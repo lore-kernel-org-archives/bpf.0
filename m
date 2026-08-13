@@ -1,206 +1,129 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6017F3CB2FA
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 22:00:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE113346A0
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 22:04:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.173
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786658426; cv=pass; b=N4MMWJjxikeOU1nsRmPQlbGWfVQ+72+pISMyvSCs8oOGGJXlidQwKY6q7Uq+nLm+hvfm/+r+A/5kMV6zgkX2Z1oDkrmJZ6EY/MHFoomU9E7IsrY2rv6+/n7TMzuvUYhniEbuBT9HHpPzhHYqnKAKdheNuVP6LrRYUxYZh48ToxM=
+	t=1786658679; cv=pass; b=FP1194U9GsadOxbieeQXDW9PO4nAH+HIzUbvIY5PnGiSxSzdcOrD1M7p1xU3MHmesj3LF0r/251tajHtEUa0HB7+jInonXRfoJyS6LWmtS5te/DwPcymt93UKstwqNOSbCEkpCP1KZD5BWZte9rGyhcER4zEyjsxYvLC6G5eQdU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786658426; c=relaxed/simple;
-	bh=5nekVy28ubmsTAs+dzaYrbAn/O2Wfyk3/PZkyv6JlhM=;
+	s=arc-20240116; t=1786658679; c=relaxed/simple;
+	bh=+nJVwpFMXbMjPE1ueHu/52hziTr3b56pfhCEr1u4jas=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uypF4mgblhoikFoHEzLpkb21T1ymJBhh5Pj3wiDzksJTrvkET2eHWhs4Bk2PJnvd58HBf5BoqTP1nr8pCLgMBKes2zyy71JcE7JIrCeeNmaPZRANESv/EEMheMCs4WEei7aD+8nsdSl2VYj0z8J1oFnsxTl09LFrrtXQWyhaRHc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G2BTmaTp; arc=pass smtp.client-ip=209.85.210.178
+	 To:Cc:Content-Type; b=HJJImz94b6dWN3hHKmtf9lJ2WH8SjK7o7unFuYUYFpC/IBBlvAMBEkdnEIWn+6HNkBKzj4bFEtiMMolVkr8q+pMLQnVhbOgo5glUcizPeDe53uKpL71FL2xacYHsEs3WEj5vDcMkmbYWr/XtUyOfoZerpVwXkkEKTwpqP++13RA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uodc3msm; arc=pass smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G2BTmaTp"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8485ef63b68so361179b3a.1
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 15:00:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786658425; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uodc3msm"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2cc7ef7ec27so5101515ad.1
+        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 15:04:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786658677; cv=none;
         d=google.com; s=arc-20260327;
-        b=OREYpRiiP7Q/CHYvH2xljzfHWy5pHnMmGfw2u4OwTGeCsF2Cj69xw1UKfNEf5Fmklo
-         7Qzx0P5u+Zh8Jf/zrNvDWbcZcHnydxsokYVhpVHPGfyNtelQPPur6Qb/fQeOwr1125lk
-         9mdsFEBMTYM0VNsNFCPIbmHi0lE/M23uEUlR9lYJisc0iCH3CJLsvGjx5Z9KZGg1Xtna
-         oZ9lXiqdIdLF+Vpo6zTvE+OeQ1ES0XROVKRkipE4A8gwlJ0SdiqwPz/9pVmEwNXeAAV5
-         GTpVWS6d2cCOKZlt+QcFKALOWFFn80I4nvZ0115xBZhFsJcNrjj5ncT9hDfndWWCGoON
-         OpeA==
+        b=kpzj2y7FSZgLST/qHyFzFCY8SXFVCUFgOlfAXD7nRAS3pinWzwu3jaQv3l6+pxQcYI
+         BjNzrb+kfhGAdEpzCB+iAnkQ3u8f8zP1YaBs8hSP/+0BnoMahNk6eV06xkRqaTC76pfa
+         Q8aa3DGkAJrvswlkcNETDF2jIk0K1Blcf/zEy6r0ErsPM8SKEqUkIaQvdyuqvqt0zApd
+         z8gPftCsNsFhY00z18EiPnkSvVZaZ5CBCchBLq7oQV4tO9ZcfJGTbX4/lkPmZslvvZzO
+         FU8AukTPI/X67iVegi6nuQFlHWBK9ynA40u0O9v9jp7WN799iLusVs+vs+cgdV1eBFpG
+         faBw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=TsHG9X4LKDpidQ0lZnkR2jTteM2KBumLlfXgv3JR1Ug=;
-        fh=2g8ZyObSs38UhAj8kd80vpxj+W332ieoAyB+PfA9NvA=;
-        b=r13gZNGNukb10ksgnr/UJ0O9cOK1uo/JWqTx+dSWKBcqEWGOS5YXnY4JwM2PwThPbJ
-         l90AJHZnyrnJXbMw7aepSl4ArddVoaGqCZ3MKJB+UxYLi5NQz8XBqv2HQwnsdNJg2x8l
-         1Wo0T0S7mRgP1u7aHWbiZdmmGZRR7pRqWuO0lkQBV7YAIihZkF5AfWP3qtD6kGcKEcO0
-         17eTHKbZlnZTt/06kuOifbgNiz052mQFux9AAXyM7a+YW4bdo5xmeFcU5CEs5UOnPagJ
-         UdFO41NkCePIMVQtAPB3XWgxIgt2Bu/sGnGQRbzkehJbkSK60DsndWp49t12QZbGkPje
-         lazg==;
+        bh=XBjlbb9xfnyRrsn87ZRRTDGluqDs+J3ckgA2mWnKvPI=;
+        fh=BxnX00Zwhuuj1n4QmEPi0G/q0Nd/AClBQgfShq2ikxk=;
+        b=Z+Y/H89Iih9FZO+Kh5JzDTAo77raITe68Ui+7jAkcWAvIV/XMo1zAWcorpHyssMSPt
+         wow0UL/qe9+kHS7fvtThDG0yEL8I/8f/XjB2pgaVIXLTPODscGtaxqNJqterbHp8e0oD
+         XFg3vLIpu/dbEkOYW1e/v6cJCwx3Eckfy52W1gxFNxEqmkC2GRTF6uLu66nntK10LpYL
+         IY3UfMxyUS2J0hxZNVmarCWekz8ZnTT06onw13+KQh+74jJY+Ul3u00cpsrPpy7V0fMd
+         jGtzfFZJEuPUmLN8GJyUpT2Be7ZKtRhQKe17QX6sfjI4yS2s6iiPWCpDvvuEPu+YKdbo
+         bYRg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786658425; x=1787263225; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786658677; x=1787263477; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=TsHG9X4LKDpidQ0lZnkR2jTteM2KBumLlfXgv3JR1Ug=;
-        b=G2BTmaTpJuQsuMuOUXzLQF0mPWPH7xN7uG0WvZaTDZEchJY1VLGdl/Pmwp+JHTsezF
-         N2TVgRgJMz8Vrxkmso3bjfxKps0X7TOXo0pNrJDCMBkIBpAXvLfLsvCSc724COZiPiu+
-         R4EkBHEs8s6dgR1RxZkZQ7Pek8SeJ0GECVvQuK5r+tf+ZrlH8OSX9z2hKycV4sKHVIRI
-         HhqXtkvRQ8JRs7IRK6bgjbU0b42N1yAu4Q2Y0VZYVjlq6dU3MxNZ0OfpbFn83a3I53ab
-         V7AX4D76St/QDX5oqTXrV59WKRO1fEraJ7GWDUDQuZ5LmCHRwYkauGfYfhrlZnvopNqB
-         hqOQ==
+        bh=XBjlbb9xfnyRrsn87ZRRTDGluqDs+J3ckgA2mWnKvPI=;
+        b=Uodc3msm0IhpYSQj8VX5kovwarQak0zWiB/9IgNLNosdzdKvi2WrB3Uf2GCxS1QiYa
+         7E8ILtr8/gBU/JI+kHVgNqEAyqnog40JFkEEx6EIc0tKMCffuR2s3Ppec0SV0Foyi3C/
+         hK4oaTIlwjpd7QZWvfuAF7jLYQU+A3GG5tuYDdP47Xic5giy8V4n1H83fDpp9VxD2smc
+         I5QMchWfUqLNQy4pIKZNo3yQRKxPblIxt8Nl0+md+xDjdNRyifsH+4Vw8VtWPCUWG1Zq
+         zVCfVtQ+vlA04FQ0G4y+ctnOuX6HegjNDgeCyWCcbBpblgUhzSYSgnbHgZkvjSteiP3q
+         WY5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786658425; x=1787263225;
+        d=1e100.net; s=20251104; t=1786658677; x=1787263477;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=TsHG9X4LKDpidQ0lZnkR2jTteM2KBumLlfXgv3JR1Ug=;
-        b=gWEkNRVyJ9F+SMh239xEfd6VFgZ4CsU8UtDCufvJSuAGij8i9wRtluXdz/uQuvtx3+
-         9Rn/BNY/vVN9CzLA/YJPa1w+cWDSNB0TWiisdp7S2jfpD2anmVyJi7vlGDLprF1wxIjG
-         x7UD1layznoKVyF5p0rauTNb02poMWIY3YMi3Yi0rDh9BaYvzq1P0KTl9z4fRv1jyG7p
-         7a1o7tvthZcHZSZ6Tc/VXaCjXQkothl6dwy0NwCBlAS9mRfSDFC2+XMrdztrA9aGHXsM
-         XkvZH87W7SM+uf9evk3cye7oVr3seVBo6+rthMs/jUTezwAui8l2I4FNyA3JQwhCs74H
-         hgIg==
-X-Gm-Message-State: AOJu0YyLsbvyABZCAh2ftfHuLwCxPUU27KoUyRd/FmtBoDnT3g/8qhMK
-	aLEPY4B3lw0LWeYahYtNcvLRE0lgPobsDlztKcniXlGRTPCvcU/gRcIHtT1wp8aBasT9qG6J9km
-	RpQgrJP1oe56jWtsn6MPjFjpg/nHhP+E=
-X-Gm-Gg: AR+sD10jB3A1SAMQT9cquxwJeRenC4IEwcDBLnlf5awmc3bguPZ6tjlJQ4/23ckOO+3
-	lhIJ1aPWafdRJnJrrWRGoy2Q9Jsyj+FTzMRPZQlkBbMjnGThYqX7HrBLXJzEnyI89lUI8bGgL5x
-	qoPR23Xu/5hnCDPmdCL3Z3lvpIXJJQeFI0u5iwlChU64/dKxyijoh6TCp6zkO4asvDUaeRFbIpu
-	vvefE2OD4PJsmN8GT4i9Zht0c/Q8H90AQOVrOcyhs+PYriadSGlN30NGH2ZzVDdWhT0FeNQaGIa
-	YUjHvbO6xJ+qSMoCPs2wqBuTz+jlkB46T+2TOh1GJEAZ97lWc5PsHob/uXGIT2WxMPBMOPVYHJ2
-	SMWfsQ1E7cp3zOySe03G4UYAAeFBoseaRwOjQ4t1cmA==
-X-Received: by 2002:a05:6a20:7343:b0:3c3:a722:59cc with SMTP id
- adf61e73a8af0-3cc71cc65camr919970637.22.1786658424611; Thu, 13 Aug 2026
- 15:00:24 -0700 (PDT)
+        bh=XBjlbb9xfnyRrsn87ZRRTDGluqDs+J3ckgA2mWnKvPI=;
+        b=GoIb54Xp+B0rIqccSlZEp0VwdVcQ247TNMTsrhpAdDy+E5Vn0FWvIdAusGN5W2jSRG
+         efhSUACgAjVHHaKIwguC3qbF66hrOeBdYSF3xesitXwN91eQXXrap62qZeVaIQM7c3PE
+         k69ND9xNtS0wEi4/C/GFwHfG7YqvOkMECchFM9ZaQ9NczKWPXyMZf5GiuAVqUGMg7WGm
+         Bw8L7z7wnCijKbYN12KEngn5GkGdpP/Fh7Cg94vwuV/9kD+8d3t9u1DhME5+aJWcTzEJ
+         IojXMCRu8KLptep5EMgrauAET0b41nENshRO//23ScxTUA8FoCu67WEBy6SEArFoFN01
+         A8Uw==
+X-Forwarded-Encrypted: i=1; AHgh+RofHIQlCirt4A4wtXeIRl6bo+TpCeUsS3bxROgK87WirdZhjPBM1IacgFK6ifM2dI9Wq3g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzIn/1e+meMm0Na0izNdrhKFSma9yuGzyt4WgjjdU+GlSIRW3s
+	MxjkoIL1vmsFitabdlztcFr99rp0dqeM1p4CBv0K9g6eEtCceBparG6a6JKmlg59JUrQuF+VZRk
+	pYiak5oW0h2e4sylgEJtPjf3k3bf2toyFyu6m
+X-Gm-Gg: AR+sD10REw8afjOHOwOpXCh0V/TSaUrHE95Xvm98DXlQ9nqV+sIBN/vNCxoqic7ESpo
+	CPM/zdkI5rxuPQbbnlWQ7wvmewRHXh99iu2LQLdCsFfQfi4z4kl5slGYl1/e4VdknWrpkGOBSgI
+	kqd/zjaF/Km37OQ9z/fkNMCXmMKwDycr7BdPAGTLz194BW9rWL+tmbTPTPyJ93fjyOpLBn57npG
+	9CAHRWZxU1QlWNSsyQqBd+QIsH/IK/VZ9P+rIv7sivgCJPZaxoUHJ0CKM9A2aiiOYmzZByv5OzG
+	hWH8h+9CSPSQV+EyHIo59SxiJumzLJEvLCM0YWC7Cr42gs88sZUjY903n4m1KHVRihLTqCMWW8j
+	sZbmgTjZ7pueekrpJhLQ9Gy5e72D5nfsXdpVzCe0lWg==
+X-Received: by 2002:a05:6a21:33a2:b0:3c4:3321:4fe8 with SMTP id
+ adf61e73a8af0-3cc71be2ba0mr896598637.14.1786658676974; Thu, 13 Aug 2026
+ 15:04:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260810142224.2907373-1-chenyuan_fl@163.com> <20260810142224.2907373-4-chenyuan_fl@163.com>
-In-Reply-To: <20260810142224.2907373-4-chenyuan_fl@163.com>
+References: <20260810055709.729203-1-chenguang.zhao@linux.dev>
+In-Reply-To: <20260810055709.729203-1-chenguang.zhao@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 13 Aug 2026 15:00:09 -0700
-X-Gm-Features: AUfX_mx1zLwRSFSgJHEZPI-dhLz6l7sGh0nTDR8aw3Qm6WAzKqdyZ2jS5SAPkPA
-Message-ID: <CAEf4Bza9pXdT0agLs81Hqqti1vB51F01mA-MnQiEOdR3a5SBWg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 3/3] bpftool: Fix bypass of the batch line
- length check by comments
-To: chenyuan_fl@163.com
-Cc: bpf@vger.kernel.org, Quentin Monnet <qmo@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Yuan Chen <chenyuan@kylinos.cn>
+Date: Thu, 13 Aug 2026 15:04:22 -0700
+X-Gm-Features: AUfX_mySmBbuOKMkZzyA6luWIOwiLVFTaBzYxN1T4Y0G-POAuGd72b9d5snmCP4
+Message-ID: <CAEf4BzY9YaeT4CssCe13uAWXYHXs6HervsCo0Puc0osfr8=yVw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Add kptr-xchg benchmark
+To: Chenguang Zhao <chenguang.zhao@linux.dev>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, shuah@kernel.org, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
+	ihor.solodrai@linux.dev, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	chenguang.zhao@liux.dev, Chenguang Zhao <zhaochenguang@kylinos.cn>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 10, 2026 at 7:23=E2=80=AFAM <chenyuan_fl@163.com> wrote:
+On Sun, Aug 9, 2026 at 10:57=E2=80=AFPM Chenguang Zhao <chenguang.zhao@linu=
+x.dev> wrote:
 >
-> From: Yuan Chen <chenyuan@kylinos.cn>
+> From: Chenguang Zhao <zhaochenguang@kylinos.cn>
 >
-> do_batch() strips trailing comments by truncating the line at '#'
-> before checking whether fgets() filled the buffer. If a batch line
-> longer than the buffer contains a '#' within the first
-> sizeof(buf) - 1 bytes, the truncation makes strlen(buf) smaller and the
-> line-length check is bypassed. The unread remainder of the line then
-> stays in the file stream and is parsed and executed as a separate
-> command on the next loop iteration.
->
-> Continuation lines handled below are affected the same way: an overlong
-> continuation line containing '#' bypasses the "command is too
-> long" check, and its unread remainder is executed as a separate command.
->
-> Detect the truncated read before stripping the comment, using memchr()
-> to look for a newline (instead of strlen(), which is also fooled by an
-> embedded NUL byte) and feof() to tell an overlong line apart from a
-> final line without a trailing newline. A line that fills the buffer
-> exactly (the byte after the read is a newline) is not treated as
-> truncated, so valid maximal-length lines are no longer rejected. Use the
-> result for the line-length checks, so overlong lines are rejected
-> regardless of comments or NUL bytes.
->
-> Fixes: 71bb428fe2c1 ("tools: bpf: add bpftool")
-> Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
-> ---
->  tools/bpf/bpftool/main.c | 26 ++++++++++++++++++++++++--
->  1 file changed, 24 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-> index 0bbb2e198450..337fbf1ec596 100644
-> --- a/tools/bpf/bpftool/main.c
-> +++ b/tools/bpf/bpftool/main.c
-> @@ -367,11 +367,27 @@ static int do_batch(int argc, char **argv)
->         if (json_output)
->                 jsonw_start_array(json_wtr);
->         while (fgets(buf, sizeof(buf), fp)) {
-> +               bool truncated =3D !memchr(buf, '\n', sizeof(buf) - 1) &&=
- !feof(fp);
-> +
-> +               if (truncated) {
-> +                       /*
-> +                        * fgets() filled the buffer. If the very next by=
-te is
-> +                        * a newline, the line fits the buffer exactly an=
-d is
-> +                        * not truncated.
-> +                        */
-> +                       int c =3D fgetc(fp);
-> +
-> +                       if (c =3D=3D '\n')
-> +                               truncated =3D false;
-> +                       else if (c !=3D EOF)
-> +                               ungetc(c, fp);
-> +               }
-> +
->                 cp =3D strchr(buf, '#');
->                 if (cp)
->                         *cp =3D '\0';
->
-> -               if (strlen(buf) =3D=3D sizeof(buf) - 1) {
+> Add a microbenchmark that repeatedly calls bpf_kptr_xchg() from an
+> fentry program. Architectures that advertise bpf_jit_supports_ptr_xchg()
+> inline the helper to BPF_XCHG; others keep the helper call. This bench
+> makes it easy to compare the two paths under the same workload.
 
-just move this check before you overwrite buf contents. even with
-comments, a reasonable line shouldn't be 64KB long, no?
+but do we need a permanent benchmark for this? Is there any valid risk
+of regressing performance here? Unless there is a good reason to have
+this benchmark readily available for everyone to periodically run or
+something, I'm inclined to reject new benchmarks and minimize amount
+of code maintenance burden for something like this, sorry.
 
 pw-bot: cr
 
-> +               if (truncated) {
->                         line_too_long =3D true;
->                         break;
->                 }
-> @@ -380,6 +396,8 @@ static int do_batch(int argc, char **argv)
->                  * with '\' in the batch file).
->                  */
->                 while ((cp =3D strstr(buf, "\\\n")) !=3D NULL) {
-> +                       bool cont_truncated;
-> +
->                         if (!fgets(contline, sizeof(contline), fp) ||
->                             strlen(contline) =3D=3D 0) {
->                                 p_err("missing continuation line on comma=
-nd %u",
-> @@ -388,11 +406,15 @@ static int do_batch(int argc, char **argv)
->                                 goto err_close;
->                         }
 >
-> +                       cont_truncated =3D !memchr(contline, '\n', sizeof=
-(contline) - 1) &&
-> +                                        !feof(fp);
-> +
->                         cp =3D strchr(contline, '#');
->                         if (cp)
->                                 *cp =3D '\0';
+> Usage:
+>   sudo ./bench -d 30 -w 5 -p 1 kptr-xchg --nr_loops 256
 >
-> -                       if (strlen(buf) + strlen(contline) + 1 > sizeof(b=
-uf)) {
-> +                       if (cont_truncated ||
-> +                           strlen(buf) + strlen(contline) + 1 > sizeof(b=
-uf)) {
->                                 p_err("command %u is too long", lines);
->                                 err =3D -1;
->                                 goto err_close;
-> --
-> 2.54.0
+> Signed-off-by: Chenguang Zhao <zhaochenguang@kylinos.cn>
+> ---
+> Example results on LoongArch64 (helper vs inlined):
 >
+
+[...]
