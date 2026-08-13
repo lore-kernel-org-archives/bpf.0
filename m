@@ -1,185 +1,112 @@
-Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11012070.outbound.protection.outlook.com [40.107.75.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA6B33630AD
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 12:00:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.70
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786622450; cv=fail; b=N9u5gv+kVzCHTQHLxzGHEtJgwOsMRjCwT97z6x3ZMRolZdFovF6CUKNffAmYEWprQsgzN6SQfwpOA5YPWliK/dx2nAmMW1AXKIb6TRidCWiO/AWHLc4oafjGYIMOqTng7hAx6V3U7FRyjBfuJs+I3E0//+Rhm+9qO22uSLj3MKs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786622450; c=relaxed/simple;
-	bh=mC3+m7xFWluL2PLyNXBDDeUaVP27deg7bYU9eBabFV4=;
-	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=qZmJZXd3rQF0fmKc9Z9+cK3eUIXpCIfYOeM7VZH6a1mvifWBYBpGmYx6+I2K6Nm7rn2wLsa6srBhxMv4J4EWPpB/3gWYTUQRl+EJK9hcG/0fKZbTQfS/FtCVeF0p7wEAcXqRLvEUjBdbzHt1Blzk21K9IsKC5p52sh2FZm+MF9Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=YOp7NASj; arc=fail smtp.client-ip=40.107.75.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D05743B42DD;
+	Thu, 13 Aug 2026 12:01:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.76.78.106
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786622482; cv=none; b=h6y3YEFUdqjKADc9FeY88cyZ3Qw8bl9OFXdI0x8GDybV1K8Nr8NASnkA7q0K2hJB6tWHlEqWzRkrl3FT/ZRKDkngYhF9991Cfx5pSnc8/GQpkwn2g8yW4RmPIEJjn+JkHA7Ei3HxaGYw5zz3AepIwk1ZWbxgAneetDQKppNiuWk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786622482; c=relaxed/simple;
+	bh=ijObjGeW3Fel5QLJr4lHYonxQn33GrDYR5wWkz/Qw/k=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=mumNDaPLv+q8hlILweY15cVn9dRCxmZis5iHBn6oa7rZUGVlbb+IHi03zfV8Y5mrouxvUrvnekDKgeYhCl2AgCoUgRuJ2SH1QOf368/ZDTnWGhcg6IXyZTUnSJGqKZe4yCbw1cAiKGkeAvZzkYNZrKFnGzHRTxcAKNm7e3FUGOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=j6sog8bt; arc=none smtp.client-ip=13.76.78.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="YOp7NASj"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EEbqd27Nn80QFLJoKm+r4csC30LFXqwbXjDgyjadVaWwpFpNNE34CUpwZFxUOGMAna/6j1KdOJX0Q6Vr8xLdUMx4AFnIlaJRBTsna92d0RjdNodjd8AZ5o62/6vetvEbNwtTtmFKt36urjAVR1ln3vUF4Mx5I1JsuEDe+aLU3IBHPhyluvxWZvz7O1NPrqBYWsRZhQVhkfjb86QTuqEivJSPpToSZp8XHXr0x0CSNfablp/7akmenWEg7asenHXggshjfHqD79EIw8x95CFYI3pzr/7frRvLsGT9B4EOpEm2/3Rw6eXXm2PFOphw+hjg1qcDJQHwBmntgpWGk+Dnmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NRo2rQAX6w6S9D9fb/ZnKC3i3GsHAgxSw5hKcENYguA=;
- b=Xb2uMMvRGnTBOMwBVX8ZNpUnitAxwZHVcLFWWuj9TdZEKFBJvVONjDmqcBYLynwwTcDrafEo39HOf6qL9HQqm7G7EVS9y0uc3V5IfIOsLPV/zL5v6hje8lUeTiCxL5itk8mOuiZI9QLdslmRYhHV/6lQYGmALB2EmcUQ4vb9iM8EDzv0Ioe8o1IR3BMG6RBYthm9+zfm6QmVhlTZlR5zsYv5vT+51uJdm1O9m5OvvAyRMj0P+zqTQ9JXlSvHVsxsdBb+XOnouYoDfj2JH0p5ffDnL2+/e2i9CnlwHuoMmALKeV6QO8AeF3e1mUnWdkg4bSeafwWXKNVa2/E2UsVtdg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NRo2rQAX6w6S9D9fb/ZnKC3i3GsHAgxSw5hKcENYguA=;
- b=YOp7NASj38/FcrWo4BIskadfwsXW1caTDTH5f/vE/h4fJvlTfEsHkYXRSsP0arThw1zNwUVXmp/n/9+Te/8SLS+n4HSnley/E8eycvvEMdPxh783GZeRfiXH0VJl2/NNA+9P5RELMM+3GuOAOsvKLFEt2fScMrfDnKYa69EvmrFlaiY4TdkN3FT59kNmPQ87I6iis6XHlX0f6mgOrm8RaOmL/2uPDgwmJXYJNHxImhrB+Y9kcxr2aeqdj/wei2Pb7uxlRucaO+xDsKx71E4ncWq0QQuWwV7oPXMg5b6yb3HN3YfXTgfQ7vllQSOU8XJANPTkApAJDWehwYsWkE8Ybw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from PUZPR06MB4742.apcprd06.prod.outlook.com (2603:1096:301:b5::13)
- by JH0PR06MB6655.apcprd06.prod.outlook.com (2603:1096:990:3d::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.14; Thu, 13 Aug
- 2026 12:00:45 +0000
-Received: from PUZPR06MB4742.apcprd06.prod.outlook.com
- ([fe80::206c:c661:9838:5571]) by PUZPR06MB4742.apcprd06.prod.outlook.com
- ([fe80::206c:c661:9838:5571%6]) with mapi id 15.21.0315.011; Thu, 13 Aug 2026
- 12:00:44 +0000
-Message-ID: <b83c28cc-94ce-466b-aa25-f86ffc3be512@vivo.com>
-Date: Thu, 13 Aug 2026 20:00:42 +0800
-User-Agent: Mozilla Thunderbird
-From: Fuyu Zhao <zhaofuyu@vivo.com>
-Subject: Re: [RFC PATCH bpf-next v2 2/2] selftests/bpf: add tests for
- selective kmod BTF loading
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260813032613.2755-1-zhaofuyu@vivo.com>
- <20260813032613.2755-3-zhaofuyu@vivo.com>
- <20260813033743.102F91F000E9@smtp.kernel.org>
-In-Reply-To: <20260813033743.102F91F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SGAP274CA0022.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b6::34)
- To PUZPR06MB4742.apcprd06.prod.outlook.com (2603:1096:301:b5::13)
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="j6sog8bt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Subject:Date:
+	Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	To:Cc; bh=fXb4k+zm0KD4/L1Qma4PIF9I1u/QVZGrQVhe4b+J1nE=; b=j6sog8
+	btuv8MXeRBMoU97zd5TUlGIy7GCPjL+oE3F/Q2e6hdCL+gkDgAswXsYIaG126HOI
+	RjQCO2sVZh8He0/TDUSyXw1vjICAPKLNMe3FzWsvj5wniAIdmHYOWzWr/XBnOmqo
+	cYW72qg/gm6tf55hQNalUWsZrzn92zrSS+HyE=
+Received: from [172.17.0.4] (unknown [101.6.30.195])
+	by web3 (Coremail) with SMTP id ygQGZQAn+BbosX1q_MyTAA--.65327S2;
+	Thu, 13 Aug 2026 20:00:46 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+Subject: [PATCH bpf-next 0/2] bpf, x86: Normalize IA32 kfunc return values
+Date: Thu, 13 Aug 2026 12:00:39 +0000
+Message-Id: <20260813-bpf-next-039-ia32-kfunc-return-v1-v1-0-37495ec632b5@mails.tsinghua.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PUZPR06MB4742:EE_|JH0PR06MB6655:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5c032ad1-f945-4149-b4b0-08def9328106
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|366016|1800799024|23010399003|22082099003|18002099003|56012099006|11063799006|6133799003|10067099003|4143699003;
-X-Microsoft-Antispam-Message-Info:
-	lMVOgmrmGAa8ZWNqg2ZZs1Hf3K+5ObVi9kEG9G4IlTFuNU+RXWBIkWlLNFkluCCgIWAUZ0LfsU7nyFq6ecPeKB9Uc3ClHiLYqgH3oKCvt69EQeSXQG1RB0QGJfKAgLSBGcBnrCmo/soYzgpF8ku5tdof5v6Vv2Cx8ZaKtUixirjGM9U8lZX34WxNEbQ6hk5SC0NnT5sskhOwLn4fRFmRRwDb8n2bb4u6oGS14emv7zWituX+nFefOfgQhQMB5vBlHpEdiUSf7rh1N4LmWYAHmZ46DhHqacoFp0BssGMgFyaRNhl4iCO8H3wc3DQF2ZfvXFEcutFxoYEQlDGf9MYFGyf5yRrTcEY3GjuhNxuaNBLKNK8XfBB2a5ldhJn9FnHGIfRFqp2P7Ae5u4xrBTBUMvmRpwxp9r6+BP0Vjw+q+ymPra8+5oDnj/FpZMyt4cOYfMRHrQyg0MW6D439PxzlQzgu4jFIachgtB9HM4ka8OXdwzQ0x7kHBXFovPNM/MdVwoV8ZgFQ5419KtiSkVv2gCFOIb4/LkKKG+kN50LZzI8qkYN7OZ9+zjHokHl8shNmF/V+bVeD+VW0daqNK1WXpkJn3uubt0YLjYXhQXX6W+KvMNQsxsdwQdrIBYeOXwrIPfmPxkVqI0y82pigPuFILUXvailYnkHLwlvfCODNXfQ=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB4742.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(23010399003)(22082099003)(18002099003)(56012099006)(11063799006)(6133799003)(10067099003)(4143699003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?V1lUUzlRVWZTYWE4M2QweVhmbU1WMEQrbXZXaDRaWjlSMWp4VXZ2MnJ1MFJE?=
- =?utf-8?B?MDlLQjNvM1BIbXF6K0RkVjNXTVNRazhlaFY3cHdPV1ExWTJPbldsVmFrK0FP?=
- =?utf-8?B?akFIWnRlc0laYzFGRXdqNktSU3JPR0xPcVovMWxoNWs2TjlSWGdvSDNLSDJJ?=
- =?utf-8?B?UHlZVldSN0E3VU50OTVLMXY3eWVFNEVvY1hIeUU0VTVGYzZpa0RLSVdkZWVM?=
- =?utf-8?B?YUR0RDJMQWlzQ1AwWkdnYzh2dStGWVV1Qk5WcWZQOUl1bjAwN3dNdTRxcUZr?=
- =?utf-8?B?NVpibGNqRVAwbEpOVzRZOWhBdjhWTkY1TlB2cWo5Sld2TmFmR1czbTZXb3hG?=
- =?utf-8?B?VmtIbnM0NUNlMytEMm5QUFNkUGI1WTluZjhYV1hXQVA4N1BTa3FtSW5kQWls?=
- =?utf-8?B?aEdTV1R1Qkw4bjFVK096OCtwVHpFUUdINUxMRjNZY0hDMW1mTCt2UXhPOFYr?=
- =?utf-8?B?aUpETENLSGN1YWFNVnJRQjQyaTRWQVl6bXN4VmRseUwyUHBzM044bjA1Ky90?=
- =?utf-8?B?WWtaV3c1ZTE2UFB0TWZyTEFxei9HdTNsd0xpNWlYRW1ic3VhbUN1Yytlb05j?=
- =?utf-8?B?TGpYc2dXdHBmNTloS3IwWjNES1lxN0luVE1ZSEFOOXZ3ZHFPQVVvWEN4LzJH?=
- =?utf-8?B?VTZDUzgwdWF3SlFMRVBaVkh6R0kzNThKODlmU005cnM5Zmt6WjJQelUrUGxY?=
- =?utf-8?B?TnRFRGZWUUtJSE9xZnIreWt2RzJMZnpuUXhmS0dHMVUxbWdIcnFlU1NBelNS?=
- =?utf-8?B?TjRsb2xCS3FYMGRvdHhyQ3VrOUhkOEtXK3owQmVKT2UyYnE4UUdUbWRudTRJ?=
- =?utf-8?B?K2FKYkl5cXpkdTBlTjA3NklvRVpnbE1lanVnbjUvajVMaHhYa3hGK0RubVU2?=
- =?utf-8?B?VHFDZjNHcVhqb3NFRTd1L0NUQTNGOGZUZWlRM3NZUGpDdWtNbWxiVmd2YVFl?=
- =?utf-8?B?SEJFaGIzb29TYUdnY1hDQ1ZxVlVaQWRLME9tZVF2MnY0Ujg5MWlHQlNIN3oy?=
- =?utf-8?B?TDA3Z1JaK2tvZUlVYzRhb0JXTllRRWZzei9hN2RRcWEwdWFTeVFIT2YvMVdu?=
- =?utf-8?B?VUFieC9kNUIwb1lJWW9tdUsxbHpTU01kNFF4NUlTQmxsWnp5UEt2YUlDM0V0?=
- =?utf-8?B?MTRUaFhkNkkyYmRiS3FUNmc5Y05vb3RIMStrOXBzb1BsTjZvcTl1ZFBrdHpP?=
- =?utf-8?B?cER2YTl4TmJPckREOTlQNkk0aGZhcC9vUmhtalBxbXJhV2U0enc5eFoySU9L?=
- =?utf-8?B?NVdQRnIwdFlPMHpGQlFIbWlrUDZkWnJpUjl2Um1zaEhpVDdQWHh0OVB3M2Jm?=
- =?utf-8?B?V05Jd1ExVjZobldzRnI5TXo1WFNWNVl1RkVZclVVRVBCS1VaNzVrS2ltV1RS?=
- =?utf-8?B?SnJzYTY3QitwS0lDcHRER05sVzhxUTRRMnIyelNmRC9EaGZ1RCt6T3A1a21x?=
- =?utf-8?B?bk5aN2NSM2gySEFGbVhkT3VkSnljKzJyT0ZLMWIyUTJQakFZMmNzUjVOTXdt?=
- =?utf-8?B?a1Bkd010RXZnOXY2elVJNmZFMTZ4bHNVUUo2OWpBWktIbHpEbjNtUzhHTXgw?=
- =?utf-8?B?RncyUkdmUFJsZ002RmRCdDJUaHhTcEdCSnV3SXhOR25BdU9HempuT042eDZC?=
- =?utf-8?B?WEZmT0gvTXdPbEVvSktGYXozK0ZYSnVRNFZ0MlNCNEhjd3dGeDd3S2pxb1Jj?=
- =?utf-8?B?V3VnNFF4dW4wb1h4SVVLRlpFUEYvL2Z1WC8zNmJ5TStqamtVL3FST1ZEazhP?=
- =?utf-8?B?bHdINUpuOFdRREF1NXQ4VGNKQU93dHI5cXRXUzhVYkZ5QXV4bzRvWC9DNHdk?=
- =?utf-8?B?ZjhPYlN1d1pWY05TNFZxbDJtUnFGUEU4SEtKWUtvc3VKcEZEWERLZ0MzNTk4?=
- =?utf-8?B?SVRJaGZ1UDE5N1VDUUpjNm16eDdwNitEMStVOUc0eVRDMmU0TzRwK3BkUk1h?=
- =?utf-8?B?Y1NVVDVJOEdYZnE2cU1EQWlWY0ZrRGxmUHE5dEo4VFpRVVFXZytHWU5VQ3I3?=
- =?utf-8?B?SjhHdFdrRW9ncXBKUkIyZkdXUnV6aVNJWlhhVGJpd2VBQk9pZTlQdy9ua3k2?=
- =?utf-8?B?N3RqbmNPNzNEUjZDZFFsS0dwM2FIbWVQY0QralU4dkNKd0IvVDBBTHBWbGFs?=
- =?utf-8?B?NTNKZjR5UGp6UFpyYlVuMDhvOEJOL29lanpzYlppVlZSb1pOS3BlN3RUOXND?=
- =?utf-8?B?WU4xWlB6emxPblRGUmN0dzd0RkJlaWlVUGpPSUFneXNvSmVWbWUycmVzekZv?=
- =?utf-8?B?RDVISk9CK3lDWElWSXkxemNOb0VYakRlYmt0THkxbDBzVUNSalA5eFhzZnpK?=
- =?utf-8?B?QWVqZnovMWdsNmtMNUlvNVE4M0dVK1plbjhsUWZZdXM3VHlkYkFQdz09?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c032ad1-f945-4149-b4b0-08def9328106
-X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB4742.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Aug 2026 12:00:44.3550
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UfsRjQUiWhwS8QdGmHfUj08Lk527ZV70SwF7FJVLIQXsh5VdvaW4bvTppoAGZiUdSKIBNHH6d4cSCmLKrwSfag==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: JH0PR06MB6655
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOixfWoC/zWNQQqDMBAAvyJ77sImwbb2K8VDNJt2KWxloyKIf
+ zcUepzDzOxQ2IQLPJodjFcp8tUK7tLA+I76YpRUGTz5K91dwGHKqLzNSKFDicHjJy86ovG8mOL
+ qMLWJiG8txS5C7UzGWbbf4wl/HfrjOAFpdYG3fQAAAA==
+To: Wang YanQing <udknight@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Thomas Gleixner <tglx@kernel.org>, 
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+ "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1786622447; l=1216;
+ i=chenyy23@mails.tsinghua.edu.cn; s=kernel; h=from:subject:message-id;
+ bh=ijObjGeW3Fel5QLJr4lHYonxQn33GrDYR5wWkz/Qw/k=;
+ b=WfVEHcJN/dGstTAmrba3+TOQ/av6FOm/WuoStONYxaa42eSzcmTylZE6UdP/JE/LXadEO+VGK
+ rq40wYJuUsqDGzq2PsKE8k7qfBbq/R1wEL3N7g6cypj16LgoYneRc+b
+X-Developer-Key: i=chenyy23@mails.tsinghua.edu.cn; a=ed25519;
+ pk=+Q11PEDVzoU+87KHlIeNWKwv/GiutzE5094ej7opM+s=
+X-CM-TRANSID:ygQGZQAn+BbosX1q_MyTAA--.65327S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gr48GrW5uF47Wr1rJF1xGrg_yoWkuFX_Zr
+	WY9r97Wr4qvFW5Ja4xGr1rWrW7Ca1UKrW5AF1Fq3W7J34jgrsxJF4kXrnFq34xWF43JrZx
+	XFs3urWxG3yaqjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUb-xFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wA2ocxC64kI
+	II0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7
+	xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28E
+	F7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzx
+	vE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VCjz48v1sIEY20_GrWk
+	Jr1UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5c
+	I20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r4a6rW5MxkIecxE
+	wVAFwVW5JwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4rKr1UJr1l4I8I3I
+	0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
+	GVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
+	0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0
+	rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r
+	4UJbIYCTnIWIevJa73UjIFyTuYvjfUr6wZDUUUU
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
+The IA32 JIT stores BPF registers as pairs of 32-bit scratch words. Kfunc
+returns narrower than 64 bits currently update only R0.low32, so full-width
+uses can observe a stale R0.high32 value.
 
+Patch 1 uses the BTF function model to sign- or zero-extend narrow returns
+into EDX:EAX and stores both halves of R0.
 
-On 8/13/2026 11:37 AM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] The tracking counter `obj->kmod_btfs->nr_loaded` is never updated, rendering the early termination optimization for BTF loading completely ineffective.
-> --
-> 
-> --- Patch [2]: [RFC PATCH bpf-next v2 2/2] selftests/bpf: add tests for selective kmod BTF loading ---
-> commit 506359525a106f517e013e060ee2c6feb17720c8
-> Author: Fuyu Zhao <zhaofuyu@vivo.com>
-> 
-> selftests/bpf: add tests for selective kmod BTF loading
-> 
-> Add test cases to verify the new ".kmod_btfs" section logic in libbpf.
-> The added test cases cover three main scenarios: valid module, non-existent
-> module, and duplicates/unneeded modules.
-> 
->> diff --git a/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c b/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c
->> index 0000000000000..d875fcce6681d
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c
->> @@ -0,0 +1,52 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +#include <test_progs.h>
->> +#include "kmod_btfs.skel.h"
->> +#include "kmod_btfs_nonexist.skel.h"
->> +#include "kmod_btfs_mix.skel.h"
->> +
-> 
-> [ ... ]
-> 
-> [Severity: Medium]
-> While reviewing these tests, I noticed a potential regression in the libbpf
-> code they exercise. In load_module_btfs():
-> 
-> tools/lib/bpf/libbpf.c:load_module_btfs() {
-> ...
-> 		if (obj->kmod_btfs &&
-> 		    obj->kmod_btfs->nr_names == obj->kmod_btfs->nr_loaded)
-> 			break;
-> ...
-> }
-> 
-> Is obj->kmod_btfs->nr_loaded ever incremented when a module BTF is
-> successfully loaded?
-> 
-> If it is not incremented, will this early termination condition ever be
-> met? It appears this might unnecessarily iterate over all remaining
-> system BTFs, which would bypass the intended performance optimization
-> of the .kmod_btfs section.
-> 
+Patch 2 adds IA32-specific test_loader support and unsigned bool and signed
+int kfunc return regression tests.
 
-Thanks for catching this. This is the same oversight mentioned above.
-I'll fix the nr_loaded accounting in v3.
+Yiyang Chen (2):
+  bpf, x86: Normalize narrow kfunc returns on IA32
+  selftests/bpf: Cover IA32 narrow kfunc returns
 
+Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+---
+Yiyang Chen (2):
+      bpf, x86: Normalize narrow kfunc returns on IA32
+      selftests/bpf: Cover IA32 narrow kfunc returns
+
+ arch/x86/net/bpf_jit_comp32.c                      | 53 +++++++++++---
+ tools/testing/selftests/bpf/prog_tests/verifier.c  |  2 +
+ tools/testing/selftests/bpf/progs/bpf_misc.h       |  1 +
+ .../selftests/bpf/progs/verifier_kfunc_return.c    | 84 ++++++++++++++++++++++
+ tools/testing/selftests/bpf/test_loader.c          | 13 ++--
+ 5 files changed, 140 insertions(+), 13 deletions(-)
+---
+base-commit: 6f033615ef8fb2374daa7e50a8ff68616bc850d2
+-- 
+2.43.0
 
