@@ -1,30 +1,86 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC1B93955E8
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 09:03:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 018A33E7174
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 09:06:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786611802; cv=none; b=TPmGs+Avy2HJedSo9fPoP101j5QoCqs76/IyEzsjgDGBT/yTkMlGuDBKE/WsDqDKJcn+FOIIu18Q2ifqoyZiVy8x2zOQCmg985pXBq+UVNitwOIEmuEBg29V1jikA7QQ1ZnsDy1WLsAXs3GE6lgv3lchPGzB8SUbi2bG/zAA2Ko=
+	t=1786611992; cv=none; b=ElGiiO2xNS6d2X9pReTADe5dOE6ZXux9v+Uba3NjWQJc3324MCPTezcmuEpXqLzc49LPEmSIsNek6Oc1uCIE0OVdfOlpT9r+otwelbqg4WVnzinS8LcoacKrp+ESYCB6r3dy/foh1NorhjDToy6a+vFBHK+eLXymxnB+1fDyh5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786611802; c=relaxed/simple;
-	bh=fXGADN5+wp60htehVaqtl/B/L0WWIV/HGWGUsUhushI=;
+	s=arc-20240116; t=1786611992; c=relaxed/simple;
+	bh=fZVaZ7TjMrKw7+i2lbImOkpXxSg4IUmytFvvhSuahqM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YHPLpTonGuc+s7T8jOzPIo2ejPXbmXPkG/kSy5O44T7UGN7Sy+RiptNpq+3wOO03kdXJNySECcxjNzzwEzwJiCjyv6wOj5KQCYU48GyPqq8TTaJXwQqMGz7tsB3SJXbt3Ev7ExwJMsM4miQn7CuT9bjo4FQtBR5IqCu2r6Ln02w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hLKBb74GBzKHN8C
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 17:02:47 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 1111640953
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 17:03:07 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgBXw4pJiH1qugamCA--.35513S2;
-	Thu, 13 Aug 2026 17:03:06 +0800 (CST)
-Message-ID: <bba3c4f8-a7b3-40ae-a7bd-88594a7252bb@huaweicloud.com>
-Date: Thu, 13 Aug 2026 17:03:05 +0800
+	 In-Reply-To:Content-Type; b=JlZ2HY9eJCOHZch3iX3z8+laycUC53ur9ARMBXhCte5uMO/20ChzelKGs8Ung2FfZcWLjTuSAnb/Y0dN2tCVhLY3YXBj124WnhBaAQ3rd5IsOLUaNIRKdm7mXo1YcylCgJ21K04f+fVTCvCyl/lJ4Y1zpeaA+uWWbljj0kjk2Js=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WcGjmYme; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y25KmcrE; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WcGjmYme";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y25KmcrE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1786611987;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9N33LkksLPfNjIlTNbni8jbzLx2tB4hZrFzuYLnaQlE=;
+	b=WcGjmYmeCpvCejdzjX7/vnYtkd2LQ47ZWrljQbzddI2Uir/CC/0KOGseER+x6l3/b3z2jz
+	eTZnQLJNorfww58Rx4f4QkHpaX4re4m7EaCvy0OMZlqXWbiwD0+xkXg5eqtUvv2QxRGzFb
+	FbyccHE4uiPYge3qIrVtZ857lMVJqPs=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-220-xRxCI0YYOUWdzYZ9Kr9sxA-1; Thu, 13 Aug 2026 05:06:26 -0400
+X-MC-Unique: xRxCI0YYOUWdzYZ9Kr9sxA-1
+X-Mimecast-MFC-AGG-ID: xRxCI0YYOUWdzYZ9Kr9sxA_1786611985
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-47fecbb553bso1584240f8f.2
+        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 02:06:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1786611985; x=1787216785; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=9N33LkksLPfNjIlTNbni8jbzLx2tB4hZrFzuYLnaQlE=;
+        b=Y25KmcrEbPrKqaM41MtTogq9QEbFTjLISnEHcpgYhWx+5QXirB5IvxGrzXfxGNcLMM
+         EaJDM8JX37dvRMT7gaqn2p5xQ2YI1Iaz0Q6T2NhTeVfJ+wXyZ0cyrghbtfkMUWYOsoTG
+         epJS8LZ3RY34EwZ5G3o3XXjXGdQzM2EXI36AcNKzeQxuzg5lJSRzQS6khzWc1q/OA8vp
+         9xe+0L5Nrk/bzeYRaZ+TnSec6cMDremv4yS6yBjfRr2wpJYjYyg1WEzK5ze9Y9Lf1mXK
+         MPdrNXG1aPacmLzDaFZlUVaBTEO4n6xukCMuuzP8GK2b/fDF0YCZRN5YL9sAQs5d1++p
+         r6mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786611985; x=1787216785;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=9N33LkksLPfNjIlTNbni8jbzLx2tB4hZrFzuYLnaQlE=;
+        b=hRInF2xInq1wjRXcNjtRxYE5M7JN42SoA63fBv21y/dr8Qxk1JnrHepnKiMEpI2+xF
+         NHWBRa4WeA8t91g2dsGeZrzVw1Ww+UyLa83aSLU/ChOrboBs9XO6HzBCLFxI+98vA4Bn
+         Zed47mI/ZKRGKe0dYprZK9OHDt8P70Ed+CGp+Fe1Nge9KK1+cLelDvCFc5BIeILTVcXT
+         l60HqfAnk7QLwVtsuU4h00Oz/nPNA1a689nPv7oy6K2SwPt61HW6hpCxjWxrCZzhXvK5
+         sSKOTOdljuNn9lNoVrfMnU6fXkKiWtw6E4au3kh3zAmYrY2mxxhs7xFa1OV3eKPOAc6f
+         NGDw==
+X-Forwarded-Encrypted: i=1; AHgh+RpXMdzwkV415uWhTE2Lk7PoR9G/ATesm4wJ9PhhI9lCQY/x9Eh7Kct7zqm62CMfw9E5ZOw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbYkiiYT7DBtK6/HJf4Z1v4BcoBF1inu8aVsOY16gjKQ6EzU5b
+	QcRLnwmJl3E2MRdn7p/EA5Gf8cDrCKrcyCEBx15GCI7izVQGDSiNMW/McyhBSQIsU3y2Sxvv2N9
+	NcEvrO07vo8R1j7XCnBt1tYTvx5ApwBxd0uyLda27Atk3GtRfFiCicw==
+X-Gm-Gg: AR+sD12ez2rZgqfFTb+eDEvONsS7ebySBCXY0ZX166m5l57UYUPLj5c4yFSnqiga2Qx
+	671+SsiXabLf8tHGChmycOJ6kHI3TonsfdNS9Rl6GEoKBqp7fEmJxH4x1MSDrWn0BQ40eAxYE7T
+	umBj1+ozjooOS8QZOgIBLYW8Lbq+cvYjMfsrxtywo+5wuHq0rsOqu6I7yH7HzeyJOYmjrAVR8WS
+	eDVVxiuS6lQszVV+G3Lp7B5Ne9/kMn4xWa32v7/FpL+tpGsVjqdiXxccdJpvBH83S/bxuJNSdRr
+	rx3JnQaK4tR22CJUYLI9i6wHkyoVC8aUS5RXvYpTUD1iuSBaA4Lgfdqi5dsqPmeWMg5vlVSbI/n
+	7iJZ6rQRQvI+OQ36ZT6SjiejVUgIBbMkSQdM530ORCIz8LApf9bSK2myNGZGqkD3wJP8DdTQ6oH
+	8=
+X-Received: by 2002:adf:e193:0:b0:474:18d9:8371 with SMTP id ffacd0b85a97d-4815a011050mr5799189f8f.28.1786611985362;
+        Thu, 13 Aug 2026 02:06:25 -0700 (PDT)
+X-Received: by 2002:adf:e193:0:b0:474:18d9:8371 with SMTP id ffacd0b85a97d-4815a011050mr5799073f8f.28.1786611984862;
+        Thu, 13 Aug 2026 02:06:24 -0700 (PDT)
+Received: from [192.168.188.103] (ip239-44-231-195.pool-bba.aruba.it. [195.231.44.239])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815a5613e2sm6119566f8f.6.2026.08.13.02.06.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Aug 2026 02:06:24 -0700 (PDT)
+Message-ID: <0c4e75f9-f7ce-41c9-aef9-a3b3b474c695@redhat.com>
+Date: Thu, 13 Aug 2026 11:06:22 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -32,118 +88,48 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 1/7] bpf, arm64: Fix stack-passed arguments for
- indirect trampolines
+Subject: Re: [PATCH net] net/sched: cls_bpf: reject dev-bound programs bound
+ to a different device
+To: Jamal Hadi Salim <jhs@mojatatu.com>, netdev@vger.kernel.org
+Cc: stable@vger.kernel.org, vega@nebusec.ai,
+ Victor Nogueira <victor@mojatatu.com>, Jakub Kicinski <kuba@kernel.org>,
+ Quentin Monnet <qmo@kernel.org>, Simon Horman <horms@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Jiri Pirko <jiri@resnulli.us>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, bpf@vger.kernel.org
+References: <20260809094418.901607-1-jhs@mojatatu.com>
+From: Paolo Abeni <pabeni@redhat.com>
 Content-Language: en-US
-To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Mark Rutland <mark.rutland@arm.com>, Will Deacon <will@kernel.org>,
- Catalin Marinas <catalin.marinas@arm.com>
-References: <20260810190922.3408757-1-puranjay@kernel.org>
- <20260810190922.3408757-2-puranjay@kernel.org>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <20260810190922.3408757-2-puranjay@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20260809094418.901607-1-jhs@mojatatu.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:Syh0CgBXw4pJiH1qugamCA--.35513S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAr1kGFW8CFW7XF4UCw1UAwb_yoW5KrW3pa
-	10ywnxCFs5JrW09a4kXr4UuFyFkFZYyr43CFWUJ34Sya1FgryDXFW5KayYk3s8Cr95Zr1x
-	Zr4jyr9IkFZ7C3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
-	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1
-	7KsUUUUUU==
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On 8/11/2026 3:09 AM, Puranjay Mohan wrote:
-> save_args() reads stack-passed arguments relative to FP assuming the
-> trampoline is entered through the fentry call from a traced function, in
-> which case both the parent frame (FP/x9) and the traced function frame
-> (FP/LR) are saved before FP is set, so the arguments start at FP + 32.
+On 8/9/26 11:44 AM, Jamal Hadi Salim wrote:
+> cls_bpf_prog_from_efd() obtained a SCHED_CLS program via
+> bpf_prog_get_type_dev() but never verified that a device-bound (offloaded)
+> program's bound netdev matches the TC netdev the classifier is being
+> attached to. This let a program loaded with prog_ifindex for device A be
+> attached via cls_bpf + skip_sw to device B; deleting device A then
+> destroyed the program's offload state while it was still attached to
+> device B, triggering a netdevsim WARN (panic with panic_on_warn=1).
 > 
-> An indirect trampoline for a struct_ops callback is entered through a
-> function pointer (blr), so only the FP/LR frame is pushed and the
-> arguments start at FP + 16, not FP + 32. Every stack-passed argument of
-> a struct_ops callback with more than eight argument slots is read two
-> slots off.
+> Mirror the XDP attach path (net/core/dev.c) and reject the attach with
+> -EINVAL when a dev-bound program's bound device does not match the
+> target device.
 > 
-> This went unnoticed because no struct_ops member passed arguments on the
-> stack until bpf_testmod_ops3::test_arena_stack, added by
-> commit 2d4de9a493a0 ("selftests/bpf: Test stack-passed struct_ops arena arguments").
-> That member covers this on arm64 once the JIT gains arena argument
-> support later in this series. Pass is_struct_ops into save_args() and
-> pick the offset accordingly, mirroring the x86 fix.
-> 
-> Fixes: 9014cf56f13d ("bpf, arm64: Support up to 12 function arguments")
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> ---
->   arch/arm64/net/bpf_jit_comp.c | 19 +++++++++++++------
->   1 file changed, 13 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> index d14d297ebb967..4af5a98b84e19 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-> @@ -2509,9 +2509,8 @@ static void clear_garbage(struct jit_ctx *ctx, int reg, int effective_bytes)
->   }
->   
->   static void save_args(struct jit_ctx *ctx, int bargs_off, int oargs_off,
-> -		      const struct btf_func_model *m,
-> -		      const struct arg_aux *a,
-> -		      bool for_call_origin)
-> +		      const struct btf_func_model *m, const struct arg_aux *a,
-> +		      bool for_call_origin, bool is_struct_ops)
->   {
->   	int i;
->   	int reg;
-> @@ -2531,7 +2530,15 @@ static void save_args(struct jit_ctx *ctx, int bargs_off, int oargs_off,
->   		bargs_off += 8;
->   	}
->   
-> -	soff = 32; /* on stack arguments start from FP + 32 */
-> +	/*
-> +	 * On-stack arguments start above the frame(s) pushed by the trampoline
-> +	 * prologue. Entered through the fentry call from a traced function, the
-> +	 * prologue saves both the parent (FP/x9) and the traced function
-> +	 * (FP/LR) frames, so the arguments start at FP + 32. A struct_ops
-> +	 * callback is called indirectly and only the FP/LR frame is saved, so
-> +	 * they start at FP + 16.
-> +	 */
-> +	soff = is_struct_ops ? 16 : 32;
->   	doff = (for_call_origin ? oargs_off : bargs_off);
->   
->   	/* save on stack arguments */
-> @@ -2721,7 +2728,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
->   	store_func_meta(ctx, func_meta, func_meta_off);
->   
->   	/* save args for bpf */
-> -	save_args(ctx, bargs_off, oargs_off, m, a, false);
-> +	save_args(ctx, bargs_off, oargs_off, m, a, false, is_struct_ops);
->   
->   	/* save callee saved registers */
->   	emit(A64_STR64I(A64_R(19), A64_SP, regs_off), ctx);
-> @@ -2770,7 +2777,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
->   
->   	if (flags & BPF_TRAMP_F_CALL_ORIG) {
->   		/* save args for original func */
-> -		save_args(ctx, bargs_off, oargs_off, m, a, true);
-> +		save_args(ctx, bargs_off, oargs_off, m, a, true, is_struct_ops);
->   		/* call original func */
->   		emit(A64_LDR64I(A64_R(10), A64_SP, retaddr_off), ctx);
->   		emit(A64_ADR(A64_LR, AARCH64_INSN_SIZE * 2), ctx);
+> Fixes: 6c8dfe21c435 ("cls_bpf: allow attaching programs loaded for specific device")
+> Reported-by: vega@nebusec.ai
+> Tested-by: Victor Nogueira <victor@mojatatu.com>
+> Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
+I understand that Jakub prefers going with this patch (with a correct
+fixes tag), so waiting for such tag landing here ;)
 
-Reviewed-by: Xu Kuohai <xukuohai@huawei.com>
+/P
 
