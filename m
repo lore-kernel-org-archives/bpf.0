@@ -1,148 +1,173 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D1B472F73;
-	Thu, 13 Aug 2026 12:59:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D82345EB5;
+	Thu, 13 Aug 2026 13:01:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786625963; cv=none; b=cz8pn11FkcY/d2gC/PvK3jmi1Jhq675UkTv5Qdxk2itY0vuWRsgggcAB8CZghmJgK/Ko0ortGrgNpT8XoK/tv9Zwxjaj+kkXJaxiRCLaklDmdXMsDCYNOhVULu2tKXH7GBkf6t87EVTIIOwzdfAb59+WdOQ8s8y5owpjSnMRJps=
+	t=1786626080; cv=none; b=RmT/iXx7uizNhWVmYPrMVA6fisz5adHJi4Hqr7+rvwdFiK/szXRr4D+tkkVfdLCbsA999n3lyXG0zBhsu0ws+9pL1B1EngHe28zQxPUjuipa4WiCvGB5Dnw4ThDHzfJLLz4G5yFv/4MtZqc1DpS7/UVZ3H7uE/rAnEmhEKILbYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786625963; c=relaxed/simple;
-	bh=R/TdCUsGnnRJ8S21ArMI8rn0BaNeYJp35glrrlC16XQ=;
+	s=arc-20240116; t=1786626080; c=relaxed/simple;
+	bh=cKew3KlUvcfVL85R5ZnuFzttOKWtkLMbIczwdQ/Mlmg=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=pDA9/AD1fhHVTOHSznAnbcnYWg/snuInmjpD5qNZUkDqGfnX7XuI5KCKAk8lXjmDkjBWch9RN4riW/kbyVNLLayqzzbRYCGDx/P2bBEJyWasOKIqgSyPW3Xf68nSVS0/46CYe6pLS8ULOzCh9F2xnAOqP6mx2HQE3IsEjpB2myE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ug4Wx3lq; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=nsTLxeWYFe3QLV16/yLagWP0FDLWXnpnEvlKCUWyABl+io9nCwrkb0QKFM88fs54yT9sC3em6rwTZFQwo568S47ytOX5slO3R+kDMUz9ffHal5EF+N6lbJqGL032G7ezRkNE9S/wClnqVTJfLCjfe7oZdSycAOqBcwYvDJtRM8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PlrXeZw8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ug4Wx3lq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76FE21F000E9;
-	Thu, 13 Aug 2026 12:59:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PlrXeZw8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C81981F000E9;
+	Thu, 13 Aug 2026 13:01:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786625962;
-	bh=TvTpj7DmndHOysVuNmn1xL06iJe2TyCYeqaPXMp9bhs=;
+	s=k20260515; t=1786626079;
+	bh=BWUDOEa3rQLAZjNY2vadFOSw+8DhFWgsIfJsgxNB8yU=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Ug4Wx3lqVl6THcsM+gpAVPWX0luAKyFYJGGGLMzIjbTnqAsgW+2L189nR1wBiLes2
-	 08K28ykvEk+Q6LRCngwW42pdFxVWXcb7E5N08QhsqWt1+XA/zCCNJOmuorWL/kjE8S
-	 lbO/LxxLE5b+Ja8w3cZ/v0QcOL/RVQ45GerUeF/c4vfjbmW3cRnKbKnsepKdVdDj38
-	 Qg6taeB5LDMdMLtrlZ8/SQNqrdh8ohaXESrdIlNKSmjhzZkdDsBraQoqitawMOmxiF
-	 u3dkDzQpiNlJGbHt21x8kg5bpEpN/wc502TVevxu5tJEzQWBXSGW4US8kQ3NN5rbQw
-	 uKprrlUSo+46A==
-Content-Type: multipart/mixed; boundary="===============1528963269429470544=="
+	b=PlrXeZw8pEJ41ktyEKPjhvq/siZ1bydE9zCkv2Y+g6ZNnAS/+trXXkOZsHgWok9xk
+	 dttV70ZkbeRdaYmy9IUT0t/Wdc/oR0HHs/OhMd8AZRB3MgEyWL1WMJp2UonVtaXISk
+	 aaKinchC8eX/beKSpbmnjoA1wPfbvJNHIV8PjnK2zCV9mq+gE1Ve0Xqi4b2qAIw4Ol
+	 ObbLyx8yCer96zZG2z4dhrTrN8BIe2cq5MGhStIFFIK10ipLrQEzdQoS7o0sXxa3o5
+	 /BCBCjrjqYE0shXELKJZTeKayCRGT0HJDNRnA3xX+ztKdZ7fmObgwZgiIH78s2bhUA
+	 shl4sbe8qWCxA==
+Content-Type: multipart/mixed; boundary="===============6666041604024526426=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0cff49d1e60dd2651d7c93beb8e5594bdea638548a3136204d588cbfda11c826@mail.kernel.org>
-In-Reply-To: <20260813112039.247862-1-maze@google.com>
-References: <20260813112039.247862-1-maze@google.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Support cgroup {get,set}sockopt hooks for compat syscalls
+Message-Id: <4ed920eb3ae305b6b4a323af841064d5486d00531e11c7c5c7cc381e22df9551@mail.kernel.org>
+In-Reply-To: <20260813-bpf-next-039-ia32-kfunc-return-v1-v1-1-37495ec632b5@mails.tsinghua.edu.cn>
+References: <20260813-bpf-next-039-ia32-kfunc-return-v1-v1-1-37495ec632b5@mails.tsinghua.edu.cn>
+Subject: Re: [PATCH bpf-next 1/2] bpf, x86: Normalize narrow kfunc returns on IA32
 From: bot+bpf-ci@kernel.org
-To: maze@google.com,zenczykowski@gmail.com,ast@kernel.org,daniel@iogearbox.net
-Cc: netdev@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,maze@google.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 13 Aug 2026 12:59:21 +0000 (UTC)
+To: chenyy23@mails.tsinghua.edu.cn,udknight@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,tglx@kernel.org,mingo@redhat.com,bp@alien8.de,dave.hansen@linux.intel.com,x86@kernel.org,hpa@zytor.com,shuah@kernel.org
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,chenyy23@mails.tsinghua.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 13 Aug 2026 13:01:17 +0000 (UTC)
 
---===============1528963269429470544==
+--===============6666041604024526426==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index ffd96e8b920bd..15f712b5b1645 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -7616,6 +7616,7 @@ struct bpf_sockopt {
->  	__s32	optname;
->  	__s32	optlen;
->  	__s32	retval;
-> +	__s32	is_compat;
->  };
+> diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
+> index 852baf2e4db4d..017cc9e7e4e2b 100644
+> --- a/arch/x86/net/bpf_jit_comp32.c
+> +++ b/arch/x86/net/bpf_jit_comp32.c
 
 [ ... ]
 
-> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> index 8fbc942a1cc3a..910878e991a04 100644
-> --- a/kernel/bpf/cgroup.c
-> +++ b/kernel/bpf/cgroup.c
-
-[ ... ]
-
-> @@ -2705,6 +2707,9 @@ static u32 cg_sockopt_convert_ctx_access(enum bpf_access_type type,
->  		else
->  			*insn++ = CG_SOCKOPT_READ_FIELD(optlen);
->  		break;
-> +	case offsetof(struct bpf_sockopt, is_compat):
-> +		*insn++ = CG_SOCKOPT_READ_FIELD(is_compat);
+> @@ -1620,13 +1620,25 @@ static int emit_kfunc_call(const struct bpf_prog *bpf_prog, u8 *end_addr,
+>  		/* add esp,"bytes_in_stack" */
+>  		end_addr -= 3;
+>
+> -	/* mov dword ptr [ebp+off],edx */
+> -	if (fm->ret_size > sizeof(u32))
+> -		end_addr -= 3;
+> -
+> -	/* mov dword ptr [ebp+off],eax */
+> -	if (fm->ret_size)
+> +	switch (fm->ret_size) {
+> +	case 0:
 > +		break;
->  	case offsetof(struct bpf_sockopt, retval):
->  		BUILD_BUG_ON(offsetof(struct bpf_cg_run_ctx, run_ctx) != 0);
+> +	case sizeof(u8):
+> +	case sizeof(u16):
+> +		/* mov[s|z]x eax,[a]x */
+>  		end_addr -= 3;
+> +		fallthrough;
+> +	case sizeof(u32):
+> +		/* cdq or xor edx,edx */
+> +		end_addr -= fm->ret_flags & BTF_FMODEL_SIGNED_ARG ? 1 : 2;
+> +		fallthrough;
+> +	case sizeof(u64):
+> +		/* Store EDX:EAX in R0. */
+> +		end_addr -= 6;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
 
-Appending __s32 is_compat to struct bpf_sockopt grows the UAPI structure
-from 40 to 48 bytes due to 8-byte alignment required by the __bpf_md_ptr()
-unions. This creates 4 bytes of unoccupied tail padding at offsets 44-47.
+The comment above this diff hunk reads:
 
-Can the verifier accept a 4-byte load at ctx offset 44?
+ * address by figuring out how many jit-insn is generated between
+ * the call (0xE8) and the end_addr:
+ *      - 0-1 jit-insn (3 bytes each) to restore the esp pointer if there
+ *        is arg pushed to the stack.
+ *      - 0-2 jit-insns (3 bytes each) to handle the return value.
 
-Looking at cg_sockopt_is_valid_access() in kernel/bpf/cgroup.c, the bounds
-check allows any offset under sizeof(struct bpf_sockopt), with alignment:
+Should this comment be updated? The new code can emit 0-4 instructions
+with varying lengths (1, 2, 3 or 6 bytes) to extend and store the
+return value, not just "0-2 jit-insns (3 bytes each)".
 
-	if (off < 0 || off >= sizeof(struct bpf_sockopt))
-		return false;
-	if (off % size != 0)
-		return false;
+>
+>  	jmp_offset = (u8 *)__bpf_call_base + insn->imm - end_addr;
+>  	if (!is_simm32(jmp_offset)) {
+> @@ -1637,15 +1649,38 @@ static int emit_kfunc_call(const struct bpf_prog *bpf_prog, u8 *end_addr,
+>
+>  	EMIT1_off32(0xE8, jmp_offset);
+>
+> -	if (fm->ret_size)
+> +	switch (fm->ret_size) {
+> +	case sizeof(u8):
+> +		/* mov[s|z]x eax,al */
+> +		EMIT3(0x0F, fm->ret_flags & BTF_FMODEL_SIGNED_ARG ? 0xBE : 0xB6,
+> +		      add_2reg(0xC0, IA32_EAX, IA32_EAX));
+> +		break;
+> +	case sizeof(u16):
+> +		/* mov[s|z]x eax,ax */
+> +		EMIT3(0x0F, fm->ret_flags & BTF_FMODEL_SIGNED_ARG ? 0xBF : 0xB7,
+> +		      add_2reg(0xC0, IA32_EAX, IA32_EAX));
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	if (fm->ret_size && fm->ret_size <= sizeof(u32)) {
+> +		if (fm->ret_flags & BTF_FMODEL_SIGNED_ARG)
+> +			/* cdq */
+> +			EMIT1(0x99);
+> +		else
+> +			/* xor edx,edx */
+> +			EMIT2(0x31, add_2reg(0xC0, IA32_EDX, IA32_EDX));
+> +	}
 
-A 4-byte load at offset 44 passes (44 < 48, 44 % 4 == 0), but
-cg_sockopt_convert_ctx_access() above has no case for offset 44 and no
-default arm. When bpf_convert_ctx_accesses() sees zero instructions
-returned, it calls verifier_bug() and triggers WARN_ONCE under
-CONFIG_DEBUG_KERNEL, letting any user with cgroup-sockopt load permission
-trigger a kernel warning via a BPF_PROG_TYPE_CGROUP_SOCKOPT program with
-r0 = *(u32 *)(r1 + 44).
+Does sign-extending narrow signed returns match the documented kfunc
+return contract? In kernel/bpf/fixups.c the comment says:
 
-Before this patch every accepted offset had a matching conversion case:
-offsets 0-23 (pointer fields) require size 8, and 24, 28, 32, 36 (level,
-optname, optlen, retval) were all handled; sizeof was exactly 40 with no
-tail padding.
+    /* Zero-extension is done by the caller. */
+    if (bpf_pseudo_kfunc_call(&insn))
+            continue;
 
-Should the hole be reserved in the UAPI struct (e.g. __u32 :32 or a named
-reserved field) and rejected in is_valid_access, or should
-cg_sockopt_convert_ctx_access() add an explicit case list or default arm
-to reject non-enumerated offsets?
+This exempts kfunc calls from the usual zero-extension path because
+the JIT is responsible for R0's high half. The verifier's
+__mark_btf_func_reg_size() marks narrow returns as subregs
+specifically to invoke the zero-extension machinery.
+
+For a concrete example with bpf_strcmp() which returns signed int,
+if it returns -1:
+  - x86-64 leaves R0 = 0x00000000ffffffff (32-bit write zeros upper half)
+  - This patch makes x86-32 produce R0 = 0xffffffffffffffff via cdq
+
+The same BPF program would see different R0 values depending on the
+architecture. Is this the intended behavior, or should narrow kfunc
+returns be zero-extended unconditionally to match the x86-64 path and
+the fixups.c contract?
+
+> +
+> +	if (fm->ret_size) {
+>  		/* mov dword ptr [ebp+off],eax */
+>  		EMIT3(0x89, add_2reg(0x40, IA32_EBP, IA32_EAX),
+>  		      STACK_VAR(bpf2ia32[BPF_REG_0][0]));
+> -
+> -	if (fm->ret_size > sizeof(u32))
+>  		/* mov dword ptr [ebp+off],edx */
+>  		EMIT3(0x89, add_2reg(0x40, IA32_EBP, IA32_EDX),
+>  		      STACK_VAR(bpf2ia32[BPF_REG_0][1]));
+> +	}
 
 [ ... ]
-
-The patch updates __cgroup_bpf_run_filter_getsockopt() to accept compat
-and populate ctx.is_compat, but __cgroup_bpf_run_filter_getsockopt_kern()
-was not updated.
-
-This matters because __cgroup_bpf_run_filter_getsockopt_kern() is the only
-hook that runs for getsockopt(TCP_ZEROCOPY_RECEIVE). The outer
-BPF_CGROUP_RUN_PROG_GETSOCKOPT in do_sock_getsockopt() is bypassed for
-that optname via tcp_bpf_bypass_getsockopt(), and do_tcp_getsockopt()
-instead calls BPF_CGROUP_RUN_PROG_GETSOCKOPT_KERN() at net/ipv4/tcp.c.
-Unlike the two hooks this patch fixes, that kernel-side hook was never
-gated on compat, so it already ran for 32-bit callers.
-
-Now it reports ctx->is_compat == 0 for them, violating the documented
-contract that the field is "1 for compat syscalls and 0 otherwise." A BPF
-program that keys its optval layout decisions off ctx->is_compat will
-misparse the compat struct tcp_zerocopy_receive request from a 32-bit task.
-
-Should compat be threaded into
-__cgroup_bpf_run_filter_getsockopt_kern() as well, or at minimum should the
-documentation clarify that is_compat is unreliable on the kern hook?
-
-[ ... ]
-
-This looks like a bug fix for code introduced in 55db9c0e8534 ("net: remove
-compat_sys_{get,set}sockopt"). Should this include:
-
-  Fixes: 55db9c0e8534 ("net: remove compat_sys_{get,set}sockopt")
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31696027015
---===============1528963269429470544==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31699378511
+--===============6666041604024526426==--
