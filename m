@@ -1,21 +1,21 @@
 Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCF4742900D
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 20:02:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F69528D8D0
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 20:03:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786651375; cv=none; b=fMuI7MgFgCOeygRjLXMJQCSdcgjMJ8vMQvAgaw+aIxFOy9vdNGEhEjyPZ2nW2e1yhipetseompqcMUq1KX7niq8hQ8ob+i05p5bugPcpCWIXeMZIeRJyKCcVDB91yaDt1nyIgegb3w8zw6xKPHf5fL7vCe39J7rIlO3ndkp5FyM=
+	t=1786651381; cv=none; b=RnqyIqPY+Z8rmoQl0P+AbS87A8i+iDOBbCT1USX/knSbf/glcFC0cqjJKZOoOw1dDHXLTpB0/2C3UVoWRzHl14IVwjlNvL5lrrQnh0S4ufI5373lIMXg3XtqbsZJzgfi5tgoCULeFKVoSWE67tKFTzhr66Gcrj9i8sn7WybDVpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786651375; c=relaxed/simple;
-	bh=FKYA53ftyFv9+BlSlTEW7xiX8JmKxjsAIvTS+dsF86Y=;
+	s=arc-20240116; t=1786651381; c=relaxed/simple;
+	bh=WBc7u2ChcMltHjTzmPjiWB5A2t4DJpx07JcVD3gf500=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=krE+XbpLh9ZuQ4aKAD/+2jkplwp4JHaqj6BMY+C2qtLmDIBOK+woeF6ewmtyGyny+S7Mfqm4UadTPVtOgljsZJ+0o4EwrczkczJPO7EmfyuzM10ygFV3gGdoBZvcmZVpt6xL5k0cUNkyG2F0W9b2g1C51T1yUUM9ZutPlRgyMjI=
+	 MIME-Version; b=f7OHF14/3WqavBnivrfcaPdPykiAhE64SljdF5rpms1E+FTiZ1fU1Xt521rdocpV/drcs8IzHfBZahClUvUba9utbHN7Obiu1lpITqlMwtum2Vqf4DS3DIPBt65A3hQht/dIgQyvKLeti+diI7q6ufnkpjY46QYyz7k0GsU0FzA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id DB87D23E02F8AF; Thu, 13 Aug 2026 13:02:45 -0700 (PDT)
+	id C242723E03556D; Thu, 13 Aug 2026 13:02:51 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v5 07/11] bpf: Enable aggregate return types up to 16 bytes
-Date: Thu, 13 Aug 2026 13:02:45 -0700
-Message-ID: <20260813200245.1996135-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v5 08/11] bpf: Reject register-pair returns when the subprog BTF is unreliable
+Date: Thu, 13 Aug 2026 13:02:50 -0700
+Message-ID: <20260813200250.1996395-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260813200210.1991507-1-yonghong.song@linux.dev>
 References: <20260813200210.1991507-1-yonghong.song@linux.dev>
@@ -37,220 +37,84 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Relax btf_distill_func_proto() to accept a by-value struct or union that
-the R0:R2 convention added in earlier patches can carry:
+btf_check_subprog_call() can decide, at a call site, that this BTF is not
+to be trusted and mark the subprogram unreliable, which happens when
+compiler optimizations remove arguments from a static function or when a
+mismatched type is passed to a global one. Verification carries on, but
+the prototype the return convention was read from is one the verifier has
+already declared not to describe the compiled code.
 
- - a struct or union larger than 8 and up to 16 bytes, returned in the
-   R0:R2 register pair, matching what LLVM emits for the BPF target;
- - a struct or union up to 8 bytes, returned in R0 alone.
+Rather than keep tracking R2 on the strength of a discarded signature,
+reject a return value larger than 8 bytes as soon as the prototype it was
+derived from becomes unreliable. Add subprog_ret_pair_unreliable() and
+test it in check_func_call() on the path to a static subprogram, which is
+where the flag can be observed while the call still proceeds. For a stati=
+c
+callee this only triggers on a genuine argument mismatch, since the
+previous patch stopped btf_validate_return_type() from marking a local
+function unreliable for returning an aggregate.
 
-A >8 byte scalar (__int128) was already accepted and is unchanged.
-Everything else stays rejected: a return type larger than 16 bytes, and a=
-ny
-type that __get_type_size() cannot return in registers at all (e.g. an
-array), which it already reports as ret < 0.
+No check is needed anywhere else:
+ - a global subprogram is already rejected by the existing "Caller passes
+   invalid args into func#N" path, because btf_check_subprog_call()
+   returns an error both when it marks the BTF unreliable and on every
+   later call;
+ - the main program does not use the convention at all: its return value
+   is the program's exit code, read out of R0, so nothing looks at R2
+   there;
 
-btf_validate_return_type() is relaxed as well, so that it accepts a
-by-value struct or union up to 16 bytes in addition to void and scalars.
-For a local (static) function this also stops btf_check_subprog_call() fr=
-om
-marking the subprogram's BTF unreliable just because it returns an
-aggregate.
-
-With btf_distill_func_proto() and btf_validate_return_type() relaxed, the
-verifier, JIT, precision-backtracking and live-register support from the
-earlier patches becomes reachable: <=3D16 byte aggregate return values no=
-w
-work end to end.
-
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/bpf_verifier.h                  |  2 ++
- kernel/bpf/btf.c                              | 23 +++++++++++++++----
- kernel/bpf/verifier.c                         | 18 +++++++--------
- .../selftests/bpf/progs/exceptions_fail.c     |  2 +-
- 4 files changed, 30 insertions(+), 15 deletions(-)
+ kernel/bpf/verifier.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index bffd32dca068..899e5ce98643 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1448,6 +1448,8 @@ int bpf_jmp_offset(struct bpf_insn *insn);
- struct bpf_iarray *bpf_insn_successors(struct bpf_verifier_env *env, u32=
- idx);
- void bpf_fmt_stack_mask(char *buf, ssize_t buf_sz, u64 stack_mask);
- bool bpf_subprog_is_global(const struct bpf_verifier_env *env, int subpr=
-og);
-+bool btf_type_is_scalar_struct(struct bpf_verifier_env *env, const struc=
-t btf *btf,
-+			       const struct btf_type *t, int rec);
-=20
- int bpf_find_subprog(struct bpf_verifier_env *env, int off);
- bool bpf_is_throw_kfunc(struct bpf_insn *insn);
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 87ffde865a50..e59c00f78b9a 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -7591,7 +7591,7 @@ int btf_distill_func_proto(struct bpf_verifier_log =
-*log,
- 		return -EINVAL;
- 	}
- 	ret =3D __get_type_size(btf, func->type, &t);
--	if (ret < 0 || btf_type_is_struct(t)) {
-+	if (ret < 0 || ret > 16) {
- 		bpf_log(log,
- 			"The function %s return type %s is unsupported.\n",
- 			tname, btf_type_str(t));
-@@ -7964,7 +7964,7 @@ static int btf_scan_type_tags(struct bpf_verifier_e=
-nv *env,
-=20
- /* Check whether the type is a valid return type. */
- static int btf_validate_return_type(struct bpf_verifier_env *env, struct=
- btf *btf,
--		const struct btf_type *t, int subprog)
-+		const struct btf_type *t, int subprog, bool is_global)
- {
- 	u32 tags =3D 0;
- 	int err;
-@@ -7987,6 +7987,19 @@ static int btf_validate_return_type(struct bpf_ver=
-ifier_env *env, struct btf *bt
- 	if (btf_type_is_void(t) || btf_type_is_int(t) || btf_is_any_enum(t))
- 		return 0;
-=20
-+	if (btf_type_is_struct(t) && t->size <=3D 16) {
-+		/*
-+		 * A global function's caller models the return as an opaque
-+		 * scalar pair, so it may only return scalars by value. A local
-+		 * function is verified inline, so a pointer field stays tracked
-+		 * and needs no such restriction.
-+		 */
-+		bool local_func =3D subprog && !is_global;
-+
-+		if (local_func || btf_type_is_scalar_struct(env, btf, t, 0))
-+			return 0;
-+	}
-+
- 	return -EOPNOTSUPP;
- }
-=20
-@@ -8074,12 +8087,12 @@ int btf_prepare_func_args(struct bpf_verifier_env=
- *env, int subprog)
- 		return -EINVAL;
- 	}
-=20
--	err =3D btf_validate_return_type(env, btf, t, subprog);
-+	err =3D btf_validate_return_type(env, btf, t, subprog, is_global);
- 	if (err) {
- 		if (is_global) {
- 			bpf_log(log,
--				"Global function %s() return value not void or scalar. "
--				"Only those are supported.\n",
-+				"Global function %s() has unsupported return type. "
-+				"Only void, scalar, or a scalar-only struct/union up to 16 bytes is =
-supported.\n",
- 				tname);
- 		}
- 		return err;
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 0c68ab3bd6ce..b23be0fa95af 100644
+index b23be0fa95af..0ffb3bed1649 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -11093,9 +11093,9 @@ static bool is_kfunc_arg_implicit(const struct bp=
-f_call_arg_meta *meta, u32 arg_
+@@ -441,6 +441,23 @@ static void bpf_compute_subprog_ret_regs(struct bpf_=
+verifier_env *env)
+ 	}
  }
 =20
- /* Returns true if struct is composed of scalars, 4 levels of nesting al=
-lowed */
--static bool __btf_type_is_scalar_struct(struct bpf_verifier_env *env,
--					const struct btf *btf,
--					const struct btf_type *t, int rec)
-+bool btf_type_is_scalar_struct(struct bpf_verifier_env *env,
-+			       const struct btf *btf,
-+			       const struct btf_type *t, int rec)
++/*
++ * A >8 byte BPF return changes the calling convention to R0:R2, and the
++ * verifier derives that convention from the subprogram's BTF prototype
++ * alone. Once that prototype is marked unreliable it is known not to
++ * describe the compiled code, so the convention read from it cannot be
++ * trusted either: reject the call rather than keep tracking R2 on the
++ * strength of a signature the verifier has already discarded.
++ */
++static bool subprog_ret_pair_unreliable(struct bpf_verifier_env *env, in=
+t subprog)
++{
++	struct bpf_prog_aux *aux =3D env->prog->aux;
++
++	return bpf_ret_reg_pair(env, subprog) &&
++	       aux->func_info_aux &&
++	       aux->func_info_aux[subprog].unreliable;
++}
++
+ static const char *subprog_name(const struct bpf_verifier_env *env, int =
+subprog)
  {
- 	const struct btf_type *member_type;
- 	const struct btf_member *member;
-@@ -11113,7 +11113,7 @@ static bool __btf_type_is_scalar_struct(struct bp=
-f_verifier_env *env,
- 				verbose(env, "max struct nesting depth exceeded\n");
- 				return false;
- 			}
--			if (!__btf_type_is_scalar_struct(env, btf, member_type, rec + 1))
-+			if (!btf_type_is_scalar_struct(env, btf, member_type, rec + 1))
- 				return false;
- 			continue;
- 		}
-@@ -11512,7 +11512,7 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, =
-struct bpf_call_arg_meta *meta,
- 		 (is_kfunc_arg_mem_size(meta->btf, &args[arg + 1]) ||
- 		  is_kfunc_arg_const_mem_size(meta->btf, &args[arg + 1]))) {
- 		if (!btf_type_is_void(ref_t) && !btf_type_is_scalar(ref_t) &&
--		    !__btf_type_is_scalar_struct(env, meta->btf, ref_t, 0)) {
-+		    !btf_type_is_scalar_struct(env, meta->btf, ref_t, 0)) {
- 			verbose(env, "%s pointer type %s %s must point to void, scalar, or st=
-ruct with scalar\n",
- 				reg_arg_name(env, argno), btf_type_str(ref_t), ref_tname);
- 			return -EINVAL;
-@@ -11528,7 +11528,7 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, =
-struct bpf_call_arg_meta *meta,
- 		 * scalars. The access size is derived from the pointed-to BTF type.
- 		 */
- 		if (!btf_type_is_scalar(ref_t) &&
--		    !__btf_type_is_scalar_struct(env, meta->btf, ref_t, 0)) {
-+		    !btf_type_is_scalar_struct(env, meta->btf, ref_t, 0)) {
- 			verbose(env, "%s pointer type %s %s must point to scalar, or struct w=
-ith scalar\n",
- 				reg_arg_name(env, argno), btf_type_str(ref_t), ref_tname);
- 			return -EINVAL;
-@@ -12498,7 +12498,7 @@ static int check_kfunc_args(struct bpf_verifier_e=
-nv *env, struct bpf_call_arg_me
- 				break;
- 			}
+ 	struct bpf_func_info *info;
+@@ -9527,6 +9544,12 @@ static int check_func_call(struct bpf_verifier_env=
+ *env, struct bpf_insn *insn,
+ 		return 0;
+ 	}
 =20
--			if (!__btf_type_is_scalar_struct(env, meta->btf, ref_t, 0)) {
-+			if (!btf_type_is_scalar_struct(env, meta->btf, ref_t, 0)) {
- 				enum bpf_reg_type reg2btf_type =3D lookup_reg2btf_ids(ref_id);
-=20
- 				verbose(env, "%s is %s expected %s %s",
-@@ -12962,7 +12962,7 @@ static int check_special_kfunc(struct bpf_verifie=
-r_env *env, struct bpf_call_arg
-=20
- 		struct_meta =3D btf_find_struct_meta(ret_btf, ret_btf_id);
- 		if (is_bpf_percpu_obj_new_kfunc(meta->func_id)) {
--			if (!__btf_type_is_scalar_struct(env, ret_btf, ret_t, 0)) {
-+			if (!btf_type_is_scalar_struct(env, ret_btf, ret_t, 0)) {
- 				verbose(env, "bpf_percpu_obj_new type ID argument must be of a struc=
-t of scalars\n");
- 				return -EINVAL;
- 			}
-@@ -13306,7 +13306,7 @@ static int check_kfunc_call(struct bpf_verifier_e=
-nv *env, struct bpf_insn *insn,
- 		 * otherwise a pointer field would be laundered into a scalar
- 		 * and escape provenance and reference tracking.
- 		 */
--		if (!__btf_type_is_scalar_struct(env, desc_btf, t, 0)) {
-+		if (!btf_type_is_scalar_struct(env, desc_btf, t, 0)) {
- 			verbose(env,
- 				"kernel function %s returns %s %s that is not composed of scalars\n"=
-,
- 				func_name, btf_type_str(t),
-diff --git a/tools/testing/selftests/bpf/progs/exceptions_fail.c b/tools/=
-testing/selftests/bpf/progs/exceptions_fail.c
-index ac44d60e5066..9708efb93683 100644
---- a/tools/testing/selftests/bpf/progs/exceptions_fail.c
-+++ b/tools/testing/selftests/bpf/progs/exceptions_fail.c
-@@ -60,7 +60,7 @@ __noinline int exception_cb_ok_arg_small(int a)
-=20
- SEC("?tc")
- __exception_cb(exception_cb_bad_ret_type1)
--__failure __msg("Global function exception_cb_bad_ret_type1() return val=
-ue not void or scalar.")
-+__failure __msg("Only void, scalar, or a scalar-only struct/union up to =
-16 bytes is supported.")
- int reject_exception_cb_type_1(struct __sk_buff *ctx)
- {
- 	bpf_throw(0);
++	if (subprog_ret_pair_unreliable(env, subprog)) {
++		verbose(env, "Func#%d ('%s') returns >8 bytes, which requires reliable=
+ BTF\n",
++			subprog, subprog_name(env, subprog));
++		return -EINVAL;
++	}
++
+ 	/*
+ 	 * Track caller's total stack arg count (incoming + max outgoing).
+ 	 * This is needed so the JIT knows how much stack arg space to allocate=
+.
 --=20
 2.53.0-Meta
 
