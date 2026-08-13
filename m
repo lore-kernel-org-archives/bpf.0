@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEC1A48D874;
-	Thu, 13 Aug 2026 17:16:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC7394A2E17;
+	Thu, 13 Aug 2026 17:17:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786641397; cv=none; b=alg27eNMUUs/pJ05thMzJp7R7uhSUGjp9QPWk+F2Uq/mWzliePeG7mkXGnkAurJdaCfaL9YKyXlQJYeVxqnwtoxtEg00OF8jFdBXdf1o8OD19N8madhrqlgsoawkNYq/gMjcBkdSTbXg/FP0kCgwA3KLEwyDv4RAodmqStC283E=
+	t=1786641455; cv=none; b=nlSoef2N65lFus5alURrnmdRf9sWhh8F+t0tivHhjeInS99Cgp6T2dZa7D5nIBUzsytWl1Slc1XdS5MfwHbeT2Hm2TeuHIzR6zBDeOHcGS1oiaF46G+dMOV0Krih6iLSQYBn6jnin3xMZdTiZ5zjWDb+W/nHXWevnoMZSrwt2zU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786641397; c=relaxed/simple;
-	bh=h4V18G1IGMluUDpGrYb0L5vfGcwL279BSqJc0Lxvn8w=;
+	s=arc-20240116; t=1786641455; c=relaxed/simple;
+	bh=jQ/dW4Vhmcxo/pQQIciVUY/RP/zNy8o+EC3W0CJSXE4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Jals6CYmu4LBuKxnuRU2YTr3GoLQAFhtn0T79h8145a9Ey04ObUF8qOa/Jbn7da2LASI7cuJSLURzZURPoTK5Xqxqb29gqMY3kwyUBemIiYaec4cxIK7f9irUd6Vpr0OyaGd8DGcZAsI+JhSGyHzXD0Z3PlqxxNrgOZZM2qUt9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vo2StqAd; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=sp/Mn5UuumUZgpu5IOkFx0dDvV9gyK13wRgLCsTS5yjHEdJS5zkoLK/YLf+OWwejZSW/WpkebcrH2WwAiRXsGKaVFQAzFiw8/PMoeDDCtls+9yCUF2nejeGhW05kGWZWHZ1uHiu/PLAWBjNOtqVk+dLws+6SoVdyI6Cjpfid0d4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=azaHqEmx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vo2StqAd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E1471F000E9;
-	Thu, 13 Aug 2026 17:16:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="azaHqEmx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A5511F00A3A;
+	Thu, 13 Aug 2026 17:17:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786641395;
-	bh=DP/pkqUUqjCbjJSAYJqSSJGEYL3fyr5nTie6andI3Is=;
+	s=k20260515; t=1786641453;
+	bh=RzppDJGB6ZCdx2OYyV1lZRNPp+9ZE+7GMmUkW1Kug2g=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Vo2StqAd9Sl5GV+5sQy97NHBlsSYBYDswk2ReMgNqWrrBoTzEcjZinP1GDFiyOYDI
-	 RjWe7iltd4hTfeT5U3WMWDy2q83NAdJW8+SS7tbAajdqWGa51s4TyVYA2IjWYH7HQD
-	 FE56/AFg6sTEnHcoLGjFS5nqBIyRzCB32t9628N54+dh+XddKQpd78cq3nPqPbMjy7
-	 vyUV7QMmmj0vXHn372DDFRjiUuCi8cDUIa/ApS8cHHO0bCDKJqOppMo91uqhGGzgup
-	 DoVnr4WkxJdsTS7JdOG422Iz1rTdmmCpxdVBQX6sEy+oLvNefJ3RKlSqvwhFiYnyFk
-	 igY98d4ov+ibQ==
+	b=azaHqEmxm6G1IZ5/HBcjMrVFaAp1cchh89o6D6+eTgy4aYsbozEzDIDEsaz1MwgMJ
+	 +73dhSxVBsQ22VlYL30slO71tQk7Hr8jllKGXCw0+UB8yB7S5Cfzn350n+FqInUhch
+	 Q0UOV3molRjYsuWVIpl+wH7OZJrPTpXbI/Mz/OmmB9aER8ATNsbHRvdRbzEKu7xLd+
+	 5Lf9c6wuYBpkzzA6eegtxiEtPCZUZqoTHmTD0KvVvNZQOuXgX2JFdhQ3iGrgooL2oV
+	 OophZ65KcaGSQ6lDR42av0LxloTelt30VJAQWpXAE1e2RMsRXNo4JWGhEnxSYijBOw
+	 lw3QNfIjFFv0g==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 05/13] csky: pass all six syscall args to
+Subject: Re: [PATCH 04/13] arm64: pass all six syscall args to
  audit_syscall_entry()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Ricardo Robaina" <rrobaina@redhat.com>
 Cc: bpf@vger.kernel.org, audit@vger.kernel.org
-In-Reply-To: <0b18395deee1e30aaa53e4cc402f93e6e273a9ad.1786626275.git.rrobaina@redhat.com>
+In-Reply-To: <84e977166dfd72c8c5b53a54e86e149e7ed60672.1786626275.git.rrobaina@redhat.com>
 References: <cover.1786626275.git.rrobaina@redhat.com>
- <0b18395deee1e30aaa53e4cc402f93e6e273a9ad.1786626275.git.rrobaina@redhat.com>
+ <84e977166dfd72c8c5b53a54e86e149e7ed60672.1786626275.git.rrobaina@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 13 Aug 2026 17:16:35 +0000
-Message-Id: <20260813171635.7E1471F000E9@smtp.kernel.org>
+Date: Thu, 13 Aug 2026 17:17:32 +0000
+Message-Id: <20260813171733.1A5511F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,46 +47,56 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] The patch introduces a compile error by accessing `a4` and `a5` mem=
-bers of `struct pt_regs`, which do not exist on the csky architecture.
+- [Low] Tree-wide API change for `audit_syscall_entry()` missed several arc=
+hitectures, causing build failures due to an argument count mismatch.
 --
 
---- Patch [5]: [PATCH 05/13] csky: pass all six syscall args to audit_sysca=
-ll_entry() ---
-commit 048151cce10f914f8f5068a59ec81b9462f22b0f
+--- Patch [4]: [PATCH 04/13] arm64: pass all six syscall args to audit_sysc=
+all_entry() ---
+commit 5064bc40e84bac75de063321783c252440dbc0f5
 Author: Ricardo Robaina <rrobaina@redhat.com>
 
-csky: pass all six syscall args to audit_syscall_entry()
+arm64: pass all six syscall args to audit_syscall_entry()
 
-This commit updates the audit_syscall_entry() call in the csky architecture=
- to
-pass the 5th and 6th syscall arguments. It attempts to access these argumen=
-ts
-via the pt_regs structure.
+This commit updates the arm64 syscall entry path to pass all six syscall
+arguments to audit_syscall_entry(). This aligns with updates to the audit
+core which now expects these additional arguments.
 
-> diff --git a/arch/csky/kernel/ptrace.c b/arch/csky/kernel/ptrace.c
-> index 6bb685a2646b5..562eaf23be82d 100644
-> --- a/arch/csky/kernel/ptrace.c
-> +++ b/arch/csky/kernel/ptrace.c
-> @@ -329,7 +329,8 @@ asmlinkage int syscall_trace_enter(struct pt_regs *re=
-gs)
->  	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
->  		trace_sys_enter(regs, syscall_get_nr(current, regs));
+> diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+> index 4d08598e2891d..093c20bff38a9 100644
+> --- a/arch/arm64/kernel/ptrace.c
+> +++ b/arch/arm64/kernel/ptrace.c
+> @@ -2427,7 +2427,8 @@ int syscall_trace_enter(struct pt_regs *regs)
+>  		trace_sys_enter(regs, regs->syscallno);
 > =20
-> -	audit_syscall_entry(regs_syscallid(regs), regs->a0, regs->a1, regs->a2,=
- regs->a3);
-> +	audit_syscall_entry(regs_syscallid(regs), regs->a0, regs->a1,
-> +			    regs->a2, regs->a3, regs->a4, regs->a5);
+>  	audit_syscall_entry(regs->syscallno, regs->orig_x0, regs->regs[1],
+> -			    regs->regs[2], regs->regs[3]);
+> +			    regs->regs[2], regs->regs[3],
+> +			    regs->regs[4], regs->regs[5]);
 
 [Severity: Low]
-Will this cause a build failure? Looking at struct pt_regs for csky, it
-appears the a4 and a5 members do not exist. Accessing regs->a4 and regs->a5
-here in syscall_trace_enter() seems like it will prevent the csky
-architecture from compiling.
+Does this change need to be applied to other architectures as well to avoid
+build failures?
 
->  	return 0;
->  }
+It looks like several other architectures were not updated to match the new
+7-argument signature of audit_syscall_entry(), which will cause them to fail
+to compile due to 'too few arguments to function' errors.
+
+For example, MIPS continues to pass only 5 arguments:
+
+arch/mips/kernel/ptrace.c:syscall_trace_enter() {
+	...
+	audit_syscall_entry(current_thread_info()->syscall,
+			    regs->regs[4], regs->regs[5],
+			    regs->regs[6], regs->regs[7]);
+	...
+}
+
+Similar missing updates appear in C-Sky's syscall_trace_enter()
+(arch/csky/kernel/ptrace.c), Microblaze's do_syscall_trace_enter()
+(arch/microblaze/kernel/ptrace.c), and PowerPC's do_syscall_trace_enter()
+(arch/powerpc/kernel/ptrace/ptrace.c).
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1786626275.gi=
-t.rrobaina@redhat.com?part=3D5
+t.rrobaina@redhat.com?part=3D4
