@@ -1,103 +1,122 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD1D8367B6F
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 03:37:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D03F2FE56F
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 03:37:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786592264; cv=none; b=drZUi4DH2NcxHxiMLVsiWzQ4xGR4aSNsUz/1HuWj4YwjjRR1aa51WDhbAFdZjATwmQ81zAXFwXJ1xwdrcEfCBYkAJuqcrcY9Y6iC/4vIt01ptxXVK+jBpQBtu4qrvNAG5Ra0UXeXCMmTuWTqaQrp5229mOghLzr1hw+RaWrIR44=
+	t=1786592275; cv=none; b=Q0sZftZB4q07SoUWbrF+gNQFHEtCL7m5E2ScHEBVvIcCeYXTFoYW7Xc8E75m6XK/N1ITOXtwjeFMc9vQHb9zuzfXB8+6/h3iJDnqT0L71QxY9NcKmPFe/5rNCPX6HZrnVKYQFZ3VpYDV8Hp54jzIyBnBP91KW6MtJ3fAhjPInGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786592264; c=relaxed/simple;
-	bh=vWXTKlju+kZNorxnF2Sm2sZn3RCbE1HbvUDdwURT4gU=;
+	s=arc-20240116; t=1786592275; c=relaxed/simple;
+	bh=64VOHehe7qe0DEFowvKN3EEY3JBmUkEAvPw92hkAK9k=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=PLUrA4yi2OAiHCRK/wMUnINZvv/b+1p0u2DgW6s9F+NHsrWjK+mEiysZZDQ1EMfrg31WubeLLmOUbBmko5PVAjDrZpZKjNGoqA/Y8u30ZcteB5WnB3Nn6DEYiUtiYra+pgiB8IEGQTmzXRaiCDSk+IaYU/8Qf3ZjfTzc0St5O44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V/PNly++; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=GmYSKLOc0mvoir9we6Tj6X9U/F3rXElN8U0baxfJyC6qSVftQQu2lY9w+pEFvWB8M52B5UAfXvoWArz3mCYwep9Cgt5gGvbBEDIhTKws86ZG49IAYHwq/2cMqSg9U/7BqsedQLNWd6Kb5v1MYlD1UFXPoDRoVB30lncV4uEuZGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JhD8iSwl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V/PNly++"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 102F91F000E9;
-	Thu, 13 Aug 2026 03:37:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JhD8iSwl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B09FA1F000E9;
+	Thu, 13 Aug 2026 03:37:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786592263;
-	bh=WniDOR7mo6Y/pAYZHyD96n4SsMo2ydTGlYmrw3R6OF4=;
+	s=k20260515; t=1786592273;
+	bh=GVZqrwyi4zzNbGzqL5DhnVegzoqR8alD8EtaBldPbao=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=V/PNly++Yd5UQ2TikYg0KpnNEcfafoy4XvKY1Ea4uh1DATngmUfjOlb8Y1ajB3UrK
-	 NAqPv+xHyTxyv6V3xpPXYDhxLct4LNepeWgyiLU/XCy5vof6ePQ4BG4Nl8Bm2tahNt
-	 dV64l+4XZFO1BSoNn9DMmQ5OtqNbWI6xtHvFmlEsb37FofmngmRe+sy4zJIh+OQ4gt
-	 D46pe4DFwpULtoh45wkBGHzgKl4WGbyMlgt1QMna5DMIb18bcNi3pdUe7GodBff7EA
-	 X11X67kyjxYZTWuZkFZl11lo6XGFMfFEZczgiWfX4EnXNBmnLAAFCRYiP+UM1KQhcf
-	 etigXcH72ZGrw==
+	b=JhD8iSwlRcaPUS4OGuS2NDT/ge/t0ZA1d2xVbtQGL8pZqAagKlfAgnqaKlMcXLnVv
+	 x4oLhDCMxcbC/HHc8a+rIzxEu7yIeM3VV6+R3W/+YWYqSzWjRCD/mXngK9/RS2ldE3
+	 iDG2D5SLTnlWjUmmXNN7ItP18gZNOhg4z+pY9/2BKZSHNkJ4WHqIr9aSq+yIw2tRYR
+	 3ihwJBMpdg5YYo3FmrIaBkoGU81hoEL+nZFr9SvmugAnywvoQaYTj6SIpZCBr+Aaro
+	 /eAFMat54q4ZP/ybn0p31o4bp5KyZSqwsCD0p5IDjF6qjcFCadU4SdCON9RxOZgK0j
+	 1vfAV9v1b8mPw==
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH bpf-next v2 2/2] selftests/bpf: add tests for
- selective kmod BTF loading
+Subject: Re: [RFC PATCH bpf-next v2 1/2] libbpf: support selective kernel
+ module BTF loading via .kmod_btfs section
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Fuyu Zhao" <zhaofuyu@vivo.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260813032613.2755-3-zhaofuyu@vivo.com>
+In-Reply-To: <20260813032613.2755-2-zhaofuyu@vivo.com>
 References: <20260813032613.2755-1-zhaofuyu@vivo.com>
- <20260813032613.2755-3-zhaofuyu@vivo.com>
+ <20260813032613.2755-2-zhaofuyu@vivo.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 13 Aug 2026 03:37:42 +0000
-Message-Id: <20260813033743.102F91F000E9@smtp.kernel.org>
+Date: Thu, 13 Aug 2026 03:37:53 +0000
+Message-Id: <20260813033753.B09FA1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] The tracking counter `obj->kmod_btfs->nr_loaded` is never update=
-d, rendering the early termination optimization for BTF loading completely =
-ineffective.
+- [Medium] Missing increment of `nr_loaded` prevents early loop termination.
+- [Low] Multi-line comment formatting violation.
 --
 
---- Patch [2]: [RFC PATCH bpf-next v2 2/2] selftests/bpf: add tests for sel=
-ective kmod BTF loading ---
-commit 506359525a106f517e013e060ee2c6feb17720c8
+--- Patch [1]: [RFC PATCH bpf-next v2 1/2] libbpf: support selective kernel=
+ module BTF loading via .kmod_btfs section ---
+commit 3f4fb04bbfb95d7f7ea0012b5651135983af6e62
 Author: Fuyu Zhao <zhaofuyu@vivo.com>
 
-selftests/bpf: add tests for selective kmod BTF loading
+libbpf: support selective kernel module BTF loading via .kmod_btfs section
 
-Add test cases to verify the new ".kmod_btfs" section logic in libbpf.
-The added test cases cover three main scenarios: valid module, non-existent
-module, and duplicates/unneeded modules.
+This patch adds support for a ".kmod_btfs" ELF section to allow BPF programs
+to specify which kernel modules need BTF loading. It introduces functions to
+collect the module names and filter the BTF loading process to avoid loading
+unneeded modules.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c b/tools/t=
-esting/selftests/bpf/prog_tests/kmod_btfs.c
-> index 0000000000000..d875fcce6681d
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c
-> @@ -0,0 +1,52 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <test_progs.h>
-> +#include "kmod_btfs.skel.h"
-> +#include "kmod_btfs_nonexist.skel.h"
-> +#include "kmod_btfs_mix.skel.h"
-> +
+> diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+> index 9d160b5b9c0ee..171ea055cd323 100644
+> --- a/tools/lib/bpf/bpf_helpers.h
+> +++ b/tools/lib/bpf/bpf_helpers.h
+> @@ -188,6 +188,20 @@ enum libbpf_tristate {
+>  	TRI_MODULE =3D 2,
+>  };
+> =20
+> +/* Helper typedef for declaring kernel module names that need BTF loadin=
+g.
+> + *
+
+[Severity: Low]
+This isn't a bug, but the BPF subsystem coding style expects multi-line
+comments to have the opening /* on its own line. Should this be reformatted
+to match the preferred kernel style?
+
+> + * Usage: define an array in the ".kmod_btfs" ELF section to specify
+> + * which modules need BTF loading:
+> + *
 
 [ ... ]
 
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 514e4e9daa825..9fe8a653e8b6b 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+
+[ ... ]
+
+> @@ -5891,6 +5987,10 @@ static int load_module_btfs(struct bpf_object *obj)
+>  			break;
+>  		}
+>  		obj->btf_module_cnt++;
+> +
+> +		if (obj->kmod_btfs &&
+> +		    obj->kmod_btfs->nr_names =3D=3D obj->kmod_btfs->nr_loaded)
+> +			break;
+
 [Severity: Medium]
-While reviewing these tests, I noticed a potential regression in the libbpf
-code they exercise. In load_module_btfs():
+Is obj->kmod_btfs->nr_loaded missing an increment?
 
-tools/lib/bpf/libbpf.c:load_module_btfs() {
-...
-		if (obj->kmod_btfs &&
-		    obj->kmod_btfs->nr_names =3D=3D obj->kmod_btfs->nr_loaded)
-			break;
-...
-}
+Looking at the loop in load_module_btfs(), when a module BTF is successfully
+loaded and obj->btf_module_cnt is incremented, obj->kmod_btfs->nr_loaded
+doesn't appear to be updated anywhere.
 
-Is obj->kmod_btfs->nr_loaded ever incremented when a module BTF is
-successfully loaded?
+Will this prevent the intended optimization of breaking out of the loop ear=
+ly,
+causing it to always scan all remaining kernel BTF IDs unnecessarily?
 
-If it is not incremented, will this early termination condition ever be
-met? It appears this might unnecessarily iterate over all remaining
-system BTFs, which would bypass the intended performance optimization
-of the .kmod_btfs section.
+>  	}
+> =20
+>  	if (err) {
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260813032613.2755=
--1-zhaofuyu@vivo.com?part=3D2
+-1-zhaofuyu@vivo.com?part=3D1
