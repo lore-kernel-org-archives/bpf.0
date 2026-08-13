@@ -1,264 +1,175 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BB1136215D
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 22:32:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786660359; cv=none; b=IDgLDgLvQ4ZtFr+8j8TF/r1JePjR4llyfJIOXPOkXpX1iI7VSs2dXzU6Iz9DIX7RYNL0lyeBK4m+TUiYykD4mpdze05WEHPiVIN0+u2U+zHn//bLTbIOeqYoQKyMPxwEBMO9rPWWbt2LiknQrtcF7QoSLkkFMwx+PuRYWv9MAh0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786660359; c=relaxed/simple;
-	bh=P9tXm7ziA2uuqMGnoC/M3nqJ2E0hGI7U4dFyEn7sfhI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pRI5FsJjgkL3zaw1blEn836jzhpkoEVlSl/hQNZa1YkHcAQ2lQJKKud5xQc3m254i4R3jKpgfs3uwjzdJgkhUwhfTLgXfqZPFHIEfu9i3Z109kIZEm7h1ozuFj1Sm6ZQeaXnWXVHq91yhjDuHoo3t1kzc1R1wp5ZA74am+GgDpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lMcDX8oV; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94C6371889
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 22:33:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786660391; cv=pass; b=JY0CFH0Z+23AMjf9mBrjMdqiFxPXIa2U7ykmJgnnAlTnWMAquMOIbZqDMmrju5Xvwb8YfPqq3utYIno5G5XbV5Z+twHT0zGMDcXGWSNAVspcZayhyuj3BQZ3m+leb7Gdl6P5yEAU5C96+/Y6hD1vnR5xovFBWmN6eBR7+WUN0jI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786660391; c=relaxed/simple;
+	bh=FOIcLM0bxNwc2XeqBek8fVKkqkawxUbpIvQ7cUMtiTg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QDR4nyqQTWjBgh4c/mR3ZkaF0ZmS4YgBiptOnbmPcriH0GMLt4V1XIkdSY2Aod9c8BWtr3RjoOA/L+yL8fBA2SHTlfp0H9/uQEi9zx+zqeOrgkfrpTGiNmFu2fej9zkjUHk+U84vKLnqvKons4AKjqHTT3RdM3V9ne3yffJUfUg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JFkxe72Q; arc=pass smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lMcDX8oV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEA321F000E9;
-	Thu, 13 Aug 2026 22:32:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786660357;
-	bh=ZZL85vNCz73hrdwFtE9+OKyg69zlsZ1sUhh3idU4RxM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lMcDX8oVP6vVzriH45sob0ctHSRx0W8dj4d++Q0if9zB0c+iIJr1m4Ee81gVEikO3
-	 7YGKagRon09I7iikKUzk2lOnS5Y4Rbleip9NDo4TdsWqSpddZ9cwSb727HlDB2NcfM
-	 s/IawEAJlTPDm3o5gQsSAVS07Z1M7l8nFGFI30NH1Tviu1FyfczH/CVru07wnn3xy0
-	 1AAd9kjAvzz8O/MNkj19yB6TR+1X4I6AD2yxUuzNW6IEn+z7JffG29TJ5mNaJGoCbo
-	 hxowyjeQ4nuRPyIdQZJn6mNYTfvmkRBwLYba+FWSCNgIQPF0LvJn5MxVf7KolzBHuj
-	 vz8WU4GKQQe1g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCHv7 06/13] kexec_file: Chain the stages into a pipeline
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Pingfan Liu" <piliu@redhat.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260322014402.8815-7-piliu@redhat.com>
-References: <20260322014402.8815-7-piliu@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 13 Aug 2026 22:32:33 +0000
-Message-Id: <20260813223237.BEA321F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JFkxe72Q"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2ced3386430so4893745ad.1
+        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 15:33:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786660389; cv=none;
+        d=google.com; s=arc-20260327;
+        b=NAJBqebzT5qR3sx5M/ycNLlB+LOm2ECf+NPCij2Zq58AMRin5iKTYDyMocHtM64BKx
+         vbo6f5+O89Nlyp7C8lZ3A+JD6VV02AGgrbhD8VCeuiDuvs0lh2Sf+nZkVlj9LZJNcY8y
+         7ZXXYoc4GM++oE+jnvIH2ca6uh01Qa9UJVlVuktYDhb87J3XmraIvk0o4xWKVpSn3MHJ
+         HUF/t2plzFgx1kn9rWPSWl2P9zsH0gcfDlQu99PzEt5nnFUgUDevmU8n9pl17OOpgyW6
+         R7gQvNops4rDqxpPmLoNLQQL4gDUH0tDAGPBPRzRqSPxzxy59+vJoxOIsZTAuovqjSB+
+         5XYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=5m9qkWkkiGrMe/7E1EC5e0bYS8Dyu5QZ1EmRVUDZfQ4=;
+        fh=dSBIYQpS5JvUobOPrkPcZD/5FaaRLkAn0Zt16067eO4=;
+        b=FVEdcxXar6hL048gUfr/4LfjIZi0F/0NgJYxBu+8MGk92TRppE7juOtAO5tnGatHy2
+         vb/zxE1yjx02xFhZhC0a442JSeKWRCkLpfeB0SSIRkCRhQUbrE8DIpgBZeBWvOClRCTR
+         pKcy6TQYAwZzbb1kcydYKOyIdbx8olsHJCGuhDqRx/6Afs3KmgMcIXnCaMV1MWBsT64e
+         mCswi0WUiHATcPeiqjqicHK1GI3VdHOzH0RPYtPqd45yda5qaZE0Ke3PkbRGLK914aRv
+         XtiOn91TAozQUTVC09/NJGWSnDQlysASE8DF1RLP32J6l+rgkLg2erYmXLMF0c7HM7kl
+         /bfA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786660389; x=1787265189; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=5m9qkWkkiGrMe/7E1EC5e0bYS8Dyu5QZ1EmRVUDZfQ4=;
+        b=JFkxe72QWAr2L0wE+w4jPF8fx5iV4JbqlCCGvKaKuPrbME2nWYiSGXsMVEX2opRCAF
+         sxInSPiedtrsrQwUJIE9PH9VoSLlO/F/nMe/BquQv6cxxJsFZxTbdTVx6hpmQEhmKUlL
+         tGP5MrCDpImwLj9wwjEti1nVAumndQMyLzkerODxgRnVzA8EqO1BegqHz6uMi9GfcG2h
+         r7jWSmou9tRRN1/5qjMQV7Y0ZqdAjn1Vi2bm99zl4h8zoUNv9f+DUimmDUjMR9ODKHQC
+         hhqb3nETHG2G08E0bwW/oi6BOVI/+1Qyj3/h/g27xJCodaQuNKZTEgQYn515XFJMqX/D
+         voQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786660389; x=1787265189;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5m9qkWkkiGrMe/7E1EC5e0bYS8Dyu5QZ1EmRVUDZfQ4=;
+        b=FtYu2lHJThrIVxkFtp356qDzbgQME2NEDtncIY53/EmO2HlA4SHzyqsV4IfykeLxjg
+         oMWXYHTtJMxlDYD77nTnS3MSgQa9KQK3QhgsTuWIgPhStFXS++FKrx+wjZossXbCfebP
+         LwLxeVNMNgFj/B6MevaRkX3141gv64j727qtY7Ljom1dq1TCmgDLbemkgjqbxPF8mubz
+         HJ1R11LFA9NTXwXmdImewxCytJGQCIXkHMQKW6piJzi/oWfvsLP1rkrmBnoQ4YGfAcW+
+         AxENrA/rbljuBnQZVjodX8G0A3OmQXWd24tXc2d2UU36fXrh0XbBRM227+G+mrPRu1bD
+         fFfQ==
+X-Gm-Message-State: AOJu0YwKt6DGM9PYscQKZQObBZgpYMALK4LUu590LZVU+49UxAYiZVaw
+	QfqG9LzXOVe4aofaSKdw2mWLTEHvwbYH0TnM7eX5wXTs5ceSsCVDGerjm9lDjRBb56hWOqA8iOK
+	KoLw6z6PCy5y81RVvPATnOQqINlzMwNI=
+X-Gm-Gg: AR+sD12g1Uonadc7KgPM5x2R/x8nfgCEmtGWonocf3cXQgVA85wP0vnqPpUqvuHWU8x
+	9NNgYDjatLhQ6SI75/dPuMiDps9wWptB4xnirj4YOEw96HnKh0w2wTp3OHl0/Cw/oVFB2UsF2YX
+	IxYsgLNrB8HTEZUTFLmnZOScP7VybQxBAVpBfd4iH6qDd+Vvv+viPx1fv2aAkoaj7aI9G0/rfMq
+	CgIqeCiOsnXpZ1j8h/iXdxGy665R8PZNqDkzkLSYCobAL6KiiBq4DTe6Ev7TOqZz/1yTI46xDcA
+	UzVpCKq0lYspntx0Bn+S2s/MCfy0EGAl9MtBFIlBjESJcwUQ1tzLLFVsop3A7awGaCHIJAiMunE
+	Lq7pLsmqqMOSUQHD8exhsMDZuCP+v01hyY1lkCt7MHTtsbpazH7JE
+X-Received: by 2002:a05:6a21:4c85:b0:3c3:8ead:6df0 with SMTP id
+ adf61e73a8af0-3cc71cd5375mr1269370637.28.1786660389082; Thu, 13 Aug 2026
+ 15:33:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <CAOZ_KysLYww+5TT8LQO-xNnubktwfyKYtxgAsBt44S-XmZHMVg@mail.gmail.com>
+In-Reply-To: <CAOZ_KysLYww+5TT8LQO-xNnubktwfyKYtxgAsBt44S-XmZHMVg@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 13 Aug 2026 15:32:54 -0700
+X-Gm-Features: AUfX_mxT17JJwLGy8aDu7XINDMUSp0FKiOTW8mCr8vntYc-TE5fvuf5i7N2oy8E
+Message-ID: <CAEf4BzYUgrxxZ2DbXDe+bweKENhzNeeN5EnrG0D2xwLmm-yrTQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5] libbpf: avoid overflow in BTF.ext bounds check
+To: Darren Carreras <carrerasdarren@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, shuah@kernel.org, jolsa@kernel.org, 
+	yonghong.song@linux.dev, song@kernel.org, martin.lau@linux.dev, 
+	memxor@gmail.com, daniel@iogearbox.net, ast@kernel.org, 
+	ihor.solodrai@linux.dev, eddyz87@gmail.com, andrii@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 7 potential issue(=
-s) to consider:
-
-New issues:
-- [High] Aliasing ctx->kernel and ctx->next_parsing_buf in KEXEC_BPF_CMD_DE=
-COMPRESS leads to a Use-After-Free.
-- [Medium] Memory leak of newly allocated buffer 'pn' in KEXEC_BPF_CMD_COPY=
- when the pipeline array is full.
-
-Pre-existing issues:
-- [Critical] The BPF container decomposition stage completely bypasses KEXE=
-C signature verification.
-- [Critical] The bpf_buffer_parser kfunc lacks the required __sz suffix on =
-its size argument, defeating the BPF verifier.
-- [High] Memory leak of parsing buffers due to a double-negation logic erro=
-r (!!context->parsing_buf[i]).
-- [High] Severe memory leak of kexec_context dynamically allocated componen=
-ts on error and success paths.
-- [High] vfree() is improperly used on memory allocated by kernel_read_file=
-_from_fd().
---
-
---- Patch [6]: [PATCHv7 06/13] kexec_file: Chain the stages into a pipeline=
- ---
-commit 8070ede2f761980c4a2de11a2d72fb8a5309bc74
-Author: Pingfan Liu <piliu@redhat.com>
-
-kexec_file: Chain the stages into a pipeline
-
-This commit enables kexec stages to be chained into a pipeline. It promotes
-intermediate outputs from next_parsing_buf to parsing_buf for the subsequent
-BPF parsing stages. It also allows multiple layers with distinct formats to=
- be
-parsed sequentially.
-
-> diff --git a/kernel/kexec_bpf_loader.c b/kernel/kexec_bpf_loader.c
-> index af16f7b685d9a..7f7884411e2c7 100644
-> --- a/kernel/kexec_bpf_loader.c
-> +++ b/kernel/kexec_bpf_loader.c
-[ ... ]
-> @@ -301,6 +305,23 @@ static int kexec_buff_parser(struct bpf_parser_conte=
-xt *parser)
->  				vfree(ctx->kernel);
->  				ctx->kernel =3D decompressed_buf;
->  				ctx->kernel_sz =3D decompressed_sz;
-> +				if (fill_pipeline) {
-> +					int i;
-> +
-> +					for (i =3D 0; i < MAX_PARSING_BUF_NUM; i++) {
-> +						if (ctx->next_parsing_buf[i])
-> +							continue;
-> +						ctx->next_parsing_buf[i] =3D decompressed_buf;
-> +						ctx->next_parsing_buf_sz[i] =3D decompressed_sz;
-> +						break;
-> +					}
-
-[Severity: High]
-Does this aliasing of decompressed_buf create a use-after-free risk?
-
-If a nested BPF program parses a sub-kernel and issues another
-KEXEC_BPF_SUBCMD_KERNEL command, kexec_buff_parser() will unconditionally c=
-all
-vfree(ctx->kernel):
-
-kexec_buff_parser()
-   case KEXEC_BPF_SUBCMD_KERNEL:
-      vfree(ctx->kernel);
-
-Since ctx->kernel and ctx->next_parsing_buf[i] point to the exact same buff=
-er,
-wouldn't this free the memory that the nested parser is actively reading fr=
-om?
-
-> +					/* No enough parsing slot */
-> +					if (i =3D=3D MAX_PARSING_BUF_NUM) {
-> +						ctx->kernel =3D NULL;
-> +						vfree(decompressed_buf);
-> +						return -ENOMEM;
-> +					}
-> +				}
->  				break;
-[ ... ]
-> @@ -313,6 +334,22 @@ static int kexec_buff_parser(struct bpf_parser_conte=
-xt *parser)
->  		if (!p)
->  			return -ENOMEM;
->  		memcpy(p, buf, cmd->payload_len);
-> +		if (fill_pipeline) {
-> +			pn =3D __vmalloc(cmd->payload_len, GFP_KERNEL | __GFP_ACCOUNT);
-> +			if (!pn) {
-> +				vfree(p);
-> +				return -ENOMEM;
-> +			}
-> +			memcpy(pn, buf, cmd->payload_len);
-> +			for (int i =3D 0; i < MAX_PARSING_BUF_NUM; i++) {
-> +				if (!ctx->next_parsing_buf[i]) {
-> +					ctx->next_parsing_buf[i] =3D pn;
-> +					ctx->next_parsing_buf_sz[i] =3D cmd->payload_len;
-> +					break;
-> +				}
-> +			}
-> +		}
-
-[Severity: Medium]
-If the pipeline array is fully exhausted and ctx->next_parsing_buf has no
-empty slots, the loop will complete without storing pn. Is there a missing
-check after the loop to free pn when it cannot be stored?
-
-[ ... ]
-> @@ -637,6 +674,14 @@ static int process_bpf_parsers_container(const char =
-*elf_buf, size_t elf_sz,
->  		/* Free the old parsing context, and reload the new */
->  		for (int i =3D 0; i < MAX_PARSING_BUF_NUM; i++) {
->  			if (!!context->parsing_buf[i])
->  				break;
->  			vfree(context->parsing_buf[i]);
-
-[Severity: High]
-This is a pre-existing issue, but does this double negation logic incorrect=
-ly
-skip cleanup?
-
-Because !!context->parsing_buf[i] evaluates to true for any non-NULL
-pointer, the loop will immediately break instead of freeing valid buffers.
-
-[Severity: High]
-This is a pre-existing issue, but is it safe to use vfree() here?
-
-Since these buffers are originally populated by kernel_read_file_from_fd()
-which uses kvmalloc(), shouldn't kvfree() be used to avoid panics on
-kmalloc'd memory?
-
->  			context->parsing_buf[i] =3D NULL;
->  			context->parsing_buf_sz[i] =3D 0;
->  		}
-> +		for (int i =3D 0; i < MAX_PARSING_BUF_NUM; i++) {
-> +			if (!context->next_parsing_buf[i])
-> +				break;
-> +			context->parsing_buf[i] =3D context->next_parsing_buf[i];
+On Tue, Aug 11, 2026 at 9:49=E2=80=AFAM Darren Carreras
+<carrerasdarren@gmail.com> wrote:
+>
+> An invalid BTF.ext subsection length can wrap the pointer addition used b=
+y
+> btf_ext_parse_sec_info() on 32-bit builds. The wrapped pointer passes the
+> bounds check and parsing then reads beyond the copied BTF.ext data.
+>
+> Validate the offset and length with subtraction before forming the sectio=
+n
+> pointer.
+>
+> Fixes: ae4ab4b4117d ("btf: expose API to work with raw btf_ext data")
+> Closes: https://issues.oss-fuzz.com/issues/477315119
+> Signed-off-by: Darren Carreras <carrerasdarren@gmail.com>
+> ---
+> Changes in v5:
+> - Rebase onto bpf-next commit d114bb989367.
+> - Attach one diff-only patch; the v4 MIME body contained a duplicated dif=
+f and
+>   could not be applied by CI.
+>
+> Changes in v4:
+> - Drop the selftest because the malformed length is already rejected by t=
+he
+>   old check on 64-bit CI; the behavioral divergence is specific to 32-bit=
+.
+> - Correct the Fixes tag to the commit that introduced the pointer-based c=
+heck.
+>
+> Changes in v3:
+> - Remove the nested mbox envelope and mail headers from the Gmail attachm=
+ent
+>   so Patchwork's generated mbox applies with git am.
+>
+> Changes in v2:
+> - Resend as plain text because Gmail mangled the v1 diff and Patchwork
+>   reported "Patch is empty."
+> - Include the authorized DCO Signed-off-by line.
 
 
-While reviewing this patch, I noticed a few pre-existing issues in other
-related areas:
+It's hard to review and reply because you didn't post patch inline
+(please don't do this for subsequent contributions), but here's the
+gist:
 
-kernel/kexec_bpf_loader.c:decompose_kexec_image() {
-...
-		ret =3D process_bpf_parsers_container(parser_start, parser_sz, &ctx, 0);
-		if (!ret) {
-...
-			vfree(ctx.cmdline);
-		}
-		return ret;
-}
+- /* The start of the info sec (including the __u32 record_size). */
+- info =3D btf_ext->data + btf_ext->hdr->hdr_len + ext_sec->off;
+- info_left =3D ext_sec->len;
+-
+- if (btf_ext->data + btf_ext->data_size < info + ext_sec->len) {
++ data_left =3D btf_ext->data_size - btf_ext->hdr->hdr_len;
 
-[Severity: High]
-This is a pre-existing issue, but does this function leak memory on the err=
-or
-path?
+From what I understand, you are trying to protect against corrupted
+ELF that specifies invalid .BTF.ext ELF section size, is that right?
 
-If process_bpf_parsers_container() returns an error, the function exits
-directly and returns ret without freeing ctx.kernel, ctx.initrd, ctx.cmdlin=
-e,
-or the array of buffers in ctx.parsing_buf allocated by
-kernel_read_file_from_fd().
+And your fix makes another assumption that btf_ext->hdr->hdr_len is
+definitely not malformed, because otherwise this  btf_ext->data_size -
+btf_ext->hdr->hdr_len can underflow, no?
 
-Also, on the success path (!ret), the ctx.parsing_buf array appears to be
-permanently leaked as well.
+So in both cases, if ELF or BTF content is corrupted, there might be a prob=
+lem.
 
 
-kernel/kexec_file.c:kimage_file_prepare_segments() {
-...
-	if (IS_ENABLED(CONFIG_KEXEC_BPF)) {
-		/* Fill up image's kernel_buf, initrd_buf, cmdline_buf */
-		ret =3D decompose_kexec_image(image, initrd_fd);
-		switch (ret) {
-		case 0:
-			envelop =3D true;
-...
-#ifdef CONFIG_KEXEC_SIG
-	if (!envelop) {
-		ret =3D kimage_validate_signature(image);
-		if (ret)
-			goto out;
-	}
-#endif
-...
-}
-
-[Severity: Critical]
-This is a pre-existing issue, but doesn't skipping signature validation when
-envelop is true create a security regression?
-
-If decompose_kexec_image() successfully extracts the kernel/initrd from a
-container via unverified BPF programs, could an attacker load an unsigned,
-untrusted kernel simply by wrapping it in an ELF container, completely
-defeating kernel signature enforcement and Lockdown?
-
-
-kernel/bpf/bpf_buffer_parser.c:bpf_buffer_parser() {
-...
-__bpf_kfunc int bpf_buffer_parser(char *buf, int buf_sz,
-		struct bpf_parser_context *context)
++ if (ext_sec->off > data_left || ext_sec->len > data_left - ext_sec->off) =
 {
-...
-}
+  pr_debug("%s section (off:%u len:%u) is beyond the end of the ELF
+section .BTF.ext\n",
+  ext_sec->desc, ext_sec->off, ext_sec->len);
+  return -EINVAL;
+  }
 
-[Severity: Critical]
-This is a pre-existing issue, but does the size parameter need the __sz suf=
-fix
-to be properly verified?
-
-Because the parameter is named buf_sz instead of buf__sz, the BPF verifier
-treats it as a standard scalar and won't enforce bounds checking between the
-pointer and the size. Could an unprivileged BPF program supply a small valid
-pointer and an arbitrarily large buf_sz to cause an out-of-bounds read?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260322014402.8815=
--1-piliu@redhat.com?part=3D6
++ /* The start of the info sec (including the __u32 record_size). */
++ info =3D btf_ext->data + btf_ext->hdr->hdr_len + ext_sec->off;
++ info_left =3D ext_sec->len;
++
