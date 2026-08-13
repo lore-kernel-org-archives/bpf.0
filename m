@@ -1,311 +1,117 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80AE338BF97
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 17:41:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786642904; cv=pass; b=HDvWWJLt5dHGaTPHgWjmT0UP69cqe2RNQkpOlV2yw/6hmM/42Cmcl7/PEbt8e2rLZnl1vEkIGgZrW0omolRAzeSe8bFLmC88CTrdASu8lf95RYYhuJxT2C/mrBZrH3iCChEbvmUMFZyS23H77GhVvPfi3GnGQXhZjBShm8PyXQ8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786642904; c=relaxed/simple;
-	bh=HaP3ICo6akmVnkqzweOOKfFAXd5JlmoBnPd5EHGBvuo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nU3tC50oG+L4lJg6ukwCCm2xoLNNu5HFXTp0Ao4+L/bRHz/YevUHX11tf7aWhCQPrUt7YczM91DN/j/0N0j/t+ks2qHxGeBZiT7uqXjMbdnPlDO1UFTaZxCTvJCkPmoYYa89Jwp84t2W62cW/QX8E5lZ6IlS2GM/qbaoqzACH1Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z4KWMJcN; arc=pass smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F339385D7D;
+	Thu, 13 Aug 2026 17:47:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786643280; cv=none; b=lnVZz0n1EJF1ygq9bB12tKxU4r7NLXyh29aKF1u/qll4y2hgG9G/TAlR3GgpBGWOtfUuy8Ew1Qxaw4Wnaocg59qwV+6k8f2/AS3oHSPZ/CXmVAqNeAvfL0PVsEnH7ajtlIDLvbxM7FWbgOIZgwrvKDg/cccwdEvOAL01fHrGp3s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786643280; c=relaxed/simple;
+	bh=1CYW0i+lW++6QIhwUBddZ8XJqGMhScftIHevpWyhMgA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GQi9+MMbvNI1CnRriQchtDb+KJCOufJ4mRuMWYBX6FqvXo1IFxqcW2P+fzZzuoa2q7Q54iiOqeZsLLGk14MW33UP4VZPpFMLIQViCK44g7njPSyXypEQn7NkGgeHlL/FkZ4N9dbccvelf9jFfrkRASkSyNvkgxy7+HUGegrmKAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=nn5Lnw81; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z4KWMJcN"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2d0407aedd6so2843395ad.0
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 10:41:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786642902; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ppiE/WqfnmXzWSZrDfAWjdgyMTbzZTyBbLxLlYk0WLqE3RjitI+5DF5uCxEVJn7ivZ
-         AT+8JXv3SYcNGnX1kGVcJygXxKRvqzaeURRL8lXOMbJHENWHgOtSh9VQxu5yQ+bTIlX4
-         ZJAMDdaVwMXTbQOKzvu/rqDRI0igywIcXW1YXsg/KZ9sOphuaHhsYJ9r4JVY0dzNh0Av
-         RQfygaHDXK08cxR7WwOeBljzlvtJVu0+sgUBY90ZDDnT64EL6t+p2nt33A9DRo+EBtOF
-         6hz3/EtvAQAlRR/fhDd/HskyIxtXqNMCM4QUaLD+JxYLaPQpBlscyHyl+wtf+seiCy9N
-         SjGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=TbNfG4eGfwxgP1hsK4IvQRSXBfAkWQ+qf6LaMQZKBYQ=;
-        fh=lrRs+27IvoRkJsxMFa2fum+DfD7KfZZ2DbGBg3BD/z0=;
-        b=Y5MeLPcWktcRR11KLX9uzNbTi1O3aa2AxG8DwvBqBQORW/17+coXf100gCGW4De5h4
-         dXWEWfRP4MVmgexytnH9L5CYxi08ZdFsE85yx5iAnRH9QDMiM6Yim5NP/h0yCVsnY8PI
-         0CgWnnzMB0Mg1k1/ehgweF3N09oE9b7ks9bYzIQakxp2v7Vl29/QaTC1CBiLYyNAg1hG
-         VbYbUtjAFe5hMgqyPnkJcLfw1C7AuMYiS+CdfdOaW6XDhuuUVMIpN4BGF4l9b3V7Jflb
-         56ig287fObRQlMMVkcG4CJe45YpfbCTg+5CmasKihlE5gLAeJ/pIaf3R5bkCpFdW8A6b
-         239w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786642902; x=1787247702; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=TbNfG4eGfwxgP1hsK4IvQRSXBfAkWQ+qf6LaMQZKBYQ=;
-        b=Z4KWMJcNEJ5mf152YXWj+JV1f+piwIDYk+9TD4ODoIQntFD0TfLh9cEx7PVdPPTjU7
-         K8HseRVhDLF88R6dfrEscmfLjLJ7jkD3eEAt0vFkhjeyaKIFnM5/yQDHQg7fcGb/9JOG
-         +DbQiJg4MZMDXJfLTWm5yU+RruobLSBbU0I7v+az1vVwqDcBAta91FPT271uh0zsZ73q
-         uNii+kwLtz1H4LKxpilh0uXfTI98P6RhxChryy6YBdkJN4BijMP6biIkB9EU8XyIFOPo
-         WrSeVq2l3OxFd2hyHIl1Id369BEWzpIwiSCyqIm3NetVI8UmhVu0DzBN0TKXneZ6izUN
-         2FQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786642902; x=1787247702;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=TbNfG4eGfwxgP1hsK4IvQRSXBfAkWQ+qf6LaMQZKBYQ=;
-        b=o17Fh9eCMW2pHThw6XNXzrkXOCaKH0pbpXuG5HRqbVvrMRvMNql3pxGvy0TH9tnZEY
-         8KsvXeR74X5a8gCVv6Vt/hly+uZXi1YxvqexED1pSN+4vy7SxG8FO/2XkaFVi6lQamWz
-         f45GWcvhbfneRRGkScgCCkK33Szn8Nj7923Q0sa8+nnUBZ5b2x9m9ZxtZzTgmqV7o3/E
-         358yx5zaDR6fHwabbZjRNIuofAiZ2mf3EDjGAy+NtCfxswuj+T1OBo5xdvyvlYYOm36S
-         HGiv8R3kk4mRQ9Pwa7hHvqWr1tcQz9g4iuWPNKqkhBIXml3obOfxzfsKwzm73VRM3E7X
-         yCyw==
-X-Forwarded-Encrypted: i=1; AHgh+Rrso2llQW03r7BrPQm00t2R5OEaHeD+AVBOKdlcbs8FuDwP2n+8iP2l/E9IMX9gkdvUAqc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3meSMZJk8aLndbpZRpgD2khXPl+Kv1cBNZ8k7QbyvCzFodz4p
-	VGEcnmQ38i3WOV+oHwUvk+ozzpXYPVVxkREAYv0dfHAOBib/s2LP/Egpvfy1FYSyWBRi31RYz2d
-	REqfXJsFUGW5v447gpphl7tYklLeXfXk=
-X-Gm-Gg: AR+sD12EpJnFh/qsr5DSolwMcpFRRX8OU1SDQM+DoZQ160Vm+upo5h6VG24kFT96JS9
-	0RFhFMK5TzTxRHm2UlMtn4f6d0BjkX6vPxdo9OCyACyw1Gn+ukEBUKddFiLLk908nt01ImXqPVG
-	Hk1GdptN8MDrq4xMZI4YV2H1vnamYz+ldoSDOKC3y8QFGS5r2WpAx0dR4OEYbBjR4GAPp2rULMc
-	qj/yT3nL3IMOxm7qnclXuc6kY6ureV3nhZybcx1q81A76jIhrDVaVFC1wIkxbCekn0efnqUlO8W
-	rwyTdpX9ty64t+fRbjMOIcGHe5Lz4mSTquvFghcHHY8MxCxcyStbkA/cwK9ZU3kK2GejKrBpL6n
-	LCy4eAM72vc7SWgpYm7OSIMo7RHypgvxC/HbHMhFZO6A7GzJgEZtP
-X-Received: by 2002:a05:6a20:2587:b0:3bf:983d:e9b4 with SMTP id
- adf61e73a8af0-3cc55321b6fmr9108682637.33.1786642901470; Thu, 13 Aug 2026
- 10:41:41 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="nn5Lnw81"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2DFBF1596;
+	Thu, 13 Aug 2026 10:47:42 -0700 (PDT)
+Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 69FF23F632;
+	Thu, 13 Aug 2026 10:47:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1786643266; bh=1CYW0i+lW++6QIhwUBddZ8XJqGMhScftIHevpWyhMgA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nn5Lnw81w1QjuPz1RXLa4mOPfZawnfwvqyFOA1yyoewdcvO+/rD6/grSpFM/TtGPo
+	 VQlEITvj3yBJQqcPyEl9NflGhE3/AHrsgy4lXQlM/ucNvSA3KdFUIYm1nGTNt/NQLa
+	 I1K51kkmUU+OwKnvX9tXG1V6SdGYjM97G3+pzSC8=
+Date: Thu, 13 Aug 2026 18:47:38 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+Cc: Harry Yoo <harry@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Alexander Potapenko <glider@google.com>,
+	Marco Elver <elver@google.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Hao Li <hao.li@linux.dev>, Christoph Lameter <cl@gentwo.org>,
+	David Rientjes <rientjes@google.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>, bpf@vger.kernel.org,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	Dmitry Vyukov <dvyukov@google.com>, linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+	kasan-dev@googlegroups.com,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH RFC 3/5] mm/slab, kmemleak: handle kmemleak freeing in
+ kfree_nolock()
+Message-ID: <an4DOrvgdJcfOVvb@arm.com>
+References: <20260807-kfree_nolock_kmalloc-v1-0-ba993cbf7a60@kernel.org>
+ <20260807-kfree_nolock_kmalloc-v1-3-ba993cbf7a60@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260813152324.97937-6-leon.hwang@linux.dev> <501ee3521cfb2843d9dd1b8bc1823c3816f010e08274099664137b5989c3bed2@mail.kernel.org>
-In-Reply-To: <501ee3521cfb2843d9dd1b8bc1823c3816f010e08274099664137b5989c3bed2@mail.kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 13 Aug 2026 10:41:26 -0700
-X-Gm-Features: AUfX_myoePsipu-KdvoHqZKBu9Dg7zbZTLKChm_OPi5N3-SJxIGoCDI0EA4KQDM
-Message-ID: <CAEf4BzZ3OeeOd5mBke4vp6JFNd5YRL5xK7a9h8fZ+4dwDRXnpQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v12 05/10] libbpf: Add support for global percpu data
-To: bot+bpf-ci@kernel.org
-Cc: leon.hwang@linux.dev, bpf@vger.kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
-	jolsa@kernel.org, john.fastabend@gmail.com, qmo@kernel.org, shuah@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kernel-patches-bot@fb.com, martin.lau@kernel.org, clm@meta.com, 
-	ihor.solodrai@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260807-kfree_nolock_kmalloc-v1-3-ba993cbf7a60@kernel.org>
 
-On Thu, Aug 13, 2026 at 9:26=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
->
-> > diff --git a/tools/lib/bpf/bpf_gen_internal.h b/tools/lib/bpf/bpf_gen_i=
-nternal.h
-> > index 0425691877521..6c5ad6c55e8a6 100644
-> > --- a/tools/lib/bpf/bpf_gen_internal.h
-> > +++ b/tools/lib/bpf/bpf_gen_internal.h
->
-> [ ... ]
->
-> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > index 514e4e9daa825..e574870fb7169 100644
-> > --- a/tools/lib/bpf/libbpf.c
-> > +++ b/tools/lib/bpf/libbpf.c
->
-> [ ... ]
->
-> > @@ -1839,6 +1842,8 @@ static size_t bpf_map_mmap_sz(const struct bpf_ma=
-p *map)
-> >       switch (map->def.type) {
-> >       case BPF_MAP_TYPE_ARRAY:
-> >               return array_map_mmap_sz(map->def.value_size, map->def.ma=
-x_entries);
-> > +     case BPF_MAP_TYPE_PERCPU_ARRAY:
-> > +             return map->def.value_size;
-> >       case BPF_MAP_TYPE_ARENA:
-> >               return page_sz * map->def.max_entries;
->
-> This isn't a bug, but bpf_map_mmap_sz() is documented as returning the
-> length to pass to mmap()/munmap()/mprotect(), and both other arms return
-> page-granular lengths (array_map_mmap_sz() rounds up to page_sz, ARENA
-> multiplies by page_sz).
->
-> The new PERCPU_ARRAY arm returns the raw, unrounded value_size. This
-> creates an asymmetry visible in bpf_map__set_value_size(), which compares
-> mmap_old_sz =3D bpf_map_mmap_sz(map) (unrounded for percpu) against
-> mmap_new_sz =3D array_map_mmap_sz(size, max_entries) (page-rounded), so e=
-ven
-> a no-op resize performs a redundant mmap() + memcpy() + munmap() cycle.
->
-> Would using array_map_mmap_sz(map->def.value_size, map->def.max_entries)
-> for the PERCPU_ARRAY case be more consistent with the ARRAY case?
->
-> [ ... ]
->
-> > @@ -1866,7 +1871,8 @@ static int bpf_map_mmap_resize(struct bpf_map *ma=
-p, size_t old_sz, size_t new_sz
-> >       return 0;
-> >  }
-> >
-> > -static char *internal_map_name(struct bpf_object *obj, const char *rea=
-l_name)
-> > +static char *internal_map_name(struct bpf_object *obj, const char *rea=
-l_name,
-> > +                            enum libbpf_map_type type)
-> >  {
-> >       char map_name[BPF_OBJ_NAME_LEN], *p;
-> >       int pfx_len, sfx_len =3D max((size_t)7, strlen(real_name));
-> > @@ -1907,8 +1913,11 @@ static char *internal_map_name(struct bpf_object=
- *obj, const char *real_name)
-> >       if (sfx_len >=3D BPF_OBJ_NAME_LEN)
-> >               sfx_len =3D BPF_OBJ_NAME_LEN - 1;
-> >
-> > -     /* if there are two or more dots in map name, it's a custom dot m=
-ap */
-> > -     if (strchr(real_name + 1, '.') !=3D NULL)
-> > +     /*
-> > +      * Don't prefix the bpf_object name if this is a custom dot map
-> > +      * (containing two or more dots) or a percpu data map.
-> > +      */
-> > +     if (strchr(real_name + 1, '.') !=3D NULL || type =3D=3D LIBBPF_MA=
-P_PERCPU)
-> >               pfx_len =3D 0;
-> >       else
-> >               pfx_len =3D min((size_t)BPF_OBJ_NAME_LEN - sfx_len - 1, s=
-trlen(obj->name));
->
-> Emil Tsalapatis raised a design question in v10: Why does .percpu get
-> special treatment in internal_map_name() instead of following the same
-> prefixing logic as .data and .rodata?
->
-> He noted "it seems like we're singling out the .percpu section for highly
-> nonbvious reasons" and asked "@Andrii Wdyt?" You responded that you prefe=
-r
-> excluding PERCPU "to avoid the legacy naming convention for new internal
-> maps" but said "Let us wait for Andrii's comment."
->
-> Andrii didn't publicly respond to this design question in the lore thread=
-s,
+On Fri, Aug 07, 2026 at 03:50:29PM +0200, Vlastimil Babka (SUSE) wrote:
+> Kmemleak handling is one of the reasons why kfree_nolock() cannot
+> currently handle kmalloc() objects, because calling kmemleak_free()
+> would involve spinning on its internal raw spinlocks.
+> 
+> Kmemleak is a debugging mechanism so we could simply defer all
+> kfree_nolock() to irq_work if it's enabled, and eat the extra cost. But
+> that would be unnecessary pessimistic. We expect kfree_nolock() will be
+> still mostly called on objects from kmalloc_nolock() that are not
+> registered in kmemleak so they still don't need any deferred freeing.
+> 
+> Thus introduce kmemleak_may_need_free() that can check if the object is
+> registered. This is done using __lookup_object() performed under a
+> raw_spin_trylock_irqsave(), which is safe to attempt from kfree_nolock()
+> (except from a NMI on a !CONFIG_SMP system). When that trylock fails or
+> can't be attempted, we however must assume the object might be
+> registered, and defer the freeing.
 
-ok, wow, being shamed by AI... I did respond on v10, and yes, I think
-passing type and basing decisions on that is better going forward, no
-need for name-based checks.
+The only risk is during kmemleak scanning when kmemleak_lock is
+repeatedly held by scan_block() even for minutes. There may be some
+timing where most kfree_nolock() deferred during such scanning. Not sure
+it matters much though, unless the kfree_nolock() use becomes widely
+spread. If it becomes problematic, we could add a new RCU-protected hash
+that's searchable for this specific case (we can't remove the rbtree as
+we need interval searching in general).
 
-> and v11/v12 proceeded with the same special treatment. The related
-> map_uses_real_name() function also treats PERCPU differently (always
-> returns true for PERCPU, while DATA/RODATA check against their base secti=
-on
-> names).
->
-> Should this naming convention uniformity concern be addressed, or is ther=
-e
-> a technical reason for .percpu's special handling that could be documente=
-d
-> in the comment?
->
-> [ ... ]
->
-> > @@ -1941,6 +1950,13 @@ static bool map_is_mmapable(struct bpf_object *o=
-bj, struct bpf_map *map)
-> >       if (!map->btf_value_type_id)
-> >               return false;
-> >
-> > +     /*
-> > +      * The internal PERCPU maps are not mmapble because the underlyin=
-g
-> > +      * percpu_array maps do not have mmap support.
-> > +      */
-> > +     if (map->libbpf_type =3D=3D LIBBPF_MAP_PERCPU)
-> > +             return false;
-> > +
->
-> This isn't a bug, but there's a typo: "mmapble" should be "mmappable".
->
-> [ ... ]
->
-> > @@ -5293,18 +5326,20 @@ static int
-> >  bpf_object__populate_internal_map(struct bpf_object *obj, struct bpf_m=
-ap *map)
-> >  {
-> >       enum libbpf_map_type map_type =3D map->libbpf_type;
-> > +     bool is_percpu =3D map_type =3D=3D LIBBPF_MAP_PERCPU;
-> > +     const __u64 update_flags =3D is_percpu ? BPF_F_ALL_CPUS : 0;
-> >       int err, zero =3D 0;
-> >       size_t mmap_sz;
-> >
-> >       if (obj->gen_loader) {
-> >               bpf_gen__map_update_elem(obj->gen_loader, map - obj->maps=
-,
-> > -                                      map->mmaped, map->def.value_size=
-);
-> > +                                      map->mmaped, map->def.value_size=
-, update_flags);
-> >               if (map_type =3D=3D LIBBPF_MAP_RODATA || map_type =3D=3D =
-LIBBPF_MAP_KCONFIG)
-> >                       bpf_gen__map_freeze(obj->gen_loader, map - obj->m=
-aps);
-> >               return 0;
-> >       }
-> >
-> > -     err =3D bpf_map_update_elem(map->fd, &zero, map->mmaped, 0);
-> > +     err =3D bpf_map_update_elem(map->fd, &zero, map->mmaped, update_f=
-lags);
-> >       if (err) {
-> >               err =3D -errno;
-> >               pr_warn("map '%s': failed to set initial contents: %s\n",
->
-> [ ... ]
->
-> > @@ -5349,6 +5384,13 @@ bpf_object__populate_internal_map(struct bpf_obj=
-ect *obj, struct bpf_map *map)
-> >                       return err;
-> >               }
-> >               map->mmaped =3D mmaped;
-> > +     } else if (is_percpu) {
-> > +             if (mprotect(map->mmaped, mmap_sz, PROT_READ)) {
-> > +                     err =3D -errno;
-> > +                     pr_warn("map '%s': failed to mprotect() contents:=
- %s\n",
-> > +                             bpf_map__name(map), errstr(err));
-> > +                     return err;
-> > +             }
-> > +     } else if (map->mmaped) {
-> >               munmap(map->mmaped, mmap_sz);
-> >               map->mmaped =3D NULL;
->
-> This isn't a bug, but unlike every other internal map, the percpu
-> initialization image is deliberately kept mapped and turned read-only wit=
-h
-> mprotect() instead of being munmap()ed.
->
-> The skeleton pointer that bpftool generates for this map is a plain,
-> non-const 'struct <obj>__percpu *', so a perfectly ordinary post-load
-> assignment such as 'skel->percpu->var =3D 1;' now faults with SIGSEGV in =
-the
-> user process rather than failing in a diagnosable way.
->
-> The behaviour is intentional and described in the commit message, but wou=
-ld
-> a const-qualified generated pointer (as is done for .rodata) express the
+Otherwise the kmemleak changes look ok to me.
 
-Is it done for .rodata, really?... As far as I can see, .rodata are
-still non-const because they are expected to be set before load. Eh,
-AI...
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 
-> restriction at compile time instead of at runtime?
->
-> [ ... ]
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/317164=
-47858
+>  void kfree_nolock(const void *object)
+>  {
+> @@ -6844,9 +6848,23 @@ void kfree_nolock(const void *object)
+>  	 */
+>  	kasan_slab_free(s, x, false, false, /* skip quarantine */true);
+
+Not related to kmemleak but I noticed this call here: if we relax
+kfree_nolock() for any slab objects, would the above poison
+SLAB_TYPESAFE_BY_RCU objects while they are still in use? I guess we
+should not allow such slabs on this path.
+
+Sashiko had some comments as well, I haven't gone through them but it
+also mentioned SLAB_TYPESAFE_BY_RCU on another patch.
+
+-- 
+Catalin
