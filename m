@@ -1,250 +1,135 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE54A263F5D;
-	Thu, 13 Aug 2026 06:22:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF620403B1F;
+	Thu, 13 Aug 2026 06:30:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786602139; cv=none; b=XVNoOgZ8L2pctJNE8PKH0m/KfLFCjt+qG85tuc4I1e/eUks70ZUR/E/Ap64L1dWF1J5Og16Dab471/7mGF8Yhpp8K2ENB026ULgXLtUh5UE4iNehPF41AfsfE0xnWxv2X+X4jUTywQ+gkye4wFjDqs54lJSHCCI2UQZAsR+csMw=
+	t=1786602626; cv=none; b=j/zNiACt9nIbVwV0ngwzxY0LJe3nbRhzW5U2BfeF5lIs4zc7Q5Rd32EZ466Omdr9PNPBJfqFJYWEPd/WkDWa1n1vCJqfsxxi/Clv8pL3WXdkHDatm3tBZ0UlO3pZjSv8sa0+UVu7oh6qSO5IXfB6tnpsoLN6wpp4cJ+fwabHT0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786602139; c=relaxed/simple;
-	bh=+5D3p7sScaegm1VIyeqCpLf42CdpIop97jVtqGW3CuU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=R8IBjyIs9/rSjEMHTWNsgJcLN36hcJi4VPgAiBFLNUUrwj/kWrsOfAlhsvoQHix0jxD/buSHYVq7BVyxSM8d7qLLAHtJZY12SU9xB0fhvzSnOT0OumVrd2w2WqPX4TvLp+GybeEfwiapjh636aJzEuo17Ql9JBixv9RqtuXw7PM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W6wiVsus; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786602626; c=relaxed/simple;
+	bh=8Zx0gUR1jbz1GzmYTuNpZLg8+Tqh1wm2h+LYt65zGMo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iQ1gjXJJA3/oDSRo1s4apTbQIxVBL4/tgtHFgL1YQspzRBULUBXSgeR6F1+krqk2o68l78DbvIMmCDM5a/x82re9M6q1mHIRQV7pjjjegDFwlri17mg7TAFgOVkFmteZ0SkYLASBFL6XeeEWf+ZcyQA8zWxkTMHe+zr5U1hvbm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wdm6aPeF; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W6wiVsus"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 279721F000E9;
-	Thu, 13 Aug 2026 06:22:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786602137;
-	bh=Rlj1vBayaDgp+9Da8eEHI6cd9R9vw9wihbVfkn1bs7k=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=W6wiVsusoSR1wDQPEvTaTVdyDoIazlFyoA9h4w1trf8gj08kgGvoahxYZrnOUdxWg
-	 Diqg+RW3Mc0GkhQpkkDilFEyatnLAFn2+seZ4b7WqUYlXPIzZicaWQ+lhb/NAIup4y
-	 nOf5+FcdSO3QbRDpAFDcWigtDKd/dc2xghF9w8FDmch8YjrGv7jGKRr6p15+e5IXgx
-	 qBbLRmHcIos0IpTVyhNs40SnzJL845WsNK/eo/wUaiGbQxHq9AldgUq/t06GJ/KK5E
-	 IuhbKsqn8TSCcX3VlsFb5mAQyQT9fT3vW/95FCy9AMGk8gm2v3l/rOTZx5pDGVbSC2
-	 RUTyCLwBGKokA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] perf/bpf: Fix data races in BPF perf event handling
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Deepanshu Kartikey" <kartikey406@gmail.com>
-Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-In-Reply-To: <20260813060528.365959-1-kartikey406@gmail.com>
-References: <20260813060528.365959-1-kartikey406@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 13 Aug 2026 06:22:16 +0000
-Message-Id: <20260813062217.279721F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wdm6aPeF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1786602625; x=1818138625;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8Zx0gUR1jbz1GzmYTuNpZLg8+Tqh1wm2h+LYt65zGMo=;
+  b=Wdm6aPeFAlW/2JUPPRwR2prYM944OZRgbW5EGlli+SlaBJ/sEnc45d7w
+   HaE5HmYVy8mLlE3UvCvab+RVuy8aiR4oj2QKC7lrzsB4+V2NDG1Mb34uM
+   u7a08rOrrBsj9B2D/v8+xgyZcE1wdrK7euvyl7XG6lVQM5B7AAhcHMvQA
+   bK9w9Gy1O/yUeZ5mmDqJoYUdF8i9HYK5bHiwkWgn5rNEFiiQ4sfZNpZny
+   +/mWDjT4w9ighlZkuUAXU2HHhG2VlwcYDJiYdRufyGbOLFj+xnlsoBCTr
+   e+TqogCE6aI41MkOeQhx8cvl8cuK4nrK7Nuq9g7cIRebBfpkz5slVuEPw
+   A==;
+X-CSE-ConnectionGUID: D3hTO4GTTLmZCiS52EOpIA==
+X-CSE-MsgGUID: +BqggAHwQyisUR12feu3Ww==
+X-IronPort-AV: E=McAfee;i="6800,10657,11873"; a="86933873"
+X-IronPort-AV: E=Sophos;i="6.25,220,1779174000"; 
+   d="scan'208";a="86933873"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2026 23:30:24 -0700
+X-CSE-ConnectionGUID: 34sjihtdRoOhH2yjCUAPPA==
+X-CSE-MsgGUID: kLDkHQE1QFCEhxWuETU11A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,220,1779174000"; 
+   d="scan'208";a="260033374"
+Received: from unknown (HELO brc05..) ([10.190.162.60])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2026 23:30:20 -0700
+From: Tushar Vyavahare <tushar.vyavahare@intel.com>
+To: netdev@vger.kernel.org,
+	magnus.karlsson@intel.com,
+	maciej.fijalkowski@intel.com,
+	stfomichev@gmail.com,
+	kernelxing@tencent.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	tirthendu.sarkar@intel.com,
+	tushar.vyavahare@intel.com,
+	andrii@kernel.org
+Cc: bpf@vger.kernel.org
+Subject: [PATCH net-next v2 0/5] selftests/xsk: improve shared-UMEM coverage
+Date: Thu, 13 Aug 2026 06:27:49 +0000
+Message-ID: <20260813062754.360131-1-tushar.vyavahare@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 6 potential issue(=
-s) to consider:
+AF_XDP shared-UMEM support in the existing XSK selftests is limited to
+a small set of scenarios, while the supporting setup and cleanup paths
+become fragile as coverage expands.
 
-New issues:
-- [High] Unconditional use of `bpf_event_mutex` in `kernel/events/core.c` c=
-auses a linker error in valid Kconfig combinations where `CONFIG_BPF_EVENTS=
-` is disabled.
+This series improves shared-UMEM testing and infrastructure in five
+steps.
 
-Pre-existing issues:
-- [High] The fix for the data race in `perf_event_alloc()` is incomplete be=
-cause `bpf_event_mutex` is not held during the detachment of non-tracing BP=
-F programs, leaving the use-after-free race unfixed.
-- [High] Dereferencing prog->type without rcu_read_lock_trace() exposes sle=
-epable BPF programs to Use-After-Free.
-- [Medium] The patch misses a plain write to event->prog in perf_event_atta=
-ch_bpf_prog(), leaving a data race with READ_ONCE(event->prog) unfixed.
-- [Medium] `perf_event_free_bpf_handler()` still contains a plain read of `=
-event->prog` which can race with a concurrent `WRITE_ONCE()` in `perf_event=
-_set_bpf_handler()`.
-- [Medium] Missing release barrier in perf_event_set_bpf_handler() allows B=
-PF programs to observe uninitialized or stale bpf_cookie values.
---
+Patch 1 makes UMEM ownership explicit with refcounting and centralizes
+socket/UMEM teardown, keeping cleanup behavior consistent across normal
+completion and error paths.
 
---- Patch [1]: [PATCH v2] perf/bpf: Fix data races in BPF perf event handli=
-ng ---
-commit f4518a73c55a1297eca26073838ec515d34cb05a
-Author: Deepanshu Kartikey <kartikey406@gmail.com>
-perf/bpf: Fix data races in BPF perf event handling
+Patch 2 prevents TX setup when RX socket configuration has already
+failed. This avoids shared-UMEM TX setup relying on incomplete RX-side
+socket and UMEM state.
 
-This commit attempts to fix data races around the event->prog field
-by introducing READ_ONCE and WRITE_ONCE in various handlers, and acquiring
-bpf_event_mutex during fork() in perf_event_alloc().
+Patch 3 expands XSKMAP and test capacity to four sockets and adds a
+length-based XDP steering program. The classifier uses total
+XDP-visible packet length (data_end - data) and SHARED_UMEM_LEN_SPLIT.
 
-Link: https://lore.kernel.org/all/20260811235331.10044-1-kartikey406@gmail.=
-com/T/
+Patch 4 adds the shared-UMEM callback runner and initial 4-socket,
+length-based steering, uneven-distribution, and unaligned-chunk test
+cases. The unaligned path snapshots and restores alignment flags with
+NULL-safe UMEM guards.
 
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> index 48d851fbd8ea5..5c6dabb6dccb1 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -2136,4 +2136,6 @@ static inline void perf_lopwr_cb(bool mode)
->  }
->  #endif
-> =20
-> +extern struct mutex bpf_event_mutex;
-> +
+Patch 5 makes pkt_stream_even_odd_sequence() transactional: it stages
+replacement streams until all allocations succeed, avoiding leaked
+replacement streams and partially replaced socket stream arrays after
+an allocation failure.
 
-[Severity: High]
-Will this extern declaration lead to a linker error in valid Kconfig
-combinations where CONFIG_BPF_EVENTS is disabled?
+Together, these patches strengthen shared-UMEM setup and cleanup and
+extend selftest coverage to multi-socket and packet-distribution
+scenarios.
 
-The bpf_event_mutex is defined in kernel/trace/bpf_trace.c, which is
-only compiled when CONFIG_BPF_EVENTS=3Dy. If a kernel is configured with
-CONFIG_BPF_SYSCALL=3Dy and CONFIG_EVENT_TRACING=3Dy, but kprobe and uprobe
-events are disabled, this might result in an unresolved external symbol.
+v1 -> v2:
+- [1/5] Track per-slot UMEM ownership and centralize refcount-based
+  socket teardown. [sashiko]
+- [2/5] Replace the redundant partial-socket rollback with RX failure
+  publication before the setup barrier and skip TX setup after a failed
+  RX configuration. [BPF AI]
+- [3/5] Trim the length-classifier comment to match nearby BPF style.
+  [BPF AI]
+- [5/5] Clarify the partial stream replacement leak in the commit
+  message. [BPF AI]
 
->  #endif /* _LINUX_PERF_EVENT_H */
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index ba5bd6a78fe7b..1416066ef460e 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
+Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Signed-off-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
 
-[ ... ]
+Tushar Vyavahare (5):
+  selftests/xsk: add UMEM users refcount and centralize socket teardown
+  selftests/xsk: Skip TX setup after RX configuration failure
+  selftests/xsk: expand XSKMAP capacity and add length-based XDP program
+  selftests/xsk: add shared-UMEM callback framework and initial test
+    cases
+  selftests/xsk: make pkt_stream_even_odd_sequence rollback-safe
 
-> @@ -10708,7 +10707,7 @@ static inline int perf_event_set_bpf_handler(stru=
-ct perf_event *event,
->  		return -EPROTO;
->  	}
-> =20
-> -	event->prog =3D prog;
-> +	WRITE_ONCE(event->prog, prog);
->  	event->bpf_cookie =3D bpf_cookie;
->  	return 0;
->  }
+ .../selftests/bpf/prog_tests/test_xsk.c       | 423 ++++++++++++++++--
+ .../selftests/bpf/prog_tests/test_xsk.h       |  26 +-
+ .../selftests/bpf/progs/xsk_xdp_progs.c       |  15 +-
+ tools/testing/selftests/bpf/xsk_xdp_common.h  |   3 +-
+ tools/testing/selftests/bpf/xskxceiver.c      |  38 +-
+ 5 files changed, 430 insertions(+), 75 deletions(-)
 
-[Severity: Medium]
-This is a pre-existing issue, but does publishing event->prog without a
-release barrier allow concurrent readers in __perf_event_overflow() to
-observe an uninitialized or stale bpf_cookie?
-
-Without smp_store_release() or similar ordering, the CPU can reorder the
-event->prog write and the plain store to event->bpf_cookie. Since the reader
-uses READ_ONCE(), which lacks acquire semantics, a BPF program might read
-the uninitialized cookie.
-
-> @@ -10720,7 +10719,7 @@ static inline void perf_event_free_bpf_handler(st=
-ruct perf_event *event)
->  	if (!prog)
->  		return;
-> =20
-> -	event->prog =3D NULL;
-> +	WRITE_ONCE(event->prog, NULL);
->  	bpf_prog_put(prog);
->  }
-
-[Severity: Medium]
-This is a pre-existing issue, but does perf_event_free_bpf_handler() still
-contain a plain read of event->prog?
-
-At the beginning of this function:
-	struct bpf_prog *prog =3D event->prog;
-
-Could this read race with a concurrent WRITE_ONCE() from
-perf_event_set_bpf_handler() during ioctl(PERF_EVENT_IOC_SET_BPF)?
-
-[Severity: High]
-This is a pre-existing issue, but does perf_event_free_bpf_handler() need to
-acquire bpf_event_mutex to safely detach non-tracing BPF programs?
-
-Because this function clears event->prog and drops the program reference
-locklessly, a concurrent fork() calling perf_event_alloc() could acquire the
-mutex, read the program, and increment a zero-refcount object.
-
->  #else
-> @@ -10753,6 +10752,7 @@ static int __perf_event_overflow(struct perf_even=
-t *event,
->  {
->  	int events =3D atomic_read(&event->event_limit);
->  	int ret =3D 0;
-> +	struct bpf_prog *prog;
-> =20
->  	/*
->  	 * Non-sampling counters might still use the PMI to fold short
-> @@ -10766,8 +10766,9 @@ static int __perf_event_overflow(struct perf_even=
-t *event,
->  	if (event->attr.aux_pause)
->  		perf_event_aux_pause(event->aux_event, true);
-> =20
-> -	if (event->prog && event->prog->type =3D=3D BPF_PROG_TYPE_PERF_EVENT &&
-> -	    !bpf_overflow_handler(event, data, regs))
-> +	prog =3D READ_ONCE(event->prog);
-> +	if (prog && prog->type =3D=3D BPF_PROG_TYPE_PERF_EVENT &&
-> +	    !bpf_overflow_handler(event, data, regs, prog))
-
-[Severity: High]
-This is a pre-existing issue, but does dereferencing prog->type here
-without rcu_read_lock_trace() expose sleepable BPF programs to a
-use-after-free?
-
-RCU Tasks Trace grace periods do not wait for NMIs or preemption-disabled
-sections (Classic RCU context). If a sleepable program is detached and freed
-via call_rcu_tasks_trace(), couldn't it be freed while __perf_event_overflo=
-w()
-is still executing and evaluating prog->type?
-
->  		goto out;
-> =20
->  	/*
-> @@ -13433,12 +13434,15 @@ perf_event_alloc(struct perf_event_attr *attr, =
-int cpu,
->  		overflow_handler =3D parent_event->overflow_handler;
->  		context =3D parent_event->overflow_handler_context;
->  #if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_EVENT_TRACING)
-> -		if (parent_event->prog) {
-> -			struct bpf_prog *prog =3D parent_event->prog;
-> =20
-> +		struct bpf_prog *prog;
-> =20
-> +		mutex_lock(&bpf_event_mutex);
-> +		prog =3D parent_event->prog;
-> +		if (prog) {
->  			bpf_prog_inc(prog);
->  			event->prog =3D prog;
->  		}
-> +		mutex_unlock(&bpf_event_mutex);
->  #endif
-
-[Severity: High]
-As mentioned above, since bpf_event_mutex is only compiled when
-CONFIG_BPF_EVENTS=3Dy, will unconditionally locking it here cause a build
-failure on kernels where that configuration is disabled?
-
->  	}
-> =20
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 75495a5c35079..026b5c4921158 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-
-[ ... ]
-
-> @@ -2018,7 +2018,7 @@ void perf_event_detach_bpf_prog(struct perf_event *=
-event)
-> =20
->  put:
->  	prog =3D event->prog;
-> -	event->prog =3D NULL;
-> +	WRITE_ONCE(event->prog, NULL);
-> =20
->  unlock:
->  	mutex_unlock(&bpf_event_mutex);
-
-[Severity: Medium]
-This isn't a bug introduced by this patch, but doesn't
-perf_event_attach_bpf_prog() still contain a plain write to event->prog?
-
-Since this patch fixes data races against the READ_ONCE() in the fast
-path, should the plain write:
-    event->prog =3D prog;
-
-in the attach path also be converted to a WRITE_ONCE()?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260813060528.3659=
-59-1-kartikey406@gmail.com?part=3D1
+-- 
+2.43.0
