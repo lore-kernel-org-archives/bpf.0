@@ -1,123 +1,103 @@
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 405323C3F54
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 21:42:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7799F3B8BD9
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 21:44:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786657377; cv=none; b=RTwV6OaQMK7cQrELFpspXyS0XYg9bNrzgFqX3buaQUDbyZLl4qOCvlpq+t2HvQn8GgSOCgdWh58zDHJOSn0Jop5IfVSEvRS9tVWr5Y/saEuyAxpDyWn/1w+pA9N5UAqx6KUXexT2bGBU5oQc3dHKcD4osHkIh8THdZZIqKBhsBo=
+	t=1786657479; cv=none; b=uQYdVatZDsqFOEz+7LYLQnL58krLSaAMstiRfLmmxmtzIU3OrCqdJmtJnwf7jiVAAMdcu1eUdY+f5jjeaoqATLnuSjpUVVTB2Wnf+7bmjZUGqgRUa4OoTQdQqeqVKAnkliIZn/sDIpzgSWHR+3sfvh4mMz5JhVLr074QBqDwDXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786657377; c=relaxed/simple;
-	bh=huyJMFlfQJ3dOAsamBtnzGlfdRqKt9nhuuxDEDmUYRs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kdl5Zf0HXouwaEM+Pc8tV4SmSQttuouU+7T2Kq+8tFcm+CNSsYFCixXbzV9a80yMsSmQOfDzn+r3x+3RC7lXcczXP+7ZJQRhUDRu6/PlX+NiHnIc/uSFWg+71rDNBT19l8In0kVAnP5gfnPZd5XloL8tsgIrdIscCVVzeK/+ysw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PYRDP2o2; arc=none smtp.client-ip=209.85.128.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786657479; c=relaxed/simple;
+	bh=xSZtBk9DwUT7evC8nBXZA1uBDhcmghurB7Adoek8x3E=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=USheSS/1y1Id7JOTSKGhNc4xhlkgr/4qnLSrS4MV5RlUdOQBdUvsBE5OzCdAGMhoe35MZXczUmK/BvseZqRGsJNeJLh8Ty9g49WHW6XgXWa24KbnR6AR/eJ/zWWBFbevfAe01PtmgR6Bx6nCqQ3Vqxio/VypgiTzKP3QjceUtLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NTlzlYU7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PYRDP2o2"
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-836cbcd0a48so5692097b3.1
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 14:42:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786657375; x=1787262175; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=huyJMFlfQJ3dOAsamBtnzGlfdRqKt9nhuuxDEDmUYRs=;
-        b=PYRDP2o2CWjoB9buT3ASd6aSVMT8akCCHeSR/6oxwwaRcmcIApCKhk8WohvrnhZtsm
-         RvfpFAwaCTD1apwh8y0G8Yd0aZi/zezyLLug7YTucKkNqEAq4YagSFTZEzpWy62CqBJ5
-         eOCswou4YvRJlsKDMNmWKZrTN6R5LRPOdEm0/ZPvNsuk1MaC5TeNQHNoLcruGjVBRb7E
-         8ltvbH49n0xNcpHVRru7W9C+4KD32jSlz+75DOfq4J1xkiMY12fuM/ROc9NFZWM+MzC7
-         Eiadv8JLY8eQm9roU1uUuHZ+xm76J/u0lzDHUq2qUg496bciEy/BCQF3CbJYuJESo4ck
-         x0Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786657375; x=1787262175;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=huyJMFlfQJ3dOAsamBtnzGlfdRqKt9nhuuxDEDmUYRs=;
-        b=rKCJUE2h+5iKe/Xksp/lAFVZ1bA6Xi437dG8NgpU4waIS5h+gmNfpCnw7kI/gfMDV+
-         djzPZoPh0W1i42emEbY9RPBZBG8IlMWZXoN2JkmRDHUS+DyH5kvsO5yI/0283Ta7027d
-         +z++01YKScr2zWXT9CmEnRJ9g9Sqs1GC10+J5LErmvK64xV1MfNQo8+gEeioD0M4nCtw
-         ivhSCQNSn1nxG/njIEREgAAhnjqC7mPu9ItXnn6+FC+cD5DBmvs7wKSrjtIi0yO0zXyA
-         hhHCxF6kIrXxeb04jjR9pXUuutI9in/6lluEhIM2INlWHg2gOJfdCMuc65pcqUSVX/ko
-         fCtg==
-X-Forwarded-Encrypted: i=1; AHgh+RrBF7jaViJNXBlrAJl2WbUllJMw8Hgq/XLJIgd8SqLs2eBTe6KuSdhPodCn8x0oRQqNQxs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YybchLi/2PS1ZuwPWaj8vGCPV/NkmRYjHmukZsPS8vzL+HASh7h
-	y+c3FqzNixxgKCkYZl1IDdZWkAJZQSR7hAmqpApXvK1n4eAW54j6FAXk
-X-Gm-Gg: AR+sD13Lh8Ab6/38jKRIKaBrCmK7w17ZEy2w7G52ogp32OSYsv0eb5WI4ctevbKMoCP
-	JMa3xRp0UtNnxDMuEA3ecFU3QE5G6s5uHKgpwpr/IfnPuVr96CDdHS4N6VnEf0w/me20RyUqhEH
-	X735k53/qv/2z7Pybx81lo+VASQm3JwkXl3jw/pcsGniPp/pfU9SoQA3sGwZ5hORQo3+lkPnjzO
-	bPaMIuLocpyF1k+GZFKfV4Wvy0UwrUnFs4q656BSg4wdxt7BQ+x7zsurfyzPfWw80OzZqdbbM2o
-	ufARBcNsGjGacKMGdg4t5mP3aSwi2joOCytgI1m+ridfft4DxSAkyGc64J7MJyghECKD6kJFTK4
-	Ij8ZHVewvKjrJROZNw5CxrWkzu0RLuPDecKJ5RCpXOTHRPlJTLIR2gATJ0CoHoatZswyaXJ2oGE
-	FoVYFpHhScUnDiadUSgKVPgSuDTHXc7NyMI9PNQXF5D7rrfpPHgpiQF0tY4GQqq15pCTjaA+RC6
-	rdShA==
-X-Received: by 2002:a05:690c:e5d5:b0:814:7a54:3a93 with SMTP id 00721157ae682-83711836371mr5686327b3.23.1786657375206;
-        Thu, 13 Aug 2026 14:42:55 -0700 (PDT)
-Received: from mac.lan ([136.55.173.105])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-836bb3ed2b5sm5069637b3.6.2026.08.13.14.42.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Aug 2026 14:42:54 -0700 (PDT)
-From: "Cen Zhang (Microsoft)" <blbllhy@gmail.com>
-To: horms@kernel.org
-Cc: AutonomousCodeSecurity@microsoft.com,
-	blbllhy@gmail.com,
-	bpf@vger.kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kerneljasonxing@gmail.com,
-	kuba@kernel.org,
-	kys@microsoft.com,
-	linux-kernel@vger.kernel.org,
-	maciej.fijalkowski@intel.com,
-	magnus.karlsson@intel.com,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	sdf@fomichev.me,
-	tgopinath@linux.microsoft.com
-Subject: Re: [PATCH net v3] xsk: fix NULL pointer dereference in __xsk_rcv()
-Date: Thu, 13 Aug 2026 17:42:40 -0400
-Message-ID: <20260813214240.96466-1-blbllhy@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260810132505.769431-1-horms@kernel.org>
-References: <20260810132505.769431-1-horms@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NTlzlYU7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD1131F000E9;
+	Thu, 13 Aug 2026 21:44:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786657478;
+	bh=Br0TOz7Ns8WQ2j9ZUlYGJKI40gYaKAYW9XoxOnBYsNc=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=NTlzlYU7bgyOSQk0Wo1WSVjcdBIjJotILUBFVgrhj1iySyRWbEjuAyuq2apvOGUyE
+	 Nc2626NwfFchgVHIOxlslasj+ZuuM5C6ilz3R7Z7ytUoxYVQ6fI/zPhyNVgNgCqo1a
+	 8bG5gqMedEP4uAjc8OCiLio+18BAUjIyKaBXw7ewRd8r3nHlaQrcxr0sEgH5jK1JHp
+	 PXHqSnOfbE+RNscTw/Rh6bQ6nOPo2iP3G52p3jdVlLrJ8uvrJeb4N/eIH3ZrALrkpZ
+	 BocmjMIAEKzM2bRTtmJa/jxCdXnEWVb4ja3/JO+S/0udWcH2b8H0rGDSQpserbVp7I
+	 1SSO8UriUUnuQ==
+Content-Type: multipart/mixed; boundary="===============8842438279431695634=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <bee693df6e3b4ecbe8c7c1000f23ae44df9f79fbd08b99bfc3ca39d50f4ba48b@mail.kernel.org>
+In-Reply-To: <20260813204032.644949-1-daniel@iogearbox.net>
+References: <20260813204032.644949-1-daniel@iogearbox.net>
+Subject: Re: [PATCH bpf-next 1/4] bpf: Keep fault protection when merging pointer types
+From: bot+bpf-ci@kernel.org
+To: daniel@iogearbox.net,eddyz87@gmail.com
+Cc: memxor@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 13 Aug 2026 21:44:37 +0000 (UTC)
 
-Hi Simon,
+--===============8842438279431695634==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Thanks for the comments.
 
-Given the extra complexity of reusing the pool-global xskb_list here,
-including the locking/concurrency issues and the hidden implementation
-assumptions needed to reuse the existing frag helpers, I would prefer to
-go back to the v2 local-list implementation, which is correct, logically
-simpler, and easier to maintain.
+commit e49db69f3fc735b4b80a6b4b8a50b41285d42c00
+Author: Daniel Borkmann <daniel@iogearbox.net>
 
-@Jason, regarding your v2 memory leak concern:
+bpf: Keep fault protection when merging pointer types
 
-> It will cause a memory leak because the current xsk_xdp that is not
-> added to the local list will miss the chance to get freed? And the
-> empty list_node cannot be easily freed by xp_free()...
+When the same BPF_LDX instruction is reached through paths that yield
+different pointer types, save_aux_ptr_type() merges them into a single
+type which is later used by bpf_convert_ctx_accesses() to decide whether
+the load has to be rewritten into a BPF_PROBE_MEM one.
 
-IIUC, it would not leak. The !list_empty(&xskb->list_node) case can only
-happen when fresh aligned-mode allocation returns the same xskb for a
-duplicated user Fill Ring address. In that case, the xskb has already
-been added to the local staging list by an earlier iteration, so the
-error path will walk that list, do list_del_init(), and then
-xsk_buff_free() can recycle it. For buffers returned from the free_list,
-in either aligned or unaligned mode, xsk_buff_alloc() already did
-list_del_init(). For fresh unaligned-mode allocations, xskb metadata
-comes from free_heads, so duplicated user addresses should not return the
-same in-list xskb.
+Before commit f2362a57aeff ("bpf: allow void* cast using bpf_rdonly_cast()")
+the merge only accepted two PTR_TO_BTF_ID pointers and unconditionally
+fell back to PTR_TO_BTF_ID | PTR_UNTRUSTED, so the merged type was always
+one that gets the BPF_PROBE_MEM rewrite. However, the mentioned commit
+widened the merge to also cover a PTR_TO_MEM base and replaced the
+fallback by a union of the PTR_UNTRUSTED and MEM_RDONLY flags.
 
-I'll prepare v4 based on the v2 local-list approach shortly.
+The union can produce types which bpf_convert_ctx_accesses() does not
+rewrite, and the load then stays a plain one without an exception table
+entry, e.g.:
 
-Thanks,
-Cen
+  - PTR_TO_MEM merged with PTR_TO_BTF_ID | PTR_UNTRUSTED
+   => PTR_TO_MEM | PTR_UNTRUSTED but only the MEM_RDONLY variant is valid
+  - PTR_TO_MEM merged with a plain PTR_TO_BTF_ID
+   => PTR_TO_MEM dropping the rewrite the latter type would have gotten
+  - PTR_TO_MEM | MEM_RDONLY merged with a plain PTR_TO_BTF_ID
+   => PTR_TO_MEM | MEM_RDONLY which is not rewritten either since only
+    its PTR_UNTRUSTED variant is
+
+In all three cases a program can take the unsafe path at runtime with a
+NULL or otherwise bad pointer and panic the kernel on the faulting load.
+Fix it by normalizing the merged type: if either side needs the rewrite,
+pick the one rewritten form the merged base type has.
+
+Reuse the may_fault_on_deref() helper in is_load_acq_unsafe() as well to
+avoid open coding, and trim the overly verbose comment which is more of
+implementation detail of bpf_convert_ctx_accesses() anyway.
+
+This isn't a bug, but there are a few readability issues in the changelog.
+The sentence "pick the one rewritten form the merged base type has" is
+hard to parse - could it be reworded to something like "pick the rewritten
+form that exists for the merged base type"? Also, "which is more of
+implementation detail of" is missing an article. Finally, the continuation
+lines in the ASCII list use 3-space indentation under 2-space bullets, so
+the '=>' lines don't align with the bullet text above them.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31743446421
+--===============8842438279431695634==--
