@@ -1,174 +1,264 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 073463F483D;
-	Thu, 13 Aug 2026 22:26:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BB1136215D
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 22:32:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786659998; cv=none; b=i8uiBtfIEqZtWkLqTLr2p1s/ibcGrxLahD7XWFyofYx6B4Ia6y/RyWIjgrDhEWWno3ZjCDm3E1C1evsCNErCqLre8kz4tXbayIS1xiKNREabwTx6nkbW03U7XT04GuGSfYF/hiIPdSWoTEvKjgpKEnmBFl0OUxrOPGha3XqoNh0=
+	t=1786660359; cv=none; b=IDgLDgLvQ4ZtFr+8j8TF/r1JePjR4llyfJIOXPOkXpX1iI7VSs2dXzU6Iz9DIX7RYNL0lyeBK4m+TUiYykD4mpdze05WEHPiVIN0+u2U+zHn//bLTbIOeqYoQKyMPxwEBMO9rPWWbt2LiknQrtcF7QoSLkkFMwx+PuRYWv9MAh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786659998; c=relaxed/simple;
-	bh=JpUVWn8UsZxzQeUqXmGo+2AOroUYvmVBFTXLwnNbOhA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=aNDGmnOIuEz/TkpaNdlaDnLvSCYr5jRLRpkSCByNrSP5PZ54T889ltu1WMGbTks8r7WjKoNB+1TdLo73oLtZTZS9J7FhJoQsDTMXBeAfOe2Ecu1ROLEEHvSgaF/HHC7Mo+OJL7YaORDliKcpO0HAlcze0KK+ane+4U6sWeyUejg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CGkpXLTc; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786660359; c=relaxed/simple;
+	bh=P9tXm7ziA2uuqMGnoC/M3nqJ2E0hGI7U4dFyEn7sfhI=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=pRI5FsJjgkL3zaw1blEn836jzhpkoEVlSl/hQNZa1YkHcAQ2lQJKKud5xQc3m254i4R3jKpgfs3uwjzdJgkhUwhfTLgXfqZPFHIEfu9i3Z109kIZEm7h1ozuFj1Sm6ZQeaXnWXVHq91yhjDuHoo3t1kzc1R1wp5ZA74am+GgDpA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lMcDX8oV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CGkpXLTc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A431F00A3A;
-	Thu, 13 Aug 2026 22:26:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lMcDX8oV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEA321F000E9;
+	Thu, 13 Aug 2026 22:32:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786659996;
-	bh=COjYU0sEfdGhoYwtqy3AekC66nLkRTjlQ8/+x3QCqBQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=CGkpXLTc0D7iAQ7Zmr42so6SXR4CEjcu1yBqIKuAVUfUNvnL9eQaMJ9diaaEg26dI
-	 DN2nK/OhfRZpenEdIiVSiwpkFIdueVtExvn8UFDUexYGHYvglqF3yc+DHTwI2SLcxt
-	 xBsd3peWVbfPI0MOiGO7XNrFjE40SLcQO0OUJKtXQAp6T2kau9YsBElmdXdROl1JKV
-	 rntB/yL5s93SUcO36UV54zU4Pj0t5E/sbsX9DDo7Ek1NDkFHUePzR1zc48Yuxly+nP
-	 HJd24wvvV4BV5sCCjXtPEuVSvHgwJSRNLcP7TSJ1YUEIdEonJb+ACxLVHJmBaLCqy2
-	 2CP9CLa8Hj4yg==
-Content-Type: multipart/mixed; boundary="===============0727513438879644745=="
+	s=k20260515; t=1786660357;
+	bh=ZZL85vNCz73hrdwFtE9+OKyg69zlsZ1sUhh3idU4RxM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=lMcDX8oVP6vVzriH45sob0ctHSRx0W8dj4d++Q0if9zB0c+iIJr1m4Ee81gVEikO3
+	 7YGKagRon09I7iikKUzk2lOnS5Y4Rbleip9NDo4TdsWqSpddZ9cwSb727HlDB2NcfM
+	 s/IawEAJlTPDm3o5gQsSAVS07Z1M7l8nFGFI30NH1Tviu1FyfczH/CVru07wnn3xy0
+	 1AAd9kjAvzz8O/MNkj19yB6TR+1X4I6AD2yxUuzNW6IEn+z7JffG29TJ5mNaJGoCbo
+	 hxowyjeQ4nuRPyIdQZJn6mNYTfvmkRBwLYba+FWSCNgIQPF0LvJn5MxVf7KolzBHuj
+	 vz8WU4GKQQe1g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCHv7 06/13] kexec_file: Chain the stages into a pipeline
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Pingfan Liu" <piliu@redhat.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260322014402.8815-7-piliu@redhat.com>
+References: <20260322014402.8815-7-piliu@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 13 Aug 2026 22:32:33 +0000
+Message-Id: <20260813223237.BEA321F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <54f3845022121f32320c644ae2ad998cc047bc5513756bf65febfb21d528c253@mail.kernel.org>
-In-Reply-To: <20260813211533.290256-3-dingning04@gmail.com>
-References: <20260813211533.290256-3-dingning04@gmail.com>
-Subject: Re: [PATCH bpf-next v4 2/4] selftests/bpf: Test refcount_acquire return nullability
-From: bot+bpf-ci@kernel.org
-To: dingning04@gmail.com,bpf@vger.kernel.org
-Cc: memxor@gmail.com,greg@kroah.com,dingning04@gmail.com,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,utilityemal77@gmail.com,chengkaitao@kylinos.cn,vmalik@redhat.com,leon.hwang@linux.dev,chenyy23@mails.tsinghua.edu.cn,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 13 Aug 2026 22:26:35 +0000 (UTC)
 
---===============0727513438879644745==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 7 potential issue(=
+s) to consider:
 
-> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-> index 61906f48025cc..fd35093285c0d 100644
-> --- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+New issues:
+- [High] Aliasing ctx->kernel and ctx->next_parsing_buf in KEXEC_BPF_CMD_DE=
+COMPRESS leads to a Use-After-Free.
+- [Medium] Memory leak of newly allocated buffer 'pn' in KEXEC_BPF_CMD_COPY=
+ when the pipeline array is full.
+
+Pre-existing issues:
+- [Critical] The BPF container decomposition stage completely bypasses KEXE=
+C signature verification.
+- [Critical] The bpf_buffer_parser kfunc lacks the required __sz suffix on =
+its size argument, defeating the BPF verifier.
+- [High] Memory leak of parsing buffers due to a double-negation logic erro=
+r (!!context->parsing_buf[i]).
+- [High] Severe memory leak of kexec_context dynamically allocated componen=
+ts on error and success paths.
+- [High] vfree() is improperly used on memory allocated by kernel_read_file=
+_from_fd().
+--
+
+--- Patch [6]: [PATCHv7 06/13] kexec_file: Chain the stages into a pipeline=
+ ---
+commit 8070ede2f761980c4a2de11a2d72fb8a5309bc74
+Author: Pingfan Liu <piliu@redhat.com>
+
+kexec_file: Chain the stages into a pipeline
+
+This commit enables kexec stages to be chained into a pipeline. It promotes
+intermediate outputs from next_parsing_buf to parsing_buf for the subsequent
+BPF parsing stages. It also allows multiple layers with distinct formats to=
+ be
+parsed sequentially.
+
+> diff --git a/kernel/kexec_bpf_loader.c b/kernel/kexec_bpf_loader.c
+> index af16f7b685d9a..7f7884411e2c7 100644
+> --- a/kernel/kexec_bpf_loader.c
+> +++ b/kernel/kexec_bpf_loader.c
+[ ... ]
+> @@ -301,6 +305,23 @@ static int kexec_buff_parser(struct bpf_parser_conte=
+xt *parser)
+>  				vfree(ctx->kernel);
+>  				ctx->kernel =3D decompressed_buf;
+>  				ctx->kernel_sz =3D decompressed_sz;
+> +				if (fill_pipeline) {
+> +					int i;
+> +
+> +					for (i =3D 0; i < MAX_PARSING_BUF_NUM; i++) {
+> +						if (ctx->next_parsing_buf[i])
+> +							continue;
+> +						ctx->next_parsing_buf[i] =3D decompressed_buf;
+> +						ctx->next_parsing_buf_sz[i] =3D decompressed_sz;
+> +						break;
+> +					}
+
+[Severity: High]
+Does this aliasing of decompressed_buf create a use-after-free risk?
+
+If a nested BPF program parses a sub-kernel and issues another
+KEXEC_BPF_SUBCMD_KERNEL command, kexec_buff_parser() will unconditionally c=
+all
+vfree(ctx->kernel):
+
+kexec_buff_parser()
+   case KEXEC_BPF_SUBCMD_KERNEL:
+      vfree(ctx->kernel);
+
+Since ctx->kernel and ctx->next_parsing_buf[i] point to the exact same buff=
+er,
+wouldn't this free the memory that the nested parser is actively reading fr=
+om?
+
+> +					/* No enough parsing slot */
+> +					if (i =3D=3D MAX_PARSING_BUF_NUM) {
+> +						ctx->kernel =3D NULL;
+> +						vfree(decompressed_buf);
+> +						return -ENOMEM;
+> +					}
+> +				}
+>  				break;
+[ ... ]
+> @@ -313,6 +334,22 @@ static int kexec_buff_parser(struct bpf_parser_conte=
+xt *parser)
+>  		if (!p)
+>  			return -ENOMEM;
+>  		memcpy(p, buf, cmd->payload_len);
+> +		if (fill_pipeline) {
+> +			pn =3D __vmalloc(cmd->payload_len, GFP_KERNEL | __GFP_ACCOUNT);
+> +			if (!pn) {
+> +				vfree(p);
+> +				return -ENOMEM;
+> +			}
+> +			memcpy(pn, buf, cmd->payload_len);
+> +			for (int i =3D 0; i < MAX_PARSING_BUF_NUM; i++) {
+> +				if (!ctx->next_parsing_buf[i]) {
+> +					ctx->next_parsing_buf[i] =3D pn;
+> +					ctx->next_parsing_buf_sz[i] =3D cmd->payload_len;
+> +					break;
+> +				}
+> +			}
+> +		}
+
+[Severity: Medium]
+If the pipeline array is fully exhausted and ctx->next_parsing_buf has no
+empty slots, the loop will complete without storing pn. Is there a missing
+check after the loop to free pn when it cannot be stored?
 
 [ ... ]
+> @@ -637,6 +674,14 @@ static int process_bpf_parsers_container(const char =
+*elf_buf, size_t elf_sz,
+>  		/* Free the old parsing context, and reload the new */
+>  		for (int i =3D 0; i < MAX_PARSING_BUF_NUM; i++) {
+>  			if (!!context->parsing_buf[i])
+>  				break;
+>  			vfree(context->parsing_buf[i]);
 
-> @@ -832,6 +848,51 @@ long rbtree_refcounted_node_ref_escapes_owning_input(void *ctx)
->  	return 0;
->  }
->
-> +SEC("tc")
-> +__success
-> +long refcount_acquire_owning_input_no_null_check(void *ctx)
-> +{
-> +	struct node_refcount_only *n, *m;
-> +
-> +	n = bpf_obj_new(typeof(*n));
-> +	if (!n)
-> +		return 1;
-> +
-> +	m = bpf_refcount_acquire(n);
-> +	bpf_obj_drop(m);
-> +	bpf_obj_drop(n);
-> +
-> +	return 0;
-> +}
-> +
-> +SEC("tc")
-> +__success
-> +long refcount_acquire_rcu_map_kptr_null_checked(void *ctx)
-> +{
-> +	struct map_value_refcount_only *mapval;
-> +	struct node_refcount_only *n, *m;
-> +	int idx = 0;
-> +
-> +	mapval = bpf_map_lookup_elem(&stashed_refcount_only, &idx);
-> +	if (!mapval)
-> +		return 1;
-> +
-> +	bpf_rcu_read_lock();
-> +	n = mapval->node;
-> +	if (!n) {
-> +		bpf_rcu_read_unlock();
-> +		return 2;
-> +	}
-> +	m = bpf_refcount_acquire(n);
-> +	bpf_rcu_read_unlock();
+[Severity: High]
+This is a pre-existing issue, but does this double negation logic incorrect=
+ly
+skip cleanup?
 
-This isn't a bug, but since SEC("tc") programs are already treated as
-being in an RCU critical section (in_rcu_cs() returns true for
-non-sleepable programs), would a sleepable program type make the
-bpf_rcu_read_lock()/unlock() section here actually load-bearing, or
-could the pair simply be dropped?
+Because !!context->parsing_buf[i] evaluates to true for any non-NULL
+pointer, the loop will immediately break instead of freeing valid buffers.
 
-> +
-> +	if (!m)
-> +		return 3;
-> +	bpf_obj_drop(m);
-> +
-> +	return 0;
-> +}
-> +
->  static long __stash_map_empty_xchg(struct node_data *n, int idx)
->  {
->  	struct map_value *mapval = bpf_map_lookup_elem(&stashed_nodes, &idx);
-> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-> index 024ef2aae2008..acd3e81a39168 100644
-> --- a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+[Severity: High]
+This is a pre-existing issue, but is it safe to use vfree() here?
 
-[ ... ]
+Since these buffers are originally populated by kernel_read_file_from_fd()
+which uses kvmalloc(), shouldn't kvfree() be used to avoid panics on
+kmalloc'd memory?
 
-> @@ -80,6 +96,37 @@ long refcount_acquire_maybe_null(void *ctx)
->  	return 0;
->  }
->
-> +SEC("?tc")
-> +__failure __msg("Possibly NULL pointer passed to trusted R1")
-> +long refcount_acquire_rcu_map_kptr_unchecked_drop(void *ctx)
-> +{
-> +	struct map_value_refcount_only *mapval;
-> +	struct node_refcount_only *tmp, *n, *m;
-> +	int idx = 0;
-> +
-> +	tmp = bpf_obj_new(typeof(*tmp));
-> +	if (!tmp)
-> +		return 3;
-> +	bpf_obj_drop(tmp);
-
-This isn't a bug, but is the bpf_obj_new()/bpf_obj_drop() pair at the
-start needed to force a complete BTF type for struct node_refcount_only,
-or is it leftover setup? A one-line comment would keep someone from
-removing it later.
-
-> +
-> +	mapval = bpf_map_lookup_elem(&stashed_refcount_only, &idx);
-> +	if (!mapval)
-> +		return 1;
-> +
-> +	bpf_rcu_read_lock();
-> +	n = mapval->node;
-> +	if (!n) {
-> +		bpf_rcu_read_unlock();
-> +		return 2;
-> +	}
-> +	m = bpf_refcount_acquire(n);
-> +	bpf_rcu_read_unlock();
-> +
-> +	bpf_obj_drop(m);
-> +
-> +	return 0;
-> +}
-> +
->  SEC("?tc")
->  __failure __msg("Unreleased reference id=3 alloc_insn={{[0-9]+}}")
->  long rbtree_refcounted_node_ref_escapes_owning_input(void *ctx)
+>  			context->parsing_buf[i] =3D NULL;
+>  			context->parsing_buf_sz[i] =3D 0;
+>  		}
+> +		for (int i =3D 0; i < MAX_PARSING_BUF_NUM; i++) {
+> +			if (!context->next_parsing_buf[i])
+> +				break;
+> +			context->parsing_buf[i] =3D context->next_parsing_buf[i];
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+While reviewing this patch, I noticed a few pre-existing issues in other
+related areas:
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31745514567
---===============0727513438879644745==--
+kernel/kexec_bpf_loader.c:decompose_kexec_image() {
+...
+		ret =3D process_bpf_parsers_container(parser_start, parser_sz, &ctx, 0);
+		if (!ret) {
+...
+			vfree(ctx.cmdline);
+		}
+		return ret;
+}
+
+[Severity: High]
+This is a pre-existing issue, but does this function leak memory on the err=
+or
+path?
+
+If process_bpf_parsers_container() returns an error, the function exits
+directly and returns ret without freeing ctx.kernel, ctx.initrd, ctx.cmdlin=
+e,
+or the array of buffers in ctx.parsing_buf allocated by
+kernel_read_file_from_fd().
+
+Also, on the success path (!ret), the ctx.parsing_buf array appears to be
+permanently leaked as well.
+
+
+kernel/kexec_file.c:kimage_file_prepare_segments() {
+...
+	if (IS_ENABLED(CONFIG_KEXEC_BPF)) {
+		/* Fill up image's kernel_buf, initrd_buf, cmdline_buf */
+		ret =3D decompose_kexec_image(image, initrd_fd);
+		switch (ret) {
+		case 0:
+			envelop =3D true;
+...
+#ifdef CONFIG_KEXEC_SIG
+	if (!envelop) {
+		ret =3D kimage_validate_signature(image);
+		if (ret)
+			goto out;
+	}
+#endif
+...
+}
+
+[Severity: Critical]
+This is a pre-existing issue, but doesn't skipping signature validation when
+envelop is true create a security regression?
+
+If decompose_kexec_image() successfully extracts the kernel/initrd from a
+container via unverified BPF programs, could an attacker load an unsigned,
+untrusted kernel simply by wrapping it in an ELF container, completely
+defeating kernel signature enforcement and Lockdown?
+
+
+kernel/bpf/bpf_buffer_parser.c:bpf_buffer_parser() {
+...
+__bpf_kfunc int bpf_buffer_parser(char *buf, int buf_sz,
+		struct bpf_parser_context *context)
+{
+...
+}
+
+[Severity: Critical]
+This is a pre-existing issue, but does the size parameter need the __sz suf=
+fix
+to be properly verified?
+
+Because the parameter is named buf_sz instead of buf__sz, the BPF verifier
+treats it as a standard scalar and won't enforce bounds checking between the
+pointer and the size. Could an unprivileged BPF program supply a small valid
+pointer and an arbitrarily large buf_sz to cause an out-of-bounds read?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260322014402.8815=
+-1-piliu@redhat.com?part=3D6
