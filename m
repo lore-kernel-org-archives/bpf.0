@@ -1,104 +1,49 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5AB04968E2
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 18:58:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF1F411F94
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 19:04:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786647538; cv=none; b=MMXDnOpwYyjOkkEqzk+pddPHDbotWu777sZEEFVW3sn7HKMGSti3M+dQFX/1psgZSwyIZqgozKl4BKPu0ad4iP8u3r2r//2bP48LW3itfZ6HOHxtAN3Jrz7EzMWSrYhdWT4uvkYXmZtgYZvxx17yPlkEYGasb+mY3XJGmfO9GNs=
+	t=1786647857; cv=none; b=T2M6YBHAR9RXwjME7XVuTh9HT2XgSzbimmqk5FLdSC7NjdMxKtBWBiTdQHmjBrOt9Hp4A2ZW+NaK2EB+T6G4lZgT2pCgMaFHh4qOC4LA/cZiU+vx4Ke3/6bFvS3o3sIKVxjU3PNh/THp2QvdW4uvtBseGef9okqlo+SqHh+Vwhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786647538; c=relaxed/simple;
-	bh=GOCeIpJRgFyYHMOfCqGUNzxzujcQWvp3QaqDw0/DsqY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VQsJO42slOb3EqzpfZozS717+dsk99pf/ru02uORLWZkuFMOGvIrAQOUo5PSFUAc++hahndzmggynbifer7LXWHZq2Ght6puzTTgF0bWFhycHpOK3v9dSbzNo1hjC2WINZ+DKHCYTRwiYtP2reYt9yCt3gN1Lmyqwy5cs7dUP6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f0mz3B09; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786647857; c=relaxed/simple;
+	bh=75rat4DZTbi/AtCH6CKBQvkAvbMJm8BchY554+SdpEs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nU305myiprBn9P1LWb0tSUj88qB4l9ibstfeN7Lh5C1QKk3UrCQF8ggDK/VkXE//OtfIRcC8bMX03aWdBwlfSGlz2ue7JBYqpwS+cUN19cqWf3lblVE/Yqw9GSQE09QmdivZoS0u31puVZB+PpdQVR5PqZKOQ/UzUfihRZIbXPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z6V2qP41; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f0mz3B09"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2cc61541f8cso18104025ad.0
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 11:58:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786647533; x=1787252333; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=r8vCfOJqlyeUUrhQ0TEVig3puBrFV2IWvi7C6KR3I1g=;
-        b=f0mz3B09o42+sgDyicQmHskQV9bYAolwzXKpc9qBHM9Xti973wqzKUBSNZdRdDmMMr
-         U8POGVoOCWOTq2sDp8KA1pnfaOebuz+Xrm+ca1Zn46vz9bSeO3KA939NXpOLbfkVGIdE
-         xJQ5KNUNj0+egcwiihBd8dZcQmE9dNVRoFkgM+Rs3K4Vxou1TS4oXmIqp3jjM0VIbCl2
-         giZuvLtzFMYlFnUKOI84SOBE/RikV71OUt00NdjgLxreJaEr9NPGqCNZrrvnPcrrJxyI
-         qK+BDyHLhb3bl0tDto9f1QZ7NjDQtGBMa8jaISbuDKi5+FTxI0oJSIzgPhvZH9FvDJHv
-         xUhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786647533; x=1787252333;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=r8vCfOJqlyeUUrhQ0TEVig3puBrFV2IWvi7C6KR3I1g=;
-        b=tG5lUhL+ZkxoImxS8peqHbV5cCvD8wYmC0SB2QLQJbG55gtqwe6JjLT2QcMinjUvLW
-         4WsGckO+kwwrwyqrB1cdBgCuRJ+aluwEIvhr+t1klRPIEkTBvA7KSyR5thaFWYBtMbw/
-         Dmj8nGDwwpnXV7BCNXkWte8Meafc8aefQfVvemJLbGk+4SY3WzDUkgoxa/6cmK+J/OBi
-         twRLjAOWrxP7ra5ekOJgzZPBvo+QN9sPEjeH2gVczhqH4OtG7VcFDcMfIdaoB13+N4EI
-         vdHBbvRyVBZ2wqjYjy5OD0r/zIIOOkwgs2o3W8b0+69Ag67r0naYLJ3pvdkiIyw8XqLx
-         2SIw==
-X-Forwarded-Encrypted: i=1; AHgh+RrmLQnmTsTLIlAlZfvjsf6y7iWRYhEDQH+9CVxzhH1g0o81OKq7rMPcrxJc15Z1Ou2pemo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOdZDKPt4K/lHXIGtuuIIUbaFn6C5jBjuGF1KGcDj6DDDpyoUR
-	S7kN0iEwxuHVkxqC/Q/578EbNgvV0Gaag7xWCQX6g9DJ/KHiUE9c2Hea
-X-Gm-Gg: AR+sD10duMHCHGscHJfBn/gR1QQ8pT0L2UDO0iweLv4NWSB8HKdKY5D2nKU2oGOga11
-	8WHySHqdjZb6kPb0S1cDZq6QJQ0wbQ7NaieMulNc3a/LZVj0WP+pvUakf4VY0GjZ1d7jiOrz1cL
-	jrbTPSZePJ9iwyxAebivZtlEU/0WykJN020WCBpQnhlOqi7/9URIHllABI7z5bmHf16P7A6LPEj
-	Mf1aiSwivlEckFEbsz74ofo+8jXQfE7h/mDDWFuEMWZyFgCB6O2hhtXsHmrr3HhdEchgbxiniW/
-	awAvBHlzS1LfUotECyNIcBdkOpW7K01UVxLebUWVELu4Gq4jJRKg21jVwiLnY+6FNv5uzRiHJWc
-	px5dh+/OF4jTy/Lm7HpMjwQZBaHS56OVvXq3RDzr4HYE1s0wTZYhQTsZ2p3Z/E9Gg+HkU6ZDcJC
-	6rW1NsI6iKpaiKuey9hePsFgZGx8VAbRFjGVmoJm7yDjnL8VR6sdAiR6g=
-X-Received: by 2002:a17:902:f64e:b0:2cf:70d2:da7c with SMTP id d9443c01a7336-2d37f77fdfemr99897105ad.12.1786647532683;
-        Thu, 13 Aug 2026 11:58:52 -0700 (PDT)
-Received: from localhost ([2a03:2880:9ff:63::])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31eb99e2556sm10969714eec.0.2026.08.13.11.58.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Aug 2026 11:58:52 -0700 (PDT)
-From: Ziyang Men <ziyang.meme@gmail.com>
-To: Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Ben Segall <bsegall@google.com>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Mykola Lysenko <mykolal@meta.com>,
-	Ziyang Men <ziyang.meme@gmail.com>,
-	kernel-team@meta.com,
-	bpf@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] selftests/bpf: add cgroup_iter_cpu test for cpu cgroup kfuncs
-Date: Thu, 13 Aug 2026 11:58:46 -0700
-Message-ID: <20260813185846.1216892-3-ziyang.meme@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z6V2qP41"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB8241F000E9;
+	Thu, 13 Aug 2026 19:04:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786647855;
+	bh=CX5ME1roxXjEjjYi0syuy06YCrMato1yud/FPq8W/R0=;
+	h=From:To:Cc:Subject:Date;
+	b=Z6V2qP41zCVs6NXEcsUm4MmXT5bzEAPrhwcixORA6kPiRf1sN1tBfSNGALEcDxFE1
+	 lazyK8KaFx7Iu9kI+Dc3wnB+oVyUGNPiLPwqrfnTd3Gscu2eybC9HM+KtrA+fdG6nA
+	 O7TBiuDCzirjPzsBX2YeAR41DJa2hE9QfpRoPG5IGLrvhL8PlBPZog0Fv0e1JSR1wD
+	 V4IDuzh+fAS2gW0O390+hzMRmieGXg45ZIqQRs5CWrU9HXS1Ehly2yZxsU8jq+v9XW
+	 lyk8687ITllu5/p3T7DeLdmbBZwfb6VrD97LdNvgnN12DafYhjQJb+IvLuaxpxiZFT
+	 xtBo3AnMyvPZw==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	"Alexei Starovoitov" <ast@kernel.org>,
+	"Daniel Borkmann" <daniel@iogearbox.net>,
+	"Andrii Nakryiko" <andrii@kernel.org>,
+	"Martin KaFai Lau" <martin.lau@linux.dev>,
+	"Eduard Zingerman" <eddyz87@gmail.com>,
+	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+	"Song Liu" <song@kernel.org>,
+	"Yonghong Song" <yonghong.song@linux.dev>,
+	Xu Kuohai <xukuohai@huaweicloud.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>
+Subject: [PATCH bpf-next v2 0/7] bpf, arm64: __arena kfunc and struct_ops arguments
+Date: Thu, 13 Aug 2026 12:03:47 -0700
+Message-ID: <20260813190356.335181-1-puranjay@kernel.org>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260813185846.1216892-1-ziyang.meme@gmail.com>
-References: <20260813185846.1216892-1-ziyang.meme@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -107,399 +52,93 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add cgroup_iter_cpu, a selftest for the added CPU controller BPF kfuncs.
+The x86-64 JIT recently gained support for the __arena and
+__arena__nullable argument suffixes on kfuncs and struct_ops stubs. This
+adds the arm64 side and flips bpf_jit_supports_arena_args() on, so the
+verifier stops rejecting these programs on arm64.
 
-The userspace side runs a CPU hog in a test cgroup with cpu.max settled
-then:
+Patch 1 is an independent fix. save_args() reads stack-passed arguments
+at FP + 32, which only holds when the trampoline is entered through the
+fentry call and two frame records are pushed. A struct_ops trampoline is
+entered via blr and pushes one frame fewer, so its stack arguments start
+at FP + 16 and every one of them was read two slots off. No struct_ops
+member passed arguments on the stack until the test added by commit
+2d4de9a493a0, which is why this went unnoticed. It carries a Fixes tag
+and can be taken separately; note that the test covering it only runs on
+arm64 once the rest of this series lands.
 
-  - checks the CPU-time and throttling counters are nonzero,
-  - compares whether all values the program read are same as those
-    reading from cgroup file.
+Patch 2 adds an ADD/SUB (extended register) encoder to the insn library,
+so the JIT can zero-extend and add in one instruction.
 
-CONFIG_CGROUP_SCHED, CONFIG_FAIR_GROUP_SCHED and CONFIG_CFS_BANDWIDTH
-are added to the test config.
+Patches 3 and 4 are the JIT work. A kfunc argument is rebased onto the
+arena base at the call site:
 
-Tests passed on v7.2-rc5.
+        add     xN, x28, wN, uxtw
 
-Suggested-by: Shakeel Butt <shakeel.butt@linux.dev>
-Assisted-by: Claude:claude-opus-5
-Signed-off-by: Ziyang Men <ziyang.meme@gmail.com>
----
- tools/testing/selftests/bpf/cgroup_iter_cpu.h |  22 ++
- tools/testing/selftests/bpf/config            |   3 +
- .../bpf/prog_tests/cgroup_iter_cpu.c          | 259 ++++++++++++++++++
- .../selftests/bpf/progs/cgroup_iter_cpu.c     |  53 ++++
- 4 files changed, 337 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/cgroup_iter_cpu.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter_cpu.c
- create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter_cpu.c
+and a nullable one skips the add so NULL stays NULL:
 
-diff --git a/tools/testing/selftests/bpf/cgroup_iter_cpu.h b/tools/testing/selftests/bpf/cgroup_iter_cpu.h
-new file mode 100644
-index 000000000000..74599a5c0e4d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/cgroup_iter_cpu.h
-@@ -0,0 +1,22 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+#ifndef __CGROUP_ITER_CPU_H
-+#define __CGROUP_ITER_CPU_H
-+
-+struct cpu_query {
-+	/* base cpu time, from cpu.stat */
-+	__u64 usage_usec;
-+	__u64 user_usec;
-+	__u64 system_usec;
-+	__u64 nice_usec;
-+	__u64 forceidle_usec;
-+	/* CFS bandwidth throttling, from cpu.stat and cpu.stat.local */
-+	__u64 nr_periods;
-+	__u64 nr_throttled;
-+	__u64 throttled_usec;
-+	__u64 nr_bursts;
-+	__u64 burst_usec;
-+	__u64 throttled_self_usec;
-+};
-+
-+#endif /* __CGROUP_ITER_CPU_H */
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index ea7044f30adc..482b40dde2f9 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -11,6 +11,9 @@ CONFIG_BPF_STREAM_PARSER=y
- CONFIG_BPF_SYSCALL=y
- # CONFIG_BPF_UNPRIV_DEFAULT_OFF is not set
- CONFIG_CGROUP_BPF=y
-+CONFIG_CGROUP_SCHED=y
-+CONFIG_FAIR_GROUP_SCHED=y
-+CONFIG_CFS_BANDWIDTH=y
- CONFIG_CRYPTO_HMAC=y
- CONFIG_CRYPTO_SHA256=y
- CONFIG_CRYPTO_USER_API=y
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_cpu.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_cpu.c
-new file mode 100644
-index 000000000000..cd7e92ababfb
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_cpu.c
-@@ -0,0 +1,259 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+#include <test_progs.h>
-+#include <bpf/libbpf.h>
-+#include <fcntl.h>
-+#include <signal.h>
-+#include <sys/prctl.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+#include "cgroup_helpers.h"
-+#include "cgroup_iter_cpu.h"
-+#include "cgroup_iter_cpu.skel.h"
-+
-+static int read_stats(struct bpf_link *link)
-+{
-+	int fd, ret = 0;
-+	ssize_t bytes;
-+
-+	fd = bpf_iter_create(bpf_link__fd(link));
-+	if (!ASSERT_OK_FD(fd, "bpf_iter_create"))
-+		return 1;
-+
-+	bytes = read(fd, NULL, 0);
-+	if (!ASSERT_EQ(bytes, 0, "read fd"))
-+		ret = 1;
-+
-+	close(fd);
-+	return ret;
-+}
-+
-+/* Read cgroup file @name into @buf. */
-+static int read_cgroup_file(int cgroup_fd, const char *name, char *buf,
-+			    size_t size)
-+{
-+	ssize_t n;
-+	int fd;
-+
-+	fd = openat(cgroup_fd, name, O_RDONLY);
-+	if (fd < 0)
-+		return -1;
-+	n = read(fd, buf, size - 1);
-+	close(fd);
-+	if (n <= 0)
-+		return -1;
-+	buf[n] = '\0';
-+	return 0;
-+}
-+
-+/* Parse the "cpu.stat" file into @out. */
-+static int parse_cpu_stat(int cgroup_fd, struct cpu_query *out)
-+{
-+	char buf[4096], *line, *sp;
-+	unsigned long long v;
-+
-+	if (read_cgroup_file(cgroup_fd, "cpu.stat", buf, sizeof(buf)))
-+		return -1;
-+
-+	for (line = strtok_r(buf, "\n", &sp); line;
-+	     line = strtok_r(NULL, "\n", &sp)) {
-+		if (sscanf(line, "usage_usec %llu", &v) == 1)
-+			out->usage_usec = v;
-+		else if (sscanf(line, "user_usec %llu", &v) == 1)
-+			out->user_usec = v;
-+		else if (sscanf(line, "system_usec %llu", &v) == 1)
-+			out->system_usec = v;
-+		else if (sscanf(line, "nice_usec %llu", &v) == 1)
-+			out->nice_usec = v;
-+		else if (sscanf(line, "core_sched.force_idle_usec %llu", &v) == 1)
-+			out->forceidle_usec = v;
-+		else if (sscanf(line, "nr_periods %llu", &v) == 1)
-+			out->nr_periods = v;
-+		else if (sscanf(line, "nr_throttled %llu", &v) == 1)
-+			out->nr_throttled = v;
-+		else if (sscanf(line, "throttled_usec %llu", &v) == 1)
-+			out->throttled_usec = v;
-+		else if (sscanf(line, "nr_bursts %llu", &v) == 1)
-+			out->nr_bursts = v;
-+		else if (sscanf(line, "burst_usec %llu", &v) == 1)
-+			out->burst_usec = v;
-+	}
-+	return 0;
-+}
-+
-+/*
-+ * Parse the "cpu.stat.local" file into @out.
-+ */
-+static int parse_cpu_stat_local(int cgroup_fd, struct cpu_query *out)
-+{
-+	unsigned long long v;
-+	char buf[256];
-+
-+	if (read_cgroup_file(cgroup_fd, "cpu.stat.local", buf, sizeof(buf)))
-+		return -1;
-+	if (sscanf(buf, "throttled_usec %llu", &v) != 1)
-+		return -1;
-+	out->throttled_self_usec = v;
-+	return 0;
-+}
-+
-+/* Read file value the bpf program reads. */
-+static int parse_stats(int cgroup_fd, struct cpu_query *out, bool have_bw)
-+{
-+	if (parse_cpu_stat(cgroup_fd, out))
-+		return -1;
-+	if (have_bw && parse_cpu_stat_local(cgroup_fd, out))
-+		return -1;
-+	return 0;
-+}
-+
-+/*
-+ * Check whether this kernel accounts CFS bandwidth.
-+ */
-+static bool cgroup_has_bw_stat(int cgroup_fd)
-+{
-+	char buf[4096];
-+
-+	if (read_cgroup_file(cgroup_fd, "cpu.stat", buf, sizeof(buf)))
-+		return false;
-+	return strstr(buf, "nr_periods ");
-+}
-+
-+/* Fork a child that spins in the current cgroup, kill it if the test exits. */
-+static pid_t spawn_cpu_hog(void)
-+{
-+	pid_t pid = fork();
-+
-+	if (pid == 0) {
-+		prctl(PR_SET_PDEATHSIG, SIGKILL);
-+		while (1)
-+			;
-+	}
-+	return pid;
-+}
-+
-+void test_cgroup_iter_cpu(void)
-+{
-+	char *cgroup_rel_path = "/cgroup_iter_cpu_test";
-+	struct cgroup_iter_cpu *skel;
-+	struct cpu_query *q;
-+	struct bpf_link *link;
-+	bool wrote_max, have_bw;
-+	int cgroup_fd;
-+	pid_t hog;
-+
-+	cgroup_fd = cgroup_setup_and_join(cgroup_rel_path);
-+	if (!ASSERT_OK_FD(cgroup_fd, "cgroup_setup_and_join"))
-+		return;
-+
-+	wrote_max = !write_cgroup_file(cgroup_rel_path, "cpu.max", "10000 100000");
-+
-+	skel = cgroup_iter_cpu__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "cgroup_iter_cpu__open_and_load"))
-+		goto cleanup_cgroup_fd;
-+
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	union bpf_iter_link_info linfo = {
-+		.cgroup.cgroup_fd = cgroup_fd,
-+		.cgroup.order = BPF_CGROUP_ITER_SELF_ONLY,
-+	};
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+
-+	link = bpf_program__attach_iter(skel->progs.cgroup_cpu_query, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
-+		goto cleanup_skel;
-+
-+	q = &skel->data_query->cpu_query;
-+
-+	hog = spawn_cpu_hog();
-+	if (!ASSERT_GT(hog, 0, "spawn_cpu_hog"))
-+		goto cleanup_link;
-+
-+	sleep(1);
-+
-+	/* Run the bpf program before anything here reads cpu.stat. */
-+	if (!ASSERT_OK(read_stats(link), "read stats"))
-+		goto cleanup_hog;
-+
-+	have_bw = wrote_max && cgroup_has_bw_stat(cgroup_fd);
-+
-+	if (test__start_subtest("cgroup_iter_cpu__cputime")) {
-+		ASSERT_GT(q->usage_usec, 0, "usage_usec");
-+		ASSERT_GT(q->user_usec + q->system_usec, 0, "user+system_usec");
-+	}
-+	if (test__start_subtest("cgroup_iter_cpu__throttling")) {
-+		if (!have_bw) {
-+			test__skip();
-+		} else {
-+			ASSERT_GT(q->nr_periods, 0, "nr_periods");
-+			ASSERT_GT(q->nr_throttled, 0, "nr_throttled");
-+			ASSERT_GT(q->throttled_usec, 0, "throttled_usec");
-+			ASSERT_GT(q->throttled_self_usec, 0, "throttled_self_usec");
-+		}
-+	}
-+
-+	/*
-+	 * cpu.stat cputime grows on every tick a task in the cgroup runs, so
-+	 * stop them all before comparing
-+	 */
-+	if (test__start_subtest("cgroup_iter_cpu__match")) {
-+		struct cpu_query filev = {};
-+		int i, stable = 0;
-+
-+		kill(hog, SIGSTOP);
-+		waitpid(hog, NULL, WUNTRACED);
-+		if (!ASSERT_OK(join_root_cgroup(), "join_root_cgroup"))
-+			goto cleanup_hog;
-+
-+		/*
-+		 * The period timer keeps adding to nr_periods for a while
-+		 * after the hog stops
-+		 */
-+		for (i = 0; i < 20; i++) {
-+			struct cpu_query before = {}, after = {};
-+
-+			if (!ASSERT_OK(parse_stats(cgroup_fd, &before, have_bw), "cpu.stat") ||
-+			    !ASSERT_OK(read_stats(link), "read stats") ||
-+			    !ASSERT_OK(parse_stats(cgroup_fd, &after, have_bw), "cpu.stat"))
-+				goto cleanup_hog;
-+
-+			if (!memcmp(&before, &after, sizeof(before))) {
-+				filev = before;
-+				stable = 1;
-+				break;
-+			}
-+			usleep(100000);
-+		}
-+
-+		if (!ASSERT_TRUE(stable, "cpu.stat stable"))
-+			goto cleanup_hog;
-+
-+		ASSERT_EQ(q->usage_usec, filev.usage_usec, "usage_usec");
-+		ASSERT_EQ(q->user_usec, filev.user_usec, "user_usec");
-+		ASSERT_EQ(q->system_usec, filev.system_usec, "system_usec");
-+		ASSERT_EQ(q->nice_usec, filev.nice_usec, "nice_usec");
-+		ASSERT_EQ(q->forceidle_usec, filev.forceidle_usec, "forceidle_usec");
-+
-+		if (have_bw) {
-+			ASSERT_EQ(q->nr_periods, filev.nr_periods, "nr_periods");
-+			ASSERT_EQ(q->nr_throttled, filev.nr_throttled, "nr_throttled");
-+			ASSERT_EQ(q->throttled_usec, filev.throttled_usec, "throttled_usec");
-+			ASSERT_EQ(q->nr_bursts, filev.nr_bursts, "nr_bursts");
-+			ASSERT_EQ(q->burst_usec, filev.burst_usec, "burst_usec");
-+			ASSERT_EQ(q->throttled_self_usec, filev.throttled_self_usec,
-+				  "throttled_self_usec");
-+		}
-+	}
-+
-+cleanup_hog:
-+	kill(hog, SIGKILL);
-+	waitpid(hog, NULL, 0);
-+cleanup_link:
-+	bpf_link__destroy(link);
-+cleanup_skel:
-+	cgroup_iter_cpu__destroy(skel);
-+cleanup_cgroup_fd:
-+	close(cgroup_fd);
-+	cleanup_cgroup_environment();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/cgroup_iter_cpu.c b/tools/testing/selftests/bpf/progs/cgroup_iter_cpu.c
-new file mode 100644
-index 000000000000..6a288a00c25a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/cgroup_iter_cpu.c
-@@ -0,0 +1,53 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_core_read.h>
-+#include "cgroup_iter_cpu.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct cpu_query cpu_query SEC(".data.query");
-+
-+SEC("iter.s/cgroup")
-+int cgroup_cpu_query(struct bpf_iter__cgroup *ctx)
-+{
-+	struct cpu_cgroup_cputime ct = {};
-+	struct cgroup *cgrp = ctx->cgroup;
-+	struct cgroup_subsys_state *css;
-+	struct task_group *tg;
-+
-+	if (!cgrp)
-+		return 1;
-+
-+	bpf_cpu_cgroup_flush_stats(cgrp);
-+	bpf_cpu_cgroup_cputime(cgrp, &ct);
-+
-+	cpu_query.usage_usec = ct.usage_usec;
-+	cpu_query.user_usec = ct.user_usec;
-+	cpu_query.system_usec = ct.system_usec;
-+	cpu_query.nice_usec = ct.nice_usec;
-+	cpu_query.forceidle_usec = ct.forceidle_usec;
-+
-+	bpf_rcu_read_lock();
-+	css = cgrp->subsys[cpu_cgrp_id];
-+	tg = (struct task_group *)css;
-+	if (tg && bpf_core_field_exists(tg->cfs_bandwidth.nr_periods)) {
-+		cpu_query.nr_periods =
-+			(__u32)BPF_CORE_READ(tg, cfs_bandwidth.nr_periods);
-+		cpu_query.nr_throttled =
-+			(__u32)BPF_CORE_READ(tg, cfs_bandwidth.nr_throttled);
-+		cpu_query.throttled_usec =
-+			BPF_CORE_READ(tg, cfs_bandwidth.throttled_time) / 1000;
-+		cpu_query.nr_bursts =
-+			(__u32)BPF_CORE_READ(tg, cfs_bandwidth.nr_burst);
-+		cpu_query.burst_usec =
-+			BPF_CORE_READ(tg, cfs_bandwidth.burst_time) / 1000;
-+	}
-+	bpf_rcu_read_unlock();
-+
-+	/* a sum over every possible cpu, so the test uses a kfunc */
-+	cpu_query.throttled_self_usec = bpf_cpu_cgroup_throttled_self(cgrp);
-+
-+	return 0;
-+}
+        mov     wN, wN
+        cbz     wN, 1f
+        add     xN, x28, wN, uxtw
+1:
+
+A struct_ops callback converts in the other direction, in the trampoline
+while saving arguments into the BPF ctx, with the low half of the arena
+base kept in x11:
+
+        sub     w10, wsrc, w11
+        str     x10, [sp, #slot]
+
+Patches 5 and 6 add arm64 JIT-sequence assertions and drop the x86-64
+gating from the existing arena argument tests. Patch 7 is arch-neutral:
+it adds a struct_ops member whose first argument is a 16-byte struct
+passed by value, so the arena pointer does not land at the ctx slot its
+argument index suggests. Nothing covered that before, and it is the case
+patch 4 has to get right.
+
+Changelog:
+V1: https://lore.kernel.org/bpf/20260810190922.3408757-1-puranjay@kernel.org/
+Changes in v2:
+- patch 2: fix the decode masks for the new extended-register predicates,
+  0x7F200000 -> 0x7FE00000. opt in bits 23:22 is part of the opcode here
+  rather than a shift type, and any value other than 00 is unallocated
+  (Xu Kuohai). Also noted in the commit message. No functional change: the
+  masks only feed aarch64_insn_is_*_ext(), which has no in-tree callers,
+  while the encoder uses aarch64_insn_get_*_ext_value().
+- patch 4: comment why the conversion in the stack-argument loop is not
+  guarded by for_call_origin (Xu Kuohai).
+- collect Reviewed-by/Acked-by from Xu Kuohai.
+- rebase onto current bpf-next.
+
+Puranjay Mohan (6):
+  bpf, arm64: Fix stack-passed arguments for indirect trampolines
+  bpf, arm64: JIT __arena kfunc argument rebasing
+  bpf, arm64: Convert struct_ops arena arguments in the trampoline
+  selftests/bpf: Add arm64 JIT-sequence tests for __arena kfunc
+    arguments
+  selftests/bpf: Enable __arena argument tests on arm64
+  selftests/bpf: Test a multi-slot argument before a struct_ops arena
+    argument
+
+Tejun Heo (1):
+  arm64: insn: Add encoder for ADD/SUB (extended register)
+
+ Documentation/bpf/kfuncs.rst                  |   6 +-
+ arch/arm64/include/asm/insn.h                 |  23 +++
+ arch/arm64/lib/insn.c                         |  60 +++++++
+ arch/arm64/net/bpf_jit.h                      |  11 ++
+ arch/arm64/net/bpf_jit_comp.c                 | 147 +++++++++++++++---
+ .../bpf/prog_tests/test_struct_ops_arena.c    |  10 +-
+ .../testing/selftests/bpf/progs/arena_kfunc.c |   9 ++
+ .../selftests/bpf/progs/arena_kfunc_jit.c     |  20 +++
+ .../selftests/bpf/progs/struct_ops_arena.c    |  24 +++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  15 ++
+ .../selftests/bpf/test_kmods/bpf_testmod.h    |   8 +
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |   1 +
+ 12 files changed, 308 insertions(+), 26 deletions(-)
+
+
+base-commit: 806c1a185215382fab5a7fafc74e30070b2fb043
 -- 
 2.53.0-Meta
 
