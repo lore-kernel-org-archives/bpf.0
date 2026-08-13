@@ -1,196 +1,198 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mta0.migadu.com (out-144.mta0.migadu.com [91.218.175.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C913B3F0773
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 17:57:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786643844; cv=pass; b=CYZRCIldJrX7Ftzd1quVbunVQzQdqADRUqjap0X/ToxE50gbh1Kdj2G8KLEOKZ4UbA4MKxCwuFASWE5IUlkN1aukmTTnKTWiXX+TgNl22TvuZLjZ75mdtitHZdAroEOHVJ4syzQnzvbUDjene6kIXJxhDBvcoAhd1mNlX2MZIJU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786643844; c=relaxed/simple;
-	bh=pxjZogGhoQwedyJpdwQ8wZRuKcrI3e8ALoUqvv9xYKk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=npFvsjjkftQMJPvIhtKnqdY8IZ6lyhB7twnWQvnl/kV1w8HDch6QB9eml8HYXTjigd4hz/r0ziVAf3ow3os4q9USOwxMr1Q+5Omu7N2erfWilg54JTRuNbMVn6eQsWVqwZw/SvFHzjfKNquo+AnMpcWfu147yFD3QDT0C3+6McI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CPbDHVpT; arc=pass smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C52743F1AB8
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 18:02:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.144
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786644160; cv=none; b=duhRrMZSrDVb42A1QgKY8x3h6FzPCoCxye1H2JFs/SkG0Dmst/tgKN3DMxY/NnIXFHYZiZIYNruyEMTJFkOD5su9POxNuUw5okfA0oBPDkmyn6hSg8zhwH90B7EdUPDt7DGL9CYgBRz4pAaDU+lrRhqoxM5Xi525HzYRw3rdIXo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786644160; c=relaxed/simple;
+	bh=S/SF+04kEd4FCtwBv9FzbO1akY79MCOXyE2NKZqZ4dQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Eel6kt/pSP/tw06XJz8q81ut+7iryg4l3ElxN+T8R9ZMOJ0SxgmeEm59cAUxrCEkQFuMm1IW6QnbndvOytzf6/NiftNC3NKXtDg7a6EI8XSVstlY+sjijiVXcnx8J0hqZ8yEEwTI115QiMiu6rffa59bDf/SL2J3pxVKmnTIrNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lVi5Hf0P; arc=none smtp.client-ip=91.218.175.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CPbDHVpT"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8486ac3f347so1246369b3a.1
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 10:57:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786643832; cv=none;
-        d=google.com; s=arc-20260327;
-        b=OLM8xjp6RRog4lychx6y4rpILZ4+pFqRvA6dzgeuuPVqlfQdN0gyuzHmEDOeoB8JgV
-         /gWSaT/RN9PrYnmWWYcgvsoBZLMbK4fwTtGr6wciatZn77/cFdZhgWiIz4r9fpLFI3mz
-         FVUwmuSpBLTw2ccmZg0Umf6kmRODE+762mkV7sGHN162QiS2Mf1bBfTJyt6goSt/jazm
-         ho47oMTlVJIOuv/5WbTir2t4hvhXTHsorBXbQhLiSjIQSDVgeWSX3II+CS25Ldt/l7c6
-         AG5+7HlJTS7hp1XowJmTkfnCWU7Ks2M4wSON3iSm7uFp+zZZEcnVwoZHzyzCnEyacoKe
-         tb3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=oRrR0Bomgu4d4wxrr7e8CuFo7o1Kuq9WCM1ColLyvcI=;
-        fh=IqI/Cp1xYGcfpyBgkhc6h3oFTMbeXOsSrhhlFByRLHg=;
-        b=eJJBdP1zVjmXfz43B9ymopUrNsgLcrX7R4TI+WZ+3qJkiQ4JFer3yP6Fk71xvTof75
-         8QzUV7TDBkKMTIqzHoWY6l0Z4J0lKjes0OMpmQ8KGOhXk9s4tqGOryAvLp8OOnsE9YwC
-         gkFE3O+kBbDjm+/yBXZHOvFNuaGbvnfVJbWl9QqvZ1feOJJdlVpSaLn7lRk8cjttLaPj
-         SCxN1hR184ydF9QiOtYJiISmm8gvPVkB0+GpdBRJo8pZOt+87AHyOP+LKyIr0jeMqQWI
-         bqkfyZiDGwyZB+cFCFdnMT6z7y+WRPYpcqcBz+qSBc+JJc6KM3eeafzOkDjgoEEwOs2l
-         TlOw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786643832; x=1787248632; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=oRrR0Bomgu4d4wxrr7e8CuFo7o1Kuq9WCM1ColLyvcI=;
-        b=CPbDHVpTdEBQJQXdYOBYXuWWwMdTZuHlRdueUPQaAfXyu8IQfk3fGvKUF0cdVS00dq
-         dpJwxrdqXr2iIBvzdrmavxPR6025UZxc3Mj1Jtg2lMRgFDDq0ggxVoEHgvApICMsg2D8
-         nrO3Ey3pXETqi1qgmHiD5wQLeiTwdmuckK7hUWTS4l+Qg37Tpqmnk+YE5sfNpZ7edGO1
-         gWq3eUu95aAWNoZv0pR5mJ2ATZrqcU2Sbta+7nYEgJncEFj875p2ldIDg4usN4jP6MSN
-         a8Fustvi4iSv/ks9Y5CPh7Nl93/MRc+xX0p8zAi4Xf3++n2hgCotOM7dc4y9x/6FilTu
-         Nxrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786643832; x=1787248632;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=oRrR0Bomgu4d4wxrr7e8CuFo7o1Kuq9WCM1ColLyvcI=;
-        b=TVVuV1+C4eE2rh+d5UeTksTLf2YJQfqafPdnyMz79rteFd+nQpEFI//ecrHaD7KBG9
-         4G6ActSGiJseMl7tjxIAW+deR3FiUw1KNZXtqGSoHzaKBXVT4gSs+8ue0n2aNz9xKwxz
-         nTSHLJQJr32hhld0sMY2jrNytwG/c/IPItUS081I8uzGpi+0OMjPZXwOaJq6woF5eC0X
-         mOzFwS4dR3AT6WLh4mFEa55yVL+2/sPV9KFNIm0718HnWh4YV/OL4fmalC/byWanZ6Zh
-         bBttUXMyFTkPquWRyH7fO3JrpN1u3MfvoO85VhkLS7dk3k93zwHYw7F09Bdwa5AGbHgC
-         H8vQ==
-X-Gm-Message-State: AOJu0YxF8JyStrI1bEHsWtZZuMauEH4hI/nzc6K2QTVTY02AMV4ENsjF
-	1bNSZ775nXQUIKyHlyFzA0d6jkHOkdXZ8v4lScmJXuF7UbzE6RW58TFJIvEWGQ1OLFE76TEBGXa
-	AnSWg0nyfVLsvE+mfbNQIPrc1/nvKwgs=
-X-Gm-Gg: AR+sD10ekirbWWKq7LXzkINSw7EUOlhxExVspiEt8zqcqxIMEChS0DpBApdBHnAPgL2
-	+BUTkZx+9fvpdkoxamZ7mlhmMzq1TxXXKO0dAPV5yGYLpBWWIQbF4m16ZQxj7nfemzkUCLuLFsW
-	7R35fjiNjkzWcnXhkECPxNIn3I6crR68Hnr3L6R1ev9UdMLtUTwybQsSfSH88gocml41k3kbRB6
-	MlFhaJcuWyI+89U9vhz76VG4dBhscmhkkthAO2uPPZD878r3wyRS5hhx8YwXvFfASad/xGeEzRK
-	00OBXBRnQBzvbcD7Nv8wOUJciRrs7WnddFDwX/r21vzmf9kPM5NxExhH1YMyau4lR04vtvuO3lv
-	mT3xhOwTeAJqwt9qII9NLlHIWQUwlJWOZO6DYAw8RCQ==
-X-Received: by 2002:a05:6a20:2450:b0:3cb:b6b0:1ada with SMTP id
- adf61e73a8af0-3cc57c406a3mr8656424637.13.1786643831419; Thu, 13 Aug 2026
- 10:57:11 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lVi5Hf0P"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=S/SF+04kEd4FCtwBv9FzbO1akY79MCOXyE2NKZqZ4dQ=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1786644152; v=1; x=1787248952;
+ b=lVi5Hf0PihNN2iVPPzHXJIewYyMc1I6RSR3e0aY38L/+JQGn/+NqGdw6dcLrvdnIoTL6OJ2T
+ PVfsfZZDDNso5FxoKg0PKVutq3jOl0TeedFlkMKhk0Gasa8nZS91kgEW2bhxRR92DmYm8P6i2AJ
+ xhh5lRErPmdkHszYGxPSTUog=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from [IPV6:2600:381:1f2d:e3e3:185d:58c3:4c79:68c] (2600:381:1f2d:e3e3:185d:58c3:4c79:68c)
+	by smtp.migadu.com with ESMTPS id 85eb55b367fa1e24;
+	Thu, 13 Aug 2026 18:02:22 +0000
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <05b6d121-8d29-4aa2-ae04-9d18a4fef5b5@linux.dev>
+Date: Thu, 13 Aug 2026 11:02:19 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260813152324.97937-1-leon.hwang@linux.dev> <20260813152324.97937-7-leon.hwang@linux.dev>
-In-Reply-To: <20260813152324.97937-7-leon.hwang@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 13 Aug 2026 10:56:56 -0700
-X-Gm-Features: AUfX_mxq5bBvm13KR6j4JCv_EZxTyHWyf2WYiBiHTsTVuDjtgVzk5Qn_fEDssmU
-Message-ID: <CAEf4BzYRqZ--=5d2LBWA=mOL72CYe4y4iCGS3c5Dw8PEd9BOiA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v12 06/10] bpftool: Generate skeleton for global
- percpu data
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kernel-patches-bot@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v4 02/13] bpf: Add helpers to describe the R0:R2
+ return register pair
+Content-Language: en-GB
+To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com
+References: <20260811000911.2378679-1-yonghong.song@linux.dev>
+ <20260811000922.2380171-1-yonghong.song@linux.dev>
+ <45edea4007f2b3b02caa34ed448060d43bf1f6c3.camel@gmail.com>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <45edea4007f2b3b02caa34ed448060d43bf1f6c3.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 13, 2026 at 8:24=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
->
-> Enhance bpftool to generate skeletons that properly handle global percpu
-> variables. The generated skeleton now includes a dedicated structure for
-> percpu data, allowing users to initialize and access percpu variables mor=
-e
-> efficiently.
->
-> For global percpu variables, the skeleton now includes a nested
-> structure, e.g.:
->
-> struct test_global_percpu_data {
->         struct bpf_object_skeleton *skeleton;
->         struct bpf_object *obj;
->         struct {
->                 struct bpf_map *percpu;
->         } maps;
->         // ...
->         struct test_global_percpu_data__percpu {
->                 int data;
->                 char run;
->                 struct {
->                         char set;
->                         int i;
->                         int nums[7];
->                 } struct_data;
->                 int nums[7];
->         } *percpu;
->
->         // ...
-> };
->
->   * The "struct test_global_percpu_data__percpu *percpu" points to
->     initialized data, which is actually "maps.percpu->mmaped".
->   * Before loading the skeleton, updating the
->     "struct test_global_percpu_data__percpu *percpu" modifies the initial
->     value of the corresponding global percpu variables.
->   * After loading the skeleton, "maps.percpu->mmaped" has been marked as
->     read-only in libbpf. If users want to update the global percpu
->     variables, they have to update the "maps.percpu" map instead.
->   * For lightweight skeleton, "lskel->percpu" will be protected by
->     "mprotect(p, sz, PROT_READ)".
->   * For subskeleton, those variables of global percpu data will be
->     skipped.
->
-> Acked-by: Quentin Monnet <qmo@kernel.org>
-> Assisted-by: Codex:gpt-5.5-xhigh
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> ---
->  tools/bpf/bpftool/gen.c       | 53 +++++++++++++++++++++++++++--------
->  tools/lib/bpf/skel_internal.h | 24 ++++++++++++++--
->  2 files changed, 63 insertions(+), 14 deletions(-)
 
-[...]
 
-> @@ -263,13 +269,24 @@ static bool is_mmapable_map(const struct bpf_map *m=
-ap, char *buf, size_t sz)
->                 return true;
->         }
->
-> -       if (!bpf_map__is_internal(map) || !(bpf_map__map_flags(map) & BPF=
-_F_MMAPABLE))
-> +       if (!bpf_map__is_internal(map))
->                 return false;
->
->         if (!get_map_ident(map, buf, sz))
->                 return false;
->
-> -       return true;
-> +       if (bpf_map__map_flags(map) & BPF_F_MMAPABLE)
-> +               return true;
-> +
-> +       if (bpf_map__type(map) =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY)
-> +               return bpf_map__btf_value_type_id(map) !=3D 0;
+On 8/12/26 1:07 PM, Eduard Zingerman wrote:
+> On Mon, 2026-08-10 at 17:09 -0700, Yonghong Song wrote:
+>> LLVM 23 added support for returning a value in two registers for an
+>> __int128, or a struct/union whose size is greater than 8 but not more than
+>> 16 bytes: such a value comes back in the R0:R2 register pair, with R2
+>> holding the upper half. See LLVM patches [1] and [2].
+>>
+>> Later patches teach the JIT, precision backtracking, live register analysis
+>> and the verifier itself about that convention. All of them need to answer
+>> the same question: does this subprogram return its value in a register
+>> pair? Add the shared helpers up front so that those patches can be ordered
+>> independently of each other:
+>>
+>>   - subprog_ret_type() resolves a subprogram's BTF return type. It is
+>>     factored out of subprog_returns_void(). The verifier_bug_if(!func) and
+>>     !func_proto checks it replaces are redundant, since
+>>     check_btf_func_early() already rejects a func_info record whose type_id
+>>     is not a BTF_KIND_FUNC pointing at a BTF_KIND_FUNC_PROTO. A check on
+>>     prog->aux->{btf,func_info} is added instead: unlike
+>>     subprog_returns_void(), which is only used for global subprograms, later
+>>     callers ask about static subprograms too, and those may belong to a
+>>     program loaded without BTF.
+>>
+>>   - ret_regs_cnt() maps the size of a return value to the number of
+>>     registers holding it.
+>>
+>>   - bpf_ret_reg_pair() answers the question above. Its users query it at
+>>     every subprogram call and at every subprogram exit, that is once per
+>>     verifier state rather than once per subprogram, so the answer is
+>>     precomputed into bpf_subprog_info->ret_reg_pair by
+>>     bpf_compute_subprog_ret_regs() and the helper itself is a flag test.
+>>     It lives in bpf_verifier.h because kernel/bpf/backtrack.c and
+>>     kernel/bpf/liveness.c need it as well.
+>>
+>> bpf_compute_subprog_ret_regs() runs in bpf_check() right before
+>> bpf_compute_live_registers(), which is the first of those users: by then
+>> BTF func_info has been validated and the subprogram list is final.
+>>
+>> No functional change, bpf_ret_reg_pair() has no callers yet.
+>>
+>>    [1] https://github.com/llvm/llvm-project/pull/190894
+>>    [2] https://github.com/llvm/llvm-project/pull/206876
+>>
+>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+>> ---
+> I still think that bpf_compute_live_registers() can be used to compute
+> this information w/o the need to resort to BTF.
 
-why do we need this btf_value_type_id() check? in what case it's
-expected that there will be no BTF info set?
+Maybe it is possible. I think current bpf_compute_subprog_ret_regs()
+is more clear. In llvm23, we have true signatures for bpf programs, so
+we should have precise return types for each subprogram.
 
-> +
-> +       return false;
-> +}
-> +
-> +static bool is_mmapable_map(const struct bpf_map *map, char *buf, size_t=
- sz)
-> +{
-> +       return is_skel_data(map, buf, sz) && bpf_map__type(map) !=3D BPF_=
-MAP_TYPE_PERCPU_ARRAY;
->  }
 >
+> ...
+>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 40150390dd50..58a177d26c46 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -382,27 +382,57 @@ bool bpf_subprog_is_global(const struct bpf_verifier_env *env, int subprog)
+>>   	return aux && aux[subprog].linkage == BTF_FUNC_GLOBAL;
+>>   }
+>>   
+>> -static bool subprog_returns_void(struct bpf_verifier_env *env, int subprog)
+>> +/* Return type of a subprogram, NULL if it cannot be resolved */
+>> +static const struct btf_type *subprog_ret_type(struct bpf_verifier_env *env, int subprog)
+>>   {
+>> -	const struct btf_type *type, *func, *func_proto;
+>> +	const struct btf_type *func, *func_proto;
+>>   	const struct btf *btf = env->prog->aux->btf;
+>>   	u32 btf_id;
+>>   
+>> +	if (!btf || !env->prog->aux->func_info)
+>> +		return NULL;
+>> +
+>>   	btf_id = env->prog->aux->func_info[subprog].type_id;
+>>   
+>> +	/* Both already validated by prepare_btf_func() at prog load. */
+>>   	func = btf_type_by_id(btf, btf_id);
+>> -	if (verifier_bug_if(!func, env, "btf_id %u not found", btf_id))
+>> -		return false;
+>> -
+>>   	func_proto = btf_type_by_id(btf, func->type);
+>> -	if (!func_proto)
+>> -		return false;
+>>   
+>> -	type = btf_type_skip_modifiers(btf, func_proto->type, NULL);
+>> -	if (!type)
+>> -		return false;
+>> +	return btf_type_skip_modifiers(btf, func_proto->type, NULL);
+>> +}
+>> +
+>> +static bool subprog_returns_void(struct bpf_verifier_env *env, int subprog)
+>> +{
+>> +	const struct btf_type *type = subprog_ret_type(env, subprog);
+>>   
+>> -	return btf_type_is_void(type);
+>> +	return type && btf_type_is_void(type);
+>> +}
+>> +
+>> +/*
+>> + * Number of registers holding a function return value: a value of up to 8
+>> + * bytes is returned in R0, a value of more than 8 bytes and no more than 16
+>> + * bytes (an __int128 or a struct/union of such size) is returned in the R0:R2
+>> + * register pair, with R2 holding the upper half.
+>> + */
+>> +static u32 ret_regs_cnt(u32 size)
+>> +{
+>> +	return size > 8 && size <= 16 ? 2 : 1;
+>> +}
+>> +
+>> +/*
+>> + * Resolve the return convention of every subprogram once, so that
+>> + * bpf_ret_reg_pair() is a plain flag test on the hot paths that use it.
+>> + */
+>> +static void bpf_compute_subprog_ret_regs(struct bpf_verifier_env *env)
+>> +{
+>> +	const struct btf_type *type;
+>> +	int subprog;
+>> +
+>> +	for (subprog = 0; subprog < env->subprog_cnt; subprog++) {
+>> +		type = subprog_ret_type(env, subprog);
+>> +		if (type && (btf_type_is_struct(type) || btf_type_is_scalar(type)))
+>> +			subprog_info(env, subprog)->ret_reg_pair = ret_regs_cnt(type->size) > 1;
+> Nit: there is a btf.c:btf_resolve_size() api function, it would be
+>       better to use it instead of calculating the size ad-hoc.
 
-[...]
+Will use btf_resolve_size() to get type size.
+
+>
+> Should the jit_required flag be set here instead of the main
+> verification pass?
+
+Indeed, this is much better.
+
+>
+>> +	}
+>>   }
+>>   
+>>   static const char *subprog_name(const struct bpf_verifier_env *env, int subprog)
+> ...
+
