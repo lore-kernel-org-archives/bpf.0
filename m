@@ -1,57 +1,57 @@
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A50342E62B7
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 00:26:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1669B2EEE6C
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 00:26:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786580805; cv=none; b=oCwryoImh+xId92nIaPS5RUQqQfd8lFSMXDBN3fgwOAkOD9Gd9+HBetPuLwoWiCAZ6NGGc+AJoww7WaiqVhm+ga2PdT2lMd2uzkkBegIjji0tYEvkEax7ATv9lmpuIXdruY2qP8PECF2eaXp4d4xKetDEaE+/nJIUhEtx/fsumw=
+	t=1786580809; cv=none; b=qVHX3D1UQhbjSucA0krlDaMF0AiqkSmxcUoEwvislInGHbWUm8tXx44AIIM1mo7lnug7IvbDaMO90W34/MUGXAaX5I9QNjB/upPrFKMepm2AKRB0/PB1u7Kg/l6u3LaX6tDRDBD3NZ++oq3AzTCCszvqoQoR7kanETJNJN1PtE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786580805; c=relaxed/simple;
-	bh=9bxv8IEOD63iIg3rz+IGLTgoL3q6t205C7kkxVZBBvQ=;
+	s=arc-20240116; t=1786580809; c=relaxed/simple;
+	bh=5se711kePA411xaoz5RodsO+PLdGel9RlS6q8G/sC4I=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=mApYZsHGHZQZimnFDVO2wDv7a1+LY7xTj2VffkAb8T8AJ89+UwcsshiejaiGJtxVRU6n+WlO3AXwhzEPHesbEUaRDKDCqSvP7dSg/NXFi7eI/T0c0rBKPdPVKkQj7m5ldjU9RuJxYd4wprtg20M+EJleXHPZ4BUYNtBnDp+mUoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jnPMVMKS; arc=none smtp.client-ip=209.85.214.197
+	 To:Cc:Content-Type; b=bFkuQFW6m8fBH6Fvt82mpeQNoLph/w0aU1rAuVoAe9q1I22KEL8JgmBlchOx3VBmUbccJTqcRiAE9ktapC4Lcb/83BfJz3COEmWFW/ZdhDbmNcnObKAdvSizk5OKnCkPmPF1gw0vWOgTgNbGpZkgYj2j3h3PeQ4UgyBytDwKx5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PLPeZ39k; arc=none smtp.client-ip=209.85.210.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jnPMVMKS"
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2cc640dfde3so21273645ad.1
-        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 17:26:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PLPeZ39k"
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-84f7002f9afso1561901b3a.3
+        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 17:26:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786580803; x=1787185603; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1786580807; x=1787185607; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:from:subject
          :message-id:references:mime-version:in-reply-to:date:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=cGhr1ahZhPKPx2jrgbs/gggrNdkMmSlAjSDp4bCUAbU=;
-        b=jnPMVMKSihwH/IjyNiWmWz4SPkS/zCPPHjVhLyiiX8zbxrDvgAMEGJvy9dZbAMLKp/
-         KeMOkA54E2BihNyzaZJ9WmnZM07gwKr80QmI0qfStJ7ijcHXRPL//EPAUvkN8nuKtfcu
-         o9HB/GHawvT65qTxWNlzP3HAlElrwAQZew0q+u0vZr0/xzpXNPzs7B0EZCiYj6Lr4Zvq
-         NK5G2kdsTt2xVZ8c/febJDS5bi14L8uax+g0XFn91joEIJiYUe9zy/Edxz9eGZHWeVms
-         /h9XG9KGzJUZ03aJWHd0DpqO2JppG3VgOGelkkrTO3FBRWZHo1PR7yEeGxO+XT3ZT0yu
-         VwTQ==
+        bh=Qkjz+h+zNCGoWltKJetL2Y2JT1Z7HAkSp1FmTaM3CtU=;
+        b=PLPeZ39kIdPQ9wekhs0NzjRWi0g5wU9Prl+htO8xBcFkU3JCSA1SE+liU26MJMGsE5
+         ByhTiXnyRWgD59RcAct4IrEAjcZoPU7NR2PqLOLU8tlCk4OOIG/1EBit6OoqTy1GFSFm
+         H2OcpN+BH4NmrPKnvdV88+SKddhxHQkku6jYjGkny99+NX2knla7Q0mmxyARdUr6oBM6
+         E7jWGqVo7QBmfMo3FBp+I8LOM8XjJG3eIN8tFwTNCc1CD95G1GYCIEbsxN0gzpF3kS20
+         9ippzqsPZ2zOFqmAs8+5bVijVypsJbv8Vhx7af4d049+yxa3orpHGPpG0zuUakufFLSD
+         CHng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786580803; x=1787185603;
+        d=1e100.net; s=20251104; t=1786580807; x=1787185607;
         h=content-transfer-encoding:content-type:cc:to:from:subject
          :message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=cGhr1ahZhPKPx2jrgbs/gggrNdkMmSlAjSDp4bCUAbU=;
-        b=m/kT/4R+03ZOWodSZl/IgHywzUXb5dMFL0tB8UwAQBeOpBJ+yAfq0mGQSM92nNTHi7
-         ie9nTFUHrQ2vQSYfuNBPEPSysekvd6ds3avuAvsS3TxCB/rerstEYqDQSoSl/mzArW56
-         fIhbPed9Gvm0OMtZSgqAZwPX4i5TSIwLj4AqLtUVCGDXJ1BuhVFqSD02RIaccP43677M
-         Akgl8Z+NX+RnqzNNdoVl9XTH5dEYxG/Z9GUu0x94i7OQyjeUb8MxyK+xod88wu9D0rwJ
-         gftWcSUTISTs6hDsBE8U1JEyvB2grja8bcFNHnE7WZAAn0fElLe9brOnrS4jHjZ7WkLK
-         j3sw==
-X-Forwarded-Encrypted: i=1; AHgh+RqoZNQYlHdIachUGv6qFkwWnxEi15jrihyibOJbW6gCj3voZBKxOVqm+s5KaZMXStyYPBQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLJyAQ1o954BSaqF/ODv2pACbj+rYJT9vDHmJY7oSBwSspc86x
-	SGjOGXUDX5cd3OGVLKmRFFXN0ZW8N84NntYNG3Q7c/pYP9BXfaXqMjqe8orW+geRJu4IQw2lm5s
-	cLw==
-X-Received: from plge13.prod.google.com ([2002:a17:902:cf4d:b0:2ca:f1f8:ea00])
- (user=tweek job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:b88:b0:2cf:b68a:340
- with SMTP id d9443c01a7336-2d37d884c75mr20405535ad.10.1786580802730; Wed, 12
- Aug 2026 17:26:42 -0700 (PDT)
-Date: Thu, 13 Aug 2026 10:26:15 +1000
+        bh=Qkjz+h+zNCGoWltKJetL2Y2JT1Z7HAkSp1FmTaM3CtU=;
+        b=EFHQpmBHgT88ptCg1RaayJQbyigfQWExLlXJeuatb0JdErQQXmCn0Vj3DcIvAo37L4
+         DixsgNqR5aa7YJ1sYFjqyVR1dxiaue7TT3v8z1Brgg80j1aiXxQCTpmGl3AyB1SDLuKS
+         WbwW8dbwSW9Wugd8a/pG2CY+0ZdZh1Uqz0J92UVxSN/yYbtjjdIUx1ecjRQp5MMH0c6I
+         dkNQISpltKqYWTzR73KjpRMXr0D5HZH/mXeEfS6zR8zvjUUExzlBt1V72yEir16u+cZk
+         VXODLU3TEW2e1lw8cX9piGDKSblsBa0fo2yo/zkFGTH1AdHzlG4u2g97i3qsPJFpE719
+         CKkw==
+X-Forwarded-Encrypted: i=1; AHgh+RoaauDwJg5QGD4tAdmD7CpHtW8TpPjdbter2CZyNFe3FZPT1mUG9xMe1J5DNWNqAhwlpq0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzmqe63wJ0YgiUoo5lBmt44aIrQZxrlDUHk9N2kfVFhjYvmhX+0
+	k+sXxOXIvzvgxqFcFtKKilGCPXSUudWV7o6PFF0YjYMHYDa1ZgAAiRUI/lf57xuejYiMQ7jCOr+
+	LXA==
+X-Received: from pfx22.prod.google.com ([2002:a05:6a00:a456:b0:84b:50b5:d431])
+ (user=tweek job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:44cb:b0:848:4080:afe8
+ with SMTP id d2e1a72fcca58-84fc751547fmr1831794b3a.22.1786580807349; Wed, 12
+ Aug 2026 17:26:47 -0700 (PDT)
+Date: Thu, 13 Aug 2026 10:26:16 +1000
 In-Reply-To: <20260813002618.3755631-1-tweek@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -61,8 +61,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260813002618.3755631-1-tweek@google.com>
 X-Mailer: git-send-email 2.55.0.691.gc56d675ccc-goog
-Message-ID: <20260813002618.3755631-3-tweek@google.com>
-Subject: [PATCH bpf-next 2/5] bpf: Introduce BPF_LOADER_LOAD_FD command
+Message-ID: <20260813002618.3755631-4-tweek@google.com>
+Subject: [PATCH bpf-next 3/5] selinux: use kernel sid in security_bpf_*
 From: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>
 To: Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -76,481 +76,51 @@ Cc: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>, Ondrej Mosnacek <
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Introduce the BPF_LOADER_LOAD_FD command to allow loading and executing
-loader BPF programs directly from an ELF file.
+The security_bpf hooks provides a boolean to indicate if the call is
+coming from within the kernel or not. If true, use the kernel SID
+instead of relying on the current process SID.
 
-This command implements the equivalent of bpf_load_and_run within the
-kernel. More specifically, it implements the four steps:
-  1. Create an array map
-  2. Populate the array with the loader data
-  3. Load the loader, using BPF_PROG_LOAD
-  4. Execute the loader using BPF_PROG_TEST_RUN
-
-BPF_LOADER_LOAD_FD takes 3 arguments, a file descriptor to an open ELF
-which contains the instructions, data and license of the loader; a
-context and its size which are passed to BPF_PROG_TEST_RUN.
-
-The kernel validates the ELF file and extracts three sections:
-  1. __loader.prog: Contains the loader instructions.
-  2. __loader.map: Contains the loader data.
-  3. license
-
-The caller is expected to use libbpf's light skeleton generator. The
-loader program is responsible for managing any maps or programs included
-in the original BPF object. CO-RE and BTF are explicitly not supported
-by the kernel here; they are handled by the loader directly.
-
-BPF_LOADER_LOAD_FD returns the updated context to userspace. The kernel
-treats this context as an opaque blob passed to BPF_PROG_TEST_RUN. For
-the userspace loader, this context typically contains the file
-descriptors of the newly created maps and programs.
-
-ELF validation borrows logic from the kernel module ELF validation
-in kernel/module/main.c.
+For the token-aware functions, the kernel sid is used to decide on the
+access, but the caller remains owner of the object (program or map).
 
 Signed-off-by: Thi=C3=A9baud Weksteen <tweek@google.com>
 ---
- include/uapi/linux/bpf.h       |   7 +
- kernel/bpf/syscall.c           | 341 ++++++++++++++++++++++++++++++++-
- tools/include/uapi/linux/bpf.h |   7 +
- 3 files changed, 348 insertions(+), 7 deletions(-)
+ security/selinux/hooks.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index ffd96e8b920b..05b070a489fc 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -993,6 +993,7 @@ enum bpf_cmd {
- 	BPF_TOKEN_CREATE,
- 	BPF_PROG_STREAM_READ_BY_FD,
- 	BPF_PROG_ASSOC_STRUCT_OPS,
-+	BPF_LOADER_LOAD_FD,
- 	__MAX_BPF_CMD,
- 	BPF_COMMON_ATTRS =3D 1 << 16, /* Indicate carrying syscall common attrs. =
-*/
- };
-@@ -1950,6 +1951,12 @@ union bpf_attr {
- 		__u32		flags;
- 	} prog_assoc_struct_ops;
-=20
-+	struct { /* struct used by BPF_LOADER_LOAD_FD command */
-+		__u32           loader_fd;
-+		__aligned_u64   ctx;
-+		__u32           ctx_size;
-+	} load_fd;
-+
- } __attribute__((aligned(8)));
-=20
- /* The description below is an attempt at providing documentation to eBPF
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 8d111da88655..d79cd63f9f7c 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -41,6 +41,7 @@
- #include <linux/overflow.h>
- #include <linux/cookie.h>
- #include <linux/btf_ids.h>
-+#include <linux/kernel_read_file.h>
-=20
- #include <net/netfilter/nf_bpf_link.h>
- #include <net/netkit.h>
-@@ -6291,6 +6292,336 @@ static int prog_assoc_struct_ops(union bpf_attr *at=
-tr)
- 	return ret;
- }
-=20
-+#define BPF_LOADER_PROG_SEC "__loader.prog"
-+#define BPF_LOADER_MAP_SEC "__loader.map"
-+#define BPF_LOADER_LICENSE_SEC "license"
-+#define BPF_LOADER_MAX_SIZE (8U << 20) /* 8MB */
-+
-+struct elf_info {
-+	Elf64_Ehdr *hdr;
-+	unsigned long len;
-+	Elf64_Shdr *sechdrs;
-+	char *secstrings;
-+};
-+
-+static int bpf_validate_section_offset(const struct elf_info *info, Elf64_=
-Shdr *shdr)
-+{
-+	unsigned long long secend;
-+
-+	/*
-+	 * Check for both overflow and offset/size being
-+	 * too large.
-+	 */
-+	secend =3D shdr->sh_offset + shdr->sh_size;
-+	if (secend < shdr->sh_offset || secend > info->len)
-+		return -ENOEXEC;
-+
-+	return 0;
-+}
-+
-+static int bpf_elf_validity_ehdr(const struct elf_info *info)
-+{
-+	if (info->len < sizeof(*(info->hdr))) {
-+		pr_err("Invalid ELF header len %lu\n", info->len);
-+		return -ENOEXEC;
-+	}
-+	if (memcmp(info->hdr->e_ident, ELFMAG, SELFMAG) !=3D 0) {
-+		pr_err("Invalid ELF header magic: !=3D %s\n", ELFMAG);
-+		return -ENOEXEC;
-+	}
-+	if (info->hdr->e_ident[EI_CLASS] !=3D ELFCLASS64) {
-+		pr_err("Only 64-bit ELF is supported\n");
-+		return -ENOEXEC;
-+	}
-+	if (info->hdr->e_type !=3D ET_REL) {
-+		pr_err("Invalid ELF header type: %u !=3D %u\n",
-+		       info->hdr->e_type, ET_REL);
-+		return -ENOEXEC;
-+	}
-+	if (info->hdr->e_machine !=3D EM_BPF) {
-+		pr_err("Invalid ELF machine type: %u !=3D %u\n",
-+		       info->hdr->e_machine, EM_BPF);
-+		return -ENOEXEC;
-+	}
-+	return 0;
-+}
-+
-+static int bpf_elf_validity_cache_sechdrs(struct elf_info *info)
-+{
-+	Elf64_Shdr *sechdrs;
-+	Elf64_Shdr *shdr;
-+	int i;
-+	int err;
-+
-+	err =3D bpf_elf_validity_ehdr(info);
-+	if (err < 0)
-+		return err;
-+
-+	if (info->hdr->e_shentsize !=3D sizeof(Elf64_Shdr)) {
-+		pr_err("Invalid ELF section header size\n");
-+		return -ENOEXEC;
-+	}
-+
-+	/*
-+	 * e_shnum is 16 bits, and sizeof(Elf64_Shdr) is
-+	 * known and small. So e_shnum * sizeof(Elf64_Shdr)
-+	 * will not overflow unsigned long on any platform.
-+	 */
-+	if (info->hdr->e_shoff >=3D info->len
-+	    || (info->hdr->e_shnum * sizeof(Elf64_Shdr) >
-+		info->len - info->hdr->e_shoff)) {
-+		pr_err("Invalid ELF section header overflow\n");
-+		return -ENOEXEC;
-+	}
-+
-+	sechdrs =3D (void *)info->hdr + info->hdr->e_shoff;
-+
-+	/*
-+	 * The code assumes that section 0 has a length of zero and
-+	 * an addr of zero, so check for it.
-+	 */
-+	if (sechdrs[0].sh_type !=3D SHT_NULL
-+	    || sechdrs[0].sh_size !=3D 0
-+	    || sechdrs[0].sh_addr !=3D 0) {
-+		pr_err("ELF Spec violation: section 0 type(%d)!=3DSH_NULL or non-zero le=
-n or addr\n",
-+		       sechdrs[0].sh_type);
-+		return -ENOEXEC;
-+	}
-+
-+	/* Validate contents are inbounds */
-+	for (i =3D 1; i < info->hdr->e_shnum; i++) {
-+		shdr =3D &sechdrs[i];
-+		switch (shdr->sh_type) {
-+		case SHT_NULL:
-+		case SHT_NOBITS:
-+			/* No contents, offset/size don't mean anything */
-+			continue;
-+		default:
-+			err =3D bpf_validate_section_offset(info, shdr);
-+			if (err < 0) {
-+				pr_err("Invalid ELF section in BPF loader (section %u type %u)\n",
-+				       i, shdr->sh_type);
-+				return err;
-+			}
-+		}
-+	}
-+
-+	info->sechdrs =3D sechdrs;
-+
-+	return 0;
-+}
-+
-+static int bpf_elf_validity_cache_secstrings(struct elf_info *info)
-+{
-+	Elf64_Shdr *strhdr, *shdr;
-+	char *secstrings;
-+	int i;
-+
-+	/*
-+	 * Verify if the section name table index is valid.
-+	 */
-+	if (info->hdr->e_shstrndx =3D=3D SHN_UNDEF
-+	    || info->hdr->e_shstrndx >=3D info->hdr->e_shnum) {
-+		pr_err("Invalid ELF section name index: %d || e_shstrndx (%d) >=3D e_shn=
-um (%d)\n",
-+		       info->hdr->e_shstrndx, info->hdr->e_shstrndx,
-+		       info->hdr->e_shnum);
-+		return -ENOEXEC;
-+	}
-+
-+	strhdr =3D &info->sechdrs[info->hdr->e_shstrndx];
-+
-+	if (strhdr->sh_type !=3D SHT_STRTAB) {
-+		pr_err("Invalid ELF section name table type: %u\n", strhdr->sh_type);
-+		return -ENOEXEC;
-+	}
-+
-+	/*
-+	 * The section name table must be NUL-terminated, as required
-+	 * by the spec. This makes strcmp and pr_* calls that access
-+	 * strings in the section safe.
-+	 */
-+	secstrings =3D (void *)info->hdr + strhdr->sh_offset;
-+	if (strhdr->sh_size =3D=3D 0) {
-+		pr_err("empty section name table\n");
-+		return -ENOEXEC;
-+	}
-+	if (secstrings[strhdr->sh_size - 1] !=3D '\0') {
-+		pr_err("ELF Spec violation: section name table isn't null terminated\n")=
-;
-+		return -ENOEXEC;
-+	}
-+
-+	for (i =3D 0; i < info->hdr->e_shnum; i++) {
-+		shdr =3D &info->sechdrs[i];
-+		/* SHT_NULL means sh_name has an undefined value */
-+		if (shdr->sh_type =3D=3D SHT_NULL)
-+			continue;
-+		if (shdr->sh_name >=3D strhdr->sh_size) {
-+			pr_err("Invalid ELF section name in BPF loader (section %u type %u)\n",
-+			       i, shdr->sh_type);
-+			return -ENOEXEC;
-+		}
-+	}
-+
-+	info->secstrings =3D secstrings;
-+	return 0;
-+}
-+
-+static int find_elf_section(const struct elf_info *info,
-+			       const char *sect_name, void **sect, int *sect_sz)
-+{
-+	Elf64_Shdr *shdr;
-+
-+	for (int i =3D 1; i < info->hdr->e_shnum; i++) {
-+		shdr =3D &info->sechdrs[i];
-+		if (shdr->sh_type =3D=3D SHT_NULL || shdr->sh_type =3D=3D SHT_NOBITS)
-+			continue;
-+		if (strcmp(sect_name, info->secstrings + shdr->sh_name) =3D=3D 0) {
-+			*sect =3D (void *)info->hdr + shdr->sh_offset;
-+			*sect_sz =3D shdr->sh_size;
-+			return 0;
-+		}
-+	}
-+
-+	return -EINVAL;
-+}
-+
-+/* To shut up -Wmissing-prototypes.
-+ * This function is used by the kernel light skeleton
-+ * to load bpf programs when modules are loaded or during kernel boot.
-+ * See tools/lib/bpf/skel_internal.h
-+ */
-+int kern_sys_bpf(int cmd, union bpf_attr *attr, unsigned int size);
-+
-+#define BPF_LOADER_LOAD_FD_LAST_FIELD load_fd.ctx_size
-+
-+static int loader_load_fd(union bpf_attr *attr)
-+{
-+	void *buf =3D NULL, *insns =3D NULL, *data =3D NULL, *license =3D NULL;
-+	void *kctx =3D NULL;
-+	int len, err =3D 0;
-+	int insns_sz =3D 0, data_sz =3D 0, license_sz =3D 0;
-+	int map_fd, prog_fd;
-+	size_t ctx_sz;
-+	union bpf_attr sattr =3D { 0 };
-+	unsigned int zero =3D 0;
-+
-+	if (!capable(CAP_BPF))
-+		return -EPERM;
-+
-+	if (CHECK_ATTR(BPF_LOADER_LOAD_FD))
-+		return -EINVAL;
-+
-+	if (attr->load_fd.ctx_size > U16_MAX)
-+		return -EINVAL;
-+
-+	CLASS(fd, f)(attr->load_fd.loader_fd);
-+	if (fd_empty(f))
-+		return -EINVAL;
-+
-+	len =3D kernel_read_file(fd_file(f), 0, &buf, BPF_LOADER_MAX_SIZE, NULL,
-+			       READING_BPF_LOADER);
-+	if (len < 0) {
-+		err =3D len;
-+		goto out;
-+	}
-+
-+	struct elf_info elf_info =3D {
-+		.hdr =3D (Elf64_Ehdr *) buf,
-+		.len =3D len,
-+	};
-+
-+	err =3D bpf_elf_validity_cache_sechdrs(&elf_info);
-+	if (err)
-+		goto out_free_buf;
-+
-+	err =3D bpf_elf_validity_cache_secstrings(&elf_info);
-+	if (err)
-+		goto out_free_buf;
-+
-+	err =3D find_elf_section(&elf_info, BPF_LOADER_PROG_SEC, &insns, &insns_s=
-z);
-+	if (err)
-+		goto out_free_buf;
-+
-+	err =3D find_elf_section(&elf_info, BPF_LOADER_MAP_SEC, &data, &data_sz);
-+	if (err)
-+		goto out_free_buf;
-+
-+	err =3D find_elf_section(&elf_info, BPF_LOADER_LICENSE_SEC, &license, &li=
-cense_sz);
-+	if (err)
-+		goto out_free_buf;
-+
-+	if (license_sz =3D=3D 0 || ((char *)license)[license_sz - 1] !=3D '\0') {
-+		pr_err("ELF Spec violation: license section isn't null terminated\n");
-+		err =3D -ENOEXEC;
-+		goto out_free_buf;
-+	}
-+
-+	memset(&sattr, 0, sizeof(sattr));
-+	sattr.map_type =3D BPF_MAP_TYPE_ARRAY;
-+	sattr.key_size =3D sizeof(unsigned int);
-+	sattr.value_size =3D data_sz;
-+	sattr.max_entries =3D 1;
-+	map_fd =3D kern_sys_bpf(BPF_MAP_CREATE, &sattr, sizeof(sattr));
-+	if (map_fd < 0) {
-+		err =3D map_fd;
-+		goto out_free_buf;
-+	}
-+
-+	memset(&sattr, 0, sizeof(sattr));
-+	sattr.map_fd =3D map_fd;
-+	sattr.key =3D (unsigned long) &zero;
-+	sattr.value =3D (unsigned long) data;
-+	err =3D kern_sys_bpf(BPF_MAP_UPDATE_ELEM, &sattr, sizeof(sattr));
-+	if (err < 0)
-+		goto close_map_err;
-+
-+	memset(&sattr, 0, sizeof(sattr));
-+	sattr.prog_type =3D BPF_PROG_TYPE_SYSCALL;
-+	sattr.license =3D (unsigned long) license;
-+	sattr.insns =3D (unsigned long) insns;
-+	sattr.insn_cnt =3D insns_sz / sizeof(struct bpf_insn);
-+	sattr.fd_array =3D (unsigned long) &map_fd;
-+	sattr.prog_flags =3D BPF_F_SLEEPABLE;
-+	strscpy(sattr.prog_name, BPF_LOADER_PROG_SEC, sizeof(BPF_LOADER_PROG_SEC)=
-);
-+	prog_fd =3D kern_sys_bpf(BPF_PROG_LOAD, &sattr, sizeof(sattr));
-+	if (prog_fd < 0) {
-+		err =3D prog_fd;
-+		goto close_map_err;
-+	}
-+
-+	memset(&sattr, 0, sizeof(sattr));
-+	ctx_sz =3D attr->load_fd.ctx_size;
-+	kctx =3D kzalloc(ctx_sz, GFP_KERNEL);
-+	if (kctx =3D=3D NULL) {
-+		err =3D -ENOMEM;
-+		goto close_prog_err;
-+	}
-+	sattr.test.prog_fd =3D prog_fd;
-+	sattr.test.ctx_in =3D (unsigned long) kctx;
-+	sattr.test.ctx_size_in =3D ctx_sz;
-+	err =3D kern_sys_bpf(BPF_PROG_TEST_RUN, &sattr, sizeof(sattr));
-+	if (err < 0)
-+		goto free_ctx;
-+	err =3D sattr.test.retval;
-+	if (err < 0)
-+		goto free_ctx;
-+
-+	if (copy_to_user((void *) attr->load_fd.ctx, kctx, ctx_sz) !=3D 0)
-+		err =3D -EFAULT;
-+
-+free_ctx:
-+	kfree(kctx);
-+close_prog_err:
-+	close_fd(prog_fd);
-+close_map_err:
-+	close_fd(map_fd);
-+out_free_buf:
-+	vfree(buf);
-+out:
-+	return err;
-+}
-+
-+
- static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
- 		     bpfptr_t uattr_common, unsigned int size_common)
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index f197cf476190..e7c5993f6954 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -7181,7 +7181,7 @@ static int selinux_ib_alloc_security(void *ib_sec)
+ static int selinux_bpf(int cmd, union bpf_attr *attr,
+ 		       unsigned int size, bool kernel)
  {
-@@ -6463,6 +6794,9 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr=
-, unsigned int size,
- 	case BPF_PROG_ASSOC_STRUCT_OPS:
- 		err =3D prog_assoc_struct_ops(&attr);
- 		break;
-+	case BPF_LOADER_LOAD_FD:
-+		err =3D loader_load_fd(&attr);
-+		break;
- 	default:
- 		err =3D -EINVAL;
- 		break;
-@@ -6508,13 +6842,6 @@ BPF_CALL_3(bpf_sys_bpf, int, cmd, union bpf_attr *, =
-attr, u32, attr_size)
- }
+-	u32 sid =3D current_sid();
++	u32 sid =3D kernel ? SECINITSID_KERNEL : current_sid();
+ 	int ret;
 =20
+ 	if (selinux_policycap_bpf_token_perms())
+@@ -7296,7 +7296,7 @@ static int selinux_bpf_map_create(struct bpf_map *map=
+, union bpf_attr *attr,
+ 	bpfsec->sid =3D current_sid();
 =20
--/* To shut up -Wmissing-prototypes.
-- * This function is used by the kernel light skeleton
-- * to load bpf programs when modules are loaded or during kernel boot.
-- * See tools/lib/bpf/skel_internal.h
-- */
--int kern_sys_bpf(int cmd, union bpf_attr *attr, unsigned int size);
--
- int kern_sys_bpf(int cmd, union bpf_attr *attr, unsigned int size)
- {
- 	struct bpf_prog * __maybe_unused prog;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.=
-h
-index ffd96e8b920b..470e3b575497 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -993,6 +993,7 @@ enum bpf_cmd {
- 	BPF_TOKEN_CREATE,
- 	BPF_PROG_STREAM_READ_BY_FD,
- 	BPF_PROG_ASSOC_STRUCT_OPS,
-+	BPF_LOADER_LOAD_FD,
- 	__MAX_BPF_CMD,
- 	BPF_COMMON_ATTRS =3D 1 << 16, /* Indicate carrying syscall common attrs. =
-*/
- };
-@@ -1950,6 +1951,12 @@ union bpf_attr {
- 		__u32		flags;
- 	} prog_assoc_struct_ops;
+ 	if (!token)
+-		ssid =3D bpfsec->sid;
++		ssid =3D kernel ? SECINITSID_KERNEL : bpfsec->sid;
+ 	else
+ 		ssid =3D selinux_bpffs_creator_sid(attr->map_token_fd);
 =20
-+	struct { /* struct used by BPF_LOADER_LOAD_FD command */
-+		__u32		loader_fd;
-+		__aligned_u64	ctx;
-+		__u32		ctx_size;
-+	} load_fd;
-+
- } __attribute__((aligned(8)));
+@@ -7314,7 +7314,7 @@ static int selinux_bpf_prog_load(struct bpf_prog *pro=
+g, union bpf_attr *attr,
+ 	bpfsec->sid =3D current_sid();
 =20
- /* The description below is an attempt at providing documentation to eBPF
+ 	if (!token)
+-		ssid =3D bpfsec->sid;
++		ssid =3D kernel ? SECINITSID_KERNEL : bpfsec->sid;
+ 	else
+ 		ssid =3D selinux_bpffs_creator_sid(attr->prog_token_fd);
+=20
 --=20
 2.55.0.691.gc56d675ccc-goog
 
