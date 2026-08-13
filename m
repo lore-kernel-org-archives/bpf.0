@@ -1,101 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF9312D23BC;
-	Thu, 13 Aug 2026 00:36:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB8955FDA7
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 00:39:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786581399; cv=none; b=K/8yy/30oZfNz0UIJuspAOdDSbP2cge8U2jz20hg4vku5o5huCRWzd9wioQ6AzJR/BVz0HJWKAK4+atfKz3RskZZtHLuWhCAPpAG5hNFB9EklWiHHFwim7iPSi/qRJDHc+4E83eyzyvXBxYKK3UTktT3j7LGt+M9KG/vaBOeEwE=
+	t=1786581564; cv=none; b=EPt5OJOr/IJ9e7HKLPDOoEZZQTSUQC3TwubzH7aTQ4v5xZUviHfnIKQIPdsv+1Bgo2lmbLAXUkp9YiOYFxHLTGW//aVGrazpT1g4bsd+DUFJR970UrUdA5xT0pTDkcxkhbNrBlZdbVzvvmmRvACrpEwKO/qOw8PV/FAlp9vDTUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786581399; c=relaxed/simple;
-	bh=q/ZFSActgJYqAEUHhAmbaYwZ5QLHaxQ67NZDLRBCZqc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=qNfuSau8c5wp0Yj8RMT2h+xjinfjFva33WGVN7B2IR0bdlzrm+3H1mRGH3P79TlHFJEY4fYKyzHkhNwaFjtmaJp0gVOeQZ2aNSwzJu9E+xJltJc9daiIHgPU5Ti8A61noH8mi1Ad1nrN9QLdTieEuTwlI707MRRobm6f4KRGZRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cz70iHMT; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786581564; c=relaxed/simple;
+	bh=AKzNnUGpIQgsID1GH1LN6KeL/O3OduRfA1oucI1lPeA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=T4Qt/2d363vPUN/PGn+oKuqLKf88P0PiO/1z2K3c3e9jPnhytlRexPU6ak9kOqVHoYh00SNOoE/8c2kTEFoo4Tq3m+3a/D/dKB80HnExUkjWW0kCiYAS48EiiPkIpy4OXbdn7KSP1NPz+Hi0vMwT8qMPfHSTsIUrxjhZ5038LFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YBfWFF4i; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cz70iHMT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E52D1F000E9;
-	Thu, 13 Aug 2026 00:36:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786581398;
-	bh=KfyE//Cou5yAU10w4ncKQGMqqg6lHdgwdTSUS2DXxQM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=cz70iHMTJZ3CYbN6xjSFK1ygjttnesn74QRKJQ93swIx27y0JqsEv4i77loWK+dYv
-	 M0Q/S7uD/XYJl8Y9Rg+67rkO3V5H3QwvDKssGq1GRNSyUS2GMnujr+eMhIdn9jZDw9
-	 VCVY6uOFyu40A8ahV6itOcEcZiDToQDxv/HIzcYrkCR9SnY0/eOVZGPQFuhqJjl3Zq
-	 OOifOZjkawe3eru6jrwKaoC6qEss//3V1V0UBQQe97CCWUL9SNTuvijBX+arMCo86h
-	 DKQtftStNsOAEPMq04Rp8LfbLUQe6LwGFMJPpF79FsSyyg4FjoJoHxsR8G8o0O7spt
-	 E6RmCG7bxNUPA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 5/5] selftests/bpf: add loader_load_fd tests
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?VGhpw6liYXVkIFdla3N0ZWVu?= <tweek@google.com>
-Cc: selinux@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260813002618.3755631-6-tweek@google.com>
-References: <20260813002618.3755631-1-tweek@google.com>
- <20260813002618.3755631-6-tweek@google.com>
-Content-Type: text/plain; charset=utf-8
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YBfWFF4i"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-84847482584so371981b3a.0
+        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 17:39:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786581562; x=1787186362; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=AKzNnUGpIQgsID1GH1LN6KeL/O3OduRfA1oucI1lPeA=;
+        b=YBfWFF4iymYKlraRhRDJd92U5V9CPJpWQw+58lO+lFmjGCLr+s6vizu0jVFcl360T1
+         c8motLw6iqDSvaaJ/iVw5rxiajdDJERQcX3EApxx1Dj7+pdpSmuEe3T9EyYwu6vMOORM
+         L2trKypMRdhYD92i9LIAtCiZdjKruufd/JO6IYeJfM0kAqL28MIKUKDGG6vFkGkuL4xQ
+         YKvgRUMVeyBKL9N8jm7O3jkPJFc4HTIiUourc8PUw8WppbinIbTAwcTSRQPRvOyBYl/A
+         HnJDN4PfHjR/UN6f/4S4nnTLO7xpl0HHGBaDMYktmXZxrD5X63gBziVWY4EDkJku7VGP
+         4orA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786581562; x=1787186362;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=AKzNnUGpIQgsID1GH1LN6KeL/O3OduRfA1oucI1lPeA=;
+        b=RQNTt7vSnibr3Eq6i7ylTk6hCW7RE1B7SuYFJvXnp5JMrDyOFOTh5SGaTxxVnLiTqN
+         fOPWgLw1SycR5nSTCpW6B8faS+wR3oIXx5/a7MPppEO9aaeg+gMlz3QDNN5MYkxeVrGs
+         0rGuR2QyaMXpkczqYymGO5vnY98+Uny5iS4ljmi6vicK1aE2sYBotMSRZ+ZM1JFZNfgA
+         V4ZevhlZnRMjg04O2I3eRO+FO6xHrs7gA0JEvxPIJhk7Cl5yWs4m/Ut+zwZ17k0eUiwF
+         8q4dVHeNodOOzasAmoMF1KhdES0iQRFGVqoftBXrGvFXpbAKEE3h+1sJQAnQPCLKapF5
+         AJ7A==
+X-Forwarded-Encrypted: i=1; AHgh+RoD/ZmeeVE996SXRzLySrkFYBXjcDGdtudgx08Det+7kPp/51t6WpiWkYuiFhhznG8wjV4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzaRAip5DR6Bvq90UU22a2Mf7xf+CbSJnEAR/vP2ybbQ22nSBHH
+	WRhecWSkYoqczQkUv58zkHcFOH8oPIyj3ALPMMB9F0uzgVulIfX1VfLu59WoZA==
+X-Gm-Gg: AR+sD12YtZ3Akj3L9XOkonswDXeuAHaTM7sRGlKXbqmfPtTSmCvCk0YVN7Wap4T6G6f
+	3a+9tbttdNfrQct2vJI++/Vky8jtFJ2KTFDJ1+L7gA8HXJ/GyhFlBI+1jv7VD9RypmAZMYhGLcI
+	B/PO2/Eq/kyV0BUcgVG01QpMvrI7EwvtC2HJ0eLLS529c3pRhNoDMLQk+g/CxvLYNa3hAm5XYAZ
+	5HNE5sAqaql2fnweS91ihy4Rd4TG4Vonspja0cG/TYm28krbcwfPhRHHxiEcFRZ35dsbqP3vGj8
+	ApDAlGAfws7/IvcgNMLrJyhZijkxItTXjNk7gWCbxKQOzwDblcm2i+4j8Yjk1GM5Xj5VWeUryJS
+	PWW+MrFV0wkvk31heSej4SejCIzTsnYLGnnjKq9cevDp4okxtqD6eTQHiDIHGUWRTDougw3IOHK
+	hS2iDBkW5zsmhZOVlz5917uQ5pbo44gLRReRVbfnHeI1gGJ0cl4MgzJASHapu+erAxSW0KdsVmt
+	Eg6SkXqPRHxWo5F
+X-Received: by 2002:a05:6a00:170c:b0:836:6f2e:bb6d with SMTP id d2e1a72fcca58-84fc7c59135mr1423262b3a.14.1786581561989;
+        Wed, 12 Aug 2026 17:39:21 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84fc477e556sm211415b3a.13.2026.08.12.17.39.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Aug 2026 17:39:21 -0700 (PDT)
+Message-ID: <e2b1029ee3473e43603412c185302757c918b17f.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v8 2/6] bpf: Attribute async callback
+ instructions to verification roots
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
+ Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
+Date: Wed, 12 Aug 2026 17:39:18 -0700
+In-Reply-To: <20260812221925.3358041-3-memxor@gmail.com>
+References: <20260812221925.3358041-1-memxor@gmail.com>
+	 <20260812221925.3358041-3-memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 13 Aug 2026 00:36:37 +0000
-Message-Id: <20260813003638.4E52D1F000E9@smtp.kernel.org>
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Unchecked pointer returns from libelf functions in `create_loade=
-r_elf` will cause a SIGSEGV upon allocation failure.
---
+On Thu, 2026-08-13 at 00:19 +0200, Kumar Kartikeya Dwivedi wrote:
+> Asynchronous callbacks are explored as fresh frame-zero verifier states,
+> so normal callee-to-caller accounting cannot propagate their instruction
+> budget to the main or global subprogram whose verification scheduled them=
+.
+>=20
+> The callback exploration still happens within the same do_check_common()
+> invocation as that independent verification root. Record
+> env->insn_processed at do_check_common() entry and override the root's
+> inclusive count with the delta before returning. This includes all direct=
+ly
+> and transitively scheduled asynchronous callbacks in the root's total
+> without maintaining a separate accounting call stack.
+>=20
+> Static subprogram and callback totals remain local to their synchronous c=
+all
+> paths. Their self counts continue to account for each processed instructi=
+on
+> exactly once.
+>=20
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
 
---- Patch [5]: [PATCH bpf-next 5/5] selftests/bpf: add loader_load_fd tests=
- ---
-commit b9a0b98c13acbc44d106f86733ac4cdd18481ce7
-Author: Thi=C3=A9baud Weksteen <tweek@google.com>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-selftests/bpf: add loader_load_fd tests
-
-This commit adds user-space selftests for the BPF_LOADER_LOAD_FD command.
-The test ELF is generated based on the existing light skeleton generator,
-using an awk script to extract the loader program and map.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/loader_load_fd.c b/to=
-ols/testing/selftests/bpf/prog_tests/loader_load_fd.c
-> new file mode 100644
-> index 0000000000000..ab971662dd047
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/loader_load_fd.c
-[ ... ]
-> +	ehdr->e_ident[EI_VERSION] =3D EV_CURRENT;
-> +	ehdr->e_machine =3D EM_BPF;
-> +	ehdr->e_type =3D ET_REL;
-> +	ehdr->e_version =3D EV_CURRENT;
-> +
-> +	shstr_scn =3D elf_newscn(elf);
-> +	shstr_shdr =3D elf64_getshdr(shstr_scn);
-> +	shstr_shdr->sh_name =3D shstr_off;
-> +	shstr_shdr->sh_type =3D SHT_STRTAB;
-> +	shstr_shdr->sh_flags =3D 0;
-> +
-> +	shstr_data =3D elf_newdata(shstr_scn);
-> +	shstr_data->d_buf =3D shstrtab;
-
-[Severity: Medium]
-Could this crash the test runner if libelf fails to allocate memory?
-
-Earlier in create_loader_elf(), ASSERT_OK_PTR is used to check the return
-values of elf_begin() and elf64_newehdr(). However, the pointers returned
-by elf_newscn(), elf64_getshdr(), and elf_newdata() are dereferenced here
-without prior validation.
-
-If these functions return NULL, the test will abort with a segmentation
-fault, preventing subsequent tests from running. This pattern also appears
-to be repeated for the .prog, .map, and license sections below.
-
-Would it be better to add ASSERT_OK_PTR checks for these allocations?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260813002618.3755=
-631-1-tweek@google.com?part=3D5
+...
