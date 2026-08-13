@@ -1,176 +1,293 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F20C3603D8
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 03:51:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786593104; cv=none; b=lyEtVqVZKBUnsV2p5B6lRHn0PzpotJe8bU/9ukTHAmAb47j9wTXBmMHqSv8OB84W/iHSscw9CiX0DcdX4kh9V+8DPFeqdbGqa9CjLY4CX4XvOBZg7ZahJd82S1KbCYxKkiI7I7TGZrIlKRYsKD1VwmmjqncDosGQ1HI2XykQJ+Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786593104; c=relaxed/simple;
-	bh=JScBWDIyq3IPjP1nc3ZaCx+Z8gnodJdx4N1fTXUQfSw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=j5mo2+HjZpoS9eqb7witCkYDM15l9Xa3O2yfUUmG2uw5dvquagdCrfhHf7sKneI2oP+R86l6BuuHO7db1GQXJgsDBEVOtD7IfQP/B3p3F1IuYoZzNT/xUTR+kddnmbPEQspKkajJoxeojqRiwLwEXl/kyKQXMbj1ppaascodl4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G5iNRhV3; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AFC033260C
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 04:16:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786594606; cv=pass; b=deQUBHSMnis4YvZ5ev5R12mPkTFJTGOXaztbQV7o0uVasQE+zzvUwyoRZZJG53DXbXphBUXUfa9L07vHipSSoas5EYYRbpn10DwBXczzl369gGjcs4dxvTRZ8ubSvrganMHMpSWn1t6s5WaI1tYRla6sbrmXt7vfjISNmeSNdhc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786594606; c=relaxed/simple;
+	bh=kyvju2B3kVRFWxtt3UBGqzSAAkahmS3D2grt7G1bekA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=u83rfOozLWbHJZ/6DI3cbBuZtug0wXtsg0/vV58y/GvCEqSI80f4E7zHUZtBmPyJUZqbKncYI/5vvSGdhvKHIYqA++udp4SMYVoBWUdAgbViaMjQdafWUQ4w5HIMe2Ouqu5Z4bZ8V85vYYfizEh/7QyYZJBlMNx46gSAY4YBMU0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=req0uku2; arc=pass smtp.client-ip=74.125.224.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G5iNRhV3"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-384930ca5e2so365371a91.3
-        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 20:51:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="req0uku2"
+Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-664e3ed58bcso873490d50.1
+        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 21:16:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786594604; cv=none;
+        d=google.com; s=arc-20260327;
+        b=GthkN7IYbnCp+23PHVqY0TpKmETRS67NiSu6bTo48sLeakrUXxnMeqXsxCo/Fynp4s
+         HoXj3wnWIvsBiBjjsoh0xHYTv3vO7AWXWOysbUgErwwt2L16YGBHm2uVxcaG4y1Uu8H7
+         A7W10YUw1nglqd7Cvsot8dO2gfNrtlERn49ppmQ5AsP5XkfIGNlZaY0gV+UGOQ+W4+SE
+         3Ak8J5MfpgFOArNSEOWN/dHAcvcH6BvjEvm9OkMR+/UxCyfy9DBPpCkQjDRp9bCiwtoc
+         jHV8B2/1nbvHCfOe1F4a4x/fDtCEoC46WlxbDvmjlvsQfofn/qMv/XcTxwE5HTznLHb4
+         yTlA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=hj+aZ+4yYhvsPaAhIqtP1+VT7SwFhpMGkiPhnjwuFe4=;
+        fh=6xpnP9QYE5/HVJJHdKAYZ8F/r06KD1Q+8qYld7eb8ZM=;
+        b=R7NjtVwKIgw5Xpsv3xCDU6iy+W9REJUlz9aqlccBrR1wehiNaPFmLvtPu5VGzGoLY7
+         mhIxGzAimp0yUr7vRTo4PPh9gn8m5gebVJ+ihOm7bG/LmjcFZUijqOOV7A6YvctlgOWP
+         BD9pycxMwEhIKOkA1aAf/JVNBdcd3s3cvpqRmOAhpp5p0+RaIj48ly+o7Km25WAd9XMu
+         7SdKxJzcLdocEz44TJPvw6GZpKb9C97hSu6IHW510pmxJnJwwI1nsaq4elFDxlclMDCt
+         hRxrgCRWWmu6e85B0js6+wXEe4JMvKc4zWILdlByjjc23kBLRdrqP9eld2f5hbPtO/yA
+         C/gg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786593103; x=1787197903; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ma6ZbShKO9rAbTtXIbG/48Oqhn/7/NpX4MIE3BGiTqI=;
-        b=G5iNRhV3gaI8t2aNDNwg1kvLWVSugu+nC8Hfwb7k/8OYZVHKgqiJtHUek/397QnPdu
-         tFAB7e1gknYPWPpRkF6sZE2g8pbGyF1pNcgTuiMhMBGYuYSgmuzEx7ez0tKbgJskWIT4
-         emMplJsI5VQSltyv5N9sIOGMlpiSHy3kaxcJpWPJGWIi6il4OYxVXIKqI74/37AmvnO7
-         xZwOJ7YQW5cjUH7Ml8fTouJrUILsCMhIXMB85aohn6HZ/n2h2DjVykHpLhQZQRaCmD3C
-         2yls+j5zF2AoLWUyIU0HdP4wXtv2tzApGv0/S9pXS+U+Hkr+fwnf1yv8wL6v7AKhhYIz
-         lpbw==
+        d=gmail.com; s=20251104; t=1786594604; x=1787199404; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=hj+aZ+4yYhvsPaAhIqtP1+VT7SwFhpMGkiPhnjwuFe4=;
+        b=req0uku2ETWcB1cJ2WbF+yaXE5uKne+ndkbW/DLtlXfjIvKjv/4VyEKJxoTADWlfnj
+         d46ebDXkahmv8Bh16F/Bfu2r0fbOmILJyi7ykzRysVZRDFppPSGB+jTk4bo/Ir7Q+KM/
+         RELAr6vOHdQK61h5/CcQRRXzOVl+ZYKFdLkUhM6gQqFHjHO/O+j6PTFKHruVHV/R+J06
+         v4zG77kcrZL2A7aZrnLTrgPRa8F7buTYUF9gR5MR3BfiUhyROYK2uUGv2zV+OF9LudtF
+         kVWP5ly+9HZBgcCjCvsxjo/YIUEttSzDsSS7H2N8xK67I6l88rw9IXQT46vo9Gh1VJx+
+         841g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786593103; x=1787197903;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ma6ZbShKO9rAbTtXIbG/48Oqhn/7/NpX4MIE3BGiTqI=;
-        b=pW3se/BIkAGn/Q5ty8I4oqtKETC+DvcIzDW/qfutkjk0QEGXeWS9IC7TQ/6RxRV1yt
-         /TD5NTbIRYQMlVPE3cr7DaV5rQltvJm4283oNhlTvAdsI0Jsnos/Yum5KfMvvuQd8Q8Y
-         7Sa7kI8Ee+xceCIHM3oRl+VC54Vlf/XKm/v+8uqEn5adrW1MdlaOI1JR6R4j14MTO1pB
-         9fbgxGo9Z84hZjvdcif5WIkl9M+X9sMFOOIdqhC4lJ4Ua9Wvssis4EsVmdw/+A6Rwf1O
-         DmOx/zkT9R6MhicUXqgTKHR5Sj3ukjPGpz/QDbjQAEUQ3u4Eh5UiGA8yBJWhPK1eMc1F
-         qMoQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqeFLc/5HwWt2glmKkrjv2ugLa2+3xqB8N0gIQQkcTyplG0JcOwF0McXVzirnMJdgz9FD0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywq6F+Ix6s7Uonc4pjeCR9RSy07UuY06OWTrl5nrtnsc2BP139y
-	EQpA/zqW5sp12Zt173YdidsqLHrsQHj/2YtR0B8O1PAvK2YYjwvdCNeD
-X-Gm-Gg: AR+sD123zrFFoqDQ2JHQCh5cWIprc/yML4IdIcotm0nXPeeGfHdGM0O6SV0pzWS3DVS
-	NQoQY5cKRfWAo/W51rlJmP1mR1oL74giVQC/23in/lt7RgOcEmCFVaQ5krEldG/y8CPaEL0S+co
-	sEjnZkDYnz3O5Ai1NTlE10+h0DsOFqsddldqTsdF6MZ2wmYHHVutVwPD0avlQ/5k2d4HAJ7vwAm
-	VvSRfPxtjC6xkck7lbKDuDBQM96ci9MoMyHAilp6kJyBOV4KD6Z6Sd6iCxR7AVYcIynxM0dGpoU
-	d7P8B8dIbzaFNLYurVjH/JLZoqUxJCFxMhv5uKC8IiOHbowhZSVtbrlvq7bk9ILmBgWYf+GSO99
-	YbfQYq8ZMdL8RjNUrIeW6/ZKAdz4tvYTaDct/HJfom1pDF6LlL/q1b8x+RNIozh6xoQb6Z570em
-	grPDIb52Mzx21lAeStTn6Q7MlPW7VLGD4h04NUucqaa7euYp12ubrQ6mU=
-X-Received: by 2002:a17:90b:3805:b0:381:5bd6:eb19 with SMTP id 98e67ed59e1d1-3931e2d5ad3mr3082876a91.18.1786593102550;
-        Wed, 12 Aug 2026 20:51:42 -0700 (PDT)
-Received: from omen-arch ([147.46.124.101])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3931ca612e7sm1625873a91.0.2026.08.12.20.51.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Aug 2026 20:51:41 -0700 (PDT)
-From: Junseo Lim <zirajs7@gmail.com>
-To: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Simon Horman <horms@kernel.org>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Sechang Lim <rhkrqnwk98@gmail.com>,
-	Tom Herbert <tom@herbertland.com>
-Subject: [PATCH net] net: kcm: Hold RCU read lock while running BPF parser
-Date: Thu, 13 Aug 2026 12:51:36 +0900
-Message-ID: <20260813035136.106167-1-zirajs7@gmail.com>
-X-Mailer: git-send-email 2.55.0
+        d=1e100.net; s=20251104; t=1786594604; x=1787199404;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=hj+aZ+4yYhvsPaAhIqtP1+VT7SwFhpMGkiPhnjwuFe4=;
+        b=jn+LApp83jzkYOgQpxMMbUq23Ln2O/fd6t70e1oDMs4RC0Wr0rXLZ2/1xQsFgwgXle
+         6QoPg23RF9ieq+6T2Y2/kH9G6wN+XL8YQ5VTUAAH/Nvn64xBnSSfG8IlF44tdLiqvd3t
+         LFRXCwW2TBLwm7YrhL5e4TWEJ5KZfZZr8BqPPRln6RvRyqrrOX4ySTf8BQeveJoeMF5m
+         txdTzoFg1jtVXgyVdViCdiVTlJH1RkKSBQXxtJA1ggDjI5FEQBXIw2jS6VSWTvfoQK+Q
+         KDQaOnzsCrtBTqK+s0QrL3VXiP98Slk2OErObLsb+3vANg5dqZlG8bGNLmwd0mcItU+k
+         mr0A==
+X-Forwarded-Encrypted: i=1; AHgh+Rqhk00D0RRdBYQrODta5B8TEm2oZ3AhFng82oEkNtqZWic7L42ZoxJFDbzAZMSIjiv7tks=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzh7YuxnE1H9DaiLdML5BL2RVPldF9Cz81hr7qg8IOtlZEcLWVU
+	33G/4/xPvP41erNxb/DMid8vOeadUyg8BEy1xy/8ZPyv8HFpLkV1oJNdF/3kUYSujZCFG8xYIPf
+	8mn+Q07vHkHgK9adPeT1VlYRsmamaga0=
+X-Gm-Gg: AR+sD11LTgywNA5ZAwT0/kl3UCEt4BM3fx93rNWqDIpdQM3KIrMsMKBU5bFXg1gES6a
+	fq1mtALKNErbdPWdmWcmjEkLD5TJP9GU0z9A4yu9Ult6lw54E2apNHStjCdn9RotEW545pVXjvf
+	HUvzs8RNtn6FnGebvoTXGc3JOCcRLxZ0IuYFh9jW+M6bJHFRPTpCMnpfieRt1qC4VwmnsFb4jxe
+	4PDQ9NEppdO0ic8yDDaI1xhnifZ6MAZy5icvgjBoTVUkwZ8tQNH/IyxpuFWU0bq2oXtMqwSq/ra
+	E+A3bzKzrtgLpVUbTuiNbWlbaam/orkStpwCR/vCXTxiT9Agl3BhBdlQO1JzUixdFC0UrSGSiah
+	VEZNOmml9QW93KlYA/EqHkpX97HaJn9yTcH2Vx3SDxWh2
+X-Received: by 2002:a05:690e:2584:b0:668:a17:daed with SMTP id
+ 956f58d0204a3-66c54c49056mr818130d50.21.1786594604022; Wed, 12 Aug 2026
+ 21:16:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260811235331.10044-1-kartikey406@gmail.com> <20260812000859.654FC1F00A3A@smtp.kernel.org>
+ <anxMXBwCX0HCYgxr@krava>
+In-Reply-To: <anxMXBwCX0HCYgxr@krava>
+From: Deepanshu Kartikey <kartikey406@gmail.com>
+Date: Thu, 13 Aug 2026 09:46:31 +0530
+X-Gm-Features: AUfX_mwfqzym4wGlqOQexfSsnhGUEHmMvw1zBvwX7sKbdWrWjMFru5WvJUuewL8
+Message-ID: <CADhLXY5QdvPjyK+X0q4S4wF71CTt-RQ76fHt_W=x-BmVka9LAQ@mail.gmail.com>
+Subject: Re: [PATCH] perf/bpf: Fix data race in __perf_event_overflow
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: sashiko-reviews@lists.linux.dev, bpf@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-kcm_parse_func_strparser() calls bpf_prog_run_pin_on_cpu() which
-prevents CPU migration, but does not establish an RCU read-side
-critical section. Consequently, BPF map operations can trigger
-WARN_ON_ONCE(!bpf_rcu_lock_held()) when called from the KCM strparser
-program.
+On Wed, Aug 12, 2026 at 4:05=E2=80=AFPM Jiri Olsa <olsajiri@gmail.com> wrot=
+e:
+>
+> On Wed, Aug 12, 2026 at 12:08:58AM +0000, sashiko-bot@kernel.org wrote:
+> > Thank you for your contribution! Sashiko AI review found 3 potential is=
+sue(s) to consider:
+> >
+> > Pre-existing issues:
+> > - [High] Lockless TOCTOU race in perf_event_alloc() causes NULL pointer=
+ dereference or Use-After-Free during BPF program inheritance.
+> > - [Medium] Incomplete fix for data races and missing memory barriers in=
+ BPF attach/detach paths.
+> > - [Medium] Time-of-Check to Time-of-Use (TOCTOU) race drops valid perf =
+events during concurrent BPF detach.
+> > --
+> >
+> > --- Patch [1]: [PATCH] perf/bpf: Fix data race in __perf_event_overflow=
+ ---
+> > commit f63a2be5ceb79a2a8bb0263ba6723f7bf4ae763d
+> > Author: Deepanshu Kartikey <kartikey406@gmail.com>
+> >
+> > perf/bpf: Fix data race in __perf_event_overflow
+> >
+> > This patch addresses a data race where __perf_event_overflow() concurre=
+ntly
+> > reads event->prog without lock protection while perf_event_detach_bpf_p=
+rog()
+> > writes it to NULL. It fixes the race by introducing READ_ONCE() and
+> > WRITE_ONCE() in the respective read and write paths.
+> >
+> > Reported-by: syzbot+651d2774bd1d8395595f@syzkaller.appspotmail.com
+> > Closes: https://syzkaller.appspot.com/bug?extid=3D651d2774bd1d8395595f
+> > Fixes: f11f10bfa1ca ("perf/bpf: Call BPF handler directly, not through =
+overflow machinery")
+> > Signed-off-by: Deepanshu Kartikey <kartikey406@gmail.com>
+> >
+> > > diff --git a/kernel/events/core.c b/kernel/events/core.c
+> > > --- a/kernel/events/core.c
+> > > +++ b/kernel/events/core.c
+> >
+> > [ ... ]
+> >
+> > > @@ -10766,7 +10767,8 @@ static int __perf_event_overflow(struct perf_=
+event *event,
+> > >     if (event->attr.aux_pause)
+> > >             perf_event_aux_pause(event->aux_event, true);
+> > >
+> > > -   if (event->prog && event->prog->type =3D=3D BPF_PROG_TYPE_PERF_EV=
+ENT &&
+> > > +   prog =3D READ_ONCE(event->prog);
+> > > +   if (prog && prog->type =3D=3D BPF_PROG_TYPE_PERF_EVENT &&
+> > >         !bpf_overflow_handler(event, data, regs))
+> > >             goto out;
+> >
+> > [Severity: Medium]
+> > This isn't a bug introduced by this patch, but does the independent sec=
+ond
+> > read in bpf_overflow_handler() create a time-of-check to time-of-use ra=
+ce?
+> >
+> > If a concurrent detach sets event->prog to NULL between the READ_ONCE()=
+ here
+> > in __perf_event_overflow() and the second READ_ONCE() inside
+> > bpf_overflow_handler():
+> >
+> > bpf_overflow_handler() {
+> >     prog =3D READ_ONCE(event->prog);
+> >     if (prog) {
+> >         ...
+> >     }
+> >     return 0;
+> > }
+> >
+> > Wouldn't bpf_overflow_handler() evaluate prog as NULL and return 0? The
+> > caller __perf_event_overflow() evaluates !0 as true and executes goto o=
+ut,
+> > which unconditionally drops the perf sample.
+> >
+> > Should the already-validated prog pointer be passed directly to
+> > bpf_overflow_handler()?
+>
+> seems legit
+>
+> >
+> >
+> > > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > > --- a/kernel/trace/bpf_trace.c
+> > > +++ b/kernel/trace/bpf_trace.c
+> > > @@ -2018,7 +2018,7 @@ void perf_event_detach_bpf_prog(struct perf_eve=
+nt *event)
+> > >
+> > >  put:
+> > >     prog =3D event->prog;
+> > > -   event->prog =3D NULL;
+> > > +   WRITE_ONCE(event->prog, NULL);
+> > >
+> > >  unlock:
+> >
+> > [Severity: Medium]
+> > This is a pre-existing issue, but does this incomplete fix leave other =
+data
+> > races in the attach and detach paths?
+> >
+> > Other functions like perf_event_set_bpf_handler(),
+> > perf_event_free_bpf_handler(), and perf_event_attach_bpf_prog() still
+> > perform plain writes to event->prog without WRITE_ONCE().
+>
+> was wondering the same, the perf_event_detach_bpf_prog is called for
+> tracing events (tracepoint/kprobe/uprobe) the perf event release goes
+> through perf_event_free_bpf_handler, check perf_event_free_bpf_prog
+>
+> jirka
+>
+> >
+> > Additionally, does this need release and acquire semantics? If the writ=
+es to
+> > event->prog and event->bpf_cookie in the attach paths are reordered by =
+the
+> > CPU, could the NMI handler read a valid event->prog but a stale or
+> > uninitialized event->bpf_cookie?
+> >
+> > [Severity: High]
+> > This is also a pre-existing issue, but does the lockless access in
+> > perf_event_alloc() create a use-after-free or NULL pointer dereference
+> > during BPF program inheritance?
+> >
+> > During fork, perf_event_alloc() inherits the BPF program:
+> >
+> > perf_event_alloc() {
+> >     ...
+> >     if (parent_event->prog) {
+> >         struct bpf_prog *prog =3D parent_event->prog;
+> >         bpf_prog_inc(prog);
+> >         ...
+> >     }
+> > }
+> >
+> > Since this accesses parent_event->prog locklessly, can a concurrent
+> > bpf_perf_link_release() clear the pointer? If the compiler reloads the
+> > pointer after the check, bpf_prog_inc() would dereference NULL.
+> >
+> > Even if it is optimized to a single read, perf_event_alloc() is not ins=
+ide
+> > an RCU read-side critical section. Could a concurrent detach finish its=
+ RCU
+> > grace period and free the BPF program, causing bpf_prog_inc() to write =
+to
+> > freed memory?
+> >
+> > --
+> > Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260811235331.=
+10044-1-kartikey406@gmail.com?part=3D1
+> >
 
-Hold the RCU read lock while running the program.
 
-Fixes: 9b73896a81dc ("kcm: Use stream parser")
-Reported-by: Sechang Lim <rhkrqnwk98@gmail.com>
-Signed-off-by: Junseo Lim <zirajs7@gmail.com>
----
-This issue was found by a custom fuzzer developed by
-Sechang Lim <rhkrqnwk98@gmail.com>.
+Thank you for the thorough review!
 
-The report could not be reproduced locally.  However, the trace shows
-the BPF parser being invoked from strp_work without an RCU read-side
-critical section.
+On the three issues raised:
 
-Below is an excerpt of the warning:
+[1] TOCTOU in bpf_overflow_handler():
 
-    WARNING: kernel/bpf/hashtab.c:1547 at htab_lru_map_delete_elem+0x604/0x700, CPU#0: kworker/u4:2/28
-    CPU: 0 UID: 0 PID: 28 Comm: kworker/u4:2 Not tainted 7.2.0-rc4-dirty #3 PREEMPT(full)
-    Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.3-0-ga6ed6b701f0a-prebuilt.qemu.org 04/01/2014
-    Workqueue: kstrp strp_work
-    RIP: 0010:htab_lru_map_delete_elem+0x604/0x700
-    Code: 8f d9 03 48 3b 44 24 30 0f 85 b0 00 00 00 4c 89 e0 48 83 c4 38 5b 41 5c 41 5d 41 5e 41 5f 5d c3 cc cc cc cc cc e8 ec a0 dd ff <0f> 0b e9 35 fa ff ff 44 89 f9 80 e1 07 80 c1 03 38 c1 0f 8c 54 fa
-    RSP: 0018:ffffc900001cf678 EFLAGS: 00010293
-    RAX: ffffffff8e8910f4 RBX: ffff888102bf8800 RCX: ffff888100ce8000
-    RDX: 0000000000000000 RSI: ffffffff91df4082 RDI: ffffffff91597ac0
-    RBP: ffffc900001cf7f8 R08: 0000000000000000 R09: 0000000000000000
-    R10: ffff888106cf6180 R11: ffffffffc020540c R12: ffffc900001cf778
-    R13: 1ffff1102019d07f R14: ffff888106cf6140 R15: ffffc90020a65000
-    FS:  0000000000000000(0000) GS:0000000000000000(0000) knlGS:0000000000000000
-    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-    CR2: 0000001b34521ff8 CR3: 0000000021a28001 CR4: 0000000000370ef0
-    Call Trace:
-     <TASK>
-     bpf_prog_5dda175565b852e0+0x140/0x153
-     ? __copy_skb_header+0xba/0x480
-     ? __asan_memcpy+0x40/0x70
-     ? __skb_clone+0x61/0x8f0
-     bpf_prog_run_pin_on_cpu+0xf4/0x330
-     kcm_parse_func_strparser+0x60/0xb0
-     __strp_recv+0x5d5/0x1880
-     __tcp_read_sock+0x181/0x8c0
-     ? __pfx_strp_recv+0x10/0x10
-     ? __pfx_tcp_read_sock+0x10/0x10
-     strp_work+0x20f/0x3c0
-     ? __pfx_strp_work+0x10/0x10
-     ? lock_acquire+0xf5/0x250
-     ? process_scheduled_works+0x9ce/0x13c0
-     process_scheduled_works+0xa3f/0x13c0
-     ? __pfx_process_scheduled_works+0x10/0x10
-     ? assign_work+0x366/0x530
-     worker_thread+0x93c/0xe70
-     kthread+0x34b/0x460
-     ? __pfx_worker_thread+0x10/0x10
-     ? __pfx_kthread+0x10/0x10
-     ret_from_fork+0x348/0x700
-     ? __pfx_ret_from_fork+0x10/0x10
-     ? native_load_tls+0xd/0x40
-     ? __switch_to+0x916/0xc30
-     ? __pfx_kthread+0x10/0x10
-     ret_from_fork_asm+0x19/0x30
-     </TASK>
+You are correct. The second READ_ONCE() inside bpf_overflow_handler()
+creates a TOCTOU race. If a concurrent detach sets event->prog to NULL
+between the two reads, bpf_overflow_handler() returns 0, causing
+__perf_event_overflow() to drop the perf sample via goto out.
 
- 
- net/kcm/kcmsock.c | 3 +++
- 1 file changed, 3 insertions(+)
+I will fix this by passing the already-validated prog pointer directly
+to bpf_overflow_handler() instead of having it re-read event->prog.
 
-diff --git a/net/kcm/kcmsock.c b/net/kcm/kcmsock.c
-index d469abcd989b..71af69d442f2 100644
---- a/net/kcm/kcmsock.c
-+++ b/net/kcm/kcmsock.c
-@@ -5,6 +5,7 @@
-  * Copyright (c) 2016 Tom Herbert <tom@herbertland.com>
-  */
- 
-+#include <linux/rcupdate.h>
- #include <linux/bpf.h>
- #include <linux/errno.h>
- #include <linux/errqueue.h>
-@@ -391,7 +392,9 @@ static int kcm_parse_func_strparser(struct strparser *strp, struct sk_buff *skb)
- 	struct bpf_prog *prog = psock->bpf_prog;
- 	int res;
- 
-+	rcu_read_lock();
- 	res = bpf_prog_run_pin_on_cpu(prog, skb);
-+	rcu_read_unlock();
- 	return res;
- }
- 
--- 
-2.55.0
+[2] Incomplete fix - other write paths:
 
+Thanks Jirka for pointing out that perf_event_free_bpf_handler() is
+used for handler-based events (tracepoint/kprobe/uprobe). You are
+right that my fix is incomplete.
+
+I will extend the fix to also add WRITE_ONCE() in:
+- perf_event_free_bpf_handler()
+- perf_event_set_bpf_handler()
+- perf_event_attach_bpf_prog()
+
+[3] Lockless access in perf_event_alloc() - UAF:
+
+Agreed. The lockless access to parent_event->prog in
+perf_event_alloc() during fork can lead to NULL pointer dereference or
+use-after-free if a concurrent detach clears and frees the prog.
+
+I will fix this by using READ_ONCE() to capture the pointer atomically
+before the NULL check.
+
+I will send a v2 patch addressing all three issues.
+
+Thanks
+
+Deepanshu
