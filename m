@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B86041687A
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 19:04:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08CB341DDE4
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 19:04:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786647863; cv=none; b=df614n3739WhzA9+7hBPeOCAMkwMnAAnsOrGtWMfFrKhMsyS3B/0e+4bWTsA890Ec72/h2n5d6x34f02G3NTqp3caSHqcxei+EW9eVe5d5Y0XS0uNByNNQjx+PBFZkR1sPw1SR3ORCjP1zrR67fl6mn9ecWt0GqzAFlE/bq/YkY=
+	t=1786647866; cv=none; b=PnzfYBO7ZU99mT7xlIhmDnKqTBdC1Bx/VZWbQ+AVihLhm3nHVdxlD8xl8bvitVlw7GgwkgWcsr7vhYxGys4GqpLTXokaDGAznwdXR+MV+uuseFH2r2mxOHFhBvp8IEgXW+eFH4vQHC5IYsMYLmUCQHKC3gSr38tcfEdx/9AEfBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786647863; c=relaxed/simple;
-	bh=py08yf7ffvlyMB+r/1cXd/G+joODL5qxb+iUNQ5V34U=;
+	s=arc-20240116; t=1786647866; c=relaxed/simple;
+	bh=R4ZZla74pmDCdhyymH9MlqiSRUzB+Z1/A3eAqsRfHtQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VhuI0eGKMZCWrdE5TSdSEPa3G8UEFZBDN397rQan9lm+5LaCtYjJGdavtjwlx7zC4FtySoeMC9kWXZZjjagoAck+U2Yy86lT9wnz8dNWsr8cg70KSi7fGjQrLkySzEnzw+EPzT3uYaDdFDIIuhD14Lt1n2Ydya/z4oqFOa4pmsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A/PfS4Re; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=uinoG7kouacyQ2ClQtolnlytuynTXbyNbtIfB0fnyDJVrNiTCrHhopN7472zwOu+bFnjELZgb56nGVHYlYRn1+YDfULF9niMVqhW5ga42x2hr4984TUM11ZV1sbA4mo/TTJMpnhF8DWDy61o7dZIT0bpP18JGT+f9xO5hnsj7UM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lrb1N7ow; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A/PfS4Re"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 957331F00A3A;
-	Thu, 13 Aug 2026 19:04:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lrb1N7ow"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE2FE1F000E9;
+	Thu, 13 Aug 2026 19:04:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786647861;
-	bh=zdw4Rd74+qNA8x6GuPjYv1FD5puUAHQOB8zlSXzCHa8=;
+	s=k20260515; t=1786647864;
+	bh=RLpJ6+l45H8Z2TiqX/1ZykVHIf9E2CfNkoBd7nKp9HM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=A/PfS4Re44iYGkRzDJC70X0w/q9Of2kPgyYaASWuInWH61oq0cT7k3nwOimB/vcuT
-	 wx4E3Gz5DjBqkKT/zs4IvWmoysokV75QGJ38wvZnkldJKP43RGen6LMuo0l0MoSEAn
-	 22UipvO78BpPSSlPNFZq+CaTDcdmZPKoCsD06KqQtRNS7uvP4G8g3pm/2Zv3niZGn+
-	 GdwaHkR63Ocw7+iPA7sTsD+a6H7bHHqf78WSCjdhpXkOxllHpb/IjU+yF3AG2j3yKj
-	 SB7NXI4jlpuv5nSKMWQEHb/LPpzULvr44zSsIkViWTxK/US/Zes8KZ4SrTUoNEF3Xb
-	 FMo8VTas3J1yg==
+	b=lrb1N7owOdEOkah8uPqHpYvVb45XO7B3j1Lwebug1DmkJb0dIOLmejiAV+xK5mPj6
+	 C045HkUIonrWbn01gZl/OO8aJNGh6TXiUSJ/u1niJzisYSm6lfobWV+VbTD+PMcTwN
+	 Ht54sCb9FH2loSWBXX87tO781Ct8EkKHRBETImSq//5hCiRbrIEgcMgKjOuFAFgFGH
+	 7e1icI8lnSEqbo7My9iySf51aCenrtO+SRg0OVRYz2cOZLXGs0pwtu+LhBFxE+quSh
+	 DMaQJZu/hMY9NBvJ4MOArBtlkav67uQLFfkIOBc7mJ/4XN910Md4iPwYmipsF5jYBG
+	 e4icpsJEBcYCw==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -41,11 +41,10 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	Mark Rutland <mark.rutland@arm.com>,
 	Will Deacon <will@kernel.org>,
 	Catalin Marinas <catalin.marinas@arm.com>,
-	Tejun Heo <tj@kernel.org>,
 	Xu Kuohai <xukuohai@huawei.com>
-Subject: [PATCH bpf-next v2 2/7] arm64: insn: Add encoder for ADD/SUB (extended register)
-Date: Thu, 13 Aug 2026 12:03:49 -0700
-Message-ID: <20260813190356.335181-3-puranjay@kernel.org>
+Subject: [PATCH bpf-next v2 3/7] bpf, arm64: JIT __arena kfunc argument rebasing
+Date: Thu, 13 Aug 2026 12:03:50 -0700
+Message-ID: <20260813190356.335181-4-puranjay@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260813190356.335181-1-puranjay@kernel.org>
 References: <20260813190356.335181-1-puranjay@kernel.org>
@@ -57,154 +56,119 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Tejun Heo <tj@kernel.org>
+Implement arena argument rebasing for kfunc calls on arm64. x28 already
+holds kern_vm_start whenever the prog has an arena, and the newly added
+extended-register add zero-extends the 32-bit arena offset in place, so
+an unconditional argument costs a single instruction emitted right
+before the call:
 
-The insn library encodes the immediate and shifted-register forms of
-ADD/SUB but not the extended-register form. The BPF JIT wants it to
-rebase a 32-bit arena offset onto the arena kernel base in a single
-instruction, add xN, xBASE, wN, uxtw, instead of a separate zero-extend
-followed by a plain add.
+  add xN, x28, wN, uxtw
 
-Add aarch64_insn_gen_add_sub_extended_reg(), modeled on the
-shifted-register generator. The option and imm3 fields occupy the same
-bits as the shifted form's shift amount, so they are encoded through the
-existing IMM_6 field type. The opt field in bits 23:22 is part of the
-opcode here rather than a shift type, and any value other than 00 is
-unallocated, so the decode masks cover it.
+A nullable argument first truncates into wN so that a zero offset leaves
+xN holding a real NULL, then tests it and jumps over the add:
 
-Note that register 31 does not mean the same thing in the two forms: in
-the extended-register encoding it is SP for Rn, and for Rd unless the
-instruction sets the flags, while it stays XZR for Rm. Callers porting a
-shifted-register site that passes A64_ZR need to be aware of that, so
-say so above the function.
+  mov wN, wN
+  cbz wN, 1f
+  add xN, x28, wN, uxtw
+1:
 
-Signed-off-by: Tejun Heo <tj@kernel.org>
+The rebase is native code generated after constant blinding has run on
+the BPF instruction stream, so blinding never sees it and needs no
+special handling. The emitted count depends only on the kfunc model, so
+it is identical across JIT passes.
+
+bpf_jit_supports_arena_args() is not flipped yet; that happens when the
+struct_ops trampoline side is in place as well.
+
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 Reviewed-by: Xu Kuohai <xukuohai@huawei.com>
 ---
- arch/arm64/include/asm/insn.h | 23 ++++++++++++++
- arch/arm64/lib/insn.c         | 60 +++++++++++++++++++++++++++++++++++
- 2 files changed, 83 insertions(+)
+ arch/arm64/net/bpf_jit.h      | 11 +++++++++
+ arch/arm64/net/bpf_jit_comp.c | 42 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 53 insertions(+)
 
-diff --git a/arch/arm64/include/asm/insn.h b/arch/arm64/include/asm/insn.h
-index cc0702fa64a79..1ce75a4426387 100644
---- a/arch/arm64/include/asm/insn.h
-+++ b/arch/arm64/include/asm/insn.h
-@@ -205,6 +205,18 @@ enum aarch64_insn_adsb_type {
- 	AARCH64_INSN_ADSB_SUB_SETFLAGS
- };
+diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
+index d13de4222cfb7..b2fe6e6dcf447 100644
+--- a/arch/arm64/net/bpf_jit.h
++++ b/arch/arm64/net/bpf_jit.h
+@@ -243,6 +243,17 @@
+ /* Rn - Rm; set condition flags */
+ #define A64_CMP(sf, Rn, Rm) A64_SUBS(sf, A64_ZR, Rn, Rm)
  
-+/* option field of add/sub (extended register) */
-+enum aarch64_insn_extend_type {
-+	AARCH64_INSN_EXTEND_UXTB,
-+	AARCH64_INSN_EXTEND_UXTH,
-+	AARCH64_INSN_EXTEND_UXTW,
-+	AARCH64_INSN_EXTEND_UXTX,
-+	AARCH64_INSN_EXTEND_SXTB,
-+	AARCH64_INSN_EXTEND_SXTH,
-+	AARCH64_INSN_EXTEND_SXTW,
-+	AARCH64_INSN_EXTEND_SXTX,
-+};
++/* Add/subtract (extended register) */
++#define A64_ADDSUB_EREG(sf, Rd, Rn, Rm, ext, shift, type) \
++	aarch64_insn_gen_add_sub_extended_reg(Rd, Rn, Rm, \
++		AARCH64_INSN_EXTEND_##ext, shift, A64_VARIANT(sf), \
++		AARCH64_INSN_ADSB_##type)
++/* Rd = Rn + (EXT(Rm) << shift) */
++#define A64_ADD_EXT(sf, Rd, Rn, Rm, ext, shift) \
++	A64_ADDSUB_EREG(sf, Rd, Rn, Rm, ext, shift, ADD)
++/* Rd = Rn + (u32)Rm */
++#define A64_ADD_UXTW(Rd, Rn, Rm) A64_ADD_EXT(1, Rd, Rn, Rm, UXTW, 0)
 +
- enum aarch64_insn_movewide_type {
- 	AARCH64_INSN_MOVEWIDE_ZERO,
- 	AARCH64_INSN_MOVEWIDE_KEEP,
-@@ -378,6 +390,10 @@ __AARCH64_INSN_FUNCS(add,	0x7F200000, 0x0B000000)
- __AARCH64_INSN_FUNCS(adds,	0x7F200000, 0x2B000000)
- __AARCH64_INSN_FUNCS(sub,	0x7F200000, 0x4B000000)
- __AARCH64_INSN_FUNCS(subs,	0x7F200000, 0x6B000000)
-+__AARCH64_INSN_FUNCS(add_ext,	0x7FE00000, 0x0B200000)
-+__AARCH64_INSN_FUNCS(adds_ext,	0x7FE00000, 0x2B200000)
-+__AARCH64_INSN_FUNCS(sub_ext,	0x7FE00000, 0x4B200000)
-+__AARCH64_INSN_FUNCS(subs_ext,	0x7FE00000, 0x6B200000)
- __AARCH64_INSN_FUNCS(madd,	0x7FE08000, 0x1B000000)
- __AARCH64_INSN_FUNCS(msub,	0x7FE08000, 0x1B008000)
- __AARCH64_INSN_FUNCS(udiv,	0x7FE0FC00, 0x1AC00800)
-@@ -637,6 +653,13 @@ u32 aarch64_insn_gen_add_sub_shifted_reg(enum aarch64_insn_register dst,
- 					 int shift,
- 					 enum aarch64_insn_variant variant,
- 					 enum aarch64_insn_adsb_type type);
-+u32 aarch64_insn_gen_add_sub_extended_reg(enum aarch64_insn_register dst,
-+					  enum aarch64_insn_register src,
-+					  enum aarch64_insn_register reg,
-+					  enum aarch64_insn_extend_type extend,
-+					  int shift,
-+					  enum aarch64_insn_variant variant,
-+					  enum aarch64_insn_adsb_type type);
- u32 aarch64_insn_gen_data1(enum aarch64_insn_register dst,
- 			   enum aarch64_insn_register src,
- 			   enum aarch64_insn_variant variant,
-diff --git a/arch/arm64/lib/insn.c b/arch/arm64/lib/insn.c
-index 37ce75f7f1f08..e70ac02385153 100644
---- a/arch/arm64/lib/insn.c
-+++ b/arch/arm64/lib/insn.c
-@@ -986,6 +986,66 @@ u32 aarch64_insn_gen_add_sub_shifted_reg(enum aarch64_insn_register dst,
- 	return aarch64_insn_encode_immediate(AARCH64_INSN_IMM_6, insn, shift);
+ /* Data-processing (1 source) */
+ #define A64_DATA1(sf, Rd, Rn, type) aarch64_insn_gen_data1(Rd, Rn, \
+ 	A64_VARIANT(sf), AARCH64_INSN_DATA1_##type)
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 7938b3422d3c4..e31490c0e331c 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -1256,6 +1256,43 @@ static void emit_stack_arg_store_imm(s32 imm, s16 bpf_off, const u8 tmp, struct
+ 	}
  }
  
 +/*
-+ * Unlike the shifted-register form, register 31 is not XZR everywhere here:
-+ * it encodes SP for @src, and for @dst too unless @type sets the flags. Only
-+ * @reg keeps the XZR meaning.
++ * Rebase the __arena args of a kfunc call to arena kernel addresses,
++ * xN = kern_vm_start + (u32)xN, with the arena base register holding
++ * kern_vm_start. A nullable arg preserves NULL by skipping the add, tested
++ * on the truncated value as arena NULL is offset 0.
 + */
-+u32 aarch64_insn_gen_add_sub_extended_reg(enum aarch64_insn_register dst,
-+					  enum aarch64_insn_register src,
-+					  enum aarch64_insn_register reg,
-+					  enum aarch64_insn_extend_type extend,
-+					  int shift,
-+					  enum aarch64_insn_variant variant,
-+					  enum aarch64_insn_adsb_type type)
++static int emit_kfunc_arena_args(struct jit_ctx *ctx, const struct bpf_insn *insn)
 +{
-+	u32 insn;
++	const u8 arena_vm_base = bpf2a64[ARENA_VM_START];
++	const struct btf_func_model *fm;
++	int i;
 +
-+	switch (type) {
-+	case AARCH64_INSN_ADSB_ADD:
-+		insn = aarch64_insn_get_add_ext_value();
-+		break;
-+	case AARCH64_INSN_ADSB_SUB:
-+		insn = aarch64_insn_get_sub_ext_value();
-+		break;
-+	case AARCH64_INSN_ADSB_ADD_SETFLAGS:
-+		insn = aarch64_insn_get_adds_ext_value();
-+		break;
-+	case AARCH64_INSN_ADSB_SUB_SETFLAGS:
-+		insn = aarch64_insn_get_subs_ext_value();
-+		break;
-+	default:
-+		pr_err("%s: unknown add/sub encoding %d\n", __func__, type);
-+		return AARCH64_BREAK_FAULT;
++	fm = bpf_jit_find_kfunc_model(ctx->prog, insn);
++	if (!fm)
++		return -EINVAL;
++
++	for (i = 0; i < min_t(int, fm->nr_args, MAX_BPF_FUNC_REG_ARGS); i++) {
++		const u8 reg = bpf2a64[BPF_REG_1 + i];
++		u8 flags = fm->arg_flags[i];
++
++		if (!(flags & BTF_FMODEL_ARENA_ARG))
++			continue;
++		if (WARN_ON_ONCE(!ctx->arena_vm_start))
++			return -EINVAL;
++
++		if (flags & BTF_FMODEL_NULLABLE_ARG) {
++			/* 32-bit mov clears the upper 32 bits */
++			emit(A64_MOV(0, reg, reg), ctx);
++			/* skip the add so that NULL stays NULL */
++			emit(A64_CBZ(0, reg, 2), ctx);
++		}
++		emit(A64_ADD_UXTW(reg, arena_vm_base, reg), ctx);
 +	}
 +
-+	switch (variant) {
-+	case AARCH64_INSN_VARIANT_32BIT:
-+		break;
-+	case AARCH64_INSN_VARIANT_64BIT:
-+		insn |= AARCH64_INSN_SF_BIT;
-+		break;
-+	default:
-+		pr_err("%s: unknown variant encoding %d\n", __func__, variant);
-+		return AARCH64_BREAK_FAULT;
-+	}
-+
-+	if (shift < 0 || shift > 4) {
-+		pr_err("%s: invalid shift encoding %d\n", __func__, shift);
-+		return AARCH64_BREAK_FAULT;
-+	}
-+
-+	insn = aarch64_insn_encode_register(AARCH64_INSN_REGTYPE_RD, insn, dst);
-+
-+	insn = aarch64_insn_encode_register(AARCH64_INSN_REGTYPE_RN, insn, src);
-+
-+	insn = aarch64_insn_encode_register(AARCH64_INSN_REGTYPE_RM, insn, reg);
-+
-+	/* option in bits [15:13] and imm3 in [12:10] together fill IMM_6 */
-+	return aarch64_insn_encode_immediate(AARCH64_INSN_IMM_6, insn,
-+					     (extend << 3) | shift);
++	return 0;
 +}
 +
- u32 aarch64_insn_gen_data1(enum aarch64_insn_register dst,
- 			   enum aarch64_insn_register src,
- 			   enum aarch64_insn_variant variant,
+ /* JITs an eBPF instruction.
+  * Returns:
+  * 0  - successfully JITed an 8-byte eBPF instruction.
+@@ -1678,6 +1715,11 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
+ 					    &func_addr, &func_addr_fixed);
+ 		if (ret < 0)
+ 			return ret;
++		if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
++			ret = emit_kfunc_arena_args(ctx, insn);
++			if (ret < 0)
++				return ret;
++		}
+ 		emit_call(func_addr, ctx);
+ 		/*
+ 		 * Call to arch_bpf_timed_may_goto() is emitted by the
 -- 
 2.53.0-Meta
 
