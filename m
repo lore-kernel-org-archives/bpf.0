@@ -1,140 +1,224 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ECB72D8370;
-	Thu, 13 Aug 2026 00:22:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C92EACD
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 00:26:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786580538; cv=none; b=r7HgcsAZ+WP+j599Fn8FJujP927tq/vtWgHtWuxDpjBTAV/5rlui9VIyfsmZs0Qb5zSnSgVTsHQcudt34XMfVMItXHRV1U5SCSUP/daFNAqavjksTEtsxsolrgdrDU1WevvBjKduXmhuA/XdQfBMkKPKfl0Lqbb7VOlebVuFlBg=
+	t=1786580796; cv=none; b=X1InZrj7iUbDdjFp4RK2T3apztPAW5i0Mwe7qu6h1sz5XKWNvUr6GRf+bd8ys5lYvpPpvLK5UIopB7xsa1H31a0byJivvT6zm34boE6D7bx/IlHB5D02ggXYb5XZwHVTyEsYy4f4YUkWBXz+gijCT/8c3WlJGq26UBaI+/UcYnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786580538; c=relaxed/simple;
-	bh=IZCtIwMgIam1NuychOS41K1ib6ff5DnZvV0sxlrpQO0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=NfRFfpDd662rub8LvxS5A3xbSb/TGBhSXHaw7Tty8Lq9KCkSZhlJfJibGfz82zfL4TxDjcomRXUlFbGRp0T/tjATqYR7TwFN25NpbKJGOC2hpjjsi63JHufpGagBmy7sjUZyPW55mf4fWQianuFD00R4WqDHYljwxXuVKY/f+3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ei2SKeKS; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786580796; c=relaxed/simple;
+	bh=qtqCBjefR6rwi0q7bGOqYffF8HYy+4dIgPVv2g7kYpY=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=tTqzt4GvoqYfFWB8KCqCSmxk++Bye05EgXxAN1Skd1cGgO3uyUj2vRfXFXTMqOyTZgEIHedhlIl470vQ86J7zd5dgD7VVwbYbWNEo47/EYHIlxyHr3rV1A7p1UBSULtnvr4k0oB+zv4kLNsUjWHKV249z9It7Yvk2kex5cSVl1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ad2bN+R9; arc=none smtp.client-ip=209.85.210.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ei2SKeKS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A2921F00A3A;
-	Thu, 13 Aug 2026 00:22:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786580537;
-	bh=DHdix0jwz+cYIxf59zyMaEXeIIOrEGcfePsOeno83wE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ei2SKeKSlExapaH0+ChZIkOruQNeIW7rI2IWTsfqde8lpz/UmdsW6eas2mscqFTsf
-	 +xN0NFjfLav/FE65AjNB0jCiMkZWlRn9N8y5s+ckk+EXBWWh+BesZFvrrDzbCDzSTn
-	 xh1ElLsqAgD2cSWIsKmjxysM50yMueW2GzUauVlK8XI/YrfEQ5CDA+LdijX805gn13
-	 Zf9GDCP2aGKxuHhOg2GK3qQI1HEyU21ocoIcb/izc4Xi9z3CKyer9dI6UAnfhnMPKL
-	 mu09FxrpxCkO7QR71asVgPcWlWImEt8zQyJ7BXQRKO9SM+ZhGwDUVAH+MDa3qdI84T
-	 E2hYxkE8rabBA==
-Content-Type: multipart/mixed; boundary="===============2442601514520147488=="
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ad2bN+R9"
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-84e375d9736so1363371b3a.2
+        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 17:26:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1786580794; x=1787185594; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:mime-version:date:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=/dfZJNnftySUH8TsJJxhZ+pr3drILFQwEYZcgIGHVgc=;
+        b=ad2bN+R9fkAh0sCv3TDgBJ+WNs7seKtAC9fMU/d4KGJvfi6vqre/jv7TEaP8b0RXLx
+         mnoW90Xym8mLgDEaOkgVSAQ6464hXQgbGhP4c9ubsERvBeTbAipi+oDDyiHWjbtJ9M+4
+         1mOss5aCrNtRQfxQritNV8D2t3KGMP51z7/HETYfGt7PgAHO5j7UvTJfpx8pnmZg8h0J
+         ReRhQtBK3w7wQ52uzNv1JMKV6myJX6v3KGLFZaf9ymkSG7JTIBSoXnywlwgZUpdwaO7j
+         xKomcYcdCNK+U2HbsyYCAPHt3G9395Q85t2Bzu7vVVGRMUB9htWl624G+hyl3RvT+eO/
+         knZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786580794; x=1787185594;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:mime-version:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=/dfZJNnftySUH8TsJJxhZ+pr3drILFQwEYZcgIGHVgc=;
+        b=NquTNeqCdqUE8i3rBtfHSC2XyixLfU7RWIXm9lktZyX2L2DC1q5cSoLhRjjjiQUypf
+         3p3c7xHg33FW/DhDzUALLg8jRt9S4Ue9ytdkttHKxYItjZ9d0digY8Nj1WJvNiSG0Ugs
+         aj0kxk6u43CWlckvIPQDwCWzLDXn4PsfuFAtoIuDA4arnT9ZMbLhr7hudMBt8KXF5xEf
+         LYpD7rdKSiNt4ay3UeEZnIN078AtZIZAH3GtxH+c4ZVZwNF4dP9/0S56a78hnRGR7TVU
+         9EmLidypa1VAQCDNc7y1wk3jYQBjuIJXI4gFNZcLvneTSC2wR5A3f/aDYyfHzBDp/iH5
+         Y9PA==
+X-Forwarded-Encrypted: i=1; AHgh+RpUddjKWJ5/VH1V5JktIrxbvIqeYWjaY4WXQ8QeRK9eIJGUk0wIT6BPI6z4U1XvJLEDB5Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwY0ua/P6SPa9xcETsz+ZaoLdyYuFxDrEeIYUTtrbrHTRFIqLmC
+	sOjqYFgN7Ny1dK/aP6kPAWJASLvO7wm5ytoEGJrpc1PbmyyhrmRtMLVCTVqMp0QKLtYQ0SNqRBf
+	cCw==
+X-Received: from pfbhm22.prod.google.com ([2002:a05:6a00:6716:b0:847:881c:7027])
+ (user=tweek job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:408e:b0:845:ce5f:c926
+ with SMTP id d2e1a72fcca58-84fc7492a05mr1951249b3a.1.1786580793920; Wed, 12
+ Aug 2026 17:26:33 -0700 (PDT)
+Date: Thu, 13 Aug 2026 10:26:13 +1000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <67d3fde7d6f3c2a8a4673c4d8e35e4250d610287f30794f42f502570a63e13cd@mail.kernel.org>
-In-Reply-To: <20260812231905.2956588-2-tjmercier@google.com>
-References: <20260812231905.2956588-2-tjmercier@google.com>
-Subject: Re: [PATCH bpf-next v4 1/2] bpf: htab: Split htab_elem_lru and htab_elem_pcpu off of htab_elem
-From: bot+bpf-ci@kernel.org
-To: tjmercier@google.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,mykyta.yatsenko5@gmail.com
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,tjmercier@google.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 13 Aug 2026 00:22:16 +0000 (UTC)
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.55.0.691.gc56d675ccc-goog
+Message-ID: <20260813002618.3755631-1-tweek@google.com>
+Subject: [PATCH bpf-next 0/5] bpf: Introduce LOADER_LOAD_FD
+From: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>
+To: Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Jeffrey Vander Stoep <jeffv@google.com>
+Cc: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Eric Suen <ericsu@linux.microsoft.com>, 
+	Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Sid Nayyar <sidnayyar@google.com>, 
+	Neill Kapron <nkapron@google.com>, Eric Biggers <ebiggers@google.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org, 
+	selinux@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============2442601514520147488==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+The bpf subsystem supports a signed-bpf infrastructure to guarantee the
+authenticity of programs [1, 2]. While this infrastructure is ideal for
+dynamic environments or enterprise deployments where untrusted binaries
+are loaded post-boot, it introduces unnecessary complexity for static
+platform use cases.
 
-> @@ -476,7 +522,7 @@ static void htab_mem_dtor(void *obj, void *ctx)
->  	if (IS_ERR_OR_NULL(hrec->record))
->  		return;
->
-> -	map_value = htab_elem_value(elem, hrec->key_size);
-> +	map_value = (void *)elem + sizeof(struct htab_elem) + round_up(hrec->key_size, 8);
->  	bpf_obj_free_fields(hrec->record, map_value);
->  }
+In the Android ecosystem, platform BPF programs reside exclusively on
+read-only partitions that are strictly verified at the block level via
+dm-verity. Because the kernel has already guaranteed the authenticity of
+the underlying file, parsing and validating a secondary signature inside
+the BPF subsystem is redundant, complex (because it requires X509 and
+PKCS#7 parsing) and necessitates introducing additional signing flows
+during build.
 
-This isn't a bug, but would it be worth storing the element header offset
-in struct htab_btf_record (next to key_size) and keeping htab_mem_dtor on
-the shared htab_elem_value() path, rather than open-coding
-sizeof(struct htab_elem) here? Everywhere else in the file the header
-size is now the per-map htab->key_offset, reached through
-htab_elem_key()/htab_elem_value(). The hardcoded form happens to be
-correct today because htab_mem_dtor is only installed for non-preallocated,
-non-percpu, non-LRU BPF_MAP_TYPE_HASH maps (LRU requires prealloc, and
-HASH_OF_MAPS uses map_check_no_btf), which is exactly the case where
-key_offset == sizeof(struct htab_elem). The invariant is invisible at the
-call site and there is no comment or assertion tying the two together, so
-the open-coded copy silently diverges from the accessor if another element
-layout ever registers this dtor.
+Furthermore, relying on signatures forces the kernel to manage a
+dedicated public key keyring. In a decentralized ecosystem comprising
+various OEMs and SoC vendors, managing these keys specifically for
+infrastructure BPF programs presents an operational hurdle.
 
-> @@ -869,17 +929,17 @@ static bool htab_lru_map_delete_node(void *arg, struct bpf_lru_node *node)
->  	struct bucket *b;
->  	int ret;
->
-> -	tgt_l = container_of(node, struct htab_elem, lru_node);
-> -	b = __select_bucket(htab, tgt_l->hash);
-> +	tgt_l = (struct htab_elem *)container_of(node, struct htab_elem_lru, lru_node);
-> +	b = __select_bucket(htab, htab_elem_hash(htab, tgt_l));
+Thanks to light skeletons, it is possible to embed the loading steps
+within a wrapping BPF program (also known as loader). In turns, the
+loading of the loader only requires a limited, well-defined number of
+steps. This series introduces the bpf command LOADER_LOAD_FD for the
+kernel to directly load an ELF file which contains a loader with its
+data. By moving the loading within the kernel, the authenticity of the
+loader and its content can be guaranteed by existing kernel mechanisms.
 
-This isn't a bug, but the commit adds htab_elem_lru_node() for the
-htab_elem to bpf_lru_node direction, while the inverse conversion stays
-open-coded and is now duplicated verbatim at two sites (line 358 in
-prealloc_lru_pop() and line 932 here), each needing an explicit
-(struct htab_elem *) cast to silence the incompatible-pointer warning.
-Would a small counterpart helper, e.g. htab_elem_from_lru_node(), keep
-both directions symmetric and confine the cast to one place?
+Kernel Modules Precedent
+------------------------
 
-Commit message issue:
+Verification of authenticity for kernel modules is supported through
+multiple options. Deployments may implement PKCS#7 signature validation
+or, alternatively, leverage the fact that finit_module(2) retrieves
+module data via kernel_read_file().
 
->     bpf: htab: Split htab_elem_lru and htab_elem_pcpu off of htab_elem
->
->     The htab_elem struct is used as the per-element type for all BPF hash
->     map types and includes bpf_lru_node in a union with a ptr_to_pptr
->     pointer. For standard (non-LRU, non-PCPU) hash maps, the 24 byte union
->     allocated for every element is entirely unused. For non-preallocated
->     PCPU maps, ptr_to_pptr only requires 8 bytes, leaving 16 bytes of unused
->     overhead in the union. For preallocated PCPU maps ptr_to_pptr is unused
->     since elements are freed to the PCPU freelist.
->
->     Eliminate this per-element memory overhead by splitting htab_elem into
->     dedicated structures for each map type:
->        - struct htab_elem: Minimal structure for standard hash maps and
->          preallocated PCPU maps (saves 24 bytes per element).
->        - struct htab_elem_pcpu: Structure for non-preallocated PCPU maps
->          containing ptr_to_pptr (saves 16 bytes per element).
->        - struct htab_elem_lru: Retains struct bpf_lru_node for LRU maps.
->
->     Because element sizes now vary by map type, add key_offset to struct
->     bpf_htab to track the dynamic key offset. Update helper accessors and
->     lookups to compute key and value offsets using htab->key_offset.
->
->     Pointers to struct htab_elem in the existing code (e.g. htab_elem_hash)
->     serve as generic base element pointers. This is possible because
->     htab_elem, htab_elem_pcpu, and htab_elem_lru share a common initial
->     sequence, making pointer casts safe.
+Android utilizes this latter method for kernel module verification. By
+integrating kernel_read_file() with LSM hooks, security policies can
+ensure that any loaded module is sourced from a read-only partition
+protected by dm-verity, and therefore trusted.
 
-This isn't a bug, but could the changelog gain a paragraph on the
-map_in_map.c side? The patch also touches kernel/bpf/map_in_map.c and
-kernel/bpf/map_in_map.h: it adds bpf_map_type_is_htab(), grows
-inner_map_meta to sizeof(struct bpf_htab) via the new
-bpf_htab_map_meta_size(), and copies key_offset into the meta map with the
-new bpf_htab_map_meta_init(). That part is the non-obvious
-correctness-critical consequence of making the key offset a runtime field,
-since the verifier's inlined lookups read the offset out of the
-inner_map_meta. A reviewer looking at the diff would most benefit from an
-explanation of why inner_map_meta must now be sizeof(struct bpf_htab) and
-have key_offset copied. Also, the sentence about making pointer casts safe
-mentions the common initial sequence but doesn't name which casts rely on
-it (htab_elem_lru_node(), htab_elem_get_ptr_to_pptr(),
-htab_elem_set_ptr_to_pptr()).
+This patch series adopts a similar design for BPF by introducing the
+READING_BPF_LOADER constant to the kernel_read_file() enumeration.
 
+The availability of multiple verification paths for kernel modules
+reflects the diverse requirements of different environments. Providing
+analogous options for the BPF subsystem maintains consistency with this
+established kernel precedent.
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+This proposal again?
+--------------------
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31651309438
---===============2442601514520147488==--
+Similar approaches were proposed in the past [3, 4]. There are
+differences that make this proposal worth sharing. Namely, the loading
+relies on light skeletons for the heavy lifting. It means that the UAPI
+exposed by the kernel is limited: one file descriptor of an ELF with 3
+sections; and an opaque context. It also means that the processing done
+by the kernel is limited: the majority of the code in this patchset is
+doing basic ELF validation and calling the BPF interface that is already
+exposed to the rest of the kernel (kern_sys_bpf).=20
+
+Design
+------
+
+The BPF_LOADER_LOAD_FD command provides a method for the kernel to load
+and set up BPF programs and maps directly from an ELF file, guaranteeing
+the authenticity of the loaded objects.
+
+It builds upon the light skeleton approach which transfers the loading
+logic (i.e., CO-RE, BTF parsing, etc) to a wrapping BPF program (called
+loader), generated by libbpf. By relying on these, it is possible to
+drastically reduce the expectations on the kernel interface that needs
+to be declared and supported.
+
+When loading a light skeleton, libbpf performs 4 actions:
+  1. Create a map array.
+  2. Populate the map array with the light skeleton=E2=80=99s data.
+  3. Load the light skeleton program.
+  4. Execute the light skeleton program.
+These exact same steps are implemented in LOADER_LOAD_FD.
+
+This new command takes a file descriptor and a context. The file
+descriptor is expected to refer to an ELF file which contains 3
+sections: __loader.prog, __loader.map and license. These sections are
+used as-is in the steps above. The context is passed directly to
+BPF_PROG_TEST_RUN. In the current libbpf implementation, that context
+contains the file descriptors to the programs and maps that have been
+created by the loader (for further processing by userland, such as
+pinning). This context is opaque to the kernel in BPF_LOADER_LOAD_FD.
+
+Compared to previous approaches [3] and because this approach relies on
+light skeletons, only basic processing is done by the kernel when
+loading the programs. CO-RE or BTF are explicitly not supported as these
+are handled by the light skeleton loader.
+
+This series also includes the corresponding SELinux changes. Namely, a
+new loader_load_fd permission is added to gate the use of the syscall.
+It can be used to guarantee that any userspace caller migrates to this
+new command instead of the existing BPF_PROG_LOAD. Another permission,
+named bpf_load is added to the system class. This permission can be used
+to restrict the file allowed to be loaded. Effectively, these
+permissions can be used to guarantee that the kernel loads BPF programs
+originating from known locations only.
+
+Notes
+-----
+
+- There are some limited duplications of the ELF validation between this
+  patchset and the existing kernel module loading logic. This can be
+  refactored.
+- ELF was picked as a container for the loader=E2=80=99s instructions and m=
+ap.
+  There are very few expectations on the ELF, it is mainly a container
+  for these opaque bytes.
+
+References
+----------
+
+[1] https://lore.kernel.org/bpf/20250921160120.9711-1-kpsingh@kernel.org/
+[2] https://lore.kernel.org/bpf/20260708075343.358712-1-daniel@iogearbox.ne=
+t/
+[3] https://lore.kernel.org/bpf/20250109214617.485144-1-bboscaccy@linux.mic=
+rosoft.com/
+[4] https://bpfconf.ebpf.io/bpfconf2024/bpfconf2024_material/LSFMMBPF24_kap=
+ron_verified_boot.pdf
+
+Thi=C3=A9baud Weksteen (5):
+  fs/kernel_read_file,selinux: Add BPF_LOADER constant
+  bpf: Introduce BPF_LOADER_LOAD_FD command
+  selinux: use kernel sid in security_bpf_*
+  selinux: Add BPF_LOADER_LOAD_FD syscall permission
+  selftests/bpf: add loader_load_fd tests
+
+ include/linux/kernel_read_file.h              |   1 +
+ include/uapi/linux/bpf.h                      |   7 +
+ kernel/bpf/syscall.c                          | 341 ++++++++++++++++-
+ security/selinux/hooks.c                      |  22 +-
+ security/selinux/include/classmap.h           |   4 +-
+ tools/include/uapi/linux/bpf.h                |   7 +
+ tools/testing/selftests/bpf/Makefile          |   8 +-
+ tools/testing/selftests/bpf/loader_setup.sh   |  68 ++++
+ .../selftests/bpf/prog_tests/loader_load_fd.c | 361 ++++++++++++++++++
+ .../testing/selftests/bpf/progs/test_loader.c |  21 +
+ 10 files changed, 824 insertions(+), 16 deletions(-)
+ create mode 100755 tools/testing/selftests/bpf/loader_setup.sh
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/loader_load_fd.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_loader.c
+
+--=20
+2.55.0.691.gc56d675ccc-goog
+
