@@ -1,118 +1,68 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDE3C48EBC1;
-	Thu, 13 Aug 2026 16:26:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C1148CD47;
+	Thu, 13 Aug 2026 16:26:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786638371; cv=none; b=FB0EsKlMtK7yaDnIOC5m6Yt8ooYjld0OhkOWM1dI2RwBOrvX5mdJb3GSGmPcbBnQpIWfGa717+CS9CNqwdPXQLYq8Mql+kEJ1IsDhRhX69K5MYbIV0r8EZCQtQoKsELqgji/dUcwvPy4Q5w/018sK89/aSpJQPhqm8W3IY9N48k=
+	t=1786638379; cv=none; b=FRQ+2/EHo+eselomqoAsnylQfIyWyHVcCuoLUSaX9dzSzlbTt1LuU/mv478GXL1L3d7rL8epbg4R99vO/py74oJSGGIrz5u6xOaKM16sWX603gYZkQPJvuvZKtP1B874ATF8fa5F+vrUHETaaLqRO+DjUXQz4cmCOmBKMj/hleM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786638371; c=relaxed/simple;
-	bh=Lax2qZ9GB1r4BaQe+F2w3PBCHGlHlV9qaBK786jRFe4=;
+	s=arc-20240116; t=1786638379; c=relaxed/simple;
+	bh=uB5s1jQ3hiFuQFX0vrBKBDHwWCQSVzTK5nq5aXRLYbg=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WbcGlEzaul12WqKDcq5DDFGPnETP6tmJl1FD39+msb8jwhnEeLpWvbnO2Yh++UT4Iw338RDiDgcWa+yOQLATblbI1dowpLrmDLmXIsg3yHrvLyqwk+ku0jNm8LjgrMBAFyp486rzM2a+pw5iFHCQFR/g/Qe5UK3B89mVBg0P3fA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MSr8j35B; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=TgY4IT33wtLYVzB8vBD06XjV7r+Y0NA9HmrWYvE2hFwcvtKqoNTN4KBcAn1kvANshC6s9eBBCwxtE0I4lbO2KR8nShbWlI17cuCV/nbDFzp7w0IitrV1W/lmlWMCoddkokQqE47zzOTZWB1M+4Bx3yOlcwJx7bKj3mFEObbYIwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MkLSpAzM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MSr8j35B"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3DC81F00A3A;
-	Thu, 13 Aug 2026 16:26:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MkLSpAzM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B57ED1F000E9;
+	Thu, 13 Aug 2026 16:26:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786638368;
-	bh=hOTAX7fdd3rZcAVWKYZHC50W+Bb3qZRONDBbaZeiuIw=;
+	s=k20260515; t=1786638375;
+	bh=uB5s1jQ3hiFuQFX0vrBKBDHwWCQSVzTK5nq5aXRLYbg=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=MSr8j35BjFMcX4ddLYOOuM+/4jBHssj9Z16BZrX90lJyGCNRABhaiGEwNhQZjoui6
-	 LGvGMWcbMx3c5c0iL4be2gKLT2+KoorBmPJJMPM/tQI9Tlyvpcgb9ufwTIyGwrsozC
-	 JriVlQnvPPDmtUxa0NRDuxZ41O/ZkEiPaURNiNrs46vV//HdnGyewm8zU2bLh4BFpi
-	 bV1KicdD0LS0bM0MsIhRTAvbtIbgQDg6qrb9W0+KL979g4RPuy1W/B2DsXQqJaLLTI
-	 qB9ezMOBHhgHnTxbw5p+goGsaXfRfXNDWPQGP0+CB6n/9qEzYka0jarUDFj4UGMaSn
-	 aHH93cvDJQX/g==
-Content-Type: multipart/mixed; boundary="===============3463485423944060497=="
+	b=MkLSpAzMxc3JlGi9OjgaJ0EZKy2i4Vztl1FVOurafU5Yxc9JxMfJORX0Ieo8KQ3Aa
+	 BY6KKY9GPQjDBmsw+5qZOsO1vjNjw5FM3Yoi28h5E0vWHnnRDOYRiUWzAQ+Q9MHqfk
+	 5uC1Paim3k41NudwjT9QWQHhXuWyj7t2YsotwmQrMzimWOWAPn4f+o5DIw6v3B9yPw
+	 cgvgcG85hGOhGlOuz0L8vqqBV/AZNIDdIYeS0a2z3Y9mjU9q12oSw6Mq6Ar2UTZyto
+	 t6sfNhdagm7SuFGbwTnA2r74MXaioZn78k34MvuQqKnRqcr6ch6gbNufZtWij8R9yp
+	 I2h8BqRs3umsg==
+Content-Type: multipart/mixed; boundary="===============5959896170807582759=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <00f7d1a28671561d7ef689774af280b7aff3c6a0f9ca06212b05df2002f2793d@mail.kernel.org>
-In-Reply-To: <20260813152324.97937-2-leon.hwang@linux.dev>
-References: <20260813152324.97937-2-leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next v12 01/10] bpf: Drop duplicate blank lines in kernel/bpf/
+Message-Id: <c235a89df142e86e70f38a91acc5c3ec9e64cba2ae7539df9696150bf8ea3d66@mail.kernel.org>
+In-Reply-To: <20260813152324.97937-3-leon.hwang@linux.dev>
+References: <20260813152324.97937-3-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next v12 02/10] bpf: Factor out check_map_mem_read helper in verifier
 From: bot+bpf-ci@kernel.org
 To: leon.hwang@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,john.fastabend@gmail.com,qmo@kernel.org,shuah@kernel.org,leon.hwang@linux.dev,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 13 Aug 2026 16:26:07 +0000 (UTC)
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,john.fastabend@gmail.com,qmo@kernel.org,shuah@kernel.org,leon.hwang@linux.dev,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 13 Aug 2026 16:26:14 +0000 (UTC)
 
---===============3463485423944060497==
+--===============5959896170807582759==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
-> index 40bd04421a991..a2b18a9f1694c 100644
-> --- a/kernel/bpf/backtrack.c
-> +++ b/kernel/bpf/backtrack.c
-> @@ -214,7 +214,6 @@ static inline bool bt_is_reg_set(struct backtrack_state *bt, u32 reg)
->  	return bt->reg_masks[bt->frame] & (1 << reg);
->  }
->
-> -
->  /* format registers bitmask, e.g., "r0,r2,r4" for 0x15 mask */
->  static void fmt_reg_mask(char *buf, ssize_t buf_sz, u32 reg_mask)
->  {
+> In the next commit, percpu_array map will add map_direct_value_addr
+> support.
+> IOW, it will add a map_type check in the iff condition of the
+> bpf_map_direct_read() code block, which will reduce the code block
+> readability.
+> Hence, factor out check_map_mem_read helper to improve the readability,
+> and the maintainability for the percpu_array map case.
 
-[ ... ]
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 164d16c243ca6..cdb79a66b156f 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -635,7 +635,6 @@ static void __mark_dynptr_reg(struct bpf_reg_state *reg,
->  			      enum bpf_dynptr_type type,
->  			      bool first_slot, int id, int parent_id);
->
-> -
->  static void mark_dynptr_stack_regs(struct bpf_verifier_env *env,
->  				   struct bpf_reg_state *sreg1,
->  				   struct bpf_reg_state *sreg2,
-
-[ ... ]
-
-> @@ -18361,8 +18352,6 @@ static void release_insn_arrays(struct bpf_verifier_env *env)
->  		bpf_insn_array_release(env->insn_array_maps[i]);
->  }
->
-> -
-> -
->  /* The verifier does more data flow analysis than llvm and will not
->   * explore branches that are dead at run time. Malicious programs can
->   * have dead code too. Therefore replace all dead at-run-time code
-> @@ -18390,8 +18379,6 @@ static void sanitize_dead_code(struct bpf_verifier_env *env)
->  	}
->  }
->
-> -
-> -
->  static void free_states(struct bpf_verifier_env *env)
->  {
->  	struct bpf_verifier_state_list *sl;
-
-This isn't a bug, but it looks like one adjacent blank-line pair is still
-left in verifier.c. Inside the kfunc argument loop in check_kfunc_args(),
-around the code that checks:
-
-	if (bpf_register_is_null(reg) && type_may_be_null(kf_arg_type))
-
-there's a blank line pair that appears to fit the same pattern this patch
-removes everywhere else. The changelog states the goal is to drop the
-adjacent blank lines that have accumulated over time, and the patch removes
-30 blank lines across the directory, but this one instance seems to have
-been overlooked. Was that one intentionally kept, or could it be folded
-into this patch so the whole directory is done in one pass?
-
+This isn't a bug, but did 'the iff condition' mean 'the if condition'
+guarding the bpf_map_direct_read() call? And since this looks like a pure
+code motion, would it be worth adding a 'No functional change intended.'
+line so reviewers know what to expect?
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31716447858
---===============3463485423944060497==--
+--===============5959896170807582759==--
