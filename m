@@ -1,66 +1,66 @@
-Received: from mail-wm2-f7.google.com (mail-wm2-f7.google.com [74.125.225.135])
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C1926ED3E
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 02:37:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.135
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7292F344D9B
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 03:26:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786588668; cv=none; b=j9KngWM8fZAcvOyRVByN4vl/8dYHXo7hPl5h7MDZLXYQQ0i4IJFHDlOFYz/v7VMV6DqTn8f58ojoeR+aUmzKHhJUWV7wTKI/gBLP3SqARn9a+MaI+1SDNz224ZCGE6TMjJ979Nl96c4Kp8g4Ryt9c3InHWFXX6Bqw5tgiyHLLQU=
+	t=1786591592; cv=none; b=CJI2gBHZnsWxQQLO0wqXkQnCZsSPWBXLVzqqURqLtnd1bFqXVqZzylVlTZV8CPocb/wesmPCa4m8Vm3ie2kNJCJ6YQtzV7ziNacDh5DmIsUzjudfExaVZSKIqNgObWzd9e7Igh91reU3bmQPC6fDugBV/5+Hta6Z9fx2IjBB/NY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786588668; c=relaxed/simple;
-	bh=Cp/7r3UqGsO/nzKRlaWKpWO+vM+tfG8GSAcYl45XzRk=;
+	s=arc-20240116; t=1786591592; c=relaxed/simple;
+	bh=X0pHP4S2OsRNcX4/HbKprcP2h56QDiwvZLsJATuwvS4=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=DuNYoJpnCJ0s1P11vdxuse8WpLS5lfI1Feb3dqQtjLrr6+uud1t+xYRFXQNM5rJKhMjr2JE4/o6e8BLhM4tBNoamDBnsjYzzRY0Eod0Tb3B6zT1cgfmhrpt2pKTtbFfeN5rKcW3Sb8aEQuOmFPgf08qLgNWw/fd33CFdmYPGcSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ea3y0Uxc; arc=none smtp.client-ip=74.125.225.135
+	 References:In-Reply-To; b=gMLT8nbNbcluAkKcrHzrb6E85zjBO1SdTCJe0Xe9HGfnzUJBRDy3GEWxQjweVTsxTPtrK+Kh+/Z0rEjpbUVyi4GDJDpLDfOMAcxJGH3zqTg/NcazlFokaceeWYZ/ifOmYvLLtxDlZyzz4431UZmMveg7Y0uuFIXc8s5UvJ6R0Ww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OyGzc+CZ; arc=none smtp.client-ip=74.125.225.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ea3y0Uxc"
-Received: by mail-wm2-f7.google.com with SMTP id 5b1f17b1804b1-498079e98beso3613025e9.1
-        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 19:37:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OyGzc+CZ"
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49556ce3549so6598055e9.0
+        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 20:26:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786588665; x=1787193465; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786591589; x=1787196389; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=Cp/7r3UqGsO/nzKRlaWKpWO+vM+tfG8GSAcYl45XzRk=;
-        b=Ea3y0Uxc3YytxauolBWgCKKYF4jq7xX4raO+F4/wSIMC1BXmwfqGDumP1wdLQM8Y9Q
-         OL9s7wXL4K6ygZMzksGLa/LCqPy0YDrtAzfKmCyIc6qYt/kT5RgbkA8cnVkPr2MDepOD
-         ilVdjBvsLPlcGFGkRJWyQkiPgfv9Z9C4z6xNWWCgT62JfPXBa3Jk/dCoaNol/nNXwJP9
-         atR4RSQQBcTNewD6xtWWSKgLpyJrMWRaYPF0ICuamWrW3rbJIX0/DleCk2doE6RjZrYs
-         vt1wfElE4qVzDM77fy4crHKyfiD3ETRXs+gzRRBVTkFz60cZ/SfbvUS0aQIEa/lNX+6j
-         vpvQ==
+        bh=glE18fTWGFGOtieGZ/t9cUibr9Ip5396IdYy4itNJLM=;
+        b=OyGzc+CZYyaigbVJVAELJ3hPfH3bFkcydqDPyzVpDTLspUl9dMB92tfymlwohqKazP
+         Ug4Yd+yHsVtYxlyNDZHc5WvTq8zmOtRitcivDH++cQDCss766gKdtsbTOExoUDZ+Gp2i
+         Mus2HK92AsvmSLPg0i0A1PEhW6M5oJnqFfO/pSc6E68EoWe8mNaQPiyfRMgEeXWYbHoA
+         JfZAkzOb3JMI9H+VUUvKNWw63ss7uMtCTNMu4vxzwDvCweoJFD0Wn5s2wUGn7idjv9Vk
+         BWWwX2VqK/c+Jyv/qvVUWxj38c5KILmrhF4Q2QiqbyQDZMn9oWY4TsvgO+9wqT7lDTbz
+         KD6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786588665; x=1787193465;
+        d=1e100.net; s=20251104; t=1786591589; x=1787196389;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Cp/7r3UqGsO/nzKRlaWKpWO+vM+tfG8GSAcYl45XzRk=;
-        b=d8xnNKwka4gRJpfb3+LbNVTuocygY3vHpoahWsDyowr7yKZusO12LryZaEO2xI4R1Y
-         ChYlDUqUGEfshISa8FTqzvk2gXS64342LUgipMijgxnDb06dssZ8sDD3jYQhnaog/sPz
-         h1DBCPQN2AjlxH+4Ht5Y/EkB2N3eCTujXgJ5rKpCvZ2++axsxJp9xnqTbAnXVgwJsSyD
-         y8I2pKdW4LK5i4eEjE37/zFvmhb0nTnHnGEVYBU7cSqAVT9uHjknj5jaAbrIw+YW1RY4
-         NTTGcGFDp+rOsZxBGTEB2pF5SELbdMIgHfzdMTSvj+f7vXz1HjA/f6l7H1DzUJxAAkju
-         ryGQ==
-X-Forwarded-Encrypted: i=1; AHgh+RphVFjGpZk5dbABv/kA3QtuGB9OVj9vKuDOECbF38Ip6PQFFEtCv+07A0ZQGjUH6tv7FGs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjL3LndXsX1s0miAHu10z6cAN5iXqygYo5Eu27B0ZH0q+MPGra
-	/PjvreerVpsOPlH34yMMQAw6qEYSFQzN3AChyNVvHZosnoqPTwGARN1v
-X-Gm-Gg: AR+sD122A1k/V1fhCM0ZP7VfofeckDA/D5GXWLXhw3O77daHVog4NN52FL3rjpE83M0
-	WSYPbMCWClzhcu0OrDH9INlfEgrX6G9w6ixChDA4R3QLYKwqfA0Tb/EmDk9w7UbVeDAZ8HWs750
-	81xEi8DaLka/H0znDG1gTdBcgqAkz1A/ryej+MMdkro0GxpTVa7yfJL9TtIPBaHyN98amYe8vA4
-	PIvrE8xPl3C1ZZ6btbUZb/oQxuPTiOK6n3pjlQnmTKGh9nCv4DzsxV8Cdan33llOuUTDy0dlP+f
-	pgDNjdVG05x+zTDn4ncHciLziInurCYZ/zKH2RX/TD8kcMG6f0LENykDqfI5/5qT4QB53pRcNs4
-	mDieEWGOfiOuN4QiedRsJDIREZnlPDCJPwJCa6LFsMjBAkpd6Ne7Bosm5dYx3Lxio+Pd3rVB5JE
-	tyaPYzyWBpg/2nYKpOQXvCCco4bnMWNG5ewlWt5GmiLWRFipjWdt4/or8caMhBb5mEUKqgh2RKL
-	sTpbErOost55pAeYTqoL1jfrndi9sZHG3Uao53hoWcWZ2jWN2XbwZRoePCu016wFXGLGoRWeuR4
-	hN7LA9rTw/6uN0AIyOXf0fneFOw=
-X-Received: by 2002:a05:6000:2505:b0:47f:e797:41c8 with SMTP id ffacd0b85a97d-48159ca5d62mr2939768f8f.4.1786588664987;
-        Wed, 12 Aug 2026 19:37:44 -0700 (PDT)
+        bh=glE18fTWGFGOtieGZ/t9cUibr9Ip5396IdYy4itNJLM=;
+        b=ONYAV31KqteOcbj6Bq+vm86yNqDevTMlKYfLg4SaekqbZTi0A5wHxnQlPn70WtV5X3
+         X9jCCmFKeazs2ezphUMqSfgMgZ0c9pXhxd8ah34iEyKUbkwJOxrOe5zhIfCw69Qbfj/K
+         76EmnBP+TkaOoWYojDwQR+ziGF9UK2J/YBwRYfPQlAwnjrmDJlIhGjbXCdbBVZeNS2vv
+         jTvTJnlMLVm4wmw8AiWAlJdpMc4SnWg3RQvB5N7OS/bJClOFPKjhjZK8Q3hQzGeAcg48
+         l2kaNFouuNlSI9AZ5Fi0y/Pq7dvl9zUoo7Wi9XFlVwHRtT99n3ZibL5Ps2XHjDEshaHC
+         kSRg==
+X-Forwarded-Encrypted: i=1; AHgh+Rp6zeJ92wwTLl2LAa4LOP1PhvUdjxl080EmINUzfeYMzpFrxT4t9ur7x8SMTVhpxeh7bjk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNgKUQOoRbeX+MmDmavHecQwU9klMwv3DAohwElwuV2O/1Jf5D
+	76fYHWZ3SGRQdkQ+ARhRQImFlNBd8B7w9fc1BfqL+Ki8LR+hxBwpoRNZ
+X-Gm-Gg: AR+sD11bvKA+m12cK8GfUjm5kS3cDqG8/rmW4p/HgrOjTQN+nmfq6pw+qecCYYOGvYJ
+	tHbFxCkg7Egc9xDW2S4x7LfZkvMKxXLkTif0J3vlTSnc4PrlcxRdb9jNg84O/6eM6aGwOtRLS8j
+	s3290HPKvWMuVvN1cBisJVKQ3B510IvP/MInP6VsfP/2B4jrYUbR4nQ5RuePaZJn/9uzKQYVn3X
+	OgJwbqwIZlUthRAACCPOKraI1szi1NTa1cP3ZdxWi6s4jMSh+SsfoTCK9CYqvMUM8W/obzKa9v0
+	n3ks8E2ZPefBLQww65cIUSML1lDnxIfNMXXJzt5ASzh/h1yy8aEILtg8j9VdD1F3aAVMNuos4Lk
+	1oKh5lvNpcdKYx1Jm52lQ64ttZ4FUBw1/Cjq+hA9gbZHZ2VX3lRJVKdP+9vPBa7mPYrHflRCo0I
+	okSLRX9jPVV7WnetDXFiSpzMsxuUMeiltYX8ynqbNEIY6jN0YBa8dA0HphiO8hvW55Emk6hxjnc
+	JYUZr4lLFyJiQ1vslte/5qdupzXR/JfgJOSvyZZo3wAibNOZ1vP8a+HwWlwPlKwL0MM8V56ogjx
+	TILI3hEbxbMG2QpKBBwVcBMMdL9w6Z4mbsHXuw==
+X-Received: by 2002:adf:e008:0:10b0:481:5167:d526 with SMTP id ffacd0b85a97d-48159c8d9f8mr2408652f8f.6.1786591588609;
+        Wed, 12 Aug 2026 20:26:28 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815a5b6616sm2217698f8f.25.2026.08.12.19.37.44
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815a569ab3sm2609540f8f.11.2026.08.12.20.26.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Aug 2026 19:37:44 -0700 (PDT)
+        Wed, 12 Aug 2026 20:26:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,52 +69,155 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 13 Aug 2026 04:37:43 +0200
-Message-Id: <DKNGTPM2RNL9.2E66H1VIT9RW9@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Anton Protopopov" <a.s.protopopov@gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Eliminate dup/restore of
- insn_aux_data
+Date: Thu, 13 Aug 2026 05:26:26 +0200
+Message-Id: <DKNHV09PBQZP.IRQL20BY574I@gmail.com>
+Cc: "Hui Zhu" <zhuhui@kylinos.cn>
+Subject: Re: [PATCH bpf-next 2/4] bpf: add bpf_thread_wq kthread-backed
+ workqueue with cgroup placement
 From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Eduard Zingerman" <eddyz87@gmail.com>, "Xu Kuohai"
- <xukuohai@huaweicloud.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
+To: "Hui Zhu" <hui.zhu@linux.dev>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
+ "Jiri Olsa" <jolsa@kernel.org>, "Johannes Weiner" <hannes@cmpxchg.org>,
+ "Michal Hocko" <mhocko@kernel.org>, "Roman Gushchin"
+ <roman.gushchin@linux.dev>, "Shakeel Butt" <shakeel.butt@linux.dev>,
+ "Muchun Song" <muchun.song@linux.dev>, "JP Kobryn"
+ <inwardvessel@gmail.com>, "Andrew Morton" <akpm@linux-foundation.org>,
+ "Shuah Khan" <shuah@kernel.org>, <davem@davemloft.net>, "Jakub Kicinski"
+ <kuba@kernel.org>, "Jesper Dangaard Brouer" <hawk@kernel.org>, "Stanislav
+ Fomichev" <sdf@fomichev.me>, "KP Singh" <kpsingh@kernel.org>, "Tao Chen"
+ <chen.dylane@linux.dev>, "Mykyta Yatsenko" <yatsenko@meta.com>, "Leon
+ Hwang" <leon.hwang@linux.dev>, "Anton Protopopov"
+ <a.s.protopopov@gmail.com>, "Amery Hung" <ameryhung@gmail.com>, "Tobias
+ Klauser" <tklauser@distanz.ch>, "Eyal Birger" <eyal.birger@gmail.com>,
+ "Rong Tao" <rongtao@cestc.cn>, "Hao Luo" <haoluo@google.com>, "Peter
+ Zijlstra" <peterz@infradead.org>, "Miguel Ojeda" <ojeda@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>, "Kees Cook" <kees@kernel.org>,
+ "Tejun Heo" <tj@kernel.org>, "Jeff Xu" <jeffxu@chromium.org>,
+ <mkoutny@suse.com>, "Jan Hendrik Farr" <kernel@jfarr.cc>, "Christian
+ Brauner" <brauner@kernel.org>, "Randy Dunlap" <rdunlap@infradead.org>,
+ "Brian Gerst" <brgerst@gmail.com>, "Masahiro Yamada"
+ <masahiroy@kernel.org>, "Willem de Bruijn" <willemb@google.com>, "Jason
+ Xing" <kerneljasonxing@gmail.com>, "Paul Chaignon"
+ <paul.chaignon@gmail.com>, "Lance Yang" <lance.yang@linux.dev>, "Jiayuan
+ Chen" <jiayuan.chen@linux.dev>, "Emil Tsalapatis" <emil@etsalapatis.com>,
+ "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Barry Song"
+ <baohua@kernel.org>, "Geliang Tang" <geliang@kernel.org>,
+ <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+ <cgroups@vger.kernel.org>, <linux-mm@kvack.org>, <netdev@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
 X-Mailer: aerc 0.21.0
-References: <cover.1785240296.git.xukuohai@huawei.com>
- <5a4528f019c8d2638c019a2f37475cccc16a9503.1785240296.git.xukuohai@huawei.com> <96eceba605b2cb7e93b3e33abf545a02c4eeb1cd.camel@gmail.com>
-In-Reply-To: <96eceba605b2cb7e93b3e33abf545a02c4eeb1cd.camel@gmail.com>
+References: <cover.1786086076.git.zhuhui@kylinos.cn>
+ <cfb06f2626062fa60efbbd9d34089819b1a34522.1786086076.git.zhuhui@kylinos.cn>
+In-Reply-To: <cfb06f2626062fa60efbbd9d34089819b1a34522.1786086076.git.zhuhui@kylinos.cn>
 
-On Mon Aug 10, 2026 at 11:17 PM CEST, Eduard Zingerman wrote:
-> On Tue, 2026-07-28 at 20:25 +0000, Xu Kuohai wrote:
->> From: Xu Kuohai <xukuohai@huawei.com>
->>
->> The dup/restore of insn_aux_data was introduced to resolve the
->> inconsistency between insnsi and insn_aux_data arrays, which occurs
->> on the failure path where insnsi was rolled back to the original
->> state before constants blinding, while insn_aux_data was not.
->>
->> After JIT failure, there is only one user, bpf_clear_insn_aux_data(),
->> that requires insnsi and insn_aux_data to be synchronized. It accesses
->> both insnsi and insn_aux_data using the same array size and index.
->>
->> However, the access to insnsi in bpf_clear_insn_aux_data() is not
->> necessary. It is checked to skip the second slot of an ldimm64 instructi=
-on,
->> whose jt is never set and can be absorbed into the jt check itself.
->>
->> So remove the access to insnsi from bpf_clear_insn_aux_data(), and add a
->> specific length field for insn_aux_data to allow it to have a different
->> length from the insnsi array. Then remove dup/restore of insn_aux_data.
->>
->> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
->> ---
+On Fri Aug 7, 2026 at 9:01 AM CEST, Hui Zhu wrote:
+> From: Hui Zhu <zhuhui@kylinos.cn>
 >
-> Hi Xu, sorry for the delayed response, the patch lgtm.
+> Introduce bpf_thread_wq, a new BPF embedded map field similar to
+> bpf_wq but backed by a dedicated kthread_worker instead of a system
+> workqueue. The worker kthread can be attached to a specific cgroup at
+> init time so BPF-deferred callbacks run under the resource limits of
+> the target cgroup.
 >
-> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+> Three kfuncs are exposed:
+>   bpf_thread_wq_init(twq, map, cgroup_id, flags)   [KF_SLEEPABLE]
+>   bpf_thread_wq_set_callback(twq, cb, flags, aux)
+>   bpf_thread_wq_start(twq, flags)
 >
-> ...
+> bpf_thread_wq_init() is registered only for BPF_PROG_TYPE_SYSCALL
+> programs. It creates a kthread worker and may attach it to a cgroup;
+> those paths can sleep and acquire kthread and cgroup locks. Restricting
+> init to syscall programs prevents it from running in BPF contexts that
+> may already hold locks which could deadlock with those paths.
+>
+> bpf_thread_wq intentionally avoids the bpf_async infrastructure used by
+> bpf_timer and bpf_wq. That infrastructure drives cleanup from irq_work
+> in hardirq context, while bpf_thread_wq cancellation and final teardown
+> may need to sleep through kthread_cancel_work_sync(),
+> kthread_destroy_worker() and a final cgroup_put().
+> bpf_thread_wq_cancel_and_free() therefore cancels work synchronously and
+> drops the context reference; the last put waits for tasks-trace RCU
+> readers and then schedules process-context work to run bpf_prog_put(),
+> cgroup_put(), kthread_destroy_worker() and kfree().
+>
+> Add BTF/map support for bpf_thread_wq fields, map teardown hooks,
+> verifier handling for the callback kfunc, and cgroup_kthread_attach() to
+> move the worker into the requested cgroup.
+>
+> Supported map types are BPF_MAP_TYPE_HASH, BPF_MAP_TYPE_LRU_HASH, and
+> BPF_MAP_TYPE_ARRAY, consistent with bpf_wq and bpf_task_work.
+>
+> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+> ---
 
-I applied this one for now, thanks.
+Hi Hui,
+
+Thanks for sharing the patches. I think Sashiko and Mykyta already pointed =
+out a
+couple of issues with the current implementation, but I would like to comme=
+nt on
+the higher-level approach.
+
+If I understood the past discussions and current set correctly, the reason =
+for
+your choice to move from bpf_wq to bpf_thread_wq was primarily to enable co=
+rrect
+CPU accounting of the work done by threads to specific cgroups.
+
+I think this is a step in the right direction, but looking at the bigger
+picture, I feel we need a more flexible solution.
+
+In practice, users deciding to do async reclaim through such a BPF interfac=
+e
+would want to scale and compact the number of threads doing reclaim-related=
+ work
+dynamically, based on available idle resources, but also application-specif=
+ic
+metrics, and I do not think the bpf_thread_wq abstraction provides enough
+flexibility in managing work scheduling related aspects precisely.
+
+What we probably should expose is the ability for programs to manage their =
+own
+wait queues and subscribe kthreads managed by BPF programs dynamically to t=
+hem.
+User-defined policies can dictate how many threads remain active, whether t=
+hey
+busy poll, and when they go to sleep, completely under the program's contro=
+l.
+
+Looking beyond this particular example, there are cases where work is stash=
+ed in
+queues, and threads draw items from the pool and process them. In such case=
+s
+having flexibility in deciding the mapping between threads and queues is al=
+so
+important. We want to thus allow management of the work item queues from th=
+e
+program itself, and not hide it behind the API to offer the desired level o=
+f
+control.  The order in which items are ranked in individual queues, and the
+order in which queues are processed horizontally by threads is also a desir=
+able
+property.
+
+Correctly associating the BPF-managed kthread to a cgroup should still be
+possible in a manner similar to what you did in this set. But the amount of
+control programs can exert over how work is scheduled and the level of
+concurrency will be much higher if we disaggregate and generalize each part=
+ of
+the picture (wait queues, kthreads, and work item queues, which can be
+implemented in BPF itself).
+
+I am not aware of ways to back charge time spent to remote cgroups, but if
+desired we could also explore that option when a single thread does work on
+behalf of multiple cgroups. It is something to be explored.
+
+I've been working on related patches, and will post RFC set for bpf_kthread=
+ and
+bpf_waitq management in due time.  Until then I recommend that you continue
+experimenting with the existing async execution primitives for now.
+
+> [...]
