@@ -1,129 +1,291 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE113346A0
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 22:04:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786658679; cv=pass; b=FP1194U9GsadOxbieeQXDW9PO4nAH+HIzUbvIY5PnGiSxSzdcOrD1M7p1xU3MHmesj3LF0r/251tajHtEUa0HB7+jInonXRfoJyS6LWmtS5te/DwPcymt93UKstwqNOSbCEkpCP1KZD5BWZte9rGyhcER4zEyjsxYvLC6G5eQdU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786658679; c=relaxed/simple;
-	bh=+nJVwpFMXbMjPE1ueHu/52hziTr3b56pfhCEr1u4jas=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HJJImz94b6dWN3hHKmtf9lJ2WH8SjK7o7unFuYUYFpC/IBBlvAMBEkdnEIWn+6HNkBKzj4bFEtiMMolVkr8q+pMLQnVhbOgo5glUcizPeDe53uKpL71FL2xacYHsEs3WEj5vDcMkmbYWr/XtUyOfoZerpVwXkkEKTwpqP++13RA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uodc3msm; arc=pass smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400F4361976;
+	Thu, 13 Aug 2026 22:10:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786659038; cv=none; b=CjzPrTklJP+YOy06+kg69oC8aSxO+ujxwCWQ+IrmZ4fvprZOwnBbLUWMnxlA40wZKqbMxC5HtPC33BKvgnwlOhkKj0EmiyDX2WEDvhafFHkzKyPEkgTUJ7Cx1Y6oyJcMieLpOj/cxq951UZrww931o1Ki+gu8nx+MNdLzjG4tQ4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786659038; c=relaxed/simple;
+	bh=POXpIRD4wmUHvq5EVRhrrHK7dmS6cVVMl3iHwixvm9E=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=CmWiqufMSS5vFfS/QcYhKytnt4kWNS13/OL6grMyeEhCgw3L3okeRW8W99aPCPZ6IhXwBTHeI65uz+S3yogQnKDTMqH2QnlhdTjGMq1Igin6tsDUqSweTNVzRmij5b9VeKOanNZJ9IV+xlJC+S12XvvLMShFI0WAb9pjMBApJEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VJb6r5cU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uodc3msm"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2cc7ef7ec27so5101515ad.1
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 15:04:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786658677; cv=none;
-        d=google.com; s=arc-20260327;
-        b=kpzj2y7FSZgLST/qHyFzFCY8SXFVCUFgOlfAXD7nRAS3pinWzwu3jaQv3l6+pxQcYI
-         BjNzrb+kfhGAdEpzCB+iAnkQ3u8f8zP1YaBs8hSP/+0BnoMahNk6eV06xkRqaTC76pfa
-         Q8aa3DGkAJrvswlkcNETDF2jIk0K1Blcf/zEy6r0ErsPM8SKEqUkIaQvdyuqvqt0zApd
-         z8gPftCsNsFhY00z18EiPnkSvVZaZ5CBCchBLq7oQV4tO9ZcfJGTbX4/lkPmZslvvZzO
-         FU8AukTPI/X67iVegi6nuQFlHWBK9ynA40u0O9v9jp7WN799iLusVs+vs+cgdV1eBFpG
-         faBw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=XBjlbb9xfnyRrsn87ZRRTDGluqDs+J3ckgA2mWnKvPI=;
-        fh=BxnX00Zwhuuj1n4QmEPi0G/q0Nd/AClBQgfShq2ikxk=;
-        b=Z+Y/H89Iih9FZO+Kh5JzDTAo77raITe68Ui+7jAkcWAvIV/XMo1zAWcorpHyssMSPt
-         wow0UL/qe9+kHS7fvtThDG0yEL8I/8f/XjB2pgaVIXLTPODscGtaxqNJqterbHp8e0oD
-         XFg3vLIpu/dbEkOYW1e/v6cJCwx3Eckfy52W1gxFNxEqmkC2GRTF6uLu66nntK10LpYL
-         IY3UfMxyUS2J0hxZNVmarCWekz8ZnTT06onw13+KQh+74jJY+Ul3u00cpsrPpy7V0fMd
-         jGtzfFZJEuPUmLN8GJyUpT2Be7ZKtRhQKe17QX6sfjI4yS2s6iiPWCpDvvuEPu+YKdbo
-         bYRg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786658677; x=1787263477; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=XBjlbb9xfnyRrsn87ZRRTDGluqDs+J3ckgA2mWnKvPI=;
-        b=Uodc3msm0IhpYSQj8VX5kovwarQak0zWiB/9IgNLNosdzdKvi2WrB3Uf2GCxS1QiYa
-         7E8ILtr8/gBU/JI+kHVgNqEAyqnog40JFkEEx6EIc0tKMCffuR2s3Ppec0SV0Foyi3C/
-         hK4oaTIlwjpd7QZWvfuAF7jLYQU+A3GG5tuYDdP47Xic5giy8V4n1H83fDpp9VxD2smc
-         I5QMchWfUqLNQy4pIKZNo3yQRKxPblIxt8Nl0+md+xDjdNRyifsH+4Vw8VtWPCUWG1Zq
-         zVCfVtQ+vlA04FQ0G4y+ctnOuX6HegjNDgeCyWCcbBpblgUhzSYSgnbHgZkvjSteiP3q
-         WY5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786658677; x=1787263477;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=XBjlbb9xfnyRrsn87ZRRTDGluqDs+J3ckgA2mWnKvPI=;
-        b=GoIb54Xp+B0rIqccSlZEp0VwdVcQ247TNMTsrhpAdDy+E5Vn0FWvIdAusGN5W2jSRG
-         efhSUACgAjVHHaKIwguC3qbF66hrOeBdYSF3xesitXwN91eQXXrap62qZeVaIQM7c3PE
-         k69ND9xNtS0wEi4/C/GFwHfG7YqvOkMECchFM9ZaQ9NczKWPXyMZf5GiuAVqUGMg7WGm
-         Bw8L7z7wnCijKbYN12KEngn5GkGdpP/Fh7Cg94vwuV/9kD+8d3t9u1DhME5+aJWcTzEJ
-         IojXMCRu8KLptep5EMgrauAET0b41nENshRO//23ScxTUA8FoCu67WEBy6SEArFoFN01
-         A8Uw==
-X-Forwarded-Encrypted: i=1; AHgh+RofHIQlCirt4A4wtXeIRl6bo+TpCeUsS3bxROgK87WirdZhjPBM1IacgFK6ifM2dI9Wq3g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzIn/1e+meMm0Na0izNdrhKFSma9yuGzyt4WgjjdU+GlSIRW3s
-	MxjkoIL1vmsFitabdlztcFr99rp0dqeM1p4CBv0K9g6eEtCceBparG6a6JKmlg59JUrQuF+VZRk
-	pYiak5oW0h2e4sylgEJtPjf3k3bf2toyFyu6m
-X-Gm-Gg: AR+sD10REw8afjOHOwOpXCh0V/TSaUrHE95Xvm98DXlQ9nqV+sIBN/vNCxoqic7ESpo
-	CPM/zdkI5rxuPQbbnlWQ7wvmewRHXh99iu2LQLdCsFfQfi4z4kl5slGYl1/e4VdknWrpkGOBSgI
-	kqd/zjaF/Km37OQ9z/fkNMCXmMKwDycr7BdPAGTLz194BW9rWL+tmbTPTPyJ93fjyOpLBn57npG
-	9CAHRWZxU1QlWNSsyQqBd+QIsH/IK/VZ9P+rIv7sivgCJPZaxoUHJ0CKM9A2aiiOYmzZByv5OzG
-	hWH8h+9CSPSQV+EyHIo59SxiJumzLJEvLCM0YWC7Cr42gs88sZUjY903n4m1KHVRihLTqCMWW8j
-	sZbmgTjZ7pueekrpJhLQ9Gy5e72D5nfsXdpVzCe0lWg==
-X-Received: by 2002:a05:6a21:33a2:b0:3c4:3321:4fe8 with SMTP id
- adf61e73a8af0-3cc71be2ba0mr896598637.14.1786658676974; Thu, 13 Aug 2026
- 15:04:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VJb6r5cU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D3FF1F00A3A;
+	Thu, 13 Aug 2026 22:10:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786659036;
+	bh=hkxTWcvChsvj61vzegcnkZFzyTe5mjr4qA5ydcOUnVw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=VJb6r5cU0mo/3v5El5LCFZ9lSbzo3+KVvsMSboRjZ72wTWz1xHi2aOYMEUFoxnQUe
+	 fh8ozXcly17ElnUpNSzfZxfrEpivWW7OaOBxDJyWPWuFrB+oA0Xr/wAKGUWsbP0wkp
+	 UJFkyq72XHBvZxfGgYhI5ZlnUjKfi8Xv667Bc1hrQvK+7pjEA8Ptb9yFsQc7pZJ15e
+	 pirHLwhIl8H06gH2pguWzuCYIUtUeI9vAU7kEMJMcBGcg/kn6/3X0shKmmej10QxQq
+	 DpVHrug6Oyb6qa7evmrC8nR2iSLZi684H4Z0ROiuPnL5QsTkblzimhbeC7Jw6oDtOw
+	 tpJ+4ngjEpbzA==
+Content-Type: multipart/mixed; boundary="===============8004572713851048476=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260810055709.729203-1-chenguang.zhao@linux.dev>
-In-Reply-To: <20260810055709.729203-1-chenguang.zhao@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 13 Aug 2026 15:04:22 -0700
-X-Gm-Features: AUfX_mySmBbuOKMkZzyA6luWIOwiLVFTaBzYxN1T4Y0G-POAuGd72b9d5snmCP4
-Message-ID: <CAEf4BzY9YaeT4CssCe13uAWXYHXs6HervsCo0Puc0osfr8=yVw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Add kptr-xchg benchmark
-To: Chenguang Zhao <chenguang.zhao@linux.dev>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, shuah@kernel.org, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
-	ihor.solodrai@linux.dev, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	chenguang.zhao@liux.dev, Chenguang Zhao <zhaochenguang@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <244c96861c2f5eedf2fec73ffb1dcff7c7eec570a426361b5fc93000f19850dd@mail.kernel.org>
+In-Reply-To: <20260813211533.290256-5-dingning04@gmail.com>
+References: <20260813211533.290256-5-dingning04@gmail.com>
+Subject: Re: [PATCH bpf-next v4 4/4] selftests/bpf: Test untrusted allocated-object pointers
+From: bot+bpf-ci@kernel.org
+To: dingning04@gmail.com,bpf@vger.kernel.org
+Cc: memxor@gmail.com,greg@kroah.com,dingning04@gmail.com,sashiko-bot@kernel.org,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,chengkaitao@kylinos.cn,vmalik@redhat.com,utilityemal77@gmail.com,leon.hwang@linux.dev,chenyy23@mails.tsinghua.edu.cn,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 13 Aug 2026 22:10:35 +0000 (UTC)
 
-On Sun, Aug 9, 2026 at 10:57=E2=80=AFPM Chenguang Zhao <chenguang.zhao@linu=
-x.dev> wrote:
->
-> From: Chenguang Zhao <zhaochenguang@kylinos.cn>
->
-> Add a microbenchmark that repeatedly calls bpf_kptr_xchg() from an
-> fentry program. Architectures that advertise bpf_jit_supports_ptr_xchg()
-> inline the helper to BPF_XCHG; others keep the helper call. This bench
-> makes it easy to compare the two paths under the same workload.
+--===============8004572713851048476==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-but do we need a permanent benchmark for this? Is there any valid risk
-of regressing performance here? Unless there is a good reason to have
-this benchmark readily available for everyone to periodically run or
-something, I'm inclined to reject new benchmarks and minimize amount
-of code maintenance burden for something like this, sorry.
-
-pw-bot: cr
-
+> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+> index fd35093285c0d..383c5b1b7111f 100644
+> --- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+> @@ -893,6 +893,106 @@ long refcount_acquire_rcu_map_kptr_null_checked(void *ctx)
+>  	return 0;
+>  }
 >
-> Usage:
->   sudo ./bench -d 30 -w 5 -p 1 kptr-xchg --nr_loops 256
->
-> Signed-off-by: Chenguang Zhao <zhaochenguang@kylinos.cn>
-> ---
-> Example results on LoongArch64 (helper vs inlined):
->
+> +SEC("?syscall")
+> +__success
+> +long map_kptr_read_after_rcu_unlock(void *ctx)
 
-[...]
+A reviewer noted in v3 that the tests use TC programs with implicit RCU
+protection, causing pointers not to become untrusted as intended, and
+specifically suggested: "The right fix might be to use fentry.s for these
+tests to trigger untrusted marking of pointers."
+
+v4 uses SEC("?syscall") instead. While syscall programs are sleepable and
+may trigger untrusted marking, does this section annotation achieve the
+same behavior Kumar recommended fentry.s for? The deviation from the
+specific suggestion wasn't discussed in the v4 thread.
+
+> +{
+> +	struct map_value_refcount_only *mapval;
+> +	struct node_refcount_only *n;
+> +	int idx = 0;
+> +
+> +	mapval = bpf_map_lookup_elem(&stashed_refcount_only, &idx);
+> +	if (!mapval)
+> +		return 0;
+> +
+> +	bpf_rcu_read_lock();
+> +	n = mapval->node;
+> +	if (!n) {
+> +		bpf_rcu_read_unlock();
+> +		return 0;
+> +	}
+> +	bpf_rcu_read_unlock();
+> +
+> +	return n->key;
+> +}
+> +
+> +SEC("?syscall")
+> +__failure __msg("is neither owning or non-owning ref")
+> +long refcount_acquire_graph_after_rcu_unlock(void *ctx)
+> +{
+> +	struct map_value *mapval;
+> +	struct node_data *n, *m;
+> +	int idx = 0;
+> +
+> +	mapval = bpf_map_lookup_elem(&stashed_nodes, &idx);
+> +	if (!mapval)
+> +		return 0;
+> +
+> +	bpf_rcu_read_lock();
+> +	n = mapval->node;
+> +	if (!n) {
+> +		bpf_rcu_read_unlock();
+> +		return 0;
+> +	}
+> +	bpf_rcu_read_unlock();
+> +
+> +	m = bpf_refcount_acquire(n);
+> +	if (m)
+> +		bpf_obj_drop(m);
+> +
+> +	return 0;
+> +}
+> +
+> +SEC("?syscall")
+> +__failure __msg("only read is supported")
+> +long graph_map_kptr_write_after_rcu_unlock(void *ctx)
+> +{
+> +	struct map_value *mapval;
+> +	struct node_data *n;
+> +	int idx = 0;
+> +
+> +	mapval = bpf_map_lookup_elem(&stashed_nodes, &idx);
+> +	if (!mapval)
+> +		return 1;
+> +
+> +	bpf_rcu_read_lock();
+> +	n = mapval->node;
+> +	if (!n) {
+> +		bpf_rcu_read_unlock();
+> +		return 2;
+> +	}
+> +	bpf_rcu_read_unlock();
+> +
+> +	n->key = 1;
+> +	return 0;
+> +}
+
+Does this test actually verify the fix? The "only read is supported"
+rejection comes from the PTR_UNTRUSTED check in check_ptr_to_btf_access():
+
+    if (atype != BPF_READ && (type_flag(reg->type) & PTR_UNTRUSTED)) {
+            verbose(env, "only read is supported\n");
+            return -EACCES;
+    }
+
+This check is unchanged in the pre-series tree and rejects writes through
+any PTR_UNTRUSTED register for both object layouts. A kernel missing the
+series fix would still fail this test with the same message, so the test
+wouldn't catch a revert.
+
+> +
+> +SEC("?syscall")
+> +__success
+> +long graph_map_kptr_read_after_spin_unlock(void *ctx)
+> +{
+> +	struct map_value *mapval;
+> +	struct node_data *n;
+> +	int idx = 0;
+> +
+> +	mapval = bpf_map_lookup_elem(&stashed_nodes, &idx);
+> +	if (!mapval)
+> +		return 0;
+> +
+> +	bpf_rcu_read_lock();
+> +	n = mapval->node;
+> +	if (!n) {
+> +		bpf_rcu_read_unlock();
+> +		return 0;
+> +	}
+> +	bpf_rcu_read_unlock();
+> +
+> +	bpf_spin_lock(&lock);
+> +	bpf_spin_unlock(&lock);
+> +
+> +	return n->key;
+> +}
+
+Is __success correct for this read? After bpf_rcu_read_unlock() in a
+sleepable program, the pointer gains PTR_UNTRUSTED but keeps NON_OWN_REF
+because the fix excludes PTR_UNTRUSTED from type_is_ptr_alloc_obj().
+
+At the load, the type is PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED |
+NON_OWN_REF. The bpf_convert_ctx_accesses() switch in
+kernel/bpf/fixups.c lists these BPF_PROBE_MEM cases:
+
+    case PTR_TO_BTF_ID | PTR_UNTRUSTED:
+    case PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED:
+
+but not the NON_OWN_REF variant, so the switch falls through and the load
+stays a plain BPF_MEM access with no exception-table entry.
+
+The object is freed via bpf_mem_free_rcu(), so in a sleepable syscall
+program that has left the RCU critical section, a grace period can elapse
+and the page can be returned to the allocator before the load executes,
+causing an unprotected fault.
+
+Pre-series, invalidate_non_owning_refs() at bpf_spin_unlock() killed this
+register because type_is_non_owning_ref() was true. Now that
+type_is_ptr_alloc_obj() excludes PTR_UNTRUSTED, type_is_non_owning_ref()
+returns false and the stale register survives.
+
+The sibling test map_kptr_read_after_rcu_unlock (node_refcount_only, no
+graph node, hence no NON_OWN_REF) does match a BPF_PROBE_MEM case and gets
+the probe rewrite. Should either fixups.c gain a NON_OWN_REF case and this
+test document the probe path, or should NON_OWN_REF be stripped in
+invalidate_rcu_protected_refs()?
+
+> +
+>  static long __stash_map_empty_xchg(struct node_data *n, int idx)
+>  {
+>  	struct map_value *mapval = bpf_map_lookup_elem(&stashed_nodes, &idx);
+> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+> index acd3e81a39168..0cc4cbd0c81b1 100644
+> --- a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+> @@ -127,6 +127,33 @@ long refcount_acquire_rcu_map_kptr_unchecked_drop(void *ctx)
+>  	return 0;
+>  }
+>
+> +SEC("?syscall")
+> +__failure __msg("is neither owning or non-owning ref")
+> +long refcount_acquire_after_rcu_unlock(void *ctx)
+> +{
+> +	struct map_value_refcount_only *mapval;
+> +	struct node_refcount_only *n, *m;
+> +	int idx = 0;
+> +
+> +	mapval = bpf_map_lookup_elem(&stashed_refcount_only, &idx);
+> +	if (!mapval)
+> +		return 1;
+> +
+> +	bpf_rcu_read_lock();
+> +	n = mapval->node;
+> +	if (!n) {
+> +		bpf_rcu_read_unlock();
+> +		return 2;
+> +	}
+> +	bpf_rcu_read_unlock();
+> +
+> +	m = bpf_refcount_acquire(n);
+> +	if (m)
+> +		bpf_obj_drop(m);
+> +
+> +	return 0;
+> +}
+> +
+>  SEC("?tc")
+>  __failure __msg("Unreleased reference id=3 alloc_insn={{[0-9]+}}")
+>  long rbtree_refcounted_node_ref_escapes_owning_input(void *ctx)
+
+The commit message states:
+
+> The verifier previously allowed pointers used after RCU protection ended
+> to reach bpf_refcount_acquire() and, for one object layout, a direct write.
+> If the object was freed and reused, these operations could access stale
+> memory.
+>
+> Add tests that keep BPF_PROBE_MEM reads accepted but reject reference
+> acquisition and direct writes after RCU protection ends. Cover both tested
+> object layouts.
+
+Is the description fully accurate?
+
+The "direct write" was never allowed for any object layout. The
+PTR_UNTRUSTED check in check_ptr_to_btf_access() predates the series and
+rejects writes through any PTR_UNTRUSTED register for both node_data and
+node_refcount_only.
+
+The claim "keep BPF_PROBE_MEM reads accepted ... Cover both tested object
+layouts" is only true for node_refcount_only (map_kptr_read_after_rcu_unlock).
+The node_data read (graph_map_kptr_read_after_spin_unlock) ends up with
+PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED | NON_OWN_REF, a combination
+missing from bpf_convert_ctx_accesses() in kernel/bpf/fixups.c, so it
+stays a plain BPF_MEM load without probe rewrite.
+
+The genuinely new coverage is the two bpf_refcount_acquire() tests. Would
+it be more accurate to scope the description to those plus the
+refcount-only read?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31745514567
+--===============8004572713851048476==--
