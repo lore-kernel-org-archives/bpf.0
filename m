@@ -1,297 +1,97 @@
-Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FDDB29BD8C
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 02:32:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 696E42D6E64
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 02:33:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786588349; cv=none; b=QBVxB//2eMRvCUr7gqBDIiP79V5I+StFGU4IqeFhSMx0Tu8jlf0/DqNPYZYR/Xg7r6NrFXQMZtqwjQYmrR7yi06VyLmCGXng0U1tMzIiKNBzd9m4CbfOQT2WB9GoPNGV/9fbV3/l4ltWbCTHVkwvgWddf+2MudDXZVVkBphZtt0=
+	t=1786588427; cv=none; b=QpPOuEwOx+w+eGauAIP0atN9DauELD862S2PxpN2MjAgQtKf/rwHVJjuJMfG9Qef80hlLYAohjyG2GD0bZJwDHB29yGehbgcQnPlMyAVsi1tRIXqQgsNvtRUhjT1MHJJXo65bBwWqY0AcGGwtUVh9oR/vtfaAcqbTMSgkIyeLos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786588349; c=relaxed/simple;
-	bh=036Im8OT7vtFN+Z+XmJ1SUKckGDPPAoqQODBJMhZKl0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=C+r+B4w8cSyydGLsQXSX5gkIqnoBbcbhaGLZwjPACKs+9AMVCk5W26NVgz1xRAw2uYzMiRI9AU5ElO3ubrEc9b1Eha1jUI7OxEODoJmQZpmNBHUbwAbRPl2ohBhSWC6+Y+Zo2pwEAhF7lTucETc1qXyVH/fUK2TKg9qqnZkDnM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RXYZVrav; arc=none smtp.client-ip=74.125.225.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RXYZVrav"
-Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-47fe3f552f0so81097f8f.0
-        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 19:32:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786588346; x=1787193146; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=OO/kWqWey78xSCQX80s8SUkYWYReSxkVRzCtMWpZ454=;
-        b=RXYZVravDJOPK/ZIqrp36IUhDHoBEIy/GHMAGPMggL8JiV9UTvTNbLVe7qVanhXMh8
-         FeI7DjDNceCnxIKcipDGBkuBCt5PHgnJGMo/sXSPGKqaAgIspEMS5tsh5jBz6K69QkMJ
-         XUmCefVz+i8A6HwJgWyIMkVNBGxN9i6MsDrEMOKxRiBiFcZIaBDJ/TwFlDgFC2mrhg51
-         vQ15vvpffdqQv3g9p0Hf9g5VxnQUwzvEhmEi5udgQsZHwkH8K4WJnG1KJs2g3WXMjzdt
-         6UXrJGyEYFSWV/eATE8HNRPnfUc2U19kIIzSxbQdbjyrg5JiWakyY0dYTV4e/65JyThl
-         Cblg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786588346; x=1787193146;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=OO/kWqWey78xSCQX80s8SUkYWYReSxkVRzCtMWpZ454=;
-        b=PzA0s+J2H9rBtHR8Li2g5v83fMVuaj9+RuHbgxqNjVn1C0jFqCNDNT4Hp0qramiBLR
-         xANOQgml8aUT3xHETogb7ttss/4YQlwpeGTBbH93aVA2YWVZkg6z1TT9U0llwBBIyFO3
-         XQ/2TGjZpYtY3iUkwNI5XiihtlOn+H7bY0Pg/qYnagBhgCMXBuebnNCu1y2GF8C7iGQR
-         hwwPKSV/Vzch7brxbSjKg/N9AVFshRGFoY3KBJtPu//IRGPKtX1Wg0hIk5/zkjfpsHAl
-         WYdgJZZcPbB38UmWhiqxZhAv/YscEvx20ua1VWVbYwIC0RWR8/ORtWbd2Pp0zJn70GMs
-         MQtQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpzTWw0SjFDTIv3OJ40efudsNBvDt0vSZ/YiF5UUYEHiT6Q53es9sx0APay+eM7o/H9Rp0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxuEBdoXSTiqeEleYeHpFIQlaidMaiNf8jGoEopac8Ok5uRGp0
-	8hYW8Y1Vi2lJYZbfc6R3eA1lwubcfi/Ig7IqAN/lD0MM9mht+pXI/6zQ
-X-Gm-Gg: AR+sD10Jag/TuAlmbsSzmSFJwX24vN6/aSDl8DDEnZrNgvA9ugmva1mCI8f/zpm1zuT
-	YFzQCVjW5qh2/nzIlN9RI4fDj/J24AItx3iP1myh0YdqqFxUOu2S9b7gfilOPsC6uVjocbMwPXc
-	59NFhupx71HRumLQRUkX3PWyPcnLtvIC7SYfXszdbhC3ew1/puYMrWMWArb4DpoI3t9/kgBAWfY
-	hdCz2d7o+3sy7N4wfUiOBcX5iRKHbcMVKRPaegV2LMXLQlYM9jCEOdsZL12gy0HlXBV/o6wAq6u
-	sJiUp4cT5RfdFoS99SMd9S6OmHs1lPkM1wEgssJ7mbSS3krpWvBQKyBEdBKpcUcUTF6lwWjczdY
-	xj57H4QyJbWhvcEK1W0RwnA89V1cI+Ug0Qc2ATS6kN8XLN5HebBJ8QjhM5fKJhgiSEroGzS22d8
-	jJaWapUE1syGwgdhyjASAvFdXCrwKErganvyL/XIG5hnprukw03e+jQ4Tqk0A+ClQRlkL/JBZ6r
-	36Okl1ElynZ6gmnOpADoVhQF1Lwl1uZRroXKqu2Ma1qAoUQ7iiiERSKL3y00fvM7kr0i6AWPPWT
-	wHTDWlT+lyQ4Mg7FWHp2uaHaEYo=
-X-Received: by 2002:adf:fd4f:0:b0:481:474a:99f6 with SMTP id ffacd0b85a97d-4815a01c4e9mr2226008f8f.19.1786588345450;
-        Wed, 12 Aug 2026 19:32:25 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815a569c2bsm2320892f8f.12.2026.08.12.19.32.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Aug 2026 19:32:25 -0700 (PDT)
+	s=arc-20240116; t=1786588427; c=relaxed/simple;
+	bh=mfcoaHzFUlYbi6SscVdtoCboZavxA3EYKtz1pthvlUk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Im58DTE00okeuc8VhEa9ubpmiKxRcqLBiWFTTCWsSJGubCJ0wACj+udeCL1OILOIHb/L3KPRyANC9GpCbqawgipAgZGVoyTkTSpVgq9lJJIqQ4rtAS3F06q2P6Krxp83cDW+tgOxa6LdaQe/j4zpq5Moe4Mb+e/PzEaG8UvaUXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hL8YM3gmCzYQtnT
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 10:33:27 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id 8304340981
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 10:33:33 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgB3Z0b8LH1qUU94CA--.47281S2;
+	Thu, 13 Aug 2026 10:33:33 +0800 (CST)
+Message-ID: <953b1c77-01d0-4a8c-aecd-00df353c6222@huaweicloud.com>
+Date: Thu, 13 Aug 2026 10:33:32 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 13 Aug 2026 04:32:24 +0200
-Message-Id: <DKNGPMSHGC89.1WT6CHDFCPRJR@gmail.com>
-Cc: <greg@kroah.com>, <sashiko-bot@kernel.org>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Emil Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>,
- "Viktor Malik" <vmalik@redhat.com>, "Justin Suess"
- <utilityemal77@gmail.com>, "Kaitao Cheng" <chengkaitao@kylinos.cn>, "Leon
- Hwang" <leon.hwang@linux.dev>, "Yiyang Chen"
- <chenyy23@mails.tsinghua.edu.cn>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf v3 4/4] selftests/bpf: Test untrusted
- allocated-object pointers
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Ning Ding" <dingning04@gmail.com>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260803112218.3361213-1-dingning04@gmail.com>
- <20260803112218.3361213-5-dingning04@gmail.com>
-In-Reply-To: <20260803112218.3361213-5-dingning04@gmail.com>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 0/7] bpf, arm64: __arena kfunc and struct_ops
+ arguments
+Content-Language: en-US
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org,
+ Xu Kuohai <xukuohai@huaweicloud.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Mark Rutland
+ <mark.rutland@arm.com>, Will Deacon <will@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>
+References: <20260810190922.3408757-1-puranjay@kernel.org>
+ <DKND9FBAR1JE.3713OP933LYT3@gmail.com>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <DKND9FBAR1JE.3713OP933LYT3@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:_Ch0CgB3Z0b8LH1qUU94CA--.47281S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKF1fCrWfurWxZrW3KFW7Jwb_yoW3AFgE93
+	40y393uw1xWr1xGFW3KF13ArW7JFZ5WF10qr15WrWjy3s0yryUZFsay34kK3yxA3y7Ww4a
+	vFn8Xa40yrW2vjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUb38FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+	Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+	0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+	0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+	v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+	1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+	AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI
+	42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
+	evJa73UjIFyTuYvjfUonmRUUUUU
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On Mon Aug 3, 2026 at 1:22 PM CEST, Ning Ding wrote:
-> The verifier previously allowed pointers used after RCU protection ended
-> to reach bpf_refcount_acquire() and, for one object layout, a direct writ=
-e.
-> If the object was freed and reused, these operations could access stale
-> memory.
+On 8/13/2026 7:50 AM, Kumar Kartikeya Dwivedi wrote:
+> On Mon Aug 10, 2026 at 9:09 PM CEST, Puranjay Mohan wrote:
+>> The x86-64 JIT recently gained support for the __arena and
+>> __arena__nullable argument suffixes on kfuncs and struct_ops stubs. This
+>> adds the arm64 side and flips bpf_jit_supports_arena_args() on, so the
+>> verifier stops rejecting these programs on arm64.
+>>
+> 
+> Hi Xu,
+> 
+> If you have cycles this week, could you take a look at these changes and let us
+> know they make sense?
+> 
+> It would allow us to close both x86 support (already landed) and arm64 support
+> for arena arguments for next merge window (next week). No worries if you need
+> more time to go through these though. Just bumping the thread.
 >
-> Add tests that keep BPF_PROBE_MEM reads accepted but reject reference
-> acquisition and direct writes after RCU protection ends. Cover both teste=
-d
-> object layouts.
->
-> Reported-by: sashiko-bot@kernel.org
-> Link: https://lore.kernel.org/r/20260726021304.97ED91F000E9@smtp.kernel.o=
-rg
-> Assisted-by: Codex:gpt-5
-> Signed-off-by: Ning Ding <dingning04@gmail.com>
-> ---
->  .../selftests/bpf/progs/refcounted_kptr.c     | 100 ++++++++++++++++++
->  .../bpf/progs/refcounted_kptr_fail.c          |  27 +++++
->  2 files changed, 127 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tools/=
-testing/selftests/bpf/progs/refcounted_kptr.c
-> index fd35093285c0d..b70be8b52ff80 100644
-> --- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-> @@ -893,6 +893,106 @@ long refcount_acquire_rcu_map_kptr_null_checked(voi=
-d *ctx)
->  	return 0;
->  }
->
-> +SEC("?tc")
-> +__success
-> +long map_kptr_read_after_rcu_unlock(void *ctx)
-> +{
-> +	struct map_value_refcount_only *mapval;
-> +	struct node_refcount_only *n;
-> +	int idx =3D 0;
-> +
-> +	mapval =3D bpf_map_lookup_elem(&stashed_refcount_only, &idx);
-> +	if (!mapval)
-> +		return 0;
-> +
-> +	bpf_rcu_read_lock();
-> +	n =3D mapval->node;
-> +	if (!n) {
-> +		bpf_rcu_read_unlock();
-> +		return 0;
-> +	}
-> +	bpf_rcu_read_unlock();
-> +
-> +	return n->key;
 
-Here, n->key won't read untrusted pointer, since tc progs have RCU protecti=
-on,
-so I don't think the pointer becomes untrusted.
+OK, I'll take a look at it soon, thanks.
 
-> +}
-> +
-> +SEC("?tc")
-> +__failure __msg("is neither owning or non-owning ref")
-> +long refcount_acquire_graph_after_rcu_unlock(void *ctx)
-> +{
-> +	struct map_value *mapval;
-> +	struct node_data *n, *m;
-> +	int idx =3D 0;
-> +
-> +	mapval =3D bpf_map_lookup_elem(&stashed_nodes, &idx);
-> +	if (!mapval)
-> +		return 0;
-> +
-> +	bpf_rcu_read_lock();
-> +	n =3D mapval->node;
-> +	if (!n) {
-> +		bpf_rcu_read_unlock();
-> +		return 0;
-> +	}
-> +	bpf_rcu_read_unlock();
-> +
-> +	m =3D bpf_refcount_acquire(n);
-> +	if (m)
-> +		bpf_obj_drop(m);
-> +
-> +	return 0;
-> +}
+> Thanks!
+> 
+>> [...]
+> 
 
-I don't think you ran these tests, they have unexpected success, mostly bec=
-ause
-tc has RCU read protection already, so n passed to refcount acquire is not
-untrusted.
-
-> +
-> +SEC("?tc")
-> +__failure __msg("only read is supported")
-> +long graph_map_kptr_write_after_rcu_unlock(void *ctx)
-> +{
-> +	struct map_value *mapval;
-> +	struct node_data *n;
-> +	int idx =3D 0;
-> +
-> +	mapval =3D bpf_map_lookup_elem(&stashed_nodes, &idx);
-> +	if (!mapval)
-> +		return 1;
-> +
-> +	bpf_rcu_read_lock();
-> +	n =3D mapval->node;
-> +	if (!n) {
-> +		bpf_rcu_read_unlock();
-> +		return 2;
-> +	}
-> +	bpf_rcu_read_unlock();
-> +
-> +	n->key =3D 1;
-> +	return 0;
-> +}
-> +
-
-Same for write here, it succeeds...
-
-> +SEC("?tc")
-> +__success
-> +long graph_map_kptr_read_after_spin_unlock(void *ctx)
-> +{
-> +	struct map_value *mapval;
-> +	struct node_data *n;
-> +	int idx =3D 0;
-> +
-> +	mapval =3D bpf_map_lookup_elem(&stashed_nodes, &idx);
-> +	if (!mapval)
-> +		return 0;
-> +
-> +	bpf_rcu_read_lock();
-> +	n =3D mapval->node;
-> +	if (!n) {
-> +		bpf_rcu_read_unlock();
-> +		return 0;
-> +	}
-> +	bpf_rcu_read_unlock();
-> +
-> +	bpf_spin_lock(&lock);
-> +	bpf_spin_unlock(&lock);
-> +
-> +	return n->key;
-> +}
-> +
-
-Similar case.
-
->  static long __stash_map_empty_xchg(struct node_data *n, int idx)
->  {
->  	struct map_value *mapval =3D bpf_map_lookup_elem(&stashed_nodes, &idx);
-> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c b/t=
-ools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-> index acd3e81a39168..3408f68ad444d 100644
-> --- a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-> @@ -127,6 +127,33 @@ long refcount_acquire_rcu_map_kptr_unchecked_drop(vo=
-id *ctx)
->  	return 0;
->  }
->
-> +SEC("?tc")
-> +__failure __msg("is neither owning or non-owning ref")
-> +long refcount_acquire_after_rcu_unlock(void *ctx)
-> +{
-> +	struct map_value_refcount_only *mapval;
-> +	struct node_refcount_only *n, *m;
-> +	int idx =3D 0;
-> +
-> +	mapval =3D bpf_map_lookup_elem(&stashed_refcount_only, &idx);
-> +	if (!mapval)
-> +		return 1;
-> +
-> +	bpf_rcu_read_lock();
-> +	n =3D mapval->node;
-> +	if (!n) {
-> +		bpf_rcu_read_unlock();
-> +		return 2;
-> +	}
-> +	bpf_rcu_read_unlock();
-> +
-> +	m =3D bpf_refcount_acquire(n);
-> +	if (m)
-> +		bpf_obj_drop(m);
-> +
-> +	return 0;
-> +}
-
-This also passes.
-
-> +
->  SEC("?tc")
->  __failure __msg("Unreleased reference id=3D3 alloc_insn=3D{{[0-9]+}}")
->  long rbtree_refcounted_node_ref_escapes_owning_input(void *ctx)
-
-Please respin and only send patches after you have tested them properly.
-
-The right fix might be to use fentry.s for these tests to trigger untrusted
-marking of pointers. The fixes themselves do make sense.
-
-For the next version, target bpf-next and drop Cc: stable.
-
-pw-bot: cr
