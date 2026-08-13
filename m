@@ -1,194 +1,120 @@
-Received: from mta0.migadu.com (out-89.mta0.migadu.com [91.218.175.89])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84C5372049
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 11:32:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A445B425CEE;
+	Thu, 13 Aug 2026 11:35:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786620778; cv=none; b=HuqyxsR5FUSVXoFCpHbSr+gzuS1q2DQgLFiIzZYyg37pDZRgq39ctoZ1okPVM4t22Dt6qfF0ahZ8+UYhDkoWXyioYRDRixHGp3TpRqkeVkEAgkaUdHz0FDmdcUOoP7PJOiYeGrAhvbFvZxlMnjWi5k1gpIZnaRnr6NjrlPSgDXQ=
+	t=1786620947; cv=none; b=VRsj4ZN8lOsnTXkLGP761DtLq+lYMXZPPwDiCpvaPbsKnr6qrUYB/50bChV/x1tSUc5H3x6rOuLcxn8BTer1By6N6RJs6/shPQbryVe1MsR5pNoWgfahgYEmONgj6iNhNRzc9O8X+pkynj3BS22x288rfpjCLnsKD+aKg5yWN+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786620778; c=relaxed/simple;
-	bh=cZkj5BPSYYoc5aDEyFKO1RL8X23y1PD207f7mnoVj0k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DY5E/AG8Bi77VicUvded4PU4zGOXhmIJ5UmIdnlc6x7Q4febhF9ryIV1JgfOn5Fam6DPvr7I9p7x/GZsRuNq4fLnYeaJUGaIfTzUsWNnW6VAAxIP6tEu+dusOUhvBGl5M+FuHMjoNVTw0F1QhbFaj637ScAMsLKkGclh2A6JZpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nUo4vtEj; arc=none smtp.client-ip=91.218.175.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nUo4vtEj"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=cZkj5BPSYYoc5aDEyFKO1RL8X23y1PD207f7mnoVj0k=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786620773; v=1; x=1787225573;
- b=nUo4vtEjQNJe1GYAwtSsoCEMjyl4ePBV88Ry+gsDBMw4oCCG220HHGh937wG9/xWRL5WcwJ0
- sY8WEGjYCIyzNjEaBch/FKDg7gGchMPdvNN/USUk3Y59FZ6T20rQMAJ2e/n1h1DEa/EZLk5N5eB
- jUoBGXVrKMCD9QfBtY3xgRAQ=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from localhost.localdomain (147.136.157.0)
-	by smtp.migadu.com with ESMTPS id 40f3c96585ea3264;
-	Thu, 13 Aug 2026 11:32:53 +0000
-X-Migadu-Flow: FLOW_OUT
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: netdev@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Kenneth Lee <kennethbwlee@snu.ac.kr>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	Krishna Kumar <krikku@gmail.com>,
-	Martin Karsten <mkarsten@uwaterloo.ca>,
-	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-	Martin Willi <martin@strongswan.org>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH net-next] net: xdp: don't assume an Ethernet header in generic XDP
-Date: Thu, 13 Aug 2026 19:32:24 +0800
-Message-ID: <20260813113229.381136-1-jiayuan.chen@linux.dev>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1786620947; c=relaxed/simple;
+	bh=5Tvx6RpoaacNlQMdAJr4JipUiAyB1qM7luaNfU2qjdI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Dbo/gQM2w/efY1umdhuuXzFXV0Q424VupJ8u1mpkxRBlAiycYQmUq4argZv2R50pbx6TKhYboeL5w4dHKCwzIBCXc/oJv7Wm2fpaoZuA4Nn6oJXBnMFgLrgHk6ABlZN6KrKq62OrCXO6Ko4vEEzb0LjbJ7rHUNpTkSdhTwoUDyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 1a63a56a970b11f1aa26b74ffac11d73-20260813
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:34152572-762d-4210-a9b3-dafca5525e8a,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:e7bac3a,CLOUDID:13b49416b906cdcebb694eea30640219,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|136|865|898,TC:nil,Conte
+	nt:0|15|50,EDM:-3|-100,IP:nil,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC
+	:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_ULS,TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 1a63a56a970b11f1aa26b74ffac11d73-20260813
+X-User: jiangfeng@kylinos.cn
+Received: from [10.42.12.56] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <jiangfeng@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
+	with ESMTP id 193053877; Thu, 13 Aug 2026 19:35:36 +0800
+Message-ID: <8e9a0272-b503-4ac6-9af3-8e5683f6b8b5@kylinos.cn>
+Date: Thu, 13 Aug 2026 19:35:33 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 1/2] bpf, riscv: Add BPF stack arguments
+ support for RV64 JIT
+To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ luke.r.nels@gmail.com, xi.wang@gmail.com, bjorn@kernel.org,
+ pulehui@huawei.com, puranjay@kernel.org, pjw@kernel.org, palmer@dabbelt.com,
+ aou@eecs.berkeley.edu, alex@ghiti.fr, shuah@kernel.org, nathan@kernel.org,
+ ndesaulniers@google.com, morbo@google.com, justinstitt@google.com
+Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev, martin.lau@kernel.org, clm@meta.com
+References: <20260813-bpf-riscv-stack-args-v2-1-efea8f9b3fe1@kylinos.cn>
+ <b9781ebbc70ad4c748f4c08d94bbe6994b4e0fde867a8bf252b5d0f08a985dee@mail.kernel.org>
+Content-Language: en-US
+From: Feng Jiang <jiangfeng@kylinos.cn>
+In-Reply-To: <b9781ebbc70ad4c748f4c08d94bbe6994b4e0fde867a8bf252b5d0f08a985dee@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Kenneth Lee reported a bug [1]:
+On 2026/8/13 16:25, bot+bpf-ci@kernel.org wrote:
+>>     bpf, riscv: Add BPF stack arguments support for RV64 JIT
+>>
+>>     Add bpf_jit_supports_stack_args() for the RV64 JIT so BPF subprograms
+>>     and kfuncs can receive more than 5 arguments via the stack
+>>     (BPF_REG_PARAMS / r11).
+>>
+>>     For BPF-to-BPF calls the caller writes outgoing arguments at the
+>>     bottom of its frame (SP-relative). The callee reads them with
+>>     FP-relative loads. Its FP is set to the caller SP in the prologue,
+>>     so the offsets match.
+>>
+>>     The RISC-V ABI puts arguments 6-8 in A5-A7 and arguments 9+ at
+>>     SP+0. Before each kfunc call, load arguments 6-8 from the outgoing
+>>     area into A5-A7 and copy any remaining arguments down so argument 9
+>>     lands at SP+0.
+>>
+>>     A5 (BPF_REG_0), A6 (TCC) and A7 are safe to clobber here: R0 is not
+>>     live before a call, TCC is backed up on the stack, and A7 is unused
+>>     by the JIT.
+>>
+>>     Limit the existing kfunc sign-extension loop to MAX_BPF_FUNC_REG_ARGS
+>>     iterations; otherwise idx >= 5 resolves to S1-S5 (BPF_R6-FP) and
+>>     corrupts callee-saved registers.
+>>
+>>     Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+> 
+> This looks like a bug fix for stack argument support. The commit message
+> describes how the sign-extension loop was limited to prevent corruption
+> of callee-saved registers S1-S5 when idx >= 5. This fixes an issue
+> introduced by commit 443574b03387 ("riscv, bpf: Fix kfunc parameters
+> incompatibility between bpf and riscv abi"), which added the
+> sign-extension loop without limiting it to MAX_BPF_FUNC_REG_ARGS.
+> 
+> Should this include:
+> 
+>   Fixes: 443574b03387 ("riscv, bpf: Fix kfunc parameters incompatibility between bpf and riscv abi")
+> 
 
-  skb_vlan_push got skb with skb->data not at mac header (offset 14)
-  WARNING: net/core/skbuff.c:6474 at skb_vlan_push+0x5ec/0x8a0
-   ____bpf_skb_vlan_push net/core/filter.c:3239 [inline]
-   bpf_skb_vlan_push+0x216/0x8b0 net/core/filter.c:3229
-   bpf_prog_run_data_pointers+0x17c/0x240 include/linux/filter.h:917
-   tcf_bpf_act+0x31c/0x940 net/sched/act_bpf.c:50
-   tcf_action_exec+0x2c1/0x720 net/sched/act_api.c:1147
-   tcf_classify+0x6e4/0x1080 net/sched/cls_api.c:1860
-   tc_run+0x31c/0x5d0 net/core/dev.c:4411
-   sch_handle_ingress net/core/dev.c:4486 [inline]
-   __netif_receive_skb_core+0x141b/0x2ec0 net/core/dev.c:6054
+No Fixes: tag. When 443574b03387 added the loop, the verifier still
+unconditionally rejected kfuncs with more than 5 args, so fm->nr_args
+was always <= 5 and the loop never touched S1-S5. The corruption is
+only reachable once this series enables stack arguments, so bounding
+the loop is part of the feature, not a fix for a triggerable bug.
 
-bpf_prog_run_generic_xdp() just assumes xdp->data is an Ethernet header:
-
-	eth = (struct ethhdr *)xdp->data;
-	orig_host = ether_addr_equal_64bits(eth->h_dest, skb->dev->dev_addr);
-	orig_bcast = is_multicast_ether_addr_64bits(eth->h_dest);
-	orig_eth_type = eth->h_proto;
-
-But an L3 device (ARPHRD_NONE, ARPHRD_TUNNEL, ...) has no L2 header at
-all - its mac_len is 0 and xdp->data is really the L3 header, so those
-orig_* values are garbage.
-
-When that garbage comparison says the header changed, we then do:
-
-	__skb_push(skb, ETH_HLEN);
-	skb->pkt_type = PACKET_HOST;
-	skb->protocol = eth_type_trans(skb, skb->dev);
-
-eth_type_trans() resets mac_header and pulls ETH_HLEN back, so skb->data
-does not move at all, but we now have mac_len == 0 while
-skb_mac_header(skb) == skb->data - ETH_HLEN.
-
-tc ingress relies on mac_len == skb->data - skb_mac_header(skb) to get
-skb->data onto the mac header, so __skb_push(skb, skb->mac_len) pushes
-nothing, the program runs with skb->data ETH_HLEN past the mac header,
-and bpf_skb_vlan_push() hits the WARN_ONCE above.  skb->protocol also
-ends up parsed from uninitialised headroom.
-
-So skip the Ethernet part entirely when the skb has no ETH_HLEN sized L2
-header.  The program still runs and its action is still returned.
-
-Refusing to attach XDP to L3 devices instead would not help: mac_len is a
-property of the skb, not of the netdev, so an ARPHRD_ETHER device can see
-mac_len == 0 too.
-
-[1]: https://lore.kernel.org/bpf/20260812043643.808295-1-kennethbwlee@snu.ac.kr/
-
-Fixes: 22b6034323fd ("net, xdp: Update pkt_type if generic XDP changes unicast MAC")
-Reported-by: Kenneth Lee <kennethbwlee@snu.ac.kr>
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- net/core/dev.c | 42 ++++++++++++++++++++++++++++--------------
- 1 file changed, 28 insertions(+), 14 deletions(-)
-
-diff --git a/net/core/dev.c b/net/core/dev.c
-index b390c2edfb33..5c395460854f 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -5489,11 +5489,12 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
- {
- 	void *orig_data, *orig_data_end, *hard_start;
- 	struct netdev_rx_queue *rxqueue;
--	bool orig_bcast, orig_host;
-+	bool orig_bcast = false, orig_host = false;
-+	__be16 orig_eth_type = 0;
- 	u32 mac_len, frame_sz;
--	__be16 orig_eth_type;
- 	struct ethhdr *eth;
- 	u32 metalen, act;
-+	bool has_eth;
- 	int off;
- 
- 	/* The XDP program wants to see the packet starting at the MAC
-@@ -5519,10 +5520,21 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
- 
- 	orig_data_end = xdp->data_end;
- 	orig_data = xdp->data;
--	eth = (struct ethhdr *)xdp->data;
--	orig_host = ether_addr_equal_64bits(eth->h_dest, skb->dev->dev_addr);
--	orig_bcast = is_multicast_ether_addr_64bits(eth->h_dest);
--	orig_eth_type = eth->h_proto;
-+
-+	/* xdp->data only points at an Ethernet header if this skb actually
-+	 * carries one.  Devices with a different link layer (mac_len == 0
-+	 * for ARPHRD_NONE/TUNNEL/RAWIP/PPP/..., IPOIB_ENCAP_LEN for IPoIB)
-+	 * have nothing to inspect here, and must not have skb->mac_header
-+	 * relocated by the ETH_HLEN fixup below.
-+	 */
-+	has_eth = mac_len == ETH_HLEN;
-+	if (has_eth) {
-+		eth = (struct ethhdr *)xdp->data;
-+		orig_host = ether_addr_equal_64bits(eth->h_dest,
-+						    skb->dev->dev_addr);
-+		orig_bcast = is_multicast_ether_addr_64bits(eth->h_dest);
-+		orig_eth_type = eth->h_proto;
-+	}
- 
- 	act = bpf_prog_run_xdp(xdp_prog, xdp);
- 
-@@ -5554,14 +5566,16 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, struct xdp_buff *xdp,
- 		skb->data_len = 0;
- 
- 	/* check if XDP changed eth hdr such SKB needs update */
--	eth = (struct ethhdr *)xdp->data;
--	if ((orig_eth_type != eth->h_proto) ||
--	    (orig_host != ether_addr_equal_64bits(eth->h_dest,
--						  skb->dev->dev_addr)) ||
--	    (orig_bcast != is_multicast_ether_addr_64bits(eth->h_dest))) {
--		__skb_push(skb, ETH_HLEN);
--		skb->pkt_type = PACKET_HOST;
--		skb->protocol = eth_type_trans(skb, skb->dev);
-+	if (has_eth) {
-+		eth = (struct ethhdr *)xdp->data;
-+		if ((orig_eth_type != eth->h_proto) ||
-+		    (orig_host != ether_addr_equal_64bits(eth->h_dest,
-+							  skb->dev->dev_addr)) ||
-+		    (orig_bcast != is_multicast_ether_addr_64bits(eth->h_dest))) {
-+			__skb_push(skb, ETH_HLEN);
-+			skb->pkt_type = PACKET_HOST;
-+			skb->protocol = eth_type_trans(skb, skb->dev);
-+		}
- 	}
- 
- 	/* Redirect/Tx gives L2 packet, code that will reuse skb must __skb_pull
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/3167782391
 -- 
-2.43.0
+With Best Regards,
+Feng Jiang
 
