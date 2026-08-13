@@ -1,115 +1,160 @@
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C5441D23B
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 06:38:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786603112; cv=pass; b=gWX7KnEXaC+A+qjsgTo0D6bDaFJQQtOBQDIM1aRdeWlgJzlSAqyZzoi1Ib0wTbEZPGrY9k9YLH4AOje7rv3pg60O6EJ3HA1x78IZf9Xj9+dUUhpVmjZOLCUaLH4kf31ZwShe48ghZMNrH975iSvD7aXllBEhWiCkPBoqIYvRtig=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786603112; c=relaxed/simple;
-	bh=+A24NtONRwnbr6r3D7xaRVes2nGA+7zLWQBwcOligMI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bYsNA4tRxV5OQIdhoS2mR//T5Gf34khqGXjZXBeUA5IOnNoELrVCZTDPdBEw1/N8WlkdQ6kfv5MN7Mp9fo2VxasuVomwmzeejGuFwHD7/rC3dfpfKqKfPWNhmswV7EOEeF84mf7Cv5enzHrtd82VifZt0tT8Wqs+U2gS0cZmRxg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=anyfinetworks.com; spf=none smtp.mailfrom=anyfinetworks.com; dkim=pass (2048-bit key) header.d=anyfinetworks-com.20251104.gappssmtp.com header.i=@anyfinetworks-com.20251104.gappssmtp.com header.b=seICwRt/; arc=pass smtp.client-ip=209.85.221.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=anyfinetworks.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=anyfinetworks.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=anyfinetworks-com.20251104.gappssmtp.com header.i=@anyfinetworks-com.20251104.gappssmtp.com header.b="seICwRt/"
-Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-59b074ec7ceso686730e0c.1
-        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 23:38:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786603110; cv=none;
-        d=google.com; s=arc-20260327;
-        b=c8DOKf6QB0KiXlMlnWunRsy8iwf+s2fsPl2ugOq1d8jMwa7gnyU7z2eQ7MFp03Oxww
-         3MZlkauRE6/uJpR6Ca1POGNu7oKq8w9ZAVCj7luPFdAkz7ASno/tfqYwfuPjosyEzmK3
-         hIudqfXUSfXWT5q8hpaHSTM9exVuUvqngDJpCBMe8X/QD8NzkraxMdZU/xxNRLjp7j0T
-         LjYgjfnBWiVSY/TdJW9Otv3wB1/zjMyDSgVCwSSvaayKjC9U1XWwI2mgGW76dJJVBTkc
-         8vX/CK+tq/fA0n6kWdKQyMOX8fREOR5AI7wjJFvIDoVWSIwtY1o9Y5sC2lmu7feH/Nxd
-         ZaNA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=+A24NtONRwnbr6r3D7xaRVes2nGA+7zLWQBwcOligMI=;
-        fh=SU6NvKS3Wzf9lcXzJJpj4+07tb5X0j360LJazEc1kNk=;
-        b=Zc41v94InKdi5fGkggriRSmngpnhlxKItdGanKSUCv8jEQZcbBfwxtcdGM+n91gHFU
-         3TZ/bgBRoSGfdSUxpQ28eKeumdG+y2PBUi3FonZmtGhO9dAcJEqN79OuJyDwZuIr7NH3
-         PmydUS5iEddGqLbxntBauCfSLodqQB+zsf9o3Hy3HHLuy/JtJ/j0+xPHTi7aHvqjx+9i
-         ceLN/zLGDgDSWVvGySy02AZlBQEkXKDdmH5xOoE6epA/LkmU1IQKsWX3I/cepdKviXpK
-         AESdInkWNyqqKn3gTDWGdYbTdXqAZEaml4TJBt3cuyyBgkmVku3oGfPlos8BHZf5GT4u
-         d/PQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=anyfinetworks-com.20251104.gappssmtp.com; s=20251104; t=1786603110; x=1787207910; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+A24NtONRwnbr6r3D7xaRVes2nGA+7zLWQBwcOligMI=;
-        b=seICwRt/JeBBzfHlC41orlrh+jIQOO9ErSfHMZyRvAxm4pRcjwaWrEaL7Hh4NBL5vG
-         RKtODZQ8PL8KQVZU9Cz6GEaVQl5KJ9OcUBxu902VsyLMt+UnFEzTq1k3LNwKQcZ8iGbF
-         kLekaE/Bk0W1BHFsljuhWBOTgGRq5gQEnYnxnX0QKuRBIdvTzVG02d+CjqRe9Gont2a+
-         AW+bBC0nyo/NcGPHfo5BDdHCGuWWaMcMsbVyaK4F2uB8C9GmqAYXRlbu/0sdAgGdjQCW
-         27yv2xvTQokDu2HkvNdFuAJLaaqiU9sKYXxDWPvykMtKSps9vBhjM5hiqW+74f3OWgJL
-         ACZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786603110; x=1787207910;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=+A24NtONRwnbr6r3D7xaRVes2nGA+7zLWQBwcOligMI=;
-        b=ns8rEL0LEVtLCsnQBHbNuWyMCwUjEpTfpYOnmznN4PgpFX338hPqie7JfK0LdoCDFH
-         RxB69qFIZeI7dR5RyNuNxKVszxpFDRfBNLxK3wMEsli7eHHKBf1ad7k6wzfhI8sPm3t+
-         53YnPkS5+2onA5bB+I+xTDxYH5PUi5r7GlIh124EmL+DHuuZDoYcqzBzw7K7WALQxBPd
-         W4zcRJRhorZC6q+94C+eV2dsx/KAILTZ1zHEU+KPzf7/nYy4zSCr2x6XWP8ZBzFvAeaw
-         Yg+1pVVQPF58f2Yx7dA6ljH7FF6pGOrBPV5Y3VXmbR7z+4/ndDfsj9GqiUW0zLbZB43u
-         V+Yw==
-X-Forwarded-Encrypted: i=1; AHgh+Rp6ZNQC1lmhol1oD1ex5bHMLNQZQlvbdixbUCH4br/P8Hgjumjts0lql6cH0P/CBZFNTLo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdB3K1MKcIiNiV1915SelBpl0HhguZC9Em0VdurYf8eRyoFQYV
-	peLoWkQtKGwuEfyRAxXHK5tqAYT+vE1uSLrDj73fLNe0XS+FPxKusRCQm/OlYDE94hXqEflAHhp
-	jHlcvKlB0pMA7iVkS7pzwBxBC5Bk9gOKXBTFcTeydIw==
-X-Gm-Gg: AR+sD101ywKfsmBN5tiKL1SclIkjo49yReN494IVguguTu77Uq9qcpYGfFw0SucMxZx
-	EaPu2KPFGNpP02vhOAxYDf3ymd5TCHFEv6He/UdXmaaoo3xxSaH/TcVknNr7s8whjua1nQVFRwx
-	J8igJdYj7d5WFqR7ZGYeBGPKSRq1cgnPBAt08nvdrLGSIMwSOMojONnzRqWTE2f5Sge5W1Zq3Lg
-	6eRs746SdqToZCOjA30uQAdGRf4zuOtvqMvfx9hW96l3UuEsgxK/Zcnxg35NrXLiq7dqKTZzkRQ
-	ADnTleqKak0jJyIfYU6GL9aEHnDQR8PW4VovVaK5NblcvccZwiJa3w==
-X-Received: by 2002:a05:6122:e24f:b0:5c1:2150:9de7 with SMTP id
- 71dfb90a1353d-5c579cef23amr400695e0c.12.1786603109953; Wed, 12 Aug 2026
- 23:38:29 -0700 (PDT)
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4E0D356779;
+	Thu, 13 Aug 2026 07:09:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786604955; cv=none; b=GPZihOvYK8YhiOC4FUmSSDEhKy0qQiaJYeFperg94pjPbF/3PMfrd4bB4NpmTL6E1jTj9Dbcq4lcjhZy0Pz/bmEwNFYrcIY3U7gfTnXAjk63M84eHpJLQMka1+jqo4AqNIG1Q6DnEiGDth4xl/H8obcDXcC3fX9AE3Z3LXU39PI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786604955; c=relaxed/simple;
+	bh=6Z1KVKHKC7XX4FfaZ954+tbK1vGqBHuDIcjuPObLF5w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GcYfBxNxB+LxaaqBQUMSdHYYy+vPtQAqzuG1FJrtZnUJKcLm+Ona2Z2EJf/aGQ5t+Ci1l02Pbtap/ph1I4hqvY7UMLK7XBNG5zaWMi3eWx+XW3v+n/edGZO9FnDDlEpVeElJmoQ4jLFPw+XLAICQ61h3V2c6cbH8qZ3v4mofRcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8DxC9KVbX1qc9MAAA--.2500S3;
+	Thu, 13 Aug 2026 15:09:09 +0800 (CST)
+Received: from linux.localdomain (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJCxNs2UbX1qrRADAA--.7861S2;
+	Thu, 13 Aug 2026 15:09:08 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>,
+	Hengqi Chen <hengqi.chen@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: loongarch@lists.linux.dev,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v1] selftests/bpf: Enable timed may_goto tests for LoongArch
+Date: Thu, 13 Aug 2026 15:09:06 +0800
+Message-ID: <20260813070906.5164-1-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260810194215.3754591-1-main.kalliope@gmail.com>
-In-Reply-To: <20260810194215.3754591-1-main.kalliope@gmail.com>
-From: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Date: Thu, 13 Aug 2026 08:38:18 +0200
-X-Gm-Features: AUfX_mxnVKFrhzMvzU9GpBsrmWTwP-e51VBkRweV7y8XFEVr_QVxGwultt7UhUU
-Message-ID: <CAM1=_QTvdWzBpSGnoLV7wiW0dsn_nc04V8KnYuntptQ5mF9Pyg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 0/3] bpf, mips: Add signed div/mod support
-To: Nicholas Dudar <main.kalliope@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, tsbogend@alpha.franken.de, paulburton@kernel.org, 
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
-	philmd@oss.qualcomm.com, bpf@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCxNs2UbX1qrRADAA--.7861S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxWw48XFWfGw4fArWkWw4kAFc_yoW5KFWxpa
+	4kuasIkr18Jw1DJF9rGr4UWFW5Xrn293yaqr4ftryfAF17Jr97WF1xK34UKFyY9F4ruw4F
+	va129F98Xa18ArgCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE
+	14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
+	0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
+	7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcV
+	C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF
+	04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7
+	CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8zwZ7UUUUU==
 
-Hi Nicholas,
+Enable stream_cond_break, may_goto_interaction, and verifier_may_goto_1
+tests for LoongArch, aligning with recent architectural infrastructure
+support (timed may_goto and arch_bpf_stack_walk JIT).
 
-Thanks for the v3 series. It looks good.
+With this patch, the following tests passed on LoongArch:
 
-However, i am currently on holiday and do not have access to my full
-QEMU test rig right now. I have verified your changes with the
-test_bpf selftests on mips32 with QEMU on my laptop, but the remaining
-arch variants will have to wait until I am back in about 12 days. I
-would like to do that before giving my final approval.
+  sudo ./test_progs -a stream_success/stream_cond_break
+  sudo ./test_progs -a verifier_bpf_fastcall/may_goto_interaction
+  sudo ./test_progs -a verifier_may_goto_1
 
-Please proceed with the remaining opcodes in the meantime. I will do
-the same on my part as we discussed, and then we can wrap up this
-whole v4 compliance work when I am back.
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+This patch is based on the latest bpf-next tree, it depends on the
+following two patches:
 
-Thanks,
-Johan
+LoongArch: BPF: Add timed may_goto support
+https://lore.kernel.org/loongarch/20260804153938.16129-3-dongtai.guo@linux.dev/
+
+LoongArch: BPF: Implement arch_bpf_stack_walk()
+https://lore.kernel.org/loongarch/20260813045306.21571-1-yangtiezhu@loongson.cn/
+
+They are expected to be merged into v7.3-rc1 during the upcoming merge
+window through the loongarch-next tree.
+
+ tools/testing/selftests/bpf/progs/stream.c                | 1 +
+ tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c | 1 +
+ tools/testing/selftests/bpf/progs/verifier_may_goto_1.c   | 5 +++++
+ 3 files changed, 7 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/progs/stream.c b/tools/testing/selftests/bpf/progs/stream.c
+index 00a37933e411..8e8e1339dc74 100644
+--- a/tools/testing/selftests/bpf/progs/stream.c
++++ b/tools/testing/selftests/bpf/progs/stream.c
+@@ -65,6 +65,7 @@ __arch_x86_64
+ __arch_arm64
+ __arch_s390x
+ __arch_riscv64
++__arch_loongarch
+ __success __retval(0)
+ __stderr("ERROR: Timeout detected for may_goto instruction")
+ __stderr("CPU: {{[0-9]+}} UID: 0 PID: {{[0-9]+}} Comm: {{.*}}")
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
+index 4cfaa6b4ab40..328cf630210a 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
+@@ -665,6 +665,7 @@ __naked void may_goto_interaction_x86_64(void)
+ SEC("raw_tp")
+ __arch_arm64
+ __arch_riscv64
++__arch_loongarch
+ __log_level(4)
+ __msg("subprog 0 (may_goto_interaction) main {{.*}} stack 24")
+ /* may_goto counter at -24 */
+diff --git a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
+index 0e211f030d0d..db7e30da234f 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
++++ b/tools/testing/selftests/bpf/progs/verifier_may_goto_1.c
+@@ -12,6 +12,7 @@ __arch_x86_64
+ __arch_s390x
+ __arch_arm64
+ __arch_riscv64
++__arch_loongarch
+ __xlated("0: r0 = 1")
+ __xlated("1: exit")
+ __success
+@@ -33,6 +34,7 @@ __arch_x86_64
+ __arch_s390x
+ __arch_arm64
+ __arch_riscv64
++__arch_loongarch
+ __xlated("0: r0 = 1")
+ __xlated("1: exit")
+ __success
+@@ -56,6 +58,7 @@ __arch_x86_64
+ __arch_s390x
+ __arch_arm64
+ __arch_riscv64
++__arch_loongarch
+ __xlated("0: r0 = 1")
+ __xlated("1: exit")
+ __success
+@@ -83,6 +86,7 @@ __arch_x86_64
+ __arch_s390x
+ __arch_arm64
+ __arch_riscv64
++__arch_loongarch
+ __xlated("0: *(u64 *)(r10 -16) = 65535")
+ __xlated("1: *(u64 *)(r10 -8) = 0")
+ __xlated("2: r12 = *(u64 *)(r10 -16)")
+@@ -120,6 +124,7 @@ __arch_x86_64
+ __arch_s390x
+ __arch_arm64
+ __arch_riscv64
++__arch_loongarch
+ __success
+ __retval(0)
+ __naked void timed_may_goto_preserves_regs(void)
+-- 
+2.42.0
+
