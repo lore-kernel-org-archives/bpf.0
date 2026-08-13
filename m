@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AC8A4A2E00;
-	Thu, 13 Aug 2026 17:18:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 591DF485CF2;
+	Thu, 13 Aug 2026 17:19:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786641539; cv=none; b=hWy6mY+dESTlIImg0p14hmijZIolwmLI7OzBt9RZCIaSo9vUWh4auQg4dPvEloSbuyNFbapSshdUBLKuKut+Lzb9ktaTJJlYfBVSz7yLuz3NTYfZ+E1k++N/TuBuOaRxW1IIsYzyqKGFBNxHitV23auWx/TF3R5PB4Pfovv+JrI=
+	t=1786641547; cv=none; b=oooPoGcWRg7NczzFi8LOBrODklXUce3ku7Uw3giuWBo7nBjMW4OnOC0iAh1HhAGvqA/wvacIB0dB2bqr1Qmmc/4g7QpRKRcIFwbmx2jyJ3VDJ0agd/ME0FilG6AGHhwR1ycYzaQXEodk0dn1arGaWPPZA9Tkyw+VJBg22cXTrC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786641539; c=relaxed/simple;
-	bh=v/ue70/FSZFaIQeua/1hAuL9GUw0Dtmd5j0KNdgSm9Y=;
+	s=arc-20240116; t=1786641547; c=relaxed/simple;
+	bh=87wUUXftmiYbvJoJ0h5v7iqjwKBjlR4YGQxJLo4meMI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=b4gyt4D6V8JvIJTemrZMXtdKrAUHQZiKcJNQ2mTYzsnf85o0YjG5vOzlsQQj+OzFbuFyuHpvbEHIB+PJ7HOl2+a74mVNCFjEqNFedL/F52DlMUVY6tvQF09Gp+m7nGlT5YXkyfsdmMYRFjLIX2zvdUU7Q2XEM/qidhvHddwpTAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CqcqqKty; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=BVDmnFb5fvlU9vmHnJCIdJI09JcMt3fy/FvfiiAYUW94jrtFhT/auIYAQFhpIzdUY34UendNadUtolXYZXPcTRvJyBu4GE6g5BHNssvhtXV+29mNR9AlEy3LWJqgEEqnUaJbTXqASrKBDSKtPq76srf8QLxv7GckFy454q2ofiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dsUgBIWH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CqcqqKty"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0E591F000E9;
-	Thu, 13 Aug 2026 17:18:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dsUgBIWH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 770021F000E9;
+	Thu, 13 Aug 2026 17:19:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786641536;
-	bh=7YfHeS9sPLK1Lhe6B/cprlk6Tdxtdx92WvKqR+YhQVI=;
+	s=k20260515; t=1786641544;
+	bh=ifqzkHJ/EUIj/EG8u3ZjABZHquShqZypz/LarWcc2b4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=CqcqqKtyx/WEIgwveiSclPdXlrJorUuOOWdBr7OVjAV/bSpRCmX+CdQz4eCS+LoRv
-	 GpDl7/xnLYmcbBqDoeuXnJ02bw2t3int1dzS04m3+i92ku+VHIq7sy737lOwg7vQUr
-	 EJqC25oMoPbP/jOQKpy8CFXlTFUnXHeB5lf6Sct/bFSLurK2K1SYH49EWHA9S4RmDO
-	 syIgYiMTOcmkx9na+JWeVzwODjrCIEFUazK+Ux4+A4WLRWmguFyJJd2ArZASRUtIYb
-	 s7HUtV6Lsd4bi0Fz77VGXxSo8+2DrtikWavVL2d0JasFmFJU3zqufKTqOBnykcIhOX
-	 vjfs7adr1d3LQ==
+	b=dsUgBIWHXaY5kFdzutuVZt+uWI8T0GgEUqdy9EAaml9LnMT7Qiha+UJuyFcUvwjVj
+	 PRz1fmnJ7RL6o34U/H+5BA3xSNDnE9xbu3HaGEOfgGdosXxUIp415tj4JlfBtCaq9q
+	 Flqck3P1zFmSt+6bwxfy9cNKVnI8KdOAt1/TMCAVpOrFLRi880Ftp+UDE0WmKAuNIn
+	 WLuJQd4fW1gllB/0wG7U4tSq66XIR3x6GHUccWZyNm60V/fTP62CCVp3VqIrvLZilv
+	 6Nu+B/oRFyuC7YsuVZ/xuODjn4SXuvHe7QzclcVYhOBPphKdRf/TvTJoG+405SX4lx
+	 D5cxbdU19POMQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 02/13] alpha: pass all six syscall args to
+Subject: Re: [PATCH 12/13] um: pass all six syscall args to
  audit_syscall_entry()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Ricardo Robaina" <rrobaina@redhat.com>
 Cc: audit@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <7dec380a50e3db536bdec61a33b8f3b2e2e7ec65.1786626275.git.rrobaina@redhat.com>
+In-Reply-To: <c4118be04a7247aca96de49950dd5d866aa352b8.1786626275.git.rrobaina@redhat.com>
 References: <cover.1786626275.git.rrobaina@redhat.com>
- <7dec380a50e3db536bdec61a33b8f3b2e2e7ec65.1786626275.git.rrobaina@redhat.com>
+ <c4118be04a7247aca96de49950dd5d866aa352b8.1786626275.git.rrobaina@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 13 Aug 2026 17:18:56 +0000
-Message-Id: <20260813171856.B0E591F000E9@smtp.kernel.org>
+Date: Thu, 13 Aug 2026 17:19:04 +0000
+Message-Id: <20260813171904.770021F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,72 +47,57 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] When a syscall is skipped by seccomp or ptrace, the kernel fails t=
-o set the return value to -ENOSYS, allowing unprivileged userspace to spoof=
- successful syscall returns.
+- [Low] The patch series changes the signature of `audit_syscall_entry()` g=
+lobally but splits caller updates into separate commits and completely miss=
+es updating the PowerPC and Xtensa architectures, causing a tree-wide build=
+ failure.
 --
 
---- Patch [2]: [PATCH 02/13] alpha: pass all six syscall args to audit_sysc=
-all_entry() ---
-commit 34becaec07c6a7a08cc6bd923c1a39f3ee655963
+--- Patch [12]: [PATCH 12/13] um: pass all six syscall args to audit_syscal=
+l_entry() ---
+commit 9c50f8d1e9a5a601156f9a077df794dd83a368a0
 Author: Ricardo Robaina <rrobaina@redhat.com>
-Subject: alpha: pass all six syscall args to audit_syscall_entry()
 
-Update the audit_syscall_entry() call to forward the 5th and 6th syscall
-arguments. This ensures the audit core logs all six arguments on alpha.
+um: pass all six syscall args to audit_syscall_entry()
 
-> diff --git a/arch/alpha/kernel/ptrace.c b/arch/alpha/kernel/ptrace.c
-> index 0687760ea4669..d90e2194b5284 100644
-> --- a/arch/alpha/kernel/ptrace.c
-> +++ b/arch/alpha/kernel/ptrace.c
-> @@ -396,7 +396,8 @@ asmlinkage unsigned long syscall_trace_enter(void)
+This commit updates the syscall_trace_enter function in the UML architecture
+to pass the 5th and 6th syscall arguments to audit_syscall_entry. This alig=
+ns
+with the new audit core API which logs all six arguments.
 
-[Severity: High]
-This is a pre-existing issue, but does the -ENOSYS fixup in
-syscall_trace_enter() get skipped incorrectly when a syscall is filtered by
-seccomp or ptrace?
+> diff --git a/arch/um/kernel/ptrace.c b/arch/um/kernel/ptrace.c
+> --- a/arch/um/kernel/ptrace.c
+> +++ b/arch/um/kernel/ptrace.c
+[ ... ]
+> @@ -127,7 +127,9 @@ int syscall_trace_enter(struct pt_regs *regs)
+>  			    UPT_SYSCALL_ARG1(&regs->regs),
+>  			    UPT_SYSCALL_ARG2(&regs->regs),
+>  			    UPT_SYSCALL_ARG3(&regs->regs),
+> -			    UPT_SYSCALL_ARG4(&regs->regs));
+> +			    UPT_SYSCALL_ARG4(&regs->regs),
+> +			    UPT_SYSCALL_ARG5(&regs->regs),
+> +			    UPT_SYSCALL_ARG6(&regs->regs));
 
-Earlier in this function, the fixup condition is:
+[Severity: Low]
+Does splitting the caller updates into separate commits from the core API
+change break bisection for architectures not using the generic entry code?
 
-    if (secure_computing() =3D=3D -1) {
-        if (regs->r19 =3D=3D 0 && regs->r0 =3D=3D (unsigned long)-1)
-            syscall_set_return_value(current, regs, -ENOSYS, 0);
-        syscall_set_nr(current, regs, -1);
-        return -1UL;
-    }
+If the core API was changed in a previous commit, building this intermediate
+commit during git bisect will fail since architectures not yet updated will
+have callers expecting the old signature.
 
-If secure_computing() returns -1 to skip the syscall execution,
-syscall_set_nr() sets r1 to -1. However, it seems r0 still contains the
-original syscall number instead of -1. Doesn't this cause the fallback
-condition to evaluate to false and skip setting -ENOSYS?
+Additionally, were the PowerPC and Xtensa architectures missed entirely in
+this series? For example, do_syscall_trace_enter() in
+arch/powerpc/kernel/ptrace/ptrace.c still passes 5 arguments instead of the
+required 7:
 
-If so, a seccomp filter that skips a syscall without explicitly setting a
-return value (such as SECCOMP_RET_USER_NOTIF) might leak the syscall number
-back to user space as a successful return value instead of returning an err=
-or.
+		audit_syscall_entry(regs->gpr[0], regs->gpr[3], regs->gpr[4],
+				    regs->gpr[5], regs->gpr[6]);
 
-It looks like this same logic is mirrored in arch/alpha/kernel/entry.S in
-SYSCALL_SKIP_RETURN_RESTART_GATE:
-
-    ldq     $20, 0($sp)             /* r0 */
-    lda     $21, -1($31)
-    cmpeq   $20, $21, $22
-    beq     $22, 1f                 /* r0 !=3D -1 =3D> skip fixup */
-
-Does this also bypass the fixup for the same reason?
-
-> =20
->  #ifdef CONFIG_AUDITSYSCALL
->  	audit_syscall_entry(syscall_get_nr(current, regs),
-> -		regs->r16, regs->r17, regs->r18, regs->r19);
-> +		regs->r16, regs->r17, regs->r18, regs->r19,
-> +		regs->r20, regs->r21);
->  #endif
->  	return syscall_get_nr(current, regs);
->  }
+A similar issue occurs in do_syscall_trace_enter() in
+arch/xtensa/kernel/ptrace.c. Will this cause an unconditional build failure
+for these architectures when compiled with CONFIG_AUDITSYSCALL=3Dy?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1786626275.gi=
-t.rrobaina@redhat.com?part=3D2
+t.rrobaina@redhat.com?part=3D12
