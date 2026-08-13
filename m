@@ -1,254 +1,139 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD8C73EBF3B
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 19:44:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9D0C26A1A4;
+	Thu, 13 Aug 2026 19:50:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786650248; cv=none; b=fdSgkwTX0jIaHksGe8m6BMsfdSV3ETc1/9f209COfkrruNp1QNjHGgWEqIX2+e+A8CZoL/9ODPY8DVWuCatS36hmNDZcoluHFriS+aevjKiP+ot5qCkt/jRHziGKaOHknS6NYV6eKvsmVycSQwF/NtpZlerot1Jz9XniZVh9Oz0=
+	t=1786650621; cv=none; b=K+THVlYhlPCNTDPQrPVKs8SSaD/24Lm7sUZriyP99BU7RuE7t7sGJbzvsCq8LV86lGHfbfRcAJOJnM0tO11Mt8eDPQLqjD+qZq1hV5N60N9i8CX2YHRYxkwTKNOj+UfH/vmrrCVZm6oCDHZN1aEglnmofHk9PUw/2imHXfPaBvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786650248; c=relaxed/simple;
-	bh=u8wuJxT2Em7xjPpCtJAd3pmrPzPH3Y4EmnfYRE023FI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NcxOBpRNg3CzkZhWBmFrAn9bF6tjdHGumHPC+BdUQQfPob4sLXphI9Cy5dJhfff98YAHCKhvRIiYNc8wgwukZqOXUAZF+nqhLb41Gsdexw2cMAHePj3VF+LbKvOG3hw5emmSCueTYpt5OIwRHCptEA1kmZbL6Bk+rR9d/kX81m4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oUZvQ/H4; arc=none smtp.client-ip=209.85.215.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786650621; c=relaxed/simple;
+	bh=KRZyTJ8mF5URIGRc8Ri7yfCL4VSPBiavk5S0ueHepl8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OWt3E0RawwPhCSnKcpU3sZRI0on2mOL+5wjZsoVJcNzkfaWzXnhb6ZH+49vOftSBu1YDts7y38pUF36tXcHrKS9OxzuX3IUNFaL89tKmERjCgXrSphZox4wUzVzhuvcxSefZAEcQHyXc7ARRTtDVgcQCm6hn2JbvVC6hcDkk9xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Ido9lFMm; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oUZvQ/H4"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-ca12086c06eso177551a12.0
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 12:44:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786650246; x=1787255046; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=fLNP5a1c2ClTV8DOXcZsLyeb1Z6bMnzz+TbBaAtJgfs=;
-        b=oUZvQ/H4/pDWycscuqUKM3f5wlOMkqRUfhfCLgCyoMibxNqreSAODPjK7462MsKafS
-         J7qFI6M38r2En5tXcBnodARISNS4UVScZylFH6I7ANmnru9KpPa9kBxy0sDv0E+cejJU
-         gdYaLwdIaka2mKl5t24BsdQWSffyXSKmaemu+da20ZatGUjmxirTtGBof2DtZfQSRqWm
-         slxMPQRUBynUnz/kOXQKE04Vf4IZ1L/h4AWcQ6yGmQoZOaaIuoBtV4en2AcOScW04gxV
-         t5TSLXnHoBDSUbs8HJATYESoaQUol/FjoHdEPKA27qCc0NpubLpKHU+DPDALSQIzHKF6
-         mBhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786650246; x=1787255046;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=fLNP5a1c2ClTV8DOXcZsLyeb1Z6bMnzz+TbBaAtJgfs=;
-        b=I1fQw/Hfoa4gvz4hya28UdO2gbTWszfh02MsznHY93AHnzGvE9a8R6f7S6QBkaPvVM
-         AiRX7mH89QqP8msUk3VJ63ErHcWPxvHh/itI1GoY5FBBs82/M1AUB82O0Mg4PTDz4Ddt
-         RSvrVddojiU/YJknVa+4WfaEAcgZ66eLkKoVKZHVWLoUFTnNFE+3OO+5XPGFusFKLKAP
-         NTOsuARzBciPXwvX9tzCmYv7rMkmxWbzSbdkAsX6VcksDgl0qKI29klsGkLNdR8X3Rxb
-         hXMWPsYykpQ7mH4e55cEybMq9Xxs5LUJww3QcTlM7JtzZHd2H2usbKbeSidisZ+RBfZH
-         R4fQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqMrBLCbOhsDDLa/2m7L07YaqH7XWHIOGjihgzD9J7ZuSWtHbvYN4yvnB25KyKUwksn5CU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqgRa3/mpkTlGMGpT6drAyntWbT4eRNAIihGw91oV9v6O0NuIR
-	jU4ciag6O5R9x19XmJTtJgP9hPgHpIVmmH7w+aVQmcGMWD+4ipcOyAHN
-X-Gm-Gg: AR+sD11n2Z4JcKc/FzVNMt3X4yPVCyDpz1UKK2bkRvtpn9veFSC2GTIfd3Md+mKL1cw
-	TvoULuXKIQPPOOqGCPtK1rgrg2DC7JgnwQR93Y3PV18Kg1vg2UzdeqvbLZGTOoLCcKMfT5bVt+M
-	B/kEdyiErElfnljgHie3g301jU7a9S4m8fcyzoTD5EiFM/kPEHOlm7mhaNanC/L2qO8VNdbvpcf
-	0y1pAiF5FH4ONE3PbmNNQEmujsbqAjCT+SkNhBiffOVHKyXz+NcV0Kn3D6tgMmdH6Tu+IMUNjVr
-	SaQgwRp0a2O0lT3cLlX+UeXZX16oTwi7LNvZILgncc0At7POBwwkGVrt02JFI//m23kcSExLckJ
-	C5nbrBpn7FClfeX7Y39S8CAPwuAZLK3fWe//B6xeu0aWiDX65O71cyCYDw5j2QeNvbSjNRamAM7
-	oeep55hz7ACPyt3KzKEu7xU6+L3HEmD7GCH/BQ2GFiKPUpCwpbSQghU3p1s4KvOK3BOeM22NMMM
-	AX3XRxA30xXZmVGqq9umi7ZlbckzVCEg3zN/2268mKa+w==
-X-Received: by 2002:a05:6a20:4321:b0:3c3:875d:c546 with SMTP id adf61e73a8af0-3cc71af3552mr157697637.7.1786650246007;
-        Thu, 13 Aug 2026 12:44:06 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:2cae:4c28:2903:b6f9? ([2620:10d:c090:500::7:1c5e])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-141387c5747sm1098097c88.5.2026.08.13.12.44.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Aug 2026 12:44:03 -0700 (PDT)
-Message-ID: <c0a8a71dab13be1009080b4133069c7f55323af1.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 05/16] bpf: Track verifier register
- diagnostic events
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
- Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
-Date: Thu, 13 Aug 2026 12:44:01 -0700
-In-Reply-To: <20260812233326.3575958-6-memxor@gmail.com>
-References: <20260812233326.3575958-1-memxor@gmail.com>
-	 <20260812233326.3575958-6-memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Ido9lFMm"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=jbErwCXZpsAeSyNrGlJjSOg+/lKCvzA5UZLc9zYpicU=; b=Ido9lFMmWpkhuP8sQYbP06mPcA
+	aOp5ieHuyOAjkdm87YqwsJhZ9EfRldvuIdcAQqsNlMDjsDSUBnzNnQpdQOZS+5d/epLk3QHQybjWP
+	jNMlcwtGWtLbBaJkWRWbZPM3ky+ALiQiOAbmkgT+Yu0ofAW2EirNFUEo3BHSi+QtNgXf4r2wT6oul
+	hkGp7LMJXFA3wmLPrrwFMVyDxCTRZCeuF9ytdud5kjkDsib+T/57oyCZ+Eb4YcWS1RumV5VikeNDa
+	cpTu1Go5ZHq2XLm623DiHU9SwcIUnuVblW/xxjrLaHdQLEC6MvaFcCGIj80PKCrIBhYefEdtZJkVk
+	6slTJ2OQ==;
+Received: from sslproxy04.your-server.de ([78.46.152.42])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wubRH-0001js-0d;
+	Thu, 13 Aug 2026 21:50:07 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wubRG-000LUW-1K;
+	Thu, 13 Aug 2026 21:50:05 +0200
+Message-ID: <04493cfc-98a6-418b-8d8a-8f85688aca1b@iogearbox.net>
+Date: Thu, 13 Aug 2026 21:50:05 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v1] selftests/bpf: Fix insn count expectations in
+ chained global subprogs test
+To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org,
+ memxor@gmail.com
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+ <eddyz87@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Mykyta Yatsenko <yatsenko@meta.com>, Taegu Ha <hataegu0826@gmail.com>,
+ Amery Hung <ameryhung@gmail.com>, Paul Chaignon <paul.chaignon@gmail.com>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20260813051635.121670-1-jiayuan.chen@linux.dev>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260813051635.121670-1-jiayuan.chen@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28091/Thu Aug 13 08:25:54 2026)
 
-On Thu, 2026-08-13 at 01:33 +0200, Kumar Kartikeya Dwivedi wrote:
+On 8/13/26 7:16 AM, Jiayuan Chen wrote:
+> The test asserts exact per-subprog insns_self/insns_total values and the
+> aggregate processed count, but these depend on compiler codegen. The
+> expected values match -mcpu=v3 output; under -mcpu=v4 clang emits a
+> sign-extending load in global_good() instead of a load plus two shifts,
+> so the subprog is verified in 3 insns instead of 5 and the test fails on
+> the cpuv4 flavor.
+> 
+> Rewrite the involved subprogs as naked functions with hand-written
+> instruction sequences using only v1 instructions, so the verified insn
+> counts no longer depend on cpu version or compiler codegen.
+> 
+> Fixes: c2e6c7de8830 ("bpf: Show more useful info in stack depth stats")
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+$subj should have been bpf-next to route to BPF CI.
+Anyway, it was fixed in the tree via:
 
-Claude ensures me that BPF_ATOMIC | BPF_FETCH lacks the mod_end() call
-for when the stack memory is modified. Seem to be true.
+   9786d424a36b ("selftests/bpf: Fix chained_global_func_calls_success() for cpu v4for-next")
 
-...
-
-> diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-
-...
-
-> @@ -30,15 +30,23 @@
->  #define BPF_DIAG_CONTEXT_CNT (1 + BPF_DIAG_CONTEXT * 2)
->  #define BPF_DIAG_SOURCE_LANE_WIDTH 88
->  #define BPF_DIAG_TAB_WIDTH 8
-> -#define BPF_DIAG_REG_DESC_LEN 512
-> -#define BPF_DIAG_REG_TMP_LEN 192
-
-Churn
-
-...
-
-> @@ -49,6 +57,13 @@ struct bpf_diag_history_event {
->  		struct {
->  			bool cond_true;
->  		} branch;
-> +		struct {
-> +			struct bpf_diag_mod_target target;
-> +			struct bpf_diag_mod_target origin;
-
-Silly question, should we keep the 'src'/'dst' terminology here?
-In order to be in line with instruction set.
-
-> +			struct bpf_diag_reg_snapshot old, new;
-> +			u8 reason;
-> +			bool origin_valid;
-> +		} mod;
->  	};
->  };
-
-...
-
-> @@ -375,6 +401,34 @@ static void diag_print_wrapped_prefixed(struct bpf_v=
-erifier_env *env, const char
->  	}
->  }
-> =20
-> +static void bpf_diag_format_btf_type(char *buf, size_t size, const struc=
-t btf *btf, u32 type_id)
-> +{
-
-Nit: single caller, might as well inline.
-
-> +	size_t len;
-> +	int ret;
-> +
-> +	buf[0] =3D '\0';
-> +	ret =3D btf_type_snprintf_show_name(btf, type_id, buf, size);
-> +	if (ret < 0 || !buf[0]) {
-> +		scnprintf(buf, size, "BTF type ID %u", type_id);
-> +		return;
-> +	}
-> +
-> +	len =3D strlen(buf);
-> +	if (len && buf[len - 1] =3D=3D '{')
-> +		buf[len - 1] =3D '\0';
-> +}
-> +
-> +const char *bpf_diag_fmt_btf_type(struct bpf_verifier_env *env, const st=
-ruct btf *btf, u32 type_id)
-> +{
-> +	char *buf =3D bpf_diag_fmt_buf(env, BPF_DIAG_FMT_BUF_SIZE);
-> +
-> +	if (!buf)
-> +		return "";
-> +
-> +	bpf_diag_format_btf_type(buf, BPF_DIAG_FMT_BUF_SIZE, btf, type_id);
-> +	return buf;
-> +}
-
-...
-
-> +static bool diag_snapshot_eq(const struct bpf_diag_reg_snapshot *old,
-> +			     const struct bpf_diag_reg_snapshot *new)
-> +{
-
-Nit: memcmp?
-
-> +	return old->type =3D=3D new->type && old->map_ptr =3D=3D new->map_ptr &=
-& old->btf =3D=3D new->btf &&
-> +	       old->btf_id =3D=3D new->btf_id && old->var_off.value =3D=3D new-=
->var_off.value &&
-> +	       old->var_off.mask =3D=3D new->var_off.mask && old->r64.base =3D=
-=3D new->r64.base &&
-> +	       old->r64.size =3D=3D new->r64.size;
-> +}
-
-...
-
-> +static struct bpf_func_state *diag_func_state(struct bpf_verifier_env *e=
-nv, u32 frameno)
-> +{
-> +	struct bpf_verifier_state *vstate =3D env->cur_state;
-> +	int frame;
-> +
-> +	for (frame =3D 0; frame <=3D vstate->curframe; frame++) {
-> +		if (vstate->frame[frame]->frameno =3D=3D frameno)
-> +			return vstate->frame[frame];
-> +	}
-
-Isn't this just `return frameno <=3D vstate->curframe ? vstate->frame[frame=
-no] : NULL`?
-
-> +	return NULL;
-> +}
-> +
-
-...
-
-> diff --git a/kernel/bpf/diagnostics.h b/kernel/bpf/diagnostics.h
-
-...
-
---- 8< --------------------------------------
-
-> +enum bpf_diag_mod_target_kind { ...
-> +struct bpf_diag_mod_target { ...
-> +static inline struct bpf_diag_mod_target bpf_diag_reg_target(u32 frameno=
-, u8 regno) ...
-> +static inline struct bpf_diag_mod_target bpf_diag_stack_arg_target(u32 f=
-rameno, u8 slot) ...
-> +static inline struct bpf_diag_mod_target bpf_diag_stack_slot_target(u32 =
-frameno, u16 spi) ...
-> +static inline struct bpf_diag_mod_target bpf_diag_stack_range_target(u32=
- frameno, s16 min_off, ...
-
--------------------------------------- >8 ---
-
-Move this to diagnostics.c? (and drop prefixes).
-
-...
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-
-...
-
-> @@ -8902,13 +8936,18 @@ static int check_func_proto(const struct bpf_func=
-_proto *fn, struct bpf_call_arg
->   */
->  static void clear_all_pkt_pointers(struct bpf_verifier_env *env)
->  {
-> +	struct bpf_stack_state *stack;
->  	struct bpf_func_state *state;
->  	struct bpf_reg_state *reg;
-> =20
-> -	bpf_for_each_reg_in_vstate(env->cur_state, state, reg, ({
-> -		if (reg_is_pkt_pointer_any(reg) || reg_is_dynptr_slice_pkt(reg))
-> -			mark_reg_invalid(env, reg);
-> -	}));
-> +	bpf_for_each_reg_in_vstate_mask(
-> +		env->cur_state, state, reg, stack, 1 << STACK_SPILL, ({
-> +			if (reg_is_pkt_pointer_any(reg) || reg_is_dynptr_slice_pkt(reg)) {
-> +				bpf_diag_record_scrub(env, reg, BPF_DIAG_MOD_PKT_DATA_CHANGE);
-> +				mark_reg_invalid(env, reg);
-> +			}
-> +		}))
-> +		;
->  }
-
-Nit: bpf_for_each_reg_in_vstate_mask conversion is not necessary.
+Thanks,
+Daniel
