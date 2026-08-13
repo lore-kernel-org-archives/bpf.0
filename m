@@ -1,122 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D03F2FE56F
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 03:37:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786592275; cv=none; b=Q0sZftZB4q07SoUWbrF+gNQFHEtCL7m5E2ScHEBVvIcCeYXTFoYW7Xc8E75m6XK/N1ITOXtwjeFMc9vQHb9zuzfXB8+6/h3iJDnqT0L71QxY9NcKmPFe/5rNCPX6HZrnVKYQFZ3VpYDV8Hp54jzIyBnBP91KW6MtJ3fAhjPInGM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786592275; c=relaxed/simple;
-	bh=64VOHehe7qe0DEFowvKN3EEY3JBmUkEAvPw92hkAK9k=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=GmYSKLOc0mvoir9we6Tj6X9U/F3rXElN8U0baxfJyC6qSVftQQu2lY9w+pEFvWB8M52B5UAfXvoWArz3mCYwep9Cgt5gGvbBEDIhTKws86ZG49IAYHwq/2cMqSg9U/7BqsedQLNWd6Kb5v1MYlD1UFXPoDRoVB30lncV4uEuZGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JhD8iSwl; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5DA1368D4C
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 03:41:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786592466; cv=pass; b=r9b3qu0EizQikrHMPAIQCTSH4TKz3gvAGp1WLETwf9gCLY6P+3eQCC/rckmy5M6qd6kHUW3HAK6dJQa7t/Wy/smoRw2LoSkK0Zv7BsCKZB99vU5RpluTNqDdTzoe/9ZO3L2mq8hZZwrCK6Xn0uMORmJTJ8evOhkLvCbtLwSVLpw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786592466; c=relaxed/simple;
+	bh=KGNqgcuWPSyLSxhZ6HvJxhNYRieQ49SCRyUh0hq1fDw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qTRGCZwK09d2n+lJyCALsbnzWjgFpSbNSf8RaOxG6wD2TU5i1yJDVBt11dVt8+HjCeP/NMluYdQa3fxp0Ig7s8Rpumj3cdKlLc3LF50xniQ9cZfIoPPaC9bKeWCx7cGDTYzIBSQjaFOfMbaQFkqDdMYOr1lWSGbsm+ZllauVnWQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fzJe6LdD; arc=pass smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JhD8iSwl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B09FA1F000E9;
-	Thu, 13 Aug 2026 03:37:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786592273;
-	bh=GVZqrwyi4zzNbGzqL5DhnVegzoqR8alD8EtaBldPbao=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=JhD8iSwlRcaPUS4OGuS2NDT/ge/t0ZA1d2xVbtQGL8pZqAagKlfAgnqaKlMcXLnVv
-	 x4oLhDCMxcbC/HHc8a+rIzxEu7yIeM3VV6+R3W/+YWYqSzWjRCD/mXngK9/RS2ldE3
-	 iDG2D5SLTnlWjUmmXNN7ItP18gZNOhg4z+pY9/2BKZSHNkJ4WHqIr9aSq+yIw2tRYR
-	 3ihwJBMpdg5YYo3FmrIaBkoGU81hoEL+nZFr9SvmugAnywvoQaYTj6SIpZCBr+Aaro
-	 /eAFMat54q4ZP/ybn0p31o4bp5KyZSqwsCD0p5IDjF6qjcFCadU4SdCON9RxOZgK0j
-	 1vfAV9v1b8mPw==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH bpf-next v2 1/2] libbpf: support selective kernel
- module BTF loading via .kmod_btfs section
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Fuyu Zhao" <zhaofuyu@vivo.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260813032613.2755-2-zhaofuyu@vivo.com>
-References: <20260813032613.2755-1-zhaofuyu@vivo.com>
- <20260813032613.2755-2-zhaofuyu@vivo.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 13 Aug 2026 03:37:53 +0000
-Message-Id: <20260813033753.B09FA1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fzJe6LdD"
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5b159850b16so1640870e87.3
+        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 20:41:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786592463; cv=none;
+        d=google.com; s=arc-20260327;
+        b=eONOz0R6vpmtNYjN5A+g5MRy+WyZVENXIwqVY+VFdz1fHXik4IDZy7LznJtyY3hhwO
+         Kto4TMhMDk69cJIP2Hj5ka0nN39l8KAdNarvehnthUJJQWZl6u0Pc4xV19zDRGTLkfKG
+         +SnifA+AxOK+uyFbNJIudbdIKLVOxYqTRaqdPtIkmUKZi4ABMUUksoSm8P397oJ1CoXF
+         7uWUKl0g1fjNfbuUYcHDshIeiMf3Ha7wUBO+HDyhuVagABuoPCXHWJNseAFrhYm3oIqp
+         BMGiX/CvIuzO8cE3SdEHRfkm1GFZiPkbTu0ExhVLfcjPs2eBb4taZW6heyU/085rfai3
+         CT0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=KGNqgcuWPSyLSxhZ6HvJxhNYRieQ49SCRyUh0hq1fDw=;
+        fh=+2i0Mx8zdklcqxcl0fG68rMUoFBPzhW3ezoAD8ONY7w=;
+        b=Qp60YUV5OXfvZtekakLFmEY4kOvyYY5JixM9wPLpwVd+vxV2kJG3DqXtIAtk+JnIdo
+         B15ud9VBwVpeLvMG5gyy5+Y5ejTQnq4hHv15B2j8AoefZbHjy1bz0iAungpq+zuU0WiM
+         cGicygjLmIZaPb0CvSBdQmgIwBJdPLyn74uhvU1TH9D5HB1AqOsYgRJb9dJJXhQ7ZhhW
+         fGHpKkozTOQKeXObEoRNOYD2fP7c4dfauxsM49km9acaF2RgSKO9XvJhghjLqaIrFBJQ
+         nHcqd2rnky0Mvu/L+xakU8jRNIp1fEhl/z772tmcnIcpfa/F6IxOcmLWc6+6W7d+RLCg
+         w/Yg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786592463; x=1787197263; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=KGNqgcuWPSyLSxhZ6HvJxhNYRieQ49SCRyUh0hq1fDw=;
+        b=fzJe6LdDAHCuOOen4AkfHRsMy3EwDZfFW0QIGdze8sdEzctJHbmxFalbj80Y8dleWX
+         3UUmVust8DHJrCtnFWl1GnVC4d7POz9pyspy2EUGTixNoIlZWyk6Pv/iHNYU6nTr/cWp
+         29VhdtucWlR24q94AmhvclmBvl97Z5BI1KEd1tdzsxnvKu2LVn/K9GRi5qkhFDSIz/sP
+         9i9s3UVPeA7SK9vboCTKSNQ+oUxVidBp6CFwHbCBm3/bJrE4kKeryNRt+U4mtZQrFkLO
+         M6F24OmEcjYHZ9nugjXpwCx+TpzuOr6ErsRwmWoJnibtqt8umwWBD2eY1+tgWY4pIPc/
+         LREQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786592463; x=1787197263;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=KGNqgcuWPSyLSxhZ6HvJxhNYRieQ49SCRyUh0hq1fDw=;
+        b=g6z+JMsy//nCQYop63tKiUR2rU8Mtx2bIsjnD2c+BRO8GSviN8UU+IvTSvE7p25fmk
+         6GADJl+Z8TBmOJMZjqq7nzMPxzGCaNNTaZ/ujZa4G42YC3/95969r133JmuekWFeYFRU
+         EYG8HasRuScyRDNkY739erUDEh9uI9su9VVkFS6naNi3cvWq9ME7eOauaZZ0vGE9XfIh
+         iFpeUx/CxYUDZGIMW9agGH7j1ywM668dUczRFCQ1kjnVBxskMFH1kxbDmpVOHKMwS6DP
+         z0z+VizlU/Q3BRUG+Mwg02GEw99U+WlVqz9Q8CaijGggvSSNdY8X/YjYCvSNYaqET3OF
+         0W+w==
+X-Gm-Message-State: AOJu0YxlKzHrCuk4K/WlmLdj9r9gapdJBQsVx361CbFCCHnd6MjL4eVO
+	pqx5+/5dxfCPx5HMAJpNpnFPjSO80R6mleks1SeKjUpkrTCI8NDYbLK7VbB6SbWRWaEoUbQ6c3j
+	Sj0HfaU8ec8dUxPGF2nvrCEe99UGCkak=
+X-Gm-Gg: AR+sD11mkq7tEya/LIyovGS9rLH804Iz3ESJf5RztogYX8CrBIKP1OlVVHmXRbPqub0
+	b6zekMElWGLUeP4DnOA95ZkusDy0YjGF221o7xxKXlTvdHjfVyVRF/trygTa8ak1S4YWA1O1i4f
+	hUAfzEYE4WnJ8FvOyBVxa2xBNefFV4szDwmGoEseOFAdCk1muKdvu3OWStIJDtxEbcC/BCoq1y2
+	nEJr0I6SdoDVXg0Wx3rNm3W7YAhmG16dpwcr5+nUtEE/VEMEZ3+8gqhFSMsybA0gNBrk+e0m8Ea
+	O6AKqhinqd1LxvnidnD03ouiziFtdwPTeMVgLGTIV4Q=
+X-Received: by 2002:a05:6512:65c9:10b0:5aa:671d:9960 with SMTP id
+ 2adb3069b0e04-5b453f3a290mr198295e87.6.1786592462622; Wed, 12 Aug 2026
+ 20:41:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260803112218.3361213-1-dingning04@gmail.com>
+ <20260803112218.3361213-5-dingning04@gmail.com> <DKNGPMSHGC89.1WT6CHDFCPRJR@gmail.com>
+In-Reply-To: <DKNGPMSHGC89.1WT6CHDFCPRJR@gmail.com>
+From: Ning Ding <dingning04@gmail.com>
+Date: Wed, 12 Aug 2026 20:40:51 -0700
+X-Gm-Features: AUfX_mzFUfYUhn8CtVXH-132owRD1GihhiMHZXa7_zmjDSR98AiJaHY2mSy0pJI
+Message-ID: <CAJP4iutYA3fcAb5V0Hmc_MDu1=Tk9NuRzDy+NuD9k4N3L8OoQg@mail.gmail.com>
+Subject: Re: [PATCH bpf v3 4/4] selftests/bpf: Test untrusted allocated-object pointers
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, greg@kroah.com, sashiko-bot@kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+	Viktor Malik <vmalik@redhat.com>, Justin Suess <utilityemal77@gmail.com>, 
+	Kaitao Cheng <chengkaitao@kylinos.cn>, Leon Hwang <leon.hwang@linux.dev>, 
+	Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] Missing increment of `nr_loaded` prevents early loop termination.
-- [Low] Multi-line comment formatting violation.
---
+> Please respin and only send patches after you have tested them properly.
+>
+> The right fix might be to use fentry.s for these tests to trigger untrusted
+> marking of pointers. The fixes themselves do make sense.
+>
+> For the next version, target bpf-next and drop Cc: stable.
 
---- Patch [1]: [RFC PATCH bpf-next v2 1/2] libbpf: support selective kernel=
- module BTF loading via .kmod_btfs section ---
-commit 3f4fb04bbfb95d7f7ea0012b5651135983af6e62
-Author: Fuyu Zhao <zhaofuyu@vivo.com>
-
-libbpf: support selective kernel module BTF loading via .kmod_btfs section
-
-This patch adds support for a ".kmod_btfs" ELF section to allow BPF programs
-to specify which kernel modules need BTF loading. It introduces functions to
-collect the module names and filter the BTF loading process to avoid loading
-unneeded modules.
-
-> diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-> index 9d160b5b9c0ee..171ea055cd323 100644
-> --- a/tools/lib/bpf/bpf_helpers.h
-> +++ b/tools/lib/bpf/bpf_helpers.h
-> @@ -188,6 +188,20 @@ enum libbpf_tristate {
->  	TRI_MODULE =3D 2,
->  };
-> =20
-> +/* Helper typedef for declaring kernel module names that need BTF loadin=
-g.
-> + *
-
-[Severity: Low]
-This isn't a bug, but the BPF subsystem coding style expects multi-line
-comments to have the opening /* on its own line. Should this be reformatted
-to match the preferred kernel style?
-
-> + * Usage: define an array in the ".kmod_btfs" ELF section to specify
-> + * which modules need BTF loading:
-> + *
-
-[ ... ]
-
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 514e4e9daa825..9fe8a653e8b6b 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-
-[ ... ]
-
-> @@ -5891,6 +5987,10 @@ static int load_module_btfs(struct bpf_object *obj)
->  			break;
->  		}
->  		obj->btf_module_cnt++;
-> +
-> +		if (obj->kmod_btfs &&
-> +		    obj->kmod_btfs->nr_names =3D=3D obj->kmod_btfs->nr_loaded)
-> +			break;
-
-[Severity: Medium]
-Is obj->kmod_btfs->nr_loaded missing an increment?
-
-Looking at the loop in load_module_btfs(), when a module BTF is successfully
-loaded and obj->btf_module_cnt is incremented, obj->kmod_btfs->nr_loaded
-doesn't appear to be updated anywhere.
-
-Will this prevent the intended optimization of breaking out of the loop ear=
-ly,
-causing it to always scan all remaining kernel BTF IDs unnecessarily?
-
->  	}
-> =20
->  	if (err) {
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260813032613.2755=
--1-zhaofuyu@vivo.com?part=3D1
+Ah I see, I forgot that tc programs are non-sleepable. Will apply the
+fixes soon, thanks!
