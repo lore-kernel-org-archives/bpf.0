@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDCB333688F
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 21:36:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CD384334B8
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 21:37:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786656964; cv=none; b=jWnGqYcC8XpJofszEAqgXYa9nzns9UZFlEXRrFmZFNzvB7vPLlo+lacFlKEqJx/tBct/dNwzD4ZWc9ulRVPkqqeYRiPCKP2Q9IFoDafglOF8DWgy6zFLYRVmJSm3FlSPYLjAJ/MO5v1UBWib98ySk60niOziYt7sscVlqPHIWvc=
+	t=1786657028; cv=none; b=LJGd4iR3Yywz6DmXvGBzbXzRCgjcoBCvQa9UyJTT5OQpWBkMJRfVNnvdnw4/b5Qct9Ogpu1/1YCfX9Uf1i5LJY4WfJQS70Tw6HK0EZmgQ5CZzYurWjXMWpERA6niqHdkoK+DuE4RkymqjSwh9HDG4tnZQtfsdiNkcXV1aFj8w/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786656964; c=relaxed/simple;
-	bh=bfAqsAAjknuXLM7V8nV9QmEUchJdxl2w+c5fFZYasq8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VFFKzg5ZAlz4/wCCdUf0/y0Bcvpr1GOcz6CfuvJQmYKowkdp9b8BDs2SZzVk+TKtDNw+THE88YcwawHkRkrVNgK/AOtkwrdtT4A4PWu9cEd9loxxuUfA1Zrra0LW49Ib1n6tDRpXLNYyQXp4/3LAycxtiX87RE1i6jB/kUurbiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bm4BydtV; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786657028; c=relaxed/simple;
+	bh=Am7YEAV82DWSxnFuhWEOxepxzrGtHsdU1UUny++yNHY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=C1FTUuzQQ/A10UajF0FYM6VQWW7XjaUMXmL2BntIsQzPDD4rCr+E7XK0WB94YSlYmE7fUgent4epQbkqcPb12SwJhDXptbnTZF0CxEAjqb31VyMYRc4yd+l7Z5sEdFxkuzzhR/1ph5IYhPZ2yYHtDCDsn5OIXpyIIC8kZH29daU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PELbHPFb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bm4BydtV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D33061F000E9;
-	Thu, 13 Aug 2026 21:36:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PELbHPFb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5BBF1F000E9;
+	Thu, 13 Aug 2026 21:37:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786656962;
-	bh=pEgtUHR85pJvxTatTgfXENEEYV/8bVzxu0MK7w0h+Po=;
+	s=k20260515; t=1786657023;
+	bh=KWA9u+GyDPU3jZ9dHvsYui6wjahIon0r9UF+f724Yc4=;
 	h=From:To:Cc:Subject:Date;
-	b=Bm4BydtVp4/Qz5yAmCuoGlj9MVPPKFEBCyqbH4FXvUxq43n9cEMb4GmhRo1EEn7lQ
-	 xZq0GgyU/P7enM4pppkywJYLkMoQmcsehkVCbnpCpJLa04ksNV72SbHMvOZ6cPqpGo
-	 Ww4JqonzVR3nIaXfFaOSzeyrnu5hKcjJH5VnyBeqSeUUcjFENpjiLILFYorTsjDko4
-	 40a8R4d0wylSZxZC9jOYSocgx2zdaEubAtcH/E5zFVUG8IJOMkgPCDZtnnPDmYZf9F
-	 yXHigLDT5Y+QeElvW/WGy1fw1gVJmxSnzsUgxg6K6LUXzC0vWXKEvLTJIejl912IOV
-	 DC6Byg+QoJjJA==
+	b=PELbHPFbM7TYwS85ByGpUfhTMJaG4CjdwcYBsYxTz3T8nRncZ90FTb1F1vyBfVvtd
+	 UqNY8pKoss6tGiWaNBEDtjz+kv45NQEQaM2N+zb3NFlQfYrILLX5qZm5+y/kBAAB21
+	 9FQg6y3c9M6z7PIk7iliABanBejT64wgi0zJA3YqOpeqKwJY1A7M3+PuHh09nwUk46
+	 Fqh7j/p7L9v58jqhXk4tL89FSO1CTNq0jHASZcuvxgNAtvc6l5oh5FInLuOCyzPqbB
+	 zCfKMjp0rE8B/U9fSnUgJ9PBAjZq3k8xDr3VZ6w+A0yKNJeQe/Or45wZz1u6btVunD
+	 wbfgqqLRmDoCA==
 From: Andrii Nakryiko <andrii@kernel.org>
 To: bpf@vger.kernel.org
 Cc: andrii@kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next] selftests/bpf: Use ping_command() for IPv6 pings in lwt_ip_encap
-Date: Thu, 13 Aug 2026 14:35:58 -0700
-Message-ID: <20260813213558.3103179-1-andrii@kernel.org>
+Subject: [PATCH bpf-next] selftests/bpf: Retry stat generation in cgroup_iter_memcg
+Date: Thu, 13 Aug 2026 14:37:01 -0700
+Message-ID: <20260813213701.3116369-1-andrii@kernel.org>
 X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -41,67 +41,160 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-lwt_ip_encap hardcodes the ping6 binary for its IPv6 pings. iputils
-merged ping6 into ping long ago and distros have started dropping the
-compat symlink -- Arch's iputils 20250605 ships only arping, clockdiff,
-ping and tracepath. There, every lwt_ip_encap subtest fails:
+Each cgroup_iter_memcg subtest touches 1024 pages and expects the matching
+memcg counter to be non-zero. On a host with many CPUs it reads zero
+instead:
 
-  check_ping_ok:FAIL:ip netns exec ns-lwt-ip-encap-1-0101330 ping6 -c 1 \
-    -W1 -I veth1 fb04::1 > /dev/null unexpected error: 256 (errno 2)
-  #217/1   lwt_ip_encap_ipv4/egress:FAIL
+  test_anon:FAIL:final anon mapped val: actual 0 <= expected 0
 
-The IPv4 subtests fail too, because check_ping_ok() pings both families.
-SYS() runs the command through system(), so a missing binary is
-indistinguishable from an unreachable peer.
+memcg stats are cached per-cpu and only become visible once the periodic
+flusher runs (FLUSH_TIME, 2s), or once pending updates cross
+MEMCG_CHARGE_BATCH * num_online_cpus(). That threshold is 512 pages at 8
+CPUs but 8192 at 128, so a single pass no longer reaches it and
+bpf_mem_cgroup_flush_stats() returns without flushing anything.
 
-network_helpers.c has had ping_command() for exactly this since commit
-372642ea83ff ("selftests/bpf: Move netcnt test under test_progs"): it
-falls back to "ping -6" when ping6 is not present. lwt_ip_encap.c is the
-last hardcoded ping6 user. Fix that.
+Retry the stat generation, sleeping in between, so that a flusher cycle is
+always covered.
 
-Fixes: f5e288943e2c ("selftests/bpf: Move test_lwt_ip_encap to test_progs")
+Fixes: 6bce6ddbe634 ("bpf: selftests: selftests for memcg stat kfuncs")
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ .../bpf/prog_tests/cgroup_iter_memcg.c        | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c b/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-index 6606f0ed9a9a..39e8a3b8b6af 100644
---- a/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-+++ b/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
-@@ -410,7 +410,8 @@ static int test_gso_fix(const char *ns1, const char *ns3, int family)
- static int check_ping_ok(const char *ns1)
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+index b7c18d590b99..37e2cf249be8 100644
+--- a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+@@ -10,6 +10,17 @@
+ #include "cgroup_iter_memcg.h"
+ #include "cgroup_iter_memcg.skel.h"
+ 
++/*
++ * memcg stats are cached per-cpu and only become visible once the periodic
++ * flusher runs (FLUSH_TIME, 2s), or once pending updates cross
++ * MEMCG_CHARGE_BATCH * num_online_cpus(). That threshold grows with the CPU
++ * count, so on a large machine a single pass does not reach it and
++ * bpf_mem_cgroup_flush_stats() returns without flushing anything. Retry for
++ * long enough to cover a flusher cycle.
++ */
++#define MEMCG_STAT_RETRIES		16
++#define MEMCG_STAT_RETRY_DELAY_US	(250 * 1000)
++
+ static int read_stats(struct bpf_link *link)
  {
- 	SYS(fail, "ip netns exec %s ping -c 1 -W1 -I veth1 %s > /dev/null", ns1, IP4_ADDR_DST);
--	SYS(fail, "ip netns exec %s ping6 -c 1 -W1 -I veth1 %s > /dev/null", ns1, IP6_ADDR_DST);
-+	SYS(fail, "ip netns exec %s %s -c 1 -W1 -I veth1 %s > /dev/null", ns1,
-+	    ping_command(AF_INET6), IP6_ADDR_DST);
- 	return 0;
- fail:
- 	return -1;
-@@ -424,7 +425,8 @@ static int check_ping_fails(const char *ns1)
- 	if (!ret)
- 		return -1;
+ 	int fd, ret = 0;
+@@ -35,11 +46,13 @@ static int read_stats(struct bpf_link *link)
  
--	ret = SYS_NOFAIL("ip netns exec %s ping6 -c 1 -W1 -I veth1 %s", ns1, IP6_ADDR_DST);
-+	ret = SYS_NOFAIL("ip netns exec %s %s -c 1 -W1 -I veth1 %s", ns1,
-+			 ping_command(AF_INET6), IP6_ADDR_DST);
- 	if (!ret)
- 		return -1;
+ static void test_anon(struct bpf_link *link, struct memcg_query *memcg_query)
+ {
++	int retries = 0;
+ 	void *map;
+ 	size_t len;
  
-@@ -657,9 +659,10 @@ static void lwt_ip_encap_vxlan(bool ipv4_encap)
- 	skel->bss->fexit_triggered = false;
+ 	len = sysconf(_SC_PAGESIZE) * 1024;
  
- 	if (ipv4_encap)
--		SYS(out, "ip netns exec %s ping  -c 1 -W1 %s", ns1, IP4_ADDR_DST);
-+		SYS(out, "ip netns exec %s ping -c 1 -W1 %s", ns1, IP4_ADDR_DST);
- 	else
--		SYS(out, "ip netns exec %s ping6 -c 1 -W1 %s", ns1, IP6_ADDR_DST);
-+		SYS(out, "ip netns exec %s %s -c 1 -W1 %s", ns1,
-+		    ping_command(AF_INET6), IP6_ADDR_DST);
++retry:
+ 	/*
+ 	 * Increase memcg anon usage by mapping and writing
+ 	 * to a new anon region.
+@@ -53,6 +66,12 @@ static void test_anon(struct bpf_link *link, struct memcg_query *memcg_query)
+ 	if (!ASSERT_OK(read_stats(link), "read stats"))
+ 		goto cleanup;
  
- 	if (!ASSERT_TRUE(skel->bss->fexit_triggered, "fexit_triggered"))
- 		goto out;
++	if (!memcg_query->nr_anon_mapped && ++retries < MEMCG_STAT_RETRIES) {
++		munmap(map, len);
++		usleep(MEMCG_STAT_RETRY_DELAY_US);
++		goto retry;
++	}
++
+ 	ASSERT_GT(memcg_query->nr_anon_mapped, 0, "final anon mapped val");
+ 
+ cleanup:
+@@ -61,6 +80,7 @@ static void test_anon(struct bpf_link *link, struct memcg_query *memcg_query)
+ 
+ static void test_file(struct bpf_link *link, struct memcg_query *memcg_query)
+ {
++	int retries = 0;
+ 	void *map;
+ 	size_t len;
+ 	char *path;
+@@ -76,6 +96,7 @@ static void test_file(struct bpf_link *link, struct memcg_query *memcg_query)
+ 	fd = open(path, O_CREAT | O_RDWR, 0644);
+ 	if (!ASSERT_OK_FD(fd, "open fd"))
+ 		return;
++retry:
+ 	if (!ASSERT_OK(ftruncate(fd, len), "ftruncate"))
+ 		goto cleanup_fd;
+ 
+@@ -88,6 +109,13 @@ static void test_file(struct bpf_link *link, struct memcg_query *memcg_query)
+ 	if (!ASSERT_OK(read_stats(link), "read stats"))
+ 		goto cleanup_map;
+ 
++	if (!memcg_query->nr_file_pages && !memcg_query->nr_file_mapped &&
++	    ++retries < MEMCG_STAT_RETRIES) {
++		munmap(map, len);
++		usleep(MEMCG_STAT_RETRY_DELAY_US);
++		goto retry;
++	}
++
+ 	ASSERT_GT(memcg_query->nr_file_pages, 0, "final file value");
+ 	ASSERT_GT(memcg_query->nr_file_mapped, 0, "final file mapped value");
+ 
+@@ -100,6 +128,7 @@ static void test_file(struct bpf_link *link, struct memcg_query *memcg_query)
+ 
+ static void test_shmem(struct bpf_link *link, struct memcg_query *memcg_query)
+ {
++	int retries = 0;
+ 	size_t len;
+ 	int fd;
+ 
+@@ -113,12 +142,18 @@ static void test_shmem(struct bpf_link *link, struct memcg_query *memcg_query)
+ 	if (!ASSERT_OK_FD(fd, "memfd_create"))
+ 		return;
+ 
++retry:
+ 	if (!ASSERT_OK(fallocate(fd, 0, 0, len), "fallocate"))
+ 		goto cleanup;
+ 
+ 	if (!ASSERT_OK(read_stats(link), "read stats"))
+ 		goto cleanup;
+ 
++	if (!memcg_query->nr_shmem && ++retries < MEMCG_STAT_RETRIES) {
++		usleep(MEMCG_STAT_RETRY_DELAY_US);
++		goto retry;
++	}
++
+ 	ASSERT_GT(memcg_query->nr_shmem, 0, "final shmem value");
+ 
+ cleanup:
+@@ -127,11 +162,13 @@ static void test_shmem(struct bpf_link *link, struct memcg_query *memcg_query)
+ 
+ static void test_pgfault(struct bpf_link *link, struct memcg_query *memcg_query)
+ {
++	int retries = 0;
+ 	void *map;
+ 	size_t len;
+ 
+ 	len = sysconf(_SC_PAGESIZE) * 1024;
+ 
++retry:
+ 	/* Create region to use for triggering a page fault. */
+ 	map = mmap(NULL, len, PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+ 	if (!ASSERT_NEQ(map, MAP_FAILED, "mmap anon"))
+@@ -143,6 +180,12 @@ static void test_pgfault(struct bpf_link *link, struct memcg_query *memcg_query)
+ 	if (!ASSERT_OK(read_stats(link), "read stats"))
+ 		goto cleanup;
+ 
++	if (!memcg_query->pgfault && ++retries < MEMCG_STAT_RETRIES) {
++		munmap(map, len);
++		usleep(MEMCG_STAT_RETRY_DELAY_US);
++		goto retry;
++	}
++
+ 	ASSERT_GT(memcg_query->pgfault, 0, "final pgfault val");
+ 
+ cleanup:
 -- 
 2.53.0-Meta
 
