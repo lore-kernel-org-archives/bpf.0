@@ -1,116 +1,110 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-230.mta1.migadu.com [95.215.58.230])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5589B48C3FF;
-	Thu, 13 Aug 2026 16:10:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B89D483BEA
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 16:18:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.230
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786637459; cv=none; b=FLtMInQJElbhY2wrAsKYmsvfJpyxi8KryDSI7RvgyPW/P44nZnFeBAdr3EGvNAgfugzWitr+ORlHbxZf9S7FUuyRRSvnhI/yIpPLvS5AKAQjh44eUXSRahShmTCYcyHmfPU2baI4r2iZXnTv2bSz8r4oaRt2IL24cXwB9YSg9v4=
+	t=1786637905; cv=none; b=euSjIlcTCrl0xACxjyhiLloYbI7rgcVSow1uKqAo7DvnqHGXImA9PUxbrd++ykC+0H85XuvD/cFBY8LV/KTCoSEhjecUxSQRMooWNw0FwCUGb3R7YRpkMt17wBz+yhXsGRcJIkm4wNc8cWKDGX428eTYhTr9102lNcYv7HXUtck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786637459; c=relaxed/simple;
-	bh=m+K51MO81waEGflQda2mnL1hqEASJ8ZRztgXp7SXUS4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=m6KF0GSbNe49sB835261rl1zN7d1lwZJW5khGNa/QAhfXrWLcooXJo6yjxk/4tYwlhKd7QcBsuHf4QKnMphuCIIc5zf+QqnOey2sZWK+xmm/bBfE6clpAVxTnjGaPe/+Jl8ZpgOSCzZ2GiAzqTX0a0Xhdvzw1SZ3QwWPGI02ero=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=UHJvIZbB; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1786637905; c=relaxed/simple;
+	bh=gM3TFE//hvikjKMj/TFefs2iWN3yDc9jeflEfY8CKyQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=c3HNYV23A5Hup8tYIGk7ceOll6RTK+BxCBnVyEEp6Ad3eyBEtTHd1qsDq4vgJsHWwgtKp0hIXVxQ3u5lC5UstNPbpcBYWDmL0yD/KD3EQE0DI9h8Xha2lAl40riaalvbEyrifnRdr8nz6DX+esl52YGIQETwgMWRt64rxTHbdEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Uezdezav; arc=none smtp.client-ip=95.215.58.230
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="UHJvIZbB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Hi
-	kGhVWf4pY0nRs1YNMJqz3rQKJ07L1gT/o+/qOR8PY=; b=UHJvIZbBCrf1jgN/fv
-	XOt+MeQBYtUn/5GNNAZD9teIC6it9XkllkIjL3H0UgYrP3JQw+29mWzTiRa44RyS
-	+ffVcvmuZRIzuFbhhqb3MW7v8+mhJJEgZ/OklTvQdcXwePKjcaeY7EA7YD6JnJDt
-	vMxa6Qm61ExJEOO+lEEGw5WY8=
-Received: from localhost (unknown [])
-	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wDXnxVH7H1q2LswPA--.33402S2;
-	Fri, 14 Aug 2026 00:09:44 +0800 (CST)
-From: Hui Su <sh_def@163.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	leon.hwang@linux.dev
-Cc: martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	john.fastabend@gmail.com,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	sh_def@163.com
-Subject: [PATCH bpf v2] bpf: fix BPF_F_CPU validation for sparse CPU IDs
-Date: Fri, 14 Aug 2026 00:09:00 +0800
-Message-ID: <20260813160858.1042834-3-sh_def@163.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Uezdezav"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=gM3TFE//hvikjKMj/TFefs2iWN3yDc9jeflEfY8CKyQ=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1786637898; v=1; x=1787242698;
+ b=UezdezavBi4rv91aReDDVYdmd57PD3l6D83Bl8Jb58y6YQ+dKiPKnxRjooxN3VHgu3zg4F5u
+ 2VQI+6NAbVa+znSU5qojnLWaNQHJiNqo6+X5kbxtfk4jFrtFAEfAolz3ECHnhUsaD39zVpVUkts
+ OxoD8rc6z75ywMmibBJXszOw=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from [IPV6:2620:10d:c085:21e8::13e6] (2620:10d:c090:400::5:fb16)
+	by smtp.migadu.com with ESMTPS id 4d9e2575af9622e6;
+	Thu, 13 Aug 2026 16:18:08 +0000
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <ccb6879a-b568-4bc1-b7ec-bb3196135d73@linux.dev>
+Date: Thu, 13 Aug 2026 09:17:59 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v3 1/2] selftests/bpf: keep polling connection that is
+ still in progress
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+ Jiayuan Chen <jiayuan.chen@linux.dev>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org,
+ Bastien Curutchet <bastien.curutchet@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260811-tc_tunnel_flaky-v3-0-876f4e0bc603@bootlin.com>
+ <20260811-tc_tunnel_flaky-v3-1-876f4e0bc603@bootlin.com>
+ <75ec8417-4be5-4e7a-86c9-70a83b793580@linux.dev>
+ <DKM96LSV880C.1QEALTH06N0GI@bootlin.com>
+ <d92da576-4930-4b10-b8bd-ea1158ec08bc@linux.dev>
+ <DKNN0WMD9XW8.MCJAMGS5NPYR@bootlin.com>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <DKNN0WMD9XW8.MCJAMGS5NPYR@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDXnxVH7H1q2LswPA--.33402S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7CFW5tF1rGw1kWFy8XF4kCrg_yoW8ZFyrpF
-	WkWa109rs7GryFyayag3yxCr18Cws5Xw4Ikas8Kw15Zw4Yq3WxW3sYkFnIvr9Ykrs5Jr4U
-	KF1IyrWkuaykZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUbXo7UUUUU=
-X-CM-SenderInfo: xvkbvvri6rljoofrz/xtbC6glHpmp97EnGVQAA3j
 
-BPF_F_CPU stores the target CPU ID in the upper 32 bits of the map
-operation flags. bpf_map_check_op_flags() currently compares that ID
-with num_possible_cpus(), which is the number of possible CPUs rather
-than a bound on CPU IDs.
+On 2026-08-13 12:29 a.m., Alexis Lothoré wrote:
+> Hi Ihor,
+> thanks for the extensive investigation
+> 
+> On Wed Aug 12, 2026 at 8:46 PM CEST, Ihor Solodrai wrote:
+>> On 8/11/26 9:25 AM, Alexis Lothoré wrote:
+>>> On Tue Aug 11, 2026 at 5:05 PM CEST, Jiayuan Chen wrote:
+>>>>
+>>>> On 8/11/26 10:26 PM, Alexis Lothoré (eBPF Foundation) wrote:
+> 
+> [...]
+> 
+> 
+>> An entirely different alternative that Eduard brought up in an
+>> off-list discussion, is to drop all the timeout machinery from
+>> network_helpers.c altogether, and rely solely on the test_progs
+>> watchdog to kill the subtest processes: d9d4d127e813 ("selftests/bpf:
+>> watchdog timer for test_progs")
+>>
+>> I am not convinced it's a good idea, because I don't know what will
+>> happen with all the tc_* tests if there is no connection timeouts. If
+>> you're interested, you could try it and see.
+> 
+> Hmmm, I'm not very familiar with this mechanism, but aside from the
+> potential issues you are mentioning, wouldn't it make us loose a bit of
+> info here, when the watchdog kicks the runner out ? We may know from the
+> stacktrace that the subtest was in connect(), but we would loose any
+> formal error/errno on connection timeout I guess, and I am not sure how
+> confident we can get about any watchdog kick being a connect timeout.
 
-On an arm64 QEMU guest with a CPU device-tree hole, the possible CPU
-mask was 0,2-3. A userspace program using raw bpf() syscalls creates
-a BPF_MAP_TYPE_PERCPU_ARRAY and performs update and lookup operations
-for each CPU by setting BPF_F_CPU and the CPU ID in the flags.
+That's a good point. The watchdog is the killer of last resort,
+we should report proper errors whenever possible, I agree.
 
-With the old check, CPU 1 is incorrectly accepted while valid CPU 3 is
-rejected with -ERANGE. The CPU 1 update then reaches the per-CPU map
-access path and triggers:
-
-  Unable to handle kernel paging request at virtual address ...
-  pc : __pi_memcpy_generic+0x5c/0x22c
-  lr : bpf_percpu_array_update+0x2dc/0x2e8
-  Call trace:
-    __pi_memcpy_generic
-    bpf_map_update_value
-    map_update_elem
-    __sys_bpf
-
-Check the CPU ID against nr_cpu_ids and cpu_possible() instead. This
-rejects CPU IDs outside the valid range and CPUs absent from the
-possible mask, while allowing valid sparse CPU IDs.
-
-Fixes: 2b421662c788 ("bpf: Introduce BPF_F_CPU and BPF_F_ALL_CPUS flags")
-Acked-by: Leon Hwang <leon.hwang@linux.dev>
-Signed-off-by: Hui Su <sh_def@163.com>
----
-Changes in v2:
-- Keep the CPU ID check on one line as suggested by the review.
-- Add Leon Hwang's Acked-by tag.
-
-v1 Link: https://lore.kernel.org/lkml/20260813101229.680523-3-sh_def@163.com/
-
- include/linux/bpf.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 7719f6528445..353f13bb066d 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -4202,7 +4202,7 @@ static inline int bpf_map_check_op_flags(struct bpf_map *map, u64 flags, u64 all
- 			return -EINVAL;
- 
- 		cpu = flags >> 32;
--		if ((flags & BPF_F_CPU) && cpu >= num_possible_cpus())
-+		if ((flags & BPF_F_CPU) && (cpu >= nr_cpu_ids || !cpu_possible(cpu)))
- 			return -ERANGE;
- 	}
- 
--- 
-2.54.0
+> 
+>>> That potentially brings back part of the issues he has been mentioning
+>>> with selftests duration possibly increasing by a non negligeable amount,
+>>> but maybe 1s is a better compromise, compared to my initial 3s proposal
+>>> ?
+>>>
+> 
+> 
+> 
+> 
 
