@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08CB341DDE4
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 19:04:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0940041DDE5
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 19:04:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786647866; cv=none; b=PnzfYBO7ZU99mT7xlIhmDnKqTBdC1Bx/VZWbQ+AVihLhm3nHVdxlD8xl8bvitVlw7GgwkgWcsr7vhYxGys4GqpLTXokaDGAznwdXR+MV+uuseFH2r2mxOHFhBvp8IEgXW+eFH4vQHC5IYsMYLmUCQHKC3gSr38tcfEdx/9AEfBk=
+	t=1786647870; cv=none; b=rWZs8OXld067+vEbTHtCBP1qf5VbspXIccnAf2NkXGtilYglvXpF5BV0bljagyXHNe8bvFg8nhH81iWIhS6CKcK7GF9+nUUizTsK60gAoRZ/zmPvkhcst7efu44s8sZJovI6rcx4TJxzMlK1ePEWxqZ2uGt9FF4nUnT0EuVtJfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786647866; c=relaxed/simple;
-	bh=R4ZZla74pmDCdhyymH9MlqiSRUzB+Z1/A3eAqsRfHtQ=;
+	s=arc-20240116; t=1786647870; c=relaxed/simple;
+	bh=A0NpFx4EoEZ8MtrWH3qGR3S8SnnFER0em2u8TSsBibg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uinoG7kouacyQ2ClQtolnlytuynTXbyNbtIfB0fnyDJVrNiTCrHhopN7472zwOu+bFnjELZgb56nGVHYlYRn1+YDfULF9niMVqhW5ga42x2hr4984TUM11ZV1sbA4mo/TTJMpnhF8DWDy61o7dZIT0bpP18JGT+f9xO5hnsj7UM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lrb1N7ow; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=sBjkwXc4svQejPti7Cwe0SNSeXZMtrlU92HextX4qcp+RC1PeAXj0rjCPXMrG+neY5nIas73N1Ot+V0qiCTiVzkMqfOIZJoqzRvC7xJ4z11VWBwM4P764/mEM4cDChkn09OdOmjKpYy7pRmigN1qLe8msPuDCsov5Q1KgLfGPlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gBvABTP8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lrb1N7ow"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE2FE1F000E9;
-	Thu, 13 Aug 2026 19:04:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gBvABTP8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 794A41F000E9;
+	Thu, 13 Aug 2026 19:04:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786647864;
-	bh=RLpJ6+l45H8Z2TiqX/1ZykVHIf9E2CfNkoBd7nKp9HM=;
+	s=k20260515; t=1786647868;
+	bh=TKPdQXHoefk1jbTD3I7+jsO6KtDqLbuveVDOezcWLjA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=lrb1N7owOdEOkah8uPqHpYvVb45XO7B3j1Lwebug1DmkJb0dIOLmejiAV+xK5mPj6
-	 C045HkUIonrWbn01gZl/OO8aJNGh6TXiUSJ/u1niJzisYSm6lfobWV+VbTD+PMcTwN
-	 Ht54sCb9FH2loSWBXX87tO781Ct8EkKHRBETImSq//5hCiRbrIEgcMgKjOuFAFgFGH
-	 7e1icI8lnSEqbo7My9iySf51aCenrtO+SRg0OVRYz2cOZLXGs0pwtu+LhBFxE+quSh
-	 DMaQJZu/hMY9NBvJ4MOArBtlkav67uQLFfkIOBc7mJ/4XN910Md4iPwYmipsF5jYBG
-	 e4icpsJEBcYCw==
+	b=gBvABTP8rUutLwuXflk43Z9dmL8N05eFITYMMdjWb8ZDxUtssldJLiIeGG+UNr7CG
+	 S9PBbxiu/ryGxfkN7imo56PK8wp4ohkyfotXejb8QheK+3qLz1UToJWTr6WNpIGW8v
+	 963vosNEgI15a5Aeensjc4Mbk+OIv7wnEbZhG9vXNVdPu0EbtrXgCyy1qkHOHHRFSX
+	 TgfyqSgBvQn9zfNRwmB1o0ArMoRXc9eqdASS5iyvOthUFZo3K+jwtU9JLj0jjmBhAx
+	 pjzrBhr852ivi3LLWlHK0JLBPH2uBFWCnj315H0Z58+mcdBuycCSozMZ9ZSo1FyIIB
+	 17Qa+NceNHVew==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -40,11 +40,10 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	Xu Kuohai <xukuohai@huaweicloud.com>,
 	Mark Rutland <mark.rutland@arm.com>,
 	Will Deacon <will@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Xu Kuohai <xukuohai@huawei.com>
-Subject: [PATCH bpf-next v2 3/7] bpf, arm64: JIT __arena kfunc argument rebasing
-Date: Thu, 13 Aug 2026 12:03:50 -0700
-Message-ID: <20260813190356.335181-4-puranjay@kernel.org>
+	Catalin Marinas <catalin.marinas@arm.com>
+Subject: [PATCH bpf-next v2 4/7] bpf, arm64: Convert struct_ops arena arguments in the trampoline
+Date: Thu, 13 Aug 2026 12:03:51 -0700
+Message-ID: <20260813190356.335181-5-puranjay@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260813190356.335181-1-puranjay@kernel.org>
 References: <20260813190356.335181-1-puranjay@kernel.org>
@@ -56,119 +55,225 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Implement arena argument rebasing for kfunc calls on arm64. x28 already
-holds kern_vm_start whenever the prog has an arena, and the newly added
-extended-register add zero-extends the 32-bit arena offset in place, so
-an unconditional argument costs a single instruction emitted right
-before the call:
+Implement the struct_ops arena argument conversion on arm64. save_args()
+receives the arena base from bpf_tramp_arena_base() and consults the
+btf_func_model argument flags as it copies each native argument into the
+BPF ctx, routing a marked argument through x10 with the low half of the
+base materialized once into x11:
 
-  add xN, x28, wN, uxtw
+  sub w10, wsrc, w11    /* truncate and clear the upper 32 bits */
+  str x10, [sp, #slot]
 
-A nullable argument first truncates into wN so that a zero offset leaves
-xN holding a real NULL, then tests it and jumps over the add:
+A nullable argument tests the full 64-bit kernel pointer first:
 
-  mov wN, wN
-  cbz wN, 1f
-  add xN, x28, wN, uxtw
+  mov x10, xsrc
+  cbz x10, 1f
+  sub w10, w10, w11
 1:
+  str x10, [sp, #slot]
 
-The rebase is native code generated after constant blinding has run on
-the BPF instruction stream, so blinding never sees it and needs no
-special handling. The emitted count depends only on the kfunc model, so
-it is identical across JIT passes.
+The 32-bit subtraction is sufficient since (u32)(kaddr - base) ==
+(u32)kaddr - (u32)base, and it clears the upper half as the JITs require
+of arena pointer registers. Stack-passed arguments already reload
+through x10, so only the subtraction (and the NULL test) is inserted
+there.
 
-bpf_jit_supports_arena_args() is not flipped yet; that happens when the
-struct_ops trampoline side is in place as well.
+The register loop now walks arguments rather than registers so that the
+per-argument flags line up with the slots a multi-slot argument occupies;
+the sequence of stores is otherwise unchanged. bpf_tramp_arena_base()
+returns a base only for a single-program struct_ops indirect trampoline,
+so a tracing trampoline emits exactly what it did before and never
+touches x11. The size probe reruns the same emission with the same model
+and nodes, so the image size matches by construction.
+
+Conversion must never reach the original function, which takes kernel
+addresses. That holds because BPF_TRAMP_F_INDIRECT is incompatible with
+BPF_TRAMP_F_CALL_ORIG, so pass 0 rather than the base to the call-origin
+save_args() and assert the flag combination the same way x86 does,
+rather than leaving the invariant to a comment.
+
+With both the kfunc and struct_ops directions implemented, flip
+bpf_jit_supports_arena_args() on for arm64 and drop the x86-64-only
+qualifier from the kfunc documentation.
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-Reviewed-by: Xu Kuohai <xukuohai@huawei.com>
 ---
- arch/arm64/net/bpf_jit.h      | 11 +++++++++
- arch/arm64/net/bpf_jit_comp.c | 42 +++++++++++++++++++++++++++++++++++
- 2 files changed, 53 insertions(+)
+ Documentation/bpf/kfuncs.rst  |  6 +--
+ arch/arm64/net/bpf_jit_comp.c | 92 +++++++++++++++++++++++++++++------
+ 2 files changed, 80 insertions(+), 18 deletions(-)
 
-diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
-index d13de4222cfb7..b2fe6e6dcf447 100644
---- a/arch/arm64/net/bpf_jit.h
-+++ b/arch/arm64/net/bpf_jit.h
-@@ -243,6 +243,17 @@
- /* Rn - Rm; set condition flags */
- #define A64_CMP(sf, Rn, Rm) A64_SUBS(sf, A64_ZR, Rn, Rm)
+diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+index 10e725cbe64cd..85f73e0bbd0ff 100644
+--- a/Documentation/bpf/kfuncs.rst
++++ b/Documentation/bpf/kfuncs.rst
+@@ -301,9 +301,9 @@ An example is given below::
+         }
  
-+/* Add/subtract (extended register) */
-+#define A64_ADDSUB_EREG(sf, Rd, Rn, Rm, ext, shift, type) \
-+	aarch64_insn_gen_add_sub_extended_reg(Rd, Rn, Rm, \
-+		AARCH64_INSN_EXTEND_##ext, shift, A64_VARIANT(sf), \
-+		AARCH64_INSN_ADSB_##type)
-+/* Rd = Rn + (EXT(Rm) << shift) */
-+#define A64_ADD_EXT(sf, Rd, Rn, Rm, ext, shift) \
-+	A64_ADDSUB_EREG(sf, Rd, Rn, Rm, ext, shift, ADD)
-+/* Rd = Rn + (u32)Rm */
-+#define A64_ADD_UXTW(Rd, Rn, Rm) A64_ADD_EXT(1, Rd, Rn, Rm, UXTW, 0)
-+
- /* Data-processing (1 source) */
- #define A64_DATA1(sf, Rd, Rn, type) aarch64_insn_gen_data1(Rd, Rn, \
- 	A64_VARIANT(sf), AARCH64_INSN_DATA1_##type)
+ Calling such a kfunc requires the program to use an arena map and a JIT with
+-arena argument support (currently x86-64); verification fails otherwise. The
+-program can pass any value without compromising the kernel. A value that does
+-not point into the arena is a program bug.
++arena argument support (currently x86-64 and arm64); verification fails
++otherwise. The program can pass any value without compromising the kernel. A
++value that does not point into the arena is a program bug.
+ 
+ The suffixes have the same meaning on the arguments of struct_ops stub
+ functions, with the conversion running in the opposite direction. The
 diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 7938b3422d3c4..e31490c0e331c 100644
+index e31490c0e331c..c18e005a41dbe 100644
 --- a/arch/arm64/net/bpf_jit_comp.c
 +++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -1256,6 +1256,43 @@ static void emit_stack_arg_store_imm(s32 imm, s16 bpf_off, const u8 tmp, struct
+@@ -2393,6 +2393,11 @@ bool bpf_jit_supports_stack_args(void)
+ 	return true;
+ }
+ 
++bool bpf_jit_supports_arena_args(void)
++{
++	return true;
++}
++
+ void *bpf_arch_text_copy(void *dst, void *src, size_t len)
+ {
+ 	if (!aarch64_insn_copy(dst, src, len))
+@@ -2566,26 +2571,58 @@ static void clear_garbage(struct jit_ctx *ctx, int reg, int effective_bytes)
  	}
  }
  
 +/*
-+ * Rebase the __arena args of a kfunc call to arena kernel addresses,
-+ * xN = kern_vm_start + (u32)xN, with the arena base register holding
-+ * kern_vm_start. A nullable arg preserves NULL by skipping the add, tested
-+ * on the truncated value as arena NULL is offset 0.
++ * Convert an arena kernel address into the arena pointer form on its way into
++ * the BPF ctx, dst = (u32)(src - kern_vm_start), with @base_lo holding the low
++ * 32 bits of kern_vm_start. A nullable arg preserves NULL, tested on the full
++ * 64-bit kernel pointer. The 32-bit subtraction both truncates and clears the
++ * upper half, so the stored value satisfies the JIT invariant for arena
++ * pointer registers.
 + */
-+static int emit_kfunc_arena_args(struct jit_ctx *ctx, const struct bpf_insn *insn)
++static void emit_arena_arg_conv(struct jit_ctx *ctx, u8 dst, u8 src, bool nullable, u8 base_lo)
 +{
-+	const u8 arena_vm_base = bpf2a64[ARENA_VM_START];
-+	const struct btf_func_model *fm;
-+	int i;
-+
-+	fm = bpf_jit_find_kfunc_model(ctx->prog, insn);
-+	if (!fm)
-+		return -EINVAL;
-+
-+	for (i = 0; i < min_t(int, fm->nr_args, MAX_BPF_FUNC_REG_ARGS); i++) {
-+		const u8 reg = bpf2a64[BPF_REG_1 + i];
-+		u8 flags = fm->arg_flags[i];
-+
-+		if (!(flags & BTF_FMODEL_ARENA_ARG))
-+			continue;
-+		if (WARN_ON_ONCE(!ctx->arena_vm_start))
-+			return -EINVAL;
-+
-+		if (flags & BTF_FMODEL_NULLABLE_ARG) {
-+			/* 32-bit mov clears the upper 32 bits */
-+			emit(A64_MOV(0, reg, reg), ctx);
-+			/* skip the add so that NULL stays NULL */
-+			emit(A64_CBZ(0, reg, 2), ctx);
-+		}
-+		emit(A64_ADD_UXTW(reg, arena_vm_base, reg), ctx);
++	if (nullable) {
++		if (dst != src)
++			emit(A64_MOV(1, dst, src), ctx);
++		/* skip the subtraction so that NULL stays NULL */
++		emit(A64_CBZ(1, dst, 2), ctx);
++		src = dst;
 +	}
-+
-+	return 0;
++	emit(A64_SUB(0, dst, src, base_lo), ctx);
 +}
 +
- /* JITs an eBPF instruction.
-  * Returns:
-  * 0  - successfully JITed an 8-byte eBPF instruction.
-@@ -1678,6 +1715,11 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
- 					    &func_addr, &func_addr_fixed);
- 		if (ret < 0)
- 			return ret;
-+		if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
-+			ret = emit_kfunc_arena_args(ctx, insn);
-+			if (ret < 0)
-+				return ret;
+ static void save_args(struct jit_ctx *ctx, int bargs_off, int oargs_off,
+ 		      const struct btf_func_model *m, const struct arg_aux *a,
+-		      bool for_call_origin, bool is_struct_ops)
++		      bool for_call_origin, bool is_struct_ops, u64 arena_base)
+ {
+-	int i;
+-	int reg;
+-	int doff;
+-	int soff;
+-	int slots;
+ 	u8 tmp = bpf2a64[TMP_REG_1];
++	u8 base_lo = bpf2a64[TMP_REG_2];
++	int i, reg, doff, soff, slots;
++
++	/* only the low 32 bits of the base take part in the subtraction */
++	if (arena_base)
++		emit_a64_mov_i(0, base_lo, (s32)(u32)arena_base, ctx);
+ 
+ 	/* store arguments to the stack for the bpf program, or restore
+ 	 * arguments from stack for the original function
+ 	 */
+-	for (reg = 0; reg < a->regs_for_args; reg++) {
+-		emit(for_call_origin ?
+-		     A64_LDR64I(reg, A64_SP, bargs_off) :
+-		     A64_STR64I(reg, A64_SP, bargs_off),
+-		     ctx);
+-		bargs_off += 8;
++	for (i = 0, reg = 0; i < a->args_in_regs; i++) {
++		bool arena_arg = arena_base && (m->arg_flags[i] & BTF_FMODEL_ARENA_ARG);
++		bool nullable = m->arg_flags[i] & BTF_FMODEL_NULLABLE_ARG;
++
++		slots = (m->arg_size[i] + 7) / 8;
++		while (slots-- > 0) {
++			if (for_call_origin) {
++				emit(A64_LDR64I(reg, A64_SP, bargs_off), ctx);
++			} else if (arena_arg) {
++				emit_arena_arg_conv(ctx, tmp, reg, nullable, base_lo);
++				emit(A64_STR64I(tmp, A64_SP, bargs_off), ctx);
++			} else {
++				emit(A64_STR64I(reg, A64_SP, bargs_off), ctx);
++			}
++			reg++;
++			bargs_off += 8;
 +		}
- 		emit_call(func_addr, ctx);
- 		/*
- 		 * Call to arch_bpf_timed_may_goto() is emitted by the
+ 	}
+ 
+ 	/*
+@@ -2601,6 +2638,9 @@ static void save_args(struct jit_ctx *ctx, int bargs_off, int oargs_off,
+ 
+ 	/* save on stack arguments */
+ 	for (i = a->args_in_regs; i < m->nr_args; i++) {
++		bool arena_arg = arena_base && (m->arg_flags[i] & BTF_FMODEL_ARENA_ARG);
++		bool nullable = m->arg_flags[i] & BTF_FMODEL_NULLABLE_ARG;
++
+ 		slots = (m->arg_size[i] + 7) / 8;
+ 		/* verifier ensures arg_size <= 16, so slots equals 1 or 2 */
+ 		while (slots-- > 0) {
+@@ -2610,6 +2650,15 @@ static void save_args(struct jit_ctx *ctx, int bargs_off, int oargs_off,
+ 			 */
+ 			if (slots == 0 && !for_call_origin)
+ 				clear_garbage(ctx, tmp, m->arg_size[i] % 8);
++			/*
++			 * No guard on for_call_origin here: only the indirect
++			 * trampoline is given a base, and it never calls the
++			 * original function, so arguments are never converted
++			 * on their way back out to it. See the WARN_ON_ONCE()
++			 * in prepare_trampoline().
++			 */
++			if (arena_arg)
++				emit_arena_arg_conv(ctx, tmp, tmp, nullable, base_lo);
+ 			emit(A64_STR64I(tmp, A64_SP, doff), ctx);
+ 			soff += 8;
+ 			doff += 8;
+@@ -2669,8 +2718,21 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 	bool is_struct_ops = is_struct_ops_tramp(fentry);
+ 	int cookie_off, cookie_cnt, cookie_bargs_off;
+ 	int fsession_cnt = bpf_fsession_cnt(tnodes);
++	u64 arena_base;
+ 	u64 func_meta;
+ 
++	/*
++	 * F_INDIRECT is only compatible with F_RET_FENTRY_RET, it is explicitly
++	 * incompatible with F_CALL_ORIG | F_SKIP_FRAME | F_IP_ARG because
++	 * @func_addr. Arena conversion relies on this: bpf_tramp_arena_base()
++	 * only returns a base for the indirect trampoline, which therefore
++	 * never calls the original function with converted arguments.
++	 */
++	WARN_ON_ONCE((flags & BPF_TRAMP_F_INDIRECT) &&
++		     (flags & ~(BPF_TRAMP_F_INDIRECT | BPF_TRAMP_F_RET_FENTRY_RET)));
++
++	arena_base = bpf_tramp_arena_base(m, tnodes, flags);
++
+ 	/* trampoline stack layout:
+ 	 *                    [ parent ip         ]
+ 	 *                    [ FP                ]
+@@ -2786,7 +2848,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 	store_func_meta(ctx, func_meta, func_meta_off);
+ 
+ 	/* save args for bpf */
+-	save_args(ctx, bargs_off, oargs_off, m, a, false, is_struct_ops);
++	save_args(ctx, bargs_off, oargs_off, m, a, false, is_struct_ops, arena_base);
+ 
+ 	/* save callee saved registers */
+ 	emit(A64_STR64I(A64_R(19), A64_SP, regs_off), ctx);
+@@ -2834,8 +2896,8 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 	}
+ 
+ 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+-		/* save args for original func */
+-		save_args(ctx, bargs_off, oargs_off, m, a, true, is_struct_ops);
++		/* the original func takes kernel addresses, never converted ones */
++		save_args(ctx, bargs_off, oargs_off, m, a, true, is_struct_ops, 0);
+ 		/* call original func */
+ 		emit(A64_LDR64I(A64_R(10), A64_SP, retaddr_off), ctx);
+ 		emit(A64_ADR(A64_LR, AARCH64_INSN_SIZE * 2), ctx);
 -- 
 2.53.0-Meta
 
