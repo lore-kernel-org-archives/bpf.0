@@ -1,125 +1,126 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98DA3803F1;
-	Thu, 13 Aug 2026 16:26:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C038494A19;
+	Thu, 13 Aug 2026 16:26:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786638387; cv=none; b=A1fvGqvEYeiESgWBBcKECHXILdmbxtK9ezikNUT82LPJoOcWTBaYqWdefo8uROP7u01GEj7KeAtwUgqM7oiTzhwkzydpt47k9Y455z3367QWc3z7tCMn/W//OLrd+dl9eAjP/EIoQPTNv1QT2HSGVPl5LuCQjpTfsHFGX3N6tcE=
+	t=1786638399; cv=none; b=lICvFn73zSjkYaVNDN4Uu4byBSA/iOo8EFU8VCGYdQY7RbYFLuZSymHDApYSUizIi6bLYUb+sdQD8eF3+bQUQhHO8cDEepfMGE2OTaZ9l7thOvenXM6RvOp+LkCpXgE75XRU+rlP2mP+Jc5bKTY8OLtu6W+p6yKrMGoFaIXB6Sk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786638387; c=relaxed/simple;
-	bh=0zNs6VxyHoPCC04WihUe79Rh0i5CPI6/8FfLTOd3x2s=;
+	s=arc-20240116; t=1786638399; c=relaxed/simple;
+	bh=3viJ+U6Im457zuO4zp/pN3zOtDF5bXAuYSPyM/HJj1U=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WyWNlkHPDL38iDWZbYgwo0aj7voNU0HexFzW0jlzWTDs2LcP2wWxDck+jWcnHCxpsP8l4ke7FgMt2LUmqE+wgylxDkmXfy+dYcetxGFrbdMBdXREAPFEh23ZTgpvluMLBdsFrk/uvaZn8UYysthtREG1r4tsjgU59nkiQc71kiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=md0EOscu; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=Rug/32JGRVIUP3FQkfzgyy78D4QzrVSXMrdM/TlJnxYofcQHiuh3vdLo4gzWJ7nh0aTAP/zJKGI+adP0+0H6aMXfVHODEyyx/KqEqvHC55AeHnCpyAWtz76/0rzqAWmeFiMUKc+1ar7e6LClqFxX0mM6DGluMXjq6WPRHSdSGO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o0h5Z8+1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="md0EOscu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 210D61F000E9;
-	Thu, 13 Aug 2026 16:26:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o0h5Z8+1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCD071F000E9;
+	Thu, 13 Aug 2026 16:26:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786638383;
-	bh=U7dYvMVT+92Gq4e+NEjD9WL0ngCQ7boRgOo6E4+Oyb4=;
+	s=k20260515; t=1786638391;
+	bh=Wdk1e5FLQH7EBUx53jHiruEgvRSKARms+mqv1lqcbyc=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=md0EOscuHH9+cC8SuF7tVcuHQU6Iw6VZ4s18vENVf362Hc5NpBnHb82++UcOnidln
-	 wU/LKctU0Pz7WaQhA2ZuFLk+8/0kvHE2sPrVYZQT63MlQPeiYSZLd1Kvz7hPP0MwoW
-	 xbQ0Sb9yEXJuL9TCGX+sp8bpMUf6ZBQD2H7tuU+eeQDAJ/kIgYchJHqGEt5r0Ghjpf
-	 vqutyWgSFvRlS9VSwadEFCB7JOgAgBzOje29Mt1aGlw+G6OASQQPlX7v72jT2G1WYY
-	 liv/Tg35MP62z3fVpCJxMCgZ/ApfkuHX6ndJ4N09Bffzl8nZ7OOt7GtgBEH5aOsOO/
-	 MZigyrQoeMewA==
-Content-Type: multipart/mixed; boundary="===============3439356630173476319=="
+	b=o0h5Z8+1Rgca5V3xwsZcKmc5p9bON3cIOULbviL3tNv7LeZbw6wRUk0Zea1l1vaxT
+	 IT7nM4mjArD/4DHvmswRflWcH68rSOf+wwGh++O1zeBhuWRa9kx//I+sN9aCFK6Ppa
+	 /v334tuQlat8mAm56rKprY8SrdDfi9V5PS2v2c3eV6jhivS/T5tBkTxOV7Vx8z6/VV
+	 CuwWD1FcxR6eutdfCSwS1dnRZSPR+Br7ijMP4m8lElXjaXUpxws67ByvVZuIu3v116
+	 SgV+m3kOXSCY2C+liCa9Vey53MAaX2vbOz9fa/KPUGNHec4wp5s77EaEYA2dhBxOcX
+	 UX1IIITeHMdRw==
+Content-Type: multipart/mixed; boundary="===============4818090833141130813=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <5e196fcd4e2ac190d9232398274607860c07747f6d5adf39fb41db4f0a8d0167@mail.kernel.org>
-In-Reply-To: <20260813152324.97937-7-leon.hwang@linux.dev>
-References: <20260813152324.97937-7-leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next v12 06/10] bpftool: Generate skeleton for global percpu data
+Message-Id: <bd01566fa68ef3b993bdd4cfbd9802a24cd9b5052b5a746712067d8571ea0bd0@mail.kernel.org>
+In-Reply-To: <20260813152324.97937-11-leon.hwang@linux.dev>
+References: <20260813152324.97937-11-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next v12 10/10] selftests/bpf: Verify bpf_iter for global percpu data
 From: bot+bpf-ci@kernel.org
 To: leon.hwang@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,john.fastabend@gmail.com,qmo@kernel.org,shuah@kernel.org,leon.hwang@linux.dev,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 13 Aug 2026 16:26:22 +0000 (UTC)
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,john.fastabend@gmail.com,qmo@kernel.org,shuah@kernel.org,leon.hwang@linux.dev,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 13 Aug 2026 16:26:30 +0000 (UTC)
 
---===============3439356630173476319==
+--===============4818090833141130813==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-> index a01d06d22d1a3..a50540ef6521c 100644
-> --- a/tools/bpf/bpftool/gen.c
-> +++ b/tools/bpf/bpftool/gen.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> index d308ca3b30457..7d6bda9092954 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> @@ -327,6 +327,56 @@ static void test_global_percpu_data_verifier_log(void)
+>  	RUN_TESTS(test_global_percpu_data);
+>  }
+>
+> +static void test_global_percpu_data_iter(void)
+> +{
+> +	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
+> +	struct test_global_percpu_data *skel;
+> +	union bpf_iter_link_info linfo = {};
+> +	struct bpf_link *link = NULL;
+> +	int fd, num_cpus, len, err;
+> +	char buf[16];
+> +
+> +	num_cpus = libbpf_num_possible_cpus();
+> +	if (!ASSERT_GT(num_cpus, 0, "libbpf_num_possible_cpus"))
+> +		return;
+> +
+> +	skel = test_global_percpu_data__open();
+> +	if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
+> +		return;
+> +
+> +	skel->rodata->num_cpus = num_cpus;
+> +	skel->rodata->offsetof_num = offsetof(struct test_global_percpu_data__percpu, struct_data);
+> +	skel->rodata->offsetof_num += sizeof(skel->percpu->struct_data) - sizeof(int);
+
+This isn't a bug, but could these two lines collapse into a single
+offsetof(struct test_global_percpu_data__percpu, struct_data.nums[6]),
+so the offset names the field being read instead of depending on nums[6]
+staying last in the struct?
+
+> +	skel->rodata->elem_sz = roundup(sizeof(struct test_global_percpu_data__percpu), 8);
+> +	skel->percpu->struct_data.nums[6] = 0xc0de;
+> +
+> +	err = test_global_percpu_data__load(skel);
+> +	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
+> +		goto out;
+> +
+> +	linfo.map.map_fd = bpf_map__fd(skel->maps.percpu);
+> +	opts.link_info = &linfo;
+> +	opts.link_info_len = sizeof(linfo);
+> +	link = bpf_program__attach_iter(skel->progs.dump_percpu_data, &opts);
+> +	if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
+> +		goto out;
+> +
+> +	fd = bpf_iter_create(bpf_link__fd(link));
+> +	if (!ASSERT_GE(fd, 0, "bpf_iter_create"))
+> +		goto out;
+> +
+> +	while ((len = read(fd, buf, sizeof(buf))) > 0)
+> +		do { } while (0);
+
+This isn't a bug, but would a bare semicolon (as in bpf_iter.c's
+read-drain loops) be clearer here than do { } while (0)?
 
 [ ... ]
 
-> @@ -254,7 +260,7 @@ static const struct btf_type *find_type_for_map(struct btf *btf, const char *map
->  	return NULL;
+> diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+> index d086e9417f9fb..71ff8d1bf49eb 100644
+> --- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+> +++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+> @@ -61,4 +61,29 @@ int verifier_snprintf(void *ctx)
+>  	return 0;
 >  }
 >
-> -static bool is_mmapable_map(const struct bpf_map *map, char *buf, size_t sz)
-> +static bool is_skel_data(const struct bpf_map *map, char *buf, size_t sz)
->  {
->  	size_t tmp_sz;
->
-> @@ -263,13 +269,24 @@ static bool is_mmapable_map(const struct bpf_map *map, char *buf, size_t sz)
->  		return true;
->  	}
->
-> -	if (!bpf_map__is_internal(map) || !(bpf_map__map_flags(map) & BPF_F_MMAPABLE))
-> +	if (!bpf_map__is_internal(map))
->  		return false;
->
->  	if (!get_map_ident(map, buf, sz))
->  		return false;
->
-> -	return true;
-> +	if (bpf_map__map_flags(map) & BPF_F_MMAPABLE)
-> +		return true;
-> +
-> +	if (bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY)
-> +		return bpf_map__btf_value_type_id(map) != 0;
-> +
-> +	return false;
-> +}
-> +
-> +static bool is_mmapable_map(const struct bpf_map *map, char *buf, size_t sz)
-> +{
-> +	return is_skel_data(map, buf, sz) && bpf_map__type(map) != BPF_MAP_TYPE_PERCPU_ARRAY;
->  }
->
->  static int codegen_datasecs(struct bpf_object *obj, const char *obj_name)
-> @@ -287,7 +304,7 @@ static int codegen_datasecs(struct bpf_object *obj, const char *obj_name)
->
->  	bpf_object__for_each_map(map, obj) {
->  		/* only generate definitions for memory-mapped internal maps */
-> -		if (!is_mmapable_map(map, map_ident, sizeof(map_ident)))
-> +		if (!is_skel_data(map, map_ident, sizeof(map_ident)))
->  			continue;
+> +volatile const __u32 num_cpus = 0;
+> +volatile const int offsetof_num;
 
-The comment here says "only generate definitions for memory-mapped
-internal maps," but is_skel_data() now also returns true for
-BPF_MAP_TYPE_PERCPU_ARRAY maps. Those percpu maps are never
-memory-mapped: map_is_mmapable() in tools/lib/bpf/libbpf.c returns false
-for LIBBPF_MAP_PERCPU, which is why this patch had to add mprotect() for
-the init buffer rather than relying on shared mmap.
-
-When you removed the identical comment from codegen_maps_skeleton()
-(line 988), should this one have been updated to say "skeleton data maps"
-or "internal maps exposed as skeleton data" to match what is_skel_data()
-actually checks?
-
-The same wording also appears at line 534 in codegen_asserts():
-
->  	bpf_object__for_each_map(map, obj) {
-> -		if (!is_mmapable_map(map, map_ident, sizeof(map_ident)))
-> +		if (!is_skel_data(map, map_ident, sizeof(map_ident)))
->  			continue;
-
-where the comment above (line 513) says "Emit type size asserts for all
-top-level fields in memory-mapped internal maps." That comment now covers
-percpu maps too.
+This isn't a bug, but would a name like nums6_off (set directly from
+offsetof(struct test_global_percpu_data__percpu, struct_data.nums[6]))
+make it clearer which field the iterator is summing?
 
 [ ... ]
 
@@ -129,4 +130,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31716447858
---===============3439356630173476319==--
+--===============4818090833141130813==--
