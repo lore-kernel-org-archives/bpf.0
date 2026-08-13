@@ -1,144 +1,177 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E9CA48BD34
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 15:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4995477E27;
+	Thu, 13 Aug 2026 15:52:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786635772; cv=none; b=TwUx0t7xkmgW1p3t+1hqPk/GhlcFb2p/tEe6el3O4XQJzDuZuxfKIdyUX10kjgwtxQ9TJO7pQZfiFP7nfJmAKPyA3ZWIyYd3YD+i7zGTt/VFlK3SVg4aa9YMyt65J4NL+BenlniyVw6zh1sohi/XFRBJZ0gWi9Lt0s+a24Wotqg=
+	t=1786636388; cv=none; b=mh/iV13xvPiwmPQscZJZVXfOYhOyTmIraunce3HqfNhfT62d54s+n7UQdrZ3QWT8ASWavs+KFeUiebbMfuJ2NGAwXX+LVl5UXRteVzyGMC/EPEaAWkHziDjIIJ+sd0NwlIOIrWG8flHCA2dXA7/kWqTI4RHI270PbNNJe8Qs3GI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786635772; c=relaxed/simple;
-	bh=DsTCygJTaKZiH+BqNscJuUIOUaP0MoRgt8GZ4RTlBTg=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=e5XuAD0QQUEK82KEcvHffJqngPJO5rIJ8+P96xraIdqWlzHSp7T5IG2t1ZCMT2rIljTEOYBB0oZqA2mVVEixPeUY/SXZ3BP1eV2N0Ajw0uYJFAeqCh9B8Mkl/hdviq+h7Wu0rqGyvyZBUt/KLKYNJOYeARSE0J+t9qu2goPbp6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ml+9KNb1; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786636388; c=relaxed/simple;
+	bh=jSi1UHuN+zcK/4pLHabYoQsSjxZneOtWXjmVMUKGaSE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=t82Jhs+6vmazBietEE0A/A55L67N67UN2bvkxlfSljW2bv9qaKRTuMqb1OCwL93t+Hgw+HbBTToGE7d74huaQL0NOS/5326tCT61RVpiRfDbiiXaZ0LcjncNrPtWT74A3dXQo7BlMxylgRdJOuVjQhJgppYvjzpwVT/fHKclJBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Yp9dEjvH; arc=none smtp.client-ip=117.135.210.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ml+9KNb1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA831F000E9;
-	Thu, 13 Aug 2026 15:42:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786635769;
-	bh=Yp/zTfl7Gb1sv786R21fWp/06PvLW5AoU58dMqwP54g=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Ml+9KNb1CnNMePPD2VpsE7rh1mrTJ0Y+PjEgGFQOY5chZK1oMJ7dbJUDw0U/Et8iJ
-	 C4pgPQaE8LkvQ8d4s4HQo7MFcfD4VDGBkmI5qz0K6wLPVeEovP1mw9eoPi2LQf/HDF
-	 162QltUnPtco6DGAsHH1myL74rJw9ESDioy5J1aA7/A6WWNQ/VjZnZuRWhoIYpuo+1
-	 ZaNYVP0/4gWG3h4bosxvV4/BQ5snWnio75JEqJUBFNx//9lPGbRAPhZGtuQHlJ8OZg
-	 ZRhgfs79UX/bLLj5eNHLAABb6J3OZEKQYi2RYfpnASkbssOyxleoPGRlCJIgll0pk+
-	 bCdxGZOHD3clA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v12 05/10] libbpf: Add support for global
- percpu data
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Leon Hwang" <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260813152324.97937-6-leon.hwang@linux.dev>
-References: <20260813152324.97937-1-leon.hwang@linux.dev>
- <20260813152324.97937-6-leon.hwang@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 13 Aug 2026 15:42:48 +0000
-Message-Id: <20260813154249.1CA831F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Yp9dEjvH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=1P
+	9OP1jqGzcXv+f+DU4FiQ3m3kjvAPcTMIjlQ0b/u9Q=; b=Yp9dEjvHFbnCdH+QPw
+	A66NBbt8wm8rRDiNbzLOGLIucwfB8PBcneiRhJA4grXRN2d8xRVuuDu9X/ZUuwuY
+	iHhKLlbXt9JzGgBCv4xpxlpOSfFw4SvnlpVsdeyeNTgy8IDaDnvAh5vyq9uHYWsc
+	ZJjDA8G1pnsXrsLrUUcB9NO5s=
+Received: from localhost (unknown [])
+	by gzsmtp5 (Coremail) with SMTP id QCgvCgDXOfcv6H1q5LRQMA--.18601S2;
+	Thu, 13 Aug 2026 23:52:16 +0800 (CST)
+From: Hui Su <sh_def@163.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	leon.hwang@linux.dev
+Cc: eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	linux-kernel@vger.kernel.org,
+	Hui Su <sh_def@163.com>
+Subject: [PATCH bpf v2] bpf: fix percpu map update indexing with sparse CPU IDs
+Date: Thu, 13 Aug 2026 23:51:33 +0800
+Message-ID: <20260813155131.1022745-3-sh_def@163.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:QCgvCgDXOfcv6H1q5LRQMA--.18601S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxJw15tr1kCw4fCFW5Aw1xGrg_yoWrZF1kpa
+	95Ka4jvr17XF4Fvw4rK34xCFZ5Kan8Xw17Ka98KryFyr42qrn2qr1DKFy3XFy3KwsIqr4j
+	yFnYvrZ0qay8ZrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piQJ57UUUUU=
+X-CM-SenderInfo: xvkbvvri6rljoofrz/xtbC6hBAn2p96DCPogAA3H
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+Per-CPU array, hash, and cgroup storage map updates without BPF_F_CPU
+or BPF_F_ALL_CPUS use a value buffer whose per-CPU slots are packed in
+possible-CPU order. The buffer is sized as:
 
-New issues:
-- [High] bpftool gen skeleton fails to generate fields for .percpu maps, br=
-eaking lightweight skeleton generation memory layout.
+  round_up(value_size, 8) * num_possible_cpus()
 
-Pre-existing issues:
-- [High] A massive >4GB ELF section causes a gigabyte-scale out-of-bounds m=
-emcpy buffer overflow in libbpf.
---
+The update paths iterate over possible CPUs, but use the logical CPU ID
+to calculate the source offset:
 
---- Patch [5]: [PATCH bpf-next v12 05/10] libbpf: Add support for global pe=
-rcpu data ---
-commit ba7ffd0a036fafab1adafd7c20bbbb6455fe6cf6
-Author: Leon Hwang <leon.hwang@linux.dev>
+  value + size * cpu
 
-libbpf: Add support for global percpu data
+This only works when possible CPU IDs are contiguous starting at zero.
 
-Add support for global percpu data in libbpf by adding a new ".percpu"
-section, similar to ".data". It enables efficient handling of percpu
-global variables in bpf programs.
+For example, with a possible CPU mask of 0,2-3, the buffer contains
+three slots corresponding to CPUs 0, 2, and 3. CPU2 is therefore
+expected to use slot 1 and CPU3 slot 2. Instead, the current code uses
+slots 2 and 3 respectively, causing incorrect per-CPU values and an
+out-of-bounds read from the update buffer for CPU3.
 
->     When generating loader for lightweight skeleton, update the percpu_ar=
-ray
->     map used for global percpu data using BPF_F_ALL_CPUS, in order to upd=
-ate
->     values across all CPUs using one value slot.
+The corresponding lookup paths already use a dense offset while
+iterating over possible CPUs. Do the same for the array, hash, and
+cgroup storage update paths, advancing the source offset once for each
+possible CPU. BPF_F_ALL_CPUS continues to use the same value for every
+CPU.
 
-[Severity: High]
-Does this change break bpftool's lightweight skeleton generation for .percpu
-maps?
+Fixes: 8eb76cb03f0f ("bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_array maps")
+Fixes: c6936161fd55 ("bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_hash and lru_percpu_hash maps")
+Fixes: 47c79f05aa0d ("bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_cgroup_storage maps")
+Acked-by: Leon Hwang <leon.hwang@linux.dev>
+Signed-off-by: Hui Su <sh_def@163.com>
+---
+Changes in v2:
+- Add the missing Fixes tags for percpu hash and percpu cgroup storage.
+- Drop the unnecessary Sashiko Reported-by tag.
+v1 link: https://lore.kernel.org/lkml/20260813120250.796934-4-sh_def@163.com/
 
-Looking at tools/bpf/bpftool/gen.c:get_map_ident(), the hardcoded sfxs
-array lacks the ".percpu" suffix:
+ kernel/bpf/arraymap.c      | 5 +++--
+ kernel/bpf/hashtab.c       | 5 +++--
+ kernel/bpf/local_storage.c | 5 +++--
+ 3 files changed, 9 insertions(+), 6 deletions(-)
 
-    static const char *sfxs[] =3D { ".data", ".rodata", ".bss", ".kconfig" =
-};
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 248b4818178c..cc3f8c25a28b 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -405,7 +405,7 @@ int bpf_percpu_array_update(struct bpf_map *map, void *key, void *value,
+ 	void __percpu *pptr;
+ 	void *ptr, *val;
+ 	u32 size;
+-	int cpu;
++	int cpu, off = 0;
+ 
+ 	if (unlikely((map_flags & BPF_F_LOCK) || (u32)map_flags > BPF_F_ALL_CPUS))
+ 		/* unknown flags */
+@@ -437,9 +437,10 @@ int bpf_percpu_array_update(struct bpf_map *map, void *key, void *value,
+ 	}
+ 	for_each_possible_cpu(cpu) {
+ 		ptr = per_cpu_ptr(pptr, cpu);
+-		val = (map_flags & BPF_F_ALL_CPUS) ? value : value + size * cpu;
++		val = (map_flags & BPF_F_ALL_CPUS) ? value : value + off;
+ 		copy_map_value(map, ptr, val);
+ 		bpf_obj_cancel_fields(map, ptr);
++		off += size;
+ 	}
+ unlock:
+ 	rcu_read_unlock();
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 9f394e1aa2e8..dd4da18312ac 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -1026,7 +1026,7 @@ static void pcpu_copy_value(struct bpf_htab *htab, void __percpu *pptr,
+ 	} else {
+ 		u32 size = round_up(htab->map.value_size, 8);
+ 		void *val;
+-		int cpu;
++		int cpu, off = 0;
+ 
+ 		if (map_flags & BPF_F_CPU) {
+ 			cpu = map_flags >> 32;
+@@ -1038,9 +1038,10 @@ static void pcpu_copy_value(struct bpf_htab *htab, void __percpu *pptr,
+ 
+ 		for_each_possible_cpu(cpu) {
+ 			ptr = per_cpu_ptr(pptr, cpu);
+-			val = (map_flags & BPF_F_ALL_CPUS) ? value : value + size * cpu;
++			val = (map_flags & BPF_F_ALL_CPUS) ? value : value + off;
+ 			copy_map_value(&htab->map, ptr, val);
+ 			bpf_obj_cancel_fields(&htab->map, ptr);
++			off += size;
+ 		}
+ 	}
+ }
+diff --git a/kernel/bpf/local_storage.c b/kernel/bpf/local_storage.c
+index 23267213a17f..83cd527a2542 100644
+--- a/kernel/bpf/local_storage.c
++++ b/kernel/bpf/local_storage.c
+@@ -220,7 +220,7 @@ int bpf_percpu_cgroup_storage_update(struct bpf_map *_map, void *key,
+ 	struct bpf_cgroup_storage *storage;
+ 	void *val;
+ 	u32 size;
+-	int cpu;
++	int cpu, off = 0;
+ 
+ 	if ((u32)map_flags & ~(BPF_ANY | BPF_EXIST | BPF_F_CPU | BPF_F_ALL_CPUS))
+ 		return -EINVAL;
+@@ -245,8 +245,9 @@ int bpf_percpu_cgroup_storage_update(struct bpf_map *_map, void *key,
+ 	}
+ 	size = round_up(_map->value_size, 8);
+ 	for_each_possible_cpu(cpu) {
+-		val = (map_flags & BPF_F_ALL_CPUS) ? value : value + size * cpu;
++		val = (map_flags & BPF_F_ALL_CPUS) ? value : value + off;
+ 		copy_map_value(_map, per_cpu_ptr(storage->percpu_buf, cpu), val);
++		off += size;
+ 	}
+ unlock:
+ 	rcu_read_unlock();
+-- 
+2.54.0
 
-This causes the .percpu map to be silently skipped during skeleton
-generation.
-
-Since the BPF loader program is generated based on the true array index
-(map_idx =3D map - obj->maps), skipping .percpu in the generated C struct
-shifts all subsequent maps. Can this cause the loader program to read or wr=
-ite
-out of bounds of the skel->maps structure?
-
->    =20
->     Unlike global data, the mmaped data for global percpu data will be ma=
-rked
->     as read-only after populating the percpu_array map. Thereafter, users=
- can
->     read those initialized percpu data after loading prog. If they want to
->     update the percpu data after loading prog, they have to update the
->     percpu_array map using key=3D0 instead.
->    =20
->     Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 514e4e9daa825..e574870fb7169 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-
-[ ... ]
-
-> @@ -1983,7 +2000,7 @@ bpf_object__init_internal_map(struct bpf_object *ob=
-j, enum libbpf_map_type type,
->  	}
-> =20
->  	def =3D &map->def;
-> -	def->type =3D BPF_MAP_TYPE_ARRAY;
-> +	def->type =3D is_percpu ? BPF_MAP_TYPE_PERCPU_ARRAY : BPF_MAP_TYPE_ARRA=
-Y;
->  	def->key_size =3D sizeof(int);
->  	def->value_size =3D data_sz;
-
-[Severity: High]
-This is a pre-existing issue, but does this code cause a buffer
-overflow if a malicious BPF ELF file contains a data section larger than 4G=
-B?
-
-The 64-bit size_t data_sz is truncated into the 32-bit unsigned int
-def->value_size. The mmap allocation will use this undersized truncated
-value, but the subsequent memcpy below uses the original 64-bit data_sz,
-overflowing the undersized map->mmaped buffer:
-
-    if (data)
-        memcpy(map->mmaped, data, data_sz);
-
-Can this lead to a massive out-of-bounds write in libbpf?
-
->  	def->max_entries =3D 1;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260813152324.9793=
-7-1-leon.hwang@linux.dev?part=3D5
