@@ -1,153 +1,115 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0657935A925;
-	Thu, 13 Aug 2026 06:30:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786602644; cv=none; b=d1abDFevgcwHNqopUMdjCJkED3f3XNqt/BBqp5wg9VuX/NX0aimVVwHbmNMBzPLcdU7ZJYrIWUIVbM6d1a5QckdCNEa7CODu0PmL9ZfUo1MBfeslvle/CnnKgLMrp5FYeAAYO7b1qeI7emo0Ri/fs9Xxb01Ln9bFG4q4J0HcfLg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786602644; c=relaxed/simple;
-	bh=0JHzwHKRn7A0y0PcpDE+F8+6eFYW/G4Z39dUpe7jF4g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nWteCh9mN5qa0lsNU2rx7e4LpCZ7QNhnzP+9auKOnQVmSmzYxNBI9spWz8jBAaDnTFqR6Y4iygageN/j9RWw8QLRKrnGu1X9AYj9moVOmPmWqJN1Ov4P3Qq6GpYxEafEjelNxnTynCa5NahyLWoPIuqZU+lKJUoCUFkJF5eA2/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SM5nP9tW; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C5441D23B
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 06:38:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786603112; cv=pass; b=gWX7KnEXaC+A+qjsgTo0D6bDaFJQQtOBQDIM1aRdeWlgJzlSAqyZzoi1Ib0wTbEZPGrY9k9YLH4AOje7rv3pg60O6EJ3HA1x78IZf9Xj9+dUUhpVmjZOLCUaLH4kf31ZwShe48ghZMNrH975iSvD7aXllBEhWiCkPBoqIYvRtig=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786603112; c=relaxed/simple;
+	bh=+A24NtONRwnbr6r3D7xaRVes2nGA+7zLWQBwcOligMI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bYsNA4tRxV5OQIdhoS2mR//T5Gf34khqGXjZXBeUA5IOnNoELrVCZTDPdBEw1/N8WlkdQ6kfv5MN7Mp9fo2VxasuVomwmzeejGuFwHD7/rC3dfpfKqKfPWNhmswV7EOEeF84mf7Cv5enzHrtd82VifZt0tT8Wqs+U2gS0cZmRxg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=anyfinetworks.com; spf=none smtp.mailfrom=anyfinetworks.com; dkim=pass (2048-bit key) header.d=anyfinetworks-com.20251104.gappssmtp.com header.i=@anyfinetworks-com.20251104.gappssmtp.com header.b=seICwRt/; arc=pass smtp.client-ip=209.85.221.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=anyfinetworks.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=anyfinetworks.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SM5nP9tW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786602643; x=1818138643;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=0JHzwHKRn7A0y0PcpDE+F8+6eFYW/G4Z39dUpe7jF4g=;
-  b=SM5nP9tWuGY2lo+8j6GrnXkomU5soCrXDGm+ekjBVbnlWDYI/VvSI9b4
-   sC084omXUZJcsxsbcoYmPdbU/vuHa2H/ht/c/ICHkHJ9K2G3o+Jf1s9dx
-   NTWEE6t2iTHyqFliPBQRWNAC0dMm2MVksO/TA9ULZcfHKSCbBikrwabW3
-   htJvEPgXJHovzMFSwlTLlDhdJRDsSTlQyfPSbqHG7d+kNhujdbwtWp5JZ
-   fr+erOYVviytJRemEQTLwYC5WTi0JWIHdE/3aF4qPx8lsCgY5NPsSOVru
-   KhXLFWDJtxuGL6mV0micGICX3MKjBiD9u1hpjzBPVH5qjwpRqAbVjgovx
-   w==;
-X-CSE-ConnectionGUID: AkFRzmPZQzKUFGuNgIk7Kg==
-X-CSE-MsgGUID: lwQ61zQcQqSKoF5y5q0ckQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11873"; a="86933915"
-X-IronPort-AV: E=Sophos;i="6.25,220,1779174000"; 
-   d="scan'208";a="86933915"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2026 23:30:43 -0700
-X-CSE-ConnectionGUID: g0aorIAIR9+6dFom0fsc3w==
-X-CSE-MsgGUID: +zMpg4JsSwu2hSgZDWYsCA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,220,1779174000"; 
-   d="scan'208";a="260033517"
-Received: from unknown (HELO brc05..) ([10.190.162.60])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2026 23:30:39 -0700
-From: Tushar Vyavahare <tushar.vyavahare@intel.com>
-To: netdev@vger.kernel.org,
-	magnus.karlsson@intel.com,
-	maciej.fijalkowski@intel.com,
-	stfomichev@gmail.com,
-	kernelxing@tencent.com,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	tirthendu.sarkar@intel.com,
-	tushar.vyavahare@intel.com,
-	andrii@kernel.org
-Cc: bpf@vger.kernel.org
-Subject: [PATCH net-next v2 5/5] selftests/xsk: make pkt_stream_even_odd_sequence rollback-safe
-Date: Thu, 13 Aug 2026 06:27:54 +0000
-Message-ID: <20260813062754.360131-6-tushar.vyavahare@intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260813062754.360131-1-tushar.vyavahare@intel.com>
-References: <20260813062754.360131-1-tushar.vyavahare@intel.com>
+	dkim=pass (2048-bit key) header.d=anyfinetworks-com.20251104.gappssmtp.com header.i=@anyfinetworks-com.20251104.gappssmtp.com header.b="seICwRt/"
+Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-59b074ec7ceso686730e0c.1
+        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 23:38:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786603110; cv=none;
+        d=google.com; s=arc-20260327;
+        b=c8DOKf6QB0KiXlMlnWunRsy8iwf+s2fsPl2ugOq1d8jMwa7gnyU7z2eQ7MFp03Oxww
+         3MZlkauRE6/uJpR6Ca1POGNu7oKq8w9ZAVCj7luPFdAkz7ASno/tfqYwfuPjosyEzmK3
+         hIudqfXUSfXWT5q8hpaHSTM9exVuUvqngDJpCBMe8X/QD8NzkraxMdZU/xxNRLjp7j0T
+         LjYgjfnBWiVSY/TdJW9Otv3wB1/zjMyDSgVCwSSvaayKjC9U1XWwI2mgGW76dJJVBTkc
+         8vX/CK+tq/fA0n6kWdKQyMOX8fREOR5AI7wjJFvIDoVWSIwtY1o9Y5sC2lmu7feH/Nxd
+         ZaNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=+A24NtONRwnbr6r3D7xaRVes2nGA+7zLWQBwcOligMI=;
+        fh=SU6NvKS3Wzf9lcXzJJpj4+07tb5X0j360LJazEc1kNk=;
+        b=Zc41v94InKdi5fGkggriRSmngpnhlxKItdGanKSUCv8jEQZcbBfwxtcdGM+n91gHFU
+         3TZ/bgBRoSGfdSUxpQ28eKeumdG+y2PBUi3FonZmtGhO9dAcJEqN79OuJyDwZuIr7NH3
+         PmydUS5iEddGqLbxntBauCfSLodqQB+zsf9o3Hy3HHLuy/JtJ/j0+xPHTi7aHvqjx+9i
+         ceLN/zLGDgDSWVvGySy02AZlBQEkXKDdmH5xOoE6epA/LkmU1IQKsWX3I/cepdKviXpK
+         AESdInkWNyqqKn3gTDWGdYbTdXqAZEaml4TJBt3cuyyBgkmVku3oGfPlos8BHZf5GT4u
+         d/PQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=anyfinetworks-com.20251104.gappssmtp.com; s=20251104; t=1786603110; x=1787207910; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+A24NtONRwnbr6r3D7xaRVes2nGA+7zLWQBwcOligMI=;
+        b=seICwRt/JeBBzfHlC41orlrh+jIQOO9ErSfHMZyRvAxm4pRcjwaWrEaL7Hh4NBL5vG
+         RKtODZQ8PL8KQVZU9Cz6GEaVQl5KJ9OcUBxu902VsyLMt+UnFEzTq1k3LNwKQcZ8iGbF
+         kLekaE/Bk0W1BHFsljuhWBOTgGRq5gQEnYnxnX0QKuRBIdvTzVG02d+CjqRe9Gont2a+
+         AW+bBC0nyo/NcGPHfo5BDdHCGuWWaMcMsbVyaK4F2uB8C9GmqAYXRlbu/0sdAgGdjQCW
+         27yv2xvTQokDu2HkvNdFuAJLaaqiU9sKYXxDWPvykMtKSps9vBhjM5hiqW+74f3OWgJL
+         ACZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786603110; x=1787207910;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=+A24NtONRwnbr6r3D7xaRVes2nGA+7zLWQBwcOligMI=;
+        b=ns8rEL0LEVtLCsnQBHbNuWyMCwUjEpTfpYOnmznN4PgpFX338hPqie7JfK0LdoCDFH
+         RxB69qFIZeI7dR5RyNuNxKVszxpFDRfBNLxK3wMEsli7eHHKBf1ad7k6wzfhI8sPm3t+
+         53YnPkS5+2onA5bB+I+xTDxYH5PUi5r7GlIh124EmL+DHuuZDoYcqzBzw7K7WALQxBPd
+         W4zcRJRhorZC6q+94C+eV2dsx/KAILTZ1zHEU+KPzf7/nYy4zSCr2x6XWP8ZBzFvAeaw
+         Yg+1pVVQPF58f2Yx7dA6ljH7FF6pGOrBPV5Y3VXmbR7z+4/ndDfsj9GqiUW0zLbZB43u
+         V+Yw==
+X-Forwarded-Encrypted: i=1; AHgh+Rp6ZNQC1lmhol1oD1ex5bHMLNQZQlvbdixbUCH4br/P8Hgjumjts0lql6cH0P/CBZFNTLo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxdB3K1MKcIiNiV1915SelBpl0HhguZC9Em0VdurYf8eRyoFQYV
+	peLoWkQtKGwuEfyRAxXHK5tqAYT+vE1uSLrDj73fLNe0XS+FPxKusRCQm/OlYDE94hXqEflAHhp
+	jHlcvKlB0pMA7iVkS7pzwBxBC5Bk9gOKXBTFcTeydIw==
+X-Gm-Gg: AR+sD101ywKfsmBN5tiKL1SclIkjo49yReN494IVguguTu77Uq9qcpYGfFw0SucMxZx
+	EaPu2KPFGNpP02vhOAxYDf3ymd5TCHFEv6He/UdXmaaoo3xxSaH/TcVknNr7s8whjua1nQVFRwx
+	J8igJdYj7d5WFqR7ZGYeBGPKSRq1cgnPBAt08nvdrLGSIMwSOMojONnzRqWTE2f5Sge5W1Zq3Lg
+	6eRs746SdqToZCOjA30uQAdGRf4zuOtvqMvfx9hW96l3UuEsgxK/Zcnxg35NrXLiq7dqKTZzkRQ
+	ADnTleqKak0jJyIfYU6GL9aEHnDQR8PW4VovVaK5NblcvccZwiJa3w==
+X-Received: by 2002:a05:6122:e24f:b0:5c1:2150:9de7 with SMTP id
+ 71dfb90a1353d-5c579cef23amr400695e0c.12.1786603109953; Wed, 12 Aug 2026
+ 23:38:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260810194215.3754591-1-main.kalliope@gmail.com>
+In-Reply-To: <20260810194215.3754591-1-main.kalliope@gmail.com>
+From: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Date: Thu, 13 Aug 2026 08:38:18 +0200
+X-Gm-Features: AUfX_mxnVKFrhzMvzU9GpBsrmWTwP-e51VBkRweV7y8XFEVr_QVxGwultt7UhUU
+Message-ID: <CAM1=_QTvdWzBpSGnoLV7wiW0dsn_nc04V8KnYuntptQ5mF9Pyg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 0/3] bpf, mips: Add signed div/mod support
+To: Nicholas Dudar <main.kalliope@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, tsbogend@alpha.franken.de, paulburton@kernel.org, 
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
+	philmd@oss.qualcomm.com, bpf@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-pkt_stream_even_odd_sequence() replaces each socket stream as it is
-generated. If a later allocation fails, the earlier replacement streams are
-already published in xsk_arr while the original streams for those slots are
-lost.
+Hi Nicholas,
 
-Both testapp_xdp_shared_umem() and run_shared_umem_test() return
-immediately on that error, without calling release_even_odd_sequence().
-This leaks the already-published replacement streams and leaves the socket
-arrays with a partially replaced stream set.
+Thanks for the v3 series. It looks good.
 
-Generate all TX and RX streams in temporary arrays and publish them only
-after every allocation succeeds. On failure, free the temporary streams
-and leave xsk_arr unchanged.
+However, i am currently on holiday and do not have access to my full
+QEMU test rig right now. I have verified your changes with the
+test_bpf selftests on mips32 with QEMU on my laptop, but the remaining
+arch variants will have to wait until I am back in about 12 days. I
+would like to do that before giving my final approval.
 
-Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
-Signed-off-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
----
- .../selftests/bpf/prog_tests/test_xsk.c       | 35 +++++++++++++------
- 1 file changed, 25 insertions(+), 10 deletions(-)
+Please proceed with the remaining opcodes in the meantime. I will do
+the same on my part as we discussed, and then we can wrap up this
+whole v4 compliance work when I am back.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-index 54143fc757e1..ae6a091b6485 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-@@ -602,26 +602,41 @@ static int pkt_stream_receive_half(struct test_spec *test)
- 
- static int pkt_stream_even_odd_sequence(struct test_spec *test)
- {
-+	struct pkt_stream *tx_streams[MAX_SOCKETS] = {};
-+	struct pkt_stream *rx_streams[MAX_SOCKETS] = {};
- 	struct pkt_stream *pkt_stream;
- 	u32 i;
- 
- 	for (i = 0; i < test->nb_sockets; i++) {
- 		pkt_stream = test->ifobj_tx->xsk_arr[i].pkt_stream;
--		pkt_stream = __pkt_stream_generate(pkt_stream->nb_pkts / 2,
--						   pkt_stream->pkts[0].len, i, 2);
--		if (!pkt_stream)
--			return -ENOMEM;
--		test->ifobj_tx->xsk_arr[i].pkt_stream = pkt_stream;
-+		tx_streams[i] = __pkt_stream_generate(pkt_stream->nb_pkts / 2,
-+						      pkt_stream->pkts[0].len, i, 2);
-+		if (!tx_streams[i])
-+			goto err;
- 
- 		pkt_stream = test->ifobj_rx->xsk_arr[i].pkt_stream;
--		pkt_stream = __pkt_stream_generate(pkt_stream->nb_pkts / 2,
--						   pkt_stream->pkts[0].len, i, 2);
--		if (!pkt_stream)
--			return -ENOMEM;
--		test->ifobj_rx->xsk_arr[i].pkt_stream = pkt_stream;
-+		rx_streams[i] = __pkt_stream_generate(pkt_stream->nb_pkts / 2,
-+						      pkt_stream->pkts[0].len, i, 2);
-+		if (!rx_streams[i])
-+			goto err;
-+	}
-+
-+	for (i = 0; i < test->nb_sockets; i++) {
-+		test->ifobj_tx->xsk_arr[i].pkt_stream = tx_streams[i];
-+		test->ifobj_rx->xsk_arr[i].pkt_stream = rx_streams[i];
- 	}
- 
- 	return 0;
-+
-+err:
-+	for (i = 0; i < test->nb_sockets; i++) {
-+		if (tx_streams[i])
-+			pkt_stream_delete(tx_streams[i]);
-+		if (rx_streams[i])
-+			pkt_stream_delete(rx_streams[i]);
-+	}
-+
-+	return -ENOMEM;
- }
- 
- static int pkt_stream_len_seq(struct test_spec *test, u32 short_len, u32 long_len)
--- 
-2.43.0
-
+Thanks,
+Johan
