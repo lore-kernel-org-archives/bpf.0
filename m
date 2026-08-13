@@ -1,123 +1,234 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00AC7359A91
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 22:47:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E653331222
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 22:49:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786661247; cv=none; b=T9AAgRsRM+rjHrepRAZe97ySslF4XfaAQUzUEb4EspU6GFMmfKZbBbGAE7ZzCJKMzC9LjKCueIFKvBfRQHbGTLQ4D5LAHdWSyX5/Xu8lcdJIVjuppe08RW6RvtjsfkY53frvUHaFN6Rv81Zez76dGbZ3rxQkEVIArNXfyAVho00=
+	t=1786661346; cv=none; b=OjAhAzNx1bK4p4yoTP6BJAshmygs+edC0kTiE6Dj7Laz20Eonz3TVJ9LVp8hZt4TL5CGQ+Y98+Znmj6PCmmj/DwejNTaJP0gihEW1SQAIs1q0VmXpBTY3hZC+s+ue37jwJoaxKR0RwdoP+Rap/icpiFzauc4pZrvJn2PMZo7UZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786661247; c=relaxed/simple;
-	bh=vD2ihCB3IXJIBefEbaymWsOxu1Q/Ry1ZC0VVdwEYEWU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=FhEa98LyZvY5/h3vJlmZTfGMComxPYQLBZ5oZZNE/jdPzx7eMKzEzGvHKEOwUmMI2Eq/rN1g/qr7TkON6YY/tXKlXx74pyasv8GinZHdl92/1xYTb56QlW+tu3Y7XxoPWljMs5uZd0MdUhv6swtQymZ3cr5Bpt+6jjzc/aQ+yIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LjaaYJrJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786661346; c=relaxed/simple;
+	bh=hZD6Z5uI3FFhEFieMNQQwvTj9KF6y3swzMuKuTWU8Ps=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=N4kc3/v31QclStcfCoLY1e0VgTkuvGWqAGLT2qSeQDo04ezv1x+MRdrByljNAW20VCJIbtbZ7nbPcBXe2lBkqc9JM1IKtr3D8aw9A5u2BSQ0kMNp0FmwNn7RWgg1RJ6AItIepVzqqsyTSZHSo5O60xO+0BisLBT9C7bo9IGDDf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cEe5yzhH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LjaaYJrJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71C101F000E9;
-	Thu, 13 Aug 2026 22:47:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cEe5yzhH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D712D1F000E9;
+	Thu, 13 Aug 2026 22:49:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786661245;
-	bh=V8Xdg6EzrhrCSmrmwmGGHq3AHO78IpuratX1SUg6M9k=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=LjaaYJrJLYR0JpQlegEUHSth6sq7116FswiCPizGv+Fr0ap8SacAqd6WGDvb3KBWj
-	 d1W43EcKIdFAdG4ni5zSqh/CMS2sGhbehi2OIogRnKaqdyC8q23wSkD5wWNCQogLAM
-	 i85PC6/SRnADX5RbJGyMTlvuFAgN3TB3dr4/LhOeynLn6ZjLRBHzM6qEDqyX4VO3Kd
-	 3FACXrr97ZW6Hz1/KzIF4voxMaQzbXsQE0UeMsYR4gRbcHXAgmD3iWwxam1H+h8aaw
-	 tlhb3Mwqg38wiO0UHapMoR4KmHdUcDPXXvNmrXdNBtmFicfTBtx6CFiSUfj5UaDQRf
-	 s/NHDEjnNTs/w==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v6 4/6] bpf: Verifier support for sleepable
- tracepoint programs
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260324-sleepable_tracepoints-v6-4-81bab3a43f25@meta.com>
-References: <20260324-sleepable_tracepoints-v6-4-81bab3a43f25@meta.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 13 Aug 2026 22:47:24 +0000
-Message-Id: <20260813224725.71C101F000E9@smtp.kernel.org>
+	s=k20260515; t=1786661344;
+	bh=XMxRCbvJo1u5r1UrLeEa+/OFvDqIKIiSeCJx7G2MxEg=;
+	h=From:To:Cc:Subject:Date;
+	b=cEe5yzhHJQasbayz2vWqBSATeddg8LDrr3rCdol3kDlOvVmBXOqh7OhkVhhm7INIQ
+	 y/W2xnJW8sFtiQuA97ILC24HvB6EPSceVN1kRl5WJdxJhkdMNO2poCja0L7pgCXJXB
+	 elLeR9Fw03NvbUb5aPlxAwnGPec1Csne1riHwsaue7SzO/pZ5wAzL0TW+uvA8ucvfF
+	 LSpON2oqPWd+wNpMUf41o2pZ9DwKbOteptnXKupdjeDH6OytaqnMoBror7KOGBXc5h
+	 K45aHfnSdr8xVpvKiW2RiASNLT5+2KJUuOXOwuhqz8K2T/F40U+LI4TBoAHF+szz5a
+	 VbJR/7PZ8h/5Q==
+From: Song Liu <song@kernel.org>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	kernel-team@meta.com,
+	Song Liu <song@kernel.org>
+Subject: [PATCH v6 bpf-next] bpf: Populate mmap-able array map memory lazily
+Date: Thu, 13 Aug 2026 15:48:53 -0700
+Message-ID: <20260813224853.1436734-1-song@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Sleepable BPF_PROG_TYPE_RAW_TRACEPOINT programs cause a 'schedulin=
-g while atomic' kernel panic when executed via BPF_PROG_TEST_RUN.
---
+An mmap-able BPF array map (BPF_F_MMAPABLE) has its backing memory
+vmalloc'ed up front at map creation time. array_map_mmap() then wired up
+the whole mapping eagerly via remap_vmalloc_range(), which calls
+vm_insert_page() for every page of the map. For large maps this makes
+every mmap() O(number of pages): an 8MiB map inserts 2048 PTEs per
+mmap() and tears them all down again on munmap(), even when user space
+only touches a few pages (or none at all).
 
---- Patch [4]: [PATCH bpf-next v6 4/6] bpf: Verifier support for sleepable =
-tracepoint programs ---
-commit 0adc028b1ba3ebb449f79abbe66b1d15d4ba5578
-Author: Mykyta Yatsenko <yatsenko@meta.com>
+Populate the mapping lazily instead, the same way the arena map already
+does. array_map_mmap() now only performs the bounds check and returns,
+leaving the PTEs unpopulated; pages are inserted on demand by a new
+array_map_mmap_fault() handler. Because the memory is already resident,
+the fault handler simply resolves the vmalloc page and hands it to the
+fault path. This makes mmap() O(1), and munmap() proportional to the
+number of pages that were actually faulted in rather than to the size of
+the map.
 
-bpf: Verifier support for sleepable tracepoint programs
+The handler is reached through a new optional ->map_mmap_fault callback
+dispatched from the shared bpf_map_default_vmops, so the existing VMA
+open/close accounting (VM_MAYWRITE write-active tracking, freeze
+handling) stays centralized rather than each map installing its own
+vm_operations_struct.
 
-This commit allows BPF_PROG_TYPE_RAW_TRACEPOINT, BPF_PROG_TYPE_TRACEPOINT, =
-and
-BPF_TRACE_RAW_TP programs to be sleepable. It also adds checks to ensure
-these sleepable programs are only attached to faultable tracepoints.
+Callers that want the pages populated up front can still request that
+explicitly with MAP_POPULATE. Kernel-side access to the map (via the
+vmalloc address) is unaffected.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 01c18f4268deb..a4836f564cb12 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+Time for one mmap()+munmap() of an 8MiB mmap-able array map:
 
-[ ... ]
+                                       before     after
+  no MAP_POPULATE, no access            226us     1.1us
+  no MAP_POPULATE, access all pages     236us    1341us
+  MAP_POPULATE, no access               312us     493us
+  MAP_POPULATE, access all pages        318us     519us
 
-> @@ -25478,7 +25485,9 @@ static bool can_be_sleepable(struct bpf_prog *pro=
-g)
->  	}
->  	return prog->type =3D=3D BPF_PROG_TYPE_LSM ||
->  	       prog->type =3D=3D BPF_PROG_TYPE_KPROBE /* only for uprobes */ ||
-> -	       prog->type =3D=3D BPF_PROG_TYPE_STRUCT_OPS;
-> +	       prog->type =3D=3D BPF_PROG_TYPE_STRUCT_OPS ||
-> +	       prog->type =3D=3D BPF_PROG_TYPE_RAW_TRACEPOINT ||
-> +	       prog->type =3D=3D BPF_PROG_TYPE_TRACEPOINT;
->  }
+Mapping without touching the data, which is what this change targets,
+gets ~160x cheaper. Faulting in the whole mapping one page at a time is
+more expensive than the eager remap_vmalloc_range() loop, so users that
+do touch every page should ask for MAP_POPULATE. Note that MAP_POPULATE
+is not free before this change either: it adds ~85us (226us => 312us)
+for no benefit, as the mapping is already fully populated.
 
-[Severity: High]
-Can this change introduce a 'scheduling while atomic' kernel panic when a
-sleepable BPF_PROG_TYPE_RAW_TRACEPOINT program is executed via
-BPF_PROG_TEST_RUN?
+Signed-off-by: Song Liu <song@kernel.org>
+Assisted-by: Claude:claude-opus-4-8
 
-Looking at net/bpf/test_run.c, bpf_prog_test_run_raw_tp() disables preempti=
-on
-via get_cpu() or smp_call_function_single() before running the program:
+---
+Changes in v6:
+- Drop the !CONFIG_MMU branch. nommu cannot mmap() a BPF map fd in the
+  first place: the fd is an anon inode and bpf_map_fops has no
+  ->mmap_capabilities, so validate_mmap_request() returns -EINVAL before
+  ->mmap() runs. (BPF CI AI review)
+- Scope the O(1) claim to mmap(); munmap() still tears down whatever was
+  faulted in. (BPF CI AI review)
+v5: https://lore.kernel.org/bpf/20260812230248.2452103-1-song@kernel.org/
 
-net/bpf/test_run.c:bpf_prog_test_run_raw_tp() {
-	current_cpu =3D get_cpu();
-	if ((kattr->test.flags & BPF_F_TEST_RUN_ON_CPU) =3D=3D 0 ||
-	    cpu =3D=3D current_cpu) {
-		__bpf_prog_test_run_raw_tp(&info);
-	} else if (cpu >=3D nr_cpu_ids || !cpu_online(cpu)) {
-		err =3D -ENXIO;
-	} else {
-		err =3D smp_call_function_single(cpu, __bpf_prog_test_run_raw_tp,
-					       &info, 1);
-	}
-	put_cpu();
-}
+Changes in v5:
+- Drop the ->map_pages (fault-around) handler, it pulls in too much mm
+  internal API for the gain. (Andrii)
+- Drop the fault path overflow and bounds checks, and the verbose
+  comments; VM_DONTEXPAND plus the mmap() time check already bound the
+  faulting offset. (Andrii)
+- No cover letter for a single patch. (Andrii)
+v4: https://lore.kernel.org/bpf/20260729192419.41331-1-song@kernel.org/
 
-And __bpf_prog_test_run_raw_tp() then executes the program under
-rcu_read_lock():
+Changes in v4:
+- Flush the D-cache before exposing a page at a new user address, as the
+  eager vm_insert_page() path did. (Sashiko AI review)
+- Fix the build on !CONFIG_MMU: keep populating the mapping eagerly
+  there, as there are no page faults. (kernel test robot)
+v3: https://lore.kernel.org/bpf/20260729001033.3433328-1-song@kernel.org/
 
-net/bpf/test_run.c:__bpf_prog_test_run_raw_tp() {
-	rcu_read_lock();
-	info->retval =3D bpf_prog_run(info->prog, info->ctx);
-	rcu_read_unlock();
-}
+Changes in v3:
+- Add a ->map_pages (fault-around) handler so mmap(MAP_POPULATE) and
+  linear access populate PTEs in batches instead of one fault per page.
+- Harden the fault path with check_shl_overflow() and explicit bounds
+  checks instead of a plain (u64) cast. (Andrii)
+- Drop selftests (2/2 in v2). (Andrii)
+v2: https://lore.kernel.org/bpf/20260722205032.1245094-1-song@kernel.org/
 
-If a user with CAP_BPF loads a sleepable raw tracepoint program and execute=
-s it
-via the BPF_PROG_TEST_RUN syscall, wouldn't invoking sleepable helpers in t=
-his
-context trigger a 'BUG: scheduling while atomic' panic?
+Changes in v2:
+- Use 64-bit arithmetic for the mmap offset and bounds check to avoid a
+  potential overflow on 32-bit architectures.
+v1: https://lore.kernel.org/bpf/20260722065308.4116186-1-song@kernel.org/
+---
+ include/linux/bpf.h   |  1 +
+ kernel/bpf/arraymap.c | 29 +++++++++++++++++++++++++----
+ kernel/bpf/syscall.c  | 12 ++++++++++++
+ 3 files changed, 38 insertions(+), 4 deletions(-)
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260324-sleepable_=
-tracepoints-v6-0-81bab3a43f25@meta.com?part=3D4
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index f4e8d372253a..04cadd987169 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -145,6 +145,7 @@ struct bpf_map_ops {
+ 	int (*map_direct_value_meta)(const struct bpf_map *map,
+ 				     u64 imm, u32 *off);
+ 	int (*map_mmap)(struct bpf_map *map, struct vm_area_struct *vma);
++	vm_fault_t (*map_mmap_fault)(struct bpf_map *map, struct vm_fault *vmf);
+ 	__poll_t (*map_poll)(struct bpf_map *map, struct file *filp,
+ 			     struct poll_table_struct *pts);
+ 	unsigned long (*map_get_unmapped_area)(struct file *filep, unsigned long addr,
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 34865701f7f7..a6e44428a6c5 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -608,17 +608,37 @@ static int array_map_check_btf(struct bpf_map *map,
+ static int array_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
+ {
+ 	struct bpf_array *array = container_of(map, struct bpf_array, map);
+-	pgoff_t pgoff = PAGE_ALIGN(sizeof(*array)) >> PAGE_SHIFT;
+ 
+ 	if (!(map->map_flags & BPF_F_MMAPABLE))
+ 		return -EINVAL;
+ 
+-	if (vma->vm_pgoff * PAGE_SIZE + (vma->vm_end - vma->vm_start) >
++	/* use u64 math so the offset cannot overflow on 32-bit archs */
++	if ((u64)vma->vm_pgoff * PAGE_SIZE + (vma->vm_end - vma->vm_start) >
+ 	    PAGE_ALIGN((u64)array->map.max_entries * array->elem_size))
+ 		return -EINVAL;
+ 
+-	return remap_vmalloc_range(vma, array_map_vmalloc_addr(array),
+-				   vma->vm_pgoff + pgoff);
++	/* pages are faulted in on demand by array_map_mmap_fault() */
++	vm_flags_set(vma, VM_DONTEXPAND | VM_DONTDUMP);
++
++	return 0;
++}
++
++static vm_fault_t array_map_mmap_fault(struct bpf_map *map,
++				       struct vm_fault *vmf)
++{
++	struct bpf_array *array = container_of(map, struct bpf_array, map);
++	struct page *page;
++
++	page = vmalloc_to_page(array->value + ((u64)vmf->pgoff << PAGE_SHIFT));
++	if (!page)
++		return VM_FAULT_SIGBUS;
++
++	/* the eager remap_vmalloc_range() flushed via vm_insert_page() */
++	flush_dcache_folio(page_folio(page));
++	get_page(page);
++	vmf->page = page;
++
++	return 0;
+ }
+ 
+ static bool array_map_meta_equal(const struct bpf_map *meta0,
+@@ -844,6 +864,7 @@ const struct bpf_map_ops array_map_ops = {
+ 	.map_direct_value_addr = array_map_direct_value_addr,
+ 	.map_direct_value_meta = array_map_direct_value_meta,
+ 	.map_mmap = array_map_mmap,
++	.map_mmap_fault = array_map_mmap_fault,
+ 	.map_seq_show_elem = array_map_seq_show_elem,
+ 	.map_check_btf = array_map_check_btf,
+ 	.map_lookup_batch = generic_map_lookup_batch,
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 7d8c3e8e6d62..9e5e65e73dfa 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1076,9 +1076,21 @@ static void bpf_map_mmap_close(struct vm_area_struct *vma)
+ 		bpf_map_write_active_dec(map);
+ }
+ 
++/* Called for maps that populate their memory-mapped region lazily. */
++static vm_fault_t bpf_map_mmap_fault(struct vm_fault *vmf)
++{
++	struct bpf_map *map = vmf->vma->vm_private_data;
++
++	if (!map->ops->map_mmap_fault)
++		return VM_FAULT_SIGBUS;
++
++	return map->ops->map_mmap_fault(map, vmf);
++}
++
+ static const struct vm_operations_struct bpf_map_default_vmops = {
+ 	.open		= bpf_map_mmap_open,
+ 	.close		= bpf_map_mmap_close,
++	.fault		= bpf_map_mmap_fault,
+ };
+ 
+ static int bpf_map_mmap(struct file *filp, struct vm_area_struct *vma)
+
+base-commit: 259d60f5bfa41056fe01cbf2ba3f6f0331865a16
+-- 
+2.53.0-Meta
+
