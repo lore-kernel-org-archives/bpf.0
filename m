@@ -1,103 +1,168 @@
-Received: from mail-wr2-f0.google.com (mail-wr2-f0.google.com [74.125.225.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16FB33314B7
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 04:55:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE347207DF7
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 05:17:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786596934; cv=none; b=J/itOfqI78HvS6tRGojZovetPLRHM+l2I2drCq6Bcq4m2qKmeC4hbTDEHid4r5QT349w71kxN8qAFzZ0lJMIsPUHc0NOFd7K9C5MxBwxMV+Ja/5Ko5fGn0ZIv/UA6Mx5/LGV13czaAK+94VcAP79yG1e48B10rG3bZuLi0U5rHo=
+	t=1786598232; cv=none; b=CEgledCFuS/+BtFGC3Et6u+VJqjDxxzlAGZ33oKh4xRNvQfybialrz4tI2+VlbO4NAcWmhvXFdl5Gc65eVpyq9XXDs5NN8vPmnyIwQf2r2lkZCbJmlWIxI/l5Qoy9T+bJTF4NEUE3+1UzpRC7I5VcBirqkLtxp+jFUuYgtYSirA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786596934; c=relaxed/simple;
-	bh=LcDT13BfJZLygNzuHMSU17EAG+rR9RjyKf+PofnUB8c=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=afq6HerOGzG8c9rrmzXBUoLjZzPO8uFqX40YR457qxuVOPFsnMS6f5iOrcRGLKYtRDolUK8gnp0YPIOjEGZc9h/k+LyslkxjLgFxLgW4ASEX/wblNwKNP2LXUBRmiXU14nIKpTvwK6Zg+azVoSoWdR9xRjI2v9LbZfpzLQtJUQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pZq6HTbU; arc=none smtp.client-ip=74.125.225.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786598232; c=relaxed/simple;
+	bh=XWFZK/e/7CsX4iMIsxwBsCGV+o44AZdAJ4gnsWag03o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YumJabb7iy+miOvzaDKZBLblvioiCUnOXNYG8vuKSsb61EoZ/Y82jdBog89xDN/EvTSiHuVbvVH8e9Z+3OC19uAPDDeJ7qbjsV88tL7A15bGW8AsncmUtdcGaQSMKwl8tO3iucqcMJpvixDAQ76slckJRYlKSHHA/buVMs0e4ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gGqHBHIi; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pZq6HTbU"
-Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-4784b41f3aeso430390f8f.1
-        for <bpf@vger.kernel.org>; Wed, 12 Aug 2026 21:55:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786596930; x=1787201730; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=LcDT13BfJZLygNzuHMSU17EAG+rR9RjyKf+PofnUB8c=;
-        b=pZq6HTbUz5hbRAAAT/wtJx78P7uLz8HaKthLqdu4ywMpPxcbxlzx3+n+XjHOdUlPBT
-         SjZ3CzqAUYBpiyL3ZZn91tHc4THi8m6Ahe3LIXnNR/1Moe13g447Yt99lOvQ4MvpIViT
-         yqsD0NGrA08W8d6dplsiJQLxHNcrv74B9xGXmcRBiwdhoeAiy4GvHNamvuL389KkJz3J
-         iiUc0XIDegnO0I5rYMuBU3UGlcIXGZBUfXzRUaXnENMiLHwMysQEq8BOL8qNZlyDKrYa
-         C1EvTA+ONHIH2/naghCGYnFJgY8gyCIv5Ix9/JpOwFtskXrBxhtcCt2o0OtG+EwjfSSc
-         Kthg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786596930; x=1787201730;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=LcDT13BfJZLygNzuHMSU17EAG+rR9RjyKf+PofnUB8c=;
-        b=RCO5XyAcmCQ1fLheXCt4EGF6Ik9z2GakHQ53xF+iTDEynPm1LaB/b7EOOymbXRBQqT
-         AXlouSgz5SL6tDiOQFtXrzbGXy7i6JWZDvRNkMZF/DYyR5wzNjBwTTLXVfOtojAJ7S6Z
-         o02qPizsvq0RU7kT5LcX/18d7ogk2BfKZAMyOydCGluoYsuIizktNi7OyZONG/xyoX0b
-         l+Wpk9WyfNgIcSYLpYv/VWqJen2LBXjUrQZdJhIfnRQal1Ul3DwiNqTrzItPjpgJN7CC
-         NENBYaTEQYDjXQts+CEM7aQUejdqdSzb171wAchf4Aj/6/IOC7OjgMpJg8HXZf9hBaLD
-         wOlA==
-X-Forwarded-Encrypted: i=1; AHgh+RpNWtOZwOfGJwIv2Kqr6tQp2KiCCIqX+c9KHQKFUySfdCJVieb0j7gvOtSaHbKT8Eds8Yw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSyQCd3N9lj+ska3atmjakQy7GnnpgZ+kPZ6vcZKEXlq5KtPxF
-	IVvKsf9bXllWdasIkLv/nREZNseaYy+hJOvdvucH19SU+knPJhSTcX5+
-X-Gm-Gg: AR+sD12eHtklBU/OrQRh3AK7QkouvvEsAa06IboPQXGdhh2HPKhF98N8ejxM//gcSM0
-	IOb69jz7PAodwmnMDeIHoJ61Y9sOGZMg6DqNYqqp8UtE0Ej3dWZvB8atN6AJb6t1Fpt0QLhcdRj
-	m9wAG/HZVdM2MpLsqK2HzGTai6e+tiTFNZF1ZzgS6rJfWNLHuTRegHIXzRKuxnS4sw20D+HpSIx
-	i7GSLC8OiKhifNcSu92t57ovL3t8EWa2sX7Mw6/AZ4PNlZO4vgDP3zUycKapSpLu216D9vDbYtp
-	RI3+rw5G6uGg0iHBYbA34EPGUdcbVMNzO4V3AipVyFZsaXTxMEk/CSDBVr39AhPYtfS8sGrJOWu
-	jOF3KwU7P90iAJyO055HyooZ+rw8VhrXJ0+oIStKDtVcUBmy95yVz6fxgGvgOBgpFFtoDQjPW9R
-	gHzmcmcgPPB6BJawB3+0LrmCsWJcOOjc5P/1WGZuYd/GDG0eTcSE1NDtAJnIe/m+mpfL6GMHIY9
-	FxusleFSkxUChog9gx8TnMQY8qpz3lB3GGyJIFNU40w5ytaXgdm5HeJo461c1DvU6FaMzbfkCYv
-	r5pwLjWdaJbOygcUp3nyouCbl24=
-X-Received: by 2002:a5d:5008:0:b0:47f:826c:7422 with SMTP id ffacd0b85a97d-4815a0225b0mr2873991f8f.17.1786596930203;
-        Wed, 12 Aug 2026 21:55:30 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815a5af4b2sm2779518f8f.17.2026.08.12.21.55.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Aug 2026 21:55:29 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gGqHBHIi"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786598214;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=EYcOFy8k9Qk2cCl/jWteAJqGPNJg4JpMyMzEqhTo0Is=;
+	b=gGqHBHIiKtMTOnIZQKKSlzGdfXL1nLGq1LypkigyAHxq6CRyoECql3nmpHnNLke/PIDUez
+	cZCnt3Zv2makSGMZowpH2FUZzPO3vr6pSPPGmyjr4Xn2ktZ7ckhObLyc2rt7pm1UD8rac+
+	E2mvjZy4vcGKUA+ub4h2kA7jz+RjtDE=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org,
+	memxor@gmail.com
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Taegu Ha <hataegu0826@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Paul Chaignon <paul.chaignon@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH net-next v1] selftests/bpf: Fix insn count expectations in chained global subprogs test
+Date: Thu, 13 Aug 2026 13:16:29 +0800
+Message-ID: <20260813051635.121670-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 13 Aug 2026 06:55:29 +0200
-Message-Id: <DKNJR6PWB9H8.1KQ1YNIGKMXTE@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next] bpf: Trim special_kfunc_list in verifier
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Leon Hwang" <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260812164843.55601-1-leon.hwang@linux.dev>
-In-Reply-To: <20260812164843.55601-1-leon.hwang@linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed Aug 12, 2026 at 6:48 PM CEST, Leon Hwang wrote:
-> The commit 7619a0ee9340 ("bpf: Mark existing lock-safe kfuncs with KF_SPI=
-NLOCK_SAFE")
-> dropped some helpers in verifier, which also eliminated the use of the
-> following kfuncs from the special_kfunc_list:
->
-> * bpf_arena_reserve_pages
-> * bpf_stream_vprintk
-> * bpf_stream_print_stack
->
-> So, drop them from the special_kfunc_list.
->
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> ---
+The test asserts exact per-subprog insns_self/insns_total values and the
+aggregate processed count, but these depend on compiler codegen. The
+expected values match -mcpu=v3 output; under -mcpu=v4 clang emits a
+sign-extending load in global_good() instead of a load plus two shifts,
+so the subprog is verified in 3 insns instead of 5 and the test fails on
+the cpuv4 flavor.
 
-Applied. pw-bot is asleep.
+Rewrite the involved subprogs as naked functions with hand-written
+instruction sequences using only v1 instructions, so the verified insn
+counts no longer depend on cpu version or compiler codegen.
+
+Fixes: c2e6c7de8830 ("bpf: Show more useful info in stack depth stats")
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+ .../bpf/progs/verifier_global_subprogs.c      | 56 +++++++++++++++----
+ 1 file changed, 45 insertions(+), 11 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+index 7b65eea97ebc..3352dc177ec1 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
++++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+@@ -25,9 +25,22 @@ __noinline long global_bad(void)
+ 	return arr[unkn_idx]; /* BOOM */
+ }
+ 
+-__noinline long global_good(void)
++/* Insn counts asserted in chained_global_func_calls_success() depend on
++ * the exact instruction sequences of this function and its callers, so
++ * they are written in inline asm to be independent of compiler codegen.
++ */
++__naked __noinline long global_good(void)
+ {
+-	return arr[0];
++	/* return (long)arr[0]; 5 insns (ld_imm64 counts as one) */
++	asm volatile (
++		"r1 = %[arr] ll;"
++		"r0 = *(u32 *)(r1 + 0);"
++		"r0 <<= 32;"
++		"r0 s>>= 32;"
++		"exit;"
++		:
++		: __imm_addr(arr)
++		: __clobber_all);
+ }
+ 
+ __noinline long global_calls_bad(void)
+@@ -35,9 +48,13 @@ __noinline long global_calls_bad(void)
+ 	return global_good() + global_bad() /* does BOOM indirectly */;
+ }
+ 
+-__noinline long global_calls_good_only(void)
++__naked __noinline long global_calls_good_only(void)
+ {
+-	return global_good();
++	/* return global_good(); 2 insns */
++	asm volatile (
++		"call global_good;"
++		"exit;"
++		::: __clobber_all);
+ }
+ 
+ __noinline long global_dead(void)
+@@ -56,13 +73,30 @@ __msg("subprog 0 (chained_global_func_calls_success) main insns_self 7 insns_tot
+ __msg("subprog {{[0-9]+}} (global_calls_good_only) global insns_self 2 insns_total 2 stack")
+ __msg("subprog {{[0-9]+}} (global_good) global insns_self 5 insns_total 5 stack")
+ __msg("processed 14 insns")
+-int chained_global_func_calls_success(void)
+-{
+-	int sum = 0;
+-
+-	if (call_dead_subprog)
+-		sum += global_dead();
+-	return global_calls_good_only() + sum;
++__naked int chained_global_func_calls_success(void)
++{
++	/* int sum = 0;
++	 * if (call_dead_subprog)
++	 *	sum += global_dead();
++	 * return global_calls_good_only() + sum;
++	 *
++	 * call_dead_subprog is known false, so 7 insns are processed:
++	 * the branch to l0 is always taken and global_dead() is dead code.
++	 */
++	asm volatile (
++		"r6 = 0;"
++		"r1 = %[call_dead_subprog] ll;"
++		"r1 = *(u8 *)(r1 + 0);"
++		"if r1 == 0 goto l0_%=;"
++		"call global_dead;"
++		"r6 = r0;"
++	"l0_%=:"
++		"call global_calls_good_only;"
++		"r0 += r6;"
++		"exit;"
++		:
++		: __imm_addr(call_dead_subprog)
++		: __clobber_all);
+ }
+ 
+ SEC("?raw_tp")
+-- 
+2.43.0
+
