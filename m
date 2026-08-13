@@ -1,103 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-248.mta1.migadu.com [95.215.58.248])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A592931FB;
-	Thu, 13 Aug 2026 13:48:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FFBB483802
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 14:44:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.248
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786628905; cv=none; b=n+vVfveUyM2QU42P44N7KANiYYT5nLn4fXluQq48WQ0vlRTKPYYD/hbm59ANuH7/GBbD1jeb6aSPV95Mi/IrTlwmtjAyLnNsj3hxgzGrrQZ9Y1B1ZZJHAjE8peGOYIbGgLegvzd5kcndntyjpYv3c/dXs9huzZ4ljdVOnmh6IIk=
+	t=1786632258; cv=none; b=HskFl8U7tJ6uKo0eZa+URIGz3lFySuyfjt5htZ8B/UchR1JiyTHr+1ouut2ZvQBQqwf5AHIdXKotO7LWiYF4MIcpSydB6FtayG5LwnFYLE8JvIzSMJsIgqfmh1sTbSg80p3sbnHplWJlD7n9B3uK8nKdiEVJWllsRCF/iGIBwFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786628905; c=relaxed/simple;
-	bh=tc+0er2U1DLU+at2eGrqYfG5BUhQlSMtehkhlcxxBzA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=VcSjLPvKoPUDH7t0q7Bu2r+a0HzhJCmHH+W14guL1UyHjPw9wAuQA7y6ahTRBeJSK2Lr9/tZrB3xtBEy3rZ7M2CaaflQymthk6EbtetHiNg8JYZzKd+MBDEFLvumRDeyN/yHw2BdAbTR05ygZn8Nei7uOr3OY4NokS+UkOJlQfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SgoYWo/H; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786632258; c=relaxed/simple;
+	bh=8fVIx7G6mHExdyJvBnMZanXKXlszThoCe1xwtW73Qyw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SCQRgzecHf1YzcXNDsx9+PVXE6KaMeH+bEdReHgj6K0p6wyTSqz4Ck6dr/EPjU/w/x00SJTlxrmViJPnbk6C1slXBHstPMD/kCrld34z+LoDhlXO6dFQsAy068tJmxjvQPEtKTsEN18C3WVit3/JYrASIcy5bHsqC+XZM4GRSms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lkxYwXZj; arc=none smtp.client-ip=95.215.58.248
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SgoYWo/H"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1F931F000E9;
-	Thu, 13 Aug 2026 13:48:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786628903;
-	bh=B0jeCG32tnGw9NMO5PftY637Zp6I2ih3emRAjg65r4U=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=SgoYWo/HXGIr7g58qxaXhUcqJT8Y4or8FZ3DYnhwoas/BEr1IR1FiFBmYcpDZKQU/
-	 8sq4DnMGeDwmePz7lfWxFFLeTqi5Na/uHeGkErHXCFppZO7tEihDhy+W1eM6Y7YL3J
-	 8dP3gDpekT6k+rTSW/JqNJCqwIhOHEq4lURXAlNnAJb0KyLTqp1yFZPg1G8+31nrzC
-	 meTd+2cOXXubcb1DgOYExPriYMzt8YMURqeC8y7EgY/9BvBCWTX+cTqhF8UirUHa9B
-	 2AzUY0/5iT8pYG6rmUni4S6XSvAre3hu8OlrgdK2XvyJKyzD+4CvYTxmhFOBI96Z0i
-	 iPeSizbtmGI+Q==
-Content-Type: multipart/mixed; boundary="===============1870217146028247937=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lkxYwXZj"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=8fVIx7G6mHExdyJvBnMZanXKXlszThoCe1xwtW73Qyw=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1786632253; v=1; x=1787237053;
+ b=lkxYwXZjET8OnFj479lYLdwfbKpsp51ep/i6lQq1G9PuU+0d3kyGwBmKX9e3FsWsDtojoyX2
+ VHAMdVxA5YcQNDcirsUaT0OVeUJ0mAl+mAS/ELKK3Wfzx9YiWlx22ZDKEsN4FqjWnactSrypWse
+ gb3bs2yYU6ypGcbQUmaWvqCY=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from [172.20.10.7] (117.20.149.103)
+	by smtp.migadu.com with ESMTPS id 44444fa5db3f0b38;
+	Thu, 13 Aug 2026 14:44:13 +0000
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <56ff2d90-5943-4e9b-afc8-18dcaef2f893@linux.dev>
+Date: Thu, 13 Aug 2026 22:44:04 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <4399f187b740ad845694474891fa8063ec2fcfb4b3a6da4595e6b6dabfed5bb3@mail.kernel.org>
-In-Reply-To: <20260813120250.796934-4-sh_def@163.com>
-References: <20260813120250.796934-4-sh_def@163.com>
-Subject: Re: [PATCH bpf] bpf: fix percpu map update indexing with sparse CPU IDs
-From: bot+bpf-ci@kernel.org
-To: sh_def@163.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@google.com,haoluo@google.com,jolsa@kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,sh_def@163.com,sashiko-bot@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 13 Aug 2026 13:48:22 +0000 (UTC)
-
---===============1870217146028247937==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf] bpf: fix BPF_F_CPU validation for sparse CPU IDs
+To: Hui Su <sh_def@163.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260813101229.680523-3-sh_def@163.com>
+Content-Language: en-US
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260813101229.680523-3-sh_def@163.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-> commit 3563498ad027820b11bad3993a5c6a17d293ad23
-> Author: Hui Su <sh_def@163.com>
->
->     bpf: fix percpu map update indexing with sparse CPU IDs
->
->     Per-CPU array, hash, and cgroup storage map updates without BPF_F_CPU
->     or BPF_F_ALL_CPUS use a value buffer whose per-CPU slots are packed in
->     possible-CPU order. The buffer is sized as:
->
->       round_up(value_size, 8) * num_possible_cpus()
->
->     The update paths iterate over possible CPUs, but use the logical CPU ID
->     to calculate the source offset:
->
->       value + size * cpu
->
->     This only works when possible CPU IDs are contiguous starting at zero.
->
->     For example, with a possible CPU mask of 0,2-3, the buffer contains
->     three slots corresponding to CPUs 0, 2, and 3. CPU2 is therefore
->     expected to use slot 1 and CPU3 slot 2. Instead, the current code uses
->     slots 2 and 3 respectively, causing incorrect per-CPU values and an
->     out-of-bounds read from the update buffer for CPU3.
->
->     The corresponding lookup paths already use a dense offset while
->     iterating over possible CPUs. Do the same for the array, hash, and
->     cgroup storage update paths, advancing the source offset once for each
->     possible CPU. BPF_F_ALL_CPUS continues to use the same value for every
->     CPU.
->
->     Fixes: 8eb76cb03f0f ("bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_array maps")
+Hi Hui,
 
-The Fixes: tag points to 8eb76cb03f0f, which introduced the 'value +
-size * cpu' pattern in bpf_percpu_array_update() (kernel/bpf/arraymap.c).
-That attribution is correct for the arraymap.c fix.
+On 2026/8/13 18:12, Hui Su wrote:
+> BPF_F_CPU stores the target CPU ID in the upper 32 bits of the map
+> operation flags. bpf_map_check_op_flags() currently compares that ID
+> with num_possible_cpus(), which is the number of possible CPUs rather
+> than a bound on CPU IDs.
+> 
+> On an arm64 QEMU guest with a CPU device-tree hole, the possible CPU
 
-However, at commit 8eb76cb03f0f, kernel/bpf/hashtab.c and
-kernel/bpf/local_storage.c still used the correct 'off += size' pattern
-and did not have the 'size * cpu' bug yet. The hashtab.c and
-local_storage.c bugs were introduced later in the same BPF_F_CPU feature
-series.
+TIL about the possible CPU hole.
 
-Should this commit include additional Fixes: tags for the commits that
-introduced the bug in hashtab.c and local_storage.c? This would ensure
-that backporting tools pick up all three fixes even when the percpu_array
-commit is not present in a given stable tree.
+> mask was 0,2-3. A userspace program using raw bpf() syscalls creates
+> a BPF_MAP_TYPE_PERCPU_ARRAY and performs update and lookup operations
+> for each CPU by setting BPF_F_CPU and the CPU ID in the flags.
+> 
+> With the old check, CPU 1 is incorrectly accepted while valid CPU 3 is
+> rejected with -ERANGE. The CPU 1 update then reaches the per-CPU map
+> access path and triggers:
+> 
+>   Unable to handle kernel paging request at virtual address ...
+>   pc : __pi_memcpy_generic+0x5c/0x22c
+>   lr : bpf_percpu_array_update+0x2dc/0x2e8
+>   Call trace:
+>     __pi_memcpy_generic
+>     bpf_map_update_value
+>     map_update_elem
+>     __sys_bpf
+> 
+> Check the CPU ID against nr_cpu_ids and cpu_possible() instead. This
+> rejects CPU IDs outside the valid range and CPUs absent from the
+> possible mask, while allowing valid sparse CPU IDs.
+> 
+> Fixes: 2b421662c788 ("bpf: Introduce BPF_F_CPU and BPF_F_ALL_CPUS flags")
+> Signed-off-by: Hui Su <sh_def@163.com>
+> ---
+>  include/linux/bpf.h | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 7719f6528445..282f7022d984 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -4202,7 +4202,8 @@ static inline int bpf_map_check_op_flags(struct bpf_map *map, u64 flags, u64 all
+>  			return -EINVAL;
+>  
+>  		cpu = flags >> 32;
+> -		if ((flags & BPF_F_CPU) && cpu >= num_possible_cpus())
+> +		if ((flags & BPF_F_CPU) &&
+> +		    (cpu >= nr_cpu_ids || !cpu_possible(cpu)))
 
+NIT: no need to put the cpu check on a new line, as 100 chars per line
+are allowed.
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Other than the NIT,
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31703563365
---===============1870217146028247937==--
+Acked-by: Leon Hwang <leon.hwang@linux.dev>
+
+>  			return -ERANGE;
+>  	}
+>  
+
