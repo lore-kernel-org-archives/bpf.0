@@ -1,187 +1,149 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9523A44683E
-	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 08:52:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.182
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786611170; cv=pass; b=AipDMma7UFzPgkkd5Cwg8MjmUFe17tdLnVl8SJXOar2+DED/2Qa0Fj47ajgoiWlvA72u49r1jNzMWQpeVepDoJZSLg4U99d4E2NV2S2xzbCY0z5Ho1xzgN4Q8/COjKi+vyXqIiYdsaX700W6ycDMlwaFhMoOkIAjvTvLdH8awZ0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786611170; c=relaxed/simple;
-	bh=OuHmCFJxSVJBidCXfFZYNZ0poOvLesgUedmmoEQ/ihE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MbpPcSI/6vqBnAj9QUKpzSPDrHYN4UgNr+1fP05XQH/nLmICeq9UMLasyoJOa7OMziXbF70Orj0GM9InmEWKn4lIZHOTMWyX7bXKVHpVpl9VOcT1n9FIA5TX/d5GBill0dnsj9OU1olIKfyM4DHtFCUvLgxGPljMfp8uI83vY38=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b=Ix45WXuQ; arc=pass smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mojatatu.com header.i=@mojatatu.com header.b="Ix45WXuQ"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-84eb992a881so1530285b3a.2
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 01:52:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786611167; cv=none;
-        d=google.com; s=arc-20260327;
-        b=iulj1GPNmyDrNw5cGhLCYtIQZzNlVALem283uH1I2UuTCVv9tEaRQ6Oy2MK5ymsdxr
-         Wzzbey8+kCfrJUE8h1xXZ1CBF6PqHCEygI4FOV20CYRAdhLBbVVTeHHMRBJPGyf90ioR
-         ZJ/GbxdAmu+r5lXH7WbGbpLrlapgl+OphvkJSWO6XXzu1AnRNbKGM3C2/fNbc9cgZLSc
-         GHXT4v2RUoAHlftodZRc9HyknQrh/IvEP1zItLJ/MiT3rD4HHmXz7MfjO1Xwb94WQv8G
-         Y0St0tNChp+vwlqzrgat3JM0xY3Nz7I5SZax3bGsNs4fJCKuQJe8fAqKy9Ja9yEVBaaK
-         lV3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=eB8qHCkBqgdg5x5zWmXJ5QxdIBLGKfO7Oht3lf2tkAU=;
-        fh=LtHBe70SlIkNmWMMHzcnctvzm/Hf6YLzR43izAnAxiU=;
-        b=OGIkUoAJxYDYHLkUZDK+Z1Md9oihAxuIlL33BRmijEVLhD/bDNWZEEaLvHz3+BpE5v
-         +Ky4ZEwj/k3piKz+cMst2mnCL7r8aJzG0ElIq1YiGHoqkrLWThMZAaPwRiMDHYF+Zhxz
-         tu5Uk1wmDO8B+eSXmYpFXHvy0+B6gmjhPgTyFsG5gDh+3ddzLZDp1fXpfzLL/ffJgrcf
-         2alX6DdwTdHXXLtWwknq5EIO6WRz5JdhC7QH/+goYTv7lee/3/NhbZM7K22A3iGEiWKK
-         BVr4EuRyD+LDJpi6bmXQLh6wEoo6agBY4w21EkVUPqK1n1W5cp0W3PM1/TJucCc9tJ4q
-         rPyg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu.com; s=google; t=1786611167; x=1787215967; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=eB8qHCkBqgdg5x5zWmXJ5QxdIBLGKfO7Oht3lf2tkAU=;
-        b=Ix45WXuQi1B/KzBzQq6pZrj+eyHx1usm9lNuBiLKjFNvbDFoTV4xcj4TbNeo8S2ZTG
-         n+lufhzd4Rw7YfYrFHqdPxqBuRp/bWVJUN2IV2gtv1msTmY3ZNOg4MfAkzmAqjFfnlSE
-         WqdoltD0oru+cDYDom9AFu8VNuOCeQrPAXUUI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786611167; x=1787215967;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=eB8qHCkBqgdg5x5zWmXJ5QxdIBLGKfO7Oht3lf2tkAU=;
-        b=GGmOLQYlTCKo+kGi+1FOsIDNFW+cKFFMpAR80uqdwELqd64bEMdIk8xnZNlfHUBspx
-         1Kfd1FQxgNgVKPRcH3qLoCeYk2ilwhxvhQPqucOvu/tW4WnpJn9aZ2b/964DbWsqt+Bw
-         73DhyK9HlNBQXmEb5ajUW9mZDzVXjy/x8e3k6ixb9roUJTfgUpLb3ZSXn3wVQ/98zF5H
-         pIDd6YGl/xNv+R/h2gIbwPn27nL3U5SbLXyBsbOsIJqMSmoMbks8+ydynSyELWwPy6jo
-         aWXM1Fv8ZfCqG5rjU/oVRemTxKDOrrj6e4+ebdoIxb2+R8Ou/Iv9mtUoFc29cfL03FGW
-         S1KQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqLlgqkKhgYeQ3Ko5mFaWY7eoWq2xfBVTceg4f3VDD30WxJRRNUBNX219X61coPTkNlAXw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzq3lJJVCY0SnGJz1x4J/ST9N6ne7vG3XaEGPgmRHzEImN1fyYv
-	UgU/e1FYvOpI361GIOw/wZzYq06JFqK4sgSxxYU518vOClFWIcffOfZoVZVxZccvs9yD8rTLGsZ
-	GuMTa5kjQ8QE4RD0Jwn+Iu3ZslU/2N/JCXsmS746z
-X-Gm-Gg: AR+sD105llRFj7R3gfstdZ2lxXEjfWPwOSlAU8JJK5V43wKZYiM1F8UUpqB9juzcK9p
-	ox7MNRGMrkLj05p3TN/QcKm8VQPbmyOqbtXGZ21NmY1KhyjbAxSLTKwVvF1M7JUWVJ76byafMpe
-	w5TmIDz+AbMERY8JeK7Pknv3e60O3876DNacq0J1AgIdTjSwXBnDt1kOOTack4VWkGfk3MUpGZc
-	Y5qRjQtRHvaWqgUknT/S3s05dYj/TCFVMuCjKtp2toTUrVmfVoBbrB0HBcnrZuFGJzbdjQEHrp7
-	AutMo1J0o2bphIHhEK23gjQhmzaXMb8zw1pMd+6qTQ==
-X-Received: by 2002:a05:6a00:1891:b0:845:c6fc:2821 with SMTP id
- d2e1a72fcca58-84fc6e04476mr4296840b3a.22.1786611166640; Thu, 13 Aug 2026
- 01:52:46 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC1B93955E8
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 09:03:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786611802; cv=none; b=TPmGs+Avy2HJedSo9fPoP101j5QoCqs76/IyEzsjgDGBT/yTkMlGuDBKE/WsDqDKJcn+FOIIu18Q2ifqoyZiVy8x2zOQCmg985pXBq+UVNitwOIEmuEBg29V1jikA7QQ1ZnsDy1WLsAXs3GE6lgv3lchPGzB8SUbi2bG/zAA2Ko=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786611802; c=relaxed/simple;
+	bh=fXGADN5+wp60htehVaqtl/B/L0WWIV/HGWGUsUhushI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YHPLpTonGuc+s7T8jOzPIo2ejPXbmXPkG/kSy5O44T7UGN7Sy+RiptNpq+3wOO03kdXJNySECcxjNzzwEzwJiCjyv6wOj5KQCYU48GyPqq8TTaJXwQqMGz7tsB3SJXbt3Ev7ExwJMsM4miQn7CuT9bjo4FQtBR5IqCu2r6Ln02w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hLKBb74GBzKHN8C
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 17:02:47 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id 1111640953
+	for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 17:03:07 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgBXw4pJiH1qugamCA--.35513S2;
+	Thu, 13 Aug 2026 17:03:06 +0800 (CST)
+Message-ID: <bba3c4f8-a7b3-40ae-a7bd-88594a7252bb@huaweicloud.com>
+Date: Thu, 13 Aug 2026 17:03:05 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260809094418.901607-1-jhs@mojatatu.com>
-In-Reply-To: <20260809094418.901607-1-jhs@mojatatu.com>
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-Date: Thu, 13 Aug 2026 04:52:35 -0400
-X-Gm-Features: AUfX_mzYJSHQ81nk6K5CQtHRiM8w99otSWYBW2UKmO4T55DkFo0ZHPMcwhj5DCs
-Message-ID: <CAM0EoMm0xj=R4c+3yoBJyEDgNAmsaCospYT9jxVTTihJzSnvPg@mail.gmail.com>
-Subject: Re: [PATCH net] net/sched: cls_bpf: reject dev-bound programs bound
- to a different device
-To: netdev@vger.kernel.org
-Cc: stable@vger.kernel.org, vega@nebusec.ai, 
-	Victor Nogueira <victor@mojatatu.com>, Jakub Kicinski <kuba@kernel.org>, Quentin Monnet <qmo@kernel.org>, 
-	Simon Horman <horms@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Jiri Pirko <jiri@resnulli.us>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/7] bpf, arm64: Fix stack-passed arguments for
+ indirect trampolines
+Content-Language: en-US
+To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Mark Rutland <mark.rutland@arm.com>, Will Deacon <will@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>
+References: <20260810190922.3408757-1-puranjay@kernel.org>
+ <20260810190922.3408757-2-puranjay@kernel.org>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <20260810190922.3408757-2-puranjay@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:Syh0CgBXw4pJiH1qugamCA--.35513S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAr1kGFW8CFW7XF4UCw1UAwb_yoW5KrW3pa
+	10ywnxCFs5JrW09a4kXr4UuFyFkFZYyr43CFWUJ34Sya1FgryDXFW5KayYk3s8Cr95Zr1x
+	Zr4jyr9IkFZ7C3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
+	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1
+	7KsUUUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On Sun, Aug 9, 2026 at 5:44=E2=80=AFAM Jamal Hadi Salim <jhs@mojatatu.com> =
-wrote:
->
-> cls_bpf_prog_from_efd() obtained a SCHED_CLS program via
-> bpf_prog_get_type_dev() but never verified that a device-bound (offloaded=
-)
-> program's bound netdev matches the TC netdev the classifier is being
-> attached to. This let a program loaded with prog_ifindex for device A be
-> attached via cls_bpf + skip_sw to device B; deleting device A then
-> destroyed the program's offload state while it was still attached to
-> device B, triggering a netdevsim WARN (panic with panic_on_warn=3D1).
->
-> Mirror the XDP attach path (net/core/dev.c) and reject the attach with
-> -EINVAL when a dev-bound program's bound device does not match the
-> target device.
->
-> Fixes: 6c8dfe21c435 ("cls_bpf: allow attaching programs loaded for specif=
-ic device")
-
-Fixes: 2b3486bc2d23 ("bpf: Introduce device-bound XDP programs")
-
-cheers,
-jamal
-
-> Reported-by: vega@nebusec.ai
-> Tested-by: Victor Nogueira <victor@mojatatu.com>
-> Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
+On 8/11/2026 3:09 AM, Puranjay Mohan wrote:
+> save_args() reads stack-passed arguments relative to FP assuming the
+> trampoline is entered through the fentry call from a traced function, in
+> which case both the parent frame (FP/x9) and the traced function frame
+> (FP/LR) are saved before FP is set, so the arguments start at FP + 32.
+> 
+> An indirect trampoline for a struct_ops callback is entered through a
+> function pointer (blr), so only the FP/LR frame is pushed and the
+> arguments start at FP + 16, not FP + 32. Every stack-passed argument of
+> a struct_ops callback with more than eight argument slots is read two
+> slots off.
+> 
+> This went unnoticed because no struct_ops member passed arguments on the
+> stack until bpf_testmod_ops3::test_arena_stack, added by
+> commit 2d4de9a493a0 ("selftests/bpf: Test stack-passed struct_ops arena arguments").
+> That member covers this on arm64 once the JIT gains arena argument
+> support later in this series. Pass is_struct_ops into save_args() and
+> pick the offset accordingly, mirroring the x86 fix.
+> 
+> Fixes: 9014cf56f13d ("bpf, arm64: Support up to 12 function arguments")
+> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 > ---
->  net/sched/cls_bpf.c | 18 ++++++++++++++++--
->  1 file changed, 16 insertions(+), 2 deletions(-)
->
-> diff --git a/net/sched/cls_bpf.c b/net/sched/cls_bpf.c
-> index 001d8c4ebfed..6d19155becc8 100644
-> --- a/net/sched/cls_bpf.c
-> +++ b/net/sched/cls_bpf.c
-> @@ -374,7 +374,8 @@ static int cls_bpf_prog_from_ops(struct nlattr **tb, =
-struct cls_bpf_prog *prog)
->  }
->
->  static int cls_bpf_prog_from_efd(struct nlattr **tb, struct cls_bpf_prog=
- *prog,
-> -                                u32 gen_flags, const struct tcf_proto *t=
-p)
-> +                                u32 gen_flags, const struct tcf_proto *t=
-p,
-> +                                struct netlink_ext_ack *extack)
->  {
->         struct bpf_prog *fp;
->         char *name =3D NULL;
-> @@ -388,6 +389,19 @@ static int cls_bpf_prog_from_efd(struct nlattr **tb,=
- struct cls_bpf_prog *prog,
->         if (IS_ERR(fp))
->                 return PTR_ERR(fp);
->
-> +       if (bpf_prog_is_dev_bound(fp->aux)) {
-> +               struct tcf_block *block =3D tp->chain->block;
-> +               struct net_device *dev;
-> +
-> +               dev =3D block->q ? qdisc_dev(block->q) : NULL;
-> +               if (!dev || !bpf_offload_dev_match(fp, dev)) {
-> +                       NL_SET_ERR_MSG(extack,
-> +                                      "Program is bound to a different d=
-evice");
-> +                       bpf_prog_put(fp);
-> +                       return -EINVAL;
-> +               }
-> +       }
-> +
->         if (tb[TCA_BPF_NAME]) {
->                 name =3D nla_memdup(tb[TCA_BPF_NAME], GFP_KERNEL);
->                 if (!name) {
-> @@ -492,7 +506,7 @@ static int cls_bpf_change(struct net *net, struct sk_=
-buff *in_skb,
->         prog->gen_flags =3D gen_flags;
->
->         ret =3D is_bpf ? cls_bpf_prog_from_ops(tb, prog) :
-> -               cls_bpf_prog_from_efd(tb, prog, gen_flags, tp);
-> +               cls_bpf_prog_from_efd(tb, prog, gen_flags, tp, extack);
->         if (ret < 0)
->                 goto errout_idr;
->
-> --
-> 2.34.1
->
+>   arch/arm64/net/bpf_jit_comp.c | 19 +++++++++++++------
+>   1 file changed, 13 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+> index d14d297ebb967..4af5a98b84e19 100644
+> --- a/arch/arm64/net/bpf_jit_comp.c
+> +++ b/arch/arm64/net/bpf_jit_comp.c
+> @@ -2509,9 +2509,8 @@ static void clear_garbage(struct jit_ctx *ctx, int reg, int effective_bytes)
+>   }
+>   
+>   static void save_args(struct jit_ctx *ctx, int bargs_off, int oargs_off,
+> -		      const struct btf_func_model *m,
+> -		      const struct arg_aux *a,
+> -		      bool for_call_origin)
+> +		      const struct btf_func_model *m, const struct arg_aux *a,
+> +		      bool for_call_origin, bool is_struct_ops)
+>   {
+>   	int i;
+>   	int reg;
+> @@ -2531,7 +2530,15 @@ static void save_args(struct jit_ctx *ctx, int bargs_off, int oargs_off,
+>   		bargs_off += 8;
+>   	}
+>   
+> -	soff = 32; /* on stack arguments start from FP + 32 */
+> +	/*
+> +	 * On-stack arguments start above the frame(s) pushed by the trampoline
+> +	 * prologue. Entered through the fentry call from a traced function, the
+> +	 * prologue saves both the parent (FP/x9) and the traced function
+> +	 * (FP/LR) frames, so the arguments start at FP + 32. A struct_ops
+> +	 * callback is called indirectly and only the FP/LR frame is saved, so
+> +	 * they start at FP + 16.
+> +	 */
+> +	soff = is_struct_ops ? 16 : 32;
+>   	doff = (for_call_origin ? oargs_off : bargs_off);
+>   
+>   	/* save on stack arguments */
+> @@ -2721,7 +2728,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+>   	store_func_meta(ctx, func_meta, func_meta_off);
+>   
+>   	/* save args for bpf */
+> -	save_args(ctx, bargs_off, oargs_off, m, a, false);
+> +	save_args(ctx, bargs_off, oargs_off, m, a, false, is_struct_ops);
+>   
+>   	/* save callee saved registers */
+>   	emit(A64_STR64I(A64_R(19), A64_SP, regs_off), ctx);
+> @@ -2770,7 +2777,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+>   
+>   	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+>   		/* save args for original func */
+> -		save_args(ctx, bargs_off, oargs_off, m, a, true);
+> +		save_args(ctx, bargs_off, oargs_off, m, a, true, is_struct_ops);
+>   		/* call original func */
+>   		emit(A64_LDR64I(A64_R(10), A64_SP, retaddr_off), ctx);
+>   		emit(A64_ADR(A64_LR, AARCH64_INSN_SIZE * 2), ctx);
+
+Reviewed-by: Xu Kuohai <xukuohai@huawei.com>
+
