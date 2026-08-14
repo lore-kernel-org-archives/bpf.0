@@ -1,169 +1,66 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2363E9C18;
-	Fri, 14 Aug 2026 07:13:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CB07415F3B;
+	Fri, 14 Aug 2026 07:49:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786691611; cv=none; b=hGu7sPaqfu4plXay1sKOgDj/y7PgZk3SOaVjmRNbTKTQkL79jhKIvsNGJdmdsr5St5u3Nidj84l4HF+tHuoHnmQVM20YOIqjBlkGWEhw//A6f2YuFOWVaATA64vuFAfX3E+i7j++VEkHHLkGw3jT58E7nSj8rljMNi5aagUIAu0=
+	t=1786693777; cv=none; b=UQ41PW25quiwyRPd1zbpoHRx+YqmdFHRrALYe4UE4wueCUtHYbfY6BJg87xHMzeJMSbHMIJRZ9ElzZpKmB+roXNZ2jTYb3kMUXdwAf8uu/4OTkfo1GoqdYmtgThwG0/3ChHrrTbsIb9Gs4HOTWtmnFa61iUObObNBUEWPnWkNWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786691611; c=relaxed/simple;
-	bh=o3/AKJ1BkfhYXq+Dg59HF5Hxq3bczX2JLmtlREB/jpc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QxjC2xd31LKCYev+4l1n8KumHFwrp0HIVI/1QGU9S201LABo8P0BI90NsPGR2J6YLqWXTLJq1UjcYCHaZXZKDAGYx46KgNpeyD3337H0EZp5MEpcKCTRieZ4iVudbl1X61Lcd0N+HQiML5vyRbfIOJTjcD920N1c0VdQsRJMXPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=wrFIonor; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1786693777; c=relaxed/simple;
+	bh=IGcJH8MziLTIkppT7J9/sjWmFByS19SX5etMRNc7h7k=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Ylu4/6GsyErY2nHRTCSoyDx2r03rU/K0qkEbBIzzbWPb9IUot3WFsXjR1sFFRbfPL7nNtcbqItZy1jGGjwT26xEXV/oYNqdJALcVu36V9UgBcA+yN5En5mvA8q4+uKANzguATdK/T5pC+ZjNXGyk7J+OWvUkLdJxRofaOCnfGx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J8HpFqk6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="wrFIonor"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 194F51A162B;
-	Fri, 14 Aug 2026 07:13:17 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id DFD636046D;
-	Fri, 14 Aug 2026 07:13:16 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 07EE211C4E895;
-	Fri, 14 Aug 2026 09:13:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1786691591; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=YiK4yiTW2Lx/mwsS/lDLH9lOApYiCd32mWNiNG38Bxw=;
-	b=wrFIonorpQUlxtkTaSaqE554IeXUFP0EHNrxaINcgSXFTfzWUOSBk2Pp6xSwiGPMZUu7I9
-	7FnisLw605/ywpnmVwnf/34em421xMvrZd1kdckg5Ge1BwO5xUlKZSq/Y7lyQbOyjJWAqy
-	B+iTx+HPsY1G4WE7tM/q9c2QGAGK8+cCyCkQrwFegV1UkKwOkL9Gm2/+hVS1ZJlx2YSOYJ
-	CsRuZp9rLyxDBsl5fsJ2molFKDM7iw+Dy79yOQ3TL+eEEEVcBYY40XymJ1a1TsMZ19s0TT
-	qZbL2qHaBv2me+YTRuhkecLnlWcCiDjIl8UbHFmfmJwWpZ0v1u9KPqsjKw2joA==
-From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Fri, 14 Aug 2026 09:11:28 +0200
-Subject: [PATCH bpf v5 2/2] selftests/bpf: allocate a larger timeout for
- connection
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J8HpFqk6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99BA31F000E9;
+	Fri, 14 Aug 2026 07:49:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786693772;
+	bh=IGcJH8MziLTIkppT7J9/sjWmFByS19SX5etMRNc7h7k=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=J8HpFqk6s3VTvxtwb1IQ0zddEorS8IiJxIqUOwcdYHmYqaZcJWggbRyJJlbbJlWNM
+	 f9L0rwUBPdkXuvCBRapw6PMhcMVA0KSuSSxbmcx1lx6YLBafeJ27RE1Nama+BXy3mC
+	 B+mRXkCJHdVd5ecUdzi8FcuLbTIM8CBYofYRUopdP2cfO2niBt9uply5sBrRmj7f0e
+	 H6ztXRjiMH0djRlzTsZhBNM0hVA0GcqPKMOoZkJUeSm3OE/NwPfInP4OjcWdwtvKyT
+	 sFzKGqKgAm/1ogOqj5Kd1ys6r+JGQ+Sog/1ZPtgAxH8ndTrpSaXQUR7G+6u2VXLTma
+	 pQUfsclzwGLNA==
+Content-Type: multipart/mixed; boundary="===============1755425199160881240=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Message-Id: <a93509e0a9d3c7761982e98a4cea76d2e493121794c410719d9d8f36efc79b6e@mail.kernel.org>
+In-Reply-To: <20260814-tc_tunnel_flaky-v5-1-5b93d030c42c@bootlin.com>
+References: <20260814-tc_tunnel_flaky-v5-1-5b93d030c42c@bootlin.com>
+Subject: Re: [PATCH bpf v5 1/2] bpf/selftests: fix comment style in network_helpers.c
+From: bot+bpf-ci@kernel.org
+To: alexis.lothore@bootlin.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,ihor.solodrai@linux.dev
+Cc: ebpf@linuxfoundation.org,bastien.curutchet@bootlin.com,thomas.petazzoni@bootlin.com,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,alexis.lothore@bootlin.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 14 Aug 2026 07:49:31 +0000 (UTC)
+
+--===============1755425199160881240==
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260814-tc_tunnel_flaky-v5-2-5b93d030c42c@bootlin.com>
-References: <20260814-tc_tunnel_flaky-v5-0-5b93d030c42c@bootlin.com>
-In-Reply-To: <20260814-tc_tunnel_flaky-v5-0-5b93d030c42c@bootlin.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: ebpf@linuxfoundation.org, 
- Bastien Curutchet <bastien.curutchet@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.15.2
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
 
-Some tests, like tc_tunnel or tc_edt, sporadically fail in CI with the
-following logs:
+PiBicGYvc2VsZnRlc3RzOiBmaXggY29tbWVudCBzdHlsZSBpbiBuZXR3b3JrX2hlbHBlcnMuYwo+
+Cj4gQlBGIHN1YnN5c3RlbSByZXF1aXJlcyBtdWx0aS1saW5lIGNvbW1lbnRzIHRvIGhhdmUgdGhl
+IG9wZW5pbmcgLyogc3RhcnQKPiBvbiBpdHMgb3duIGxpbmUuCj4KPiBVcGRhdGUgbXVsdGktbGlu
+ZSBjb21tZW50cyBpbiBuZXR3b3JrX2hlbHBlcnMuYyB0byBmb2xsb3cgdGhpcwo+IHJlcXVpcmVt
+ZW50Lgo+Cj4gU2lnbmVkLW9mZi1ieTogQWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p
+IDxhbGV4aXMubG90aG9yZUBib290bGluLmNvbT4KClRoaXMgaXNuJ3QgYSBidWcsIGJ1dCB3b3Vs
+ZCAnc2VsZnRlc3RzL2JwZjonIGJlIHRoZSBleHBlY3RlZCBzdWJqZWN0CnByZWZpeCBoZXJlPyAg
+VGhlIHJlc3Qgb2YgdGhlIGRpcmVjdG9yeSB1c2VzIHRoYXQgY29udmVudGlvbiAoMzUxCm9jY3Vy
+cmVuY2VzIG9mICdzZWxmdGVzdHMvYnBmOicgdmVyc3VzIDAgb2YgJ2JwZi9zZWxmdGVzdHM6JyBp
+biB0aGUKcmVjZW50IGhpc3RvcnkpLCBhbmQgdGhlIGZvbGxvd2luZyBwYXRjaCBpbiB0aGlzIHNl
+cmllcyB1c2VzCidzZWxmdGVzdHMvYnBmOicuCgoKLS0tCkFJIHJldmlld2VkIHlvdXIgcGF0Y2gu
+IFBsZWFzZSBmaXggdGhlIGJ1ZyBvciBlbWFpbCByZXBseSB3aHkgaXQncyBub3QgYSBidWcuClNl
+ZTogaHR0cHM6Ly9naXRodWIuY29tL2tlcm5lbC1wYXRjaGVzL3ZtdGVzdC9ibG9iL21hc3Rlci9j
+aS9jbGF1ZGUvUkVBRE1FLm1kCgpDSSBydW4gc3VtbWFyeTogaHR0cHM6Ly9naXRodWIuY29tL2tl
+cm5lbC1wYXRjaGVzL2JwZi9hY3Rpb25zL3J1bnMvMzE3Nzk1MTAwMDM=
 
-  (network_helpers.c:309: errno: Operation now in progress) \
-    Failed to connect to server
-  send_and_test_data:FAIL:connect to server unexpected error: -115
-
-This is due to SO_RCVTIMEO and SO_SNDTIMEO being set on the client
-socket (see settimeo() in client_socket()), allowing connect() to return
-an error and to set errno to EINPROGRESS instead of ETIMEDOUT.
-Increasing the timeout value for those tests is likely not a good
-solution (and it has already been done by commit 2790db208b44
-("selftests/bpf: Improve tc_tunnel test reliability")): some tests
-expect some data transfer to fail, and so the timeout value would
-increase overall test execution duration again (not only the connection,
-but any socket operation).
-
-Another solution is to allocate a timeout budget specific to the
-connection: we can apply a larger timeout only for connections, and once
-the connection is established, set back the timeout configured through
-opts->timeout_ms; this would allow connection to succeed under heavy CI
-load, while keeping timeout reasonable for the rest of the test traffic.
-
-Set a larger SO_SNDTIMEO/SO_RCVTIMEO for the connection step, and reset
-it back to the timeout configured by the test once the connection has
-succeeded.
-
-Fixes: 99126abec5e5 ("bpf: selftests: A few improvements to network_helpers.c")
-Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
----
- tools/testing/selftests/bpf/network_helpers.c | 36 ++++++++++++++++++++++++---
- 1 file changed, 33 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index cdf2d7d3ab32..8c9236c0a5a5 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -49,6 +49,8 @@
- 			errno = __save;					\
- })
- 
-+#define CONNECT_MIN_TIMEOUT_MS	5000
-+
- struct ipv4_packet pkt_v4 = {
- 	.eth.h_proto = __bpf_constant_htons(ETH_P_IP),
- 	.iph.ihl = 5,
-@@ -291,6 +293,12 @@ int client_socket(int family, int type,
- 	return -1;
- }
- 
-+static int connect_timeout_ms(const struct network_helper_opts *opts)
-+{
-+	/* Enforce a minimum connect timeout value */
-+	return MAX(opts->timeout_ms, CONNECT_MIN_TIMEOUT_MS);
-+}
-+
- int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t addrlen,
- 		    const struct network_helper_opts *opts)
- {
-@@ -305,13 +313,35 @@ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t add
- 		return -1;
- 	}
- 
-+	/*
-+	 * Override timeout configuration with a larger value for the
-+	 * connection
-+	 */
-+	if (settimeo(fd, connect_timeout_ms(opts))) {
-+		log_err("Failed to set connect timeout");
-+		goto close;
-+	}
-+
- 	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
--		log_err("Failed to connect to server");
--		save_errno_close(fd);
--		return -1;
-+		log_err("Failed to connect");
-+		goto close;
-+	}
-+
-+	/*
-+	 * If the timeout configured by the test is different from the
-+	 * connect timeout, restore it
-+	 */
-+	if (opts->timeout_ms != CONNECT_MIN_TIMEOUT_MS &&
-+	    settimeo(fd, opts->timeout_ms)) {
-+		log_err("Failed to set timeout for connected socket");
-+		goto close;
- 	}
- 
- 	return fd;
-+
-+close:
-+	save_errno_close(fd);
-+	return -1;
- }
- 
- int connect_to_addr_str(int family, int type, const char *addr_str, __u16 port,
-
--- 
-2.55.0
-
+--===============1755425199160881240==--
