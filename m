@@ -1,69 +1,68 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 364A843E097
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 08:14:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83556442FC5
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 08:14:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786695287; cv=none; b=WsvnHmahJp1z9+72qtV5oWBoE03Itrmvu4bYr9jJ4HOtTTnkaXXX6mwEg50SV26w7XH4OWRVhOxFvSyashg8UskLX4O+dBX4OEeFeEdICpF/eHrwoeEZMIkQ1RaARhUSlQkQ9lD/nmtwd1hL9L683yCvypE/BvhRCm6W89noto4=
+	t=1786695286; cv=none; b=rxOClCnqnRu64tHTclxYMHkzsDqOIcf09xKJdUE5kxw7Xh4WVfSx9nxAQvCaLqhgj41Jg56GwIGHERuBf1jRnaetxkAYVjmkMqrgEsnqq3bxqq4NFql74UjGZ66BeuRrMsUYTqqNNA1QA/KjuEUPpnr6amaoVrUMt8xUjSQqcIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786695287; c=relaxed/simple;
-	bh=TMb8X1vdWIpeu9UUp/S6+S8cFTyaPl3Cfq3fwSJcBhc=;
+	s=arc-20240116; t=1786695286; c=relaxed/simple;
+	bh=nhh8GAFnbC3stGIWCDcWnCvr9NMiSv+vzGQckS2aorE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KwNHRJ9nUkD0fCohABELyxbt0rntg9hWs2VEMaGiqH3mK7VxMxe7PLiF/mUfEAz0YfwjkE15Q5h5bGfLkYa89rWKxdrX43NobzxZYFlHrOFTk81KznouYbQfyfeqg9G5aB/8yaA1JvgNYASGGNHmy250aWpL8rkpsVykcDCAy8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=TJ5tj9k/; arc=none smtp.client-ip=209.85.218.53
+	 In-Reply-To:To:Cc; b=V8zcv5F0cfx4MruplRpb0EO2huc95UF8TfcZQglNip/tPz8PS2PC0qLfswO557ZhJxo4WN9GVoDDlVLHdQbJhG6QBPNeN6TRaUExlNmbet687RQA3L5SAFpwBvvlAjrjia/zl9p1z7fvcmlPLSW4pVanj90EvyN03KPjtpwsnr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=VsrIVY9P; arc=none smtp.client-ip=209.85.218.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="TJ5tj9k/"
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c15cb6f5c12so139057166b.0
-        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 01:14:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="VsrIVY9P"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-c1f5208b38dso139196266b.0
+        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 01:14:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1786695279; x=1787300079; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1786695277; x=1787300077; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Jn7sny1HXte6HBs3YW57QoHTHXgEeijfouy5Vk0k8QQ=;
-        b=TJ5tj9k/8T7b+FEZht8pkYvbxBkH3z9Rvr5JgZXx15zHbHlQioxiwFHXlLcAY9hgpw
-         pwLMnSnQXoiarHGP/lPZAOgsEoN3NFrvJBzfBl+jOZQJbvxl4CR1NAkyk3zV7bbzWlev
-         aSnjS1ANKIaNU0Aww6xXlPRHFwe7bM2MFC0mu0KsoHgdcENhj0Vb/DQtFlT7n5Jcp7kk
-         yyX/YV7fFGGMWCw2hvUrZQtmjeJXGPYJMQr3OUBspjLqBPeLc1V75OULmDkuTJs5OEo2
-         mwdLGziA+d38LR/Wl1Ch8Kt3GkExhqrbcijg7ANYXmOwakmX/7BO7KicQlVJijn+rpDP
-         /J4Q==
+        bh=j4oWv3Sp0enwEYapW96AvZnTioNxWZur2lOF8iRZu74=;
+        b=VsrIVY9PRqrvCsSOHcsGikgFVYD2YjF2xQvcATmMbT8cNueQLnGyUPvnVr6Wbm42oD
+         TwcLh+OJzpGq2k+ojhAF1UbcZF73+C0CpfXlXOYYuq8HnMtiMV9MBq85WCYJBnAVGDe/
+         D0VlLN0p34I1EyraXP9Cb8ARJOG9Iqsd53U7aNWKMHymQmwRCe3fYj+yhRH+OqnJTUN2
+         H/CoXHHEBGIIZuFZW187I2eknviEmy0KdzLIn/mGEi1Puq+D9WGo9qyrDUmsFsP1Y6gS
+         SmmTxEc9QTCHrkhNWp3t7pRVJ1to2fYEfdLK0NoU8O2gyJmucR5ypyx14NyxoDkc+cGM
+         II4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786695279; x=1787300079;
+        d=1e100.net; s=20251104; t=1786695277; x=1787300077;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Jn7sny1HXte6HBs3YW57QoHTHXgEeijfouy5Vk0k8QQ=;
-        b=jIv49TBqnGSLkfGV3Yv6XGdy1mPkBFf3YPPMXR9SxTg6tkbkZnR3f5V+fJUXcrkink
-         8HMER/xQjKG0xk5Y8f/DZroku61kihUiGJ3DNWzq7F8yUrRYlBGyT/cj5Y7YGim6Vsgr
-         ouGRDU8cfHkC8W2yXembs8KPeeu1Gy6QnJQFFihHx8jE6lRPp0UzXww/4P3rhyc2DJ/9
-         WHcw2NUz91SaXnWysc1V+kExeDQTsrm8d7hxlIZktJW1OYDM85lRUfhtX+Rn/SGCqXAk
-         86ThfVO4kMiwoNCFBAwMjDvTf2wo0TVcp8M7726iVjgfjPGZ/09r7YAuIM6w4R92YFap
-         0jjQ==
-X-Gm-Message-State: AOJu0YyCc4EdlXe51TBNnUEmuuG7OhVsAVX1UfS2cnYBMCBNf9yjZ/Ao
-	QjUAAw27VEzrlqhESFH7/prTFCpK+3EGF71wWqZP3L4H0zomaJu8rcL/YSTJGf/HuZjL4W9u4xw
-	ILChLUi0=
-X-Gm-Gg: AR+sD10eZR68TXCenfm/Vy/GoyBRSO939Q4OFJVY0lF4wXcfJlZLUM2NHE0+Bf8F4GM
-	M4otjMFvR+/HgJLJu8FXEu6Qc8Shi4z0NwRwzgx2hJbnCmQBZKBPomIhpfx5AlFfFCU9KnlO6kt
-	84eK8m8wcVchB6RTvQiVpeqtNUym4Y2R6SjoT+jv522Fi7RXezB4GFh5qHwoz1WAMCzkZAYVNme
-	TucbAG6/rTSxRtUEjEvRBkTv+w1ZMtT89YumLZhY/V5GHLgwUpXVTrcW9MeIwUQOYKuMQNb8XLR
-	ypQaQgKsnJn8W6gWZk7ywEcOS1THjCi622TmC4woaV6ZiOooVuJeWLm87r/3SMebGJF7QRaheok
-	RPQ6o3BP8j1tXzWdiqklYV5teJf5P+f2cs6myveueKXwvOVw1mQlKFrPnj2fDCugfqOjqQEs25Z
-	r6qo/sdzySsJ1RbvxpZ+UPLtWGncWjTsEadV+PShGxuPx7s5Xhpf+CTKqGMqIaJyjet24vgGrSD
-	PngoV9Yq8Nf6zauIvZX8cPwdw+jSeHyXDlwAQ==
-X-Received: by 2002:a17:907:5cd:b0:c20:7cb1:9046 with SMTP id a640c23a62f3a-c212a0ed9e9mr168226866b.8.1786695278844;
-        Fri, 14 Aug 2026 01:14:38 -0700 (PDT)
+        bh=j4oWv3Sp0enwEYapW96AvZnTioNxWZur2lOF8iRZu74=;
+        b=EV5iKobAtG4q1AF71+k7eCXuykXtKLhNfhlxe/qbUlJdBGrvhlQDcmDQLasdeiIwiK
+         o0SOmyqwijpxo7fOvSimr7I4XdWYTdeCx1+2TPnkPwogeYo8VR6CSMC8BM0slAr+thsN
+         SQrIL4rKAfuts2gNWS/D45Tdl6V7uUOgUMHFhYxuXLOrLlloJoAT9GGswaLRbe1jVPQz
+         qDx4c4ulLf3/lgJlLquj8HMC5EueXqXHh4L/auTr6to+wZmpHPSU/iqvMgCBaUkB7SRu
+         vLfPnXH1Wa7IP3a8YXfRY9XL3dOFkM521RBWB1kpX0bV4ENnxRn3buDKadugec6X974P
+         0JWQ==
+X-Gm-Message-State: AOJu0YxSzE1eQE0FhFp4PjW1p5927RK0epmEypyPekX5T5ZSOdK9wn5+
+	TvcPQ3hExBUqP58N1nEiLMfNKHtYGG57tHrFA1voPY4E/Mc4iUJBw6ftUaJI2DYkUQY=
+X-Gm-Gg: AR+sD12N+XGs+c/cw+B6ffIxSCrMml27RRCE7UrOMEqRP6yPWfrP4H1Gv5rsouqNtUM
+	W3lA43AwRdzU2o8Aqm0v0Z4oeO1EZQD1bFgTOoVy6GFtfeuYpfQtLL0zn6eNBNSG2OLYYEC52Gg
+	BFTch/7jbWD0kXqnxuvMUxGr+z/cO7w2w4W7NtNpEK/MhTv2EeFS72Ke4gaam6nJdVKoUJ7/XTo
+	WQzoTaJiZR0eprtCZPa4fFx2LcxY1UaC7o6XaYl2I5CSh3sR0pUMREJhMDi0QuxYpt4BkVTUn4h
+	uliXjF+DzJXI4ypLZmUUyizPLKiqZtJbEQ37kky0yQFGMT42BNsUzRDlZqHd1HlIAySg0NeyVsi
+	aDwMKEldwrsoySvTl6jDRaj6daWn27bbabyVhgjeALVd63MZgwQUrESgi6D98it5AVmw830ltyq
+	QLN/t97KTjq5G2mcKvh1gcl+U0EYLfatHZZEBca5miNAcpRj/Yc6xghc6jF+JIdM8TC5p/2VuOH
+	TPHWr6Abj2MQ5wcfm5VPU+c0G11QxaHFyIH5g==
+X-Received: by 2002:a17:907:3c92:b0:beb:133d:cf02 with SMTP id a640c23a62f3a-c212a213d9bmr158508866b.26.1786695277450;
+        Fri, 14 Aug 2026 01:14:37 -0700 (PDT)
 Received: from cloudflare.com (79.184.184.176.ipv4.supernova.orange.pl. [79.184.184.176])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c21231f1903sm81232366b.0.2026.08.14.01.14.38
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c21237e7fe2sm77272266b.49.2026.08.14.01.14.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Aug 2026 01:14:38 -0700 (PDT)
+        Fri, 14 Aug 2026 01:14:37 -0700 (PDT)
 From: Jakub Sitnicki <jakub@cloudflare.com>
-Date: Fri, 14 Aug 2026 10:14:12 +0200
-Subject: [PATCH net-next 11/14] selftests/bpf: Test skb_ext from LWT in,
- out, and xmit hooks
+Date: Fri, 14 Aug 2026 10:14:11 +0200
+Subject: [PATCH net-next 10/14] selftests/bpf: Test skb_ext read from
+ netfilter hook
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -72,7 +71,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260814-bpf-meta-inside-skb-ext-v1-11-767edd862656@cloudflare.com>
+Message-Id: <20260814-bpf-meta-inside-skb-ext-v1-10-767edd862656@cloudflare.com>
 References: <20260814-bpf-meta-inside-skb-ext-v1-0-767edd862656@cloudflare.com>
 In-Reply-To: <20260814-bpf-meta-inside-skb-ext-v1-0-767edd862656@cloudflare.com>
 To: netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
@@ -91,71 +90,53 @@ Cc: bpf@vger.kernel.org, kernel-team@cloudflare.com,
  Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 X-Mailer: b4 0.16.0
 
-Add cross-hook tests for bpf_dynptr_from_skb_ext() covering all
-generic LWT program types. For lwt_in, a TC ingress program writes
-skb_ext on loopback and the LWT program reads it back. For lwt_out
-and lwt_xmit, the LWT programs write skb_ext on the output path and a
-TC ingress program reads it back after loopback.
+Add a TC -> netfilter cross-hook test for bpf_dynptr_from_skb_ext(). A TC
+ingress program writes skb_ext on loopback, and a netfilter program at
+NF_INET_LOCAL_IN reads it back.
 
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- .../bpf/prog_tests/xdp_context_test_run.c          | 98 ++++++++++++++++++++++
- tools/testing/selftests/bpf/progs/test_xdp_meta.c  | 45 ++++++++++
- 2 files changed, 143 insertions(+)
+ .../bpf/prog_tests/xdp_context_test_run.c          | 56 ++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/test_xdp_meta.c  | 23 +++++++++
+ 2 files changed, 79 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-index 82c57ea3957e..7a7537ef80e7 100644
+index 1e4e12d2b041..82c57ea3957e 100644
 --- a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
 +++ b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-@@ -1303,6 +1303,95 @@ static void test_skb_ext_nf(struct test_xdp_meta *skel, const char *name)
- 	netns_free(ns);
+@@ -2,6 +2,7 @@
+ #include <test_progs.h>
+ #include <network_helpers.h>
+ #include <linux/ipv6.h>
++#include <linux/netfilter.h>
+ #include <arpa/inet.h>
+ #include "test_xdp_context_test_run.skel.h"
+ #include "test_xdp_meta.skel.h"
+@@ -1249,6 +1250,59 @@ static void test_cgrp_egress_to_kfree_skb(struct test_xdp_meta *skel)
+ 		close(cgroup_fd);
  }
  
-+#define LWT_EXT_PIN_PATH "/sys/fs/bpf/skb_ext_lwt"
-+
-+/* Test skb_ext across LWT hooks on loopback.
-+ *
-+ * @lwt_prog:  BPF program to pin and attach via ip route encap
-+ * @encap_dir: "in", "out", or "xmit"
-+ * @writer:    true if lwt_prog writes skb_ext (reader on TC ingress),
-+ *             false if lwt_prog reads skb_ext (writer on TC ingress)
-+ */
-+static void test_skb_ext_lwt(struct test_xdp_meta *skel, const char *name,
-+			     struct bpf_program *lwt_prog,
-+			     const char *encap_dir, bool writer)
++/* Test skb_ext survival across TC ingress -> netfilter hook */
++static void test_skb_ext_nf(struct test_xdp_meta *skel, const char *name)
 +{
 +	LIBBPF_OPTS(bpf_tc_hook, tc_hook,
 +		    .ifindex = 1 /* IFINDEX_LO */,
 +		    .attach_point = BPF_TC_INGRESS);
 +	LIBBPF_OPTS(bpf_tc_opts, tc_opts, .handle = 1, .priority = 1);
-+	struct sockaddr_in addr = {
-+		.sin_family = AF_INET,
-+	};
-+	struct bpf_program *tc_prog;
-+	char buf[TEST_PAYLOAD_LEN];
++	LIBBPF_OPTS(bpf_netfilter_opts, nf_opts,
++		    .pf = NFPROTO_IPV4,
++		    .hooknum = NF_INET_LOCAL_IN,
++		    .priority = 1);
++	struct bpf_link *reader_link = NULL;
 +	struct netns_obj *ns = NULL;
-+	bool pinned = false;
 +	int server_fd = -1;
-+	int fd = -1;
-+	__be16 port;
 +	int ret;
-+
-+	unlink(LWT_EXT_PIN_PATH);
-+	ret = bpf_program__pin(lwt_prog, LWT_EXT_PIN_PATH);
-+	if (!ASSERT_OK(ret, "pin lwt"))
-+		return;
-+	pinned = true;
 +
 +	ns = netns_new(name, true);
 +	if (!ASSERT_OK_PTR(ns, "netns_new"))
-+		goto cleanup;
++		return;
 +
-+	SYS(cleanup, "ip addr add 10.0.0.1/32 dev lo");
-+	SYS(cleanup, "ip route replace table local local 10.0.0.1 "
-+		     "encap bpf %s pinned " LWT_EXT_PIN_PATH " dev lo",
-+		     encap_dir);
-+
-+	server_fd = start_server(AF_INET, SOCK_DGRAM, "10.0.0.1", 0, 0);
++	server_fd = start_server(AF_INET, SOCK_DGRAM, "127.0.0.1", 0, 0);
 +	if (!ASSERT_GE(server_fd, 0, "start_server"))
 +		goto cleanup;
 +
@@ -165,111 +146,70 @@ index 82c57ea3957e..7a7537ef80e7 100644
 +	if (!ASSERT_OK(ret, "bpf_tc_hook_create"))
 +		goto cleanup;
 +
-+	/* When LWT writes, TC ingress reads; when LWT reads, TC ingress writes */
-+	tc_prog = writer ? skel->progs.tc_skb_ext_read
-+			 : skel->progs.tc_skb_ext_write;
-+	tc_opts.prog_fd = bpf_program__fd(tc_prog);
++	tc_opts.prog_fd = bpf_program__fd(skel->progs.tc_skb_ext_write);
 +	ret = bpf_tc_attach(&tc_hook, &tc_opts);
 +	if (!ASSERT_OK(ret, "bpf_tc_attach"))
 +		goto cleanup;
 +
-+	port = get_socket_local_port(server_fd);
-+	if (!ASSERT_GE(port, 0, "get_port"))
++	reader_link = bpf_program__attach_netfilter(skel->progs.nf_skb_ext_read,
++						    &nf_opts);
++	if (!ASSERT_OK_PTR(reader_link, "attach_nf"))
 +		goto cleanup;
 +
-+	fd = socket(AF_INET, SOCK_DGRAM, 0);
-+	if (!ASSERT_GE(fd, 0, "socket"))
++	if (send_loopback_udp(server_fd))
 +		goto cleanup;
-+
-+	inet_pton(AF_INET, "10.0.0.1", &addr.sin_addr);
-+	addr.sin_port = port;
-+	sendto(fd, test_payload, TEST_PAYLOAD_LEN, 0,
-+	       (void *)&addr, sizeof(addr));
-+	recvfrom(server_fd, buf, sizeof(buf), 0, NULL, NULL);
 +
 +	ASSERT_TRUE(skel->bss->test_pass, "test_pass");
 +
 +cleanup:
-+	if (fd >= 0)
-+		close(fd);
++	bpf_link__destroy(reader_link);
 +	bpf_tc_hook_destroy(&tc_hook);
 +	if (server_fd >= 0)
 +		close(server_fd);
 +	netns_free(ns);
-+	if (pinned)
-+		unlink(LWT_EXT_PIN_PATH);
 +}
 +
  void test_skb_ext_cross_hook(void)
  {
  	struct test_xdp_meta *skel = NULL;
-@@ -1323,6 +1412,15 @@ void test_skb_ext_cross_hook(void)
+@@ -1267,6 +1321,8 @@ void test_skb_ext_cross_hook(void)
+ 		test_skb_ext_tcp(skel, "tc_to_skops", READER_SKOPS);
+ 	if (test__start_subtest("cgrp_egress_to_kfree_skb"))
  		test_cgrp_egress_to_kfree_skb(skel);
- 	if (test__start_subtest("tc_to_nf"))
- 		test_skb_ext_nf(skel, "tc_to_nf");
-+	if (test__start_subtest("tc_to_lwt_in"))
-+		test_skb_ext_lwt(skel, "tc_to_lwt_in",
-+				 skel->progs.lwt_in_skb_ext_read, "in", false);
-+	if (test__start_subtest("lwt_out_to_tc"))
-+		test_skb_ext_lwt(skel, "lwt_out_to_tc",
-+				 skel->progs.lwt_out_skb_ext_write, "out", true);
-+	if (test__start_subtest("lwt_xmit_to_tc"))
-+		test_skb_ext_lwt(skel, "lwt_xmit_to_tc",
-+				 skel->progs.lwt_xmit_skb_ext_write, "xmit", true);
++	if (test__start_subtest("tc_to_nf"))
++		test_skb_ext_nf(skel, "tc_to_nf");
  
  	test_xdp_meta__destroy(skel);
  }
 diff --git a/tools/testing/selftests/bpf/progs/test_xdp_meta.c b/tools/testing/selftests/bpf/progs/test_xdp_meta.c
-index 0688120f3d40..97c1760fbd6d 100644
+index 415b33b32ef5..0688120f3d40 100644
 --- a/tools/testing/selftests/bpf/progs/test_xdp_meta.c
 +++ b/tools/testing/selftests/bpf/progs/test_xdp_meta.c
-@@ -1089,4 +1089,49 @@ int nf_skb_ext_read(struct bpf_nf_ctx *ctx)
- 	return NF_ACCEPT;
+@@ -1066,4 +1066,27 @@ int BPF_PROG(tp_kfree_skb_ext_read, struct sk_buff *skb)
+ 	return 0;
  }
  
-+SEC("lwt_in")
-+int lwt_in_skb_ext_read(struct __sk_buff *ctx)
++#define NF_ACCEPT 1
++
++SEC("netfilter")
++int nf_skb_ext_read(struct bpf_nf_ctx *ctx)
 +{
++	struct __sk_buff *skb = (struct __sk_buff *)ctx->skb;
 +	__u8 meta_have[META_SIZE];
 +	struct bpf_dynptr meta;
 +
-+	if (bpf_dynptr_from_skb_ext(ctx, 0, 0, &meta))
-+		return BPF_OK;
++	if (!skb)
++		return NF_ACCEPT;
++
++	if (bpf_dynptr_from_skb_ext(skb, 0, 0, &meta))
++		return NF_ACCEPT;
 +	if (bpf_dynptr_read(meta_have, META_SIZE, &meta, 0, 0))
-+		return BPF_OK;
++		return NF_ACCEPT;
 +	if (!check_metadata(meta_have))
-+		return BPF_OK;
++		return NF_ACCEPT;
 +
 +	test_pass = true;
-+	return BPF_OK;
-+}
-+
-+SEC("lwt_out")
-+int lwt_out_skb_ext_write(struct __sk_buff *ctx)
-+{
-+	struct bpf_dynptr meta;
-+
-+	if (!is_test_packet_tc(ctx))
-+		return BPF_OK;
-+	if (bpf_dynptr_from_skb_ext(ctx, 0, BPF_SKB_EXT_F_CREATE, &meta))
-+		return BPF_OK;
-+	bpf_dynptr_write(&meta, 0, (void *)meta_want, ARRAY_SIZE(meta_want), 0);
-+
-+	return BPF_OK;
-+}
-+
-+SEC("lwt_xmit")
-+int lwt_xmit_skb_ext_write(struct __sk_buff *ctx)
-+{
-+	struct bpf_dynptr meta;
-+
-+	if (!is_test_packet_tc(ctx))
-+		return BPF_OK;
-+	if (bpf_dynptr_from_skb_ext(ctx, 0, BPF_SKB_EXT_F_CREATE, &meta))
-+		return BPF_OK;
-+	bpf_dynptr_write(&meta, 0, (void *)meta_want, ARRAY_SIZE(meta_want), 0);
-+
-+	return BPF_OK;
++	return NF_ACCEPT;
 +}
 +
  char _license[] SEC("license") = "GPL";
