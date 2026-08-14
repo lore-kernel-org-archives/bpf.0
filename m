@@ -1,106 +1,76 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0BD61FCE
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 13:18:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A3B640DB2A;
+	Fri, 14 Aug 2026 13:30:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786713525; cv=none; b=jwZ2LTk51XeBvroiQ1l+K0kojIGpScl0fGxhGpm/a/PCFMOFg8asKk8rI2YiSQOdvg7Jee9WpLkrJWVk+a0QDRE+X/WVSIja8hp5A80mxASz5fYZt7FfnKav1b8xHbz8PKKnd0FRIWA0OKFxenx5d2IClCsavsqido5TtcQR6SU=
+	t=1786714260; cv=none; b=LD0YdRCj46KdwceiY4BhZTBcZwc/p+pTkc0+t2yYxLEcrAmA4S76v19UuLMN17tFceSn0yU8Y+iHsLWZh2f7jl1OW6UtpSWZfg1Yw+9Kpm/JUXska69nRO8eAGlskZ7MfAnNzBm7jjXSXwUEmcO0CsW1SkstWOtj6xmZfnJXsgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786713525; c=relaxed/simple;
-	bh=4AtAXL4E79obY9lF17YzBLoAkQLBGrq4PN88UIveZSA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=c7KZZfOgszWwivlTD5uVQt+p0QhDKPX2NtQWdmovUkHR3UqRD2QuTMt4otskSYkYlNVVZKpXpPFcclfwG1hCfoj3tfo9nTlvKArL1uyKLMvzLlEpm2YSveQGgma50jfSqVoO+QZn3Kwxg4QXRP4F78s8UfYcsBSDfsSqD8AHvDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QMqHuub2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786714260; c=relaxed/simple;
+	bh=9ULoTSGCVj/w+s39ZLBV0LbdXllfjePvvTAdFDJnusk=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=ILLlb2t7WATNzZZ40a8YAWIFtdBpiici0yqDhiYNb6ETm07WFRL63kg8sKs3o5pxKYENjbcAp3vK8xGqqwMqIB7u2Eub0Y0FFzdfIEsmnOhV0/eV9fpuW0wfKHw9fa9k4sEq1CjQB8CWh9cqvenR80Fau1mUQzCB/3Evu/NjgXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lArKcp7u; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QMqHuub2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A45B1F000E9;
-	Fri, 14 Aug 2026 13:18:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lArKcp7u"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2BCA1F000E9;
+	Fri, 14 Aug 2026 13:30:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786713523;
-	bh=Cpaodk1Nvie2kkmyQwhqdJGemKXJkNG9SuRy2OLWk64=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=QMqHuub2YHQwomf6QG2/NVIfEnu6k0ewSVOsxUU2Nkj+teLQ2b9Gw6mLk+M56mZM8
-	 g0HDA5EEgcUvyM/KCv3Z++GtXrjBl/Uu8ajX+1tKnJoFfCjELv3WkoxerL9t//Ddu9
-	 fhpcn1eeR9IXDtUFyhfoIs4QAouF/F4tu8JpQKXOMiyrxhMB3FcFuOxwEMFGcDJSX0
-	 GBCoEvcbsIQzfL6FfsjaXhgDZ+5oV4y3Y3YU1rtwG1ikgz8GscQxHuGrcXVsE9t9fP
-	 zQpN92c1pd7iPTstbgBG3XhSPQ837cztDRlfPBRSP8tNd71qo6MCv6mhEa18yQOHFJ
-	 f1XiFaLON8LvQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf] bpf: Enforce cgroup storage map consistency for
- freplace attach
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Aohan Mei" <3472274613@qq.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <tencent_2EB11B9074207E825BE3ACC0AF1F09DE0108@qq.com>
-References: <tencent_2EB11B9074207E825BE3ACC0AF1F09DE0108@qq.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 14 Aug 2026 13:18:42 +0000
-Message-Id: <20260814131843.6A45B1F000E9@smtp.kernel.org>
+	s=k20260515; t=1786714258;
+	bh=9ULoTSGCVj/w+s39ZLBV0LbdXllfjePvvTAdFDJnusk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=lArKcp7ufCcFkX1+dBDqgXJRLMqZqJQCCvECQ4tEakzBSCsJUyfMMS4Hfz7qBGRVv
+	 Y6Hkthek6RIbhMCH9gFeXyiDaigvLquUoERXxvjQysQy+W8dxvI9gDkRgBXWpNsNrg
+	 N8KpaM3w764/WiF3ay+l8MbMXik7+rorgMTY1KurzZo+owOkz93Q+LQTGXoeK/OYJT
+	 Pmy7TWroPbCFPT4yJM1pc7HKKcCgim0Npl9Yy7nWYEST8CK0WIGIav7VCifR4FnEw1
+	 CHf76JptW+Nh+96nftkOxDWAlRTv0urS78+wOPhSmsqWAyI7F99fL/HPB6FlF2kfUc
+	 DylMnX8T4In/A==
+Content-Type: multipart/mixed; boundary="===============2721682741473554854=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <9598e12851c93f183b337cc01433927b2b012454eb275515857271a57d29202e@mail.kernel.org>
+In-Reply-To: <20260814124843.22041-4-i.tellez@btesa.com>
+References: <20260814124843.22041-4-i.tellez@btesa.com>
+Subject: Re: [PATCH v2 bpf 3/4] bpf: Read producer_pos before overwrite_pos in ringbuf_avail_data_sz()
+From: bot+bpf-ci@kernel.org
+To: i.tellez@btesa.com,andrii.nakryiko@gmail.com,ast@kernel.org,daniel@iogearbox.net
+Cc: andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,billy@starlabs.sg,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,i.tellez@btesa.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 14 Aug 2026 13:30:57 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] State corruption in bpf_freplace_check_tgt_prog() leaking aux->is_=
-extended =3D true on validation failure.
---
+--===============2721682741473554854==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
 
---- Patch [1]: [PATCH bpf] bpf: Enforce cgroup storage map consistency for =
-freplace attach ---
-commit 25f8d74e87a11313024cd3ea152a45bd57843da3
-Author: Aohan Mei <henrymei@tencent.com>
-Subject: bpf: Enforce cgroup storage map consistency for freplace attach
+PiBicGY6IFJlYWQgcHJvZHVjZXJfcG9zIGJlZm9yZSBvdmVyd3JpdGVfcG9zIGluIHJpbmdidWZf
+YXZhaWxfZGF0YV9zeigpCj4KPiBUaGUgcHJvZHVjZXIgZG9jdW1lbnRzIHRoZSBvcmRlciB0aGUg
+Y29uc3VtZXIgaGFzIHRvIHVzZSwgaW4KPiBfX2JwZl9yaW5nYnVmX3Jlc2VydmUoKToKPgo+ICAg
+ICAgICAgICogc21wX3N0b3JlX3JlbGVhc2UoJnJiLT5wcm9kdWNlcl9wb3MsIG5ld19wcm9kX3Bv
+cykgYXQKPiAgICAgICAgICAqIHRoZSBlbmQgb2YgdGhlIGZ1bmN0aW9uIGVuc3VyZXMgdGhhdCB3
+aGVuIGNvbnN1bWVyIHNlZXMKPiAgICAgICAgICAqIHRoZSB1cGRhdGVkIHJiLT5wcm9kdWNlcl9w
+b3MsIGl0IGFsd2F5cyBzZWVzIHRoZSB1cGRhdGVkCj4gICAgICAgICAgKiByYi0+b3ZlcndyaXRl
+X3Bvcywgc28gd2hlbiBjb25zdW1lciByZWFkcyBvdmVyd3JpdGVfcG9zCj4gICAgICAgICAgKiBh
+ZnRlciBzbXBfbG9hZF9hY3F1aXJlKHItPnByb2R1Y2VyX3BvcyksIHRoZSBvdmVyd3JpdGVfcG9z
+Cj4gICAgICAgICAgKiB3aWxsIGFsd2F5cyBiZSB2YWxpZC4KPgo+IHJpbmdidWZfYXZhaWxfZGF0
+YV9zeigpIHJlYWRzIHRoZW0gdGhlIG90aGVyIHdheSByb3VuZCwgc28gdGhlIGFjcXVpcmUKPiBs
+b2FkIG9mIHByb2R1Y2VyX3BvcyBubyBsb25nZXIgb3JkZXJzIHRoZSBsb2FkIG9mIG92ZXJ3cml0
+ZV9wb3MuIE5vdGhpbmcKPiB0aGVuIHByZXZlbnRzIHRoZSBwYWlyIGZyb20gYmVpbmcgb2JzZXJ2
+ZWQgYXMgYSBzdGFsZSBvdmVyd3JpdGVfcG9zIG5leHQKPiB0byBhbiBhbHJlYWR5IGFkdmFuY2Vk
+IHByb2R1Y2VyX3Bvcywgd2hpY2ggb3ZlcnN0YXRlcyB0aGUgYW1vdW50IG9mCj4gYXZhaWxhYmxl
+IGRhdGEgYnkgaG93ZXZlciBmYXIgdGhlIHByb2R1Y2VyIG1vdmVkIGluIGJldHdlZW4uCj4KPiBT
+d2FwIHRoZSB0d28gbG9hZHMgc28gdGhlIGRvY3VtZW50ZWQgY29udHJhY3QgaG9sZHMsIGFuZCBz
+YXkgd2h5IGluIGEKPiBjb21tZW50Lgo+Cj4gU2lnbmVkLW9mZi1ieTogSXNyYWVsIFTDqWxsZXog
+R2FyY8OtYSA8aS50ZWxsZXpAYnRlc2EuY29tPgoKVGhpcyBsb29rcyBsaWtlIGEgYnVnIGZpeCBm
+b3IgYSBtZW1vcnkgb3JkZXJpbmcgaXNzdWUuIFNob3VsZCB0aGlzIGluY2x1ZGU6CgogIEZpeGVz
+OiBiNzMyNDZmZjg3NWIgKCJhZGRpbmcgY2kgZmlsZXMiKQoKCi0tLQpBSSByZXZpZXdlZCB5b3Vy
+IHBhdGNoLiBQbGVhc2UgZml4IHRoZSBidWcgb3IgZW1haWwgcmVwbHkgd2h5IGl0J3Mgbm90IGEg
+YnVnLgpTZWU6IGh0dHBzOi8vZ2l0aHViLmNvbS9rZXJuZWwtcGF0Y2hlcy92bXRlc3QvYmxvYi9t
+YXN0ZXIvY2kvY2xhdWRlL1JFQURNRS5tZAoKQ0kgcnVuIHN1bW1hcnk6IGh0dHBzOi8vZ2l0aHVi
+LmNvbS9rZXJuZWwtcGF0Y2hlcy9icGYvYWN0aW9ucy9ydW5zLzMxODAyODM2OTY0
 
-This commit adds a consistency check for cgroup storage maps when attaching
-an extension program. It rejects the attach with -EINVAL if the extension
-and target programs reference mismatched cgroup storage maps, preventing
-potential out-of-bounds access.
-
-> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> --- a/kernel/bpf/trampoline.c
-> +++ b/kernel/bpf/trampoline.c
-[ ... ]
-> @@ -821,6 +823,20 @@ static int bpf_freplace_check_tgt_prog(struct bpf_pr=
-og *tgt_prog)
->  		return -EBUSY;
-> =20
->  	aux->is_extended =3D true;
-> +
-> +	/* At runtime the extension program inherits the target program's
-> +	 * cgroup storage context (via prog_item->cgroup_storage), while the
-> +	 * verifier bounds its accesses by its own map's value_size. A
-> +	 * value_size mismatch leads to slab out-of-bounds access.
-> +	 */
-> +	for_each_cgroup_storage_type(i) {
-> +		struct bpf_map *tgt_map =3D tgt_prog->aux->cgroup_storage[i];
-> +		struct bpf_map *prog_map =3D prog->aux->cgroup_storage[i];
-> +
-> +		if (prog_map && (!tgt_map || prog_map->value_size !=3D tgt_map->value_=
-size))
-> +			return -EINVAL;
-
-[Severity: High]
-If this check fails and returns -EINVAL, does it leave aux->is_extended
-permanently set to true?
-
-Because aux->is_extended is set to true just before this loop, returning
-an error here without reverting it might permanently prevent the target pro=
-gram
-from being used as a tail callee, since prog_fd_array_get_ptr() strictly
-rejects programs with is_extended =3D=3D true.
-
-Should this error path revert aux->is_extended to false?
-
-> +	}
-> +
->  	return 0;
->  }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/tencent_2EB11B90742=
-07E825BE3ACC0AF1F09DE0108@qq.com?part=3D1
+--===============2721682741473554854==--
