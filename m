@@ -1,130 +1,105 @@
-Received: from mta1.migadu.com (out-32.mta1.migadu.com [95.215.58.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85892282F13
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 21:52:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6425F3AE195
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 21:53:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786744336; cv=none; b=Ju15NlNZZygL7FE61yFvmMQ+Qc9i35CF/F4HcH6xiCXHWay960B1gehILJRV1hbFLXalmrjtX+4wQ/+5T10fRJlhEOLFcoK2YrKayHGz62D/+hC3GafuRkeCT5zjzYSzdy2+Ahe8K5wr5JrbEMSc7BpIDXK5FzneyTB8DP2ixeo=
+	t=1786744392; cv=none; b=XZ+bwfQAkcbWJcBOLG6uUFPR1a0l4hsDYJUOxzG7zZbY+aUJ7AOst3yf7k+hN4gySCzfGEYKttcYympCkN9RV7IH/QGHOd0YJds3oAjn6qlDA+u9XE8YKU6w+rJs/9bGXfoL0RLL32+CngZYeTOsdF32lpA74BRa1e3G4XFbIWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786744336; c=relaxed/simple;
-	bh=N0myQE++yQTI9u7tY4JAkVybawx1xDvKBp+IGvHCvPI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jkfpCVpp6ShRJ2PzHszjeA8Tv+Ua3ksdxkoTPCpTm4zv2F61NNeG82nofsGMwJzoTDGfGG2ka1G0NYGVw4ONEUZ4fsaRtLyqrphJehU63PCYYeWDbH/lhuWbPTwgrhXsWi2uO4ITYSL3a4uAU2jOzpLIBzN26Kp+UvZjrGCUvvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZgpZxy+k; arc=none smtp.client-ip=95.215.58.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1786744392; c=relaxed/simple;
+	bh=cr1O0I0Qt6xys5V/3AcBeShvEjyI53SmIkAK8pjIPKw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JoK5arRI1geCNZFxWlSD8CgQl3bIKKi8/OEoXTUDjOMu6Dz7ja4diYdICDr0LQTBbjkniGRVs/zT8AqgXJWTv+DnBWwC7WUv5sSJP0iaED0w/dExTPYtGHhlcdl8sU85TliW1IzZGS3S6B32yHMZsbpiyZZhFO/Rtw8ejx44aRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=LozN/KFQ; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZgpZxy+k"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=N0myQE++yQTI9u7tY4JAkVybawx1xDvKBp+IGvHCvPI=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786744332; v=1; x=1787349132;
- b=ZgpZxy+k0z/aXelvFgJIreejIpGF4yhVN9oTIguC51biWo/FiJP9sKVBNXa3YioFIQGxLyhe
- QnBlpLLK0k33fAgqRt+xQtTCM+z3Lf7bfdSXUEuiVyv/APIfSxUTmTayorBqpgHQcDY1zcUWDkU
- 9slA2h79ZR0bVPlHWHXRC91A=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [IPV6:2a03:83e0:1251:27:9295:e585:8bf6:fa24] (2620:10d:c090:500::6:7be4)
-	by smtp.migadu.com with ESMTPS id 92d4703bf2947a41;
-	Fri, 14 Aug 2026 21:52:02 +0000
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <c2650d12-784f-4f74-a520-ea97e4cb548c@linux.dev>
-Date: Fri, 14 Aug 2026 14:51:54 -0700
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="LozN/KFQ"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=BiS+ZhMVoi+LgKBZNj7IAPtAfMN+422Ye53DKA3T3yU=; b=LozN/KFQYVFSsxmOReQGbB1kiV
+	yz3en5pJFgEsQ9weB6W+niU2LQaYW4F19X8Eklj1KW/6W2EtgJZ5If3exVTIcIrkRktuu2kmrgzgu
+	oPfBjuFN9P144pPVe5ES7VPO06r0HmkfnlcfiwrncWX/K3KQNwOeiv6wuebTg5el4oaw2Q8LJ8qGs
+	Vm6BL1UJreZtw6LvnYXELSGhdBGyeR+dVgWI3V5NSfBsX8EeZypv46NmodxDyOAoWRXlwZSZkuOTp
+	nAj96f+gqRL9xVFxD2Ol6xJAi7z1oGK6N/I9pqC4QGA5eItOy0LvANuG2rarG3K9P9SQvOvcJqr58
+	3kelsfnA==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wuzpm-000F9B-2v;
+	Fri, 14 Aug 2026 23:53:02 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: eddyz87@gmail.com
+Cc: memxor@gmail.com,
+	bpf@vger.kernel.org
+Subject: [PATCH bpf-next v2 3/6] bpf: Reject a store through a fault prone pointer
+Date: Fri, 14 Aug 2026 23:52:57 +0200
+Message-ID: <20260814215301.709827-3-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260814215301.709827-1-daniel@iogearbox.net>
+References: <20260814215301.709827-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Check per-CPU address
- resolution per register
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, x86@kernel.org,
- stable@vger.kernel.org, martin.lau@kernel.org, eddyz87@gmail.com,
- yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
-References: <20260814203248.3714536-3-vineet.gupta@linux.dev>
- <7276efcb565f80eed9a05dd364570b432a68ba5d980d9d1676bf620501f10040@mail.kernel.org>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <7276efcb565f80eed9a05dd364570b432a68ba5d980d9d1676bf620501f10040@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28092/Fri Aug 14 08:27:02 2026)
 
-On 8/14/26 2:20 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c b/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c
->> new file mode 100644
->> index 000000000000..962faea8ef90
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c
->> @@ -0,0 +1,114 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +
->> +#include <vmlinux.h>
->> +#include <bpf/bpf_helpers.h>
->> +#include "bpf_misc.h"
->> +
->> +int percpu_data SEC(".percpu");
->> +
->> +#if defined(__TARGET_ARCH_x86)
->> +
->> +/*
->> + * An ld_imm64 of a per-CPU map value is followed by a mov_percpu_addr that
->> + * reuses the same register, so the register the address lands in decides how
->> + * the JIT encodes the add. On x86 R5, R7, R8 and R9 are the extended
->> + * registers, whose high bit needs REX.R because the destination sits in
->> + * ModRM.reg. Check one program per extended register, since getting the
->> + * prefix wrong resolves the address into whichever register shares the low
->> + * three bits instead.
->> + */
->> +
->> +SEC("raw_tp")
->> +__description("per-CPU address into r5")
->> +__success
->> +__arch_x86_64
->> +__jited("	addq	%gs:{{.*}}, %r8")
->> +__naked void percpu_addr_into_r5(void)
->> +{
->> +	asm volatile ("					\
->> +	r5 = %[percpu_data] ll;				\
->> +	r0 = *(u32 *)(r5 + 0);				\
->> +	exit;						\
->> +"	:
->> +	: __imm_addr(percpu_data)
->> +	: __clobber_all);
->> +}
-> This isn't a bug, but would it be tidier to move the percpu_data
-> declaration inside the __TARGET_ARCH_x86 block?
->
-> Currently percpu_data is declared above the arch guard, but its only
-> readers (percpu_addr_into_r1/r5/r7/r8/r9) are inside the guard:
->
-> +int percpu_data SEC(".percpu");
-> +
-> +#if defined(__TARGET_ARCH_x86)
-> +
-> +/* ... test functions using percpu_data ... */
->
-> On every other target the object still carries a .percpu section, so
-> libbpf still creates an unused percpu data map for it.
+check_ptr_to_btf_access() allows the program to store before the default
+BTF access path gets to reject a non read access. ac65c710cc64 ("bpf:
+Reject writes through untrusted BTF pointers") closed that for a
+PTR_UNTRUSTED pointer, but a bare PTR_TO_BTF_ID may fault on a dereference
+just the same and is let through.
 
-That's a good point, will address this in v3
+A BPF_LDX gets the BPF_PROBE_MEM rewrite in bpf_convert_ctx_accesses()
+and a bad address is handled, but a BPF_STX does not and cannot, there
+is no probed store to rewrite. The store is emitted as a plain one without
+an exception table entry and a bad address panics the kernel.
 
-Thx,
--Vineet
+A bpf_qdisc program can reach this, bpf_qdisc_btf_struct_access() permits a
+write to Qdisc::limit and Qdisc::next_sched is a plain struct Qdisc pointer
+which the walk turns into the compat type:
 
->
-> Comparable files in the same directory keep objects used only by guarded
-> programs inside the guard. verifier_private_stack.c declares its 'struct
-> elem' and 'array SEC(".maps")' after the '#if defined(__TARGET_ARCH_x86)
-> || defined(__TARGET_ARCH_arm64)' guard, and verifier_ldsx.c declares its
-> 'arena SEC(".maps")' map inside its arch guard.
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31839526403
+  struct Qdisc *next = sch->next_sched;
+
+  next->limit = 1000;
+
+  BUG: kernel NULL pointer dereference, address: 0000000000000014
+  RIP: 0010:bpf_prog_c6e14e7f32c8e325_bpf_fifo_enqueue+0x3a/0x12b
+  Code: [...] bf e8 03 00 00 <89> 7e 14 41 8b 7f 14 [...]
+  Kernel panic - not syncing: Fatal exception in interrupt
+
+Fix by widen the check to bpf_may_fault_on_deref() so that it covers both.
+
+Fixes: 27ae7997a661 ("bpf: Introduce BPF_PROG_TYPE_STRUCT_OPS")
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ v1 -> v2:
+   - new patch
+
+ kernel/bpf/verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2e6992569187..6610e2437047 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5789,7 +5789,7 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+ 		return -EACCES;
+ 	}
+ 
+-	if (atype != BPF_READ && (type_flag(reg->type) & PTR_UNTRUSTED)) {
++	if (atype != BPF_READ && bpf_may_fault_on_deref(reg->type)) {
+ 		verbose(env, "only read is supported\n");
+ 		return -EACCES;
+ 	}
+-- 
+2.43.0
 
