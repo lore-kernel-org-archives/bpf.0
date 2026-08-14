@@ -1,124 +1,160 @@
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
+Received: from mta1.migadu.com (out-26.mta1.migadu.com [95.215.58.26])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 932DC383C89
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 23:49:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D463B71A4
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 23:52:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.26
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786751368; cv=none; b=UYlN+EAGWwIvBOe8hMek85hFs9AzwPjlBqkdX1ZJYDJBLGEKWheRvCU7HdzrZ45LULOwHiqMor/AmKt8pLYqQFD4xDZRuIAor7r/Pt+S/3w6Y7QwWsgFRZjT9a1e1k6Q+HmL7XnNMkiryAx+t4H/F65UplivU5p7Xc3F/ASuG48=
+	t=1786751544; cv=none; b=o4lfrowRw8CM6BvPcrwkHFoys+ezjzMxNJpNwbsb5WHzdzslSJLIG2XH/f9Kb3Z8SmrwibZtUyTDQExHlwhrkdkJC0fC2YUgzLjBFWkmItZ8LJSkmbrdqmlo+eESuQWeSGPJkiM9oX0bPpQ4x84cvaPMFn5akWRfPxev+GI8Piw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786751368; c=relaxed/simple;
-	bh=KmaIFs7Rsf1wuaaVKDkIGKBAJHwoNkoAEaDWZtWjD3U=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=E/zWb1eUL67QS1mi0q7s7TblFPzyyAHc9jAU6rwnUlq7MTfGdekmr4jmGbSBL7WqEjXRg7rlV9iqAu+G79JJSsIFbXVC13ADFfJKZVS5NoxCcNJiIHPzs+jW8hBi97PCBLUdh8HLFsP3PyBjFVN8PR/h1ZSaHRYuDgd8MGSFq9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--joshwash.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UVaaoPbs; arc=none smtp.client-ip=209.85.215.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--joshwash.bounces.google.com
+	s=arc-20240116; t=1786751544; c=relaxed/simple;
+	bh=XUGVDWJoU3RK9p8QNyvMPr/HlvJCp2imwGONSk/iOCQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=GG/3IPSAnF8Qs3gtIMkecRUue/HexauElYOLH4wrqkymkKj1vMrlc8iJmIINdv+ODu4f2m8cdVI3toSE/HIzXLLbCSPMhDHbmvtH7Y1hYyNg+sJBT14+3OcGi1D8R9T90mRnXucaKSw7j5jqH5mkXOmhvnXm/nIpjC8QaKXd91s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=P0IJkW99; arc=none smtp.client-ip=95.215.58.26
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UVaaoPbs"
-Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-cbef7b172easo3145289a12.0
-        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 16:49:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786751361; x=1787356161; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=QlrIN2FE+vOMvXseiBIppZAdIzkDPz9iddK1/8i1Wos=;
-        b=UVaaoPbsqrV5ch0ZVmXBRc+6nwn8OWS97VXQgVgCHyRF1es8O5mvIp80nCjIhUXpi2
-         Kjo77kNN0L+w8iz1WjyR7lxcYokrQtEgj3R4R1n6Hr4DE4XCrqGzfKCLkwZB+xQwWuH1
-         9+HMJlKuRW4fPc2DxC+EnpnBGrrrRlGrxCuOtXzjlqSchzQn3iGdMWcONKg/xV9XxNs/
-         ePccmBWTFjwkNA8ydXi2gV9IxgXapuS8WwolD4FV3EU/3xVuJXPGauTVFzjipmQ6gLuf
-         kphBUOPAmr1ayp55feEGIlSylEO5xN8pZbfTDXGBgrrD6fDlm43tmFEs+zk+osPhpw+z
-         2otA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786751361; x=1787356161;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=QlrIN2FE+vOMvXseiBIppZAdIzkDPz9iddK1/8i1Wos=;
-        b=Y5VByAH9uLYb8+SLh4cgV2pnlTMJ7vX/qyNOzZOnWI8clvEj/KijTq2kiuehAFaPCi
-         zsNUFdA+xNcBZzcFmsP0BfUjD/uwStrlgxIltksHbPPqTip5ySIPIG1NmiiN8QKGivZ/
-         joTzRjyHsUDdy86C6rv5kl3Xtej07anbJvyCEOs3539+ooyD4jHnrUyuPjEALgQHuBA4
-         VD3N5y8pd4qC0ROjfufz+X/iZqOSVJXDadExLB3R79pe9YvdYP13pqVtZXZwEE8vpeC6
-         eLsna+CWW1Op0sJcm0i8fy4MBQ70aj079VBfSZ5jirjZ9vMqPKKmo0EFyAT4Z6OYv5iP
-         R/VA==
-X-Forwarded-Encrypted: i=1; AHgh+RrSyV2FwyZi8WKh3ktEcQf365gnX+tWEzBdTUHwVy+Z1Kxm1FRxLpnHcWVi8SDnY/3A9kM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0olQEfKIQD02i3VWjS3cxuL9vxkqpvMi/WS0QmWBfLCYfNDOU
-	KF+Thvj6xSwsBOXjagU2YK8jJ/NuVjnT4RY75NuV+XhDOXzwrGb67iahM6WHGvxeA52Ucxor+jy
-	VQV03Bus9uNQB/Q==
-X-Received: from pgcm29.prod.google.com ([2002:a63:711d:0:b0:cbe:ddc9:c670])
- (user=joshwash job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a21:350f:b0:3c3:724d:ae7a with SMTP id adf61e73a8af0-3cc71a2975amr12638942637.9.1786751360785;
- Fri, 14 Aug 2026 16:49:20 -0700 (PDT)
-Date: Fri, 14 Aug 2026 16:48:44 -0700
-In-Reply-To: <20260814234845.773189-1-joshwash@google.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="P0IJkW99"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=XUGVDWJoU3RK9p8QNyvMPr/HlvJCp2imwGONSk/iOCQ=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1786751540; v=1; x=1787356340;
+ b=P0IJkW99fVmwxdaNHQfpy0kwjuTOe6Bx62MS3DaeuYLgVAdbSbWG4r1SaBIDH0nIZOZv4f6U
+ TBGD4p7b9ANYp7wP2Kkc0hzJWulc2NP8GIjWI/aM0ZAorRwE9GrBPDUEhVh888jIEJRx2sPUK//
+ MhfyCup/qHUex2FWxDBsgMHM=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from isolodrai-fedora-MJ0FVMD1.thefacebook.com (2620:10d:c090:500::4:b8fe)
+	by mta10.migadu.com with ESMTPS id 999b0796c06f0297;
+	Fri, 14 Aug 2026 23:52:20 +0000
+X-Migadu-Flow: FLOW_OUT
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Thomas Gleixner <tglx@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	x86@kernel.org,
+	bpf@vger.kernel.org,
+	kasan-dev@googlegroups.com,
+	linux-mm@kvack.org,
+	kernel-team@meta.com
+Subject: [PATCH v2 1/5] x86/cpu: Factor init_cpu_info() out of identify_cpu()
+Date: Fri, 14 Aug 2026 16:51:30 -0700
+Message-ID: <20260814235134.3461435-2-ihor.solodrai@linux.dev>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260814235134.3461435-1-ihor.solodrai@linux.dev>
+References: <20260814235134.3461435-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260814234845.773189-1-joshwash@google.com>
-X-Mailer: git-send-email 2.55.0.691.gc56d675ccc-goog
-Message-ID: <20260814234845.773189-6-joshwash@google.com>
-Subject: [PATCH net 5/6] gve: fix napi_disable deadlock when attempting to
- disable XSK pools
-From: Joshua Washington <joshwash@google.com>
-To: netdev@vger.kernel.org
-Cc: Joshua Washington <joshwash@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jordan Rhee <jordanrhee@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Ankit Garg <nktgrg@google.com>, Tim Hostetler <thostet@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Jeroen de Borst <jeroendb@google.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-When disabling XSK pools, GVE calls the unlocked versions of
-napi_disable and napi_enable. However, the netdev lock has already been
-acquired before ndo_bpf is called because GVE supports queue management
-ops. Calling the unlocked versions of napi_disable/enable results in a
-deadlock when attempting to disable XSK pools, as the thread attempts to
-re-acquire a lock it already holds.
+identify_cpu() unconditionally resets the struct cpuinfo_x86 fields to
+their default values and clears the capability arrays with memset()
+before rescanning the CPU to fill it in again.
 
-Update the NAPI calls to use the locked versions.
+However the boot CPU capabilities have already been scanned by
+early_identify_cpu(), with interrupts disabled.
 
-Fixes: 606048cbd834 ("net: designate XSK pool pointers in queues as "ops protected"")
-Cc: stable@vger.kernel.org
-Reviewed-by: Harshitha Ramamurthy <hramamurthy@google.com>
-Reviewed-by: Jordan Rhee <jordanrhee@google.com>
-Signed-off-by: Joshua Washington <joshwash@google.com>
+Introduce init_cpu_info() helper in preparation for letting the
+callers decide whether the reset is needed.
+
+early_identify_cpu() starts using the helper in the next patch.
+
+No functional changes.
+
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- drivers/net/ethernet/google/gve/gve_main.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/x86/kernel/cpu/common.c | 51 ++++++++++++++++++++----------------
+ 1 file changed, 28 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
-index 453b304016b6..e084b367a92d 100644
---- a/drivers/net/ethernet/google/gve/gve_main.c
-+++ b/drivers/net/ethernet/google/gve/gve_main.c
-@@ -1706,17 +1706,17 @@ static int gve_xsk_pool_disable(struct net_device *dev,
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index a3df21d26460..bb4525523222 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -1772,6 +1772,32 @@ static void __init cpu_parse_early_param(void)
  	}
+ }
  
- 	napi_rx = &priv->ntfy_blocks[priv->rx[qid].ntfy_id].napi;
--	napi_disable(napi_rx); /* make sure current rx poll is done */
-+	napi_disable_locked(napi_rx); /* make sure current rx poll is done */
++static void init_cpu_info(struct cpuinfo_x86 *c)
++{
++	c->x86_cache_size = 0;
++	c->x86_vendor = X86_VENDOR_UNKNOWN;
++	c->x86_model = c->x86_stepping = 0;	/* So far unknown... */
++	c->x86_vendor_id[0] = '\0'; /* Unset */
++	c->x86_model_id[0] = '\0';  /* Unset */
++#ifdef CONFIG_X86_64
++	c->x86_clflush_size = 64;
++	c->x86_phys_bits = 36;
++	c->x86_virt_bits = 48;
++#else
++	c->cpuid_level = -1;	/* CPUID not detected */
++	c->x86_clflush_size = 32;
++	c->x86_phys_bits = 32;
++	c->x86_virt_bits = 32;
++#endif
++	c->x86_cache_alignment = c->x86_clflush_size;
++	memset(&c->x86_capability, 0, sizeof(c->x86_capability));
++	memset(&c->cpuid, 0, sizeof(c->cpuid));
++#ifdef CONFIG_X86_VMX_FEATURE_NAMES
++	memset(&c->vmx_capability, 0, sizeof(c->vmx_capability));
++#endif
++	c->extended_cpuid_level = 0;
++}
++
+ /*
+  * Do minimum CPU detection early.
+  * Fields really needed: vendor, cpuid_level, family, model, mask,
+@@ -1956,8 +1982,6 @@ void check_null_seg_clears_base(struct cpuinfo_x86 *c)
  
- 	tx_qid = gve_xdp_tx_queue_id(priv, qid);
- 	napi_tx = &priv->ntfy_blocks[priv->tx[tx_qid].ntfy_id].napi;
--	napi_disable(napi_tx); /* make sure current tx poll is done */
-+	napi_disable_locked(napi_tx); /* make sure current tx poll is done */
+ static void generic_identify(struct cpuinfo_x86 *c)
+ {
+-	c->extended_cpuid_level = 0;
+-
+ 	if (!cpuid_feature())
+ 		identify_cpu_without_cpuid(c);
  
- 	gve_unreg_xsk_pool(priv, qid);
- 	smp_mb(); /* Make sure it is visible to the workers on datapath */
+@@ -2001,27 +2025,8 @@ static void identify_cpu(struct cpuinfo_x86 *c)
+ 	int i;
  
--	napi_enable(napi_rx);
--	napi_enable(napi_tx);
-+	napi_enable_locked(napi_rx);
-+	napi_enable_locked(napi_tx);
- 	if (gve_is_gqi(priv)) {
- 		if (gve_rx_work_pending(&priv->rx[qid]))
- 			napi_schedule(napi_rx);
+ 	c->loops_per_jiffy = loops_per_jiffy;
+-	c->x86_cache_size = 0;
+-	c->x86_vendor = X86_VENDOR_UNKNOWN;
+-	c->x86_model = c->x86_stepping = 0;	/* So far unknown... */
+-	c->x86_vendor_id[0] = '\0'; /* Unset */
+-	c->x86_model_id[0] = '\0';  /* Unset */
+-#ifdef CONFIG_X86_64
+-	c->x86_clflush_size = 64;
+-	c->x86_phys_bits = 36;
+-	c->x86_virt_bits = 48;
+-#else
+-	c->cpuid_level = -1;	/* CPUID not detected */
+-	c->x86_clflush_size = 32;
+-	c->x86_phys_bits = 32;
+-	c->x86_virt_bits = 32;
+-#endif
+-	c->x86_cache_alignment = c->x86_clflush_size;
+-	memset(&c->x86_capability, 0, sizeof(c->x86_capability));
+-	memset(&c->cpuid, 0, sizeof(c->cpuid));
+-#ifdef CONFIG_X86_VMX_FEATURE_NAMES
+-	memset(&c->vmx_capability, 0, sizeof(c->vmx_capability));
+-#endif
++
++	init_cpu_info(c);
+ 
+ 	generic_identify(c);
+ 
 -- 
-2.55.0.691.gc56d675ccc-goog
+2.55.0
 
