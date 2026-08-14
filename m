@@ -1,122 +1,131 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CFF613D891
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 00:14:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 602C017A2FC
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 00:21:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786666449; cv=none; b=fGOWOQ5vhHIHsG/QfqjIc/SVUjCDu/YyvPPJrEDFz8hhiq85cXRFjMA4+Ur85MYKvKxDsF9q2Cl5Ifu2L1fNeaRJIT1PAkB8fo97/M7jblSxCvPx42ZWBgeFQYiPtLB+ZlUGx6On9DtP3EbEkXCdVuquLUg6eLlpogwrx/z1gHU=
+	t=1786666899; cv=none; b=g32IdYz+6HzwbFEiJDDITehJeJgD+cMiqRFMo43dX4Kd+Mbpv9bkmbfXr9lhVJLwaC04H+AyvYIjIDxf59TCgodsZeKiJVrj4Ot6tGqkJ5PzjgzDZgiIBbAXEy9Q4AMiiLDNo4jk9NLhvGMLS0NtEfN43BoIs85Qqar+T5e/bZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786666449; c=relaxed/simple;
-	bh=C5nVkUNMV7Ig+Y8GVlrqoFzpmDyOaJHY6c0sq4Xossw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VzETK8+yVIFzqS2mq+6biJGHpNeDug6ehj7SPJFHvdKf3F2+NP/cnAXeSZMV6cq8yF7EWTFF05q025Db2Q7HNXtnXq85Pu868Qwhbu8oDmPVbCDx5WJSoNYuUNZyos3/cZ80AjqOvqZlVRq1veaGwyOAPUMpqXpONjsrzAuuwMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aSXkwScV; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786666899; c=relaxed/simple;
+	bh=llSMXw7G3kpnXsk5e6qj6SBgAaYcAM7nLPGGsUkX4YQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=p0OgcooAuu/xG4rYNccFA+gS9oGGSIez/gnjLfKZeoFpKdrusZGhs/zsVwhBxt17HhIfZG2omY/tCf4Hmqvq5AJfK++rVAeOr6aOz/lNcFg8nTfrSTz6acBIJn8CjyCRFbnvopRe85DDuGeq/TynG42FVL6EjVPNeWFr/CZtdic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f5p8zu0E; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aSXkwScV"
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-cbedf433a99so390317a12.2
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 17:14:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786666447; x=1787271247; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=6l3D5/SbgYiklv+NVxjZquxsLJXOjF4y5W1m+lLTXkg=;
-        b=aSXkwScVByLYl/Tw2ZCRH5XSfKR2eI7bs7p6HOshb/12J5fai5otmTHiqmTDvqEQeX
-         5w9MjmGqgrmUCm/gQSnVbm7EvnqoKLCL6vaChBaYxiytoIdaJzOkWaM5NlxEog8ZQt/v
-         QLq9VpT4lRWB1qmUCm1Gwh3YQtxXvZxtNU5pUTvLqd33LZqF7AuZcEdYbQ5j3luPE/Dh
-         tp5Kp84vAab7AEHVUBd8xPA/a31OOhhxFDc5pMMCh1Ut8sLxsNobqNUtk9W+dDCa80/v
-         46bSRZ9BlPUWrynSsetphSwD6KwB3vG3hbsDmkkWtFaVgjaPcVCPljzJUbK2/fT7cqZN
-         y25A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786666447; x=1787271247;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=6l3D5/SbgYiklv+NVxjZquxsLJXOjF4y5W1m+lLTXkg=;
-        b=owMENYsxYEgEz3sDLR98gTGukrYxp2jhXVmUATPVktKBgqkpP8IlpN9niwu/RiNO6t
-         JyOuXvkDjBwedrnMETgoR0M5TB397o3YGibykfcxpROUwVfwPozcHqaG+PIG5Y/wPVCA
-         72p6LEsKZk1GpS7Et4Oyv30EGLhBBc5+Gtxtbv++KGDjk22VuxqmVaFa+VGzOxS9Wusd
-         p+y4PRhpE0OmB0GXHjzuYNJ/FjeujZKx4j+DE0UExE5oa3n3rx05LO2TzzQz3DOtq+Ge
-         UDkFeL5BIemwMvpN7k6hdxM9rx/Eut38i5VCeg/+Vy7L5HkIGzVvPQEJNA6OzZXxEt3r
-         SDSw==
-X-Forwarded-Encrypted: i=1; AHgh+Rp44YV/0Sj1zZJQyWu8k+YnMCK4OKUk+kvyFFu0Cnl+MCRZ2hjpj5KIplXJci5DhycK7WU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDOb31tz9pOu1xqC4pV/kBAwbajvh0dO8dGvZQj7ARS5bIdi0/
-	KaRjYvU/98UZbD/IzdysfaDVbPh0DWHthbjQYxwqn6HBivccuPZKhfG6
-X-Gm-Gg: AR+sD11cGR/zCfDNehiQdMKyfuaigCFBXzF7+BNyOzbD/UsFNO1PCncuvR/ixFLi6vP
-	xAsRUWxbfBjIsIFneFUCcONpPvUo72eoPpYrec61Zt2Batr5vJfKyWiy+9kwn6iQ8x6x4bNLb5m
-	hzPVk4Ymq7AcxflbuP5zD26/lJzOh0h2ISFvDt/WFq/VEuzc2QX3qaDXPoZPFEQWVjIr36CNk3w
-	C2ib1RwX4FHUwsIW9BNFMuoXiIwhbdcyvm73Jq2/+V9rxe5tSnWfiEUES6wKesiSEtMxq1WVVoO
-	fDc00fEYXhfRujVgAHIeM3zrTK+BrVILRX8hHQQO2xsuR1TpX1O0gq14/t3Te8wYXsnIz93rxqT
-	gNPM1OjjeSKlEAFOMWoLKGIiaG4BM+ffVDjnPOwSrpHC/WqEqDhQeTYuz5Saz5e04Ydw5Tgvu3a
-	A5rIjqNFcxYfZ3pIkqyeeayO4Mub6hyEidXIjUDw7e81JAJGxkSjMIBogxA8BZ33yWNsiUDY3YP
-	H14hpsu1XNs0upFKjbWk6+AFdfZ7ceVWJJbcg/13XzTYg==
-X-Received: by 2002:a05:6a21:3384:b0:3b2:8685:1473 with SMTP id adf61e73a8af0-3cc719c7356mr2129297637.7.1786666447552;
-        Thu, 13 Aug 2026 17:14:07 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:2cae:4c28:2903:b6f9? ([2620:10d:c090:500::7:1c5e])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31ebcb69807sm12372396eec.10.2026.08.13.17.14.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Aug 2026 17:14:06 -0700 (PDT)
-Message-ID: <b698a1805cf0164abdedca01fa12494effce0c49.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 2/4] bpf: Merge pointer types also when both
- are PTR_TO_MEM
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: memxor@gmail.com, bpf@vger.kernel.org
-Date: Thu, 13 Aug 2026 17:14:05 -0700
-In-Reply-To: <20260813204032.644949-2-daniel@iogearbox.net>
-References: <20260813204032.644949-1-daniel@iogearbox.net>
-	 <20260813204032.644949-2-daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f5p8zu0E"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87E3A1F000E9;
+	Fri, 14 Aug 2026 00:21:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786666898;
+	bh=whOIq62BFzpoHcpZWhrOUJKzqaBvWP1ErgiKZJphfZQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=f5p8zu0Epithta/p3NHNTLJly8g26xb6qcSi8HTrUqHaGUAsDI3SahYx/X2zXjLa4
+	 5xOqSr8lBMlHxzufe/eCUNBsjn4NrxVKMsxNGyqqnz3VvcnHItcZ9nbxFN1UOvovVQ
+	 SNAmdh3NUJ3ZveTito8JbJl8yKiAu6iegDv1mcpcrU5zveUFOAgypKzeAbwreLOqTj
+	 jKUsVJFfj1vRqkSevVAGRTd9icxYZyKrfzdwSsWF8hINbFOw7DzsKxb+wfBY4s2Wjt
+	 S7T7H5P1O7Sg1Un2fGs/wRw2Gznam6tW7UJ62sNcfnDC6O9mKrwe5ZaoEqTvXjso/z
+	 1K0CQbuef723w==
+Content-Type: multipart/mixed; boundary="===============4197804010435716492=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Message-Id: <a94164ace11182f9ca7a0fb5e20375fbbcf5bbc51bda5d692cea3ec93a05b790@mail.kernel.org>
+In-Reply-To: <20260813232943.581283-1-andrii@kernel.org>
+References: <20260813232943.581283-1-andrii@kernel.org>
+Subject: Re: [PATCH bpf-next] selftest/bpf: make pyperf600 a success again
+From: bot+bpf-ci@kernel.org
+To: andrii@kernel.org,bpf@vger.kernel.org
+Cc: andrii@kernel.org,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 14 Aug 2026 00:21:37 +0000 (UTC)
 
-On Thu, 2026-08-13 at 22:40 +0200, Daniel Borkmann wrote:
-> save_aux_ptr_type() only reaches the merge when reg_type_mismatch() says
-> the two types are incompatible, and that in turn requires at least one of
-> them to have a base type reg_type_mismatch_ok() rejects. PTR_TO_MEM is
-> not among those, so for two PTR_TO_MEM based types the merge never runs
-> and the recorded type stays the one of whichever path was verified first.
->=20
-> That is ok as long as all PTR_TO_MEM variants can be dereferenced with
-> a plain load, which stopped being true with commit f2362a57aeff ("bpf:
-> allow void* cast using bpf_rdonly_cast()") adding PTR_TO_MEM | MEM_RDONLY
-> > PTR_UNTRUSTED. If the other path saved e.g. a PTR_TO_MEM | MEM_RINGBUF
-> first, then bpf_convert_ctx_accesses() does not rewrite the load into a
-> BPF_PROBE_MEM one, and the untrusted path faults on a plain load.
->=20
-> Fix by merging the two whenever they differ and both are of PTR_TO_MEM or
-> PTR_TO_BTF_ID base instead of keying it off reg_type_mismatch(), so that
-> merge_ptr_types() gets to normalize the result in this case as well. The
-> rejection of genuinely incompatible types is left untouched.
->=20
-> Fixes: f2362a57aeff ("bpf: allow void* cast using bpf_rdonly_cast()")
-> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> ---
+--===============4197804010435716492==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Would the following work?
+>     pyperf600 has been running into 8K BPF_COMPLEXITY_LIMIT_JMP_SEQ limitations
+>     for a long while now, after some internal compiler changes.
+>
+>     Until BPF verifier is bestowed with scalar evolution logic, make that test
+>     actually work by doing what would anyone should do in such situations: by
+>     moving repeatable per-iteration work into independently verified global
+>     functions.
+>
+>     `void *` argument is a problem for global funcs, but a static function wrapper
+>     doing necessary casts and a bit of __arg_nonnull magic dust is all it takes.
+>
+>     Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 
-  diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-  index 1e537bc25ef5..a02914af0f5b 100644
-  --- a/kernel/bpf/verifier.c
-  +++ b/kernel/bpf/verifier.c
-  @@ -17022,6 +17022,8 @@ static bool reg_type_mismatch_ok(enum bpf_reg_typ=
-e type)
-        case PTR_TO_BTF_ID:
-        case PTR_TO_ARENA:
-                return false;
-  +     case PTR_TO_MEM:
-  +             return !may_fault_on_deref(type);
-        default:
-                return true;
+This isn't a bug, but could this sentence be tightened? The phrase "by
+doing what would anyone should do in such situations: by moving ..."
+mixes "what would anyone do" with "what anyone should do" and repeats
+the "by" clause on both sides of the colon. Also, the changelog says
+"global functions" (plural) while the diff adds exactly one global
+function (__get_frame_data).
 
-?
+> diff --git a/tools/testing/selftests/bpf/progs/pyperf.h b/tools/testing/selftests/bpf/progs/pyperf.h
+> index 86484f07e1d19..fd93a96e59015 100644
+> --- a/tools/testing/selftests/bpf/progs/pyperf.h
+> +++ b/tools/testing/selftests/bpf/progs/pyperf.h
+> @@ -85,9 +85,11 @@ static void *get_thread_state(void *tls_base, PidData *pidData)
+>  	return thread_state;
+>  }
+>
+> -static __always_inline bool get_frame_data(void *frame_ptr, PidData *pidData,
+> -					   FrameData *frame, Symbol *symbol)
+> +__weak bool __get_frame_data(long frame_ptr_, PidData *pidData __arg_nonnull,
+> +			     FrameData *frame __arg_nonnull, Symbol *symbol __arg_nonnull)
+>  {
+> +	void *frame_ptr = (void *)frame_ptr_;
+> +
+>  	// read data from PyFrameObject
+>  	bpf_probe_read_user(&frame->f_back,
+>  			    sizeof(frame->f_back),
+
+[ ... ]
+
+> @@ -119,6 +121,12 @@ static __always_inline bool get_frame_data(void *frame_ptr, PidData *pidData,
+>  	return true;
+>  }
+>
+> +static __always_inline bool get_frame_data(void *frame_ptr, PidData *pidData,
+> +					   FrameData *frame, Symbol *symbol)
+> +{
+> +	return __get_frame_data((long)frame_ptr, pidData, frame, symbol);
+> +}
+> +
+>  struct {
+>  	__uint(type, BPF_MAP_TYPE_HASH);
+>  	__uint(max_entries, 1);
+
+This isn't a bug, but was the intent to change all nine pyperf variants?
+pyperf.h already carries a per-variant inlining switch used twice in the
+same file (the #ifdef SUBPROGS block at get_thread_state and the #ifdef
+GLOBAL_FUNC / #elif SUBPROGS block at __on_event). The new __get_frame_data
+is unconditionally __weak, so all nine includers change shape at once,
+including pyperf_subprogs.c and pyperf_global.c whose reason for existing
+is to exercise the static-noinline-subprog and global-func paths
+specifically, and pyperf50/100/180 which exercise full unrolling.
+
+The descriptions in prog_tests/bpf_verif_scale.c that document the
+intended shape of these objects (for pyperf600: "Asm loop count -> 4. 16k
+insns in loop body. Total program size ~82k insns.") are no longer
+accurate for the smaller loop body and are not updated here. The changelog
+only motivates pyperf600.
+
+Would gating the new global function the way get_thread_state()/
+__on_event() are already gated keep the subprogs/global/unrolled variants
+testing what their names suggest? If it is meant to apply everywhere,
+would it be worth refreshing the size comments in bpf_verif_scale.c?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31754735233
+--===============4197804010435716492==--
