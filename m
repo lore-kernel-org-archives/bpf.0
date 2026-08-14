@@ -1,164 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-77.mta0.migadu.com [91.218.175.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD13D335066;
-	Fri, 14 Aug 2026 22:39:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74A7726ED59
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 22:40:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786747167; cv=none; b=Pm7Gcq3Tkkg0YkRFMlMNmEbzsluyqDKL8AlShpKKrf48+lX9uDBEGboe3lbjdDkL20iocL4RBuml+yfXv6vmHyfC8pPiXriLBApm/SAccYMvxskJ1/Kumiub+ibQf69lbqtma3jqhDcnpQHWbhrj3PQNAJmAnW0KjxRbQz6GwWY=
+	t=1786747217; cv=none; b=Lz0xwVYUM80tnlvbsxeTzp//FAWrD8BCDa27ThItk3J9diqm3crudlt190T9OT4Ue2ESXu9b11WV4lvgOobBHAeohOmPVWWMhZm6b4CzwRY9p06uBBF5AWVc3WXgZ2R2q+Cti+lz6LQdb3Z+w82sktazq6YgYiC2qyYFrQbPUU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786747167; c=relaxed/simple;
-	bh=76SNzyY38GOsNKmkWsfVpDZfa9cdPESD4Uc2V7NMthU=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=l0Hnank4/wUSyf0Jgf8T+xDnEK8Il/PTHRblFFI0hXTb2ynNZhVuTrfIo98o9CbvXvwPHQnIyJD1l2ol3QO0mPV6Vo1STgE4VUOX+el9TsHqjPvGoHzVt9X5G9lTWcqn1Ez9wfz6ZA+VKPNdpeQQ/MDX93FQeR+SbqdSU2/JcRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jRxlX8kj; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786747217; c=relaxed/simple;
+	bh=IV2UV3chZCnHrDt7xljiy/hS29K/5lVpa/jkOtIILzE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bLlCjmxDRx7M/gz2kQlBm1cI4wFksq9wnpWko3VW7zb4z3736mqUuY9hRzR5hA51Qe6aCWa/vEl5Yc4Ug29XspXvLgu7FzyRgO6sFzV/0YP0ouD3vbR5A9428yuM6eWZ5LoABWnqASR0D/4tb2HzVVCx2JnqIEsKNiLs2rIxSkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hVvnj2Js; arc=none smtp.client-ip=91.218.175.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jRxlX8kj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4BDE1F000E9;
-	Fri, 14 Aug 2026 22:39:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786747165;
-	bh=DOTNd6p8SlrZsb5048GqhLcptFwNiD5Hv1ZYRf4mH8M=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=jRxlX8kjxZhThbYvx7BQpsX12oaDAYVlK6z/xtJcTvLINNwTslMhhYjAdqBJC3JtH
-	 U2dmDRIesM2ygi1ipFzhNhbH/do3UoIG/47Z8ZjExkFjVgeGqida/vE2nY8RCRVTAB
-	 BEWIaxbwX6+yE0ZHgSsaWPIcTs4pYiJWKJI26rvuqXqvLf2v1w388b1YvuUdWuWc/N
-	 W5a6w6XFyK/aMiOOXEwuHPeev5/vRBSNkUbgtjpAzTcrgek/WlDkoRkIiHxUxRiCq5
-	 7lcYlZ8AFIH6WNoMv48uqYUBthJMxfXXVrwOtjfp88G0utIYbW92h6gn4xvn+Dgnx7
-	 9KkiQv9Iaxpig==
-Content-Type: multipart/mixed; boundary="===============7034129261370145602=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hVvnj2Js"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=IV2UV3chZCnHrDt7xljiy/hS29K/5lVpa/jkOtIILzE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1786747211; v=1; x=1787352011;
+ b=hVvnj2JsARtvTrsb9GgO2VwIOTbxEOMDJMc547RA3XApTSQcV7f7z63C5DvHJeiNptKRoEds
+ xaLjjopOmOzQgnouWjOx578577f1YqjwFaIrkFDcjyr4kow/SlIpPEIBxJ+DLCdRf2nyITOZrmt
+ rrmvPwqJXdziT15crSBuHZs0=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from [IPV6:2a03:83e0:1251:27:9295:e585:8bf6:fa24] (2620:10d:c090:500::6:7be4)
+	by smtp.migadu.com with ESMTPS id f4b8fbe0aa8df799;
+	Fri, 14 Aug 2026 22:40:00 +0000
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <f651b905-eef2-41a3-ad55-ce2adede5d9c@linux.dev>
+Date: Fri, 14 Aug 2026 15:39:54 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <67663b343f4aa2719eee273f10ca74a469fa1ab5e8772933083f51b62284a59a@mail.kernel.org>
-In-Reply-To: <20260814220254.3797467-3-vineet.gupta@linux.dev>
-References: <20260814220254.3797467-3-vineet.gupta@linux.dev>
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Check per-CPU address resolution per register
-From: bot+bpf-ci@kernel.org
-To: vineet.gupta@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,x86@kernel.org,stable@vger.kernel.org,vineet.gupta@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 14 Aug 2026 22:39:24 +0000 (UTC)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Check per-CPU address
+ resolution per register
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260814220254.3797467-1-vineet.gupta@linux.dev>
+ <20260814220254.3797467-3-vineet.gupta@linux.dev>
+ <20260814222652.7600C1F000E9@smtp.kernel.org>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <20260814222652.7600C1F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
---===============7034129261370145602==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 
-> commit fe4e8b7aecfff8c04bc3c2f472f9243928effc6e
+
+On 8/14/26 3:26 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> - [High] The test uses an unrecognized section name `SEC(".percpu")` for its global variable, preventing libbpf from loading the test.
+> - [High] The test's inline assembly is missing the `mov_percpu_addr` instruction, causing the `__jited` assertions to always fail.
+> --
+>
+> --- Patch [2]: [PATCH bpf v3 2/2] selftests/bpf: Check per-CPU address resolution per register ---
+> commit 94ba39b00c54962b463da6e18c62f89978f29a3f
 > Author: Vineet Gupta <vineet.gupta@linux.dev>
-> Date:   Fri Aug 14 15:02:54 2026 -0700
 >
->     selftests/bpf: Check per-CPU address resolution per register
+> selftests/bpf: Check per-CPU address resolution per register
 >
->     An ld_imm64 of a per-CPU map value is followed by a mov_percpu_addr that
->     reuses the same register, so which register the address lands in decides
->     how the JIT encodes the add. Getting the REX prefix wrong there is
->     invisible to a functional test unless the address happens to land in an
->     extended register, which is why this went unnoticed.
+> This commit adds a BPF selftest to verify that the x86 JIT correctly encodes
+> the per-CPU address resolution. It loads a .percpu variable into all registers
+> and matches the JITed add instruction against the expected register.
+>
+>> diff --git a/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c b/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c
+>> new file mode 100644
+>> index 0000000000000..967f4e6e3a490
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c
+>> @@ -0,0 +1,72 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +
+>> +#include <vmlinux.h>
+>> +#include <bpf/bpf_helpers.h>
+>> +#include "bpf_misc.h"
+>> +
+>> +#if defined(__TARGET_ARCH_x86)
+>> +
+>> +int percpu_data SEC(".percpu");
+> [Severity: High]
+> Does libbpf support the SEC(".percpu") section name?
 
-Does this mechanism actually exist in the tree?
+Yes it does:
 
-There is no verifier or JIT path that follows an ld_imm64 of a per-CPU map
-value with a mov_percpu_addr on the same register. BPF_MOV64_PERCPU_REG has
-exactly four call sites:
+   - tools/lib/bpf/libbpf.c:544 — #define PERCPU_SEC ".percpu"
 
-  kernel/bpf/arraymap.c:288   *insn++ = BPF_MOV64_PERCPU_REG(BPF_REG_0, BPF_REG_0);
-  kernel/bpf/hashtab.c:2429   *insn++ = BPF_MOV64_PERCPU_REG(BPF_REG_0, BPF_REG_0);
-  kernel/bpf/fixups.c:2115    insn_buf[1] = BPF_MOV64_PERCPU_REG(BPF_REG_0, BPF_REG_0);
-  kernel/bpf/fixups.c:2136    insn_buf[1] = BPF_MOV64_PERCPU_REG(BPF_REG_0, BPF_REG_0);
+>
+> When bpf_object__elf_collect runs, it skips the .percpu section as it doesn't
+> match known data section prefixes like .data. Later, when
+> bpf_object__relocate_data processes the R_BPF_64_64 relocation for the
+> percpu_data load, bpf_object__section_to_libbpf_map_type returns
+> LIBBPF_MAP_UNSPEC.
+>
+> Since the section is not the BTF maps section, this results in a bad map relo
+> warning and returns -LIBBPF_ERRNO__RELOC, causing the test to fail to load.
+>
+> [ ... ]
+>
+>> +__naked void percpu_addr(void)
+>> +{
+>> +	asm volatile ("					\
+>> +	r0 = %[percpu_data] ll;				\
+>> +	r1 = %[percpu_data] ll;				\
+> [Severity: High]
+> Are the mov_percpu_addr instructions missing from this inline assembly?
 
-All four use BPF_REG_0 as both source and destination. BPF_REG_0 maps to
-RAX, so is_ereg() is always false and the REX.R encoding path is
-unreachable from any loadable program.
+They are inserted by the verifier.
 
-An ld_imm64 of a percpu ksym goes through check_pseudo_btf_id() in the
-verifier, which only sets aux->btf_var.reg_type = PTR_TO_BTF_ID |
-MEM_PERCPU. No mov_percpu_addr insn is inserted after it. The per-CPU
-base is added later by bpf_per_cpu_ptr() or bpf_this_cpu_ptr() kfuncs,
-which return in R0.
+Thx,
+-Vineet
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c b/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c
-> new file mode 100644
-> index 000000000000..967f4e6e3a49
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c
-> @@ -0,0 +1,72 @@
+> The commit message notes that an ld_imm64 of a per-CPU map value is followed
+> by a mov_percpu_addr, but the assembly here only emits a BPF_LD_IMM64
+> instruction.
+>
+> The verifier processes this as BPF_PSEUDO_MAP_VALUE and converts it to a
+> standard 64-bit immediate load. Without the BPF_MOV64_PERCPU_REG
+> (mov_percpu_addr) instruction, the x86 JIT emits movabsq but never emits the
+> addq %gs:..., %reg instruction. This causes the __jited assertions to fail.
+>
+>> +	r2 = %[percpu_data] ll;				\
+>> +	r3 = %[percpu_data] ll;				\
+>> +	r4 = %[percpu_data] ll;				\
+> [ ... ]
+>
 
-[ ... ]
-
-> +SEC("raw_tp")
-> +__description("per-CPU address resolution")
-> +__success
-> +__arch_x86_64
-> +__jited("	movabsq	$0x{{.*}}, %rax")
-> +__jited("	addq	%gs:{{.*}}, %rax")
-> +__jited("	movabsq	$0x{{.*}}, %rdi")
-> +__jited("	addq	%gs:{{.*}}, %rdi")
-> +__jited("	movabsq	$0x{{.*}}, %rsi")
-> +__jited("	addq	%gs:{{.*}}, %rsi")
-> +__jited("	movabsq	$0x{{.*}}, %rdx")
-> +__jited("	addq	%gs:{{.*}}, %rdx")
-> +__jited("	movabsq	$0x{{.*}}, %rcx")
-> +__jited("	addq	%gs:{{.*}}, %rcx")
-> +__jited("	movabsq	$0x{{.*}}, %r8")
-> +__jited("	addq	%gs:{{.*}}, %r8")
-> +__jited("	movabsq	$0x{{.*}}, %rbx")
-> +__jited("	addq	%gs:{{.*}}, %rbx")
-> +__jited("	movabsq	$0x{{.*}}, %r13")
-> +__jited("	addq	%gs:{{.*}}, %r13")
-> +__jited("	movabsq	$0x{{.*}}, %r14")
-> +__jited("	addq	%gs:{{.*}}, %r14")
-> +__jited("	movabsq	$0x{{.*}}, %r15")
-> +__jited("	addq	%gs:{{.*}}, %r15")
-> +__naked void percpu_addr(void)
-> +{
-> +	asm volatile ("					\
-> +	r0 = %[percpu_data] ll;				\
-> +	r1 = %[percpu_data] ll;				\
-> +	r2 = %[percpu_data] ll;				\
-> +	r3 = %[percpu_data] ll;				\
-> +	r4 = %[percpu_data] ll;				\
-> +	r5 = %[percpu_data] ll;				\
-> +	r6 = %[percpu_data] ll;				\
-> +	r7 = %[percpu_data] ll;				\
-> +	r8 = %[percpu_data] ll;				\
-> +	r9 = %[percpu_data] ll;				\
-> +	r0 = 0;						\
-> +	exit;						\
-> +"	:
-> +	: __imm_addr(percpu_data)
-> +	: __clobber_all);
-> +}
-
-Can these 'addq %gs:..., %<reg>' assertions ever match?
-
-A bare sequence of ten ld_imm64s produces ten 'movabsq' lines and zero
-'addq %gs:' lines. The verifier does not insert a mov_percpu_addr insn
-after an ld_imm64 of a percpu ksym. The per-CPU base is added by the
-bpf_per_cpu_ptr() or bpf_this_cpu_ptr() kfuncs, which return in R0.
-
-So the JIT output would be ten consecutive 'movabsq' instructions with no
-'addq' between them. The test expects alternating 'movabsq' and 'addq'
-lines, and consecutive __jited tags must match consecutive disassembly
-lines unless a '...' tag is inserted.
-
-Even if a mov_percpu_addr could be generated, all four call sites hardcode
-BPF_REG_0, so only the %rax form would ever be reachable.
-
-This means the test cannot cover the REX.R fix in acdf39f8be46 ("bpf, x86:
-Fix per-CPU address resolution into an extended register").
-
-Should there be a Link: or Fixes: tag referencing acdf39f8be46, and does
-the commit message need to explain what new path makes the destination
-register reachable?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31845422431
---===============7034129261370145602==--
