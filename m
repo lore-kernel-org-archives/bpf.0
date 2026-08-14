@@ -1,234 +1,126 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACE054908D6
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 17:02:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73C9F47254A;
+	Fri, 14 Aug 2026 17:05:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786726958; cv=none; b=CTm33DnXvbn8SK4ahKHqA4EmOtkJxhpXK8TP3x1qR1iz3W9BPr/lJj14b7KK2JL/zzCQks78aJpPusZxr051mScb5cK/XUXvmryQkA/TCz9XcixOhmvVv/JMWneLKPiXRJjoZLHieHUJnWxzvTshtpjmVxjI2ApHQ6mXvSnQQ9E=
+	t=1786727112; cv=none; b=E6PHKzOcrDl8Ny33QEVfIb1KIMHvF+gYQY/fZ7V6Rjl7iYrGTJgLpIWwxjGOr4qfLXKeM5QPX1VB0M/mSiOTh6xoUNhVx1NSS94mFYTDebRgPCibJ+nfM3YjaZXMdWafdAF5Zknq9F9DzfzTKi0opTUpi0jD4hbbNFocBAK4/nQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786726958; c=relaxed/simple;
-	bh=V3nvXf3+/CFfWZbw5zMeH8gJw9d23Xs5gUZiRrc+CtI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SXbA41Bd+1fmitHFMmRbVRyhvyyRqUENIXhQH2dlkFtVApHpTnHlaasV3epX3xReyVobZZZm0PiZDZcM16bbZyo6HvTNo/3743vUmUMD0tTxp+Wq95CtfYzyOim2C+VlYULudZhmVPVD2iSzTrdB2NF+8Al9pVMMJpJDX4NAsF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=be2E5FL4; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786727112; c=relaxed/simple;
+	bh=hmk5DMYYPmU0hVlqz0ianL+11xxxbuG8IpeYoMizpfc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=i51n+oajP7kNHmIkJJ4awp6lIJuf/o0bg+nMrqjPHPFBylJ2g95PSBimgUGJ8v4HS9bDfd2wlcbVGvQxEui3mgSpoY2Jq31AmAVQmEHh/Oehi92JbYU+ULcCG+wMEJLdAZ2dhXaChREWbQ0fJzwFV1Qlg7v3L35FPBm+CLId2FU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ebwNvCqU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="be2E5FL4"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4998590d392so13200035e9.0
-        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 10:02:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786726955; x=1787331755; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=IF42ZuIW9yF9A7a9sUDgQVbQl7kYmWIXZAUKHoESs64=;
-        b=be2E5FL422+5MsZjYpw2lonQOTFDa2GD7ETWm9FgaGjgqsQXgd9lZVOZlpFH9WYJf7
-         tEdg20iQ0LCNyPHfyxv+6P/HODDd0EWRlXvdt5g9FhduCuOWW0NpQEG+Nh0s0fix2vWD
-         nFFVV9fgLoY8GmO/XEq1m4nps9WrGKGTVmVI3izxCUCmvUkCx2kP4Zbdc+PQqxIY/uDR
-         h+Roz5/K96FNJbUC0QWSskYXHolOlIrc/IqgbeK6Z7XUvjAF1L/KWeywBqHhWfg+NGMo
-         mWnGXSLznhBVD4w0I/CLnuTYQwrMeZ93lDa/g3Y7Ja01WOXi+dY+JIyvUl8agXI/MjfB
-         bNxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786726955; x=1787331755;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=IF42ZuIW9yF9A7a9sUDgQVbQl7kYmWIXZAUKHoESs64=;
-        b=jeIRxvclTN4ER9+uxvRBFMdnENxB+Kn/A1UxAJ8qSpd9qox1hor9TLCcXiBGy+yFnb
-         KfOfLmf1HSsepsYgXDCug69Cnb38VT7yRgUTK6OLDKp8erPO61F2ojoINqANLMwCwsRc
-         3xacer8IzF2L3V43GcGBvUtUyggI69/SZWc9xbBUlQoM5EjkjnBrlR+EGyTZMQItV2YE
-         vOr1yS0oQlEHmiR9sCij3ubdhVySsI2th2d1qaGPgX/nIEbBxC3hn2IBfjikkRRYj25m
-         qWQ2Q0pw9VRFmNlYjH53XtUQMkbtdsLGFAB57ctirNv5TcHH6Ybua0sHQtKvHPOw15Og
-         5oOw==
-X-Gm-Message-State: AOJu0YzIHr2wBjzNueti7Kk5m+omNmWH7U3YwiveyXVmLMuzbhYwvm9k
-	O4bQ4xf0EI6nk1fOHjDh73N3e9rMb8d5NzmFLwmrNPMR7vU1Xq+fCp1d
-X-Gm-Gg: AR+sD13kuBXGaaIim+5mvcOASnGAOrqnS0oimVByGeac66LcBVmAySkgAar/L4dcofo
-	IrEpXSRovLYO/fGCLr9JhhHcorA9yrrZpgaZgFdUEpW1vCbDcFMNioskobbB5QjR/VLVv/Npe5t
-	vISBR+Ce7qrjS5fABam/7S0r1G/++B1Ve4Gih6YHp4+kJ7ZEbOUABwADKDBvrdcpjcJjl1/uVyc
-	BEYHNrhGolK1cFRqM5UQ2UF2BcbtTtHxBRGy5taLa1DYDpPGLrnfcC9d+HXp4Wqp6f1dAaLAz8w
-	dmTkqn8lsDbcwZdOgh7phHur5dxC2QK2Fi1dxJe6A4YPYx7NxOEGmkY6WYmxRmS2VJqYj0jc04p
-	64J6TaTb3z70TKp4DZ+Qzb06wLKfiSn96oDzcG+px2M8qdJHvZj6PF83Om7gW4o8yxumDjUNeN+
-	ko20EoGvHso2VELEtzPzf0GL4oGDhh6RQW9tic2CMcnpgiCKuErQfNMv+k/moMfci7cdIhRcM7W
-	q980MI7vgDRdtg7+Y1/dsUYaWYXpB8=
-X-Received: by 2002:a05:600c:8b05:b0:499:7a15:fcec with SMTP id 5b1f17b1804b1-499879923ecmr110696545e9.13.1786726954708;
-        Fri, 14 Aug 2026 10:02:34 -0700 (PDT)
-Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815f2c18cbsm8431365f8f.29.2026.08.14.10.02.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Aug 2026 10:02:34 -0700 (PDT)
-Date: Fri, 14 Aug 2026 19:02:32 +0200
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, andrew+netdev@lunn.ch, andrii@kernel.org,
-	ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-	eddyz87@gmail.com, edumazet@google.com, john.fastabend@gmail.com,
-	kuba@kernel.org, liamwisehart@meta.com, martin.lau@linux.dev,
-	pabeni@redhat.com, song@kernel.org, netdev@vger.kernel.org,
-	sdf.kernel@gmail.com, ameryhung@gmail.com, kuniyu@google.com,
-	memxor@gmail.com, jiayuan.chen@linux.dev, sdf@fomichev.me,
-	martin.lau@kernel.org, yonghong.song@linux.dev, clm@meta.com,
-	ihor.solodrai@linux.dev
-Subject: Re: [PATCH bpf-next v7 5/5] selftests/bpf: Add ksock test for async
- callback guard
-Message-ID: <an9KKJtU5XrastyR@gmail.com>
-References: <20260813110540.103550-6-mahe.tardy@gmail.com>
- <62274a8d6156015b945bc8e7b5b8c2962332b104e3484a5a2d0e0b0c95b531b1@mail.kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ebwNvCqU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4E461F000E9;
+	Fri, 14 Aug 2026 17:05:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786727111;
+	bh=X/oq0HBoJMRapoD7XWtIdy5xy+Ds8RrmKGd6Lc/Pysc=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=ebwNvCqUju/eAaqKWY2V19wi/U9Lgt/o8wQot0+G2TbFHEvlXiLg0BCdU9eT+x79Y
+	 YyWDrqJD1bqXn15z4tYiP2yWmfOxFMSrwUCq+0KgINHhXxRzNnMatX0TyRRB+EVWr3
+	 +RDRwR8uLF1gVT4ee1tcNIxVuuzuMdm3Vkn98rX6Y4j/P1eHQqd9CCAgDe0LDC9NXc
+	 6Mb8UdJT55rfklnAnJd9Y0Bc78PiZi6kd65v64/v27mEyX429i9ys+xvoeva0cmCrh
+	 8iLtVm32WSB26NoDgxdTTWuqNbB89txZW4zVjbp+DF6FIe2oq9B2BC2FxY7CrfVDUK
+	 Tg2xmyIrwXcGA==
+Content-Type: multipart/mixed; boundary="===============3060449598212239265=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <62274a8d6156015b945bc8e7b5b8c2962332b104e3484a5a2d0e0b0c95b531b1@mail.kernel.org>
+Message-Id: <a13e1c45f40c04350b700e6b2ad5bae5dc72c8402ec59b0edbfb7907e90ca13e@mail.kernel.org>
+In-Reply-To: <20260814075054.507089-4-ziyang.meme@gmail.com>
+References: <20260814075054.507089-4-ziyang.meme@gmail.com>
+Subject: Re: [PATCH v3 3/4] selftests/hid: build the BPF program via the shared lib.bpf.mk
+From: bot+bpf-ci@kernel.org
+To: ziyang.meme@gmail.com,shuah@kernel.org,tj@kernel.org,hannes@cmpxchg.org,mkoutny@suse.com,jikos@kernel.org,bentiss@kernel.org,void@manifault.com,eddyz87@gmail.com
+Cc: vmalik@redhat.com,arighi@nvidia.com,changwoo@igalia.com,mhocko@kernel.org,roman.gushchin@linux.dev,shakeel.butt@linux.dev,muchun.song@linux.dev,akpm@linux-foundation.org,inwardvessel@gmail.com,mykolal@meta.com,nathan@kernel.org,ziyang.meme@gmail.com,kernel-team@meta.com,linux-kselftest@vger.kernel.org,cgroups@vger.kernel.org,linux-input@vger.kernel.org,sched-ext@lists.linux.dev,linux-mm@kvack.org,bpf@vger.kernel.org,llvm@lists.linux.dev,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 14 Aug 2026 17:05:09 +0000 (UTC)
 
-On Thu, Aug 13, 2026 at 12:13:31PM +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/ksock_wq.c b/tools/testing/selftests/bpf/prog_tests/ksock_wq.c
-> > new file mode 100644
-> > index 0000000000000..d6dc20b8f95bb
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/prog_tests/ksock_wq.c
-> > @@ -0,0 +1,45 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/* Copyright (c) 2026 Isovalent */
-> > +
-> > +#include <unistd.h>
-> > +
-> > +#include "test_progs.h"
-> > +#include "ksock_wq.skel.h"
-> > +
-> > +#define CALLBACK_WAIT_RETRIES 1000
-> > +#define CALLBACK_WAIT_US 1000
-> > +
-> > +void test_ksock_wq(void)
-> 
-> This commit adds a new standalone test file for the workqueue guard check.
-> The same directory already has prog_tests/ksock.c (from commit a529f8c4d088b
-> two patches earlier in this series) which is the home of the ksock kfunc
-> tests. Notably, the immediately preceding commit in this series
-> (75ef545fdff15) added its negative test as a new function inside the
-> existing prog_tests/ksock.c rather than creating a new file. A subsystem
-> pattern flags this as potentially concerning: should test_ksock_wq() be
-> another function/subtest in prog_tests/ksock.c, consistent with how patch
-> 4 of this same series added its case? The split means the ksock feature's
-> tests are now across two files with generated test names 'ksock_lsm',
-> 'ksock_lsm_verifier' and 'ksock_wq' rather than grouped together.
+--===============3060449598212239265==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Yes indeed this one was added in a separate file, not sure it's
-important.
+> The generated hid.skel.h public API is same before and after, hid_bpf
+> and hidraw are built and linked the same way.
 
-> 
-> > +{
-> > +	LIBBPF_OPTS(bpf_test_run_opts, opts);
-> > +	struct ksock_wq *skel;
-> > +	u32 callback_done;
-> > +	int err, i;
-> > +
-> > +	skel = ksock_wq__open_and_load();
-> > +	if (!ASSERT_OK_PTR(skel, "ksock_wq open and load"))
-> > +		return;
-> > +
-> > +	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.ksock_wq_start),
-> > +				     &opts);
-> > +	if (!ASSERT_OK(err, "run ksock_wq_start"))
-> > +		goto out;
-> > +	if (!ASSERT_OK(opts.retval, "ksock_wq_start retval"))
-> > +		goto out;
-> > +
-> > +	for (i = 0; i < CALLBACK_WAIT_RETRIES; i++) {
-> > +		if (__atomic_load_n(&skel->bss->callback_done, __ATOMIC_ACQUIRE))
-> > +			break;
-> > +		usleep(CALLBACK_WAIT_US);
-> > +	}
-> > +	callback_done = __atomic_load_n(&skel->bss->callback_done,
-> > +					__ATOMIC_ACQUIRE);
-> > +	if (!ASSERT_EQ(callback_done, 1, "workqueue callback completed"))
-> > +		goto out;
-> > +
-> > +	ASSERT_EQ(skel->bss->create_err, -EOPNOTSUPP,
-> > +		  "workqueue create rejected");
-> > +
-> > +out:
-> > +	ksock_wq__destroy(skel);
-> > +}
-> > diff --git a/tools/testing/selftests/bpf/progs/ksock_wq.c b/tools/testing/selftests/bpf/progs/ksock_wq.c
-> > new file mode 100644
-> > index 0000000000000..16a1873d132ed
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/progs/ksock_wq.c
-> > @@ -0,0 +1,62 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/* Copyright (c) 2026 Isovalent */
-> > +
-> > +#include "vmlinux.h"
-> > +#include <bpf/bpf_helpers.h>
-> > +#include "bpf_experimental.h"
-> > +#include "bpf_tracing_net.h"
-> > +#include "errno.h"
-> > +#include "ksock_common.h"
-> > +
-> > +struct ksock_wq_value {
-> > +	struct bpf_wq work;
-> > +};
-> > +
-> > +struct {
-> > +	__uint(type, BPF_MAP_TYPE_ARRAY);
-> > +	__uint(max_entries, 1);
-> > +	__type(key, u32);
-> > +	__type(value, struct ksock_wq_value);
-> > +} work_map SEC(".maps");
-> > +
-> > +int create_err;
-> > +u32 callback_done;
-> > +
-> > +static int ksock_wq_callback(void *map, int *key, void *value)
-> > +{
-> > +	struct bpf_ksock_create_opts opts = {
-> > +		.family = AF_INET,
-> > +		.type = SOCK_DGRAM,
-> > +		.protocol = IPPROTO_UDP,
-> > +	};
-> > +	struct bpf_ksock *ks;
-> > +	int err = 0;
-> > +
-> > +	ks = bpf_ksock_create(&opts, sizeof(opts), &err);
-> > +	if (ks)
-> > +		bpf_ksock_release(ks);
-> > +	create_err = err;
-> > +	__sync_fetch_and_add(&callback_done, 1);
-> > +	return 0;
-> > +}
-> 
-> [ ... ]
-> 
-> >     selftests/bpf: Add ksock test for async callback guard
-> >
-> >     Because the kfuncs are going through LSM hooks, allowing their use via
-> >     workqueue callbacks would expose the wrong credentials. This test
-> >     ensures the kfunc are preventing any use from these contexts.
-> 
-> This isn't a bug, but the changelog says the test "ensures the kfunc are
-> preventing any use from these contexts", which reads as covering the
-> whole kfunc set. The added program exercises exactly one kfunc from the
-> workqueue callback, bpf_ksock_create(). The other two kfuncs that carry
-> the same runtime guard, bpf_ksock_connect() and bpf_ksock_send(), are not
-> exercised from an async callback anywhere in the tree. Would it be worth
-> either narrowing the changelog to say the test covers bpf_ksock_create(),
-> or extending the callback to also call bpf_ksock_send() on a stashed kptr
-> so all three guarded kfuncs are pinned?
+This isn't a bug, but could the changelog mention that the BPF compile
+flags change with the shared fragment (added -Wall/-std=gnu11/
+-fno-strict-aliasing, added include paths, auto-detected -mcpu instead
+of a hardcoded v3) rather than describing the build as unchanged?
 
-Yeah, eventually they all call bpf_ksock_has_user_task_context() so the
-runtime guard tested is the same.
+The flags used to compile progs/hid.c do change: the shared BPF_CFLAGS
+add -Wall, -std=gnu11, -fno-strict-aliasing, -I$(APIDIR)
+-I$(TOOLSINCDIR) and the clang system-include set (which the old
+Makefile computed into CLANG_SYS_INCLUDES but never passed), and -mcpu
+becomes auto-detected (v3/v2) instead of hardcoded -mcpu=v3. The
+-Wno-unused-variable line the patch has to add is direct evidence that
+the compile flags are not identical.
 
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31694719067
+> diff --git a/tools/testing/selftests/hid/.gitignore b/tools/testing/selftests/hid/.gitignore
 
+[ ... ]
+
+> diff --git a/tools/testing/selftests/hid/Makefile b/tools/testing/selftests/hid/Makefile
+> index 2f423de83147..1d7c64ec992c 100644
+> --- a/tools/testing/selftests/hid/Makefile
+> +++ b/tools/testing/selftests/hid/Makefile
+
+[ ... ]
+
+> +# progs/hid.c is built into a skeleton by ../lib.bpf.mk.  hid keeps the legacy
+> +# progs/<name>.c layout, hence BPF_PROG_EXT.  BPF_EXTRA_HDRS is deferred: it
+> +# uses $(BPFDIR), which lib.bpf.mk defines.
+> +BPF_SRCS       := $(wildcard progs/*.c)
+> +BPF_PROG_EXT   := .c
+> +BPF_EXTRA_HDRS  = $(wildcard progs/*.h) $(wildcard $(BPFDIR)/hid_bpf_*.h) \
+> +		  $(wildcard $(BPFDIR)/*.bpf.h)
+> +# hid.c predates the shared -Wall and has a few unused locals.
+> +BPF_EXTRA_CFLAGS := -Wno-unused-variable
+
+This isn't a bug, but would dropping the four unused locals in
+progs/hid.c (the `int i` in the three hid_user_* syscall programs and
+the unused `int ret` in hid_test_hidraw_output_report) let this
+directory build without the -Wno-unused-variable override?
+
+The shared lib.bpf.mk compiles BPF objects with -Wall -Werror, and this
+patch reacts by permanently disabling -Wunused-variable for every BPF
+program in this directory. The trigger is exactly four dead locals:
+`int i` in hid_user_raw_request(), hid_user_output_report() and
+hid_user_input_report(), plus an `int ret;` in
+hid_test_hidraw_output_report() that is never assigned or read.
+Deleting those four declarations would let the directory build with the
+shared warning set unmodified, and would keep the suppression from
+silently hiding unused locals in BPF programs added here later.
+
+[ ... ]
+
+> +EXTRA_CLEAN += feature bpftool $(addprefix $(OUTPUT)/,*.o no_alu32)
+
+This isn't a bug, but since the no_alu32 build rule goes away in this
+patch, is the `no_alu32` (and `feature`) entry in EXTRA_CLEAN still
+needed, or could this line shrink to just `$(OUTPUT)/*.o`?
+
+The rewritten EXTRA_CLEAN keeps the `no_alu32` entry, but this patch
+removes the only thing that could ever have produced such an artifact:
+the CLANG_NOALU32_BPF_BUILD_RULE definition (and hid never had the
+selftests/bpf per-flavor subdirectory machinery that creates a
+no_alu32/ tree in the first place). Now that the flavor rule is gone,
+nothing in this directory can create $(OUTPUT)/no_alu32. The `feature`
+entry is in a similar position - libbpf/bpftool feature-detection
+output lands under $(BUILD_DIR)/libbpf/, which is already covered by
+the $(SCRATCH_DIR) entry that lib.bpf.mk adds.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31820214629
+--===============3060449598212239265==--
