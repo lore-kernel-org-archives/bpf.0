@@ -1,133 +1,95 @@
-Received: from mta0.migadu.com (out-77.mta0.migadu.com [91.218.175.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74A7726ED59
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 22:40:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C7FE26ED59
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 22:40:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786747217; cv=none; b=Lz0xwVYUM80tnlvbsxeTzp//FAWrD8BCDa27ThItk3J9diqm3crudlt190T9OT4Ue2ESXu9b11WV4lvgOobBHAeohOmPVWWMhZm6b4CzwRY9p06uBBF5AWVc3WXgZ2R2q+Cti+lz6LQdb3Z+w82sktazq6YgYiC2qyYFrQbPUU0=
+	t=1786747259; cv=none; b=Uq1bFjJMj11cC8CNGKEPiCyreTbESPUz5jHzFZnUpEljUqbUT6VHbGW6f90OnnC4WU2SlfyGS1sYvuycXdVuTnP5SKCXpt14BroEmEuFJ+2cgpA81DhaemU4IABY3WI+I5kZflyZl3/4W/HTODWVzMd3jLq62zrKpNQ9UEDywZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786747217; c=relaxed/simple;
-	bh=IV2UV3chZCnHrDt7xljiy/hS29K/5lVpa/jkOtIILzE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bLlCjmxDRx7M/gz2kQlBm1cI4wFksq9wnpWko3VW7zb4z3736mqUuY9hRzR5hA51Qe6aCWa/vEl5Yc4Ug29XspXvLgu7FzyRgO6sFzV/0YP0ouD3vbR5A9428yuM6eWZ5LoABWnqASR0D/4tb2HzVVCx2JnqIEsKNiLs2rIxSkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hVvnj2Js; arc=none smtp.client-ip=91.218.175.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1786747259; c=relaxed/simple;
+	bh=IeCOwNfz/b0sVItIu2e7aXW9GcF38NDSB+HgI8MLBNo=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=TnG16g1eSW8Uhf6JQXeq8kwqgYLYDSeM2L6K93YhpmkzgfNUm5NgId3U3nEmIYvigTZ22NorT1lqg0GTYgyazbtdIngUozWeVqEAqTvYL4HidDsIzZbEsWEBnM4UVL4Ylf5rsLGs0hFQrM3wkvdHqP827FE3KCMUMVXq+Ta8R70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LrYt83XY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hVvnj2Js"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=IV2UV3chZCnHrDt7xljiy/hS29K/5lVpa/jkOtIILzE=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786747211; v=1; x=1787352011;
- b=hVvnj2JsARtvTrsb9GgO2VwIOTbxEOMDJMc547RA3XApTSQcV7f7z63C5DvHJeiNptKRoEds
- xaLjjopOmOzQgnouWjOx578577f1YqjwFaIrkFDcjyr4kow/SlIpPEIBxJ+DLCdRf2nyITOZrmt
- rrmvPwqJXdziT15crSBuHZs0=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [IPV6:2a03:83e0:1251:27:9295:e585:8bf6:fa24] (2620:10d:c090:500::6:7be4)
-	by smtp.migadu.com with ESMTPS id f4b8fbe0aa8df799;
-	Fri, 14 Aug 2026 22:40:00 +0000
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <f651b905-eef2-41a3-ad55-ce2adede5d9c@linux.dev>
-Date: Fri, 14 Aug 2026 15:39:54 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LrYt83XY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87CC11F000E9;
+	Fri, 14 Aug 2026 22:40:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786747258;
+	bh=uVzmKXUXQCAKX+3M7RqMNcZQ+Oz/uDvi525yZEig+pg=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=LrYt83XYKwzRchJPC25nyFK/ZVg97P8/uEGAFoqACdjBnhg6RX1oe5qFVRaRyzOyH
+	 wRhrSYrnu0YgrHVTTkna1i6Ag3gnB8S0cran9ii8eIxQpZNgIQhW/fNZNhfc7x7qKh
+	 yeETOkic/swG5WK9Cj2ZLQZfc9S9S0lgG6HW6hsr/1op9yX6KEk60jjFSedonudghD
+	 BUdTKB7mHc3H+aiKU35rKZcOHICQO3doxGDbY4Z3No6EDv/xoOOLMtjqt+mm2yUjMM
+	 O7kHDDc+tm1i+NOvRCqyyVYZ8IkrWoAV8rItstW9f+o4V0+0edMwb8+dLWuZZu/x0M
+	 mxCbveTuCYUSQ==
+Content-Type: multipart/mixed; boundary="===============7828696089515052364=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Check per-CPU address
- resolution per register
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260814220254.3797467-1-vineet.gupta@linux.dev>
- <20260814220254.3797467-3-vineet.gupta@linux.dev>
- <20260814222652.7600C1F000E9@smtp.kernel.org>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <20260814222652.7600C1F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Message-Id: <5b81c3f28a2ca32623bdc5e1e2ca55d797d37739033a0ef1338f1c93bd6911bc@mail.kernel.org>
+In-Reply-To: <20260814215301.709827-3-daniel@iogearbox.net>
+References: <20260814215301.709827-3-daniel@iogearbox.net>
+Subject: Re: [PATCH bpf-next v2 3/6] bpf: Reject a store through a fault prone pointer
+From: bot+bpf-ci@kernel.org
+To: daniel@iogearbox.net,eddyz87@gmail.com
+Cc: memxor@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 14 Aug 2026 22:40:57 +0000 (UTC)
+
+--===============7828696089515052364==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 814096ed835d..cbbb0c82d22c 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -5788,7 +5788,7 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+>  		return -EACCES;
+>  	}
+>
+> -	if (atype != BPF_READ && (type_flag(reg->type) & PTR_UNTRUSTED)) {
+> +	if (atype != BPF_READ && bpf_may_fault_on_deref(reg->type)) {
+>  		verbose(env, "only read is supported\n");
+>  		return -EACCES;
+>  	}
+
+Does this change also reject HID-BPF writes to struct hid_device fields?
+
+The HID struct_ops hid_bpf_ops_btf_struct_access() whitelists writes to
+hid_device::name, ::uniq, and ::phys via WRITE_RANGE entries in
+drivers/hid/bpf/hid_bpf_struct_ops.c. A HID program receives a
+'struct hid_bpf_ctx *' argument that is PTR_TO_BTF_ID | PTR_TRUSTED, but
+walking hctx->hid produces a bare PTR_TO_BTF_ID because
+struct hid_bpf_ctx appears in no BTF_TYPE_SAFE_TRUSTED list in
+check_ptr_to_btf_access().
+
+Before this commit, 'hctx->hid->name[i] = c' passed the PTR_UNTRUSTED
+test and reached env->ops->btf_struct_access(), where
+hid_bpf_ops_btf_struct_access() returned 0 for offsets in the whitelisted
+ranges and the store succeeded. After this commit,
+bpf_may_fault_on_deref(PTR_TO_BTF_ID) is true and the store is rejected
+with 'only read is supported' before the btf_struct_access callback runs.
+
+The three WRITE_RANGE(hid_device, ...) entries become unreachable. The
+commit message notes the bpf_qdisc Qdisc::next_sched case but does not
+mention HID-BPF. If the intent is to preserve HID-BPF write capability,
+hid_bpf_ctx::hid would need a trusted annotation
+(BTF_TYPE_SAFE_TRUSTED(struct hid_bpf_ctx) { struct hid_device *hid; })
+so the walked register stays PTR_TRUSTED. Otherwise, should the removal
+be documented?
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-On 8/14/26 3:26 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [High] The test uses an unrecognized section name `SEC(".percpu")` for its global variable, preventing libbpf from loading the test.
-> - [High] The test's inline assembly is missing the `mov_percpu_addr` instruction, causing the `__jited` assertions to always fail.
-> --
->
-> --- Patch [2]: [PATCH bpf v3 2/2] selftests/bpf: Check per-CPU address resolution per register ---
-> commit 94ba39b00c54962b463da6e18c62f89978f29a3f
-> Author: Vineet Gupta <vineet.gupta@linux.dev>
->
-> selftests/bpf: Check per-CPU address resolution per register
->
-> This commit adds a BPF selftest to verify that the x86 JIT correctly encodes
-> the per-CPU address resolution. It loads a .percpu variable into all registers
-> and matches the JITed add instruction against the expected register.
->
->> diff --git a/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c b/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c
->> new file mode 100644
->> index 0000000000000..967f4e6e3a490
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c
->> @@ -0,0 +1,72 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +
->> +#include <vmlinux.h>
->> +#include <bpf/bpf_helpers.h>
->> +#include "bpf_misc.h"
->> +
->> +#if defined(__TARGET_ARCH_x86)
->> +
->> +int percpu_data SEC(".percpu");
-> [Severity: High]
-> Does libbpf support the SEC(".percpu") section name?
-
-Yes it does:
-
-   - tools/lib/bpf/libbpf.c:544 — #define PERCPU_SEC ".percpu"
-
->
-> When bpf_object__elf_collect runs, it skips the .percpu section as it doesn't
-> match known data section prefixes like .data. Later, when
-> bpf_object__relocate_data processes the R_BPF_64_64 relocation for the
-> percpu_data load, bpf_object__section_to_libbpf_map_type returns
-> LIBBPF_MAP_UNSPEC.
->
-> Since the section is not the BTF maps section, this results in a bad map relo
-> warning and returns -LIBBPF_ERRNO__RELOC, causing the test to fail to load.
->
-> [ ... ]
->
->> +__naked void percpu_addr(void)
->> +{
->> +	asm volatile ("					\
->> +	r0 = %[percpu_data] ll;				\
->> +	r1 = %[percpu_data] ll;				\
-> [Severity: High]
-> Are the mov_percpu_addr instructions missing from this inline assembly?
-
-They are inserted by the verifier.
-
-Thx,
--Vineet
-
-> The commit message notes that an ld_imm64 of a per-CPU map value is followed
-> by a mov_percpu_addr, but the assembly here only emits a BPF_LD_IMM64
-> instruction.
->
-> The verifier processes this as BPF_PSEUDO_MAP_VALUE and converts it to a
-> standard 64-bit immediate load. Without the BPF_MOV64_PERCPU_REG
-> (mov_percpu_addr) instruction, the x86 JIT emits movabsq but never emits the
-> addq %gs:..., %reg instruction. This causes the __jited assertions to fail.
->
->> +	r2 = %[percpu_data] ll;				\
->> +	r3 = %[percpu_data] ll;				\
->> +	r4 = %[percpu_data] ll;				\
-> [ ... ]
->
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31845722500
+--===============7828696089515052364==--
