@@ -1,56 +1,56 @@
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FDF83D669D
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 02:14:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 774E53DA7F2
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 02:14:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786673651; cv=none; b=t4h/V0HQXLyoxXYkgAPZb7v1TVrEY3+SNBz89o4PKemE5udk+GlTjS7Fw6rYsfGQ6PsrVl52Zj67H0Y3vTFog31P/iQbnAcBj6+wpKdegUEuTVTKn++Rr9zKQKDiwaT4ZjHG0a5YN8ixALxvbFRjzJUQsZjKG4j+8eGkgO+9rkU=
+	t=1786673654; cv=none; b=sxvpRuYr2UwAjhiMQU51RB86CKUhhiVJSIs/Zj6CiNwuzr1hdL5Q1s+hG17sCTDpA9QKhsGpWf0RMEKAH/adWGNLXOoIYXE/d2otJ9lkDR0MhMndqC0Tq0dyseXe3IpNJdpL/kmFP1Su8lOPQ2JjwdRjZfu401Qz4L4e4iUn8uA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786673651; c=relaxed/simple;
-	bh=fR1+yOn1X/Oxt6Op0vFhWWNj9Hn06o6mXazJgaV86tI=;
+	s=arc-20240116; t=1786673654; c=relaxed/simple;
+	bh=LXTIMcSfH5vTVUzlKTulAXUDtY+yzROXY7e2Zi5XcMU=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=aWSx1vWZpUTK+F3m+LAxiM/jdRxaA4UP3ugkf88BlKQPMW5q4ETetuHwOuNQM3jKDfAruDPO9wOSJWTuMYtRmlMCdqgy9I4p/9lhE4LtGcWRMWzxCXUMwcnbh677TPHoGBZ1PLwNOr0OIwMZftHAlDPh8R6jHSeZqBmgLmw9nfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=STM93Zzy; arc=none smtp.client-ip=209.85.215.198
+	 To:Cc:Content-Type; b=KCRmSFH8G6kBfJEmyshXxNbFAFUi6KRLMEQSJUTIy0iBvZeyDrwkHJYm518Ua2m1mp8pxnicue7/lmrRuMPftAcoRxNNXvsnizyi3ftAVWJ2yJWFJBXGBkM9zSMdcJ4ount+gctXqMKuBogc9WhsxbMgji7KDVATA9vRykCkJGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GgfP8gTI; arc=none smtp.client-ip=209.85.210.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="STM93Zzy"
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-cbedfa3898aso337468a12.3
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 19:14:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GgfP8gTI"
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-84fa3b14ed2so413027b3a.1
+        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 19:14:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786673650; x=1787278450; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1786673652; x=1787278452; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=0mmSqbuVweBWGbqmxEm8QoJgEKbkKxRiioKgLKo7m1I=;
-        b=STM93ZzynYOy9kE/FmX+DLLdMCTJQFsfNK9ywWqCgaixtSthbxOklmiS54EaZDjxVY
-         gsC0JKHdSSaDyR+RnY2QvBRgfH6hNXaJLvg/IZxxiLW6rQ2TH61DHB8rIlhRWvozOpsP
-         ZhVSofWC/CkeI54g9gwzGJnNBXm9Mo9PC3urQjBZLLD62iXC75bAr0LdPj8btU9bEUrM
-         JPvLrI3z4ecLEUV37jcYoRXmE8sRWfwiGPjiBHj/7c1E4UpxOTnr4dQqmKC2atImqxrH
-         qVMzCicYqqx3ZWBBGUKJjmyg8OCwtwyPSzl8cWo8yPB3zNGlJ0Zz+nQ54eRYDxp3lvZ4
-         753A==
+        bh=ZcbgeGSInQHo4bfOFeXby0+i+iSONKuxDUIqpuvMFaM=;
+        b=GgfP8gTIzH1TnqArRggwMBvp8yF8uksZZv5ZN17Smx6801Z82q89eedpFBS4AYcLV+
+         sDnb4PAa+CUKx2MT4JYBNyIgV5MRIIkWlRFYij3eRrOlKN4NFLvD9u7cemqdBTEX7lR8
+         TasdVtO+TuISKuQlTenPeLk8CE0O8+LfV2U2BQnsbzsxlDhfjidDRqrr74cnbMmTNb0r
+         fbkK4WJYR/LzomVTkRZ/8kO2X9hG2Zbe/DhWp+lVwAtoNQ6IwAaEVnKaoLu05BOwknni
+         MdxJGVp0os6IY8e2RSiuOH167ZEiOVmZahrqmv3juf1aiW59WnyEeOYhTkU/SgBQYkKy
+         Pvxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786673650; x=1787278450;
+        d=1e100.net; s=20251104; t=1786673652; x=1787278452;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=0mmSqbuVweBWGbqmxEm8QoJgEKbkKxRiioKgLKo7m1I=;
-        b=rI/jmuMVwKfsCPlywhaCraU1n3kW45CDAQFznY0N59pr7d2o30Owglk7SW6k1PdVVB
-         wrdeR3YsFC4irTSom4tyPZ2rx6Lb4bgqg+/yBBTx4B+fRoBzIESbD1ltunI3ZI+GgNuI
-         XMF3dZcH2ZVAnd1GOE7h/aBQJ4s/fgaJjA9jxtto3nITCZnrkpSYb5+C6FeJrONyMWIP
-         cz0mySxluOrdZF+JNEhOItPCMG6HyW0Sv48Et0+gYDjkr3oVLSpoluW4Gs19J0qEazgd
-         PQPksY7ONP/BlvQo2fSu3ZisX9LsLt6+AKiXfxNfpVVhEw2icfIYypZQq6gvRkojrKkw
-         kGbA==
-X-Forwarded-Encrypted: i=1; AHgh+Rp8jdA4k57jUqB4dkxDeZZQA6AKBDLmNBZTA2o4uYUzJjyL2lGt7wOC15SudzKhqescK4o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcE4RUz7+7GRK+UTweiaHs+Y7UFA39figQjCI+FU7QDSbMx9OX
-	fZf8Lbi7EYxoBPFfpQ7JN5mCFkRDhqwirDTEi7z8EIpkyAAw3JBXbPHJbkEtgcAyg2KAhdXWxop
-	0xet3A7OUE13TKmDJIJbg1p83LA==
-X-Received: from pgmu38.prod.google.com ([2002:a63:2366:0:b0:c99:90dc:7b3f])
+        bh=ZcbgeGSInQHo4bfOFeXby0+i+iSONKuxDUIqpuvMFaM=;
+        b=Psgnymu26j3dHbS0BJ9KuRYrlOjKZmY1DZtuHwIFmER2Acx77h8FSobfbEAFy5H+zd
+         PqrqpaXfwiXo41JGNyjyuEa9upXy8h3W6QLj0tBgzSUw6uaZsAXEtDj98L8TsPdotyqN
+         ZWZXZJchj78XSd0RFbJI/6rWT/E2eQLnM7o+O5Jl4sJhbjD38L/Dm0TjlD4UtXZPTY/O
+         o8qKN5DnWe2eAaXg6bvlNw+tVuAWPqs1InYT3XpkYrPLhzWOSX0i59VX5z0XuSXmXYg6
+         7J1zgn+JUHabt0/Ajtasi7BIgp+9npBud/LuS8zRjOhi7XlQqtW2BWTv7N7e7b5D4cWa
+         2cjw==
+X-Forwarded-Encrypted: i=1; AHgh+RrxxjOTtMa0Zgocg124RB/nd+OZjz6rEO7ORxAsIG2kWcZRRz79qPbd4Ul2PJlbMJc9eu0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyvoKe5CRvYz8xu3RVK0AjQ6qG29V/66ZYi50rWD6ED7ble1nZZ
+	5QOz3ZH2BR2oF/OkzeJ8dGPpDx1PPVrYCEVMeerEQLUwyMyqMCn9gLdJPbS+E34xMP/2kbpCGSm
+	qNJc5IscLZEcTfXlV1+/4hAW6bw==
+X-Received: from pgbcr10.prod.google.com ([2002:a05:6a02:410a:b0:cbe:dbaf:256e])
  (user=hramamurthy job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6300:2289:b0:3cb:e8b4:f03b with SMTP id adf61e73a8af0-3cc71ca5ad5mr2577505637.17.1786673649389;
- Thu, 13 Aug 2026 19:14:09 -0700 (PDT)
-Date: Fri, 14 Aug 2026 02:13:52 +0000
+ 2002:a05:6a00:1c8e:b0:847:8b0f:2508 with SMTP id d2e1a72fcca58-84fddfc20damr2690028b3a.13.1786673651659;
+ Thu, 13 Aug 2026 19:14:11 -0700 (PDT)
+Date: Fri, 14 Aug 2026 02:13:53 +0000
 In-Reply-To: <20260814021406.3044324-1-hramamurthy@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -60,8 +60,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260814021406.3044324-1-hramamurthy@google.com>
 X-Mailer: git-send-email 2.55.0.691.gc56d675ccc-goog
-Message-ID: <20260814021406.3044324-3-hramamurthy@google.com>
-Subject: [PATCH net-next v4 02/15] gve: refactor initialization with helper functions
+Message-ID: <20260814021406.3044324-4-hramamurthy@google.com>
+Subject: [PATCH net-next v4 03/15] gve: add a few helper functions to set
+ device properties
 From: Harshitha Ramamurthy <hramamurthy@google.com>
 To: netdev@vger.kernel.org
 Cc: joshwash@google.com, hramamurthy@google.com, andrew+netdev@lunn.ch, 
@@ -73,200 +74,172 @@ Cc: joshwash@google.com, hramamurthy@google.com, andrew+netdev@lunn.ch,
 	kees@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-In the interest of commonizing code, refactor gve_probe()
-and gve_init_priv() with a few helper functions that can
-be expanded and utilized in upcoming patches that add the
-mailbox ABI to the driver. The helper functions are:
+For the mailbox ABI, device properties will come from a different
+source compared to the AdminQ mode. To accommodate the new source
+when the mailbox ABI is added, add a few helper functions to set a
+few device properties. Those functions are:
 
-- gve_set_num_ntfy_blks()
-- gve_set_num_queues()
+- gve_set_queue_properties() to set no. of pages for QPL mode and
+  number of queues in general
+- gve_set_mtu()
+- gve_set_mac()
 
-Reorder code to combine lines that accomplish a similar objective
-like setting defaults. Move setting HW-GRO and UDP GSO support out
-of an Adminq method into gve_init_priv().
-
-These changes are just code movement, no functional change.
+This is just code movement, no functional change.
 
 Reviewed-by: Willem de Bruijn <willemb@google.com>
 Reviewed-by: Jordan Rhee <jordanrhee@google.com>
 Signed-off-by: Harshitha Ramamurthy <hramamurthy@google.com>
 ---
-v4:
-- move the new functions to gve_adminq.c since that will be their final
-  home in the following patches (Przemek Kitszel)
-v2:
-- ensure to call verify driver compatibility in reset path
+v4: move mac to a variable to reduce diff for next patch
 
- drivers/net/ethernet/google/gve/gve_adminq.c | 49 ++++++++++++++---
- drivers/net/ethernet/google/gve/gve_adminq.h |  2 +
- drivers/net/ethernet/google/gve/gve_main.c   | 58 +++++++-------------
- 3 files changed, 62 insertions(+), 47 deletions(-)
+ drivers/net/ethernet/google/gve/gve_adminq.c | 38 +++------------
+ drivers/net/ethernet/google/gve/gve_adminq.h |  7 ++-
+ drivers/net/ethernet/google/gve/gve_main.c   | 49 ++++++++++++++++++++
+ 3 files changed, 62 insertions(+), 32 deletions(-)
 
 diff --git a/drivers/net/ethernet/google/gve/gve_adminq.c b/drivers/net/ethernet/google/gve/gve_adminq.c
-index 70ffed8b52c3..fe0dedfb25d7 100644
+index 7e242a0c8edc..8156c6f8c3b0 100644
 --- a/drivers/net/ethernet/google/gve/gve_adminq.c
 +++ b/drivers/net/ethernet/google/gve/gve_adminq.c
-@@ -1117,14 +1117,6 @@ int gve_adminq_describe_device(struct gve_priv *priv)
- 
- 	gve_set_default_rss_sizes(priv);
- 
--	/* DQO supports HW-GRO and UDP_GSO */
--	if (gve_is_dqo(priv)) {
--		u64 additional_features = NETIF_F_GRO_HW | NETIF_F_GSO_UDP_L4;
--
--		priv->dev->hw_features |= additional_features;
--		priv->dev->features |= additional_features;
--	}
--
- 	priv->max_registered_pages =
- 				be64_to_cpu(descriptor->max_registered_pages);
- 	mtu = be16_to_cpu(descriptor->mtu);
-@@ -1600,3 +1592,44 @@ int gve_adminq_query_rss_config(struct gve_priv *priv, struct ethtool_rxfh_param
- 	dma_pool_free(priv->adminq_pool, descriptor, descriptor_bus);
+@@ -920,19 +920,6 @@ int gve_adminq_destroy_rx_queues(struct gve_priv *priv, u32 num_queues)
  	return err;
  }
+ 
+-static void gve_set_default_desc_cnt(struct gve_priv *priv,
+-			const struct gve_device_descriptor *descriptor)
+-{
+-	priv->tx_desc_cnt = be16_to_cpu(descriptor->tx_queue_entries);
+-	priv->rx_desc_cnt = be16_to_cpu(descriptor->rx_queue_entries);
+-
+-	/* set default ranges */
+-	priv->max_tx_desc_cnt = priv->tx_desc_cnt;
+-	priv->max_rx_desc_cnt = priv->rx_desc_cnt;
+-	priv->min_tx_desc_cnt = priv->tx_desc_cnt;
+-	priv->min_rx_desc_cnt = priv->rx_desc_cnt;
+-}
+-
+ static void gve_set_default_rss_sizes(struct gve_priv *priv)
+ {
+ 	if (!gve_is_gqi(priv)) {
+@@ -1049,8 +1036,6 @@ int gve_adminq_describe_device(struct gve_priv *priv)
+ 	union gve_adminq_command cmd;
+ 	dma_addr_t descriptor_bus;
+ 	int err = 0;
+-	u8 *mac;
+-	u16 mtu;
+ 
+ 	memset(&cmd, 0, sizeof(cmd));
+ 	descriptor = dma_pool_alloc(priv->adminq_pool, GFP_KERNEL,
+@@ -1112,26 +1097,17 @@ int gve_adminq_describe_device(struct gve_priv *priv)
+ 			 "Driver is running with GQI QPL queue format.\n");
+ 	}
+ 
+-	/* set default descriptor counts */
+-	gve_set_default_desc_cnt(priv, descriptor);
+-
+ 	gve_set_default_rss_sizes(priv);
+ 
+-	priv->max_registered_pages =
+-				be64_to_cpu(descriptor->max_registered_pages);
+-	mtu = be16_to_cpu(descriptor->mtu);
+-	if (mtu < ETH_MIN_MTU) {
+-		dev_err(&priv->pdev->dev, "MTU %d below minimum MTU\n", mtu);
+-		err = -EINVAL;
++	err = gve_set_mtu(priv, descriptor);
++	if (err)
+ 		goto free_device_descriptor;
+-	}
+-	priv->dev->max_mtu = mtu;
 +
-+int gve_set_num_ntfy_blks(struct gve_priv *priv)
+ 	priv->num_event_counters = be16_to_cpu(descriptor->counters);
+-	eth_hw_addr_set(priv->dev, descriptor->mac);
+-	mac = descriptor->mac;
+-	dev_info(&priv->pdev->dev, "MAC addr: %pM\n", mac);
+-	priv->tx_pages_per_qpl = be16_to_cpu(descriptor->tx_pages_per_qpl);
+-	priv->default_num_queues = be16_to_cpu(descriptor->default_num_queues);
++
++	gve_set_mac(priv, descriptor);
++
++	gve_set_queue_properties(priv, descriptor);
+ 
+ 	gve_enable_supported_features(priv, supported_features_mask,
+ 				      dev_op_jumbo_frames, dev_op_dqo_qpl,
+diff --git a/drivers/net/ethernet/google/gve/gve_adminq.h b/drivers/net/ethernet/google/gve/gve_adminq.h
+index 82b52424a63f..68c63ce75505 100644
+--- a/drivers/net/ethernet/google/gve/gve_adminq.h
++++ b/drivers/net/ethernet/google/gve/gve_adminq.h
+@@ -658,5 +658,10 @@ int gve_adminq_get_ptype_map_dqo(struct gve_priv *priv,
+ 				 struct gve_ptype_lut *ptype_lut);
+ int gve_set_num_ntfy_blks(struct gve_priv *priv);
+ void gve_set_num_queues(struct gve_priv *priv);
+-
++void gve_set_queue_properties(struct gve_priv *priv,
++			      struct gve_device_descriptor *descriptor);
++int gve_set_mtu(struct gve_priv *priv,
++		struct gve_device_descriptor *descriptor);
++void gve_set_mac(struct gve_priv *priv,
++		 struct gve_device_descriptor *descriptor);
+ #endif /* _GVE_ADMINQ_H */
+diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
+index 5ba534beb40f..dc6c2d08540f 100644
+--- a/drivers/net/ethernet/google/gve/gve_main.c
++++ b/drivers/net/ethernet/google/gve/gve_main.c
+@@ -2398,6 +2398,55 @@ static const struct xdp_metadata_ops gve_xdp_metadata_ops = {
+ 	.xmo_rx_timestamp	= gve_xdp_rx_timestamp,
+ };
+ 
++static void gve_set_default_desc_cnt(struct gve_priv *priv,
++				     const struct gve_device_descriptor *descriptor)
 +{
-+	int num_ntfy;
++	priv->tx_desc_cnt = be16_to_cpu(descriptor->tx_queue_entries);
++	priv->rx_desc_cnt = be16_to_cpu(descriptor->rx_queue_entries);
 +
-+	num_ntfy = pci_msix_vec_count(priv->pdev);
-+	if (num_ntfy <= 0) {
-+		dev_err(&priv->pdev->dev,
-+			"could not count MSI-x vectors: err=%d\n", num_ntfy);
-+		return num_ntfy;
-+	} else if (num_ntfy < GVE_MIN_MSIX) {
-+		dev_err(&priv->pdev->dev, "gve needs at least %d MSI-x vectors, but only has %d\n",
-+			GVE_MIN_MSIX, num_ntfy);
++	/* set default ranges */
++	priv->max_tx_desc_cnt = priv->tx_desc_cnt;
++	priv->max_rx_desc_cnt = priv->rx_desc_cnt;
++	priv->min_tx_desc_cnt = priv->tx_desc_cnt;
++	priv->min_rx_desc_cnt = priv->rx_desc_cnt;
++}
++
++void gve_set_queue_properties(struct gve_priv *priv,
++			      struct gve_device_descriptor *descriptor)
++{
++	/* set default descriptor counts */
++	gve_set_default_desc_cnt(priv, descriptor);
++
++	priv->max_registered_pages = be64_to_cpu(descriptor->max_registered_pages);
++	priv->tx_pages_per_qpl = be16_to_cpu(descriptor->tx_pages_per_qpl);
++	priv->default_num_queues = be16_to_cpu(descriptor->default_num_queues);
++}
++
++int gve_set_mtu(struct gve_priv *priv,
++		struct gve_device_descriptor *descriptor)
++{
++	u16 mtu;
++
++	mtu = be16_to_cpu(descriptor->mtu);
++	if (mtu < ETH_MIN_MTU) {
++		dev_err(&priv->pdev->dev, "MTU %d below minimum MTU\n", mtu);
 +		return -EINVAL;
 +	}
-+
-+	/* gvnic has one Notification Block per MSI-x vector, except for the
-+	 * management vector
-+	 */
-+	priv->num_ntfy_blks = (num_ntfy - 1) & ~0x1;
-+	priv->mgmt_msix_idx = priv->num_ntfy_blks;
++	priv->dev->max_mtu = mtu;
 +
 +	return 0;
 +}
 +
-+void gve_set_num_queues(struct gve_priv *priv)
++void gve_set_mac(struct gve_priv *priv,
++		 struct gve_device_descriptor *descriptor)
 +{
-+	priv->tx_cfg.max_queues =
-+		min_t(int, priv->tx_cfg.max_queues, priv->num_ntfy_blks / 2);
-+	priv->rx_cfg.max_queues =
-+		min_t(int, priv->rx_cfg.max_queues, priv->num_ntfy_blks / 2);
++	u8 *mac;
 +
-+	priv->tx_cfg.num_queues = priv->tx_cfg.max_queues;
-+	priv->rx_cfg.num_queues = priv->rx_cfg.max_queues;
-+	if (priv->default_num_queues > 0) {
-+		priv->tx_cfg.num_queues = min_t(int, priv->default_num_queues,
-+						priv->tx_cfg.num_queues);
-+		priv->rx_cfg.num_queues = min_t(int, priv->default_num_queues,
-+						priv->rx_cfg.num_queues);
-+	}
++	mac = descriptor->mac;
++	eth_hw_addr_set(priv->dev, mac);
++	dev_info(&priv->pdev->dev, "MAC addr: %pM\n", mac);
 +}
-diff --git a/drivers/net/ethernet/google/gve/gve_adminq.h b/drivers/net/ethernet/google/gve/gve_adminq.h
-index 8e80f36116ec..82b52424a63f 100644
---- a/drivers/net/ethernet/google/gve/gve_adminq.h
-+++ b/drivers/net/ethernet/google/gve/gve_adminq.h
-@@ -656,5 +656,7 @@ int gve_adminq_report_nic_ts(struct gve_priv *priv,
- struct gve_ptype_lut;
- int gve_adminq_get_ptype_map_dqo(struct gve_priv *priv,
- 				 struct gve_ptype_lut *ptype_lut);
-+int gve_set_num_ntfy_blks(struct gve_priv *priv);
-+void gve_set_num_queues(struct gve_priv *priv);
- 
- #endif /* _GVE_ADMINQ_H */
-diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
-index 30bf6df4ebc5..37e6205e2eef 100644
---- a/drivers/net/ethernet/google/gve/gve_main.c
-+++ b/drivers/net/ethernet/google/gve/gve_main.c
-@@ -2400,7 +2400,6 @@ static const struct xdp_metadata_ops gve_xdp_metadata_ops = {
- 
++
  static int gve_init_priv(struct gve_priv *priv, bool skip_describe_device)
  {
--	int num_ntfy;
  	int err;
- 
- 	/* Set up the adminq */
-@@ -2431,57 +2430,38 @@ static int gve_init_priv(struct gve_priv *priv, bool skip_describe_device)
- 			"Could not get device information: err=%d\n", err);
- 		goto err;
- 	}
--	priv->dev->mtu = priv->dev->max_mtu;
--	num_ntfy = pci_msix_vec_count(priv->pdev);
--	if (num_ntfy <= 0) {
-+
-+	err = gve_set_num_ntfy_blks(priv);
-+	if (err) {
- 		dev_err(&priv->pdev->dev,
--			"could not count MSI-x vectors: err=%d\n", num_ntfy);
--		err = num_ntfy;
-+			"Could not setup notify blocks: err=%d\n", err);
- 		goto err;
--	} else if (num_ntfy < GVE_MIN_MSIX) {
--		dev_err(&priv->pdev->dev, "gve needs at least %d MSI-x vectors, but only has %d\n",
--			GVE_MIN_MSIX, num_ntfy);
--		err = -EINVAL;
--		goto err;
--	}
--
--	/* Big TCP is only supported on DQO */
--	if (!gve_is_gqi(priv))
--		netif_set_tso_max_size(priv->dev, GVE_DQO_TX_MAX);
--
--	priv->rx_copybreak = GVE_DEFAULT_RX_COPYBREAK;
--	/* gvnic has one Notification Block per MSI-x vector, except for the
--	 * management vector
--	 */
--	priv->num_ntfy_blks = (num_ntfy - 1) & ~0x1;
--	priv->mgmt_msix_idx = priv->num_ntfy_blks;
--	priv->numa_node = dev_to_node(&priv->pdev->dev);
--
--	priv->tx_cfg.max_queues =
--		min_t(int, priv->tx_cfg.max_queues, priv->num_ntfy_blks / 2);
--	priv->rx_cfg.max_queues =
--		min_t(int, priv->rx_cfg.max_queues, priv->num_ntfy_blks / 2);
--
--	priv->tx_cfg.num_queues = priv->tx_cfg.max_queues;
--	priv->rx_cfg.num_queues = priv->rx_cfg.max_queues;
--	if (priv->default_num_queues > 0) {
--		priv->tx_cfg.num_queues = min_t(int, priv->default_num_queues,
--						priv->tx_cfg.num_queues);
--		priv->rx_cfg.num_queues = min_t(int, priv->default_num_queues,
--						priv->rx_cfg.num_queues);
- 	}
--	priv->tx_cfg.num_xdp_queues = 0;
- 
-+	gve_set_num_queues(priv);
- 	dev_info(&priv->pdev->dev, "TX queues %d, RX queues %d\n",
- 		 priv->tx_cfg.num_queues, priv->rx_cfg.num_queues);
- 	dev_info(&priv->pdev->dev, "Max TX queues %d, Max RX queues %d\n",
- 		 priv->tx_cfg.max_queues, priv->rx_cfg.max_queues);
- 
--	if (!gve_is_gqi(priv)) {
-+	if (gve_is_dqo(priv)) {
-+		/* DQO supports HW-GRO and UDP_GSO */
-+		u64 additional_features = NETIF_F_GRO_HW | NETIF_F_GSO_UDP_L4;
-+
-+		priv->dev->hw_features |= additional_features;
-+		priv->dev->features |= additional_features;
-+
- 		priv->tx_coalesce_usecs = GVE_TX_IRQ_RATELIMIT_US_DQO;
- 		priv->rx_coalesce_usecs = GVE_RX_IRQ_RATELIMIT_US_DQO;
-+
-+		/* Big TCP is only supported on DQO */
-+		netif_set_tso_max_size(priv->dev, GVE_DQO_TX_MAX);
- 	}
- 
-+	priv->dev->mtu = priv->dev->max_mtu;
-+	priv->numa_node = dev_to_node(&priv->pdev->dev);
-+	priv->tx_cfg.num_xdp_queues = 0;
-+	priv->rx_copybreak = GVE_DEFAULT_RX_COPYBREAK;
- 	priv->ts_config.tx_type = HWTSTAMP_TX_OFF;
- 	priv->ts_config.rx_filter = HWTSTAMP_FILTER_NONE;
- 
 -- 
 2.55.0.691.gc56d675ccc-goog
 
