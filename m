@@ -1,100 +1,127 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2DFA3624CC
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 22:24:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF8B91EEA31
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 22:26:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786746283; cv=none; b=ss6rcmlqDGAFj7ZslSHE4NQtQfTavHw19ZFB/RH9yPCT5ry1bq139DhDIkYxoJShfdfjS74esBgPepI6ZEqOsJV0Rl5vOgwjwhyPLwOP8utOXGrv3HM7m7afZvfx0V8zB8PWgwbigMNcbUeLGYidd4aNF30GYZ7vJ/KRuVje8wg=
+	t=1786746414; cv=none; b=YzMKdGc95GHo+E3hfVUcbwHBkIWvSeJJIp3RLB6Z6WJ3018RvNuV0yJSpkBUsRK6SMO6F8yhf+cFlYa/eJF670uK1h5edfyxPdSZA/MoV2/H5YDCVVxBVI05YElEyfH8+QQ/YCBML2yuVst2pCMpJPdKVwKJQygdYyoDkXzLRpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786746283; c=relaxed/simple;
-	bh=dhpjWZ2Tycp1HuZXZeKui9ccCFITazEi3l3AANhY1tc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bZx6/JmOLsEgEEyWa1Eg/nEJNV6XVoy9CpfL3odV5K6PkuqNUIorycoXqFLUypvDTsOs/6Ot9SIN9jdqQ8wKUPBR881CC+JGF64TmLDLUylowYZempq5Ugok8erWzYOAMLj9oIpvvgXxD2tKHLxi1l/1LEr8pJcsQzAOSXrjJ3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=klYvvVwI; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786746414; c=relaxed/simple;
+	bh=tV5sinmeVGIYrQkFyyWHIUOZLVljpHf2aQ4IdGYSeug=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=B74Xeo5AdKNbv9U2WO6wo7DVHWVtfg/KIAH3dU3Izw4JN88WxVoIDrMmohSUZpUHPecQNoqFwhp7lGRK2fvw6aYcAPaYzQpo4EaV068oDEI1N4SK7uS2jwdS9i6FGVuDotVDPkwWE9EBWxwg74mh6r8kQxJpVM9q0RnnZxJGMLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cNWccU7w; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="klYvvVwI"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-38e3efab7e0so1046570a91.0
-        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 15:24:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786746281; x=1787351081; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=dhpjWZ2Tycp1HuZXZeKui9ccCFITazEi3l3AANhY1tc=;
-        b=klYvvVwIEcPu9gKJBSbE9vWR+cTscF+YUUaXjpmIXFeNKXvLarcgy5oM/Pm6MLTbV6
-         WSw+fLv6b0nhIC77mjea9UtERLa0yQqxUmzp9ZhJIeL6tHR3GYqR8DPooG6WUlxyIuzw
-         2pYcnSGeTuTZFLTpLdsnpeTSAu4pU4UsLS2YZ8iTxM0wHboJrvAHGvBW9uy/AI/fvHhb
-         lBpKWogudlbnxGRBhoSQ4fLPuV2CQcItYmxCV5EsfmLt+kJbKnShTWsHr890euEVL0sI
-         4v9u1QkN8vEL658EWu0hFV4Qs2TJu+eVxFsYIZqlKdIdEzfmP+Exe/cuOUg4iVqng2mc
-         EIiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786746281; x=1787351081;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=dhpjWZ2Tycp1HuZXZeKui9ccCFITazEi3l3AANhY1tc=;
-        b=Koyczzrq3h7imFILanE6PP2xC8x93rOsBLxzirjNTNs7nFgWYq6DRGF3YBmxoae7NI
-         Vpx9chydNCm8zJNlRAWh2DJM50TFyYOoThFuipW+3QepodAROJwPBPEnOOQZ7S1xI5Hx
-         69NiRTS5MBvSQxffx8KrHF3EqWI5yKyAov9zZAcn7cWA7nAHCX0KEVXEEI/OKfmf9+TO
-         JLIvzpw7JkYvq4ZqXBevPQpIg3O5K9jEuklzIopJ4gM4XL0cyk/SKIuUJ3ZEkJQdwDqc
-         HutLYKQ8cIjF2U656Tm5JxdBEf6GrL5PxrZ38YTYU9yjQcn9sv4E4HVeOg9mTd8TyIiv
-         4dQQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpzvDuUaRg/gu9+efda2OYBdiDHmN4fqtSGWgwOnc1w7IGY58HuaD2XhNC3sndFecjwPJA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQOfHOVOBp523Tf6Wug/46PAE5RjBoKdjIwyPlxQ8V2KSU/kKs
-	Eqguez4LPgzbHT+kHLzRfmfKb4WxeRgRNNU8zY8ZTE6dm5hEIQRh5QINE3guvASl
-X-Gm-Gg: AR+sD13gKkG/886+WoRm5X8eQVkwp2p7uzmYUR4hRJSs84cYTRsN15YQdLlZJh1I5Vo
-	bmyJxOP+nEDHv5u20SQTu85hKS59uKEeO+VcsYuYbyDoZAdA1lqC31uBG8R9W7pYWPLiRBVZeV1
-	XZx5eEdNoVKvGHkUN2yVDnvZ2ZC85AcZ3hxDR+bE0miay3PlDsdpynuGvmdHNCY/oDI4oeRjhOq
-	GU7HnljhQ64BaN64hZhFLxvaqsIoQ+nYC15EzppRHIVckDDcjfQ0NY50PHDAWHGusUeYe9ERlyg
-	XkK1kAOz5ANCsukZv9E1Q5uwAr4MPZbBVxPn7n6DQjax9A9UcvI/Y2cqOqBS8wVdypdcd3bIHXf
-	NZjM0rkElLYjFpadVXv18gSSvLY7qcs80oi0Bgc47BtY2OpTx4i8KGI5Zh+/l2KPhxIqKdwGcxA
-	+KwFIcnZyJLlLwPMBLSXTf0yJJm3OXzDDecZzHRrwvX+5wvSNajdJIkPlrCOJzaeWOyZAKJvHOB
-	UMV7p1owPq7PYlb8TWARJ4LTHmwtqxEpBID8KyfazN+
-X-Received: by 2002:a17:90b:54c3:b0:387:d9cc:7dc3 with SMTP id 98e67ed59e1d1-3931f61cca5mr12877503a91.21.1786746281036;
-        Fri, 14 Aug 2026 15:24:41 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:b77:bdad:4587:c682? ([2620:10d:c090:500::6:84a4])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-141388b2554sm18518227c88.14.2026.08.14.15.24.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Aug 2026 15:24:40 -0700 (PDT)
-Message-ID: <94765f6dd63a1834793a32965ea3e0ec6e4eb567.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v5 01/11] bpf: Factor
- check_global_ret_scalar_reg() out of the global return check
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
- kernel-team@fb.com
-Date: Fri, 14 Aug 2026 15:24:38 -0700
-In-Reply-To: <20260813200215.1993264-1-yonghong.song@linux.dev>
-References: <20260813200210.1991507-1-yonghong.song@linux.dev>
-	 <20260813200215.1993264-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cNWccU7w"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7600C1F000E9;
+	Fri, 14 Aug 2026 22:26:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786746412;
+	bh=/PbbCJZGCD4eYYWjFPdkK7um0C0qoc5Iz93ZdYP4k14=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=cNWccU7w2Kt+HaiNC5ZcgjoG9/1MWMs6/dOa0vSrtjJSsEYTen4bJjm7F3xPfLZr0
+	 tI/r0WZxrsN9PdOnu9Zcy0Sox/zjWtSOMyZ5DvRAsjogU0Ayjcuicn6F044DELvxdQ
+	 +IsFve6Wf1Pc8dFlqNZVNWqeOMnel4EwDKHyKB4XkXpkKOjMkv1QQuagiblTNHaBab
+	 QSKNFQbYnM1PHhD5+U9KDaDFvbFr0+9ngYFlO7VZ2jKrzoZr+bnQXLqwxFeJI1CxPV
+	 UUquMDLGhYcUDHEeY/FfAvQ/Yk+bnLTuFVuXt/yTriz7SJ6MyX2/6r/880YjcfAkae
+	 dlXORnZQitnOg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Check per-CPU address
+ resolution per register
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Vineet Gupta" <vineet.gupta@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260814220254.3797467-3-vineet.gupta@linux.dev>
+References: <20260814220254.3797467-1-vineet.gupta@linux.dev>
+ <20260814220254.3797467-3-vineet.gupta@linux.dev>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+Date: Fri, 14 Aug 2026 22:26:51 +0000
+Message-Id: <20260814222652.7600C1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Thu, 2026-08-13 at 13:02 -0700, Yonghong Song wrote:
-> check_global_subprog_return_code() verifies that a global subprogram
-> returns void, an arena pointer, or register R0 holding a scalar value.
-> Later patches in this series add 16-byte aggregate return support, whose
-> second half is returned in R2 and needs the same validation.
->=20
-> Factor the per-register check into check_global_ret_scalar_reg(env, regno=
-)
-> so that it can be reused for R2. No functional change.
->=20
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] The test uses an unrecognized section name `SEC(".percpu")` for it=
+s global variable, preventing libbpf from loading the test.
+- [High] The test's inline assembly is missing the `mov_percpu_addr` instru=
+ction, causing the `__jited` assertions to always fail.
+--
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+--- Patch [2]: [PATCH bpf v3 2/2] selftests/bpf: Check per-CPU address reso=
+lution per register ---
+commit 94ba39b00c54962b463da6e18c62f89978f29a3f
+Author: Vineet Gupta <vineet.gupta@linux.dev>
 
-...
+selftests/bpf: Check per-CPU address resolution per register
+
+This commit adds a BPF selftest to verify that the x86 JIT correctly encodes
+the per-CPU address resolution. It loads a .percpu variable into all regist=
+ers
+and matches the JITed add instruction against the expected register.
+
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c b/t=
+ools/testing/selftests/bpf/progs/verifier_percpu_addr.c
+> new file mode 100644
+> index 0000000000000..967f4e6e3a490
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c
+> @@ -0,0 +1,72 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <vmlinux.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include "bpf_misc.h"
+> +
+> +#if defined(__TARGET_ARCH_x86)
+> +
+> +int percpu_data SEC(".percpu");
+
+[Severity: High]
+Does libbpf support the SEC(".percpu") section name?
+
+When bpf_object__elf_collect runs, it skips the .percpu section as it doesn=
+'t
+match known data section prefixes like .data. Later, when
+bpf_object__relocate_data processes the R_BPF_64_64 relocation for the
+percpu_data load, bpf_object__section_to_libbpf_map_type returns
+LIBBPF_MAP_UNSPEC.
+
+Since the section is not the BTF maps section, this results in a bad map re=
+lo
+warning and returns -LIBBPF_ERRNO__RELOC, causing the test to fail to load.
+
+[ ... ]
+
+> +__naked void percpu_addr(void)
+> +{
+> +	asm volatile ("					\
+> +	r0 =3D %[percpu_data] ll;				\
+> +	r1 =3D %[percpu_data] ll;				\
+
+[Severity: High]
+Are the mov_percpu_addr instructions missing from this inline assembly?
+
+The commit message notes that an ld_imm64 of a per-CPU map value is followed
+by a mov_percpu_addr, but the assembly here only emits a BPF_LD_IMM64
+instruction.
+
+The verifier processes this as BPF_PSEUDO_MAP_VALUE and converts it to a
+standard 64-bit immediate load. Without the BPF_MOV64_PERCPU_REG
+(mov_percpu_addr) instruction, the x86 JIT emits movabsq but never emits the
+addq %gs:..., %reg instruction. This causes the __jited assertions to fail.
+
+> +	r2 =3D %[percpu_data] ll;				\
+> +	r3 =3D %[percpu_data] ll;				\
+> +	r4 =3D %[percpu_data] ll;				\
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260814220254.3797=
+467-1-vineet.gupta@linux.dev?part=3D2
