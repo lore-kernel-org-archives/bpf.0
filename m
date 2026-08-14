@@ -1,127 +1,173 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E2F7081E
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 00:48:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA321F1534
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 00:52:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786668511; cv=none; b=n1nOn+KLRhDrsR1MN+FjNEX1O5dIY40G9lxaJ7T1MBaDnRPpiRxhpjabY+pY+2g3J52Uu7yG86N8Umt7piGwEx/MF1M9kSeWrM3ZQaE5/WJE/o+SlzM+nZ6m39P4RCzmYBAUVPSb9VwwPENEh/Y2i4mV0v83nRkbKxdyGT5u7mk=
+	t=1786668758; cv=none; b=oiUkdTF6DwAAcj6Mv0RFJfI7SPWQpXEcaXvl1RwzC/XVC31hkIdUNUqVDSsmY6AICW48ip3BhDcUt0a9uXm5E5CFBki4j9uyRZHj2zR2HfFyHBCy0hR43ivoVqoGHvDvnPWrFGDgOnfQz5+FP7qOZDtf3LW02Hj95eCNn1xhwsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786668511; c=relaxed/simple;
-	bh=wucGsXbEIuj2lrK/n23T2UY7uO27CVFJcdK7dzalA7s=;
+	s=arc-20240116; t=1786668758; c=relaxed/simple;
+	bh=8Mepd5zi626exT2MDwl6FFhlv6eEA77pYyTYIOhdrVE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=b4dgwrmz07IgNC9Lq9YH1sGw1c0U59LUP5CP0A+4+b3nL3dymnIlXcjILqFyxk/iIiDfBiWc0xc18UcXOHta8Wwo7tz6MT1ods7XZFGmtVjrCyaT1qJZ4lg+CLHCzpAlsQLcnP9WiW3n72xPCeSGQTFfXV0BRsVfIjhK7UJRe5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b+PO1+N6; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=MHu8puXBq8DXeOl3gIhOMFsuEpCJA59vG9ou1LmgHyeRY1o9a7Syx5TE+7DUn6RLQcTkTletjb6nLcPUB2n7Dl7ODDt7LrTS9hax/xyuApeIoMVZk2fviJg1JtXpeb8jYQ8mDQoYzpUbNIa/iuuWjC0HJ80yTRGB7QJTXF4D+C4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kAWlY+/6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b+PO1+N6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D012E1F000E9;
-	Fri, 14 Aug 2026 00:48:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kAWlY+/6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD84F1F00A3A;
+	Fri, 14 Aug 2026 00:52:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786668510;
-	bh=R4/aofqPOmdaaL3CCxWisxnm1JUrzPa9sog7MPXBEcw=;
+	s=k20260515; t=1786668757;
+	bh=QnOn4C7to3ToHmX1kz+ytbwDJlhyjwBGiKgfN8RkZm8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=b+PO1+N61OnIpTTwPOdfOoa4o26I1h8+AEc8nTIfOfyXXMfpXSC9qf4wl2nmSoEie
-	 mLqDY6ToVYPmO4nbLkeebMriopaOOKdQtDjZLPRsyH5F6apTez+vybD8cJaNYWSTkZ
-	 KkEimdxZSY1g5FoMIEFFhs6QxGlQ9aDx/MovQBPHFqwovZ6K5I9ht8HZT68V2iimBn
-	 zXOQir5htrqd0nXvhtXq2Yticq/s8btSF9T7igTn3h8XISjkWjm+et1CKiq2MgVeUW
-	 NXivENET5w3yb3X5OZpBDSVSiM1MfNJNmEpjxxVFM+tc6kgdOMk0I2b7Nnr3J1+xpt
-	 ZaTIFRd3vSxqg==
+	b=kAWlY+/6xs6/xThZOd2lVD4rHnAFlNAeT9kAK+A7MP7vqI991g79Lgd+L2oHfxmW5
+	 ABW8Z1NZ+BrJc8pzfhWnvUPJQxggjZkbSgYvKEh3vENRUK5ovA97T8naz0gOZ78tIl
+	 fqdwn8lYZyoqatjtVQv+rg30dfzf/YPZC/G01kyUhrojalh/GzjIpyEoZW1Bnc06b5
+	 Jybvmc3NgfKFrWHQuV/k+dl+/E9dgKSPNxJNRpl7TvzUnAeM+1dNVeXIyvD2fBBpxw
+	 amIeBy2UXXLUQZoYiNSrE/IfpaEcUyMnBf/DjNmtJkM7mGD8kUTk+o6wRjEtDEPX1K
+	 7JEB1DUuBF+3Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 05/13] bpf: 4-byte precise
- clean_verifier_state
+Subject: Re: [PATCH bpf-next v6 09/17] bpf: Track r11 registers in
+ const_fold and liveness
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Eduard Zingerman" <eddyz87@gmail.com>
+To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260410-patch-set-v3-5-1f5826dc0ef2@gmail.com>
-References: <20260410-patch-set-v3-5-1f5826dc0ef2@gmail.com>
+In-Reply-To: <20260419163402.734987-1-yonghong.song@linux.dev>
+References: <20260419163402.734987-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 14 Aug 2026 00:48:24 +0000
-Message-Id: <20260814004829.D012E1F000E9@smtp.kernel.org>
+Date: Fri, 14 Aug 2026 00:52:31 +0000
+Message-Id: <20260814005236.CD84F1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Critical] Verifier bypass leading to out-of-bounds memory access due to =
-precision loss when 8-byte scalar spills are partially read.
+- [High] The stack arguments feature is entirely blocked because BPF_REG_PA=
+RAMS is unconditionally rejected during initial instruction sanity checks.
+- [Medium] State tracking corruption due to early returns skipping register=
+ invalidation for BPF_REG_PARAMS
+- [Medium] Out-of-bounds access in verifier register checks when using BPF_=
+REG_PARAMS in unsupported instructions
 --
 
---- Patch [5]: [PATCH bpf-next v3 05/13] bpf: 4-byte precise clean_verifier=
-_state ---
-commit 720b66feb217d6b05897c14d4beceb7ff588cf92
-Author: Eduard Zingerman <eddyz87@gmail.com>
+--- Patch [9]: [PATCH bpf-next v6 09/17] bpf: Track r11 registers in const_=
+fold and liveness ---
+commit 9af64f45f038d2b8f7990714d3dc13da2d1fbc25
+Author: Yonghong Song <yonghong.song@linux.dev>
 
-bpf: 4-byte precise clean_verifier_state
+bpf: Track r11 registers in const_fold and liveness
 
-Migrate clean_verifier_state() and its liveness queries from 8-byte
-SPI granularity to 4-byte half-slot granularity.
+This commit adds early returns in the register tracking arrays for
+const_fold.c and liveness.c when instructions use BPF_REG_PARAMS (r11).
+It aims to prevent out-of-bounds accesses and invalidates the destination
+register for BPF_LDX instructions to avoid leaving stale states.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index ee3945a919e3a..0731e99aa5412 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-[ ... ]
-> @@ -20075,26 +20074,83 @@ static void clean_func_state(struct bpf_verifie=
-r_env *env,
-[ ... ]
-> +			/*
-> +			 * Only destroy spilled_ptr when hi half is dead.
-> +			 * If hi half is still live with STACK_SPILL, the
-> +			 * spilled_ptr metadata is needed for correct state
-> +			 * comparison in stacksafe().
-> +			 * is_spilled_reg() is using slot_type[7], but
-> +			 * is_spilled_scalar_after() check either slot_type[0] or [4]
-> +			 */
-> +			if (!hi_live) {
-> +				struct bpf_reg_state *spill =3D &st->stack[i].spilled_ptr;
-> +
-> +				if (lo_live && stype =3D=3D STACK_SPILL) {
-> +					u8 val =3D STACK_MISC;
-> +
-> +					/*
-> +					 * 8 byte spill of scalar 0 where half slot is dead
-> +					 * should become STACK_ZERO in lo 4 bytes.
-> +					 */
-> +					if (register_is_null(spill))
-> +						val =3D STACK_ZERO;
-> +					for (j =3D 0; j < 4; j++) {
-> +						u8 *t =3D &st->stack[i].slot_type[j];
-> +
-> +						if (*t =3D=3D STACK_SPILL)
-> +							*t =3D val;
-> +					}
-> +				}
-> +				__mark_reg_not_init(env, spill);
-> +			}
+> diff --git a/kernel/bpf/const_fold.c b/kernel/bpf/const_fold.c
+> index db73c4740b1e1..41e5a406432c4 100644
+> --- a/kernel/bpf/const_fold.c
+> +++ b/kernel/bpf/const_fold.c
+> @@ -51,13 +51,23 @@ static void const_reg_xfer(struct bpf_verifier_env *e=
+nv, struct const_arg_info *
+>  			   struct bpf_insn *insn, struct bpf_insn *insns, int idx)
+>  {
+>  	struct const_arg_info unknown =3D { .state =3D CONST_ARG_UNKNOWN, .val =
+=3D 0 };
+> -	struct const_arg_info *dst =3D &ci_out[insn->dst_reg];
+> -	struct const_arg_info *src =3D &ci_out[insn->src_reg];
+> +	struct const_arg_info *dst, *src;
+>  	u8 class =3D BPF_CLASS(insn->code);
+>  	u8 mode =3D BPF_MODE(insn->code);
+>  	u8 opcode =3D BPF_OP(insn->code) | BPF_SRC(insn->code);
+>  	int r;
+> =20
+> +	/* Stack arguments using BPF_REG_PARAMS are outside the tracked registe=
+r set. */
+> +	if (insn->dst_reg >=3D MAX_BPF_REG)
+> +		return;
+> +	if (insn->src_reg >=3D MAX_BPF_REG) {
+> +		if (class =3D=3D BPF_LDX)
+> +			ci_out[insn->dst_reg] =3D unknown;
+> +		return;
+> +	}
 
-[Severity: Critical]
-Can this lead to a verifier bypass and out-of-bounds access due to precision
-loss when 8-byte scalar spills are partially read?
+[Severity: Medium]
+If an ALU or atomic instruction uses BPF_REG_PARAMS (r11) as a source or
+destination register, is it possible that this early return skips clearing =
+the
+destination register state?
 
-If a code path spills a non-zero precise scalar (e.g., an array index) to t=
-he
-stack as an 8-byte write, and then reads only the upper 4 bytes, `lo_live`
-would be true and `hi_live` would be false.
+If an ALU instruction uses r11, it looks like the destination register's
+tracking state is not invalidated, retaining its previous, potentially stale
+constant state. Similarly, an atomic store (BPF_STX) to r11 could return
+early without invalidating R0 for BPF_CMPXCHG.
 
-This code then destroys the `spilled_ptr` via `__mark_reg_not_init()`, which
-loses the exact value and precision metadata. It downgrades the live half to
-`STACK_MISC`, which represents an unbounded scalar.
+Could this lead to dead branch elimination errors or forged pointers?
 
-If a different path reaches the same point with an out-of-bounds precise
-scalar, wouldn't `stacksafe()` compare the new state against the cached sta=
-te
-containing `STACK_MISC`?
+> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+> index 332e6e003f270..87022da94f3a0 100644
+> --- a/kernel/bpf/liveness.c
+> +++ b/kernel/bpf/liveness.c
+> @@ -1068,11 +1068,21 @@ static void arg_track_xfer(struct bpf_verifier_en=
+v *env, struct bpf_insn *insn,
+>  	int depth =3D instance->depth;
+>  	u8 class =3D BPF_CLASS(insn->code);
+>  	u8 code =3D BPF_OP(insn->code);
+> -	struct arg_track *dst =3D &at_out[insn->dst_reg];
+> -	struct arg_track *src =3D &at_out[insn->src_reg];
+> +	struct arg_track *dst, *src;
+>  	struct arg_track none =3D { .frame =3D ARG_NONE };
+>  	int r;
+> =20
+> +	/* Stack arguments using BPF_REG_PARAMS are outside the tracked registe=
+r set. */
+> +	if (insn->dst_reg >=3D MAX_BPF_REG)
+> +		return;
+> +	if (insn->src_reg >=3D MAX_BPF_REG) {
+> +		if (class =3D=3D BPF_LDX)
+> +			at_out[insn->dst_reg] =3D none;
+> +		return;
+> +	}
 
-Since an imprecise unbounded scalar is evaluated as a superset of any preci=
-se
-scalar in `regsafe()`, wouldn't the out-of-bounds path be incorrectly prune=
-d,
-allowing an out-of-bounds memory access to execute at runtime?
+[Severity: Medium]
+Looking at this similar early return, could it skip updating the liveness
+tracking for ALU and atomic instructions that use BPF_REG_PARAMS?
+
+While reviewing this feature, I also noticed a couple of related issues in
+kernel/bpf/verifier.c:
+
+[Severity: Medium]
+In kernel/bpf/verifier.c:__check_reg_arg():
+
+    reg =3D &regs[regno];
+
+When an ALU, JMP, or ATOMIC instruction uses BPF_REG_PARAMS (r11) as a regi=
+ster
+operand, it appears this might access the regs array with an index of 11.
+Since the verifier's regs array is sized exactly MAX_BPF_REG (11 elements,
+indices 0-10), could this lead to an out-of-bounds access?
+
+
+[Severity: High]
+In kernel/bpf/verifier.c:check_and_resolve_insns():
+
+    if (insn->dst_reg >=3D MAX_BPF_REG) {
+        verbose(env, "R%d is invalid\n", insn->dst_reg);
+        return -EINVAL;
+    }
+
+Is BPF_REG_PARAMS unintentionally being rejected during the initial sanity
+checks here?
+
+Since BPF_REG_PARAMS is defined as MAX_BPF_REG (11), any instruction
+referencing r11 seems to be immediately rejected with "R11 is invalid" befo=
+re
+core verification begins. Should this bounds check be updated to accommodate
+the new register?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260410-patch-set-=
-v3-0-1f5826dc0ef2@gmail.com?part=3D5
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260419163316.7310=
+19-1-yonghong.song@linux.dev?part=3D9
