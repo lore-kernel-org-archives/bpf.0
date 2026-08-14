@@ -1,131 +1,152 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 602C017A2FC
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 00:21:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 959E070836;
+	Fri, 14 Aug 2026 00:44:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786666899; cv=none; b=g32IdYz+6HzwbFEiJDDITehJeJgD+cMiqRFMo43dX4Kd+Mbpv9bkmbfXr9lhVJLwaC04H+AyvYIjIDxf59TCgodsZeKiJVrj4Ot6tGqkJ5PzjgzDZgiIBbAXEy9Q4AMiiLDNo4jk9NLhvGMLS0NtEfN43BoIs85Qqar+T5e/bZw=
+	t=1786668292; cv=none; b=OGzqGU70yJxdoQK42ICizra+E/bIAUgf1LgAqh8maJ19Lav7iJedFKK4f8bnqCsAXhbY6KgzK0ULcFQ8nXv566lzsWaSjsQP1Ul5IEK2FY4rQwcbrOAGYgr7KiJK2bCDBSMw3EfNtS42OcEmN/5arkXy/K67yv2oTcZ0KpK6ixA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786666899; c=relaxed/simple;
-	bh=llSMXw7G3kpnXsk5e6qj6SBgAaYcAM7nLPGGsUkX4YQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=p0OgcooAuu/xG4rYNccFA+gS9oGGSIez/gnjLfKZeoFpKdrusZGhs/zsVwhBxt17HhIfZG2omY/tCf4Hmqvq5AJfK++rVAeOr6aOz/lNcFg8nTfrSTz6acBIJn8CjyCRFbnvopRe85DDuGeq/TynG42FVL6EjVPNeWFr/CZtdic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f5p8zu0E; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786668292; c=relaxed/simple;
+	bh=ihz6ut/dLxukNdpzAV6ILRUAK7wQohQv6y1U12ebl2k=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=AtK52cJsPFzkzonrdVseQMXIG97WrryXDArINYHRpwhcxei4zmTrS/Y7+dmtHOtJrYfIx7m62rmHpcW1B5AzmfD/mTQnxS+vt4DEvaNuO7gjkUfDwoEGgXGyIaA7rMBtH0XwUyOw867/7KBMklhq/HlCSEveAwhR8ZuEDBivgkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WiP6CpDi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f5p8zu0E"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87E3A1F000E9;
-	Fri, 14 Aug 2026 00:21:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786666898;
-	bh=whOIq62BFzpoHcpZWhrOUJKzqaBvWP1ErgiKZJphfZQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=f5p8zu0Epithta/p3NHNTLJly8g26xb6qcSi8HTrUqHaGUAsDI3SahYx/X2zXjLa4
-	 5xOqSr8lBMlHxzufe/eCUNBsjn4NrxVKMsxNGyqqnz3VvcnHItcZ9nbxFN1UOvovVQ
-	 SNAmdh3NUJ3ZveTito8JbJl8yKiAu6iegDv1mcpcrU5zveUFOAgypKzeAbwreLOqTj
-	 jKUsVJFfj1vRqkSevVAGRTd9icxYZyKrfzdwSsWF8hINbFOw7DzsKxb+wfBY4s2Wjt
-	 S7T7H5P1O7Sg1Un2fGs/wRw2Gznam6tW7UJ62sNcfnDC6O9mKrwe5ZaoEqTvXjso/z
-	 1K0CQbuef723w==
-Content-Type: multipart/mixed; boundary="===============4197804010435716492=="
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WiP6CpDi"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1104CC19425;
+	Fri, 14 Aug 2026 00:44:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1786668292;
+	bh=ihz6ut/dLxukNdpzAV6ILRUAK7wQohQv6y1U12ebl2k=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=WiP6CpDiS5sKN0OoMtbbs9QsGSyZVTv2Fi9amU6PGAKIiaSRrzJYQ33S10Mps4H0G
+	 L87i0jg9LH+CR5sfsaCliP6YVxWTxe95qyjJEXExGeWfoA6m1L/LXvibr4in0ZZQfW
+	 eNQYkxN0KN79ApBE9erNKgd6dGEHHxWzxmP+nVLsNFIgUsimKs54kfACP4JAaRhCvd
+	 L5wKQQc4vKztxszEiLn5HBLjtx17pCl1hRqfh8kYL625sJlITbD/fCMe4oPBWFM/06
+	 FUkW25o/T+zkZXN2+Uox38Nv5mg9Ki/uaWSgiSdKOeSF+dAJ/H3j6llh3MrfsZ9QuS
+	 CHtgfJjGqWOAw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2013C5CFCF;
+	Fri, 14 Aug 2026 00:44:51 +0000 (UTC)
+From: Darren Carreras via B4 Relay <devnull+carrerasdarren.gmail.com@kernel.org>
+Date: Thu, 13 Aug 2026 20:43:18 -0400
+Subject: [PATCH bpf-next v6] libbpf: avoid overflow in BTF.ext bounds check
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <a94164ace11182f9ca7a0fb5e20375fbbcf5bbc51bda5d692cea3ec93a05b790@mail.kernel.org>
-In-Reply-To: <20260813232943.581283-1-andrii@kernel.org>
-References: <20260813232943.581283-1-andrii@kernel.org>
-Subject: Re: [PATCH bpf-next] selftest/bpf: make pyperf600 a success again
-From: bot+bpf-ci@kernel.org
-To: andrii@kernel.org,bpf@vger.kernel.org
-Cc: andrii@kernel.org,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 14 Aug 2026 00:21:37 +0000 (UTC)
-
---===============4197804010435716492==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20260813-b4-libbpf-v6-send-20260813-v6-1-56be61c52758@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/z2M0QqCQBBFf0XmuQFTmbRfiR523WtNxCY7JoL47
+ 60FPR4O56xkSAqjc7FSwqymr5hBDgX1dxdvYA2ZqSorKdtjzb7hp3o/DjwLG2Lgv3Lh1EG6pnb
+ SUh6MCYMu3/mF9iJimej6M/b2D/TT/qZt+wBSILptiAAAAA==
+X-Change-ID: 20260813-b4-libbpf-v6-send-20260813-ad79e6943a68
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net, song@kernel.org, yonghong.song@linux.dev, 
+ linux-kernel@vger.kernel.org, jolsa@kernel.org, andrii.nakryiko@gmail.com, 
+ ast@kernel.org, eddyz87@gmail.com, emil@etsalapatis.com, andrii@kernel.org, 
+ memxor@gmail.com, ihor.solodrai@linux.dev, martin.lau@linux.dev
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1786668291; l=3262;
+ i=carrerasdarren@gmail.com; s=libbpf-b4; h=from:subject:message-id;
+ bh=05gmjAYpA6RRbM/SjSaIlc9x2GNDsLxx41K1RESmUG4=;
+ b=nxZUJ38gxCIU7W2EYxDCpkEzwMxLgf8WslbqL1i1mnBOf3X04At2e9oHBC/yFhJMnmqqlYNAZ
+ HMEMY45vkB+DleZ5s28GUG0YB+pNvyjhvPM3XYIVlofdFdzbhXxW68k
+X-Developer-Key: i=carrerasdarren@gmail.com; a=ed25519;
+ pk=B0Vb/xevRsgB+/STwMUkNczAQ7nZs/27IiRcds2ikpM=
+X-Endpoint-Received: by B4 Relay for carrerasdarren@gmail.com/libbpf-b4
+ with auth_id=947
+X-Original-From: Darren Carreras <carrerasdarren@gmail.com>
+Reply-To: carrerasdarren@gmail.com
 
->     pyperf600 has been running into 8K BPF_COMPLEXITY_LIMIT_JMP_SEQ limitations
->     for a long while now, after some internal compiler changes.
->
->     Until BPF verifier is bestowed with scalar evolution logic, make that test
->     actually work by doing what would anyone should do in such situations: by
->     moving repeatable per-iteration work into independently verified global
->     functions.
->
->     `void *` argument is a problem for global funcs, but a static function wrapper
->     doing necessary casts and a bit of __arg_nonnull magic dust is all it takes.
->
->     Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+From: Darren Carreras <carrerasdarren@gmail.com>
 
-This isn't a bug, but could this sentence be tightened? The phrase "by
-doing what would anyone should do in such situations: by moving ..."
-mixes "what would anyone do" with "what anyone should do" and repeats
-the "by" clause on both sides of the colon. Also, the changelog says
-"global functions" (plural) while the diff adds exactly one global
-function (__get_frame_data).
+A malformed BTF.ext subsection length in an ELF input can wrap the
+pointer addition used by btf_ext_parse_sec_info() on 32-bit builds. The
+wrapped pointer passes the bounds check and parsing then reads beyond the
+copied BTF.ext data.
 
-> diff --git a/tools/testing/selftests/bpf/progs/pyperf.h b/tools/testing/selftests/bpf/progs/pyperf.h
-> index 86484f07e1d19..fd93a96e59015 100644
-> --- a/tools/testing/selftests/bpf/progs/pyperf.h
-> +++ b/tools/testing/selftests/bpf/progs/pyperf.h
-> @@ -85,9 +85,11 @@ static void *get_thread_state(void *tls_base, PidData *pidData)
->  	return thread_state;
->  }
->
-> -static __always_inline bool get_frame_data(void *frame_ptr, PidData *pidData,
-> -					   FrameData *frame, Symbol *symbol)
-> +__weak bool __get_frame_data(long frame_ptr_, PidData *pidData __arg_nonnull,
-> +			     FrameData *frame __arg_nonnull, Symbol *symbol __arg_nonnull)
->  {
-> +	void *frame_ptr = (void *)frame_ptr_;
-> +
->  	// read data from PyFrameObject
->  	bpf_probe_read_user(&frame->f_back,
->  			    sizeof(frame->f_back),
+Ensure the header fits in the copied data, then validate the subsection
+offset and length with subtraction before forming its pointer.
 
-[ ... ]
+Fixes: ae4ab4b4117d ("btf: expose API to work with raw btf_ext data")
+Closes: https://issues.oss-fuzz.com/issues/477315119
+Signed-off-by: Darren Carreras <carrerasdarren@gmail.com>
+---
+Changes in v6:
+- Post the patch inline rather than as an attachment.
+- Guard hdr_len locally before subtracting it from data_size.
+- Clarify that the input is a malformed BTF.ext subsection in an ELF file.
 
-> @@ -119,6 +121,12 @@ static __always_inline bool get_frame_data(void *frame_ptr, PidData *pidData,
->  	return true;
->  }
->
-> +static __always_inline bool get_frame_data(void *frame_ptr, PidData *pidData,
-> +					   FrameData *frame, Symbol *symbol)
-> +{
-> +	return __get_frame_data((long)frame_ptr, pidData, frame, symbol);
-> +}
-> +
->  struct {
->  	__uint(type, BPF_MAP_TYPE_HASH);
->  	__uint(max_entries, 1);
+Changes in v5:
+- Resend from a clean compose window because Gmail retained a stale rich-text
+  copy beside the v4 attachment, producing a duplicated malformed patch body.
 
-This isn't a bug, but was the intent to change all nine pyperf variants?
-pyperf.h already carries a per-variant inlining switch used twice in the
-same file (the #ifdef SUBPROGS block at get_thread_state and the #ifdef
-GLOBAL_FUNC / #elif SUBPROGS block at __on_event). The new __get_frame_data
-is unconditionally __weak, so all nine includers change shape at once,
-including pyperf_subprogs.c and pyperf_global.c whose reason for existing
-is to exercise the static-noinline-subprog and global-func paths
-specifically, and pyperf50/100/180 which exercise full unrolling.
+Changes in v4:
+- Drop the selftest because the malformed length is already rejected by the
+  old check on 64-bit CI; the behavioral divergence is specific to 32-bit.
+- Correct the Fixes tag to the commit that introduced the pointer-based check.
 
-The descriptions in prog_tests/bpf_verif_scale.c that document the
-intended shape of these objects (for pyperf600: "Asm loop count -> 4. 16k
-insns in loop body. Total program size ~82k insns.") are no longer
-accurate for the smaller loop body and are not updated here. The changelog
-only motivates pyperf600.
+Changes in v3:
+- Remove the nested mbox envelope and mail headers from the Gmail attachment
+  so Patchwork's generated mbox applies with git am.
 
-Would gating the new global function the way get_thread_state()/
-__on_event() are already gated keep the subprogs/global/unrolled variants
-testing what their names suggest? If it is meant to apply everywhere,
-would it be worth refreshing the size comments in bpf_verif_scale.c?
+Changes in v2:
+- Resend as plain text because Gmail mangled the v1 diff and Patchwork
+  reported "Patch is empty."
+- Include the authorized DCO Signed-off-by line.
+---
+ tools/lib/bpf/btf.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 8417de92d..c78335997 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -3364,7 +3364,7 @@ static int btf_ext_parse_sec_info(struct btf_ext *btf_ext,
+ {
+ 	const struct btf_ext_info_sec *sinfo;
+ 	struct btf_ext_info *ext_info;
+-	__u32 info_left, record_size;
++	__u32 data_left, info_left, record_size;
+ 	size_t sec_cnt = 0;
+ 	void *info;
+ 
+@@ -3377,16 +3377,20 @@ static int btf_ext_parse_sec_info(struct btf_ext *btf_ext,
+ 		return -EINVAL;
+ 	}
+ 
+-	/* The start of the info sec (including the __u32 record_size). */
+-	info = btf_ext->data + btf_ext->hdr->hdr_len + ext_sec->off;
+-	info_left = ext_sec->len;
++	if (btf_ext->hdr->hdr_len > btf_ext->data_size)
++		return -EINVAL;
+ 
+-	if (btf_ext->data + btf_ext->data_size < info + ext_sec->len) {
++	data_left = btf_ext->data_size - btf_ext->hdr->hdr_len;
++	if (ext_sec->off > data_left || ext_sec->len > data_left - ext_sec->off) {
+ 		pr_debug("%s section (off:%u len:%u) is beyond the end of the ELF section .BTF.ext\n",
+ 			 ext_sec->desc, ext_sec->off, ext_sec->len);
+ 		return -EINVAL;
+ 	}
+ 
++	/* The start of the info sec (including the __u32 record_size). */
++	info = btf_ext->data + btf_ext->hdr->hdr_len + ext_sec->off;
++	info_left = ext_sec->len;
++
+ 	/* At least a record size */
+ 	if (info_left < sizeof(__u32)) {
+ 		pr_debug(".BTF.ext %s record size not found\n", ext_sec->desc);
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+base-commit: 4d9551b39aeb5d32beb4d795ce2892e7690a3e93
+change-id: 20260813-b4-libbpf-v6-send-20260813-ad79e6943a68
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31754735233
---===============4197804010435716492==--
+Best regards,
+--  
+Darren Carreras <carrerasdarren@gmail.com>
+
+
