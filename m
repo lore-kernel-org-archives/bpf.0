@@ -1,45 +1,45 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04A1E3A7F7C
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 21:53:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D62083D47A7
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 21:53:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786744392; cv=none; b=lNaOs3ddkyDyPLAV38QACx3iNanQFbNesx7EUOtzg6dOaUEmdFkVmPrbp4tPJwFI/OFbGpgsbpdGXtr9dztSEWefGDnCIr0nEy33JiPdmr8211Ov1DqTvrZ+73Ta1P2Q+p/CMm4JDNXYHfZ5degttb7PoEPSxOSh7CroTKjxrR0=
+	t=1786744393; cv=none; b=YDJM9Co1+SeXcNvKzE8NI7mkw4PtlCHuZhQG8eNy8PP63vwCz/gvVJwZmRUNJO5ItpNkQWtthu0oQSZSFbjbcL4qbdFYFFtm5ViK8FxibAZ25zLvvJf8v77A8hu979tB7IGEHgVsjD3gj6O46QGW3X+g1Zb4Tt6ilfuThY6IOAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786744392; c=relaxed/simple;
-	bh=YBSQEqEmlHDxdm0P4EYkLzJ7pEl1unA2e9P2W/1HuKk=;
+	s=arc-20240116; t=1786744393; c=relaxed/simple;
+	bh=11lS8Vsvg9TpuQmxaFknjUTrorhzfBPBuZcukAN+qQY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=j4PEmHSCx6sV/jM2wNUiCS1EEXlflEJGMoizZG1Ou9vF2HFF1a2dg1ZFJEHZHmpOy2fxRpSxDwa/AYdX8SSKxiam13+Z+jgYNkI7o2CeerYpQVB3eJPuuR8CtCVKsnWLkKevk3/mMl/2NRnK1/FX7jBew8A7aT/vXHm0aPrSpyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=eYWk+x1z; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=kW6Hq6U1ukjKfzMhtPVvQHjxe9cxWkHCE0y4JZeLrJq2qJmdggmoQFPWtEs/euKB5OLuj/cXTbuyRmxbzujbECT6zvhqxy4odittuQU98Ho5zmmzNL6AlE/sLM/qavQwq6mof5MhEo0HflAy4bBdd/Q/rNP+PXYEIkYq8YiNOC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=hnWTY1Qe; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="eYWk+x1z"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="hnWTY1Qe"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=mESqynhU62fsjvxDRQKPK/hNWNy1zvFIJ921s+EtIEA=; b=eYWk+x1zJvzrnLFQ7OyMnu+m8t
-	fpRvjXXQ60Y1NyF5WRl118qZaDZZbw0u7znzX3ItmhnZNypYVkXzWdwaZHCnhKzzLS1Gr6vU7/Qlt
-	ndpUl3KalJgvXf084rCeHnFoZ9J5gVgaljnQOQXasJUrRUl2i2TJRD24h41N/2yroNn1qoT/ecE08
-	qTSlfoinxJwou1NMuxUKPe4HPhRPGJlNN8XAFC0vGxaKaZs+UOOgISQOL6NNqGRWlJjDGLHTMS72G
-	CUIw8u11yDHjFLRfpOL/TJXhL+++jSwPPJ5tSZusd7sx18bDQGngSfbeW5Z307oSBZZBMe4o0jDG0
-	993ZNbgA==;
+	bh=BWdFGvoFYeABGHtF51iraeHFSi+yLYk83h3wzTHiB6g=; b=hnWTY1QeimoBIbA9iuGMGxZcPb
+	Ymr/ZHJIYVLv9WP9fMKGu3Wuz8y4kxElekCw08BNVf3q58RD+yaJ6CBq8R3i37lWWOrGks8wQ/PFD
+	G+6uR9O8LZarFaBJQJHxR8RN25ZVnQh34n18XRp0SdF1R3MqqTloIb168Tk/P/AJtQPzGSL1z31/w
+	esKIDKjDa5vtwbaNrWEXDHgMGARLGVH7J3GqCvxmdlD2JMPYd/RENeVVxCX+KruFx8+c4jd4gVq4H
+	WM60VAax547kS1sZT8A67kq/2sSBgJHI9GuTnsPWcqPDX/k2uH3z8CGfC6KHZjR6oghNgfmuzjFl/
+	v91sfY8Q==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wuzpm-000F93-1N;
-	Fri, 14 Aug 2026 23:53:02 +0200
+	id 1wuzpo-000F9Y-1v;
+	Fri, 14 Aug 2026 23:53:04 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: eddyz87@gmail.com
 Cc: memxor@gmail.com,
 	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/6] bpf: Treat a fault prone PTR_TO_MEM as a pointer type mismatch
-Date: Fri, 14 Aug 2026 23:52:56 +0200
-Message-ID: <20260814215301.709827-2-daniel@iogearbox.net>
+Subject: [PATCH bpf-next v2 6/6] selftests/bpf: Add tests for fault prone loads out of RCU pointers
+Date: Fri, 14 Aug 2026 23:53:00 +0200
+Message-ID: <20260814215301.709827-6-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260814215301.709827-1-daniel@iogearbox.net>
 References: <20260814215301.709827-1-daniel@iogearbox.net>
@@ -52,39 +52,124 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28092/Fri Aug 14 08:27:02 2026)
 
-reg_type_mismatch_ok() enumerates the pointer types which must not
-silently share a BPF_LDX with a different one, since the type recorded
-for the insn drives a rewrite in bpf_convert_ctx_accesses().
+Cover the two loads which used to lose the BPF_PROBE_MEM rewrite, both
+reached from an RCU read-side critical section.
 
-f2362a57aeff ("bpf: allow void* cast using bpf_rdonly_cast()") added
-PTR_TO_MEM | MEM_RDONLY | PTR_UNTRUSTED as another type in need of one,
-namely the BPF_PROBE_MEM rewrite, but did not add it there. Fix it by
-adding the missing case to reg_type_mismatch_ok(), so that a PTR_TO_MEM
-which may fault on deref is not mismatch ok anymore. The triage in
-save_aux_ptr_type() then merges them.
+  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t rcu_read_lock
+  [...]
+  #332/1   rcu_read_lock/success:OK
+  #332/2   rcu_read_lock/rcuptr_acquire:OK
+  #332/3   rcu_read_lock/negative_tests_inproper_region:OK
+  #332/4   rcu_read_lock/negative_tests_rcuptr_misuse:OK
+  #332     rcu_read_lock:OK
+  Summary: 1/4 PASSED, 0 SKIPPED, 0/0 FAILED
 
-Fixes: f2362a57aeff ("bpf: allow void* cast using bpf_rdonly_cast()")
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
  v1 -> v2:
-   - new patch to address PTR_TO_MEM case differently (Eduard)
+   - new patch
 
- kernel/bpf/verifier.c | 2 ++
- 1 file changed, 2 insertions(+)
+ .../selftests/bpf/prog_tests/rcu_read_lock.c  |  2 +
+ .../selftests/bpf/progs/rcu_read_lock.c       | 76 +++++++++++++++++++
+ 2 files changed, 78 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a3d165e92175..2e6992569187 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -16974,6 +16974,8 @@ static bool reg_type_mismatch_ok(enum bpf_reg_type type)
- 	case PTR_TO_BTF_ID:
- 	case PTR_TO_ARENA:
- 		return false;
-+	case PTR_TO_MEM:
-+		return !bpf_may_fault_on_deref(type);
- 	default:
- 		return true;
- 	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/rcu_read_lock.c b/tools/testing/selftests/bpf/prog_tests/rcu_read_lock.c
+index 246eb259c08a..6a07b2b418d1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/rcu_read_lock.c
++++ b/tools/testing/selftests/bpf/prog_tests/rcu_read_lock.c
+@@ -34,6 +34,8 @@ static void test_success(void)
+ 	bpf_program__set_autoload(skel->progs.rcu_read_lock_global_subprog, true);
+ 	bpf_program__set_autoload(skel->progs.rcu_read_lock_subprog_lock, true);
+ 	bpf_program__set_autoload(skel->progs.rcu_read_lock_subprog_unlock, true);
++	bpf_program__set_autoload(skel->progs.non_own_ref_untrusted_ld, true);
++	bpf_program__set_autoload(skel->progs.rcu_untrusted_union_ld, true);
+ 	err = rcu_read_lock__load(skel);
+ 	if (!ASSERT_OK(err, "skel_load"))
+ 		goto out;
+diff --git a/tools/testing/selftests/bpf/progs/rcu_read_lock.c b/tools/testing/selftests/bpf/progs/rcu_read_lock.c
+index b4e073168fb1..31d4081c3a9f 100644
+--- a/tools/testing/selftests/bpf/progs/rcu_read_lock.c
++++ b/tools/testing/selftests/bpf/progs/rcu_read_lock.c
+@@ -549,3 +549,79 @@ int rcu_read_lock_sleepable_global_subprog_indirect(void *ctx)
+ 	bpf_rcu_read_unlock();
+ 	return 0;
+ }
++
++struct rcu_node_data {
++	long key;
++	struct bpf_rb_node node;
++};
++
++struct rcu_node_stash {
++	struct rcu_node_data __kptr *node;
++};
++
++/*
++ * Necessary so that LLVM emits BTF for rcu_node_data rather than just a
++ * fwd reference to it, same as in progs/local_kptr_stash.c.
++ */
++struct rcu_node_data *just_here_because_btf_bug;
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, struct rcu_node_stash);
++} node_stash SEC(".maps");
++
++long non_own_ref_key;
++
++SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
++int non_own_ref_untrusted_ld(void *ctx)
++{
++	struct rcu_node_stash *stash;
++	struct rcu_node_data *node;
++	int key = 0;
++
++	stash = bpf_map_lookup_elem(&node_stash, &key);
++	if (!stash)
++		return 0;
++	bpf_rcu_read_lock();
++	node = stash->node;
++	if (!node) {
++		bpf_rcu_read_unlock();
++		return 0;
++	}
++	bpf_rcu_read_unlock();
++	/*
++	 * The unlock leaves node as PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED
++	 * | NON_OWN_REF, and the load below has to get the BPF_PROBE_MEM
++	 * rewrite for it, otherwise a bad address panics the kernel.
++	 */
++	non_own_ref_key = node->key;
++	return 0;
++}
++
++long rcu_untrusted_wq_flags;
++
++SEC("?tp_btf/tcp_probe")
++int BPF_PROG(rcu_untrusted_union_ld, struct sock *sk)
++{
++	struct socket_wq *wq;
++
++	/*
++	 * sk_wq sits in a two member union, so btf_struct_walk() marks the
++	 * pointer PTR_UNTRUSTED, and the __rcu tag on the member adds MEM_RCU
++	 * on top of it. struct sock is not on the __safe_rcu_or_null allow
++	 * list, hence the two stay combined and the load below has to get the
++	 * BPF_PROBE_MEM rewrite for PTR_TO_BTF_ID | PTR_UNTRUSTED | MEM_RCU,
++	 * otherwise a bad address panics the kernel.
++	 *
++	 * The __rcu tag only reaches BTF on a clang built kernel, that is, one
++	 * with CONFIG_PAHOLE_HAS_BTF_TAG. On a gcc built kernel the walk yields
++	 * a plain untrusted pointer, which is rewritten either way.
++	 */
++	wq = sk->sk_wq;
++	if (!wq)
++		return 0;
++	rcu_untrusted_wq_flags = wq->flags;
++	return 0;
++}
 -- 
 2.43.0
 
