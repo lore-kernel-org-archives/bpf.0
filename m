@@ -1,41 +1,42 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4186A3E7625;
-	Fri, 14 Aug 2026 07:13:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79B043E5A22
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 07:13:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786691595; cv=none; b=nubi4IrW4DmR2/XeZoaSNGXHiQZkCT8MXEUBTWIf6yGz57BhlIwVZWS50XWqDQSBD/M3apmYDBijIKlUHrSfF+zbk0wCYL129QjA5p2zj3UWxbp73rQArlrGzYHvpOSabPIHcHzI4Xb1kUM/Lf1J96RYQ9iz/R2vJdbqA+WbsuQ=
+	t=1786691601; cv=none; b=PzZs2fNLtOZEA6rciv+cFq12PWVs4JxrUWUvCJo0Vm4pwlIv+QeDKrTQX62QhfBY6rhNB64BQl7qdx12qLiDhNOFYTAdsuhfILewGb5KIbwlLS9yyon0dS0QrhDib2ZMH8Mpk5+uQEtAG5v6IGLxFNLEld6oQJ07C8WRHYqN/Fo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786691595; c=relaxed/simple;
-	bh=yqP4tSBZtLGvea0WQ/QK/61MC4Kyq0gUuWOtLvjgkNo=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=d/91oqkbVqQ0zHYHJhhqIRfBlJXZT5fb+MUU1wsK6qt7gNnUjBuH5ChFqwH9rKh+R/2jE7Pnelkul6qaObKSpWvmLzxQw/JMLjAjoTAuhR4uIzjs9QCSNhvuFNNLpItHpejE/nt1bvep90UG8jGSxLXPTZu1khl4UU731MMVqPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=BREEoX6s; arc=none smtp.client-ip=185.246.85.4
+	s=arc-20240116; t=1786691601; c=relaxed/simple;
+	bh=zFtNcngtFWoMnpccDfuSCQkGbVwc6Ii4mKhnjDMpm5s=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=L5D5GgxzU8Gfj+upk08HljKEXcR5qEv2mjABw028oOYDDFwwB61PYkcO8gOqUJ7XQFr2vg5f9qykv7lkX2OmzWYpQf4iI5xeA58u5ftiz+vDzuhXPHk1yR8e+W7zyg0S0oOTfBo8yTPRnuAFiqUuM7xcPoB5eRtlEcaYHKOUlm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=y/EZvdlJ; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BREEoX6s"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="y/EZvdlJ"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 944F04E41220;
-	Fri, 14 Aug 2026 07:13:04 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id EFFF61A162A;
+	Fri, 14 Aug 2026 07:13:10 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 5E7056046D;
-	Fri, 14 Aug 2026 07:13:04 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 418DB11C4E895;
-	Fri, 14 Aug 2026 09:12:55 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id BDA866046D;
+	Fri, 14 Aug 2026 07:13:10 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8CBEF11C4E891;
+	Fri, 14 Aug 2026 09:13:03 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1786691579; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=UamOckhX2fid98x7el6hlfeD34U7Ll/vltEZg4yRc0U=;
-	b=BREEoX6sWj+t/i1mrq/BtGlEhT+qSkbHCTl+bDELDe8r+AWZcxwY5ZLVlXAwNNSt/4NRgY
-	zzu7qj4j9ySzjUE4Mh6F7OH4G7hIkZOnAj93zHut/A672EQIJQwaj5d9+N0Z3oFElzza4G
-	nE+DmDrWcIFd85YabaEySGCvmY9D9u1r5LdtAe2KAIkvqY1t1jDtnCwTxRVITFlScny0GU
-	LNzYO/tsjcNu5ehCs2+S/TKEKUsN6XL2fg7WgfO7AGfIWwv0VFiWKjAjbUVk4xaIDC/6nN
-	8/wulF4ufcyaPRh+wj7wT/N4Vh0SSeOf32Wp1yIR/A8H4v84khuL907NfE/GcQ==
+	t=1786691585; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=kRgIOpocXmWDCj9+e0CmpJoX72P3XcDuoAlPjTPqyK4=;
+	b=y/EZvdlJUc0MpNB4aB73uMu6uXZx0cx6WV3f5WG9knOzgolkkU4/xi29bqDXhkSI6evopp
+	T3FhkQiNASrrfdYnSasAYAEZLMNs42mettBgMqhkzkHSGhhxpRoQDD9X9CAcVNGsp9emqX
+	+yvkaR51r4f/Jb4AVDGzoxJKM6LxAgFbwTLVfwitrLFY2rPYZr83nf5OFZEYIMVAAMmhCW
+	mDfxctDrr3vhcKPP+KtZDQvQfyE7hCmSW2zeBhw5QYyAgVwnk6rJ4HQHRHMb4djhvFOg1L
+	6xBbDG8hMtgdyshBEoz+r5T2lsD7M+6/i+10ZI9ZEq/j5GvKSCHRwQ2yqF7x6A==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Subject: [PATCH bpf v5 0/2] selftest/bpf: make test_tc_tunnel and
- test_tc_edt more robust to CI load
-Date: Fri, 14 Aug 2026 09:11:26 +0200
-Message-Id: <20260814-tc_tunnel_flaky-v5-0-5b93d030c42c@bootlin.com>
+Date: Fri, 14 Aug 2026 09:11:27 +0200
+Subject: [PATCH bpf v5 1/2] bpf/selftests: fix comment style in
+ network_helpers.c
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -44,12 +45,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3XOwU4DIRAG4FdpOIsBBpbFk+9hTAPsYNEtNAvd2
- DT77tL1YM3qcSb/fP9cScEpYiFPuyuZcI4l5tQG9bAj/mDTG9I4tJkIJjqmOaPV7+s5JRz3YbQ
- fFyo0GssNdwMD0q5OE4b4uYovxJ0Cef1elrN7R19v1i12iKXm6bL2znwN/1sxc8qpFNY6BcZYa
- Z5dznWM6dHn4+rP4kfoGWwF0YROaSd6PQSr1VaAO4HzrQCU0V53QSJzvmOwFeS98McPsv0ACuQ
- QIKAB9ltYluULUnhjgY0BAAA=
-X-Change-ID: 20260710-tc_tunnel_flaky-27e9a191bd03
+Message-Id: <20260814-tc_tunnel_flaky-v5-1-5b93d030c42c@bootlin.com>
+References: <20260814-tc_tunnel_flaky-v5-0-5b93d030c42c@bootlin.com>
+In-Reply-To: <20260814-tc_tunnel_flaky-v5-0-5b93d030c42c@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
@@ -66,71 +64,98 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.15.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-Hello,
-this is the v5 of the series aiming to reduce the flakyness of
-tc_tunnel/tc_edt tests in CI. This revision just fixes multi-line
-comments style, not only for the updated helper but for the whole
-network_helpers.c file
+BPF subsystem requires multi-line comments to have the opening /* start
+on its own line.
+
+Update multi-line comments in network_helpers.c to follow this
+requirement.
 
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
-Changes in v5:
-- reformat multi-line comments
-- collect Ihor's Acked-by
-- Link to v4: https://patch.msgid.link/20260813-tc_tunnel_flaky-v4-1-3534df3fe930@bootlin.com
+ tools/testing/selftests/bpf/network_helpers.c | 24 ++++++++++++++++--------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
 
-Changes in v4:
-- dropped the polling loop in favor of a larger, connect-specific timeout
-- drop timeout configuration from tc_edt test
-- Link to v3: https://patch.msgid.link/20260811-tc_tunnel_flaky-v3-0-876f4e0bc603@bootlin.com
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index db935a9d9fc1..cdf2d7d3ab32 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -424,7 +424,8 @@ int make_sockaddr(int family, const char *addr_str, __u16 port,
+ 			*len = sizeof(*sin6);
+ 		return 0;
+ 	} else if (family == AF_UNIX) {
+-		/* Note that we always use abstract unix sockets to avoid having
++		/*
++		 * Note that we always use abstract unix sockets to avoid having
+ 		 * to clean up leftover files.
+ 		 */
+ 		struct sockaddr_un *sun = (void *)addr;
+@@ -865,7 +866,8 @@ static bool is_ethernet(const u_char *packet)
+ 	memcpy(&arphdr_type, packet + 8, 2);
+ 	arphdr_type = ntohs(arphdr_type);
+ 
+-	/* Except the following cases, the protocol type contains the
++	/*
++	 * Except the following cases, the protocol type contains the
+ 	 * Ethernet protocol type for the packet.
+ 	 *
+ 	 * https://www.tcpdump.org/linktypes/LINKTYPE_LINUX_SLL2.html
+@@ -1033,19 +1035,22 @@ static void *traffic_monitor_thread(void *arg)
+ 		if (!packet)
+ 			continue;
+ 
+-		/* According to the man page of pcap_dump(), first argument
++		/*
++		 * According to the man page of pcap_dump(), first argument
+ 		 * is the pcap_dumper_t pointer even it's argument type is
+ 		 * u_char *.
+ 		 */
+ 		pcap_dump((u_char *)dumper, &header, packet);
+ 
+-		/* Not sure what other types of packets look like. Here, we
++		/*
++		 * Not sure what other types of packets look like. Here, we
+ 		 * parse only Ethernet and compatible packets.
+ 		 */
+ 		if (!is_ethernet(packet))
+ 			continue;
+ 
+-		/* Skip SLL2 header
++		/*
++		 * Skip SLL2 header
+ 		 * https://www.tcpdump.org/linktypes/LINKTYPE_LINUX_SLL2.html
+ 		 *
+ 		 * Although the document doesn't mention that, the payload
+@@ -1079,7 +1084,8 @@ static void *traffic_monitor_thread(void *arg)
+ 	return NULL;
+ }
+ 
+-/* Prepare the pcap handle to capture packets.
++/*
++ * Prepare the pcap handle to capture packets.
+  *
+  * This pcap is non-blocking and immediate mode is enabled to receive
+  * captured packets as soon as possible.  The snaplen is set to 1024 bytes
+@@ -1150,7 +1156,8 @@ static void encode_test_name(char *buf, size_t len, const char *test_name, const
+ 
+ #define PCAP_DIR "/tmp/tmon_pcap"
+ 
+-/* Start to monitor the network traffic in the given network namespace.
++/*
++ * Start to monitor the network traffic in the given network namespace.
+  *
+  * netns: the name of the network namespace to monitor. If NULL, the
+  *        current network namespace is monitored.
+@@ -1255,7 +1262,8 @@ static void traffic_monitor_release(struct tmonitor_ctx *ctx)
+ 	free(ctx);
+ }
+ 
+-/* Stop the network traffic monitor.
++/*
++ * Stop the network traffic monitor.
+  *
+  * ctx: the context returned by traffic_monitor_start()
+  */
 
-Changes in v3:
-- set errno before logging errors
-- respect time budget set by
-- respect opts->timeout_ms when polling: only poll for the remaining
-  time not already consume by connect()
-- keep polling if poll returns with EINTR
-- reorder early returns and add intermediate variables to clarify code
-  flow
-- Link to v2: https://patch.msgid.link/20260803-tc_tunnel_flaky-v2-1-657b287dfa75@bootlin.com
-
-Changes in v2:
-- drop unneeded initialization
-- add back error message for immediate connection failure, and slightly
-  reword the async connection failure error message
-- Link to v1: https://patch.msgid.link/20260710-tc_tunnel_flaky-v1-1-42aab5399a49@bootlin.com
-
-To: Alexei Starovoitov <ast@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-To: Andrii Nakryiko <andrii@kernel.org>
-To: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-To: Song Liu <song@kernel.org>
-To: Yonghong Song <yonghong.song@linux.dev>
-To: Jiri Olsa <jolsa@kernel.org>
-To: Emil Tsalapatis <emil@etsalapatis.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Shuah Khan <shuah@kernel.org>
-Cc: ebpf@linuxfoundation.org
-Cc: Bastien Curutchet <bastien.curutchet@bootlin.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-
----
-Alexis Lothoré (eBPF Foundation) (2):
-      bpf/selftests: fix comment style in network_helpers.c
-      selftests/bpf: allocate a larger timeout for connection
-
- tools/testing/selftests/bpf/network_helpers.c | 60 ++++++++++++++++++++++-----
- 1 file changed, 49 insertions(+), 11 deletions(-)
----
-base-commit: 114cb6aa1571c30770715a1756553b812865b1ba
-change-id: 20260710-tc_tunnel_flaky-27e9a191bd03
-
-Best regards,
---  
-Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+-- 
+2.55.0
 
