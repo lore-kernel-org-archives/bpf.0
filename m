@@ -1,179 +1,225 @@
-Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9362237F8A1
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 19:15:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C9A3515D7
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 19:34:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.170
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786734911; cv=pass; b=pNmOnsqhJb6iswJVtLZUgSRNK5ZZvpls+di8fBl6ZKmKw2ajo/+brAcmOc4INnvDB8inVN4cootVXsFygt6VMuvStbp6cb9n0+22Wlb5xi009FzMZ5iAK00u9FwcfS2Z1TrV15aXdO9kZDlyuEZdWvyd+SLBwRJm6FdFNcfR89c=
+	t=1786736074; cv=pass; b=Gq3AdQu52FvehxVdDpIAziFlC0TZOoCIPT6+R494mMt9sIUGFptbDuI3f0QlRGI+DQwNX2cvAildFxPpOLmwW1R5beoheHdttroug55ucF/hKk2R2lFLatxaAT/j4wQy9HRRtupl/wm5kMPMjLthG/OTZC1V2Ug5MIHP2IjwDGw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786734911; c=relaxed/simple;
-	bh=YARhzzSQQ1PYu0fWMrgI/uEX5C0qrr5INxA7sSEl8ig=;
+	s=arc-20240116; t=1786736074; c=relaxed/simple;
+	bh=BijgrGWiD0sRMYcSax7e27hFwMfEy2yLRhbRUbhOeMk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BYv+Jcux24UEwxSR0RAlNPinATVO4wiUSSIDyOTt5SJk0ypnqIELcox2fp+f/uV56MQucVm5TaO3yY36wtscc/L0meXT2SmcQzyR6t/a1OWBr+A9sKczLAu974aJoynIpE2+QbPVdwnbMTE1IbL2vYaKZekHTLtvupOJW5TNQX4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KYQ/nw7u; arc=pass smtp.client-ip=74.125.224.45
+	 To:Cc:Content-Type; b=OaIT7TfO2yt99fFA4E1zYTpZukBUF8I98oFHKu5hjxs+m8PYCLycMHn3Mck6HSVZRosgtgfk3N6nps+Stc/FINY89F+Bedy7rEQvfUxept4pBJ6G3wYwJYeTb3La+Rb1hLJXPc32OQzqL2Q57Ut8VUvlUkj+E7ArXllP2Dcqz8g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PTcVqUa/; arc=pass smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KYQ/nw7u"
-Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-66c67a73eb7so2500180d50.0
-        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 12:15:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786734908; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PTcVqUa/"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-848643382fcso1390784b3a.1
+        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 12:34:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786736072; cv=none;
         d=google.com; s=arc-20260327;
-        b=msIv0W7/dXoznwcAz2o+vCzfn1RnQzvMqBA3N5ayeDp4HBsx3EBS7AwkwJrwjiaPps
-         aiYYeR6cJHhEbqoclWRJ0Xe6h2uPVNRKw4qUybrgXu1PlQ13P1a/y6a7LMygMoB4vqyO
-         iPKFuX8jRf+QuCMhwEU6fH3F97Tx1v1HgzyV3nCNjpGLNqsvxlUVir1s5HuqnVVO9DZ5
-         AuFz7sW/vFlrKh8jxRsxPNhwc8zU9H2foLU3Nj6hx+QAkvbqijiWz206u0JEW5J55U3q
-         4dbVIIe2YoJPQXewbFdY0lrYGuDVVae/IHGNTRxTY3cNIVTHYm4IzDL6+fubjWU3NHeL
-         oe2g==
+        b=qAzQMb7ccBzvvBWLPYa7hhTuB+ovlpYZdV86UhOr/NW4A0VlcSPoFxSxt7IbfO+/0Q
+         bbZgH9m8lfZESxEOYASNG+k18AcwfYMUrOTS2gVDj5a85zX+nP7AqMalVvvHVOvUXPj0
+         ukcmY1KCV8coci9dwFHfR87FajfxsYgGJgzRf+7D/ZroMbNBL1DStUIjVyH+bjcRoKHX
+         Xj3J5s+aaXkGb6o74LXy1p0FW9+zuIhPpa18j4XTvfMsSiXqcdoQMcXyQnfJfZAAjfJW
+         8qCQzs0/I6uxwx/izrhQmRuzDwevm1vur4BtGUSQFjderb6PuBixF0S8+KjEGUr63N6D
+         o2Wg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=krO17/bagVVmRXbK81DAUeMmTF89gRNsvTsVM9hl/s8=;
-        fh=F/aKvsMONRFzcHwkLVI8gOv9iX3sWMIoLfTfaJb71YU=;
-        b=q1STF5ivVxI4TCXQEqrmH+wz9Ihp/MruBcS1x71QQN+j/J8E5yLwdWb1UFCh2K8uoF
-         +9s/R5acZM63DrNBu8GEoOXcb4j33rN7lRZOJfKLeOSmfSTvmFQhFYasnh1CBkXJGA0+
-         HqVZ142J0K3nzdqpZSA44UIM+AshGHGj/60V/tTmgZZkwzDtlZaza1ztkhnxNwFSDYHs
-         AGdOnsLBbGunDeJ4hc98PB95zqJLNjwwvksez8P5WkoGKN9/JwiBZXGJHehL/AUiRqJ8
-         1OI4gOWjzpqKETcPRA1dZPRAeR/wOh11nItbbDjY6A256YU0vczSeerkVbag8CbUeZKB
-         lyUQ==;
+        bh=y3Wg7BlO4Qo+99Bkr2kgupRM9RDswUzNhJatcCXw2Rk=;
+        fh=mc1EpJUw09rU2fKHXHULD5cZq4kWVKZq5TWeVOTdCs4=;
+        b=caSa1sKPbzzOZWKIBGFJ0LyGicbNha7lCzs/JAwWYkAGjCj9m+MF5PBH8Foa0e8LKS
+         6+VVztgc3CQUd+S492EOBC0jZKdrEtOZZApR7LW5aG1l/JqZwIP8eb3eTbHp9Mw1sc2D
+         XcPTrmz/OjF1+Gk1wC/ZY+CUrmkL+PsankxwEajLHmGC8QfbhK2jwQvoFSOaTSyOEfcu
+         scx8Wp64Szf2UxZXWmaBJ+BKMBw65U8LO3fFfkB3xYbDByALKGBRKiNgbgeAz5bO9Xh0
+         RXqohH402IVwQ3K7Fa2qxgCPzBMZbdcpObpv53uMetz6bOlOuyrpBPbsor6QfjcYs0wc
+         7PtQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786734908; x=1787339708; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786736072; x=1787340872; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=krO17/bagVVmRXbK81DAUeMmTF89gRNsvTsVM9hl/s8=;
-        b=KYQ/nw7u3tV0TExnGT+kd0AY6B8/6BK+QfWLRP/6E4dlPlPZz1LjL8JhAJk+dBX+6w
-         sblw4YbI6vQcbyROFtTvoxUEp7GvqM4YlGJonR16otVkwHGhkYgLS5HqOJQ2C+POypbu
-         fTg9mPpzjVG1vy+EwpPg2/NNng118TQwedSvAwOTFyU0bX8sasEcM21H1lNUb57/hXOb
-         PQJIkXuhhcw159yLRuQYcuIhk7/AeADb4t2d28HLXcH/QZWiw3jbR22ZauT4PoIJ2izm
-         0mjHu1/pT0/fudQazr0Ra9taP5SbUPkRm3vmKuIZcHS/DfYBk5sBXpODtIGIOK4RxW/S
-         cLCg==
+        bh=y3Wg7BlO4Qo+99Bkr2kgupRM9RDswUzNhJatcCXw2Rk=;
+        b=PTcVqUa/wKQmshqC8/fRAQletZ+LKqWvR4MQMwILDg5NqbDYKQcLmamhcuzcJ9lsR5
+         esifYIrlZGB44Y/cU13TmqYjRBl4PLDxUTEqWB8H5T7ZisYl1/7xh+NRUtqeE8E9anwM
+         lpkPnr8++VxuyeHOkm3tAkLkS6s3667EiowTk18nEDgFwKCfZmShLdjrJpEaBoTBnUfC
+         t1SpbWAPpxAVe+0m5CT0FvZRn+TFqCPYq96EsHqjwXG0VmqgRdGd7n0gfWEm6V+Ohqim
+         b3sKUrJuxZgSkqZpKn+DrIagY9GMkm4tbjJ1RY+3cj3qWced3YIH9ZCAIV0pi4sBgAcT
+         qRMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786734908; x=1787339708;
+        d=1e100.net; s=20251104; t=1786736072; x=1787340872;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=krO17/bagVVmRXbK81DAUeMmTF89gRNsvTsVM9hl/s8=;
-        b=DlNbS71SWU9OtXyv6VzNBNt2rLXebyuE9BbsXMEhkw1133h7lu9u0K8t5KAG82CpRX
-         P1tsF5agi9fba35zJYsIBbnh+13DyjTY2fwF3I/rhuxpUCfE9WQ19lG1C5SCikWh1Hpy
-         W5i7cTUloGxhsKVqWzWMAYT7yDbFFeKdhbfPNyhHo7DvTQFcmIp7XbAx+vI1WWGa12D0
-         IF1d+bbISKktTjpC1HaSkDpicKZ93wNcTrFolugbE9adLEDIky9x724kpKfar09T6tpx
-         6vNcApzUgC2pP+45X1zyGHpRt9hlw2X5nCgH5IhC7atVV1NglIt/Ts3oEk8vd4hWS1r+
-         7TCw==
-X-Forwarded-Encrypted: i=1; AHgh+RpqRClCqCqRz5pNEtxMo6+8OWpMjMZgvEetXA7nrzRU4KQAoc3tRzxkc/qqQTJe2haZGWU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNnr1p8t25+TAl548by5JU1smnXTXSFS6BB0FZIjnr43zMFJOE
-	HmWE7DM2fAnCYb099hb7CTGiI9Y9maIgzCO/sMjKJ4EnXdGelx5z52rgwqg5LqLSVHSGg/lpNMk
-	oBudVhfHAa5wJGduKDayGcu22WG0zZf0=
-X-Gm-Gg: AR+sD10+z/FEs24B0tqRXVL5XbCdYp1Jxflw1vxh0XCE2AiwvyerzhtGm00AJE+q50c
-	ReyGG7JauLnhpQ4Lb4l/1Qc1MewmMpOry3Kuao4P2oLa8Pr1OArbED0en+G9OpWLEhhQmBSVYuR
-	7/jC6BC/BjZ00FrMLDbyhTyCCBTKM90/edA5+MyLs03oGuG2KGRkSaD8Tb3LV14ncvjekpPI/+M
-	pIbQQ7mn2WrjBrBdCLqJHxQVOdwoK2mc7Vl8lNq75KOJ7t9Cc+Y8d4NWyUnIfs+eWBN8XFbRASK
-	uzV8Esc8zwkgk98oxYPjVWttU1NPIJtvbMklkDVaFgBzsm3/cPRucNAodwq3BC7rr9Gbqtz9v0H
-	BIQ==
-X-Received: by 2002:a53:dd0a:0:b0:668:894a:f534 with SMTP id
- 956f58d0204a3-66c54cc5fcfmr4473139d50.25.1786734907868; Fri, 14 Aug 2026
- 12:15:07 -0700 (PDT)
+        bh=y3Wg7BlO4Qo+99Bkr2kgupRM9RDswUzNhJatcCXw2Rk=;
+        b=faMum+bvlcNUOOQ8f562bWFktT+V/WFDWqLVuko6qoDpWTXrhRt7Ts6ngXtJmC3mzO
+         FuO+2G++Hbx2plIxRIcYXdpK6JinmSk2+FIQ5J2qqZUx3JpKjRA/oceQHOMedSbgggiw
+         AJFwywna5HDfeBi8boZmGVJUhcaDlUnJsEhGZ2gGdZuoualbDWgbhFc2MGpPtNWiXezr
+         vjoK6MaREsPT6iUNONNaWvKVfHp2Uyc0N7r+S4s7+7qtDvmyptlt6yT/xTbUhRrUJgI7
+         9wawdaT9onO0jndODiy4JcQUoZ/KGOeeHMw5dip9sUa4ykSIVx8m2A+Lt4G9RJ9HHciN
+         ecAg==
+X-Forwarded-Encrypted: i=1; AHgh+RpZ84xO7o2htRJ4k9H4cCy9EwbNPT8/uwOasS3xfr9xFYZWA1yhTsR6pDpid1VInPBPP7A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLZI3JeCBKL6Es1vbdhhbjBVY2x/PpWmbu/A07alMFKl1bAGoo
+	G+e+x5biTZVMRi1BfIwRM1zczNGvszajVFFNZEBttnOdM/tkMUaqZFPFwXkwRnpUTzoIopG9SdI
+	OFrB0P1wCLCAwBK8KEGNPVjGiBnTWhmA=
+X-Gm-Gg: AR+sD11w+ksyME2psVuxx6uhWFBH1oIOqfpv+FlKTRBuS+GMzmARTSEtYTbj0G2JEeJ
+	DV8v93/z/P8CqvtbRSX+XtHIdgXrZ7mNXSWdu1xsLTeh1EXr5SINoLZXHyrce1rvFgzQLYxcjg7
+	J3YTIa8Ze0taYn28POwHL8vJcn70Ci0OO26/8XXKtwnm7z5ZJrkxxJOgNpyiMI+Gs0giLYt1XFn
+	SmPGFkW8wgKSTjMh+90KgJWwmsWKFMprpr5k1O9bbW8e8lHkQ6qpKn4PbsRddXylyITquAvUcbR
+	8N4EfUfiLusiAcVOndBXCGk6DJ17f9ta2WWnzSXX6qpZgc573Da6N9i6hDxPc4XGu/7GneucKql
+	yZRZoYMZNDzvpzDTtSK3d5aRd+ecl3DyrbPHTww==
+X-Received: by 2002:a05:6a00:2394:b0:848:63c9:ee39 with SMTP id
+ d2e1a72fcca58-84fde156853mr8605898b3a.12.1786736071843; Fri, 14 Aug 2026
+ 12:34:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260804213510.673084-1-chia-yu.chang@nokia-bell-labs.com>
- <20260804213510.673084-2-chia-yu.chang@nokia-bell-labs.com>
- <20260811173017.3d18dfdc@kernel.org> <PAXPR07MB79849A3F1724DBB2DA8EA20AA3DC2@PAXPR07MB7984.eurprd07.prod.outlook.com>
- <20260812155430.6ec81eec@kernel.org> <PAXPR07MB7984E3E73868BF8966821C27A3DB2@PAXPR07MB7984.eurprd07.prod.outlook.com>
- <CAF=yD-LQbndjPZiXcfA6fMp6msza_+YdzqqwyeUDVTdOCOHhDw@mail.gmail.com>
- <47BE8A8A-F80C-4C30-BC95-C85FEBFFB606@ericsson.com> <PAXPR07MB7984ED42ED0849D3A9AB8C19A3DA2@PAXPR07MB7984.eurprd07.prod.outlook.com>
- <willemdebruijn.kernel.c248a28f9c86@gmail.com> <20260814120121.50e61d01@kernel.org>
-In-Reply-To: <20260814120121.50e61d01@kernel.org>
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date: Fri, 14 Aug 2026 15:14:30 -0400
-X-Gm-Features: AUfX_mzfpoxQCDCly02kzT0GRl9rBucQ1xz8t4L_tqiifrYvAjnLnYkwChvD3sw
-Message-ID: <CAF=yD-L1-Sxz9uyP_4WqtNRJHnwTVMhQba_KF-=Eiy=d9Jf-qA@mail.gmail.com>
-Subject: Re: [PATCH v5 net-next 1/2] net: update comments for SKB_GSO_TCP_ECN
- and SKB_GSO_TCP_ACCECN
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>, 
-	Mirja Kuehlewind <mirja.kuehlewind@ericsson.com>, 
-	"shaojijie@huawei.com" <shaojijie@huawei.com>, "shenjian15@huawei.com" <shenjian15@huawei.com>, 
-	"linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>, "eperezma@redhat.com" <eperezma@redhat.com>, 
-	"jasowang@redhat.com" <jasowang@redhat.com>, 
-	"virtualization@lists.linux.dev" <virtualization@lists.linux.dev>, "mst@redhat.com" <mst@redhat.com>, 
-	"xuanzhuo@linux.alibaba.com" <xuanzhuo@linux.alibaba.com>, "pabeni@redhat.com" <pabeni@redhat.com>, 
-	"edumazet@google.com" <edumazet@google.com>, 
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, "corbet@lwn.net" <corbet@lwn.net>, 
-	"horms@kernel.org" <horms@kernel.org>, "dsahern@kernel.org" <dsahern@kernel.org>, 
-	"kuniyu@google.com" <kuniyu@google.com>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, "dave.taht@gmail.com" <dave.taht@gmail.com>, 
-	"jhs@mojatatu.com" <jhs@mojatatu.com>, 
-	"stephen@networkplumber.org" <stephen@networkplumber.org>, 
-	"xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>, "jiri@resnulli.us" <jiri@resnulli.us>, 
-	"davem@davemloft.net" <davem@davemloft.net>, "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, 
-	"donald.hunter@gmail.com" <donald.hunter@gmail.com>, "ast@fiberby.net" <ast@fiberby.net>, 
-	"liuhangbin@gmail.com" <liuhangbin@gmail.com>, "shuah@kernel.org" <shuah@kernel.org>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "ij@kernel.org" <ij@kernel.org>, 
-	"ncardwell@google.com" <ncardwell@google.com>, 
-	"Koen De Schepper (Nokia)" <koen.de_schepper@nokia-bell-labs.com>, 
-	"g.white@cablelabs.com" <g.white@cablelabs.com>, 
-	Ingemar Johansson S <ingemar.s.johansson@ericsson.com>, 
-	"cheshire@apple.com" <cheshire@apple.com>, "rs.ietf@gmx.at" <rs.ietf@gmx.at>, 
-	"Jason_Livingood@comcast.com" <Jason_Livingood@comcast.com>, "vidhi_goel@apple.com" <vidhi_goel@apple.com>, 
-	Parav Pandit <parav@nvidia.com>, Willem de Bruijn <willemb@google.com>
+References: <20260813152324.97937-11-leon.hwang@linux.dev> <bd01566fa68ef3b993bdd4cfbd9802a24cd9b5052b5a746712067d8571ea0bd0@mail.kernel.org>
+ <4c455c0f-9138-4183-8fb9-fe979d56ae3a@linux.dev>
+In-Reply-To: <4c455c0f-9138-4183-8fb9-fe979d56ae3a@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 14 Aug 2026 12:34:18 -0700
+X-Gm-Features: AUfX_myrT8YZ9muA99YdftkP-AO_rXmd-yDihK3ElrtWjk04_Mk_Tk0PPrSKF-Y
+Message-ID: <CAEf4BzZWV7EQJpmS2dddkgVeDqXLun8UuGbNNzrQ6SVMEMTRtw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v12 10/10] selftests/bpf: Verify bpf_iter for
+ global percpu data
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, john.fastabend@gmail.com, qmo@kernel.org, shuah@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kernel-patches-bot@fb.com, emil@etsalapatis.com, martin.lau@kernel.org, 
+	clm@meta.com, ihor.solodrai@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 14, 2026 at 3:01=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
+On Thu, Aug 13, 2026 at 11:13=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> =
+wrote:
 >
-> On Fri, 14 Aug 2026 09:34:01 -0400 Willem de Bruijn wrote:
-> > > Current SW GRO sets SKB_GSO_TCP_ACCECN when the flushed skb carries C=
-WR in tcp_gro_complete():
-> > > if (th->cwr)
-> > >     shinfo->gso_type |=3D SKB_GSO_TCP_ACCECN;
+> On 14/8/26 00:26, bot+bpf-ci@kernel.org wrote:
+> >> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c=
+ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> >> index d308ca3b30457..7d6bda9092954 100644
+> >> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> >> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> >> @@ -327,6 +327,56 @@ static void test_global_percpu_data_verifier_log(=
+void)
+> >>      RUN_TESTS(test_global_percpu_data);
+> >>  }
+> >>
+> >> +static void test_global_percpu_data_iter(void)
+> >> +{
+> >> +    DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
+> >> +    struct test_global_percpu_data *skel;
+> >> +    union bpf_iter_link_info linfo =3D {};
+> >> +    struct bpf_link *link =3D NULL;
+> >> +    int fd, num_cpus, len, err;
+> >> +    char buf[16];
+> >> +
+> >> +    num_cpus =3D libbpf_num_possible_cpus();
+> >> +    if (!ASSERT_GT(num_cpus, 0, "libbpf_num_possible_cpus"))
+> >> +            return;
+> >> +
+> >> +    skel =3D test_global_percpu_data__open();
+> >> +    if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
+> >> +            return;
+> >> +
+> >> +    skel->rodata->num_cpus =3D num_cpus;
+> >> +    skel->rodata->offsetof_num =3D offsetof(struct test_global_percpu=
+_data__percpu, struct_data);
+> >> +    skel->rodata->offsetof_num +=3D sizeof(skel->percpu->struct_data)=
+ - sizeof(int);
 > >
-> > And I suppose it follows correct AccECN rules for coalescing.
-> >
-> > That is a performance regression from RFC 3168 ECN, as it allows for
-> > less effective coalescing. I have no intuition how much it will
-> > differ in practice.
-> >
-> > > For HW GRO of a legacy device that implementing RFC3168 semantics, se=
-tting SKB_GSO_TCP_ECN seems reasonable.
-> > > However, such a device would not be able to preserve ACCECN signaling=
- across the GRO/GSO.
-> > > In that case, if preserving AccECN signaling is required, disabling H=
-W GRO may indeed be necessary.
-> >
-> > Right.
+> > This isn't a bug, but could these two lines collapse into a single
+> > offsetof(struct test_global_percpu_data__percpu, struct_data.nums[6]),
+> > so the offset names the field being read instead of depending on nums[6=
+]
+> > staying last in the struct?
 >
-> I'm still not following.. Maybe Willem can ELI5 what the problem is.
+> Sure. Will update.
 >
-> _SW_ GRO follows only the AccECN rules.
-> But if HW GRO follows RFC 3168 and we mark the aggregate as
-> SKB_GSO_TCP_ECN - TSO will also abide, and segmented output
-> will be identical to pre-GRO input.
+> >
+> >> +    skel->rodata->elem_sz =3D roundup(sizeof(struct test_global_percp=
+u_data__percpu), 8);
+> >> +    skel->percpu->struct_data.nums[6] =3D 0xc0de;
+> >> +
+> >> +    err =3D test_global_percpu_data__load(skel);
+> >> +    if (!ASSERT_OK(err, "test_global_percpu_data__load"))
+> >> +            goto out;
+> >> +
+> >> +    linfo.map.map_fd =3D bpf_map__fd(skel->maps.percpu);
+> >> +    opts.link_info =3D &linfo;
+> >> +    opts.link_info_len =3D sizeof(linfo);
+> >> +    link =3D bpf_program__attach_iter(skel->progs.dump_percpu_data, &=
+opts);
+> >> +    if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
+> >> +            goto out;
+> >> +
+> >> +    fd =3D bpf_iter_create(bpf_link__fd(link));
+> >> +    if (!ASSERT_GE(fd, 0, "bpf_iter_create"))
+> >> +            goto out;
+> >> +
+> >> +    while ((len =3D read(fd, buf, sizeof(buf))) > 0)
+> >> +            do { } while (0);
+> >
+> > This isn't a bug, but would a bare semicolon (as in bpf_iter.c's
+> > read-drain loops) be clearer here than do { } while (0)?
+>
+> Prefer 'do { } while (0);' instead of a dangling ';'.
 
-+1
+humans used to have {} or { /* no-op */ } for cases like this, not a
+dangling semicolon
 
-> Are we trying to ban RFC 3168 behavior in HW purely to match SW?
-
-I think that's the intent here?
+do {} while (0) is for macros only
 
 >
-> > And there currently is no kernel API to disable only ECN
-> > coalescing. NETIF_F_GRO_HW enables or disables HW-GRO entirely.
-> > Or even to signal whether a HW-GRO implementation is AccECN
-> > capable.
 > >
-> > Disabling HW-GRO can be a huge efficiency regression. I suspect
-> > many users will prioritize the efficiency over preserving the AccECN
-> > signal.
+> > [ ... ]
 > >
-> > That said, some devices may have other ways to configure such
-> > finer details of their HW-GRO, even though not available through
-> > Ethtool.
+> >> diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data=
+.c b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+> >> index d086e9417f9fb..71ff8d1bf49eb 100644
+> >> --- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+> >> +++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+> >> @@ -61,4 +61,29 @@ int verifier_snprintf(void *ctx)
+> >>      return 0;
+> >>  }
+> >>
+> >> +volatile const __u32 num_cpus =3D 0;
+> >> +volatile const int offsetof_num;
+> >
+> > This isn't a bug, but would a name like nums6_off (set directly from
+> > offsetof(struct test_global_percpu_data__percpu, struct_data.nums[6]))
+> > make it clearer which field the iterator is summing?
+>
+> 'num_off' would be better.
+>
+> In iter, it should not know the concrete number. Instead, it identifies
+> the number by offset 'num_off'.
+>
+> Thanks,
+> Leon
+>
+> >
+> > [ ... ]
+> >
+> >
+> > ---
+> > AI reviewed your patch. Please fix the bug or email reply why it's not =
+a bug.
+> > See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/REA=
+DME.md
+> >
+> > CI run summary: https://github.com/kernel-patches/bpf/actions/runs/3171=
+6447858
+>
