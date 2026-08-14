@@ -1,270 +1,120 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB85296BC8;
-	Fri, 14 Aug 2026 01:29:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 230A832861F
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 01:29:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786670974; cv=none; b=lNIkhz8B0eb9DqPo/6sgs4xfh4/vC5gECdJueL8ypTX+/FWKSLL+ZuxXnKVQSUM1Ro+guAMNooFx52vSy1V/VmHLFN/Ycd54BVmg8FIeNc8p+QW/qjVD1IFesRUSnUKyKVKXAe0YYE1eGSIVlrRIhkzKs/db7Lcv4WxFFNd1m8A=
+	t=1786670997; cv=none; b=SwZ4hstP7UabdbIQZ7w1N4jD5+zUQ54Gy7HWD/EKZSeOyTE4OfW3jEIUrES+IZ82zi/5HDBQNcCtch2mObWh4zxj8ZKEy6LJecVqQKo6u7N0WMLd5+NBJw+CcC5tV2n8+G61NyFzCva2wHtTKdpBnBEXCnLrmaK1VlIurBD5PKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786670974; c=relaxed/simple;
-	bh=0kS+/pvdCQGVYJfx53V964WwBqdInsQldAZzKhWH7cg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IX1akJ9/2xn7wZ7InTFCLyXcy+GYrOGEW27ZDwD/WNG41qE0fE2EJb/kUoiiqVyXx2i6ZKEAvs3FpllkK1wn2FiSG8Hw0nVoB2LqEeTMXRJB2BwZBNBedxTMyOWJaRpqlb0rfVpntRlfypav/nyD7PSJo01lBqZBjURUWYdfBCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 9619335e977f11f1aa26b74ffac11d73-20260814
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:8b116628-f5f0-4b4a-917b-954746a0aaf1,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:e7bac3a,CLOUDID:86bd5f22ff51350930c73dfd4940c4b7,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|136|850|865|898,TC:nil,Content
-	:0|15|50,EDM:-3|-100,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,
-	COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 9619335e977f11f1aa26b74ffac11d73-20260814
-X-User: jiangfeng@kylinos.cn
-Received: from [127.0.0.1] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <jiangfeng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 308682915; Fri, 14 Aug 2026 09:29:26 +0800
-From: Feng Jiang <jiangfeng@kylinos.cn>
-Date: Fri, 14 Aug 2026 01:29:03 +0000
-Subject: [PATCH bpf-next v3 1/2] bpf, riscv: Add BPF stack arguments
- support for RV64 JIT
+	s=arc-20240116; t=1786670997; c=relaxed/simple;
+	bh=hh/jG9z7Uw3vguED7ipaFPfR2knEKJa9dX9UcNVx/Xc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=QmhaOP9ejvnX6t49xPAlLugvjRFr0/jcUMLsnJGBjrMrYdrG/iJis8kUFZgpWWn5Ino+cKlae4c7bK5Rtw9vCNfB9fKe+bdtYR35siENu/mA3QzEJyq5KprCRpxEXYHP3jVi/j+yx8RCDz5iccA2Odu8riRNletxWmO8wY9ZDl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=brMSaeLt; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="brMSaeLt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7BB21F000E9;
+	Fri, 14 Aug 2026 01:29:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786670989;
+	bh=8Siug6toQ/JHfDMA5ghl+7FApJw6AmiwPjVz+UlSfx0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=brMSaeLtuPqMjVlvKGLgu5eh3Xiv4dbrgbHF/U4+uiAnsZZ+jQD+4BqUlI58irHQA
+	 +EJOVC9X89iyjw7zIV1odM52sc1lJ+dQJtz8a5XXHRH2im/00Mgve5Qa9FJcEJ5jpw
+	 3xQvtvRToujyGd7wr4yV7LA+YFGcXD9nnRD2xZMj2lHq5CGqrsLRIkO6+0btihRwKd
+	 49EFsfS8sjjGkIrLQr00/DO4YtgrQ40RgQ70UmZGsEBhBRPITvMFBN6At2lF/jGtPz
+	 GzZYsEWhJpDaUrm2txEeXfDaETCha8tuB7qU3ZWqsQLLx/3hu1XJqha2QQNqj1jg0O
+	 eqswQPB1bHkGw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next] selftests/bpf: Retry stat generation in
+ cgroup_iter_memcg
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Andrii Nakryiko" <andrii@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260813213701.3116369-1-andrii@kernel.org>
+References: <20260813213701.3116369-1-andrii@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 14 Aug 2026 01:29:48 +0000
+Message-Id: <20260814012948.D7BB21F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260814-bpf-riscv-stack-args-v3-1-2160de56fea3@kylinos.cn>
-References: <20260814-bpf-riscv-stack-args-v3-0-2160de56fea3@kylinos.cn>
-In-Reply-To: <20260814-bpf-riscv-stack-args-v3-0-2160de56fea3@kylinos.cn>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, 
- =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
- Pu Lehui <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- llvm@lists.linux.dev, Feng Jiang <jiangfeng@kylinos.cn>
-X-Mailer: b4 0.14.3
 
-Add bpf_jit_supports_stack_args() for the RV64 JIT so BPF subprograms
-and kfuncs can receive more than 5 arguments via the stack
-(BPF_REG_PARAMS / r11).
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The retry loops in test_anon and test_file destroy the memcg sta=
+te before waiting for the periodic flusher, causing the tests to reliably f=
+ail. Additionally, test_file uses a flawed retry condition.
+--
 
-For BPF-to-BPF calls the caller writes outgoing arguments at the
-bottom of its frame (SP-relative). The callee reads them with
-FP-relative loads. Its FP is set to the caller SP in the prologue,
-so the offsets match.
+--- Patch [1]: [PATCH bpf-next] selftests/bpf: Retry stat generation in cgr=
+oup_iter_memcg ---
+commit 6d80dc385d952485dfd4001f328081e6d5523309
+Author: Andrii Nakryiko <andrii@kernel.org>
 
-The RISC-V ABI puts arguments 6-8 in A5-A7 and arguments 9+ at
-SP+0. Before each kfunc call, load arguments 6-8 from the outgoing
-area into A5-A7 and copy any remaining arguments down so argument 9
-lands at SP+0.
+selftests/bpf: Retry stat generation in cgroup_iter_memcg
 
-A5 (BPF_REG_0), A6 (TCC) and A7 are safe to clobber here: R0 is not
-live before a call, TCC is backed up on the stack, and A7 is unused
-by the JIT.
+This commit introduces retry loops in the cgroup_iter_memcg selftest
+to wait for the periodic memcg stat flusher. This addresses test failures
+on large core-count systems where a single pass does not reach the flush
+threshold.
 
-Limit the existing kfunc sign-extension loop to MAX_BPF_FUNC_REG_ARGS
-iterations; otherwise idx >= 5 resolves to S1-S5 (BPF_R6-FP) and
-corrupts callee-saved registers.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c b=
+/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+> index b7c18d590b993..37e2cf249be8a 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+[ ... ]
+> @@ -53,6 +66,12 @@ static void test_anon(struct bpf_link *link, struct me=
+mcg_query *memcg_query)
+>  	if (!ASSERT_OK(read_stats(link), "read stats"))
+>  		goto cleanup;
+> =20
+> +	if (!memcg_query->nr_anon_mapped && ++retries < MEMCG_STAT_RETRIES) {
+> +		munmap(map, len);
+> +		usleep(MEMCG_STAT_RETRY_DELAY_US);
+> +		goto retry;
+> +	}
 
-Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
----
- arch/riscv/net/bpf_jit.h        |  1 +
- arch/riscv/net/bpf_jit_comp64.c | 79 +++++++++++++++++++++++++++++++++++++++--
- arch/riscv/net/bpf_jit_core.c   |  4 +++
- 3 files changed, 81 insertions(+), 3 deletions(-)
+[Severity: Medium]
+Does unmapping the memory before sleeping prevent the periodic flusher from
+observing the mapped state?
 
-diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
-index 419b9d795f2a..9eb4e149505d 100644
---- a/arch/riscv/net/bpf_jit.h
-+++ b/arch/riscv/net/bpf_jit.h
-@@ -82,6 +82,7 @@ struct rv_jit_context {
- 	unsigned long flags;
- 	int stack_size;
- 	int tcc_offset;
-+	u16 stack_arg_size;
- 	u64 arena_vm_start;
- 	u64 user_vm_start;
- };
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 6b9972b07c1b..58cb3e5ff6b4 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -1815,18 +1815,43 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 
- 		if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
- 			const struct btf_func_model *fm;
--			int idx;
-+			int idx, nargs;
- 
- 			fm = bpf_jit_find_kfunc_model(ctx->prog, insn);
- 			if (!fm)
- 				return -EINVAL;
- 
--			for (idx = 0; idx < fm->nr_args; idx++) {
-+			nargs = min_t(int, fm->nr_args, MAX_BPF_FUNC_REG_ARGS);
-+			for (idx = 0; idx < nargs; idx++) {
- 				u8 reg = bpf_to_rv_reg(BPF_REG_1 + idx, ctx);
- 
- 				if (fm->arg_size[idx] == sizeof(int))
- 					emit_sextw(reg, reg, ctx);
- 			}
-+
-+			/* BPF stack args -> RISC-V ABI: args 6-8 in A5-A7, 9+ at SP+0 */
-+			if (fm->nr_args > MAX_BPF_FUNC_REG_ARGS) {
-+				int n_stack = fm->nr_args - MAX_BPF_FUNC_REG_ARGS;
-+				int n_reg = min_t(int, n_stack,
-+						  RV_MAX_REG_ARGS - MAX_BPF_FUNC_REG_ARGS);
-+
-+				for (idx = 0; idx < n_reg; idx++) {
-+					int sz = fm->arg_size[MAX_BPF_FUNC_REG_ARGS + idx];
-+
-+					emit_ld(RV_REG_A5 + idx, idx * 8, RV_REG_SP, ctx);
-+					if (sz == sizeof(int))
-+						emit_sextw(RV_REG_A5 + idx, RV_REG_A5 + idx, ctx);
-+				}
-+
-+				for (idx = n_reg; idx < n_stack; idx++) {
-+					int sz = fm->arg_size[MAX_BPF_FUNC_REG_ARGS + idx];
-+
-+					emit_ld(RV_REG_T1, idx * 8, RV_REG_SP, ctx);
-+					if (sz == sizeof(int))
-+						emit_sextw(RV_REG_T1, RV_REG_T1, ctx);
-+					emit_sd(RV_REG_SP, (idx - n_reg) * 8, RV_REG_T1, ctx);
-+				}
-+			}
- 		}
- 
- 		/* restore TCC to RV_REG_TCC before bpf2bpf call */
-@@ -1891,6 +1916,21 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_LDX | BPF_MEM | BPF_H:
- 	case BPF_LDX | BPF_MEM | BPF_W:
- 	case BPF_LDX | BPF_MEM | BPF_DW:
-+		if (insn->src_reg == BPF_REG_PARAMS) {
-+			int idx = off / 8 - 1;
-+
-+			if (is_12b_int(idx * 8)) {
-+				emit_ldx_insn(rd, idx * 8, RV_REG_FP, BPF_SIZE(code), false, ctx);
-+			} else {
-+				emit_imm(RV_REG_T1, idx * 8, ctx);
-+				emit_add(RV_REG_T1, RV_REG_T1, RV_REG_FP, ctx);
-+				emit_ldx_insn(rd, 0, RV_REG_T1, BPF_SIZE(code), false, ctx);
-+			}
-+			if (BPF_SIZE(code) != BPF_DW && insn_is_zext(&insn[1]))
-+				return 1;
-+			break;
-+		}
-+		fallthrough;
- 	case BPF_LDX | BPF_PROBE_MEM | BPF_B:
- 	case BPF_LDX | BPF_PROBE_MEM | BPF_H:
- 	case BPF_LDX | BPF_PROBE_MEM | BPF_W:
-@@ -1938,6 +1978,20 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_ST | BPF_MEM | BPF_H:
- 	case BPF_ST | BPF_MEM | BPF_W:
- 	case BPF_ST | BPF_MEM | BPF_DW:
-+		if (insn->dst_reg == BPF_REG_PARAMS) {
-+			int idx = -off / 8 - 1;
-+
-+			emit_imm(RV_REG_T1, imm, ctx);
-+			if (is_12b_int(idx * 8)) {
-+				emit_stx_insn(RV_REG_SP, idx * 8, RV_REG_T1, BPF_SIZE(code), ctx);
-+			} else {
-+				emit_imm(RV_REG_T2, idx * 8, ctx);
-+				emit_add(RV_REG_T2, RV_REG_SP, RV_REG_T2, ctx);
-+				emit_stx_insn(RV_REG_T2, 0, RV_REG_T1, BPF_SIZE(code), ctx);
-+			}
-+			break;
-+		}
-+		fallthrough;
- 	/* ST | PROBE_MEM32: *(size *)(dst + RV_REG_ARENA + off) = imm */
- 	case BPF_ST | BPF_PROBE_MEM32 | BPF_B:
- 	case BPF_ST | BPF_PROBE_MEM32 | BPF_H:
-@@ -1960,6 +2014,19 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_STX | BPF_MEM | BPF_H:
- 	case BPF_STX | BPF_MEM | BPF_W:
- 	case BPF_STX | BPF_MEM | BPF_DW:
-+		if (insn->dst_reg == BPF_REG_PARAMS) {
-+			int idx = -off / 8 - 1;
-+
-+			if (is_12b_int(idx * 8)) {
-+				emit_stx_insn(RV_REG_SP, idx * 8, rs, BPF_SIZE(code), ctx);
-+			} else {
-+				emit_imm(RV_REG_T1, idx * 8, ctx);
-+				emit_add(RV_REG_T1, RV_REG_SP, RV_REG_T1, ctx);
-+				emit_stx_insn(RV_REG_T1, 0, rs, BPF_SIZE(code), ctx);
-+			}
-+			break;
-+		}
-+		fallthrough;
- 	/* STX | PROBE_MEM32: *(size *)(dst + RV_REG_ARENA + off) = src */
- 	case BPF_STX | BPF_PROBE_MEM32 | BPF_B:
- 	case BPF_STX | BPF_PROBE_MEM32 | BPF_H:
-@@ -2036,6 +2103,7 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
- 
- 	stack_adjust = round_up(stack_adjust, STACK_ALIGN);
- 	stack_adjust += bpf_stack_adjust;
-+	stack_adjust += ctx->stack_arg_size;
- 
- 	store_offset = stack_adjust - 8;
- 
-@@ -2093,7 +2161,7 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
- 	emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
- 
- 	if (bpf_stack_adjust)
--		emit_addi(RV_REG_S5, RV_REG_SP, bpf_stack_adjust, ctx);
-+		emit_addi(RV_REG_S5, RV_REG_SP, ctx->stack_arg_size + bpf_stack_adjust, ctx);
- 
- 	ctx->stack_size = stack_adjust;
- 
-@@ -2171,3 +2239,8 @@ bool bpf_jit_supports_timed_may_goto(void)
- {
- 	return true;
- }
-+
-+bool bpf_jit_supports_stack_args(void)
-+{
-+	return true;
-+}
-diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
-index cbfcd287ea16..844a0f3e0fa9 100644
---- a/arch/riscv/net/bpf_jit_core.c
-+++ b/arch/riscv/net/bpf_jit_core.c
-@@ -72,6 +72,10 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 	ctx->arena_vm_start = bpf_arena_get_kern_vm_start(prog->aux->arena);
- 	ctx->user_vm_start = bpf_arena_get_user_vm_start(prog->aux->arena);
- 	ctx->prog = prog;
-+
-+	ctx->stack_arg_size = round_up(bpf_out_stack_arg_cnt(env, prog) *
-+				       sizeof(u64), STACK_ALIGN);
-+
- 	ctx->offset = kvzalloc_objs(int, prog->len);
- 	if (!ctx->offset)
- 		goto out_offset;
+If the mapped memory is unmapped via munmap() before the sleep, the periodic
+flusher running during usleep() will observe a net-zero state for
+nr_anon_mapped. The retry loop seems to repeatedly map and unmap the memory
+without letting the flusher see the steady state, which might prevent the t=
+est
+from ever succeeding.
 
--- 
-2.53.0
+[ ... ]
+> @@ -88,6 +109,13 @@ static void test_file(struct bpf_link *link, struct m=
+emcg_query *memcg_query)
+>  	if (!ASSERT_OK(read_stats(link), "read stats"))
+>  		goto cleanup_map;
+> =20
+> +	if (!memcg_query->nr_file_pages && !memcg_query->nr_file_mapped &&
+> +	    ++retries < MEMCG_STAT_RETRIES) {
+> +		munmap(map, len);
+> +		usleep(MEMCG_STAT_RETRY_DELAY_US);
+> +		goto retry;
+> +	}
 
+[Severity: Medium]
+Could this condition cause the retry loop to exit prematurely?
+
+In this path, munmap() removes the mapping but leaves the file in the page
+cache. The periodic flusher will flush a positive nr_file_pages but a zero
+nr_file_mapped.
+
+On the next iteration, memcg_query->nr_file_pages will be non-zero, causing
+the && condition to evaluate to false and the loop to exit early before the
+mapped stats are satisfied.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260813213701.3116=
+369-1-andrii@kernel.org?part=3D1
