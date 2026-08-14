@@ -1,170 +1,138 @@
-Received: from mta1.migadu.com (out-87.mta1.migadu.com [95.215.58.87])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C7A175A99
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 22:03:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB1B3624D3
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 22:03:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786745001; cv=none; b=YD0ls7pJXn0VBfnk/ixDV8nwL623gsp0IsUmUvqNr5K2bBjoYEL2B3sBiIxJoRDNzkKimKEuB1zDVSHG9rioI23w/8gdXTVHQOlTB9iW62/lISbRGJP84NUr6Z6uNlFt3Z2B4RaC9w6mmpvjIuW99CWNg313B1WYET8I0UM+o3I=
+	t=1786745013; cv=none; b=sJDnqlbyT4WlUqwWDDqdQyNdiQ362bXhrZUudcpiXu7bPdwmZ+okK4Xew6FiXdN0EqsC4Db9lBMnIlct4W+WlMZCYm3pLrO6ua/x94aKt+znJp6ilFc2o6bAICyoP1xGoqRVp2A5XQ9JZ3zpLFYaOUjTxOU0AGqgpUHp1S+oTMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786745001; c=relaxed/simple;
-	bh=oLzthMFr/EnLIpkxFu8EDlPiz+DlwdfnOQIJjl9vezI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ICxNkRwQlLp7djGa4NA09ptNhURapVN139lIKBu1SYFgr10iaxLwnWGyx/D5J3f8B8KgT2U7lXKTtaV2MlDnHCkZB+lA2oBhnmf79bSbLoswrk8M3JdE2IA8o+zn2ygdaaL0iQGhnQ5smmW2w6ZqXAKdbidey33Qlfp4TaT8Pcc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HwoSv64o; arc=none smtp.client-ip=95.215.58.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1786745013; c=relaxed/simple;
+	bh=hY5VrYdNindfmZb7chxornVQLdtbP2Dxkq7t2oY92Uw=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Lm773BccFwbsYt9IblufwIHQt2AzcXokrzDRFiKwlpKq2ij2etFxHFdl9TFKgdFHlRF113zRbVBPwQv2NwjwoH3fkLBwGHWhvxDujpL64tE+xXEUG0DQob9kqbHsn1QHBdB5MOkNfHWkxTcJiolSWh3cWNcfpOfiExTOuqqL4BE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IU4VYg68; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HwoSv64o"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=oLzthMFr/EnLIpkxFu8EDlPiz+DlwdfnOQIJjl9vezI=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786744998; v=1; x=1787349798;
- b=HwoSv64o+Kin+67heeHgkqnRWFU9yXgXg3bbjjmmhOMCJWLzvLkSbRAwsuWlSlO+FC9NiYeS
- fAtwM/5OGcAPu+4fZr2xYwJej1m1fvOeasH+cG4fMUzSH6PTotsPgt8S7iFzQsqQafntJyg4P2t
- rGu+aMJGWkv/tgvWln52iVcE=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from gvineet-fedora-PF5JGVFY.thefacebook.com (2620:10d:c090:500::6:7be4)
-	by smtp.migadu.com with ESMTPS id 5a80e9e2ed9a1c43;
-	Fri, 14 Aug 2026 22:03:18 +0000
-X-Migadu-Flow: FLOW_OUT
-From: Vineet Gupta <vineet.gupta@linux.dev>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	x86@kernel.org,
-	stable@vger.kernel.org,
-	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH bpf v3 2/2] selftests/bpf: Check per-CPU address resolution per register
-Date: Fri, 14 Aug 2026 15:02:54 -0700
-Message-ID: <20260814220254.3797467-3-vineet.gupta@linux.dev>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260814220254.3797467-1-vineet.gupta@linux.dev>
-References: <20260814220254.3797467-1-vineet.gupta@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IU4VYg68"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D132B1F000E9;
+	Fri, 14 Aug 2026 22:03:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786745012;
+	bh=Is+YLncgynQPx3lecRUIbvhI+3j9IdHjZgVdkZTfg5Y=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=IU4VYg68Jm9KAJsc17eX19EM8yC7Z9i9vNGvR9XllpwG5TliopnTt7P/St9Lj29Mt
+	 QtNULLylj156N90rGT7RpWs0mOwEXYFLXnRgGbxonkP7BTrESjRDnRcNr073wrcoya
+	 wmK0yAbI8wl025wqeZlJ9/zx9rH+x+QgJ1miPqxP6Gqz3S5F6HMHpWd6IHcatUrpi2
+	 WYxYtZYdWwXlfo+YpvZ2/J5TXunMLs59738lRL6dKIC8kRNGGZgmMW6RPGeqg6vs3R
+	 Aoscq01x6VrcjOrIy/i0uK/6wWTRQ7zBpnKo85634K2b2FK9swGSSrlDjqYs55sJ4a
+	 xES+FHjzXN3UA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 6/6] selftests/bpf: Add tests for fault
+ prone loads out of RCU pointers
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Daniel Borkmann" <daniel@iogearbox.net>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260814215301.709827-6-daniel@iogearbox.net>
+References: <20260814215301.709827-1-daniel@iogearbox.net>
+ <20260814215301.709827-6-daniel@iogearbox.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 14 Aug 2026 22:03:31 +0000
+Message-Id: <20260814220331.D132B1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-An ld_imm64 of a per-CPU map value is followed by a mov_percpu_addr that
-reuses the same register, so which register the address lands in decides
-how the JIT encodes the add. Getting the REX prefix wrong there is
-invisible to a functional test unless the address happens to land in an
-extended register, which is why this went unnoticed.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The newly added BPF programs do not execute the vulnerable instr=
+uctions at runtime and lack explicit verifier log assertions, failing to pr=
+ovide robust regression coverage.
+--
 
-Load a .percpu variable into every register in one program and match the
-JITed add against the register each one must resolve into.
+--- Patch [6]: [PATCH bpf-next v2 6/6] selftests/bpf: Add tests for fault p=
+rone loads out of RCU pointers ---
+commit 6d523ae9972a5903a07a65fd29336ef6414702f5
+Author: Daniel Borkmann <daniel@iogearbox.net>
 
-Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
----
- .../selftests/bpf/prog_tests/verifier.c       |  2 +
- .../bpf/progs/verifier_percpu_addr.c          | 72 +++++++++++++++++++
- 2 files changed, 74 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_percpu_addr.c
+selftests/bpf: Add tests for fault prone loads out of RCU pointers
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 8113fea7ba86..64ac49ad67e6 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -79,6 +79,7 @@
- #include "verifier_netfilter_retcode.skel.h"
- #include "verifier_bpf_fastcall.skel.h"
- #include "verifier_or_jmp32_k.skel.h"
-+#include "verifier_percpu_addr.skel.h"
- #include "verifier_precision.skel.h"
- #include "verifier_prevent_map_lookup.skel.h"
- #include "verifier_private_stack.skel.h"
-@@ -240,6 +241,7 @@ void test_verifier_netfilter_ctx(void)        { RUN(verifier_netfilter_ctx); }
- void test_verifier_netfilter_retcode(void)    { RUN(verifier_netfilter_retcode); }
- void test_verifier_bpf_fastcall(void)         { RUN(verifier_bpf_fastcall); }
- void test_verifier_or_jmp32_k(void)           { RUN(verifier_or_jmp32_k); }
-+void test_verifier_percpu_addr(void)          { RUN(verifier_percpu_addr); }
- void test_verifier_precision(void)            { RUN(verifier_precision); }
- void test_verifier_prevent_map_lookup(void)   { RUN(verifier_prevent_map_lookup); }
- void test_verifier_private_stack(void)        { RUN(verifier_private_stack); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c b/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c
-new file mode 100644
-index 000000000000..967f4e6e3a49
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c
-@@ -0,0 +1,72 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+#if defined(__TARGET_ARCH_x86)
-+
-+int percpu_data SEC(".percpu");
-+
-+/*
-+ * An ld_imm64 of a per-CPU map value is followed by a mov_percpu_addr that
-+ * reuses the same register, so check that the add resolves into the register
-+ * the address was loaded into, for every register.
-+ */
-+SEC("raw_tp")
-+__description("per-CPU address resolution")
-+__success
-+__arch_x86_64
-+__jited("	movabsq	$0x{{.*}}, %rax")
-+__jited("	addq	%gs:{{.*}}, %rax")
-+__jited("	movabsq	$0x{{.*}}, %rdi")
-+__jited("	addq	%gs:{{.*}}, %rdi")
-+__jited("	movabsq	$0x{{.*}}, %rsi")
-+__jited("	addq	%gs:{{.*}}, %rsi")
-+__jited("	movabsq	$0x{{.*}}, %rdx")
-+__jited("	addq	%gs:{{.*}}, %rdx")
-+__jited("	movabsq	$0x{{.*}}, %rcx")
-+__jited("	addq	%gs:{{.*}}, %rcx")
-+__jited("	movabsq	$0x{{.*}}, %r8")
-+__jited("	addq	%gs:{{.*}}, %r8")
-+__jited("	movabsq	$0x{{.*}}, %rbx")
-+__jited("	addq	%gs:{{.*}}, %rbx")
-+__jited("	movabsq	$0x{{.*}}, %r13")
-+__jited("	addq	%gs:{{.*}}, %r13")
-+__jited("	movabsq	$0x{{.*}}, %r14")
-+__jited("	addq	%gs:{{.*}}, %r14")
-+__jited("	movabsq	$0x{{.*}}, %r15")
-+__jited("	addq	%gs:{{.*}}, %r15")
-+__naked void percpu_addr(void)
-+{
-+	asm volatile ("					\
-+	r0 = %[percpu_data] ll;				\
-+	r1 = %[percpu_data] ll;				\
-+	r2 = %[percpu_data] ll;				\
-+	r3 = %[percpu_data] ll;				\
-+	r4 = %[percpu_data] ll;				\
-+	r5 = %[percpu_data] ll;				\
-+	r6 = %[percpu_data] ll;				\
-+	r7 = %[percpu_data] ll;				\
-+	r8 = %[percpu_data] ll;				\
-+	r9 = %[percpu_data] ll;				\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm_addr(percpu_data)
-+	: __clobber_all);
-+}
-+
-+#else
-+
-+SEC("raw_tp")
-+__description("percpu addr dummy")
-+__success
-+int dummy_test(void)
-+{
-+	return 0;
-+}
-+
-+#endif
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.53.0-Meta
+This commit adds new BPF tests for ensuring the verifier correctly
+applies the BPF_PROBE_MEM rewrite to fault-prone loads reached from an
+RCU read-side critical section. Two new subprograms are added and
+autoloaded in the rcu_read_lock test.
 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/rcu_read_lock.c b/too=
+ls/testing/selftests/bpf/prog_tests/rcu_read_lock.c
+> --- a/tools/testing/selftests/bpf/prog_tests/rcu_read_lock.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/rcu_read_lock.c
+> @@ -34,6 +34,8 @@ static void test_success(void)
+>  	bpf_program__set_autoload(skel->progs.rcu_read_lock_global_subprog, tru=
+e);
+>  	bpf_program__set_autoload(skel->progs.rcu_read_lock_subprog_lock, true);
+>  	bpf_program__set_autoload(skel->progs.rcu_read_lock_subprog_unlock, tru=
+e);
+> +	bpf_program__set_autoload(skel->progs.non_own_ref_untrusted_ld, true);
+> +	bpf_program__set_autoload(skel->progs.rcu_untrusted_union_ld, true);
+>  	err =3D rcu_read_lock__load(skel);
+
+[Severity: Medium]
+Is `rcu_untrusted_union_ld` reliably triggered by the test harness?=20
+
+Looking at `test_success()`, the harness executes `syscall(SYS_getpgid)` to
+trigger the fentry program, but there doesn't seem to be a trigger for the
+`tp_btf/tcp_probe` program.
+
+Also, would it be safer to use `test_loader` for these tests so we can
+statically assert the verifier log output contains the `BPF_PROBE_MEM`
+rewrite, rather than relying only on runtime execution?
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/rcu_read_lock.c b/tools/te=
+sting/selftests/bpf/progs/rcu_read_lock.c
+> --- a/tools/testing/selftests/bpf/progs/rcu_read_lock.c
+> +++ b/tools/testing/selftests/bpf/progs/rcu_read_lock.c
+
+[ ... ]
+
+> +SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
+> +int non_own_ref_untrusted_ld(void *ctx)
+> +{
+> +	struct rcu_node_stash *stash;
+> +	struct rcu_node_data *node;
+> +	int key =3D 0;
+> +
+> +	stash =3D bpf_map_lookup_elem(&node_stash, &key);
+> +	if (!stash)
+> +		return 0;
+> +	bpf_rcu_read_lock();
+> +	node =3D stash->node;
+> +	if (!node) {
+> +		bpf_rcu_read_unlock();
+> +		return 0;
+> +	}
+
+[Severity: Medium]
+Does this program end up returning early here on every run?
+
+Since the `node_stash` map is never populated from the userspace test
+harness, `stash->node` appears to always be NULL. If it returns early,
+the test never actually reaches the fault-prone load below to trigger a
+kernel panic if the rewrite were to fail.
+
+> +	bpf_rcu_read_unlock();
+> +	/*
+> +	 * The unlock leaves node as PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED
+> +	 * | NON_OWN_REF, and the load below has to get the BPF_PROBE_MEM
+> +	 * rewrite for it, otherwise a bad address panics the kernel.
+> +	 */
+> +	non_own_ref_key =3D node->key;
+> +	return 0;
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260814215301.7098=
+27-1-daniel@iogearbox.net?part=3D6
