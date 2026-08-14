@@ -1,112 +1,161 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D90B2D8385;
-	Fri, 14 Aug 2026 22:19:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786745969; cv=none; b=kSXGZbm+CEnuwfrRDeJ1ALug6C053YQ9Do3JDOdXbCPX0U9r97wbjAREHf6Qx4zGR5EyTHPN0soS9G+u5jsmlMM/pqmO1qu/Wsud0D4OhHs3S2zE4G6ISDCwmlQ6ugIks/WYjYyin65LTPUcXtT4f9V1A7ExdE2G02xoif0L9Nc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786745969; c=relaxed/simple;
-	bh=byIk0wKlUDT8kV4RrhUZpLpHNsjKlVdZKuOvmIFsQrw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LI75LGUgDi42KQg5iBJfpZ/S5FCNkTxfTAg9w1l4ivfaFl3JOafunWFYDpg/jQAwOtsDG5sySmLN733SJYo7hf05KfDDpe6hXTgmja75h+jvXTG53bSnRStZMOn8m8Nv/6N1m4TCZDBMGJhk2VOMDHo6kCoeI4lFN2t1ucl+Lkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=acCaduEG; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B09222D792
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 22:20:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786746034; cv=pass; b=HWPSriuPmuezq42nBQAmGrdu87j1jAt8GIKpZ9S2Oh7SoYDnrjv85POT7Ij2nIs6dPPcEXmp22jHJTMW5lakuHbxwh4xPn56R9y73j+NIJRCR82T1tjMZ1L2vC/tsJ2+KpQeWpw5jzuSoWAFJ+2/0ESNvO0FW/Y81r5clRjsG1g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786746034; c=relaxed/simple;
+	bh=6xM1ai1rrpeWuURVZz+0Y17lmw4N6mUw8g9CtDM7vew=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CmH+5GbUuSU01qOpj/JN5FhgqFO8kU/FSfHEylD9rnNNZA6xiTuaU4g3Zb961PL+INuYEKm7+OFG8JXApplYjgGrfqNpz02R/cAuMiUjXWOZhJVmGh/wvmAyg0y9PzrytkniV1bppwAdCI/CqalE/xjErW7B12BM3N9/QaGPvxw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hE59ABoK; arc=pass smtp.client-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="acCaduEG"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=zwW1SAd3cmYUAiMqZzrPnhUmBkwtmavZeG+Evi/0jHE=; b=acCaduEGa2QmdLd0Dxt3Hx9ccY
-	X+euiYwDgBlqDcDAHt2fhJoPGmJdCgA8ctnVFZ3cwIlxSCwaR6C33Ium7B2iWVDH3gDzVZHfZIGS2
-	YaBQNJujm5mwuYAEggZHfCGRKyqEwqywUXMe/Bb8JbeJJ+QMcOsoQYi30rceRm6q+783Sih9uDhEV
-	cfvNHd26AwnekBxCxygpNUc530vYa19uOG6od4daoJ/TYx4GJDflTuv6At/wN+I2XYHqu4ofoGN6s
-	SvFmqY11z7WkIinCMNiOrsMhQervec7NGxvU5sGwUyfmyOvgF0sz3O/k56X0NbBmyz985q9BddV48
-	knEoCXTA==;
-Received: from sslproxy08.your-server.de ([78.47.166.52])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wv0FK-000K8i-0t;
-	Sat, 15 Aug 2026 00:19:26 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wv0FK-0008fW-1L;
-	Sat, 15 Aug 2026 00:19:26 +0200
-Message-ID: <9dd7a33a-7a22-4730-a92b-dba67e68f89f@iogearbox.net>
-Date: Sat, 15 Aug 2026 00:19:25 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hE59ABoK"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-cbedf6a6fe8so1076517a12.3
+        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 15:20:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786746033; cv=none;
+        d=google.com; s=arc-20260327;
+        b=sMXN580KHrlORg04EH0vePuiNsdx6bWFlE8a8AwA6cmiPI4WcumTFxOdJaGqxIsESD
+         DWE7VBHSoMJTy+mNSLUzVwpIgygyiwjklC31vS+JNnZjfacrZJ1XCx5T3mseFGGxV2SL
+         awoEf9SF5pKKrW+JBJ+FDUDaQlwuXLfEp0VIGB9W4xJjBl49sW4LyaOAu8H5o91i/3Cs
+         ElHVBJITVeZ7D426iQcQnu3BbF2P6Ewe2XNmwAvvIQBdcK4Zm8MMEe2yPue1X1G3HQ1E
+         4xG74udLAUo6Qap7XE1gQWkbjFAoHUFX4geEcE9XSBqVPu4LdVrLCYmOpUePnzIAP41n
+         peMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=5adhcsDYcahnxZi84WaSXe7GaNlj/GfGsk4553OgP1g=;
+        fh=/VRpRzfotxltwQGihNl+rPZqo4nmkTmZ+jgvBo3HXi4=;
+        b=oUKqI0O0TtCDb+5G3Z4esUeSzATgTMkcrzxvsvSkGKqVc68Hc7e1oUx10d8BFzUYyk
+         XBKiDE3oTDQ/ViijqD6VwEDBO5U8+qX6HrgxXMpDsgwXbmrTZfwfPcuVSyXJIF/ksLwp
+         ZC8l1fubgVXcLHf5HTRrVeI3oEff7N73MhqO7KT5dhLCpsQ7CHC953oNzajvRr3r+maK
+         OiN9cgShj0fZAdouhcd3SgaglDIYfVKoiwcA9p+V+apSfX0UP0c7V8Vr6ZID61Mh7OV+
+         ePLiXm0EkPxtdT/w6i560tArkwACydxxunZB4sZ9ElWYU2DKJReTaA9WuExs1PrkQxwr
+         Rc4w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786746033; x=1787350833; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=5adhcsDYcahnxZi84WaSXe7GaNlj/GfGsk4553OgP1g=;
+        b=hE59ABoKTbEH4tAs7G6MnZaOlBURKbF8NHRSaYiG7iL92ibf36FxjMNo5eQiwaWeDE
+         wCDIjIKOyo15NbXOHcCV9j+cF55k1oWpBTtbUF6na87EZy1xpxvJl7crpYvF64TGLTma
+         xw2OaMPOnNLO/8nMoakShmKQc2SRzxFHLo3vx6Z2w9OO1MaseX9uLyPeC9A/Kh8ktpGG
+         +vehcmjRGFxbNNX9HohLNf3jfjag9w1tv9++hsLW1KNiUmhoVE0jcQQT7NEkjTo9T/LD
+         x1QZ8tpdB28dyJZ0ZS6IS0md/mAyeNG2DiYFrke/CgcUcbXObAX03fEypLq1oYw7EW8V
+         yvRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786746033; x=1787350833;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5adhcsDYcahnxZi84WaSXe7GaNlj/GfGsk4553OgP1g=;
+        b=l5/55J6xicOVIm2P108dpstjBYeX/+VBZ4moipLXCSC0qY2vjC07BtH588ubD3ruES
+         iKEWgKpx8ezl/DucO5SODfYIOaWrqGgPG/aAEqX/dXI/5Byw8/7mWqqqEhrtG9jEQRDw
+         7+KRWlKKVEiAUEOSgZzt9HII/aoXfuZnwzCU80nVS44EwcXs3M5oPwQPx/I7B+TZ0yHt
+         49WtqL2Ndc3suBkH2hdjeoNx0/QWhMFod3JWIvTbgQFkFjhdajoRQo4Y6ZUVzZVlfMHc
+         wW9SWpibo051z6K0btiIYPooENeTOrGOynhUW3Pm9CZgurcPOzL4J5was+ABsqjcr+kR
+         vZmQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rq+X3GgMpQKqO4biMHsIiGf6YaTiJWnPebIH5hUGm6eXVV2RF2h2gCZwQkQYNjvI1Aq86E=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzr5vHh3yW3Lu4GrktmEVTJXRNdio6bgy3rE3pvCzIF89p6TEH0
+	/3LAF9E5GxX7pAgcgOrsGIcW506LyyQOxtKYPeZ1WdoawDIxhQdJ+ckxDKThQ50XdjZ+0fWb1WZ
+	E/SDwI8wztEGKt2NvLLtPZBx2OrJGXpA=
+X-Gm-Gg: AR+sD11zW+e7vd3pOdUmPkOnrd+wUbimNgrC5NwV8PBDxpTb6trj64LOUBhRcnxxSAD
+	a6z8NyWSjkgU538f/+hQ5V64Bi80geKG/adEMo97ll6vPoqV2wlAIq9Lwzd1Xp6R6IUWsrjFadL
+	9hP70GxZeBbcGbhRtSNv3jgFs4uI/PInDxHzWc4zj9Il86vA5N/YoTqQ2qtO8Si4JXZedPrIgY7
+	bCIfLjByoTnowp9cd5wrmhaYXVeLPsrETSEHObRB14R2LAAT1/hOIQJNG2X0FHVTqIDwy6Vr2Ez
+	0QNQBVHdG3v3thO7x10VQ0ZLZSwoXRmEA7KhGfwvCasJ0LB4NGKUeBHy1BEqoJWWyVcWN8dcUGj
+	LH9PDJveSXSbjVKCxbMUWivLFmg==
+X-Received: by 2002:a05:6a20:5483:b0:3bd:187e:2de with SMTP id
+ adf61e73a8af0-3cc71f167c6mr10570426637.25.1786746032892; Fri, 14 Aug 2026
+ 15:20:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 1/6] bpf: Keep fault protection when merging
- pointer types
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260814215301.709827-1-daniel@iogearbox.net>
- <20260814221502.880C11F000E9@smtp.kernel.org>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260814221502.880C11F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28092/Fri Aug 14 08:27:02 2026)
+References: <20260814124843.22041-1-i.tellez@btesa.com> <20260814124843.22041-4-i.tellez@btesa.com>
+In-Reply-To: <20260814124843.22041-4-i.tellez@btesa.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 14 Aug 2026 15:20:17 -0700
+X-Gm-Features: AUfX_myp4b7aWslulf4MYxiCJ6kMsL0Y7DfkXEQT9u7nmslzA4TkLl2wgG66tdI
+Message-ID: <CAEf4BzZEuq+nA-NxEryPiXN1Qf-duNgnYwxMdpFUPprLTq98HQ@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf 3/4] bpf: Read producer_pos before overwrite_pos in ringbuf_avail_data_sz()
+To: =?UTF-8?Q?Israel_T=C3=A9llez_Garc=C3=ADa?= <i.tellez@btesa.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Bing-Jhong Billy Jheng <billy@starlabs.sg>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 8/15/26 12:15 AM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> 
-> Pre-existing issues:
-> - [Critical] The verifier fails to emit BPF_PROBE_MEM instructions when a safe pointer type (e.g., PTR_TO_STACK or PTR_TO_MAP_VALUE) and an untrusted memory pointer type (PTR_TO_MEM | PTR_UNTRUSTED) reach the same load instruction via different branches. This completely bypasses the newly introduced merge_ptr_types logic.
-(this is already addressed in 2/6 in the series)
+On Fri, Aug 14, 2026 at 5:49=E2=80=AFAM Israel T=C3=A9llez Garc=C3=ADa <i.t=
+ellez@btesa.com> wrote:
+>
+> The producer documents the order the consumer has to use, in
+> __bpf_ringbuf_reserve():
+>
+>          * smp_store_release(&rb->producer_pos, new_prod_pos) at
+>          * the end of the function ensures that when consumer sees
+>          * the updated rb->producer_pos, it always sees the updated
+>          * rb->overwrite_pos, so when consumer reads overwrite_pos
+>          * after smp_load_acquire(r->producer_pos), the overwrite_pos
+>          * will always be valid.
+>
+> ringbuf_avail_data_sz() reads them the other way round, so the acquire
+> load of producer_pos no longer orders the load of overwrite_pos. Nothing
+> then prevents the pair from being observed as a stale overwrite_pos next
+> to an already advanced producer_pos, which overstates the amount of
+> available data by however far the producer moved in between.
+>
+> Swap the two loads so the documented contract holds, and say why in a
+> comment.
+>
+> Signed-off-by: Israel T=C3=A9llez Garc=C3=ADa <i.tellez@btesa.com>
+> ---
+>  kernel/bpf/ringbuf.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
+> index 0fefa89039be..89a9c15a260f 100644
+> --- a/kernel/bpf/ringbuf.c
+> +++ b/kernel/bpf/ringbuf.c
+> @@ -319,8 +319,14 @@ static unsigned long ringbuf_avail_data_sz(struct bp=
+f_ringbuf *rb)
+>         cons_pos =3D smp_load_acquire(&rb->consumer_pos);
+>
+>         if (unlikely(rb->overwrite_mode)) {
+> -               over_pos =3D smp_load_acquire(&rb->overwrite_pos);
+> +               /*
+> +                * Read producer_pos first: its release store in
+> +                * __bpf_ringbuf_reserve() is what publishes the matching
+> +                * overwrite_pos.
+> +                */
+>                 prod_pos =3D smp_load_acquire(&rb->producer_pos);
+> +               /* Ordered after the acquire load above, per that contrac=
+t. */
+> +               over_pos =3D smp_load_acquire(&rb->overwrite_pos);
+>                 return min(prod_pos - cons_pos, prod_pos - over_pos);
+
+by reading over_pos after prod_pos, we can see over_pos logically
+after prod_pos, which will lead to bogus result. With existing
+ordering we at most will report stale amount of data, which is much
+more benign. I'm dropping this change
+
+
+>         } else {
+>                 prod_pos =3D smp_load_acquire(&rb->producer_pos);
+> --
+> 2.39.5
+>
