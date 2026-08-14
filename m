@@ -1,146 +1,148 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E75BC1EB1AA
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 13:07:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C49BB45D5D3
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 13:07:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786712840; cv=none; b=Ln1O3ehd2KEbIiWMPK0aIwqdo3fqraM+koTjxOgZuno9X/3u/8S9pxMAiUbzktrp8Lovp3bG82beVOlgzrXN9p0oVlwJrL7M6DHRwfMLGWCzNrDig9/79KLC3UsOZll3EUr/XOEYs2BVpJpUMnmCZpZRFgj5Y0IhJNUBiyNKSYY=
+	t=1786712844; cv=none; b=Gs7NdXTqjqx826A83EyPblViBS6GPKioVin3K+lqzOSTjgdc2XbQElfku4Hwt8GGbxyoThmmZjIn5AzTCIS4PPMetCorGip619QpIV52U2zWZ22OqRN++TOacPL6TKHHo2RN3S8GHmXAykSYO2pHuKFb1y3OXrlBgutnFz1zodM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786712840; c=relaxed/simple;
-	bh=Sglc8JROT2CCgynGe6ZyTxpezKjV20Su4u3VIbvsrms=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=sNOAYSUAaZXgxBgLE6Fjzn1bWoaO7GLRpjItJfj0vvii4S7NIvD6rou6sMAGuCS/2bOOgMqAelUQNSc/ixS7wsRiqQk6SDN5ifx3kp5mi0fw+u+AcYh17SWrfOs9Cwybhq4GI7yQOcv9/KZI4CLcquMMVDi5MTj9MiCIiVKFcOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j0L9FkCM; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786712844; c=relaxed/simple;
+	bh=HN+vZOnZNdBjJA8ewWe+twSaI7H37SXkAkiZmiM7rAs=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=OFCqTXwgNoT6hzaYdt+C+Dfai6PmvRJ/v9YRn0TdzjMimo8iDN0+se6m8DkyRLECtTqo19k6YSQ4TViZG/mm5V4oTxN5r+hV3jaHV/wKJyiud9+U55MaRiB9hTtuNAZOAdAYzQzfo9HgsGdVCjdNX7DuXoamc0chI4FZi+iCILE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=EBC0++iq; arc=none smtp.client-ip=162.62.57.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j0L9FkCM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 741801F000E9;
-	Fri, 14 Aug 2026 13:07:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786712838;
-	bh=UFxlK64SwJRGzqAd1H0LOWpnoPphGlUaa/PcteyrV48=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=j0L9FkCMsTs9k6I70G6JhC3ope3I03ZJfXz3trogefPKw2wdQ3Kn3QC/kWDrz4Jp+
-	 LDnvZWZmE5XFVlFo7ADpELDkmE+LkjC8RS3v1eHPYTuPNe2qfUB/Ty+zK33IOK30Ae
-	 /d7ZkPsJY+bWwsA361nMxctfpcspwkneIEons5Q1k0MPt1SBaD0f0bnbOIry76aUQ4
-	 d6FRzrY17OGaGiRP9JnT5e3wsdxzvM+tD5BsNR+M5Si30xAx4SDXS87mVjRi9lI7pv
-	 5xfykuBgJ3NbtHxCzIdWOwyhulNqivGH/7Ome34SvEcs8CU7Sqb6c8S9SV9DXLjter
-	 NgR3+8LP9t10g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 bpf 4/4] libbpf: Fix ring buffer consumer loop on
- 32-bit position wrap
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?SXNyYWVsIFTDqWxsZXogR2FyY8OtYQ==?= <i.tellez@btesa.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260814124843.22041-5-i.tellez@btesa.com>
-References: <20260814124843.22041-1-i.tellez@btesa.com>
- <20260814124843.22041-5-i.tellez@btesa.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 14 Aug 2026 13:07:17 +0000
-Message-Id: <20260814130718.741801F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="EBC0++iq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1786712835; bh=CGJZ3mhCmb6ps0SxrZbn/tQPNBv5hW7W/5KI6w51kmY=;
+	h=From:To:Cc:Subject:Date;
+	b=EBC0++iqsWXwdDX9D0IUWDhnmno2kqa4H/5Silg9qab8bqPMTpQGKV2TMcwDmI5N3
+	 kK0J01w7DfnwJVYAmLpd8wluMm/5AZxQKJEwmjpszjpoFU95BMjIWHASF2HPGgkqKS
+	 NCywj5q0BZ3lTlPxVEA6yHgKqNvLoMQWS3jRhWOA=
+Received: from localhost.localdomain ([180.101.244.73])
+	by newxmesmtplogicsvrszc43-0.qq.com (NewEsmtp) with SMTP
+	id 1BA2E89C; Fri, 14 Aug 2026 21:06:58 +0800
+X-QQ-mid: xmsmtpt1786712818tuzb71q31
+Message-ID: <tencent_2EB11B9074207E825BE3ACC0AF1F09DE0108@qq.com>
+X-QQ-XMAILINFO: N/HBIA08JiWUwo7t0Shg0hi66hrLZCTmUNMBwp9L8lJoDe2gdTOE6opDbSYKU+
+	 R2rQIW6qOT0FPVi/5QUK/glzUpyOnH4F3wDCjjMSNNftx/TsOMXBr6iOuySEejL+Vg5gmzaz4BGJ
+	 NwLVMzgBAER7b/Fxg0Ns9G3TSqyCtnUcLdPumLAcceJLA31AxE6M97J9k4JpNHgsbNifAM1mLKv4
+	 o8+9bdQSMSOD1yrSPMHOg/vymXS/W+5RlAGt/5AgpBBobPrCKaBXn8xPmJGTFIHrxHlGTVxLTKHU
+	 tAGr0r8HVb0GCnSef+xXmaT3HraQn+Pw5A9WJQnCIfmaUTQKCkU6w6aWVZY/n8bmxglPui33z+f8
+	 PS+s0jjsNeJ8pWQuS4VYxrtRW0Zai2hqPfNRBt0sqmIkWVTXZ/B9Nraq2ZrgqisXoitm/5nMejLz
+	 /xOq4hpOGQ3Nj703E9rPJzPxEQe6pj2Ncv/+vfyqVt7arpEkPI9ReOEjTK605Kc6a4zU+d5QIw7e
+	 laW6hVPL1nILQ2mYe4UMN+c+tr1Kj8HfeJ9KvsCL+JK4qe46sMmgD1oJHYd36dANN54t40d/rbl9
+	 0AfzP05izOl0MFQDoBT18fxjeN0YUHZ2qGpLtL/qTNW2orK+Umku4Xo/WxZDc2S1C/85SfWC02tt
+	 JmYIQcqQbIPT9tBZGpEvtoun6xnUO5rCdHgySMTn4AAWMyaRPOC+Gn4mcu/6o+MibQ6mGhgWjWk0
+	 Zyi1bXB8IYyVmvxX5VsuBmDcYq/WGtqmdJlEpWJYb/axxgBY+LZL4p3TW9wnHT1w2LuDqo38xEYc
+	 dTH9en8Vp/Y1JI/T5GJwkI0mOsl4rIxAkTnIJj3RwGAAmuR3XXq/dvCcNzlsAjknPsjOwwXuzaUH
+	 ZZAdHkRvOHFn8cVB72rlEmSqLo9rcwNApzZTMxxLnW0cnM15vs6OZzNn2+mDVat702UgrDHf6gU1
+	 uInocBw3l8BeasPksUHGln0yW+qhTXOMNfW0nsqhrgY4ds7bVC6HZcKu/AhC67
+X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
+From: Aohan Mei <3472274613@qq.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	bpf@vger.kernel.org
+Cc: martin.lau@linux.dev,
+	song@kernel.org,
+	jolsa@kernel.org,
+	zhuyifei@google.com,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	corvus@tencent.com,
+	Aohan Mei <henrymei@tencent.com>,
+	stable@vger.kernel.org
+Subject: [PATCH bpf] bpf: Enforce cgroup storage map consistency for freplace attach
+Date: Fri, 14 Aug 2026 21:06:23 +0800
+X-OQ-MSGID: <20260814130650.634992-1-3472274613@qq.com>
+X-Mailer: git-send-email 2.43.7
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
+From: Aohan Mei <henrymei@tencent.com>
 
-New issues:
-- [High] The loop condition `prod_pos - cons_pos > 0` uses unsigned arithme=
-tic, turning it into a simple inequality check (`!=3D`) which causes an inf=
-inite loop if `cons_pos` oversteps `prod_pos`.
+When a BPF_PROG_TYPE_EXT program replaces a cgroup program, it
+executes with the target's runtime context, including the per-program
+cgroup storage descriptor attached to the cgroup prog item. The
+verifier, however, bounds the extension's bpf_get_local_storage()
+accesses by the extension's own storage map.
 
-Pre-existing issues:
-- [High] 32-bit user space on 64-bit kernel will experience permanent ringb=
-uffer stall after 4GB of traffic.
-- [High] The kernel's `__bpf_user_ringbuf_peek` implementation suffers from=
- a 32-bit position wrap bug that permanently breaks the map on 32-bit archi=
-tectures.
---
+The prog-array path already enforces that programs sharing a
+runtime storage context reference identical storage maps (via the
+owner cookie matching added in commit abad3d0bad72 ("bpf: Fix oob
+access in cgroup local storage")), but the freplace path performs
+no such consistency check in bpf_freplace_check_tgt_prog(). An
+extension whose storage map differs from the target's therefore
+operates on a buffer whose layout does not match its verified
+bounds.
 
---- Patch [4]: [PATCH v2 bpf 4/4] libbpf: Fix ring buffer consumer loop on =
-32-bit position wrap ---
-commit fb935226d411d583439a72026e8126519f36b208
-Author: Israel T=C3=A9llez Garc=C3=ADa <i.tellez@btesa.com>
+Reject the freplace attach with -EINVAL when the extension and the
+target program reference mismatched cgroup storage maps.
 
-libbpf: Fix ring buffer consumer loop on 32-bit position wrap
+Fixes: 7d9c3427894f ("bpf: Make cgroup storages shared between programs on the same cgroup")
+Reported-by: TencentOS Corvus AI <corvus@tencent.com>
+Cc: stable@vger.kernel.org
+Assisted-by: CodeBuddy:Kimi-K3
+Signed-off-by: Aohan Mei <henrymei@tencent.com>
+---
+ kernel/bpf/trampoline.c | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
 
-ringbuf_process_ring() walks the records between the consumer and the
-producer with an ordering comparison. This patch fixes a 32-bit position
-wrap bug by comparing the distance instead, as the consumer never runs
-ahead of the producer.
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 1a721fc4bef5..3743f6c25e2c 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -806,9 +806,11 @@ static enum bpf_tramp_prog_type bpf_attach_type_to_tramp(struct bpf_prog *prog)
+ 	}
+ }
+ 
+-static int bpf_freplace_check_tgt_prog(struct bpf_prog *tgt_prog)
++static int bpf_freplace_check_tgt_prog(struct bpf_prog *tgt_prog,
++				       struct bpf_prog *prog)
+ {
+ 	struct bpf_prog_aux *aux = tgt_prog->aux;
++	enum bpf_cgroup_storage_type i;
+ 
+ 	guard(mutex)(&aux->ext_mutex);
+ 	if (aux->prog_array_member_cnt)
+@@ -821,6 +823,20 @@ static int bpf_freplace_check_tgt_prog(struct bpf_prog *tgt_prog)
+ 		return -EBUSY;
+ 
+ 	aux->is_extended = true;
++
++	/* At runtime the extension program inherits the target program's
++	 * cgroup storage context (via prog_item->cgroup_storage), while the
++	 * verifier bounds its accesses by its own map's value_size. A
++	 * value_size mismatch leads to slab out-of-bounds access.
++	 */
++	for_each_cgroup_storage_type(i) {
++		struct bpf_map *tgt_map = tgt_prog->aux->cgroup_storage[i];
++		struct bpf_map *prog_map = prog->aux->cgroup_storage[i];
++
++		if (prog_map && (!tgt_map || prog_map->value_size != tgt_map->value_size))
++			return -EINVAL;
++	}
++
+ 	return 0;
+ }
+ 
+@@ -926,7 +942,7 @@ static int __bpf_trampoline_link_prog(struct bpf_tramp_node *node,
+ 		/* Cannot attach extension if fentry/fexit are in use. */
+ 		if (cnt)
+ 			return -EBUSY;
+-		err = bpf_freplace_check_tgt_prog(tgt_prog);
++		err = bpf_freplace_check_tgt_prog(tgt_prog, node->link->prog);
+ 		if (err)
+ 			return err;
+ 		tr->extension_prog = node->link->prog;
+-- 
+2.43.7
 
-> diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-> index 00ec4837a06de..c8fe57401a8b5 100644
-> --- a/tools/lib/bpf/ringbuf.c
-> +++ b/tools/lib/bpf/ringbuf.c
-> @@ -244,7 +244,7 @@ static int64_t ringbuf_process_ring(struct ring *r, s=
-ize_t n)
->  	do {
->  		got_new_data =3D false;
->  		prod_pos =3D smp_load_acquire(r->producer_pos);
-
-[Severity: High]
-This isn't a bug introduced by this patch, but on a 32-bit userspace running
-on a 64-bit kernel, does this lead to a permanent ring buffer stall?
-
-Because unsigned long is 32-bit in userspace but the kernel uses 64-bit
-positions, won't producer_pos in the kernel exceed 2^32 after 4GB of
-traffic, while the 32-bit userspace only updates the lower 32 bits of
-consumer_pos?
-
-Does this cause prod_pos - cons_pos in the kernel to permanently exceed the
-ring buffer mask, causing bpf_ringbuf_has_space() to reject all future
-records?
-
-> -		while (cons_pos < prod_pos) {
-> +		while (prod_pos - cons_pos > 0) {
-
-[Severity: High]
-Does this condition risk an infinite loop in the consumer?
-
-Since prod_pos and cons_pos are unsigned long, their subtraction is
-unsigned and strictly >=3D 0, making > 0 act identically to !=3D 0.
-
-If cons_pos oversteps prod_pos due to reading a torn or corrupted record
-length (such as when the kernel overwrites unconsumed records in
-BPF_F_RB_OVERWRITE mode), won't cons_pos bypass prod_pos?
-
-Will the loop then spin endlessly, processing garbage memory as records
-until cons_pos coincidentally aligns perfectly with prod_pos again?
-
->  			len_ptr =3D r->data + (cons_pos & r->mask);
->  			len =3D smp_load_acquire(len_ptr);
-> =20
-
-While reviewing this 32-bit position wrap behavior, I noticed a similar
-pre-existing issue in the kernel's USER_RINGBUF implementation.
-
-[Severity: High]
-This is a pre-existing issue, but does __bpf_user_ringbuf_peek() permanently
-break maps on 32-bit architectures?
-
-kernel/bpf/ringbuf.c:__bpf_user_ringbuf_peek() {
-    ...
-    u64 cons_pos, prod_pos;
-    ...
-    if (cons_pos >=3D prod_pos)
-        return -ENODATA;
-    ...
-}
-
-On 32-bit kernels, rb->producer_pos and rb->consumer_pos are 32-bit
-variables read into 64-bit u64 variables. When producer_pos wraps past
-32-bit, its zero-extended 64-bit value becomes small, while consumer_pos
-remains large.
-
-Does this absolute ordering check falsely evaluate to true, permanently
-returning -ENODATA and stalling the map until user space pushes another 4GB
-of data?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260814124843.2204=
-1-1-i.tellez@btesa.com?part=3D4
