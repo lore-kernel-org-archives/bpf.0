@@ -1,140 +1,65 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D762E3FE
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 20:49:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9054E3DAAB6;
+	Fri, 14 Aug 2026 20:56:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786740567; cv=none; b=WWstvC6qx1QQIumduzX5AgyFPm88tkmFA834I6lkaSLsvrziq4gtn2scsH5EecslpN2SgRc4BR22PBAJ5ztVWQHbgy+UbSbdWJZdJzBFoPJ+i7pnvRt9oxpIPXr3T9RhIinV+VCBKorOYPrAJ3dCYw195Yd0pNoRnoiMR0RchVw=
+	t=1786740981; cv=none; b=lNnUxPQGtUCkyvrozHDthEZSkCeyUpvZ+yjlbhNzfhNQxBsr0KbGEzKlcQiZuESH6q7ifnv6bcN0eiaSFqatav0Jm2qUGVgdGcGkD0JjGFNkAn4t2pvT8TUiODTzZlw8BrMEF3H/kL1Zh/Ka4+JWNMQY30Q4drqbatqdOrtdOss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786740567; c=relaxed/simple;
-	bh=RLRHlnnojGpGiuTqM+Tp6kJR38c4TLqcitL10dDW6hI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Xvy/iwkAWNC8i5bHCqFsQ0M75xU3y/xOVuwHdzbY24OvMGxwZ5mnqmSTXxcKTSncOG6iN02C1S0zM5Rd6xaesvO1t8NC2qDD4V6izDgj4lsuXTDBuffap+HiZWUBdN61WGvYrs+x5oGLVixXSBRAaiymcK0FkxwmKoNk/9TE1hs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sChlPhha; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786740981; c=relaxed/simple;
+	bh=RLf+S4xWGgtGYLC4QaFImMLxfpR0WVLOSM+dtPHBNo4=;
+	h=Date:Message-ID:From:To:Cc:In-Reply-To:References:Subject; b=Kw17wYLpXOve5FBTp5o09HBdeW1qJJH1vCtEGzdEj8BxIQw6yyoPeqQIiVc1GduIhHB0pO8j91ktQAW6jVDdkV6apf1qbqGzfWwIYq+s64Vyc7IbbthIuj771TMs4Fm4UWXCpMqj5+OEk68ygHyILXB1lH1OEQWJFGmqtrbWTMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e+sZha+N; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sChlPhha"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-38dc4553f62so1995133a91.0
-        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 13:49:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786740565; x=1787345365; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=e9vtdPXUolcQyKYgAPulvlLODWa6G5v7VngkgxZZqDE=;
-        b=sChlPhhaRCVSv4uziPLpWe7fKriOKRQCOd5NoURSy2a+8zW8V1D0iJzgG+mHSS6DUX
-         BsmiOpwdhD0TxWaItyBrh+GbTCylDmEE8tlOUiDklxGns1rUV4pobJuGHzEdtzs85NO5
-         e9xzjBSi8dYjoodLOtod31dXjNClWmNN27NpXx3Xn4ujvD4yMj6YJTzf3KlOCnFd6b76
-         pGxtGxiqB1H4F+7vBzV2I/tcNcLR9+8hBSVeEHBMBTqyBhl4nEfFEwoFG9P5lTBmx4J7
-         WB8CA+Z3dGdo4DTnvwkpX5w20X2dgBerBfEXUFsuvnArzN/x6cErX1ihZpINlaT2fZDG
-         c1/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786740565; x=1787345365;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=e9vtdPXUolcQyKYgAPulvlLODWa6G5v7VngkgxZZqDE=;
-        b=T64DmW6a26ZcVqcHXTFufIBrNxp7c7JMrPPDSkt36Vs6pvAj1J/7ercSIBIa1J+d0U
-         O1UuHgk9ki7tTaWBszlNJtdbwksOpryH3VUaQch9HEB3K7ESdJLD+ahPD6bFK9EVGvpN
-         tNoyHxHsaOwCYuwvTqUY46PLoHXrpQBrfDBQFqCH7CKTdfujttlNflAYMfwbgW0jnO4I
-         hSTmxZ+gsznV+kcPPTAzF07Sr3fmkEPzJEd8mIxrdrruKggBm6SOw0zJXYc7tNGLDTRa
-         TDMQ+txcsdBi4cJUJZxBJ4zj67uUjxtCT8ujMpI6VUqViNuf1hSbmSmwcqlmC2vy4km2
-         x8xg==
-X-Forwarded-Encrypted: i=1; AHgh+RpXlmPVV7/tOPMo9JDH7WX/vJaK5A/qsSpKHNdS7JhlHLvkNYP+TAR0uFR/gTcp4hl2aus=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBxZjqV5gqsqcqyu6OmLcxGdpo0R5AKkyFQP0UJdIM3wJFhEYg
-	vkWEqIdZt1VZ3nLbJ4A8yNcj+J9Wo48p4r+EkOaQOeLVy+sSBHhlQ8a6
-X-Gm-Gg: AR+sD10sOWmMB8qFwREl39kT34AB/RfDlRA7TkGP7ctqu4ZaeAipxA6QUMdwBkzlQ40
-	RLLzPnnzXWrT+7v0+AXQpcAAuMkXUTRVWnK33eWRU/19uaQ1+d+XimvUn2O1pXNe7zowACEmKZC
-	9rKCyTHWghpjmbkxd/e/l3r+9ktIDPVu/q21kfm3Kj4yAjF8z86X73O/dypKdzidsnCqbp05oyD
-	g6V17JMpinTsFd2gyuKHMYanQkNrAxukkdDRPzvPnpy0/nwtIE3Su+qrc9u2P9psDgxsI/kSKB1
-	pD1OD1gRn/VV0E7or6NTfZrPcsCQDFcMqiO+5Ca9/OZQbDwfNdq1qBwRxYckpqOorxbaWB2mFSU
-	CfeelsFo4ypzwF7a7qpUmTSwnoDdGvWJVVy0P+S++A8aC7RaGjirMk/5jTsWyP1jIEXV835sLc+
-	6dII+4rUd3H39e/ZlikUF00OAH7nj0kA4nz8kgQs69hLzcpO2pdeK3/sCET4m2YYX+dekSur17h
-	ZZhASeffLTDfIXAEBfcRCtbld2Sz8Lb6caipetytzvpKw==
-X-Received: by 2002:a17:90b:44:b0:38e:2e16:859b with SMTP id 98e67ed59e1d1-3933bcf395amr10588067a91.20.1786740565177;
-        Fri, 14 Aug 2026 13:49:25 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:b77:bdad:4587:c682? ([2620:10d:c090:500::6:84a4])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1413889bca5sm17673449c88.12.2026.08.14.13.49.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Aug 2026 13:49:24 -0700 (PDT)
-Message-ID: <d87ed8b8140ef404436d7ddf7a4143cb07ef98cd.camel@gmail.com>
-Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Check per-CPU address
- resolution per register
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Vineet Gupta <vineet.gupta@linux.dev>, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, x86@kernel.org,
- 	stable@vger.kernel.org
-Date: Fri, 14 Aug 2026 13:49:23 -0700
-In-Reply-To: <20260814203248.3714536-3-vineet.gupta@linux.dev>
-References: <20260814203248.3714536-1-vineet.gupta@linux.dev>
-	 <20260814203248.3714536-3-vineet.gupta@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e+sZha+N"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D4C51F000E9;
+	Fri, 14 Aug 2026 20:56:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786740980;
+	bh=RLf+S4xWGgtGYLC4QaFImMLxfpR0WVLOSM+dtPHBNo4=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject;
+	b=e+sZha+N7bxdxEVZo86Valxzhaz/7EvcbH2ba7UnxbsssKCdkIv3LX8wthlTNhiaq
+	 SLSleslx1FyakSDo+BVfZjPykku8qaVe9CTacP1ypLjWlAA/8EjimVhHNkzWESrtg1
+	 johxofRPqFCqjAuZK6+QjsURDGjn2RbOVUOcBYUveM8zCZeMBXZIqF/bQUTRgSdHhT
+	 Wf9r5Tv3eBkmCi4CQSoFg5iguWg1x8x37Fdh0VmG9Ucs3FbnSwyuxgklYUXbzo9a36
+	 +FcasCcfEMOemqMkgbILJ/ViyK79feLCIwtxzH0Mbz3KHp0aRhX5IIMR0WU6AZHTgt
+	 pNtbygssDaqeA==
+Date: Fri, 14 Aug 2026 10:56:19 -1000
+Message-ID: <003d0a4f1c448113e18f9f5d61d00e99@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: Tao Cui <cui.tao@linux.dev>
+Cc: Tao Cui <cuitao@kylinos.cn>,
+	void@manifault.com,
+	arighi@nvidia.com,
+	changwoo@igalia.com,
+	suzhidao@xiaomi.com,
+	yphbchou0911@gmail.com,
+	zhaomengmeng@kylinos.cn,
+	sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+In-Reply-To: <20260814144116.2767304-1-cui.tao@linux.dev>
+References: <20260814144116.2767304-1-cui.tao@linux.dev>
+Subject: Re: [PATCH] sched_ext/scx_flatcg: expire cached hweights on
+ weight changes
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Fri, 2026-08-14 at 13:32 -0700, Vineet Gupta wrote:
+On Fri, Aug 14, 2026 at 10:41:16PM +0800, Tao Cui wrote:
+> fcg_cgroup_set_weight() updates cgc->weight and the parent's
+> child_weight_sum but doesn't bump hweight_gen, so the hweights cached by
+> cgrp_refresh_hweight() stay stale until some task activation bumps the
+> generation. For cgroups whose tasks never go through a 0->n runnable
+> transition (e.g. persistently busy ones), a cpu.weight change never
+> propagates to scheduling at all.
 
-...
+Applied to sched_ext/for-7.3.
 
-> +/*
-> + * An ld_imm64 of a per-CPU map value is followed by a mov_percpu_addr t=
-hat
-> + * reuses the same register, so the register the address lands in decide=
-s how
-> + * the JIT encodes the add. On x86 R5, R7, R8 and R9 are the extended
-> + * registers, whose high bit needs REX.R because the destination sits in
-> + * ModRM.reg. Check one program per extended register, since getting the
-> + * prefix wrong resolves the address into whichever register shares the =
-low
-> + * three bits instead.
-> + */
-> +
-> +SEC("raw_tp")
-> +__description("per-CPU address into r5")
-> +__success
-> +__arch_x86_64
-> +__jited("	addq	%gs:{{.*}}, %r8")
-> +__naked void percpu_addr_into_r5(void)
-> +{
-> +	asm volatile ("					\
-> +	r5 =3D %[percpu_data] ll;				\
-> +	r0 =3D *(u32 *)(r5 + 0);				\
-> +	exit;						\
-> +"	:
-> +	: __imm_addr(percpu_data)
-> +	: __clobber_all);
-> +}
+Thanks.
 
-Thank you for adding the tests.
-Maybe save some space by just packing it as a single test?
-
-__jited("	addq	%gs:{{.*}}, %...")
-__jited("	addq	%gs:{{.*}}, %...")
-__jited("	addq	%gs:{{.*}}, %...")
-__jited("	addq	%gs:{{.*}}, %...")
-__jited("	addq	%gs:{{.*}}, %...")
-
-	r0 =3D %[percpu_data] ll;				\
-	r1 =3D %[percpu_data] ll;				\
-	r2 =3D %[percpu_data] ll;				\
-	r3 =3D %[percpu_data] ll;				\
-	r4 =3D %[percpu_data] ll;				\
-	r5 =3D %[percpu_data] ll;				\
-	r6 =3D %[percpu_data] ll;				\
-	r7 =3D %[percpu_data] ll;				\
-	r8 =3D %[percpu_data] ll;				\
-	r9 =3D %[percpu_data] ll;				\
-
-More compact and no need to describe in length why only R{5,7,8,9} are sele=
-cted.
-
-...
+--
+tejun
