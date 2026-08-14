@@ -1,128 +1,181 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 994421FFC48
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 00:52:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786668764; cv=none; b=hXKN6U4iOf8z/FxxwrwsXoVKGEjBFnLsefV5L9ZcXjzJgZuS6VWbPAtFmO0VrH37aSC0UOK3dWiJEFWkm+J6gfhXySxbtJWP+EIdKq89s/2RKiuUs1MJsPrHkk/VTy4i9fDP4Zxc6+UL0AQY6gl0GsIQCVT0DFaSplaNpPSq2oo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786668764; c=relaxed/simple;
-	bh=bwhxbY6ZL6wBz3mcdu4XDlN/0VH5M8mop5uy1jxTiNg=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFA891C84DC
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 01:01:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786669284; cv=pass; b=p6wdiD9utHuAhpm7ydvR0A9pB+n/SGRESejoqhtT/NbRQIwTh2iFW6QCl0qose9tv9pdFsRzB2pm5+j1eWqPc8NY8NHxlTn3NbrCV+C1D3+Pot4SkOeWpF11MZlCqQkKrkSLFlcNTcWXjgfw93vkrkDt3WsELJRbIuE+jwQ7wBI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786669284; c=relaxed/simple;
+	bh=L87+y9CoVqRC0hpuMGywi6kNUXCz3SnYGNTWdYb4VAM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kigJ0LXRb3+R9tnOLtQ4iW67s8NnNLGLL1AJg4IMJrpmYce/8zc0bSIznmf/iF5o/6fUpTtLUCGV7pjvpMk7deeq84/ThPbZp1AVC9IAGGw+UMElXimBnWjjbQTO0g9YMXKyYiUsG0Cdu36k4uHSzhGWma22iwFZRac5hp0ZPWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DAxF1MZd; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=O4YUvRFS7xM5nwc7dUzSAZLSPAWEe1SR+1GKjGsLHlapyUXMnYugELsbPx75KQT2/rIgegsrBBgKW3N+gssaIetoAzKOxPkTxZFx0koUn4wDIHY813IsyQTBjbfdPkhbq2AJdp/PFSM6iUm1HK02V8pj0W4OTx/9qZsMELYzvW4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VJsK4v0W; arc=pass smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DAxF1MZd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 537FE1F00A3A
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 00:52:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786668763;
-	bh=ZN0AsNJS3aORrQWgKiMI3G3Tez0uHG0+X1FtcQ6s3Gs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=DAxF1MZdvTqdfx1RnNQ9WHC7cBqR437hIyCmjMCamSTYBHLLpuR3EiJ3lBtM2HO9B
-	 3bnw3fgrt9/snN8Bw2UbYk30bWwTf6RTdVVEOulLV5iH60AraRYSh58ZCKZEDk2p7Y
-	 YAN/+De0ndowVdTc563mtbwvC0jBWGS4LQF98MWbWAE2dz9EIJ6oIrJoTfEbr2pI03
-	 4czgIZVoyFou4QGJ9ZKwpc2xZqrXbz1CusTG186Tnasb2NTE/PWFYf0DuSFxaWD/KF
-	 Aa4UqHfoAKN/IKBfvtcr2Opn5UjKrMcPlztlxqn2At3wDLK06bBSnGpKu6KmzHAxat
-	 AYX56lNTE3zuA==
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-92e6391b114so37302285a.3
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 17:52:43 -0700 (PDT)
-X-Gm-Message-State: AOJu0YwoutByzZHBrAsghErCYfaZgEZAwNOTTx9+zFqKD7Mc8fIm9gZG
-	Bd/+CULx6X6otWN9vmpKhnbie97ylZsL/hwPtorHHikIRNJ7c5mPXd2NB6H5eA36B83v/55jXuA
-	TbuAJlbpAgKCpDknx3UywIS5fDZlJ3wM=
-X-Received: by 2002:a05:6214:29e6:b0:8ec:a010:9af5 with SMTP id
- 6a1803df08f44-90a91cd810bmr21941826d6.10.1786668762412; Thu, 13 Aug 2026
- 17:52:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VJsK4v0W"
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5b29599b81cso532204e87.1
+        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 18:01:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786669281; cv=none;
+        d=google.com; s=arc-20260327;
+        b=gDXmbrj7WMZH2UVoM5eBF+CPNlEQgouS5euVgLhuTQyHUd5l1+2EOnnEBeLsRl+tUC
+         DkXwfZ6NhAadnEIdKyhCd23utU2Ienj8udPJ4MjZcaPA2IQ2G+7heOYbMa8BD7XDVudv
+         l4fXDocrMKjzTzrMqrtvmW7rna/BklvcIbjkqIh9p9h8IsDs4mE41qWe8sPv1SZF78sx
+         XNLb6U16RJeU72OswMJXXvaYMV1rtGQP1SyYUGFPn0/82LhxtNn1NzKtyaJOziYmEr5q
+         30AEvMQxNnCQeW9eiBu38nxJrl5VNZ+OVgzhxO0EFua5U/I6xcKVOAIgnA7xtECZZjlb
+         uuUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=Ewa2mMlihLLuJ1RCLwygIaMUaUZ/BWCoiTIjU/NI918=;
+        fh=eSo/0f2A816lqDFAwzItmSDpJnsHR7ihJW8vEUvj/48=;
+        b=l443tJ+m8EzAhEwWyScqm2478FYLohRZ6eXVQrkqetkHjLNgWB8MTWaEhjrPewFabR
+         otbvFNg0d3+oxmkIfNSZhnCR3DKNnx7fT2AyWVViqxB6iiwT50UfM5hTh4xqTf0pxw/3
+         HEKXUO1p84D0fYgt6U+EVnX3WEOvs/ps42AV63f46Tm0x/g9NFbhsP6gbZ/AOxuo6g5m
+         3iQsuB2ByluaEZqIP1ZDQVmFpBBTSCGl2ZibAi1HL3YADBke88lQzZDwPl3wvwpM5S1v
+         pkB7TFf1gmX01mPkyRx9E6Wvw6hZXs+1gD6N5wLtCYWme8RRpfr6ssKgHogv2bKD8wxD
+         +2Qg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786669281; x=1787274081; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Ewa2mMlihLLuJ1RCLwygIaMUaUZ/BWCoiTIjU/NI918=;
+        b=VJsK4v0W/BBVWVNbMlBsJh9107qnx/xgCsKiMnf56AET9wAWZsJs/GxcF/cBq8ge8T
+         jk+0Bmb2T4Cnz6Km8mmY3LMFibHwNGPqjEk/DZmo10vOXzvIqCTuOruVS16eNSVeaA/c
+         S52t4+MGt2/1MMtmupOeN35P+UgL+Ugk4V4Rcz2PefPrUJDRUVHYXwkZ5Vsem484eDuO
+         2S2klHuLI0/Z/XlFYqpA8hmj22UoOZFTKUdwG0wUmSwCq//DhQNInRajQR4zeC+5MarQ
+         qU1zzXPUdV77l8vLLztzK3bqYmApUBNG5qnUa3MehQul+OyvgGylSl2QRhbzDP+zAOa+
+         RcDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786669281; x=1787274081;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Ewa2mMlihLLuJ1RCLwygIaMUaUZ/BWCoiTIjU/NI918=;
+        b=KLSuosWMKCF3a9VI3W89aRXds9njXxbmqv7vAWKSdeR8CRHKSjw2A44rgXSrntTcfw
+         zKnT9NV7ck6CBoXYssWn+VVo/NTcmaPTbNjAfiwtwL71hIdx5cRGa0AmMJCle29G4yjc
+         qgRCW7MywuCZ0j2U/y16fk16l2aKOOUeJC4xzRkjnMEGsB2tTDINaw4u1Dyz7fzKz2LO
+         kiTsCfzkhlIRn6ifN/CPubmF2nW/XrZLXntRJybRW5YVqDlSTZxcKoPljLP6vzpTYqM8
+         Mm2pmhh/KEuXfNu6iWMGcltymMX4uoc4nj3cEY3csjlZx4re4/5CkNcBG7ZBTl8lp2SF
+         1wXw==
+X-Gm-Message-State: AOJu0YwZBIKT0fJxLPUGtQt+3SYIBR80HhItCSqRRjZWG9Rba300p2VV
+	JTsE4uCIjofBdjiTEJ6mGBoy1IBrVvoaoPKbcOyxHFV/CnXe9BMRyGhurLGwC/l55pmj8b9xxZX
+	Nv/fOufmPGXcRd5lTnitthVx16i9Uass=
+X-Gm-Gg: AR+sD12JmmH7pSK2ino33zaNjJj0CdDpDU63fvzaexplUIffXqor4jVGA/Koye5WNcY
+	IpR2o1FR64VMouPSPpyab5W2ZqQhbXu8Hr2bqKt2HGTIFoGGLlztHPBQ5EzEwe0IRRyfzXgIWqs
+	Ovg0C8KrVrNj+La8NVBFbe0vCPAATw4wp+xL+ck/6EzMSOnohC1xFX2oQfJuGHRDNordMoJoeO7
+	/Jmd/jvQXIqRa1+o0MRNtYS0K3WPsyt3F9mVNWiuAuQ4dlpi+53CaqG2J0ZGABVKnRKu1hQ61Uz
+	TA3fDJEKLK9yCVoZGdZAgBqEdkKEJjVzKFarbOvpbPjoKQ==
+X-Received: by 2002:a05:6512:138c:b0:5ae:a0b4:5013 with SMTP id
+ 2adb3069b0e04-5b4590c5726mr258854e87.0.1786669280449; Thu, 13 Aug 2026
+ 18:01:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260813224853.1436734-1-song@kernel.org> <dbe52cb393027ac53874b2b54bcddc6fd5687be01895e678261c45a1b76f9a8e@mail.kernel.org>
-In-Reply-To: <dbe52cb393027ac53874b2b54bcddc6fd5687be01895e678261c45a1b76f9a8e@mail.kernel.org>
-From: Song Liu <song@kernel.org>
-Date: Thu, 13 Aug 2026 17:52:31 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7otRv+xvJ9f8tstH4Mwp3FrkT1Qgbnvzun-39_D35K4Q@mail.gmail.com>
-X-Gm-Features: AUfX_myb_XWZQpW3j7TxyipyHGCI4BEPQ6gZgFcbQ9J1Ba36XE4WPK7bfS8uLD8
-Message-ID: <CAPhsuW7otRv+xvJ9f8tstH4Mwp3FrkT1Qgbnvzun-39_D35K4Q@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next] bpf: Populate mmap-able array map memory lazily
+References: <20260813211533.290256-4-dingning04@gmail.com> <678eb16ccbeeb3d38fba26d20f6a7f3f2bb99f7bc9d7f5bc6bf2fb1d5b9ee87f@mail.kernel.org>
+In-Reply-To: <678eb16ccbeeb3d38fba26d20f6a7f3f2bb99f7bc9d7f5bc6bf2fb1d5b9ee87f@mail.kernel.org>
+From: Ning Ding <dingning04@gmail.com>
+Date: Thu, 13 Aug 2026 18:01:09 -0700
+X-Gm-Features: AUfX_mylj9AIRpVCjzozB4ZFkYgl9UXAM2f1QG1yjoejxk5y_JA1rOiM7gM55ik
+Message-ID: <CAJP4iuvscW9X=7MjTkRF4_x_o5cDAfNQB3te-JhpgU4BSwZTbg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 3/4] bpf: Reject untrusted allocated-object pointers
 To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, kernel-team@meta.com, 
-	martin.lau@kernel.org, yonghong.song@linux.dev, clm@meta.com, 
-	ihor.solodrai@linux.dev
+Cc: bpf@vger.kernel.org, memxor@gmail.com, greg@kroah.com, 
+	sashiko-bot@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	john.fastabend@gmail.com, andrii@kernel.org, eddyz87@gmail.com, 
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
+	davemarchevsky@fb.com, linux-kernel@vger.kernel.org, martin.lau@kernel.org, 
+	clm@meta.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 13, 2026 at 5:06=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
-[...]
+> The immediately following invalidate_non_owning_refs() only acts on
+> registers where type_is_non_owning_ref() returns true. But after this
+> patch, type_is_non_owning_ref() returns false for registers with
+> PTR_UNTRUSTED.
+
+Makes sense, I think the thing is, callers do not have a consistent
+contract of `type_is_non_owning_ref()` (same for
+`type_is_ptr_alloc_obj()`). Some of them only care about whether a
+register has the NON_OWN_REF flag or not, but some callers assume it
+also should not contain the PTR_UNTRUSTED flag. So if I make some
+callers happy, then other callers probably will complain because I
+break their assumption.
+
+Then I think the previous approach, which preserves the old semantics:
+`type_is_ptr_alloc_obj()` only checks the flags it declared in its
+name and doesn't care about whether other flags are here or not will
+work better. If some caller explicitly need to ensure the register
+does not have PTR_UNTRUSTED, they should check it by themselves.
+
+> The commit message states untrusted pointers "are still allowed for
+> BPF_PROBE_MEM reads," but does the BPF_PROBE_MEM conversion actually
+> work for the NON_OWN_REF variant?
 >
-> > diff --git kernel/bpf/syscall.c kernel/bpf/syscall.c
-> > index 7d8c3e8e6d62e..9e5e65e73dfa4 100644
-> > --- kernel/bpf/syscall.c
-> > +++ kernel/bpf/syscall.c
-> > @@ -1076,9 +1076,21 @@ static void bpf_map_mmap_close(struct vm_area_st=
-ruct *vma)
-> >               bpf_map_write_active_dec(map);
-> >  }
-> >
-> > +/* Called for maps that populate their memory-mapped region lazily. */
-> > +static vm_fault_t bpf_map_mmap_fault(struct vm_fault *vmf)
-> > +{
-> > +     struct bpf_map *map =3D vmf->vma->vm_private_data;
-> > +
-> > +     if (!map->ops->map_mmap_fault)
-> > +             return VM_FAULT_SIGBUS;
-> > +
-> > +     return map->ops->map_mmap_fault(map, vmf);
-> > +}
-> > +
-> >  static const struct vm_operations_struct bpf_map_default_vmops =3D {
-> >       .open           =3D bpf_map_mmap_open,
-> >       .close          =3D bpf_map_mmap_close,
-> > +     .fault          =3D bpf_map_mmap_fault,
-> >  };
+> Looking at kernel/bpf/fixups.c, the probe conversion logic has:
 >
-> Can this affect ringbuf maps? Both ringbuf_map_ops and user_ringbuf_map_o=
-ps
-> provide .map_mmap but not .map_mmap_fault, and neither overrides vm_ops, =
-so
-> they now use bpf_map_default_vmops.fault. Before this patch a fault on
-> their VMAs had no .fault handler, which let do_fault() take the path that
-> re-checks the PTE under the PTL:
->
-> mm/memory.c:do_fault() {
->     if (!vma->vm_ops->fault) {
->             vmf->pte =3D pte_offset_map_lock(vmf->vma->vm_mm, vmf->pmd,
->                                            vmf->address, &vmf->ptl);
+>     case PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED:
+>             /* probe mem access */
 >             ...
->             if (unlikely(pte_none(ptep_get(vmf->pte))))
->                     ret =3D VM_FAULT_SIGBUS;
->             else
->                     ret =3D VM_FAULT_NOPAGE;
->     ...
-> }
+>     default:
+>             continue;
 >
-> That re-check exists so a fault racing the zero-PTE window of a
-> read/modify/write update (like change_pte_range() for mprotect() or
-> clear_soft_dirty() for /proc/pid/clear_refs) sees the updated entry and
-> returns VM_FAULT_NOPAGE instead of SIGBUS.
->
-> After this patch bpf_map_mmap_fault() returns VM_FAULT_SIGBUS immediately
-> when map_mmap_fault is NULL, so the PTL re-check never happens. Could thi=
-s
-> send SIGBUS to a userspace thread reading a ring buffer while another
-> thread calls mprotect() on the same mapping?
->
-> The comment says the handler is "Called for maps that populate their
-> memory-mapped region lazily," but it is installed on the shared vm_ops an=
-d
-> actually called for all mmap-able maps, including the eagerly-populated
-> ringbufs.
+> It has a case for the plain MEM_ALLOC|PTR_UNTRUSTED type, but no case
+> for PTR_TO_BTF_ID|MEM_ALLOC|NON_OWN_REF|PTR_UNTRUSTED. So a load
+> through the surviving register is emitted as a plain load with no
+> exception-table entry, which would fault in the kernel instead of
+> returning zero.
+I didn't consider the NON_OWN_REF combination case, but I think that
+should be a separate patch for fixups.c?
 
-Both comments appears to be valid. I incorporated the feedbacks in v7.
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index bc021c8c8fbf7..c3a11c98cd451 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -5820,7 +5820,13 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+> >                       return -EACCES;
+> >               }
+> >
+> > -             if (type_is_alloc(reg->type) && !type_is_non_owning_ref(reg->type) &&
+> > +             /*
+> > +              * Skip this referenced-ID sanity check for untrusted allocated objects;
+> > +              * the access check above already rejects writes through them.
+> > +              */
+> > +             if (type_is_alloc(reg->type) &&
+> > +                 !type_is_untrusted_ptr_alloc_obj(reg->type) &&
+> > +                 !type_is_non_owning_ref(reg->type) &&
+> >                   !(reg->type & MEM_RCU) && !reg_is_referenced(env, reg)) {
+> >                       verifier_bug(env, "allocated object must have a referenced id");
+> >                       return -EFAULT;
+>
+> This change allows the demoted PTR_UNTRUSTED|NON_OWN_REF registers to
+> reach mark_btf_ld_reg() instead of hitting the sanity assertion, which
+> opens the path for the read-through described above.
 
-Thanks,
-Song
+I think for the exemption, that is intended, ths bad thing is about
+the fixups.c does not handle
+PTR_TO_BTF_ID|MEM_ALLOC|NON_OWN_REF|PTR_UNTRUSTED.
+
+Overall, there are 2 separate problems:
+1. type_is_non_owning_ref should be fixed to preserve the original semantics
+2. For the exemption, new cases should be added to fixups.c.
+
+For problem one, I think there are 2 approaches:
+1. Preserve the old type_is_ptr_alloc_obj() code, but for any caller
+who wants to verify that the register is also trusted, they should
+check themselves explicitly.
+2. Change the type_is_non_owning_ref:
+static inline bool type_is_non_owning_ref(u32 type)
+{
+return (type_is_ptr_alloc_obj(type) ||
+type_is_untrusted_ptr_alloc_obj(type)) &&
+      type_flag(type) & NON_OWN_REF;
+}
