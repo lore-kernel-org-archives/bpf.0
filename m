@@ -1,42 +1,42 @@
 Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72CDA2E7165;
-	Fri, 14 Aug 2026 01:29:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953D72F8EA5;
+	Fri, 14 Aug 2026 01:29:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786670973; cv=none; b=GEQFLOVFWnuuB+t6qUCxB95SFZ7+BnBiHWhfBP7xQtqYYnSC/cUnzOoBcmEouF3ksh/GkEc1hS3G6e7TXwscxeB7/y/dHp5posO+nv1GNIu+0h4sy1e6qR7LEUrgLPy7oioqUOQuS4YJw+JgrX5tB2hxEfsiqHdOJa1yoOmI1tY=
+	t=1786670974; cv=none; b=FSFN3guHFkUQygxCU4uaBvx19WuLSfkZIGc/VZF3WTsGIaBxKq5pFYM926Y8pZwl97DyCU8toelejussQAh8FRa4oJUTn4U3nmK5kZgWfXqb5+v094Gi10LNGhQcBdMHz/3lhHqR8hPszkUxMddiuKmvpR+Xy2WodUHlIfty/1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786670973; c=relaxed/simple;
-	bh=5lG2fKvLH9z+sik8yf3Ct2EKdBEopun9RtSDbGD7Jpg=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KF6AeqQL4RNG0DQW70BfSkhghdwdKLh6wMeWEPkmubmMobwHVj+nGjqDa2pecFB/fB/xPKaYMJc55XSiQqGlhoFysOyzQ7m0jHX+1cGcJmRYnbtRwXOA28xSevipG7cIWfhKGgYII5iDCeorLQFBk4U5wq12RYmbFaliHOZqA08=
+	s=arc-20240116; t=1786670974; c=relaxed/simple;
+	bh=juW22qNlSi8Oepq9Y7Ek47Q7j0Pavu0pnnfkEC4Iag4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Uxvoxd083oOEZS9dGg4L/jJMRKKmUDKrbzIwMzzWBKBzJmTK6V7Fb32sczpbs9EQ5HxyZcZe8bPHrgG7/3a/F/cpr15guk4yyO/VD8M0Icfo6u4NCW6O56KgpkXuDcmfcUzE+g3oefWVN3pM4AMfbdTDZ5Xo1skJHPDDfXe2zAY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 9586912a977f11f1aa26b74ffac11d73-20260814
+X-UUID: 96af0474977f11f1aa26b74ffac11d73-20260814
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:3ebe20aa-3b6e-4e24-9a03-eb0659e72c16,IP:0,U
+X-CID-O-INFO: VERSION:1.3.12,REQID:ae8c02a2-6b99-4456-a963-b6d986baad21,IP:0,U
 	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
 	release,TS:0
-X-CID-META: VersionHash:e7bac3a,CLOUDID:7cd0f55f152b39015d90a1aa5b7ec287,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102|136|850|865|898,TC:nil,Content:0|15|
-	50,EDM:-3|-100,IP:nil,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL
-	:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-META: VersionHash:e7bac3a,CLOUDID:f89b623d750cdfec9460087319acff2e,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|850|865|898,TC:nil,Content:0|1
+	5|50,EDM:-3,IP:nil,URL:1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI
+	:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
 X-CID-BVR: 2,SSN|SDN
 X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
+X-CID-FACTOR: TF_CID_SPAM_ULS,TF_CID_SPAM_SNR
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 9586912a977f11f1aa26b74ffac11d73-20260814
+X-UUID: 96af0474977f11f1aa26b74ffac11d73-20260814
 X-User: jiangfeng@kylinos.cn
 Received: from [127.0.0.1] [(10.44.16.150)] by mailgw.kylinos.cn
 	(envelope-from <jiangfeng@kylinos.cn>)
 	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1959050617; Fri, 14 Aug 2026 09:29:25 +0800
+	with ESMTP id 1359705227; Fri, 14 Aug 2026 09:29:26 +0800
 From: Feng Jiang <jiangfeng@kylinos.cn>
-Subject: [PATCH bpf-next v3 0/2] bpf, riscv: Add BPF stack arguments
- support for RV64 JIT
-Date: Fri, 14 Aug 2026 01:29:02 +0000
-Message-Id: <20260814-bpf-riscv-stack-args-v3-0-2160de56fea3@kylinos.cn>
+Date: Fri, 14 Aug 2026 01:29:04 +0000
+Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Enable stack argument tests
+ for RV64
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,11 +45,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAF5vfmoC/3XNTQ6CMBQE4KuQrq3pjxRw5T2Mi1Je4QVTSEsaC
- OHu1q400eVkMt/sJIBHCORa7MRDxICTS0GeCmIG7Xqg2KVMBBOKVaKm7Wypx2AiDYs2I9W+D1T
- JknVMKc2hIWk6e7C4ZvZO3gsH60IeqRkwLJPf8l/kuc90zcVvOnLKqKpacVE1U1A2t3F7opvC2
- bgsRvGpyD+KSApY0LVtWmmBfynHcbwAhyLSegkBAAA=
-X-Change-ID: 20260728-bpf-riscv-stack-args-6350d066a1e9
+Message-Id: <20260814-bpf-riscv-stack-args-v3-2-2160de56fea3@kylinos.cn>
+References: <20260814-bpf-riscv-stack-args-v3-0-2160de56fea3@kylinos.cn>
+In-Reply-To: <20260814-bpf-riscv-stack-args-v3-0-2160de56fea3@kylinos.cn>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, 
@@ -71,54 +69,125 @@ Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
  llvm@lists.linux.dev, Feng Jiang <jiangfeng@kylinos.cn>
 X-Mailer: b4 0.14.3
 
-Port the BPF stack argument feature (BPF_REG_PARAMS / r11) to the
-RV64 JIT, matching what x86 and arm64 already do.
+Enable the stack argument selftests for RV64. The riscv guard is
+restricted to __riscv_xlen == 64 since stack arguments are only
+supported by the RV64 JIT.
 
-BPF-to-BPF calls keep all extra arguments on the stack.  For kfunc
-calls, the JIT loads arguments 6-8 into A5-A7 at the call site to
-satisfy the RISC-V C calling convention.
-
-Tested on riscv64 QEMU with LLVM main [1]; BPF-to-BPF and kfunc
-selftests pass.
+Keep the __BPF_FEATURE_STACK_ARGUMENT gate, defined by clang with
+BPF stack argument support [1].
 
 [1] https://github.com/llvm/llvm-project/pull/189060
 
 Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
 ---
-Changes in v3:
-- Drop the exceptions.c guard change: the guarded programs use
-  bpf_throw(), unsupported by the RV64 JIT, so the test is denylisted
-  on riscv64 and the guard has no effect. (BPF CI)
-- Link to v2: https://lore.kernel.org/r/20260813-bpf-riscv-stack-args-v2-0-efea8f9b3fe1@kylinos.cn
+ tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c      | 3 ++-
+ tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c | 3 ++-
+ tools/testing/selftests/bpf/progs/stack_arg.c                     | 3 ++-
+ tools/testing/selftests/bpf/progs/stack_arg_kfunc.c               | 3 ++-
+ tools/testing/selftests/bpf/progs/stack_arg_precision.c           | 3 ++-
+ tools/testing/selftests/bpf/progs/verifier_stack_arg.c            | 3 ++-
+ tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c      | 3 ++-
+ 7 files changed, 14 insertions(+), 7 deletions(-)
 
-Changes in v2:
-- Sign-extend 32-bit kfunc arguments passed on the stack (args 9+),
-  matching the register path and the RISC-V psABI. (Sashiko)
-- Restrict the riscv selftest guard to __riscv_xlen == 64 so the
-  tests are not enabled on RV32. (Sashiko)
-- Link to v1: https://lore.kernel.org/r/20260812-bpf-riscv-stack-args-v1-0-67b246806e59@kylinos.cn
+diff --git a/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c b/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c
+index 8d38aafe66a2..ab12397a9b52 100644
+--- a/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c
++++ b/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c
+@@ -4,7 +4,8 @@
+ #include <bpf/bpf_helpers.h>
+ #include "../test_kmods/bpf_testmod_kfunc.h"
+ 
+-#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
++#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
++	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
+ 	defined(__BPF_FEATURE_STACK_ARGUMENT)
+ 
+ long subprog_call_mem_kfunc(long a, long b, long c, long d, long e, long size)
+diff --git a/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c b/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c
+index 99bc115f8380..a980a3a399d3 100644
+--- a/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c
++++ b/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c
+@@ -3,7 +3,8 @@
+ #include <vmlinux.h>
+ #include <bpf/bpf_helpers.h>
+ 
+-#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
++#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
++	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
+ 	defined(__BPF_FEATURE_STACK_ARGUMENT)
+ 
+ int subprog_bad_order_6args(int a, int b, int c, int d, int e, int f)
+diff --git a/tools/testing/selftests/bpf/progs/stack_arg.c b/tools/testing/selftests/bpf/progs/stack_arg.c
+index 944e3bb603e7..3e9ed37c57bb 100644
+--- a/tools/testing/selftests/bpf/progs/stack_arg.c
++++ b/tools/testing/selftests/bpf/progs/stack_arg.c
+@@ -21,7 +21,8 @@ struct {
+ 
+ int timer_result;
+ 
+-#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
++#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
++	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
+ 	defined(__BPF_FEATURE_STACK_ARGUMENT)
+ 
+ const volatile bool has_stack_arg = true;
+diff --git a/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c b/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
+index 345f2da2e361..b6b1a8aa7f44 100644
+--- a/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
++++ b/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
+@@ -6,7 +6,8 @@
+ #include "bpf_kfuncs.h"
+ #include "../test_kmods/bpf_testmod_kfunc.h"
+ 
+-#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
++#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
++	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
+ 	defined(__BPF_FEATURE_STACK_ARGUMENT)
+ 
+ const volatile bool has_stack_arg = true;
+diff --git a/tools/testing/selftests/bpf/progs/stack_arg_precision.c b/tools/testing/selftests/bpf/progs/stack_arg_precision.c
+index bee2eeec021d..6eebafe7f2f8 100644
+--- a/tools/testing/selftests/bpf/progs/stack_arg_precision.c
++++ b/tools/testing/selftests/bpf/progs/stack_arg_precision.c
+@@ -6,7 +6,8 @@
+ #include "../test_kmods/bpf_testmod_kfunc.h"
+ #include "bpf_misc.h"
+ 
+-#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
++#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
++	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
+ 	defined(__BPF_FEATURE_STACK_ARGUMENT)
+ 
+ /* Force kfunc extern BTF generation for inline asm call below.
+diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+index 7e0ce5db28a0..e8cd296fe763 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
++++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+@@ -12,7 +12,8 @@ struct {
+ 	__type(value, long long);
+ } map_hash_8b SEC(".maps");
+ 
+-#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
++#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
++	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
+ 	defined(__BPF_FEATURE_STACK_ARGUMENT)
+ 
+ __noinline __used
+diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
+index c9fe4857da3f..562e8319ffc2 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
++++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
+@@ -5,7 +5,8 @@
+ #include <bpf/bpf_helpers.h>
+ #include "bpf_misc.h"
+ 
+-#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
++#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
++	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
+ 	defined(__BPF_FEATURE_STACK_ARGUMENT)
+ 
+ __noinline __used __naked
 
----
-Feng Jiang (2):
-      bpf, riscv: Add BPF stack arguments support for RV64 JIT
-      selftests/bpf: Enable stack argument tests for RV64
-
- arch/riscv/net/bpf_jit.h                           |  1 +
- arch/riscv/net/bpf_jit_comp64.c                    | 79 +++++++++++++++++++++-
- arch/riscv/net/bpf_jit_core.c                      |  4 ++
- .../selftests/bpf/progs/btf__stack_arg_precision.c |  3 +-
- .../bpf/progs/btf__verifier_stack_arg_order.c      |  3 +-
- tools/testing/selftests/bpf/progs/stack_arg.c      |  3 +-
- .../testing/selftests/bpf/progs/stack_arg_kfunc.c  |  3 +-
- .../selftests/bpf/progs/stack_arg_precision.c      |  3 +-
- .../selftests/bpf/progs/verifier_stack_arg.c       |  3 +-
- .../selftests/bpf/progs/verifier_stack_arg_order.c |  3 +-
- 10 files changed, 95 insertions(+), 10 deletions(-)
----
-base-commit: d114bb98936770c501c958bf2bc5fb6b7c0bad7b
-change-id: 20260728-bpf-riscv-stack-args-6350d066a1e9
-
-Best regards,
 -- 
-Feng Jiang <jiangfeng@kylinos.cn>
+2.53.0
 
