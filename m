@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-144.mta0.migadu.com [91.218.175.144])
+Received: from mta1.migadu.com (out-87.mta1.migadu.com [95.215.58.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395FC175A99
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 22:03:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C7A175A99
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 22:03:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786744996; cv=none; b=CBfHu94AsT0UpOmIURQogu09hS5L5rA9eUUgS+nH0Xyrs0yzaj29Qa1N+/KslcWvaRjRowIOFoBsA8BMVFdDgEu+jM9xxRHWDHc6Mr0wwuORQXzeb02LWz8VgiUikF8Pg13FfMauNU+PZWuoUmgSE/Ex3BFRVowOhFjASGGuk8A=
+	t=1786745001; cv=none; b=YD0ls7pJXn0VBfnk/ixDV8nwL623gsp0IsUmUvqNr5K2bBjoYEL2B3sBiIxJoRDNzkKimKEuB1zDVSHG9rioI23w/8gdXTVHQOlTB9iW62/lISbRGJP84NUr6Z6uNlFt3Z2B4RaC9w6mmpvjIuW99CWNg313B1WYET8I0UM+o3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786744996; c=relaxed/simple;
-	bh=A0pwEcUmFnhmuPem67TBlaGWjijsG5HTlcmdOV+G4qc=;
+	s=arc-20240116; t=1786745001; c=relaxed/simple;
+	bh=oLzthMFr/EnLIpkxFu8EDlPiz+DlwdfnOQIJjl9vezI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oFlZC29x7j7Lna+hChVw6t56boLfDnnl1HTM46pNV0hAPPr7UBD7KCV8LLk/DP+M/cR0FMcnuc7bWzK9ou+pDl206xDrtPvIOSuAX+aEoC3VXKX1UdpazWLhwXaAao7utJXvW5c6sl8sgZWQp4U5emy3cXbO2z7nBw76ZGRD1iE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jZR1urit; arc=none smtp.client-ip=91.218.175.144
+	 MIME-Version; b=ICxNkRwQlLp7djGa4NA09ptNhURapVN139lIKBu1SYFgr10iaxLwnWGyx/D5J3f8B8KgT2U7lXKTtaV2MlDnHCkZB+lA2oBhnmf79bSbLoswrk8M3JdE2IA8o+zn2ygdaaL0iQGhnQ5smmW2w6ZqXAKdbidey33Qlfp4TaT8Pcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HwoSv64o; arc=none smtp.client-ip=95.215.58.87
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jZR1urit"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HwoSv64o"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=A0pwEcUmFnhmuPem67TBlaGWjijsG5HTlcmdOV+G4qc=;
+DKIM-Signature: a=rsa-sha256; bh=oLzthMFr/EnLIpkxFu8EDlPiz+DlwdfnOQIJjl9vezI=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786744992; v=1; x=1787349792;
- b=jZR1urituhqXzOatHUBDlIrBw2HckGoArqLBI+MOI2Vy6OpkayYFw/QjR6jiHM1CgiBW12jW
- cFaSVRUzVAVVlzWf10aaWMo/FjLWzewfKUpmu31Xioy32CLUx6iSoota/lwa1E5uyX2CJTNO1Qe
- Py+ggLDBiyX+1nkvSD3D7MIs=
+ t=1786744998; v=1; x=1787349798;
+ b=HwoSv64o+Kin+67heeHgkqnRWFU9yXgXg3bbjjmmhOMCJWLzvLkSbRAwsuWlSlO+FC9NiYeS
+ fAtwM/5OGcAPu+4fZr2xYwJej1m1fvOeasH+cG4fMUzSH6PTotsPgt8S7iFzQsqQafntJyg4P2t
+ rGu+aMJGWkv/tgvWln52iVcE=
 X-Envelope-To: bpf@vger.kernel.org
 Received: from gvineet-fedora-PF5JGVFY.thefacebook.com (2620:10d:c090:500::6:7be4)
-	by smtp.migadu.com with ESMTPS id 05e17389428761e9;
-	Fri, 14 Aug 2026 22:03:12 +0000
+	by smtp.migadu.com with ESMTPS id 5a80e9e2ed9a1c43;
+	Fri, 14 Aug 2026 22:03:18 +0000
 X-Migadu-Flow: FLOW_OUT
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: bpf@vger.kernel.org
@@ -36,11 +36,10 @@ Cc: ast@kernel.org,
 	andrii@kernel.org,
 	x86@kernel.org,
 	stable@vger.kernel.org,
-	Vineet Gupta <vineet.gupta@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf v3 1/2] bpf, x86: Fix per-CPU address resolution into an extended register
-Date: Fri, 14 Aug 2026 15:02:53 -0700
-Message-ID: <20260814220254.3797467-2-vineet.gupta@linux.dev>
+	Vineet Gupta <vineet.gupta@linux.dev>
+Subject: [PATCH bpf v3 2/2] selftests/bpf: Check per-CPU address resolution per register
+Date: Fri, 14 Aug 2026 15:02:54 -0700
+Message-ID: <20260814220254.3797467-3-vineet.gupta@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260814220254.3797467-1-vineet.gupta@linux.dev>
 References: <20260814220254.3797467-1-vineet.gupta@linux.dev>
@@ -52,71 +51,120 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The destination of the per-CPU address MOV is encoded in ModRM.reg,
-which is extended by REX.R, but the REX prefix is built with
-add_1mod(), which sets REX.B. REX.B extends ModRM.rm and SIB.base, and
-this instruction addresses memory as disp32 with no base, so the bit
-has no effect at all and the high register bit is simply lost.
+An ld_imm64 of a per-CPU map value is followed by a mov_percpu_addr that
+reuses the same register, so which register the address lands in decides
+how the JIT encodes the add. Getting the REX prefix wrong there is
+invisible to a functional test unless the address happens to land in an
+extended register, which is why this went unnoticed.
 
-Every is_ereg() destination therefore resolves to the wrong register,
-picking whichever one shares the low three bits:
+Load a .percpu variable into every register in one program and match the
+JITed add against the register each one must resolve into.
 
-  R5 -> RAX    R7 -> RBP    R8 -> RSI    R9 -> RDI
-
-With BPF_REG_5, whose reg2hex is 0, the emitted
-
-  65 49 03 04 25 <off>	add %gs:<off>,%rax
-
-adds the per-CPU offset to RAX rather than R8. The destination keeps
-the unadjusted address and RAX is clobbered, so the program goes on to
-dereference a pointer that was never made per-CPU:
-
-  BUG: unable to handle page fault for address: 0000607e386a8894
-  RIP: bpf_prog_707837aafd2aa9ae_update_percpu_data+0x93/0xc9
-  Call Trace:
-   __bpf_prog_test_run_raw_tp+0x2dc/0x7d0
-   __flush_smp_call_function_queue+0x1e9/0xc80
-  Kernel panic - not syncing: Fatal exception in interrupt
-
-R5 is the mildest of the four, aliasing a scratch register and faulting
-at the store. R7 aliases RBP and would corrupt the frame pointer, R8
-and R9 alias the argument registers.
-
-Use add_2mod() so the register goes through REX.R, matching how
-add_2reg() places it in ModRM.reg and how emit_priv_frame_ptr()
-hardcodes 0x4c for the same instruction with R9. Encodings for the
-non-extended registers are unchanged.
-
-Problem showed up when trying to resurrect BPF_GCC CI (selftests built
-with BPF_GCC).
-
-This has gone unnoticed because clang reloads the address into R1
-before each per-CPU access, so the destination is never an extended
-register. GCC keeps several per-CPU addresses live at once, and
-test_progs-bpf_gcc panics the kernel in global_percpu_data/init, where
-the address of a .percpu variable ends up in R5.
-
-Fixes: 7bdbf7446305 ("bpf: add special internal-only MOV instruction to resolve per-CPU addrs")
-Cc: stable@vger.kernel.org
-Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
- arch/x86/net/bpf_jit_comp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../selftests/bpf/prog_tests/verifier.c       |  2 +
+ .../bpf/progs/verifier_percpu_addr.c          | 72 +++++++++++++++++++
+ 2 files changed, 74 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_percpu_addr.c
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index d920772af7d5..1a9fb530adc3 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -1935,7 +1935,7 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 				EMIT_mov(dst_reg, src_reg);
- #ifdef CONFIG_SMP
- 				/* add <dst>, gs:[<off>] */
--				EMIT2(0x65, add_1mod(0x48, dst_reg));
-+				EMIT2(0x65, add_2mod(0x48, 0, dst_reg));
- 				EMIT3(0x03, add_2reg(0x04, 0, dst_reg), 0x25);
- 				EMIT((u32)(unsigned long)&this_cpu_off, 4);
- #endif
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index 8113fea7ba86..64ac49ad67e6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -79,6 +79,7 @@
+ #include "verifier_netfilter_retcode.skel.h"
+ #include "verifier_bpf_fastcall.skel.h"
+ #include "verifier_or_jmp32_k.skel.h"
++#include "verifier_percpu_addr.skel.h"
+ #include "verifier_precision.skel.h"
+ #include "verifier_prevent_map_lookup.skel.h"
+ #include "verifier_private_stack.skel.h"
+@@ -240,6 +241,7 @@ void test_verifier_netfilter_ctx(void)        { RUN(verifier_netfilter_ctx); }
+ void test_verifier_netfilter_retcode(void)    { RUN(verifier_netfilter_retcode); }
+ void test_verifier_bpf_fastcall(void)         { RUN(verifier_bpf_fastcall); }
+ void test_verifier_or_jmp32_k(void)           { RUN(verifier_or_jmp32_k); }
++void test_verifier_percpu_addr(void)          { RUN(verifier_percpu_addr); }
+ void test_verifier_precision(void)            { RUN(verifier_precision); }
+ void test_verifier_prevent_map_lookup(void)   { RUN(verifier_prevent_map_lookup); }
+ void test_verifier_private_stack(void)        { RUN(verifier_private_stack); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c b/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c
+new file mode 100644
+index 000000000000..967f4e6e3a49
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c
+@@ -0,0 +1,72 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++#if defined(__TARGET_ARCH_x86)
++
++int percpu_data SEC(".percpu");
++
++/*
++ * An ld_imm64 of a per-CPU map value is followed by a mov_percpu_addr that
++ * reuses the same register, so check that the add resolves into the register
++ * the address was loaded into, for every register.
++ */
++SEC("raw_tp")
++__description("per-CPU address resolution")
++__success
++__arch_x86_64
++__jited("	movabsq	$0x{{.*}}, %rax")
++__jited("	addq	%gs:{{.*}}, %rax")
++__jited("	movabsq	$0x{{.*}}, %rdi")
++__jited("	addq	%gs:{{.*}}, %rdi")
++__jited("	movabsq	$0x{{.*}}, %rsi")
++__jited("	addq	%gs:{{.*}}, %rsi")
++__jited("	movabsq	$0x{{.*}}, %rdx")
++__jited("	addq	%gs:{{.*}}, %rdx")
++__jited("	movabsq	$0x{{.*}}, %rcx")
++__jited("	addq	%gs:{{.*}}, %rcx")
++__jited("	movabsq	$0x{{.*}}, %r8")
++__jited("	addq	%gs:{{.*}}, %r8")
++__jited("	movabsq	$0x{{.*}}, %rbx")
++__jited("	addq	%gs:{{.*}}, %rbx")
++__jited("	movabsq	$0x{{.*}}, %r13")
++__jited("	addq	%gs:{{.*}}, %r13")
++__jited("	movabsq	$0x{{.*}}, %r14")
++__jited("	addq	%gs:{{.*}}, %r14")
++__jited("	movabsq	$0x{{.*}}, %r15")
++__jited("	addq	%gs:{{.*}}, %r15")
++__naked void percpu_addr(void)
++{
++	asm volatile ("					\
++	r0 = %[percpu_data] ll;				\
++	r1 = %[percpu_data] ll;				\
++	r2 = %[percpu_data] ll;				\
++	r3 = %[percpu_data] ll;				\
++	r4 = %[percpu_data] ll;				\
++	r5 = %[percpu_data] ll;				\
++	r6 = %[percpu_data] ll;				\
++	r7 = %[percpu_data] ll;				\
++	r8 = %[percpu_data] ll;				\
++	r9 = %[percpu_data] ll;				\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm_addr(percpu_data)
++	: __clobber_all);
++}
++
++#else
++
++SEC("raw_tp")
++__description("percpu addr dummy")
++__success
++int dummy_test(void)
++{
++	return 0;
++}
++
++#endif
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.53.0-Meta
 
