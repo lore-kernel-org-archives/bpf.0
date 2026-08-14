@@ -1,146 +1,213 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4773448BA3
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 08:14:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8254344AB9E
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 08:28:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786695293; cv=none; b=TWv8x2egqKqFeQ4aR0TeokhWT5ke1VclPWWXCEsHuKy6VLkRVZCsScZoI0CMyDJCYA2WmK5RbKz2NZsQ3L8L4NhfKwrMEdTtW3UctupG/l8lcSUpqWBuc8UB3Xnc0bHafcF02Xh6QsrLz22JYZOVghyDCqOJ2OM9DArihmh0x7w=
+	t=1786696139; cv=none; b=gtVYBt4jV0TKRCfalCmtC8IqMke/oMXtofCF9Kcccm8zLEWIM7FbpW+lqvKeIqM3z8+ZUI7v6SB14EVjb9JXuQHxl64kftDoRpZcnShX93INjpCHAzQK2XW9D+MiBpvswOaW6TU/fC2EP9CF6JG1PRrQ3/9FdLsb/iTYCTxDNJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786695293; c=relaxed/simple;
-	bh=uKotYtBwPfT4bBG8cqhBTPIJ0IAxdZDHhrxBiqdLA38=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BHj0tQkfHmfGAJl+1dtlHZ/FAdLMYUmgfZOzkU0G9D5fI33m+p23NcJ9MerVbDUj9nDfrHSu0DteWnMBzI0eEHVX1saCXMfTWGKofod4ZkdzBhEsBjYPkNa4debY3ADIvtTodDsG5maImK2aawSaK7i2iMBCijuJ5pY/HnUSXWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=IR7lyFLt; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1786696139; c=relaxed/simple;
+	bh=n5cSz85X9W09OOu+hMXPRVS+Xq03mr92YXN1ADMCpgo=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=qDvpW4BB3vLL9/m8OnG7rtfdpMvcqKZ+QXQvJAQQT2njhS7Z2WX9zGBeOFNS0UYmgrG6uS01ScXsXGnWfcI/B3jrvVhCl3oX40XvtC2STKGiL51SZRBTm8t9sXsJuXJhwWVl2iJcFM4hFsbfUciU+8iPj3W9wuX0WMYOrZzynUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KgWyM8gL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="IR7lyFLt"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-6a18840e2abso1086805a12.0
-        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 01:14:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1786695284; x=1787300084; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ITEm8CRypMtPNDaWKJLB67u4FZ2Yil9GXw3Eg3gJSss=;
-        b=IR7lyFLtgourOUJA1+WSN7PpPkadHzliGfnKc6B6Q0F5mMMZtmU8Kd4FDrUZv0ZeyE
-         jplGY75Id4dw/+gwrMGLtySTRs4YaPlFZNtSZsBMSxlzJihKVn5aVUP1kgFwA6UHJVUH
-         b0qMFodMk+0gadMEiBJzZzcf0xe/lRitX656JXCtPU95n4pSWFOmFFArawlKtWtYEVES
-         HBHNBwNxogLPpQ2beh9wzwd9XZhVY2GuulNg6k6MGgHyjgt65uppdInmIs9+LrKpXfWM
-         jQpYNeWtYAIN8uDyoHzwAql5678qfBlV1rGvTv55UcaliU03YcUVEU9NS1KylXCFgeAv
-         3C5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786695284; x=1787300084;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ITEm8CRypMtPNDaWKJLB67u4FZ2Yil9GXw3Eg3gJSss=;
-        b=SGGzsFrcjd1WwHxkIVAn0q7+pQSmlyj/gD/YaE4riy6SLuolMo5FNGh5pTUCq7+GAW
-         nNtP1+Jdl7pmLgpozqMSuflhvvJm+vqxVeC6y73zqR/O/iqg+f0WssTi4mfHtjfUtytQ
-         eYVqWW+Nz6hJrwhPc5orgMj/lCX3I4ENOWKlbj3jSRMcRDnhFBcj1hK5zOY2nJ7XexRR
-         d7b1gpM3du6sYJWmwPeApxQFCzqYWtI68/Ff9up0BadGOSW6JOLDRObqq3hlxn13yXY8
-         VNCzpHjXBqWGyZbzCWEcKy4LuClNwcdwdP4/ki3tby8oR4dYUBWeV/HMn4HD0emniwsV
-         qhSQ==
-X-Gm-Message-State: AOJu0YxPqAVLnHYfUEZCyDwM0S5uyo9NMfm9iL29DMikYvmoGcIaieMJ
-	N6C3Sfbv2ept8yBJF7jBnMzx8ybiNMwiegxnxzC5yU6gFBht0up9p8B5BcSW6ISOMjF/DKRJg+e
-	Lp9qc/fY=
-X-Gm-Gg: AR+sD12lyZ0jn8S1DKjqyJpO4TT3/76SCOjju+R8oSbVWnCUaYGIyFACTGfQRe2qF+v
-	BsSyt226kgXyWJgQEwR6RP7XumCnchL1cdiTgaNfj/gv9epO0wHH9DNqS2QFThxpwfskaJ6JhDL
-	h82h5oS+KybOCcB1nOpG9dPxWetCqvcza0G+Ph0QerqGROrNnwyiy70E8dNJo2lVAEW6DEWJqWg
-	ednNvPcO8uKneDB4aU+Co8MTbZwuVK1EWltPoyEeFYxbhuMa7PGRB2JOB0T5v8s955dVUnl3Jck
-	lUy5ub9QjCbY/byr/+LniW5mKim9nP0dAzp6ryNYhzxT/X6+d6GetevgDiBqDOvfpQGWPr7cT9Y
-	CjK84b89YAFW6P1QP8auTNPplQ4fkmTWXaWr/Evusbnl3NFUaGy0dvSFmnyx2G+3gPHUsEwBtlX
-	mu3m5pcJJIIUSGcElMgX3Xl2uBKUewB2Z649SjVzV1f9iGSJ32/X++chjMe6RC2zgwqGzlnkAVi
-	ADKhxgFE+G0243lxKrPBOt+GugwiDTa/7+TsLBnKR3kUG++
-X-Received: by 2002:a05:6402:458b:b0:6a1:f971:a20e with SMTP id 4fb4d7f45d1cf-6a38aabb7b7mr1892745a12.19.1786695284294;
-        Fri, 14 Aug 2026 01:14:44 -0700 (PDT)
-Received: from cloudflare.com (79.184.184.176.ipv4.supernova.orange.pl. [79.184.184.176])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a38d767e3csm425649a12.17.2026.08.14.01.14.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Aug 2026 01:14:43 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-Date: Fri, 14 Aug 2026 10:14:15 +0200
-Subject: [PATCH net-next 14/14] selftests/bpf: Use non-trivial test payload
- in xdp_context tests
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KgWyM8gL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B2DA1F000E9;
+	Fri, 14 Aug 2026 08:28:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786696129;
+	bh=HVzhEzBMqv9niiKkix4893nSShjmt/9usxI2bv0D94Q=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=KgWyM8gLWj5Nn4BovKhj9UIFxq6uWDlnv20kDSnWHYncz6R+yXvou5F+vWEmzM6Ap
+	 PZY0XnpbWahJjAhhq9MI2geBhLthfqRueXnzs37rz6t7jt9paXO2aB6lhaBMX2bFhj
+	 qM3ITHYUqMKDv0GFg3MiHXyW8RUL3q9nMMywizXqfUM6tf2O6e5R29hfwBZVUzx3bx
+	 ssTjgoponsi5tMEmTkpxH0dCUfnDcWQJT4qvSrh4niC7D5MpfgezjK6eEfdipIcCge
+	 npSF0EpS1GI0l79C06ed0ZdmK92dyL0WT92rsrlNGGM+pdeW8TZC+SmUOFiSo7TI1Z
+	 Xnd/jIQVqDu8Q==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v8 net-next] octeontx2-pf: add mqprio bandwidth offload
+ for NIX TX schedulers
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ratheesh Kannoth" <rkannoth@marvell.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260813082754.1165329-1-rkannoth@marvell.com>
+References: <20260813082754.1165329-1-rkannoth@marvell.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 14 Aug 2026 08:28:49 +0000
+Message-Id: <20260814082849.9B2DA1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260814-bpf-meta-inside-skb-ext-v1-14-767edd862656@cloudflare.com>
-References: <20260814-bpf-meta-inside-skb-ext-v1-0-767edd862656@cloudflare.com>
-In-Reply-To: <20260814-bpf-meta-inside-skb-ext-v1-0-767edd862656@cloudflare.com>
-To: netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
- Jakub Kicinski <kuba@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, 
- Paolo Abeni <pabeni@redhat.com>, Stanislav Fomichev <sdf@fomichev.me>
-Cc: bpf@vger.kernel.org, kernel-team@cloudflare.com, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Simon Horman <horms@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-X-Mailer: b4 0.16.0
 
-Replace the sequential test payload pattern (0x01..0x38) with
-higher-entropy values that don't alias common protocol header fields
-such as IP version/IHL or ethertype LSBs. This reduces the chance of
-false positives from stray packets.
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+s) to consider:
+- [High] A failed `tc qdisc replace` operation destructively modifies the s=
+oftware rate cache and hardware shapers without rolling back, leaving the s=
+ystem in a corrupted, mismatched state.
+- [High] Reusing the TL4[0] scheduler queue for MQPRIO after an HTB teardow=
+n inherits a stale topology configuration, permanently starving some TX que=
+ues.
+- [High] The driver attempts to modify hardware queues that have already be=
+en freed when deleting the MQPRIO qdisc while the interface is down.
+- [Medium] If clearing hardware shapers fails during MQPRIO teardown, the d=
+river unconditionally clears its software state while the hardware silently=
+ retains the stale shapers.
+- [Medium] A flawed allocation check silently skips clearing hardware shape=
+rs for single-queue configurations if HW index 0 is used.
+--
 
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
----
- tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c | 8 ++++----
- tools/testing/selftests/bpf/progs/test_xdp_meta.c             | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+--- Patch [1]: [PATCH v8 net-next] octeontx2-pf: add mqprio bandwidth offlo=
+ad for NIX TX schedulers ---
+commit c00a385aa5cbe69512654ab461dd033c6039b7b7
+Author: Ratheesh Kannoth <rkannoth@marvell.com>
+Subject: octeontx2-pf: add mqprio bandwidth offload for NIX TX schedulers
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-index f5fbc19757e3..8bf586b5af32 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-@@ -21,10 +21,10 @@
- 
- #define TEST_PAYLOAD_LEN 32
- static const __u8 test_payload[TEST_PAYLOAD_LEN] = {
--	0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
--	0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18,
--	0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28,
--	0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38,
-+	0x49, 0x20, 0x63, 0x72, 0x6f, 0x73, 0x73, 0x65,
-+	0x64, 0x20, 0x68, 0x6f, 0x6f, 0x6b, 0x73, 0x20,
-+	0x26, 0x20, 0x6c, 0x69, 0x76, 0x65, 0x64, 0x20,
-+	0x74, 0x6f, 0x20, 0x74, 0x65, 0x6c, 0x6c, 0x21,
- };
- 
- void test_xdp_context_error(int prog_fd, struct bpf_test_run_opts opts,
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_meta.c b/tools/testing/selftests/bpf/progs/test_xdp_meta.c
-index 4c224d5fe1b2..b0ab7f4f7a1b 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_meta.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_meta.c
-@@ -24,10 +24,10 @@
- bool test_pass;
- 
- static const __u8 meta_want[META_SIZE] = {
--	0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
--	0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18,
--	0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28,
--	0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38,
-+	0x49, 0x20, 0x63, 0x72, 0x6f, 0x73, 0x73, 0x65,
-+	0x64, 0x20, 0x68, 0x6f, 0x6f, 0x6b, 0x73, 0x20,
-+	0x26, 0x20, 0x6c, 0x69, 0x76, 0x65, 0x64, 0x20,
-+	0x74, 0x6f, 0x20, 0x74, 0x65, 0x6c, 0x6c, 0x21,
- };
- 
- static bool check_metadata(const char *file, int line, __u8 *meta_have)
+This patch adds TC_SETUP_QDISC_MQPRIO handling to offload per-queue MDQ
+CIR/PIR shaping for mqprio channel mode. It manages the setup and teardown
+by restarting the netdev to rebuild the TX scheduler hierarchy. Various
+checks and limits are also introduced.
 
--- 
-2.43.0
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/d=
+rivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> index ca73a94db7943..b6d8ee7e2d4c2 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
 
+[ ... ]
+
+> @@ -650,7 +786,20 @@ int otx2_txschq_config(struct otx2_nic *pfvf, int lv=
+l, int prio, bool txschq_for
+>  						(u64)hw->smq_link_type);
+>  		req->num_regs++;
+>  		/* MDQ config */
+> -		parent =3D schq_list[NIX_TXSCH_LVL_TL4][prio];
+> +		if (pfvf->mqprio.rate_limit) {
+> +			/* TODO: Program NIX_AF_TL4X_TOPOLOGY on TL4[0]. MQPRIO
+> +			 * parents every MDQ under the same TL4 with schedule
+> +			 * priority 0, so sibling arbitration depends on the TL4
+> +			 * topology register. Only the HTB path programs this
+> +			 * today and the AF does not reset it on schq realloc,
+> +			 * so a TL4 reused after HTB teardown can retain stale
+> +			 * RR_PRIO/PRIO_ANCHOR and starve some TX queues.
+> +			 */
+> +			parent =3D schq_list[NIX_TXSCH_LVL_TL4][0];
+> +		} else {
+> +			parent =3D schq_list[NIX_TXSCH_LVL_TL4][prio];
+> +		}
+> +
+>  		req->reg[1] =3D NIX_AF_MDQX_PARENT(schq);
+>  		req->regval[1] =3D parent << 16;
+>  		req->num_regs++;
+
+[Severity: High]
+Does reusing the TL4[0] scheduler queue for MQPRIO after an HTB teardown
+inherit a stale topology configuration? By parenting all MDQs to TL4[0]
+without explicitly reprogramming NIX_AF_TL4X_TOPOLOGY, this might permanent=
+ly
+starve some TX queues.
+
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drive=
+rs/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+> index 039fd47ebf522..fc9677e340658 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+
+[ ... ]
+
+> +static bool otx2_txschq_is_allocated(struct otx2_nic *pfvf)
+> +{
+> +	int lvl, idx;
+> +
+> +	for (lvl =3D 0; lvl < NIX_TXSCH_LVL_CNT; lvl++) {
+> +		for (idx =3D 0; idx < pfvf->hw.txschq_cnt[lvl]; idx++) {
+> +			if (pfvf->hw.txschq_list[lvl][idx])
+> +				return true;
+> +		}
+> +	}
+> +
+> +	return false;
+> +}
+
+[Severity: Medium]
+Can this check silently skip clearing hardware shapers for single-queue
+configurations? If the hardware assigned index 0 (which is a valid queue ID=
+),
+evaluating the queue ID as a boolean returns false, causing the single TX
+queue to retain its stale PIR/CIR limits.
+
+[Severity: High]
+When deleting the MQPRIO qdisc while the interface is down, will this attem=
+pt
+to modify hardware queues that have already been freed? The hardware
+resources are freed on interface down, but hw.txschq_cnt and txschq_list
+remain intact. This could cause the function to return true and trigger a
+use-after-free of the hardware scheduler queues via mailbox commands.
+
+[ ... ]
+
+> +int otx2_mqprio_down(struct otx2_nic *pfvf)
+> +{
+> +	struct net_device *netdev =3D pfvf->netdev;
+> +	int err =3D 0;
+> +
+> +	if (!pfvf->mqprio.rate_limit)
+> +		return 0;
+> +
+> +	if (otx2_txschq_is_allocated(pfvf))
+> +		err =3D otx2_nix_tm_clear_queue_shaper(pfvf);
+> +
+> +	/* TODO: mqprio_down() clears mqprio_rate_limit, netdev TC mappings,
+> +	 * and the rate cache even when otx2_nix_tm_clear_queue_shaper() fails
+> +	 * partway through the MDQ batch. Software then reports offload as
+> +	 * inactive while some queues may retain programmed CIR/PIR, so a later
+> +	 * mqprio_up() or re-setup can shape with the wrong effective rates.
+> +	 */
+> +	pfvf->mqprio.rate_limit =3D false;
+> +	pfvf->mqprio_replace_pending =3D false;
+> +	pfvf->mqprio_skip_teardown =3D false;
+> +	netdev_set_num_tc(netdev, 0);
+> +	otx2_mqprio_free_cache(pfvf);
+> +
+> +	return err;
+> +}
+
+[Severity: Medium]
+If clearing the hardware shapers fails during MQPRIO teardown (for example,
+due to a mailbox communication error in otx2_nix_tm_clear_queue_shaper),
+does this unconditionally clear the software state? The hardware would
+silently retain the stale shapers and continue to enforce bandwidth limits,
+resulting in invisible throttling that is out of sync with the software
+tracking flags.
+
+[ ... ]
+
+> +cleanup:
+> +	/* Clear hardware offload on this rejected request so a failed replace
+> +	 * does not leave tc reporting offload for driver state that was torn
+> +	 * down while the previous mqprio remains grafted.
+> +	 */
+> +	qopt->hw =3D 0;
+> +	if (replacing) {
+> +		otx2_mqprio_replace_failed_msg(netdev, extack);
+> +		pfvf->mqprio_replace_pending =3D false;
+> +		return err ? err : -EIO;
+> +	}
+
+[Severity: High]
+If a tc qdisc replace operation fails (for instance, out of memory in
+otx2_mqprio_alloc_cache or a mailbox timeout), does the cleanup path
+abandon the destructively modified rate cache and partially applied
+hardware shapers?=20
+
+Since the software rate cache is wiped early in otx2_mqprio_alloc_cache,
+returning the error here without rolling back the netdev TC mappings could
+leave the active qdisc and driver state permanently mismatched.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260813082754.1165=
+329-1-rkannoth@marvell.com?part=3D1
