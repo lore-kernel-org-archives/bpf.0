@@ -1,47 +1,47 @@
 Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11021110.outbound.protection.outlook.com [52.101.70.110])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D29B04657E5;
-	Fri, 14 Aug 2026 12:49:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD91C46F4BB;
+	Fri, 14 Aug 2026 12:49:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.110
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786711785; cv=fail; b=NLLeLGahSMvIKeJ7mfD7WioVRJXaLCcnUSOqPYE5lJfZHUnw+dBnxgWzwLK5YdxT3MZ8cYV6V5N85Sm0qjV9hGNd44nr0y0Q5TLSQXjJBlQN0pdGSviI9yPPRCXCLTXUj+91QkmdwUCpNvMr3PfzNUV8Wl7N52al7U8LWthE8Xo=
+	t=1786711791; cv=fail; b=d9iG/KyRf8/0y+sAVVYM0ROKASLA0UZp/55e39xQS0WzLlPWca0eS8BPJ63EEcC+R56T1LzvXnOWsSAyrjMkNKjaqvmDcXcmKHv0j78iyS6MlhMhW2e3RUfodLA3zdRyDU9+GWY3d9VistokgR+o4spbgREYb9llj6jQKHgEQOw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786711785; c=relaxed/simple;
-	bh=c6hCuhPw+XimGLswlRdQkW7pFfYPJv8XXQOqvWmEKo0=;
+	s=arc-20240116; t=1786711791; c=relaxed/simple;
+	bh=GVMquoG6lzze7FFbJwWZVUJlxc/xSyJ/zFap1bMfsuE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=PIFPJ4JAweuM01+1Ss9UW0PHNMur5gjiXmNHtj/b/+Cm6p0Xpy+k+Z7bTjmu/js9bJGZtRQ1pWWO9TOH3A0g5pOuiaDSgy1wKdhw69APBV6w2hBvIfAPvhWuzI6Mg0Q3jtLSXgIga5YcRbKWoMThRnNNXLJzrhB3Xg/YeCbFhmI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=btesa.com; spf=pass smtp.mailfrom=btesa.com; dkim=pass (2048-bit key) header.d=btesa.com header.i=@btesa.com header.b=OgmF0Lr9; arc=fail smtp.client-ip=52.101.70.110
+	 Content-Type:MIME-Version; b=gVj5r8N9/97IEQO3D/1hF5LQOMpZbn6G5csCtrvmugRYVjnBoQUGa4aNInDFuJiiEWykSQJk+FxknelDQBq9mS70ed8Nl3L3C+yiwwIuV33+5ueQ3vpuNPj/RD+OphSpV4gfESgn3bmqabI/4SVGAqfgR2M9BkI1Ag+Rc9n9Mx8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=btesa.com; spf=pass smtp.mailfrom=btesa.com; dkim=pass (2048-bit key) header.d=btesa.com header.i=@btesa.com header.b=Qy1qXvpD; arc=fail smtp.client-ip=52.101.70.110
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=btesa.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=btesa.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=btesa.com header.i=@btesa.com header.b="OgmF0Lr9"
+	dkim=pass (2048-bit key) header.d=btesa.com header.i=@btesa.com header.b="Qy1qXvpD"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=i4MlQZwuFK7cdC5IVX/mC39HTY+f/IDaRC/f5Wdp0UDx648ESKiTyWvtbwxwWgwrXz+v4wAJ/NL7Wh3nLlHLqVf4yKRdRB77XPoIA8DZ9SgVTXphBO6DBc4bx4UT4n545P044kk2z4GTEG6H0bzDkoNlM7hSvwloGgZaxTWQym9oQusapr/LYHooo/avjXTbfBK58YpgRC1k7o+Z56fsv5pZqdRBUCdEWVJ2xAICVPNM8WSA7pLJK32pEqXfQgkmqJ91CIEAKxVE60FQQzFIcKTpoe4SfpP/dgblzEeUd6cWSW5J3b+nv8h5s2MniKoig40D9as8T4t1BWXrIZQVBw==
+ b=jGLtLtYIRkGTZC5tx61eCi5lgEtaD+x4eAlW8XggMbxcN57+DbfWO52LnKxHwREmJeDg5HQxbiHZE1ZgEpgzIQJFKCQpPWjE+0IavT5Xy4bQnTOArSK4Qwo7dLWJz2vt8qxwb/GCjp1TJc491Wvc4p+0pilB79riG+bQ00QUEHrTxJ7qmvC6bA+qC4UlMrLoTbm8SOcuUL6btQNuZt65+/rv2O7cyc+zldSCPC1OoN+lCbBoh1M22SZ4iyaYNGgu5j8O0BfmGLlySDpDGhRQ5904RLFTnPmLbF9/qkVlVMusZAV0SXiB3ZQ8A+OK+8fMkQPR3k5tmRroq7S1z44u0g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TTrw5gNPSBbZS3YWp9Vax+IpRjsl96Bc4oQw682RbGw=;
- b=Wv1ghlnfVgL8orqNfBIZ/GJY6KoMHLQHOcv/rirO+ru764UB4ExSLe7hGtp0DAbPjQAqEV3Hef+2SL0abuDCvFALoOiJzrj6nyRnjdC/3VDtQI5Gkauc50ISocekejGa5qnpl0oBYy7qKzujNvK7nGOgVrCYJZ2eHa8KBJwGff2iYYhDXeC+wP2cWK3Beol5eTCAgfd2Q+vdt7dWUgaB7VTrJQFwW42fURKdrrduRHrD+PCbweboouZkJGVVIb4+0VoBhCQpOEC96cyj4QKCpQmH8nEAvCjuEyXXy+ZGqQJ9mPoKfesSOZvc9agzPnBR+fIx81PLzTV9N5uQJm/ECw==
+ bh=SpBen47Tq+UkAkD/zYoiLwUKmOO8jcsg0hXmHlkyiNw=;
+ b=Z9T9yM4stT6FLBBiGNsfdC4u8WyCzFcOYQCz2OT4oYLAde868TGB3vnOgGJjVtPg43TAoyUu0dmq/A8+On46PTxhf3sa8vNCRxXrcAxnM1wFiNWTVU/NmSUPYbje4KLoo1b/QUr3VlE9565DSp7+Plh6m7Hmphcs0QyDX60Eke6nBzTAJueCUT33IFxPAHM1y+slVjRpjqzDXI1SUVrhSi0QKUZ/3K6GAupRhnlG4hkyAKxqhsdo3AoMZhho/qziHyWMPDKFrNWCQv2UWk3uAghN15dbUFyMeeaUg9z5cM60nbFIpvA4MR0tapXgYIglBNw4cIM/IgXAWtWudiAMqw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=btesa.com; dmarc=pass action=none header.from=btesa.com;
  dkim=pass header.d=btesa.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=btesa.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TTrw5gNPSBbZS3YWp9Vax+IpRjsl96Bc4oQw682RbGw=;
- b=OgmF0Lr9x9ydFqFoP+DXMmaiBjCGEpsDoNDc6IQx2GOnlog3szLV3YgUguKIlvqwtSY9Ape7IFGQhxf6CMHqX3IVnP0CzFYyQY+lmASIWo+wBZxraKIUMCumJ05bLPk57rNPgtI0diZ88GSjZvwFzXlZoFuHF0iGVopC5ErDtYf/7Oyd5euGkpUxxzO2JPYpqUWykqPa02piyTnEWiHguwRcz9Ea573G2Hn2z6LafJzUEK49yDbw2PuQ6R89xtrlWBo1Cl4tfLYrWzajr/Kfg3vPmcdrU1Tc2+w+V7VCT175UBjhL/5JG8XhEMhYPIiDIWbTMaamh/PU8EPMI/PNOA==
+ bh=SpBen47Tq+UkAkD/zYoiLwUKmOO8jcsg0hXmHlkyiNw=;
+ b=Qy1qXvpD8MzBy+xDhp2fq9ZWrTLSONKB7+KfMueCRX19ZlSK/GMh6v6sf5RkcQnQDiUPUAH+agiCIn3r9FjWmuIB4qSYRxsxC7mInt7pfvl1dK7bFx1oZOHLfGZLw5Lh2IaxViKOYGBDOggUaNCFzLCEuQfamXo63jo+Ca052IemaH0e/9gBDugXKYisgeacmQUClB+2FJnPd/aNcqAbdC/za2KrpNic44PfrFT/gvOwAKzwSj9NwykKkXqhBeCDJhsj9nHPx67+F8p5XP8n55bo4QeqBrrcSJvjBq0PkD748fq+JECS2jomNdDwSrVG49m+55sEzoToTpbybJHHfg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=btesa.com;
 Received: from AM6PR07MB5384.eurprd07.prod.outlook.com (2603:10a6:20b:80::25)
  by DB5PR07MB9562.eurprd07.prod.outlook.com (2603:10a6:10:4a6::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.3; Fri, 14 Aug
- 2026 12:49:34 +0000
+ 2026 12:49:40 +0000
 Received: from AM6PR07MB5384.eurprd07.prod.outlook.com
  ([fe80::b45:9ec:1126:f27e]) by AM6PR07MB5384.eurprd07.prod.outlook.com
  ([fe80::b45:9ec:1126:f27e%5]) with mapi id 15.21.0339.002; Fri, 14 Aug 2026
- 12:49:34 +0000
+ 12:49:40 +0000
 From: =?UTF-8?q?Israel=20T=C3=A9llez=20Garc=C3=ADa?= <i.tellez@btesa.com>
 To: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -58,9 +58,9 @@ Cc: Andrii Nakryiko <andrii@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	=?UTF-8?q?Israel=20T=C3=A9llez=20Garc=C3=ADa?= <i.tellez@btesa.com>
-Subject: [PATCH v2 bpf 1/4] bpf: Fix pending_pos walk on 32-bit ring position wrap
-Date: Fri, 14 Aug 2026 14:48:40 +0200
-Message-ID: <20260814124843.22041-2-i.tellez@btesa.com>
+Subject: [PATCH v2 bpf 2/4] bpf: Fix available-data accounting on 32-bit wrap in overwrite mode
+Date: Fri, 14 Aug 2026 14:48:41 +0200
+Message-ID: <20260814124843.22041-3-i.tellez@btesa.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260814124843.22041-1-i.tellez@btesa.com>
 References: <20260814124843.22041-1-i.tellez@btesa.com>
@@ -77,133 +77,109 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM6PR07MB5384:EE_|DB5PR07MB9562:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4cd1b5a9-9c46-4d1b-651e-08defa027dc7
+X-MS-Office365-Filtering-Correlation-Id: d534be18-07f8-4d0e-0360-08defa02814b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|52116014|7416014|376014|366016|1800799024|38350700014|6133799003|10067099003|56012099006|5023799004|18002099003|22082099003|3023799007;
+	BCL:0;ARA:13230040|23010399003|52116014|7416014|376014|366016|1800799024|38350700014|10067099003|56012099006|5023799004|18002099003|22082099003;
 X-Microsoft-Antispam-Message-Info:
-	ioyw29g+kEJTZ1IriOmDShfahytkW3sedhd6kSb4qUYTkj7JWowz815yoLylHQCOI5vF7t+keXXkT3oRVvBXtIYGmX0pzu4zRvIyiOSCsaMfxK9uJBtOnd5FSoSXR7RDXCT/7jYgVzGJhfXEUSukAs1nguF9Q3wJb1Rw/DUSHwMnIo44VJddmoEVkzV3UvKli5ad4B3xI+iqoNhKNPWu4A9mRBkYccL8oM0b+OMsJ1RxajMCgLhw1h7mqUzZycZDDEQJLBs13OBMgAnyDDKunw6bhO+IrW9fIRRicFkUm5LRvToMWxTxC0GPLv+4py59sMUsTzVWLLyiK6EXc3Qob8ASaBk2WmJqRsnxFbPcwuGHYt8HrCV6I4jwfc0TzI4HQMVV6IywHF0uHaint/jA67YrlyTs/uGXjXJLJ65NjLGuprJ9k7L9vZPZOjGeXR67p/6doEujF8gpJL7OqSzo35Z/KrmEDmPdmcvH8n9GqUiekrD0bh24W+s+puT6iBqc7BEtLrxn5kNPvkhwfJy7drWq7qcWewZTSzDBpHzyELC+aydRA453CPeiG67lfyX85riv14lU3Bjb3qnKUNsM8zQ5IM7fPG8v1qRj9obyLGNcVNGKTzVs0uVPgdU70Ez7XyRt8zxfR+ni5Vh40FtNiaHe/NbOXy6qWVHDej4pNJml1O8LaPgjOgFV1zIV0FacMliZ/ZPWq95GEdxaTMRlvnAVsszr/D+6jrQqwbFy6Z4=
+	OeaGMVcOXtAlb8pXU3VINXTu4zM8ZlICncSovfFZq6+HH9VPVGat+Uqln5VJThCfZZXJOajESFQS+Nl3SKxLbIXfX7jS9TO4crkyyFv2TYM/9o1f14j3aELJxqeKCcyKYUgoBU5W52cGafLZ6hDBDnKK+JdEt8ClkKT3Acz8F/IO9s0Dn72M5BudfMCybFNSADIi3CM8fXoYHm4sxxs1UOnM46v4mJUh6xP8VZjMBqWV0QR4UwoZAGs6S3AXwFmOuFPlpFV+eRg5me36cr5hAo+ps9EEdcIVOtikoR9BBMXa4CIHeXseqktZe83Rs2+SY8plRmWjSFKKPXGPdkoEwpHCNCtDmLhbgf3vqDQtHEGScX4SgQmv52LwBIfU/C5YNcwivJSeufjM1Is/Z5K16DnxECpVHaY/rAeQJoLJ3bTb7RU1fluoONUCCkvwbKlHfrgdZnsZMrzUiu0hwscaw19E+lzEszviDIvZVwF+g4gO+Owo6tav4ago9t0cM+ajZELiKKLm0nIJrR4jJQwxhVQrMQXyPwXb5Cok5uxF2bfrJmlj/BXFhg2gh71b2g53aLUcTJhwnUbFPejVMr2fNSOYd42SHeFnw+i6zBhVp/JVfehfQo/4z/B+8T/PsFthyDZJW5VgYPu7wv2O1Uf1eiTXh1rajNIPAiSHbP347cO0NSFQ4Q5AsNFSH/CE8v2lx7B6cDkXH8Cjmy1ETJBgcwpoKdmf8kp1RAz0HRkKm9c=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR07MB5384.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(52116014)(7416014)(376014)(366016)(1800799024)(38350700014)(6133799003)(10067099003)(56012099006)(5023799004)(18002099003)(22082099003)(3023799007);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR07MB5384.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(52116014)(7416014)(376014)(366016)(1800799024)(38350700014)(10067099003)(56012099006)(5023799004)(18002099003)(22082099003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?L0t6Uk9qVlJBL3pIeXdkMmFoZUI4SFh2ekNBQ0ZmbmlaeWpNckFaU2lWWFZx?=
- =?utf-8?B?Wm80NHdNR2dPTWtsNjJjTTJra3FMREhOWUFiamZMZWVoUGIrZDE3TXB0Qjcx?=
- =?utf-8?B?c1ZjbU1TT1IwejVRK25RT1ZSMFF4VWN3K0srVnRZbUtKbjUrVUN5cW5nSmZ1?=
- =?utf-8?B?c0UrTldBU0tkaTBqVUNhYlRJT081WDRpY3NCMHBVbGk5Qnh5a1JQcEIrUUJp?=
- =?utf-8?B?Qm4xZFU0SmhaV3JIM05laVpyR1lPRytCdXBKQURuVUZkUm5VczU1VUVlamNT?=
- =?utf-8?B?eWUvbTE2NHFHRDdETEZJL1BSY2xURHhyOGZGYVpBRDZYcDZ0WDRyNnlJWERC?=
- =?utf-8?B?UEtkODRHT2xLQTNVdVg1a0l2NVBnQmZQTVg5Q1pnalhjdDhOdWZJZ285dzFN?=
- =?utf-8?B?d21rOGVuMG9HR0M4ME9PVWlnMTdvNm9kc2UwdWk1Tlk3WlgxOEFKcytqa1dH?=
- =?utf-8?B?Z0d1WTR6S3NrWWVYakNtYUVZZWZOS0J1VmhOSHNxa2RKZ1hUVWFYUDJqeWhn?=
- =?utf-8?B?RFpPYlpGeGkydUZhd0crMmoxSmlvbXJ6YzV5UFBHbFBNaTFEcWYvUGNSUlR6?=
- =?utf-8?B?NDBEQ0p3cER4ZUdJMEhWc1JQaEIycndRYnNuM3Fkczd0clYvRTdGVjJvY1dk?=
- =?utf-8?B?dU84NXBmQ1d3V1o0WUc2RnpHVWtiM3NPbkZETVhuMVVTYkc2bjk3Z1U0cWFo?=
- =?utf-8?B?RWZKcC9BS29meDhGOE9udHVGYldBbHpCMXd6N2QrQkFUbjNkWkZzR3pGdkRT?=
- =?utf-8?B?cEpxNkdhT3pOYzBFckZvbkhTeElOcG8zWDdwejhQb21FZUxGaHp4aklRQ2w5?=
- =?utf-8?B?T0k0TlFGOEZGWTBUNXR3YVl6bEF2bVhaaUh5ZVNJeFBoSWZrNTJjQnF5Mk9k?=
- =?utf-8?B?RUM3cktDY1o5L2gvcmtOYzlGUlNwNmQ3K3RIblhxMy8vUVQxbElsVitJWmVN?=
- =?utf-8?B?b2lYVUg0dGdTZlp4Sk9Yd3hpeXNGRjNvTGljYjg1SFhsZXJEbThnZEJtZi8x?=
- =?utf-8?B?VU5aeFoxR1NqY1hsMW1Db0prdTA1N0M4NHhIS0xNSWF0c05sdHMraUpJM01O?=
- =?utf-8?B?RVRRb1Y3enB5TldSUVd3VWxCQ1lzTjI2aWNzZ3BPZWVQNTVRZmlEUnQ4NlBI?=
- =?utf-8?B?ZzZURTdkMUxFQWlsZVlMV0YrVG9DSktzd1hPNUREd25ocTh6end3NlovUmFi?=
- =?utf-8?B?T0pEa3FqMkFvQzd6T0R3Z3ljY3FmOUhyb0JncWpFTnovR3Q3M1JvRk1ldzVC?=
- =?utf-8?B?Q0dKMHl2ODU2ZEJGTVdBdHo4b2h3Q1V5a3VKMXpId0dITTFIYkJsa1Q5bVpN?=
- =?utf-8?B?cnhUeHlRQ1N6bjB2K21temFMWUhkdTFnc0duVWNmS2h5OE9EUzhlU3NYQW9O?=
- =?utf-8?B?N0xqYlVPYUtOelhldWYwWFNHd2pPT1hHWmxpNjlaZGV3eFFMMms4U3A0ajhT?=
- =?utf-8?B?VHg4SVRjSHhHVGgyaFRpWElZb2ViQmZET0U2dTN5UVR2UlFkUEM4TGpLdkFV?=
- =?utf-8?B?OGtOT0JzL0tyc3hMRDQ2Wm9ZL2FGK1dqV3VqaFNwYXhWbzBHdGtsTTNZMHp4?=
- =?utf-8?B?eTl6RmxNQlF3UWY2K1hRaGRuWEUvRlN6OWZVMW5TMEV6OGZJYUxJQWdQQ0dY?=
- =?utf-8?B?M3ZUczgxN2xiVlpaUEhiVXRaSU04MTkwdDNNUFdsakk0aThiMGlFNGhpSGhn?=
- =?utf-8?B?alFMNTRmTUNyZGQ4Tzg3bGpVaTR2SDYyTVQzT2Z1N2VaY1VMcTh2dldKRTlr?=
- =?utf-8?B?cWNobmJxTUNoOW9RNVliUUdCYVo5TWJ4OVM0QWtXMngreWJqSWdhTUd2aFNN?=
- =?utf-8?B?K1BTQmNEMnNleTNUcUFDWmFTeVZCRTJmSXdzRWdWRU1pTENHVFJrR214TjBa?=
- =?utf-8?B?T05HWkFLdlJsRy9rL3F4aktaeXpOcDFsazRBVkVyVHhwVGxJL3I4Z2FkcmtR?=
- =?utf-8?B?VEl6Y2FEK0J6b2VsZGkrUjBTYlZmTXdSbFJoZW1zQXBQUTgvV3JYN211dTkw?=
- =?utf-8?B?V3V4cTFtY05obWVGK1ZZZ2FYcklnSlkyaWViSFY0NGsvSktxWDlpV3ZDRjds?=
- =?utf-8?B?ZDRGcXNhM3U0TTZmVytQNTRSUHA4a1h3RkRDK212M0I1MmZYWTNzMFJYQ0s0?=
- =?utf-8?B?SE5teDJ2OEg3SERkbEsxYVhxSDZwN3NmL0hMNElMaXJYSkJHdzlTdGRFYlov?=
- =?utf-8?B?MExaekpZbmVqWVBSaHAwWlVLb0tPS2VLcmVEUi9hbmRJOVdjclVJTzVib0hw?=
- =?utf-8?B?Q3pReHhwVXRQQy9JTEtpbUJTRHRZR2NKbWM0cGhQSE1xWTJybXVNek9HRkpv?=
- =?utf-8?B?OGxwaHkzUGpON2dOekxqOW1uYm9GTStBN2ZSRjNTUEdhMjhZempYQT09?=
+	=?utf-8?B?L2hpNHpwVkk2WFRFeWtjVnlrSGY4NUZsV0k1NEcrN0gvVXlBVGc3TzlwaTZC?=
+ =?utf-8?B?anEwbVUwdWVjUDFwMkt6UElnSTE1MGdpTkVIRG1OL1BTRUEyQnN2dUI5WjM2?=
+ =?utf-8?B?MEN5Qk1SMU5KTGthUWYzK0lENzVRNm4ycUpJK2wrS3Z3NHJzMFFYQnk0Mi9X?=
+ =?utf-8?B?N282RTNPMVVCbUtTbkk1a2JvZWplcCtWL2FZUHFUYVdrVUxRQk9obGhKdDdq?=
+ =?utf-8?B?bXA2czJIbEZmVFRDWWlBUEQ4RzZCK2ZlVjJ6SjdNV2xrSFF6b0M1ejREUXQ0?=
+ =?utf-8?B?ZUVrZmJYNW0zdTJBWU15ekNvZXpseTMxRng2bW0rUEJGdUVRY3FCTXplMW5Y?=
+ =?utf-8?B?eER6VWxvMWYwOTJsQjNPcG0wTFA1MmR1dEVxSVlFamlvOEpOQVhSV25pTmE5?=
+ =?utf-8?B?YmVaYkV2ZTByMU9kWFRMeTlzWHpPR0haTW5uN0xobU41dDI2OEo5S1dNUE9R?=
+ =?utf-8?B?cnNjVEQyaTZhZU5BMzJLZ2dnSTdGZXlmdEZaazNZZExQOG42V0lkUzNFaW9J?=
+ =?utf-8?B?MWZpTG9mNkxEbmRuckw4VG5Rb2g5TWg4T05BdkRVRXZxdTdXc3VGMkR1bXgr?=
+ =?utf-8?B?VWF3TUpLcmQ1TUZxZzhUSkNMcmNTRDN1UldQRHQ1NVVIZ0Y4Q2xCb1A3THN0?=
+ =?utf-8?B?ekRpeUZNV3JVVFNERFNneXA4dFlraS96SnpJN2dsZUZXRWRLeEI2M283VmRa?=
+ =?utf-8?B?MUZ1bzZlSUkyZDVIbkhuT0t2MFdlZ3NBNWs3STRMNGRFZTdXRzBYdnkyUUl2?=
+ =?utf-8?B?aTFmSHZVNCsrdVc3TXBkVjVSaUJhbENQdVpXM3RjUzVQY3AwYnZCMmkwc1hm?=
+ =?utf-8?B?c3FFdVBCb2VWZjh1MCtvUGhGTm96dEtWSXFEbURsZkdzeG5memlxQS9OdlQ3?=
+ =?utf-8?B?WDlKN1M3c2Vxb3NWWUVmWWFWeGJrTXl6Z0Y5YXRDbUlWVXBFYk81c21qVXB0?=
+ =?utf-8?B?SWFNeWlvdXF0UWxwZ1p5UVVrWTlxSngyOTVIMnM3d1FOUnNzK3JMRThQb0RV?=
+ =?utf-8?B?Y0lJNU9YbkpnZ2NSL0Q5QmxaOUNwVHl1T1pxS3lodzRta2NmR25xa1k2OEE2?=
+ =?utf-8?B?dlJ4N2JEMzhocXdMTGVGOXVQSExXanJlTWpTZXQrR1F5TVFFTFdSN2RjUWdk?=
+ =?utf-8?B?ZTUwaWNKcFZ6aVRNUTJFV3Npait5bkRrTWNyL2VTOE85T0lENWpxRUJUWDda?=
+ =?utf-8?B?emtTQlNCOHJHbDArS1hWaEJLczJKandmZEx5ZGVjT1FHM3IrWjdidEVJWEli?=
+ =?utf-8?B?blRNeSsrRThhRTluaGdWaHFVUkJkckFjd1M1VjJUL1NyVTdTclBXRUdVRkVX?=
+ =?utf-8?B?QmhsRXJ1eG5OcjNLczlQbDFScmFyYllOcFlZeDJubmI1ZlFIcUpUTzJIM0xm?=
+ =?utf-8?B?VEgrV0FrL24vckFCSFZNU0FFcDhxdnVpRFZ2TXJkU0FVZ05aYVdvY1JBeE5m?=
+ =?utf-8?B?Z0JGTWJlTzRBMFZleFRQbEhsZU5TT3NkL1F3RGVMZGRNN242aG1mUEZKK1I2?=
+ =?utf-8?B?VDczK3B5eEtTMkl5OWJUZ2NHc2IwNllkSnlHamtTeGl4U0trdmZEa01GYVZE?=
+ =?utf-8?B?Ky96dm9EQ0tkSkFWTjVCd0xSRENEL2VzenJXWFRxRW0rVnEzTnlpWDh0eG0x?=
+ =?utf-8?B?cFFpNTlBb0FNYkYxak1sZ0lqZWVMZUFZa0VsUGVnRHhjZnVmb0M0c3BiWG9C?=
+ =?utf-8?B?N2xoa05jZlBHRlNTQnNLMHAyaWVRMVpVUmkyejg2bDduZnFhV2Fia3p0K0lJ?=
+ =?utf-8?B?V2Q2RGVickRTd3NYR05tc0RoYVBBamlvbitybkZEVjFiNEUvZThYZjFhWk9X?=
+ =?utf-8?B?U2IzNU1iOFRRcCtZMTNXaHRDQjdkTkpIU0tpeXZHSWVJbFZDQkI2bjUvQ01j?=
+ =?utf-8?B?ZnJRN0xyVi9pQmJRSGRKK1BDVXNzcGJrL2VMcmZabWR5Z3BuQjl6c3NsczQy?=
+ =?utf-8?B?UENrWVk0M2lRT0taeW1ReGlvYXZQSk0xTUU5cUNOZE1Mc2NMMzMzUCtVYmdX?=
+ =?utf-8?B?T0lLRHZYSVozN3p3VFZUT091OFNxa2tHRDlLcWRBKy9CRElDSXJaZXJROWxk?=
+ =?utf-8?B?TkwvUzdVT3REU09HZVpLa2ptUjJreXRHTnpHK3ROa0VqYzJZUW43UlBGNkhu?=
+ =?utf-8?B?eURCejJkTzUwMVdaMm1hbUt5cFpCajRDSHdQOVdFZG94V2JLS2lRc2luNVlZ?=
+ =?utf-8?B?YUYvaytmYWl3ZWdUY1h3RVYveERXSkxOWTB6cnhJMmxNeC9uWUI1UFUyMkxU?=
+ =?utf-8?B?bXhoeDJnK29wL3lVMHRLMllLYTI5YzY5QXRkYVI3TVZEQU5DVTBSYmlxZjdh?=
+ =?utf-8?B?RG9nMmlHc0tLbkRpVU5MNHYzdHBPRjRZaE1EL29RTlFpVFcrQ2JEQT09?=
 X-OriginatorOrg: btesa.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4cd1b5a9-9c46-4d1b-651e-08defa027dc7
+X-MS-Exchange-CrossTenant-Network-Message-Id: d534be18-07f8-4d0e-0360-08defa02814b
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR07MB5384.eurprd07.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Aug 2026 12:49:34.1421
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Aug 2026 12:49:39.9898
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: f51efa09-da77-4b78-95dd-fde75cdb9c62
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KwKqjAb+qGIOxDdsGLGZTWVdnfCkNZ+VG4x1u+VDR9WOALiXAoQevfT6KfVr3eCIJyQKqFiwZ3wVvnWVX7yZCg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: Aerm9X3M0z3X3BtfrbyhZ6Lwz3wMLF1kkod+1QeBX10kqGQjeB/Inu+b+G3Ai8R3lD3dw6wz66OQQfl9eMF4Lw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB5PR07MB9562
 
-The reservation path caches the position of the oldest not-yet-committed
-record in rb->pending_pos and advances it past already committed records
-on every reservation:
+In overwrite mode ringbuf_avail_data_sz() picks the newer of the consumer
+and overwrite positions before measuring how much data is available:
 
-	while (pend_pos < prod_pos) {
+	return prod_pos - max(cons_pos, over_pos);
 
-consumer_pos, producer_pos and pending_pos are unsigned long, i.e.
-32-bit on 32-bit architectures, and Documentation/bpf/ringbuf.rst states
-that these counters may wrap around there. Every other comparison in the
-file is written as a difference, so modular arithmetic keeps them
-correct across the wrap. This one is an ordering comparison, and it is
-not wrap-safe.
+max() is an ordering comparison, and consumer_pos, producer_pos and
+overwrite_pos are unsigned long, i.e. 32-bit on 32-bit architectures,
+where Documentation/bpf/ringbuf.rst allows them to wrap. Once one of the
+two positions has wrapped and the other has not, max() returns the older
+one: the result is then a modular difference close to 2^32, so the
+function reports far more available data than the ring can hold. Pollers
+using BPF_RB_AVAIL_DATA get a bogus figure, and epoll consumers can be
+woken with nothing to read.
 
-Once producer_pos wraps past 2^32, prod_pos is small while pend_pos
-still holds its pre-wrap value, so the loop condition is false and
-pending_pos is never advanced again. Reservations keep succeeding for a
-while, because bpf_ringbuf_has_space() uses differences, but
-new_prod_pos - pend_pos grows as the producer advances, and once it
-exceeds rb->mask every subsequent __bpf_ringbuf_reserve() call fails:
-the kernel believes a pending record spans the whole buffer. The ring
-never recovers, bpf_ringbuf_output() drops every event from then on, and
-nothing is logged.
-
-Observed on four armv7 devices (i.MX7 Dual, 6.6.52) running a
-tracepoint-based collector with a 512 KiB ring and 160-byte records.
-Every one of them stopped delivering after exactly 26846821 records and
-4295491360 bytes had passed through the ring, at event rates between 441
-and 862 records/s, that is after 8 h to 17 h of uptime: the trigger is
-the byte count, not time or load. That figure is 2^32 plus 524064 bytes,
-and the excess is one ring's worth of grace period, as expected while
-new_prod_pos - pend_pos is still below rb->mask. The last reservation
-that fits is the largest record boundary X with X + 160 <= 524287, and
-since 2^32 mod 160 = 96 the boundaries after the wrap sit at
-X = 64 (mod 160), giving X = 524064. Userspace kept consuming normally
-until the producer stopped, then read zero records for good. With this
-patch applied, one of the four devices took 10 GiB through the same ring
-with no stall, while the three unpatched ones kept wedging at the same
-byte count.
+Compare distances rather than positions. prod_pos - X is the amount of
+data produced since X for either position, wrap or no wrap, so the newer
+position is simply the one with the smaller distance, which is also the
+value the function wants to return.
 
 64-bit hosts are unaffected in practice: their counters would need
-16 EiB to wrap.
+16 EiB to wrap. Found by review of the same class of bug fixed in
+"bpf: Fix pending_pos walk on 32-bit ring position wrap".
 
-Compare the two positions as a difference instead. pending_pos never
-runs ahead of producer_pos, so the unsigned difference is the real
-distance between them and stays correct across the wrap.
-
-Fixes: cfa1a2329a69 ("bpf: Fix overrunning reservations in ringbuf")
 Signed-off-by: Israel Téllez García <i.tellez@btesa.com>
 ---
  kernel/bpf/ringbuf.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
-index 35ae64ade36b..06d3cc192601 100644
+index 06d3cc192601..0fefa89039be 100644
 --- a/kernel/bpf/ringbuf.c
 +++ b/kernel/bpf/ringbuf.c
-@@ -482,7 +482,7 @@ static void *__bpf_ringbuf_reserve(struct bpf_ringbuf *rb, u64 size)
- 	prod_pos = rb->producer_pos;
- 	new_prod_pos = prod_pos + len;
- 
--	while (pend_pos < prod_pos) {
-+	while (prod_pos - pend_pos > 0) {
- 		hdr = (void *)rb->data + (pend_pos & rb->mask);
- 		hdr_len = READ_ONCE(hdr->len);
- 		if (hdr_len & BPF_RINGBUF_BUSY_BIT)
+@@ -321,7 +321,7 @@ static unsigned long ringbuf_avail_data_sz(struct bpf_ringbuf *rb)
+ 	if (unlikely(rb->overwrite_mode)) {
+ 		over_pos = smp_load_acquire(&rb->overwrite_pos);
+ 		prod_pos = smp_load_acquire(&rb->producer_pos);
+-		return prod_pos - max(cons_pos, over_pos);
++		return min(prod_pos - cons_pos, prod_pos - over_pos);
+ 	} else {
+ 		prod_pos = smp_load_acquire(&rb->producer_pos);
+ 		return prod_pos - cons_pos;
 -- 
 2.39.5
 
