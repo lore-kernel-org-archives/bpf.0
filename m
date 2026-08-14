@@ -1,56 +1,56 @@
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88CE938F93B
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 23:49:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD6F33BED27
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 23:49:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786751358; cv=none; b=q9JJ5TPqGSsJYyvI5tJTqMTgdYRHKPsvtXp2lEOwOupek7gdctvYBkQQS6o8TigNvRhvPynCwNauKlQQqQhxiiAjiAVzctM49xXj6UUucYsrfRYl/7fk3TRES0WYYeqlYbWZ44AK7Bd6mofZQtwN7MKKKko6BJI2rBe8mk/8hAo=
+	t=1786751363; cv=none; b=Az/35xRXwtDTjkMx0bGn7fEWL8OsXhyju26CTiIWlh1SyFDHUuUdELN9nSx3crWbOOjNSpwutqanCJGCaVZysaKCfYDle2a0qTvMkOBT5/VS9LICKxJlMGPvHyhFMyGG6Sn/uVTDTIF6w3YfSVKkFeIcuX79okbPvrCdnpdO6Qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786751358; c=relaxed/simple;
-	bh=Vrq8TFknVqZqc/8JOPgG7PDUWg3gpVhuozznIWgm30E=;
+	s=arc-20240116; t=1786751363; c=relaxed/simple;
+	bh=/ECkwXTcbS/nrl8o0PNyBOTEnaTt4kJMaOMMUVKH7IE=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=W7zm/yeADNXP6tyMTsONK4RQ7Z4eUNVY2b4D1sUYxogH0HG41lhBoUclavHq3wPqB0xFgeLlyRMse1he8DzhgpbcX0iz2tdG964ce/Uj+/4k8g3ga5DTbM6W4vNphZq3l24D+ofEqIVyWtMG8J8OiNHFjH6fEWdXsBlMewSs+dw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--joshwash.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GnTkp0nP; arc=none smtp.client-ip=209.85.210.198
+	 To:Cc:Content-Type; b=r0QYyWGh8t6GTe+xKttDvFjVGJpjlAlNxY/RgUpYZH+ZjTPco0xXluXGeFFUlOWihFcRuaAj1E3D+Nuc+QrgIWbLyFaOpMUlwOS11WXdQY2LeK6QH+1PfRi7ZRNrOIavJCQZE8kQcEzjfmXRYmOC9hVN1tYZbnM1iplzC/vW57U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--joshwash.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tgDEd7KH; arc=none smtp.client-ip=209.85.210.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--joshwash.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GnTkp0nP"
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-84e024d2129so2226502b3a.2
-        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 16:49:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tgDEd7KH"
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-84859a64079so2248591b3a.3
+        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 16:49:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786751356; x=1787356156; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1786751359; x=1787356159; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=mrN2/9T5gE9eG4RGKPE/4WL0YOiYDGqFenhtgUxLKRo=;
-        b=GnTkp0nPfxFYd7XT+TOl1JxkQZtAvFJbjy+LkqinG3KEWrfKxPcSeLUy5RuaY6uVNV
-         oHfsgoLGNYYGtNc1754SnyobyjEXWIo74IDZLoXatblUCNJa32syuASyBi1L5jKg/fRU
-         zxq8T5Ik2QCvPFZ4l7QNhAuoFxNwlIv1hxlj2LlGlrnLLGkmtJ46n6747aVFrizNBGdq
-         gwZZ0JhXRDtkLDcaWp3aPiRiTddr0KTuXiENg4VKeO59InAw4dg5e9aqnLIt4LrAGdf/
-         HUfS4On6Pu5YYU4J4F0spaQ64voa+4j5DgyGogjKfRkZfIVjfMgV4R2WxTwlxuFcnH0u
-         JFjg==
+        bh=Nj+GAK80Vf0LtjqMeVaepRws/HUe3sjBCweZwIjqkZ0=;
+        b=tgDEd7KHYjeQu+VsJLq06dlX9H1wiZaOhcJChoNHiN+02KEUdrayjaa12rNbt2erZm
+         gY5hbxKLmkdcKoS813c+PjztaccHq6biPGAlx/jNtKzmABLDE8c7WcNOXQZC/ni7hBPO
+         pU3u/pgQOipyU79vhH/I8fQntF8ZYYc7+/C3QCG9juag2Uz7kyp3rXRy55QNjW2hQQZt
+         rxDNA3miGierylYJeiCRsSmXdXzQSmCsh6mKzZifprkqliPkTBDwnv8Upc88axtHDyVY
+         KKEEJfWU81MzHJ7JJPu4+XuJRWdSRPHPUeI9UuTn9MDiIPQ9bUNKvgGp2i62SLKmSoiq
+         ZZVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786751356; x=1787356156;
+        d=1e100.net; s=20251104; t=1786751359; x=1787356159;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=mrN2/9T5gE9eG4RGKPE/4WL0YOiYDGqFenhtgUxLKRo=;
-        b=UF/OMR6EpXUBW72Ubdgi8cDuR6re2txHRcVaK6MPwvG9T2hNGaPrnnwhRbY1BfqPqs
-         alrOpe48xu9PmYGslqN7D5W2facD5S0uteTOaPxvrRdT2XWzhL7N4fyeHt7hbGZpI6ra
-         PZcVWHvSFgkAwzFfQDci6/qBls/NOKIzuo17hJpTkEz52RrGCydvgmDS2p3n6W+e6Lan
-         qtxPOlLzVj9lz9oAHFVp00/HcsLE1uPKIwaiDVj7vTTZNRlJySN536FEMt12DYnLDxda
-         G5Q8DEijz1Mz5AR/2GVmpzZn4iLAQJQb1eosLizDvrg3nhk6EY1alYFObaQGXi73Ve1/
-         Qmjw==
-X-Forwarded-Encrypted: i=1; AHgh+Ron8tDzfr8tFmc9RvDN6FeLj0HqwlE33LdGtD3FAWhQEP0y7W63Fq6eDETHNlJuNiSAJLI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7Mj7xRcUu/UlmCImSEm/Aplls7DGEa/CrNluZO3H/ojxdYMPM
-	xfksmb0QyKZmbXfSdXB3ML6eTh6KiNmwQl+Ppikzgjqzpa06DMvh7opkrtzZA8z+tcdHDQ/wjyL
-	DvOYa/EFEXZN64Q==
-X-Received: from pfuu5.prod.google.com ([2002:a05:6a00:6f85:b0:848:4e44:7f19])
+        bh=Nj+GAK80Vf0LtjqMeVaepRws/HUe3sjBCweZwIjqkZ0=;
+        b=XlVshV4nhwC2aTzjVgB+OjusfrmUrpILFUwBoUgkPW/M4ywJhE52vjav22rdHuO4sH
+         iZ1A/JAs+ZI9rUVWmjUaI1bMzZhfEhm+HFqO1IXFxcAdzH/EsEtVG+AGZ3i49zksGw2M
+         wHQjUSiulKy6u6ob1tJwOf+n3PsK3Z+MfrABvfHpNNPNNRJLSZU03ErI09n9ilQQh6un
+         t2oA+/4Ef9Cv8hJn8jRUIQ8Lmi8YdB7bmTiHUHSloAo6bmCDO5JDc8yG9i3EfmRzkohm
+         u5nlAMw4bxrVNXsHguqf9LxKOLfzN+/Tqo3/hbykYC9ejInCJYjVSRp6Po8qX2FFDyR7
+         6qZw==
+X-Forwarded-Encrypted: i=1; AHgh+Rp1Vl4TrLRF5OZnDETJZgBS7nDCoX4K1YMGeoOhDB4uo+KXaWGUFJyMKgDxVJPZ13RZchM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwH8pozW33YjaofoL+Iglyfgl5OigNKCE3w2kkeYPK8yAKH4/+g
+	8UeYsEB5f23SKc5ZyCPtkpfOGTIlsgcYqAosbJ0r4nlpomoVtwyCtzYsh7EqAUPhIpA9KyLTw7t
+	lAO4kfJbjC0CR2w==
+X-Received: from pfes10.prod.google.com ([2002:aa7:8d4a:0:b0:848:4642:f1d3])
  (user=joshwash job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:850:b0:84e:5e4:b9a2 with SMTP id d2e1a72fcca58-84fde31a0bdmr8848385b3a.36.1786751355562;
- Fri, 14 Aug 2026 16:49:15 -0700 (PDT)
-Date: Fri, 14 Aug 2026 16:48:41 -0700
+ 2002:a05:6a00:3ccf:b0:845:40d1:87fa with SMTP id d2e1a72fcca58-84fde20e2a4mr9752920b3a.25.1786751359066;
+ Fri, 14 Aug 2026 16:49:19 -0700 (PDT)
+Date: Fri, 14 Aug 2026 16:48:43 -0700
 In-Reply-To: <20260814234845.773189-1-joshwash@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -60,8 +60,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260814234845.773189-1-joshwash@google.com>
 X-Mailer: git-send-email 2.55.0.691.gc56d675ccc-goog
-Message-ID: <20260814234845.773189-3-joshwash@google.com>
-Subject: [PATCH net 2/6] gve: fix XSK buffer leak when rings are stopped
+Message-ID: <20260814234845.773189-5-joshwash@google.com>
+Subject: [PATCH net 4/6] gve: don't register xsk pool on pre-existing queues
+ in RDA mode
 From: Joshua Washington <joshwash@google.com>
 To: netdev@vger.kernel.org
 Cc: Joshua Washington <joshwash@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
@@ -74,38 +75,79 @@ Cc: Joshua Washington <joshwash@google.com>, Harshitha Ramamurthy <hramamurthy@g
 	stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-GVE does not free XSK buffers when resetting ring state as a part of
-stopping queues. This causes all XSK buffers which are posted to the
-NIC to be leaked.
+When XSK pools are enabled after an XDP program has already been loaded,
+XSK pools are registered on pre-existing queues before queues are
+re-created with the XSK pool fully registered in DQ RDA mode.
 
-Free XSK buffers attached to an allocated buf_state when stopping rings.
+This can lead to a race condition between the RX NAPI and the control
+plane thread wherein a pre-existing queue sees the live XSK pool and
+attempts to use recycled buffers not backed by XSK buffs for AF_XDP ZC
+traffic. This causes the following kernel panic to occur when attempting
+to DMA map a NULL XSK buffer:
+
+BUG: kernel NULL pointer dereference, address: 0000000000000050
+...
+RIP: 0010:gve_rx_post_buffers_dqo+0x99/0x190 [gve]
+...
+Call Trace:
+ <TASK>
+ gve_rx_poll_dqo+0x4d9/0xf10 [gve]
+ gve_napi_poll_dqo+0x76/0x170 [gve]
+ __napi_poll+0x28/0x160
+ net_rx_action+0x2a0/0x350
+ handle_softirqs+0xd4/0x280
+ ? sort_range+0x20/0x20
+ run_ksoftirqd+0x2d/0x40
+ smpboot_thread_fn+0xd5/0x1d0
+ kthread+0xd7/0x100
+ ? kthread_complete_and_exit+0x20/0x20
+ ret_from_fork+0x1f/0x30
+ </TASK>
+
+The XSK pool should only be registered with current queues if XSK
+buffers are allocated on-the-fly, as is the case in QPL mode.
 
 Fixes: c1fffc5d66a7 ("gve: implement DQO RX datapath and control path for AF_XDP zero-copy")
 Cc: stable@vger.kernel.org
-Reviewed-by: Tim Hostetler <thostet@google.com>
 Reviewed-by: Jordan Rhee <jordanrhee@google.com>
+Reviewed-by: Tim Hostetler <thostet@google.com>
 Signed-off-by: Joshua Washington <joshwash@google.com>
 ---
- drivers/net/ethernet/google/gve/gve_rx_dqo.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/net/ethernet/google/gve/gve_main.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/ethernet/google/gve/gve_rx_dqo.c b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-index db38bc645296..2c1ce23d1550 100644
---- a/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-+++ b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-@@ -113,6 +113,12 @@ static void gve_rx_reset_ring_dqo(struct gve_priv *priv, int idx)
- 				gve_free_to_page_pool(rx, bs, false);
- 			else
- 				gve_free_qpl_page_dqo(bs);
-+
-+			if (gve_buf_state_is_allocated(rx, bs) &&
-+			    bs->xsk_buff) {
-+				xsk_buff_free(bs->xsk_buff);
-+				bs->xsk_buff = NULL;
-+			}
- 		}
- 	}
+diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
+index e4d78ae52daf..453b304016b6 100644
+--- a/drivers/net/ethernet/google/gve/gve_main.c
++++ b/drivers/net/ethernet/google/gve/gve_main.c
+@@ -1654,20 +1654,18 @@ static int gve_xsk_pool_enable(struct net_device *dev,
+ 	if (!priv->xdp_prog || !netif_running(dev))
+ 		return 0;
  
+-	err = gve_reg_xsk_pool(priv, dev, pool, qid);
+-	if (err)
+-		goto err_xsk_pool_dma_mapped;
+-
+-	/* Stop and start RDA queues to repost buffers. */
+-	if (!gve_is_qpl(priv)) {
++	if (gve_is_qpl(priv)) {
++		err = gve_reg_xsk_pool(priv, dev, pool, qid);
++		if (err)
++			goto err_xsk_pool_dma_mapped;
++	} else {
++		/* Stop and start RDA queues to repost buffers. */
+ 		err = gve_configure_rings_xdp(priv, priv->rx_cfg.num_queues);
+ 		if (err)
+-			goto err_xsk_pool_registered;
++			goto err_xsk_pool_dma_mapped;
+ 	}
+ 	return 0;
+ 
+-err_xsk_pool_registered:
+-	gve_unreg_xsk_pool(priv, qid);
+ err_xsk_pool_dma_mapped:
+ 	clear_bit(qid, priv->xsk_pools);
+ 	xsk_pool_dma_unmap(pool,
 -- 
 2.55.0.691.gc56d675ccc-goog
 
