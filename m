@@ -1,146 +1,207 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9050421239
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 08:10:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3EF133F5BC
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 08:14:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786695017; cv=none; b=qJNauqgyH7G7OZ8bBvEFWqPCRmVXEedYrF9wd4e3qkLne7+UaBlrQ3/K7Z9fvsDVvd1W30rOW52LFwjHNM+XzM5ZPFoqlvZYI+VYAtTeetp9gA+ffTlY3MclWaMN8TbJgwfkYj7HEwW83pXZVyEovI4dz6nIUbh4Uyo1sCDNcPo=
+	t=1786695269; cv=none; b=VtMQjfNFzFeRbYxV2e6VvAv9b6szfg8g90SQCOvCW4tBVPPhj8ScMYCrLL99+bAwrYZMeeNF9TGLV8lfZ3Fn3DMJk8FK9xXP2wDuuaW7EEJ8dWjFp33Y4lh2s+/szEwRE6SHwmCYAhV6McCLlJ/W8mIOC6Eznvdyk6KVKXujc78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786695017; c=relaxed/simple;
-	bh=ArxDsdK0F+i0wX3fDRfZQpqnnCGgj63cC9PvBTsMKiA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y0yhlwYX7+YbgBX1If/bMHC9pMsK0TzUrCA7U9T+9pGPMzTa16f6cjGiNK217R/7mCs15Ey2w8Bt9J5VHjupjksmohzvVJL+uW0lyY/GzAxLHk7W6onASc8WOZKvI+mWwJAwRdTTIe7ZVXXR40UXy3l7th5ihCeMChAu+q2jw9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=YgiPbWNk; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1786695269; c=relaxed/simple;
+	bh=bHZsfLLl5vwCbNfcZaQIZTl5GdjBuDhT51CRLHiccZE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=LE0dBM2nykLEr/Z/Cmgg49bD1FsGN6vmMDDt/v92k8/6oZoPdqyEdKDyHj3GApJmjT3ROPXa8RjP7aFYhARiM3wjCTaidzqdq21Bl+Jv4xcqAJpwETIlbktPVQec1FpcQUcRMAU2uv72brmQIqPOqHJDXUDiZhS/Vguls0o4xGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=SBf1sa+f; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="YgiPbWNk"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=5skAs3lUoVe4GZoleNeDpDK7W9XDhwD7nnFnU69iSM0=; b=YgiPbWNkPmVTIVNGOdrS02IV3D
-	fV84HldLkJhYRX6dNhDKtVt7yuUO1tBbafGGRVG2eMvvcVance1pOnUVl2WyjBiQR90rYRPUW5+tF
-	OyhHtGslDf12drBF3nICW0astPhlDXQOt6O5R3Y70JImfm1thES2ixdfzZBNSGDMdLbdR6SRpNorR
-	Dnnns661abh/pP5SBXaIItOfdQKy/BwIoJfv427JwrVfZu9bDrI3Y3f71wCSa65LuF03iu0m27BOr
-	I8j2Dw+8/aJpp6a3fB8rWUlUjkD0p6RHrvu1sr2vqiXoVYpUGVeMi31N/iYDi+50m54PUAj4cdaJ1
-	5bs9W2zg==;
-Received: from sslproxy07.your-server.de ([78.47.199.104])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wumzP-000JP1-10;
-	Fri, 14 Aug 2026 10:10:07 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wumzO-000ADa-1w;
-	Fri, 14 Aug 2026 10:10:06 +0200
-Message-ID: <c14b2af0-5293-4b63-a5a0-07838957a4ed@iogearbox.net>
-Date: Fri, 14 Aug 2026 10:10:06 +0200
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="SBf1sa+f"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-6a1542cdb53so775937a12.2
+        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 01:14:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1786695261; x=1787300061; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=yPXr0G+xg2fjcvTsT5qtmvvWszHpLn8rkkUHyiWVWks=;
+        b=SBf1sa+fJYMgtQZbA/Pr/WGeqXN4SH0tI/lCt1mGSZmzIfSnq60UKTBm6XMav+1PPr
+         oXGNFxQ27tmH6Mfy2X14H/44rMFqhy1QFEay/6i4xvYc8kVUozS+s1Mp48Lt2foT8m5E
+         jTxSwPWTZXCP36GXehDCrMelb8fFZk2H54TQglHx9XoH1Cy07bKX8cWR1OCb/s7gMdly
+         MU/UvMBL/+EbolRCrGV88JfS6qDgrnWmajoDvfn05vSiBnwSyZPfGGvAB5k28Z6ZJvcv
+         LS67IcdxSdCbe8PvPZQZPinyEz8kHjgPa55XBgV0b8oPdNIO2ZOfX7w7UQSd/60oVpfS
+         mUZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786695261; x=1787300061;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=yPXr0G+xg2fjcvTsT5qtmvvWszHpLn8rkkUHyiWVWks=;
+        b=DLVW2U8l6IoOnMxWrHtapYrKHwDx9VQ0zSzRTcP8pl6H+wqEPB4Zyg3+9gfloB/dv/
+         cyCr1o5PnTRAfOw1cbuBqcLr4oKmQsuqz6ZlKOkjICQjMol8GFnUsKt85q8Jo2DHx11m
+         X2aqB+pMa1zTSOCypP5KgHjEdn9Po5CtrI44wnVCYOsMJjsrW/hex/P4zwNsoqdQXbzT
+         gemliD6oAcsL6JPRlf3l7i09YBz2wuyuHb96yLnok7pzW8ET+FCdSYaT6S1pssAE38ic
+         PHHPmnOS2mQny3ZxfAFRm+pQeGlkOvG3z0cC4NA6VJlIPvTgTQiJV+R+Rcl+1LXcsnP0
+         P4iA==
+X-Gm-Message-State: AOJu0YyAB0BCBhdSb2qIhHmCe1elwZLfbrC9dob3ytefC44C6LWsETjh
+	GFAYRXcecmBzD5KhVMuqnfPYRLPK9WjDcI13Wtx2l8U+OeX2TWX9uWYHFKUL+VYk8Jk=
+X-Gm-Gg: AR+sD13Awxs8KhbYHnQb7uv5SUxIObvDJDfPGbDVdj9hnYNQmlrX39UQiBI4+sCMmOi
+	K41dRZ+cBrBVm7i2v+CVzvtpEFEVrnwfd7YqIm5wvPL/QEBdqf+FNXHu3nEoscdJqEPcp5dMX30
+	YMoCRjnVW5McICdK8uJDh5TJh/roeTDLdrriPRcFr1T1ZaHU+u0I38kWXRxtf/Vh/bclvWPtsl6
+	GfG8qEEqoTx7AfSClwPh5CD54+VwLshslTYK/7i/UZsNbohABR7hRGt3Y9xUWcOUFvfED/rfM0o
+	r6FKIAVdr62gqkedXOE84INcgYPyOMw9nV4msR+TtICLeiNCYHDDRkJJZZI67w0ki9ai3QafqW6
+	4WIBE4zOvixa8w1pu14tCJaR2/L3+dzCl3Pns2jMDTsXChPxmWwPI99JEk73ydp6WWzVH1XCrP+
+	faVmTfz0e+/+zT4Hy3muelyRLyqyG5sB7Kiuwpz4VzYtCvdfLcFPaDUcQBIGy7EicmQe9VXSfpA
+	YnG5pH4CA2SKll7Tk6PvA7fayLLA5an5gyKMw==
+X-Received: by 2002:a05:6402:3894:b0:6a3:6d6d:2296 with SMTP id 4fb4d7f45d1cf-6a38a8f5391mr1871067a12.5.1786695260946;
+        Fri, 14 Aug 2026 01:14:20 -0700 (PDT)
+Received: from cloudflare.com (79.184.184.176.ipv4.supernova.orange.pl. [79.184.184.176])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a38c9d7f0dsm520559a12.3.2026.08.14.01.14.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Aug 2026 01:14:19 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+Subject: [PATCH net-next 00/14] skb extension for BPF metadata
+Date: Fri, 14 Aug 2026 10:14:01 +0200
+Message-Id: <20260814-bpf-meta-inside-skb-ext-v1-0-767edd862656@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 2/4] bpf: Merge pointer types also when both are
- PTR_TO_MEM
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: memxor@gmail.com, bpf@vger.kernel.org
-References: <20260813204032.644949-1-daniel@iogearbox.net>
- <20260813204032.644949-2-daniel@iogearbox.net>
- <b698a1805cf0164abdedca01fa12494effce0c49.camel@gmail.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <b698a1805cf0164abdedca01fa12494effce0c49.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28092/Fri Aug 14 08:27:02 2026)
+X-B4-Tracking: v=1; b=H4sIAEnOfmoC/3WOQQ6CMBREr0L+2m9oVUBX3sOwKO2vVKElbSEYw
+ t0tuHY5mXkzs0AgbyjALVvA02SCcTYJdshAtsI+CY1KGnjOi7zgJ2wGjT1FgcYGowjDu0GaI2r
+ NmbyyiiqpIdGDJ23mvfkBliLalIL654SxeZGMW/GWbU2Izn/2ExPbiX2vZOe/exPDHC9VyWRei
+ kqp4i47NyrdCU9H6Xqo13X9ArNmfKDfAAAA
+X-Change-ID: 20260623-bpf-meta-inside-skb-ext-ff21c918e8cf
+To: netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+ Jakub Kicinski <kuba@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, 
+ Paolo Abeni <pabeni@redhat.com>, Stanislav Fomichev <sdf@fomichev.me>
+Cc: bpf@vger.kernel.org, kernel-team@cloudflare.com, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Simon Horman <horms@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+X-Mailer: b4 0.16.0
 
-On 8/14/26 2:14 AM, Eduard Zingerman wrote:
-> On Thu, 2026-08-13 at 22:40 +0200, Daniel Borkmann wrote:
->> save_aux_ptr_type() only reaches the merge when reg_type_mismatch() says
->> the two types are incompatible, and that in turn requires at least one of
->> them to have a base type reg_type_mismatch_ok() rejects. PTR_TO_MEM is
->> not among those, so for two PTR_TO_MEM based types the merge never runs
->> and the recorded type stays the one of whichever path was verified first.
->>
->> That is ok as long as all PTR_TO_MEM variants can be dereferenced with
->> a plain load, which stopped being true with commit f2362a57aeff ("bpf:
->> allow void* cast using bpf_rdonly_cast()") adding PTR_TO_MEM | MEM_RDONLY
->>> PTR_UNTRUSTED. If the other path saved e.g. a PTR_TO_MEM | MEM_RINGBUF
->> first, then bpf_convert_ctx_accesses() does not rewrite the load into a
->> BPF_PROBE_MEM one, and the untrusted path faults on a plain load.
->>
->> Fix by merging the two whenever they differ and both are of PTR_TO_MEM or
->> PTR_TO_BTF_ID base instead of keying it off reg_type_mismatch(), so that
->> merge_ptr_types() gets to normalize the result in this case as well. The
->> rejection of genuinely incompatible types is left untouched.
->>
->> Fixes: f2362a57aeff ("bpf: allow void* cast using bpf_rdonly_cast()")
->> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
->> ---
-> 
-> Would the following work?
-> 
->    diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->    index 1e537bc25ef5..a02914af0f5b 100644
->    --- a/kernel/bpf/verifier.c
->    +++ b/kernel/bpf/verifier.c
->    @@ -17022,6 +17022,8 @@ static bool reg_type_mismatch_ok(enum bpf_reg_type type)
->          case PTR_TO_BTF_ID:
->          case PTR_TO_ARENA:
->                  return false;
->    +     case PTR_TO_MEM:
->    +             return !may_fault_on_deref(type);
->          default:
->                  return true;
-Yes, that works and looks cleaner. Will integrate, thanks!
+[I realize net-next closes soon. Posting only to collect more feedback.]
+
+Please see the RFC cover letter for the overview [1].
+I will focus here just on the latest developments.
+
+1) Based on feedback from the RFC - the BPF skb extension is *no longer
+scrubbed* on tunnel encap/decap or veth traversal. There is also *no
+mechanism* to enable scrubbing as we don't seem to have a use case for it.
+
+2) Since the RFC I've enabled access to BPF skb extension for the remaining
+BPF program types which operate on skbs, namely netfilter, lwt family, and
+- everyone's favorite - sk_skb.
+
+Outside the patch set, two things happened:
+
+3) At NetConf 2026 Kuniyuki presented effectively the same idea with a use
+case in mind to attach metadata to packets on egress (IIRC). Hoping for
+feedback if this meets your needs as well.
+
+4) At BPF Summit 2026, Alexei asked - I'm paraphrasing: What percentage of
+skbs will carry metadata in our workload? This determines if the cost of
+attaching a tracing prog to consume_skb gets amortized. We've run
+experiments and have some answers.
+
+If bpf skb ext existed today, we would adopt it to attach metadata to
+incoming TCP connections and ingress UDP packets to CDN to identify flows
+that have been forwarded from one PoP to another.
+
+Based on stats from a production node where we've been testing this patch
+set, the fraction of skbs that would carry the metadata is <1% (~0.7%):
+
+```
+923m16$ sudo perf stat -a -r 10 \
+            -e skb:consume_skb -e skb:kfree_skb \
+            -e probe:skb_ext_add -- sleep 1
+
+ Performance counter stats for 'system wide' (10 runs):
+
+           334,256      skb:consume_skb                            ( +-  1.63% )
+             1,525      skb:kfree_skb                              ( +-  4.09% )
+             2,218      probe:skb_ext_add                          ( +- 18.58% )
+
+           1.02305 +- 0.00243 seconds time elapsed  ( +-  0.24% )
+```
+
+I expect that even if we adopted bpf skb ext for other use cases we have in
+mind, like labeling egress CDN packets with a customer identifier, we would
+attach metadata only to around 5% of all skbs in flight.
+
+We've run an experiment to evaluate this patch set - bpf skb extension -
+against the alternative - using a BPF map keyed by &skb (LRU_HASH) to stash
+metadata plus consume/kfree_skb tracepoint programs to clean up the
+entries.
+
+To do that we've modified the CDN component that labels the incoming
+connections forwarded from another PoP:
+
+- with bpf skb ext, BPF progs involved in processing consumed 7.5..10 CPU%,
+- with BPF map + consume/kfree_skb tp, the overhead was between 15..20 CPU%
+
+Not surprising considering the low fraction of skbs we attach metadata to.
+(For graphs see slides 30 & 40 from our presentation at Netdev 0x1A [2].)
+
+Note that we have not tried using RHASH as a BPF metadata stash, to see if
+that could bridge the overhead gap, as that would involve deploying a
+non-LTS kernel ATM.
+
+Thanks,
+-jkbs
+
+[1] https://patch.msgid.link/20260714-bpf-meta-inside-skb-ext-v1-0-5871c07a8dd6@cloudflare.com
+[2] https://github.com/jsitnicki/talks/blob/5d64c151f4dc0c38b2832fdcbce7284ec93fdca2/Netdev%200x1A%20-%20Thrice%20the%20charm%20-%20an%20skb%20extension%20for%20BPF%20metadata.pdf
+
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+---
+Changes in v1:
+- Don't scrub BPF skb extension. Remove F_NO_SCRUB flag. (Stan)
+- Allow calling bpf_dynptr_from_skb_ext from NETFILTER, LWT_*, SK_SKB progs.
+- Reorg tests into smaller commits. Add missing coverage.
+- Link to RFC: https://patch.msgid.link/20260714-bpf-meta-inside-skb-ext-v1-0-5871c07a8dd6@cloudflare.com
+
+---
+Jakub Sitnicki (14):
+      bpf: Introduce per-packet metadata storage for BPF programs
+      bpf: Allow access to bpf_sock_ops_kern->skb
+      bpf: Make BPF skb extension survive packet scrubbing
+      selftests/bpf: Add tests for bpf_dynptr_from_skb_ext
+      selftests/bpf: Test skb_ext on cloned skbs
+      selftests/bpf: Test skb_ext survival across veth and GRE
+      selftests/bpf: Test skb_ext read from cgroup_skb and sk_filter hooks
+      selftests/bpf: Test skb_ext read from sock_ops and LSM hooks
+      selftests/bpf: Test skb_ext read from kfree_skb tracepoint
+      selftests/bpf: Test skb_ext read from netfilter hook
+      selftests/bpf: Test skb_ext from LWT in, out, and xmit hooks
+      selftests/bpf: Test skb_ext read from seg6local End.BPF hook
+      selftests/bpf: Test skb_ext read from sk_skb stream verdict hook
+      selftests/bpf: Use non-trivial test payload in xdp_context tests
+
+ include/linux/bpf.h                                |  10 +
+ include/linux/filter.h                             |  26 +
+ include/linux/skbuff.h                             |   5 +
+ include/uapi/linux/bpf.h                           |   5 +
+ kernel/bpf/helpers.c                               |   7 +
+ kernel/bpf/log.c                                   |   2 +
+ kernel/bpf/verifier.c                              |  15 +-
+ net/Kconfig                                        |  20 +
+ net/core/filter.c                                  | 135 +++
+ net/core/skbuff.c                                  |  81 +-
+ net/ipv4/udp.c                                     |   9 +-
+ tools/testing/selftests/bpf/config                 |   1 +
+ .../selftests/bpf/prog_tests/socket_helpers.h      |   1 +
+ .../bpf/prog_tests/xdp_context_test_run.c          | 988 ++++++++++++++++++++-
+ tools/testing/selftests/bpf/progs/test_xdp_meta.c  | 489 +++++++++-
+ 15 files changed, 1772 insertions(+), 22 deletions(-)
+
