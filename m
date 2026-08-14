@@ -1,112 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD6171A9B24
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 03:02:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C464B1B3925
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 03:24:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786676562; cv=none; b=GYwc7qRWtn/7HIBcNtut/wgS61xF0CvcdjyspDzNm2SisigEvbPMTyWHLeAo5WcJsSBMzMDM5/XynQ4cpTwCOmzPuHkDgZD23lk2XF839AUn4NucgQER8bWwHpxCf++6tGiv5GZldV4cD2ssS8Nrg3IK39YBaqqHXpxJvrPt/QA=
+	t=1786677868; cv=none; b=cLf1tYMXgwbe1QuT+RrK4iD69fQNGKwpXw4FFA3YMlIhXYvH38OmjHgnW6YbR/Ffi5JswbjVay8szaPpSkLqkgw/cxCNj9ce6NSjnP8HcAEhc0O3jSy73qVez8EYlLYPOgcmAiP9bclC+pi0tix3cui/49yNGKt+CcVuFlwEVwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786676562; c=relaxed/simple;
-	bh=yC5Hqd7WpP8xTto5b01ibbH4NuR+I9X5ZzOSnDJ1Mkw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=eMu18NXbSWb/V5La3lKhqt2xm/85DbphikkFyABdscbp9TCtWVfCY9WPaNiPN9TWUla5GSXKCNsJiN4iFK7CAF9piJC9KFjN68YqChVsL8YPngWav44z+1R4JxrPAiQ9npD+aKKeLZiE1Px/tN+m5kDRuoXr7hWuiP1W+zA/52A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h4d9fLO7; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786677868; c=relaxed/simple;
+	bh=rcxMgiWxjMkQFPa32//U9z+s6WPJ5Yzd5yeADKb8kgg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=L6V9keZhv1v/2p+id08vSe86fwwZMehbfvK4ng/XEaGpAc1E0QTN+4lOAn8/UAz1v8le3SawA0++x+08F9mhV5dJcdPFbVLl2C6o/KR1Cnq9R2cBQAcN2N9lu+IpBAaMYUrFLrTAv5cUvL53zTgooSxz94tQc+EYo4B/nbFqGGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gPWqJRfB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h4d9fLO7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E9981F000E9;
-	Fri, 14 Aug 2026 03:02:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gPWqJRfB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 659271F000E9;
+	Fri, 14 Aug 2026 03:24:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786676560;
-	bh=vabbb/RPG/mQAoeskokW/7FdTh63iZd/gESOydAkRAw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=h4d9fLO7KTss4iNWmkJe08AbOjX656J3OpgdvmNIP6tMPjY97QCAvOGGsorY44Upg
-	 EW0AJxlyEDsRnL5vNsawSPEWFgYTw1tSfy4WCoPeM/kgfxO+ehxXfaH0xUnQboDIS6
-	 NB9uQFWVZMmKUVv/f7/gTD1/ax2O/tGgWoh/oVlPmMjSJuLBoeTTl2TpMz1nhsNU6m
-	 MOnnNor2yCYN+dPjHzdqKXPDmTAltisFhA1sa2aqYeUSf5sPUDf7H3NwxMfTHaEKtU
-	 UPjkpRhkV6ufhDvmtcqM6IuDjo3FEFd46/FdX/5k0LqDvJpP8Q+IQonZwgUcaSzBc6
-	 jg1ZH/Sxs0VUQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v5 08/11] bpf: Reject register-pair returns
- when the subprog BTF is unreliable
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yonghong Song" <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260813200250.1996395-1-yonghong.song@linux.dev>
-References: <20260813200210.1991507-1-yonghong.song@linux.dev>
- <20260813200250.1996395-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 14 Aug 2026 03:02:39 +0000
-Message-Id: <20260814030240.5E9981F000E9@smtp.kernel.org>
+	s=k20260515; t=1786677867;
+	bh=1ViVew006vNn44JHotmLnH8B57svVQyhtxGPTbRCDBg=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=gPWqJRfBiUSPZW9NmGPMJrNGREIRgiz7hMfuXZe12s/sTZIHht290f7GUvVRP0Cfx
+	 3M7lvfIHfKBVjxT15UOXsZBMRDGlmh6DKjV8BPsA28TNSrmItIPegctyniuFWiXT3m
+	 kP9oh5OVuedsEpOBb2N6njwxlXpJro8lfrARPIeGpJZTrfQThRKg3ZjcAf+u0z+gqQ
+	 nDNU1oqH3j20kYOToTu0RsOfjlwCZ0CxODU+2kTtwSA7C/FqMfiw/p+BLTPkNwAPRn
+	 2RxDtcJAeOdkmmLbBbsqd1HxUcqCJdyOoyea2YuwfqPzT5T8uLKSbvTMpdtP5gJ5BZ
+	 IJRPpyu0NGKkQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 198B93810900;
+	Fri, 14 Aug 2026 03:23:43 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2 0/3] selftests/bpf: fix for veristat file/prog
+ filters processing
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178667782164.3150297.3197994287873547816.git-patchwork-notify@kernel.org>
+Date: Fri, 14 Aug 2026 03:23:41 +0000
+References: <20260811-veristat-filter-fix-v2-0-6c234c4cd6ef@gmail.com>
+In-Reply-To: <20260811-veristat-filter-fix-v2-0-6c234c4cd6ef@gmail.com>
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com,
+ yonghong.song@linux.dev
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+Hello:
 
-Pre-existing issues:
-- [High] push_callback_call() incorrectly passes helper arguments for BTF v=
-alidation, tainting callback subprograms as unreliable.
---
+This series was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
---- Patch [8]: [PATCH bpf-next v5 08/11] bpf: Reject register-pair returns =
-when the subprog BTF is unreliable ---
-commit c1362d6d7ccc6806c96ffe9fc78804a2b8b6f1b9
-Author: Yonghong Song <yonghong.song@linux.dev>
+On Tue, 11 Aug 2026 23:05:41 -0700 you wrote:
+> At the moment veristat filtering behaves unexpectedly for the
+> following filter expression:
+> 
+>   -f !file/prog
+> 
+> The expression rejects all programs with name 'prog', and all programs
+> in a file with name 'file'. Fix the expression to exclude only a
+> program 'prog' from a file 'file', also add a set of tests to exercise
+> filtering logic.
+> 
+> [...]
 
-bpf: Reject register-pair returns when the subprog BTF is unreliable
+Here is the summary with links:
+  - [bpf-next,v2,1/3] selftests/bpf: fix for veristat file/prog filters processing
+    https://git.kernel.org/bpf/bpf-next/c/98d309ec8189
+  - [bpf-next,v2,2/3] selftests/bpf: exercise veristat filtering logic in a selftest
+    https://git.kernel.org/bpf/bpf-next/c/6c034d962bdf
+  - [bpf-next,v2,3/3] selftests/bpf: guarantee zero termination for veristat test buffers
+    https://git.kernel.org/bpf/bpf-next/c/033506fc0667
 
-This patch rejects return values larger than 8 bytes as soon as the
-subprogram's BTF prototype is marked unreliable. It adds
-subprog_ret_pair_unreliable() and uses it in check_func_call() to
-prevent tracking R2 based on a discarded signature.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index b23be0fa95af4..0ffb3bed1649e 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
 
-[ ... ]
-
-> @@ -9527,6 +9544,12 @@ static int check_func_call(struct bpf_verifier_env=
- *env, struct bpf_insn *insn,
->  		return 0;
->  	}
-> =20
-> +	if (subprog_ret_pair_unreliable(env, subprog)) {
-> +		verbose(env, "Func#%d ('%s') returns >8 bytes, which requires reliable=
- BTF\n",
-> +			subprog, subprog_name(env, subprog));
-> +		return -EINVAL;
-> +	}
-
-[Severity: High]
-This is a pre-existing issue, but will this new check incorrectly reject
-valid BPF programs because of how push_callback_call() marks subprograms
-as unreliable?
-
-Looking at push_callback_call():
-
-    caller =3D state->frame[state->curframe];
-    err =3D btf_check_subprog_call(env, subprog, caller->regs);
-
-It passes the caller's registers (which contain the helper arguments, e.g.,
-the PTR_TO_FUNC for bpf_loop) instead of the actual arguments the callback
-will receive. Because these arguments don't match the callback's prototype,
-btf_check_subprog_call() fails, sets the unreliable flag to true on the
-subprogram, and returns -EINVAL.
-
-push_callback_call() ignores this error, leaving the callback permanently
-tainted as unreliable.
-
-If a callback subprogram returns >8 bytes, won't it be incorrectly rejected
-here if it is also called directly elsewhere in the program, since the
-unreliability flag was set mistakenly?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260813200210.1991=
-507-1-yonghong.song@linux.dev?part=3D8
