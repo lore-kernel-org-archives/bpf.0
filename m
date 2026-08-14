@@ -1,45 +1,45 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4AC83AF650
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25323AEF2D
 	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 21:53:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786744393; cv=none; b=ADAx9lgl/3/Pf2jusP6Wrc2HHxONId8QXs/aN9BKJ1rBFO42948mPY2+zi0OXbc49BNL/J8LezWYcF8Pjx1WbW0jtx0NCVxN7gtCcO9RYPb6xG+iJ5mRdSH+Sa3M7MVppXrT2aQ/bDf4yr2Zv5kBhLhq2mmZGxQLyn/PJHdM0XY=
+	t=1786744394; cv=none; b=NOixyyB3/6j1okXUBODdejT8aDK4CofBlRZk/NTE+MXWDs7Wqu4+1HzZvBHqWaeWPJ3l+hBPkDfTTJHwXm0H3GOms9+GgNO2+Kt0fLWasI/PAPp/l/ZFIIi3dEMP79igTQJKC8moelyUlVWbYQ1Xa8L2wMTzu+pCSN7bB34tnsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786744393; c=relaxed/simple;
-	bh=h/Y6kUwMOnWbRnDUTohQZSoC4odcxy8ZIrzTiRncN60=;
+	s=arc-20240116; t=1786744394; c=relaxed/simple;
+	bh=xzBcG8zrdVWHTTOLp4tCPPc1QDjgP31zJnQLNFvRAYs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MWlpX+s9nDv1n/p8HgSk27HcK7q8k5OqkrTncQUp9jI/wNohRUtlbIP2+OAZKAw2lhaScnX8lPE5bv/1jTfXekeMRrAqEfCF13sQtPo2TPzHFA80iM2+fX5tM5b88kqi8scDx9MJrLtTq6n1C0m1/V3EUa8dMDRP+EMOApsH6vk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=LJt8W4f5; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=Zna6aCeUuWk3K5vRYYkVQ0LJ6Z5TcV0HVzzuSQVcEvKdTjBqeEo6zKPaZmQdu8NZzpwXugTqbIrLzYmzIy0p3uNJTsxtv46BpbiKpWeeiCsgdIo35TZzOsUJdUFbPL3EV29TAEeOgAfawp/9omcXqz13qSflG3GOyB11eLI94B8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=q0ZgUyrb; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="LJt8W4f5"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="q0ZgUyrb"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=H58IK9mFVXDPbH2UT/ZO2DI/MTLNE5QbiV8yf3FLrD8=; b=LJt8W4f5mHI35TXoYkMka9D9RW
-	2SxB3onukSoCO4BLGTpj9lrMRWiE8vTB7RhwWfixFHgvaRqPVviJl44HT5Jupbnq/PYCOSh/eKnG6
-	nb/N9fuwymCCzp5Kuhn7tGc+g6t+QteEIJABlaLn/7zekci5C40nMl6qDENE0aNUpi/1XpgZE4tdg
-	a52hewk//6zyy41PcK35nHG2mF7eV0VJKmVeOmoj1K7v7jc1CXEIUYiAVSIJXwSSOVOlBiINKrPhi
-	1drlIWlPTDDtKMsv0U4nwNUuR7b7EkhRPB3TDdKD0CigExuW8sX/8XzvVg60BygjUM1Vq5gOiX4Tw
-	L8vx1D0w==;
+	bh=xhPF1QvyalZ00mgXhx6DBM5gr5TxltP/vhsS+yaORGM=; b=q0ZgUyrbV0G7CbCtvRg0zbLjoH
+	Grc+TvW0reFvTkxoBCtTS1Vu1GGSxVKe8MxkTLYtB/iQHachq/xkNkOlYAKANqiBksw6R1/J60DnI
+	DBGfaqD+yVCjKVnVHOW3Ph4zy3KTq1q4LvCYzgMAhOU2VyK9YNH30GSxoB9DH8NNd9wwNjlV6go1E
+	A0IsezELkXgc/lwCkm550X4v9OVVm5sXICT2ZHJNiaYD6xGDNPfCnMEVoHTEGDZ64hXZaRBTh+eMg
+	9aJHRc0Zrhy2lx5MRd1JfCVP0IAKl7i63/+HXlxW2IkDHAgOkGiAWEFRapVckwhCyqmyk7rAg5BRD
+	iIjPwM9w==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wuzpn-000F9J-24;
-	Fri, 14 Aug 2026 23:53:03 +0200
+	id 1wuzpo-000F9R-0P;
+	Fri, 14 Aug 2026 23:53:04 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: eddyz87@gmail.com
 Cc: memxor@gmail.com,
 	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 4/6] bpf: Rewrite any fault prone load out of a mem or btf_id pointer
-Date: Fri, 14 Aug 2026 23:52:58 +0200
-Message-ID: <20260814215301.709827-4-daniel@iogearbox.net>
+Subject: [PATCH bpf-next v2 5/6] selftests/bpf: Add tests for pointer type merge at a shared load
+Date: Fri, 14 Aug 2026 23:52:59 +0200
+Message-ID: <20260814215301.709827-5-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260814215301.709827-1-daniel@iogearbox.net>
 References: <20260814215301.709827-1-daniel@iogearbox.net>
@@ -52,174 +52,312 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28092/Fri Aug 14 08:27:02 2026)
 
-bpf_convert_ctx_accesses() turns a BPF_LDX into a BPF_PROBE_MEM one by
-matching the type recorded for the insn against a list of exact pointer
-types. The list cannot keep up with the flag combinations the verifier
-produces, and a type which is missing from it ends up as a plain load
-without an exception table entry, so a bad address panics the kernel
-instead of being handled.
+Cover the ways in which the type recorded for a shared load used to lose
+the BPF_PROBE_MEM rewrite which would then trigger a NULL deref if not
+handled properly.
 
-Two such types exist today and are reachable:
+  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t mem_rdonly_untrusted
+  [...]
+  #238/1   mem_rdonly_untrusted/btf_id_to_ptr_mem:OK
+  #238/2   mem_rdonly_untrusted/ldx_is_ok_bad_addr:OK
+  #238/3   mem_rdonly_untrusted/ldx_is_ok_good_addr:OK
+  #238/4   mem_rdonly_untrusted/offset_not_tracked:OK
+  #238/5   mem_rdonly_untrusted/stx_not_ok:OK
+  #238/6   mem_rdonly_untrusted/atomic_not_ok:OK
+  #238/7   mem_rdonly_untrusted/atomic_rmw_not_ok:OK
+  #238/8   mem_rdonly_untrusted/kfunc_param_not_ok:OK
+  #238/9   mem_rdonly_untrusted/mixed_mem_type:OK
+  #238/10  mem_rdonly_untrusted/mixed_mem_untrusted_btf_id_type:OK
+  #238/11  mem_rdonly_untrusted/mixed_mem_btf_id_type:OK
+  #238/12  mem_rdonly_untrusted/mixed_rdonly_mem_btf_id_type:OK
+  #238/13  mem_rdonly_untrusted/mixed_mem_mem_type:OK
+  #238/14  mem_rdonly_untrusted/mixed_map_value_mem_type:OK
+  #238/15  mem_rdonly_untrusted/mixed_stack_mem_type:OK
+  #238/16  mem_rdonly_untrusted/diff_size_access:OK
+  #238/17  mem_rdonly_untrusted/misaligned_access:OK
+  #238/18  mem_rdonly_untrusted/null_check:OK
+  #238/19  mem_rdonly_untrusted/ldx_is_ok_commuted_addr:OK
+  #238/20  mem_rdonly_untrusted/helper_param_not_ok:OK
+  #238     mem_rdonly_untrusted:OK
+  Summary: 1/20 PASSED, 0 SKIPPED, 0/0 FAILED
 
-  - PTR_TO_BTF_ID | PTR_UNTRUSTED | MEM_ALLOC | NON_OWN_REF
-  - PTR_TO_BTF_ID | PTR_UNTRUSTED | MEM_RCU
-
-Rather than adding the two, just drop the list and state the property
-itself in the default case of the switch. This is a superset of what
-the list matched, the untrusted PTR_TO_MEM does not have to carry
-MEM_RDONLY for it anymore, and it stays in sync with the verifier side
-which uses the same match in save_aux_ptr_type() and reg_type_mismatch_ok().
-
-Assert that a fault prone type which does not get the rewrite for whatever
-reason is rejected at load time rather than left to fault at runtime to
-catch any future cases.
-
-Fixes: 1b12171533a9 ("bpf: Mark direct ld of stashed bpf_{rb,list}_node as non-owning ref")
-Fixes: 6fcd486b3a0a ("bpf: Refactor RCU enforcement in the verifier.")
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- v1 -> v2:
-   - new patch, don't match on full types (Eduard)
+ .../bpf/progs/mem_rdonly_untrusted.c          | 254 ++++++++++++++++++
+ 1 file changed, 254 insertions(+)
 
- include/linux/bpf_verifier.h | 11 +++++++++
- kernel/bpf/fixups.c          | 47 ++++++++++++++++++++----------------
- kernel/bpf/verifier.c        | 15 ++----------
- 3 files changed, 39 insertions(+), 34 deletions(-)
-
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 114ae4540d2c..7239cffa7b51 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1297,6 +1297,17 @@ static inline u32 type_flag(u32 type)
- 	return type & ~BPF_BASE_TYPE_MASK;
+diff --git a/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c b/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c
+index b91271d4caa4..ac8bba3e7d02 100644
+--- a/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c
++++ b/tools/testing/selftests/bpf/progs/mem_rdonly_untrusted.c
+@@ -3,6 +3,7 @@
+ #include <vmlinux.h>
+ #include <bpf/bpf_core_read.h>
+ #include "bpf_misc.h"
++#include "bpf_kfuncs.h"
+ #include "../test_kmods/bpf_testmod_kfunc.h"
+ 
+ SEC("tp_btf/sys_enter")
+@@ -164,6 +165,259 @@ int mixed_mem_type(void *ctx)
+ 	return *p;
  }
  
-+static inline bool bpf_is_ptr_to_mem_or_btf_id(enum bpf_reg_type type)
++struct {
++	__uint(type, BPF_MAP_TYPE_RINGBUF);
++	__uint(max_entries, 4096);
++} ringbuf SEC(".maps");
++
++int zero;
++
++static __noinline u64 *get_mem_or_untrusted_addr(u64 *mem)
 +{
-+	switch (base_type(type)) {
-+	case PTR_TO_MEM:
-+	case PTR_TO_BTF_ID:
-+		return true;
-+	default:
-+		return false;
-+	}
++	/*
++	 * Try to avoid compiler hoisting load to if branches by using
++	 * __noinline func.
++	 */
++	if (zero)
++		return mem;
++	else
++		return bpf_rdonly_cast(0, bpf_core_type_id_kernel(struct sock));
 +}
 +
- static inline bool bpf_may_fault_on_deref(enum bpf_reg_type type)
- {
- 	/*
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index c4bd70befbb5..796fba0505dc 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -811,6 +811,7 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 
- 	for (i = 0; i < insn_cnt; i++, insn++) {
- 		bpf_convert_ctx_access_t convert_ctx_access;
-+		enum bpf_reg_type ptr_type;
- 		u8 mode;
- 
- 		if (env->insn_aux_data[i + delta].nospec) {
-@@ -903,7 +904,8 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 			continue;
- 		}
- 
--		switch ((int)env->insn_aux_data[i + delta].ptr_type) {
-+		ptr_type = env->insn_aux_data[i + delta].ptr_type;
-+		switch ((int)ptr_type) {
- 		case PTR_TO_CTX:
- 			if (!ops->convert_ctx_access)
- 				continue;
-@@ -919,26 +921,6 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 		case PTR_TO_XDP_SOCK:
- 			convert_ctx_access = bpf_xdp_sock_convert_ctx_access;
- 			break;
--		case PTR_TO_BTF_ID:
--		case PTR_TO_BTF_ID | PTR_UNTRUSTED:
--		/* PTR_TO_BTF_ID | MEM_ALLOC always has a valid lifetime, unlike
--		 * PTR_TO_BTF_ID, and an active referenced id, but the same cannot
--		 * be said once it is marked PTR_UNTRUSTED, hence we must handle
--		 * any faults for loads into such types. BPF_WRITE is disallowed
--		 * for this case.
--		 */
--		case PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED:
--		case PTR_TO_MEM | MEM_RDONLY | PTR_UNTRUSTED:
--			if (type == BPF_READ) {
--				if (BPF_MODE(insn->code) == BPF_MEM)
--					insn->code = BPF_LDX | BPF_PROBE_MEM |
--						     BPF_SIZE((insn)->code);
--				else
--					insn->code = BPF_LDX | BPF_PROBE_MEMSX |
--						     BPF_SIZE((insn)->code);
--				env->prog->aux->num_exentries++;
--			}
--			continue;
- 		case PTR_TO_ARENA:
- 			if (BPF_MODE(insn->code) == BPF_MEMSX) {
- 				if (!bpf_jit_supports_insn(insn, true)) {
-@@ -952,6 +934,29 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
- 			env->prog->aux->num_exentries++;
- 			continue;
- 		default:
-+			/*
-+			 * A pointer which may fault on a dereference must not
-+			 * be loaded from without fault protection, hence turn
-+			 * the BPF_LDX into a BPF_PROBE_MEM one so that a bad
-+			 * address is handled rather than panicking the kernel.
-+			 * A store through one is rejected earlier, there is no
-+			 * probed counterpart to rewrite it into.
-+			 */
-+			if (bpf_is_ptr_to_mem_or_btf_id(ptr_type) &&
-+			    bpf_may_fault_on_deref(ptr_type) &&
-+			    type == BPF_READ) {
-+				if (BPF_MODE(insn->code) == BPF_MEM)
-+					insn->code = BPF_LDX | BPF_PROBE_MEM |
-+						     BPF_SIZE(insn->code);
-+				else
-+					insn->code = BPF_LDX | BPF_PROBE_MEMSX |
-+						     BPF_SIZE(insn->code);
-+				env->prog->aux->num_exentries++;
-+				continue;
-+			}
-+			if (verifier_bug_if(bpf_may_fault_on_deref(ptr_type), env,
-+					    "access to a fault prone pointer is not rewritten as a probed one"))
-+				return -EFAULT;
- 			continue;
- 		}
- 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6610e2437047..6fff370749bf 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -16999,17 +16999,6 @@ static bool reg_type_mismatch(enum bpf_reg_type src, enum bpf_reg_type prev)
- 			       !reg_type_mismatch_ok(prev));
- }
- 
--static bool is_ptr_to_mem_or_btf_id(enum bpf_reg_type type)
--{
--	switch (base_type(type)) {
--	case PTR_TO_MEM:
--	case PTR_TO_BTF_ID:
--		return true;
--	default:
--		return false;
--	}
--}
--
- static bool is_ptr_to_mem(enum bpf_reg_type type)
- {
- 	return base_type(type) == PTR_TO_MEM;
-@@ -17049,8 +17038,8 @@ static int save_aux_ptr_type(struct bpf_verifier_env *env, enum bpf_reg_type typ
- 		 * Reject it.
- 		 */
- 		if (allow_trust_mismatch &&
--		    is_ptr_to_mem_or_btf_id(type) &&
--		    is_ptr_to_mem_or_btf_id(*prev_type)) {
-+		    bpf_is_ptr_to_mem_or_btf_id(type) &&
-+		    bpf_is_ptr_to_mem_or_btf_id(*prev_type)) {
- 			/*
- 			 * Have to support a use case when one path through
- 			 * the program yields a TRUSTED pointer while another
++SEC("socket")
++__success
++__log_level(2)
++__msg("= *(u64 *)(r{{[0-9]}} +0){{.*}}=untrusted_ptr_sock")
++__msg("= *(u64 *)(r{{[0-9]}} +0){{.*}}=ringbuf_mem")
++__retval(0)
++int mixed_mem_untrusted_btf_id_type(void *ctx)
++{
++	u64 *p, v;
++
++	p = bpf_ringbuf_reserve(&ringbuf, sizeof(*p), 0);
++	if (!p)
++		return 1;
++	*p = 42;
++	/*
++	 * The load below is reached with PTR_TO_MEM | MEM_RINGBUF on one
++	 * path and with PTR_TO_BTF_ID | PTR_UNTRUSTED on the other. The
++	 * merged type has to keep the BPF_PROBE_MEM rewrite, otherwise
++	 * the NULL deref taken at runtime panics the kernel instead of
++	 * returning 0.
++	 */
++	v = *get_mem_or_untrusted_addr(p);
++	bpf_ringbuf_discard(p, 0);
++	return v;
++}
++
++static __noinline u32 *get_mem_or_btf_id_addr(u32 *mem)
++{
++	struct task_struct *task;
++
++	/*
++	 * Try to avoid compiler hoisting load to if branches by using
++	 * __noinline func.
++	 */
++	if (zero)
++		return mem;
++
++	task = bpf_get_current_task_btf();
++	/*
++	 * A plain BTF pointer walk yields a bare PTR_TO_BTF_ID, and
++	 * task->nameidata is NULL unless the task currently is in the
++	 * middle of a path lookup.
++	 */
++	return (u32 *)&task->nameidata->flags;
++}
++
++SEC("socket")
++__success
++__log_level(2)
++__msg("= *(u32 *)(r{{[0-9]}} +0){{.*}}=ptr_nameidata")
++__msg("= *(u32 *)(r{{[0-9]}} +0){{.*}}=ringbuf_mem")
++__retval(0)
++int mixed_mem_btf_id_type(void *ctx)
++{
++	u32 *p, v;
++
++	p = bpf_ringbuf_reserve(&ringbuf, sizeof(*p), 0);
++	if (!p)
++		return 1;
++	*p = 42;
++	/*
++	 * Same as above, except that the other path yields a bare
++	 * PTR_TO_BTF_ID. Merging it with PTR_TO_MEM used to drop the
++	 * BPF_PROBE_MEM rewrite the bare PTR_TO_BTF_ID would have
++	 * gotten on its own.
++	 */
++	v = *get_mem_or_btf_id_addr(p);
++	bpf_ringbuf_discard(p, 0);
++	return v;
++}
++
++char dynptr_data[8];
++
++static __noinline u32 *get_rdonly_mem_or_btf_id_addr(u32 *mem)
++{
++	struct task_struct *task;
++
++	/*
++	 * Try to avoid compiler hoisting load to if branches by using
++	 * __noinline func.
++	 */
++	if (zero)
++		return mem;
++
++	task = bpf_get_current_task_btf();
++	return (u32 *)&task->nameidata->flags;
++}
++
++SEC("socket")
++__success
++__log_level(2)
++__msg("r8 = *(u32 *)(r7 +0){{.*}}R7=ptr_nameidata")
++__msg("r8 = *(u32 *)(r7 +0){{.*}}R7=rdonly_mem")
++__retval(0)
++int mixed_rdonly_mem_btf_id_type(void *ctx)
++{
++	struct bpf_dynptr dptr;
++	char buf[sizeof(u32)];
++	u32 *p;
++	u64 v;
++
++	if (bpf_dynptr_from_mem(dynptr_data, sizeof(dynptr_data), 0, &dptr))
++		return 1;
++	p = bpf_dynptr_slice(&dptr, 0, buf, sizeof(buf));
++	if (!p)
++		return 1;
++	/*
++	 * Same as above, except that the PTR_TO_MEM side already carries
++	 * MEM_RDONLY. Merging it with a bare PTR_TO_BTF_ID used to yield
++	 * PTR_TO_MEM | MEM_RDONLY, which is not rewritten either since
++	 * only its PTR_UNTRUSTED variant is.
++	 */
++	p = get_rdonly_mem_or_btf_id_addr(p);
++	/* asm block to have reliable match target for __msg. */
++	asm volatile (
++	"r7 = %[p];"
++	"r8 = *(u32 *)(r7 + 0);"
++	"%[v] = r8;"
++	: [v]"=r"(v)
++	: [p]"r"(p)
++	: "r7", "r8");
++	return v;
++}
++
++static __noinline u64 *get_mem_or_rdonly_untrusted_mem_addr(u64 *mem)
++{
++	u64 *p = bpf_rdonly_cast(0, 0);
++
++	/*
++	 * Hoist the cast above the branch so that the PTR_TO_MEM |
++	 * MEM_RINGBUF path is verified first and thus gets its type
++	 * recorded first.
++	 */
++	if (zero == 0)
++		return p;
++	return mem;
++}
++
++SEC("socket")
++__success
++__log_level(2)
++__msg("= *(u64 *)(r{{[0-9]}} +0){{.*}}=ringbuf_mem")
++__msg("= *(u64 *)(r{{[0-9]}} +0){{.*}}=rdonly_untrusted_mem")
++__retval(0)
++int mixed_mem_mem_type(void *ctx)
++{
++	u64 *p, v;
++
++	p = bpf_ringbuf_reserve(&ringbuf, sizeof(*p), 0);
++	if (!p)
++		return 1;
++	*p = 42;
++	/*
++	 * Both paths are PTR_TO_MEM based, so they used to not trip the
++	 * type mismatch check and skipped the merge altogether, leaving
++	 * the insn with the PTR_TO_MEM | MEM_RINGBUF recorded first and
++	 * hence without the BPF_PROBE_MEM rewrite the other path needs.
++	 */
++	v = *get_mem_or_rdonly_untrusted_mem_addr(p);
++	bpf_ringbuf_discard(p, 0);
++	return v;
++}
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, u32);
++	__type(value, u64);
++} array SEC(".maps");
++
++static __noinline u64 *get_map_value_or_rdonly_untrusted_mem_addr(u64 *mem)
++{
++	u64 *p = bpf_rdonly_cast(0, 0);
++
++	/*
++	 * Hoist the cast above the branch so that the PTR_TO_MAP_VALUE
++	 * path is verified first and thus gets its type recorded first.
++	 */
++	if (zero == 0)
++		return p;
++	return mem;
++}
++
++SEC("socket")
++__failure
++__msg("same insn cannot be used with different pointers")
++int mixed_map_value_mem_type(void *ctx)
++{
++	u64 *p, v;
++	u32 key = 0;
++
++	p = bpf_map_lookup_elem(&array, &key);
++	if (!p)
++		return 1;
++	/*
++	 * PTR_TO_MAP_VALUE is neither PTR_TO_MEM nor PTR_TO_BTF_ID based,
++	 * so it cannot be merged into a type which keeps the BPF_PROBE_MEM
++	 * rewrite the PTR_TO_MEM | MEM_RDONLY | PTR_UNTRUSTED of the other
++	 * path needs. Both bases were mismatch ok, hence the load used to be
++	 * accepted with the PTR_TO_MAP_VALUE recorded and the NULL deref on
++	 * the second path panicked the kernel.
++	 */
++	v = *get_map_value_or_rdonly_untrusted_mem_addr(p);
++	return v;
++}
++
++SEC("socket")
++__failure
++__msg("same insn cannot be used with different pointers")
++int mixed_stack_mem_type(void *ctx)
++{
++	u64 *p = bpf_rdonly_cast(0, 0);
++	u64 s = 42, v;
++
++	/*
++	 * Same as above, but for a PTR_TO_STACK on the other path. A
++	 * subprog cannot return one, so the branch and the load have to
++	 * be kept in the same frame, and the asm block is there to have
++	 * the compiler not duplicate the latter.
++	 */
++	asm volatile (
++	"r7 = %[p];"
++	"if %[zero] == 0 goto +1;"
++	"r7 = %[s];"
++	"r8 = *(u64 *)(r7 + 0);"
++	"%[v] = r8;"
++	: [v]"=r"(v)
++	: [p]"r"(p),
++	  [s]"r"(&s),
++	  [zero]"r"(zero)
++	: "r7", "r8");
++	return v;
++}
++
+ __attribute__((__aligned__(8)))
+ u8 global[] = {
+ 	0x11, 0x22, 0x33, 0x44,
 -- 
 2.43.0
 
