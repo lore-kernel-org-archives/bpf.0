@@ -1,172 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43416346A11;
-	Fri, 14 Aug 2026 08:09:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9050421239
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 08:10:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786694967; cv=none; b=mfgsDMCeXC9aJPGnMxHtLS3/czbBKTWfLj89DKCGEZFEzT9+r4fiN3z+72xqkL+h7ExF6O7014Dkw7WTqYQlbTBvJGDHVkMcHQgyl0SehkC6DPBL2ouqyFEs6sB9BSQLWgWrlASuYnPzC+/c9rKKye4ZM31fu/12e+8c6Kdebsw=
+	t=1786695017; cv=none; b=qJNauqgyH7G7OZ8bBvEFWqPCRmVXEedYrF9wd4e3qkLne7+UaBlrQ3/K7Z9fvsDVvd1W30rOW52LFwjHNM+XzM5ZPFoqlvZYI+VYAtTeetp9gA+ffTlY3MclWaMN8TbJgwfkYj7HEwW83pXZVyEovI4dz6nIUbh4Uyo1sCDNcPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786694967; c=relaxed/simple;
-	bh=TA8NjPkJg/wxekqgyP6kvAcIcsIdSbdDYTKUHdghBjE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Q1GBc//GZ7i/72uU66etn80FzCoPDSvJcY28hcIq41DqyQdSZJ0ZnUwkxFwkFF1eIwx5eflxwIz3jzs06nq9dfSOVMJZIiVJkdxmFNA6M6VLTbyWz9rK24UXAmS3c9000InOlts22dDJeHK9jzdduNPsoVhT5fryt1BQQaRU82A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fj1IbOej; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786695017; c=relaxed/simple;
+	bh=ArxDsdK0F+i0wX3fDRfZQpqnnCGgj63cC9PvBTsMKiA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Y0yhlwYX7+YbgBX1If/bMHC9pMsK0TzUrCA7U9T+9pGPMzTa16f6cjGiNK217R/7mCs15Ey2w8Bt9J5VHjupjksmohzvVJL+uW0lyY/GzAxLHk7W6onASc8WOZKvI+mWwJAwRdTTIe7ZVXXR40UXy3l7th5ihCeMChAu+q2jw9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=YgiPbWNk; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fj1IbOej"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11FA31F000E9;
-	Fri, 14 Aug 2026 08:09:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786694965;
-	bh=JTndrLd9EgESq3MQ2z80GBzpquS37Tpitiqhdh59XX8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Fj1IbOej9hAKuf/WBxehvkR7L+gY8OyJKW91rxtE7wW79QSzQN4rvZh9+9nGx7jcr
-	 SiXuhqDPwMRLYeexSS6JS3GUli9N5SXwGOr5qDt8EzXwh0tm4fu9u6mepbt8fdX0sO
-	 IF4EXeozPhd+9PuRJv7iAYiCprBYP+xNpRYgRU37ksgHVtEhBwVBl7m5ahdFT5h+Gj
-	 dhha2DbKM1bLP5gU/Trw/Je6RGnjEcYBHQlf1ccfjgO191irHDq3d0B6wXJUwtVh5H
-	 XJyfduQ6PpuIhUaOKwYs5FNjHmYqQgJ6MO579A1S62KdKxmAgOKBQi+RetIkCtPs8T
-	 ASDqs9WouEoTw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 2/4] selftests/cgroup: add memcg_stat_cross_cpu
- correctness test for flush
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ziyang Men" <ziyang.meme@gmail.com>
-Cc: mkoutny@suse.com, sched-ext@lists.linux.dev, dmitry.torokhov@gmail.com, linux-input@vger.kernel.org, bpf@vger.kernel.org, tj@kernel.org, hannes@cmpxchg.org
-In-Reply-To: <20260814075054.507089-3-ziyang.meme@gmail.com>
-References: <20260814075054.507089-1-ziyang.meme@gmail.com>
- <20260814075054.507089-3-ziyang.meme@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 14 Aug 2026 08:09:24 +0000
-Message-Id: <20260814080925.11FA31F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="YgiPbWNk"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=5skAs3lUoVe4GZoleNeDpDK7W9XDhwD7nnFnU69iSM0=; b=YgiPbWNkPmVTIVNGOdrS02IV3D
+	fV84HldLkJhYRX6dNhDKtVt7yuUO1tBbafGGRVG2eMvvcVance1pOnUVl2WyjBiQR90rYRPUW5+tF
+	OyhHtGslDf12drBF3nICW0astPhlDXQOt6O5R3Y70JImfm1thES2ixdfzZBNSGDMdLbdR6SRpNorR
+	Dnnns661abh/pP5SBXaIItOfdQKy/BwIoJfv427JwrVfZu9bDrI3Y3f71wCSa65LuF03iu0m27BOr
+	I8j2Dw+8/aJpp6a3fB8rWUlUjkD0p6RHrvu1sr2vqiXoVYpUGVeMi31N/iYDi+50m54PUAj4cdaJ1
+	5bs9W2zg==;
+Received: from sslproxy07.your-server.de ([78.47.199.104])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wumzP-000JP1-10;
+	Fri, 14 Aug 2026 10:10:07 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wumzO-000ADa-1w;
+	Fri, 14 Aug 2026 10:10:06 +0200
+Message-ID: <c14b2af0-5293-4b63-a5a0-07838957a4ed@iogearbox.net>
+Date: Fri, 14 Aug 2026 10:10:06 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 2/4] bpf: Merge pointer types also when both are
+ PTR_TO_MEM
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: memxor@gmail.com, bpf@vger.kernel.org
+References: <20260813204032.644949-1-daniel@iogearbox.net>
+ <20260813204032.644949-2-daniel@iogearbox.net>
+ <b698a1805cf0164abdedca01fa12494effce0c49.camel@gmail.com>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <b698a1805cf0164abdedca01fa12494effce0c49.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28092/Fri Aug 14 08:27:02 2026)
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-
-New issues:
-- [Low] Multi-line comment does not follow the correct BPF/kernel style.
-
-Pre-existing issues:
-- [High] The kfuncs bpf_mem_cgroup_memory_events and bpf_mem_cgroup_vm_even=
-ts lack negative bounds checks for their enum parameters, leading to out-of=
--bounds array reads.
---
-
---- Patch [2]: [PATCH v3 2/4] selftests/cgroup: add memcg_stat_cross_cpu co=
-rrectness test for flush ---
-commit aa1f4cd8dd58a883c661755d56a15bc86e70795f
-Author: Ziyang Men <ziyang.meme@gmail.com>
-
-selftests/cgroup: add memcg_stat_cross_cpu correctness test for flush
-
-This patch adds a new selftest, test_memcg_stat_cross_cpu, to verify
-that cgroup flushes happen correctly by ensuring BPF read values match
-cgroupfs file readings. It also strengthens test coverage by scattering
-charges across multiple CPUs.
-
-> diff --git a/tools/testing/selftests/cgroup/memcg_stat_cross_cpu.bpf.c b/=
-tools/testing/selftests/cgroup/memcg_stat_cross_cpu.bpf.c
-> new file mode 100644
-> index 0000000000000..3c2acd49c16ba
-> --- /dev/null
-> +++ b/tools/testing/selftests/cgroup/memcg_stat_cross_cpu.bpf.c
-> @@ -0,0 +1,86 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-> +#define BPF_NO_KFUNC_PROTOTYPES
-> +#include <vmlinux.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_core_read.h>
-> +#include "memcg_stat_cross_cpu.h"
-> +
-> +char _license[] SEC("license") =3D "GPL";
-> +
-> +/*
-> + * Declared here rather than taken from vmlinux.h, which only has them i=
-f the
-> + * build host's own kernel does.  A kernel without them is caught at run=
- time.
-> + */
-> +struct mem_cgroup *bpf_get_mem_cgroup(struct cgroup_subsys_state *css) _=
-_ksym;
-> +void bpf_put_mem_cgroup(struct mem_cgroup *memcg) __ksym;
-> +void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg) __ksym;
-> +unsigned long bpf_mem_cgroup_page_state(struct mem_cgroup *memcg, int id=
-x) __ksym;
-> +unsigned long bpf_mem_cgroup_vm_events(struct mem_cgroup *memcg,
-> +				       enum vm_event_item event) __ksym;
-
-[Severity: High]
-This is a pre-existing issue, but does this kfunc allow an out-of-bounds ar=
-ray
-read?
-
-The kfuncs bpf_mem_cgroup_memory_events() and bpf_mem_cgroup_vm_events() la=
-ck
-negative bounds checks for their enum parameters. A BPF program can pass a
-negative integer as the enum parameter to bpf_mem_cgroup_vm_events().
-
-This passes the negative enum to memcg_vm_event_item_valid() in mm/memcontr=
-ol.c:
-
-    if (idx >=3D NR_VM_EVENT_ITEMS)
-
-This validation function omits a negative bounds check (e.g., missing an
-unsigned cast). Because the BPF verifier evaluates enum parameters as signed
-integers without an explicit lower bound check, negative values bypass the
-check. This reaches memcg_events_index() and allows arbitrary memory offsets
-to be read relative to the memcg arrays.
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/cgroup/test_memcg_stat_cross_cpu.c b=
-/tools/testing/selftests/cgroup/test_memcg_stat_cross_cpu.c
-> new file mode 100644
-> index 0000000000000..9946c41c7a908
-> --- /dev/null
-> +++ b/tools/testing/selftests/cgroup/test_memcg_stat_cross_cpu.c
-
-[ ... ]
-
-> +static int add_node(const char *path, bool is_leaf)
-> +{
-> +	struct cg_node *n =3D &nodes[n_nodes];
-> +
-> +	if (cg_create(path))
-> +		return -1;
-> +
-> +	strncpy(n->path, path, sizeof(n->path) - 1);
-> +	n->id =3D cg_get_id(path);
-> +	n->is_leaf =3D is_leaf;
-> +	if (is_leaf)
-> +		n_leaves++;
-> +	n_nodes++;
-> +	return 0;
-> +}
-> +
-> +/* Create # @levels more levels below @path.
-> + * Only the last level is charged.
-> + */
-
-[Severity: Low]
-Does this multi-line comment style follow the BPF and kernel guidelines?
-The preferred style requires the opening /* to be on its own line:
-
-/*
- * Create # @levels more levels below @path.
- * Only the last level is charged.
- */
-
-> +static int build_children(const char *path, int fanout, int levels)
-> +{
-> +	char child[PATH_MAX];
-> +	int i;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260814075054.5070=
-89-1-ziyang.meme@gmail.com?part=3D2
+On 8/14/26 2:14 AM, Eduard Zingerman wrote:
+> On Thu, 2026-08-13 at 22:40 +0200, Daniel Borkmann wrote:
+>> save_aux_ptr_type() only reaches the merge when reg_type_mismatch() says
+>> the two types are incompatible, and that in turn requires at least one of
+>> them to have a base type reg_type_mismatch_ok() rejects. PTR_TO_MEM is
+>> not among those, so for two PTR_TO_MEM based types the merge never runs
+>> and the recorded type stays the one of whichever path was verified first.
+>>
+>> That is ok as long as all PTR_TO_MEM variants can be dereferenced with
+>> a plain load, which stopped being true with commit f2362a57aeff ("bpf:
+>> allow void* cast using bpf_rdonly_cast()") adding PTR_TO_MEM | MEM_RDONLY
+>>> PTR_UNTRUSTED. If the other path saved e.g. a PTR_TO_MEM | MEM_RINGBUF
+>> first, then bpf_convert_ctx_accesses() does not rewrite the load into a
+>> BPF_PROBE_MEM one, and the untrusted path faults on a plain load.
+>>
+>> Fix by merging the two whenever they differ and both are of PTR_TO_MEM or
+>> PTR_TO_BTF_ID base instead of keying it off reg_type_mismatch(), so that
+>> merge_ptr_types() gets to normalize the result in this case as well. The
+>> rejection of genuinely incompatible types is left untouched.
+>>
+>> Fixes: f2362a57aeff ("bpf: allow void* cast using bpf_rdonly_cast()")
+>> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+>> ---
+> 
+> Would the following work?
+> 
+>    diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>    index 1e537bc25ef5..a02914af0f5b 100644
+>    --- a/kernel/bpf/verifier.c
+>    +++ b/kernel/bpf/verifier.c
+>    @@ -17022,6 +17022,8 @@ static bool reg_type_mismatch_ok(enum bpf_reg_type type)
+>          case PTR_TO_BTF_ID:
+>          case PTR_TO_ARENA:
+>                  return false;
+>    +     case PTR_TO_MEM:
+>    +             return !may_fault_on_deref(type);
+>          default:
+>                  return true;
+Yes, that works and looks cleaner. Will integrate, thanks!
