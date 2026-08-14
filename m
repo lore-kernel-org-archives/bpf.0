@@ -1,36 +1,36 @@
-Received: from mta1.migadu.com (out-45.mta1.migadu.com [95.215.58.45])
+Received: from mta1.migadu.com (out-49.mta1.migadu.com [95.215.58.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D3D134CFAB
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 06:12:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F48296BC8
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 06:12:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786687947; cv=none; b=RHQxYk5Fbef6kNgAVwjZzcMB7DVj1/Rut4Jb0qPAjvyU0BfDzxoSM7DjxeLskbYEoi0UhowYv/e7/Z7d0N+lQMYR933NwqUNzuvI1fdtx7vxjAbui00avgG/Gk1uZakKtR7kXqJqncFXwiM3MFKIIIn5OOQdtOKlo5zp0tOMqIo=
+	t=1786687970; cv=none; b=Y5s9vThhfwePjdlDIx3H+8t7TAviE/znShLhviuE0vrgW6phLoad82NCpusEMFP3NzlK7A7gv+qr+auppaZOAzoje3ze4GeJqWORKS7pUkT5Hw/HhNyXUz2FXLoDUItgVsNJy91JM7kYhwlnHWqE90NjY0mBAMZq19PBEpaLmcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786687947; c=relaxed/simple;
-	bh=ONS1Y9e0gWgh9g4MMK4gPnMrtrBh/FugRw96BqHpXLE=;
+	s=arc-20240116; t=1786687970; c=relaxed/simple;
+	bh=L90ab17fh6i5j6O9COB4cSteBc9RGNKCbqLdHSck5Ag=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nPPPRQQ8wf8KPH4yOeiguEemN4RuGHMhGpOjqgEDSwE04RXyp8qcjZ9Ci4MwLEh1gdPut4lnHYZbM9vPpLVT48X9R3R4hhyKshB7+xkx/WRjnX6z7tD84FENf6avIU/E02NIvd8fvc78UOLeAaEhsqiiAYyKbOdgjp1s6oCc4vQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=a5NC3hMg; arc=none smtp.client-ip=95.215.58.45
+	 In-Reply-To:Content-Type; b=KoaDE+fvE98t6tjdv3dhfSG9PqJ+iXhJwbG6E02eJram6uWdfdzuaMBG8LSwItc+02jgpW29dz0hnwoBFgXJo983d/AN4xWYVfxHtwpRXosNcXkMgOnNG4cMrSV39Ty9QiVt2Devk/1BXEC6YjRlRliqLpV07PgbzHl3KUBnAXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xMyORaU6; arc=none smtp.client-ip=95.215.58.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="a5NC3hMg"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xMyORaU6"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ONS1Y9e0gWgh9g4MMK4gPnMrtrBh/FugRw96BqHpXLE=;
+DKIM-Signature: a=rsa-sha256; bh=L90ab17fh6i5j6O9COB4cSteBc9RGNKCbqLdHSck5Ag=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786687943; v=1; x=1787292743;
- b=a5NC3hMgrhZiXu/i+uZN5HZ5U8Qm9NFoThCxmXdtE3k+ozDHS/cgpX/pwDZqUOEB5htgB1B3
- FZbp0rsW3811rjS7Ch55oNtyC7tITnKWf100v8GBdPTZRI2LG+sF+GNdZorVYSfzhyDPFI379+I
- HYJSM7805mgTDDZL3nBxjzF4=
+ t=1786687966; v=1; x=1787292766;
+ b=xMyORaU6pdWatvbEtojOD1zOEnTHuZX+0NdXRWnlQSfyBWxG2D8OleKjQICGTXe3JJDXywZY
+ 0hwXPcGQ1Qj55s1lp1AV5NKwG/gp1UqTh17/mmXnS28Sit/JDSI8mMetuguKqLDALvTaQjixHEG
+ UYF3mzEnasOef7YuRrmiyapk=
 X-Envelope-To: bpf@vger.kernel.org
 Received: from [10.22.64.46] (122.11.166.8)
-	by smtp.migadu.com with ESMTPS id 6545b2071ce9a338;
-	Fri, 14 Aug 2026 06:12:23 +0000
+	by smtp.migadu.com with ESMTPS id 7f3db8feae3a1828;
+	Fri, 14 Aug 2026 06:12:46 +0000
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <23c9d6ee-3fa9-4e69-845e-2c30d9beeb7a@linux.dev>
-Date: Fri, 14 Aug 2026 14:12:20 +0800
+Message-ID: <e7a89c70-1f76-431e-a57e-6f6b10c3d029@linux.dev>
+Date: Fri, 14 Aug 2026 14:12:38 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,113 +38,105 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v12 05/10] libbpf: Add support for global percpu
- data
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260813152324.97937-1-leon.hwang@linux.dev>
- <20260813152324.97937-6-leon.hwang@linux.dev>
- <20260813154249.1CA831F000E9@smtp.kernel.org>
+Subject: Re: [PATCH bpf-next v12 06/10] bpftool: Generate skeleton for global
+ percpu data
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, john.fastabend@gmail.com,
+ qmo@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com,
+ martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
+References: <20260813152324.97937-7-leon.hwang@linux.dev>
+ <5e196fcd4e2ac190d9232398274607860c07747f6d5adf39fb41db4f0a8d0167@mail.kernel.org>
 Content-Language: en-US
 From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260813154249.1CA831F000E9@smtp.kernel.org>
+In-Reply-To: <5e196fcd4e2ac190d9232398274607860c07747f6d5adf39fb41db4f0a8d0167@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 13/8/26 23:42, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> 
-> New issues:
-> - [High] bpftool gen skeleton fails to generate fields for .percpu maps, breaking lightweight skeleton generation memory layout.
-> 
-> Pre-existing issues:
-> - [High] A massive >4GB ELF section causes a gigabyte-scale out-of-bounds memcpy buffer overflow in libbpf.
-> --
-> 
-> --- Patch [5]: [PATCH bpf-next v12 05/10] libbpf: Add support for global percpu data ---
-> commit ba7ffd0a036fafab1adafd7c20bbbb6455fe6cf6
-> Author: Leon Hwang <leon.hwang@linux.dev>
-> 
-> libbpf: Add support for global percpu data
-> 
-> Add support for global percpu data in libbpf by adding a new ".percpu"
-> section, similar to ".data". It enables efficient handling of percpu
-> global variables in bpf programs.
-> 
->>     When generating loader for lightweight skeleton, update the percpu_array
->>     map used for global percpu data using BPF_F_ALL_CPUS, in order to update
->>     values across all CPUs using one value slot.
-> 
-> [Severity: High]
-> Does this change break bpftool's lightweight skeleton generation for .percpu
-> maps?
-> 
-> Looking at tools/bpf/bpftool/gen.c:get_map_ident(), the hardcoded sfxs
-> array lacks the ".percpu" suffix:
-> 
->     static const char *sfxs[] = { ".data", ".rodata", ".bss", ".kconfig" };
-> 
-> This causes the .percpu map to be silently skipped during skeleton
-> generation.
-
-False positive.
-
-The .percpu map has been handled correctly in get_map_ident() by
-checking map type.
-
-> 
-> Since the BPF loader program is generated based on the true array index
-> (map_idx = map - obj->maps), skipping .percpu in the generated C struct
-> shifts all subsequent maps. Can this cause the loader program to read or write
-> out of bounds of the skel->maps structure?
-> 
->>     
->>     Unlike global data, the mmaped data for global percpu data will be marked
->>     as read-only after populating the percpu_array map. Thereafter, users can
->>     read those initialized percpu data after loading prog. If they want to
->>     update the percpu data after loading prog, they have to update the
->>     percpu_array map using key=0 instead.
->>     
->>     Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> 
->> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
->> index 514e4e9daa825..e574870fb7169 100644
->> --- a/tools/lib/bpf/libbpf.c
->> +++ b/tools/lib/bpf/libbpf.c
+On 14/8/26 00:26, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+>> index a01d06d22d1a3..a50540ef6521c 100644
+>> --- a/tools/bpf/bpftool/gen.c
+>> +++ b/tools/bpf/bpftool/gen.c
 > 
 > [ ... ]
 > 
->> @@ -1983,7 +2000,7 @@ bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map_type type,
+>> @@ -254,7 +260,7 @@ static const struct btf_type *find_type_for_map(struct btf *btf, const char *map
+>>  	return NULL;
+>>  }
+>>
+>> -static bool is_mmapable_map(const struct bpf_map *map, char *buf, size_t sz)
+>> +static bool is_skel_data(const struct bpf_map *map, char *buf, size_t sz)
+>>  {
+>>  	size_t tmp_sz;
+>>
+>> @@ -263,13 +269,24 @@ static bool is_mmapable_map(const struct bpf_map *map, char *buf, size_t sz)
+>>  		return true;
 >>  	}
->>  
->>  	def = &map->def;
->> -	def->type = BPF_MAP_TYPE_ARRAY;
->> +	def->type = is_percpu ? BPF_MAP_TYPE_PERCPU_ARRAY : BPF_MAP_TYPE_ARRAY;
->>  	def->key_size = sizeof(int);
->>  	def->value_size = data_sz;
+>>
+>> -	if (!bpf_map__is_internal(map) || !(bpf_map__map_flags(map) & BPF_F_MMAPABLE))
+>> +	if (!bpf_map__is_internal(map))
+>>  		return false;
+>>
+>>  	if (!get_map_ident(map, buf, sz))
+>>  		return false;
+>>
+>> -	return true;
+>> +	if (bpf_map__map_flags(map) & BPF_F_MMAPABLE)
+>> +		return true;
+>> +
+>> +	if (bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY)
+>> +		return bpf_map__btf_value_type_id(map) != 0;
+>> +
+>> +	return false;
+>> +}
+>> +
+>> +static bool is_mmapable_map(const struct bpf_map *map, char *buf, size_t sz)
+>> +{
+>> +	return is_skel_data(map, buf, sz) && bpf_map__type(map) != BPF_MAP_TYPE_PERCPU_ARRAY;
+>>  }
+>>
+>>  static int codegen_datasecs(struct bpf_object *obj, const char *obj_name)
+>> @@ -287,7 +304,7 @@ static int codegen_datasecs(struct bpf_object *obj, const char *obj_name)
+>>
+>>  	bpf_object__for_each_map(map, obj) {
+>>  		/* only generate definitions for memory-mapped internal maps */
+>> -		if (!is_mmapable_map(map, map_ident, sizeof(map_ident)))
+>> +		if (!is_skel_data(map, map_ident, sizeof(map_ident)))
+>>  			continue;
 > 
-> [Severity: High]
-> This is a pre-existing issue, but does this code cause a buffer
-> overflow if a malicious BPF ELF file contains a data section larger than 4GB?
+> The comment here says "only generate definitions for memory-mapped
+> internal maps," but is_skel_data() now also returns true for
+> BPF_MAP_TYPE_PERCPU_ARRAY maps. Those percpu maps are never
+> memory-mapped: map_is_mmapable() in tools/lib/bpf/libbpf.c returns false
+> for LIBBPF_MAP_PERCPU, which is why this patch had to add mprotect() for
+> the init buffer rather than relying on shared mmap.
 > 
-> The 64-bit size_t data_sz is truncated into the 32-bit unsigned int
-> def->value_size. The mmap allocation will use this undersized truncated
-> value, but the subsequent memcpy below uses the original 64-bit data_sz,
-> overflowing the undersized map->mmaped buffer:
+> When you removed the identical comment from codegen_maps_skeleton()
+> (line 988), should this one have been updated to say "skeleton data maps"
+> or "internal maps exposed as skeleton data" to match what is_skel_data()
+> actually checks?
 > 
->     if (data)
->         memcpy(map->mmaped, data, data_sz);
-> 
-> Can this lead to a massive out-of-bounds write in libbpf?
-> 
->>  	def->max_entries = 1;
-> 
+> The same wording also appears at line 534 in codegen_asserts():
 
-We must trust the BPF ELF file.
+Will update the comments.
 
-See Andrii's comment in v8:
-https://lore.kernel.org/bpf/CAEf4BzbBpDQOG-xUArBzZa_qZ08q=QViH-bbFmqwLNesGvJLUA@mail.gmail.com/.
+> 
+>>  	bpf_object__for_each_map(map, obj) {
+>> -		if (!is_mmapable_map(map, map_ident, sizeof(map_ident)))
+>> +		if (!is_skel_data(map, map_ident, sizeof(map_ident)))
+>>  			continue;
+> 
+> where the comment above (line 513) says "Emit type size asserts for all
+> top-level fields in memory-mapped internal maps." That comment now covers
+> percpu maps too.
+
+Will update the comment to "Emit type size asserts for all top-level
+fields in skel data maps.".
 
 Thanks,
 Leon
 
+> 
