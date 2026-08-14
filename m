@@ -1,165 +1,166 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA403630B0
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 18:00:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786730426; cv=pass; b=NOjRLZhlUQMxWPfOBatmWDIRenZyDdWt+Q+AwSu9dpv/KUya0qadHIoBlarxdlB0oSJvHKfePH8JQ5ffcsT2KebXX6NAQJA4l7clZHl8N/sJFI5rO4wSIf8WKjp5HjFYd9jHECtsI9Z+i8w01zBuc6SMlJ3Bbjg6bMQOP2LdM0k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786730426; c=relaxed/simple;
-	bh=Xb4aFB2LdZ8BWA2fVdcEuUyW3MqSc8rqf8KYywODpB8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HLH9xVe+pjmIR6VqiDaSgh5vc9NEM7GBXTL/jp+D4ywc/9jzaXX/feThaau5THlTYgFuVT8bSLK7IAjdt4gzHZyEIVJ9V/9VrbcJPrNwP2Ea0aOwSrUb+G5d+4auCDTAOHd2zq3ANISnwR5blSNQlRp6wPYSQ8S5RJBqNPoZ4bc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cKPWKCXZ; arc=pass smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B761A47FB10;
+	Fri, 14 Aug 2026 18:24:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786731869; cv=none; b=pJnnITktuN2wHtDWFQSdaOKFOkpDhIYuZZ07XBwyVJGk3pJAnTdrhtw7IvmZbD1KaJQhn04T2qZSQtfGKV9CC5wfrrt4VZfUELMkD88i7IH7MCf4ME47obHgGaspZYYLozyHNfLGeOtpnhsxYtn/EZiN/2lrwOS6qwPpHWPbM+g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786731869; c=relaxed/simple;
+	bh=m3riP3/yeejGRSttuhUtbzwPO+o/kb45JLxtmnaNGgk=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=lRPZ/2BECh6YQqC+BHBIQuc3Q58FxpoSfHA4dPQ1M8ZPgbGm7ycDg6p5dESPLoG+zCN2XtXDb0LwYgmmsQXkTtg0eg8ShnyqilKyJ1tySDEkHz/CT0zVXr9Z0MWWpKhVGALQrZxvaGviElYmlnb/Idr9Tb0kRCv7ea6ClOQrKUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eSw5YS9u; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cKPWKCXZ"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-84faf0fa17eso1293520b3a.2
-        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 11:00:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786730424; cv=none;
-        d=google.com; s=arc-20260327;
-        b=QkUQpZVdcZmwhGtsPwp6BfacDSXGhynS2vzIhnDgQQCjRL7OKWrm3cN9neNgMrAg9a
-         FAI+j8y4efGkrAhmOzl+klOdeIvhNRtNEuSbHRsgUKHkdh2atQnwvwzJDnUEcMfoycEl
-         Q7hIMUSgWrs2gJadT5H9ZlMx6Yd4uC0L+0Amb5TuBoCRCoOeyT8ufBcJKSdpYY2k/oC8
-         PVKNtUql6rs/1BVq8PxoySzhJicVvbCC0s0vrXA4lWShZD0i92N3IgxOej3ntf6Xev7R
-         3rBfXYTw0iayzvMWnn+dWyEyJpS95+4V5H20qij7AfxF4hITezBckCARf+9vCLObhH76
-         KiHg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=g2YaHSpSFt9Tz/WkTYNw8ZXaB2J7y5iSqhGJKx3QtZE=;
-        fh=IqI/Cp1xYGcfpyBgkhc6h3oFTMbeXOsSrhhlFByRLHg=;
-        b=H//rTdk6zLx1BoXsw4MAsEzF86Bsj4PwKG+jYaTL9BUNZDA1fFEcg95ufGyQuqKOQt
-         6wUJ6NG1bNUCG0FRxslH0DVU4CWdRJXFfPgOvW3ISGFPGrWOoBNHhdxZ2GGf43vX0oJy
-         pTv521EZI7RAAnWpvi+cFm1uJK2bY/E2zuG7yBU+dYIG/ae1a//Wgu+moCUryx48KsmG
-         cHB8/mPewNb0YwyBGuDNZezGES21HfukdlmoxD1rZ7EYWtUfd2X7LUkSRAi67or0aoiC
-         Z/JGK2f5uY/do71iHpJTZDeKsoBpQftNqBuoW/HKiIv0BkTZyOQCKk3mdSS5vlwtVEhQ
-         jCxw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786730424; x=1787335224; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=g2YaHSpSFt9Tz/WkTYNw8ZXaB2J7y5iSqhGJKx3QtZE=;
-        b=cKPWKCXZa64MwdsVbKK7HXQcjoydsnifDYNIMlkXH+lK5o9SsTi+rW2tChPjn6TSHS
-         jO7gEE5EjgKQIJfPtP/DJA98POncYZjfdN4VMThJwk9i1EymZ10g1xE0HsIpOVcWCwgg
-         ILOAf917r/uFjMAc9iCiiIUm1p+6FTd2djVhebrOUFsemM/NRMzN+HyIH9DBpMJwhQre
-         IPZdsGDxBUSnJVPS4EjeWAbTvret9gM2vAF082nXWegNWDL5u2xf5ujd5x413Cia7moN
-         QPb+v3GlAlkAxBgcm+99fZRCNs3Ug0EvNbzqjdM/9HHDtoYMxjaj3qGqTVZdL7Ym+WzX
-         LQ9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786730424; x=1787335224;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=g2YaHSpSFt9Tz/WkTYNw8ZXaB2J7y5iSqhGJKx3QtZE=;
-        b=h5qPu7zGkIOiE/7TumnvQ5i1+Mvt1f6etJKZPrISUjTS5Q98X8WN346QaiAh+8dK5n
-         S54uPWxB7TFZmSLaBnY8pT9SBu96yt6dad1mBzAlhpUYfdN4f4IW3KbtBG9EflJT4kSL
-         oqyPOgPSQjU1Np5gw7m4OKSx5L3a96iaXR1jZM6VvnzGG/l9lLbmhF99c7DyDYIwmrPS
-         2mQMVN+MCBYTc45G9aviN91Pb5tqa2BWlu2iqqSwOcHqAaRBt9aOrp97RJQwJ9BedRNs
-         /FutdL7eUOj+lvYpO5ZUD4JHIzeQQJpEyqOcm9yAN8te1+OpClqrDMe9sG7y2i3GDRtm
-         If/Q==
-X-Gm-Message-State: AOJu0Yx+lfMlQ0ehY6nHUN3DelD0TFDvxM0U+ypjRZ7jhdRGpK/HuS5t
-	VdmbrleOMZGNHQzCVeTYZ3aoLKYgrWCQxK8+MiHEGjC3hFe/JuU2ZTphxg7vv/Pd5ES0x615Ojj
-	GNuzGOzbqBkB3KchX14qvA7YuCZms80w=
-X-Gm-Gg: AR+sD114gdTeC/Ggg4drUiPOlHkyJXZgifrT240F5m3c11mNQq/Mw9TfVAsqBfKRLK1
-	B76/KjGsmKvOc3NOYGpCEDlz5nRsVmKcsjNfh0WkK0fdGer413/YvRaO9omG7ufFN62YWQbUbgr
-	Nfa6JCq2WVjs0INn9dKcM0TZVap9qcW/K/IH3q/Lx3FDtLPwKjt7WOuas7Qe06rAcJegjc9OxKR
-	vuUmZSXwUIVL/We8qDNx9XhT3PYYiSZrpg3SrfuoCgCn07PyZOdC5BDTq5wbdkpoaKmq1rBG5Er
-	uE5fwKGig9jy7py3roUjUy+HB4qVBtspU84bVq/mNNxCI4wUBXB7lv++Yko4jpTc0ytk49JHTaQ
-	z+A2PEIViCfSqmVO8LUn0YXktpA==
-X-Received: by 2002:a05:6a20:6a10:b0:3c3:ac5d:b6de with SMTP id
- adf61e73a8af0-3cc71d55406mr7493598637.22.1786730423943; Fri, 14 Aug 2026
- 11:00:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eSw5YS9u"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50CC71F000E9;
+	Fri, 14 Aug 2026 18:24:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786731868;
+	bh=4bhzNWki0BklTmUGcRCf3GO+bRynImjq/b0SzR7DwTI=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=eSw5YS9uFViYXjenA4uFUvzfDiouKjSYmS8wbJo9/TdMfIUBkStlzt9+nNzTpJ2q0
+	 cJq80XTybCh5ObS9QSoprRn8bWTgOoBFWoXix2adSmXCKG9I8O5PMhQk9mEZ2TnW0P
+	 a47NUJ7moSRcwCbIBkZPGJkPwcK0pTYdmxfujl+akJVgfkb8neBpS7l+bj40RdA0TJ
+	 5o+++Dm3yrt1IsJkQF5tYy0n5OE772G5GpKujS86THqPBatb+6i3ROn4d+SiJHb4iU
+	 x56BmdFzPmFbQGSwr2sf/kx+qKeiobFMaKEiEBJnW1O3BhyoW/W0dWx/U5qqMwyVxz
+	 ike35ueBw0Fig==
+Content-Type: multipart/mixed; boundary="===============0850578918293765097=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260813152324.97937-1-leon.hwang@linux.dev> <20260813152324.97937-7-leon.hwang@linux.dev>
- <CAEf4BzYRqZ--=5d2LBWA=mOL72CYe4y4iCGS3c5Dw8PEd9BOiA@mail.gmail.com> <965e536c-bd5c-4f63-8021-8b07e0aee231@linux.dev>
-In-Reply-To: <965e536c-bd5c-4f63-8021-8b07e0aee231@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 14 Aug 2026 11:00:11 -0700
-X-Gm-Features: AUfX_my9sVqn2htAb5x5-1TwdbZGaJswG7gE3Qs2A7WUT8EFQqLsOttnr2Ax94Q
-Message-ID: <CAEf4BzaeKxZKgF-QeJ0RdGGwxSjKcH8uzgUnA8bBVgAX++phog@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v12 06/10] bpftool: Generate skeleton for global
- percpu data
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kernel-patches-bot@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <49f1c39a9af6f07357e66657ca1020e57684036626ef1f180a803f148f8eefe4@mail.kernel.org>
+In-Reply-To: <20260814173206.93082-5-leon.hwang@linux.dev>
+References: <20260814173206.93082-5-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next 4/5] selftests/bpf: Avoid flaky resize value test for percpu data
+From: bot+bpf-ci@kernel.org
+To: leon.hwang@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,qmo@kernel.org,shuah@kernel.org,leon.hwang@linux.dev,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 14 Aug 2026 18:24:27 +0000 (UTC)
 
-On Thu, Aug 13, 2026 at 7:03=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
->
-> On 14/8/26 01:56, Andrii Nakryiko wrote:
-> > On Thu, Aug 13, 2026 at 8:24=E2=80=AFAM Leon Hwang <leon.hwang@linux.de=
-v> wrote:
-> [...]
-> >> @@ -263,13 +269,24 @@ static bool is_mmapable_map(const struct bpf_map=
- *map, char *buf, size_t sz)
-> >>                 return true;
-> >>         }
-> >>
-> >> -       if (!bpf_map__is_internal(map) || !(bpf_map__map_flags(map) & =
-BPF_F_MMAPABLE))
-> >> +       if (!bpf_map__is_internal(map))
-> >>                 return false;
-> >>
-> >>         if (!get_map_ident(map, buf, sz))
-> >>                 return false;
-> >>
-> >> -       return true;
-> >> +       if (bpf_map__map_flags(map) & BPF_F_MMAPABLE)
-> >> +               return true;
-> >> +
-> >> +       if (bpf_map__type(map) =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY)
-> >> +               return bpf_map__btf_value_type_id(map) !=3D 0;
-> >
-> > why do we need this btf_value_type_id() check? in what case it's
-> > expected that there will be no BTF info set?
->
-> Add this check by referencing btf_value_type_id check in libbpf's
-> map_is_mmapable(). That said, if btf_value_type_id is 0 for
-> global/percpu data, is_mmapable_map() should return false for them.
->
-> And, if the bpf obj is compiled without -g, this check helps to avoid
-> generating struct for percpu data explicitly.
->
+--===============0850578918293765097==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-I don't think skeleton can be generated if BPF object was compiled
-without -g, so let's just drop that btf_value_type_id() check, it
-causes more questions than it's actually useful
+> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> index 7d6bda909295..2f0dbeb88934 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
 
-> Thanks,
-> Leon
+[ ... ]
+
+> @@ -126,11 +123,11 @@ static void test_percpu_data_on_cpus(struct bpf_map *map, int map_fd, int prog_f
+>  static void test_global_percpu_data_init(void)
+>  {
+>  	struct test_global_percpu_data__percpu init_value = {};
+> +	const __u32 desired_sz = sysconf(_SC_PAGE_SIZE) * 2;
+>  	struct test_global_percpu_data__percpu *init_data;
+> -	const __u32 desired_sz = sysconf(_SC_PAGE_SIZE);
+
+Does multiplying by 2 here break the test on 64K page systems?
+
+Per-CPU array value sizes are capped by the kernel:
+
+  /* percpu map value size is bound by PCPU_MIN_UNIT_SIZE */
+  if (percpu && round_up(attr->value_size, 8) > PCPU_MIN_UNIT_SIZE)
+          return -E2BIG;
+
+in kernel/bpf/arraymap.c:array_map_alloc_check(), where PCPU_MIN_UNIT_SIZE
+is defined as:
+
+  #define PCPU_MIN_UNIT_SIZE  PFN_ALIGN(32 << 10)
+
+which equals max(32768, PAGE_SIZE).
+
+The old code was safe by construction: desired_sz == PAGE_SIZE <=
+PFN_ALIGN(32768) == PCPU_MIN_UNIT_SIZE. Doubling it breaks that:
+
+  PAGE_SIZE  4096 -> limit 32768, request   8192  OK
+  PAGE_SIZE 16384 -> limit 32768, request  32768  OK (exactly at limit)
+  PAGE_SIZE 65536 -> limit 65536, request 131072  -E2BIG
+
+On kernels built with 64K pages (arm64 CONFIG_ARM64_64K_PAGES, ppc64)
+bpf_map__set_value_size() still succeeds (it is purely userspace
+bookkeeping), all four assertions that follow it pass, and then map
+creation fails inside test_global_percpu_data__load():
+
+>  	err = test_global_percpu_data__load(skel);
+>  	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
+>  		goto out;
+
+The "global_percpu_data/init" subtest fails, and test_percpu_data_on_cpus()
+is never reached. That is a new failure introduced by this patch (with
+desired_sz == PAGE_SIZE the same configuration created a 65536-byte per-CPU
+value, which is exactly at the limit and accepted).
+
+Note that the neighbouring resize test in global_map_resize.c deliberately
+does not scale a per-CPU map by page size for this reason. At line 46 it
+uses:
+
+  new_sz = sizeof(skel->data_percpu_arr->percpu_arr[0]) *
+           libbpf_num_possible_cpus();
+
+A size that is independent of PAGE_SIZE would still force the mmap region
+to move, which is what the new skel->percpu_arr reassignment and the
+arr[0] == -1 check are there to exercise, without hitting the per-CPU
+allocator bound.
+
+>  	struct test_global_percpu_data *skel = NULL;
+> +	struct bpf_map *map, *map_percpu_arr;
+>  	size_t init_data_sz;
+> -	struct bpf_map *map;
+>  	int prog_fd, err;
+
+[ ... ]
+
+> @@ -177,33 +176,37 @@ static void test_global_percpu_data_init(void)
 >
-> >
-> >> +
-> >> +       return false;
-> >> +}
-> >> +
-> >> +static bool is_mmapable_map(const struct bpf_map *map, char *buf, siz=
-e_t sz)
-> >> +{
-> >> +       return is_skel_data(map, buf, sz) && bpf_map__type(map) !=3D B=
-PF_MAP_TYPE_PERCPU_ARRAY;
-> >>  }
-> >>
-> >
-> > [...]
+>  	ASSERT_EQ(init_data->data, init_value.data, "init_value data");
+>  	ASSERT_EQ(init_data->set, init_value.set, "init_value set");
+> +	ASSERT_EQ(init_data->nums[6], init_value.nums[6], "init_value nums[6]");
+
+[ ... ]
+
+> -	ASSERT_GT(desired_sz, sizeof(init_value), "desired_sz");
+> -	err = bpf_map__set_value_size(map, desired_sz);
+> +	skel->percpu_arr->arr[0] = -1;
+> +	map_percpu_arr = skel->maps.percpu_arr;
+> +	err = bpf_map__set_value_size(map_percpu_arr, desired_sz);
+>  	if (!ASSERT_OK(err, "bpf_map__set_value_size"))
+>  		goto out;
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+> index 71ff8d1bf49e..12556590b647 100644
+> --- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+> +++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+> @@ -8,9 +8,11 @@ int loong SEC(".percpu.looooooooong");
+>  int data3 SEC(".data.percpu");
+>  int data2 SEC(".percpu.data");
 >
+> +/* Used for testing bpf_map__set_value_size(). */
+> +int arr[1] SEC(".percpu.arr");
+> +
+>  int run;
+> -/* cpu_id as array to verify map value resizing. */
+> -int cpu_id[1] SEC(".percpu");
+> +int cpu_id SEC(".percpu");
+>  int data SEC(".percpu") = -1;
+>  int nums[7] SEC(".percpu");
+>  bool set SEC(".percpu") = false;
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31826359148
+--===============0850578918293765097==--
