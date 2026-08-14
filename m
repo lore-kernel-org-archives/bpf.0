@@ -1,127 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF8B91EEA31
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 22:26:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 438993955E8;
+	Fri, 14 Aug 2026 22:28:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786746414; cv=none; b=YzMKdGc95GHo+E3hfVUcbwHBkIWvSeJJIp3RLB6Z6WJ3018RvNuV0yJSpkBUsRK6SMO6F8yhf+cFlYa/eJF670uK1h5edfyxPdSZA/MoV2/H5YDCVVxBVI05YElEyfH8+QQ/YCBML2yuVst2pCMpJPdKVwKJQygdYyoDkXzLRpY=
+	t=1786746498; cv=none; b=YmK/dS0LoZsq7rnJ3vFaMMonz4xpho2pieBHhBB+FZBIEUba0dWeSI4ds/ZtQ1PadzipfA5J4dG4Ju1khEYQ+1nTDvwxjgz35RkgNOWV459OT+TMpNPds3AOPShC0Hncl30eWVgSOoXUN9/0wB+6Y41YCT2u/A1lfQzlkdfeT2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786746414; c=relaxed/simple;
-	bh=tV5sinmeVGIYrQkFyyWHIUOZLVljpHf2aQ4IdGYSeug=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=B74Xeo5AdKNbv9U2WO6wo7DVHWVtfg/KIAH3dU3Izw4JN88WxVoIDrMmohSUZpUHPecQNoqFwhp7lGRK2fvw6aYcAPaYzQpo4EaV068oDEI1N4SK7uS2jwdS9i6FGVuDotVDPkwWE9EBWxwg74mh6r8kQxJpVM9q0RnnZxJGMLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cNWccU7w; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786746498; c=relaxed/simple;
+	bh=/B/uIFhv76/UbnzCTjGiIfTv9nr12zAq3O2h3EkM65o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=m7x/O4mpXjdm2a4LV256ShDkrTZYTW/SuyDIgOqQHwtKY2tGAkcmZU8GREFGTwa5rSL03+KGZkBWJKae9+wlP4EoPRjbNvm3V4KIzH4lk4XwEBMtZp54wpaaqHF5cZyxssgRW/CzmZUBu/lofmoq9/ViPMdYomqif73Cf9U46Lo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Y8CCRqe3; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cNWccU7w"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7600C1F000E9;
-	Fri, 14 Aug 2026 22:26:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786746412;
-	bh=/PbbCJZGCD4eYYWjFPdkK7um0C0qoc5Iz93ZdYP4k14=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=cNWccU7w2Kt+HaiNC5ZcgjoG9/1MWMs6/dOa0vSrtjJSsEYTen4bJjm7F3xPfLZr0
-	 tI/r0WZxrsN9PdOnu9Zcy0Sox/zjWtSOMyZ5DvRAsjogU0Ayjcuicn6F044DELvxdQ
-	 +IsFve6Wf1Pc8dFlqNZVNWqeOMnel4EwDKHyKB4XkXpkKOjMkv1QQuagiblTNHaBab
-	 QSKNFQbYnM1PHhD5+U9KDaDFvbFr0+9ngYFlO7VZ2jKrzoZr+bnQXLqwxFeJI1CxPV
-	 UUquMDLGhYcUDHEeY/FfAvQ/Yk+bnLTuFVuXt/yTriz7SJ6MyX2/6r/880YjcfAkae
-	 dlXORnZQitnOg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Check per-CPU address
- resolution per register
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Vineet Gupta" <vineet.gupta@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260814220254.3797467-3-vineet.gupta@linux.dev>
-References: <20260814220254.3797467-1-vineet.gupta@linux.dev>
- <20260814220254.3797467-3-vineet.gupta@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 14 Aug 2026 22:26:51 +0000
-Message-Id: <20260814222652.7600C1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Y8CCRqe3"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=xATVbIG6/1OqLV8VuUF7ocDyn+C5xB5uzy7s1wg98lA=; b=Y8CCRqe3vB6GuNgTrKW1dzx3+f
+	olQRrRx6XlRx2+juVftfUq4cq+WTa26IEajXlwRRD+NcpUfymgQjCI2n8koiiGZvmOpPbLcS2jZtP
+	pezUKNxhHUoUBhvD4QTEfaddUVyX6XUGgkpA24XI050QQXkSUQIzvJTx9wwo4f4+O6y9opb/E6JeR
+	7YwVulO8M6y8PcBkk2CUHOSOiATT1la19irRnldL/0/itBMGv8v68p2iiZD6DBOGqzq+SrEX05+ND
+	Cr8Uged0COY08O7L8Ud0zNqRlGGmqtBY3VHB2LGN3ovQqymzGhJkQEfihv2PHM/ZDYmW8G/OMsBXg
+	4D4W24jA==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wv0Np-000Lll-26;
+	Sat, 15 Aug 2026 00:28:13 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wv0Np-000JVh-0O;
+	Sat, 15 Aug 2026 00:28:13 +0200
+Message-ID: <11348b43-7015-45db-903c-86b6a721de8e@iogearbox.net>
+Date: Sat, 15 Aug 2026 00:28:13 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 6/6] selftests/bpf: Add tests for fault prone
+ loads out of RCU pointers
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260814215301.709827-1-daniel@iogearbox.net>
+ <20260814215301.709827-6-daniel@iogearbox.net>
+ <20260814220331.D132B1F000E9@smtp.kernel.org>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260814220331.D132B1F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28092/Fri Aug 14 08:27:02 2026)
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] The test uses an unrecognized section name `SEC(".percpu")` for it=
-s global variable, preventing libbpf from loading the test.
-- [High] The test's inline assembly is missing the `mov_percpu_addr` instru=
-ction, causing the `__jited` assertions to always fail.
---
+On 8/15/26 12:03 AM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] The newly added BPF programs do not execute the vulnerable instructions at runtime and lack explicit verifier log assertions, failing to provide robust regression coverage.
+Nope, its basically load coverage (ASSERT_OK(err, "skel_load") in test_success()),
+meaning we make sure the assertion on patch 4/6 in bpf_convert_ctx_accesses()
+doesn't trigger if this is forgotten to get rewritten as probed pointer:
 
---- Patch [2]: [PATCH bpf v3 2/2] selftests/bpf: Check per-CPU address reso=
-lution per register ---
-commit 94ba39b00c54962b463da6e18c62f89978f29a3f
-Author: Vineet Gupta <vineet.gupta@linux.dev>
-
-selftests/bpf: Check per-CPU address resolution per register
-
-This commit adds a BPF selftest to verify that the x86 JIT correctly encodes
-the per-CPU address resolution. It loads a .percpu variable into all regist=
-ers
-and matches the JITed add instruction against the expected register.
-
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c b/t=
-ools/testing/selftests/bpf/progs/verifier_percpu_addr.c
-> new file mode 100644
-> index 0000000000000..967f4e6e3a490
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c
-> @@ -0,0 +1,72 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <vmlinux.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include "bpf_misc.h"
-> +
-> +#if defined(__TARGET_ARCH_x86)
-> +
-> +int percpu_data SEC(".percpu");
-
-[Severity: High]
-Does libbpf support the SEC(".percpu") section name?
-
-When bpf_object__elf_collect runs, it skips the .percpu section as it doesn=
-'t
-match known data section prefixes like .data. Later, when
-bpf_object__relocate_data processes the R_BPF_64_64 relocation for the
-percpu_data load, bpf_object__section_to_libbpf_map_type returns
-LIBBPF_MAP_UNSPEC.
-
-Since the section is not the BTF maps section, this results in a bad map re=
-lo
-warning and returns -LIBBPF_ERRNO__RELOC, causing the test to fail to load.
-
-[ ... ]
-
-> +__naked void percpu_addr(void)
-> +{
-> +	asm volatile ("					\
-> +	r0 =3D %[percpu_data] ll;				\
-> +	r1 =3D %[percpu_data] ll;				\
-
-[Severity: High]
-Are the mov_percpu_addr instructions missing from this inline assembly?
-
-The commit message notes that an ld_imm64 of a per-CPU map value is followed
-by a mov_percpu_addr, but the assembly here only emits a BPF_LD_IMM64
-instruction.
-
-The verifier processes this as BPF_PSEUDO_MAP_VALUE and converts it to a
-standard 64-bit immediate load. Without the BPF_MOV64_PERCPU_REG
-(mov_percpu_addr) instruction, the x86 JIT emits movabsq but never emits the
-addq %gs:..., %reg instruction. This causes the __jited assertions to fail.
-
-> +	r2 =3D %[percpu_data] ll;				\
-> +	r3 =3D %[percpu_data] ll;				\
-> +	r4 =3D %[percpu_data] ll;				\
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260814220254.3797=
-467-1-vineet.gupta@linux.dev?part=3D2
+         if (verifier_bug_if(bpf_may_fault_on_deref(ptr_type), env,
+                             "access to a fault prone pointer is not rewritten as a probed one"))
+                 return -EFAULT;
