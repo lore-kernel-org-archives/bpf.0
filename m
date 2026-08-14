@@ -1,520 +1,148 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0158347A0C2
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 14:53:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C0F1429CD9
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 14:54:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786719219; cv=none; b=Pwwjo0L6yHacSTIgx5Tr/249cdTV60caVvsrYgY7VENv2gq5csGEzwTSTgbRWdw0QpcVcHxducKOMsnE89zyEY2QOgZQhjtbH+out0DyKG6XAqYX1i5Dz2gUlNAEhyYaM0Rhi9laDqKdLgzbkl/ZcV9CzccImC3rjB227im3pGE=
+	t=1786719296; cv=none; b=p+qcKF92NFFniBMizhSMWZrqsh0UZANBUlGwbFWBpMQ+ZvCdUvTOwzJZ3gZ6YkrtDrAIXYcGpVKydoIRy4Cb1xR2m6ht4V5Iao9DEWVo0LgVNKm1UXjwSiFR32PrGCEF1Eloy6pjZran4466IJcA0ZGa1gA/DQIJd2VVw+L4GEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786719219; c=relaxed/simple;
-	bh=TjbvnBK5f7971bUksjS9kEoWW1kFhd7ogKMMpyrPgas=;
+	s=arc-20240116; t=1786719296; c=relaxed/simple;
+	bh=+tf7FEUY4JsLUkMWKMe2YfCCEKEGJh8DsBvHcZCylTo=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XFjFhiqny4xn+Tw4Ga5Joh0UHAPuYhp+WziUbLl/1S2Ja3fDH/tQ8aAlqRm+NPIcJc97Nm2Ms94aIcovfUA7ynDQk7UK6ccVb/VyxyCBLOUqWTEpbx67KsgHnHCF0DZcjOeQxLiAwt6YFs0+KnKfd7vFDCFS1GiM7hOAzy8fwvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oVJBknMq; arc=none smtp.client-ip=209.85.128.52
+	 Content-Type:Content-Disposition:In-Reply-To; b=c3bih3SE2DmjVbOXnsjUtwCl8YvrIp0h6YovJfk8IZa2e3bSBwz5f/f1C4CCSpBzCDc24ytaiKXxiHFuxuHbyWo4Xmv+CrlZd/unAtU9vN1OriQz/NhuZXYq38vkXpg1bD+ki+lsX0m70R8W8cpnmvIllMNnuxBvpwQ0h68RisU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fjeMZcex; arc=none smtp.client-ip=209.85.128.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oVJBknMq"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-49802c418b5so11223345e9.1
-        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 07:53:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fjeMZcex"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-495757ccbc1so10219035e9.2
+        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 07:54:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786719215; x=1787324015; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=h1vHNc0jdS1Bj4A1hxqFQJwlbabmW8A15yzEecGyIZ4=;
-        b=oVJBknMqRnK3FPXyuCtkfiEO4awaIItN5hX0zHfSwsG/Z9BjBKDQ4eQuqncZhZpxZd
-         lSmfVtlroChsGQkx6i86sh0QpJfd7UXw4oWO9AYSYPOFVVX2xfJJSbIRRBOd98zGlmOo
-         JCrFy+wO6s3a9epXOvI3kCOpzlj6TAR5LTNAsnUN+8qspxgr1MLHEwByI9pvu1P9rRXY
-         tevqMjJsF3TfxuFx1FgtK2KKdgngamkKp1FZxMhnOChRdY3kHQCZeBqgl6QfyADCfSBx
-         JerFDu/VTpTfdsEoa4ePgdypBcrLDC08mYCT8TELap9bEKmdvR7CC3LYhgEhOd3cmqsa
-         z/og==
+        d=gmail.com; s=20251104; t=1786719292; x=1787324092; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:date
+         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=DyrxI2cYH7SSc56kmNn9Wc5tUe+KXdPMo3ly6gJPo2M=;
+        b=fjeMZcexIrT0BVFRMLv97ZsfJuCWmq7Xm6cgRAca+OdFVW7xoMlTdZCtbkLzIkPbtt
+         JO2CvDV51haPNdUAb87mhlV4O4hn+ZGZH3hImgMmb8i8OfZTr5vESpLlUon3hpbLzxKW
+         lOxnrCLGMlUOYk5BLoS+OjDtozlp3QqpYW1h9n1WdZPMjo1hhIgcEEiZesVVa0TcdSsn
+         k6FGazCgxTL6KB8s0eW28CIY8aTQSChV9M6oEpn40MAK/rbMPmJKI/37FaxaM1ynN0ML
+         8xatsX0Q26Gc+qxwS03FoXsQ5Dd/uhj2CWAS+l1kccf8XZpMeu42KEOOR7gAi9aK7Y5b
+         dkxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786719215; x=1787324015;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=h1vHNc0jdS1Bj4A1hxqFQJwlbabmW8A15yzEecGyIZ4=;
-        b=Vd7ltUmc6pziWRsNLsKE24qeWxtRrvPcGWuUbvvjlKLxNBR0FMFimzLCNghSB0Z+eF
-         LdAM8/QvYF6UEPHFqD0Hb1OpXppLNLF4ASnVSJGcyMv4fPCpVIOO/s4Nrt3jKLGRCRps
-         LLW1nKel1A6ENCWB4JZtgpqWSSi0YSG194bBSdXRqKZPYFmxN2h/nH660A6qQAPdPeC0
-         xPZi1acZUwLtZzkTUa+rf75gELWk3vmy2UCFptrUB/cDsgASXoX3o8rgayN+GtEugHRr
-         Ouy6DhWIPJxcmk5G/1ulKtVNb3jkPtnXVdVjI05kzJ7Vx0rwyNQwoIQB4hywnkVoAvxi
-         m0dQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoUCgpxvF20t4v9ymfHpDYkmyqFZvjoXNzQaceChVnsjgeVRTuuC8Y0WZTDUEbfMk6uXnc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9oVO+BWI6DzoEM5HFTTz007kpwhnX5wXKiE46t2kW1OgwNgNV
-	2IE8tlYINrBoMD5TmURfmryPJVpMrCOVO95xXGKwA2QQYFdeI+PL5fXB
-X-Gm-Gg: AR+sD125z97e5FKuEKOWSHmt50ib7JNNB7TkSgjZaBI1vvBN9nVbQyu4OYY2QIfIIGB
-	CuFJgLY6dZjDByMDJ8BnIQ6TzmQVyNOpAWN6eQ7QZvRx1xvWZ3UKKyjGGPXTYOUnsAt6J+7UmfY
-	MYYMD2J064hf+9Y6oIDToV1bD4nToeHYtgFSy4vxF7M67RG4rNu2aAzrkMVeeFULcoP0n9pDH2o
-	wfiUpDcvsCV/4iEAOekDzjIyNcL7lqkcKvc9wCEbyH47F8XrxcFrEyb9FQ6kZx+1YCROxZ+ISD3
-	7I132RJNhW7CtQdXDAZ60WGlQ0q7+P+45E088fm77zcaSGB3Ovqh85sIUDihTO6i+RmVoZZo83j
-	USffFtiC6qXd+Sjl0pirSCaKE8UV8mataHLDShK+Z7f+g5YePVusIFyj3mbJqoISMWd96YCWGoe
-	hP09v4S6CSrRlAtUPNvFvIXM3Q5IkFgHQHsX8lCTdOMT/8L2A=
-X-Received: by 2002:a05:600c:19d1:b0:495:4e89:3f30 with SMTP id 5b1f17b1804b1-499879ae4f4mr84266115e9.15.1786719215001;
-        Fri, 14 Aug 2026 07:53:35 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1786719292; x=1787324092;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:date
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=DyrxI2cYH7SSc56kmNn9Wc5tUe+KXdPMo3ly6gJPo2M=;
+        b=ZBPxY4a1Ok9hGpP2X9Xq3vsC3JQPPw4/EHa/uSyfNnDztCObGoVwHL86dd+pysFsUk
+         tuwPcCsFOyNWxt7nL2S9bps3p+siqm255S6xICovV7fM+TfNNN6DlZKTboWxJCaNSXoh
+         NQjv7b4aR0AbGz1KHEysaAyYxzbuHdfo8fUYVpazK0nOkXbCkgTJX2I21z6d5/xA+4g/
+         UeK2/F6HWWPDzzyTOX4vu1Vx9ShZVUT0YcS4Rws8DwSoyowGA/6tuaZ4UZDrVWAUP2r2
+         OBQkQWCZjKbceB/9FRo/YxNA2DnuB6cct1T6ZxlFpHLdtVynPP/a+z1x4NF2kMXjRCnh
+         aPAQ==
+X-Forwarded-Encrypted: i=1; AHgh+RraGJp2otA9AdiaujvCJzn0jTlaEQS9tEgkQdTHnjolXsSlFj5pltnCzCq8ZY1KaLTeMPw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxFsPwyWd2V4gveRSenR3HGQ2sHqr4A8W8Eyfg34/AZcDtdvdO
+	2sCfozh1hh6GHWfUa9XHZiBeTXYalJZgtW3nEbDmftvGM+XiFVLkViZW
+X-Gm-Gg: AR+sD136gqtlzZ3dDnEE/Xn5ePN/iO0O6wJQWwLdYiU5IEyHfVCRhhHB8CZgcWucoCd
+	qf7MQVLrltDBm9xbMo7jQEsPwkRH4byasSAA8+HfaUV3ZMdcBLuSGy2KrPyN/62Lw5j5hSzgm4K
+	zfqXwSLPg0pQAmuDSg20YoZ3eYnB4xFqGO1rSjmYjLDUMMHsrYt9G+968Kevq/U2pjcTAZ4Hvzq
+	p1UB18z8WF5q2R0YlR2mNaDYO+mlgfwcXkFJ9TBuUFgfSxknImkOnRoVvlY+j98aAlCXuq6wcup
+	LVQtEtuAgb/cg8YAjk/PBIV7dCHr0F1HIYWiMqtezAQzv5xXezerVG4I+vknHZwUOZaVR5GQPET
+	77sbqGczqRtfWDXYDEf6xqhQTlXofofFGnzGnE/c3rEiFfiW6gdz2oQxqFZpxxv6rub9fKXq0bc
+	1XBk+nWQppsaRRFbO+ow2mSS3sVL9xQIs39Ni6s4wYgNbXNgM=
+X-Received: by 2002:a05:600c:1546:b0:499:484a:98e7 with SMTP id 5b1f17b1804b1-49987974700mr80960195e9.14.1786719291723;
+        Fri, 14 Aug 2026 07:54:51 -0700 (PDT)
 Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49988aa2273sm54308535e9.0.2026.08.14.07.53.33
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815f2cd7ecsm8874800f8f.36.2026.08.14.07.54.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Aug 2026 07:53:34 -0700 (PDT)
+        Fri, 14 Aug 2026 07:54:51 -0700 (PDT)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 14 Aug 2026 16:53:32 +0200
-To: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
+Date: Fri, 14 Aug 2026 16:54:50 +0200
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+	Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
-	Ingo Molnar <mingo@redhat.com>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>, Song Liu <song@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	Leon Hwang <leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next v3 4/5] bpf, x86: make sure allocation in
- arch_bpf_trampoline_size() is writable
-Message-ID: <an8r7EODLIL-bZM3@krava>
-References: <20260716-execmem-x86-rox-bpf-v0-v3-0-4e76158c01c5@kernel.org>
- <20260716-execmem-x86-rox-bpf-v0-v3-4-4e76158c01c5@kernel.org>
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next] selftests/bpf: Move tracing_multi_bench_attach
+ to bench
+Message-ID: <an8sOsKmqUexcYKv@krava>
+References: <20260804154813.90795-1-leon.hwang@linux.dev>
+ <CAEf4BzbJCB0KUZMkeRPfYSjMQ3Q3eoFKUZS3px1mBBhxtEqYdQ@mail.gmail.com>
+ <an4HDVUea-8zgdUM@krava>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260716-execmem-x86-rox-bpf-v0-v3-4-4e76158c01c5@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <an4HDVUea-8zgdUM@krava>
 
-On Thu, Jul 16, 2026 at 10:51:38AM +0300, Mike Rapoport (Microsoft) wrote:
-> arch_bpf_trampoline_size() allocates a buffer to get actual size required
-> for a trampoline.
+On Thu, Aug 13, 2026 at 08:03:57PM +0200, Jiri Olsa wrote:
+> On Tue, Aug 04, 2026 at 03:40:30PM -0700, Andrii Nakryiko wrote:
+> > On Tue, Aug 4, 2026 at 8:48 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+> > >
+> > > In CI, the tracing_multi_bench_attach test could cost >10s, which should
+> > > be avoided in daily CI running.
+> > >
+> > >  ./test_progs -t tracing_multi_bench_attach -v
+> > >  WATCHDOG: test case tracing_multi_bench_attach executes for 10 seconds...
+> > >  serial_test_tracing_multi_bench_attach: found 40163 functions
+> > >  serial_test_tracing_multi_bench_attach: attached in   9.367s
+> > >  serial_test_tracing_multi_bench_attach: detached in   1.798s
+> > >  #546     tracing_multi_bench_attach:OK
+> > >
+> > > Since it is for benchmark attachment of tracing_multi link, move it to
+> > > the generic bench framework.
+> > >
+> > >  ./bench tracing-multi-attach
+> > >  Setting up benchmark 'tracing-multi-attach'...
+> > >  tracing-multi-attach: found 40166 functions
+> > >  tracing-multi-attach: attached in   9.278s
+> > >  tracing-multi-attach: detached in   1.836s
+> > >
+> > > Assisted-by: Codex:gpt-5.6-sol
+> > > Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> > > ---
+> > >  tools/testing/selftests/bpf/Makefile          |   2 +
+> > >  tools/testing/selftests/bpf/bench.c           |   2 +
+> > >  .../bpf/benchs/bench_tracing_multi_attach.c   | 177 ++++++++++++++++++
+> > >  .../selftests/bpf/prog_tests/tracing_multi.c  | 125 -------------
+> > >  4 files changed, 181 insertions(+), 125 deletions(-)
+> > >  create mode 100644 tools/testing/selftests/bpf/benchs/bench_tracing_multi_attach.c
+> > >
+> > 
+> > Jiri, are you ok with not exercising this logic regularly?
+> > 
+> > but also hm, is 10 seconds expected?
 > 
-> This buffer must be in the module address space because
-> __arch_prepare_bpf_trampoline() calculates  rel32 offsets relatively to
-> that buffer.
+> sorry for late reply, I overlooked this one
 > 
-> In preparation for enabling ROX mode for EXECMEM_BPF make sure that the
-> allocated memory is writable.
+> the 'commited result' is around 1.2s.. will check
 > 
-> Add bpf_jit_alloc_exec_rw() wrapper for execmem_alloc_rw() and use it for > buffer allocation in arch_bpf_trampoline_size().
+>       serial_test_tracing_multi_bench_attach: found 51186 functions
+>       serial_test_tracing_multi_bench_attach: attached in   1.295s
+>       serial_test_tracing_multi_bench_attach: detached in   0.243s
 > 
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> ---
->  arch/x86/net/bpf_jit_comp.c | 5 ++---
->  include/linux/filter.h      | 1 +
->  kernel/bpf/core.c           | 5 +++++
->  3 files changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index de7515ea1bea..b2feec81e231 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -3703,13 +3703,12 @@ int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
->  	int ret;
->  
->  	/* Allocate a temporary buffer for __arch_prepare_bpf_trampoline().
-> -	 * This will NOT cause fragmentation in direct map, as we do not
-> -	 * call set_memory_*() on this buffer.
->  	 *
->  	 * We cannot use kvmalloc here, because we need image to be in
->  	 * module memory range.
-> +	 * Since it must be writable use bpf_jit_alloc_exec_rw().
->  	 */
-> -	image = bpf_jit_alloc_exec(PAGE_SIZE);
-> +	image = bpf_jit_alloc_exec_rw(PAGE_SIZE);
+> thanks,
+> jirka
 
-hi,
-this change (this particular patch plus possibly others in this set) is
-causing tracing_multi attachment bench slowdown
+fyi found the possible culprint:
+  https://lore.kernel.org/bpf/20260716-execmem-x86-rox-bpf-v0-v3-0-4e76158c01c5@kernel.org/T/#m8184343c667a96efae72ae55f7a8679d51f6eaf6
 
-the benchmark allocates huge number of trampolines and I'm seeing extra
-arch_bpf_trampoline_size code paths in the attached perf profile 
-
-I'm not that familiar with the allocator, but following hack makes the
-benchmark ok again:
-
-	diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-	index 6a94370a2448..bbff3c9c6681 100644
-	--- a/kernel/bpf/core.c
-	+++ b/kernel/bpf/core.c
-	@@ -1130,7 +1130,7 @@ void *bpf_jit_alloc_exec(unsigned long size)
-	 
-	 void *bpf_jit_alloc_exec_rw(unsigned long size)
-	 {
-	-	return execmem_alloc_rw(EXECMEM_BPF, size);
-	+	return execmem_alloc(EXECMEM_MODULE_DATA, size);
-	 }
-	 
-	 void bpf_jit_free_exec(void *addr)
-
-
-I still need to do more checks, but I'm wondering if we could actually fix
-this by not allocating image data in arch_bpf_trampoline_size at all..
-and just teach __arch_prepare_bpf_trampoline to survive NULL image data
-and just return the size in such case
-
-thanks,
 jirka
-
-
----
-    11.11%  test_progs  [kernel.kallsyms]  [k] decay_va_pool_node
-            |
-            ---decay_va_pool_node
-               __purge_vmap_area_lazy
-               _vm_unmap_aliases
-               change_page_attr_set_clr
-               |          
-               |--4.58%--set_memory_rw
-               |          |          
-               |          |--2.33%--execmem_alloc_rw
-               |          |          arch_bpf_trampoline_size
-               |          |          bpf_trampoline_update
-               |          |          __bpf_trampoline_link_prog
-               |          |          bpf_trampoline_multi_attach
-               |          |          bpf_tracing_multi_attach
-               |          |          __sys_bpf
-               |          |          __x64_sys_bpf
-               |          |          do_syscall_64
-               |          |          entry_SYSCALL_64_after_hwframe
-               |          |          syscall
-               |          |          sys_bpf_fd
-               |          |          bpf_link_create
-               |          |          bpf_program__attach_tracing_multi
-               |          |          serial_test_tracing_multi_bench_attach
-               |          |          run_one_test
-               |          |          main
-               |          |          __libc_start_call_main
-               |          |          __libc_start_main@@GLIBC_2.34
-               |          |          _start
-               |          |          
-               |           --2.25%--__execmem_cache_free
-               |                     execmem_free
-               |                     arch_bpf_trampoline_size
-               |                     bpf_trampoline_update
-               |                     __bpf_trampoline_link_prog
-               |                     bpf_trampoline_multi_attach
-               |                     bpf_tracing_multi_attach
-               |                     __sys_bpf
-               |                     __x64_sys_bpf
-               |                     do_syscall_64
-               |                     entry_SYSCALL_64_after_hwframe
-               |                     syscall
-               |                     sys_bpf_fd
-               |                     bpf_link_create
-               |                     bpf_program__attach_tracing_multi
-               |                     serial_test_tracing_multi_bench_attach
-               |                     run_one_test
-               |                     main
-               |                     __libc_start_call_main
-               |                     __libc_start_main@@GLIBC_2.34
-               |                     _start
-               |          
-               |--4.52%--set_memory_nx
-               |          |          
-               |          |--2.32%--execmem_alloc_rw
-               |          |          arch_bpf_trampoline_size
-               |          |          bpf_trampoline_update
-               |          |          __bpf_trampoline_link_prog
-               |          |          bpf_trampoline_multi_attach
-               |          |          bpf_tracing_multi_attach
-               |          |          __sys_bpf
-               |          |          __x64_sys_bpf
-               |          |          do_syscall_64
-               |          |          entry_SYSCALL_64_after_hwframe
-               |          |          syscall
-               |          |          sys_bpf_fd
-               |          |          bpf_link_create
-               |          |          bpf_program__attach_tracing_multi
-               |          |          serial_test_tracing_multi_bench_attach
-               |          |          run_one_test
-               |          |          main
-               |          |          __libc_start_call_main
-               |          |          __libc_start_main@@GLIBC_2.34
-               |          |          _start
-               |          |          
-               |           --2.20%--__execmem_cache_free
-               |                     execmem_free
-               |                     arch_bpf_trampoline_size
-               |                     bpf_trampoline_update
-               |                     __bpf_trampoline_link_prog
-               |                     bpf_trampoline_multi_attach
-               |                     bpf_tracing_multi_attach
-               |                     __sys_bpf
-               |                     __x64_sys_bpf
-               |                     do_syscall_64
-               |                     entry_SYSCALL_64_after_hwframe
-               |                     syscall
-               |                     sys_bpf_fd
-               |                     bpf_link_create
-               |                     bpf_program__attach_tracing_multi
-               |                     serial_test_tracing_multi_bench_attach
-               |                     run_one_test
-               |                     main
-               |                     __libc_start_call_main
-               |                     __libc_start_main@@GLIBC_2.34
-               |                     _start
-               |          
-                --2.01%--set_memory_rox
-                          |          
-                           --2.01%--__execmem_cache_free
-                                     execmem_free
-                                     arch_bpf_trampoline_size
-                                     bpf_trampoline_update
-                                     __bpf_trampoline_link_prog
-                                     bpf_trampoline_multi_attach
-                                     bpf_tracing_multi_attach
-                                     __sys_bpf
-                                     __x64_sys_bpf
-                                     do_syscall_64
-                                     entry_SYSCALL_64_after_hwframe
-                                     syscall
-                                     sys_bpf_fd
-                                     bpf_link_create
-                                     bpf_program__attach_tracing_multi
-                                     serial_test_tracing_multi_bench_attach
-                                     run_one_test
-                                     main
-                                     __libc_start_call_main
-                                     __libc_start_main@@GLIBC_2.34
-                                     _start
-
-     6.15%  test_progs  [kernel.kallsyms]  [k] smp_call_function_many_cond
-            |
-            ---smp_call_function_many_cond
-               on_each_cpu_cond_mask
-               |          
-               |--4.80%--cpa_flush
-               |          change_page_attr_set_clr
-               |          |          
-               |          |--2.37%--set_memory_rox
-               |          |          __execmem_cache_free
-               |          |          execmem_free
-               |          |          arch_bpf_trampoline_size
-               |          |          bpf_trampoline_update
-               |          |          __bpf_trampoline_link_prog
-               |          |          bpf_trampoline_multi_attach
-               |          |          bpf_tracing_multi_attach
-               |          |          __sys_bpf
-               |          |          __x64_sys_bpf
-               |          |          do_syscall_64
-               |          |          entry_SYSCALL_64_after_hwframe
-               |          |          syscall
-               |          |          sys_bpf_fd
-               |          |          bpf_link_create
-               |          |          bpf_program__attach_tracing_multi
-               |          |          serial_test_tracing_multi_bench_attach
-               |          |          run_one_test
-               |          |          main
-               |          |          __libc_start_call_main
-               |          |          __libc_start_main@@GLIBC_2.34
-               |          |          _start
-               |          |          
-               |          |--1.21%--set_memory_nx
-               |          |          execmem_alloc_rw
-               |          |          arch_bpf_trampoline_size
-               |          |          bpf_trampoline_update
-               |          |          __bpf_trampoline_link_prog
-               |          |          bpf_trampoline_multi_attach
-               |          |          bpf_tracing_multi_attach
-               |          |          __sys_bpf
-               |          |          __x64_sys_bpf
-               |          |          do_syscall_64
-               |          |          entry_SYSCALL_64_after_hwframe
-               |          |          syscall
-               |          |          sys_bpf_fd
-               |          |          bpf_link_create
-               |          |          bpf_program__attach_tracing_multi
-               |          |          serial_test_tracing_multi_bench_attach
-               |          |          run_one_test
-               |          |          main
-               |          |          __libc_start_call_main
-               |          |          __libc_start_main@@GLIBC_2.34
-               |          |          _start
-               |          |          
-               |           --1.21%--set_memory_rw
-               |                     execmem_alloc_rw
-               |                     |          
-               |                      --1.21%--arch_bpf_trampoline_size
-               |                                bpf_trampoline_update
-               |                                __bpf_trampoline_link_prog
-               |                                bpf_trampoline_multi_attach
-               |                                bpf_tracing_multi_attach
-               |                                __sys_bpf
-               |                                __x64_sys_bpf
-               |                                do_syscall_64
-               |                                entry_SYSCALL_64_after_hwframe
-               |                                syscall
-               |                                sys_bpf_fd
-               |                                bpf_link_create
-               |                                bpf_program__attach_tracing_multi
-               |                                serial_test_tracing_multi_bench_attach
-               |                                run_one_test
-               |                                main
-               |                                __libc_start_call_main
-               |                                __libc_start_main@@GLIBC_2.34
-               |                                _start
-               |          
-                --1.21%--__change_page_attr_set_clr
-                          change_page_attr_set_clr
-                          set_memory_nx
-                          execmem_alloc_rw
-                          |          
-                           --1.20%--arch_bpf_trampoline_size
-                                     bpf_trampoline_update
-                                     __bpf_trampoline_link_prog
-                                     bpf_trampoline_multi_attach
-                                     bpf_tracing_multi_attach
-                                     __sys_bpf
-                                     __x64_sys_bpf
-                                     do_syscall_64
-                                     entry_SYSCALL_64_after_hwframe
-                                     syscall
-                                     sys_bpf_fd
-                                     bpf_link_create
-                                     bpf_program__attach_tracing_multi
-                                     serial_test_tracing_multi_bench_attach
-                                     run_one_test
-                                     main
-                                     __libc_start_call_main
-                                     __libc_start_main@@GLIBC_2.34
-                                     _start
-
-     5.01%  test_progs  [kernel.kallsyms]  [k] __raw_callee_save___pv_queued_spin_unlock
-            |
-            ---__raw_callee_save___pv_queued_spin_unlock
-               do_raw_spin_unlock
-               |          
-               |--4.20%--_raw_spin_unlock
-               |          |          
-               |           --4.10%--decay_va_pool_node
-               |                     __purge_vmap_area_lazy
-               |                     _vm_unmap_aliases
-               |                     change_page_attr_set_clr
-               |                     |          
-               |                     |--1.73%--set_memory_nx
-               |                     |          |          
-               |                     |          |--0.95%--__execmem_cache_free
-               |                     |          |          execmem_free
-               |                     |          |          arch_bpf_trampoline_size
-               |                     |          |          bpf_trampoline_update
-               |                     |          |          __bpf_trampoline_link_prog
-               |                     |          |          bpf_trampoline_multi_attach
-               |                     |          |          bpf_tracing_multi_attach
-               |                     |          |          __sys_bpf
-               |                     |          |          __x64_sys_bpf
-               |                     |          |          do_syscall_64
-               |                     |          |          entry_SYSCALL_64_after_hwframe
-               |                     |          |          syscall
-               |                     |          |          sys_bpf_fd
-               |                     |          |          bpf_link_create
-               |                     |          |          bpf_program__attach_tracing_multi
-               |                     |          |          serial_test_tracing_multi_bench_attach
-               |                     |          |          run_one_test
-               |                     |          |          main
-               |                     |          |          __libc_start_call_main
-               |                     |          |          __libc_start_main@@GLIBC_2.34
-               |                     |          |          _start
-               |                     |          |          
-               |                     |           --0.78%--execmem_alloc_rw
-               |                     |                     arch_bpf_trampoline_size
-               |                     |                     bpf_trampoline_update
-               |                     |                     __bpf_trampoline_link_prog
-               |                     |                     bpf_trampoline_multi_attach
-               |                     |                     bpf_tracing_multi_attach
-               |                     |                     __sys_bpf
-               |                     |                     __x64_sys_bpf
-               |                     |                     do_syscall_64
-               |                     |                     entry_SYSCALL_64_after_hwframe
-               |                     |                     syscall
-               |                     |                     sys_bpf_fd
-               |                     |                     bpf_link_create
-               |                     |                     bpf_program__attach_tracing_multi
-               |                     |                     serial_test_tracing_multi_bench_attach
-               |                     |                     run_one_test
-               |                     |                     main
-               |                     |                     __libc_start_call_main
-               |                     |                     __libc_start_main@@GLIBC_2.34
-               |                     |                     _start
-               |                     |          
-               |                     |--1.51%--set_memory_rw
-               |                     |          |          
-               |                     |          |--0.76%--__execmem_cache_free
-               |                     |          |          execmem_free
-               |                     |          |          arch_bpf_trampoline_size
-               |                     |          |          bpf_trampoline_update
-               |                     |          |          __bpf_trampoline_link_prog
-               |                     |          |          bpf_trampoline_multi_attach
-               |                     |          |          bpf_tracing_multi_attach
-               |                     |          |          __sys_bpf
-               |                     |          |          __x64_sys_bpf
-               |                     |          |          do_syscall_64
-               |                     |          |          entry_SYSCALL_64_after_hwframe
-               |                     |          |          syscall
-               |                     |          |          sys_bpf_fd
-               |                     |          |          bpf_link_create
-               |                     |          |          bpf_program__attach_tracing_multi
-               |                     |          |          serial_test_tracing_multi_bench_attach
-               |                     |          |          run_one_test
-               |                     |          |          main
-               |                     |          |          __libc_start_call_main
-               |                     |          |          __libc_start_main@@GLIBC_2.34
-               |                     |          |          _start
-               |                     |          |          
-               |                     |           --0.75%--execmem_alloc_rw
-               |                     |                     arch_bpf_trampoline_size
-               |                     |                     bpf_trampoline_update
-               |                     |                     __bpf_trampoline_link_prog
-               |                     |                     bpf_trampoline_multi_attach
-               |                     |                     bpf_tracing_multi_attach
-               |                     |                     __sys_bpf
-               |                     |                     __x64_sys_bpf
-               |                     |                     do_syscall_64
-               |                     |                     entry_SYSCALL_64_after_hwframe
-               |                     |                     syscall
-               |                     |                     sys_bpf_fd
-               |                     |                     bpf_link_create
-               |                     |                     bpf_program__attach_tracing_multi
-               |                     |                     serial_test_tracing_multi_bench_attach
-               |                     |                     run_one_test
-               |                     |                     main
-               |                     |                     __libc_start_call_main
-               |                     |                     __libc_start_main@@GLIBC_2.34
-               |                     |                     _start
-               |                     |          
-               |                      --0.86%--set_memory_rox
-               |                                __execmem_cache_free
-               |                                execmem_free
-               |                                arch_bpf_trampoline_size
-               |                                bpf_trampoline_update
-               |                                __bpf_trampoline_link_prog
-               |                                bpf_trampoline_multi_attach
-               |                                bpf_tracing_multi_attach
-               |                                __sys_bpf
-               |                                __x64_sys_bpf
-               |                                do_syscall_64
-               |                                entry_SYSCALL_64_after_hwframe
-               |                                syscall
-               |                                sys_bpf_fd
-               |                                bpf_link_create
-               |                                bpf_program__attach_tracing_multi
-               |                                serial_test_tracing_multi_bench_attach
-               |                                run_one_test
-               |                                main
-               |                                __libc_start_call_main
-               |                                __libc_start_main@@GLIBC_2.34
-               |                                _start
-               |          
-                --0.80%--_raw_spin_unlock_irqrestore
-
-     4.88%  test_progs  [kernel.kallsyms]  [k] get_symbol_offset
