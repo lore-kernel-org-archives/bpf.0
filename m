@@ -1,173 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA321F1534
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 00:52:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 994421FFC48
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 00:52:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786668758; cv=none; b=oiUkdTF6DwAAcj6Mv0RFJfI7SPWQpXEcaXvl1RwzC/XVC31hkIdUNUqVDSsmY6AICW48ip3BhDcUt0a9uXm5E5CFBki4j9uyRZHj2zR2HfFyHBCy0hR43ivoVqoGHvDvnPWrFGDgOnfQz5+FP7qOZDtf3LW02Hj95eCNn1xhwsY=
+	t=1786668764; cv=none; b=hXKN6U4iOf8z/FxxwrwsXoVKGEjBFnLsefV5L9ZcXjzJgZuS6VWbPAtFmO0VrH37aSC0UOK3dWiJEFWkm+J6gfhXySxbtJWP+EIdKq89s/2RKiuUs1MJsPrHkk/VTy4i9fDP4Zxc6+UL0AQY6gl0GsIQCVT0DFaSplaNpPSq2oo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786668758; c=relaxed/simple;
-	bh=8Mepd5zi626exT2MDwl6FFhlv6eEA77pYyTYIOhdrVE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=MHu8puXBq8DXeOl3gIhOMFsuEpCJA59vG9ou1LmgHyeRY1o9a7Syx5TE+7DUn6RLQcTkTletjb6nLcPUB2n7Dl7ODDt7LrTS9hax/xyuApeIoMVZk2fviJg1JtXpeb8jYQ8mDQoYzpUbNIa/iuuWjC0HJ80yTRGB7QJTXF4D+C4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kAWlY+/6; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786668764; c=relaxed/simple;
+	bh=bwhxbY6ZL6wBz3mcdu4XDlN/0VH5M8mop5uy1jxTiNg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kigJ0LXRb3+R9tnOLtQ4iW67s8NnNLGLL1AJg4IMJrpmYce/8zc0bSIznmf/iF5o/6fUpTtLUCGV7pjvpMk7deeq84/ThPbZp1AVC9IAGGw+UMElXimBnWjjbQTO0g9YMXKyYiUsG0Cdu36k4uHSzhGWma22iwFZRac5hp0ZPWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DAxF1MZd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kAWlY+/6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD84F1F00A3A;
-	Fri, 14 Aug 2026 00:52:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DAxF1MZd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 537FE1F00A3A
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 00:52:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786668757;
-	bh=QnOn4C7to3ToHmX1kz+ytbwDJlhyjwBGiKgfN8RkZm8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kAWlY+/6xs6/xThZOd2lVD4rHnAFlNAeT9kAK+A7MP7vqI991g79Lgd+L2oHfxmW5
-	 ABW8Z1NZ+BrJc8pzfhWnvUPJQxggjZkbSgYvKEh3vENRUK5ovA97T8naz0gOZ78tIl
-	 fqdwn8lYZyoqatjtVQv+rg30dfzf/YPZC/G01kyUhrojalh/GzjIpyEoZW1Bnc06b5
-	 Jybvmc3NgfKFrWHQuV/k+dl+/E9dgKSPNxJNRpl7TvzUnAeM+1dNVeXIyvD2fBBpxw
-	 amIeBy2UXXLUQZoYiNSrE/IfpaEcUyMnBf/DjNmtJkM7mGD8kUTk+o6wRjEtDEPX1K
-	 7JEB1DUuBF+3Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v6 09/17] bpf: Track r11 registers in
- const_fold and liveness
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yonghong Song" <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260419163402.734987-1-yonghong.song@linux.dev>
-References: <20260419163402.734987-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 14 Aug 2026 00:52:31 +0000
-Message-Id: <20260814005236.CD84F1F00A3A@smtp.kernel.org>
+	s=k20260515; t=1786668763;
+	bh=ZN0AsNJS3aORrQWgKiMI3G3Tez0uHG0+X1FtcQ6s3Gs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=DAxF1MZdvTqdfx1RnNQ9WHC7cBqR437hIyCmjMCamSTYBHLLpuR3EiJ3lBtM2HO9B
+	 3bnw3fgrt9/snN8Bw2UbYk30bWwTf6RTdVVEOulLV5iH60AraRYSh58ZCKZEDk2p7Y
+	 YAN/+De0ndowVdTc563mtbwvC0jBWGS4LQF98MWbWAE2dz9EIJ6oIrJoTfEbr2pI03
+	 4czgIZVoyFou4QGJ9ZKwpc2xZqrXbz1CusTG186Tnasb2NTE/PWFYf0DuSFxaWD/KF
+	 Aa4UqHfoAKN/IKBfvtcr2Opn5UjKrMcPlztlxqn2At3wDLK06bBSnGpKu6KmzHAxat
+	 AYX56lNTE3zuA==
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-92e6391b114so37302285a.3
+        for <bpf@vger.kernel.org>; Thu, 13 Aug 2026 17:52:43 -0700 (PDT)
+X-Gm-Message-State: AOJu0YwoutByzZHBrAsghErCYfaZgEZAwNOTTx9+zFqKD7Mc8fIm9gZG
+	Bd/+CULx6X6otWN9vmpKhnbie97ylZsL/hwPtorHHikIRNJ7c5mPXd2NB6H5eA36B83v/55jXuA
+	TbuAJlbpAgKCpDknx3UywIS5fDZlJ3wM=
+X-Received: by 2002:a05:6214:29e6:b0:8ec:a010:9af5 with SMTP id
+ 6a1803df08f44-90a91cd810bmr21941826d6.10.1786668762412; Thu, 13 Aug 2026
+ 17:52:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260813224853.1436734-1-song@kernel.org> <dbe52cb393027ac53874b2b54bcddc6fd5687be01895e678261c45a1b76f9a8e@mail.kernel.org>
+In-Reply-To: <dbe52cb393027ac53874b2b54bcddc6fd5687be01895e678261c45a1b76f9a8e@mail.kernel.org>
+From: Song Liu <song@kernel.org>
+Date: Thu, 13 Aug 2026 17:52:31 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7otRv+xvJ9f8tstH4Mwp3FrkT1Qgbnvzun-39_D35K4Q@mail.gmail.com>
+X-Gm-Features: AUfX_myb_XWZQpW3j7TxyipyHGCI4BEPQ6gZgFcbQ9J1Ba36XE4WPK7bfS8uLD8
+Message-ID: <CAPhsuW7otRv+xvJ9f8tstH4Mwp3FrkT1Qgbnvzun-39_D35K4Q@mail.gmail.com>
+Subject: Re: [PATCH v6 bpf-next] bpf: Populate mmap-able array map memory lazily
+To: bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, kernel-team@meta.com, 
+	martin.lau@kernel.org, yonghong.song@linux.dev, clm@meta.com, 
+	ihor.solodrai@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [High] The stack arguments feature is entirely blocked because BPF_REG_PA=
-RAMS is unconditionally rejected during initial instruction sanity checks.
-- [Medium] State tracking corruption due to early returns skipping register=
- invalidation for BPF_REG_PARAMS
-- [Medium] Out-of-bounds access in verifier register checks when using BPF_=
-REG_PARAMS in unsupported instructions
---
+On Thu, Aug 13, 2026 at 5:06=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
+[...]
+>
+> > diff --git kernel/bpf/syscall.c kernel/bpf/syscall.c
+> > index 7d8c3e8e6d62e..9e5e65e73dfa4 100644
+> > --- kernel/bpf/syscall.c
+> > +++ kernel/bpf/syscall.c
+> > @@ -1076,9 +1076,21 @@ static void bpf_map_mmap_close(struct vm_area_st=
+ruct *vma)
+> >               bpf_map_write_active_dec(map);
+> >  }
+> >
+> > +/* Called for maps that populate their memory-mapped region lazily. */
+> > +static vm_fault_t bpf_map_mmap_fault(struct vm_fault *vmf)
+> > +{
+> > +     struct bpf_map *map =3D vmf->vma->vm_private_data;
+> > +
+> > +     if (!map->ops->map_mmap_fault)
+> > +             return VM_FAULT_SIGBUS;
+> > +
+> > +     return map->ops->map_mmap_fault(map, vmf);
+> > +}
+> > +
+> >  static const struct vm_operations_struct bpf_map_default_vmops =3D {
+> >       .open           =3D bpf_map_mmap_open,
+> >       .close          =3D bpf_map_mmap_close,
+> > +     .fault          =3D bpf_map_mmap_fault,
+> >  };
+>
+> Can this affect ringbuf maps? Both ringbuf_map_ops and user_ringbuf_map_o=
+ps
+> provide .map_mmap but not .map_mmap_fault, and neither overrides vm_ops, =
+so
+> they now use bpf_map_default_vmops.fault. Before this patch a fault on
+> their VMAs had no .fault handler, which let do_fault() take the path that
+> re-checks the PTE under the PTL:
+>
+> mm/memory.c:do_fault() {
+>     if (!vma->vm_ops->fault) {
+>             vmf->pte =3D pte_offset_map_lock(vmf->vma->vm_mm, vmf->pmd,
+>                                            vmf->address, &vmf->ptl);
+>             ...
+>             if (unlikely(pte_none(ptep_get(vmf->pte))))
+>                     ret =3D VM_FAULT_SIGBUS;
+>             else
+>                     ret =3D VM_FAULT_NOPAGE;
+>     ...
+> }
+>
+> That re-check exists so a fault racing the zero-PTE window of a
+> read/modify/write update (like change_pte_range() for mprotect() or
+> clear_soft_dirty() for /proc/pid/clear_refs) sees the updated entry and
+> returns VM_FAULT_NOPAGE instead of SIGBUS.
+>
+> After this patch bpf_map_mmap_fault() returns VM_FAULT_SIGBUS immediately
+> when map_mmap_fault is NULL, so the PTL re-check never happens. Could thi=
+s
+> send SIGBUS to a userspace thread reading a ring buffer while another
+> thread calls mprotect() on the same mapping?
+>
+> The comment says the handler is "Called for maps that populate their
+> memory-mapped region lazily," but it is installed on the shared vm_ops an=
+d
+> actually called for all mmap-able maps, including the eagerly-populated
+> ringbufs.
 
---- Patch [9]: [PATCH bpf-next v6 09/17] bpf: Track r11 registers in const_=
-fold and liveness ---
-commit 9af64f45f038d2b8f7990714d3dc13da2d1fbc25
-Author: Yonghong Song <yonghong.song@linux.dev>
+Both comments appears to be valid. I incorporated the feedbacks in v7.
 
-bpf: Track r11 registers in const_fold and liveness
-
-This commit adds early returns in the register tracking arrays for
-const_fold.c and liveness.c when instructions use BPF_REG_PARAMS (r11).
-It aims to prevent out-of-bounds accesses and invalidates the destination
-register for BPF_LDX instructions to avoid leaving stale states.
-
-> diff --git a/kernel/bpf/const_fold.c b/kernel/bpf/const_fold.c
-> index db73c4740b1e1..41e5a406432c4 100644
-> --- a/kernel/bpf/const_fold.c
-> +++ b/kernel/bpf/const_fold.c
-> @@ -51,13 +51,23 @@ static void const_reg_xfer(struct bpf_verifier_env *e=
-nv, struct const_arg_info *
->  			   struct bpf_insn *insn, struct bpf_insn *insns, int idx)
->  {
->  	struct const_arg_info unknown =3D { .state =3D CONST_ARG_UNKNOWN, .val =
-=3D 0 };
-> -	struct const_arg_info *dst =3D &ci_out[insn->dst_reg];
-> -	struct const_arg_info *src =3D &ci_out[insn->src_reg];
-> +	struct const_arg_info *dst, *src;
->  	u8 class =3D BPF_CLASS(insn->code);
->  	u8 mode =3D BPF_MODE(insn->code);
->  	u8 opcode =3D BPF_OP(insn->code) | BPF_SRC(insn->code);
->  	int r;
-> =20
-> +	/* Stack arguments using BPF_REG_PARAMS are outside the tracked registe=
-r set. */
-> +	if (insn->dst_reg >=3D MAX_BPF_REG)
-> +		return;
-> +	if (insn->src_reg >=3D MAX_BPF_REG) {
-> +		if (class =3D=3D BPF_LDX)
-> +			ci_out[insn->dst_reg] =3D unknown;
-> +		return;
-> +	}
-
-[Severity: Medium]
-If an ALU or atomic instruction uses BPF_REG_PARAMS (r11) as a source or
-destination register, is it possible that this early return skips clearing =
-the
-destination register state?
-
-If an ALU instruction uses r11, it looks like the destination register's
-tracking state is not invalidated, retaining its previous, potentially stale
-constant state. Similarly, an atomic store (BPF_STX) to r11 could return
-early without invalidating R0 for BPF_CMPXCHG.
-
-Could this lead to dead branch elimination errors or forged pointers?
-
-> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-> index 332e6e003f270..87022da94f3a0 100644
-> --- a/kernel/bpf/liveness.c
-> +++ b/kernel/bpf/liveness.c
-> @@ -1068,11 +1068,21 @@ static void arg_track_xfer(struct bpf_verifier_en=
-v *env, struct bpf_insn *insn,
->  	int depth =3D instance->depth;
->  	u8 class =3D BPF_CLASS(insn->code);
->  	u8 code =3D BPF_OP(insn->code);
-> -	struct arg_track *dst =3D &at_out[insn->dst_reg];
-> -	struct arg_track *src =3D &at_out[insn->src_reg];
-> +	struct arg_track *dst, *src;
->  	struct arg_track none =3D { .frame =3D ARG_NONE };
->  	int r;
-> =20
-> +	/* Stack arguments using BPF_REG_PARAMS are outside the tracked registe=
-r set. */
-> +	if (insn->dst_reg >=3D MAX_BPF_REG)
-> +		return;
-> +	if (insn->src_reg >=3D MAX_BPF_REG) {
-> +		if (class =3D=3D BPF_LDX)
-> +			at_out[insn->dst_reg] =3D none;
-> +		return;
-> +	}
-
-[Severity: Medium]
-Looking at this similar early return, could it skip updating the liveness
-tracking for ALU and atomic instructions that use BPF_REG_PARAMS?
-
-While reviewing this feature, I also noticed a couple of related issues in
-kernel/bpf/verifier.c:
-
-[Severity: Medium]
-In kernel/bpf/verifier.c:__check_reg_arg():
-
-    reg =3D &regs[regno];
-
-When an ALU, JMP, or ATOMIC instruction uses BPF_REG_PARAMS (r11) as a regi=
-ster
-operand, it appears this might access the regs array with an index of 11.
-Since the verifier's regs array is sized exactly MAX_BPF_REG (11 elements,
-indices 0-10), could this lead to an out-of-bounds access?
-
-
-[Severity: High]
-In kernel/bpf/verifier.c:check_and_resolve_insns():
-
-    if (insn->dst_reg >=3D MAX_BPF_REG) {
-        verbose(env, "R%d is invalid\n", insn->dst_reg);
-        return -EINVAL;
-    }
-
-Is BPF_REG_PARAMS unintentionally being rejected during the initial sanity
-checks here?
-
-Since BPF_REG_PARAMS is defined as MAX_BPF_REG (11), any instruction
-referencing r11 seems to be immediately rejected with "R11 is invalid" befo=
-re
-core verification begins. Should this bounds check be updated to accommodate
-the new register?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260419163316.7310=
-19-1-yonghong.song@linux.dev?part=3D9
+Thanks,
+Song
