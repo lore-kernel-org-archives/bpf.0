@@ -1,162 +1,132 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAE5D33AD9C
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 22:08:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29F5B3E51EC
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 22:15:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786745300; cv=none; b=iraPUD6j3Cn94BKxu6BQib2rnBji1AojOwkMAnQFN2Uu4PNOI87/bOMGjlqHBsMxTCkb7067F6AspwuDsfKMM2O+Ov+ZGytevsweJXLx135+x1qeV9HMAQ5cH871k4Sh6WfaWu1/oRmZ24doLtu1F+a+onBjVKPOaz/QzIg6oLA=
+	t=1786745704; cv=none; b=kXoSSP2CYUujXBpA14YA05PXL9j3XPYr7nV5kNZ8EYKx0O6h1WWZE76NDZnQPRIbDLmVFiSdCDSVbIWcCPxAWhXmQfY7QN0CfWm9Pctrlo6prMeVTXL1n5E6+MGb2ARBaZ8YQ8caEs3RRBvrZPkiHnZfVpBotGc4xAKs4x3moBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786745300; c=relaxed/simple;
-	bh=ZjYzEAgtLNk9ASjxIlHFBuTc8H1shrJZV7rjxPmkjgA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pT4iWr/RNr9Jeu76K+Rf1bFG8supAV+NGSN5DTUKAor44/5S0kttorv1bTtQ5L8gYAnIjrM1l/n/zL316ZpyAC9Narrm6al6h0o+MWugaeTww/WQ9lmHqKFGoFxhM3dlPloAklIe/ZAi2uTCumqX0YrDQgSbgN+XeYj0oliP8tI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oca2waew; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786745704; c=relaxed/simple;
+	bh=lFYGK2Bn5yYHoqjqOoX9WSrXJJCkuDwXkeXdecDxnv8=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=rQISQuaZIEB8QX7VDS3RzriYJydFKeYAVjY5PPKwfpLU5gcS9HbS5RZeY1i+nRk21FKv5YUc8Tqwp3vxyZdyM7/Zrb7Jv46OK2wjrmcXHVmLdC2Lad4wyUXmqn3UuTYulqtvghH9YN6WM6/lTJ1bf6B2nscvx4GU9CmotZVRVug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=neAnFO0f; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oca2waew"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-84a2dcede83so2019297b3a.3
-        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 15:08:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786745298; x=1787350098; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=h1fs3gotylP0AzEmYnhzcYjG4/UpG/38AhdVCX6qjcE=;
-        b=Oca2waewwb8T+747KbYwsw9lpotbOkUbvL1zItcQP1GYCVr4ihArrfhDFe+lx2z48J
-         43TUHnpBmNCVxLo/BSdWQuNFIfETV2/OKj55Ym+pr6tDPvcRicfjmiVJR4hX5LMvu7em
-         ntDf/2+u6VSrszwG2S6vEHHMmcCw2xkELMatXIQ6yAfMRS7rWltR/Fd1jVXi3TSwENl3
-         /9ytnTuSZ9NXXD1k5FIJ/2LlTdjlRfAoI5bpqGo7d2tDr4rqTInoAwlnk5O64KJ6EtsK
-         +1SbkgSHPcCEWbsBtpO9deGnWdlJCaCKWV+xm9VAUbRM/OaY/jJImbU7+qUxLPB+o9l1
-         Rt4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786745298; x=1787350098;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=h1fs3gotylP0AzEmYnhzcYjG4/UpG/38AhdVCX6qjcE=;
-        b=pTjRhK0U+1Zzs6LXA/OADT3uD6wma/Ws+nEW+pnb2o5sD7aPnixlo7n/6tZK9Zwqr8
-         mdhBRcErc6Qu2Vm07lWBH8TI07OSkFFpr+j/XDMD6DJL+UOIejA40M2un1VGkKb9OTZw
-         PDKpjrwLCY+K1MuFQw3wCoHQllmYOHoAFcjnbKLtE5NnvrA2M6TiHKq0Ho7v07x9ZgLk
-         6mPN2Bx2D357SROAUe4Jo0LLMbuZCgHkxl0jfc0/8WAaFOBDJ4sfJJpVDzi25iVIN8KD
-         5eMS6UhR5gmz/TXQU+pHCYzlXhEJWYWv/uqHsBCUgC+lnaP8OXVSMJgm5W6+UYwrULy5
-         xafg==
-X-Forwarded-Encrypted: i=1; AHgh+RoJTK5vkFzOSMr5WBQaRJldQQV/mEpg3pKEwPp335vbxJ129zLYVsta+DQxnZ4LDytOSMk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6H1GqhoR2b851b+P69l4ZKiKJunBkRl/gdhxxf9GH/VyohA19
-	gEL3mvBHyeMHwmFWaAN3+/ML00jgXMPIcIycnH/tMA9Jxx/9aeNHOGG1
-X-Gm-Gg: AR+sD11mp4hMHn3djCfU+WvGi76lwhIYigpwQ7abhILHYS1FoJCA4N5UYH7yeLmFfHq
-	oR1NgJcYKjEzqYD703Wxmj01N44K+LzlvFrt7YZnDHY+5HMc/yXccdyMTCd8hmMp1yn76mjUCh8
-	/kfm8zb1yow0CwgnepGAMiRfAw2S0DiJA+iTZxvrl+hSQOTghqzbesOFTmogfELxZdeN8e4fSl5
-	qQ+XQlfZ5SG8WjfhwiMqvCd9pCEoRiPnvwqS6n1p7EWM+dYPvBWMisWCa9dpIiazONG3s/5SEq6
-	BwDUT8IBbJhpKBZOUsv4WMClT9Z1NLjXV5Ov/HXtAS/OkhFTQ+y6i/lUcU5BSpZZrKaTRmcbToR
-	miCKO759Pb5lFGc5OYK/iVb353XdHDyoL308Fzz1tP6S2QKWzYLJzBEX3woNkV8r5wKNMpQ5COW
-	x8xZCWZ2h2rCPCPQojeVUV/RCi3dkGFEa7R0/NEkastpE3vfShI+/3bp5ZTHhf4o89ebdPCL11D
-	FjTSz904GjS1vCbBCvjOrfMUrHesbCK0XBGxGXDBDaL
-X-Received: by 2002:a05:6a21:9d84:b0:3c3:bbe6:95c7 with SMTP id adf61e73a8af0-3cc71c57b6cmr12589551637.17.1786745297980;
-        Fri, 14 Aug 2026 15:08:17 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:b77:bdad:4587:c682? ([2620:10d:c090:500::6:84a4])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-141388bd5a7sm16363905c88.15.2026.08.14.15.08.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Aug 2026 15:08:17 -0700 (PDT)
-Message-ID: <e1bf30cac04d54aa328fee5282de348a89494048.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 07/13] bpf: Add verifier support for 16-byte
- returns in R0:R2
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
- kernel-team@fb.com
-Date: Fri, 14 Aug 2026 15:08:16 -0700
-In-Reply-To: <cd43d82d-0f0b-48a9-9d81-eb214d96a3ad@linux.dev>
-References: <20260811000911.2378679-1-yonghong.song@linux.dev>
-	 <20260811000947.2381981-1-yonghong.song@linux.dev>
-	 <e6f6247b319dde9f055092cd337a61292887b141.camel@gmail.com>
-	 <cd43d82d-0f0b-48a9-9d81-eb214d96a3ad@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="neAnFO0f"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 880C11F000E9;
+	Fri, 14 Aug 2026 22:15:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786745702;
+	bh=WiRDavzohFap2XrU5lZaXSSis3fiqnYc5CQyq92733s=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=neAnFO0flTMRaTmuZbbIqNEjhg5n9vonPnJPjBfGDHFmvQ8li27GJ8JzQidfQrA8j
+	 lM+g3p2g/09Ogo6RGNAjNZvx0JEUMV0zq/jz9oCVhsRSBSo758v8WvHtYoi8gF1rvf
+	 lxtBUeOG3Xyp3qexd4eYICLGctPPFZqB18ncEaIqMACC72OF1zIT8XQNlxZuG7DHCM
+	 PM04ZjsZikFy0r2ffokq/DJ0QzhxsWuVJ80y8xGET710bULTcD5/gBklBBvEJLjcXe
+	 SUaJ9IaideaFC/eOsWvGrTJ0UuSdywoAmf7Ua5calhs0xO0gkXXPgJROH1GIEbSQon
+	 14b7ASqMPGlRg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 1/6] bpf: Keep fault protection when merging
+ pointer types
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Daniel Borkmann" <daniel@iogearbox.net>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260814215301.709827-1-daniel@iogearbox.net>
+References: <20260814215301.709827-1-daniel@iogearbox.net>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+Date: Fri, 14 Aug 2026 22:15:02 +0000
+Message-Id: <20260814221502.880C11F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Thu, 2026-08-13 at 11:20 -0700, Yonghong Song wrote:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-...
+Pre-existing issues:
+- [Critical] The verifier fails to emit BPF_PROBE_MEM instructions when a s=
+afe pointer type (e.g., PTR_TO_STACK or PTR_TO_MAP_VALUE) and an untrusted =
+memory pointer type (PTR_TO_MEM | PTR_UNTRUSTED) reach the same load instru=
+ction via different branches. This completely bypasses the newly introduced=
+ merge_ptr_types logic.
+--
 
-> > > @@ -19366,6 +19452,22 @@ int bpf_check_attach_target(struct bpf_verif=
-ier_log *log,
-> > >  =C2=A0			return -EOPNOTSUPP;
-> > >  =C2=A0		}
-> > >
-> > > +		/*
-> > > +		 * An extension replaces the target outright, so it has to match
-> > > +		 * the target's return convention. Its own return value is capped
-> > > +		 * at 8 bytes (a >8 byte program return is rejected at BPF_EXIT),
-> > > +		 * so it can never fill the R0:R2 pair the target's callers read.
-> > > +		 * This cannot be left to btf_check_type_match() above, which
-> > > +		 * compares return types by btf_type->info only: an int carries no
-> > > +		 * vlen, so a 16-byte __int128 and an 8-byte long compare equal.
-> > > +		 */
-> > Should the btf_check_type_match() be fixed?
->
-> The function=C2=A0btf_check_type_match() calls btf_check_func_type_match(=
-).
-> In btf_check_func_type_match(), we have
->
->
->          t1 =3D btf_type_skip_modifiers(btf1, t1->type, NULL);
->          t2 =3D btf_type_skip_modifiers(btf2, t2->type, NULL);
->          if (t1->info !=3D t2->info) {
->                  bpf_log(log,
->                          "Return type %s of %s() doesn't match type %s of=
- %s()\n",
->                          btf_type_str(t1), fn1,
->                          btf_type_str(t2), fn2);
->                  return -EINVAL;
->          }
->
->          for (i =3D 0; i < nargs1; i++) {
-> 		...
-> 	}
->
-> It only checked the t1->info vs. t2->info. For example t1->info and t2->i=
-nfo both
-> have kind INT. But t1 and t2 may have different INT type (e.g. int vs. lo=
-ng)
-> and this is allowed in btf_check_func_type_match().
-> The same thing it also allows int vs. int128.
-> The same for other kinds e.g. struct (some struct has smaller size and so=
-me struct
-> has larger size).
->
-> So I didn't use btf_check_type_match() and rather use tgt_info->fmodel.re=
-t_size > 8
-> where reject any prog returning more than 8 bytes.
+--- Patch [1]: [PATCH bpf-next v2 1/6] bpf: Keep fault protection when merg=
+ing pointer types ---
+commit f6edd0237d3f5f1dd3f7b1e12e20100d5ce150cd
+Author: Daniel Borkmann <daniel@iogearbox.net>
 
-Yes, I understand the mechanics. The question is whether
-btf_check_type_match() needs adjustment. This function is used by a
-single caller, bpf_check_attach_target():
+bpf: Keep fault protection when merging pointer types
 
-	if (prog_extension &&
-	    btf_check_type_match(log, prog, btf, t))
-		return -EINVAL;
+This commit fixes an issue where merging different pointer types in
+save_aux_ptr_type() drops flags like PTR_UNTRUSTED. It introduces
+merge_ptr_types() to properly normalize and combine pointer types so that t=
+he
+BPF_PROBE_MEM rewrite remains intact.
 
-And just a few lines below this (and v5 of the series) adds:
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 6ac1afced20bf..ad6ccd5cf51db 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
-+	if (prog_extension && tgt_info->fmodel.ret_size > 8) {
-+		bpf_log(log,
-+			"Cannot replace function %s with a >8 byte return value\n",
-+			tname);
-+		return -EOPNOTSUPP;
-+	}
+[ ... ]
 
-Given that the sole reason for btf_check_type_match() to exist is to
-answer the question if an extension BPF subprogram is compatible with
-the subprogram being extended, I thing this new check has to be moved
-inside btf_check_type_match(). (E.g. by deeming that integers below
-8-bytes are compatible between each other, but larger integers are not).
+> @@ -17092,20 +17097,12 @@ static int save_aux_ptr_type(struct bpf_verifie=
+r_env *env, enum bpf_reg_type typ
+>  		    is_ptr_to_mem_or_btf_id(*prev_type)) {
+>  			/*
+>  			 * Have to support a use case when one path through
+> -			 * the program yields TRUSTED pointer while another
+> -			 * is UNTRUSTED. Fallback to UNTRUSTED to generate
+> -			 * BPF_PROBE_MEM/BPF_PROBE_MEMSX.
+> -			 * Same behavior of MEM_RDONLY flag.
+> +			 * the program yields a TRUSTED pointer while another
+> +			 * is UNTRUSTED. Merge them into a type which keeps
+> +			 * the BPF_PROBE_MEM/BPF_PROBE_MEMSX rewrite when
+> +			 * either side needs it.
+>  			 */
+> -			if (is_ptr_to_mem(type) || is_ptr_to_mem(*prev_type))
+> -				merged_type =3D PTR_TO_MEM;
+> -			else
+> -				merged_type =3D PTR_TO_BTF_ID;
+> -			if ((type & PTR_UNTRUSTED) || (*prev_type & PTR_UNTRUSTED))
+> -				merged_type |=3D PTR_UNTRUSTED;
+> -			if ((type & MEM_RDONLY) || (*prev_type & MEM_RDONLY))
+> -				merged_type |=3D MEM_RDONLY;
+> -			*prev_type =3D merged_type;
+> +			*prev_type =3D merge_ptr_types(type, *prev_type);
+
+[Severity: Critical]
+This is a pre-existing issue, but does this bypass conflict resolution
+entirely if reg_type_mismatch() returns false for both types?
+
+If one branch provides a safe pointer (like PTR_TO_STACK) and another branch
+provides an untrusted pointer (PTR_TO_MEM | PTR_UNTRUSTED), they evaluate a=
+s:
+
+kernel/bpf/verifier.c:reg_type_mismatch() {
+	return src !=3D prev && (!reg_type_mismatch_ok(src) ||
+			       !reg_type_mismatch_ok(prev));
+}
+
+Since neither base type is in the reg_type_mismatch_ok() switch statement,
+it returns true for both types, causing reg_type_mismatch() to return false.
+
+If the safe pointer reaches save_aux_ptr_type() first, we wouldn't enter
+the else if (reg_type_mismatch(type, *prev_type)) block at all.
+
+Does this mean merge_ptr_types() is skipped, the untrusted pointer type is
+silently ignored, and we might fail to emit the required BPF_PROBE_MEM
+rewrite?
+
+>  		} else {
+>  			verbose(env, "same insn cannot be used with different pointers\n");
+>  			return -EINVAL;
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260814215301.7098=
+27-1-daniel@iogearbox.net?part=3D1
