@@ -1,98 +1,69 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-66.mta1.migadu.com [95.215.58.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C97C933939B
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 04:11:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C421C7E792
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 04:19:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786680663; cv=none; b=pC3Gbe1IcjHrOZxHY91Oirl0ToothZVOENmIUwibLi0RuhfPlquPE8TggQNaloZVCiYM5AnRjDnUc5Vmf2wmYoeMcZXF8THvMiGdbZngpUF0TuCe7ekKsFWNqN25MQt8uQw0zV6iEx6eRT6uJhTPA8rxyFig+jxBjU63sOgcYsI=
+	t=1786681163; cv=none; b=JAFONpFJfk1nph5QN6poFi+EkM8E0G+m5lfvAKfvKix3E72k/W5NaKfvZcla2RFOJR/c473v7cg6FkkXe/qmD3/s2LG2vvbQsKNpQ0rHeGunn4YX9B4fNa5e/vJzaMG65nV5bynYyLtyCJQLnbPvqFDXmR9lz7QajDGlxVLS/u0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786680663; c=relaxed/simple;
-	bh=aq/EqwL6zhltxxpNiUoGziL8FH1hiQc+acxLKmnSMEk=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=CBfF9p47hPiwM4wp4RY1mcDLGdFIfC0kU6Uc9IvqgDPTI3zt01QoOpdBoq6pBp1i79SLD2EeZDdT3tlrZYPYN+LaQk3Tfm4atbpCJvn56Lo/t8UQiy0QgaXD2S0UhOZUznyk7xvQZIcYPZ0gVee7A7sYNo+sRY16JOLCrk4ew8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MAtEaSeR; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786681163; c=relaxed/simple;
+	bh=PWTd6nbJVXaCT9i/7lgHburJ3nsC5QC91t07UUeLu2E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ci5rBP/G7bWoK+wpjIrHUirViLU5YFF6aDuzXZLLQPZxyPRxBZpDW7pyJbmCOf1df0pwj49ITLE3quNYIJHsKCreq+anyXlAGC3Yg3u6VlPLPOH0TAxgstRBQq1/afGEdlin3Z7CgzghzsjGyCfmTT76/BgcBONGrLFwfvKiXZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Fh5ZsFkj; arc=none smtp.client-ip=95.215.58.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MAtEaSeR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B5ED1F000E9;
-	Fri, 14 Aug 2026 04:11:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786680662;
-	bh=igDloU0eyHCmVW+1Lf/+qXx7WlPxGnvePMTmA5Ykc3o=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=MAtEaSeRJerdcfTQjoeRZdOBF4Yq7oLlKMpWE/1wlt8DrReTvIJn8K03CpF+6qiyP
-	 nsRj3GVH2EM47MuTEeu/KsYowQkLZHN9LvXd2xceVzCNlXM45JKZ/XvkiqrH9gEU3z
-	 X0BI22hylV2QyH5RP/jjzpox7NpP5v91l5cX81C8xBvnIXbglVM7DYMpk+6lDeFJCT
-	 kz+CB6Z4r2Yxi9qkFZFGTXzD5697aDuB2IEzT03q0CmdRq5dDaqCOjFnUejXNcUSfi
-	 85oD7B6APHG4k/LDoCllXi41rqop3iTnKe1EejiJAQn31TqHn7N/dHILBl955+EFeZ
-	 /fexCCkH5xUEA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 198813810900;
-	Fri, 14 Aug 2026 04:10:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Fh5ZsFkj"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=PWTd6nbJVXaCT9i/7lgHburJ3nsC5QC91t07UUeLu2E=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1786681159; v=1; x=1787285959;
+ b=Fh5ZsFkjANu5ro3H31wiUlkAV/UBI/hWAlwF0Sv2wCHMwZXam9gH6Sgavtyqjjs4Vfw2RCRh
+ Oj9WGaIfHOUT3Q6mzcm9tWVKCo2HIPGUaCRGvfggPzUlnm4OAvitLiuUlpt98ZXXt3bN7zPr9hb
+ /teh9BHg++fclGAWhkR7gxFU=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from [IPV6:2600:382:8612:2bc7:48f:e0cb:d896:8a1b] (2600:382:8612:2bc7:48f:e0cb:d896:8a1b)
+	by smtp.migadu.com with ESMTPS id 40e941041e0ea910;
+	Fri, 14 Aug 2026 04:19:19 +0000
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <42509a3a-6019-4362-a2dd-795eaaf4aeef@linux.dev>
+Date: Thu, 13 Aug 2026 21:19:12 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next] selftest/bpf: make pyperf600 a success again
+Content-Language: en-GB
+To: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org
+Cc: kernel-team@meta.com
+References: <20260813232943.581283-1-andrii@kernel.org>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260813232943.581283-1-andrii@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 0/7] bpf,
- arm64: __arena kfunc and struct_ops arguments
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178668061664.3161817.18426400734023554692.git-patchwork-notify@kernel.org>
-Date: Fri, 14 Aug 2026 04:10:16 +0000
-References: <20260813190356.335181-1-puranjay@kernel.org>
-In-Reply-To: <20260813190356.335181-1-puranjay@kernel.org>
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, xukuohai@huaweicloud.com,
- mark.rutland@arm.com, will@kernel.org, catalin.marinas@arm.com
 
-Hello:
 
-This series was applied to bpf/bpf-next.git (master)
-by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
 
-On Thu, 13 Aug 2026 12:03:47 -0700 you wrote:
-> The x86-64 JIT recently gained support for the __arena and
-> __arena__nullable argument suffixes on kfuncs and struct_ops stubs. This
-> adds the arm64 side and flips bpf_jit_supports_arena_args() on, so the
-> verifier stops rejecting these programs on arm64.
-> 
-> Patch 1 is an independent fix. save_args() reads stack-passed arguments
-> at FP + 32, which only holds when the trampoline is entered through the
-> fentry call and two frame records are pushed. A struct_ops trampoline is
-> entered via blr and pushes one frame fewer, so its stack arguments start
-> at FP + 16 and every one of them was read two slots off. No struct_ops
-> member passed arguments on the stack until the test added by commit
-> 2d4de9a493a0, which is why this went unnoticed. It carries a Fixes tag
-> and can be taken separately; note that the test covering it only runs on
-> arm64 once the rest of this series lands.
-> 
-> [...]
+On 8/13/26 4:29 PM, Andrii Nakryiko wrote:
+> pyperf600 has been running into 8K BPF_COMPLEXITY_LIMIT_JMP_SEQ limitations
+> for a long while now, after some internal compiler changes.
+>
+> Until BPF verifier is bestowed with scalar evolution logic, make that test
+> actually work by doing what would anyone should do in such situations: by
+> moving repeatable per-iteration work into independently verified global
+> functions.
+>
+> `void *` argument is a problem for global funcs, but a static function wrapper
+> doing necessary casts and a bit of __arg_nonnull magic dust is all it takes.
+>
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 
-Here is the summary with links:
-  - [bpf-next,v2,1/7] bpf, arm64: Fix stack-passed arguments for indirect trampolines
-    https://git.kernel.org/bpf/bpf-next/c/50de1c47a41d
-  - [bpf-next,v2,2/7] arm64: insn: Add encoder for ADD/SUB (extended register)
-    https://git.kernel.org/bpf/bpf-next/c/f4adb983ef3d
-  - [bpf-next,v2,3/7] bpf, arm64: JIT __arena kfunc argument rebasing
-    https://git.kernel.org/bpf/bpf-next/c/760cb40cfd6a
-  - [bpf-next,v2,4/7] bpf, arm64: Convert struct_ops arena arguments in the trampoline
-    https://git.kernel.org/bpf/bpf-next/c/bb5bad6a78b6
-  - [bpf-next,v2,5/7] selftests/bpf: Add arm64 JIT-sequence tests for __arena kfunc arguments
-    https://git.kernel.org/bpf/bpf-next/c/1c5bc60f957d
-  - [bpf-next,v2,6/7] selftests/bpf: Enable __arena argument tests on arm64
-    https://git.kernel.org/bpf/bpf-next/c/05a3575f225c
-  - [bpf-next,v2,7/7] selftests/bpf: Test a multi-slot argument before a struct_ops arena argument
-    https://git.kernel.org/bpf/bpf-next/c/197d34b16943
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+  Acked-by: Yonghong Song <yonghong.song@linux.dev>
 
 
