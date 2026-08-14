@@ -1,130 +1,124 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5113F45517F
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 11:20:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F11773E00A5
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 11:33:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786706462; cv=none; b=VHCEfclLAZ1nyLKGUBI1XD+unIbnX9zIzj1LeuEtM3N/4bOfLZk/IQxE+TfD0tabIqohEsE8TVGULIOEwUSIINxqsjdmAar91ErDX8vk5Qg/MVn43aFUbESjM+YCLxFRu2HrZJ+iTCqppUzFYeEpvLJIuuXh2+sjkrioYTY5GlU=
+	t=1786707188; cv=none; b=uvhIHiyH1C94DgVndA60Eo93lE1XdKvZugIfcK95H1j7KRRP9UIEYK1mq8qw/i5vgn5+9T5q82BZ+6s+OHdlI8/5IPlbUHL/kU7DQkSsOkEPIc2PR25yrep3RsWQczTrWIi5NCCKmoKba1RBICfl0TMJm8sSxoTTXg7qBeDRm7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786706462; c=relaxed/simple;
-	bh=t91dhOvO2JXtz0a4EQIMofUlUoMyjLkYe/rwEhyJbXI=;
+	s=arc-20240116; t=1786707188; c=relaxed/simple;
+	bh=E93JJVv0HIa7Ld/PHDmd+uYofOnyl8C/NjPhh00o5wY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=syxUN3ThF4bQdDDSis2BM/jaOdNZfrHif83wc5Rt7tHnmGjMbmVf5jGSXFNeLImQ0whKN4+QPgDzR38Jl4ut6HJ9VGYT0Lq3KCS1pJBYg8IvmSL3x6fPGoE93LAlxfQf4DvMoC5MdyMYbQ5LoLqhPHzI3bw1mqDBRnBjfsHCImQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ofc0c8co; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=sX4FHDYtRCwRzEboZ3ks/4IWrMNW023JZqGUCUr2fJ3Jsy66ZMFUzaJqJxB4HSTp0MMySgG2Iy+IcPLObLbd/pnefby3d/jXuN+yDzlKIdzDOyOAEjhsbO/09kT9l58K/NiaUMGX1i0SWqv1CXXQG7DAGsQcQnn/12NKnEw1HvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A5uSDWW/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ofc0c8co"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A34C61F000E9;
-	Fri, 14 Aug 2026 11:20:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A5uSDWW/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B21941F000E9;
+	Fri, 14 Aug 2026 11:33:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786706458;
-	bh=6yQwOXysvDquOgZZWNCZd9QmEr5FjZQaqX4MdSHSHVg=;
+	s=k20260515; t=1786707184;
+	bh=X/zswRr4bMxTSL7uTgHRpHY+XJQvuxPSpcQCvwyU3Es=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Ofc0c8coj3pz2Y+UPDyMMHbOpmYdgqyjzMw7JiqxBfkt6UDdWvoTc789ZfZKCKTbb
-	 DRVyi9mwRKeawXQt9dIRyjtSmkKb5bbznl5tCQg9CIX7Ja0diwgeeGgaXfOIoV+u/Z
-	 MZwdkkWrjuX2YuAeupshEjLqj15GL2ky53e8IWQB86YbyYBsBjIXeYSwJoba2VNCLH
-	 LuSa+ZiYG9wrvtDkUe6c20hDCBKBYfvewocUIVkZ04Mvek2kbQi06kUCDfyAqZC2KC
-	 wD/Yy/lHTMf1pjmka1egrv9D8RkGtuxhhZFgQBDr9jsA+Bnc51WZs593xnkGvX8AIj
-	 tqdZGgDvcDAQg==
+	b=A5uSDWW/iJ+Pkqaq/zKn5JSHKGyKelNNymY3rYtq8wzsszkk8jcuql4ms9uz1FNtG
+	 stpevfRK8ygDIbWHFepQh0Oh41cCDCA1ka3bLNPCiRIi+ZqfOsFGf9Jr8zVYqayY47
+	 zQkmqSuy3fuZDs1ctOVGnccNY2Qx4FZSuWjVQ5H28MSpNwRZBLscoeTD/cwC8/Nnyv
+	 sWtd5obYsNKviN+8uYfcIfFXT1TmbqsuMZWaADVCkIwHAtl9tLD1cyx4OAOLB0gXSW
+	 vZsuX3feFrMXxIEoSH9DDG81081gjun3wGChkcP5UsLMhUNtXY8K7ibjHGWwfkupNu
+	 zxl8fdUsRw0qA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add tests for bpf_sockopt
- is_compat field
+Subject: Re: [PATCH net-next] net: xdp: don't assume an Ethernet header in
+ generic XDP
 Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?TWFjaWVqIMW7ZW5jenlrb3dza2k=?= <maze@google.com>
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260813112039.247862-2-maze@google.com>
-References: <20260813112039.247862-1-maze@google.com>
- <20260813112039.247862-2-maze@google.com>
+In-Reply-To: <20260813113229.381136-1-jiayuan.chen@linux.dev>
+References: <20260813113229.381136-1-jiayuan.chen@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 14 Aug 2026 11:20:58 +0000
-Message-Id: <20260814112058.A34C61F000E9@smtp.kernel.org>
+Date: Fri, 14 Aug 2026 11:33:04 +0000
+Message-Id: <20260814113304.B21941F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] Reading the 4-byte padding at offset 44 in `struct bpf_sockopt` tr=
-iggers a `verifier_bug` WARN_ONCE because `cg_sockopt_convert_ctx_access()`=
- lacks a translation case.
-- [Low] The `getsockopt: read ctx->is_compat` selftest omits the `.io_uring=
-_support =3D true` flag, reducing test coverage.
+
+Pre-existing issues:
+- [High] Incorrect SKB length and tail pointer calculation after generic XD=
+P tail adjustment.
 --
 
---- Patch [2]: [PATCH bpf-next 2/2] selftests/bpf: Add tests for bpf_sockop=
-t is_compat field ---
-commit 007892bbe60c0ee959b9f1a3e6944cb7ea0af571
-Author: Maciej =C5=BBenczykowski <maze@google.com>
+--- Patch [1]: [PATCH net-next] net: xdp: don't assume an Ethernet header i=
+n generic XDP ---
+commit 3332d9a3f6b94e19ff995230c0e36bef6be765df
+Author: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-selftests/bpf: Add tests for bpf_sockopt is_compat field
+net: xdp: don't assume an Ethernet header in generic XDP
+   =20
+This patch fixes generic XDP for L3 devices (like tun/tap or ARPHRD_NONE)
+that do not have an Ethernet header. It skips Ethernet-specific checks and
+header adjustments when the SKB does not carry an ETH_HLEN sized L2 header.
 
-Sync tools/include/uapi/linux/bpf.h with the addition of the is_compat
-field in struct bpf_sockopt and add test cases to prog_tests/sockopt.c
-to verify context access permissions.
+Link: https://lore.kernel.org/bpf/20260812043643.808295-1-kennethbwlee@snu.=
+ac.kr/
 
-> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-> index ffd96e8b920bd..15f712b5b1645 100644
-> --- a/tools/include/uapi/linux/bpf.h
-> +++ b/tools/include/uapi/linux/bpf.h
-> @@ -7616,6 +7616,7 @@ struct bpf_sockopt {
->  	__s32	optname;
->  	__s32	optlen;
->  	__s32	retval;
-> +	__s32	is_compat;
->  };
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index fd0b445f5d38c..81de25a2b421d 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -5519,10 +5520,21 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb,=
+ struct xdp_buff *xdp,
+> =20
+>  	orig_data_end =3D xdp->data_end;
+>  	orig_data =3D xdp->data;
+> +
+> +	/* xdp->data only points at an Ethernet header if this skb actually
+> +	 * carries one.  Devices with a different link layer (mac_len =3D=3D 0
+> +	 * for ARPHRD_NONE/TUNNEL/RAWIP/PPP/..., IPOIB_ENCAP_LEN for IPoIB)
+> +	 * have nothing to inspect here, and must not have skb->mac_header
+> +	 * relocated by the ETH_HLEN fixup below.
+> +	 */
+> +	has_eth =3D mac_len =3D=3D ETH_HLEN;
+> +	if (has_eth) {
+> +		eth =3D (struct ethhdr *)xdp->data;
+> +		orig_host =3D ether_addr_equal_64bits(eth->h_dest,
+> +						    skb->dev->dev_addr);
+> +		orig_bcast =3D is_multicast_ether_addr_64bits(eth->h_dest);
+> +		orig_eth_type =3D eth->h_proto;
+> +	}
+> =20
+>  	act =3D bpf_prog_run_xdp(xdp_prog, xdp);
+> =20
 
 [Severity: High]
-Does this addition leave a 4-byte padding at offset 44 that causes a
-verifier bug?
+This isn't a bug introduced by this patch, but looking at how xdp->data and
+skb->data relate to the MAC header, could there be a tail pointer calculati=
+on
+issue when bpf_xdp_adjust_tail() is called?
 
-Because struct bpf_sockopt contains 64-bit pointers, adding is_compat
-makes the fields 44 bytes, expanding the struct size to 48 bytes due to
-alignment padding.
+Before bpf_prog_run_generic_xdp() executes, the MAC header is stripped via
+__skb_pull(skb, mac_len), leaving skb->data pointing at the network layer.
+However, xdp->data is initialized to point at the MAC header.
 
-In kernel/bpf/cgroup.c, cg_sockopt_is_valid_access() permits accesses up to
-the full struct size (48 bytes):
+If the XDP program adjusts the tail, the new tail pointer is updated further
+down in bpf_prog_run_generic_xdp():
 
-	if (off < 0 || off >=3D sizeof(struct bpf_sockopt))
-		return false;
+	/* check if bpf_xdp_adjust_tail was used */
+	off =3D xdp->data_end - orig_data_end;
+	if (off !=3D 0) {
+		skb_set_tail_pointer(skb, xdp->data_end - xdp->data);
+		skb->len +=3D off;
+	}
 
-However, cg_sockopt_convert_ctx_access() lacks a translation case for this
-implicit padding at offset 44. If a BPF program reads offset 44, it yields 0
-instructions, forcing bpf_convert_ctx_accesses() to emit a verifier_bug
-WARN_ONCE.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt.c b/tools/tes=
-ting/selftests/bpf/prog_tests/sockopt.c
-> index eaac83a7f388b..c7dd22d0e3f84 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/sockopt.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/sockopt.c
-> @@ -215,6 +215,49 @@ static struct sockopt_test {
-[ ... ]
-> +	{
-> +		.descr =3D "getsockopt: read ctx->is_compat",
-> +		.insns =3D {
-[ ... ]
-> +		},
-> +		.attach_type =3D BPF_CGROUP_GETSOCKOPT,
-> +		.expected_attach_type =3D BPF_CGROUP_GETSOCKOPT,
-> +
-> +		.get_level =3D SOL_IP,
-> +		.get_optname =3D IP_TOS,
-> +		.get_optlen =3D 1,
-> +	},
-
-[Severity: Low]
-Should this test case include the .io_uring_support =3D true flag?
-
-The "setsockopt: read ctx->is_compat" test configuration further down inclu=
-des
-this flag, but it is omitted here. Adding it would validate io_uring execut=
-ion
-on the new getsockopt hook.
+Because xdp->data_end - xdp->data includes the MAC header length, but
+skb_set_tail_pointer() applies this offset relative to skb->data (which is
+already at the network header), doesn't this push the tail pointer mac_len
+bytes too far past the actual end of the packet?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260813112039.2478=
-62-1-maze@google.com?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260813113229.3811=
+36-1-jiayuan.chen@linux.dev?part=3D1
