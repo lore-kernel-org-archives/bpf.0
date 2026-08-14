@@ -1,102 +1,130 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30448448B9C
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 10:45:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5113F45517F
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 11:20:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786704335; cv=none; b=Ki2VVokAPo5CR0YctTU0s0TnroxeYG649pUnDl1hjj2psebVSMMmOwrPEYYO/xGMpS7BnzDr+8/nHTFfsBgBj687uJ9hNgnhpXHFhQ9j9qZSJfnXa0Yy4oqk4N8gkLTiMYPSdQ+7aooX/zUD4sVmq1yA3RBl6IjPdy1UMKZTDNE=
+	t=1786706462; cv=none; b=VHCEfclLAZ1nyLKGUBI1XD+unIbnX9zIzj1LeuEtM3N/4bOfLZk/IQxE+TfD0tabIqohEsE8TVGULIOEwUSIINxqsjdmAar91ErDX8vk5Qg/MVn43aFUbESjM+YCLxFRu2HrZJ+iTCqppUzFYeEpvLJIuuXh2+sjkrioYTY5GlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786704335; c=relaxed/simple;
-	bh=cfQ5psBdFupVgEA/ciXkWuRtVmhgxSgdnNDh4pIrvSY=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=e2x5C4B7QLya4c7xbqmj1eEbSyv9xkFvOPFzoUMUR/I1hgHOQ24skHb8yGylxLAwSS1KoSZQLX+bLznf4za9TY25/zboE1ddTRfUyeqiO+u63e/JUBQLX0OzVUa+EZHwvuWJshSLQOw3qlTbetjHJkvk2N3oeltT4cemVLOQdIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=RQ1JRHOi; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1786706462; c=relaxed/simple;
+	bh=t91dhOvO2JXtz0a4EQIMofUlUoMyjLkYe/rwEhyJbXI=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=syxUN3ThF4bQdDDSis2BM/jaOdNZfrHif83wc5Rt7tHnmGjMbmVf5jGSXFNeLImQ0whKN4+QPgDzR38Jl4ut6HJ9VGYT0Lq3KCS1pJBYg8IvmSL3x6fPGoE93LAlxfQf4DvMoC5MdyMYbQ5LoLqhPHzI3bw1mqDBRnBjfsHCImQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ofc0c8co; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="RQ1JRHOi"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-c1c52d920b8so118797766b.2
-        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 03:45:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1786704319; x=1787309119; darn=vger.kernel.org;
-        h=content-type:mime-version:message-id:date:user-agent:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=cfQ5psBdFupVgEA/ciXkWuRtVmhgxSgdnNDh4pIrvSY=;
-        b=RQ1JRHOiU5EIR6nJ+NwgjYLdkCx1rJZfxxTkIBOQTnpSa0PQ0rRbm6JrIS1vIC2C/x
-         7zvY12zx0UzqrKx6rYc2suzs5KcTGA2QIJNNZ96F2rBC7OO99BCmyrsNEkcoD9X9nxw0
-         XJShp/RZUWbsPaLFaZACpW5jx++/VLttd3W61yUdfjGe2ltqGS0phh9yagcusjWw0GRz
-         3RMtsIvVgTvPaB8nFxx9O7ZNYvuTZEY89e2Cz48HFFQldYIbm2cyxb5odLrJewofGwoT
-         FjLqkwlmZflfrj/pOA2T0cAHxHEYI9EhFnq4wruOHDhzQZ2V4p4VneyFu2tfd91XrMr4
-         +TBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786704319; x=1787309119;
-        h=content-type:mime-version:message-id:date:user-agent:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=cfQ5psBdFupVgEA/ciXkWuRtVmhgxSgdnNDh4pIrvSY=;
-        b=Cj/t4eIfW/xH7GXJcdI7WaPOes6yqegfzllwEbxS0YlNsPiFoMv51PAZ2QseXohI3l
-         dFGkGaikpjmPFY5wblbyjipLsWY+u7bFHAXYYkNfiKWKK+PoURlZvbdaMUex9TuLgmJD
-         9dkFo/LZcScKP38iajuZwQidcePqda8ZTyroin4qydqy7Cc1ZLeSYGbqlbw/6ezZcZz/
-         Iix9vJUWPvxfeUxfbhAvAdNCo/Bb3++2ZIZjO7QqPtOVQk19sAJq/RWwZ6xPeo5HB/Ld
-         /kGyesCR0lUuldpEMORqT0LdIa6dbZY1wyb4DriDrjgL7EVifDRkCK8V7BKPybP37E6/
-         GecQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqbYblcVd1h8BGOTI8gFAkvTpgXicwHq8qmvQCnArDmJHfrkjUM4OC2seA2FUXIG3Hyaio=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySYAf81tC+hNpB7L6iOE2r9xIR/VTynMrr29cocFPYWIobdpW3
-	xPmZARvRnYZz5HJeJwy2K8tvy3VTq0Y3J7hLvDRZRb9cJlU5TkYmC2cakvCaGANsCRw=
-X-Gm-Gg: AR+sD12M6pE4THDh4if/UI0oSGHtCdgnxAAfUV6M0Fv3ec9HNwmE6ohM/rH8drzHH04
-	Eb/jt4hLm8wisOo+fdupQ0nyTw+ksteXodmMuVQCvn1MKlJ6NXpQuspk+CK9YDJPEMiCzsJLVC0
-	uCU0GYxMGImBCNH1pJf9l+UzT+vEURvff4kyqyAEiwsppos20dj6OvJyXICThNTNGGlV3xF87dD
-	QMPVed2CpViYTxRmyuGLO8rz4jmvSeM0s+lToBIDdtRWajENtaTTBQO5SZesjK0BnhuaKrcbihX
-	E0cSYnxrikejd36VgOcxB91IcEvhc0w18zRr/HZdG0KSbvZ+I5BN5ZKWoH5+VLfOCXPkwz2hZBV
-	LM4TYLtClKoH3cRAcZTxzwHI/G3IxYWcpRmQhAPfjQhuPJ2a0qzI8LFhnaz5+/aX3CoXLCGzw2u
-	h+7mgqnXAUxE7MP5mRRpV1dAvK9Oasq7DmZ4n/nu6scnkuSY6MYEXbGwiwaGqk9So=
-X-Received: by 2002:a17:907:3d0f:b0:c20:f913:9337 with SMTP id a640c23a62f3a-c212a265c29mr206885166b.20.1786704319537;
-        Fri, 14 Aug 2026 03:45:19 -0700 (PDT)
-Received: from cloudflare.com ([104.28.21.182])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c21233a08f0sm94381266b.11.2026.08.14.03.45.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Aug 2026 03:45:19 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Michal Luczaj <mhal@rbox.co>
-Cc: Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>,  Eduard
- Zingerman <eddyz87@gmail.com>,  Kumar Kartikeya Dwivedi
- <memxor@gmail.com>,  Martin KaFai Lau <martin.lau@linux.dev>,  Song Liu
- <song@kernel.org>,  Yonghong Song <yonghong.song@linux.dev>,  Jiri Olsa
- <jolsa@kernel.org>,  Emil Tsalapatis <emil@etsalapatis.com>,  Ihor
- Solodrai <ihor.solodrai@linux.dev>,  John Fastabend
- <john.fastabend@gmail.com>,  Stanislav Fomichev <sdf@fomichev.me>,  "David
- S. Miller" <davem@davemloft.net>,  Eric Dumazet <edumazet@google.com>,
-  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>,
-  Simon Horman <horms@kernel.org>,  Jiayuan Chen <jiayuan.chen@linux.dev>,
-  Kuniyuki Iwashima <kuniyu@google.com>,  Willem de Bruijn
- <willemb@google.com>,  bpf@vger.kernel.org,  netdev@vger.kernel.org,
-  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next 0/2] bpf: Cleanup & optimization
-In-Reply-To: <20260813-sockmap-lookup-get-ref-v1-0-31f5d55f44ac@rbox.co>
-	(Michal Luczaj's message of "Thu, 13 Aug 2026 14:41:58 +0200")
-References: <20260813-sockmap-lookup-get-ref-v1-0-31f5d55f44ac@rbox.co>
-User-Agent: mu4e 1.14.1; emacs 30.2
-Date: Fri, 14 Aug 2026 12:45:18 +0200
-Message-ID: <871pc10ym9.fsf@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ofc0c8co"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A34C61F000E9;
+	Fri, 14 Aug 2026 11:20:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786706458;
+	bh=6yQwOXysvDquOgZZWNCZd9QmEr5FjZQaqX4MdSHSHVg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Ofc0c8coj3pz2Y+UPDyMMHbOpmYdgqyjzMw7JiqxBfkt6UDdWvoTc789ZfZKCKTbb
+	 DRVyi9mwRKeawXQt9dIRyjtSmkKb5bbznl5tCQg9CIX7Ja0diwgeeGgaXfOIoV+u/Z
+	 MZwdkkWrjuX2YuAeupshEjLqj15GL2ky53e8IWQB86YbyYBsBjIXeYSwJoba2VNCLH
+	 LuSa+ZiYG9wrvtDkUe6c20hDCBKBYfvewocUIVkZ04Mvek2kbQi06kUCDfyAqZC2KC
+	 wD/Yy/lHTMf1pjmka1egrv9D8RkGtuxhhZFgQBDr9jsA+Bnc51WZs593xnkGvX8AIj
+	 tqdZGgDvcDAQg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add tests for bpf_sockopt
+ is_compat field
+Reply-To: sashiko-reviews@lists.linux.dev
+To: =?utf-8?b?TWFjaWVqIMW7ZW5jenlrb3dza2k=?= <maze@google.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260813112039.247862-2-maze@google.com>
+References: <20260813112039.247862-1-maze@google.com>
+ <20260813112039.247862-2-maze@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 14 Aug 2026 11:20:58 +0000
+Message-Id: <20260814112058.A34C61F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
 
-On Thu, Aug 13, 2026 at 02:41 PM +02, Michal Luczaj wrote:
-> Non-functional cleanup and a refcnt bumping simplification.
->
-> Series extracted from a fix attempt[1] currently under discussion.
->
-> [1]: https://lore.kernel.org/bpf/20260803-sockmap-lookup-tcp-leak-v2-0-306e025bfe66@rbox.co/
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] Reading the 4-byte padding at offset 44 in `struct bpf_sockopt` tr=
+iggers a `verifier_bug` WARN_ONCE because `cg_sockopt_convert_ctx_access()`=
+ lacks a translation case.
+- [Low] The `getsockopt: read ctx->is_compat` selftest omits the `.io_uring=
+_support =3D true` flag, reducing test coverage.
+--
 
-Discussion seems to have stalled. Or it's just vacation season.
-Anyway, I'm fine with fixing the refcounting your way.
-Merely wanted to offer an alternative idea for consideration.
-Thanks for working on this.
+--- Patch [2]: [PATCH bpf-next 2/2] selftests/bpf: Add tests for bpf_sockop=
+t is_compat field ---
+commit 007892bbe60c0ee959b9f1a3e6944cb7ea0af571
+Author: Maciej =C5=BBenczykowski <maze@google.com>
+
+selftests/bpf: Add tests for bpf_sockopt is_compat field
+
+Sync tools/include/uapi/linux/bpf.h with the addition of the is_compat
+field in struct bpf_sockopt and add test cases to prog_tests/sockopt.c
+to verify context access permissions.
+
+> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+> index ffd96e8b920bd..15f712b5b1645 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+> @@ -7616,6 +7616,7 @@ struct bpf_sockopt {
+>  	__s32	optname;
+>  	__s32	optlen;
+>  	__s32	retval;
+> +	__s32	is_compat;
+>  };
+
+[Severity: High]
+Does this addition leave a 4-byte padding at offset 44 that causes a
+verifier bug?
+
+Because struct bpf_sockopt contains 64-bit pointers, adding is_compat
+makes the fields 44 bytes, expanding the struct size to 48 bytes due to
+alignment padding.
+
+In kernel/bpf/cgroup.c, cg_sockopt_is_valid_access() permits accesses up to
+the full struct size (48 bytes):
+
+	if (off < 0 || off >=3D sizeof(struct bpf_sockopt))
+		return false;
+
+However, cg_sockopt_convert_ctx_access() lacks a translation case for this
+implicit padding at offset 44. If a BPF program reads offset 44, it yields 0
+instructions, forcing bpf_convert_ctx_accesses() to emit a verifier_bug
+WARN_ONCE.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt.c b/tools/tes=
+ting/selftests/bpf/prog_tests/sockopt.c
+> index eaac83a7f388b..c7dd22d0e3f84 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sockopt.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sockopt.c
+> @@ -215,6 +215,49 @@ static struct sockopt_test {
+[ ... ]
+> +	{
+> +		.descr =3D "getsockopt: read ctx->is_compat",
+> +		.insns =3D {
+[ ... ]
+> +		},
+> +		.attach_type =3D BPF_CGROUP_GETSOCKOPT,
+> +		.expected_attach_type =3D BPF_CGROUP_GETSOCKOPT,
+> +
+> +		.get_level =3D SOL_IP,
+> +		.get_optname =3D IP_TOS,
+> +		.get_optlen =3D 1,
+> +	},
+
+[Severity: Low]
+Should this test case include the .io_uring_support =3D true flag?
+
+The "setsockopt: read ctx->is_compat" test configuration further down inclu=
+des
+this flag, but it is omitted here. Adding it would validate io_uring execut=
+ion
+on the new getsockopt hook.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260813112039.2478=
+62-1-maze@google.com?part=3D2
