@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-232.mta0.migadu.com [91.218.175.232])
+Received: from mta0.migadu.com (out-237.mta0.migadu.com [91.218.175.237])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEBF73E8C78
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 23:20:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47ADD3EA95F
+	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 23:20:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.237
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786749618; cv=none; b=ufGRiygwCx4ICvAtoluDyWs4snUQgVA4gSFvVJqxbU6EgTY0cu3EG1QAlp1OeJBBOiPHXa5OXKCHbAAV9iFXlT2XU+rKfiJ+Wu/tROvoXDxiRyWbv9123LT2meo++s4TnHDTu9s3ujA3hiOE6DGXlTy1ocCH/CqsoUB7GGvUq/Y=
+	t=1786749622; cv=none; b=KNjoUpXYH0TuwR1BKfOOhurr10WQqcmfJrLeCA9LH5j+ydsEy0gqnLnwcp0G8iD/2XY2gV+JNqiDmebUJHyQee34Z+gVwuM5Q234sILOGMnQ+cUja0uW/dxdjBm0GIpnRYeeLoi5VYAxxbXxJ3NyERECIxN1P3CP9WAOKINKpIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786749618; c=relaxed/simple;
-	bh=32bCd92QrJ5CNFMIriXP22Lyz4CFQtB+v0/Z/V2E8wk=;
+	s=arc-20240116; t=1786749622; c=relaxed/simple;
+	bh=gQWfhEdKF2JjwJqUTznVUndfsb1utd+bePMKBBr0H5A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RwkqQ1mTyreAB2QY020CibjQhnr1qrQTa7a1Zfv013oMBC/ysIV6zSdW30ubUrsl6unHPLpncFd642nU+URrnZBd3rmNDzPgY596R0b06XdPB4nsVnUjZy9CdUIM31U2w/od2iwxwPQCD6Qe5pZ1i0cO/qkXkUwa933GeKW795s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=haUEDowS; arc=none smtp.client-ip=91.218.175.232
+	 MIME-Version; b=tLzwCjhiW/MWrpKhiVuBUriqsulm+soIDWoFUqXRnMcPzPryl+JTo3Z1n+02VD4ZMPZ12QIpTJ2Vq77ebpIGFMl7qlJuZfNNr9lipN4y6L5g+M8f3hotC2koqSnWkW99yb7qg3j4eAhf6Bm8idHrZ7eLfLdHB4FEoVkFucoE3xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=opEJJQVD; arc=none smtp.client-ip=91.218.175.237
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="haUEDowS"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="opEJJQVD"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=32bCd92QrJ5CNFMIriXP22Lyz4CFQtB+v0/Z/V2E8wk=;
+DKIM-Signature: a=rsa-sha256; bh=gQWfhEdKF2JjwJqUTznVUndfsb1utd+bePMKBBr0H5A=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786749610; v=1; x=1787354410;
- b=haUEDowS3aiummw114mtZgRiZmxyPBISz5DYTwjQuB9RwHPJLoNdF2rVZOSAjTDd2CEHT9C4
- dfKLG0bFosae4R8zAENcp38wbdkKO8AL1yisriJjqKJmWCrqjFgxBMUb0w0MG7OZVFleVdMKxCH
- YznhZDcb8BQc5fDoC8iGDXIs=
+ t=1786749614; v=1; x=1787354414;
+ b=opEJJQVD3u7rnINxCL80tZM894hnpAGnTzYnFN2q4Jm8/uvq98i4LxkMqhpDQHaivWJmZMg1
+ TiKeqH+G/z67KNv4prfUIjHeESOUJEFD5xeCIpOIAUxtvsjii3oV1aPzLStEfz3Why+ypkNUn59
+ 3ybwXGSeTepWeic9tZpTdPLA=
 X-Envelope-To: bpf@vger.kernel.org
 Received: from gvineet-fedora-PF5JGVFY.thefacebook.com (2620:10d:c090:500::6:7be4)
-	by smtp.migadu.com with ESMTPS id 845d4f031579e439;
-	Fri, 14 Aug 2026 23:20:09 +0000
+	by smtp.migadu.com with ESMTPS id ad926ce0d5276d48;
+	Fri, 14 Aug 2026 23:20:13 +0000
 X-Migadu-Flow: FLOW_OUT
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: ast@kernel.org,
@@ -47,9 +47,9 @@ Cc: martin.lau@linux.dev,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [RFC bpf-next 3/6] bpf: support low-32 subreg scalar linking for zero-extending movs
-Date: Fri, 14 Aug 2026 16:19:42 -0700
-Message-ID: <20260814231945.3884596-4-vineet.gupta@linux.dev>
+Subject: [RFC bpf-next 4/6] selftests/bpf: cover low-32 subreg-equal link for zero-extending movs
+Date: Fri, 14 Aug 2026 16:19:43 -0700
+Message-ID: <20260814231945.3884596-5-vineet.gupta@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260814231945.3884596-1-vineet.gupta@linux.dev>
 References: <20260814231945.3884596-1-vineet.gupta@linux.dev>
@@ -61,283 +61,217 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Problem
-=======
-Currently register equality tracking and propagation only works for full
-64-bits (with additional constant offset). It is missing the
-relationship: "these two regs share only their low 32-bits".
+Add subreg_eq_zext_mov_narrow: a wide-source "w7 = w6" followed by "if w6 == 0"
+must narrow w7 to 0 via the low-32 BPF_FLAG_SUBREG_ZEXT link.
 
-An illustrative snippet:
+Update two tests for the new, more precise behaviour:
+ - verifier_reg_equal/subreg_equality_2 now loads: with the low-32 link,
+   "w2 < 9" narrows r3 to [0, 8], so the illegal r1 read is unreachable and the
+   program is safe.
+ - verifier_bounds 32-bit subtraction partial overflow: R3 now carries an id
+   from the link (bounds unchanged), so __msg gains an "id=" match. It is
+   required rather than optional: the id is deterministic here, and an
+   optional match would still pass if the link were ever dropped again.
 
-|  r6 = ...                    /* full 64-bit unknown */
-|  w7 = w6                     /* 32-bit zero-extend mov from wide src */
-|  if w6 != 0 goto .Lxx        /* branch not taken, src narrowed */
-|  if w7 == 0 goto .Lok   <-- missing
-
-It works if the register is narrow to begin with, e.g.
-|  r6 = *(u32 *)(...)
-
-Rephrased in verifier speak:
-
-The linked-scalar equality relation sync_linked_regs() maintains is full
-64-bit only; there is no subregister (low-32) equality link.
-A 32-bit mov (w1 = w2) is therefore either promoted to a full-64-bit link
-when the source is provably u32, or the link is dropped entirely when the
-wider source has unknown high bits. A later narrowing of the source to its
-low 32 bits never reaches dst, causing safe programs to be rejected. Note that
-the ADD_CONST32 machinery only applies to += const offset, not to equality.
-
-This was seen with bpf-gcc codegen that tends to reuse "w0 = idx" for
-"return 0" on an idx==0 path, for bpf_loop callbacks.
-
-Solution
-========
- - Introduce a low-32-only link, BPF_FLAG_SUBREG_ZEXT, added to BPF_FLAG_LINK.
- - For a wide-source 32-bit mov, mark dst with BPF_FLAG_SUBREG_ZEXT instead
-   of clearing it (when src carries a scalar id).
- - On a later low-32 narrowing sync_linked_regs() re-derives such a register as
-   the zero-extension of the base's low 32 bits: it copies the base (keeping its
-   precise low-32 tnum) and re-applies zext_32_to_64() -- the same helper the
-   32-bit mov used -- which is sound even when the source has unknown high bits.
-   This is applied only when neither side carries an ADD_CONST delta (the
-   combined subreg+delta case is not modeled).
- - Sites that group a subreg-linked register by its scalar id compare ->id
-   directly: no masking is needed, since BPF_FLAG_SUBREG_ZEXT lives in
-   ->flags.
-
-The reconstruction copies the base wholesale, so it must put back the fields
-that identify reg rather than known_reg -- ->id and, now, the link flag. This
-mirrors what the ADD_CONST arm below already does ("Must preserve off and id,
-otherwise another sync_linked_regs() will be incorrect"). Dropping the flag
-while keeping the ->id would be worse than losing the link: the register would
-claim a full 64-bit equality with a base whose high bits are unknown, and the
-next sync driven by it would copy a narrowed low-32 value straight onto the
-base's high half.
-
-The link_flags_match() helper added by the previous patch is widened from
-BPF_FLAG_ADD_CONST to BPF_FLAG_LINK, so regs_exact() -- and through it
-states_maybe_looping() -- discriminates the new flavour as well. regsafe()
-additionally checks it early, before the explore_alu_limits and !precise
-short-circuits, which the helper's call site below them does not cover.
-
-Note: the sync_linked_regs() reconstruction is wrapped in an extra block that
-looks redundant here. It is a placeholder for the sign-extension counterpart
-patch, which turns it into the else arm of an if/else on the link flavour;
-keeping it now avoids re-indenting the whole body there.
-
-Results
-=======
-Improves verifier tracking (seen in the next selftest).
-selftest runs:
- - clang: no new regressions (-mcpu=v3 and v4)
- - bpf-gcc: no new regressions; the measurable selftest pass improvements
-   come with the sign-extension counterpart patch.
+Also covers the dest-driven direction, which the other tests do not: they all
+narrow the base and check the linked register.
+zext_dest_driven_does_not_narrow_base narrows the LINKED register instead and
+requires that the wide base is NOT narrowed -- the "known_reg is
+subreg-linked" continue in sync_linked_regs().
+It is a __failure test: the div must stay reachable. This is also the shape
+that catches a lost BPF_FLAG_SUBREG_ZEXT, since dropping the flag while the
+shared ->id survives makes the pair look like a full 64-bit equality and
+bypasses that guard.
 
 Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
- include/linux/bpf_verifier.h | 10 ++++
- kernel/bpf/states.c          | 23 ++++++++-
- kernel/bpf/verifier.c        | 91 ++++++++++++++++++++++++++++++++----
- 3 files changed, 114 insertions(+), 10 deletions(-)
+ .../selftests/bpf/progs/verifier_bounds.c     |  10 +-
+ .../bpf/progs/verifier_linked_scalars.c       | 115 ++++++++++++++++++
+ .../selftests/bpf/progs/verifier_reg_equal.c  |  16 +--
+ 3 files changed, 133 insertions(+), 8 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 2b03fdba9acf..a4cba5c5099e 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -169,10 +169,20 @@ struct bpf_reg_state {
- 	 *
- 	 * BPF_FLAG_ADD_CONST{32,64}: this register is (base + ->delta) within
- 	 * its ->id set, computed with a 32- or 64-bit ALU add.
-+	 * BPF_FLAG_SUBREG_ZEXT: low-32-bit-only equality (as opposed to the
-+	 * full equality implied by a bare shared ->id): this register shares
-+	 * only the base's low 32 bits, and its high bits are zero (32-bit
-+	 * zero-extending mov).
-+	 * sync_linked_regs() propagates the low 32-bit subrange and rebuilds
-+	 * the high half accordingly, so this is sound even when the base has
-+	 * unknown high bits.
- 	 */
- #define BPF_FLAG_ADD_CONST32	(1U << 0)
- #define BPF_FLAG_ADD_CONST64	(1U << 1)
- #define BPF_FLAG_ADD_CONST	(BPF_FLAG_ADD_CONST32 | BPF_FLAG_ADD_CONST64)
-+#define BPF_FLAG_SUBREG_ZEXT	(1U << 2)
-+/* Every flag describing how this register relates to its ->id set. */
-+#define BPF_FLAG_LINK		(BPF_FLAG_ADD_CONST | BPF_FLAG_SUBREG_ZEXT)
- #define BPF_FLAG_PRECISE	(1U << 7)
- 	u8 flags;
- };
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index d3105b9a9965..ef71999c4695 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -490,6 +490,9 @@ static int clean_verifier_state(struct bpf_verifier_env *env,
-  *
-  * Only meaningful when rold carries an id: the flags are only ever set
-  * together with one, so rold->id == 0 implies none of them is set.
-+ *
-+ * BPF_FLAG_LINK covers every flavour, so this widens automatically as new
-+ * ones are added.
-  */
- static bool link_flags_match(const struct bpf_reg_state *rold,
- 			     const struct bpf_reg_state *rcur)
-@@ -497,7 +500,7 @@ static bool link_flags_match(const struct bpf_reg_state *rold,
- 	if (!rold->id)
- 		return true;
- 
--	return (rold->flags & BPF_FLAG_ADD_CONST) == (rcur->flags & BPF_FLAG_ADD_CONST);
-+	return (rold->flags & BPF_FLAG_LINK) == (rcur->flags & BPF_FLAG_LINK);
- }
- 
- static bool regs_exact(const struct bpf_reg_state *rold,
-@@ -554,6 +557,24 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
- 
- 	switch (base_type(rold->type)) {
- 	case SCALAR_VALUE:
-+		/*
-+		 * A low-32-bit-only link has different sync_linked_regs()
-+		 * semantics than a full/ADD_CONST equality. check_scalar_ids()
-+		 * only ever sees the plain ->id and never looks at ->flags, so a
-+		 * mismatch must be rejected explicitly.
-+		 * Check it here, before the explore_alu_limits and !precise
-+		 * short-circuits below (neither of which tests it). Note the
-+		 * pre-existing BPF_FLAG_ADD_CONST check sits after those
-+		 * short-circuits instead. The argument for checking early
-+		 * applies to it equally, but moving it makes regsafe() stricter
-+		 * on a path that predates this series, which is a pruning change
-+		 * that wants measuring on its own; it is deliberately left
-+		 * alone here.
-+		 */
-+		if (rold->id &&
-+		    (rold->flags & BPF_FLAG_SUBREG_ZEXT) != (rcur->flags & BPF_FLAG_SUBREG_ZEXT))
-+			return false;
-+
- 		if (env->explore_alu_limits) {
- 			/* explore_alu_limits disables tnum_in() and range_within()
- 			 * logic and requires everything to be strict
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 93e69116ca9e..8a802d49d0a4 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1806,7 +1806,7 @@ static void __mark_reg_known(struct bpf_reg_state *reg, u64 imm)
- 	       offsetof(struct bpf_reg_state, var_off) - sizeof(reg->type));
- 	reg->id = 0;
- 	reg->parent_id = 0;
--	reg->flags &= ~BPF_FLAG_ADD_CONST;
-+	reg->flags &= ~BPF_FLAG_LINK;
- 	___mark_reg_known(reg, imm);
- }
- 
-@@ -3309,7 +3309,7 @@ static void clear_scalar_id(struct bpf_reg_state *reg)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+index 1a273e416fed..6169a61269b2 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+@@ -1516,7 +1516,15 @@ __naked void sub32_full_overflow(void)
+ SEC("socket")
+ __description("32-bit subtraction, partial overflow, result in unbounded u32 bounds")
+ __success __log_level(2)
+-__msg("3: (1c) w3 -= w2 {{.*}} R3=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))")
++/*
++ * w3 = w0 forms a low-32 BPF_FLAG_SUBREG_ZEXT link, so R3 carries an id here
++ * where it did not before; the bounds are unchanged. The id is deterministic
++ * (raw asm, same bytecode in every flavour) so require it rather than making
++ * it optional -- otherwise the assertion would still pass if the link were
++ * dropped again. The delta suffix is left general: log.c prints ->delta
++ * directly after the id with no separator when BPF_FLAG_ADD_CONST is set.
++ */
++__msg("3: (1c) w3 -= w2 {{.*}} R3=scalar(id={{[0-9]+([+-][0-9]+)?}},smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))")
+ __retval(0)
+ __naked void sub32_partial_overflow(void)
  {
- 	reg->id = 0;
- 	reg->delta = 0;
--	reg->flags &= ~BPF_FLAG_ADD_CONST;
-+	reg->flags &= ~BPF_FLAG_LINK;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+index c80747c16bcf..2cc6f9e45aff 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
++++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+@@ -711,4 +711,119 @@ l_exit_%=:							\
+ 	: __clobber_all);
  }
  
- static void assign_scalar_id_before_mov(struct bpf_verifier_env *env,
-@@ -15076,15 +15076,42 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 					if (insn->off == 0) {
- 						bool is_src_reg_u32 = get_reg_width(src_reg) <= 32;
++/*
++ * A 32-bit zero-extending mov (w7 = w6) from a source with unknown high bits
++ * shares only the low 32 bits (w7.lo == w6.lo, w7.hi == 0). A later narrowing of
++ * the source's low 32 bits must propagate to the destination via the
++ * BPF_FLAG_SUBREG_ZEXT (low-32-only) link. This is the pattern bpf-gcc emits when it
++ * reuses "w0 = idx" for "return 0" on the idx==0 path of a callback.
++ */
++SEC("socket")
++__success
++__naked void subreg_eq_zext_mov_narrow(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;		/* r6 = 64-bit unknown (helper ret is unbounded) */ \
++	call %[bpf_get_prandom_u32];				\
++	r0 <<= 32;		/* r0 = unknown high bits */	\
++	r6 |= r0;		/* still 64-bit unknown; makes it explicit */ \
++	w7 = w6;		/* 32-bit zero-extend mov, wide src */	\
++	if w6 != 0 goto l_out_%=;	/* w6 low == 0 on fall-through */ \
++	/* w7 = zext32(w6 low) must be 0 here */		\
++	if w7 == 0 goto l_out_%=;	/* provably 0 iff linked */	\
++	r0 /= 0;		/* reached only if w7 not deduced 0 */	\
++l_out_%=:							\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/*
++ * A 32-bit zero-extending mov (w7 = w5) whose SOURCE is a wide ADD_CONST-linked
++ * register (r5 = base + K) must NOT disturb that source. Forming the low-32
++ * BPF_FLAG_SUBREG_ZEXT link on the destination would need assign_scalar_id_before_mov()
++ * on the source, which clears its base+delta link -- and a combined
++ * subreg+delta link isn't modeled anyway (sync_linked_regs() skips it). So for a
++ * wide ADD_CONST src the mov leaves the source's link intact and just clears the
++ * destination.
++ *
++ * Here r5 = r6 + 3 (ADD_CONST, wide). After the mov, narrowing the base r6 must
++ * still reach r5 through the preserved link: r6 in [0, 10] => r5 in [3, 13], so
++ * the guarded div-by-zero is unreachable. Had the mov cleared r5's link (calling
++ * assign_scalar_id_before_mov() unconditionally), r5 would stay unbounded and the
++ * div would be reachable (rejected).
++ *
++ * Note this is a no-regression guard rather than coverage of the new link:
++ * before this feature the wide-source path also left the source untouched, so
++ * the test passes either way. What it pins is the choice not to call
++ * assign_scalar_id_before_mov() unconditionally.
++ *
++ * Written in asm so the bytecode is identical regardless of the host BPF compiler.
++ */
++SEC("socket")
++__success
++__naked void zext_mov_keeps_add_const_src(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;		/* r6 low = unknown u32 */	\
++	call %[bpf_get_prandom_u32];				\
++	r0 <<= 32;						\
++	r6 |= r0;		/* r6 = full 64-bit unknown (base) */ \
++	r5 = r6;		/* r5, r6 linked (shared id) */	\
++	r5 += 3;		/* r5 = base + 3: ADD_CONST, still wide */ \
++	w7 = w5;		/* 32-bit zext mov, wide ADD_CONST src */ \
++	if r6 > 10 goto l_out_%=;/* r6 in [0, 10] */		\
++	/* r5 = r6 + 3 must be in [3, 13] here (needs the kept link) */ \
++	if r5 > 13 goto l_err_%=;/* taken only if r5 not narrowed */ \
++	goto l_out_%=;						\
++l_err_%=:							\
++	r0 /= 0;		/* reachable iff r5's link was cleared */ \
++l_out_%=:							\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/*
++ * Dest-driven direction, zero-extend flavour: narrowing the LINKED register
++ * must not narrow the wide base.
++ *
++ * w7 = w6 shares only r6's low 32 bits; r7's high half is zero, r6's is
++ * unknown. Learning r7 == 0 therefore says nothing about r6, and
++ * sync_linked_regs() must not copy r7's state onto it. Rejected iff the base
++ * is left alone.
++ *
++ * This is the shape that catches a lost BPF_FLAG_SUBREG_ZEXT: if the flag is
++ * dropped while the shared ->id survives, the pair looks like a full 64-bit
++ * equality, the dest-driven guard is bypassed and r6 wrongly becomes 0.
++ */
++SEC("socket")
++__failure __msg("div by zero")
++__flag(BPF_F_TEST_STATE_FREQ)
++__naked void zext_dest_driven_does_not_narrow_base(void)
++{
++	asm volatile ("						\
++	call %[bpf_get_prandom_u32];				\
++	r6 = r0;		/* r6 low = unknown u32 */	\
++	call %[bpf_get_prandom_u32];				\
++	r0 <<= 32;						\
++	r6 |= r0;		/* r6 = full 64-bit unknown (base) */ \
++	w7 = w6;		/* low-32 ZEXT link */		\
++	if r7 != 0 goto l_out_%=;/* r7 == 0: low 32 bits are 0 */ \
++	if r6 != 0 goto l_out_%=;/* r6 may still have high bits set */ \
++	r0 /= 0;		/* must stay reachable */	\
++l_out_%=:							\
++	r0 = 0;							\
++	exit;							\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_reg_equal.c b/tools/testing/selftests/bpf/progs/verifier_reg_equal.c
+index dc1d8c30fb0e..e6fbbfaeedcb 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_reg_equal.c
++++ b/tools/testing/selftests/bpf/progs/verifier_reg_equal.c
+@@ -31,23 +31,25 @@ l1_%=:	exit;						\
+ }
  
--						if (is_src_reg_u32)
-+						/*
-+						 * *dst_reg = *src_reg below copies src's id into dst, a
-+						 * full 64-bit equality link. That is only sound when src
-+						 * fits in u32: a 32-bit mov zero-extends dst, so for a
-+						 * wider src the link would let sync_linked_regs()
-+						 * propagate dst's [0, U32_MAX] range back onto src's
-+						 * unknown high bits. For a wide src drop the full link
-+						 * and form a low-32-only BPF_FLAG_SUBREG_ZEXT link instead, so a
-+						 * later narrowing of src's low 32 bits still reaches dst.
-+						 *
-+						 * wide_subreg_link gates that low-32 link and excludes:
-+						 *  - a self-mov (w6 = w6): src == dst, nothing to link;
-+						 *    forming one would only mint an id and a spurious
-+						 *    self-link (inert in sync_linked_regs()).
-+						 *  - an ADD_CONST-linked src (rX = base + K):
-+						 *    assign_scalar_id_before_mov() would clear its
-+						 *    base+delta link, and a combined subreg+delta link
-+						 *    isn't modeled anyway (sync_linked_regs() skips it).
-+						 * In both cases src is left untouched and dst is cleared,
-+						 * as before this feature.
-+						 */
-+						bool wide_subreg_link = !is_src_reg_u32 &&
-+							src_reg != dst_reg &&
-+							!(src_reg->flags & BPF_FLAG_ADD_CONST);
-+
-+						if (is_src_reg_u32 || wide_subreg_link)
- 							assign_scalar_id_before_mov(env, src_reg);
- 						*dst_reg = *src_reg;
--						/* Make sure ID is cleared if src_reg is not in u32
--						 * range otherwise dst_reg min/max could be incorrectly
--						 * propagated into src_reg by sync_linked_regs()
--						 */
--						if (!is_src_reg_u32)
--							clear_scalar_id(dst_reg);
-+						if (!is_src_reg_u32) {
-+							if (wide_subreg_link && src_reg->id) {
-+								/* ->id already copied above */
-+								dst_reg->flags |= BPF_FLAG_SUBREG_ZEXT;
-+							} else {
-+								clear_scalar_id(dst_reg);
-+							}
-+						}
- 					} else {
- 						/* case: W1 = (s8, s16)W2 */
- 						bool no_sext = reg_umax(src_reg) < (1ULL << (insn->off - 1));
-@@ -15953,6 +15980,52 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
- 			continue;
- 		if (reg->id != known_reg->id)
- 			continue;
-+		/*
-+		 * A low-32 linked register shares only the base's low 32 bits;
-+		 * the flag says how its high bits are derived. For
-+		 * BPF_FLAG_SUBREG_ZEXT they are zero (32-bit zero-extending mov).
-+		 * Rebuild it from known_reg's low 32 bits accordingly, but only
-+		 * when neither side carries an ADD_CONST delta -- with a delta
-+		 * the low bits differ from the base by that delta and the combined
-+		 * subreg+ADD_CONST reconstruction isn't modeled here, so leave reg
-+		 * unchanged (sound, just less precise).
-+		 */
-+		if (reg->flags & BPF_FLAG_SUBREG_ZEXT) {
-+			if (!((reg->flags | known_reg->flags) & BPF_FLAG_ADD_CONST)) {
-+				{
-+					u32 saved_id = reg->id;
-+					u8 saved_subreg = reg->flags & BPF_FLAG_SUBREG_ZEXT;
-+
-+					/*
-+					 * reg = zext32(known_reg): its low 32 bits come from
-+					 * the base and its high 32 are zero. Rather than
-+					 * rebuild the value by hand, copy the base (keeping
-+					 * its precise low-32 tnum) and re-clear the high half
-+					 * with the same zext_32_to_64() the 32-bit
-+					 * zero-extending mov used -- the zero high half is a
-+					 * fallout of it, so no dedicated reconstruction is
-+					 * needed.
-+					 */
-+					*reg = *known_reg;
-+					reg->id = saved_id;
-+					reg->flags = (reg->flags & ~BPF_FLAG_SUBREG_ZEXT) | saved_subreg;
-+					zext_32_to_64(reg);
-+					reg_bounds_sync(reg);
-+				}
-+				if (e->is_reg)
-+					mark_reg_scratched(env, e->regno);
-+				else
-+					mark_stack_slot_scratched(env, e->spi);
-+			}
-+			continue;
-+		}
-+		/*
-+		 * Dest-driven direction (known_reg is subreg-linked, reg is not):
-+		 * copying known_reg's low-32-only state into a full register would
-+		 * be unsound, so leave reg unchanged.
-+		 */
-+		if (known_reg->flags & BPF_FLAG_SUBREG_ZEXT)
-+			continue;
- 		/*
- 		 * Skip mixed 32/64-bit links: the delta relationship doesn't
- 		 * hold across different ALU widths.
+ SEC("socket")
+-__description("check w reg not equal if r reg upper32 bits not 0")
+-__failure __msg("R1 !read_ok")
++__description("w reg shares r reg low32 via subreg link even if upper32 not 0")
++__success
+ __naked void subreg_equality_2(void)
+ {
+ 	asm volatile ("					\
+ 	call %[bpf_ktime_get_ns];			\
+ 	r2 = r0;					\
+-	/* Upper 4-bytes of r2 may not be 0, thus insn	\
+-	 * w3 = w2 should not propagate reg id,	and	\
+-	 * w2 < 9 comparison should not propagate	\
+-	 * the range for r3 either.			\
++	/* Upper 4-bytes of r2 may not be 0. w3 = w2 is a 32-bit	\
++	 * zero-extending mov, so w3 shares only r2 low 32 bits	\
++	 * (a BPF_FLAG_SUBREG_ZEXT link) and its high bits are zero. The	\
++	 * w2 < 9 comparison then narrows r3 to [0, 8] via the link,	\
++	 * so if r3 < 9 is always taken and the illegal r1 read below	\
++	 * is unreachable.				\
+ 	 */						\
+ 	w3 = w2;					\
+ 	if w2 < 9 goto l0_%=;				\
+ 	exit;						\
+ l0_%=:	if r3 < 9 goto l1_%=;				\
+-	/* r1 read is illegal at this point */		\
++	/* unreachable: r3 is provably < 9 */		\
+ 	r0 -= r1;					\
+ l1_%=:	exit;						\
+ "	:
 -- 
 2.53.0-Meta
 
