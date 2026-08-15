@@ -1,134 +1,149 @@
-Received: from out203-205-221-245.mail.qq.com (out203-205-221-245.mail.qq.com [203.205.221.245])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F09629898F
-	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 08:19:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.245
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A9943403EC
+	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 08:27:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786782001; cv=none; b=cucbSPb9HdZRDf+baJ7Yb6dJIhtGCsemJuXQvBCJYuP3370nfVy46ak72R6PlT8T9EvoWnpyOMoBQJ4cYldSx3p8ZfPHl1yziN7WmqMT7gsYjMNMJGbUVDrwOmGNvvAM5xovb0NreG/EGAeR4LAhp97RzGX0i1rL4cMrmA5/nSY=
+	t=1786782422; cv=none; b=R0T0ctfEC6NsUnc/LO4Q7UE+erHTRfZlvXTp2OwpHPCDE7G799ByMzwC92LG+5lP58uHGfDrGjJV0wP6LfKvp+3Kww0LwQABV+83jHJk6nfE4B+PpFQpSGPci3dcnrCKzO4Sf8mjmvAEU6r+YSMZ334VQB8sgnvELXUudSia6r4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786782001; c=relaxed/simple;
-	bh=Vs5g3khHkihyDw3hVq3jxsqeUqUvikKNdyu2c3lVEf8=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=BdHpMDZrUO/tVjBIci6lEquQUE+2QvI6gcXaAI85pazm2v+JOOPf+HQM1uRsxxDoXODGcnjbTrMRZqKpuA36UU7xsRXhcUtZrpCJGJjK800QH/yslrlft6h3QpN00tyGnaw6A1n99Tzzq3w7+IrXHd2T+4FOyyyr1egbwlewnsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=uToQWy/E; arc=none smtp.client-ip=203.205.221.245
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1786782422; c=relaxed/simple;
+	bh=sn1aKCDnqECQ6WCNbpgyWoOR71dWIh2vns4H85lPryE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=lki/Y2YaQiVefXWmOtF2YfEI4BQTiZwZF75ET2o722UVT+/SVrI8/Uq2rWPkPdKfTxYBYl0CRcnNEXz55D7NF5kOXupQXUkuQx0x4EA3De2NYklhZkD6kK0iR90j6j0i5JDe5rvaGciS6SS3bMB4272SdGBQmzz8sNMvRHuqUdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KFJ5ykWC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="uToQWy/E"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1786781971;
-	bh=PlTsX6f5WVGTG1fM/jy6eueWmXHqyeh0cZnGgAx93J8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=uToQWy/Eg66hSn6Xm1GrJVPoHT5GTCKiZmGwKM1r5Gr9QcihGQPe5HTDS0oRgGEJR
-	 snhYyf8GVCJ5Hid8lw2TVowcprWNwddL1T9Sx7wsQ1v77TClzbF8piaJwnjcNXsa+V
-	 YFL5rvilZJOMVyjYyO3L1VaHPpeXuUL60dAWiLVA=
-Received: from localhost.localdomain ([180.153.160.8])
-	by newxmesmtplogicsvrsza63-0.qq.com (NewEsmtp) with SMTP
-	id 4D51223E; Sat, 15 Aug 2026 16:19:21 +0800
-X-QQ-mid: xmsmtpt1786781967tqvaa414q
-Message-ID: <tencent_69F268659554975ACE74F3E8A26880AE3D06@qq.com>
-X-QQ-XMAILINFO: M+LbSN6IdDJLwMTXSHc1lUOejiM+Czskb7bwz1/zK9izEkY96RyjEFNHuQiI4m
-	 9qRTH50Pmu4hHLpRgorb/65LaBIzp94kw8QQ7pwex2zB3Kq+vJA6YHZngLb2kFLT2+rkH0+9cCsC
-	 7/wsnWLcIWQXDsmNTDCY7M2Up4cDDr2bo69LsipLFKhFRgbU0m+FwjtSrj2jIzBRO5dBAcn32T2j
-	 KklZbIi1WescC620YWNvEznSDr1uyPrznqoO6f7FCvbtvqRnyIv9O4sHmc5P4fmZW8OanwawPgjt
-	 We+13AS2Cst5E+I85eTxqiReQFsskK70DBN8FVSgU2evENFbJRdLRNupHh96B3buwxUael/3Yi97
-	 ZPedRBHTTEpb4xWZWg8/Z1r3IZ1dr7nN0QQNDiR+u9COdeWS0sf/2wszCXBcJmEsXO/5r4WfSlGp
-	 yBe431ux4Vgm/AZSt//9OXe9GP0nVVhYyqLzRbRr7k573jM+9uzD+nCi7agyu8yXLX9B8RL0PCgN
-	 EA+/9vCjHDz43FMB6TJy4/vv5/ay7aK9Smuve8gYJJrrtetmLIwm+5uBydZEd5+yzpCY3MN73/Sv
-	 W4VNlMtLeJW8kwdoBBll01mE7sdANjDEPeXUhX+WapdaRWSW3x/hlIqZ+PgnfLJYWEBMOB892HUi
-	 ymU56mmAy0238wjkCWuUw35HQONlTBQxJtZKq2+vXGCwZvCKpYEqcnLXCftpSlNXauVqiMqcNC/M
-	 nFot91ZKiVE4EtcyR26cfKbi6CL0REwaOjVnSPrNgosw12pX58Tdi9xSLHsV7ghI+ESQJghnVWjF
-	 ww90Fcu+CAUWE5SSxJ2TmnAwJbUU5/seu+UcFAsB4w3JZlK2EdxwDy0IUHLYD0ylEwU3dPRYRoW7
-	 Ry2Rd6S8GZk1TWfmzH21xs9pGfli2BsRCP8REvbkaMm2rsTlhslzBcoeLLGZbbNysvxRZiLpAQeB
-	 NuIVsIn9vOSpHTKRYPWz92xsSlJxcLBFKfL73ttzHk1i1NM9ayxEDZf7dPxDsyepeKKcSK9kceyl
-	 /djIlgSpIkRpElZq2Ku6dkI9Fk3gqkvBXE4pZxzXfzf2X4vOz4WORUXxI2PwBcsuTZoHlqoA==
-X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
-From: Jianlin Shi <shijianlin11@foxmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	memxor@gmail.com,
-	pulehui@huawei.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3 3/5] bpf: return partial progress from bpf_stream_read on fault
-Date: Sat, 15 Aug 2026 16:19:18 +0800
-X-OQ-MSGID: <20260815081920.609936-4-shijianlin11@foxmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260815081920.609936-1-shijianlin11@foxmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KFJ5ykWC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E74B61F000E9;
+	Sat, 15 Aug 2026 08:27:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786782421;
+	bh=LGhn7eld3mSDDjsBwTxVGMop8XgNiTWnJCUmB/uQoz4=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=KFJ5ykWCda+54ho6i/YuI74TSTHe7bU0moIXGF1iEfvKiaPhOwl05+xSWXBUYKMv7
+	 0HWXij0fC1WJW1XOdRgxnTdLcAEQ8bklNMiLCo25zocFtua8/tV+H5diGJE6rE6l/n
+	 jsLtDKtkMJ6GlsS/fdgZnCpuUoGo9nzGzDbgeLZwt9gThVfKV+Oo6Ze+XPFDEXQpDm
+	 3BNpzj6OhKUl72WcEM01f98Bt29lgH85NFaFlS0WEE0ioDsWKpf6XCQck3P+r/G9wl
+	 C7rRcqIAcFkvenSE5QrZ35cfh3kKzmMPQc26PUgubEuPmF/BwvDBXYzv99AJ9/TZs8
+	 gxqk2s/cScYAw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 5/5] selftests/bpf: cover stream capacity
+ and partial read edge cases
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jianlin Shi" <shijianlin11@foxmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <tencent_E2FD478B453F740591952AA7A502D4FCA609@qq.com>
 References: <tencent_C919BB32458A4DAD645A68F441345B971E05@qq.com>
  <20260815081920.609936-1-shijianlin11@foxmail.com>
+ <tencent_E2FD478B453F740591952AA7A502D4FCA609@qq.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 15 Aug 2026 08:27:00 +0000
+Message-Id: <20260815082700.E74B61F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-bpf_stream_read() pops and frees stream elements after a successful
-copy_to_user(). If a later copy_to_user() fails, it currently restores
-only the current element's consumed_len and returns -EFAULT, hiding
-bytes already delivered to userspace and making the consumed data
-unrecoverable on retry.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The `test_stream_oversize` test fails to verify its stated goal =
+because it uses a completely different BPF program to verify the capacity r=
+ollback.
+--
 
-On a short copy, keep the successfully copied prefix of the current
-element and return the number of bytes copied. Return -EFAULT only when
-no bytes were copied for the call.
+--- Patch [5]: [PATCH bpf-next v3 5/5] selftests/bpf: cover stream capacity=
+ and partial read edge cases ---
+commit 168aa19f7a74d7d1bc5cd6a9913bc5c68df1058d
+Author: Jianlin Shi <shijianlin11@foxmail.com>
 
-Fixes: 5ab154f1463a ("bpf: Introduce BPF standard streams")
-Signed-off-by: Jianlin Shi <shijianlin11@foxmail.com>
----
- kernel/bpf/stream.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+selftests/bpf: cover stream capacity and partial read edge cases
 
-diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
-index ef5a7b06ffcb..c1077160074c 100644
---- a/kernel/bpf/stream.c
-+++ b/kernel/bpf/stream.c
-@@ -167,6 +167,7 @@ static int bpf_stream_read(struct bpf_stream *stream, void __user *buf, int len)
- 
- 	while (rem_len) {
- 		int pos = len - rem_len;
-+		int chunk, n;
- 		bool cont;
- 
- 		node = bpf_stream_backlog_peek(stream);
-@@ -180,13 +181,14 @@ static int bpf_stream_read(struct bpf_stream *stream, void __user *buf, int len)
- 
- 		cons_len = elem->consumed_len;
- 		cont = bpf_stream_consume_elem(elem, &rem_len) == false;
--
--		ret = copy_to_user(buf + pos, elem->str + cons_len,
--				   elem->consumed_len - cons_len);
--		/* Restore in case of error. */
--		if (ret) {
--			ret = -EFAULT;
--			elem->consumed_len = cons_len;
-+		chunk = elem->consumed_len - cons_len;
-+
-+		n = copy_to_user(buf + pos, elem->str + cons_len, chunk);
-+		if (n) {
-+			/* Keep any successfully copied bytes; -EFAULT only if none. */
-+			elem->consumed_len -= n;
-+			rem_len += n;
-+			ret = (len == rem_len) ? -EFAULT : 0;
- 			break;
- 		}
- 
--- 
-2.43.0
+This commit adds test coverage for stream capacity rollback after oversized
+writes and partial reads when buffers straddle unmapped pages.
 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/stream.c b/tools/test=
+ing/selftests/bpf/prog_tests/stream.c
+> index e4e9374309e26..fefe6431dc7c9 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/stream.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/stream.c
+[ ... ]
+> @@ -58,6 +58,76 @@ void test_stream_syscall(void)
+>  	stream__destroy(skel);
+>  }
+> =20
+> +void test_stream_oversize(void)
+> +{
+> +	LIBBPF_OPTS(bpf_test_run_opts, opts);
+> +	struct stream *skel;
+> +	int ret, prog_fd;
+> +	char buf[8] =3D {};
+> +
+> +	skel =3D stream__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "stream__open_and_load"))
+> +		return;
+> +
+> +	prog_fd =3D bpf_program__fd(skel->progs.stream_oversize);
+> +	ret =3D bpf_prog_test_run_opts(prog_fd, &opts);
+> +	ASSERT_OK(ret, "oversize run");
+> +	ASSERT_EQ(opts.retval, -E2BIG, "oversize retval");
+> +
+> +	/* Oversized push must not permanently consume capacity. */
+> +	prog_fd =3D bpf_program__fd(skel->progs.stream_syscall);
+
+[Severity: Medium]
+Does this code verify the capacity rollback correctly?
+
+Because BPF streams are maintained on a per-program basis, switching to
+the stream_syscall program means it tests a completely different, pristine
+stream that was never affected by the oversized push.
+
+Should the test verify a subsequent successful push using the same program
+that performed the oversized push?
+
+> +	ret =3D bpf_prog_test_run_opts(prog_fd, &opts);
+> +	ASSERT_OK(ret, "syscall run");
+> +	ASSERT_OK(opts.retval, "syscall retval");
+> +
+> +	ret =3D bpf_prog_stream_read(prog_fd, BPF_STREAM_STDOUT, buf, sizeof(bu=
+f), NULL);
+> +	ASSERT_EQ(ret, 3, "bytes after oversize");
+> +	ASSERT_OK(memcmp(buf, "foo", 3), "payload after oversize");
+> +
+> +	stream__destroy(skel);
+> +}
+[ ... ]
+> diff --git a/tools/testing/selftests/bpf/progs/stream.c b/tools/testing/s=
+elftests/bpf/progs/stream.c
+> index 00a37933e411d..6aa9a67483500 100644
+> --- a/tools/testing/selftests/bpf/progs/stream.c
+> +++ b/tools/testing/selftests/bpf/progs/stream.c
+[ ... ]
+> @@ -118,6 +123,13 @@ int stream_syscall(void *ctx)
+>  	return 0;
+>  }
+> =20
+> +SEC("syscall")
+> +__success __retval(-E2BIG)
+> +int stream_oversize(void *ctx)
+> +{
+> +	return bpf_stream_printk(BPF_STDOUT, _BIG_STR);
+> +}
+
+[Severity: Medium]
+Since this program returns immediately after the oversized push, it leaves
+no way to verify the capacity rollback on the same stream from userspace.
+
+Could this program be updated to perform a subsequent successful push to the
+same stream, to correctly validate that the capacity was not permanently
+consumed?
+
+> +
+>  SEC("syscall")
+>  __arch_x86_64
+>  __arch_arm64
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260815081920.6099=
+36-1-shijianlin11@foxmail.com?part=3D5
