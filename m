@@ -1,67 +1,67 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 055FE319601
-	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 17:50:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE2E41A7264
+	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 18:00:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786816222; cv=none; b=L6510asK7TRBE7Dy+1WGf54UtImNo3NlNF5d+tJ1f0lsxXIdbpYS/Hmez1oBzGZOGzYatFtL6l0ajmkrG+tvX5OU/RSruS/CWmjFLmk54P5leFLvng2+z3lwVZfRJvymIAB4axuCXsuRVOMKrTMRTYTs1TGC7zwRPNQSaY0DPCg=
+	t=1786816855; cv=none; b=PNRCS7u6Kji5Kc0S4Ja2wReiJAB7+/E/2aV0j53pVLcbi8kVJ7dDEAS17gha6TB0pca7PbNX5gjjDwiNW6v+0rfEsh9Baj2VrfasSkQp0Nx6Nj/jnApf7ndjS5dm84nR4x5qInUUeb77agJHgvzHvW/H2RDhtDBQ8mxMFotrkqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786816222; c=relaxed/simple;
-	bh=ok9PA+nGFxjh2uFeoKZgMKp0sTRjZtr7YxZcORHvFJc=;
+	s=arc-20240116; t=1786816855; c=relaxed/simple;
+	bh=dvhynloBUf0sqk2X+pyZ7EV3m1f79pBhPZFzWdiNYQk=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=gQC9HQJVB1y57GNnBwMKi6JBr5gu0MYXieMcE+612v6vhfiC6beM5+Q/xRaHwraiAnNehVeO02BkXF2Qx6cv6jOYUpGQgLAYQJRtjMSb/i2qYGUyU7hGycXnK6Ivv9pNYqg+XK4iFBvIj3i2ber+kZ9za1BgK65v9B/xqE/T2Vg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EWXWIFul; arc=none smtp.client-ip=209.85.210.182
+	 Content-Type:MIME-Version; b=M7IqkGwP7kT8OzHvCmwYO2L/ZZr7yp0esFpaBQAc8C5FmRPsf4tXWoNk2Xuzz9acgGNGce5QatzXNYQ+CcNb0qkFJsH538uBiXcksmNO6hSPEqURd8MJuZtM9V/400+bP9A/u3z8Et3GGuDR7aNTHjqPmI69AzWakAvVFS4k8wU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TkaDx0aO; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EWXWIFul"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-8518b3ff3e9so525450b3a.2
-        for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 10:50:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TkaDx0aO"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-38deea72eebso2158110a91.1
+        for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 11:00:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786816220; x=1787421020; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786816853; x=1787421653; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=lmSSdNqKXTDrx2uBY4sY/OXEcIWBPM2lgJ51UmvgJY0=;
-        b=EWXWIFulsk8CuDuf1FMcDcNGTSw0dv0j9Hf9UK4IE+FtS9piwu/EI+LzbOljpH7ud7
-         3Ej7LUOC7LxwYucTCCvbEk0J7koUoqGWOjxeyImRztlb5efDiSAEa2mVPN8MXN3lUpt6
-         9I7/r1WHKFx2wsT/bA1ayfFXdq9lRUsrWh0pKo6ZTvKYj0zXancmzntjSmRWQ46gGNFX
-         hGUb0qoGwkOap9LrEQw+8iYBeRnIf86DU5csDbMhpPzETiFHN3O0jSrUzmUz+mXdRtoA
-         7KkXbhQDy32N4NxTOxnC4mTNNYCE8lVgh782tLy4e+61wGpVmt5Uif0nG/3d8UEDQB1z
-         d5pQ==
+        bh=svaOlr/lwYVSdjf9T4JW703rWBa36Bln3C8trmD5qEE=;
+        b=TkaDx0aO3nrII9YYYop65uI2vzZ7RMcIFFzYpTnwRb9/bVtuj63kQo0ZzxAJKASmOH
+         4bIAiS1dSoTEUNxHwQ3506FkfayvJuk5OAnz8bxblg7TW8RGSRJgjh23IrNXaS5QHbA/
+         8/ix9kEzvnNvZLR9E29g9QRsoD6BcIT+ZSMDtiz8JGH96JlcHP5pqGuvvfg+M/tg1WKo
+         IU/ITIcWNYjfXlq/GLZRJczioi5h8Ba6xpAnQl2ioL0dxsq9KeZ8/aPLG2X5R/ssB++P
+         2+/8Pr0lMili5W/GAr5JG0Iqqnmcy/QCaofLLme7rkvLn9i5bBiXmBs7a+cJWHsyJnhw
+         ApNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786816220; x=1787421020;
+        d=1e100.net; s=20251104; t=1786816853; x=1787421653;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=lmSSdNqKXTDrx2uBY4sY/OXEcIWBPM2lgJ51UmvgJY0=;
-        b=rciLtiMBeDSzqBRuGPU45HHgUEojRkrr+lRUbPoFbJVir6NC3LGK0L5bLE4rrLjbWw
-         2wpufvNwjgPA8B0Dsx2mihjmi84bEz0nxy2jNc/Q7MvOsWeOuUTVUgDggQuTsI5GcD0w
-         FZLnHu1TBZmLvTchAYYWZPysYgUFdxZ4OV9nd3Up8sCfZXXcviDRaldBoxlnjr++z7jJ
-         /jqD+5kxZiratjtZvNLYeKu28+aPbzin6vQc0EarwkjwBUPsB/CT2XYKu82hqmspVP38
-         u2Z1vSMo5bUm353iFj4PrtlonnqfhyegQJr1ioioJOLEjtgdwFa0t9CJxsh3LdJdIAaF
-         HTiQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqDONl3tXXUTB8nIBuxEEV3EgOM3q75VkMCEKZ8A05J3BWuqQBVqkINx/rey+qMF5zCzUI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YybdIzyxi7MqSjO5LXOQPyuj+qlYqy47m9nGUGQpYci412aoH5O
-	hEClpj1shX9vthQUODNhC7QVR1Juo2CNaXb19LiydLh3nnMrT5Fy7og+
-X-Gm-Gg: AR+sD11ZK3i+BguUNw5IfaBsq+0AB1pSqgl2m+whrhswNjrYe7UIh3245Y17MhC+HD8
-	/4tIJuaRjJ7I6jxqJRweFycfMlIun2HWtK/clgAOHPw4Uc5S37XWpLPOW0ZEv4apk5aZcPjCJ4n
-	KS2/Hqo/XnqdY3Tgesip1zgy1x6zKlFGxRVH6tVSussQkpQWmvJpAPDGSxSNPzfi4bnvpo+aPKm
-	HTv1xIQvFZv06uRqXVAX9DX3vxJH2EMO6ogozPPHgiwrD/zONfMI5kHN3QJvyK5G3wzpWikJPFe
-	1QRIdhX1+4oFcOGba63HezGy1vC7QtObODfIFIMaS2Ppp8kBvNtGK5z+Pby/iAJ85iR5s0+nbhW
-	0ZxWX8HjDJ1Cuc9162+E3Z7AUtLIq4ECwLBvvjpb6UC7u9udG4d428KmbI3bqn1Tb6BMnebkhpk
-	SBOGnkrdgny4K9QYAS7QJc70a7fdIoGE1qfl1tM3NkmEvN4N1tnBcyM+J1YbFzt1ueSfdECEqg/
-	Iat2KPfoX3TXa9jU9O/y7jItAe3
-X-Received: by 2002:a05:6a00:2907:b0:847:8704:1c54 with SMTP id d2e1a72fcca58-84fde2cb212mr16124186b3a.22.1786816220329;
-        Sat, 15 Aug 2026 10:50:20 -0700 (PDT)
+        bh=svaOlr/lwYVSdjf9T4JW703rWBa36Bln3C8trmD5qEE=;
+        b=Toj14uxBPHf0Hf8HJXPKjlghZrPugdx07QI03Y2bwgiqr0xLdhzgPDmC0CmgYrgiLI
+         HGMiTqOmo99f/8c0xlAmLQ3liuUITgxOulf7UVmIvVg/o9cflr9RP4WBdxBTNzTEWodj
+         sLmehXpSlWCnGk1PRKgkMmmG1nHO0UTfguLUz2aOoIooKBQFOSSTvoVExjYS+SbD5LBZ
+         IlT/riNNdbn1w0d5X3p1SxE/xO0mwkUY/94w+x5uEUJD2F2gBjaNmHadmVeKVTFGAJAN
+         TzqB42hPAgjxjdH+tMw5ii60hW2lzpiehSh3VrSXrTyClNen/+N8PPLnKALOfCs9Efnv
+         v01g==
+X-Forwarded-Encrypted: i=1; AHgh+RodVx8hpiuosOeyB6xHVDtU+WZwu1E7wAyEt2hphK0QlKHl/dE5zYBUHTQMLtyUxPRoTdE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyG1SvSzmsI/q6dA9+VRVkV4kBxQwzOj/ZfbT14+OS7x6cMWmy0
+	wBEw/EZEFZsuaNfxqSOQ1QVvAjqJToE0FTNtsQe5caQT3nrxEE09z0RQ
+X-Gm-Gg: AR+sD13e3aeNr1zwO0adzLQnQT8CO+QTdho6kAtYd124mkzrWoqalMfhP2qv8B1KbFK
+	e2ek7gYnUu4EU0z3wzDc2oTO+Kd3ou823LHk4juMrWlmTO0YNZp0mM5HEfGLMTuiM9UFgip0JBj
+	+A2Jc155q0mupHZHrstrlLoFSZj/ZdRPKUrg2htTeMR1thbGQZrK8EEw886VebLkQ+3dgikd8q2
+	ARkojrx94CycbbtVqbKWScIacL+s556GG1QbFt0zml6nTe0z2/bfn0uK2ba/UKtebj4yroqx67U
+	4Lk6nutL53FI7Aukl071t+Pxb7ieJ3gVvnTK2xQ/ymK+GnqZXa9qd1IVwLzmf8dzmPqhobpSBgC
+	4Dg97QMX2BPAAnYYlbrL8sIue5cjCbQJpIYPC+1h6wfS2n8M05oEsoJv7AHs4H0BjA2mcyW8frC
+	2CAjcERFJfwm2tmnqdpZqS0jYHD9lCYX1RFVuLv7vZF7BR50YjDRKdGaaJEdgrb4alr4NZe+vSQ
+	TxI2qbHcL4UKP0z
+X-Received: by 2002:a17:90b:184b:b0:37f:eafd:3505 with SMTP id 98e67ed59e1d1-3933b74d94dmr17370651a91.6.1786816852637;
+        Sat, 15 Aug 2026 11:00:52 -0700 (PDT)
 Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8517d223f8csm1474194b3a.35.2026.08.15.10.50.18
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-394ea96c7fcsm6933551a91.3.2026.08.15.11.00.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Aug 2026 10:50:19 -0700 (PDT)
-Message-ID: <091048db268a5abf69dec923248255723db440d7.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v5 13/14] bpf: Report Program Structure CFG
+        Sat, 15 Aug 2026 11:00:52 -0700 (PDT)
+Message-ID: <668871823f90f69896d3db27b56db2f53e481162.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v5 11/14] bpf: Report Call Type Safety argument
  errors
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bot+bpf-ci@kernel.org, memxor@gmail.com, bpf@vger.kernel.org
@@ -69,10 +69,10 @@ Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
  emil@etsalapatis.com, 	kkd@meta.com, kernel-team@meta.com,
  martin.lau@kernel.org, yonghong.song@linux.dev, 	clm@meta.com,
  ihor.solodrai@linux.dev
-Date: Sat, 15 Aug 2026 10:50:16 -0700
-In-Reply-To: <cf2f420c2b21de440a7dc51b1565c0f06d4b539640ee5c03384e5d77bcfb5686@mail.kernel.org>
-References: <20260815064612.378577-14-memxor@gmail.com>
-	 <cf2f420c2b21de440a7dc51b1565c0f06d4b539640ee5c03384e5d77bcfb5686@mail.kernel.org>
+Date: Sat, 15 Aug 2026 11:00:48 -0700
+In-Reply-To: <3eda33675965763aa9b2e6a5784f32b34a6a83988a55fbea98b0dbd0cf3b088d@mail.kernel.org>
+References: <20260815064612.378577-12-memxor@gmail.com>
+	 <3eda33675965763aa9b2e6a5784f32b34a6a83988a55fbea98b0dbd0cf3b088d@mail.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2-10 
@@ -83,74 +83,91 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Sat, 2026-08-15 at 07:34 +0000, bot+bpf-ci@kernel.org wrote:
-
-...
-
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+On Sat, 2026-08-15 at 07:49 +0000, bot+bpf-ci@kernel.org wrote:
+> > diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
+> > index 5d20ea9e470e..99784d465881 100644
+> > --- a/kernel/bpf/diagnostics.c
+> > +++ b/kernel/bpf/diagnostics.c
 >=20
 > [ ... ]
 >=20
-> > @@ -3020,6 +3020,12 @@ static int check_subprogs(struct bpf_verifier_en=
-v *env)
-> > =C2=A0		off =3D i + bpf_jmp_offset(&insn[i]) + 1;
-> > =C2=A0		if (off < subprog_start || off >=3D subprog_end) {
-> > =C2=A0			verbose(env, "jump out of range from insn %d to %d\n", i, off)=
-;
-> > +			bpf_diag_program_structure(
-> > +				env, i, "jump out of range",
-> > +				"Keep branch targets within the same subprogram, or use an explici=
-t subprogram call.",
-> > +				"Instruction %d jumps to instruction %d, but subprogram %d only co=
-ntains instructions %d through %d. "
-> > +				"A branch target must stay inside the same subprogram.",
-> > +				i, off, cur_subprog, subprog_start, subprog_end - 1);
-> > =C2=A0			return -EINVAL;
-> > =C2=A0		}
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index f5bf8cf644b8..2c067be53106 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
 >=20
-> Can these two bpf_diag_program_structure() calls in check_subprogs()
-> produce the source context that the patch advertises?
+> [ ... ]
 >=20
-> Looking at the verifier initialization in bpf_check():
+> > @@ -12417,29 +12552,43 @@ static int check_kfunc_args(struct bpf_verifi=
+er_env *env, struct bpf_call_arg_me
+> >=20
+> > =C2=A0	t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
+> >=20
+> > -	if (btf_type_is_ptr(t) && (bpf_register_is_null(reg) || type_may_be_n=
+ull(reg->type)) &&
+> > +	if (btf_type_is_ptr(t)) {
+> > +		ref_t =3D btf_type_skip_modifiers(btf, t->type, &ref_id);
+> > +		ref_tname =3D btf_name_by_offset(btf, ref_t->name_off);
+> > +	}
+> > +
+> > +	if (btf_type_is_ptr(t) &&
+> > +	=C2=A0=C2=A0=C2=A0 (bpf_register_is_null(reg) || type_may_be_null(reg=
+->type)) &&
+> > =C2=A0	=C2=A0=C2=A0=C2=A0 !type_may_be_null(kf_arg_type)) {
+> > +		const char *expected_type;
+> > +
+> > +		expected_type =3D bpf_diag_fmt_btf_type(env, btf, ref_id);
+> > =C2=A0		verbose(env, "Possibly NULL pointer passed to trusted %s\n",
+> > =C2=A0			reg_arg_name(env, argno));
+> > +		bpf_diag_call_arg_fmt(env, insn_idx, argno, func_name,
+> > +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "Add a NULL check and call the kfun=
+c only on the non-NULL path.",
+> > +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "the pointer may be NULL, but this =
+kfunc requires a non-NULL pointer to %s",
+> > +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 expected_type);
+> > =C2=A0		return -EACCES;
+> > =C2=A0	}
+> >=20
+> > =C2=A0	if (regno =3D=3D meta->release_regno && !is_kfunc_arg_dynptr(met=
+a->btf, &args[i]) &&
+> > =C2=A0	=C2=A0=C2=A0=C2=A0 !reg_is_referenced(env, reg) && !bpf_register=
+_is_null(reg)) {
+> > +		const char *expected_type;
+> > +
+> > +		expected_type =3D bpf_diag_fmt_btf_type(env, btf, ref_id);
+> > =C2=A0		verbose(env, "release kfunc %s expects referenced PTR_TO_BTF_ID=
+ passed to %s\n",
+> > =C2=A0			func_name, reg_arg_name(env, argno));
+> > +		bpf_diag_call_arg_fmt(env, insn_idx, argno, func_name,
+> > +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "Pass the resource-owning pointer r=
+eturned by the matching acquire kfunc, and avoid calling the release kfunc =
+after ownership has already been transferred or released.",
+> > +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "release kfuncs require a resource-=
+owning value of type %s returned by a matching acquire kfunc",
+> > +				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 expected_type);
+> > =C2=A0		return -EINVAL;
+> > =C2=A0	}
 >=20
-> =C2=A0=C2=A0=C2=A0 ret =3D bpf_prepare_btf_info(env, attr, uattr);
-> =C2=A0=C2=A0=C2=A0 ret =3D add_subprogs(env);
-> =C2=A0=C2=A0=C2=A0 ret =3D check_subprogs(env);
-> =C2=A0=C2=A0=C2=A0 ret =3D bpf_check_btf_info(env, attr, uattr);
->=20
-> check_subprogs() runs before bpf_check_btf_info(). Inside
-> bpf_check_btf_info(), check_btf_line() sets prog->aux->linfo and
-> prog->aux->nr_linfo. Before that, both are zero.
->=20
-> In bpf_diag_source():
->=20
-> =C2=A0=C2=A0=C2=A0 linfo =3D bpf_find_linfo(env->prog, insn_idx);
-> =C2=A0=C2=A0=C2=A0 if (btf && linfo)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bpf_get_linfo_source(btf, linf=
-o, &src);
-> =C2=A0=C2=A0=C2=A0 if (!src.file || !*src.file || !src.line || !*src.line=
-) {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 diag_write(env, "=C2=A0 insn %=
-u\n", insn_idx);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ...
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 goto out_restore;
-> =C2=A0=C2=A0=C2=A0 }
->=20
-> bpf_find_linfo() needs nr_linfo to be nonzero. Since check_subprogs()
-> runs before check_btf_line(), nr_linfo is still zero, so bpf_find_linfo()
-> returns NULL and bpf_diag_source() takes the degraded branch: bare
-> "insn %u" plus an instruction dump, with no source file:line:col and no
-> subprogram name.
->=20
-> The other 8 new report sites in this patch (push_insn, create_jt,
-> jt_from_subprog, visit_gotox_insn, bpf_check_cfg, sort_subprogs_topo)
-> all run after bpf_check_btf_info(), so they do get source context.
->=20
-> Should these two reports move to a later point where line info is
-> available, or should the commit message acknowledge that source context
-> isn't available yet for these early checks?
+> When the kfunc parameter is a plain void*, will bpf_diag_fmt_btf_type()
+> format it correctly? For a void* parameter, ref_id becomes 0 after
+> btf_type_skip_modifiers() and bpf_diag_fmt_btf_type() produces the
+> literal string "()" for type ID 0.
 
-This would be nice to have but requires some ordering rework,
-bpf_check_btf_info() requires subprog_info[] to be filled.
+This is legit btf.c:btf_show_name() needs a fix:
 
-Other two flagged items are non-issues.
+  --- a/kernel/bpf/btf.c
+  +++ b/kernel/bpf/btf.c
+  @@ -1172,9 +1172,9 @@ static const char *btf_show_name(struct btf_show *s=
+how)
+			id =3D 0;
+			break;
+		}
+  +		t =3D btf_type_skip_qualifiers(show->btf, id);
+		if (!id)
+			break;
+  -		t =3D btf_type_skip_qualifiers(show->btf, id);
+	}
+	/* We may not be able to represent this type; bail to be safe */
+	if (i =3D=3D BTF_SHOW_MAX_ITER)
+
+...
