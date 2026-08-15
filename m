@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B795618DF80
-	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 23:49:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2CC539099B
+	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 23:49:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786837767; cv=none; b=QpaVSCZ5kxAv49SS4vbSqOg/cNemLXdOBZVm0hmbqhEQ7IKccC19BSnGaXBA9UVprcKvSTTdt8yrXdRO2AcWjkyK36beHxEbSXrH8oK0Fefv5mZDScXtIEt5Zn0iAou0NDCoPzMKiRD0wYjuLRhkBjgGsEbkEwI1DQuGYPcTH7o=
+	t=1786837767; cv=none; b=YYhHmd852UNdcUNxU74W9D+80eqHRc0jZ66o/U0ktKijfwUcKwHxeYMUOJtiTQDzgnwZsB3+3TymVffeGzcTJtBljAbDkPJb+FZDhS1YsKZAyRd9eNr1iOhKbE4Xmwbr0ao0Ka4N41KQ6qMjC5gRzUZxIhBIYnlEHjqohMEkvGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1786837767; c=relaxed/simple;
-	bh=LeqP7zdpPSW8w0yzFcur2Manes8xWGZC95IBymG6LAg=;
+	bh=+C0jmk1ruvCSJ4SUVbXGSxBiyDYYl4NNk9LGyDgq7mk=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=S/F5VoAxS+8BhKBMKB4c03V+hqBhdZwwXGH+aFun1sYEwNlCm0wNm4kRNXl5sX9EPsl+um05wajUt1jyiHhHTKkW8HikkICQcrWsivWcgGRaDZUF/tvV0Aj6Vmy/oub5xhh8Pkr6vwC9npTfQawMmf1NGRRAUP4CZ9MzvQWVyS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KNVOFgKl; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=aj1ssKq7BP7fQnqDNuCkLKmSc8IwYO5KcQ2ioyAfEMDQjUzRPnedq1UQO30VkjVyzaX5nNbAzxa5V2JSgc/VThiLmcrKOFGkPaIbFd+z5KlFGctxWp6SMBpgC85Xj856vRxohvQymfGU99EAz1VzYocYCy8PWzlXXGd3sEVWfjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d9DpfEqr; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KNVOFgKl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F8CC1F000E9;
-	Sat, 15 Aug 2026 23:49:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d9DpfEqr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25BE61F00A3A;
+	Sat, 15 Aug 2026 23:49:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786837765;
-	bh=12Oskv9zG0IMS8oiwT9sJQp8pcShZ5UFc62F/SK8EVA=;
+	s=k20260515; t=1786837766;
+	bh=ds8WPpJ5aOBUkhNQC3sbjTQmtChMoCXwpJ4m16E7yK0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=KNVOFgKlY4TIAy1HVtnvDljJOcEzPg5h1v2YK9uHuJJbze6oNsTKwnE/TLmMYPTxp
-	 F7yhBxeq/NRQ1ABKDvGuj72aQqUuSTicOCYjdqEuhnfeh2XT4mcxpmYdpHte9tu9sw
-	 XMFltcktrs604oDmQxpjmqoK0eAud3xARPZ9KdUMnG8dY9p5gWM9bqUR3vwZLsEVyJ
-	 N+q2hV/trft8DumIMUEY4vUg9wTGDtAsUa9aujuaul2j+66JGHsdGHTXa8H6Z5N+Kz
-	 NpRbkUE6Zk0OaujjjpphNcKnr04YCbIwu5f736UglWbBF8Flj9ghb1mzX6hd77FjC2
-	 onMFBWdXQqDfA==
+	b=d9DpfEqrjqscLH04oXAzKaoqIMAs082zhPwxBPG0qL1b0ooJTb7R5h+aEaB+ZPLQW
+	 nYUygqUGSVclIAu4vsN0l7fScCkDenjc1sV4GvG+rOiGaL2pL83FwINiwCz4u+YpX5
+	 PpHX3g/2yWxeDpqYE/55mr37OhYwuSHXHHFeQEtTRFQ/3rqiiYXNU0ZG/7emPwOooA
+	 yvlh5lrcFLIjDTgmc0/LX+BQebRlenA/nBamqwlv+IEt7JkaH2QIx+kVQsWZ+olVWm
+	 kLIu8V1HLeVDZbHivNVR0ZcyJjwuakxwI7C8rmJsRPMcZ5PlnDQ/mPMZpXyP0kMnAQ
+	 yghmXqO2/Icbw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net 4/6] gve: don't register xsk pool on pre-existing
- queues in RDA mode
+Subject: Re: [PATCH net 2/6] gve: fix XSK buffer leak when rings are stopped
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Joshua Washington" <joshwash@google.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260814234845.773189-5-joshwash@google.com>
+In-Reply-To: <20260814234845.773189-3-joshwash@google.com>
 References: <20260814234845.773189-1-joshwash@google.com>
- <20260814234845.773189-5-joshwash@google.com>
+ <20260814234845.773189-3-joshwash@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Sat, 15 Aug 2026 23:49:25 +0000
-Message-Id: <20260815234925.7F8CC1F000E9@smtp.kernel.org>
+Message-Id: <20260815234926.25BE61F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,150 +48,128 @@ Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [Critical] Enabling XSK pools in QPL mode registers the memory model dyna=
-mically without disabling NAPI or restarting queues, leading to data races =
-and kernel panics.
-- [Critical] Disabling XSK pools in QPL mode fails to restart queues, causi=
-ng in-flight XSK buffers to be incorrectly freed as normal shared pages.
-- [High] `gve_xsk_pool_disable()` incorrectly unregisters the newly created=
- `PAGE_POOL` memory model for RDA queues, destroying the active page pool a=
-nd causing memory corruption/leaks.
+- [High] XSK buffers are permanently leaked during runtime when the receive=
+d packet descriptor indicates an rx_error.
+- [High] Calling `dev_consume_skb_any()` on an XDP frame and incorrectly un=
+mapping DMA for AF_XDP zero-copy buffers during pending packet cleanup.
+- [Medium] AF_XDP (XSK) TX buffers are permanently leaked from the user-spa=
+ce application when the TX queue is stopped.
 --
 
---- Patch [4]: [PATCH net 4/6] gve: don't register xsk pool on pre-existing=
- queues in RDA mode ---
-commit 9bd2a484cf9beb93c90ecf2a602f481574145671
+--- Patch [2]: [PATCH net 2/6] gve: fix XSK buffer leak when rings are stop=
+ped ---
+commit 68d9940f45b02ca459717266e19904c11302ff2d
 Author: Joshua Washington <joshwash@google.com>
 
-gve: don't register xsk pool on pre-existing queues in RDA mode
+gve: fix XSK buffer leak when rings are stopped
+   =20
+GVE does not free XSK buffers when resetting ring state as a part of
+stopping queues. This causes all XSK buffers which are posted to the
+NIC to be leaked.
+   =20
+Free XSK buffers attached to an allocated buf_state when stopping rings.
 
-This commit addresses a race condition in RDA mode when enabling XSK pools =
-on
-pre-existing queues without re-creating them. It ensures that the XSK pool =
-is
-only registered with current queues if XSK buffers are allocated on-the-fly,
-as is the case in QPL mode.
-
-> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/eth=
-ernet/google/gve/gve_main.c
-> --- a/drivers/net/ethernet/google/gve/gve_main.c
-> +++ b/drivers/net/ethernet/google/gve/gve_main.c
-> @@ -1654,20 +1654,18 @@ static int gve_xsk_pool_enable(struct net_device =
-*dev,
->  	if (!priv->xdp_prog || !netif_running(dev))
->  		return 0;
-> =20
-> -	err =3D gve_reg_xsk_pool(priv, dev, pool, qid);
-> -	if (err)
-> -		goto err_xsk_pool_dma_mapped;
-> -
-> -	/* Stop and start RDA queues to repost buffers. */
-> -	if (!gve_is_qpl(priv)) {
-> +	if (gve_is_qpl(priv)) {
-> +		err =3D gve_reg_xsk_pool(priv, dev, pool, qid);
-> +		if (err)
-> +			goto err_xsk_pool_dma_mapped;
-
-[Severity: Critical]
-This isn't a bug introduced by this patch, but does enabling XSK pools in Q=
-PL
-mode lead to a race condition since it registers the memory model dynamical=
-ly
-without disabling NAPI or restarting queues?
-
-If the NAPI softirq processes pre-existing standard buffers that were posted
-before the pool was enabled, and the XDP program returns XDP_TX or
-XDP_REDIRECT, gve_xdp_tx_dqo() will see rx->xsk_pool =3D=3D true:
-
-drivers/net/ethernet/google/gve/gve_rx_dqo.c:gve_xdp_tx_dqo() {
-    ...
-    if (unlikely(!xdpf)) {
-        if (rx->xsk_pool)
-            xsk_buff_free(xdp);
-        return -ENOSPC;
-    }
-    ...
-}
-
-Will this cause xsk_buff_free() to incorrectly assume the stack-allocated
-xdp_buff is a struct xdp_buff_xsk, leading to a kernel NULL pointer
-dereference?
-
-> +	} else {
-> +		/* Stop and start RDA queues to repost buffers. */
->  		err =3D gve_configure_rings_xdp(priv, priv->rx_cfg.num_queues);
->  		if (err)
-> -			goto err_xsk_pool_registered;
-> +			goto err_xsk_pool_dma_mapped;
->  	}
->  	return 0;
-> =20
-> -err_xsk_pool_registered:
-> -	gve_unreg_xsk_pool(priv, qid);
->  err_xsk_pool_dma_mapped:
->  	clear_bit(qid, priv->xsk_pools);
-
-[Severity: Critical]
-This is a pre-existing issue, but does disabling XSK pools in QPL mode fail=
- to
-restart queues, leaving in-flight XSK UMEM buffers to be processed with an
-unregistered memory model?
-
-In gve_xsk_pool_disable():
-
-    napi_disable(napi_tx);
-    gve_unreg_xsk_pool(priv, qid);
-    smp_mb();
-    napi_enable(napi_rx);
-
-If the QPL queues are not restarted, previously allocated XSK buffers remai=
-n in
-the hardware RX ring.
-
-When these XSK buffers are processed by the resumed NAPI, will they be
-initialized with the MEM_TYPE_PAGE_SHARED memory model instead of
-MEM_TYPE_XSK_BUFF_POOL?
-
-Could this lead to xdp_return_frame() calling page_frag_free() on an AF_XDP
-UMEM address instead of returning it to the XSK pool, corrupting the page
-allocator?
+> diff --git a/drivers/net/ethernet/google/gve/gve_rx_dqo.c b/drivers/net/e=
+thernet/google/gve/gve_rx_dqo.c
+> index db38bc6452969..2c1ce23d15508 100644
+> --- a/drivers/net/ethernet/google/gve/gve_rx_dqo.c
+> +++ b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
+> @@ -113,6 +113,12 @@ static void gve_rx_reset_ring_dqo(struct gve_priv *p=
+riv, int idx)
+>  				gve_free_to_page_pool(rx, bs, false);
+>  			else
+>  				gve_free_qpl_page_dqo(bs);
+> +
+> +			if (gve_buf_state_is_allocated(rx, bs) &&
+> +			    bs->xsk_buff) {
+> +				xsk_buff_free(bs->xsk_buff);
+> +				bs->xsk_buff =3D NULL;
+> +			}
 
 [Severity: High]
-This is a pre-existing issue, but does gve_xsk_pool_disable() incorrectly
-unregister the newly created PAGE_POOL memory model for RDA queues?
+This is a pre-existing issue, but does this cleanup loop miss leaked XSK
+buffers if they were previously freed due to an rx_error?
 
-In gve_xsk_pool_disable():
+When a packet is received with compl_desc->rx_error set (such as a CRC erro=
+r),
+gve_rx_dqo() calls gve_free_buffer() before checking for the XSK buffer:
 
-    if (!gve_is_qpl(priv) && priv->xdp_prog) {
-        err =3D gve_configure_rings_xdp(priv, priv->rx_cfg.num_queues);
-        if (err)
-            return err;
+drivers/net/ethernet/google/gve/gve_rx_dqo.c:gve_rx_dqo() {
+    ...
+    if (unlikely(compl_desc->rx_error)) {
+        gve_free_buffer(rx, buf_state);
+        return -EINVAL;
     }
-    ...
-    gve_unreg_xsk_pool(priv, qid);
-
-For RDA mode, gve_configure_rings_xdp() properly initializes and registers =
-the
-new queue with MEM_TYPE_PAGE_POOL.
-
-However, immediately after the restart, the driver unconditionally calls
-gve_unreg_xsk_pool():
-
-drivers/net/ethernet/google/gve/gve_main.c:gve_unreg_xsk_pool() {
-    ...
-    if (xdp_rxq_info_is_reg(&rx->xdp_rxq))
-        xdp_rxq_info_unreg_mem_model(&rx->xdp_rxq);
     ...
 }
 
-Will this actively invoke page_pool_destroy() on the newly created page pool
-and reset the memory type to MEM_TYPE_PAGE_SHARED?
+gve_free_buffer() returns the buffer state to the free list without calling
+xsk_buff_free(), leaving bs->xsk_buff still set.=20
 
-If so, could packets from this queue bypass page_pool_put_full_netmem() on
-free, causing memory leaks and a use-after-free since the page pool was mar=
-ked
-for destruction?
+Since this cleanup loop checks gve_buf_state_is_allocated(), which evaluates
+to false for buffers in the free list, will it completely skip these leaked
+buffers?
+
+>  		}
+>  	}
+
+[Severity: High]
+This isn't a bug introduced by this patch, but while looking at queue stop
+cleanups, is there a type confusion issue when cleaning up pending TX packe=
+ts?
+
+During interface down or MTU changes, gve_tx_clean_pending_packets() and
+remove_miss_completions() iterate over pending TX packets and unconditional=
+ly
+treat them as SKBs:
+
+drivers/net/ethernet/google/gve/gve_tx_dqo.c:gve_tx_clean_pending_packets()=
+ {
+    ...
+    gve_unmap_packet(tx->dev, cur_state);
+
+    if (cur_state->skb) {
+        dev_consume_skb_any(cur_state->skb);
+        cur_state->skb =3D NULL;
+    }
+    ...
+}
+
+struct gve_tx_pending_packet_dqo uses a union for skb and xdpf. If the pack=
+et
+is an XDP frame, cur_state->skb will evaluate to true, passing the XDP frame
+to dev_consume_skb_any(). Can this cause a crash?
+
+Additionally, for AF_XDP (XSK) packets, gve_xsk_tx_dqo() does not initialize
+dma[0] because XSK uses pre-mapped DMA. Will the unconditional call to
+gve_unmap_packet() pass uninitialized or stale dma[0] values to
+dma_unmap_single() and corrupt DMA mappings?
+
+[Severity: Medium]
+This is a pre-existing issue, but do AF_XDP TX buffers get permanently leak=
+ed
+from the userspace application when the TX ring is stopped?
+
+The gve_tx_clean_pending_packets() loop traverses and discards all pending
+packets:
+
+drivers/net/ethernet/google/gve/gve_tx_dqo.c:gve_tx_clean_pending_packets()=
+ {
+    ...
+    for (i =3D 0; i < tx->dqo.num_pending_packets; i++) {
+        struct gve_tx_pending_packet_dqo *cur_state =3D
+            &tx->dqo.pending_packets[i];
+    ...
+}
+
+Unlike the normal completion path in gve_tx_process_xsk_completions(), this
+cleanup path doesn't appear to call xsk_tx_completed() for XSK packets befo=
+re
+dropping them.=20
+
+Since the pending packets array is zeroed and freed shortly after, are these
+buffers lost permanently from the perspective of the AF_XDP socket?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260814234845.7731=
-89-1-joshwash@google.com?part=3D4
+89-1-joshwash@google.com?part=3D2
