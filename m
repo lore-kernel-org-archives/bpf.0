@@ -1,203 +1,173 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7363E366806
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85E21E0DE8
 	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 08:14:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786781692; cv=none; b=trELWU3YujRmB8wfzaWdys5cdNuwYXBGETfnZuFc5zPZao0YVIrHA64GfdLhABkctWmWRZri/YAjO2P/fC1KpIm801W9+E5xvCCund1M8v/AAxuZgwdndlQ8oi0MhdpjWuSMbExVZuAP6phbXiLzX69RF4VfDYD0jzqgKSfAdnQ=
+	t=1786781693; cv=none; b=XkKAhidKkIcpOJ8cmbES1yY6jb5mSq2Q4KuxgpaUPdwwe/dKPo9lB3eSKJOqj6zIispj3v8Nwx4ilxJQxR0D6eUgHAWOkZT+mZ6CJSAdRrgYflIzt4Rt9oGKh0HwMYHfJA1/cuTW09jrCZO1cjTkwLBhH3Ysa7+bWmVu1LTaa0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786781692; c=relaxed/simple;
-	bh=h3sjvFkk00O0WPBdKJ2zCE2hT9aXm32WOq4PoINgQHU=;
+	s=arc-20240116; t=1786781693; c=relaxed/simple;
+	bh=WddCTM3tTaCvPItcPgyyq0v1Bvw0fjcTVItPMrxR6yw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=HSEhkbZAwfdJd+5e5IUogFii0DcMHjggj+0O0m3ZbOYc5RutWVgcNFLngv3e3OYYAu2g3r3avHlUunNOmE28ldgLlT6HXJlsrkZBoqfpbDfwBKMoVRyfLBAfY5uW177yweLzLJ5+xRDpIJkHQ/Nn3ohEXIfP2u9jo97hUwlO7AE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tw7zsvMm; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=gGVt7OWcngExAapj6dAx1JkBlzgjqEwvTDelr8+YOOLLxZaOEwG23vPOg7vEUUrNfEQI1xCwYDJpvoO+BOcthso8fHiXUwb+9vXeFjeQ4m2rzOwdR7bYPeEse2e+GzjJDETCDTbLbCnCogS5w2+Hm1MSovlD3MwaPmww2WLahcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E6NjV1Yi; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tw7zsvMm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E84391F00A3A;
-	Sat, 15 Aug 2026 08:14:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E6NjV1Yi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8817D1F00A3D;
+	Sat, 15 Aug 2026 08:14:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1786781691;
-	bh=6pOKHIyc5Bi5MRSPsCRgYDmlSwhDkZS7Qs6HRT+XWsY=;
+	bh=syifls2wWDYcvaDXZGe2HhAXbsULhbNPt8iH0cL9nbc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Tw7zsvMmqH80NXX4axQBlJushDOUIyV9QeQXI8RGaEPgRGdkTCmu5rNgQEid35xtZ
-	 HxNuVrCkWFddYeS+kPgjpflMNvrrpkb2KVlcbMhVtJQN1RtYFv6brhuJVQW3ocanW9
-	 vpDHbdODtt62iSHzj6DSJORxDw/n7Y7SwQJXTsUk7xBc2SM4MSt5JeTMJNRGeAwrCa
-	 Duz998gvVjH3oV7Wj7lrHnsmPMopZMFoDY/6KJapt3r695paUqr1d4GjwrYM/qhApR
-	 f2GTcHCzTCHlhFVPOTU23wI/hRsNQVa5CDMFh2Rvytwfejj2XIPanOVrax8CIMaDnQ
-	 lrTHGdxGLTGpQ==
+	b=E6NjV1YiwP+DtwhR8ioQcPRSIBqMPhNxRUB1HPEppkulGR7WdixVU7auCIsMYXeIm
+	 oDm7NjYgr76ST1Q1RXM9nw+iDrTVd9eczuRRZXSesoqN72nFnetwSwrTlEYwCicWo3
+	 dcr31Yk7FpfHeP2CVLkqDRMeuOasHkax9zb23GBS9lf2tqN5Hm8qbrgL28kVSr76SD
+	 8NFK6OhuqSKOYFVRIjLFhc5cs4L8TBW9hgZWpS3mougFRgv94+MRUenCpI1RXtlYoB
+	 GEx+3DW42W2aDZY0B3R8Y0kU2CAEm0pbf5nyuEX7focaJB4+eeJe0urGBYAW7du25e
+	 4vlVAAQrqiWww==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 05/14] selftests/bpf: Test skb_ext on cloned
- skbs
+Subject: Re: [PATCH net-next 01/14] bpf: Introduce per-packet metadata
+ storage for BPF programs
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jakub Sitnicki" <jakub@cloudflare.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260814-bpf-meta-inside-skb-ext-v1-5-767edd862656@cloudflare.com>
+In-Reply-To: <20260814-bpf-meta-inside-skb-ext-v1-1-767edd862656@cloudflare.com>
 References: <20260814-bpf-meta-inside-skb-ext-v1-0-767edd862656@cloudflare.com>
- <20260814-bpf-meta-inside-skb-ext-v1-5-767edd862656@cloudflare.com>
+ <20260814-bpf-meta-inside-skb-ext-v1-1-767edd862656@cloudflare.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 15 Aug 2026 08:14:50 +0000
-Message-Id: <20260815081450.E84391F00A3A@smtp.kernel.org>
+Date: Sat, 15 Aug 2026 08:14:51 +0000
+Message-Id: <20260815081451.8817D1F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [Medium] Flawed assertion for `if_nametoindex` return value silently igno=
-res errors.
-- [Low] Multi-line comments do not follow the BPF subsystem comment style g=
-uidelines.
+- [High] bpf_dynptr_from_skb_ext() mutates skb->extensions without synchron=
+ization in TRACING and LSM programs, causing data races.
+- [High] bpf_dynptr_from_skb_ext() COWs the SKB extension without invalidat=
+ing existing dynptr slices in the verifier, leading to a Use-After-Free.
+- [High] __bpf_skb_ext_store_bytes() and bpf_skb_ext_pointer() allow lockle=
+ss mutation of shared SKB extensions on cloned SKBs.
 --
 
---- Patch [5]: [PATCH net-next 05/14] selftests/bpf: Test skb_ext on cloned=
- skbs ---
-commit 52378eb340683567339caa62c46774dede8267b1
+--- Patch [1]: [PATCH net-next 01/14] bpf: Introduce per-packet metadata st=
+orage for BPF programs ---
+commit e0c430f0cc32850ff4a67d41f0ec463446dca9ae
 Author: Jakub Sitnicki <jakub@cloudflare.com>
 
-selftests/bpf: Test skb_ext on cloned skbs
+bpf: Introduce per-packet metadata storage for BPF programs
 
-This patch covers skb_ext behavior when an skb is cloned by TC mirred. It a=
-dds
-tests to verify that the extension written at tap ingress is readable from =
-the
-mirred clone and that COW works when the extension is modified.
+This commit adds a new sk_buff extension (struct bpf_skb_ext) to provide
+up to 256 bytes of per-packet storage for BPF programs. The storage is
+exposed to BPF programs via the bpf_dynptr_from_skb_ext() kfunc.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.=
-c b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-> index fd340e5538a34..58b793cf14e59 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-> @@ -694,6 +694,95 @@ void test_xdp_context_lwt_encap(void)
->  	test_xdp_meta__destroy(skel);
->  }
-> =20
-> +/* Test if skb_ext survives skb clone (via tc mirred).
-> + * dummy_prog runs on the clone (dummy ingress).
-> + */
-
-[Severity: Low]
-This isn't a bug, but the multi-line comment does not follow the BPF subsys=
-tem
-style guidelines. Should the opening /* be placed on its own line?
-
-> +static void test_mirred_clone_ext(struct test_xdp_meta *skel,
-> +				  struct bpf_program *dummy_prog)
-> +{
-> +	LIBBPF_OPTS(bpf_tc_hook, tc_hook, .attach_point =3D BPF_TC_INGRESS);
-> +	LIBBPF_OPTS(bpf_tc_opts, tc_opts, .handle =3D 1, .priority =3D 1);
-> +	struct netns_obj *ns =3D NULL;
-> +	int dummy_ifindex;
-> +	int tap_ifindex;
-> +	int tap_fd =3D -1;
-> +	int ret;
-> +
-> +	skel->bss->test_pass =3D false;
-> +
-> +	ns =3D netns_new("mirred_clone", true);
-> +	if (!ASSERT_OK_PTR(ns, "netns_new"))
-> +		return;
-> +
-> +	/* Dummy dev: attach reader */
-> +	SYS(close, "ip link add name " DUMMY_NAME " type dummy");
-> +	SYS(close, "ip link set dev " DUMMY_NAME " up");
-> +
-> +	dummy_ifindex =3D if_nametoindex(DUMMY_NAME);
-> +	if (!ASSERT_GE(dummy_ifindex, 0, "dummy_ifindex"))
-
-[Severity: Medium]
-Since if_nametoindex() returns 0 on failure, will ASSERT_GE(..., 0) incorre=
-ctly
-evaluate 0 as a success? If the interface lookup fails, won't the test proc=
-eed
-with an invalid interface index (0) instead of catching the failure here?
-
-> +		goto close;
-> +
-> +	tc_hook.ifindex =3D dummy_ifindex;
-> +	ret =3D bpf_tc_hook_create(&tc_hook);
-> +	if (!ASSERT_OK(ret, "dummy_hook_create"))
-> +		goto close;
-> +
-> +	tc_opts.prog_fd =3D bpf_program__fd(dummy_prog);
-> +	ret =3D bpf_tc_attach(&tc_hook, &tc_opts);
-> +	if (!ASSERT_OK(ret, "dummy_attach"))
-> +		goto close;
-> +
-> +	/* TAP dev: attach writer + mirred to dummy */
-> +	tap_fd =3D open_tuntap(TAP_NAME, true);
-> +	if (!ASSERT_GE(tap_fd, 0, "open_tuntap"))
-> +		goto close;
-> +
-> +	SYS(close, "ip link set dev " TAP_NAME " up");
-> +
-> +	tap_ifindex =3D if_nametoindex(TAP_NAME);
-> +	if (!ASSERT_GE(tap_ifindex, 0, "tap_ifindex"))
-
-[Severity: Medium]
-Similarly, will this assertion accept 0 as a valid interface index on failu=
-re
-and result in confusing downstream errors during bpf_tc_hook_create()?
-
-> +		goto close;
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 16845987b2449..2cbb40b392edd 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -12259,6 +12259,48 @@ int __bpf_skb_meta_store_bytes(struct sk_buff *s=
+kb, u32 offset,
 
 [ ... ]
 
-> diff --git a/tools/testing/selftests/bpf/progs/test_xdp_meta.c b/tools/te=
-sting/selftests/bpf/progs/test_xdp_meta.c
-> index 43840ee32d359..1b6bb20ee7e85 100644
-> --- a/tools/testing/selftests/bpf/progs/test_xdp_meta.c
-> +++ b/tools/testing/selftests/bpf/progs/test_xdp_meta.c
-> @@ -874,4 +875,49 @@ int tc_skb_ext_double_alloc(struct __sk_buff *ctx)
->  	return TC_ACT_UNSPEC;
->  }
-> =20
-> +static const __u8 meta_zero[META_SIZE] =3D {};
-> +
-> +volatile bool clone_cow_done;
-> +
-> +/* Overwrite skb_ext on the clone via F_CREATE (COW) -- must not affect =
-original.
-> + * Runs on the dummy ingress (clone side), synchronously during tc mirre=
-d.
-> + */
-
-[Severity: Low]
-This isn't a bug, but could the opening /* be placed on its own line to adh=
-ere
-to the preferred kernel multi-line comment style used in the BPF subsystem?
-
-> +SEC("tc")
-> +int tc_skb_ext_clone_redir_cow(struct __sk_buff *ctx)
+> +int __bpf_skb_ext_store_bytes(struct sk_buff *skb, u32 offset,
+> +			      const void *from, u32 len, u64 flags)
 > +{
-> +	struct bpf_dynptr meta;
+> +	struct bpf_skb_ext *ext;
 > +
-> +	if (bpf_dynptr_from_skb_ext(ctx, 0, BPF_SKB_EXT_F_CREATE, &meta))
-> +		return TC_ACT_SHOT;
+> +	if (unlikely(flags))
+> +		return -EINVAL;
 > +
-> +	/* Zero out the clone's ext -- must not affect original */
-> +	bpf_dynptr_write(&meta, 0, (void *)meta_zero, META_SIZE, 0);
+> +	ext =3D skb_ext_find(skb, SKB_EXT_BPF);
+> +	if (!ext)
+> +		return -ENOENT;
 > +
-> +	clone_cow_done =3D true;
-> +	return TC_ACT_SHOT;
+> +	memmove(ext->buf + offset, from, len);
+
+[Severity: High]
+Is it safe to directly mutate the extension buffer here without checking if
+the SKB is cloned?
+
+If a BPF program creates a writable dynptr, clones the SKB (which increments
+the extension's reference count), and then writes to the dynptr, this
+memmove() will modify the shared extension block while the cloned SKB might
+be executing concurrently on another CPU.
+
+Should this use a mechanism like bpf_try_make_writable() or check
+ext->refcnt before mutating to ensure exclusive ownership?
+
+> +	return 0;
 > +}
-> +
-> +/* Verify COW isolation at kfree_skb time: once clone_cow_done is set,
-> + * check that the original skb still has meta_want.
-> + */
+> +#endif /* CONFIG_BPF_SKB_EXT */
 
-[Severity: Low]
-This isn't a bug, but could the opening /* be placed on its own line to adh=
-ere
-to the preferred kernel multi-line comment style used in the BPF subsystem?
+[ ... ]
 
-> +SEC("tp_btf/kfree_skb")
-> +int BPF_PROG(tp_kfree_skb_cow_check, struct sk_buff *skb)
+> +__bpf_kfunc int bpf_dynptr_from_skb_ext(struct __sk_buff *skb_, u32 size,
+> +					u64 flags,
+> +					struct bpf_dynptr *ptr__uninit)
 > +{
+
+[ ... ]
+
+> +	ext =3D skb_ext_add(skb, SKB_EXT_BPF);
+> +	if (!ext) {
+> +		err =3D -ENOMEM;
+> +		goto error;
+> +	}
+
+[Severity: High]
+Could this COW operation lead to a use-after-free if existing dynptr slices
+are not invalidated?
+
+If a BPF program obtains a direct slice to a read-only SKB extension via
+bpf_dynptr_from_skb_ext() and bpf_dynptr_slice(), and then calls
+bpf_dynptr_from_skb_ext() again with BPF_SKB_EXT_F_CREATE, this forces a
+Copy-On-Write in skb_ext_add(), dropping the reference on the old block.
+
+However, because KF_bpf_dynptr_from_skb_ext is not added to
+bpf_is_kfunc_pkt_changing() in the verifier, clear_all_pkt_pointers() won't
+be invoked. The previously obtained slice remains valid in the verifier
+state, allowing the program to read or write the freed memory.
+
+> +	if (!exists)
+> +		memset(ext, 0, sizeof(*ext));
+> +out:
+> +	bpf_dynptr_init(ptr, skb, BPF_DYNPTR_TYPE_SKB_EXT, 0, size);
+
+[ ... ]
+
+> @@ -12640,6 +12760,21 @@ static int __init bpf_kfunc_init(void)
+
+[ ... ]
+
+> +	ret =3D ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_NETFILTER, &bpf_=
+kfunc_set_skb_ext);
+> +	ret =3D ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_LSM, &bpf_kfunc_=
+set_skb_ext);
+> +	ret =3D ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &bpf_kf=
+unc_set_skb_ext);
+
+[Severity: High]
+Can calling bpf_dynptr_from_skb_ext() from TRACING or LSM programs cause
+data races on the skb structure?
+
+TRACING and LSM programs can intercept an SKB that is currently shared
+(skb->users > 1) and being processed concurrently on multiple CPUs.
+
+Since bpf_dynptr_from_skb_ext() unconditionally calls skb_ext_add(), which
+performs lockless read-modify-write operations on skb->active_extensions,
+concurrent execution could corrupt the bitfield or overwrite the extension
+pointer, leaking the allocated extension block.
+
+> +#endif
+>  	ret =3D ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &bpf_kfunc_=
+set_xdp);
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260814-bpf-meta-i=
-nside-skb-ext-v1-0-767edd862656@cloudflare.com?part=3D5
+nside-skb-ext-v1-0-767edd862656@cloudflare.com?part=3D1
