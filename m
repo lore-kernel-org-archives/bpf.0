@@ -1,64 +1,64 @@
-Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
+Received: from mail-wm2-f7.google.com (mail-wm2-f7.google.com [74.125.225.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08ADD39CD13
-	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 06:46:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2388B3B47D0
+	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 06:46:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786776389; cv=none; b=W4JXFwzrC3T9d0mtoBkUgmwfAe4MMMP5W0L01xUZiht9J7rjKX4RlpkEE5d5aBg6SrqmjlOYTJvZazd5Y88WsxzAPsiawHfVG/f/OHwf5NWeP1PlxdHltf1Y34hd0E+BQQwGGxMXLnQpflq5E9ubolnUdh2+RcclBhA6G0MHF8Y=
+	t=1786776389; cv=none; b=ne9WG+15EvRnsxywcvLzkQbmY8tcSwltAeuTroco50kfVhuhXl/f0Nrdz8U+GdgoLx5zb43eJ4pKZR+70ngaVnjruuzeN/IX4rPKm2kbOv+y+wZKbMVHG23EBQTlNPZA//Yr7B6hHVZPESa1cpD/y2JrY/UcJuNXtLhrP2pwerk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1786776389; c=relaxed/simple;
-	bh=rgCbHehKGIYh6mlG3MRresi/3QFSP4i/c2cZZe544MU=;
+	bh=kwOJqVkKkALiY4nkxeREfhsGl9+wapPrte6z8v02NXU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mZTPAPwMJfRJhzKKWy5849OYwnWL+1OyzUUjeyyoeKVUF+mi8Rzr7FemGfTXjSW+2aPTTQXRENaFMJffY6kfJvPDN9ZF3bLUM67lhgDHF7y8vPrPRQiZYREe8xvs6rw2EXOA2YnSZgDnuoZTB94uguPGA0h1B6kpo1V7Kj46Bkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OaMCDdp+; arc=none smtp.client-ip=74.125.225.137
+	 MIME-Version; b=Hut9s8zob3h4bCj/Mm50XKw7JXRs03Ldy12oDDl2aPq9IO+Z/m7bsZmA7h5QpwgbfbsvFFMLOK+uV6b9R2siqBkzzIcxuL7wHjYjF1jawYhRyQKzrecvcx2oH4jA8oci7Pnv4tM6wBubXLJ3435CdH7mDprWu/Zz+8+w6LWJSSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AxYI7jBo; arc=none smtp.client-ip=74.125.225.135
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OaMCDdp+"
-Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49556ce3549so7427305e9.0
-        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 23:46:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AxYI7jBo"
+Received: by mail-wm2-f7.google.com with SMTP id 5b1f17b1804b1-498079e98beso4055715e9.1
+        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 23:46:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786776379; x=1787381179; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786776378; x=1787381178; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=IrIIi2a5wdNCizOr8oJT7mVONXeRPFfOQ9DzG0Sw4Ok=;
-        b=OaMCDdp+EIk9AAHf33tbjJ3h1YZnL4Tnkq0HuXFiIwjhB9AZ+1gzZiNitNZ2smMM/i
-         SDcx/wvwlbFPAXJ8hLWj9m0Cq52PCquS/UzDRDalf0RhWJQui8cdoM5BsX0fEmlNSc8L
-         nYi2qopccXr0+/l85oOZ3f6Qck2Ar9HI2T3Pzyb3EFBnNSn12RCw0ujmn6NnSQf5KGeO
-         eaBQFxWUyDuMJZA/nzv+0gI68R3eQZwQiTc6PDdJfkuP50EkOdUQ8yVdnJEl/rNJtS0q
-         o3pl2UgxE5KIah+wZPaoTv01YNjYcHKrlpIUg6BkQvh3SPXXMU5FSW8iCPvCAGBjWS00
-         LPlw==
+        bh=+IA/JGVRZLBz7dEDt4N2UuAWhUpBmc7eJQE9nGE6Rxo=;
+        b=AxYI7jBo5E5kcRvTu3lC/mSq9EL8fekXTzX3yYhaXS7jFguJtNOethY42zBvHOIDZB
+         SPrssmTOG2GTNOdsZTiL6cM0va9P5unp8ypdi48PEQqLlyhT8PhKiDzKGfNHazY374gx
+         AM/ISvSnwiIdpqf2x9FjxhdZXSMsjWDj5E4TKCya0ybK6xf1f3rKazsZ9Hqw3/wObx2Q
+         XF0nWjt+NDhr9C5QKE3z/5oKovBpi0oenjEY3at9Rs01OTQe7CHKW29rYo5ckvEWF+j6
+         Ze2tZocQNHySf/64LYfAXj75RAvYtk0tKlo6YWEEmaLx9wd9v7xVsMaX7EfGHeFKNw3n
+         OeAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786776379; x=1787381179;
+        d=1e100.net; s=20251104; t=1786776378; x=1787381178;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=IrIIi2a5wdNCizOr8oJT7mVONXeRPFfOQ9DzG0Sw4Ok=;
-        b=YgBZYmEtiYSjuDhQBp0L86ywH7HAT1KKi6SSOKUp2o++dcEgtEHqnmuceIOe4dBvVT
-         ZWIxmibg8v7HnL/O7bIYZTKMbBXZLQ9kVpLNJekfiip/nvx3nR7HZj6R9tvYKjipf5d+
-         wGdQs0IsT44otlQRe605Rjic7Zio/fGRYpnWdeDQlLLrW1m3CUfTErrS+HMNr8zPtJOR
-         vqgBF9g6e+q3R+0GYlz4rjSH2178jvdt8eutMRdOekjzNPI5PMte6NjRkjgiD4drQXyi
-         BhHZpFz23gjZ7Isg7hYmwogcLmTtt+sbfavJYaNWWLEdqpiwP4OIG/bSipythCA6fPq3
-         O1Jw==
-X-Gm-Message-State: AOJu0Yy+XxiRD+IbNjGQXUo+WfPXcPuYCJplzIIG8SzylkzpWtbgUxlH
-	Tk+31hPK6HtJNwWQkQzibHhBtUSOgl2kRslsIRhrf2eVhM7/meLLd1JrfFSuVnrr
-X-Gm-Gg: AR+sD11/cThoaT2QqaYeoKtJAYZ7oBBsXGemeNXxCAvSv0cXrBdECOTQW3cTISZFTMD
-	ZjlQpiCjm2HY0yPjqZRjJr81+hjeg9aVGVasDTwbIUO97Z1eq1zF1xjpm2Hxp8pZRpORLtj/fhk
-	bYAunQ6+5t26MQpj/ah071XiGcPbsJcz3dOAanZ6J6Be93sqHeGiL+xS8T3OXUb2iw86TSr14or
-	Q+1G4iyEp5COe8ey93G2Q/SMBhYc1d3qtExq5UYGAPhaKzuvmNGch6AISFAO4SOTq/6/RXmrAm8
-	MK0XfCP7GVRGdb6svgDEi1zqXoxZfU8HFVjO/mR9LJEwH7YMVEDi1P+kT35xnjIUH+2FYBkPqNN
-	/rLny6mAkVRmckR9BYYZPZfD2lzHbfRmprpB9lmlvKXL06R5zo9SX6MzCtpkCsmKUo4Rl1m53/w
-	Zi1ul3/4UB75xbxwiK23tORicn93OEoVzQWsrgipleLqWiPsRlnUGTd+r6q8O0q3xlAoS8MnGiz
-	Nm6DRhTV6oTr8FreL2GSXIdLVW8Y1Q/7WS5s36ngyV+SUrWrXONHfpQEf2PBVNT+xTKagJo21xm
-	wUQSKaSEFcWts/XDSIeAxsHg78g=
-X-Received: by 2002:a05:600c:a4d:b0:496:ca1f:a428 with SMTP id 5b1f17b1804b1-49987981e52mr160622205e9.19.1786776379505;
-        Fri, 14 Aug 2026 23:46:19 -0700 (PDT)
+        bh=+IA/JGVRZLBz7dEDt4N2UuAWhUpBmc7eJQE9nGE6Rxo=;
+        b=ICcvLDC5F52YY9NzLuJ4HWW28+I6Y8I6IB/tOl6gXAUgTIsMQgQdeUuWpzyyi7ciZQ
+         FotAQ53HQrr4M6TqEs0F/KPrtVw5BcZN11Gf8ujkHj650ATRCqpL2AoGYkWA/f0w26AM
+         gdcX23qqEeIas1bzuK3J9XnieyiytcCFs1FssMpXTONm+CLNnK6LYYK4a935nTh7advZ
+         TBO8TonxsC/3JAtbHB3IsWiksbvPEY/3jlP3VLJOH1hHe3HNAMDJUlqIloesA5u8RGKt
+         oKPsoHeUnWmT5Rsb7SktF6VJyrUp3o0U2rsV18aTOvYOvz9e2aK/TyMCo5IFoep+YwSv
+         AQpw==
+X-Gm-Message-State: AOJu0Yxe6BpAYmMN6D+o2mHBxlcpSeKfQESDK4c0fYxFhaReC4AJzQgG
+	RRG3gw7NnztA542OXbGpC/iafFAP3Ki1WZJqRkK7oIZe3vZeVzvQsxyFOfqAZSwZ
+X-Gm-Gg: AR+sD12dRGLNBRJPdxbvrSxXti74FG8d29ov5c27yoPFsxEcIJJTBTz/S5Lq4lUGhIi
+	R4hUT0TY8stb34f51KJ8gz3pzGJMtT6VYnQx/zayPfGyLb1IfphtJZESNnIxhNcg7RDQ+rUf7NP
+	9Qry9k8PpXY13MEQHgkKxuaKHEGeXBMMxJOnU0omnvo/u3735aBGvoPMvsWOcqrWO9DVrI/9BaD
+	qy8XpceSQb2SoyIiEwUkN/g/Yv/2uEsmvPLkxOlk+VuJqOayIZAkP1GCeRSd0x0z2PgBOgV1/Om
+	eK1LlWlNOGreimVFm3Pgt/+MwOB9vzFf7s6qrWm+5a9ToVORwk4hEZBC2QYHPbip8hVn9VY+2Eg
+	o+y4JtvP0hTqt76pKilN/QCJ8cl5Qi/hrC7B9SRC81SmZSEdV+qIEuFi9FcZZ5oWCPC0Z00AC8+
+	caaau+Eu6MbySCoR4YXJf+Z09gQbJ/ybuHf62c79pYXAXoCLzzMGJaB75DDq6XjrhBBAkLDVB0E
+	Fz3W+d/ot7Sjvaxu+8GFFEtmxnmJBxyl/gZlAdd+Qw294il3yUo+199MliIzXeXiSweCLk1DHv5
+	BT3b17xG2MFBTuW6qA5kmXlQ678=
+X-Received: by 2002:a05:6000:2086:b0:47f:e797:41c8 with SMTP id ffacd0b85a97d-481607301c9mr16926188f8f.4.1786776378257;
+        Fri, 14 Aug 2026 23:46:18 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49989ae1d36sm78421275e9.11.2026.08.14.23.46.19
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815f2005b0sm15564277f8f.8.2026.08.14.23.46.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Aug 2026 23:46:19 -0700 (PDT)
+        Fri, 14 Aug 2026 23:46:17 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v5 04/14] bpf: Prune verifier diagnostics when switching paths
-Date: Sat, 15 Aug 2026 08:45:59 +0200
-Message-ID: <20260815064612.378577-5-memxor@gmail.com>
+Subject: [PATCH bpf-next v5 03/14] bpf: Add verifier diagnostic event log
+Date: Sat, 15 Aug 2026 08:45:58 +0200
+Message-ID: <20260815064612.378577-4-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260815064612.378577-1-memxor@gmail.com>
 References: <20260815064612.378577-1-memxor@gmail.com>
@@ -80,71 +80,253 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2272; i=memxor@gmail.com; h=from:subject; bh=rgCbHehKGIYh6mlG3MRresi/3QFSP4i/c2cZZe544MU=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIauBy+vNJAGLppBZ5/9VxS46uUEuK21t7Q97rmuFTStyX l9772rXUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgImcu8PIcH/PoW67NRszemRv z039fnftlpPeisKcGU+u3t6evPDdBC+Gfwo6LrM3hzGfeJV3+RPjBVvmCqsrwRw6Xz2viK1p7WF mYwQA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7580; i=memxor@gmail.com; h=from:subject; bh=kwOJqVkKkALiY4nkxeREfhsGl9+wapPrte6z8v02NXU=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIauBy8v9u7XuLVXjvOR5znVRKmoxyUmbYz87r8rK+xvcm b+6vrWjlIVBjItBVkyRpeT/PibjE5W/A22XccPMYWUCGcLAxSkAEzmhxchwX0f91pedzc3dIr7+ P56///tX5vIJ9VihNc6VK+o/XJb+zvDPvnnFe6Y/C07VMIh38909xLfcrfZ/3TYrk80PlEoi5j5 jBwA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Save the diagnostic event-log position with each verifier stack entry and
-reset the environment-owned stream together with the normal verifier log
-when a queued state is popped. Also reset the diagnostic stream after
-successful subprogram verification even when level-2 logging preserves the
-normal verifier log.
+Add an environment-owned diagnostic history for verifier reports. Event
+payloads keep the user-facing branch history shape, while storage lives
+in bpf_verifier_env and follows the active verifier path.
+
+Grow the event array geometrically up to a 64 MiB limit. Once storage
+reaches the limit, or an allocation fails, overwrite the oldest event so
+diagnostics retain the newest useful suffix without adding per-event
+metadata.
+
+Represent saved positions as absolute logical sequence numbers. A restore
+truncates to a retained position. If its prefix has already been evicted,
+clear the abandoned suffix and preserve the missing-history position. This
+keeps marks stable across rotation without increasing their size.
+
+Add the branch event renderer and branch recording.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/verifier.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ kernel/bpf/diagnostics.c | 130 +++++++++++++++++++++++++++++++++++++++
+ kernel/bpf/diagnostics.h |   3 +
+ kernel/bpf/verifier.c    |  21 +++++++
+ 3 files changed, 154 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 60dcb87a2417..db644690ac4b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -194,6 +194,7 @@ struct bpf_verifier_stack_elem {
- 	struct bpf_verifier_stack_elem *next;
- 	/* length of verifier log at the time this state was pushed on stack */
- 	u32 log_pos;
-+	u64 diag_log_pos;
+diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
+index 815aa7938b50..8f21b46adeca 100644
+--- a/kernel/bpf/diagnostics.c
++++ b/kernel/bpf/diagnostics.c
+@@ -22,8 +22,24 @@
+ #define BPF_DIAG_TAB_WIDTH 8
+ #define BPF_DIAG_FMT_CHUNK_SIZE (PAGE_SIZE - sizeof(struct diag_fmt_chunk))
+ #define BPF_DIAG_FMT_BUF_SIZE 256
++#define BPF_DIAG_EVENT_LOG_MAX_SIZE (64U << 20)
+ #define DISASM_LINE_LEN 160
+ 
++enum bpf_diag_history_kind {
++	BPF_DIAG_HISTORY_BRANCH,
++};
++
++struct bpf_diag_history_event {
++	u32 insn_idx : 24;
++	u32 kind : 8;
++	u8 in_lineage : 1;
++	union {
++		struct {
++			bool cond_true;
++		} branch;
++	};
++};
++
+ struct disasm_line {
+ 	char text[DISASM_LINE_LEN];
+ 	int idx;
+@@ -46,12 +62,23 @@ struct diag_fmt_mark {
+ 	size_t len;
  };
  
- #define BPF_COMPLEXITY_LIMIT_JMP_SEQ	8192
-@@ -1700,6 +1701,7 @@ static int pop_stack(struct bpf_verifier_env *env, int *prev_insn_idx,
- 		err = bpf_copy_verifier_state(cur, &head->st);
- 		if (err)
- 			return err;
-+		bpf_diag_event_log_restore(env, head->diag_log_pos);
- 	}
- 	if (pop_log)
- 		bpf_vlog_reset(&env->log, head->log_pos);
-@@ -1743,6 +1745,7 @@ static struct bpf_verifier_state *push_stack(struct bpf_verifier_env *env,
- 	elem->prev_insn_idx = prev_insn_idx;
- 	elem->next = env->head;
- 	elem->log_pos = env->log.end_pos;
-+	elem->diag_log_pos = bpf_diag_event_log_save(env);
- 	env->head = elem;
- 	env->stack_size++;
- 	err = bpf_copy_verifier_state(&elem->st, cur);
-@@ -2264,6 +2267,7 @@ static struct bpf_verifier_state *push_async_cb(struct bpf_verifier_env *env,
- 	elem->prev_insn_idx = prev_insn_idx;
- 	elem->next = env->head;
- 	elem->log_pos = env->log.end_pos;
-+	elem->diag_log_pos = bpf_diag_event_log_save(env);
- 	env->head = elem;
- 	env->stack_size++;
- 	if (env->stack_size > BPF_COMPLEXITY_LIMIT_JMP_SEQ) {
-@@ -18635,8 +18639,11 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog)
- 	ret = do_check(env);
- out:
- 	account_current_path(env);
--	if (!ret && pop_log)
--		bpf_vlog_reset(&env->log, 0);
-+	if (!ret) {
-+		if (pop_log)
-+			bpf_vlog_reset(&env->log, 0);
-+		bpf_diag_event_log_restore(env, 0);
-+	}
- 	free_states(env);
++struct bpf_diag_log {
++	struct bpf_diag_history_event *events;
++	/* Sequence number of the oldest retained event on the active path. */
++	u64 first_seq;
++	u32 cnt;
++	u32 cap;
++	u32 head;
++	bool growth_failed;
++};
++
+ struct bpf_diag_scratch {
+ 	struct bpf_linfo_source source_lines[BPF_DIAG_CONTEXT_CNT];
+ 	struct disasm_line disasm_lines[BPF_DIAG_CONTEXT_CNT];
+ };
  
- 	/*
+ struct bpf_diag {
++	struct bpf_diag_log log;
+ 	struct bpf_diag_scratch scratch;
+ 	struct list_head fmt_chunks;
+ };
+@@ -191,6 +218,7 @@ void bpf_diag_free(struct bpf_verifier_env *env)
+ 		return;
+ 
+ 	diag_fmt_restore(env, (struct diag_fmt_mark){});
++	kvfree(diag->log.events);
+ 	kfree(diag);
+ 	env->diag = NULL;
+ }
+@@ -207,6 +235,95 @@ static void diag_write(struct bpf_verifier_env *env, const char *fmt, ...)
+ 	va_end(args);
+ }
+ 
++static u64 log_end(const struct bpf_diag_log *log)
++{
++	return log->first_seq + log->cnt;
++}
++
++static u32 log_pos(const struct bpf_diag_log *log, u32 idx)
++{
++	u32 pos = log->head + idx;
++
++	return pos < log->cap ? pos : pos - log->cap;
++}
++
++u64 bpf_diag_event_log_save(struct bpf_verifier_env *env)
++{
++	struct bpf_diag *diag = env->diag;
++
++	return diag ? log_end(&diag->log) : 0;
++}
++
++void bpf_diag_event_log_restore(struct bpf_verifier_env *env, u64 log_pos)
++{
++	struct bpf_diag *diag = env->diag;
++	struct bpf_diag_log *log;
++	u64 end_seq;
++
++	if (!diag)
++		return;
++
++	log = &diag->log;
++	end_seq = log_end(log);
++	if (WARN_ON_ONCE(log_pos > end_seq))
++		log_pos = end_seq;
++
++	/*
++	 * A deep abandoned path may have rotated away the shared prefix. In
++	 * that case, restart with an empty retained suffix and remember that
++	 * every event before the restored mark is unavailable.
++	 */
++	if (log_pos <= log->first_seq) {
++		log->first_seq = log_pos;
++		log->head = 0;
++		log->cnt = 0;
++		return;
++	}
++
++	log->cnt = log_pos - log->first_seq;
++}
++
++static void diag_append_history(struct bpf_verifier_env *env,
++				const struct bpf_diag_history_event *event)
++{
++	struct bpf_diag_history_event *events;
++	struct bpf_diag *diag = env->diag;
++	struct bpf_diag_log *log;
++	u32 cap, max_events;
++
++	if (!diag)
++		return;
++	log = &diag->log;
++
++	if (log->cnt < log->cap) {
++		log->events[log_pos(log, log->cnt++)] = *event;
++		return;
++	}
++
++	max_events = BPF_DIAG_EVENT_LOG_MAX_SIZE / sizeof(*events);
++	if (log->growth_failed || log->cap == max_events)
++		goto rotate;
++
++	cap = min(log->cap ? log->cap * 2 : 64, max_events);
++	events = kvrealloc(log->events, array_size(cap, sizeof(*events)), GFP_KERNEL_ACCOUNT);
++	if (!events) {
++		log->growth_failed = true;
++		goto rotate;
++	}
++	log->events = events;
++	log->cap = cap;
++	log->events[log->cnt++] = *event;
++	return;
++
++rotate:
++	if (log->cap) {
++		log->events[log->head++] = *event;
++		if (log->head == log->cap)
++			log->head = 0;
++	}
++	log->first_seq++;
++}
++
+ static void diag_print_wrapped_prefixed(struct bpf_verifier_env *env, const char *first_prefix,
+ 					const char *next_prefix, const char *text)
+ {
+@@ -535,3 +652,16 @@ static void bpf_diag_source(struct bpf_verifier_env *env, u32 insn_idx, const ch
+ out_restore:
+ 	diag_fmt_restore(env, mark);
+ }
++
++void bpf_diag_record_branch(struct bpf_verifier_env *env, u32 insn_idx, bool cond_true)
++{
++	struct bpf_diag_history_event event = {
++		.insn_idx = insn_idx,
++		.kind = BPF_DIAG_HISTORY_BRANCH,
++		.branch = {
++			.cond_true = cond_true,
++		},
++	};
++
++	diag_append_history(env, &event);
++}
+diff --git a/kernel/bpf/diagnostics.h b/kernel/bpf/diagnostics.h
+index ba268b589ac9..6eda2fd65ee1 100644
+--- a/kernel/bpf/diagnostics.h
++++ b/kernel/bpf/diagnostics.h
+@@ -16,6 +16,9 @@ char *bpf_diag_fmt_buf(struct bpf_verifier_env *env, size_t size);
+ const char *bpf_diag_vfmt(struct bpf_verifier_env *env, const char *fmt, va_list args)
+ 	__printf(2, 0);
+ const char *bpf_diag_fmt(struct bpf_verifier_env *env, const char *fmt, ...) __printf(2, 3);
++u64 bpf_diag_event_log_save(struct bpf_verifier_env *env);
++void bpf_diag_event_log_restore(struct bpf_verifier_env *env, u64 log_pos);
+ void bpf_diag_free(struct bpf_verifier_env *env);
++void bpf_diag_record_branch(struct bpf_verifier_env *env, u32 insn_idx, bool cond_true);
+ 
+ #endif /* __BPF_DIAGNOSTICS_H */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2f330230f8d5..60dcb87a2417 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -17439,6 +17439,27 @@ static int do_check(struct bpf_verifier_env *env)
+ 
+ 		state->last_insn_idx = env->prev_insn_idx;
+ 		state->insn_idx = env->insn_idx;
++		/*
++		 * Record the incoming edge so active and queued paths use the same
++		 * branch-recording path. A zero-offset conditional has identical
++		 * successors, so its outcome cannot be reconstructed from the edge.
++		 */
++		if (!state->speculative && prev_insn_idx >= 0 && prev_insn_idx < insn_cnt) {
++			struct bpf_insn *prev_insn = &insns[prev_insn_idx];
++			int fallthrough_idx = prev_insn_idx + 1;
++			int branch_idx = prev_insn_idx + bpf_jmp_offset(prev_insn) + 1;
++			u8 class = BPF_CLASS(prev_insn->code);
++			u8 opcode = BPF_OP(prev_insn->code);
++
++			if ((class == BPF_JMP || class == BPF_JMP32) &&
++			    opcode != BPF_JA && opcode != BPF_CALL && opcode != BPF_EXIT &&
++			    opcode <= BPF_JCOND && branch_idx != fallthrough_idx) {
++				if (env->insn_idx == branch_idx)
++					bpf_diag_record_branch(env, prev_insn_idx, true);
++				else if (env->insn_idx == fallthrough_idx)
++					bpf_diag_record_branch(env, prev_insn_idx, false);
++			}
++		}
+ 
+ 		if (bpf_is_prune_point(env, env->insn_idx)) {
+ 			err = bpf_is_state_visited(env, env->insn_idx);
 -- 
 2.53.0
 
