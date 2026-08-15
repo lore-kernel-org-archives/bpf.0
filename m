@@ -1,146 +1,133 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCCFA32692C
-	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 02:14:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9003D34252B
+	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 02:14:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786760081; cv=none; b=sWW69XEaMofqQ6sbcnqbOnr78iFi5iUehjEHVXcLA9wEaEHEBQgvgAOhg1kggDyyn0EtHtlKPg7Y4nCMp9siALpN9m1H4mPJn/5rcsjCCrARJC022EXeGthsntP/DxrKxE51+obrgudJ6QcuEUjmf/1ECM1Z09IkOibGXlS92SQ=
+	t=1786760081; cv=none; b=iIdXhvWOCF5IVYmd73dAxZzncF85F4tU7hkKXxJTnePYVaHOd6SeOmDT9wzc5XXGGOJv6Ob+AYqlfsyl3nXBip+kDjqYZteH52aX/Z0FL9rFgDj/N0qM8Klns1+1STFGsiF0MwWkPi0ht4bwUubrLajYyX3nUiaBJr7mSa1OoJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1786760081; c=relaxed/simple;
-	bh=Sk99+XuFjak8A6VDfNsCzaMk+a0C68StzirFWAxegQQ=;
+	bh=53XxteKHfA/1qxxZi3kwhPTWj8YmpD/kGePz5WLWSSk=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=RGyqXRX7B8kc5zg7ztdu198S3peS0w5V0ilzjTeIEPYtLLqT9DAvX8CErXq275U0Myc8HnKWnpzqhuhY8oQkOlw0Nh3LPKNlPVrgwF8sGXyiE9jVam6AUmFG1Ov2QIztyn3meknll/ZXMCNK9JdwPZA1ZVkt8devTw6mXUj8fVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ik9sukvE; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=dl0BOvKjXVMRv0zSvjeqMwh8ZAOEQfT7q7fqOWJ+mmyS4AFeLXQyZGloRYjB029OYQkSywR4Bb55Uo3Yvd6ICQ+38nZ6jwOyWtkmrvcP719hEqucTn0Sz5+X126BzQhmK0hsIbcecCP6dZPNdIAgI51rIvrnjb6bvememkx8res=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gYojdYAM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ik9sukvE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A43771F000E9;
-	Sat, 15 Aug 2026 02:14:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gYojdYAM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ECD61F00A3A;
+	Sat, 15 Aug 2026 02:14:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786760079;
-	bh=uG0YK/x47s2eKuDsHHLt0DSNnw7uRce7uit55b1SZpc=;
+	s=k20260515; t=1786760080;
+	bh=nJKS3O0hP+Q1N+VgCpLDxU7NWM7Gip8ib1zgpKKLPfQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ik9sukvE9RL/9/dTPA1YUc1VjBAhJ6OAknJKDnW5buBLmEjIb/veHfdbvCNpPClKK
-	 l2Zks5t1D83cdvnNFqcDx5uuoF2mQ4KT5C795d8KP5QTspzB74KXObZ7iVp14ijQq9
-	 LIcyHfYUODAbIqq3RwCHhH646JiYO7wu0qHl5Oxbj/kc8y6y2PIxgAGOZ/wAMEgclT
-	 blqRnbQIngld37Kxmwc3s90W5+7U7P0Mga5So1jxG1y/BkgmNmQaejbS+h1/GOW85C
-	 57ZdptRSMrRV7WPHG+AFfhnuc5Xuu27I6iPgcks8DE+FtgLUQiJgc3rN/Np41S7VKI
-	 Rc6p9JXP5ZkOA==
+	b=gYojdYAMx4sDIc72bwbI0BuFN5EQ5St6hWxA+AYP36lgxNEqXghKPvN+3UGq9muMx
+	 lWW1UGw/6HgsB967x9b+kfmZ+7SWKC3XpfwMcdupllleFCQq+A0tGPZfVqYvu+LIFb
+	 LrfBy6/HRMnMTNJdsvrkJoop315b2cJxBO+ViE9dgbH25s/X18uqW+JVmMWbiXUH48
+	 svEN3gkQHTuLB8WoU3/ZHT6vqbi0v7a8AwupO8Wru0ArdchthlJi+iY8uVOR7evK5b
+	 48RTkuQm6iv8oy4+TnMDvGmeqTy4ECKwP4d1C7Vzn8YHihfQoinvA6dIgAaDN+z41a
+	 31YBECZ2zhRJw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v4 02/15] gve: refactor initialization with
- helper functions
+Subject: Re: [PATCH net-next v4 14/15] gve: add ctrl ops to for queue
+ operations
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Harshitha Ramamurthy" <hramamurthy@google.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260814021406.3044324-3-hramamurthy@google.com>
+In-Reply-To: <20260814021406.3044324-15-hramamurthy@google.com>
 References: <20260814021406.3044324-1-hramamurthy@google.com>
- <20260814021406.3044324-3-hramamurthy@google.com>
+ <20260814021406.3044324-15-hramamurthy@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Sat, 15 Aug 2026 02:14:39 +0000
-Message-Id: <20260815021439.A43771F000E9@smtp.kernel.org>
+Message-Id: <20260815021440.4ECD61F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [Critical] Disabling XDP triggers an out-of-bounds array access due to th=
-e old BPF program remaining active while the TX arrays are shrunk.
-- [High] Device resets permanently break AF_XDP sockets because the driver =
-zeroes the `xsk_pools` bitmask.
-- [High] `gve_xsk_pool_enable` causes a data race by modifying the XDP memo=
-ry model concurrently with the NAPI polling context.
+- [Medium] Double logging remains in the create queues error path, contradi=
+cting the commit message.
 --
 
---- Patch [2]: [PATCH net-next v4 02/15] gve: refactor initialization with =
-helper functions ---
-commit f4310d54d17a7a878691c693aea2b3ce23d39802
+--- Patch [14]: [PATCH net-next v4 14/15] gve: add ctrl ops to for queue op=
+erations ---
+commit 026806681c18ac8de5714de37a0562162a553296
 Author: Harshitha Ramamurthy <hramamurthy@google.com>
 
-gve: refactor initialization with helper functions
+gve: add ctrl ops to for queue operations
 
-In the interest of commonizing code, refactor gve_probe()
-and gve_init_priv() with a few helper functions that can
-be expanded and utilized in upcoming patches that add the
-mailbox ABI to the driver.
+This commit adds control operations for creating and destroying queues. It =
+moves existing admin queue functions into the new ops structure to abstract=
+ these operations.
 
 > diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/eth=
 ernet/google/gve/gve_main.c
-> index 30bf6df4ebc58..37e6205e2eefd 100644
+> index eecc988073951..500247b0e34aa 100644
 > --- a/drivers/net/ethernet/google/gve/gve_main.c
 > +++ b/drivers/net/ethernet/google/gve/gve_main.c
-> @@ -2400,7 +2400,6 @@ static const struct xdp_metadata_ops gve_xdp_metada=
-ta_ops =3D {
+[ ... ]
+> @@ -874,33 +874,18 @@ static int gve_unregister_qpls(struct gve_priv *pri=
+v)
 > =20
->  static int gve_init_priv(struct gve_priv *priv, bool skip_describe_devic=
-e)
+>  static int gve_create_rings(struct gve_priv *priv)
 >  {
+> -	int num_tx_queues =3D gve_num_tx_queues(priv);
+>  	int err;
+>  	int i;
+> =20
+> -	err =3D gve_adminq_create_tx_queues(priv, 0, num_tx_queues);
+> +	err =3D priv->ctrl_ops->create_queues(priv);
+>  	if (err) {
+> -		netif_err(priv, drv, priv->dev, "failed to create %d tx queues\n",
+> -			  num_tx_queues);
+> -		/* This failure will trigger a reset - no need to clean
+> -		 * up
+> -		 */
+> -		return err;
+> -	}
+> -	netif_dbg(priv, drv, priv->dev, "created %d tx queues\n",
+> -		  num_tx_queues);
+> -
+> -	err =3D gve_adminq_create_rx_queues(priv, priv->rx_cfg.num_queues);
+> -	if (err) {
+> -		netif_err(priv, drv, priv->dev, "failed to create %d rx queues\n",
+> -			  priv->rx_cfg.num_queues);
+> +		netif_err(priv, drv, priv->dev,
+> +			  "failed to create queues\n");
 
-[Severity: High]
-This is a pre-existing issue, but could device resets permanently break AF_=
-XDP
-sockets because the driver zeroes the xsk_pools bitmask?
+[Severity: Medium]
+The v3 changelog notes state "remove double logging in the create queues
+path", but doesn't this still leave a double logging issue when
+create_queues() fails?
 
-When a device reset occurs (e.g., due to timeout, adminq failure, or MTU
-change), it triggers gve_teardown_priv_resources() which frees the bitmask:
+If priv->ctrl_ops->create_queues() (which maps to gve_adminq_create_queues(=
+))
+encounters an error, it logs a specific message:
 
-    bitmap_free(priv->xsk_pools);
-    priv->xsk_pools =3D NULL;
+drivers/net/ethernet/google/gve/gve_adminq.c:gve_adminq_create_queues() {
+	...
+	err =3D gve_adminq_create_tx_queues(priv, 0, num_tx_queues);
+	if (err) {
+		netif_err(priv, drv, priv->dev, "failed to create %d tx queues\n",
+			  num_tx_queues);
+		return err;
+	}
+	...
+}
 
-During recovery, the initialization path reallocates a fresh zeroed
-xsk_pools bitmap (e.g., via priv->xsk_pools =3D bitmap_zalloc(...)),
-permanently losing the previous state. Because the driver never restores the
-xsk_pools state from the core net_device, AF_XDP sockets silently stop
-working after a reset.
+Then it returns the error back here to gve_create_rings(), which logs a sec=
+ond
+generic "failed to create queues" message. Should this netif_err() in
+gve_create_rings() be removed to fully resolve the double logging?
 
-[Severity: Critical]
-This is a pre-existing issue, but is there a risk of an out-of-bounds
-array access when disabling XDP?
-
-In gve_set_xdp(), the xdp_prog pointer is updated after the queues have been
-restarted with a shrunken TX array:
-
-    err =3D gve_configure_rings_xdp(priv, 0);
-    if (err)
-        goto out;
-
-    WRITE_ONCE(priv->xdp_prog, prog);
-
-If a local privileged user disables XDP, gve_set_xdp() calls
-gve_configure_rings_xdp(priv, 0), which reallocates priv->tx without XDP
-queues and restarts NAPI polling. Since priv->xdp_prog is updated only after
-NAPI restarts, the active NAPI poll can execute the old BPF program. If the
-program returns XDP_TX, it accesses priv->tx[tx_qid] where tx_qid exceeds
-the new, smaller array size, leading to memory corruption.
-
-[Severity: High]
-This is a pre-existing issue, but does gve_xsk_pool_enable() cause a data
-race by modifying the XDP memory model concurrently with the NAPI polling
-context?
-
-In gve_xsk_pool_enable(), it registers an AF_XDP pool by modifying the XDP
-memory model and rx->xsk_pool without first disabling NAPI polling:
-
-    err =3D xdp_rxq_info_reg_mem_model(&rx->xdp_rxq, MEM_TYPE_XSK_BUFF_POOL,
-                                     pool);
-    if (err) {
-        ...
-    }
-
-    rx->xsk_pool =3D pool;
-
-If NAPI receives a packet in the race window, it may initialize the XDP
-buffer with MEM_TYPE_XSK_BUFF_POOL but allocate memory from the standard pa=
-ge
-pool because rx->xsk_pool was observed as NULL. When freed, xsk_buff_free()
-would be incorrectly called on a standard page, causing type confusion and
-memory corruption.
+>  		/* This failure will trigger a reset - no need to clean
+>  		 * up
+>  		 */
+>  		return err;
+>  	}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260814021406.3044=
-324-1-hramamurthy@google.com?part=3D2
+324-1-hramamurthy@google.com?part=3D14
