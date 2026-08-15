@@ -1,216 +1,146 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mta1.migadu.com (out-36.mta1.migadu.com [95.215.58.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01CF6378833
-	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 11:20:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CBAF33F5BC
+	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 11:56:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.36
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786792856; cv=none; b=dSLg4LS4c3SZCoRO1jKOqLrT0Pm2vD9X9OeIphGEVyNujMWalxW03J7TzA4o1T+eJVI/bfmndKWBqsbfoHZ9ha2PqUnLPNdti+k3rBao3K566zqGkufF1OiizSM0yRKjDD3fbJGUTVWD2qvi6Et0mu15DAI/5caD04bp+M7sEb0=
+	t=1786794972; cv=none; b=F+IfBosTjWHKLpjNh4ST+guaAFsvoLqZTEP1ieSbCYFWWpmnRDehdQfFHvdvDJjFkOJIm4hI/l6uOJ38NXHKoHGM5k9N26/OvmMvOuXvhwmRZCmcz3QsR1EXPqwG0L6RFez9rZVn4YcOTQaQPTrbOvechZ6Sb/YayZSAJ8IkAHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786792856; c=relaxed/simple;
-	bh=BRb/H6gQyImwNG31QtMHC6XRD9DnDYtem0s3kH7ioLM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=K6C+vrBHtAwX/Q8NnNGgAEJbpruyPeWpHHZPNe0WWJZKuYdRzQalOkW//GjMrTmvcITx1/+2+zjgNDk8qandKR+2IxrtIpOLMy0WpRwlOksUPQt2qR5YMYernE3QRT1viqKiAN0AQvnRXpRBoMtlesddSZU+t8KmVT9HAmQg2+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=by+J+fAH; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786794972; c=relaxed/simple;
+	bh=YkLmU1NxiWB/vciVK99wUc8NOQwVA9xq2ClSCkxrLdg=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=ISFu+2kSw/yyfpNeoOG/HTTao4l+0p99a637uS+qZzmjP6PKHUTm1lvOiz8LLmQX99mnbkkRX2dOxJcamUMk4wksoY+AidODu0KcwIC6OOh507Bs6LgFgB/x+vN+74My29uMMIwmbD8hALH6f8KSSWP5rX5YVjHeXIXrLZUiEVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DILQYcgL; arc=none smtp.client-ip=95.215.58.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="by+J+fAH"
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-836c8bdac50so26543157b3.0
-        for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 04:20:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786792852; x=1787397652; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=JPYKJdV6UanlxlzF1JXSEmSoCuW7gRMwUCGNDo7gTeg=;
-        b=by+J+fAHdcMUb7Xdj6yvosWZmBP1qQF2qsmyiaK3BUwvn4rMEarjAAnCrbqWGmtNio
-         gEh/eokb0ShtUsseLO1JYk89IidCZnewqUK3uDHaPyp7cwdT9VnIdDy88pB3F9uXu6gG
-         bxvo+NVtQippMaTkgIjUrDn3In6eRPc0+JPfCfncrcrOqgJyCU58eD/atgMbqN51XWUH
-         fsVZyfsIxccOYyyQSe4Qhd1ms2QH9J+7HR8CVeBK17uDmrhNGvy0cEBskAtdLQFCkI6V
-         JxcQEeuzVFYFOui+umrlroq1CRq3RE61ZJNzUK98nbk+L/SpInAIEnftdrLjjiuV/aDw
-         KACw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786792852; x=1787397652;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=JPYKJdV6UanlxlzF1JXSEmSoCuW7gRMwUCGNDo7gTeg=;
-        b=IyA6Zc8KRFL9SZ2AESZdkHVYsREpSpzghVyzfvVMSdoHuqZkHYgSDU/6NZuejxULcw
-         DIio/ANl38wjmrDJSHPfyfMpSa7cHdzrYkcKtkOQjTS/WBwUxIS0eyLu4o2ybWzZcyT8
-         zGqX/XMIp3L9yDSn5SrYTr43BJpuFeUbH80Ao3gH1zLNoxQoNxvU/RQurwuQhgkGMPAk
-         +7pRZWeqP6gdPp33AcjPbKQOfTmXP8nbxmafdGYG8P9eyjegFxUuJO7JjTfj2OVyMi/d
-         X/9Cxz1R4/PRx2soba4vBXBvB/Uqdb7wdgjQLlswmi+FiwrpoKa4fs6JaghqErm2nrcU
-         6szQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpfLZMPbvi9/ZXAelLwxSX8mJ+w6MoNAe3/cgIuokTcOf1VmWtj4KtHyxkhYti8Vr4UnOA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhIc+fZ+lEa+3+1JO0anN4gULpvCKuoe8+lLYAmWxU076NlqHW
-	oJeuLU4vcL5PqAopsRvjbqvldipX/rjeRWI3lpjfktl0HT7woYG3z6WX
-X-Gm-Gg: AR+sD13zrv96fYGSlcPbHxnaoY2Id1agZ+pNyt4Hf6aBT9C6E67epp0yrRR9eF2Za9t
-	eVqn0g6GJ5Zzfei2I14+SFtRPDxCuoXGIysKLqUBFc7IM3KPcHWs2TUxU1DWs7KwM3b21HjfvVa
-	83T+I/itM1MvEdOzZRFamjt1NY0Ekl2eLrqkHnTR5IEphqQ/lIlKNkqgvesdMQ+QnurLXrMETyP
-	VxCfXTmmZyu27AKFF3R2JSnRkdHOFA5q/G5X47XkqPjKY1qu+qmby3xZYgvUvvad3a76bIVnXKq
-	bXdS+zKnyonTzNR9QlMQgx3TfS1ksp8FIRTdsmGz8k8wzHs4CBe2q5q+oIQIHzzkFrsu2QP/uT2
-	8z2Zde80RtCiLy+CR0BKePD5X9aFIw2ohdEF5qhCLYGVV98HRa5YrIE0x7uCTcjKm2yjKh/WpMR
-	v4IXQUsyyIbh5NRjN/glU/3zHSSLwcRKWJ4QydjtHRETxQm9urddvghKVZaCyf6TTwGMI1HOZq2
-	mhyZ+NWuCkxIDUnVv7+070iD3gHz7BT6ssqLkY=
-X-Received: by 2002:a05:690c:e1c6:20b0:812:996f:176e with SMTP id 00721157ae682-83712da2b76mr35634757b3.26.1786792851947;
-        Sat, 15 Aug 2026 04:20:51 -0700 (PDT)
-Received: from zenbox ([2600:1700:18fb:6011:31f0:efe0:f2d8:ae44])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-836c36a84d9sm24388037b3.46.2026.08.15.04.20.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Aug 2026 04:20:51 -0700 (PDT)
-From: Justin Suess <utilityemal77@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Paul Moore <paul@paul-moore.com>,
-	Xiu Jianfeng <xiujianfeng@huawei.com>
-Cc: linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Justin Suess <utilityemal77@gmail.com>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Test bpf_security_locked_down kfunc
-Date: Sat, 15 Aug 2026 07:20:41 -0400
-Message-ID: <20260815112041.1248855-3-utilityemal77@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260815112041.1248855-1-utilityemal77@gmail.com>
-References: <20260815112041.1248855-1-utilityemal77@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DILQYcgL"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=YkLmU1NxiWB/vciVK99wUc8NOQwVA9xq2ClSCkxrLdg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1786794967; v=1; x=1787399767;
+ b=DILQYcgLc7V1r9wYIblCS9C9niCRcXbzsLh3kxLfZlu03VGI6rAiB7kyse9oUp2y7vSJy9CI
+ w1sONtfJgUwkDui1INLe3dfLZ4HOI7VUh2VKdahEDrwScUGJc+yYHgBCb4ANper1BJFdOjy5F8c
+ Sj6C+SI4VH/aG9UhQyzvkh7E=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from [192.168.1.116] (111.162.215.50)
+	by smtp.migadu.com with ESMTPS id c2dba12a5636e28d;
+	Sat, 15 Aug 2026 11:55:56 +0000
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <e707deeb-6253-4ea0-92de-ebd87f0da707@linux.dev>
+Date: Sat, 15 Aug 2026 19:55:50 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc: cui.tao@linux.dev, Tao Cui <cuitao@kylinos.cn>, void@manifault.com,
+ arighi@nvidia.com, changwoo@igalia.com, suzhidao@xiaomi.com,
+ yphbchou0911@gmail.com, zhaomengmeng@kylinos.cn, sched-ext@lists.linux.dev,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH] sched_ext/scx_flatcg: expire cached hweights on weight
+ changes
+To: Tejun Heo <tj@kernel.org>
+References: <20260814144116.2767304-1-cui.tao@linux.dev>
+ <80d78aac-7fc8-4c14-a2ae-419297d953f7@linux.dev>
+ <3432f79f1d8195a56a0b4fea53ceb099@kernel.org>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <3432f79f1d8195a56a0b4fea53ceb099@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Test the bpf_security_locked_down() kfunc. An LSM program attached to
-the locked_down hook denies LOCKDOWN_HIBERNATION, so a syscall program
-querying the kfunc observes both verdicts deterministically without
-touching real lockdown state: 0 for LOCKDOWN_KEXEC and -EPERM for
-LOCKDOWN_HIBERNATION. Out-of-range reasons must return -EINVAL.
 
-Programs in denied calling contexts (a tracing program, and an LSM
-program attached to the locked_down hook itself) must be rejected at
-load time by the kfunc filter.
 
-The selftest config guarantees the verdicts are stable: the bpf LSM is
-in CONFIG_LSM and the lockdown LSM is not, so the kernel cannot already
-be locked down.
+在 2026/8/15 06:23, Tejun Heo 写道:
+> Hello,
+> 
+> On Fri, Aug 14, 2026 at 10:48:35PM +0800, Tao Cui wrote:
+>> Is this the intended behavior of the budget clamping, or should the
+>> steady-state distribution converge to the compounded shares over time?
+>> The header comment's model doesn't seem to hold in this scenario.
+> 
+> The clamp isn't the culprit. I reproduced your setup (3 busy tasks per
+> leaf, 4 CPUs) and dug in.
+> 
+> The dominant factor is that D is runnable-task limited. At weight 800
+> its compounded share is 3.55 CPUs but it only has 3 tasks, so 75% is
+> the best it can do. Below that cap, the window granting loses more:
+> whenever all three of D's tasks are already running and another CPU
+> picks D, the pop from D's DSQ comes up empty, the cgv_node gets
+> stashed and that CPU grants a full cgrp_slice_ns window to another
+> cgroup. The loss scales with the window size. Measured D shares at
+> weight 800:
+> 
+> 	3 tasks/leaf			55-59%
+> 	3 tasks/leaf, 100ms slices	52%
+> 	5 tasks/leaf			84-86%
+> 
+> Disabling the clamp entirely is the 59% above, so it barely matters.
+> With enough runnable tasks per cgroup, the distribution converges to
+> the documented compounding. The model holds, but only when no cgroup
+> is runnable-task limited, and the window granting degrades sooner than
+> per-task fair queueing would as that limit is approached. That's an
+> inherent simplification of this example scheduler.
+> 
+> Separately, while digging into this, I found that the true-up in
+> fcg_dispatch() is broken:
+> 
+> 	__sync_fetch_and_add(&cgc->cvtime_delta,
+> 			     (cpuc->cur_at + cgrp_slice_ns - now) *
+> 			     FCG_HWEIGHT_ONE / (cgc->hweight ?: 1));
+> 
+> In the CNS_EXPIRE case, now is past cur_at + cgrp_slice_ns, so the u64
+> subexpression wraps. The multiplication preserves the two's complement
+> encoding but the unsigned division by hweight destroys it, adding about
+> 2^64 / hweight per expiry instead of a small correction. The sign is
+> also inverted. The true-up should be actual minus charged, so the
+> expiry overrun should be added and the CNS_EMPTY unused portion
+> subtracted. Under saturation the budget clamp mostly masks the garbage,
+> which is why the numbers above barely move with it fixed (the 86% in
+> the 5 tasks/leaf row), but the accounting is broken all the same. The
+> following fixes it and tests fine (BPF division is unsigned, keep the
+> dividends positive):
+> 
+> 	s64 delta = now - cpuc->cur_at - cgrp_slice_ns;
+> 
+> 	if (delta >= 0)
+> 		__sync_fetch_and_add(&cgc->cvtime_delta,
+> 				     (u64)delta * FCG_HWEIGHT_ONE /
+> 				     (cgc->hweight ?: 1));
+> 	else
+> 		__sync_fetch_and_sub(&cgc->cvtime_delta,
+> 				     (u64)-delta * FCG_HWEIGHT_ONE /
+> 				     (cgc->hweight ?: 1));
+> 
+> Care to send a patch?
+> 
+Hi, tejun
 
-Signed-off-by: Justin Suess <utilityemal77@gmail.com>
----
- .../selftests/bpf/prog_tests/lsm_kfuncs.c     | 28 +++++++++++++++
- .../testing/selftests/bpf/progs/lsm_kfuncs.c  | 34 +++++++++++++++++++
- .../selftests/bpf/progs/lsm_kfuncs_fail.c     | 26 ++++++++++++++
- 3 files changed, 88 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/lsm_kfuncs.c
- create mode 100644 tools/testing/selftests/bpf/progs/lsm_kfuncs.c
- create mode 100644 tools/testing/selftests/bpf/progs/lsm_kfuncs_fail.c
+Thanks for the detailed walkthrough. I was chasing the clamp, but the
+runnable-task limit and the window granting behavior explain it much
+better, learned a lot from your analysis.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_kfuncs.c b/tools/testing/selftests/bpf/prog_tests/lsm_kfuncs.c
-new file mode 100644
-index 000000000000..c836851d8397
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/lsm_kfuncs.c
-@@ -0,0 +1,28 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include "lsm_kfuncs.skel.h"
-+#include "lsm_kfuncs_fail.skel.h"
-+
-+void test_lsm_kfuncs(void)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	struct lsm_kfuncs *skel;
-+
-+	RUN_TESTS(lsm_kfuncs_fail);
-+
-+	skel = lsm_kfuncs__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+	if (!ASSERT_OK(lsm_kfuncs__attach(skel), "attach"))
-+		goto out;
-+
-+	if (!ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(skel->progs.query),
-+					      &opts), "test_run"))
-+		goto out;
-+	ASSERT_EQ(skel->data->ret_clear, 0, "not locked down");
-+	ASSERT_EQ(skel->data->ret_denied, -EPERM, "locked down");
-+	ASSERT_EQ(skel->data->ret_invalid_low, -EINVAL, "LOCKDOWN_NONE invalid");
-+	ASSERT_EQ(skel->data->ret_invalid_high, -EINVAL, "CONFIDENTIALITY_MAX invalid");
-+out:
-+	lsm_kfuncs__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/lsm_kfuncs.c b/tools/testing/selftests/bpf/progs/lsm_kfuncs.c
-new file mode 100644
-index 000000000000..2637b9bc9025
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/lsm_kfuncs.c
-@@ -0,0 +1,34 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <errno.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+extern int bpf_security_locked_down(enum lockdown_reason what) __ksym;
-+
-+/* Reason nothing in the test environment genuinely queries or locks. */
-+#define DENY_REASON LOCKDOWN_HIBERNATION
-+#define ALLOW_REASON LOCKDOWN_KEXEC
-+
-+int ret_clear = 1;
-+int ret_denied = 1;
-+int ret_invalid_low = 1;
-+int ret_invalid_high = 1;
-+
-+SEC("lsm/locked_down")
-+int BPF_PROG(lockdown_hook, enum lockdown_reason what)
-+{
-+	return what == DENY_REASON ? -EPERM : 0;
-+}
-+
-+SEC("syscall")
-+int query(void *ctx)
-+{
-+	ret_clear = bpf_security_locked_down(ALLOW_REASON);
-+	ret_denied = bpf_security_locked_down(DENY_REASON);
-+	ret_invalid_low = bpf_security_locked_down(LOCKDOWN_NONE);
-+	ret_invalid_high = bpf_security_locked_down(LOCKDOWN_CONFIDENTIALITY_MAX);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/lsm_kfuncs_fail.c b/tools/testing/selftests/bpf/progs/lsm_kfuncs_fail.c
-new file mode 100644
-index 000000000000..b9861d9c4f16
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/lsm_kfuncs_fail.c
-@@ -0,0 +1,26 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+extern int bpf_security_locked_down(enum lockdown_reason what) __ksym;
-+
-+/* Tracing programs must be rejected by the kfunc filter. */
-+SEC("fentry/bpf_fentry_test1")
-+__failure __msg("calling kernel function bpf_security_locked_down is not allowed")
-+int BPF_PROG(tracing_caller, int a)
-+{
-+	bpf_security_locked_down(LOCKDOWN_KEXEC);
-+	return 0;
-+}
-+
-+/* As must locked_down programs, which would recurse into the dispatch. */
-+SEC("lsm/locked_down")
-+__failure __msg("calling kernel function bpf_security_locked_down is not allowed")
-+int BPF_PROG(recursive_caller, enum lockdown_reason what)
-+{
-+	return bpf_security_locked_down(what);
-+}
--- 
-2.54.0
+I sent a fix based on your suggestion, and saw it's been applied to
+your tree:
+
+  sched_ext/scx_flatcg: Fix cvtime true-up on slice overrun
+
+  https://lore.kernel.org/all/20260815045905.3431991-1-cui.tao@linux.dev/
+
+Kept your approach (s64 delta, keep dividends positive) and added
+A/B numbers from the same VM setup in the commit message.
+
+Looking forward to more of this while digging through sched_ext.
+
+Thanks,
+Tao
+
+> Thanks.
+> 
+> --
+> tejun
 
