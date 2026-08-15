@@ -1,146 +1,177 @@
-Received: from mta1.migadu.com (out-36.mta1.migadu.com [95.215.58.36])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CBAF33F5BC
-	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 11:56:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.36
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 611051C5499;
+	Sat, 15 Aug 2026 12:19:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786794972; cv=none; b=F+IfBosTjWHKLpjNh4ST+guaAFsvoLqZTEP1ieSbCYFWWpmnRDehdQfFHvdvDJjFkOJIm4hI/l6uOJ38NXHKoHGM5k9N26/OvmMvOuXvhwmRZCmcz3QsR1EXPqwG0L6RFez9rZVn4YcOTQaQPTrbOvechZ6Sb/YayZSAJ8IkAHI=
+	t=1786796382; cv=none; b=SfRn2il7g2C7W/4uhGH4RUl87voguaTcqg5tjwgYOtO4GYt0S+G6mV+dn2NvBEk8E2pVgRGA5ifWJXQ0rTZfu8qz6XDLoJ1pm/FMocEZ/9zl0LQugO7IuQhx2YhjB+qvzOZm0+OayHXhz0MA7cKr93Q4DqG/FY/QF0t4H4G+68Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786794972; c=relaxed/simple;
-	bh=YkLmU1NxiWB/vciVK99wUc8NOQwVA9xq2ClSCkxrLdg=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=ISFu+2kSw/yyfpNeoOG/HTTao4l+0p99a637uS+qZzmjP6PKHUTm1lvOiz8LLmQX99mnbkkRX2dOxJcamUMk4wksoY+AidODu0KcwIC6OOh507Bs6LgFgB/x+vN+74My29uMMIwmbD8hALH6f8KSSWP5rX5YVjHeXIXrLZUiEVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DILQYcgL; arc=none smtp.client-ip=95.215.58.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1786796382; c=relaxed/simple;
+	bh=1miv0zhuoRnew8VNtiBDS20oYiD49W/W4s47bl+UgFg=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=mpjswj0ZLhzkZ34C+cBaqhYwpDUFrCuIP4Yf7pm7DavuL+dWn0ttknzWc5FIYerhlFcF4rorlOhXuoKVg7KOdqnW7WKavtV/0YRhvEgNqYQmbiMTjF7rV5nuQfuqcE8p2gOwu7YOZfEReLV357XbxZXlWWk1KIdhqwhZTn8PxXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SajgJZbR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DILQYcgL"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=YkLmU1NxiWB/vciVK99wUc8NOQwVA9xq2ClSCkxrLdg=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786794967; v=1; x=1787399767;
- b=DILQYcgLc7V1r9wYIblCS9C9niCRcXbzsLh3kxLfZlu03VGI6rAiB7kyse9oUp2y7vSJy9CI
- w1sONtfJgUwkDui1INLe3dfLZ4HOI7VUh2VKdahEDrwScUGJc+yYHgBCb4ANper1BJFdOjy5F8c
- Sj6C+SI4VH/aG9UhQyzvkh7E=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [192.168.1.116] (111.162.215.50)
-	by smtp.migadu.com with ESMTPS id c2dba12a5636e28d;
-	Sat, 15 Aug 2026 11:55:56 +0000
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <e707deeb-6253-4ea0-92de-ebd87f0da707@linux.dev>
-Date: Sat, 15 Aug 2026 19:55:50 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SajgJZbR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D93D1F000E9;
+	Sat, 15 Aug 2026 12:19:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786796380;
+	bh=bQJBp191S+481hNkbAoL6aYbN0WJu7jzwlCUDZsUusk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=SajgJZbR5d4H3uoj3K1p6YJuRT1pTzl1tj/yaE//eyFTBYXdhmZ/wRFvZE1djTn97
+	 VPD5VyyUU8/BTsoKJjFysQIS26JcY+vOlT7n4zSpffejfKgy9utB6mOwOs51rupwjS
+	 Mm8qzzcpLY9zIdIRYH7rVKivhyACZtHva1ZZ7cWy3xt00mpx9q20/VqLDrRQ/CWyVB
+	 4by98bOcq+boJMu3PJiGc3dtxmIzTOZhaRTtgjlXXfwK8uhK8mV/z2Dilr2LZ1CMpy
+	 tDSZYJu/OYENqOM+qB9bapXw4JmxcXUMvTKChusTTJ6AdYQew2B93EUS4MwYPEY+Dc
+	 LIyqkw9AMGH+A==
+Content-Type: multipart/mixed; boundary="===============6946164073483389045=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, Tao Cui <cuitao@kylinos.cn>, void@manifault.com,
- arighi@nvidia.com, changwoo@igalia.com, suzhidao@xiaomi.com,
- yphbchou0911@gmail.com, zhaomengmeng@kylinos.cn, sched-ext@lists.linux.dev,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] sched_ext/scx_flatcg: expire cached hweights on weight
- changes
-To: Tejun Heo <tj@kernel.org>
-References: <20260814144116.2767304-1-cui.tao@linux.dev>
- <80d78aac-7fc8-4c14-a2ae-419297d953f7@linux.dev>
- <3432f79f1d8195a56a0b4fea53ceb099@kernel.org>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <3432f79f1d8195a56a0b4fea53ceb099@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Message-Id: <65c31dc7456f76e4b3012dd8dff3f7e23d136903d5cf997eb9be0662a979c1bc@mail.kernel.org>
+In-Reply-To: <20260815112041.1248855-3-utilityemal77@gmail.com>
+References: <20260815112041.1248855-3-utilityemal77@gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Test bpf_security_locked_down kfunc
+From: bot+bpf-ci@kernel.org
+To: utilityemal77@gmail.com,ast@kernel.org,paul@paul-moore.com,xiujianfeng@huawei.com
+Cc: linux-kernel@vger.kernel.org,linux-security-module@vger.kernel.org,bpf@vger.kernel.org,utilityemal77@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sat, 15 Aug 2026 12:19:40 +0000 (UTC)
+
+--===============6946164073483389045==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> The selftest config guarantees the verdicts are stable: the bpf LSM is
+> in CONFIG_LSM and the lockdown LSM is not, so the kernel cannot already
+> be locked down.
+
+Does the selftest config actually guarantee this? Looking at
+tools/testing/selftests/bpf/config, it sets only CONFIG_BPF_LSM=y,
+CONFIG_SECURITY=y and CONFIG_SECURITYFS=y. There is no CONFIG_LSM line at
+all in that file.
+
+The only CONFIG_LSM in the bpf selftest configs is
+tools/testing/selftests/bpf/config.x86_64, which has
+CONFIG_LSM="selinux,bpf,integrity". On other arch configs (aarch64,
+s390x, riscv64, ppc64el), CONFIG_LSM falls back to the security/Kconfig
+default, which does list "lockdown".
+
+What actually prevents the lockdown LSM from being active is that
+CONFIG_SECURITY_LOCKDOWN_LSM defaults to n, so the lockdown LSM registers
+no hook. This is a weaker guarantee than the changelog states, and only
+holds when test_progs is run against the shipped selftest config.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_kfuncs.c b/tools/testing/selftests/bpf/prog_tests/lsm_kfuncs.c
+> new file mode 100644
+> index 000000000000..c836851d8397
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/lsm_kfuncs.c
+> @@ -0,0 +1,28 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <test_progs.h>
+> +#include "lsm_kfuncs.skel.h"
+> +#include "lsm_kfuncs_fail.skel.h"
+> +
+> +void test_lsm_kfuncs(void)
+> +{
+> +	LIBBPF_OPTS(bpf_test_run_opts, opts);
+> +	struct lsm_kfuncs *skel;
+> +
+> +	RUN_TESTS(lsm_kfuncs_fail);
+> +
+> +	skel = lsm_kfuncs__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
+> +		return;
+> +	if (!ASSERT_OK(lsm_kfuncs__attach(skel), "attach"))
+> +		goto out;
+> +
+> +	if (!ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(skel->progs.query),
+> +					      &opts), "test_run"))
+> +		goto out;
+> +	ASSERT_EQ(skel->data->ret_clear, 0, "not locked down");
+
+Can this assertion produce false failures on a kernel that is already
+locked down? If CONFIG_SECURITY_LOCKDOWN_LSM=y with lockdown active
+(lockdown=integrity/confidentiality, or Secure Boot with
+CONFIG_LOCK_DOWN_KERNEL_FORCE_*), security_locked_down() walks every
+registered locked_down hook, not just the test's BPF program.
+
+security/lockdown/lockdown.c:
+    LSM_HOOK_INIT(locked_down, lockdown_is_locked_down)
+
+would return -EPERM for LOCKDOWN_KEXEC (an integrity-level reason), so
+ret_clear becomes -EPERM and the test reports a hard FAIL rather than a
+skip.
+
+> +	ASSERT_EQ(skel->data->ret_denied, -EPERM, "locked down");
+> +	ASSERT_EQ(skel->data->ret_invalid_low, -EINVAL, "LOCKDOWN_NONE invalid");
+> +	ASSERT_EQ(skel->data->ret_invalid_high, -EINVAL, "CONFIDENTIALITY_MAX invalid");
+> +out:
+> +	lsm_kfuncs__destroy(skel);
+> +}
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/lsm_kfuncs.c b/tools/testing/selftests/bpf/progs/lsm_kfuncs.c
+> new file mode 100644
+> index 000000000000..2637b9bc9025
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/lsm_kfuncs.c
+> @@ -0,0 +1,34 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include "vmlinux.h"
+> +#include <errno.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +
+> +char _license[] SEC("license") = "GPL";
+> +
+> +extern int bpf_security_locked_down(enum lockdown_reason what) __ksym;
+> +
+> +/* Reason nothing in the test environment genuinely queries or locks. */
+> +#define DENY_REASON LOCKDOWN_HIBERNATION
+> +#define ALLOW_REASON LOCKDOWN_KEXEC
+> +
+> +int ret_clear = 1;
+> +int ret_denied = 1;
+> +int ret_invalid_low = 1;
+> +int ret_invalid_high = 1;
+> +
+> +SEC("lsm/locked_down")
+> +int BPF_PROG(lockdown_hook, enum lockdown_reason what)
+> +{
+> +	return what == DENY_REASON ? -EPERM : 0;
+> +}
+> +
+> +SEC("syscall")
+> +int query(void *ctx)
+> +{
+> +	ret_clear = bpf_security_locked_down(ALLOW_REASON);
+
+Would it make sense to have the test tolerate or skip when the running
+kernel is already locked down? The current approach asserts on global host
+state the test does not control. Consider checking if ret_clear != 0 and
+skipping with a message, so the test does not produce false regression
+signals on distro kernels with lockdown active.
+
+> +	ret_denied = bpf_security_locked_down(DENY_REASON);
+> +	ret_invalid_low = bpf_security_locked_down(LOCKDOWN_NONE);
+> +	ret_invalid_high = bpf_security_locked_down(LOCKDOWN_CONFIDENTIALITY_MAX);
+> +	return 0;
+> +}
+
+[ ... ]
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-在 2026/8/15 06:23, Tejun Heo 写道:
-> Hello,
-> 
-> On Fri, Aug 14, 2026 at 10:48:35PM +0800, Tao Cui wrote:
->> Is this the intended behavior of the budget clamping, or should the
->> steady-state distribution converge to the compounded shares over time?
->> The header comment's model doesn't seem to hold in this scenario.
-> 
-> The clamp isn't the culprit. I reproduced your setup (3 busy tasks per
-> leaf, 4 CPUs) and dug in.
-> 
-> The dominant factor is that D is runnable-task limited. At weight 800
-> its compounded share is 3.55 CPUs but it only has 3 tasks, so 75% is
-> the best it can do. Below that cap, the window granting loses more:
-> whenever all three of D's tasks are already running and another CPU
-> picks D, the pop from D's DSQ comes up empty, the cgv_node gets
-> stashed and that CPU grants a full cgrp_slice_ns window to another
-> cgroup. The loss scales with the window size. Measured D shares at
-> weight 800:
-> 
-> 	3 tasks/leaf			55-59%
-> 	3 tasks/leaf, 100ms slices	52%
-> 	5 tasks/leaf			84-86%
-> 
-> Disabling the clamp entirely is the 59% above, so it barely matters.
-> With enough runnable tasks per cgroup, the distribution converges to
-> the documented compounding. The model holds, but only when no cgroup
-> is runnable-task limited, and the window granting degrades sooner than
-> per-task fair queueing would as that limit is approached. That's an
-> inherent simplification of this example scheduler.
-> 
-> Separately, while digging into this, I found that the true-up in
-> fcg_dispatch() is broken:
-> 
-> 	__sync_fetch_and_add(&cgc->cvtime_delta,
-> 			     (cpuc->cur_at + cgrp_slice_ns - now) *
-> 			     FCG_HWEIGHT_ONE / (cgc->hweight ?: 1));
-> 
-> In the CNS_EXPIRE case, now is past cur_at + cgrp_slice_ns, so the u64
-> subexpression wraps. The multiplication preserves the two's complement
-> encoding but the unsigned division by hweight destroys it, adding about
-> 2^64 / hweight per expiry instead of a small correction. The sign is
-> also inverted. The true-up should be actual minus charged, so the
-> expiry overrun should be added and the CNS_EMPTY unused portion
-> subtracted. Under saturation the budget clamp mostly masks the garbage,
-> which is why the numbers above barely move with it fixed (the 86% in
-> the 5 tasks/leaf row), but the accounting is broken all the same. The
-> following fixes it and tests fine (BPF division is unsigned, keep the
-> dividends positive):
-> 
-> 	s64 delta = now - cpuc->cur_at - cgrp_slice_ns;
-> 
-> 	if (delta >= 0)
-> 		__sync_fetch_and_add(&cgc->cvtime_delta,
-> 				     (u64)delta * FCG_HWEIGHT_ONE /
-> 				     (cgc->hweight ?: 1));
-> 	else
-> 		__sync_fetch_and_sub(&cgc->cvtime_delta,
-> 				     (u64)-delta * FCG_HWEIGHT_ONE /
-> 				     (cgc->hweight ?: 1));
-> 
-> Care to send a patch?
-> 
-Hi, tejun
-
-Thanks for the detailed walkthrough. I was chasing the clamp, but the
-runnable-task limit and the window granting behavior explain it much
-better, learned a lot from your analysis.
-
-I sent a fix based on your suggestion, and saw it's been applied to
-your tree:
-
-  sched_ext/scx_flatcg: Fix cvtime true-up on slice overrun
-
-  https://lore.kernel.org/all/20260815045905.3431991-1-cui.tao@linux.dev/
-
-Kept your approach (s64 delta, keep dividends positive) and added
-A/B numbers from the same VM setup in the commit message.
-
-Looking forward to more of this while digging through sched_ext.
-
-Thanks,
-Tao
-
-> Thanks.
-> 
-> --
-> tejun
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31882515336
+--===============6946164073483389045==--
