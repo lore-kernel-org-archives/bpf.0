@@ -1,79 +1,74 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C748135A925
-	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 09:18:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63C1532B111
+	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 11:20:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786785514; cv=none; b=WaedYTVcK4OcEm6oPixozDMPvbLsBx3/6Zw/zXk2yjZgn3MuO9fDggq1BbfqXC/SHZYgT0Tr3TBBL4ouHNT+4aw8tkCW0gkJ5AmV/nVdoTSL/jVh8xPn+WV7IElknyvY+2nCgb3J6e7Ibgp9mFf2qgiQRpbLjFvpzCfS/B64Rpw=
+	t=1786792848; cv=none; b=hbYuhAxBuY1RuEHS+twYKZWeX+XVIpcQ8KuCYKX54G3tgnLB4qwMDrUtHUsPjeR/Lfm4DTYUz619j3/vYnID//PZxCH/78V1MGj6NpyiwwydZ8sDhEuOsYwPEvT3wKbXoBIczXyIu0A9aupxwznxW26jYIlGaQcMGI2ENuAM9d8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786785514; c=relaxed/simple;
-	bh=5Tk26TZlY4MOjCWHoxMOQGtJ853fDrZtjs1HhWW1xrs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=a9uT6h1WC5rLqEOckGCsjYV2xy3BgS7kfYvDIGq8lOY0EFqXdxCVANBXWzRufnI8S3FeZucDY5kDDhKJspZn8SxKdGMtNbnFx5buZtIOH49YbWoxbaOc4eZBTTe4or8LsXGqctnfIsEEEzijfUgO98bHFQrGgDcXQUZqSNIqMrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eeOxmG1Y; arc=none smtp.client-ip=209.85.210.171
+	s=arc-20240116; t=1786792848; c=relaxed/simple;
+	bh=djLZMpUah7Mihpof97k8hEqjZOn9/S4jD4Bgilil3vg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oU7TEFKS8MrG/yUKjFiana5CBbJHA91mJLkDC409qNDFyDg+j+GsAA9qBxDnCK9DHhGZ+sYygkmDeaPdrM5nMVIsgs00GdbFNlIS0g1Dy/jwoNWOeZkCmQwuvDFJkjb3oe++07V0AdwnZ4LiQ5Y9/HHzQ2FTVYWY/pzGfxbEpU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k4mRdM4r; arc=none smtp.client-ip=209.85.128.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eeOxmG1Y"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-84e0688b7e8so1504013b3a.1
-        for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 02:18:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k4mRdM4r"
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-7dbcb505578so18035287b3.3
+        for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 04:20:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786785511; x=1787390311; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786792846; x=1787397646; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=LXZKFyuDLY2DRqrs+BqA4wglyce4j9tGUwHMwcrD9yQ=;
-        b=eeOxmG1Yv5n2ziL/1dL99m3xVHhDpZZp1Nxf4AkmTCP9/1DufHLD31EQK93p7FkwOm
-         6oi2RPOKGK/2RXZjBMk9TsfqXbxSBOugu8VMflKirsAJw13U9vLBSZnSznzc/HcLefJX
-         G1TXx06IzC51h1p6J/dZ6HC+lynor7u0bOkoH/G39C23G40X3n8S5Y1mKCp5ypgXbxh/
-         GPU9pEm2KlA8YdCvrBXFTTCwjdVzkz4Qexe2SIC3VNrY4RDEeIq02oys9KlKtqYos4iL
-         6TH9wcr/fb1uE/lvMVuHCWaYdNOX5uak+wJG4EDvHACEtEuRKumZGUEAHk3iUYeQCa/+
-         pUOA==
+        bh=G+Pc3CG99YBm+EzYDINBR/q4A3NL6A7bn3Kkm4VNB1A=;
+        b=k4mRdM4rQpUjwcAznPFhQOJfliG/ThLAXJ+nzL/wQ+gk7RXn1IZkyM3gwEBqliuGkt
+         EVMFQTsJE2gQZE3z8eb4vlIQpmDT2lg70Qln5FkEBmVcRRzBERCNE6I4WagDM2/DMREY
+         K3LLVNrTKJsHEx+aJ/318hCyJEA6qQo4JXWuajpk3XtNWguMXsnepnuP7yeezlI+51m3
+         29Rv7V5r7SgnSRxDX3TLbNk1aUTOrwt1mGWx0nxYaJscKzpBpw0jgW/rUVRMpj4zGj4G
+         eia9cCP/+6S3FntDVWKdSU56aldb6WMmLye7n3nkOtuRZhedce+nTr98KAp2Ry45oCjB
+         jurA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786785511; x=1787390311;
+        d=1e100.net; s=20251104; t=1786792846; x=1787397646;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=LXZKFyuDLY2DRqrs+BqA4wglyce4j9tGUwHMwcrD9yQ=;
-        b=ixuCFZMXziwFRLJMrYyXnkOI6mSsqyBsCqqGI9jeNtG76wVLRqmvQ4bmZmGLUBxZsL
-         dM/piXG/N1Od0OeZ8JKLKYthE02TVsGBpBQ8DOZryiEcoQprzuo1AFSb1Z2Xr2J3J3sW
-         NfFLUf92/fffQ4ynYHAePdzE4fkuyhUt3NK/N41Rxh8An/VpvjgSLKiVDcF6h/+JFtaa
-         ie8Tbg9g7q0RNJ75mw9eqF043Rm/MpacGYa4dDMgCcClIUkbT2HxpGrqSBAR1+RrpP7E
-         TBBjnoYQS1bwkyKoMuZYdoIwU9+smY1x6gcXAcRdsD5kI56CFbAv+TbfihY4/rVHyxlV
-         rf2Q==
-X-Forwarded-Encrypted: i=1; AHgh+RquJT39LkwONMGBA7eUisv9/I+iz7o0CM1nQbOru9hRgThfQDk8MHsIEVSZbpz25LEteo4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbTrizG1swOT3xUq2oLR4YcW+OphWo4ivMMK9RjNBO0ygk+KUO
-	Y1uUAyUredEmxpzgSa/CwSCIGzwJyDdkpqJNvtWhRFHuwD6j6KZ/kkbq
-X-Gm-Gg: AR+sD12B871vuegCHevxCg8sFFR7aHPqxcqBzp2Q3W5JzM0zMt4HnhIv6rgQRCKpF3z
-	c6YtdLHPO44Z4aQDWi+xAcsA4W9Mn1xDcMrq5PCPkcwbSRZ4NzVoejt2ObukyTM8z+EJkXyb8hu
-	LPmbbjAgzfcQTYPwtkSr6j0cy0W3gVUAcTd3hyJF2oad8KJ4E2VlhQM17jPEG/UGdKwgC/Q1jdJ
-	YlgEE22GM0MXxEB2mYIvQBe9Rq/ETfzZKeMOBA7ZVMrfkN4K4fO6RGhZ7ri6P7rkaILfL3+R2v6
-	5cAmFqtF241ywfI2XGfBtNbj+XQHjoAJyI98/BIAXtD81H/37twnW1tnVxk0AnyiaP+7nWcmPfg
-	PV5DPr3B66QlAgKdK1tW+KiHTy5iJRLd806Q0pK2YGsxuA7C1bGoZVlKlJGMqKFQ6adbKeLKAHC
-	+2KxEfVoYWMi5mnGE52S+QsV7uFk64xUVUwcTl3Ke15J1I4zj269x8xvBuopxDYGKCr4AS+5zcg
-	WbdhJ19w2GInyFqG9znonZQnao2
-X-Received: by 2002:a05:6a00:3d88:b0:851:8084:133a with SMTP id d2e1a72fcca58-8518084471emr6698912b3a.29.1786785510477;
-        Sat, 15 Aug 2026 02:18:30 -0700 (PDT)
-Received: from bj-kjy-standalone-gaoxiang17.mioffice.cn ([43.224.245.230])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8517d223f1bsm1274934b3a.38.2026.08.15.02.18.24
+        bh=G+Pc3CG99YBm+EzYDINBR/q4A3NL6A7bn3Kkm4VNB1A=;
+        b=VD9RguUM+IB4CSS7GGWzAs/W1mCaSRVH3IyQbA4cJQr2hQuchzS4q66xeHpoABNrx5
+         uRrgzsqlfEvKsceMSCSuz4o28N5eIYV/GL4UN6bbjE2d6fZNtox18NCNGfMB+pkimqBj
+         vG2z9B5lnxFX8WO4Sdid4TbNyQnrdmB/6kouYqwztSiBh+eMSqpQCmm8Ok3boCBqyD5w
+         62S9DQUEv9T2785uM91pJ+1hFQGPzXJb6kXQiszVsFo6cYPuDiAnYbqVQ4Y1gtPQFr+9
+         dqKuhWvzq/JPuk2w6Oa1mzVI3i32Rq3Mge/pu+2OcqRNT/ep/eOth5U8TQk8sIIdF0VD
+         oFfw==
+X-Forwarded-Encrypted: i=1; AHgh+RqjtLOYupYl2rR5BgnJpQn9IPMBVJSbFUZki1qvnuVj8GujsrlUJBsJAMSCk6d+nkdB+AI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwuL6IHXOebb56A6x1fFGPtz0miPHOk8gsfoyPBNZedOObvaMEP
+	tX5S2o3l7nGsmewtS09yE0RGMAHNhNkrZNyQEj5kr1bjk5R3+NifzaHg
+X-Gm-Gg: AR+sD12WPSpYSjauBJa80og1xoSG6MeYuDOflqJjVcA3sh6vbeDIEbgZKr75fC/4rN7
+	zzuEROWiRSqfaP/Y4n1n7to9CnVkbeIkTlqt0eOTsTbWOzZmygDY4HX/Q8yn2qQOL4Udk14RJLW
+	NwfD+ZnswphUe5WFFKbWrQxOrX60onJ0iaSPCb7UfVvA5CXnUcUeOjDD/c34Sc12y8Tf10wcJ0x
+	gWB4q89AVJaMM7Dlw61vDq7/Pihjr8OK5OABsCrA9eh6VRDmNXrabnrdn6PBlbi6vXbsgnRxjGd
+	QUJuIOmINEy07prGKHh3vzYk4+0nLTOuGG7bwSaoXnCjVEMTezbQWe5jX9DhVHvm6IUUYo0GnDT
+	JqO61ZphIYjBProd8hHwzZMbvJNkesHJt1+kUcDLZHZqDtu40Rv0QB9JiRJ/7n6VeyhP81+WZvn
+	xk4gFkKFcJt1iu/D+iw9mq8ytKS2pVmVWoJmUezsT7l1R0G9t00I+XSsqW268cRYyLlVtBews4O
+	WLsoa5mqZihu7RaAo79t7Y=
+X-Received: by 2002:a05:690c:a4c8:b0:81d:a1e5:a4d7 with SMTP id 00721157ae682-8370c93d31amr36153457b3.5.1786792846338;
+        Sat, 15 Aug 2026 04:20:46 -0700 (PDT)
+Received: from zenbox ([2600:1700:18fb:6011:31f0:efe0:f2d8:ae44])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-836c36a84d9sm24388037b3.46.2026.08.15.04.20.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Aug 2026 02:18:28 -0700 (PDT)
-From: Xiang Gao <gxxa03070307@gmail.com>
-X-Google-Original-From: Xiang Gao <gaoxiang17@xiaomi.com>
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	yinchuang1@xiaomi.com,
+        Sat, 15 Aug 2026 04:20:46 -0700 (PDT)
+From: Justin Suess <utilityemal77@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Paul Moore <paul@paul-moore.com>,
+	Xiu Jianfeng <xiujianfeng@huawei.com>
+Cc: linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
 	bpf@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Xiang Gao <gaoxiang17@xiaomi.com>
-Subject: [RFC] bpf: account ring buffer backing pages separately from Lost RAM
-Date: Sat, 15 Aug 2026 17:18:19 +0800
-Message-Id: <20260815091819.3651099-1-gaoxiang17@xiaomi.com>
-X-Mailer: git-send-email 2.34.1
+	Justin Suess <utilityemal77@gmail.com>
+Subject: [PATCH bpf-next 0/2] lsm: give BPF programs a way to query locked_down state
+Date: Sat, 15 Aug 2026 07:20:39 -0400
+Message-ID: <20260815112041.1248855-1-utilityemal77@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,69 +77,67 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+Howdy,
 
-I would like to discuss accounting BPF ring buffer backing pages in
-system-wide memory reports.
+BPF programs can attach to the locked_down LSM hook and contribute a
+verdict, but they have never been able to ask the locked_down question
+themselves: there is no way for a program to invoke the hook and learn
+whether a given operation is locked down. (i.e be a caller of
+security_locked_down rather than a consumer).
 
-BPF ring buffers allocate their data and metadata as order-0 pages directly
-from the buddy allocator, and then map those pages with vmap().
+Today the state has to be fed in out of band, for example userspace
+reading /sys/kernel/security/lockdown and writing the result into a
+map. That is a time-of-check/time-of-use race: a security_locked_down
+verdict can be raised at runtime, so the cached answer can be stale
+by the time the program acts on it.
 
-Because vmap() maps caller-owned pages, these backing pages are not counted
-by VmallocUsed. They are also not slab pages. As a result, most BPF ring
-buffer memory is not represented by an existing named /proc/meminfo category
-and appears as Lost RAM in Android memory reports.
+Add a bpf_security_locked_down() kfunc that calls
+security_locked_down() and returns its verdict, letting LSM and
+syscall programs query locked_down state at decision time. Out-of-range
+reasons are rejected with -EINVAL before dispatching the hook, and the
+kfunc is refused to programs attached to the locked_down hook itself,
+which would recurse into the dispatch. (how the obvious recursion issue
+is addressed).
 
-We measured this on an Android 6.18 kernel.
+As this is the first pure-lsm-hook kfunc, add a new file security/lsm_kfuncs.c
+to host it.
 
-Test case:
+This kfunc has no reliance on / relation to the Lockdown LSM, despite the
+similar naming. It is an LSM-agnostic caller of security_locked_down, and
+Lockdown just happens to be the only in-tree subscriber to this hook at the
+moment.
 
-  32 BPF ring buffer maps
-  16 MiB data area per map
-  512 MiB total data area
+In fact, the test environment does not rely on CONFIG_SECURITY_LOCKDOWN at
+all, and uses a BPF implementation of security_locked_down.
 
-Observed changes:
+This kfunc can cause notices to be printed with kmsg if the Lockdown LSM is
+enabled due to this line in security/lockdown/lockdown.c:
 
-  Lost RAM:       approximately +529 MiB
-  VmallocUsed:      approximately +2 MiB
-  Slab:        approximately unchanged
+  pr_notice_ratelimited("Lockdown: %s: %s is restricted; see man kernel_lockdown.7\n",
+				                 current->comm, lockdown_reasons[what]);
 
-After destroying all maps, the values returned close to baseline.
+Patch 1 adds the kfunc, patch 2 the selftests. This is based on bpf-next/master, but
+applies cleanly to the lsm tree.
 
-The question is whether the kernel should expose the unique physical backing
-pages of live BPF ring buffers through a dedicated global counter and a
-/proc/meminfo entry, for example:
+Justin
 
-  BpfRingbuf: <value in kB>
+Justin Suess (2):
+  lsm: add bpf_security_locked_down() kfunc
+  selftests/bpf: Test bpf_security_locked_down kfunc
 
-The proposed counter would include:
+ security/Makefile                             |  1 +
+ security/lsm_kfuncs.c                         | 84 +++++++++++++++++++
+ .../selftests/bpf/prog_tests/lsm_kfuncs.c     | 28 +++++++
+ .../testing/selftests/bpf/progs/lsm_kfuncs.c  | 34 ++++++++
+ .../selftests/bpf/progs/lsm_kfuncs_fail.c     | 26 ++++++
+ 5 files changed, 173 insertions(+)
+ create mode 100644 security/lsm_kfuncs.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/lsm_kfuncs.c
+ create mode 100644 tools/testing/selftests/bpf/progs/lsm_kfuncs.c
+ create mode 100644 tools/testing/selftests/bpf/progs/lsm_kfuncs_fail.c
 
-  * ring buffer data pages;
-  * metadata pages;
-  * consumer and producer position pages.
 
-It would exclude:
+base-commit: d82ebfc685c91e7f5623a8be949da1ddb767420b
+-- 
+2.54.0
 
-  * the second virtual mapping of data pages;
-  * the pages[] pointer array;
-  * map metadata allocations;
-  * vmap page tables.
-
-The goal is to account for the currently unclassified direct backing pages.
-Slab- and vmalloc-backed auxiliary allocations are already represented by
-existing memory categories and should not be counted again.
-
-A possible implementation is an NR_BPF_RINGBUF vmstat counter maintained by
-the ring buffer allocation and free paths, with the aggregate exposed through
-/proc/meminfo.
-
-Questions:
-
-1. Is a dedicated BPF ring buffer counter appropriate?
-2. Should this be represented as an NR_* vmstat counter?
-3. Is /proc/meminfo an acceptable interface for this information?
-4. Is counting only unique physical backing pages the correct accounting unit?
-
-Thanks,
-
-Xiang Gao
