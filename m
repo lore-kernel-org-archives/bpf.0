@@ -1,91 +1,147 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E9A3F3265
-	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 06:59:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 293DE3F54DF
+	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 06:59:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786777188; cv=none; b=O2knvKTn1qGmly1WVyKz0ZpOTMrGQvp9pL+jSdXuMXjk2RKXmjIXNwOiywbdwN3P4cadh1TzmpIheoxip+ePGH/XuAeGoRZLwVSIUySmvo2Rsq5XP6IPrseQQoVBUhKmzHRkJKyKGV/gVZ55ey7QEdpZChTgiCOIVKU6GaV6bVw=
+	t=1786777199; cv=none; b=mA9HTVgYk+Sck70jf1CsLuQLptV72907yz7Cp+lkZkv2NMhekqsVrttT7O9JaBaaEGw7jkgae+9eMTyalqb/4ZrpAqRj4SU22ZvplXbXp4GqSYqlyXvem48WRya99MVkZ8zPazsDHOVntqLJH5jADsy8vx+bGuVQPzckzd6qhZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786777188; c=relaxed/simple;
-	bh=2XRsYUoPzYnatPTvcy6y5W3t3RWQ5s0KpPGVdws+DbY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=eSh3w83Gs0TiUyAcmy512EgyC4XtTFwY6V6cg7jkm22GdjwjjWEs4HIVAyUpheWc22yNH/iTv3H6De2Yc1E7Yd2PNjewWEhyX9UqjCFz6CGBDN+XY66Fb6AkIgx8027igLud0+yzxnar4jy7CpP41sKu5owoYhi1rbrTBCE9CHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MMH8arRH; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786777199; c=relaxed/simple;
+	bh=aSqfcgAYwLOQEp1PvRqANBYyPLp6SxBS09oyq107Ukg=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Z2NLo/BoUCsRLrYL0pdC4sVwTOOZiuf+O8mIUFt8ihtsMw0Gkivcy6fJyJoHbKQiIyyalE0QJMFUPO2YtlHwZ41JXh2sskOrW+xbWZOlBvrMjmDm+yOFJIv5u9c41HMNyeLQnUs4WvQivJeBvoAnnRLiDrqQDN4gJqUB5I17Klw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C3/Fw2Sj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MMH8arRH"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c966b9ee9cbso1088997a12.1
-        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 23:59:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786777184; x=1787381984; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=2XRsYUoPzYnatPTvcy6y5W3t3RWQ5s0KpPGVdws+DbY=;
-        b=MMH8arRHM2OKYrulo38TBgFRWRLrUcul/k/ue8uqtA/JKxBxUqcCi7X9dDRc67gT6C
-         UNEZc18VB0of86YVRTcJ05Gkplon0I2Mzke/yQSkxInnFxt/Vxcdl7RCYr+eSZKJe+KF
-         Jaq82eKNmfJSznGatBnoQli/5bsfUzn4WtXu6Shu1yadikfY5oGUaZ5TeUV+NRr/xfmC
-         i2IWDaZPPUgUH9qyMO6ZARCBE1PvQocoE0HTurDIO2vFK8yoV1ABt1hgCuQ2g5LUr4qf
-         VytaAaJ+THPXpU1l5YV5eW1/hWS3jkYSz2EdnGevZa+3XPe8nQcf+jkobwPU7CEKZ11L
-         kwuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786777184; x=1787381984;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=2XRsYUoPzYnatPTvcy6y5W3t3RWQ5s0KpPGVdws+DbY=;
-        b=Ohow/94CIED5nRg52TizcOCgS2VLli3n1maaHw+SDq++j0yxYALwgQefx6GKW0sipE
-         EgQR+muLXR8V7DOXbXH9KK5SCd3kvFfZV6en9Q8IXRyp7eBywMF3BSfwMqb3XWjt8vzk
-         iqhRR5shJUMtFP/GPezyJusBf1gEW1D2uTrcC2q/63Qds49bGdERDdCe6A9JCe/1mJbu
-         8NM51AHdGUCi2X22VvOCDWoUuwncyYqutwyeERPa5WZxl85T/G9wWPvOQeO53np9K2AC
-         whD/87k5us0IsbmdUOSug/gNMBapawlJkRRWxP0xu8y1DasGl4lI1TFefZTvi/quzGa+
-         Hrcg==
-X-Forwarded-Encrypted: i=1; AHgh+RogG3pnZtBhf5SLEDQVc0GkFmJiQnq0e/LsixA6qJjFwVhzFz/oRvFwke4cqbQct/P0+SE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhfNQV88koxWHy8UIzKPnLKHiFXw+PH+4HGvQqslyRoIdOxZHY
-	6vQ88171tMLSH7t049776bKGkH/5SpO1mAsGTHGPDRhMsTZRxEwttEsS
-X-Gm-Gg: AR+sD13yhPDepN76FFtkBQHamXn+rRz2TyPzss2vI91Kv9t9hMHl5yNlV2Hjmw+qaeF
-	kitJObh3U6FUeIBnsl3P/etD4jp0U6ncztuwuH8S4W0bDhh3q/QYHbwhDBySRCqHqRHa/KHP7mP
-	B3zS7uIxRpi7JGtPqWlr/28WR7ga6qvEEhyfg4ii2Ap8Kr08vLuFJUeafVtHxYLXnn/94XO89gk
-	qkb3ikgSmrCY8f13TxRumFu4ZXt7bemnxfNoMdRNEaZuhrPx0e6pLzieaYtBhvPFL3C7qZDj98N
-	bGaj+kxhvckaxHZifSo44AWNpXsL2Tax6x5+5QJnX0+EMoQroQVz+ibPSjIDM+na5+dymifGt2Y
-	9FbPFXb8LAko6cbZ12jRyhkc7UNup5znndjNHaVz/mK7ai5wC/Y6+Shn3IZm7SO6e8/8ertJU8j
-	VOJx4ShwgwfoY752l4KA4bWsU7+P368SQfAPWR4zUJyFz+licMPFcX1kqkv8N0BsafKyJIlDLF5
-	f6KbjghsunZkhlf
-X-Received: by 2002:a05:6a00:418a:b0:847:99a7:c751 with SMTP id d2e1a72fcca58-84fde75b0cemr10999018b3a.25.1786777183910;
-        Fri, 14 Aug 2026 23:59:43 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8517d223f8csm1223558b3a.35.2026.08.14.23.59.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Aug 2026 23:59:43 -0700 (PDT)
-Message-ID: <2d19f707f3c70c3e170acd3fc79fb70e7a27d5b5.camel@gmail.com>
-Subject: Re: [PATCH bpf v3 0/2] bpf, x86: fix per-CPU address resolution
- into an extended register
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Vineet Gupta <vineet.gupta@linux.dev>, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, x86@kernel.org,
- 	stable@vger.kernel.org
-Date: Fri, 14 Aug 2026 23:59:39 -0700
-In-Reply-To: <20260814220254.3797467-1-vineet.gupta@linux.dev>
-References: <20260814220254.3797467-1-vineet.gupta@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C3/Fw2Sj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49D2B1F000E9;
+	Sat, 15 Aug 2026 06:59:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786777196;
+	bh=hixlxX+uT8jrUYytWSMWRR1cmKBIGU4UXyI9dzik550=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=C3/Fw2Sjl0afwkR+Al0pB1EKo/eva1mDYMqhNfPmKPkY+YN3lV4xyHnjaYxRAjQGL
+	 Qp/wroz5l/J9/bxxGTrLFDh13KpjxG27uYPFSZ2vc82U7s8KSoiyP9W7zj3wMcs/BA
+	 MVyDbTei8eQjXbu1g9ZYFXF7s1qi/VawUoj4gw80Lo+g/Sn4yBPJpoQaTRJAEiWKj8
+	 bvoB+gCBcU4IxYe6Vc9wRBLvRKw1w67y3hVuVYLEyfOPnftakz4/dYXoDm+LLu5ZzL
+	 QBg7uioW8H9blvmOm6MqtutF3bmIv44/ZGwJ5uKkB+tZasg1WIo4IPMiV5tC+mzk5y
+	 Q6x5N6BuaPB0w==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v5 09/14] bpf: Report Memory Safety bounds
+ errors
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260815064612.378577-10-memxor@gmail.com>
+References: <20260815064612.378577-1-memxor@gmail.com>
+ <20260815064612.378577-10-memxor@gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+Date: Sat, 15 Aug 2026 06:59:55 +0000
+Message-Id: <20260815065956.49D2B1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Fri, 2026-08-14 at 15:02 -0700, Vineet Gupta wrote:
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] bpf_diag_stack_read_uninit incorrectly diagnoses reads of specia=
+l stack slots (e.g., STACK_DYNPTR) as uninitialized memory.
+- [Medium] bpf_diag_memory incorrectly attributes variable stack access fai=
+lures from atomic instructions to a 'helper function'.
+--
 
-Triggered bpf-next CI manually [1] and pushed to bpf-next.
-(Since it would be sent to Linus on Monday).
-Thank you for the fix!
+--- Patch [9]: [PATCH bpf-next v5 09/14] bpf: Report Memory Safety bounds e=
+rrors ---
+commit 787129fefde67f039a1ddb3b85e61af60e79f8f2
+Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-[1] https://github.com/kernel-patches/bpf/pull/13314
+bpf: Report Memory Safety bounds errors
 
-...
+Augment selected memory-range verifier failures with Memory Safety reports
+while preserving the existing terse verifier messages for compatibility.
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -3851,6 +3875,8 @@ static int check_stack_read_fixed_off(struct bpf_ve=
+rifier_env *env,
+>  					} else {
+>  						verbose(env, "invalid read from stack off %d+%d size %d\n",
+>  							off, i, size);
+> +						bpf_diag_stack_read_uninit(env, off, i,
+> +									   size);
+>  					}
+>  					return -EACCES;
+>  				}
+
+[Severity: Medium]
+Will this else branch also catch special stack slots like STACK_DYNPTR or
+STACK_ITER?
+
+If a BPF program directly reads a special stack slot, the verifier rejects
+it because it contains opaque internal state. Does calling
+bpf_diag_stack_read_uninit() here incorrectly diagnose these special slots
+as uninitialized memory? This might lead users to incorrectly try using
+CAP_PERFMON or initializing the memory, which would corrupt the underlying
+object.
+
+[ ... ]
+
+> @@ -3909,6 +3935,7 @@ static int check_stack_read_fixed_off(struct bpf_ve=
+rifier_env *env,
+>  			} else {
+>  				verbose(env, "invalid read from stack off %d+%d size %d\n",
+>  					off, i, size);
+> +				bpf_diag_stack_read_uninit(env, off, i, size);
+>  			}
+>  			return -EACCES;
+>  		}
+
+[Severity: Medium]
+Similar to the above, does this second else branch for non-spilled slots
+also misdiagnose special slot reads as uninitialized memory?
+
+[ ... ]
+
+> @@ -4001,11 +4028,19 @@ static int check_stack_read(struct bpf_verifier_e=
+nv *env,
+>  	 * check_stack_read_fixed_off).
+>  	 */
+>  	if (dst_regno < 0 && var_off) {
+> +		const char *reason;
+>  		char tn_buf[48];
+> =20
+>  		tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
+>  		verbose(env, "variable offset stack pointer cannot be passed into help=
+er function; var_off=3D%s off=3D%d size=3D%d\n",
+>  			tn_buf, off, size);
+> +		reason =3D bpf_diag_fmt(env,
+> +				      "The helper would access the stack through variable offset %s =
+plus fixed offset %d and size %d. "
+> +			"Helper stack memory arguments require a constant stack offset and a =
+precise initialized range.",
+> +			tn_buf, off, size);
+> +		bpf_diag_memory(
+> +			env, env->insn_idx, "variable stack access", reason,
+> +			"Use a fixed stack offset for helper memory arguments, or copy the ne=
+eded bytes into a fixed stack slot first.");
+>  		return -EACCES;
+>  	}
+
+[Severity: Medium]
+Are we sure this condition is triggered by helper functions?
+
+In check_stack_read(), a destination register less than 0 is triggered
+exclusively by atomic instructions, not by helper functions which
+instead use check_helper_mem_access().
+
+Could this new diagnostic text falsely attribute atomic instruction failures
+to helper functions and incorrectly suggest changes for helper memory
+arguments?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260815064612.3785=
+77-1-memxor@gmail.com?part=3D9
