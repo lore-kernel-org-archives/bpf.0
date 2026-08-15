@@ -1,76 +1,76 @@
-Received: from mail-wm2-f7.google.com (mail-wm2-f7.google.com [74.125.225.135])
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98DFA3B4E84
-	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 06:46:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.135
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F5D3B47F5
+	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 06:46:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786776397; cv=none; b=PCRHl/9q7cf33BtczOkEir26/xNzuXbXajjLU+vn5sS8XLduSAN5EvwWdq+KABF3UwI+zg/Jbb4b9CDl10s4QZi/ocUF232DSR7WweWoRNmXwm3kaSbQDQTiRWSJ4M8GZYYaWsP897xCcImlNoDcvYAiJPpeT3nIQTwQZn3kvmM=
+	t=1786776404; cv=none; b=A0KP8faPisas5Zn2BVEHh+RUydVyOtDqhU7oRWAY2aggJ3lTC9ZnYkWDcSAOtHvmZBmGuktTXi+T+zFw8g/ieiTGhvtmUuRJHWSol+BKwBsSUSkrgQ/SKLpbfTTNdiiVovlmzCq6WoxxBtn7RwlT1Qt8S4eDEB1iJrtfshiRCh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786776397; c=relaxed/simple;
-	bh=i/GesWKvfJmwjUbG/Tl/ycNwkMAu/jDoDjDWbbte/7I=;
+	s=arc-20240116; t=1786776404; c=relaxed/simple;
+	bh=2qELXIoU9lXKGno5vwoFlCd1BjmN5Mb+jYS6b8DsJU4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rcwaYOGeDCkdKiFpxorqt1GTboseLifwte3Pguujx4FWeohRGZVrJD2n0b3v4GDTPF8OWw7XF3FfWJ2Uh4aaRo3bbULw+ip2PAOkedygYnisoDXlmqhGgJRHqGjTj7ERzZDQdF6AgXWglKcE6yxPZfKOzPDMo+bR2/HjNkdBEN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nMm7emk3; arc=none smtp.client-ip=74.125.225.135
+	 MIME-Version; b=evQCUiYT37BSmXTwFJE56xVSyl9viKM/IADbq5RBbuP+F6dBFCIwYiA3ljrqRumCBtCiL2NP1qI28oa6ivComUv4yBw+ax/J3q+fTpwrImiDBRV8VoMWPsljBXiOWmboQIJ9SiI6BrXk3Z0fS+5O7QgMaQIy/wklUo6PQFYlCb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cM+XOeOm; arc=none smtp.client-ip=74.125.225.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nMm7emk3"
-Received: by mail-wm2-f7.google.com with SMTP id 5b1f17b1804b1-498074920dcso6979455e9.1
-        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 23:46:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cM+XOeOm"
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-4955674321eso3449545e9.0
+        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 23:46:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786776381; x=1787381181; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786776392; x=1787381192; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=zxyb+H1m/gcepzlyaRVCy4rF81yO21LjvRxlCWOrstg=;
-        b=nMm7emk3oriCvJHXcMqC4xu7Os8yLGdjOqySDdr52zRn7KuO2KuNkH9QfrIrWyG30E
-         bM3HpgfbRnIF2Z2zHUMGoOEmvF94ukGMuAYXJauS7KN3Rr11qQwFCNCTXne81eHoXPLy
-         50CmKkgpKnTGi6mfmcaKq9lbmDHgQyuF/+F36EwMtnJdu2T6TbTlmmGKSqJ6ySC4Od5q
-         FQxYsSE+u+F3oOPn+WYfz+GUilD/NgiBBT4UIHgDrVAPFJDX+ggM0qgyw9Qhz4UAW5t/
-         ZFipl/hk6JzFNCBoihtr+Jke61x09zlEVApZRcxmaQlLlvqn0tskyQVC52YSj2uROfo5
-         2U4w==
+        bh=LzWVWxb/0eg9q6BnwJP28btwNlr72EUilj3ObPEPakg=;
+        b=cM+XOeOmk9AcX7ZqGpAIqCt1je0fu1dWZxYhAU2IT6Z85YL1QcHxl9vYZWEIezrRQM
+         JtIHRgqwE+udJH4vsNmKtxSLqH3Dkg1Zpxt5Qey+jt9I7ZyMgMXZeokLtC5jv7gotewH
+         XJ903Kg8h8t1CeFfFi65b3RylCGr07M+dvq9H06vyc3LgaTWGwVaRMmPg09a1NU9lLW5
+         C+dRnkgGd4rnvTNkhUNmiV31ax/r9H3KInPMGsOIjAcWbIlO6/LkWaf1XZ8LtiQ14sNl
+         t75shWT/xypincFI6DQG6GWDwEu09qrtlWGzetleR5cJOy17/I8OTqbkC1qlFW5J6uNj
+         lE8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786776381; x=1787381181;
+        d=1e100.net; s=20251104; t=1786776392; x=1787381192;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=zxyb+H1m/gcepzlyaRVCy4rF81yO21LjvRxlCWOrstg=;
-        b=InauvePRLcE8bU+PDhS/HOBg6hsC9O1dR5mAL3L+iisKOPKgCym7XXwNwvaJi088pE
-         YFFtEd81kY5p5tta2/fZZaVh4u5PCj9xbI2H2s3prdiTa4QAthlP6X0wrbvHzcnsOBmS
-         lxlhvXJdAV4YaLXU83y4XVS97T+cwCdhjMqmqcSJUxrwVAMlsMFow3cWQtTwXiAxEYiq
-         ptygID2y+q5RuGwxlPwbkFvM5DRDNoAdJCcglIc4h1emtiZeB8l4NFL1KRGCOC+7uxnT
-         GgN+l90pSH9LEXT+8A70rXfPcrtl2RmIv2TkxQJ3CklTIw9a3y8t26M6NRkzMnB+dDY0
-         u0lg==
-X-Gm-Message-State: AOJu0YzsHJRpXlNPLBZYCCp2pyGCO2dLgmCT2CuvV2pcldPy+QPVIGP0
-	6MjO3o6/khcMGzpZfZ8NMN3JT5v7+jRWyZmMme7Cq3KAw91CgTt/u5tO416tSyrv
-X-Gm-Gg: AR+sD12BAD4Ce/yf/28yCvpuDMfxsbZem9/ZXqcIBlQ7o8aT3HRuuE+q/pofEBvJ9KT
-	LhcsTGR3RdkM3G3EE9N2jmsM1j9EZmb4lxrhOc7v4/m92/fU1m44ZZMnlxqTR3YTMNojCS0qSgE
-	qwCw4y3N5hlg2zQFv2yLETh6CzhRgZHOhcdSCiIjXazpisF90bzRS4ObpR4/dmwli0NwYnWu2Ku
-	dYT/GnHyZHiPVZ1KIvditKArwI6aSaqkVOG6EcvzeCdQnwokuWah1p0R1TsuJlsvqUuMRxvQ+W5
-	vD7JJ3Nzfj9eiQT2MdhZ7qcBGCc8HZTx9VoSDOvQLXP1xQh8uLE0POSpH5ATDL1muP717nTkQLf
-	DA1tI4SV9jC0JCmaaWkUeDFTWwlFdq3n0+h8wzJkf3cVqCXLdJO2BbjhmOAoCyXR6YyBiMT60Xo
-	s3HtUOkPrWm9QnwXjuyUkZMrAcLEvqdLz45mSS9kNvnS5gTQ4jdzyjLxQn5EGfSqm1B7ZzrOeOJ
-	W++S5vK7Bs1PKi7g50xD8BoI8b5MKKwDaGPITuuUSdRvROoQLM3WkejkKXDhKQUdqzVNNUABWov
-	s/5iXGbIfBDRq+3KCHAvJbiM4YC6cA7M
-X-Received: by 2002:a05:6000:29cf:b0:47f:9750:26cc with SMTP id ffacd0b85a97d-4816077c8acmr11787922f8f.23.1786776380969;
-        Fri, 14 Aug 2026 23:46:20 -0700 (PDT)
+        bh=LzWVWxb/0eg9q6BnwJP28btwNlr72EUilj3ObPEPakg=;
+        b=BwtefWQI04MEJKEnmRKEd2H8lja9vjl8VlfazQl5Y9nSK87Jn1WtsUUqPqE9TXc9c5
+         YlxlpuzTI3RKc8DrRCvJBV2hBVgo+scfcJZwz0O+GuBg51ZphtDGLi8m/oUl4Bg9nOxo
+         dfnhd1tRdyZtbxCrMHTlyPLK96+u1+V6DvUNFEwJcqBvIy7FZ2Rq7wj8PxzMIVlaZ6dA
+         4sRcFBIBIlBEGgHo/ZOAGwBlS0k+yjDA4xQR4huk6mp0xPb4Hu/ny0DNe1Z1T/PkbgVw
+         9VWNxMKzBeEmhFyrjWGWSDt0VVU49Txkdxxce38mLSwY+90o4q0Mu2JP444/jEG5w06M
+         KnxQ==
+X-Gm-Message-State: AOJu0YywBj17DHQFJlibUtjZWXln5JdHr3fAad8wHR6vTPhWj44FZ/f/
+	6TTmNlHBBmVm1XNXK+sQTZ63md2RSZPeHJH5GNcwTl4rMF9ftAhJmB4n4eQcR16g
+X-Gm-Gg: AR+sD10ydCyzRNkGeqATxK2qaWOI2WKaHNTkcgQ9v4dvi7h823ONFZv0T1gxkmGlciE
+	ZE6iBuMaKVaD5r6RSJjqo2zbGE2LbkXvVMT2S6M2wmMi6AK5PV7JivgBwP7CqKm6yiwz25UK8Y3
+	IAuiOJcCsa8ZcqjcH/K3beN58xZJrPTPad+iFZQ61/lHsmBiBIExYnFrp6CPZ+DdRa2KrrHWLzb
+	5pNqKq+TLl4yAhW0I1ZXU76azrM9xxAN6gUDzle62T+VnER+nRyF0XnyZxlX6o7NHV5nVeeHKwT
+	uWfc4NBhOcAiWUkl3Ms0Dj2NDg9kkamLCua/Ec5BW0NxFoOdDsuAWb/7B9BPfvGanXoQDKIRyHj
+	tz13M+/qUz+JqfrrxLqsXjc58t25V+7YhCoOZoi3gtDUdUDCQzYtCCdNONJhvLp9oQJ8xroImfy
+	fg/HfW6Z6UF9O2qDEBcjxYYNZdsSAJp/pWN+pR0R1Avd+7jqgrU9QQd0O1r/Tg5cQf1UDNbd7Dg
+	vImacBjl8MpBQPzKmXArVXzUhp9MT1qicXroA3ZlpG8ZKts1+k2jiLdqvQSlTVWK+GCRxKQkSh0
+	7KXu/6OzRWfaFbH2wW56m1q1rdw=
+X-Received: by 2002:a5d:5303:0:b0:47f:8802:c182 with SMTP id ffacd0b85a97d-481607a3329mr12780995f8f.29.1786776391804;
+        Fri, 14 Aug 2026 23:46:31 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815f2c18cbsm12881928f8f.29.2026.08.14.23.46.20
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815f2c6115sm13959047f8f.32.2026.08.14.23.46.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Aug 2026 23:46:20 -0700 (PDT)
+        Fri, 14 Aug 2026 23:46:31 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v5 05/14] bpf: Track verifier register diagnostic events
-Date: Sat, 15 Aug 2026 08:46:00 +0200
-Message-ID: <20260815064612.378577-6-memxor@gmail.com>
+Subject: [PATCH bpf-next v5 13/14] bpf: Report Program Structure CFG errors
+Date: Sat, 15 Aug 2026 08:46:08 +0200
+Message-ID: <20260815064612.378577-14-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260815064612.378577-1-memxor@gmail.com>
 References: <20260815064612.378577-1-memxor@gmail.com>
@@ -80,995 +80,219 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=33351; i=memxor@gmail.com; h=from:subject; bh=i/GesWKvfJmwjUbG/Tl/ycNwkMAu/jDoDjDWbbte/7I=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIauBy7twovuSAqWUhxfyPymtFtQLZtj94q7cgWm1J50Wi pmqiB7oKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwEQ+dDMyNG7/dupd1995ovMy uc11PZO2SLr86xSz74tZOb1E+/Z8Dob/Ye9Cf8QsnbNZpse3svSoYGVL6H917+e17XcNXil4FaX wAwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=9512; i=memxor@gmail.com; h=from:subject; bh=2qELXIoU9lXKGno5vwoFlCd1BjmN5Mb+jYS6b8DsJU4=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIauBy09zQdj9rJziffcaUlnWfgg2WLPOPXKi43HBKRzG/ UdtFnB1lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCLp2Qx/+HacFOmX+7yK8ddM Bg93piOZPIXrO5TF/ulLzlBbZsPez8gwod73WZxXmv3ceyc8dv6d+G9lmgVL1KFzn+ttbApelde yAwA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Record material register and outgoing stack argument changes so diagnostics can
-explain how a value reached its current type, bounds, or unreadable state.
+Augment selected whole-program and subprogram CFG validation failures with
+Program Structure reports. These errors are structural rather than
+path-dependent, so the reports focus on source and instruction context
+instead of causal history.
 
-Store old and new register types, scalar ranges, tnum value and mask, map and
-BTF type identity, and basic operand metadata in the environment-owned
-diagnostic event stream.
+Cover direct and indirect jumps outside the program or current subprogram,
+unprivileged backedges, missing and out-of-range jump tables, targets in the
+second half of an ldimm64, unreachable instructions, subprogram fallthrough,
+and recursive bpf2bpf call graph edges.
 
-Record invalidations when packet data moves, references are released, or
-borrowed references leave their protected region. Register-scoped history
-starts at the latest matching modification and then shows later branch
-outcomes.
+Format long jump-range reasons directly in diagnostics.c, and keep the
+fallthrough suggestion aligned with the verifier check by suggesting exit or
+explicit jumps.
 
-Also record fixed stack spills and overwrites, and tag register fills from
-stack so register-scoped history can follow value flow through spilled stack
-slots.
-
-The type_is_map_ptr() helper previously lived as a static function in
-kernel/bpf/log.c since commit 0c95c9fdb696 ("bpf: emit map name in register
-state if applicable and available"). Move it verbatim to
-include/linux/bpf_verifier.h as a static inline, next to the other type
-classifiers, so diagnostics.c can reuse it without duplicating the case list.
-
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf_verifier.h |  17 ++
- kernel/bpf/diagnostics.c     | 356 +++++++++++++++++++++++++++++++++++
- kernel/bpf/diagnostics.h     |  23 +++
- kernel/bpf/log.c             |  11 --
- kernel/bpf/verifier.c        | 131 +++++++++++--
- 5 files changed, 515 insertions(+), 23 deletions(-)
+ kernel/bpf/cfg.c         | 35 +++++++++++++++++++++++++++++++++++
+ kernel/bpf/diagnostics.c | 19 +++++++++++++++++++
+ kernel/bpf/diagnostics.h |  3 +++
+ kernel/bpf/verifier.c    | 16 ++++++++++++++++
+ 4 files changed, 73 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 579a288bc8de..bc2af02547fe 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -354,6 +354,11 @@ struct bpf_func_state {
- 	 * 0 = main function, 1 = first callee.
- 	 */
- 	u32 frameno;
-+	/*
-+	 * Unique diagnostic identity for this function invocation. Frame depth is
-+	 * reused after returns, while this ID is preserved across state clones.
-+	 */
-+	u32 diag_frame_id;
- 	/* subprog number == index within subprog_info
- 	 * zero == main subprog
- 	 */
-@@ -1351,6 +1356,18 @@ static inline bool type_is_non_owning_ref(u32 type)
- 	return type_is_ptr_alloc_obj(type) && type_flag(type) & NON_OWN_REF;
- }
+diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
+index 818f7afac83a..0f13c13f4133 100644
+--- a/kernel/bpf/cfg.c
++++ b/kernel/bpf/cfg.c
+@@ -5,6 +5,8 @@
+ #include <linux/filter.h>
+ #include <linux/sort.h>
  
-+static inline bool type_is_map_ptr(enum bpf_reg_type type)
-+{
-+	switch (base_type(type)) {
-+	case CONST_PTR_TO_MAP:
-+	case PTR_TO_MAP_KEY:
-+	case PTR_TO_MAP_VALUE:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
++#include "diagnostics.h"
 +
- static inline bool type_is_pkt_pointer(enum bpf_reg_type type)
- {
- 	type = base_type(type);
+ #define verbose(env, fmt, args...) bpf_verifier_log_write(env, fmt, ##args)
+ 
+ /* non-recursive DFS pseudo code
+@@ -112,6 +114,10 @@ static int push_insn(int t, int w, int e, struct bpf_verifier_env *env)
+ 	if (w < 0 || w >= env->prog->len) {
+ 		verbose_linfo(env, t, "%d: ", t);
+ 		verbose(env, "jump out of range from insn %d to %d\n", t, w);
++		bpf_diag_program_structure(
++			env, t, "jump out of range", "Keep branch targets inside the program.",
++			"Instruction %d jumps to instruction %d, but the program only contains instructions 0 through %d.",
++			t, w, env->prog->len - 1);
+ 		return -EINVAL;
+ 	}
+ 
+@@ -135,6 +141,11 @@ static int push_insn(int t, int w, int e, struct bpf_verifier_env *env)
+ 		verbose_linfo(env, t, "%d: ", t);
+ 		verbose_linfo(env, w, "%d: ", w);
+ 		verbose(env, "back-edge from insn %d to %d\n", t, w);
++		bpf_diag_program_structure(
++			env, t, "back-edge is not allowed",
++			"Load with privileges that allow this back-edge, or rewrite the control flow so it does not branch backward.",
++			"Instruction %d branches back to instruction %d. This program is being rejected without the privilege needed for this back-edge.",
++			t, w);
+ 		return -EINVAL;
+ 	} else if (insn_state[w] == EXPLORED) {
+ 		/* forward- or cross-edge */
+@@ -315,6 +326,11 @@ static struct bpf_iarray *jt_from_subprog(struct bpf_verifier_env *env,
+ 
+ 	if (!jt) {
+ 		verbose(env, "no jump tables found for subprog starting at %u\n", subprog_start);
++		bpf_diag_program_structure(
++			env, subprog_start, "missing jump table",
++			"Make sure subprograms containing gotox instructions are accompanied by jump tables referencing these subprograms.",
++			"No jump table was found for the subprogram that starts at instruction %u.",
++			subprog_start);
+ 		return ERR_PTR(-EINVAL);
+ 	}
+ 
+@@ -342,6 +358,11 @@ create_jt(int t, struct bpf_verifier_env *env)
+ 		if (jt->items[i] < subprog_start || jt->items[i] >= subprog_end) {
+ 			verbose(env, "jump table for insn %d points outside of the subprog [%u,%u]\n",
+ 					t, subprog_start, subprog_end);
++			bpf_diag_program_structure(
++				env, t, "jump table target out of range",
++				"Keep every jump-table target inside the same subprogram.",
++				"The jump table for instruction %d points outside subprogram range [%u,%u).",
++				t, subprog_start, subprog_end);
+ 			kvfree(jt);
+ 			return ERR_PTR(-EINVAL);
+ 		}
+@@ -373,6 +394,11 @@ static int visit_gotox_insn(int t, struct bpf_verifier_env *env)
+ 		w = jt->items[i];
+ 		if (w < 0 || w >= env->prog->len) {
+ 			verbose(env, "indirect jump out of range from insn %d to %d\n", t, w);
++			bpf_diag_program_structure(
++				env, t, "indirect jump out of range",
++				"Keep indirect jump targets inside the program.",
++				"Instruction %d can jump indirectly to instruction %d, but the program only contains instructions 0 through %d.",
++				t, w, env->prog->len - 1);
+ 			return -EINVAL;
+ 		}
+ 
+@@ -623,12 +649,21 @@ int bpf_check_cfg(struct bpf_verifier_env *env)
+ 
+ 		if (insn_state[i] != EXPLORED) {
+ 			verbose(env, "unreachable insn %d\n", i);
++			bpf_diag_program_structure(
++				env, i, "unreachable instruction",
++				"Remove the unreachable instruction or add valid control flow that reaches it.",
++				"Instruction %d is not reachable from the program entry point.", i);
+ 			ret = -EINVAL;
+ 			goto err_free;
+ 		}
+ 		if (bpf_is_ldimm64(insn)) {
+ 			if (insn_state[i + 1] != 0) {
+ 				verbose(env, "jump into the middle of ldimm64 insn %d\n", i);
++				bpf_diag_program_structure(
++					env, i, "jump into ldimm64 immediate",
++					"Target the first instruction of the ldimm64 pair, or restructure the jump target.",
++					"Control flow reaches the second half of the ldimm64 instruction pair that starts at instruction %d.",
++					i);
+ 				ret = -EINVAL;
+ 				goto err_free;
+ 			}
 diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-index 8f21b46adeca..2e8e75815581 100644
+index c69160f656e9..9fc1f8cf7312 100644
 --- a/kernel/bpf/diagnostics.c
 +++ b/kernel/bpf/diagnostics.c
-@@ -25,8 +25,83 @@
- #define BPF_DIAG_EVENT_LOG_MAX_SIZE (64U << 20)
- #define DISASM_LINE_LEN 160
+@@ -21,6 +21,7 @@
+ #define RESOURCE_LIFETIME_SAFETY "Resource Lifetime Safety"
+ #define CALL_TYPE_SAFETY "Call Type Safety"
+ #define EXECUTION_CONTEXT_SAFETY "Execution Context Safety"
++#define PROGRAM_STRUCTURE "Program Structure"
  
-+enum bpf_diag_mod_target_kind {
-+	BPF_DIAG_MOD_TARGET_NONE,
-+	BPF_DIAG_MOD_TARGET_REG,
-+	BPF_DIAG_MOD_TARGET_STACK_ARG,
-+	BPF_DIAG_MOD_TARGET_STACK_SLOT,
-+	BPF_DIAG_MOD_TARGET_STACK_RANGE,
-+};
-+
-+struct bpf_diag_mod_target {
-+	u32 frame_id;
-+	union {
-+		struct {
-+			s16 min_off;
-+			s16 max_off;
-+		} range;
-+		u16 spi;
-+		u8 regno;
-+		u8 stack_arg;
-+	};
-+	u8 frameno;
-+	u8 kind;
-+};
-+
-+static struct bpf_diag_mod_target diag_reg_target(u32 frame_id, u8 frameno, u8 regno)
-+{
-+	return (struct bpf_diag_mod_target){
-+		.frame_id = frame_id,
-+		.frameno = frameno,
-+		.kind = BPF_DIAG_MOD_TARGET_REG,
-+		.regno = regno,
-+	};
-+}
-+
-+static struct bpf_diag_mod_target diag_stack_arg_target(u32 frame_id, u8 frameno, u8 slot)
-+{
-+	return (struct bpf_diag_mod_target){
-+		.frame_id = frame_id,
-+		.frameno = frameno,
-+		.kind = BPF_DIAG_MOD_TARGET_STACK_ARG,
-+		.stack_arg = slot,
-+	};
-+}
-+
-+static struct bpf_diag_mod_target diag_stack_slot_target(u32 frame_id, u8 frameno, u16 spi)
-+{
-+	return (struct bpf_diag_mod_target){
-+		.frame_id = frame_id,
-+		.frameno = frameno,
-+		.kind = BPF_DIAG_MOD_TARGET_STACK_SLOT,
-+		.spi = spi,
-+	};
-+}
-+
-+static struct bpf_diag_mod_target diag_stack_range_target(u32 frame_id, u8 frameno,
-+							  s16 min_off, s16 max_off)
-+{
-+	return (struct bpf_diag_mod_target){
-+		.frame_id = frame_id,
-+		.frameno = frameno,
-+		.kind = BPF_DIAG_MOD_TARGET_STACK_RANGE,
-+		.range.min_off = min_off,
-+		.range.max_off = max_off,
-+	};
-+}
-+
-+struct bpf_diag_reg_snapshot {
-+	u32 type;
-+	u32 btf_id;
-+	const struct bpf_map *map_ptr;
-+	const struct btf *btf;
-+	struct tnum var_off;
-+	struct cnum64 r64;
-+};
-+
- enum bpf_diag_history_kind {
- 	BPF_DIAG_HISTORY_BRANCH,
-+	BPF_DIAG_HISTORY_MOD,
- };
- 
- struct bpf_diag_history_event {
-@@ -37,6 +112,13 @@ struct bpf_diag_history_event {
- 		struct {
- 			bool cond_true;
- 		} branch;
-+		struct {
-+			struct bpf_diag_mod_target target;
-+			struct bpf_diag_mod_target origin;
-+			struct bpf_diag_reg_snapshot old, new;
-+			u8 reason;
-+			bool origin_valid;
-+		} mod;
- 	};
- };
- 
-@@ -77,10 +159,22 @@ struct bpf_diag_scratch {
- 	struct disasm_line disasm_lines[BPF_DIAG_CONTEXT_CNT];
- };
- 
-+struct bpf_diag_mod_scope {
-+	struct bpf_reg_state target_reg_snapshot;
-+	struct bpf_diag_mod_target target;
-+	struct bpf_diag_mod_target origin;
-+	enum bpf_diag_mod_reason reason;
-+	u32 insn_idx;
-+	bool active;
-+	bool origin_valid;
-+};
-+
- struct bpf_diag {
- 	struct bpf_diag_log log;
- 	struct bpf_diag_scratch scratch;
- 	struct list_head fmt_chunks;
-+	struct bpf_diag_mod_scope mod;
-+	u32 frame_id_gen;
- };
- 
- bool bpf_diag_enabled(const struct bpf_verifier_env *env)
-@@ -103,6 +197,12 @@ int bpf_diag_init(struct bpf_verifier_env *env)
- 	return 0;
+ #define BPF_DIAG_TEXT_WIDTH 100
+ #define BPF_DIAG_TEXT_INDENT "  "
+@@ -1192,6 +1193,24 @@ void bpf_diag_ctx_underflow(struct bpf_verifier_env *env, u32 insn_idx,
+ 	diag_suggestion(env, "%s", suggestion);
  }
  
-+void bpf_diag_init_frame(struct bpf_verifier_env *env, struct bpf_func_state *state)
++void bpf_diag_program_structure(struct bpf_verifier_env *env, u32 insn_idx,
++				const char *problem, const char *suggestion,
++				const char *reason_fmt, ...)
 +{
-+	if (env->diag)
-+		state->diag_frame_id = ++env->diag->frame_id_gen;
++	va_list args;
++
++	bpf_diag_header(env, PROGRAM_STRUCTURE, problem);
++	diag_section(env, "Reason");
++
++	va_start(args, reason_fmt);
++	diag_vprint_indented(env, reason_fmt, args);
++	va_end(args);
++
++	diag_section(env, "At");
++	bpf_diag_source(env, insn_idx, "error", "%s", problem);
++
++	diag_suggestion(env, "%s", suggestion);
 +}
-+
- static char *diag_fmt_alloc(struct bpf_verifier_env *env, size_t size)
- {
- 	struct bpf_diag *diag = env->diag;
-@@ -359,6 +459,28 @@ static void diag_print_wrapped_prefixed(struct bpf_verifier_env *env, const char
- 	}
- }
- 
-+const char *bpf_diag_fmt_btf_type(struct bpf_verifier_env *env, const struct btf *btf, u32 type_id)
-+{
-+	char *buf = bpf_diag_fmt_buf(env, BPF_DIAG_FMT_BUF_SIZE);
-+	size_t len;
-+	int ret;
-+
-+	if (!buf)
-+		return "";
-+
-+	buf[0] = '\0';
-+	ret = btf_type_name_to_buf(btf, type_id, buf, BPF_DIAG_FMT_BUF_SIZE);
-+	if (ret < 0 || !buf[0]) {
-+		scnprintf(buf, BPF_DIAG_FMT_BUF_SIZE, "BTF type ID %u", type_id);
-+		return buf;
-+	}
-+
-+	len = strlen(buf);
-+	if (len && buf[len - 1] == '{')
-+		buf[len - 1] = '\0';
-+	return buf;
-+}
-+
- static int diag_line_width(unsigned int line)
- {
- 	int width = 1;
-@@ -665,3 +787,237 @@ void bpf_diag_record_branch(struct bpf_verifier_env *env, u32 insn_idx, bool con
- 
- 	diag_append_history(env, &event);
- }
-+
-+static void diag_snapshot_reg(struct bpf_diag_reg_snapshot *snapshot,
-+			      const struct bpf_reg_state *reg)
-+{
-+	snapshot->type = reg->type;
-+	if (type_is_map_ptr(reg->type))
-+		snapshot->map_ptr = reg->map_ptr;
-+	if (base_type(reg->type) == PTR_TO_BTF_ID && reg->btf && reg->btf_id) {
-+		snapshot->btf_id = reg->btf_id;
-+		snapshot->btf = reg->btf;
-+	}
-+	snapshot->var_off = reg->var_off;
-+	snapshot->r64 = reg->r64;
-+}
-+
-+static bool diag_mod_insn_origin(struct bpf_verifier_env *env, u32 insn_idx,
-+				 const struct bpf_diag_mod_target *target,
-+				 struct bpf_diag_mod_target *origin)
-+{
-+	const struct bpf_insn *insn = &env->prog->insnsi[insn_idx];
-+	u8 class = BPF_CLASS(insn->code);
-+	const struct bpf_func_state *state;
-+
-+	if (target->kind == BPF_DIAG_MOD_TARGET_REG && (class == BPF_ALU || class == BPF_ALU64) &&
-+	    BPF_OP(insn->code) == BPF_MOV && BPF_SRC(insn->code) == BPF_X) {
-+		*origin = diag_reg_target(target->frame_id, target->frameno, insn->src_reg);
-+		return true;
-+	}
-+
-+	if ((target->kind != BPF_DIAG_MOD_TARGET_STACK_ARG &&
-+	     target->kind != BPF_DIAG_MOD_TARGET_STACK_SLOT) ||
-+	    class != BPF_STX)
-+		return false;
-+
-+	state = env->cur_state->frame[env->cur_state->curframe];
-+	*origin = diag_reg_target(state->diag_frame_id, state->frameno, insn->src_reg);
-+	return true;
-+}
-+
-+static bool diag_mod_keeps_lineage(struct bpf_verifier_env *env,
-+				   const struct bpf_diag_history_event *event)
-+{
-+	const struct bpf_insn *insn;
-+	u8 class;
-+
-+	if (event->mod.reason != BPF_DIAG_MOD_WRITE ||
-+	    event->mod.target.kind != BPF_DIAG_MOD_TARGET_REG)
-+		return false;
-+
-+	insn = &env->prog->insnsi[event->insn_idx];
-+	class = BPF_CLASS(insn->code);
-+	if (class != BPF_ALU && class != BPF_ALU64)
-+		return false;
-+
-+	switch (BPF_OP(insn->code)) {
-+	case BPF_ADD:
-+	case BPF_SUB:
-+	case BPF_MUL:
-+	case BPF_OR:
-+	case BPF_AND:
-+	case BPF_LSH:
-+	case BPF_RSH:
-+	case BPF_ARSH:
-+	case BPF_XOR:
-+	case BPF_NEG:
-+	case BPF_END:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
-+static void diag_record_mod(struct bpf_verifier_env *env, u32 insn_idx,
-+			    struct bpf_diag_mod_target target,
-+			    enum bpf_diag_mod_reason reason,
-+			    const struct bpf_reg_state *old_reg,
-+			    const struct bpf_reg_state *new_reg,
-+			    const struct bpf_diag_mod_target *origin)
-+{
-+	struct bpf_diag_history_event event = {
-+		.insn_idx = insn_idx,
-+		.kind = BPF_DIAG_HISTORY_MOD,
-+		.mod = {
-+			.target = target,
-+			.reason = reason,
-+		},
-+	};
-+
-+	if (old_reg)
-+		diag_snapshot_reg(&event.mod.old, old_reg);
-+	if (new_reg)
-+		diag_snapshot_reg(&event.mod.new, new_reg);
-+	if (origin) {
-+		event.mod.origin = *origin;
-+		event.mod.origin_valid = true;
-+	} else if (diag_mod_insn_origin(env, insn_idx, &target, &event.mod.origin)) {
-+		event.mod.origin_valid = true;
-+	}
-+	if (old_reg && new_reg &&
-+	    (reason == BPF_DIAG_MOD_WRITE || reason == BPF_DIAG_MOD_SPILL) &&
-+	    !memcmp(&event.mod.old, &event.mod.new, sizeof(event.mod.old)) &&
-+	    !event.mod.origin_valid &&
-+	    diag_mod_keeps_lineage(env, &event))
-+		return;
-+
-+	diag_append_history(env, &event);
-+}
-+
-+static struct bpf_reg_state *target_to_reg(struct bpf_verifier_env *env,
-+					   const struct bpf_diag_mod_target *target)
-+{
-+	struct bpf_verifier_state *vstate = env->cur_state;
-+	struct bpf_func_state *state;
-+
-+	state = target->frameno <= vstate->curframe ? vstate->frame[target->frameno] : NULL;
-+
-+	if (!state)
-+		return NULL;
-+	if (state->diag_frame_id != target->frame_id)
-+		return NULL;
-+
-+	switch (target->kind) {
-+	case BPF_DIAG_MOD_TARGET_REG:
-+		if (target->regno >= MAX_BPF_REG)
-+			return NULL;
-+		return &state->regs[target->regno];
-+	case BPF_DIAG_MOD_TARGET_STACK_ARG:
-+		if (target->stack_arg >= state->out_stack_arg_cnt)
-+			return NULL;
-+		return &state->stack_arg_regs[target->stack_arg];
-+	case BPF_DIAG_MOD_TARGET_STACK_SLOT:
-+		if (target->spi >= state->allocated_stack / BPF_REG_SIZE)
-+			return NULL;
-+		return &state->stack[target->spi].spilled_ptr;
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+static bool reg_to_target(struct bpf_verifier_env *env, const struct bpf_reg_state *reg,
-+			  struct bpf_diag_mod_target *target)
-+{
-+	struct bpf_verifier_state *vstate = env->cur_state;
-+	unsigned long addr = (unsigned long)reg;
-+	int frame;
-+
-+	for (frame = 0; frame <= vstate->curframe; frame++) {
-+		struct bpf_func_state *state = vstate->frame[frame];
-+		unsigned long start, end;
-+		u32 nslots = state->allocated_stack / BPF_REG_SIZE;
-+		int spi;
-+
-+		start = (unsigned long)state->regs;
-+		end = (unsigned long)(state->regs + MAX_BPF_REG);
-+		if (addr >= start && addr < end) {
-+			*target = diag_reg_target(state->diag_frame_id, state->frameno,
-+						  reg - state->regs);
-+			return true;
-+		}
-+
-+		start = (unsigned long)state->stack_arg_regs;
-+		end = (unsigned long)(state->stack_arg_regs + state->out_stack_arg_cnt);
-+		if (state->out_stack_arg_cnt && addr >= start && addr < end) {
-+			*target = diag_stack_arg_target(state->diag_frame_id, state->frameno,
-+							reg - state->stack_arg_regs);
-+			return true;
-+		}
-+
-+		start = (unsigned long)state->stack;
-+		end = (unsigned long)(state->stack + nslots);
-+		if (nslots && addr >= start && addr < end) {
-+			spi = ((const char *)reg - (const char *)state->stack) /
-+			      sizeof(*state->stack);
-+			*target = diag_stack_slot_target(state->diag_frame_id, state->frameno, spi);
-+			return true;
-+		}
-+	}
-+	return false;
-+}
-+
-+void bpf_diag_mod_begin(struct bpf_verifier_env *env, const struct bpf_reg_state *reg,
-+			const struct bpf_reg_state *origin, enum bpf_diag_mod_reason reason)
-+{
-+	struct bpf_diag *diag = env->diag;
-+
-+	if (!diag)
-+		return;
-+	diag->mod.active = reg_to_target(env, reg, &diag->mod.target);
-+	if (!diag->mod.active)
-+		return;
-+	diag->mod.target_reg_snapshot = *reg;
-+	diag->mod.insn_idx = env->insn_idx;
-+	diag->mod.reason = reason;
-+	diag->mod.origin_valid = origin && reg_to_target(env, origin, &diag->mod.origin);
-+}
-+
-+void bpf_diag_mod_end(struct bpf_verifier_env *env)
-+{
-+	struct bpf_diag *diag = env->diag;
-+	const struct bpf_reg_state *new_reg;
-+
-+	if (!diag || !diag->mod.active)
-+		return;
-+	diag->mod.active = false;
-+	/*
-+	 * Resolve the target again because the enclosing function state's stack
-+	 * may have been reallocated while the modification was in progress.
-+	 */
-+	new_reg = target_to_reg(env, &diag->mod.target);
-+	if (!new_reg)
-+		return;
-+	diag_record_mod(env, diag->mod.insn_idx, diag->mod.target, diag->mod.reason,
-+			&diag->mod.target_reg_snapshot, new_reg,
-+			diag->mod.origin_valid ? &diag->mod.origin : NULL);
-+}
-+
-+void bpf_diag_record_scrub(struct bpf_verifier_env *env, const struct bpf_reg_state *reg,
-+			   enum bpf_diag_mod_reason reason)
-+{
-+	struct bpf_diag_mod_target target;
-+
-+	if (!env->diag || reg->type == NOT_INIT || !reg_to_target(env, reg, &target))
-+		return;
-+	diag_record_mod(env, env->insn_idx, target, reason, reg, NULL, NULL);
-+}
-+
-+void bpf_diag_record_scrub_stack(struct bpf_verifier_env *env,
-+				 const struct bpf_func_state *state, s16 min_off, s16 max_off,
-+				 enum bpf_diag_mod_reason reason)
-+{
-+	diag_record_mod(env, env->insn_idx,
-+			diag_stack_range_target(state->diag_frame_id, state->frameno, min_off, max_off),
-+			reason, NULL, NULL, NULL);
-+}
+ void bpf_diag_invalid_deref(struct bpf_verifier_env *env, u32 insn_idx, int regno,
+ 			    const char *reg_name, const struct bpf_reg_state *reg,
+ 			    enum bpf_diag_invalid_deref_kind kind, s64 offset)
 diff --git a/kernel/bpf/diagnostics.h b/kernel/bpf/diagnostics.h
-index 6eda2fd65ee1..c4e44b86e89d 100644
+index 95bc654e5b3e..ab082d2d6e37 100644
 --- a/kernel/bpf/diagnostics.h
 +++ b/kernel/bpf/diagnostics.h
-@@ -8,17 +8,40 @@
- #include <linux/stdarg.h>
- #include <linux/types.h>
- 
-+struct bpf_func_state;
-+struct bpf_reg_state;
- struct bpf_verifier_env;
-+struct btf;
-+
-+enum bpf_diag_mod_reason {
-+	BPF_DIAG_MOD_WRITE,
-+	BPF_DIAG_MOD_SPILL,
-+	BPF_DIAG_MOD_VAR_WRITE,
-+	BPF_DIAG_MOD_REF_RELEASE,
-+	BPF_DIAG_MOD_PKT_DATA_CHANGE,
-+	BPF_DIAG_MOD_NON_OWN_REF,
-+	BPF_DIAG_MOD_CALLER_SAVED,
-+};
- 
- bool bpf_diag_enabled(const struct bpf_verifier_env *env);
- int bpf_diag_init(struct bpf_verifier_env *env);
-+void bpf_diag_init_frame(struct bpf_verifier_env *env, struct bpf_func_state *state);
- char *bpf_diag_fmt_buf(struct bpf_verifier_env *env, size_t size);
- const char *bpf_diag_vfmt(struct bpf_verifier_env *env, const char *fmt, va_list args)
- 	__printf(2, 0);
- const char *bpf_diag_fmt(struct bpf_verifier_env *env, const char *fmt, ...) __printf(2, 3);
-+const char *bpf_diag_fmt_btf_type(struct bpf_verifier_env *env, const struct btf *btf, u32 type_id);
- u64 bpf_diag_event_log_save(struct bpf_verifier_env *env);
- void bpf_diag_event_log_restore(struct bpf_verifier_env *env, u64 log_pos);
- void bpf_diag_free(struct bpf_verifier_env *env);
+@@ -89,6 +89,9 @@ void bpf_diag_ctx_required(struct bpf_verifier_env *env, u32 insn_idx, const cha
+ void bpf_diag_ctx_underflow(struct bpf_verifier_env *env, u32 insn_idx,
+ 			    const char *operation, enum bpf_diag_context_kind ctx_kind,
+ 			    const char *suggestion);
++void bpf_diag_program_structure(struct bpf_verifier_env *env, u32 insn_idx,
++				const char *problem, const char *suggestion,
++				const char *reason_fmt, ...) __printf(5, 6);
  void bpf_diag_record_branch(struct bpf_verifier_env *env, u32 insn_idx, bool cond_true);
-+void bpf_diag_mod_begin(struct bpf_verifier_env *env, const struct bpf_reg_state *reg,
-+			const struct bpf_reg_state *origin, enum bpf_diag_mod_reason reason);
-+void bpf_diag_mod_end(struct bpf_verifier_env *env);
-+void bpf_diag_record_scrub(struct bpf_verifier_env *env, const struct bpf_reg_state *reg,
-+			   enum bpf_diag_mod_reason reason);
-+void bpf_diag_record_scrub_stack(struct bpf_verifier_env *env,
-+				 const struct bpf_func_state *state, s16 min_off, s16 max_off,
-+				 enum bpf_diag_mod_reason reason);
- 
- #endif /* __BPF_DIAGNOSTICS_H */
-diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index b740fa73ee26..589770ca3d3a 100644
---- a/kernel/bpf/log.c
-+++ b/kernel/bpf/log.c
-@@ -615,17 +615,6 @@ static void print_scalar_ranges(struct bpf_verifier_env *env,
- 	}
- }
- 
--static bool type_is_map_ptr(enum bpf_reg_type t) {
--	switch (base_type(t)) {
--	case CONST_PTR_TO_MAP:
--	case PTR_TO_MAP_KEY:
--	case PTR_TO_MAP_VALUE:
--		return true;
--	default:
--		return false;
--	}
--}
--
- /*
-  * _a stands for append, was shortened to avoid multiline statements below.
-  * This macro is used to output a comma separated list of attributes.
+ void bpf_diag_mod_begin(struct bpf_verifier_env *env, const struct bpf_reg_state *reg,
+ 			const struct bpf_reg_state *origin, enum bpf_diag_mod_reason reason);
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index db644690ac4b..a5929e40f18d 100644
+index a81a7ed18d76..64c5c31ed230 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -1792,6 +1792,17 @@ static const int caller_saved[CALLER_SAVED_REGS] = {
- 	BPF_REG_0, BPF_REG_1, BPF_REG_2, BPF_REG_3, BPF_REG_4, BPF_REG_5
- };
- 
-+static void bpf_diag_record_caller_saved(struct bpf_verifier_env *env,
-+					 struct bpf_reg_state *regs)
-+{
-+	int i;
-+
-+	for (i = 1; i < CALLER_SAVED_REGS; i++) {
-+		bpf_diag_record_scrub(env, &regs[caller_saved[i]],
-+				      BPF_DIAG_MOD_CALLER_SAVED);
-+	}
-+}
-+
- /* This helper doesn't clear reg->id */
- static void ___mark_reg_known(struct bpf_reg_state *reg, u64 imm)
- {
-@@ -2245,6 +2256,7 @@ static void init_func_state(struct bpf_verifier_env *env,
- {
- 	state->callsite = callsite;
- 	state->frameno = frameno;
-+	bpf_diag_init_frame(env, state);
- 	state->subprogno = subprogno;
- 	state->callback_ret_range = retval_range(0, 0);
- 	init_reg_state(env, state);
-@@ -3362,6 +3374,7 @@ static void save_register_state(struct bpf_verifier_env *env,
- {
- 	int i;
- 
-+	bpf_diag_mod_begin(env, &state->stack[spi].spilled_ptr, reg, BPF_DIAG_MOD_SPILL);
- 	state->stack[spi].spilled_ptr = *reg;
- 
- 	for (i = BPF_REG_SIZE; i > BPF_REG_SIZE - size; i--)
-@@ -3370,6 +3383,8 @@ static void save_register_state(struct bpf_verifier_env *env,
- 	/* size < 8 bytes spill */
- 	for (; i; i--)
- 		mark_stack_slot_misc(env, &state->stack[spi].slot_type[i - 1]);
-+
-+	bpf_diag_mod_end(env);
- }
- 
- static bool is_bpf_st_mem(struct bpf_insn *insn)
-@@ -3506,6 +3521,9 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
- 	} else {
- 		u8 type = STACK_MISC;
- 
-+		if (bpf_is_spilled_reg(&state->stack[spi]))
-+			bpf_diag_record_scrub(env, &state->stack[spi].spilled_ptr,
-+					      BPF_DIAG_MOD_WRITE);
- 		scrub_special_slot(state, spi);
- 
- 		/* when we zero initialize stack slots mark them as such */
-@@ -3666,6 +3684,8 @@ static int check_stack_write_var_off(struct bpf_verifier_env *env,
- 		if (err)
- 			return err;
- 	}
-+	bpf_diag_record_scrub_stack(env, state, min_off, max_off,
-+				    BPF_DIAG_MOD_VAR_WRITE);
- 	return 0;
- }
- 
-@@ -3758,6 +3778,12 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
- 	mark_stack_slot_scratched(env, spi);
- 	check_fastcall_stack_contract(env, state, env->insn_idx, off);
- 
-+	/*
-+	 * Refine the in-progress load record's origin to the source stack slot.
-+	 */
-+	if (dst_regno >= 0)
-+		bpf_diag_mod_begin(env, &state->regs[dst_regno], reg, BPF_DIAG_MOD_WRITE);
-+
- 	if (bpf_is_spilled_reg(&reg_state->stack[spi])) {
- 		u8 spill_size = 1;
- 
-@@ -4051,14 +4077,17 @@ static int check_stack_arg_write(struct bpf_verifier_env *env, struct bpf_func_s
- 	if (spi + 1 > subprog->max_out_stack_arg_cnt)
- 		subprog->max_out_stack_arg_cnt = spi + 1;
- 
-+	arg = &state->stack_arg_regs[spi];
-+	bpf_diag_mod_begin(env, arg, value_reg, BPF_DIAG_MOD_WRITE);
-+
- 	if (value_reg) {
- 		state->stack_arg_regs[spi] = *value_reg;
- 	} else {
- 		/* BPF_ST: store immediate, treat as scalar */
--		arg = &state->stack_arg_regs[spi];
- 		arg->type = SCALAR_VALUE;
- 		__mark_reg_known(arg, env->prog->insnsi[env->insn_idx].imm);
- 	}
-+	bpf_diag_mod_end(env);
- 	state->no_stack_arg_load = true;
- 	return bpf_push_jmp_history(env, env->cur_state,
- 				    INSN_F_STACK_ARG_ACCESS, spi, 0, 0);
-@@ -4091,7 +4120,9 @@ static int check_stack_arg_read(struct bpf_verifier_env *env, struct bpf_func_st
- 	caller = vstate->frame[vstate->curframe - 1];
- 	arg = &caller->stack_arg_regs[spi];
- 	cur = vstate->frame[vstate->curframe];
-+	bpf_diag_mod_begin(env, &cur->regs[dst_regno], arg, BPF_DIAG_MOD_WRITE);
- 	cur->regs[dst_regno] = *arg;
-+	bpf_diag_mod_end(env);
- 	return bpf_push_jmp_history(env, env->cur_state,
- 				    INSN_F_STACK_ARG_ACCESS, spi, 0, 0);
- }
-@@ -6426,15 +6457,19 @@ static int check_load_mem(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 
- 	src_reg_type = regs[insn->src_reg].type;
- 
--	/* Check if (src_reg + off) is readable. The state of dst_reg will be
--	 * updated by this call.
-+	/*
-+	 * check_stack_read_fixed_off() may refine the modification's origin to
-+	 * the source stack slot.
- 	 */
-+	bpf_diag_mod_begin(env, &regs[insn->dst_reg], NULL, BPF_DIAG_MOD_WRITE);
- 	err = check_mem_access(env, env->insn_idx, regs + insn->src_reg, argno_from_reg(insn->src_reg), insn->off,
- 			       BPF_SIZE(insn->code), BPF_READ, insn->dst_reg,
- 			       strict_alignment_once, is_ldsx);
- 	err = err ?: save_aux_ptr_type(env, src_reg_type,
- 				       allow_trust_mismatch);
- 	err = err ?: reg_bounds_sanity_check(env, &regs[insn->dst_reg], ctx);
-+	if (!err)
-+		bpf_diag_mod_end(env);
- 
- 	return err;
- }
-@@ -6540,10 +6575,14 @@ static int check_atomic_rmw(struct bpf_verifier_env *env,
- 	 */
- 	err = check_mem_access(env, env->insn_idx, dst_reg, argno_from_reg(insn->dst_reg), insn->off,
- 			       BPF_SIZE(insn->code), BPF_READ, -1, true, false);
--	if (!err && load_reg >= 0)
-+	if (!err && load_reg >= 0) {
-+		bpf_diag_mod_begin(env, cur_regs(env) + load_reg, NULL, BPF_DIAG_MOD_WRITE);
- 		err = check_mem_access(env, env->insn_idx, dst_reg, argno_from_reg(insn->dst_reg),
- 				       insn->off, BPF_SIZE(insn->code),
- 				       BPF_READ, load_reg, true, false);
-+		if (!err)
-+			bpf_diag_mod_end(env);
-+	}
- 	if (err)
- 		return err;
- 
-@@ -8945,8 +8984,10 @@ static void clear_all_pkt_pointers(struct bpf_verifier_env *env)
- 	struct bpf_reg_state *reg;
- 
- 	bpf_for_each_reg_in_vstate(env->cur_state, state, reg, ({
--		if (reg_is_pkt_pointer_any(reg) || reg_is_dynptr_slice_pkt(reg))
-+		if (reg_is_pkt_pointer_any(reg) || reg_is_dynptr_slice_pkt(reg)) {
-+			bpf_diag_record_scrub(env, reg, BPF_DIAG_MOD_PKT_DATA_CHANGE);
- 			mark_reg_invalid(env, reg);
-+		}
- 	}));
- }
- 
-@@ -9062,10 +9103,25 @@ static int release_reference(struct bpf_verifier_env *env, int id)
- 					return err;
+@@ -3020,6 +3020,12 @@ static int check_subprogs(struct bpf_verifier_env *env)
+ 		off = i + bpf_jmp_offset(&insn[i]) + 1;
+ 		if (off < subprog_start || off >= subprog_end) {
+ 			verbose(env, "jump out of range from insn %d to %d\n", i, off);
++			bpf_diag_program_structure(
++				env, i, "jump out of range",
++				"Keep branch targets within the same subprogram, or use an explicit subprogram call.",
++				"Instruction %d jumps to instruction %d, but subprogram %d only contains instructions %d through %d. "
++				"A branch target must stay inside the same subprogram.",
++				i, off, cur_subprog, subprog_start, subprog_end - 1);
+ 			return -EINVAL;
+ 		}
+ next:
+@@ -3032,6 +3038,11 @@ static int check_subprogs(struct bpf_verifier_env *env)
+ 			    code != (BPF_JMP32 | BPF_JA) &&
+ 			    code != (BPF_JMP | BPF_JA)) {
+ 				verbose(env, "last insn is not an exit or jmp\n");
++				bpf_diag_program_structure(
++					env, i, "subprogram can fall through",
++					"End each subprogram with an exit or an explicit jump that keeps control flow inside the subprogram.",
++					"Subprogram %d reaches its last instruction %d without an exit or jump, so control could continue into the next subprogram.",
++					cur_subprog, i);
+ 				return -EINVAL;
  			}
- 
-+			/*
-+			 * A dynptr occupies two stack slots that invalidate_dynptr()
-+			 * clears together. Record both scrubs before invalidating it.
-+			 */
-+			if (stack && stack->slot_type[BPF_REG_SIZE - 1] == STACK_DYNPTR) {
-+				struct bpf_stack_state *dyn_stack = stack;
-+
-+				if (reg->dynptr.first_slot)
-+					dyn_stack--;
-+				bpf_diag_record_scrub(env, &dyn_stack[0].spilled_ptr,
-+						      BPF_DIAG_MOD_REF_RELEASE);
-+				bpf_diag_record_scrub(env, &dyn_stack[1].spilled_ptr,
-+						      BPF_DIAG_MOD_REF_RELEASE);
-+				invalidate_dynptr(env, dyn_stack);
-+				continue;
-+			}
-+			bpf_diag_record_scrub(env, reg, BPF_DIAG_MOD_REF_RELEASE);
- 			if (!stack || stack->slot_type[BPF_REG_SIZE - 1] == STACK_SPILL)
- 				mark_reg_invalid(env, reg);
--			else if (stack->slot_type[BPF_REG_SIZE - 1] == STACK_DYNPTR)
--				invalidate_dynptr(env, stack);
- 		}));
- 	}
- 
-@@ -9078,8 +9134,10 @@ static void invalidate_non_owning_refs(struct bpf_verifier_env *env)
- 	struct bpf_reg_state *reg;
- 
- 	bpf_for_each_reg_in_vstate(env->cur_state, unused, reg, ({
--		if (type_is_non_owning_ref(reg->type))
-+		if (type_is_non_owning_ref(reg->type)) {
-+			bpf_diag_record_scrub(env, reg, BPF_DIAG_MOD_NON_OWN_REF);
- 			mark_reg_invalid(env, reg);
-+		}
- 	}));
- }
- 
-@@ -9092,8 +9150,10 @@ static void invalidate_rcu_protected_refs(struct bpf_verifier_env *env)
- 
- 	bpf_for_each_reg_in_vstate_mask(env->cur_state, state, reg, stack, clear_mask, ({
- 		if (reg->type & MEM_RCU) {
-+			bpf_diag_mod_begin(env, reg, NULL, BPF_DIAG_MOD_WRITE);
- 			reg->type &= ~(MEM_RCU | PTR_MAYBE_NULL);
- 			reg->type |= PTR_UNTRUSTED;
-+			bpf_diag_mod_end(env);
- 		}
- 	}));
- }
-@@ -9110,9 +9170,11 @@ static int ref_convert_alloc_rcu_protected(struct bpf_verifier_env *env, u32 id)
- 		if (reg->id != id)
- 			continue;
- 		if ((reg->type & MEM_ALLOC) && (reg->type & MEM_PERCPU)) {
-+			bpf_diag_mod_begin(env, reg, NULL, BPF_DIAG_MOD_WRITE);
- 			reg->id = 0;
- 			reg->type &= ~MEM_ALLOC;
- 			reg->type |= MEM_RCU;
-+			bpf_diag_mod_end(env);
- 		}
- 	}));
- 
-@@ -9124,6 +9186,8 @@ static void clear_caller_saved_regs(struct bpf_verifier_env *env,
- {
- 	int i;
- 
-+	bpf_diag_record_caller_saved(env, regs);
-+
- 	/* after the call registers r0 - r5 were scratched */
- 	for (i = 0; i < CALLER_SAVED_REGS; i++) {
- 		bpf_mark_reg_not_init(env, &regs[caller_saved[i]]);
-@@ -9131,13 +9195,15 @@ static void clear_caller_saved_regs(struct bpf_verifier_env *env,
- 	}
- }
- 
--static void invalidate_outgoing_stack_args(const struct bpf_verifier_env *env,
-+static void invalidate_outgoing_stack_args(struct bpf_verifier_env *env,
- 					   struct bpf_func_state *state)
- {
- 	int i, nslots = state->out_stack_arg_cnt;
- 
--	for (i = 0; i < nslots; i++)
-+	for (i = 0; i < nslots; i++) {
-+		bpf_diag_record_scrub(env, &state->stack_arg_regs[i], BPF_DIAG_MOD_CALLER_SAVED);
- 		bpf_mark_reg_not_init(env, &state->stack_arg_regs[i]);
-+	}
- }
- 
- typedef int (*set_callee_state_fn)(struct bpf_verifier_env *env,
-@@ -9436,6 +9502,7 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		return err;
- 	if (bpf_subprog_is_global(env, subprog)) {
- 		const char *sub_name = bpf_subprog_name(env, subprog);
-+		bool returns_void;
- 
- 		if (env->cur_state->active_locks) {
- 			verbose(env, "global function calls are not allowed while holding a lock,\n"
-@@ -9458,16 +9525,22 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		if (env->log.level & BPF_LOG_LEVEL)
- 			verbose(env, "Func#%d ('%s') is global and assumed valid.\n",
- 				subprog, sub_name);
-+		returns_void = subprog_returns_void(env, subprog);
- 		if (env->subprog_info[subprog].changes_pkt_data)
- 			clear_all_pkt_pointers(env);
- 		/* mark global subprog for verifying after main prog */
- 		subprog_aux(env, subprog)->called = true;
-+		if (returns_void)
-+			bpf_diag_record_scrub(env, &caller->regs[BPF_REG_0], BPF_DIAG_MOD_CALLER_SAVED);
-+		else
-+			bpf_diag_mod_begin(env, &caller->regs[BPF_REG_0], NULL, BPF_DIAG_MOD_WRITE);
- 		clear_caller_saved_regs(env, caller->regs);
- 		invalidate_outgoing_stack_args(env, cur_func(env));
- 
- 		/* All non-void global functions return a 64-bit SCALAR_VALUE. */
--		if (!subprog_returns_void(env, subprog)) {
-+		if (!returns_void) {
- 			mark_reg_unknown(env, caller->regs, BPF_REG_0);
-+			bpf_diag_mod_end(env);
- 		}
- 
- 		if (env->subprog_info[subprog].might_throw) {
-@@ -9502,6 +9575,7 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	if (err)
- 		return err;
- 
-+	bpf_diag_record_scrub(env, &caller->regs[BPF_REG_0], BPF_DIAG_MOD_CALLER_SAVED);
- 	clear_caller_saved_regs(env, caller->regs);
- 
- 	/* and go analyze first insn of the callee */
-@@ -9865,7 +9939,9 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
- 		}
- 	} else {
- 		/* return to the caller whatever r0 had in the callee */
-+		bpf_diag_mod_begin(env, &caller->regs[BPF_REG_0], r0, BPF_DIAG_MOD_WRITE);
- 		caller->regs[BPF_REG_0] = *r0;
-+		bpf_diag_mod_end(env);
- 	}
- 
- 	/* for callbacks like bpf_loop or bpf_for_each_map_elem go back to callsite,
-@@ -10518,12 +10594,14 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		return err;
- 
- 	/* reset caller saved regs */
-+	bpf_diag_record_caller_saved(env, regs);
- 	for (i = 0; i < CALLER_SAVED_REGS; i++) {
- 		bpf_mark_reg_not_init(env, &regs[caller_saved[i]]);
- 		check_reg_arg(env, caller_saved[i], DST_OP_NO_MARK);
- 	}
- 	invalidate_outgoing_stack_args(env, cur_func(env));
- 
-+	bpf_diag_mod_begin(env, &regs[BPF_REG_0], NULL, BPF_DIAG_MOD_WRITE);
- 	/* update return register (already marked as written above) */
- 	ret_type = fn->ret_type;
- 	ret_flag = type_flag(ret_type);
-@@ -10672,6 +10750,8 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		if (err)
- 			return err;
- 
-+		bpf_diag_mod_end(env);
-+
- 		/*
- 		 * In order for a release of any of the original or cast pointers
- 		 * to invalidate all other pointers, reuse the same reference id for
-@@ -10688,6 +10768,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		__mark_reg_known_zero(r0);
- 		r0->type = SCALAR_VALUE;
- 
-+		bpf_diag_mod_begin(env, &regs[BPF_REG_0], NULL, BPF_DIAG_MOD_WRITE);
- 		regs[BPF_REG_0].type &= ~PTR_MAYBE_NULL;
- 		regs[BPF_REG_0].id = meta.ref_obj.id;
- 	} else if (is_acquire_function(func_id, meta.map.ptr)) {
-@@ -10706,6 +10787,8 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 	if (err)
- 		return err;
- 
-+	bpf_diag_mod_end(env);
-+
- 	err = check_map_func_compatibility(env, meta.map.ptr, func_id);
- 	if (err)
- 		return err;
-@@ -13211,6 +13294,8 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		}
- 	}
- 
-+	bpf_diag_record_caller_saved(env, regs);
-+	bpf_diag_mod_begin(env, &regs[BPF_REG_0], NULL, BPF_DIAG_MOD_WRITE);
- 	for (i = 0; i < CALLER_SAVED_REGS; i++) {
- 		u32 regno = caller_saved[i];
- 
-@@ -13362,6 +13447,12 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 			caller_info->stack_arg_cnt = stack_arg_cnt;
- 	}
- 
-+	/*
-+	 * Record R0 before process_iter_next_call() snapshots the alternate
-+	 * iterator path's diagnostic position.
-+	 */
-+	bpf_diag_mod_end(env);
-+
- 	if (bpf_is_iter_next_kfunc(&meta)) {
- 		err = process_iter_next_call(env, insn_idx, &meta);
- 		if (err)
-@@ -15004,6 +15095,8 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 	u8 opcode = BPF_OP(insn->code);
- 	int err;
- 
-+	bpf_diag_mod_begin(env, &regs[insn->dst_reg], NULL, BPF_DIAG_MOD_WRITE);
-+
- 	if (opcode == BPF_END || opcode == BPF_NEG) {
- 		/* check src operand */
- 		err = check_reg_arg(env, insn->dst_reg, SRC_OP);
-@@ -15177,7 +15270,12 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 			return err;
- 	}
- 
--	return reg_bounds_sanity_check(env, &regs[insn->dst_reg], "alu");
-+	err = reg_bounds_sanity_check(env, &regs[insn->dst_reg], "alu");
-+	if (err)
-+		return err;
-+
-+	bpf_diag_mod_end(env);
-+	return 0;
- }
- 
- static void find_good_pkt_pointers(struct bpf_verifier_state *vstate,
-@@ -16271,11 +16369,13 @@ static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 		return err;
- 
- 	dst_reg = &regs[insn->dst_reg];
-+	bpf_diag_mod_begin(env, dst_reg, NULL, BPF_DIAG_MOD_WRITE);
- 	if (insn->src_reg == 0) {
- 		u64 imm = ((u64)(insn + 1)->imm << 32) | (u32)insn->imm;
- 
- 		dst_reg->type = SCALAR_VALUE;
- 		__mark_reg_known(&regs[insn->dst_reg], imm);
-+		bpf_diag_mod_end(env);
- 		return 0;
- 	}
- 
-@@ -16299,6 +16399,7 @@ static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 			verifier_bug(env, "pseudo btf id: unexpected dst reg type");
- 			return -EFAULT;
- 		}
-+		bpf_diag_mod_end(env);
- 		return 0;
- 	}
- 
-@@ -16318,6 +16419,7 @@ static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 
- 		dst_reg->type = PTR_TO_FUNC;
- 		dst_reg->subprogno = subprogno;
-+		bpf_diag_mod_end(env);
- 		return 0;
- 	}
- 
-@@ -16328,6 +16430,7 @@ static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 		if (map->map_type == BPF_MAP_TYPE_ARENA) {
- 			__mark_reg_unknown(env, dst_reg);
- 			dst_reg->map_ptr = map;
-+			bpf_diag_mod_end(env);
- 			return 0;
- 		}
- 		__mark_reg_known(dst_reg, aux->map_off);
-@@ -16345,6 +16448,7 @@ static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 		return -EFAULT;
- 	}
- 
-+	bpf_diag_mod_end(env);
- 	return 0;
- }
- 
-@@ -16423,6 +16527,8 @@ static int check_ld_abs(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 		return err;
- 
- 	/* reset caller saved regs to unreadable */
-+	bpf_diag_record_caller_saved(env, regs);
-+	bpf_diag_mod_begin(env, &regs[BPF_REG_0], NULL, BPF_DIAG_MOD_WRITE);
- 	for (i = 0; i < CALLER_SAVED_REGS; i++) {
- 		bpf_mark_reg_not_init(env, &regs[caller_saved[i]]);
- 		check_reg_arg(env, caller_saved[i], DST_OP_NO_MARK);
-@@ -16433,6 +16539,7 @@ static int check_ld_abs(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 	 * Already marked as written above.
- 	 */
- 	mark_reg_unknown(env, regs, BPF_REG_0);
-+	bpf_diag_mod_end(env);
- 	/*
- 	 * See bpf_gen_ld_abs() which emits a hidden BPF_EXIT with r0=0
- 	 * which must be explored by the verifier when in a subprog.
+ 			subprog_start = subprog_end;
+@@ -3104,6 +3115,11 @@ static int sort_subprogs_topo(struct bpf_verifier_env *env)
+ 					verbose(env, "recursive call from %s() to %s()\n",
+ 						bpf_subprog_name(env, cur),
+ 						bpf_subprog_name(env, callee));
++					bpf_diag_program_structure(
++						env, idx, "recursive subprogram call",
++						"Rewrite the recursion as an explicit bounded loop, or split the logic so subprogram calls do not form a cycle.",
++						"This bpf2bpf call would make the subprogram call graph recursive. "
++						"The verifier requires a finite, acyclic call graph so it can bound stack depth and analysis.");
+ 					ret = -EINVAL;
+ 					goto out;
+ 				}
 -- 
 2.53.0
 
