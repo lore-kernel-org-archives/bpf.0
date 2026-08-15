@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAD3A374E46
-	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 08:14:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA2C37D130
+	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 08:14:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786781694; cv=none; b=AQ8jueA3/SKqzXMOhRE9d4PdgAC66nosjx7uU9whocJLpYTrGGA0Eu1J8BOwyf2Wt93mC8KtSskc480v+PJaj7Sfek9Up7NlwIjO1IA/hvbPa0IFk0st0LPJ+T7WhLtArm9GIBXI56bXABcabi4X949ThpBQJuG97SXO7ncUGw4=
+	t=1786781694; cv=none; b=WXdvgMcayxjllIre+iSvlueotp9rPjydVFEJgTFehWVzqouAzAD6XZKudBG4zsq5fECx48RMPm7CV0zgad+WVWLwuH9T/9xIOVOWh3yqEiwuvtlT+bAX3Ozh3xWGK5pmX48OC+vNkhoY9bxvX+3NAFrCofNgOoufhriryim9jN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1786781694; c=relaxed/simple;
-	bh=3r6l8LnGfmhJ0x91sNFTF3kNUv6l8qKk7CAboicgYro=;
+	bh=+c3Sp5DbVYoWP9nGHQktzzwL5GbRJlXf+mjDW1sqw8A=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gSMqyzLRr3tTK/HeB9CaYElmDKXzyB36xSuDautra8pCUvh8SQcYUEEPhC6ASe7qbXnBQslEq/thVOUv/1Y/0T30oScTiUasmgoh1aYmJtqWNfI5g5i9X01yH2ELoj3246FTjCSJM/gAanOZQMwLHYLXfGPNMaWPhk5uheLMq2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WtTeLc1L; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=fBbTJezxrFbPtnBFvrxOxI6vR1Rel7ri6eIpAepscHK6UzIU/hEN1peNgHx8zpgTs5oWk7F58q5NlSEtSf/XKOImUwnUlCqb39WapW/cc1hM8/qzvXQvf5aaj00qjoHyad3U3qsUuYjySFLCDFuqIx7BSPIJpXgFPXZcTb7zLok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=luSLlOkG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WtTeLc1L"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6B381F000E9;
-	Sat, 15 Aug 2026 08:14:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="luSLlOkG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BC451F00A3A;
+	Sat, 15 Aug 2026 08:14:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786781692;
-	bh=ufc1lF1ElPFBw2DzTL/RPBMd+9mgeKZejJz3BvCCAgI=;
+	s=k20260515; t=1786781693;
+	bh=vM+EPw17zfvPbLVg6KxKe9frqLQATy/JiGadRB2X7iI=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=WtTeLc1LedFZHXsNMidpna4mfRjRlDv2NMCJqIJRVqcFnqJV1LrKvWq6fRlGA+81c
-	 UHepvLSnSO5Gd8wI8umEU4skRNiyIwZwK7hEcXada/Aiz4uJt/QFuw5PM/uIezAOif
-	 oz9WmetHqrvwbaBI9mo4AfiSG0BMe/iy661Yl5+F84i6dw9O9W8VEcTODTs1rosuaK
-	 N3nI+KsOkDwxnlnuPOR6xX2F4Hj1tgnD2GDliGtVwO4LSS5WPYlXdpffP+EsinykFd
-	 z8UYjRwJWxbZGwOpoVSldLXa9xGf+R5toDyX11bAXn/2J+HZg/B6TJXGPc8MMRMwUO
-	 A2fKc+p8TV+iw==
+	b=luSLlOkGjcqgkcvWCtFKzu5IsgPCzdXfe33a8pQkWc3A8nCpCYSYXQ9omaqq8d5QA
+	 5Y4mg8HG43DDscnEhlGNwYkiU6zlxfFxBOrOAYOMyNd3jdf7tirRGwfUN9ngrXHaqn
+	 84w7GjDH+3MyVu+TymU1jo632AT9LIjwuxc0zS8SLTV44YgROIrR545v5ZOB+BNCpk
+	 4LWkgzlRUgmhmrCYO+5L1T3RiwyPS48jFGDKsKbaByG77Gq1lq0lgX5uOFRYLoT4El
+	 YLe6XQEWp3xZJTXoGcXE6piBwxUl7r8McY0+Pq1vl2tBS4Bm+IV2XnM1sNtSJvQkez
+	 Z3QyzxCsbdf2w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 07/14] selftests/bpf: Test skb_ext read from
- cgroup_skb and sk_filter hooks
+Subject: Re: [PATCH net-next 06/14] selftests/bpf: Test skb_ext survival
+ across veth and GRE
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jakub Sitnicki" <jakub@cloudflare.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260814-bpf-meta-inside-skb-ext-v1-7-767edd862656@cloudflare.com>
+In-Reply-To: <20260814-bpf-meta-inside-skb-ext-v1-6-767edd862656@cloudflare.com>
 References: <20260814-bpf-meta-inside-skb-ext-v1-0-767edd862656@cloudflare.com>
- <20260814-bpf-meta-inside-skb-ext-v1-7-767edd862656@cloudflare.com>
+ <20260814-bpf-meta-inside-skb-ext-v1-6-767edd862656@cloudflare.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Sat, 15 Aug 2026 08:14:52 +0000
-Message-Id: <20260815081452.A6B381F000E9@smtp.kernel.org>
+Message-Id: <20260815081453.5BC451F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,63 +47,95 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] Implicit truncation of error code to unsigned short masks get_so=
-cket_local_port() failure.
+- [Low] Incorrect assertions for if_nametoindex() return values allow error=
+s to pass silently.
 --
 
---- Patch [7]: [PATCH net-next 07/14] selftests/bpf: Test skb_ext read from=
- cgroup_skb and sk_filter hooks ---
-commit b524b9baad48611cd0f3fbe2f1b770ea85d7c5df
+--- Patch [6]: [PATCH net-next 06/14] selftests/bpf: Test skb_ext survival =
+across veth and GRE ---
+commit 9eef2d71b261cfaa465a5233213fb272dc34f416
 Author: Jakub Sitnicki <jakub@cloudflare.com>
 
-selftests/bpf: Test skb_ext read from cgroup_skb and sk_filter hooks
-
-This commit extends the skb_ext cross-hook coverage to UDP readers. It atta=
-ches
-a TC ingress program on loopback to write the extension, sends a UDP datagr=
-am,
-and reads the extension back from a cgroup_skb/ingress program and a socket
-filter.
+selftests/bpf: Test skb_ext survival across veth and GRE
+   =20
+This commit tests if skb_ext survives veth cross-netns forwarding and GRE
+encap/decap. It writes skb_ext at TC egress and reads it back at TC ingress
+after the packet crosses device boundaries.
 
 > diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.=
 c b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-> index de60303025361..808eb158fe0f1 100644
+> index 58b793cf14e59..de60303025361 100644
 > --- a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
 > +++ b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
+
 [ ... ]
-> +/* Send test_payload over loopback UDP to recv_fd */
-> +static int send_loopback_udp(int recv_fd)
+
+> @@ -783,6 +783,156 @@ static void test_mirred_clone_ext_cow(struct test_x=
+dp_meta *skel)
+> +/* Test if skb_ext survives veth cross-netns forward */
+> +static void test_skb_ext_scrub_veth(struct test_xdp_meta *skel)
 > +{
-> +	struct sockaddr_in addr =3D {
-> +		.sin_family =3D AF_INET,
-> +		.sin_addr.s_addr =3D htonl(INADDR_LOOPBACK),
-> +	};
-> +	char buf[TEST_PAYLOAD_LEN];
-> +	int ret =3D -1;
-> +	int fd =3D -1;
-> +	__be16 port;
+
+[ ... ]
+
+> +	SYS(close, "ip link set dev " RX_NAME " up");
 > +
-> +	port =3D get_socket_local_port(recv_fd);
-> +	if (!ASSERT_GE(port, 0, "get_port"))
-> +		goto out;
+> +	rx_ifindex =3D if_nametoindex(RX_NAME);
+> +	if (!ASSERT_GE(rx_ifindex, 0, "if_nametoindex rx"))
+> +		goto close;
 
-[Severity: Medium]
-Will this error check ever trigger if get_socket_local_port() fails?
+[Severity: Low]
+Does this code correctly catch interface lookup failures?
 
-Because port is declared as a __be16 (an unsigned 16-bit integer), a -1 ret=
-urn
-value from get_socket_local_port() would be implicitly truncated and conver=
-ted
-to 65535.
+Since if_nametoindex() returns 0 on failure, the ASSERT_GE(rx_ifindex, 0, .=
+..)
+check will evaluate 0 >=3D 0 as true, failing to catch the error. The test =
+will
+instead fail slightly later with a less descriptive error.=20
 
-The ASSERT_GE(port, 0, ...) check would then compare 65535 >=3D 0, which is=
- always
-true. This masks the failure and allows the test to proceed with an invalid
-port.
+Should this be using ASSERT_GT() or ASSERT_NEQ() instead?
 
-Should the return value be captured in an int variable for the error check
-before assigning it to the __be16 port?
+[ ... ]
+
+> +	SYS(close, "ip link set dev " TX_NAME " up");
+> +
+> +	tx_ifindex =3D if_nametoindex(TX_NAME);
+> +	if (!ASSERT_GE(tx_ifindex, 0, "if_nametoindex tx"))
+> +		goto close;
+
+[Severity: Low]
+Is this the same issue here? if_nametoindex() returning 0 would bypass this
+ASSERT_GE check.
+
+[ ... ]
+
+> +/* Test if skb_ext survives GRE tunnel encap+decap */
+> +static void test_skb_ext_scrub_gre(struct test_xdp_meta *skel)
+> +{
+
+[ ... ]
+
+> +	/* Write skb_ext on TC egress on GRE tx */
+> +	tx_ifindex =3D if_nametoindex("gre_tx");
+> +	if (!ASSERT_GE(tx_ifindex, 0, "tx_ifindex"))
+> +		goto close;
+
+[Severity: Low]
+Is this the same issue here as well?
+
+[ ... ]
+
+> +	/* Read skb_ext on TC ingress on GRE rx */
+> +	rx_ifindex =3D if_nametoindex("gre_rx");
+> +	if (!ASSERT_GE(rx_ifindex, 0, "rx_ifindex"))
+> +		goto close;
+
+[Severity: Low]
+And one more instance here where ASSERT_GE allows if_nametoindex() failure
+to pass silently.
+
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260814-bpf-meta-i=
-nside-skb-ext-v1-0-767edd862656@cloudflare.com?part=3D7
+nside-skb-ext-v1-0-767edd862656@cloudflare.com?part=3D6
