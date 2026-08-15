@@ -1,112 +1,146 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB1430569A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCCFA32692C
 	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 02:14:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786760080; cv=none; b=VsqzWZJxMeD2kbodeF4digedxRZBFDNDVRlKGb+V4NKuk/UBMk42/ByZdu1QrKEwFbbpfXLhIJdq9p3QVgOIDZTyGeYss/Hm7OeVYqK8CGPCq+k/xvCtsnkqBsZhxt2wCi6XZ1TpmDYUJrnjMVf9XrsSlwwGcAsCPMv+xSVwsYM=
+	t=1786760081; cv=none; b=sWW69XEaMofqQ6sbcnqbOnr78iFi5iUehjEHVXcLA9wEaEHEBQgvgAOhg1kggDyyn0EtHtlKPg7Y4nCMp9siALpN9m1H4mPJn/5rcsjCCrARJC022EXeGthsntP/DxrKxE51+obrgudJ6QcuEUjmf/1ECM1Z09IkOibGXlS92SQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786760080; c=relaxed/simple;
-	bh=b5D6UV4AlDWhoaYVpxbJ3HAyl0nrnigSdNOCjeO88bE=;
+	s=arc-20240116; t=1786760081; c=relaxed/simple;
+	bh=Sk99+XuFjak8A6VDfNsCzaMk+a0C68StzirFWAxegQQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=LAyi4L9V3Yk8Uvx2ryrWdutR8XF6vJaTGl8rDuM3DxC3ZcIqRoTrfoJIfpOvTNv8QKjsUEoaeKnXr4VikS1n+kCCt3jxFCXSatLY5yF7kCROEaq+SHj4BEuIxdomy7/OVQ0RNYPN5WWFuqzGL14xuZeVOvqwPj/GwrLpbFmfTVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ODw5Ixc4; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=RGyqXRX7B8kc5zg7ztdu198S3peS0w5V0ilzjTeIEPYtLLqT9DAvX8CErXq275U0Myc8HnKWnpzqhuhY8oQkOlw0Nh3LPKNlPVrgwF8sGXyiE9jVam6AUmFG1Ov2QIztyn3meknll/ZXMCNK9JdwPZA1ZVkt8devTw6mXUj8fVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ik9sukvE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ODw5Ixc4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFF7D1F00A3D;
-	Sat, 15 Aug 2026 02:14:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ik9sukvE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A43771F000E9;
+	Sat, 15 Aug 2026 02:14:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1786760079;
-	bh=tm7H+OO+xm+OmXheK9mAOQANmrtTCZXjiDC/nsD2BbA=;
+	bh=uG0YK/x47s2eKuDsHHLt0DSNnw7uRce7uit55b1SZpc=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ODw5Ixc47l09H8Iz5WsSWig49aZmBpuQj7BBG9gcNeA1zAPVxV/4A07UwZLzXKfYH
-	 OfiNrHsZ5FAwPHLr5htARigsJ6zGO+PB61d1CIHjnedR6USyDR4bjhAt8TI/Pn84sR
-	 EiePwu84uaE3nIWgo4uEESsnllevjjbLHjBnEoTZdAVu1LtPZwOfrrBHxUhN/11zAT
-	 3Osj06qLfI//TcGmN4tucg7JOj7r68rUuBViuI8Sh4uv99fL1r27tTvwjyhNZxefgv
-	 Ewk4+Tiplb/b28NrzSWyzC+I3zxjFQ9VTcoJes3Q7RGSszO88812UEmydETcodBgn1
-	 I8eMxFudvRhoQ==
+	b=ik9sukvE9RL/9/dTPA1YUc1VjBAhJ6OAknJKDnW5buBLmEjIb/veHfdbvCNpPClKK
+	 l2Zks5t1D83cdvnNFqcDx5uuoF2mQ4KT5C795d8KP5QTspzB74KXObZ7iVp14ijQq9
+	 LIcyHfYUODAbIqq3RwCHhH646JiYO7wu0qHl5Oxbj/kc8y6y2PIxgAGOZ/wAMEgclT
+	 blqRnbQIngld37Kxmwc3s90W5+7U7P0Mga5So1jxG1y/BkgmNmQaejbS+h1/GOW85C
+	 57ZdptRSMrRV7WPHG+AFfhnuc5Xuu27I6iPgcks8DE+FtgLUQiJgc3rN/Np41S7VKI
+	 Rc6p9JXP5ZkOA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v4 05/15] gve: introduce control plane
- operations structure
+Subject: Re: [PATCH net-next v4 02/15] gve: refactor initialization with
+ helper functions
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Harshitha Ramamurthy" <hramamurthy@google.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260814021406.3044324-6-hramamurthy@google.com>
+In-Reply-To: <20260814021406.3044324-3-hramamurthy@google.com>
 References: <20260814021406.3044324-1-hramamurthy@google.com>
- <20260814021406.3044324-6-hramamurthy@google.com>
+ <20260814021406.3044324-3-hramamurthy@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 15 Aug 2026 02:14:38 +0000
-Message-Id: <20260815021438.EFF7D1F00A3D@smtp.kernel.org>
+Date: Sat, 15 Aug 2026 02:14:39 +0000
+Message-Id: <20260815021439.A43771F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Workqueue flushed after private resources are freed, leading to me=
-mory leaks and Use-After-Free.
+- [Critical] Disabling XDP triggers an out-of-bounds array access due to th=
+e old BPF program remaining active while the TX arrays are shrunk.
+- [High] Device resets permanently break AF_XDP sockets because the driver =
+zeroes the `xsk_pools` bitmask.
+- [High] `gve_xsk_pool_enable` causes a data race by modifying the XDP memo=
+ry model concurrently with the NAPI polling context.
 --
 
---- Patch [5]: [PATCH net-next v4 05/15] gve: introduce control plane opera=
-tions structure ---
-commit 21d462ce52db670852717f6c821149b6dd730ea9
+--- Patch [2]: [PATCH net-next v4 02/15] gve: refactor initialization with =
+helper functions ---
+commit f4310d54d17a7a878691c693aea2b3ce23d39802
 Author: Harshitha Ramamurthy <hramamurthy@google.com>
 
-gve: introduce control plane operations structure
+gve: refactor initialization with helper functions
 
-To abstract out the difference in implementation of control plane operations
-between the existing Adminq ABI and the upcoming Mailbox ABI, introduce a n=
-ew
-gve_ctrl_ops structure which will contain the basic operations.
+In the interest of commonizing code, refactor gve_probe()
+and gve_init_priv() with a few helper functions that can
+be expanded and utilized in upcoming patches that add the
+mailbox ABI to the driver.
 
 > diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/eth=
 ernet/google/gve/gve_main.c
+> index 30bf6df4ebc58..37e6205e2eefd 100644
 > --- a/drivers/net/ethernet/google/gve/gve_main.c
 > +++ b/drivers/net/ethernet/google/gve/gve_main.c
-[ ... ]
-> @@ -3000,14 +3005,13 @@ static void gve_remove(struct pci_dev *pdev)
->  {
->  	struct net_device *netdev =3D pci_get_drvdata(pdev);
->  	struct gve_priv *priv =3D netdev_priv(netdev);
-> -	__be32 __iomem *db_bar =3D priv->db_bar2;
->  	void __iomem *reg_bar =3D priv->reg_bar0;
+> @@ -2400,7 +2400,6 @@ static const struct xdp_metadata_ops gve_xdp_metada=
+ta_ops =3D {
 > =20
->  	unregister_netdev(netdev);
->  	gve_teardown_priv_resources(priv);
->  	destroy_workqueue(priv->gve_wq);
-> +	priv->ctrl_ops->unmap_db_bar(priv);
->  	free_netdev(netdev);
-> -	pci_iounmap(pdev, db_bar);
->  	pci_iounmap(pdev, reg_bar);
->  	pci_release_regions(pdev);
->  	pci_disable_device(pdev);
+>  static int gve_init_priv(struct gve_priv *priv, bool skip_describe_devic=
+e)
+>  {
 
 [Severity: High]
-This is a pre-existing issue, but is it possible that tearing down private
-resources before destroying the workqueue causes memory leaks and a use
-after free?
+This is a pre-existing issue, but could device resets permanently break AF_=
+XDP
+sockets because the driver zeroes the xsk_pools bitmask?
 
-If a service task is pending during gve_remove() and a reset was requested
-via management IRQ, destroy_workqueue() will flush and execute it.=20
+When a device reset occurs (e.g., due to timeout, adminq failure, or MTU
+change), it triggers gve_teardown_priv_resources() which frees the bitmask:
 
-The service task executes gve_reset() which can re-allocate resources and
-re-register MSI-X interrupts.
+    bitmap_free(priv->xsk_pools);
+    priv->xsk_pools =3D NULL;
 
-Since gve_teardown_priv_resources() has already run, these newly allocated
-resources won't be torn down before free_netdev() frees the priv pointer.
+During recovery, the initialization path reallocates a fresh zeroed
+xsk_pools bitmap (e.g., via priv->xsk_pools =3D bitmap_zalloc(...)),
+permanently losing the previous state. Because the driver never restores the
+xsk_pools state from the core net_device, AF_XDP sockets silently stop
+working after a reset.
 
-If the active MSI-X interrupt fires afterwards, would the interrupt handler
-end up accessing the freed priv pointer?
+[Severity: Critical]
+This is a pre-existing issue, but is there a risk of an out-of-bounds
+array access when disabling XDP?
 
-It looks like this same ordering issue also exists in the probe error
-handling path.
+In gve_set_xdp(), the xdp_prog pointer is updated after the queues have been
+restarted with a shrunken TX array:
+
+    err =3D gve_configure_rings_xdp(priv, 0);
+    if (err)
+        goto out;
+
+    WRITE_ONCE(priv->xdp_prog, prog);
+
+If a local privileged user disables XDP, gve_set_xdp() calls
+gve_configure_rings_xdp(priv, 0), which reallocates priv->tx without XDP
+queues and restarts NAPI polling. Since priv->xdp_prog is updated only after
+NAPI restarts, the active NAPI poll can execute the old BPF program. If the
+program returns XDP_TX, it accesses priv->tx[tx_qid] where tx_qid exceeds
+the new, smaller array size, leading to memory corruption.
+
+[Severity: High]
+This is a pre-existing issue, but does gve_xsk_pool_enable() cause a data
+race by modifying the XDP memory model concurrently with the NAPI polling
+context?
+
+In gve_xsk_pool_enable(), it registers an AF_XDP pool by modifying the XDP
+memory model and rx->xsk_pool without first disabling NAPI polling:
+
+    err =3D xdp_rxq_info_reg_mem_model(&rx->xdp_rxq, MEM_TYPE_XSK_BUFF_POOL,
+                                     pool);
+    if (err) {
+        ...
+    }
+
+    rx->xsk_pool =3D pool;
+
+If NAPI receives a packet in the race window, it may initialize the XDP
+buffer with MEM_TYPE_XSK_BUFF_POOL but allocate memory from the standard pa=
+ge
+pool because rx->xsk_pool was observed as NULL. When freed, xsk_buff_free()
+would be incorrectly called on a standard page, causing type confusion and
+memory corruption.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260814021406.3044=
-324-1-hramamurthy@google.com?part=3D5
+324-1-hramamurthy@google.com?part=3D2
