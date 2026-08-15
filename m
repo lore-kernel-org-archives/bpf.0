@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C0012D21B
-	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 02:14:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 454791632E7
+	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 02:14:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786760077; cv=none; b=Le7cPjq4M5qmsrDTA4/zzHYxcvmqjzzY6ctRsDb5FkxZgsaOWnQgldwwuNxGhz6l998BgCE5x0EKWAZR0x703TtigQpxTkDg2xLTXDKcdCKwjcxT3yIdMWAaZ8yBSpfIMjOx6xVhdsTOKAlXPOByyFPqBG0TeTSKYGZt5kYh67g=
+	t=1786760078; cv=none; b=bFo/hgwp9uvc9jI64rFqawKPrpXDHQFih66U7oZyFMGJPqPgig/qR9zXH6Jn8u4oZT/ast4QmG+Ru4dj9PlEPMh2kIVuBIYfdTyUwSxJ4A/3x/4ZgCvWw9/pu0l9wsietL3dzQC8LD0DvjdcYlUOORwDyhE6qzKpEbFoMlfZZx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786760077; c=relaxed/simple;
-	bh=pxATmt8+Wojg5eyeDCbJ+BvP7d1ZNF3KIgsRP8ujZMc=;
+	s=arc-20240116; t=1786760078; c=relaxed/simple;
+	bh=IZJcoff1SlO9WeTMgOpy7j/C8AEPiD50ySlJQtmEBu8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=iPvKA7wVMi0dmMSjAGWGMwvhIUP4CQtSlyflwh24TKM38nc/RR85PXu1gNvI6FBk/4FELuKWFnzX+ifOto3qB6HYx74fjLN/h8FEmm1kKyBOt+O9wqzl0yMC9RLPYvK2sZhT2LIJpan/gLguqYSFcjqiC0F9redfI6Es+8B6bLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WhSLc5NX; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=DSH43nbovN2lc93Xs8653Te6aPBI+llnEpBKBDYdDkKG7PVX2GPmDGt0A0I8iLkN9zevz9vxXm2dxRJf8BtQ5/uQjVLVahNndKGyGHcENxVVlBFeIvlNWwL51lv+yLujhCunWbJSQnUy/BERi1/trxkrqmNDeedBJ39o1sdcXno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iwy6ORNQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WhSLc5NX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A5451F00A3A;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iwy6ORNQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E34CA1F00A3D;
 	Sat, 15 Aug 2026 02:14:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786760076;
-	bh=zpqNATiPwzW59QJem1Gyro4LyHKdZwLNdQalznlVAo4=;
+	s=k20260515; t=1786760077;
+	bh=SrHac5vP3MDkMLMFd7V72dHpVEylgKyMEMhI5A0yI6w=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=WhSLc5NXWwtvl3UbXBPhq+zzMM6HlV+k+UsRKOx0v447XfQK5DM4eusKtWmLg3jCa
-	 jioJbnize7728U3wexVD9WpBkvq5wvyP3T+Gcle439jtlChadYdChNzreXL/au9EnD
-	 1sSPqnZYHN4BWLsfooRw3GnNqS2t70fQNLJJM/1KeGGzu66ZujX0krNjTZpnau5R5N
-	 673d25fYLWT71IHYs68PIjXGyG/st6Igrxbp5URyBnj1hD8Dq/Hxq8pt4SMHcRcvll
-	 titBYhIr0aFSaQARqqQWTLjC2dwKBm3NmigDEY43mgTZ/BEcDRzA7GikkFpcL+++pS
-	 NQyptb/r2TfJA==
+	b=iwy6ORNQ2AUtmK7V6MgGabrbK5p3aOyrEYd5PCQxztYOluSOMmlM9YyCgF/0geM69
+	 zCYg3g3tfsLx4KF5laphzFF4eUH/nJViGCHObhMZ0Rm6LvjjNFU0Uv+JR2cn8X2txt
+	 JginloJrEW1Z9d1CX1U8KWiLo+8YTBccM9KT/5J/qxNQjthUDVong8jmfVoKIkCdgP
+	 drvl3c28KfJD36Jo+3nbzysuS1mxNZvHdH/4wvd0bVMl78Gey+WtdJRc9XL0eS0YmY
+	 rkmUe6CzhmBOm7mm4hk8iblz7maKrBX6+CMIM2U08rU072dpBmwkpbZmURxPYeD8dt
+	 /droWZ59Prhzw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v4 04/15] gve: add struct gve_device_info to
- hold device properties
+Subject: Re: [PATCH net-next v4 09/15] gve: simplify reset logic
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Harshitha Ramamurthy" <hramamurthy@google.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260814021406.3044324-5-hramamurthy@google.com>
+In-Reply-To: <20260814021406.3044324-10-hramamurthy@google.com>
 References: <20260814021406.3044324-1-hramamurthy@google.com>
- <20260814021406.3044324-5-hramamurthy@google.com>
+ <20260814021406.3044324-10-hramamurthy@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 15 Aug 2026 02:14:35 +0000
-Message-Id: <20260815021436.3A5451F00A3A@smtp.kernel.org>
+Date: Sat, 15 Aug 2026 02:14:36 +0000
+Message-Id: <20260815021436.E34CA1F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,78 +46,129 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] The driver ignores the hardware-requested default queue limits a=
-nd blindly allocates the maximum number of queues due to an uninitialized v=
-ariable introduced during refactoring.
-- [Low] The conditional assignment of `max_rx_buffer_size` incorrectly drop=
-s valid device limits that are smaller than the driver's default size.
+- [High] Dangling pointers for `priv->tx` and `priv->rx` are left behind if=
+ `gve_create_rings()` fails during interface open, leading to a Use-After-F=
+ree.
+- [High] The `gve_recover` function unconditionally forces the `service_tas=
+k` work item to become enabled, breaking synchronization guarantees in powe=
+r management and teardown paths and leading to a `WARN_ON_ONCE` or hardware=
+ fault.
 --
 
---- Patch [4]: [PATCH net-next v4 04/15] gve: add struct gve_device_info to=
- hold device properties ---
-commit 7fded5d146c6551cb7cea8119862eccd51e6f61f
-Author: Harshitha Ramamurthy <hramamurthy@google.com>
+--- Patch [9]: [PATCH net-next v4 09/15] gve: simplify reset logic ---
+commit 49cb37f017cb334dfcf8209cde2a7c5d05f9e88e
+Author: Joshua Washington <joshwash@google.com>
+Subject: gve: simplify reset logic
 
-gve: add struct gve_device_info to hold device properties
-
-This commit introduces a new gve_device_info structure to hold negotiated
-device properties for both AdminQ and upcoming MailboxQ modes. It refactors
-gve_adminq_describe_device and its children to populate this structure and
-centralizes device property initialization in gve_init_priv.
+This commit simplifies the reset logic in the GVE driver by removing
+recursive resets and restructuring the teardown and deallocation steps.
+It ensures that the driver can execute a hardware reset even if control
+plane operations fail, and consolidates the recovery path.
 
 > diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/eth=
 ernet/google/gve/gve_main.c
 > --- a/drivers/net/ethernet/google/gve/gve_main.c
 > +++ b/drivers/net/ethernet/google/gve/gve_main.c
-
-[ ... ]
-
-> -void gve_set_queue_properties(struct gve_priv *priv,
-> -			      struct gve_device_descriptor *descriptor)
-> +static void gve_set_queue_properties(struct gve_priv *priv)
->  {
-> -	/* set default descriptor counts */
-> -	gve_set_default_desc_cnt(priv, descriptor);
-> +	struct gve_device_info *device_info =3D &priv->device_info;
-> =20
-> -	priv->max_registered_pages =3D be64_to_cpu(descriptor->max_registered_p=
-ages);
-> -	priv->tx_pages_per_qpl =3D be16_to_cpu(descriptor->tx_pages_per_qpl);
-> -	priv->default_num_queues =3D be16_to_cpu(descriptor->default_num_queues=
-);
-> +	gve_set_desc_cnt(priv);
-> +	priv->max_registered_pages =3D device_info->max_registered_pages;
-> +	priv->tx_pages_per_qpl =3D device_info->tx_pages_per_qpl;
->  }
-
-[Severity: Medium]
-Does this leave priv->default_num_queues uninitialized?
-
-The previous code initialized it from the descriptor. The new device_info
-struct holds default_tx_queues and default_rx_queues, but it appears
-priv->default_num_queues is no longer being populated.
-
-Because of this, will gve_set_num_queues() bypass device-suggested queue
-limits and always allocate the maximum possible number of queues since the
-check for priv->default_num_queues > 0 will fail?
-
-[ ... ]
-
-> +static void gve_set_buf_sizes(struct gve_priv *priv)
+> @@ -2515,93 +2543,81 @@ static int gve_init_priv(struct gve_priv *priv)
+> [ ... ]
+> +static int gve_recover(struct gve_priv *priv, bool setup_queues)
 > +{
-> +	struct gve_device_info *device_info =3D &priv->device_info;
+> +	bool service_task_enabled =3D false;
+> +	int err;
 > +
-> +	if (device_info->max_rx_buffer_size > priv->max_rx_buffer_size)
-> +		priv->max_rx_buffer_size =3D device_info->max_rx_buffer_size;
+> +	err =3D gve_adminq_init(priv);
+> +	if (err) {
+> +		dev_err(&priv->pdev->dev,
+> +			"Failed to alloc admin queue: err=3D%d\n", err);
+> +		goto teardown_device;
+> +	}
+> +
+> +	err =3D gve_adminq_verify_driver_compatibility(priv);
+> +	if (err) {
+> +		dev_err(&priv->pdev->dev,
+> +			"Could not verify driver compatibility: err=3D%d\n", err);
+> +		goto teardown_device;
+> +	}
+> +
+> +	err =3D gve_setup_device(priv);
+> +	if (err)
+> +		goto teardown_device;
+> +
+> +	/* In the case of cascading failures, the disable count could be greater
+> +	 * than 1. The service task must be enabled before starting queues.
+> +	 */
+> +	while (!service_task_enabled)
+> +		service_task_enabled =3D enable_work(&priv->service_task);
 
-[Severity: Low]
-Is it intentional to only update priv->max_rx_buffer_size if the device
-limit is strictly greater than the driver's current default?
+[Severity: High]
+Does this loop risk breaking the synchronization guarantees of power
+management callbacks?
 
-The previous implementation in gve_enable_supported_features() applied the
-device value unconditionally. Does this conditional check discard valid
-hardware limits if they happen to be smaller than the driver's default size?
+Functions like gve_suspend(), gve_shutdown(), and gve_remove() explicitly
+synchronize and disable the background work by calling disable_work_sync()
+to ensure the task does not execute while hardware resources are unavailabl=
+e:
+
+gve_suspend() {
+    disable_work_sync(&priv->service_task);
+    ...
+    if (was_up)
+        gve_close(priv->dev);
+    ...
+}
+
+If gve_close() fails during one of these callbacks (for example, due to an
+adminq timeout), it triggers a fallback to gve_reset() which in turn calls
+gve_recover(). Won't this loop unconditionally undo the intentional
+disable_work_sync(), leaving the device in suspend or shutdown with the
+service task fully active?
+
+Additionally, on the subsequent gve_resume(), gve_recover() is called again.
+Since the disable depth would already be 0, wouldn't calling enable_work()=
+=20
+here trigger a WARN_ON_ONCE(!offqd->disable) in the core workqueue subsyste=
+m?
+
+> +
+> +	if (setup_queues) {
+> +		err =3D gve_open(priv->dev);
+
+[Severity: High]
+If gve_create_rings() fails during this nested gve_open() call, could it
+leave dangling pointers for priv->tx and priv->rx?
+
+When gve_create_rings() fails during an initial gve_open(), it triggers
+gve_reset(). Because the interface is marked as starting, gve_reset()
+performs cleanup via gve_queues_mem_remove() (which properly nullifies
+priv->tx and priv->rx) and then calls gve_recover() to restart the queues.
+
+Inside gve_recover(), this nested call to gve_open() allocates new ring
+memory and updates the priv->tx and priv->rx pointers. If queue creation
+fails again, gve_queues_start() detects that reset_in_progress is true (set
+by the outer gve_reset) and jumps to the stop_and_free_rings label:
+
+gve_queues_start() {
+...
+stop_and_free_rings:
+    gve_tx_stop_rings(priv, gve_num_tx_queues(priv));
+    gve_rx_stop_rings(priv, priv->rx_cfg.num_queues);
+free_rings:
+    gve_queues_mem_free(priv, tx_alloc_cfg, rx_alloc_cfg);
+    return err;
+}
+
+The stop_and_free_rings path frees the memory using gve_queues_mem_free(),
+but doesn't appear to nullify priv->tx and priv->rx like
+gve_queues_mem_remove() does. Could this lead to a use-after-free if
+another context like ethtool -S checks if (priv->tx) and dereferences
+these pointers?
+
+> +		if (err)
+> +			goto disable_work;
+> +	}
+> +
+> +	return 0;
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260814021406.3044=
-324-1-hramamurthy@google.com?part=3D4
+324-1-hramamurthy@google.com?part=3D9
