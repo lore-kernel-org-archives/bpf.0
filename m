@@ -1,186 +1,143 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571F239794E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94AC3939CE
 	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 23:49:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786837769; cv=none; b=kAkHTS8JU8HYAKWGbp8iZHhuod4U1pIQ6FgD3H3w+weBRMOLVnIj59GgNGHDk1biQHnst5voBd1M1HMClrgI5AjO7aS4Qy2oiJTQ4cnhIYYCiOJ9PjYU2tjKjriEhqV8P2rV+Adn3pddNrgVjG9eED4mF1st0ZMYvZP3vDS3WkA=
+	t=1786837770; cv=none; b=YvwoM+fFnzBIjpkiLXCyMqZt5reAAdgMXmJOw4DpRmLJCDDLuVQ3lD5P1pjP/yJGS9LCVnSUcwk8ElsL/Eugf6cpbZy+FWhR/Jv5osRY7YPR50cbH6fCD3AJw9z0VhtdO1+uAN6zBXmaj3OAhdqKOk9ACxYeu8wedX3HDEKRHSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786837769; c=relaxed/simple;
-	bh=Zh8u5vIw/WGoumqQSKwEPD7WQ8Xd1ctgS0c0k40yop4=;
+	s=arc-20240116; t=1786837770; c=relaxed/simple;
+	bh=2mJmf1D0mSOhgn23vLi56riBLA9C2JslQDYFmcsND0Y=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=g3mGpOaI42PNNzhftaPipHQy7ZuI3M9l88eVb9Dy5SqL41P8Dcy9DincMXhQB9d3C8lAhpnv1lt3oGN1ZbFpacDpvoRpIKG9I/kfWLSNa7YJJmN4O8ciAzXfWT2j1W4l/Bd0FKUskMnsyv6jt9MpUnIvDXsHL+235zfy3dR+/cs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qy7UOxGT; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=qpmjHoyCv9zyN4wo7m9B8P1nubavXFizkKY023UGXGOLrzOxqn8VtH6n0JkOCefco0f/sZ6nMfu50NKNsfPaM0Zh6O9wsp6C43mwjApAfjjWHkiQ7KyCiEfKdBI8hQfv1YAtSyGDwjmJ2dA18g09FIrg4Y+Ufh4g7Nur6WH47Ok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cwTttrOi; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qy7UOxGT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C21A11F00A3E;
-	Sat, 15 Aug 2026 23:49:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cwTttrOi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77AA61F00A3A;
+	Sat, 15 Aug 2026 23:49:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1786837768;
-	bh=23UlLtJgd4Mb65QTz0UCEVgmxAine9JyS/6MQuAS+zk=;
+	bh=Phlz8SP88o2HZ3hExex4sa72TqQpfBEcHpjmdutT0RE=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Qy7UOxGTJmfH1XtR4HKiKB6BW+1pEaCGap26Grs8TtbT0hFYAzHY9geCCS5JwLHhJ
-	 mEgYEcs7xVfUtkTz1rK7CzEJ1bJPCNrZHXRuTawNb108gMVqZTHl+WVxG8CHe3Mzkb
-	 xILcIOaB+uDi3r4pXEeOONQK1rWiebdtfw/1gDF+5aRd8vcpk+dKHLw1izcuyVCIFf
-	 4r8cr8xns8KT6pTDc/Lp32nO9LWPa0lfO5wOx2Po/0rZSi7DcdbTAdns2NnnIbe8Uz
-	 M0Q4QK2WyYc5FokAISMiWf8hkKQxsQENnRF+kxNHkjiLtvkbh2biGnAbSFS9TBFtgA
-	 3u2jvE8WYitLw==
+	b=cwTttrOin4OKxlxfEer12ZZbfiS9e5Q8WKfFg3YYUfBqgf8Y1NibeAgythEw2pEeh
+	 tHh4PYGHVNLZ6AFZ5V8xfecSMDrJ6AlHZpRaUIIWbt6349g+0PkCfupHWM0tuifgjD
+	 fndeeMqEDqVHlA7tHr+qbPVxMN7PpnaAQmfjtSquaxY5lUlbddI+Mmmf8gkG1Gnuqs
+	 hp+Pj0syLqIquJ+O7YDP6oVj0Gq08WnKt7E0ZzV4/X3cN6akspkRN/KMHT3hCJx7RG
+	 iXXjLVKjckCw+R9CGO8UTBNLK1dVRsQVZPw+1ORxSiD4jWj/W2Jd4boZwnC9QnLfhn
+	 b9Yo8k0f5uwOw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net 3/6] gve: fix XSK buffer leak on error descriptor
+Subject: Re: [PATCH net 1/6] gve: increment work_done for XDP and error
+ packets
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Joshua Washington" <joshwash@google.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260814234845.773189-4-joshwash@google.com>
+In-Reply-To: <20260814234845.773189-2-joshwash@google.com>
 References: <20260814234845.773189-1-joshwash@google.com>
- <20260814234845.773189-4-joshwash@google.com>
+ <20260814234845.773189-2-joshwash@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 15 Aug 2026 23:49:27 +0000
-Message-Id: <20260815234927.C21A11F00A3E@smtp.kernel.org>
+Date: Sat, 15 Aug 2026 23:49:28 +0000
+Message-Id: <20260815234928.77AA61F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
 
+New issues:
+- [Medium] The patch inadvertently corrupts `rx->rpackets` statistics by co=
+unting descriptor errors, allocation failures, and XDP drops as successfull=
+y received packets, and creates a mismatch with `rx->rbytes`.
+
 Pre-existing issues:
-- [Critical] Fragment desynchronization resulting in truncated or malformed=
- packets being incorrectly pushed to the network stack upon intermediate de=
-scriptor errors.
-- [High] Massive unmitigated leak of AF_XDP zero-copy buffers (`xsk_buff`) =
-and XDP frames (`xdpf`) on XDP_TX and XDP_REDIRECT paths.
-- [High] `gve_rx_xsk_dqo` unconditionally overwrites `rx->ctx.skb_head` on =
-multi-fragment XDP sequences, causing leaks.
-- [High] The driver inherently trusts the `packet_len` provided by the devi=
-ce DMA completion descriptor without verifying it against the allocated buf=
-fer size.
-- [High] Missing bounds check on `compl_desc->header_len` allows out-of-bou=
-nds reads from the header buffer array.
+- [Critical] Missing state tracking for dropped multi-descriptor packets in=
+ the DQO RX path causes subsequent fragments to be treated as new packets, =
+leading to payload corruption, bypass of XDP drop rules, and unsafe XDP exe=
+cution on partial data.
 --
 
---- Patch [3]: [PATCH net 3/6] gve: fix XSK buffer leak on error descriptor=
- ---
-commit 92aa7b2aab7b9d9aa0aed8717f991d9e6e5c13b2
+--- Patch [1]: [PATCH net 1/6] gve: increment work_done for XDP and error p=
+ackets ---
+commit 705a50c36a672a5d7810174d670e9330d7aada5f
 Author: Joshua Washington <joshwash@google.com>
 
-gve: fix XSK buffer leak on error descriptor
+gve: increment work_done for XDP and error packets
 
-When the error bit is set in the RX completion descriptor, the buf_state
-and its attached buffer should be freed. In the case of AF_XDP ZC, the
-XSK buffer was not freed, leading to a leak.
+Ensure every packet is accounted for in work_done by incrementing
+work_done before checking for the existence of a SKB.
 
-Fixes: c1fffc5d66a7 ("gve: implement DQO RX datapath and control path for A=
-F_XDP zero-copy")
 Cc: stable@vger.kernel.org
 
 > diff --git a/drivers/net/ethernet/google/gve/gve_rx_dqo.c b/drivers/net/e=
 thernet/google/gve/gve_rx_dqo.c
-> index 2c1ce23d15508..811db42d05c67 100644
+> index 0ece2f6fdffb4..db38bc6452969 100644
 > --- a/drivers/net/ethernet/google/gve/gve_rx_dqo.c
 > +++ b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
-> @@ -845,7 +845,12 @@ static int gve_rx_dqo(struct napi_struct *napi, stru=
-ct gve_rx_ring *rx,
->  	}
+> @@ -1145,13 +1145,14 @@ int gve_rx_poll_dqo(struct gve_notify_block *bloc=
+k, int budget)
+>  		/* Free running counter of completed descriptors */
+>  		rx->cnt++;
 > =20
->  	if (unlikely(compl_desc->rx_error)) {
-> -		gve_free_buffer(rx, buf_state);
-> +		if (buf_state->xsk_buff) {
-> +			xsk_buff_free(buf_state->xsk_buff);
-> +			gve_free_buf_state(rx, buf_state);
-> +		} else {
-> +			gve_free_buffer(rx, buf_state);
-> +		}
->  		return -EINVAL;
->  	}
-
-[Severity: High]
-This is a pre-existing issue, but does the driver verify the length fields
-provided by the device DMA completion descriptor?
-
-In gve_rx_dqo(), the driver reads packet_len and header_len directly from
-the untrusted descriptor:
-
-        buf_len =3D compl_desc->packet_len;
-        hdr_len =3D compl_desc->header_len;
-
-It then uses hdr_len to copy data:
-
-        rx->ctx.skb_head =3D
-                gve_rx_copy_data(priv->dev, napi,
-                                 rx->dqo.hdr_bufs.data + offset,
-                                 hdr_len);
-
-Could a buggy or malicious device supply a large header length (up to 1023
-bytes), causing out-of-bounds memory reads from the header buffer array?
-Similarly, could an unchecked packet_len result in out-of-bounds memory
-reads being copied into SKBs and pushed to the network stack?
-
-[Severity: High]
-This isn't a bug introduced by this patch, but are there other paths where
-AF_XDP zero-copy buffers or XDP frames can leak?
-
-In drivers/net/ethernet/google/gve/gve_rx_dqo.c:gve_xsk_done_dqo(), the
-XDP_REDIRECT failure path appears to fall through without freeing the
-original xsk_buff:
-
-        case XDP_REDIRECT:
-                if (unlikely(xdp_do_redirect(priv->dev, xdp, xprog)))
-                        goto err;
-
-Also, in drivers/net/ethernet/google/gve/gve_tx_dqo.c:gve_xdp_xmit_one_dqo(=
-),
-the error path nullifies the packet frame without calling xdp_return_frame(=
-):
-
-err:
-        pkt->xdpf =3D NULL;
-        pkt->num_bufs =3D 0;
-        gve_free_pending_packet(tx, pkt);
-        return err;
-
-Does this lead to resource exhaustion if XDP_TX or XDP_REDIRECT actions fai=
-l?
+> -		if (!rx->ctx.skb_head)
+> -			continue;
+> -
+>  		if (!compl_desc->end_of_packet)
+>  			continue;
 
 [Severity: Critical]
-This is a pre-existing issue, but does the RX poll loop correctly track
-dropped packets across multiple descriptors?
+This is a pre-existing issue, but does the polling loop lack state tracking
+for dropped multi-descriptor packets?
 
-In gve_rx_poll_dqo(), an error causes the skb to be freed:
+If a multi-fragment packet is dropped (for example, by an XDP rule
+in gve_rx_dqo()), rx->ctx.skb_head remains NULL. When the loop handles the
+next fragment of that same packet, it skips to it because of the
+end_of_packet check.
 
-        if (err < 0) {
-                gve_rx_free_skb(napi, rx);
+Since skb_head is NULL, gve_rx_dqo() will treat the middle fragment as a
+new packet:
 
-However, if this was the first or intermediate descriptor of a multi-fragme=
-nt
-packet, there doesn't seem to be a flag (like rx->ctx.drop_pkt) to ignore
-the remaining descriptors. As a result, when the next fragment is processed=
- in
-gve_rx_dqo(), a new skb is allocated:
+drivers/net/ethernet/google/gve/gve_rx_dqo.c:gve_rx_dqo() {
+        ...
+        /* Append to current skb if one exists. */
+        if (rx->ctx.skb_head) {
+        ...
+}
 
-        rx->ctx.skb_head =3D napi_get_frags(napi);
+Can this lead to XDP programs running on partial data and malicious inner
+payloads bypassing XDP drop rules?
 
-Could this fragment desynchronization allow subsequent fragments of the same
-packet to be parsed as the start of an entirely new packet?
+>  		work_done++;
+> +
+> +		if (!rx->ctx.skb_head)
+> +			continue;
+> +
 
-[Severity: High]
-This isn't a bug introduced by this patch, but does gve_rx_xsk_dqo() leak
-skbs on multi-fragment XDP sequences?
+[Severity: Medium]
+Does this change inadvertently increment the interface packet statistics
+for dropped packets?
 
-If a multi-fragment packet arrives while AF_XDP zero-copy is active,
-gve_rx_xsk_dqo() unconditionally overwrites rx->ctx.skb_head:
+By moving the work_done increment before the skb_head check, work_done
+now correctly accounts for dropped packets, XDP drops, and allocation
+failures in the NAPI budget.
 
-        /* Copy the data to skb */
-        rx->ctx.skb_head =3D gve_rx_copy_data(priv->dev, napi,
-                                            xdp->data, buf_len);
+However, work_done is later used to update rx->rpackets at the end of
+gve_rx_poll_dqo():
 
-Could this unconditionally overwrite the globally stored skb_head and
-skb_tail without appending to or freeing the existing partial SKB,
-causing a permanent leak of SKBs allocated for prior fragments?
+        u64_stats_update_begin(&rx->statss);
+        rx->rpackets +=3D work_done;
+        rx->rbytes +=3D bytes;
+        u64_stats_update_end(&rx->statss);
+
+Will this cause dropped packets to be incorrectly counted as successfully
+received packets, causing the rpackets stat to diverge from rbytes?
+
+>  		pkt_bytes =3D rx->ctx.skb_head->len;
+>  		/* The ethernet header (first ETH_HLEN bytes) is snipped off
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260814234845.7731=
-89-1-joshwash@google.com?part=3D3
+89-1-joshwash@google.com?part=3D1
