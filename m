@@ -1,76 +1,76 @@
-Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A04D3AFD06
-	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 06:46:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08ADD39CD13
+	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 06:46:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786776386; cv=none; b=d067hqrB1IxxGg8+B3FZbCTciQEvNTpv/V7JlQMmguBhqy2M7VdttqNiGy1UAXUmEksT+Syuxvamf1toOolsjoE2Czsk6q2NHLZMmi3rNlpiBKR94WbZ0v2GWrjZAnnwa6qwrIOT7LEEU0ShDQTjOQypMXrEA2iOlvwOXZ5mMew=
+	t=1786776389; cv=none; b=W4JXFwzrC3T9d0mtoBkUgmwfAe4MMMP5W0L01xUZiht9J7rjKX4RlpkEE5d5aBg6SrqmjlOYTJvZazd5Y88WsxzAPsiawHfVG/f/OHwf5NWeP1PlxdHltf1Y34hd0E+BQQwGGxMXLnQpflq5E9ubolnUdh2+RcclBhA6G0MHF8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786776386; c=relaxed/simple;
-	bh=fbcM4yHOEyXcDdj3zQtGhJ3b8EFdcjensA6jinMqGfA=;
+	s=arc-20240116; t=1786776389; c=relaxed/simple;
+	bh=rgCbHehKGIYh6mlG3MRresi/3QFSP4i/c2cZZe544MU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cja4SCHobkTTGHFE4/Si3TUpmsx58vqd+1+c1yTlv5arv6NW1pXCbFq06fmp61I5gIwoP54LxXNYfuaBICrsRj3JGdCuHf8gc46mpzCiDohVwLjs5G3I0C7sohshGcD91l5bcQQHYCziGvT0syhqVOnOeWEiGgiYorz3wCxrwXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kYMhIuXe; arc=none smtp.client-ip=74.125.225.65
+	 MIME-Version; b=mZTPAPwMJfRJhzKKWy5849OYwnWL+1OyzUUjeyyoeKVUF+mi8Rzr7FemGfTXjSW+2aPTTQXRENaFMJffY6kfJvPDN9ZF3bLUM67lhgDHF7y8vPrPRQiZYREe8xvs6rw2EXOA2YnSZgDnuoZTB94uguPGA0h1B6kpo1V7Kj46Bkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OaMCDdp+; arc=none smtp.client-ip=74.125.225.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kYMhIuXe"
-Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-47fcb9d4b33so718045f8f.0
-        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 23:46:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OaMCDdp+"
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49556ce3549so7427305e9.0
+        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 23:46:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786776376; x=1787381176; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786776379; x=1787381179; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=HumWKxa/vqCxcrBTfK32Z7eV6GDzgWU5UCE8AjC82YM=;
-        b=kYMhIuXeCZph3wqZCYtz74vt9/Q0nEW+uPGtoCmJ6FetIZK6NkXLLGHLKN0sdTGiYc
-         mIO9Kgvh5c0Y2KCRIUCsRZsEnJQY5SrCdVOKnX6tEIJ3mvzepS0/acd5zJf95OHEuZDW
-         ZK74ZiuQXwQKWWCq/MNuS9ae6dlYzFgQdRT5Pe8d1i1uYYuY6r3s5k2bX+mJmX32KjpW
-         Ycn0ErT1Ad8SvTkcaLKyagxaxETO5/9BnY8zuuvQrXson0Hz0DmSZ1zCTpIg2SKVTB7u
-         fCoa4jrfWP6FJgYH6vaoJctpBd6ShOiLldY3DTDhkdqWMY11cuqkuSkTHJwTNZLJAahF
-         FX6A==
+        bh=IrIIi2a5wdNCizOr8oJT7mVONXeRPFfOQ9DzG0Sw4Ok=;
+        b=OaMCDdp+EIk9AAHf33tbjJ3h1YZnL4Tnkq0HuXFiIwjhB9AZ+1gzZiNitNZ2smMM/i
+         SDcx/wvwlbFPAXJ8hLWj9m0Cq52PCquS/UzDRDalf0RhWJQui8cdoM5BsX0fEmlNSc8L
+         nYi2qopccXr0+/l85oOZ3f6Qck2Ar9HI2T3Pzyb3EFBnNSn12RCw0ujmn6NnSQf5KGeO
+         eaBQFxWUyDuMJZA/nzv+0gI68R3eQZwQiTc6PDdJfkuP50EkOdUQ8yVdnJEl/rNJtS0q
+         o3pl2UgxE5KIah+wZPaoTv01YNjYcHKrlpIUg6BkQvh3SPXXMU5FSW8iCPvCAGBjWS00
+         LPlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786776376; x=1787381176;
+        d=1e100.net; s=20251104; t=1786776379; x=1787381179;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=HumWKxa/vqCxcrBTfK32Z7eV6GDzgWU5UCE8AjC82YM=;
-        b=eDsprPkYO5/YwsBTxS0PimpslR7VO5QEIBqfibQB04EnHaejbwFp5gHwO95EQw4WFM
-         mAnlss3roeU4hsIW8p+DEFqqULaH52X2s0+Ax1MqLA7MDmFQ/5r5YTQJMswLliTxJ6nE
-         5Z07KDA6pXG68WJ54X+L4mi1rM5FRGEyIU4hErfAsAjjBAU5ka/lY+SRs+AHB8v0uclT
-         OoBjytEntq75SagPAvhsgssgu2H3uV3nPxdqdD15hhSQ6cNHcUy2La4WxV70RA+Q+Y5x
-         YH9tWRj6pw0gIrJzDz15sQM2N4Vv+JamvSjZ6mX9FtwztLwVdjKnyjef/3xDJMWYkMX2
-         PSIw==
-X-Gm-Message-State: AOJu0YwjQr0psTTCKOyCWF3BiMwtgjmcsCcgHTXXHH7zRjZHcbzfzsX9
-	2vZL43jI/f2OKWht1aP+QDbNvjJciJTnG3/bX6gwgwPiTLItPhnsiuDz2C7Fq0GC
-X-Gm-Gg: AR+sD10af3wxqtzeCPjevkwqztAWjG7G6m9eXkL7Hlc/rMr6uCT83X7Og+WHrhTOEgO
-	bah5UVRMdv7glS4oOCGSr18h/pRa+cvMn6qBJasUupC4XuABFjmlJqdPHsO0L7evbNgKWAcATzH
-	vqGlGeTJHdR0c8TuMXVgLAztFBtfHJKddKYAzm6k40LaXfYZ+RKZagS3kfsZqNLFCyMkUhmKjQm
-	0TaPiBWH2Ocn7v4OR5hu6UKw8WlXGQ0ZiDQg7GEuRRPedH4SwB90oc6W/Jn6uzly5NoPhiB9QzG
-	3H+3I7cbmTirR/+ecMn/CPJ6Wz8fN285grulrwa8l9JD3psAJGs42hUHzrlzaKh7MFX1hkEVIkg
-	VhnSjI6vMsw93bFwDqIXqXj0LOd47CjRe3vKkbgWsEvrKnAyGgVwuGd/nl2GFbbWAip6Ry068dC
-	Ich/NSc/1NQyVoujVM+eNpW4VNE1qTzL8pYMN3JeECH9R4Ts9HBJHrRe6ewb57JZhrtAO2kw8C5
-	QB3uHs20D3PEwlsLvfAJVPxbt8FHnn8S0WVvDl3Co4/1bkz3nLhqmAfvDEB6gkC5uHvom50iWlh
-	0y0RhdKwL/k9EN4AJ1ZHXM5A0JU=
-X-Received: by 2002:a5d:5f07:0:b0:481:4654:8599 with SMTP id ffacd0b85a97d-4816070d9bamr16835579f8f.10.1786776375596;
-        Fri, 14 Aug 2026 23:46:15 -0700 (PDT)
+        bh=IrIIi2a5wdNCizOr8oJT7mVONXeRPFfOQ9DzG0Sw4Ok=;
+        b=YgBZYmEtiYSjuDhQBp0L86ywH7HAT1KKi6SSOKUp2o++dcEgtEHqnmuceIOe4dBvVT
+         ZWIxmibg8v7HnL/O7bIYZTKMbBXZLQ9kVpLNJekfiip/nvx3nR7HZj6R9tvYKjipf5d+
+         wGdQs0IsT44otlQRe605Rjic7Zio/fGRYpnWdeDQlLLrW1m3CUfTErrS+HMNr8zPtJOR
+         vqgBF9g6e+q3R+0GYlz4rjSH2178jvdt8eutMRdOekjzNPI5PMte6NjRkjgiD4drQXyi
+         BhHZpFz23gjZ7Isg7hYmwogcLmTtt+sbfavJYaNWWLEdqpiwP4OIG/bSipythCA6fPq3
+         O1Jw==
+X-Gm-Message-State: AOJu0Yy+XxiRD+IbNjGQXUo+WfPXcPuYCJplzIIG8SzylkzpWtbgUxlH
+	Tk+31hPK6HtJNwWQkQzibHhBtUSOgl2kRslsIRhrf2eVhM7/meLLd1JrfFSuVnrr
+X-Gm-Gg: AR+sD11/cThoaT2QqaYeoKtJAYZ7oBBsXGemeNXxCAvSv0cXrBdECOTQW3cTISZFTMD
+	ZjlQpiCjm2HY0yPjqZRjJr81+hjeg9aVGVasDTwbIUO97Z1eq1zF1xjpm2Hxp8pZRpORLtj/fhk
+	bYAunQ6+5t26MQpj/ah071XiGcPbsJcz3dOAanZ6J6Be93sqHeGiL+xS8T3OXUb2iw86TSr14or
+	Q+1G4iyEp5COe8ey93G2Q/SMBhYc1d3qtExq5UYGAPhaKzuvmNGch6AISFAO4SOTq/6/RXmrAm8
+	MK0XfCP7GVRGdb6svgDEi1zqXoxZfU8HFVjO/mR9LJEwH7YMVEDi1P+kT35xnjIUH+2FYBkPqNN
+	/rLny6mAkVRmckR9BYYZPZfD2lzHbfRmprpB9lmlvKXL06R5zo9SX6MzCtpkCsmKUo4Rl1m53/w
+	Zi1ul3/4UB75xbxwiK23tORicn93OEoVzQWsrgipleLqWiPsRlnUGTd+r6q8O0q3xlAoS8MnGiz
+	Nm6DRhTV6oTr8FreL2GSXIdLVW8Y1Q/7WS5s36ngyV+SUrWrXONHfpQEf2PBVNT+xTKagJo21xm
+	wUQSKaSEFcWts/XDSIeAxsHg78g=
+X-Received: by 2002:a05:600c:a4d:b0:496:ca1f:a428 with SMTP id 5b1f17b1804b1-49987981e52mr160622205e9.19.1786776379505;
+        Fri, 14 Aug 2026 23:46:19 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815f2005bcsm14187305f8f.6.2026.08.14.23.46.15
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49989ae1d36sm78421275e9.11.2026.08.14.23.46.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Aug 2026 23:46:15 -0700 (PDT)
+        Fri, 14 Aug 2026 23:46:19 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v5 01/14] bpf: Add verifier diagnostics report helpers
-Date: Sat, 15 Aug 2026 08:45:56 +0200
-Message-ID: <20260815064612.378577-2-memxor@gmail.com>
+Subject: [PATCH bpf-next v5 04/14] bpf: Prune verifier diagnostics when switching paths
+Date: Sat, 15 Aug 2026 08:45:59 +0200
+Message-ID: <20260815064612.378577-5-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260815064612.378577-1-memxor@gmail.com>
 References: <20260815064612.378577-1-memxor@gmail.com>
@@ -80,116 +80,71 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3624; i=memxor@gmail.com; h=from:subject; bh=fbcM4yHOEyXcDdj3zQtGhJ3b8EFdcjensA6jinMqGfA=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIauBy3NvtuNEdf7NAvPSWZUUORg526+cV5c5Y+bqMksoY f1smRUdpSwMYlwMsmKKLCX/9zEZn6j8HWi7jBtmDisTyBAGLk4BmEgVOyPDtflbexZa5vx60RR7 +sk3mbubEjUtrfmE/2iGSVhqLbs5n+GfufYSDq7dD+d/bNw4w0NSmLHn57yCSjnF2SpazLMlrxx iAAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2272; i=memxor@gmail.com; h=from:subject; bh=rgCbHehKGIYh6mlG3MRresi/3QFSP4i/c2cZZe544MU=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIauBy+vNJAGLppBZ5/9VxS46uUEuK21t7Q97rmuFTStyX l9772rXUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgImcu8PIcH/PoW67NRszemRv z039fnftlpPeisKcGU+u3t6evPDdBC+Gfwo6LrM3hzGfeJV3+RPjBVvmCqsrwRw6Xz2viK1p7WF mYwQA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Add the initial diagnostics renderer for verifier reports and wire it into
-the BPF build. The helper emits the common failure header through the
-verifier log.
+Save the diagnostic event-log position with each verifier stack entry and
+reset the environment-owned stream together with the normal verifier log
+when a queued state is popped. Also reset the diagnostic stream after
+successful subprogram verification even when level-2 logging preserves the
+normal verifier log.
 
-Later patches add prose wrapping, reusable report sections, and source and
-instruction context for category-specific diagnostics.
-
-Gate the helpers on normal verifier log output from the start, so
-BPF_LOG_STATS-only loads do not collect or render diagnostics.
-
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/Makefile      |  2 +-
- kernel/bpf/diagnostics.c | 47 ++++++++++++++++++++++++++++++++++++++++
- kernel/bpf/diagnostics.h | 14 ++++++++++++
- 3 files changed, 62 insertions(+), 1 deletion(-)
- create mode 100644 kernel/bpf/diagnostics.c
- create mode 100644 kernel/bpf/diagnostics.h
+ kernel/bpf/verifier.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index 4dc41bf5780c..90255d80e5be 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -6,7 +6,7 @@ cflags-nogcse-$(CONFIG_X86)$(CONFIG_CC_IS_GCC) := -fno-gcse
- endif
- CFLAGS_core.o += -Wno-override-init $(cflags-nogcse-yy)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 60dcb87a2417..db644690ac4b 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -194,6 +194,7 @@ struct bpf_verifier_stack_elem {
+ 	struct bpf_verifier_stack_elem *next;
+ 	/* length of verifier log at the time this state was pushed on stack */
+ 	u32 log_pos;
++	u64 diag_log_pos;
+ };
  
--obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o cnum.o log.o token.o liveness.o const_fold.o
-+obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o cnum.o log.o token.o liveness.o const_fold.o diagnostics.o
- obj-$(CONFIG_BPF_SYSCALL) += bpf_iter.o map_iter.o task_iter.o prog_iter.o link_iter.o
- obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o bloom_filter.o
- obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o bpf_insn_array.o
-diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-new file mode 100644
-index 000000000000..e75753552a4d
---- /dev/null
-+++ b/kernel/bpf/diagnostics.c
-@@ -0,0 +1,47 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (c) 2026 Meta Platforms, Inc. and affiliates.
-+
-+#include <linux/bpf_verifier.h>
-+#include <linux/ctype.h>
-+#include <linux/stdarg.h>
-+
-+#include "diagnostics.h"
-+
-+bool bpf_diag_enabled(const struct bpf_verifier_env *env)
-+{
-+	return env->log.level & BPF_LOG_LEVEL;
-+}
-+
-+static void diag_write(struct bpf_verifier_env *env, const char *fmt, ...) __printf(2, 3);
-+
-+static void diag_write(struct bpf_verifier_env *env, const char *fmt, ...)
-+{
-+	va_list args;
-+
-+	if (!bpf_diag_enabled(env))
-+		return;
-+
-+	va_start(args, fmt);
-+	bpf_verifier_vlog(&env->log, fmt, args);
-+	va_end(args);
-+}
-+
-+static void bpf_diag_header(struct bpf_verifier_env *env, const char *category,
-+			    const char *problem)
-+{
-+	char first;
-+
-+	if (!bpf_diag_enabled(env))
-+		return;
-+
-+	category = category ?: "Verifier Error";
-+	problem = problem ?: "";
-+
-+	if (!problem[0]) {
-+		diag_write(env, "\nVerification failed: %s\n", category);
-+		return;
+ #define BPF_COMPLEXITY_LIMIT_JMP_SEQ	8192
+@@ -1700,6 +1701,7 @@ static int pop_stack(struct bpf_verifier_env *env, int *prev_insn_idx,
+ 		err = bpf_copy_verifier_state(cur, &head->st);
+ 		if (err)
+ 			return err;
++		bpf_diag_event_log_restore(env, head->diag_log_pos);
+ 	}
+ 	if (pop_log)
+ 		bpf_vlog_reset(&env->log, head->log_pos);
+@@ -1743,6 +1745,7 @@ static struct bpf_verifier_state *push_stack(struct bpf_verifier_env *env,
+ 	elem->prev_insn_idx = prev_insn_idx;
+ 	elem->next = env->head;
+ 	elem->log_pos = env->log.end_pos;
++	elem->diag_log_pos = bpf_diag_event_log_save(env);
+ 	env->head = elem;
+ 	env->stack_size++;
+ 	err = bpf_copy_verifier_state(&elem->st, cur);
+@@ -2264,6 +2267,7 @@ static struct bpf_verifier_state *push_async_cb(struct bpf_verifier_env *env,
+ 	elem->prev_insn_idx = prev_insn_idx;
+ 	elem->next = env->head;
+ 	elem->log_pos = env->log.end_pos;
++	elem->diag_log_pos = bpf_diag_event_log_save(env);
+ 	env->head = elem;
+ 	env->stack_size++;
+ 	if (env->stack_size > BPF_COMPLEXITY_LIMIT_JMP_SEQ) {
+@@ -18635,8 +18639,11 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog)
+ 	ret = do_check(env);
+ out:
+ 	account_current_path(env);
+-	if (!ret && pop_log)
+-		bpf_vlog_reset(&env->log, 0);
++	if (!ret) {
++		if (pop_log)
++			bpf_vlog_reset(&env->log, 0);
++		bpf_diag_event_log_restore(env, 0);
 +	}
-+
-+	first = toupper(problem[0]);
-+	diag_write(env, "\nVerification failed: %s: %c%s\n", category, first, problem + 1);
-+}
-diff --git a/kernel/bpf/diagnostics.h b/kernel/bpf/diagnostics.h
-new file mode 100644
-index 000000000000..f51aa39f0909
---- /dev/null
-+++ b/kernel/bpf/diagnostics.h
-@@ -0,0 +1,14 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#ifndef __BPF_DIAGNOSTICS_H
-+#define __BPF_DIAGNOSTICS_H
-+
-+#include <linux/compiler_attributes.h>
-+#include <linux/types.h>
-+
-+struct bpf_verifier_env;
-+
-+bool bpf_diag_enabled(const struct bpf_verifier_env *env);
-+
-+#endif /* __BPF_DIAGNOSTICS_H */
+ 	free_states(env);
+ 
+ 	/*
 -- 
 2.53.0
 
