@@ -1,125 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CFB94B04A0
-	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 00:13:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FE1815C14F
+	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 00:47:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786752803; cv=none; b=sshaGGmGiWFBfoWeBEXRfo0q3b+8aYLqpPYMY3RBBQiSn5hePhXZ9E8eSryosY/lpmuuXsAzFaFSKqvtayQ+UDQbNdOrAcitB8Bw7NEUujLr8m9DAwGDzqmdrvSGmlfqS0RRmn3kKcv1d5ywo4muSRPxhnFqkEfeVu4/63fqB0w=
+	t=1786754857; cv=none; b=BRSa4XWYy/nWE6+MdWfwO79V+ansp2IJrsI0u0M4YYyfO4R05q6pURTVREn4AcnqLN/tnZFdXV8oMOY0+HnSfzB/ZF8lW1b2ey40+8wi4oURpBR8hrAyqZFs1RszAkNXDqJ/n6VHxUYVse8DQdjo9fTZdqh5ZVLpjQuImPPJMgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786752803; c=relaxed/simple;
-	bh=DnSeyMSD0rzo0WOl3epffo3cDD4HUSRKkcyCX+Mm4Fs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=lfcxHO/TnQgAfYqaMXJJ89rMB8avLXqiaeROoatZ0pAZKu2exK/fWrqCSTMl05CiZ48c4RuTneSsw7CBXuKMG5li9YgF4Iykf026mDsAPLhK6wMTWQaCAmEZ9qwG9wZwZmiDd7WLYHreEyIHF37SQk695mIOtUaOikhYoi5+IL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g5HxEC1t; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786754857; c=relaxed/simple;
+	bh=R5vv1l/+FwYutZ4Go9D49mOLIbW6wU5tVF+JFmKY6Ik=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=SaJhsHF5kJ5WZBHOpxxAjYVkziiNwTFyoAvYpQWXDEROCKWHtOjij1JiWPLX4zg8JlP6oOgzRCXW9AQk424fZGyjJOrt4K+HHokRhFBA7e2B93cYGMQJLK3nf7MO4ehP5USl2NArm3FpRAVmZ1Kzct1XGINPCUBnOO+Uu1TCf0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HLCqMnw4; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g5HxEC1t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA4231F000E9;
-	Sat, 15 Aug 2026 00:13:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786752802;
-	bh=NCuO/eNOM6OQi50FdqCrAU0bwxD2zj1sF7WVmgZL2yY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=g5HxEC1tDp3nFJpIMYpIFL/3FLQ+DkxSMnHhZePiXRn9KFBQ0t1IqPOyOUEgnRXcF
-	 JFPKlgLLkndv3BecOkvO6re3LOEmphqylZSxYHKFCCh33mnY4SWKTf59u0ZungzMvI
-	 Ng0biKIReNzW2H0lP6WqLWSmvgo1byVzqX7WIa9DOOycaHjSpg0GRVNO/SHRNuPZoa
-	 REK8TYaIZ77I2uBzeFiFvZ5hM6zfbBooGE1i68tokAipkynBTXCM4iL674j2zQDeJa
-	 fFBX/QgprSpzPdKBRxtytVxNkokVDWSX2YyrpUlaz+w4fdtqVgUbNEFFmT75BRazJ7
-	 QHhpYrML50SuQ==
-Content-Type: multipart/mixed; boundary="===============3798828678189222425=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HLCqMnw4"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2d530328efbso10151885ad.0
+        for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 17:47:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786754855; x=1787359655; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=LDcIRjZOU9cetv3g4m8ltiwxcBIoqfe50mIvf/zJ/7o=;
+        b=HLCqMnw4CSQ4X0dEiKUNFMjPbcCRDfJZqCw7ySx79m7EOa+eiHwF6PnUhY693ExwJx
+         zxRjkt/T8ibYat3Wgx7Veq/qcW0/8FCbqm4eltnesgpNlUchK/YHJ5NSSYlnHrIUnUmJ
+         3HoeKA4Q38Bjs/S4gFDgI1910tDu9dkxkPan1yHrjjUYbSWbC+9rIdZbpiHk1mRdb4Ar
+         FcesjgaPvr/Z6gbAFmwYOkoRacqU+HJ8xcwySvxji9FGaeoefzWIXi6Q1sUVz+F6cvUJ
+         kFRLiVKTnuuZaaQsKaRwkNCQlV5V/W6X45x/iAocyNmUK1bH+JAcmYSadeJAwOp3yLfF
+         lYFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786754855; x=1787359655;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=LDcIRjZOU9cetv3g4m8ltiwxcBIoqfe50mIvf/zJ/7o=;
+        b=FaKk2dyJgFNNeXc/yHYRQnB39wNI7P+22Fx6ZnDPW8Ai6it1WWDaGePFglAj313nNb
+         wJh/uZ5m6f4UEXCc9GPc5eXXQ2D5XkWnDmjU4Nu4mY/CUl+Fl3phGJIc850KoIhi6Z5U
+         Ukw6HS6lW+C9l43qVd9/3VYibX72M2jStiWCsnsiwNQPiY7UWwADhU9PsRJDDvKljiOw
+         oyA8R+GmwIAITVurXnXwY82Mh7m6lRgGLD8SNXgWVkPtlLCKWXV9dNhQobO2rbijP+eV
+         WNXYIA5sVb6AFJp1S4RJiN48Bgs7PjeTb5NzUFcK/lHhJDQS0klPY28sXLtJRQnyDP3f
+         FBnQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpA+2/bDrpV3vhcEaizNtmdc1F4G2JpWubtVS4iLqbYOObUSNXdfUC3EtXy0YZft4TGDjY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYT+IcjTdBeogZbeILjpBKg6fB1SA7DJIQgXdENFgaOEE8KcpJ
+	bhILOiIGcI7zGCLBbrRmrya4KyLAviAuUgQIsqhjiFg2PPHNuzMThQRP
+X-Gm-Gg: AR+sD13+3MMD9hOI6/C6ASyGA+IGorXwf+e/E3hPCh9p8TBh6YjsWhg6eR15NtYPrR7
+	JPCKs3FhAJyl9kC2W/hjGaewQjQtr+tlLzxbHdX+tv68pksfDkGWPsuLZ94njymHGUx3QVxDQfb
+	Ju1a8gdxO7yJ4LLSKI3UKQGBZlAEkcv5TFt2U3WMA/9Eq983m+2IWZp4n+dChBgfFAZjBNusJhD
+	6fmeBNRAMEyGC/EiDz+Ga007J+n0MVvyhfbibG4dSTDrrMnnK9WbFwPJ59czAxlXQPpSrkeh9NR
+	AL0LmbHbOdQhWpgLi8CyHtXfSrwSW7u8Ehy1sugQvU09M5g0HQZupG+pYdwJNIOQ9r/KS8+db7V
+	q0uxh61/cr7q4J/87BWdfvewT/AcU592N8ZwpMCQTFXurtaBdmDjtHByVg4nEJSzhiyBakHTN2F
+	hr2hwiF9h1sUAS+pdLZU1vXjLUzvrIjpBS2F8IxqgCfrUW20oez8+wADPaFcbV3/3TrWKEx8Yo6
+	OzrhGxHVDfu90gF106Wslh75vnGXWnwtRKbCg7bURpr
+X-Received: by 2002:a17:903:2c06:b0:2d3:a853:bb7a with SMTP id d9443c01a7336-2d3b0cde805mr125448375ad.19.1786754855108;
+        Fri, 14 Aug 2026 17:47:35 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:b77:bdad:4587:c682? ([2620:10d:c090:500::6:84a4])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-320e9df68ccsm9557760eec.14.2026.08.14.17.47.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Aug 2026 17:47:34 -0700 (PDT)
+Message-ID: <7b7f5154cab8e3a217047e34be0d7255e9eccc21.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v5 09/11] selftests/bpf: Add C tests for
+ 16-byte returns in R0:R2
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
+ kernel-team@fb.com
+Date: Fri, 14 Aug 2026 17:47:33 -0700
+In-Reply-To: <20260813200256.1996809-1-yonghong.song@linux.dev>
+References: <20260813200210.1991507-1-yonghong.song@linux.dev>
+	 <20260813200256.1996809-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f378de7112ea0f57deb3cfd220bdde8af20918ab931d4d520195f04912924c55@mail.kernel.org>
-In-Reply-To: <20260814232017.2839959-1-andrii@kernel.org>
-References: <20260814232017.2839959-1-andrii@kernel.org>
-Subject: Re: [PATCH v2 bpf-next] selftests/bpf: Retry stat generation in cgroup_iter_memcg
-From: bot+bpf-ci@kernel.org
-To: andrii@kernel.org,bpf@vger.kernel.org
-Cc: andrii@kernel.org,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 15 Aug 2026 00:13:21 +0000 (UTC)
 
---===============3798828678189222425==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Thu, 2026-08-13 at 13:02 -0700, Yonghong Song wrote:
+> Add selftests that exercise a 16-byte return value passed in the R0:R2
+> register pair, written in C so that they depend on the compiler lowering
+> the register-pair return. Covered are an __int128 return, a 16-byte struc=
+t
+> return (from a static and from a global subprogram) and a 16-byte union
+> return, plus __int128 and 16-byte struct returns from a kfunc. The union
+> program shares an object with the struct ones.
+>=20
+> The R0:R2 convention is only emitted by LLVM 23 and newer, and a by-value
+> aggregate return does not compile at all before that, so the programs sit
+> behind a __clang_major__ guard. An older compiler builds the dummy test i=
+n
+> the #else branch instead, which keeps each object non-empty and says in
+> its description why nothing was exercised.
+>=20
+> The kfunc tests are tagged __arch_x86_64/__arch_arm64 and skip elsewhere.
+> Those are the architectures whose JIT advertises
+> bpf_jit_supports_kfunc_ret_reg_pair(), which bpf_add_kfunc_call() require=
+s
+> before it accepts a kfunc returning more than 8 bytes, and they are also
+> the only ones building the kfuncs.
+>=20
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> ---
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
-> index b7c18d590b99..5a1e08d39a06 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-[ ... ]
+>  .../selftests/bpf/prog_tests/aggregate_ret.c  |  13 ++
+>  .../bpf/progs/aggregate_ret_int128_c.c        |  49 ++++++++
+>  .../bpf/progs/aggregate_ret_kfunc_c.c         |  65 ++++++++++
+>  .../bpf/progs/aggregate_ret_struct_c.c        | 114 ++++++++++++++++++
 
-> @@ -100,6 +128,7 @@ static void test_file(struct bpf_link *link, struct memcg_query *memcg_query)
->
->  static void test_shmem(struct bpf_link *link, struct memcg_query *memcg_query)
->  {
-> +	int retries = 0;
->  	size_t len;
->  	int fd;
->
-> @@ -113,12 +142,18 @@ static void test_shmem(struct bpf_link *link, struct memcg_query *memcg_query)
->  	if (!ASSERT_OK_FD(fd, "memfd_create"))
->  		return;
->
-> +retry:
->  	if (!ASSERT_OK(fallocate(fd, 0, 0, len), "fallocate"))
->  		goto cleanup;
->
->  	if (!ASSERT_OK(read_stats(link), "read stats"))
->  		goto cleanup;
->
-> +	if (!memcg_query->nr_shmem && ++retries < MEMCG_STAT_RETRIES) {
-> +		usleep(MEMCG_STAT_RETRY_DELAY_US);
-> +		goto retry;
-> +	}
+Nit: I'd merge all three files into one and move loader to prog_tests/verif=
+ier.c.
+     Also not sure about union vs struct tests.
+
+> diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_int128_c.c b=
+/tools/testing/selftests/bpf/progs/aggregate_ret_int128_c.c
+> new file mode 100644
+> index 000000000000..913cc374215d
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/aggregate_ret_int128_c.c
+
+...
+
+> +#if defined(__clang_major__) && __clang_major__ >=3D 23
+
+...
+
+> +#else
 > +
->  	ASSERT_GT(memcg_query->nr_shmem, 0, "final shmem value");
->
->  cleanup:
+> +SEC("socket")
+> +__description("aggregate_ret_int128_c: needs LLVM 23, dummy test")
+> +__success
+> +int dummy_test(void)
+> +{
+> +	return 0;
+> +}
 
-Does the retry loop in test_shmem actually regenerate stat updates the way
-test_anon, test_file, and test_pgfault do?
+Q: what would happen w/o #else branch? Is loading an empty object an error?
 
-The retry: label sits above the fallocate() call, and nothing inside the
-loop tears down the allocation. From the second iteration on, the range is
-already populated. shmem_fallocate() in mm/shmem.c (mode 0 path) walks
-each index with shmem_get_folio(..., SGP_FALLOC), every index becomes a
-page-cache hit, and no new charge or NR_SHMEM/NR_FILE_PAGES delta gets
-posted to vmstats->stats_updates.
+> +#endif
 
-So vmstats->stats_updates stays where the first pass left it (around 1-4k
-units on the 128-CPU host the commit message mentions), which is well
-under the 64 * 128 = 8192 threshold. That leaves
-memcg_vmstats_needs_flush() returning false, and
-bpf_mem_cgroup_flush_stats() exiting without flushing.
-
-test_anon, test_file, and test_pgfault all munmap and then remap+refault
-1024 pages on each iteration, posting a fresh ~2k abs() worth of deltas,
-so they can reach both mechanism (a) the periodic flusher and mechanism
-(b) crossing MEMCG_CHARGE_BATCH * num_online_cpus(). test_shmem appears
-to depend entirely on stats_flush_dwork landing inside the 15 x 250ms =
-3.75s window.
-
-That is still better than the original single-pass behavior, but on a
-large, mostly-idle host with NOHZ, deferrable timers (which
-stats_flush_dwork is, per mm/memcontrol.c DECLARE_DEFERRABLE_WORK) may
-not fire reliably while the machine is idle.
-
-Would moving retry: above memfd_create(), or punching a hole with
-FALLOC_FL_PUNCH_HOLE after the usleep() and before re-fallocating, give
-test_shmem the same regeneration the other three subtests have? As the
-commit message notes for nr_anon_mapped, the hole punch would need to come
-after the sleep so the flusher observes the allocated state.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31851044465
---===============3798828678189222425==--
+...
