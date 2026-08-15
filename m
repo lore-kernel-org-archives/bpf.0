@@ -1,36 +1,36 @@
-Received: from mta1.migadu.com (out-63.mta1.migadu.com [95.215.58.63])
+Received: from mta1.migadu.com (out-106.mta1.migadu.com [95.215.58.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A2E03E716F
-	for <bpf@vger.kernel.org>; Fri, 14 Aug 2026 23:55:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.63
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D008A3BB4A
+	for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 00:01:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786751711; cv=none; b=TCBKqF7J9d/nIR9Nd5tMJqOpDoo6FqfMDi/hnNRUZLcGhip6kF5Zv6fTL+wABEgZ5/Zh5x3wZDLpsBcapTBqwhs3CsUXCZz6oPE5yeBczmPzuY+PKcZkqIQmLhmQS0/NoStvzJqKthWfX2kg9QJzWalu74fkvuwpfk+5u185iWE=
+	t=1786752094; cv=none; b=HlkokyIazdhNJ73+n077jCvvc9E3XjNe7vutJT7lRahnfJX/DwnNlzFB1G0Z3P0bSM59Ct9MMjFCEGSKFnKNrfmP16OgQ6sXPjXvjuVv+dZtfWNKTkHCOd23aiuYbz5z7RJGUNzTcD5G58m55MfvWyXj5UY41mTqHDKjcupLYLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786751711; c=relaxed/simple;
-	bh=RMN5UefWE03kCQbDYhAuTCIAqJYIWwwHF4nusHD7CFQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=t/MqqbXzPAifHfgtVZig2hRWRJWzVtvn8Lc1LNuewybz2ZDBU9BrxjylSbesA3RCJdBT4gr3k91ThZmNnHrXytOghczDOy8jN7fnww6fFoiMcbPfX/r0LCdDDRaGNaAA2E7FR+3L4z2UyozfFT1Ay8jUAhRgLSpfufnsKULGKv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QNWmLGwm; arc=none smtp.client-ip=95.215.58.63
+	s=arc-20240116; t=1786752094; c=relaxed/simple;
+	bh=ajEtm7Cc9gbBg7ONgIlCKTKF9E+P1en9GcyNIOemgso=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=VYgNVxLyYMGCeDiNHojUZIwWhtm1tQSDHT1Sj6zBGQjIXgsIKxsP0bTS3B+LdspoNYj1pR7bDBAdYj7TJ2qxrtZGoYmxZGvNoW7tS0CqPfPxZFC9jFaOP/V5KyiEcnw79t4oHoM9aVFic4kjX/llCZApK3qQYDV4XPearCO8/j8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mb28iZQw; arc=none smtp.client-ip=95.215.58.106
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QNWmLGwm"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mb28iZQw"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=RMN5UefWE03kCQbDYhAuTCIAqJYIWwwHF4nusHD7CFQ=;
+DKIM-Signature: a=rsa-sha256; bh=ajEtm7Cc9gbBg7ONgIlCKTKF9E+P1en9GcyNIOemgso=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786751708; v=1; x=1787356508;
- b=QNWmLGwmYUJFSHBTi+G3wcunFWovhJnpG9zZzF4bZx5wlKrUZe0Q+qgo2RjIun05RXEDczJ/
- 1K1eQe6118hfSEcnsA/+RSZmkCdK850pNqMDY0QnPCpgFLx3L77iOo8+0lxti6aNuI0jLEWnBJ+
- ZOduXhLFNqVABVAWsDmsGUJI=
+ t=1786752090; v=1; x=1787356890;
+ b=mb28iZQw7+Pikc+Vm1b8zir3PTmYz80nHNc0AXqWFiZ376xFV6ZYvPuWObOftdA34MZdtY6x
+ /a/JRv+4WdP+GTujwNlJHKnZqkCp9p21rnR+uhZpssbZs9QUoOH+lx/0P0fapN7GwAQPQBdwOoq
+ CHfmQMTxUpOBh5iZ+1fhYo1w=
 X-Envelope-To: bpf@vger.kernel.org
-Received: from [IPV6:2a03:83e0:1251:27:9295:e585:8bf6:fa24] (2620:10d:c090:500::6:7be4)
-	by smtp.migadu.com with ESMTPS id 39cf3d840af50284;
-	Fri, 14 Aug 2026 23:55:08 +0000
+Received: from [192.168.1.116] (111.162.215.50)
+	by smtp.migadu.com with ESMTPS id 709e2110065d8f26;
+	Sat, 15 Aug 2026 00:01:30 +0000
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <fc9da1e4-714a-4a2a-974b-fe495a3d8afe@linux.dev>
-Date: Fri, 14 Aug 2026 16:55:00 -0700
+Message-ID: <d7e534e1-ab78-4c6e-ad0c-0cfeed5049e6@linux.dev>
+Date: Sat, 15 Aug 2026 08:01:21 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,141 +38,52 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Check per-CPU address
- resolution per register
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, x86@kernel.org,
- stable@vger.kernel.org, martin.lau@kernel.org, eddyz87@gmail.com,
- yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
-References: <20260814220254.3797467-3-vineet.gupta@linux.dev>
- <67663b343f4aa2719eee273f10ca74a469fa1ab5e8772933083f51b62284a59a@mail.kernel.org>
-Content-Language: en-US
-From: Vineet Gupta <vineet.gupta@linux.dev>
-In-Reply-To: <67663b343f4aa2719eee273f10ca74a469fa1ab5e8772933083f51b62284a59a@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc: cui.tao@linux.dev, Tao Cui <cuitao@kylinos.cn>, void@manifault.com,
+ arighi@nvidia.com, changwoo@igalia.com, mingo@redhat.com,
+ peterz@infradead.org, sched-ext@lists.linux.dev,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH] sched_ext: don't BUG_ON a destroyed DSQ in
+ process_deferred_reenq_users
+To: Tejun Heo <tj@kernel.org>
+References: <20260811075913.344033-1-cui.tao@linux.dev>
+ <f3a7965cc9d6527de793fdda816b6b63@kernel.org>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <f3a7965cc9d6527de793fdda816b6b63@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
 
 
-On 8/14/26 3:39 PM, bot+bpf-ci@kernel.org wrote:
->> commit fe4e8b7aecfff8c04bc3c2f472f9243928effc6e
->> Author: Vineet Gupta <vineet.gupta@linux.dev>
->> Date:   Fri Aug 14 15:02:54 2026 -0700
->>
->>      selftests/bpf: Check per-CPU address resolution per register
->>
->>      An ld_imm64 of a per-CPU map value is followed by a mov_percpu_addr that
->>      reuses the same register, so which register the address lands in decides
->>      how the JIT encodes the add. Getting the REX prefix wrong there is
->>      invisible to a functional test unless the address happens to land in an
->>      extended register, which is why this went unnoticed.
-> Does this mechanism actually exist in the tree?
+在 2026/8/15 02:56, Tejun Heo 写道:
+> Hello,
+> 
+> On Tue, Aug 11, 2026 at 03:59:12PM +0800, Tao Cui wrote:
+>> -		BUG_ON(dsq->id & SCX_DSQ_FLAG_BUILTIN);
+>> +		/* destroy_dsq() may race and invalidate @dsq; skip */
+>> +		if (unlikely(dsq->id & SCX_DSQ_FLAG_BUILTIN))
+>> +			continue;
+> 
+> Nice catch, but this also swallows states which can never occur
+> legitimately. The only builtin-flagged value that can show up here is
+> SCX_DSQ_INVALID from destroy_dsq(). Let's keep the BUG_ON for everything
+> else:
+> 
+> 	/* destroy_dsq() may have raced and invalidated @dsq, nothing to reenq */
+> 	if (unlikely(dsq->id == SCX_DSQ_INVALID))
+> 		continue;
+> 
+> 	BUG_ON(dsq->id & SCX_DSQ_FLAG_BUILTIN);
+> 
+> Can you please spin v2? Also, please capitalize the subject after the
+> prefix ("Don't ...") and remove the blank line between the tags.
+> 
+Right, that was too broad. v2 skips only SCX_DSQ_INVALID and keeps the BUG_ON otherwise, as you suggested. Also fixed the subject capitalization and the blank line between the tags.
 
-Indeed these changes are introduced in bpf-next not on *bpf* which the 
-patches were targeting - noob mistake on my part.
+Thanks,
+Tao
 
-I'll respin v4 targeting bpf-next and drop stable etc.
-
-Thx,
--Vineet
-
->
-> There is no verifier or JIT path that follows an ld_imm64 of a per-CPU map
-> value with a mov_percpu_addr on the same register. BPF_MOV64_PERCPU_REG has
-> exactly four call sites:
->
->    kernel/bpf/arraymap.c:288   *insn++ = BPF_MOV64_PERCPU_REG(BPF_REG_0, BPF_REG_0);
->    kernel/bpf/hashtab.c:2429   *insn++ = BPF_MOV64_PERCPU_REG(BPF_REG_0, BPF_REG_0);
->    kernel/bpf/fixups.c:2115    insn_buf[1] = BPF_MOV64_PERCPU_REG(BPF_REG_0, BPF_REG_0);
->    kernel/bpf/fixups.c:2136    insn_buf[1] = BPF_MOV64_PERCPU_REG(BPF_REG_0, BPF_REG_0);
->
-> All four use BPF_REG_0 as both source and destination. BPF_REG_0 maps to
-> RAX, so is_ereg() is always false and the REX.R encoding path is
-> unreachable from any loadable program.
->
-> An ld_imm64 of a percpu ksym goes through check_pseudo_btf_id() in the
-> verifier, which only sets aux->btf_var.reg_type = PTR_TO_BTF_ID |
-> MEM_PERCPU. No mov_percpu_addr insn is inserted after it. The per-CPU
-> base is added later by bpf_per_cpu_ptr() or bpf_this_cpu_ptr() kfuncs,
-> which return in R0.
->
->> diff --git a/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c b/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c
->> new file mode 100644
->> index 000000000000..967f4e6e3a49
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/verifier_percpu_addr.c
->> @@ -0,0 +1,72 @@
-> [ ... ]
->
->> +SEC("raw_tp")
->> +__description("per-CPU address resolution")
->> +__success
->> +__arch_x86_64
->> +__jited("	movabsq	$0x{{.*}}, %rax")
->> +__jited("	addq	%gs:{{.*}}, %rax")
->> +__jited("	movabsq	$0x{{.*}}, %rdi")
->> +__jited("	addq	%gs:{{.*}}, %rdi")
->> +__jited("	movabsq	$0x{{.*}}, %rsi")
->> +__jited("	addq	%gs:{{.*}}, %rsi")
->> +__jited("	movabsq	$0x{{.*}}, %rdx")
->> +__jited("	addq	%gs:{{.*}}, %rdx")
->> +__jited("	movabsq	$0x{{.*}}, %rcx")
->> +__jited("	addq	%gs:{{.*}}, %rcx")
->> +__jited("	movabsq	$0x{{.*}}, %r8")
->> +__jited("	addq	%gs:{{.*}}, %r8")
->> +__jited("	movabsq	$0x{{.*}}, %rbx")
->> +__jited("	addq	%gs:{{.*}}, %rbx")
->> +__jited("	movabsq	$0x{{.*}}, %r13")
->> +__jited("	addq	%gs:{{.*}}, %r13")
->> +__jited("	movabsq	$0x{{.*}}, %r14")
->> +__jited("	addq	%gs:{{.*}}, %r14")
->> +__jited("	movabsq	$0x{{.*}}, %r15")
->> +__jited("	addq	%gs:{{.*}}, %r15")
->> +__naked void percpu_addr(void)
->> +{
->> +	asm volatile ("					\
->> +	r0 = %[percpu_data] ll;				\
->> +	r1 = %[percpu_data] ll;				\
->> +	r2 = %[percpu_data] ll;				\
->> +	r3 = %[percpu_data] ll;				\
->> +	r4 = %[percpu_data] ll;				\
->> +	r5 = %[percpu_data] ll;				\
->> +	r6 = %[percpu_data] ll;				\
->> +	r7 = %[percpu_data] ll;				\
->> +	r8 = %[percpu_data] ll;				\
->> +	r9 = %[percpu_data] ll;				\
->> +	r0 = 0;						\
->> +	exit;						\
->> +"	:
->> +	: __imm_addr(percpu_data)
->> +	: __clobber_all);
->> +}
-> Can these 'addq %gs:..., %<reg>' assertions ever match?
->
-> A bare sequence of ten ld_imm64s produces ten 'movabsq' lines and zero
-> 'addq %gs:' lines. The verifier does not insert a mov_percpu_addr insn
-> after an ld_imm64 of a percpu ksym. The per-CPU base is added by the
-> bpf_per_cpu_ptr() or bpf_this_cpu_ptr() kfuncs, which return in R0.
->
-> So the JIT output would be ten consecutive 'movabsq' instructions with no
-> 'addq' between them. The test expects alternating 'movabsq' and 'addq'
-> lines, and consecutive __jited tags must match consecutive disassembly
-> lines unless a '...' tag is inserted.
->
-> Even if a mov_percpu_addr could be generated, all four call sites hardcode
-> BPF_REG_0, so only the %rax form would ever be reachable.
->
-> This means the test cannot cover the REX.R fix in acdf39f8be46 ("bpf, x86:
-> Fix per-CPU address resolution into an extended register").
->
-> Should there be a Link: or Fixes: tag referencing acdf39f8be46, and does
-> the commit message need to explain what new path makes the destination
-> register reachable?
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31845422431
+> Thanks.
+> 
+> --
+> tejun
 
