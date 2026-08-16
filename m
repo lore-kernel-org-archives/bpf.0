@@ -1,64 +1,64 @@
-Received: from mail-wm2-f4.google.com (mail-wm2-f4.google.com [74.125.225.132])
+Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D7213C10B6
-	for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 01:57:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60A853932C3
+	for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 01:58:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786845480; cv=none; b=d8/oYZDFTPgEDCaU1t9YO9ALQLK50Bqg7pvenUilXzU5uVT93TmByuz3KwXmDFJZP6jfbaKZt/IZA696AJASzK2g+gO5dEuCwQnxJ423uuzPAdvNdnW7D6NFjvSjmbySFnx/I3OAv3pgcWPvWmp4IsIDehgXsSlM5WAgh0bzg2U=
+	t=1786845482; cv=none; b=qSteng85t6nCIbVsHPHdqVmywFzZY91NT70lhX2ik4g63f+s9sPgb0MxiCWP9j+o+OPZcOqCj55gvR72/aeUiiFeBRWHzs/UksFmK5ojITL7kC3p9bDbHYxArMFZIhUxkTNSeYKMFEwljJqC99CyFdJaC/YoV+L1ib9+25aG/T4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786845480; c=relaxed/simple;
-	bh=GpNY+HnQop03ypd8qo1PhtX13zfevtIKkOCtmq+7pc4=;
+	s=arc-20240116; t=1786845482; c=relaxed/simple;
+	bh=PMhkufPlfAXLAXuXuztc7uOys6SyAAJvpBxgdM1XE30=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kM9tDGfU471Tu4f8et6Y6NfRQ68nj1svMcoFQFfJd6cAaQMfYMSIigAHUioJFI3WaJ7ShdgLCEMaUuTdx/xfJGyYv7V/t91UEDhqq69rbEP8U2FJta1S254SEw5XiprrzUJsxHSLKuFhP0ojmNv4SkX9gh4NH7Mn0Y5YYfuQdHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LbTdqWIp; arc=none smtp.client-ip=74.125.225.132
+	 MIME-Version; b=gOUO2y7gDlAO3kkmb8nnRqG39ZO3K61I3nfDcW9+Y5u1d29DQ3LbXupkRZa7gP7fNwzf570OiPyoohoNXhX1Xez0UimgXsmuY+ztVQ4O+46MD22GfTztXJQKWk9SQzVxFTnUPxrHs6X7QR/sJe2HB+VmYp9p95WNk4u2HEg0IxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fx4KBlos; arc=none smtp.client-ip=209.85.221.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LbTdqWIp"
-Received: by mail-wm2-f4.google.com with SMTP id 5b1f17b1804b1-4955f00e593so6013375e9.0
-        for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 18:57:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fx4KBlos"
+Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-47de008b020so1324642f8f.1
+        for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 18:58:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786845477; x=1787450277; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786845478; x=1787450278; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=KJpj4+Q2ePT6NOpFdiEYCDUaqywZgn2iJS+Zp3Hrk/g=;
-        b=LbTdqWIpZTlJffP74gLnBYBiF5dlyWvouDa62l2VyZYI41YwM1jhoDE4kEVp/pypm8
-         7Bfvdp/n2CEpRABAVXh+/vn8LpO4qcIS/yjx7CJ9R84n5Ct/JNmWpcIKjVZq4TzoHpGx
-         KZUEe8mgcUawF2IzN35oFTSXed4bdyWVCYjuk1efZ/TLL/3/6dt4uWpbA8nI7p6Ln5g5
-         beLtT498pgaD3iqASVARcfRdD01Taedxg+snOt7PhBB8Srn31Uxn4WIbiZghGf0ULS09
-         JcZwRjvU2GJVWBuokmgnt4nzPIiTRcbLDolNhvgpymYny3vCayNLRPi71AgHY5vafQ4p
-         Td6Q==
+        bh=55h8Ctds775sB1f/uWwswbajNjVd2y+mCCmAtsHdNM4=;
+        b=fx4KBlosoQYdbxHGPGYRTta5jRS4ZHfhOzO6+4902vBWyQ7DFjKdXTHWs3tGwSsdoz
+         qqpbIBkC8TsWfthN30ooJY+momGjpZAAoItrIWusTrM8UkuoAWp2tIQK8pXjCyCDqjOM
+         5/vi8VJ5htPwpXeqdN1kMGEmvLTMbCON/k3htBvnzLQvKFoZCMbaQCp9RZ57ImoQH4b1
+         1leFUYd907C9GfNEZkwKEY1431/xWVpjdCJH3oUkW5oP6H3KObIVD8Nt8WEsr98RhpC5
+         6B7mhjax3+rwf08PLcattlFm9uO3YVohkY5eMmhT+ZlE5VR1bX99O0uLom2ARgseJ9Vg
+         MSow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786845477; x=1787450277;
+        d=1e100.net; s=20251104; t=1786845478; x=1787450278;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=KJpj4+Q2ePT6NOpFdiEYCDUaqywZgn2iJS+Zp3Hrk/g=;
-        b=YdbCDfEAO+csxi4FHox0XxH/NLEHZrQd4jJP6jW0YQNtuVwoSglIfxpDQEjZJf4Mxr
-         lVcAm73+NY24FX2cZAjLe5lyrg80DTUdVKrAtyYpJUSAAUNa/7xPWMzwifZRj47mAR0I
-         Plxv9AaBYL8qUG38dMC8DWsGASWFhtBpNIR8aRe65/vPFNSsT0z2VLUZZ7i4aqO4vC/a
-         PziaK6L7EOWCgSGPHToYQpw0HF84vQEpSdhzaT2CLiUFmYd5vNv+TfTRf8epbBFyybz8
-         o5GbCE/EHWY0v5pFrllg6f+WnMlVC3jt92tMCBGzdPE/Y7fm6nPv+TOAuqsBNNHHirrf
-         f4kA==
-X-Gm-Message-State: AOJu0YwjcyL1Xr77+KQ/LAIFX8hAiIjKcoHl8nielPFJS9eJvP5JHuw6
-	6ToJ/1ePW1IBQVjfMR1GHPuTlYMsqLoWTtzfepEdQYa/e/l/HwPpUGJYz8DBX8mz
-X-Gm-Gg: AR+sD13SokFOr0sOneHBlh/G8obYIM0z2Gf4HFiTmsM6/8CF0jJ0H/5Fjh3Xx6JQZ3K
-	+I0YTFowiwlpC9e66aOOC7jymJmFEQfv3i/ehpMfWFNTVMx+mtI06y6AnvcfBAGrKtZA/zYR3bV
-	qlyByyn3SnjLqkmdNwr50aGM8DJYfMcZToOBQqSpuuoCSztf3UI7hv+efR2Frz/kKct7F+EhhQV
-	55GwVZ/rKQEW2uGYrNCK+cpKZm/zEbsIgmjVFrrfrv1ltG8WraXzr9RQVj3ybBrvah5cKr5ajYm
-	2cXOz8MXpklum5q3uhNEmjJ6lNeIq2YPXZ1tcR7CfbkeHcAfXymodN9Wb6EC89OJsrtpOXW8qxL
-	TeLF4WQlQ1rbVA7fM8GN6XJKkCUnxTtGm9lT5YO7voTitZTmG0a7MXxxZD9Sm3av7GykQEcSEOU
-	2qYKAdBbwjmSqRdNqXTioGE9C82C/T5iDgeRqLWmg+GOC0uQPjmmcMHJHv9RNDdGiXviI3uqsU+
-	/7Y+wl9Ggz/nr9ISdJNZQ3lMHiDMOtFLM4WkOytWSVjQ+P+lHFfG7im9XlR0Plly/SCLgiVhVDC
-	nlvCA7cFu3CMrAVA+gjtoNRFYL0=
-X-Received: by 2002:a05:600c:1d0e:b0:495:4fd4:619b with SMTP id 5b1f17b1804b1-49987941a4amr186099445e9.1.1786845477210;
-        Sat, 15 Aug 2026 18:57:57 -0700 (PDT)
+        bh=55h8Ctds775sB1f/uWwswbajNjVd2y+mCCmAtsHdNM4=;
+        b=KCgcfah2amqq6gtUTm9m6ZBLiDHkY9qXKH9SEPlMofyelUaqTJ7wWZmw927E5JMhQL
+         4xMLhPNy9XQriCFXu7UcKMly8VclQ7cHZsh3U/h8F38JfH6BdiyfAOHXbnVL3gHCROIv
+         RcN82hN4z54Sntt1RYA7nUX+2T1r+kX+umNacSHOoA+/aE6oRmcwdxWt30OSsa4ZuxVz
+         37NWspM30nkzd+vfNldbvslEP5NCbZYXl5BCpftDScVy6P3MbRInJ4gkke8GQIBUa4ec
+         hKU7uGAgEvXXnhhkhWs5oH0o+g8GdEO0hAE49YBn92QY+dS8M6XVi4RvKF7fR/bMJzp0
+         v/Nw==
+X-Gm-Message-State: AOJu0YyZjZVufTWoPWpp0FbSg/CRaHDHFrj3Qd6g7DIDKMJScnaUJTSs
+	aX5tdNvZaRph5LJncmv6AmnJkkavL1S9WKqMO6jX+ntUu7YMy5XY7WENblLVZOiu
+X-Gm-Gg: AR+sD12ZDq7sGVCbNakmP+xqPiarIo3a2Sep05UDMwWD9iKTqH2eSteIUaJ2JTOQPrL
+	YQj5OtlxxI4ysnucJntcqe0lxeqexAtU2aUI0z1IhQRRvqowLxP0K/bBfPoOIkFS+ParCsEQ+tr
+	Dq5qXtpuAV2QcRU0suUoFBvB7K5PC0NrG/q96rHLr6qC3rR8JDGKDA9YWx00M+FsTYBps4y4gZQ
+	mkzgw6yaUkhLw/nSfBMU6+ov3k0HJUpAO2AYi4oreWR/o7+iquyOlArno3+Kr2QnS8/zHeKLCvG
+	dPwrd011C7IgX1D5KOqDwh4UB7R88H/MRMkLMoIBQiXQLQ2o6rENRfVzHcJQYQemymWO0SxiGUu
+	Tzd18xd+2PW4ZS8pBbJB526QoTekaF5mLCCJbJdce2TsLCXp1HXysPFFcLceJOGGHHG7yz48lz9
+	2JLu5Pi2C2S0T2iRJ6BFVjtxg/FV/q3fAGrDb8anfjoxQbET8kUte0YEmoMIS16u99EjCG31QPD
+	peffA/T+EuCf/lsAWp7og/yxGbhhwmhSCF9u0xNJXTPA12rGf/N+dlcSbgY/7GOZnjCnEZINT2J
+	husK+6AN3gCXmqjqc4zo27nYUFM=
+X-Received: by 2002:a05:6000:1865:b0:47f:71a0:c060 with SMTP id ffacd0b85a97d-4815a4de806mr36901341f8f.2.1786845478588;
+        Sat, 15 Aug 2026 18:57:58 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49996108141sm3422375e9.6.2026.08.15.18.57.56
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815f2c6115sm20559801f8f.32.2026.08.15.18.57.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Aug 2026 18:57:56 -0700 (PDT)
+        Sat, 15 Aug 2026 18:57:58 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 07/14] selftests/bpf: Test kfunc argument diagnostics
-Date: Sun, 16 Aug 2026 03:57:35 +0200
-Message-ID: <20260816015746.2632990-8-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 08/14] bpf: Report non-sleepable kfunc programs accurately
+Date: Sun, 16 Aug 2026 03:57:36 +0200
+Message-ID: <20260816015746.2632990-9-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260816015746.2632990-1-memxor@gmail.com>
 References: <20260816015746.2632990-1-memxor@gmail.com>
@@ -80,72 +80,132 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2792; i=memxor@gmail.com; h=from:subject; bh=GpNY+HnQop03ypd8qo1PhtX13zfevtIKkOCtmq+7pc4=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIatRQkzh3c6fXElvf1YGu3xJl9jnWrreZLpnpwfPjrVnp GOnTFPsKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwETWqTP8L7fIMdRKiGvNq2vI nMqlXaIYdH2f/ROeD47GE4v7me7vZvifsrvt7dIW2+meXHtPLzp0yW122e1JPtx/k/p6RHdJhe5 kAQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5862; i=memxor@gmail.com; h=from:subject; bh=PMhkufPlfAXLAXuXuztc7uOys6SyAAJvpBxgdM1XE30=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIatRQvytn1fatJn8J2Xkz3v/X7zKVWnm7KfqAqptqzdOm X6XacaRjlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAEzk00NGhv8u6R3nOKvjkvwe TN36StFBPiNshs5zf2+G5A36KfedXzL8M61v9PKNU77gcm5Xrl/2zoAAD4eFIQ5taR+0H13k2GP EAQA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Extend existing negative kfunc programs to assert that BTF void is rendered
-as void and that variable __szk arguments receive a structured constant-size
-diagnostic.
+A sleepable kfunc call can fail either because the program is not sleepable
+or because an otherwise sleepable program has entered a non-sleepable
+critical section. check_kfunc_call() checks these conditions separately. The
+first check is only gated by in_sleepable(), so the shared diagnostic can
+blame an active RCU, preemption-disabled, IRQ-disabled, or locked region even
+though leaving that region would not make the program sleepable. Adding a
+second diagnostic entry point only to force the program context would
+duplicate the API.
 
-Also pass a context pointer to bpf_refcount_acquire() and verify that the
-report describes the generic refcounted-object contract and the actual
-argument type. Retain the legacy verbose-message assertions.
+Reject the call once based on in_sleepable_context(). Teach the shared
+bpf_diag_ctx_forbidden() reporter to prefer the non-sleepable program when the
+current verifier state is not sleepable; otherwise preserve the RCU, preempt,
+IRQ, and lock priority for active contexts. Select the kfunc message and
+suggestion according to that cause, and align the helper and global-function
+descriptions with the same priority.
 
-Link: https://lore.kernel.org/bpf/3eda33675965763aa9b2e6a5784f32b34a6a83988a55fbea98b0dbd0cf3b088d@mail.kernel.org/
+This avoids a diagnostic-only wrapper while retaining context history for
+sleepable programs that enter a forbidden region.
+
+Link: https://lore.kernel.org/bpf/2e42a1a2bf45f4d2aba7495bdc9f147558055740e2f3c8b9dae255f6c57fc13c@mail.kernel.org/
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- tools/testing/selftests/bpf/progs/dynptr_fail.c          | 2 ++
- tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c | 9 +++++++++
- 2 files changed, 11 insertions(+)
+ kernel/bpf/diagnostics.c |  4 +++-
+ kernel/bpf/verifier.c    | 34 ++++++++++++++++++----------------
+ 2 files changed, 21 insertions(+), 17 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-index 72aa6b5a877b..9418dfe4d7b7 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-@@ -1593,6 +1593,7 @@ __u32 hdr_size = sizeof(struct ethhdr);
- /* Can't pass in variable-sized len to bpf_dynptr_slice */
- SEC("?tc")
- __failure __msg("must be a known constant")
-+__msg("requires this memory size to be a verifier-known constant")
- int dynptr_slice_var_len1(struct __sk_buff *skb)
- {
- 	struct bpf_dynptr ptr;
-@@ -1612,6 +1613,7 @@ int dynptr_slice_var_len1(struct __sk_buff *skb)
- /* Can't pass in variable-sized len to bpf_dynptr_slice */
- SEC("?tc")
- __failure __msg("must be a known constant")
-+__msg("requires this memory size to be a verifier-known constant")
- int dynptr_slice_var_len2(struct __sk_buff *skb)
- {
- 	char buffer[sizeof(struct ethhdr)] = {};
-diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-index 024ef2aae200..eaaed0859f94 100644
---- a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-@@ -63,6 +63,7 @@ long rbtree_refcounted_node_ref_escapes(void *ctx)
+diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
+index 2c475174a640..df9259fa0ea7 100644
+--- a/kernel/bpf/diagnostics.c
++++ b/kernel/bpf/diagnostics.c
+@@ -1083,7 +1083,9 @@ void bpf_diag_ctx_forbidden(struct bpf_verifier_env *env, u32 insn_idx,
+ 	const char *constraint, *context;
+ 	u32 depth;
  
- SEC("?tc")
- __failure __msg("Possibly NULL pointer passed to trusted R1")
-+__msg("requires a non-NULL value of type (void *)")
- long refcount_acquire_maybe_null(void *ctx)
+-	if (env->cur_state->active_rcu_locks)
++	if (!env->cur_state->in_sleepable)
++		ctx_kind = BPF_DIAG_CONTEXT_NONE;
++	else if (env->cur_state->active_rcu_locks)
+ 		ctx_kind = BPF_DIAG_CONTEXT_RCU;
+ 	else if (env->cur_state->active_preempt_locks)
+ 		ctx_kind = BPF_DIAG_CONTEXT_PREEMPT;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index da2ec0655b17..3de9e4f617b6 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9912,7 +9912,7 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 				sub_name, non_sleepable_context_description(env));
+ 			operation = bpf_diag_fmt(env, "sleepable global function %s()", sub_name);
+ 			bpf_diag_ctx_forbidden(env, *insn_idx, operation,
+-				"Move the call outside the critical section, or use a non-sleepable function.");
++				"Call the function from a sleepable program outside any critical section, or use a non-sleepable function.");
+ 			return -EINVAL;
+ 		}
+ 
+@@ -10731,6 +10731,8 @@ static inline bool in_sleepable_context(struct bpf_verifier_env *env)
+ 
+ static const char *non_sleepable_context_description(struct bpf_verifier_env *env)
  {
- 	struct node_acquire *n, *m;
-@@ -80,6 +81,14 @@ long refcount_acquire_maybe_null(void *ctx)
- 	return 0;
++	if (!in_sleepable(env))
++		return "non-sleepable prog";
+ 	if (env->cur_state->active_rcu_locks)
+ 		return "rcu_read_lock region";
+ 	if (env->cur_state->active_preempt_locks)
+@@ -10739,7 +10741,7 @@ static const char *non_sleepable_context_description(struct bpf_verifier_env *en
+ 		return "IRQ-disabled region";
+ 	if (env->cur_state->active_locks)
+ 		return "lock region";
+-	return "non-sleepable prog";
++	return "non-sleepable context";
  }
  
-+SEC("?tc")
-+__failure __msg("R1 is neither owning or non-owning ref")
-+__msg("expects a pointer to a BPF-managed refcounted object, but R1 is a context pointer")
-+long refcount_acquire_non_object(void *ctx)
-+{
-+	return bpf_refcount_acquire(ctx) != NULL;
-+}
+ static int release_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+@@ -10835,7 +10837,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		operation = bpf_diag_fmt(env, "sleepable helper %s#%d",
+ 					 func_id_name(func_id), func_id);
+ 		bpf_diag_ctx_forbidden(env, insn_idx, operation,
+-			"Move the helper call outside the critical section, or use a non-sleepable helper.");
++			"Call the helper from a sleepable program outside any critical section, or use a non-sleepable helper.");
+ 		return -EINVAL;
+ 	}
+ 
+@@ -13760,11 +13762,20 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 	}
+ 
+ 	sleepable = bpf_is_kfunc_sleepable(&meta);
+-	if (sleepable && !in_sleepable(env)) {
+-		verbose(env, "program must be sleepable to call sleepable kfunc %s\n", func_name);
++	if (sleepable && !in_sleepable_context(env)) {
++		const char *suggestion;
 +
- SEC("?tc")
- __failure __msg("Unreleased reference id=3 alloc_insn={{[0-9]+}}")
- long rbtree_refcounted_node_ref_escapes_owning_input(void *ctx)
++		if (in_sleepable(env)) {
++			verbose(env, "kernel func %s is sleepable within %s\n",
++				func_name, non_sleepable_context_description(env));
++			suggestion = "Move the kfunc call outside the critical section, or use a non-sleepable kfunc.";
++		} else {
++			verbose(env, "program must be sleepable to call sleepable kfunc %s\n",
++				func_name);
++			suggestion = "Mark the program sleepable if the program type allows it, or use a non-sleepable kfunc.";
++		}
+ 		operation = bpf_diag_fmt(env, "sleepable kfunc %s", func_name);
+-		bpf_diag_ctx_forbidden(env, insn_idx, operation,
+-			"Mark the program sleepable if the program type allows it, or use a non-sleepable kfunc.");
++		bpf_diag_ctx_forbidden(env, insn_idx, operation, suggestion);
+ 		return -EACCES;
+ 	}
+ 
+@@ -13864,15 +13875,6 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			invalidate_rcu_protected_refs(env);
+ 	}
+ 
+-	if (sleepable && !in_sleepable_context(env)) {
+-		verbose(env, "kernel func %s is sleepable within %s\n",
+-			func_name, non_sleepable_context_description(env));
+-		operation = bpf_diag_fmt(env, "sleepable kfunc %s", func_name);
+-		bpf_diag_ctx_forbidden(env, insn_idx, operation,
+-			"Move the kfunc call outside the critical section, or use a non-sleepable kfunc.");
+-		return -EACCES;
+-	}
+-
+ 	if (in_rbtree_lock_required_cb(env) && (rcu_lock || rcu_unlock)) {
+ 		verbose(env, "Calling bpf_rcu_read_{lock,unlock} in unnecessary rbtree callback\n");
+ 		return -EACCES;
 -- 
 2.53.0
 
