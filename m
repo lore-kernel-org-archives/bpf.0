@@ -1,73 +1,73 @@
 Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D8E418374;
-	Sun, 16 Aug 2026 22:47:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5214418A51;
+	Sun, 16 Aug 2026 22:47:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786920474; cv=none; b=fOm56kjEcwcSywrTrDSZiAF2CAgwzVrrtFQER8BaaMVLYWKguF3WdhIT65MD+q4NBxf8THh8T/xf3pnnU6DcyNelp+ns9pKM/eVW2HI4PcjczoIBp3pJv6O3jyekQvVcKc6mSZTcjjLPcyZbY45g6ycbFZc58GZtJxTQgBoHllE=
+	t=1786920476; cv=none; b=SwWI5xXbiAiTYJA14K7rOfDauaoVxYkltoccz6EhSJPVSFLkU7DbGmeEBzsQk7et6PoRcSQBJZJ7iSapjKX16tFlEQjo80do/SM6baG9fUAKF07NCCCe+Nme4K9w4bUwlEhrU14ZpIM2agzz9NOSdmzYUKYMiqfAqV4eJmICD5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786920474; c=relaxed/simple;
-	bh=DCU0OBGX8PtBGbjVBDq2QbdRsHPkXfxxwZ0E3flceEI=;
+	s=arc-20240116; t=1786920476; c=relaxed/simple;
+	bh=0khGCNAZ79erovRTN27euIO+9Af+Ty/ga1jXRTOxdDQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=r3+tdw6E0y1pLX6yXrxk3ThSTEX93959Zp69QDbks8aRo4KipolFzJ0RN99Ne8hNEEnZIum2sL0PawMBJRFsR+oCCjShxKyAhdbpylDktwBCLXoznkObQ+VHryxgqKa9aPYyNp4L2PD7a0zHXrLkTDn9htMAB6mqvisyN3ILYcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=xA337mvy; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=QfjNs5uP; arc=none smtp.client-ip=103.168.172.153
+	 MIME-Version; b=MOIVFaXveH245XRB1C2NgQqFYbx9oYw1Sj9zVpqo06xajBEOI3QCz9hKXInbmsbAAjMkelBW4mjHj3+O/nVt8YKeT5nieTLhIF+IZAJ0a5fW3XU13xppSTlCW63SCt+H0/0oQI6Gnu9bcx7YTj/iAwuGGwDOTgOU4r03prT+Z+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=J2MIBzRg; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=J/P8NbYc; arc=none smtp.client-ip=103.168.172.153
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="xA337mvy";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="QfjNs5uP"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 3103814000EE;
-	Sun, 16 Aug 2026 18:47:52 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Sun, 16 Aug 2026 18:47:52 -0400
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="J2MIBzRg";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="J/P8NbYc"
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id ED57E14000FA;
+	Sun, 16 Aug 2026 18:47:53 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Sun, 16 Aug 2026 18:47:53 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
 	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1786920472; x=
-	1787006872; bh=wHV+00xH9B3bJYx8y5slE3mzGKqkEhVlu1wRFthp3Pk=; b=x
-	A337mvyUFlpppzBdiF3Cu5k9EWiW/mPwjKlFQ/EXtIodTzvnUTAOUv3VnRXvYjcP
-	BvsI78mXPc70LuodC4qj7bM30YcVCzUF6bWD25/7lIJKsC/SxkFTfrbAyhixXe/a
-	Ot2cgLPAViVXFX20f1ru0+uCEaCqC272zU0ifxB51M0YvHmHo6xZiuHUCJgaHFop
-	sNiaEmjnxlTqfqW1yUJj6/pkllSKYYaoyyXsWDIaZ6i7iNKsQrvVATmoqc9Pqwsg
-	nfy1mTw7sQCJFJS+XFYlzKSlJqzQofUcHkgoKkMpwRYgrpDu20KHTAbDPusrYQOD
-	WLY8l/lRq1E+tcEixhsuA==
+	:reply-to:subject:subject:to:to; s=fm1; t=1786920473; x=
+	1787006873; bh=6nKA+x05SWCXqc9tAtZ9fIuQuNqLhmkMozez9tYtOg8=; b=J
+	2MIBzRgxUP1C4fIjfMGKaTm5D0/70cOQRHKAbA2pFShrgKmGO1NRT0pDfPKhBD15
+	HXSqf3NsaCIleEj/q4hDHVHX9JGeoP9UY13JE55foNll6OzHp2g5Vk0uFAJIdY4w
+	GoO1Yg6tsF2g+kWdbyG7BWiB5m28OxHZoMTpJ/e+M9RAaV2uFSRL40wNl1JkXpKF
+	H0a9hOB0HY8+RNI0kZp1Bn1uVhNnk0D9LTLf0sAdhXUtaXB/Tg+lxrUj4edzFeL/
+	njv4WlY3IIA3p8BkcnDozs2Bf6Usp5OKhLCy9kW+QzrUena3ltGTKavDK/nUVo1+
+	IMeSMRBK+DmhTjOnIrvBg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1786920472; x=1787006872; bh=w
-	HV+00xH9B3bJYx8y5slE3mzGKqkEhVlu1wRFthp3Pk=; b=QfjNs5uPIoaSLCjY4
-	UNvENcFHjTNOENXnBPqTi+RNc22z55HCrvzacXE7SByYPz/otrYquY5kNhc9W/3g
-	LJKZRjgZmIW3rhS35U/WAqh93TYt/66eol9QOdQmjq9k275DoFipa+J8BMQSSkmp
-	uYPcyX7FoE3dxI715BbSY+NfHhll5cGsXZF4Baj2Eu7idCmmIGSdXfquxh3juO5Y
-	u10RldDwrSLco3n7O23TY902qashNBNAUBQi18VDEWR3xNFy+jWdJHukqh+svl2R
-	0Q+F820OiBKJJYrzAvITwog2ofMeMp2mGGznk4AB5awQjF9JUJ9I7O0pSSD433cS
-	r2H9g==
-X-ME-Sender: <xms:Fz6CaoZgiCDc1KxOay93nBsy4Osg8ZhCu9GhNZqmCXV2vUtn2ke9kQ>
-    <xme:Fz6CaouyxFpKBMt1J_FT6745AkY3cxXGAUKPK5Tfgh4jznvS0Kd_Jfuo2XvXdAgud
-    EC1UPc25YeSFmlx56oRZvCEK50oWmJSyEQ4plSMGJA8ZHGEJ_KXGBz1>
-X-ME-Received: <xmr:Fz6CavDeGt0nJRM1iU7maNNyHJtk2gElrZGw9egA19wxGZSNE6uErJd3ohQ>
-X-ME-Proxy-Cause: dmFkZTFt7uwKlsd4UyzlmYX1bnlzO4+qp5TmvoTS/qzkFKfMuj25xYssUPl6UU5Ie9xRba
-    Y0bWuaC/AePVMhqrkCnU3j3fo4+kQ4lrNr0qcDw4ZM2xDmZI+m2r8oZbGDZU/DcLlRMJvk
-    pxa8BemzxDXpf0p5hqW+oOweEwIQBvnr/hc1O3uCrLqxLkUCX+QMvT/AmKStBz4XcOBl17
-    ynvfoFkCi5Qu6ZndF8QgBKMwimBrechIaqu56LTRaFtWn2N2FSoSPFDDGPAClh8o3Wii3h
-    WmXtU4UIpdlwyanZt6DS7CEKxM1G2yBGNUvAI/9KSggaAyLfyuWlS9a0iep84iGUQaZXfq
-    knD0n9YA/kWmvfl0Wjb8E/Beu3ua4NshP/Nio/tZ6O8p5iMb+wpx4YBhk175j5jhIoNquf
-    +gH+mFtvZJEmhVHsfKOwvOI/Zqd9dLt3FKSCAdmKnioYMErInfqEm+HllRAv8ksF/n6S5S
-    h2uR4Bt/+ZJoTA+GRWlNvAH0+HzPvPGFqXohUpm2Y5V9P1mXIEgx/+CO6eALiZ20+Mpnd1
-    O0fqm0rJ2cvqo0NujMKgCoRTnm8xRyygGCtnH8y5EQi/fGzr2AjM3K+VHQ7HUZbO016+tv
-    bw5ebY3O4xa6hlnqtSatzZA1NE7UEOHzGO6lgunGBISbTEBpHkcnlEiy4S+w
-X-ME-Proxy: <xmx:Fz6CavNuicul1hB7acVRkWI-FSMEUDenG3hIg6ni5a9JljXLb7NeyQ>
-    <xmx:Fz6Cap7QlyTSrmQOlcBYGIe8F7bYZ6vbjlzjedSZDzFRHKABd8Ea6A>
-    <xmx:Fz6Cap3lul_7Ir028YdmawBxWM8F9jt4sEs9abx7frYUMAieWlq87w>
-    <xmx:Fz6CaoomY9yx_yWOP-HFjrcgA4La4oDeGUEkDPml4LOLzLxyqpJF5Q>
-    <xmx:GD6Case2J7iIxkQ6smxyjic-RGnxsxJv7nQtrZsKbjwvALgygkwA4Ngm>
+	:x-me-sender:x-sasl-enc; s=fm3; t=1786920473; x=1787006873; bh=6
+	nKA+x05SWCXqc9tAtZ9fIuQuNqLhmkMozez9tYtOg8=; b=J/P8NbYcP6xCTt5pt
+	yUGsWYlcL5jXSEBSpHo5972USkYsQ4clKoiQmAxZfiapt3giYptu6UTfctr+Ux+Z
+	3RhxGo/0KNda0UZVE2m3Yruac+La6uxGyjkj6L5QP82mf8mjZK1DODa+rEi5LyAu
+	cTaf8ctK+B1NMVYNCbtVDXY5yhmgL4LRnrsHm85REZi0il4ySqfrtaPo2gkjN/gS
+	NzcbaykTcpMTHuwT1q9a/oStrP2GFiGnKqwUf49YL/jxsoX3XZdYDzyUwCCDAeS6
+	vMUXpAuCeF89aQ8/g2ihCWhko3penp8Csz0Q401gDWY0aBssIjsDYMRm878T1f1y
+	c3e7w==
+X-ME-Sender: <xms:GT6CaqrvauPI-5F91b8wxSvyKJSrQbxgyHhKq3rYRhQE_BPmsmyoQQ>
+    <xme:GT6Cat_8BQ8Evg857fLm8kLc33LATZeixRawXmwg0XjPRPceWiwYH_0Z2C2cs963p
+    _BBgRF7KqreQxfMWRBWARslXR16ZMiFg4Ht2gI4HdcGK36kThfAP1k>
+X-ME-Received: <xmr:GT6CarT8HqOaiV-BMbUlsX1maFYXlnliODeiLj2baT6o_pirxk5YOkmpi-Y>
+X-ME-Proxy-Cause: dmFkZTGLjSC+Sq1mG4OxzCqJWZCyq6WBdNxixaUzytYe9+wGJyabxJMeXSGoSuAsbaseo8
+    j4DSEFeK04hDwZtES01hwyaQU7EBbvB2uUyGWGXfBIvFkincgAhOfMPuQIYJEtCVnAaSQR
+    A4Ax8HD1ONlE2jDjL1mVvD+0hWY7OblS1nu5BjF2+enir154N1oLAu20vju0M/bNfdRnaJ
+    kR8ssngVd0jx9kVZmvlOu6xrNJDHPkWuaI7duTsmkJWDtl1nRnZmYTu08hiimZvSmFoDki
+    6dltoqAKCLj0c9eKP1Vuuwv4Z4pwJTjTf79O9CtQykYTwcA2QZ7OKyC8oLqq7vFkYshLpw
+    LbZeDrUOk8rhM5rSxocjaWFP41pGzRhRHl0flKSZneFSf+mPmKgFKw4251gunztkdKVNyH
+    QnRYsGz5L/GXiKiy1v3S/SrN7GzTBcXp0MYjJsgYyrkQ0uihcwm0LmFwzy8ExXjXwl/DcJ
+    Bqw+WfxPjvkY6ZNwBmZbpr0mZaQ4NNtCOskJtyCw9HD9a7mzzSdUorDoJlDWU180C8lZ54
+    HZEFuOjndqiCWeC0hQcqgUiK5PiUEeazn7abJ+/umTML33AYxBH0wTQylP6xID9xXksZyN
+    k1UDRxZM6cfUp4CdSMNeruahniVs/40VjqqWeFlJs8fuMuUCsfGpnTv8yfQA
+X-ME-Proxy: <xmx:GT6CamczuDaAvElUCT6NWOqCS0uGo89Bl4-xkNsxmOS4JxDrbjHAHA>
+    <xmx:GT6CagKu8X5IybB2Cr7f9AjwTUM2C_095ar5-6iwb-T70Pl8KgpptQ>
+    <xmx:GT6CajEBFmVXIuW_bw2m5oU8_Z1FhEskuxmdLCX5C1oXLHXuZ9Lg9A>
+    <xmx:GT6Cao7cZMP1atvMHzcNqcbIvofy0j0S5fSiwjfE3RO4RpBXbSPkGg>
+    <xmx:GT6CaptNvAXrW6ozbY7ylNvb3zr1TdbgQ_lrOv-QyUQi5AD32TcU1lgY>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 16 Aug 2026 18:47:51 -0400 (EDT)
+ 16 Aug 2026 18:47:53 -0400 (EDT)
 From: Kiryl Shutsemau <kirill@shutemov.name>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -100,9 +100,9 @@ Cc: baolin.wang@linux.alibaba.com,
 	mhiramat@kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [RFC PATCH 51/57] selftests/mm: cover collapse inside a sub-PMD VMA
-Date: Sun, 16 Aug 2026 23:46:03 +0100
-Message-ID: <20260816224609.308019-52-kirill@shutemov.name>
+Subject: [RFC PATCH 52/57] selftests/mm: cover a hole-y window in a sub-PMD VMA
+Date: Sun, 16 Aug 2026 23:46:04 +0100
+Message-ID: <20260816224609.308019-53-kirill@shutemov.name>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260816224609.308019-1-kirill@shutemov.name>
 References: <20260816224609.308019-1-kirill@shutemov.name>
@@ -116,109 +116,92 @@ Content-Transfer-Encoding: 8bit
 
 From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
-The new engine can collapse an mTHP inside a VMA smaller than a PMD.  The
-old mechanism could not: its coverage was rooted at whole PMD-aligned
-spans, so a VMA that could not hold one was passed over however many
-mTHP-sized windows it held.  On arm64 with 64K pages, where a PMD is 512M,
-that was every VMA below 512M.
+A collapse over a partially populated window has to zero the slots it
+found empty.  The destination comes from the allocator holding whatever
+was last written to it, and a slot the process never touched must read
+back zero.
 
-Nothing covers that, so add two cases:
+Nothing in the suite checks that.  validate_memory() only re-reads the
+pattern fill_memory() wrote, and every caller passes it the faulted extent
+alone, so a collapse that left stale bytes behind the holes would pass
+every case here.
 
- - a VMA of exactly one window, the smallest thing that can be collapsed
-   at all;
- - a VMA of several windows, which also walks from one window to the next
-   inside a single VMA.
-
-The second takes as many windows as fit in half a table.  At the order
-just below the PMD order two windows are already a whole table, so there
-is no room for several and the case skips.
+Check it where population and sub-PMD eligibility meet, which no existing
+case covers either.  One page is faulted in a window-sized VMA; the case
+expects the window collapsed, the faulted page unchanged, and every byte
+behind the holes zero.
 
 Assisted-by: Claude-Code:claude-opus-5
 Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 ---
- tools/testing/selftests/mm/khugepaged.c | 65 +++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+ tools/testing/selftests/mm/khugepaged.c | 50 +++++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
 diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-index 172e7307eeee..85f138cfb9b2 100644
+index 85f138cfb9b2..b61e32566d47 100644
 --- a/tools/testing/selftests/mm/khugepaged.c
 +++ b/tools/testing/selftests/mm/khugepaged.c
-@@ -1536,6 +1536,69 @@ static void collapse_order_mixed_sources(struct collapse_context *c,
- 	ksft_test_result_report(exit_status, "%s\n", __func__);
+@@ -1599,6 +1599,55 @@ static void collapse_order_sub_pmd_range(struct collapse_context *c,
+ 	__collapse_order_sub_pmd_vma(c, ops, nr_windows, __func__);
  }
  
 +/*
-+ * A VMA smaller than a PMD is a valid collapse target, so long as it holds a
-+ * naturally aligned window of the target order.  This is the case khugepaged
-+ * used to pass over entirely, its coverage being rooted at whole PMD-aligned
-+ * spans, which on arm64 with 64K pages meant every VMA below 512M.
++ * A partially populated window in a sub-PMD VMA: population and
++ * sub-PMD eligibility at once. The unfaulted slots must come back
++ * zero-filled in the collapsed folio, and the faulted ones unchanged.
 + */
-+static void __collapse_order_sub_pmd_vma(struct collapse_context *c,
-+					 struct mem_ops *ops, int nr_windows,
-+					 const char *name)
++static void collapse_order_sub_pmd_holes(struct collapse_context *c,
++					 struct mem_ops *ops)
 +{
-+	size_t size = nr_windows * mthp_window_size();
++	size_t size = mthp_window_size();
++	char *bytes;
 +	void *p;
++	size_t i;
 +
 +	mthp_push_target_order();
 +
 +	p = mmap(BASE_ADDR, size, PROT_READ | PROT_WRITE,
 +		 MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++	bytes = p;
 +	if (p != BASE_ADDR)
 +		ksft_exit_fail_msg("Failed to allocate VMA at %p\n", BASE_ADDR);
 +
-+	fill_memory(p, 0, size);
++	fill_memory(p, 0, page_size);
 +	if (!window_not_collapsed(p, size))
 +		ksft_exit_fail_msg("Unexpected large folio after fault\n");
 +
 +	madvise(p, size, MADV_HUGEPAGE);
-+	ksft_print_msg("Collapse inside a sub-PMD VMA (%d windows)...",
-+		       nr_windows);
-+	if (!khugepaged_wait_full_pass())
++	ksft_print_msg("Collapse hole-y window inside a sub-PMD VMA...");
++	if (!khugepaged_wait_full_pass()) {
 +		fail("Timeout");
-+	else if (window_collapsed(p, size))
-+		success("OK");
-+	else
++	} else if (window_collapsed(p, size)) {
++		/* The unfaulted tail must be zero-filled. */
++		for (i = page_size; i < size; i++) {
++			if (bytes[i])
++				break;
++		}
++		if (i == size)
++			success("OK");
++		else
++			fail("Fail");
++	} else {
 +		fail("Fail");
++	}
 +
-+	validate_memory(p, 0, size);
++	validate_memory(p, 0, page_size);
 +	munmap(p, size);
 +	thp_pop_settings();
-+	ksft_test_result_report(exit_status, "%s\n", name);
-+}
-+
-+static void collapse_order_sub_pmd_vma(struct collapse_context *c,
-+				       struct mem_ops *ops)
-+{
-+	__collapse_order_sub_pmd_vma(c, ops, 1, __func__);
-+}
-+
-+static void collapse_order_sub_pmd_range(struct collapse_context *c,
-+					 struct mem_ops *ops)
-+{
-+	size_t window = mthp_window_size();
-+	int nr_windows = 16;
-+
-+	while (nr_windows > 1 && nr_windows * window > hpage_pmd_size / 2)
-+		nr_windows /= 2;
-+
-+	if (nr_windows == 1) {
-+		ksft_test_result_skip("%s: no room for multiple windows below the PMD\n",
-+				      __func__);
-+		return;
-+	}
-+	__collapse_order_sub_pmd_vma(c, ops, nr_windows, __func__);
++	ksft_test_result_report(exit_status, "%s\n", __func__);
 +}
 +
  static void usage(void)
  {
  	fprintf(stderr, "\nUsage: ./khugepaged [OPTIONS] <test type> [dir]\n\n");
-@@ -1823,6 +1886,8 @@ int main(int argc, char **argv)
- 		TEST(collapse_order_partial_window, mthp_khugepaged_context, anon_ops);
- 		TEST(collapse_order_max_ptes_none, mthp_khugepaged_context, anon_ops);
+@@ -1888,6 +1937,7 @@ int main(int argc, char **argv)
  		TEST(collapse_order_mixed_sources, mthp_khugepaged_context, anon_ops);
-+		TEST(collapse_order_sub_pmd_vma, mthp_khugepaged_context, anon_ops);
-+		TEST(collapse_order_sub_pmd_range, mthp_khugepaged_context, anon_ops);
+ 		TEST(collapse_order_sub_pmd_vma, mthp_khugepaged_context, anon_ops);
+ 		TEST(collapse_order_sub_pmd_range, mthp_khugepaged_context, anon_ops);
++		TEST(collapse_order_sub_pmd_holes, mthp_khugepaged_context, anon_ops);
  	}
  
  	TEST(collapse_full, madvise_context, anon_ops);
