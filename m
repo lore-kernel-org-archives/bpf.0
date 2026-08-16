@@ -1,73 +1,73 @@
 Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C41073EA976;
-	Sun, 16 Aug 2026 22:47:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDC343F6C2A;
+	Sun, 16 Aug 2026 22:47:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786920436; cv=none; b=N7Mzulwu1i4hqKA7phKRpuJZv71RNlF5NWufn+ywlf8AxS2GZVaOi7A/bo3Xio1q9GlL4ZPLC0TAxIm/Fid09Pjj5xOf+cD3zVt38q/2+47jlm5phVpGjLAcOP2n4UkrZKZV657HMo7ycybzAG0PkihwMzHr5zjvxRSExBIevuA=
+	t=1786920437; cv=none; b=jZ2V8cBqhDYv7QRMfkC5ii1CayFhABhtLuzr3WZ1G1cdQ2FcvZPAeI0QdWSEI0WodQqMLL4IteaXq8koXErLFOUDE9iAGJi2OUho0FF97x9qgnaVSmSS2xX+EvMWbhd/0QDgn1zSO1YR51RPdaHUDT6+pUV5A5DPGDA9paIMruY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786920436; c=relaxed/simple;
-	bh=QIY6pUWnMRARFJZmXUoPldloXAGvNVEu7FWVprChByM=;
+	s=arc-20240116; t=1786920437; c=relaxed/simple;
+	bh=KD4sXY94Vuz2+nX0EfaUT6taLHsHeW/DxE8KoKSqk/k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BA/cF0ijyy07x5rA77EtlG2douy6APukh5tgECFUXC1K+VNCwUt0dcn7ZVWh4N3Efu9HhiUDWyqvzK1cOx02mzdgUfRJpF3p9e/ob3JF4aD/wVxTOm2G2hdVPCKDfrusDdc51zXMC+Zi9TmX0KpUIDQSKL0Nuw55yBtpWdoSiFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=Nzmo2MU9; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=cPw1clLh; arc=none smtp.client-ip=103.168.172.144
+	 MIME-Version; b=ihTyO7kKNb6lfWOKch1L5OW0QnTENe4Vkday4Rug31cbW7IrfiGDOg357Tv/4oaT88PxXN0fTYNjTCnFhwYZ4wpmcwOltVzGTA3pIo9Szy3NqpUmvaDY8pcX6EZtg+5QYYznfDetySychiF7ckzgjRKHvrTRmu6w5vNufqh2N84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=V5giir+F; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=GApl5JHf; arc=none smtp.client-ip=103.168.172.144
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="Nzmo2MU9";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="cPw1clLh"
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="V5giir+F";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="GApl5JHf"
 Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfout.phl.internal (Postfix) with ESMTP id A1C33EC0241;
-	Sun, 16 Aug 2026 18:47:13 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Sun, 16 Aug 2026 18:47:13 -0400
+	by mailfout.phl.internal (Postfix) with ESMTP id 38940EC0242;
+	Sun, 16 Aug 2026 18:47:15 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Sun, 16 Aug 2026 18:47:15 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
 	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1786920433; x=
-	1787006833; bh=v4o+UQoQZuN2LWwiMtMQO8gOWSU/QLCCuxZH7iTS8uU=; b=N
-	zmo2MU9TZwrrFRAZ6xGNylCaGbUonvBeA/xtuSMYioyuvFDLHSIkGp9ynrpX/LNk
-	7cKrZXTFjSkDIQvlM/IKGNuMy42XDNj73hPmv79SntLIxYKwCg2sGRUpHEq1BUSq
-	HaurKhr1NuNDOKleEDWdn4tS+8Lpksv31G0u2S0+rkxPM9TDwRneDQWVxVF8iRna
-	Rq/4eS2CPbjoAaerlyjGFwP4QOUjUvqmhbd5ANkGUC85hZd4PW4ddcInBU9LeAQX
-	LjLMy5fgedqxFG6hWYHZXbV8W/FiM+xQvgUXY17mYC7WD/CLqgnPOuBtNXVveFUU
-	bbBAAhxd9NBZ59MvVDClw==
+	:reply-to:subject:subject:to:to; s=fm1; t=1786920435; x=
+	1787006835; bh=0Xh3qJFy3fUbrlN8Fy5RgHt7peoEA3/8bbzab7kXN/s=; b=V
+	5giir+FskG5CJ7dclo4ePNvd6SAwJqQ4yiFRkHkuQgTdwtX43TgBGCcujN18hpPC
+	RtjvbXARIqnkKrr2hpRHpBYlBOeLlSJ0nyu/Al0vs+246WUCf9WlXUarCqwF2kFE
+	omjK4nbjMDwDvNu6N7pPXuHBG7/Ey3yVmLU6Zv7W1ayBFV4aSyKwfQ5N04Xxtyjc
+	u9glyesF+QjUFHPyqBM+qiOeyYSuAQTTlXgUCAUuC0mSsYGk9W9AxivavcATJvxf
+	Gr42crPrhx4gE+UqaTqeT7txuIL8NINf/LYmAUQ8Yr9ahMsFyPw+ilLbnPy9ht8X
+	RgDOoqXtnvB7pw/3FLNMQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1786920433; x=1787006833; bh=v
-	4o+UQoQZuN2LWwiMtMQO8gOWSU/QLCCuxZH7iTS8uU=; b=cPw1clLhWCFCWDCZS
-	eKIgUsyQawxGxJvSYFl3N6kirdJFd0ho8m3Eqa6wrgy+YA6Hp4nGh0FvyoicjECL
-	YpmeWK3qAeMfnCbxdNUgJaBBljXKMVawJztxRg09Sqj/zdVCSRTJ52w8mzfYy2dM
-	9xjh9Bbne/DfZCp0LPW2uMQtmSR5CXuQZn1yiVI52TywqYBt5KNHM4XBK+4wcDW1
-	Zt0wV7Xn3DOhcEfanGyDNG3DREcPIuSkU2bSob4PN7ICfYMzmlDIU6bX6QxYjZTT
-	/LWQ6eue81Dn3kfxq1NHvLs2Yu6CrEESW0ezOKfRn2Iu6/w540Zkw6g6RgZdBMX3
-	KVisQ==
-X-ME-Sender: <xms:8T2CasT8iy7zqMjUTD8h3KzaPjgKOGCPyWj0nq0r-3yyFuLnVpyxuQ>
-    <xme:8T2CavHs1V3iunHwsXuV8cTt05rkwJq0fQuMQsCcYgaIHHarBtOt2Wm43rGpEyMbY
-    p_Wt6zv7xB6u21UzNoZyLU0jf6N_YPeGSvocGkk1m9HC6H1aDwW9JBW>
-X-ME-Received: <xmr:8T2Cal5g8O9yNxhrPLYdV-g8VrgwcpxhtycuV6qL1K1P-mQpS-khjQFbUig>
+	:x-me-sender:x-sasl-enc; s=fm3; t=1786920435; x=1787006835; bh=0
+	Xh3qJFy3fUbrlN8Fy5RgHt7peoEA3/8bbzab7kXN/s=; b=GApl5JHf4d23ZEorQ
+	EMstbMXZUb1M4UgrkGwCFZMAFdXcPxOT6ROYUSU/cH8dAgE9NiO09jAP+z9H5Xhv
+	VEABoGBQvAtGiWNxDNEfau5NaGo5dfHGNdJv6fzrB6LNxrLVw55XJQ8RwVn8UiNR
+	haN8wb0Ssgxm8r44TK+Kw9fwY7ZWiUvDWxZA4ElLSbfgNDrymH6sIj2P10BWjvVv
+	IADR1Ntgw2akgUPcVEsyf1QHZDh+sFA5OpHEr8RISRW8FjyO7cQR1zV2NE6vPcJc
+	Fpi39Ghn8vQCcTQM+xAHBOLTOWKjWchajHE8H0BYbYn6GXdfYf862gBGJ+iaZDDI
+	+BTtA==
+X-ME-Sender: <xms:8z2Caq4-OBD-AiIgXEWjU9hWbNHj4kVcsm9hvUsvbO9s196q3igM1g>
+    <xme:8z2CapM5HufFBu0pZ05nLf5hL2AEshucIhiVZS9TAODah5Xa8IOFaOUho9WF9zGS_
+    8ygme3Kzere6SIzB2bayDsQjnz9ChkzeQPCYD3ed1UBMVvDwAFZyEg>
+X-ME-Received: <xmr:8z2CaliN6nn2m2UACcbQtY92IouTMO_yENw3iTs1cSQcjBWDMx84pc0n9h0>
 X-ME-Proxy-Cause: dmFkZTEDk+RLLWMQ2xmtz+SLrRm4SAAyqR0dcBO/jFiSra6UqVmtacLBiFsIEc4u4O0k4e
     TprFkQPKvch8mvItdBrQvHbw0cB+L9AXDq7j8E1YHObaRHu/NhSSUGMahPtwIv/D6P/2Ck
     /ZmAzcEVmv8/4SK/QQlss/OdD6ZYE8aT6ou3Os4qcrsJTku67URPEU5YsnAJoGYWAjn3Up
     7SKj7HM1m+Bk9heCO7PBXLylkVDNPLNBQlGmsET8D8iA96BjDQqliz/FRaUJqsbc23hZYK
-    6FfmpWMzIACF8l0zIVIJGtLfQU4v7CVbie56C+ilpPey1dPs7ANiSUKA9aUYDcXfVHEKt5
-    QL+mvNaMseb/Ht1UO0WB56E3iZGzyAOebwIkEOYKQzzqtStumThDKCMbnt+pabPBUCi6C4
-    i1X8mX281nuQJE+kMOftIZFvYGyVcJ4EZfk7iq3IwS7NuqcYuxw+BjUBjNWCnYNXKe3ykr
-    ajmbjgA95dA0JtaZDAeNOemV3+7uqoirAmx5+CghSeFHgxZC/NzlROWzFMZZ9a7SEjVKov
-    CsevLGiDtRPJplVpKu9iUjOIQlaE4smjKTqMP5JqBu7Rj0/yeqEqWcLhYu98GV1a7O039C
-    yStEXlYF+K1jnN4lvNCMC8uN6vMTMzcxa2dkpBw+3kVFpSgx8l0seglGw0jw
-X-ME-Proxy: <xmx:8T2CasleIljLbczwsgJmWXki19zmR_jslomsxAgPmA-a4jvXUw-3Rw>
-    <xmx:8T2CarwyeBa3U0l3ZTusASOq92-AXEzl_l7FafO3yB-5GXOsuaKzlQ>
-    <xmx:8T2CamOgE2xu3Sm9QRcsycaDvCGDJi-oV-oqtHDOVHddfkMVTjojAA>
-    <xmx:8T2CatiQgLhSzz9d3pvfgf9SDe_1F7H9iE6M5NpzNQB0dlmpJ4qxVA>
-    <xmx:8T2Cau3k2QpKg3ruNjpKXblqS2EXS-KfIjm6TdGH_q9ulZ0T3hWxB2-A>
+    6FfmpWMzIACF8l0zIVIJGtLfQU4v7CVbie56C+ilpPey1dPs7ANiSUKA9aUYDcXfVHEKIB
+    CBopL77cQG0VLaTu2WtaEqdiaZ5xCAD/3YiiT0Lq44Ym9vdIpYdhzK+jQXietixt7epVkB
+    if3RNtS6b9w3JJ41Es85ighZoOawaKfc83t0IoYu4uoikAtuRK+JbqxDq/gaHo9YYFOBBq
+    B65m56HfcLycTC3OwAjrSioOFCBDb40VhLH64PtRBYsZjA0+1n3CrhGCunvVAvf9rb6dEp
+    0jfbxFptvtcfTYM69fB3mqD0o8Q3g3qeOYT+NVvJ+WlCKBClxubhwGBnyR/4vMG7vwnYjS
+    uhnzb4yQEXQ/H5n2RPqlQYRsWTuxmq3VmvuT/9rB2mqs0kuK37xxe+LH8GWw
+X-ME-Proxy: <xmx:8z2CajshiB69gzwXiOvYVO9qyylDxqLk7a1iMxVPicc7T5J2EtjA9Q>
+    <xmx:8z2CakZplhn4MASd4j_fbvSMDjNcFNoG-kxxMVx8BZeQEYZMcibnFQ>
+    <xmx:8z2CaiXVKNiJfn49BNdWc7dKEb2CWa8_7MN9bPZq5EEHwfv1Y1r1vQ>
+    <xmx:8z2CanJTxqkiZtjkNB7JUeWLHOv8BqFBkd-p0oirHcfgTrGwRT5-fg>
+    <xmx:8z2Cas-SLvdtpXL2o2h3H4eBUjfSmnIzbxFWh5JZWZwoTqql0Tr3MUyX>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 16 Aug 2026 18:47:13 -0400 (EDT)
+ 16 Aug 2026 18:47:14 -0400 (EDT)
 From: Kiryl Shutsemau <kirill@shutemov.name>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -100,9 +100,9 @@ Cc: baolin.wang@linux.alibaba.com,
 	mhiramat@kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [RFC PATCH 29/57] mm/collapse: move what a collapse is judged on into collapse.c
-Date: Sun, 16 Aug 2026 23:45:41 +0100
-Message-ID: <20260816224609.308019-30-kirill@shutemov.name>
+Subject: [RFC PATCH 30/57] mm/collapse: name the max_ptes ceiling after collapse
+Date: Sun, 16 Aug 2026 23:45:42 +0100
+Message-ID: <20260816224609.308019-31-kirill@shutemov.name>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260816224609.308019-1-kirill@shutemov.name>
 References: <20260816224609.308019-1-kirill@shutemov.name>
@@ -116,508 +116,103 @@ Content-Transfer-Encoding: 8bit
 
 From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
-collapse.c had to call back into khugepaged.c for nine things: the PMD
-state checks, the orders a VMA allows, the per-order limits, the NUMA
-heuristics and the window alignment.  The engine therefore depended on
-the daemon, which is backwards -- khugepaged is one caller of a collapse,
-not the place a collapse lives.
+The constant lives in collapse.h and is read by the limit helpers there,
+so KHUGEPAGED_MAX_PTES_LIMIT names it after one of its callers rather
+than after what it is.
 
-Move them across.  max_order_from_offset() and collapse_max_ptes_shared()
-have no caller left outside collapse.c and land static; the rest stay
-exported while khugepaged.c's file paths still ask for them.
-
-KHUGEPAGED_MAX_PTES_LIMIT goes to collapse.h with them, being both the
-ceiling the tunables accept and the value they read as "no limit".
-
-Every function body is byte for byte what it was, and the dependency now
-points one way.
+Rename it to COLLAPSE_MAX_PTES_LIMIT, matching the other constant the
+header defines.  khugepaged keeps using it to bound what its tunables
+accept.
 
 Assisted-by: Claude-Code:claude-opus-5
 Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 ---
- mm/collapse.c   | 187 +++++++++++++++++++++++++++++++++++++++++++++++
- mm/collapse.h   |  11 +--
- mm/khugepaged.c | 189 ------------------------------------------------
- 3 files changed, 191 insertions(+), 196 deletions(-)
+ mm/collapse.c   | 8 ++++----
+ mm/collapse.h   | 2 +-
+ mm/khugepaged.c | 8 ++++----
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
 diff --git a/mm/collapse.c b/mm/collapse.c
-index df3760e3918b..43a4b771bbe1 100644
+index 43a4b771bbe1..ae7c2777b279 100644
 --- a/mm/collapse.c
 +++ b/mm/collapse.c
-@@ -113,6 +113,193 @@
- 	min(COLLAPSE_BATCH_BYTES >> (PAGE_SHIFT + COLLAPSE_MIN_MTHP_ORDER), \
- 	    COLLAPSE_TABLE_WINDOWS)
+@@ -193,19 +193,19 @@ unsigned int collapse_max_ptes_none(struct collapse_control *cc,
+ 	if (is_pmd_order(order) || !cc->policy.strict_sub_pmd)
+ 		return max_ptes_none;
+ 	/*
+-	 * for mTHP collapse with the sysctl value set to KHUGEPAGED_MAX_PTES_LIMIT,
++	 * for mTHP collapse with the sysctl value set to COLLAPSE_MAX_PTES_LIMIT,
+ 	 * scale the maximum number of PTEs to the order of the collapse.
+ 	 */
+-	if (max_ptes_none == KHUGEPAGED_MAX_PTES_LIMIT)
++	if (max_ptes_none == COLLAPSE_MAX_PTES_LIMIT)
+ 		return (1 << order) - 1;
+ 	/*
+-	 * For mTHP collapse of values other than 0 or KHUGEPAGED_MAX_PTES_LIMIT,
++	 * For mTHP collapse of values other than 0 or COLLAPSE_MAX_PTES_LIMIT,
+ 	 * emit a warning and return 0.
+ 	 */
+ 	if (max_ptes_none)
+ 		pr_warn_once("mTHP collapse does not support max_ptes_none"
+ 		     " values other than 0 or %u, defaulting to 0.\n",
+-		     KHUGEPAGED_MAX_PTES_LIMIT);
++		     COLLAPSE_MAX_PTES_LIMIT);
+ 	return 0;
+ }
  
-+static inline enum scan_result check_pmd_state(pmd_t *pmd)
-+{
-+	pmd_t pmde = pmdp_get_lockless(pmd);
-+
-+	if (pmd_none(pmde))
-+		return SCAN_NO_PTE_TABLE;
-+
-+	/*
-+	 * The folio may be under migration when khugepaged is trying to
-+	 * collapse it. Migration success or failure will eventually end
-+	 * up with a present PMD mapping a folio again.
-+	 */
-+	if (pmd_is_migration_entry(pmde))
-+		return SCAN_PMD_MAPPED;
-+	if (!pmd_present(pmde))
-+		return SCAN_NO_PTE_TABLE;
-+	if (pmd_trans_huge(pmde))
-+		return SCAN_PMD_MAPPED;
-+	if (pmd_bad(pmde))
-+		return SCAN_NO_PTE_TABLE;
-+	return SCAN_SUCCEED;
-+}
-+
-+enum scan_result find_pmd_or_thp_or_none(struct mm_struct *mm,
-+		unsigned long address, pmd_t **pmd)
-+{
-+	*pmd = mm_find_pmd(mm, address);
-+	if (!*pmd)
-+		return SCAN_NO_PTE_TABLE;
-+
-+	return check_pmd_state(*pmd);
-+}
-+
-+/*
-+ * Check what orders are possible based on the vma and collapse type.
-+ * This is used to determine if mTHP collapse is a viable option.
-+ */
-+unsigned long collapse_possible_orders(struct vm_area_struct *vma,
-+		vm_flags_t vm_flags, enum tva_type tva_flags)
-+{
-+	unsigned long orders;
-+
-+	/* If khugepaged is scanning an anonymous vma, allow mTHP collapse */
-+	if ((tva_flags == TVA_KHUGEPAGED) && vma_is_anonymous(vma))
-+		orders = THP_ORDERS_ALL_ANON;
-+	else
-+		orders = BIT(HPAGE_PMD_ORDER);
-+
-+	return thp_vma_allowable_orders(vma, vm_flags, tva_flags, orders);
-+}
-+
-+/* Return the highest naturally aligned order that fits at @offset within a PMD. */
-+static unsigned int max_order_from_offset(unsigned int offset)
-+{
-+	if (offset == 0)
-+		return HPAGE_PMD_ORDER;
-+
-+	return min_t(unsigned int, __ffs(offset), HPAGE_PMD_ORDER);
-+}
-+
-+/**
-+ * collapse_max_ptes_none - Calculate maximum allowed empty PTEs or PTEs mapping
-+ * the shared zeropage for the given collapse operation.
-+ * @cc: The collapse control struct
-+ * @vma: The vma to check for userfaultfd
-+ * @order: The folio order being collapsed to
-+ *
-+ * Return: Maximum number of empty/shared zeropage PTEs for the collapse operation
-+ */
-+unsigned int collapse_max_ptes_none(struct collapse_control *cc,
-+		struct vm_area_struct *vma, unsigned int order)
-+{
-+	const unsigned int max_ptes_none = cc->policy.max_ptes_none;
-+
-+	if (vma && userfaultfd_armed(vma))
-+		return 0;
-+	/* The limit as given, at the PMD order and wherever it is not capped */
-+	if (is_pmd_order(order) || !cc->policy.strict_sub_pmd)
-+		return max_ptes_none;
-+	/*
-+	 * for mTHP collapse with the sysctl value set to KHUGEPAGED_MAX_PTES_LIMIT,
-+	 * scale the maximum number of PTEs to the order of the collapse.
-+	 */
-+	if (max_ptes_none == KHUGEPAGED_MAX_PTES_LIMIT)
-+		return (1 << order) - 1;
-+	/*
-+	 * For mTHP collapse of values other than 0 or KHUGEPAGED_MAX_PTES_LIMIT,
-+	 * emit a warning and return 0.
-+	 */
-+	if (max_ptes_none)
-+		pr_warn_once("mTHP collapse does not support max_ptes_none"
-+		     " values other than 0 or %u, defaulting to 0.\n",
-+		     KHUGEPAGED_MAX_PTES_LIMIT);
-+	return 0;
-+}
-+
-+/**
-+ * collapse_max_ptes_shared - Calculate maximum allowed PTEs that map shared
-+ * anonymous pages for the given collapse operation.
-+ * @cc: The collapse control struct
-+ * @order: The folio order being collapsed to
-+ *
-+ * Return: Maximum number of PTEs that map shared anonymous pages for the
-+ * collapse operation
-+ */
-+static unsigned int collapse_max_ptes_shared(struct collapse_control *cc,
-+		unsigned int order)
-+{
-+	/*
-+	 * A sub-PMD window held to the strict rule takes no shared page at all:
-+	 * an mTHP is not worth the CoW-breaking.
-+	 */
-+	if (!is_pmd_order(order) && cc->policy.strict_sub_pmd)
-+		return 0;
-+	return cc->policy.max_ptes_shared;
-+}
-+
-+/**
-+ * collapse_max_ptes_swap - Calculate the maximum allowed non-present PTEs or the
-+ * maximum allowed non-present pagecache entries for the given collapse operation.
-+ * @cc: The collapse control struct
-+ * @order: The folio order being collapsed to
-+ *
-+ * Return: Maximum number of non-present PTEs or the maximum allowed non-present
-+ * pagecache entries for the collapse operation.
-+ */
-+unsigned int collapse_max_ptes_swap(struct collapse_control *cc,
-+		unsigned int order)
-+{
-+	/*
-+	 * A sub-PMD window held to the strict rule takes nothing non-present:
-+	 * reading pages back to build an mTHP is not worth the latency.
-+	 */
-+	if (!is_pmd_order(order) && cc->policy.strict_sub_pmd)
-+		return 0;
-+	return cc->policy.max_ptes_swap;
-+}
-+
-+bool collapse_scan_abort(int nid, struct collapse_control *cc)
-+{
-+	int i;
-+
-+	/*
-+	 * If node_reclaim_mode is disabled, then no extra effort is made to
-+	 * allocate memory locally.
-+	 */
-+	if (!node_reclaim_enabled())
-+		return false;
-+
-+	/* If there is a count for this node already, it must be acceptable */
-+	if (cc->node_load[nid])
-+		return false;
-+
-+	for (i = 0; i < MAX_NUMNODES; i++) {
-+		if (!cc->node_load[i])
-+			continue;
-+		if (node_distance(nid, i) > node_reclaim_distance)
-+			return true;
-+	}
-+	return false;
-+}
-+
-+#ifdef CONFIG_NUMA
-+int collapse_find_target_node(struct collapse_control *cc)
-+{
-+	int nid, target_node = 0, max_value = 0;
-+
-+	/* find first node with max normal pages hit */
-+	for (nid = 0; nid < MAX_NUMNODES; nid++)
-+		if (cc->node_load[nid] > max_value) {
-+			max_value = cc->node_load[nid];
-+			target_node = nid;
-+		}
-+
-+	for_each_online_node(nid) {
-+		if (max_value == cc->node_load[nid])
-+			node_set(nid, cc->alloc_nmask);
-+	}
-+
-+	return target_node;
-+}
-+#else
-+int collapse_find_target_node(struct collapse_control *cc)
-+{
-+	return 0;
-+}
-+#endif
- /*
-  * The saved-PTE pool spans a whole table.  The byte cap bounds what a round
-  * holds, but not what one candidate does: a sub-PMD order goes up to
 diff --git a/mm/collapse.h b/mm/collapse.h
-index 50a9d59bbf03..2fdb6418653a 100644
+index 2fdb6418653a..94c11051f06a 100644
 --- a/mm/collapse.h
 +++ b/mm/collapse.h
-@@ -7,6 +7,9 @@
- #include <linux/pgtable.h>
+@@ -8,7 +8,7 @@
  #include <linux/types.h>
  
-+/* Ceiling the max_ptes_* tunables accept, and the value meaning "no limit" */
-+#define KHUGEPAGED_MAX_PTES_LIMIT	(HPAGE_PMD_NR - 1)
-+
+ /* Ceiling the max_ptes_* tunables accept, and the value meaning "no limit" */
+-#define KHUGEPAGED_MAX_PTES_LIMIT	(HPAGE_PMD_NR - 1)
++#define COLLAPSE_MAX_PTES_LIMIT		(HPAGE_PMD_NR - 1)
+ 
  /* The smallest order a collapse will build, and so the finest window it cuts */
  #define COLLAPSE_MIN_MTHP_ORDER		2
- 
-@@ -194,22 +197,16 @@ enum scan_result collapse_anon_pmd(struct mm_struct *mm, unsigned long start,
- int collapse_control_init(struct collapse_control *cc);
- void collapse_control_release(struct collapse_control *cc);
- 
--/*
-- * Defined in khugepaged.c, which still uses them itself.
-- * TODO: move each into collapse.c once its last khugepaged.c user is gone.
-- */
- unsigned long collapse_possible_orders(struct vm_area_struct *vma,
- 		vm_flags_t vm_flags, enum tva_type tva_flags);
-+enum scan_result check_pmd_state(pmd_t *pmd);
- enum scan_result find_pmd_or_thp_or_none(struct mm_struct *mm,
- 		unsigned long address, pmd_t **pmd);
- int collapse_find_target_node(struct collapse_control *cc);
- bool collapse_scan_abort(int nid, struct collapse_control *cc);
--unsigned int max_order_from_offset(unsigned int offset);
- unsigned int collapse_max_ptes_none(struct collapse_control *cc,
- 		struct vm_area_struct *vma, unsigned int order);
- unsigned int collapse_max_ptes_swap(struct collapse_control *cc,
- 		unsigned int order);
--unsigned int collapse_max_ptes_shared(struct collapse_control *cc,
--		unsigned int order);
- 
- #endif	/* __MM_COLLAPSE_H */
 diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 6203473f4953..26c0e961ac9f 100644
+index 26c0e961ac9f..8c770e251c22 100644
 --- a/mm/khugepaged.c
 +++ b/mm/khugepaged.c
-@@ -57,7 +57,6 @@ static DECLARE_WAIT_QUEUE_HEAD(khugepaged_wait);
-  *
-  * Note that these are only respected if collapse was initiated by khugepaged.
-  */
--#define KHUGEPAGED_MAX_PTES_LIMIT (HPAGE_PMD_NR - 1)
- unsigned int khugepaged_max_ptes_none __read_mostly;
- static unsigned int khugepaged_max_ptes_swap __read_mostly;
- static unsigned int khugepaged_max_ptes_shared __read_mostly;
-@@ -296,84 +295,6 @@ struct attribute_group khugepaged_attr_group = {
- };
- #endif /* CONFIG_SYSFS */
+@@ -214,7 +214,7 @@ static ssize_t max_ptes_none_store(struct kobject *kobj,
+ 	unsigned long max_ptes_none;
  
--/**
-- * collapse_max_ptes_none - Calculate maximum allowed empty PTEs or PTEs mapping
-- * the shared zeropage for the given collapse operation.
-- * @cc: The collapse control struct
-- * @vma: The vma to check for userfaultfd
-- * @order: The folio order being collapsed to
-- *
-- * Return: Maximum number of empty/shared zeropage PTEs for the collapse operation
-- */
--unsigned int collapse_max_ptes_none(struct collapse_control *cc,
--		struct vm_area_struct *vma, unsigned int order)
--{
--	const unsigned int max_ptes_none = cc->policy.max_ptes_none;
--
--	if (vma && userfaultfd_armed(vma))
--		return 0;
--	/* The limit as given, at the PMD order and wherever it is not capped */
--	if (is_pmd_order(order) || !cc->policy.strict_sub_pmd)
--		return max_ptes_none;
--	/*
--	 * for mTHP collapse with the sysctl value set to KHUGEPAGED_MAX_PTES_LIMIT,
--	 * scale the maximum number of PTEs to the order of the collapse.
--	 */
--	if (max_ptes_none == KHUGEPAGED_MAX_PTES_LIMIT)
--		return (1 << order) - 1;
--	/*
--	 * For mTHP collapse of values other than 0 or KHUGEPAGED_MAX_PTES_LIMIT,
--	 * emit a warning and return 0.
--	 */
--	if (max_ptes_none)
--		pr_warn_once("mTHP collapse does not support max_ptes_none"
--		     " values other than 0 or %u, defaulting to 0.\n",
--		     KHUGEPAGED_MAX_PTES_LIMIT);
--	return 0;
--}
--
--/**
-- * collapse_max_ptes_shared - Calculate maximum allowed PTEs that map shared
-- * anonymous pages for the given collapse operation.
-- * @cc: The collapse control struct
-- * @order: The folio order being collapsed to
-- *
-- * Return: Maximum number of PTEs that map shared anonymous pages for the
-- * collapse operation
-- */
--unsigned int collapse_max_ptes_shared(struct collapse_control *cc,
--		unsigned int order)
--{
--	/*
--	 * A sub-PMD window held to the strict rule takes no shared page at all:
--	 * an mTHP is not worth the CoW-breaking.
--	 */
--	if (!is_pmd_order(order) && cc->policy.strict_sub_pmd)
--		return 0;
--	return cc->policy.max_ptes_shared;
--}
--
--/**
-- * collapse_max_ptes_swap - Calculate the maximum allowed non-present PTEs or the
-- * maximum allowed non-present pagecache entries for the given collapse operation.
-- * @cc: The collapse control struct
-- * @order: The folio order being collapsed to
-- *
-- * Return: Maximum number of non-present PTEs or the maximum allowed non-present
-- * pagecache entries for the collapse operation.
-- */
--unsigned int collapse_max_ptes_swap(struct collapse_control *cc,
--		unsigned int order)
--{
--	/*
--	 * A sub-PMD window held to the strict rule takes nothing non-present:
--	 * reading pages back to build an mTHP is not worth the latency.
--	 */
--	if (!is_pmd_order(order) && cc->policy.strict_sub_pmd)
--		return 0;
--	return cc->policy.max_ptes_swap;
--}
--
- int hugepage_madvise(struct vm_area_struct *vma,
- 		     vm_flags_t *vm_flags, int advice)
- {
-@@ -483,24 +404,6 @@ void __khugepaged_enter(struct mm_struct *mm)
- 		wake_up_interruptible(&khugepaged_wait);
- }
+ 	err = kstrtoul(buf, 10, &max_ptes_none);
+-	if (err || max_ptes_none > KHUGEPAGED_MAX_PTES_LIMIT)
++	if (err || max_ptes_none > COLLAPSE_MAX_PTES_LIMIT)
+ 		return -EINVAL;
  
--/*
-- * Check what orders are possible based on the vma and collapse type.
-- * This is used to determine if mTHP collapse is a viable option.
-- */
--unsigned long collapse_possible_orders(struct vm_area_struct *vma,
--		vm_flags_t vm_flags, enum tva_type tva_flags)
--{
--	unsigned long orders;
--
--	/* If khugepaged is scanning an anonymous vma, allow mTHP collapse */
--	if ((tva_flags == TVA_KHUGEPAGED) && vma_is_anonymous(vma))
--		orders = THP_ORDERS_ALL_ANON;
--	else
--		orders = BIT(HPAGE_PMD_ORDER);
--
--	return thp_vma_allowable_orders(vma, vm_flags, tva_flags, orders);
--}
--
- static bool collapse_possible(struct vm_area_struct *vma,
- 		vm_flags_t vm_flags, enum tva_type tva_flags)
- {
-@@ -559,30 +462,6 @@ static struct collapse_control khugepaged_collapse_control = {
- 	.is_khugepaged = true,
- };
+ 	khugepaged_max_ptes_none = max_ptes_none;
+@@ -239,7 +239,7 @@ static ssize_t max_ptes_swap_store(struct kobject *kobj,
+ 	unsigned long max_ptes_swap;
  
--bool collapse_scan_abort(int nid, struct collapse_control *cc)
--{
--	int i;
--
--	/*
--	 * If node_reclaim_mode is disabled, then no extra effort is made to
--	 * allocate memory locally.
--	 */
--	if (!node_reclaim_enabled())
--		return false;
--
--	/* If there is a count for this node already, it must be acceptable */
--	if (cc->node_load[nid])
--		return false;
--
--	for (i = 0; i < MAX_NUMNODES; i++) {
--		if (!cc->node_load[i])
--			continue;
--		if (node_distance(nid, i) > node_reclaim_distance)
--			return true;
--	}
--	return false;
--}
--
- #define khugepaged_defrag()					\
- 	(transparent_hugepage_flags &				\
- 	 (1<<TRANSPARENT_HUGEPAGE_DEFRAG_KHUGEPAGED_FLAG))
-@@ -623,32 +502,6 @@ static void collapse_policy_forced(struct collapse_policy *p)
- 	p->tva_type = TVA_FORCED_COLLAPSE;
- }
+ 	err  = kstrtoul(buf, 10, &max_ptes_swap);
+-	if (err || max_ptes_swap > KHUGEPAGED_MAX_PTES_LIMIT)
++	if (err || max_ptes_swap > COLLAPSE_MAX_PTES_LIMIT)
+ 		return -EINVAL;
  
--#ifdef CONFIG_NUMA
--int collapse_find_target_node(struct collapse_control *cc)
--{
--	int nid, target_node = 0, max_value = 0;
--
--	/* find first node with max normal pages hit */
--	for (nid = 0; nid < MAX_NUMNODES; nid++)
--		if (cc->node_load[nid] > max_value) {
--			max_value = cc->node_load[nid];
--			target_node = nid;
--		}
--
--	for_each_online_node(nid) {
--		if (max_value == cc->node_load[nid])
--			node_set(nid, cc->alloc_nmask);
--	}
--
--	return target_node;
--}
--#else
--int collapse_find_target_node(struct collapse_control *cc)
--{
--	return 0;
--}
--#endif
--
- /*
-  * If mmap_lock temporarily dropped, revalidate vma
-  * after taking the mmap_lock again.
-@@ -692,39 +545,6 @@ static enum scan_result hugepage_vma_revalidate(struct mm_struct *mm, unsigned l
- 	return SCAN_SUCCEED;
- }
+ 	khugepaged_max_ptes_swap = max_ptes_swap;
+@@ -265,7 +265,7 @@ static ssize_t max_ptes_shared_store(struct kobject *kobj,
+ 	unsigned long max_ptes_shared;
  
--static inline enum scan_result check_pmd_state(pmd_t *pmd)
--{
--	pmd_t pmde = pmdp_get_lockless(pmd);
--
--	if (pmd_none(pmde))
--		return SCAN_NO_PTE_TABLE;
--
--	/*
--	 * The folio may be under migration when khugepaged is trying to
--	 * collapse it. Migration success or failure will eventually end
--	 * up with a present PMD mapping a folio again.
--	 */
--	if (pmd_is_migration_entry(pmde))
--		return SCAN_PMD_MAPPED;
--	if (!pmd_present(pmde))
--		return SCAN_NO_PTE_TABLE;
--	if (pmd_trans_huge(pmde))
--		return SCAN_PMD_MAPPED;
--	if (pmd_bad(pmde))
--		return SCAN_NO_PTE_TABLE;
--	return SCAN_SUCCEED;
--}
--
--enum scan_result find_pmd_or_thp_or_none(struct mm_struct *mm,
--		unsigned long address, pmd_t **pmd)
--{
--	*pmd = mm_find_pmd(mm, address);
--	if (!*pmd)
--		return SCAN_NO_PTE_TABLE;
--
--	return check_pmd_state(*pmd);
--}
--
- static void count_collapse_event(unsigned int order, enum vm_event_item vm_event,
- 		enum mthp_stat_item mthp_event)
- {
-@@ -770,15 +590,6 @@ static enum scan_result alloc_charge_folio(struct folio **foliop, struct mm_stru
- 	return SCAN_SUCCEED;
- }
+ 	err  = kstrtoul(buf, 10, &max_ptes_shared);
+-	if (err || max_ptes_shared > KHUGEPAGED_MAX_PTES_LIMIT)
++	if (err || max_ptes_shared > COLLAPSE_MAX_PTES_LIMIT)
+ 		return -EINVAL;
  
--/* Return the highest naturally aligned order that fits at @offset within a PMD. */
--unsigned int max_order_from_offset(unsigned int offset)
--{
--	if (offset == 0)
--		return HPAGE_PMD_ORDER;
--
--	return min_t(unsigned int, __ffs(offset), HPAGE_PMD_ORDER);
--}
--
- static void collect_mm_slot(struct mm_slot *slot)
- {
- 	struct mm_struct *mm = slot->mm;
+ 	khugepaged_max_ptes_shared = max_ptes_shared;
+@@ -330,7 +330,7 @@ int __init khugepaged_init(void)
+ 		return -ENOMEM;
+ 
+ 	khugepaged_pages_to_scan = HPAGE_PMD_NR * 8;
+-	khugepaged_max_ptes_none = KHUGEPAGED_MAX_PTES_LIMIT;
++	khugepaged_max_ptes_none = COLLAPSE_MAX_PTES_LIMIT;
+ 	khugepaged_max_ptes_swap = HPAGE_PMD_NR / 8;
+ 	khugepaged_max_ptes_shared = HPAGE_PMD_NR / 2;
+ 
 -- 
 2.54.0
 
