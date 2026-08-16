@@ -1,179 +1,164 @@
-Received: from outbound.baidu.com (mx14.baidu.com [220.181.3.101])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id 02786201278;
-	Sun, 16 Aug 2026 03:56:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.181.3.101
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DACB12DB798;
+	Sun, 16 Aug 2026 03:57:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786852596; cv=none; b=Qe+ZaYY4x9eoWpKhbXgUfqALNZWB7wQLAC8qHTqLGJc2qt+nju4Kb8McM4aQsn+T7odVJ//TeavNqU2fb80aYDeeFI8RcIbv3GS6RWskkMU7TpiVtU5QIQOpSTmtBxLUo36EpGXGfuE+y+oaWvqKpoZN7I9iklriTWL8kZrbGkI=
+	t=1786852681; cv=none; b=dfePsv7+AeCxXx840f/HaIs2/C0a1mS1Xo2vg30DK3gE9fCB0LAkbZ0jKFQjVBUawaDY1WVXqYObmeKJ/rCSteKiDZil/Omxc7njRRd4kObD2SKUJOXjpXIvZFcyDnwb1TKlYyzsM5hJx01McMJz/uJ5M+dUkrbJpc4qZWlMgXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786852596; c=relaxed/simple;
-	bh=6cbLuym+1cqRI7P7D4gMdqm+OHpINkJYcn9natJyGsk=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Oie0GtLXvxSfWw5YGXDMUw7AvnbWSUxc3X7kyIu6eo9g3omFCQiXIulbhKv6bQvKgYIWkihOdKQkyf7ceMLhtzcYJTKMECKgXY+m6iH0z0587JTu7bgTfxKaAu8hpe/HrAC2lwowa3qSAV/Sm71I73wpyAB0MsEJRblwsJi+PlE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=baidu.com; spf=pass smtp.mailfrom=baidu.com; dkim=pass (2048-bit key) header.d=baidu.com header.i=@baidu.com header.b=NTLoGFoI; arc=none smtp.client-ip=220.181.3.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=baidu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baidu.com
+	s=arc-20240116; t=1786852681; c=relaxed/simple;
+	bh=gECAAk/4ExcxETs+rIfYIcGaME31GhWzE7ijuaUeZpg=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=iwgfymJh3lDnbGzFPzR5WBrL7w9XZO9bnuXFrzJrw1DSbeVJwDgCEVKpOc968dWl2svYkA2anTG1FGk6Ui511sXk5itGJa1sIl4tSegfdZ02LHjN7PR9wjo+k6wYjpi9EPOfiWHRMicp26o/9ZoEe+SYdk5Ctm21yJ43z5XrI/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZfFx4bQ1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baidu.com header.i=@baidu.com header.b="NTLoGFoI"
-X-MD-Sfrom: lirongqing@baidu.com
-X-MD-SrcIP: 172.31.50.47
-From: lirongqing <lirongqing@baidu.com>
-To: Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
-	Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>, Andrew Lunn
-	<andrew+netdev@lunn.ch>, "David S . Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
- Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
-	Boris Pismenny <borisp@nvidia.com>, Richard Cochran
-	<richardcochran@gmail.com>, Cosmin Ratiu <cratiu@nvidia.com>, Dragos Tatulea
-	<dtatulea@nvidia.com>, Carolina Jubran <cjubran@nvidia.com>, Li RongQing
-	<lirongqing@baidu.com>, Kees Cook <kees@kernel.org>, Akiva Goldberger
-	<agoldberger@nvidia.com>, Simon Horman <horms@kernel.org>,
-	<netdev@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: [PATCH net-next, v3] net/mlx5: Use dma_wmb() for completion queue doorbell updates
-Date: Sun, 16 Aug 2026 11:56:05 +0800
-Message-ID: <20260816035605.1873-1-lirongqing@baidu.com>
-X-Mailer: git-send-email 2.17.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZfFx4bQ1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ED3B1F000E9;
+	Sun, 16 Aug 2026 03:57:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786852679;
+	bh=MTSysb65ADjtlvNFIs4wkzTc2eQHtgkj3pmYPJpa6YI=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=ZfFx4bQ1/rLRgacIfeaiHLgahxI7FbPQnye+g4au0ZWrMMsRZ442SZ4K0i/3sLg2k
+	 kfkQdRMZoGSsp8ndeuczeouSWKE9xPji5wrWANmwmk+41eoCYmC4lG/V8J57oVCYg+
+	 Ww0dewOSz2ul17pLmtfxAxApXC0ytvqvp8E3uy4lKwsbXflFyEThJKWmitBwDj5H06
+	 jRzwwO0WRPNkZnZg67ODvyVzcwV1Tu00TxwhM1pdTrLT1bebV+wi+YoQY+vsiqt1Nc
+	 mc3SXQmkN/8IRm/yQ/GVrQZCewGTiBV773IryqnJhxis+CIF8Hslde9YD88kmDazKN
+	 XZ22JM8WliQ3Q==
+Content-Type: multipart/mixed; boundary="===============2544190724305362226=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: bjhj-exc3.internal.baidu.com (172.31.3.13) To
- bjkjy-exc3.internal.baidu.com (172.31.50.47)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=baidu.com;
-	s=selector1; t=1786852580;
-	bh=CoCztr6XAGEBvv7TN377FtTXgA/2hXdT8SEOdZBtANs=;
-	h=From:To:Subject:Date:Message-ID:Content-Type;
-	b=NTLoGFoISOzPQiSktm5+AmMXT1oHO6xmi7YjLpp4ef+j/cHW/39vT0qO07iS9Cyds
-	 iRVl5U1hhMKpyY1n9Qkl5MHPTMfCWXRqcVSx6DbDu1NHghuNstnSo3x46l1WfZcmPr
-	 Dwy7WJ5yG3tQeBk7TtIz+rcg932cZWY8tqybGRRlAFw6OA842IlQJUebVUCypAKB9X
-	 9Osx1tvQcids58cPMCMxVsECaqYhU7QMSq3IbsLlLkTVG4opZOprA+J3MyHu/ve34c
-	 BehnyyN7WgbejNu7v6GlY/Dj/FtTD/8nLY5MCSf3jKtnAFBjx9LmXa6IYvptfHqC14
-	 AKKYEs/UB27zg==
+Message-Id: <5aa97a9a0b8cd20feda29b304874967a8019d8b4b3dd4021dc5c0dac43c10d05@mail.kernel.org>
+In-Reply-To: <20260816031245.268898-1-jiayuan.chen@linux.dev>
+References: <20260816031245.268898-1-jiayuan.chen@linux.dev>
+Subject: Re: [PATCH bpf] bpf: free page_pool frags via the page_pool path in bpf_xdp_shrink_data
+From: bot+bpf-ci@kernel.org
+To: jiayuan.chen@linux.dev,bpf@vger.kernel.org,netdev@vger.kernel.org
+Cc: jiayuan.chen@linux.dev,syzbot+237bbeed8dfe0699b7f5@syzkaller.appspotmail.com,daniel@iogearbox.net,john.fastabend@gmail.com,sdf@fomichev.me,martin.lau@linux.dev,ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,hawk@kernel.org,toke@redhat.com,lorenzo@kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sun, 16 Aug 2026 03:57:58 +0000 (UTC)
 
-From: Li RongQing <lirongqing@baidu.com>
+--===============2544190724305362226==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-dma_*() barriers are specifically for ordering writes to DMA
-coherent memory that is accessible to both the CPU and DMA capable
-devices.
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 16845987b244..3aab5556abe2 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -86,6 +86,7 @@
+>  #include <net/inet_dscp.h>
+>
+>  #include "dev.h"
+> +#include "netmem_priv.h"
+>
+>  /* Keep the struct bpf_fib_lookup small so that it fits into a cacheline */
+>  static_assert(sizeof(struct bpf_fib_lookup) == 64, "struct bpf_fib_lookup size check");
+> @@ -4288,6 +4289,14 @@ static bool bpf_xdp_shrink_data(struct xdp_buff *xdp, skb_frag_t *frag,
+>  	if (mem_type == MEM_TYPE_XSK_BUFF_POOL) {
+>  		netmem = 0;
+>  		zc_frag = bpf_xdp_shrink_data_zc(xdp, shrink, tail, release);
+> +	} else if (netmem_is_pp(netmem)) {
+> +		/* The rxq mem model does not always describe how a released
+> +		 * frag must be freed: the generic-XDP and veth paths run the
+> +		 * program on a shared rxq while the frag has been cow'd into
+> +		 * page_pool memory. Trust the page itself and return a
+> +		 * page_pool frag to its pool regardless of rxq->mem.type.
+> +		 */
+> +		mem_type = MEM_TYPE_PAGE_POOL;
+>  	}
+>
+>  	if (release) {
 
-The dma_wmb() barrier is lighter than wmb() on some architectures
-because it only ensures ordering for DMA writes, not for all writes
-including MMIO accesses.
+The comment says the fix handles rxq->mem.type "regardless" of its value,
+but the implementation still checks MEM_TYPE_XSK_BUFF_POOL first. When the
+shared rxq has been left with mem_type == MEM_TYPE_XSK_BUFF_POOL by
+veth_xdp_rcv_one() (which writes frame->mem_type into the shared rxq on
+XDP_TX/XDP_REDIRECT and never restores it), a page_pool frag skips the new
+netmem_is_pp() branch entirely and goes to bpf_xdp_shrink_data_zc() instead.
 
-In the MLX5 driver, completion queue (CQ) doorbell records are
-allocated as DMA coherent memory via mlx5_dma_zalloc_coherent_node().
-The CQ update pattern is:
-  1. Update CQ space (device reads via DMA)
-  2. Update doorbell record (device reads via DMA)
-  3. Memory barrier
-  4. Enable more CQEs
-Since only DMA coherent memory accesses are involved (no MMIO accesses
-follow), we can safely use dma_wmb() instead of wmb().
+Should the comment say "regardless of rxq->mem.type, unless the rxq claims
+XSK memory" or should the netmem_is_pp() test be unconditional so the stale
+MEM_TYPE_XSK_BUFF_POOL case is also handled?
 
-This change improves performance slightly on architectures where
-dma_wmb() is lighter than wmb().
+The commit message states: "A single rxq->mem.type can be wrong in either
+direction." The code, however, only corrects one direction: it upgrades
+mem_type to MEM_TYPE_PAGE_POOL when the frag is a page_pool page, but it
+never downgrades when rxq->mem.type already says MEM_TYPE_PAGE_POOL and the
+frag is not a page_pool page.
 
-Signed-off-by: Li RongQing <lirongqing@baidu.com>
-Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
+That second direction is reachable on the very path the commit message
+cites. veth_xdp_rcv_one() (drivers/net/veth.c:638) points the buff at the
+shared rxq and then, on XDP_TX/XDP_REDIRECT, writes the frame's type into
+it:
+
+    xdp->rxq = &rq->xdp_rxq;
+    ...
+    case XDP_TX:
+            xdp->rxq->mem.type = frame->mem_type;
+    case XDP_REDIRECT:
+            xdp->rxq->mem.type = frame->mem_type;
+
+Once one redirected frame with mem_type == MEM_TYPE_PAGE_POOL is TX'd or
+redirected, rq->xdp_rxq.mem.type stays MEM_TYPE_PAGE_POOL for every
+subsequent packet on that queue.
+
+A later frame whose frags are plain pages then reaches:
+
+    } else if (netmem_is_pp(netmem)) {   /* false, mem_type left as PAGE_POOL */
+    ...
+    __xdp_return(netmem, mem_type, false, zc_frag);
+
+and __xdp_return()'s MEM_TYPE_PAGE_POOL arm (net/core/xdp.c:436-446) skips
+the check and dereferences a garbage pool pointer:
+
+    /* No need to check netmem_is_pp() as mem->type knows this a page_pool page */
+    page_pool_put_full_netmem(netmem_get_pp(netmem), netmem, napi_direct);
+
+netmem_get_pp() reads page->pp, which for a non-page_pool page holds
+whatever the allocator left there.
+
+This specific crash is pre-existing rather than introduced by the patch, but
+the patch is the change that claims to make the frag itself authoritative,
+and it had the netmem in hand. Could the decision be unconditional:
+
+    } else {
+            mem_type = netmem_is_pp(netmem) ? MEM_TYPE_PAGE_POOL : mem_type;
+
+plus a guard for the stale-MEM_TYPE_PAGE_POOL case, or should the "wrong in
+either direction" claim be dropped from the commit message so the remaining
+hole is not reported as fixed?
+
+This isn't a bug, but a subsystem pattern flags this as potentially
+concerning: the new multi-line block comment added at net/core/filter.c
+starts its text on the same line as the opening:
+
+    /* The rxq mem model does not always describe how a released
+     * frag must be freed: ...
+     */
+
+The BPF subsystem style required for net/core/filter.c puts the opening on
+a line of its own:
+
+    /*
+     * The rxq mem model does not always describe how a released
+     * frag must be freed: ...
+     */
+
+Most existing multi-line comments in net/core/filter.c use the old style, so
+the new comment matches its immediate neighbours and checkpatch will not
+complain. The guide says the rule applies even where surrounding code uses
+the old style, but the decision is yours.
+
+
 ---
-V3: Kept the original wmb() barrier inside wc.c 
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-V2: rebased.
-https://patchwork.kernel.org/project/netdevbpf/patch/20260811064750.3218024-1-tariqt@nvidia.com/
-
-V1:
-https://patchwork.kernel.org/project/netdevbpf/patch/20260402055206.2311-1-lirongqing@baidu.com/
-
- drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c    | 2 +-
- drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c    | 2 +-
- drivers/net/ethernet/mellanox/mlx5/core/en_rx.c     | 2 +-
- drivers/net/ethernet/mellanox/mlx5/core/en_tx.c     | 2 +-
- drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c | 2 +-
- drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c   | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
-index 723f66a..17084d7 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
-@@ -259,7 +259,7 @@ static bool mlx5e_ptp_poll_ts_cq(struct mlx5e_cq *cq, int napi_budget)
- 	mlx5_cqwq_update_db_record(cqwq);
- 
- 	/* ensure cq space is freed before enabling more cqes */
--	wmb();
-+	dma_wmb();
- 
- 	while (metadata_buff_sz > 0)
- 		mlx5e_ptp_metadata_fifo_push(&ptpsq->metadata_freelist,
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-index 77ea51b..ee0986b 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-@@ -817,7 +817,7 @@ bool mlx5e_poll_xdpsq_cq(struct mlx5e_cq *cq)
- 	mlx5_cqwq_update_db_record(&cq->wq);
- 
- 	/* ensure cq space is freed before enabling more cqes */
--	wmb();
-+	dma_wmb();
- 
- 	sq->cc = sqcc;
- 	return (i == MLX5E_TX_CQ_POLL_BUDGET);
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-index 6fbc044..3c80193 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-@@ -2507,7 +2507,7 @@ int mlx5e_poll_rx_cq(struct mlx5e_cq *cq, int budget)
- 	mlx5_cqwq_update_db_record(cqwq);
- 
- 	/* ensure cq space is freed before enabling more cqes */
--	wmb();
-+	dma_wmb();
- 
- 	return work_done;
- }
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
-index 0b5e600..14479da 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
-@@ -849,7 +849,7 @@ bool mlx5e_poll_tx_cq(struct mlx5e_cq *cq, int napi_budget)
- 	mlx5_cqwq_update_db_record(&cq->wq);
- 
- 	/* ensure cq space is freed before enabling more cqes */
--	wmb();
-+	dma_wmb();
- 
- 	sq->dma_fifo_cc = dma_fifo_cc;
- 	sq->cc = sqcc;
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c b/drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c
-index 1f6bde5..1341874 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c
-@@ -384,7 +384,7 @@ static inline void mlx5_fpga_conn_cqes(struct mlx5_fpga_conn *conn,
- 
- 	mlx5_fpga_dbg(conn->fdev, "Re-arming CQ with cc# %u\n", conn->cq.wq.cc);
- 	/* ensure cq space is freed before enabling more cqes */
--	wmb();
-+	dma_wmb();
- 	mlx5_fpga_conn_arm_cq(conn);
- }
- 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c b/drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c
-index 614cd57..8f7a89a 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c
-@@ -421,7 +421,7 @@ int mlx5_aso_poll_cq(struct mlx5_aso *aso, bool with_data)
- 	mlx5_cqwq_update_db_record(&cq->wq);
- 
- 	/* ensure cq space is freed before enabling more cqes */
--	wmb();
-+	dma_wmb();
- 
- 	if (with_data)
- 		aso->cc += MLX5_ASO_WQEBBS_DATA;
--- 
-2.9.4
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31924332756
+--===============2544190724305362226==--
