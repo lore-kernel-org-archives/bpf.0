@@ -1,64 +1,64 @@
 Received: from mail-wr2-f0.google.com (mail-wr2-f0.google.com [74.125.225.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEBFB3C3F52
-	for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 01:58:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 729A9399007
+	for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 01:58:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786845486; cv=none; b=m64gOq6uq4nvuaxQHMrCco2xq3gp8DXEFjrhuJ3gkH9wrTaAeJ/E/Pd4P2ujJzxk4XdnyjSWdhErJcfcaRZxU2Ud5ucWJ2ysO8EYxGrhz+a/60bjiap9vowUA9G2LpJChR7sSyVLD9aQXy+2w87wvlVXCxzp/ggzaM16mS5xLWk=
+	t=1786845488; cv=none; b=RjemQox9bO2XALmcNtBGXNCNeC9yu2p+AtB9M9zc+do2ASWBlj9N0gjrX2r1n2Bro9D/JrbBtR8UZ/zUaY7WeobKoAU9z+F/G0608UKxksNa16nHv0PQA+P3gUuZrJ0aJxWDi8iaH5WlduBQTdhMh+V+cJh8d6hLn4DlMdIXUxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786845486; c=relaxed/simple;
-	bh=EpRJKEYSiz1NSHR/dT++VDCWF+hWBEbDGgjE238+1OA=;
+	s=arc-20240116; t=1786845488; c=relaxed/simple;
+	bh=e3PmPz8cw7JyX+k3++IZD3FvhqtEO8JHFb47fHWCz8E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XucdwIEuBW4jr7NhXwoPn2MrOTrtwW55T1iBobElhRort86BFLKq5zRjnh5nSUzmvuHNNrBmL3F02nB8F3yaAr16uyHbfE1NBYG1Ukcs/BRNQaVavS2zuAOmcHBU60IpLrLxuWD4yWSZJM4dbipsIXogb60MYk5ZIBGVdKtfUsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mpE1jk7p; arc=none smtp.client-ip=74.125.225.64
+	 MIME-Version; b=PMqEUOXj9KEV6l5L4B3g0U3JCHiourEvbrHyb6z7kxUXl0qkYXcqSQVtGoWUfnOG4Onshr1khuzrfa/xvzmWISoB9Su5OC/2lk1aS3KY6wPnuVvipu6HbFOcuAjPsqbkq5MkduVmfvHBqy7ob1c2fbIawLQl2Zbeq9e/kAwwVWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=p2TD3kBA; arc=none smtp.client-ip=74.125.225.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mpE1jk7p"
-Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-4784b41f3aeso518633f8f.1
-        for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 18:58:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p2TD3kBA"
+Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-46cbf263216so1094353f8f.1
+        for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 18:58:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786845483; x=1787450283; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786845485; x=1787450285; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=auBeWHiVqurCBkcr8tyKi0DxpLDt4UBHKgmgMxUVA7A=;
-        b=mpE1jk7pC2QcZKMj00giFj+fke2YF9x+f0fZRdCqsj5FmeothpMW3Fk2+xSJneFWME
-         9viLEYXQvKXcftrtqTPeDkSZGb76DO3oACSbH/wSBCvBF/8abPReYwcPJ1nc002If5fc
-         deUpXQhYXf8PbAmTM1rwnKjPbhifti7oYRnH04TLw4NvIzs1Lzam+aXRzyIh2l9GYa+y
-         JHeGkfZagrX/Y4meS8yATCjXwINF2XjUOEJl7zivZHTPHDq0us3IaAlRsQZdWCEHVD61
-         bVMtirJwbG/mjn7hEV2MbW2qzbhp64kZap6K+oIlPMZ/GKqKGNwAnb2/KkJQOshS/EP/
-         AppQ==
+        bh=d940bnO/jeH74OIIhtKBZuQBibk85Vo9rNFZSBgg+2Q=;
+        b=p2TD3kBAdDgk5f0M1bjajhPpKL5EUhqesy7p6Ph7MoU1DxOX2GG7g8WD6P7adS06vC
+         PadhLHkXua6BaPPtmEA1ZWstEKBNNR1Pl6FG+3Z1UXqQR1x90DF6qAhnKFNcPAnwykgp
+         OeTmG2TCQeHmyHqsS5Bxf8eGhi2G9a9eJW7a1DFuD/kmIx0DXN9NQPmoyWPor8SJMc28
+         x9AfK/5xbCOiFnj5hwAetuqPUJPon6x3dMjHZVoHxPloQtg2u59a2BRz2M+PDOUhZqfC
+         v7TQgC+g5iksOV41B520f2vDRqh0iNHzhPVhvUXuKACIXaLeEtu1dCIyYWrquQhAWRpC
+         rI0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786845483; x=1787450283;
+        d=1e100.net; s=20251104; t=1786845485; x=1787450285;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=auBeWHiVqurCBkcr8tyKi0DxpLDt4UBHKgmgMxUVA7A=;
-        b=ZyC+FoVsbdafl9ZyAzaaSUG25BxzQA5z9HDiS9O1nuOqMPBWIQPBRCkSCfZG6f26LA
-         kMlFYbqdLjhfS0gCwWPuuH0t4h3BmcTthcjdUo9ENN6cJJTgpUjsBMfPnJwMbGoaLTIi
-         HxC44YxqOvQxAFi6bTJ0u9bD+V/JZTwLbwIoek46S73sZ1sAJG300HQ9tuEhIoSICsQP
-         EP2Cle/+uyPCP2sZqmRTepE+cD/C47qqlfjyyyH1giukLg9nQD4vj3N6AZlo25qFfQZ4
-         CjnHVdIEWAqiVVNRs2h7TsFxUpigJj3nmkS9yJJziRXiPYcp7xqevM2pXrdLdiPPITPh
-         nG1w==
-X-Gm-Message-State: AOJu0Yz8Gz16T8wefa8ulE7xRsF3LIxl5I//a9Mb2fWACPmhC7/frJ/T
-	p+PPnQ3YWA0Itgx0t0SJVL9w6Hk41FzzxgrqsP+nVk6+IZQK8x9gmapvkrBaCBDf
-X-Gm-Gg: AR+sD128HXnpieKlLa/MMy2xDCBDypCjp/ojZ1tj0ecrmZ94W/rT/cvtB3l3Ps/1q43
-	5WHPtG8UjipZRs42Yy0So6NNYgHHh/9Afqatqzoan/I5rvUMMdtnSdiGo+I51WlMnD4hZOsoQ4K
-	97j0ig//ieffMkqtftIVu68l4XOYRYThLpqBaJge/5V+u53B5Iw0R169jsrLrabt6cQhDuzBYNj
-	prRnMeR+tXfRXpf6MYrlK/jhmIOEstvnW3f7MHBbfaKiQeKe8QumxsYEB9p+CsReSIlspxcQAJ6
-	+h/gm8NkI5hZUtpthCZCucRgmLr9C1wcP864/pBRH40fn96wF5L8CMx/PLSwtA8441nzkZ5SfXs
-	rCX090T3uOuzWzcWsllkx417IXRxHRwcZsWSuRtmIotfEq9uCbE0L9jh9yHQppqqo4Tn2CCq5Gy
-	hxUazwGjmU7qbycLvVYY3vjniMe/EPOOcE6bDirBrBE0NKojHquyBpnfBkqwVoZ44tH29JZSENC
-	kzvYgcEPq/1GDy9oBYcm3uGMmZAURukUFV72CkKuYHrWqy7zm+U8592UUTjyMfrgCcHbI9OIy2d
-	KTIldeUcAdcoclH8mtsZn7XdPlo=
-X-Received: by 2002:a05:600c:468d:b0:498:8e6:d464 with SMTP id 5b1f17b1804b1-4998797dd82mr188039555e9.14.1786845482881;
-        Sat, 15 Aug 2026 18:58:02 -0700 (PDT)
+        bh=d940bnO/jeH74OIIhtKBZuQBibk85Vo9rNFZSBgg+2Q=;
+        b=jkJDvdGueeY2btGG006/L+4Q2JnBN4ClPrucFcIAGA4UWlKBqg9xK+uYcEpZLIlf1i
+         fhrdsKhP4HlgBp+zrtOvOGj81D5AwX5Z0yCoR96W4kuODiv2xRx45+UsNldzNCg2Jr4K
+         RtRfdyTfkVgB6M92wFyV/ujNAlWgG+zdqN/Z5hhhiVisn6ZEf19Am6Uzk4NuU25gK2NQ
+         3hOSpAC0BZq/Zk9fnS4/T3OcCrUUqO8vn96rw5BXZAnmLDJn5CWqw+i/SEJNtSNIsmMX
+         R5CI/Vv8DFXpMKBevkGfiRJJdiOJ9mp3S0Aw2LQwzkv5y4PZYAs8b2Grq/RBIkaA1VOF
+         fdgg==
+X-Gm-Message-State: AOJu0YxTrtP/EcXyJkAOq93zn8AQdZA9xFK0VUwEupNO2zoATUP4XBJq
+	ucHTkNeqDnnX/D07VBjcE09YEkl6NbTKiz9Uwg10qQq8sl5m3Kzx6r9H0Emr3C5L
+X-Gm-Gg: AR+sD10LejZSZxkzrO53/PXpIeGOb+v593gXALsOplSjOBpfk+aQm7cs916wTIL2TpJ
+	kaCYRvnyc9uTvo3Ft1UI+xtODGq8GpBmkN5PQjTS8DmJqSA0Iu2VhDv8Qmmbv426QpMnqefSUx0
+	kYILEPMD30Pu2hNQjBeyLKIscLqP8OVEs2Ghk/woQyCbj4KPmlqa3olgIAQkZ1Xa6437NyODO3a
+	QZyW82xBrGYZBqEwO6apO8ZjnTa0/M0xHDZnbLrWZSVqJkvM9VTE1kGJ/KQ23Zn1TLgQWy2Tx6L
+	IPB5z+Ov9OyZlkVtrnI3b0lMw9lhg3cb8Hgl9QI8JAxC8EgQ2tq03XhfDciHol0LprUFqIYqV0n
+	96Elf0lt8R2RY2vd+bk5yNqdeb3+064tFH+vDfoJMbDvvVY0KSDOpcHI6f8EMCihFV8blzh+RPz
+	yzpV3g8jeXmfJzAbFzaIufhNc8MqJz6T4bCF25XVRl2eLLb0z9UDYfxXCblEayAn+uDHzy5xMUm
+	GrvDIMpkpFCYdAhvyBt+oIyjauZZAAvFvqtC30nhOQk+Md9x/YJJMiv2A3V6wmOZjdVQS8yAGQT
+	XLcRALBvFn0RUTj6cTCyI8fmBwM=
+X-Received: by 2002:a05:6000:1887:b0:474:18d9:8371 with SMTP id ffacd0b85a97d-4816076c903mr21956332f8f.28.1786845485590;
+        Sat, 15 Aug 2026 18:58:05 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49996100184sm5286095e9.1.2026.08.15.18.58.02
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815f219d3dsm21406023f8f.14.2026.08.15.18.58.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Aug 2026 18:58:02 -0700 (PDT)
+        Sat, 15 Aug 2026 18:58:05 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 11/14] bpf: Preserve source attribution without source text
-Date: Sun, 16 Aug 2026 03:57:39 +0200
-Message-ID: <20260816015746.2632990-12-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 13/14] bpf: Distinguish function references in policy diagnostics
+Date: Sun, 16 Aug 2026 03:57:41 +0200
+Message-ID: <20260816015746.2632990-14-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260816015746.2632990-1-memxor@gmail.com>
 References: <20260816015746.2632990-1-memxor@gmail.com>
@@ -80,64 +80,58 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2400; i=memxor@gmail.com; h=from:subject; bh=EpRJKEYSiz1NSHR/dT++VDCWF+hWBEbDGgjE238+1OA=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIatRQmL6d+e3K6fLXl5+MWROslTOratyNacEzpWJz39V7 HOsftXhjlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAEyk/BTDP6O8itrXSjpzjZ+x uYSUsPdLs7LwaKzQnXd+v9LM7E6BWEaGJw+qC4s7rYTNbwblSFk4HlgyM2j6PxF1xo6/+QpBa55 zAQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2238; i=memxor@gmail.com; h=from:subject; bh=e3PmPz8cw7JyX+k3++IZD3FvhqtEO8JHFb47fHWCz8E=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIatRQuJridnM4p7o6E4dr8sL7rg37LZlvXgladKTw22Ps 3gS0/U6SlkYxLgYZMUUWUr+72MyPlH5O9B2GTfMHFYmkCEMXJwCMJGvZxj+x0Z2tmtrTTEQXdKa FxJp/6Jsf3G1osGd2x0XQg2Z/MN3M/x3ePAn4mhsuZBmTafCHisHucNnu7UU7nWs/3uze0nVNF9 eAA==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-GCC emits BTF line records with a file name and line number, but leaves the
-source line string empty. bpf_diag_source() currently treats that empty string
-as if the complete line record were unavailable, so diagnostics fall back to
-an instruction number and discard the function, file, and line attribution.
+add_subprogs() rejects both BPF-to-BPF calls and BPF_PSEUDO_FUNC loads for
+unprivileged programs. The latter loads a subprogram address for use as a
+callback, but its Policy report currently describes it as a function call and
+suggests avoiding calls that the program does not contain.
 
-Print the available source location before deciding whether source context can
-be rendered. When source text is absent, omit only the source context and retain
-the diagnostic annotation and instruction context.
+Select the operation and suggestion from the instruction kind. Preserve the
+existing call wording for BPF_PSEUDO_CALL, and describe BPF_PSEUDO_FUNC as a
+BPF function reference.
 
-Fixes: b9c5d822f677 ("bpf: Add source and instruction diagnostic context")
+Link: https://lore.kernel.org/bpf/d02e6a6d3b2dc43a207b8ba836ce62497b250dede9252e7409c5212201c794b7@mail.kernel.org/
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/diagnostics.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ kernel/bpf/verifier.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-index df9259fa0ea7..44d0b7c5f05f 100644
---- a/kernel/bpf/diagnostics.c
-+++ b/kernel/bpf/diagnostics.c
-@@ -833,11 +833,9 @@ static void bpf_diag_source(struct bpf_verifier_env *env, u32 insn_idx, const ch
- 	linfo = bpf_find_linfo(env->prog, insn_idx);
- 	if (btf && linfo)
- 		bpf_get_linfo_source(btf, linfo, &src);
--	if (!src.file || !*src.file || !src.line || !*src.line) {
-+	if (!src.file || !*src.file) {
- 		diag_write(env, "  insn %u\n", insn_idx);
--		diag_print_source_annotation(env, 0, 0, label, msg);
--		diag_print_insn_context(env, insn_idx, disasm_lines);
--		goto out_restore;
-+		goto out_annotation;
- 	}
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d2f08c6612c6..bc7c1163ab1c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2912,6 +2912,7 @@ static int add_subprogs(struct bpf_verifier_env *env)
+ 	struct bpf_subprog_info *subprog = env->subprog_info;
+ 	int i, ret, insn_cnt = env->prog->len, ex_cb_insn;
+ 	struct bpf_insn *insn = env->prog->insnsi;
++	const char *operation, *suggestion;
  
- 	subprog = bpf_find_containing_subprog(env, insn_idx);
-@@ -847,6 +845,8 @@ static void bpf_diag_source(struct bpf_verifier_env *env, u32 insn_idx, const ch
- 		diag_write(env, "  %s @ %s:%d:%d\n", func, src.file, src.line_num, src.line_col);
- 	else
- 		diag_write(env, "  %s:%d:%d\n", src.file, src.line_num, src.line_col);
-+	if (!src.line || !*src.line)
-+		goto out_annotation;
+ 	/* Add entry function. */
+ 	ret = add_subprog(env, 0);
+@@ -2923,11 +2924,18 @@ static int add_subprogs(struct bpf_verifier_env *env)
+ 			continue;
  
- 	start_line = src.line_num - BPF_DIAG_CONTEXT;
- 	end_line = src.line_num + BPF_DIAG_CONTEXT;
-@@ -889,7 +889,11 @@ static void bpf_diag_source(struct bpf_verifier_env *env, u32 insn_idx, const ch
- 			diag_print_source_annotation(env, width, indent, label, msg);
- 	}
- 	diag_print_insn_context(env, insn_idx, disasm_lines);
-+	goto out_restore;
+ 		if (!env->bpf_capable) {
++			if (bpf_pseudo_func(insn)) {
++				operation = "BPF function reference";
++				suggestion = "Load this program with the required capability, or avoid BPF function references in unprivileged programs.";
++			} else {
++				operation = "BPF-to-BPF function call";
++				suggestion = "Load this program with the required capability, or avoid BPF-to-BPF function calls in unprivileged programs.";
++			}
+ 			verbose(env, "loading/calling other bpf or kernel functions are allowed for CAP_BPF and CAP_SYS_ADMIN\n");
+ 			bpf_diag_policy(
+-				env, i, "BPF-to-BPF function call",
++				env, i, operation,
+ 				"loading or calling other BPF functions requires CAP_BPF or CAP_SYS_ADMIN",
+-				"Load this program with the required capability, or avoid BPF-to-BPF function calls in unprivileged programs.");
++				suggestion);
+ 			return -EPERM;
+ 		}
  
-+out_annotation:
-+	diag_print_source_annotation(env, 0, 0, label, msg);
-+	diag_print_insn_context(env, insn_idx, disasm_lines);
- out_restore:
- 	diag_fmt_restore(env, mark);
- }
 -- 
 2.53.0
 
