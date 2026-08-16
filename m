@@ -1,77 +1,78 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEFF23CFF5E
-	for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 06:35:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2F237F012
+	for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 06:36:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786862124; cv=none; b=CtsSSLLMoYI5N4abbNRWdwx7/Or+FqMe7d7alSnt3KU/fqYbNJ8IpaQrKLgqO0xWEuiaPhVXDwz2NmWZEwGQTPFjHUsxrX5rVtwMQWTHM7aQZdbXAmsihF0VwluSgvmcMJkgzrnYGGDTkBx6Fg6e7wzCn01xNnKu11qbiD7mk+Q=
+	t=1786862166; cv=none; b=IJoEfBC7xYhhqR7ZudYuBXp3SKrbYNFtTXMaMSMDJx3EJVFVhNMVREOFk22/P+IFt3fceUJzQAKC/V3vrYnNToXioa/Ea6x0cX2WdYrdeIU3ibzNlvHhIda9iGqGR3chIxFeUHSjfQkE9xFoccEypknDsr9HaBsM54TKJy6HcvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786862124; c=relaxed/simple;
-	bh=umpycgPVKUVkDlsLaR+i3dWZ40QXSKAyiFa02iT9g0I=;
+	s=arc-20240116; t=1786862166; c=relaxed/simple;
+	bh=IZc2RFb2o9lZx6oLfog9CpKKGSIFJArYZO/tHSeUxyA=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=rcWty/WdD8xe2mMvsVyrjIbXGDtEb74DEQAcupQxyZKRsQllV1rVdF9eENLWjURwV9hOdlT0nurG9a6+9MRkw/ZkB98HgiusgNC4c83njWfO8JAR+haBIIMNeNHzwdQeVN7UlZAYuv0Q5GgyS29LigynJuBMMslZ9R5dbBUpNak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ajaVSwpP; arc=none smtp.client-ip=209.85.214.177
+	 Content-Type:MIME-Version; b=NmujI1fglXjKUddiz7Kn+US3rAuSj2GtxD2tq2BAQBhNZB41TiQhlLuHdnuxqoS5nlYKr7HWPsDq09y1AYLZkeCs9pYRsBESt/Ov+hEDtli4axwuq4nOYk2dGUmmPYtOT6SRsnr9YUoD4qTkH3+1X1FmQnDNROSrWr35iCM6OPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I2gR76IC; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ajaVSwpP"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2d5655cc850so5414745ad.3
-        for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 23:35:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I2gR76IC"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-84e507b079dso1459370b3a.0
+        for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 23:36:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786862122; x=1787466922; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786862165; x=1787466965; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=umpycgPVKUVkDlsLaR+i3dWZ40QXSKAyiFa02iT9g0I=;
-        b=ajaVSwpPD6KW0tum+19EV75SBXzJEEDx50Th7qxxuxvGvm21KpwAKPnfmIUBfq1Xlb
-         60JqhW0n4paTDbeyufscj3dc98QSKkLhAN9xVLl9JYBQqP87qNzaTtQ2iReBhKxhjhAf
-         DNS9rpiKkgB6r76lO6k+jrRgBHlnONzTSVUu/fHawL7WJeZiuoq2hc83oYaNjEDA3CPp
-         idWI7pmPd4GpMc7v7dDQFUYl+zK1Kdp5bTRtYSi54LoVIo3PG4L6VAovhmYvuCLbsA92
-         oYPic9qyJgZcVEJaHJYdwWcqpA/KoFEG7mirLpCZz3QOrfcx8NfCSpI3AGeYF4aSWDPC
-         Dp9w==
+        bh=IZc2RFb2o9lZx6oLfog9CpKKGSIFJArYZO/tHSeUxyA=;
+        b=I2gR76IC3QBeiAZbb6V5/g2QuHxk3Pb7dFBb12WqUXHx6Hki14Wb9lEOmKYrIERZ8U
+         PIeEE9WIdLQBHp6lWlOaneXbfTGbu0eDfZUcxq9M9ZWYV4T7eYtcxD5OgaFQ8QtmW9YK
+         FM4gOmh9KmX90IkUMR4FIIhPWJDTMq7mxPF5LQQcKk32HB6I+/l2O6tgZgLU6zU3SJtJ
+         +QLcPDDq8a5SkAhS4sMeqvcti94QjoCM1N5sWfr5I6VRiy8UW1BlxrsAhI8WcuYxKkNk
+         +3fBRG0uZq4xn5ajzMUbuA0FCePqbNtoORoCm/hmMB1qpVVDEmKAvOhSMSAf28meET1+
+         jaRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786862122; x=1787466922;
+        d=1e100.net; s=20251104; t=1786862165; x=1787466965;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=umpycgPVKUVkDlsLaR+i3dWZ40QXSKAyiFa02iT9g0I=;
-        b=OQ2MuHJZgeeZl/Ue2VzBE0aeJmBInRlYqXehLZ9/F0tsiA9TDJwmZNqYO1q2ICzOYm
-         Yugp/6P+GcFuAkVQRe6FMxrS9d+9cXp48In+LlhAK+BCsNH5oRG30al2yvFIKcUTb9IN
-         020FX1Vn3TWllgeB+ziEj+eUUb3Fo4G/gjISQKp0LuXqZDlbh1TZv6ovYns7ONg0v7jq
-         LQzR05a6IX4NoKmkSOsJ4SYheVLir5gtRi00wjE+QJ8shPyaBupm6QAtClOSiyZ0PMI/
-         RlB8TuobcHiWJQxTexR9ha2a65iaW8mYAuwJrmgeaDovJpSRW09LWwGnQgNJNhJuLyPX
-         z79A==
-X-Forwarded-Encrypted: i=1; AHgh+RpmKW2PIcN6mPaTJHdmNY0yftPZFBYid6z7DKo9llByQeI5LTWbF++22ud54NhV9Q6h5x8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxifj7/72U1O4P2NJ8SLZOFAw9dmb1YjOuP/Xn9cZ0KNsZOoVY/
-	S6Ba3Bf8XO+WDDJvPZmE6Fu4AwLgWblp5S1d8+cC7+M+ciGhKHvpsi7j
-X-Gm-Gg: AR+sD1162Qfs14FhNlbQns63WOs2tOgFKxpyyyEiCjv3Mz/xqkBeorfOi7yc4wKhgsS
-	0aIvk1ME9ett1y4tQkYhf5R6GOls985vrb608Ed/pdMP1b7TMP5GLqMEwU5zQmABPkBOMzu/mb5
-	D7lfMU5Jdlzis+fxEWi7MG9COKyDdhz76EsmfuZvNrqoUeT19HHOl/MuhjgCpcCeE7kX1VbnhUA
-	A67uDOHxjme61wqsQAo5kqU4JhJaWwjDoCBs0YEc+N8OlXw2aLvYoxkyEZwxJEqfz6UpnQ7qZP3
-	2alSXa0/NW304D/6yqxpQU0jcgfxE4gI7wE1FkCdtijEqY+2QzBx3CwuREAOdMAAt3BDqsjkQ9i
-	yzShhaZ1a2YFtV3DcqJKk7fNbe1pSOQllOMINXdV1RCn2m/1sNQDMN/tcuHGsJlZ0qLRKqNhGdm
-	rAxOjYmYqGcutnOznQvsexwomL3SN+bzs1EWdkI6YPNeHf3QCSXLsvJe71mth6AUhI1njpsgN+x
-	MjzkDcFxJkglwR5Dw==
-X-Received: by 2002:a17:90b:224a:b0:38f:837e:fc5d with SMTP id 98e67ed59e1d1-3933b786507mr17122181a91.3.1786862122277;
-        Sat, 15 Aug 2026 23:35:22 -0700 (PDT)
+        bh=IZc2RFb2o9lZx6oLfog9CpKKGSIFJArYZO/tHSeUxyA=;
+        b=YyXma9tuLjDo7FMeVA+Wyk4yGkBxGvv0kTB7RHYN982b/nQG7xfk9hPjLxjixvMyei
+         RfW8snH2rRi1YLwqObV7g6LLM05cAByMSaSfrua/+TTn6tfNLVEom4FtgZDCZwg4Rm9m
+         v3H11NmwDj/D562qk00tuLZMX7JwjDkcdr/puqT9t70U0H9NbcykHuN0uQ9UDmf5R8j0
+         7UXSx7GgftyTpiLZ9ch0ckOmLFOAVoqXV5HMnVLpIt5RGy9WaoGL1m9X12hBRQ2PHhQR
+         9l5V8BnDEt4JPEjMvNW8suYEAP7BheqzUAAdS0DjNHNuLoG27xU94JcrhEOkhtJI/Ern
+         MR7w==
+X-Forwarded-Encrypted: i=1; AHgh+RoX01ZIuRBnAmsDkbONEhtMynUZhSdanJKyjTSIJyLZ1X3ykiPdLcCYZlR9qA8Phyz7dDE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyhxe+Htp5nZzwsVavc4UsQvcBqFiqWGHNZz5CSSg9qrMqzq4dX
+	EI1o4pXR9k4wl72TONhsbsg5DHPpc2wIb7dUaAXSnPUv+cigOpdgwGkn
+X-Gm-Gg: AR+sD13UY7XXQINRQLGRJ2UyrgB0FvHDevqC7KLt7d5gez8Omt3Rk24l+LZjRSACT5v
+	pFEQIlKgNjt7UlVgn7IcmUy6uvaVguZrB4Igii/nQUZDUaBxXA/jarovGklHcx9mov9YPH2fe/u
+	jl7dtI68yEufSUaeBhgoiXSx6KVOgPOhXk+4Yvj3RLZ081BGxTePDrbZGMBUnWXehv+nfmTlZL5
+	HXNWsk6i1r3aQfhpKXRQZgpMJq/Kx82AkeNCrVZSNX8x7fMl0y1ecIKRG/FAX6TU5Q9yq1kKoSG
+	1kR78H5erwQ2TASrWyiInibFyWQaG7GAlwJQYC2GMkX1kbQOQrQ0dP5QX/GiDZ+x3l9yZy/J6BW
+	/n3g8ukmXXolKHIxX9mhJefW3DYNgMDayeD0RUqFpkl+rRiOUx6ksp8G4JCUdtIoWCtnn/I5Qdg
+	dUNkB5SWgxRQcBIv0yi3Cdt2kmJMc00ZfmzshUxndD/U8wDKLRSVsxcM+5CjEJ4qn3bMpTJzY+n
+	2mvfFQKDJxhCTd6
+X-Received: by 2002:a05:6a00:8086:b0:848:7731:d95a with SMTP id d2e1a72fcca58-84fde47a4c8mr18583764b3a.37.1786862164915;
+        Sat, 15 Aug 2026 23:36:04 -0700 (PDT)
 Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39531ecac9dsm689195a91.15.2026.08.15.23.35.21
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8517d01f2f5sm1711433b3a.22.2026.08.15.23.36.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Aug 2026 23:35:21 -0700 (PDT)
-Message-ID: <5ec46455e31b4472fe23f25ceb1cd2d595c00f18.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v1 02/14] selftests/bpf: Test verifier
- stack-read diagnostic attribution
+        Sat, 15 Aug 2026 23:36:04 -0700 (PDT)
+Message-ID: <8b473da1bf04294626e74e8e0cd94e3b70f14df3.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 03/14] bpf: Preserve R0 lineage across
+ helper calls
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
- Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
-Date: Sat, 15 Aug 2026 23:35:19 -0700
-In-Reply-To: <20260816015746.2632990-3-memxor@gmail.com>
+Cc: Sashiko <sashiko-bot@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	kkd@meta.com, kernel-team@meta.com
+Date: Sat, 15 Aug 2026 23:36:01 -0700
+In-Reply-To: <20260816015746.2632990-4-memxor@gmail.com>
 References: <20260816015746.2632990-1-memxor@gmail.com>
-	 <20260816015746.2632990-3-memxor@gmail.com>
+	 <20260816015746.2632990-4-memxor@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2-10 
@@ -83,15 +84,22 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Sun, 2026-08-16 at 03:57 +0200, Kumar Kartikeya Dwivedi wrote:
-> Verifier diagnostics distinguish uninitialized stack bytes from opaque
-> dynptr, iterator, and IRQ-flag state, and identify variable-offset atomic
-> stack accesses without changing the existing verbose messages.
+> check_helper_call() clears all caller-saved registers before taking the
+> diagnostic snapshot of R0. This records NOT_INIT as the old state for eve=
+ry
+> helper return and loses the lineage of the value held in R0 before the ca=
+ll.
+> bpf_diag_record_caller_saved() deliberately skips R0 because the paired
+> modification scope is responsible for it.
 >=20
-> Add output assertions to the existing dynptr and iterator rejection
-> cases. Add a direct IRQ-flag read and a variable-offset atomic stack
-> access to cover the other classifications. Retain an assertion for the
-> legacy helper-worded verbose message in the atomic test.
+> Open the R0 modification scope before clearing caller-saved registers,
+> matching the kfunc, ld_abs, and subprogram call paths.
 >=20
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Link: https://lore.kernel.org/bpf/20260815073833.A93A91F000E9@smtp.kernel=
+.org/
+> Link: https://lore.kernel.org/bpf/48e6f021b89562f68850fe21ef8c78719819b04=
+cf9c4e4f50bc791937d37ace8@mail.kernel.org/
 > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 > ---
 
