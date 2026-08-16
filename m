@@ -1,77 +1,77 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E25F2D5925
-	for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 08:01:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF57E38C42F
+	for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 08:06:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786867272; cv=none; b=EQnRJVuR9rHyl5Mv3/S1sR9Cexb2NorBYdXXCmcobutKzJO+8akp+0nPQ20vW8fHNoq5zODSeeW1kYZ4+TOK40Avq6qNJpcC+hOdSZUefPwMbI+n0/VwqN6zEFIPx5wWQv5yyAlD336qNwh8/0h6UCqVihRSXHk0Esup4tq8ujc=
+	t=1786867607; cv=none; b=ZJvY0gYb8IvynsWeVn1VkQFlbwd89TTM3/TtlMeveV8YZqfOaW6oHW0VMWa2/fnSyju0KbDDRXJXHHRL3ydYcWgenc6o/A56E7TSdUjojdRBt1VpPyoll7WHpDo7x6BHgaFaeyGJU2BoyDY5EAY6hOz9rLeOOKei53WW08klh48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786867272; c=relaxed/simple;
-	bh=+TZXUhWx7bpaNHxszc7UK/Z81aAqrkOGmR74fFw5fgQ=;
+	s=arc-20240116; t=1786867607; c=relaxed/simple;
+	bh=Enl4qlGarnj3oVlA3n6vmIXCwFtrLXr140Sfsn8p1jk=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=m3em1zV8HkQSOupTvLFa/Y9DmagX/bBHGd7SANPM+ouWOEY7RzxoN7TOrgUVIqm4pBYu8aYzLUQ3miRAveo9mhj7MaTD6jBq71AlWCsh1Ri7AVMPm2kiM5fLCAWoZ/BTgPl2w7fZH3ApXC4MbjZoomZC7om6JSRjVchhueJM09g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hIpHbZxB; arc=none smtp.client-ip=209.85.216.44
+	 Content-Type:MIME-Version; b=BNZLbifyG50W7LZPGD00WWZCgOs+rC7YvdsL0yx+yvZ/U1NlYdMf+5qKyNxeJWBfcXPPon0PA+AZnLLXVEQowY29wu6q1CGXUDw8qWNCJel/m4kpl5wOn3uBjXK61zn+c+B9+73ozWJcSncCeM55xvQJ1AhyKNIciosrq/Z0LkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GBTHNOgO; arc=none smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hIpHbZxB"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-38e347638adso2897006a91.0
-        for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 01:01:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GBTHNOgO"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-84847482584so1652497b3a.0
+        for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 01:06:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786867271; x=1787472071; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786867605; x=1787472405; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=+TZXUhWx7bpaNHxszc7UK/Z81aAqrkOGmR74fFw5fgQ=;
-        b=hIpHbZxBpgFld/VBU8tciGz7hFWST09IHh4nZq2N+YWvottYyesC1F4EGYrRkr2AmX
-         BeqvjzsW/Yq+LCXeav1tgzgORXJJV0m6+3OoVXbQq9buY4LkA61+2bODN0f9fb1NAGpR
-         mUSbH25jzvZQx/3YuAmOQqfCtenpGRbi30VNQ9/uEflB17fr4gh/iytus47OhXQCV9O3
-         9YeC9pHcpO95+HEds6AfSIS5f7w1ujgfNRfhom65+9XwPt3ABzYCLc9OaB6Fbu4OPXeb
-         bXJi3iImYk6viVM53/t4Pz9gpcAoVD3StXzBsuCqrFNVASLrLpmbixZ79hY0nXPR6Hpk
-         8NYg==
+        bh=Enl4qlGarnj3oVlA3n6vmIXCwFtrLXr140Sfsn8p1jk=;
+        b=GBTHNOgOR6ejctXIm5cwHi9Z4tDSANyKwr87UDoMwpSKdR9z9/N9+txssge01lvnAz
+         T/s96r0+sY1DcmkZc780Clctkj1TnZMeEiYZyURZM5Fs//1y9Hxynshrb8y3DtpZ4q0A
+         sqWNnXtxstIxKwaRRtZWgFDlwme5PqEEgv52AkSlIdUPQak2qwRTv4cf9A7tKlhpD/I7
+         /pPksBJ8wmOfQtSIbkLO6DlKbpHl7C27f132UqaopyALG3/zMG95HB9HZsTkIQntQ9Nn
+         b6ll/6GCoqo+hrj0HmaCprS+66+4WoHxOUY30D5G2/4MqIR1YfNojjZxwBK8sUR0E2rp
+         wn9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786867271; x=1787472071;
+        d=1e100.net; s=20251104; t=1786867605; x=1787472405;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=+TZXUhWx7bpaNHxszc7UK/Z81aAqrkOGmR74fFw5fgQ=;
-        b=a+KGasybNITPaeDdW8JKZuQE5St5a67FgobYmlisY7CyC0V3e6CXxf9dc640rmFyfq
-         WUOapt7D29Jm5w4r3RMJaN/ZHUXxjGzZ5r/uw1kSH78SQ+4AWwmrNIv+QsKo2PO1QRli
-         joBrEYdwWzBM2vP78JuhDInYuR13mtWu2i63heGbjf5eX2GEwmsNuPf6LwFLEEnP9d/1
-         NeEfIvx5ONYLTviiS7Ra/URTe+DCSbiZtXWMTU78pTsRpMNV/qHZ0AttB8xRuyspUqbH
-         uCV2rBHDU9sm7w3fyg6Bcu6qcSyjQvi5Ko4jhueNLYDU5vLl3CJGcaIZ03fotjTGLf8x
-         iW7A==
-X-Forwarded-Encrypted: i=1; AHgh+RqMHRDAYojbfgsM5vE9Q6G0mcFamuwDyxSth/ESvJL7GXqx/MH8+7bZJTsGyuq9FhAwIEo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzibAnkI6HlqHs7iSpofM40alO4xalpyqIYp2w+lvwb/f1u4xEI
-	e8SyQkE7zSVbTqOBIAUOOWrj/iOtwl8c6ia9ZbviTPgd1RtZ2ZsDFB0B
-X-Gm-Gg: AR+sD10XllV6Z4RfyOlu8yoI3nOr3goDqTziXz1htFBja1Q5Kdu/ElMuvCWNj5YHaFY
-	i3+CD5HGsbRGrCUy1kREc2HMS5qTeMEmE+URgPu0LbFme78SzvJz/N+W7JfIxkBCG1mKoTnT6g/
-	lz4afs0FRJw58qlTg5DZwl46ekGF1TlxHgCppOsZ+cqmUdSKQxZANJ7WHpp5bzN8Qp75wuoffFw
-	UXdQQKce7E8tZdibb10bdYrASyJUuOarwSzTpYpngCwCaN9OtnuhMC3Vl5b/+PF1cUIIN0BUKU5
-	5kNzimFUOhfbjH9DubOXTANTZUloSUfgBSjH3/14nFrHSl7hoKss9coFf2AUKzXWWt7n5R+PdNH
-	/k5/ZdyFmS26BMqKi543aZaMXBSA6EDSy4KX5xDHYJ9zOxTTLNIg8hzDsfx4IHHmDdW14jX9bQD
-	skhMjOchIaAnerDIgJ51SamXNGi/wBZ9tX5KyGTrWHTSFNfBswrvkLRaoTd8gL64cVDvfv1xEBz
-	o7S6XGrBKr93mPl
-X-Received: by 2002:a17:90b:4d08:b0:37f:c22a:c188 with SMTP id 98e67ed59e1d1-3933b6f0622mr17541335a91.4.1786867270823;
-        Sun, 16 Aug 2026 01:01:10 -0700 (PDT)
+        bh=Enl4qlGarnj3oVlA3n6vmIXCwFtrLXr140Sfsn8p1jk=;
+        b=MKAdHSJuz2TfJlT5yBv9jleXxkXMHs87Zv4yDzfUgoTiJN6kLuOoV8Aun5LxmPclOK
+         Nwth6HSKrsIUkyhF02WMe2xcUaqHyvyQxQW64bjrMbIDPNSZqsYPaYRlFFTehGfJWdV5
+         8iIAWxPwSxius/ZI5o+2CkYH2MlGwPqLrTr+SblFQZUMwZP6e4sZuTZFxjTRlPN3DZps
+         gB7bJ/aqcDwkzoeUNJbH0SjS8RMGjUMlpkhEY92ROC4bzLpBE6ADiglMi+sHVQRVvRcH
+         e9ocwYbSM89SNCooNQ6+moyWLUDZ7tYqFzggaiO4nI3S6hQqnqc9rqS4Cu3xCTlxUVBK
+         0caw==
+X-Forwarded-Encrypted: i=1; AHgh+RoIbMHNpZp2yXIfKq8hPMbaG2Qn5E8z6kiODIh6S9YhrYbioKED7SB5aAHwWZP51FhIZ6A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMnLh2w9sSH57QH/wqZy0oQxMI+Uu41VWzlAukV0Jg9xtGwKai
+	rKCizp3gqqMi567MtDLJOcYiRwy9sTP92tRUb/4PNHk+rtBgEMcZ1/Yt
+X-Gm-Gg: AR+sD13CO133FgHxyWoqN80Uj3qhqk5uFTgR1qKWHNqOkI8vdurwXqQADTWanY/fY4i
+	KOH3yYMzavuwRzOG5Eo9bRcC3JFrHbpuvLmmEHBFArlR0IOAEe4gk+VeW+iWb/HCN631C4TdVoq
+	BxDUbC8qBU0dfIceDEqWuqtUXmGQ5VEj66dommw9VHRKq70JbHVGJBo1p3t36aB9vSYAHQX9EoI
+	UA5lhYfmHxlUWf7Dunn4gIKjyZsuV7FrQ1GCkFvXtTRjxNGCsHhpWTLQAikpZcED+2YEVXDN4oG
+	0jafYHP9tQYqnRWOJ0D4DSOFyBRdSl2pQVJC4Yctyg2KVjwTx5niyF21BdAkNJ26c/DgAnEWVlo
+	Gs71REhVZ2BbQ8DVFJINL3ANdjyOPBPgP0l8WSrrzlMTG5t39a0aFLOiLtN8IX+Kl/nBewwTEUo
+	TD4SFxacxwXo6FQOxz1d5TgKKM7hxSCGR8NxSz7zBQUFGDN73+9iTaouMWdxrL8Vbn+Q5oDv2od
+	5DV6ffn2lFDxnnOHs2XnQ==
+X-Received: by 2002:a05:6a00:808a:b0:848:2a69:97be with SMTP id d2e1a72fcca58-84fdc77ab7dmr13325335b3a.10.1786867605122;
+        Sun, 16 Aug 2026 01:06:45 -0700 (PDT)
 Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39531e10d9fsm899008a91.3.2026.08.16.01.01.10
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8517cfeb39esm1779300b3a.4.2026.08.16.01.06.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Aug 2026 01:01:10 -0700 (PDT)
-Message-ID: <82a51a8e17c4cce62ead6faa5df2e856e395ef11.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v1 11/14] bpf: Preserve source attribution
- without source text
+        Sun, 16 Aug 2026 01:06:44 -0700 (PDT)
+Message-ID: <9985a0858192282921de335359db85ab1e7db1ab.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 12/14] selftests/bpf: Test Program Structure
+ diagnostic context
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
  <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
  Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
-Date: Sun, 16 Aug 2026 01:01:07 -0700
-In-Reply-To: <20260816015746.2632990-12-memxor@gmail.com>
+Date: Sun, 16 Aug 2026 01:06:42 -0700
+In-Reply-To: <20260816015746.2632990-13-memxor@gmail.com>
 References: <20260816015746.2632990-1-memxor@gmail.com>
-	 <20260816015746.2632990-12-memxor@gmail.com>
+	 <20260816015746.2632990-13-memxor@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2-10 
@@ -83,26 +83,22 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Sun, 2026-08-16 at 03:57 +0200, Kumar Kartikeya Dwivedi wrote:
-> GCC emits BTF line records with a file name and line number, but leaves t=
-he
-> source line string empty. bpf_diag_source() currently treats that empty s=
-tring
-> as if the complete line record were unavailable, so diagnostics fall back=
- to
-> an instruction number and discard the function, file, and line attributio=
-n.
+> Exercise each corrected Program Structure report. Place a missing-table g=
+otox
+> after another instruction so its attribution differs from the subprogram
+> start, and assert that the recursive-call reason names both ends of the e=
+dge.
 >=20
-> Print the available source location before deciding whether source contex=
-t can
-> be rendered. When source text is absent, omit only the source context and=
- retain
-> the diagnostic annotation and instruction context.
+> Add malformed subprogram layouts for a branch crossing a subprogram bound=
+ary
+> and a subprogram that falls through its end. Both cases carry BTF line re=
+cords
+> and assert that their structured reports include the corresponding source
+> function and file.
 >=20
-> Fixes: b9c5d822f677 ("bpf: Add source and instruction diagnostic context"=
-)
+> Link: https://lore.kernel.org/bpf/cf2f420c2b21de440a7dc51b1565c0f06d4b539=
+640ee5c03384e5d77bcfb5686@mail.kernel.org/
 > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 > ---
 
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-
-...
