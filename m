@@ -1,64 +1,64 @@
-Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
+Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3FF3C10B6
-	for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 01:57:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ACFE3932C3
+	for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 01:57:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786845478; cv=none; b=OTyERC417Mm8bkuaGwxxkg3OPfS4yvpSoO9jG+CAN3GdLNEVEqHYLgo28CyvbJFVk7XdmJOws05VlvArWCX0HZXkNmgruE7LnExUopTv7o/pUcKwALj5oVOFm30/jMFNWjMW3Twqru99v7TkPXEHKF3lHBRg27H9/IQcJimeW50=
+	t=1786845479; cv=none; b=dA1ez9+twdOHNMCWXyWg2PvBcs32zwK0uXZStOesrWyAn33XAuk5U/oNELyVVmT1/pTbjw0GutdDBXpwe5bvVSy2SvJyHwWghfYbgjP+3sncohr0EJlO7PTGWHHXJsZOnUkfGmKywhv3jd5tnXnYNXXp2Yk5+l+tbJHPTBQFMiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786845478; c=relaxed/simple;
-	bh=uF0OBRxYo8av4y7VMZhXeM5qnvbPVNs+/C9T9j/zy2c=;
+	s=arc-20240116; t=1786845479; c=relaxed/simple;
+	bh=PEMagL3mLgUbTuGxKztEN0bameyjWAmZV5cU8WLuseI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fucGe36GNSI605TyKtKTJtGC2ekmdBkJYK2CfoH6OmDQ8nVZ95JCOmIQT+PctqWS6cudpBakshCTZcFTrjQNuLzsmjd933okUlAe7hhP8LawJnEBSuhtDEtOyH7bPwPWT1addefM5U1Gz/zktGPtASQWtD53PKxGCUgeUUEYg7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ok3hXNbD; arc=none smtp.client-ip=74.125.225.138
+	 MIME-Version; b=W6sMrVo+F/L5/mMmL8UzqOFQixdqkMYLH9foAjAG8/YxloekxyzI9Wj8RPMT0h8tmdlBhC5lv1F9BZEhso1XuozrD5slPtgYHk6zdo3ELa1dVh23raycEi3+n2ip6rpdBp+wPxO5t2sG+gOzd6rCXLFZfbr53AuphMNbJoHETSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FkZgdOY6; arc=none smtp.client-ip=74.125.225.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ok3hXNbD"
-Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-495482c36b8so7666705e9.0
-        for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 18:57:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FkZgdOY6"
+Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-47fcb9d4b33so958483f8f.0
+        for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 18:57:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786845474; x=1787450274; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786845476; x=1787450276; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=pKfCjHnMX8QhtR6ZpymKT4ZAVjVy6XVN4NL942NscVM=;
-        b=Ok3hXNbDLtnP2IAtV4k8dY41cBXnWbeQQ8zbgEXDrSuBFck3PmRTdd7XI666+/Sh/F
-         +ZYw89Kae8A1q+oyQ+lK5v+2YuJzOrVg4mnZUzWBp21qXhrQp1WVCOls6aPLxgyFY3mN
-         a55PvIYXiY771MpmDMFNPmhfLY+0LifmPYbRJrtGtyLBkL88JHQgYlDgchJ65IdnZyJE
-         Qz2dgE2wEVFkCQ98o68lvf3oUUW37MBoEavI2nxjjE3UDgdNGopsrFGCJcZcQtdqWvg8
-         l+/etIOsi7CNW9wAskA2I2XeoFYoAoH0IkMW9zGFHZG0Bc2H0AIrcvEhxBNemFkgtQl+
-         ObhA==
+        bh=BG4qz6jTNkyaOKyV5eTnTjsTD3XfNZYK/5zqAUZmzck=;
+        b=FkZgdOY67tqJW4Ls9om0jkxuPhvx8osgYZquVUsYqQNSWrt+vr5YtrTp68ZGHih4X2
+         x6QTzTmzN4LiUwYjDoJ8/pMKPt8Sw9fNLAl4pTgMMbHcbnBAqglSGFjf1FtQ4WNzkcA/
+         nykTcsFJ296KG7lJp3WsCgDa8sN8el4t5t4t2qSiZWd73cIHRsCkFDVob67x88Ups5xd
+         Q6U/DdKOfD6l8j/DQgyIDvykXsr3XCRjF0QZHyuvk0nQq7yG4a+PdMe/j/4nVl7zNUeR
+         PvGnhz6MpxuJiX8swmGTZggvqp5Sin6U6IYRHhFyoz2XNyNkXKEs0I0+HGR4sA9j5KIP
+         9PiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786845474; x=1787450274;
+        d=1e100.net; s=20251104; t=1786845476; x=1787450276;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=pKfCjHnMX8QhtR6ZpymKT4ZAVjVy6XVN4NL942NscVM=;
-        b=NhwCjXCpq715KHke4HtCBLylbSUx84Askj4JZ0abVSIVNhgmSXpVNGd8yacoIQbZ7g
-         0Oz2SmkCGtAokmCGKpA11mkZDyFa1whotQve1JwNvy9hUtpIk/fdFApGGwhGnmJXdM8i
-         FN6RKpbGB7EJTIE7y0Qt9jEsI4jxWD2kQllXDcr1YO3/+oGiCC9tzGp4FnbjMi3kE4df
-         eSirs9Zzka56FUEcaPvXWXTv2tiQaubWljn8tGmb1y1Y4U4ppL/X4DsG3b2gZyp9+RYE
-         tu1qQwktOoXjzFawSos4+Ohu08J18q9VtLiLrspWZaiPE4qmYXxqytwGbumv2H4x72pT
-         /njw==
-X-Gm-Message-State: AOJu0Yw375/KZ+QCSwHBMR2zuhgSv2Tx5XEmTugEkAcSkBNa+A9KDJig
-	C1vSqZgbNxmInuIvX4gMOItQmlfdwBfWX4JKlx89YVlirQv9MSo95wI0Gk95C05f
-X-Gm-Gg: AR+sD1183Ln2FYCk0eyW6+rQQ+l+krH0LP4kgUje5cp4NOTpAK58A2EYp1zrES28hWF
-	HPlUNPWfH+uOxMj+418j2seQg7+Jnyr3LNPOszC/2hjMy/hUMzn0zjCCQmKS91Dd4fRuYc6yytn
-	w47zXukBnUmDfBF62SQTipJk5eF0S2RuVI1oOhQrUbrHLQgiZ9+HeENrlcxS7atppG08y+BawhD
-	WkItZb/hP4Bk9uvpxD4P4fZ0eZiF8gk+tsqCcObqqNZtXC3bGlTtNfkqWsCJEKOskROfnxzqcGF
-	73UDpLJC/Hc0LzSXJ0r8dore7sDgB5NkOKWblN3gFd5UYMwpDbglmZzBQCtsYjGrhUROZOZnjYy
-	WqVWSrwG155QfJcCmaoHjU5aZyuGn+WyRDLnuMIQWqiiQdH1mIQ7H2EHXIJMrEIu/hl3k2VQ6ZS
-	/Os7Dxbqnqfx6jnTh0f1Xx0wfoI9VmvjUxBCromLX4nsorCUxJc09YzptfLDS+AILLucfOkQhZF
-	Lm68oNyTURw58XdulOrGzh4t8BtRrNxkGgkD+gfMTROh2Nv/zN6+X2zb/18hJ9xB5A9MyKliH4U
-	/dQmaLliKVxhLjBHsFZT+AQO30g=
-X-Received: by 2002:a05:600d:10e:b0:495:4572:21af with SMTP id 5b1f17b1804b1-499879809b7mr160648615e9.9.1786845474599;
-        Sat, 15 Aug 2026 18:57:54 -0700 (PDT)
+        bh=BG4qz6jTNkyaOKyV5eTnTjsTD3XfNZYK/5zqAUZmzck=;
+        b=o+vnk5A/rrTO2cnw1qbfAFV99wmJx/LJgBSWxH2B/89vKtUW5IhHiOZ+Yi87wcIxMD
+         RjsmJQT6SSiYTip5PjBfvOdQ6t5LKWfE+5cuoZ1So90piG3Wnvuams68W5l/vAJHobMI
+         BqgJjGB4IZRXbopmnR8w9I8CGhKeH0U6LD7/AxPPVg0RLimcjNmFODu2HIQieNTVYEBo
+         HDEJwKYgSfJpnL3FhHyqHZSSTLX1PlTbfYpXSkw0Rar9+17vei/OKW5JsDiFzFTmVm5a
+         OIkZOsevuvAmX+ox7OuI14fGkZJ/uSEb4wNjpVrMiCR+k38se7N9K2eG2+mRL/PSSYO9
+         NRPQ==
+X-Gm-Message-State: AOJu0YwFCw/lHu/HELew+WRVWX4FQ0L7k+LZLB7vfavpo5CpTogLxWsW
+	xIs4IikrH9Meti/BLEqC52uV7REmsFsn3c96R46yUwZF5Qj86lb8IW8MRSJ1EhuV
+X-Gm-Gg: AR+sD13q6h94lz4LmcpnZD/87fTD3ZeJvDauIScvlOcNYWmiNLSN+N0JeKfW6E82aJR
+	6AyiYeHrsWHG5zZKY1n/NhNgYgtrOWErEgpnFZLDj93pW7QnVmliwNH78X/5cO26vDrAYUKzl7+
+	BaVPoE0liATTFIigww8nRkKv4Qol5CrYXwIPAzFw0mt+qI/oEl1I65wBS4hlEtuwx0c/X0dLfNP
+	nx90qohxwvVFIRxI6rP9Wrjrb7gCmCThkdptCZAnMIRKJb5vW3oFmkGy68/U/z/HpRKPM1JMbus
+	PpPibtyVTHB6uSUT/Fq5RovtPrI5VIaKBIfD1QFRstXdtf38C08z2T6q/KVrG8G1BYdG7ofnsur
+	Lges1LiRG6Pj2T4U345xIvVrkZbCSoFkJkm31OjWl6I61tDLwbTmDWAfdGjZO7t84809igBzX4F
+	U98U33j3RhhgZEBbQhqASZwh67QwRvXe74Fhnn3+UL9qYsmbzRcBqFwQdRJaVOhnOQMs1q3hGsT
+	B85BnI6cmHCTy2H8cxFd+nBEyEd486iBNKWXb0g7D2eIHhJMCjLnu0v8NdRFwqyiHRsVub3nEJK
+	O5Kxhas+UxmmT7NwMbs8N0kzZrY=
+X-Received: by 2002:a5d:56c1:0:b0:481:57f7:6015 with SMTP id ffacd0b85a97d-481606fbc2cmr19758559f8f.6.1786845475890;
+        Sat, 15 Aug 2026 18:57:55 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49987b36370sm144137305e9.4.2026.08.15.18.57.54
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815f2c07d2sm20721341f8f.30.2026.08.15.18.57.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Aug 2026 18:57:54 -0700 (PDT)
+        Sat, 15 Aug 2026 18:57:55 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 05/14] bpf: Use canonical stack argument names in diagnostics
-Date: Sun, 16 Aug 2026 03:57:33 +0200
-Message-ID: <20260816015746.2632990-6-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 06/14] bpf: Correct kfunc argument diagnostics
+Date: Sun, 16 Aug 2026 03:57:34 +0200
+Message-ID: <20260816015746.2632990-7-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260816015746.2632990-1-memxor@gmail.com>
 References: <20260816015746.2632990-1-memxor@gmail.com>
@@ -80,38 +80,113 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1408; i=memxor@gmail.com; h=from:subject; bh=uF0OBRxYo8av4y7VMZhXeM5qnvbPVNs+/C9T9j/zy2c=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIatRQlRv5h62xOvvvweHzGFg85dSfLO7JDz1134hs7hjd 7tNvTU6SlkYxLgYZMUUWUr+72MyPlH5O9B2GTfMHFYmkCEMXJwCMBGRBEaGV3MOSjxS1b6VH5l4 Ql/avvvVR8ktB36FT9itqF390/eWCyPDexbJ3Cd/Mjaz12lmMc6qXW5rfL71We+nSq34WWUG1zY xAAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4612; i=memxor@gmail.com; h=from:subject; bh=PEMagL3mLgUbTuGxKztEN0bameyjWAmZV5cU8WLuseI=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIatRQixXOy8gn2kXa6WvoUde4KTEiV/mSe889WPbg7771 U4bs992lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCJOxxkZ2m5x/RGey3hbLnR1 uONuhQy2lFdfZ99ZE3fzwhq5qKiXexj+54scedFUv6XSd3/DtLATGtEGS8WYzE/rvJLW2t09e+s tdgA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-The main diagnostic identifies the first outgoing stack slot as stack
-argument 1 and the sixth function argument. The causal history instead
-labels the same value as stack arg6, making it look like a different slot.
+The Call Type Safety diagnostics mishandle three kfunc argument classes.
 
-Render causal-history targets in the verifier's canonical stack-argument
-location form. The first outgoing slot is now shown as *(R11-8), matching
-reg_arg_name(), while the main diagnostic retains its fuller slot and
-ordinal description.
+BTF type ID 0 represents void, but btf_show_name() also uses zero to end
+type traversal. A pointer that resolves to void therefore loses its pointee
+name and is rendered as "()". End traversal directly for concrete terminal
+types, but resolve referenced types before testing for ID zero, and name the
+void terminal type explicitly. Format the complete parameter pointer type
+for nullable kfunc arguments, so void pointers are reported as (void *).
 
-Link: https://lore.kernel.org/bpf/eb1be5327d136b7e5bd6d68e76fef6de20c40790.camel@gmail.com/
+Also add the missing structured report when an __szk memory-size argument is
+not a verifier-known constant. Describe the generic bpf_refcount_acquire()
+contract without deriving an object type from its void pointer prototype.
+
+Link: https://lore.kernel.org/bpf/668871823f90f69896d3db27b56db2f53e481162.camel@gmail.com/
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/diagnostics.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/bpf/btf.c      |  8 ++++----
+ kernel/bpf/verifier.c | 22 +++++++++++++---------
+ 2 files changed, 17 insertions(+), 13 deletions(-)
 
-diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-index 37ed22a764e0..2c475174a640 100644
---- a/kernel/bpf/diagnostics.c
-+++ b/kernel/bpf/diagnostics.c
-@@ -2163,7 +2163,7 @@ static const char *diag_mod_target_desc(struct bpf_verifier_env *env,
- 	case BPF_DIAG_MOD_TARGET_REG:
- 		return bpf_diag_fmt(env, "R%u", target->regno);
- 	case BPF_DIAG_MOD_TARGET_STACK_ARG:
--		return bpf_diag_fmt(env, "stack arg%d", diag_stack_argno(target->stack_arg));
-+		return bpf_diag_fmt(env, "*(R11-%u)", (target->stack_arg + 1) * BPF_REG_SIZE);
- 	case BPF_DIAG_MOD_TARGET_STACK_SLOT:
- 		return bpf_diag_fmt(env, "stack slot fp%d", -(target->spi + 1) * BPF_REG_SIZE);
- 	default:
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 5b9d767895c9..6967d48bba49 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -1169,19 +1169,19 @@ static const char *btf_show_name(struct btf_show *show)
+ 			id = t->type;
+ 			break;
+ 		default:
+-			id = 0;
+-			break;
++			goto resolved;
+ 		}
++		t = btf_type_skip_qualifiers(show->btf, id);
+ 		if (!id)
+ 			break;
+-		t = btf_type_skip_qualifiers(show->btf, id);
+ 	}
+ 	/* We may not be able to represent this type; bail to be safe */
+ 	if (i == BTF_SHOW_MAX_ITER)
+ 		return "";
+ 
++resolved:
+ 	if (!name)
+-		name = btf_name_by_offset(show->btf, t->name_off);
++		name = btf_type_is_void(t) ? "void" : btf_name_by_offset(show->btf, t->name_off);
+ 
+ 	switch (BTF_INFO_KIND(t->info)) {
+ 	case BTF_KIND_STRUCT:
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 7ef324e384f4..da2ec0655b17 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -12653,12 +12653,12 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
+ 		    !type_may_be_null(kf_arg_type)) {
+ 			const char *expected_type;
+ 
+-			expected_type = bpf_diag_fmt_btf_type(env, btf, ref_id);
++			expected_type = bpf_diag_fmt_btf_type(env, btf, args[i].type);
+ 			verbose(env, "Possibly NULL pointer passed to trusted %s\n",
+ 				reg_arg_name(env, argno));
+ 			bpf_diag_call_arg_fmt(env, insn_idx, argno, func_name,
+ 					      "Add a NULL check and call the kfunc only on the non-NULL path.",
+-					      "the pointer may be NULL, but this kfunc requires a non-NULL pointer to %s",
++					      "the pointer may be NULL, but this kfunc requires a non-NULL value of type %s",
+ 					      expected_type);
+ 			return -EACCES;
+ 		}
+@@ -13095,8 +13095,14 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
+ 			break;
+ 		case KF_ARG_CONST_MEM_SIZE:
+ 			ret = process_const_arg(env, reg, argno, meta);
+-			if (ret < 0)
++			if (ret < 0) {
++				if (ret == -EINVAL)
++					bpf_diag_call_arg_fmt(env, insn_idx, argno, func_name,
++							      "Pass a compile-time constant or a value the verifier can prove is constant at this call.",
++							      "the kfunc requires this memory size to be a verifier-known constant, but %s is variable on this path",
++							      reg_arg_name(env, argno));
+ 				return ret;
++			}
+ 			fallthrough;
+ 		case KF_ARG_MEM_SIZE:
+ 		{
+@@ -13160,15 +13166,13 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
+ 			break;
+ 		case KF_ARG_PTR_TO_REFCOUNTED_KPTR:
+ 			if (!type_is_ptr_alloc_obj(reg->type)) {
+-				const char *expected_type;
+-
+-				expected_type = bpf_diag_fmt_btf_type(env, btf, ref_id);
+ 				verbose(env, "%s is neither owning or non-owning ref\n",
+ 					reg_arg_name(env, argno));
+ 				bpf_diag_call_arg_fmt(env, insn_idx, argno, func_name,
+-						      "Pass a pointer returned by the matching BPF object allocation or lookup operation for this kfunc.",
+-						      "the kfunc expects a pointer to BPF-managed refcounted object type %s, but this argument is not such an object pointer",
+-						      expected_type);
++						      "Pass an owning or non-owning pointer to a BPF-managed object containing a bpf_refcount field.",
++						      "the kfunc expects a pointer to a BPF-managed refcounted object, but %s is %s",
++						      reg_arg_name(env, argno),
++						      bpf_diag_reg_type_plain(env, reg->type));
+ 				return -EINVAL;
+ 			}
+ 			if (!type_is_non_owning_ref(reg->type))
 -- 
 2.53.0
 
