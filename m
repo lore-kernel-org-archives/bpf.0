@@ -1,178 +1,162 @@
-Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4573E6DEB;
-	Sun, 16 Aug 2026 22:48:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF2263A6B6F
+	for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 23:17:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786920485; cv=none; b=PFV+xjoP+H6fMAgZQY4lBsarBgEXiHvlb2paM5iiqpq/eQ2hlmgWCrWyV+O/LOG9XCqcnMIhEL7wmXf0W1YIyl6Rsd7yExtv9d8B16Ml7TPvsk9H5fD74GGYRGT9pwGm5VZfbUxmmf4IVK/ce/MsgPH0KQzB5eBqN9Ifv+xssAs=
+	t=1786922245; cv=none; b=pDRgyFl1FlEYq9HSMMbdEhi2TNw1P/R5L5jcOg/+AiVUaEINaJfN5MawFGRc0ixsOARbr87HVkJmLBgjCMdWTioT3dLbawI39z/Lw9AB9AC+0EJmsHfiXas6bPh6TmSADKthk9vw/stOubUIXw1lfDojJOKRtmZ20mILbSFOMGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786920485; c=relaxed/simple;
-	bh=y4Oe55bBTpGkU/aNbfP6J95JKmmpSt53Q4zvyPHYMcs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qLHvBIoLMfIXCyIktMEZIaiWm6gza8pvPT1LvchtzqpbaBqi9XwY+NLvkUnT+C/KteOM0SL7zvn7bchBYd5u7YSCE+yDZ0RBPZMGSfvLwjbkSjprIBka/kaFggFcYLtxOaobznac/vmjXD3gMbLNA9duyHU5wYuqX/grXmLp9OA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=GFVDPNvE; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Hz4HNAaV; arc=none smtp.client-ip=103.168.172.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+	s=arc-20240116; t=1786922245; c=relaxed/simple;
+	bh=orlL/s+0UfGhO31zaJ/3W8YeQ3MSg7gTeXGZ5qRQ5EQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=AGoxWAAiJ9jJMOMJwZrduQIl6WlIg9vrQPTLw/OyaVh/qLhjyH7amUu4y9j2iwvSsdI4hK3CDqxPoeEFIQjnQ9c2V2R/cnaz+tQc/oZCaq5s8l8mYoRl/xxGQnLBPatuD+N1Ov24g+n8zDv5RdEajAZ5B0O5ePbD5tzFEjX8/QQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FUDSP2hp; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="GFVDPNvE";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Hz4HNAaV"
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id E8B7A14000FD;
-	Sun, 16 Aug 2026 18:48:02 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Sun, 16 Aug 2026 18:48:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
-	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1786920482; x=
-	1787006882; bh=Iai5LJEqyfwXNhMcgzy+VoGlTqvQD8cplGNN5rO3Gn4=; b=G
-	FVDPNvEdF/lL/bDhKjUQATKlA6pTWX5pDq2Wh5U6aMTM9BzGaSDO688Im2i2YsZr
-	RgZLwS2n+5inMq7Sob+xaV5+TCHHdQG1qDsXXUMDes8OSNoX72MFONQN46UfiGaT
-	gmUPI3kN38+KKJmS39xN5epeDUOgbe34UYQSTXxEscLFjf44HpGbu46bsYtgURrZ
-	hz6oW55iwh5iz4ibfqIA0SlbLWZgVWwx5fgQBGNHTH0sDswgjEjq2xeCLlqIwx7k
-	OjZXiy7IskzyAQXUmhglwRWDYBI7GyO6jyOInK7bkJYi7godKmrDUlhG0svHBspK
-	BKCCz6S1+MQLpB6oJhZ+w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1786920482; x=1787006882; bh=I
-	ai5LJEqyfwXNhMcgzy+VoGlTqvQD8cplGNN5rO3Gn4=; b=Hz4HNAaVKEcF2CWJo
-	Om6xPuGHGt2tE6CzXz/iroFOtOXu9jVJ8U1KDKTNufChodRcuF6N/9cR+S45Gc7g
-	U2qTpO/u8LNLszJ+pDJwpQfivAb1vmdzkS/riL3/qXvhsLcKxH0fNGh4G6ViFzFC
-	tlhWV4G6yKXiImzcb3QnFXD/nY+PbuOc5yUw15F6eAa5vnCNtOnYN9ZbnxZuL//0
-	qgPvJyeIyqZPA3gpeNlSE77SZhJx9bF3g3hQp2HA7hU3CDoVLugXJIMJZSUwUysW
-	d7g98jMRabHLZTxC5QOF9JigdxfvevOF9qGHTsmEueBRNVNgfHonEANULwlpslQ/
-	iq3cQ==
-X-ME-Sender: <xms:Ij6CaioSJsqUhI4Aqnx3wt2s0nWySiT1NeBSaIjGrFArF2py7iF4RQ>
-    <xme:Ij6CaqNvDc7Td3dMzxJdZ-Kt7IR2H--Sf4Cf1huLpTAyGgeUd_Dfbvp7yhcZKzlIF
-    YLyqI_5sCybxeqxZGp1SVgxJMsGCxuP34foHNH741tX6Ykq-Zq66orC>
-X-ME-Received: <xmr:Ij6Caird1e9QSdZLPmEkfVKsG-hEMJo4kzWBi2nFYPgFp1GlibN8QyRHddY>
-X-ME-Proxy-Cause: dmFkZTEdkpHxwPvghylIRiDh2DXj/W+5rHHxiNSRAV/FnUvF+pTHTSRogpF51K0JMFOoNq
-    FXR3xXOJwqbxi3xnpOR1gVnxkOx0+3lmAqj6HIZkTE7HCsj4rfJi12LdCUf4noPIB2xzxm
-    G7I/52H/Ds2kSEPPWl68t4mZYEFuU9+tOum6r1AuUpSuXeb/EuVzDQV2mgKoQzhJqWy9WS
-    TVItjwfT9Ds7erymUHvJC6I4UFiVodQ+tEdI5cAgcJk8Vajp+hbWnlKpegW2smcmqEpO9y
-    vf97AV5jaic/zQ1Bw2Y9IMD/RUnDCUvC3h/3BgvkY0X8lg0WF0YKtDhM/4K5gFEWm8G2hC
-    o7UOq1ARSQoAFN87IS8L7LmQD0NqIPY7B3lg1mFqX/Ux9m5lhs/bBn3ORbVqzOiq5xkBQH
-    eMvoSuKMYDFCUz5886MTOlInYpH1NMOThGQVJpNdwJoccgzj6LI2NAzcCnEuDStOxdS3Ob
-    t7IJbEzdcGjLWgq+oRueBNy4DT1TJGHM6PcqkdDdDDoeUE9kieAliwATf6dSYT+wGv4zS8
-    PNNAWvqZZQE8EQod+tB+wj3MtC6rQT+AzOTnzegSlTSw16FRcdIH8OOwF9BXYH+8WCobx4
-    N+1qrWjy3Npgs0clVyYZ0uus3IX3Vf/faSpYjpWgaZtEl4vpp9FuSha/Ga2Q
-X-ME-Proxy: <xmx:Ij6Cagko3JAvb8fMKFhrpQD__u94Z7-YYZku2lum-7QB6QLigMaibQ>
-    <xmx:Ij6CaixAAkAfGekw3AatVXYZGsAydjRbujxVMotnnR75tf2lPNujWA>
-    <xmx:Ij6Cam0v9fPLp8U5tAs4LmdJjkJrrczGOd66tLnpOx7H2hI0mGhMUg>
-    <xmx:Ij6CarbDdgMLosGVqBmC_0tjhS9tqo07XH2nWjprpLIOJsowtDhxPA>
-    <xmx:Ij6CaqEsI3e8D_SGUBLJEtTHMZ4NMCfxEflyw8uzpoFBx1MnHHKWyloc>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 16 Aug 2026 18:48:02 -0400 (EDT)
-From: Kiryl Shutsemau <kirill@shutemov.name>
-To: akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	nico.pache@linux.dev
-Cc: baolin.wang@linux.alibaba.com,
-	baohua@kernel.org,
-	dev.jain@arm.com,
-	hughd@google.com,
-	lance.yang@linux.dev,
-	liam@infradead.org,
-	mhocko@suse.com,
-	rppt@kernel.org,
-	ryan.roberts@arm.com,
-	shuah@kernel.org,
-	surenb@google.com,
-	usama.arif@linux.dev,
-	vbabka@kernel.org,
-	ziy@nvidia.com,
-	usama.anjum@arm.com,
-	agordeev@linux.ibm.com,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kas@kernel.org,
-	jannh@google.com,
-	willy@infradead.org,
-	pfalcato@suse.de,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [RFC PATCH 57/57] MAINTAINERS: add an entry for collapse
-Date: Sun, 16 Aug 2026 23:46:09 +0100
-Message-ID: <20260816224609.308019-58-kirill@shutemov.name>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260816224609.308019-1-kirill@shutemov.name>
-References: <20260816224609.308019-1-kirill@shutemov.name>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FUDSP2hp"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-38a0c7e841fso3729442a91.2
+        for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 16:17:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786922243; x=1787527043; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=ucrgPcpj7nxeCtN9HT0N9KMvy3swFcYQyW8EFS22f1M=;
+        b=FUDSP2hpoLQjY0jKVSxpDZcv6rMboedMDhXXYKAlPUChWJb7xZ2nqq69JxMDTFF/GP
+         o26FLv5AtMmCsh+usjvPV1mAsz6BIspH5n1MzE44eWA3vvGd0vUAfBx1cavi0FFRsp4C
+         KPYHfn6nnZUbWv5Zi/9ABQNDYlEd1FG3ymyt6o87p2PWIhNUYzs9J+Dy9BxKztSSmQ8o
+         Rr/gWcHRwtumu8Knle6/sar7i5Z6B2Q/AYv4OM3HYVkYb9iaRHBbW1CcYnLWNiIvV9ox
+         VvZv8XKxi1X9O9JA5IadI+vIqCS3Z8/j8004Wes9Bc6q0UBCpNpZzhbaEsXTkVYPUCZs
+         N3wQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786922243; x=1787527043;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ucrgPcpj7nxeCtN9HT0N9KMvy3swFcYQyW8EFS22f1M=;
+        b=hjOrdXrQQQlTh/1ocruDBm5u6j0vPU9tYAfBKX0nvg9vB3RRBAUtluNtnAH1kKni+q
+         w3/zAbZkS9RQoiFhwGeS9axrmFSjC9oRnneAZcWIY9cvk2QeG8/etU8BeJ5ZVrmc7Il2
+         8k1xtMRvG7ISPKeXmQYvjSSH1Lu1cI7TOQGeasWdf/iWGLxUrMJAz6Is78S6KFCevnpM
+         y0/RAl8DJ6XdTjYn/oalpXbyxqFdUAUsOEzlyxYuo3eREtUMHlpa9S3p4oO07IOn9K3s
+         zz2UQGVsrQqcV47ejboHRt7W/PNctFMM7/zAzPJB/g6L5piuQ0vT2FtsVUu4TutCqrey
+         GOqQ==
+X-Gm-Message-State: AOJu0YyL+fe2YtxZmD7AmKdu7DfwqgfpxRXc3RXRoUZ0XEgq7Y/us8w3
+	2uu03lbytLu8FnK1GKRmWXJwqo1DVdcGnvSksbSgqIujZi/KQWOWzBIA
+X-Gm-Gg: AR+sD139Fymb6NUj2khRYYFFT3zXknOCg5p3PzEhfvVzX6ADpn8cTuVSATkzyOml+E3
+	ysvgCEMpUFkDAUzvim/4UEljs/6YZxKW5+r4jEH7OBC8ffxC8QG7OUfSom10CBs5+5W4HJDxDRG
+	Gx4zZYE6vB9S7Y7EajlcOOj6cAWg9f6pBy6Hx9w3zWkvh9hKqst8vHrcDGakgoRtUXh3P35qMtL
+	zl4H8J7UXmxSYYHGodDYNWWexkI6tlY8APa20Ak/r6EaJ7b8mxnoNBO6leo+mUyNK2TfCQqlp/v
+	T6rZdeujqGSoduVc9cyXCIAXXlPOMJ1q042T/L30qUEk17IEYYXazyhDNuuY2cS9pcYescwwwOJ
+	FvqT2+NfaHuv0P9yPOJQ18GKjOJiOFdNAT8QFs0CE/5pfolkgVjk9MXORWG7rRNcLjiaRS5ySUB
+	xO49AMREjetp5S/W7AXKKE3a/IX39ROcUaYwbJVMgOUuzPpJR02/YaD2JrGKhfiswl7RO41mQi5
+	db70lK2NUdJbRIG
+X-Received: by 2002:a17:90b:2e90:b0:392:c80c:9202 with SMTP id 98e67ed59e1d1-3933b8a399dmr22513992a91.14.1786922243214;
+        Sun, 16 Aug 2026 16:17:23 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39531eca993sm2583640a91.14.2026.08.16.16.17.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Aug 2026 16:17:22 -0700 (PDT)
+Message-ID: <cd62cd53be9bcea2d5b63fef8eece815f5095103.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Cover mixed arena and
+ stack atomics
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, Alexei Starovoitov
+	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
+	 <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Kumar
+ Kartikeya Dwivedi
+	 <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
+	 <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
+	 <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai
+	 <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Date: Sun, 16 Aug 2026 16:17:19 -0700
+In-Reply-To: <20260816-bpf-next-038-mixed-atomic-v1-v2-2-4644c1886dbc@mails.tsinghua.edu.cn>
+References: 
+	<20260816-bpf-next-038-mixed-atomic-v1-v2-0-4644c1886dbc@mails.tsinghua.edu.cn>
+	 <20260816-bpf-next-038-mixed-atomic-v1-v2-2-4644c1886dbc@mails.tsinghua.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+On Sun, 2026-08-16 at 10:56 +0000, Yiyang Chen wrote:
+> Add a verifier test with one atomic RMW instruction reached through
+> PTR_TO_ARENA and PTR_TO_STACK paths. The verifier must reject the
+> shared instruction with the existing incompatible-pointer diagnostic.
+>=20
+> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+> ---
+> =C2=A0tools/testing/selftests/bpf/progs/verifier_arena.c | 39 +++++++++++=
++++++++++++
+> =C2=A01 file changed, 39 insertions(+)
+>=20
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/t=
+esting/selftests/bpf/progs/verifier_arena.c
+> index b241bbcf54a8a..b22bab33301ab 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
+> @@ -637,6 +637,45 @@ int non_arena_ptr_add_to_arena_ptr(void *ctx)
+> =C2=A0
+> =C2=A0#endif
+> =C2=A0
+> +static const struct bpf_insn addr_space_cast_insn =3D {
+> +	.code =3D 0xbf,
+> +	.dst_reg =3D BPF_REG_7,
+> +	.src_reg =3D BPF_REG_7,
+> +	.off =3D 1,
+> +	.imm =3D 1,
+> +};
+> +
+> +SEC("socket")
+> +__description("arena and stack atomic at the same instruction")
+> +__failure __msg("same insn cannot be used with different pointers")
+> +__arch_x86_64
+> +__load_if_JITed()
+> +__naked void mixed_arena_stack_atomic(void)
+> +{
+> +	asm volatile ("					\
+> +	r1 =3D %[arena] ll;				\
+> +	r6 =3D r10;					\
+> +	r6 +=3D -8;					\
+> +	r9 =3D 0;					\
+> +	*(u64 *)(r6 + 0) =3D r9;			\
+> +	r7 =3D 8192;					\
+> +	.8byte %[addr_space_cast];			\
 
-Collapse is now its own body of code: mm/collapse.c, a header stating what
-it offers a caller, and its own tracepoint family.  It has two callers,
-the khugepaged daemon and MADV_COLLAPSE, rather than living inside one of
-them.
+I'm going to fix this to:
 
-Add a section for it, and move what belongs to it out of the THP entry:
-khugepaged.c and its header, the trace header, the selftests, and
-mm_slot.h.
+	r7 =3D addr_space_cast(r7, 0, 1);			\
 
-The selftests are matched as khugepaged*.c, which also covers the race and
-sync-check harnesses the THP entry did not list.  mm_slot.h stays listed
-under KSM as well, which is the other user of it.
+as in the test case above.
+Waiting for CI [1].
 
-Assisted-by: Claude-Code:claude-opus-5
-Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
----
- MAINTAINERS | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
+[1] https://github.com/kernel-patches/bpf/pull/13325
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7c179b333e4e..4e4e5030b979 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16955,6 +16955,20 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
- F:	include/linux/balloon.h
- F:	mm/balloon.c
- 
-+MEMORY MANAGEMENT - COLLAPSE
-+M:	Kiryl Shutsemau <kas@kernel.org>
-+L:	linux-mm@kvack.org
-+S:	Maintained
-+W:	http://www.linux-mm.org
-+T:	git git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-+F:	include/linux/khugepaged.h
-+F:	include/trace/events/collapse.h
-+F:	mm/collapse.c
-+F:	mm/collapse.h
-+F:	mm/khugepaged.c
-+F:	mm/mm_slot.h
-+F:	tools/testing/selftests/mm/khugepaged*.c
-+
- MEMORY MANAGEMENT - CORE
- M:	Andrew Morton <akpm@linux-foundation.org>
- M:	David Hildenbrand <david@kernel.org>
-@@ -17272,12 +17286,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
- F:	Documentation/ABI/testing/sysfs-kernel-mm-transparent-hugepage
- F:	Documentation/admin-guide/mm/transhuge.rst
- F:	include/linux/huge_mm.h
--F:	include/linux/khugepaged.h
--F:	include/trace/events/collapse.h
- F:	mm/huge_memory.c
--F:	mm/khugepaged.c
--F:	mm/mm_slot.h
--F:	tools/testing/selftests/mm/khugepaged.c
- F:	tools/testing/selftests/mm/split_huge_page_test.c
- F:	tools/testing/selftests/mm/transhuge-stress.c
- 
--- 
-2.54.0
-
+> +	call %[bpf_get_prandom_u32];			\
+> +	if w0 !=3D 0 goto 1f;				\
+> +	r8 =3D r6;					\
+> +	goto 2f;					\
+> +1:	r8 =3D r7;					\
+> +2:	r9 =3D 1;					\
+> +	lock *(u64 *)(r8 + 0) +=3D r9;			\
+> +	r0 =3D 0;					\
+> +	exit;						\
+> +"	:
+> +	: __imm_addr(arena),
+> +	=C2=A0 __imm_insn(addr_space_cast, addr_space_cast_insn),
+> +	=C2=A0 __imm(bpf_get_prandom_u32)
+> +	: __clobber_all);
+> +}
+> +
+> =C2=A0static __noinline
+> =C2=A0u32 __arena *check_arena_arg_nonglobal(u32 __arena *arg)
+> =C2=A0{
