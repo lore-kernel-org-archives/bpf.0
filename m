@@ -1,150 +1,103 @@
-Received: from mta1.migadu.com (out-3.mta1.migadu.com [95.215.58.3])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0DD0381C4
-	for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 05:17:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.3
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786857430; cv=none; b=CI2ZK7rVj+jcvI5UTVzAs/jRHZfOH7Gh63ydpVzoFMtgt2U8YeNMTFue0/bR3iTesKVejAwwV52nMhogajbSNj3Tc2m67tHy+g+LFoqFnoi9+tM8VeEJo7q+kb+MqlTexlXOnNfheNhIu7YpQYCfEF4y6B7JMVJsL8iSoMlf5D0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786857430; c=relaxed/simple;
-	bh=R1kjcacTRoQOwC7NDd6CTosEsArpHA+50CECWl/HoVM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kWUi18Xp/2RUokfwitEpqQE2BrG+wWrrMyCy0zgeRR1PAgzZQ0FRYFMJX4R4vj09t1+Qq97lQldPyNj8A7ogF4vqYpLs0ieB/F6vK0Rjzm4s79OplogU5++QfpEY082ZZKeJ7pmAoqjTL5GDPbufpRQiqH6dJaY/apCq9KPc9c0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aoEpNGYl; arc=none smtp.client-ip=95.215.58.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47B773C454F
+	for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 05:29:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786858197; cv=pass; b=sSZz39jzDDBHG0Wi0ue+jjf8jztVVlfy5TxZGa3T6yklaClPwIyyZhFAJ2K52RydZEC5zAk82R+Ya23ZYTjW/Su6s9uIi6xQaVOd9SY5u/RMhfEoI2AVQMOGDCUWiyTeu59TojEp7j5SfGxVViZ6SUjlHD84Lhxz3lyIa64jcbI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786858197; c=relaxed/simple;
+	bh=0GMogYTNpbTF5VIQI3Tj0Z3WDeNmKEadOpeGZiPUrEs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Dnd5vy4xifClSrn5nC16GkAVn8J4tnWb2mzJYD/Slq4Y0UQ1a/nLZQA1OTmzrvdAE8+49EZIsuaJtybC8TCdy2hrtLMtGNaKfwt8tJQx6MQuXLlRDI4coIdzYfrHqbGtNaC1qPSjUkdEpq35ou+OfsAPAKHlBFzEHCv7DFdY9h4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i6efumHj; arc=pass smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aoEpNGYl"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=R1kjcacTRoQOwC7NDd6CTosEsArpHA+50CECWl/HoVM=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786857425; v=1; x=1787462225;
- b=aoEpNGYlt4t12YBPQs3of5bErEZXxIpRpaN6ikFiD46QupL4WfP+fko2pPX65Ni2tXxykarw
- WyVH3sQtaVdMn1r/THRQ2XC4YDeY48Rp5ches2OIAq2h2dujJIk9oaPArUu8/3/19e6ocjYHVYB
- +6sX0eWI04pABNRMfc5j0srw=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [10.54.26.41] (222.72.143.228)
-	by smtp.migadu.com with ESMTPS id 58ec1bfda975086f;
-	Sun, 16 Aug 2026 05:17:05 +0000
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <2c2c7bb6-cce5-4dc3-965c-bbf1c50905d9@linux.dev>
-Date: Sun, 16 Aug 2026 13:16:54 +0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i6efumHj"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c15cf78d1a2so241810566b.1
+        for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 22:29:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786858194; cv=none;
+        d=google.com; s=arc-20260327;
+        b=eKi1XOrj5ckf85Ajcs3MWLra2tpUy1l+qV92KVKlzR8UZLVdXJ/uxdToNsmDRKqP9N
+         L/XyntWCqegtJB7ab1jfoyKq9Frva/w014HUtrIMyS4EJtw9NKn5oFZRmXdQMeT7iXfq
+         uSHrpQqnEgqDMi8R+EgbQRfA1l/CtPiYUrGMwTiRjU+9ksoB91dvtuGYEQVFPY19Flqt
+         BzXv2Rf0LnymTRGo250gIKlyFyXuI9sNz6ncqUj71JSzSwiQtl39QdOAFWt8Xvci3nN0
+         otNMZGD4HebTK1r5Y3lNyFwC6YsK+hJr/R1Vlq8lPufbP70WM8VyKuvADWpfpWvKFYIg
+         eJLg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=0GMogYTNpbTF5VIQI3Tj0Z3WDeNmKEadOpeGZiPUrEs=;
+        fh=1+WoQEZUrThSPmy+EVdRGjmxDxUVNPxXMKvglkUdF6U=;
+        b=j0CsJ53w1uEvyy65XzaN2Jl+42m635EdPN88V5dEV+61UJSIbaTWOd4CdYJuCDys1s
+         JaktkklW5KeQvKiD65HzZwp4WmO5ujfYxnmMqwEIcIvE32xFNzNgD0cnYFex/2cA26Ko
+         MGVTXRoKzkgVKXCYcej3OmNLI6bv4CNDIIM6h4+/hNfjZRj4Zi042bHS2eSIZ3AVCQKt
+         OhRuT1IUugclIEV3WHQ5luUSLPsQ8cfT3JJHth5ljCtXT6BWOoEpSiSzoP/Ql2+5PQdn
+         g40zbQd++kzkPpQYcsSmvcPbdw1j5yI0sxhA5fd9kF8plrgC+Uwhjpk2NogdTPUwOV0t
+         YjMw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1786858194; x=1787462994; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=0GMogYTNpbTF5VIQI3Tj0Z3WDeNmKEadOpeGZiPUrEs=;
+        b=i6efumHj/UP+vr0j5972EHSS85O4+ucNdfTNSumbKdzLdUK2PqmMDO0qUkMuY3r7MN
+         NQtMqDc3zLRBXNWr7MWgkxeAYe5AX+0/ATwihgSODSJr7uWKlbPbn/PjrBkXsBcR/S/V
+         nkVFuUEWQWt5eeDKjhDCoToqJiqMnV1wIRZu9gvrBM2FD3wuqOBvh4Z+LoyLuEl2Xo8k
+         QiJDB+n8rHrGE+ktrlHj3dV4+DVluPb4T3UnWpDUokyRrMPPCRprYpj/jhrZDP6iZvbi
+         1NzH63US02YXSPcZECYasB9f7TqWeWkfa/cHBeTXPPVrDKEA4EvT09C5s0dNrDBHGwEQ
+         xj2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786858194; x=1787462994;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=0GMogYTNpbTF5VIQI3Tj0Z3WDeNmKEadOpeGZiPUrEs=;
+        b=gwFQxOTLFgOwcsOcsWCFZpz9EqUFxxW75A1frbyM9lkNEVIh7WzKnvjKpftCqDyy9/
+         kTVNywkg59zrciMiATbknXkOoiDC8K2EUJL4zvRItIwq22QUCNaaVeVsAIhTxEjGZ/Li
+         zXnN3G5YmbQSSxd55VX5PnC+nyiIbZhCWkeBc2osv9GS/EDsr4yw2dJnBe2V0haXuBB3
+         twvde+QfY2f8km/Sq1vya9sXhOnxBnWNUAFD0snsXnC+rh7mabaPR/gtUvX9R4JjcUyb
+         36/OS14sCvc1398isqk3HnTOsR52o4UOTW6KtHOcWcEvjoz1/K+i3W007uXTHDXIUp5k
+         qLnA==
+X-Forwarded-Encrypted: i=1; AHgh+Rr5sEKQ/t45VoF4zTFRP1SGvQeL8OySoxMjnXp1841lhMmydx4CG8Yzi6G9ywKQnNPEZlk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywk59xEFbpbtt/rYDU9/aMTPDAKK20AtdU5ho3H6jTNTQclsP4H
+	t2OEv6s8BTpQ5v4K9k1EN52448Lx1Qtums4/VIVSquyWCvotkejQOXq+V9M/8oewphR9UlWR9Wd
+	AuxlJJP0toTe28XwS8dg6qN1YitofXsFqrmgVz/zP
+X-Gm-Gg: AR+sD10fMvvjsDEyHfcrXp99epDRkezX/Gf8vyrY+pSYrVeh5zzzEwOc6+0OS5qisH4
+	FBLOSmwQYTQGMmSc30wHE3u9ZKMXa7eKxaSVaPIAWK+Q2EmdRWkNJ/fVT55f0f2M6312DSpImaq
+	UcnQlcmVNP55NZji7AJLxcHgMguhmxOCFjLWa0erwC35LCNbZrzuPBU49D7CQGgBah9YFgUBciK
+	qZfc/6t3yZYsQlAoBc5rQKIqvMM+8JxEvwqI6TGHLmoGoxLhlo0OnRtn1O3fTSQ+NPqzl4Cwni9
+	z1wvhmqNktwHqKcQDYNJN1ZBxe6p+GRsWQsTH6YH7KQeqw==
+X-Received: by 2002:a17:907:7b9e:b0:c20:33db:41d3 with SMTP id
+ a640c23a62f3a-c2129bd0001mr748392866b.11.1786858193993; Sat, 15 Aug 2026
+ 22:29:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf] bpf: free page_pool frags via the page_pool path in
- bpf_xdp_shrink_data
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org
-Cc: syzbot+237bbeed8dfe0699b7f5@syzkaller.appspotmail.com,
- daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me,
- martin.lau@linux.dev, ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, hawk@kernel.org, toke@redhat.com,
- lorenzo@kernel.org, linux-kernel@vger.kernel.org, martin.lau@kernel.org,
- clm@meta.com
-References: <20260816031245.268898-1-jiayuan.chen@linux.dev>
- <5aa97a9a0b8cd20feda29b304874967a8019d8b4b3dd4021dc5c0dac43c10d05@mail.kernel.org>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <5aa97a9a0b8cd20feda29b304874967a8019d8b4b3dd4021dc5c0dac43c10d05@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260814234845.773189-1-joshwash@google.com>
+In-Reply-To: <20260814234845.773189-1-joshwash@google.com>
+From: Joshua Washington <joshwash@google.com>
+Date: Sat, 15 Aug 2026 22:29:39 -0700
+X-Gm-Features: AcwNN1UyYmeHLBsfX_QGjqXqAtj1GIDQi_SA3bNYfMThTGhnY9c3uKATUeY0Mxk
+Message-ID: <CALuQH+WN+xftDONAk=T8zeB1qF5y=yaJ4F23DAg4W6puP+jToA@mail.gmail.com>
+Subject: Re: [PATCH net 0/6] gve: various XDP fixes
+To: netdev@vger.kernel.org
+Cc: Harshitha Ramamurthy <hramamurthy@google.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jordan Rhee <jordanrhee@google.com>, 
+	Willem de Bruijn <willemb@google.com>, Ankit Garg <nktgrg@google.com>, 
+	Tim Hostetler <thostet@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
+	Jeroen de Borst <jeroendb@google.com>, Stanislav Fomichev <sdf@fomichev.me>, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-
-On 8/16/26 11:57 AM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/net/core/filter.c b/net/core/filter.c
->> index 16845987b244..3aab5556abe2 100644
->> --- a/net/core/filter.c
->> +++ b/net/core/filter.c
->> @@ -86,6 +86,7 @@
->>   #include <net/inet_dscp.h>
->>
->>   #include "dev.h"
->> +#include "netmem_priv.h"
->>
->>   /* Keep the struct bpf_fib_lookup small so that it fits into a cacheline */
->>   static_assert(sizeof(struct bpf_fib_lookup) == 64, "struct bpf_fib_lookup size check");
->> @@ -4288,6 +4289,14 @@ static bool bpf_xdp_shrink_data(struct xdp_buff *xdp, skb_frag_t *frag,
->>   	if (mem_type == MEM_TYPE_XSK_BUFF_POOL) {
->>   		netmem = 0;
->>   		zc_frag = bpf_xdp_shrink_data_zc(xdp, shrink, tail, release);
->> +	} else if (netmem_is_pp(netmem)) {
->> +		/* The rxq mem model does not always describe how a released
->> +		 * frag must be freed: the generic-XDP and veth paths run the
->> +		 * program on a shared rxq while the frag has been cow'd into
->> +		 * page_pool memory. Trust the page itself and return a
->> +		 * page_pool frag to its pool regardless of rxq->mem.type.
->> +		 */
->> +		mem_type = MEM_TYPE_PAGE_POOL;
->>   	}
->>
->>   	if (release) {
-> The comment says the fix handles rxq->mem.type "regardless" of its value,
-> but the implementation still checks MEM_TYPE_XSK_BUFF_POOL first. When the
-> shared rxq has been left with mem_type == MEM_TYPE_XSK_BUFF_POOL by
-> veth_xdp_rcv_one() (which writes frame->mem_type into the shared rxq on
-> XDP_TX/XDP_REDIRECT and never restores it), a page_pool frag skips the new
-> netmem_is_pp() branch entirely and goes to bpf_xdp_shrink_data_zc() instead.
->
-> Should the comment say "regardless of rxq->mem.type, unless the rxq claims
-> XSK memory" or should the netmem_is_pp() test be unconditional so the stale
-> MEM_TYPE_XSK_BUFF_POOL case is also handled?
->
-> The commit message states: "A single rxq->mem.type can be wrong in either
-> direction." The code, however, only corrects one direction: it upgrades
-> mem_type to MEM_TYPE_PAGE_POOL when the frag is a page_pool page, but it
-> never downgrades when rxq->mem.type already says MEM_TYPE_PAGE_POOL and the
-> frag is not a page_pool page.
->
-> That second direction is reachable on the very path the commit message
-> cites. veth_xdp_rcv_one() (drivers/net/veth.c:638) points the buff at the
-> shared rxq and then, on XDP_TX/XDP_REDIRECT, writes the frame's type into
-> it:
->
->      xdp->rxq = &rq->xdp_rxq;
->      ...
->      case XDP_TX:
->              xdp->rxq->mem.type = frame->mem_type;
->      case XDP_REDIRECT:
->              xdp->rxq->mem.type = frame->mem_type;
->
-> Once one redirected frame with mem_type == MEM_TYPE_PAGE_POOL is TX'd or
-> redirected, rq->xdp_rxq.mem.type stays MEM_TYPE_PAGE_POOL for every
-> subsequent packet on that queue.
->
-> A later frame whose frags are plain pages then reaches:
->
->      } else if (netmem_is_pp(netmem)) {   /* false, mem_type left as PAGE_POOL */
->      ...
->      __xdp_return(netmem, mem_type, false, zc_frag);
->
-> and __xdp_return()'s MEM_TYPE_PAGE_POOL arm (net/core/xdp.c:436-446) skips
-> the check and dereferences a garbage pool pointer:
->
->      /* No need to check netmem_is_pp() as mem->type knows this a page_pool page */
->      page_pool_put_full_netmem(netmem_get_pp(netmem), netmem, napi_direct);
->
-> netmem_get_pp() reads page->pp, which for a non-page_pool page holds
-> whatever the allocator left there.
->
-> This specific crash is pre-existing rather than introduced by the patch, but
-> the patch is the change that claims to make the frag itself authoritative,
-> and it had the netmem in hand. Could the decision be unconditional:
->
->      } else {
->              mem_type = netmem_is_pp(netmem) ? MEM_TYPE_PAGE_POOL : mem_type;
-
-
-
-This is a non-pool page being mistreated as a pool page, and I think 
-it's a separate issue, xdp_return_buff and xdp_convert_buff_to_frame hit 
-it too, not just this path.
-
-
+Quite a few review bot concerns on this patch series. I will respin to
+address the concerns and manually run Sashiko to hopefully catch any
+other lingering issues before resubmitting.
