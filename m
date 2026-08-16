@@ -1,73 +1,73 @@
-Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
+Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B512417D64;
-	Sun, 16 Aug 2026 22:47:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D8E418374;
+	Sun, 16 Aug 2026 22:47:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786920472; cv=none; b=IDPHbOG2P4gtKuMNj9GByoe8TpQM0bPSTH1N3IxSmcPKwz8+pwRKCN/couub7tX+IGwducQNYITmNQefnybrVwz4AB9ochuggiMEm1P+VBlJl0zJvqu2ogOVzlHWXpWv8X8sK3aIbc4ETcYRwkEEMt9W0zt9/YlAYrzgjdbd7e8=
+	t=1786920474; cv=none; b=fOm56kjEcwcSywrTrDSZiAF2CAgwzVrrtFQER8BaaMVLYWKguF3WdhIT65MD+q4NBxf8THh8T/xf3pnnU6DcyNelp+ns9pKM/eVW2HI4PcjczoIBp3pJv6O3jyekQvVcKc6mSZTcjjLPcyZbY45g6ycbFZc58GZtJxTQgBoHllE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786920472; c=relaxed/simple;
-	bh=xfE9665ZBQHh3APTq8yboXBPsMEMe1PYQzkF4sy2Gu8=;
+	s=arc-20240116; t=1786920474; c=relaxed/simple;
+	bh=DCU0OBGX8PtBGbjVBDq2QbdRsHPkXfxxwZ0E3flceEI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X8Sy5/Er2TDj4iFm8F7qlp4HxT2rtJrBtvqlsnYdC9hsNuWTQCYu/ZautuY7b13fdtFzB2ztK+r0WuzbaWPapsDm6jK0OJ40DGUEy3odrsIRiPLs6Q4LW4DtnHJ2oOyUUvkUkcJerNdk+xBFJrHcX5l8OT5+61zJJ4W1/ykBlko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=0EkC16hO; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dghigcQF; arc=none smtp.client-ip=103.168.172.144
+	 MIME-Version; b=r3+tdw6E0y1pLX6yXrxk3ThSTEX93959Zp69QDbks8aRo4KipolFzJ0RN99Ne8hNEEnZIum2sL0PawMBJRFsR+oCCjShxKyAhdbpylDktwBCLXoznkObQ+VHryxgqKa9aPYyNp4L2PD7a0zHXrLkTDn9htMAB6mqvisyN3ILYcU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=xA337mvy; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=QfjNs5uP; arc=none smtp.client-ip=103.168.172.153
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="0EkC16hO";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dghigcQF"
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfout.phl.internal (Postfix) with ESMTP id 4ED26EC0235;
-	Sun, 16 Aug 2026 18:47:50 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-06.internal (MEProxy); Sun, 16 Aug 2026 18:47:50 -0400
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="xA337mvy";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="QfjNs5uP"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 3103814000EE;
+	Sun, 16 Aug 2026 18:47:52 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Sun, 16 Aug 2026 18:47:52 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
 	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1786920470; x=
-	1787006870; bh=PyXPtjPVYE8Z0aMRtUKX037WUeKGrSifkaLdS3sKWUk=; b=0
-	EkC16hOhVsqh30c3Myj5XL1qP+K3wPn+xQsGWQHAIoL0MoTMTirS5zrh9jwW26t2
-	fBAEm/dy2wTAwkB/h3ZE3kSUvy9x/4nvh1q27BabBNosXddL+HpAY6fRpJu3BipR
-	8iqy3eHg6CeNMcQeurXur8Xo7z2x5a/ggI37tXw+K9PtbYpcZmV78hM9IvvkRE2R
-	sOeKu+Tgb9UbXSGTfTBeKA659U+9g9mzfmac24WxtEmGHmzOq0bDGXyXmdcu1z5l
-	cl7cPp1RdfPSNbG2FPTMz9N/DF8rPTqKVf+YY96FVzgS3ay4WBA77eGAzC0g05Vd
-	832iL1c6w9+8FFo0LmIVg==
+	:reply-to:subject:subject:to:to; s=fm1; t=1786920472; x=
+	1787006872; bh=wHV+00xH9B3bJYx8y5slE3mzGKqkEhVlu1wRFthp3Pk=; b=x
+	A337mvyUFlpppzBdiF3Cu5k9EWiW/mPwjKlFQ/EXtIodTzvnUTAOUv3VnRXvYjcP
+	BvsI78mXPc70LuodC4qj7bM30YcVCzUF6bWD25/7lIJKsC/SxkFTfrbAyhixXe/a
+	Ot2cgLPAViVXFX20f1ru0+uCEaCqC272zU0ifxB51M0YvHmHo6xZiuHUCJgaHFop
+	sNiaEmjnxlTqfqW1yUJj6/pkllSKYYaoyyXsWDIaZ6i7iNKsQrvVATmoqc9Pqwsg
+	nfy1mTw7sQCJFJS+XFYlzKSlJqzQofUcHkgoKkMpwRYgrpDu20KHTAbDPusrYQOD
+	WLY8l/lRq1E+tcEixhsuA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1786920470; x=1787006870; bh=P
-	yXPtjPVYE8Z0aMRtUKX037WUeKGrSifkaLdS3sKWUk=; b=dghigcQFSuackbjpf
-	i8ccZXUzsilX+jOQyQEmxsRAaw5KlmG+++n/q8Szwyp9fj5VwwLmt6JWIVLJtQPx
-	9Z6z5+Rf/ctbSVUqrCVcu9kPxz3jn0iASTx1yvIRYNQGmvMMo4kC+KCy/MZyJasx
-	564WfCpnJnO754Ya6z0dxyDhnjiSYP8aYao3MoBpoIf1W26oSdF9j3YrbHzlyZza
-	JL4TYl/Rj1x3MEd+h/95I+G2hy9ObHkYRC3fw37KisBD9c7OLokNEIDSjvv0AGHF
-	bhsQO+QwiedX376TuXwmQ9L+MjMyO/QDazWFYKgr/eisS7+NypQvIdmQbbH9uSDG
-	z/IGg==
-X-ME-Sender: <xms:Fj6Cah6znDgsOUy0HJujMw9V-DLP_g-Au06B1xf2g5413AmFWBbeUA>
-    <xme:Fj6CakNtwNGlE1WSWZ3bsFDkwlkOGVFSx1DzGEJpiKytyC-zoJa7rmx-SN1YqtTty
-    VRiSziF0BE-3AIQ39ENR89hDdHAlMG5Te0rpcWwNt3bt4zdYIe9nX0>
-X-ME-Received: <xmr:Fj6CakivqmGiV_BgjEyop1zjNIFG6OzfOcwF55JGFQzMlGYZyGqn32gXbLA>
-X-ME-Proxy-Cause: dmFkZTGLjSC+Sq1mG4OxzCqJWZCyq6WBdNxixaUzytYe9+wGJyabxJMeXSGoSuAsbaseo8
-    j4DSEFeK04hDwZtES01hwyaQU7EBbvB2uUyGWGXfBIvFkincgAhOfMPuQIYJEtCVnAaSQR
-    A4Ax8HD1ONlE2jDjL1mVvD+0hWY7OblS1nu5BjF2+enir154N1oLAu20vju0M/bNfdRnaJ
-    kR8ssngVd0jx9kVZmvlOu6xrNJDHPkWuaI7duTsmkJWDtl1nRnZmYTu08hiimZvSmFoDki
-    6dltoqAKCLj0c9eKP1Vuuwv4Z4pwJTjTf79O9CtQykYTwcA2QZ7OKyC8oLqq7vFkYshLYo
-    e77wWWIENfWWfKsbKC1kP1m+OxwAAiqZx0bEjZKDuPeV22XOXIGcwfKRFV0FN1rHmveHL0
-    Y6ejQe4oFZtmmgdQW5dIGSQZXfyUU5nLR+TZExZg0Bcb/lQn5/6SQDajFLx0I0bg5ey1S5
-    VVBBbzfOElkCyYT+2y9mCdYY69R2UkeyosAzehBiW5C//ulhzKnXpLOIAglVsKGDLTD3qg
-    KWjxi/4iYNGoMuWvB6ZUWuS8mA+ypg9x4kPFB/Msx2X7Cx2DUJIV3qpyFE9KM1niesKiwc
-    ddPOQNpAyzTHzdRzd6gdnR6t2t+NbuyxnuFQ8diZkqJAQ06NMSk0cglrCNug
-X-ME-Proxy: <xmx:Fj6Cams0FNOh1GD8Ydq2e-VIyGp_1FTHjlRCAHwB7Nmusiyatap6kg>
-    <xmx:Fj6Cara0tyJyyCpiPelu4nA9b6aGIIX1r_LGNFdYODym4cq-O5ae2A>
-    <xmx:Fj6CatWTXFCoJdBX5juAF0XJwfnaoba3jx7S45IOl4BAYeS62wJfxQ>
-    <xmx:Fj6CamKkYL9Oke65FnGPHjt4PidGrdGaTMkREDtGPBhbghyAiX2v3w>
-    <xmx:Fj6Can-0wwsVr_1rTIf9ZV4E29WzY3A_VG4LbVZBfE7HVE10QoLzuQci>
+	:x-me-sender:x-sasl-enc; s=fm3; t=1786920472; x=1787006872; bh=w
+	HV+00xH9B3bJYx8y5slE3mzGKqkEhVlu1wRFthp3Pk=; b=QfjNs5uPIoaSLCjY4
+	UNvENcFHjTNOENXnBPqTi+RNc22z55HCrvzacXE7SByYPz/otrYquY5kNhc9W/3g
+	LJKZRjgZmIW3rhS35U/WAqh93TYt/66eol9QOdQmjq9k275DoFipa+J8BMQSSkmp
+	uYPcyX7FoE3dxI715BbSY+NfHhll5cGsXZF4Baj2Eu7idCmmIGSdXfquxh3juO5Y
+	u10RldDwrSLco3n7O23TY902qashNBNAUBQi18VDEWR3xNFy+jWdJHukqh+svl2R
+	0Q+F820OiBKJJYrzAvITwog2ofMeMp2mGGznk4AB5awQjF9JUJ9I7O0pSSD433cS
+	r2H9g==
+X-ME-Sender: <xms:Fz6CaoZgiCDc1KxOay93nBsy4Osg8ZhCu9GhNZqmCXV2vUtn2ke9kQ>
+    <xme:Fz6CaouyxFpKBMt1J_FT6745AkY3cxXGAUKPK5Tfgh4jznvS0Kd_Jfuo2XvXdAgud
+    EC1UPc25YeSFmlx56oRZvCEK50oWmJSyEQ4plSMGJA8ZHGEJ_KXGBz1>
+X-ME-Received: <xmr:Fz6CavDeGt0nJRM1iU7maNNyHJtk2gElrZGw9egA19wxGZSNE6uErJd3ohQ>
+X-ME-Proxy-Cause: dmFkZTFt7uwKlsd4UyzlmYX1bnlzO4+qp5TmvoTS/qzkFKfMuj25xYssUPl6UU5Ie9xRba
+    Y0bWuaC/AePVMhqrkCnU3j3fo4+kQ4lrNr0qcDw4ZM2xDmZI+m2r8oZbGDZU/DcLlRMJvk
+    pxa8BemzxDXpf0p5hqW+oOweEwIQBvnr/hc1O3uCrLqxLkUCX+QMvT/AmKStBz4XcOBl17
+    ynvfoFkCi5Qu6ZndF8QgBKMwimBrechIaqu56LTRaFtWn2N2FSoSPFDDGPAClh8o3Wii3h
+    WmXtU4UIpdlwyanZt6DS7CEKxM1G2yBGNUvAI/9KSggaAyLfyuWlS9a0iep84iGUQaZXfq
+    knD0n9YA/kWmvfl0Wjb8E/Beu3ua4NshP/Nio/tZ6O8p5iMb+wpx4YBhk175j5jhIoNquf
+    +gH+mFtvZJEmhVHsfKOwvOI/Zqd9dLt3FKSCAdmKnioYMErInfqEm+HllRAv8ksF/n6S5S
+    h2uR4Bt/+ZJoTA+GRWlNvAH0+HzPvPGFqXohUpm2Y5V9P1mXIEgx/+CO6eALiZ20+Mpnd1
+    O0fqm0rJ2cvqo0NujMKgCoRTnm8xRyygGCtnH8y5EQi/fGzr2AjM3K+VHQ7HUZbO016+tv
+    bw5ebY3O4xa6hlnqtSatzZA1NE7UEOHzGO6lgunGBISbTEBpHkcnlEiy4S+w
+X-ME-Proxy: <xmx:Fz6CavNuicul1hB7acVRkWI-FSMEUDenG3hIg6ni5a9JljXLb7NeyQ>
+    <xmx:Fz6Cap7QlyTSrmQOlcBYGIe8F7bYZ6vbjlzjedSZDzFRHKABd8Ea6A>
+    <xmx:Fz6Cap3lul_7Ir028YdmawBxWM8F9jt4sEs9abx7frYUMAieWlq87w>
+    <xmx:Fz6CaoomY9yx_yWOP-HFjrcgA4La4oDeGUEkDPml4LOLzLxyqpJF5Q>
+    <xmx:GD6Case2J7iIxkQ6smxyjic-RGnxsxJv7nQtrZsKbjwvALgygkwA4Ngm>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 16 Aug 2026 18:47:49 -0400 (EDT)
+ 16 Aug 2026 18:47:51 -0400 (EDT)
 From: Kiryl Shutsemau <kirill@shutemov.name>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -100,9 +100,9 @@ Cc: baolin.wang@linux.alibaba.com,
 	mhiramat@kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [RFC PATCH 50/57] selftests/mm: attribute collapses by candidate event alone
-Date: Sun, 16 Aug 2026 23:46:02 +0100
-Message-ID: <20260816224609.308019-51-kirill@shutemov.name>
+Subject: [RFC PATCH 51/57] selftests/mm: cover collapse inside a sub-PMD VMA
+Date: Sun, 16 Aug 2026 23:46:03 +0100
+Message-ID: <20260816224609.308019-52-kirill@shutemov.name>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260816224609.308019-1-kirill@shutemov.name>
 References: <20260816224609.308019-1-kirill@shutemov.name>
@@ -116,131 +116,112 @@ Content-Transfer-Encoding: 8bit
 
 From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
-The check counts collapses of its window by matching isolate events
-against the source PFNs it recorded beforehand.  That tracepoint went with
-the mechanism that emitted it, so nothing would match.
+The new engine can collapse an mTHP inside a VMA smaller than a PMD.  The
+old mechanism could not: its coverage was rooted at whole PMD-aligned
+spans, so a VMA that could not hold one was passed over however many
+mTHP-sized windows it held.  On arm64 with 64K pages, where a PMD is 512M,
+that was every VMA below 512M.
 
-Count the engine's per-candidate events instead: an install that
-succeeded, at the window's address and order, is one collapse of that
-window.
+Nothing covers that, so add two cases:
 
-Preparing the window still checks that the sources are present, which is
-the other thing those PFN lookups were doing.  The recorded PFNs
-themselves are no longer needed, so the array goes.
+ - a VMA of exactly one window, the smallest thing that can be collapsed
+   at all;
+ - a VMA of several windows, which also walks from one window to the next
+   inside a single VMA.
+
+The second takes as many windows as fit in half a table.  At the order
+just below the PMD order two windows are already a whole table, so there
+is no room for several and the case skips.
 
 Assisted-by: Claude-Code:claude-opus-5
 Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 ---
- .../selftests/mm/khugepaged_sync_check.c      | 55 +++++++++----------
- 1 file changed, 26 insertions(+), 29 deletions(-)
+ tools/testing/selftests/mm/khugepaged.c | 65 +++++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
 
-diff --git a/tools/testing/selftests/mm/khugepaged_sync_check.c b/tools/testing/selftests/mm/khugepaged_sync_check.c
-index 4c37b697d3dd..2a0c247aeec5 100644
---- a/tools/testing/selftests/mm/khugepaged_sync_check.c
-+++ b/tools/testing/selftests/mm/khugepaged_sync_check.c
-@@ -7,10 +7,9 @@
-  * advancing by two is a completion barrier for one full pass that
-  * started after setup (khugepaged_full_pass()). Verify the pair gives
-  * deterministic, attributable results: one barrier step over one
-- * prepared window produces exactly one collapse attempt on that
-- * window's source pages (mm_collapse_huge_page_isolate events filtered
-- * by source PFN and order) and the window is collapsed
-- * afterwards, repeatably.
-+ * prepared window produces exactly one collapse of that window --
-+ * mm_collapse_candidate install events at its address and order -- and
-+ * the window is collapsed afterwards, repeatably.
-  *
-  * scan_sleep_millisecs is set to 60s to prove the wake path: without
-  * the wake, one barrier step would sleep multiples of that and blow
-@@ -51,11 +50,10 @@ static void trace_events_off(void)
+diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+index 172e7307eeee..85f138cfb9b2 100644
+--- a/tools/testing/selftests/mm/khugepaged.c
++++ b/tools/testing/selftests/mm/khugepaged.c
+@@ -1536,6 +1536,69 @@ static void collapse_order_mixed_sources(struct collapse_context *c,
+ 	ksft_test_result_report(exit_status, "%s\n", __func__);
  }
  
- /*
-- * Count collapse attempts attributable to our window: isolate events whose
-- * scan_pfn is one of the window's source PFNs, reported once per attempt.
-+ * Count the collapses attributable to our window: per-candidate install
-+ * events at the window's address and order, one per collapse.
-  */
--static int count_attributed(unsigned long *pfns, int nr_pfns,
--			    unsigned int order)
-+static int count_attributed(unsigned long addr, unsigned int order)
++/*
++ * A VMA smaller than a PMD is a valid collapse target, so long as it holds a
++ * naturally aligned window of the target order.  This is the case khugepaged
++ * used to pass over entirely, its coverage being rooted at whole PMD-aligned
++ * spans, which on arm64 with 64K pages meant every VMA below 512M.
++ */
++static void __collapse_order_sub_pmd_vma(struct collapse_context *c,
++					 struct mem_ops *ops, int nr_windows,
++					 const char *name)
++{
++	size_t size = nr_windows * mthp_window_size();
++	void *p;
++
++	mthp_push_target_order();
++
++	p = mmap(BASE_ADDR, size, PROT_READ | PROT_WRITE,
++		 MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++	if (p != BASE_ADDR)
++		ksft_exit_fail_msg("Failed to allocate VMA at %p\n", BASE_ADDR);
++
++	fill_memory(p, 0, size);
++	if (!window_not_collapsed(p, size))
++		ksft_exit_fail_msg("Unexpected large folio after fault\n");
++
++	madvise(p, size, MADV_HUGEPAGE);
++	ksft_print_msg("Collapse inside a sub-PMD VMA (%d windows)...",
++		       nr_windows);
++	if (!khugepaged_wait_full_pass())
++		fail("Timeout");
++	else if (window_collapsed(p, size))
++		success("OK");
++	else
++		fail("Fail");
++
++	validate_memory(p, 0, size);
++	munmap(p, size);
++	thp_pop_settings();
++	ksft_test_result_report(exit_status, "%s\n", name);
++}
++
++static void collapse_order_sub_pmd_vma(struct collapse_context *c,
++				       struct mem_ops *ops)
++{
++	__collapse_order_sub_pmd_vma(c, ops, 1, __func__);
++}
++
++static void collapse_order_sub_pmd_range(struct collapse_context *c,
++					 struct mem_ops *ops)
++{
++	size_t window = mthp_window_size();
++	int nr_windows = 16;
++
++	while (nr_windows > 1 && nr_windows * window > hpage_pmd_size / 2)
++		nr_windows /= 2;
++
++	if (nr_windows == 1) {
++		ksft_test_result_skip("%s: no room for multiple windows below the PMD\n",
++				      __func__);
++		return;
++	}
++	__collapse_order_sub_pmd_vma(c, ops, nr_windows, __func__);
++}
++
+ static void usage(void)
  {
- 	char line[1024];
- 	int count = 0;
-@@ -66,25 +64,25 @@ static int count_attributed(unsigned long *pfns, int nr_pfns,
- 		ksft_exit_fail_msg("Cannot open trace buffer\n");
- 
- 	while (fgets(line, sizeof(line), fp)) {
-+		char *s;
- 		unsigned long val;
- 		unsigned int ord;
--		char *s, *o;
--		int i;
-+		char *o;
- 
--		s = strstr(line, "mm_collapse_huge_page_isolate:");
--		if (!s)
--			continue;
--		if (sscanf(s, "mm_collapse_huge_page_isolate: scan_pfn=0x%lx",
--			   &val) != 1)
--			continue;
--		o = strstr(s, "order=");
--		if (!o || sscanf(o, "order=%u", &ord) != 1 || ord != order)
--			continue;
--		for (i = 0; i < nr_pfns; i++) {
--			if (val == pfns[i]) {
--				count++;
--				break;
--			}
-+		s = strstr(line, "mm_collapse_candidate:");
-+		if (s) {
-+			if (!strstr(s, "pass=install") ||
-+			    !strstr(s, "result=succeeded"))
-+				continue;
-+			o = strstr(s, "addr=");
-+			if (!o || sscanf(o, "addr=0x%lx", &val) != 1 ||
-+			    val != addr)
-+				continue;
-+			o = strstr(s, "order=");
-+			if (!o || sscanf(o, "order=%u", &ord) != 1 ||
-+			    ord != order)
-+				continue;
-+			count++;
- 		}
- 	}
- 	fclose(fp);
-@@ -95,7 +93,6 @@ static void one_step(int iteration)
- {
- 	const size_t window = getpagesize() << TARGET_ORDER;
- 	const int nr_pages = 1 << TARGET_ORDER;
--	unsigned long pfns[1 << TARGET_ORDER];
- 	bool collapsed, passed;
- 	int attributed;
- 	char *p;
-@@ -106,11 +103,11 @@ static void one_step(int iteration)
- 	if (p != BASE_ADDR)
- 		ksft_exit_fail_perror("mmap() window");
- 
--	/* Prepare one window; record its source PFNs. */
-+	/* Prepare one window, and check the sources really are present. */
- 	for (i = 0; i < nr_pages; i++) {
- 		p[i * getpagesize()] = i + 1;
--		pfns[i] = pagemap_get_pfn(pagemap_fd, p + i * getpagesize());
--		if (pfns[i] == -1UL)
-+		if (pagemap_get_pfn(pagemap_fd,
-+				    p + i * getpagesize()) == -1UL)
- 			ksft_exit_fail_msg("Source page not present\n");
+ 	fprintf(stderr, "\nUsage: ./khugepaged [OPTIONS] <test type> [dir]\n\n");
+@@ -1823,6 +1886,8 @@ int main(int argc, char **argv)
+ 		TEST(collapse_order_partial_window, mthp_khugepaged_context, anon_ops);
+ 		TEST(collapse_order_max_ptes_none, mthp_khugepaged_context, anon_ops);
+ 		TEST(collapse_order_mixed_sources, mthp_khugepaged_context, anon_ops);
++		TEST(collapse_order_sub_pmd_vma, mthp_khugepaged_context, anon_ops);
++		TEST(collapse_order_sub_pmd_range, mthp_khugepaged_context, anon_ops);
  	}
  
-@@ -133,7 +130,7 @@ static void one_step(int iteration)
- 
- 	collapsed = is_range_backed_by_folio_orders(p, window, TARGET_ORDER,
- 						    pagemap_fd, kpageflags_fd);
--	attributed = count_attributed(pfns, nr_pages, TARGET_ORDER);
-+	attributed = count_attributed((unsigned long)p, TARGET_ORDER);
- 
- 	ksft_test_result(collapsed && attributed == 1,
- 			 "step %d: window collapsed, %d attributed result(s)\n",
+ 	TEST(collapse_full, madvise_context, anon_ops);
 -- 
 2.54.0
 
