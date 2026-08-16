@@ -1,77 +1,76 @@
 Received: from mail-wm2-f1.google.com (mail-wm2-f1.google.com [74.125.225.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FA453932C3
-	for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 01:57:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 250CA3A1686
+	for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 01:57:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786845475; cv=none; b=NEnsJ95Qfkk3BR1FTNJ6rKma4OY2lDowwrOEV0gq2jFBolswNCYa+Y3ajUPkJVmTSWKtAB5Asn+1ifR/nxkmYY4MX4G0WvzsWEaJr8VE5Ezdj+MWTrRKdrmrpE9nl8aBT2al/YOMSCBOjl31OeLildxWLzY5Ffkp9agkNtAWNoQ=
+	t=1786845476; cv=none; b=kpDBsQ+B8mu07zdWOhzUrOrewSMeTdV2v437LW0F2n9DdGTQ2nyaWttYZxWn1g98SKXmePO2Z9EA2O3yB3JPa0Vq675ukeUzUsMTZayiJrXFXjVBb5eOTrHDBUbWWqgofkSX2PrQEvEzxeKqwdnJL96Zb1BWYpYPedsFvU2mhtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786845475; c=relaxed/simple;
-	bh=EfPktGjbTGdaC5xo9gt6XAA/vTOxcyNVWc+5oVpCcQs=;
+	s=arc-20240116; t=1786845476; c=relaxed/simple;
+	bh=unyplOxnmBY+FeDh4xvpkzWjWCnDg1vUEu6Y0rfVp/A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uDmjafA2yOU3wcx4i+AQ7XLhBk7yXXytohSJxHbYYJrOgWyUXlTaf5frC2cyFQx5BP06KpA3DzxgwInj0sxrPct3iHY4uIM+Jxop5x4PgO/3AIWAZSkqBctS35qjCqDwMoqnKugEM2UUnA+Bm0iiAdU54/mhhBBDZly7e0mVj4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OxCT9HYg; arc=none smtp.client-ip=74.125.225.129
+	 MIME-Version; b=TtGQhoQuC+XxJ+IDTdrurQK+/saFwuaJPGTi4DDRXXZd7d8iG6bafvJXicSg4FZFiv6kxnyJushFesDNYX9TZdMWWUHYVaQNevRvSmGXVQYmUc5WVpTH02VGpJaLS+ebY7R0eO7SM1rLS6sCFJblmuc2RiXZVUlEi2ue89JLeyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NtFv2Tu9; arc=none smtp.client-ip=74.125.225.129
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OxCT9HYg"
-Received: by mail-wm2-f1.google.com with SMTP id 5b1f17b1804b1-492367f3094so9781135e9.0
-        for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 18:57:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NtFv2Tu9"
+Received: by mail-wm2-f1.google.com with SMTP id 5b1f17b1804b1-492367f3094so9781175e9.0
+        for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 18:57:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786845472; x=1787450272; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786845473; x=1787450273; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=zu043QY8JcRklYW956dTLaFp3ndqiO5Yq08MCSw4Qj4=;
-        b=OxCT9HYg5dAhcs00dDSh7svHcWUH3BLtlP2W2xZVGsqtEOhuxPa/1jd1ugZGzS+3po
-         1npzNmE8sktm5SFX2wqVEj2Lj8nCU+q5szi6u7g+/pLQ4U+B1DsYekQdeqdxTAPp2yZO
-         04vpbMRCpMVbRfu9t0PGcQoVqq8vdhYEqwVGCtPXMQ6sqDHBKlTZUHWNlCK6tUGtedk+
-         npwPRfEWUCLaNWmSGAc3DJDVHXJ4Gl7Y++7wkS1JPqm4zS6t4DOAsR7GqgvwKEsVrqzp
-         Z/a/QthJE8R8/TYgXQIzwaQCCor3dBeE0bz+V0V4l5B5kYx3bIaC9iAz/hY4MIU0dswx
-         fjJQ==
+        bh=BtVZzW8chWntt6wiZjpaBxWTnniOGDQ0XPhpp4gCCqM=;
+        b=NtFv2Tu9feLquC4rFRYGQQEXBtOsy4HjYcuA2mUTm+H9m96Gg7p0mbAdX7K3k7u0Mz
+         12busqSdDuhCO7MJB2QyJ3yFItwwSO0JpxJShNWRtt8y3RVh1alDn/19YqlDYY7OGLeP
+         DUOWCHjGNK7eoG4T9F5ABJYZ60TtLwqpyER0nU9ImcdxewbMi/BHUPc2scz+CuJ19+/S
+         zjCEVchQPBCWFOooxPvXdXcA1J8m+U6uZ3wDRlKMmVPJVtf0n1nmBO1CmvReohTOpXOL
+         YACWi/QSlKwtQ7/fE7kGBBm74o9qQcWytpyfnP0kanT58DgwP7b3MA5K7R8Se44e8AVH
+         yfHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786845472; x=1787450272;
+        d=1e100.net; s=20251104; t=1786845473; x=1787450273;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=zu043QY8JcRklYW956dTLaFp3ndqiO5Yq08MCSw4Qj4=;
-        b=ZIfaVwMzeUmC9LJG2s4L9aZxA8md2qN7cOEIkLC8jouMTQ6KcqklKtwwUXqkDeqNAC
-         t/hptoycGxPrvrBpxY2eGqRQxmDd7P+lE7PmqzrLK0qb5538BfePgtpUYUS4RYSIMJ/t
-         hjbXcuTMeuI/IJqdUWdPi+2MDnKN0p2Us8gsUiV4EJOlmLBLJuKZH/WUJv/Hp6RyDhbi
-         EJdLVZgFjZKo6Xeueh/g0xtXIS3obwW+eQc0yW/otfcxHwsIyY6eZOMwflKsIcjp3RLQ
-         ezpvJLUjFSD1LdP476RsDpTwLtZP5u6LHTyXA/GEm1Zac9AfwWXrxURi2l8DHZV2/5M7
-         xsEg==
-X-Gm-Message-State: AOJu0Yw4EVe588kTOSQprR7euwH0o+PBM6mCeNh5d/pfs1KJ89wFkJGj
-	9OdAje9qJTZ+OKovOX6DanNqz9aWU4w2eha1CRzgdcjFfeQouutMQdppO2lLxOHk
-X-Gm-Gg: AR+sD10A2FZQqar5DPP7rgr41vsz1t3G8WnPfnCgsXNsagRtMphqCy34t0zyTzK91ZO
-	yJjIRS42cdyibfsVpj/Rh5BO4ZD90pCXzIQiNQFue/xB4KrJTa8S+p+zZmF2A0IIb/iVl2qiNUh
-	VNq6K0x/lNQoxHNe/maCE1fReYVbwDTZEV9zD4gkcgN1tgGpNmNpvDG7F4jvv+Gy4DS0MRyG1S8
-	uJW558HZfrbgOkEaItDRcUhBoLzY2JrfgCLnVlmPDJlTgYE9/5Bu47WKanrGdRE6n0tVBco02J1
-	cRMLgiamVCSHW8qk8b2JmOW/BH2oWFRfIXqOBKelkU6o51sV90Aul+cXmbSfQ5a/sGTm5o7bLTn
-	StqVrrEA+wVTXnNs338XDoW4Bjb6lOVKXm0sQLGH985IUc6Aj4pAsUdG7KVubX6y2dGpkoHjP3+
-	KURRPv/8LncvQt8IapK4ZGM+PVzRSjUZ9xunJC/vIPClrlBc8pGXwHO2uet2kdmypNAojHdk/FB
-	70LAjxiTNU4i9sKn9WRSA2kLEmOXuL3H0kW15986g7AdbVGKhL9EVpiM9zypydqT6JFQ1H5LIHk
-	m7wSFnDenIyrV1rp5pCKkANukIVkc8cF/LhCTg==
-X-Received: by 2002:a05:600c:4fcf:b0:498:ee7:e40a with SMTP id 5b1f17b1804b1-49987992130mr201905155e9.16.1786845471824;
-        Sat, 15 Aug 2026 18:57:51 -0700 (PDT)
+        bh=BtVZzW8chWntt6wiZjpaBxWTnniOGDQ0XPhpp4gCCqM=;
+        b=hGo5No37kS0NnCbjqqWbtuoreHDL6XB4ILRrokIXHhUCGOnkwtUwNGCVFqU7iZwV8F
+         qo8YBnupi6fzP46M1w2/VA1/vahAtYTtnl4Vu0/qYSjl3WHHCJmHCXzWzKdcqy601jD0
+         5E4NV+q2unTz7XCkcsxfAN3PQF0+z5dDOQH+yhT+TgFBQenTZMkEud3hWELbCr2GFNgT
+         V1uHA5F2Ofzjq98NdT4OirolmsHsBoHJ7AHdrwgxLVXUNTgdwzAkebKJHDipfVZmxMhO
+         ihnBnm7zp+yOjZRQ811/nn5NHxCQKCT6MEcTutAbk0XGc1dW+vpoFSZfHs35SgyHzz1s
+         qiEQ==
+X-Gm-Message-State: AOJu0YzTedjwULlk21R4s5KCh+Lu0CiKj+lOuuLiZfrd5BvpqA6n0exb
+	hU4yVPEIlrl/icqL308ag7x6gKAK6NWSYUVT43qLxwwnX4y16FPT8HHihpsqtTbJ
+X-Gm-Gg: AR+sD10buTidLG7OBpFYELt0hdZwFYME/kDcWoBVzyNKc89GX1HA5aZrktoc74p+NzN
+	WCbhs6JskYtxIofvjrYOpM/z9oXktqW5PpQV1Ekbc2RCncb7dzhumVTmyBWOhxPW4ukfU3LrooH
+	zx16DK3qrJgUJh7qGsKplfbucF7Xdbp4OO3tJVWcuR0qLEhY/9ytnsWnisAfEw33d+DqdwfMyrN
+	Csa6zT0zc8+odS0JKJiELJR+1HuGWE+FcOhLXbP9HEsaY6pAvaAUYlOxcu0d9dwwUYTdUc6QmHi
+	lEGpfagLdWhYpkrxTxpVnfRu0Vv+J+pLNnNMCgFPoBT1DQy3XPM4oQHX0xba8xFJQOndZN7JK5u
+	NnqkNhEMNZBVMB4ok3FnuE+tNbNLEIE9JEBimjTGzWCTE4Nc1LAtFet26zS7B8amKvoUVPV2whx
+	JXCcygJLkvg3YPYnZkHj91tKexZxsJiQO90a06jqDNIPD7c4v7OfcaVxdaZNw1N1eRpRq69MIxC
+	tBl7osIYbQqiqrpE+u5nyvs01RAozEo3YClMBALvMcL28eQ1IKaaMf4Dk6d9bfEvSpHfG4B96Cb
+	qvTnbIwyRIdg/QhFvlXYacj5L0c=
+X-Received: by 2002:a05:600c:5613:b0:493:c47f:3c55 with SMTP id 5b1f17b1804b1-49987937672mr160108355e9.5.1786845473289;
+        Sat, 15 Aug 2026 18:57:53 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49987b3a6dcsm77558085e9.1.2026.08.15.18.57.51
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4999610ed6dsm5269545e9.8.2026.08.15.18.57.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Aug 2026 18:57:51 -0700 (PDT)
+        Sat, 15 Aug 2026 18:57:52 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Sashiko <sashiko-bot@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 03/14] bpf: Preserve R0 lineage across helper calls
-Date: Sun, 16 Aug 2026 03:57:31 +0200
-Message-ID: <20260816015746.2632990-4-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 04/14] bpf: Drop dead spill diagnostic condition
+Date: Sun, 16 Aug 2026 03:57:32 +0200
+Message-ID: <20260816015746.2632990-5-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260816015746.2632990-1-memxor@gmail.com>
 References: <20260816015746.2632990-1-memxor@gmail.com>
@@ -81,46 +80,38 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1719; i=memxor@gmail.com; h=from:subject; bh=EfPktGjbTGdaC5xo9gt6XAA/vTOxcyNVWc+5oVpCcQs=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIatRQvQOp/Fq2XBXqWrejf8fXK7PWVk9Jyzs2wfDnk8+6 by1O593lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCIH0hj+CslVMdQo8Kx9Eyn/ zC05fofS5cYoFfsK4Q3fujbohV+KZvjv9P9qOMPSU0n1F2ek3jUOTTwQpDM5ZieHVtplhldpj56 wAQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1372; i=memxor@gmail.com; h=from:subject; bh=unyplOxnmBY+FeDh4xvpkzWjWCnDg1vUEu6Y0rfVp/A=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIatRQvTPLr/r6p+0XiifN5gQ860rjKHs8dfky9sWKrEvU FQJene+o5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABP5vZLhf+lsjl7zE6aVOz37 pv3pN8mrvu7IHP8uxWdZwvTfL2Vnb2FkaLEMMGqd97srd/bvj6XbpyqkvfY/O9EjNfLwrNPN313 qWAE=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-check_helper_call() clears all caller-saved registers before taking the
-diagnostic snapshot of R0. This records NOT_INIT as the old state for every
-helper return and loses the lineage of the value held in R0 before the call.
-bpf_diag_record_caller_saved() deliberately skips R0 because the paired
-modification scope is responsible for it.
+diag_record_mod() appears to allow identical spill events to be suppressed,
+but diag_mod_keeps_lineage() only accepts register write events. The spill
+producer also supplies a stack target and an explicit origin, so a spill can
+never satisfy this conjunction.
 
-Open the R0 modification scope before clearing caller-saved registers,
-matching the kfunc, ld_abs, and subprogram call paths.
+Restrict the condition to writes to reflect the filter's actual contract and
+avoid suggesting that it applies to spills.
 
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Link: https://lore.kernel.org/bpf/20260815073833.A93A91F000E9@smtp.kernel.org/
 Link: https://lore.kernel.org/bpf/48e6f021b89562f68850fe21ef8c78719819b04cf9c4e4f50bc791937d37ace8@mail.kernel.org/
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/verifier.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/bpf/diagnostics.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 5d0a2d3ef594..7ef324e384f4 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -11024,13 +11024,13 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 
- 	/* reset caller saved regs */
- 	bpf_diag_record_caller_saved(env, regs);
-+	bpf_diag_mod_begin(env, &regs[BPF_REG_0], NULL, BPF_DIAG_MOD_WRITE);
- 	for (i = 0; i < CALLER_SAVED_REGS; i++) {
- 		bpf_mark_reg_not_init(env, &regs[caller_saved[i]]);
- 		check_reg_arg(env, caller_saved[i], DST_OP_NO_MARK);
+diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
+index 33b7d9e8e2c3..37ed22a764e0 100644
+--- a/kernel/bpf/diagnostics.c
++++ b/kernel/bpf/diagnostics.c
+@@ -1531,8 +1531,7 @@ static void diag_record_mod(struct bpf_verifier_env *env, u32 insn_idx,
+ 	} else if (diag_mod_insn_origin(env, insn_idx, &target, &event.mod.origin)) {
+ 		event.mod.origin_valid = true;
  	}
- 	invalidate_outgoing_stack_args(env, cur_func(env));
- 
--	bpf_diag_mod_begin(env, &regs[BPF_REG_0], NULL, BPF_DIAG_MOD_WRITE);
- 	/* update return register (already marked as written above) */
- 	ret_type = fn->ret_type;
- 	ret_flag = type_flag(ret_type);
+-	if (old_reg && new_reg &&
+-	    (reason == BPF_DIAG_MOD_WRITE || reason == BPF_DIAG_MOD_SPILL) &&
++	if (old_reg && new_reg && reason == BPF_DIAG_MOD_WRITE &&
+ 	    !memcmp(&event.mod.old, &event.mod.new, sizeof(event.mod.old)) &&
+ 	    !event.mod.origin_valid &&
+ 	    diag_mod_keeps_lineage(env, &event))
 -- 
 2.53.0
 
