@@ -1,73 +1,73 @@
-Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
+Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C760C3EFFB9;
-	Sun, 16 Aug 2026 22:47:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4FCE41CB39;
+	Sun, 16 Aug 2026 22:48:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786920481; cv=none; b=MQotroKZdihiPuokIzTQdKRT/AxpQbeFa9k9DtIEnrDkCuCH29KrrGsqPIXhpD8/uSSDJmTfsZYhsopM+rEXK+BFyDK7UGsMzclOJr6JmOGO6GtZalhegVR/oTBu2OKgxUoJiaQRunueLVPYTTBPrbr7YyEBFdRiaWPi/q7cha4=
+	t=1786920483; cv=none; b=XE9kGvic00UGjPwMWF9TfdXcYCpJ+D1GKojoXQmItIWjCsKDvGZKEkWKnnB7TQ3XHxVnUE/s3lZTOChSqKWxYxAwBoCtRQr1/hiudUtavjW2bRmhpzy2NrhOXB5mOk/B5zi0fXK4g9A/wHmvzKuXmZolj1jPZq3sSgxpZEwVlPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786920481; c=relaxed/simple;
-	bh=DrYyq6k0YTeD7AW469vi5eSN+TBdQBREionMKZ3o9aM=;
+	s=arc-20240116; t=1786920483; c=relaxed/simple;
+	bh=fx4uMDLnQu7YiIWADrslnkPRqCeym9piQn5W0aKziC4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CxkIX0DDPXSiLJBTU2xukcGRrbcqr7BLtYr8d6v6PiyKvgGsZyoclyWz/0n393MqtlO73uXW4HXDdaUv5eLapuRZ1c2bbC6YPcmai2IkHBFhR62NEQk9fbeJ2QXTWXUnBR6OtR1j4tvFoxD5+lt+DFPiX8/PqiXlItb6IObjOas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=RxwFjfkg; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=CUyI9ies; arc=none smtp.client-ip=103.168.172.153
+	 MIME-Version; b=d6AgVunN4oTbUrBAOpH65D0jIsFXZjwoFKCPuNUMdwzTZmHd5rs5y0Vh1Qt+CdGDZudD0tOOqc32CVoFQL5rrv5Gln5rncj1NE5C4xMhaz3vEyaffrsCaVBAol5yRE9/UhTOaAyeo6OyhUXoZf6JmsXNdYwmYgPhB9XDUf3eyUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=Q1nl18jy; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=HBZrNw5X; arc=none smtp.client-ip=103.168.172.144
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="RxwFjfkg";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CUyI9ies"
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 3095014000EB;
-	Sun, 16 Aug 2026 18:47:59 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-06.internal (MEProxy); Sun, 16 Aug 2026 18:47:59 -0400
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="Q1nl18jy";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="HBZrNw5X"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id 080F7EC0242;
+	Sun, 16 Aug 2026 18:48:01 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Sun, 16 Aug 2026 18:48:01 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
 	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1786920479; x=
-	1787006879; bh=VGSfdznQJ8iv193S46pZAZAzBKSWT9DlgvTIxMoYJH0=; b=R
-	xwFjfkgyL4cFAowgG/eRTs7SRD2Hk/lfU+igVpiLcbevYOnK6QpUDMSD6n5iu6ZM
-	zuA72uBY8qQt/aXDlQ5itWOvuicsiloRedf0VOGIk3mJfxalsDJ5N8gxwM/ydKuf
-	GJPr3I5IaQojSIhxRjuFn/gDLC7N2Uj+YOzi4andpPBZkkyOHPN+JjXkMht7voog
-	Xtmqwbd0D1tE6wgjTL+814XNv8cbtKxMgYB5ldwonHdOm7fhBTjpHYg+dUGtjWVN
-	Dpgmhp28+G0lQ77eWwELqxLVOTBMpQAjlBJN7Vumg6XzcLNq199lQHyyHgBf0coh
-	MSwwf3GWO64nJwVo3gqTw==
+	:reply-to:subject:subject:to:to; s=fm1; t=1786920481; x=
+	1787006881; bh=GxeIcugRbXVZfwL3UIFb4N2+J7ON7LziwuBbRMyDD8k=; b=Q
+	1nl18jyTLYzI3yx4j+jwVY/KO10w2lM3QYtsyjfOG4YOYBwTTnXPm4LRNOpGJ7DC
+	dmKxYGXrkLCioU5z597fuaWe1KK1SoBHdOqe8jVVxx8MR5EmpfiZNAoZN4ptk6Do
+	AKXYSDxDlff8PElQJPNGo9Gwn5a5iZywwlOUcAyZ4qnWz5NmpDoicDuH9UgfEJKu
+	oiDVD5rHzcOmcKWYCWbFK1KMpMgUEKeMjzMZzKOtq5veaoK8uWxWeGfaDkyJ99Bt
+	eGtKMBK+kMBbdqMD4Gydwilbq39tES6G7BP86WARBy1JZkAP/jnsRdituYma7+ac
+	lvecsLUJu69i55sDnPcPA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1786920479; x=1787006879; bh=V
-	GSfdznQJ8iv193S46pZAZAzBKSWT9DlgvTIxMoYJH0=; b=CUyI9iesxRmQIJgIH
-	ZchdKM3r/qX6ZQsnBbNAiee8xozAyBRfIHAyuaTwQADy1uOTpELJY0d0rJMGghuX
-	Vg51RrWYlOewtag1HzkpI3hh962E6G7J7MecOytWOTZ9xsjrNtn6/C6De10EqmPB
-	nXxEBZbWim70I4NSgDzqOk6TpCQhbY+sNOBzThSPqwQMmZwKXlIf1kr1ytHQ1nRy
-	dJwRzDh/Ac+R0Nlw3jSdrkL/Tcc/JtMQtFFa6oAF6I83AgRXGyggSzzpIyak3MFY
-	rw85QW7kfxP9MViQVHIJ5loVxX8lWLFItJo5F7LI0YNFHQMfjoFRB6IKD+cyka8S
-	Iu8lQ==
-X-ME-Sender: <xms:Hz6CasFo-9P7dVRvaQvgTto6GI1llvl1ED6GQ3i9GAM3uTYdq2cHiQ>
-    <xme:Hz6Caqo1iNwUp-MN_DKAN1RpHWm2fD6Yq1aurTTuBp0f91ZY3JbseyTTq4yw9HKXC
-    h23u4x3NTk2s5FmhTQ-x0NOBZdCiEy2Wemi8hE7x5jG4zyVF6cbCrc>
-X-ME-Received: <xmr:Hz6CaiONu4crVo_zSH_pH23CMlclG_l-VGDYRCqbuuRa6FSttVL6JqWq78Q>
-X-ME-Proxy-Cause: dmFkZTFmVpV/hJjZHr0In5rst86Yjj8UzaETlwDLpAB00i6iblejFCjXgd4Yu6W0V/gth1
-    QQk5g5peqevhLXv5oAa6A4wgFqksr02imAlY52J4/X33aBN3Akp7RIr6ZCjxvFrfIU4xSQ
-    9AheWiTkiHfncTH5fU2zdbKh7twfazXu6MLOYizqj9hOx9PWjvQu87w255iL0QOT3f2Y/i
-    HNIQn9sEDNwBaHw57xp44AudhIMQHXhs3AVBoLAek/6nuxTCRhfFb4YEz1RsUSKGdN99wZ
-    k2GQ9I2a7t9qkq8S1OweCHxSw7aYXSWFm/gAj0eB9X5rOMd4bXVGhGMj8yPothnhUJpprg
-    zkISQdrFK3cnz1l1Kx1HDHsdctZnnvA7Eni2VQr/C/DD3oP+T4LhVxqhuDiLc9MniGzZA5
-    2ZAzxrFzhLFV4yStAzNOLiigtaOra4QSZduguqacbRIjtObYgtDf9UQKf+XKXOblOYjTIB
-    su8VPGWXVs5MMz/wTe4Agk4jqScxC/DUeqhsEmIhr25STr6PTaupy6pZdh9Rvf8PdX5Pe+
-    HQT6QCpQ8lQRKf5ktiR2ZePBoSzbiWb+LUWCLc9KU3LXrUaSQ+BlRQJhjxqDGBC4Og9JNj
-    iTLwf+gO+G6lrH03ovxQ7tQImYZ2cdLwvb56qO61EPdPO8ovPG4mjErqmGkQ
-X-ME-Proxy: <xmx:Hz6CaqpseZ-UYLbdetEbB6SAabMVr6no6-8PgDr_m6HCaNVvU5vYZQ>
-    <xmx:Hz6CaolBbZZw052DtY7rhUl0lAmtgQNNyzrypr-Gq0o-fG_Oz2zWzw>
-    <xmx:Hz6Caqwbs30KQcaUV5fFGyUHuCRL9vDeud20nHY99OxTDY4Y1EPmUQ>
-    <xmx:Hz6Cau2kd3e5zW6m4nD5qpeDX-qSQx6VPGlKl-p0_GDDaD7j3WBElg>
-    <xmx:Hz6CakYP3uRh1nTLzeeichKwS48BOFyL3fCRb2nK8IZJo2vaYjjCGKAk>
+	:x-me-sender:x-sasl-enc; s=fm3; t=1786920481; x=1787006881; bh=G
+	xeIcugRbXVZfwL3UIFb4N2+J7ON7LziwuBbRMyDD8k=; b=HBZrNw5XGXWsoSjY/
+	l2Ty9l7Y2HQdxrIGH/GmBuDYsahOR7E3ZhJ7jrSBaXi6PaevxI/Qf6bG5rxg+k3K
+	3UvOZ5FlVYhUKt8uwxUk/RSSKVXcVEz01RWIOyi1e2oSV9DwG6jdLF4CFvyFXKGf
+	fiOCfCaV0iuAw9DbMeMee4rZHJ79Do9HuXLHLTBAzscPu8eXBw+dHBbSq+8GQj8q
+	5PqkmoLrGd3iwwReLQvYbgkfL1D5f+nq/be1sa9A8Fwi/pdDNVC5hAkCmeOVJ2wl
+	iC4dGym4EQV4Gf/TD9kygnf/BmERNW97vZnmtxLZufRwGB+cbK2zMGe+dliAX3uP
+	bo9ug==
+X-ME-Sender: <xms:ID6CarHNVqrH9pjbuZMemB1OZ7N0sW0SU1Q2w0-xArCBHW-Y9HwAbA>
+    <xme:ID6CatrPYWsFCsTDM3-_-Ugq035N_JxSd09WFHjuZC9D7pkv_Rf4mSU64BmeEo6Of
+    xv1vNg8vwai6kCey5_29XogplG825zsUiFlf-ybSLtMigWTth_QOd-e>
+X-ME-Received: <xmr:ID6CapNTKZ_rkw3PfmGyNFIUWQP9OVErkw8sGQ1wEKkdr5pW62pv9dsHqnk>
+X-ME-Proxy-Cause: dmFkZTGU6CsvhMdBtF1sno4coJRY9LqZz27w5X62/KcvcmaHPoOW0E1BwYMGQvImxADkeF
+    Vrd/NWvQclh95CfVK4mxB+x5IwibSBkynFlxvp5GF5/z4jepOu57IyLHUvB8DzXymwpMun
+    cyoWwWLP4hjAaD7bSTsoDmYKe03ryBERSg0IuR8ZqJolHrsaFnqWf5mL2byVsL9qLL9zPI
+    9yLFlvwwZlCiJbT4IVFlRVV/9A2lZNuDFrGWvpQWw3cjqX9EcFrpnMQcn/0MdQygQWXSYC
+    yXHZy2pRvgBssh5qObsL1GM1XSEE6m2uHX2m5CwJlvTSIfOodU1appS1XFI/CBVlhtQ7bu
+    WKduOy5KF3rkObzFMiEUvs0Uj+LfiCh6TivtFsv9ZCNMbNZlGDBoD70ARSLp0XqawKgcWO
+    4RiWTFPOoz+vIHDroCYLvSEQINMB4dtDTXJ4bPtSoOC1A7Uuzl+tv2HVHx+vABiXweeL5Y
+    B3sGlUM6WH7yS7YE4BSgR6uka3P965uA8/oqj2x+5VFy/Ho1o+YZlJ6AzrIDQ2AOtpBe1f
+    oON1he5PaB+Gj11+twxr/dYpMSHdLv7yT7mnf/dci59b0UPnqF9iMScbflIoYgvrHP20+G
+    HvUS/ei21AytaZzWxcEuOCYs0kXcHbXn/msGaoTEwH1OUh7FsC6dL8NQXoJg
+X-ME-Proxy: <xmx:ID6CalqKv0hCUxmF86ciHpXUTy3ebSv3UxCAlN0wCK99JAaQHTeFrQ>
+    <xmx:ID6CankFNKYtlXTcEsPn3FwCNKApsL-bSTzIZEaquGLMo-ttCjrQbg>
+    <xmx:ID6CatwonootbN2xB3VzZK0QOdiMoG8W70sF3rZfeQRAr2Ski3DgPg>
+    <xmx:ID6Cal1ipe2HfUXooDqHPQuEju8XQHca1H3JyNEYbA9q3M_rCennmQ>
+    <xmx:IT6CananLT0nU6sQR71oBM7lv19j5Kw6TIPwBvwOOamkgv9APnRcXioe>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 16 Aug 2026 18:47:58 -0400 (EDT)
+ 16 Aug 2026 18:48:00 -0400 (EDT)
 From: Kiryl Shutsemau <kirill@shutemov.name>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -100,9 +100,9 @@ Cc: baolin.wang@linux.alibaba.com,
 	mhiramat@kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [RFC PATCH 55/57] selftests/mm: cover collapse beside a pinned page
-Date: Sun, 16 Aug 2026 23:46:07 +0100
-Message-ID: <20260816224609.308019-56-kirill@shutemov.name>
+Subject: [RFC PATCH 56/57] selftests/mm: cover the scaled max_ptes_shared limit
+Date: Sun, 16 Aug 2026 23:46:08 +0100
+Message-ID: <20260816224609.308019-57-kirill@shutemov.name>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260816224609.308019-1-kirill@shutemov.name>
 References: <20260816224609.308019-1-kirill@shutemov.name>
@@ -116,103 +116,118 @@ Content-Transfer-Encoding: 8bit
 
 From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
-A GUP pin holds a reference nobody else can account for, so a pinned page
-cannot be collapsed.  The freeze needs the folio's reference count to
-match what its mappings and cache membership explain, and a pin makes it
-not.
+max_ptes_shared is written in PTEs of a whole PMD, but a range smaller
+than a PMD is scanned in full and judged by the same setting.  Compared
+raw the limit is then unreachable: on arm64 with 64K base pages a 2M range
+holds 32 PTEs and can never exceed a 4096-PTE budget.  So it is scaled to
+what was actually scanned, and what decides is the shared fraction rather
+than the count.
 
-The window holding one has to be refused.  The windows beside it should
-not be, as with a lazyfree page.
+Cover both directions in one sub-PMD range, with a forked child holding
+the sources shared.  One PTE past the scaled budget: nothing in the range
+collapses.  Break CoW on one more page, bringing it inside: it collapses.
 
-Pin one page for the duration of a khugepaged pass through gup_test, which
-makes the refusal deterministic instead of a race.  Check the same three
-things the lazyfree case does: the rest of the table collapsed, that
-window not, and the pinned page still backed by an order-0 folio, since
-selection descends orders on a refusal.
+The counts come from the current max_ptes_shared rather than being
+hardcoded, so the case follows the setting and the order it runs at.
 
-Skipped without CONFIG_GUP_TEST or the privilege to use it.
+Without the scaling the first half passes wrongly: a few dozen shared PTEs
+never reach a limit expressed in PMD units, so the range collapses when it
+should not.
 
 Assisted-by: Claude-Code:claude-opus-5
 Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 ---
- tools/testing/selftests/mm/khugepaged.c | 64 +++++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
+ tools/testing/selftests/mm/khugepaged.c | 85 +++++++++++++++++++++++++
+ 1 file changed, 85 insertions(+)
 
 diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-index 58cb7364652e..bd684cd25fed 100644
+index bd684cd25fed..dde24756a3a2 100644
 --- a/tools/testing/selftests/mm/khugepaged.c
 +++ b/tools/testing/selftests/mm/khugepaged.c
-@@ -21,7 +21,9 @@
- 
- #include "linux/magic.h"
- 
-+#include <sys/ioctl.h>
- #include "vm_util.h"
-+#include "../../../../mm/gup_test.h"
- #include "hugepage_settings.h"
- 
- #define BASE_ADDR ((void *)(1UL << 30))
-@@ -1728,6 +1730,67 @@ static void collapse_order_lazyfree_window(struct collapse_context *c,
+@@ -1791,6 +1791,90 @@ static void collapse_order_pinned_window(struct collapse_context *c,
  	ksft_test_result_report(exit_status, "%s\n", __func__);
  }
  
 +/*
-+ * A GUP pin on one page holds a reference the collapse cannot account for, so
-+ * khugepaged must leave the window holding it alone -- and collapse the rest.
-+ * The pin is held across the whole khugepaged pass, which is what makes the
-+ * refusal deterministic rather than a race.
++ * max_ptes_shared counts PTEs of a whole PMD, but a VMA smaller than one is
++ * scanned in full and judged against the same setting, so the limit is scaled
++ * to the range actually scanned: what decides is the shared *fraction*, not
++ * the raw count. An unscaled comparison against HPAGE_PMD_NR/2 could never
++ * refuse a range this small, so both directions are checked here.
 + */
-+static void collapse_order_pinned_window(struct collapse_context *c,
-+					 struct mem_ops *ops)
++static void collapse_order_sub_pmd_shared(struct collapse_context *c,
++					  struct mem_ops *ops)
 +{
-+	struct pin_longterm_test pin = {};
 +	size_t window = mthp_window_size();
++	size_t size = 4 * window;
++	unsigned long nr_ptes = size / page_size;
++	unsigned long budget, cow;
++	int max_shared, wstatus;
 +	void *p;
-+	int fd;
 +
-+	fd = open("/sys/kernel/debug/gup_test", O_RDWR);
-+	if (fd < 0) {
-+		ksft_test_result_skip("%s: gup_test needs CONFIG_GUP_TEST and root\n",
++	/*
++	 * The range has to stay strictly below a PMD to say anything about the
++	 * scaling: at exactly one PMD the scaled limit is the raw one, and the
++	 * case would pass without testing what it is here for.
++	 */
++	if (size >= hpage_pmd_size) {
++		ksft_test_result_skip("%s: four windows do not fit below the PMD\n",
++				      __func__);
++		return;
++	}
++
++	max_shared = thp_read_num("khugepaged/max_ptes_shared");
++	/* The same fraction of this range as max_shared is of a PMD. */
++	budget = (unsigned long)max_shared * nr_ptes / hpage_pmd_nr;
++	if (budget + 1 > nr_ptes) {
++		ksft_test_result_skip("%s: max_ptes_shared leaves nothing to exceed\n",
 +				      __func__);
 +		return;
 +	}
 +
 +	mthp_push_target_order();
 +
-+	p = ops->setup_area(1);
-+	ops->fault(p, 0, hpage_pmd_size);
-+	if (!window_not_collapsed(p, hpage_pmd_size))
-+		ksft_exit_fail_msg("Unexpected large folio after fault\n");
++	p = mmap(BASE_ADDR, size, PROT_READ | PROT_WRITE,
++		 MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++	if (p != BASE_ADDR)
++		ksft_exit_fail_msg("Failed to allocate VMA at %p\n", BASE_ADDR);
++	fill_memory(p, 0, size);
++	madvise(p, size, MADV_HUGEPAGE);
 +
-+	pin.addr = (__u64)(unsigned long)p;
-+	pin.size = page_size;
-+	pin.flags = PIN_LONGTERM_TEST_FLAG_USE_WRITE;
-+	if (ioctl(fd, PIN_LONGTERM_TEST_START, &pin)) {
-+		ops->cleanup_area(p, hpage_pmd_size);
-+		close(fd);
-+		thp_pop_settings();
-+		ksft_test_result_skip("%s: cannot pin\n", __func__);
-+		return;
++	if (!fork()) {
++		/*
++		 * Everything is shared with the parent now. Break CoW on all
++		 * but budget + 1 PTEs: one PTE over the scaled limit, and far
++		 * below the unscaled one.
++		 */
++		cow = nr_ptes - budget - 1;
++		fill_memory(p, 0, cow * page_size);
++		ksft_print_msg("Refuse a sub-PMD range over the scaled max_ptes_shared...");
++		if (!khugepaged_wait_full_pass())
++			fail("Timeout");
++		else if (window_not_collapsed(p, size))
++			success("OK");
++		else
++			fail("Fail");
++
++		/* One fewer shared PTE brings it back within the limit. */
++		fill_memory(p, cow * page_size, (cow + 1) * page_size);
++		ksft_print_msg("Collapse once inside it...");
++		if (!khugepaged_wait_full_pass())
++			fail("Timeout");
++		else if (window_collapsed(p, size))
++			success("OK");
++		else
++			fail("Fail");
++
++		validate_memory(p, 0, size);
++		_exit(exit_status);
 +	}
++	wait(&wstatus);
++	if (WEXITSTATUS(wstatus))
++		exit_status = WEXITSTATUS(wstatus);
 +
-+	madvise(p, hpage_pmd_size, MADV_HUGEPAGE);
-+	ksft_print_msg("Collapse the windows beside a pinned page...");
-+	if (!khugepaged_wait_full_pass())
-+		fail("Timeout");
-+	else if (window_collapsed(p + window, hpage_pmd_size - window) &&
-+		 window_not_collapsed(p, window) &&
-+		 /* Left alone at every order, not just the target one */
-+		 is_range_backed_by_folio_orders(p, page_size, 0,
-+						 pagemap_fd, kpageflags_fd))
-+		success("OK");
-+	else
-+		fail("Fail");
-+
-+	ioctl(fd, PIN_LONGTERM_TEST_STOP);
-+	close(fd);
-+
-+	validate_memory(p, 0, hpage_pmd_size);
-+	ops->cleanup_area(p, hpage_pmd_size);
++	munmap(p, size);
 +	thp_pop_settings();
 +	ksft_test_result_report(exit_status, "%s\n", __func__);
 +}
@@ -220,11 +235,11 @@ index 58cb7364652e..bd684cd25fed 100644
  static void usage(void)
  {
  	fprintf(stderr, "\nUsage: ./khugepaged [OPTIONS] <test type> [dir]\n\n");
-@@ -2020,6 +2083,7 @@ int main(int argc, char **argv)
- 		TEST(collapse_order_sub_pmd_holes, mthp_khugepaged_context, anon_ops);
+@@ -2084,6 +2168,7 @@ int main(int argc, char **argv)
  		TEST(collapse_order_mlocked, mthp_khugepaged_context, anon_ops);
  		TEST(collapse_order_lazyfree_window, mthp_khugepaged_context, anon_ops);
-+		TEST(collapse_order_pinned_window, mthp_khugepaged_context, anon_ops);
+ 		TEST(collapse_order_pinned_window, mthp_khugepaged_context, anon_ops);
++		TEST(collapse_order_sub_pmd_shared, mthp_khugepaged_context, anon_ops);
  	}
  
  	TEST(collapse_full, madvise_context, anon_ops);
