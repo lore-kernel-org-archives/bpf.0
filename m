@@ -1,73 +1,73 @@
 Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA1FE3F3285;
-	Sun, 16 Aug 2026 22:46:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A09DE3F4114;
+	Sun, 16 Aug 2026 22:47:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786920421; cv=none; b=BKVGM2Tnq00eYAU/0j1NFPCIyyQfSgss/9w9elmXLi9C/3idPhTh2ZymtIdeojzsrWW5pE9C70S2O2ij1hUb319jM75wgGfDnEcyYE9YpS4OQrkpZK+jelSmqcrXgEK8P+dg6F6FG4TYdGq4CA+qMr5V1+C3vIGh0mhC1W9ZSPc=
+	t=1786920423; cv=none; b=Z1QTx0OmproPd8NVrnF/QGBzzVZOPEuNobMasxnsth+x8XKRK5iz8PHfKaXOD7n2wGMpXBCMMDnzpzeZhGtgR8SZVW8IvtqTSAQ/nuhJqDLohG9/edduyGjyYdTonlIem/J3rbOgT8BjwlBe1CMaVzHd81USxOXvUTmY7H8TsJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786920421; c=relaxed/simple;
-	bh=qxezClCXR1oALlFl7oDnUW813LKJ437GJTADJ3u48dY=;
+	s=arc-20240116; t=1786920423; c=relaxed/simple;
+	bh=+hXqI4nBcQjO/KoCZ14TLbLqKBYVJhTdirQSx5Z51js=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=auvk4JLudOlQIefWbQdl51J4OZkQTTDrzO7ma4Yze19tpYV9PKxEKnWT9Ak/QorW+BMceZLyHsSwsDckfDbJrTUm7BiI2qseB6VuVkEdBWAY+DBLliE7BQhTDYL8JiP1rJL76/bvokpr582Iq4zfnWUsPjQgXLGc81kDvhClxCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=d7WK9YCR; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=GJUIGH96; arc=none smtp.client-ip=103.168.172.144
+	 MIME-Version; b=Jbs3wJNqEaUVIRDakVHiQI1rL/w5ctWqLR28zj9jYA7XdJimTySwwN6akxPaIfxNejj/Zk8d3eF2omY5ogTzyB43k+P5gmXx/gzhcfJXMQdntoREiVMaLhg3V4mlgcpJElOJUf7CnP2jyOpHYM9RFRTBK+MMc8poTqF5OuJQVA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=Tf8ZBSBA; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=AB0csPAg; arc=none smtp.client-ip=103.168.172.144
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="d7WK9YCR";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="GJUIGH96"
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfout.phl.internal (Postfix) with ESMTP id EF0B3EC0242;
-	Sun, 16 Aug 2026 18:46:58 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-06.internal (MEProxy); Sun, 16 Aug 2026 18:46:58 -0400
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="Tf8ZBSBA";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="AB0csPAg"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id E7A64EC0241;
+	Sun, 16 Aug 2026 18:47:00 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Sun, 16 Aug 2026 18:47:00 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
 	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1786920418; x=
-	1787006818; bh=mo9/YyuZ+27uiSkLEdlk6rzsMwO0ifUZXBUSyhK0NkI=; b=d
-	7WK9YCRZJRHPwU0pAQUS10+wHOnpDVzzsLoMHT4KYOSJTernWLvI5zEDM0UkfP6l
-	sDfoB0P4LSOIrmvVWaMZU5WgPwdOZ26zGOGxOQnDXF7zH9//nENd0dCVsng3FqEi
-	OfNRivgTRghzdRb6B7imJ3QTM3oow78pgAp7RWFlnqlPDWREvgcw7lTuNGFIMucN
-	HHliw5wwSFtsS8pIfixDSCSHfsp2yV+7TtjaDqxBOCz9kYofyi62Najmtyg7aEcI
-	FSR1kV7BgaHkM7t0KShfBPl5TJt3QZi4a4CzjmLD/tozU/ZJZUyg8b/oNakVgcKt
-	9arG4B0r60J5KjF9IK80g==
+	:reply-to:subject:subject:to:to; s=fm1; t=1786920420; x=
+	1787006820; bh=J1+9D9mcuyt/yxdgXW36/YFxLEOMLmPJXeDS+6QRV2M=; b=T
+	f8ZBSBA3TQRK3cD9jO4SD+8+5wk4KAvSmI88xPbHNQQ5uy6iP3VbK+kdBjeI3lQH
+	4Uc+i4JN1TGKJHDaJqLp87se4FThEzjG+MY6YJqo1ZSRYbIz54PGd597teurTpcZ
+	TiL4MzYQNoRWKr9j4akAwU9Y7zNfm9IOVaGc69Gf4WVWgDFoVOlL/UHDdSwBTWAG
+	DV+LyaFOKVXAheken+gJw4on7+C9BRs2RK5WwAHys4l0r/HxDuy7VKJandTVEiX3
+	ruO6aLt/NZYWUivJ26MQrQklgCuYO1mYxyANBTQEDz14R+sRW0tUVto6uBCgy5BN
+	zswoaiGjXIld8YV4WXptg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1786920418; x=1787006818; bh=m
-	o9/YyuZ+27uiSkLEdlk6rzsMwO0ifUZXBUSyhK0NkI=; b=GJUIGH96wLw4Ae4b/
-	KotBYngP01kE9QSEmFZ40LRhjCHLB0RR2+4JbCP2BK0l/nh2BSKndFsJe3TmuVr/
-	Uvk1WU/Z8DtRr0wK4C0ws33aKKox37XCxk05NgPvaKBYWbrmrDtzPktez79HbNmi
-	JHctxjj5epxyWTBslwvYTB7Ti9pz2NQHCXgz9OYdXjGXA+aTU8TsreCpgNHaMWK5
-	LTznPv6P4TCcJjocAe0tKvz25zwiJRIW6II/5pxqD06ZMfbFHk5GatQ2wvvlCz5S
-	qXRwGf68w9y0T4WgtoHJxrkkgdWtZuIOOEzoHb92rsS9hg/YC+ZdTZWQ4m4J5+Zn
-	ahRpQ==
-X-ME-Sender: <xms:4j2CanQqScaubasMLkTsysJw-SK7UfwGJd7eoSwFYVX2L5_o5AmVvQ>
-    <xme:4j2CauGArq4GUP4XjGMM3XggInpA_aUCDPkf74NbM9pfE8qYwzYpN1LvtPDUInE5K
-    N-9XRxVWBWMMee-iU-K1pINfPFkr3SZKV9WI7KAhtlTE18MuweGkgJu>
-X-ME-Received: <xmr:4j2Cao79UHKeyM1kBRBZ3tKSjAYqTy2tTxq6UKqARBtFB5dVCRDwDg7FGfY>
-X-ME-Proxy-Cause: dmFkZTFkhNC7YI+Ei0MrF6zu90W9yR7z714JmmtstcBEn9fnZ0JEx8KxNru7XjOIPijUAd
-    VrNDumTIvQCtLJHAbrPKMRdbJsCYKY1AWxa28xNEDdkQaDqy3PIOJVA9R+OjsTN2M4dnB4
-    WQk97ejO2lmWwXR5mw6146Dl5x2vSRCf1uehpA4Z3DNP/uvzS8DmGwE+/LsFmt9BQO6ZtJ
-    eWd0dPZ2F0WrWW1tiYo0zV8d4Xgh8ztMbcUaDgwCK69ZeQi0ebesOWu50OSj19NNGHzec3
-    w5R1etyOsXXy4NxsI/YxbKwNbzdBv+aWoLN5/PFLP+n740pr735uP0KJxEPqjezkxGUEYw
-    zcznv5swWAyw6XmESrxIGM8A1bTTyyCb8TGgw+qEShLJxmw0H1QgFlfOeuxPMpjGoxHDtp
-    PCjigTxTQQ2SQYH+g1Zjow5z90rNIRRpTNdfes5gZJF781hKtVjYAOe4if7ktPzJJA4yNg
-    SoS74FodWm5MlganZ52ThBjBAI0zsQCzKw1kMNWmaHUySWEGqzr+6R499T3SjVD8uPcKN/
-    4SLidXdUPP7GCHgXfbqC5pStWuEVCtQYOB96tZz4WWjhPZl2k+r4upntklA4ZEhZgnxts8
-    Lxz66rlvmgByz0pVLkrls4qWwn+V7sbwBmY/Z6EOmYn3bFnzh2lepzJSEjtg
-X-ME-Proxy: <xmx:4j2CajlsvjAN_IEHAIV1kdp5qFXcSIkYNgoGFY8LAx7-GMiLIVyIkA>
-    <xmx:4j2CamyLPAh9iniFOlqmrcrm1VGdAlLtldJw-Q25y0HYU9VT0elSKg>
-    <xmx:4j2CalODmyYrz0w_UYvd--3ZMZ88iSP2eG9dXy7GQuMAp6S8f0v36g>
-    <xmx:4j2CagjRf48cFh8tnR00-qMgeKzkwFPTMv9-xyTkeoMwOiCkBud3zg>
-    <xmx:4j2Cat0OGWz64CT28dddn965QWPo0PjRSa2NkonwE7g1N9uko2NxaYeC>
+	:x-me-sender:x-sasl-enc; s=fm3; t=1786920420; x=1787006820; bh=J
+	1+9D9mcuyt/yxdgXW36/YFxLEOMLmPJXeDS+6QRV2M=; b=AB0csPAgdvYAGp2gQ
+	PiZ8s9TB0lKptBLgc6G8XjReoWX3VQPWod9imkjpE79kqUKaLGn80ihiDFB1OIz0
+	B/CNlftWgGIIm35vtT2TvU17FV5LvtxlkCrlwYLrflNfzrpEnUZyxTBsQkgCqPL2
+	PxTKH2EqVOV2hhQEYiwpEtRnx8n0K44p0beGRM9qHVcrNgKXqNM3Hw8V6zKg2uUf
+	8hSVfY18P+DiMRqCfRwFEuEUDYj3UmnUGcyXBtVHhW7CsEZ5+169BbNgrcdk8gbu
+	X9vFIZ1sM4q2VI2IkvwLa0hg6UQKBvJIxlY979/8XvTxKQfQuRkUX35QffVinQIK
+	OX61g==
+X-ME-Sender: <xms:5D2CathmKe_S5Z3a5FPjO13vpZLQkGGy3yeCxM8B7Gb-qKQsrKKk8w>
+    <xme:5D2CarnR9IJlc4OvHwBtrp4ARBQMEWsGqrIzcHNf3vEm0qVsjjGk3Ztbw1dP1W9HV
+    VCjosG5RnmEABjBL1wnMlZIALY_447QCOCzXgrYAWgi3DlOq8OtSbU>
+X-ME-Received: <xmr:5D2Caohkwljo_5atCYjhUMEtNkX8d1rGTKMrRFt1hBVIB2YWsTWW6K6vZiM>
+X-ME-Proxy-Cause: dmFkZTGQiHMMNOd1xnoN6lXQSIrGAe7MwYo75Qud3VSOh3aIjL1T4IX+wE1i/v23Y8aWnG
+    m9SHT5inuXsr6fNeLF7q+XcMZ+pkZJxjpb2XQQyKrFdYKaLz7QDFEiegvQaT+Y5rGxRgjF
+    euipinLXiFMtCpFgMqQP9Dwn4SHq3YG285QsMU4KB7YfRQHYWKIG6dJTmdP/7bPKv1qUNe
+    3LkhBXaaROXWrLGafj+UVrogU8Abxo2OvgWTBKIlLl3SY5Eb27sggkfdoaZJgpjY1+W5mK
+    IYgTH3bmg7umgeRjJmx+WAhyhWPmGn2xLzWKHa3nzXVCTdFk2+6Uh9D41+s+1+4ThvFtc7
+    YPFXNzpcj4NYLt23UmZkN6vYCsvNuqRLXW2/cXefqbxj2Ku/EoFycRIBFGawf0PxryN+Ss
+    t7WEunz71VUfOY4zX967A9vNhnBU7zoN7JwtQVp8mdlYrYolVL1fcnlt4bdpNKdHuwZ3+v
+    ZxaZVO8TeJhVBOw1hQ1lmw0SyaRFM0DgZbVpmtF16qIJ/Y2yOFAOIDaAzF1wjmqhEnnqjk
+    IOf+1hbIQ3Wdy1ombl+1sqs1iZoiq11q6UdwsaD8e5fjodHmOzN/3y40+8nouAVZJxY6iF
+    aj0zkUU68uxiRWlFTw0RZwSEXhpsRX558YVTFYZaKy+qpBE9hovTY7LMtYzA
+X-ME-Proxy: <xmx:5D2Cag8_2A1zH9w4UURlg9PWxKVlZq2mm5BamwjpOk0vHirheiH7xw>
+    <xmx:5D2Carpxj2GAAs1QYydVib8Y9mszwmkLYpZr1J7MJevBzlm5-KEuvQ>
+    <xmx:5D2CauPcgOpDHV2cD5ci1dz3gV8mI9x3JZMQxdVezE2Rbe3bXdpLhA>
+    <xmx:5D2CavSij7eSks4BrppBv8RAbxirLNVGT4IxbIeVXJwfcoqO0mE7fw>
+    <xmx:5D2CanfwrsPJ0T76uZ0qz2L-Y19ekWjEQ3GpbXBMc44vBIxbOoQtqZIP>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 16 Aug 2026 18:46:58 -0400 (EDT)
+ 16 Aug 2026 18:47:00 -0400 (EDT)
 From: Kiryl Shutsemau <kirill@shutemov.name>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -100,9 +100,9 @@ Cc: baolin.wang@linux.alibaba.com,
 	mhiramat@kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [RFC PATCH 21/57] mm/collapse: settle whatever the round reached
-Date: Sun, 16 Aug 2026 23:45:33 +0100
-Message-ID: <20260816224609.308019-22-kirill@shutemov.name>
+Subject: [RFC PATCH 22/57] mm/collapse: walk a table with a selection cursor
+Date: Sun, 16 Aug 2026 23:45:34 +0100
+Message-ID: <20260816224609.308019-23-kirill@shutemov.name>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260816224609.308019-1-kirill@shutemov.name>
 References: <20260816224609.308019-1-kirill@shutemov.name>
@@ -116,61 +116,243 @@ Content-Transfer-Encoding: 8bit
 
 From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
-Fill in the last pass.  A candidate that never froze is recorded as given
-up on, with whatever result ended the round.  Anything no pass took
-ownership of -- a destination folio, a table meant for deposit -- goes
-back.  The count of installed candidates is what the round reports.
+Fill in the half of selection that emits candidates: a cursor over the
+table, handing out the largest window that fits where it stands.
 
-Holding no lock here is the point.  Every refusal before this happens
-under a page-table lock: the freeze unwinds under the ptl it took, and
-the install aborts under that ptl or the pmd lock.
+Two things bound the order at any point.  A huge page has to be naturally
+aligned, so the cursor's own offset caps it -- at offset 4 nothing above
+order 2 can start -- and the largest enabled order caps it too.
 
-Dropping the last reference to a folio, and the memcg uncharge behind it,
-is not spinlock work.  So a refused candidate keeps its folio and its
-table until the round is over, and this is where they are released.
+A window qualifies when enough of it is eligible: the scan's bits counted
+over the window, against the max_ptes_none limit for that order.  One
+that does not qualify drops to the next enabled order below, which need
+not be half of it, since a sparse set of enabled sizes may skip several.
+When no smaller order is left, the cursor steps over the region.
+
+Only the scan's bitmap is read, so a clear bit is either a hole or a PTE
+the scan disqualified.  Occupancy here means what a collapse could use,
+not what is present.
+
+Non-present PTEs the scan accepted are the exception.  They are counted
+apart, in cc->scan_unmapped, and added back only for a PMD candidate,
+which faults them in; a smaller window leaves them as holes, sub-PMD
+collapse not reading swap.
+
+The cursor advances at emission and never rewinds.  A round is collected
+before it is run, so within a round every attempt is assumed to succeed.
+Nothing here gives a refused region a second chance.
 
 Assisted-by: Claude-Code:claude-opus-5
 Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 ---
- mm/collapse.c | 25 ++++++++++++++++++++++++-
- 1 file changed, 24 insertions(+), 1 deletion(-)
+ mm/collapse.c   | 126 ++++++++++++++++++++++++++++++++++++++++++++++++
+ mm/collapse.h   |  10 ++++
+ mm/khugepaged.c |   2 +-
+ 3 files changed, 137 insertions(+), 1 deletion(-)
 
 diff --git a/mm/collapse.c b/mm/collapse.c
-index f65f413339bf..2da1f8ddcca8 100644
+index 2da1f8ddcca8..258bb9cc32c5 100644
 --- a/mm/collapse.c
 +++ b/mm/collapse.c
-@@ -1500,7 +1500,30 @@ static unsigned int collapse_finish(struct mm_struct *mm,
- 				    struct collapse_control *cc,
- 				    enum scan_result result)
+@@ -1841,6 +1841,7 @@ static enum scan_result collapse_scan_table(struct vm_area_struct *vma,
+ 	if (result != SCAN_SUCCEED)
+ 		cc->select_orders &= ~BIT(HPAGE_PMD_ORDER);
+ 
++	cc->scan_unmapped = unmapped;
+ 	return result;
+ }
+ 
+@@ -1852,6 +1853,7 @@ static void collapse_anon_scan_init(struct collapse_control *cc)
+ 	nodes_clear(cc->alloc_nmask);
+ 
+ 	cc->select_orders = 0;
++	cc->scan_unmapped = 0;
+ 	cc->nr_collapsed = 0;
+ }
+ 
+@@ -1896,10 +1898,116 @@ collapse_scan_anon_pmd(struct vm_area_struct *vma, unsigned long start,
+ 	return cc->scan_refusal;
+ }
+ 
++/*
++ * Selection cuts the table into candidate windows and feeds them to rounds.  A
++ * window is cut at the largest enabled order that fits and qualifies -- the PMD
++ * order, when the whole table qualified -- and a region that does not qualify is
++ * probed at the next enabled order below, which need not be half of it: a sparse
++ * set of enabled sizes may skip several.
++ *
++ * Only cc->eligible_ptes is read, so a clear bit is either a hole or a PTE the
++ * scan disqualified: a window's occupancy is what a collapse could use, not what
++ * is present.
++ */
++
++/*
++ * Largest order a window may be rooted at: the largest enabled one.
++ * select_orders is fixed for the table, and the caller checked it is not empty,
++ * so this is well-defined for the whole walk.
++ */
++static unsigned int collapse_root_order(struct collapse_control *cc)
++{
++	return __fls(cc->select_orders);
++}
++
++/*
++ * The next enabled order below @order, or 0 when there is none.  select_orders
++ * never carries an order below COLLAPSE_MIN_MTHP_ORDER -- THP_ORDERS_ALL_ANON
++ * masks orders 0 and 1 -- so __fls() honours that floor by itself.  Order 0 has
++ * no bits below it to mask and has to answer 0 outright: a walk that ascended
++ * instead would emit a window at an offset it is not aligned for.
++ */
++static unsigned int collapse_lower_order(struct collapse_control *cc,
++					 unsigned int order)
++{
++	unsigned long lower;
++
++	if (!order)
++		return 0;
++
++	lower = cc->select_orders & GENMASK(order - 1, 0);
++	return lower ? __fls(lower) : 0;
++}
++
+ /* Point the selection cursor at [start, end) of the table, in PTE offsets */
+ static void collapse_selection_init(struct collapse_control *cc,
+ 				    unsigned int start, unsigned int end)
  {
--	return 0;
-+	unsigned int i, nr_installed = 0;
++	cc->select_start = start;
++	cc->select_end = end;
++	cc->select_offset = start;
++	cc->select_order = min(max_order_from_offset(start),
++			       collapse_root_order(cc));
++}
 +
-+	for (i = 0; i < cc->nr_candidates; i++) {
-+		struct collapse_candidate *cand = &cc->candidates[i];
++/*
++ * Advance past the region [select_offset, select_offset + nr_ptes) and determine
++ * the highest order that can be attempted next.  Since huge pages must be
++ * naturally aligned, it is limited by the alignment of the new offset: after an
++ * order-2 mTHP at offset 0 the offset becomes 4, and __ffs(4) == 2, so the next
++ * attempt starts at order 2.
++ */
++static void collapse_selection_advance(struct collapse_control *cc,
++				       unsigned int nr_ptes)
++{
++	cc->select_offset += nr_ptes;
++	cc->select_order = min(max_order_from_offset(cc->select_offset),
++			       collapse_root_order(cc));
++}
 +
-+		/* Never froze: the round gave up before it got that far */
-+		if (cand->state == CAND_SELECTED) {
-+			cand->state = CAND_SKIPPED;
-+			cand->result = result;
-+		}
++/*
++ * The window at the cursor did not qualify.  Drop to the next smaller enabled
++ * order over the same region, or -- when no smaller order remains -- give the
++ * region up and advance the cursor past it.
++ */
++static void collapse_selection_reject(struct collapse_control *cc)
++{
++	unsigned int lower = collapse_lower_order(cc, cc->select_order);
 +
-+		if (cand->new_folio) {
-+			folio_put(cand->new_folio);
-+			cand->new_folio = NULL;
-+		}
-+		if (cand->deposit) {
-+			pte_free(mm, cand->deposit);
-+			cand->deposit = NULL;
-+		}
-+		if (cand->state == CAND_INSTALLED)
-+			nr_installed++;
-+	}
++	if (lower)
++		cc->select_order = lower;
++	else
++		collapse_selection_advance(cc, 1U << cc->select_order);
++}
 +
-+	return nr_installed;
++/* Is the window at @offset one a collapse of @order should be attempted on? */
++static bool collapse_window_eligible(struct collapse_control *cc,
++				     unsigned int offset, unsigned int order)
++{
++	unsigned int nr_ptes = 1U << order;
++	unsigned int max_ptes_none, nr_eligible_ptes;
++
++	if (!test_bit(order, &cc->select_orders))
++		return false;
++
++	/* The window must lie inside the scanned range */
++	if (offset < cc->select_start || offset + nr_ptes > cc->select_end)
++		return false;
++
++	max_ptes_none = collapse_max_ptes_none(cc, NULL, order);
++	nr_eligible_ptes = bitmap_weight_from(cc->eligible_ptes, offset,
++					      offset + nr_ptes);
++
++	/*
++	 * Swap PTEs the scan accepted are counted in cc->scan_unmapped, not in
++	 * the bitmap.  collapse_faultin() reads them in for a PMD candidate, so
++	 * there they do become sources; a smaller window leaves them as holes,
++	 * sub-PMD collapse not faulting swap in.
++	 */
++	if (is_pmd_order(order))
++		nr_eligible_ptes += cc->scan_unmapped;
++
++	return nr_eligible_ptes >= nr_ptes - max_ptes_none;
  }
  
  /*
+@@ -1913,6 +2021,24 @@ static void collapse_selection_init(struct collapse_control *cc,
+ static bool collapse_next_candidate(struct collapse_control *cc,
+ 				    unsigned int *offset, unsigned int *order)
+ {
++	while (cc->select_offset < cc->select_end) {
++		if (!collapse_window_eligible(cc, cc->select_offset,
++					      cc->select_order)) {
++			collapse_selection_reject(cc);
++			continue;
++		}
++
++		/*
++		 * The cursor advances past the window at emission: a round is
++		 * collected before it is run, so within a round every attempt is
++		 * assumed to succeed.
++		 */
++		*offset = cc->select_offset;
++		*order = cc->select_order;
++		collapse_selection_advance(cc, 1U << cc->select_order);
++		return true;
++	}
++
+ 	return false;
+ }
+ 
+diff --git a/mm/collapse.h b/mm/collapse.h
+index 3256c45ee228..94b796271843 100644
+--- a/mm/collapse.h
++++ b/mm/collapse.h
+@@ -114,6 +114,15 @@ struct collapse_control {
+ 	/* Orders still worth attempting in the table being scanned */
+ 	unsigned long select_orders;
+ 
++	/* Non-present PTEs the scan accepted, which no bitmap bit marks */
++	unsigned int scan_unmapped;
++
++	/* Where selection has got to in the table, and at what order */
++	unsigned int select_start;
++	unsigned int select_end;
++	unsigned int select_offset;
++	unsigned int select_order;
++
+ 	/* PTEs collapsed in it so far */
+ 	unsigned int nr_collapsed;
+ 
+@@ -166,6 +175,7 @@ enum scan_result find_pmd_or_thp_or_none(struct mm_struct *mm,
+ 		unsigned long address, pmd_t **pmd);
+ int collapse_find_target_node(struct collapse_control *cc);
+ bool collapse_scan_abort(int nid, struct collapse_control *cc);
++unsigned int max_order_from_offset(unsigned int offset);
+ unsigned int collapse_max_ptes_none(struct collapse_control *cc,
+ 		struct vm_area_struct *vma, unsigned int order);
+ unsigned int collapse_max_ptes_swap(struct collapse_control *cc,
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 1244e161beae..c7c933e819e2 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -1426,7 +1426,7 @@ static enum scan_result collapse_huge_page(struct mm_struct *mm, unsigned long s
+ }
+ 
+ /* Return the highest naturally aligned order that fits at @offset within a PMD. */
+-static unsigned int max_order_from_offset(unsigned int offset)
++unsigned int max_order_from_offset(unsigned int offset)
+ {
+ 	if (offset == 0)
+ 		return HPAGE_PMD_ORDER;
 -- 
 2.54.0
 
