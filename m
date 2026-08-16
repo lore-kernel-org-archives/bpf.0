@@ -1,77 +1,77 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69EB53D3D19
-	for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 06:39:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FFE73D3498
+	for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 06:40:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786862391; cv=none; b=bkSVELibZNHuIiUTo+QZdzYbtdBbkpLn8uWAZFl7X3/DgdaYQRAI0uQeDWzgfPERVYSqws5eZcqlAc/5KetyCK/uMObMD9GbNm2MqJrzBP5PlXuAokWa2rjRT1LU47IKK3VZMir4IEXcWUWSAjWoNVqZBs5hPswlQ3VFaqLMcw0=
+	t=1786862438; cv=none; b=awe5z4Wc2YHueQ1TuoikL+AmS74u+XN435eIiWOJFJ74fHMTuc0HTiU5+y/7Ey9wtV+bnD5otbXnue1dZzZe75WYIAkGpUztmI1DzxbAK0aUWGvtYheKcmbLLPsi0JoFL79C7/kTq7XocFDqKesGH2iJN7OUUYkD437rEe7F1tE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786862391; c=relaxed/simple;
-	bh=2LFmLPdz3qR2GfXXCEuwFsvSvFgMSBkPsGt/pv2AXH0=;
+	s=arc-20240116; t=1786862438; c=relaxed/simple;
+	bh=odpugJRcyKAsN4WjpLNXC2zjr/ZBxp7CK1JMAFjrIPY=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=mPHp86TVz9pyXKYxP22QwdcFvhXohFTA75gzwr2PqyvAhIcvmonIaSd+/9grtfL7CZRoIo0qkAdwq7wqN3dMH/oTSiYDY9O+N+qlwYIJjbA+fAp473qr3PbceW57I9aunnbmE0jWKQLn0yFETXnXQkH320kwE7sqSJ7Qz4fZUwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SNdgE6xp; arc=none smtp.client-ip=209.85.214.174
+	 Content-Type:MIME-Version; b=jNzimK1tVinF9Pjqp2afyz7YJo7CMSSM2PhH/aF+4InGN6wYyD24QOSkpSgP11ZKwfKiljYw4deCp3jfqEzGIYjooc2uzoytmp87PcGG+UhLKPUjWEaWS4wu8nhcIrZIRpAZaF830RgSbpfqBFMQRy5+BOD6KyFa+uQlCwNNOWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ewjXOke6; arc=none smtp.client-ip=209.85.216.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SNdgE6xp"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2ceab75934dso29120465ad.2
-        for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 23:39:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ewjXOke6"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-38e58034d05so1926827a91.2
+        for <bpf@vger.kernel.org>; Sat, 15 Aug 2026 23:40:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786862389; x=1787467189; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786862437; x=1787467237; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=afTrRXV4XSXTFvY24MoZk3NiX/aJ24UC3gxnkWyoToQ=;
-        b=SNdgE6xpkHuNVziIaHF3pow8S9HzJJD58klbGlhbW2+pyV39Rr4bo3/b/yHgHbYmxX
-         bu2jnSdILxVb+d/Szhh10JPHjaZd2XFTi0c/Vu9aDPhjwkZTLBfskJtDpj/E+dfWkIzB
-         BbUGbDjhpjSDWQJMNHGmP9hzgV9hcpsHSXnSxPUV+7KFdY38oc/NrXbaDCyCmYJVIIuX
-         wFO+pWEpndyD7dZbVp3TdvPkmrgCZc1WDzhrRw1MZXDNxaM/a6SNjiwyaTnmIOSeY+Vr
-         hyyJlYKAikPMH/dJp7YjJbHH1dXmem69HDQPJVxsRfov7fpmmCSUObcQ8FxtRPs/Ijxl
-         U3UA==
+        bh=odpugJRcyKAsN4WjpLNXC2zjr/ZBxp7CK1JMAFjrIPY=;
+        b=ewjXOke6lNaLebqapdX7ko5lFZNjBmPsKs7ittKwLwx4qVFKpnMhGH/sv88N6EAy2K
+         KrbxAvBqID40Catlb+UKQMNJ6MfEwwBrjgWwe2hC2l97Hw1hA4TomciWgt538NZZdtwZ
+         LK1jaY+D0puMOonhpDEx/cmDQJZd6geQV2mZFvk6QS8myROPQsKledfI63MaMA202Jaj
+         sWPNUyKegFQKVSMU8ZLogCuL2aIFym1Wl2GVjOM3zSGvoIcimY+XdSiJC6GUCyMGoHSk
+         xc4nlNByF0tMdhddmfhMw5+w/klm4+yRqx3Q4Je2+352r/mDXaodj+fwXYsbT6BUzt+X
+         1LtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786862389; x=1787467189;
+        d=1e100.net; s=20251104; t=1786862437; x=1787467237;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=afTrRXV4XSXTFvY24MoZk3NiX/aJ24UC3gxnkWyoToQ=;
-        b=tJJ48qE58qCh0vgbH/AVmzrwU43cybJGIr57W2gtu8zwYHpXgLmRFEQPbUZgKRHWbc
-         ZoOP71K64RM/+ttM2dZi6+ZXn/yK9rDL24fF2isX3NNhmPIBHhY4+HMT1U0Bzv4bO6B+
-         GVJdIL0APQFKQ4PXOMRpP0F3/TShFGM+t8ZZKInejUtdv4u5pR25EQNRroFe9phVFplU
-         4W82mqShiKCBJ47YQqbEhZj8DiTe1WlOlyOvf2Ce7BSeoOBNfPJebfNAPHmPFClQrcyM
-         QZwjQ/EUdQMLf/X8szMLPgLp0zOnWAqCDtYtVQHtDIAQyYz1kndvhk2TR3BG9WxjYnQh
-         uoJw==
-X-Forwarded-Encrypted: i=1; AHgh+RoVbv7yzYAxEY6y7GrIlObq68E/Y3P5mcgMao43c1EgjMH/YC6+KbIWnyKzezWIvc0pCro=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSVzrtVJM//AUukACXlV2G8NtQ4F7etvd8FkBlwyO9/VWyyKNX
-	qprLi4V+EFPt4c8QZL8unwJsvrcjXmesLgfhuRU3NLacLSZph546IRZ/
-X-Gm-Gg: AR+sD10yPD7tw4yrY9PlVHA9AkXfxMJyCSbOthJiZVd9Y7VX/PJyeBTcxVR2jkn9UY9
-	kQh5RrYdj57Riu/QUAAaf0ZaHnrkITvIUDxEWuGbpDf0uBazd9ykOaJIpCFbZa8t+6BHlHFJLYb
-	AEvPOtqsYDOYUmw11CzyGW4DPrt1LyuauXH0C5FHhN45azmCauYjd6hoxAFg9fC5Cu+cufGF+S7
-	zrxtJziMV9ZUolrKCFH4QIxoPGl/Dj0qXDuZQQyy5n901JZ68JofnHmJD1le3ytDNvjNPBPG5L7
-	cRE+B6oKI5Xakl3MLOJJVc5E5cWjbhaBEE/vvu0sQ6qh9X7eN+Ts/njxtREwGjRtHviWTEIxXja
-	PgcjG2VMRS4nmxmyvDM0W2bvCOafqE6urWt4QeMiCkE5UZcoANVWBWwh4H08MerLzKASi4AGwxw
-	AEuvlAzIhGNzhBIFdY+wjRV5fTgjV5KeSR0/ZnNp7aO1uRD2kFelg5KLMsAs/kkOsSh1hFhYj4F
-	RQRVbUdmhT4/vE5
-X-Received: by 2002:a17:903:9ce:b0:2cf:b066:7de2 with SMTP id d9443c01a7336-2d3b0f4ab8emr167866505ad.22.1786862389270;
-        Sat, 15 Aug 2026 23:39:49 -0700 (PDT)
+        bh=odpugJRcyKAsN4WjpLNXC2zjr/ZBxp7CK1JMAFjrIPY=;
+        b=l7+D5HHtWF9MLutdoDVLV+P8LlBnoHQexCQmuWz/lQtRlf1HDiyS7mgqrAmANFH+AZ
+         X29UBO5Ci3iwDXI/f8VA06TI8antttvXf7pB8YAtYW/EtGvvO91xUjimbr1FCjgrZKWQ
+         lP/oe71K5QwSNoMZ8PeI0P54ZWlfJp3CBviKM3ivaVrujUWu6k0lJWulGb6s2RxP8Gle
+         50nlzIL+FFsb2GVuR6dejIHnqAF6k6A1ObPQD2TbUqaDQooL7enjaAsl/ZviIRnQ9Kr1
+         EPkrrZYlKRo9Fu5yrwSHK+r1/XROr+tINY6/rJznyvFiPGhCPHshECioPwv6Mm3W8wSS
+         dk0A==
+X-Forwarded-Encrypted: i=1; AHgh+RrDInFuHz5O6dBpdRlp35v6JPhcd0Miz1dVqbQoIua7yBy6wgsWKtwQ2SPOcnvfSrxwLLM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxb7s9SBLPx8M18CjTRlgfg1kApbdOzNzsSHNhKc2uAisD/xahX
+	rG49Itfn4ues4S7XS9F5s6ubSfVfMTe5N7blg+hnC+aTqo/qwKJZv3XO
+X-Gm-Gg: AR+sD13RXZR+sX0op0JEUGEbHZshDYNpGgsWqQhPXSGn6EqhE7cEjyiUri/0FFsqzT/
+	A/L/eF1YazDKdBEkkRMn1TDFLNjdweYlPeXYNocQBT5Xo31GGJdBb3XSH/jKM0HlFkYzylyKvOU
+	VPn6lfeFB1bVpw0qcke5/lX0lys1P+4t7yeWX7s5X1NOaz3xlxZDXYEv55DVj4g6zQjqFG6xH6u
+	iXarDC0S5ydI3/nfazNCyx/XDj0QY6mfH1VzpXiQSc54hbNVcAv3la8PxpCzNMlNDyQ9yLvb6v+
+	OKWZehIgEwcStdcsIuHy2747eKVIj8WDQeVZ7hjz4t165nBpd4mAtprtXMGM5Mot2g6PDS3PTdO
+	zyv3peqZMUV15BGgWOuThuueHVY+vQlodTpIMc8BSXJ1QThRIaWg8HYcXiyJHXgXAmWMrH2GdMf
+	VzVUfPXPwVqaVluY21xqgrw/JkThCI/kvN4JGBD6IHF8bfFlUYw8pYcMpIAi7sV2PKo1AC8VXfz
+	CdSab6OBtJgpIrxUD923rW2Poc=
+X-Received: by 2002:a17:90b:2248:b0:392:c80b:8eff with SMTP id 98e67ed59e1d1-3933b87a743mr16195037a91.11.1786862436819;
+        Sat, 15 Aug 2026 23:40:36 -0700 (PDT)
 Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d3aeb7c2cfsm24246145ad.59.2026.08.15.23.39.48
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3953202e9ddsm676437a91.17.2026.08.15.23.40.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Aug 2026 23:39:48 -0700 (PDT)
-Message-ID: <5e67f44f28df257f67350ec95e2a9cbd77864da9.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v1 04/14] bpf: Drop dead spill diagnostic
- condition
+        Sat, 15 Aug 2026 23:40:36 -0700 (PDT)
+Message-ID: <f00742a12513967cade44c47a6cced73db4a5292.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 05/14] bpf: Use canonical stack argument
+ names in diagnostics
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
  <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
  Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
-Date: Sat, 15 Aug 2026 23:39:46 -0700
-In-Reply-To: <20260816015746.2632990-5-memxor@gmail.com>
+Date: Sat, 15 Aug 2026 23:40:33 -0700
+In-Reply-To: <20260816015746.2632990-6-memxor@gmail.com>
 References: <20260816015746.2632990-1-memxor@gmail.com>
-	 <20260816015746.2632990-5-memxor@gmail.com>
+	 <20260816015746.2632990-6-memxor@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2-10 
@@ -83,43 +83,19 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Sun, 2026-08-16 at 03:57 +0200, Kumar Kartikeya Dwivedi wrote:
-> diag_record_mod() appears to allow identical spill events to be suppresse=
-d,
-> but diag_mod_keeps_lineage() only accepts register write events. The spil=
-l
-> producer also supplies a stack target and an explicit origin, so a spill =
-can
-> never satisfy this conjunction.
+> The main diagnostic identifies the first outgoing stack slot as stack
+> argument 1 and the sixth function argument. The causal history instead
+> labels the same value as stack arg6, making it look like a different slot=
+.
 >=20
-> Restrict the condition to writes to reflect the filter's actual contract =
-and
-> avoid suggesting that it applies to spills.
+> Render causal-history targets in the verifier's canonical stack-argument
+> location form. The first outgoing slot is now shown as *(R11-8), matching
+> reg_arg_name(), while the main diagnostic retains its fuller slot and
+> ordinal description.
 >=20
-> Link: https://lore.kernel.org/bpf/48e6f021b89562f68850fe21ef8c78719819b04=
-cf9c4e4f50bc791937d37ace8@mail.kernel.org/
+> Link: https://lore.kernel.org/bpf/eb1be5327d136b7e5bd6d68e76fef6de20c4079=
+0.camel@gmail.com/
 > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 > ---
-> =C2=A0kernel/bpf/diagnostics.c | 3 +--
-> =C2=A01 file changed, 1 insertion(+), 2 deletions(-)
->=20
-> diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-> index 33b7d9e8e2c3..37ed22a764e0 100644
-> --- a/kernel/bpf/diagnostics.c
-> +++ b/kernel/bpf/diagnostics.c
-> @@ -1531,8 +1531,7 @@ static void diag_record_mod(struct bpf_verifier_env=
- *env, u32 insn_idx,
-> =C2=A0	} else if (diag_mod_insn_origin(env, insn_idx, &target, &event.mod=
-.origin)) {
-> =C2=A0		event.mod.origin_valid =3D true;
-> =C2=A0	}
-> -	if (old_reg && new_reg &&
-> -	=C2=A0=C2=A0=C2=A0 (reason =3D=3D BPF_DIAG_MOD_WRITE || reason =3D=3D B=
-PF_DIAG_MOD_SPILL) &&
-> +	if (old_reg && new_reg && reason =3D=3D BPF_DIAG_MOD_WRITE &&
-> =C2=A0	=C2=A0=C2=A0=C2=A0 !memcmp(&event.mod.old, &event.mod.new, sizeof(=
-event.mod.old)) &&
-> =C2=A0	=C2=A0=C2=A0=C2=A0 !event.mod.origin_valid &&
-> =C2=A0	=C2=A0=C2=A0=C2=A0 diag_mod_keeps_lineage(env, &event))
 
-Q: does this filter ever fires?
-   The condition appears to be very narrow.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
