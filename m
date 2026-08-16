@@ -1,73 +1,73 @@
 Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1F5412272;
-	Sun, 16 Aug 2026 22:47:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50A8E4156DA;
+	Sun, 16 Aug 2026 22:47:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786920468; cv=none; b=TD9nbbzowzfSj1jMbFVb9gANrsGOBtDnC2wVOX9MJeiS6MKEU6C5WQ/b6lQfOtG2bhi/iyQ8YGFAngGZGGLvvEMD/OwCJ7mR9Llg8gngSQ1V7BtzCrG6EwiUXRm2J2fh081NBQgB86hQzRvKiO+yHvzZ1EyvdSTg7Su+uqba7h4=
+	t=1786920470; cv=none; b=sxXUd+jJ0gNvu2hHQ6c6t+kAX0RH6k2oPuJXt40d8Q5+SKQQLF5+BZY1dg5yRco08UMfzUcl9l8uSRWLqFD/0Q/zHmvkIOUxXYIk85UVV1iA5E9GxD1Mkd9JkTRxWQWeIC7J9Esql5Hs0a2Jm2J0AmIglx9ff+8RwK+eNJTU5+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786920468; c=relaxed/simple;
-	bh=Z9R28D2/2GGvJxVw8L0LsZFpJElQsJEGRr2o3etmFwo=;
+	s=arc-20240116; t=1786920470; c=relaxed/simple;
+	bh=5z8qphyv0VlAuEc2ngiQhIwupgoOuFydmJLL53f7IOc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ICgpJDjtqvWS87korpp/I4Kjy/3XTCcLB69XeJm0shSy5Kj27IiV5db8+zssvwVRi77xe9/QVi/JAGs5AJcC3dmWOXstAy+6fJholjVhNxG58agkSkRwP37jABzSB9yIjYj0isCZM6HrmZ3N+qhi8KPO0PwfU4YN1PCFx5A6GGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=eLcO8lyA; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=QVdq39AQ; arc=none smtp.client-ip=103.168.172.153
+	 MIME-Version; b=Cdc/Mcf+wDwzL2ADaf1FZ7Wmo4eGlkKnwvB8NMouRT5E2xF906aofjSCJGmrY3K/3LwBs7G+KlT4eVd0uuyTDORhbRl3/z5cPgYe3uPT2TcJiozdapbXCCNE7ra75hudpHqJ+a5YT//ABRaGq6uM73t+HDUu2fBK6r4gGEYi9yA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=R/D9hrJ/; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=cMcHegD+; arc=none smtp.client-ip=103.168.172.153
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="eLcO8lyA";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="QVdq39AQ"
-Received: from phl-compute-07.internal (phl-compute-07.internal [10.202.2.47])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id B4E2814000F8;
-	Sun, 16 Aug 2026 18:47:46 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-07.internal (MEProxy); Sun, 16 Aug 2026 18:47:46 -0400
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="R/D9hrJ/";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="cMcHegD+"
+Received: from phl-compute-08.internal (phl-compute-08.internal [10.202.2.48])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 918E714000FE;
+	Sun, 16 Aug 2026 18:47:48 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-08.internal (MEProxy); Sun, 16 Aug 2026 18:47:48 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
 	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1786920466; x=
-	1787006866; bh=kXFeu3sLpTizBLZ9/Sqsc9AjC3ALB9bfMUETq02vuTs=; b=e
-	LcO8lyAfOxw6vsbVSfPPyUPeqcUILzjVePX85zdk+4Qa/6P2XtB0oD6EX0GBe78y
-	SbRWyJTI8wg5nuia8lPlnJdCs9jQtnPEEf7DN2tIrE87uzvWtoTX11UnOzY1V2Wg
-	pn8AW0p+dQKPTmNzhl3ShlZJjkfHNYIRvQklrrI21hmjoY1w2Ui/7pw8jjDSLjCK
-	8xyE5palO5N0A7kf2LJ2htSwjseT2dNljxr9AVM4VPHjpGDv5YonQC/5UAZyoVsO
-	3fAcia4nQAwlOptaPlX+P9Vkhi9DFkHzJj5Iyn/auiZZzlnL8pgwLfelj0CaRU2O
-	4X37RwoyrG+IWPcER01lQ==
+	:reply-to:subject:subject:to:to; s=fm1; t=1786920468; x=
+	1787006868; bh=RDFiXs9UFefjDWAntFW6mYoilxTkA+zz17UfIDflfSQ=; b=R
+	/D9hrJ/A6K3alQkubIQewlCsyxKk99E71DYl22d+XE0UTS8oqhOmPEXALqrmtPT+
+	fhuQgCJdw2MUES2F9umkeZgwgY7Q+WO2UprI3k8gGgT9QVoKAYH0w2Yrx3UOpMRK
+	T0EH6CMchU5fZMIz+NZ7j8tTZ0ons48Jar8nhm4n4gHQPLkgbj6fAW6o25vFywcN
+	f7ZtVUKrem5+kj6u9Jezo+JKRRKvfGWl1AtB9D598iwPDoetjHIJBonwWcHev36V
+	fpQ2h5896OHtH4/c0B1nLJ+qk+2/ePN4qBAyPZqaVs1L0VusKect+tsF/9Topjf5
+	cYlwFEB4mSG/xDuea4zLQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1786920466; x=1787006866; bh=k
-	XFeu3sLpTizBLZ9/Sqsc9AjC3ALB9bfMUETq02vuTs=; b=QVdq39AQH+YK6d1qn
-	1wRVHgcj9LE+6Mkh8KyLkGFlc8HTgZ/WJynfrsg9F2dxi6jKEfLWtVOjY6qhqALg
-	iyleh6gleGIDi8nh1HrpMT4+nFB31rAe40Sl9BATfK4rF7GG926621n+bkl4P0EG
-	kbjaMc0aseXlqQzJrXL15CC98sNuEqLlDh+sAOSGgg2DBg+O9NScSikFT7dpSFvR
-	FK0+7DuAr9HGf+U5YDaciPGUHDvWB2C43vQzUuPxgc8Uv2lcnbSwJqSsvrurXt1f
-	yggRh8v1cbDQTWa3AsyItOQmX4nQruKyH1ppeWxQuaSowmdqMuR5zZjhH8LNiq4m
-	Ersvw==
-X-ME-Sender: <xms:Ej6CahjR6r2mktBJ6gWC_DkV80ycF8y77kBLzABUUokWUHMAwUPHpw>
-    <xme:Ej6CarXMaTGOsK4nj1K_ZjpLiiEiw3xHwFLHoIBPhcuTHK_TxdUvVl_bg0HotxUSD
-    qxciCRouKSQT2GIluCzZed5wYY2y3X2hNIxNpfIJDXwwTlDzGYboGg>
-X-ME-Received: <xmr:Ej6CatK-oCE3eiv1IaeuXYhVxmS316s1aiHjP8OiYiqSoqbMgJv6m8Wz-Ug>
+	:x-me-sender:x-sasl-enc; s=fm3; t=1786920468; x=1787006868; bh=R
+	DFiXs9UFefjDWAntFW6mYoilxTkA+zz17UfIDflfSQ=; b=cMcHegD+siSteXceA
+	eORchYYJpRg5mkjZpTJ4wtDQd1qhM4icwlRxaOng9Siw3K5cRYYAp7ay9pM9UbSi
+	Crhn6tlhUd9aPwxLjlsga0sRqVLTa65D6RmWWVm0Z1/+jSLfVsxsGUFqZDtsD3da
+	VwPhwjZqGp4gyFSzD4nBVo39qToJWxBQlF52iv/0BRsc4m+s5VJF9th88pwnxahQ
+	zmSTYQb6PCLMAAiX1c1BLtjdxHH943hWM85tvUwHXmJNmBX3SXis9thMwQiemlzn
+	VFWqoNl1GjEteU5c4kuGSgUd1IXh7wV2yHsqdNjtc6VrqiO92KGGjP8LSgVjdJT3
+	3cy8A==
+X-ME-Sender: <xms:FD6Caij5zk7EHpJYk0SEVw8nfTitQEEu943h-uXF36WJ-orjngfDXw>
+    <xme:FD6CaoU7Ta24wJTMCQqNgdekAeNJJhvn77pjj6-pJD3HyDu4ao6fcLt0ktvzm9gwD
+    VxNGk0LL5lCDQiMmp1q35P8SAnkeAtm7STFPtRlp6v2tju2s1cGw58>
+X-ME-Received: <xmr:FD6CamLNxb6VLNY6dmwcc0n63rIkmfjVHsD-n-qava3lM2QLm4vFk2T0lmY>
 X-ME-Proxy-Cause: dmFkZTFX8QZ1Abcp//ElmtP0wYUsUMnb+KjPA544aOlJXhXcQAudkXa81C9Rj4L11ediC/
     SYpDnD1LvcyFEAv2YFQNL3ReIx6t28G7cFOXvsWQqNdQRv24cIelnnbcWrHqur16sY2q+b
     PHK84xbhjrx0R6ZFbdj3lDcQr+wbYteZ9PHsSvZgjQoovnxRkTlpJXxI+K+aK0DY9MqaWr
     nM0jSjvJAOtmNeFdTIuI9VxKMOFqeJI9DUUNBafqnTlsaU2K5w1xy/oDJpRmozGKRfcEpJ
-    T4FDpTcqBKNo58tTW6I4nVl91YkYNyFfziYdH6IV5aj62MGBqsSUtSYZnaDODTOndFzTVv
-    qOtBqEf6P9b+C81V84k4WZcgjMziTkY36tS6PSJ/ihWMzxssTaILKX1x0S+EnTMrbWn4tx
-    /WsAGYeCiIsEPje2mEGeHo1a7HuyO9eOPf3nZ82C8aboYTb/FTNw5UJkzusnordR7v9U0S
-    8QOawJGWzEPx+57GKu5OD7HLlhjh4MjCz7vLnL1lFlqsZN4BRmFISTdNaYhQjG1CUBsVPL
-    PM5z9JW4FnIDlhdJUtMfpaAk0cPHGSL3oVddW6H3HoL/aB4BMDSxUrghJHNG/0+Ign85r1
-    +HsdiW0bYOGDytlMz9aQRKxqsDuwuKKJh2Kd2LSQZV0Kcr7fx8iysiO4aKjQ
-X-ME-Proxy: <xmx:Ej6Cai3OBqBfzo8zewOQ9o4v36A2oIIob5kmClye4X-6QCcLZO9eZg>
-    <xmx:Ej6CalB4_1YeqpH9M80bmIFF9nfx13H8kYO-LTNP-Akc1baCQojlow>
-    <xmx:Ej6Camc4n-oACR89ufga0hr3f4pWG6FPoIBIf4ooz9J8RuW--F5ytA>
-    <xmx:Ej6CaoziM6C77QX3UzVy4VrufLirnqBYM9YfqH5jjQE7MX4az3O4yQ>
-    <xmx:Ej6CajGXtY-Bk8nR7a9PeWro5YsVyhZs3Qhh3tVqcGqbr9j67X_Y3a7r>
+    T4FDpTcqBKNo58tTW6I4nVl91YkYNyFfziYdH6IV5aj62MGBqsSUtSYZnaDODTOndFzTlc
+    EbUeQzhKxJEmsRwlRPWupCudTuURb990558e34xXePZqhKsdittFqFVB13AvKNBPn+zTIC
+    vmM4mIxGpPzx/nK894dSAKdZpvpkCU2McTpnHaRUIk0aWa95Ge9rfXUXULEztRAndnCYbt
+    4qD7P3eAyIA5OFPCP2oHhYFpAkBT0mo15kPYR7H5/b3GrpRM2b7kXKyktWAQ4dA2U9USmE
+    fM3n0gonMJM6KinITZmpApKtfVndLpnhEgoZeb0eJJWbRvyWRI94p3CA2ZvaB1HejNnPzR
+    Unmc2v7FvenSNzXmIHyeuDNm+B0nonswhiJxC0bKiq5ZtPtGImr9bjx9A2Bw
+X-ME-Proxy: <xmx:FD6Can1hoyC6PmwnR3KJ4dbo6AaCtxi4W6oWnQ3-zNUMuqfvESwEww>
+    <xmx:FD6CamARxPMeY605qB94pGmuSHRBTI814URQxpldxXLXdEAlV-iRxg>
+    <xmx:FD6CajfEmEZ_BSxer4SMt38i9c-XlD2tG1D68WIaL60-b1zGoTyJBA>
+    <xmx:FD6CahxK0UCDvcRAJW9wRSf3H34UNiXlP6VB0qkJ-OWmeTGneOr14A>
+    <xmx:FD6CagGoFvpkcKSU7TANtFqL-or-_aq0-dmKR8_hl6WToLkaPkCRXok_>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 16 Aug 2026 18:47:45 -0400 (EDT)
+ 16 Aug 2026 18:47:47 -0400 (EDT)
 From: Kiryl Shutsemau <kirill@shutemov.name>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -100,9 +100,9 @@ Cc: baolin.wang@linux.alibaba.com,
 	mhiramat@kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [RFC PATCH 48/57] mm/collapse: assert the mm reference the engine relies on
-Date: Sun, 16 Aug 2026 23:46:00 +0100
-Message-ID: <20260816224609.308019-49-kirill@shutemov.name>
+Subject: [RFC PATCH 49/57] mm/khugepaged: drop the mmap_lock barrier from __khugepaged_exit()
+Date: Sun, 16 Aug 2026 23:46:01 +0100
+Message-ID: <20260816224609.308019-50-kirill@shutemov.name>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260816224609.308019-1-kirill@shutemov.name>
 References: <20260816224609.308019-1-kirill@shutemov.name>
@@ -116,64 +116,41 @@ Content-Transfer-Encoding: 8bit
 
 From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
-Every caller of the engine holds a reference on mm_users for as long as it
-works: khugepaged for a pass, MADV_COLLAPSE for a call.  So mm_users
-cannot reach zero underneath one, yet collapse.c still asked whether it
-had, in three places where the answer can only be no.
+__khugepaged_exit() took mmap_lock for writing and dropped it again, to
+wait for a scan holding it for reading before exit_mmap() destroyed the
+page tables underneath it.
 
-Ask only whether collapsing was turned off, which prctl() can do at any
-point, and assert the rest where the interface begins.
-
-A caller that arrives without a reference is a bug in the caller.  A debug
-build says so there, rather than leaving it to be found when an address
-space is freed under a collapse.
+A scan now holds a reference on mm_users for as long as it runs, so it
+cannot be in flight here at all: __mmput() runs only once that count has
+reached zero, and asserts so on entry.  The barrier is redundant.
 
 Assisted-by: Claude-Code:claude-opus-5
 Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 ---
- mm/collapse.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ mm/khugepaged.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/mm/collapse.c b/mm/collapse.c
-index 1e3b2d202ffe..28631c734fcb 100644
---- a/mm/collapse.c
-+++ b/mm/collapse.c
-@@ -473,7 +473,7 @@ static enum scan_result collapse_revalidate(struct vm_area_struct *vma,
- 	enum scan_result result;
- 	unsigned int i, nr_live = 0;
- 
--	if (unlikely(collapse_test_exit_or_disable(mm)))
-+	if (unlikely(collapse_disabled(mm)))
- 		return SCAN_ANY_PROCESS;
- 
- 	if (!vma->anon_vma || !vma_is_anonymous(vma))
-@@ -3731,7 +3731,7 @@ static enum scan_result collapse_file_pmd(struct mm_struct *mm,
- 
- 	if (result == SCAN_PTE_MAPPED_HUGEPAGE) {
- 		mmap_read_lock(mm);
--		if (collapse_test_exit_or_disable(mm))
-+		if (collapse_disabled(mm))
- 			result = SCAN_ANY_PROCESS;
- 		else
- 			result = try_collapse_pte_mapped_thp(mm, addr,
-@@ -3762,6 +3762,8 @@ bool collapse_scan_pmd(struct vm_area_struct *vma, unsigned long addr,
- 	struct mm_struct *mm = vma->vm_mm;
- 
- 	vma_assert_locked(vma);
-+	/* The caller holds a reference on it, so it cannot have gone away */
-+	VM_WARN_ON_ONCE(collapse_test_exit(mm));
- 
- 	/*
- 	 * What the scan answers with, so cleared before it runs.
-@@ -3776,7 +3778,7 @@ bool collapse_scan_pmd(struct vm_area_struct *vma, unsigned long addr,
- 		cc->scan_file = NULL;
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 1d77d9a8046d..2b3364bdb100 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -434,16 +434,6 @@ void __khugepaged_exit(struct mm_struct *mm)
+ 		mm_flags_clear(MMF_VM_HUGEPAGE, mm);
+ 		mm_slot_free(mm_slot_cache, slot);
+ 		mmdrop(mm);
+-	} else if (slot) {
+-		/*
+-		 * This is required to serialize against
+-		 * collapse_test_exit() (which is guaranteed to run
+-		 * under mmap_lock read mode). Stop here (after we return all
+-		 * pagetables will be destroyed) until khugepaged has finished
+-		 * working on the pagetables under the mmap_lock.
+-		 */
+-		mmap_write_lock(mm);
+-		mmap_write_unlock(mm);
  	}
+ }
  
--	if (unlikely(collapse_test_exit_or_disable(mm)))
-+	if (unlikely(collapse_disabled(mm)))
- 		cc->scan_refusal = SCAN_ANY_PROCESS;
- 	else if (addr < vma->vm_start || end > vma->vm_end)
- 		cc->scan_refusal = SCAN_ADDRESS_RANGE;
 -- 
 2.54.0
 
