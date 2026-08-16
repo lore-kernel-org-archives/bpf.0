@@ -1,73 +1,73 @@
-Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
+Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73D6641A549;
-	Sun, 16 Aug 2026 22:47:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 658EF3EE1E5;
+	Sun, 16 Aug 2026 22:47:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786920477; cv=none; b=evGCdNJh9rmwZXrWyKSs5ew5X6ZMsxRuRQso1MszQppQ1hhViW7YytxHbgYAMOGL3j5L5Ne5sbxip8t+duZtfctPidWOnN3hmUqloWNmdU1y7Py4gGRJ9sEyaGAHxVGUdfVH008ZHEZ8jaB0o+Goey4KX6OBBbOzrcksIIm8BEE=
+	t=1786920480; cv=none; b=L0O055x+N5SkVjhlknujJ98xoqeEADb2Khe/93MCIgLmmgLft+pHDv9jZ1X9hc5qBleGbkIkhODzJwTH+0nfOXdKLEoUAu2Xv2PhFBUSIVpa9waHT+zKrcFNHJw5qh1Cfluazhvj5rwywNFjb8cwh6kCI7GIGQPwLW3vnB/kV/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786920477; c=relaxed/simple;
-	bh=RDTsAz4Oy7wezsLnEkXHTNcA0qQ8+nrFDvVHPQR253A=;
+	s=arc-20240116; t=1786920480; c=relaxed/simple;
+	bh=V2amMiMl7R+h4dDAD6Zy7w5nkocePltmqZVhOP7JMNs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=diGR0CuuiO4sf8Jy8gzGUEhjUwip82IN0tVbMg4bEKu0NddkMh+d+Gat+t2QfPwajepSM5qyly/Z3NGwXxiSJ3cDWdfjQ7P6rtVVSS/juE0QThQSWRK9ItJ68vlQXPoP6L7uFYdzTD7c0OYR6fPshjYu+zsAFj26HjRlyK5CYQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=HgHGN44b; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=G8U1xcnF; arc=none smtp.client-ip=103.168.172.153
+	 MIME-Version; b=bNASkxTpqSo5VGJ0WWKQRDAtbc9y4L+k4FU1eLRqs0b2tPjpicjBPaQsqIlkwIL3z7D0xOZUanVkVOAJFb1Ezp91F+h+9XE8G/cstHAxkQPXn5pJeE+eZKXXlXnodp5JNZp0ucc73lhCqq0Lqovo9zjqSUz/9rQjzLd6MSmHQF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=0KrLNBOp; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=fwlDkpgk; arc=none smtp.client-ip=103.168.172.144
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="HgHGN44b";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="G8U1xcnF"
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="0KrLNBOp";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="fwlDkpgk"
 Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id C871A14000FB;
-	Sun, 16 Aug 2026 18:47:55 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-11.internal (MEProxy); Sun, 16 Aug 2026 18:47:55 -0400
+	by mailfout.phl.internal (Postfix) with ESMTP id 692D5EC0074;
+	Sun, 16 Aug 2026 18:47:57 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-11.internal (MEProxy); Sun, 16 Aug 2026 18:47:57 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
 	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1786920475; x=
-	1787006875; bh=YVoKODTNuHH9tsvnWaADZQ9VZLR8etvBsMTlfNVNhEw=; b=H
-	gHGN44biqF8ui1hgPrOaWlVx9x42CW2TrTQ1MBpnq9uZohHvhs9TFO8COYmiBtCQ
-	x092f/nn0bFsT4jxcfIqh4yGHRauPzg3rM62tQd+rliAmvov/yjuGh8SL0B1rWY+
-	hbGt5HaX9ZWi+CPjnEF7Gpu06s9ZzxKtL25W+JLXAm5m95PwqT58EM1QRCpYQ8Y8
-	A9SznxPCoxfH4y21kjuZpwwI58y6krWsOdIdjexXUSbQAu/m2ylSEVTAiMpyulSj
-	Mf89HJ7jwuv3gx0AfmaaIxd4QsMTQ3GFYKUXKqbtO6l7ASEFDRt1X9lgRkWYJoMx
-	qHj4B8Rlg2SfjUyO/jiNw==
+	:reply-to:subject:subject:to:to; s=fm1; t=1786920477; x=
+	1787006877; bh=pI4lY+AJfKOOjXvPiR0jbn4HyML/QwSMTUaiVyOT0As=; b=0
+	KrLNBOpYOPbnXg5hm7ina1g0ZHCTyNqP/VTFRHVM6sdgshZ2wVN2j3ej2iBzttnh
+	NAFDGpntTkBz66SHNLaWbBOblPFQCR+VRnv2V9DPWGeCv5mV9baYtrFc1BbgMSev
+	HrZSAsUrzTpuDBvQAfhsbtKU1sVtWv77Hpc3bl/55w+FTA5CBFcsQZwa8qNvjS9y
+	UA/9nHSkwNijJDlcDkAjGQMwh4ZuG/UIgy1abfmtDFrbBaRzBdjvSB1iLO7s0ccE
+	iL85a+IykYR7qjP+C2ouXneVPivWKeNXjgoL4dE3WJb4TboXzECfi7IQzvjvYPiC
+	87hASIGf73zI5ZtJaTqEg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1786920475; x=1787006875; bh=Y
-	VoKODTNuHH9tsvnWaADZQ9VZLR8etvBsMTlfNVNhEw=; b=G8U1xcnFalpJlNLkp
-	cMJJl5lDt/0JdgftmpIqkcaVJ5istmKoLWtdXShZo572ZMnXxNWs8lUmlTfJuUVZ
-	sJ0oKdAlnJeAEi8RfwsAi7Zow0AhAJpDGHKGFzUYuC9vKVZZ3PpKIcX1iGaU62fD
-	ZbuD7OgEZo5Gu2GQntxsilcY+newcgsOQAAVWUddpN6x81U7xrB9zkrs+XTN8Iau
-	jK2PJm6aPa/liiZhSlJ0HCJGn0lbtkeauX7LWN/kL/puId4wJ7pGTwhBDeEaN/Yb
-	mXxkUN6NBnt2KB3cpwfp7jM+S6qVsdwcameuR29CIdoVXBb0UioyoXaPv5xBveZP
-	C9zig==
-X-ME-Sender: <xms:Gz6Caoal4FlStzYDBFIdE2tm2uGtShL8G4GQm3nQnWZ68beuoa9j3A>
-    <xme:Gz6CaosTWK9QhJo2s8EFtvVm1tqYtKMLXaXM5lwdY41GHSphMHiSeNndnIxgi9agA
-    PEoX_eIHdkVxqfE2UqxNMHFdx4Fc9pGihXX_HG9h2fP3_DzP7bZ0z8>
-X-ME-Received: <xmr:Gz6CavArAbWlv_aIh7Wts9Fp_BPY0_i62aAeUQpeiBVUDzwHo111WdiXB_o>
+	:x-me-sender:x-sasl-enc; s=fm3; t=1786920477; x=1787006877; bh=p
+	I4lY+AJfKOOjXvPiR0jbn4HyML/QwSMTUaiVyOT0As=; b=fwlDkpgkeMZAR/C/C
+	ZHIYGibmR+6BagltMa4AF34xr2PMsy5NRw+2XrmedxKjk3KU+BKe3dGZZ2a/c44F
+	Ten7qAoPkTuUp9RW43eRSwxioiaEELXeJ/LPc9gwYawfdl/BJZbACsP9JDuEf6oB
+	Wtvdge7jFJW7ZBqHTQM0Wyvvq9Ee8bkKb0DQr1cQy6ymOJ6H7+CX+twmnrLXi5Lp
+	nfIWtZ9yeTCawpc4qzNfqq3/aRLrxfoOYUnpz7yK2pHtLUYiLCBuyHR/po/ALpbW
+	yS20oqx9rvGQqNSCztj9W2NjE/igqtmYUoTwny+hAuIYNNMGe7F8zve174pc0AVm
+	HCUnw==
+X-ME-Sender: <xms:HT6CaqfyvV1vIi4cPst5XmFoYwVTFj12MYVAmADUns_pNyquOFwaBw>
+    <xme:HT6Cat49Y_M7YC1mCQsfunNnGQ_3gaTp4CsJP6PQXp1aHFXIf2gMcJn6-6YONiTB4
+    Np8Q-v1GtiR0G8XnNFhyKFgRDXgWfaU_RzL0AgNZ7ncPrZ8WQezqMo>
+X-ME-Received: <xmr:HT6Caq0M4FYaQoZVQAo61i8KRQTbqjCb1K7aVDDpQjno9AKOcBYWBXEoCYA>
 X-ME-Proxy-Cause: dmFkZTFX8QZ1Abcp//ElmtP0wYUsUMnb+KjPA544aOlJXhXcQAudkXa81C9Rj4L11ediC/
     SYpDnD1LvcyFEAv2YFQNL3ReIx6t28G7cFOXvsWQqNdQRv24cIelnnbcWrHqur16sY2q+b
     PHK84xbhjrx0R6ZFbdj3lDcQr+wbYteZ9PHsSvZgjQoovnxRkTlpJXxI+K+aK0DY9MqaWr
     nM0jSjvJAOtmNeFdTIuI9VxKMOFqeJI9DUUNBafqnTlsaU2K5w1xy/oDJpRmozGKRfcEpJ
-    T4FDpTcqBKNo58tTW6I4nVl91YkYNyFfziYdH6IV5aj62MGBqsSUtSYZnaDODTOndFzTnT
-    D5+QXiNA7V0+//1GAWfYdWnFUDbJ4PKAYPebwd2vIw25LxzaUn6QnwsCjtV0vOBDOG68oD
-    Oqk6cCWO4XKcdDE7GZMuUoxBQVzvFGinAnfQRKXDAj//k/5a2GjRPi+pYfH35b9i57TE0h
-    XMcQaJjSBsGRFRkjnhDLw4f5+2D4nvb6hkAfT4rb9iy+9cz89AU2qog1b4xomiUSaQuLKo
-    YugSHkz9PMS2Kwoq88m1eRQ5YhN8GUeGt4kbhSAlFnxsssMN8NRLY8TPq77Lu3JPp+uR9g
-    JtdJwGX3/UFlAhzoIkkuyY2NCBLzeHHV6BWLrw7FTIxQWDTMxU/KKrZWRpRg
-X-ME-Proxy: <xmx:Gz6CavM3xp0qemypU0qR-XBXw8eaQ3nXInSdzCphmSY01aisG6dxiA>
-    <xmx:Gz6Cap5lD5H8hVGTfr395LWfMDrxzEM2tcghCsf1WL9p4_PGnJjngg>
-    <xmx:Gz6Cap1Wg1plDDHzez4r8oz0vBMGOG1iNK9RW5V-1p9JWxL4thpOOQ>
-    <xmx:Gz6CaopDQeVzLvBLfcI8PULfw8AQf-En0bRl2QFHJRgtK1looePk5Q>
-    <xmx:Gz6Case39aqqM3ygzLuRqDDXwiYAOEZii_dRxfn08yCZjZmzQlMRp-6e>
+    T4FDpTcqBKNo58tTW6I4nVl91YkYNyFfziYdH6IV5aj62MGBqsSUtSYZnaDODTOndFzTg4
+    3gj7NdlC8U/37zfIU9cOpYnuRdXqkl9pVUWc3zwBpKJzvj+ZfRQlz7GS0Ejlp3UR3S3OSR
+    Yd0A+lV4lpsWSXukhEFEBp0eGov5qfF8JzT+PPjVG2KIhEnHHbHIxwPmWbz8OxyU++EsAh
+    RsLI86qe1gASncpfU8bRy6B8cY8saqXrUVybVt5nqWgtzw4IJAa+6Td5Hbmb1QRUXlJbJx
+    GkafdYrgnhVsK1vDbEOoEqpzGn0iwNtltfuGQDQQEbiiDEAB8frR5GXA+RVgD6DnVcpjQT
+    3C3sZmLkZkqv6ZVIOyP1kW5sYHRBNe9OT/zSKApbEQuHaXzBQYMRjgclBtCA
+X-ME-Proxy: <xmx:HT6CagDyRQ4RhvEfGzHyB3EK742G3n4Cf0ippH7ddVrL0Cz8rHjG5Q>
+    <xmx:HT6CarFe_F_su38oOgOf65C28ts1cZwxARcLL1t57AJm7cbUPCxvrA>
+    <xmx:HT6Caqr7rAE7UR6Fz2MUQmypgCjJtDE4nkuSV6Tazj-PPVmoh0t5fQ>
+    <xmx:HT6Car1ATaoqGe7PghNyWRYplbjHgWERwim0QIUKm5Fxhc16Eglevw>
+    <xmx:HT6CavShMTfNJOFUXfFUaZCLyVx8e9_g9EfRz-XzhNxAflfK4Nd0UpGZ>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 16 Aug 2026 18:47:55 -0400 (EDT)
+ 16 Aug 2026 18:47:56 -0400 (EDT)
 From: Kiryl Shutsemau <kirill@shutemov.name>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -100,9 +100,9 @@ Cc: baolin.wang@linux.alibaba.com,
 	mhiramat@kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [RFC PATCH 53/57] selftests/mm: cover collapse of mlocked ranges
-Date: Sun, 16 Aug 2026 23:46:05 +0100
-Message-ID: <20260816224609.308019-54-kirill@shutemov.name>
+Subject: [RFC PATCH 54/57] selftests/mm: cover collapse beside a MADV_FREE'd page
+Date: Sun, 16 Aug 2026 23:46:06 +0100
+Message-ID: <20260816224609.308019-55-kirill@shutemov.name>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260816224609.308019-1-kirill@shutemov.name>
 References: <20260816224609.308019-1-kirill@shutemov.name>
@@ -116,48 +116,49 @@ Content-Transfer-Encoding: 8bit
 
 From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
-Collapsing an mlocked range makes the teardown do something it does
-nowhere else: the sources have to be munlocked while the destination
-arrives already mlocked, and munlocking takes a reference.  So a teardown
-that reaches a source before it is unfrozen fails on a refcount that is
-not allowed to move.  That is the one ordering constraint in the putback
-with no other way to be caught.
+A clean lazyfree page must not be collapsed.  Copying it into a folio that
+is not lazyfree would quietly take back memory the process offered to the
+kernel, and reclaim would no longer be free to drop it.  khugepaged
+refuses the window that holds one.
 
-An mlocked range was collapsible before, as long as the whole VMA was
-locked.  This case is the other shape.  mlock() over part of a VMA splits
-it, leaving the locked part smaller than a PMD, which khugepaged passed
-over for as long as its coverage was rooted at PMD-aligned spans.  A
-partially mlocked region therefore went uncollapsed however long it lived.
+What it should not do is give up on the rest of the table.  One page a
+process no longer needs is a poor reason to leave a whole PMD's worth of
+memory without large folios.  Yet refusing per table is what khugepaged
+did: any single disqualified PTE ended the scan.
 
-Cover it deterministically: mlock a window, collapse it, check the
-contents survive.  Drive it under contention too, with a thread mlocking
-and munlocking random spans across the race harness's region, since the
-ordering only breaks when a teardown and an mlock overlap.  The plain
-racers never touch VM_LOCKED at all.
+So collapse a table with one MADV_FREE'd page in it, and expect three
+things: the windows beside it collapsed, the window holding it not, and
+the page itself still backed by an order-0 folio.
+
+That last one matters because selection descends orders on a refusal, so
+checking the target order alone would not notice a smaller window
+swallowing it.
+
+The freed page's contents are not checked -- reclaim is entitled to have
+dropped them -- but everything else must still read back.
 
 Assisted-by: Claude-Code:claude-opus-5
 Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 ---
- tools/testing/selftests/mm/khugepaged.c      | 38 ++++++++++++++++++++
- tools/testing/selftests/mm/khugepaged_race.c | 29 +++++++++++++--
- 2 files changed, 64 insertions(+), 3 deletions(-)
+ tools/testing/selftests/mm/khugepaged.c | 44 +++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
 diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-index b61e32566d47..208300ecb344 100644
+index 208300ecb344..58cb7364652e 100644
 --- a/tools/testing/selftests/mm/khugepaged.c
 +++ b/tools/testing/selftests/mm/khugepaged.c
-@@ -1599,6 +1599,43 @@ static void collapse_order_sub_pmd_range(struct collapse_context *c,
- 	__collapse_order_sub_pmd_vma(c, ops, nr_windows, __func__);
+@@ -1685,6 +1685,49 @@ static void collapse_order_sub_pmd_holes(struct collapse_context *c,
+ 	ksft_test_result_report(exit_status, "%s\n", __func__);
  }
  
 +/*
-+ * Collapse of an mlocked window: source teardown munlocks the old
-+ * pages while the new folio arrives mlocked via folio_add_lru_vma().
-+ * A teardown that touches the sources while they are still frozen
-+ * blows up exactly here (munlock_folio() takes a reference).
++ * One MADV_FREE'd page must not stop the windows beside it from collapsing.
++ * khugepaged still refuses the window holding it: collapsing would copy the
++ * page into a folio that is not lazyfree, quietly making memory the process
++ * offered up undroppable again.
 + */
-+static void collapse_order_mlocked(struct collapse_context *c,
-+				   struct mem_ops *ops)
++static void collapse_order_lazyfree_window(struct collapse_context *c,
++					   struct mem_ops *ops)
 +{
 +	size_t window = mthp_window_size();
 +	void *p;
@@ -165,91 +166,45 @@ index b61e32566d47..208300ecb344 100644
 +	mthp_push_target_order();
 +
 +	p = ops->setup_area(1);
-+	ops->fault(p, 0, window);
-+	if (mlock(p, window))
-+		ksft_exit_fail_perror("mlock()");
++	ops->fault(p, 0, hpage_pmd_size);
 +	if (!window_not_collapsed(p, hpage_pmd_size))
 +		ksft_exit_fail_msg("Unexpected large folio after fault\n");
 +
++	/* Clean and lazyfree: do not touch this page again. */
++	if (madvise(p, page_size, MADV_FREE))
++		ksft_exit_fail_perror("MADV_FREE");
++
 +	madvise(p, hpage_pmd_size, MADV_HUGEPAGE);
-+	ksft_print_msg("Collapse fully populated mlocked window...");
++	ksft_print_msg("Collapse the windows beside a MADV_FREE'd page...");
 +	if (!khugepaged_wait_full_pass())
 +		fail("Timeout");
-+	else if (window_collapsed(p, window))
++	else if (window_collapsed(p + window, hpage_pmd_size - window) &&
++		 window_not_collapsed(p, window) &&
++		 /* Left alone at every order, not just the target one */
++		 is_range_backed_by_folio_orders(p, page_size, 0,
++						 pagemap_fd, kpageflags_fd))
 +		success("OK");
 +	else
 +		fail("Fail");
 +
-+	validate_memory(p, 0, window);
-+	munlock(p, window);
++	/* Everything but the freed page, whose contents may be gone. */
++	validate_memory(p, page_size, hpage_pmd_size);
 +	ops->cleanup_area(p, hpage_pmd_size);
 +	thp_pop_settings();
 +	ksft_test_result_report(exit_status, "%s\n", __func__);
 +}
 +
- /*
-  * A partially populated window in a sub-PMD VMA: population and
-  * sub-PMD eligibility at once. The unfaulted slots must come back
-@@ -1938,6 +1975,7 @@ int main(int argc, char **argv)
- 		TEST(collapse_order_sub_pmd_vma, mthp_khugepaged_context, anon_ops);
+ static void usage(void)
+ {
+ 	fprintf(stderr, "\nUsage: ./khugepaged [OPTIONS] <test type> [dir]\n\n");
+@@ -1976,6 +2019,7 @@ int main(int argc, char **argv)
  		TEST(collapse_order_sub_pmd_range, mthp_khugepaged_context, anon_ops);
  		TEST(collapse_order_sub_pmd_holes, mthp_khugepaged_context, anon_ops);
-+		TEST(collapse_order_mlocked, mthp_khugepaged_context, anon_ops);
+ 		TEST(collapse_order_mlocked, mthp_khugepaged_context, anon_ops);
++		TEST(collapse_order_lazyfree_window, mthp_khugepaged_context, anon_ops);
  	}
  
  	TEST(collapse_full, madvise_context, anon_ops);
-diff --git a/tools/testing/selftests/mm/khugepaged_race.c b/tools/testing/selftests/mm/khugepaged_race.c
-index 6682bbae0a8f..a4710130aabf 100644
---- a/tools/testing/selftests/mm/khugepaged_race.c
-+++ b/tools/testing/selftests/mm/khugepaged_race.c
-@@ -219,6 +219,29 @@ static void *forker_fn(void *arg)
- 	return NULL;
- }
- 
-+/*
-+ * mlock/munlock cycling over the shared areas: collapse of an mlocked
-+ * range munlocks the sources at teardown and mlocks the new folio --
-+ * the interaction the fuzzer caught (munlock on a frozen source) and
-+ * the plain racers never drove.
-+ */
-+static void *mlocker_fn(void *arg)
-+{
-+	unsigned int seed = (unsigned long)arg;
-+
-+	while (!stop) {
-+		unsigned long page_idx = rand_page(&seed);
-+		unsigned long nr = 1UL << (rand_r(&seed) % 8);	/* 1..128 pages */
-+
-+		if (rand_r(&seed) & 1)
-+			mlock(region + page_idx * page_size, nr * page_size);
-+		else
-+			munlock(region + page_idx * page_size, nr * page_size);
-+		usleep(rand_r(&seed) % 1000);
-+	}
-+	return NULL;
-+}
-+
- static void *mremapper_fn(void *arg)
- {
- 	unsigned int seed = (unsigned long)arg;
-@@ -328,14 +351,14 @@ int main(int argc, char **argv)
- {
- 	static const char * const thread_names[] = {
- 		"faulter", "faulter2", "dontneed", "pinner", "forker",
--		"mremapper", "pageout", "compactor",
-+		"mremapper", "mlocker", "pageout", "compactor",
- 	};
- 	void *(*const thread_fns[])(void *) = {
- 		faulter_fn, faulter_fn, dontneed_fn, pinner_fn, forker_fn,
--		mremapper_fn, pageout_fn, compactor_fn,
-+		mremapper_fn, mlocker_fn, pageout_fn, compactor_fn,
- 	};
- 	enum { T_FAULTER, T_FAULTER2, T_DONTNEED, T_PINNER, T_FORKER,
--	       T_MREMAPPER, T_PAGEOUT, T_COMPACTOR };
-+	       T_MREMAPPER, T_MLOCKER, T_PAGEOUT, T_COMPACTOR };
- 	const unsigned long pageout_bit = 1UL << T_PAGEOUT;
- 	const unsigned long compactor_bit = 1UL << T_COMPACTOR;
- 	const int nr_threads = ARRAY_SIZE(thread_names);
 -- 
 2.54.0
 
