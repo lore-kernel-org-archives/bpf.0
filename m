@@ -1,119 +1,126 @@
-Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0832939150B;
-	Sun, 16 Aug 2026 10:56:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6ABB38F25C;
+	Sun, 16 Aug 2026 11:43:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786877824; cv=none; b=pjd+HZXdOrMwGF9TL1yJh+WyL45zXALzHGuIqnsgLbjCMJvHLGPWFl305/fzldczHAaH4k5gPjreaSSgwjMzuClDw4GFdm0IpVTPQTouXs2NiXyaF8zwWsPhQ08hgy5nSUuywftu7emuHd7kIkjEvlIJymClgoNezW/3sL/P1gU=
+	t=1786880605; cv=none; b=BHP4bMRPAfNf+liNn2aWS/grckQCpgV0NjkJl6CQly2W1ScOuohFmsJyvnmMqbAzVabcVFQ4COHtNglHXxH9jqz+tfZeLl8P7bvyEjMaNmU29HHghYdMIAEPyJg/nMR4V57aU+1GHMuesistDowasyOHb6uyNksdoYJ5Z2X7KRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786877824; c=relaxed/simple;
-	bh=2waN7egFf4zHp8cjqjJvAhm9wI2J1lCCDSCOGqZjUNY=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=F39CR4lNK8w/sWUBmx7wBHJWI4didTZINnlnGEpQENlc1Ufh/FxDUDxGSX2TVUnsSumQoEB6syiWc7P5LUNYgGM52dMJJS3Q/Kw/KBUjFEzAPNqBRgM0/phYUPMlZv8ovywOCUrLa/bBFCaEMO6pg1OwimrCF/TB06FRAVxL36w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=cKbuWVVo; arc=none smtp.client-ip=162.243.161.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1786880605; c=relaxed/simple;
+	bh=95qM+648/6/bwW0zTKBkD68TwnfIpwIczJEHLzfnaTg=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=bWuzhZoZjLgJUuIheBAM1o6s/6pXPvEjgGXXQcOpQ8mblsbRSZBkfFcD/3rkPC1I89vZRDuXtAhya2SufFrBFAa9T6LQm5QPl9kZUPagqEUTiEgs/ZVtul8/hfqg+WGeYMvxgtezQo9F5y+v9wgJ0ouNDtM0j4PPTGIB0LVt5EU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Asw2i/4E; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="cKbuWVVo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Subject:Date:
-	Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	To:Cc; bh=FOjahohnfx6SB52oCyuMAZao61uyB8uroSsqjtOq+Dw=; b=cKbuWV
-	VocuAOQuPL41osv3Egzi8FBFQ3zIgLUUJuic0TcFc+uSiirkf41baqbJR1NTkzkW
-	4zG4tUxsLg1ZdgVWrP7taUmXn5U4Z5o2hbZEY0l/rwBY19csU6PNJLbP+jqJxlLX
-	dmBLlwv3fWrX5MhUV0lppbm7duOOy1EvWgGQk=
-Received: from [172.17.0.4] (unknown [101.6.30.195])
-	by web1 (Coremail) with SMTP id yAQGZQB3Gclkl4FqEsoEAg--.40530S2;
-	Sun, 16 Aug 2026 18:56:44 +0800 (CST)
-From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-Subject: [PATCH bpf-next v2 0/2] bpf: Reject mixed arena and ordinary
- atomic paths
-Date: Sun, 16 Aug 2026 10:56:32 +0000
-Message-Id: <20260816-bpf-next-038-mixed-atomic-v1-v2-0-4644c1886dbc@mails.tsinghua.edu.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Asw2i/4E"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84C031F000E9;
+	Sun, 16 Aug 2026 11:43:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786880603;
+	bh=4bwyFjrWA1ti65GnM4D0QfJ6pSauz6paINXfzFFaDX4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Asw2i/4E1aI2d1Ry/CdCXHEgT+PYz9flhFBh4JfM10KMYCDTl+DI0PHNEzBEYHgSL
+	 4bcOJC4VmSykJTajJlkmmGED+XsEXzso4Xf0sZyPVjOLYdc/ypgi7cQMtMiVrs63Mn
+	 Sf2IBHGGGVJXwQOvU5bOOHV7OU79kQtUHo+hhcm+kVe6PMiAVmuHa3Yh3nFjTaqzHH
+	 yldXck1ihxGA2EXUrrKC+XrwmWdy4z4r0sqG10J1A1hj2TC+ttVjDqNrsmEDCrei7D
+	 OtNP8l5wGJ4oudvMp5mbNaAiGlBTuMJkgkawbuALLvqH7KEJ9QbzMsFwKaE3hJUWPj
+	 Lz1w3KKzG5+ig==
+Content-Type: multipart/mixed; boundary="===============4573482612144578179=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Message-Id: <585cf79505dfbbd961eefad95a134c02d0fc30f6693b157a8ed4f1824c2e1db4@mail.kernel.org>
+In-Reply-To: <20260816-bpf-next-038-mixed-atomic-v1-v2-2-4644c1886dbc@mails.tsinghua.edu.cn>
+References: <20260816-bpf-next-038-mixed-atomic-v1-v2-2-4644c1886dbc@mails.tsinghua.edu.cn>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Cover mixed arena and stack atomics
+From: bot+bpf-ci@kernel.org
+To: chenyy23@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,chenyy23@mails.tsinghua.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sun, 16 Aug 2026 11:43:22 +0000 (UTC)
+
+--===============4573482612144578179==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAGCXgWoC/42NywqDMBBFf6XMuiPx0dR21f8oLkYz6kCNkkSxi
- P/eVOi+cDeX+zgbeHbCHu6nDRwv4mW00WTnEzQ92Y5RTPSQqUyrMs2xnlq0vAZUeYmDrGyQwjh
- Ig0uKl8LUDWmdp1kL8WJy3MbK9/4JvyVUMenFh9G9D+6SHvl/iCiFfL0RmbrQVNJjIHn5JHixX
- T9TwmZOGgvVvu8fi3Pjft4AAAA=
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1786877805; l=1544;
- i=chenyy23@mails.tsinghua.edu.cn; s=kernel; h=from:subject:message-id;
- bh=2waN7egFf4zHp8cjqjJvAhm9wI2J1lCCDSCOGqZjUNY=;
- b=SufQphGnSUxU791ZpZ3QricatJwnikw+Zdgmwe8OlLoSRbx3hLJd/xIlDXIAZdKvUyrzBqZhj
- q3J2cvvLQNkDG28XeCipmOYEouhS2GIt9dhgycXR6DfSPvsH6vT3MnN
-X-Developer-Key: i=chenyy23@mails.tsinghua.edu.cn; a=ed25519;
- pk=+Q11PEDVzoU+87KHlIeNWKwv/GiutzE5094ej7opM+s=
-X-CM-TRANSID:yAQGZQB3Gclkl4FqEsoEAg--.40530S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kr4rZw1Uury5uFW8CFWruFg_yoW8XF45pF
-	Wru3ZxtayvqF17uas3AF47Zr13KFZ3ZrW3ur17G34rA3Z8tr10qF4xKa1UAr98CryUXw13
-	KFyjqr90gF1DAaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9v1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
-	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2
-	z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4
-	CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx26r4r
-	Kr1UJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc
-	8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY02Av
-	z4vE14v_Gw1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8Ww4UJr1UMxC20s
-	026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-	JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-	v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
-	j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
-	W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU1Z2-7UUUUU==
-X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-Atomic RMW instructions use a single aux pointer type to select their final
-instruction encoding. The verifier currently records that type only for
-PTR_TO_ARENA, allowing a second path with an ordinary pointer to reach the
-same instruction before fixups rewrite it to BPF_PROBE_ATOMIC.
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
+> index b241bbcf54a8..b22bab33301a 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
+> @@ -637,6 +637,45 @@ int non_arena_ptr_add_to_arena_ptr(void *ctx)
+>
+>  #endif
+>
+> +static const struct bpf_insn addr_space_cast_insn = {
+> +	.code = 0xbf,
+> +	.dst_reg = BPF_REG_7,
+> +	.src_reg = BPF_REG_7,
+> +	.off = 1,
+> +	.imm = 1,
+> +};
 
-Patch 1 records the destination type for every atomic RMW path so the existing
-pointer mismatch check rejects incompatible uses of one instruction.
+This isn't a bug, but could the struct carry the same kind of decoding
+comments as the raw insns in stream.c?  The register fields are written
+symbolically (BPF_REG_7) while the three fields that actually need decoding
+are bare numbers: .code = 0xbf is BPF_ALU64 | BPF_MOV | BPF_X, .off = 1 is
+BPF_ADDR_SPACE_CAST, and .imm = 1 is the (dst_as << 16) | src_as encoding
+for as(1) -> as(0).
 
-Patch 2 adds a verifier regression test with PTR_TO_ARENA and
-PTR_TO_STACK paths converging on one atomic add.
+Could it be annotated like stream.c does (e.g. /* BPF_ALU64 | BPF_MOV |
+BPF_X */, /* BPF_ADDR_SPACE_CAST */, /* (dst_as << 16) | src_as */)?  And
+could the .8byte line below note that it is r7 = addr_space_cast(r7, 0, 1)?
 
-Yiyang Chen (2):
-  bpf: Check pointer type for all atomic RMW paths
-  selftests/bpf: Cover mixed arena and stack atomics
+> +
+> +SEC("socket")
+> +__description("arena and stack atomic at the same instruction")
+> +__failure __msg("same insn cannot be used with different pointers")
+> +__arch_x86_64
+> +__load_if_JITed()
+> +__naked void mixed_arena_stack_atomic(void)
+> +{
+> +	asm volatile ("					\
+> +	r1 = %[arena] ll;				\
+> +	r6 = r10;					\
+> +	r6 += -8;					\
+> +	r9 = 0;					\
+> +	*(u64 *)(r6 + 0) = r9;			\
+> +	r7 = 8192;					\
+> +	.8byte %[addr_space_cast];			\
+> +	call %[bpf_get_prandom_u32];			\
+> +	if w0 != 0 goto 1f;				\
+> +	r8 = r6;					\
+> +	goto 2f;					\
+> +1:	r8 = r7;					\
+> +2:	r9 = 1;					\
+> +	lock *(u64 *)(r8 + 0) += r9;			\
+> +	r0 = 0;					\
+> +	exit;						\
 
-Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+This isn't a bug, but would it be worth adding one more tab on the r9 = 0;,
+*(u64 *)(r6 + 0) = r9;, 2:\tr9 = 1; and r0 = 0; lines so the line
+continuations line up like the rest of the block?  Four of the seventeen
+continuation lines put the trailing backslash at column 48 instead of the
+column 56 used by the other thirteen lines.
+
+> +"	:
+> +	: __imm_addr(arena),
+> +	  __imm_insn(addr_space_cast, addr_space_cast_insn),
+> +	  __imm(bpf_get_prandom_u32)
+> +	: __clobber_all);
+> +}
+> +
+>  static __noinline
+>  u32 __arena *check_arena_arg_nonglobal(u32 __arena *arg)
+>  {
+
+
 ---
-Changes in v2:
-- Remove the arena global and extra map from the selftest; reuse the existing
-  arena map and a stack destination.
-- Construct the arena pointer from a scalar and encode the cast with
-  __imm_insn.
-- Rebase onto bpf-next commit c93cbdb13f99.
-- Link to v1: https://lore.kernel.org/r/20260813-bpf-next-038-mixed-atomic-v1-v1-0-e79aadb46a8a@mails.tsinghua.edu.cn
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
----
-Yiyang Chen (2):
-      bpf: Check pointer type for all atomic RMW paths
-      selftests/bpf: Cover mixed arena and stack atomics
-
- kernel/bpf/verifier.c                              |  8 ++---
- tools/testing/selftests/bpf/progs/verifier_arena.c | 39 ++++++++++++++++++++++
- 2 files changed, 42 insertions(+), 5 deletions(-)
----
-base-commit: c93cbdb13f995f87b5356329b3fe551c80bb482d
--- 
-2.43.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31943300584
+--===============4573482612144578179==--
