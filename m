@@ -1,160 +1,120 @@
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010023.outbound.protection.outlook.com [52.101.46.23])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B04B738C42F;
-	Sun, 16 Aug 2026 10:34:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.23
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786876457; cv=fail; b=h3kgd5titDkqefTBsk2UNKHfhuz/jMr8D50EVSIxQQrMeIMKesZy++pSVP4gseEb/dA5HNxur9gZKQxD4hhpDbG775UZv/Nnkntkaelat/xJk7B11X1+jjnQDG0GFEOSmg9QIKUrzaMsYsZfai0iZdqwbUmtMIxR7IvnqKrjLnE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786876457; c=relaxed/simple;
-	bh=/z/R09VINV0FaIrKifNqrUaWkXAPpIeSr9CXRs8u1Go=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=dAGZ53pOM4yLBaDcihx4p5ghUox4zMPAUVkQ6G0n2p1vGz12mfpP4mVAiV9L86IQjGphmxkfAcnZxUgdT5sDA0JG6+N2g3Ld5nr8Jzq2AjXRpJdfOzQzBKD04JK3oFT9nSpK4CsOtyLBQdN6RcRW9tXC2IrvB8RHMRkuGLpk2qQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=HbrxAic0; arc=fail smtp.client-ip=52.101.46.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1B0136A376;
+	Sun, 16 Aug 2026 10:56:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786877822; cv=none; b=dkrPcpTsFeMcibyabdhtlxvX4s9bBivfSqtOosRKNonratwk1vBNHVGI6FLHEVsJtRw/K5VB7PSl/c4URc8GEo+wGKEZTubKx+sAn7xVfeVvtfjnyOaJq2qqiHijKYCyfdFXfiQtfGEi2tppNrR3L+cJMJltjtV3ENByqHaJAIo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786877822; c=relaxed/simple;
+	bh=DQ26j5KfDBjdkJdGIUsSNO9aYlVJwusBnVeo+Z7hxC8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Bg6hVvIV3ppDgiOJgJX/e3QriB72JfPRVE8sTyaSmm0YfkbK8D4rvI2PJt8KJpT7XysMouVB6qSAL0yfwf4I0I4fO923xEse+0YTlBg8Xsb3J6HVEz3JVKLEMaMo6eBjPxzVNK/wUwfaofcF9X78UbEUTbZ8p1OV21XiIrL9GOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=oqwtBese; arc=none smtp.client-ip=13.75.44.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="HbrxAic0"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=U949EQooBVUtFW5AjACRIvQfHAwQpMZNvYsTE4VOY1AEuGRv+BKaNHNBQN8cvU/tkCp+/i/QVl3mCTnASzwkHHG+RlWU8U30NDOptFi3E3wLdh/XNDPamgqcURwoygOVnlyfuZT2G940xyRt8N4OdKv3eFDF4HfSLUGWmVEIDKj/0GyGZjmGB6oohEdcAYXql5BmUfzDkAeoxwmLe6oqMGU3SH2GkbgNXZelJoFVeAc0d9Mda1bR88zYUPJ6Pesq4s0L5TeFz7QBspXGsjENTiC680QuwSiH+TEhZx5D70NUUA5pDNMf3L1HyQpaNPZTTLWcsWYJpbLVQ0E5Sla6xw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=j81LDg/VETF69A33MtDsTcCGbHsT646YQvdsDI0tTZ0=;
- b=fW/MFfdXsFG1+5xaa5ku0mC/EMZGndIkTTZR+3K5bRxyPfTp6g0VvhlpyPEhlvLuW5/mqKwhJJE97MVo9JwmHvXVcwVijV7zvwj6lI5R+xDJOFw5y3YKzwkAoA2pJOz+VKP0fhy84noEJsuIBuS+Yiei2XnKYqsOF7EKz/HnNjJcOziEE/R7tJoik3USUfMnWvl9snHCzEXqKt72q4MBEf2UCwZOTE1XWUEHyKCCrkj85SH2Qaul7/8uQV/y73kkbRp+kzXR2pYkwoMv+mIjITjHI/ET4leacgVrKAmhBpvs9Uvi3Lo2PdA3hSNbbT4/9RSQQ11w6mhH7KOgAdJEtg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j81LDg/VETF69A33MtDsTcCGbHsT646YQvdsDI0tTZ0=;
- b=HbrxAic0iR61fV/tSRiJYZHYzKW0mwtt4p7HUzzaCWvN9urjGTbcfVCj3vSTiKzy8+x584eZFOK8mOhKlGSWNhXtCxIzKfatNoxmC28IYW5+x6fist0oA3+5wUhozCB/S1lzCJf2EqC67quOJKGwWJc7bWrV5/ZRY8T92hjIHrJb3STa7TK0/rjIiqeg/9nCwDAffXGSdTpvgMzQxWS/VkJOMhBWQkg7DcLje80d/rMaUzdrYJHtNn90ntk7NdyQtZDEbWKwU2zLWIGU9N3/v05SbRj6pBdlWs/plbPqSXFZC1OW4QoHlAVGjx8WFjVJmGmrVvGnEezb630uO82XRw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
- by DS7PR12MB6045.namprd12.prod.outlook.com (2603:10b6:8:86::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.17; Sun, 16 Aug
- 2026 10:34:10 +0000
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2]) by SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2%5]) with mapi id 15.21.0315.016; Sun, 16 Aug 2026
- 10:34:10 +0000
-Date: Sun, 16 Aug 2026 13:34:00 +0300
-From: Ido Schimmel <idosch@nvidia.com>
-To: Zhiling Zou <zhilinz@nebusec.ai>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, dsahern@kernel.org,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, horms@kernel.org, ast@kernel.org, kafai@fb.com,
-	joe@wand.net.nz, vega@nebusec.ai
-Subject: Re: [PATCH net v3 1/1] ip: orphan prefetched skbs before multicast
- forwarding
-Message-ID: <20260816103400.GA4187591@shredder>
-References: <cover.1786552223.git.zhilinz@nebusec.ai>
- <0c52eb3d7532aaf8bccf37e0f7c922143c639735.1786552223.git.zhilinz@nebusec.ai>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0c52eb3d7532aaf8bccf37e0f7c922143c639735.1786552223.git.zhilinz@nebusec.ai>
-X-ClientProxiedBy: TL2P290CA0021.ISRP290.PROD.OUTLOOK.COM
- (2603:1096:950:3::15) To SA3PR12MB7901.namprd12.prod.outlook.com
- (2603:10b6:806:306::12)
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="oqwtBese"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
+	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	References:In-Reply-To:To:Cc; bh=ZgJfDn5KQYjme6KfWIFnnNgLsyC3Z6a
+	FTYgMcP1BOnM=; b=oqwtBese1EQihmrYuDlHJdwhwC41H2xIue7Xsd00VPhNfnn
+	EOBlk5xhFhkaFs3V/L4GxvHehMqN1pYAVCxeYZEit44J8xDRzyE6a9xhde9Doi0y
+	vjYSKoTSxJF+CnBvIcCivIhD2+AwcQR3xnNQO+uq7GBtb9KRFfW0Qejs9tsM=
+Received: from [172.17.0.4] (unknown [101.6.30.195])
+	by web1 (Coremail) with SMTP id yAQGZQB3Gclkl4FqEsoEAg--.40530S3;
+	Sun, 16 Aug 2026 18:56:44 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+Date: Sun, 16 Aug 2026 10:56:33 +0000
+Subject: [PATCH bpf-next v2 1/2] bpf: Check pointer type for all atomic RMW
+ paths
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|DS7PR12MB6045:EE_
-X-MS-Office365-Filtering-Correlation-Id: 85bd2c47-3d0c-4565-2d15-08defb81e85c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|1800799024|7416014|376014|366016|6133799003|10067099003|4143699003|11063799006|5023799004|56012099006|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	yAmdX1Qne8OzO+SCNwUKFOZLI4QhHyYzmgkI9sDlPk8XQgI4itqnniytZDEtWnVo6s0LbtLCUA+2YTb5or5mZendVdciTXU/DRqxiqAYSRHeN8e2jlN4HSFHEITiy3afhIOTAbDhDDfgOE0nn6hf3kBCqgLYrUvfH727W9WnZ03FboKKU0DBp8Lz+AqnaIUZyYGETbnWm5/drEYVIGi/55CEDWo6WydkDjIYJ6/M/UxNofSESdzxTlhgskzbBCkfmsPWKtaj+aaht4udUBe/ASOisOjEy33ErF0jEBtP3lJnaTTxnCbUkrODAdfRD/9ByW1wALCwdU4smUFKcpXGYTL1iok2Ynk6WeAj1QJU6HT3FIqDHhZCAQqQwTsnfvfyOiy98SIued6CaLzQD1MJcUQ/TuVtPIEEpylKAElTDUGGrN+fHT0+5H49TSM3wdAeZM+DzGjExv6gwWi2HWZm+aTGXhCsH4CldxeMDBTCchuxMz052ClueBE16tKZB7G7BDaRjNOZDoBATb/gqi03oDC6NyQ4dAB23LzE0Bzz3Lx+QMZRGysYIDzYlBjPwIZCYvbhS+aR7kb/w0atIBN4XXnPiOhXGNRHiuL4x5YsyatACY4PY/PwoxFOLdb3MSaI5AwHWrl/d3FubVnM8Oi3i2YTJEiAXM1S8GghfUcqSSc=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(7416014)(376014)(366016)(6133799003)(10067099003)(4143699003)(11063799006)(5023799004)(56012099006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?IJjQdJEmN+JFxNOwfAWkhTFt5VGU+g0aC0a6msW7YUUiHIPvHpmdfw06gHqK?=
- =?us-ascii?Q?7P8nELkGrFlwKpEUqfQMVm+EMafYdtjt4mXzt2YeP/eEnRVjH2euvSBb6/p1?=
- =?us-ascii?Q?ipiQCMg1L8uI4SKCUkVVEF/69NtXX5LyjoXBzBV/FVGJity7Czd43C/vThqf?=
- =?us-ascii?Q?POPQc5J/p9ghSZA18ek8eZP0PfLIA3vdAFtdlQlKZ55lUy6Hq2neoCaPZpE4?=
- =?us-ascii?Q?gl5ngrmwStP4WrnMzQupn1YMBeYwNGBLgPDiqzpwVDX7XmdgaJSSK2olp+Ni?=
- =?us-ascii?Q?/bEJy0nMuOldZgGWIInpPq1YFNLlJrS9NGQYdWi6TCKNSoaLnaVZsHWXS4ye?=
- =?us-ascii?Q?/VYFL8qpsLxkqO7bfTDq6DbTTtKOy5SJ3C6RYrQobHLPPOLZVgzfQ6Xu0pET?=
- =?us-ascii?Q?dUCas4jtN0hJUfH3tfHaiUYcp7X+9MaMXObwxcEitFZx94b+MWBEydzxWMmd?=
- =?us-ascii?Q?uPB8OSRSs3YlmuKIRzL4plmIPvWT3lusSaH4vr5agbuMEIQ2SreVwQ6bbWU0?=
- =?us-ascii?Q?rb0n/ecW5JGN9rRjKGDsTRZqgjSt+D1s1wZv/JmYELCh5/usaPcxvJACjY5G?=
- =?us-ascii?Q?UvBQQe73C7kfuQ347iZQnRwChp1WU6T00RDJT6PBN/Fxe9fqBOfJlUqbBr5h?=
- =?us-ascii?Q?t7xTPVhx24nh9Vu3iZW4aSsbbzfDbgQkDfHm7XrRXUovPGD0/rMz9/mgkArM?=
- =?us-ascii?Q?NLawayeItJ8zDiRMol6UWQJXj/rI3O+J+4GS4AByHzjPHqTbnMSygHdmPh7Q?=
- =?us-ascii?Q?kelx+4SxbX6I4aRedFF9SWK4PJ8bdqoAVpIFWGDltAQDpXZ8/Knud9sJpbGf?=
- =?us-ascii?Q?OuMzhiCVgslhTbZcemjoQp3eGj1Wbf4TBMlWwjMBgvR+XEA/kAkHm25zBVYL?=
- =?us-ascii?Q?jGXnTc+b7ALssvpt+EcYDQEK7Gdvk+mYmPYdAAaLU9Cq2dcFZ/C3jCnhiY2q?=
- =?us-ascii?Q?4WFZmsR/KjtDHi673J+T5QVDaEi4l1L8/sv+y4eNDuFUKosUwwPvVPZVoLn0?=
- =?us-ascii?Q?lveXiypY+ptCzI/W7YNUXRgFNQC3DqxXqJvoYKx1SjvXcoqwT2BOB40ft98s?=
- =?us-ascii?Q?m+/F193uCjaE37lveqKyWhSgnOtW3wJ0zFTlryFCx7fhrn9xb1EZ7GR5p+fy?=
- =?us-ascii?Q?p9ftOAGP3FBuiIpDR+7tqProtBZnSFdU/Uen0AqXMC2cTHERXkBfMeUBfM0l?=
- =?us-ascii?Q?/0meVpPjt1ANj2GhGxlvd4pUFYV5tGm0xMWLXquB53OwLHLlQC+KIKsIS8ca?=
- =?us-ascii?Q?La1Y0iyvLHs6IBdGWqgwF+99NGEDJtI7NPBv3R6S2E09YL6MFqjHCU3mGdYT?=
- =?us-ascii?Q?iB56gmYUBYhKy2V/+WJFRMiso+tjncvwdF+IFr9BEcMDuFYeJoQSXaGjNu5+?=
- =?us-ascii?Q?rV9IsgKf0EWyA8shvBNjod4ZkuD8lCOzj2NW5GZgZ1V8DU+xQHoO/3Af8L9H?=
- =?us-ascii?Q?uxVLwQCKYRFuyfuK6mX/RuZ8oMhBfGngQCjNx2QCG0lHrnoUFWXHDvaJDB38?=
- =?us-ascii?Q?ikoczlDd8vMcRlkDK3Vgu26y3cX6OCGJG2pkkodJzhS1iqOmRmIw6Ml9Y1+i?=
- =?us-ascii?Q?Siryu0kdgryGcJjasAG1UKLpanpN1370jYriLpB4dQJGlL3MZwVPBl29N2sG?=
- =?us-ascii?Q?jdXQvUMbWIRqXl5d2pl480Hta1AfmsTn8tFuUzGM3o7GW5FvVQdW+tqNauX+?=
- =?us-ascii?Q?Dndd+O8jBY95IaMz7VJXp7gTYIi5o5P2UMQmJpkzPKypDu8j?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 85bd2c47-3d0c-4565-2d15-08defb81e85c
-X-MS-Exchange-CrossTenant-AuthSource: SA3PR12MB7901.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2026 10:34:10.2511
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: buEVQasCDFsOj0NrZlgoBOoDbEmfw9s3AZoAV7RD1+YwAAob8DCjNuiFNkcCAOd6eVtewrU++BqVkwoEZ/h2wQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6045
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260816-bpf-next-038-mixed-atomic-v1-v2-1-4644c1886dbc@mails.tsinghua.edu.cn>
+References: <20260816-bpf-next-038-mixed-atomic-v1-v2-0-4644c1886dbc@mails.tsinghua.edu.cn>
+In-Reply-To: <20260816-bpf-next-038-mixed-atomic-v1-v2-0-4644c1886dbc@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1786877805; l=1514;
+ i=chenyy23@mails.tsinghua.edu.cn; s=kernel; h=from:subject:message-id;
+ bh=DQ26j5KfDBjdkJdGIUsSNO9aYlVJwusBnVeo+Z7hxC8=;
+ b=7uk+GBhXfxI0d48fmH00zZR9L9LBHeYamKEb2pC/Wava5LMk19W1rCAKIUvVeeeR5krvZm8vm
+ J8o2YNzvxmTDQ80n7NCLKffoR+17RERCq+ztVwd0PIrEa6yci+qcqOf
+X-Developer-Key: i=chenyy23@mails.tsinghua.edu.cn; a=ed25519;
+ pk=+Q11PEDVzoU+87KHlIeNWKwv/GiutzE5094ej7opM+s=
+X-CM-TRANSID:yAQGZQB3Gclkl4FqEsoEAg--.40530S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kw43Cr1fAryUWF15tw13Arb_yoW8XF4xpr
+	4kGasFq3yvv347uwnrAF48Cry5KF4rtw47Gw1jvw1ftF17tFs0qFW8K3W3Za4Ykr40q342
+	yFWjvr9Y9a4UuFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9v1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2
+	z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4
+	CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx26r4r
+	Kr1UJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc
+	8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY02Av
+	z4vE14v_Gw1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8Ww4UJr1UMxC20s
+	026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
+	JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
+	v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
+	j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
+	W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU1Z2-7UUUUU==
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-On Thu, Aug 13, 2026 at 12:36:38AM +0800, Zhiling Zou wrote:
-> IPv4 and IPv6 input preserve an skb->sk association installed by
-> bpf_sk_assign() so that local delivery can use the selected socket under
-> RCU. Both address families can also prefetch a socket in UDP early demux.
-> In both paths (BPF and UDP early demux) a reference is not guaranteed to
-> be held on the socket.
-> 
-> When a multicast packet is not locally deliverable, IPv6 hands the
-> original skb to ip6_mr_input(). IPv4's ip_mr_input() similarly keeps the
-> original skb when local delivery is not needed. Either path can put the
-> skb on an unresolved multicast route queue or forward it after the
-> receive-side RCU section ends.
-> 
-> After the prefetched socket is destroyed, a later skb free invokes
-> sock_pfree() and dereferences the stale skb->sk. Orphan the skb before
-> each non-local multicast forwarding path. Local delivery retains the
-> original skb; the existing skb_clone() calls provide multicast forwarding
-> with a socket-free clone.
-> 
-> Fixes: cf7fbe660f2d ("bpf: Add socket assign support")
-> Fixes: 08842c43d016 ("udp: no longer touch sk->sk_refcnt in early demux")
-> Cc: stable@vger.kernel.org
-> Reported-by: Vega <vega@nebusec.ai>
-> Signed-off-by: Zhiling Zou <zhilinz@nebusec.ai>
+Atomic RMW verification records an instruction pointer type only when the
+current destination is PTR_TO_ARENA. A second path can therefore reach the
+same instruction with an ordinary pointer without comparing it against the
+saved arena type.
 
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+The post-verification fixup uses the saved type to rewrite the instruction
+to BPF_PROBE_ATOMIC for every path. Record the actual destination type for
+all atomic RMW paths so the existing mismatch check rejects incompatible
+uses of one instruction.
 
-I read the feedback from Sashiko [1], but calling skb_orphan() in
-ip{,6}mr_cache_unresolved() will not cover the case where an skb with a
-pre-fetched socket is multicast forwarded and ends up waiting in some
-qdisc. This can be accomplished by an unprivileged user via UDP early
-demux.
+Fixes: d503a04f8bc0 ("bpf: Add support for certain atomics in bpf_arena to x86 JIT")
+Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+---
+ kernel/bpf/verifier.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-The case that Sashiko is referring to requires bpf_sk_assign() which is
-not available to unprivileged users, AFAIU. It's also not specific to
-ipmr.
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d17f14b35b79f..93463caf5c9ad 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6739,11 +6739,9 @@ static int check_atomic_rmw(struct bpf_verifier_env *env,
+ 	if (err)
+ 		return err;
+ 
+-	if (is_arena_reg(env, insn->dst_reg)) {
+-		err = save_aux_ptr_type(env, PTR_TO_ARENA, false);
+-		if (err)
+-			return err;
+-	}
++	err = save_aux_ptr_type(env, dst_reg->type, false);
++	if (err)
++		return err;
+ 	/* Check whether we can write into the same memory. */
+ 	err = check_mem_access(env, env->insn_idx, dst_reg, argno_from_reg(insn->dst_reg), insn->off,
+ 			       BPF_SIZE(insn->code), BPF_WRITE, -1, true, false);
 
-[1] https://netdev-ai.bots.linux.dev/sashiko/#/patchset/0c52eb3d7532aaf8bccf37e0f7c922143c639735.1786552223.git.zhilinz%40nebusec.ai
+-- 
+2.43.0
+
