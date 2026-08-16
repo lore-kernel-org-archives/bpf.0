@@ -1,73 +1,73 @@
-Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
+Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A77503FADFA;
-	Sun, 16 Aug 2026 22:47:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46DA73EC837;
+	Sun, 16 Aug 2026 22:47:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786920448; cv=none; b=Jjje3C0IE2X4BqIVEb91NxiTTJ9MO/LFskoeXEAMMg8nExagQk/LYMHzeSu2+OAoxUtADNyKShhlfsryr9W4bK/gjxm0P1Re9lWOxCa+qrhMAn59DypzTsxz3b/swlD10eN6otadFeTLD9YC/d5pk+3WwW1rJr9GsnNK2Waw8BY=
+	t=1786920450; cv=none; b=nueKDJDsgvoYQk/QJFqY3OLR+B3tLTrYhQk/sWue4RBjQ0S9/NHOAGOg3se1oh+1TlFv3cWRAylaq7KzvNI3Okl13ZLZPMjEA46eSzaB7qoZhtOIum5S1Qzee/9WA3Hs4d6Px/SRu23spl+gjZ2vZB/PbpmHVvZK9GfKEz5RHR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786920448; c=relaxed/simple;
-	bh=jz4ij5tio1IG99wlK7+3EFva3nFMif1EfCGnf0/5n08=;
+	s=arc-20240116; t=1786920450; c=relaxed/simple;
+	bh=1KeF9AI4FCP0f2B4mcuZTbOO+JQHuKOB3PUuiXmHzlo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VS90exYdgQ8qh4HAiVtqlUkldyT1ObRC2FFCHaU/kYE9bj2TM2F43zw5t4p0YEnT7fyPp/hoqlJIoSMES7hk8cbvpQnOPezEGc0MJFqhyw6h/t/ivG1wtR+WW00AJmvD8A7O2K+zZFgFpy6y2rOR2JplIGMxfpAx+9Df08qAIGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=U8DMpupR; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Ne2vpsJ2; arc=none smtp.client-ip=103.168.172.144
+	 MIME-Version; b=WlvSWXxEyPW8IEyIy06jE1oVARBRyyCPJb9rPa12QOIN8o88DADfyf5o40YDT8CFaEXMe44tHFXJds3Px1ciz6euEayf05UmKyrwR7PggyBs/MNwxc8/TbObW0Svf0re36nL3SY9wqmJcm3C4wlnyEurVrzunwnqPJDwegNO8hk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=d6Y2jbrL; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SnXwxds2; arc=none smtp.client-ip=103.168.172.153
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="U8DMpupR";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Ne2vpsJ2"
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfout.phl.internal (Postfix) with ESMTP id BC2ACEC0245;
-	Sun, 16 Aug 2026 18:47:25 -0400 (EDT)
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="d6Y2jbrL";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SnXwxds2"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 75E8F14000FB;
+	Sun, 16 Aug 2026 18:47:27 -0400 (EDT)
 Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Sun, 16 Aug 2026 18:47:25 -0400
+  by phl-compute-04.internal (MEProxy); Sun, 16 Aug 2026 18:47:27 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
 	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1786920445; x=
-	1787006845; bh=jQDVLS5QXQD8PSUIRmPFOeq1RPNNLBEX8FtCDNd5u2M=; b=U
-	8DMpupRPxqNtjnk8MQ2nr5Tbo5J15VHzqtBgNexbVDLBpQK8kOZV1V9VY+oTuclR
-	FQwN1MvWVLuiLmcoyeMjBjAsCK5jQiMnCByX5sgQcVEV08a7dKIl5WJmD167xKsd
-	yxQ7OnXROVAGW/6T7F5mwovdCEXMiXGeyCbx0Blytwa7iAXZ9fy4r4TDPHRhwZaH
-	vClCvsD2KdWW3DONN2vx+ocz7EhMKeBAZdEmGRcSKeBQrFIA3qDi1+U+CcOSNLE2
-	5eDbkp2Q8RBM6gtc1s0Xkg2Edc72+x+DGSpowCNEvZ8LT8Ez3oNUoKYnNGCPP2Hm
-	xuahjYF0L026BXVJ9QcSg==
+	:reply-to:subject:subject:to:to; s=fm1; t=1786920447; x=
+	1787006847; bh=RxOUZtNI4iK6oDUbeznOi5j6qWIw7a+qTCAWQpT1d7E=; b=d
+	6Y2jbrLxcG+b7UlQQQDlAUCnECDZvaCKHbgYYo96wTHEGmtT61158UIi24EfmWBq
+	1r0MiJt1qD9EWnwIlRJ1FVDPQSHCuQQk2fnFJeYBzxHGnpFwer1hwqp22UwnDM2i
+	GF665c+8S6CCznhnz7Rxaon2MSmgX0NrQJdycztlwwZuy5MpTU2Teq7AmK9Br+rh
+	izXEyoj2U8owy02g1nD1Qj6i4jC4YyjP5FI2rG4tML9AyVg6sUVTfMzPyT6WUOF9
+	zAAV5AdKP1cwODl6BUU4DOg8bV+kyvHHxuV+0Y0QmTPawvH2JEVhRfVi3ztWiTCc
+	Vz6hvChnLuvM2EhXEAC4g==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1786920445; x=1787006845; bh=j
-	QDVLS5QXQD8PSUIRmPFOeq1RPNNLBEX8FtCDNd5u2M=; b=Ne2vpsJ2pSqH37gTo
-	Wmx5ryypkj6OLWQeygS4FAdp8lHexFPq9T6hnhqWd3FFoaJ8/u9jg8aewPXuAWAS
-	vfFKx+JtJDAjFXvqvAkkEPEZvhLlVERfDcBvsH4T53nK2mozBL/Cvrt5pq5zfyCl
-	A4+EEFq2kfAuNRTDskQydpsx9uP81j30iaWmjmWzj0Kel4UcWCky1aVAOkzvfuXa
-	Cl+wdwDq8VFhMsWFJNio4nZN4wuuCYjfQ4iX5XsjVIRHlza3dfHgIMbrxIF7iRC3
-	o5N+ta537koNr/JRGVSGrgGX0lKLqtbooNDWYePfkUiDFtW0Wv6uX1IcV369p2qt
-	GzBww==
-X-ME-Sender: <xms:_T2CasrVW5hajWbLikKl4dLJpd5a9eMTlGeM9lC1yc62Lwqk8W-Guw>
-    <xme:_T2Can-42G3Fwi1izl7fzD14uBRCTbRlts_oARlDYR21KfoHOAafPYAGMXvDZwtfg
-    TqYXOQUqw_q6mFU8shEp2CluRJHh4Y3gaPPJKGSaXo7Q35qDTQHx5E>
-X-ME-Received: <xmr:_T2CatSf6g4kKxV-6xyJXciG5ZvJNI0ybU8Dnndpbqo5YPgEFyPXt5N9lAI>
-X-ME-Proxy-Cause: dmFkZTFcTQrb7i2Wnr2aEeZt1aoD7asKutBPdJgU3YSD5OfcfuljRo8Y5zG4WAng55KhcU
-    fdYu9dW0n+wtsUDWiYHh8AwjWiiyOeVLRvzra0gUIzgKMFXfu2OsH3wUsDwz3Dpe7vEjB9
-    JjBmMfD78Db5X6Vl1RDz8Wz4IQF1tjtPvs8yYIcZ4vdtxAZhotrvrKr9o/e/MWe2qw9p1d
-    u/4ngMViLbtWn8zpPvYSIgtjaF8APmxmHCU5Ga5Rd5eIGcQp1MbbGmkchmHrMFMoUd9mrv
-    TpVQ9+TKNOdfLLUK+2CPoHpagx885EUQUSZxhSq0AxxU5QJRQ+JA8yzxyjEYMjW1uFFjmi
-    LqqoNifkXB79/90TSRF1slcFxxwzddkh5G5bZ3d0l80IbLrRpgBlzopY6EpPfytjdWVjfO
-    +DqxD67otuMVUFiKrSCwFY0E3gh/4zA/82p9GG1UXZlq2+64MGfIaNuCFx78ugxlx/Vxd3
-    zcra6CnnMWps68YaqKx2D1rCx0QlW0Fe4XYEBXJdYnAr+DVTZT5z4gxDDkKwjNDEjaX1X+
-    0qqckODmklZPLQLdNdAJbhiPAlLC0CzYGXGbs8lQ4kjAcpKVSed6BeRd67fF25naIaKKH6
-    DYyWnNDoe85We2Xvv2oHM5trVYOLjMtG281TyArJBr7AEnxa79wrFeGYYOLA
-X-ME-Proxy: <xmx:_T2CagdoezJWqKxXMydbSbxIDG9lyArj0l7AHk-4SpFKTBHooh1XOg>
-    <xmx:_T2CaiLW1lXeF5L1I6jVyK0EIJm0CfzXd9uXG2IEb_SItVwL0Daxzw>
-    <xmx:_T2CatHWNIRpSuMZlszw2kT5EhC_rxKl9vmYFA-koz1NgR9zkNOUjw>
-    <xmx:_T2Caq6R82YAoFOrIWzhTPEqBgxIZKbIvnGaAaPcd36HNWC7_rI47A>
-    <xmx:_T2CajsNeYuv7GPWRAu90uT4Hta4RKVmiOS_7coCKXhLeRfMVvsStC4e>
+	:x-me-sender:x-sasl-enc; s=fm3; t=1786920447; x=1787006847; bh=R
+	xOUZtNI4iK6oDUbeznOi5j6qWIw7a+qTCAWQpT1d7E=; b=SnXwxds2phmTEsFOj
+	Q2LaIYTq8f6mE6MN8pVm+gwliOOaKFVpnarOySZ1FjmfvCANGLx6V98d0FLbztWA
+	B9biuWNQ114cLiT0pExzYfTBAjP1lIJeDENfz04uTJKdsENucFxvn8NFnjIzDojQ
+	rN4j4aKvkTKFdK+PWQx9CFZ2bOkedltp9DqnN7IbzuX99k9Y5+1++80cNQmc3arD
+	b8c5YS9+7N68QAUhoUdsSU4gM67AF3m8qbE1G7ElyxXnjn20xzG3lb0IekzfMn5G
+	gxgHPBwT5QWFMdOWoUEnYJE6pNoxkJ3aZJHhY4pVR79n5Yk+ZaFycQjFXiJOknTt
+	X3SxA==
+X-ME-Sender: <xms:_z2Cauc9DGmMoL75smZAHOOUa-L2NhdOxlJ_rp36LakMlT2Eqh75eg>
+    <xme:_z2CatgaO-eQNOwuf6F2Z2Ck9MdJhWXiB-qTo6xvOm79lKajoFkqBFFVS1BFFdku_
+    oDq_lPJn_jcAL4OhM6C9oAL0_KZAQXbrfsL_CBve53Ot_yhga5383iJ>
+X-ME-Received: <xmr:_z2Carl1Nvp8EvT3DIIdmWUI7gymooa294TrXQH_9rRaAq_ETSOJo3puZLQ>
+X-ME-Proxy-Cause: dmFkZTFX8QZ1Abcp//ElmtP0wYUsUMnb+KjPA544aOlJXhXcQAudkXa81C9Rj4L11ediC/
+    SYpDnD1LvcyFEAv2YFQNL3ReIx6t28G7cFOXvsWQqNdQRv24cIelnnbcWrHqur16sY2q+b
+    PHK84xbhjrx0R6ZFbdj3lDcQr+wbYteZ9PHsSvZgjQoovnxRkTlpJXxI+K+aK0DY9MqaWr
+    nM0jSjvJAOtmNeFdTIuI9VxKMOFqeJI9DUUNBafqnTlsaU2K5w1xy/oDJpRmozGKRfcEpJ
+    T4FDpTcqBKNo58tTW6I4nVl91YkYNyFfziYdH6IV5aj62MGBqsSUtSYZnaDODTOndFzTVW
+    SGg4/Aho0z4roUqJEIyLZFKJMrH29ZtJmmfVu0Xk4xI9g5vXJsHBT/1UTWE52f63Iditod
+    QO+tCxiJRIyoY5eyvFqF/AP9BwfZSJJILY0yBU4a+Y77JTTBvzFRPmzoF2NwjJw/SQV0mw
+    3gBuVTYtebOsIyX9LdjddvoMVP97xwlvjYt5YJaoGGSpdBdloyVecVWIk3bHdHHzpzaiBL
+    dxjak1g91n3VQ8llIqbPfezoTwPoq1nkTX2Ju/5Z66s1JgNHx0dnFQ8yPZHSqhczgAz/jU
+    7Zani/FxXTb5g+3pyTmIq3aqyP8cdvHFbM+9BhJbzY2xyTHsPI232s/hahjg
+X-ME-Proxy: <xmx:_z2Caog4DUmEzXcltHF3csxAQnf_5pGe0MKw-3JmUR5xItcbVb-GFQ>
+    <xmx:_z2Cag-DLAjOOqxozuEjbqqJzs9d0xyiZQpE9DmPV51677Zf2XDseg>
+    <xmx:_z2CarpliFz2PvMsBQicbwgsE6m2IQuC7QERKy31r2MkPIheQOY3ZA>
+    <xmx:_z2CauPAuGHUr9v0vxTyGEGaDHW5mg17JLDPnFJNXuV7vGuwrCOYig>
+    <xmx:_z2CajQV9oAXOJAUMVuE72pGShFy5qQPsRrZc15PIVYZdxOi8IaBoqlW>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 16 Aug 2026 18:47:25 -0400 (EDT)
+ 16 Aug 2026 18:47:26 -0400 (EDT)
 From: Kiryl Shutsemau <kirill@shutemov.name>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -100,9 +100,9 @@ Cc: baolin.wang@linux.alibaba.com,
 	mhiramat@kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [RFC PATCH 36/57] mm/collapse: report what the scan found
-Date: Sun, 16 Aug 2026 23:45:48 +0100
-Message-ID: <20260816224609.308019-37-kirill@shutemov.name>
+Subject: [RFC PATCH 37/57] mm/collapse: report what the fault-in pass paid
+Date: Sun, 16 Aug 2026 23:45:49 +0100
+Message-ID: <20260816224609.308019-38-kirill@shutemov.name>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260816224609.308019-1-kirill@shutemov.name>
 References: <20260816224609.308019-1-kirill@shutemov.name>
@@ -116,70 +116,56 @@ Content-Transfer-Encoding: 8bit
 
 From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
-The anonymous scan reports nothing, and its verdict decides everything
-after it: which orders selection may still try, and whether the table is
-refused outright.  The only way to see it was to infer it from what the
-candidates did afterwards, or from their absence.
+The fault-in pass is the one place a collapse does work on someone else's
+behalf: a swap read, or a CoW break, for every slot that needs one.  How
+much of that a round pays is invisible, and it is the first thing to look
+at when collapses are slow, or when a workload notices khugepaged at all.
 
-Add mm_collapse_scan: where the table was scanned, how many slots were
-holes or the zeropage, how many were swapped out, which orders survived
-the scan, and the verdict.
+Add mm_collapse_faultin: the faults taken across the round, with the
+outcome.  A round that collapses a full table without faulting anything
+and one that reads sixty-four pages back from swap are otherwise
+indistinguishable.
 
-The first two counts are why a table yields a smaller window than
-expected.  The third is what a PMD candidate will have to read back.  The
-order mask is the scan's whole output to selection in one number: a table
-refused as a unit shows an empty mask, which distinguishes it at a glance
-from one that merely lost the PMD order.
-
-The file scan already reported through mm_khugepaged_scan_file; this gives
-the anonymous side the same.
+The mm is captured before the walk, because the pass returns with
+mmap_lock dropped on failure and the VMA is then unsafe to touch at the
+report.
 
 Assisted-by: Claude-Code:claude-opus-5
 Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 ---
- include/trace/events/huge_memory.h | 34 ++++++++++++++++++++++++++++++
- mm/collapse.c                      |  2 ++
- 2 files changed, 36 insertions(+)
+ include/trace/events/huge_memory.h | 24 ++++++++++++++++++++++++
+ mm/collapse.c                      | 19 ++++++++++++++-----
+ 2 files changed, 38 insertions(+), 5 deletions(-)
 
 diff --git a/include/trace/events/huge_memory.h b/include/trace/events/huge_memory.h
-index 86131845b761..573cf5428969 100644
+index 573cf5428969..c2314e26111c 100644
 --- a/include/trace/events/huge_memory.h
 +++ b/include/trace/events/huge_memory.h
-@@ -126,6 +126,40 @@ TRACE_EVENT(mm_collapse_huge_page,
- 		__entry->order)
+@@ -160,6 +160,30 @@ TRACE_EVENT(mm_collapse_scan,
+ 		__print_symbolic(__entry->result, SCAN_STATUS))
  );
  
-+TRACE_EVENT(mm_collapse_scan,
++TRACE_EVENT(mm_collapse_faultin,
 +
-+	TP_PROTO(struct mm_struct *mm, unsigned long addr, int none_or_zero,
-+		 int unmapped, unsigned long orders, int result),
++	TP_PROTO(struct mm_struct *mm, unsigned int nr_faults, int result),
 +
-+	TP_ARGS(mm, addr, none_or_zero, unmapped, orders, result),
++	TP_ARGS(mm, nr_faults, result),
 +
 +	TP_STRUCT__entry(
 +		__field(struct mm_struct *, mm)
-+		__field(unsigned long, addr)
-+		__field(int, none_or_zero)
-+		__field(int, unmapped)
-+		__field(unsigned long, orders)
++		__field(unsigned int, nr_faults)
 +		__field(int, result)
 +	),
 +
 +	TP_fast_assign(
 +		__entry->mm = mm;
-+		__entry->addr = addr;
-+		__entry->none_or_zero = none_or_zero;
-+		__entry->unmapped = unmapped;
-+		__entry->orders = orders;
++		__entry->nr_faults = nr_faults;
 +		__entry->result = result;
 +	),
 +
-+	TP_printk("mm=%p, addr=0x%lx, none_or_zero=%d, unmapped=%d, orders=0x%lx, result=%s",
++	TP_printk("mm=%p, nr_faults=%u, result=%s",
 +		__entry->mm,
-+		__entry->addr,
-+		__entry->none_or_zero,
-+		__entry->unmapped,
-+		__entry->orders,
++		__entry->nr_faults,
 +		__print_symbolic(__entry->result, SCAN_STATUS))
 +);
 +
@@ -187,15 +173,75 @@ index 86131845b761..573cf5428969 100644
  
  	TP_PROTO(struct mm_struct *mm, unsigned long addr, unsigned int order,
 diff --git a/mm/collapse.c b/mm/collapse.c
-index f0d80204c2bd..b750a1fc81a5 100644
+index b750a1fc81a5..1b5db42b6991 100644
 --- a/mm/collapse.c
 +++ b/mm/collapse.c
-@@ -2097,6 +2097,8 @@ static enum scan_result collapse_scan_table(struct vm_area_struct *vma,
- 		cc->select_orders &= ~BIT(HPAGE_PMD_ORDER);
+@@ -509,8 +509,10 @@ static enum scan_result collapse_revalidate(struct vm_area_struct *vma,
  
- 	cc->scan_unmapped = unmapped;
-+	trace_mm_collapse_scan(vma->vm_mm, start, none_or_zero, unmapped,
-+			       cc->select_orders, result);
+ /*
+  * Bring one address to a state the freeze will accept: present, and exclusive if
+- * it is anonymous.  Returns with mmap_lock dropped on every failure, because the
+- * fault path may drop it and the caller cannot tell which case it is in.
++ * it is anonymous.  Every fault it takes to get there counts in *nr_faults, each
++ * one an allocation or a read the round is paying for.  Returns with mmap_lock
++ * dropped on every failure, because the fault path may drop it and the caller
++ * cannot tell which case it is in.
+  *
+  * SCAN_EXCEED_SWAP_PTE is the exception: it is a verdict on this candidate
+  * rather than on the round, nothing was faulted to reach it, and it keeps the
+@@ -518,7 +520,8 @@ static enum scan_result collapse_revalidate(struct vm_area_struct *vma,
+  */
+ static enum scan_result collapse_faultin_addr(struct vm_area_struct *vma,
+ 					      struct collapse_candidate *cand,
+-					      pmd_t *pmd, unsigned long addr)
++					      pmd_t *pmd, unsigned long addr,
++					      unsigned int *nr_faults)
+ {
+ 	struct mm_struct *mm = vma->vm_mm;
+ 	const unsigned int flags = FAULT_FLAG_ALLOW_RETRY | FAULT_FLAG_UNSHARE |
+@@ -571,6 +574,7 @@ static enum scan_result collapse_faultin_addr(struct vm_area_struct *vma,
+ 
+ 		/* Only swap or shared PTEs reach here; the rest broke out */
+ 		ret = handle_mm_fault(vma, addr, flags, NULL);
++		(*nr_faults)++;
+ 		/*
+ 		 * Not a verdict on this window: the fault dropped the lock to
+ 		 * wait, which is what a swap-in normally does.  Distinct from
+@@ -600,7 +604,9 @@ static enum scan_result collapse_faultin(struct vm_area_struct *vma,
+ 					 struct collapse_control *cc,
+ 					 pmd_t *pmd)
+ {
++	struct mm_struct *mm = vma->vm_mm;
+ 	enum scan_result result = SCAN_SUCCEED;
++	unsigned int nr_faults = 0;
+ 	unsigned int i;
+ 
+ 	for (i = 0; i < cc->nr_candidates; i++) {
+@@ -616,7 +622,8 @@ static enum scan_result collapse_faultin(struct vm_area_struct *vma,
+ 		     j++, addr += PAGE_SIZE) {
+ 			enum scan_result r;
+ 
+-			r = collapse_faultin_addr(vma, cand, pmd, addr);
++			r = collapse_faultin_addr(vma, cand, pmd, addr,
++						  &nr_faults);
+ 			/*
+ 			 * The one failure that judges this candidate rather
+ 			 * than the round, and so the one that leaves the lock
+@@ -627,7 +634,7 @@ static enum scan_result collapse_faultin(struct vm_area_struct *vma,
+ 			if (r == SCAN_EXCEED_SWAP_PTE) {
+ 				cand->state = CAND_SKIPPED;
+ 				cand->result = r;
+-				collapse_trace_candidate(vma->vm_mm, cand,
++				collapse_trace_candidate(mm, cand,
+ 							 COLLAPSE_PASS_FAULTIN);
+ 				break;
+ 			}
+@@ -638,6 +645,8 @@ static enum scan_result collapse_faultin(struct vm_area_struct *vma,
+ 		}
+ 	}
+ out:
++	/* @vma is unsafe on the failure path: the callee dropped mmap_lock */
++	trace_mm_collapse_faultin(mm, nr_faults, result);
  	return result;
  }
  
