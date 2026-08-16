@@ -1,77 +1,77 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCDCE2EC0A4
-	for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 07:37:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DA9F2E413
+	for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 07:59:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786865832; cv=none; b=jbCFnAf0aM78EditVuxbenabSn8ahOhNb4upqNqrMPfqCBzoB+Z93gAyLHV+jBCJl0Ux7EcnJR+j/1ZwrMY8EjJ9oOB9EspCdXJ5Q5MP5+D+Qp6xHGHaAyOwR8wQfEDTOGXF3XSI1X6E2E2oZkmQVkkzD3zwnaymq7yRaBnj3WM=
+	t=1786867143; cv=none; b=p3efe9uBbCLnf0P4DpSo1qqaz7zShP54bq6otHX2L9V55+xWBSu0lP5b+E6sYcgfu+uYnQEcD6cq51nWM7CMGjDdew0WtdUket0O6/ExltCntjYPgRK5k/rnot4+OPzFtPWbKIVyUQGZBWg/X0LsmFHkDJ9hIsiOY7xLIYiDJq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786865832; c=relaxed/simple;
-	bh=jPHJXjN4vmn/2WpWsBVJzZDcs7tnclRGBy0vFpXB+H0=;
+	s=arc-20240116; t=1786867143; c=relaxed/simple;
+	bh=W2pHimXLknz1sQAMFCvIeg4Sq+ihrHCOJ4my6apu+Lo=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=FzwmKRiwlZcUkKPZBKTOSULfpdI+sZg2ARgQugQLjWPmkyAM/Dzkn+syhmEp/YNWGYE30CyRFeU6yF4vnrbGhCshcSRi/0J4uXJtNY5ZOlb9HZC71nIzrxwnQdgdaeywQw3sbOdhzpzG3jOwPwMgkLKjGtq85Sv/6PPHaOZ3NYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mrVKr+yq; arc=none smtp.client-ip=209.85.216.49
+	 Content-Type:MIME-Version; b=MtGF7FwgxYrakqAbqVjWX9ggS41LHhbdJl8i/C3FODmwGyMLaXLREFZM+0jSAqkTn2UsLSVysQV3QEoPDj7UtfhyJ0gTK4I//L8x2ryjJ9p8x8xmyHhJZ1gQwZpR3OIv5dw/+zLEbvzmQAFfWqmmwpeLcIHEKsWwdpMjBtJaEQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZjaB/mdG; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mrVKr+yq"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3856d6fbcb3so1911038a91.2
-        for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 00:37:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZjaB/mdG"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2cf27856f9cso21901695ad.2
+        for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 00:59:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786865831; x=1787470631; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786867142; x=1787471942; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=p42FHpUneL20s8sK2+GHyUce0yzEn6Z4vHVG2TE7X/w=;
-        b=mrVKr+yqCe+vqrt6y3C7NDolEhOMhhDpcTJi3RfY0WlD4d012PNQ5KcDFru5GohpuZ
-         GjH2DpLzBhX0dsfg/sTG/p57+jQ7PwVWx36bB94Mkmqe2DPuY1FsR1BYAJ9T1JAJAa9p
-         0djt52BQTks5tMa5RjAYXdSrKPvdoUMDB5u2FZvRMTynbWRAMXRdoI/J8wiuIKfWQVSM
-         QMGHPD8J0sMRM5zDar5rFSEKJgIvkd8bj5Q/+nLrgiJbi+HcXrWPATwYvsFKhsGjQIib
-         rHdlShENpZYQsPU6T1wu9W13oE5RfTokUHhWsEKba7dkvgKNEpJ8MdxQijBSfxWPWQ5g
-         1fUA==
+        bh=krOoWGE2WqVY6m6N8+DLm5p8nBXtPa73HREPEy02ceU=;
+        b=ZjaB/mdGrhrHAbJVSGFYfCZl4V0TBagFLPYPsIUA0Q6+unEYuwKhyYwmUvW/rgxmdb
+         z/K4KEkQ8SfJa/d37x6kfrfBSPtuxNxIYQ5DAwlEOi5/Fh3OspXFJfLc2VM3EbQuE2EM
+         S1wtR/vn+sXCAF+2iCxEx+SEsw5CD6oYqMoDYQGBNWTKSwiUwdvN4jGUW+/+qh4QDmm5
+         O0/T0qjz55W1ECX8+IPScNXpraosrS94AKpHuSlslUS7gwRFLnmhlENHDR5BQwyDipcM
+         BaHQeMBrFtIA2708/X2v3tNxY0bAJ9JmhiOqWzrklEASa3HefoY4t/bMnAxNGTSmN140
+         mYFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786865831; x=1787470631;
+        d=1e100.net; s=20251104; t=1786867142; x=1787471942;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=p42FHpUneL20s8sK2+GHyUce0yzEn6Z4vHVG2TE7X/w=;
-        b=bhjJ2W9xsrkHzh6y98yaLQIbFJpqm68Y20e+G+44rPWYRjnW5xM8Htr21qyg4et3Sg
-         caqUbizC+VVzD9FJ20XPTCZkR6q/BFC9OTtCVdBQHWeTgZf14GIE7kLW8g4cK6zXOYKJ
-         J6np9xRhrXPSo6PDjD2anEqe3F0AAJTGVillQcKKa9gB9CDdTy3OTsRkHaVlXsFaGihp
-         v+wUWQXzx5bffi0Xg54bYdHSp84kuG7dUcxzBnvUczo5crcfw2gyN7cwvz2M+hKQnuKI
-         GbVcCfUZCMdh4RFs2CDe02FlNp/9//HAiSe+UoHnGX5vKylsb8Pb95R8cHBuOnxdiXCJ
-         aD5Q==
-X-Forwarded-Encrypted: i=1; AHgh+RpfQenvqCPFPxuWVEpeQoWLu5cIHVw5fogS/lIK7QoiCr/LNH/bkoXNu6tBGqhvTykNs8I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyiREbMdeSY+J9Om7C5gYGJb5BZx/HBKfN564Lyt3RwqkuBdg9R
-	Zvh7Rnr3a9nCPqTSsiftjkOQ6LCFq2CDEBDzPbjKgOkF9JFHST8uLQf5
-X-Gm-Gg: AR+sD11KzP2X55H1GGEQ0uYfqKU9gdi09NFdVvNsJrCqrHN2GIFTVO4lZ+SpVVnTyxY
-	k4nnq6KhyZeYQF0YQ64uXPoRVPzkUX43h8DEyfgCAW1jmFI8adNPSLRfzqCLiMDT1DdxFUuIyaw
-	VggqgPAXL0nWjoAArJmmZaxpstzIM2UE8XlS0q7gFZoMhLyKipoITPnY7GGkgQpuwH4ch4hDQxE
-	ETewglO8XxcbC+lQTQozuJgmY3SwNiLNv/2e335GTwgzJNBfFtSN6uJaPHRT1fiC6n6KdUi1Wzb
-	ldY6ipVh0DjpApf7oMUP8rIQ8zjCvkbjvpRhoWvcwr0Y50lovHzc0sjZt0g2oReBW7TynNe9kuP
-	o6cKjGfI5RuzOiad6XoVUP79YCrYQGjE7LNzTCqKB6Gz9ioVAB3dNYJamzNqodWl66hAdhfC3ig
-	ZuLbhyFyififJPyICEGmscPNcCddocWOwyc16+39QpBIAfWiPT3rmFlu08knNx08cuCuzqTRftD
-	y2uPkKyxfyCb9L2
-X-Received: by 2002:a17:90b:510a:b0:38e:9ef9:eb97 with SMTP id 98e67ed59e1d1-3933ba87422mr18985735a91.16.1786865830930;
-        Sun, 16 Aug 2026 00:37:10 -0700 (PDT)
+        bh=krOoWGE2WqVY6m6N8+DLm5p8nBXtPa73HREPEy02ceU=;
+        b=Rog4+6nBZoTUVbMndSNAixnqe09V7d6kAqo+M9cgBT0CMdyT413MrEy8pdd1+yGMYK
+         hNcWZDHZ7+OUIi9XP5np0hr3L7s5HXO+H5btA43GAICJ1sW2UXEuh6EhzT+GJoZ/+UNr
+         6gwyeT9tQ5B37bu5rah/142SVVcgHLwrb1rjRvBxbq/HX+dOvNuG43fGyIEpLNKTnBGS
+         WfCkFHE9HGyF0zeLHj8QkU01V7bPXUD3sTJII2e4Vx+QWQdYiJVr+pR1CMbRmo3bpkzw
+         1VL8u6cIeGJncryyrQMq7M3DlRS/EXaFYn3DfnXvdEiRT8owIHc3/ji9NLT76y6+rsZA
+         k2ag==
+X-Forwarded-Encrypted: i=1; AHgh+Rq7bynUZ+7l3BNvJ2YSCx/OdcAPdQzkcLh1dE1hI0ju+iepMUPqC2jn7JHMdzV39stD3Dw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9TAfVWd8uSw02vf7CC/IiJBE65vAgAe0bhsOYzAq71t3IiRtq
+	BkXybcMAxVLbKCOSheTDZZSfkq60/DM0ht+rVrFnjcsHs0jEXnbjEzft
+X-Gm-Gg: AR+sD135jBet/YqwFAE/JxZGugA4xduuu888Q+MKWvI7v20Jw3sAkTW59Bf3FP8J7v3
+	XRpdZqkJl1KUNcRLK5jKHkTkH2HLF8Fot75HE84uZi/pqDSg/Q47NmVvLjzjZ0yXcVRD/U8hCJa
+	O71GkPqi88IXXATB7fcmVPtn9JEZC8/RHy4ROZRKBiyis8EosAB0xotJWZ3kse2WOKZknJx8nOM
+	ROrw8BTT1Prti2+zfFN4Bv9WR2PLIfKXFZIVBR+j/cRZmw9NtEUiRbOmhFaJYZb3oS3jT6Cn4tv
+	E/LVeH7AAF3ri+qBT3Xs2M5+hezojw8v9ZXr/wPnIzbIrU2HD61dbKoT8shoJ/BFTvb3LZ2+usZ
+	Gyn5UktY8eCtEZs2Vsd5fKfcq4L4cgvN2RK/pO9gmTDVjwr3r5rBN/Wo87mKRl8/nyTCeYSQ3rQ
+	eKor/cwE1KW1tYz+M+7txwMbato7+5cwoU5dpPS4v3n6XQMiZ/Qb04TLXGXU4MvHmHoYijYNE3D
+	Bm1JpRrJf5aU7By
+X-Received: by 2002:a17:90a:d646:b0:36d:9e0b:3801 with SMTP id 98e67ed59e1d1-3933b7d33b4mr18502798a91.8.1786867141714;
+        Sun, 16 Aug 2026 00:59:01 -0700 (PDT)
 Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39531ee7d46sm839997a91.16.2026.08.16.00.37.10
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3933b699e47sm3935374a91.4.2026.08.16.00.59.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Aug 2026 00:37:10 -0700 (PDT)
-Message-ID: <9d5a272e06491517ed886a416be4d705283b915f.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v1 09/14] selftests/bpf: Test non-sleepable
- kfunc context
+        Sun, 16 Aug 2026 00:59:01 -0700 (PDT)
+Message-ID: <f9c45e499331c84c0a5b4b924fb8a0594ec64fa1.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 10/14] bpf: Correct Program Structure
+ diagnostic context
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
  <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
  Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
-Date: Sun, 16 Aug 2026 00:37:07 -0700
-In-Reply-To: <20260816015746.2632990-10-memxor@gmail.com>
+Date: Sun, 16 Aug 2026 00:58:58 -0700
+In-Reply-To: <20260816015746.2632990-11-memxor@gmail.com>
 References: <20260816015746.2632990-1-memxor@gmail.com>
-	 <20260816015746.2632990-10-memxor@gmail.com>
+	 <20260816015746.2632990-11-memxor@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2-10 
@@ -84,44 +84,73 @@ MIME-Version: 1.0
 
 On Sun, 2026-08-16 at 03:57 +0200, Kumar Kartikeya Dwivedi wrote:
 
-...
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-> --- a/tools/testing/selftests/bpf/progs/preempt_lock.c
-> +++ b/tools/testing/selftests/bpf/progs/preempt_lock.c
-> @@ -6,6 +6,8 @@
-> =C2=A0#include "bpf_experimental.h"
-> =C2=A0
-> =C2=A0extern int bpf_copy_from_user_str(void *dst, u32 dst__sz, const voi=
-d *unsafe_ptr__ign, u64 flags) __weak __ksym;
-> +extern void bpf_rcu_read_lock(void) __ksym;
-> +extern void bpf_rcu_read_unlock(void) __ksym;
-> =C2=A0
-> =C2=A0SEC("?tc")
-> =C2=A0__failure __msg("BPF_EXIT instruction in main prog cannot be used i=
-nside bpf_preempt_disable-ed region")
-> @@ -127,6 +129,19 @@ int preempt_sleepable_kfunc(void *ctx)
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 3de9e4f617b6..d2f08c6612c6 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -2995,15 +2995,13 @@ static int add_kfuncs(struct bpf_verifier_env *en=
+v)
 > =C2=A0	return 0;
 > =C2=A0}
 > =C2=A0
-> +SEC("?fentry/" SYS_PREFIX "sys_getpgid")
-> +__failure __msg("program must be sleepable to call sleepable kfunc bpf_c=
-opy_from_user_str")
-> +__msg("cannot be used in non-sleepable program")
-> +int non_sleepable_kfunc_in_rcu(void *ctx)
-> +{
-> +	u32 data;
-> +
-> +	bpf_rcu_read_lock();
-> +	bpf_copy_from_user_str(&data, sizeof(data), NULL, 0);
-> +	bpf_rcu_read_unlock();
-> +	return 0;
-> +}
-> +
-
-Tbh, I'd just add two tests: one with a call inside rcu, another from
-a program context and match new messages. We are going to switch away
-from those anyway.
-
-> =C2=A0int __noinline preempt_global_subprog(void)
+> -static int check_subprogs(struct bpf_verifier_env *env)
+> +static void find_subprog_properties(struct bpf_verifier_env *env)
 > =C2=A0{
-> =C2=A0	preempt_balance_subprog();
+> -	int i, subprog_start, subprog_end, off, cur_subprog =3D 0;
+> +	int i, subprog_end, cur_subprog =3D 0;
+> =C2=A0	struct bpf_subprog_info *subprog =3D env->subprog_info;
+> =C2=A0	struct bpf_insn *insn =3D env->prog->insnsi;
+> =C2=A0	int insn_cnt =3D env->prog->len;
+> =C2=A0
+> -	/* now check that all jumps are within the same subprog */
+> -	subprog_start =3D subprog[cur_subprog].start;
+> =C2=A0	subprog_end =3D subprog[cur_subprog + 1].start;
+> =C2=A0	for (i =3D 0; i < insn_cnt; i++) {
+> =C2=A0		u8 code =3D insn[i].code;
+> @@ -3017,6 +3015,27 @@ static int check_subprogs(struct bpf_verifier_env =
+*env)
+> =C2=A0		if (BPF_CLASS(code) =3D=3D BPF_LD &&
+> =C2=A0		=C2=A0=C2=A0=C2=A0 (BPF_MODE(code) =3D=3D BPF_ABS || BPF_MODE(cod=
+e) =3D=3D BPF_IND))
+> =C2=A0			subprog[cur_subprog].has_ld_abs =3D true;
+> +		if (i =3D=3D subprog_end - 1) {
+> +			cur_subprog++;
+> +			if (cur_subprog < env->subprog_cnt)
+> +				subprog_end =3D subprog[cur_subprog + 1].start;
+> +		}
+
+Nit: in situations like this doing two nested loops reads much better:
+     for each subprog:
+       for insn from star to end:
+         ...
+
+> +	}
+> +}
+
+...
+
+> @@ -3126,8 +3146,9 @@ static int sort_subprogs_topo(struct bpf_verifier_e=
+nv *env)
+> =C2=A0					bpf_diag_program_structure(
+> =C2=A0						env, idx, "recursive subprogram call",
+> =C2=A0						"Rewrite the recursion as an explicit bounded loop, or split =
+the logic so subprogram calls do not form a cycle.",
+> -						"This bpf2bpf call would make the subprogram call graph recursive.=
+ "
+> -						"The verifier requires a finite, acyclic call graph so it can boun=
+d stack depth and analysis.");
+> +						"The call from %s() to %s() would make the subprogram call graph r=
+ecursive. "
+> +						"The verifier requires a finite, acyclic call graph so it can boun=
+d stack depth and analysis.",
+> +						bpf_subprog_name(env, cur), bpf_subprog_name(env, callee));
+
+Nit: I'd drop this hunk, I think that initial suggestion from the bot
+     was bogus. What would be really helpful is to draw the whole
+     cycle, but we don't have such info here.
+
+> =C2=A0					ret =3D -EINVAL;
+> =C2=A0					goto out;
+> =C2=A0				}
