@@ -1,102 +1,72 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A348D223DFF
-	for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 02:45:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59235336885
+	for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 02:45:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786848337; cv=none; b=gn8VfYv0sADlojCvhbX8kUbi5Z0dlxu22MsGU+i1nb1/4ZV0lkqKeixkXR8uyCvaDy895xA9J+fSvpg4DImmu1F53FodxO58nXpGt739zh1TrySOqNHRh6zXVK8J9dAgZl6+K1z2JxAalyNtDp5/e82DqBFHk6dhJD2j8kTnDt4=
+	t=1786848339; cv=none; b=Uu9ezcyrqLejeFDjciYdAv9oUNMfESPNnNutUNnwnMtt3TtP3yhIivhFw49iWYqYpOXe0tW3hUMWzK8MbxG8eyHQmqmYq1d5ImAAHDevJp7EYmkhOuDnlbwTPkcYQOBevhRazpZzDOLbWNb60XIaTXq9V2okB6ZIpQDRQkgwoRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786848337; c=relaxed/simple;
-	bh=33UyrlsNFsmSy9jam6vOSHmbPlwVac86/W6MaiJpizI=;
+	s=arc-20240116; t=1786848339; c=relaxed/simple;
+	bh=/NWK/rL+Ziaf/I81bvbBbZnBhKBmPQpvsaYjGKoKZ9c=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WCVClbI3iy1z7a7VZKUDm1JfecjScAprXMhuRyTVmdWwKBko75X0NZ1g0PPc0zwmv9AzrxVzwj4cuTYrlnSyefx0sGFbb6sxnhqqR8a/K+gwxez1Rr95SjxQvygdBJy4zniqC4qTbhKH1qVAUIUlUchTlsKmJdQAJUkp6A4W5Wc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tn6dRReY; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=Rst/Jh4Joqn2WUfH5sRoshuEg0uIWxF+Gp94cHx1X4Zk0vwDzN5AS2F2Dg+lI/28dzWRtjJbQrAHueHVfi+CJxec0OqoVBlHk+CAx7W9yFHuGPvZwXwvmGuaJyUgdBKMC8I5Y6UFQUg6uozupIMYHvSJL853K9OLGoQqPzqmqRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S3GzAZjN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tn6dRReY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89B2C1F000E9;
-	Sun, 16 Aug 2026 02:45:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S3GzAZjN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53E351F00A3A;
+	Sun, 16 Aug 2026 02:45:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786848336;
-	bh=qSkbUGX4w8t3JVSTmqLdB4/WoyYgW2kQX6wgugC0VAI=;
+	s=k20260515; t=1786848338;
+	bh=/NWK/rL+Ziaf/I81bvbBbZnBhKBmPQpvsaYjGKoKZ9c=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Tn6dRReYH6dYYpr17eMBGJACGwelgcIV1LivoRUKKJ6XP39JSuHZp/lQUS0I2nJlQ
-	 76kYRylZyKIjYXsNri5NNwjskjU8qhQvPhElcIcfbnA4wzUVOUcbWHfpiGDpf4pApI
-	 DLkxLStTY6H84vM1uYCQYvT9YUkErgap/8zkLMwo4Z0l9gvX3UiXDa2SqIhX8iqhai
-	 9Km6jCK8oeQFgl40BnV+McYXNVFa0N/VgHL432cbbl8JA5XhBiZRWy87a6SyBXcBQq
-	 YpRS1j8h2F+KacDEQnDSt0u6lVt3oLax9j+q7df7Fu84GsHE2lW2pdUO3UjO65DSGh
-	 gOqPOBNadg8Ww==
-Content-Type: multipart/mixed; boundary="===============0544100852628332932=="
+	b=S3GzAZjNOs3qxGFe3gPIgdkQJJf/KJpCHlsVqVU1LGF7MxXYrCo8QhxOyO+RvNBtt
+	 U04TgA3DaZz+Kvhnc7U/l8L915Nz28iiVwaNk2pBJ88Wk0XdWIWlFnCvUPnOxjFSr9
+	 nWbcgRv8tLfsVGLDUwkgngMKSo7+U6M1KwH7MsbSAn+FKLiU2SMUkZg0FghVNsojW0
+	 kMQ/J2s+Ir2BAEdacqwaHN5hQDXhF3+FxHkPm6PdaNgHFyN0KBB/RBE22+gUuvYTVg
+	 tXNsf68Ep/gJUdXk81LKm1xUjDpchXoEvBICjDH9ukyU2hGzj8t4b5MXCr7pMLE4o6
+	 ggU1k6y+2t4Fg==
+Content-Type: multipart/mixed; boundary="===============6029463034311986706=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <592feb16031b652d6ae99546a346625838e8a52dbff431764c2c4ca02a9e8d0e@mail.kernel.org>
-In-Reply-To: <20260816015746.2632990-15-memxor@gmail.com>
-References: <20260816015746.2632990-15-memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v1 14/14] selftests/bpf: Test pseudo-function policy diagnostics
+Message-Id: <d7d6ffd97c2a82ff6fd69c784d944a8458586008c5f01469bdb81091b08fb01f@mail.kernel.org>
+In-Reply-To: <20260816015746.2632990-3-memxor@gmail.com>
+References: <20260816015746.2632990-3-memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v1 02/14] selftests/bpf: Test verifier stack-read diagnostic attribution
 From: bot+bpf-ci@kernel.org
 To: memxor@gmail.com,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sun, 16 Aug 2026 02:45:35 +0000 (UTC)
+Date: Sun, 16 Aug 2026 02:45:37 +0000 (UTC)
 
---===============0544100852628332932==
+--===============6029463034311986706==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> Load a socket-filter program that passes a callback to bpf_loop() without
-> making a BPF-to-BPF call. Verify that the privileged load succeeds and the
-> unprivileged Policy report identifies the BPF function reference at its
-> ldimm64 instruction.
-
-This isn't a bug, but the changelog says the report is verified to identify
-the reference "at its ldimm64 instruction", though the added test asserts no
-location at all -- only the three wording substrings.
-
-Looking at the verification flow, prog->aux->linfo is assigned by
-check_btf_line() in kernel/bpf/check_btf.c, reached from
-bpf_check_btf_info() at kernel/bpf/verifier.c:21164, which runs after
-add_subprogs() at line 21157. So bpf_find_linfo() returns NULL and
-bpf_diag_source() takes its fallback branch, emitting a bare "insn %u" with
-no function/file/line and no Source context block.
-
-Would it be worth either asserting the instruction location the changelog
-mentions, or softening the wording -- given that linfo is not yet parsed
-when add_subprogs() runs, the "At" section here can only print a bare
-insn N?
-
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-> index 42de5cff7e52..3069e70fbcbd 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-> @@ -96,6 +96,24 @@ __naked void pseudo_btf_id_log_masks_address(void)
->  	: __clobber_all);
->  }
+> selftests/bpf: Test verifier stack-read diagnostic attribution
 >
-> +static int pseudo_func_callback(__u32 index, void *ctx)
-> +{
-> +	return 0;
-> +}
-> +
-> +SEC("socket")
-> +__description("unpriv: pseudo function policy diagnostic")
-> +__success __failure_unpriv
-> +__msg_unpriv("loading/calling other bpf or kernel functions")
-> +__not_msg_unpriv("BPF-to-BPF function call")
-> +__msg_unpriv("policy check failed for BPF function reference")
-> +__msg_unpriv("avoid BPF function references in unprivileged")
-> +int unpriv_pseudo_func_policy(void *ctx)
-> +{
-> +	bpf_loop(1, pseudo_func_callback, NULL, 0);
-> +	return 0;
-> +}
-> +
->  SEC("socket")
->  __description("unpriv: return pointer")
->  __success __failure_unpriv __msg_unpriv("R0 leaks addr")
+> Verifier diagnostics distinguish uninitialized stack bytes from opaque
+> dynptr, iterator, and IRQ-flag state, and identify variable-offset atomic
+> stack accesses without changing the existing verbose messages.
+>
+> Add output assertions to the existing dynptr and iterator rejection
+> cases. Add a direct IRQ-flag read and a variable-offset atomic stack
+> access to cover the other classifications. Retain an assertion for the
+> legacy helper-worded verbose message in the atomic test.
+>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+
+This isn't a bug, but would it be worth adding one assertion on the
+retained uninitialized-stack-read report as well? The commit adds test
+coverage for STACK_DYNPTR, STACK_ITER, STACK_IRQ_FLAG and the
+variable-offset atomic path, but leaves the STACK_INVALID arm unpinned.
+If a later refactor changes the uninitialized-read wording to reuse the
+new verifier-managed state classification, the change would go unnoticed
+in the test suite.
 
 
 ---
@@ -104,4 +74,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31921026518
---===============0544100852628332932==--
+--===============6029463034311986706==--
