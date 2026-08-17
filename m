@@ -1,46 +1,46 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D6E43A9627;
-	Mon, 17 Aug 2026 10:27:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BB753F44EC;
+	Mon, 17 Aug 2026 10:59:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786962427; cv=none; b=R9BxaF2z10b6ZTINBB/TNsDyct1mxSeqHpMqMePf2QOF3Z1dPU2O82QbvpmBA7lyo+hpdMvN9v/UWuUdT4nL7JARmEqXFIcMyppySnphNhlcVFmt8g5DUYZcU/p9X7HQdk0RTI6+a6+3MSg5ptqUfSO7uBlltl5FN0kV2LqwesY=
+	t=1786964395; cv=none; b=s3IeHEf/L8u/5UhrTSgJyGzWTfsL73N3wu6T7m4vDT3AZo4EPzMTWaV4uArBFFf5K6kd+D/rku58cv1NSzEASnD/YiXbD+vkv9DjsoaKi5qtrPhoUqHGI+kQCOra51CCPNiIGrBHPnPA610LHnQnk4vdSel0pbled73A/IEjVIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786962427; c=relaxed/simple;
-	bh=6asVjeYgrsRvpSFd4NODZyK/+aGlP6Tbbrh5c0GtcHo=;
+	s=arc-20240116; t=1786964395; c=relaxed/simple;
+	bh=ryUyJkF5r6sr22hj0YcG/kzjNE7UKL2QWF2EIScNOaE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rbogsptmRcCEZOMtKCWkkcE0TldNK3sFZ+tLRvULufXhurq2W7T4PPtaHTtWEKNt7IH8khSVyjzcE79dWebaVvT/VqtAyJvsF9yQcK5n2530myoINaujdeOcMUtoj8Wscuys7gBmgOXL/cddC12wzlQDlBiS1GUda+dWXrWX2Qc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=l2JVTXmu; arc=none smtp.client-ip=213.133.104.62
+	 In-Reply-To:Content-Type; b=Jb/PxrjZNUBaTIe69tcGV54hqCYXvzDarwqzH9g6Ved0q2D5giXWl3t96ex4AW68ipsBrsbZy1jk1pdc7Xa1bg2PAbu1tuy/FIWCUxUfq1G8aOLYn5QtEIwlha5dotTDnknKsG3Tlupv0PgDsVGGttVzqXABfhfEaSZ3/gftB7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=eu1CdQfZ; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="l2JVTXmu"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="eu1CdQfZ"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=1M26PH9RZ7Rso30q/85Ralpwk9Ge6mES02l72QbVED4=; b=l2JVTXmuHFUWPj/BsRUPZRTpXR
-	IMLZunU5ZhHDsCTQNB+3wJnm/J2ySAGUl9cNkRMoVyc2WYO2RKC4rS+MZBXVtDCUhPiVrP8vtAkH/
-	W8nHr5uV5I6FxPBbsu18S9yvQegk0A6tpCvnjJD8t2/V3f+CLPWLMcub0xy4niSIRiNnHPt5sWo6a
-	ac1aOYRLVTlatwcXogJ5M29AipcSuzhtsr/85HHjgVVsAKcxRqZZnK5drb/HnMxabgLdLh3IHlb0d
-	4M6ajsy0N2xQ/jhSaIMpPeIvF9YEBsXGkXb9aTosJMpmSIbiw0qNExlrOUNHtSsD/1jE6rsvP8XUY
-	BEM60SSA==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
+	bh=0XLVkjAqQhZdBionA4sPMHUV8ZIJiuNjBIsLw1DYAh4=; b=eu1CdQfZgrbfIYjhCe1u1vfaHw
+	HTLsq/oTFFsKuz94TOeIg+aH/dYwLaaUvmfuYgy/s+X4EFmYHBWM3QMvyz1oCCvhvpmm/dy2S+Wtr
+	ePgCMOQQnc/rbQNGdfutPCentbQJUPZi21MT1RZ5sBAQ69d11pJAV2fp5lCUg8gJJRatlqAxFe/7j
+	SrVh7/ly3cCefvNn6fnQdC+ElT3edao6Py2rNo1ISBFxFsKtb9Jv3bqsVcn+hcmuyKkAAVHor80XC
+	wIGpvXX0M4NZrU0Uyz09Bqkgntm4Gp7JPrUly+e8pXwZucDHEDwSwUSMyLTns6GFEdfImh5Ndch1v
+	hBsAyi8Q==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wvuYV-000723-16;
-	Mon, 17 Aug 2026 12:26:59 +0200
+	id 1wvv4C-000Crc-12;
+	Mon, 17 Aug 2026 12:59:44 +0200
 Received: from localhost ([127.0.0.1])
-	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wvuYU-000Gg6-0i;
-	Mon, 17 Aug 2026 12:26:58 +0200
-Message-ID: <0d0b440d-423f-4f31-8726-98ac755e7501@iogearbox.net>
-Date: Mon, 17 Aug 2026 12:26:58 +0200
+	id 1wvv36-0004X2-0o;
+	Mon, 17 Aug 2026 12:59:43 +0200
+Message-ID: <6c7fdd8e-bc32-4c33-ad06-39b00af1ccda@iogearbox.net>
+Date: Mon, 17 Aug 2026 12:59:42 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,17 +48,15 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] bpf: reject stack-argument callback subprograms
-To: =?UTF-8?B?SsOpcsOpbXkgSmVhbg==?= <jeremy.jean@oss.cyber.gouv.fr>,
- Pu Lehui <pulehui@huawei.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260816204501.493914-2-Jeremy.Jean@oss.cyber.gouv.fr>
- <8331116a-2a90-4342-a1d2-bd3a97bebb73@huawei.com>
- <ccea81b198d7a1a92ff4b4827465c9b0@oss.cyber.gouv.fr>
+Subject: Re: [PATCH net-next 0/5] selftests/xsk: improve shared-UMEM coverage
+ and infrastructure
+To: Tushar Vyavahare <tushar.vyavahare@intel.com>, netdev@vger.kernel.org,
+ magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
+ stfomichev@gmail.com, kernelxing@tencent.com, davem@davemloft.net,
+ kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
+ tirthendu.sarkar@intel.com, andrii@kernel.org
+Cc: bpf@vger.kernel.org
+References: <20260807134209.3794735-1-tushar.vyavahare@intel.com>
 Content-Language: en-US
 From: Daniel Borkmann <daniel@iogearbox.net>
 Autocrypt: addr=daniel@iogearbox.net; keydata=
@@ -104,20 +102,50 @@ Autocrypt: addr=daniel@iogearbox.net; keydata=
  rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
  DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
  owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <ccea81b198d7a1a92ff4b4827465c9b0@oss.cyber.gouv.fr>
+In-Reply-To: <20260807134209.3794735-1-tushar.vyavahare@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28095/Mon Aug 17 08:23:59 2026)
 
-Hi Jérémy,
+Hi Tushar,
 
-On 8/17/26 12:04 PM, Jérémy Jean wrote:
-> On 2026-08-17 04:16, Pu Lehui wrote:
->> Just took a look at stack args feature. The limit looks good to me, but it would be better to split the fix and selftest into two separate patches.
+On 8/7/26 3:42 PM, Tushar Vyavahare wrote:
+> AF_XDP shared-UMEM support in existing XSK selftests is limited to a
+> small set of scenarios and cleanup paths that become fragile as coverage
+> expands.
 > 
-> Thanks for the feedback.
-> Do you want me to do the split, or will you do it?
-Please send a v2 with the split, so it can go through BPF CI again.
+> This series improves shared-UMEM testing and infrastructure in five
+> steps.
+> 
+> Patch 1 introduces explicit UMEM lifetime management with refcounting
+> and consolidates socket/UMEM teardown into common helpers, keeping
+> cleanup behavior consistent across normal completion and error paths.
+> 
+> Patch 2 adds rollback for partial socket setup in xsk_configure() when
+> xsk_socket__create() retries are exhausted or busy-poll setup fails.
+> 
+> Patch 3 adds a length-based XDP steering helper and updates XSKMAP/test
+> capacity constants for 4-socket scenarios. Steering is explicitly based
+> on total XDP-visible packet length (data_end - data) using
+> SHARED_UMEM_LEN_SPLIT.
+> 
+> Patch 4 adds the shared-UMEM callback runner together with the first
+> four test cases (4-socket, length-based steering, uneven distribution,
+> and unaligned chunk mode) in one commit so every SHA in the series
+> builds and bisects cleanly. The unaligned path snapshots/restores prior
+> alignment flags with NULL-safe UMEM guards.
+> 
+> Patch 5 makes pkt_stream_even_odd_sequence() rollback-safe by staging
+> replacement streams in temporary arrays and committing only after all
+> allocations succeed.
+> 
+> Together, these patches make shared-UMEM setup/cleanup more robust and
+> extend selftest coverage to common multi-socket and distribution
+> scenarios.
+> 
+> Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+> Signed-off-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
+Looks like this needs a v2 respin based on the LLM reviews.
 
 Thanks,
 Daniel
