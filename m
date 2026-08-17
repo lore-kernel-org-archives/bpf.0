@@ -1,46 +1,46 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 706803DC4CE;
-	Mon, 17 Aug 2026 14:15:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C639A27D786;
+	Mon, 17 Aug 2026 14:20:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786976139; cv=none; b=uviqcEDDONm8AKyPK6TsghS1wGUEXMBrnFXkBnujKQbRKnnr5epy8yp3lGdc/MSTych3/+2DboGjjg3WrONVYxP9pwCtAoAWqlurDR3LmmnDQfIbzUymaqyB5l/PAF8YBvalLkYaNWpZHc/q3zgMpKWkF3n/nRbsEGAcO5wwJJw=
+	t=1786976430; cv=none; b=d3gi00ri3IWbjrZry3kJRMZjSjyTkquJnDk7GYWq43FAg+s77A93E8Pd/8zi2MeSNlyhiBmOzmPoRStWTCV7L98AkHM+Mzsmwd8Jmg3FU5Q2yhYdaZnaTEZ51yW2xbctq7c5cPpzmJgqLBUpnSl4ecsheoDQbVLISSTH8rxaOWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786976139; c=relaxed/simple;
-	bh=1/eYIkz0AFB91Tmeaq5LsODRm0JR6lxKLjBeydamfhk=;
+	s=arc-20240116; t=1786976430; c=relaxed/simple;
+	bh=8M/aIqelAoUOCteDkUInmpDkioDQLoSr2gHe45HSDJk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZMd+UxN+xmBTFHuzR5FgClGIYs9mxUX9JJZ6sJ4QjpRtTYtVU4Pb1YPIHaadPpLmF+vk7oRE0bzuCaRq0DA24k+oLmwmXmukr02NwGARdDIQTU8ypyUP3VqjEgMt7NdO1Uro8xtXdCTsnnjqoJuLLA8T3vReAmAg/nYka/zFv1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=PjkYMs26; arc=none smtp.client-ip=213.133.104.62
+	 In-Reply-To:Content-Type; b=Di+/f+F8g+um/S/vLdXFgcTd4Nuj75JzhwFOWGt/I48CmObl4/BchFcYKj076syVEIzQ1OJZ5s5iQfgOaj3Rgq5VAFkjqaN9lsxExxLHZFoEuZA363TmQDzvmkI5DI31efjMQLt1nzVcFznKbyHRYvA0jPObnMDwpgJhFPUPfgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=jeP/0zu1; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="PjkYMs26"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="jeP/0zu1"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=tF98P74tC4o92WZtcEtDR8sMudbG6OD9RkXX0/2R/aY=; b=PjkYMs26pnmHClcJTGAgdmR4lw
-	Mhggn8iQqesep4Az0xBGqYl9dOgeV3VHQUHBouRx4IT6u1WpCr29gbNrUEo2VFZqBUwORylHSnJBU
-	2kZrcR/nA6oHMUBPKNFgxX4UFDt+NFwJ0egiZiRL8jSmH5ABPCyHbh5JFrkxcjHY0FHaSd3ogWaVT
-	xcq8U3HbdwR+t7qhqlcfEC0qB1mDBVoHS9gCMcpqzocRwUq/eGkgl3u80UjKtf0OURZr0ifbnMpzR
-	Uou4WWVaT3pXXIz7Jqy8fdZaLBTReo51m1p592JK2v6Z1eMeEzYGKPLXaK6WU/LQYBn3+s5K3wZ7l
-	eLSvycMg==;
+	bh=ifdNIG+S04K40CHHKlWPcFgMS63d5NVSCS3KIOPTPyM=; b=jeP/0zu1Z7VrvpPfPLre7/ni75
+	5PhbBFMNvHKHy4QXXXhnHmMyZj5z+t9UaOAjAXUcQ4KtzVI5Z1fH1/wRMqIScTMb6THKLtGrIiPXj
+	K4z4JC40HGFMyWFDSNMoAFopw+WLngILjWENRAPMS3sLq1Ikg45Y1E3sjLIl+K36Ast+nO0OQ303g
+	FF7BrDdBam0CYHiH5Gw9LYdW5I3nOWTEDxXPtI8eebkvoGj86QIahcLeJHq/2WvwKuANQu/MTJElV
+	GExvzRolzNYUryo9A2ZMsIUZ0BcBjKbpuMmKcOC1GeiSxra551cW5hM3tXY765iUIMIKLu1VzSKna
+	OjL7RMRg==;
 Received: from sslproxy02.your-server.de ([78.47.166.47])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wvy7c-000N6b-0J;
-	Mon, 17 Aug 2026 16:15:28 +0200
+	id 1wvyCK-000OYK-1T;
+	Mon, 17 Aug 2026 16:20:20 +0200
 Received: from localhost ([127.0.0.1])
 	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wvy7b-0000vQ-0F;
-	Mon, 17 Aug 2026 16:15:26 +0200
-Message-ID: <8a34148c-4704-4d8c-9c7f-cfadb523a745@iogearbox.net>
-Date: Mon, 17 Aug 2026 16:15:25 +0200
+	id 1wvyCJ-000GIJ-2t;
+	Mon, 17 Aug 2026 16:20:19 +0200
+Message-ID: <3694dac0-3ba7-4d1c-8a1e-7f590baf649f@iogearbox.net>
+Date: Mon, 17 Aug 2026 16:20:18 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,21 +48,24 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf] bpf: free page_pool frags via the page_pool path in
- bpf_xdp_shrink_data
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, bot+bpf-ci@kernel.org,
- bpf@vger.kernel.org, netdev@vger.kernel.org
-Cc: syzbot+237bbeed8dfe0699b7f5@syzkaller.appspotmail.com,
- john.fastabend@gmail.com, sdf@fomichev.me, martin.lau@linux.dev,
- ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, ihor.solodrai@linux.dev, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- hawk@kernel.org, toke@redhat.com, lorenzo@kernel.org,
- linux-kernel@vger.kernel.org, martin.lau@kernel.org, clm@meta.com
-References: <20260816031245.268898-1-jiayuan.chen@linux.dev>
- <5aa97a9a0b8cd20feda29b304874967a8019d8b4b3dd4021dc5c0dac43c10d05@mail.kernel.org>
- <2c2c7bb6-cce5-4dc3-965c-bbf1c50905d9@linux.dev>
+Subject: Re: [PATCH bpf-next v3 4/5] bpf, x86: make sure allocation in
+ arch_bpf_trampoline_size() is writable
+To: Mike Rapoport <rppt@kernel.org>, Jiri Olsa <olsajiri@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Eduard Zingerman <eddyz87@gmail.com>, Ingo Molnar <mingo@redhat.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Peter Zijlstra <peterz@infradead.org>, Song Liu <song@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, "H. Peter Anvin" <hpa@zytor.com>,
+ Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, x86@kernel.org,
+ Leon Hwang <leon.hwang@linux.dev>
+References: <20260716-execmem-x86-rox-bpf-v0-v3-0-4e76158c01c5@kernel.org>
+ <20260716-execmem-x86-rox-bpf-v0-v3-4-4e76158c01c5@kernel.org>
+ <an8r7EODLIL-bZM3@krava> <aoF7f3lH_rz7mxSR@kernel.org>
 Content-Language: en-US
 From: Daniel Borkmann <daniel@iogearbox.net>
 Autocrypt: addr=daniel@iogearbox.net; keydata=
@@ -108,98 +111,95 @@ Autocrypt: addr=daniel@iogearbox.net; keydata=
  rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
  DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
  owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <2c2c7bb6-cce5-4dc3-965c-bbf1c50905d9@linux.dev>
+In-Reply-To: <aoF7f3lH_rz7mxSR@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28095/Mon Aug 17 08:23:59 2026)
 
-On 8/16/26 7:16 AM, Jiayuan Chen wrote:
-> On 8/16/26 11:57 AM, bot+bpf-ci@kernel.org wrote:
->>> diff --git a/net/core/filter.c b/net/core/filter.c
->>> index 16845987b244..3aab5556abe2 100644
->>> --- a/net/core/filter.c
->>> +++ b/net/core/filter.c
->>> @@ -86,6 +86,7 @@
->>>   #include <net/inet_dscp.h>
+On 8/16/26 10:57 AM, Mike Rapoport wrote:
+> On Fri, Aug 14, 2026 at 04:53:32PM +0200, Jiri Olsa wrote:
+>> On Thu, Jul 16, 2026 at 10:51:38AM +0300, Mike Rapoport (Microsoft) wrote:
+>>> arch_bpf_trampoline_size() allocates a buffer to get actual size required
+>>> for a trampoline.
 >>>
->>>   #include "dev.h"
->>> +#include "netmem_priv.h"
+>>> This buffer must be in the module address space because
+>>> __arch_prepare_bpf_trampoline() calculates  rel32 offsets relatively to
+>>> that buffer.
 >>>
->>>   /* Keep the struct bpf_fib_lookup small so that it fits into a cacheline */
->>>   static_assert(sizeof(struct bpf_fib_lookup) == 64, "struct bpf_fib_lookup size check");
->>> @@ -4288,6 +4289,14 @@ static bool bpf_xdp_shrink_data(struct xdp_buff *xdp, skb_frag_t *frag,
->>>       if (mem_type == MEM_TYPE_XSK_BUFF_POOL) {
->>>           netmem = 0;
->>>           zc_frag = bpf_xdp_shrink_data_zc(xdp, shrink, tail, release);
->>> +    } else if (netmem_is_pp(netmem)) {
->>> +        /* The rxq mem model does not always describe how a released
->>> +         * frag must be freed: the generic-XDP and veth paths run the
->>> +         * program on a shared rxq while the frag has been cow'd into
->>> +         * page_pool memory. Trust the page itself and return a
->>> +         * page_pool frag to its pool regardless of rxq->mem.type.
->>> +         */
->>> +        mem_type = MEM_TYPE_PAGE_POOL;
->>>       }
+>>> In preparation for enabling ROX mode for EXECMEM_BPF make sure that the
+>>> allocated memory is writable.
 >>>
->>>       if (release) {
->> The comment says the fix handles rxq->mem.type "regardless" of its value,
->> but the implementation still checks MEM_TYPE_XSK_BUFF_POOL first. When the
->> shared rxq has been left with mem_type == MEM_TYPE_XSK_BUFF_POOL by
->> veth_xdp_rcv_one() (which writes frame->mem_type into the shared rxq on
->> XDP_TX/XDP_REDIRECT and never restores it), a page_pool frag skips the new
->> netmem_is_pp() branch entirely and goes to bpf_xdp_shrink_data_zc() instead.
+>>> Add bpf_jit_alloc_exec_rw() wrapper for execmem_alloc_rw() and use it for > buffer allocation in arch_bpf_trampoline_size().
+>>>
+>>> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+>>> ---
+>>>   arch/x86/net/bpf_jit_comp.c | 5 ++---
+>>>   include/linux/filter.h      | 1 +
+>>>   kernel/bpf/core.c           | 5 +++++
+>>>   3 files changed, 8 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+>>> index de7515ea1bea..b2feec81e231 100644
+>>> --- a/arch/x86/net/bpf_jit_comp.c
+>>> +++ b/arch/x86/net/bpf_jit_comp.c
+>>> @@ -3703,13 +3703,12 @@ int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
+>>>   	int ret;
+>>>   
+>>>   	/* Allocate a temporary buffer for __arch_prepare_bpf_trampoline().
+>>> -	 * This will NOT cause fragmentation in direct map, as we do not
+>>> -	 * call set_memory_*() on this buffer.
+>>>   	 *
+>>>   	 * We cannot use kvmalloc here, because we need image to be in
+>>>   	 * module memory range.
+>>> +	 * Since it must be writable use bpf_jit_alloc_exec_rw().
+>>>   	 */
+>>> -	image = bpf_jit_alloc_exec(PAGE_SIZE);
+>>> +	image = bpf_jit_alloc_exec_rw(PAGE_SIZE);
 >>
->> Should the comment say "regardless of rxq->mem.type, unless the rxq claims
->> XSK memory" or should the netmem_is_pp() test be unconditional so the stale
->> MEM_TYPE_XSK_BUFF_POOL case is also handled?
+>> hi,
+>> this change (this particular patch plus possibly others in this set) is
+>> causing tracing_multi attachment bench slowdown
 >>
->> The commit message states: "A single rxq->mem.type can be wrong in either
->> direction." The code, however, only corrects one direction: it upgrades
->> mem_type to MEM_TYPE_PAGE_POOL when the frag is a page_pool page, but it
->> never downgrades when rxq->mem.type already says MEM_TYPE_PAGE_POOL and the
->> frag is not a page_pool page.
+>> the benchmark allocates huge number of trampolines and I'm seeing extra
+>> arch_bpf_trampoline_size code paths in the attached perf profile
 >>
->> That second direction is reachable on the very path the commit message
->> cites. veth_xdp_rcv_one() (drivers/net/veth.c:638) points the buff at the
->> shared rxq and then, on XDP_TX/XDP_REDIRECT, writes the frame's type into
->> it:
+>> I'm not that familiar with the allocator, but following hack makes the
+>> benchmark ok again:
 >>
->>      xdp->rxq = &rq->xdp_rxq;
->>      ...
->>      case XDP_TX:
->>              xdp->rxq->mem.type = frame->mem_type;
->>      case XDP_REDIRECT:
->>              xdp->rxq->mem.type = frame->mem_type;
->>
->> Once one redirected frame with mem_type == MEM_TYPE_PAGE_POOL is TX'd or
->> redirected, rq->xdp_rxq.mem.type stays MEM_TYPE_PAGE_POOL for every
->> subsequent packet on that queue.
->>
->> A later frame whose frags are plain pages then reaches:
->>
->>      } else if (netmem_is_pp(netmem)) {   /* false, mem_type left as PAGE_POOL */
->>      ...
->>      __xdp_return(netmem, mem_type, false, zc_frag);
->>
->> and __xdp_return()'s MEM_TYPE_PAGE_POOL arm (net/core/xdp.c:436-446) skips
->> the check and dereferences a garbage pool pointer:
->>
->>      /* No need to check netmem_is_pp() as mem->type knows this a page_pool page */
->>      page_pool_put_full_netmem(netmem_get_pp(netmem), netmem, napi_direct);
->>
->> netmem_get_pp() reads page->pp, which for a non-page_pool page holds
->> whatever the allocator left there.
->>
->> This specific crash is pre-existing rather than introduced by the patch, but
->> the patch is the change that claims to make the frag itself authoritative,
->> and it had the netmem in hand. Could the decision be unconditional:
->>
->>      } else {
->>              mem_type = netmem_is_pp(netmem) ? MEM_TYPE_PAGE_POOL : mem_type;
+>> 	diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+>> 	index 6a94370a2448..bbff3c9c6681 100644
+>> 	--- a/kernel/bpf/core.c
+>> 	+++ b/kernel/bpf/core.c
+>> 	@@ -1130,7 +1130,7 @@ void *bpf_jit_alloc_exec(unsigned long size)
+>> 	
+>> 	 void *bpf_jit_alloc_exec_rw(unsigned long size)
+>> 	 {
+>> 	-	return execmem_alloc_rw(EXECMEM_BPF, size);
+>> 	+	return execmem_alloc(EXECMEM_MODULE_DATA, size);
 > 
-> This is a non-pool page being mistreated as a pool page, and I think it's a separate issue, xdp_return_buff and xdp_convert_buff_to_frame hit it too, not just this path.
-Could you look into this as well, and make this a small series along with a BPF selftest
-which exercises/tests this bug?
+> This is fine on x86 because all execmem types live in the same 2G
+> range. Other architectures may have _BPF and MODULE_DATA in different
+> ranges, e.g arm64 and some configurations of powerpc.
+> 
+>> 	 }
+>> 	
+>> 	 void bpf_jit_free_exec(void *addr)
+>>
+>>
+>> I still need to do more checks, but I'm wondering if we could actually fix
+>> this by not allocating image data in arch_bpf_trampoline_size at all..
+>> and just teach __arch_prepare_bpf_trampoline to survive NULL image data
+>> and just return the size in such case
+> 
+> Since bpf_jit_alloc_exec_rw() is only used by
+> x86::arch_bpf_trampoline_size() I think we can directly allocate from
+> _MODULE_DATA there and drop bpf_jit_alloc_exec_rw(), like (build tested
+> only) patch below does.
+> 
+> If/when other architectures would implement arch_bpf_trampoline_size(),
+> they'll probably need to deal with this differently.
+Mike, could you send this as a regular patch to bpf list, so it can go
+through BPF CI?
 
 Thanks,
 Daniel
