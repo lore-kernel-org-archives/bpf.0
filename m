@@ -1,86 +1,120 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DBA246AECF;
-	Mon, 17 Aug 2026 17:31:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E78244C67E
+	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 17:31:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786987887; cv=none; b=nD5R+gPc0jyJnF4cmB4XlBu1HfAwsWeg+3n/+j/aNL49VOD+EnfOzEv1u0P+IfPtcwhsT8UAlTQJhe+T4EZRKxFzb6+LnqIxOZ+jIjOEA81qOh5fNohOcO0Zm2pmgfKmEDBwJKscgssgPCX3oUfCrREte4S+H4b71ejkMrA9xSc=
+	t=1786987912; cv=none; b=nlOtWKdRRl2Ht4HstKEznWOBivNZ11lWJrrqFWerQn/g3UGdenwoaQYK/1nGPxgSNt51kvTsyOaQ6QK5uVlCy4JCEWec/vou38nV4E1UERVckK+yUQdHWyOac3DGM28bwd2Opukv19zKl6d6Fi2QUkJlZwjZkRQRG1ilNXUJPXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786987887; c=relaxed/simple;
-	bh=EzvVYoHdofLxVfFhVesAID7yg4jQjmGgkTVqVe9teNY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=KztFd/OzEGHnmVbYf0XfzLO5fLVN3D8CeZ2x+dj2LtSv6hWbWC/mjxzucUHM83JhpjvT/f/DiNGBioPdo/8rRdvpkHxT63eXOOvlHjporPCBIn8vsdEgZryRiiiEVqfnFhwZXRqVDZ3sq9G9RSk4yZM5o2AIWqAUgX1R2XiFP70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eQl//6kJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786987912; c=relaxed/simple;
+	bh=YB5vyXomEiNlD4MxdpnFjCjHR+jZyC6FqEvQT3nyuA4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=R+1cLWkvqaojvYr+Rx01Yh+NoG3dVQrlzYXoBGKAq9E3p2s2bkFD41wh3+Cjh31aMtIeQp5iAOaCTtlVDkygyZtql/bffrTSjOXWMWET7vx5xQ6gn1hqvI84wnahDhwJhrKApgqWntcAcxWZjZxFu4o5Ghi3FN5qLRTMr8KJzD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RS/K17pp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eQl//6kJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB5451F000E9;
-	Mon, 17 Aug 2026 17:31:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RS/K17pp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1C311F000E9;
+	Mon, 17 Aug 2026 17:31:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786987885;
-	bh=jYkVBiRdmR7dtQoUmA2EXI8m8j3sAeYYAmtKiVnPBrE=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=eQl//6kJFNiTnhidOPi9G7MDwve6qw8KQ98NdzTq2MNtxMzwNvr4SJhgolyBPYv3i
-	 jQTwdOQsmQFGv/OcD1FxwO8qj+ZJrYJncmK5L603rVJeMyHsQVFntLAUHA71nT+gxM
-	 mzpKrAekcplfuOSNHENjAzdcXMkrHnoUOXamdtyiBwmvBQfYLRwX7PVPghZVbigY4D
-	 OkicOwD/D7jLZCFaaKq49XU9GRfDtY8IYI3Ibh9/5tIfL7Od5jecWHxqwOyTn5D6dR
-	 oEKzOUrzjlD7JJHlg7U4btjiOx4sj3l3SGxpZBQyh6kH5NfBs5QmmWtjA82JAR4Faz
-	 SYKbp2bLmydkg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 569DF3926259;
-	Mon, 17 Aug 2026 17:30:39 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1786987911;
+	bh=CKN+q9tl7lYQI8ZJfGj6rsvGpVNeb9NI0bd+MDRTfck=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=RS/K17ppXCbPL9BgwgLzJXDYsPnWtqDtA55DpmT0SMp8vu91GCp1egvMuS8SqDbdh
+	 mov88INkrje32MQxB35pHAvC/6mN4qFXYpkQocpSlMMThdX5SjAeG+3ymadYZPXwC7
+	 Irou67FJNEmIlaltp/Q3b16zQmigBL3NC6861baxYSX02HVH37/P0gPWUa6YI9vStm
+	 S+kzGVysjDRb7q2NyR1z3SNzlY32FHq+jyGKAqDxJGOjB/j+XKH/cd1pJwuOfaUGVs
+	 nTN7VmbIq3anKjgNcDDGNzMD7yWhdKSQ6TSJLvPlYFgF6tvzSozKcru5WytgpDT9K6
+	 kKm68r4qCebxQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 4/9] drm/gpuvm: Route gpuva_op allocations to
+ folio_scratchpad
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jim Cromie" <jim.cromie@gmail.com>
+Cc: dri-devel@lists.freedesktop.org, bpf@vger.kernel.org
+In-Reply-To: <20260817-folio-pool-v1-v1-4-0c1d230aa3af@gmail.com>
+References: <20260817-folio-pool-v1-v1-0-0c1d230aa3af@gmail.com>
+ <20260817-folio-pool-v1-v1-4-0c1d230aa3af@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 17 Aug 2026 17:31:50 +0000
+Message-Id: <20260817173150.D1C311F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] bpf,
- xdp: move offload check into dev_xdp_install()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178698783797.1666117.698643856348207432.git-patchwork-notify@kernel.org>
-Date: Mon, 17 Aug 2026 17:30:37 +0000
-References: <20260812063616.364817-1-jiayuan.chen@linux.dev>
-In-Reply-To: <20260812063616.364817-1-jiayuan.chen@linux.dev>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, kuniyu@google.com, liuhangbin@gmail.com, krikku@gmail.com,
- mkarsten@uwaterloo.ca, andriin@fb.com, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org
 
-Hello:
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] Unbounded memory leak of transient `struct drm_gpuva_op` objects d=
+ue to bump allocator usage without intermediate resets.
+- [Low] Undeclared static key variable 'gpuvm_scratchpad_key' used in drm_g=
+puvm_init().
+--
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+--- Patch [4]: [PATCH 4/9] drm/gpuvm: Route gpuva_op allocations to folio_s=
+cratchpad ---
+commit 6e27181fef6cb87688764c9745ab2086b2091e88
+Author: Jim Cromie <jim.cromie@gmail.com>
+Subject: drm/gpuvm: Route gpuva_op allocations to folio_scratchpad
 
-On Wed, 12 Aug 2026 14:36:11 +0800 you wrote:
-> bpf_xdp_link_update() calls dev_xdp_install() directly and skips
-> dev_xdp_attach(), so the checks in dev_xdp_attach() do not run. A user can
-> make an XDP link with a normal program and then swap in an offloaded or
-> device-bound program with BPF_LINK_UPDATE, which puts it on the software
-> path.
-> 
-> dev_xdp_install() is the one place all three paths go through:
-> "ip link set xdp" and BPF_LINK_CREATE reach it via dev_xdp_attach(), and
-> BPF_LINK_UPDATE calls it directly. So move the program checks (offloaded,
-> bound to another device, device-bound in generic mode, native vs generic,
-> DEVMAP and CPUMAP) there, and keep only the netlink-flag check
-> (XDP_FLAGS_UPDATE_IF_NOEXIST) in dev_xdp_attach().
-> 
-> [...]
+This commit modifies the DRM GPUVM subsystem to route default gpuva_op
+allocations to a folio scratchpad embedded in struct drm_gpuvm. It updates
+gpuva_op_alloc() to use folio_scratchpad_alloc_obj() and handles the bulk
+teardown during drm_gpuvm_fini().
 
-Here is the summary with links:
-  - [net-next] bpf, xdp: move offload check into dev_xdp_install()
-    https://git.kernel.org/netdev/net/c/ad27ed7d2309
+> diff --git a/drivers/gpu/drm/drm_gpuvm.c b/drivers/gpu/drm/drm_gpuvm.c
+> --- a/drivers/gpu/drm/drm_gpuvm.c
+> +++ b/drivers/gpu/drm/drm_gpuvm.c
+> @@ -1109,6 +1109,8 @@ drm_gpuvm_init(struct drm_gpuvm *gpuvm, const char =
+*name,
+>  	spin_lock_init(&gpuvm->evict.lock);
+> =20
+>  	init_llist_head(&gpuvm->bo_defer);
+> +	folio_scratchpad_init_key(&gpuvm->va_scratchpad, get_order(SZ_64K),
+> +				  &gpuvm_scratchpad_key);
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+[Severity: Low]
+Does this cause a compilation failure?
 
+In drm_gpuvm_init(), the code references gpuvm_scratchpad_key, but this
+static key is not defined until later in the file via the
+DEFINE_FOLIO_POOL_STATIC_KEY_PARAM macro.
 
+[ ... ]
+
+> @@ -2814,7 +2820,8 @@ gpuva_op_alloc(struct drm_gpuvm *gpuvm)
+>  	if (fn && fn->op_alloc)
+>  		op =3D fn->op_alloc();
+>  	else
+> -		op =3D kzalloc_obj(*op);
+> +		op =3D folio_scratchpad_alloc_obj(gpuvm, va_scratchpad,
+> +						struct drm_gpuva_op, GFP_KERNEL);
+> =20
+>  	if (unlikely(!op))
+>  		return NULL;
+> @@ -2831,7 +2838,7 @@ gpuva_op_free(struct drm_gpuvm *gpuvm,
+>  	if (fn && fn->op_free)
+>  		fn->op_free(op);
+>  	else
+> -		kfree(op);
+> +		folio_scratchpad_free_elem(op);
+>  }
+
+[Severity: High]
+Will this cause an unbounded memory leak for long-lived VMs?
+
+In gpuva_op_alloc(), struct drm_gpuva_op objects are allocated using
+gpuvm->va_scratchpad, which acts as a bump allocator. However, the
+folio_scratchpad_free_elem() called here in gpuva_op_free() cannot reclaim
+individual elements from a scratchpad bump allocator.
+
+Since the memory is only fully reclaimed during bulk teardown in
+drm_gpuvm_fini(), and these objects are transiently allocated per map/unmap
+operation, could this result in continuous memory leakage over the lifetime
+of the GPU VM?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260817-folio-pool=
+-v1-v1-0-0c1d230aa3af@gmail.com?part=3D4
