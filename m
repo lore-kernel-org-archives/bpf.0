@@ -1,157 +1,116 @@
-Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08AA04B0491;
-	Mon, 17 Aug 2026 02:17:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.225
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F6C526FD97;
+	Mon, 17 Aug 2026 03:04:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786933026; cv=none; b=ovTB0conUy4ROEDnRZSHHzLab5SaKkEHvF9RTozrOkSBrxHLd/zFvXJMfKQ00M4UYK033tuj18kzp6pDVsFPEQGlt6QyHziO/EV/c+Wt+6M4IsW/v1ssfjlRl2xXf+I9a+s2ab9AMerHNrPlQj5lHPhMDbfYWVHHPcjVEXooUgA=
+	t=1786935882; cv=none; b=jjH1zX+MKu8E6OPM5Z1fhMXZkfiWq5yo87ZRfHmnuNlxjRZCiQKw43YH/gOCrNjEQbR+xhpw77kQaczimvHYCZNbCtqSdZy/+7HPvAgVYHq8TRbHRZBO7bL2XoN22SMKPlLhOyKsBiAnVYcbb8z3mTZ87IUoLuguGQlWpMkwDTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786933026; c=relaxed/simple;
-	bh=Ln1yFhAR7CM3NpHn/pMZE8Y+oColfmphkLnZ9tJ3iX0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=W1XxAKg2xi+r7WZEiug1zpL4U0RAPtueYc4fhqj2PHaT6Y5wHSuuVPeV4UINatbxnA8wi+dj3UWlC3GMO1Fh9Vv291kD8gQw4NPOaHYJTXgFfgaD6f3d9i++yUioIxZqlt8tonoz/hAmr5eUr47oiKS036Fx3vPt0uvwqsGwHEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=AgxdaTeh; arc=none smtp.client-ip=113.46.200.225
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1786935882; c=relaxed/simple;
+	bh=44ZKI6gyYThyXEbVF9HXAQR/5R5MusU9DyMF+CnI2N8=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DZw+lNYm+DR05GC0xXPB7GvDdXARCxZqkLCl/UEE/6JWyhwYar2K9FUL2UqFh9H5dOnEe/ipcVyKJ5q1zUpHJKV53KT2YOAEJgS3YDbcvMqbsyrxkJ3qgAGM7jen8c7LnB0xUJCZTyKkIm2l3fUeIBMURJqAWZM1K9KpRQx270k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=Zsa7wI0Q; arc=none smtp.client-ip=67.231.156.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="AgxdaTeh"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=ZbFDu/0nbJJ7HMlwOHKVUYA4S3DaNydS6nkSMhavzm0=;
-	b=AgxdaTehaKaiJQ0jIb2jp1nkZ4PA8W5QMJuS+CKP/sPVHFTvlc3ZPTuxa6kUpRpSwqDOnNDnS
-	ZzH1CB1l9x8ByjAEE1PggUOoPvE45OorkVgpWCHvmgClrrbOhcJS8jvcVWJuricxF4Veu75w7Vm
-	QVQEIEcsawovOYFdz5/fAUk=
-Received: from mail.maildlp.com (unknown [172.19.163.127])
-	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4hNbm46vp0z1K96b;
-	Mon, 17 Aug 2026 10:06:12 +0800 (CST)
-Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
-	by mail.maildlp.com (Postfix) with ESMTPS id EC8D3402AB;
-	Mon, 17 Aug 2026 10:16:52 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
- (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Mon, 17 Aug
- 2026 10:16:52 +0800
-Message-ID: <8331116a-2a90-4342-a1d2-bd3a97bebb73@huawei.com>
-Date: Mon, 17 Aug 2026 10:16:51 +0800
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="Zsa7wI0Q"
+Received: from pps.filterd (m0431383.ppops.net [127.0.0.1])
+	by mx0b-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67GMieJl1291985;
+	Sun, 16 Aug 2026 20:03:57 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pfpt0220; bh=44ZKI6gyYThyXEbVF9HXAQR/5
+	R5MusU9DyMF+CnI2N8=; b=Zsa7wI0QBilVtDY1gVCDYuTQs/KChHg8BnTfguksF
+	6voUNfJxQwyQV7v2bVdii1vvsN3dRT1elH4E3+gkASyPl7GlsUCA+qTAu/dD1P74
+	5JePtP45eCTekEdzOTxADT1nzA7Z66NPa3d+RkKwXMpbKcLW4v2ec0l1sPLVxe9j
+	NjLaiHcl5LX8dwbqMVQcaYeq0Xnf1QbYn7eITxoK4GXweoY+19Yk707UiZojNa3o
+	Vg8d79NnZnQIOGNyYGPDp3uj2vOy3SuzP3eVtf1FtcMUkFC6fEm7iQxCf+dF1aH3
+	sdIjmbEjwfmCOnJVGN3ORsFdRHzFnRjeH6cMgCXl0SG2Q==
+Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
+	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 4g38v8h4vp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 16 Aug 2026 20:03:57 -0700 (PDT)
+Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
+ DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Sun, 16 Aug 2026 20:03:56 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
+ (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
+ Transport; Sun, 16 Aug 2026 20:03:56 -0700
+Received: from rkannoth-OptiPlex-7090 (unknown [10.28.36.165])
+	by maili.marvell.com (Postfix) with SMTP id 369E75B6922;
+	Sun, 16 Aug 2026 20:03:51 -0700 (PDT)
+Date: Mon, 17 Aug 2026 08:33:50 +0530
+From: Ratheesh Kannoth <rkannoth@marvell.com>
+To: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+CC: <andrew+netdev@lunn.ch>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <davem@davemloft.net>, <edumazet@google.com>, <hawk@kernel.org>,
+        <john.fastabend@gmail.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <sdf@fomichev.me>, <sgoutham@marvell.com>
+Subject: Re: [PATCH v8 net-next] octeontx2-pf: add mqprio bandwidth offload
+ for NIX TX schedulers
+Message-ID: <aoJ6FhtWue0FHDQV@rkannoth-OptiPlex-7090>
+References: <20260813082754.1165329-1-rkannoth@marvell.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] bpf: reject stack-argument callback subprograms
-Content-Language: en-US
-To: =?UTF-8?B?SsOpcsOpbXkgSmVhbg==?= <Jeremy.Jean@oss.cyber.gouv.fr>, Yonghong
- Song <yonghong.song@linux.dev>
-CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
-	<eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	<bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-References: <20260816204501.493914-2-Jeremy.Jean@oss.cyber.gouv.fr>
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <20260816204501.493914-2-Jeremy.Jean@oss.cyber.gouv.fr>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- kwepemf100007.china.huawei.com (7.202.181.221)
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20260813082754.1165329-1-rkannoth@marvell.com>
+X-Proofpoint-GUID: CE-0RjH_jgToRXolM0233dstsri4H3ap
+X-Authority-Analysis: v=2.4 cv=ZpHd7d7G c=1 sm=1 tr=0 ts=6a827a1d cx=c_pps
+ a=gIfcoYsirJbf48DBMSPrZA==:117 a=gIfcoYsirJbf48DBMSPrZA==:17
+ a=kj9zAlcOel0A:10 a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=l0iWHRpgs5sLHlkKQ1IR:22 a=qit2iCtTFQkLgVSMPQTB:22 a=M5GUcnROAAAA:8
+ a=5TXRcTkNFt69AM2IH6YA:9 a=CjuIK1q_8ugA:10 a=OBjm3rFKGHvpk9ecZwUJ:22
+ a=Oh551-UHZqmTy8JkqTUo:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODE3MDAyMiBTYWx0ZWRfX3CqMZAs9ol0p
+ vASzUiXmCP4sLxb/4hrscrDzXl0Fdg4oqL+Zla28Lcgn76eBwonnKO5BYQtbH6uZWcCByQ3D2xF
+ +MT0Jhkivm+gWJIVvc0mrPwb4BT8vrsaCzJTRq9egbPbnbMZU6+zTreDxAGtsOsf8R6yvtcOEbf
+ tsAMoXM+xCfNMr6WEqZGAZgA2VHCJnV8oEwSAMT8Ma7Y0DMw73duBSfodS6fogF4iAOEPfLTDki
+ uTEev+0zMpd28tfE2JKdKr0IfOelIKJzBzEqQzekDIIXeNk/1LCUvkkhQWsgmDof0LAN0d1R5iW
+ fh0UocxuXFVisD9mBJ3IpfkiEhnRdUlHjCHqgReqeVlbMVVXG5uUTAlDVE70WfHplSlYCqnGwP/
+ xruoFSj1Aggja3+NoNmFcnri7wdoSJTMkq5C9z28nkUNVQbLpw8JM34nT7vBUI5vGcddHVrul6N
+ PPvXcmPl5Ix1pC5jzTg==
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODE3MDAyMiBTYWx0ZWRfX4Fih+aOGYCwU
+ CVpWFhjB6MCUL3IMCu9xa41uxw8qZuRlu96qTw2Hs2udEP/H/bQFLu5WxDyl3754voQdT/gClO1
+ 9QRrX44F4RJypkJ2pc/2td7dHeAHES8=
+X-Proofpoint-ORIG-GUID: CE-0RjH_jgToRXolM0233dstsri4H3ap
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-08-16_06,2026-08-12_01,2025-10-01_01
 
-+cc Yonghong
+On 2026-08-13 at 13:57:54, Ratheesh Kannoth (rkannoth@marvell.com) wrote:
+> Add TC_SETUP_QDISC_MQPRIO handling to offload per-queue MDQ CIR/PIR
+> shaping for mqprio channel mode with TC_MQPRIO_SHAPER_BW_RATE. When
+> bandwidth offload is enabled, allocate one SMQ per non-QoS transmit
+> queue, parent all MDQs under TL4[0], and program min/max rates by
+> dividing each traffic class byte/s limit across its queues.
+>
+> Setting up or tearing down the offload restarts the netdev via
+> ndo_stop()/ndo_open() to rebuild the TX scheduler hierarchy. That
+> clears carrier, tears down IRQ/NAPI and drops in-flight traffic; if
+> ndo_open() fails the interface is left administratively down. Offload
+> setup is rejected unless the interface is already running.
+>
+> Reject incompatible configurations (HTB, PFC, XDP, SDP rep, missing
+> CIR+PIR support) and out-of-range rates. Validate queue mappings
+> against hw.non_qos_queues and reject per-TC rates smaller than the
+> queue count that integer division would truncate to zero. Track offload
+> state in mqprio_rate_limit instead of pfvf->flags to avoid races with
+> the mbox up-handler, skip spurious teardown on tc qdisc replace, and
+> clear all MDQ shapers before applying a new mapping so queues dropped
+> from a TC layout do not retain stale limits. Restore cached shapers
+> across routine netdev stop/open via otx2_mqprio_up().
+>
+> Signed-off-by: Ratheesh Kannoth <rkannoth@marvell.com>
 
-On 2026/8/17 4:45, Jérémy Jean wrote:
-> Helper callbacks enter BPF subprograms through bpf_callback_t, whose
-> runtime ABI supplies five arguments. BTF validation nevertheless permits
-> static callback subprograms to declare more than five arguments when JIT
-> stack arguments are supported.
-> 
-> This lets verifier state for a callback use outgoing stack argument slots
-> prepared at the helper call site. The helper does not pass those slots. On
-> x86-64, callback loads of arguments seven and later therefore read the
-> helper native frame instead of the synthetic values checked by the
-> verifier. KASAN reports a slab OOB write.
-> 
-> Reject callback subprograms with incoming stack arguments when processing
-> callback calls. Add a verifier regression test using bpf_loop() and a
-> nine-argument callback.
-> 
-> Fixes: 0f6bd5e7a804 ("bpf: Support stack arguments for bpf functions")
-> Assisted-by: Codex:gpt-5
-> Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
-> ---
->   kernel/bpf/verifier.c                         |  4 +++
->   .../selftests/bpf/progs/verifier_stack_arg.c  | 33 +++++++++++++++++++
->   2 files changed, 37 insertions(+)
-> 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index fdc5fbb1f78c..29aa4911c7f7 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -9285,6 +9285,10 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
->   	err = btf_check_subprog_call(env, subprog, caller->regs);
->   	if (err == -EFAULT)
->   		return err;
-> +	if (bpf_in_stack_arg_cnt(&env->subprog_info[subprog])) {
-> +		verbose(env, "callback subprog cannot have stack args\n");
-> +		return -EINVAL;
-> +	}
+Will address sashiko comments in v9.
 
-Just took a look at stack args feature. The limit looks good to me, but 
-it would be better to split the fix and selftest into two separate patches.
-
->   
->   	/* set_callee_state is used for direct subprog calls, but we are
->   	 * interested in validating only BPF helpers that can call subprogs as
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-> index 7e0ce5db28a0..5acc3b63ca84 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-> @@ -27,6 +27,13 @@ static int subprog_7args(int a, int b, int c, int d, int e, int f, int g)
->   	return a + b + c + d + e + f + g;
->   }
->   
-> +__noinline __used
-> +static int callback_9args(__u32 index, void *ctx, long a3, long a4,
-> +			  long a5, long a6, long a7, long a8, long a9)
-> +{
-> +	return a9;
-> +}
-> +
->   __noinline __used
->   static long subprog_deref_arg6(long a, long b, long c, long d, long e, long *f)
->   {
-> @@ -79,6 +86,32 @@ __naked void stack_arg_two_subprogs(void)
->   	);
->   }
->   
-> +SEC("tc")
-> +__description("stack_arg: callback with incoming stack args")
-> +__failure
-> +__msg("callback subprog cannot have stack args")
-> +__naked void stack_arg_callback_many_args(void)
-> +{
-> +	asm volatile (
-> +		"r6 = 0;"
-> +		"*(u64 *)(r11 - 32) = 0;"
-> +		"*(u64 *)(r11 - 24) = 0;"
-> +		"*(u64 *)(r11 - 16) = 0;"
-> +		"*(u64 *)(r11 - 8) = 0;"
-> +		"r1 = 1;"
-> +		"r2 = %[callback_9args];"
-> +		"r3 = 0;"
-> +		"r4 = 0;"
-> +		"call %[bpf_loop];"
-> +		"r0 = 0;"
-> +		"exit;"
-> +		:
-> +		: __imm_ptr(callback_9args),
-> +		  __imm(bpf_loop)
-> +		: __clobber_all
-> +	);
-> +}
-> +
->   SEC("tc")
->   __description("stack_arg: read from uninitialized stack arg slot")
->   __failure
+pw-bot: changes-requested
