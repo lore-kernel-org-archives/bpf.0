@@ -1,125 +1,93 @@
-Received: from mta0.migadu.com (out-202.mta0.migadu.com [91.218.175.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FB8728690
-	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 04:01:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.202
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D601128690
+	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 04:04:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786939265; cv=none; b=qfjzZEbZ2yEXDS/G96uNddiI8//OmDUcjucO/Gk3at2wtHWL55BdA8mtvhQFRS0V0qgasd0bjMOyaudG40y7+P4GDpXGQHMCAA0oWefZ799YK2wPQQjQ70GaMFOoeRVxNwAf+tXUJCceaKba+5lnKBwWWCm/JocwVK05acYLeog=
+	t=1786939452; cv=none; b=t7/xP8wqq34eS+OOjAR1o1u7SQ256+kSIjecp2NEgnJbUDoBD4uzjsiMRfPa1GfqCURXsYmuUfuTXtVF/hgvafy7LKIqqc89LOMY6u2GQfbR9DiTyEUr8MF7GixIcYhS8w5HOFcSLAiYwQzKMC1tWurn3myhXU87o5ShMrKiLJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786939265; c=relaxed/simple;
-	bh=PiAvSTSmjnV67k6uaMX03KR6CJRJgU8zuU0Pom3Zlfw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ue/Hj27dq8Jp29ZMZ4+uvXk9vnGDVbgq2bqQafE7rwk+YeZ2XgsuD9ZbtLL3cxzffO8CsEGQhYPgctaBf7acWtZRRhEmA7rmBIzAyjIP5tOXF8cvYQHOmR7catV8XIPaL0G38iYGL8Y5TrFAqJb2BXjl+VaaKzNciqYZd5WMLm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=umQMPqd1; arc=none smtp.client-ip=91.218.175.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="umQMPqd1"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=PiAvSTSmjnV67k6uaMX03KR6CJRJgU8zuU0Pom3Zlfw=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786939261; v=1; x=1787544061;
- b=umQMPqd1oRgCq46RHszNmXKdl4+tEX2uN72Xn5Js+8bUL66kfQtjbCPFBacLS9bwVC5RRIDT
- kuGt9CqMnVsGd8fKXyzqUICrQHZUKgVPAOTzZLFvQrke7ztJDxJJd79IxltsjR4lhVbBl1F5Q6J
- HD9PrA124mwNZ2zei/GSuNRI=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [IPV6:2600:382:861c:7f36:14e1:cf55:e233:293b] (2600:382:861c:7f36:14e1:cf55:e233:293b)
-	by smtp.migadu.com with ESMTPS id f56ebb9910e0a748;
-	Mon, 17 Aug 2026 04:01:01 +0000
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <2d7a1070-e6f9-41d0-886f-c02f418f7604@linux.dev>
-Date: Sun, 16 Aug 2026 21:00:58 -0700
+	s=arc-20240116; t=1786939452; c=relaxed/simple;
+	bh=JMO161agt4UOo1iIL8s2FVGrZ9q+Z0IhgEB0TUpUjCg=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=aBRRNuIgUfViI9L5DuwTiCAJYhKxPNWF1vOR+3bNllWtoBQ+SCCmP8ePbgGw8L1Y9etVXrtHUNmOY6rE7WTT4VHT/hPnop2llOTiXgt7tnGrW1F/1jXZcgpvRU69Ac1BPAHjc3Pb5onf5TsedbqfAliyHbs4W2WtMzqYI/me0wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8Bx79I4iIJq2b0BAA--.5278S3;
+	Mon, 17 Aug 2026 12:04:08 +0800 (CST)
+Received: from [10.130.40.83] (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJAx3c43iIJqrHsHAA--.49061S2;
+	Mon, 17 Aug 2026 12:04:08 +0800 (CST)
+Subject: Re: bpf selftests timer_lockup intermittently locks up kernel
+To: Vincent Li <vincent.mc.li@gmail.com>, bpf <bpf@vger.kernel.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>,
+ loongarch@lists.linux.dev
+References: <CAK3+h2xOSEZUHhou7N2cRL-aGrZCNSm45g+P7thObMe+fpgYCA@mail.gmail.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <d06a7557-fb51-2be9-63cd-3269533476b2@loongson.cn>
+Date: Mon, 17 Aug 2026 12:04:07 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 10/11] selftests/bpf: Add inline-asm and
- subprog tests for R0:R2 returns
-Content-Language: en-GB
-To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com
-References: <20260813200210.1991507-1-yonghong.song@linux.dev>
- <20260813200302.1997359-1-yonghong.song@linux.dev>
- <d1a79a5bee37759da16f5944905dee8aa4a01604.camel@gmail.com>
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <d1a79a5bee37759da16f5944905dee8aa4a01604.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <CAK3+h2xOSEZUHhou7N2cRL-aGrZCNSm45g+P7thObMe+fpgYCA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJAx3c43iIJqrHsHAA--.49061S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrurykuF1UGw4rtryxXr4kZrc_yoWftrcEga
+	1vyryjyw4rJr4Yy3WDt3WFvF97ta1DXFy8WrW5Jry2qw1SqFWrArsagas0vFyaqF4ktF9x
+	WFn5tFyFvry7ZosvyTuYvTs0mTUanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUbfxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
+	Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
+	twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
+	k0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
+	Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67
+	AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8I
+	cVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI
+	8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v2
+	6r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j5xhLUUUUU=
 
+On 2025/8/25 上午2:26, Vincent Li wrote:
+> Hi,
+> 
+> I am running bpf selftests on a Loonarch PC and observed intermittent
+> kernel lockup by timer_lockup, then I can repeat the lockup just by
+> running the timer_lockup in while loop every 5 seconds, I could not
+> find a good x86 machine to test, and I think this might be
+> architecture independent. I don't have a good way to capture any
+> kernel log messages for the PC after the kernel hangs, and I had to
+> power reset the PC.
 
+...
 
-On 8/14/26 6:03 PM, Eduard Zingerman wrote:
-> On Thu, 2026-08-13 at 13:03 -0700, Yonghong Song wrote:
->
-> ...
->
->> diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_func.c b/tools/testing/selftests/bpf/progs/aggregate_ret_func.c
->> new file mode 100644
->> index 000000000000..cfb21bcf704b
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/aggregate_ret_func.c
-> ...
->
->> +struct ptr_pair {
->> +	void *p;
->> +	__u64 x;
->> +};
->> +
->> +static __naked __noinline struct ptr_pair static_ret_ptr_pair(void)
->> +{
->> +	asm volatile (
->> +	"r0 = 0;"
->> +	"r2 = r1;"
->> +	"exit;"
->> +	);
->> +}
->> +
->> +SEC("tc")
->> +__load_if_JITed()
->> +__success __retval(0)
->> +__naked int aggregate_ret_static_ptr_pair(void)
-> This test is redundant, already covered by a previous patch.
+> #458     timer_lockup:FAIL
+> Caught signal #11!
 
-Ack.
+I recently spent some time investigating this and
+managed to reliably reproduce the issue.
 
->
->> +{
->> +	asm volatile (
->> +	"call %[static_ret_ptr_pair];"
->> +	"r1 = *(u32 *)(r2 + 0);"	/* deref the returned ctx pointer */
->> +	"r0 = 0;"
->> +	"exit;"
->> +	:
->> +	: __imm(static_ret_ptr_pair)
->> +	: __clobber_all);
->> +}
->> +
->> +char _license[] SEC("license") = "GPL";
-> ...
->
->> diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc_c.c b/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc_c.c
->> index b66576307f73..2c1889fc28ef 100644
->> --- a/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc_c.c
->> +++ b/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc_c.c
->> @@ -50,6 +50,66 @@ int aggregate_ret_kfunc_struct_c_test(struct __sk_buff *skb)
->> +int aggregate_ret_kfunc_li_c_test(struct __sk_buff *skb)
-> ...
->> +int aggregate_ret_kfunc_ii_c_test(struct __sk_buff *skb)
-> ...
->> +int aggregate_ret_kfunc_uu_c_test(struct __sk_buff *skb)
-> I don't think three tests above a warranted, the previous patch
-> already tested returning 16-byte structs. Maybe a test with a small
-> structs of two ints, but I'd skip even that.
-> This would drop a ton of code from the back of the patch.
+After adjusting some kernel configs and parameters,
+I successfully captured the call trace.
 
-Ack. Will do.
+The following patch fixes the issue, feel free to
+test it:
 
->
-> ...
+LoongArch: Fix __smp_mb__{before,after}_atomic()
+https://lore.kernel.org/loongarch/20260817035908.460-1-yangtiezhu@loongson.cn/
+
+Thanks,
+Tiezhu
 
