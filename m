@@ -1,89 +1,90 @@
 Received: from flow-b2-smtp.messagingengine.com (flow-b2-smtp.messagingengine.com [202.12.124.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5D23E8356;
-	Mon, 17 Aug 2026 10:07:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C893AAF5B;
+	Mon, 17 Aug 2026 10:12:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786961238; cv=none; b=KczcpKvQN40LhAysqIr55ZdveHgG7LZSBU/OEsOjGltaiAIicKqQfUubAXFIo+gq+WxdjHMM+q9kd+1NPWWhrTRY7r8Telf1XcpzcvgL7dfgH0E/9UA3oK2FWUWbEH3egBMYwJZlMdYRo26RRCBhg1KGb/jVLc01dGWamWe7WYo=
+	t=1786961547; cv=none; b=tLKXPVtNWc3l6ZGvNBci6BoH1XrKlZruzKpx61u/ORSxs6vxkwiVTCHOeqG018qx9DDWWIBwLjJFaUjG6d+Zv0gs+rXuh6vdu7AsmFVG4T3bOLsUHwxL2DLgrWO1KrYNkAT0bgeSzuIrL7cZjuWoR1Lf8H9qE89i+V0EzYyxVZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786961238; c=relaxed/simple;
-	bh=ZLDLJ/KyytAKY3NBmGcEhTfUVtSQGMNC3kccuD/k488=;
+	s=arc-20240116; t=1786961547; c=relaxed/simple;
+	bh=rB6OVwdsXXCAGKXTgfp8Kmoki85JWZCeQYezlggkZ00=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lNGYf/+S8E63v+lKsn3LzS/9NyLVFsoHUKjeAWLN5i769/23ojRn1rw5KFNZGKuvB4diAS4xhQKa0unQ2Ff8zN9ISKR80KH6s/pYTiUKWvQZvAB8oqV2VnJM/1QH7jepiFEl0hCulrELktwomCkVpyMlsP89BwRJx7hfNVXLOpM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=Obw+j5Wg; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jc5xJb2V; arc=none smtp.client-ip=202.12.124.137
+	 Content-Type:Content-Disposition:In-Reply-To; b=je7f4Glhu7olVma2Sy0U1/I+LMytNByJaDBcL+YjXa+Fqqfv/tYm3Gn8hSnn/bQqDDdJoZP9yOzV1Oi6wMXspb3CEHmmwACgh7RsvRFwdn5mvw/ELKzAHL1vRUaEUdUy/WOBCrZ4gSms0HJdBmgBjuAoZh6qrk4fK+xFUG/wKYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=xRQqngJs; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=CfTV6G2L; arc=none smtp.client-ip=202.12.124.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="Obw+j5Wg";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jc5xJb2V"
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailflow.stl.internal (Postfix) with ESMTP id 5ECA31300157;
-	Mon, 17 Aug 2026 06:07:12 -0400 (EDT)
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="xRQqngJs";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CfTV6G2L"
+Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
+	by mailflow.stl.internal (Postfix) with ESMTP id 63A571300117;
+	Mon, 17 Aug 2026 06:12:23 -0400 (EDT)
 Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-06.internal (MEProxy); Mon, 17 Aug 2026 06:07:13 -0400
+  by phl-compute-10.internal (MEProxy); Mon, 17 Aug 2026 06:12:24 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-type:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1786961232; x=
-	1786968432; bh=aRuNgn93bXJUfUxBiQxkO2z074NGsTuHkXM1In4i/2g=; b=O
-	bw+j5WgWN+X6RQhGAYltwX6zzKc0Fc3AgF/3bxvz2QdUBFHjnMtBLTcg+Y+dnImg
-	CyzEfKss1yEa2iQcZJvd7MoCY3w8OU/SSX5g8LouAtrJSqf2QgP4o3DVmRU4RfAE
-	xL6WLF8j79qAZvgk0xHb/r+suYpm9YbGpJj3HNbBlXaIFwCjomWvp39d7bu0pE9O
-	FQ7J9brTf0KpLa4NP5We5Yt5jfLeGAcKf8WLpTIrZIz5BEL9gW5R0udM8ieJU8AC
-	6+tWXw25nO0maJonQZMdrMIZq3EXoX0ev6OqrvgZfzxh6dvU6RvUG977GDJbSb4v
-	7MjxthZq5Ew36jTVBXhTQ==
+	:reply-to:subject:subject:to:to; s=fm1; t=1786961543; x=
+	1786968743; bh=X2HZwQB8X79/qdi/4/eTag5lQ6IwYEUzzGIop06qT48=; b=x
+	RQqngJsQvZrHf0s86jYgcXCj5Nva4QQgYdFLWvnPsm5pHlQWL4f4JsJcJmhZ1KQd
+	ebFLHWOBGxdPAmJtctVNUyRxj4+VhIKyNK3YnVAl972sH78EIK6ce05LQA1UmvkU
+	Gc0qqJ5KtPCg5gpc6OycPPTdXp5kb76hiwcFxd6wLtAauHCP/cYu4yRlnS/I0yjs
+	UiNYqJKPGN+Zk0j7dIYGHCZ6IHNKZAZutsmJpaYFEHXXzjaNobM3+E+I30W4Xu50
+	CkT4YMcOK0UsdcX7N/2ylmqshv+nlx8VmsGzHdAQQOacPUw9o/w4fiTgYAL2VncB
+	gc/zLvswJrx8vPKiXrWLw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:content-type:date:date
 	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
 	:message-id:mime-version:references:reply-to:subject:subject:to
 	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1786961232; x=1786968432; bh=aRuNgn93bXJUfUxBiQxkO2z074NGsTuHkXM
-	1In4i/2g=; b=jc5xJb2VoVZ1fl2S6LLqziq4i2u2Rbe32OHQeJVp/2ttPYTXew0
-	7fI87ivUzXyjtnbDs9dM6NQNV3o8ArPMOKaUgnltc5Lub9V598q6WxgipKSq6vty
-	zeDD7M/ZgRR1gOO4hUgeirt736eb0ZwlUwCWnJNZDvk45D3gRHqaNGzzARe++MR9
-	T8wj+C5TYn88f0zcpQvtazCWS5NJGNTs8rMFuHegFjkZ7AePLSicCWft5HQoGLPo
-	Ln/FnQvW+gGfYcLSaa3nFZzFQoC5+Ljnv2h1n2phwmmvNY7BrTExfOMM6wYBBug/
-	CEcTRhxwPoeOjpi4FPmH/fDkD7KGYVnvEwQ==
-X-ME-Sender: <xms:Tt2CapXMRrdqUkLUYClECzMGWz7C6_A8JSuSSJczEnq-CYWn6lQsHg>
-    <xme:Tt2CaqBxYZMKV3YyzhukbCH2OSBWz-cCHzzrGjyuynRYx5hdylU-XPFPbhGqWCImY
-    hw6SzT0-0rOPRj49_5_IZYpzj-lPJn2bXjj1VxLQrLJl4bXkRPTjbzP>
-X-ME-Received: <xmr:Tt2Cam23dXjUyNx77-7MMZ_lxv3FAf44uQvC9wprJ7cpr2x2MfiOIMp7_-o>
-X-ME-Proxy-Cause: dmFkZTGPke0xlf6uK3/vVuV73Zp1ci4I00XU/mQfuBGFKH1EChMGX2W2K2Ay2xhloeELQD
-    YiSpOdYfS3z1XRkLC6OwopMYsiHdQ/yeActqocVNoFvfU/5hj7DZTAbsGqeu/+vlYMOKYe
-    MWZ9Q8UiaBU71nzHRAot0umiaedntditcGBLwUem5zhFHFf5OpfS/6n4GvupEXcpjvPGj3
-    YS/MsMxbcZPoVQjXb4Y5nmgZiQQTorgVnlVV7XtccWjaPbJxsCJxHuas6xK55NYWz1sLxN
-    BrpX30FWPC089z3CGRvQuRihRi+MjBpPadK+XwuOwmXhO/v6SpeTG64SVzAEO1fg3twnP1
-    Kff7Ds0jl28z1J7Pw/pA2yU9ggaWKCe8j6+zwfuGFFyZuYj9ej/W7PLO9hSwDLHvIdW6e6
-    Mr/XVT8/uY+izsqEvf9nEEzVsCTyF+Mu7ocLv1N8u1P7CBjqyb9zStDL6Ow8OhJrSPvHnZ
-    CY4gqFI+3SIrPoHTIQjBKp2kK4SlVy31eGOwFfSooL93C7phrDuEtE6RThgrayhp9q/CEb
-    MtROetx8oiqBJOf2mJ2ieygLVtmzuoOpIsCwDXTmS1tO5vJZ8JyienAdNO5QvrPaiK4piA
-    hA0YgweTdo/51rf4vottrOb6FRoIjt2cLXIPrFbDaGaLAA1zaoVYm2Nyd23A
-X-ME-Proxy: <xmx:Tt2CasUuEtiP84tS7a6-AsE2jEt4pUnaX_etlNhxWeXrpK8Iiw-iZA>
-    <xmx:Tt2Cai9U7lLXVYWTLOHt9tMTtMIJQhUW-2RPfF55m9wC3ZiigfrLbQ>
-    <xmx:Tt2Cah1N-5Sw1mAJFbviYO3ob6StIInc6Me9s3_0UAv57rrxd4fFhQ>
-    <xmx:Tt2CatD1gW3cHx2rVnpjpUMd3hGXJN-wCfU4S8HoIuNJkC5uGGA8kQ>
-    <xmx:UN2Can-cWdfMqC3gdMhs9v4sDRqa48mv37iCCpvVjODesicJh_YR0Jdx>
+	1786961543; x=1786968743; bh=X2HZwQB8X79/qdi/4/eTag5lQ6IwYEUzzGI
+	op06qT48=; b=CfTV6G2LTjN1icCJK3DcPrP9QPJjVSJHPG8zI/AUFBKAc5iZ4xi
+	BEA1j8oQreIWLuZjLOeq7e4byBwT98UUCgo1D0bLn82yuUMTZU4MxtGr2rV3/LAq
+	ncbRIN7DVdoL71TC5/EEaQ7K3gsezUrzmGlp0zVOEyNLHVPxo8L4R69Flq2iSwuf
+	2KPlbdSf8PPgZzMEF6QGo+EBmKJDYufqpS6CR1Z+1v9jmcHQ047HbO45s30og0Mv
+	rjxJv16nupiABUJpZxDIh4swNyobXKpmzNbgJO9pxVu9ltBYUgDTjlonPcz7tHJT
+	60r+kqnOk6LGF3nAFaaIclnFyXE9txjhnyQ==
+X-ME-Sender: <xms:ht6CajzZR34q0SpE3IBGlWMzV0HsL-On7sQsj9W0qut91mX6-gWjjQ>
+    <xme:ht6CarveJbz5zfChiOhwbUClj7gzKj2j7UzbG_Z7gTfe2kKYdHvuMQeL-DwdBY-jE
+    NiPYswveJGNCTo9suitCqpiy48ahU7evBboWLm-2KKLJFyTz0-k4wQy>
+X-ME-Received: <xmr:ht6CauxtAk3icX5Uj3LwCKfQQvgQ33e5GquzNj3jh6MWY81ykc2npIuhqco>
+X-ME-Proxy-Cause: dmFkZTE04h/Xk+B6F38wg1Z4C6OmnrAKlBfM7UzM5EIQKp4sCWLVWOi+/U7GmJGoQVV3aU
+    PCZ6qKdMqIGgdq11Uk+Bvg3GH0Qksqp9icwfxUi8xTi0VgIM9ofTpDppNiUf47vBs6CnCa
+    61NgyKhphhFRp6j0B1wVtMY/dUPe6YISZOK/wa2GNLF6Pdz3RFO7QexzO+CH5Dzon7VkqL
+    cUykLN6rKkOh2b64Cj4PEuZ8L0YOl6N3I5fW9T7NeStA2TOnjgJqfJ90ZWJWfkCgUetW8k
+    BwRmAcnGQoAwDIW3yl/VOiIdWYaNABY6slB4PBxG9o3FolT+tORmcgvXoOLN6jodX7rQHi
+    jtZcozexYhIZ73a4vTqm+HwRcZ+j4fnZ7nH2DgowV2OWuwKGUJjmojdWA5wbuU4UfE4WCr
+    XiSNq/MJrOKZsWh0BQ/fdiF/3UIo6WSAigw1v9d34tpR989iNEBeznfkd1GbFPo9SDz+jM
+    ukwd2k91H36BTEsP23SmdgqLLptzUc8tZxoDRdMmYEe2tkdWI5GmKU5pWWItjEYqXvpUoR
+    eRoIHtCk2h7wkLc/+7cF2eDgtfbj/UX/q/ipDTHmr6VYhkwM0NuLOf6t9SW2CyIZhZZGuv
+    JE79Jf/na2ye8Z/yLwVLL8B+/otnZA/k62pQwiGUk3SREVwoN8JCWEH9X3kQ
+X-ME-Proxy: <xmx:ht6Catj8BSPlV6w5NE2AfS7My6PfEb6qYAePZKZcqv2EbIDrekWfyA>
+    <xmx:ht6CakYkZruLAxRYLQcbZXIs0Lo_GApO_kKv2aijIaD26LH4oRaL6A>
+    <xmx:ht6CauiQJ3zXuSu-QM-XGtUkcsIqBNywZufZq5nCdi6ytv4f0seGig>
+    <xmx:ht6Caj81ZylIxOsO7YPadr1koFSi6F9Xcjdfa_-XQ1wfWK1AZLi98Q>
+    <xmx:h96CapKWXoutgBeqJ8uTcWbxvl8CkWe79PwwUwJ5FsBS-iCjL65xbjOI>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 17 Aug 2026 06:07:10 -0400 (EDT)
-Date: Mon, 17 Aug 2026 11:07:08 +0100
+ 17 Aug 2026 06:12:21 -0400 (EDT)
+Date: Mon, 17 Aug 2026 11:12:20 +0100
 From: Kiryl Shutsemau <kirill@shutemov.name>
-To: Zi Yan <ziy@nvidia.com>
-Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, akpm@linux-foundation.org, 
 	nico.pache@linux.dev, baolin.wang@linux.alibaba.com, baohua@kernel.org, 
 	dev.jain@arm.com, hughd@google.com, lance.yang@linux.dev, liam@infradead.org, 
 	mhocko@suse.com, rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org, 
-	surenb@google.com, usama.arif@linux.dev, vbabka@kernel.org, usama.anjum@arm.com, 
-	agordeev@linux.ibm.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, jannh@google.com, willy@infradead.org, pfalcato@suse.de, 
-	rostedt@goodmis.org, mhiramat@kernel.org, linux-trace-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 00/57] mm/collapse: rebuild collapse on migration
- primitives
-Message-ID: <aoLc38LkU8bLAJ3Q@thinkstation>
+	surenb@google.com, usama.arif@linux.dev, vbabka@kernel.org, ziy@nvidia.com, 
+	usama.anjum@arm.com, agordeev@linux.ibm.com, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, jannh@google.com, 
+	willy@infradead.org, pfalcato@suse.de, rostedt@goodmis.org, mhiramat@kernel.org, 
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 57/57] MAINTAINERS: add an entry for collapse
+Message-ID: <aoLecacFrU6bqmp5@thinkstation>
 References: <20260816224609.308019-1-kirill@shutemov.name>
- <DKQUL7RN5K3W.30VLVVWFPBRXZ@nvidia.com>
+ <20260816224609.308019-58-kirill@shutemov.name>
+ <aoLASuFkQ3rUrWa0@lucifer>
+ <985a5b95-e2af-4603-b2af-973cd634cb59@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -92,33 +93,40 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DKQUL7RN5K3W.30VLVVWFPBRXZ@nvidia.com>
+In-Reply-To: <985a5b95-e2af-4603-b2af-973cd634cb59@kernel.org>
 
-On Sun, Aug 16, 2026 at 10:02:53PM -0400, Zi Yan wrote:
-> > What that removes from every collapse path:
-> >
-> >   mmap_write_lock              -> mmap_read
-> >   anon_vma_lock_write()        -> nothing: an rmap walk needs the folio
-> >                                   locked, and the engine holds that lock
-> >                                   from freeze to putback
-> >   tlb_remove_table_sync_one()  -> nothing: one ranged flush per round
-> >   LRU isolation                -> nothing: sources are inert in place
+On Mon, Aug 17, 2026 at 10:08:32AM +0200, David Hildenbrand (Arm) wrote:
+> On 8/17/26 10:04, Lorenzo Stoakes (ARM) wrote:
+> >> diff --git a/MAINTAINERS b/MAINTAINERS
+> >> index 7c179b333e4e..4e4e5030b979 100644
+> >> --- a/MAINTAINERS
+> >> +++ b/MAINTAINERS
+> >> @@ -16955,6 +16955,20 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> >>  F:	include/linux/balloon.h
+> >>  F:	mm/balloon.c
+> >>
+> >> +MEMORY MANAGEMENT - COLLAPSE
+> >> +M:	Kiryl Shutsemau <kas@kernel.org>
+> >> +L:	linux-mm@kvack.org
+> >> +S:	Maintained
+> >> +W:	http://www.linux-mm.org
+> >> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> >> +F:	include/linux/khugepaged.h
+> >> +F:	include/trace/events/collapse.h
+> >> +F:	mm/collapse.c
+> >> +F:	mm/collapse.h
+> >> +F:	mm/khugepaged.c
+> >> +F:	mm/mm_slot.h
+> >> +F:	tools/testing/selftests/mm/khugepaged*.c
+> >> +
+> > 
+> > I'll look through the series properly, but presumably this is a separation of
+> > the THP collapse logic, and therefore should have the same maintainers/reviewers
+> > as the rest of THP.
 > 
-> I remember we were discussing using migration entry and the issue with
-> mmap_write_lock() in the context of in-place THP promotion and the
-> conclusion was that because MADV_DONTNEED (maybe MADV_REMOVE or
-> MADV_PAGEOUT) works on page table and does not change VMAs,
-> mmap_write_lock() is needed to prevent things being changed under
-> khugepaged. Anything different in normal khugepaged collapse process, so
-> that it is OK to use mmap_read_lock? Let me know if I misremember it.
+> Jup.
 
-IIRC that discussion predates Hugh's pte_offset_map() rework -- since
-0d940a9b270b the helper takes rcu_read_lock() and fails if the pmd is
-none, !present or huge, so mmap_write is no longer what keeps a pte
-walker out.  MADV_DONTNEED is still not excluded, and the engine does not
-try to: the install re-reads every slot under the ptl and publishes only
-if it still holds the migration entry this round put there, leaving a
-zapped slot alone and dropping the rmap the frozen source still held.
+Sure.  I just didn't want to volunteer anybody here.
 
 -- 
   Kiryl Shutsemau / Kirill A. Shutemov
