@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A94E3C3458;
-	Mon, 17 Aug 2026 09:10:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD6203BADAA;
+	Mon, 17 Aug 2026 09:20:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786957855; cv=none; b=maFFyCsX3kt3beZi2O/LYwfctZfbc5UhIoJcvMOd5EuiJ7AIA5p4PBdkzguwDWvRToCHgH8qJTnFYMa7yvQ7KYjmt5wxIw0WeTXrq0SS/GwNy7rJ9kF6XJZBnMTg3iHk80ffRL2pa04mtSHx0jAIJhTBS2h2ssqsdmbo4DaOqk0=
+	t=1786958456; cv=none; b=BP2MGMk0vHNFvW2NXbvCHVXa+e/Ik+LsHclLyoOi1BR1m/6ZdYaiYhIvtTtyv24l5Vc4SmRg8K+exLEpL4gtSzcZ9pHsdKeWwvra5OlmUu9h/B9Xp6d85roY/jdRBgFwTNFweMjnyrvZsa8kghSrhJ0yeV1tq+lium2NqxAoZcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786957855; c=relaxed/simple;
-	bh=APpwken6/kn8nPUE5Dl3oYBovFkpIHIiEI6GMR3WFiE=;
+	s=arc-20240116; t=1786958456; c=relaxed/simple;
+	bh=ta7g2cxvov7TUku22VQzLqA7VtXieNjevpBzlEjV810=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=p4IkEVPLlM/ctGgX51VAheOVDVUf4en9v/NEpR3+gOrNp3aN/Ph14evKOL5PCZj1l2HQCA4t6F7L3wPlms4ZJZnEuZnhoxA9KYj8ZwxhbEwrcdVvbZ/lADVRc+7UR9BisfU3wjfeMptjzAS1zC2+8Q8/+u2QGwlbNsG8416nRCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JP/FAlgR; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=ZoySYGqnqou1Q0V5oWDdVpuSCNn5QkSkztsnOsVT/zl7e68ezG7t7/qZPlVsISCDnqSdmwA+TDUVjg+2zYeMZSbQhCOZB/nSgM/jUEKXx19nf9RZA8i7VvzCfXjRCbQK5tdHt8qPWvjaLfKSYyuWBY+pbNld22YZbjzdYL1sZMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TADieu4R; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JP/FAlgR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAB781F00A3F;
-	Mon, 17 Aug 2026 09:10:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TADieu4R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E987E1F000E9;
+	Mon, 17 Aug 2026 09:20:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786957853;
-	bh=gRQSUtkmmSk1F9ZN+pwA6ejx6E7c2c41ltEUjaJV+aY=;
+	s=k20260515; t=1786958455;
+	bh=n2q+8bFM8NBLHAUHpM6PZHD+hNnTopAORAsNWi9JvSU=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=JP/FAlgRG/5+t91U8h0fpGWDBaQZ7vcl8+qJasbNGmxW0kZTQQh4VsaKtIHrtN490
-	 8koYxojyhxSavdXcvgLV7ICsp1nvhhLApmVuMQan/FOSUvHg3kS5CgTOHo2dwPby4u
-	 2nTSHviHZTEjf63gQK1hNhX9zEvAQNRH01+PuV0JRTSZRsVpd4VczDOmawqjesALSh
-	 ZZMopwI1jc5zQ0KC7YHNJzjUDE8zYeHR+FrG3qj1F2Xe/sMsScGKQUFH8LXghjl9ND
-	 PfPTL+AFmx/S/dcqYoeC+uF8C1axLv9/ut6kwPt7RmBE9/ectytCREIrJXbQuUfD5N
-	 oThvdv5eHDzfg==
+	b=TADieu4R4szcOqgjWQa+I0KOllmdTY1Bl0IDjkrQs1OmNbA6JIk8FZzEQ/s8zQi02
+	 /K6Z2gVa4nxRFNI46mrjt7a0MHrKWzd+1HrT5dgp/2FZd9aARz0SHAvrRuBxLg+mMs
+	 8gw89fYDiyXdx9VHjb9kZmNNxAt2EzbqElEZD1epXEVBQ6NCZaS9+gVrjY69H1WYN4
+	 6h3X4Dpo1hvXoRX8qUezwEqACesPOQulH/e5DueFvehzDqZtKrIiK62hbJ78ttXE3D
+	 tSwD9786P77D2KAd2zZzWsgdXVKG3HXTRlHA6jRXra3hICSCc8zga8cbyg2UIZLXwj
+	 q8zOYm27YUQdQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 5680D3924FE9;
-	Mon, 17 Aug 2026 09:10:07 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 938833924FE9;
+	Mon, 17 Aug 2026 09:20:08 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,43 +37,40 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v2] lwt_bpf: restore reserved headroom after xmit
- program
+Subject: Re: [PATCH bpf] bpf: Disallow bpf_{g,s}etsockopt() in cgroup UNIX
+ getname
+ hooks
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <178695780590.1031338.13848902843812824537.git-patchwork-notify@kernel.org>
-Date: Mon, 17 Aug 2026 09:10:05 +0000
-References: <20260811044149.118235-1-zirajs7@gmail.com>
-In-Reply-To: <20260811044149.118235-1-zirajs7@gmail.com>
+ <178695840740.1036045.289178403447627477.git-patchwork-notify@kernel.org>
+Date: Mon, 17 Aug 2026 09:20:07 +0000
+References: <20260812091654.244752-1-zirajs7@gmail.com>
+In-Reply-To: <20260812091654.244752-1-zirajs7@gmail.com>
 To: Junseo Lim <zirajs7@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, idosch@nvidia.com,
- martin.lau@kernel.org, leon.hwang@linux.dev, ast@kernel.org,
- gnault@redhat.com, fmancera@suse.de, bpf@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, tgraf@suug.ch,
- rhkrqnwk98@gmail.com, emil@etsalapatis.com, daniel@iogearbox.net
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, martin.lau@linux.dev, song@kernel.org, kuniyu@google.com,
+ emil@etsalapatis.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ rhkrqnwk98@gmail.com, daan.j.demeyer@gmail.com
 
 Hello:
 
 This patch was applied to bpf/bpf-next.git (master)
 by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Tue, 11 Aug 2026 13:41:49 +0900 you wrote:
-> ip_finish_output2() expands an skb to LL_RESERVED_SPACE(dev) before LWT
-> xmit. An LWT_XMIT BPF program can then modify the skb head and still
-> return BPF_OK, so bpf_xmit() rechecks the remaining headroom before the
-> skb continues to neighbour output.
+On Wed, 12 Aug 2026 18:16:54 +0900 you wrote:
+> _bpf_setsockopt() and _bpf_getsockopt() call sock_owned_by_me() for
+> full sockets, so these helpers expect the socket lock to be held.
 > 
-> That recheck uses dst->dev->hard_header_len. This is not enough for the
-> neighbour cached-header path: neigh_hh_output() copies the cached hardware
-> header using the aligned hh_cache size, HH_DATA_MOD for short headers or
-> HH_DATA_ALIGN(hh_len) otherwise.
+> BPF_CGROUP_UNIX_GETPEERNAME and BPF_CGROUP_UNIX_GETSOCKNAME run BPF
+> programs without acquiring the socket lock. A program attached to
+> either hook can therefore trigger the sock_owned_by_me() warning by
+> calling bpf_setsockopt() or bpf_getsockopt().
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf,v2] lwt_bpf: restore reserved headroom after xmit program
-    https://git.kernel.org/bpf/bpf-next/c/5fe7007aed9a
+  - [bpf] bpf: Disallow bpf_{g,s}etsockopt() in cgroup UNIX getname hooks
+    https://git.kernel.org/bpf/bpf-next/c/84473a7e1813
 
 You are awesome, thank you!
 -- 
