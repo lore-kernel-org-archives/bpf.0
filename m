@@ -1,84 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8040B3B42FE;
-	Mon, 17 Aug 2026 09:50:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 183733F58E0;
+	Mon, 17 Aug 2026 09:56:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786960256; cv=none; b=r0dSMUsDXWR9kNCibTtSm0HqkCQlEKUAHML4ZJYFYskCPBbYa3c6xxe8OWYRDHH44zaGHyQLrQz+xiiewlhWgr7i5erQgucbK6hvFDRtiEwXnojl5m0Ww509KIabMXQzE6GahiwVHQEZ9dbe/493MnlLsr10jCe1e36jYBHVmG8=
+	t=1786960576; cv=none; b=VUSLIf5dz0LvYZUX2/tugNhpGbivQ2euIpHWmXybxzzHjKiQMxm+wa3cd3wFAIJSSPHITrDzNyE2t7uUVPy6Hj3QKJAx9Rnu5JMCIpLqm5hTaX8v/MWUVDVqoPZ+VGF4Eg0iakVyhB+Wg6lcF/vPdeeNyhiZjJrMfaJXSmhOgRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786960256; c=relaxed/simple;
-	bh=JLLbgujZYkj0BnDfaWwCyG3HeAkP3glyBlfiCcRUOEI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=VJp3yuKpv8yr4WS/CcMSQU6/KIdM/FKJ0uW3n4xBq72vsyDnm2aJyWy44hOoBUdk5+LfKgl3XXDq99VsYMstQqKYgfWF9wgbNWUGzVA1uQfbuDGtI4pOBRtPVs4GWuq1FgD48TZx6EdFOACFpoCpgONx2nCDI79KmUHcB5ssYxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IR7PiKsW; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786960576; c=relaxed/simple;
+	bh=VfSe1uHL6S/Q76hLZIUKNYTBfPpff6p6p3SFbFOifmQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Subject:Cc:
+	 References:In-Reply-To; b=ufPvUcX1yBYbHMO8BL95aiXR4bOGmp4uoqiyBZXEcefw+vRq23Wax4ChaIQCCcF7gM3FzOOijXU6/SaOTSL9Tow+YKQTD7TcmMmIgoFHB5XPzWQ8/VbX6SZtpywve8VXDl+cLSee1ofYrbu0P5sSm+KvtBp+epLw5rv7o6AXFAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=dQt+Vp+l; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IR7PiKsW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35C2F1F000E9;
-	Mon, 17 Aug 2026 09:50:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786960255;
-	bh=d4wSjGZxS0+NFOIGm6UI/84mWN7jIGcu12O+oKPrv/Y=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=IR7PiKsWticzhEUcKhDkLs6pBH7DAklzVuAzeArT4mwQ2k7MbiDeeJzq77MNAkUq7
-	 C3/+7HFfuaK8Wo9yS0yKbBm+61Is/h5gRygXtYkNZh5LwI0x9E9TZXuBDSuXDbAmAH
-	 8UaoOLfouqkvHBtSZjJZd5561Ok3qxsu9GZx5AYFi+ElN/etEYID83O0wCYZeJXe2+
-	 EhL2QfoUVzk6UGfcILITnnw0S/vcQLZ2hIuSTrZQVggG6QPaG9Koku3b/cCYWwXRsh
-	 GfCQvH5EQ2zbT0XjXbRYDwGrVlfAw+eLhVIktN516Btq4BQEL+8E7rW+v7oHWu6X7H
-	 hrhf1izNgSw0Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D098239253C6;
-	Mon, 17 Aug 2026 09:50:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="dQt+Vp+l"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 8A5EF1A16DA;
+	Mon, 17 Aug 2026 09:56:08 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 54F5560352;
+	Mon, 17 Aug 2026 09:56:08 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id BF3B511C4FFB5;
+	Mon, 17 Aug 2026 11:55:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1786960563; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=mtBtSPmPjbbZ12kC6Vzxp1XkUgAFw6sD7320/XF8vpY=;
+	b=dQt+Vp+lwaWW32G77vDmBmg76FSGrtVCWbyPEJyNMsyvFKIG0OGwjs6PzxaaFSds7dM1sz
+	eePUFhPjfkQsYixH99ZuJB1+rqolqtwJ9YxsF9JCNX9+QFDdXt495t57u8vRHLUgKdwb2Z
+	0TZG0iXgQpLhY4Y/mmAvF+l0AILGo3pHEK39+hS0AzqoujG/987aOGA5H1jnR0CZC/cgXh
+	VGD4Gy1MeSCAIUW7UqrKebDfjm0SGKDbL9YVzU32P4kKctPwY/uLicS5C3GghHlv3CP80J
+	q6H/6AKIIb2419e1yfZTkpMd7Wx0uSrOkATcVgNwW29LZ3QaCKejI3OziF4WNQ==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v2 0/2] bpf: Reject negative optlen in cgroup
- getsockopt
- hook
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178696020739.1047534.3951933136786792330.git-patchwork-notify@kernel.org>
-Date: Mon, 17 Aug 2026 09:50:07 +0000
-References: <cover.1786448307.git.zirajs7@gmail.com>
-In-Reply-To: <cover.1786448307.git.zirajs7@gmail.com>
-To: Junseo Lim <zirajs7@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, sdf@fomichev.me,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- rhkrqnwk98@gmail.com
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 17 Aug 2026 11:55:59 +0200
+Message-Id: <DKR4NFY9QWP6.HDPI329BNKZ0@bootlin.com>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Daniel Borkmann" <daniel@iogearbox.net>,
+ =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
+ <alexis.lothore@bootlin.com>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>, "Ihor
+ Solodrai" <ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf v5 2/2] selftests/bpf: allocate a larger timeout for
+ connection
+Cc: <ebpf@linuxfoundation.org>, "Bastien Curutchet"
+ <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260814-tc_tunnel_flaky-v5-0-5b93d030c42c@bootlin.com>
+ <20260814-tc_tunnel_flaky-v5-2-5b93d030c42c@bootlin.com>
+ <07776a9c-2998-4d65-af3e-c714181d4241@iogearbox.net>
+In-Reply-To: <07776a9c-2998-4d65-af3e-c714181d4241@iogearbox.net>
+X-Last-TLS-Session-Version: TLSv1.3
 
-Hello:
+Hi Daniel,
 
-This series was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+On Mon Aug 17, 2026 at 10:55 AM CEST, Daniel Borkmann wrote:
+> Hi Alexis,
+>
+> On 8/14/26 9:11 AM, Alexis Lothor=C3=A9 (eBPF Foundation) wrote:
 
-On Tue, 11 Aug 2026 23:19:06 +0900 you wrote:
-> A cgroup getsockopt BPF program can set a negative optlen after the
-> kernel getsockopt handler has run. For TCP_ZEROCOPY_RECEIVE, the
-> kernel-buffer hook did not validate the lower bound and the negative
-> value could reach copy_to_sockptr() as a size_t.
-> 
-> Patch 1 rejects negative optlen values in the kernel-buffer hook.
-> Patch 2 adds a test_progs selftest that reproduces the issue through
-> TCP_ZEROCOPY_RECEIVE.
-> 
-> [...]
+[...]
 
-Here is the summary with links:
-  - [bpf,v2,1/2] bpf: Reject negative optlen in cgroup getsockopt hook
-    https://git.kernel.org/bpf/bpf-next/c/1b5aacd5b241
-  - [bpf,v2,2/2] selftests/bpf: Exercise negative optlen in cgroup getsockopt hook
-    https://git.kernel.org/bpf/bpf-next/c/6b0835ac79b2
+>> +	/*
+>> +	 * If the timeout configured by the test is different from the
+>> +	 * connect timeout, restore it
+>> +	 */
+>> +	if (opts->timeout_ms !=3D CONNECT_MIN_TIMEOUT_MS &&
+>> +	    settimeo(fd, opts->timeout_ms)) {
+>> +		log_err("Failed to set timeout for connected socket");
+>> +		goto close;
+>>   	}
+>
+> Could you do one last spin? I'll get the comment fix applied, but the abo=
+ve
+> still has issues as pointed out by sashiko, so maybe this could be rework=
+ed
+> as follows (untested):
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Sure, I was planning to respin today with fixes to issues raised by the
+CI bot (wrong patch subject and mishandling of timeouts larger than the
+default connect timeout). I'll send it later today.
 
+Thanks,
+
+Alexis
+
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
