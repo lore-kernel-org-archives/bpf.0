@@ -1,118 +1,97 @@
-Received: from pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.42.203.116])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA74B3D4114;
-	Mon, 17 Aug 2026 21:27:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.42.203.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C2053C09E7;
+	Mon, 17 Aug 2026 21:37:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787002069; cv=none; b=CuQ1KTiXSznnHwqTWD6bIFAlK1o8kULiiiR33KwneGBP6mxkmHY2eRCsHeXrleLYiNOb1WbmytCFIremtVapOOZejmyOIAAtFmb4r7AowrRChpIFgBlFkP1Q4+2MENdSH77SGP+slzXW/MQPbmkePEJlHtTxx8rSyTVAYIA1BOc=
+	t=1787002623; cv=none; b=uhu8ioku0jMrnjkpfykqxs+OpZ6+U1HdjGXTA+XlWlw4Db11U/CAjbuFxl4+xmtqXzYrh7FBOl8ZKvSGXP/ou2oEZyz6zXiLDgA/xVZuviirwsOoshemsv7ZMhhI/Mqj3yrmJORkwzL/sqrro+h469dilQetXNyVCdYIw1m2+ms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787002069; c=relaxed/simple;
-	bh=60fJekTBbR11gLxTaWREoBHR2j+XFQ7jRlnXGTD55OM=;
-	h=MIME-Version:Content-Type:Subject:From:To:CC:In-Reply-To:
-	 References:Date:Message-ID; b=dCqqXChbH9mJ43eysV5r5a9zQev0k3tmATfKPQpMXqET8afB6cN1v7vb7/Xu4sO0MyKWPWPKP5VPraWWn2+Nr14vPaW4CoFaT0rBD8b6DnrSpzsWTZAv6d/7eyuEJK3gmMvWZpiI+9MEjB9sTL1EE24hozNllOg5gzRIDezXWO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=rmgMpLAJ; arc=none smtp.client-ip=52.42.203.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	s=arc-20240116; t=1787002623; c=relaxed/simple;
+	bh=TOh2twL5Fhvhio7Uj36AhvthP9inb4OGQEsrWcD/jE0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=g1wQDlI46VTu4K9YsfrfjZDpZNewjbL0bGWyZSRkdzs61kw7faW+BBCStsAeM85DPPWh3gx0Oitge6fEjsZ8G1UOm92Sx87b1TYKLHKluI2mRELbjU3GI1YreTy5NtMgyUxIeqw5vo32vSKS/Pfd742yNeun/3nszGdvMQPRnpA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X9spCsA3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="rmgMpLAJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1787002067; x=1818538067;
-  h=mime-version:content-transfer-encoding:subject:from:to:
-   cc:in-reply-to:references:date:message-id;
-  bh=7HAQgr7W1Px6oodKSFEqrJXQ5YZXceMvyj/wLnrYFcQ=;
-  b=rmgMpLAJ3TQdFYt7QiKq0Haj+EHDDde5UBphOpTqvcrMDXj3fwtJ2uyj
-   q8qBtI5gBLeeE9x1PuGC7He7nT+WiEx1KP4D4paBtI7s72x9SjDTLouFT
-   1pv6yIPZ0KrSnNDLzgFDeRgg2DTcCsxihEYO3RhUiVt/xm/acdI/8HDCq
-   f6a7c7WQS2Cb2j7CdLz+xZnBC/kApC6wg2ZiYVh/w0qgylTO4XT6TRFAz
-   SVpWTbIJFIpT+VkqAyzZUpBjgH1hAqazhotHFSkqpzD48g47XpjOWrkfr
-   ukXTh4OL/HSTy3A+ukRqPLDRbIZoXfGcTCedsKjhzE4r7C2BgSM2fDfa/
-   A==;
-X-CSE-ConnectionGUID: xqkOYIIoS5iXSHPq31YmEg==
-X-CSE-MsgGUID: siGmvPlBSnSUzy7Vob9ogQ==
-X-IronPort-AV: E=Sophos;i="6.25,229,1779148800"; 
-   d="scan'208";a="26237258"
-Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
-  by internal-pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2026 21:27:47 +0000
-Received: from EX19MTAUWB001.ant.amazon.com [205.251.233.104:13272]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.54.183:2525] with esmtp (Farcaster)
- id 05c9af25-051b-43f7-8f28-ec338ccbac36; Mon, 17 Aug 2026 21:27:47 +0000 (UTC)
-X-Farcaster-Flow-ID: 05c9af25-051b-43f7-8f28-ec338ccbac36
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.45;
- Mon, 17 Aug 2026 21:27:47 +0000
-Received: from u34cccd802f2d52.ant.amazon.com (10.106.178.24) by
- EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.45;
- Mon, 17 Aug 2026 21:27:43 +0000
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X9spCsA3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2D0C1F000E9;
+	Mon, 17 Aug 2026 21:37:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787002621;
+	bh=8YeRVvb5fOWOBDUhPCq8cNtQ+K3tbVVzmgfC5QhPf58=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=X9spCsA3Q0NVjGSoItOxM+E+wy018EIGXSjwQX0OSUyZHbOI4KBuH8u8lkBrW/uu5
+	 Rwicq/qkWZ8CyIKm63qdsMqotjwRYK0kNrQ5GCtDOLEy+Mbh+NeTubNxJYKfPOqtvZ
+	 1jhBCcOVraBs+aEpK0EbBOdRT+0u2i6Rm8IKoSR2zhSR1xWMX5QhGN/dFYerbnnBlv
+	 osJFYxbWjfCrkQmjjSAs5ZkOF5TAPwIK4sR958O/sq2Xe0GRAUISN3BOrWBr3RssIg
+	 3vPDfDJLtQlGBbtS+77IkvjcdeiSCueQASi7olX08Jq0/TbggqR0jT9YOQMUjCsYs/
+	 vyMsilMasuWzQ==
+Content-Type: multipart/mixed; boundary="===============8031173725188166952=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Message-Id: <e304b97889065108a5b2a41908329bb9d38a7c23837a6861ce3b21302aaf7eed@mail.kernel.org>
+In-Reply-To: <20260817204812.1637171-2-Jeremy.Jean@oss.cyber.gouv.fr>
+References: <20260817204812.1637171-2-Jeremy.Jean@oss.cyber.gouv.fr>
+Subject: Re: [PATCH v2 1/2] bpf: reject stack-argument callback subprograms
+From: bot+bpf-ci@kernel.org
+To: Jeremy.Jean@oss.cyber.gouv.fr,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,yonghong.song@linux.dev
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,Jeremy.Jean@oss.cyber.gouv.fr,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 17 Aug 2026 21:37:00 +0000 (UTC)
+
+--===============8031173725188166952==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v14 13/15] arm64/delay: enable testing
- smp_cond_load_relaxed_timeout()
-From: Haris Okanovic <harisokn@amazon.com>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-CC: Will Deacon <will@kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-pm@vger.kernel.org>, <bpf@vger.kernel.org>, <arnd@arndb.de>,
-	<catalin.marinas@arm.com>, <peterz@infradead.org>,
-	<akpm@linux-foundation.org>, <mark.rutland@arm.com>, <harisokn@amazon.com>,
-	<cl@gentwo.org>, <ast@kernel.org>, <rafael@kernel.org>,
-	<daniel.lezcano@linaro.org>, <memxor@gmail.com>, <zhenglifeng1@huawei.com>,
-	<xueshuai@linux.alibaba.com>, <rdunlap@infradead.org>,
-	<david.laight.linux@gmail.com>, <broonie@kernel.org>,
-	<joao.m.martins@oracle.com>, <boris.ostrovsky@oracle.com>,
-	<konrad.wilk@oracle.com>, <ashok.bhat@arm.com>
-In-Reply-To: <87tspi7lzk.fsf@oracle.com>
-References: <20260714073041.40250-1-ankur.a.arora@oracle.com>
- <20260714073041.40250-14-ankur.a.arora@oracle.com>
- <amiUWpsL1QGf929i@willie-the-truck> <87tspi7lzk.fsf@oracle.com>
-Date: Mon, 17 Aug 2026 16:27:29 -0500
-Message-ID: <178700204950.2504314.3914062953110867251.b4-reply@b4>
-X-Mailer: b4 0.15.2
-X-ClientProxiedBy: EX19D038UWC001.ant.amazon.com (10.13.139.213) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-Hi Ankur,
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index e421ea2b80c3..6f6e35bc7c97 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -9785,6 +9785,8 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
+>  	err = btf_check_subprog_call(env, subprog, caller->regs);
+>  	if (err == -EFAULT)
+>  		return err;
+> +	if (bpf_in_stack_arg_cnt(&env->subprog_info[subprog]))
+> +		return -EINVAL;
 
-On 2026-07-28 16:06 -0700, Ankur Arora wrote:
-> 
-> Will Deacon <will@kernel.org> writes:
-> 
-> > Hello, Ankur,
-> >
-> > On Tue, Jul 14, 2026 at 12:30:39AM -0700, Ankur Arora wrote:
-> >> This enables the barrier tests to be built as a module.
-> >>
-> >> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> >> Cc: Will Deacon <will@kernel.org>
-> >> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
-> >> ---
-> >>  arch/arm64/lib/delay.c               | 2 ++
-> >>  drivers/clocksource/arm_arch_timer.c | 2 ++
-> >>  2 files changed, 4 insertions(+)
-> >
-> > Acked-by: Will Deacon <will@kernel.org>
-> 
-> Thanks Will.
-> 
-> > I think this is looking good from the arm64 side now (and appears to have
-> > all the relevant Acks). What's the plan to get this series merged?
-> 
-> Let me ask Andrew if he can pick this up via nonmm.
+Should this rejection include a verbose() message explaining why the
+callback was rejected? Currently this returns a bare -EINVAL, which means
+bpf_loop(), bpf_for_each_map_elem(), bpf_timer_set_callback(), bpf_find_vma(),
+and bpf_user_ringbuf_drain() with a callback that has more than five
+arguments will fail with EINVAL but nothing in the verifier log shows why.
 
-Any progress on merging this?
+check_helper_call() propagates the error silently for all five of those
+helpers. Only the three kfunc callback sites (in check_kfunc_call()) add
+"kfunc %s#%d failed callback verification".
 
-> 
-> --
-> ankur
-> 
+Every other stack-argument rejection in this feature logs a message before
+returning: check_stack_arg_read() reports "invalid read from stack arg off
+%d depth %d", check_stack_arg_write() reports "stack arg write offset %d
+exceeds max %d stack args", check_outgoing_stack_args() reports "callee
+expects %d args, stack arg%d is not initialized", and bpf_fixup_call_args()
+reports "func#%d writes %u stack arg slots, but calls only require %u".
+
+This is the path the patch is meant to reject. For the other outcome (the
+caller's outgoing slots are not initialized), btf_check_subprog_call()
+returns -EFAULT and the existing message is printed, and push_callback_call()
+returns before this new check.
+
+All other error paths in push_callback_call() also log: verifier_bug() for
+the two internal consistency checks, and verbose() inside
+setup_func_entry() or push_stack().
+
+>
+>  	/* set_callee_state is used for direct subprog calls, but we are
+>  	 * interested in validating only BPF helpers that can call subprogs as
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32068993990
+--===============8031173725188166952==--
