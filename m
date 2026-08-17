@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF78A314A90
-	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 04:42:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D9DE31AABC
+	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 04:42:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786941742; cv=none; b=eqdKX5mOCxp03CkxO/N6xIXBh3dmkE2kOPHwcZswXU0sMpl4XwxpYiSgTNwqo/8Mkf5ey4fCgH8bTZJEEr9HAL3zxi2ofOJetS+es2BW8S1raqpezxdQ2k+9HhM4wpk6sixkRJiwxuwrFOTOVJJzDhvqhQiMhbqUzhbe9I0tZHE=
+	t=1786941742; cv=none; b=Ha/RRpUtdbW1VySOkZairKSQhD14s6sZY2yLGPyOw06swSD8vEFoz2+/M83LN+Tu/E5C+KC+W1oLNCr18yrJ4HFcSqxHf7fPfNx+kwMsusL74pXT67CP+Xzb33Pena4x8bNJE1uRQ5vHqRVcizKPcJVob1xYeSnbXdxYB8mNkFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1786941742; c=relaxed/simple;
-	bh=KfBOFcsR5C0wyl2xTsdbHvFliILBtdqmUArr4ky29B0=;
+	bh=7B3yoABiPB5ruEvyYHTbdmPMIkIOakI6JOV+mZ2uz6o=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=f7324DOAngf1rVrzoPAY7UXrLC2LTdgfRSffG+MHXN0N02+1kzMTEnXg8BtGkArW5ccYKSAjmJnMIaIpl5dnIKkXKG9tXZdOsHn1ekedwjPVDEdwf0J93+LvryZ1czNZmNtnIjBmxgRWrmla1STlySB0F3WKVvOMOWGjVCt3o/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SXDPFcP6; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=NVB671HLCs6yRh1KQJYLk1EUnHAmtwDrD7eNz0GjbpTJy+30FrG44a8uhR5x298dTWFRzZYmpiTlB9U7cuziT1vXcZAazU3RX5w5pXeJZd4cZZHnHWwkGOThxPaxM2Wtkx19CkxMJBB4myUdktjS3gNjJPxITIgIKzBUjOKGCLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C7/H++vX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SXDPFcP6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46F201F000E9;
-	Mon, 17 Aug 2026 04:42:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C7/H++vX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 152F31F00A3A;
+	Mon, 17 Aug 2026 04:42:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786941740;
-	bh=XRh98l79XCZXGX4A4E3VtOb6EesnGGqHDA/iW1HeQgM=;
+	s=k20260515; t=1786941741;
+	bh=rpA241MOQkUnX3zzS7U3R/Wde3p9e96Is6UTdI80MZE=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=SXDPFcP64eaQjdJ7Pa/she/rMiPfa8sUgotzyb+6ijuXLlPsA2g3Gq3F8oCWR/8Sk
-	 YSlanRPUI/4h+dup8BNuj3R4R2X2GLwT5ce3LhenkU1hHjUzcmXZ4AQOsJtQSroGXh
-	 3bC2R0E3yfgE0UQ4+R/q1ll33GxWElXNtV4ttd5krTE/1fnBp8YPtCQCYc9+ydniFi
-	 WyQZiSHztAVodTbwxiTclOBTNBHcErAN+SfnsJdc9eGPFvkxluIpaBkqKYAgIb7k8X
-	 jZbgn81Oemg5NLH9035SZuNugL/oZXNyZ2SRCumISZeJDen/deGYGfbXpzAB8W24zl
-	 9B1PqWajTCIzg==
+	b=C7/H++vXrEMmioJ2xiifI+K3QZvUK0k/Zpi8S/MVd26jUsjxJJq/e2lOKBabsBPKI
+	 1CNKHIYPo0XgBtIKRo1zSQW+d+7uurbJVr1PyakGYNYtIif3pG4oUdGtgFb7ics8ba
+	 BjSD1VUT1jfWrY0wPTc1dqqv+D45dG65+9X1tt9LPUTbMMPq9fPzHqm3hXn5XrE3Jm
+	 oI6n5aPPBFDsA+0qhqRJ1OS3YnicWEddl0F1qWTdK4ip4rIDjMJUlyruQ0bcAEX8Gr
+	 7RctEsJJYWdq6pLcCmaj4YCzlB50sujatb7D+ZF7bjldpe8pLn/sP2igoQxPp6LQYy
+	 aJ45b5XJQsWow==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v6 06/10] bpf: Add verifier support for 16-byte
- returns in R0:R2
+Subject: Re: [PATCH bpf-next v6 09/10] selftests/bpf: Add inline-asm and
+ subprog tests for R0:R2 returns
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260817042212.2291498-1-yonghong.song@linux.dev>
+In-Reply-To: <20260817042227.2296079-1-yonghong.song@linux.dev>
 References: <20260817042141.2286086-1-yonghong.song@linux.dev>
- <20260817042212.2291498-1-yonghong.song@linux.dev>
+ <20260817042227.2296079-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 17 Aug 2026 04:42:19 +0000
-Message-Id: <20260817044220.46F201F000E9@smtp.kernel.org>
+Date: Mon, 17 Aug 2026 04:42:20 +0000
+Message-Id: <20260817044221.152F31F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,88 +47,65 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The newly added support for kfuncs returning structs by value is=
- mathematically unreachable.
+- [Medium] The test `aggregate_ret_kfunc_too_big_fail` is incorrectly restr=
+icted to only run on x86_64 and arm64 architectures.
 --
 
---- Patch [6]: [PATCH bpf-next v6 06/10] bpf: Add verifier support for 16-b=
-yte returns in R0:R2 ---
-commit 438f13b526c411cf77d7536a3436a0cc4625dbe4
+--- Patch [9]: [PATCH bpf-next v6 09/10] selftests/bpf: Add inline-asm and =
+subprog tests for R0:R2 returns ---
+commit b44fbeb59afa99f6be0f33037220d124e0fb4e12
 Author: Yonghong Song <yonghong.song@linux.dev>
 
-bpf: Add verifier support for 16-byte returns in R0:R2
+selftests/bpf: Add inline-asm and subprog tests for R0:R2 returns
 
-This patch adds BPF verifier support for handling 16-byte returns in the
-R0:R2 register pair, utilizing LLVM 23 capabilities. It models this
-register pair at calls to global/static subprograms and kfuncs, allowing
-kfuncs to return structs composed of scalars.
+This commit adds BPF inline-assembly tests to cover BPF-to-BPF returns, kfu=
+nc
+calls, backtracking, and liveness for functions returning values in the R0:=
+R2
+register pair. It also includes an extension test to ensure a function retu=
+rning
+R0:R2 cannot be replaced.
 
-Link: https://github.com/llvm/llvm-project/pull/190894
-Link: https://github.com/llvm/llvm-project/pull/206876
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+> diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c b/to=
+ols/testing/selftests/bpf/progs/aggregate_ret_kfunc.c
+> new file mode 100644
+> index 0000000000000..c23b4beb1773c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c
 
 [ ... ]
 
-> @@ -13967,10 +13997,25 @@ static int check_kfunc_call(struct bpf_verifier=
-_env *env, struct bpf_insn *insn,
->  	}
-> =20
->  	if (btf_type_is_scalar(t)) {
-> -		mark_reg_unknown(env, regs, BPF_REG_0);
-> +		mark_kfunc_ret_regs(env, regs, t->size);
->  		if (meta.btf =3D=3D btf_vmlinux && (meta.func_id =3D=3D special_kfunc_=
-list[KF_bpf_res_spin_lock] ||
->  		    meta.func_id =3D=3D special_kfunc_list[KF_bpf_res_spin_lock_irqsav=
-e]))
->  			__mark_reg_const_zero(env, &regs[BPF_REG_0]);
-> +	} else if (btf_type_is_struct(t)) {
+> +/*
+> + * A return value larger than 16 bytes does not fit in R0:R2 and is reje=
+cted by
+> + * btf_distill_func_proto(), before the KF_FASTCALL and JIT-capability c=
+hecks,
+> + * so this behaves the same on every architecture.
+> + */
+> +SEC("tc")
+> +__arch_x86_64 __arch_arm64
 
 [Severity: Medium]
-Is this newly added code for kfunc struct returns actually reachable
-during program load?
+Are these architecture restriction tags intended here?
 
-Looking at how kfuncs are processed earlier in the verifier,
-bpf_add_kfunc_call() calls btf_distill_func_proto(), which appears to
-still explicitly reject struct return types:
+The comment right above mentions that this test behaves the same on every
+architecture, but the __arch_x86_64 and __arch_arm64 tags artificially limit
+aggregate_ret_kfunc_too_big_fail() to only run on those two architectures,
+which prevents the test from running on others.
 
-kernel/bpf/btf.c:btf_distill_func_proto() {
-    ...
-    if (ret < 0 || btf_type_is_struct(t)) {
-        bpf_log(log,
-            "The function %s return type %s is unsupported.\n",
-            tname, btf_type_str(t));
-        return -EINVAL;
-    }
-    ...
-}
-
-Since btf_distill_func_proto() is called during program load before
-check_kfunc_call() is ever reached, won't any BPF program calling a
-struct-returning kfunc be unconditionally rejected, making this new
-branch dead code?
-
-> +		/*
-> +		 * The returned struct comes back as raw register bits modeled
-> +		 * as an unknown scalar, so it must contain only scalars:
-> +		 * otherwise a pointer field would be laundered into a scalar
-> +		 * and escape provenance and reference tracking.
-> +		 */
-> +		if (!__btf_type_is_scalar_struct(env, desc_btf, t, 0)) {
-> +			verbose(env,
-> +				"kernel function %s returns %s %s that is not composed of scalars\n",
-> +				func_name, btf_type_str(t),
-> +				btf_name_by_offset(desc_btf, t->name_off));
-> +			return -EINVAL;
-> +		}
-> +		mark_kfunc_ret_regs(env, regs, t->size);
->  	} else if (btf_type_is_ptr(t)) {
->  		ptr_type =3D btf_type_skip_modifiers(desc_btf, t->type, &ptr_type_id);
-
-[ ... ]
+> +__failure __msg("The function bpf_kfunc_call_test_ret_big return type ST=
+RUCT is unsupported")
+> +__naked int aggregate_ret_kfunc_too_big_fail(void)
+> +{
+> +	asm volatile (
+> +	"call %[bpf_kfunc_call_test_ret_big];"
+> +	"r0 =3D 0;"
+> +	"exit;"
+> +	:
+> +	: __imm(bpf_kfunc_call_test_ret_big)
+> +	: __clobber_all);
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260817042141.2286=
-086-1-yonghong.song@linux.dev?part=3D6
+086-1-yonghong.song@linux.dev?part=3D9
