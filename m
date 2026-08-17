@@ -1,36 +1,36 @@
-Received: from mta1.migadu.com (out-246.mta1.migadu.com [95.215.58.246])
+Received: from mta1.migadu.com (out-100.mta1.migadu.com [95.215.58.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA8D73AB26B
-	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 06:20:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB3763AFCF8
+	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 06:28:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786947636; cv=none; b=KiDg/yPxROkHVY44ea+jG8mggcl8kBdg2GdzFkSVWu7efLFuN10cZ7FLMORG4Z/WFdTAad45/93E/huTG+zPjBEeHagYPXMdoyXxjRootEWJkNEyGM//xNpKk38ry7AeUI05fYpWycmxcfWhzGExfEt4KOCbBKnlqO/50X6VdAc=
+	t=1786948110; cv=none; b=OTzt9a5Zpw6UNSxdacYwm0GMC5LgEaCOKp2N8P4KuWyzD3ZbaG7CkfFGGRPL+Od2XGLTl8/73pae9l833UMP8D5tECZ7+0Oe5wx/FdgQJhIWxRW/qHvJsMpSHrV1/t//iIVLdy7ZBIIATbrXDL/LDdTV4cpiE9AYYD/fgP9WiPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786947636; c=relaxed/simple;
-	bh=ZiXApMxhwMcnSZgjXgU+Hr+iwul/uOdUn6GAbgpB0KA=;
+	s=arc-20240116; t=1786948110; c=relaxed/simple;
+	bh=fLCW866umXO4Gn7teaCvFnw/Ft7dtha1aZ8qqLg65vg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ry/Jla2Cfede+f7Vx+BlL6gPp8BJIT+m75dbXiWlt0wyt++wun5DNqlcRsau4JCjCnaQizGu8++S7XnPTmkL4kyfsaSHjg1nsiDygMmUjrOkwGJPwtBLijIXUGoBYk/5IU8Hkz1muSB53l3BW4uHTQIxs3CxGInoLFT1ZJAy188=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qCCTTKZu; arc=none smtp.client-ip=95.215.58.246
+	 In-Reply-To:Content-Type; b=HpEVOrSjGZxRnzpJkKJGLhNZ9Gj7sckncQnpZh8P1mEyntBvgFObMXcE5kBXFjGEJKiV5wHTdtAygQwHIiL0SFiuN7gj2RUMPxsei1TI719Ezy38+KISB414dqPjg7+y6432l2xx5wVrZzQ2ZqfeSxs5D23XmFbIJeYwHWgM/30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=woD0iqEG; arc=none smtp.client-ip=95.215.58.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qCCTTKZu"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="woD0iqEG"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ZiXApMxhwMcnSZgjXgU+Hr+iwul/uOdUn6GAbgpB0KA=;
+DKIM-Signature: a=rsa-sha256; bh=fLCW866umXO4Gn7teaCvFnw/Ft7dtha1aZ8qqLg65vg=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786947632; v=1; x=1787552432;
- b=qCCTTKZusM0N8DOUBVyPZUwTVYhq94s6Xtw/3tibj+ECxCPsQy9mWzIFNqD2xCi5ELqmf/Ar
- HytOTNQVi9ZOQETjJD4L+kymBlYIGjpLG5jgDzGdXCGT8Jb5EOgr+ubjcg9S/auP5xg5OSAM5EC
- jKbILIa8wLqxmwEVIPhMIJwg=
+ t=1786948106; v=1; x=1787552906;
+ b=woD0iqEGRr6q929Wjxk1yM8XXnfdf5eYKJWkrr7ami+TMW+37ev/C5ZAryPdBQzsrD+g3f/7
+ KpXBMGs6TlnbSo4FFxBo+bTXCENeLNCEmkRLRCTlBgmn2ZiLvqNt1o/UhuOBtACT3aM+rzoCviD
+ /VETfjefxDFsVryrFCJipQkE=
 X-Envelope-To: bpf@vger.kernel.org
 Received: from [10.22.64.46] (122.11.166.8)
-	by smtp.migadu.com with ESMTPS id 154e3e38bfd820d7;
-	Mon, 17 Aug 2026 06:20:32 +0000
+	by smtp.migadu.com with ESMTPS id 6a9a30d04e066ce2;
+	Mon, 17 Aug 2026 06:28:26 +0000
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <0b30bc97-2ecf-46eb-a863-94e706e18c6b@linux.dev>
-Date: Mon, 17 Aug 2026 14:20:17 +0800
+Message-ID: <9de86d80-59f9-45cb-a684-42ec7d2831b9@linux.dev>
+Date: Mon, 17 Aug 2026 14:28:19 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,119 +38,95 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 00/13] bpf: Add tracing_multi link support for
- bpf progs
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Quentin Monnet <qmo@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>,
- Avinash Duduskar <avinash.duduskar@gmail.com>,
- Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
- <ameryhung@gmail.com>, Jordan Rife <jordan@jrife.io>,
- Rong Tao <rongtao@cestc.cn>, Eyal Birger <eyal.birger@gmail.com>,
- Pu Lehui <pulehui@huawei.com>, Jingguo Tan <tanjingguo@huawei.com>,
- Lin Ma <malin89@huawei.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260809150111.45000-1-leon.hwang@linux.dev>
- <CAEf4Bzam=0V6n4_vBahhYh2Qn9KfriDKXSz58L4L+teHJRWfPQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 4/5] selftests/bpf: Avoid flaky resize value test
+ for percpu data
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ qmo@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com
+References: <20260814173206.93082-5-leon.hwang@linux.dev>
+ <49f1c39a9af6f07357e66657ca1020e57684036626ef1f180a803f148f8eefe4@mail.kernel.org>
 Content-Language: en-US
 From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAEf4Bzam=0V6n4_vBahhYh2Qn9KfriDKXSz58L4L+teHJRWfPQ@mail.gmail.com>
+In-Reply-To: <49f1c39a9af6f07357e66657ca1020e57684036626ef1f180a803f148f8eefe4@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 15/8/26 04:14, Andrii Nakryiko wrote:
-> On Sun, Aug 9, 2026 at 8:01 AM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
->> Similar to the tracing_multi link support for kernel functions [1], add
->> support for bpf progs.
->>
->> When attaching to bpf progs, it must attaches to the target by text poke
->> way.
->>
+On 15/8/26 02:24, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+>> index 7d6bda909295..2f0dbeb88934 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
 > 
-> Please spend a bit more human effort on justification for the change
-> and explaining your use case. In what case you'll be attaching to a
-> large amount of BPF programs such that attachment speed-up (if there
-> is any) matters.
-
-Will update the cover letter with justification and my use case.
-
-Here's my use case:
-
-I'm planning to enhance the function-graph feature of bpfsnoop [1]. It
-will trace all bpf progs, including their subprogs, to draw a full
-function call graph including bpf prog call sites.
-
-The attachment could speed-up when there are hundreds of targets. For
-example, on high CPU core count servers, it probably runs 200 tc-bpf
-progs as Kubernetes CNI, and each tc-bpf prog might have 4 subprogs.
-Hence, there will be 1000 targets to trace for bpfsnoop's function-graph
-feature.
-
-With tracing_multi link support for bpf progs, bpfsnoop will be able to
-attach to all targets quickly.
-
-[1] https://github.com/bpfsnoop/bpfsnoop
-
+> [ ... ]
 > 
-> Please do your homework. Generating code with AI is easy, reviewing
+>> @@ -126,11 +123,11 @@ static void test_percpu_data_on_cpus(struct bpf_map *map, int map_fd, int prog_f
+>>  static void test_global_percpu_data_init(void)
+>>  {
+>>  	struct test_global_percpu_data__percpu init_value = {};
+>> +	const __u32 desired_sz = sysconf(_SC_PAGE_SIZE) * 2;
+>>  	struct test_global_percpu_data__percpu *init_data;
+>> -	const __u32 desired_sz = sysconf(_SC_PAGE_SIZE);
+> 
+> Does multiplying by 2 here break the test on 64K page systems?
+> 
+> Per-CPU array value sizes are capped by the kernel:
+> 
+>   /* percpu map value size is bound by PCPU_MIN_UNIT_SIZE */
+>   if (percpu && round_up(attr->value_size, 8) > PCPU_MIN_UNIT_SIZE)
+>           return -E2BIG;
+> 
+> in kernel/bpf/arraymap.c:array_map_alloc_check(), where PCPU_MIN_UNIT_SIZE
+> is defined as:
+> 
+>   #define PCPU_MIN_UNIT_SIZE  PFN_ALIGN(32 << 10)
+> 
+> which equals max(32768, PAGE_SIZE).
+> 
+> The old code was safe by construction: desired_sz == PAGE_SIZE <=
+> PFN_ALIGN(32768) == PCPU_MIN_UNIT_SIZE. Doubling it breaks that:
+> 
+>   PAGE_SIZE  4096 -> limit 32768, request   8192  OK
+>   PAGE_SIZE 16384 -> limit 32768, request  32768  OK (exactly at limit)
+>   PAGE_SIZE 65536 -> limit 65536, request 131072  -E2BIG
+> 
+> On kernels built with 64K pages (arm64 CONFIG_ARM64_64K_PAGES, ppc64)
+> bpf_map__set_value_size() still succeeds (it is purely userspace
+> bookkeeping), all four assertions that follow it pass, and then map
+> creation fails inside test_global_percpu_data__load():
+> 
+>>  	err = test_global_percpu_data__load(skel);
+>>  	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
+>>  		goto out;
+> 
+> The "global_percpu_data/init" subtest fails, and test_percpu_data_on_cpus()
+> is never reached. That is a new failure introduced by this patch (with
+> desired_sz == PAGE_SIZE the same configuration created a 65536-byte per-CPU
+> value, which is exactly at the limit and accepted).
+> 
+> Note that the neighbouring resize test in global_map_resize.c deliberately
+> does not scale a per-CPU map by page size for this reason. At line 46 it
+> uses:
+> 
+>   new_sz = sizeof(skel->data_percpu_arr->percpu_arr[0]) *
+>            libbpf_num_possible_cpus();
+> 
+> A size that is independent of PAGE_SIZE would still force the mmap region
+> to move, which is what the new skel->percpu_arr reassignment and the
+> arr[0] == -1 check are there to exercise, without hitting the per-CPU
+> allocator bound.
+> 
 
-Sure, will do my homework.
+To avoid breaking the test on 64K page systems, run the resize subtest
+only on 4K page systems.
 
-> and making decisions about whether it's the right approach (and
-> ultimately supporting it long term) is still a human process, so let's
-> weigh that in.
-
-Will keep it in mind.
+From maintenance view, I think it's better to add a dedicated subtest to
+test bpf_map__set_value_size() for percpu data. Then, it will be able to
+skip the subtest when sysconf(_SC_PAGE_SIZE) != 4K.
 
 Thanks,
 Leon
-
-> 
->> [1] https://lore.kernel.org/bpf/20260606123955.345967-1-jolsa@kernel.org/
->>
->> Leon Hwang (13):
->>   bpf: Initialize ftrace_managed in bpf_trampoline_get
->>   bpf: Factor out update_fentry_multi helper
->>   bpf: Drop unnecessary ftrace_location() in update_fentry_multi()
->>   bpf: Add tracing_multi link support for bpf progs
->>   libbpf: Add tracing_multi link support for bpf progs
->>   bpf: Add tracing_multi link fdinfo support for bpf progs
->>   bpf: Add tracing_multi link info support for bpf progs
->>   selftests/bpf: Add tracing_multi bpf prog attach test
->>   selftests/bpf: Add tracing_multi bpf prog attach failure tests
->>   selftests/bpf: Add tracing_multi bpf prog cookie test
->>   selftests/bpf: Add tracing_multi bpf prog rollback test
->>   selftests/bpf: Add tracing_multi bpf prog link info test
->>   selftests/bpf: Test tailcall with fentry.multi
->>
->>  include/linux/bpf.h                           |   3 +
->>  include/uapi/linux/bpf.h                      |   6 +-
->>  kernel/bpf/trampoline.c                       |  87 +++---
->>  kernel/bpf/verifier.c                         |  22 +-
->>  kernel/trace/bpf_trace.c                      | 212 ++++++++++++---
->>  tools/bpf/bpftool/link.c                      |  59 +++-
->>  tools/include/uapi/linux/bpf.h                |   6 +-
->>  tools/lib/bpf/bpf.c                           |   1 +
->>  tools/lib/bpf/bpf.h                           |   2 +
->>  tools/lib/bpf/libbpf.c                        |  39 ++-
->>  tools/lib/bpf/libbpf.h                        |   4 +-
->>  tools/lib/bpf/libbpf_internal.h               |   1 +
->>  .../selftests/bpf/prog_tests/fill_link_info.c | 170 ++++++++++--
->>  .../selftests/bpf/prog_tests/tailcalls.c      |  62 +++++
->>  .../selftests/bpf/prog_tests/tracing_multi.c  | 254 ++++++++++++++++++
->>  .../selftests/bpf/progs/tracing_multi_bpf.c   |  61 +++++
->>  16 files changed, 869 insertions(+), 120 deletions(-)
->>  create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_bpf.c
->>
->> --
->> 2.55.0
 
