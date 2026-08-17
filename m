@@ -1,132 +1,168 @@
-Received: from mta1.migadu.com (out-100.mta1.migadu.com [95.215.58.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB3763AFCF8
-	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 06:28:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41BBB3B19D0
+	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 06:30:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786948110; cv=none; b=OTzt9a5Zpw6UNSxdacYwm0GMC5LgEaCOKp2N8P4KuWyzD3ZbaG7CkfFGGRPL+Od2XGLTl8/73pae9l833UMP8D5tECZ7+0Oe5wx/FdgQJhIWxRW/qHvJsMpSHrV1/t//iIVLdy7ZBIIATbrXDL/LDdTV4cpiE9AYYD/fgP9WiPs=
+	t=1786948230; cv=none; b=HbPlIlbYvcprsK3snGPa3rCfPQCK4Pn6vZTafD8cB4eoWZUk2wtaa77TNpK04FKWVdaabU2/DhFkSK453dcoZAkg+UCyzuNRAE9J6War53BhIVKUVSrXxF2GO0hyKXIzO/XAcsvc1v1pMsy5s5HZgwOVPh6lb3ThVpZ3Wpstlk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786948110; c=relaxed/simple;
-	bh=fLCW866umXO4Gn7teaCvFnw/Ft7dtha1aZ8qqLg65vg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HpEVOrSjGZxRnzpJkKJGLhNZ9Gj7sckncQnpZh8P1mEyntBvgFObMXcE5kBXFjGEJKiV5wHTdtAygQwHIiL0SFiuN7gj2RUMPxsei1TI719Ezy38+KISB414dqPjg7+y6432l2xx5wVrZzQ2ZqfeSxs5D23XmFbIJeYwHWgM/30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=woD0iqEG; arc=none smtp.client-ip=95.215.58.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1786948230; c=relaxed/simple;
+	bh=UV50VoozEFUOBOJQFvFlIV/q9kPbFe+J56l16wS6ctg=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=H//B6k5UYVr4jLnPCnKq09+0r5Gkudp+jV8oa3UmBdqEshnBjaS6VwMorllRotGSuTlBv1K5Hy9v4iiENVXbdR7FuZwlV1ety7GmIaxVOfdASpA0WtpG1Ry3Nk5m+YP6QluT3TCX4UOtKMFFwwk2suFrp8Fx/nr2omUCWGsZl8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=MQlrW9E5; arc=none smtp.client-ip=162.62.57.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="woD0iqEG"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=fLCW866umXO4Gn7teaCvFnw/Ft7dtha1aZ8qqLg65vg=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786948106; v=1; x=1787552906;
- b=woD0iqEGRr6q929Wjxk1yM8XXnfdf5eYKJWkrr7ami+TMW+37ev/C5ZAryPdBQzsrD+g3f/7
- KpXBMGs6TlnbSo4FFxBo+bTXCENeLNCEmkRLRCTlBgmn2ZiLvqNt1o/UhuOBtACT3aM+rzoCviD
- /VETfjefxDFsVryrFCJipQkE=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [10.22.64.46] (122.11.166.8)
-	by smtp.migadu.com with ESMTPS id 6a9a30d04e066ce2;
-	Mon, 17 Aug 2026 06:28:26 +0000
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <9de86d80-59f9-45cb-a684-42ec7d2831b9@linux.dev>
-Date: Mon, 17 Aug 2026 14:28:19 +0800
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="MQlrW9E5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1786948222; bh=qgMbh5RNFI8OLX8K1ZLrBtKPn2+cUkmHSDywr+PEu38=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=MQlrW9E5TQVq/TsXwv0+mfcZ8lv18wonCGToHnUhp0WS0zTIZ89qBDyQKw91xh3+C
+	 beUzFZ2WbtyZ7VTuWHfJe2hJMuZ5Ia1Xem1fqzSpSpg56QjP2xlb1Ieq55HmukxlAL
+	 oq0CAqbk+8LRuJGNYkusJdabzAjWkNtT6OF/nt+8=
+Received: from localhost.localdomain ([180.101.244.73])
+	by newxmesmtplogicsvrsza53-0.qq.com (NewEsmtp) with SMTP
+	id 739A8AA7; Mon, 17 Aug 2026 14:28:57 +0800
+X-QQ-mid: xmsmtpt1786948137th98zjb8g
+Message-ID: <tencent_05AD70D6BED7A204CB00860D0C3A303FDC07@qq.com>
+X-QQ-XMAILINFO: OSyReP17gB4cs2XLG9gcwSMRL6l6OExF9b5KusC0i6w+U4l8jxv1y6hT6Dvr0X
+	 YFzTJjeZDr9bfoCYlJSWgq7NUo9SVUFIfxFvUQRkt5YuERpXcSllySF2ORpP+yg04vUf5k1lWcta
+	 kCfzs0M1njFuzGWY9JP2NsdgBa3ieDKAnGJSE0dsAMZOtNOXEuDNT8DK6iyYW5Bluel2j5doVaa1
+	 k9UVB/MLSsotUyzh7aXv7lWj0x2puXA1Cln1+trAk3REnValhV/X/9mmZuu96jkiRJAOz+t2Fxyl
+	 IRhRi0P//bSfdj45eDckCVCJeAIpRXYHYCWD6B4EYUESgrISmEbD6rcuDLpCbqHssTXXgNfx5yEQ
+	 so5PtBp4XRDd+EckJrNNlDYILLcINvfyZTr8k3eUj2o2uEkpm3h69O5crkIuY2C63ogmWXWztsmj
+	 kVBmbs26VrrEo4MDfC2zxunOrwBcLxqTkRL4WNZwmkB7V8YCeEiRt5XO6GuQ4rb3vMWFEwlK1D+S
+	 alYzLLGfGlTd5+cdGEtRTHlBai64gPG1ZK8AK/QnGoNFuKy30wKE65i4uOH5jniENcSO1ahL6ZDG
+	 3xQaMaST1YLRg7GXCAKhpgN5NhWxuFvDiHNFVJEz1JGee9nZVu7WqE+wWXLNjAoPUC/vf24MJCSu
+	 fOUO+9TLPigF9ZjgFNgp2A1252RlrMSMXxlcK2Zzwx+2Q31gmOuhEPs6xkIEzxC2I2ZzQDA/qDar
+	 IXSMFUqde6cXJmEqcUfYCUbuMwomf9b0EzHQ6i1wzKkbL5TjnmC03J9tPR9+T5osQnJ67p4sLXpn
+	 2kjfdk+FeOZjVEGDfoZMM76ywbGqLZSZg7hL8+SvlPAvePFec+3+8l8uh40L28cJ0HG8EJ70zOW0
+	 VQDihOi6zFHcyh38rU9mwBoOTAYTt7kzlY2cGjybH67BX65VYXVHU8/u9aaqxiw1vqv6UIu/NtJq
+	 0Dj1zZH8uPnHS6dXNray8qVO98LJAsNHoy8+pSIxItFvIaND3lx4xOyjbWAu5f
+X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
+From: Aohan Mei <3472274613@qq.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	bpf@vger.kernel.org
+Cc: martin.lau@linux.dev,
+	song@kernel.org,
+	jolsa@kernel.org,
+	zhuyifei@google.com,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	corvus@tencent.com,
+	Aohan Mei <henrymei@tencent.com>,
+	stable@vger.kernel.org
+Subject: [PATCH bpf v2] bpf: Enforce cgroup storage map consistency for freplace attach
+Date: Mon, 17 Aug 2026 14:28:28 +0800
+X-OQ-MSGID: <20260817062854.2710890-1-3472274613@qq.com>
+X-Mailer: git-send-email 2.43.7
+In-Reply-To: <20260814130650.634992-1-3472274613@qq.com>
+References: <20260814130650.634992-1-3472274613@qq.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 4/5] selftests/bpf: Avoid flaky resize value test
- for percpu data
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- qmo@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com
-References: <20260814173206.93082-5-leon.hwang@linux.dev>
- <49f1c39a9af6f07357e66657ca1020e57684036626ef1f180a803f148f8eefe4@mail.kernel.org>
-Content-Language: en-US
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <49f1c39a9af6f07357e66657ca1020e57684036626ef1f180a803f148f8eefe4@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 15/8/26 02:24, bot+bpf-ci@kernel.org wrote:
->> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
->> index 7d6bda909295..2f0dbeb88934 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-> 
-> [ ... ]
-> 
->> @@ -126,11 +123,11 @@ static void test_percpu_data_on_cpus(struct bpf_map *map, int map_fd, int prog_f
->>  static void test_global_percpu_data_init(void)
->>  {
->>  	struct test_global_percpu_data__percpu init_value = {};
->> +	const __u32 desired_sz = sysconf(_SC_PAGE_SIZE) * 2;
->>  	struct test_global_percpu_data__percpu *init_data;
->> -	const __u32 desired_sz = sysconf(_SC_PAGE_SIZE);
-> 
-> Does multiplying by 2 here break the test on 64K page systems?
-> 
-> Per-CPU array value sizes are capped by the kernel:
-> 
->   /* percpu map value size is bound by PCPU_MIN_UNIT_SIZE */
->   if (percpu && round_up(attr->value_size, 8) > PCPU_MIN_UNIT_SIZE)
->           return -E2BIG;
-> 
-> in kernel/bpf/arraymap.c:array_map_alloc_check(), where PCPU_MIN_UNIT_SIZE
-> is defined as:
-> 
->   #define PCPU_MIN_UNIT_SIZE  PFN_ALIGN(32 << 10)
-> 
-> which equals max(32768, PAGE_SIZE).
-> 
-> The old code was safe by construction: desired_sz == PAGE_SIZE <=
-> PFN_ALIGN(32768) == PCPU_MIN_UNIT_SIZE. Doubling it breaks that:
-> 
->   PAGE_SIZE  4096 -> limit 32768, request   8192  OK
->   PAGE_SIZE 16384 -> limit 32768, request  32768  OK (exactly at limit)
->   PAGE_SIZE 65536 -> limit 65536, request 131072  -E2BIG
-> 
-> On kernels built with 64K pages (arm64 CONFIG_ARM64_64K_PAGES, ppc64)
-> bpf_map__set_value_size() still succeeds (it is purely userspace
-> bookkeeping), all four assertions that follow it pass, and then map
-> creation fails inside test_global_percpu_data__load():
-> 
->>  	err = test_global_percpu_data__load(skel);
->>  	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
->>  		goto out;
-> 
-> The "global_percpu_data/init" subtest fails, and test_percpu_data_on_cpus()
-> is never reached. That is a new failure introduced by this patch (with
-> desired_sz == PAGE_SIZE the same configuration created a 65536-byte per-CPU
-> value, which is exactly at the limit and accepted).
-> 
-> Note that the neighbouring resize test in global_map_resize.c deliberately
-> does not scale a per-CPU map by page size for this reason. At line 46 it
-> uses:
-> 
->   new_sz = sizeof(skel->data_percpu_arr->percpu_arr[0]) *
->            libbpf_num_possible_cpus();
-> 
-> A size that is independent of PAGE_SIZE would still force the mmap region
-> to move, which is what the new skel->percpu_arr reassignment and the
-> arr[0] == -1 check are there to exercise, without hitting the per-CPU
-> allocator bound.
-> 
+From: Aohan Mei <henrymei@tencent.com>
 
-To avoid breaking the test on 64K page systems, run the resize subtest
-only on 4K page systems.
+When a BPF_PROG_TYPE_EXT program replaces a cgroup program, it
+executes with the target's runtime context, including the per-program
+cgroup storage descriptor attached to the cgroup prog item:
+bpf_get_local_storage() resolves the buffer via
+prog_item->cgroup_storage, so the extension's own storage map never
+provides storage at runtime. The verifier, however, bounds the
+extension's bpf_get_local_storage() accesses by the extension's own
+storage map.
 
-From maintenance view, I think it's better to add a dedicated subtest to
-test bpf_map__set_value_size() for percpu data. Then, it will be able to
-skip the subtest when sysconf(_SC_PAGE_SIZE) != 4K.
+The prog-array path already enforces that programs sharing a
+runtime storage context reference identical storage maps (via the
+owner cookie matching added in commit abad3d0bad72 ("bpf: Fix oob
+access in cgroup local storage")), but the freplace path performs
+no such consistency check in bpf_freplace_check_tgt_prog(). An
+extension whose storage map differs from the target's therefore
+operates on a buffer whose size, flags and layout do not match its
+verified assumptions: a smaller target buffer leads to slab
+out-of-bounds access, and even equal-sized maps can bypass
+BPF_F_RDONLY_PROG or mismatch BPF_SPIN_LOCK fields.
 
-Thanks,
-Leon
+Reject the freplace attach with -EINVAL unless the extension
+references the exact same cgroup storage map as the target program,
+matching the cookie semantics of __bpf_prog_map_compatible().
+
+Fixes: 7d9c3427894f ("bpf: Make cgroup storages shared between programs on the same cgroup")
+Reported-by: TencentOS Corvus AI <corvus@tencent.com>
+Cc: stable@vger.kernel.org
+Assisted-by: CodeBuddy:Kimi-K3
+Signed-off-by: Aohan Mei <henrymei@tencent.com>
+---
+ kernel/bpf/trampoline.c | 23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
+
+Changes in v2:
+- Tighten the check from a value_size comparison to map identity:
+  the extension's own map never provides storage at runtime, so a
+  different map can only create verifier/runtime inconsistencies
+  (BPF_F_RDONLY_PROG bypass, BPF_SPIN_LOCK layout mismatch), pointed
+  out by the bpf CI review.
+- Reformat the added comment to the kernel multi-line style.
+
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 1a721fc4bef5..043bee6aaab2 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -806,9 +806,11 @@ static enum bpf_tramp_prog_type bpf_attach_type_to_tramp(struct bpf_prog *prog)
+ 	}
+ }
+ 
+-static int bpf_freplace_check_tgt_prog(struct bpf_prog *tgt_prog)
++static int bpf_freplace_check_tgt_prog(struct bpf_prog *tgt_prog,
++				       struct bpf_prog *prog)
+ {
+ 	struct bpf_prog_aux *aux = tgt_prog->aux;
++	enum bpf_cgroup_storage_type i;
+ 
+ 	guard(mutex)(&aux->ext_mutex);
+ 	if (aux->prog_array_member_cnt)
+@@ -821,6 +823,23 @@ static int bpf_freplace_check_tgt_prog(struct bpf_prog *tgt_prog)
+ 		return -EBUSY;
+ 
+ 	aux->is_extended = true;
++
++	/*
++	 * At runtime the extension program inherits the target program's
++	 * cgroup storage context (via prog_item->cgroup_storage), so its
++	 * own map never provides storage; the verifier, however, bounds
++	 * its accesses (size, flags, layout) by that map. Require both
++	 * programs to reference the same map, matching the cookie
++	 * semantics of the prog-array path.
++	 */
++	for_each_cgroup_storage_type(i) {
++		struct bpf_map *tgt_map = tgt_prog->aux->cgroup_storage[i];
++		struct bpf_map *prog_map = prog->aux->cgroup_storage[i];
++
++		if (prog_map && prog_map != tgt_map)
++			return -EINVAL;
++	}
++
+ 	return 0;
+ }
+ 
+@@ -926,7 +945,7 @@ static int __bpf_trampoline_link_prog(struct bpf_tramp_node *node,
+ 		/* Cannot attach extension if fentry/fexit are in use. */
+ 		if (cnt)
+ 			return -EBUSY;
+-		err = bpf_freplace_check_tgt_prog(tgt_prog);
++		err = bpf_freplace_check_tgt_prog(tgt_prog, node->link->prog);
+ 		if (err)
+ 			return err;
+ 		tr->extension_prog = node->link->prog;
+-- 
+2.43.7
 
