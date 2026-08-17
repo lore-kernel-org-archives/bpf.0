@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-128.mta0.migadu.com [91.218.175.128])
+Received: from mta1.migadu.com (out-84.mta1.migadu.com [95.215.58.84])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C2A327FB18
-	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 03:49:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC0223E342
+	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 03:50:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786938597; cv=none; b=BCZW66GEjeQQqT20DjfUC77mSN6VyJiIKMlAaEM6ZWXSJDx8T2XcEKvx3WWHPNKBKiub0msopaSNfZW4cO94wayYU/YT1Xeb30X4Z9Tj5wPxD7ekV4T4PKAknL4tRHh5WEf1W52xGYFzMkkW1t43c9lEt4SAUk/+UI47IeTroxs=
+	t=1786938642; cv=none; b=Q62/g+V6F8k6Xt178HEhj3EICa87hhXFbJ3wbmnc7jb9HjQHRff3pCcVNfDYLcnWg4d4oTdBdEa6vK7xGL10VImehGmk/IV5LwZU7rOH0fgHdifjuNeDR9r5P6/EAxgM5+juua7X5s959EC8VIV9k27KRzCcOWRnzffOZCvHXJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786938597; c=relaxed/simple;
-	bh=oO0Fa8oRMiXpJTyPpWMxKjOJmoUdQU3ye8KGWNrXMJw=;
+	s=arc-20240116; t=1786938642; c=relaxed/simple;
+	bh=8wZU3Iss3wmXREHyNW+ytu2hUlwNlnC6rKMAD596Axk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ryVrvRPhlkvH1UKuhHHPtatbb+7s0zPVezL3Mb/wr04tPv39xbo8drZoB0SMmtYPTXkkOhvb7lm1Pm3j/nwuYvi2lb2KYQe1M153ZkKAEXyzBzAna2tIvqtWlw1pHz5b9bN0e9vj2CX+OeoDQvu5sdebiFSNKCaraivuFFjHjro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oYTmasWX; arc=none smtp.client-ip=91.218.175.128
+	 In-Reply-To:Content-Type; b=pQQCigyOJw1njUIlELl/g7qkxgVMJtJ4o1cdUOoTUllPy7OuWTth4W/FTaa4tGysQa/7nTPO4b/oizDvn9mMfWONfgWKls7VLiSCRYGvGyZ/yNJeBpwvv5oMpHwFpHkCTWeQ9R2Wo4w8MBRRwzY9rjbFG+3dw5FQrmH0IkwsG/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=weYM3O2I; arc=none smtp.client-ip=95.215.58.84
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oYTmasWX"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="weYM3O2I"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=oO0Fa8oRMiXpJTyPpWMxKjOJmoUdQU3ye8KGWNrXMJw=;
+DKIM-Signature: a=rsa-sha256; bh=8wZU3Iss3wmXREHyNW+ytu2hUlwNlnC6rKMAD596Axk=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786938594; v=1; x=1787543394;
- b=oYTmasWX+0rtn39ZjTt/nIVH+H/U/EovFtQHB2crAldgL462KEmuWnat8gpI4zHHAf5y8I1H
- awLI/zuKFo+g2ucK21fmbDvmkJDtf9yJ1JCDsDnNfdU2creYFEIJJqQa2BY6Pwp0mh7YGcCoDmU
- 7YrMcCYtV8841B8zVFQtkOpo=
+ t=1786938638; v=1; x=1787543438;
+ b=weYM3O2Ikg69I+jzhvZ+HLIl0GGhpPgYqAfW5Omt/tddDFJ82LhPj/HU2D844fo7txd2ae7P
+ lrYrj9ksYmRNPfDTuGy5HWDt2dZPtSyYlowzhFTQvZimcEUxJ68pssshMbHzNo1s+C84zf7I5No
+ Zp2J5jyUbTjVwGE6YUtLpwOE=
 X-Envelope-To: bpf@vger.kernel.org
 Received: from [IPV6:2600:382:861c:7f36:14e1:cf55:e233:293b] (2600:382:861c:7f36:14e1:cf55:e233:293b)
-	by smtp.migadu.com with ESMTPS id de54a06a9d27b7aa;
-	Mon, 17 Aug 2026 03:49:54 +0000
+	by smtp.migadu.com with ESMTPS id 1f0e8816264863d2;
+	Mon, 17 Aug 2026 03:50:38 +0000
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <9ec10d1e-0e98-4512-a628-a1055a1cc05e@linux.dev>
-Date: Sun, 16 Aug 2026 20:49:47 -0700
+Message-ID: <20ceb335-905d-4301-9e72-ea59d596ea06@linux.dev>
+Date: Sun, 16 Aug 2026 20:50:34 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,78 +38,107 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 08/11] bpf: Reject register-pair returns when
- the subprog BTF is unreliable
+Subject: Re: [PATCH bpf-next v5 09/11] selftests/bpf: Add C tests for 16-byte
+ returns in R0:R2
 Content-Language: en-GB
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260813200210.1991507-1-yonghong.song@linux.dev>
- <20260813200250.1996395-1-yonghong.song@linux.dev>
- <20260814030240.5E9981F000E9@smtp.kernel.org>
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org, clm@meta.com,
+ ihor.solodrai@linux.dev
+References: <20260813200256.1996809-1-yonghong.song@linux.dev>
+ <2435b43ae3c7dfdfac13b28256ec34050ed7a7d6b358337263b2c52003476ece@mail.kernel.org>
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260814030240.5E9981F000E9@smtp.kernel.org>
+In-Reply-To: <2435b43ae3c7dfdfac13b28256ec34050ed7a7d6b358337263b2c52003476ece@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 
 
-On 8/13/26 8:02 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
->
-> Pre-existing issues:
-> - [High] push_callback_call() incorrectly passes helper arguments for BTF validation, tainting callback subprograms as unreliable.
-> --
->
-> --- Patch [8]: [PATCH bpf-next v5 08/11] bpf: Reject register-pair returns when the subprog BTF is unreliable ---
-> commit c1362d6d7ccc6806c96ffe9fc78804a2b8b6f1b9
-> Author: Yonghong Song <yonghong.song@linux.dev>
->
-> bpf: Reject register-pair returns when the subprog BTF is unreliable
->
-> This patch rejects return values larger than 8 bytes as soon as the
-> subprogram's BTF prototype is marked unreliable. It adds
-> subprog_ret_pair_unreliable() and uses it in check_func_call() to
-> prevent tracking R2 based on a discarded signature.
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index b23be0fa95af4..0ffb3bed1649e 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
+On 8/13/26 2:11 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_struct_c.c b/tools/testing/selftests/bpf/progs/aggregate_ret_struct_c.c
+>> new file mode 100644
+>> index 000000000000..83b1a3751988
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/progs/aggregate_ret_struct_c.c
 > [ ... ]
 >
->> @@ -9527,6 +9544,12 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->>   		return 0;
->>   	}
->>   
->> +	if (subprog_ret_pair_unreliable(env, subprog)) {
->> +		verbose(env, "Func#%d ('%s') returns >8 bytes, which requires reliable BTF\n",
->> +			subprog, subprog_name(env, subprog));
->> +		return -EINVAL;
->> +	}
-> [Severity: High]
-> This is a pre-existing issue, but will this new check incorrectly reject
-> valid BPF programs because of how push_callback_call() marks subprograms
-> as unreliable?
->
-> Looking at push_callback_call():
->
->      caller = state->frame[state->curframe];
->      err = btf_check_subprog_call(env, subprog, caller->regs);
->
-> It passes the caller's registers (which contain the helper arguments, e.g.,
-> the PTR_TO_FUNC for bpf_loop) instead of the actual arguments the callback
-> will receive. Because these arguments don't match the callback's prototype,
-> btf_check_subprog_call() fails, sets the unreliable flag to true on the
-> subprogram, and returns -EINVAL.
->
-> push_callback_call() ignores this error, leaving the callback permanently
-> tainted as unreliable.
->
-> If a callback subprogram returns >8 bytes, won't it be incorrectly rejected
-> here if it is also called directly elsewhere in the program, since the
-> unreliability flag was set mistakenly?
+>> +struct pair {
+>> +	__u64 hi;	/* R0 */
+>> +	__u64 lo;	/* R2 */
+>> +};
+>> +
+>> +union upair {
+>> +	__u64 halves[2];
+>> +	struct {
+>> +		__u64 lo;	/* R0 */
+>> +		__u64 hi;	/* R2 */
+>> +	} parts;
+>> +};
+> This isn't a bug, but struct pair puts hi in R0 while union upair's
+> parts puts lo in R0 - was the inverted naming in the union deliberate,
+> or would matching the struct's order (or first/second) make the R0:R2
+> mapping easier to follow?
 
-Yes, let us remove this patch as the above unreliable rejection may actually
-reject legal prog's.
+Thanks. This is an oversight. Will fix 'struct pair' with proper ordering.
 
+>
+>> +
+>> +static __noinline struct pair make_pair(__u64 a, __u64 b)
+>> +{
+>> +	struct pair p = { .hi = a + b, .lo = a - b };
+>> +
+>> +	return p;
+>> +}
+>> +
+>> +SEC("tc")
+>> +__load_if_JITed()
+>> +__success __retval(0)
+>> +int aggregate_ret_struct_c_test(struct __sk_buff *skb)
+>> +{
+>> +	__u64 a = skb->len ^ MIX_A;
+>> +	__u64 b = skb->len ^ MIX_B;
+>> +	struct pair p;
+>> +
+>> +	p = make_pair(a, b);
+>> +	if (p.hi != a + b)
+>> +		return 1;
+>> +	if (p.lo != a - b)
+>> +		return 2;
+>> +
+>> +	return 0;
+>> +}
+> [ ... ]
+>
+>> +static __noinline union upair make_upair(__u64 a, __u64 b)
+>> +{
+>> +	union upair p;
+>> +
+>> +	p.halves[0] = a + b;
+>> +	p.halves[1] = a - b;
+>> +	return p;
+>> +}
+>> +
+>> +SEC("tc")
+>> +__load_if_JITed()
+>> +__success __retval(0)
+>> +int aggregate_ret_union_c_test(struct __sk_buff *skb)
+>> +{
+>> +	__u64 a = skb->len ^ MIX_A;
+>> +	__u64 b = skb->len ^ MIX_B;
+>> +	union upair p;
+>> +
+>> +	p = make_upair(a, b);
+>> +	if (p.parts.lo != a + b)
+>> +		return 1;
+>> +	if (p.parts.hi != a - b)
+>> +		return 2;
+>> +
+>> +	return 0;
+>> +}
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31740414277
 
