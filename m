@@ -1,121 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-156.mta1.migadu.com [95.215.58.156])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC9A44B049F
-	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 04:45:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24A833030F
+	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 04:54:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786941944; cv=none; b=J8w+eJYMPKRvnSpp/+XLl6YzIwJ6s8xuS/gQuwwpnUMvq3RxoKaXWX4AO7Pz30SOPf6HliPqeVR+3S9fDAcPVyxYuD39hG3xHze1gOcBc39Gh5kbOgPlNRp+6+VCFpVIJVFrY/zElgFk9lgLaM05dmYf9vwdpaPCXWnAWLJI200=
+	t=1786942490; cv=none; b=pUEqcHubNSxwHlBhvXQ017B1pc5KYsO1uMVFawT8UnuWhymmYWjatVlvneO0DeaHy05fEB4fIEo86crkWt396xO47G0QF/PpzRcWK8nLcUhHg3T2x5/PGp21BlDiLX+cDg0J/T+OKcIhaPbfHo+pQSJP/rfMtFotSFadmnOQdzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786941944; c=relaxed/simple;
-	bh=FM4FLSS5nuukhulEnTNedl75if2KZuF1TXxRJXledck=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pDoappdxy1Yt91nz9AATWgZfk6cM6lnbvcF0l/yitD8mPh3KObewnWDIw4kPipy5SL3kjxPzEG1VdBd4tb2TZGdxyAAJGdvN7qBxiu+pevPsNGfOf954vkFHDHC79ZALZEnIEro+Ewu2MJTfCYp2OjYfOl2LV6Pj/HUcZrZryIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NF4Inx2L; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786942490; c=relaxed/simple;
+	bh=dbAoGVBRuUvMmPmhiZ4u6YNK1J5v+C3LqR2Yeoa+leI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hoCb+vm8totxXGf8nloZHzIFjR+KH9MjhkUudXrwVdY+A4ng53eSMQ2GnUHp2YNfbkmPnEPM6rUkBGy7gEOnu9TdaREt9pTblLcniKrmMsiBmKkBhR/jr5u+sk5TzkQC/aFGjfLFGZ3rxIxaComb4WKDqE6H/HaHNw8TrbyrPJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gB2E3sE0; arc=none smtp.client-ip=95.215.58.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NF4Inx2L"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 255FA1F000E9;
-	Mon, 17 Aug 2026 04:45:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786941943;
-	bh=GB093qdH6NDILUDeXBhXnpD+fx+pp3OWCUlE+sevWtE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=NF4Inx2LZQgV4lVaenZ40kEM3Sj6TjK64es/3zxPPvxfSRoiC2OaZLkgmHCwSgDsv
-	 NUY6BcnsOZBdSwdiIoV/JQMbCUy0JQ6ba7pCE2KK3Mueufy47FRpwHiqOB1yZctqX8
-	 4bI6+ftNJCPc3QsIgjGa9D5p308KzbfxBwMbct46BWrDa3y2A+2JB1NV4A/PdjSwam
-	 A/DdM4z/fKmOm1MTSLJ70uDNINgVHfcv6usKfEof+6mApNc5cvxAm6epledO79+tDG
-	 aePK1shBHu2KoVcv6QydPqJxMhjlCTQ5z+OiFnoAZ5jXs/q6xGqeFA+gMw+L9W5nNq
-	 9Isce8o71wC4g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v6 08/10] selftests/bpf: Add C tests for
- 16-byte returns in R0:R2
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yonghong Song" <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260817042222.2295525-1-yonghong.song@linux.dev>
-References: <20260817042141.2286086-1-yonghong.song@linux.dev>
- <20260817042222.2295525-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 17 Aug 2026 04:45:42 +0000
-Message-Id: <20260817044543.255FA1F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gB2E3sE0"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=dbAoGVBRuUvMmPmhiZ4u6YNK1J5v+C3LqR2Yeoa+leI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1786942484; v=1; x=1787547284;
+ b=gB2E3sE0znq4ViErd9ZJ/e/Rl27lbddoVosne2BtRAKJo2TrpsVScrr3R3Ki/LK+fE4C6eNO
+ 1lxR+J9WNZMTuhZJsAp31qr/GNzrtMkhY8+6JOarrjxo7ZjGaTy7GC72hcl9T12ahdNpergxlpk
+ vGztiTtO+E3+pt9OkLcjIgEI=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from [10.22.64.46] (122.11.166.8)
+	by smtp.migadu.com with ESMTPS id 9105983903091a03;
+	Mon, 17 Aug 2026 04:54:34 +0000
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <d5dc645b-3efe-4875-93ec-4c89ee323de8@linux.dev>
+Date: Mon, 17 Aug 2026 12:54:23 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf] bpf: fix UAF of trampoline progs before image release
+To: Junseo Lim <zirajs7@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>
+Cc: John Fastabend <john.fastabend@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
+ Sechang Lim <rhkrqnwk98@gmail.com>, "Paul E. McKenney" <paulmck@kernel.org>
+References: <20260815071927.147049-1-zirajs7@gmail.com>
+Content-Language: en-US
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260815071927.147049-1-zirajs7@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The kfuncs `bpf_kfunc_call_test_i128` and `bpf_kfunc_call_test_r=
-et_pair` are conditionally compiled out of `bpf_testmod.ko` on architecture=
-s other than x86_64 and arm64, but are unconditionally compiled and declare=
-d as strong `__ksym` externs in the selftest object `verifier_aggregate_ret=
-.c`. This will cause libbpf to fail loading the entire object on unsupporte=
-d architectures (when compiled with LLVM 23+), failing the entire test suit=
-e even for programs that don't use the kfuncs.
---
-
---- Patch [8]: [PATCH bpf-next v6 08/10] selftests/bpf: Add C tests for 16-=
-byte returns in R0:R2 ---
-commit 00f68ada7c423dbadb8514b3c5f6c309f446bc99
-Author: Yonghong Song <yonghong.song@linux.dev>
-
-selftests/bpf: Add C tests for 16-byte returns in R0:R2
-
-Add selftests that exercise a 16-byte return value passed in the R0:R2
-register pair, written in C so that they depend on the compiler lowering
-the register-pair return.
-
-The R0:R2 convention is only emitted by LLVM 23 and newer, and a by-value
-aggregate return does not compile at all before that, so the programs sit
-behind a __clang_major__ guard. An older compiler builds the dummy test in
-the #else branch instead, which keeps the object non-empty and says in its
-description why nothing was exercised.
-
-The kfunc tests are tagged __arch_x86_64/__arch_arm64 and skip elsewhere.
-Those are the architectures whose JIT advertises
-bpf_jit_supports_kfunc_ret_reg_pair(), which bpf_add_kfunc_call() requires
-before it accepts a kfunc returning more than 8 bytes, and they are also
-the only ones building the kfuncs.
-
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b=
-/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-> index 7d81070eefe7f..426000f9a14fa 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-[ ... ]
-> @@ -131,6 +136,10 @@ int bpf_kfunc_call_test2(struct sock *sk, __u32 a, _=
-_u32 b) __ksym;
->  struct sock *bpf_kfunc_call_test3(struct sock *sk) __ksym;
->  long bpf_kfunc_call_test4(signed char a, short b, int c, long d) __ksym;
->  int bpf_kfunc_call_test5(__u8 a, __u16 b, __u32 c) __ksym;
-> +#ifdef __SIZEOF_INT128__
-> +__int128 bpf_kfunc_call_test_i128(__u64 a, __u64 b) __ksym;
+On 15/8/26 15:19, Junseo Lim wrote:
+[...]
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 7719f6528445..bacb6bc2e27b 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1376,6 +1376,11 @@ struct bpf_tramp_image {
+>  		struct rcu_head rcu;
+>  		struct work_struct work;
+>  	};
+> +#ifdef CONFIG_PREEMPTION
+> +	/* Programs called from this image must outlive deferred image freeing. */
+> +	struct bpf_prog *progs[BPF_MAX_TRAMP_LINKS];
+> +	int nr_progs;
 > +#endif
-> +struct prog_test_ret_pair bpf_kfunc_call_test_ret_pair(__u64 a, __u64 b)=
- __ksym;
+>  };
+>  
+>  struct bpf_trampoline {
+> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> index 1a721fc4bef5..ff6b331c965b 100644
+> --- a/kernel/bpf/trampoline.c
+> +++ b/kernel/bpf/trampoline.c
+> @@ -531,6 +531,13 @@ bpf_trampoline_get_progs(const struct bpf_trampoline *tr, int *total, bool *ip_a
+>  
+>  static void bpf_tramp_image_free(struct bpf_tramp_image *im)
+>  {
+> +#ifdef CONFIG_PREEMPTION
+> +	int i;
+> +
+> +	for (i = 0; i < im->nr_progs; i++)
+> +		bpf_prog_put(im->progs[i]);
+> +#endif
 
-[Severity: Medium]
-Should these kfuncs be declared with the __weak attribute?
+Looks better to factor out a helper for it, e.g.
+bpf_tramp_image_put_progs().
 
-While the test programs in verifier_aggregate_ret.c use the __arch_x86_64 a=
-nd
-__arch_arm64 tags, they still unconditionally reference these kfuncs in the
-C code. Without the __weak attribute, Clang emits them as strong externs in
-the BPF object file.
+> +
+>  	bpf_image_ksym_del(&im->ksym);
+>  	arch_free_bpf_trampoline(im->image, im->size);
+>  	bpf_jit_uncharge_modmem(im->size);
+> @@ -678,6 +685,9 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
+>  	u32 orig_flags = tr->flags;
+>  	bool ip_arg = false;
+>  	int err, total, size;
+> +#ifdef CONFIG_PREEMPTION
+> +	int i, kind;
+> +#endif
+>  
+>  	tnodes = bpf_trampoline_get_progs(tr, &total, &ip_arg);
+>  	if (IS_ERR(tnodes))
+> @@ -740,6 +750,16 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
+>  		goto out;
+>  	}
+>  
+> +#ifdef CONFIG_PREEMPTION
+> +	for (kind = 0; kind < BPF_TRAMP_MAX; kind++)
+> +		for (i = 0; i < tnodes[kind].nr_nodes; i++) {
+> +			struct bpf_prog *prog = tnodes[kind].nodes[i]->link->prog;
+> +
+> +			bpf_prog_inc(prog);
+> +			im->progs[im->nr_progs++] = prog;
+> +		}
+> +#endif
 
-When libbpf attempts to load the verifier_aggregate_ret object on unsupport=
-ed
-architectures (when compiled with LLVM 23+), won't it fail to resolve these
-strong externs because they are conditionally compiled out of bpf_testmod.k=
-o?
-This could cause the entire object load to fail, preventing even the
-non-kfunc tests in the same object from running.
+Ditto.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260817042141.2286=
-086-1-yonghong.song@linux.dev?part=3D8
+Thanks,
+Leon
+
+> +
+>  	err = arch_prepare_bpf_trampoline(im, im->image, im->image + size,
+>  					  &tr->func.model, tr->flags, tnodes,
+>  					  tr->func.addr);
+
