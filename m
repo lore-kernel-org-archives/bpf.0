@@ -1,328 +1,233 @@
-Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010033.outbound.protection.outlook.com [52.101.46.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DFC0305665;
-	Mon, 17 Aug 2026 01:52:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.224
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786931556; cv=none; b=Jmhdee9JwXli/qmAAybI90n6EfB7SXwJBRkx9yEBtZy+8fyyme+j0coZCHRXZy6tU08g9DhoBlx+YXcJ7gJpoAGApfS+RPTh40jCp6QTuit75iLOC96PI8yIGb7tx159mvRGfdNAESaDe4SS9KWMeLYrRWn0RRjTd4O2c4jDMnk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786931556; c=relaxed/simple;
-	bh=Em5+JleXmfQ+tSKIywginRF4M4++sM3CUoEfoqJB7OM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=OXA6dWqJfYdSRLwzlOppXMKMTTICNRFl5MqEplYj09Le+VYMpYXf3EfGZ7LihnbpHCo36pFfy0bW+joct8NmHiouqc9IdgWlLoemJnBp/aE5u27NnsW1J2+Fvy+MQ3696WORDSRKEpw8CgT6SfvSnwZpgPYmZaDrxXu/QsfCAvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=ofTbkbQt; arc=none smtp.client-ip=113.46.200.224
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71B81E8826;
+	Mon, 17 Aug 2026 02:02:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.33
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786932181; cv=fail; b=dOVlNF1W2ZwQk93gIo0+0QuH5BUXtcIcra7COrNMy6hPO+1ezWIEzGc/hD5iLx1KfRsMyzBZIJuzPOxFmo6974DnlA9ry6ydvyK2Iq2xQEILdxos3wf4JQ/dxINgn5pDt8WZkzb60EGM8YEsi1fA8OQk6Hs5A287wcxvWT3PmLo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786932181; c=relaxed/simple;
+	bh=hy6bhKgkMXhnCn6pJ8aIjx2oG7KSwmdnJtx68JgNo8Y=;
+	h=Content-Type:Date:Message-Id:Cc:To:From:Subject:References:
+	 In-Reply-To:MIME-Version; b=RzgvwE84TG17KObhZtc2iqT/kYB+pDz38HwIZ+AWp8wn/Xc3kVIk8FE2dR3qViCNEA/7NwQjt6ZOh3P1md9naQmVb4y/R6UlztEYgyxReJGpuX9kdhDXtWM1XtUwPLLC9HUMjmT0Mnj0f9vVs0VEjh37Xwry5szoG1/dqWj0BWA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=fZmwBe9V; arc=fail smtp.client-ip=52.101.46.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="ofTbkbQt"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=IJmVtDUb7XIXFtur5WMo0s7yV4lH1fkofPtZwxK+itg=;
-	b=ofTbkbQtdBBQ+yJPEy7FUu3xAYwE6iKLjhMprk41MzSXuZE4ws9IDxxr2ddP/XGp9vE+py+m1
-	T66MFV6wW8yPCmERJgPJMfMkhY8q2tqW6q1HKgVerDvDNfiXss+HL+vPMJ0EQ4HHXEV9MG1BPpK
-	pq6Ru4C4y3wD4g0YzBhjvX0=
-Received: from mail.maildlp.com (unknown [172.19.163.15])
-	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4hNbCq1p5wz1cyPY;
-	Mon, 17 Aug 2026 09:41:43 +0800 (CST)
-Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
-	by mail.maildlp.com (Postfix) with ESMTPS id 5F9A940578;
-	Mon, 17 Aug 2026 09:52:22 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
- (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Mon, 17 Aug
- 2026 09:52:21 +0800
-Message-ID: <729d2110-20b2-4e63-af44-99ca8cebdbfd@huawei.com>
-Date: Mon, 17 Aug 2026 09:52:20 +0800
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="fZmwBe9V"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=gQBqNX9bymfd4Dwc3OUq252aWVSmgLxHSNJl8Q8U1IPHz6yX0ceekbyoMqA//bukQHUrhEeiaoVOmrwtlR25srciP1tD/iomwn8oXRysVmZCUEk5aYJP8vxjOXLZbeQArJACdsV6fN2ziQmRQ/RRyHBoPyaI64LXf0cDBKb8ES+HuEYpxL9Ieh3/04qNPlXwHCMwgh5qidhKLburIhsPjR/3f/PieoIj0CBig+kW88pkp9myEU4ZfPo8v/xmZe6uGFvouaB+JhwUagjvDjvIMuU+OVnm5mBDam/NgfLFvieZlS7tc5a0Wpo35UznmMWfk/HhzA9i2Gud4d4r5x5w4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OsQzv821ldIQC38YunE5+owAk4192BbWH3L+2jE4UME=;
+ b=Zw+ZcOhyXMxEWUds8GpMpITuWkkVBph/DtCKZlCpWiUDGRTHOfGVc/Chz/LH9ANhjZVPJ355qLdaX0ZgC+D+kWIh5kWozLrpTCUfSBW56yOkhuCWKo+mQMAVluqLFrANn/ZrnRFgPmCW3ABteDttu2eW4MQeC/3WZih2vLFOqSE2xNEw0/EzC7viz1ng/mPCBar/mc10BHdXXwg3SmR2Mimw0bjYYbp3DUXejLihK97exXWuZ8lNQOIPpSSIMp1Y5+kr4D2PGAvufi02V/Mq9OOUE7Rm/uXy9PNbODN61BTDiMpHqxhOVZgn1rJhaHVLUcvt5ZeKLn6t221GCUSXQQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OsQzv821ldIQC38YunE5+owAk4192BbWH3L+2jE4UME=;
+ b=fZmwBe9VfQigYvSdN7D7++U33TthRDRlBgN0A1mm83nXz3AmDnJOO7/CBY8bMIQPJu3hBedwc7JfPDDdyTdV2dMDX2LPP4kct1F9Pstq9xBvUgH6CYVrHny78kIqj6YkQ68WTLwMavLTTHfoLnG2KpFs8AEW11OkIurYzGdsDvVUXru7orpn7gdS10A3yPlauzx5mtYCRA6Biwfi50CaWRS0+51ZCka8lP8Uq1mvJJAvSFsha3jLyRY63BYfMs3nT6IsAIlndsDx2xDJ4/Yr4VcEcGjaOZwItmP/XrHOeq1XaOC9Sx7+RNfaHbxeQRo+AIA1/B5v4AVJ+UI0gEuW7g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
+ by IA1PR12MB8405.namprd12.prod.outlook.com (2603:10b6:208:3d8::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.17; Mon, 17 Aug
+ 2026 02:02:56 +0000
+Received: from IA0PR12MB8374.namprd12.prod.outlook.com
+ ([fe80::d85f:4c87:ae84:3f16]) by IA0PR12MB8374.namprd12.prod.outlook.com
+ ([fe80::d85f:4c87:ae84:3f16%5]) with mapi id 15.21.0315.016; Mon, 17 Aug 2026
+ 02:02:56 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 16 Aug 2026 22:02:53 -0400
+Message-Id: <DKQUL7RN5K3W.30VLVVWFPBRXZ@nvidia.com>
+Cc: <baolin.wang@linux.alibaba.com>, <baohua@kernel.org>,
+ <dev.jain@arm.com>, <hughd@google.com>, <lance.yang@linux.dev>,
+ <liam@infradead.org>, <mhocko@suse.com>, <rppt@kernel.org>,
+ <ryan.roberts@arm.com>, <shuah@kernel.org>, <surenb@google.com>,
+ <usama.arif@linux.dev>, <vbabka@kernel.org>, <usama.anjum@arm.com>,
+ <agordeev@linux.ibm.com>, <linux-mm@kvack.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <kas@kernel.org>, <jannh@google.com>, <willy@infradead.org>,
+ <pfalcato@suse.de>, <rostedt@goodmis.org>, <mhiramat@kernel.org>,
+ <linux-trace-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+To: "Kiryl Shutsemau" <kirill@shutemov.name>, <akpm@linux-foundation.org>,
+ <david@kernel.org>, <ljs@kernel.org>, <nico.pache@linux.dev>
+From: "Zi Yan" <ziy@nvidia.com>
+Subject: Re: [RFC PATCH 00/57] mm/collapse: rebuild collapse on migration
+ primitives
+X-Mailer: aerc 0.21.0
+References: <20260816224609.308019-1-kirill@shutemov.name>
+In-Reply-To: <20260816224609.308019-1-kirill@shutemov.name>
+X-ClientProxiedBy: YQBPR0101CA0212.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:67::18) To IA0PR12MB8374.namprd12.prod.outlook.com
+ (2603:10b6:208:40e::7)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 1/2] bpf, riscv: Add BPF stack arguments
- support for RV64 JIT
-Content-Language: en-US
-To: Feng Jiang <jiangfeng@kylinos.cn>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi
-	<memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
-	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
-	<jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai
-	<ihor.solodrai@linux.dev>, Luke Nelson <luke.r.nels@gmail.com>, Xi Wang
-	<xi.wang@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-	Puranjay Mohan <puranjay@kernel.org>, Paul Walmsley <pjw@kernel.org>, Palmer
- Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Alexandre
- Ghiti <alex@ghiti.fr>, Shuah Khan <shuah@kernel.org>, Nathan Chancellor
-	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill
- Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-CC: <bpf@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<llvm@lists.linux.dev>
-References: <20260814-bpf-riscv-stack-args-v3-0-2160de56fea3@kylinos.cn>
- <20260814-bpf-riscv-stack-args-v3-1-2160de56fea3@kylinos.cn>
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <20260814-bpf-riscv-stack-args-v3-1-2160de56fea3@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- kwepemf100007.china.huawei.com (7.202.181.221)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|IA1PR12MB8405:EE_
+X-MS-Office365-Filtering-Correlation-Id: 041db405-18f2-494d-2da6-08defc03a787
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|1800799024|366016|23010399003|18002099003|22082099003|56012099006|11063799006|5023799004|10067099003;
+X-Microsoft-Antispam-Message-Info:
+	ft/wKU5K4qyOxji+w4hWNX6sj8LJekekanPuNzUbYyI0KnHabFilIRlJOIKC0HQCZTap2qGlRCNGEATTwVQyib7BpcTjs5dyYwwqbcI5eBAwq98SEANR8Htam4q0bnoKCmUAXJ/R6J/A9Y+Lx+1fGwKt9CXj7G6beRBsF2gqA2DTaVr25JVCZWkIpQ9yNbJ7cUhRfJVkxAk3aMlnGNZOhrmOHjimN5HlEqKswu7qbJVq7Eu7N6t9fUKrEr6u6B0pXEv/G4w/w5EPOrEpcVOdfajSQLXsQFqfeHyjIH/1+Kh0Z2C7cG/Y0H7lTp/pGCRzv22Zu1PjcdBCVvdq6xKVgpK+vp42FdOZNx26ErdVB8nzoXY2TH67XBEjJlnii3IDAPhugcmOrMOUWL6eOU43FV87YvkTUOT/k1iIbOxilIaz/BoNgsj9uo4d4Wrah3VOgGL9+rvVdMLFAa+ovveQMwa6+PDAmeaNnQWPf4YMIXyvQZbcxqIG55t74DDq8VK6ROMwjG2Rin9JEORD9yIbiBGwy8DGRpN8Cj61WBVoxeeFRpi2g5VcueRPxqyPzsJEIzz4+fKdUaxrExHdcnlVppzYy/nHCYk2bkR32fptko+KcOWTQTtDAroVf0YQ/pEdl7UZ47geiROfred23lTVkEHbT+1v81Kqyo5h/a0dKHg=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(23010399003)(18002099003)(22082099003)(56012099006)(11063799006)(5023799004)(10067099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ais5ZzUzcnNNOHo1TVR3TExnTmlKalVUM1RHK0l4MnRTZjFDVDdSOEM0eWx0?=
+ =?utf-8?B?UzhFanRwUlVsTEVONVc0V29aaDlqTzVlYjk4QURYTDhENkkxNElMdng0RDBP?=
+ =?utf-8?B?MG13ZEYxQzRQR05UcEhqTEk1SHUxOWEwZzFOQm1yNmI0OGtLVkJnNWNZd3c0?=
+ =?utf-8?B?RUhQaDJpam1KZHY4Q3EyNUVlcVk1a0tlSEJ6Mjh3N2tPdVgzSXgxWjZsYy9z?=
+ =?utf-8?B?NnVVVTc3dGsxN21QTjdrdXJOQ0I2bWRISXlZMkVjT1ZVRlhiam51Y3QzV1ky?=
+ =?utf-8?B?N0dxKzNpNFgrWDBsR1Jvc1JWY2krbnhqN0JOVHl0aE1Oam1BTnZoK1NES05v?=
+ =?utf-8?B?R1RMd0dRT0t5dTRNOUNWaWZ0K0lFejRjRk1uZHIzMWtEM2U0UjJVYWJOR0c1?=
+ =?utf-8?B?a1FTZVE0azRWdkhkNW92TFQycVZ0Zk9PSWUzcGQzM2sydHlpN0pxZU1GZTdt?=
+ =?utf-8?B?OVU0UTlPM0pQb3pHMURpemgzUjMxNlZVeGE5ZzQ3OTh4cXlWaWdrRWdybnEx?=
+ =?utf-8?B?aGdUTnQ5VFZ1a1hJcm1tTi9LaGZFZmF2ZWNzS2Y0ZU01VFdzT1NDeDdlMUpX?=
+ =?utf-8?B?cjVONE9rbGVZTHE1bDhiNysvb242VkxDQ3g2NDhON0VyaVljRGRFTFFzY1lx?=
+ =?utf-8?B?ZThnVldpOEx0Tkt3cHZjRU1JcDVqV250MklaUEpJKytwSnlvMmQybUNpdTRX?=
+ =?utf-8?B?OTFXNzB1SFQzOFZRVG5UVTkyVzdod0RBZHVEbkZkOVk5ZXlyN3VGZGxFQW04?=
+ =?utf-8?B?a2htditPKzcwVk1IN1B0MURFTmFDZE1HS2ZYQjJGOENRTDNjbnhpNEo5QVNO?=
+ =?utf-8?B?djl6L0RkdVJNVithR2lXdlByS09wV0ZRSzU3cUZCQm5qRERvbzJ6T01TYW5h?=
+ =?utf-8?B?L0hSVFoyc3ZrN0tMUGJzb2podjI2b3JlSVpuTE1qMnZ2dFI1VWdsVmluRzVp?=
+ =?utf-8?B?Y0FTR3dReFN6NnNjM3k1aFoxdXYxQ3d4aEpsNHVtWjEyTjc0OEJFcXpLSkNX?=
+ =?utf-8?B?M0NsdFRVVHBJd2VFaUQ5Y09jVUpkUWtYUC9YUUtqYy83NkNDUzFVa0l6Szc5?=
+ =?utf-8?B?Z1RjSnJOKzE5bXorT2JBRWJNTytlOGpmTXMvdEFISmVPcGJDaUhVQWRLQTlx?=
+ =?utf-8?B?aFpyZnB4SmNYUkNxV082VGxPclpENHRqUXA1ZXM5Y3NUbHd0LzRTWDJ5bVhI?=
+ =?utf-8?B?ajlyd0g4VUpTUENxL0pxZUlMaGJBUDhuSEI2VjhkeFA0dHk4ck0rN21pTmd6?=
+ =?utf-8?B?emZneUVBZ2NQVHFQZzgwbzV0S01xdjA1VFkrQWxWKzIrd2ZuNDVYbVZFWGJJ?=
+ =?utf-8?B?QzdYKzFwTW1TS2VFSkg2cmx4RVBvRVdvcStOSGlMMVIwVCt0Ri9tK0c4Ynl6?=
+ =?utf-8?B?bGdLUmUxZktNUEI1ZXY0K1NwREJWQ0xJNFFrY2hwVnRQL1ZxMDlMUkU0OHdy?=
+ =?utf-8?B?L1BDV3FPYjRpTzRiODMvQytRamRVSUVIUzkydlF5THZ6bDdMYkFyWWdGNmpQ?=
+ =?utf-8?B?R2tHNVQxL2w2UnU2Tm5Ma2JPclhmQVZ6QVZrV1Y1cC9PZEpGQ0RSQWFHeFg4?=
+ =?utf-8?B?Z1FIbWxJZENPRDVPNC90Nk9xVEQyQlN3ZEZwNjR3R2dvSy9DanFlcm5JYmdi?=
+ =?utf-8?B?aHlLdWpxUjYxNGpCTVM3c1MwQ0x4Y3l2SWpPSjlYRUlKcmRvejVwQ2grWktF?=
+ =?utf-8?B?cXFyazc0eC9Ea1FMV3FWcUZIRkxsRGF3TWNTREpPdGdkQWw0S09pMmpXamVZ?=
+ =?utf-8?B?RzMwd2VZQVZWbDgzT253TzA2YmZNQ2hkalNkRTJjRS8rS2huRU8vWDIyWUwr?=
+ =?utf-8?B?OCt5RWZRUXo0ckQ2OExNZ0xGZWZva0R3QmxDYWVMNmlPdko4bWpodUZkWHRs?=
+ =?utf-8?B?TENvTldUeVkvN3QzclVJdml4ekZOcTFPK0czTlk2a0VHZ05sTU96YWx0bTll?=
+ =?utf-8?B?ZTA0dzllYThrUDg3N01aRGp0a0ZvRmQ4MHJjc3BnbVdoM21ueWtvVHhSWGI2?=
+ =?utf-8?B?cnlrMEsrT2NSM1cxeVZtNHJ2cUFCV2VtYmN6dHZvQXZZM0VDYUtETUZ0MUFy?=
+ =?utf-8?B?MUNLNVVwempWbklDeEhBa0d6K0h0SkpwR0xsSmZXU1dSTFlyMlhIU0JNRnBM?=
+ =?utf-8?B?Vm9LYmQrSHVKU3FOa2hZcnM4enZHQWd2UHhnZGFaWWZJK2lMYlRPUE5NMGdH?=
+ =?utf-8?B?eldRLzVzNkFnNlRkNzZoNEFSVkI4dW9QUGRmOEdPa0FheE5lT3VodldsV0F1?=
+ =?utf-8?B?SWdCSjJORDlVRC9JeEdLUUlwaElqQzVadmwvb2RqUk9uZTNmZzhNb0hhSDhJ?=
+ =?utf-8?Q?jPCOkPwG65VAwvfKRL?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 041db405-18f2-494d-2da6-08defc03a787
+X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2026 02:02:56.0041
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wjJWne1kmh48ocXtGYULIGJONuzPxUB3uca6JSEeprfca7A7RE3f9o4X4RXH16h6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8405
 
-Hi Feng Jiang,
+On Sun Aug 16, 2026 at 6:45 PM EDT, Kiryl Shutsemau wrote:
+> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+>
+> Yes, I know, this is a lot of changes. But I'm happy with the overall sta=
+te
+> of the patchset and the only reason I tag it as RFC is that it is tricky
+> to get 57 patches upstream.
+>
+> I wanted to give a view of the end state first. I will suggest a possible
+> way to split it below.
+>
+> I would appreciate any feedback.
+>
+> TL;DR
+> =3D=3D=3D=3D=3D
+>
+> This replaces khugepaged's anonymous collapse with an engine that
+> can collapse sub-PMD ranges. It is built around migration entries and
+> frozen folios instead of heavy locking and isolation, aiming for better
+> scalability and less disruption to the workload being collapsed.
+>
+> Why
+> =3D=3D=3D
+>
+> mTHP collapse landed in khugepaged in 7.2 and I was glad to see it.  We
+> at Meta run arm64 with 64K base pages, where a PMD is 512M: PMD-order THP
+> is of limited use at that size, and mTHP is exactly what we want.
+>
+> It turned out not to help us.
+>
+> khugepaged only ever looks at PMD-aligned windows, and it is not an easy
+> limitation to lift.
+>
+> Fixing the alignment is a one-line change, but what it feeds assumes the
+> PMD everywhere that matters: collapse_huge_page() clears and flushes the
+> whole PMD whatever order it is collapsing, installs a PMD leaf because
+> that is the only thing it can produce, and keeps everyone out with
+> mmap_write_lock, anon_vma_lock_write() and an IPI broadcast while it
+> does.
+>
+> Which is why hugepage_vma_revalidate() demands that the VMA span the
+> whole PMD even for an mTHP order -- "we'd need to lock all VMAs in the
+> PMD range to support this", as the comment there puts it.  A PMD-granular
+> operation is only safe when one VMA owns the PMD, and that is exactly the
+> restriction in the way.  The alignment is the symptom; the PMD is the
+> design.
+>
+> So both roots have to go.
 
-On 2026/8/14 9:29, Feng Jiang wrote:
-> Add bpf_jit_supports_stack_args() for the RV64 JIT so BPF subprograms
-> and kfuncs can receive more than 5 arguments via the stack
-> (BPF_REG_PARAMS / r11).
-> 
-> For BPF-to-BPF calls the caller writes outgoing arguments at the
-> bottom of its frame (SP-relative). The callee reads them with
-> FP-relative loads. Its FP is set to the caller SP in the prologue,
-> so the offsets match.
-> 
-> The RISC-V ABI puts arguments 6-8 in A5-A7 and arguments 9+ at
-> SP+0. Before each kfunc call, load arguments 6-8 from the outgoing
-> area into A5-A7 and copy any remaining arguments down so argument 9
-> lands at SP+0.
+I agree that khugepaged is designed for PMD-aligned collapse and this is
+a limitation we want to get rid of. It is great you are looking at them.
 
-bpf2bpf calls pass extra arguments entirely on the stack, whereas kfuncs 
-pass them via a mix of registers and the stack. This inconsistency not 
-only wastes stack slots in kfunc scenarios but is also error-prone and 
-easy to overlook during maintenance.
+>
+> Design
+> =3D=3D=3D=3D=3D=3D
+>
+> The old mechanism holds the address space still because it has nothing
+> else stopping the sources from moving under the copy.  The new engine
+> makes the sources themselves inert instead, with the two barriers
+> migration already uses, raised in that order:
+>
+>   1. migration entries replace the source PTEs.  Faults and GUP-slow
+>      now wait on the source folio's lock, which is taken before the
+>      first entry becomes visible.
+>   2. the source folio's refcount is frozen to its expected value.
+>      GUP-fast, pfn walkers, reclaim, compaction and memory-failure all
+>      fail folio_try_get() and back off.
+>
+> Between the two, nothing can reach a source, so the copy runs with no
+> lock held at all -- and the address space is left alone while it does.
+>
+> What that removes from every collapse path:
+>
+>   mmap_write_lock              -> mmap_read
+>   anon_vma_lock_write()        -> nothing: an rmap walk needs the folio
+>                                   locked, and the engine holds that lock
+>                                   from freeze to putback
+>   tlb_remove_table_sync_one()  -> nothing: one ranged flush per round
+>   LRU isolation                -> nothing: sources are inert in place
 
-To make argument passing more straightforward and consistent, I think we 
-can align it with the standard riscv calling convention: use a0-a7 for 
-the first 8 arguments and pass any remaining arguments on the stack.
+I remember we were discussing using migration entry and the issue with
+mmap_write_lock() in the context of in-place THP promotion and the
+conclusion was that because MADV_DONTNEED (maybe MADV_REMOVE or
+MADV_PAGEOUT) works on page table and does not change VMAs,
+mmap_write_lock() is needed to prevent things being changed under
+khugepaged. Anything different in normal khugepaged collapse process, so
+that it is OK to use mmap_read_lock? Let me know if I misremember it.
 
-To support this, the current bpf-to-rv register mapping needs to be revised:
+Thanks.
 
-T0 -> BPF_REG_0 (ftrace use T0 too, but it might not be an issue / needs 
-verification)
-T6 -> TCC
-T7 -> BPF_REG_AX (rarely used, so let's move to t7)
+--=20
+Best Regards,
+Yan, Zi
 
-Note that this remapping affects multiple places and requires careful 
-auditing.
-
-> 
-> A5 (BPF_REG_0), A6 (TCC) and A7 are safe to clobber here: R0 is not
-> live before a call, TCC is backed up on the stack, and A7 is unused
-> by the JIT.
-
-
-
-> 
-> Limit the existing kfunc sign-extension loop to MAX_BPF_FUNC_REG_ARGS
-> iterations; otherwise idx >= 5 resolves to S1-S5 (BPF_R6-FP) and
-> corrupts callee-saved registers.
-> 
-> Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
-> ---
->   arch/riscv/net/bpf_jit.h        |  1 +
->   arch/riscv/net/bpf_jit_comp64.c | 79 +++++++++++++++++++++++++++++++++++++++--
->   arch/riscv/net/bpf_jit_core.c   |  4 +++
->   3 files changed, 81 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
-> index 419b9d795f2a..9eb4e149505d 100644
-> --- a/arch/riscv/net/bpf_jit.h
-> +++ b/arch/riscv/net/bpf_jit.h
-> @@ -82,6 +82,7 @@ struct rv_jit_context {
->   	unsigned long flags;
->   	int stack_size;
->   	int tcc_offset;
-> +	u16 stack_arg_size;
->   	u64 arena_vm_start;
->   	u64 user_vm_start;
->   };
-> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-> index 6b9972b07c1b..58cb3e5ff6b4 100644
-> --- a/arch/riscv/net/bpf_jit_comp64.c
-> +++ b/arch/riscv/net/bpf_jit_comp64.c
-> @@ -1815,18 +1815,43 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->   
->   		if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
->   			const struct btf_func_model *fm;
-> -			int idx;
-> +			int idx, nargs;
->   
->   			fm = bpf_jit_find_kfunc_model(ctx->prog, insn);
->   			if (!fm)
->   				return -EINVAL;
->   
-> -			for (idx = 0; idx < fm->nr_args; idx++) {
-> +			nargs = min_t(int, fm->nr_args, MAX_BPF_FUNC_REG_ARGS);
-> +			for (idx = 0; idx < nargs; idx++) {
->   				u8 reg = bpf_to_rv_reg(BPF_REG_1 + idx, ctx);
->   
->   				if (fm->arg_size[idx] == sizeof(int))
->   					emit_sextw(reg, reg, ctx);
->   			}
-> +
-> +			/* BPF stack args -> RISC-V ABI: args 6-8 in A5-A7, 9+ at SP+0 */
-> +			if (fm->nr_args > MAX_BPF_FUNC_REG_ARGS) {
-> +				int n_stack = fm->nr_args - MAX_BPF_FUNC_REG_ARGS;
-> +				int n_reg = min_t(int, n_stack,
-> +						  RV_MAX_REG_ARGS - MAX_BPF_FUNC_REG_ARGS);
-> +
-> +				for (idx = 0; idx < n_reg; idx++) {
-> +					int sz = fm->arg_size[MAX_BPF_FUNC_REG_ARGS + idx];
-> +
-> +					emit_ld(RV_REG_A5 + idx, idx * 8, RV_REG_SP, ctx);
-> +					if (sz == sizeof(int))
-> +						emit_sextw(RV_REG_A5 + idx, RV_REG_A5 + idx, ctx);
-> +				}
-> +
-> +				for (idx = n_reg; idx < n_stack; idx++) {
-> +					int sz = fm->arg_size[MAX_BPF_FUNC_REG_ARGS + idx];
-> +
-> +					emit_ld(RV_REG_T1, idx * 8, RV_REG_SP, ctx);
-> +					if (sz == sizeof(int))
-> +						emit_sextw(RV_REG_T1, RV_REG_T1, ctx);
-> +					emit_sd(RV_REG_SP, (idx - n_reg) * 8, RV_REG_T1, ctx);
-> +				}
-> +			}
-
-looks a bit complicated, how about the following after redefine regmap:
-
-```
-for (idx = 0; idx < fm->nr_args; idx++) {
-   if (idx < RV_MAX_REG_ARGS) {
-     u8 reg = RV_REG_A0 + idx;
-
-     sign_extend(reg, reg, xxx)
-   } else {
-     load from stack to T1
-     sign_extend
-     retore from T1 to orig stack slot
-   }
-}
-```
-
->   		}
->   
->   		/* restore TCC to RV_REG_TCC before bpf2bpf call */
-> @@ -1891,6 +1916,21 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->   	case BPF_LDX | BPF_MEM | BPF_H:
->   	case BPF_LDX | BPF_MEM | BPF_W:
->   	case BPF_LDX | BPF_MEM | BPF_DW:
-> +		if (insn->src_reg == BPF_REG_PARAMS) {
-
-pls use is_stack_arg_ldx/st/stx instead.
-
-> +			int idx = off / 8 - 1;
-> +
-> +			if (is_12b_int(idx * 8)) {
-> +				emit_ldx_insn(rd, idx * 8, RV_REG_FP, BPF_SIZE(code), false, ctx);
-> +			} else {
-> +				emit_imm(RV_REG_T1, idx * 8, ctx);
-> +				emit_add(RV_REG_T1, RV_REG_T1, RV_REG_FP, ctx);
-> +				emit_ldx_insn(rd, 0, RV_REG_T1, BPF_SIZE(code), false, ctx);
-> +			}
-> +			if (BPF_SIZE(code) != BPF_DW && insn_is_zext(&insn[1]))
-> +				return 1;
-> +			break;
-
-This piece of code was refactored not long ago. Let's see if we can 
-merge it into the logic below or fold it into emit_ldx—let's give it a try.
-
-> +		}
-> +		fallthrough;
->   	case BPF_LDX | BPF_PROBE_MEM | BPF_B:
->   	case BPF_LDX | BPF_PROBE_MEM | BPF_H:
->   	case BPF_LDX | BPF_PROBE_MEM | BPF_W:
-> @@ -1938,6 +1978,20 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->   	case BPF_ST | BPF_MEM | BPF_H:
->   	case BPF_ST | BPF_MEM | BPF_W:
->   	case BPF_ST | BPF_MEM | BPF_DW:
-> +		if (insn->dst_reg == BPF_REG_PARAMS) {
-> +			int idx = -off / 8 - 1;
-> +
-> +			emit_imm(RV_REG_T1, imm, ctx);
-> +			if (is_12b_int(idx * 8)) {
-> +				emit_stx_insn(RV_REG_SP, idx * 8, RV_REG_T1, BPF_SIZE(code), ctx);
-> +			} else {
-> +				emit_imm(RV_REG_T2, idx * 8, ctx);
-> +				emit_add(RV_REG_T2, RV_REG_SP, RV_REG_T2, ctx);
-> +				emit_stx_insn(RV_REG_T2, 0, RV_REG_T1, BPF_SIZE(code), ctx);
-> +			}
-> +			break;
-> +		}
-> +		fallthrough;
-
-ditto
-
->   	/* ST | PROBE_MEM32: *(size *)(dst + RV_REG_ARENA + off) = imm */
->   	case BPF_ST | BPF_PROBE_MEM32 | BPF_B:
->   	case BPF_ST | BPF_PROBE_MEM32 | BPF_H:
-> @@ -1960,6 +2014,19 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->   	case BPF_STX | BPF_MEM | BPF_H:
->   	case BPF_STX | BPF_MEM | BPF_W:
->   	case BPF_STX | BPF_MEM | BPF_DW:
-> +		if (insn->dst_reg == BPF_REG_PARAMS) {
-> +			int idx = -off / 8 - 1;
-> +
-> +			if (is_12b_int(idx * 8)) {
-> +				emit_stx_insn(RV_REG_SP, idx * 8, rs, BPF_SIZE(code), ctx);
-> +			} else {
-> +				emit_imm(RV_REG_T1, idx * 8, ctx);
-> +				emit_add(RV_REG_T1, RV_REG_SP, RV_REG_T1, ctx);
-> +				emit_stx_insn(RV_REG_T1, 0, rs, BPF_SIZE(code), ctx);
-> +			}
-> +			break;
-> +		}
-> +		fallthrough;
-
-ditto
-
->   	/* STX | PROBE_MEM32: *(size *)(dst + RV_REG_ARENA + off) = src */
->   	case BPF_STX | BPF_PROBE_MEM32 | BPF_B:
->   	case BPF_STX | BPF_PROBE_MEM32 | BPF_H:
-> @@ -2036,6 +2103,7 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
->   
->   	stack_adjust = round_up(stack_adjust, STACK_ALIGN);
->   	stack_adjust += bpf_stack_adjust;
-> +	stack_adjust += ctx->stack_arg_size;
->   
->   	store_offset = stack_adjust - 8;
->   
-> @@ -2093,7 +2161,7 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
->   	emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
->   
->   	if (bpf_stack_adjust)
-> -		emit_addi(RV_REG_S5, RV_REG_SP, bpf_stack_adjust, ctx);
-> +		emit_addi(RV_REG_S5, RV_REG_SP, ctx->stack_arg_size + bpf_stack_adjust, ctx);
->   
->   	ctx->stack_size = stack_adjust;
->   
-> @@ -2171,3 +2239,8 @@ bool bpf_jit_supports_timed_may_goto(void)
->   {
->   	return true;
->   }
-> +
-> +bool bpf_jit_supports_stack_args(void)
-> +{
-> +	return true;
-> +}
-> diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
-> index cbfcd287ea16..844a0f3e0fa9 100644
-> --- a/arch/riscv/net/bpf_jit_core.c
-> +++ b/arch/riscv/net/bpf_jit_core.c
-> @@ -72,6 +72,10 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
->   	ctx->arena_vm_start = bpf_arena_get_kern_vm_start(prog->aux->arena);
->   	ctx->user_vm_start = bpf_arena_get_user_vm_start(prog->aux->arena);
->   	ctx->prog = prog;
-> +
-> +	ctx->stack_arg_size = round_up(bpf_out_stack_arg_cnt(env, prog) *
-> +				       sizeof(u64), STACK_ALIGN);
-
-It's not u64—since every stack slot is aligned to the pointer size 
-(sizeof(long)), I think using 8 is fine.
-
-> +
->   	ctx->offset = kvzalloc_objs(int, prog->len);
->   	if (!ctx->offset)
->   		goto out_offset;
-> 
