@@ -1,120 +1,134 @@
-Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9325E31F98F
-	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 04:38:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF78A314A90
+	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 04:42:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786941530; cv=none; b=j5MNBwTLreQculTK6W5yuSAVl0mPlvDWeTNAbaviJfBuUe65w79nedt/V791bMSAI8Eu7TPAbecd2TAaG8v4Mcr2GqtCUTW+7D437P7tTtdCbLEOPiI/qHWkUCyDs9rAdPfasPK+XVR8sPZlZZDS4Rt0NWok4dT5DfjVijSvnFo=
+	t=1786941742; cv=none; b=eqdKX5mOCxp03CkxO/N6xIXBh3dmkE2kOPHwcZswXU0sMpl4XwxpYiSgTNwqo/8Mkf5ey4fCgH8bTZJEEr9HAL3zxi2ofOJetS+es2BW8S1raqpezxdQ2k+9HhM4wpk6sixkRJiwxuwrFOTOVJJzDhvqhQiMhbqUzhbe9I0tZHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786941530; c=relaxed/simple;
-	bh=fkQiXS2dj0HIQT6nxsCnV4dj4UNnrygOECOoDn6j4q4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=TZ4KcVlUIsOR9mIlyFofYSj6wPax9p3DF+NOqTZYuIC+Yn+7DLHTDS0d/iqdXiWO7NZZ74fwQcVspmd9W41tWknniSJkVVSnGOwJRcOFULtD+IeOtDRxwGiWRsUXxCVIPJg0j55Rk4wFhX+rlFLo8mW/EDAlpAgZj/aj9b4bFPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UpUqrq+i; arc=none smtp.client-ip=74.125.225.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786941742; c=relaxed/simple;
+	bh=KfBOFcsR5C0wyl2xTsdbHvFliILBtdqmUArr4ky29B0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=f7324DOAngf1rVrzoPAY7UXrLC2LTdgfRSffG+MHXN0N02+1kzMTEnXg8BtGkArW5ccYKSAjmJnMIaIpl5dnIKkXKG9tXZdOsHn1ekedwjPVDEdwf0J93+LvryZ1czNZmNtnIjBmxgRWrmla1STlySB0F3WKVvOMOWGjVCt3o/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SXDPFcP6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UpUqrq+i"
-Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-47fcb9d4b33so1273080f8f.0
-        for <bpf@vger.kernel.org>; Sun, 16 Aug 2026 21:38:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786941526; x=1787546326; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=1c8foKhzrYQ6izTIE48GxSA/nmG3AeRv3jsPbmv5QtA=;
-        b=UpUqrq+it8QQ/2LMCtrVz01FKOqOhA/D7TSemGKnO3ONZW/+I+D/9hXvSQM3faKxBH
-         EF4ufoiaoVZ3RXDBX3eZc5P0YXqhP7lIMvbRTHnWp+k2Hi6oU3s7qC6O/51miUWFbvDa
-         LMO8jPVt5m29KtXx0mtgc5Z9h77DjZLHtmiuBlXjXXEzbB+DbhaA17vjDsfoZX124dL1
-         tDhXfvpkWP30KuEUEj/ndKqgX0zs5lissCUVQwNiE6xBYjjEKwYeH3JsWL36qrRUXMCa
-         BEAcmUw4qjCachSVd8sQkGVJ55UNLXYiGqMM6uESuYBiX7pYPhO7KYaVRYxWQZCFWBXq
-         SjWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786941526; x=1787546326;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=1c8foKhzrYQ6izTIE48GxSA/nmG3AeRv3jsPbmv5QtA=;
-        b=dQ6qy3cQedFwTpJLA0zkt5ojBCcRqMhOLTChpxMQL5DqSP6C+6ZQfBDqn9OA6ZQahY
-         eJBfcpIscJFELtg2PG7qE06xTtvGBt8boljZLo+uJxBJ/HUqpn5/CbZotkQsVKyijQZf
-         cvy0EimxQXCfMLMUDEbWOdqgUNqfA4Dto6AO9icxRmoqf+HwukWzKXQHrAfOP527dXgO
-         eabh0LqjwjspQDoqbn6l0dAcXUAG+FRJIXksrcgMpr2mP5gtmrhozgrmvxloGBemUQdx
-         Ohdio4wghea69I11MDCPpjAr7lbqKqS5BKVWkl9e4eU/qhYXTK89rxxyLamZSZFieY/a
-         +bpQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoTwYJAl5nlNG1+JCWKptQzyISiXsOLhbwsXheCwtWWHnCyCN6XOUzY8VJTXL1zkvBzMtQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzELnGayW/3LYAFlqQkOc9Yn8rHydyLOUZtwpx58VMQxAEx/jbm
-	AXbzmH2F+co0xi8SSPXq/GcbFhK9YUJC7+LTavTT3+3N8ovl986JpvhT
-X-Gm-Gg: AR+sD12zUvb7Vn+jrsGIaIuqpe3UZqB9CGoly8wYIHe/41tiGukI/j09FKNcQYRW/UB
-	rYpwSV95JIMU60LWF7c7aH8hOINJ3Wy8s9+isyrWU70D2f9WFhtplLB2BFFSKWKpHrvNLRCODZL
-	I1dXsc+GBuzFzAZCvVvGuDjAWTnD4RK/a1l6CjmcS2qMro87VV4FIVXm5IAiX/YE9CiIFOoYgOq
-	dSiJyWr3UKvh7newaTyWITRVj6BYkMGoGNXw3u+xQm2pqRrP5pOiM+//3nyHFgCiU0T46cL1IX9
-	TTu+jPtN+qvyPBok+EMQiqBrTW4mtVn84SO2Hqbn6yqLfGsGKM0wZW/gj9eFYw70aRT5yBkaxlM
-	dWFk19+yMn8Sxa/pfhDPHF6CXuZL0rHghGQxBSnM5zVQqA5tCIP2FhjwONY2Xs47LZecWanIKE5
-	rp6BDFtR4T1BH88gaXntyU7yeMKTB0/1tu8uq2cx2o4e5lwW+owMpQnd3Cr10GFb/fPfxnpTlei
-	gD286PcyJ6oXuoeeDMuf6o4foTBfrFhmItbhWDU/UJlARGG38MRq3Eb4Htfk0Y3EfAXpZy5yNeo
-	ZXGakf7/u0soNe/29wNBhtvYyLU=
-X-Received: by 2002:a05:6000:25f4:b0:47f:7129:6e2d with SMTP id ffacd0b85a97d-48160751f31mr34517595f8f.17.1786941526370;
-        Sun, 16 Aug 2026 21:38:46 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-482a5a7c57fsm625297f8f.22.2026.08.16.21.38.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Aug 2026 21:38:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SXDPFcP6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46F201F000E9;
+	Mon, 17 Aug 2026 04:42:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786941740;
+	bh=XRh98l79XCZXGX4A4E3VtOb6EesnGGqHDA/iW1HeQgM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=SXDPFcP64eaQjdJ7Pa/she/rMiPfa8sUgotzyb+6ijuXLlPsA2g3Gq3F8oCWR/8Sk
+	 YSlanRPUI/4h+dup8BNuj3R4R2X2GLwT5ce3LhenkU1hHjUzcmXZ4AQOsJtQSroGXh
+	 3bC2R0E3yfgE0UQ4+R/q1ll33GxWElXNtV4ttd5krTE/1fnBp8YPtCQCYc9+ydniFi
+	 WyQZiSHztAVodTbwxiTclOBTNBHcErAN+SfnsJdc9eGPFvkxluIpaBkqKYAgIb7k8X
+	 jZbgn81Oemg5NLH9035SZuNugL/oZXNyZ2SRCumISZeJDen/deGYGfbXpzAB8W24zl
+	 9B1PqWajTCIzg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v6 06/10] bpf: Add verifier support for 16-byte
+ returns in R0:R2
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yonghong Song" <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260817042212.2291498-1-yonghong.song@linux.dev>
+References: <20260817042141.2286086-1-yonghong.song@linux.dev>
+ <20260817042212.2291498-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 17 Aug 2026 04:42:19 +0000
+Message-Id: <20260817044220.46F201F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 17 Aug 2026 06:38:45 +0200
-Message-Id: <DKQXWK0ILLSS.UF4CVFD9NO3I@gmail.com>
-To: "Tiezhu Yang" <yangtiezhu@loongson.cn>, "Vincent Li"
- <vincent.mc.li@gmail.com>, "bpf" <bpf@vger.kernel.org>
-Cc: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, <loongarch@lists.linux.dev>
-Subject: Re: bpf selftests timer_lockup intermittently locks up kernel
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <CAK3+h2xOSEZUHhou7N2cRL-aGrZCNSm45g+P7thObMe+fpgYCA@mail.gmail.com> <d06a7557-fb51-2be9-63cd-3269533476b2@loongson.cn>
-In-Reply-To: <d06a7557-fb51-2be9-63cd-3269533476b2@loongson.cn>
 
-On Mon Aug 17, 2026 at 6:04 AM CEST, Tiezhu Yang wrote:
-> On 2025/8/25 =E4=B8=8A=E5=8D=882:26, Vincent Li wrote:
->> Hi,
->>
->> I am running bpf selftests on a Loonarch PC and observed intermittent
->> kernel lockup by timer_lockup, then I can repeat the lockup just by
->> running the timer_lockup in while loop every 5 seconds, I could not
->> find a good x86 machine to test, and I think this might be
->> architecture independent. I don't have a good way to capture any
->> kernel log messages for the PC after the kernel hangs, and I had to
->> power reset the PC.
->
-> ...
->
->> #458     timer_lockup:FAIL
->> Caught signal #11!
->
-> I recently spent some time investigating this and
-> managed to reliably reproduce the issue.
->
-> After adjusting some kernel configs and parameters,
-> I successfully captured the call trace.
->
-> The following patch fixes the issue, feel free to
-> test it:
->
-> LoongArch: Fix __smp_mb__{before,after}_atomic()
-> https://lore.kernel.org/loongarch/20260817035908.460-1-yangtiezhu@loongso=
-n.cn/
->
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The newly added support for kfuncs returning structs by value is=
+ mathematically unreachable.
+--
 
-This looks correct to me. Also, nice that the test actually reproduces the =
-issue
-without that store-load barrier present, which is good validation for the k=
-ernel
-side fix.
+--- Patch [6]: [PATCH bpf-next v6 06/10] bpf: Add verifier support for 16-b=
+yte returns in R0:R2 ---
+commit 438f13b526c411cf77d7536a3436a0cc4625dbe4
+Author: Yonghong Song <yonghong.song@linux.dev>
+
+bpf: Add verifier support for 16-byte returns in R0:R2
+
+This patch adds BPF verifier support for handling 16-byte returns in the
+R0:R2 register pair, utilizing LLVM 23 capabilities. It models this
+register pair at calls to global/static subprograms and kfuncs, allowing
+kfuncs to return structs composed of scalars.
+
+Link: https://github.com/llvm/llvm-project/pull/190894
+Link: https://github.com/llvm/llvm-project/pull/206876
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -13967,10 +13997,25 @@ static int check_kfunc_call(struct bpf_verifier=
+_env *env, struct bpf_insn *insn,
+>  	}
+> =20
+>  	if (btf_type_is_scalar(t)) {
+> -		mark_reg_unknown(env, regs, BPF_REG_0);
+> +		mark_kfunc_ret_regs(env, regs, t->size);
+>  		if (meta.btf =3D=3D btf_vmlinux && (meta.func_id =3D=3D special_kfunc_=
+list[KF_bpf_res_spin_lock] ||
+>  		    meta.func_id =3D=3D special_kfunc_list[KF_bpf_res_spin_lock_irqsav=
+e]))
+>  			__mark_reg_const_zero(env, &regs[BPF_REG_0]);
+> +	} else if (btf_type_is_struct(t)) {
+
+[Severity: Medium]
+Is this newly added code for kfunc struct returns actually reachable
+during program load?
+
+Looking at how kfuncs are processed earlier in the verifier,
+bpf_add_kfunc_call() calls btf_distill_func_proto(), which appears to
+still explicitly reject struct return types:
+
+kernel/bpf/btf.c:btf_distill_func_proto() {
+    ...
+    if (ret < 0 || btf_type_is_struct(t)) {
+        bpf_log(log,
+            "The function %s return type %s is unsupported.\n",
+            tname, btf_type_str(t));
+        return -EINVAL;
+    }
+    ...
+}
+
+Since btf_distill_func_proto() is called during program load before
+check_kfunc_call() is ever reached, won't any BPF program calling a
+struct-returning kfunc be unconditionally rejected, making this new
+branch dead code?
+
+> +		/*
+> +		 * The returned struct comes back as raw register bits modeled
+> +		 * as an unknown scalar, so it must contain only scalars:
+> +		 * otherwise a pointer field would be laundered into a scalar
+> +		 * and escape provenance and reference tracking.
+> +		 */
+> +		if (!__btf_type_is_scalar_struct(env, desc_btf, t, 0)) {
+> +			verbose(env,
+> +				"kernel function %s returns %s %s that is not composed of scalars\n",
+> +				func_name, btf_type_str(t),
+> +				btf_name_by_offset(desc_btf, t->name_off));
+> +			return -EINVAL;
+> +		}
+> +		mark_kfunc_ret_regs(env, regs, t->size);
+>  	} else if (btf_type_is_ptr(t)) {
+>  		ptr_type =3D btf_type_skip_modifiers(desc_btf, t->type, &ptr_type_id);
+
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260817042141.2286=
+086-1-yonghong.song@linux.dev?part=3D6
