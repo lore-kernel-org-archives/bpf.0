@@ -1,46 +1,46 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DE63BA235;
-	Mon, 17 Aug 2026 08:55:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E5CC3C3F70;
+	Mon, 17 Aug 2026 09:05:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786956920; cv=none; b=JotEZ2auXfng3xbcOltFhcy7/9oejNYwFFGBaqSh2PtWA/Vrj3WIibIakLvcRHD98/5+c7BAbuAzAEUWV14YttdyYdN1ozT6TQqWaflpeplkiiVWQEVvVUpPEOYoRb8yUuH+GtFC3yTzMJFa4pp4KFt/1dAOzH3IbtXKKtp4Xb0=
+	t=1786957531; cv=none; b=KsziWBlqmwM9ahlvdtEhkujkioFeBOym7PACd7/fwRswbzHq+VzNNJUK/9rL3OgDt/x6zAyAj0ZQ16A8twEGUzEC0aG5xGwwklb8h7Y6NOzhiQ2MHbd7cOem8C+OxJ3TxzVEXTGCl+HCJc+ygl5DyhKhSzZimjW5h5LQuucnRGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786956920; c=relaxed/simple;
-	bh=qG4W8FZSLQgbODO1N0MzlCxgNi96uMRMzgagbbEQu8g=;
+	s=arc-20240116; t=1786957531; c=relaxed/simple;
+	bh=NLdCGzhe94/PU970AOTLvbtcEi3iafICjwjvAZgTVns=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=vGdr9E5S3HtDFMTXsyqa8tGk/ArfRc2GGf5obUx7d03eQXmcbCDisOBSzHvNKR05LnDQTHSWoTTvylp1bZGXxZA2XMHF58aM9E1qwai0vyh1cm4M9prMCVJEstjW921VXO/jfqjdIKskfxassCQZCiFfHtzwGilSVovW5WoYgs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=CNiOvucC; arc=none smtp.client-ip=213.133.104.62
+	 In-Reply-To:Content-Type; b=fiYl3q/VQdvgmARP9jeGf8TVjy2n7B/Z2cd8oDwkP19PtHS79PEAzpJxZ4Xv5w1ijrjDp3NDFXYrBne4KytbRoarb5ZWdkAMrWBPPT4SHwbj/ALCrgFvOQz3WJ37h8iVwCNsyOgj689avYaohpktbumcC6Yp9JkG48NxUdlRtMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=YauXxH7r; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="CNiOvucC"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="YauXxH7r"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=PzxZMYZyvNobYQwazFJ6TwTep3p8YEU/dFfec5P3lJQ=; b=CNiOvucC6c+azq+w6urhli/rNy
-	YDX7L/5uHz8rAHpZCfgURjQRZW6btuGm/Fld8Il4h7nT/sDGyMEJqBUSmhvh6mGI5TTan31GDC5yz
-	29wx9vINKWa8KTVgd++r4a4YueSXfw+1cebFOnscLk2M09SUbASYx2506wpuXE4lllQGMWiqp8CmT
-	m0360LmFjfAyRgGcljyBw7k86LFxaOqgpO9jfsCLnVh93zifWrlFqazpVd2uWtqY85IpFE7Ri5sm3
-	ehVoJVwHunhfCPTc3/8pVEnNyjb3OE817C689xP99QaBHtw9PJimbeDQfpA1uVVhA9DKTh3nX4QcD
-	QfQ+eo2g==;
+	bh=Wg+oHCmEmcqVWg4e1GvP1q0Yfyaco5diy6ohQZmN4IQ=; b=YauXxH7ro0Yei4jbrWYnMu5fLE
+	NnTqTprxFVhMDCgP4ankOqAFrxO+IZUrWtsDLlZ83TmHAj3jrLo6mEIagvOyI9Uw7ypSgjKDUHBPT
+	h7xMVV9JreQ30j0w+eqaMRdwsI97T0HQt2g01qY8dWNJ8+dhm5kL5NAyvBSqQEBZbdCIfqh+wCaWe
+	6rM/phwjYRJDe/4cBVClUpyx2wXeNyLgQWKUJcVi9drhiqwzrJ3HyLRFPQpZZT4vbHVEAQMtY2wlu
+	D2S9CRPE9dVO7dHpOyO3k/kbgjLT5dNPH5sU7rf+jhfMyvPE/ZgR3nkIrIwnoWpm7VEvFG7anxIFB
+	gi6d3iKQ==;
 Received: from sslproxy02.your-server.de ([78.47.166.47])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wvt7i-000EQH-13;
-	Mon, 17 Aug 2026 10:55:14 +0200
+	id 1wvtHa-000GDo-0a;
+	Mon, 17 Aug 2026 11:05:26 +0200
 Received: from localhost ([127.0.0.1])
 	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wvt7h-00034Z-2y;
-	Mon, 17 Aug 2026 10:55:13 +0200
-Message-ID: <07776a9c-2998-4d65-af3e-c714181d4241@iogearbox.net>
-Date: Mon, 17 Aug 2026 10:55:12 +0200
+	id 1wvtHZ-000EkP-2t;
+	Mon, 17 Aug 2026 11:05:25 +0200
+Message-ID: <c9f8616b-15df-4c5a-8184-bf4d63813afb@iogearbox.net>
+Date: Mon, 17 Aug 2026 11:05:24 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,22 +48,18 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v5 2/2] selftests/bpf: allocate a larger timeout for
- connection
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
- <alexis.lothore@bootlin.com>, Alexei Starovoitov <ast@kernel.org>,
+Subject: Re: [PATCH] selftests/bpf: Remove duplicate copies of the arena
+ spinlock qnodes
+To: Changwoo Min <changwoo@igalia.com>, Alexei Starovoitov <ast@kernel.org>,
  Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
  Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
- Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: ebpf@linuxfoundation.org,
- Bastien Curutchet <bastien.curutchet@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260814-tc_tunnel_flaky-v5-0-5b93d030c42c@bootlin.com>
- <20260814-tc_tunnel_flaky-v5-2-5b93d030c42c@bootlin.com>
+ bpf@vger.kernel.org, sched-ext@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kernel-dev@igalia.com
+References: <20260803001807.646357-1-changwoo@igalia.com>
 Content-Language: en-US
 From: Daniel Borkmann <daniel@iogearbox.net>
 Autocrypt: addr=daniel@iogearbox.net; keydata=
@@ -109,203 +105,34 @@ Autocrypt: addr=daniel@iogearbox.net; keydata=
  rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
  DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
  owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <20260814-tc_tunnel_flaky-v5-2-5b93d030c42c@bootlin.com>
+In-Reply-To: <20260803001807.646357-1-changwoo@igalia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28095/Mon Aug 17 08:23:59 2026)
 
-Hi Alexis,
+On 8/3/26 2:18 AM, Changwoo Min wrote:
+> bpf_arena_spin_lock.h defines its 64KB qnodes array in the header, so
+> every translation unit including it emits a copy. __weak makes them all
+> resolve to one instance, but bpftool gen object merges only the symbols
+> and concatenates each input's .addr_space.1 bytes, leaving the surplus
+> copies unreferenced in the linked object.
+> 
+> libarena links ten such units, so nine copies were dead weight (bytes):
+> 
+>    object                             before       after
+>    -----------------------------------------------------
+>    .addr_space.1 in libarena.bpf.o    676200       86376
+>    libarena.skel.h                   2100123      892371
+>    libarena_asan.skel.h              2641124     1466477
+> 
+> Declare qnodes in the header and let each program define it once:
+> libarena in src/common.bpf.c, and the arena_spin_lock test beside the
+> lock it guards.
+> 
+> Tested with test_progs -t arena_spin_lock and -t libarena.
+> 
+> Signed-off-by: Changwoo Min <changwoo@igalia.com>
+This doesn't apply cleanly, could you respin against latest bpf-next?
 
-On 8/14/26 9:11 AM, Alexis Lothoré (eBPF Foundation) wrote:
-> Some tests, like tc_tunnel or tc_edt, sporadically fail in CI with the
-> following logs:
-> 
->    (network_helpers.c:309: errno: Operation now in progress) \
->      Failed to connect to server
->    send_and_test_data:FAIL:connect to server unexpected error: -115
-> 
-> This is due to SO_RCVTIMEO and SO_SNDTIMEO being set on the client
-> socket (see settimeo() in client_socket()), allowing connect() to return
-> an error and to set errno to EINPROGRESS instead of ETIMEDOUT.
-> Increasing the timeout value for those tests is likely not a good
-> solution (and it has already been done by commit 2790db208b44
-> ("selftests/bpf: Improve tc_tunnel test reliability")): some tests
-> expect some data transfer to fail, and so the timeout value would
-> increase overall test execution duration again (not only the connection,
-> but any socket operation).
-> 
-> Another solution is to allocate a timeout budget specific to the
-> connection: we can apply a larger timeout only for connections, and once
-> the connection is established, set back the timeout configured through
-> opts->timeout_ms; this would allow connection to succeed under heavy CI
-> load, while keeping timeout reasonable for the rest of the test traffic.
-> 
-> Set a larger SO_SNDTIMEO/SO_RCVTIMEO for the connection step, and reset
-> it back to the timeout configured by the test once the connection has
-> succeeded.
-> 
-> Fixes: 99126abec5e5 ("bpf: selftests: A few improvements to network_helpers.c")
-> Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
-> ---
->   tools/testing/selftests/bpf/network_helpers.c | 36 ++++++++++++++++++++++++---
->   1 file changed, 33 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-> index cdf2d7d3ab32..8c9236c0a5a5 100644
-> --- a/tools/testing/selftests/bpf/network_helpers.c
-> +++ b/tools/testing/selftests/bpf/network_helpers.c
-> @@ -49,6 +49,8 @@
->   			errno = __save;					\
->   })
->   
-> +#define CONNECT_MIN_TIMEOUT_MS	5000
-> +
->   struct ipv4_packet pkt_v4 = {
->   	.eth.h_proto = __bpf_constant_htons(ETH_P_IP),
->   	.iph.ihl = 5,
-> @@ -291,6 +293,12 @@ int client_socket(int family, int type,
->   	return -1;
->   }
->   
-> +static int connect_timeout_ms(const struct network_helper_opts *opts)
-> +{
-> +	/* Enforce a minimum connect timeout value */
-> +	return MAX(opts->timeout_ms, CONNECT_MIN_TIMEOUT_MS);
-> +}
-> +
->   int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t addrlen,
->   		    const struct network_helper_opts *opts)
->   {
-> @@ -305,13 +313,35 @@ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t add
->   		return -1;
->   	}
->   
-> +	/*
-> +	 * Override timeout configuration with a larger value for the
-> +	 * connection
-> +	 */
-> +	if (settimeo(fd, connect_timeout_ms(opts))) {
-> +		log_err("Failed to set connect timeout");
-> +		goto close;
-> +	}
-> +
->   	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
-> -		log_err("Failed to connect to server");
-> -		save_errno_close(fd);
-> -		return -1;
-> +		log_err("Failed to connect");
-> +		goto close;
-> +	}
-> +
-> +	/*
-> +	 * If the timeout configured by the test is different from the
-> +	 * connect timeout, restore it
-> +	 */
-> +	if (opts->timeout_ms != CONNECT_MIN_TIMEOUT_MS &&
-> +	    settimeo(fd, opts->timeout_ms)) {
-> +		log_err("Failed to set timeout for connected socket");
-> +		goto close;
->   	}
-
-Could you do one last spin? I'll get the comment fix applied, but the above
-still has issues as pointed out by sashiko, so maybe this could be reworked
-as follows (untested):
-
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index 8c9236c0a5a5..ec209a744889 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -293,10 +293,27 @@ int client_socket(int family, int type,
-  	return -1;
-  }
-  
--static int connect_timeout_ms(const struct network_helper_opts *opts)
-+static int connect_with_timeout(int fd, const struct sockaddr_storage *addr,
-+				socklen_t addrlen, int timeout_ms)
-  {
--	/* Enforce a minimum connect timeout value */
--	return MAX(opts->timeout_ms, CONNECT_MIN_TIMEOUT_MS);
-+	int connect_timeout_ms = MAX(timeout_ms, CONNECT_MIN_TIMEOUT_MS);
-+
-+	if (settimeo(fd, connect_timeout_ms)) {
-+		log_err("Failed to set connect timeout");
-+		return -1;
-+	}
-+
-+	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
-+		log_err("Failed to connect to server");
-+		return -1;
-+	}
-+
-+	if (connect_timeout_ms != timeout_ms && settimeo(fd, timeout_ms)) {
-+		log_err("Failed to restore timeout for connected socket");
-+		return -1;
-+	}
-+
-+	return 0;
-  }
-  
-  int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t addrlen,
-@@ -313,35 +330,12 @@ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t add
-  		return -1;
-  	}
-  
--	/*
--	 * Override timeout configuration with a larger value for the
--	 * connection
--	 */
--	if (settimeo(fd, connect_timeout_ms(opts))) {
--		log_err("Failed to set connect timeout");
--		goto close;
--	}
--
--	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
--		log_err("Failed to connect");
--		goto close;
--	}
--
--	/*
--	 * If the timeout configured by the test is different from the
--	 * connect timeout, restore it
--	 */
--	if (opts->timeout_ms != CONNECT_MIN_TIMEOUT_MS &&
--	    settimeo(fd, opts->timeout_ms)) {
--		log_err("Failed to set timeout for connected socket");
--		goto close;
-+	if (connect_with_timeout(fd, addr, addrlen, opts->timeout_ms)) {
-+		save_errno_close(fd);
-+		return -1;
-  	}
-  
-  	return fd;
--
--close:
--	save_errno_close(fd);
--	return -1;
-  }
-  
-  int connect_to_addr_str(int family, int type, const char *addr_str, __u16 port,
-@@ -406,20 +400,12 @@ int connect_fd_to_fd(int client_fd, int server_fd, int timeout_ms)
-  	struct sockaddr_storage addr;
-  	socklen_t len = sizeof(addr);
-  
--	if (settimeo(client_fd, timeout_ms))
--		return -1;
--
-  	if (getsockname(server_fd, (struct sockaddr *)&addr, &len)) {
-  		log_err("Failed to get server addr");
-  		return -1;
-  	}
-  
--	if (connect(client_fd, (const struct sockaddr *)&addr, len)) {
--		log_err("Failed to connect to server");
--		return -1;
--	}
--
--	return 0;
-+	return connect_with_timeout(client_fd, &addr, len, timeout_ms);
-  }
-  
-  int make_sockaddr(int family, const char *addr_str, __u16 port,
-
+Thanks,
+Daniel
