@@ -1,102 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EC663B635A;
-	Mon, 17 Aug 2026 07:13:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C709E3B71A3;
+	Mon, 17 Aug 2026 07:24:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786950840; cv=none; b=siHCkZyoFQ8Tp3qhfBegF8dfT58XSkM/bNtv9SHwVxQjQPwxojFclq3faVC/qh/XaAYxKATLHiN38C1nTYpdtVb0VyrFAf420/+HXbxRSNXNkUxLzGWzXVANa5EuUht3NSSREIFZxMrvKnESRQvUOTv4iT3TTmEyfeP9R0uSNfk=
+	t=1786951493; cv=none; b=PnXCRvu+aLs+yr+5CRWL+MmThUdtxPNJNjpmdPphDvICAWaJ+TeIzXVgFgfaJHgkJdjAyzAVrxokNr+0AL0dkYjr3Ed9jqTiEAloZuj7/eh4Mh6y67tw3joE7c1/MIs6430ZID1ZqP24J/XZWTB77ZaC6OwC5SkCRtE0Od7pXWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786950840; c=relaxed/simple;
-	bh=dNiBm8Z4TPsQpQc7cLPtPFMQKci3flxF9+CF8nRfLRs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=n8AuVsLWmspQAiEJ2F5f1M7y2OZF82zVmubkQNxpfq50ijIHQer05gGMQgrRUj7aFyLppPX5C4lbNy7ajLIls7TV0c6krKe7Z3BbjZZuXcRetnuYpzfg26PPANprIoVQZNEVeS9RneMogBkfkEjmEEP50M+KJbvI5Pm7d+bvbds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y224I2SD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786951493; c=relaxed/simple;
+	bh=f06tOPZ1julrNQSafVLBYB6Jc5E2gj7xvDNDijzZpaE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=QVJoy71BYy0/EkyIlLS2M5XA+Oi0O2uBAOGM2dYFt2e20DMiX1ojLG1mn448gqE8Tu3XFZri9SqjY8/43pMZPjbLoQruyjY96auIcfTGcTDo16cN6Gip3xIkjGSiwnwt25gmfucg12SA7lCaMGbrCSB5cSalMijr8R2MXCYLMqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=SuOgOgfF; arc=none smtp.client-ip=115.124.30.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y224I2SD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26E4E1F000E9;
-	Mon, 17 Aug 2026 07:13:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786950839;
-	bh=dNiBm8Z4TPsQpQc7cLPtPFMQKci3flxF9+CF8nRfLRs=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Y224I2SDPGu1RwxqHULAl/1tYEvIsZMkDqLKc6u7GtMXv+ra0UePzREYFyqHknITo
-	 4jlIuOSPeiJfwUMmkYSvz5CBmOyLaAomyuu5hRRLXrG8/x5gy+z6ebsZnxp1hP+JMM
-	 B6LrjT7Ljcg8ugyTjYj0mVSLtjnSbm/tQjOx37Tz+SnU4sW5wyn+8zPSTstsS6kAcX
-	 /qYUizFqrwwruhtFvZW+rmPciVWCr4WkqJFB/DEFdVVi2/i64s62rBV2Lu01FD49j3
-	 m1aegDV4ojysTS9p4jyrbRF3j79CVutevVOKBeWwVXqUWPXsECXXAdOR2fQB+xnja1
-	 NyRO5uFnELdvA==
-Content-Type: multipart/mixed; boundary="===============2466479123060906233=="
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="SuOgOgfF"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1786951487; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=QiDMtzylae+qC9+4Ug6NQ9raR1nP9TUQubbhKCJf3IM=;
+	b=SuOgOgfFtwDdNqjhm/vtYi+VOXVhM3euQsgUS8KeuolB1X4HIARWHyQKXERSGe5gVt+QjaX1B2+r7gqJuJ+cDtS34PP3ny6U9hqnFlX0Yx1WdDXjbr01lAU4exPHbTOw8iOzHBJuA5iIEeqV6pYViwm1AHjWImCg9t194FPHNpM=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0X946s4R_1786951486;
+Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0X946s4R_1786951486 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 17 Aug 2026 15:24:46 +0800
+From: Chen Pei <cp0613@linux.alibaba.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	bjorn@kernel.org,
+	puranjay@kernel.org
+Cc: eddyz87@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	pulehui@huawei.com,
+	pjw@kernel.org,
+	palmer@dabbelt.com,
+	shuah@kernel.org,
+	guoren@kernel.org,
+	bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Enable arena LDSX tests for riscv64
+Date: Mon, 17 Aug 2026 15:24:33 +0800
+Message-ID: <913f4fd8b3d0b7470428d9e6f0ed64f3a89e8a98.1786708960.git.cp0613@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1786708960.git.cp0613@linux.alibaba.com>
+References: <cover.1786708960.git.cp0613@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <61f56e7f20ef48c6be7829c12a0cd02a57fbcea73ffd4b537af9a85b6e6e3781@mail.kernel.org>
-In-Reply-To: <tencent_05AD70D6BED7A204CB00860D0C3A303FDC07@qq.com>
-References: <tencent_05AD70D6BED7A204CB00860D0C3A303FDC07@qq.com>
-Subject: Re: [PATCH bpf v2] bpf: Enforce cgroup storage map consistency for freplace attach
-From: bot+bpf-ci@kernel.org
-To: 3472274613@qq.com,ast@kernel.org,daniel@iogearbox.net,bpf@vger.kernel.org
-Cc: martin.lau@linux.dev,song@kernel.org,jolsa@kernel.org,zhuyifei@google.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,corvus@tencent.com,henrymei@tencent.com,stable@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 17 Aug 2026 07:13:58 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============2466479123060906233==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Now that the riscv64 JIT supports signed arena loads
+(BPF_PROBE_MEM32SX), enable the arena LDSX tests on riscv64:
+add JIT disassembly assertions for arena_ldsx_disasm (arena base in
+s7, add into t2, sign-extending lw/lh/lb loads) and run
+arena_ldsx_exception and arena_ldsx_s8/s16/s32 on riscv64.
 
-> bpf: Enforce cgroup storage map consistency for freplace attach
->
-> When a BPF_PROG_TYPE_EXT program replaces a cgroup program, it
-> executes with the target's runtime context, including the per-program
-> cgroup storage descriptor attached to the cgroup prog item:
-> bpf_get_local_storage() resolves the buffer via
-> prog_item->cgroup_storage, so the extension's own storage map never
-> provides storage at runtime. The verifier, however, bounds the
-> extension's bpf_get_local_storage() accesses by the extension's own
-> storage map.
->
-> The prog-array path already enforces that programs sharing a
-> runtime storage context reference identical storage maps (via the
-> owner cookie matching added in commit abad3d0bad72 ("bpf: Fix oob
-> access in cgroup local storage")), but the freplace path performs
-> no such consistency check in bpf_freplace_check_tgt_prog(). An
-> extension whose storage map differs from the target's therefore
-> operates on a buffer whose size, flags and layout do not match its
-> verified assumptions: a smaller target buffer leads to slab
-> out-of-bounds access, and even equal-sized maps can bypass
-> BPF_F_RDONLY_PROG or mismatch BPF_SPIN_LOCK fields.
->
-> Reject the freplace attach with -EINVAL unless the extension
-> references the exact same cgroup storage map as the target program,
-> matching the cookie semantics of __bpf_prog_map_compatible().
->
-> Fixes: 7d9c3427894f ("bpf: Make cgroup storages shared between programs on the same cgroup")
-
-Does this Fixes tag point to the correct commit? Looking at the commit
-history, 7d9c3427894f introduced storage map sharing between programs on
-the same cgroup.
-
-However, before that commit, bpf_cgroup_storage_assign() bound each
-cgroup storage map to exactly one program. This meant a target program and
-an extension that both used cgroup storage were guaranteed to reference
-different maps - the mismatch this patch rejects was unavoidable.
-
-The extension's bpf_get_local_storage() already resolved the buffer from
-the runtime prog-array item rather than from its own map even before
-7d9c3427894f, so the underlying behavior existed earlier.
-
-The condition became reachable when dynamic program extensions were
-introduced in be8704ff07d2 ("bpf: Introduce dynamic program extensions").
-Since this is Cc'd to stable, should the Fixes tag reference be8704ff07d2
-instead to direct the backport to the correct range?
-
-
+Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ .../testing/selftests/bpf/progs/verifier_ldsx.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32002984717
---===============2466479123060906233==--
+diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
+index 41340877dc9d..ed0a0f159bc1 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
++++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
+@@ -286,6 +286,19 @@ __jited("add	x11, x0, x28")
+ __jited("ldrsh	x22, [x11, #0x18]")
+ __jited("add	x11, x0, x28")
+ __jited("ldrsb	x22, [x11, #0x20]")
++__arch_riscv64
++__jited("add	t2, a5, s7")
++__jited("lw	s3, 0x10(t2)")
++__jited("add	t2, a5, s7")
++__jited("lh	s3, 0x18(t2)")
++__jited("add	t2, a5, s7")
++__jited("lb	s3, 0x20(t2)")
++__jited("add	t2, a0, s7")
++__jited("lw	s4, 0x10(t2)")
++__jited("add	t2, a0, s7")
++__jited("lh	s4, 0x18(t2)")
++__jited("add	t2, a0, s7")
++__jited("lb	s4, 0x20(t2)")
+ __naked void arena_ldsx_disasm(void *ctx)
+ {
+ 	asm volatile (
+@@ -317,6 +330,7 @@ __description("Arena LDSX Exception")
+ __success __retval(0)
+ __arch_x86_64
+ __arch_arm64
++__arch_riscv64
+ __naked void arena_ldsx_exception(void *ctx)
+ {
+ 	asm volatile (
+@@ -338,6 +352,7 @@ __description("Arena LDSX, S8")
+ __success __retval(-1)
+ __arch_x86_64
+ __arch_arm64
++__arch_riscv64
+ __naked void arena_ldsx_s8(void *ctx)
+ {
+ 	asm volatile (
+@@ -369,6 +384,7 @@ __description("Arena LDSX, S16")
+ __success __retval(-1)
+ __arch_x86_64
+ __arch_arm64
++__arch_riscv64
+ __naked void arena_ldsx_s16(void *ctx)
+ {
+ 	asm volatile (
+@@ -400,6 +416,7 @@ __description("Arena LDSX, S32")
+ __success __retval(-1)
+ __arch_x86_64
+ __arch_arm64
++__arch_riscv64
+ __naked void arena_ldsx_s32(void *ctx)
+ {
+ 	asm volatile (
+-- 
+2.50.1
+
