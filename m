@@ -1,21 +1,21 @@
 Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8D66313E2C
-	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 04:22:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC25314A73
+	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 04:22:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786940549; cv=none; b=S55le7MtJPSZ4ubMEkKTZJBEOHGU2creFfrtXBbGRuVLcgrbPVzzRJW7BbXX1zvYPSnFiDLigufrul2cshfFzY1Fu5EsrV81So6zKtaG9u35dp9x5DwTgFyxGq9++x6ybKH7pQmfgd+7WHiCmpKVx7poCSyhNFmPXBjNY2CxXNc=
+	t=1786940551; cv=none; b=J8ftBgZOJlmyv/5JjEWNQYpUHDpZeKQGW9JuIGZmohFoWSHHirv15X35mEyrgORCcLqFRVJPh87NpAVf62YQj2W+0508x513wlh5v+7fSWaGqHUIVwnFV84sMGv7kjt2RnNetB698+DAVq45Q+ctEIhiQxR2M4vGH8IJ/2kM92s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786940549; c=relaxed/simple;
-	bh=grYOHqrduDvSBVKtldTKjgM2QxDQVS90+EeMQ5WH99k=;
+	s=arc-20240116; t=1786940551; c=relaxed/simple;
+	bh=CSnZ+I7CMXHMubLQClg/fsrd6QfD1D5xf7d0IU86K9Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ub1PdLLOCGQbOoyNn5Cu3qdDfpmqLLK4yteCP1cmDTJj175cwtKMZqzd0aUKM08odtDEcX26uoATdYt3glBpwL9jB74ckT18UUZCUME2GHMcMmEKOG/7KUzz3rykgYFbnTp0iGzlQUZH2fcTpso5pcxnviSdDwM89ceAX2Gl+kY=
+	 MIME-Version; b=GK2vBBc0im8W8o3SMBro7Ke8NVfeySaSNf/dEFnKUc1mJpf0DZis5I88I9bJFu3IInmNLtV+NZg8m71PBZxBXVoUrgCwDXhE88a0yCxf+FhwCYKcmPTJtFInj1D0T06ba7r/poWFuysfpg3d8kdzDEBFekAtCLJ4fB4FLUEzjXU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 7D12C24982E91E; Sun, 16 Aug 2026 21:22:22 -0700 (PDT)
+	id 9966C24982E984; Sun, 16 Aug 2026 21:22:27 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v6 08/10] selftests/bpf: Add C tests for 16-byte returns in R0:R2
-Date: Sun, 16 Aug 2026 21:22:22 -0700
-Message-ID: <20260817042222.2295525-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v6 09/10] selftests/bpf: Add inline-asm and subprog tests for R0:R2 returns
+Date: Sun, 16 Aug 2026 21:22:27 -0700
+Message-ID: <20260817042227.2296079-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260817042141.2286086-1-yonghong.song@linux.dev>
 References: <20260817042141.2286086-1-yonghong.song@linux.dev>
@@ -37,311 +37,693 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Add selftests that exercise a 16-byte return value passed in the R0:R2
-register pair, written in C so that they depend on the compiler lowering
-the register-pair return.
+Add inline-asm tests covering what the C tests cannot reach, since they
+need a callee that violates the convention on purpose.
 
-The R0:R2 convention is only emitted by LLVM 23 and newer, and a by-value
-aggregate return does not compile at all before that, so the programs sit
-behind a __clang_major__ guard. An older compiler builds the dummy test i=
-n
-the #else branch instead, which keeps the object non-empty and says in it=
-s
-description why nothing was exercised.
+The coverage includes BPF-to-BPF returns, kfunc calls, backtracking and
+liveness. In addition, a negative freplace test checks that an extension
+cannot replace a function returning R0:R2.
 
-The kfunc tests are tagged __arch_x86_64/__arch_arm64 and skip elsewhere.
-Those are the architectures whose JIT advertises
-bpf_jit_supports_kfunc_ret_reg_pair(), which bpf_add_kfunc_call() require=
-s
-before it accepts a kfunc returning more than 8 bytes, and they are also
-the only ones building the kfuncs.
-
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../bpf/progs/verifier_aggregate_ret.c        | 178 ++++++++++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  18 ++
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |   9 +
- 4 files changed, 207 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_aggregate_=
-ret.c
+ .../selftests/bpf/prog_tests/aggregate_ret.c  |  11 +
+ .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  |  16 ++
+ .../selftests/bpf/progs/aggregate_ret_func.c  | 235 ++++++++++++++++++
+ .../selftests/bpf/progs/aggregate_ret_kfunc.c | 122 +++++++++
+ .../bpf/progs/aggregate_ret_target.c          |  29 +++
+ .../bpf/progs/compute_live_registers.c        |  30 +++
+ .../selftests/bpf/progs/freplace_ret_pair.c   |  12 +
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  37 +++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |  20 ++
+ 9 files changed, 512 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/aggregate_ret.=
+c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_func.=
+c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_kfunc=
+.c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_targe=
+t.c
+ create mode 100644 tools/testing/selftests/bpf/progs/freplace_ret_pair.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
-sting/selftests/bpf/prog_tests/verifier.c
-index 64ac49ad67e6..f7f94ccebce2 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -5,6 +5,7 @@
- #include "arena_kfunc.skel.h"
- #include "arena_kfunc_jit.skel.h"
- #include "cap_helpers.h"
-+#include "verifier_aggregate_ret.skel.h"
- #include "verifier_align.skel.h"
- #include "verifier_and.skel.h"
- #include "verifier_arena.skel.h"
-@@ -170,6 +171,7 @@ void test_arena_kfunc(void)                   { RUN_T=
-ESTS(arena_kfunc); }
-=20
- void test_arena_kfunc_jit(void)               { RUN_TESTS(arena_kfunc_ji=
-t); }
-=20
-+void test_verifier_aggregate_ret(void)        { RUN_TESTS(verifier_aggre=
-gate_ret); }
- void test_verifier_align(void)                { RUN(verifier_align); }
- void test_verifier_and(void)                  { RUN(verifier_and); }
- void test_verifier_arena(void)                { RUN(verifier_arena); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_aggregate_ret.c b=
-/tools/testing/selftests/bpf/progs/verifier_aggregate_ret.c
+diff --git a/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c b/too=
+ls/testing/selftests/bpf/prog_tests/aggregate_ret.c
 new file mode 100644
-index 000000000000..7851bade2b40
+index 000000000000..e0b94ed10f94
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_aggregate_ret.c
-@@ -0,0 +1,178 @@
++++ b/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c
+@@ -0,0 +1,11 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
++#include <test_progs.h>
++#include "aggregate_ret_func.skel.h"
++#include "aggregate_ret_kfunc.skel.h"
++
++void test_aggregate_ret(void)
++{
++	RUN_TESTS(aggregate_ret_func);
++	RUN_TESTS(aggregate_ret_kfunc);
++}
+diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/too=
+ls/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+index 2523c07a16c6..6c438df380bb 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
++++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+@@ -441,6 +441,20 @@ static void test_func_replace_int_with_void(void)
+ 				     " doesn't match type INT of global_func2()");
+ }
+=20
++static void test_func_replace_ret_pair(void)
++{
++	const char *msg =3D "Return type of new_agg_ret_target_func() has size =
+8 "
++			  "while agg_ret_target_func() has size 16";
++
++	/*
++	 * An extension cannot replace a function whose return value comes back
++	 * in the R0:R2 pair: only R0 is checked at the extension's exit, so it
++	 * would leave R2 stale for the target's callers.
++	 */
++	test_obj_load_failure_common("freplace_ret_pair.bpf.o",
++				     "./aggregate_ret_target.bpf.o", msg);
++}
++
+ static int find_prog_btf_id(const char *name, __u32 attach_prog_fd)
+ {
+ 	struct bpf_prog_info info =3D {};
+@@ -660,6 +674,8 @@ void serial_test_fexit_bpf2bpf(void)
+ 		test_func_replace_progmap();
+ 	if (test__start_subtest("freplace_int_with_void"))
+ 		test_func_replace_int_with_void();
++	if (test__start_subtest("freplace_ret_pair"))
++		test_func_replace_ret_pair();
+ 	if (test__start_subtest("freplace_void"))
+ 		test_func_replace_void();
+ 	if (test__start_subtest("sleepable_fentry_to_xdp"))
+diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_func.c b/too=
+ls/testing/selftests/bpf/progs/aggregate_ret_func.c
+new file mode 100644
+index 000000000000..e35baaa10fea
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/aggregate_ret_func.c
+@@ -0,0 +1,235 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <linux/bpf.h>
 +#include <bpf/bpf_helpers.h>
-+#include "../test_kmods/bpf_testmod_kfunc.h"
 +#include "bpf_misc.h"
-+
-+#if defined(__clang_major__) && __clang_major__ >=3D 23
-+
-+#define MIX_A	0xdeadbeefcafef00dULL
-+#define MIX_B	0x0123456789abcdefULL
 +
 +typedef unsigned __int128 u128;
 +
-+struct pair {
-+	__u64 lo;	/* R0 */
-+	__u64 hi;	/* R2 */
++__naked u128 global_agg_good(void)
++{
++	asm volatile (
++	"r0 =3D 0x1234;"	/* low 64 bits */
++	"r2 =3D 0x5678;"	/* high 64 bits */
++	"exit;"
++	);
++}
++
++__naked u128 global_agg_bad(void)
++{
++	asm volatile (
++	"r0 =3D 0;"
++	"exit;"
++	);
++}
++
++__naked u128 global_agg_bad_ptr(void)
++{
++	asm volatile (
++	"r0 =3D 0;"
++	"r2 =3D r10;"
++	"exit;"
++	);
++}
++
++SEC("tc")
++__failure __msg("R2 !read_ok")
++__naked int aggregate_ret_global_fail(void)
++{
++	asm volatile (
++	"call %[global_agg_bad];"
++	"r0 =3D r2;"
++	"exit;"
++	:
++	: __imm(global_agg_bad)
++	: __clobber_all);
++}
++
++SEC("tc")
++__failure __msg("At subprogram exit the register R2 is not a scalar valu=
+e")
++__naked int aggregate_ret_global_ptr_fail(void)
++{
++	asm volatile (
++	"call %[global_agg_bad_ptr];"
++	"r0 =3D r2;"
++	"exit;"
++	:
++	: __imm(global_agg_bad_ptr)
++	: __clobber_all);
++}
++
++static __naked __noinline u128 static_agg_bad_ptr(void)
++{
++	asm volatile (
++	"r0 =3D 0;"
++	"r2 =3D r10;"	/* stack pointer placed in the second return register */
++	"exit;"
++	);
++}
++
++/*
++ * R2 is a return register once the subprogram returns a pair, so a stac=
+k
++ * pointer left in it is rejected at the callee's exit exactly as one in=
+ R0
++ * is: the callee frame is gone by the time the caller could use it.
++ */
++SEC("tc")
++__failure __msg("cannot return stack pointer to the caller")
++__naked int aggregate_ret_static_ptr_fail(void)
++{
++	asm volatile (
++	"call %[static_agg_bad_ptr];"
++	"r0 =3D 0;"
++	"exit;"
++	:
++	: __imm(static_agg_bad_ptr)
++	: __clobber_all);
++}
++
++static __naked __noinline u128 static_agg_no_r2(void)
++{
++	asm volatile (
++	"r0 =3D 0;"
++	"exit;"
++	);
++}
++
++SEC("tc")
++__failure __msg("R2 !read_ok")
++__naked int aggregate_ret_static_uninit_fail(void)
++{
++	asm volatile (
++	"call %[static_agg_no_r2];"
++	"r0 =3D r2;"
++	"exit;"
++	:
++	: __imm(static_agg_no_r2)
++	: __clobber_all);
++}
++
++static __naked __noinline u128 static_agg_precise(void)
++{
++	asm volatile (
++	"r0 =3D 0;"
++	"r2 =3D 4;"	/* second half; its value is made precise below */
++	"exit;"
++	);
++}
++
++SEC("tc")
++__load_if_JITed()
++__success __retval(0)
++__log_level(2)
++__msg("mark_precise: frame0: last_idx 5 first_idx 0 subseq_idx -1")
++__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 4: (07) r1 +=3D -=
+8")
++__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 3: (bf) r1 =3D r1=
+0")
++__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 2: (57) r6 &=3D 7=
+")
++__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 1: (bf) r6 =3D r2=
+")
++__msg("mark_precise: frame0: regs=3Dr2 stack=3D before 12: (95) exit")
++__msg("mark_precise: frame1: regs=3Dr2 stack=3D before 11: (b7) r2 =3D 4=
+")
++__naked int aggregate_ret_static_precise(void)
++{
++	asm volatile (
++	"call %[static_agg_precise];"
++	"r6 =3D r2;"		/* derived from the aggregate's second half */
++	"r6 &=3D 7;"		/* keep it in [0, 7] to index the stack */
++	"r1 =3D r10;"
++	"r1 +=3D -8;"
++	"r1 +=3D r6;"		/* ptr +=3D scalar marks r6 (hence R2) precise */
++	"r0 =3D 0;"
++	"*(u8 *)(r1 + 0) =3D r0;"
++	"r0 =3D 0;"
++	"exit;"
++	:
++	: __imm(static_agg_precise)
++	: __clobber_all);
++}
++
++SEC("tc")
++__load_if_JITed()
++__success __retval(0)
++__log_level(2)
++__msg("mark_precise: frame0: last_idx 5 first_idx 0 subseq_idx -1")
++__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 4: (07) r1 +=3D -=
+8")
++__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 3: (bf) r1 =3D r1=
+0")
++__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 2: (57) r6 &=3D 7=
+")
++__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 1: (bf) r6 =3D r2=
+")
++__msg("mark_precise: frame0: regs=3Dr2 stack=3D before 0: (85) call pc+9=
+")
++__naked int aggregate_ret_global_precise(void)
++{
++	asm volatile (
++	"call %[global_agg_good];"
++	"r6 =3D r2;"		/* derived from the aggregate's second half */
++	"r6 &=3D 7;"		/* keep it in [0, 7] to index the stack */
++	"r1 =3D r10;"
++	"r1 +=3D -8;"
++	"r1 +=3D r6;"		/* ptr +=3D scalar marks r6 (hence R2) precise */
++	"r0 =3D 0;"
++	"*(u8 *)(r1 + 0) =3D r0;"
++	"r0 =3D 0;"
++	"exit;"
++	:
++	: __imm(global_agg_good)
++	: __clobber_all);
++}
++
++#if defined(__clang_major__) && __clang_major__ >=3D 23
++
++/* A by-value struct that smuggles a pointer, which must be rejected. */
++struct with_ptr {
++	void *p;
++	__u64 x;
 +};
 +
-+union upair {
++/* A by-value union that smuggles a pointer, which must be rejected too.=
+ */
++union upair_with_ptr {
++	void *p;
 +	__u64 halves[2];
-+	struct {
-+		__u64 lo;	/* R0 */
-+		__u64 hi;	/* R2 */
-+	} parts;
 +};
 +
-+static __noinline u128 make_i128(__u64 a, __u64 b)
++__naked struct with_ptr global_ret_struct_ptr(void)
 +{
-+	return ((u128)(a + b) << 64) | (a - b);
++	asm volatile (
++	"r0 =3D 0;"
++	"r2 =3D 0;"
++	"exit;"
++	);
 +}
 +
 +SEC("tc")
-+__load_if_JITed()
-+__success __retval(0)
-+int aggregate_ret_int128_c_test(struct __sk_buff *skb)
++__failure __msg("Global function global_ret_struct_ptr() has unsupported=
+ return type")
++__naked int aggregate_ret_global_struct_ptr_fail(void)
 +{
-+	__u64 a =3D skb->len ^ MIX_A;
-+	__u64 b =3D skb->len ^ MIX_B;
-+	u128 v;
-+
-+	v =3D make_i128(a, b);
-+	if ((__u64)(v >> 64) !=3D a + b)
-+		return 1;
-+	if ((__u64)v !=3D a - b)
-+		return 2;
-+
-+	return 0;
++	asm volatile (
++	"call %[global_ret_struct_ptr];"
++	"r0 =3D 0;"
++	"exit;"
++	:
++	: __imm(global_ret_struct_ptr)
++	: __clobber_all);
 +}
 +
-+static __noinline struct pair make_pair(__u64 a, __u64 b)
++__naked union upair_with_ptr global_ret_union_ptr(void)
 +{
-+	struct pair p =3D { .lo =3D a + b, .hi =3D a - b };
-+
-+	return p;
-+}
-+
-+SEC("tc")
-+__load_if_JITed()
-+__success __retval(0)
-+int aggregate_ret_struct_c_test(struct __sk_buff *skb)
-+{
-+	__u64 a =3D skb->len ^ MIX_A;
-+	__u64 b =3D skb->len ^ MIX_B;
-+	struct pair p;
-+
-+	p =3D make_pair(a, b);
-+	if (p.lo !=3D a + b)
-+		return 1;
-+	if (p.hi !=3D a - b)
-+		return 2;
-+
-+	return 0;
-+}
-+
-+__noinline struct pair make_pair_global(__u64 a, __u64 b)
-+{
-+	struct pair p =3D { .lo =3D a + b, .hi =3D a - b };
-+
-+	return p;
++	asm volatile (
++	"r0 =3D 0;"
++	"r2 =3D 0;"
++	"exit;"
++	);
 +}
 +
 +SEC("tc")
-+__load_if_JITed()
-+__success __retval(0)
-+int aggregate_ret_global_struct_c_test(struct __sk_buff *skb)
++__failure __msg("Global function global_ret_union_ptr() has unsupported =
+return type")
++__naked int aggregate_ret_global_union_ptr_fail(void)
 +{
-+	__u64 a =3D skb->len ^ MIX_A;
-+	__u64 b =3D skb->len ^ MIX_B;
-+	struct pair p;
-+
-+	p =3D make_pair_global(a, b);
-+	if (p.lo !=3D a + b)
-+		return 1;
-+	if (p.hi !=3D a - b)
-+		return 2;
-+
-+	return 0;
-+}
-+
-+static __noinline union upair make_upair(__u64 a, __u64 b)
-+{
-+	union upair p;
-+
-+	p.halves[0] =3D a + b;
-+	p.halves[1] =3D a - b;
-+	return p;
-+}
-+
-+SEC("tc")
-+__load_if_JITed()
-+__success __retval(0)
-+int aggregate_ret_union_c_test(struct __sk_buff *skb)
-+{
-+	__u64 a =3D skb->len ^ MIX_A;
-+	__u64 b =3D skb->len ^ MIX_B;
-+	union upair p;
-+
-+	p =3D make_upair(a, b);
-+	if (p.parts.lo !=3D a + b)
-+		return 1;
-+	if (p.parts.hi !=3D a - b)
-+		return 2;
-+
-+	return 0;
-+}
-+
-+SEC("tc")
-+__arch_x86_64 __arch_arm64
-+__load_if_JITed()
-+__success __retval(0)
-+int aggregate_ret_kfunc_int128_c_test(struct __sk_buff *skb)
-+{
-+	__u64 a =3D skb->len ^ MIX_A;
-+	__u64 b =3D skb->len ^ MIX_B;
-+	u128 v;
-+
-+	v =3D bpf_kfunc_call_test_i128(a, b);
-+	if ((__u64)(v >> 64) !=3D a + b)
-+		return 1;
-+	if ((__u64)v !=3D a - b)
-+		return 2;
-+
-+	return 0;
-+}
-+
-+SEC("tc")
-+__arch_x86_64 __arch_arm64
-+__load_if_JITed()
-+__success __retval(0)
-+int aggregate_ret_kfunc_struct_c_test(struct __sk_buff *skb)
-+{
-+	__u64 a =3D skb->len ^ MIX_A;
-+	__u64 b =3D skb->len ^ MIX_B;
-+	struct prog_test_ret_pair p;
-+
-+	p =3D bpf_kfunc_call_test_ret_pair(a, b);
-+	if (p.lo !=3D a + b)
-+		return 1;
-+	if (p.hi !=3D a - b)
-+		return 2;
-+
-+	return 0;
-+}
-+
-+#else
-+
-+SEC("socket")
-+__description("verifier_aggregate_ret: needs LLVM 23, dummy test")
-+__success
-+int dummy_test(void)
-+{
-+	return 0;
++	asm volatile (
++	"call %[global_ret_union_ptr];"
++	"r0 =3D 0;"
++	"exit;"
++	:
++	: __imm(global_ret_union_ptr)
++	: __clobber_all);
 +}
 +
 +#endif
 +
 +char _license[] SEC("license") =3D "GPL";
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
-/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 9366a3c578f1..c4bc8e11c6e1 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -954,6 +954,20 @@ __bpf_kfunc int bpf_kfunc_call_test5(u8 a, u16 b, u3=
-2 c)
- 	return 0;
- }
-=20
-+#if defined(__x86_64__) || defined(__aarch64__)
-+__bpf_kfunc __int128 bpf_kfunc_call_test_i128(u64 a, u64 b)
+diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c b/to=
+ols/testing/selftests/bpf/progs/aggregate_ret_kfunc.c
+new file mode 100644
+index 000000000000..c23b4beb1773
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c
+@@ -0,0 +1,122 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++#include "../test_kmods/bpf_testmod_kfunc.h"
++
++/*
++ * Reference kfunc addresses to force those BTF to be emitted. Taking th=
+e address
++ * (rather than calling) avoids any dependence on the compiler lowering =
+an
++ * __int128 or struct return value, which the BPF backend only supports =
+from
++ * LLVM 23 on.
++ */
++void __kfunc_btf_root(void)
 +{
-+	return (__int128)(((unsigned __int128)(a + b) << 64) | (a - b));
++	asm volatile (""
++	:
++	: "r"(&bpf_kfunc_call_test_i128),
++	  "r"(&bpf_kfunc_call_test_ret_fastcall),
++	  "r"(&bpf_kfunc_call_test_ret_ptr),
++	  "r"(&bpf_kfunc_call_test_ret_ii),
++	  "r"(&bpf_kfunc_call_test_ret_big));
 +}
 +
-+__bpf_kfunc struct prog_test_ret_pair bpf_kfunc_call_test_ret_pair(u64 a=
-, u64 b)
++SEC("tc")
++__arch_x86_64 __arch_arm64
++__load_if_JITed()
++__success __retval(0)
++__log_level(2)
++__msg("mark_precise: frame0: last_idx 7 first_idx 0 subseq_idx -1")
++__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 6: (07) r1 +=3D -=
+8")
++__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 5: (bf) r1 =3D r1=
+0")
++__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 4: (57) r6 &=3D 7=
+")
++__msg("mark_precise: frame0: regs=3Dr6 stack=3D before 3: (bf) r6 =3D r2=
+")
++__msg("mark_precise: frame0: regs=3Dr2 stack=3D before 2: (85) call bpf_=
+kfunc_call_test_i128")
++__naked int aggregate_ret_kfunc_precise(void)
++{
++	asm volatile (
++	"r1 =3D 1;"
++	"r2 =3D 2;"
++	"call %[bpf_kfunc_call_test_i128];"
++	"r6 =3D r2;"		/* second return half */
++	"r6 &=3D 7;"		/* keep it in [0, 7] to index the stack */
++	"r1 =3D r10;"
++	"r1 +=3D -8;"
++	"r1 +=3D r6;"		/* ptr +=3D scalar marks r6 (hence R2) precise */
++	"r0 =3D 0;"
++	"*(u8 *)(r1 + 0) =3D r0;"
++	"r0 =3D 0;"
++	"exit;"
++	:
++	: __imm(bpf_kfunc_call_test_i128)
++	: __clobber_all);
++}
++
++SEC("tc")
++__arch_x86_64 __arch_arm64
++__failure __msg("kfunc bpf_kfunc_call_test_ret_fastcall with >8-byte ret=
+urn is not supported with KF_FASTCALL")
++__naked int aggregate_ret_kfunc_fastcall_fail(void)
++{
++	asm volatile (
++	"r1 =3D 1;"
++	"r2 =3D 2;"
++	"call %[bpf_kfunc_call_test_ret_fastcall];"
++	"r0 =3D 0;"
++	"exit;"
++	:
++	: __imm(bpf_kfunc_call_test_ret_fastcall)
++	: __clobber_all);
++}
++
++SEC("tc")
++__arch_x86_64 __arch_arm64
++__failure __msg("is not composed of scalars")
++__naked int aggregate_ret_kfunc_ptr_fail(void)
++{
++	asm volatile (
++	"r1 =3D 0;"
++	"call %[bpf_kfunc_call_test_ret_ptr];"
++	"r0 =3D 0;"
++	"exit;"
++	:
++	: __imm(bpf_kfunc_call_test_ret_ptr)
++	: __clobber_all);
++}
++
++SEC("tc")
++__arch_x86_64 __arch_arm64
++__failure __msg("R2 !read_ok")
++__naked int aggregate_ret_kfunc_small_no_r2(void)
++{
++	asm volatile (
++	"r1 =3D 0;"
++	"r2 =3D 0;"
++	"call %[bpf_kfunc_call_test_ret_ii];"
++	"r0 =3D r2;"	/* R2 is not a return register for a <=3D8 byte struct */
++	"exit;"
++	:
++	: __imm(bpf_kfunc_call_test_ret_ii)
++	: __clobber_all);
++}
++
++/*
++ * A return value larger than 16 bytes does not fit in R0:R2 and is reje=
+cted by
++ * btf_distill_func_proto(), before the KF_FASTCALL and JIT-capability c=
+hecks,
++ * so this behaves the same on every architecture.
++ */
++SEC("tc")
++__arch_x86_64 __arch_arm64
++__failure __msg("The function bpf_kfunc_call_test_ret_big return type ST=
+RUCT is unsupported")
++__naked int aggregate_ret_kfunc_too_big_fail(void)
++{
++	asm volatile (
++	"call %[bpf_kfunc_call_test_ret_big];"
++	"r0 =3D 0;"
++	"exit;"
++	:
++	: __imm(bpf_kfunc_call_test_ret_big)
++	: __clobber_all);
++}
++
++char _license[] SEC("license") =3D "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_target.c b/t=
+ools/testing/selftests/bpf/progs/aggregate_ret_target.c
+new file mode 100644
+index 000000000000..cffd8d7d3241
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/aggregate_ret_target.c
+@@ -0,0 +1,29 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++/* freplace target: a global subprogram returning 16 bytes in R0:R2. */
++__naked unsigned __int128 agg_ret_target_func(void)
++{
++	asm volatile (
++	"r0 =3D 0x1234;"
++	"r2 =3D 0x5678;"
++	"exit;"
++	);
++}
++
++SEC("tc")
++__naked int agg_ret_target(void)
++{
++	asm volatile (
++	"call %[agg_ret_target_func];"
++	"r0 =3D 0;"
++	"exit;"
++	:
++	: __imm(agg_ret_target_func)
++	: __clobber_all);
++}
++
++char _license[] SEC("license") =3D "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/compute_live_registers.c b=
+/tools/testing/selftests/bpf/progs/compute_live_registers.c
+index d055fc7b3b95..0be9441ec273 100644
+--- a/tools/testing/selftests/bpf/progs/compute_live_registers.c
++++ b/tools/testing/selftests/bpf/progs/compute_live_registers.c
+@@ -431,6 +431,36 @@ __naked void subprog1(void)
+ 		::: __clobber_all);
+ }
+=20
++static __used __naked unsigned __int128 aux2(void)
++{
++	asm volatile (
++		"r0 =3D 1;"
++		"r2 =3D 2;"
++		"exit;"
++		::: __clobber_all);
++}
++
++SEC("socket")
++/* A program observing the pair needs the JIT; see bpf_compute_subprog_r=
+et_regs(). */
++__load_if_JITed()
++__log_level(2)
++__msg("0: .12345.... (85) call pc+2")
++__msg("1: ..2....... (bf) r0 =3D r2")
++/* R2 is not read at the exit of this program, which returns an int, ...=
+ */
++__msg("2: 0......... (95) exit")
++__msg("3: .......... (b7) r0 =3D 1")
++__msg("4: 0......... (b7) r2 =3D 2")
++/* ... but it is at the exit of aux2(), which returns a register pair. *=
+/
++__msg("5: 0.2....... (95) exit")
++__naked void subprog_ret_reg_pair(void)
++{
++	asm volatile (
++		"call aux2;"
++		"r0 =3D r2;"
++		"exit;"
++		::: __clobber_all);
++}
++
+ #if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
+=20
+ SEC("socket")
+diff --git a/tools/testing/selftests/bpf/progs/freplace_ret_pair.c b/tool=
+s/testing/selftests/bpf/progs/freplace_ret_pair.c
+new file mode 100644
+index 000000000000..12c15d293bd7
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/freplace_ret_pair.c
+@@ -0,0 +1,12 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++SEC("freplace/agg_ret_target_func")
++__u64 new_agg_ret_target_func(void)
++{
++	return 0;
++}
++
++char _license[] SEC("license") =3D "GPL";
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
+/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index c4bc8e11c6e1..20a9b9f20e96 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -966,8 +966,41 @@ __bpf_kfunc struct prog_test_ret_pair bpf_kfunc_call=
+_test_ret_pair(u64 a, u64 b)
+=20
+ 	return r;
+ }
++
++__bpf_kfunc struct prog_test_ret_pair bpf_kfunc_call_test_ret_fastcall(u=
+64 a, u64 b)
 +{
 +	struct prog_test_ret_pair r =3D { .lo =3D a + b, .hi =3D a - b };
 +
 +	return r;
 +}
-+#endif /* __x86_64__ || __aarch64__ */
++
++__bpf_kfunc struct prog_test_ret_ptr bpf_kfunc_call_test_ret_ptr(u64 tag=
+)
++{
++	struct prog_test_ret_ptr r =3D { .p =3D NULL, .tag =3D tag };
++
++	return r;
++}
++
++__bpf_kfunc struct prog_test_ret_ii bpf_kfunc_call_test_ret_ii(int a, in=
+t b)
++{
++	struct prog_test_ret_ii r =3D { .a =3D a, .b =3D b };
++
++	return r;
++}
+ #endif /* __x86_64__ || __aarch64__ */
+=20
++/*
++ * Takes no argument on purpose: with no arguments there is nothing for =
+the sret
++ * pointer to displace, so this needs no architecture guard even though =
+it
++ * returns 24 bytes. See the comment on bpf_kfunc_call_test_i128() above=
+.
++ */
++__bpf_kfunc struct prog_test_ret_big bpf_kfunc_call_test_ret_big(void)
++{
++	struct prog_test_ret_big r =3D { .a =3D 1, .b =3D 2, .c =3D 3 };
++
++	return r;
++}
 +
  __bpf_kfunc u64 bpf_kfunc_call_stack_arg(u64 a, u64 b, u64 c, u64 d,
  					 u64 e, u64 f, u64 g, u64 h,
  					 u64 i, u64 j)
-@@ -1487,6 +1501,10 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test2)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test3)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test4)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test5)
-+#if defined(__x86_64__) || defined(__aarch64__)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_pair)
-+#endif
+@@ -1504,7 +1537,11 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test5)
+ #if defined(__x86_64__) || defined(__aarch64__)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_pair)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_fastcall, KF_FASTCALL)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_ptr)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_ii)
+ #endif
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_big)
  BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg)
  BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg_ptr)
  BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg_mix)
 diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b=
 /tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-index 7d81070eefe7..426000f9a14f 100644
+index 426000f9a14f..65e693ada736 100644
 --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
 +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-@@ -55,6 +55,11 @@ struct prog_test_big_arg {
- 	__u64 b;
+@@ -60,6 +60,22 @@ struct prog_test_ret_pair {	/* 16 bytes: R0:R2 */
+ 	__u64 hi;
  };
 =20
-+struct prog_test_ret_pair {	/* 16 bytes: R0:R2 */
-+	__u64 lo;
-+	__u64 hi;
++struct prog_test_ret_ii {	/* 8 bytes: R0 only */
++	int a;
++	int b;
++};
++
++struct prog_test_ret_ptr {	/* 16 bytes: contains a pointer */
++	void *p;
++	__u64 tag;
++};
++
++struct prog_test_ret_big {	/* 24 bytes: too large for R0:R2 */
++	__u64 a;
++	__u64 b;
++	__u64 c;
 +};
 +
  struct prog_test_fail1 {
  	void *p;
  	int x;
-@@ -131,6 +136,10 @@ int bpf_kfunc_call_test2(struct sock *sk, __u32 a, _=
-_u32 b) __ksym;
- struct sock *bpf_kfunc_call_test3(struct sock *sk) __ksym;
- long bpf_kfunc_call_test4(signed char a, short b, int c, long d) __ksym;
- int bpf_kfunc_call_test5(__u8 a, __u16 b, __u32 c) __ksym;
-+#ifdef __SIZEOF_INT128__
-+__int128 bpf_kfunc_call_test_i128(__u64 a, __u64 b) __ksym;
-+#endif
-+struct prog_test_ret_pair bpf_kfunc_call_test_ret_pair(__u64 a, __u64 b)=
+@@ -140,6 +156,10 @@ int bpf_kfunc_call_test5(__u8 a, __u16 b, __u32 c) _=
+_ksym;
+ __int128 bpf_kfunc_call_test_i128(__u64 a, __u64 b) __ksym;
+ #endif
+ struct prog_test_ret_pair bpf_kfunc_call_test_ret_pair(__u64 a, __u64 b)=
  __ksym;
++struct prog_test_ret_pair bpf_kfunc_call_test_ret_fastcall(__u64 a, __u6=
+4 b) __ksym;
++struct prog_test_ret_ii bpf_kfunc_call_test_ret_ii(int a, int b) __ksym;
++struct prog_test_ret_ptr bpf_kfunc_call_test_ret_ptr(__u64 tag) __ksym;
++struct prog_test_ret_big bpf_kfunc_call_test_ret_big(void) __ksym;
  __u64 bpf_kfunc_call_stack_arg(__u64 a, __u64 b, __u64 c, __u64 d,
  			       __u64 e, __u64 f, __u64 g, __u64 h,
  			       __u64 i, __u64 j) __ksym;
