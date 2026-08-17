@@ -1,35 +1,48 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F6A3CB2E9
-	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 15:20:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF5D440A25;
+	Mon, 17 Aug 2026 15:24:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786980053; cv=none; b=eWES2fX8iFU/YgUi0qYGBDFUD3dbpAS3caHVsIqE+wn1XmQexFp8BtCa8vmKbxegWJZeLhDi0+vHKxsKlvxs45Wx45QieJwGohR+4d0D05HwhJgg4p4YqdrwAWAOLOs4nx5WoflJL5CMnJF4jvhnE9p/T6UA3361RCL2PzKB4so=
+	t=1786980289; cv=none; b=ffDTGqKLcErbws5ucIWCUlCDSEaUxTTs36kEE40Epk99bKpM0qFYhqUKQNUbuPWsUNhrQpf1iZX83nY1G80YY3J0UuIJyyTjCCusOVFH9G+HuNr9pHZ90HeMa/Elk7lowi2JYFnQ5sgdBO5LFn/TizXdoG4YG9bzafXDx2TKH/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786980053; c=relaxed/simple;
-	bh=nBpe/aGSAWEPSLezvJlEIYzifsiTJOufZuQpq98Ht1o=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=X00sERngIBcr5JpYunAWIC9FmOxP+ys842Sxg0NZ732YtvCbs1f8vfD7rJeFmMql3QxAWJTZb4PzFx8oZSfXt/3VQRjZ/XZBuEcbRzQwA5svGLUAQzxkdKoTxZz7c8GXc9D/xgAhoxmZtPLjBKlaivZ4idUT6pv3QY3pttAly3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fL2K+/EK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786980289; c=relaxed/simple;
+	bh=b08zChp0o29dodsssb6TkSggxUxNj5Udb6Jvc8WhoJo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=QNgQzsnZf7tyVh1kJMoXgfVYaxhjyckzR/BNIH3EA6oaFIzPwr7v1BrKGKt3oLykwFMZigYL56lPQpp0KU/nAWpUe3W/ylfGuDtKfs7eHPkR3fhfbJKCOovP+uwV/VU88H5e9GiCIqRqQsGwHbVB9QE8RiF+LwHsooBFsu60uTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QgZ80qrQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fL2K+/EK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 167841F00A3A;
-	Mon, 17 Aug 2026 15:20:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QgZ80qrQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B7BB1F000E9;
+	Mon, 17 Aug 2026 15:24:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786980052;
-	bh=vVJAG/JVccH6B+4RpOjYABD1E8SsJLRfJ1953HBVjMo=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=fL2K+/EKQ/oOwPFKLegyhTpxatxYuGT8bhBemGltvpnXjK+5NihH3OmMl+Gcaa2GQ
-	 90BW7sXx2MsIeFs9h/NciSmuN/loEA3rMIEEXvaxCI6rTx7HKvzK9FFO5Pertmb3Q3
-	 H1Dg60A2a8EoHodswNZC3UvduuyR7SMeSChgnykNFPHL26dQMfIEr6CN8lx4zDhedj
-	 70KarPueMThOK5g5omMW5OsVVoMuCBr8W9fj+eaJowZqMYnEiyrl5WApKUHtKbWw6Q
-	 RC3W0lKwfPPP902N9I6BBHV39NPgZzq0d8wr4QB8SeA2kvochIQ6MHugCnGZ8OEf2/
-	 eSLI3aSdeGliw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 938C2380690E;
-	Mon, 17 Aug 2026 15:20:05 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1786980288;
+	bh=FuPzUDmQKbOowTX2ptTEZOqxyo+PviRTDwqmhrgRh+A=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=QgZ80qrQ9uknhgs079rAM4s2WVxww1TwsfuiqFRMOFCN28qXd8abOb3wvgG5yWdkD
+	 1DsA8fZg9beYfIzltSo0QUxMtDgh5tGQtebrbIq9/Ns4zXWa14EAEPI5vE+0v67/yX
+	 TQ5tv5meh6F5KzEdTDaTVwcAF3p7pcyGBN0U0HM4pA+oCMbeXHfDSGMkHjcrhWfXDK
+	 C9PFHbmw/vtDDEotpzYZaAFESlBn1N7AZF9DTkGHJrrB7ZvcGkggnEl9GOzzP36cxI
+	 krUe0Bw3o8/CE1myC/4S0Q9N4bVEL0UEkJuXhGJuo+F5SVfgNVgN6KMpGSAgOd9g5C
+	 IS4P+aLSpXU+w==
+From: Sasha Levin <sashal@kernel.org>
+To: gregkh@linuxfoundation.org,
+	stable@vger.kernel.org
+Cc: Sasha Levin <sashal@kernel.org>,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Peter Jung <admin@ptr1337.dev>
+Subject: Re: [PATCH 7.1.y] Revert "tracing: perf: Fix stale head for perf syscall tracing"
+Date: Mon, 17 Aug 2026 11:24:40 -0400
+Message-ID: <20260817150000.2@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260816133101.83109-1-admin@ptr1337.dev>
+References: <20260816133101.83109-1-admin@ptr1337.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,44 +50,20 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 bpf-next] selftests/bpf: Retry stat generation in
- cgroup_iter_memcg
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178698000441.1184401.15726013769999807610.git-patchwork-notify@kernel.org>
-Date: Mon, 17 Aug 2026 15:20:04 +0000
-References: <20260814232017.2839959-1-andrii@kernel.org>
-In-Reply-To: <20260814232017.2839959-1-andrii@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, kernel-team@meta.com
 
-Hello:
+> The 7.1.y implementation has not undergone that restructuring. It handles
+> BPF and perf consumers together, and already reloads the current CPU's
+> perf event list after syscall_get_data().
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+The analysis checks out on 7.1.y: 57918341dd19 ("bpf: Add sleepable
+support for classic tracepoint programs") is not there, so the added
+hlist_empty() early return runs before bpf_prog_array_valid() is ever
+consulted and a BPF-only consumer stops firing.
 
-On Fri, 14 Aug 2026 16:20:17 -0700 you wrote:
-> Each cgroup_iter_memcg subtest touches 1024 pages and expects the matching
-> memcg counter to be non-zero. On a host with many CPUs it reads zero
-> instead:
-> 
->   test_anon:FAIL:final anon mapped val: actual 0 <= expected 0
-> 
-> memcg stats are cached per-cpu and only become visible once the periodic
-> flusher runs (FLUSH_TIME, 2s), or once pending updates cross
-> MEMCG_CHARGE_BATCH * num_online_cpus(). That threshold is 512 pages at 8
-> CPUs but 8192 at 128, so a single pass no longer reaches it and
-> bpf_mem_cgroup_flush_stats() returns without flushing anything.
-> 
-> [...]
+Since this reverts a commit that already shipped in 7.1.6, I would like
+your test result before queueing it - you mentioned you would have one
+today. Ping the thread once you do and I will pick it up.
 
-Here is the summary with links:
-  - [v2,bpf-next] selftests/bpf: Retry stat generation in cgroup_iter_memcg
-    https://git.kernel.org/bpf/bpf-next/c/3d9393ff98ca
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks,
+Sasha
