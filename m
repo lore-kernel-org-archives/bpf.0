@@ -1,692 +1,311 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5CAB3BA235;
-	Mon, 17 Aug 2026 08:52:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DE63BA235;
+	Mon, 17 Aug 2026 08:55:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786956758; cv=none; b=jxrlFx2/G8CGMYb8KVQQrFH3i3Dt7wNH6qy/i8NNqAIff42JoaxxpZoAvXVRN45Yw79QX9c91ejQxqik17uhejIUzzpWQgZGzHZ7w7PVkvh1bCnCTMIFJHvB2l3DIcshcwveHtcjAdjFH0ntIHzv2JCSlE7dyIyDAig2NJqJt58=
+	t=1786956920; cv=none; b=JotEZ2auXfng3xbcOltFhcy7/9oejNYwFFGBaqSh2PtWA/Vrj3WIibIakLvcRHD98/5+c7BAbuAzAEUWV14YttdyYdN1ozT6TQqWaflpeplkiiVWQEVvVUpPEOYoRb8yUuH+GtFC3yTzMJFa4pp4KFt/1dAOzH3IbtXKKtp4Xb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786956758; c=relaxed/simple;
-	bh=NF5cH4so8oXAZuDcZJa5VbNFo1KTj4LUSy+dZ3F/n1g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HgYJ2+b0xC9NFYhNTwtdOs1cuz9vT+CwG1vVR1X2SEHSrmuMFeOKoTEY2ZP47cgA/XoGQJr8zHhWB905FRpmI+Ki1Ov9890IHmhb8J+b0zw0DAxsOPOHO6HCJ9RCx0BdUpmOig/fVgnn9EDxo2njYOXtkIXQIAl4bPwgj2JfI3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hRR9dQfs; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786956920; c=relaxed/simple;
+	bh=qG4W8FZSLQgbODO1N0MzlCxgNi96uMRMzgagbbEQu8g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=vGdr9E5S3HtDFMTXsyqa8tGk/ArfRc2GGf5obUx7d03eQXmcbCDisOBSzHvNKR05LnDQTHSWoTTvylp1bZGXxZA2XMHF58aM9E1qwai0vyh1cm4M9prMCVJEstjW921VXO/jfqjdIKskfxassCQZCiFfHtzwGilSVovW5WoYgs0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=CNiOvucC; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hRR9dQfs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43B471F000E9;
-	Mon, 17 Aug 2026 08:52:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786956755;
-	bh=c8rt/m1ocK6A8DLGZQiJTrm2CPGOJpgEOjSjcb53xDg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=hRR9dQfselNlfEvxmpQRYrJwoHOJXopx/fovox92Sw3N9KznLokMthmvnYq0bXmHb
-	 pTiFhVTKGpzosxSeqTpYnH1GtR5LpXKdYrP3cd8wfXZDL0CpN7zHPetbOdSj9DzvKO
-	 rOUyBeLyinGIZcbqpwDhao92BL/vM//U/Tm/9OnJx89n+rZCE9ZOOt8A7S9YO/hpvS
-	 NO3CW7CKaD4u8pUGOAFTt31mw7++n3u4xlxMdouWv80V4GhIV3ilWGYQuts4K1JnZl
-	 m5rf5NYWJdeEtUzvIgYNr5ogNdYijynGa98Fk97+XOH+3w9lz+dXVPg0wm1QwIWduq
-	 pFgYOPbGw5hTw==
-Date: Mon, 17 Aug 2026 09:52:13 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Kiryl Shutsemau <kirill@shutemov.name>
-Cc: akpm@linux-foundation.org, david@kernel.org, nico.pache@linux.dev, 
-	baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com, hughd@google.com, 
-	lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com, rppt@kernel.org, 
-	ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, 
-	vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kas@kernel.org, jannh@google.com, willy@infradead.org, pfalcato@suse.de, 
-	rostedt@goodmis.org, mhiramat@kernel.org, linux-trace-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 00/57] mm/collapse: rebuild collapse on migration
- primitives
-Message-ID: <aoLAly-oL2OAa4n8@lucifer>
-References: <20260816224609.308019-1-kirill@shutemov.name>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="CNiOvucC"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=PzxZMYZyvNobYQwazFJ6TwTep3p8YEU/dFfec5P3lJQ=; b=CNiOvucC6c+azq+w6urhli/rNy
+	YDX7L/5uHz8rAHpZCfgURjQRZW6btuGm/Fld8Il4h7nT/sDGyMEJqBUSmhvh6mGI5TTan31GDC5yz
+	29wx9vINKWa8KTVgd++r4a4YueSXfw+1cebFOnscLk2M09SUbASYx2506wpuXE4lllQGMWiqp8CmT
+	m0360LmFjfAyRgGcljyBw7k86LFxaOqgpO9jfsCLnVh93zifWrlFqazpVd2uWtqY85IpFE7Ri5sm3
+	ehVoJVwHunhfCPTc3/8pVEnNyjb3OE817C689xP99QaBHtw9PJimbeDQfpA1uVVhA9DKTh3nX4QcD
+	QfQ+eo2g==;
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wvt7i-000EQH-13;
+	Mon, 17 Aug 2026 10:55:14 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wvt7h-00034Z-2y;
+	Mon, 17 Aug 2026 10:55:13 +0200
+Message-ID: <07776a9c-2998-4d65-af3e-c714181d4241@iogearbox.net>
+Date: Mon, 17 Aug 2026 10:55:12 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260816224609.308019-1-kirill@shutemov.name>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v5 2/2] selftests/bpf: allocate a larger timeout for
+ connection
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
+ <alexis.lothore@bootlin.com>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: ebpf@linuxfoundation.org,
+ Bastien Curutchet <bastien.curutchet@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260814-tc_tunnel_flaky-v5-0-5b93d030c42c@bootlin.com>
+ <20260814-tc_tunnel_flaky-v5-2-5b93d030c42c@bootlin.com>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260814-tc_tunnel_flaky-v5-2-5b93d030c42c@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28095/Mon Aug 17 08:23:59 2026)
+
+Hi Alexis,
+
+On 8/14/26 9:11 AM, Alexis Lothoré (eBPF Foundation) wrote:
+> Some tests, like tc_tunnel or tc_edt, sporadically fail in CI with the
+> following logs:
+> 
+>    (network_helpers.c:309: errno: Operation now in progress) \
+>      Failed to connect to server
+>    send_and_test_data:FAIL:connect to server unexpected error: -115
+> 
+> This is due to SO_RCVTIMEO and SO_SNDTIMEO being set on the client
+> socket (see settimeo() in client_socket()), allowing connect() to return
+> an error and to set errno to EINPROGRESS instead of ETIMEDOUT.
+> Increasing the timeout value for those tests is likely not a good
+> solution (and it has already been done by commit 2790db208b44
+> ("selftests/bpf: Improve tc_tunnel test reliability")): some tests
+> expect some data transfer to fail, and so the timeout value would
+> increase overall test execution duration again (not only the connection,
+> but any socket operation).
+> 
+> Another solution is to allocate a timeout budget specific to the
+> connection: we can apply a larger timeout only for connections, and once
+> the connection is established, set back the timeout configured through
+> opts->timeout_ms; this would allow connection to succeed under heavy CI
+> load, while keeping timeout reasonable for the rest of the test traffic.
+> 
+> Set a larger SO_SNDTIMEO/SO_RCVTIMEO for the connection step, and reset
+> it back to the timeout configured by the test once the connection has
+> succeeded.
+> 
+> Fixes: 99126abec5e5 ("bpf: selftests: A few improvements to network_helpers.c")
+> Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+> ---
+>   tools/testing/selftests/bpf/network_helpers.c | 36 ++++++++++++++++++++++++---
+>   1 file changed, 33 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+> index cdf2d7d3ab32..8c9236c0a5a5 100644
+> --- a/tools/testing/selftests/bpf/network_helpers.c
+> +++ b/tools/testing/selftests/bpf/network_helpers.c
+> @@ -49,6 +49,8 @@
+>   			errno = __save;					\
+>   })
+>   
+> +#define CONNECT_MIN_TIMEOUT_MS	5000
+> +
+>   struct ipv4_packet pkt_v4 = {
+>   	.eth.h_proto = __bpf_constant_htons(ETH_P_IP),
+>   	.iph.ihl = 5,
+> @@ -291,6 +293,12 @@ int client_socket(int family, int type,
+>   	return -1;
+>   }
+>   
+> +static int connect_timeout_ms(const struct network_helper_opts *opts)
+> +{
+> +	/* Enforce a minimum connect timeout value */
+> +	return MAX(opts->timeout_ms, CONNECT_MIN_TIMEOUT_MS);
+> +}
+> +
+>   int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t addrlen,
+>   		    const struct network_helper_opts *opts)
+>   {
+> @@ -305,13 +313,35 @@ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t add
+>   		return -1;
+>   	}
+>   
+> +	/*
+> +	 * Override timeout configuration with a larger value for the
+> +	 * connection
+> +	 */
+> +	if (settimeo(fd, connect_timeout_ms(opts))) {
+> +		log_err("Failed to set connect timeout");
+> +		goto close;
+> +	}
+> +
+>   	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
+> -		log_err("Failed to connect to server");
+> -		save_errno_close(fd);
+> -		return -1;
+> +		log_err("Failed to connect");
+> +		goto close;
+> +	}
+> +
+> +	/*
+> +	 * If the timeout configured by the test is different from the
+> +	 * connect timeout, restore it
+> +	 */
+> +	if (opts->timeout_ms != CONNECT_MIN_TIMEOUT_MS &&
+> +	    settimeo(fd, opts->timeout_ms)) {
+> +		log_err("Failed to set timeout for connected socket");
+> +		goto close;
+>   	}
+
+Could you do one last spin? I'll get the comment fix applied, but the above
+still has issues as pointed out by sashiko, so maybe this could be reworked
+as follows (untested):
+
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index 8c9236c0a5a5..ec209a744889 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -293,10 +293,27 @@ int client_socket(int family, int type,
+  	return -1;
+  }
+  
+-static int connect_timeout_ms(const struct network_helper_opts *opts)
++static int connect_with_timeout(int fd, const struct sockaddr_storage *addr,
++				socklen_t addrlen, int timeout_ms)
+  {
+-	/* Enforce a minimum connect timeout value */
+-	return MAX(opts->timeout_ms, CONNECT_MIN_TIMEOUT_MS);
++	int connect_timeout_ms = MAX(timeout_ms, CONNECT_MIN_TIMEOUT_MS);
++
++	if (settimeo(fd, connect_timeout_ms)) {
++		log_err("Failed to set connect timeout");
++		return -1;
++	}
++
++	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
++		log_err("Failed to connect to server");
++		return -1;
++	}
++
++	if (connect_timeout_ms != timeout_ms && settimeo(fd, timeout_ms)) {
++		log_err("Failed to restore timeout for connected socket");
++		return -1;
++	}
++
++	return 0;
+  }
+  
+  int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t addrlen,
+@@ -313,35 +330,12 @@ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t add
+  		return -1;
+  	}
+  
+-	/*
+-	 * Override timeout configuration with a larger value for the
+-	 * connection
+-	 */
+-	if (settimeo(fd, connect_timeout_ms(opts))) {
+-		log_err("Failed to set connect timeout");
+-		goto close;
+-	}
+-
+-	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
+-		log_err("Failed to connect");
+-		goto close;
+-	}
+-
+-	/*
+-	 * If the timeout configured by the test is different from the
+-	 * connect timeout, restore it
+-	 */
+-	if (opts->timeout_ms != CONNECT_MIN_TIMEOUT_MS &&
+-	    settimeo(fd, opts->timeout_ms)) {
+-		log_err("Failed to set timeout for connected socket");
+-		goto close;
++	if (connect_with_timeout(fd, addr, addrlen, opts->timeout_ms)) {
++		save_errno_close(fd);
++		return -1;
+  	}
+  
+  	return fd;
+-
+-close:
+-	save_errno_close(fd);
+-	return -1;
+  }
+  
+  int connect_to_addr_str(int family, int type, const char *addr_str, __u16 port,
+@@ -406,20 +400,12 @@ int connect_fd_to_fd(int client_fd, int server_fd, int timeout_ms)
+  	struct sockaddr_storage addr;
+  	socklen_t len = sizeof(addr);
+  
+-	if (settimeo(client_fd, timeout_ms))
+-		return -1;
+-
+  	if (getsockname(server_fd, (struct sockaddr *)&addr, &len)) {
+  		log_err("Failed to get server addr");
+  		return -1;
+  	}
+  
+-	if (connect(client_fd, (const struct sockaddr *)&addr, len)) {
+-		log_err("Failed to connect to server");
+-		return -1;
+-	}
+-
+-	return 0;
++	return connect_with_timeout(client_fd, &addr, len, timeout_ms);
+  }
+  
+  int make_sockaddr(int family, const char *addr_str, __u16 port,
 
-+cc Pedro for discussion about perf numbers
-
-On Sun, Aug 16, 2026 at 11:45:12PM +0100, Kiryl Shutsemau wrote:
-> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
->
-> Yes, I know, this is a lot of changes. But I'm happy with the overall state
-> of the patchset and the only reason I tag it as RFC is that it is tricky
-> to get 57 patches upstream.
->
-> I wanted to give a view of the end state first. I will suggest a possible
-> way to split it below.
->
-> I would appreciate any feedback.
-
-Oh Kiryl :)
-
-We have a THP cabal meeting every couple of weeks where it would have been
-useful for you to raise this first.
-
-In any case - this series is not something we'd consider at the moment,
-even broken into parts.
-
-David and I have put THP into feature freeze - until the codebase is
-subtantially improved we're not really interested in seeing significant
-development.
-
-The technical debt is substantial and has to be paid down first.
-
-See [0] for a rough list of TODOs in this regard.
-
-(I also intend to do at least 1 series that improves things shortly
-myself.)
-
-mTHP khugepaged was allowed in _despite_ my being reticent given this
-technical debt, but with a proviso of a feature freeze afterwards.
-
-It's still fine obviously to send a theoretical RFC for early feedback. But
-there can be no un-RFC'ing any time soon.
-
-I'd suggest looking at cleanups that could act as foundations for your
-changes.
-
-I'll try to find some time to look through the actual patches to make
-concrete suggestions/see if we could break some of this out like that.
-
-Some more comments below.
-
->
-> TL;DR
-> =====
->
-> This replaces khugepaged's anonymous collapse with an engine that
-> can collapse sub-PMD ranges. It is built around migration entries and
-> frozen folios instead of heavy locking and isolation, aiming for better
-> scalability and less disruption to the workload being collapsed.
-
-OK interesting :)
-
->
-> Why
-> ===
->
-> mTHP collapse landed in khugepaged in 7.2 and I was glad to see it.  We
-> at Meta run arm64 with 64K base pages, where a PMD is 512M: PMD-order THP
-> is of limited use at that size, and mTHP is exactly what we want.
-
-Do you have some numbers that indicate to what degree mTHP khugepaged is
-beneficial?
-
-I was discussing this with Pedro recently and he pointed out that we have
-very poor coverage of the actual observed benefits of mTHP khugepaged
-(there are reasons to have merged it anyway but still).
-
-Some detailed analysis on how it benefits Meta would be really beneficial,
-with specifics and what settings you find useful.
-
-Is it only useful for larger page size? What orders have you found to be
-most effective?
-
-Is it useful in itself or do you view it as a stepping stone to further
-work, like this?
-
->
-> It turned out not to help us.
-
-I mean maybe this answers my question :)
-
->
-> khugepaged only ever looks at PMD-aligned windows, and it is not an easy
-> limitation to lift.
-
-Yes. This assumption is very much baked in.
-
-I guess this is coming from the perspective of having ranges that are
-neither PMD-aligned nor sized (far harder to achieve with 512 MiB PMD size
-obviously).
-
->
-> Fixing the alignment is a one-line change, but what it feeds assumes the
-
-Hmm not so sure about that... especially given how baked in these
-assumptions are.
-
-Which by the way, all speaks to the need for rework.
-
-The first stage in my view would be to improve the code to the point that
-these kinds of assumptions fall out of it, which then lays the foundations
-for future changes to eliminate the assumptions.
-
-> PMD everywhere that matters: collapse_huge_page() clears and flushes the
-> whole PMD whatever order it is collapsing, installs a PMD leaf because
-> that is the only thing it can produce, and keeps everyone out with
-> mmap_write_lock, anon_vma_lock_write() and an IPI broadcast while it
-> does.
-
-To be clear - the anon path. I think important to clarify :)
-
-And yeah it does IPI for any sensible arch (with
-CONFIG_MMU_GATHER_RCU_TABLE_FREE) via tlb_remove_table_sync_one(). The
-other arches IPI anyway on TLB invalidation.
-
-[Though I intend to make all page table freeing RCU relatively soon which
-should? Eliminate the need for this, possibly?]
-
-It doesn't insert a PMD leaf entry for mTHP collapse though, that's
-incorrect.
-
-It does, as you say, clear down the PMD even on mTHP PTE range
-installation, and has to hold the rmap lock for a longer period to account
-for adjacent ranges that share a PMD entry.
-
-All in all it's a mess yes and clearly can be improved.
-
->
-> Which is why hugepage_vma_revalidate() demands that the VMA span the
-> whole PMD even for an mTHP order -- "we'd need to lock all VMAs in the
-> PMD range to support this", as the comment there puts it.  A PMD-granular
-> operation is only safe when one VMA owns the PMD, and that is exactly the
-> restriction in the way.  The alignment is the symptom; the PMD is the
-> design.
->
-> So both roots have to go.
-
-Yeah this is pretty radical stuff so it's just an absolute no until
-technical debt is paid down properly.
-
-That means signficant rework to make this code something far from the
-overly-coupled spaghetti mess that it is now.
-
-Efforts have been ongoing with this, Nico and others have submitted
-cleanups and obviously more is required here.
-
-But yes I think decoupling the ossified PMD assumption is important.
-
-However we have to remember that a lot of the user-visible API assumes PMD
-sizing and so the code has to clearly reflect this and make it clear that
-
->
-> Design
-> ======
->
-> The old mechanism holds the address space still because it has nothing
-> else stopping the sources from moving under the copy.  The new engine
-> makes the sources themselves inert instead, with the two barriers
-> migration already uses, raised in that order:
->
->   1. migration entries replace the source PTEs.  Faults and GUP-slow
->      now wait on the source folio's lock, which is taken before the
->      first entry becomes visible.
->   2. the source folio's refcount is frozen to its expected value.
->      GUP-fast, pfn walkers, reclaim, compaction and memory-failure all
->      fail folio_try_get() and back off.
->
-> Between the two, nothing can reach a source, so the copy runs with no
-> lock held at all -- and the address space is left alone while it does.
-
-Hmm, are migration entries the right mechnanism here? Are you actually
-migrating the pages to a large folio here, or using them to get the
-behaviour you want on fault/GUP?
-
-Same question in general for the freezing.
-
-I'm not suggesting quite that these are the wrong mechanisms, just querying
-how they are being used here.
-
-I do like the idea of using the folio lock though. All rmap operations now
-take the folio lock when traversing the rmap.
-
->
-> What that removes from every collapse path:
->
->   mmap_write_lock              -> mmap_read
->   anon_vma_lock_write()        -> nothing: an rmap walk needs the folio
->                                   locked, and the engine holds that lock
->                                   from freeze to putback
-
-I do like the idea of eliminating uses of the rmap lock like this, not only
-for contention's sake but also for scalable CoW purposes which introduces
-challenges with regards to holding these.
-
-In fact, migration and huge memory collapse are the really problematic
-areas.
-
->   tlb_remove_table_sync_one()  -> nothing: one ranged flush per round
-
-Aren't we reliant upon this synchronisation for correctness?
-
->   LRU isolation                -> nothing: sources are inert in place
->
-> Working in windows rather than whole PMDs takes care of the other root.
-> A sub-PMD window is collapsed under the page table lock, so a collapse
-> disturbs only the window it collapses, and each candidate is validated
-> at its own order -- a window need only fit its own VMA.  A PMD-order
-> candidate still has to own the whole PMD, which is the old rule kept
-> where it is still needed.
->
-> Candidates are carried through the passes a batch at a time rather than
-> one window at a time, so a round pays for its flush and its lock
-> acquisitions once.
->
-> With the barriers holding the sources still, which read lock the engine
-> takes stops being part of the design.  A round works inside a single
-> VMA, so patches 43-49 switch it from mmap_read to per-VMA locking: an
-> mmap_write elsewhere in the mm then stops waiting for a collapse that
-> has nothing to do with it.  That block is the only part of the series
-> that needs per-VMA locking to be unconditional, and it is a separate
-> dependency (see below); everything before it runs under mmap_read and
-> does not care.
->
-> Patch 7 sketches the engine as a comment naming every pass, what lock it
-> takes and what it may sleep on; the details are there rather than here.
->
-> What falls out beyond the lock diet:
->
->  - mTHP collapse in VMAs smaller than a PMD, which is the arm64 case
->    above: a 2M VMA on an arm64/64K machine collapses nothing today at
->    any order, and collapses to mTHP here.
-
-I do worry about knock-ons from this. Has to be carefully checked.
-
->  - Hole and zeropage population at every order, so partially populated
->    windows collapse to mTHP under the same max_ptes_none policy as PMD.
->  - Sources come in spans -- any stretch of consecutive PTEs mapping
->    consecutive pages of one folio -- so partially mapped and scrambled
->    compound sources (the PTE-mapped-THP re-collapse class) work at
->    every order.
->  - A table that cannot become one huge page still yields the largest
->    windows inside it, where before a single disqualified PTE gave up
->    the whole table.
-
-Are you permitting collapse of ranges that straddle PTEs?
-
-Though in general I'm confused by the single disqualified PTE here -
-
->
-> Reading the series
-> ==================
->
-> 57 patches is a lot to land on a list.  They go in blocks:
->
->   1-6    helpers and shared state: pte_folio(), pte_none_or_zero(),
->          mm/collapse.h, and the policy that replaces asking whether
->          khugepaged started a collapse
->   7-8    the engine's shape: entry points, a call-tree comment naming
->          every pass, and the scan filled in
->   9-23   the collapse half, top down: the round frame, then each pass
->          in turn, then selection and the retry store
->   24     per-candidate tracing, before the switch takes the old
->          tracepoints away
->   25-28  the switch: point the anon path at the engine, widen coverage
->          to sub-PMD VMAs, delete the mechanism it replaces
->   29-35  move what is left of collapse out of khugepaged.c, and
->          MADV_COLLAPSE into madvise.c
->   36-42  tracing: the engine's own events and trace header
->   43-49  per-VMA locking, and the mm reference that makes it safe
->   50-56  selftests for what the engine can now do
->   57     MAINTAINERS
-
-Yeah as I replied there the MAINTAINERS change is totally unacceptable :)
-
-This is THP code and belongs to the THP maintainers/reviewers.
-
-No coup d'etat please :)
-
-Also reviewership/maintainership in this area is predicated on significant
-review contributions which are badly needed in THP. So effort in this
-respect is appreciated too :)
-
-And come to a THP cabal meeting to discuss your changes with us please!
-We're friendly :)
-
->
-> The two patches worth reading first if you read nothing else are 7 (the
-> design, as a comment naming the whole call tree) and 16 (the freeze,
-> which is where the safety argument lives).
->
-> A possible split, if that helps:
->
->   1-2    two mm helpers, pte_folio() and pte_none_or_zero().  Both
->          convert callers outside collapse and are useful on their own
->   3-27   the engine and the switch-over.  This is the smallest unit
->          that does anything: stop earlier and the tree carries an
->          engine nothing calls
->   28     remove the mechanism the engine replaces
->   29-42  moving what is left of collapse out of khugepaged.c, and the
->          engine's own tracepoints
->   43-49  per-VMA locking
->   50-57  selftests and MAINTAINERS
->
-> Keeping the removal separate leaves both engines in the tree with only
-> the new one reachable, so the switch can be reverted on its own if
-> something turns up.  The old mechanism is already carried that way for
-> three patches inside the series, so this costs nothing but 975 lines of
-> unreferenced code until 28 lands.  That safety net only lasts until the
-> blocks after it land, though: once collapse has moved out of
-> khugepaged.c and the locking has changed, reverting the switch no longer
-> gives back a working old engine.
-
-Again as above, no to these changes in any form at the moment.
-
-The techical debt must be paid down first.
-
->
-> Base and dependencies
-> =====================
->
-> This applies on the selftests series, not on plain mm-new:
->
->   [PATCH v4 00/19] selftests/mm: improve khugepaged coverage
->   https://lore.kernel.org/all/20260815015901.1236937-1-kirill@shutemov.name/
->
-> which is on mm-new 33f61b12d297.
->
-> Patches 43-49 depend on Suren's unconditional per-VMA locks:
->
->   [PATCH v6 0/5] mm: Unconditional per-VMA locks and cleanups
->   https://lore.kernel.org/all/20260813193433.3318288-1-surenb@google.com/
->
-> That series is not in mm-new yet, and with patch 46 applied SMP=n does
-> not build without it: lock_next_vma() is behind CONFIG_PER_VMA_LOCK in
-> mmap_lock.h.  Everything up to patch 42 builds and runs on mm-new as it
-> stands.  There is no fallback path by choice -- adding one would mean
-> carrying two locking models through every pass.
->
-> Both branches are available at
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git collapse/rfc-v1
->
-> and the benchmark used for the numbers below, which is unposted and not a
-> dependency, at
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git perf/bench-usemem
-
-As above.
-
->
-> Performance
-> ===========
->
-> Measuring khugepaged is awkward.  It is a background daemon, so what
-> matters is what a workload feels while it runs, not what the daemon
-> reports about itself -- and the usual coverage instrument is no help
-> below the PMD: smaps AnonHugePages only counts PMD-order folios, so it
-> reads zero however much mTHP has been collapsed.
->
-> So I wrote "perf bench mem usemem" for this.  It touches a region while
-> khugepaged works on it and reports the workload's own latency
-> percentiles and throughput, against per-size counters that can see
-> sub-PMD folios.  The branch is above; it is unposted and not a
-> dependency.
->
-> x86-64, production configs (no KASAN, no lockdep, no DEBUG_VM, no
-> PAGE_TABLE_CHECK), interleaved rounds on an idle host, equal work on
-> every arm.
->
-> I measured three kernels, so the two halves of the series can be told
-> apart in the numbers below:
->
->   A   the base
->   B   the new engine, still under mmap_read
->   C   B plus per-VMA locking -- what this series ends up with
->
-> The engine: a sub-PMD collapse stops blanking the surrounding 2M
-> -----------------------------------------------------------------
->
-> base routes sub-PMD collapse through collapse_huge_page(), whose
-> pmdp_collapse_flush() and tlb_remove_table_sync_one() are not gated on
-> order: to collapse an order-4 window of 16 pages it clears and flushes
-> the whole 512-page PMD and IPIs, then repopulates.  The engine does the
-> window under the PTL.
->
-> A thread reading and writing a 32G region while it is collapsed at
-> order-4, 16384 collapses on every arm:
->
->                          A        B        C
->   read p99 (ns)       3071     1023     1023   -66.7%
->   write p99 (ns)      3071      927      927   -69.8%
->
-> and the workload's read rate rises by 68% on both engine kernels.
->
-> B == C, so this is the engine, not the locking.
->
-> At PMD order the same workload is flat, and that is expected rather
-> than disappointing: it is the one configuration where both mechanisms
-> disturb exactly the same 2M.  Read it as no regression at PMD order.
->
-> Per-VMA locking: address-space operations stop waiting on the scan
-> -------------------------------------------------------------------
->
-> MADV_HUGEPAGE/MADV_NOHUGEPAGE toggling against a scanning mm, which is
-> what jemalloc does with its arenas.  4096 collapses on every arm:
->
->                          A        B        C
->   ops/sec           340656   340820   603305   +77%
->   p99 (ns)           77823    86015     3327   -96%
->   p99.9 (ns)         86015    94207     9215   -89%
->
-> B is about 11% worse than base at p99 here, consistently across runs:
-> the engine alone slightly worsens hint-toggle latency, and per-VMA
-> locking is what turns it into a win.  Both halves are in this series, so
-> C is what a reviewer gets, but the middle column is the honest one.
->
-> The trade is real in the other direction too.  On settled memory with
-> nothing to collapse and scan_sleep_millisecs=0, per-VMA locking costs
-> about 47% of scan throughput against one mmap_read for the whole walk.
-> That is a synthetic worst case -- the daemon wraps 8000 times a second
-> there, where production defaults to 10s between passes -- and it buys
-> mmap/munmap p99 of 56us against 1.4us.
->
-> Collapse itself is not slower
-> -----------------------------
->
-> One complete pass over a 32G region, 16384 collapses, khugepaged CPU
-> from /proc/<pid>/stat, 7 repeats:
->
->   A base    median 5760 ms   spread 12.7%
->   B engine  median 4990 ms   spread  3.8%
->   C pervma  median 5020 ms   spread 12.4%
->
-> The base arm is bimodal, so its median moves with sampling and the
-> percentage is soft.  The distribution-free statement is better: every
-> engine run used less CPU than every base run.
->
-> The engine also allocates one destination per folio installed, where
-> base allocates 5.25 and frees the rest again: nothing is allocated until
-> the sources are frozen and the collapse can no longer be refused.
->
-> A measurement note, since an earlier version of this series quoted worse
-> figures.  khugepaged CPU has to be measured per collapse or per
-> completed pass, never over a fixed window with scan_sleep_millisecs=0:
-> the daemon never sleeps, so whichever kernel finishes the work sooner
-> spends the rest of the window scanning settled memory and is charged for
-> it.  Measured that way the engine appeared to cost 10% more CPU;
-> measured per unit of work it costs less.
->
-> Costs
-> =====
->
-> At PMD order the engine issues two TLB flushes per collapse where the
-> old mechanism issues one: the freeze's ranged flush plus the terminal
-> layer's pmdp_collapse_flush().  A PMD candidate is alone in its round,
-> so nothing amortizes the first.  Dropping the old per-collapse
-> tlb_remove_table_sync_one() IPI presumably pays for it, but that was not
-> measured and is not claimed here.
->
-> There may be a way out -- a PMD migration entry over the table during
-> the window, so the CPU never caches a walk to shoot down -- but that
-> means teaching every pmd-level walker a new kind of entry, and I have
-> not tried it.
-
-Hmm this seems like complexity on top of complexity...
-
->
-> PMD collapse deposits a freshly allocated page table instead of
-> redepositing the detached one.  Whoever withdraws a deposited table
-> frees it immediately, with nothing to hold a lockless walker off first,
-> and under a read lock the detached table may still be traversed by
-> GUP-fast or an RCU pte walk.  It goes to pte_free_defer() instead,
-> exactly as retract_page_tables() does.  One transient table page per PMD
-> collapse buys the IPI's absence.
->
-> That cost goes away if zap_deposited_table() -- the only site that frees
-> a deposited table outright, the others redeposit it or repopulate the
-> PMD with it -- used pte_free_defer().  The deposit would no longer have
-> to be quiescent and the detached table could go straight back.  It would
-> defer every THP zap's table free, and I have not tried it.
->
-> A shared source now costs an extra copy.  The freeze needs every page
-> exclusive to this mm, so the fault-in pass breaks CoW first -- an
-> allocation and a copy -- and the collapse then copies that page into the
-> destination; the old mechanism copied a shared page straight into the
-> new folio and broke the sharing that way.  It is bounded by
-> max_ptes_shared, which khugepaged holds at zero below the PMD order, so
-> in practice this is PMD-order collapse and MADV_COLLAPSE.
-
-Hmm I guess better to be explicit.
-
->
-> Size
-> ====
->
-> mm/ grows by 1915 lines net: 4475 added against 2560 deleted.
->
-> That is not a claim that this is less code, but it is less than it
-> looks.  khugepaged.c goes from 3283 lines to 908.  The new engine is
-> 4052 lines across mm/collapse.c and mm/collapse.h, of which 1344 --
-> about a third -- are comments, which is where the pipeline's invariants
-> are written down.  What replaces three install paths with their own
-> isolate/copy/rollback is one engine and one contract.
-
-As above. The existing codebase is a mess and must be cleaned up first,
-this isn't optional.
-
->
-> Testing
-> =======
->
-> Both matrices run the mm selftests plus a race harness, on the
-> validation config: KASAN, lockdep, PROVE_LOCKING, DEBUG_VM and
-> PAGE_TABLE_CHECK, 16G of guest memory, swap active so the swap-in
-> prepass is exercised rather than skipped.
->
->   x86-64        433 pass, 0 fail, 12 skip
->   arm64/64K     581 pass, 0 fail, 18 skip
->
-> dmesg clean on both.  The arm64 skips are a pre-existing shmem
-> MADV_COLLAPSE -EINVAL on 64K pages, confirmed against the base by A/B.
->
-> Every one of the 57 patches builds with no new warnings; !NUMA and !MMU
-> (arm nommu) build clean.  SMP=n does not build, for the reason in the
-> dependencies section above.
->
-> The race harness also gets longer soaks -- 1800s per driver mode, with
-> memory pressure and swap -- and the engine is fuzzed with syzkaller on a
-> KCOV+KASAN build.  That found two bugs the selftests could not reach: a
-> teardown that dropped rmap while the source was still frozen, where
-> removing an mlocked mapping munlocks and munlock_folio() takes a
-> reference a frozen folio forbids; and a whole-table MADV_DONTNEED racing
-> the copy window under CONFIG_PT_RECLAIM, which freed the table and left
-> the sources frozen and locked.  Both are fixed, and both gained coverage
-> -- the mlocked case is patch 53.
-
-Thanks for the detailed explanation.
-
->
-> Kiryl Shutsemau (Meta) (57):
->   mm: add pte_folio()
->   mm: add pte_none_or_zero()
->   mm/collapse: add collapse.h for the shared collapse state
->   mm/collapse: rename mthp_present_ptes to eligible_ptes
->   mm/collapse: state what a collapse may do in the policy
->   mm/collapse: move the smallest collapse order to collapse.h
->   mm/collapse: sketch the new anonymous collapse engine
->   mm/collapse: scan a table for what a collapse could use
->   mm/collapse: collect candidate windows into a round
->   mm/collapse: run a round and feed the outcomes back
->   mm/collapse: sketch the passes of a round
->   mm/collapse: allocate a destination per candidate
->   mm/collapse: revalidate a round against the VMA
->   mm/collapse: fault the sources in before the freeze
->   mm/collapse: check what a candidate would freeze
->   mm/collapse: freeze the sources behind migration entries
->   mm/collapse: copy the sources into the destinations
->   mm/collapse: install the destinations at PTE level
->   mm/collapse: install a PMD leaf as the terminal layer
->   mm/collapse: put the sources back
->   mm/collapse: settle whatever the round reached
->   mm/collapse: walk a table with a selection cursor
->   mm/collapse: give a refused region a second chance
->   mm/collapse: report each candidate's outcome to tracing
->   mm/collapse: collapse anonymous memory with the new engine
->   mm/collapse: give collapse_single_pmd() the range to work on
->   mm/collapse: scan the windows a VMA can hold
->   mm/collapse: remove the mechanism the engine replaces
->   mm/collapse: move what a collapse is judged on into collapse.c
->   mm/collapse: name the max_ptes ceiling after collapse
->   mm/khugepaged: count collapses where khugepaged makes them
->   mm/collapse: move the file collapse into collapse.c
->   mm/collapse: split collapse into a scan and a run
->   mm/collapse: implement MADV_COLLAPSE in madvise.c
->   mm/madvise: drop MADV_COLLAPSE's redundant mm reference
->   mm/collapse: report what the scan found
->   mm/collapse: report what the fault-in pass paid
->   mm/collapse: report the round, and what it made faulters wait
->   mm/collapse: name the file collapse's tracepoints after collapse
->   mm/collapse: remove the tracepoints of the mechanism that is gone
->   mm/collapse: give collapse its own trace header
->   mm/collapse: allow error injection into the freeze
->   mm/khugepaged: check the scan budget before the work, not after
->   mm/khugepaged: hold the address space open across a scan
->   mm/collapse: take a per-VMA read lock for the round
->   mm/khugepaged: scan under a per-VMA read lock
->   mm/madvise: collapse under a per-VMA read lock
->   mm/collapse: assert the mm reference the engine relies on
->   mm/khugepaged: drop the mmap_lock barrier from __khugepaged_exit()
->   selftests/mm: attribute collapses by candidate event alone
->   selftests/mm: cover collapse inside a sub-PMD VMA
->   selftests/mm: cover a hole-y window in a sub-PMD VMA
->   selftests/mm: cover collapse of mlocked ranges
->   selftests/mm: cover collapse beside a MADV_FREE'd page
->   selftests/mm: cover collapse beside a pinned page
->   selftests/mm: cover the scaled max_ptes_shared limit
->   MAINTAINERS: add an entry for collapse
->
->  MAINTAINERS                                   |   19 +-
->  fs/proc/task_mmu.c                            |    4 +-
->  include/linux/huge_mm.h                       |    9 -
->  include/linux/mm.h                            |   14 +
->  include/linux/pgtable.h                       |   17 +
->  .../events/{huge_memory.h => collapse.h}      |  176 +-
->  kernel/bpf/btf.c                              |    8 +-
->  mm/Makefile                                   |    2 +-
->  mm/collapse.c                                 | 3808 +++++++++++++++++
->  mm/collapse.h                                 |  244 ++
->  mm/hugetlb.c                                  |    8 +-
->  mm/khugepaged.c                               | 2711 +-----------
->  mm/madvise.c                                  |  251 +-
->  mm/migrate_device.c                           |    9 +-
->  mm/mremap.c                                   |    2 +-
->  tools/testing/selftests/mm/khugepaged.c       |  346 ++
->  tools/testing/selftests/mm/khugepaged_race.c  |   29 +-
->  .../selftests/mm/khugepaged_sync_check.c      |   65 +-
->  tools/testing/selftests/mm/vm_util.c          |    2 +-
->  19 files changed, 5022 insertions(+), 2702 deletions(-)
->  rename include/trace/events/{huge_memory.h => collapse.h} (60%)
->  create mode 100644 mm/collapse.c
->  create mode 100644 mm/collapse.h
->
->
-> base-commit: 8b76faf42c5d342b3bf0b1fd97bdaf603ee57354
-> --
-> 2.54.0
->
-
---
-Cheers, Lorenzo
-
-[0]:https://docs.google.com/document/d/1dsAXvVtioR2Hj98E_Um6220jamdznWxYsyx8jO0aUGU/edit?usp=sharing
