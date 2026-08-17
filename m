@@ -1,110 +1,125 @@
-Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41F4018E02A
-	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 07:48:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.252
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A643B3C14;
+	Mon, 17 Aug 2026 08:04:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786952908; cv=none; b=fk+Suo0YJPmkRMoiStdV9X0DmtWuweCnYmk8oRKMLlXrUU9ArBoBeG/2kGcdPINe3FfFUmHScNdPQZRRLsoUFdi1Zq8k1udqVhr5qGQ6oeguzmo6lGKP/s7gb7cEJ5XcyvRqQhjb1twwTTxcT1p5AkE5gfp0e9w0ReG9bWrRNmI=
+	t=1786953890; cv=none; b=kyJIn+k/AD+eoYR5uSuiAqEMJj6vszUUuHIiODi4TNB/mZcTcqL+5SrSEQdWm4lMK0kUDPGJIPoAIufpNiLQ5QIBa0kccLV/XY/d006ZEhLhC8FjSKyMdq1G1iND9qJi5Su1Xq0EfdPqyhzmuQmsubf1qEjEH8LIGnJ/hzSfPgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786952908; c=relaxed/simple;
-	bh=KILH+OOA0ThbcblvuVAEgdGql3C398mPUD66caEU0As=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=fJyEiZW1cpJ9A9EyzlUWXqbipY7ELpTx4YS2cYAVoigBG9azkoh3BlkgZ6QYXvFlMNntpUYi+m2Exl1vuW2xZtvZ1jNpG/T0NyrOe5qyudVwqGmGITObKSY1Oj/XuAyYrYFpDo0aqa4dPGKGsV9mciGbFC/3KiT3/uQEmQSBUfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=gaHeCdnG; arc=none smtp.client-ip=162.62.57.252
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+	s=arc-20240116; t=1786953890; c=relaxed/simple;
+	bh=vysRNSYSTwolpYgu/f2kDU3j2KSjD484zo5IVWXfZIM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pdNkR0pQpWAQ2th3RzQwB3EImj7c30kdGkNVwdSC9UcvhFeMQSQpDma67Bt1JdLNiI01rGI8DhqnR5byxgQetilPa4Kb4qdjutG/CxoRj3O3asq8Mq1uUe7kjbdom3EoA7R3zfJPmpJI4YeyTjjLXeab/5J4OE2JlXLytbGn04E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jlsg3MZQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="gaHeCdnG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1786952895; bh=opBOpwT3kb/x2ZnFUUpehu1KTMBnLjc4UIJXivfi+oQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=gaHeCdnGuYmztEDFcmHnBTNxEGYhmQfxk2QHybFUPC7a3j3dxbHb0sRnwy9UEHV6H
-	 5X8hr9z7kEUAjHdgaJtD0Hm9/5H+4GHJ02Ftz+Zxc58yNa8hCF4XvllDJOMTWcivKH
-	 r0LEMHnzpJy5IZrMMSYKUo2wu2NNXAHYPmO4WdWY=
-Received: from localhost.localdomain ([117.88.121.65])
-	by newxmesmtplogicsvrszb51-0.qq.com (NewEsmtp) with SMTP
-	id BDDA2646; Mon, 17 Aug 2026 15:47:29 +0800
-X-QQ-mid: xmsmtpt1786952849twq2brmki
-Message-ID: <tencent_EC328062C381CEDAEF690B8695F7752EC105@qq.com>
-X-QQ-XMAILINFO: OMwdwY5aSqdOMlMuSIs48YkLCwzCH044VrrUv//fr+n6gC6iDzCU4Yz6WO7GTt
-	 eiYZG1YBhEsl1DDOo9PLrubCyj4VE9VjvdhoC82rXZM3IN+JclzmKRJTHAckHVdywZrspCeViuJU
-	 Z9w929d5sdAM0FthnFsCmhilNoOTGoYoVkpjT2asRNy3+pPv3B+ysx+1X4hA3Ch8TrE7W4u0zSxo
-	 hsHJCpH5XFBA3CI854CWPxXqlRDNoLm3hihiLEPwxLkHlrSE5J477YqOhOMnVyorHtKCsoSu1Vac
-	 X+tAYTeSmcFxhwcfoTidPFOhaJJn7JZ5UvvDjzptTiv5VJzs0y50HchLweio8Eyny5MNW6AxzJe3
-	 RmId2sV5piDDk8x1apJQbwk7joV04s7ACNxqvqaZ8Clte1PqgPrFHqHnqw2zq6B43a86mzpuk6rr
-	 tZzwtxJYcrBCbpe1RfUNMKF+lj6ZeR6x4n+03ntQwGyYisunZgLinIXCle1mL+gbf1Rm96v275fJ
-	 OCiSkIkzcxseCq3E4FgI0el8Ul73Pqs7kHvyir/jlbQjvG/5VYisD/NiCgJpiPWgfMXvKX2qnI2o
-	 6pMbRDsbjRxFC996BhatyOW5pUbUJscUxsa9EP2FVHIRZmD7fmneq/WBRtV2R97WDDQKUTxCjLHG
-	 SKndVsM2RtP1V+gBYE2w5tXqBzNaYAfBeFUciH8TeoPZwQB64M865Lc+GJENlR/hpb05Ff4V6cSY
-	 8MFXtU17ZyNGZ8TYUtE9SWdBBRKrxk4I80U/Xny0qKp8UpooY/1Yt0MKB9iNZKWUMQaMUSKUQ+7b
-	 IMrOG/niU7RYRGdUIQfPjCVq52/vw5R90Rq99z4QWWUcmdgqFbgox7+R7TWwuyQg6BsFHlqKEk51
-	 2W7X+h4jepif+Y77Uo4JAQgo9Rdr0ZAb8KXRorruibIVwAG+9fOv/mWBw/Xb1pmBvllpSlka9Xti
-	 0a0i4a0fBhGsDGR4MV2V3u4WW6xuk91DpYS1Jluy0r3t50YdBpE2e4ybY976p9yUYwN7/QMow5M3
-	 3HiI7Ebh1JMpeiI/Y1WRO4P5Y/ZnMbPfyB1RZu6NORmvHVkZpxc+WGBLyyWUH68W1Scxn5UQ==
-X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
-From: Aohan Mei <3472274613@qq.com>
-To: bot+bpf-ci@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jlsg3MZQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AE351F000E9;
+	Mon, 17 Aug 2026 08:04:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786953886;
+	bh=/8YEgw0OcGhLggCgZu0df/8CubxvmgeZk0MDZaoHme4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=jlsg3MZQb936uD7sRHVGzRJsM4FPP06SzC3LJGqDw3Ziw3v0yU1MFVOvQeRHx3m8o
+	 2tS/8PUESGgMjjAPH43sdrcpv3blq0zwFE7Y9/Jwus9K5nh2OSeLV4CUWEWbjXRLLY
+	 uzLKcaBO52LJeRgop+GD7611SUufWlz9v8BtmwWELgHKrQ3CopYlUrafbxLptgRsXS
+	 ZcxocQSRRySex3jfHuDZLY/ig8HI2qtgXuVA2LIrKB17xKtWo08XOMKjeNz+eKD84x
+	 m+qvoZlHD469WMQh3awtCO952TARRFzZDrvSk2C/1IZ4CGLsOtVxFr5sbaGd4V851Y
+	 g9g+uW3thmbhQ==
+Date: Mon, 17 Aug 2026 09:04:24 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Kiryl Shutsemau <kirill@shutemov.name>
+Cc: akpm@linux-foundation.org, david@kernel.org, nico.pache@linux.dev, 
+	baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com, hughd@google.com, 
+	lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com, rppt@kernel.org, 
+	ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, 
+	vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kas@kernel.org, jannh@google.com, willy@infradead.org, pfalcato@suse.de, 
+	rostedt@goodmis.org, mhiramat@kernel.org, linux-trace-kernel@vger.kernel.org, 
 	bpf@vger.kernel.org
-Cc: martin.lau@linux.dev,
-	song@kernel.org,
-	jolsa@kernel.org,
-	zhuyifei@google.com,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	corvus@tencent.com,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2 bpf] bpf: Enforce cgroup storage map consistency for freplace attach
-Date: Mon, 17 Aug 2026 15:47:19 +0800
-X-OQ-MSGID: <20260817074729.2888421-1-3472274613@qq.com>
-X-Mailer: git-send-email 2.43.7
-In-Reply-To: <20260817062306.2707661-1-3472274613@qq.com>
-References: <20260817062306.2707661-1-3472274613@qq.com>
+Subject: Re: [RFC PATCH 57/57] MAINTAINERS: add an entry for collapse
+Message-ID: <aoLASuFkQ3rUrWa0@lucifer>
+References: <20260816224609.308019-1-kirill@shutemov.name>
+ <20260816224609.308019-58-kirill@shutemov.name>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260816224609.308019-58-kirill@shutemov.name>
 
-On Mon, 17 Aug 2026, bot+bpf-ci@kernel.org wrote:
-> Does this Fixes tag point to the correct commit?
+On Sun, Aug 16, 2026 at 11:46:09PM +0100, Kiryl Shutsemau wrote:
+> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 >
-> [...] should the Fixes tag reference be8704ff07d2 instead to direct
-> the backport to the correct range?
+> Collapse is now its own body of code: mm/collapse.c, a header stating what
+> it offers a caller, and its own tracepoint family.  It has two callers,
+> the khugepaged daemon and MADV_COLLAPSE, rather than living inside one of
+> them.
+>
+> Add a section for it, and move what belongs to it out of the THP entry:
+> khugepaged.c and its header, the trace header, the selftests, and
+> mm_slot.h.
+>
+> The selftests are matched as khugepaged*.c, which also covers the race and
+> sync-check harnesses the THP entry did not list.  mm_slot.h stays listed
+> under KSM as well, which is the other user of it.
+>
+> Assisted-by: Claude-Code:claude-opus-5
+> Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
+> ---
+>  MAINTAINERS | 19 ++++++++++++++-----
+>  1 file changed, 14 insertions(+), 5 deletions(-)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 7c179b333e4e..4e4e5030b979 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16955,6 +16955,20 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+>  F:	include/linux/balloon.h
+>  F:	mm/balloon.c
+>
+> +MEMORY MANAGEMENT - COLLAPSE
+> +M:	Kiryl Shutsemau <kas@kernel.org>
+> +L:	linux-mm@kvack.org
+> +S:	Maintained
+> +W:	http://www.linux-mm.org
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> +F:	include/linux/khugepaged.h
+> +F:	include/trace/events/collapse.h
+> +F:	mm/collapse.c
+> +F:	mm/collapse.h
+> +F:	mm/khugepaged.c
+> +F:	mm/mm_slot.h
+> +F:	tools/testing/selftests/mm/khugepaged*.c
+> +
 
-The analysis is largely correct: before 7d9c3427894f, the extension
-could already observe the target's storage. bpf_get_local_storage()
-resolved the buffer through a per-CPU pointer set from the prog array
-item in the run loop (bpf_cgroup_storage_set(_item->cgroup_storage)
-in include/linux/bpf.h), bpf_cgroup_storage_assign() enforced 1:1
-map-to-prog binding so an extension and its target could never share
-a map, and be8704ff07d2 made EXT programs inherit the target's
-verifier ops without excluding cgroup targets. So the freplace +
-mismatched-storage combination was technically reachable since v5.6.
+I'll look through the series properly, but presumably this is a separation of
+the THP collapse logic, and therefore should have the same maintainers/reviewers
+as the rest of THP.
 
-I kept 7d9c3427894f anyway, for three reasons:
+>  MEMORY MANAGEMENT - CORE
+>  M:	Andrew Morton <akpm@linux-foundation.org>
+>  M:	David Hildenbrand <david@kernel.org>
+> @@ -17272,12 +17286,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+>  F:	Documentation/ABI/testing/sysfs-kernel-mm-transparent-hugepage
+>  F:	Documentation/admin-guide/mm/transhuge.rst
+>  F:	include/linux/huge_mm.h
+> -F:	include/linux/khugepaged.h
+> -F:	include/trace/events/collapse.h
+>  F:	mm/huge_memory.c
+> -F:	mm/khugepaged.c
+> -F:	mm/mm_slot.h
+> -F:	tools/testing/selftests/mm/khugepaged.c
+>  F:	tools/testing/selftests/mm/split_huge_page_test.c
+>  F:	tools/testing/selftests/mm/transhuge-stress.c
+>
+> --
+> 2.54.0
+>
 
-1. abad3d0bad72 ("bpf: Fix oob access in cgroup local storage"), the
-   analogous fix for the tail-call vector of the same
-   verifier-vs-runtime-context confusion, uses Fixes: 7d9c3427894f.
-   Identical tags keep the backport sets of both fixes aligned.
-
-2. All currently maintained stable trees (5.10+) contain both
-   be8704ff07d2 and 7d9c3427894f, so the tag choice does not change
-   which kernels receive this fix in practice.
-
-3. 7d9c3427894f introduced the shared prog_item->cgroup_storage
-   runtime model that both this changelog and abad3d0bad72 describe;
-   the pre-7d9c3427894f per-CPU mechanism was superseded by it.
-
-That said, if maintainers prefer be8704ff07d2 for strict
-reachability accuracy, I can respin with the tag changed.
-
-Thanks,
-Aohan
-
+--
+Cheers, Lorenzo
