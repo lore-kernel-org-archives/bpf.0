@@ -1,36 +1,36 @@
-Received: from mta1.migadu.com (out-61.mta1.migadu.com [95.215.58.61])
+Received: from mta0.migadu.com (out-235.mta0.migadu.com [91.218.175.235])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 295B944161B
-	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 14:30:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B19143636A
+	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 14:46:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.235
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786977026; cv=none; b=S6lyH+L82/Ev5gUrcIDqBf/cCcMCXwOASpXuT3rBzOnZzerkxkjVf8LcRWWvk9eEskP0PdudY/UyFANa+OErwzSlWwyaeZY2DoMpCFxM3PdpwE9v6t2TrJWaNIB1VxlgmKzgwgqSoRKl49vDbKt0lUkAd2K/ocdtgc1N+QhrOlU=
+	t=1786977982; cv=none; b=ITPnsb8OQp5WYSo6Er4F2VUcCzjtV21HrXN0Jy/ECwdrU6thJIuD7KKAUcTjFrJopTbzFIpmU9S/liN6sr4CcLx3nhIhJszTaSLuTbbGsJSkEBk/2ROxkGXMg0TDeS+4yvvTQwicPEWUzKOSTzBTnN1F5CBG4iJXkzCBKDTXQC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786977026; c=relaxed/simple;
-	bh=rwsfwe1KC9WcPPdY4abw6tIn22E87mujFPrmBhYTeAQ=;
+	s=arc-20240116; t=1786977982; c=relaxed/simple;
+	bh=7F0zooi2QVxzxthLrYZpvTOFobdXpnJ4oBoLO28N8uk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ld9JS3avOdRpQHRKWC9RFfzYgIlRO9+Z2B2/7/UJzhriVfZbLTyNR1pEnya8zpdEl6CcKQzsHSPzQyyJd4S6bUXZcapDKnznuSxe3KOZHOPMdmItqFy7JbAiqV+XPkVpQILErQatGqtsN+DJEGZMqoJrm42fulPMekXTqTaZZwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qra4UERD; arc=none smtp.client-ip=95.215.58.61
+	 In-Reply-To:Content-Type; b=RatyaWOk22fdtq9oNGBcBfg2U4LKBfI5NLRVHzJHzAlOimmRwsxgMNbZ3GS3M15NSYmFZ53Qdn4id4uERznNnWeTuuEaH/XoaLkyXmmFT9Mx3SUaoglTDbRN8hdySl34mY7OCMFkSuDbi7pFHC2y6oUppQfhJFh7G0YGzTUgiXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YWm92I8z; arc=none smtp.client-ip=91.218.175.235
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qra4UERD"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YWm92I8z"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=rwsfwe1KC9WcPPdY4abw6tIn22E87mujFPrmBhYTeAQ=;
+DKIM-Signature: a=rsa-sha256; bh=7F0zooi2QVxzxthLrYZpvTOFobdXpnJ4oBoLO28N8uk=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786977023; v=1; x=1787581823;
- b=qra4UERDP0xNfaaZrlb9BWRpNzwWUXNCoH4NvBHJXEmhcb1K0YsQIPgkJ4XF0EhocRCvGZ4N
- G2pdhB1n+rqGFCe1aarh1HdfgI8pNcJ4PXqHcm30uP2J/0l5OwTgwTCaYpWmHgVAwAREuJsmAFH
- SFHLClsYZ1wTFleQFkkRJOQk=
+ t=1786977978; v=1; x=1787582778;
+ b=YWm92I8z5U4aczwLH/uREkjYG6yN+9DnRk0ZXuZIfVclqhwEZ2SIFAz2PF/QhW50OnleEWNi
+ dXgwVaMhn9oJaZl2o60yNPAc8urOfG81T0e7+GjZTgAvgok81C/BoNCRj3P7S1soEoLj2EvniW2
+ H+3VeV7x8MWhQ9vY0jjZ0oU4=
 X-Envelope-To: bpf@vger.kernel.org
-Received: from [10.54.26.211] (222.72.143.228)
-	by smtp.migadu.com with ESMTPS id 7d67e3c03a18b92d;
-	Mon, 17 Aug 2026 14:30:13 +0000
+Received: from [IPV6:2a03:83e0:1151:15:1c5e:37e8:36:dd37] (2620:10d:c090:500::7:5604)
+	by smtp.migadu.com with ESMTPS id 733ad8e6f54186f1;
+	Mon, 17 Aug 2026 14:46:08 +0000
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <deeacbf2-8ae3-4f32-9787-c3625d686113@linux.dev>
-Date: Mon, 17 Aug 2026 22:29:58 +0800
+Message-ID: <14a7e7c2-36f7-4aa2-9b20-cc54700a9f1b@linux.dev>
+Date: Mon, 17 Aug 2026 07:46:03 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,151 +38,158 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf] bpf: free page_pool frags via the page_pool path in
- bpf_xdp_shrink_data
-To: Daniel Borkmann <daniel@iogearbox.net>, bot+bpf-ci@kernel.org,
- bpf@vger.kernel.org, netdev@vger.kernel.org
-Cc: syzbot+237bbeed8dfe0699b7f5@syzkaller.appspotmail.com,
- john.fastabend@gmail.com, sdf@fomichev.me, martin.lau@linux.dev,
- ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, ihor.solodrai@linux.dev, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- hawk@kernel.org, toke@redhat.com, lorenzo@kernel.org,
- linux-kernel@vger.kernel.org, martin.lau@kernel.org, clm@meta.com
-References: <20260816031245.268898-1-jiayuan.chen@linux.dev>
- <5aa97a9a0b8cd20feda29b304874967a8019d8b4b3dd4021dc5c0dac43c10d05@mail.kernel.org>
- <2c2c7bb6-cce5-4dc3-965c-bbf1c50905d9@linux.dev>
- <8a34148c-4704-4d8c-9c7f-cfadb523a745@iogearbox.net>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <8a34148c-4704-4d8c-9c7f-cfadb523a745@iogearbox.net>
+Subject: Re: [PATCH] bpf: reject stack-argument callback subprograms
+Content-Language: en-GB
+To: =?UTF-8?B?SsOpcsOpbXkgSmVhbg==?= <Jeremy.Jean@oss.cyber.gouv.fr>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260816204501.493914-2-Jeremy.Jean@oss.cyber.gouv.fr>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260816204501.493914-2-Jeremy.Jean@oss.cyber.gouv.fr>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
-On 8/17/26 10:15 PM, Daniel Borkmann wrote:
-> On 8/16/26 7:16 AM, Jiayuan Chen wrote:
->> On 8/16/26 11:57 AM, bot+bpf-ci@kernel.org wrote:
->>>> diff --git a/net/core/filter.c b/net/core/filter.c
->>>> index 16845987b244..3aab5556abe2 100644
->>>> --- a/net/core/filter.c
->>>> +++ b/net/core/filter.c
->>>> @@ -86,6 +86,7 @@
->>>>   #include <net/inet_dscp.h>
->>>>
->>>>   #include "dev.h"
->>>> +#include "netmem_priv.h"
->>>>
->>>>   /* Keep the struct bpf_fib_lookup small so that it fits into a 
->>>> cacheline */
->>>>   static_assert(sizeof(struct bpf_fib_lookup) == 64, "struct 
->>>> bpf_fib_lookup size check");
->>>> @@ -4288,6 +4289,14 @@ static bool bpf_xdp_shrink_data(struct 
->>>> xdp_buff *xdp, skb_frag_t *frag,
->>>>       if (mem_type == MEM_TYPE_XSK_BUFF_POOL) {
->>>>           netmem = 0;
->>>>           zc_frag = bpf_xdp_shrink_data_zc(xdp, shrink, tail, 
->>>> release);
->>>> +    } else if (netmem_is_pp(netmem)) {
->>>> +        /* The rxq mem model does not always describe how a released
->>>> +         * frag must be freed: the generic-XDP and veth paths run the
->>>> +         * program on a shared rxq while the frag has been cow'd into
->>>> +         * page_pool memory. Trust the page itself and return a
->>>> +         * page_pool frag to its pool regardless of rxq->mem.type.
->>>> +         */
->>>> +        mem_type = MEM_TYPE_PAGE_POOL;
->>>>       }
->>>>
->>>>       if (release) {
->>> The comment says the fix handles rxq->mem.type "regardless" of its 
->>> value,
->>> but the implementation still checks MEM_TYPE_XSK_BUFF_POOL first. 
->>> When the
->>> shared rxq has been left with mem_type == MEM_TYPE_XSK_BUFF_POOL by
->>> veth_xdp_rcv_one() (which writes frame->mem_type into the shared rxq on
->>> XDP_TX/XDP_REDIRECT and never restores it), a page_pool frag skips 
->>> the new
->>> netmem_is_pp() branch entirely and goes to bpf_xdp_shrink_data_zc() 
->>> instead.
->>>
->>> Should the comment say "regardless of rxq->mem.type, unless the rxq 
->>> claims
->>> XSK memory" or should the netmem_is_pp() test be unconditional so 
->>> the stale
->>> MEM_TYPE_XSK_BUFF_POOL case is also handled?
->>>
->>> The commit message states: "A single rxq->mem.type can be wrong in 
->>> either
->>> direction." The code, however, only corrects one direction: it upgrades
->>> mem_type to MEM_TYPE_PAGE_POOL when the frag is a page_pool page, 
->>> but it
->>> never downgrades when rxq->mem.type already says MEM_TYPE_PAGE_POOL 
->>> and the
->>> frag is not a page_pool page.
->>>
->>> That second direction is reachable on the very path the commit message
->>> cites. veth_xdp_rcv_one() (drivers/net/veth.c:638) points the buff 
->>> at the
->>> shared rxq and then, on XDP_TX/XDP_REDIRECT, writes the frame's type 
->>> into
->>> it:
->>>
->>>      xdp->rxq = &rq->xdp_rxq;
->>>      ...
->>>      case XDP_TX:
->>>              xdp->rxq->mem.type = frame->mem_type;
->>>      case XDP_REDIRECT:
->>>              xdp->rxq->mem.type = frame->mem_type;
->>>
->>> Once one redirected frame with mem_type == MEM_TYPE_PAGE_POOL is 
->>> TX'd or
->>> redirected, rq->xdp_rxq.mem.type stays MEM_TYPE_PAGE_POOL for every
->>> subsequent packet on that queue.
->>>
->>> A later frame whose frags are plain pages then reaches:
->>>
->>>      } else if (netmem_is_pp(netmem)) {   /* false, mem_type left as 
->>> PAGE_POOL */
->>>      ...
->>>      __xdp_return(netmem, mem_type, false, zc_frag);
->>>
->>> and __xdp_return()'s MEM_TYPE_PAGE_POOL arm (net/core/xdp.c:436-446) 
->>> skips
->>> the check and dereferences a garbage pool pointer:
->>>
->>>      /* No need to check netmem_is_pp() as mem->type knows this a 
->>> page_pool page */
->>>      page_pool_put_full_netmem(netmem_get_pp(netmem), netmem, 
->>> napi_direct);
->>>
->>> netmem_get_pp() reads page->pp, which for a non-page_pool page holds
->>> whatever the allocator left there.
->>>
->>> This specific crash is pre-existing rather than introduced by the 
->>> patch, but
->>> the patch is the change that claims to make the frag itself 
->>> authoritative,
->>> and it had the netmem in hand. Could the decision be unconditional:
->>>
->>>      } else {
->>>              mem_type = netmem_is_pp(netmem) ? MEM_TYPE_PAGE_POOL : 
->>> mem_type;
->>
->> This is a non-pool page being mistreated as a pool page, and I think 
->> it's a separate issue, xdp_return_buff and xdp_convert_buff_to_frame 
->> hit it too, not just this path.
-> Could you look into this as well, and make this a small series along 
-> with a BPF selftest
-> which exercises/tests this bug?
+
+On 8/16/26 1:45 PM, Jérémy Jean wrote:
+> Helper callbacks enter BPF subprograms through bpf_callback_t, whose
+> runtime ABI supplies five arguments. BTF validation nevertheless permits
+> static callback subprograms to declare more than five arguments when JIT
+> stack arguments are supported.
 >
-> Thanks,
-> Daniel
+> This lets verifier state for a callback use outgoing stack argument slots
+> prepared at the helper call site. The helper does not pass those slots. On
+> x86-64, callback loads of arguments seven and later therefore read the
+> helper native frame instead of the synthetic values checked by the
+> verifier. KASAN reports a slab OOB write.
+>
+> Reject callback subprograms with incoming stack arguments when processing
+> callback calls. Add a verifier regression test using bpf_loop() and a
+> nine-argument callback.
+>
+> Fixes: 0f6bd5e7a804 ("bpf: Support stack arguments for bpf functions")
+> Assisted-by: Codex:gpt-5
+> Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
+> ---
+>   kernel/bpf/verifier.c                         |  4 +++
+>   .../selftests/bpf/progs/verifier_stack_arg.c  | 33 +++++++++++++++++++
+>   2 files changed, 37 insertions(+)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index fdc5fbb1f78c..29aa4911c7f7 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -9285,6 +9285,10 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
+>   	err = btf_check_subprog_call(env, subprog, caller->regs);
+>   	if (err == -EFAULT)
+>   		return err;
+> +	if (bpf_in_stack_arg_cnt(&env->subprog_info[subprog])) {
+> +		verbose(env, "callback subprog cannot have stack args\n");
+> +		return -EINVAL;
+> +	}
+>   
+>   	/* set_callee_state is used for direct subprog calls, but we are
+>   	 * interested in validating only BPF helpers that can call subprogs as
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+> index 7e0ce5db28a0..5acc3b63ca84 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+> @@ -27,6 +27,13 @@ static int subprog_7args(int a, int b, int c, int d, int e, int f, int g)
+>   	return a + b + c + d + e + f + g;
+>   }
+>   
+> +__noinline __used
+> +static int callback_9args(__u32 index, void *ctx, long a3, long a4,
+> +			  long a5, long a6, long a7, long a8, long a9)
+> +{
+> +	return a9;
+> +}
+> +
+>   __noinline __used
+>   static long subprog_deref_arg6(long a, long b, long c, long d, long e, long *f)
+>   {
+> @@ -79,6 +86,32 @@ __naked void stack_arg_two_subprogs(void)
+>   	);
+>   }
+>   
+> +SEC("tc")
+> +__description("stack_arg: callback with incoming stack args")
+> +__failure
+> +__msg("callback subprog cannot have stack args")
+> +__naked void stack_arg_callback_many_args(void)
+> +{
+> +	asm volatile (
+> +		"r6 = 0;"
+> +		"*(u64 *)(r11 - 32) = 0;"
+> +		"*(u64 *)(r11 - 24) = 0;"
+> +		"*(u64 *)(r11 - 16) = 0;"
+> +		"*(u64 *)(r11 - 8) = 0;"
+> +		"r1 = 1;"
+> +		"r2 = %[callback_9args];"
+> +		"r3 = 0;"
+> +		"r4 = 0;"
+> +		"call %[bpf_loop];"
+> +		"r0 = 0;"
+> +		"exit;"
+> +		:
+> +		: __imm_ptr(callback_9args),
+> +		  __imm(bpf_loop)
+> +		: __clobber_all
+> +	);
+> +}
 
+I build with latest bpf-next and selftest with llvm23 and I got a selftest build
+failure:
 
-Thanks Daniel. I'm still thinking of a unified fix( for example 
-__xdp_return() since that's the one place 
-bpf_xdp_shrink_data/xdp_return_buff/xdp_convert_buff_to_frame go
-through), deciding by the page itself there handles both directions at once.
+progs/verifier_stack_arg.c:96:3: error: inline assembly requires more registers than available
+    96 |                 "r6 = 0;"
+       |                 ^
+   CLNG-BPF [test_progs] verifier_value_or_null.bpf.o
+1 error generated.
 
-I'll work on it.
+The reason probably due to '__imm_ptr(callback_9args)'. The following change can fix the build:
+
+index 5acc3b63ca84..f55a433b9202 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
++++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+@@ -108,7 +108,7 @@ __naked void stack_arg_callback_many_args(void)
+                 :
+                 : __imm_ptr(callback_9args),
+                   __imm(bpf_loop)
+-               : __clobber_all
++               : __clobber_common, "r6"
+         );
+  }
+
+I then tested without your verifier.c change, I get the following test failure:
+
+     All error logs:
+     tester_init:PASS:tester_log_buf 0 nsec
+     process_subtest:PASS:obj_open_mem 0 nsec
+     process_subtest:PASS:specs_alloc 0 nsec
+     run_subtest:PASS:obj_open_mem 0 nsec
+     libbpf: prog 'stack_arg_callback_many_args': BPF program load failed: -EINVAL
+     libbpf: prog 'stack_arg_callback_many_args': failed to load: -EINVAL
+     libbpf: failed to load object 'verifier_stack_arg'
+     run_subtest:PASS:unexpected_load_success 0 nsec
+     validate_msgs:FAIL:979 expect_msg
+     VERIFIER LOG:
+     =============
+     func#0 writes 4 stack arg slots, but calls only require 0
+     processed 21 insns (limit 1000000) max_states_per_insn 1 total_states 2 peak_states 2 mark_read 0
+     =============
+     EXPECTED   SUBSTR: 'callback subprog cannot have stack args'
+     Summary: 1/18 PASSED, 0 SKIPPED, 1/1 FAILED
+
+I think the error message "func#0 writes 4 stack arg slots, but calls only require 0"
+is good enough. So the extra error message "callback subprog cannot have stack args"
+is not necessary in my opinion.
+
+> +
+>   SEC("tc")
+>   __description("stack_arg: read from uninitialized stack arg slot")
+>   __failure
 
