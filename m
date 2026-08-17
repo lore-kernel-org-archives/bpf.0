@@ -1,114 +1,98 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739D7367F31
-	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 19:31:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F3E344E678;
+	Mon, 17 Aug 2026 20:14:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786995096; cv=none; b=UplnEJiH9+mphWzzZ1PQauy8u/JS4jPdvf1uil0qfmRAnwfvkZSq4folMG1MsTo2e+UddScIU6K+ZfFE4bsA7KtUL7bfov+uuGOvJqG2trn6v9pOnj/3F6fGnKlHnTtzbPM/gC5VodLpl2WxYez5JO5luw2c9tq2+5Az2Qse5ts=
+	t=1786997648; cv=none; b=ktjAchPv+59lZVvSffKJXVF5nt1W6l/U/tWwpK3VTOakTsxGxMv8725l9yg/gsTZwy8v7Eat3eE7urVABuNyRX7mtdPeqBe+6VCDBfdlLEdDVxtASwG6mRwqM/fhVewbxJWyJDty8FY1Qz4xr6K4YsSS9d7acXc1QKaj0r6SLRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786995096; c=relaxed/simple;
-	bh=d+4ilJJ8vBM+F4geL1ACLpwCGOWdPD3Kx2bi/rFVI/M=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=PER9x4BHSdy0uFvmoKDMM8vrNXEjexl29/JAhMwQ3x0fQo7/y6G3zIh0ggRDdsqYmw2wJfb/fzuJx5ahvf06//i4B/Qs7cGxwNac5u7voCsFDjMh1PG7SfGjyMlZFQ1QJlMZ1GKx3xFivyht+IUQCDVpNEtZWGjQoO7IAhJeYdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZczLUJC+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786997648; c=relaxed/simple;
+	bh=MKAJTs4N20chRMx11ir24sEGxfvLBVvzTI4RLgwfzK8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=E5a/VvVrFm75yeKslDqukiPC99lWBA3AWbTgCQp4ob/a+lH/laWsPlcakmcC+9iU2MlIX46RAowq6Trqc2vZqZWgw24z8/7P2ldAZr4atYepgRnd152AUoDSbFMnfcbPGiFfdRJlKNPdPzaEkiFqs8/Bb0DrV26gAqSN5Gvdg2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WCtGvW0U; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZczLUJC+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D78D91F000E9;
-	Mon, 17 Aug 2026 19:31:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WCtGvW0U"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3437C1F000E9;
+	Mon, 17 Aug 2026 20:14:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786995095;
-	bh=rd2mCGTAjHR1Jb4FF3aoV2trLHYFkvTtQa4AlbaWkSU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ZczLUJC+wX0X6V+EYHi11rDnOx/qX+UgfQZMdogjbN2UL8p3ndGAQFBdTsAHTaYZL
-	 UJOsYQlE/p3LVeUsK4UkTu3QW+LbuCowSusAqu2gTw+45YsVGkgORAwLm3O6o7hixk
-	 OpJWAhquzAxOFX+BQX1CZN2eQdJn/YMu3j2U56UyZUUwA+0R7ahM8rFSd8A/mWhnWH
-	 YeicLL6F6f6/hcTKvbC0m1rXKCEUiee4AVGRGLR7QHx17OWMedfFHw+6/wnmSv9pLw
-	 HRiqv9f1iaL52oYKjsyavZUvVlEJ++IAyBPpnrPEV/n2rTOpKsMO5MecotZRiylm16
-	 5mVFmp1otNcXg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 5/6] selftests/bpf: libarena: Add a benchmark for
- malloc()/calloc()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Emil Tsalapatis" <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260817191616.11071-6-emil@etsalapatis.com>
-References: <20260817191616.11071-1-emil@etsalapatis.com>
- <20260817191616.11071-6-emil@etsalapatis.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 17 Aug 2026 19:31:34 +0000
-Message-Id: <20260817193134.D78D91F000E9@smtp.kernel.org>
+	s=k20260515; t=1786997647;
+	bh=sm5ecoGDsVrlrsmLrRZTgm/GCM0BDVcP6qlE+u0dDto=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=WCtGvW0UxYn14utiR4TdgB2fCAiK6EmTM/m/B5V2HpCDGwIIBDobjSqww27mX8v+W
+	 uG7Gwz2XUhx6H/we9vg9GGgKFKeXDgppQuEnH9jMCSrjuiWEfKoks7izsp7xb74kUS
+	 SlklJMJBsXoxc3/WG3da5jkFDEDDjpaOtPGLp3VhatmPkpbhk64z1UjX+GTVIwny9x
+	 KubfHxoPSy8W/kee0dlZ5j2neBvxePX7c/uoivNSxisp+zmFFWZTwlk0ZQGyUTTNxT
+	 ggsNb1YqHai2IlhPW0S7QStBXw1WUFrH8+gaUc1+DPxtMvAX0Q262X431qDVCol0IQ
+	 kJOXxFFWtrBVw==
+Content-Type: multipart/mixed; boundary="===============7027275377149721589=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <c7945c532eb31abc4d3fbbd0720d7a1f47eff936621cf8d11ecdfd9aeef27f93@mail.kernel.org>
+In-Reply-To: <20260817-tc_tunnel_flaky-v6-1-c02ccde847f2@bootlin.com>
+References: <20260817-tc_tunnel_flaky-v6-1-c02ccde847f2@bootlin.com>
+Subject: Re: [PATCH bpf v6] selftests/bpf: allocate a larger timeout for connection
+From: bot+bpf-ci@kernel.org
+To: alexis.lothore@bootlin.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
+Cc: ebpf@linuxfoundation.org,bastien.curutchet@bootlin.com,thomas.petazzoni@bootlin.com,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ihor.solodrai@linux.dev,alexis.lothore@bootlin.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 17 Aug 2026 20:14:06 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Medium] The benchmark incorrectly reports the 'allocations per second' m=
-etric as 'invocations', and includes an unmatched closing parenthesis.
-- [Medium] Missing bounds check causes silent 32-bit integer truncation for=
- the `--nallocs` argument.
-- [Low] An unsigned validation value is formatted with a signed `%ld` speci=
-fier, causing it to print negative numbers on error.
---
+--===============7027275377149721589==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
---- Patch [5]: [PATCH 5/6] selftests/bpf: libarena: Add a benchmark for mal=
-loc()/calloc() ---
-commit cfe60c8125bcfe8399db973cf6b5a739e50079d3
-Author: Emil Tsalapatis <emil@etsalapatis.com>
-
-selftests/bpf: libarena: Add a benchmark for malloc()/calloc()
-   =20
-Add a benchmark for measuring the performance of the malloc()/calloc()
-arena allocator calls. This is useful as a basic allocator performance
-check that we can easily expand later. As with the regular arena
-allocator, focus on sub-page allocations that cannot be satisfied
-efficiently with the BPF arena page allocation code.
-
-> diff --git a/tools/testing/selftests/bpf/benchs/bench_libarena.c b/tools/=
-testing/selftests/bpf/benchs/bench_libarena.c
-> new file mode 100644
-> index 0000000000000..24e432244bf5d
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/benchs/bench_libarena.c
-> @@ -0,0 +1,210 @@
+> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+> index b82f572641b7..1fda1fa7281c 100644
+> --- a/tools/testing/selftests/bpf/network_helpers.c
+> +++ b/tools/testing/selftests/bpf/network_helpers.c
 
 [ ... ]
 
-> +static error_t parse_arg(int key, char *arg, struct argp_state *state)
+> @@ -291,6 +293,37 @@ int client_socket(int family, int type,
+>  	return -1;
+>  }
+>
+> +static int connect_with_timeout(int fd, const struct sockaddr_storage *addr,
+> +				socklen_t addrlen, int timeout_ms)
 > +{
-> +	unsigned long value;
+> +	int connect_timeout_ms = MAX(timeout_ms, CONNECT_MIN_TIMEOUT_MS);
 > +
-> +	switch (key) {
-> +	case ARG_LIBARENA_ALLOC_SIZE:
-> +		value =3D strtoull(arg, NULL, 10);
-> +		if (!value || value >=3D UINT_MAX) {
-> +			fprintf(stderr, "invalid alloc_size: %ld", value);
+> +	/*
+> +	 * Override timeout configuration with a larger value for the
+> +	 * connection
+> +	 */
+> +	if (settimeo(fd, connect_timeout_ms)) {
+> +		log_err("Failed to set connect timeout");
+> +		return -1;
+> +	}
+> +
+> +	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
+> +		log_err("Failed to connect");
+> +		return -1;
+> +	}
+> +
+> +	/*
+> +	 * If the timeout configured by the test is different from the
+> +	 * connect timeout, restore it
+> +	 */
 
-[Severity: Low]
-Does this print a negative number on overflow since value is an unsigned lo=
-ng
-and the format specifier is %ld instead of %lu?
+This isn't a bug, but do the two block comments here add anything over
+the code they sit above? The first sits above settimeo(fd,
+connect_timeout_ms) where connect_timeout_ms was computed with MAX(...,
+CONNECT_MIN_TIMEOUT_MS) on the line before. The second transliterates
+the condition on the line below (timeout_ms != connect_timeout_ms means
+"restore it"). Could they be trimmed to a single line about why a larger
+connect budget is needed?
 
-> +			argp_usage(state);
-> +		}
-> +		args.alloc_size =3D value;
-> +		break;
-> +	case ARG_LIBARENA_NALLOCS:
-> +		args.nallocs =3D strtoull(arg, NULL, 10);
-
-[Severity: Medium]
-Since args.nallocs is parsed as a 64-bit value without upper bounds validat=
-ion,
-and ctx.skel->bss->bench_nallocs is a 32-bit u32, does this result in silent
-32-bit integer truncation when copying it later in setup_common()?
-
-> +		break;
-> +	default:
-> +		return ARGP_ERR_UNKNOWN;
+> +	if (timeout_ms != connect_timeout_ms && settimeo(fd, timeout_ms)) {
+> +		log_err("Failed to set timeout for connected socket");
+> +		return -1;
 > +	}
 > +
 > +	return 0;
@@ -116,36 +100,40 @@ and ctx.skel->bss->bench_nallocs is a 32-bit u32, does this result in silent
 
 [ ... ]
 
-> +static void report_final(struct bench_res res[], int res_cnt)
-> +{
-> +	unsigned long duration_ns =3D 0;
-> +	long hits =3D 0;
-> +	int i;
-> +
-> +	for (i =3D 0; i < res_cnt; i++) {
-> +		duration_ns +=3D res[i].duration_ns;
-> +		hits +=3D res[i].hits;
-> +	}
-> +
-> +	if (!hits || !res_cnt) {
-> +		printf("Summary: no runs measured\n");
-> +		return;
-> +	}
-> +
-> +	printf("Summary: %.3lf ns/op, %.0lf invocations for %u allocations/invo=
-cation)\n",
-> +	       duration_ns / (double)hits, hits / (double)res_cnt,
-> +	       ctx.skel->bss->bench_nallocs);
+> @@ -376,20 +408,14 @@ int connect_fd_to_fd(int client_fd, int server_fd, int timeout_ms)
+>  	struct sockaddr_storage addr;
+>  	socklen_t len = sizeof(addr);
+>
+> -	if (settimeo(client_fd, timeout_ms))
+> -		return -1;
+> -
+>  	if (getsockname(server_fd, (struct sockaddr *)&addr, &len)) {
+>  		log_err("Failed to get server addr");
+>  		return -1;
+>  	}
+>
+> -	if (connect(client_fd, (const struct sockaddr *)&addr, len)) {
+> -		log_err("Failed to connect to server");
+> -		return -1;
+> -	}
+> -
+> -	return 0;
+> +	return connect_with_timeout(client_fd,
+> +				    &addr, len,
+> +				    timeout_ms);
+                            ^^^^
 
-[Severity: Medium]
-Since hits tracks the total number of allocations, does hits / res_cnt
-incorrectly report the allocations metric as invocations?
+This isn't a bug, but could this call fit on one line? With the leading
+tab it comes to about 71 columns as a single statement, well inside the
+80-column limit. Elsewhere the file only wraps arguments when the line
+doesn't fit.
 
-Also, there is an unmatched closing parenthesis at the end of the format
-string.
+>  }
 
-> +}
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260817191616.1107=
-1-1-emil@etsalapatis.com?part=3D5
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32062499118
+--===============7027275377149721589==--
