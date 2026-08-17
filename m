@@ -1,115 +1,134 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10847275AFD
-	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 19:21:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E31C3624A8
+	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 19:23:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786994507; cv=none; b=EZR/JkkgT0Y84VVq8oLmTlqloXzVAVDLti6DI0vf4kAJQcJ+Alh8qHRrpUcbQQvtfjmLt4z3+dXaIA3Iz41eXl4nTaCKgpaXd2cqpI/pd/crImpqwXF5rI9oXMOOAwIYfN5ZoZp77/CTL/ivgtbkO0eHnVYaDUGL/1vB8Rp33CU=
+	t=1786994633; cv=none; b=jJ1b7uoq8pBILNl8qvjcoakciLuIMhPwewTHrdEtTj+PNW+AQokorQ9398a2nxZpURC9WNkoFsS5dy08QxnVxqc9bUMZC56nNSHOSZ/YmMGK8WbkIH+awxjHGmkDUiIPoNe4TaXuVUQm6XYiSiFmfClfqHbdreciR3YU5PVXJKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786994507; c=relaxed/simple;
-	bh=lhl6vB23mjzxM5gLjSdCB9SEVy/US7kQoF4lniPdGjQ=;
+	s=arc-20240116; t=1786994633; c=relaxed/simple;
+	bh=fOlbUl3JTqGyabrc0v/wr4zE1qz7zCb5CEkPqq7CdSg=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=LYQ7KiDsLBeYUfCxi8nKSKpX1IeXB+qm6be5sdK4dFUXVPcpRAiS7TDDx+XOvfA2qY4zLo5hKiIDdvZVaLW6GHiOd7CY2Ltj2lE8rTQJArGdVdzdioDM9PWxJJakudH7auP/FnvRJj0HynXMfOzva47fUoa+6ZJwAyiBF4wExAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kn+OKGQj; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=ImVAymZAXKpWqYWToBAJLx8utJWUi75jdJZAzqyrlke1Lvh0l0pUW6n2Bz/GfXH7LISG2rRmAX8Z8DWvmQe519nTaQ10GJBGAnHa6+bF+EoRQND1PSXlnmYYTWw7AkzRq0WuGsdf5KnE0rpTn9q+3Xp72rAR6MKxy3EYfFUGAGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F/W0R8/S; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kn+OKGQj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 774441F000E9;
-	Mon, 17 Aug 2026 19:21:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F/W0R8/S"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E5C81F000E9;
+	Mon, 17 Aug 2026 19:23:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786994505;
-	bh=u5MT5BF4L9vCaMj4BbRKxKAv3UQUUhmMsVwHT7n15SM=;
+	s=k20260515; t=1786994631;
+	bh=cdVz++lwPerCNHG9oWLVZflxKchzeSoadzujpLPZ53k=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kn+OKGQjB5opWZva83uOylqHV7SGury+ffYigZODu1MmQ57ssMcu/Urc/9I/0J7Z6
-	 9ksKVWkNEUF/7ExUAGUogh4KrVske7kHE/KAeUA0HRqFJgAT2Z3BGWij5e+ukvCKv8
-	 GiqcrAfmWcLL2ENt9NgN7ECHwIIE/Bn9035/mAJZuvwHuWHV8QiMdZQQZdP//+Ftq8
-	 3iImI39zEQMFzgpjdO5zDRchx5fwFkM1U0nr/dMGZrCCSUt7MvtRBAqJSgYX8fB98g
-	 uEDGRxznnjyCYtcv7XVWkiDhMYVkkMcnjBVOBv238cUC5asO0g7DhMvAzzvzObOyt9
-	 spZnlQdQ5KhRQ==
+	b=F/W0R8/S+QU0D7Lk9ryMn88IE9O2yjq5+mjSjlc5Jw4sZZ7EnwQJQCqiFQkKrZqNz
+	 8ysSGAGMqYgTNZBH6zVtwTX9mib33OZIDLNP+kOjAtaqAQhoWXFKsmM0Abf6Qgl0Gs
+	 itJIqkbju3/JRQLhixso70pZH3yjG6Nyw8pu3Gztej7UAybwWPx3dukEMFWPTGKh4i
+	 swvXI7VJa2L5LZVTl5AXmgwQXuorUL3Mhrk26yaYyDfHHWZMjWOtvTYJwXxhFnmgsq
+	 NZnuG9NRUesg2XJF73axJZORrTJMvSz6WNgYzRTcHc+LHwv57YwMtM8w2wChyuEmMd
+	 +t0+pStooX4pg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 1/6] selftests/bpf: libarena: Normalize SPDX headers
- across files
+Subject: Re: [PATCH 4/6] selftests/bpf: libarena: Add calloc() call
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Emil Tsalapatis" <emil@etsalapatis.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260817191616.11071-2-emil@etsalapatis.com>
+In-Reply-To: <20260817191616.11071-5-emil@etsalapatis.com>
 References: <20260817191616.11071-1-emil@etsalapatis.com>
- <20260817191616.11071-2-emil@etsalapatis.com>
+ <20260817191616.11071-5-emil@etsalapatis.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 17 Aug 2026 19:21:44 +0000
-Message-Id: <20260817192145.774441F000E9@smtp.kernel.org>
+Date: Mon, 17 Aug 2026 19:23:51 +0000
+Message-Id: <20260817192351.8E5C81F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The commit message claims to normalize libarena to a uniform 'du=
-al GPLv2/BSD-2-Clause license', but the patch actually applies a mix of LGP=
-L-2.1 and GPL-2.0 licenses.
-- [Medium] Relicensing code authored by others requires their explicit Acke=
-d-by or Signed-off-by, not just a CC.
-- [Low] SPDX License Identifiers in C header files are improperly formatted=
- using `//` comments instead of `/* ... */`.
+- [Medium] arena_calloc() can silently return partially uninitialized memor=
+y for large allocations due to early termination of arena_memset().
 --
 
---- Patch [1]: [PATCH 1/6] selftests/bpf: libarena: Normalize SPDX headers =
-across files ---
-commit 31e67a726c2a90149ef6d815e971306cd776d717
+--- Patch [4]: [PATCH 4/6] selftests/bpf: libarena: Add calloc() call ---
+commit 6f83c4438650c93f36d2b3ed9f3991f97c46a580
 Author: Emil Tsalapatis <emil@etsalapatis.com>
 
-selftests/bpf: libarena: Normalize SPDX headers across files
+selftests/bpf: libarena: Add calloc() call
 
-This commit normalizes SPDX headers in libarena by adding missing headers=20
-and updating existing ones. It states the intention to apply a uniform=20
-dual GPLv2/BSD-2-Clause license across the components.
+This commit adds a calloc() operation to the arena memory allocator. It
+provides zero-initialization for the allocated memory using a naive
+memset implementation.
 
-> There are currently three files missing headers and two of them
-> (both originally authored by Kartikeya, CC'ed below) that are
-> GPLv2 only. This patch ensures all files in libarena have a
-> dual GPLv2/BSD-2-Clause license in the example of other non-
-> kernel BPF codebases, e.g., libbpf.
+> diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/common=
+.h b/tools/testing/selftests/bpf/libarena/include/libarena/common.h
+> --- a/tools/testing/selftests/bpf/libarena/include/libarena/common.h
+> +++ b/tools/testing/selftests/bpf/libarena/include/libarena/common.h
+> @@ -61,6 +62,23 @@ void arena_free(void __arena *ptr);
+>   */
+>  #define arena_subprog_init() do { asm volatile ("" :: "r"(&arena)); } wh=
+ile (0)
+> =20
+> +/*
+> + * BPF does not currently support the memset intrinsics. for large
+> + * sequential copies, or assignments of large data structures,
+> + * the frontend will generate an intrinsic that causes the BPF
+> + * backend to exit due to a missing implementation. Provide
+> + * implementations for the intrinsic.
+> + */
+> +static inline int arena_memset(s8 __arena *dst, s8 val, size_t size)
+> +{
+> +	size_t i;
+> +
+> +	for (i =3D zero; i < size && can_loop; i++)
+> +		dst[i] =3D val;
+> +
+> +	return 0;
+> +}
 
 [Severity: Medium]
-Is a Cc sufficient for changing the license of existing code? Relicensing=20
-code originally authored by others typically requires their explicit=20
-Acked-by or Signed-off-by tags to document their consent, rather than=20
-just a Cc.
+If the loop terminates early because the instruction limit is reached when
+can_loop evaluates to false, will this function return 0 without indicating
+to the caller that the memory was only partially written?
 
-> diff --git a/tools/testing/selftests/bpf/libarena/include/bpf_may_goto.h =
-b/tools/testing/selftests/bpf/libarena/include/bpf_may_goto.h
-> --- a/tools/testing/selftests/bpf/libarena/include/bpf_may_goto.h
-> +++ b/tools/testing/selftests/bpf/libarena/include/bpf_may_goto.h
-> @@ -1,3 +1,4 @@
-> +// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
->  #pragma once
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/libarena/src/common.bpf.c b/tool=
+s/testing/selftests/bpf/libarena/src/common.bpf.c
+> --- a/tools/testing/selftests/bpf/libarena/src/common.bpf.c
+> +++ b/tools/testing/selftests/bpf/libarena/src/common.bpf.c
+
+[ ... ]
+
+> +__weak void __arena *arena_calloc(size_t ncount, size_t size)
+> +{
+> +	void __arena *mem;
+> +	size_t total;
+> +
+> +	/*
+> +	 * Ideally we'd be using __builtin_mul_overflow here,
+> +	 * but the BPF compiler backend doesn't implement __multi3.
+> +	 * There are ways to optimize the division away from the
+> +	 * overflow check, but any costs are dwarfed by the
+> +	 * buddy_alloc() call. Keep it simple for now.
+> +	 */
+> +	if (unlikely(ncount && size >=3D ULLONG_MAX / ncount))
+> +		return NULL;
+> +
+> +	total =3D ncount * size;
+> +
+> +	mem =3D buddy_alloc(&buddy, total);
+> +	if (likely(mem))
+> +		arena_memset(mem, 0, total);
+> +
+> +	return mem;
+> +}
 
 [Severity: Medium]
-The commit message states the patch ensures all files have a dual=20
-GPLv2/BSD-2-Clause license, but this adds an LGPL-2.1 tag. Was this=20
-intended to be GPL-2.0 to match the other updated headers, or should the=20
-commit message be updated to reflect the mix of licenses?
-
-[Severity: Low]
-Also, according to the kernel's documentation, C header files should use=20
-the C-style block comment format /* SPDX-License-Identifier: ... */=20
-rather than C++ style // comments.
-
-> diff --git a/tools/testing/selftests/bpf/libarena/include/libarena/bitmap=
-.h b/tools/testing/selftests/bpf/libarena/include/libarena/bitmap.h
-> --- a/tools/testing/selftests/bpf/libarena/include/libarena/bitmap.h
-> +++ b/tools/testing/selftests/bpf/libarena/include/libarena/bitmap.h
-> @@ -1,3 +1,4 @@
-> +// SPDX-License-Identifier: LGPL-2.1 OR BSD-2-Clause
->  #pragma once
-
-[Severity: Low]
-This header file also uses the // comment style instead of the /* ... */=20
-block comment format expected for C headers.
+Because arena_memset() always returns 0 even on early termination, could
+arena_calloc() silently return a partially uninitialized buffer for large
+allocations where the loop budget is exhausted?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260817191616.1107=
-1-1-emil@etsalapatis.com?part=3D1
+1-1-emil@etsalapatis.com?part=3D4
