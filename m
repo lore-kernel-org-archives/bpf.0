@@ -1,45 +1,45 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B583E764F
-	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 14:10:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58FF1418A39
+	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 14:10:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786975821; cv=none; b=iEbWwwbyHekejIq0YJ8mV5R6bse18H8ELagydZgvg3VAztVVs32jQtcxMuAmPiLeiF+hWiqtG6jCtnC4L468uzNVfw3QH7SxItBeiCqihCLid0w4cEHcysJ7K5HE6m02uKCRSzb1ljKT1rc1xzBGgB+y2pv1xEWffn862mjnuzQ=
+	t=1786975821; cv=none; b=FsTmpenoXuosKjZU2YO60IHVfZY5Vl/46i0VYouyAMhhHG7O734lMYG+DrqkTphL5F+FgnZAGoHVd5kigZm8pmbUiobbfAxHlyEQ/P5uWbst28Xr/mS6MW91mGXYxYjJp1sucL18oWNkdHd0TamASQvsp4VXN2ySTA2UGPBjsg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1786975821; c=relaxed/simple;
-	bh=BljXeCjyLRFmAqLJkB0zosxOheJ1V4MVD2n/sa40lnI=;
+	bh=3dSXIOk6uIKu9ZAyeC4o0SC+xkN8X4IZ801BUnOO914=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qUXVPpXWYiUZVRlIVHB6kzi1J2lTzedYhahoAWvVBJeNaPvJsgb9dI7Z9q/vFLYx+UqpSgYTR7YGIGUp3Qqua0+aYzRSk/mQXYPREKs8Y02bUqBaHyfcgjezPdVHElhWtdIViR3xU59axyvjQRcdr1GBWLE213A4uSx2GoGKVwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=L3LWsMP+; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=m9h6QVAAXoa4PaFEsRk959lzSpE4uVoF8edOc9gWh7W40KpeuJNsYGeA+dhMZnXJe0EzvyTBAtnlIUKLdKnHlQAixVNO82hRYzuqr1N9s9l3TjcknOAxj5JnD4eGEDpDwAJGTMJACI4Fp+wqQyUsXhGbnbFPkYbKKCQg8WMOnmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=QT1FgcOS; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="L3LWsMP+"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="QT1FgcOS"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=s4nUYMIslMQxdNjBCwqr6ryeKIkXVxM/7qraB2GYP8g=; b=L3LWsMP+zMN8hl9oqnTTajZmhn
-	AU341MRBaBMexOBdcHetHA1EmqI2LT3ycq8XIt2w/5PA9oHCVPcP268sI0QDMnzEYqQf9AfbxgWyx
-	wWj6r9DfzMygBSIXbadtoImbwrZ9qjFL9Y1TkKYn7Vm6uX+WASFrm3UamJ4YeeweaJ7xDrW/GvvJe
-	JlX59rhKU9D2sk6r9eWw8oNJ5DEwh6jeD7L3n1kKENNEE6N6M7nbwvviP6RQ7s+hQ9oKalECcPTS6
-	TvZTLdla20yHu2BT/qX3m0SFMlQRMpHOfB+M9LcvOgaas/3iov/wROyQtsO0eOPe132X6SbPbGJxw
-	ioHJr6Yw==;
+	bh=EakLggF10eTw8zn+qxxABs/Xl9jQ3q8SHP2uVcWTG7Y=; b=QT1FgcOSI8WoSw+FInRs+XjxNh
+	NCIa6ARScyjtcDeZDnTKdXhunKRZi1e69vgVztGlJ+9Ql9madF7Epbh2V7PST5UsWKKn0clJXQrv3
+	lyp8mhWszRdSCGQc+sU0uLeAqN19Klig4c5m/NkgSg/CMzn0Y5R8VPzzG+BBT/Tqg9w3ngHbcnSE4
+	EpA9PFbebTtoSLmqJAF+tO1PQ9pbXoDPaee9yKN5f/btXFr5BkVu6E4kJLs9jkoJFb9ffXe+ls0WL
+	zixkXZ8Xb52I/hUuW/6qG+nzyhzryK7s+yzjCE+TyXGE96dlfxd4j0qp8q9ex5nisZP2eg+h1NF6s
+	hZ4E4xbQ==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wvy2a-000MLB-3B;
+	id 1wvy2b-000MLJ-1a;
 	Mon, 17 Aug 2026 16:10:17 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: eddyz87@gmail.com
 Cc: memxor@gmail.com,
 	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v3 2/3] selftests/bpf: Add tests for fault prone loads out of RCU pointers
-Date: Mon, 17 Aug 2026 16:10:14 +0200
-Message-ID: <20260817141015.878071-2-daniel@iogearbox.net>
+Subject: [PATCH bpf-next v3 3/3] selftests/bpf: Add tests for a store on a fault prone qdisc pointer
+Date: Mon, 17 Aug 2026 16:10:15 +0200
+Message-ID: <20260817141015.878071-3-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260817141015.878071-1-daniel@iogearbox.net>
 References: <20260817141015.878071-1-daniel@iogearbox.net>
@@ -52,124 +52,133 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28095/Mon Aug 17 08:23:59 2026)
 
-Cover the two loads which used to lose the BPF_PROBE_MEM rewrite, both reached
-from an RCU read-side critical section. The purpose of this patch is to assert
-load success in order to make sure to not trigger verifier_bug_if() on
-bpf_may_fault_on_deref() due to forgotten rewrite of a probed pointer.
+Cover the store which used to be left as a plain BPF_STX without an
+exception table entry:
 
-  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t rcu_read_lock
+  1: R1=trusted_ptr_Qdisc()
+  ; struct Qdisc *next = sch->next_sched;
+  1: (79) r1 = *(u64 *)(r1 +216)        ; R1=ptr_Qdisc()
+  ; next->limit = 1000;
+  3: (63) *(u32 *)(r1 +20) = r2         ; R1=ptr_Qdisc() R2=1000
+
+Assert that it is rejected now.
+
+  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t ns_bpf_qdisc
   [...]
-  #332/1   rcu_read_lock/success:OK
-  #332/2   rcu_read_lock/rcuptr_acquire:OK
-  #332/3   rcu_read_lock/negative_tests_inproper_region:OK
-  #332/4   rcu_read_lock/negative_tests_rcuptr_misuse:OK
-  #332     rcu_read_lock:OK
-  Summary: 1/4 PASSED, 0 SKIPPED, 0/0 FAILED
+  #257/1   ns_bpf_qdisc/fifo:OK
+  #257/2   ns_bpf_qdisc/fq:OK
+  #257/3   ns_bpf_qdisc/attach to mq:OK
+  #257/4   ns_bpf_qdisc/attach to non root:OK
+  #257/5   ns_bpf_qdisc/incompl_ops:OK
+  #257/6   ns_bpf_qdisc/invalid_dynptr:OK
+  #257/7   ns_bpf_qdisc/invalid_dynptr_cross_frame:OK
+  #257/8   ns_bpf_qdisc/invalid_dynptr_slice:OK
+  #257/9   ns_bpf_qdisc/untrusted_write:OK
+  #257/10  ns_bpf_qdisc/dynptr_use_after_invalidate_clone:OK
+  #257     ns_bpf_qdisc:OK
+  Summary: 1/10 PASSED, 0 SKIPPED, 0/0 FAILED
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- .../selftests/bpf/prog_tests/rcu_read_lock.c  |  2 +
- .../selftests/bpf/progs/rcu_read_lock.c       | 76 +++++++++++++++++++
- 2 files changed, 78 insertions(+)
+ v2->v3:
+  - new patch
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/rcu_read_lock.c b/tools/testing/selftests/bpf/prog_tests/rcu_read_lock.c
-index 246eb259c08a..6a07b2b418d1 100644
---- a/tools/testing/selftests/bpf/prog_tests/rcu_read_lock.c
-+++ b/tools/testing/selftests/bpf/prog_tests/rcu_read_lock.c
-@@ -34,6 +34,8 @@ static void test_success(void)
- 	bpf_program__set_autoload(skel->progs.rcu_read_lock_global_subprog, true);
- 	bpf_program__set_autoload(skel->progs.rcu_read_lock_subprog_lock, true);
- 	bpf_program__set_autoload(skel->progs.rcu_read_lock_subprog_unlock, true);
-+	bpf_program__set_autoload(skel->progs.non_own_ref_untrusted_ld, true);
-+	bpf_program__set_autoload(skel->progs.rcu_untrusted_union_ld, true);
- 	err = rcu_read_lock__load(skel);
- 	if (!ASSERT_OK(err, "skel_load"))
- 		goto out;
-diff --git a/tools/testing/selftests/bpf/progs/rcu_read_lock.c b/tools/testing/selftests/bpf/progs/rcu_read_lock.c
-index b4e073168fb1..31d4081c3a9f 100644
---- a/tools/testing/selftests/bpf/progs/rcu_read_lock.c
-+++ b/tools/testing/selftests/bpf/progs/rcu_read_lock.c
-@@ -549,3 +549,79 @@ int rcu_read_lock_sleepable_global_subprog_indirect(void *ctx)
- 	bpf_rcu_read_unlock();
- 	return 0;
+ .../selftests/bpf/prog_tests/bpf_qdisc.c      |  2 +
+ .../progs/bpf_qdisc_fail__untrusted_write.c   | 65 +++++++++++++++++++
+ 2 files changed, 67 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_qdisc_fail__untrusted_write.c
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c b/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
+index 77f1c0550c9b..6dbd1487343c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
+@@ -11,6 +11,7 @@
+ #include "bpf_qdisc_fail__invalid_dynptr.skel.h"
+ #include "bpf_qdisc_fail__invalid_dynptr_slice.skel.h"
+ #include "bpf_qdisc_fail__invalid_dynptr_cross_frame.skel.h"
++#include "bpf_qdisc_fail__untrusted_write.skel.h"
+ #include "bpf_qdisc_dynptr_use_after_invalidate_clone.skel.h"
+ 
+ #define LO_IFINDEX 1
+@@ -230,6 +231,7 @@ void test_ns_bpf_qdisc(void)
+ 	RUN_TESTS(bpf_qdisc_fail__invalid_dynptr);
+ 	RUN_TESTS(bpf_qdisc_fail__invalid_dynptr_cross_frame);
+ 	RUN_TESTS(bpf_qdisc_fail__invalid_dynptr_slice);
++	RUN_TESTS(bpf_qdisc_fail__untrusted_write);
+ 	RUN_TESTS(bpf_qdisc_dynptr_use_after_invalidate_clone);
  }
+ 
+diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__untrusted_write.c b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__untrusted_write.c
+new file mode 100644
+index 000000000000..688c2a049ae3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__untrusted_write.c
+@@ -0,0 +1,65 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+struct rcu_node_data {
-+	long key;
-+	struct bpf_rb_node node;
-+};
++#include <vmlinux.h>
++#include "bpf_experimental.h"
++#include "bpf_qdisc_common.h"
++#include "bpf_misc.h"
 +
-+struct rcu_node_stash {
-+	struct rcu_node_data __kptr *node;
-+};
++char _license[] SEC("license") = "GPL";
 +
-+/*
-+ * Necessary so that LLVM emits BTF for rcu_node_data rather than just a
-+ * fwd reference to it, same as in progs/local_kptr_stash.c.
-+ */
-+struct rcu_node_data *just_here_because_btf_bug;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, struct rcu_node_stash);
-+} node_stash SEC(".maps");
-+
-+long non_own_ref_key;
-+
-+SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
-+int non_own_ref_untrusted_ld(void *ctx)
++SEC("struct_ops")
++__failure __msg("only read is supported")
++int BPF_PROG(untrusted_write, struct sk_buff *skb, struct Qdisc *sch,
++	     struct bpf_sk_buff_ptr *to_free)
 +{
-+	struct rcu_node_stash *stash;
-+	struct rcu_node_data *node;
-+	int key = 0;
++	struct Qdisc *next = sch->next_sched;
 +
-+	stash = bpf_map_lookup_elem(&node_stash, &key);
-+	if (!stash)
-+		return 0;
-+	bpf_rcu_read_lock();
-+	node = stash->node;
-+	if (!node) {
-+		bpf_rcu_read_unlock();
-+		return 0;
-+	}
-+	bpf_rcu_read_unlock();
 +	/*
-+	 * The unlock leaves node as PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED
-+	 * | NON_OWN_REF, and the load below has to get the BPF_PROBE_MEM
-+	 * rewrite for it, otherwise a bad address panics the kernel.
++	 * sch is trusted, but the walk of next_sched yields a plain
++	 * PTR_TO_BTF_ID which may fault on a dereference. A store through
++	 * it does not get an exception table entry, there is no probed
++	 * store to rewrite it into, hence it has to be rejected before
++	 * bpf_qdisc_btf_struct_access() gets to allow the write to limit.
 +	 */
-+	non_own_ref_key = node->key;
++	next->limit = 1000;
++
++	bpf_qdisc_skb_drop(skb, to_free);
++	return NET_XMIT_DROP;
++}
++
++SEC("struct_ops")
++__auxiliary
++struct sk_buff *BPF_PROG(bpf_qdisc_test_dequeue, struct Qdisc *sch)
++{
++	return NULL;
++}
++
++SEC("struct_ops")
++__auxiliary
++int BPF_PROG(bpf_qdisc_test_init, struct Qdisc *sch, struct nlattr *opt,
++	     struct netlink_ext_ack *extack)
++{
 +	return 0;
 +}
 +
-+long rcu_untrusted_wq_flags;
-+
-+SEC("?tp_btf/tcp_probe")
-+int BPF_PROG(rcu_untrusted_union_ld, struct sock *sk)
++SEC("struct_ops")
++__auxiliary
++void BPF_PROG(bpf_qdisc_test_reset, struct Qdisc *sch)
 +{
-+	struct socket_wq *wq;
-+
-+	/*
-+	 * sk_wq sits in a two member union, so btf_struct_walk() marks the
-+	 * pointer PTR_UNTRUSTED, and the __rcu tag on the member adds MEM_RCU
-+	 * on top of it. struct sock is not on the __safe_rcu_or_null allow
-+	 * list, hence the two stay combined and the load below has to get the
-+	 * BPF_PROBE_MEM rewrite for PTR_TO_BTF_ID | PTR_UNTRUSTED | MEM_RCU,
-+	 * otherwise a bad address panics the kernel.
-+	 *
-+	 * The __rcu tag only reaches BTF on a clang built kernel, that is, one
-+	 * with CONFIG_PAHOLE_HAS_BTF_TAG. On a gcc built kernel the walk yields
-+	 * a plain untrusted pointer, which is rewritten either way.
-+	 */
-+	wq = sk->sk_wq;
-+	if (!wq)
-+		return 0;
-+	rcu_untrusted_wq_flags = wq->flags;
-+	return 0;
 +}
++
++SEC("struct_ops")
++__auxiliary
++void BPF_PROG(bpf_qdisc_test_destroy, struct Qdisc *sch)
++{
++}
++
++SEC(".struct_ops")
++struct Qdisc_ops test = {
++	.enqueue   = (void *)untrusted_write,
++	.dequeue   = (void *)bpf_qdisc_test_dequeue,
++	.init      = (void *)bpf_qdisc_test_init,
++	.reset     = (void *)bpf_qdisc_test_reset,
++	.destroy   = (void *)bpf_qdisc_test_destroy,
++	.id        = "bpf_qdisc_test",
++};
 -- 
 2.43.0
 
