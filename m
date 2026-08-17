@@ -1,145 +1,77 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4640C330B32
-	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 05:17:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15491332EA0
+	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 05:17:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786943851; cv=none; b=uxNAVDEwEE97aWXH1othrBx/LMfMjkAPMCYO1TIPWxTVJ9FPIaA6Wvdy0RSoUpaNSlicfwqxeOjH9utQ60b303bnmazmZoIkWGFlNFu60RBk8eC8xNDZ2y8PSH7DzSvoOx8KeCYND/HXmd7CaFu+XKdESR68543NxzeC90zoMJQ=
+	t=1786943853; cv=none; b=GjMKeZHwrekVZ8qWpliIpSjKsyDQqh4uoSzTQg+8GmqbumYon+NdtVVmDv6ZUD1YbRQ3KmRpPUBAt0O9rzDQ3qr88zY8CU/mTa3m4Qoo9e+JEO9co7VcjGoK4EwhUrSjISwrJJp9Gi/SJF6a4w3JiuobG4HbQOihO7715IqAKzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786943851; c=relaxed/simple;
-	bh=5llm6NnXL1xsV4vhwvYxrGjFsmJIe5n1IjGvGuiYFEs=;
+	s=arc-20240116; t=1786943853; c=relaxed/simple;
+	bh=cO0BdsdmrotDMqqAEiVek2K7EB70IvOUOCbBjYSqOnA=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=X+YDnxB9A2EWyzCaWbb19+vG7zxEd7zRq/PsLqtRxgGylzFnFWy7/UovBxblHOHYpDNrGggL9z/asHOcEEQ16qecvvcvo08S+t9Fwamh+6B9F/AroegHD3CXPVSgb7vnuhC16ru10TG8hGNOhoJQuwOKMuGy9XXMcyDkmD3kHTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uxwb0FRB; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=SomkC3q3E8MP0JjxDsa1JXk+s8ZDOUcQSDXTQmyeAH/q9vBS62upQfzaqc2c34XDG2AKEmgMJhtnDY77E1g2Zw7Zzuozy8L8MA/bTsyXYpPl3txRdUAK+UvEacVka25Ws95WsnYWDt83xinBoxoaB4wSWkUaP7ZMeA6j54KSdiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MkpR2Xmx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uxwb0FRB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 515CA1F00A3A;
-	Mon, 17 Aug 2026 05:17:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MkpR2Xmx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60FD71F000E9;
+	Mon, 17 Aug 2026 05:17:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786943849;
-	bh=I8sgrZ3w37xs6olfFm+nuDv7YVrjsk0Xb6RyWib+IYs=;
+	s=k20260515; t=1786943852;
+	bh=ovjGTYewagivl1svFPDp8nJdOB+Nvr83yK3R5vVbFxI=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Uxwb0FRB9f0bABjPCOLZR0NMam15b5xPCdkjw4S1VhTg4mQZDOVksxHAXyTQLKdkX
-	 vxUARlmjJggKF2/QysLAsAs8pr8CB92tXsdHS03GOzrBWKnGB5X5R1pe8HIhY2hh9m
-	 UZNzCQWe4XUzwRIOTf9nj10w3WtxDh3jajsCx0m59zJjiiHIOdpvh5YJ5+j/oi24cK
-	 3MGacTw55FKkSUSSujdj5ho3FoUoA4OuuwupzTopTpgTHlUo3iiNzBM51K6mGFqYhh
-	 yLM50wYSc43SmY7eQ+qTlWFE4ndq+pY9hoiSi78tJFIkU2NTK+CIrSFllFRD4PLAM+
-	 EvzHjTl5R2pBg==
-Content-Type: multipart/mixed; boundary="===============8630942586406859978=="
+	b=MkpR2Xmxuybv2SmvytTYeuRyM2xZEBQzqEaAy9HHW4r+KqSVoZJb5dQeZp5IMn1VR
+	 pGyZaDsAkjmbA1iYTXf+t70BfRhSHcYeEJtAbxz1HpoQEJYRl4yPwFEgqE6GMVhBzH
+	 hbRPEUAcP4xZeqxBy3rQc82sl2IOc9qUMx558QEBeHNmCHRjG/1Kd1dkBvXYlsCy3/
+	 DMsdMFuvLiNaD/8wSAy4j1gETgxnAe/nQCbo/mRmTciOi3hCzzoz28Rs97NB/La4l4
+	 TKX3/lTy7oA/jfTG6iGuOHisTPqEdGNHU7PraPT56UCVkOHbVYe7Upy231A5bl4gc1
+	 qKXBKcsUGlVCg==
+Content-Type: multipart/mixed; boundary="===============3914086702044715110=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <412885dce17d0fa3a3a9d5eff1d9bd06a100f7f17ed66700bda5e9851881262b@mail.kernel.org>
-In-Reply-To: <20260817042202.2288574-1-yonghong.song@linux.dev>
-References: <20260817042202.2288574-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v6 04/10] bpf: Handle R2 as a return register in precision backtracking
+Message-Id: <7549f24ead00d59b53a11482de59a7858aa1fe8118b41f7449887ee9b544b0c8@mail.kernel.org>
+In-Reply-To: <20260817042212.2291498-1-yonghong.song@linux.dev>
+References: <20260817042212.2291498-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v6 06/10] bpf: Add verifier support for 16-byte returns in R0:R2
 From: bot+bpf-ci@kernel.org
 To: yonghong.song@linux.dev,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 17 Aug 2026 05:17:29 +0000 (UTC)
+Date: Mon, 17 Aug 2026 05:17:31 +0000 (UTC)
 
---===============8630942586406859978==
+--===============3914086702044715110==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Handle R2 as a return register in precision backtracking
->
-> Precision backtracking treats only R0 as a return register at a
-> call/return boundary, so once the verifier starts modeling R2 that way,
-> marking the second half of such a return precise would trip the
-> "unexpected regs" checks in backtrack_insn() and reject a valid
-> program.
->
-> Marking the upper half precise, for example by branching on it after a
-> call to a static subprogram, walks backtracking into the callee and
-> reaches its BPF_EXIT with R2 still set in the mask. Handle R2 like R0
-> in boundaries where a call defines the return registers.
->
-> R2 differs from R0 in that it is an argument register as well, so it is
-> part of the BPF_REGMASK_ARGS check and has to be cleared before that check
-> rather than next to R0. Clear it unconditionally, rather than only where
-> the callee or the kfunc really does return a pair. That gives up the
-> "unexpected regs" assertion for R2, and in exchange keeps backtracking
-> free of any BTF lookup. Nothing is lost: a callee that does not return
-> a pair leaves the caller's R2 uninitialized, so the main verification
-> pass has already rejected any program that reads it, and backtracking
-> is never asked for its precision.
->
-> At BPF_EXIT the return registers are sampled before the callback path
-> clears R1-R5. That clear does not touch R0, but it does cover R2, and
-> running it first would drop a pair return whenever the instruction
-> following the call happens to be one that invokes a callback.
->
-> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 5b9d767895c9..2ae7cb9b30f2 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -7684,6 +7684,12 @@ static int btf_check_func_type_match(struct bpf_verifier_log *log,
+>  			btf_type_str(t2), fn2);
+>  		return -EINVAL;
+>  	}
+> +	if (btf_type_has_size(t1) && (t1->size > 8 || t2->size > 8)) {
+> +		bpf_log(log,
+> +			"Return type of %s() has size %u while %s() has size %u, and a size above 8 bytes cannot be replaced\n",
+> +			fn1, t1->size, fn2, t2->size);
+> +		return -EINVAL;
+> +	}
 
-This looks like a bug fix for 16-byte return support. Should this
-include:
+This isn't a bug, but since this check fires on the absolute size rather
+than on a mismatch, the message can end up reading "has size 16 while g()
+has size 16". Would it be clearer to state which side exceeds 8 bytes
+instead of using the "X while Y" mismatch phrasing the neighbouring
+diagnostics use?
 
-  Fixes: 162762023c59 ("bpf: Add helpers to describe the R0:R2 return register pair")
-
-> diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
-> index a2b18a9f1694..653db80bcc47 100644
-> --- a/kernel/bpf/backtrack.c
-> +++ b/kernel/bpf/backtrack.c
-
-[ ... ]
-
-> @@ -520,7 +524,25 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
->  					return -EFAULT;
->  			}
->  		} else if (opcode == BPF_EXIT) {
-> -			bool r0_precise;
-> +			bool from_subprog_call, r0_precise, r2_precise;
-> +
-> +			/* BPF_EXIT in subprog or callback always returns
-> +			 * right after the call instruction, so by checking
-> +			 * whether the instruction at subseq_idx-1 is subprog
-> +			 * call or not we can distinguish actual exit from
-> +			 * *subprog* from exit from *callback*. In the former
-> +			 * case, we need to propagate the precision of the
-> +			 * return registers, if necessary. In the latter we
-> +			 * never do that.
-> +			 */
-> +			from_subprog_call = subseq_idx - 1 >= 0 &&
-> +					    bpf_pseudo_call(&env->prog->insnsi[subseq_idx - 1]);
-> +
-> +			/* Sample the return registers before the callback
-> +			 * handling below clears R1-R5.
-> +			 */
-> +			r0_precise = from_subprog_call && bt_is_reg_set(bt, BPF_REG_0);
-> +			r2_precise = from_subprog_call && bt_is_reg_set(bt, BPF_REG_2);
-
-A subsystem pattern flags this as potentially concerning: the multi-line
-comment above starts its text on the opening /* line:
-
-	/* Sample the return registers before the callback
-	 * handling below clears R1-R5.
-	 */
-
-The BPF subsystem guide suggests putting /* on its own line for
-multi-line comments under kernel/bpf/:
-
-	/*
-	 * Sample the return registers before the callback
-	 * handling below clears R1-R5.
-	 */
-
-Every existing multi-line comment in backtrack.c uses the older form,
-including the comment block that this same hunk moves, so matching the
-file's dominant style is a plausible reason to write it this way. Does
-the newer form matter here?
-
-[ ... ]
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31995069373
---===============8630942586406859978==--
+--===============3914086702044715110==--
