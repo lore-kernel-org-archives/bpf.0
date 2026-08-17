@@ -1,148 +1,133 @@
-Received: from fout-a5-smtp.messagingengine.com (fout-a5-smtp.messagingengine.com [103.168.172.148])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFC1341F37A;
-	Mon, 17 Aug 2026 12:59:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E444429022
+	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 13:24:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786971588; cv=none; b=MEEzOA/5kA41SHSV1geEFt8Uj4vAF9HkscJIK9BIvM/pOtOE52Nrzfm9RZ/mTEUy7iQTfrQYiEdfGoQ56cA3QtLSDsbWF9tJOhygvB27r3mIAi+W934PYU8L0RFM//i5oyE15EH73nI6gzjtCigLLE23XrYMJioWI6q891EmamE=
+	t=1786973092; cv=none; b=aqJQ0u1GxbmKAMJPRfy0g+74+EfYOk7UC5QRv2sj9eJMkQvGMPHHCINylDZg2MNWi98727lyNpWDzY1Y9Gn4qpq1SEcbvixZmvI6a6v2w57Tsz+jnA9NlNWuXCe5STo6d5N2HwwJvmWxqiMpwbWKNQUQbsdbMB49JZbRNV5msxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786971588; c=relaxed/simple;
-	bh=DRyKZDUerO4XoZiKd0/UMs68uPcTpzCDEqnmCAFZfJw=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=LgcZjqZM1HK+pGVMFXEsW0szJP+eGQHUHEJwJPOZhNc9JaEmKQhBS3PRIgEgO5NkxYmBcQFk+TgfELQsZF8Zk/ojHB3pyrmUoY5Kq0UGRd+PTWiThHdsUHDtjbdj6ArpGPujA1XgM0EHBXSDrAlhhFkKMosNyhp9ebLH/fwhIoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=GXRjuXp7; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=iqk0ZZGL; arc=none smtp.client-ip=103.168.172.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1786973092; c=relaxed/simple;
+	bh=Hw/jfXcPPMobBLBI8W1VNi7tiStnZDpg9z6Ju3cQlQw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jj1VuIV109zgBLM1AmXmoYabsmvJ37EOEBw6Qk9sid53BWxisygRkcTxgCES3ZnVunl1lUjph8qATNPoOVHwo/5RTXNREubqjgqnJEGUpo1zPVtvL78gfZR1rlU27Fvzh7fEtJMCOEgT42pH+Wo2hipuMgXNR1L3gYjfSEuPRXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=asu.edu; spf=pass smtp.mailfrom=asu.edu; dkim=pass (2048-bit key) header.d=asu.edu header.i=@asu.edu header.b=Vr+7rqUS; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=asu.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=asu.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="GXRjuXp7";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="iqk0ZZGL"
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfout.phl.internal (Postfix) with ESMTP id 9E27EEC023A;
-	Mon, 17 Aug 2026 08:59:42 -0400 (EDT)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Mon, 17 Aug 2026 08:59:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1786971581;
-	 x=1787057981; bh=bQ68rGWO5+XJK8Ee7Y4MpJFQgMAvX184NdiLnRVSkzI=; b=
-	GXRjuXp7Jv+3Fds7JDBpdOJL6G1CE4gD9Q/IqnxqxWBRPIq0Lw84CWRLF1bvVJGr
-	xmPYDAXG2rH1cW433tXlnm/j93zkl3UKZWysNLFOHI45DOSgXBmvGOxR4RnRX/lp
-	B7GUXiC/8udS4NoK+K4ISch9RsEnC/24wPiBlTl+k763cvBIuP/nZF0FQom1/5uX
-	YxUf/+31mfneVrsawfhBf3bqRkFv03L3YSUzAkvuRfDSZw2MoP5vgu6FHLW56CK4
-	PrGCtNqWYU2ENGUaGwx1fKBnXG2CN5DUb97CtJQsTTEbn5GEXwQHEc+URYSWmpOW
-	tUrajbGLLfx3JDSiwbcq6g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1786971581; x=
-	1787057981; bh=bQ68rGWO5+XJK8Ee7Y4MpJFQgMAvX184NdiLnRVSkzI=; b=i
-	qk0ZZGLQPfTfh2kptC750VNH9PmChyfYQx5a5sa2HUzx390rfuMo+KPS5/ep4zMG
-	LMBsJxY9WnhwQBRB909OWefFpqnZ5zJ+Dblok3DBePsj2WpSshvae5Oh3c7wmow5
-	eAQYz91n+DdXshP3Z/giKu5eYAUIzRpGD6BeAGYMrH9tY/11aWGfjyrvbYATtLG1
-	wRWVlDVK248PFhnrjrF18HilhDan0U6HknNojhtHPgzPUZwROpH/Fn90ewOUFE4l
-	6ER2ou/yIflu00LYZ0KLCXI5ymoXCVIMCmFSc8C2+yxVSgPBFgWeYPLYPHYxx9C/
-	ZCtW3z6pBHYEhqo1hdtdQ==
-X-ME-Sender: <xms:sgWDaqgrCKVVCvHxjDye6qxsId8-HfFnu0DF9f8J8JQI-ieRq0KCtw>
-    <xme:sgWDal1aImYo5BfcDZDMLcinayUsbH2vyq9-ZH2akzqiMzW3eGQB_eLIU-4VRHBKv
-    Aqkn06p7ifIPIt_pMW0qPRBR1vobxrwrbfBr3uQ6UL_gSFR7lxdU6y8>
-X-ME-Proxy-Cause: dmFkZTFrJQquK4O/Ss9PIUnA61QMTKUxplzDdeAV+mGJHm6az6ApcdUzgLb4ocbjXBTFEQ
-    5ZIKh+gRdwlURyM1BOZsyjg3BxgSAv9jwi31hDOmEcJFGkpWNl0sok7rBC3wSehXCV6Gcd
-    budBvHA5eC+q9TOcRGZPvDE4DVSXy3T7vhgLk6sFJ94H0eJL0jnslBuB3FSILMtRZlFAYQ
-    3zD7qDx+GwpfSiV+tmkDGSn7hVAwA0Km7hBXyITvN8slYbT4kTN2IlGcCesnDzxGm6hE8C
-    8uoQeNiOVoRRyEGlVYl/E1aRIeYW6CczUWjdYlcaXU6UiTG2IHG3NaqTZV3ij0f/mFK9tZ
-    sDMwl00WCYHSE2mF4xDuFUlGcdM/kJShAvBgye9OftzsK1LkfEas2LA64uZZaEwvzL1Opw
-    qWsrsuzES5iljhkKU7/9VVHzMPCGSGkFFtyFG4W60Y/fyqzM9DlYA7Yeh3H+HnBKmIhxiz
-    eDbyotJI3ZlN4G2pIJIHrODsDnfClP65xHYvCqQNewEare2JOBXlatPbzd2D5ducAH2C49
-    NPmXvbXIotr4tQ4v3ZU4LiGzEa/lYEmy8eQXrm48CQFUwp5Y/mWYene0Vs4ctJdQSiKgVm
-    m2b+evTH2uotPBCeFVTIIZa7LOWED6upQNzX/x3CJoJPJWBs16qXr0181kpQ
-X-ME-Proxy: <xmx:twWDahMaUZL_NGJfM4dNKNxkheLO96-qLwnUF3pePeuKxd2RncTFrA>
-    <xmx:twWDal2UZxDXZ1wN5eBMTu5NJ434qothwIqe2lHweQXfVN3k8JdmJA>
-    <xmx:twWDak724YEbGwd8yoHEzIJDHgRePjwgnyRrOZvkqG1QMIFiCYW4cw>
-    <xmx:twWDasM70ZfBvoT1gUiKLR1nJMl9FIZSOfjZlhAV-jvOq5tMWQyJEg>
-    <xmx:vQWDap6g-dNLJszNbPPoxBx0DQEx1fc0plUfLqH7afMBTZ65OZ-2_Nd8>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 21A9432A0070; Mon, 17 Aug 2026 08:59:30 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=asu.edu header.i=@asu.edu header.b="Vr+7rqUS"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-49954b88fffso38633445e9.0
+        for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 06:24:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=asu.edu; s=google; t=1786973088; x=1787577888; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=oBxqkvt2QiyULLxw2yg2sHAVvNGWnYOoHvbaWXtRPBA=;
+        b=Vr+7rqUSSmJQlcFh13E5PEUcs5NjpEBKr1CbNuCsbKC4C8uXbCU1uU/vxfKju1teOs
+         jYGjkaMMapiV2Ag1e3hWftj3u5VTC4qrYkr4XyGS5qQVqK+o1a8GmZ54J9Rc3j8wyOki
+         EWWPHSYwh5EWtxEl+k0XVg22Dz+3a8F/8JLASx4ox+loy/THofG/OjeOThDkzr30H6+/
+         JVQWJs/noLpZ/sdk8odXwzlkO/cc+VJw04xPYbcMaoUzN5a7fcEfnAFckjfmY701GS/a
+         LAB8BoCmE0Q+mgJGQGNCIzbSv16raXt3dmojRPlz/Ky1FYeZ1+0r2lIpJfcbPrM9QAPq
+         YNmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786973088; x=1787577888;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=oBxqkvt2QiyULLxw2yg2sHAVvNGWnYOoHvbaWXtRPBA=;
+        b=su4OoXRA2B3MxXJq4NY9pt2L1E+oOOCJjyyJeQgOHxkW0zbuIt+4xK6Ue7wyawEdXx
+         kOCDiFoQ1Pb2zP+Dugl3HwwKtanX82bGQ4jWMacOSwQQJt/P/b0WVpBvC+YmbgK0WnfV
+         1EIgTCKirHYRfGSJprQkb8JboQQHgxxD4r9dAi0PURflye0tKMt6sg4SGlA/Q4mzRWHP
+         kegDDDMYjavjYxoBx0aCy8HZKi6v13l6IUDzWL2IhkZ2JRXzR+sYTCkmD4vxtRKWyoWm
+         iNAs5dbb8EPTU+8ONIaLghoE8yDAY3PoLYJMjuUFDluGLrN/QEpRgRD8KMGPwITIvjY2
+         hRkA==
+X-Forwarded-Encrypted: i=1; AHgh+RoC7KbcbukdhyI1Eg1grM9YN+p0WFJsX8BCY0HolW8ldYwtzMHfKTOnLCgc5iey/OxL+oA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwuRLR4n7zSzBvC47bavgIq6dpSxqjDA9OATV2CbGexg1ez/tEn
+	aqU+EdpJYM1zRzSUvXkrOp7nAVUwUKQHxjpuVpFXY+sSf4Zk8RIPj1BKdV8Dn2G8XQ==
+X-Gm-Gg: AR+sD12w0Uw75DYwJwatjmIyLcCilx80FGQvm2iAMIz5obuj3Rqcx7Ozr3eXQX0+NQ/
+	Un7M+xuk0CKJf5j7+Szi4zsm/q+Y6EcVBQsxzm0dJKOtsWXA4cFEs9aspFA4WgFUty5l+bwgYnE
+	zp4xjUWbGxMXak2eGSU/B1qw9T4pfQKnJjG49qAhr8nMPElhe5mYZ+GfxjD1TE7R4qVACpP13z3
+	2hjsNcwUn0WAZsaOr8MW4VX82+s3/eoWsvKfm3k0UYGNsbZEPwTOpxG1DCp36tf67YQoEOLHkD1
+	RQTO6asmgpb3GGYyrKwVnEt1ndzT1B8Os6WYkWUhD8ihzb+yzfCBIw9ZxVOjkE3JMLEc3qLqXfA
+	svD25VGsZKLkhZJ+H6boT2Bp03ieL1BvGQ2iJ3JUnKZnCjPtz4XchbFcx8kVZVcKT7nSVCNOCTn
+	8j4u9+jjW0l78fhxIIuSgRJFBLi96digJiVorhPWVx148I/nhmjZYBTmyCwKhLosCzFowo0P4=
+X-Received: by 2002:a05:600c:3b1d:b0:499:87b6:f3c0 with SMTP id 5b1f17b1804b1-4998807e4c9mr382618245e9.14.1786973087942;
+        Mon, 17 Aug 2026 06:24:47 -0700 (PDT)
+Received: from spiro ([141.5.46.6])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49996109652sm188597975e9.4.2026.08.17.06.24.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Aug 2026 06:24:47 -0700 (PDT)
+Date: Mon, 17 Aug 2026 06:24:44 -0700
+From: Jennifer Miller <jmill@asu.edu>
+To: Kees Cook <kees@kernel.org>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	eddyz87@gmail.com, memxor@gmail.com, linux-hardening@vger.kernel.org, xmei5@asu.edu, 
+	samitolvanen@google.com, peterz@infradead.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH bpf-next v1 1/1] bpf: Enable JIT hardening by default
+ when x86_64 CFI is enabled
+Message-ID: <aoL_G-3chdLZGxSJ@spiro>
+References: <20260710191932.120911-1-jmill@asu.edu>
+ <20260710191932.120911-2-jmill@asu.edu>
+ <202608091030.C69278022@keescook>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AdWx15gK6UpR
-Date: Mon, 17 Aug 2026 14:59:09 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Stanislav Fomichev" <sdf.kernel@gmail.com>,
- Netdev <netdev@vger.kernel.org>
-Cc: "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>,
- "Anthony L Nguyen" <anthony.l.nguyen@intel.com>,
- "Przemek Kitszel" <przemyslaw.kitszel@intel.com>, andrew+netdev@lunn.ch,
- "Saeed Mahameed" <saeedm@nvidia.com>, "Tariq Toukan" <tariqt@nvidia.com>,
- "Mark Bloch" <mbloch@nvidia.com>,
- "Maxime Chevallier" <maxime.chevallier@bootlin.com>,
- "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
- "Alexandre Torgue" <alexandre.torgue@foss.st.com>,
- "Alexander Lobakin" <aleksander.lobakin@intel.com>,
- "Simon Horman" <horms@kernel.org>, magnus.karlsson@intel.com,
- "Maciej Fijalkowski" <maciej.fijalkowski@intel.com>,
- "Stanislav Fomichev" <sdf@fomichev.me>,
- "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "Jesper Dangaard Brouer" <hawk@kernel.org>,
- "John Fastabend" <john.fastabend@gmail.com>, witu@nvidia.com,
- "Martin KaFai Lau" <martin.lau@kernel.org>, yoong.siang.song@intel.com,
- rohan.g.thomas@intel.com,
- "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
- linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
- "Leon Romanovsky" <leon@kernel.org>
-Message-Id: <06f8153d-2156-4e7d-9d49-006db4b2cec4@app.fastmail.com>
-In-Reply-To: <20260813190800.222527-2-sdf@fomichev.me>
-References: <20260813190800.222527-1-sdf@fomichev.me>
- <20260813190800.222527-2-sdf@fomichev.me>
-Subject: Re: [PATCH net v2 1/3] xsk: align TX metadata layout across ABIs
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202608091030.C69278022@keescook>
 
-On Thu, Aug 13, 2026, at 21:07, Stanislav Fomichev wrote:
-> Add explicit padding before launch_time so xsk_tx_metadata has the same
-> layout on 32-bit and 64-bit systems.
->
-> On i386 and m68k, the old native 32-bit layout put launch_time at offset 12
-> and had a natural size of 20 bytes. Using sizeof(struct xsk_tx_metadata) as
-> tx_metadata_len was already rejected because the length must be a multiple
-> of eight, so the straightforward use of the interface was broken on those
-> ABIs. Userspace could still register a padded length of 24 bytes, though;
-> mixing the old and new layouts then silently reads launch_time from the
-> wrong offset and misprograms packet launch times. This intentionally
-> replaces that incompatible layout while the interface is still new.
->
-> Fixes: ca4419f15abd ("xsk: Add launch time hardware offload support to 
-> XDP Tx metadata")
-> Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
+On Sun, Aug 09, 2026 at 10:30:35AM -0700, Kees Cook wrote:
+> On Fri, Jul 10, 2026 at 12:19:32PM -0700, Jennifer Miller wrote:
+> > Initializes bpf_jit_harden to 1 if x86_64 CFI is enabled. Prevents the
+> > misuse of BPF JIT code to craft CFI signatures or Endbr64 instructions
+> > by enabling constant blinding for JITted BPF code from unprivileged
+> > users.
+> > 
+> > Signed-off-by: Jennifer Miller <jmill@asu.edu>
+> > ---
+> >  kernel/bpf/core.c | 6 +++++-
+> >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> > index 47fe047ad30b..ed22b90c6e4e 100644
+> > --- a/kernel/bpf/core.c
+> > +++ b/kernel/bpf/core.c
+> > @@ -548,7 +548,11 @@ void bpf_prog_kallsyms_del_all(struct bpf_prog *fp)
+> >  /* All BPF JIT sysctl knobs here. */
+> >  int bpf_jit_enable   __read_mostly = IS_BUILTIN(CONFIG_BPF_JIT_DEFAULT_ON);
+> >  int bpf_jit_kallsyms __read_mostly = IS_BUILTIN(CONFIG_BPF_JIT_DEFAULT_ON);
+> > -int bpf_jit_harden   __read_mostly;
+> > +/* Enable hardening by default when x86_64 CFI is enabled to prevent CFI
+> > + * hashes and endbr64 instructions from being crafted.
+> > + */
+> > +int bpf_jit_harden   __read_mostly = IS_ENABLED(CONFIG_X86_64) &&
+> > +					IS_ENABLED(CONFIG_CFI);
+> 
+> Why not just do this for all CONFIG_CFI?
+> 
+> -Kees
+> 
 
-This is probably the right approach, given lack of alternatives.
-In the changelog text, it may be worth noting a few more points:
+The intention was to not enable JIT hardening by default for other
+architectures when CONFIG_CFI is enabled when we don't know if it would
+be preventing any CFI from being bypassed. It may be possible that kCFI
+on other architectures is able to be bypassed in similar ways to x86_64,
+but we haven't looked into it.
 
-- A few additional architectures have the same issue: csky,
-  nios2, openrisc and sh.
-- the commit that introduced the mistake was part of linux-6.15,
-  so the 6.18-lts release also needs an ABI change. I don't
-  think the "while the interface is still new" wording
-  makes sense here.
-- what actually saves us here is that none of the affected
-  architectures are likely to have notable use cases for
-  xdp that would care about the ABI break.
-  The one that is most likely to have affected users
-  is x86-compat, and that is also the only one that is
-  broken right now.
+~Jennifer
 
-      Arnd
+> >  long bpf_jit_limit   __read_mostly;
+> >  long bpf_jit_limit_max __read_mostly;
+> >  
+> > -- 
+> > 2.34.1
+> > 
+> 
+> -- 
+> Kees Cook
