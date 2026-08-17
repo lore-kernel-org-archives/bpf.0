@@ -1,249 +1,283 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC6846D548
-	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 18:22:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.181
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786990951; cv=pass; b=lpehNw8uN1lfqsGyBjaGHkzwoJ6W3FqRO1Kmvmz3vj68wpdc6T/+gBxL9v+jyELgSSRg/lTqwVKqZ+TMEGGCthzqr0ouJj6r63jx7u6U5859StXMhaRRvG2+caveNbiMZRGT14BJmvdO2nFjU4o0j8OlcIsQbxIPdPdZNr8kH5U=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786990951; c=relaxed/simple;
-	bh=C8eL0RXUqd+z/87h6pbMWRZbWxcVYzCNN4whWihuau0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NSWBwEl+z8v1eJ5ihT8A8LSS/NfTUBJVrwD6CK2hholSBS2sWIskDYPVKJaVd85RKYO5IgYr2fLe29UTgdmoxFZcK+lON1h4a49+dBruHDeZe1Vrz2rZFqjiseYlwtsCBhlm1v7S5UgM9GOSiReU3fl8+301h8HslYlp1UTSwV4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pxTp3xpc; arc=pass smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A618D221F39;
+	Mon, 17 Aug 2026 18:35:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786991729; cv=none; b=q4susFZk8+7eopFicxCPOwzZrG+Qs2GyA9zUea1kRLegSBTUxyncx2L3spf5X8zXLihIkdvowfD/c/axHbdcQ6r85GWml+eAG80Gr5CK4B30ywuiFjEgAGUJHQqwCJ88l9d0xEw3cReCs0tAkRfZbKhnfPTtBEphdWuc89MZgTw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786991729; c=relaxed/simple;
+	bh=B6wmlUIc2tUi+TTPV7bDOCgiGr7oqCyvoGh74R+lIHU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jHvCs9J3Nk3j7TkUDmPfKiYPCBXn/VLYZjxtrY5PkGGUvJmK5UW1Sb1RBwMpmxAJLfGAXkZLjTqHaSWjX+0l+mExtpzLSC9TCS/v/kgFayhSGmVA64byAYvtR8uT2vB+08y1dCB/p7/s8v5BEcM/aUpKjPJp1gm/nL9Fgyp0G4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=vX/A6JUR; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pxTp3xpc"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-84faf0fa17eso3789167b3a.2
-        for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 11:22:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786990943; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ioQJWIEJF0EFQ3sJ2LrBze1EiL0UD/lyOwdnDKe6a4wbnmcxynAJemn+CdqVDsEgmq
-         MTn7Kde6Qi64w1r5dMGO7HpDetH5Sh9yzKte6wTYnz2fJds3jlpXVhWUN2OcG4rBChXZ
-         LdJrIbYD/DxepLyokM5xRhnxWWLTcSVfkbsyRsKMDpabejgyQb2quUKXoZr+9kLKP9Rk
-         fNF6nIR4c9YgVnK9WRaUieKMWAvdEp8MjKNjth+hzN+tcr7y9i5/p2USvr+DdZN815it
-         /2d9zqxBS8riqbM52bOcgzwW8xprDKPds53xu/YIc8ddz2du3p8gfUaseyprYCopIGet
-         ok8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=LxYwqYOrD411oJvKVf7MSl5O4yE/v1cgNQc8LyxR9SI=;
-        fh=R5pH+HpMnpTROLm2YVtqmyGfauIoP3RVN4A/RUVE1Fo=;
-        b=mpcaycdP57MpZ9CvPph6ZTSHL8unS7wtyTLpiVlHnbBCFpZ1d1/gWYViAxLwH8sm6A
-         /5A/wuSvJbeQ5NadMNp73oPsigwcQDxede8VXRXTZZL+JOUyOCE5UuDWS/NEZFjIShQo
-         MknpcWw3942e0PS6Pdval5l3aUDBNJmBVY4Jn7IrPOq+2/abw0yhuZ9ciEfBEuDgiKcr
-         6YayxLmo0WSeGgKbQZ2rRNkEIr1X0EpqdddFVSD0huggmCjnDVdaahWulDML0kp5lPHg
-         PY+nM2X2NPTSHaulzjT5XSFTswkQpNOsuqkxTyBxJaemYI95RxFTeObfIX57Mj+c/3f2
-         /NWA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786990943; x=1787595743; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=LxYwqYOrD411oJvKVf7MSl5O4yE/v1cgNQc8LyxR9SI=;
-        b=pxTp3xpcRRwAAYWMoaX073/GbevAANKDrvDyppPn6Nm727yH0fa6q8ECO154D4mst5
-         t6BZ+8ZkAtfnH8c8dLCg2HrybqE/741z0/pK6acsbb+oUrZX7pxSk3PvqzWA4wXJSHmZ
-         s3njRLpVqydgjv3KdiEoS3d5jz2T97ih1wMxyRIePss4XKaTicxeJIg8jT6T3TkUYES7
-         FAV4LIchVxgw9VjOmZrskjTmMhetaVcRcQJMyh7YP4WYAeZUf3oy14WhTTsw/wUNof47
-         mlVaeKRsmrycVN06if48ejZAvqteSWEPpA7CoMW5v1/8RjCbeH/YoJxofNcD7pP5Fp7v
-         QCDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786990943; x=1787595743;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=LxYwqYOrD411oJvKVf7MSl5O4yE/v1cgNQc8LyxR9SI=;
-        b=RtykMvrio5lPi8Q7AcDCPdCvTHrZaYjEKqf342u7Mx4O1ttlAF+dNXLIKWbW4RVMRs
-         OwUAN32nYbZDFDDMaRT6KVl6IDAwH/gAP3VA5G7bixmhLsq45hYQm/6I6vCMAJu3mXrE
-         45uA7dOOrmnXA3tAdi8m0fkOH4Qvn5jGDylZPZTB0PRpzssT0B7UwI03s+eHTB0k8KgG
-         sr1iOLn289xgCTTUAymYbm/h2EpDlAYMMOzgwBqFgkfsB3z8nBwEP8LZ0OCCQV50Ksaf
-         +e4YqjEvNPtyNhdHmZb81AIOPQv8zuZPNqAE5smzHr9keLuGYem4gLUyvLB6onRP4Is7
-         wreg==
-X-Forwarded-Encrypted: i=1; AHgh+Rp5HDK4AnQbobBl25818Zb8rej7M0+yCd7OMjYkR8pXflErQKrjSMib31i6AZm1hyrXjDo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGHXHstQTy8ZLRSrcRBCo51qglSKhsGeacggoietH3huwomTEm
-	abbPAUx1qADCJ00vYDLYOU2vidqrnXVznbUYH1oJjlR8pVv+xDzDjIyEhoSURSM3qn9+b3G1HCp
-	+TIU8G8SXlzJuip7HvOcdoBHdWcxL5HfCWYVa
-X-Gm-Gg: AR+sD13N9zVd7BZ+YRafe1wQOb4gkDFplZ/uSmyOIeCrsaokILwoRhIl2G23t0om7YE
-	ds+pupwSB3gstp+XDogMPBC/wiQFKe6DhJtCSC99Yi/AbRdiT8dXABKSIdRtexo3Z/dlhoWIg0m
-	m0RYL86biOxTdf+CqN3DItAQ3mzO22XCeqmNi/2uGmrHAB/G2cnXnTXouNAQ6d98xSAjg30ehPu
-	9WMP3XO6EmSjQxctvHZBj/HKaW3TK3/ZlDGcKaMCpMhc1lMm1v9IC6VQJCjTr9cyJ8R/NRYYQan
-	/oLkfGkzVnzQzXMWxTO6Sg3XxgJ8VTjgbGuqC0EFRxLqjp/RZ45Kflv4gPXbAnoXONeeVUSmDDW
-	1dH3BK7cr1Eu6pxt1UnNaHRSZxg/z/RB6pNVHF1Fshw==
-X-Received: by 2002:a05:6a00:94e3:b0:848:6720:6fec with SMTP id
- d2e1a72fcca58-84fde34a291mr26130114b3a.28.1786990942981; Mon, 17 Aug 2026
- 11:22:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="vX/A6JUR"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=7shnazFeFjFhvWi4xctYX+yRJGMgipdv+99SjZFKDrw=; b=vX/A6JUR7JJc1Cu7W/sJL7JG1D
+	frHOMMcqPcHEgd0Vrbuv+MMSslzyzlbfX/oydkNbZJQmgOXpZY8Jepof4R0FEhzDF0E7SO4eFytDi
+	XnxMcciSgsLCtG0lINrYWr5PraWLmFYk/XpH7OQ6XXENzduwLndKOX+NMGo3YoSB/r6rDUpB8GXCI
+	q5fCiEiIKEWeZZ4WvVQ9aB8ynh9wREs5USUSOT4SRRBtNZtwZN6xMYm7oXugC6qkfKsnY8j4hqucM
+	0zP1hqOGmWQlLwWOBOoHvvl8WXxIvvGMQVmY6WbRsvfH7b9o4Oca/WhxBGBLXqGaUJavW9up0Cjg4
+	8P1soEHQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1ww2Ak-0000000Ad5q-0PAP;
+	Mon, 17 Aug 2026 18:34:58 +0000
+Date: Mon, 17 Aug 2026 19:34:57 +0100
+From: Matthew Wilcox <willy@infradead.org>
+To: jim.cromie@gmail.com
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Pablo Neira Ayuso <pablo@netfilter.org>,
+	Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Matthew Brost <matthew.brost@intel.com>,
+	Boris Brezillon <boris.brezillon@collabora.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Boqun Feng <boqun@kernel.org>, netfilter-devel@vger.kernel.org,
+	bpf@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	coreteam@netfilter.org, netdev@vger.kernel.org,
+	Byungchul Park <byungchul@sk.com>
+Subject: Re: [PATCH 0/9] lib/folio_pool: Direct-Map Large Folio Pool &
+ Scratchpad bump allocators
+Message-ID: <aoNUUTG2DPS3kGzp@casper.infradead.org>
+References: <20260817-folio-pool-v1-v1-0-0c1d230aa3af@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260815091819.3651099-1-gaoxiang17@xiaomi.com> <04f3ce2f-67f5-4829-9551-a69b9df29854@kernel.org>
-In-Reply-To: <04f3ce2f-67f5-4829-9551-a69b9df29854@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 17 Aug 2026 11:22:07 -0700
-X-Gm-Features: AcwNN1WfsDbZbp0-lpvXe5rDMDaXky5_oG6XfLm1oTm1uuOmMOh7cMvg-ry1wfk
-Message-ID: <CAEf4BzbwZkoacX-iP1j4+p8YNbWsq0pc3eTermh2uT5ir66zbw@mail.gmail.com>
-Subject: Re: [RFC] bpf: account ring buffer backing pages separately from Lost RAM
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Xiang Gao <gxxa03070307@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrew Morton <akpm@linux-foundation.org>, yinchuang1@xiaomi.com, bpf@vger.kernel.org, 
-	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Xiang Gao <gaoxiang17@xiaomi.com>, 
-	"Lorenzo Stoakes (Arm)" <ljs@kernel.org>, Steven Rostedt <rostedt@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260817-folio-pool-v1-v1-0-0c1d230aa3af@gmail.com>
 
-On Mon, Aug 17, 2026 at 11:10=E2=80=AFAM David Hildenbrand (Arm)
-<david@kernel.org> wrote:
->
-> On 8/15/26 11:18, Xiang Gao wrote:
-> > Hi,
->
-> Hi,
->
-> >
-> > I would like to discuss accounting BPF ring buffer backing pages in
-> > system-wide memory reports.
-> >
-> > BPF ring buffers allocate their data and metadata as order-0 pages dire=
-ctly
-> > from the buddy allocator, and then map those pages with vmap().
->
-> I assume there is a reason the slab isn't used, right? Are these pages ma=
-pped
-> into user space such that page->mapcount would get used?
->
-> Can you point me at relevant code?
+On Mon, Aug 17, 2026 at 11:22:14AM -0600, Jim Cromie via B4 Relay wrote:
+> Introduce two light-weight bump allocators backed directly by compound
+> folio pages from the buddy allocator (skipping SLUB metadata overhead):
+> 
+> 1. struct folio_scratchpad - Variable-sized, alignment-aware bump allocator
+>    for bursty, append-mostly lifecycles with bulk teardown.
+> 2. struct folio_pool - Fixed uniform-slot bump allocator for homogeneous
+>    descriptors.
 
-See code in [0]. And yes, these pages are meant to be mapped into user spac=
-e.
+This is an inappropriate use of folios.  Folios are for memory that's
+in the page cache and anonymous user memory, not for general kernel
+use.  They would need their own memdesc type.
 
-  [0] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/tree=
-/kernel/bpf/ringbuf.c#n93
+But Byungchul is already doing that work.  So you should just reuse what
+he's done.
 
->
-> >
-> > Because vmap() maps caller-owned pages, these backing pages are not cou=
-nted
-> > by VmallocUsed. They are also not slab pages. As a result, most BPF rin=
-g
-> > buffer memory is not represented by an existing named /proc/meminfo cat=
-egory
-> > and appears as Lost RAM in Android memory reports.
-> >
-> > We measured this on an Android 6.18 kernel.
-> >
-> > Test case:
-> >
-> >   32 BPF ring buffer maps
-> >   16 MiB data area per map
-> >   512 MiB total data area
-> >
-> > Observed changes:
-> >
-> >   Lost RAM:       approximately +529 MiB
-> >   VmallocUsed:      approximately +2 MiB
-> >   Slab:        approximately unchanged
-> >
-> > After destroying all maps, the values returned close to baseline.
-> >
-> > The question is whether the kernel should expose the unique physical ba=
-cking
-> > pages of live BPF ring buffers through a dedicated global counter and a
-> > /proc/meminfo entry, for example:
-> >
-> >   BpfRingbuf: <value in kB>
->
-> This looks a bit too specific for my taste. And I think we should try to =
-no
-> inflate these statistics here too much.
->
-
-+1, way too specific
-
-> >
-> > The proposed counter would include:
-> >
-> >   * ring buffer data pages;
-> >   * metadata pages;
-> >   * consumer and producer position pages.
-> >
-> > It would exclude:
-> >
-> >   * the second virtual mapping of data pages;
-> >   * the pages[] pointer array;
-> >   * map metadata allocations;
-> >   * vmap page tables.
-> >
-> > The goal is to account for the currently unclassified direct backing pa=
-ges.
-> > Slab- and vmalloc-backed auxiliary allocations are already represented =
-by
-> > existing memory categories and should not be counted again.
-> >
-> > A possible implementation is an NR_BPF_RINGBUF vmstat counter maintaine=
-d by
-> > the ring buffer allocation and free paths, with the aggregate exposed t=
-hrough
-> > /proc/meminfo.
-> >
-> > Questions:
-> >
-> > 1. Is a dedicated BPF ring buffer counter appropriate?
->
-> I don't think so.
->
-> See [1] where we just had the same discussion for tracing buffers. For th=
-em,
-> Steve [2] had an idea on how to expose them more fine-grained and tracing=
- specific.
->
-> [1] https://lore.kernel.org/r/20260810094025.136705-1-gaoxiang17@xiaomi.c=
-om
-> [2] https://lore.kernel.org/r/20260810105710.6ee5e493@gandalf.local.home
->
-
-We already report per-BPF ringbuf memory usage either through bpf()
-syscall or map's fdinfo. E.g., with `sudo bpftool map show` you'll
-see"
-
-1455733: ringbuf  name event_ringbuf  flags 0x0
-        key 0B  value 0B  max_entries 262144  memlock 275776B
-        btf_id 2193434
-        pids tcpeventd(2549812)
-
-where memlock is how much memory is allocated for the ringbuf data area.
-
-> > 2. Should this be represented as an NR_* vmstat counter?
->
-> I don't think so.
->
-> > 3. Is /proc/meminfo an acceptable interface for this information?
->
-> Again, I don't think so. "Lost RAM" really is just "excessive memory allo=
-cated
-> by some other subsystem".
->
-> I agree that some users might want to figure out what is consuming that m=
-uch
-> memory, but I don't think growing /proc/meminfo in that way is really wha=
-t we want.
->
-> > 4. Is counting only unique physical backing pages the correct accountin=
-g unit?
->
-> I'd assume the "It would exclude" part above should not be accounted ther=
-e, if
-> that's what you mean.
->
-> --
-> Cheers,
->
-> David
+> These serve 2 kinds of use-cases:
+> 
+> 1: Ephemeral Batch/transaction Lifecycles (Netfilter, BPF, DRM GPUVM)
+> 
+> - Transactional subsystems allocate bursts of hundreds or thousands of
+>   homogeneous or heterogeneous objects, only to tear them all down
+>   simultaneously at batch completion or error abort.
+> 
+> - Under SLUB: Each descriptor incurs freelist traversal, lock
+>   contention, and O(N) kfree() loops on teardown.
+> 
+> - Under Folio-Scratchpad: Allocations are straight-line pointer bumps,
+>   bulk teardown is O(1) folio_put(), and consecutive Netlink
+>   transactions reuse warm L1/L2 cachelines without buddy lock churn
+>   via folio_scratchpad_reset().
+> 
+> 2: Dynamic Long-Lived Graph Scaling (Lockdep)
+> 
+> - Core subsystems historically avoided SLUB by statically
+>   preallocating massive compile-time arrays in .bss
+>   (e.g. list_entries[32768], 1.31 MB) to prevent SLUB allocator
+>   recursion deadlocks.
+> 
+> - Fixed arrays exhaust their limit and permanently disable validation
+>   (BUG: MAX_LOCKDEP_ENTRIES too low!).
+>   
+> - Under Folio-Pool: Lockdep uses a 4,096-entry __initdata bootstrap
+>   buffer for early boot prior to buddy initialization, then seamlessly
+>   migrates and compacts all dependency edges into 64 KB direct-map
+>   folios at late_initcall.
+>   
+> - Permanent static .bss allocation for dependency edges is reduced
+>   from 1.31 MB to 0 KB (100% reclamation at free_initmem()).
+> 
+> Core Primitives in include/linux/folio_pool.h & lib/folio_pool.c:
+> -----------------------------------------------------------------
+> 0. struct folio_scratchpad (Variable-Sized Elements):
+>    - Dynamic alignment-aware bump pointer with zero padding waste.
+>    - API: folio_scratchpad_init(), folio_scratchpad_alloc(),
+>      folio_scratchpad_reset(), folio_scratchpad_free(),
+>      folio_scratchpad_stats().
+>    - Typed macros: folio_scratchpad_alloc_obj(),
+>      folio_scratchpad_alloc_bytes(), DEFINE_FREE(folio_scratchpad, ...).
+> 
+> 1. struct folio_pool (Fixed Uniform Elements):
+>    - Thin wrapper embedding struct folio_scratchpad for homogeneous objects.
+>    - API: folio_pool_init(), folio_pool_alloc(), folio_pool_free(),
+>      folio_pool_stats().
+>    - Typed macros: folio_pool_alloc_obj(), folio_pool_alloc_type().
+> 
+> 2. Encapsulated Slab Discrimination & Reallocation:
+>    - is_folio_pool_ptr(ptr): Direct-map folios are identified via
+>      virt_to_folio(ptr) && !folio_test_slab(f), avoiding custom bitflags.
+>    - folio_scratchpad_free_elem(ptr): Safe no-op for folio-backed objects;
+>      delegates to kvfree() for SLUB/vmalloc fallback objects.
+>    - folio_scratchpad_realloc(ptr, old_size, new_size, gfp): Delegates to
+>      krealloc() for SLUB objects; allocates a fresh SLUB buffer and copies
+>      payload for folio-backed descriptors.
+> 
+> 3. Subsystem Autonomy & Runtime Static-Key Control:
+>    - DEFINE_FOLIO_POOL_STATIC_KEY_PARAM() allows maintainers of each
+>      subsystem (Netfilter, Lockdep, DRM, BPF) to choose their own default
+>      enablement policy (DECLARE_STATIC_KEY_TRUE vs FALSE) and independent
+>      module/boot parameters (e.g. lockdep.folio_pool, nf_tables.trans_scratchpad).
+>    - Enables isolated, zero-overhead A/B benchmarking and production triage
+>      without cross-subsystem coupling or kernel recompilation.
+> 
+> Active Proofs & Performance Profiling:
+> --------------------------------------
+> 0. Virtualized Guest Netfilter Benchmark (KVM / virtme-ng ftrace):
+>    Controlled A/B benchmark across 10,025 Netlink transaction descriptors
+>    and 5 asynchronous commit/abort teardown passes:
+> 
+>    Function: nft_trans_alloc (10,025 descriptor allocations)
+>    -----------------------------------------------------------------------------
+>    Mode                                 Total Time       Avg / Alloc      Delta
+>    -----------------------------------------------------------------------------
+>    folio_scratchpad Enabled (Bump)      9,158.02 us          0.914 us    -19.4%
+>    SLUB Fallback (kzalloc)             11,366.53 us          1.134 us  Baseline
+>    -----------------------------------------------------------------------------
+>    Net allocation latency reduction:   -2,208.52 us (-2.21 ms)
+> 
+>    Function: nf_tables_trans_destroy_work (5 asynchronous teardown passes)
+>    -----------------------------------------------------------------------------
+>    Mode                                 Total Time       Avg / Pass       Delta
+>    -----------------------------------------------------------------------------
+>    folio_scratchpad Enabled (Bulk)     36,065.65 us          7.21 ms      -8.6%
+>    SLUB Fallback (O(N) kfree)          39,449.65 us          7.89 ms   Baseline
+>    -----------------------------------------------------------------------------
+>    Net teardown latency reduction:     -3,384.00 us (-3.38 ms)
+> 
+>    Combined In-Kernel Netlink Transaction Lifecycle Savings: -5.59 ms (-13.3%)
+> 
+> 1. Bare-Metal Host Netfilter Profile (AMD Zen 3 Hardware PMU & ftrace):
+>    - Asynchronous Teardown: 53.77 ms vs 56.03 ms (-2.26 ms / -4.0%).
+>    - Instruction Retirement: 281.29M -> 282.46M (-1,174,062 instructions).
+>    - Branch Instructions:     62.94M ->  63.20M (-265,961 branches).
+> 
+> 2. Bare-Metal Host Lockdep Telemetry (Physical Host frodo, AMD Zen SMP):
+>    - Pre-Buddy Watermark: 928/4096 bootstrap entries consumed during boot.
+>    - Graph Compaction: Migrated and compacted bootstrap dependency edges
+>      into folio_pool at late_initcall; bootstrap array reclaimed by
+>      free_initmem() (0 KB permanent .bss cost).
+>    - Live procfs Telemetry (/proc/lockdep_stats):
+>      lock-classes:                          996 [max: 8192]
+>      direct dependencies:                  2324 [dynamic: 7 x 64 kB, tail: 17 kB/64 kB]
+>      indirect dependencies:               24612
+>      all direct dependencies:             81884
+>      zapped classes:                          2
+>      zapped lock chains:                    173
+>    - Active Invariant Validation: Live module unloads exercised modernized
+>      zap_class() direct list unlinking across dynamic folios with zero
+>      global bitmap scans and zero assertions.
+> 
+> What's Unchanged:
+> -----------------
+> - All consumer object structures, alignment rules, and lifecycle boundaries
+>   remain strictly identical.
+> - Memory safety invariants are preserved: individual deallocation is a safe
+>   no-op for arena-backed objects while SLUB objects continue to use kfree().
+> 
+> Subsystem Adoptions in this Series:
+> -----------------------------------
+> 0. lib/folio_pool: Core direct-map large-folio pool and scratchpad allocators.
+> 1. netfilter/nf_tables: Pack netlink transaction descriptors into per-net
+>    trans_scratchpad with bulk reclaim & warm chunk reset.
+> 2. bpf/verifier: Route verifier stack state node allocations to folio_pool.
+> 3. drm/gpuvm: Route gpuva_op allocations to folio_scratchpad.
+> 4. bpf/syscall: Route generic_map_update_batch key/value allocations to
+>    folio_scratchpad.
+> 5. locking/lockdep: Fallback to folio_pool in alloc_list_entry when static
+>    pool is full and expose dynamic folio telemetry in /proc/lockdep_stats.
+> 6. locking/lockdep: Traverse adjacency lists directly in zap_class().
+> 7. locking/lockdep: Shrink static list_entries array to early bootstrap buffer.
+> 8. locking/lockdep: Migrate and compact boot-time dependency graph from __initdata.
+> 
+> Patches in this series:
+> -----------------------
+> [PATCH 1/9] lib/folio_pool: Introduce Direct-Map Large Folio Pool & Scratchpad bump allocators
+> [PATCH 2/9] netfilter/nf_tables: Add folio_scratchpad collector to struct nftables_pernet
+> [PATCH 3/9] bpf/verifier: Route verifier stack state node allocations to folio_pool
+> [PATCH 4/9] drm/gpuvm: Route gpuva_op allocations to folio_scratchpad
+> [PATCH 5/9] bpf/syscall: Route generic_map_update_batch key/value allocations to folio_scratchpad
+> [PATCH 6/9] locking/lockdep: Fallback to folio_pool in alloc_list_entry when static pool is full
+> [PATCH 7/9] locking/lockdep: Traverse adjacency lists directly in zap_class()
+> [PATCH 8/9] locking/lockdep: Shrink static list_entries array to early bootstrap buffer
+> [PATCH 9/9] locking/lockdep: Migrate and compact boot-time dependency graph from __initdata
+> 
+> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+> ---
+> Jim Cromie (9):
+>       lib/folio_pool: Introduce Direct-Map Large Folio Pool & Scratchpad bump allocators
+>       netfilter/nf_tables: Add folio_scratchpad collector to struct nftables_pernet
+>       bpf/verifier: Route verifier stack state node allocations to folio_pool
+>       drm/gpuvm: Route gpuva_op allocations to folio_scratchpad
+>       bpf/syscall: Route generic_map_update_batch key/value allocations to folio_scratchpad
+>       locking/lockdep: Fallback to folio_pool in alloc_list_entry when static pool is full
+>       locking/lockdep: Traverse adjacency lists directly in zap_class()
+>       locking/lockdep: Shrink static list_entries array to early bootstrap buffer
+>       locking/lockdep: Migrate and compact boot-time dependency graph from __initdata
+> 
+>  drivers/gpu/drm/drm_gpuvm.c        |  11 +-
+>  include/drm/drm_gpuvm.h            |   6 +
+>  include/linux/bpf_verifier.h       |   3 +
+>  include/linux/folio_pool.h         | 279 +++++++++++++++++++++++++++++++++++++
+>  include/net/netfilter/nf_tables.h  |   3 +
+>  kernel/bpf/syscall.c               |  17 ++-
+>  kernel/bpf/verifier.c              |  16 ++-
+>  kernel/locking/lockdep.c           | 278 +++++++++++++++++++++++++++++-------
+>  kernel/locking/lockdep_internals.h |   2 +
+>  kernel/locking/lockdep_proc.c      |  16 ++-
+>  lib/Makefile                       |   2 +-
+>  lib/folio_pool.c                   | 230 ++++++++++++++++++++++++++++++
+>  net/netfilter/nf_tables_api.c      |  51 +++++--
+>  13 files changed, 837 insertions(+), 77 deletions(-)
+> ---
+> base-commit: 1a7ac48cd3e62f281ce62f8ed89dc2cc8866eaa4
+> change-id: 20260815-folio-pool-v1-cb75c247692c
+> 
+> Best regards,
+> -- 
+> Jim Cromie <jim.cromie@gmail.com>
+> 
+> 
+> 
