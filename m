@@ -1,544 +1,199 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930F446D569
-	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 21:42:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787002946; cv=none; b=RtHIAWCKM4t12wxqWGOnvJ0sUzS2+pO/5powhvwV4l5CwM0A8/C111L+lR2YA1dNOzxuM9UYw9ReY8PDtL2kKnz9fKOdobD2raXZE0alhsCNZ0rHaJCg018UXop4lMXpkWW15bJh+aEQ1RKwmK6ixg6J4Vm2CI08DKe6PNp5vBA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787002946; c=relaxed/simple;
-	bh=+BrwSqK/iZEWjOi5n/aAk9jdHYV1SOICLEzhhQHfrdM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mJcL5Q/hfgpNual6G57wZSoU7raJialYK5sBO4fgIXTx/LZ6kd99YEtgCdpmnac0vuIAW2tmpHedbem5Uyyn8HqT7BtIQn9kQT7xUndcF8sRxVdFDU8VnZqzzqI5dzwsFQg/hAk/VpTYheUXLKSADbrMyE5/4neHt14goPEBlgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WJpTGgkh; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36D33A9DA1
+	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 21:45:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787003122; cv=pass; b=siDihkT0zlwzBKuCOlehWsY0Eb5IJxIRKCeDa/v9M7C1nwqu0KT8xGMdiUInK1QPtB1yJ0CBbpfbgfSd1tmu8sPc/1q3IymOVsmW7/Zq1nQhlAczXeA0hJmwu3PfBtHUiKfkkk7bgeRY6zgrcyKxBk45lPhRYoVSfvd6hfL4WJE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787003122; c=relaxed/simple;
+	bh=Ul7GuxkaVhigC+VNw81nmS37qoZ1+T7jXP9zqROO3ao=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BTju8bkKzt/x3St1v/bInz2czRICR7l0H/epTPBwaKv2tt9b6kk8Apjc6Uf2jtmsG0V6o7BQHu8/OdX0zrVdTGdFw2r6kWHa+lyplAdXL2PFBmP70Z0ixkARQb+W8XjWB5SZnxPku5y8XIOBG5kqbwzBclr/6E9fF0zAMSoAcrs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YhrsKRbT; arc=pass smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WJpTGgkh"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c9cf07d2df6so2414163a12.2
-        for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 14:42:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YhrsKRbT"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2ccdf36f63dso31325ad.0
+        for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 14:45:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787003120; cv=none;
+        d=google.com; s=arc-20260327;
+        b=R3cMw+HxfNa2iNeZT5PhlbwTET8AEjMaWrGsIr5ooyN6E/ILE4uVcNlXHPqgOUw+Sg
+         Cjc1CaIYflBu31WI11PyBhlnVQZ8oAEYYOPco0Z/E9vYjT38ONvMe+fzu17fVZsoOMbk
+         IIqHhWXbhyHfti4nPK8dmGWEeFmMbkYLVrn7XC15vAMlvJwHOtRjN7SQpg/eQicvENP7
+         d/Dzcw7sI5UCQ4e0LSBKLChfuHGpH7DiA2nRlEjajJqbFIOGUBY6myXMVSOWIaWmNXK3
+         SnU2SDBn018x8KgMlGMrMPxGwqQLr9Dgc4FcAcVqSBBziJDjFIqWauLe7voQqCvyqaQ/
+         uypA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=i0xcwMjf7sgDjGuJ1B5j2NzWRjcW56xg2K8cs35uSKU=;
+        fh=zdyTC/iSZL1e+GrBqRZx1wGt+gRQA+A5BfwRvc38a40=;
+        b=pJXGY2ZnCy61dm3wJL6pyBSWG4UXK+oN+wC0nGDIELpnTePYmVLNwpP556flR/HdqA
+         8+asnnlEH5B92NwDklhgC4oYPU3X6sD/6eZrkaerEPcGiWypGi5puO9CZGl1nwQTLJVX
+         9g5Dr1/VuimMOVNZQZ1rFGJyAEacZRoDR+3gZjjJnsHql/N0Tx/KdLwtjdzlEsT8H6Hk
+         S6XMRRQ4+G5kxxFXPh0lYCEd9utLxP47xeGSNu5Kdo6qHmmrQqk+/4oFjK3hnk+eYbmQ
+         Jc2eaG3Y5l6heevKG0if5KFy2yY3qo2EfeQGzS7DrtWc0UqZgyfW6/A/nQ/uzTDk15UT
+         T/Hg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787002944; x=1787607744; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Z8oHY1efdTZ0mrkkqnpEhOi9h4e/ZaN6Y4vux4nxnrw=;
-        b=WJpTGgkhDAn8mSHKKOrK8V5g+WWW6/bwkGhgTjq5Gb8jBGVDTncw2rtji2w0Qv3Fyf
-         uQ3f57E8lIJf30l39cXbSjdbbfXq9YnRjoJXu9CfeqOVB2wzoWlpzDyNF8hk+mZ/AX47
-         2G7dYkdllBvkTSSfeeWRpZByTdKcdPkRvWmyYNp9xdpyvXcv/hIkj7PmmOIZW4exYjLS
-         o7P5w4I4pZ7LlFkprFtawpu9qeB1WSxbChM1mttvtSx3XFtZmo5STVDbSLTMUj1kNmmx
-         4aXIUhLwxcFyveUTyGe+z37LEckyyxG52H5OXAhHDSLEE1QNZMRvKESk5jPDnCTU6dmh
-         hhEQ==
+        d=google.com; s=20251104; t=1787003120; x=1787607920; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=i0xcwMjf7sgDjGuJ1B5j2NzWRjcW56xg2K8cs35uSKU=;
+        b=YhrsKRbTVM/kI4s3qh5SDOa92o2c/uqxsGUaKinRv+Z/JiP3DQBAMUHHAyyAX6qlBx
+         twxbT1IC05P5rG5HzaOABOncu3oyku/+YsPswkdSsr0VqjyVa3YS9gT3pMfjvuUwtYk+
+         /IQ5webGtPngzRxnEP/ZsGQVQxENd5Zab3tqk5MmkxGBapGNegursqvSRVsUi/Zj5jfl
+         WoExawFnrgauOdLCKydg0xIA3/1P6exfPnNOEUUICCMn5zpFbjv56ieYKNACBarlP2zv
+         762GSYP8Rjzcl6MlKLzuO9mApsSONtz6xR1sh9NvYf2KN7kM/z3Zr3DD7RhIcWKBsCkD
+         zRzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787002944; x=1787607744;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Z8oHY1efdTZ0mrkkqnpEhOi9h4e/ZaN6Y4vux4nxnrw=;
-        b=KOVh2Kaom+5WuD8i5Xx1hXMgUywywo5UuOsIJWTWDkQZNCtUe6zs3EfgMtUtjJxD3j
-         QFG5pDcTHbGdu+E6fm6/DS6ArtKeogrNVz0tuAO7aze9UNEn+okrsObARzTrRViMnssd
-         XT0rORWCf/0jboWFaNlHGj6teijtBRJU7zGSc0/oYP5DmI283DDFMKabLVyJSidubV0P
-         FYSW8GfQOpXAueTQYS9ME1LfuQ037CkkQffnpEnhXR5rN6ebTXiBNwULU8qxfjgUy3jE
-         9zQbL4VRik+s6eInWkMYCkaJpTDW72g1zJdIcCLEV15RalU7jVyNoQFcEcnOSz5sKm21
-         lxIQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqYWK6iFF7sTOV7i0a+0SDaslKwb9RWNVebUXsjcG0i5p6+ST5z76WZnDtHSICMcRhv5zs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yykj0dJyHEob+qmBkE2HEOUBWj0+IVqSA4lPkVpu/tuDgIIW0uG
-	sEvcrS+EKL4r6swOmadvIrGbyeiiSCkV/28ntcD6M8LOeAYlEj4xDd70
-X-Gm-Gg: AR+sD10tzHh1zsrW6mJJsR8BttcWuClBDOd3P4xaOjHRdNVO2r/wKl2TPG31dCGJBb+
-	VIe7lTLkWOshDxSbFxOG7WONIsSDWSJ2nV1hKsR6laebWOmzcYXFkAeaikvEGgMYC39GnYmO8tg
-	0WaTZsrWKPXx5GbSae2MVcCtk32CqQUDV/cUyd3RxpsGK6QoskindAjt/KWFOf3rtxdX6xIisXF
-	3nJnKPoWot9D8PtJ4oXL0w+jf2YJJCybrdM1dYFIKdxYl1rHpk8OAClb7IouVKIDiBgHkCZiZ8Y
-	xCRpGQVG+crAw/IeV4g9v3qqL32ZcqxJ5Ujzgq1FeGiS26nNGMiSVC0wtLZ59/dpXSaxJszwTqX
-	wdtXPEMeBpPW23c+QmcjBedrNv3V699OTOjBvLtprgNiXjhMCla9kw28QqZ3vbHIBxFRWx5f/Pk
-	5zxZX/Usrfm0OYfyDq5zQtM50j6MAvLLQbwf5dpqtN4yjbJfIrio+tuVg=
-X-Received: by 2002:a05:6a21:9087:b0:3c3:9aff:7a67 with SMTP id adf61e73a8af0-3ccda66c136mr3576310637.17.1787002943840;
-        Mon, 17 Aug 2026 14:42:23 -0700 (PDT)
-Received: from localhost ([2a03:2880:9ff:6b::])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-326794c0c94sm18048820eec.9.2026.08.17.14.42.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Aug 2026 14:42:23 -0700 (PDT)
-From: Ziyang Men <ziyang.meme@gmail.com>
-To: kernel-team@meta.com,
-	Jens Axboe <axboe@kernel.dk>,
-	Tejun Heo <tj@kernel.org>,
-	Josef Bacik <josef@toxicpanda.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Mykola Lysenko <mykolal@meta.com>,
-	Ziyang Men <ziyang.meme@gmail.com>,
-	linux-block@vger.kernel.org,
-	bpf@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] selftests/bpf: add test for blkcg io.stat BPF kfuncs
-Date: Mon, 17 Aug 2026 14:42:05 -0700
-Message-ID: <20260817214205.723267-3-ziyang.meme@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260817214205.723267-1-ziyang.meme@gmail.com>
-References: <20260817214205.723267-1-ziyang.meme@gmail.com>
+        d=1e100.net; s=20251104; t=1787003120; x=1787607920;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=i0xcwMjf7sgDjGuJ1B5j2NzWRjcW56xg2K8cs35uSKU=;
+        b=ipCU0I3Q3q0/HEBcloHY5Cb3mPRgHPQa3Ral51HbLc/MpY1i6b6T8oT7OMMfuorV0+
+         DOIuRtkaEf5rnCRP0rlCe9CmfIUkGkkPmYa5EmNGPBGsHh47gQafgUtoe1/ditKghnoE
+         fz40sebLZkhIb1eOE3p3cPrC/knYwIU+2zUbBtayCY1TeQXvM9NcgRcdoYPSMMtnolO7
+         ZiKlUjL9UvGx0RQHYYe3dOJIFRaJKNs/h8jhsVOFwah1SSe6yP5iLOIAy32Du9OFRqof
+         TskjtEM6odgFlLMeGmy3qETETcI0g2GqsEPAuPN6yu0Autz49KEqUPcaUzfaMW/xlL/T
+         G8gA==
+X-Forwarded-Encrypted: i=1; AHgh+Rqv2I+jY73rUXeyrCyrVRUAwthOpwFm+6AIZLSpSee5u96ZdbSugkXcPSaUJLLffy8aou8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzoHtb/XFld8FrRgr01y4I7rtmkBGKUa7hDJQURdLZ+W7MvGJ8n
+	qdrlOcYCM1xsIoYFqyprYop6iEz/7MvJlL3DUk8aa4/svSLxGFnKhd50P2KUOzHdHqKdW8fEXnK
+	KXtwatKSRGTfFWG+JWg6gX9qzkLDlKUSx1TUmjfZM
+X-Gm-Gg: AR+sD10RR7MmB7QW9GWVvmPa/ZlMse8ZnMO5P74T77C4vpWSB2Iz0twQqIqloZ7T/iu
+	dGzyNQXouBLPS9Q2b9D28UAz17colxDGfGUz72A0vbyn7myS37usV8VQNujJTQZLdzcA5QAaCiI
+	ep4i3a5R9HcAy0AA/A4vbOfjVp4JsF4fYWWzp6y2jgNVipu9mb8VaNADqjZJqyNpF+AkfN6lXSE
+	9y5aCLta2Ukf9j2xv6NMz+cn4PL043x422yH5XS1cNiuLrHbuTIjlh5BWYwEyOXU/A5YwK8Mxzy
+	Nf7t6j9kn0mMnEKBU2qzfIvZlXRITXTJd0SFlgILY+2HXuwnq5UXAIWKRISFfrTT/2b4L/SoG3q
+	Dyq5/AvvWCilphCnrAJIv73eu+z3Y+Y5r/VofVX6BjUU=
+X-Received: by 2002:a17:903:3d0f:b0:2bf:3579:cdaa with SMTP id
+ d9443c01a7336-2d5cca0821emr3898765ad.10.1787003119386; Mon, 17 Aug 2026
+ 14:45:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260814021406.3044324-1-hramamurthy@google.com>
+In-Reply-To: <20260814021406.3044324-1-hramamurthy@google.com>
+From: Harshitha Ramamurthy <hramamurthy@google.com>
+Date: Mon, 17 Aug 2026 14:45:08 -0700
+X-Gm-Features: AcwNN1X-PrLuTfYUH8HnqqozWNkSjG5BNtWITsNii8iA8utNKIgF2z0jsb6e5Es
+Message-ID: <CAEAWyHerP_n3ucJaEqrCZqVFQTPKzydYXOPYZkk8d0iKf8UWow@mail.gmail.com>
+Subject: Re: [PATCH net-next v4 00/15] gve: AdminQ mode related refactors
+To: netdev@vger.kernel.org
+Cc: joshwash@google.com, andrew+netdev@lunn.ch, davem@davemloft.net, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, 
+	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, 
+	sdf@fomichev.me, jordanrhee@google.com, willemb@google.com, nktgrg@google.com, 
+	maolson@google.com, thostet@google.com, jacob.e.keller@intel.com, 
+	przemyslaw.kitszel@intel.com, debarghyak@google.com, kees@kernel.org, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add cgroup_iter_io to test the blkcg io.stat BPF kfuncs. The BPF program
-flushes the statistics, looks up the I/O css under RCU, walks its blkgs,
-and reads one device's counters with BPF_CORE_READ().
+On Thu, Aug 13, 2026 at 7:14=E2=80=AFPM Harshitha Ramamurthy
+<hramamurthy@google.com> wrote:
+>
+> This series is preparing the driver for the addition of a new control
+> plane mode(MailboxQ) by commonizing and reusing as much code as possible.
+> MailboxQ is a new control plane infrastructure which uses mailbox queues.
+> This is a new control plane to communicate with the device when the drive=
+r
+> is running on bare-metal instances as well as newer versions of the devic=
+e.
+>
+> This series contains 2 main changes to the gve driver's existing control
+> plane(AdminQ):
+> 1) refactor some initialization/teardown path methods to make it work for
+>    both control planes.
+> 2) add gve_ctrl_ops structure to the driver for various control plane
+>    operations
+>
+> The refactors are mainly around the init, reset and recover paths so that
+> functionalities could be moved into the control ops like 'set_num_queues'=
+,
+> 'set_num_ntfy_blks' etc.
+>
+> This patch series only sets the control ops for AdminQ mode. This is
+> intended as a preparation for adding MailboxQ mode in upcoming series
+> which will add the new control plane infrastructure and then introduce
+> the corresponding control ops for MailboxQ mode.
+>
+> The entire list of future patches can be found here for reference:
+> https://github.com/hramamurthy12/linux/commits/gve-mailbox-queues/
 
-The test performs O_DIRECT I/O on a private loop device. It checks the
-device ID and counters against io.stat.
+Sashiko has spotted a few issues - will look through them and fix them in v=
+5.
 
-Assisted-by: Claude:claude-opus-5
-Signed-off-by: Ziyang Men <ziyang.meme@gmail.com>
----
- tools/testing/selftests/bpf/cgroup_iter_io.h  |  17 ++
- tools/testing/selftests/bpf/config            |   1 +
- .../selftests/bpf/prog_tests/cgroup_iter_io.c | 277 ++++++++++++++++++
- .../selftests/bpf/progs/cgroup_iter_io.c      |  99 +++++++
- 4 files changed, 394 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/cgroup_iter_io.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter_io.c
- create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter_io.c
-
-diff --git a/tools/testing/selftests/bpf/cgroup_iter_io.h b/tools/testing/selftests/bpf/cgroup_iter_io.h
-new file mode 100644
-index 000000000000..f4bbaaccdf71
---- /dev/null
-+++ b/tools/testing/selftests/bpf/cgroup_iter_io.h
-@@ -0,0 +1,17 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+#ifndef __CGROUP_ITER_IO_H
-+#define __CGROUP_ITER_IO_H
-+
-+struct io_query {
-+	/* one device's io.stat counters */
-+	__u64 rbytes;
-+	__u64 wbytes;
-+	__u64 rios;
-+	__u64 wios;
-+	__u64 dbytes;
-+	__u64 dios;
-+	__u64 dev;	/* dev_t of the device the counters belong to */
-+};
-+
-+#endif /* __CGROUP_ITER_IO_H */
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index ea7044f30adc..270e6bf9194d 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -1,3 +1,4 @@
-+CONFIG_BLK_CGROUP=y
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=y
- CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=1
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_io.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_io.c
-new file mode 100644
-index 000000000000..5d27e5d28379
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_io.c
-@@ -0,0 +1,277 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+#define _GNU_SOURCE
-+#include <test_progs.h>
-+#include <bpf/libbpf.h>
-+#include <fcntl.h>
-+#include <linux/loop.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+#include <sys/stat.h>
-+#include <sys/sysmacros.h>
-+#include <unistd.h>
-+#include "cgroup_helpers.h"
-+#include "cgroup_iter_io.h"
-+#include "cgroup_iter_io.skel.h"
-+
-+#define IO_SIZE (4 * 1024 * 1024)
-+
-+static int read_stats(struct bpf_link *link)
-+{
-+	int fd, ret = 0;
-+	ssize_t bytes;
-+
-+	fd = bpf_iter_create(bpf_link__fd(link));
-+	if (!ASSERT_OK_FD(fd, "bpf_iter_create"))
-+		return 1;
-+
-+	/* Results land in skel->data_query; the read itself returns no data. */
-+	bytes = read(fd, NULL, 0);
-+	if (!ASSERT_EQ(bytes, 0, "read fd"))
-+		ret = 1;
-+
-+	close(fd);
-+	return ret;
-+}
-+
-+/* Set up a loop device for cgroup-charged I/O. */
-+static int loop_setup(char *loop_path, size_t sz, int *ctl_fd, int *loop_fd,
-+		      int *back_fd)
-+{
-+	char back_path[] = "/tmp/cgroup_iter_io.XXXXXX";
-+	int nr;
-+
-+	*ctl_fd = *loop_fd = *back_fd = -1;
-+
-+	*ctl_fd = open("/dev/loop-control", O_RDWR | O_CLOEXEC);
-+	if (*ctl_fd < 0)
-+		return -1;
-+
-+	nr = ioctl(*ctl_fd, LOOP_CTL_GET_FREE);
-+	if (nr < 0)
-+		goto err;
-+	snprintf(loop_path, sz, "/dev/loop%d", nr);
-+
-+	*back_fd = mkstemp(back_path);
-+	if (*back_fd < 0)
-+		goto err;
-+	unlink(back_path);
-+	if (ftruncate(*back_fd, (off_t)IO_SIZE * 4))
-+		goto err;
-+
-+	*loop_fd = open(loop_path, O_RDWR | O_CLOEXEC);
-+	if (*loop_fd < 0)
-+		goto err;
-+	if (ioctl(*loop_fd, LOOP_SET_FD, *back_fd))
-+		goto err;
-+
-+	return 0;
-+err:
-+	if (*loop_fd >= 0)
-+		close(*loop_fd);
-+	if (*back_fd >= 0)
-+		close(*back_fd);
-+	close(*ctl_fd);
-+	*ctl_fd = *loop_fd = *back_fd = -1;
-+	return -1;
-+}
-+
-+static void loop_teardown(const char *loop_path, int ctl_fd, int loop_fd,
-+			  int back_fd)
-+{
-+	int nr = -1;
-+
-+	if (loop_fd >= 0) {
-+		ioctl(loop_fd, LOOP_CLR_FD, 0);
-+		close(loop_fd);
-+	}
-+	if (back_fd >= 0)
-+		close(back_fd);
-+	if (ctl_fd >= 0) {
-+		if (sscanf(loop_path, "/dev/loop%d", &nr) == 1 && nr >= 0)
-+			ioctl(ctl_fd, LOOP_CTL_REMOVE, nr);
-+		close(ctl_fd);
-+	}
-+}
-+
-+/* O_DIRECT keeps I/O charged to the current cgroup. */
-+static int do_direct_io(const char *loop_path)
-+{
-+	void *buf;
-+	int fd, ret = -1;
-+
-+	fd = open(loop_path, O_RDWR | O_DIRECT | O_CLOEXEC);
-+	if (fd < 0)
-+		return -1;
-+	if (posix_memalign(&buf, 4096, IO_SIZE))
-+		goto out_fd;
-+	memset(buf, 0xab, IO_SIZE);
-+
-+	if (pwrite(fd, buf, IO_SIZE, 0) != IO_SIZE)
-+		goto out_buf;
-+	fsync(fd);
-+	if (pread(fd, buf, IO_SIZE, 0) != IO_SIZE)
-+		goto out_buf;
-+	ret = 0;
-+out_buf:
-+	free(buf);
-+out_fd:
-+	close(fd);
-+	return ret;
-+}
-+
-+/* Read @dev's io.stat counters. @dev uses kernel dev_t encoding. */
-+static int parse_io_stat(int cgroup_fd, __u64 dev, struct io_query *out)
-+{
-+	unsigned int want_maj = dev >> 20, want_min = dev & ((1U << 20) - 1);
-+	char buf[4096], *line, *saveptr;
-+	int fd, n, ret = -1;
-+
-+	fd = openat(cgroup_fd, "io.stat", O_RDONLY);
-+	if (fd < 0)
-+		return -1;
-+	n = read(fd, buf, sizeof(buf) - 1);
-+	close(fd);
-+	if (n <= 0)
-+		return -1;
-+	buf[n] = '\0';
-+
-+	for (line = strtok_r(buf, "\n", &saveptr); line;
-+	     line = strtok_r(NULL, "\n", &saveptr)) {
-+		unsigned long long rb = 0, wb = 0, ri = 0, wi = 0, db = 0, di = 0;
-+		unsigned int maj, min;
-+
-+		/* Only the device id is required; missing counters stay zero. */
-+		if (sscanf(line,
-+			   "%u:%u rbytes=%llu wbytes=%llu rios=%llu wios=%llu dbytes=%llu dios=%llu",
-+			   &maj, &min, &rb, &wb, &ri, &wi, &db, &di) < 2)
-+			continue;
-+		if (maj != want_maj || min != want_min)
-+			continue;
-+
-+		out->rbytes = rb;
-+		out->wbytes = wb;
-+		out->rios = ri;
-+		out->wios = wi;
-+		out->dbytes = db;
-+		out->dios = di;
-+		ret = 0;
-+		break;
-+	}
-+	return ret;
-+}
-+
-+void test_cgroup_iter_io(void)
-+{
-+	char *cgroup_rel_path = "/cgroup_iter_io_test";
-+	int ctl_fd = -1, loop_fd = -1, back_fd = -1;
-+	struct cgroup_iter_io *skel = NULL;
-+	struct bpf_link *link = NULL;
-+	char loop_path[64];
-+	struct io_query *q;
-+	int cgroup_fd;
-+
-+	cgroup_fd = cgroup_setup_and_join(cgroup_rel_path);
-+	if (!ASSERT_OK_FD(cgroup_fd, "cgroup_setup_and_join"))
-+		return;
-+
-+	if (loop_setup(loop_path, sizeof(loop_path), &ctl_fd, &loop_fd, &back_fd)) {
-+		test__skip();	/* needs root + CONFIG_BLK_DEV_LOOP */
-+		goto cleanup_cgroup_fd;
-+	}
-+
-+	skel = cgroup_iter_io__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "cgroup_iter_io__open_and_load"))
-+		goto cleanup_loop;
-+
-+	/* Convert glibc st_rdev to kernel dev_t format. */
-+	{
-+		struct stat lst;
-+
-+		if (!ASSERT_OK(fstat(loop_fd, &lst), "fstat loop"))
-+			goto cleanup_skel;
-+		skel->data_query->target_dev =
-+			((__u64)major(lst.st_rdev) << 20) | minor(lst.st_rdev);
-+	}
-+
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	union bpf_iter_link_info linfo = {
-+		.cgroup.cgroup_fd = cgroup_fd,
-+		.cgroup.order = BPF_CGROUP_ITER_SELF_ONLY,
-+	};
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+
-+	link = bpf_program__attach_iter(skel->progs.cgroup_io_query, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
-+		goto cleanup_skel;
-+
-+	/* This process is in the test cgroup, so the loop I/O is charged here. */
-+	if (!ASSERT_OK(do_direct_io(loop_path), "do_direct_io"))
-+		goto cleanup_link;
-+
-+	if (!ASSERT_OK(read_stats(link), "read stats"))
-+		goto cleanup_link;
-+
-+	q = &skel->data_query->io_query;
-+	if (test__start_subtest("cgroup_iter_io__write")) {
-+		ASSERT_GT(q->wbytes, 0, "wbytes");
-+		ASSERT_GT(q->wios, 0, "wios");
-+	}
-+	if (test__start_subtest("cgroup_iter_io__read")) {
-+		ASSERT_GT(q->rbytes, 0, "rbytes");
-+		ASSERT_GT(q->rios, 0, "rios");
-+	}
-+	if (test__start_subtest("cgroup_iter_io__dev"))
-+		ASSERT_GT(q->dev, 0, "dev");
-+
-+	/* Compare with io.stat without I/O between the reads. */
-+	if (test__start_subtest("cgroup_iter_io__match")) {
-+		struct io_query filev = {};
-+
-+		if (ASSERT_OK(read_stats(link), "read stats") &&
-+		    ASSERT_OK(parse_io_stat(cgroup_fd, q->dev, &filev),
-+			      "parse io.stat")) {
-+			ASSERT_EQ(q->rbytes, filev.rbytes, "rbytes");
-+			ASSERT_EQ(q->wbytes, filev.wbytes, "wbytes");
-+			ASSERT_EQ(q->rios, filev.rios, "rios");
-+			ASSERT_EQ(q->wios, filev.wios, "wios");
-+			ASSERT_EQ(q->dbytes, filev.dbytes, "dbytes");
-+			ASSERT_EQ(q->dios, filev.dios, "dios");
-+		}
-+	}
-+
-+	/* Root statistics include this cgroup's I/O. */
-+	if (test__start_subtest("cgroup_iter_io__root")) {
-+		struct bpf_link *root_link;
-+		struct io_query *r;
-+
-+		skel->data_query->got_root_css = 0;
-+		root_link = bpf_program__attach_iter(skel->progs.cgroup_root_io_query,
-+						     &opts);
-+		if (ASSERT_OK_PTR(root_link, "attach root iter")) {
-+			if (ASSERT_OK(read_stats(root_link), "read root stats")) {
-+				r = &skel->data_query->root_query;
-+				ASSERT_EQ(skel->data_query->got_root_css, 1,
-+					  "got_root_css");
-+				ASSERT_EQ(r->dev, q->dev, "root dev");
-+				ASSERT_GE(r->wbytes, q->wbytes, "root wbytes");
-+				ASSERT_GE(r->wios, q->wios, "root wios");
-+				ASSERT_GE(r->rbytes, q->rbytes, "root rbytes");
-+				ASSERT_GE(r->rios, q->rios, "root rios");
-+			}
-+			bpf_link__destroy(root_link);
-+		}
-+	}
-+
-+cleanup_link:
-+	bpf_link__destroy(link);
-+cleanup_skel:
-+	cgroup_iter_io__destroy(skel);
-+cleanup_loop:
-+	loop_teardown(loop_path, ctl_fd, loop_fd, back_fd);
-+cleanup_cgroup_fd:
-+	close(cgroup_fd);
-+	cleanup_cgroup_environment();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/cgroup_iter_io.c b/tools/testing/selftests/bpf/progs/cgroup_iter_io.c
-new file mode 100644
-index 000000000000..2cd538068987
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/cgroup_iter_io.c
-@@ -0,0 +1,99 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_core_read.h>
-+#include "bpf_experimental.h"
-+#include "cgroup_iter_io.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct io_query io_query SEC(".data.query");
-+
-+struct io_query root_query SEC(".data.query");
-+
-+__u64 got_root_css SEC(".data.query");
-+
-+/* Device selected by userspace in kernel dev_t format. */
-+__u64 target_dev SEC(".data.query");
-+
-+/* Keep inline: RCU and open-coded iterators cannot cross a BPF call. */
-+static __always_inline int read_target_dev(struct cgroup *cgrp,
-+					   struct io_query *out)
-+{
-+	struct cgroup_subsys_state *css;
-+	struct blkcg_gq *pos;
-+	__u64 dev;
-+	int ssid;
-+
-+	/* The flush can sleep, so run it before the RCU section. */
-+	bpf_blkcg_flush_stats(cgrp);
-+
-+	bpf_rcu_read_lock();
-+	ssid = bpf_core_enum_value(enum cgroup_subsys_id, io_cgrp_id);
-+
-+	/*
-+	 * subsys[] is __rcu, so this read gives an RCU pointer the iterator
-+	 * accepts. BPF_CORE_READ() would return a plain value instead.
-+	 */
-+	css = cgrp->subsys[ssid];
-+	if (!css) {
-+		bpf_rcu_read_unlock();
-+		return 0;
-+	}
-+
-+	bpf_for_each(blkg, pos, css) {
-+		dev = BPF_CORE_READ(pos, q, disk, part0, bd_dev);
-+		if (dev != target_dev)
-+			continue;
-+
-+		out->dev = dev;
-+		out->rbytes = BPF_CORE_READ(pos, iostat.cur.bytes[BLKG_IOSTAT_READ]);
-+		out->wbytes = BPF_CORE_READ(pos, iostat.cur.bytes[BLKG_IOSTAT_WRITE]);
-+		out->rios = BPF_CORE_READ(pos, iostat.cur.ios[BLKG_IOSTAT_READ]);
-+		out->wios = BPF_CORE_READ(pos, iostat.cur.ios[BLKG_IOSTAT_WRITE]);
-+		out->dbytes = BPF_CORE_READ(pos, iostat.cur.bytes[BLKG_IOSTAT_DISCARD]);
-+		out->dios = BPF_CORE_READ(pos, iostat.cur.ios[BLKG_IOSTAT_DISCARD]);
-+		break;
-+	}
-+	bpf_rcu_read_unlock();
-+	return 1;
-+}
-+
-+SEC("iter.s/cgroup")
-+int cgroup_io_query(struct bpf_iter__cgroup *ctx)
-+{
-+	struct cgroup *cgrp = ctx->cgroup;
-+
-+	if (!cgrp)
-+		return 1;
-+
-+	/* Start fresh so a device that is not found stays all-zero. */
-+	__builtin_memset(&io_query, 0, sizeof(io_query));
-+
-+	read_target_dev(cgrp, &io_query);
-+	return 0;
-+}
-+
-+SEC("iter.s/cgroup")
-+int cgroup_root_io_query(struct bpf_iter__cgroup *ctx)
-+{
-+	struct cgroup *root;
-+
-+	if (!ctx->cgroup)
-+		return 1;
-+
-+	__builtin_memset(&root_query, 0, sizeof(root_query));
-+
-+	/* The root cgroup always has id 1. */
-+	root = bpf_cgroup_from_id(1);
-+	if (!root)
-+		return 0;
-+
-+	/* Root counters include all cgroups' I/O. */
-+	if (read_target_dev(root, &root_query))
-+		got_root_css = 1;
-+
-+	bpf_cgroup_release(root);
-+	return 0;
-+}
--- 
-2.53.0-Meta
-
+>
+> Changes in v4:
+> - Reduce code churn by placing new functions directly in gve_adminq.c, in=
+troducing final tab spacing
+>   and using local variable (Przemek Kitszel)
+> - Fix kdoc formatting and drop spurious management interrupt(patch 9)
+> - Propagate release_db_resources naming change (patch 12)
+> - Remove double logging in destroy queues path (patch 14)
+> - v3: https://lore.kernel.org/netdev/20260803184630.3813311-1-hramamurthy=
+@google.com/
+>
+> Changes in v3:
+> - Fix driver compatibility verification in the reset and recovery paths (=
+patches 2, 8).
+> - Mark gve_adminq_get_device_properties() with __maybe_unused ahead of it=
+s usage (patch 7).
+> - Refine error handling and resource cleanup in reset, probe, and queue c=
+reation paths (patches 8, 9, 11, 14).
+> - Keep IRQ doorbell allocation/release in control plane resource helpers =
+(patch 12).
+> - Minor fixes: fix TOCTOU issue for link speed, correct kdoc comments, an=
+d remove redundant teardown calls (patches 4, 11, 15).
+> - v2: https://lore.kernel.org/netdev/20260602235900.3050782-1-hramamurthy=
+@google.com/
+>
+> Changes in v2:
+> - Rebased against latest net-next to resolve apply failure for patch 5
+> - Fixed a few typos in commit messages of patch 9 and 14
+> - Fixed a kdoc warning in patch 9
+> - v1: https://lore.kernel.org/netdev/20260601175437.3767283-1-hramamurthy=
+@google.com/
+> Harshitha Ramamurthy (9):
+>   gve: don't pass in unused parameter to gve_adminq_free
+>   gve: refactor initialization with helper functions
+>   gve: add a few helper functions to set device properties
+>   gve: add struct gve_device_info to hold device properties
+>   gve: introduce control plane operations structure
+>   gve: introduce ctrl ops to set vectors and Qs
+>   gve: introduce gve_adminq_get_device_properties()
+>   gve: refactor gve_init_priv for reset path
+>   gve: add ctrl ops to for queue operations
+>
+> Joshua Washington (6):
+>   gve: simplify reset logic
+>   gve: add gve_ctrl_ops for gve initialization/teardown sequences
+>   gve: split up notify block allocation and setup paths
+>   gve: introduce new methods to handle IRQ doorbells
+>   gve: setup and teardown management interrupts
+>   gve: add link status/speed ctrl ops
+>
+>  drivers/net/ethernet/google/gve/gve.h         |  89 +-
+>  drivers/net/ethernet/google/gve/gve_adminq.c  | 437 ++++++--
+>  drivers/net/ethernet/google/gve/gve_adminq.h  |  25 +-
+>  drivers/net/ethernet/google/gve/gve_dqo.h     |   2 +-
+>  drivers/net/ethernet/google/gve/gve_ethtool.c |   5 +-
+>  .../net/ethernet/google/gve/gve_flow_rule.c   |  15 +-
+>  drivers/net/ethernet/google/gve/gve_main.c    | 940 +++++++++---------
+>  7 files changed, 957 insertions(+), 556 deletions(-)
+>
+> --
+> 2.55.0.691.gc56d675ccc-goog
+>
