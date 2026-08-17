@@ -1,139 +1,110 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F3E344E678;
-	Mon, 17 Aug 2026 20:14:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A2533BBFAE
+	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 20:25:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786997648; cv=none; b=ktjAchPv+59lZVvSffKJXVF5nt1W6l/U/tWwpK3VTOakTsxGxMv8725l9yg/gsTZwy8v7Eat3eE7urVABuNyRX7mtdPeqBe+6VCDBfdlLEdDVxtASwG6mRwqM/fhVewbxJWyJDty8FY1Qz4xr6K4YsSS9d7acXc1QKaj0r6SLRA=
+	t=1786998353; cv=none; b=u3uIUJAjroL3JByJyx8l730oF3XQjqduSHMLxBN9qGmti8HjzOxxtrH9xm/GTbSsSaYA2GVuN1LdltffCM7jAaYBz4c3vwbod4MhHc1Eyrrw+4hCeJS864qKVMbdOYWnkQ4ZffRmpCqsZayJDUdQwxNKghH8K/IOaya5uDlvx74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786997648; c=relaxed/simple;
-	bh=MKAJTs4N20chRMx11ir24sEGxfvLBVvzTI4RLgwfzK8=;
+	s=arc-20240116; t=1786998353; c=relaxed/simple;
+	bh=WZOrc40c8mf+xS0X2WYf+F4xqSw8kNTlD24NyZlBvUo=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=E5a/VvVrFm75yeKslDqukiPC99lWBA3AWbTgCQp4ob/a+lH/laWsPlcakmcC+9iU2MlIX46RAowq6Trqc2vZqZWgw24z8/7P2ldAZr4atYepgRnd152AUoDSbFMnfcbPGiFfdRJlKNPdPzaEkiFqs8/Bb0DrV26gAqSN5Gvdg2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WCtGvW0U; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=AM9ZbN/03O2/YNW+K647KTkmPqWMiAIa3Kwmastnl9wYdwa4z0PaHmm1u7DAAltO30PIyFe8Bc9gvwt4eZ6pegYohJhP/0/V80nPzvydLe41+3S/+EIhQXxRlaXU6GymhWtWqqFuBj4JDrySrDP5M+jqe+gzH6zK2kHhtS/8zG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D5tZ9mc8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WCtGvW0U"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3437C1F000E9;
-	Mon, 17 Aug 2026 20:14:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D5tZ9mc8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC67C1F000E9;
+	Mon, 17 Aug 2026 20:25:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786997647;
-	bh=sm5ecoGDsVrlrsmLrRZTgm/GCM0BDVcP6qlE+u0dDto=;
+	s=k20260515; t=1786998351;
+	bh=RjE0rCX19M54zziZHn1BVumIyN2seC7W4hHLzO25Bd8=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=WCtGvW0UxYn14utiR4TdgB2fCAiK6EmTM/m/B5V2HpCDGwIIBDobjSqww27mX8v+W
-	 uG7Gwz2XUhx6H/we9vg9GGgKFKeXDgppQuEnH9jMCSrjuiWEfKoks7izsp7xb74kUS
-	 SlklJMJBsXoxc3/WG3da5jkFDEDDjpaOtPGLp3VhatmPkpbhk64z1UjX+GTVIwny9x
-	 KubfHxoPSy8W/kee0dlZ5j2neBvxePX7c/uoivNSxisp+zmFFWZTwlk0ZQGyUTTNxT
-	 ggsNb1YqHai2IlhPW0S7QStBXw1WUFrH8+gaUc1+DPxtMvAX0Q262X431qDVCol0IQ
-	 kJOXxFFWtrBVw==
-Content-Type: multipart/mixed; boundary="===============7027275377149721589=="
+	b=D5tZ9mc8hQ9GGWhx6Z8TmdpXX3Ju2z25cyLEwHmf4RhuYjpfWhUmh6rekhiSzvUtP
+	 yBoweMkWfBjnvbBbRPEjqtRguwhYuguemh8GWm8aXqi/JU/6I2x4qbCfv9J+mb1y05
+	 t1PviD0v7dtdPvXPMbvEqhWMG08n903ZJdzfAq/3cTvU1L3Plzj8YRpeFbvTz7wf8j
+	 MOmksshsKXitqaQwNFgKJWoxCFL9siyUkrukyJ5zaQ3i4EzFt/YrhuMf6NZVUqxWtn
+	 V6K8a5TOcASVZgtzN9oVKVUb/vKIq3iY1QqA8J8yoeG+Gilgz1CeDupZZ7nu7pS8gc
+	 qgtbD+IUUV2Qw==
+Content-Type: multipart/mixed; boundary="===============7511222645804119623=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <c7945c532eb31abc4d3fbbd0720d7a1f47eff936621cf8d11ecdfd9aeef27f93@mail.kernel.org>
-In-Reply-To: <20260817-tc_tunnel_flaky-v6-1-c02ccde847f2@bootlin.com>
-References: <20260817-tc_tunnel_flaky-v6-1-c02ccde847f2@bootlin.com>
-Subject: Re: [PATCH bpf v6] selftests/bpf: allocate a larger timeout for connection
+Message-Id: <49d90f8604abbf8f1e0ae7699bfbb9a02bc8edb69c5b67f8925166bfd681969f@mail.kernel.org>
+In-Reply-To: <20260817191616.11071-6-emil@etsalapatis.com>
+References: <20260817191616.11071-6-emil@etsalapatis.com>
+Subject: Re: [PATCH 5/6] selftests/bpf: libarena: Add a benchmark for malloc()/calloc()
 From: bot+bpf-ci@kernel.org
-To: alexis.lothore@bootlin.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
-Cc: ebpf@linuxfoundation.org,bastien.curutchet@bootlin.com,thomas.petazzoni@bootlin.com,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ihor.solodrai@linux.dev,alexis.lothore@bootlin.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 17 Aug 2026 20:14:06 +0000 (UTC)
+To: emil@etsalapatis.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,memxor@gmail.com,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 17 Aug 2026 20:25:50 +0000 (UTC)
 
---===============7027275377149721589==
+--===============7511222645804119623==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-> index b82f572641b7..1fda1fa7281c 100644
-> --- a/tools/testing/selftests/bpf/network_helpers.c
-> +++ b/tools/testing/selftests/bpf/network_helpers.c
-
-[ ... ]
-
-> @@ -291,6 +293,37 @@ int client_socket(int family, int type,
->  	return -1;
->  }
->
-> +static int connect_with_timeout(int fd, const struct sockaddr_storage *addr,
-> +				socklen_t addrlen, int timeout_ms)
+> diff --git a/tools/testing/selftests/bpf/benchs/run_bench_libarena.sh b/tools/testing/selftests/bpf/benchs/run_bench_libarena.sh
+> new file mode 100755
+> index 000000000000..10afe4d52ebf
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/benchs/run_bench_libarena.sh
+> @@ -0,0 +1,31 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +source ./benchs/run_common.sh
+> +
+> +set -eufo pipefail
+> +
+> +RUN_BENCH="./bench -d3 -q"
+> +
+> +summarize_libarena()
 > +{
-> +	int connect_timeout_ms = MAX(timeout_ms, CONNECT_MIN_TIMEOUT_MS);
+> +	local bench="$1"
+> +	local summary
 > +
-> +	/*
-> +	 * Override timeout configuration with a larger value for the
-> +	 * connection
-> +	 */
-> +	if (settimeo(fd, connect_timeout_ms)) {
-> +		log_err("Failed to set connect timeout");
-> +		return -1;
-> +	}
-> +
-> +	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
-> +		log_err("Failed to connect");
-> +		return -1;
-> +	}
-> +
-> +	/*
-> +	 * If the timeout configured by the test is different from the
-> +	 * connect timeout, restore it
-> +	 */
-
-This isn't a bug, but do the two block comments here add anything over
-the code they sit above? The first sits above settimeo(fd,
-connect_timeout_ms) where connect_timeout_ms was computed with MAX(...,
-CONNECT_MIN_TIMEOUT_MS) on the line before. The second transliterates
-the condition on the line below (timeout_ms != connect_timeout_ms means
-"restore it"). Could they be trimmed to a single line about why a larger
-connect budget is needed?
-
-> +	if (timeout_ms != connect_timeout_ms && settimeo(fd, timeout_ms)) {
-> +		log_err("Failed to set timeout for connected socket");
-> +		return -1;
-> +	}
-> +
-> +	return 0;
+> +	summary=$(printf '%s\n' "$2" | tail -n1)
+> +	summary=${summary#Summary: }
+> +	printf "%-20s %s\n" "$bench" "$summary"
 > +}
+> +
+> +header "libarena sequential malloc\n"
+                                       ^^
 
-[ ... ]
+The argument passed to header() includes a trailing '\n' escape, but
+header() in benchs/run_common.sh uses printf's %s conversion, which
+copies the argument verbatim without interpreting backslash escapes:
 
-> @@ -376,20 +408,14 @@ int connect_fd_to_fd(int client_fd, int server_fd, int timeout_ms)
->  	struct sockaddr_storage addr;
->  	socklen_t len = sizeof(addr);
->
-> -	if (settimeo(client_fd, timeout_ms))
-> -		return -1;
-> -
->  	if (getsockname(server_fd, (struct sockaddr *)&addr, &len)) {
->  		log_err("Failed to get server addr");
->  		return -1;
->  	}
->
-> -	if (connect(client_fd, (const struct sockaddr *)&addr, len)) {
-> -		log_err("Failed to connect to server");
-> -		return -1;
-> -	}
-> -
-> -	return 0;
-> +	return connect_with_timeout(client_fd,
-> +				    &addr, len,
-> +				    timeout_ms);
-                            ^^^^
+    function header()
+    {
+            local len=${#1}
 
-This isn't a bug, but could this call fit on one line? With the leading
-tab it comes to about 71 columns as a single statement, well inside the
-80-column limit. Elsewhere the file only wraps arguments when the line
-doesn't fit.
+            printf "\n%s\n" "$1"
+            for i in $(seq 1 $len); do printf '='; done
+            printf '\n'
+    }
 
->  }
+So the two characters '\' and 'n' are printed literally rather than as a
+newline. There is a second effect: len=${#1} counts those two extra
+characters, so the '=' underline is 28 characters for a 26-character title,
+leaving the rule two characters wider than the text it underlines.
+
+header() already emits its own leading and trailing newlines, so the escape
+is not needed. All 23 other header() call sites in
+tools/testing/selftests/bpf/benchs/*.sh pass a bare string with no escape
+(for example, run_bench_bloom_filter_map.sh:8 uses header "Bloom filter
+map"), so this is the only caller that includes an escape.
+
+Would it make sense to drop the trailing \n?
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32062499118
---===============7027275377149721589==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32062809860
+--===============7511222645804119623==--
