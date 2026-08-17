@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-75.mta0.migadu.com [91.218.175.75])
+Received: from mta0.migadu.com (out-83.mta0.migadu.com [91.218.175.83])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96EC612CDA5
-	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 03:43:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4421F26CE05
+	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 03:44:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.83
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786938201; cv=none; b=lUFQw7RXcsYlLcVMRtoIzmZ+20TAyL/xkM5M+sAwvd+9MPYxxwsi3CIKxPSsVFon2HIC9jZSPVEM61Mcy59jJfUYmi6/3hXYWZRwT6amOoXUtQt7SsorR6mMGheJzryvta/Jg5okgWoeBxOjnlpqytDatRCcalGpgTtFDDyGo/M=
+	t=1786938269; cv=none; b=hQFtxljvKiJ3q2QiEvxd1djYztWgW0GHPE+XRj1vDL0xJ+ONh9WhTPk7UALakZgTtbNULoqvH10/8GIVqcJgIv0DG8RFRp3LjOgncgkBhIDCLHAcPyLuYGqnGdlDLWG/Ino1YKrEGBRy9J26VfuOirS0bmBhEsY5LpMe9AAZ9qU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786938201; c=relaxed/simple;
-	bh=5JlqAkFUoHoOaU/+L10rQGU7qGWtY5gdH8bdufLqrKU=;
+	s=arc-20240116; t=1786938269; c=relaxed/simple;
+	bh=ONUXVn4EcDphDo7KsaCHdSqV/EGEjLfMgyUFh3WJBzo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ujf+3TvvgykS8SV4wwq57ZQ8FOASHaZIRKtAVQE1Itv4086njzmtBg2Wapwji3mhrt8fLQp9Ve1nrBOlNBc2mbIHtXOhnrusH/6mmmI8mZG5kJ2aZ9/xPV2Mc3J7UFMxhcB9s8P+UYjvHkIJ7/j+SOIIbHUrHemtoXdoo54gsQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Yeuaz5C8; arc=none smtp.client-ip=91.218.175.75
+	 In-Reply-To:Content-Type; b=EvnQ1YgmkWb1gKr9bShBKQukLxS0i5U5JwxT9uZ+ONoIuCOoW9jl0ZUHtiVbUeUnOKfRAgEbCQjAXE7Zq7fevfb9ew7L0Tn2EAkCvmUmKgQD3FavYzK9kJEr1uLJOXwud6i14G/W9p8+Fs3i1hbhKIZQBlcNn26cL6LMFjEVPBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AyPjH8TR; arc=none smtp.client-ip=91.218.175.83
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Yeuaz5C8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AyPjH8TR"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=5JlqAkFUoHoOaU/+L10rQGU7qGWtY5gdH8bdufLqrKU=;
+DKIM-Signature: a=rsa-sha256; bh=ONUXVn4EcDphDo7KsaCHdSqV/EGEjLfMgyUFh3WJBzo=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786938196; v=1; x=1787542996;
- b=Yeuaz5C8b+zHe/DN6ZO+YJWyEKZ6bu7scbXIb5fVCHxx3SwGiHqRfOrnhhpETGCbViPeTq5m
- 4WjW6XXszRB+/dLtwuNL8rSeEsXQh9bDUSe4bXuqXZMK42m+8rWt4dIWlSRQCvXkmuIWKLk7nJK
- 7MVkuK4sDBNCtsgjKPS3xyro=
+ t=1786938264; v=1; x=1787543064;
+ b=AyPjH8TR5wmajXEvBhjA87oJNCVsW7hMCIDlMvl7ZQNKVK3r9f+7ldlVL2khlR7CnoQ3Wji4
+ 18CvPzkzMX1K9GBnW6IiqO7N/0iJ24N6sk2u2vDYt8AEOsT5Qqx8NRL4qj4zgwWUzSj9ja9nGno
+ 4i5TrQe9bW6kFDSnhAPMu4ig=
 X-Envelope-To: bpf@vger.kernel.org
 Received: from [IPV6:2600:382:861c:7f36:14e1:cf55:e233:293b] (2600:382:861c:7f36:14e1:cf55:e233:293b)
-	by smtp.migadu.com with ESMTPS id f13dca0dc2dac506;
-	Mon, 17 Aug 2026 03:43:16 +0000
+	by smtp.migadu.com with ESMTPS id 06c9bd7da7b32600;
+	Mon, 17 Aug 2026 03:44:24 +0000
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <f7b9ae25-d882-4d33-a0a8-7e87fbbcae52@linux.dev>
-Date: Sun, 16 Aug 2026 20:43:07 -0700
+Message-ID: <1a5bd4c5-8138-48da-b48d-6290d38428f0@linux.dev>
+Date: Sun, 16 Aug 2026 20:44:22 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -41,147 +41,90 @@ User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH bpf-next v5 06/11] bpf: Add verifier support for 16-byte
  returns in R0:R2
 Content-Language: en-GB
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org, clm@meta.com,
- ihor.solodrai@linux.dev
-References: <20260813200240.1995795-1-yonghong.song@linux.dev>
- <3cb3f15f328c59186cf442c7fda68e83849dc9db3aee638a82bfeb47917b9266@mail.kernel.org>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260813200210.1991507-1-yonghong.song@linux.dev>
+ <20260813200240.1995795-1-yonghong.song@linux.dev>
+ <20260814022633.B578E1F00A3A@smtp.kernel.org>
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <3cb3f15f328c59186cf442c7fda68e83849dc9db3aee638a82bfeb47917b9266@mail.kernel.org>
+In-Reply-To: <20260814022633.B578E1F00A3A@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 
 
-On 8/13/26 2:11 PM, bot+bpf-ci@kernel.org wrote:
->> bpf: Add verifier support for 16-byte returns in R0:R2
->>
->> LLVM 23 added support for returning a value in two registers for an
->> __int128, or a struct/union whose size is greater than 8 but not more than
->> 16 bytes. See LLVM patches [1] and [2].
->>
->> Before LLVM 23 the BPF backend could not return these values at all. A
->> by-value struct or union return (of any size) was rejected at compile time
->> with:
->>
->>    error: aggregate returns are not supported
->>
->> and an __int128 return failed later in the backend with:
->>
->>    fatal error: error in backend: unable to allocate function return #1
->>
->> Both are resolved in LLVM 23, which lowers such returns into the R0:R2
->> register pair.
->>
->> This patch models that pair at calls to global and static BPF subprograms
->> and at kfunc calls: R2 is marked alongside R0 at the call, propagated out
->> of a callee at its exit, and held to the same scalar-only and no-stack-
->> pointer rules that R0 already is.
-> This isn't a bug, but could the changelog be reworded in imperative mood
-> to match Documentation/process/submitting-patches.rst? The other commits
-> in this series follow that convention, so this one reads inconsistently.
+On 8/13/26 7:26 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] The newly added support for kfuncs and global subprograms returning structs up to 16 bytes by value is unreachable dead code because existing BTF validation logic unconditionally rejects struct return types.
+> --
 >
->> @@ -9858,11 +9867,15 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
->>   	struct bpf_func_state *caller, *callee;
->>   	struct bpf_reg_state *r0;
->>   	bool in_callback_fn;
->> +	u32 i, nregs;
->>   	int err;
->>
->>   	callee = state->frame[state->curframe];
->>   	r0 = &callee->regs[BPF_REG_0];
->> -	if (r0->type == PTR_TO_STACK) {
->> +	nregs = bpf_ret_reg_pair(env, callee->subprogno) ? 2 : 1;
->> +	for (i = 0; i < nregs; i++) {
->> +		if (callee->regs[ret_regs[i]].type != PTR_TO_STACK)
->> +			continue;
->>   		/* technically it's ok to return caller's stack pointer
->>   		 * (or caller's caller's pointer) back to the caller,
->>   		 * since these pointers are valid. Only current stack
-> The new R0:R2 return-register loop is placed before the
-> 'if (callee->in_callback_fn)' branch, so it runs for callback frames as
-> well. A callback follows bpf_callback_t (return value in R0 only) and R2
-> holds an incoming argument: set_loop_callback_state() and
-> set_user_ringbuf_callback_state() both do
-> 'callee->regs[BPF_REG_2] = caller->regs[BPF_REG_3]', i.e. the
-> callback_ctx, which is PTR_TO_STACK for the common
-> 'bpf_loop(n, cb, &local_var, 0)' idiom.
+> --- Patch [6]: [PATCH bpf-next v5 06/11] bpf: Add verifier support for 16-byte returns in R0:R2 ---
+> commit 9e421b8a810e50b00fab2bcdb9c1dbd32e705d84
+> Author: Yonghong Song <yonghong.song@linux.dev>
 >
-> bpf_compute_subprog_ret_regs() sets ret_reg_pair purely from the
-> subprog's BTF return type and iterates every subprog, with no exclusion
-> for subprogs used as callbacks. So a static subprog whose BTF declares a
-> 9..16 byte return and which is passed to bpf_loop() or
-> bpf_user_ringbuf_drain() gets ret_reg_pair = true, and at its BPF_EXIT
-> the still-live callback_ctx in R2 is inspected as if it were the upper
-> half of a return value.
+> bpf: Add verifier support for 16-byte returns in R0:R2
 >
-> Consequence: the callback exit is rejected with 'cannot return stack
-> pointer to the caller', a diagnostic that points at a register holding an
-> argument rather than a return value, and it fires before the
-> in_callback_fn R0 checks that would otherwise produce the accurate
-> message. Impact is limited (any such program is already ill-typed with
-> respect to bpf_callback_t, and compiler-generated code for a 16-byte
-> return does write R2), so this is a misleading-rejection /
-> modelling-scope defect rather than a memory-safety bug.
+> This commit adds verifier support for returning values in both R0 and R2 for
+> types greater than 8 bytes and up to 16 bytes. It models the register pair
+> for global and static subprograms as well as kfunc calls.
 >
-> Would it make sense to compute nregs after the in_callback_fn branch, or
-> force nregs = 1 when callee->in_callback_fn, since a callback frame has
-> no R0:R2 return convention?
-
-The current callback function only returns one register. If the bpf
-prog intends to return two registers, the upper R2 register is ignored.
-The result may be incorrect. It is bpf prog users' problem.
-
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 161d77791bc62..0c68ab3bd6cec 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+> [ ... ]
 >
->> @@ -9897,8 +9910,12 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
->>   			return -EFAULT;
->>   		}
->>   	} else {
->> -		/* return to the caller whatever r0 had in the callee */
->> -		caller->regs[BPF_REG_0] = *r0;
->> +		/*
->> +		 * return to the caller whatever the callee had in the
->> +		 * return register(s)
->> +		 */
->> +		for (i = 0; i < nregs; i++)
->> +			caller->regs[ret_regs[i]] = callee->regs[ret_regs[i]];
+>> @@ -13265,10 +13295,25 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
 >>   	}
-> prepare_func_exit() has three call sites, and only the real BPF_EXIT one
-> (process_bpf_exit_full()) establishes the callee's return registers. The
-> other two are synthetic exits that explicitly set up R0 but not R2,
-> because R1-R5 were already reset to NOT_INIT above them:
+>>   
+>>   	if (btf_type_is_scalar(t)) {
+>> -		mark_reg_unknown(env, regs, BPF_REG_0);
+>> +		mark_kfunc_ret_regs(env, regs, t->size);
+>>   		if (meta.btf == btf_vmlinux && (meta.func_id == special_kfunc_list[KF_bpf_res_spin_lock] ||
+>>   		    meta.func_id == special_kfunc_list[KF_bpf_res_spin_lock_irqsave]))
+>>   			__mark_reg_const_zero(env, &regs[BPF_REG_0]);
+>> +	} else if (btf_type_is_struct(t)) {
+> [Severity: Medium]
+> Is this new logic for kfuncs returning structs actually reachable?
 >
-> In check_helper_call(), BPF_FUNC_tail_call inside a subprog: the
-> caller-saved reset loop sets R1-R5 to NOT_INIT, then only
-> 'mark_reg_unknown(env, regs, BPF_REG_0)' runs before
-> 'prepare_func_exit(env, &env->insn_idx)'.
+> Looking at btf_distill_func_proto() in kernel/bpf/btf.c, it unconditionally
+> rejects struct return types, meaning programs would fail to load early on:
 >
-> In check_ld_abs() hidden BPF_EXIT inside a subprog: reset loop, then only
-> 'mark_reg_known_zero(env, regs, BPF_REG_0)' before prepare_func_exit().
+> 	if (ret < 0 || btf_type_is_struct(t)) {
+> 		bpf_log(log,
+> 			"The function %s return type %s is unsupported.\n",
+> 			tname, btf_type_str(t));
+> 		return -EINVAL;
+> 	}
 >
-> For a static subprog with ret_reg_pair set, the new copy loop therefore
-> propagates a NOT_INIT R2 into caller->regs[BPF_REG_2] on those paths.
-> This is fail-safe (no uninitialised value is treated as readable), but it
-> means a caller that reads the upper half of the 16-byte return is
-> rejected on that path with an opaque 'R2 !read_ok', so a subprog with a
->> 8 byte return that contains a bpf_tail_call() or LD_ABS is unverifiable,
-> and only R0 gets the conservative unknown-scalar treatment the commit
-> message describes.
+> Similarly, btf_validate_return_type() blocks global subprograms from returning
+> structs:
 >
-> Would symmetric handling be to mark R2 unknown next to R0 at both sites
-> (the tail-called program only defines R0, so R2 is genuinely undefined
-> there), or to reject the combination with an explicit message?
+> 	/* We always accept void or scalars. */
+> 	if (btf_type_is_void(t) || btf_type_is_int(t) || btf_is_any_enum(t))
+> 		return 0;
+>
+> 	return -EOPNOTSUPP;
+>
+> Does this mean the new struct return handling logic is dead code, and only
+> static subprograms or __int128 returns can actually use the new convention?
 
-Okay, this is related to tail call. The tail call prog expects to return
-R0 only. If the bpf prog intends to return R0:R2 (similar to main program),
-it is user's problem.
+The next patch will actually enable "aggregate return types up to 16 bytes".
 
 >
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31740414277
+>> +		/*
+>> +		 * The returned struct comes back as raw register bits modeled
+>> +		 * as an unknown scalar, so it must contain only scalars:
+>> +		 * otherwise a pointer field would be laundered into a scalar
+>> +		 * and escape provenance and reference tracking.
+>> +		 */
+>> +		if (!__btf_type_is_scalar_struct(env, desc_btf, t, 0)) {
+>> +			verbose(env,
+>> +				"kernel function %s returns %s %s that is not composed of scalars\n",
+>> +				func_name, btf_type_str(t),
+>> +				btf_name_by_offset(desc_btf, t->name_off));
+>> +			return -EINVAL;
+>> +		}
+>> +		mark_kfunc_ret_regs(env, regs, t->size);
+>>   	} else if (btf_type_is_ptr(t)) {
 
