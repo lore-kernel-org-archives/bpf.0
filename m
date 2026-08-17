@@ -1,63 +1,63 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD9EE4483A6
-	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 15:50:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1478448BAC
+	for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 15:50:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786981827; cv=none; b=hyNOfYdsuBd8VW/meisblRi/adD++5d7rSPK3xEIuwR0rp6iI4vz4bYUMkmajQSOXE9t6pXuNdta6bP8qE6vKXYkkFClsj4/UpMJUfOX4QA5aDZG9KAUBJXb3ZNqf4R2YABSXt6vrZIctpJMkn806B0uVX4wXiMRePoMDNEBLLI=
+	t=1786981832; cv=none; b=FR0X9uZ00UWY++eVVvmfjw8Kdfjh4YBekCxdMed16Heff+k7bzxq0gh0n9ZPwVVrH78/m4oQB7mbMedB/B3CKaR6VVu4aZO8gA2iZU2P5QzS/mqrjfvQyA3YT6LTtsnqLQkdw00zKrduuObRUSkQ98AJ8r/MwuFbBLWvpQe3EJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786981827; c=relaxed/simple;
-	bh=58qHDIQxG1mH9BFRk+cF81U+5YtKWcf5WSKvxO+dbgU=;
+	s=arc-20240116; t=1786981832; c=relaxed/simple;
+	bh=UGaXKViydcNHgiIYJqkogJCCwyxdJr51ddIZCkZf78c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BplDa8ZXMhScvXG/Hn5Noe1JMWC45/5iskI4FeqBvEGFRID0gzLks8ufU3ac3MP7/+pkRwexqVQu8VFZgUI5dYcWzDui7gxI+z0QNykKpdE+YeTluvuD6K9Gz/wXsU1r4t4HU9OQ1lnWqYphvhuoNESZBivN+imqatmH1Gj5QhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KNpgLNoV; arc=none smtp.client-ip=209.85.216.45
+	 MIME-Version; b=fWmDYeqa4BuFEDhO6Dg4OlHBzxioMRCJtPx3TMXYygM5XjVQoQipixDWjoD/DEJ0ieeqC+zuev0KG5u2M8wbe8srEvOu/no0bCW0qr+3naXf3xf43hzbBdKY25kYK58N4hFh822nbQmjGv3JPGHuxDmuyst+0/eletDAVyysDLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=al+0ZHDV; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KNpgLNoV"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-381c51fde6bso4320309a91.2
-        for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 08:50:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="al+0ZHDV"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-38a0c7e841fso4644255a91.2
+        for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 08:50:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786981823; x=1787586623; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786981828; x=1787586628; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=1BSs30Y1kdXLL3xvxTGvOte+LNauCnr30r4k5Jmngzo=;
-        b=KNpgLNoVZvcByzeaHHUb3PMBdc8C4fkpFqVNoK8EA/ZSLK3mqotcksKqtNe6UXkWER
-         18syHiamDFLLtag4zw/0TyYCXgCMaShVGNmz5kqfuw9PBLVnh844hMctJTtFEZAuKTjn
-         uulgITXT0ZLsJi3GMC3b8f9lJdFBRBM0v9cF3eaNlkZmyfWNevHjdeLJWfXZVX8zpILa
-         RNyg4h43whM8YCADD9UnxqO8ufYYu3loaDb2x+qAl1nkX5sZHsQGCwEmdpglYMfYUzti
-         DGUZhxTR2w169hbxCZRtJaLDgex3zEMoYf2B2jx47orOvuWyc35eXT9UvdqQ2arp0Wjl
-         QLTg==
+        bh=Bm6tU6uRMhMFMi+BnhXh/n8qQcLZIiln365T8/pycxA=;
+        b=al+0ZHDVRdxYbYdXpFtNT9yfLmChIiI5RiQ392qfOYF4+zr8F+21rmu8+bv1BCnbeM
+         4X/ETUbL1x6YtYQ4r04GNvdyNcYMK1FZb2qgdqS+UW9M+ZHa6LY6+vUsnbAOCLWro9Zc
+         3YyDx9TnMGAkY5+zfB9fTWYL2zLq/mouTT3B7zGKLDdHrbxCtziEo0Of6Xmd0XEkkRE3
+         5zNNJFgke6TyptSaQNZisOYTWuLRp8MTT7K1K6s1IBHMxZo2HU0gGDXej/+JLt4VGtAX
+         HoiadL4OMcUlBspVtWTWPRZryZk865D8BDpg69secvNlMge6P50buRcLtLk70Uv2UFeK
+         e8ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786981823; x=1787586623;
+        d=1e100.net; s=20251104; t=1786981828; x=1787586628;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=1BSs30Y1kdXLL3xvxTGvOte+LNauCnr30r4k5Jmngzo=;
-        b=GYtYgJovByzaYCsJOi3cgpjWJgVZPQOLz0Jey8hvn7RCqUS/3zLx+WXM+/WqiZqzN7
-         AMSqaoSg2wu9oANl7TF4kFTSEgIz1/6dBz1G6mokXaSdQ9mfW2EU2/KL33++w3IFnI/r
-         g4cOoR5iTc0jb2bQH12gEyxnta5oJLoFcHhsZ//dUqvsBbwdkktCUXVqYZ0WU7d4Ir8n
-         IHBbJbbeWpK0vM3GvObTgeySBXONOG3wh+/Xt60mR3rmA9SXhs/CMI356d7h49EghaTb
-         BHmQtrnACEx9h/L908jtxvaOvSvIIyVBrvaWLLn8gcp22UL5UM5JywF/8jqShZQx06B1
-         Lu1A==
-X-Forwarded-Encrypted: i=1; AHgh+Roft31ctOjCCDVP4H/b1tyLVcQIudtAa93COukSVgAvb+lpYEOjt4E/W8ugTPO+AGDKEsw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8Wc3zCR6QxHPDR+WtHjJaISBt3N4831ZV/6IH2+y7MbMgWCUJ
-	H5pUNu7HaVeCJO7CNOg/b5DjlIYh13Af97uCSMCma0sG+D2jLUE0Pajr
-X-Gm-Gg: AR+sD10SgzktLOARyOPmR2UhR7ZbR66MAycZEENCP6o020mPdQ1zwb2A5Dae9S011bL
-	AeFD+/0P4h07DPPv97GoSfn3R3QEBomD06iXtIRN61wPTRDzcxR6kxZzTxKWcddCg/FpDT5mAQG
-	Qr5RqA6LKSJrefTTtxcXrwo8ABTWpMo2oL968kIHgyqEsfj6/s6ea8/dq7fbsx+YIPJTW3TYeDL
-	KzjoRp5ZA8//jMAT+6rQJQ7HPkjbDYuk2RyMyBdUaGUXqRiOLkTORpmZO79aB9KqD8bZrKOEd0m
-	yer9o98olENKF0GT5rNB9fns69DYzcJsWVl8zphKZtWxopa/dHVhDieAYw80p7xXTQRRpedHEDD
-	606Gbdmyd6rPYmKQ9payg7YEaKeH83cH86ZRtahXPt/7nzHcHFKk0UQ3+WeLvl5ZBs+fReayQSM
-	Ir7N6GHZP943NfZE50gO3Tpje7wAiuP1HvAaprKUhq66IPwqzY93lyAk4=
-X-Received: by 2002:a17:90b:4d08:b0:37f:c22a:c188 with SMTP id 98e67ed59e1d1-3933b6f0622mr25492398a91.4.1786981822988;
-        Mon, 17 Aug 2026 08:50:22 -0700 (PDT)
+        bh=Bm6tU6uRMhMFMi+BnhXh/n8qQcLZIiln365T8/pycxA=;
+        b=DemLKgl6I0AGMPdOjhcROkYbNLhDUsiPiexmfBtEFRMSUn8x7jkK7fbsywvHJodDVr
+         HQjg58NDMbON3ROj4TOXVIf+bUnCqInhqL/6AT6x3rcLrk+31x4pFA/MigZY5PYwEE39
+         uEAgTPl/9Y141+N7R+zJ4e4xtjZ6nT2fHUI5sLOCkg91SQ8mrG7K6WIgNvQ/qfiwqeak
+         0yvHVlEVz06yCeqILlxW3zaNGJCFopwNp4itcLaxvvIXci5QeGXMasN4dTScQrd5MueF
+         71yZMJEsYe0CgvLD/Vsz/eg/GF8XeZwDyewbtjfp+Pi23Qy1vvLgUA/5pHF9Qz+5zHUW
+         K9hA==
+X-Forwarded-Encrypted: i=1; AHgh+RpWE5IFDxu6o7eTfGaRyxMN1dPG87NWBo3DM7kHIH2y2MISTLhwVr1F67HVXc8H8sSqSEA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXop91pB92fyQDpLT44oe1wdCpK/Rmj2bK6sC52H+kNjTni9/O
+	kUyd5c57Sdg2AR2UPJDiGSnX6lVdFMWhEJc30Q4fqt1WQPzTmLMQEzp+
+X-Gm-Gg: AR+sD10+WqU0MpvxI6vnoz82Jcmc0byPdvf90uBoJq3zzgbOi8uxuloeQLcghFmBQQ1
+	+rc7lQopr1IVFaiAHLsg0X2labFuExMxWMtNhGGPTvHOASadfoeT8t3HMVfaGT7Avw2M3j13RI+
+	fXT9xG6qKQ4iIHy1rgT0JmXmdT2Hf1RdnWtHq4keQOOMJHE3C+aMDLY8OAP/sOpmHpbW74eT6SE
+	Zyu098ZlQpJjcnbQLRSUHp5G9Sgs1/Naf29GCNWd01S+pDdGLRqdeUjUMzOCN0FHX8H5buMb4ZT
+	pNhmxT1rlG6zVaPKPXd0UXhj4vCph/fPIIsD/OYfG+BkzMg1TR4eIk+UzGWfwXvRWRsAetOB/hQ
+	80808lu6Ogf20XwwXq6ypNWdxO0rP2JLjC1FR3wXly7lPM8udPw7tiPdH6TD/rqJs7GUwd4tPGt
+	R1HngLnTCCoXxHDpUTeYOrW1mtUaK4R/MDsNRkTT3IaTtCKc9NlN+y/eg=
+X-Received: by 2002:a17:90b:4405:b0:381:792d:f993 with SMTP id 98e67ed59e1d1-3933b8c4cf1mr23467515a91.17.1786981828382;
+        Mon, 17 Aug 2026 08:50:28 -0700 (PDT)
 Received: from omen-arch ([211.58.239.197])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39339b0d6f4sm4682766a91.0.2026.08.17.08.50.17
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39339b0d6f4sm4682766a91.0.2026.08.17.08.50.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Aug 2026 08:50:22 -0700 (PDT)
+        Mon, 17 Aug 2026 08:50:27 -0700 (PDT)
 From: Junseo Lim <zirajs7@gmail.com>
 To: John Fastabend <john.fastabend@gmail.com>,
 	Jakub Sitnicki <jakub@cloudflare.com>,
@@ -75,9 +75,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Sechang Lim <rhkrqnwk98@gmail.com>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf v3 1/2] bpf, sockmap: settle sk_forward_alloc for strparser SK_PASS
-Date: Tue, 18 Aug 2026 00:50:08 +0900
-Message-ID: <20260817155009.232670-2-zirajs7@gmail.com>
+Subject: [PATCH bpf v3 2/2] selftests/bpf: Cover strparser self-pass forward allocation
+Date: Tue, 18 Aug 2026 00:50:09 +0900
+Message-ID: <20260817155009.232670-3-zirajs7@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260817155009.232670-1-zirajs7@gmail.com>
 References: <20260817155009.232670-1-zirajs7@gmail.com>
@@ -89,257 +89,230 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The strparser SK_PASS path can queue cloned skbs back to the same
-socket. A single TCP receive skb may be split into multiple strparser
-messages. The strparser clones are unowned, but keep the original
-truesize.
+Add a sockmap_strp regression test for strparser SK_PASS delivery to the
+same socket. A one-byte stream parser splits a single write into many
+messages, repeatedly exercising receive ownership transitions while the
+skbs remain queued.
 
-sk_psock_skb_ingress_self() assigns receive ownership with
-skb_set_owner_r(). That charges each clone to the socket. When this is
-repeated for strparser clones, sk_forward_alloc can already be in
-deficit before the next owner assignment. Releasing the queued skbs can
-then uncharge more memcg pages than were reserved and trigger a
-page_counter underflow.
+Verify through INET_DIAG_MEMINFO that sk_forward_alloc does not become
+negative after the self-pass path is exercised.
 
-Fix by making same-socket ingress preserve existing receive
-ownership and only assign ownership to unowned self-pass skbs. For
-strparser clones, use a zero-sized sk_rmem_schedule() before
-skb_set_owner_r() to settle any sk_forward_alloc deficit without
-reserving the skb's full truesize again.
-
-When the skb is retried from the psock backlog, preserve the original
-_sk_redir value across skb_bpf_redirect_clear() so the deferred path
-keeps the same ingress and strparser state. Perform the deferred owner
-assignment under the socket lock because psock backlog work only holds
-psock->work_mutex.
-
-Fixes: 144748eb0c44 ("bpf, sockmap: Fix incorrect fwd_alloc accounting")
-Reported-by: Sechang Lim <rhkrqnwk98@gmail.com>
-Suggested-by: Emil Tsalapatis <emil@etsalapatis.com>
-Assisted-by: Codex:gpt-5.5
 Signed-off-by: Junseo Lim <zirajs7@gmail.com>
 ---
- net/core/skmsg.c | 125 +++++++++++++++++++++++++++++++++++++++--------
- 1 file changed, 105 insertions(+), 20 deletions(-)
+ .../selftests/bpf/prog_tests/sockmap_strp.c   | 171 ++++++++++++++++++
+ .../selftests/bpf/progs/test_sockmap_strp.c   |   6 +
+ 2 files changed, 177 insertions(+)
 
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 2521b643fa05..347cb168f749 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -586,21 +586,24 @@ static int sk_psock_skb_ingress_enqueue(struct sk_buff *skb,
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c b/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
+index 1d7231728eaf..c7ad21d0bbf4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
+@@ -1,5 +1,9 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <error.h>
++#include <linux/inet_diag.h>
++#include <linux/netlink.h>
++#include <linux/rtnetlink.h>
++#include <linux/sock_diag.h>
+ #include <netinet/tcp.h>
+ #include <test_progs.h>
+ #include "sockmap_helpers.h"
+@@ -460,6 +464,171 @@ static void test_sockmap_strp_parser_reject(void)
+ 	test_sockmap_strp__destroy(strp);
  }
  
- static int sk_psock_skb_ingress_self(struct sk_psock *psock, struct sk_buff *skb,
--				     u32 off, u32 len, bool take_ref);
-+				     u32 off, u32 len, bool take_ref,
-+				     bool settle_fwd_alloc);
-+static int sk_psock_skb_ingress_self_backlog(struct sk_psock *psock,
-+					     struct sk_buff *skb,
-+					     u32 off, u32 len, bool take_ref,
-+					     bool settle_fwd_alloc);
- 
- static int sk_psock_skb_ingress(struct sk_psock *psock, struct sk_buff *skb,
--				u32 off, u32 len)
-+				u32 off, u32 len, bool settle_fwd_alloc)
- {
- 	struct sock *sk = psock->sk;
- 	struct sk_msg *msg;
- 	int err;
- 
--	/* If we are receiving on the same sock skb->sk is already assigned,
--	 * skip memory accounting and owner transition seeing it already set
--	 * correctly.
--	 */
- 	if (unlikely(skb->sk == sk))
--		return sk_psock_skb_ingress_self(psock, skb, off, len, true);
-+		return sk_psock_skb_ingress_self_backlog(psock, skb, off,
-+							 len, true,
-+							 settle_fwd_alloc);
- 	msg = sk_psock_create_ingress_msg(sk, skb);
- 	if (!msg)
- 		return -EAGAIN;
-@@ -618,34 +621,100 @@ static int sk_psock_skb_ingress(struct sk_psock *psock, struct sk_buff *skb,
- 	return err;
- }
- 
--/* Puts an skb on the ingress queue of the socket already assigned to the
-- * skb. In this case we do not need to check memory limits or skb_set_owner_r
-- * because the skb is already accounted for here.
-+static int sk_psock_skb_ingress_self_assign(struct sock *sk,
-+					    struct sk_buff *skb,
-+					    bool settle_fwd_alloc)
++/* Read sk_forward_alloc through inet_diag meminfo. */
++static int sockmap_strp_get_fwd_alloc(int sock, int *fwd_alloc)
 +{
-+	/* Leave skbs already receive-accounted to sk untouched. */
-+	if (skb->sk == sk && skb->destructor == sock_rfree)
-+		return 0;
++	struct sockaddr_storage local = {}, peer = {};
++	struct sockaddr_in *local_in, *peer_in;
++	socklen_t addr_len = sizeof(local);
++	char buf[1024];
++	struct {
++		struct nlmsghdr nlh;
++		struct inet_diag_req_v2 req;
++	} req = {
++		.nlh = {
++			.nlmsg_len = sizeof(req),
++			.nlmsg_type = SOCK_DIAG_BY_FAMILY,
++			.nlmsg_flags = NLM_F_REQUEST,
++			.nlmsg_seq = 1,
++		},
++		.req = {
++			.sdiag_family = AF_INET,
++			.sdiag_protocol = IPPROTO_TCP,
++			.idiag_ext = 1 << (INET_DIAG_MEMINFO - 1),
++			.idiag_states = ~0U,
++			.id.idiag_cookie = {
++				INET_DIAG_NOCOOKIE,
++				INET_DIAG_NOCOOKIE,
++			},
++		},
++	};
++	int diag_fd, ret, err = -ENOENT;
 +
-+	if (settle_fwd_alloc) {
-+		sock_owned_by_me(sk);
++	if (getsockname(sock, (struct sockaddr *)&local, &addr_len))
++		return -errno;
++	addr_len = sizeof(peer);
++	if (getpeername(sock, (struct sockaddr *)&peer, &addr_len))
++		return -errno;
 +
-+		if (!sk_rmem_schedule(sk, skb, 0))
-+			return -EAGAIN;
++	local_in = (struct sockaddr_in *)&local;
++	peer_in = (struct sockaddr_in *)&peer;
++	req.req.id.idiag_sport = local_in->sin_port;
++	req.req.id.idiag_dport = peer_in->sin_port;
++	req.req.id.idiag_src[0] = local_in->sin_addr.s_addr;
++	req.req.id.idiag_dst[0] = peer_in->sin_addr.s_addr;
++
++	diag_fd = socket(AF_NETLINK, SOCK_RAW | SOCK_CLOEXEC,
++			 NETLINK_SOCK_DIAG);
++	if (diag_fd < 0)
++		return -errno;
++
++	ret = send(diag_fd, &req, sizeof(req), 0);
++	if (ret < 0) {
++		err = -errno;
++		goto out;
++	}
++	if (ret != sizeof(req)) {
++		err = -EIO;
++		goto out;
 +	}
 +
-+	skb_set_owner_r(skb, sk);
-+	return 0;
++	ret = recv(diag_fd, buf, sizeof(buf), 0);
++	if (ret < 0) {
++		err = -errno;
++		goto out;
++	}
++
++	for (struct nlmsghdr *nlh = (struct nlmsghdr *)buf;
++	     NLMSG_OK(nlh, ret); nlh = NLMSG_NEXT(nlh, ret)) {
++		struct inet_diag_msg *msg = NLMSG_DATA(nlh);
++		struct rtattr *attr;
++		int len;
++
++		if (nlh->nlmsg_type == NLMSG_ERROR) {
++			err = -EINVAL;
++			goto out;
++		}
++		if (nlh->nlmsg_type == NLMSG_DONE)
++			break;
++
++		len = nlh->nlmsg_len - NLMSG_LENGTH(sizeof(*msg));
++		for (attr = (struct rtattr *)(msg + 1); RTA_OK(attr, len);
++		     attr = RTA_NEXT(attr, len)) {
++			struct inet_diag_meminfo *minfo;
++
++			if (attr->rta_type != INET_DIAG_MEMINFO)
++				continue;
++			minfo = RTA_DATA(attr);
++			*fwd_alloc = (__s32)minfo->idiag_fmem;
++			err = 0;
++			goto out;
++		}
++	}
++
++out:
++	close(diag_fd);
++	return err;
 +}
 +
-+/* Puts an skb on the ingress queue for psock->sk.
-+ *
-+ * If the skb already has receive ownership for this socket, leave socket
-+ * memory accounting untouched. Otherwise, before assigning receive ownership
-+ * to an unowned strparser SK_PASS skb, settle any existing sk_forward_alloc
-+ * deficit from earlier clone charges.
-  */
- static int sk_psock_skb_ingress_self(struct sk_psock *psock, struct sk_buff *skb,
--				     u32 off, u32 len, bool take_ref)
-+				     u32 off, u32 len, bool take_ref,
-+				     bool settle_fwd_alloc)
- {
-+	struct sock *sk = psock->sk;
- 	struct sk_msg *msg = alloc_sk_msg(GFP_ATOMIC);
++/* Test strparser SK_PASS delivery to the same socket. */
++static void test_sockmap_strp_self_pass_fwd_alloc(void)
++{
++	struct test_sockmap_strp *strp = NULL;
++	char snd[4 * 1024];
++	int c = -1, p = -1;
++	int fwd_alloc;
++	int sndbuf = sizeof(snd);
++	int zero = 0;
++	char rcv;
++	int sent, recvd;
++	int map;
 +	int err;
 +
-+	if (unlikely(!msg))
-+		return -EAGAIN;
++	memset(snd, 0xa5, sizeof(snd));
 +
-+	err = sk_psock_skb_ingress_self_assign(sk, skb, settle_fwd_alloc);
++	strp = test_sockmap_strp__open_and_load();
++	if (!ASSERT_OK_PTR(strp, "test_sockmap_strp__open_and_load"))
++		return;
++
++	map = bpf_map__fd(strp->maps.sock_map);
++	err = xbpf_prog_attach(bpf_program__fd(strp->progs.prog_skb_parser_one),
++			       map, BPF_SK_SKB_STREAM_PARSER, 0);
 +	if (err)
-+		goto free;
++		goto out_destroy;
 +
-+	/* This is used in tcp_bpf_recvmsg_parser() to determine whether the
-+	 * data originates from the socket's own protocol stack. No need to
-+	 * refcount sk because msg's lifetime is bound to sk via the ingress_msg.
-+	 */
-+	msg->sk = sk;
-+	err = sk_psock_skb_ingress_enqueue(skb, off, len, psock, sk, msg,
-+					   take_ref);
-+	if (err < 0)
-+		goto free;
++	err = xbpf_prog_attach(bpf_program__fd(strp->progs.prog_skb_verdict_pass),
++			       map, BPF_SK_SKB_STREAM_VERDICT, 0);
++	if (err)
++		goto out_destroy;
 +
-+	return err;
-+free:
-+	kfree(msg);
-+	return err;
++	err = create_pair(AF_INET, SOCK_STREAM, &c, &p);
++	if (!ASSERT_OK(err, "create_pair"))
++		goto out_destroy;
++
++	err = xsetsockopt(c, SOL_SOCKET, SO_SNDBUF, &sndbuf, sizeof(sndbuf));
++	if (err)
++		goto out_destroy;
++
++	err = xsetsockopt(p, SOL_SOCKET, SO_RCVBUF, &sndbuf, sizeof(sndbuf));
++	if (err)
++		goto out_destroy;
++
++	err = xbpf_map_update_elem(map, &zero, &p, BPF_NOEXIST);
++	if (err)
++		goto out_destroy;
++
++	sent = send(c, snd, sizeof(snd), MSG_DONTWAIT);
++	if (!ASSERT_EQ(sent, sizeof(snd), "send"))
++		goto out_destroy;
++
++	recvd = recv_timeout(p, &rcv, sizeof(rcv), MSG_DONTWAIT,
++			     IO_TIMEOUT_SEC);
++	if (!ASSERT_EQ(recvd, sizeof(rcv), "recv_timeout") ||
++	    !ASSERT_EQ(rcv, snd[0], "data mismatch"))
++		goto out_destroy;
++
++	err = sockmap_strp_get_fwd_alloc(p, &fwd_alloc);
++	if (!ASSERT_OK(err, "sockmap_strp_get_fwd_alloc") ||
++	    !ASSERT_GE(fwd_alloc, 0, "sk_forward_alloc"))
++		goto out_destroy;
++out_destroy:
++	test_sockmap_strp__destroy(strp);
++	if (c >= 0)
++		close(c);
++	if (p >= 0)
++		close(p);
 +}
 +
-+static int sk_psock_skb_ingress_self_backlog(struct sk_psock *psock,
-+					     struct sk_buff *skb,
-+					     u32 off, u32 len, bool take_ref,
-+					     bool settle_fwd_alloc)
-+{
- 	struct sock *sk = psock->sk;
-+	struct sk_msg *msg = alloc_sk_msg(GFP_ATOMIC);
- 	int err;
- 
- 	if (unlikely(!msg))
- 		return -EAGAIN;
--	skb_set_owner_r(skb, sk);
-+
-+	lock_sock(sk);
-+	err = sk_psock_skb_ingress_self_assign(sk, skb, settle_fwd_alloc);
-+	release_sock(sk);
-+	if (err)
-+		goto free;
- 
- 	/* This is used in tcp_bpf_recvmsg_parser() to determine whether the
- 	 * data originates from the socket's own protocol stack. No need to
- 	 * refcount sk because msg's lifetime is bound to sk via the ingress_msg.
- 	 */
- 	msg->sk = sk;
--	err = sk_psock_skb_ingress_enqueue(skb, off, len, psock, sk, msg, take_ref);
-+	err = sk_psock_skb_ingress_enqueue(skb, off, len, psock, sk, msg,
-+					   take_ref);
- 	if (err < 0)
--		kfree(msg);
-+		goto free;
-+
-+	return err;
-+free:
-+	kfree(msg);
- 	return err;
- }
- 
- static int sk_psock_handle_skb(struct sk_psock *psock, struct sk_buff *skb,
--			       u32 off, u32 len, bool ingress)
-+			       u32 off, u32 len, bool ingress,
-+			       bool self_pass, bool strparser)
+ void test_sockmap_strp(void)
  {
- 	if (!ingress) {
- 		if (!sock_writeable(psock->sk))
-@@ -653,7 +722,11 @@ static int sk_psock_handle_skb(struct sk_psock *psock, struct sk_buff *skb,
- 		return skb_send_sock(psock->sk, skb, off, len);
- 	}
- 
--	return sk_psock_skb_ingress(psock, skb, off, len);
-+	if (self_pass)
-+		return sk_psock_skb_ingress_self_backlog(psock, skb, off,
-+							 len, true, strparser);
-+
-+	return sk_psock_skb_ingress(psock, skb, off, len, strparser);
+ 	if (test__start_subtest("sockmap strp tcp pass"))
+@@ -482,4 +651,6 @@ void test_sockmap_strp(void)
+ 		test_sockmap_strp_dispatch_pkt(AF_INET, SOCK_STREAM);
+ 	if (test__start_subtest("sockmap strp parser reject pkt mod"))
+ 		test_sockmap_strp_parser_reject();
++	if (test__start_subtest("sockmap strp self pass fwd alloc"))
++		test_sockmap_strp_self_pass_fwd_alloc();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_strp.c b/tools/testing/selftests/bpf/progs/test_sockmap_strp.c
+index fe88fa6d40bc..682e53d40751 100644
+--- a/tools/testing/selftests/bpf/progs/test_sockmap_strp.c
++++ b/tools/testing/selftests/bpf/progs/test_sockmap_strp.c
+@@ -50,6 +50,12 @@ int prog_skb_parser_partial(struct __sk_buff *skb)
+ 	return 10;
  }
  
- static void sk_psock_skb_state(struct sk_psock *psock,
-@@ -694,9 +767,14 @@ static void sk_psock_backlog(struct work_struct *work)
- 		return;
- 	mutex_lock(&psock->work_mutex);
- 	while ((skb = skb_peek(&psock->ingress_skb))) {
-+		unsigned long saved_redir;
-+		bool strparser;
-+		bool self_pass;
++SEC("sk_skb/stream_parser")
++int prog_skb_parser_one(struct __sk_buff *skb)
++{
++	return 1;
++}
 +
- 		len = skb->len;
- 		off = 0;
--		if (skb_bpf_strparser(skb)) {
-+		strparser = skb_bpf_strparser(skb);
-+		if (strparser) {
- 			struct strp_msg *stm = strp_msg(skb);
- 
- 			off = stm->offset;
-@@ -710,17 +788,20 @@ static void sk_psock_backlog(struct work_struct *work)
- 		}
- 
- 		ingress = skb_bpf_ingress(skb);
-+		self_pass = ingress && !skb_bpf_redirect_fetch(skb);
-+		saved_redir = skb->_sk_redir;
- 		skb_bpf_redirect_clear(skb);
- 		do {
- 			ret = -EIO;
- 			if (!sock_flag(psock->sk, SOCK_DEAD))
- 				ret = sk_psock_handle_skb(psock, skb, off,
--							  len, ingress);
-+							  len, ingress,
-+							  self_pass, strparser);
- 			if (ret <= 0) {
- 				if (ret == -EAGAIN) {
- 					sk_psock_skb_state(psock, state, len, off);
- 					/* Restore redir info we cleared before */
--					skb_bpf_set_redir(skb, psock->sk, ingress);
-+					skb->_sk_redir = saved_redir;
- 					/* Delay slightly to prioritize any
- 					 * other work that might be here.
- 					 */
-@@ -1017,6 +1098,8 @@ static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
- 		 * retrying later from workqueue.
- 		 */
- 		if (skb_queue_empty(&psock->ingress_skb)) {
-+			bool settle_fwd_alloc = false;
-+
- 			len = skb->len;
- 			off = 0;
- 			if (skb_bpf_strparser(skb)) {
-@@ -1024,8 +1107,10 @@ static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
- 
- 				off = stm->offset;
- 				len = stm->full_len;
-+				settle_fwd_alloc = true;
- 			}
--			err = sk_psock_skb_ingress_self(psock, skb, off, len, false);
-+			err = sk_psock_skb_ingress_self(psock, skb, off, len,
-+							false, settle_fwd_alloc);
- 		}
- 		if (err < 0) {
- 			spin_lock_bh(&psock->ingress_lock);
+ SEC("sk_skb/stream_parser")
+ int prog_skb_parser_resize(struct __sk_buff *skb)
+ {
 -- 
 2.55.0
 
