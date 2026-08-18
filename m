@@ -1,98 +1,138 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mta1.migadu.com (out-193.mta1.migadu.com [95.215.58.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A62376A16
-	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 20:05:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E983793D5
+	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 20:06:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787083533; cv=none; b=eZ6w7hoKPzEXdo4TSoMisvCQl00tCvux1Fa3j0k59R1CXfzBYq0L5YL8qbDUe/MnY266jUIqLqN4axSALyFOpQl6xEtYbit2GvnkW93dwpZzWDlSLd/4D5cD25dQf1RdzdZ5gljhEQR3hqhf3nuvL8DdWmx11J+NlreiRAmDclA=
+	t=1787083615; cv=none; b=kHCCyMbFbnL7sAOC6fkUVSwbxvlUIJjLqFi1YpJ7G7qD1D177e3rqvc06eT3EgY05vgZmPL3xb4BfWXL2QG/n4y2fXpeffY5mekWRqhp31zccCowXxGkEl4Cp1ZhZwec1wSemKIuQ2pkxNjVDCeddsFhYlA4+3zsuEnjkVz4/sc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787083533; c=relaxed/simple;
-	bh=dKPJhUx+10vKn7uaMJXqPXPMihpzsew2EQTiqPX9QEk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=tdkSPEV9YrRCmE/hAZdfRxi2PAOMM3Fqu5zQRAjCyUpP7LTcS6MeymP+7DcnCsLZBLX5k8ZRAyyiUyVnKT8u1ywiohgxbmE7BBntX8cbYQOCEnLk1N9kUZJZ+rc0bV+DtNQqnjPODXeTnuXZNHY/qYgjj0CFzrZvY6wB4eje8Sc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=afbCEuop; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787083615; c=relaxed/simple;
+	bh=pw2VKTeijUS0mD7622T+XsHyQ54fWSMv6vBNMQOlT1U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mLL93gDTCTkfQRlGAFm80u7VYTxTpaFzD1VWrpze51ayL/Ys6DBw44QD2h6Fnnv8jfvKiidsN8k0oBoJaWxqgYUWnaEMt5i4zRCYSTT1CyVl26/X4Uyx7DiPgi5yRJSqPPP/eL86qs4CVMbggm+6TiOrPMxdjyKrYzr26u2stRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AfCG0ol7; arc=none smtp.client-ip=95.215.58.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="afbCEuop"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-38e347638adso408200a91.0
-        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 13:05:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787083532; x=1787688332; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=dKPJhUx+10vKn7uaMJXqPXPMihpzsew2EQTiqPX9QEk=;
-        b=afbCEuopmlUmUCaI8K2LlIkiXUrSelfGIJyojUFjq1jZ2jVck7JoDEfpm5laFDAaMN
-         UdqjVSCBLRhOEVYEXpeVGOPVKIuAEUBTPAVRqTnCA0LKRmaxNFmhiE6+UK8swTghjyKW
-         Dg+mzqHEgDIibNEZyp3qhYwCd81UdSjcWyfuxCsQiVEWCdZYAqMGfpzA4CbcfbWEhIj8
-         KJanjnTZ+UO54zD9TU8+J7JnGsTIcaz0vSpGaCRrA01YlNoq839Opqxu8/Sb2JNz+GC4
-         vjJ1h0tflj67cwU4GnNhkAWqlCZ3UZu+t4H8k7BlLbkCmnfyX5YtjZRNZHCm5kFM9h6l
-         P92A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787083532; x=1787688332;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=dKPJhUx+10vKn7uaMJXqPXPMihpzsew2EQTiqPX9QEk=;
-        b=MNoe+ZsqUZhBfss1lSFNf936ajiN1VRQyDK0TR4XVcSOx5KdT0c3wcph6SgwesG6m2
-         ZOY1MoNWI/Fz73NJNqx6bAZDSOrSauhELDO70r3UoCYLP8T8+1pYqWTEp6G7wFAQeIUF
-         xOqpnXwgOZ5tgb1gl3D3IBwiB3vuJA77u36+oixRuKFuzVwGCXAjJYZ+5UKsveRwXQWJ
-         ih9MqJ91IukhfxkPevBTlv7oSE4hrCiX8vQY9BuLBhoW1ht+VEXetMYJ/6ziQBU/3zbc
-         3eXmDr06xq+6fSL0ivTxZF0HNbW/SJVTNwYaBEbLuFcKJauDtqiyUyonCbFbCh0nyGiu
-         qk9w==
-X-Forwarded-Encrypted: i=1; AHgh+Rp8y8ke35POFarYzL7t4ACLFyef8N5ZHhRPMrXtRRE+D6FsSEahe9yEiQKD8DdUdndEFLU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzN5DMuIK9SUEw3VC3S1905YwRm/AWzmYpG91w97RzHCWF25GDy
-	cIugdpVYepuKlYH3ERxlMZbX4ert9OBopDk0uwN9ukAdqGIBTR0/UvOB
-X-Gm-Gg: AR+sD137z6fREk01pCNTSl7VVkyWQbNJwAvjEh6WVTSXEsVlw6GjyxVONgxvw78LHzq
-	yxgtfmi6D0JwnhGJkcmeAdMmZGZ9ScSTxI13jGHjnlH+lIhtOnUB2PahZJF59/o1XojC/GW1BJ/
-	1RX8FmBQRDb7SoBazwv4VJ4OhPYzPqh4nT1IWZG20MfjPK6Lyd6u4UZEce7MVfCsW/4Yaoe8864
-	wIg2yHaHn0R3rRDKKdR0GmZwWJ43yDQawcdHy9JUYhqtHipWebccGyTFLgypVHLabNgc4tBmDvn
-	uT2ttmzw8HVNirRqHS7SEZSAukala2DyZjLRJ6IZgO3mQcdgyQ857XE8ZiHGl/5aDJAdyKTPFOw
-	MI5tJvJINQfev6TggDmwf8LplxUWudFMeapDl3yGQBYhn955yR0Fht5lBXxHp0agF+yVD6zQ++G
-	XtEqkWt0Pxaw80/JsWVbzgSit98Qexz/jakxoaBdOtw/ULyvta5Kvw0F1nTgrUViutfKQ/PYKxx
-	Yk/xb/5UfZEQD25
-X-Received: by 2002:a17:90a:e710:b0:38e:b400:a860 with SMTP id 98e67ed59e1d1-3957bd5d21cmr323853a91.13.1787083531985;
-        Tue, 18 Aug 2026 13:05:31 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39531fbc08bsm9586472a91.12.2026.08.18.13.05.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2026 13:05:31 -0700 (PDT)
-Message-ID: <33065694711b925e8af3c6a446c3ece15b4cae64.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v6 09/10] selftests/bpf: Add inline-asm and
- subprog tests for R0:R2 returns
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
- kernel-team@fb.com
-Date: Tue, 18 Aug 2026 13:05:28 -0700
-In-Reply-To: <20260817042227.2296079-1-yonghong.song@linux.dev>
-References: <20260817042141.2286086-1-yonghong.song@linux.dev>
-	 <20260817042227.2296079-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AfCG0ol7"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=pw2VKTeijUS0mD7622T+XsHyQ54fWSMv6vBNMQOlT1U=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787083610; v=1; x=1787688410;
+ b=AfCG0ol7ffLABRZ9il0lupn9de5+TOPGeL9K8ILNKBeyKSkWHX5Jpdb/ubL3qevf28O1I1bb
+ Pnzyg+AvNx/5HnJr+/hNDsUiYd6BxnXuqWnmDrnaxXMrZhqjo/whXzdtczKzs+rq2IPgc8sVCYA
+ 6qIVbCmEVgp+cciILnfAH8pU=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from [IPV6:2a03:83e0:125c:1:7612:abfc:71b6:4eb2] (2620:10d:c090:500::5:97cb)
+	by smtp.migadu.com with ESMTPS id dd65d28a1e961842;
+	Tue, 18 Aug 2026 20:06:50 +0000
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <1e1e55cc-0d67-40b4-8527-3990fc6859f6@linux.dev>
+Date: Tue, 18 Aug 2026 13:06:41 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Cover mixed arena and
+ stack atomics
+To: Eduard Zingerman <eddyz87@gmail.com>,
+ Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
+ vineet.gupta@linux.dev
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260816-bpf-next-038-mixed-atomic-v1-v2-0-4644c1886dbc@mails.tsinghua.edu.cn>
+ <20260816-bpf-next-038-mixed-atomic-v1-v2-2-4644c1886dbc@mails.tsinghua.edu.cn>
+ <cd62cd53be9bcea2d5b63fef8eece815f5095103.camel@gmail.com>
+ <123a014b2b4ecd7d19cbdfe62c62d994e612b6f0.camel@gmail.com>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <123a014b2b4ecd7d19cbdfe62c62d994e612b6f0.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sun, 2026-08-16 at 21:22 -0700, Yonghong Song wrote:
-> Add inline-asm tests covering what the C tests cannot reach, since they
-> need a callee that violates the convention on purpose.
->=20
-> The coverage includes BPF-to-BPF returns, kfunc calls, backtracking and
-> liveness. In addition, a negative freplace test checks that an extension
-> cannot replace a function returning R0:R2.
->=20
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
+On 8/16/26 4:36 PM, Eduard Zingerman wrote:
+> On Sun, 2026-08-16 at 16:17 -0700, Eduard Zingerman wrote:
+>> On Sun, 2026-08-16 at 10:56 +0000, Yiyang Chen wrote:
+>>> Add a verifier test with one atomic RMW instruction reached through
+>>> PTR_TO_ARENA and PTR_TO_STACK paths. The verifier must reject the
+>>> shared instruction with the existing incompatible-pointer diagnostic.
+>>>
+>>> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+>>> ---
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+>>> [...]
+>>> +SEC("socket")
+>>> +__description("arena and stack atomic at the same instruction")
+>>> +__failure __msg("same insn cannot be used with different pointers")
+>>> +__arch_x86_64
+>>> +__load_if_JITed()
+>>> +__naked void mixed_arena_stack_atomic(void)
+>>> +{
+>>> +	asm volatile ("					\
+>>> +	r1 = %[arena] ll;				\
+>>> +	r6 = r10;					\
+>>> +	r6 += -8;					\
+>>> +	r9 = 0;					\
+>>> +	*(u64 *)(r6 + 0) = r9;			\
+>>> +	r7 = 8192;					\
+>>> +	.8byte %[addr_space_cast];			\
+>>
+>> I'm going to fix this to:
+>>
+>> 	r7 = addr_space_cast(r7, 0, 1);			\
+>>
+>> as in the test case above.
+>> Waiting for CI [1].
+>>
+>> [1] https://github.com/kernel-patches/bpf/pull/13325
+> 
+> 
+> A...and it requires another exception for GCC-BPF:
+> https://github.com/kernel-patches/bpf/blob/bpf-next_base/ci/vmtest/configs/DENYLIST.test_progs-bpf_gcc
+> 
+> Ihor, it's a third time GCC-BPF strikes this weekend.
+> What do people think about downgrading it to may-fail until the
+> DENYLIST decreases to something reasonable?
 
-...
+I get your frustration, but red CI makes us to look at things
+which is good. "May fail" runs and "warnings" are very likely
+to be ignored.
+
+I think the tests and the denylist will be in a stable shape soon.
+Flakiness on the way there is expected.
+
+> 
+> Anyway, I'll wrap-up with this patch-set in the evening.
+> 
+>>> +	call %[bpf_get_prandom_u32];			\
+>>> +	if w0 != 0 goto 1f;				\
+>>> +	r8 = r6;					\
+>>> +	goto 2f;					\
+>>> +1:	r8 = r7;					\
+>>> +2:	r9 = 1;					\
+>>> +	lock *(u64 *)(r8 + 0) += r9;			\
+>>> +	r0 = 0;					\
+>>> +	exit;						\
+>>> +"	:
+>>> +	: __imm_addr(arena),
+>>> +	  __imm_insn(addr_space_cast, addr_space_cast_insn),
+>>> +	  __imm(bpf_get_prandom_u32)
+>>> +	: __clobber_all);
+>>> +}
+>>> +
+>>>  static __noinline
+>>>  u32 __arena *check_arena_arg_nonglobal(u32 __arena *arg)
+>>>  {
+
