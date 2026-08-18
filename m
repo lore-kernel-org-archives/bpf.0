@@ -1,112 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0753A33B6DA
-	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 15:40:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8EE53793C3
+	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 15:49:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787067622; cv=none; b=B959mcTb0jXuSFIZPvOazMbdkXglYJV20Dz7eQDwykn1tAEmb1Y8lcq0TvYLk2DZ+kOVGj4P4hL0MiijtHlSIMg1BZtxVdEuwvQyeZ7KVcEe9xHNYv8++KYYLZtxsKq1maJLgSpPcMZR4aPvP+jvIrkYrXLcJ8+HpOsXd6H01Ok=
+	t=1787068164; cv=none; b=BwQyPk+eTJAMkp+b0ZAbbpx9AmDERI43KI3YLKdwqA9k7YdIUhfjVW0TCKVoHA/4cUDIix4HNWx5nkCpjyyfxT+C0q1Tly/81L7RaXRVuhXfzdA/+OL6K4V6F/MUNmgukNjpSgDwtUTw+x9VcGEQ6IwVp9hIw5BdDO9nAArGCi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787067622; c=relaxed/simple;
-	bh=s0LirhyID40okBoex45trSkQrlNtfD7qZqmO76aKLuY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=oH/Ly5cUApgzu1Alo/Be7V0tUQ6QMBlzHVW7lrl/aetMAPrCjlSVs2zRwsELMV9mUw1JTyEVOKlqJtBEr8mKXJZyJs2SqsH4BUUXQJBegFSJ+AysTPI6WMaNlk/65aQHodilglLCL49Hri7kK+lm+jfXvEjHtjOgdrn6jHXO2KY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c3gOhs0t; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787068164; c=relaxed/simple;
+	bh=fo5PoXZ5ZKT8MDrEaZn6E4TyN2oZ8TJ4XeZLBR3XSA8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uaNEjxo/jpD9E6iVGaSwm5RBEgRJ2bmg1BMrzCGYgpoEK84j+U0m8nS5W5CqWX+qs/w1DoLBjPRBhSR6vpXk9Obm0LmSo+s3Q557/ql4QhjibR28I6IWy1PV+nuwYpkekVuKhjV2oMPRdKMMMPWh0c8tWCTUNoI7uH7MjGv3sYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PylBpURd; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c3gOhs0t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 749521F000E9;
-	Tue, 18 Aug 2026 15:40:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787067620;
-	bh=7JGvx3ZZYmBKKDQZVuHfBuWZpM7glZTmAP68NdyFB/I=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=c3gOhs0tQFQ4qqEXC3s6TyTgLUnjYwL2Zvh1utvf8nid0m53qS7mnmDDK7B4z13bg
-	 Q7c3SdqihsIrje9Mprx0Ug8DcOXMleGFLJQQxYUN9vaw0CBogGXALb7dwS1fMaSMlr
-	 H+7pw3rMDFjhYjyE3hBrEJWJAX3VvpXq2vBBMuuwHATl5Mn8kawc0j0BlK5sPyqX+n
-	 TOqN18KHqs21no18qmz3eXzM+Lgj9hiPKFvKx/Wtshjv5RPeKRynImY2JGfx6fVGud
-	 hSDXiOsBiOJVRk//dKeIzXfogdDOF9eqSkrR/BDDuTJijPujfxj8QA8lSMV6oE/Tjn
-	 mfp1TW1sUx7xQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net] xsk: reset the mac header in the generic Tx path
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Petr Oros" <poros@redhat.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260817153957.3177627-1-poros@redhat.com>
-References: <20260817153957.3177627-1-poros@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 18 Aug 2026 15:40:20 +0000
-Message-Id: <20260818154020.749521F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PylBpURd"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2cca0c5799eso45025775ad.0
+        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 08:49:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787068162; x=1787672962; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=kSuvpzf7rU+xT5RM3KODXO3i5VoabBrqOkefcg/k454=;
+        b=PylBpURd1jLiVAm8Cs7dCBobDJvvZy9TGx7l+ZjllMkDrnAoBsWnRm0LEitGLy5ior
+         fRO+97ovEeHD7R0dkpTMuFZ+EvC90M6hly50UyUQh6uH9UTDJaxcM8TFuXxWlz47vI/R
+         SU34n+TfVbXF7KAJpg8htzK4FqwDbv4ZY4JKsS82IADbPqjayswGuWbids6QN4Mbnnwu
+         +2LK1O3IAtFa0o1igXqZm9XvG8epRDhBzHB05xh3qZILigP6rp3YgrPmZFFXipCCnaST
+         TfLBjY+y6FCj6TXYhyh7fyoOYd+PNDIbd10JnhzysNf8PL1uKAqZoCfdsdFMHTetOXI9
+         r4gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787068162; x=1787672962;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=kSuvpzf7rU+xT5RM3KODXO3i5VoabBrqOkefcg/k454=;
+        b=ZpKJZgOWK4jB+iYbMUKs+MztG6uTQ+IoNa0NleyazgpLs4j7t16dVVKXhhe5UdOf9L
+         0Cl6bBV42a3KMVFHDEzzJ2JSY+1KEjv5EdoJ6koVhnwfPeT/jdCTAASFpx1O+dbx9imw
+         C15u6/PVu7LdPUkMqZ4xRzoLcC8hcpbJcxhQQUrnEmJCRuv4nI5x+0QwunTF33T5dbpd
+         vd0Qq9IHsY28v8Twe6LJoC2sUwCYBagJmd+XxC52JWtKBkW8/XHqp3nEGmb/Otdsc5FP
+         zVAPh6xMwiL6fZVjhrYKaF9vrPclGFo6myAMGGEgf7m8sjpdPu7UELIz7iy0hAd5txa1
+         mySA==
+X-Forwarded-Encrypted: i=1; AHgh+RqYfWm4dfD7zTQsbC2esefDVBy0MiA0J3iFB2F/y0J1/wUey51pMmJrua059aEnRda75xs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSViHzxuILKxajgT4tZtsrLmtFMz4gH2pKr5PJqwohPR+1njfd
+	Wv1MINgfzej3HTi+0DlG4/lpgoYSTpoKS1RK5i+qH+NMbJXmkIg4ceo7
+X-Gm-Gg: AR+sD10oA3wzDU9JPX1MOD7vYh7jjTjY25W/qD32EQNsOY7fIUAygfTxP3dU8iLfSaM
+	I7x7OZkMuc1Qdlkf+v6U6TJNw9iOckJUlaW4Pz7IpA0WueAdSLTyWuN8tmygv5H7DG47msbDwIu
+	7NpCcLQ/tZ6U2fiF6wlAxgmq4rzL/BZeh7lP0IULPPymha3GCs4zi3dsgVjlvUX9fswuF8URdbH
+	ybOzRXNTBLrrqzQeeqlWmdvW1b8IfpwZlr4Mi2JGJY0J9Bd0oxP5MSUqps8JekGeQSRWCpemdwi
+	pGMUUwbdE2G9hsYg5zjXYJpTUX/ftSPDt3bEYOQYlbz5NibXfDQvphk5WVMUaTHIkHxMCDEE83L
+	q2aiKzVRnmxcMnGF7IJjo82GEKBhtN7clzhzStusYQubZi9v9+Mxt/S0oGpXcK271c8OCriZIsl
+	13BUPC3Kr3P4nmUOo+h3IrjQ6B4bwL6jh+nw22lgAz4uxXb8lzzDGqQG1MCPBqIr4SMoJshXoXA
+	XbuO1xfV6q5aonWG+WNRxk=
+X-Received: by 2002:a17:902:d4c1:b0:2c9:c517:d070 with SMTP id d9443c01a7336-2d3b0ad45d3mr352820585ad.3.1787068161635;
+        Tue, 18 Aug 2026 08:49:21 -0700 (PDT)
+Received: from 192.168.50.3 ([183.193.113.149])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d5c1e543besm16937955ad.41.2026.08.18.08.49.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Aug 2026 08:49:21 -0700 (PDT)
+Sender: Weiming Shi <thebestswings@gmail.com>
+From: Weiming Shi <bestswngs@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>
+Cc: netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Xiang Mei <xmei5@asu.edu>,
+	stable@vger.kernel.org
+Subject: [PATCH net] xdp: fix zero-copy frame layout
+Date: Tue, 18 Aug 2026 23:45:15 +0800
+Message-ID: <20260818154516.793517-1-bestswngs@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+xdp_convert_zc_to_xdp_frame() clones an XSK packet into an order-0 page
+and advertises PAGE_SIZE as its frame size.  It allows the copied frame
+to occupy the page tail needed by skb_shared_info and records zero
+headroom even when metadata separates the frame header from packet data.
+An AF_XDP zero-copy packet redirected through cpumap can therefore make
+the skb overlap skb_shared_info or place it beyond the allocated page.
 
-Pre-existing issues:
-- [High] Incomplete fix leaves skb->network_header and skb->transport_heade=
-r uninitialized in generic XDP TX, causing out-of-bounds reads during check=
-sum offload.
---
+Limit the copied layout to SKB_WITH_OVERHEAD(PAGE_SIZE) and include the
+metadata length in frame headroom.  Redirect callers already handle a
+NULL conversion result.
 
---- Patch [1]: [PATCH net] xsk: reset the mac header in the generic Tx path=
- ---
-commit 28a4ae00fcc18f8550bef3cea318942f60fe0720
-Author: Petr Oros <poros@redhat.com>
+BUG: KASAN: slab-out-of-bounds in skb_gro_receive
+Write of size 4 at addr ffff88800cf37004 by task cpumap/1/map:1/146
+Call Trace:
+ skb_gro_receive (net/core/gro.c:174)
+ udp_gro_receive (net/ipv4/udp_offload.c:812)
+ inet_gro_receive (net/ipv4/af_inet.c:1539)
+ dev_gro_receive (net/core/gro.c:515)
+ gro_receive_skb (net/core/gro.c:633)
+ cpu_map_kthread_run (kernel/bpf/cpumap.c:395)
+ kthread (kernel/kthread.c:436)
+ ret_from_fork (arch/x86/kernel/process.c:164)
+ ret_from_fork_asm (arch/x86/entry/entry_64.S:255)
+Kernel panic - not syncing: KASAN: panic_on_warn set ...
 
-xsk: reset the mac header in the generic Tx path
+Fixes: b0d1beeff2a9 ("xdp: implement convert_to_xdp_frame for MEM_TYPE_ZERO_COPY")
+Cc: stable@vger.kernel.org
+Reported-by: Xiang Mei <xmei5@asu.edu>
+Assisted-by: Codex:gpt-5.6
+Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+---
+ net/core/xdp.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-This commit fixes a bug where AF_XDP generic Tx leaves the MAC header
-uninitialized, leading to out-of-bounds reads in drivers. It sets the
-MAC header in xsk_skb_init_misc() to ensure the pointer stays in bounds.
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index 9890a30584ba..4bb97790b189 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -585,7 +585,7 @@ struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct xdp_buff *xdp)
+ 		   xdp->data - xdp->data_meta;
+ 	totsize = xdp->data_end - xdp->data + metasize;
+ 
+-	if (sizeof(*xdpf) + totsize > PAGE_SIZE)
++	if (sizeof(*xdpf) + totsize > SKB_WITH_OVERHEAD(PAGE_SIZE))
+ 		return NULL;
+ 
+ 	page = dev_alloc_page();
+@@ -602,7 +602,7 @@ struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct xdp_buff *xdp)
+ 
+ 	xdpf->data = addr + metasize;
+ 	xdpf->len = totsize - metasize;
+-	xdpf->headroom = 0;
++	xdpf->headroom = metasize;
+ 	xdpf->metasize = metasize;
+ 	xdpf->frame_sz = PAGE_SIZE;
+ 	xdpf->mem_type = MEM_TYPE_PAGE_ORDER0;
+-- 
+2.55.0
 
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 7855ee09c4b64..885427392cb6b 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -931,6 +931,7 @@ static int xsk_skb_init_misc(struct sk_buff *skb, str=
-uct xdp_sock *xs,
->  	skb->priority =3D READ_ONCE(xs->sk.sk_priority);
->  	skb->mark =3D READ_ONCE(xs->sk.sk_mark);
->  	skb->destructor =3D xsk_destruct_skb;
-> +	skb_reset_mac_header(skb);
-
-[Severity: High]
-This is a pre-existing issue and was not introduced by the patch under revi=
-ew,
-but does this incomplete fix leave skb->network_header and
-skb->transport_header uninitialized?
-
-If a userspace application uses an AF_XDP socket in generic TX mode with
-the XDP_TXMD_FLAGS_CHECKSUM metadata flag set, xsk_skb_metadata() will set
-skb->ip_summed =3D CHECKSUM_PARTIAL without initializing the network or
-transport headers.
-
-When the packet is passed to a NIC driver (like ice) that processes
-CHECKSUM_PARTIAL, it reads skb_network_header() and skb_transport_header():
-
-drivers/net/ethernet/intel/ice/ice_txrx.c:ice_tx_csum() {
-    ...
-		ip.hdr =3D skb_network_header(skb);
-		l4.hdr =3D skb_transport_header(skb);
-    ...
-}
-
-Because these headers are never initialized, network_header remains 0
-(pointing to uninitialized SKB headroom) and transport_header remains ~0U
-(65535 bytes past skb->head).
-
-Could this lead to out-of-bounds reads when drivers dereference these
-pointers, requiring us to safely anchor or parse the headers here as well
-(for example, via skb_probe_transport_header() as was previously done for
-AF_PACKET)?
-
->  	return 0;
->  }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260817153957.3177=
-627-1-poros@redhat.com?part=3D1
