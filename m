@@ -1,228 +1,268 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35CE52ECD35;
-	Tue, 18 Aug 2026 04:44:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787028289; cv=fail; b=Sel8yf/dRSIalGbHeTH7mzXTrwcBODfIYKyj/N7voHtRRspHKbJ8LdYhyrsAxmffBNlQkkY1Q5yS1cNwPhEEEQ+/Y8VQE5nWCVTZDsXB19rdyHs5lWWrhzMQ3cCv6fd1EIFwaMj81Jdord8UQ9B5AWWZ9klIk1Lt0lrN/QrowNE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787028289; c=relaxed/simple;
-	bh=JzVc8J5yealnB+N+kMMmgb9H+F7WNC87ycBBeBlEtRo=;
-	h=References:From:To:Cc:Subject:In-reply-to:Date:Message-ID:
-	 Content-Type:MIME-Version; b=OR5s3b3xUn8fSthiCEgwbvmi+zXiDdQNGTCum2bIIjekcw76aLsxZQu1KNrANtfUCJHJ4Jp7lixOJIIv5gMrx0OVWGR3N5YzTi6+YrwLJSGhYnSY6qE7BhyW0JyIS7wn/S3yWnmiJMP45TN3HbeQoPS4DFH1yyalLgY1IMWdSIY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=bslbzq/q; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=uJFTpWyg; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 558523D3CEE;
+	Tue, 18 Aug 2026 04:44:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787028294; cv=none; b=mEOiTibjtuSyqJ0d3z/zZXFckV/ecGiP4I4rbsj2bwDUFumH9HGrSx9Bc5UqL1W5OSV5TYMWqv17Szk8DdR7ajNzsSkTAoBO1qfzxwsyupu8D8jp78kRZISbZF3GB+ti2nwzniO9GUK+/uslg6eV4vvMVayG3sTqMHbHvZb1wsc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787028294; c=relaxed/simple;
+	bh=t7XhYzgYJWxicOASZMOzP8HpXMfgB5Q8zzdcD1PGJ1o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nlTiwKMLpOmG/Nf4gCzzyzRiX8+wsEzbelVZ0zN0euTPS4MaheWqyUO0Bhr77tpIBPygWK36jbwYliWLGNFJyo/Q+qwsZc1tb9hG7d3xtLGq+YDdt9LYW0ZLu2jV6iG278fYRDxYsqceYg87xA0zOJAuj4usTcO0PsuHsJfvNDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=LejyrPZt; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="bslbzq/q";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="uJFTpWyg"
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67HLMi8O1332746;
-	Tue, 18 Aug 2026 04:44:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2025-04-25; bh=RkNW9QolmLTmy2Nk9y
-	QOO5VcD9BUaRy/KiFAyy183rM=; b=bslbzq/q3sN4zhYD4KoCwBjugSY124k7CQ
-	FndqyFCRwbuQc7IQbWPnFcFPVKn4EbV6u3OCcUwWOzs3VkkYaJ3YUCgF4cuJxsGu
-	pjgxZdNMp3oqwjEMWU1JGqL1XkmnsuWOwgmL1cko9gcXUa+gA8qex/5862VVImhJ
-	TTdcho+9P4WqUwJYp2ZFur2CWOkNPjOrNqK/hWuCqbKWuvE3NPQ1Oc+seB99A0+4
-	i27DWUMmAbKiggk9gsGASIIjEm1lE1JM7hLyACx03rTf3ArpyW4vpsiHPLxOs1Kh
-	DFRyWqwg70fBbZqARnsNMoMzJontrOPoI6CeLqgsnCuiUFlYh9OQ==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4g2gns3f03-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 18 Aug 2026 04:44:11 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 67I4UgHQ030298;
-	Tue, 18 Aug 2026 04:44:10 GMT
-Received: from ch4pr04cu002.outbound.protection.outlook.com (mail-northcentralusazon11013044.outbound.protection.outlook.com [40.107.201.44])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4g2ejq5b1k-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 18 Aug 2026 04:44:10 +0000 (GMT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Iwed+g2J2H53E79PCtUUA0aLLCc6+xug1qOTRReKSR7Z/jyjcci9K0q8nw1/gGKTIkAWaOv1FnPcjvOsmgsUvurezNa+79Q0jeWudAcBDTewMrN1FXhBTPpkOoTtecUsqt1/+9LfkVffaOsG/kUNZc1ruTam69MC9Und2vZXk7Jq8pPmtzAIG3STYQIHd7PgkLGNtJdbPdDGz2WfoVzn7pesfHxI2YJ2GszgJpzhjoHh1NPJPDfhn0sxKOb5k9gjWeM1GCTQz2d/ZCCwB3Scp06mAHv27TEr0Mt6pXxTtm16osfcso+LOJ/3dtAkdtuMsLOW5R0OidHtshJ6FQ7UBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RkNW9QolmLTmy2Nk9yQOO5VcD9BUaRy/KiFAyy183rM=;
- b=cSBKkpDKoH/SjfafgwIljNmCBKpl8gCORo14KABOM7CDjPyD8DdujZcMbAmafca+lmZcsHuexKMWoGrxYweon4c7JlNrruGg6BjeKjp6GrwBhMiWSKtoPRDnPcX7Pd0eSIxP5DkSr2i6yHxhy/zjgX3MJjLITcdlaIwBSaz9sBUvKRwKVtSzZOnrtZIrqkhP1PaYESPmJ+b1DZ6d5Zd9oereObgF1DsAu/LsuVUaZrhQ7mxLJsmVGuEoCMJuYStYbgD9TaSsUHceRsBA7CDEe0hEM+qrZDyS7v0qe/+jXgPzjt8rabPh9A+Y8iD4jlsTyKiDfLT2l75q2lour2lgaA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RkNW9QolmLTmy2Nk9yQOO5VcD9BUaRy/KiFAyy183rM=;
- b=uJFTpWygBdNGdJt8ew7nGaq9UUVwO5o0WzNELzBN/ZhEiwU4gR7RIwYrHZiRpTFNi+Kjxhad8ybXKUsSFcr15kWxdEBv11zJvnPIzimPTXR7itouhTHCwoTIU2PKiY3WIEqbLGQC6QBCM8GpDpCfGuXS88nnpGmHDJriWqRW7VM=
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com (2603:10b6:5:357::14)
- by DM4PR10MB6839.namprd10.prod.outlook.com (2603:10b6:8:105::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.17; Tue, 18 Aug
- 2026 04:44:06 +0000
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::3c92:21f3:96a:b574]) by CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::3c92:21f3:96a:b574%6]) with mapi id 15.21.0315.016; Tue, 18 Aug 2026
- 04:44:06 +0000
-References: <20260714073041.40250-1-ankur.a.arora@oracle.com>
- <20260714073041.40250-14-ankur.a.arora@oracle.com>
- <amiUWpsL1QGf929i@willie-the-truck> <87tspi7lzk.fsf@oracle.com>
- <178700204950.2504314.3914062953110867251.b4-reply@b4>
-User-agent: mu4e 1.4.10; emacs 27.2
-From: Ankur Arora <ankur.a.arora@oracle.com>
-To: Haris Okanovic <harisokn@amazon.com>
-Cc: Ankur Arora <ankur.a.arora@oracle.com>, Will Deacon <will@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
-        peterz@infradead.org, akpm@linux-foundation.org, mark.rutland@arm.com,
-        cl@gentwo.org, ast@kernel.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, memxor@gmail.com, zhenglifeng1@huawei.com,
-        xueshuai@linux.alibaba.com, rdunlap@infradead.org,
-        david.laight.linux@gmail.com, broonie@kernel.org,
-        joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
-        konrad.wilk@oracle.com, ashok.bhat@arm.com
-Subject: Re: [PATCH v14 13/15] arm64/delay: enable testing
- smp_cond_load_relaxed_timeout()
-In-reply-to: <178700204950.2504314.3914062953110867251.b4-reply@b4>
-Date: Mon, 17 Aug 2026 21:44:03 -0700
-Message-ID: <87y0e4yr58.fsf@oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR03CA0116.namprd03.prod.outlook.com
- (2603:10b6:303:b7::31) To CO6PR10MB5409.namprd10.prod.outlook.com
- (2603:10b6:5:357::14)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="LejyrPZt"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67HM1jRi2669108;
+	Tue, 18 Aug 2026 04:44:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=VNoeJ1pi0IaQw+BsR
+	beWlLnMs+GZmcWZQJyyRm1dwFM=; b=LejyrPZtnuQpzIlSfsAuM0vS0vxDa2Mio
+	MtywJRlEYeabhMAeI1bRANvv10H9DrFZkebEhXTsTnPY4BTab2+Cn+g2NRu8jZXU
+	2rqLCzzDQOwJbK0mqVt3qz+hyPQalrkr1rC5TMZlia9p58VUlUtAzYICiTCCfOL1
+	d7YxlXjJqT3Oo9g8d7UB7+j11NT1jeYc1n6zZPPfa4P+188T/XllUfcd+ppDiWC5
+	AiiPRmjJTd/pwaLZaHnXpDvlPU3JljoeivJR9ZnNLrBBgNqdYDeKX3LBWL4s+iVY
+	521esh5lVVo+wPKWs967xF0MzDzKxLIP4UT54hF0TqnW2sd+tqh+Q==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4g2frt5jnq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 18 Aug 2026 04:44:33 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 67I4fKiZ028611;
+	Tue, 18 Aug 2026 04:44:32 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4g32eq1h02-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 18 Aug 2026 04:44:32 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 67I4iSY747055352
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 18 Aug 2026 04:44:28 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6B22D2004B;
+	Tue, 18 Aug 2026 04:44:28 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9636320040;
+	Tue, 18 Aug 2026 04:44:17 +0000 (GMT)
+Received: from li-1cb9f04c-2ae1-11b2-a85c-a8a0a83790a8.ibm.com.com (unknown [9.39.17.69])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 18 Aug 2026 04:44:17 +0000 (GMT)
+From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+To: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Cc: hbathini@linux.ibm.com, maddy@linux.ibm.com, ast@kernel.org,
+        andrii@kernel.org, daniel@iogearbox.net, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+        venkat88@linux.ibm.com, yeswanth@linux.ibm.com, skb99@linux.ibm.com
+Subject: [PATCH v12 3/8] powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
+Date: Tue, 18 Aug 2026 10:13:36 +0530
+Message-ID: <cbbffb007454434ad67a7a09cfe26bd68e1edb5c.1787027080.git.skb99@linux.ibm.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <cover.1787027080.git.skb99@linux.ibm.com>
+References: <cover.1787027080.git.skb99@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR10MB5409:EE_|DM4PR10MB6839:EE_
-X-MS-Office365-Filtering-Correlation-Id: 53c0d480-d745-4050-daea-08defce35584
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|366016|1800799024|23010399003|18002099003|22082099003|56012099006|4143699003|10067099003;
-X-Microsoft-Antispam-Message-Info:
-	JcgS8+XarVZp21zwpplwPE0036hhpD9q0Tdf6XU4BjIO5bvFRJDP/5Vx7NVnHMpWIdXG2Gr68edaoG8yre0S/I/gIv9oTU9eLfgA4RxY/tngWl+cyRegNZhVyN/rc9i2dR2OrXg3Dj4wbe1uajzTCWMCqFmYURAKnDz3eH+S2lw+IPEzArzzPjPJST6M3uxl9f6CSsTYftNYOEqwo/cLu0i+erWrNGELEl8LB8M1f6gWVX4muq6ScZmogJ745ug/f9AhcAEtOf2QbTAJz0M7BafOlEh8UwX/lDbwkHtACsp7t184a3TOsVUHYmG45BDmdXGD2ruFL5A9PkS7jivg6w04aOzl/w6MAsIitDvUxFrvvlCDyNQ/cpwCknd7uHSlLj2fzv71vxzzAIufuNsQSjbD1c8I98ec5F7UM1EELvbKoZ6iqIKTtE4O5Yfe88Abb+hfzM2KFwRV4dBZRvmFACJOQsXAg2f0t56gJZ+gy9OaEcQUj/K5BllxdTiQQsMteYB6lL2FlxVG6kdKIs8dlhnWvbpPdSR3gxDBOMEnpoWHpVa+1xXduimlo/9d3uxK8rhZR0xI84VlhHuOnt73i32m+Xc7qOpaJkuD4bGcoWOteZ8qEV+6gJSoDR10sTRhA3+JjfLYXsYIMDTjS313IW/FYmiZlAN6W+Xm+XJJcNk=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR10MB5409.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(23010399003)(18002099003)(22082099003)(56012099006)(4143699003)(10067099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?N+8acVqxJgHFCcZQi/TxKp8B08vCIrzfAHUnRQYWcBwyi3W5RsVkjIMhiko0?=
- =?us-ascii?Q?fFIPPGIleYuU+3sMtFec3Lj4K1ioIFU/6TfiMDRnt8IS9X+MhTDGRhxHtXQ8?=
- =?us-ascii?Q?i1RUl9bcOSduruZRP0Wf6I8aL3E+R5SPZ5PiQJfBQgubsAfn3qo55zJSc45q?=
- =?us-ascii?Q?7Bp4C1tDkYK8WXM5QeGw8ciawd7FjJytvu0/AqfVjqC1sOxcIO4viMtHOk0D?=
- =?us-ascii?Q?X3nZbWWBToDpzB7lklZESbzWLiqfhUe2oBXj3e0u+x6tjAkUhi1MV5TwDS15?=
- =?us-ascii?Q?dkf87dwXXmSuHNKCjRQ6F5m+L3yyCl70BcWjMGbRGv1GpRkshea9HehPXol2?=
- =?us-ascii?Q?QUE5OhK3tRBeEdJWFeUArIAHuLiCMfAVIzlUnfDKJ0BCqNMHQ91rkJUaV+59?=
- =?us-ascii?Q?fsDzFVYz7LOYvKSK2srV21HD5V3gFuENsqzh+1D0lxxQM6K7MIYgezitMn0p?=
- =?us-ascii?Q?8NBa0Pvjwqh3L39nMMH1Vm34nX1Iv/8j81S80oGRcgPGGQU96xeTFTGlkZJv?=
- =?us-ascii?Q?VVWZHOGdYy6Bt29ZuTtcSGKNOpaVutnjxiov0xzAXei6qEuiGPi6Vmz4DtnR?=
- =?us-ascii?Q?iD7KwzOkKTxTqQnuVAzkZlop9v/zsNAWJ7PKmoSXav1FQCbHb63HG+kql6s5?=
- =?us-ascii?Q?wnJDk/OduxMOjsVJW6q32axl0Fog5Z3gHdjLXcjajAvP8ZseaPUuZbxfG8Bn?=
- =?us-ascii?Q?QIZ7OsZ631B/wSalH26uHWTPU6HHbPIp9MwiAwqc2jWKCc2EafglYoadpSeS?=
- =?us-ascii?Q?XbiVTrTbgLZ/Ciu24cokCwqgx0mz6syjcaFnNO6XrrEXIdk1M9mZPGo1D/7+?=
- =?us-ascii?Q?RpE39fOSDIyfiqUulCQWhLxKi3+pe0rvR+hB3FN4hsUOryMKwZK4hJNONe6E?=
- =?us-ascii?Q?Zo4Z4wlAoKDFAy9t+UAy8N2DTmbnDl4G77Hws4peGXqJS0CJeYm6UhRmqDNv?=
- =?us-ascii?Q?03i3iS0cKNKwZBdU+w1CIx8HsrJcUfXugXEGd2AbO9aohcGO5BHNxHY8qWnP?=
- =?us-ascii?Q?Z+K9fvnVLbai8qEw8kkqukfMjAA4Qls6tRYu9qrkJ3Bt44I64nPhYeWyH43z?=
- =?us-ascii?Q?yqz2/DkejhLN+iEhKyhLI8B5+xe9mQoLwBkunURPUTpjsrbJaW9NWCDYQO1O?=
- =?us-ascii?Q?GZ3oLc2kJgShFPRvfmUx0Hi+F93ALab657lNEWZub5K59itAeok8xvW9jWBr?=
- =?us-ascii?Q?SHdnVTPsJLgcK4xL2u+qj4dGeyptSZaWynSR3HMjL+NOVbk7UshRCP8u8kcv?=
- =?us-ascii?Q?ZJYUXWTMnrNfKq6PMVzsKp+eDBI/Zp1VS/SHkv7caNSuT6+CdIxxzZ2vWcR1?=
- =?us-ascii?Q?3g/2qfIsbLUL83eArlYJtvQhUnPB2KBff7mQLBHehVkk49yXi9Co0M4hSy0K?=
- =?us-ascii?Q?FpdEbLITeuFFMClxGuwAR148Kl73DW2nX8N93HNSKunF1czUrvEIFe1SMMy7?=
- =?us-ascii?Q?sJZ/3/ZfOe5maFe9k3kGr+lr+qqUMaM06RZztXwjHPpLQIzco+SHgYiv3LYi?=
- =?us-ascii?Q?uFYNAgaAiMF556Z9FOR5niDK/Z4ZZYqZJ+LnBx8RAWCeZErp6RUjPMrOobWg?=
- =?us-ascii?Q?NqcMO2vV2pdY46HSlRJTSb4g1nouRLseAGGF1AjG/cK4UWrOGSNkoKR41wY3?=
- =?us-ascii?Q?rC3daXH9dMGIrZQbsFlMdvcpp1NHdJ8OC2FFW97AfQQOWqLLWMRHdBoYozIx?=
- =?us-ascii?Q?hvoTieoIIutcCAxRlckyXz4Rf1bHJlo7VYAdbUvjUMer6bG1AfYLPAnyeAla?=
- =?us-ascii?Q?aJhWlZikmEBXojHakjkgp8x+2RzyThI=3D?=
-X-Exchange-RoutingPolicyChecked:
-	CHuGgcL1PItVoVPa4/76EPOH1glYLVAP6DoY4PfaWWCCgAcCHteFhOo5Jn2d0QH1wFEHOLDVH+DPR5Dj5gMoNsgMaI/orxUKAcomOTlR6kXErAWxTzD8H+Vof/qLTRO8oGsF4gTRKc8bqk3teG+m+24VuB3ELeJEPwSqiW96rH27FlkZTl+0M/JUrFO49Vp01lqHhNWVv7ZsRMM240zF4KAbVCfTvfoNynHsKHmRp+r+zwg0jpYiX8I+2fJMFJU89sSrXnizBWSwSWHlguLqfoIzumwkUGJgFctU5pUjz/PZZy8zxpylGWsRjTYJ15XXwKaE9D2c4VoPVJjmWtPoaQ==
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	VodMX2bTbNnUW5lqu0i7T3NFp2NhBgb5Jvyr33bT1gl2hbmIsrTLUfm3/P/pOZar8XMR1iSClRuN1n+x+q+4sOhKa7epyRBAZflpNj+oNst1KWi/Xl9nzMjDcYH6kC3oL8/bUbKYLoVYM5+yby2Ih2t4cK3KApulOxtJLdVWS9i2+U+dAATNgIhggoiLqCjWWYJX36JNhMaS9XHfMmSfnpoci9zPGr1JJhgK6r+Ku05K6qb+FPLlW72Ale40lO8xcl0omgsFSKuPYeOioh/DPPZj6OBFMAijSxmnevLVP9UUChQKCeF6GKlkYOLEhvaHJT16x6kHDpimgKfa0Xj3nyPlj2t09pV8PMX2TlsjIkLWD/omd/jDbZ8Au6/jKTJ2M8yBy3h8b1/kUwi8VVArni21VwLXyWm9tScerc5oMW7O9XQt9MeYaJ3cimWqaSd++m1aPuVKxMaYiGdbfwa+Yi9512zLT62K35y9JlaF+nWhRBgvpv3g+LiVrUIY+KOcdR26F6WRPwvjvbVUfTbNP/55L99CGdj2v3irKpgRFUjTvJAu4o2KG+UVFglD9Iut5+uQyYKVGgjdkzh4O6aNTBQJW9kXqe9SFO3yY4KOJ38=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 53c0d480-d745-4050-daea-08defce35584
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR10MB5409.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2026 04:44:05.9759
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: taFR6SRgTv3KZc/7PkgwQ6PZd6jCVgaASW36KuPp6Q6DMP9Eb3tgkSoz5F+FUWn/Lks2gWYnna9GkMGeQFE8JKy+xUuHnkylKp6gjGqymzU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB6839
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=OfaoyBTY c=1 sm=1 tr=0 ts=6a83e331 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=RzCfie-kr_QcCd8fBx8p:22 a=VnNF1IyMAAAA:8 a=Lb6AdhTzggfNSiIQzXIA:9
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODE4MDAzMSBTYWx0ZWRfX5P4DFg59l1Yj
+ BUgW56npiH28bO1InjgN6LHBSbk2rp9fAaJEJz9IRyw+IPdtnRtOGorHZXrKSqpxpx0LUogCy+Y
+ t5UnViITjpb8u+82PWBtD1194/yX378=
+X-Proofpoint-GUID: 7__X4WYXxZCTUyIknnoXO2KMLUp2aYfj
+X-Proofpoint-ORIG-GUID: 7__X4WYXxZCTUyIknnoXO2KMLUp2aYfj
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODE4MDAzMSBTYWx0ZWRfXxJAQl6xLyhqv
+ 9qiLDGzgqmdZAXbVmlo+fxgk96NdjTuatEKdtfMaHAB+3rxoi/2OJWKOc+z9eR6xjDwmu+9Z76C
+ tp+2mAyu74Kc3qW7x6jZCWH5IaWXYQ4QoqoID706hAakaaQEVu3kxYZTzZx++n379dC8MM0wFdi
+ 7JxJU6drbUFof4y9+JJXfOG1jT1SPoURctvPXO4k+9T4fjOpjFg+Hz6Zz3OtMcaiw2iEOyB+hqC
+ /3wxh4k0KnzpKCxYgWWOPcsSaIH0N3DHP8iuwuWATWsOA+yB2KgzcvR0IQ23YZwhq6qyz8IDzr5
+ RRnSSu+P002p1hO1/6lMWxiIrkotlXujvp02YV7h0hj1uGTPJofuvD8fPTKjD02B92cGFwshuql
+ KqErCGVwOE8KLqINdlsWIX/dbfIoLvzYk5DL6bPgFcIzaah1sD+SUt35fnTooGyN+r8Cu+fAiMI
+ uWVHdUL6qagsp6jy0VQ==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-08-17_04,2026-08-12_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=904
- lowpriorityscore=0 malwarescore=0 bulkscore=0 suspectscore=0 adultscore=0
- phishscore=0 mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2606160000 definitions=main-2608180031
-X-Proofpoint-GUID: a51T9LyGGkPnHto-iOMVOSMvuE0Ei3kD
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODE4MDAzMyBTYWx0ZWRfX5WPR+ISCCiP0
- UVSCjVQbne8fFGXhIJlD/57th2ZotRKU/Io7T8Bd8H286TAd0J+P3J7Wfi1zcoValVRVLnjScUb
- fDqpDr7yKvacto3vCrE8gduFRoHgG3odmTtAUNJNqZ2B08nr2CH9
-X-Proofpoint-ORIG-GUID: a51T9LyGGkPnHto-iOMVOSMvuE0Ei3kD
-X-Authority-Analysis: v=2.4 cv=a8UAM0SF c=1 sm=1 tr=0 ts=6a83e31b b=1 cx=c_pps
- a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=Sv0fKeRqtYgA:10
- a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=7Gl3-_t3PgB9XO-mQDs3:22 a=vggBfdFIAAAA:8 a=VwQbUJbxAAAA:8 a=7CQSdrXTAAAA:8
- a=yPCof4ZbAAAA:8 a=NaRaTxz1LYebIvW7r9MA:9 a=a-qgeE7W1pNrGK8U0ZQC:22
- a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:13509
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODE4MDAzMyBTYWx0ZWRfX3Sv26xvU6YiO
- AKhL0yQZFqGduQ9B9JV08j0zVN4EYjjOkGM3Pi3Hh4MioizFEBaBrHN3CKxZK3729/szakOE3Ij
- 3yOCDRXH4MgbLhsYgTsm7myTH28nKIV8NIeSNRA/7xLM4un3mRlxz+/6LYxwhTaSl25tL3Cpntu
- RC6y+EGRulHoL2pnQfZffiWWSV7gtxciSuvFDkcgRJ74irmr2jGxec5jHyj9n2erp0JPRWw+d/y
- 0Ih5caflNX1MO5WQhI3RsDgB5xH1e/8SVN0X/07kqu6Cvgh9fKL8JXQl9fYLWfnKxxYzh2BaG4C
- 1oG8Ulxwjnpnp5UjmQPuHBbCe7COaEPqbUmz4lwkPObAf0RLJHyN1nPKEIXUVXhZCFMmdp8OrBk
- LC/LIJuZspgSV5Ef5XMcOPY94tpEzXGTUStpWUc9wHQWAmz22CtHKr8hDKQOEM7cqCMHSuWDoyG
- KyApwpvzWCEX5EmeeZF+SHRK5sLwNDjnkXfsByuI=
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 adultscore=0 clxscore=1015 lowpriorityscore=0 impostorscore=0
+ malwarescore=0 bulkscore=0 phishscore=0 priorityscore=1501 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608180031
 
+From: Abhishek Dubey <adubey@linux.ibm.com>
 
-Haris Okanovic <harisokn@amazon.com> writes:
+Move the long branch address field to the bottom of the long
+branch stub. This allows uninterrupted disassembly until the
+last 4/8 bytes. The last bytes exclusion is logically necessary to
+prevent disassembly failure, otherwise the actual program layout
+is never altered. Hence no effect on overall program size.
+Also, align dummy_tramp_addr field with 8-byte boundary.
 
-> Hi Ankur,
->
-> On 2026-07-28 16:06 -0700, Ankur Arora wrote:
->>
->> Will Deacon <will@kernel.org> writes:
->>
->> > Hello, Ankur,
->> >
->> > On Tue, Jul 14, 2026 at 12:30:39AM -0700, Ankur Arora wrote:
->> >> This enables the barrier tests to be built as a module.
->> >>
->> >> Cc: Catalin Marinas <catalin.marinas@arm.com>
->> >> Cc: Will Deacon <will@kernel.org>
->> >> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
->> >> ---
->> >>  arch/arm64/lib/delay.c               | 2 ++
->> >>  drivers/clocksource/arm_arch_timer.c | 2 ++
->> >>  2 files changed, 4 insertions(+)
->> >
->> > Acked-by: Will Deacon <will@kernel.org>
->>
->> Thanks Will.
->>
->> > I think this is looking good from the arm64 side now (and appears to have
->> > all the relevant Acks). What's the plan to get this series merged?
->>
->> Let me ask Andrew if he can pick this up via nonmm.
->
-> Any progress on merging this?
+Following is disassembler output for test program with moved down
+dummy_tramp_addr field:
+.....
+.....
+pc:68    left:44     a6 03 08 7c  :  mtlr 0
+pc:72    left:40     bc ff ff 4b  :  b .-68
+pc:76    left:36     a6 02 68 7d  :  mflr 11
+pc:80    left:32     05 00 9f 42  :  bcl 20, 31, .+4
+pc:84    left:28     a6 02 88 7d  :  mflr 12
+pc:88    left:24     14 00 8c e9  :  ld 12, 20(12)
+pc:92    left:20     a6 03 89 7d  :  mtctr 12
+pc:96    left:16     a6 03 68 7d  :  mtlr 11
+pc:100   left:12     20 04 80 4e  :  bctr
+pc:104   left:8      c0 34 1d 00  :
 
-Hey Haris. Andrew asked me to take care of the remaining sashiko
-comments.
+Failure log:
+Can't disasm instruction at offset 104: c0 34 1d 00 00 00 00 c0
+Disassembly logic can truncate at 104, ignoring last 8 bytes.
 
-Some of them need somewhat careful changes. I'll be sending out the
-series this week.
+Update the dummy_tramp_addr field offset calculation from the end
+of the program to reflect its new location, for bpf_arch_text_poke()
+to update the actual trampoline's address in this field.
 
---
-ankur
+All BPF trampoline selftests continue to pass with this patch applied.
+
+Fixes: d243b62b7bd3 ("powerpc64/bpf: Add support for bpf trampolines")
+Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+Tested-by: Yeswanth Krishna Tellakula <yeswanth@linux.ibm.com>
+---
+ arch/powerpc/net/bpf_jit_comp.c | 46 +++++++++++++++++----------------
+ 1 file changed, 24 insertions(+), 22 deletions(-)
+
+diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+index caea53cde063..870cbffdbb93 100644
+--- a/arch/powerpc/net/bpf_jit_comp.c
++++ b/arch/powerpc/net/bpf_jit_comp.c
+@@ -52,9 +52,10 @@ asm (
+ void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context *ctx)
+ {
+ 	int ool_stub_idx, long_branch_stub_idx;
+-	int ool_stub_sz;
++	int stub_sz;
+ 
+ 	/*
++	 * The dummy_tramp_addr field is placed at bottom of Long branch stub.
+ 	 * In the final pass, align the mis-aligned dummy_tramp_addr field
+ 	 * in the fimage. The alignment NOP must appear before OOL stub,
+ 	 * to make ool_stub_idx & long_branch_stub_idx constant from end.
+@@ -62,13 +63,10 @@ void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context
+ 	 * dummy_tramp_addr must be 8-byte aligned for load-register
+ 	 * compatibility. The fimage can be non 8-byte aligned, so final
+ 	 * alignment depends on start of fimage and the stub's instruction
+-	 * count offset. The OOL stub size is 4 instructions (with
+-	 * CONFIG_PPC_FTRACE_OUT_OF_LINE) or 3 instructions (without)
+-	 * before dummy_tramp_addr.
+-	 *
+-	 * Emit a NOP here if (ctx->idx + ool_stub_sz) is odd, so that
+-	 * dummy_tramp_addr lands at an even instruction offset (== 8-byte
+-	 * aligned from an 8-byte aligned base).
++	 * count. The stubs block has 11 instructions (with
++	 * CONFIG_PPC_FTRACE_OUT_OF_LINE) or 10 instructions (without)
++	 * before dummy_tramp_addr field. Emit a NOP if the address of
++	 * dummy_tramp_addr is non aligned.
+ 	 *
+ 	 * In pass=0 when image==NULL, conservatively account for space
+ 	 * required to accommodate alignment NOP. In case final pass skips
+@@ -76,8 +74,8 @@ void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context
+ 	 * jited_len signifies correct program size.
+ 	 */
+ 
+-	ool_stub_sz = IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE) ? 16 : 12;
+-	if (!image || !IS_ALIGNED((unsigned long)fimage + ctx->idx*4 + ool_stub_sz, SZL))
++	stub_sz = IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE) ? 44 : 40;
++	if (!image || !IS_ALIGNED((unsigned long)fimage + ctx->idx*4 + stub_sz, SZL))
+ 		EMIT(PPC_RAW_NOP());
+ 
+ 	/*
+@@ -98,28 +96,29 @@ void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context
+ 
+ 	/*
+ 	 * Long branch stub:
+-	 *	.long	<dummy_tramp_addr>  // 8-byte aligned
+ 	 *	mflr	r11
+ 	 *	bcl	20,31,$+4
+-	 *	mflr	r12
+-	 *	ld	r12, -8-SZL(r12)
++	 *	mflr	r12	// lr/r12 stores pc of current(this) inst.
++	 *	ld	r12, 20(r12) // offset(dummy_tramp_addr) from prev inst. is 20
+ 	 *	mtctr	r12
+-	 *	mtlr	r11 // needed to retain ftrace ABI
++	 *	mtlr	r11	// needed to retain ftrace ABI
+ 	 *	bctr
++	 *	.long	<dummy_tramp_addr>  // SZL bytes aligned
+ 	 */
+-	if (image)
+-		*((unsigned long *)&image[ctx->idx]) = (unsigned long)dummy_tramp;
+-
+-	ctx->idx += SZL / 4;
+ 	long_branch_stub_idx = ctx->idx;
+ 	EMIT(PPC_RAW_MFLR(_R11));
+ 	EMIT(PPC_RAW_BCL4());
+ 	EMIT(PPC_RAW_MFLR(_R12));
+-	EMIT(PPC_RAW_LL(_R12, _R12, -8-SZL));
++	EMIT(PPC_RAW_LL(_R12, _R12, 20));
+ 	EMIT(PPC_RAW_MTCTR(_R12));
+ 	EMIT(PPC_RAW_MTLR(_R11));
+ 	EMIT(PPC_RAW_BCTR());
+ 
++	if (image)
++		*((unsigned long *)&image[ctx->idx]) = (unsigned long)dummy_tramp;
++
++	ctx->idx += SZL / 4;
++
+ 	if (!bpf_jit_ool_stub) {
+ 		bpf_jit_ool_stub = (ctx->idx - ool_stub_idx) * 4;
+ 		bpf_jit_long_branch_stub = (ctx->idx - long_branch_stub_idx) * 4;
+@@ -1313,6 +1312,7 @@ static void do_isync(void *info __maybe_unused)
+  * bpf_func:
+  *	[nop|b]	ool_stub
+  * 2. Out-of-line stub:
++ *	nop	// optional nop for alignment
+  * ool_stub:
+  *	mflr	r0
+  *	[b|bl]	<bpf_prog>/<long_branch_stub>
+@@ -1320,14 +1320,14 @@ static void do_isync(void *info __maybe_unused)
+  *	b	bpf_func + 4
+  * 3. Long branch stub:
+  * long_branch_stub:
+- *	.long	<branch_addr>/<dummy_tramp>
+  *	mflr	r11
+  *	bcl	20,31,$+4
+  *	mflr	r12
+- *	ld	r12, -16(r12)
++ *	ld	r12, 20(r12)
+  *	mtctr	r12
+  *	mtlr	r11 // needed to retain ftrace ABI
+  *	bctr
++ *	.long	<branch_addr>/<dummy_tramp>
+  *
+  * dummy_tramp is used to reduce synchronization requirements.
+  *
+@@ -1429,10 +1429,12 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
+ 	 * 1. Update the address in the long branch stub:
+ 	 * If new_addr is out of range, we will have to use the long branch stub, so patch new_addr
+ 	 * here. Otherwise, revert to dummy_tramp, but only if we had patched old_addr here.
++	 *
++	 * dummy_tramp_addr moved to bottom of long branch stub.
+ 	 */
+ 	if ((new_addr && !is_offset_in_branch_range(new_addr - ip)) ||
+ 	    (old_addr && !is_offset_in_branch_range(old_addr - ip)))
+-		ret = patch_ulong((void *)(bpf_func_end - bpf_jit_long_branch_stub - SZL),
++		ret = patch_ulong((void *)(bpf_func_end - SZL), /* SZL: dummy_tramp_addr offset */
+ 				  (new_addr && !is_offset_in_branch_range(new_addr - ip)) ?
+ 				  (unsigned long)new_addr : (unsigned long)dummy_tramp);
+ 	if (ret)
+-- 
+2.55.0
+
