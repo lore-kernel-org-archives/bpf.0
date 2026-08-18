@@ -1,217 +1,172 @@
-Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej2-f0.google.com (mail-ej2-f0.google.com [74.125.228.128])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D51D9472F7C;
-	Tue, 18 Aug 2026 13:32:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2F763D79FD
+	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 13:35:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787059958; cv=none; b=VZhlRe21OzKTaSXVOzqKJM7XlNuizr4tHVn5AeEOgKtlG/BrLqo3k2TxNCbOk07F1dlPWtSiHr9nRVPs+/PaVsOSl7USh8xd46wI1Qv1B3melqMYCqEfaifuBu9TLctGL766LVkoxXpqavyZEqFVAui1o1WJF4zTPA42Mok3SBo=
+	t=1787060157; cv=none; b=QAsHOZhr3esdpITt1J+HxV+kGulz67DWLnJa1plp6huhW11dPT0Nbn3kgblkeiQBLzUoBxWFq8A4PAgqMyANe72HHbVfwNCz89xRChlJ8h3YdRscW1oU1IDnuzKK2wkOevGsaDjPY0mcZzfAhdhHs8hvJF7GUYaxDGF1hXZLRkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787059958; c=relaxed/simple;
-	bh=zODo0YxaK8EvQyzyub97afGLMRh9681+5f+JksrYehQ=;
-	h=Message-ID:Date:MIME-Version:CC:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=YPC2aVXTYUIXYxI6FlMjKYsVDi6WFijHrrSYTdaN7/EFEL+E8FPt9s37H9kmTIYrzgZnum/wtsXcXMHcCVzD03hB7KOOTTnX54JFK60eiAVl9R0Y9CfpbEbaS9hEsfeWXiBleL4dw9xlLNwxX/GvSRGCp/z+tRffGRHbGivXAfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=loEDKz/q; arc=none smtp.client-ip=113.46.200.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1787060157; c=relaxed/simple;
+	bh=69PmcPI3dm7Faoq28h94RmUiPIMu2QEtxtKq+uOtgsI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=rg4essuwAjLk01cpZUqokolLW4SwywCUtEg7Bx9KQd5uHIBMxJe3o9xg+9POqHjbsVxnCLlA1Dd/18v5keHx0RpU7nHaqyUbCAiqTQhrW3Eu01AcxBq2YTzmt0+iZzgLvE4f2VtBxORU13VtGSNkMVhT5lfYDFK6iXlDghxt0bk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MXVPyzRi; arc=none smtp.client-ip=74.125.228.128
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="loEDKz/q"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=5Ao0mjFbvVNW/izzO3jvpj6rQ9rGRmC29qURkFZh6ME=;
-	b=loEDKz/qrpzbvC0Lh9UjT1BLiZqEz5h3Fgx0xNC6h/0utCONZfj9gJxFUI9wWKVaZTuJfmffK
-	7S3eS70EYvMPfFus94IwKTMYKXd5JQ8EdS5aR1dCPT/BmpIjoY3aJyPJvE1YRIqSzH+47+68a+4
-	LQhcHzRcKKboSqyIuM0NyTU=
-Received: from mail.maildlp.com (unknown [172.19.163.214])
-	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4hPVj20XhbzLlTg;
-	Tue, 18 Aug 2026 21:21:42 +0800 (CST)
-Received: from kwepemo500018.china.huawei.com (unknown [7.202.195.199])
-	by mail.maildlp.com (Postfix) with ESMTPS id C5D2A4056C;
-	Tue, 18 Aug 2026 21:32:22 +0800 (CST)
-Received: from [10.67.120.192] (10.67.120.192) by
- kwepemo500018.china.huawei.com (7.202.195.199) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Tue, 18 Aug 2026 21:32:21 +0800
-Message-ID: <dd817755-eb4d-4ac2-b282-ac06f847270d@huawei.com>
-Date: Tue, 18 Aug 2026 21:32:20 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MXVPyzRi"
+Received: by mail-ej2-f0.google.com with SMTP id a640c23a62f3a-c16772d888aso174082066b.1
+        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 06:35:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787060154; x=1787664954; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=co96cHXVTim0XeUqP04qIzrXjrThFIBTNFHixkplh6I=;
+        b=MXVPyzRizjJ3uzesSy1YTetc3KaNv93xS5i2AGuUoPdK5er5kAe3eSAzhLIWuGK5gD
+         4p7dKjKPUq177cQemLu0fLDZgyhJ3AmD1M8pivcHCWYo5yr5XI81MtKhVMOfDVVNVGZf
+         ZVptxcACUzM5uh2tiBDLuqj3gbzy2aBlPzdennDAspNBCwhRD9n2Vcg+JKMSoOrPhCWI
+         8WIbri7bh+2VfL4TSxSO0mq24h2/pa+7tLj9/TjmA5SQ06idnDpvrRjwi8OxERfLpxgW
+         k1UGent7YFPI+fbNoXC5BfkUdKHQIX3kVpu76U93m4STEzVfFlBKUQwQKBpzrHQgZskM
+         T8NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787060154; x=1787664954;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=co96cHXVTim0XeUqP04qIzrXjrThFIBTNFHixkplh6I=;
+        b=ZC58etwD3u5y1AGHdygosXe430eZVNiLbEzX+FJTj5LtxZHwp6zXkxZAhf8BKi/MDJ
+         8bntnAGHg8i6hNAHt8xHHWBt3gWAeaRSC2yaggwA7gAPmEN0bdBNoqCnwOctfpnjBiZd
+         8fFEkhzGKNYOKHOi2E8pUH2HYJgTJgmtriWsqVDktRt98cbdFVLkNbq9jcwUF5NRgWlm
+         0QAWu64sB0k7XBHtDU8J6MTSZDy8tDetKvVEr/Mg0iMy4XGDcpnu50AhTmX6NRdjp+HR
+         I/eeqQrjo9jPrV2GDcOngKVMDy9H+cZa8Takjt3wuXlzriGMAFTmMm1/4DxU0Cv4DbXQ
+         dz4A==
+X-Forwarded-Encrypted: i=1; AHgh+RqR456mWKi6sYLb7lnabmBOpqddVNMNxiwtItLJv6DKaLmK1uCOJzbWTHoUTpftvmUm2UQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YytTEroeczCG4L3gj7xq2JgiMlhqMGMv2Be8EDFfGS2T7ART+PS
+	r6M9zlJJi3Dq96j1kd/K/egAHqVU1ygnQb9ddyDR5fjLeo+48+znJtNu
+X-Gm-Gg: AR+sD12JuEGn+atEioHrzXZ3A5PAS4N8I/bOhmtljTxO3AOw9x4vQ7poIEZS4JCWk9M
+	Q2vZRFvqUQPQ/L5qRoGEj0yywWUc+SrV2lSV4omm95uVfnInboVhEXnmZKreNG54N4mrdGOo0HZ
+	YWQh043fdWK0L0xFX3h6symK5bFM8TAhpEvK9ncsyobEOPRYE6QbnE1TnLfpu63cE1X/C5SAEmQ
+	YWmIA/jLRLfBEwMJbtVSPkj/pavMzd5nCgB9Tmt6M5FjaEh5an6Bc2x3M5sZX+vfUA6Bhg+Mkmp
+	zehPaNk/gJ5Al6R3XBKOoJ2ULTdO3NJchpwHuz69c9UyiUJmYZDN0WJQps6C1rQ1uN6yXFbzXRV
+	Bqi39CbR3j/yzpst7E8NdKlmZX5e2oFcuLuQb7aw4kceJrpQh1ot3mfPWDEp4y0tXfSAQh2aWg0
+	88P9RjGs2Giw2x3Je019CEY4wxqHtKQ7je4QQMHUR+QW87T/c5rJoEyWjGe1ZJ5OgalYtP44qzR
+	mRsDZOHu1PwGJ7oRs6lqs2/zh/We1xbHOfCYdpLKMufPdjpJoObrdxxqOhnAs1j64uIuXuHnpPv
+	o+eIeOEYL47lgTVNuQBWV0QGgh8=
+X-Received: by 2002:a17:907:b052:20b0:c1f:8145:820c with SMTP id a640c23a62f3a-c2129c1beeamr1154813466b.2.1787060153608;
+        Tue, 18 Aug 2026 06:35:53 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2185b732a4sm162691866b.30.2026.08.18.06.35.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Aug 2026 06:35:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-CC: <shaojijie@huawei.com>
-Subject: Re: [PATCH v5 net-next 2/2] net: hns3: fix GSO_ECN flag setting in
- the RX path
-To: <chia-yu.chang@nokia-bell-labs.com>, <shenjian15@huawei.com>,
-	<linux-rdma@vger.kernel.org>, <eperezma@redhat.com>, <jasowang@redhat.com>,
-	<virtualization@lists.linux.dev>, <mst@redhat.com>,
-	<xuanzhuo@linux.alibaba.com>, <pabeni@redhat.com>, <edumazet@google.com>,
-	<linux-doc@vger.kernel.org>, <corbet@lwn.net>, <horms@kernel.org>,
-	<dsahern@kernel.org>, <kuniyu@google.com>, <bpf@vger.kernel.org>,
-	<netdev@vger.kernel.org>, <dave.taht@gmail.com>, <jhs@mojatatu.com>,
-	<kuba@kernel.org>, <stephen@networkplumber.org>, <xiyou.wangcong@gmail.com>,
-	<jiri@resnulli.us>, <davem@davemloft.net>, <andrew+netdev@lunn.ch>,
-	<donald.hunter@gmail.com>, <ast@fiberby.net>, <liuhangbin@gmail.com>,
-	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>, <ij@kernel.org>,
-	<ncardwell@google.com>, <koen.de_schepper@nokia-bell-labs.com>,
-	<g.white@cablelabs.com>, <ingemar.s.johansson@ericsson.com>,
-	<mirja.kuehlewind@ericsson.com>, <cheshire@apple.com>, <rs.ietf@gmx.at>,
-	<Jason_Livingood@comcast.com>, <vidhi_goel@apple.com>
-References: <20260804213510.673084-1-chia-yu.chang@nokia-bell-labs.com>
- <20260804213510.673084-3-chia-yu.chang@nokia-bell-labs.com>
- <61721708-0d77-4f59-aa08-02562af282bb@huawei.com>
-From: Jijie Shao <shaojijie@huawei.com>
-In-Reply-To: <61721708-0d77-4f59-aa08-02562af282bb@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemo500018.china.huawei.com (7.202.195.199)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 18 Aug 2026 15:35:52 +0200
+Message-Id: <DKS3YCAMWONO.2NVVH8IPARH7Y@gmail.com>
+Cc: <loongarch@lists.linux.dev>, <linux-kernel@vger.kernel.org>, "Vincent
+ Li" <vincent.mc.li@gmail.com>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH v1] LoongArch: Fix __smp_mb__{before,after}_atomic()
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Tiezhu Yang" <yangtiezhu@loongson.cn>, "Huacai Chen"
+ <chenhuacai@kernel.org>
+X-Mailer: aerc 0.21.0
+References: <20260817035908.460-1-yangtiezhu@loongson.cn>
+ <3103b3b4-5c0d-ed87-2e15-31a4d2289ec5@loongson.cn>
+In-Reply-To: <3103b3b4-5c0d-ed87-2e15-31a4d2289ec5@loongson.cn>
 
-
-on 2026/8/11 21:31, Jijie Shao wrote:
+On Tue Aug 18, 2026 at 3:28 PM CEST, Tiezhu Yang wrote:
+> On 2026/8/17 =E4=B8=8A=E5=8D=8811:59, Tiezhu Yang wrote:
+>> When testing the BPF selftest "sudo ./test_progs -t timer_lockup", there
+>> is a kernel lockup and panic:
 >
-> on 2026/8/5 5:35, chia-yu.chang@nokia-bell-labs.com wrote:
->> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> ...
+>
+>> With this patch, the lockless "store-before-load" ordering is enforced b=
+y
+>> the DBAR instruction. The BPF timer_lockup selftest was stressed for 500=
+0
+>> consecutive loops on a physical LoongArch machine without encountering a=
+ny
+>> further lockups or warnings:
 >>
->> Currently, the hns3 Rx path sets the SKB_GSO_TCP_ECN flag when a TCP
->> segment with the CWR flag set is received. This is incorrect because
->> the hns3 hardware GRO resets the IP ToS byte to 0 during packet
->> aggregation. Consequently, no valid ECN signals are carreid, meaning
->> that it cannot support RFC3168 ECN or Accurate ECN protocols. Setting
->> SKB_GSO_TCP_ECN or SKB_GSO_TCP_ACCECN under these conditions misleads
->> the upper network stack.
+>>    for i in {1..5000}; do sudo ./test_progs -t timer_lockup; done
+>
+> ...
+>
+>> diff --git a/arch/loongarch/include/asm/barrier.h b/arch/loongarch/inclu=
+de/asm/barrier.h
+>> index 4b663f197706..adfe343dfa65 100644
+>> --- a/arch/loongarch/include/asm/barrier.h
+>> +++ b/arch/loongarch/include/asm/barrier.h
+>> @@ -57,8 +57,8 @@
+>>   #define __WEAK_LLSC_MB		"			\n"
+>>   #endif
 >>
->> Fix this by removing the incorrect SKB_GSO_TCP_ECN flag assignment
->> in hns3_gro_complete().
+>> -#define __smp_mb__before_atomic()	barrier()
+>> -#define __smp_mb__after_atomic()	barrier()
+>> +#define __smp_mb__before_atomic()	__smp_mb()
+>> +#define __smp_mb__after_atomic()	__smp_mb()
+>>
+>>   /**
+>>    * array_index_mask_nospec() - generate a ~0 mask when index < size, 0=
+ otherwise
 >
+> Hi all,
 >
-> Tested on hns3 HW (2x 100G, direct cable, openEuler 24.03, kernel 
-> 7.2.0-rc6).
+> To address the soft lockup while avoiding the performance overhead of
+> executing two separate instructions, I think there is a more elegant
+> way to fix this directly in the BPF core helper:
 >
-> tcpdump confirms HW GRO zeroes IP ToS: aggregated (>MTU) packets carry
-> tos 0x0, while non-aggregated packets keep their ToS/ECN marks — so the
-> zeroing is done by HW GRO, not the sender. Before patch, CWR packets had
-> SKB_GSO_TCP_ECN set (0x5 = SKB_GSO_TCPV4 | SKB_GSO_TCP_ECN). After patch,
-> all GRO events gso_type=0x1 (SKB_GSO_TCPV4 only), no 0x5 observed.
+> We can replace atomic_inc() and smp_mb__after_atomic() with a single
+> atomic_fetch_add() in bpf_timer_cancel(). This consolidates the logic
+> into a single native atomic operation with full ordering, which not
+> only guarantees the store-load order to eliminate the deadlock but
+> also improves the performance for weak memory model architectures.
 >
-> Tested-by: Jijie Shao <shaojijie@huawei.com>
+> Any thoughts on this approach?
+>
+> ```
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index c18f1e16edee..ee2b3a4dcc05 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -1591,9 +1591,7 @@ BPF_CALL_1(bpf_timer_cancel, struct bpf_async_kern
+> *, async)
+>           */
+>          if (!cur_t)
+>                  goto drop;
+> -       atomic_inc(&t->cancelling);
+> -       /* Need full barrier after relaxed atomic_inc */
+> -       smp_mb__after_atomic();
+> +       atomic_fetch_add(1, &t->cancelling);
+>          inc =3D true;
+>          if (atomic_read(&cur_t->cancelling)) {
+>                  /* We're cancelling timer t, while some other timer
+> callback is
+> ```
+>
+> I tested the above diff, the BPF timer_lockup selftest was stressed
+> for 5000 consecutive loops on a physical LoongArch machine without
+> encountering any further lockups or warnings.
 
+There is a full barrier in both cases. I don't know what performance improv=
+ement
+will be achieved by changing this. Don't you need to fix the lowering for
+smp_mb__after_atomic() anyway? It's used in several other places in the ker=
+nel.
 
-I need to correct my earlier test report where I stated:
-
-   "tcpdump confirms HW GRO zeroes IP ToS: aggregated (>MTU) packets
-    carry tos 0x0, while non-aggregated packets keep their ToS/ECN
-    marks — so the zeroing is done by HW GRO, not the sender"
-
-This conclusion was wrong. I am withdrawing that Tested-by tag.
-
-Root cause of the error
-========================
-
-I mixed two test tools with different sender-side paths and incorrectly
-compared their results:
-
-1. The observation that "non-aggregated packets keep their ToS/ECN
-    marks" came from a Python script (scapy). Scapy constructs L2/L3
-    packets directly, bypassing the kernel TCP stack, so the ToS value
-    on the wire is exactly what the script sets — this says nothing
-    about whether a kernel-stack sender would clear ToS or not.
-
-2. The observation that "aggregated packets carry tos 0x0" came from
-    iperf3 with --tos. iperf3 goes through the kernel TCP stack, and I
-    did not set net.ipv4.tcp_ecn=1, so the kernel cleared the ECN bits
-    (low 2 bits of ToS) before the packets hit the wire. The tos=0x0 on
-    aggregated packets was already tos=0x0 on the wire at the sender
-    side — it was a TX-side kernel behavior, not HW GRO zeroing.
-
-I mistakenly used the scapy observation ("non-aggregated packets keep
-ToS") as evidence that "the sender didn't clear ToS", then concluded
-that iperf3's tos=0x0 must be caused by HW GRO. But these two
-observations came from different sender paths and cannot be compared
-this way. I only captured at the receiver side with no sender-side
-wire capture to compare against, so I wrongly attributed the TX-side
-clearing to HW GRO.
-
-New test with tesgine (direct packet construction)
-===================================================
-
-To eliminate the kernel TCP stack interference, I retested using
-tesgine, a packet generator that constructs TCP segments directly at
-L2/L3 with full control over the IP ToS byte. This bypasses the kernel
-TCP ECN state machine entirely, so the ToS value on the wire is exactly
-what was configured.
-
-Test setup:
-   - hns3 NIC, HW GRO on, software GRO off (ethtool -K <dev> gro off)
-   - tesgine sends 1460-byte TCP segments with controlled ToS values
-   - Capture at receiver post-GRO
-
-Four test cases were run, each verifying a different ToS boundary:
-
-Test 1: Non-ECT <-> ECT(0)
-   Sent:  4x tos=0x00 + 1x tos=0x02 + 4x tos=0x00 + 2x tos=0x02 + 1x tos=0x00
-   Got:   4 aggregated (tos=0x00) | 1 single (tos=0x02)
-        | 4 aggregated (tos=0x00) | 2 aggregated (tos=0x02)
-        | 1 single (tos=0x00)
-   => GRO segments at every ToS change, each group keeps its ToS.
-
-Test 2: ECT(0) <-> CE
-   Sent:  4x tos=0x02 + 1x tos=0x03 (CE) + 4x tos=0x02
-   Got:   4 aggregated (tos=0x02) | 1 single (tos=0x03 CE)
-        | 4 aggregated (tos=0x02)
-   => CE packet is delivered independently, CE mark preserved.
-
-Test 3: Non-ECT <-> CE
-   Sent:  4x tos=0x00 + 1x tos=0x03 (CE)
-   Got:   4 aggregated (tos=0x00) | 1 single (tos=0x03 CE)
-   => Same behavior: CE is segmented out, ToS preserved.
-
-Test 4: Pure DSCP change (ECN bits identical)
-   Sent:  4x tos=0x10 (DSCP4) + 4x tos=0xB8 (DSCP46)
-   Got:   4 aggregated (tos=0x10) | 4 aggregated (tos=0xB8)
-   => Even pure DSCP change (no ECN bit change) triggers segmentation.
-
-Conclusions from tesgine testing
-================================
-
-   1. HW GRO does NOT zero IP ToS. Each aggregate group retains the
-      head packet's ToS value (verified with 0x00/0x02/0x03/0x10/0xB8).
-
-   2. HW GRO segments flows by ToS boundaries. Any ToS change — whether
-      DSCP (bits 0-5) or ECN (bits 6-7) — terminates the current
-      aggregate group and starts a new one.
-
-   3. ECN signals are preserved: CE packets (tos=0x03) are delivered
-      independently with the CE mark intact, not merged into non-CE
-      aggregates.
-
-Impact on this patch
-====================
-
-The commit message states:
-
-   "the hns3 hardware GRO resets the IP ToS byte to 0 during packet
-    aggregation. Consequently, no valid ECN signals are carried"
-
-This factual claim is incorrect per the tesgine test results above.
-HW GRO preserves ToS and segments by ToS boundaries, so ECN signals
-are not lost during aggregation.
-
-The code change itself (removing the SKB_GSO_TCP_ECN assignment in
-hns3_gro_complete) may still be correct, but the justification should
-be based on the RX-path semantic argument from patch 1/2 (SKB_GSO_TCP_ECN
-is a TX-path flag; using it in RX can corrupt the ACE signal in AccECN
-forwarding scenarios), not on the ToS-zeroing claim. Or change to AccECN.
-
-I will re-verify and provide a new Tested-by once the commit message is
-updated. Sorry for the confusion caused by my earlier report.
-
-Test captures and methodology details available on request.
-
-Regards,
-Jijie Shao
-
+>
+> If you are OK with this change of bpf code, I will send a bpf patch
+> later.
+>
+> Thanks,
+> Tiezhu
 
