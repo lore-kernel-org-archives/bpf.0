@@ -1,115 +1,177 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pj2-f1.google.com (mail-pj2-f1.google.com [74.125.227.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 516CF346ADB
-	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 16:26:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.175
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787070390; cv=pass; b=kSEShQp40jgUSfq86WVgv8c7GJg40KLClenIFz5krpa5Fo+ujNiqKucIhQ1lqtI5fng6csCke5Q4DW9uwl6w1U6afAaBhq0YDHPvEiBd5OBTysMvPbnyGbezbuy3E4TyHglrh5MoBR8xhRYLM/26/IbotG7cCtKGyOv9YlMzS0o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787070390; c=relaxed/simple;
-	bh=boxmTyMFq29LCfG4VMNLF0pnUpUmPagiT8ecsCV/s6Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EfiDqtHc4GXV398S5cacu8imh0ue0zMBs5KyxqjVnZw8zDwY862eH8z0nATnOtOZCwM8ttrO36A8Q4jTEWt3uGh3WNl36eMaWRejS+rmGOiIoO/bzE17Uhwe6mEEze/Q5Oz9KCO/YrJKsKekjk9lCybO1yqP72gZw/Dhzg+vRJo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cbMdr37i; arc=pass smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14BD847DF9B
+	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 17:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.129
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787072636; cv=none; b=SvHH/tKoJG4dCYIplyGwkZztjCbcpjKMrOm5RYKIMAH7xmCTvUKhvJKtLRk7ngQ6uriRh12eEqByXPLb/H9rCCZ9GWyP83UrZ02tsoJvYEHtc+P9r9Nmnqw+XRMRfwn/z4HU23NgrQHLekqwENyWU30NJ+pqg48+E3qZOtddJBI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787072636; c=relaxed/simple;
+	bh=+NtjBczxEraDYPUktGMOfDvSdqIm87V/zl/KlbsnxXQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C02mIT/xt0g/O4yz5UgkyxiI0eTmtQUwPqcL5iRKglBqinTE7nJoOGSr/jPGJeQjB1yJfKC/1A5PTeVCOzL0rF+EG+2AqMgOGIl2k4dt4K0nvYqWWvjq8VBao5Vi8Uum4Fs2LkhkEqvve7QUQTdu+skA/QUFTH4C35Lhp7kvJbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lYn8sxjX; arc=none smtp.client-ip=74.125.227.129
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cbMdr37i"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2ccdf36f63dso124045ad.0
-        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 09:26:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787070388; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ensWxT/GWvkBrDb3TaLPE3fBZwpy0QT2QGBC4SGhcCfwyIFefbTdvki2S68/x7b5sZ
-         GbD7Ha4HtxlIaErOOjvT9yEKZdW6dqqgb96mMUf3mLmcVY+L9cgqQXTK4vFTrKZEGlUB
-         AZknJSA0kk049SVaLBjfbQkG5p7ZSm2g7Xg4vdlGazBiEBNqONEpVg/IUHIncAJhmRfc
-         PGnkxhr0JYwwnvcwCYqbux7DcS6prGOJNZIRY8L3D67A1/jSoKVgFYScIMua3XPuJCXv
-         3OxU9VHawCmZnPRBEqJcmtBznhDp1P5HW64zHo/xUVhitCL4iWGNuNLwhhYr+SjB9QH9
-         gdCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=boxmTyMFq29LCfG4VMNLF0pnUpUmPagiT8ecsCV/s6Q=;
-        fh=euEx/oqlLsTy1ph+n9k/W+VKNtdWp01wOic06Gxl+Dg=;
-        b=rep94DwhtxHbXZ24cg9TsyZvjMx6rOKx4pKW9f/fAMWZ1EltHoOo3fvHUMb+wQQtgs
-         Oy2ZJ+JOUfLxJ0RsVUtW6b4T7rfBnv9f8wZw27BVQGkj/zF88XW3UEyyjKo3pXbCw85q
-         gg9KB/EdJovb4bjLyC++Woue2TV9ZMV1ujz0MDTJl9IZM2/LAvrBHDWAcdY5rnjAihT9
-         aMWw+nwxQezW45iLo7v1h8mcAqiYn0RfH3XCYKLzAMLl9s2mY77D8UvczLwG8SAtzIYV
-         +T3teMfnnhknU2GFlx0GD9mYeYKX5swEytZcT8ecWQvOwVWdptIkrOHXjK83PtK01twt
-         Ujdw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lYn8sxjX"
+Received: by mail-pj2-f1.google.com with SMTP id d9443c01a7336-2cb3f5bb19aso240525ad.1
+        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 10:03:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787070388; x=1787675188; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1787072634; x=1787677434; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=boxmTyMFq29LCfG4VMNLF0pnUpUmPagiT8ecsCV/s6Q=;
-        b=cbMdr37ipLubWoECADncUh9dMoO0uC7oXVvBXb7iWd+rwMv0K1jbw9SXP0DkvBhDs4
-         1cYtN9/AnegPBycAcXWZnpH67kbD8nYDnt0tlx4FnJwjnyCX69zSEveaqf4Z8NVLg2xM
-         axMzU3y5qx3DZJovyTcP7k8l8hEOXagUFSBvb2JIlahCzLMqy/aocMkCjpMkIWO5L6JG
-         IzSItWdZjsigrX6B4rB+ydovDN3nkLL9ZUV+H/c4l8STyuJRSov2fgIBQegVbjhULvb2
-         1QcOTg3K1nnrQdJ9l1rnvq7bJCenoABdk0WW6qPWLRAGcj0yv/edvOYtfIML0UDUWjrr
-         wyLQ==
+        bh=Q80BWnEZK8DYTRP4qPFCamRkQ8PTkFuflTPG4q2POi4=;
+        b=lYn8sxjX9036r6auB1CDBYvkLJI43+KtySxmbeyJXpZCY5JxsLpBPd1CsfuoiuZRUn
+         D0ZtV42OYnydKT0Tll1J3KLGobtdqGq8SOCoakEeUYrLhmF8BC9UmnPclmLU6NQzjDEo
+         muSiTR/cZWcRywtKs6wH1e7ar5aw+AwzYRYjlOrKoShCIfCtNdeJyUgwc5qLYeiMkz6E
+         7FeaPyi2UBgk1ls07wIKpa3PgCrgf/hVTtD/dQvJ8ix6gyrK1l20AxJsA3V54WN18kUU
+         xz4QFxZOtI1SM56O2y/ncLryDBOiaQbBmdnBwEZV7v5D11o1B7gzrIveU2iJw1BpOIG5
+         lOsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787070388; x=1787675188;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1787072634; x=1787677434;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=boxmTyMFq29LCfG4VMNLF0pnUpUmPagiT8ecsCV/s6Q=;
-        b=pHqSnXREmJjOgputOUQM2N/+RScejH7jnW6tP6vYKOgrLcFEjT97pCS7TCD2o5Z115
-         uJaD7yEvRozXOmdRj7itHQZ/2mH9e4X4+f1eIKJPlvKYV6BBmgxYAm3cnyuf1t031l1N
-         hH3ySFc6DZj15JyhjveSXPFVM8ZovA8cU3M/wzWaG+3ZGXqu20yoRiMhhgbzHTMDVumM
-         3r69Tn8xfid1P2mK+9TBzCFtDvJ2p2W0RgGHkwgMarrAl4epWWkCZNohFbeTHgahhntj
-         uQ4F2a15Ff5S9R4tGtYYUCjle+X+MC9wjHQ589g68zDfRXTfQzfSXNK6HO6MxBs/FKcN
-         9pXA==
-X-Forwarded-Encrypted: i=1; AHgh+RqNomZ8GKeKqwpYhG9zYskEpz68RtCXCLyT1hrn7ePgiQrREez6PD7xox6fwVQVLp1enjA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHaGd5Q1h/FcRJDzKN7wgf0/MeIEQcvhoJYvFzY2RmNQAiQ77T
-	WkoHf7gMqrMeXb35PVrBym5IrOAq0ve5BHFB1UGJMdqXwZVk71Kvtxo03UUKQvqsdj9N+QJhvSQ
-	IaDqe9AXt7GMZGgOIP1o+YyV/6fXfE1Hdcojc5bDM
-X-Gm-Gg: AR+sD10F8H209j6PKOY/OrJV1mwSU1nMkO22PrhZPxjtvALHE+Juw+xcPLc7/5RFywO
-	i1LQhUDSaVGQP1C2HTl6hWl/dFlCc10ZFFfNmOUrhbugQ9lXEglv14dXiNB1FDesTzJ8HBsTsmB
-	Eh5GkJZQshwTxIu1MfbsiV5BiI73CxyV/sqoEwOaDhovwlKkjrE3xa9ZpOpkojYJNKVM20Ci1Yf
-	KchFl0RTg8tkZaJMg5xD8Xuaq+KGhadkI1vaL7B1rRUmWJ1j249YJ2jSH2gDisV1kuuZezWjTcE
-	C91wdEYZ9jZhHnAau2m6LLa/RnSn8WtD6O4oc7GxRMAW4vUtrTCDHZWeHgNRDGyKcVaJ2PNm++s
-	vgWmJr7ahWXKfCQ==
-X-Received: by 2002:a17:902:f682:b0:2d5:db38:8013 with SMTP id
- d9443c01a7336-2d5db3884camr4553885ad.18.1787070387689; Tue, 18 Aug 2026
- 09:26:27 -0700 (PDT)
+        bh=Q80BWnEZK8DYTRP4qPFCamRkQ8PTkFuflTPG4q2POi4=;
+        b=HcjhIf76LFPW6AhWWVuoF9KDd23ik6Gee4XrOQ32p9dr70EqUG5dw/4o5lDj6xn8JH
+         HJ1Ka2nKKA/2ZfbSfGUBGVGbniKt71jJXezjpsJlCR0aG7G/GKYPu/6UTSokoVprqWmK
+         u6EN2d1RCMeSRULfXjwaMtJJS0A3ehz+4PdSyGzkDpen2MwNvCuV5oWgRHtrXmX9fTG1
+         96qfjEOtKpgo9AsWWwTxH1ebW/lv+jo/O5nprXbiwW9HFxyu8ZotcGiPC2maIAkuWUVL
+         P2Vcu0TRrN/nV3lGybLVMm53z/k55vWuftzEmF23joLgSbby+JhbD7Jb3QCtWOmpmjPl
+         IeFg==
+X-Forwarded-Encrypted: i=1; AHgh+RqMx1CVv1dOSFznSxNAh/uAyuoVpw+HlENaXJUjQ2HKIwoSX6kktq93EUVa3CZj14sMZvQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1wjXUa0g63dSP7bpicnNPsKJtj+5iazlytp5L+o2J+K7cn0xD
+	c+s4eTJHsDo9DMFAWm0NztYMjPzzBQ8dorlMrVT/9opMdyPBwgqIesek
+X-Gm-Gg: AR+sD13zRMzQUzBXrdHctDsnGFCjkT2v5mg/KlC/bo3iGLVUMGyPwfhmaDQwctzK773
+	8CrZ3LT4jl5RAFBXAwS04FgNIuuuX09y0iy0mrZGdt8M2Gh8HWe4iZxtIZ8+d+bPIUvTR4GLFR+
+	1dwR38gAihpJ1phxOXL9uNNsSqLXZ9WVqPHV614GJWSaOXGcDRvez1+kzFYvl68BOfW0d/gTowq
+	/YlZByk1ASDwuyVPTXn35nlUIoTt2r8pilDgs84XOsZDgrpHh5GhorGpLYxLbZlSwwjUrRhCGhK
+	C0D0WZbQeaajVeaZ/PtZGbMgfFWM6jyqWEUHwP8jIl4eiMsVVAjZsGGc/p8z7BQ/yN28Bdp6pEg
+	JGCtBqfSE6Y7EK/ULbW/WC39tGQ2adSlPzjOmvTFc+KLTptl/ZrfH9tNqNj9w/umwPz8x0JWq/j
+	vvdxcCWqGqKfkJfTzSlaqsyk0sKTZn6ZMUXw96AOIza3t68WSSudEy
+X-Received: by 2002:a17:902:d4cf:b0:2ca:660:b1d with SMTP id d9443c01a7336-2d3b0d5eccfmr373846305ad.11.1787072634166;
+        Tue, 18 Aug 2026 10:03:54 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:7::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d5bb499d7bsm20728245ad.3.2026.08.18.10.03.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Aug 2026 10:03:53 -0700 (PDT)
+Date: Tue, 18 Aug 2026 10:03:16 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
+	pabeni@redhat.com, anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com, 
+	andrew+netdev@lunn.ch, saeedm@nvidia.com, tariqt@nvidia.com, mbloch@nvidia.com, 
+	maxime.chevallier@bootlin.com, mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, 
+	aleksander.lobakin@intel.com, horms@kernel.org, magnus.karlsson@intel.com, 
+	maciej.fijalkowski@intel.com, sdf@fomichev.me, ast@kernel.org, daniel@iogearbox.net, 
+	hawk@kernel.org, john.fastabend@gmail.com, witu@nvidia.com, martin.lau@kernel.org, 
+	yoong.siang.song@intel.com, rohan.g.thomas@intel.com, intel-wired-lan@lists.osuosl.org, 
+	linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
+	leon@kernel.org
+Subject: Re: [Intel-wired-lan] [PATCH net v2 3/3] net: stmmac: skip
+ queueMaxSDU check for AF_XDP
+Message-ID: <aoSOau3NuHTLLxnL@devvm7509.cco0.facebook.com>
+References: <20260813190800.222527-4-sdf@fomichev.me>
+ <20260818162442.3980697-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260814021406.3044324-1-hramamurthy@google.com>
- <CAEAWyHerP_n3ucJaEqrCZqVFQTPKzydYXOPYZkk8d0iKf8UWow@mail.gmail.com> <20260817183904.6e0fd5a5@kernel.org>
-In-Reply-To: <20260817183904.6e0fd5a5@kernel.org>
-From: Harshitha Ramamurthy <hramamurthy@google.com>
-Date: Tue, 18 Aug 2026 09:26:16 -0700
-X-Gm-Features: AcwNN1XvAvV0q4175YkxzKnksGXpJuWQyNr6fD5SZcYJFVMGRRHl5k4ZnrMHHXw
-Message-ID: <CAEAWyHehCR6+mV1d1JJz=wdsT-LrUyowT2v0CsFR8cw3CVqYhQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v4 00/15] gve: AdminQ mode related refactors
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, joshwash@google.com, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, pabeni@redhat.com, ast@kernel.org, 
-	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, 
-	sdf@fomichev.me, jordanrhee@google.com, willemb@google.com, nktgrg@google.com, 
-	maolson@google.com, thostet@google.com, jacob.e.keller@intel.com, 
-	przemyslaw.kitszel@intel.com, debarghyak@google.com, kees@kernel.org, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260818162442.3980697-1-kuba@kernel.org>
 
-On Mon, Aug 17, 2026 at 6:39=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> On Mon, 17 Aug 2026 14:45:08 -0700 Harshitha Ramamurthy wrote:
-> > Sashiko has spotted a few issues - will look through them and fix them =
-in v5.
->
-> net-next has closed. I'll take the first 3 from v4 and the rest has to
-> wait until after the merge window.
+On 08/18, Jakub Kicinski wrote:
+> This is an AI-generated review of your patch. The human sending this
+> email has considered the AI review valid, or at least plausible.
+> ---
+> net: stmmac: skip queueMaxSDU check for AF_XDP
+> 
+> This drops the per-queue max SDU length check from the stmmac AF_XDP
+> zero-copy transmit path, on the grounds that xsk_tx_peek_desc() has
+> already reserved a completion ring entry and the old "continue" skipped
+> both queuing and completion. The change is tagged for stable via a Fixes:
+> tag on c5c3e1bfc9e0.
+> 
+> > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > index 62de03e65a90c..4a82f4351303a 100644
+> > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > @@ -2710,13 +2710,6 @@ static bool stmmac_xdp_xmit_zc(struct stmmac_priv *priv, u32 queue, u32 budget)
+> >  		if (!xsk_tx_peek_desc(pool, &xdp_desc))
+> >  			break;
+> >  
+> > -		if (priv->est && priv->est->enable &&
+> > -		    priv->est->max_sdu[queue] &&
+> > -		    xdp_desc.len > priv->est->max_sdu[queue]) {
+> > -			priv->xstats.max_sdu_txq_drop[queue]++;
+> > -			continue;
+> > -		}
+> > -
+> 
+> [Severity: Medium]
+> The completion ring imbalance described in the commit message looks real:
+> xsk_tx_peek_desc() reserves the cq slot with xskq_prod_reserve_addr() and
+> only xsk_tx_completed() submits it, so the old "continue" left the cq
+> producer permanently offset.
+> 
+> Was completing the reserved descriptor considered instead of removing the
+> check, i.e. keeping the length test and doing:
+> 
+> 	if (priv->est && priv->est->enable &&
+> 	    priv->est->max_sdu[queue] &&
+> 	    xdp_desc.len > priv->est->max_sdu[queue]) {
+> 		priv->xstats.max_sdu_txq_drop[queue]++;
+> 		xsk_tx_completed(pool, 1);
+> 		continue;
+> 	}
+> 
+> That would fix the ring accounting without dropping the enforcement.
 
-Sounds good, will post the rest when net-next opens. Thanks!
+Don't think this suggestion would work. xsk_tx_completed(1) will complete
+the first queued entry, no the current rejected one (completions are in order).
+
+If it's not convincing, I can repost only patches 1 and 2. Or if it sounds
+reasonable, can try to explain that part in the description.
+
+> On stmmac, queueMaxSDU has no hardware table. priv->est->max_sdu[] is
+> written only by tc_taprio_map_maxsdu_txq() in stmmac_tc.c:
+> 
+> 		for (j = offset; j < offset + count; j++)
+> 			priv->est->max_sdu[j] = qopt->max_sdu[i] + ETH_HLEN - ETH_TLEN;
+> 
+> and read only by the length checks in stmmac_main.c. With this hunk gone,
+> does an AF_XDP zero-copy socket now transmit frames above the configured
+> per-queue limit while tc_query_caps() still reports:
+> 
+> 		caps->gate_mask_per_txq = true;
+> 		caps->supports_queue_max_sdu = true;
+> 
+> That capability is what taprio uses to accept a queueMaxSDU configuration
+> in the first place, and sch_taprio comments in
+> taprio_skb_exceeds_queue_max_sdu() that "Devices with full offload are
+> expected to honor this in hardware".
+> 
+> The "bypasses the qdisc" rationale also applies to stmmac_xdp_xmit_xdpf(),
+> which serves XDP_TX and ndo_xdp_xmit and does not traverse the qdisc
+> either, yet still enforces the same limit:
+> 
+> 	if (priv->est && priv->est->enable &&
+> 	    priv->est->max_sdu[queue] &&
+> 	    xdpf->len > priv->est->max_sdu[queue]) {
+> 		priv->xstats.max_sdu_txq_drop[queue]++;
+> 		return STMMAC_XDP_CONSUMED;
+> 	}
+> 
+> Should that check be removed as well so the XDP paths agree? The cited igc
+> precedent checks only in igc_xmit_frame_ring() and in neither of its XDP
+> paths, so matching igc would mean touching stmmac_xdp_xmit_xdpf() too.
+
+xdp_tx does not expose xsk-like descriptor rings, so it doesn't apply.
