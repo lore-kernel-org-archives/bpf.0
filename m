@@ -1,127 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-211.mta0.migadu.com [91.218.175.211])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42BC5346E7D;
-	Tue, 18 Aug 2026 19:23:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69299351C2F
+	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 19:36:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787080986; cv=none; b=J/INgsNV1Tn58kuvmQnNKE14f/yPGh8dRhhouKWWkJRbTCpBoKRrrpIKSjo4g5hOULYps5TZJRvLO+51HzNIBBvc4MhcmK4xZb+KTAnWE7Ldj2lcdSVy+swaWR+3f3j3L7OwK5kcWj4bU8M/w6ezx42BTYVURKzihSznuAvSKqo=
+	t=1787081772; cv=none; b=UliSF4E7b7Y6ablpIAPf59JAARKCUIFNiNH0PDbObRyNMQyABZ9YMNfO6hfLp4H0Pf0Kx5mPwpfEC9BdqZcX4h9w3VUd3C0TpLoDv6Il9rf/gj90KsL7W6QUDjl4rZ8yocAXZLh8fZC5saXd83LDHvkBVSZWpW53AOYa4SC9RvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787080986; c=relaxed/simple;
-	bh=lQRxNS4d05kQAqG2bVOvBsIurzMvX6ZwwIQWQU0HLcU=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=qryietR4MoKO0H3+Y9SjaDYK4N2GeFKnYJMtgBDMUnktTdAgP2fnIIu/m+oaBHWHM2/OAV7E+8Gm4UBlWBebp31+XAXEgv+qtqkW2jogLhffb+7CRfmyAwc5YL+Wer9E5h9atdeiXSvKf/MiYai+1qkC0n+RdNioMZS/zVimAmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fP2hBNTN; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787081772; c=relaxed/simple;
+	bh=kIKvNM7BPSkBXUN2eWH5O/FffUslGwSPxg0v8WZ5jtQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Wg+HJ8689dgkO1E3tJlxLmbUI8pAkhwlWrQI03tBRouqAFPIeav5K25Na4R8T8uPQIUqrx+J660buaHQ1Qo4sfet59n2FMOY+8IIpFub/S5Sey9bp6FTteOXHKGpT+ptlssXrLKBTKPAdEyjA49zhiocSpTOUAVfZ9LA/F1RJaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wjufIYRe; arc=none smtp.client-ip=91.218.175.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fP2hBNTN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D4BF1F00A3A;
-	Tue, 18 Aug 2026 19:23:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787080985;
-	bh=rdmhfD3PiVS3wdrrP9DwnsXChoLTG8E9NJnpYLSxS0g=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=fP2hBNTN+9ytZ36ziE4WBmNhVJj9AWu52C8iqMTLCM8t9VLloTYB+LBPeZU1jaW1Z
-	 /vIX+WPolQ8YQ78JbsXIv7bmeXGZ6wImG0CdILebDt2T3pibmgM1gFk35FjI6x55Si
-	 l0GenpkD+S7+YIhg8D9MxfL2QNA9w7VDRGdfTzYE6ZmPwUiEtW0uMxhLN1nLX97gNk
-	 fythUkmezczOPvTA4omTBfR2NiooWQp2swZX3RdP53ppyapyY7nU0FzsybyQGwIVyY
-	 OGYaY+YssVcLDvk8ft9fMdN4Vdlt/fsD8MzpIpE2XqOt3WPuCZXxEUCbnl/kaZaNVq
-	 XilG0WV0aZaqA==
-Content-Type: multipart/mixed; boundary="===============8883660200475105318=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wjufIYRe"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=kIKvNM7BPSkBXUN2eWH5O/FffUslGwSPxg0v8WZ5jtQ=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787081766; v=1; x=1787686566;
+ b=wjufIYReKApm19whovGAR48ngk1w3pYh+NeD/JsiUSfqlB6ZTUBRYXXfzt/Lu4V7l6s1mtu1
+ cWOlBolctSOmsWls0GgBKFQhSBkW4jS5x0Dj38sxH8rkzBz+8EpHaXora9t21A8dIJ3voggMoki
+ iumLcYnCrXbkOWtxhN1+gMIo=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from [IPV6:2a03:83e0:1251:27:17dc:c6a5:7074:ce30] (2620:10d:c090:500::7:86e7)
+	by smtp.migadu.com with ESMTPS id b107c2617882a1d3;
+	Tue, 18 Aug 2026 19:35:54 +0000
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <ac19d435-4c92-42c8-9db1-2db1ab854c3c@linux.dev>
+Date: Tue, 18 Aug 2026 12:35:46 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <60472e2d261b280c49f896716cf5c50d1188c4dc33cf86a5a7139b91078c4e54@mail.kernel.org>
-In-Reply-To: <20260818-tc_tunnel_flaky-v7-1-aec161e74ef2@bootlin.com>
-References: <20260818-tc_tunnel_flaky-v7-1-aec161e74ef2@bootlin.com>
-Subject: Re: [PATCH bpf v7] selftests/bpf: allocate a larger timeout for connection
-From: bot+bpf-ci@kernel.org
-To: alexis.lothore@bootlin.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
-Cc: ebpf@linuxfoundation.org,bastien.curutchet@bootlin.com,thomas.petazzoni@bootlin.com,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ihor.solodrai@linux.dev,alexis.lothore@bootlin.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 18 Aug 2026 19:23:04 +0000 (UTC)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Cover mixed arena and
+ stack atomics
+To: Eduard Zingerman <eddyz87@gmail.com>,
+ Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260816-bpf-next-038-mixed-atomic-v1-v2-0-4644c1886dbc@mails.tsinghua.edu.cn>
+ <20260816-bpf-next-038-mixed-atomic-v1-v2-2-4644c1886dbc@mails.tsinghua.edu.cn>
+ <cd62cd53be9bcea2d5b63fef8eece815f5095103.camel@gmail.com>
+ <123a014b2b4ecd7d19cbdfe62c62d994e612b6f0.camel@gmail.com>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <123a014b2b4ecd7d19cbdfe62c62d994e612b6f0.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
---===============8883660200475105318==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-> index b82f572641b7..380b776f182d 100644
-> --- a/tools/testing/selftests/bpf/network_helpers.c
-> +++ b/tools/testing/selftests/bpf/network_helpers.c
-> @@ -49,6 +49,8 @@
->  			errno = __save;					\
->  })
+On 8/16/26 4:36 PM, Eduard Zingerman wrote:
+> On Sun, 2026-08-16 at 16:17 -0700, Eduard Zingerman wrote:
+>> On Sun, 2026-08-16 at 10:56 +0000, Yiyang Chen wrote:
+>>> Add a verifier test with one atomic RMW instruction reached through
+>>> PTR_TO_ARENA and PTR_TO_STACK paths. The verifier must reject the
+>>> shared instruction with the existing incompatible-pointer diagnostic.
+>>>
+>>> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+>>> ---
+>>>   tools/testing/selftests/bpf/progs/verifier_arena.c | 39 ++++++++++++++++++++++
+>>>   1 file changed, 39 insertions(+)
+>>>
+>>> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
+>>> index b241bbcf54a8a..b22bab33301ab 100644
+>>> --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
+>>> +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
+>>> @@ -637,6 +637,45 @@ int non_arena_ptr_add_to_arena_ptr(void *ctx)
+>>>   
+>>>   #endif
+>>>   
+>>> +static const struct bpf_insn addr_space_cast_insn = {
+>>> +	.code = 0xbf,
+>>> +	.dst_reg = BPF_REG_7,
+>>> +	.src_reg = BPF_REG_7,
+>>> +	.off = 1,
+>>> +	.imm = 1,
+>>> +};
+>>> +
+>>> +SEC("socket")
+>>> +__description("arena and stack atomic at the same instruction")
+>>> +__failure __msg("same insn cannot be used with different pointers")
+>>> +__arch_x86_64
+>>> +__load_if_JITed()
+>>> +__naked void mixed_arena_stack_atomic(void)
+>>> +{
+>>> +	asm volatile ("					\
+>>> +	r1 = %[arena] ll;				\
+>>> +	r6 = r10;					\
+>>> +	r6 += -8;					\
+>>> +	r9 = 0;					\
+>>> +	*(u64 *)(r6 + 0) = r9;			\
+>>> +	r7 = 8192;					\
+>>> +	.8byte %[addr_space_cast];			\
+>> I'm going to fix this to:
+>>
+>> 	r7 = addr_space_cast(r7, 0, 1);			\
+>>
+>> as in the test case above.
+>> Waiting for CI [1].
+>>
+>> [1] https://github.com/kernel-patches/bpf/pull/13325
 >
-> +#define CONNECT_MIN_TIMEOUT_MS	5000
-
-[ ... ]
-
-> @@ -291,6 +293,37 @@ int client_socket(int family, int type,
->  	return -1;
->  }
+> A...and it requires another exception for GCC-BPF:
+> https://github.com/kernel-patches/bpf/blob/bpf-next_base/ci/vmtest/configs/DENYLIST.test_progs-bpf_gcc
 >
-> +static int connect_with_timeout(int fd, const struct sockaddr_storage *addr,
-> +				socklen_t addrlen, int timeout_ms)
-> +{
-> +	int connect_timeout_ms = MAX(timeout_ms, CONNECT_MIN_TIMEOUT_MS);
-> +
-> +	/*
-> +	 * Override timeout configuration with a larger value for the
-> +	 * connection
-> +	 */
-> +	if (settimeo(fd, connect_timeout_ms)) {
-> +		log_err("Failed to set connect timeout");
-> +		return -1;
-> +	}
-> +
-> +	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
-> +		log_err("Failed to connect");
-> +		return -1;
-> +	}
+> Ihor, it's a third time GCC-BPF strikes this weekend.
+> What do people think about downgrading it to may-fail until the
+> DENYLIST decreases to something reasonable?
 
-Does the 5-second floor apply to callers that deliberately set a small
-timeout because they expect the connect to fail?
+While bpf-gcc is improving, slowly, we can in parallel do alittle better 
+on test hygiene as well. In this case by correctly bracketing the tests 
+with _BPF_FEATURE_XXX.
 
-Looking at cgroup_skb_sk_lookup.c, the test expects a connection to time
-out after 1 second:
+Co-incidently I have a series in works from an accidental discovery of 
+llvm-only testing coverage (rely solely on __clang_version macro) which 
+I'll follow up on the list shortly.
 
-  /* Client outside of test cgroup should fail to connect by timeout. */
-  err = connect_fd_to_fd(out_sk, serv_sk, 1000);
-  if (CHECK(!err || errno != EINPROGRESS, "connect_fd_to_fd", ...))
-
-The call chain is:
-
-  test_cgroup_skb_sk_lookup()
-    -> run_cgroup_bpf_test()
-      -> run_lookup_test()
-        -> connect_fd_to_fd(out_sk, serv_sk, 1000)
-          -> connect_with_timeout(..., 1000)
-
-With MAX(1000, 5000) returning 5000, settimeo(fd, 5000) is installed,
-and the deliberately-dropped connect() now blocks for 5 seconds instead
-of 1 second.
-
-The test still passes because the cgroup_skb program drops the SYNs
-permanently, so at 5 seconds the socket is still in SYN_SENT and
-connect() returns EINPROGRESS. But the test now waits 5 times longer than
-intended.
-
-The commit message mentions that some tests expect data transfer to fail
-and that increasing timeout would increase execution duration, which is
-what happens here for connects expected to time out.
-
-Would it make sense to honour the caller's timeout_ms when explicitly set,
-and only apply the 5-second floor when timeout_ms is 0 or use a default?
-
-[ ... ]
+Thx,
+-Vineet
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> Anyway, I'll wrap-up with this patch-set in the evening.
+>
+>>> +	call %[bpf_get_prandom_u32];			\
+>>> +	if w0 != 0 goto 1f;				\
+>>> +	r8 = r6;					\
+>>> +	goto 2f;					\
+>>> +1:	r8 = r7;					\
+>>> +2:	r9 = 1;					\
+>>> +	lock *(u64 *)(r8 + 0) += r9;			\
+>>> +	r0 = 0;					\
+>>> +	exit;						\
+>>> +"	:
+>>> +	: __imm_addr(arena),
+>>> +	  __imm_insn(addr_space_cast, addr_space_cast_insn),
+>>> +	  __imm(bpf_get_prandom_u32)
+>>> +	: __clobber_all);
+>>> +}
+>>> +
+>>>   static __noinline
+>>>   u32 __arena *check_arena_arg_nonglobal(u32 __arena *arg)
+>>>   {
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32172718494
---===============8883660200475105318==--
