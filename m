@@ -1,238 +1,93 @@
-Received: from mta1.migadu.com (out-204.mta1.migadu.com [95.215.58.204])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF643A6B8A
-	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 11:40:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.204
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5613246C833;
+	Tue, 18 Aug 2026 11:56:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787053255; cv=none; b=am+K2Wsegf+BMWtmAmMlY02545qVs8hVLEr7AMqcKkyIdDou7D8J3+TJwpYhSm8VCapE8Z1xqrWjc4T9a5dbx0l6x2Y0/dFpqjC9xVMR053e9dEnm+HDVfhsbrSD0vewr27OF/LA/DasbZ2JVIuEax4Ruf4SA6dUej2sMXCo/c8=
+	t=1787054184; cv=none; b=aEMeb/wCNVXpiJL1HPFVeG6cSBNMl2lnuDs27nyFMPQR7NZteC+CqwxUgD+9nJ7TyzGiznrc+qeWHkND3g9xWh8PxNqHkAe2RJjVRqatt14Oez8AL4VF/kI+idn7IsxqzjO1PqQaNFOYrEjbCw1Ya8Ff4lSpxAkFyr0tNhSK2k0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787053255; c=relaxed/simple;
-	bh=1WMHENEYr0OqLYuuU4QREt9kYkPM7Zi0Jgv7vPZ7ygU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TpRdR5jPrTJQ63Olcf1Un7Y3JJ2u86o/JzQteUeiKB0eoHn9Y6ZfgLoodARC6xxQLJpS2WoEncfyVTrEEfL6GUwc3nAsmZh/Nify8vydKnF46m5fC2wJHwBoqxAmKXWeCN7s+x7PNWIweE0gd/orpMxQFgkwTHonmzpticunyT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WuoiiXul; arc=none smtp.client-ip=95.215.58.204
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787054184; c=relaxed/simple;
+	bh=Iv5US5B7t8r8Me9nlw1SOZ/vA3ero2ERM3lNPAW0fds=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=NNICDzrSnfo6kpfGRL5CnXH4Z91cB+omkFJuavKz08T2Yacne+JsWhddWpPTliwHmMYXT+NbjXdc2eMfbH0u4hERH6W5C6DwQigIEEqaYCzQwT4XIHvUa9SwuHK+nUBip/kZrMHHpF8eXMUlugCd6TF/n4dFI5qsR87kGw1YT3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=e+KJonJA; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WuoiiXul"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=1WMHENEYr0OqLYuuU4QREt9kYkPM7Zi0Jgv7vPZ7ygU=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787053251; v=1; x=1787658051;
- b=WuoiiXulGs2VD+GlB0mNMAZ5G9u0uuKyukUPpijrw8tBRlEVYBpcZ7tm+H6xiB9vYmPoFKDn
- EPi63+m0ZvpgLpPfsQz+KcXSRVWkKVDS76oubsAauQsWdvwQal54KcUvubW6xE0WLDyQqFzSA1r
- hgsF/ibxBFoCw5OHUBpN/0m4=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from fedora (117.129.78.49)
-	by smtp.migadu.com with ESMTPS id 5b473eed746572f9;
-	Tue, 18 Aug 2026 11:40:51 +0000
-X-Migadu-Flow: FLOW_OUT
-Date: Tue, 18 Aug 2026 19:40:27 +0800
-From: Hao Li <hao.li@linux.dev>
-To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Cc: Harry Yoo <harry@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Alexander Potapenko <glider@google.com>, Marco Elver <elver@google.com>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Christoph Lameter <cl@gentwo.org>, 
-	David Rientjes <rientjes@google.com>, Roman Gushchin <roman.gushchin@linux.dev>, bpf@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
-	kasan-dev@googlegroups.com, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
-	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH RFC 3/5] mm/slab, kmemleak: handle kmemleak freeing in
- kfree_nolock()
-Message-ID: <aoRDqeBrzitJcqyY@fedora>
-References: <20260807-kfree_nolock_kmalloc-v1-0-ba993cbf7a60@kernel.org>
- <20260807-kfree_nolock_kmalloc-v1-3-ba993cbf7a60@kernel.org>
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="e+KJonJA"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1wwIQ9-0009it-7C; Tue, 18 Aug 2026 13:55:57 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
+	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
+	bh=QK8T12e09pHXas09f+Y2o4MkHsqueci1dUh5t0k/mrw=; b=e+KJonJAoflPK5jE1ZZZqgdE1o
+	8ISn9QjwRgXnp3RSrzbfqI1cGKU/0gqCi6U9KARclZeyRqXf9rDipPxrwt/mn1B2Dv8YfKVJo5XXb
+	m4n/OrvfiGtCUDVb12JSilGxg+9e6Y5bMqBazM90+z7hD8etNGXVm3m1SxTaMRiT091CBmJEzHzWL
+	yj1OSAbR1tAzB1cjZ796rCW0UiTVJ/SsOUChZ/mkFaKUlV24/53XmohqDXQI9F+6502f/RUkNHMRr
+	E9zABRk+JTk4vL7ccsaUq2a2FLuBWbFFE99KG2AYYBjJ0CaHbSoiBCesYlnio6pt3sJtFWUBIhPaR
+	jl7bhPfA==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1wwIPr-0003lQ-A5; Tue, 18 Aug 2026 13:55:39 +0200
+Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.95)
+	id 1wwIPa-00EDoG-OT;
+	Tue, 18 Aug 2026 13:55:22 +0200
+Message-ID: <d2b7e7e4-23b0-4efc-9192-279b33af8b99@rbox.co>
+Date: Tue, 18 Aug 2026 13:55:21 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260807-kfree_nolock_kmalloc-v1-3-ba993cbf7a60@kernel.org>
+User-Agent: Mozilla Thunderbird
+From: Michal Luczaj <mhal@rbox.co>
+Subject: Re: [PATCH bpf-next 0/2] bpf: Cleanup & optimization
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Jiayuan Chen <jiayuan.chen@linux.dev>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn
+ <willemb@google.com>, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260813-sockmap-lookup-get-ref-v1-0-31f5d55f44ac@rbox.co>
+ <871pc10ym9.fsf@cloudflare.com>
+Content-Language: pl-PL, en-GB
+In-Reply-To: <871pc10ym9.fsf@cloudflare.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Aug 07, 2026 at 03:50:29PM +0200, Vlastimil Babka (SUSE) wrote:
-> Kmemleak handling is one of the reasons why kfree_nolock() cannot
-> currently handle kmalloc() objects, because calling kmemleak_free()
-> would involve spinning on its internal raw spinlocks.
+On 8/14/26 12:45, Jakub Sitnicki wrote:
+> On Thu, Aug 13, 2026 at 02:41 PM +02, Michal Luczaj wrote:
+>> Non-functional cleanup and a refcnt bumping simplification.
+>>
+>> Series extracted from a fix attempt[1] currently under discussion.
+>>
+>> [1]: https://lore.kernel.org/bpf/20260803-sockmap-lookup-tcp-leak-v2-0-306e025bfe66@rbox.co/
 > 
-> Kmemleak is a debugging mechanism so we could simply defer all
-> kfree_nolock() to irq_work if it's enabled, and eat the extra cost. But
-> that would be unnecessary pessimistic. We expect kfree_nolock() will be
-> still mostly called on objects from kmalloc_nolock() that are not
-> registered in kmemleak so they still don't need any deferred freeing.
-> 
-> Thus introduce kmemleak_may_need_free() that can check if the object is
-> registered. This is done using __lookup_object() performed under a
-> raw_spin_trylock_irqsave(), which is safe to attempt from kfree_nolock()
-> (except from a NMI on a !CONFIG_SMP system). When that trylock fails or
-> can't be attempted, we however must assume the object might be
-> registered, and defer the freeing.
-> 
-> The ordering of kmsan/kasan handling and kmemleak is also different from
-> what kfree() is doing, but as explained in the comment, it should be OK.
-> 
-> Signed-off-by: Vlastimil Babka (SUSE) <vbabka@kernel.org>
-> ---
->  include/linux/kmemleak.h | 17 +++++++++++++++++
->  mm/kmemleak.c            | 42 ++++++++++++++++++++++++++++++++++++++++++
->  mm/slub.c                | 34 ++++++++++++++++++++++++++--------
->  3 files changed, 85 insertions(+), 8 deletions(-)
-> 
-> diff --git a/include/linux/kmemleak.h b/include/linux/kmemleak.h
-> index fbd424b2abb1..52f75f10a9ce 100644
-> --- a/include/linux/kmemleak.h
-> +++ b/include/linux/kmemleak.h
-> @@ -22,6 +22,7 @@ extern void kmemleak_alloc_percpu(const void __percpu *ptr, size_t size,
->  extern void kmemleak_vmalloc(const struct vm_struct *area, size_t size,
->  			     gfp_t gfp) __ref;
->  extern void kmemleak_free(const void *ptr) __ref;
-> +bool kmemleak_may_need_free(const void *ptr) __ref;
->  extern void kmemleak_free_part(const void *ptr, size_t size) __ref;
->  extern void kmemleak_free_percpu(const void __percpu *ptr) __ref;
->  extern void kmemleak_update_trace(const void *ptr) __ref;
-> @@ -50,6 +51,14 @@ static inline void kmemleak_free_recursive(const void *ptr, slab_flags_t flags)
->  		kmemleak_free(ptr);
->  }
->  
-> +static inline bool kmemleak_may_need_free_recursive(const void *ptr, slab_flags_t flags)
-> +{
-> +	if (!(flags & SLAB_NOLEAKTRACE))
-> +		return kmemleak_may_need_free(ptr);
-> +
-> +	return false;
-> +}
-> +
->  static inline void kmemleak_erase(void **ptr)
->  {
->  	*ptr = NULL;
-> @@ -86,6 +95,14 @@ static inline void kmemleak_free_part(const void *ptr, size_t size)
->  static inline void kmemleak_free_recursive(const void *ptr, slab_flags_t flags)
->  {
->  }
-> +static inline bool kmemleak_may_need_free(const void *ptr)
-> +{
-> +	return false;
-> +}
-> +static inline bool kmemleak_may_need_free_recursive(const void *ptr, slab_flags_t flags)
-> +{
-> +	return false;
-> +}
->  static inline void kmemleak_free_percpu(const void __percpu *ptr)
->  {
->  }
-> diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-> index 7c7ba17ce7af..e3560ce82632 100644
-> --- a/mm/kmemleak.c
-> +++ b/mm/kmemleak.c
-> @@ -1168,6 +1168,48 @@ void __ref kmemleak_free(const void *ptr)
->  }
->  EXPORT_SYMBOL_GPL(kmemleak_free);
->  
-> +/**
-> + * kmemleak_may_need_free - check if object is registered
-> + * @ptr:	pointer to beginning of the object
-> + *
-> + * This function is called from the kernel allocator when an object should be
-> + * freed but the caller context might be unsafe to spin on the internal locks.
-> + *
-> + * It will therefore only use trylock and thus might return a false positive
-> + * if the trylock fails and the status cannot be determined.
-> + *
-> + * For objects that (might) need free, the allocator has to defer the actual
-> + * freeing to a safe context.
-> + *
-> + * The assumption is that most objects freed from the unsafe context are also
-> + * allocated in such context and thus are not registered in kmemleak, so it's
-> + * unlikely the defered freeing will be necessary just because kmemleak is
-> + * enabled.
-> + */
-> +bool __ref kmemleak_may_need_free(const void *ptr)
-> +{
-> +	unsigned long flags;
-> +	struct kmemleak_object *object;
-> +
-> +	pr_debug("%s(0x%px)\n", __func__, ptr);
-> +
-> +	if (!kmemleak_free_enabled || !ptr || IS_ERR(ptr))
-> +		return false;
-> +
-> +	/* On UP, raw_spin_trylock() always succeeds even when it is locked */
-> +	if (!IS_ENABLED(CONFIG_SMP) && in_nmi())
-> +		return true;
-> +
-> +	if (!raw_spin_trylock_irqsave(&kmemleak_lock, flags))
-> +		return true;
-> +
-> +	object = __lookup_object((unsigned long)ptr, 0, 0);
-> +
-> +	raw_spin_unlock_irqrestore(&kmemleak_lock, flags);
-> +
-> +	return !!object;
-> +}
-> +
->  /**
->   * kmemleak_free_part - partially unregister a previously registered object
->   * @ptr:	pointer to the beginning or inside the object. This also
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 2d7648b96bfa..423b5bdb910b 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -6390,6 +6390,8 @@ static void deferred_percpu_work_fn(struct irq_work *work)
->  		/* Point 'x' back to the beginning of allocated object */
->  		x -= s->offset;
->  
-> +		kmemleak_free_recursive(x, s->flags);
-> +
->  		/*
->  		 * We used freepointer in 'x' to link 'x' into df->objects.
->  		 * Clear it to NULL to avoid false positive detection
-> @@ -6403,8 +6405,15 @@ static void deferred_percpu_work_fn(struct irq_work *work)
->  
->  	llnode = llist_del_all(&dpw->objects_kfence);
->  	llist_for_each_safe(pos, t, llnode) {
-> +		struct kmem_cache *s;
-> +		struct slab *slab;
->  		void *obj = kfence_llnode_to_obj(pos);
->  
-> +		slab = virt_to_slab(obj);
-> +		s = slab->slab_cache;
-> +
-> +		kmemleak_free_recursive(obj, s->flags);
-> +
->  		__kfence_free(obj);
->  	}
->  
-> @@ -6781,15 +6790,10 @@ EXPORT_SYMBOL(kfree);
->  
->  /*
->   * Can be called while holding raw_spinlock_t or from IRQ and NMI,
-> - * but ONLY for objects allocated by kmalloc_nolock().
-> - *
-> - * In case kmemleak is enabled,
-> + * but may defer freeing to irq_work() in some cases.
->   *
-> - * obj = kmalloc(); kfree_nolock(obj);
-> - *
-> - * will miss kmemleak book keeping and will cause false positives.
-> - *
-> - * large_kmalloc is not supported either.
-> + * Intended mainly for objects allocated from kmalloc_nolock(), but can handle
-> + * also kmem_cache_alloc() and kmalloc() objects, except large_kmalloc.
+> Discussion seems to have stalled. Or it's just vacation season.
+> Anyway, I'm fine with fixing the refcounting your way.
+> Merely wanted to offer an alternative idea for consideration.
+> Thanks for working on this.
 
-Do we need to add slab_want_init_on_free support for kfree_nolock as well?
+All right, I'll wait for this series to land in bpf.git (to avoid merge
+conflicts) and then repost the fixes.
 
--- 
-Thanks,
-Hao
+thanks,
+Michal
