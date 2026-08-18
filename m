@@ -1,136 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42A44344031
-	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 12:11:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A110646D564;
+	Tue, 18 Aug 2026 12:49:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787055093; cv=none; b=p8hvfOfI5OjLKtKr6asxGMSguS+HLjZt6Q9fAyV7WD+NO2FRKse9WWCWdJ8bpFEHuYtgo/GWW7Na6Z0bjS+Ajsg2keS4AfcliuuLzDFfn06WZpZ5yNlmBncmHy5iJ1qzOLAHLrcJXHBCYdScT1x94arOOFuFGXCeGek0qkhtPU8=
+	t=1787057388; cv=none; b=YKV5d8aaK3tXIltEguVrqMZESvY05XEXuXaVUUhOBGv3v/uYnff1IqcbUKGE4zl2nNv9St83FSsHCpYkqCH9kN9jrDMgueKUhuH+puZNQJymnFS99iym/wlMUvZAkEocOq6yie1vrSCoywFF4z7QH/s9V+JhQtGzrx6vvkwyziQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787055093; c=relaxed/simple;
-	bh=p7rLJWWP2W5EMa+bFpeL9JBy5nPqq9Je5f4l0FV4xmA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=SzPt6BQ5yfRqPGJP17GoQR71UM2FN5N486Cw2DCD6azMGIgW12eZGr8j7Qy/aC1sibGjribKFN/FQUqKQzzepCiStQuf7aXf/ktasJIHoOuYhcupkYWE9dPsjUWawh7004+PsM/68MTNHNq4N+EojuZZSyHgh4sGOAopmWfty9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g43owLvp; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787057388; c=relaxed/simple;
+	bh=Gq2r1FfeEGK0v5W9yu0Rt48rAmYvUZwtw+oK7zZ+amI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
+	 References:In-Reply-To; b=gqJdPT1YsvaXDDJGhl4qmhchd5NUUPxuhgY/2Kzm0V4MCtYBQrfPjnandjU44XIyEOhkuA+/nDv6tkpHp+fkX7BrNtHYAOg6PfEC7PpCItRB0KZl6QCznT1xBa718fYUX66aib7r08CmoiLkBgu9O83MEnFdbK9SbPbz0SfBcgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=l6RIcNPs; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g43owLvp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6740B1F000E9;
-	Tue, 18 Aug 2026 12:11:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787055091;
-	bh=J9bIBpTw2GIMF0U2KaosVuQdIm8S6jnENLrFvzPsFzc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=g43owLvpCZpkTpJdSgJUXf/CRLhytFymFPXDrCHcAPg5i7xha3uXzZ6uNfihbFOWX
-	 VVBqTOqOdeH4SdumCaaZABRXdtDbCdZ8OOBhn+vHRAmgeSOTexIc0l6x8Mdr6LIOpw
-	 jE4u+rQWfT4fWcmcshAvYo2sgVnLyw99HutQl5ke5O/5CJEQNJ/VQog1cL7WdZI1mU
-	 p0eQ8fPuJ+0dn69nOZBd98j+AmhbSDTcFFfDH/T4tXxPCFIGXHipkUD3Okj5KV99tV
-	 Z5zfWH8KUm9dgC2nJzLtWbS2S0mGwb8qkCW6+TjeB5aXiduqnVJwwe0L1mP8yATGoo
-	 fLgrXngxxyD6A==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] selftests/bpf: tc_tunnel - validate decap tunnel state
- without false-pass gaps
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Nick Hudson" <nhudson@akamai.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260818120308.623905-1-nhudson@akamai.com>
-References: <20260818120308.623905-1-nhudson@akamai.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 18 Aug 2026 12:11:30 +0000
-Message-Id: <20260818121131.6740B1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="l6RIcNPs"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id B59861A16FC;
+	Tue, 18 Aug 2026 12:49:42 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 8854660355;
+	Tue, 18 Aug 2026 12:49:42 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E1C5111C70324;
+	Tue, 18 Aug 2026 14:49:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1787057377; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=zaPuVgk6vBQFQ2iyk57rrQKoeBKvURSjuf5b4I6ULVQ=;
+	b=l6RIcNPs1SQmIadkjYJzP2zpSgAveZwq5HUZxoHrNmnaiqAx4/xQwddSE11k8J42pMv9ac
+	40qhpa7c+Ty4UlBsGR/V6qpf6GJw2BE7qxPch5p2D+SB+Uac/pF3xCzKE5pWfbmfda2GtC
+	pvNPVRrC+3dlfV2DhtnyMREc6qw4AMLaRLp1QzaUg2JeDmzN3qX6CYwPxoeWjb+uu0r3S/
+	aUE6py5AwDBhAWiwNcI1Sb0aJnWemjSR8jLnTltgIhCbHFpIT1cZkZQGpb022QoI36zG10
+	1/Dwvu4VIuHOkzskahMsBBUfOuCRAvajIPpWPS2KNyo42BfiY5lEAneMAaeArA==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 18 Aug 2026 14:49:30 +0200
+Message-Id: <DKS2YUE3JPJO.1QKR47OVLV5UW@bootlin.com>
+Subject: Re: [PATCH bpf v6] selftests/bpf: allocate a larger timeout for
+ connection
+Cc: <ebpf@linuxfoundation.org>, <bastien.curutchet@bootlin.com>,
+ <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <ihor.solodrai@linux.dev>, <martin.lau@kernel.org>, <clm@meta.com>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: <bot+bpf-ci@kernel.org>, <alexis.lothore@bootlin.com>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
+ <shuah@kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260817-tc_tunnel_flaky-v6-1-c02ccde847f2@bootlin.com>
+ <c7945c532eb31abc4d3fbbd0720d7a1f47eff936621cf8d11ecdfd9aeef27f93@mail.kernel.org>
+In-Reply-To: <c7945c532eb31abc4d3fbbd0720d7a1f47eff936621cf8d11ecdfd9aeef27f93@mail.kernel.org>
+X-Last-TLS-Session-Version: TLSv1.3
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The variable `decap_gso_validation_seen` is introduced to track =
-whether GSO metadata was present during decap validation, but it is never a=
-sserted in the test suite.
---
+On Mon Aug 17, 2026 at 10:14 PM CEST, bot+bpf-ci wrote:
+>> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testi=
+ng/selftests/bpf/network_helpers.c
+>> index b82f572641b7..1fda1fa7281c 100644
+>> --- a/tools/testing/selftests/bpf/network_helpers.c
+>> +++ b/tools/testing/selftests/bpf/network_helpers.c
 
---- Patch [1]: [PATCH] selftests/bpf: tc_tunnel - validate decap tunnel sta=
-te without false-pass gaps ---
-commit f4a6b83a5918e8a74560dcb08d2827677bbdfe70
-Author: Nick Hudson <nhudson@akamai.com>
+[...]
 
-selftests/bpf: tc_tunnel - validate decap tunnel state without false-pass g=
-aps
+>> +static int connect_with_timeout(int fd, const struct sockaddr_storage *=
+addr,
+>> +				socklen_t addrlen, int timeout_ms)
+>> +{
+>> +	int connect_timeout_ms =3D MAX(timeout_ms, CONNECT_MIN_TIMEOUT_MS);
+>> +
+>> +	/*
+>> +	 * Override timeout configuration with a larger value for the
+>> +	 * connection
+>> +	 */
+>> +	if (settimeo(fd, connect_timeout_ms)) {
+>> +		log_err("Failed to set connect timeout");
+>> +		return -1;
+>> +	}
+>> +
+>> +	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
+>> +		log_err("Failed to connect");
+>> +		return -1;
+>> +	}
+>> +
+>> +	/*
+>> +	 * If the timeout configured by the test is different from the
+>> +	 * connect timeout, restore it
+>> +	 */
+>
+> This isn't a bug, but do the two block comments here add anything over
+> the code they sit above? The first sits above settimeo(fd,
+> connect_timeout_ms) where connect_timeout_ms was computed with MAX(...,
+> CONNECT_MIN_TIMEOUT_MS) on the line before. The second transliterates
+> the condition on the line below (timeout_ms !=3D connect_timeout_ms means
+> "restore it"). Could they be trimmed to a single line about why a larger
+> connect budget is needed?
 
-This commit tightens the tc_tunnel selftest to guard against false passes
-in GSO decap validation. It asserts that decap validation paths are executed
-during large-send phases and verifies post-decap states.
+This is slowly turning into bikeshedding (and if the comment wasn't
+there, another LLM run could possibly request it to clarify the
+intent...) so I'll keep it as-is.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c b/to=
-ols/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
-> --- a/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
+[...]
 
-[ ... ]
+>> -	if (connect(client_fd, (const struct sockaddr *)&addr, len)) {
+>> -		log_err("Failed to connect to server");
+>> -		return -1;
+>> -	}
+>> -
+>> -	return 0;
+>> +	return connect_with_timeout(client_fd,
+>> +				    &addr, len,
+>> +				    timeout_ms);
+>                             ^^^^
+>
+> This isn't a bug, but could this call fit on one line? With the leading
+> tab it comes to about 71 columns as a single statement, well inside the
+> 80-column limit. Elsewhere the file only wraps arguments when the line
+> doesn't fit.
 
-> @@ -406,7 +415,18 @@ static void run_test(struct subtest_cfg *cfg)
->  	/* Replace kernel decapsulation with BPF decapsulation, test must pass =
-*/
->  	if (!ASSERT_OK(configure_ebpf_decapsulation(cfg), "configure ebpf decap=
-sulation"))
->  		goto fail;
-> -	ASSERT_OK(send_and_test_data(cfg), "connect with encap and decap progs"=
-);
-> +	if (!ASSERT_OK(send_and_test_data(cfg, skel), "connect with encap and d=
-ecap progs"))
-> +		goto fail;
-> +	if (!ASSERT_NEQ(skel->bss->decap_validation_seen, 0,
-> +			"decap validation executed"))
-> +		goto fail;
-> +	if (!ASSERT_EQ(skel->bss->decap_expect_large_send, 0,
-> +		       "decap large-send marker reset"))
-> +		goto fail;
-> +	if (cfg->test_gso) {
-> +		ASSERT_NEQ(skel->bss->decap_large_send_validation_seen, 0,
-> +			   "decap validation executed for large send");
-> +	}
+True. Will be fixed.
 
-[Severity: Medium]
-Is decap_gso_validation_seen missing an assertion here?
-
-The BPF program tracks this variable to verify the presence of GSO metadata,
-but it appears the userspace test runner never actually checks it.=20
-
-If a kernel bug strips the GSO metadata before reaching the BPF program,
-shinfo->gso_size would be 0, bypassing the inner GSO validations. The test
-might still pass because it only asserts decap_large_send_validation_seen.
-
-> diff --git a/tools/testing/selftests/bpf/progs/test_tc_tunnel.c b/tools/t=
-esting/selftests/bpf/progs/test_tc_tunnel.c
-> --- a/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
-> +++ b/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
-
-[ ... ]
-
-> @@ -690,7 +695,21 @@ static int decap_internal(struct __sk_buff *skb, int=
- off, int len, char proto,
-> =20
->  	kskb =3D bpf_cast_to_kern_ctx(skb);
->  	shinfo =3D bpf_core_cast(kskb->head + kskb->end, struct skb_shared_info=
-);
-> +
-> +	if (flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
-> +		     BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK))
-> +		decap_validation_seen++;
-> +
-> +	if ((flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
-> +		      BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)) &&
-> +	    decap_expect_large_send)
-> +		decap_large_send_validation_seen++;
-> +
->  	if (shinfo->gso_size) {
-> +		if (flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
-> +			     BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK))
-> +			decap_gso_validation_seen++;
-> +
+Alexis
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260818120308.6239=
-05-1-nhudson@akamai.com?part=3D1
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
