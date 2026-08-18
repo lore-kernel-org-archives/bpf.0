@@ -1,215 +1,143 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38B7737B40E
-	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 23:26:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8BC5190462
+	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 23:59:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787095564; cv=none; b=d0glg4V+te8gR+/oc2347slRW6qprKMly/qswhUOs6/kkfB46Ea26TlA7R8sWh5aK6EsEOsD2wwPyROE0Sed1iF1fxwEIRevphRwK98Z3/DlHOtdj2uT7LYdDuMFzAMhSEOAq/hmSx09GOtYZ/QrG7grwBkAFCU72vSuJR0Dghg=
+	t=1787097563; cv=none; b=Z+cE/rypLdL/tKZcWaYvtxwbR9ocAu1EgjV265liKVmlXnFvtgo98r6fDiey4KxK5yG/TnBKb0Jmt1tqvK5gQrHwFWh0919rzvzAMjocHxoTlB9xN6H1CXZRENEpzI3WQLessEGvnnNhgVVF8nCNwZ8Xh7tMIzUF9UxiNeCD6W0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787095564; c=relaxed/simple;
-	bh=e6ndFhgPut4OMuMojKDPvfYXSEtrB68z8W/+iyMwO+U=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=MTXM7eTI5WQeqwyd/gBLVi8oRom/SMexFXsthclSU8dpY8KpqhOt7IE604O+QNPBscs3QJvuHEYQk3Tp16WprWh/cAdIdW5maqWv5Y0HIxaXiV/0gKV9EXZMTTkdf6xrOQj4DCxOe7oqG3UDu/y/U+TYNNrcUqnrROLyjESQfdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=MVUaiosa; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1787097563; c=relaxed/simple;
+	bh=3/FC3+rTB7zenyYUb/SAoT6ao55r7Msw4PLNzKlY1/I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YJu24S5aGjjTnzmAwKOotPdHRaopVdEN6EYQYn0+Pxy3RxXOHyNzjMBNR/JqnMz6nJC68lujHKmv/+zMaRxYgaT/MM6fCuVo09lIqHtK9APUOAWs3szBLxAYHRxJtEcZhnfD2OBXaxWHSg9rbjEUo1RnKQzB4+zwKPfsgZuL3bw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AvGalExL; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="MVUaiosa"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-38dc69c74b8so628531a91.0
-        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 16:26:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AvGalExL"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2ccf2360620so3037765ad.3
+        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 16:59:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1787095562; x=1787700362; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=jztQZP2aqNb9XCCcLuBxD5DTDOgUaHJEuB77MdCft9I=;
-        b=MVUaiosav1FHdlwiAsgKAS3544vAwi1buY3jtXckrEmnQ1qhEWn9ozW5TGC6W4j6Lk
-         hBV5X9QJWHBx1saVx/rtm73SWgvU6hNBQ0xPOJA9AYMMDms3QhXg9FQiK8H2FNwSZz0n
-         biblO6h6yPvidhg0jD0+EKEMFbTEUSu0M2g+Hqiu8raXSt7JJV1nvEFyeG9c67hKB4Xh
-         Kv3roiFtSTORulWWAMF6XcdwfGc3du2o5Fr7xRDpJmAByM7wxzEBDh4br8aiTkFph8GN
-         zHOL3mEyWHJmXA8NqZOsstRFK8yA2NrCGRyVHRgn1INrYL4kJ3BaDVCdULkI+9omi7RC
-         YcxA==
+        d=gmail.com; s=20251104; t=1787097561; x=1787702361; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=9UA11QdsDBQZZwlQ8Rx/R/X7VYyb6gM0uXTt1nPuef8=;
+        b=AvGalExL57zB9dAd6e/zsohPJQ4EjxjlxdyXQ35qSFnq6v+xVESozfqfHbSWZc+UQc
+         rILD5x1YHKhM+izDD8POVAwJ40uIjHA2uDwYoBYagrxtS6UIdY6bjBeE1Nht4vOIAxWt
+         3ILnmro/pldKVNBIggkZtXV+Xxar1l17naq99FSE+dJc9gmg+YnyB37c5NEKO/VMWKb5
+         qmauLF2iC4LlJPCNWpXAPgEf0poz8gROp3vXR2IBir//40deagwXupiw2EZbKkRCx/9j
+         T1XmMABCtiZGzL7Dau7QC5h/Yuqgjbu41rCMSpm68ohfwcDzhDevediqrO5T4/LKplUa
+         zTAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787095562; x=1787700362;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1787097561; x=1787702361;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=jztQZP2aqNb9XCCcLuBxD5DTDOgUaHJEuB77MdCft9I=;
-        b=oewGnckIIlYb9/uDqae5QFdNOfuNRAllOEVswB1Hv/Q8pow1Ps91vCzzTgOt+rcB7F
-         CCRwrmuZ1W7u256GAPvfpCYCmAo+JVQpLPHGI+23UDUmRW9OByNe7cBgm/MeH8dtGKvw
-         fedOQ3F+NIaPd7JR/o7brwN2g27CcXKh0nTIdbbfx+uIpeTSjkxdwb3yJdgZ7UWwNcPg
-         eMMpzfg71cfxXKjxvvRzoQFyrha0SL0Wn/NrP3ZCW2YWjnrOg6/MY8PUyu2JP0BRFJJ+
-         XP9nfi8386/pmuOir424M1WKgNbH3sSC6Wj9aNTGL0KO0YGD/JgBxnSp5qh/Tv3BshHF
-         2kPQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpccuxnGKZGHjyIFG2X4hhK3YKMFMyaB0xBgFdr68t9G52em0ySi9N9ok9HXfOU9espZ/U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPBtXLlFE8AfpYVPeUthYD5T3uHMIa4EpbI7unPkqiWTwJ9If1
-	RLDvjR68DRxqtfvgTvvDoR/f1NaMjoAjePHosApmPFf4S5sb5RHei4d87JGtLX2PpSA=
-X-Gm-Gg: AR+sD12z0dgwxHnwK3gUtWh/+GvpxGE30sPPjugsep7yDUlyb2YPnS1lf3Lb7rsR6DA
-	5uvL7+ZMyMSjyh5AGQdVvGR06eSaJt3wid3ybeyA8WVwBjIYScoPxFsM5MltyfOLZvaznIn95fH
-	wH6c9k9h2oStxeKkfRGOHgQXDcLT7JO81azpvT8zpqF4j+iMoxZdtfFsy4dMCCY/UUvYHH2gi3D
-	n3Mb25A3He8DdHBL6KTDBI6PW0NiVFGnkAiMmQgBDm+VDIvfw7ww6AcCB68WRHFFyuZ0PBUhvX1
-	d41WKFY8/KRoQiT20U4mFKycZguArXrPjble9X1Ebz8Vv/Vd5H2+zrHrTJNDQ2S+SsBRSgdfequ
-	BvmAeQtmRI07j6XNzrXVKUE0fPqcC7cNv0y8H2xy4CkP6xbL438Ehtd1XbDGQrT4TL4adtM0gbo
-	NlQ/h6+S/kSuxFl1Id+UmyLeiUCw0xXCcLEAaLLbzje5iOlwwaXT13Sanq1HG5+jPf9SNamqz43
-	YMx5pBCYJlOi1WOrGK9NJKs9QqM
-X-Received: by 2002:a17:90b:5484:b0:37d:f983:7b5 with SMTP id 98e67ed59e1d1-3958110cfc4mr767267a91.9.1787095562358;
-        Tue, 18 Aug 2026 16:26:02 -0700 (PDT)
-Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3957f85cdddsm115192a91.3.2026.08.18.16.26.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Aug 2026 16:26:01 -0700 (PDT)
+        bh=9UA11QdsDBQZZwlQ8Rx/R/X7VYyb6gM0uXTt1nPuef8=;
+        b=iXQ7yFmcWJWPpY4w1A19nfz2V2Ncg0jnG8Ze1knx4ScQvB5fMyTY2TZuWBQcXkK4gw
+         ZqFHpHirT/C6EbD3TzecXdPMGOFkVVUJeQnSqYkhd8k10gJAl6f66/atOWC5cmgfEkin
+         +F6SRgd/EK4HTLIFtho3qv4WTuJyz/a8WnakfKTjkZoof1WtWrkpmeBdkCH9Dpgh6Jgi
+         EwXlFBk4gvBV3eL4CuKWy8sD79Qz/A0hhCpGFwth7JBidzJQciEkxIiAvg47lj90N84X
+         TXmy0nVEISwTQwUqAybKzqzkD1iiIn1JfKBy0nxo8EjeG3PsUUJ6wM3JqJ8eXQBseLTm
+         T1kA==
+X-Forwarded-Encrypted: i=1; AHgh+RoQnUAnwpIP772rRb9dmqkGjb+16XvrPCzjO/7xvwlWnPuoyDettBHqKY//szZdVNh/Qu4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyX0WGeqrbOkTeR5meftbnhs9vVwt713qTK7vz1Wp2xSZdKf7hC
+	0EQAm8V5pi2gZN0HLasL/X5OBZfB5sswZFX5/ZsKOpfqiUjFA0zZwYAU
+X-Gm-Gg: AR+sD13E1k1eQq6+IKZx6EKyb4A7PbBP76eaigoUNWiQyxhXxYGCHxeH6OR6EfAvd0L
+	QjObVJl34gOgB0Js6PGnVXHMAAKs3m4OhC36xQ9tVU9IasoqnpRofLqHS2YzmAwaRFYKtmNFrAG
+	JiqIq7klhrLE1rF3tM0Jh27OAKT33Uz9chBftrzJtcK8l/97+kA93wyVFsFyBgVk7/Udj0va6Vu
+	bW7L1ieV0lrl3UVufdZZEZ4Ekd20Q2D0mTNe6qz7ifRlmTWj9oBtkcsTjsC2uDlEW6qc7MrFOtX
+	rLvE/gcX4vQutrZ+mjLqrtYtjo5nLPNbuFVGIaN06rW/ntA/lFy52Uy0BlOAC9MhE+OQ+q0yoee
+	rkNAUEFLlB8Cb7UVu+iJUHSN0XlW8PSkt7A549yxuBVJFrC72iKvxkJWr4++cLxRbPI2m+Z9XYf
+	efhpIJ4NIe2rhz4pgjDUWKH1E36+l6xMHOnVWbDIr0hQd9Xc8SlKJ/vg1KLVUP4qcJAm9Fgwfk7
+	GGDf0Mwksq/NwxA2qM=
+X-Received: by 2002:a17:90b:4a4b:b0:38f:240d:b857 with SMTP id 98e67ed59e1d1-39580a4d03cmr971369a91.2.1787097561159;
+        Tue, 18 Aug 2026 16:59:21 -0700 (PDT)
+Received: from devvm16600.scu0.facebook.com ([2a03:2880:9ff:73::])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1416ae5f1ffsm1121775c88.13.2026.08.18.16.59.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Aug 2026 16:59:20 -0700 (PDT)
+Date: Tue, 18 Aug 2026 16:59:17 -0700
+From: Ziyang Men <ziyang.meme@gmail.com>
+To: Tejun Heo <tj@kernel.org>
+Cc: Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, kernel-team@meta.com,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Ben Segall <bsegall@google.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	JP Kobryn <inwardvessel@gmail.com>, bpf@vger.kernel.org,
+	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] cgroup: add BPF kfuncs to read a cpu cgroup's
+ stats
+Message-ID: <aoTx1eaNNJ+xrUq1@devvm16600.scu0.facebook.com>
+References: <20260818002450.3071325-1-ziyang.meme@gmail.com>
+ <20260818002450.3071325-2-ziyang.meme@gmail.com>
+ <aoSTaFwsVEoNW01D@slm.duckdns.org>
+ <aoTgVOTxsEbFXTp2@devvm16600.scu0.facebook.com>
+ <aoTg7ybddqzoZbz7@slm.duckdns.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 18 Aug 2026 19:26:00 -0400
-Message-Id: <DKSGI6P7W52Z.3KO3SK2SG7EHG@etsalapatis.com>
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, "John Fastabend"
- <john.fastabend@gmail.com>, "Shuah Khan" <shuah@kernel.org>, "Sebastian
- Andrzej Siewior" <bigeasy@linutronix.de>, "Clark Williams"
- <clrkwllms@kernel.org>, "Steven Rostedt" <rostedt@goodmis.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-rt-devel@lists.linux.dev>
-Subject: Re: [PATCH bpf-next v3 3/4] selftests/bpf: Add read_cgroup_file()
- to cgroup_helpers
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260808140720.293604-1-jiayuan.chen@linux.dev>
- <20260808140720.293604-4-jiayuan.chen@linux.dev>
-In-Reply-To: <20260808140720.293604-4-jiayuan.chen@linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <aoTg7ybddqzoZbz7@slm.duckdns.org>
 
-On Sat Aug 8, 2026 at 10:05 AM EDT, Jiayuan Chen wrote:
-> cgroup_helpers has write_cgroup_file()/write_cgroup_file_parent() but no
-> read counterpart. Add read_cgroup_file() and read_cgroup_file_parent() so
-> a forked child can read a cgroup file (e.g. memory.current) from the work
-> dir owned by the parent that set the environment up, without hand-buildin=
-g
-> the /mnt/... path.
+Hi Tejun,
+
+On Tue, Aug 18, 2026 at 12:47:11PM -1000, Tejun Heo wrote:
+>On Tue, Aug 18, 2026 at 03:44:36PM -0700, Ziyang Men wrote:
+>> > > +BTF_KFUNCS_START(bpf_rstat_common_kfunc_ids)
+>> > > +BTF_ID_FLAGS(func, bpf_css_flush_rstat, KF_SLEEPABLE)
+>> > > +BTF_ID_FLAGS(func, bpf_cgroup_base_stat, KF_SLEEPABLE)
+>> >
+>> > Why are these SLEEPABLE?
+>> >
+>>
+>> The css_rstat_flush() calls might_sleep() and cond_resched().
 >
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-
-The "- 24" is questionable, but it's already all over the file. We can
-clean it up separately.
-
-> ---
->  tools/testing/selftests/bpf/cgroup_helpers.c | 67 ++++++++++++++++++++
->  tools/testing/selftests/bpf/cgroup_helpers.h |  4 ++
->  2 files changed, 71 insertions(+)
+>I see.
 >
-> diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing=
-/selftests/bpf/cgroup_helpers.c
-> index 45cd0b479fe3..4183ff6150c2 100644
-> --- a/tools/testing/selftests/bpf/cgroup_helpers.c
-> +++ b/tools/testing/selftests/bpf/cgroup_helpers.c
-> @@ -188,6 +188,73 @@ int write_cgroup_file_parent(const char *relative_pa=
-th, const char *file,
->  	return __write_cgroup_file(cgroup_path, file, buf);
->  }
-> =20
-> +static int __read_cgroup_file(const char *cgroup_path, const char *file,
-> +			      char *buf, size_t len)
-> +{
-> +	char file_path[PATH_MAX + 1];
-> +	ssize_t got;
-> +	int fd;
-> +
-> +	snprintf(file_path, sizeof(file_path), "%s/%s", cgroup_path, file);
-> +	fd =3D open(file_path, O_RDONLY);
-> +	if (fd < 0) {
-> +		log_err("Opening %s", file_path);
-> +		return 1;
-> +	}
-> +
-> +	got =3D read(fd, buf, len - 1);
-> +	if (got < 0) {
-> +		log_err("Reading %s", file_path);
-> +		close(fd);
-> +		return 1;
-> +	}
-> +	buf[got] =3D '\0';
-> +	close(fd);
-> +	return 0;
-> +}
-> +
-> +/**
-> + * read_cgroup_file() - Read from a cgroup file
-> + * @relative_path: The cgroup path, relative to the workdir
-> + * @file: The name of the file in cgroupfs to read from
-> + * @buf: Buffer to read into, NUL-terminated on success
-> + * @len: Size of @buf
-> + *
-> + * Read from a file in the given cgroup's directory.
-> + *
-> + * If successful, 0 is returned.
-> + */
-> +int read_cgroup_file(const char *relative_path, const char *file,
-> +		     char *buf, size_t len)
-> +{
-> +	char cgroup_path[PATH_MAX - 24];
-> +
-> +	format_cgroup_path(cgroup_path, relative_path);
-> +	return __read_cgroup_file(cgroup_path, file, buf, len);
-> +}
-> +
-> +/**
-> + * read_cgroup_file_parent() - Read from a cgroup file in the parent pro=
-cess
-> + *                             workdir
-> + * @relative_path: The cgroup path, relative to the parent process workd=
-ir
-> + * @file: The name of the file in cgroupfs to read from
-> + * @buf: Buffer to read into, NUL-terminated on success
-> + * @len: Size of @buf
-> + *
-> + * Read from a file in the given cgroup's directory under the parent pro=
-cess
-> + * workdir.
-> + *
-> + * If successful, 0 is returned.
-> + */
-> +int read_cgroup_file_parent(const char *relative_path, const char *file,
-> +			    char *buf, size_t len)
-> +{
-> +	char cgroup_path[PATH_MAX - 24];
-> +
-> +	format_parent_cgroup_path(cgroup_path, relative_path);
-> +	return __read_cgroup_file(cgroup_path, file, buf, len);
-> +}
-> +
->  /**
->   * setup_cgroup_environment() - Setup the cgroup environment
->   *
-> diff --git a/tools/testing/selftests/bpf/cgroup_helpers.h b/tools/testing=
-/selftests/bpf/cgroup_helpers.h
-> index 3857304be874..d42d2e13044e 100644
-> --- a/tools/testing/selftests/bpf/cgroup_helpers.h
-> +++ b/tools/testing/selftests/bpf/cgroup_helpers.h
-> @@ -15,6 +15,10 @@ int write_cgroup_file(const char *relative_path, const=
- char *file,
->  		      const char *buf);
->  int write_cgroup_file_parent(const char *relative_path, const char *file=
-,
->  			     const char *buf);
-> +int read_cgroup_file(const char *relative_path, const char *file,
-> +		     char *buf, size_t len);
-> +int read_cgroup_file_parent(const char *relative_path, const char *file,
-> +			    char *buf, size_t len);
->  int cgroup_setup_and_join(const char *relative_path);
->  int get_root_cgroup(void);
->  int create_and_get_cgroup(const char *relative_path);
+>> The bpf_cgroup_base_stat() takes an rstat spinlock_t, which can sleep on
+>> PREEMPT_RT.
+>
+>Is this actually required? This doesn't really make sense to me. Shouldn't
+>what SLEEPABLE mean change on RT kernels instead?
 
+Oh sorry, I didn't notice that.
+
+I might be wrong: this function calls the cputime_adjust(), which in turn
+acquires raw_spin_lock_irqsave(), so there would be NMI deadlock in the
+perf_event program. The __css_rstat_lock() take the spin_lock_irq() as well. So
+maybe a SLEEPABLE tag is still necessary?
+
+Please let me know your concerns. Thanks!
+
+Best,
+Ziyang
+
+>
+>Thanks.
+>
+>-- 
+>tejun
