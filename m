@@ -1,140 +1,167 @@
-Received: from mta1.migadu.com (out-73.mta1.migadu.com [95.215.58.73])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C16AB468C1D
-	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 13:58:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.73
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787061516; cv=none; b=VbOoMbcq/y74oo4ekYN2lUgbjnbWalGriYCGNB1wMwnn5Qw4XCOxywUpm8vUXPVkEj3IavIgg0yBQLUTZwRtdk35ZSnTEiJG/CnGvquwlubUwwerQqsg+RghAQht5f01gfSQm/7MiDDnkjDzsamD0YQXeYirMh1vpK+vd3+hC00=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787061516; c=relaxed/simple;
-	bh=MNNbsfqEg64V79LFUtQz5lVKVEX8FokcixHJCigxHzE=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=FrpFLZNX0pLqSdmBTHNVHIL8kXgmXhGmuVc/TDpk+N3iH6czPi/C/ErcKrOBsgcSO03iLj+g80H6PgoHyHMV9Pgju4/MusCbPT58/Ncy0739ykbkhM006BZcCRxqMzwzH7+TVEXfYjttOS0SezK5G+74BYUJdRoX/hgsC/gF8P8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=m3vVfe3h; arc=none smtp.client-ip=95.215.58.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B9E4477983
+	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 14:02:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787061761; cv=pass; b=J5cVWjo/ZaTVmdHCeztgtPDGiq6GqwH2oOUoMOR+iNiNEjZjvmsmJGt/f/VQWkfxiL7rSS7jfLcKxUMaiqS5YY9kDCDDFtXNR43DgkxQKUQCNAnGlPFW9ykf54xbbZkB3FUgjNb8gHHLSxcu9jAcP31zb5H+z8i6ikt1vHP6oLo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787061761; c=relaxed/simple;
+	bh=UTv5iKcz7kfcY3WQo8grBxKS0khaeif0r4KiIQ2d1NQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OLrz7Hco1os9BPFXaUg5IufeFjasWji1ilYnu3ZtBasz0ilxko8Mp8142v2JwUuFa96I89Oz3xfPeGALXrjZr31RjP/nmRddSjt3bbU1od7JJyDl5g+AnS/Y+6MGXbfAknkB3d1i8NCbK/yz0Q4Q+6HleKOSKGX7THkvRIzCweo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WBnsNR53; arc=pass smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="m3vVfe3h"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=MNNbsfqEg64V79LFUtQz5lVKVEX8FokcixHJCigxHzE=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787061512; v=1; x=1787666312;
- b=m3vVfe3hYSLzxdsHbSz/rX3J1u9fqAWD2XisemfNJQWIlfjhEYKXLWtLGT3rDJgQVd4cjwBS
- TbLQXwUFHBs6P+GRKFjuEG+3LDFKMXN/NWVHOHJ8k2WQrX0u1ePQBoYjG+7OWe6N3lc3wlHUose
- alEqXHW84t2uByzUY29J8PE4=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [192.168.110.173] (223.70.159.239)
-	by smtp.migadu.com with ESMTPS id a762077461864aa3;
-	Tue, 18 Aug 2026 13:58:32 +0000
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <ceb9f4e0-5fe3-426a-bdc7-42d918f87fab@linux.dev>
-Date: Tue, 18 Aug 2026 21:58:25 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WBnsNR53"
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5b14d1f9315so3986043e87.2
+        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 07:02:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787061758; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Y0wYHX6BCxLJ1C00Gk7z2+xrvQXgvsN8ja5YtF8hrvgUhEOmXpYZPd/XPH3hAEVKkk
+         T4WQQwtDrZySs5pHfS6O6OuEuMFWs1ADWGNuqpJ7KHBwGTGLxILmoUoB5xAoTDQ76N7S
+         jlzxkWjek/QrOKX9wkqfhGY8z0Jx8QbJ57eTCJM9i7BWU+5zbf8sImSqY1ZYWsiczWnP
+         J9y29sBGnJhojv/EwEcalOGQBoM9evKOnlUnsKs5l51Tgz0fNsN+gXzqDFlvZ/ymDUci
+         To82SoeNljSgAKMi8TtBYWCWG4Fivw8QI3pwpwLUgnzTRcMboMX8GbNhrJDBy7e9Uwmq
+         2Qeg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=SyYLwZDkHAy+N7E1Yf97yW3d9A55gZNRqH5/hl/NyOE=;
+        fh=vuqwMBoFjnULz9w3/fQM1xnC0ChV0lhyHSyH5KBKids=;
+        b=SayJLee+0FyhAzBOtA4io8+lyakfAsdI4KwrDqA5VGOfTUxmscFa6lniYa/0tU6CF6
+         d3atys16F/N0rK6in/AcX1lRaQpPnSJTPdBgqhEPGLDS/aCkkbTy9WogFfAuzypCIxDY
+         GIlRWccCwj1swgK5ZnrtZ8AC1J63sc/hYp/4j5iF5X8VfNKnS/a+4pA9TVuobLRnQrf3
+         D4L07Y71VKmINXHuMV6ghw4ngQFwY7KGwBGsJBL1xGqTu9IcvTBkVHy7Ioyto5HADu2w
+         mKVDsSCvVuC4P/xUgVDYCy8ylVRbiz4LlYCPwTUxQVRV3aFrqIawmb4HAKTTLe/W//M0
+         SfgQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787061758; x=1787666558; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=SyYLwZDkHAy+N7E1Yf97yW3d9A55gZNRqH5/hl/NyOE=;
+        b=WBnsNR53SLLb1zdbMEZ0zS5c9TdF2lECNtXwUWI/BYt/JF+w+rcLHSfoPLuO2FLxXd
+         jg04/TIYEQ4ElNSve1aETYaXWAkgC0C0iJSK8df7FEvuv4SxFVlObacbz62WyQDSIeyR
+         4Ns4MXqwwgjA3qoL4LrVkRtsZwKROmIeLBGPvoJyR5JOV54yNuP4Ubhe3YxrSTy+wHOK
+         fREUZxE4iNJrIUl14sPWgmOXPfl4v2DDvDaO0YtfGghVNCw4G/Lbew8E123Xyfwrv8j+
+         QaQ9aNM179jb0Hv2KoShmQ8MtueJCkCb1oX/PQ5CBH7CkmwXivnUs57wR7rsFpMF/hGK
+         T4+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787061758; x=1787666558;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=SyYLwZDkHAy+N7E1Yf97yW3d9A55gZNRqH5/hl/NyOE=;
+        b=hmETq92F2TTVzs4i6TJR9PkM01+zjhjbsD4iOnBfg/ZNPa65WbQLGa9H+z4XLqvoj1
+         UBeg/lzjNiANVjQTGg+F8VM5g/YYbCHtUD1DYf3TaBSXIecKBPPD+ldl+JdvkI38L48F
+         AId8m6UBoA60yRJ5D7AIytfEIeiGFGLhotmB69IfMDzhwRHwV1MZXqsdnY25eFVU4YDX
+         /dN71GHI8F5ULDM0XhOHSjCQnk1V12LT6UBumkREezaNfCBc3J+ZrSPdQNmMS4tAh2Ea
+         Qi4+L3lVV6wd2RMCzbY7eUvO+TkGpM2ggnfxosEUht6X/R8sc81lG9jf3/8BQ4VhkkU6
+         2JcA==
+X-Forwarded-Encrypted: i=1; AHgh+RpkMoCcQimEyKQ6oK017hFoeh1FRE9C6Xe8+89Uwhcvr6rwXInkEl7aZD1ptzmHT9L3J+g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLOli7ruEzk+C+akhqn+jauiuuq+ag6eq0wUfe7o2GadAQsE7y
+	TWWSvphV9GrAJdxXe+/1BpYMZNBof7VnAg3Tvqi+a+mri15YmdMYuy0xC5sHINahxmzu21JfD+Z
+	5QWzI0ChEnHwe44aDQqVSw9p2/2DLKBg=
+X-Gm-Gg: AR+sD10Xv6YchFAv3NSjeYWqQD8BCowYl6OA9/OIuRyx3ex4GP24D2wA7BwCYH55RjH
+	to+z3ND1VDyg9dGaiDM94I751kNt0s4HPxxTgu6uoQVbqVNErwllOXXulR8kow1pDb+/IEJWZA9
+	XHJWxag4Hv19infSqXTtUYdL59OWEWT+dHbUkom+VGzZQiRm5vbuuH8PqwtIzM0qI+n9VEgsC7B
+	F8lrP4omI8ZkJHyUJ/NijZzsoY5sIxKT6skYXqgKWujU3I6QRNXARgecGdzPL5x2YPrW+2mEnNB
+	8ie7y5fUfAv/ZWK7XGDSZ78VA7x24OjFSmFpfFtlCUNXl4ie6f8TtJB9uE0mRAaZoKspMbAmMtr
+	31oQP2n99BKgwwhCSmico6WtaxmWJRhoAuXI0PTUIDCNRljjv5zRYH4LzO8w=
+X-Received: by 2002:a05:6512:a34e:b0:5ae:b0aa:8f07 with SMTP id
+ 2adb3069b0e04-5b470670602mr2119668e87.16.1787061757880; Tue, 18 Aug 2026
+ 07:02:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, arighi@nvidia.com, changwoo@igalia.com,
- suzhidao@xiaomi.com, sched-ext@lists.linux.dev,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- Tao Cui <cuitao@kylinos.cn>
-Subject: Re: [PATCH RFC] sched_ext: warn when cpu.max is set but the BPF
- scheduler doesn't implement bandwidth control
-To: tj@kernel.org, void@manifault.com
-References: <20260818135328.174152-1-cui.tao@linux.dev>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <20260818135328.174152-1-cui.tao@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260817153957.3177627-1-poros@redhat.com>
+In-Reply-To: <20260817153957.3177627-1-poros@redhat.com>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Tue, 18 Aug 2026 22:02:00 +0800
+X-Gm-Features: AcwNN1UG_1pwdTjBdcWV7mH5yBQ6g2Q9r0pVO6574S7baK_7e2jyDoLFtMFtCU4
+Message-ID: <CAL+tcoBVxsjPXzfSHorXFMLMcsh_ibRmLFBwaQQYZQBjx8RBiw@mail.gmail.com>
+Subject: Re: [PATCH net] xsk: reset the mac header in the generic Tx path
+To: Petr Oros <poros@redhat.com>
+Cc: netdev@vger.kernel.org, Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Willem de Bruijn <willemb@google.com>, Vladimir Oltean <olteanv@gmail.com>, Doruk Tan Ozturk <doruk@0sec.ai>, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Aug 18, 2026 at 1:12=E2=80=AFAM Petr Oros <poros@redhat.com> wrote:
+>
+> __dev_queue_xmit() resets skb->mac_header, __dev_direct_xmit() does not,
+> so a frame taking the qdisc bypass path reaches ndo_start_xmit() with
+> the sentinel left by __finalize_skb_around() and skb_mac_header() points
+> 65535 bytes past skb->head.
+>
+> The packet socket reaches it through packet_direct_xmit(), and
+> packet_parse_headers() was taught to anchor the header by
+> commit c2707480cfbf ("net/packet: reset the MAC header on the
+> packet-socket transmit path"). AF_XDP reaches it through
+> __xsk_generic_xmit(), and net/xdp/xsk.c never sets the mac header.
+>
+> ice reads eth->h_proto through skb_mac_header() on its ordinary Tx path.
+> On an E810 every one of 2817224 AF_XDP frames reached the driver with the
+> sentinel still in place, so the ethertype never came from the frame. With
+> this patch all 5757920 frames of the same test carried the correct 0x88b5=
+.
+> An AF_PACKET sender on the same port read 0x88b5 in both runs.
+>
+> On a KFENCE kernel that read lands inside the pool and gets reported as a
+> use after free of an unrelated object, 387 times in a 180 s run:
+>
+>         BUG: KFENCE: use-after-free read in ice_xmit_frame_ring+0xddb/0x1=
+650 [ice]
+>          ice_xmit_frame_ring+0xddb/0x1650 [ice]
+>          __dev_direct_xmit+0x347/0x4d0
+>          __xsk_generic_xmit+0xc13/0x1e70
+>          __xsk_sendmsg.constprop.0.isra.0+0x519/0x640
+>          xsk_sendmsg+0x6c/0x90
+>
+> Rerunning the same reproducer on the same E810 with this patch applied
+> produced no reports and no bad reads.
+>
+> Anchor the header in xsk_skb_init_misc(), which runs once per skb for
+> both build paths. With IFF_TX_SKB_NO_LINEAR the offset still is not a
+> real header, but it stays in bounds and no such driver reads it.
+>
+> Fixes: 35fcde7f8deb ("xsk: support for Tx")
+> Signed-off-by: Petr Oros <poros@redhat.com>
 
-Hi, tejun
+Reviewed-by: Jason Xing <kerneljasonxing@gmail.com>
 
-在 2026/8/18 21:53, Tao Cui 写道:
-> From: Tao Cui <cuitao@kylinos.cn>
-> 
-> The kernel stores cpu.max bandwidth parameters in the task_group and
-> passes them to the BPF scheduler via ops.cgroup_set_bandwidth() and
-> scx_cgroup_init_args, but does not enforce the quota itself. If the
-> loaded BPF scheduler doesn't implement the callback, cpu.max is
-> silently ignored -- the cgroup gets unlimited CPU regardless of the
-> configured quota.
-> 
-> Of the example schedulers, only scx_qmap implements the callback --
-> and only to bpf_printk() the parameters, so no in-tree scheduler
-> actually enforces the quota. Measured with scx_simple: a
-> cgroup with cpu.max = "50000 100000" (50% of one CPU) and one
-> busy task used 9946ms of CPU in 10 seconds with nr_throttled
-> remaining 0.
-> 
-> Print a one-time warning when a finite quota is configured on a
-> cgroup while the active scheduler lacks the callback, so users and
-> container orchestrators know the quota is not enforced.
-> 
+> ---
+>  net/xdp/xsk.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 7855ee09c4b640..885427392cb6b3 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -931,6 +931,7 @@ static int xsk_skb_init_misc(struct sk_buff *skb, str=
+uct xdp_sock *xs,
+>         skb->priority =3D READ_ONCE(xs->sk.sk_priority);
+>         skb->mark =3D READ_ONCE(xs->sk.sk_mark);
+>         skb->destructor =3D xsk_destruct_skb;
+> +       skb_reset_mac_header(skb);
 
-Some background on how I found this: I was testing how sched_ext
-interacts with cgroup CPU controls in a VM, and the cpu.max case stood
-out:
-
-    cgroup with cpu.max = "50000 100000" (50% of one CPU),
-    one busy task, scx_simple loaded
-
-    sched_ext : 9946ms of CPU in 10s, nr_throttled = 0
-    CFS       : ~5000ms in 10s, throttling as expected
-
-The same happens with scx_flatcg and scx_central -- neither they nor
-scx_simple implement ops.cgroup_set_bandwidth(), so the quota is
-silently ignored. grep shows scx_qmap is the only in-tree user of the
-callback -- and its implementation just bpf_printk()s the parameters, so
-even there the quota is not enforced. Outside the
-tree, lavd implements its own bandwidth accounting, but as far as I can
-tell rusty and bpfland don't, which suggests users on those schedulers
-are running containers with cpu.max that does nothing.
-
-That's why I drafted the warning patch -- but I'm not sure a warning is
-the right approach. Some alternatives I can think of:
-
-  1. pr_warn_once() as in this patch (minimal, but the quota is still
-     not enforced)
-  2. refuse to enable sched_ext (or the cgroup support) when a finite
-     quota exists and the callback is missing
-  3. kernel-side fallback enforcement, e.g. throttle in
-     scx_next_task_picked()/dispatch path based on tg->scx.bw_quota_us
-
-Is the missing enforcement considered the BPF scheduler's responsibility
-by design (and just under-documented), or would a kernel fallback be
-welcome? If it's the former, maybe sched-ext.rst should mention that
-cpu.max requires ops.cgroup_set_bandwidth() from the loaded scheduler.
-
-Happy to work on whichever direction you prefer.
+That's a good place to do the reset process. I will cook a follow-up
+patch to reset the network header.
 
 Thanks,
-Tao
-
-> Signed-off-by: Tao Cui <cuitao@kylinos.cn>
-> ---
->  kernel/sched/ext/ext.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
-> index 10af28a9f2c0..de786d0b928a 100644
-> --- a/kernel/sched/ext/ext.c
-> +++ b/kernel/sched/ext/ext.c
-> @@ -4953,6 +4953,12 @@ void scx_group_set_bandwidth(struct task_group *tg,
->  	     tg->scx.bw_burst_us != burst_us))
->  		SCX_CALL_OP(sch, cgroup_set_bandwidth, NULL,
->  			    tg_cgrp(tg), period_us, quota_us, burst_us);
-> +	else if (scx_cgroup_enabled && sch &&
-> +		 !SCX_HAS_OP(sch, cgroup_set_bandwidth) &&
-> +		 quota_us != RUNTIME_INF)
-> +		pr_warn_once("sched_ext: BPF scheduler \"%s\" does not implement "
-> +			     "ops.cgroup_set_bandwidth(); cpu.max will not be enforced\n",
-> +			     sch->ops.name);
->  
->  	tg->scx.bw_period_us = period_us;
->  	tg->scx.bw_quota_us = quota_us;
-
+Jason
