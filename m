@@ -1,124 +1,134 @@
-Received: from mail-yx1-f44.google.com (mail-yx1-f44.google.com [74.125.224.44])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0FE331E852
-	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 21:34:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB9D937C927
+	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 21:38:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787088854; cv=none; b=EFHpyqG3SgsSBdS8qZ0WrHD7W0f9hSA4B0lMWR6LDTChUR+tF0HXK+CN2Hg5VJpgoFMyhQsdBO96O2PwRyhJxxG/6roE/BJzADrDwFZEt+ZY4x+emD6DD9j3bgfNswkz/kgfsvHBMH+QeJdd70kt2RiYkX8QhYTfgHESkOJ9bEU=
+	t=1787089111; cv=none; b=Zh059oBxTtY1OabC6TeymE42u2Yh7d9NKeRdblUIX65P63o78TmnHyBXdB96FFrLMrrSdGDs9F1LVB+SzAakgh6sHRS9nkuL5z54snJ4mT7mJnIzns3ksJOBO4fFSOt9lVZx8uwnooM6fsQoeru7teQMO4+rdQYqKm4wXIi8ly0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787088854; c=relaxed/simple;
-	bh=avzpMIpWk8G0UsinOiaW/I+zSHwJiOsnpz63IET9gm8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oKo5YztG5Phw4IiXx1LsmFsX14QRDeb1/jqH5uQR5wwCsmFAO2VfQujZj1ydnYvL/FSN1AJsrA1y7Ltk46ckBClIgPuI0TAsUTRKr/GgeZX0rmmROwOhaAM3Uw952+++y/+mOwET9KsPt24/1r6VpLBzvHVrc5adl3YwQJesCzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kF3W6/jt; arc=none smtp.client-ip=74.125.224.44
+	s=arc-20240116; t=1787089111; c=relaxed/simple;
+	bh=GPinSQFO4keSd1Q5bC5YTK7Ezticd5+rWlEfu42Fe/E=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pGNlRknPOo06jc9KagOVW7+IqPcS7TIMTxhDBcp4vpwk6m/SZRm66DBdeo0xlNNug8Q62kH3QhkBoZx3vLcYm/ZaIW0SR+z1+39s1DOTd6cHWWhAQDEWuVxEx5tGL3twkn7J+5+Heoy8W9Z+ZdI5oJdbxGsj2+KIkj2KpuZ27pg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DHqH2vfI; arc=none smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kF3W6/jt"
-Received: by mail-yx1-f44.google.com with SMTP id 956f58d0204a3-66b35d2c4edso646781d50.2
-        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 14:34:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DHqH2vfI"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-38dc4553f62so592945a91.0
+        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 14:38:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787088852; x=1787693652; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=3sDmUeEbcal2gxd06G7R/9k1xkDLSkoYHHtzuG733R4=;
-        b=kF3W6/jtJwvv4A0H6CNDc2vwexeyPGmkzPlmKMXuLoLpQh/DyCrEcWXJqQfu/Ty1dh
-         RJZF2DJvF4X0+kbqJN7bEGy+A0cm9HDKJOHD/CGbhpsVBZ5sQWXkFFXP7X/LIYUPSlEX
-         jHsZxiHyMuup2x96l1R33XK3s8pH2xWrbxkQ7Npts+qabNAuoPxaXglnbJs+oT7g2Xjm
-         Un11fCY4a0Drnj6Vk1ZiegGjLhDm7M9lPDPHy8ZT4bzbF5c3R+cOMJfNsZlXFACYgI/f
-         wK+ThaZzLvlgguNvVXuAxIg1vvTV/mwPe/BW+iMj9qf8OZkRBazuKDdy7cvcxjLQrwsD
-         siwQ==
+        d=gmail.com; s=20251104; t=1787089109; x=1787693909; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=5pr8D9dTko0nm5cpxv7gLu3MP5nFNJnzsxpSKuqHUmo=;
+        b=DHqH2vfI3CokoJHsnQ2zLyJc+J9LVADwT0fEANQxoIF4V2+R9fY24HG1QvTqD+SQv7
+         7yrs7/cpYTV1RcV4ORupXm5oq9+NODSsrstcGeuy86MrjBkEPKZ1xGE9jKAy6KjBumvn
+         j16Nl3Rlhd+27KFWoatYUulQNQJD9rymfk0cEOfHU0WVsBwKNa2PMwNmdD1P8KL+rJEP
+         cy+qr7AXdFf3/rOG4o7KExAMBatknXXDPNlUKEtQOPIoAvv/7v7RyKSNtZE598C2F2x3
+         OYH9XlgZR3Gc/YKfEdzZQ9E1RwuH+wog28obhfP2MGek1YtAAdXYlwnPZex6xd6HcUWr
+         Ep6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787088852; x=1787693652;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1787089109; x=1787693909;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=3sDmUeEbcal2gxd06G7R/9k1xkDLSkoYHHtzuG733R4=;
-        b=TKZscu4ArtFU3JlylRn6u1aUMBkkI4GX0Ge/1TSK6wMiMpYTDsV7oWm7HwXSAX81zH
-         4VjfX/roWzdHsdbG6asKFn3L1WFNYLuqJfIdYnyjO4a5WM8GAeW6KBWccUuO7fvQe+Cl
-         lu7ONjXuUbbATacepQhLq7r7vGiY4mRClgQ/jKdqC3Z9AAvctVcl1lw62AtTtVf21Uwh
-         kEST2jeZ1coWFX49gZzz9CG8WeDZizPRf6u22Vx5MhfjyXgtygtpWiY9Wj8IJth9N60l
-         G2VLyBk2SwFQfha9ZHii/OGStADBcojm84JTXCWtSEyaoFly6DEUXXzGeG4HxkSK9gvq
-         RcMA==
-X-Forwarded-Encrypted: i=1; AHgh+RrQn4Js8pgEKfJfEQU4WBExM3AlzSOdnogNFjCsm/K7jr6I0GrjurjotrvyIg6ymT8dAZk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7g6kQU/gO5Lw9kBZDdwNYLuYQgI38Ux7Ww24h1NirAKuTQuvT
-	O8tBMSAy/3tOeviMegoeE9ZOfBLbmu5hOTmBzojo8mKoOxHyPeYRQoZn
-X-Gm-Gg: AR+sD11R6TRJ3141cnk6DdG/Ws+f5yfahHSqgNomcQ4npPFrPTZITsXRDzBi7ba2cA9
-	0m8z+T6IbsKpdPBykE3yxBONEJ+iazPmAAk0JXfLYhBmXf7mTw0a23W0eIdJoxHeq+UH0GkFIfb
-	NMMpNzstFmMXQTe+GlXFhgZ3PpJVohvF9URo7ugmHHaOjxU32oG2vpGunVOoO8RUHPlDZHQKaa5
-	mUY9lh+TBJghOM6OBwho3riZN1djhXDTwvEZmgOxbNp24yz4+MU4Fc+nOwz1pr9l5m/V7DvptoE
-	6AvADfsXS7HB9WJoHIX7JcAfvg2/tnNsQ1lWWrUZ9b1ExlvkVT8IH418L1sfcpcjYYsKKRXrUW7
-	uQqWTYzuD4OZ+jTJnRef35X1eocS77XQ1FPSRruHh1BOGL7IjJWoZ6d4e3oyeNFgWLG6FAIxOUN
-	1yzaT9C+JNYOom0uMFQBIs9cjL+Kapn+6xkjuw3deXEHWhPGMDEWYcWnn/aFZtYmS+3DZwUWqGY
-	ez523DD2ACk8bNAv4u/Ok4=
-X-Received: by 2002:a53:e911:0:b0:668:9b6a:653b with SMTP id 956f58d0204a3-66ccb537d3amr50318d50.3.1787088851823;
-        Tue, 18 Aug 2026 14:34:11 -0700 (PDT)
-Received: from zenbox ([2600:1700:18fb:6011:5ffe:d5c9:845d:50b5])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-66ccb19e096sm52049d50.19.2026.08.18.14.34.10
+        bh=5pr8D9dTko0nm5cpxv7gLu3MP5nFNJnzsxpSKuqHUmo=;
+        b=UrvEj3kLYSTeK2FP4Xgfo+4lYcpZhOxOTqZM4rHXdFFEvlOU2T+A/XCLVZ/TANBh+9
+         I84NH4K00LsELHnqhSEm7RFPMVjBXit/oH0gIjduvBvYxS3rlWRnb+GCYs2Cbkii5j0r
+         iH2G+1QDiMAOq18XV78C35vN2+bK4gvayWAzSKiZES8KCBFDb0c69LD8KnUUlGGO5Xs2
+         BUmOQNNj7DDOf0X8NeJznaODOeHsaHskggsxZmWEImS509cJQWjdMvQa0jgbvTp51mUA
+         45mzDa6Quelt2L/dOeX5WtVh3h7ji3l1m7m4O69sZ8UrB7rp/Tq9l0QYYuj/4wUG+8Xh
+         jIzw==
+X-Forwarded-Encrypted: i=1; AHgh+Rplx+LL0p9+DBlkat0Tdp/BlZ/N5Njxsag9dN3ZDnh2A7o672KdztpBZirC7dKlh8YllhM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1wkftwhdTGzlJFdrNzmlSIoB9F8smUol8qEyotKnXEi1mfSIx
+	cW6zodbSuqzOEpHfUOk5VKOSVdGFGKd90iZOm28jWweJ+f0P7sM3yJsd0m2BuTL6UIk=
+X-Gm-Gg: AR+sD134cW8yPud+DUPQ963FLJtO75hsA//HMCZVx83eegguZK202iZa63kopDtHsha
+	TZHme+fADFL+8DHwapxOIlOoluqQkQNb1bkR0OCtpb5nuIEA+GQMlM5UQtbR5CxUw9lNsSCF9MX
+	WT5z1IZv4HCRg7Yn1odbhJKev1L4oHUpxNy5PlWpLOocGxHB7ls5WO8eoJ4bnRG9SyPAl2PY3Kv
+	m173H3WeAaydPAD81x5A4n2fScHr8te9jdU/XDr9FT3NGOv1eB0DtWi7tJUTjTMPIUprbe0uPo+
+	lxxJTvAv/ebV4V4NFeMXCAEt0jIpY4ktzFQ9B3ZJ/60iMtMK0kSEnGOb+6GDi59Kf+RZ+kMYX/e
+	We59VcOiXYDYbb4ju3BE2fOtaiksvTRgtAgwwUjY09W3jgi940HgOw2xs0mUiIgOlAIkDL8niif
+	xbLbIVIyXecs+i3HVByo6eWxTfjjgl5dqfH7jt+g4HEq+ITjrxEvLQkWHFoHATb+VgxiGsukeaP
+	vOpYs6jSPnUBe9wnH+Q0yV9U5M=
+X-Received: by 2002:a17:90b:54c5:b0:38e:6aa7:68ad with SMTP id 98e67ed59e1d1-3957b1c5cc4mr1267082a91.5.1787089109181;
+        Tue, 18 Aug 2026 14:38:29 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3957fbba811sm122046a91.13.2026.08.18.14.38.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2026 14:34:11 -0700 (PDT)
-Date: Tue, 18 Aug 2026 17:34:10 -0400
-From: Justin Suess <utilityemal77@gmail.com>
-To: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
-Cc: akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org, 
-	bpf@vger.kernel.org, brauner@kernel.org, daniel@iogearbox.net, david@kernel.org, 
-	eddyz87@gmail.com, kpsingh@kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, matt@bobrowski.net, memxor@gmail.com, 
-	song@kernel.org, viro@zeniv.linux.org.uk
-Subject: Re: [PATCH bpf-next 2/3] bpf: Add user memory access kfuncs for
- linux_binprm
-Message-ID: <aoTMu0_CNLyLGh45@zenbox>
-References: <any3wCj66dWbwgwT@zenbox>
- <20260818082441.4091-1-tasos.papagiannnis@gmail.com>
+        Tue, 18 Aug 2026 14:38:28 -0700 (PDT)
+Message-ID: <17813f00c2c81cd2588672197cc6d4de619ca36b.camel@gmail.com>
+Subject: Re: [RFC bpf-next 1/6] bpf: turn bpf_reg_state->precise into a
+ flags field [NFC]
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Vineet Gupta <vineet.gupta@linux.dev>, ast@kernel.org,
+ daniel@iogearbox.net, 	andrii@kernel.org, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
+	john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Tue, 18 Aug 2026 14:38:25 -0700
+In-Reply-To: <20260814231945.3884596-2-vineet.gupta@linux.dev>
+References: <20260814231945.3884596-1-vineet.gupta@linux.dev>
+	 <20260814231945.3884596-2-vineet.gupta@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260818082441.4091-1-tasos.papagiannnis@gmail.com>
 
-On Tue, Aug 18, 2026 at 11:24:41AM +0300, Anastasios Papagiannis wrote:
-> Thanks for the review!
-> 
-> > Would it be better to handle that case transparently rather than
-> > requiring introducing a new kfunc / leaving that gap open for NOMMU?
-> 
-> > Either return an error or perform the copy from bprm->page[].
-> 
-> > Unless there's some reason I'm not seeing.
-> 
-> My understanding is that there is currently no way to use these kfuncs
-> on a NOMMU system. Although CONFIG_BPF_LSM does not directly depend on
-> CONFIG_MMU, as far as I can tell, no current NOMMU architecture provides
-> the required support to use them. For this reason even if I write that
-> code, this cannot be tested.
-> 
-> > It would also be better for portability across NOMMU / CONFIG_MMU
-> > systems (the exisiting kfunc is never registered, so a program using it
-> > would be rejected rather than able to handle the error).
-> 
-> As you suggested, I would propose to register those kfuncs
-> unconditionally, move the ifdefs inside those kfuncs, in the case
-> of NOMMU return an error (e.g. -EOPNOTSUPP) and allow the programs to
-> handle those.
-> 
-> Does this sound reasonable?
->
-Yes that does. It's a small niche anyway (I don't think a lot of people
-are using BPF and NOMMU anyway, and BPF_LSM && !MMU is unsatisfiable
-unless RISC-V or some other architecture gets JIT support in nommu)
+On Fri, 2026-08-14 at 16:19 -0700, Vineet Gupta wrote:
+> bpf_reg_state carries a single bool, ->precise. Other per-register boolea=
+n
+> properties exist (and more are coming), so convert the bool into a u8,
+> call it flags and give the property a name.
+>=20
+> =C2=A0 -	bool precise;
+> =C2=A0 +#define BPF_FLAG_PRECISE	(1U << 7)
+> =C2=A0 +	u8 flags;
+>=20
+> Both occupy 1 byte at the same offset, so the struct layout is unchanged.
+> ->precise was the last field, after ->frameno, and ->flags takes exactly
+> that slot, so the memcmp()/offsetof() based comparisons are unaffected:
+> every one of them stops at offsetof(id), offsetof(var_off) or
+> offsetof(frameno), i.e. at or before the field either way.
+>=20
+> That tail position is not an accident -- it is where fields live that are
+> compared semantically rather than byte-wise. ->precise is never memcmp()e=
+d;
+> regsafe() tests it explicitly, and an imprecise old scalar is a wildcard:
+>=20
+> 	if (!reg_is_precise(rold) && exact =3D=3D NOT_EXACT)
+> 		return true;
+>=20
+> PRECISE also takes bit 7 rather than bit 0, because it is the odd one out
+> among the flags that will share this byte: the others describe how a regi=
+ster
+> relates to its ->id set and are cleared as a group, while PRECISE belongs=
+ to
+> the register alone and must survive that clearing. Growing the rest up fr=
+om
+> bit 0 keeps a clear-the-link-bits mask from reaching it by construction.
+>=20
+> Reads go through a helper, since they are the common case and read better=
+.
+> Set and clear stay open-coded as the usual reg->flags |=3D / &=3D ~ bit o=
+ps.
+>=20
+> No functional change intended.
+>=20
+> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+> ---
 
-And when/if (big if) it does, they wouldn't even need this kfunc and could
-bpf_probe_read_kernel() bprm->page[] directly.
-
-So an error is best. 
-
-Justin
-> Thanks,
-> Anastasios
+Sorry for the confusion, what I intended to suggest is usage of bitfields,
+instead of carving out bits from the 'id' field.
+Let me read the rest of the series to see how the flags look overall,
+but looking just at this patch I'd suggest bitfields.
