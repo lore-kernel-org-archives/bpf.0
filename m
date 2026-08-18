@@ -1,123 +1,137 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE4FC284896
-	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 05:20:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45DCF126C02;
+	Tue, 18 Aug 2026 05:32:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787030428; cv=none; b=YEw0m3hoPzVjAeAkLJ7mUZB3d+Zj8dZeyldj6MM9fZtNR4mVe8tUu1a8CDEX0NTS3TV7dZ33nQf8pNsM2JpolPNJrgPJ2HiQTRZ2qrTEfRLE0uDKfaEIXwJ9ZxNyy8oUdPKVh34NvvH+uIbQ5TIMsixrnBu5OqQtx69Yc2hKVaw=
+	t=1787031143; cv=none; b=bzRbj83IvoJY7m1IBUTs+jvU0NV/ED7aiyWsFp8yXzJ+LkniEgOooiAfr89RN5vEZH2IQoQzVpReAnn8iAaE3OvUcdCgndU2be8Ljhsamz2HOMv5a3LivpXMl7x8Mhlg2vohojwlUSYaMzjzTBJN9bhizkXAIszd+oKaSCIcJMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787030428; c=relaxed/simple;
-	bh=H/zOlGcY83fmIIgH5EXSWiy0LGwiarK4zHNCO9l+iUk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uwUvXM045mV9l3zuzUbKO2c267rTEZkmFlP/wJ7B4QXRQjB33Y1+VYCaDu236xjLVgWhomQj0NuLfuNnU4thysbdZ34mS5KPRVAAHMKl+YMaELymJmGSDP6DoYdwYhDu1Iqkbqyo4o4eBMOJO9dTTJwwRO3x3euHXDT6lWwIbUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lDUk/LaN; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787031143; c=relaxed/simple;
+	bh=lzNLajtEZE6Kgrwuh4+EqFM++cNMoROubLVm8Jtrc4E=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=jTfXhhxNHZ/zEfWDjkJcOE1c2bs7xx+sJ1nEUSLecUlPFNcWVr3UF7v4Fxd+QGUF0aBi5qM+yKbNJAM1ehmjDNPyz9FQ/zOFNXsa+p0B/3GTdkhZ53LPi3N7KCnJthE5EiWerMp0IHi9DDfz+1LJsFB2kjV0zDDu8Hzsmb6gPRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m3tQkm2n; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lDUk/LaN"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-84874b52eabso5635767b3a.0
-        for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 22:20:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787030427; x=1787635227; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=guhfkRusufvBWD8H2or6jNYjgUQNUVh/3Ni9l2mmIoM=;
-        b=lDUk/LaNP85ZQHPwh3yhZnIyAIK2qwpQDuiwHUi6pPpUBJrI8jlKHZ61Wn1avakq5Y
-         syXI/33gY0uPb12SuAQF/Beu7WG3aUUkVFgpdJJJIgiDjAA2J4t4y8RuepBl4jGXUBY/
-         FFNbtjzJG0QYl7I6Az9FjsxQ9VvzXm2XynpnM1x/GX9gsvd9ADPSdQ85NSRWXQefCDJ+
-         HhKHjuMdiB3g0In4BzzZZeCgauNYkpsSzX6zK7TV47r+do3uxDrG3CoKOa7UjNircvbM
-         Iim8bLeG1lIORaNMcxdfy5FXrk5UV1No6t+oJnvhIxl5YixyZtlVXQbL4ZRBU3bhI0Nm
-         Iurg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787030427; x=1787635227;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=guhfkRusufvBWD8H2or6jNYjgUQNUVh/3Ni9l2mmIoM=;
-        b=ks6Uoxhg/Hc2v4g74G8sElSabZCFSJXrQRonua3FJquA0O0vgIG41jwHudQBatk/zC
-         BS5o5IFzSTVgvmUV1HVeY8byBgJfVWG1JK/+/SMvE41DB3qSUkN5NQAn85wyFKp7p1U+
-         LZ1xNYkRzUE+v4rNS36rvwljMfS3EfiY5P6/fukio+2oMSFHntchpg/7Ulzpo9ICLddi
-         Vo1k7OhoYioagNJ0F9yxkQe4UNVO77NW/VE10jgESqlM+c25/XdvV4vResmH+kbjM7Kl
-         MbDDqKdmrPLJWghHg+Qm+MEykoJJ3zgQ/fcpyLl3TpctDmHSyw8e6K7D/oCsjKNbYEU6
-         DiRA==
-X-Forwarded-Encrypted: i=1; AHgh+RpdNLRFBuiA+80Bc9hFZTFZ5r1sMflCR1TpC7UBrhqjtGXfRYxnXVR5DU+sb23j8nY/lU0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEkMF+AUOd1pBh8csh+z28GnA63yKblgK7ziEzqGOia1oxwNVg
-	5oKHqJyjk0MjKtya7Zr5ctj4Vn3RtNm7e7J/dpzv9VUo2ViQIKnAVEk0
-X-Gm-Gg: AR+sD1293nKY3bTRL9Li8kprJqEPIQzjINmIk8Zen4tLkWl0BuOV5Qx+96a5JOfnaj3
-	MKAMI9TtHwtJN/46WHZ7UnulBoB+ENf4i5J6oAB1IByfLN77kZ9QlJCBZn7CNftV5Up64graDKF
-	WlaQ2b3LYF5ANXEMFRl4nEndCA9xagMMwLen2qmPrz0R7PYU2pGIO92wKRt/n020aR59lWQ+amh
-	m+MjS32onNgmiPXnU7r3ZYN1x54cjZ7jwpvOfiY1s/vRWmKfBzw4zK9POn+CI2r9gzAbK6SQx5z
-	/Nkb+gdNhdDYOwtyqcH3ld/vRO3VFju1YJloBqr5wNNokHxao2hpnHfOxz6d01/x1xkQtaQgm2e
-	xh1CzLVAk0xYcRwh97NXbw7+HyKjyh/H3yXuzzOGsbmSAVLvNbQG9REI8DwO7q53szz4Pc5VIkP
-	yuSNqhv17TX2QP8zUDjFqKHTkeiZVP4R+M6AUA/Z0q8PbxFENmswLUTIJ3mSMtsijY4yKtTqNpf
-	Q==
-X-Received: by 2002:a05:6a00:4ac3:b0:82f:50cd:e586 with SMTP id d2e1a72fcca58-84fde001affmr34125452b3a.13.1787030427076;
-        Mon, 17 Aug 2026 22:20:27 -0700 (PDT)
-Received: from ancienth-X870E-Nova-WiFi ([125.186.72.2])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-851b6ff0e3csm1046621b3a.60.2026.08.17.22.20.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Aug 2026 22:20:26 -0700 (PDT)
-From: Daehyeon Ko <4ncienth@gmail.com>
-To: Lorenzo Stoakes <ljs@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	David Hildenbrand <david@kernel.org>,
-	"Liam R . Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	James Bottomley <James.Bottomley@HansenPartnership.com>,
-	Hagen Paul Pfeifer <hagen@jauu.net>,
-	Pedro Falcato <pfalcato@suse.de>,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] mm/secretmem: properly account locked pages
-Date: Tue, 18 Aug 2026 14:20:06 +0900
-Message-ID: <20260818052006.2387242-1-4ncienth@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260814-secretmem-accounting-v1-1-d2f8c677980b@kernel.org>
-References: <20260814-secretmem-accounting-v1-1-d2f8c677980b@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m3tQkm2n"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 019F71F000E9;
+	Tue, 18 Aug 2026 05:32:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787031141;
+	bh=9FMVXrty6AbTQ8HEy8w73hGEdOppBdD86P9xan4kkSk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=m3tQkm2nrHHprSxp/ulKVGFZRosqWUvXNoInSMtajkZFEis3LXhD7Tg3Fvpvjutpj
+	 jRfGuEEQjcdZfB/HJronIQ6V0Q1mWIWu+w7YnWt8BohCSP4Pm0Sw74OUEi5pQ/Angr
+	 QmexXST1bhIoTRdrTAm/DOcVPCshLrneHkO24uI5/j5ShsLZVNkp6jXyGIB0/wOwbL
+	 J/oYmn5vznzFQhcrGZPBPtj/NAxaViS4Wv7F0/gFQLyUALvZJ0K+tjdiQ9sa7EyImL
+	 h3kny95AXE7Ij2PBLl+ZD9XuH/5KxJX4+NLBV/5V7A7y5+5FvjBqjuycKkbZImb1S/
+	 e2SLr2eEDqi1Q==
+Content-Type: multipart/mixed; boundary="===============5640435612391008903=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <f6b6fdce69918619ab08600a81a10dc1b651cffd0621beeb0a62d992d01d51b7@mail.kernel.org>
+In-Reply-To: <84fad8bf849e48ea156e3e598eed8136e42385ff.1787027080.git.skb99@linux.ibm.com>
+References: <84fad8bf849e48ea156e3e598eed8136e42385ff.1787027080.git.skb99@linux.ibm.com>
+Subject: Re: [PATCH v12 6/8] selftests/bpf: Fixing powerpc JIT disassembly failure
+From: bot+bpf-ci@kernel.org
+To: skb99@linux.ibm.com,bpf@vger.kernel.org,linuxppc-dev@lists.ozlabs.org
+Cc: hbathini@linux.ibm.com,maddy@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,shuah@kernel.org,linux-kselftest@vger.kernel.org,stable@vger.kernel.org,venkat88@linux.ibm.com,yeswanth@linux.ibm.com,skb99@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 18 Aug 2026 05:32:20 +0000 (UTC)
 
-Thanks for the patch.
+--===============5640435612391008903==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-I tested this v1 on its stated base with an x86_64 KASAN kernel. The supplied
-selftest passed 6/6 in three boots. Additional fork/unmap and inherited-VMA
-mremap tests also passed.
+> selftests/bpf: Fixing powerpc JIT disassembly failure
+>
+> Ensure that the trampoline stubs JITed at the tail of the
+> epilogue do not expose the dummy trampoline address stored
+> in the last 8 bytes(64-bit) and last 4 bytes(32-bit)
+> to the disassembly flow. Prevent the disassembler from
+> ingesting this memory address, as it may occasionally decode
+> into a seemingly valid but incorrect instruction. Fix this
+> issue by truncating the last 8/4 bytes from JITed buffers
+> before supplying them for disassembly.
 
-One question: the inode stores the creator's user_struct, but the fault path
-uses the current task's RLIMIT_MEMLOCK.
+This isn't a bug, but could the subject use the imperative ('Fix ...'
+instead of 'Fixing ...'), and could the in-code comment and the
+changelog agree on why the trailing bytes are dropped - is the hazard
+that they cannot be decoded, or that they can be decoded into a
+plausible-looking wrong instruction?
 
-  secretmem_init_inode_priv():
-    state->user = get_uid(current_user());
-  __secretmem_account_pages():
-    page_limit = rlimit(RLIMIT_MEMLOCK) >> PAGE_SHIFT;
+> diff --git a/tools/testing/selftests/bpf/jit_disasm_helpers.c b/tools/testing/selftests/bpf/jit_disasm_helpers.c
+> index 3558fe10e28c..b291d934dd1a 100644
+> --- a/tools/testing/selftests/bpf/jit_disasm_helpers.c
+> +++ b/tools/testing/selftests/bpf/jit_disasm_helpers.c
+> @@ -179,9 +179,11 @@ int get_jited_program_text(int fd, char *text, size_t text_sz)
+>  	struct bpf_prog_info info = {};
+>  	__u32 info_len = sizeof(info);
+>  	__u32 jited_funcs, len, pc;
+> +	__u32 trunc_len = 0, disasm_len;
+>  	__u32 *func_lens = NULL;
+>  	FILE *text_out = NULL;
+>  	uint8_t *image = NULL;
+> +	char *triple = NULL;
+>  	int i, err = 0;
+>
+>  	if (!llvm_initialized) {
 
-With A limited to one page and B to four, A created the fd and passed it to B.
-B faulted four pages, after which A got SIGBUS faulting one page on a new fd:
+[ ... ]
 
-  CROSS_PRINCIPAL receiver_pages=4 creator_fresh_page=0
+> @@ -225,9 +227,30 @@ int get_jited_program_text(int fd, char *text, size_t text_sz)
+>  	if (!ASSERT_OK(err, "bpf_prog_get_info_by_fd #2"))
+>  		goto out;
+>
+> +	/*
+> +	 * last 8 bytes contains dummy_trampoline address in JIT
+> +	 * output on 64-bit and last 4 bytes on 32-bit powerpc,
+> +	 * which can't disassemble to a valid instruction.
+> +	 */
+> +	triple = LLVMGetDefaultTargetTriple();
+> +	if (triple) {
+> +		if (strstr(triple, "powerpc64") || strstr(triple, "ppc64"))
+> +			trunc_len = 8;
+> +		else if (strstr(triple, "powerpc") || strstr(triple, "ppc"))
+> +			trunc_len = 4;
+> +		LLVMDisposeMessage(triple);
+> +	}
 
-This seems to charge A's locked_vm using B's limit. Is that intended?
+This isn't a bug, but would #if defined(__powerpc64__) / #elif
+defined(__powerpc__) work here, matching how get_current_arch() in
+test_loader.c already detects the arch, and avoiding a second
+LLVMGetDefaultTargetTriple()/LLVMDisposeMessage() pair alongside the
+one in disasm_one_func()?
 
-Thanks,
-Daehyeon
+> +
+>  	for (pc = 0, i = 0; i < jited_funcs; ++i) {
+>  		fprintf(text_out, "func #%d:\n", i);
+> -		disasm_one_func(text_out, image + pc, func_lens[i]);
+> +
+> +		/*
+> +		 * Disabled JIT have zero func_lens, hence underflow
+> +		 */
+> +		disasm_len = func_lens[i] > trunc_len ?
+> +					func_lens[i] - trunc_len : 0;
+> +		disasm_one_func(text_out, image + pc, disasm_len);
+> +
+>  		fprintf(text_out, "\n");
+>  		pc += func_lens[i];
+>  	}
+
+This isn't a bug, but since 32-bit powerpc has no __arch_* tag and
+get_current_arch() has no case for it yet, would it be clearer to add
+the 4-byte arm together with the 32-bit enablement rather than ahead of
+it?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32100929603
+--===============5640435612391008903==--
