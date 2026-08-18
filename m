@@ -1,216 +1,209 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5C843769E7;
-	Tue, 18 Aug 2026 04:45:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CE7B25228C
+	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 04:46:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787028337; cv=none; b=d4CG7lvYrePBbZyCIagzeXEs83xr/OypxbvVrHfwY2O3yLtRIiGuZnObGqt7u6QE0uNz+jljAHzC1mS2VFrtVCgE1tHDyixUei5aOB++tEATgIS38sLyrVAtukpT9/z+IfUtan0Krfc52GNrIDzlW0r3cJ3M8mqkg3seLYMiAB0=
+	t=1787028371; cv=none; b=Wv9FxxXCMHbiiklUMtNgn94qes/e0AOSowJSfNccVZzSX93odWT1ZsLJtgIC2kqgHfja9jXPTuHJHw/NOOQ0AFGArfIap3Gq7c19p6k4eLR9g/tWTwMrBp+ltA4KF8JLU4C7qwJFLWHb8bWokQy2OumvD5AyspAOjJU/xvg5qAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787028337; c=relaxed/simple;
-	bh=5/DvxvEwvJWLlpNbVsdrDFY8Xsn/e7wV7y4aKTu4NYA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HST4Jabsp3dI1P9AIv45c9JcFJIS9BGpgpsyGTAsONwKE0CEcFpWCAi3kVN9tZFrbnqM+0QwL6FRvQZM3k122LjzsNeW8GKMcNFBoR+6hhSPyatOQ7NocQrPxT5wKTwlFk/Vp26cU9fGR8bAQN4BO+xgkdZqnVM2mn+zDUkhZTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=NXq3r9NS; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1787028371; c=relaxed/simple;
+	bh=TJtUnycmkFiaAj3mJhUcUQu15+2rN75KyCAhaJPj92s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QkhBT1PQASiPB23NqeTc9fkB3s+YxPmCEYkvcQCPhJwScgVf2V8wKW7hTXSE8nzx+UMxHNtyDdLsPCQWct9iNnb7rAnQO9tnx/zYaKW5yFKe4oVKVSdw4GrWalOG1EedygEuZRseO1lBMlKBYMQSclhV9K7h8aZG5/NlckYDVdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qur0/uU8; arc=none smtp.client-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="NXq3r9NS"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67HM2C6c2527979;
-	Tue, 18 Aug 2026 04:45:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=y5ydXHje6PqHCvFUZ
-	HFbkL4Mrbt+ZMSusvaRTitCHxw=; b=NXq3r9NSZSfA5jmVS99n9kL7HOtz8hL2K
-	TIkw1Cq8GTOXV/SsiLomEAYssrHimT6LDtlmUQ99sWJAiZzUeaGPrne6eHEBCF4O
-	JIiH38R1RzyWCYlLrqKugjt16ug7tk1vIAPz6DLHCKYVBlcxL8cTFjEFtdyTPFbf
-	YXvQGVPZUrNK6MwtomDIJp8vL3C4Xk4XqyxD+8H5AvtzvFq9xWgwfetHS0qpN4uQ
-	08xNYK75d12spelpOjwgwN4XA7sZeh6c7jMPi7cqUnT8QYExLtGkw5qs4FLSO3mf
-	fST+EGhEZ370iWemK1C2VTEltrHnNmraABFCdAec3a2lfgoxB9wMw==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4g2dhkwx9h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Aug 2026 04:45:16 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 67I4fI5G020824;
-	Tue, 18 Aug 2026 04:45:15 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4g34ng95hx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Aug 2026 04:45:15 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 67I4jBqb49676548
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 18 Aug 2026 04:45:11 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4B2AC20049;
-	Tue, 18 Aug 2026 04:45:11 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2A51A2004D;
-	Tue, 18 Aug 2026 04:44:57 +0000 (GMT)
-Received: from li-1cb9f04c-2ae1-11b2-a85c-a8a0a83790a8.ibm.com.com (unknown [9.39.17.69])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 18 Aug 2026 04:44:56 +0000 (GMT)
-From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-To: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc: hbathini@linux.ibm.com, maddy@linux.ibm.com, ast@kernel.org,
-        andrii@kernel.org, daniel@iogearbox.net, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
-        venkat88@linux.ibm.com, yeswanth@linux.ibm.com, skb99@linux.ibm.com
-Subject: [PATCH v12 8/8] selftests/bpf: Add tailcall verifier selftest for powerpc64
-Date: Tue, 18 Aug 2026 10:13:41 +0530
-Message-ID: <0a70cdb21d953c55cd2b39a1754190d7542af165.1787027080.git.skb99@linux.ibm.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <cover.1787027080.git.skb99@linux.ibm.com>
-References: <cover.1787027080.git.skb99@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qur0/uU8"
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-836f34a0ceaso12245587b3.1
+        for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 21:46:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787028369; x=1787633169; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=/3KS3sK3TH9J4fhtOAZRLOoGJUvvvE1x4mW89M2uoC4=;
+        b=Qur0/uU8wiFTK0U8YH8jeF6XASB5a8lK6nAcn72GH4450IJbVUNd4qwNLkaDpuQXQI
+         HUTnVxvlhOymmMo5pDhWclt9JihyAHzcED5T458/ao6tlsoMRQoL7FrKnczlJ/8RzJWM
+         YyAsCTb+B3O3gOOeTDCn2tZ3hBnsXmvK+nBMC0BoPmQccB5/BU9P8U0qWXVe9weM+Xjm
+         UohNIdbbTnGUPRpQ3v1sPrkrIGgApGp3BSHdTdYO6J0LPmeCH8LZdWvDkeYOzKiXvHSg
+         /f1Vr+EVzQ2282bBPNKU8jL+brhEPjBJnfkvS4HJGKVZPjSi4DiKiiCJ351bs2v4roHa
+         hUug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787028369; x=1787633169;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=/3KS3sK3TH9J4fhtOAZRLOoGJUvvvE1x4mW89M2uoC4=;
+        b=N8IPK79lm0Wlud9KY/mK+ndvUJBrEv3mfQ1LE8HS6TguuKVGMNUWCme1iMZpeRzZQD
+         8GqwyfiOzqtwxDwGg3+nMOD/f2ECIsWIKAeo7ftH9r9GeHSgj8qXUW/kEIYTqa8TMYbS
+         sdV54GWjzw4oLtuYQjKQN6Vg0mUlJZPBy6hxePV5udI2pq4PfjsZ9yAbhLjzl4kvGJho
+         J7EdA6BZmRw9lH+978Whxt0Kd2EceBeP1Dff6FoapTI6VSWCZCeiUTqKFulPgZQLR4pg
+         8Ix+K2scj0qJFdb0sxKEqFnHCPuhK8w4gjX3hzTPWPsavxOJA/sWQ9mh2PNIHJFs3o3m
+         nGsQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rroux4Y4F5CNEXMAMUsHJn4Vut7nqirpHgjaByJyfZ280zmsBjL/UYadnFT6yZhBTvv/Ew=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGXC6m+q8ZLtLMMrbU+bWOlUVFOeAEmY5RDN1NrUvyX2iVXIXo
+	UrzZpJdFKM+dQjZyXVSoGCNp6mC1vXAr7ETgJ5koj94Hkj7k2Tyw64aM
+X-Gm-Gg: AR+sD12dW/4/cmzADzwBMA+VOurs4FKgYRG9iFiXCv4Qt2KzqCTduKRyZos4viOL1pG
+	D6ydLGviRGMCMN7WUtUL1D6gjuM1NCWtKDYw5sJwJmhKfSHHFgHg6V/h3LhSMu0TQKPdq2MNVLH
+	N3oNWW5rCAginMdVfwZ9c7u6HH02lh2Sm3BT6S+iENn4yFp/pCkQ9EjqkRAJm1A7MTeNGU21vlC
+	6uVg2bACdaESWw3Z3PYLwvis5S/fDg80+NUqo8WzdTq7Fom180pp30D0h3jOiluil7c8jmVtLLg
+	BW7N7cU5UaJesNa5BNCAQ4g/d3Q+R0xks3qxxMMPsOCOSGdeVbrYp5Qibd55l4DXM0KZwlHpPo2
+	JRgBfOHcaWLQ7QTBOQdDIj+wAo1lYkjLxSYcZRrCwgmdkhphjrYKNSby0MQ+ImsOa0hRPa7vUM9
+	8+oNTwGUPJvEJ1uBlziMMS8h6gtE/HePfC4oLMs3sO8u2pCvSiFOmwBYlqCKitGSqNUSEu/5+My
+	0e7g1ZsFUKz5HqutzQeuzo=
+X-Received: by 2002:a05:690c:4f10:b0:81e:fc6c:452c with SMTP id 00721157ae682-841a09b13f9mr14965927b3.9.1787028368949;
+        Mon, 17 Aug 2026 21:46:08 -0700 (PDT)
+Received: from zenbox ([2600:1700:18fb:6011:f3e5:832a:1675:b570])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-84068075e00sm15870677b3.3.2026.08.17.21.46.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Aug 2026 21:46:07 -0700 (PDT)
+Date: Tue, 18 Aug 2026 00:46:06 -0400
+From: Justin Suess <utilityemal77@gmail.com>
+To: Xiujianfeng <xiujianfeng@huaweicloud.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Paul Moore <paul@paul-moore.com>, 
+	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, Xiujianfeng <xiujianfeng@huawei.com>, 
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next 0/2] lsm: give BPF programs a way to query
+ locked_down state
+Message-ID: <aoPXqkqJJ5a1J9JZ@zenbox>
+References: <20260815112041.1248855-1-utilityemal77@gmail.com>
+ <6ab57477-69f8-4c60-852e-58ce7ef25023@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODE4MDAzMSBTYWx0ZWRfX+LNFigaJ/w3d
- LFZFUnz8VckOHpKfFeDifPDQe5Q9KH070nU2b17yM9RMs6QmiRtwO6AvsfeZ/obe8Xp+AXxYWgL
- Y6xuvXHiKmiHRzhpn9qFR6VMJPk7ebzYLIhq8e5hWtC1VRKET9Z2IVDhiH3ThABiSAaSZDqwAEi
- 8WBd/pUrU40R3GwTOBN0nzKI+3BcxNGxdJNedu6H1rCXv6+BKEuB87dmlUq6BTRtzGPCWpoBKtE
- +PF0nkl1tCPP1zFCNef5rY9Kh7mpRjfjrCE6sjL8gfpb2glFpXnvUAPwmqr+tYOF65nyqAGGQ0s
- kH8utaM/0hPzqz3zJ1M6cbZ93hHqJZj8bXhbTecjGqpzv2dhAk5csbOsAJicERv8H3jnrjqUZB+
- HjXDXX6zVKSMiW0cOetGPdHfxQc55FVDmegQp9C83m1qjK8MULh2g+rhrglRnYjFnvSvUy1c+iL
- c+DbeD/CZiQYrQqTnAQ==
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODE4MDAzMSBTYWx0ZWRfX8irZF6mbjsCV
- Du13Q/rQiapMkXElrwABEI4w5R0lQY1oQvGRVUStg2KUJFvis0RQH2v4z2ztu1uP6kigtlJ2+2x
- mcv1Xuv/qkkWSlErmIAPMk0wZtrFhoc=
-X-Authority-Analysis: v=2.4 cv=JKkLdcKb c=1 sm=1 tr=0 ts=6a83e35c cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VnNF1IyMAAAA:8 a=YHohsJt5VkgNoF_SymIA:9
-X-Proofpoint-ORIG-GUID: YXIJL93hMLRDANGdMv4CyMqJmXIBTaOx
-X-Proofpoint-GUID: YXIJL93hMLRDANGdMv4CyMqJmXIBTaOx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-17_04,2026-08-12_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 bulkscore=0 malwarescore=0 priorityscore=1501
- lowpriorityscore=0 clxscore=1015 adultscore=0 impostorscore=0 spamscore=0
- phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
- definitions=main-2608180031
+In-Reply-To: <6ab57477-69f8-4c60-852e-58ce7ef25023@huaweicloud.com>
 
-From: Abhishek Dubey <adubey@linux.ibm.com>
+On Tue, Aug 18, 2026 at 11:47:55AM +0800, Xiujianfeng wrote:
+> +cc Nicolas
+> 
+> On 8/15/2026 7:20 PM, Justin Suess wrote:
+> > Howdy,
+> > 
+> > BPF programs can attach to the locked_down LSM hook and contribute a
+> > verdict, but they have never been able to ask the locked_down question
+> > themselves: there is no way for a program to invoke the hook and learn
+> > whether a given operation is locked down. (i.e be a caller of
+> > security_locked_down rather than a consumer).
+> > 
+> > Today the state has to be fed in out of band, for example userspace
+> > reading /sys/kernel/security/lockdown and writing the result into a
+> > map. That is a time-of-check/time-of-use race: a security_locked_down
+> > verdict can be raised at runtime, so the cached answer can be stale
+> > by the time the program acts on it.
+> 
+> Adding the bpf_security_locked_down() kfunc does not actually solve the
+> TOCTOU issue you mentioned. Even after bpf_security_locked_down() is
+> called, userspace can still change the lockdown state via /sys/kernel/
+> security/lockdown.
+>
+This would put it at the same raciness level as any kernel caller of
+security_locked_down.
 
-Verifier testcase result for tailcalls:
+More importantly, the sysfs file is not equivalent to calling the
+hook. /sys/kernel/security/lockdown reflects only the lockdown LSM's
+static level.
 
-# ./test_progs -t verifier_tailcall
+security_locked_down() is a generic LSM hook and other
+implementers of locked_down: including BPF LSM programs attached to
+that hook (which is already supported) can contribute per-reason,
+dynamic verdicts that never appear in sysfs. The composite answer is
+only obtainable by invoking the hook, which is what this kfunc exposes.
 
-#618/1   verifier_tailcall/invalid map type for tail call:OK
+> I fail to see the necessity for a BPF program to know whether a specific
+> operation is locked down. The test case provided in patch 2 does not
+> clearly demonstrate a scenario where this is required. In my view, the
+> verdict should happen exactly where security_locked_down() is currently
+> invoked.
+>
+Elaborating a bit more on the use cases:
 
-#618/2   verifier_tailcall/invalid map type for tail call @unpriv:OK
+1. Being able to know if features LOCKDOWN_BPF_READ / LOCKDOWN_KPROBES is
+   locked down without a userspace hop / polling an LSM-specific interface
+   for error handling.
 
-#618     verifier_tailcall:OK
+2. Use with the BPF LSM implmentations of security_locked_down, without
+   Lockdown even in the picture.
 
-#619/1   verifier_tailcall_jit/main:OK
+3. A BPF LSM can restrict access to arbritrary sensitive resources based
+   on the security_locked_down verdict.
 
-#619     verifier_tailcall_jit:OK
+> Furthermore, based on the current implementation of Lockdown, integrity
+> is the prerequisite for confidentiality. It is designed to be coarse-
+> grained and does not support per-operation lockdown. The fact that LSM
+> BPF can already hook into locked_down seems to violate this foundational
+> model, this is is analogous to the bitmap implementation [1], I’m
+> considering whether we should restrict BPF from attaching to the
+> locked_down hook. Nicolas, what are your thoughts on this?
 
-Summary: 2/3 PASSED, 0 SKIPPED, 0 FAILED
+You describe a Lockdown-specific model, why should other security models /
+implementations of the same hook be made to have the same semantics?
 
-Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
-Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-Tested-by: Yeswanth Krishna Tellakula <yeswanth@linux.ibm.com>
----
- .../bpf/progs/verifier_tailcall_jit.c         | 76 +++++++++++++++++++
- 1 file changed, 76 insertions(+)
+The point of the LSM hooks are to be generic.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c b/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
-index 48fa34d2959f..880c4636b000 100644
---- a/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
-@@ -91,6 +91,82 @@ __jited("	popq	%rax")
- __jited("	jmp	{{.*}}")		/* jump to tail call tgt   */
- __jited("L0:	leave")
- __jited("	{{(retq|jmp	0x)}}")		/* return or jump to rethunk */
-+__arch_powerpc64
-+/* program entry for main(), regular function prologue */
-+__jited("	nop")
-+__jited("...")                          /* ld 2, 16(13) absent with CONFIG_PPC_KERNEL_PCREL */
-+__jited("	li 9, 0")
-+__jited("	std 9, -8(1)")
-+__jited("	mflr 0")
-+__jited("	std 0, 16(1)")
-+__jited("	stdu 1, {{.*}}(1)")
-+/*
-+ * load address and call sub() via count register
-+ *
-+ * Address materialization differs between PCREL and non-PCREL kernels.
-+ * Skip the address generation sequence and verify only that the call
-+ * target is loaded into CTR before branching.
-+ */
-+__jited("...")
-+__jited("...")
-+__jited("...")
-+__jited("...")
-+__jited("...")
-+__jited("	mtctr 12")
-+__jited("	bctrl")
-+__jited("	mr	8, 3")
-+__jited("	li 8, 0")
-+__jited("	addi 1, 1, {{.*}}")
-+__jited("	ld 0, 16(1)")
-+__jited("	mtlr 0")
-+__jited("	mr	3, 8")
-+__jited("	blr")
-+__jited("...")
-+__jited("func #1")
-+/* subprogram entry for sub() */
-+__jited("	nop")
-+__jited("...")                          /* ld 2, 16(13) absent with CONFIG_PPC_KERNEL_PCREL */
-+/* tail call prologue for subprogram */
-+__jited("	ld 10, 0(1)")
-+__jited("	ld 9, -8(10)")
-+__jited("	cmpldi	9, 33")
-+__jited("	bt	{{.*}}, {{.*}}")
-+__jited("	addi 9, 10, -8")
-+__jited("	std 9, -8(1)")
-+__jited("	lis {{.*}}, {{.*}}")
-+__jited("	sldi {{.*}}, {{.*}}, 32")
-+__jited("	oris {{.*}}, {{.*}}, {{.*}}")
-+__jited("	ori {{.*}}, {{.*}}, {{.*}}")
-+__jited("	li {{.*}}, 0")
-+__jited("	lwz 9, {{.*}}({{.*}})")
-+__jited("	slwi {{.*}}, {{.*}}, 0")
-+__jited("	cmplw	{{.*}}, 9")
-+__jited("	bf	0, {{.*}}")
-+/* bpf_tail_call implementation */
-+__jited("	ld 9, -8(1)")
-+__jited("	cmpldi	9, 33")
-+__jited("	bf	{{.*}}, {{.*}}")
-+__jited("	ld 9, 0(9)")
-+__jited("	cmpldi	9, 33")
-+__jited("	bt	{{.*}}, {{.*}}")
-+__jited("	addi 9, 9, 1")
-+__jited("	mulli 10, {{.*}}, 8")
-+__jited("	add 10, 10, {{.*}}")
-+__jited("	ld 10, {{.*}}(10)")
-+__jited("	cmpldi	10, 0")
-+__jited("	bt	{{.*}}, {{.*}}")
-+__jited("	ld 10, {{.*}}(10)")
-+__jited("	addi 10, 10, {{.*}}")    /* offset depends on CONFIG_PPC_KERNEL_PCREL */
-+__jited("	mtctr 10")
-+__jited("	ld 10, -8(1)")
-+__jited("	cmpldi	10, 33")
-+__jited("	bt	{{.*}}, {{.*}}")
-+__jited("	addi 10, 1, -8")
-+__jited("	std 9, 0(10)")
-+__jited("	bctr")
-+__jited("	mr	3, 8")
-+__jited("	blr")
-+
- SEC("tc")
- __naked int main(void)
- {
--- 
-2.55.0
+(I have use cases that do rely on that hook; though I'm embarrased to
+speak on it and it is probably abuse: I use this hook to temporarily
+disable hibernation in BPF)
 
+Justin
+> 
+> [1]
+> https://lore.kernel.org/all/20250728111517.134116-1-nik.borisov@suse.com/
+> 
+> > 
+> > Add a bpf_security_locked_down() kfunc that calls
+> > security_locked_down() and returns its verdict, letting LSM and
+> > syscall programs query locked_down state at decision time. Out-of-range
+> > reasons are rejected with -EINVAL before dispatching the hook, and the
+> > kfunc is refused to programs attached to the locked_down hook itself,
+> > which would recurse into the dispatch. (how the obvious recursion issue
+> > is addressed).
+> > 
+> > As this is the first pure-lsm-hook kfunc, add a new file security/lsm_kfuncs.c
+> > to host it.
+> > 
+> > This kfunc has no reliance on / relation to the Lockdown LSM, despite the
+> > similar naming. It is an LSM-agnostic caller of security_locked_down, and
+> > Lockdown just happens to be the only in-tree subscriber to this hook at the
+> > moment.
+> > 
+> > In fact, the test environment does not rely on CONFIG_SECURITY_LOCKDOWN at
+> > all, and uses a BPF implementation of security_locked_down.
+> > 
+> > This kfunc can cause notices to be printed with kmsg if the Lockdown LSM is
+> > enabled due to this line in security/lockdown/lockdown.c:
+> > 
+> >    pr_notice_ratelimited("Lockdown: %s: %s is restricted; see man kernel_lockdown.7\n",
+> > 				                 current->comm, lockdown_reasons[what]);
+> > 
+> > Patch 1 adds the kfunc, patch 2 the selftests. This is based on bpf-next/master, but
+> > applies cleanly to the lsm tree.
+> > 
+> > Justin
+> > 
+> > Justin Suess (2):
+> >    lsm: add bpf_security_locked_down() kfunc
+> >    selftests/bpf: Test bpf_security_locked_down kfunc
+> > 
+> >   security/Makefile                             |  1 +
+> >   security/lsm_kfuncs.c                         | 84 +++++++++++++++++++
+> >   .../selftests/bpf/prog_tests/lsm_kfuncs.c     | 28 +++++++
+> >   .../testing/selftests/bpf/progs/lsm_kfuncs.c  | 34 ++++++++
+> >   .../selftests/bpf/progs/lsm_kfuncs_fail.c     | 26 ++++++
+> >   5 files changed, 173 insertions(+)
+> >   create mode 100644 security/lsm_kfuncs.c
+> >   create mode 100644 tools/testing/selftests/bpf/prog_tests/lsm_kfuncs.c
+> >   create mode 100644 tools/testing/selftests/bpf/progs/lsm_kfuncs.c
+> >   create mode 100644 tools/testing/selftests/bpf/progs/lsm_kfuncs_fail.c
+> > 
+> > 
+> > base-commit: d82ebfc685c91e7f5623a8be949da1ddb767420b
+> 
