@@ -1,89 +1,76 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58D6D448B86
-	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 09:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF5D39A7EF
+	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 09:56:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787046569; cv=none; b=qz7MQ2eO2oNrg2PgsAbr19MzLv+xsUsaB9cNQKk3vgtBaDpgf+yIFEjtDF005Y3rgxLLUh7CrLmAihV5IaYTikwy/0YbLFdHaU0arAP/2GpNWHyBHj0tPcM3r7DtPCAhOizMLysq/kcd5HyOsFtD+ZUygZSSGbon3B2SanZzGPQ=
+	t=1787046995; cv=none; b=i7W1yGxMywvb1JTzs8unraGLNtHDbNGrXHOYS4EBGW0RsWTXlVvrkdsLGMBCw7DOdvL/8WmhGbwwn/NNZ9ErN1bdLxLNqZ+vn8as3pCP+bw3Po1cK7/4+ktMEVBW4qv2eJfX4MLG2fq9gznWbIuUl7lB+rRTktZZihRL5XN9L4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787046569; c=relaxed/simple;
-	bh=x+hUVSpLmnGOBRbrUs8t/YAarM8tfurNyZaOcnSMAtk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qDPSVb+kASbWMYDv//5jXQH1QggSHAt61POVyt2lZnEkfbUlyXT4L0A3qCkYvBtJcFQSUYRxjrWKWFWxmqz1ZmgmTCQwZO3xhK9GXKoc8bYnQohHmlsFKtFXUF9RUNj7gTR897Am8JSb9C9G++PefDq2MYK81zC3/ifM16xyyu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ig3oTXHF; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787046995; c=relaxed/simple;
+	bh=7ibTghDomdFK+AuRMk66RXL/ZL3+I70CKoequsSTJ6Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QKFeVV4L/bOhHAacpXx6BNNogQXLCsBIad6cWv1OE9kY43v05UWDZJ7tddeWXGnagK/Ae0SxskSQiEB0wajKyUSFQx75+KZ7WcZJnQ+RopXA3YuxaN9pPKLxMIU+oXc4Ob4SP5wKm7GKYvmtTsnyCDy7LZqDruf366CcpJMgEAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=swine.de; spf=pass smtp.mailfrom=swine.de; dkim=pass (2048-bit key) header.d=swine.de header.i=@swine.de header.b=Fw7sjZAb; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=swine.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=swine.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ig3oTXHF"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-84a2c90e383so633886b3a.0
-        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 02:49:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=swine.de header.i=@swine.de header.b="Fw7sjZAb"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-47f84023916so4207305f8f.3
+        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 02:56:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787046568; x=1787651368; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=NVZqfaL1cDu6QLngalu7WE4kGe47MKpcY+uRtreSbGM=;
-        b=Ig3oTXHFnuk+O/rPOeaLzDl+jyEagcFcJxOiOmB8kHgos0tZrh4g+TCVtc+BWfHDLo
-         wKZcM/K98SvKWpkUJ1gOa/cV/Ud5X/2/AKieyZdkoXVzepfiN/VaJVeKvJqrmcQnygXT
-         abSB1bsAT6kgsBmvKUaiSX+lSS2boh31n5tzXR7i6xId4s8kbPJd4U/ggD1EKlM51XD7
-         xBuA+6LAxr90IWswayf0RPGRgo+HSPmZGhq3bMUJ4zu8sMFsED+9p/ZAZPJdejNN04om
-         o8OzNA3Pjm45VRjM676u98/+6fsnR5grzG0DusVMkdr3brrz1uxFLNCOuMT43ipJP1Zi
-         4XrA==
+        d=swine.de; s=google; t=1787046992; x=1787651792; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=8fXTVcuANg8HG1Ctn5Fy42Q/TSh5wfRVcnMZYRYvZPA=;
+        b=Fw7sjZAb/Psmzxp+ewF4YVgm5lyY/FyXUmT6DTcnsR/Rf3yOrmq4oFDXOo2GQUfV6A
+         A5IKQpnp4AM+uvXRmHWuwxMmSxZqTmh/kvchNpbmjV+3ynAlKdsy94lePD0cZ121x8ZA
+         k1s2nSsYQWFh5K7Ji24+Qri7141s1VyZGu3IfeMJ6VmeeynPgmjVvmoK0PqpU2CnkkvG
+         +ZCJeuUcnnG2tGWpK56467QDJc4IN5hRPrFPcx9sndsl5FFHtFyUAjRTgE5PDUHCyoOS
+         rHINOzHP0a4dCeHlx9hmDxn/GiBHcCV4T+1ixjEUKsrFL9C/8YRYDqm7381dmUyEfhXX
+         VeZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787046568; x=1787651368;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=NVZqfaL1cDu6QLngalu7WE4kGe47MKpcY+uRtreSbGM=;
-        b=tErtCENyArOVeMT4GfFzoad4j5bE4uSxhn6s7WtYsb2QqBrVV7rEYHgmnciWAe2u6S
-         r+Rh54cmHI8B0apa7+sBltj2c3wssWELfy8igOBRCTTGwmlAUz4+2MNe2jEn//2ouLnF
-         r0jYv+yWraJlR56OAbXYz53ovCZdcmKFw0328aGQU4b8ZaIGXiuNar02pyu2T3sMWFNw
-         FfPaK2VqbvnGCwY3RCnb6vavxaofBEvTx4URv34W28sOsdiAWR02xu/HbNfTR245dNr1
-         UKP9LLpdbMj8GVssLZPoAxzFaIHy0NsKXzE8ojXgcKHF1SJYZjNV1hVDAgzGXa/fWe66
-         gsJQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rpn5Won0jVysNaazm0uQuUIb1fe/pH8wONd+KK7wscbcQmjeqzaP9iTdqeM7FyW6Yyjn+Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIbU1ziASywYmUAWAKMIocEuXzb8CTBOKg9fKTalBdbFwDGLd6
-	DJbVVcoDHwNpFsGHtinSofBPglxva72QHhDzAzO9Fm17vWFqvrhflLw2
-X-Gm-Gg: AR+sD11bdQ5b1WH2Lct/JhEo3bIlHKuFg11yBzHqIHhU5hzn2UHm5Tq+N1QsGiLg6Dl
-	59Sf3WoUtJFmvV7gMICctNa503nxC+1zGkrkvHm5l94guWHTtuVtayjGhC0TrExz4LXPI+Ks5SP
-	vyWxb10nGBM0swRccuhyvgiyEq0W6powDTgYUc1crclDNg9/FTvSlbLfLuUgXTnu5GY4W5hdKF0
-	/xLGnURUJ5VC2b521NBVj8mvloJMDG2RsFB2JxdAKWjakVB9IlwkB+AmqZFyx1oJsPFGotbWZqH
-	YxmNQeSpA6bRhSqWEXON4Y7as4gwmggXyX9esb8S8sdW3KcP3Ggz/+haEg6wPp+VZKoyyPYGANm
-	G9FSOu4sKcc7+DRuyFiQ4JTRJ72LdBDw7xoieQtVxG+ynLDiVAHKTNXQ0uBPDm4mK3jt5JiFiHc
-	E6x9IQTd0WNE0RTOgPRw3Y9i9HPGT4+T9ze23+NA1WkVuvZnjBz/fUUPgADbocvu/VwwqQJ3zZI
-	c92Hy11FKj5gtsIKtSxj+5h5GjO5jZhF08o2/Fnw12H22JK4zGJ
-X-Received: by 2002:a05:6a00:10cf:b0:847:9dd7:2683 with SMTP id d2e1a72fcca58-851bc380e98mr4882490b3a.9.1787046567622;
-        Tue, 18 Aug 2026 02:49:27 -0700 (PDT)
-Received: from secrnd-cstp.tailb7f510.ts.net ([125.131.91.97])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-851b6f8b057sm1310191b3a.29.2026.08.18.02.49.22
+        d=1e100.net; s=20251104; t=1787046992; x=1787651792;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=8fXTVcuANg8HG1Ctn5Fy42Q/TSh5wfRVcnMZYRYvZPA=;
+        b=nbkuHqNq5wgr0Qli7nZ0TU+6wAx9ihNaFOMFyCTixa5YdruPppwf8KGsQqaw2qSFeP
+         THYg4GEbLT/JF4lbM7XtbEMo1d7Mz5/SuxtRnhoVjQ7tUmjbbAcuj2bY9+Fs0jM+3TpR
+         LRKFD4AikYPqCaNFBfnLOA4m0RfWIgWiYY+9NSwplToFs4V7epfMJWrdI+KNiSHBGevX
+         aUAThbjuiEqTpjDipgRhk8nf4E+gmQMwUatwFHQc9T0/t/5UpNeYGAmqjA/Uvs+7mW8/
+         qDlRyX1qFHsJfyhXurCuyMbFkiDJfjhRU+08udZtlKZLO5xfo6G+7IIwQgUjWS1tCDp4
+         L6VA==
+X-Gm-Message-State: AOJu0YxU9MN5Qty0ghwmIWRwofj7KDc+dBsDig5ATLVgTRFhokFA8qhT
+	zH3jHTczHCTQdsq4nOv0P+iK7iq9whvtkEagZmJhhD0JXMVaaq5rvcTyYaGGRINNeqWvyAjB4v3
+	XlOpnRZuO9A==
+X-Gm-Gg: AR+sD10enivzM7KuFz3DaN5edOvIHRQ5mKm2BlT4u8SOe13Pd+gBj0U2bbrJM3l1jVF
+	uaglBeDR8ZZoG7CtIAce/HzSgzjo8kALkGg3V/OzHSCricq1SnBFlt0jKwTZWZ7DL2twJLmPPKD
+	fli51iGB4Z1Z9GzIxETkBQxP0CGx5hN5kgf3sbkHqLSPCdq22i0StLzOHiAvuhet97VO2YSNbLn
+	fkZcfHNHjS+AF6CTopYfH45YVFZ9DrClV/BtDXiQAHiSi/St26cD8r1gvVQW+ZFT99AVan8fsgc
+	rRibTVdj0c4XA0N3ebmAbVWnLN1hf2PvhDBJ124tdIp37WHp+7ZZQT4vXZ5Hfz1WAgM6ucZ2bKv
+	46pQBsUyY7enPH0ItuOf7dhP4ZPyInGd9Wmddm7sjlDlXU9lvGBXQgnBMsvPbXHv1zBSACn7uJS
+	L2yM4xoFdioiIeefxkoHYhGIar7ctzrhFJnxWnaR7mC9xdL2xiRyqbR1I7zVPJXGQdNin2i3OTU
+	oJb8qY5HkUw+A==
+X-Received: by 2002:a05:600c:848e:b0:499:8156:cd3f with SMTP id 5b1f17b1804b1-4999fb3f78bmr120150495e9.8.1787046991876;
+        Tue, 18 Aug 2026 02:56:31 -0700 (PDT)
+Received: from christian-gtr9.tailscale.swine.de ([2a02:6b67:d11b:4200:508:9a18:a3aa:3270])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-482a5b81748sm10780123f8f.37.2026.08.18.02.56.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2026 02:49:26 -0700 (PDT)
-From: Sanghyun Park <sanghyun.park.cnu@gmail.com>
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Sanghyun Park <sanghyun.park.cnu@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Pu Lehui <pulehui@huawei.com>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2] bpf: Fix stack out-of-bounds write in cgroup link update
-Date: Tue, 18 Aug 2026 18:48:51 +0900
-Message-ID: <20260818094851.2941245-2-sanghyun.park.cnu@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <c065e1e3-7d78-4098-901d-7cf257f3ce0e@linux.dev>
-References: 
+        Tue, 18 Aug 2026 02:56:31 -0700 (PDT)
+From: Christian Simon <simon@swine.de>
+To: bpf@vger.kernel.org
+Cc: Christian Simon <simon@swine.de>,
+	ast@kernel.org,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@kernel.org,
+	tj@kernel.org,
+	yonghong.song@linux.dev,
+	stable@vger.kernel.org
+Subject: [PATCH bpf] bpf: guard classic uprobes against private-stack corruption
+Date: Tue, 18 Aug 2026 10:55:39 +0100
+Message-ID: <20260818095545.314358-1-simon@swine.de>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -92,15 +79,121 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hello Leon,
+Eligible BPF programs use one private stack per program and CPU.
+bpf_prog_run_array_uprobe() uses migrate_disable() to keep an
+invocation on one CPU, but another task can still preempt it and run
+the same program on that CPU. The second invocation then reuses and
+can overwrite the first invocation's private stack.
 
-Thanks for the review.
+Protect each real program invocation with the existing per-program
+recursion context. When the program is already active on this CPU,
+account for the missed invocation and skip it. This matches the
+private-stack protection in bpf_prog_run_array_sleepable().
 
-> Seems not a good choice to use 'bool check_cap_net_admin' here.
->
-> Better to factor out a helper to check CAP_NET_ADMIN first?
+Skip dummy_bpf_prog before acquiring the recursion context because its
+active pointer is NULL.
 
-I tried to minimize the code changes and avoid introducing another helper, but
-it seems that your approach is cleaner than this version. 
+Fixes: 7d1cd70d4b16 ("bpf, x86: Support private stack in jit")
+Closes: https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/issues/3056
+Cc: stable@vger.kernel.org
+Signed-off-by: Christian Simon <simon@swine.de>
+---
 
-Let me try that way in v3, thanks!
+This is my first contribution to the BPF subsystem. I reproduced the
+failure described in the linked report and would particularly appreciate
+review of the recursion-context handling.
+
+I have a reproducer, that this patch fixes, I am also unsure if this is
+something that should be part of the selftests.
+
+Tests: https://github.com/simonswine/beyla/commit/20c9912a02c5d5924c992faf7ee353c7d71c9fa0 
+
+
+The analogous uprobe-multi path appears affected but is not addressed by
+this patch.
+
+
+ include/linux/bpf.h | 33 +++++++++++++++++++++++++--------
+ 1 file changed, 25 insertions(+), 8 deletions(-)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 7719f6528445..11e3d7f00543 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2572,12 +2572,20 @@ static inline void bpf_reset_run_ctx(struct bpf_run_ctx *old_ctx)
+ 
+ typedef u32 (*bpf_prog_run_fn)(const struct bpf_prog *prog, const void *ctx);
+ 
++#ifdef CONFIG_BPF_SYSCALL
++void notrace bpf_prog_inc_misses_counter(struct bpf_prog *prog);
++#else
++static inline void bpf_prog_inc_misses_counter(struct bpf_prog *prog)
++{
++}
++#endif
++
+ static __always_inline u32
+ bpf_prog_run_array(const struct bpf_prog_array *array,
+ 		   const void *ctx, bpf_prog_run_fn run_prog)
+ {
+ 	const struct bpf_prog_array_item *item;
+-	const struct bpf_prog *prog;
++	struct bpf_prog *prog;
+ 	struct bpf_run_ctx *old_run_ctx;
+ 	struct bpf_trace_run_ctx run_ctx;
+ 	u32 ret = 1;
+@@ -2635,15 +2643,30 @@ bpf_prog_run_array_uprobe(const struct bpf_prog_array *array,
+ 	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
+ 	item = &array->items[0];
+ 	while ((prog = READ_ONCE(item->prog))) {
++		/* dummy_bpf_prog has no recursion state. */
++		if (unlikely(!prog->len)) {
++			item++;
++			continue;
++		}
++
++		if (unlikely(!bpf_prog_get_recursion_context(prog))) {
++			bpf_prog_inc_misses_counter(prog);
++			bpf_prog_put_recursion_context(prog);
++			item++;
++			continue;
++		}
++
+ 		if (!prog->sleepable)
+ 			rcu_read_lock();
+ 
+ 		run_ctx.bpf_cookie = item->bpf_cookie;
+ 		ret &= run_prog(prog, ctx);
+-		item++;
+ 
+ 		if (!prog->sleepable)
+ 			rcu_read_unlock();
++
++		bpf_prog_put_recursion_context(prog);
++		item++;
+ 	}
+ 	bpf_reset_run_ctx(old_run_ctx);
+ 	migrate_enable();
+@@ -3208,8 +3231,6 @@ static inline bool has_current_bpf_ctx(void)
+ 	return !!current->bpf_ctx;
+ }
+ 
+-void notrace bpf_prog_inc_misses_counter(struct bpf_prog *prog);
+-
+ void bpf_dynptr_init(struct bpf_dynptr_kern *ptr, void *data,
+ 		     enum bpf_dynptr_type type, u32 offset, u32 size);
+ void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr);
+@@ -3538,10 +3559,6 @@ static inline bool has_current_bpf_ctx(void)
+ 	return false;
+ }
+ 
+-static inline void bpf_prog_inc_misses_counter(struct bpf_prog *prog)
+-{
+-}
+-
+ static inline void bpf_cgrp_storage_free(struct cgroup *cgroup)
+ {
+ }
+-- 
+2.54.0
+
