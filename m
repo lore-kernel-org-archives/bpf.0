@@ -1,136 +1,133 @@
-Received: from mta1.migadu.com (out-106.mta1.migadu.com [95.215.58.106])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFF9927FD76
-	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 21:03:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B35F3306744
+	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 21:25:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787087016; cv=none; b=D8Qc8Z1RHbRZHqHZgbS+4xtbSU3aBajoUBIaO9hs5wDeSqsPWKrPCRBepyEvDZR951zRHcIcRpkAYBzu9C+D3FwTC11DpF3JoVa23qs1wd6rO4B8hIqWEm1YSw5WukXtdNalWNMXcqBo9HQVDrb+tiXygWukYABONt3xgsgYLnY=
+	t=1787088314; cv=none; b=LzVg/q1fVMo99/D1CvOI7vUooCqUhAfD9hB5XQjJb4chpESNUuC0G6GSKEvmTIONNUrYCcleFf6V+xhs+8v/aHrMWoZUFw+gE7+sGBUAUcDT9Ly6xBzOQmVayGGdT2EJhMxveRpvXum00951lLaUgQ8f0pXDdcBqHDKndPBmwG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787087016; c=relaxed/simple;
-	bh=0AGz8ClWhv/8k8q18axKvNzjLqFvBGOkv5QBv+ymZqQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J9TNrPGjP1CeqNM1Mi2pXCRhtVz9guo2+126+hDC4N0gL5G0UlrN938HWTKf8lOft8s7QHhuRPZw7rh/grFb4B8iOnixmKLJNQN0Zd9z4wJJG3OKt4wL7+SKJXJGjz0BV4yTIhWPuZAAo/q1y4OBDIAyvv9D9ru5SlARHV4jqqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=m01nSxuI; arc=none smtp.client-ip=95.215.58.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787088314; c=relaxed/simple;
+	bh=r2FgQ/HdyGi2HS8tZDe+weZ55AOvx8Nyoa5GiLqke4o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FQNrCO4RXbMO0MbGd5j9v6Msl9FLRvE3KvKIEbDR/oOGLODztO82ucfWdCCmqgnHtUCyUWmLonpzyL4Uk9AgNWBoA8zBT82n7CmU/tr0VZkTo0D3fTETayzP1dJRytCfA92rIi3k5bLl+3N/PnT7wf4QAOaax4kAQ2Lu8MIt+w8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mcyd15CF; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="m01nSxuI"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=0AGz8ClWhv/8k8q18axKvNzjLqFvBGOkv5QBv+ymZqQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787087011; v=1; x=1787691811;
- b=m01nSxuIjPkWl9aySf3YUJoeN12QU3BxhmbCBRTTyz2ztOwgfZ42SRqhIEfm/q1+nrqhnOzN
- XaiA7J4T4rMmlkM4HHCeZs80URnf4XjwFwVbD4RDHbaAsVYti8L/VUxFxfuqYla8NySsD09emq5
- PLsE3Hhpa92CSz3uX8uVXQE4=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [IPV6:2a03:83e0:1251:27:17dc:c6a5:7074:ce30] (2620:10d:c090:500::7:86e7)
-	by smtp.migadu.com with ESMTPS id b3773563f98e6be2;
-	Tue, 18 Aug 2026 21:03:31 +0000
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <1f5fa9db-0051-403a-a2e9-44ee20592148@linux.dev>
-Date: Tue, 18 Aug 2026 14:03:21 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mcyd15CF"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c966b9ee9cbso181297a12.1
+        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 14:25:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787088312; x=1787693112; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=LMyxz9jOaZnEGXaOhUkxWJff/1PqbJKX6RH8c8vpkrw=;
+        b=Mcyd15CFWjDM19CCjAwPe/Qgh1jXWxAWcUPtomWTI2dBTDQ2wqpMylXMdZjTnmXyAT
+         xDW3aml5r8PjpER54TE6adYO7OYmSL+zzK6veTXGhvbfmVx/IxJQwYpcUYyogzsukGgi
+         NGGdg+dvFmJ5TNXs/iTxHn92//U3lDPwJ9WeLYOqMbsrCfRvvA5n8VcCzxKKYlGgxpVV
+         3ehS8SCyXmypSm5c4DgBPWwzp+HvdY263O09//znRWmtuBnS7gVbgZkcPVySi0DqDP8L
+         df2sxAuv34PmF4oISf6MMY8d52ItIEGLB3ocj5HLNftNvx09aRGVuUZ7yGzQk0BxjBgL
+         QH0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787088312; x=1787693112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=LMyxz9jOaZnEGXaOhUkxWJff/1PqbJKX6RH8c8vpkrw=;
+        b=SYrQmdDB0TIHniyS14Y9T8VQoDfFnWEM4WqvesiqLAkpJAWLIu+EETFHOWKEJQjIzB
+         MlD/pgwRr2yl4qCoMa8EP0yMEq9csRUhUwT//ZaBwc411Yr8mV5OChamse2pbpJGm/n3
+         G/8rRy2VWvmGvRWD565O2uQhM8sm60dOGp2aqNM/y+BF0FffOSEk6Ooxqrhim2sWa93Z
+         lyR+J0b4sSyOf53TKKg26bl9hA1vskaVpK13/+t+G+D+8BjsOybb97kM/19oKJLCMAka
+         QbWX8JRBhPAo06cZb8r+vMwjX3794ZHwwQCNUerF1MASVgaZ/YhwnWkj6EtIy2Z24uxa
+         3fvw==
+X-Gm-Message-State: AOJu0YwWhY7L6SxmNYeSbtvrYTKTz9n5b+D9zFTZGtRuG1QL8cVqXAHE
+	DvEBmf9JizAeKdEXaDQuveG4GT5h+iK935a3a6j5ubDZ2Yuwc2MjcwenuuR6aIZ2+Xk8rA==
+X-Gm-Gg: AR+sD13GxFaoYpWcabbAjUgV8eJrV9S/6rlQyh4Zf6arBsOtW85+QPq2bfySf1qZPmQ
+	c7dQSzh7gV4yHXZ7w3ucJCbMGDrcKsULEDFj7zLJf9oF7uOuSAfXtAGDfBbhGXdEcwOnKXUTOfk
+	AwMBgxDlFP2oFlMcHxnssjL2lzeJgNLCt4E9ck8+z05eR0VwK6AIJT3JX3kYIcf/YUtyJ5GsQYp
+	mzraMo2enZfr1SevOy3709ChTXNLWpKaMDe70lnuwvKoTf7wxrA0LF6T/j5rKQuGrvN6jWFZyPi
+	dTtHY5BgWVFYNHF4nSwGea1Ko6d7iT6m/TfqhaWWINbtVPnI05qdUSJw3JiT5HC6r3HeLluywvz
+	QK1Dm4tYuMISt+E9zHMg4upZayb1uBQHJFnZECBBwCv4ebS7zhg2+8Jqi8QaM2SsFmmDuRC5ayp
+	1YkCApc42Kr2SS+TONy4SS6Ph7s+94a5EzrvkF170h9zx6jprUDRw8R/x8txFQ8ir+WvT5P4K4n
+	X9bDOTtpMPbMBQnjS5hFul7SYk8j2FXmh+43OzZBA==
+X-Received: by 2002:a05:6a21:4c03:b0:3c9:1c1f:f516 with SMTP id adf61e73a8af0-3ccff029346mr1238565637.19.1787088311749;
+        Tue, 18 Aug 2026 14:25:11 -0700 (PDT)
+Received: from fedora ([202.47.63.86])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-326793ca665sm21941057eec.8.2026.08.18.14.25.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Aug 2026 14:25:10 -0700 (PDT)
+From: Muhammad Bilal <meatuni001@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	linux-kernel@vger.kernel.org,
+	Muhammad Bilal <meatuni001@gmail.com>
+Subject: [PATCH bpf-next] bpf, verifier: Invalidate dynptr slices on skb_ext COW reallocation
+Date: Wed, 19 Aug 2026 02:24:48 +0500
+Message-ID: <20260818212448.60816-1-meatuni001@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Cover mixed arena and
- stack atomics
-To: Eduard Zingerman <eddyz87@gmail.com>,
- Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260816-bpf-next-038-mixed-atomic-v1-v2-0-4644c1886dbc@mails.tsinghua.edu.cn>
- <20260816-bpf-next-038-mixed-atomic-v1-v2-2-4644c1886dbc@mails.tsinghua.edu.cn>
- <cd62cd53be9bcea2d5b63fef8eece815f5095103.camel@gmail.com>
- <123a014b2b4ecd7d19cbdfe62c62d994e612b6f0.camel@gmail.com>
- <ac19d435-4c92-42c8-9db1-2db1ab854c3c@linux.dev>
- <ba901e5268dc739711b9a5e1d9405be6953e35f1.camel@gmail.com>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <ba901e5268dc739711b9a5e1d9405be6953e35f1.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 8/18/26 12:56 PM, Eduard Zingerman wrote:
-> On Tue, 2026-08-18 at 12:35 -0700, Vineet Gupta wrote:
->> On 8/16/26 4:36 PM, Eduard Zingerman wrote:
->>> On Sun, 2026-08-16 at 16:17 -0700, Eduard Zingerman wrote:
->>>> On Sun, 2026-08-16 at 10:56 +0000, Yiyang Chen wrote:
->>>>> Add a verifier test with one atomic RMW instruction reached through
->>>>> PTR_TO_ARENA and PTR_TO_STACK paths. The verifier must reject the
->>>>> shared instruction with the existing incompatible-pointer diagnostic.
->>>>>
->>>>> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
->>>>> ---
->>>>>    tools/testing/selftests/bpf/progs/verifier_arena.c | 39 ++++++++++++++++++++++
->>>>>    1 file changed, 39 insertions(+)
->>>>>
->>>>> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
->>>>> index b241bbcf54a8a..b22bab33301ab 100644
->>>>> --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
->>>>> +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
->>>>> @@ -637,6 +637,45 @@ int non_arena_ptr_add_to_arena_ptr(void *ctx)
->>>>>    
->>>>>    #endif
->>>>>    
->>>>> +static const struct bpf_insn addr_space_cast_insn = {
->>>>> +	.code = 0xbf,
->>>>> +	.dst_reg = BPF_REG_7,
->>>>> +	.src_reg = BPF_REG_7,
->>>>> +	.off = 1,
->>>>> +	.imm = 1,
->>>>> +};
->>>>> +
->>>>> +SEC("socket")
->>>>> +__description("arena and stack atomic at the same instruction")
->>>>> +__failure __msg("same insn cannot be used with different pointers")
->>>>> +__arch_x86_64
->>>>> +__load_if_JITed()
->>>>> +__naked void mixed_arena_stack_atomic(void)
->>>>> +{
->>>>> +	asm volatile ("					\
->>>>> +	r1 = %[arena] ll;				\
->>>>> +	r6 = r10;					\
->>>>> +	r6 += -8;					\
->>>>> +	r9 = 0;					\
->>>>> +	*(u64 *)(r6 + 0) = r9;			\
->>>>> +	r7 = 8192;					\
->>>>> +	.8byte %[addr_space_cast];			\
->>>> I'm going to fix this to:
->>>>
->>>> 	r7 = addr_space_cast(r7, 0, 1);			\
->>>>
->>>> as in the test case above.
->>>> Waiting for CI [1].
->>>>
->>>> [1] https://github.com/kernel-patches/bpf/pull/13325
->>> A...and it requires another exception for GCC-BPF:
->>> https://github.com/kernel-patches/bpf/blob/bpf-next_base/ci/vmtest/configs/DENYLIST.test_progs-bpf_gcc
->>>
->>> Ihor, it's a third time GCC-BPF strikes this weekend.
->>> What do people think about downgrading it to may-fail until the
->>> DENYLIST decreases to something reasonable?
->> While bpf-gcc is improving, slowly, we can in parallel do alittle better
->> on test hygiene as well. In this case by correctly bracketing the tests
->> with _BPF_FEATURE_XXX.
-> Yes, that's what I ended up doing. Should have paid attention to the
-> #if .. #endif bracket used by the textually preceding test.
-> Sorry for lashing out.
+When bpf_dynptr_from_skb_ext() is invoked with BPF_SKB_EXT_F_CREATE, it
+calls skb_ext_add(skb, SKB_EXT_BPF). On cloned or shared SKBs, this
+performs a copy-on-write (COW) reallocation of skb->extensions via
+skb_ext_maybe_cow(), dropping the reference count on the previous
+extension buffer and freeing it if the count drops to zero.
 
-No worries and I can sympathize with frustrations when someone's s*it is 
-not together and others have to suffer
+However, bpf_is_kfunc_pkt_changing() does not include
+KF_bpf_dynptr_from_skb_ext. As a result, the BPF verifier skips
+clear_all_pkt_pointers(), leaving previously obtained PTR_TO_MEM
+dynptr slices pointing to the old extension buffer marked as valid.
+A BPF program can subsequently dereference the stale slice pointer,
+resulting in a Use-After-Free (UAF) read/write on freed slab memory.
 
--Vineet
+Fix this by:
+1. Adding KF_bpf_dynptr_from_skb_ext to bpf_is_kfunc_pkt_changing() so
+   that clear_all_pkt_pointers() is executed, invalidating any active
+   dynptr slices across the COW reallocation.
+2. Updating __bpf_skb_ext_store_bytes() to use skb_ext_add() instead of
+   skb_ext_find(), ensuring that shared extension buffers are properly
+   COWed before any byte mutations.
+
+Signed-off-by: Muhammad Bilal <meatuni001@gmail.com>
+---
+ kernel/bpf/verifier.c | 3 ++-
+ net/core/filter.c     | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 7aa47342dc65..4b584ec6ef2d 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11243,7 +11243,8 @@ static bool is_kfunc_bpf_preempt_enable(struct bpf_kfunc_call_arg_meta *meta)
+ 
+ bool bpf_is_kfunc_pkt_changing(struct bpf_kfunc_call_arg_meta *meta)
+ {
+-	return meta->func_id == special_kfunc_list[KF_bpf_xdp_pull_data];
++	return meta->func_id == special_kfunc_list[KF_bpf_xdp_pull_data] ||
++	       meta->func_id == special_kfunc_list[KF_bpf_dynptr_from_skb_ext];
+ }
+ 
+ static enum kfunc_ptr_arg_type
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 11bb0d236822..a9a164738389 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -12290,7 +12290,7 @@ int __bpf_skb_ext_store_bytes(struct sk_buff *skb, u32 offset,
+ 	if (unlikely(flags))
+ 		return -EINVAL;
+ 
+-	ext = skb_ext_find(skb, SKB_EXT_BPF);
++	ext = skb_ext_add(skb, SKB_EXT_BPF);
+ 	if (!ext)
+ 		return -ENOENT;
+ 
+-- 
+2.43.0
