@@ -1,201 +1,92 @@
-Received: from mail-ej2-f10.google.com (mail-ej2-f10.google.com [74.125.228.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38615D531
-	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 14:05:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4A2046E01A;
+	Tue, 18 Aug 2026 14:07:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787061924; cv=none; b=PLHMZlzIrhsDRAb8QniKPFitS1H6ECHufcXvIQxl/YAhhLMM80ClkuET4X8w/L3S0u5EyVfZhZQgfJaX8GY1vaJCvkIvxPxWVaq5rBUg6gurXFloAQJJpNA4AUWT7rYmJfp8RMvTfD384dvqbTa+AnhyR+MuL/5bYlEzoT0Tbm4=
+	t=1787062046; cv=none; b=MPMm8z7ZimYmde+8j7KD1fxmNwbh0UTwlUbr4DNeev30ZCdzxVNomDEMbwoeTCClAUvMgigiFY8yRiyZxh4//c3wXosvYiLWrzd77yeueRgo2pbThbrAnsiRqTu8crLhGXnPOlMywFTH1bQOi+/hS7mKgxImrEZHZgfnzlT3wyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787061924; c=relaxed/simple;
-	bh=6lN7JRMhV++fUWBRY/mOyEZ6HBCxjfX02lNtSVCMpUg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=CO/97Zy+sJuGdB91JcS4sM76sFppk1MelZZmiVeY/W8PyeF1+qEsofj4Zbt4quqXQZx6JVgDGKqX1CJvV0rehkiwevKETfQ/EytV1AjylOYIGdM6OhWTjE93OK25vhNMdNqyu+gCEvZPQJLTDVVxJbSiza5DROWpiqDpp34kFHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hWnAAPQv; arc=none smtp.client-ip=74.125.228.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787062046; c=relaxed/simple;
+	bh=dukS9we1zfBE/bi3Cep9OXodE2ksoGA1ZCmmQe2dLk4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=rK6bnGSb42zqHtq/ETmQfD8KaK+I+tKFx91XhT8MNoXP9M2hDqt4P71xshYN1uiwhyklfhJjiF+/zsaMQupnGgqDp0MDz0LloL0ZBRqTjLYyjnFM8HX7radA3NkXUgn3uz6HlQc1QBQn+UX9PLyIVK9Ib0Q3rGl18nk/iwxDJjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XM8deTdP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hWnAAPQv"
-Received: by mail-ej2-f10.google.com with SMTP id a640c23a62f3a-c2142244006so35530166b.1
-        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 07:05:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787061921; x=1787666721; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=8J8uVRc1aTCENx69srR/YmAYw9UpjNQQND8eHx6fKtQ=;
-        b=hWnAAPQvsn8q4ieYhxBLS0l2dlDwcusBC6NyPuLYLeULqSOZEP7S052MJiyCjTBpuG
-         7kYCgpwVN1exOwGGYy5ym0Dd3Wd8BPEbAVXvyLyIsSaMNAo2VG8Ndghf9Q1XmD/B2bxA
-         /2lLyfglwM3x91nRW+zJnkcJSjNtGSa9/HYtWqBdpJXcaynD8ln7HHPCHtAb8uZ8msIS
-         H8VXxSvbMBgJTbi6jGQg9scKcFkfuslB42UxkNPq2Gk1mPu4/PBCUAMwMxQNgzug/ZUA
-         wAhTVwDCwYSV3b21LNYCafNtq2LnAgDu9DQm7lRWpWwpjp26wxC5wMm2jKmfBW5NzV9F
-         cSOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787061921; x=1787666721;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=8J8uVRc1aTCENx69srR/YmAYw9UpjNQQND8eHx6fKtQ=;
-        b=Y4n908MlZEPxz2WWKkrjYZaoBdIwTIqKtcnABP4jiZPzP5oHlqXTr4CpTHQ6GFA1hG
-         GXuMa/QvNwcqcer2SkTL+DxLLYKV5QmVbnqHeVJfmz30oIgxhbLTWmI5HszvnN4pRhPh
-         ONpfoavgvS5JKZnk0r/Zkbz8CfjbaX/p2+orQprq56VtoW+/hQJO3MUaBwMshMpNP/Da
-         dUKvRdNXN55FZHFaHCYqmIjzTd3pWBBkW5D165Nhtr8atWvb7/ugGBpYVErxHgQ5AcZ7
-         UWm8dMq4jXtMrrsV/Pl7BLpL5pDJFgrN8VRS//VnDlvUqZAt+41kxJexlTZmmG0s34MB
-         h7Xg==
-X-Forwarded-Encrypted: i=1; AHgh+RraaoSYAgH/OXIi/F6Rm38Kcqu1fElox2Uv8jE3SRMR737S6Kxg+ojXV/tUn16clnxK32Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzZ45pXoSkxA81pQoPPd4jfhswP1TzEra+Djaepkmyyz4Qi8+Y
-	GJ0zJNjN3ZXFvqSCNjWp1WOWoasNkJ0ZbvVCajFJ3ZREChFADNAxz1Wl
-X-Gm-Gg: AR+sD10sJhW5vGChkYeQJg/QixXlaQKfUfRl5jyfzda2FZGT+MXI7fFKEicDh2HwOoW
-	DtJfORghXS/nOeKkEPkPBJCLRYiGgCYPyhzLTsV/Fdy4b4wsJIkF94RYg3vKpkzETTnL2hqDJKH
-	Z67nQ8OAVvxjNrBNexeDOOE/iyXcEbOpgkVpTeTKOA49otvPZ2yNMB4AaJEHkMc1QZI+UolLa75
-	Q5wk4Xvc9/JiYA8MWR3rOCto2j3xIHZDoK4eaOiD0BENAA2kaJSbawBlpnqiXhDYjQLsS4LhNJd
-	WpkJWfL0RCxcW3IKlNXU4kbDAnPaCbR+/MELueTQUEP+XseIM66jTuRzGCV2uMGbn4Tp+cYLb46
-	4QgdoBOcTIhNaBiPZK5yMa3AdnJyP2tVtnuwoPbaHt0+teZAfy1K/1gtg/anltXjZvtyu8e5sHv
-	u09hb4O9ow4BD5g9q/7jT/eeSxswdxoaO6OkO4+BZj8iZ7FmGb8SbgrBjN76KX1zEDt3Ip4DKEU
-	ggEYUVFUe1zAV5IwHl8ioPKQCE+PH2n31FcuP9x+QBUu1ufDtDHkXRsyViBRVVL9VMwcr7MhnMB
-	4qrId5v0owMSgRNk7itGll3ikSU=
-X-Received: by 2002:a17:906:c147:b0:c16:785:cfb6 with SMTP id a640c23a62f3a-c218d9ba609mr329965666b.3.1787061921093;
-        Tue, 18 Aug 2026 07:05:21 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2187d269dbsm144722766b.7.2026.08.18.07.05.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Aug 2026 07:05:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XM8deTdP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E32B71F00A3A;
+	Tue, 18 Aug 2026 14:07:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787062044;
+	bh=RkiZEuVoOaLw2cPfbZU3c3W1s+jX+eTd2R4YVQanf7U=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=XM8deTdP1ST5bAnV2mCZXvq3QQTv2G0GzY479fdy6toYeeUQGqxlLM5GKjudj80nQ
+	 lJOoYXNp6SybTTMxkNSDwE4BC+4v83CbANyZdhnXiJKnZO/o0DclkZ/suF4vXNvudu
+	 25kMcO3+JbM+m/HW7PWBUpBl+jE8rj4LkJNDxA680LBMfijw8Xgk0aydz9TbH9O/vB
+	 XjwpzFYP09G1dRaXQib4d289oGUgpjCG+TIUykuexC90ev0O04d3Z8p6uHu+wLOARi
+	 A6KJu4ynhYFsYFUdmepVDeuAXlrZwgnKPXAMKcTx8HFWDOrqmdLHlDJNexIY9SyHFh
+	 P9x1sP1exGuwA==
+Content-Type: multipart/mixed; boundary="===============2716527946889949584=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 18 Aug 2026 16:05:20 +0200
-Message-Id: <DKS4KWIT8C5I.2THOLN7FKRRJT@gmail.com>
-Cc: <loongarch@lists.linux.dev>, <linux-kernel@vger.kernel.org>, "Vincent
- Li" <vincent.mc.li@gmail.com>, <bpf@vger.kernel.org>
-Subject: Re: [PATCH v1] LoongArch: Fix __smp_mb__{before,after}_atomic()
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Tiezhu Yang" <yangtiezhu@loongson.cn>, "Huacai Chen"
- <chenhuacai@kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260817035908.460-1-yangtiezhu@loongson.cn>
- <3103b3b4-5c0d-ed87-2e15-31a4d2289ec5@loongson.cn>
- <DKS3YCAMWONO.2NVVH8IPARH7Y@gmail.com>
- <48ade10d-dd1f-ac6f-e827-d76a81183486@loongson.cn>
-In-Reply-To: <48ade10d-dd1f-ac6f-e827-d76a81183486@loongson.cn>
+MIME-Version: 1.0
+Message-Id: <9b5c48df2b9e1f49191a459c822608751240e2243ae0cebb96bae0939037aadc@mail.kernel.org>
+In-Reply-To: <20260818130510.3110054-1-rppt@kernel.org>
+References: <20260818130510.3110054-1-rppt@kernel.org>
+Subject: Re: [PATCH] x86/bpf: make arch_bpf_trampoline_size allocate from EXECMEM_MODULE_DATA
+From: bot+bpf-ci@kernel.org
+To: rppt@kernel.org,ast@kernel.org,andrii@kernel.org,bp@alien8.de,daniel@iogearbox.net,dave.hansen@linux.intel.com,eddyz87@gmail.com,mingo@redhat.com,memxor@gmail.com,song@kernel.org,tglx@kernel.org
+Cc: emil@etsalapatis.com,hpa@zytor.com,jolsa@kernel.org,john.fastabend@gmail.com,martin.lau@linux.dev,rppt@kernel.org,yonghong.song@linux.dev,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,x86@kernel.org,olsajiri@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 18 Aug 2026 14:07:23 +0000 (UTC)
 
-On Tue Aug 18, 2026 at 3:50 PM CEST, Tiezhu Yang wrote:
-> On 2026/8/18 =E4=B8=8B=E5=8D=889:35, Kumar Kartikeya Dwivedi wrote:
->> On Tue Aug 18, 2026 at 3:28 PM CEST, Tiezhu Yang wrote:
->>> On 2026/8/17 =E4=B8=8A=E5=8D=8811:59, Tiezhu Yang wrote:
->>>> When testing the BPF selftest "sudo ./test_progs -t timer_lockup", the=
-re
->>>> is a kernel lockup and panic:
->>>
->>> ...
->>>
->>>> With this patch, the lockless "store-before-load" ordering is enforced=
- by
->>>> the DBAR instruction. The BPF timer_lockup selftest was stressed for 5=
-000
->>>> consecutive loops on a physical LoongArch machine without encountering=
- any
->>>> further lockups or warnings:
->>>>
->>>>     for i in {1..5000}; do sudo ./test_progs -t timer_lockup; done
->>>
->>> ...
->>>
->>>> diff --git a/arch/loongarch/include/asm/barrier.h b/arch/loongarch/inc=
-lude/asm/barrier.h
->>>> index 4b663f197706..adfe343dfa65 100644
->>>> --- a/arch/loongarch/include/asm/barrier.h
->>>> +++ b/arch/loongarch/include/asm/barrier.h
->>>> @@ -57,8 +57,8 @@
->>>>    #define __WEAK_LLSC_MB		"			\n"
->>>>    #endif
->>>>
->>>> -#define __smp_mb__before_atomic()	barrier()
->>>> -#define __smp_mb__after_atomic()	barrier()
->>>> +#define __smp_mb__before_atomic()	__smp_mb()
->>>> +#define __smp_mb__after_atomic()	__smp_mb()
->>>>
->>>>    /**
->>>>     * array_index_mask_nospec() - generate a ~0 mask when index < size=
-, 0 otherwise
->>>
->>> Hi all,
->>>
->>> To address the soft lockup while avoiding the performance overhead of
->>> executing two separate instructions, I think there is a more elegant
->>> way to fix this directly in the BPF core helper:
->>>
->>> We can replace atomic_inc() and smp_mb__after_atomic() with a single
->>> atomic_fetch_add() in bpf_timer_cancel(). This consolidates the logic
->>> into a single native atomic operation with full ordering, which not
->>> only guarantees the store-load order to eliminate the deadlock but
->>> also improves the performance for weak memory model architectures.
->>>
->>> Any thoughts on this approach?
->>>
->>> ```
->>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->>> index c18f1e16edee..ee2b3a4dcc05 100644
->>> --- a/kernel/bpf/helpers.c
->>> +++ b/kernel/bpf/helpers.c
->>> @@ -1591,9 +1591,7 @@ BPF_CALL_1(bpf_timer_cancel, struct bpf_async_ker=
-n
->>> *, async)
->>>            */
->>>           if (!cur_t)
->>>                   goto drop;
->>> -       atomic_inc(&t->cancelling);
->>> -       /* Need full barrier after relaxed atomic_inc */
->>> -       smp_mb__after_atomic();
->>> +       atomic_fetch_add(1, &t->cancelling);
->>>           inc =3D true;
->>>           if (atomic_read(&cur_t->cancelling)) {
->>>                   /* We're cancelling timer t, while some other timer
->>> callback is
->>> ```
->>>
->>> I tested the above diff, the BPF timer_lockup selftest was stressed
->>> for 5000 consecutive loops on a physical LoongArch machine without
->>> encountering any further lockups or warnings.
->>
->> There is a full barrier in both cases. I don't know what performance imp=
-rovement
->> will be achieved by changing this.
+--===============2716527946889949584==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+>     x86/bpf: make arch_bpf_trampoline_size allocate from EXECMEM_MODULE_DATA
 >
-> We performed benchmarking using UnixBench on a physical LoongArch
-> machine, the UnixBench score is different (amadd.w + dbar < amadd_db.w).
+>     Jiri Olsa reports slowdown of tracing_multi benchmark that allocates huge
+>     number of trampolines [1].
 >
-
-I mean, this function is already quite heavy. We have multiple fully ordere=
-d
-atomics (refcount bumps/drops, xchg(), etc.) spread across the operation. D=
-o you
-observe any measurable speedup in the throughput of this function?  The sec=
-ond
-question is whether timer cancellation is really frequent. In practice, I d=
-on't
-think that is the case.  The actual hrtimer_cancel() in itself is heavy and
-waits synchronously for the callback to finish.
-
-I'm not opposed to it or anything, I just don't think it's worth it in this
-case. If the latency of cancel is a problem there are other bigger opportun=
-ities
-to pursue than this.
-
->> Don't you need to fix the lowering for
->> smp_mb__after_atomic() anyway? It's used in several other places in the =
-kernel.
+>     The slowdown caused by extra protection changes in execmem_alloc_rw() and
+>     execmem_free().
 >
-> The LoongArch architecture-level fix for smp_mb__after_atomic() is
-> a fundamental bug fix that will be pushed separately to the LoongArch
-> tree. This BPF-layer change is intended as a generic, cross-architecture
-> performance optimization.
+>     With ROX caches enabled, all execmem allocations except EXECMEM_MODULE_DATA
+>     are ROX after the allocation. execmem_alloc_rw() temporarily sets them to
+>     W+NX and execmem_free() resets them back to ROX.
 >
-> Thanks,
-> Tiezhu
+>     The only user of bpf_jit_alloc_exec_rw() is x86::arch_bpf_trampoline_size()
+>     that only needs a temporary writable buffer in the modules address space.
+>
+>     On x86 executable memory and module data are constrained to the same
+>     address range, so x86::arch_bpf_trampoline_size() can directly use
+>     execmem_alloc(EXECMEM_MODULE_DATA)
+>
+>     Replace the call to bpf_jit_alloc_exec_rw() with a call to
+>     execmem_alloc(EXECMEM_MODULE_DATA) in x86::arch_bpf_trampoline_size() and
+>     drop bpf_jit_alloc_exec_rw() helper.
+>
+>     Reported-by: Jiri Olsa <olsajiri@gmail.com>
+>     Link: https://lore.kernel.org/all/an8r7EODLIL-bZM3@krava
+>     Fixes: f0334294a428 ("bpf, x86: make sure allocation in arch_bpf_trampoline_size() is writable")
+             ^^^^^^^^^^^^
 
+The Fixes tag references commit f0334294a428, which does not exist in
+this repository. Should this be:
+
+  Fixes: 5bf02dbf39fa ("bpf, x86: Make sure allocation in arch_bpf_trampoline_size() is writable")
+
+That commit introduced bpf_jit_alloc_exec_rw() and the performance issue
+being addressed here.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32142507111
+--===============2716527946889949584==--
