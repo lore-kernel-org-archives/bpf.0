@@ -1,143 +1,185 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D68E53A6F09
-	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 10:09:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95101339B3D;
+	Tue, 18 Aug 2026 10:29:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787047773; cv=none; b=lEPPr0i4d6rDR7z4aqE25qB8bodWNwEi2A8OgAlUDVX1R4Ckno7DsDIjvyu40mrA2r33LuprcSc+U7YwEscSsvM3yxHbkcndTPmHBAhbjybEpJEZ36IR0a54eeHX5pvuMUMWaetMOBLfHaqRv3CuAcnDpuzyKaspxk0PKZX1l4Q=
+	t=1787048988; cv=none; b=Yu/5h26mQSl2zZYSpJR6aEHDPy9AzbO0OdL05OtWnp58g8eaUCMgPIXbuusm8sicHMqSRN9p2vmTpx3sDhplhk13fewowUIUie5URLU35rsXIvfDNNPlJ9Jf1snC/kl57camplmtuJ6PKuxodJM9P3xk05M5S0Nfp8zAvbfXLQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787047773; c=relaxed/simple;
-	bh=oUtS/TCIKFn5IBaGN4iPozeEGcywqoxmOsEXGslPwfQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=rL7z6RZXybjXVImZi7HQDQrU3guZAsxNOfuPWwbqrrheBy/HQzyZhf8qbsxhDHYEPK49tIfVrBBoCqK8fNxoe84wvPCWAnds/7ojdZ2fx3WwrIPB5PM9HUmlh/vHJGdGEvFs/en011LwA2+pwxA8cuJXqlTeu5O+8dd9ExVuPwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FEJvZJY1; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787048988; c=relaxed/simple;
+	bh=IkGa6xqKFM5x7wT1EwhGFPFaIGs9Gn9uxpjtq8no2A0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Qw9rnQa81cGwRWZQ7mFA8YXRn6XNgxpOmqezE3Z12+KN22g4DH3DSlPg011gPrRTUabe2JGMXGrxJ1b5pgB5VB1OWXaFM59zrEXTH3pMcLzdeXiX00RFlmhljiTmc3nf7xfrlAz2IqCoo8Vcht92M5E9l9tLOvrXYaZoUkFEk4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NuFqqhx/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FEJvZJY1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 062EC1F000E9;
-	Tue, 18 Aug 2026 10:09:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NuFqqhx/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D781A1F000E9;
+	Tue, 18 Aug 2026 10:29:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787047769;
-	bh=JlRhsI3dSE/l1DKEQhH/NQ3ob4asPJSZDrsA+LHbnG0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=FEJvZJY1V/279HjViRyNbOJ7zjvsEGPRFi5kdTcoSSYvzuUJcMwEKgolyQjxOdH5B
-	 5kvphtV8O3adQq2SBkkF1h9X0fxC/ATVPkYNweOzge/KP6RsNGQDvNXK6QwnGdj2tI
-	 vHopL/wMWGaiwaa6C+GJ+9+222m2rYFOYT2bcvYO/xuUzCBAq7o2Gg6pCMQp7X5Zpd
-	 yUuAh30ilju2btPEQbSRgFpD3/tgcqeqeBsHmgSM2GyY5JU1jc738VgqD2KaobJ7Vk
-	 1wCrs5m1arY8Fvz0nMnNkwFRA3AMkFC2MmJQ5IENOJ0jeLq5tGZzv3fLPi77kogEwE
-	 s9/PxDz/HqAqA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf] bpf: guard classic uprobes against private-stack
- corruption
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Christian Simon" <simon@swine.de>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260818095545.314358-1-simon@swine.de>
-References: <20260818095545.314358-1-simon@swine.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 18 Aug 2026 10:09:28 +0000
-Message-Id: <20260818100929.062EC1F000E9@smtp.kernel.org>
+	s=k20260515; t=1787048987;
+	bh=YGBu95KxEYL60/6Z19Vi2hF5fBbivoB9n1qwKiIoQCA=;
+	h=From:Subject:Date:To:Cc;
+	b=NuFqqhx/OBpG4enp+eYRdbfn7ghsLQThetOxvPIFUTslDtl7sQEqYSRncFJjSNLME
+	 tHvpuXUaGEtJTshEQmEvEVrUELhr+x1sNnlmdx1UCiFIaPIE+IrKfWyl3o7MTFzBMb
+	 Jar4dMZ3WjHgaLLQO6WO7Ja9zmMVR1kt1OEmVkuHHF5RR0Q86DvDqiAmw6LwjmBi5B
+	 h4E2Lg6wzH9kFsEDnzkC1wRwo6KnPdQ5vLIlZJlxGBOkPwXICi7jrmFueLVOhV4ej2
+	 QQwJd8okOEDS3uRsMKSgpN1UCfDt4PEl3FJpD/+bKiHjbddgIHnq89OPvGv1ccmzxr
+	 Gtq34sog6jPVg==
+From: Christian Brauner <brauner@kernel.org>
+Subject: [PATCH 0/4] Stop TIF_NOTIFY_SIGNAL from interrupting work that
+ can't be restarted
+Date: Tue, 18 Aug 2026 12:29:35 +0200
+Message-Id: <20260818-work-tif_notify_signal-v1-0-1ee1fcc5b3ff@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWM2w6CMBBEf4XssyWlJAX9FWNICwusl5bsImoI/
+ 27Rl0nOZOasIMiEAqdsBcaFhGJIUBwyaEcXBlTUJQajjdV1UalX5JuaqW9CTPlphIbg7so6r2v
+ dlaU9lpDOE2NP75/4fPmzPP0V23m37QvvBJVnF9pxrx5OZuR8qXID2/YF7EDK4pgAAAA=
+X-Change-ID: 20260817-work-tif_notify_signal-6ab080d33693
+To: Oleg Nesterov <oleg@redhat.com>, Jens Axboe <axboe@kernel.dk>
+Cc: Peter Zijlstra <peterz@infradead.org>, 
+ Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+ Steve French <sfrench@samba.org>, linux-fsdevel@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-cifs@vger.kernel.org, linux-mm@kvack.org, 
+ "Christian Brauner (Amutable)" <brauner@kernel.org>
+X-Mailer: b4 0.17-dev-362b8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5657; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=IkGa6xqKFM5x7wT1EwhGFPFaIGs9Gn9uxpjtq8no2A0=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWS1mEi8d51zdc+hz9ordprwXjomqr104t+pot8OP7qwa
+ HWzg5HqqY5SFgYxLgZZMUUWh3aTcLnlPBWbjTI1YOawMoEMYeDiFICJ7LnL8E9PxWHzicts8foZ
+ F3/cvrzC4o1tSNqiCqX8JUa+ibeY15gyMryZ/v76KZGtC5tuGcUzKUoETNkWlnfx4bqnp2UcDnN
+ OZuEDAA==
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+Ok, so I was looking into things and as usual got
+side-tracked so here we are. Oleg, save me please.
 
-New issues:
-- [Low] The patch causes a `-Wdiscarded-qualifiers` compiler warning in `bp=
-f_prog_run_array_uprobe` and mistakenly removes `const` from `bpf_prog_run_=
-array`.
+IF_NOTIFY_SIGNAL is used to kick a task in uninterruptible sleep to
+return to userspace and run task work and then go back to sleep. This
+mechanism works well but breaks coredumps. dump_interrupted() only
+allows fatal signals to interrupt a coredump and the whole regular write
+path going to actual filesystems is impervious to TIF_NOTIFY_SIGNAL as
+well.
 
-Pre-existing issues:
-- [High] Missing recursion context protection in the uprobe-multi path lead=
-s to per-CPU private stack corruption.
---
+The core is that you can have quite deep callchains that end up calling
+signal_pending() in both the pipe and the socket codepaths so it's like
+we can just pass a flag through somehow.
 
---- Patch [1]: [PATCH bpf] bpf: guard classic uprobes against private-stack=
- corruption ---
-commit d583ad326b3c9bb2b3cfd745309987d581a65249
-Author: Christian Simon <simon@swine.de>
+For coredumps its very annoying because it means io_uring is - depending
+on how much outstanding work you have - incompatible with generating
+non-truncated coredumps. A process with too many file backed mappings
+and io_uring requests in flight ends up losing most of the coredump.
 
-bpf: guard classic uprobes against private-stack corruption
+While zap_threads() has cleared TIF_SIGPENDING for a long time, just
+clearing TIF_NOTIFY_SIGNAL isn't going to work because the next
+completion will just set it again.
 
-Eligible BPF programs use one private stack per program and CPU.
-bpf_prog_run_array_uprobe() uses migrate_disable() to keep an
-invocation on one CPU, but another task can still preempt it and run
-the same program on that CPU. The second invocation then reuses and
-can overwrite the first invocation's private stack.
+The fun part also is that io_uring isn't actually the only case:
 
-> The analogous uprobe-multi path appears affected but is not addressed by
-> this patch.
+(1) io_uring
 
-[Severity: High]
-This is a pre-existing issue, but since the uprobe-multi path shares this
-vulnerability, shouldn't it be addressed as well to prevent private-stack
-corruption?
+(2) klp_send_signals()
 
-In kernel/trace/bpf_trace.c:uprobe_prog_run(), the BPF program is executed
-without recursion context protection:
+(3) bpf_task_work_schedule_signal()
 
-        err =3D bpf_prog_run(link->link.prog, regs);
+(4) landlock's tsync
 
-If a task executing uprobe_prog_run() is preempted (or yields) and the
-preempting task triggers the same program on the same CPU, the private stack
-can be overwritten, breaking verifier safety guarantees. Could we add
-bpf_prog_get_recursion_context() protection to uprobe_prog_run() too?
+And technically, kthread_stop() and the printk kunit test set the bit
+raw. So no simple way of just fixing this in one subsystem.
 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index ffa5626411ac2..1d263992213e1 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-[ ... ]
->  static __always_inline u32
->  bpf_prog_run_array(const struct bpf_prog_array *array,
->  		   const void *ctx, bpf_prog_run_fn run_prog)
->  {
->  	const struct bpf_prog_array_item *item;
-> -	const struct bpf_prog *prog;
-> +	struct bpf_prog *prog;
+So, a fix for this issue has the following constraints:
 
-[Severity: Low]
-Was this const removal intended for bpf_prog_run_array_uprobe() instead?
+(i) The places where a write is aborted are deep callchains that we
+    can't reasonably parameterize. For example, anon_pipe_write(),
+    unix_stream_sendmsg(), unix_stream_read_generic(),
+    sk_stream_wait_memory(), or a bare wait_event_interruptible() in
+    wait_for_dump_helpers(). All of them are shared with regular
+    syscalls that must stay interruptible.
 
-Removing the const qualifier here doesn't seem necessary for
-bpf_prog_run_array().
+    IOW, the state has to be per-task and ambient.
 
-[ ... ]
-> @@ -2640,15 +2648,30 @@ bpf_prog_run_array_uprobe(const struct bpf_prog_a=
-rray *array,
->  	old_run_ctx =3D bpf_set_run_ctx(&run_ctx.run_ctx);
->  	item =3D &array->items[0];
->  	while ((prog =3D READ_ONCE(item->prog))) {
-> +		/* dummy_bpf_prog has no recursion state. */
-> +		if (unlikely(!prog->len)) {
-> +			item++;
-> +			continue;
-> +		}
-> +
-> +		if (unlikely(!bpf_prog_get_recursion_context(prog))) {
+    An LLM would call this "load bearing"...
 
-[Severity: Low]
-Does passing prog to bpf_prog_get_recursion_context() here cause a
-build regression with a -Wdiscarded-qualifiers compiler warning?
+(ii) There are multiple ways TIF_NOTIFY_SIGNAL can get raised and they
+     can get set from irq context against any task. As said above we
+     have at least io_uring paths (poll task_work, msg_ring, tctx exit,
+     io-wq via __set_notify_signal()), bpf_task_work_schedule_signal(),
+     klp_send_signals(), landlock tsync, plus kthread_stop() and the
+     printk kunit stuff that set the bit raw.
 
-Since prog is declared as const struct bpf_prog *prog in
-bpf_prog_run_array_uprobe(), and bpf_prog_get_recursion_context() expects a
-non-const pointer, this discards the const qualifier.
+     So fixing this up in the individual subsystems is doomed to fail or
+     require constant audits in case some new variant shows up.
 
-Should the const removal above have been applied here in
-bpf_prog_run_array_uprobe() instead?
+(iii) The coredump task is exiting and can't restart the work.
 
-> +			bpf_prog_inc_misses_counter(prog);
-> +			bpf_prog_put_recursion_context(prog);
-> +			item++;
-> +			continue;
-> +		}
+So here's some stuff that was considered but I think it not really
+feasible:
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260818095545.3143=
-58-1-simon@swine.de?part=3D1
+(a) Check for task_is_coredumping(). That will end up forcing
+    task_work_add() users to know about coredumps. This seems like a
+    layering violation.
+
+    I have a patch for this as well but it's ugly. It races with the
+    dump staarting unless the bit setter takes a lock in the io_uring
+    completion. I know someone that will disagree with this approach. ;)
+
+(b) Oleg's old suggestion iirc. Just clear the bit at coredump entry.
+    That doesn't work because io_uring poll completions just raise it
+    again from irq context. So you also need synchronization with the
+    setter of which there are quite a few.
+
+(c) Let the setting task defer setting the bit if the task is flagged
+    and then raise it again at exit.
+
+(d) Take TIF_NOTIFY_SIGNAL out of singal_pending() and make it opt-in at
+    specific points. That breaks io_uring quite badly and forces a
+    tree-wide audit.
+
+So the amount of patches for this issue over the years is impressive. So
+let me add one to the pile for the lolz.
+
+Add PF_NO_NOTIFY_SIGNAL and helpers to raise/restore it. This is the
+same approach as memalloc_nofs_save(). signal_pending() will not report
+a fake pending signal via TIF_NOTIFY_SIGNAL if inside a
+PF_NO_NOTIFY_SIGNAL critical section. Obviously you can't
+fork()/clone3() in such a section.
+
+Fix coredumps and smb. Fwiw, I think there's a few other potential users
+of the helpers that are left out of this series.
+
+|         |    notify_signal_pipe     |   notify_signal_socket    |
+|---------|---------------------------|---------------------------|
+| fix     | ok                        | ok                        |
+|---------|---------------------------|---------------------------|
+| unfixed | 357324 of ≥ 5111808 bytes | 467336 of ≥ 5111808 bytes |
+
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+---
+Christian Brauner (4):
+      signal: allow taks to temporarily block TIF_NOTIFY_SIGNAL
+      coredump: prevent TIF_NOTIFY_SIGNAL from interrupting coredumps
+      selftests/coredump: test that TIF_NOTIFY_SIGNAL doesn't truncate a coredump
+      smb: prevent TIF_NOTIFY_SIGNAL from interrupting
+
+ fs/coredump.c                                      |   4 +
+ fs/smb/client/transport.c                          |  13 +-
+ include/linux/sched.h                              |   2 +-
+ include/linux/sched/signal.h                       |  21 +-
+ tools/testing/selftests/coredump/Makefile          |   7 +-
+ .../selftests/coredump/coredump_notify_signal.h    |  29 ++
+ .../coredump/coredump_notify_signal_helper.c       |  46 +++
+ .../coredump/coredump_notify_signal_test.c         | 245 ++++++++++++++++
+ tools/testing/selftests/coredump/coredump_test.h   |   1 +
+ .../selftests/coredump/coredump_test_helpers.c     | 318 +++++++++++++++++++++
+ 10 files changed, 674 insertions(+), 12 deletions(-)
+---
+base-commit: 8d3ae59288f1e7d58d76558a6ee96d533bc5019f
+change-id: 20260817-work-tif_notify_signal-6ab080d33693
+
