@@ -1,102 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51AAD3A7F41;
-	Tue, 18 Aug 2026 19:13:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42BC5346E7D;
+	Tue, 18 Aug 2026 19:23:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787080405; cv=none; b=oud9QZa7r9qjSfQGhevl6M94J+ZsI4JEzOYIm1u0zcVOAcvcNcYyKGuLGiMD/irddJYrc66VsIecHEqDylpy73h4y687kiTyk+G+dNnjiz3ChawqaQhTItatS1kUQKP5SDBlHpobVJ3hX8/XaZ7RGEvVfj3hbKfjl/utOaFBL3M=
+	t=1787080986; cv=none; b=J/INgsNV1Tn58kuvmQnNKE14f/yPGh8dRhhouKWWkJRbTCpBoKRrrpIKSjo4g5hOULYps5TZJRvLO+51HzNIBBvc4MhcmK4xZb+KTAnWE7Ldj2lcdSVy+swaWR+3f3j3L7OwK5kcWj4bU8M/w6ezx42BTYVURKzihSznuAvSKqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787080405; c=relaxed/simple;
-	bh=eP6hRVJWkqC9etP0qkJGMC1lvCwtMzBJ6mFYUAnXYUA=;
+	s=arc-20240116; t=1787080986; c=relaxed/simple;
+	bh=lQRxNS4d05kQAqG2bVOvBsIurzMvX6ZwwIQWQU0HLcU=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=bJaAaSQuXmo9Fmzt/m5k6IgBSV7vUmhZ+QUBgAJohBZScz71KTTWwjS6v8Ii97hn0IxfJAfDTY5Ql47Nq5G6H2zfA+e+aKCsqqDNP5dp2rrNprVnxt8hF2Erc7Chd6U2HKbfuG7hDjx3Ioj2l0z+KRS7PbytYs5O8a9sy5srXZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mpqLfuFc; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=qryietR4MoKO0H3+Y9SjaDYK4N2GeFKnYJMtgBDMUnktTdAgP2fnIIu/m+oaBHWHM2/OAV7E+8Gm4UBlWBebp31+XAXEgv+qtqkW2jogLhffb+7CRfmyAwc5YL+Wer9E5h9atdeiXSvKf/MiYai+1qkC0n+RdNioMZS/zVimAmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fP2hBNTN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mpqLfuFc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F70B1F000E9;
-	Tue, 18 Aug 2026 19:13:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fP2hBNTN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D4BF1F00A3A;
+	Tue, 18 Aug 2026 19:23:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787080403;
-	bh=cDLgtVmpaOuZdcJclkutA/Cgdtb0yCY1mrHTQhLafYI=;
+	s=k20260515; t=1787080985;
+	bh=rdmhfD3PiVS3wdrrP9DwnsXChoLTG8E9NJnpYLSxS0g=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=mpqLfuFctnvz4mu/Mhs/ebkXa2L+M0dgiHlmlRIbQazLSzC3bQQiO1HHcWD0YzAtl
-	 ad3Cjwnj45jbcikMr0CuBt7SZZy1+zzCgEqGD9jREjVPXRk+cAGfWJtfvH5t6OJbkP
-	 EQnIsa2uTocGqEjfDiDEUzxiHWCYhRXI9vATf5q8D2Vjof3rnNk6OnE+2DAFQ7xHuS
-	 KiEjO6KVxGqpSUC5he8p2DkavCeNws7se8KRiUVQHTcJJnpHRAx1TrPKGf1emTGQxP
-	 92/ZoinIuxbQ13AdORmu+zE6ODCPCbCbSVTv4G3vDJD+8MMICHRUeIJCU3P8hZf9VF
-	 JKjJDN42/biBQ==
-Content-Type: multipart/mixed; boundary="===============2041633098559337984=="
+	b=fP2hBNTN+9ytZ36ziE4WBmNhVJj9AWu52C8iqMTLCM8t9VLloTYB+LBPeZU1jaW1Z
+	 /vIX+WPolQ8YQ78JbsXIv7bmeXGZ6wImG0CdILebDt2T3pibmgM1gFk35FjI6x55Si
+	 l0GenpkD+S7+YIhg8D9MxfL2QNA9w7VDRGdfTzYE6ZmPwUiEtW0uMxhLN1nLX97gNk
+	 fythUkmezczOPvTA4omTBfR2NiooWQp2swZX3RdP53ppyapyY7nU0FzsybyQGwIVyY
+	 OGYaY+YssVcLDvk8ft9fMdN4Vdlt/fsD8MzpIpE2XqOt3WPuCZXxEUCbnl/kaZaNVq
+	 XilG0WV0aZaqA==
+Content-Type: multipart/mixed; boundary="===============8883660200475105318=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <4fc9c8150478b9b1f1b349068e6aac3817a8f9d80fe1e71cb31b72791bb3365d@mail.kernel.org>
-In-Reply-To: <20260818174253.492196-1-s.mahnur.a@gmail.com>
-References: <20260818174253.492196-1-s.mahnur.a@gmail.com>
-Subject: Re: [PATCH bpf] bpf: Fix NULL pointer dereference in bpf_sock_from_file
+Message-Id: <60472e2d261b280c49f896716cf5c50d1188c4dc33cf86a5a7139b91078c4e54@mail.kernel.org>
+In-Reply-To: <20260818-tc_tunnel_flaky-v7-1-aec161e74ef2@bootlin.com>
+References: <20260818-tc_tunnel_flaky-v7-1-aec161e74ef2@bootlin.com>
+Subject: Re: [PATCH bpf v7] selftests/bpf: allocate a larger timeout for connection
 From: bot+bpf-ci@kernel.org
-To: s.mahnur.a@gmail.com,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net
-Cc: netdev@vger.kernel.org,andrii@kernel.org,s.mahnur.a@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 18 Aug 2026 19:13:23 +0000 (UTC)
+To: alexis.lothore@bootlin.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
+Cc: ebpf@linuxfoundation.org,bastien.curutchet@bootlin.com,thomas.petazzoni@bootlin.com,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ihor.solodrai@linux.dev,alexis.lothore@bootlin.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 18 Aug 2026 19:23:04 +0000 (UTC)
 
---===============2041633098559337984==
+--===============8883660200475105318==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> commit b394c2b75945f69ef4a6312d0fa18f1cc000d0c2
-> Author: MahnurA <s.mahnur.a@gmail.com>
-> Date:   Tue Aug 18 19:42:53 2026 +0200
+> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+> index b82f572641b7..380b776f182d 100644
+> --- a/tools/testing/selftests/bpf/network_helpers.c
+> +++ b/tools/testing/selftests/bpf/network_helpers.c
+> @@ -49,6 +49,8 @@
+>  			errno = __save;					\
+>  })
 >
->     bpf: Fix NULL pointer dereference in bpf_sock_from_file
+> +#define CONNECT_MIN_TIMEOUT_MS	5000
+
+[ ... ]
+
+> @@ -291,6 +293,37 @@ int client_socket(int family, int type,
+>  	return -1;
+>  }
 >
->     bpf_sock_from_file should not dereference a NULL file pointer.
->     KASAN detects a null-ptr-deref when eBPF tracing
->     fentry/fexit programs are attached to points such as
->     __mmap_region and file_map_prot_check kernel functions. This can
->     result in a NULL file pointer flowing from context to the helper.
->
->     A minimal check before dereferencing can fix this.
->
->     Fixes: b60da4955f53 ("bpf: Only provide bpf_sock_from_file with CONFIG_NET")
->     Signed-off-by: MahnurA <s.mahnur.a@gmail.com>
+> +static int connect_with_timeout(int fd, const struct sockaddr_storage *addr,
+> +				socklen_t addrlen, int timeout_ms)
+> +{
+> +	int connect_timeout_ms = MAX(timeout_ms, CONNECT_MIN_TIMEOUT_MS);
+> +
+> +	/*
+> +	 * Override timeout configuration with a larger value for the
+> +	 * connection
+> +	 */
+> +	if (settimeo(fd, connect_timeout_ms)) {
+> +		log_err("Failed to set connect timeout");
+> +		return -1;
+> +	}
+> +
+> +	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
+> +		log_err("Failed to connect");
+> +		return -1;
+> +	}
 
-Does the Fixes: tag reference the right commit?
+Does the 5-second floor apply to callers that deliberately set a small
+timeout because they expect the connect to fail?
 
-Looking at b60da4955f53 ("bpf: Only provide bpf_sock_from_file with
-CONFIG_NET"), that commit was a pure relocation: it deleted the helper from
-kernel/trace/bpf_trace.c and re-added the identical body in net/core/filter.c,
-and moved the proto dispatch from bpf_tracing_func_proto() to
-tracing_prog_func_proto().
+Looking at cgroup_skb_sk_lookup.c, the test expects a connection to time
+out after 1 second:
 
-The body it moved was already:
+  /* Client outside of test cgroup should fail to connect by timeout. */
+  err = connect_fd_to_fd(out_sk, serv_sk, 1000);
+  if (CHECK(!err || errno != EINPROGRESS, "connect_fd_to_fd", ...))
 
-    BPF_CALL_1(bpf_sock_from_file, struct file *, file)
-    {
-            return (unsigned long) sock_from_file(file);
-    }
+The call chain is:
 
-The unchecked dereference was introduced when the helper was first added, in
-4f19cab76136 ("bpf: Add a bpf_sock_from_file helper"), which created exactly
-that body. sock_from_file() in net/socket.c dereferences its argument
-unconditionally via 'if (likely(file->f_op == &socket_file_ops))', so the
-null-ptr-deref has existed since 4f19cab76136, not since b60da4955f53.
+  test_cgroup_skb_sk_lookup()
+    -> run_cgroup_bpf_test()
+      -> run_lookup_test()
+        -> connect_fd_to_fd(out_sk, serv_sk, 1000)
+          -> connect_with_timeout(..., 1000)
 
-Should the Fixes: tag be:
+With MAX(1000, 5000) returning 5000, settimeo(fd, 5000) is installed,
+and the deliberately-dropped connect() now blocks for 5 seconds instead
+of 1 second.
 
-  Fixes: 4f19cab76136 ("bpf: Add a bpf_sock_from_file helper")
+The test still passes because the cgroup_skb program drops the SYNs
+permanently, so at 5 seconds the socket is still in SYN_SENT and
+connect() returns EINPROGRESS. But the test now waits 5 times longer than
+intended.
 
-Practical backport impact is small because both commits landed in the v5.11
-merge window, but the tag is what stable/AUTOSEL tooling uses to pick a range,
-and it points at a commit that did not introduce the bug.
+The commit message mentions that some tests expect data transfer to fail
+and that increasing timeout would increase execution duration, which is
+what happens here for connects expected to time out.
+
+Would it make sense to honour the caller's timeout_ms when explicitly set,
+and only apply the 5-second floor when timeout_ms is 0 or use a default?
+
+[ ... ]
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32172667075
---===============2041633098559337984==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32172718494
+--===============8883660200475105318==--
