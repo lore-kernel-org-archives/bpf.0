@@ -1,124 +1,131 @@
-Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E6336E466;
-	Tue, 18 Aug 2026 20:10:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.67.55.147
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787083847; cv=none; b=bhSiOtWj/FW2GvJDP1qoKxUc4h2Mgk2TzE/iwyVGnHbZmgWXimKkL1P+4eFhaS6pJ8o4HiRb2xOOQWX0VDOnS8QrzuPty9au2LIW80oxIWzvweZ0/e5HKlanZbIkJtPgejPkCgQaHJGqwC3+ATDybBTpFQscySUmjxOs6I3ltTQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787083847; c=relaxed/simple;
-	bh=woT1zsi14to1BWM9P1WvMv8qVMYsV1szojyD7lMbyCc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nXzg1kCGWwGGZ+U7xGDfLxe3hSt/nDZX96PbvZ+o/75MKBk41FQPVoa+wQkf0aXYK8V88y97EaGeyO+vCr8VsVxMTagRkcD92AWurE49EddPmylSWUk6JNlESJWowF2vPZJSktjo56LBxNZdJAu9RTihupcrLYvMPvI8TCHe3pE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=surriel.com; spf=pass smtp.mailfrom=surriel.com; dkim=pass (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b=OQsHpuIt; arc=none smtp.client-ip=96.67.55.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=surriel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=surriel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADAE3233954
+	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 20:16:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787084192; cv=pass; b=fHaKtCWq70aSIS8P8etHFuyQeutI2fj2ourXQEfsrplw0Aqn35Yageo2P3Lzrz7chN5XYbe4LXxxrEVXDiUsMfDUWvxa8nYaUyr7eM1c7Y7zoiKx0k422zvppLUfKCHYMbfyC2Xdy0tsdYM87YM1ML4eP4k9j0KJJ8nMxI85Nfo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787084192; c=relaxed/simple;
+	bh=+YF0JnFuLVVFd+EqIHRIxuAkoPBQK11aF1ZvDWyGFSw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=J1p1htC+KqZNgS+FXxCZD1d6aun+o0+y1VpgIN0qXlw5x3kJbwL5FJZpUZefcRVRlN8GHn260hvl7EWZwr0htmEO8G7/BOEKK/FTBRQg1JbQQaW2YDcv918d4SMB0s2uWaahKpXTDfXoM6SugpXW7lV9p745u/nB3I+gOxdQXVo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QJo3C8G7; arc=pass smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b="OQsHpuIt"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=surriel.com
-	; s=mail; h=MIME-Version:Content-Transfer-Encoding:Content-Type:References:
-	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID; bh=woT1zsi14to1BWM9P1WvMv8qVMYsV1szojyD7lMbyCc=; b=OQsHpu
-	ItmETeHPBNCexRGovGmSiK/1fEe9+feHxvUwum1vDTb3CfY+mvvrEAKC/LZb4I/e31JQabE4pAaDF
-	S0kdmZIMNZK3/4VsuxvzcdelOKLKBLDZeCADpZ2dmDCGJNdNh840FUZO+GEOtz6Z9GNl8EdMNpsVL
-	idS1l/7HJSth11v7TVneHNO9TsAzorxwdVSV+GOD9YZnGvZEF0RMoTzb6YbhkpgWTv5evnZsoac2+
-	ff9fINsIRrjiChTD8wo21iXUFag7kAEZdG2uYL8gT41oDNPzUbaEno1Hb/RtC8HFQXeItIQtBVqm1
-	vkW6ZUY+u+2Gl9kyKxyXPyuxyiOA==;
-Received: from [2601:18c:8100:a0e0:5a47:caff:fe78:8708]
-	by shelob.surriel.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.99.5)
-	(envelope-from <riel@surriel.com>)
-	id 1wwQ35-00000001X80-2pgq;
-	Tue, 18 Aug 2026 20:04:39 +0000
-Message-ID: <edcebef940c262a83421666de67e8a07ca93e85d.camel@surriel.com>
-Subject: Re: [RFC PATCH 01/57] mm: add pte_folio()
-From: Rik van Riel <riel@surriel.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>, Kiryl Shutsemau
-	 <kirill@shutemov.name>, akpm@linux-foundation.org, ljs@kernel.org, 
-	nico.pache@linux.dev
-Cc: baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com, 
-	hughd@google.com, lance.yang@linux.dev, liam@infradead.org,
- mhocko@suse.com, 	rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org,
- surenb@google.com, 	usama.arif@linux.dev, vbabka@kernel.org,
- ziy@nvidia.com, usama.anjum@arm.com, 	agordeev@linux.ibm.com,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kas@kernel.org, jannh@google.com, 
-	willy@infradead.org, pfalcato@suse.de, rostedt@goodmis.org,
- mhiramat@kernel.org, 	linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-Date: Tue, 18 Aug 2026 16:04:39 -0400
-In-Reply-To: <c05f7bfb-c84b-4c36-8091-5ec7721a658b@kernel.org>
-References: <20260816224609.308019-1-kirill@shutemov.name>
-	 <20260816224609.308019-2-kirill@shutemov.name>
-	 <905d08d102e56a026a5ad69573c507d2d9becc37.camel@surriel.com>
-	 <c05f7bfb-c84b-4c36-8091-5ec7721a658b@kernel.org>
-Autocrypt: addr=riel@surriel.com; prefer-encrypt=mutual;
- keydata=mQENBFIt3aUBCADCK0LicyCYyMa0E1lodCDUBf6G+6C5UXKG1jEYwQu49cc/gUBTTk33A
- eo2hjn4JinVaPF3zfZprnKMEGGv4dHvEOCPWiNhlz5RtqH3SKJllq2dpeMS9RqbMvDA36rlJIIo47
- Z/nl6IA8MDhSqyqdnTY8z7LnQHqq16jAqwo7Ll9qALXz4yG1ZdSCmo80VPetBZZPw7WMjo+1hByv/
- lvdFnLfiQ52tayuuC1r9x2qZ/SYWd2M4p/f5CLmvG9UcnkbYFsKWz8bwOBWKg1PQcaYHLx06sHGdY
- dIDaeVvkIfMFwAprSo5EFU+aes2VB2ZjugOTbkkW2aPSWTRsBhPHhV6dABEBAAG0HlJpayB2YW4gU
- mllbCA8cmllbEByZWRoYXQuY29tPokBHwQwAQIACQUCW5LcVgIdIAAKCRDOed6ShMTeg05SB/986o
- gEgdq4byrtaBQKFg5LWfd8e+h+QzLOg/T8mSS3dJzFXe5JBOfvYg7Bj47xXi9I5sM+I9Lu9+1XVb/
- r2rGJrU1DwA09TnmyFtK76bgMF0sBEh1ECILYNQTEIemzNFwOWLZZlEhZFRJsZyX+mtEp/WQIygHV
- WjwuP69VJw+fPQvLOGn4j8W9QXuvhha7u1QJ7mYx4dLGHrZlHdwDsqpvWsW+3rsIqs1BBe5/Itz9o
- 6y9gLNtQzwmSDioV8KhF85VmYInslhv5tUtMEppfdTLyX4SUKh8ftNIVmH9mXyRCZclSoa6IMd635
- Jq1Pj2/Lp64tOzSvN5Y9zaiCc5FucXtB9SaWsgdmFuIFJpZWwgPHJpZWxAc3VycmllbC5jb20+iQE
- +BBMBAgAoBQJSLd2lAhsjBQkSzAMABgsJCAcDAgYVCAIJCgsEFgIDAQIeAQIXgAAKCRDOed6ShMTe
- g4PpB/0ZivKYFt0LaB22ssWUrBoeNWCP1NY/lkq2QbPhR3agLB7ZXI97PF2z/5QD9Fuy/FD/jddPx
- KRTvFCtHcEzTOcFjBmf52uqgt3U40H9GM++0IM0yHusd9EzlaWsbp09vsAV2DwdqS69x9RPbvE/Ne
- fO5subhocH76okcF/aQiQ+oj2j6LJZGBJBVigOHg+4zyzdDgKM+jp0bvDI51KQ4XfxV593OhvkS3z
- 3FPx0CE7l62WhWrieHyBblqvkTYgJ6dq4bsYpqxxGJOkQ47WpEUx6onH+rImWmPJbSYGhwBzTo0Mm
- G1Nb1qGPG+mTrSmJjDRxrwf1zjmYqQreWVSFEt26tBpSaWsgdmFuIFJpZWwgPHJpZWxAZmIuY29tP
- okBPgQTAQIAKAUCW5LbiAIbIwUJEswDAAYLCQgHAwIGFQgCCQoLBBYCAwECHgECF4AACgkQznneko
- TE3oOUEQgAsrGxjTC1bGtZyuvyQPcXclap11Ogib6rQywGYu6/Mnkbd6hbyY3wpdyQii/cas2S44N
- cQj8HkGv91JLVE24/Wt0gITPCH3rLVJJDGQxprHTVDs1t1RAbsbp0XTksZPCNWDGYIBo2aHDwErhI
- omYQ0Xluo1WBtH/UmHgirHvclsou1Ks9jyTxiPyUKRfae7GNOFiX99+ZlB27P3t8CjtSO831Ij0Ip
- QrfooZ21YVlUKw0Wy6Ll8EyefyrEYSh8KTm8dQj4O7xxvdg865TLeLpho5PwDRF+/mR3qi8CdGbkE
- c4pYZQO8UDXUN4S+pe0aTeTqlYw8rRHWF9TnvtpcNzZw==
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QJo3C8G7"
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-8f032b47e3cso2951606d6.0
+        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 13:16:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787084189; cv=none;
+        d=google.com; s=arc-20260327;
+        b=gS9HkHNoqEhPGxkqA3m0fhhHj07ykEwsAnUtS5mM20Q8Gv1+RXRuCx4gi3eGU5bYTo
+         PsqIlQIfHOQglNTvDZvN2UspPE1flhMzCq4AM5e2eY7Wd+Wg0SZ5MCh2BILIRMObAs+p
+         hIwfj8kw1siCTDLQCy5mxI7DXxWd2k7iGF0uCLkmmhX68ZV464Fk/BL7i/7nJRKJURS0
+         Q+f7uafVm/wyNTKuz18tJrh+nKamIBHuD92pumb0VegEAClupWwCf7K7cZx+SSoexKjc
+         qB/DgGWg739MRzqzd/ghoEa1cMHG+7Y0rLrvruKhzVDAnN8rcpK2d7oBUDrs7V2kDtCU
+         ijGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=+YF0JnFuLVVFd+EqIHRIxuAkoPBQK11aF1ZvDWyGFSw=;
+        fh=TRE/h+5ZDj6sDrjRErD3RIDG9CRT8mE/Z2gF7rNNMbE=;
+        b=Z+FPpvx99XZc/CWP7aYIhDAYkWWBlRbL3IEB24+zNOv/XQX3MEQ0qUtC5+P+9agk8A
+         +nvjjeHKHuigKdBFB+lumLSUtPc3wDEOpw2tqzSFdXuevCUVk+yJGQrKub1MEJtBGbCY
+         DblwY+Ccc9eJasq1yv4O9KGgumHTxDnW28jgyiWCDOHTL+zCHqj3ObbH7/+lB7+JqSxz
+         Rp08sfJTc1m9Hec+zuYRFNfF90IiVkSOSNBj79pQ9pCuKAUTCMG+UFh4oFcu3SRKM3Cw
+         xCWCddRsGLnKguAs0KAXl9x6pb3Njs1dbtaO2WX/bwEsR8d2cc2nBLzB5sEAiSxJL22s
+         fvwQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787084189; x=1787688989; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=+YF0JnFuLVVFd+EqIHRIxuAkoPBQK11aF1ZvDWyGFSw=;
+        b=QJo3C8G7+3Ax9M4jvi7dQqv8/P5t4tF97m88qWzhD0vTpInsOaI8CywoCZfJXDoj/i
+         B40DpFKyeO6IMjbMAt8UkaGc2FjtMj5Re5NO+ceiXnb9QeZ6V+FbHQHJYspEZUH6W2HK
+         1lyIb6wKe62zN+4YPUVGg9JABkxAyAkoDee737vSCpieMwnLHwoZ7VMsiBjcKWprmePp
+         SlnITAsMs/dZdvLkI4nfPVKPN/k0L86nTc4eQA2kGY2khc/to/gKD7Y83KorTPuVLDB0
+         y4mEmpx2js5QBQtUvK1Xz4ZO0v8x/T+Hs06eWrMD84J+qx9ZP9AmJAV4OggBcKb4lBjO
+         7uQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787084189; x=1787688989;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+YF0JnFuLVVFd+EqIHRIxuAkoPBQK11aF1ZvDWyGFSw=;
+        b=q6YYQCpQd87rMFpDwXmvP7uFeublnfH9I7GYIxksoaZJ0OlQt5wHvdfqOFZk4JWa2d
+         uZtTla8GffKO6sQuysB4S3pwrCWeBnTUM+yEfkz56ngve33um307HDxFB7tZV2CqEk61
+         I45dPB8Y8eaNBHseY8/th6dvPhWdVCNG7EDr+ne0/6T7q6ZWD28Iw7UUgjsaQLGBIfbX
+         7z/SayFpU69HItK+zIxJZhKmWvp3RI48QEdGSwZY/kSnZZTtcJznnZsm3YPFYV+VW0de
+         9ikG2dU4QL1idSrtDy6gh+J/VzR5fS0x5taQx7cKM/4Al90d1GqHay2KrG3dld8t0Lsq
+         qV1w==
+X-Forwarded-Encrypted: i=1; AHgh+Rq2m8GcHvlNpr4RfzC65E+5KLAKXLLwZB524Df8ildSA7YDby16jK0/iD7EkJQv3y4jQRk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRCCSBaSDE2Bq/Rdi/E68j1GBU2IBQNRuFYd2Sltt1YM1m1QyD
+	dd6/opWMck0XqRtwqHb08gtPaZi+HbrC5jLEWGhlIJVYRCVqY5zisehaXB8jc49yxbJ5PzLzOX0
+	vm32BHRMqc3mWqlSs/rXyw0tNCaoMDAc=
+X-Gm-Gg: AR+sD125rnT1R6hAmG0uxvxc8ACqU7Rbqxghs5+nW/Ae2RKfTc0DddBf2mJ0gWJJJKd
+	nvXgbuiID6o3LZoOv24zMWdnUFlNCsjtHjKatgDDTrNE+wiVhSdTVI15CiK0KNyK6RxF/3xQDvU
+	G0e3E5asGFaL5njYNKKqLlhpqvygS9bnB+eR56I8XNc7sMF62uCocBETNwjKzxY000MHk6qloZM
+	8JWg/7vQBbZS4qyzPBRuMikzBBYclKuT+/jYJNL6inQmOwC8GbcRfbbgjiHUdfMQ9Xapva9o9TL
+	gC2u2RVbc6Lc+gksbGDAX6ojxXjnLp8WYKJ3yvX0anuTOXBhFuxxj5tLpTrwKAyGV4yBfWE9aFY
+	=
+X-Received: by 2002:a05:620a:890f:b0:936:883d:89c6 with SMTP id
+ af79cd13be357-9371df950a2mr12671385a.28.1787084189450; Tue, 18 Aug 2026
+ 13:16:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260815112041.1248855-1-utilityemal77@gmail.com>
+ <DKRYZPV04750.1V3UXL56PKB6@gmail.com> <CAEXv5_gT+xcZauKug-VsmqSBtuMPEPtw7hubxn6-0nv=D9aq5A@mail.gmail.com>
+ <CAHC9VhSs5noQexa5c5RiP_DEzUgGaZw1hwsP+T-HWRvvymB+3w@mail.gmail.com>
+In-Reply-To: <CAHC9VhSs5noQexa5c5RiP_DEzUgGaZw1hwsP+T-HWRvvymB+3w@mail.gmail.com>
+From: David Windsor <dwindsor@gmail.com>
+Date: Tue, 18 Aug 2026 16:16:17 -0400
+X-Gm-Features: AcwNN1XmyoBwjLZW5dDGiUk6T0a33HIdvZ8D12DpgCUEXpkFqvB5_cWXzPjArcc
+Message-ID: <CAEXv5_j0h+qCvj5U_aha_7OUUyuR6FPzufo3zK=Ax67724CPjA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/2] lsm: give BPF programs a way to query
+ locked_down state
+To: Paul Moore <paul@paul-moore.com>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Justin Suess <utilityemal77@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Xiu Jianfeng <xiujianfeng@huawei.com>, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2026-08-18 at 20:13 +0200, David Hildenbrand (Arm) wrote:
-> On 8/18/26 18:38, Rik van Riel wrote:
-> > On Sun, 2026-08-16 at 23:45 +0100, Kiryl Shutsemau wrote:
-> > > From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
-> > >=20
-> > > Callers that want the folio behind a present PTE spell it out as
-> > > page_folio(pte_page(pte)).
-> > >=20
-> > > Add pte_folio() as the folio companion to pte_page(), and convert
-> > > the
-> > > callers in fs/proc/task_mmu.c and mm/hugetlb.c.
-> > >=20
-> > > Preparation for the anonymous collapse engine, which reads the
-> > > folio
-> > > behind a PTE in several places.
-> > >=20
-> > > Assisted-by: Claude-Code:claude-opus-5
-> > > Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
-> >=20
-> > Oh nice, this could clean up some things in the
-> > get_user_pages code too, when we get around to
-> > tech debt there.
->=20
-> We really need the page in GUP code ...
+On Tue, Aug 18, 2026 at 3:48=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
+>
+> On Tue, Aug 18, 2026 at 1:42=E2=80=AFPM David Windsor <dwindsor@gmail.com=
+> wrote:
+> > On Tue, Aug 18, 2026 at 5:43=E2=80=AFAM Kumar Kartikeya Dwivedi
+> > <memxor@gmail.com> wrote:
+> > >
+> > >
+> > > Lastly, given the difficulties we've faced from the LSM maintainers, =
+I'm not
+> > > inclined to waste more time in explaining again why this cannot go un=
+der
+> > > security/.
+> > >
+> >
+> > I'm still going to send v7 of bpf_init_inode_xattr series, even though
+> > it's a stalemate. Haven't yet decided where it'll live in v7, I'm
+> > inclined to leave it where it was (in fs/) since one side will NAK it
+> > wherever it lives. We can record NAKs and take it from there.
+>
+> As a FYI, I'm not going to ACK any of the LSM changes with the kfunc
+> in security/bpf_lsm_kfuncs.c.
+>
 
-Ugh, indeed. COW can create "holes" in the middle of
-a large folio, so even __access_remote_vm() will
-continue to need pages.
-
-I guess we'll continue to look up both page and
-folio in that code, then :/
-
---=20
-All Rights Reversed.
+Hmm, even if it lands in security/ you'd not ACK it? I thought what
+we'd settled on as acceptable from your end was placing it in
+security/, then having a broader discussion about the rest of the fs
+kfuncs? Just trying to understand everyone's position.
