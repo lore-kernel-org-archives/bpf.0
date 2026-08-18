@@ -1,151 +1,101 @@
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+Received: from mta0.migadu.com (out-71.mta0.migadu.com [91.218.175.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11B723A381C
-	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 14:59:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.161.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787065177; cv=pass; b=lWSqxIX3RI8xWH8mdeznivYPviKevgGy7Lj033mVBPMGergI8QBv2ql5oKU9Pxd7DjKmtM4uYHmh80RwOdqu2JB3x0+xsrbjx4k0xbBcfCCvHvEjkZkT9Oz/mOyoyWXklido/usA4ViCTkwzyUNQnDL/qPQKIfr6xZ4EQaZu7YY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787065177; c=relaxed/simple;
-	bh=fsOZnsGEZSlKY8sCMjv0Dj1Z9up+Eh82cxaq4JJbeZM=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=MQH28MVgnPuJPX65Zg07gOL5rhVdqCG7mkeLPTU9q7GQFH104y5qX9wrAujJJnc7Uw0rYi/Dy4Ua+NVVeQ9YGiyqujw1V5vSVKwx+TPPLE/80FwrnVYC87hjX3cIico0QXR5VIxlgRJLLDdMOdeAnJ98GwDVN6PIvmyR+9VBV3Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sG3qiZlY; arc=pass smtp.client-ip=209.85.161.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65F8383984
+	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 15:23:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.71
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787066613; cv=none; b=gbDJDoyb738gbg7l9vVjMtn/CpYzqzl3c6LoOcz6TCSbKi1c740k3i0n5+Y65bwIs2nN+GcAJqbcn6+Fx2ScR2mNBzplcDjn/V/smRGQAH0ah6cTJzgFZWYAqWOwqyW6g+KJ5Tf9+3Hrk++NeboJJeIbKx+c9WQMBGXbo1mRt1g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787066613; c=relaxed/simple;
+	bh=NN1nvwHVM4sMs6sktgMnbJCqc7wba36OW2ufgd8BrRw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZAxrkPQfdYbPUKzGphgci7by32Os+jmEISII2Gi3jXiClMn/y0PM+VizRuVZ8/ZsobSKFMUYfFVCsUSSguRVZUukshE8kpwNxnCtiSvRvrE8q6L4iVH+YNeUx2IxF6kcsUro5DjShW0SUMtKS78vIzACPfUFxNn6owalS30cU9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KdcUPKH8; arc=none smtp.client-ip=91.218.175.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sG3qiZlY"
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-6b0b7464c99so3073860eaf.3
-        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 07:59:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787065175; cv=none;
-        d=google.com; s=arc-20260327;
-        b=qN1eWWiVrjTkBalJPkQ2NdRXpwFyM/4TdHiHrnRcv2tX2ISZqC6FmHspQVHqTvEAwN
-         nmj4ShqFBHgpt9XNKrRckaF9oiuGr4nJum1hXGMLmmfi7MzbMHx7qp+6P/8aPXwnSrPs
-         5bTO+rIPfk3T7BOw9AVMeoAJGOIR+h87uq2pVjOKMbTi2XszmqxeAVk5jdBv/NObkitd
-         TB+KGmNvjvpLwpG4Uj9jvEmXfUFZTijMNNIWd1P+ASClUyMOccFY6OyYF/kDYq2mqF+q
-         KMoJ9nLl9ayxLMHT6BwemnW85GdaUFXjTrbbO2e0BBesYvjqZ7dT/lGNohSrnBg6JjOS
-         RHlg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=CugeKmYT87+pqueTbULb8VHDLcK5V5YmQTnDuTF5UaM=;
-        fh=34UiwQxnVfWDIG5RezE2n654k/hUlpWv3CTaiWKCn54=;
-        b=KxQekeG6DHq+po5GUnUw6hOnBz+ZKXqpgR8AeLYfNmVxnLQQgLW0tkVt7ftzNPBrXw
-         zIfgyEreOy2+nEp/nXUmHZhWxomzvHygH+EBo/UsZIiL7TGjjB0lsI+FMSeClC0Vq4bq
-         19S6laE0YaylM4S06X2XQZ7IqkCN2rJQ12Wt8oNK0t+9uZ9bm6WqiuXTWPS2SxdZSBo5
-         Sxoa3mNA5N22JFEd09ZLLlYj2ZT72X+1xeBWd76YZHgmT8EV3eG0Bj+Xa6R1i1OdDSdA
-         aozHxWSKhQc5RxXlNsHTy0PT0Jb6hymZuF1PANXgZs8Z8Af8ikUwThNQLpUw6xTjY6F5
-         dt8g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787065175; x=1787669975; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=CugeKmYT87+pqueTbULb8VHDLcK5V5YmQTnDuTF5UaM=;
-        b=sG3qiZlYKQwQXTeqNkmbkiDCqouGb2wzzQcuUkMtVHptbmE8kPefhb6ge+xYVkGMvb
-         +NCy+hFOGVH+JdoRjiMSxFI3C+a8AxMcRDNombzcAaA7YOvzLZSi+tERkeGf7EymRuxW
-         qlFMCh+GKi3s3vJMADLZrJAq8w/1hgCUJoswSVwaIqrmv2vOpxLcpimb9qgOXsa7D3+1
-         FuI0Y3pNQNY7SPG0qW8cVuK1vFf1DSCYOx/nzwTadcayJqmrLysHB9MwoGFTooj0w4FN
-         SavLDMrZrg8uTACsbhMaYQmir1UT/VHl+hmPpf+j+Il3qoH2L2jpqDiccr0E589r3fe4
-         emFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787065175; x=1787669975;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=CugeKmYT87+pqueTbULb8VHDLcK5V5YmQTnDuTF5UaM=;
-        b=n8xvtJA7y2yIcU2MrMUnYCXBvr3JjZ4POaw79eo+a5CrH3rZGqBQmeBG0fz5XE6Fs5
-         zRmzZVs+me+DXMpw8Iy26kUm3Uu2wc2aU4WzSAtHqPrpTJyqJKRCmUcgjof1q3OLfX5G
-         frV17WgMCm4rNSx7zsgqVZ5EijsiHE9RxNgwBBk/OtqRVITabDzvTThBHKlhC07DhjIW
-         3CnE1JXq/ec+TBC5coshlMTS5k/kFY8RIDm2yhnpTnOU/FZneTmrQWS9UCVSRz3RA763
-         reEYAq8yqV6XMGG3WoyCQF0Gg5S+fsk1CorYuM2HYShKPND++RSlFB1yK2433IYChcIU
-         2fJA==
-X-Gm-Message-State: AOJu0YyHWtLadDD4+Rtji0j9PD4aAUDNODc75R4G+V0n4WRiSwaadOA/
-	WmPYRZAZ778VyTU+J5TrWmB3eogm2LdLddPckmLFZdb++HXV/CuKVsMFlSJRZGmVZfc2pe1R49f
-	nvN6SL1YpbTvFMYlPUkF4kT/NEJj/Y+NEIijm6SA=
-X-Gm-Gg: AR+sD13eKPWRqVxjbXJ1D9nlq/OFrZrvQnDMImNzwRIV8FZ25CDpduIGdDUSCtAkWRF
-	etztFEFCC4snfmof5e2r2FF5yXphp2/PMCvgXHdEMXH91UdBeNVkHkdFPqYFJI/fo89cni1V/Xj
-	KiqoCbqJvh7NJvVwTCDFwYkFoq0O5OeiEfIe/Krny5JmzbrMbPQ6z+pEP4CvOjWPqItIbnTmGfX
-	NuCjG0ja/q1PpSPbTW+qUX1Gs1aP+NbINOcmKma+7AwEgJF4/8LIdGtmk7yA/cuLYOHDfCqTi7D
-	CkTDK9hV+wTWRH3mq+dwNWjcG/WniCicBQFWI2ilCwN0tw==
-X-Received: by 2002:a05:6820:2916:b0:6ae:5250:dd1c with SMTP id
- 006d021491bc7-6b0d68f86damr30268817eaf.29.1787065174844; Tue, 18 Aug 2026
- 07:59:34 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KdcUPKH8"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=NN1nvwHVM4sMs6sktgMnbJCqc7wba36OW2ufgd8BrRw=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787066608; v=1; x=1787671408;
+ b=KdcUPKH8pKIFNlTLCTQPgrB2VoRrBCQP9+VaekAchnkPkAMploPyDPLfOJJHwhdLgP8laGDg
+ Nrp75lsUwCWvLnFTMnG110+IZPy2UVAJzfm1G1NPMz6SNKTtvoGAAJgEUDf3Q0Mqtsr/f0VYRKh
+ 9aS4TfqiY4y/AzrY2r9GuiN4=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from [IPV6:2600:382:861a:c934:1800:dc08:870b:3340] (2600:382:861a:c934:1800:dc08:870b:3340)
+	by smtp.migadu.com with ESMTPS id 9c4906d55d580d82;
+	Tue, 18 Aug 2026 15:23:28 +0000
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <5d02cbe3-fd71-44e4-a6dd-706233ba248e@linux.dev>
+Date: Tue, 18 Aug 2026 08:23:21 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Hiker Cl <clhiker365@gmail.com>
-Date: Tue, 18 Aug 2026 22:59:21 +0800
-X-Gm-Features: AcwNN1VI0TsmYwGC2oossS0Ko3jNmGFX8QCeNVEf9G_D4ufBZsrpxgM0zr4I1-E
-Message-ID: <CAGM=xGB1fJ9kT8XTitVo74B0WGqgjkoUHdLwzytwV0AyqeVApw@mail.gmail.com>
-Subject: WARNING in reg_bounds_sanity_check - const subreg tnum out of sync
- after ALU64 add
-To: bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] bpf: reject stack-argument callback subprograms
+Content-Language: en-GB
+To: =?UTF-8?B?SsOpcsOpbXkgSmVhbg==?= <Jeremy.Jean@oss.cyber.gouv.fr>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260817204812.1637171-1-Jeremy.Jean@oss.cyber.gouv.fr>
+ <20260817204812.1637171-2-Jeremy.Jean@oss.cyber.gouv.fr>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260817204812.1637171-2-Jeremy.Jean@oss.cyber.gouv.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi BPF maintainers,
 
-I'm reporting a kernel WARNING (verifier internal-invariant violation) I
-encountered on the BPF subsystem, reproducible on Linux 7.2.0-rc6
-(bpf-next f5b57e9e9) and 7.2.0-rc7 (mainline 15ef2f78c).
 
-### Summary
-A 19-instruction SOCKET_FILTER program, loaded by an unprivileged user
-(unprivileged_bpf_disabled=0, no CAP_BPF), triggers:
+On 8/17/26 1:48 PM, Jérémy Jean wrote:
+> Helper callbacks enter BPF subprograms through bpf_callback_t, whose
+> runtime ABI supplies five arguments. BTF validation nevertheless permits
+> static callback subprograms to declare more than five arguments when JIT
+> stack arguments are supported.
+>
+> This lets verifier state for a callback use outgoing stack argument slots
+> prepared at the helper call site. The helper does not pass those slots. On
+> x86-64, callback loads of arguments seven and later therefore read the
+> helper native frame instead of the synthetic values checked by the
+> verifier. KASAN reports a slab OOB write.
+>
+> Reject callback subprograms with incoming stack arguments when processing
+> callback calls.
+>
+> Fixes: 0f6bd5e7a804 ("bpf: Support stack arguments for bpf functions")
+> Assisted-by: Codex:gpt-5
+> Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
+> ---
+>   kernel/bpf/verifier.c | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index fdc5fbb1f78c..5fcefc0eaba0 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -9285,6 +9285,8 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
+>   	err = btf_check_subprog_call(env, subprog, caller->regs);
+>   	if (err == -EFAULT)
+>   		return err;
+> +	if (bpf_in_stack_arg_cnt(&env->subprog_info[subprog]))
+> +		return -EINVAL;
 
-    verifier bug: REG INVARIANTS VIOLATION (alu): const subreg tnum out of
-    sync with range bounds
-    r64={.base=0x0, .size=0x0} r32={.base=0x0, .size=0xffffffff}
-    var_off=(0x0, 0x0)
+This is not good as user will not know why it failed. Your v1 does have an error message.
 
-The 64-bit register and var_off are both precise (const 0), but the 32-bit
-subregister range is fully unknown -- an internal inconsistency in
-subregister precision tracking. reg_bounds_sanity_check() fires from the
-check_alu_op() path after `r0 += r1` (64-bit add of a map_value pointer and
-a ktime-derived bounded scalar). The WARNING only fires on the unprivileged
-verification path; the privileged path verifies the same program cleanly.
+But this is not needed. Without above verifer.c change, user will get an error message:
+    func#0 writes 4 stack arg slots, but calls only require 0
 
-### Steps to Reproduce (raw instruction sequence)
-One ARRAY map (key_size=4, value_size=48, max_entries=1); its fd patched
-into insn 6-7 as BPF_PSEUDO_MAP_FD:
+NACK, see my v1 comment: https://lore.kernel.org/bpf/14a7e7c2-36f7-4aa2-9b20-cc54700a9f1b@linux.dev/
 
-     0  r0 = bpf_ktime_get_ns()                 /* call 5 */
-     1  *(u64 *)(r10 - 16) = r0
-     2  r1 = 0
-     3  *(u64 *)(r10 - 8) = r1
-     4  r2 = r10
-     5  r2 += -8
-     6-7  r1 = map fd                           /* LD_IMM64 */
-     8  r0 = bpf_map_lookup_elem(r1, r2)        /* call 1 */
-     9  if r0 == 0 goto +7
-    10  r1 = *(u64 *)(r10 - 16)                 /* reload ktime */
-    11  r2 = 0x40000000
-    12  if r1 > r2 goto +4
-    13  if r1 s> 1 goto +3
-                                                /* r1 in [1, 0x40000000] */
-    14  r0 += r1                                /* (*) WARNING fires here */
-    15  r9 = r0
-    16  *(u8 *)r0 = r1
-    17  r0 = 0
-    18  exit
+>   
+>   	/* set_callee_state is used for direct subprog calls, but we are
+>   	 * interested in validating only BPF helpers that can call subprogs as
 
-Full bug report (with kernel log) is filed on Bugzilla:
-
- https://bugzilla.kernel.org/show_bug.cgi?id=221899
-
-### Notes
-This message ("const subreg tnum out of sync with range bounds",
-const_tnum_range_mismatch_32, check_alu_op) is distinct from the syzbot
-report "WARNING in reg_bounds_sanity_check (2)"
-(https://syzbot.org/bug?id=8e3413235092cdd148efd146f97ea9960cdd23ca),
-whose message is "range bounds violation" and which fires from the
-conditional-jump path (reg_set_min_max). Both the 2025-09 fix and the
-2026-03 "Simulate branches" series are present in the kernels tested, yet
-this path still triggers.
-
-Please let me know if you need more information or if I can help test a
-patch
