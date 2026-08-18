@@ -1,160 +1,84 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 766421FE44A
-	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 20:46:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17042E888A
+	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 20:47:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787086007; cv=none; b=DPmsQJ/gZnIc6p12WpCIEOsuAJEhDpJUxcSpQKVavtzBrYfQBiNySYTJ6sDMT1vTZtXxk8RTncBwVwCzl28aREDY8N11dzSM7lUsgXJiFi593QqzWpYUxpxZ9S/fb85Af0BeSTSuICNBmK0UM8qMgHIJunQJN6Iw4U1T0epyKOU=
+	t=1787086024; cv=none; b=sW7qZFohouPZpDdjcC5ElPiClbafMcTg+T0P606FdU39VSv1sxajkNldKZO3BORT8YBty0blLr3vftFWq4AgRXn3se0pKQtXFB7t15elaFIjx7NaAcYUX/tyzF5BpT+9nLe5/UZFv4MrRkDpk7OYYKj8azllGsNSAfHb4GDIEOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787086007; c=relaxed/simple;
-	bh=iJGjwOHPh4YuY9kr8w4+W1rM42dfPnAVwtGMdqR89RU=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HBjh6uwKWTRIKe/kWFFIsl6vHjC2hPBKld7su8mA4xpT2f3Mh48yNChlMfYugqO4l4e3vfGvkYdSaLOhG9v7kfTGvQ/LQGdvpcdnwpVCVxyAj28lY3qdPEKRT3MizQMKjPKjAtfjc/3DHuKv/V0TErpF9gdmdcPeh9V85I/UcYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OBBOzQ94; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787086024; c=relaxed/simple;
+	bh=Z+Mvw2sOAEZQ38B8htRdPuDm7SBTFhxqUrUlrDaU3U0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Gipjp6JsBOSEE0uxANJ92mG1yRnLOOGWAUpH/r8ghuwSko1697PugqO8WiaB4HN9PC9+0oJCip254ckfh5bF+sK0azOEXAm5446UAA3BcVN92/1Y76CNKdc8SACfkIKdRMaTdRua7EPoSyOTdJQfxQczP0HRq99ndOQs+gDwrfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DymCpAS9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OBBOzQ94"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-47fd4531020so140607f8f.3
-        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 13:46:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787086004; x=1787690804; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=jEoCjWMiQtD+w2HLXdKanKRDEQHtdfUfccyF+OQon+0=;
-        b=OBBOzQ94Nm1PqSBOaqZdaefa9KtIHtxdPXyuXM53v7OCOOkgs1nxA80cphpJAdXZLD
-         c08918IYiZlV4d/QTt29hA/ucSwRGTAPxCkTI5HwEy+TrVc6vkA927FACcP69NYEHhcs
-         pVKrMp8bzL+8IzlkgqB2LokEZpTIpiYAfWsPirsoWvbzvg5UjeM2TgdV0v8o2xeeM/4o
-         fCKLU/3vNpy0wGmIF5NfJL/qgcmHz7drLJlKCHJCqG08E5Jn+SrSdeNm4jcUXfi95+YS
-         MwETgkwF5Fm7/gvnPtQjg3KLKGnYqWFwtdUQvnBX/TbKaoFT92tNfWZ0Ed9rx6WSZKNS
-         W5KA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787086004; x=1787690804;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jEoCjWMiQtD+w2HLXdKanKRDEQHtdfUfccyF+OQon+0=;
-        b=h3Ji7QZD4RRhwrPsbagjDjCMqkZ4mAqdjuBNF5WMuQ2THhXMTKyGL6BWE6p03nLs0W
-         cBqlORn6XZgs4LqompZ0WuZOG7/4h//cp2uxziDp62Be1poqYbcsSsWhC1muZz/luW4j
-         CFjXgqcIpSZx3qIyvIGXGHIKrwNXHip7UflpjDGIMDwZQfaWKUd5arVGig1mwylYWF/R
-         A8PARkIjVxvO5c8m/9NOodLGCCo/bssvo3yOQUEc/dJsSii6zMKiG8Q2hayEEukFzBAP
-         2HP8+xSxHOrkp/6jMT8pBm98zvZVFII/5uX16ekr8M6zt3/CByPvbp03qINesItl3ZOw
-         M5+g==
-X-Gm-Message-State: AOJu0YxclvoVoSMeteuIZv7A7OOylHq/2JCmphj3InVsGl7EeE4DkU7o
-	+A8tifr3/id9CRmzrr5x9oyj6bhkwdY5ZnLlz1hGyUCxOb/0sS/YEmCcdIuIKvok
-X-Gm-Gg: AR+sD13/vjtFf+fAhTSJUmdfsKgplD0vJGKsvnDvOZsUpnrQ943rQ4uEdLD9OzJUfXB
-	ywvut+m3yChzTsYh2cVj9tX3nSiIqkSfiJJI3vC7yLrXY5+UOBgKzoYzSIhh5GEFo+SQCaLgY8u
-	V0FSPjCNLrbdEYIRuPKmUNhpdtzgE6j8fWPvQwXaftw5jb593VSMvsHOxps2HEf+7YkDGbLJyor
-	EFZHE0NcNdjMHY2pu6l22aJRgviAquXfneavuE9OkVceeu5KkjWlZucY96FrI8J2dQ5W8zCXnzY
-	k5XeIXwcqa8bzPsslnkaCGl2rbbUX0RnbSv+ffhB0/3pe4P1DYavsW/JjIggwAjfhmg/vPqVATV
-	waKsoDogT/EEI9dOFd/Gd9r3ImFyMDyB4KpY38pNrkKCmsiIwnQmdqKIMU1P3kr50ZBpJ9EysgF
-	z4/0xBiTgy4A99V9EanDeJ2ta5z7C/Z/Vz1cF740+ANu7oekrCfNM3Eqsqr4kIbM6qN4ApmfM=
-X-Received: by 2002:a05:600c:6286:b0:499:7ce1:d8a2 with SMTP id 5b1f17b1804b1-499a8f8166fmr12816065e9.8.1787086003443;
-        Tue, 18 Aug 2026 13:46:43 -0700 (PDT)
-Received: from krava (37-188-219-233.red.o2.cz. [37.188.219.233])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-482a5a3b51asm14756971f8f.11.2026.08.18.13.46.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2026 13:46:42 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 18 Aug 2026 22:46:37 +0200
-To: Christian Simon <simon@swine.de>, yonghong.song@linux.dev
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-	daniel@iogearbox.net, martin.lau@kernel.org, tj@kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH bpf] bpf: guard classic uprobes against private-stack
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DymCpAS9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F6911F000E9;
+	Tue, 18 Aug 2026 20:47:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787086023;
+	bh=eFJKnWRZ+7JUD1sq5JNUNJlALC7dakErcRQKotRQI+U=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=DymCpAS9WN1rpSB6hqtjnePDPJn2/dDsD8KC/NXljGlUoFrCF8GRpdbpt6Zdnkk7o
+	 JwAnxgvSaQYExQ5a51Bhz6HlDzI7cDeUWJQVk6+ReSJ4WPy6pyiUZd1pNTfcfJMzzp
+	 B+VRp0R3/Ls5iui461kRhiFARuLvIdaDmRQNDB9H3V4QTGga+GK+D/Dtaz8piq8E6o
+	 cgiG4V7nmveZV4F+wfqFI+jcx8ffO7WQjObsdBKsNVQwtslzICPkiHywUu7Nqz7lOs
+	 0QAepY0Itbd/Ylho5zGVc1v4lytJwzVF2y9LSych2aVHb6b1c093EOqhaf6/874bif
+	 Kg+B4xcbqJExQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf v2] bpf: guard uprobes against private-stack
  corruption
-Message-ID: <aoTErdLEwBbiJUHZ@krava>
-References: <20260818095545.314358-1-simon@swine.de>
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Christian Simon" <simon@swine.de>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260818203234.1142913-1-simon@swine.de>
+References: <20260818203234.1142913-1-simon@swine.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 18 Aug 2026 20:47:02 +0000
+Message-Id: <20260818204703.2F6911F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260818095545.314358-1-simon@swine.de>
 
-On Tue, Aug 18, 2026 at 10:55:39AM +0100, Christian Simon wrote:
-> Eligible BPF programs use one private stack per program and CPU.
-> bpf_prog_run_array_uprobe() uses migrate_disable() to keep an
-> invocation on one CPU, but another task can still preempt it and run
-> the same program on that CPU. The second invocation then reuses and
-> can overwrite the first invocation's private stack.
-> 
-> Protect each real program invocation with the existing per-program
-> recursion context. When the program is already active on this CPU,
-> account for the missed invocation and skip it. This matches the
-> private-stack protection in bpf_prog_run_array_sleepable().
-> 
-> Skip dummy_bpf_prog before acquiring the recursion context because its
-> active pointer is NULL.
-> 
-> Fixes: 7d1cd70d4b16 ("bpf, x86: Support private stack in jit")
-> Closes: https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/issues/3056
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Christian Simon <simon@swine.de>
-> ---
-> 
-> This is my first contribution to the BPF subsystem. I reproduced the
-> failure described in the linked report and would particularly appreciate
-> review of the recursion-context handling.
-> 
-> I have a reproducer, that this patch fixes, I am also unsure if this is
-> something that should be part of the selftests.
-> 
-> Tests: https://github.com/simonswine/beyla/commit/20c9912a02c5d5924c992faf7ee353c7d71c9fa0 
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-would be great to have selftest for this if possible
+Pre-existing issues:
+- [High] Incomplete fix for private stack corruption: BPF programs attached=
+ to both uprobes and kprobes/tracepoints bypass recursion protection.
+--
 
-> 
-> 
-> The analogous uprobe-multi path appears affected but is not addressed by
-> this patch.
+--- Patch [1]: [PATCH bpf v2] bpf: guard uprobes against private-stack corr=
+uption ---
+commit 91e05311e6d3a25ea1742394d64f625138f2c862
+Author: Christian Simon <simon@swine.de>
 
-do you plan to fix uprobe_multi?
+bpf: guard uprobes against private-stack corruption
 
-would be great to have fix for both together with the selftest ;-)
+Eligible BPF programs use one private stack per program and CPU. This
+commit adds per-program recursion protection to the uprobe execution
+paths to prevent a second invocation from overwriting the first invocation's
+private stack.
 
-> 
-> 
->  include/linux/bpf.h | 33 +++++++++++++++++++++++++--------
->  1 file changed, 25 insertions(+), 8 deletions(-)
-> 
+Closes: https://github.com/open-telemetry/opentelemetry-ebpf-instrumentatio=
+n/issues/3056
+
 > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 7719f6528445..11e3d7f00543 100644
+> index 7719f65284456..a94fc9898ecef 100644
 > --- a/include/linux/bpf.h
 > +++ b/include/linux/bpf.h
-> @@ -2572,12 +2572,20 @@ static inline void bpf_reset_run_ctx(struct bpf_run_ctx *old_ctx)
->  
->  typedef u32 (*bpf_prog_run_fn)(const struct bpf_prog *prog, const void *ctx);
->  
-> +#ifdef CONFIG_BPF_SYSCALL
-> +void notrace bpf_prog_inc_misses_counter(struct bpf_prog *prog);
-> +#else
-> +static inline void bpf_prog_inc_misses_counter(struct bpf_prog *prog)
-> +{
-> +}
-> +#endif
-> +
->  static __always_inline u32
->  bpf_prog_run_array(const struct bpf_prog_array *array,
->  		   const void *ctx, bpf_prog_run_fn run_prog)
->  {
->  	const struct bpf_prog_array_item *item;
-> -	const struct bpf_prog *prog;
-> +	struct bpf_prog *prog;
->  	struct bpf_run_ctx *old_run_ctx;
->  	struct bpf_trace_run_ctx run_ctx;
->  	u32 ret = 1;
-> @@ -2635,15 +2643,30 @@ bpf_prog_run_array_uprobe(const struct bpf_prog_array *array,
->  	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
->  	item = &array->items[0];
->  	while ((prog = READ_ONCE(item->prog))) {
+
+[ ... ]
+
+> @@ -2635,15 +2643,30 @@ bpf_prog_run_array_uprobe(const struct bpf_prog_a=
+rray *array,
+>  	old_run_ctx =3D bpf_set_run_ctx(&run_ctx.run_ctx);
+>  	item =3D &array->items[0];
+>  	while ((prog =3D READ_ONCE(item->prog))) {
 > +		/* dummy_bpf_prog has no recursion state. */
 > +		if (unlikely(!prog->len)) {
 > +			item++;
@@ -162,30 +86,47 @@ would be great to have fix for both together with the selftest ;-)
 > +		}
 > +
 > +		if (unlikely(!bpf_prog_get_recursion_context(prog))) {
+
+[Severity: High]
+This is a pre-existing issue, but does this leave the private stack vulnera=
+ble
+to corruption if a program is attached to both an uprobe and a kprobe?
+
+The uprobe path increments the per-program recursion counter here via
+bpf_prog_get_recursion_context(), but it does not increment the global
+bpf_prog_active counter.
+
+If an interrupt triggers a kprobe while the uprobe is executing on the same
+CPU, the kprobe dispatcher only checks the global counter:
+
+kernel/trace/bpf_trace.c:trace_call_bpf() {
+    if (unlikely(__this_cpu_inc_return(bpf_prog_active) !=3D 1)) {
+        ...
+        ret =3D bpf_prog_run_array(..., bpf_prog_run);
+    ...
+}
+
+Because the uprobe didn't increment the global bpf_prog_active counter,
+trace_call_bpf() will proceed and execute the same BPF program again,
+bypassing the per-program recursion protection and potentially overwriting
+the first invocation's stack frames.
+
+Does kprobe_multi_link_prog_run() also have this same vulnerability since
+it relies solely on bpf_prog_active before executing bpf_prog_run()?
+
 > +			bpf_prog_inc_misses_counter(prog);
 > +			bpf_prog_put_recursion_context(prog);
-
-hum, we need uprobes reliable and IIUC this does not happen without
-the uprobe using private stack
-
-Yonghong, is it possible to add support to disable private stack for
-program.. like maybe with some flag during the load?
-
-thanks,
-jirka
-
-
 > +			item++;
 > +			continue;
 > +		}
 > +
 >  		if (!prog->sleepable)
 >  			rcu_read_lock();
->  
->  		run_ctx.bpf_cookie = item->bpf_cookie;
->  		ret &= run_prog(prog, ctx);
+> =20
+>  		run_ctx.bpf_cookie =3D item->bpf_cookie;
+>  		ret &=3D run_prog(prog, ctx);
 > -		item++;
->  
+> =20
 >  		if (!prog->sleepable)
 >  			rcu_read_unlock();
 > +
@@ -194,27 +135,7 @@ jirka
 >  	}
 >  	bpf_reset_run_ctx(old_run_ctx);
 >  	migrate_enable();
-> @@ -3208,8 +3231,6 @@ static inline bool has_current_bpf_ctx(void)
->  	return !!current->bpf_ctx;
->  }
->  
-> -void notrace bpf_prog_inc_misses_counter(struct bpf_prog *prog);
-> -
->  void bpf_dynptr_init(struct bpf_dynptr_kern *ptr, void *data,
->  		     enum bpf_dynptr_type type, u32 offset, u32 size);
->  void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr);
-> @@ -3538,10 +3559,6 @@ static inline bool has_current_bpf_ctx(void)
->  	return false;
->  }
->  
-> -static inline void bpf_prog_inc_misses_counter(struct bpf_prog *prog)
-> -{
-> -}
-> -
->  static inline void bpf_cgrp_storage_free(struct cgroup *cgroup)
->  {
->  }
-> -- 
-> 2.54.0
-> 
-> 
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260818203234.1142=
+913-1-simon@swine.de?part=3D1
