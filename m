@@ -1,87 +1,77 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1C36377ED7
-	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 19:56:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A62376A16
+	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 20:05:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787082989; cv=none; b=FYTLJUxaUZlwJP57BIVgYiDRKH29dF/H/Nd2hA8pfSW9dgLNnBd62BTtt5yD02i5AdLCnotE0pxRA91CDB87+iedHRXuGmTbGHCAM5ci/Q+aUpBOBTwO6rt3LUxYR6NROqTmZL2X2eIUNq3DY7FzzrsALomS3u40/3HBsR64i3U=
+	t=1787083533; cv=none; b=eZ6w7hoKPzEXdo4TSoMisvCQl00tCvux1Fa3j0k59R1CXfzBYq0L5YL8qbDUe/MnY266jUIqLqN4axSALyFOpQl6xEtYbit2GvnkW93dwpZzWDlSLd/4D5cD25dQf1RdzdZ5gljhEQR3hqhf3nuvL8DdWmx11J+NlreiRAmDclA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787082989; c=relaxed/simple;
-	bh=8IH10OjJZB/mtZdH6fmGqFSUirbS+Exj18SWzs9jBGU=;
+	s=arc-20240116; t=1787083533; c=relaxed/simple;
+	bh=dKPJhUx+10vKn7uaMJXqPXPMihpzsew2EQTiqPX9QEk=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=J4ZwWbm42OJU/UEmldHZ7nO92RNuP6RsmEQWufv5yVE48+dmHUhpgF/YNIEIjA2dJAL1hevJeFjDg7u3OGCckYzidxQFdHtMNkekPGKvAoqS8TEr+gQckKIoJ7VXomowMmtnHIOghBs/YON/aWhiZj0OdUFz5PjNbJnneZJiEbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jF1OaZDj; arc=none smtp.client-ip=209.85.214.182
+	 Content-Type:MIME-Version; b=tdkSPEV9YrRCmE/hAZdfRxi2PAOMM3Fqu5zQRAjCyUpP7LTcS6MeymP+7DcnCsLZBLX5k8ZRAyyiUyVnKT8u1ywiohgxbmE7BBntX8cbYQOCEnLk1N9kUZJZ+rc0bV+DtNQqnjPODXeTnuXZNHY/qYgjj0CFzrZvY6wB4eje8Sc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=afbCEuop; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jF1OaZDj"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2caed617615so2446865ad.3
-        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 12:56:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="afbCEuop"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-38e347638adso408200a91.0
+        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 13:05:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787082987; x=1787687787; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787083532; x=1787688332; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=MwsjfYvjhLLXvhbkk9VLjuUHWqsTTdTeOI61TJBjUdk=;
-        b=jF1OaZDj00nwOzsynVGw6C4vixLhAM+FfIbShX9Bc/a3gULgU5+zI36nxCdunNd/qG
-         4w7KqOjCXtXqSQbUd6bLhuogGPX2n8ki7KRmmOtTTSuylcAs35PtnuGUY+RYijVjph2Z
-         WsgSiTB3wVBcClAodn16xvpwFGVrsDNvh+tLeWPXboXHb7PhMXbKStt4Elt8fk/O7TFB
-         tUvmlmRNdjKBvbnoNxSLoqVSq64NgXOigHArrcTiZh3SwBi8CPid76u0W/lsX2mkrXjp
-         JOjeKLSGJEVZhSnNuhCYFWtfn9RFLqFE/F3PMhBoWwr6KM+0tGLRCWTunWvO5VBpN9XJ
-         fYKA==
+        bh=dKPJhUx+10vKn7uaMJXqPXPMihpzsew2EQTiqPX9QEk=;
+        b=afbCEuopmlUmUCaI8K2LlIkiXUrSelfGIJyojUFjq1jZ2jVck7JoDEfpm5laFDAaMN
+         UdqjVSCBLRhOEVYEXpeVGOPVKIuAEUBTPAVRqTnCA0LKRmaxNFmhiE6+UK8swTghjyKW
+         Dg+mzqHEgDIibNEZyp3qhYwCd81UdSjcWyfuxCsQiVEWCdZYAqMGfpzA4CbcfbWEhIj8
+         KJanjnTZ+UO54zD9TU8+J7JnGsTIcaz0vSpGaCRrA01YlNoq839Opqxu8/Sb2JNz+GC4
+         vjJ1h0tflj67cwU4GnNhkAWqlCZ3UZu+t4H8k7BlLbkCmnfyX5YtjZRNZHCm5kFM9h6l
+         P92A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787082987; x=1787687787;
+        d=1e100.net; s=20251104; t=1787083532; x=1787688332;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=MwsjfYvjhLLXvhbkk9VLjuUHWqsTTdTeOI61TJBjUdk=;
-        b=bDLe7DuZx/Jxdfo96SjsC86vHowrUc6T3Yy9WPlyXfL95cT0WtCSKwa6S6hzE8pfzF
-         xeAcwRRP/XPxIttFepeDx0aTxG+tyUnUKGYxdrYyaZZYqaznuY1v3yD7I/86hZ4tJLIW
-         tcyGOc7Aw24fIZxwHltceO1dFoOq6B9IOIek8K5E8VlaJH9R6jvtKmB/6os/U1wXs3/S
-         Af9d0TxCHcjaA1ZQC8LDzv2dfAsnAgeR6Zc58Js8/i3fWP8ZGj2afF9IuJpJ/CnR0x65
-         n6GiP8KShftsyIHU5K4TXrobem/t8wce/1lxuNLzplIxUqvhuCAxT16vWMNH5i9bC5hC
-         /I+w==
-X-Gm-Message-State: AOJu0YzX8TrhvvDL/LBJbXLUHVNJjb9+5GH9hlpONlzuhgIipsAv+mV5
-	sY4qCvIUBIVT/IcCkXo3QMuNavODeM5VGPlAMhBUqHmkxZNnpS4aX+qi
-X-Gm-Gg: AR+sD10zZQ5GCdp+USK4Kf8pNARof2FKD1dZVJq4au4WLWus++B2bVX8RH2RSgWp/Bg
-	3jloRNz/C4KH7mfe6TV54k0osReoPbdcf0qwWhylX5rc9c2Yy35KcHZQJ80wFXiAZC08vPneFPH
-	PcXyfHc5BWTWcQ+MR93h7DCgcQpR5XM/72RTpnii6VrHcVmKsbmLY5fBJd5T5ywlCvUd3jw+b+z
-	fR45dSWnSKdRZhtwcb+s1NXmYps1KIi0xgyehodrTNam/z8SpIPcoxdHHHWhbaquONpdAIPH7sv
-	vAz/c/IFG5s2pRjZBg084Crc2fi0vL2dVNMDPVBbvDWg+2A3YA4R3Uym2nEHDTXhjtRrKNO7Bq5
-	2+3s7LeYZ1SsZnT8kwpxxuHcZ+ex6jl6vP4f0CP6cQilG0Q0UoB8q4CQgFtkr1XW52J8QCcvUL5
-	ilOt3d+K2/326+ciLRXxQirn9VwD1H78nLgpVMFVzgB/98D9xEwjFsWHs6JJO08iEuN80dB/l3G
-	jrHnL23WV/8JtE9hgUUERtxHOZLop8T
-X-Received: by 2002:a17:902:d483:b0:2d3:6fac:d67c with SMTP id d9443c01a7336-2d5f6cb7623mr3131945ad.10.1787082986700;
-        Tue, 18 Aug 2026 12:56:26 -0700 (PDT)
+        bh=dKPJhUx+10vKn7uaMJXqPXPMihpzsew2EQTiqPX9QEk=;
+        b=MNoe+ZsqUZhBfss1lSFNf936ajiN1VRQyDK0TR4XVcSOx5KdT0c3wcph6SgwesG6m2
+         ZOY1MoNWI/Fz73NJNqx6bAZDSOrSauhELDO70r3UoCYLP8T8+1pYqWTEp6G7wFAQeIUF
+         xOqpnXwgOZ5tgb1gl3D3IBwiB3vuJA77u36+oixRuKFuzVwGCXAjJYZ+5UKsveRwXQWJ
+         ih9MqJ91IukhfxkPevBTlv7oSE4hrCiX8vQY9BuLBhoW1ht+VEXetMYJ/6ziQBU/3zbc
+         3eXmDr06xq+6fSL0ivTxZF0HNbW/SJVTNwYaBEbLuFcKJauDtqiyUyonCbFbCh0nyGiu
+         qk9w==
+X-Forwarded-Encrypted: i=1; AHgh+Rp8y8ke35POFarYzL7t4ACLFyef8N5ZHhRPMrXtRRE+D6FsSEahe9yEiQKD8DdUdndEFLU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzN5DMuIK9SUEw3VC3S1905YwRm/AWzmYpG91w97RzHCWF25GDy
+	cIugdpVYepuKlYH3ERxlMZbX4ert9OBopDk0uwN9ukAdqGIBTR0/UvOB
+X-Gm-Gg: AR+sD137z6fREk01pCNTSl7VVkyWQbNJwAvjEh6WVTSXEsVlw6GjyxVONgxvw78LHzq
+	yxgtfmi6D0JwnhGJkcmeAdMmZGZ9ScSTxI13jGHjnlH+lIhtOnUB2PahZJF59/o1XojC/GW1BJ/
+	1RX8FmBQRDb7SoBazwv4VJ4OhPYzPqh4nT1IWZG20MfjPK6Lyd6u4UZEce7MVfCsW/4Yaoe8864
+	wIg2yHaHn0R3rRDKKdR0GmZwWJ43yDQawcdHy9JUYhqtHipWebccGyTFLgypVHLabNgc4tBmDvn
+	uT2ttmzw8HVNirRqHS7SEZSAukala2DyZjLRJ6IZgO3mQcdgyQ857XE8ZiHGl/5aDJAdyKTPFOw
+	MI5tJvJINQfev6TggDmwf8LplxUWudFMeapDl3yGQBYhn955yR0Fht5lBXxHp0agF+yVD6zQ++G
+	XtEqkWt0Pxaw80/JsWVbzgSit98Qexz/jakxoaBdOtw/ULyvta5Kvw0F1nTgrUViutfKQ/PYKxx
+	Yk/xb/5UfZEQD25
+X-Received: by 2002:a17:90a:e710:b0:38e:b400:a860 with SMTP id 98e67ed59e1d1-3957bd5d21cmr323853a91.13.1787083531985;
+        Tue, 18 Aug 2026 13:05:31 -0700 (PDT)
 Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d5bb519678sm21011025ad.31.2026.08.18.12.56.25
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39531fbc08bsm9586472a91.12.2026.08.18.13.05.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2026 12:56:26 -0700 (PDT)
-Message-ID: <ba901e5268dc739711b9a5e1d9405be6953e35f1.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Cover mixed arena and
- stack atomics
+        Tue, 18 Aug 2026 13:05:31 -0700 (PDT)
+Message-ID: <33065694711b925e8af3c6a446c3ece15b4cae64.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v6 09/10] selftests/bpf: Add inline-asm and
+ subprog tests for R0:R2 returns
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Vineet Gupta <vineet.gupta@linux.dev>, Yiyang Chen	
- <chenyy23@mails.tsinghua.edu.cn>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
- <john.fastabend@gmail.com>, Andrii Nakryiko	 <andrii@kernel.org>, Kumar
- Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>,  Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
- <emil@etsalapatis.com>, Ihor Solodrai	 <ihor.solodrai@linux.dev>, Shuah
- Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Date: Tue, 18 Aug 2026 12:56:23 -0700
-In-Reply-To: <ac19d435-4c92-42c8-9db1-2db1ab854c3c@linux.dev>
-References: 
-	<20260816-bpf-next-038-mixed-atomic-v1-v2-0-4644c1886dbc@mails.tsinghua.edu.cn>
-	 <20260816-bpf-next-038-mixed-atomic-v1-v2-2-4644c1886dbc@mails.tsinghua.edu.cn>
-	 <cd62cd53be9bcea2d5b63fef8eece815f5095103.camel@gmail.com>
-	 <123a014b2b4ecd7d19cbdfe62c62d994e612b6f0.camel@gmail.com>
-	 <ac19d435-4c92-42c8-9db1-2db1ab854c3c@linux.dev>
+To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
+ kernel-team@fb.com
+Date: Tue, 18 Aug 2026 13:05:28 -0700
+In-Reply-To: <20260817042227.2296079-1-yonghong.song@linux.dev>
+References: <20260817042141.2286086-1-yonghong.song@linux.dev>
+	 <20260817042227.2296079-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2-10 
@@ -92,111 +82,17 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Tue, 2026-08-18 at 12:35 -0700, Vineet Gupta wrote:
-> On 8/16/26 4:36 PM, Eduard Zingerman wrote:
-> > On Sun, 2026-08-16 at 16:17 -0700, Eduard Zingerman wrote:
-> > > On Sun, 2026-08-16 at 10:56 +0000, Yiyang Chen wrote:
-> > > > Add a verifier test with one atomic RMW instruction reached through
-> > > > PTR_TO_ARENA and PTR_TO_STACK paths. The verifier must reject the
-> > > > shared instruction with the existing incompatible-pointer diagnosti=
-c.
-> > > >=20
-> > > > Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-> > > > ---
-> > > > =C2=A0=C2=A0tools/testing/selftests/bpf/progs/verifier_arena.c | 39=
- ++++++++++++++++++++++
-> > > > =C2=A0=C2=A01 file changed, 39 insertions(+)
-> > > >=20
-> > > > diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/t=
-ools/testing/selftests/bpf/progs/verifier_arena.c
-> > > > index b241bbcf54a8a..b22bab33301ab 100644
-> > > > --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
-> > > > +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-> > > > @@ -637,6 +637,45 @@ int non_arena_ptr_add_to_arena_ptr(void *ctx)
-> > > > =C2=A0=20
-> > > > =C2=A0=C2=A0#endif
-> > > > =C2=A0=20
-> > > > +static const struct bpf_insn addr_space_cast_insn =3D {
-> > > > +	.code =3D 0xbf,
-> > > > +	.dst_reg =3D BPF_REG_7,
-> > > > +	.src_reg =3D BPF_REG_7,
-> > > > +	.off =3D 1,
-> > > > +	.imm =3D 1,
-> > > > +};
-> > > > +
-> > > > +SEC("socket")
-> > > > +__description("arena and stack atomic at the same instruction")
-> > > > +__failure __msg("same insn cannot be used with different pointers"=
-)
-> > > > +__arch_x86_64
-> > > > +__load_if_JITed()
-> > > > +__naked void mixed_arena_stack_atomic(void)
-> > > > +{
-> > > > +	asm volatile ("					\
-> > > > +	r1 =3D %[arena] ll;				\
-> > > > +	r6 =3D r10;					\
-> > > > +	r6 +=3D -8;					\
-> > > > +	r9 =3D 0;					\
-> > > > +	*(u64 *)(r6 + 0) =3D r9;			\
-> > > > +	r7 =3D 8192;					\
-> > > > +	.8byte %[addr_space_cast];			\
-> > > I'm going to fix this to:
-> > >=20
-> > > 	r7 =3D addr_space_cast(r7, 0, 1);			\
-> > >=20
-> > > as in the test case above.
-> > > Waiting for CI [1].
-> > >=20
-> > > [1] https://github.com/kernel-patches/bpf/pull/13325
-> >=20
-> > A...and it requires another exception for GCC-BPF:
-> > https://github.com/kernel-patches/bpf/blob/bpf-next_base/ci/vmtest/conf=
-igs/DENYLIST.test_progs-bpf_gcc
-> >=20
-> > Ihor, it's a third time GCC-BPF strikes this weekend.
-> > What do people think about downgrading it to may-fail until the
-> > DENYLIST decreases to something reasonable?
+On Sun, 2026-08-16 at 21:22 -0700, Yonghong Song wrote:
+> Add inline-asm tests covering what the C tests cannot reach, since they
+> need a callee that violates the convention on purpose.
 >=20
-> While bpf-gcc is improving, slowly, we can in parallel do alittle better=
-=20
-> on test hygiene as well. In this case by correctly bracketing the tests=
-=20
-> with _BPF_FEATURE_XXX.
+> The coverage includes BPF-to-BPF returns, kfunc calls, backtracking and
+> liveness. In addition, a negative freplace test checks that an extension
+> cannot replace a function returning R0:R2.
+>=20
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> ---
 
-Yes, that's what I ended up doing. Should have paid attention to the
-#if .. #endif bracket used by the textually preceding test.
-Sorry for lashing out.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-> Co-incidently I have a series in works from an accidental discovery of=
-=20
-> llvm-only testing coverage (rely solely on __clang_version macro) which=
-=20
-> I'll follow up on the list shortly.
->=20
-> Thx,
-> -Vineet
->=20
->=20
-> >=20
-> > Anyway, I'll wrap-up with this patch-set in the evening.
-> >=20
-> > > > +	call %[bpf_get_prandom_u32];			\
-> > > > +	if w0 !=3D 0 goto 1f;				\
-> > > > +	r8 =3D r6;					\
-> > > > +	goto 2f;					\
-> > > > +1:	r8 =3D r7;					\
-> > > > +2:	r9 =3D 1;					\
-> > > > +	lock *(u64 *)(r8 + 0) +=3D r9;			\
-> > > > +	r0 =3D 0;					\
-> > > > +	exit;						\
-> > > > +"	:
-> > > > +	: __imm_addr(arena),
-> > > > +	=C2=A0 __imm_insn(addr_space_cast, addr_space_cast_insn),
-> > > > +	=C2=A0 __imm(bpf_get_prandom_u32)
-> > > > +	: __clobber_all);
-> > > > +}
-> > > > +
-> > > > =C2=A0=C2=A0static __noinline
-> > > > =C2=A0=C2=A0u32 __arena *check_arena_arg_nonglobal(u32 __arena *arg=
-)
-> > > > =C2=A0=C2=A0{
+...
