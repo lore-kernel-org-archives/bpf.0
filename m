@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F6B2561A2;
-	Tue, 18 Aug 2026 14:34:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C7893812FB;
+	Tue, 18 Aug 2026 14:42:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787063647; cv=none; b=p/RC1Ez4QkT1Z2tQ8Xk9EMIf14JZV975dkA9JjVfdXrl64R80oFKFpBNVNyjzAmdRQScqXo+p8/8kmusRaFP1UVXOaZSTr69DsC2Xn/iyvQTzarvbVbDEqjkpiAHThkZkqwCXIl9sJ34O2VftiAYLS/WXrfmEZ/4R06cBudAg8A=
+	t=1787064126; cv=none; b=InXuZjh7u7nx9UrFr7eGpRvDGAlmqfrv908kv4usqmMr2DC0wUD0ifvYEPAkiv1eV4tRHhrz5TFrZCDLKzjUjELpo1zxQk96uO5Q10Dlvhhg0qg2c2mM7nzwj7EIDyNmZVavIC0szr8Q2MNBaArv5JiJWfjERHnfGVmhqYppY4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787063647; c=relaxed/simple;
-	bh=rVKtpVqLc11/bslXNSGYgugY1jfuCHBdjuxVIXKkQ5A=;
+	s=arc-20240116; t=1787064126; c=relaxed/simple;
+	bh=8bHO7dMJiHXvIoMvb7YLuOXiYkeDw930A2e0yHp6ZJI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nXrcDviB1bvkZ0k6NzuUiv5hcbpA8L0jOTVgRW5wBSctY+UFxmrSzVJA675Li36R3jhWRco9tcQjR+CHgg1DZtS/0iM6TIZ/HgpTqbyxOZ30ZyZ3Eamj4VRhhfzfV7R9FBW41Y73S8rh6rVsSNwsOiJ3foiAl/hTMtCkjknOsuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JhGeoaoh; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=eYRx6QU8LlTUNtuTBA6vxyfNMvvCWlP206Mav2QDQGKR2+/y9gL0luhF4Z4yKOg9hs7y4FzACqMIR/VGnRN6SfwBq0Or3vmJO1J6TepAzo/lLn0CdY418s7QNaCxBUoFuCb7b8FV7ScKhY4ollG4qvdJBSGd9rg6pWIsj9p23CA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CDQc3TbX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JhGeoaoh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DA871F000E9;
-	Tue, 18 Aug 2026 14:33:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CDQc3TbX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C2261F000E9;
+	Tue, 18 Aug 2026 14:41:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787063645;
-	bh=5o59A+iUFyU+31kYkokmEB51xD/MimpJJEfveQW/Usw=;
+	s=k20260515; t=1787064123;
+	bh=fIgroO17cxW3StOu7FtwzJ0p4BsPX3URbvdP5tpra2A=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=JhGeoaohI/G+QkNhEO8WhJsLjSEb99kxRI07DwXVljsOzC8bWSYW+Un3eLGngrkOE
-	 yuagroV1ZxBYVVEjDdhsft0MTk4GKGkD+1qshw8yoRmCnzhHfRF2cUbC0ImoDZJR2n
-	 ydvSNeckFrVeepxoEWrG9GF8PzFUlIHPc1exetk0wJHXVctTR9oYJPbQUcHBTQNPp2
-	 HzGfG6l6k5c3wzOhjh+NlaTiALRN/PSEo9QUicLT+u3ycoiQkdYCicTyBgaJ8WURdb
-	 xfUec6UMt094VaNCpDCBIzPgXSE0GiVWPM2G5pnIXECz/zCO/q5mio3oY0PDA9BMOK
-	 cN/keMp8JTxjA==
-Date: Tue, 18 Aug 2026 15:33:42 +0100
+	b=CDQc3TbXHMGHuOVnFhO/NrVr0MqkyFFMgQaU1KZKGPZQbiFQsjLNVGsur+cfMnnZO
+	 UQPUWRzDS08US+P2dtx0QNBWWrenfUHoeJRTJTyWT+xDVcdAGiYgnODJzYbteqNI/1
+	 LPdnZLcxdLysRPBDgdvowJ0y9rqygjW/gvqdAu64/kzb8UYZL9wzLY5hk0+SdEOfhB
+	 J6s/JFVnqkhVvCOsSIb85qhuHJ/fUPElB2yxQ3YNC7EpiSHIEt4WOqosvz1N8aWpLm
+	 qUIT+6t6QlJNDUnSwUmtIWnwtHjPiDoi7fk9PBqGmwtkC9fD//KBG8JCJDhpCu4PG8
+	 vAgGurOJhSoHQ==
+Date: Tue, 18 Aug 2026 15:41:40 +0100
 From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
 To: "David Hildenbrand (Arm)" <david@kernel.org>
 Cc: Kiryl Shutsemau <kirill@shutemov.name>, akpm@linux-foundation.org, 
@@ -40,12 +40,11 @@ Cc: Kiryl Shutsemau <kirill@shutemov.name>, akpm@linux-foundation.org,
 	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
 Subject: Re: [RFC PATCH 00/57] mm/collapse: rebuild collapse on migration
  primitives
-Message-ID: <aoRqByutFcW61Vag@lucifer>
+Message-ID: <aoRuqbgFAPyZtUli@lucifer>
 References: <20260816224609.308019-1-kirill@shutemov.name>
  <aoLAly-oL2OAa4n8@lucifer>
  <aoLkMUtmzRVuv2Hx@thinkstation>
- <aoQ77EcD3M2kjeya@lucifer>
- <0153303d-f9d6-45ea-a276-fbf2e5625ef9@kernel.org>
+ <99138bda-55ba-4c58-9b79-b76e9daecdde@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,154 +53,72 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0153303d-f9d6-45ea-a276-fbf2e5625ef9@kernel.org>
+In-Reply-To: <99138bda-55ba-4c58-9b79-b76e9daecdde@kernel.org>
 
-On Tue, Aug 18, 2026 at 04:12:17PM +0200, David Hildenbrand (Arm) wrote:
-> On 8/18/26 15:06, Lorenzo Stoakes (ARM) wrote:
-> > (I'll reply to the rest of this later)
+On Tue, Aug 18, 2026 at 04:15:27PM +0200, David Hildenbrand (Arm) wrote:
+> On 8/17/26 15:38, Kiryl Shutsemau wrote:
+> > On Mon, Aug 17, 2026 at 09:52:13AM +0100, Lorenzo Stoakes (ARM) wrote:
+> >> We have a THP cabal meeting every couple of weeks where it would have been
+> >> useful for you to raise this first.
 > >
-> > On Mon, Aug 17, 2026 at 02:38:44PM +0100, Kiryl Shutsemau wrote:
-> >> David and I talked about this at LSF/MM.  I can give it a try if it fits
-> >> your idea of "feature freeze" -- and if it doesn't collide with the series
-> >> you have in flight, in which case I'd rather go after yours than around it.
+> > Fair -- though my invite is on my old @linux.intel.com address.  Could
+> > you forward it to kas@kernel.org?
 > >
-> > Whether intended or not you sound rather like you are trying to override me
-> > in favour of my co-maintainer here and it's... not helpful.
->
-> I think Kiryl tried to say that we discussed at LSF/MM which areas of MM scream
-> for an improvement, and we discussed that khugepaged is just horrible code.
-
-Yes, and obviously I agree with that very much!
-
->
-> I think we all agree that there is a lot of room for improvement, but the big
-> question is:
->
-> (a) When does it stop being a cleanup and is a new feature in disguise that
->     makes the code more complicated and even harder to maintain.
->
-> (b) Can it just naturally be made looking like a cleanup.
-
-Right and point (a) is exactly my pushback here.
-
-And it's not always so easy to separate.
-
->
-> Ideally, we'd get b), in small, nice-to-review chunks that incrementally improve
-> the code without inflating it heavily or moving everything around.
-
-Yep.
-
->
-> The current locking is nasty, so anything that moves us one step closer into
-> something that is not only simpler but also more scalable is nice. I am a bit
-> concerned with the churn in the series as is.
-
-Yes.
-
-What I'm saying is, essentially, go read the code. Go see how coupled things
-are. Go read the functions that require you to keep a giant stack of
-state to even know what's going on.
-
-Look at the bug rate, and how subtle the bugs are - essentially - 'behold the
-horrors' :)
-
-And rather than being opposed to fundamental reworks (actually - it's the exact
-opposite - I think THP needs changing from top-to-bottom):
-
-Based on experience of seeing work done in THP - we are _making it worse_ when
-we add features without paying down this debt.
-
-I think it's nuanced, because as part of reworking things (you say this below
-too), patterns and approaches can fall out.
-
-And you can naturally lead things towards a sensible rework.
-
->
-> After this series, mm/collapse.c itself is way larger than just mm/khugepaged.c
-> originally, which raises some eyebrows.
-
-Yeah exactly.
-
->
-> We should also be aware that people are proposing file/shmem mTHP collapse, so
-> ideally what we refactor would naturally unify some of these code paths.
-
-Right yes. There's no harm in _laying the foundations_ for future changes.
-
-In fact a lot of reworks are about doing exactly that - you can often go one of
-2 paths:
-
-	a. push the feature in as some tacked-on thing that works but adds
-	   complexity/maintainership overhhead/etc. or
-
-	b. Change the architecture to suit the feature you intend.
-
-So my opposition is to a, not b.
-
->
-> I am wondering whether shmem mTHP collapse should come first. (I'm hoping that
-> shmem mTHP collapse can unify some of the anon+file collapse code in a nice way,
-> to similarly just look like a cleanup while enabling a new scenario. Which is
-> really what I am hoping for because the current code is A MESS with weirdly
-> named functions all over the place. I hope it can be unified somehow ... and
-> that needs some proper thought)
-
-Yes.
-
-And to be clear and I am going to say this in my (proper) reply to Kiryl - I do
-think moving away from the presumption of PMD collapse is _key_ to a more
-general rework.
-
-But it's about how we get there, how the rest of the code looks, what other work
-we do around it.
-
->
+> >> In any case - this series is not something we'd consider at the moment,
+> >> even broken into parts.
+> >>
+> >> David and I have put THP into feature freeze - until the codebase is
+> >> subtantially improved we're not really interested in seeing significant
+> >> development.
+> >>
+> >> The technical debt is substantial and has to be paid down first.
+> >>
+> >> See [0] for a rough list of TODOs in this regard.
 > >
-> > David and I co-maintain THP together, are in constant communication, and
-> > have a great working relationship :)
->
-> Yes! :)
-
-:)
-
->
+> > I read the TODO list and I'll pick from it -- though I notice the
+> > technical debt section includes "Literally all of the code in
+> > mm/huge_memory.c and mm/khugepaged.c", which I'd argue this series is a
+> > fairly committed attempt at :)
 > >
-> > IOW - if one of us states a position on the sub(sub?)system - then take
-> > that to be the actual position.
+> > One clean up I wanted to do is consolidate code by functionality, not by
+> > the THP/non-THP split.  Move all page fault handler code into mm/fault.c,
+> > unmap code into mm/zap.c, fork's copying into mm/fork.c -- mirroring
+> > kernel/fork.c, so the mm half of a subsystem sits under the same name.
+> > Large folios are an integral part of mm nowadays and I don't think we
+> > benefit from keeping THP in a separate file.  It is also an opportunity to
+> > shift away from mm/memory.c being a kitchen sink.
 > >
-> > I have poured what must be hundreds of hours now into THP maintainership -
-> > it's by far my biggest workload on the maintenance front, by far the most
-> > painful and by far the most thankless.
-> >
-> > I do it because I care about mm a great deal and am, frankly, driven by a
-> > desire to see THP turn from a flaming trash pile of a code base with
-> > confusing semantics and many, many broken parts into something that serves
-> > the community's needs with far less maintenance burden.
-> >
-> > Looking over your series it seems some of the patches works in this
-> > direction (great!), but much else of it fundamentally changes key
-> > behaviour.
+> > David and I talked about this at LSF/MM.
 >
-> Agreed, I think we really should unify+cleanup the existing code first before
-> doing more drastic changes.
->
-> Having a series that throws all of khugepaged.c into a mixer and pours something
-> new into collapse.c is ... concerning :)
->
-> But I am sure there is a way to incrementally improve the code? At least that's
-> what I hope.
+> Ah, I missed the context in my other reply. Lorenzo already had some patches at
+> some point to split up mm/memory.c into better chunks that will also better help
+> our subcomponent maintenance model.
 
-Yes. And it does look like a lot of the early patches are along the right road.
+Ah yeah I kinda lost those but indeed doing this is a good idea.
 
-I do plan to do some proper feedback on this series along the lines of figuring
-out how we move this forwards.
+I should try to dig those out again or look again when I have a chance...
 
 >
-> >
-> > So it's just a question of deferring the latter until we get to a sane
-> > point with the former.
-> Thanks Lorenzo.
+> I think the challenge is how to handle huge_memory.c, because ideally, we'd not
+> have these stupid callbacks into huge_memory.c once we make PMDs just a
+> first-class citizen.
+
+Yes and another point and I think it's one that Kiryl also gets at is - can we
+_please_ stop pretending huge folios == THP == what the page cache does == page
+special cases like DAX? :)
+
+I think Matthew had ideas (TM) about separating out CONFIG_THP from that stuff
+but that's another way in which we can unwend some of the horrors.
+
+>
+> This is, unfortunately, also something that needs more thought, because we don't
+> want to end up moving stuff back and forth.
+
+Yeah annoyingly it's not all straightforward. I wonder if actually gauging off
+of what series often touch in patches might be a good way of figuring out how to
+separate, funnily enough (certainly for mm-next conflict resolution purposes
+anyway).
+
 >
 > --
 > Cheers,
