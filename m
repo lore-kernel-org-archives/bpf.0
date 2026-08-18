@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8585479875;
-	Tue, 18 Aug 2026 14:12:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30F69175A88;
+	Tue, 18 Aug 2026 14:15:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787062350; cv=none; b=KM2bJbEj4eL1mHuStPe21fCpdlbZD/1dQOLhEQxC8Klz2DVA0uDFkyRNec8QtnsqHnNlMyycYeIKFiFC1OkX8PDJl9tYqsRPS0yFVBGWXiPRoZDM3+OCARolYN+otGXYwvRNVDqokovswaPpMwQbhlVlWZOVAnZ4Ta6RxC+BL6U=
+	t=1787062539; cv=none; b=IQ/HOR2uMTMgoJwDVbd3VVPIsbKNgVNT4w+ac+7v7Ouz+9/vgGTPOI4XAM7+CApSvZARBn2EMjYNFjQTgcKbHuur+zFdNftRjT3Zc8PQU91bmClR5HaueFTAKzIladXQ5SMCNN6gXsd2LlY6/cXF2eEMPN5+haeKbwG/ukZdgxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787062350; c=relaxed/simple;
-	bh=oqE56bS3SGsRsfaFr8lPO7u0GCoTicW0P/B8im+Pdu8=;
+	s=arc-20240116; t=1787062539; c=relaxed/simple;
+	bh=3sc9jhutDQogoK0YLOwRMtxdYw3oTIlvs7NVL1reC+U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HoL3man6XWEp+P82qeRxzyxfrf0Bekdx6mjgzQY4LR4ZtZeRw0nGvVR5m2i5dc2d4285YtFNoZyKnGOCNlhvTfPDLvfpgkQksOLvufBQNge/ZfRRpI13ddalHEqkpA0Zo9TFYgvoL8hkcrl2mQa6xj/uV7Ie8dM8uDpzry3U2As=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k7fgtiew; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=PcvkZkwaVnP8JqVupmB2KWCo+9o7UTzjjivE9JAg8Wc3rNkE0u6W2yGpL1uUwG59qPBt6SyOGDwz7wUplzhkU2pBS5+m7iVlZJ0al7hZ8XPz9jps2HvxZ+uYp4J+yQU1tbxso6/AdWciXmdLsVyk47LKDl0Y6MgaPsK25UL1PHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J4txqm8P; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k7fgtiew"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FE7C1F000E9;
-	Tue, 18 Aug 2026 14:12:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J4txqm8P"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 528441F000E9;
+	Tue, 18 Aug 2026 14:15:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787062348;
-	bh=VDXqL7k+knl0jkjn1/aRQLOgRCL9XqV9SBb/yRhLycU=;
+	s=k20260515; t=1787062537;
+	bh=Qx7Q9Tkm+30Vy5GpQNpuwA2/ZGcx6zXr2iqGQrjyaow=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=k7fgtiew3sQROMKATfkzeYmZ8lMA4FEFtSOWmgJKmHlC/KVM8bYABwCDJOILFZn8V
-	 4+PlOo5WhEFiD/6YT5j0I6aydDO3hY20SxflBZhvNvviV3nhiYixa6zaVU3M1UYw7B
-	 u1P2Isq+pze0hJRmlUtlbXehWcf6OvBiv3JICbLfmjh9SrMLd8Qub92HH2/FUdu1cX
-	 htZUt+eqVM6BXdGGJ9FFX5m5gOYR0v/NSF3bzz/qbgMGVCGQLbUUimvC1YgJ1u46nG
-	 ctUj6ckK8JIYMgsg250bFMC6JBRgVSiAqSoqk1EY6npKMtCjYDtgzevhVBkECLsAbd
-	 Q2TdWq+hJFwWQ==
-Message-ID: <0153303d-f9d6-45ea-a276-fbf2e5625ef9@kernel.org>
-Date: Tue, 18 Aug 2026 16:12:17 +0200
+	b=J4txqm8PSDHPtAGQRTxTA5BirFk7+ogzhOIXx818dDoEykvFj2mrVFD5zdFYcfFJ0
+	 /jprkZRDFxQc8+QCcmNb0ApwCPKRCXrDv8FdOKGTuzZSBcmf10N4ZNE2LUmmbewdbR
+	 j4nU0aKvIRwA6/P+7rKRyvxb+WqvxxEYHHG++dyYmXrcmPJ4wvxfPuZA75WpgPVgxs
+	 f0B9a3AoNrZyoj+6NB3OnEml7VuMxDNvR+DUcxVjWZC/C0Sw9hEPBcvxjPfQATlp3A
+	 n0QvsdIbuzJrd8r8lo//noi6umHRcuvqsDdZ55Q9yQZXT5rNReYRnMfBHGHAV80cYT
+	 U4t5de0eRoHxA==
+Message-ID: <99138bda-55ba-4c58-9b79-b76e9daecdde@kernel.org>
+Date: Tue, 18 Aug 2026 16:15:27 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,8 +37,8 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [RFC PATCH 00/57] mm/collapse: rebuild collapse on migration
  primitives
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
- Kiryl Shutsemau <kirill@shutemov.name>
+To: Kiryl Shutsemau <kirill@shutemov.name>,
+ "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
 Cc: akpm@linux-foundation.org, nico.pache@linux.dev,
  baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com,
  hughd@google.com, lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com,
@@ -51,7 +51,6 @@ Cc: akpm@linux-foundation.org, nico.pache@linux.dev,
  linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
 References: <20260816224609.308019-1-kirill@shutemov.name>
  <aoLAly-oL2OAa4n8@lucifer> <aoLkMUtmzRVuv2Hx@thinkstation>
- <aoQ77EcD3M2kjeya@lucifer>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -98,88 +97,54 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <aoQ77EcD3M2kjeya@lucifer>
+In-Reply-To: <aoLkMUtmzRVuv2Hx@thinkstation>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 8/18/26 15:06, Lorenzo Stoakes (ARM) wrote:
-> (I'll reply to the rest of this later)
+On 8/17/26 15:38, Kiryl Shutsemau wrote:
+> On Mon, Aug 17, 2026 at 09:52:13AM +0100, Lorenzo Stoakes (ARM) wrote:
+>> We have a THP cabal meeting every couple of weeks where it would have been
+>> useful for you to raise this first.
 > 
-> On Mon, Aug 17, 2026 at 02:38:44PM +0100, Kiryl Shutsemau wrote:
->> David and I talked about this at LSF/MM.  I can give it a try if it fits
->> your idea of "feature freeze" -- and if it doesn't collide with the series
->> you have in flight, in which case I'd rather go after yours than around it.
+> Fair -- though my invite is on my old @linux.intel.com address.  Could
+> you forward it to kas@kernel.org?
 > 
-> Whether intended or not you sound rather like you are trying to override me
-> in favour of my co-maintainer here and it's... not helpful.
-
-I think Kiryl tried to say that we discussed at LSF/MM which areas of MM scream
-for an improvement, and we discussed that khugepaged is just horrible code.
-
-I think we all agree that there is a lot of room for improvement, but the big
-question is:
-
-(a) When does it stop being a cleanup and is a new feature in disguise that
-    makes the code more complicated and even harder to maintain.
-
-(b) Can it just naturally be made looking like a cleanup.
-
-Ideally, we'd get b), in small, nice-to-review chunks that incrementally improve
-the code without inflating it heavily or moving everything around.
-
-The current locking is nasty, so anything that moves us one step closer into
-something that is not only simpler but also more scalable is nice. I am a bit
-concerned with the churn in the series as is.
-
-After this series, mm/collapse.c itself is way larger than just mm/khugepaged.c
-originally, which raises some eyebrows.
-
-We should also be aware that people are proposing file/shmem mTHP collapse, so
-ideally what we refactor would naturally unify some of these code paths.
-
-I am wondering whether shmem mTHP collapse should come first. (I'm hoping that
-shmem mTHP collapse can unify some of the anon+file collapse code in a nice way,
-to similarly just look like a cleanup while enabling a new scenario. Which is
-really what I am hoping for because the current code is A MESS with weirdly
-named functions all over the place. I hope it can be unified somehow ... and
-that needs some proper thought)
-
+>> In any case - this series is not something we'd consider at the moment,
+>> even broken into parts.
+>>
+>> David and I have put THP into feature freeze - until the codebase is
+>> subtantially improved we're not really interested in seeing significant
+>> development.
+>>
+>> The technical debt is substantial and has to be paid down first.
+>>
+>> See [0] for a rough list of TODOs in this regard.
 > 
-> David and I co-maintain THP together, are in constant communication, and
-> have a great working relationship :)
-
-Yes! :)
-
+> I read the TODO list and I'll pick from it -- though I notice the
+> technical debt section includes "Literally all of the code in
+> mm/huge_memory.c and mm/khugepaged.c", which I'd argue this series is a
+> fairly committed attempt at :)
 > 
-> IOW - if one of us states a position on the sub(sub?)system - then take
-> that to be the actual position.
+> One clean up I wanted to do is consolidate code by functionality, not by
+> the THP/non-THP split.  Move all page fault handler code into mm/fault.c,
+> unmap code into mm/zap.c, fork's copying into mm/fork.c -- mirroring
+> kernel/fork.c, so the mm half of a subsystem sits under the same name.
+> Large folios are an integral part of mm nowadays and I don't think we
+> benefit from keeping THP in a separate file.  It is also an opportunity to
+> shift away from mm/memory.c being a kitchen sink.
 > 
-> I have poured what must be hundreds of hours now into THP maintainership -
-> it's by far my biggest workload on the maintenance front, by far the most
-> painful and by far the most thankless.
-> 
-> I do it because I care about mm a great deal and am, frankly, driven by a
-> desire to see THP turn from a flaming trash pile of a code base with
-> confusing semantics and many, many broken parts into something that serves
-> the community's needs with far less maintenance burden.
-> 
-> Looking over your series it seems some of the patches works in this
-> direction (great!), but much else of it fundamentally changes key
-> behaviour.
+> David and I talked about this at LSF/MM. 
 
-Agreed, I think we really should unify+cleanup the existing code first before
-doing more drastic changes.
+Ah, I missed the context in my other reply. Lorenzo already had some patches at
+some point to split up mm/memory.c into better chunks that will also better help
+our subcomponent maintenance model.
 
-Having a series that throws all of khugepaged.c into a mixer and pours something
-new into collapse.c is ... concerning :)
+I think the challenge is how to handle huge_memory.c, because ideally, we'd not
+have these stupid callbacks into huge_memory.c once we make PMDs just a
+first-class citizen.
 
-But I am sure there is a way to incrementally improve the code? At least that's
-what I hope.
-
-> 
-> So it's just a question of deferring the latter until we get to a sane
-> point with the former.
-Thanks Lorenzo.
+This is, unfortunately, also something that needs more thought, because we don't
+want to end up moving stuff back and forth.
 
 -- 
 Cheers,
