@@ -1,140 +1,128 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1862C43FD26
-	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 18:09:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96FB846A5F2;
+	Tue, 18 Aug 2026 18:13:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787076581; cv=none; b=k81X2dP7tCpY5+fhTxpTIv2RIjti0X4zPc2015Tu0YoSE11wxKlMOCO+GYgCoTaKEfp6qST4Jet3YVzRxxXUXZWjDzzNtDbzc55x8djoWIpTVeFwWbLRc1IpJcUc7uhqTI3D4Gily+n5pV6HSarkCnbvOex9JSIsIpKX8lZ6WO0=
+	t=1787076840; cv=none; b=kJ1QQiJpfErUuGObMiRz6U/opkw5Z4WrIZYhftsma04xUBFwGrhCJ8e4ccruWhXMQAQvEq74aW+/IDkcNeC07hEqiof4M1NX79RjI9dU2EONzkc70XNmm3QMxy7ryecVqPaeiSbvB5AEkfdJ0ITGiSezEK0xHZ+bS4vdzdN5ZwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787076581; c=relaxed/simple;
-	bh=fePiLZS/g3Bx8H0TLNR7mUgRZEZ8yYZVNkO8Y+/pq6Y=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=qGkSZovRVBkAOkOdj6jW7WF/sQRgvKHqy4ax35+uQnIHZ4do/PRuTODFHCct7JULTg6w6lHzmeXwK+TuQ6H/GSDGkGPlpx4ISAk9T8bJfLvHkdNHpIG5OFkUqUSDlnkMjNFSfrE0tTF65RFIRh1J1hDrDG1jbl+9NWdT23qo8u8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NJRB3tIj; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=VL/MF7uh; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1787076840; c=relaxed/simple;
+	bh=yMLrmdwXeHUgaFH2K6lvC5bUq9/5Cuaow9mOoprwegQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WqNd6CHFzNDi4JQ004N/vub12/1XMj9WRYIMrA6nLuq+lJKhSf/fXELUMU0MqGNSXI/DxqjBzW6ssOrW/dxKqG25GniaS798QUBSxwvj/iwVoVN3+kpK43QKbIILmpkkhYEceAX1bU/G8NOkoPkHJmYmGc0a/MwTj+QCa47xTCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TKWBXLyN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NJRB3tIj";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="VL/MF7uh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1787076579;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UbMG91XJkSDOVCgcf8S4eiNN3mjMzoFKvd3Nk1kKRdI=;
-	b=NJRB3tIjOv3arqAR/rEPeYsYcEWHnGslaoXDqyqdtIZcSYu6y5eb3BfYl6vQAoK7qSRbjz
-	PkBRlqenBKmJw6ZMg64JqwIJIvefVBHdMJAMWep7ck/eh6z1MH1CDB2avT+F5H9AKLxJjw
-	4t+Sx5zT6ciUESdUJvjA+wNhe1XdO0A=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-21-rR3sqQTXP8CBmq3qq6TpXg-1; Tue, 18 Aug 2026 14:09:37 -0400
-X-MC-Unique: rR3sqQTXP8CBmq3qq6TpXg-1
-X-Mimecast-MFC-AGG-ID: rR3sqQTXP8CBmq3qq6TpXg_1787076576
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-47f4601af62so37819f8f.1
-        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 11:09:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1787076576; x=1787681376; darn=vger.kernel.org;
-        h=content-type:mime-version:message-id:date:references:in-reply-to
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=UbMG91XJkSDOVCgcf8S4eiNN3mjMzoFKvd3Nk1kKRdI=;
-        b=VL/MF7uhJohrENXEmMvutZCA3fLN0Z81WDGMZ6qbL0+WT7FPZGzNsKY7QqBSpJU4RR
-         HHmRmoucnN7lO2GfaXrH548ve9bV30gpRQfc68x8PGyqJn/zQcZGiMPbEKQPZENf4Clt
-         NvG9rDYuXINQqjS1JN1TVIMTg4ka/QDnrGbGavh/qViubilKgxOp7LA4R1bdeL/ZRbbS
-         A8eElxf4JcOIP+QGn+2F10q/PQOvv38jkoqYkkXzY6GhyQl2ZQH2w9yRH9s6iUQvGBy6
-         jBfdnsUGYZKtyPjj1nxU6I098slCW5Md0+Gr+WPFTZ5qTAHCTNNGN1FKTyzb1FJ36eTo
-         DSFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787076576; x=1787681376;
-        h=content-type:mime-version:message-id:date:references:in-reply-to
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=UbMG91XJkSDOVCgcf8S4eiNN3mjMzoFKvd3Nk1kKRdI=;
-        b=ItCV60RLIWa3UXtAeXuOoKo/zKBdue8+vR7v1WGvkD+UqUhwWzHofX3W57uQyIn0nb
-         uviHkXsmHx8wEPzInGEJrlLr0O2xZiszes/cXvFi9KiTTTueEVZYY7sXpf9EhaYOZjsU
-         ORzsf3ZICiXIQj/SrIyhlgZhsXu2T5EoU26Fl19B6vJ/fcMCjPtzBW84i2UXuSpDUkhu
-         Xq36Xdg4AWjWCVxq4dchymN1mDvpeQLfTDQr/kSUEbkrxkw9rRpdYilP1LsaSH6BlTIi
-         JBNLwEqFJEvp/5xm6EZP+VqxZ2FpCnZNNx+/GwA+YEV54NDYhUM1eYhoPzGiJ8a6Ztyj
-         59gw==
-X-Forwarded-Encrypted: i=1; AHgh+RrhziPc9CV0zZWBi88FfEE74AZH/xYd+SFYEGomt959Dz3aEslu3xIqIp3zldhweys/jfQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoGBuiSAARZ5QUNLzHrgExWW/aKFMt2KiZ/1dLwD8h+KPIsSk4
-	6sGnYpOhZ3GnW72XU/b/7dGR+MvLwpQO1KTv97kDV3KPI100JOBCKHEsUuvHf/q9InMJWUVyoZO
-	rCDR7hjQBgZjbSN1A8s+Z1TrEdhfv6qgrZXzASVnDndy9pYl2ekXsyQ==
-X-Gm-Gg: AR+sD11r5VC8/rTbIvbExF2vBf1nw/ct4u7XKcGqlic52dIoEjGaWyLgdvYgJ2GSN9i
-	hnRd7xgkdpk+7P+Rsl+U8AwWw4dxXEWJFaRY7gNz57MdJ776YrG+bpr8x/JO9ExeX8rlbSkW9hQ
-	Add7tjxol0cf0qAz5rz2MFjrDDFk57fuB4094njdv+uEEbUmynKjXRyewPx8OTouFq7u5d0jBgA
-	4rw6COdJKUHqlJjtSiaTOcE062ZlupAcCTUNgudZroN/1inFwVQTWW8/MI7vlVsngTGQY571rBD
-	RVB4jFCWWUbZnhPDQoszr4yXiOObU9cF4/V5UBjv0pXCteHrIq/FKtU/1V7cIFFu6G5qg9CTYhW
-	AseykBGJ3Wg0tApiUpc2SKLu6
-X-Received: by 2002:a05:6000:29cc:b0:47f:773f:2d68 with SMTP id ffacd0b85a97d-48160738c19mr44990089f8f.16.1787076576467;
-        Tue, 18 Aug 2026 11:09:36 -0700 (PDT)
-X-Received: by 2002:a05:6000:29cc:b0:47f:773f:2d68 with SMTP id ffacd0b85a97d-48160738c19mr44990028f8f.16.1787076576088;
-        Tue, 18 Aug 2026 11:09:36 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-482a5a7c603sm14758633f8f.21.2026.08.18.11.09.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2026 11:09:35 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 57C3591AE2A; Tue, 18 Aug 2026 20:09:34 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Alexander Lobakin <aleksander.lobakin@intel.com>, Jiayuan Chen
- <jiayuan.chen@linux.dev>
-Cc: netdev@vger.kernel.org, Kenneth Lee <kennethbwlee@snu.ac.kr>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub
- Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
- Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
- <sdf@fomichev.me>, Kuniyuki Iwashima <kuniyu@google.com>, Hangbin Liu
- <liuhangbin@gmail.com>, Krishna Kumar <krikku@gmail.com>, Martin Karsten
- <mkarsten@uwaterloo.ca>, Martin Willi <martin@strongswan.org>,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next] net: xdp: don't assume an Ethernet header in
- generic XDP
-In-Reply-To: <d9c3234b-99ac-430c-ab62-9b1412af3461@intel.com>
-References: <20260813113229.381136-1-jiayuan.chen@linux.dev>
- <d9c3234b-99ac-430c-ab62-9b1412af3461@intel.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Tue, 18 Aug 2026 20:09:34 +0200
-Message-ID: <875x179u75.fsf@toke.dk>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TKWBXLyN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FC0F1F00A3A;
+	Tue, 18 Aug 2026 18:13:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787076839;
+	bh=6urx/Pmc2TVqY78ox2ByVeVGQ7i5RyjHUlIMni2Wy24=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=TKWBXLyNCdFchULyM4e6Qnn0+fNTSqbcC4mqTMW//aMh/p21/6Ly0aql6Fda4s4xp
+	 HvZz3Gzt32dxhVEwYxwARMuSBHQHXGfzMRvaYlrh0cywJg+pNkv5sf26/QFhSlvm7q
+	 b8jc6mMNUjb+i7C2/tLepIXyrFk9Srb2fc/GD7slcCnwcg7qs8BwJr0PQ/KcCGxqiA
+	 vEq6mMT4B1eKUpL2jd0W6OaqwR6imJDEeYlDD8t1ipMLgZAeuTxmJeVsuBM6sE3BBx
+	 aAXBUDXf4L5c5VXyAvVxm58UULRPAohQ/RD4KHZV8vG3WNoS7w2rhe3HryL6C4AKtn
+	 z4aMShcnqUZGQ==
+Message-ID: <c05f7bfb-c84b-4c36-8091-5ec7721a658b@kernel.org>
+Date: Tue, 18 Aug 2026 20:13:47 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 01/57] mm: add pte_folio()
+To: Rik van Riel <riel@surriel.com>, Kiryl Shutsemau <kirill@shutemov.name>,
+ akpm@linux-foundation.org, ljs@kernel.org, nico.pache@linux.dev
+Cc: baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com,
+ hughd@google.com, lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com,
+ rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com,
+ usama.arif@linux.dev, vbabka@kernel.org, ziy@nvidia.com,
+ usama.anjum@arm.com, agordeev@linux.ibm.com, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kas@kernel.org, jannh@google.com, willy@infradead.org, pfalcato@suse.de,
+ rostedt@goodmis.org, mhiramat@kernel.org,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+References: <20260816224609.308019-1-kirill@shutemov.name>
+ <20260816224609.308019-2-kirill@shutemov.name>
+ <905d08d102e56a026a5ad69573c507d2d9becc37.camel@surriel.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
+ dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
+ QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
+ XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
+ Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
+ PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
+ WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
+ UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
+ jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
+ B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzS5EYXZpZCBIaWxk
+ ZW5icmFuZCAoQ3VycmVudCkgPGRhdmlkQGtlcm5lbC5vcmc+wsGQBBMBCAA6AhsDBQkmWAik
+ AgsJBBUKCQgCFgICHgUCF4AWIQQb2cqtc1xMOkYN/MpN3hD3AP+DWgUCaYJt/AIZAQAKCRBN
+ 3hD3AP+DWriiD/9BLGEKG+N8L2AXhikJg6YmXom9ytRwPqDgpHpVg2xdhopoWdMRXjzOrIKD
+ g4LSnFaKneQD0hZhoArEeamG5tyo32xoRsPwkbpIzL0OKSZ8G6mVbFGpjmyDLQCAxteXCLXz
+ ZI0VbsuJKelYnKcXWOIndOrNRvE5eoOfTt2XfBnAapxMYY2IsV+qaUXlO63GgfIOg8RBaj7x
+ 3NxkI3rV0SHhI4GU9K6jCvGghxeS1QX6L/XI9mfAYaIwGy5B68kF26piAVYv/QZDEVIpo3t7
+ /fjSpxKT8plJH6rhhR0epy8dWRHk3qT5tk2P85twasdloWtkMZ7FsCJRKWscm1BLpsDn6EQ4
+ jeMHECiY9kGKKi8dQpv3FRyo2QApZ49NNDbwcR0ZndK0XFo15iH708H5Qja/8TuXCwnPWAcJ
+ DQoNIDFyaxe26Rx3ZwUkRALa3iPcVjE0//TrQ4KnFf+lMBSrS33xDDBfevW9+Dk6IISmDH1R
+ HFq2jpkN+FX/PE8eVhV68B2DsAPZ5rUwyCKUXPTJ/irrCCmAAb5Jpv11S7hUSpqtM/6oVESC
+ 3z/7CzrVtRODzLtNgV4r5EI+wAv/3PgJLlMwgJM90Fb3CB2IgbxhjvmB1WNdvXACVydx55V7
+ LPPKodSTF29rlnQAf9HLgCphuuSrrPn5VQDaYZl4N/7zc2wcWM7BTQRVy5+RARAA59fefSDR
+ 9nMGCb9LbMX+TFAoIQo/wgP5XPyzLYakO+94GrgfZjfhdaxPXMsl2+o8jhp/hlIzG56taNdt
+ VZtPp3ih1AgbR8rHgXw1xwOpuAd5lE1qNd54ndHuADO9a9A0vPimIes78Hi1/yy+ZEEvRkHk
+ /kDa6F3AtTc1m4rbbOk2fiKzzsE9YXweFjQvl9p+AMw6qd/iC4lUk9g0+FQXNdRs+o4o6Qvy
+ iOQJfGQ4UcBuOy1IrkJrd8qq5jet1fcM2j4QvsW8CLDWZS1L7kZ5gT5EycMKxUWb8LuRjxzZ
+ 3QY1aQH2kkzn6acigU3HLtgFyV1gBNV44ehjgvJpRY2cC8VhanTx0dZ9mj1YKIky5N+C0f21
+ zvntBqcxV0+3p8MrxRRcgEtDZNav+xAoT3G0W4SahAaUTWXpsZoOecwtxi74CyneQNPTDjNg
+ azHmvpdBVEfj7k3p4dmJp5i0U66Onmf6mMFpArvBRSMOKU9DlAzMi4IvhiNWjKVaIE2Se9BY
+ FdKVAJaZq85P2y20ZBd08ILnKcj7XKZkLU5FkoA0udEBvQ0f9QLNyyy3DZMCQWcwRuj1m73D
+ sq8DEFBdZ5eEkj1dCyx+t/ga6x2rHyc8Sl86oK1tvAkwBNsfKou3v+jP/l14a7DGBvrmlYjO
+ 59o3t6inu6H7pt7OL6u6BQj7DoMAEQEAAcLBfAQYAQgAJgIbDBYhBBvZyq1zXEw6Rg38yk3e
+ EPcA/4NaBQJonNqrBQkmWAihAAoJEE3eEPcA/4NaKtMQALAJ8PzprBEXbXcEXwDKQu+P/vts
+ IfUb1UNMfMV76BicGa5NCZnJNQASDP/+bFg6O3gx5NbhHHPeaWz/VxlOmYHokHodOvtL0WCC
+ 8A5PEP8tOk6029Z+J+xUcMrJClNVFpzVvOpb1lCbhjwAV465Hy+NUSbbUiRxdzNQtLtgZzOV
+ Zw7jxUCs4UUZLQTCuBpFgb15bBxYZ/BL9MbzxPxvfUQIPbnzQMcqtpUs21CMK2PdfCh5c4gS
+ sDci6D5/ZIBw94UQWmGpM/O1ilGXde2ZzzGYl64glmccD8e87OnEgKnH3FbnJnT4iJchtSvx
+ yJNi1+t0+qDti4m88+/9IuPqCKb6Stl+s2dnLtJNrjXBGJtsQG/sRpqsJz5x1/2nPJSRMsx9
+ 5YfqbdrJSOFXDzZ8/r82HgQEtUvlSXNaXCa95ez0UkOG7+bDm2b3s0XahBQeLVCH0mw3RAQg
+ r7xDAYKIrAwfHHmMTnBQDPJwVqxJjVNr7yBic4yfzVWGCGNE4DnOW0vcIeoyhy9vnIa3w1uZ
+ 3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
+ CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
+ qIws/H2t
+In-Reply-To: <905d08d102e56a026a5ad69573c507d2d9becc37.camel@surriel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Alexander Lobakin <aleksander.lobakin@intel.com> writes:
+On 8/18/26 18:38, Rik van Riel wrote:
+> On Sun, 2026-08-16 at 23:45 +0100, Kiryl Shutsemau wrote:
+>> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+>>
+>> Callers that want the folio behind a present PTE spell it out as
+>> page_folio(pte_page(pte)).
+>>
+>> Add pte_folio() as the folio companion to pte_page(), and convert the
+>> callers in fs/proc/task_mmu.c and mm/hugetlb.c.
+>>
+>> Preparation for the anonymous collapse engine, which reads the folio
+>> behind a PTE in several places.
+>>
+>> Assisted-by: Claude-Code:claude-opus-5
+>> Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
+> 
+> Oh nice, this could clean up some things in the
+> get_user_pages code too, when we get around to
+> tech debt there.
 
-> From: Jiayuan Chen <jiayuan.chen@linux.dev>
-> Date: Thu, 13 Aug 2026 19:32:24 +0800
->
->> Kenneth Lee reported a bug [1]:
->> 
->>   skb_vlan_push got skb with skb->data not at mac header (offset 14)
->>   WARNING: net/core/skbuff.c:6474 at skb_vlan_push+0x5ec/0x8a0
->>    ____bpf_skb_vlan_push net/core/filter.c:3239 [inline]
->>    bpf_skb_vlan_push+0x216/0x8b0 net/core/filter.c:3229
->>    bpf_prog_run_data_pointers+0x17c/0x240 include/linux/filter.h:917
->>    tcf_bpf_act+0x31c/0x940 net/sched/act_bpf.c:50
->>    tcf_action_exec+0x2c1/0x720 net/sched/act_api.c:1147
->>    tcf_classify+0x6e4/0x1080 net/sched/cls_api.c:1860
->>    tc_run+0x31c/0x5d0 net/core/dev.c:4411
->>    sch_handle_ingress net/core/dev.c:4486 [inline]
->>    __netif_receive_skb_core+0x141b/0x2ec0 net/core/dev.c:6054
->> 
->> bpf_prog_run_generic_xdp() just assumes xdp->data is an Ethernet header:
-> Most XDP programs expect Ethernet header at the beginning of a frame.
-> Unless you write a custom one which doesn't.
-> But then you may face that XDP_TX, XDP_REDIRECT won't work properly --
-> cpumap Rx, each .ndo_xdp_xmit() implementation -- all expect Ethernet
-> header at the beginning.
+We really need the page in GUP code ...
 
-Yeah, I don't think we should start messing with the "XDP is Ethernet
-only" assumption at this point...
+-- 
+Cheers,
 
--Toke
-
+David
