@@ -1,121 +1,109 @@
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ED2248423E
-	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 17:42:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787074924; cv=pass; b=jCpUxQ7sy0W2+T8hS3/EwgzWcpDQqvKm6S4DLaNkIaS7YLHEJSYX9h2QOjYr+82LUhuCwl09DKoBTbse4W9fAYR6chD1YVB61Qkx6gfF2xx9qzjgIkTJScMYqj97p+NbZzwF/Ddc//He6d/00QekhXwWNfjzIwOb28/BNklPOlo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787074924; c=relaxed/simple;
-	bh=7koRXVLA3oYazNCeGdonu2Fx0u9xqB25POt9oeKXmBc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OP+vKSB5acY/Z4xyCD7RG1Br10or8QOpNyIpmwtvjYgbV9l3jF6i+DsLbxygk1+4Pe6fXASGcZsUjfXdia/0XAZVVUUPGw5oLNxK8RwVLmJJ6Mv2CwUlPLvlN2cF0Hn6t2qIB5vOkWlwjcnMC1pYMKyJnSkf92uzgdAWyPKiLyQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QVgCyOLy; arc=pass smtp.client-ip=209.85.219.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511403CB2DC
+	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 17:43:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787074986; cv=none; b=takJxakeAtXe8IIwhUcJjSYfcTc91hMaCU9PFHl/G5FLflDXaNvKHbzF2+UF1BRIjxNDfxkOH7zZeHKbPRddSRv26saKF8TMK0jzDEv8JE+805E7gShGw5BNdYihD6B8Mjm4esN+rklpq+M4X9BkeRE4bMeviQeACk0eRVWp9Cc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787074986; c=relaxed/simple;
+	bh=jdih85vIaDm1WR10xO6ndaR9LyFS/Bqn6efFH0k0+pQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RxEQgCxvddk55TYPAWlM2KfCu2X2Ghv8mn2xwzyrWXaKwh08BezwbfGoHuY6eBD/IyBHAFiro+4CYc8MiXzdUWEG+rhcbYwBBMAjkW4J3O3gwI1zRN3BcntwcgKveh3lMLXCbkRFhQLwxBTaxNSHEsWNMUE9301ktkMt4RWEm0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kCyrv1Ip; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QVgCyOLy"
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-8edda5d56a5so2207126d6.3
-        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 10:42:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787074920; cv=none;
-        d=google.com; s=arc-20260327;
-        b=EuOmrrpVQjn1fT4MAsSJy7Uu/QcrONAlabCOt8Of7y/CQPvJEo80mE4/9F+cIvJ/YF
-         qXcCVmjoqViNniqgc2Bwt/YRtUO880CVRiknJnAXlOqzgYGtL/sHVzxBwsGqPppXGft6
-         1h4GbL1mJUNll/TojiUdOsOv8Qbr3rRrxmqkORPzlWPl76M0nXKbNh84OnPLKS87qO/Y
-         6xTIDAsa3C2b8WTPiM89kOC5eM+Dov3L0I01250sMqFhjeTNJlxXbhEamb8d61elZcQ9
-         jmSWUDlqNMQzVRpIZ4pXBYTUdaMNw8Uiea0ASG/7pPIRcsmWWVV7ri7zVWTlqIka86Ct
-         H+uQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=7koRXVLA3oYazNCeGdonu2Fx0u9xqB25POt9oeKXmBc=;
-        fh=u3fUbNgmHYCK1caWA4i97Ado6MJSWPI88BeUf56WFLQ=;
-        b=OZ1HKEdz4kRyQjpEpnKXlgb5DbOhYi5OnnpeNZ1olnf17nFiTS6H1GFNsAbqr9NQMh
-         3IMpOO1VVkzpENUd6Zh+L8MAchSOBm/XSdrlMR1FWcKzER40JyxkTkfqMKFkC4xQxgky
-         GlBRGK69LhFrRnVku9u0fEiPCxKoNbt7SxC7JE0THCFFW1DR9S9QUsxxsQ8ikIy9+sq5
-         oib2OzJPadrXg5CmpTHSYuifF5ExmknjN1suclTM1B2GitVI+2QVhmK+wp8PLsnuZgCS
-         3BK8X686BAmXlo/PQd9KvmUQWEuxUA7K6U+37F3BqPI/UADcun90aRYZN7C2v6rHjLfk
-         vNZQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kCyrv1Ip"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-493b966dd74so589525e9.3
+        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 10:43:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787074920; x=1787679720; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=7koRXVLA3oYazNCeGdonu2Fx0u9xqB25POt9oeKXmBc=;
-        b=QVgCyOLyuehuQgFYAb4QVdKb1IbW4B45cUA+Vk+6lmNzR4uDW6tNHYcZH77qh+GVyt
-         IjwNBMwbq/5D5T2MLHAqUcqC4xbmIYgr+dmrfUwQInp3Ii7c4KDUwP7F+eC9eg3Utz9h
-         GKT/3qkjvwJVnPDjgpe2dusIN7N/bwlZY/LubM7eZ0TTzLve1Lgggtr+ql62WI2ZRTXy
-         RPTp0hMYbhBrBG0c7Z+s90xAwJ1gz4/edcYrHI6TzRFYCu2AUTy/JQt6cZuPZY29F2v2
-         i84AUCk/NWwDkpL6ZrNp6THAtNeCuglTWtpYSMihlQWN9Y7EUQ+XpYtvosCV5UJlQdrx
-         G7Ug==
+        d=gmail.com; s=20251104; t=1787074982; x=1787679782; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=3ImxPVs7wW436U1dwrS4Ni5rkXml8A2eZz8xdfOEDl4=;
+        b=kCyrv1Ipge+n7OsMekEan7o4iPohmZzad0yqmJ5VbJZXIWT+hYeC6j0dnSmQjfai6B
+         0+N9mZmNi0FQWuCBl5d6enNU0Qy41EmQEDNXD0xISwIYWZdQTZNr/Rdj3EupmiJyI2Sp
+         WmtFSeiqoF4xxKCYapMGJ/FBO8u1kPkILrXmA8pr56EOEdKoynLWmRhnbvAGFcCOitS4
+         vf1qAWa6Vv2lPpjs4w6bVcjjbcSOtXC5egWF/FTQACJDfTp/3oP4eRoYeiumA74kcdku
+         lWm+XYbdKrFTelu8CuWePsuJ5r7Y+zLW4/NmeTol/H/uf54v4SZ0ztFqQTFCi+0x+Jji
+         +LcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787074920; x=1787679720;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7koRXVLA3oYazNCeGdonu2Fx0u9xqB25POt9oeKXmBc=;
-        b=LQJRWbY37nf2llghsWdANRN1aVmFUEIJid8zZKra7LUEuIlDKQrLWePMrEBFevdpjZ
-         FKkw8OJAAyTYi7TjKbZb+WtIGUyoJwpy7VQ8U4uiOH0RJpjxkfpus3Rj+rgObTflzjLK
-         rRgzXFhPpnhP2GQnMrB2fS/5TBS7BcZvtttbl/ZDwIYH6857y0h9HBbngCHS2Afq81+o
-         1i1pQTZ0D6iDuIR4S7klSjDiT1HwDoH6mXzEkpRspNxlL6VRq1XvTXlMsrUF6eZg/Us6
-         H69Rfmr92ga8jCQgUyF4V45mOCQLQuu9TSwtRcayBlrUvkzzSSuCTgARL3+LVF4oCanj
-         1ekQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rrkm3NKoGslrwL+MGM3aMWlz3uhNNt7+TqzwgKTIiJyrzo49T8DnhK/z4M/ult/uUtfpCc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAdi1SQwNCaTaT6MecKDHlDMrUZpCde1zzKncSmqBlowPdK08p
-	NiClmazGdZaOakwe7rhPNRKZxLOW2pubUBDrxg9GdzTRE33JXnHPzWPLRZ0dIm8vV5YtilWvwjn
-	WGAGDdZf+DHZpvt2vLxRNBwLr+xfYln0=
-X-Gm-Gg: AR+sD13PfI5UJacjsvESMmU20TfyF/oGCjMeDEsZJf2rLGFCBWc5P8LPdx0QtOnq5Se
-	VVBRybBYtbol0/xJqHeP13fOmDQejvohPyBIxnF5cv5eJoKlfp0zvMHT7HZ1+LkhSIf9IDVyNHK
-	kSO46PvyYMwo0y2ciUV4VobmZ3/g9UpJIQCjdPf+Clb80sTVgqynm65dw1TUzKLb+uQbiHONvmy
-	T6CGCTI6LmGH8M7OeZOz8hrFdcxYO6V025yQMt9cQIXaa19sanQF2LflSNrUVTsLp0h5EazPjax
-	//SspchWR4b//luY/2Z41K/44QaB69HFmIWOjpPT0qbBWrv/NX7iEv9OJhj5LEguDyp3UtbA+QM
-	=
-X-Received: by 2002:a05:6214:2607:b0:907:88ec:6002 with SMTP id
- 6a1803df08f44-90a91d23fc6mr359439716d6.12.1787074920246; Tue, 18 Aug 2026
- 10:42:00 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1787074982; x=1787679782;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=3ImxPVs7wW436U1dwrS4Ni5rkXml8A2eZz8xdfOEDl4=;
+        b=hyq/Tn2C7Z0OURmeIdIN92hle2H6Hw4L016Gypdr1AC1sbnBREsa8TMCTMGUCqDRH2
+         JKkz0+bi5qRjcpWoRQQBa5ihJvy8Q+TFfH2yGjZ8SJ4BIki1KGNR/UIhRR74QqmzFjj3
+         stkb36O7mdZQmNDOVUBx5Dv+cXZN/DP2vzIfTU1fj5naM2ttocjf+cEAm3gx8lTA1Hc9
+         y2LogLWJ9tS12yVchbiwo3LFQu78Gj0UWlQSuP6mGS+oXtrSvfVHWUj+u/xC+5pVb5zN
+         uWbTzL6wS0b1A9uxWAgbK9fBQPhxh03kT8uaMtpy/1hQ0ee+YVJZx8z8rYeOvk/EdUCX
+         lqsg==
+X-Gm-Message-State: AOJu0YxSM56LlWQWtDvAaO1nGl9TFsn+kNTlaqm1csIVW8SbKQUeqj+n
+	L7Dom0GuwmJH2ube4+fugzuDxQgxlxRGv61VCpDZ9UwobUsHGvZx0K1brfg0IHwVERs=
+X-Gm-Gg: AR+sD10hDwCEIS7EIh/wGD0BY/IAZRPW1xwd8ApIkBTlRfHwajSPtabqOfnoe9IM1g+
+	hs83MyUWoxmkQnyjtkk8W6lwFPJoIeQesF1kuoXEl2LtdXukpcPAKqRtu7Hr4701hPJHeX1pmJo
+	Gj85M//A8enX7aK1aHW3+K/7MxkJcjF7SDO7l2AM0jhu+sAd1ux/FLWDlOUOyI+r4is25A0tWtj
+	OL9y++piniSwMkKA3bR9f2havyex/BBcwdBnImSA/18Cd4nb5HfyV0WmmalxV1kLjSKOzOS6P+u
+	unDAY0rjl+jH0KBVCm7EQbSdKiKSzd6mcl6VVJ1yYKGTWt25Ywns3FtArOXHSN8uA4iQaoWq/Ng
+	HF76sJb1b0y1Vo+Q5ZlKV8SfU62ku03Dsy80CVGn91sX91Mtyery4YOIXmtAYNUpT2mUOPlpTHh
+	Y2DVotg2GgUofoB4N45O8rFfXYaboBk/R+ZDnBToTIcMLU9E6+m3Lw5Cl9cPNL
+X-Received: by 2002:a05:600c:3485:b0:499:8758:8cb4 with SMTP id 5b1f17b1804b1-49987935eecmr586444765e9.5.1787074982255;
+        Tue, 18 Aug 2026 10:43:02 -0700 (PDT)
+Received: from runham-think ([141.5.46.228])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-499a5684e06sm41678945e9.1.2026.08.18.10.43.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Aug 2026 10:43:01 -0700 (PDT)
+From: MahnurA <s.mahnur.a@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net
+Cc: netdev@vger.kernel.org,
+	andrii@kernel.org,
+	MahnurA <s.mahnur.a@gmail.com>
+Subject: [PATCH bpf] bpf: Fix NULL pointer dereference in bpf_sock_from_file
+Date: Tue, 18 Aug 2026 19:42:53 +0200
+Message-ID: <20260818174253.492196-1-s.mahnur.a@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260815112041.1248855-1-utilityemal77@gmail.com> <DKRYZPV04750.1V3UXL56PKB6@gmail.com>
-In-Reply-To: <DKRYZPV04750.1V3UXL56PKB6@gmail.com>
-From: David Windsor <dwindsor@gmail.com>
-Date: Tue, 18 Aug 2026 13:41:48 -0400
-X-Gm-Features: AcwNN1XLdyaSasMTp9iBpNvyrMss7F-pcwuEvUrbotoGcvR6ijlcZVek2kfbZ2k
-Message-ID: <CAEXv5_gT+xcZauKug-VsmqSBtuMPEPtw7hubxn6-0nv=D9aq5A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/2] lsm: give BPF programs a way to query
- locked_down state
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Justin Suess <utilityemal77@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Paul Moore <paul@paul-moore.com>, Xiu Jianfeng <xiujianfeng@huawei.com>, 
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 18, 2026 at 5:43=E2=80=AFAM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
->
->
-> Lastly, given the difficulties we've faced from the LSM maintainers, I'm =
-not
-> inclined to waste more time in explaining again why this cannot go under
-> security/.
->
+bpf_sock_from_file should not dereference a NULL file pointer.
+KASAN detects a null-ptr-deref when eBPF tracing
+fentry/fexit programs are attached to points such as
+__mmap_region and file_map_prot_check kernel functions. This can
+result in a NULL file pointer flowing from context to the helper.
 
-I'm still going to send v7 of bpf_init_inode_xattr series, even though
-it's a stalemate. Haven't yet decided where it'll live in v7, I'm
-inclined to leave it where it was (in fs/) since one side will NAK it
-wherever it lives. We can record NAKs and take it from there.
+A minimal check before dereferencing can fix this.
 
-Just wanted to state this for least surprise when v7 does come out,
-which will be soon.
+Fixes: b60da4955f53 ("bpf: Only provide bpf_sock_from_file with CONFIG_NET")
+Signed-off-by: MahnurA <s.mahnur.a@gmail.com>
+---
+ net/core/filter.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Thanks,
-David
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 16845987b244..7c3caae4bafc 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -12182,7 +12182,10 @@ const struct bpf_func_proto bpf_skc_to_mptcp_sock_proto = {
+ 
+ BPF_CALL_1(bpf_sock_from_file, struct file *, file)
+ {
+-	return (unsigned long)sock_from_file(file);
++	if (file)
++		return (unsigned long)sock_from_file(file);
++
++	return (unsigned long)NULL;
+ }
+ 
+ BTF_ID_LIST(bpf_sock_from_file_btf_ids)
+-- 
+2.53.0
+
