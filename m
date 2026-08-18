@@ -1,83 +1,68 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF5D39A7EF
-	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 09:56:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D68E53A6F09
+	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 10:09:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787046995; cv=none; b=i7W1yGxMywvb1JTzs8unraGLNtHDbNGrXHOYS4EBGW0RsWTXlVvrkdsLGMBCw7DOdvL/8WmhGbwwn/NNZ9ErN1bdLxLNqZ+vn8as3pCP+bw3Po1cK7/4+ktMEVBW4qv2eJfX4MLG2fq9gznWbIuUl7lB+rRTktZZihRL5XN9L4c=
+	t=1787047773; cv=none; b=lEPPr0i4d6rDR7z4aqE25qB8bodWNwEi2A8OgAlUDVX1R4Ckno7DsDIjvyu40mrA2r33LuprcSc+U7YwEscSsvM3yxHbkcndTPmHBAhbjybEpJEZ36IR0a54eeHX5pvuMUMWaetMOBLfHaqRv3CuAcnDpuzyKaspxk0PKZX1l4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787046995; c=relaxed/simple;
-	bh=7ibTghDomdFK+AuRMk66RXL/ZL3+I70CKoequsSTJ6Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QKFeVV4L/bOhHAacpXx6BNNogQXLCsBIad6cWv1OE9kY43v05UWDZJ7tddeWXGnagK/Ae0SxskSQiEB0wajKyUSFQx75+KZ7WcZJnQ+RopXA3YuxaN9pPKLxMIU+oXc4Ob4SP5wKm7GKYvmtTsnyCDy7LZqDruf366CcpJMgEAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=swine.de; spf=pass smtp.mailfrom=swine.de; dkim=pass (2048-bit key) header.d=swine.de header.i=@swine.de header.b=Fw7sjZAb; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=swine.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=swine.de
+	s=arc-20240116; t=1787047773; c=relaxed/simple;
+	bh=oUtS/TCIKFn5IBaGN4iPozeEGcywqoxmOsEXGslPwfQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=rL7z6RZXybjXVImZi7HQDQrU3guZAsxNOfuPWwbqrrheBy/HQzyZhf8qbsxhDHYEPK49tIfVrBBoCqK8fNxoe84wvPCWAnds/7ojdZ2fx3WwrIPB5PM9HUmlh/vHJGdGEvFs/en011LwA2+pwxA8cuJXqlTeu5O+8dd9ExVuPwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FEJvZJY1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=swine.de header.i=@swine.de header.b="Fw7sjZAb"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-47f84023916so4207305f8f.3
-        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 02:56:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=swine.de; s=google; t=1787046992; x=1787651792; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=8fXTVcuANg8HG1Ctn5Fy42Q/TSh5wfRVcnMZYRYvZPA=;
-        b=Fw7sjZAb/Psmzxp+ewF4YVgm5lyY/FyXUmT6DTcnsR/Rf3yOrmq4oFDXOo2GQUfV6A
-         A5IKQpnp4AM+uvXRmHWuwxMmSxZqTmh/kvchNpbmjV+3ynAlKdsy94lePD0cZ121x8ZA
-         k1s2nSsYQWFh5K7Ji24+Qri7141s1VyZGu3IfeMJ6VmeeynPgmjVvmoK0PqpU2CnkkvG
-         +ZCJeuUcnnG2tGWpK56467QDJc4IN5hRPrFPcx9sndsl5FFHtFyUAjRTgE5PDUHCyoOS
-         rHINOzHP0a4dCeHlx9hmDxn/GiBHcCV4T+1ixjEUKsrFL9C/8YRYDqm7381dmUyEfhXX
-         VeZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787046992; x=1787651792;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=8fXTVcuANg8HG1Ctn5Fy42Q/TSh5wfRVcnMZYRYvZPA=;
-        b=nbkuHqNq5wgr0Qli7nZ0TU+6wAx9ihNaFOMFyCTixa5YdruPppwf8KGsQqaw2qSFeP
-         THYg4GEbLT/JF4lbM7XtbEMo1d7Mz5/SuxtRnhoVjQ7tUmjbbAcuj2bY9+Fs0jM+3TpR
-         LRKFD4AikYPqCaNFBfnLOA4m0RfWIgWiYY+9NSwplToFs4V7epfMJWrdI+KNiSHBGevX
-         aUAThbjuiEqTpjDipgRhk8nf4E+gmQMwUatwFHQc9T0/t/5UpNeYGAmqjA/Uvs+7mW8/
-         qDlRyX1qFHsJfyhXurCuyMbFkiDJfjhRU+08udZtlKZLO5xfo6G+7IIwQgUjWS1tCDp4
-         L6VA==
-X-Gm-Message-State: AOJu0YxU9MN5Qty0ghwmIWRwofj7KDc+dBsDig5ATLVgTRFhokFA8qhT
-	zH3jHTczHCTQdsq4nOv0P+iK7iq9whvtkEagZmJhhD0JXMVaaq5rvcTyYaGGRINNeqWvyAjB4v3
-	XlOpnRZuO9A==
-X-Gm-Gg: AR+sD10enivzM7KuFz3DaN5edOvIHRQ5mKm2BlT4u8SOe13Pd+gBj0U2bbrJM3l1jVF
-	uaglBeDR8ZZoG7CtIAce/HzSgzjo8kALkGg3V/OzHSCricq1SnBFlt0jKwTZWZ7DL2twJLmPPKD
-	fli51iGB4Z1Z9GzIxETkBQxP0CGx5hN5kgf3sbkHqLSPCdq22i0StLzOHiAvuhet97VO2YSNbLn
-	fkZcfHNHjS+AF6CTopYfH45YVFZ9DrClV/BtDXiQAHiSi/St26cD8r1gvVQW+ZFT99AVan8fsgc
-	rRibTVdj0c4XA0N3ebmAbVWnLN1hf2PvhDBJ124tdIp37WHp+7ZZQT4vXZ5Hfz1WAgM6ucZ2bKv
-	46pQBsUyY7enPH0ItuOf7dhP4ZPyInGd9Wmddm7sjlDlXU9lvGBXQgnBMsvPbXHv1zBSACn7uJS
-	L2yM4xoFdioiIeefxkoHYhGIar7ctzrhFJnxWnaR7mC9xdL2xiRyqbR1I7zVPJXGQdNin2i3OTU
-	oJb8qY5HkUw+A==
-X-Received: by 2002:a05:600c:848e:b0:499:8156:cd3f with SMTP id 5b1f17b1804b1-4999fb3f78bmr120150495e9.8.1787046991876;
-        Tue, 18 Aug 2026 02:56:31 -0700 (PDT)
-Received: from christian-gtr9.tailscale.swine.de ([2a02:6b67:d11b:4200:508:9a18:a3aa:3270])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-482a5b81748sm10780123f8f.37.2026.08.18.02.56.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2026 02:56:31 -0700 (PDT)
-From: Christian Simon <simon@swine.de>
-To: bpf@vger.kernel.org
-Cc: Christian Simon <simon@swine.de>,
-	ast@kernel.org,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@kernel.org,
-	tj@kernel.org,
-	yonghong.song@linux.dev,
-	stable@vger.kernel.org
-Subject: [PATCH bpf] bpf: guard classic uprobes against private-stack corruption
-Date: Tue, 18 Aug 2026 10:55:39 +0100
-Message-ID: <20260818095545.314358-1-simon@swine.de>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FEJvZJY1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 062EC1F000E9;
+	Tue, 18 Aug 2026 10:09:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787047769;
+	bh=JlRhsI3dSE/l1DKEQhH/NQ3ob4asPJSZDrsA+LHbnG0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=FEJvZJY1V/279HjViRyNbOJ7zjvsEGPRFi5kdTcoSSYvzuUJcMwEKgolyQjxOdH5B
+	 5kvphtV8O3adQq2SBkkF1h9X0fxC/ATVPkYNweOzge/KP6RsNGQDvNXK6QwnGdj2tI
+	 vHopL/wMWGaiwaa6C+GJ+9+222m2rYFOYT2bcvYO/xuUzCBAq7o2Gg6pCMQp7X5Zpd
+	 yUuAh30ilju2btPEQbSRgFpD3/tgcqeqeBsHmgSM2GyY5JU1jc738VgqD2KaobJ7Vk
+	 1wCrs5m1arY8Fvz0nMnNkwFRA3AMkFC2MmJQ5IENOJ0jeLq5tGZzv3fLPi77kogEwE
+	 s9/PxDz/HqAqA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf] bpf: guard classic uprobes against private-stack
+ corruption
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Christian Simon" <simon@swine.de>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260818095545.314358-1-simon@swine.de>
+References: <20260818095545.314358-1-simon@swine.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 18 Aug 2026 10:09:28 +0000
+Message-Id: <20260818100929.062EC1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+
+New issues:
+- [Low] The patch causes a `-Wdiscarded-qualifiers` compiler warning in `bp=
+f_prog_run_array_uprobe` and mistakenly removes `const` from `bpf_prog_run_=
+array`.
+
+Pre-existing issues:
+- [High] Missing recursion context protection in the uprobe-multi path lead=
+s to per-CPU private stack corruption.
+--
+
+--- Patch [1]: [PATCH bpf] bpf: guard classic uprobes against private-stack=
+ corruption ---
+commit d583ad326b3c9bb2b3cfd745309987d581a65249
+Author: Christian Simon <simon@swine.de>
+
+bpf: guard classic uprobes against private-stack corruption
 
 Eligible BPF programs use one private stack per program and CPU.
 bpf_prog_run_array_uprobe() uses migrate_disable() to keep an
@@ -85,115 +70,74 @@ invocation on one CPU, but another task can still preempt it and run
 the same program on that CPU. The second invocation then reuses and
 can overwrite the first invocation's private stack.
 
-Protect each real program invocation with the existing per-program
-recursion context. When the program is already active on this CPU,
-account for the missed invocation and skip it. This matches the
-private-stack protection in bpf_prog_run_array_sleepable().
+> The analogous uprobe-multi path appears affected but is not addressed by
+> this patch.
 
-Skip dummy_bpf_prog before acquiring the recursion context because its
-active pointer is NULL.
+[Severity: High]
+This is a pre-existing issue, but since the uprobe-multi path shares this
+vulnerability, shouldn't it be addressed as well to prevent private-stack
+corruption?
 
-Fixes: 7d1cd70d4b16 ("bpf, x86: Support private stack in jit")
-Closes: https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/issues/3056
-Cc: stable@vger.kernel.org
-Signed-off-by: Christian Simon <simon@swine.de>
----
+In kernel/trace/bpf_trace.c:uprobe_prog_run(), the BPF program is executed
+without recursion context protection:
 
-This is my first contribution to the BPF subsystem. I reproduced the
-failure described in the linked report and would particularly appreciate
-review of the recursion-context handling.
+        err =3D bpf_prog_run(link->link.prog, regs);
 
-I have a reproducer, that this patch fixes, I am also unsure if this is
-something that should be part of the selftests.
+If a task executing uprobe_prog_run() is preempted (or yields) and the
+preempting task triggers the same program on the same CPU, the private stack
+can be overwritten, breaking verifier safety guarantees. Could we add
+bpf_prog_get_recursion_context() protection to uprobe_prog_run() too?
 
-Tests: https://github.com/simonswine/beyla/commit/20c9912a02c5d5924c992faf7ee353c7d71c9fa0 
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index ffa5626411ac2..1d263992213e1 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+[ ... ]
+>  static __always_inline u32
+>  bpf_prog_run_array(const struct bpf_prog_array *array,
+>  		   const void *ctx, bpf_prog_run_fn run_prog)
+>  {
+>  	const struct bpf_prog_array_item *item;
+> -	const struct bpf_prog *prog;
+> +	struct bpf_prog *prog;
 
+[Severity: Low]
+Was this const removal intended for bpf_prog_run_array_uprobe() instead?
 
-The analogous uprobe-multi path appears affected but is not addressed by
-this patch.
+Removing the const qualifier here doesn't seem necessary for
+bpf_prog_run_array().
 
+[ ... ]
+> @@ -2640,15 +2648,30 @@ bpf_prog_run_array_uprobe(const struct bpf_prog_a=
+rray *array,
+>  	old_run_ctx =3D bpf_set_run_ctx(&run_ctx.run_ctx);
+>  	item =3D &array->items[0];
+>  	while ((prog =3D READ_ONCE(item->prog))) {
+> +		/* dummy_bpf_prog has no recursion state. */
+> +		if (unlikely(!prog->len)) {
+> +			item++;
+> +			continue;
+> +		}
+> +
+> +		if (unlikely(!bpf_prog_get_recursion_context(prog))) {
 
- include/linux/bpf.h | 33 +++++++++++++++++++++++++--------
- 1 file changed, 25 insertions(+), 8 deletions(-)
+[Severity: Low]
+Does passing prog to bpf_prog_get_recursion_context() here cause a
+build regression with a -Wdiscarded-qualifiers compiler warning?
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 7719f6528445..11e3d7f00543 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2572,12 +2572,20 @@ static inline void bpf_reset_run_ctx(struct bpf_run_ctx *old_ctx)
- 
- typedef u32 (*bpf_prog_run_fn)(const struct bpf_prog *prog, const void *ctx);
- 
-+#ifdef CONFIG_BPF_SYSCALL
-+void notrace bpf_prog_inc_misses_counter(struct bpf_prog *prog);
-+#else
-+static inline void bpf_prog_inc_misses_counter(struct bpf_prog *prog)
-+{
-+}
-+#endif
-+
- static __always_inline u32
- bpf_prog_run_array(const struct bpf_prog_array *array,
- 		   const void *ctx, bpf_prog_run_fn run_prog)
- {
- 	const struct bpf_prog_array_item *item;
--	const struct bpf_prog *prog;
-+	struct bpf_prog *prog;
- 	struct bpf_run_ctx *old_run_ctx;
- 	struct bpf_trace_run_ctx run_ctx;
- 	u32 ret = 1;
-@@ -2635,15 +2643,30 @@ bpf_prog_run_array_uprobe(const struct bpf_prog_array *array,
- 	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
- 	item = &array->items[0];
- 	while ((prog = READ_ONCE(item->prog))) {
-+		/* dummy_bpf_prog has no recursion state. */
-+		if (unlikely(!prog->len)) {
-+			item++;
-+			continue;
-+		}
-+
-+		if (unlikely(!bpf_prog_get_recursion_context(prog))) {
-+			bpf_prog_inc_misses_counter(prog);
-+			bpf_prog_put_recursion_context(prog);
-+			item++;
-+			continue;
-+		}
-+
- 		if (!prog->sleepable)
- 			rcu_read_lock();
- 
- 		run_ctx.bpf_cookie = item->bpf_cookie;
- 		ret &= run_prog(prog, ctx);
--		item++;
- 
- 		if (!prog->sleepable)
- 			rcu_read_unlock();
-+
-+		bpf_prog_put_recursion_context(prog);
-+		item++;
- 	}
- 	bpf_reset_run_ctx(old_run_ctx);
- 	migrate_enable();
-@@ -3208,8 +3231,6 @@ static inline bool has_current_bpf_ctx(void)
- 	return !!current->bpf_ctx;
- }
- 
--void notrace bpf_prog_inc_misses_counter(struct bpf_prog *prog);
--
- void bpf_dynptr_init(struct bpf_dynptr_kern *ptr, void *data,
- 		     enum bpf_dynptr_type type, u32 offset, u32 size);
- void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr);
-@@ -3538,10 +3559,6 @@ static inline bool has_current_bpf_ctx(void)
- 	return false;
- }
- 
--static inline void bpf_prog_inc_misses_counter(struct bpf_prog *prog)
--{
--}
--
- static inline void bpf_cgrp_storage_free(struct cgroup *cgroup)
- {
- }
--- 
-2.54.0
+Since prog is declared as const struct bpf_prog *prog in
+bpf_prog_run_array_uprobe(), and bpf_prog_get_recursion_context() expects a
+non-const pointer, this discards the const qualifier.
 
+Should the const removal above have been applied here in
+bpf_prog_run_array_uprobe() instead?
+
+> +			bpf_prog_inc_misses_counter(prog);
+> +			bpf_prog_put_recursion_context(prog);
+> +			item++;
+> +			continue;
+> +		}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260818095545.3143=
+58-1-simon@swine.de?part=3D1
