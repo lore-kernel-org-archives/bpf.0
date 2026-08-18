@@ -1,155 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2BE0846A
-	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 05:00:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE4FC284896
+	for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 05:20:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787029258; cv=none; b=oYcP8DHLK5gz2UICf58gibD751X8lyNfRRCAIVijGh5y1I5ajHy+sgUE8BzjmRgfAIgmyZSRjSL+h5nLJoVn17Nk7KSGjOTlB82rgFRxPnP6fAHeJP3Trv+BO0gxtphmdJbSAdhUl1d5pALnE8Ek3+PcVOTjrsh/457qzznSstU=
+	t=1787030428; cv=none; b=YEw0m3hoPzVjAeAkLJ7mUZB3d+Zj8dZeyldj6MM9fZtNR4mVe8tUu1a8CDEX0NTS3TV7dZ33nQf8pNsM2JpolPNJrgPJ2HiQTRZ2qrTEfRLE0uDKfaEIXwJ9ZxNyy8oUdPKVh34NvvH+uIbQ5TIMsixrnBu5OqQtx69Yc2hKVaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787029258; c=relaxed/simple;
-	bh=sqETVgVrVL9XLsmQfZzAkuZDecE+KFE68uKWjYjDb+w=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pr+nTLpA1F/moZ0Jt6mWdnz3k6AGrQLIJyPx9/YKxufktJNpOrKByw2M3f1HU55HhOt5hj5T2hQRfFc3lYWYIFZAKe/4oIvv75F6Clj7+QF2KuhTJnwLT3S5oZEBx//TQch/lFvPhxvaphLV9aAYVn9Zfkgex7k3Yofs8ejmVfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gjNCqAJM; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787030428; c=relaxed/simple;
+	bh=H/zOlGcY83fmIIgH5EXSWiy0LGwiarK4zHNCO9l+iUk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=uwUvXM045mV9l3zuzUbKO2c267rTEZkmFlP/wJ7B4QXRQjB33Y1+VYCaDu236xjLVgWhomQj0NuLfuNnU4thysbdZ34mS5KPRVAAHMKl+YMaELymJmGSDP6DoYdwYhDu1Iqkbqyo4o4eBMOJO9dTTJwwRO3x3euHXDT6lWwIbUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lDUk/LaN; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gjNCqAJM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC1811F000E9;
-	Tue, 18 Aug 2026 05:00:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787029256;
-	bh=Ztb6wwK6/xNyraziJIRsZSuv/t/KjBXfgmFl4ySAK48=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=gjNCqAJMe/9QQ0WQahzQ9BLm+Jibu7iK0S6gdHl8NQUzQ46iqMs+Ir8qIB93sMBZh
-	 T6Gq9jQvR4esZD4PPPr4oLsG2FE3iBT3d5OE9NOpo1J/GDKpQI+PQvMwBFmk9prZwU
-	 EJvBcSz7OVQ0hGyjaKSBfulOGPBZclpPoAabphx9qt7X4ygHMGyS3ZDlojkXlL+MeQ
-	 9D3zhvZDA18y106U2feKkmSa4+DZpBiVQJjurWrRPZ9nIfOGhqTalXx9XFrSfk7glc
-	 UeMhV87UbbfXhgegGlFp7m2IlLoxReO/60aaR1cqQLPX1ZcweQDt5PVlFUK0ed3iYh
-	 Enqtr9C90TtfA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v12 1/8] powerpc/bpf: fix buffer overflow in JIT for
- large BPF programs
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Saket Kumar Bhaskar" <skb99@linux.ibm.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <191961a8100f3656a01ab826a02d43c765d02464.1787027080.git.skb99@linux.ibm.com>
-References: <cover.1787027080.git.skb99@linux.ibm.com>
- <191961a8100f3656a01ab826a02d43c765d02464.1787027080.git.skb99@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 18 Aug 2026 05:00:56 +0000
-Message-Id: <20260818050056.AC1811F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lDUk/LaN"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-84874b52eabso5635767b3a.0
+        for <bpf@vger.kernel.org>; Mon, 17 Aug 2026 22:20:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787030427; x=1787635227; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=guhfkRusufvBWD8H2or6jNYjgUQNUVh/3Ni9l2mmIoM=;
+        b=lDUk/LaNP85ZQHPwh3yhZnIyAIK2qwpQDuiwHUi6pPpUBJrI8jlKHZ61Wn1avakq5Y
+         syXI/33gY0uPb12SuAQF/Beu7WG3aUUkVFgpdJJJIgiDjAA2J4t4y8RuepBl4jGXUBY/
+         FFNbtjzJG0QYl7I6Az9FjsxQ9VvzXm2XynpnM1x/GX9gsvd9ADPSdQ85NSRWXQefCDJ+
+         HhKHjuMdiB3g0In4BzzZZeCgauNYkpsSzX6zK7TV47r+do3uxDrG3CoKOa7UjNircvbM
+         Iim8bLeG1lIORaNMcxdfy5FXrk5UV1No6t+oJnvhIxl5YixyZtlVXQbL4ZRBU3bhI0Nm
+         Iurg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787030427; x=1787635227;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=guhfkRusufvBWD8H2or6jNYjgUQNUVh/3Ni9l2mmIoM=;
+        b=ks6Uoxhg/Hc2v4g74G8sElSabZCFSJXrQRonua3FJquA0O0vgIG41jwHudQBatk/zC
+         BS5o5IFzSTVgvmUV1HVeY8byBgJfVWG1JK/+/SMvE41DB3qSUkN5NQAn85wyFKp7p1U+
+         LZ1xNYkRzUE+v4rNS36rvwljMfS3EfiY5P6/fukio+2oMSFHntchpg/7Ulzpo9ICLddi
+         Vo1k7OhoYioagNJ0F9yxkQe4UNVO77NW/VE10jgESqlM+c25/XdvV4vResmH+kbjM7Kl
+         MbDDqKdmrPLJWghHg+Qm+MEykoJJ3zgQ/fcpyLl3TpctDmHSyw8e6K7D/oCsjKNbYEU6
+         DiRA==
+X-Forwarded-Encrypted: i=1; AHgh+RpdNLRFBuiA+80Bc9hFZTFZ5r1sMflCR1TpC7UBrhqjtGXfRYxnXVR5DU+sb23j8nY/lU0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEkMF+AUOd1pBh8csh+z28GnA63yKblgK7ziEzqGOia1oxwNVg
+	5oKHqJyjk0MjKtya7Zr5ctj4Vn3RtNm7e7J/dpzv9VUo2ViQIKnAVEk0
+X-Gm-Gg: AR+sD1293nKY3bTRL9Li8kprJqEPIQzjINmIk8Zen4tLkWl0BuOV5Qx+96a5JOfnaj3
+	MKAMI9TtHwtJN/46WHZ7UnulBoB+ENf4i5J6oAB1IByfLN77kZ9QlJCBZn7CNftV5Up64graDKF
+	WlaQ2b3LYF5ANXEMFRl4nEndCA9xagMMwLen2qmPrz0R7PYU2pGIO92wKRt/n020aR59lWQ+amh
+	m+MjS32onNgmiPXnU7r3ZYN1x54cjZ7jwpvOfiY1s/vRWmKfBzw4zK9POn+CI2r9gzAbK6SQx5z
+	/Nkb+gdNhdDYOwtyqcH3ld/vRO3VFju1YJloBqr5wNNokHxao2hpnHfOxz6d01/x1xkQtaQgm2e
+	xh1CzLVAk0xYcRwh97NXbw7+HyKjyh/H3yXuzzOGsbmSAVLvNbQG9REI8DwO7q53szz4Pc5VIkP
+	yuSNqhv17TX2QP8zUDjFqKHTkeiZVP4R+M6AUA/Z0q8PbxFENmswLUTIJ3mSMtsijY4yKtTqNpf
+	Q==
+X-Received: by 2002:a05:6a00:4ac3:b0:82f:50cd:e586 with SMTP id d2e1a72fcca58-84fde001affmr34125452b3a.13.1787030427076;
+        Mon, 17 Aug 2026 22:20:27 -0700 (PDT)
+Received: from ancienth-X870E-Nova-WiFi ([125.186.72.2])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-851b6ff0e3csm1046621b3a.60.2026.08.17.22.20.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Aug 2026 22:20:26 -0700 (PDT)
+From: Daehyeon Ko <4ncienth@gmail.com>
+To: Lorenzo Stoakes <ljs@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	David Hildenbrand <david@kernel.org>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Hagen Paul Pfeifer <hagen@jauu.net>,
+	Pedro Falcato <pfalcato@suse.de>,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] mm/secretmem: properly account locked pages
+Date: Tue, 18 Aug 2026 14:20:06 +0900
+Message-ID: <20260818052006.2387242-1-4ncienth@gmail.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260814-secretmem-accounting-v1-1-d2f8c677980b@kernel.org>
+References: <20260814-secretmem-accounting-v1-1-d2f8c677980b@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+Thanks for the patch.
 
-Pre-existing issues:
-- [High] bpf_jit_binary_pack_finalize leaks modmem charge and uses uninitia=
-lized size on error path.
---
+I tested this v1 on its stated base with an x86_64 KASAN kernel. The supplied
+selftest passed 6/6 in three boots. Additional fork/unmap and inherited-VMA
+mremap tests also passed.
 
---- Patch [1]: [PATCH v12 1/8] powerpc/bpf: fix buffer overflow in JIT for =
-large BPF programs ---
-commit 86d46c787bf7b94485f88f3d4dc3220927360140
-Author: Abhishek Dubey <adubey@linux.ibm.com>
+One question: the inode stores the creator's user_struct, but the fault path
+uses the current task's RLIMIT_MEMLOCK.
 
-powerpc/bpf: fix buffer overflow in JIT for large BPF programs
+  secretmem_init_inode_priv():
+    state->user = get_uid(current_user());
+  __secretmem_account_pages():
+    page_limit = rlimit(RLIMIT_MEMLOCK) >> PAGE_SHIFT;
 
-This patch fixes a buffer overflow in the PowerPC BPF JIT compiler
-caused by incorrect handling of exit_addr during pass-0 size calculation.
-It ensures the epilogue instructions are conservatively accounted for
-in the initial allocation and iterates the code-generation loop until
-the program size converges.
+With A limited to one page and B to four, A created the fd and passed it to B.
+B faulted four pages, after which A got SIGBUS faulting one page on a new fd:
 
-Link: https://lore.kernel.org/bpf/20260529015855.364704-2-adubey@linux.ibm.=
-com/T/#mfcb23909d977b949727cca4f59ee56a13fd69b92
+  CROSS_PRINCIPAL receiver_pages=4 creator_fresh_page=0
 
-> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_c=
-omp.c
-> index 7b07b43575f11..8bee2674d4a90 100644
-> --- a/arch/powerpc/net/bpf_jit_comp.c
-> +++ b/arch/powerpc/net/bpf_jit_comp.c
+This seems to charge A's locked_vm using B's limit. Is that intended?
 
-[ ... ]
-
-> @@ -306,10 +306,13 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_ver=
-ifier_env *env, struct bpf_pr
->  	code_base =3D (u32 *)(image + FUNCTION_DESCR_SIZE);
->  	fcode_base =3D (u32 *)(fimage + FUNCTION_DESCR_SIZE);
-> =20
-> -	/* Code generation passes 1-2 */
-> -	for (pass =3D 1; pass < 3; pass++) {
-> +	/* Code generation passes 1-2+, loop until program size converges. */
-> +	for (pass =3D 1; pass <=3D CODEGEN_MAX_PASSES; pass++) {
-> +		u32 prev_proglen =3D proglen;
-> +
->  		/* Now build the prologue, body code & epilogue for real. */
->  		cgctx.idx =3D 0;
-> +		cgctx.exentry_idx =3D 0;
->  		cgctx.alt_exit_addr =3D 0;
->  		bpf_jit_build_prologue(code_base, &cgctx);
->  		if (bpf_jit_build_body(fp, code_base, fcode_base, &cgctx, addrs, pass,
-> @@ -318,11 +321,26 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_ver=
-ifier_env *env, struct bpf_pr
->  			bpf_jit_binary_pack_free(fhdr, hdr);
->  			goto out_err;
->  		}
-> +		addrs[fp->len] =3D cgctx.idx * 4;
->  		bpf_jit_build_epilogue(code_base, &cgctx);
-> =20
-> +		proglen =3D cgctx.idx * 4;
-> +
->  		if (bpf_jit_enable > 1)
->  			pr_info("Pass %d: shrink =3D %d, seen =3D 0x%x\n", pass,
-> -				proglen - (cgctx.idx * 4), cgctx.seen);
-> +				prev_proglen - proglen, cgctx.seen);
-> +
-> +		/* Check if program size has converged, but ensure minimum passes */
-> +		if (pass >=3D CODEGEN_MIN_PASSES && proglen =3D=3D prev_proglen)
-> +			break;
-> +
-> +		if (pass =3D=3D CODEGEN_MAX_PASSES && proglen !=3D prev_proglen) {
-> +			pr_err("BPF JIT: Program did not converge after %d passes\n",
-> +								CODEGEN_MAX_PASSES);
-> +			bpf_arch_text_copy(&fhdr->size, &hdr->size, sizeof(hdr->size));
-> +			bpf_jit_binary_pack_free(fhdr, hdr);
-> +			goto out_err;
-> +		}
-
-[Severity: High]
-This isn't a bug introduced by this patch, but since we are touching the JIT
-error paths here, I noticed a potential leak in bpf_jit_binary_pack_finaliz=
-e().
-
-Does the error path in kernel/bpf/core.c:bpf_jit_binary_pack_finalize() leak
-the global JIT memory charge?
-
-When bpf_arch_text_copy() fails, the error path cleans up the memory
-allocations but appears to completely omit the corresponding
-bpf_jit_uncharge_modmem() call:
-
-kernel/bpf/core.c:bpf_jit_binary_pack_finalize() {
-	...
-	kvfree(rw_header);
-
-	if (IS_ERR(ptr)) {
-		bpf_prog_pack_free(ro_header, ro_header->size);
-		return PTR_ERR(ptr);
-	}
-	...
-}
-
-Additionally, could ro_header->size be uninitialized if bpf_arch_text_copy()
-fails early, potentially causing bpf_prog_pack_free() to corrupt the
-pack bitmap?
-
->  	}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1787027080.gi=
-t.skb99@linux.ibm.com?part=3D1
+Thanks,
+Daehyeon
