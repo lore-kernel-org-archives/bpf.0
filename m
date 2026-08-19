@@ -1,40 +1,30 @@
-Received: from canpmsgout03.his.huawei.com (canpmsgout03.his.huawei.com [113.46.200.218])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41EBC275870;
-	Wed, 19 Aug 2026 02:51:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE873812E1;
+	Wed, 19 Aug 2026 03:07:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787107911; cv=none; b=gMVMrTFyp0YPTurXZukz3rRp6l9N1MhQSdTELcwcv2Mzx/3i4q2E29D/B/nyuzAbOLUUrib3ilmIMVMO0Qojfiylgq2Zj231GQMXDRznH2jWxYwPJLyTFiejzY8kTVqNEwUyx/9tXoBhIQXwSxWBW7Wv4MwUfs/ya0FijYYRc0A=
+	t=1787108843; cv=none; b=tg+vYikQ+/aHvi1zmvPqY/oGYCVKWRhkAPcVfNtfIrdM2mVj1xny49X8lMgHvceWSWo8/ZghghiQWXq3NecOd6W8Er5n5jfrEHdoST4TUP0AG9lawrmfo9h53Ot9yrHVdJQIYpbkbvz00i9p30mIqaS2tn2LVRmCkDdCTZmkBq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787107911; c=relaxed/simple;
-	bh=/806s9Z6FPuQkp69sO+d1jlqaLHZbcjzztrS7iCpl9o=;
-	h=Message-ID:Date:MIME-Version:CC:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=ZgYIoAN9xAaJXoXE8vw1WL3eSVDf6kqeRHfz10O8FNBqAsoDESfuzVGLxqtaF9UMao2tm04pDm1+y/E5nhevkN2Ix+wIdlmidOciseOvPkvd5VqGhPnfgkqGdznMnJg/VnD5DpAHWHb3wK/dsjQw8+LS+vHQekSKevSAe6ZD+2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=XHNqjnFw; arc=none smtp.client-ip=113.46.200.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="XHNqjnFw"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=xhtZRXjoCnMWn9mFXaTj7fZKbM8NqbXiis/kR/upGLo=;
-	b=XHNqjnFwQ8sme/7g89G8PlcjwNXIUE9tyH0qII8KGgLBvvQ7VkPstRJuLBOLan4VKem0teuBz
-	xa3eejrWZwF10E9W+MyaHv0o1xvI8uel43bsbfnuifTMSwXU0OPBADf7ys0t2Y8CNUnwFb8QQZH
-	rd0/aVbjTzJWr4vmM8HQHx0=
-Received: from mail.maildlp.com (unknown [172.19.162.223])
-	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4hPrQv5CwkzpSvB;
-	Wed, 19 Aug 2026 10:40:39 +0800 (CST)
-Received: from kwepemo500018.china.huawei.com (unknown [7.202.195.199])
-	by mail.maildlp.com (Postfix) with ESMTPS id 35A5F40561;
-	Wed, 19 Aug 2026 10:51:35 +0800 (CST)
-Received: from [10.67.120.192] (10.67.120.192) by
- kwepemo500018.china.huawei.com (7.202.195.199) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Wed, 19 Aug 2026 10:51:33 +0800
-Message-ID: <b1aa6136-3dc1-4190-beaa-32bee88b7091@huawei.com>
-Date: Wed, 19 Aug 2026 10:51:33 +0800
+	s=arc-20240116; t=1787108843; c=relaxed/simple;
+	bh=bNcs03/qax0NE2Dcoq2YxTBLI4cwGzk+jLyINd3l+mQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=r4sXcuLE0ReppldaXcOcZ0c+8pQCCOPDGxW2Q4jRfQRJYsYoeVd19zimnRsGeaxfP4l9/a5hXQJEzzOqwDj/gjX3YEXikghKtVw5nDRqpnzCwnZwWYEtqI4ajcAstKN0Q8udSpAFHpqIMJB0zuC78iYtvt5FGGWVrf3maW3bBMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hPs0x28yQzKHML3;
+	Wed, 19 Aug 2026 11:06:41 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id B187B4058C;
+	Wed, 19 Aug 2026 11:07:09 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP1 (Coremail) with UTF8SMTPA id cCh0CgCHdtLcHYVqFr9bCw--.64187S2;
+	Wed, 19 Aug 2026 11:07:09 +0800 (CST)
+Message-ID: <449ec257-1ec2-4535-9bcc-70a6881c9349@huaweicloud.com>
+Date: Wed, 19 Aug 2026 11:07:08 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -42,90 +32,96 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-CC: <shaojijie@huawei.com>, "shenjian15@huawei.com" <shenjian15@huawei.com>,
-	"linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-	"eperezma@redhat.com" <eperezma@redhat.com>, "jasowang@redhat.com"
-	<jasowang@redhat.com>, "virtualization@lists.linux.dev"
-	<virtualization@lists.linux.dev>, "mst@redhat.com" <mst@redhat.com>,
-	"xuanzhuo@linux.alibaba.com" <xuanzhuo@linux.alibaba.com>,
-	"pabeni@redhat.com" <pabeni@redhat.com>, "edumazet@google.com"
-	<edumazet@google.com>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "corbet@lwn.net" <corbet@lwn.net>,
-	"horms@kernel.org" <horms@kernel.org>, "dsahern@kernel.org"
-	<dsahern@kernel.org>, "kuniyu@google.com" <kuniyu@google.com>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>, "dave.taht@gmail.com" <dave.taht@gmail.com>,
-	"jhs@mojatatu.com" <jhs@mojatatu.com>, "stephen@networkplumber.org"
-	<stephen@networkplumber.org>, "xiyou.wangcong@gmail.com"
-	<xiyou.wangcong@gmail.com>, "jiri@resnulli.us" <jiri@resnulli.us>,
-	"davem@davemloft.net" <davem@davemloft.net>, "andrew+netdev@lunn.ch"
-	<andrew+netdev@lunn.ch>, "donald.hunter@gmail.com" <donald.hunter@gmail.com>,
-	"ast@fiberby.net" <ast@fiberby.net>, "liuhangbin@gmail.com"
-	<liuhangbin@gmail.com>, "shuah@kernel.org" <shuah@kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"ij@kernel.org" <ij@kernel.org>, "ncardwell@google.com"
-	<ncardwell@google.com>, "Koen De Schepper (Nokia)"
-	<koen.de_schepper@nokia-bell-labs.com>, "g.white@cablelabs.com"
-	<g.white@cablelabs.com>, "ingemar.s.johansson@ericsson.com"
-	<ingemar.s.johansson@ericsson.com>, "mirja.kuehlewind@ericsson.com"
-	<mirja.kuehlewind@ericsson.com>, "cheshire@apple.com" <cheshire@apple.com>,
-	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
-	<Jason_Livingood@comcast.com>, "vidhi_goel@apple.com" <vidhi_goel@apple.com>
-Subject: Re: [PATCH v5 net-next 2/2] net: hns3: fix GSO_ECN flag setting in
- the RX path
-To: Jakub Kicinski <kuba@kernel.org>, "Chia-Yu Chang (Nokia)"
-	<chia-yu.chang@nokia-bell-labs.com>
-References: <20260804213510.673084-1-chia-yu.chang@nokia-bell-labs.com>
- <20260804213510.673084-3-chia-yu.chang@nokia-bell-labs.com>
- <61721708-0d77-4f59-aa08-02562af282bb@huawei.com>
- <PAXPR07MB79842CC27C2F5CF9BD40E007A3DC2@PAXPR07MB7984.eurprd07.prod.outlook.com>
- <20260812155927.57ee295b@kernel.org>
-From: Jijie Shao <shaojijie@huawei.com>
-In-Reply-To: <20260812155927.57ee295b@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- kwepemo500018.china.huawei.com (7.202.195.199)
+Subject: Re: [RFC PATCH bpf-next v1 1/1] bpf: Enable JIT hardening by default
+ when x86_64 CFI is enabled
+Content-Language: en-US
+To: Jennifer Miller <jmill@asu.edu>, Kees Cook <kees@kernel.org>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, linux-hardening@vger.kernel.org,
+ xmei5@asu.edu, samitolvanen@google.com, peterz@infradead.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260710191932.120911-1-jmill@asu.edu>
+ <20260710191932.120911-2-jmill@asu.edu> <202608091030.C69278022@keescook>
+ <aoL_G-3chdLZGxSJ@spiro>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <aoL_G-3chdLZGxSJ@spiro>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:cCh0CgCHdtLcHYVqFr9bCw--.64187S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cw17Gw1Utr4fAw1UXFyDtrb_yoW8uF4xpr
+	1kKayFkF4DX340ka42vanrKr1Fva98Kr4UWr1rWw1Iq3Z0qr93JFnakr45WFn0qrWrZryI
+	vF40qas8ua4UAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvYb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7
+	CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+	rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+	IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kK
+	e7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+	02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
+	GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+	CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
+	6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
+	UAwIDUUUUU=
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-
-on 2026/8/13 6:59, Jakub Kicinski wrote:
-> On Wed, 12 Aug 2026 10:35:25 +0000 Chia-Yu Chang (Nokia) wrote:
->>> Tested on hns3 HW (2x 100G, direct cable, openEuler 24.03, kernel 7.2.0-rc6).
+On 8/17/2026 9:24 PM, Jennifer Miller wrote:
+> On Sun, Aug 09, 2026 at 10:30:35AM -0700, Kees Cook wrote:
+>> On Fri, Jul 10, 2026 at 12:19:32PM -0700, Jennifer Miller wrote:
+>>> Initializes bpf_jit_harden to 1 if x86_64 CFI is enabled. Prevents the
+>>> misuse of BPF JIT code to craft CFI signatures or Endbr64 instructions
+>>> by enabling constant blinding for JITted BPF code from unprivileged
+>>> users.
 >>>
->>> tcpdump confirms HW GRO zeroes IP ToS: aggregated (>MTU) packets carry tos 0x0, while non-aggregated packets keep their ToS/ECN marks — so the zeroing is done by HW GRO, not the sender. Before patch, CWR packets had SKB_GSO_TCP_ECN set (0x5 = SKB_GSO_TCPV4 | SKB_GSO_TCP_ECN). After patch, all GRO events gso_type=0x1 (SKB_GSO_TCPV4 only), no 0x5 observed.
+>>> Signed-off-by: Jennifer Miller <jmill@asu.edu>
+>>> ---
+>>>   kernel/bpf/core.c | 6 +++++-
+>>>   1 file changed, 5 insertions(+), 1 deletion(-)
 >>>
->>> Tested-by: Jijie Shao <shaojijie@huawei.com>
->> Thanks Jijie for confirmation, I will submit to net in the next round.
-> Hold on.. Sounds like hns3 zeros ToS out (?!)
+>>> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+>>> index 47fe047ad30b..ed22b90c6e4e 100644
+>>> --- a/kernel/bpf/core.c
+>>> +++ b/kernel/bpf/core.c
+>>> @@ -548,7 +548,11 @@ void bpf_prog_kallsyms_del_all(struct bpf_prog *fp)
+>>>   /* All BPF JIT sysctl knobs here. */
+>>>   int bpf_jit_enable   __read_mostly = IS_BUILTIN(CONFIG_BPF_JIT_DEFAULT_ON);
+>>>   int bpf_jit_kallsyms __read_mostly = IS_BUILTIN(CONFIG_BPF_JIT_DEFAULT_ON);
+>>> -int bpf_jit_harden   __read_mostly;
+>>> +/* Enable hardening by default when x86_64 CFI is enabled to prevent CFI
+>>> + * hashes and endbr64 instructions from being crafted.
+>>> + */
+>>> +int bpf_jit_harden   __read_mostly = IS_ENABLED(CONFIG_X86_64) &&
+>>> +					IS_ENABLED(CONFIG_CFI);
+>>
+>> Why not just do this for all CONFIG_CFI?
+>>
+>> -Kees
+>>
+> 
+> The intention was to not enable JIT hardening by default for other
+> architectures when CONFIG_CFI is enabled when we don't know if it would
+> be preventing any CFI from being bypassed. It may be possible that kCFI
+> on other architectures is able to be bypassed in similar ways to x86_64,
+> but we haven't looked into it.
+> 
+> ~Jennifer
 >
-> This would be invalid and illegal for HW-GRO. If hns3 nukes crucial IP
-> header fields it should probably be advertising LRO not HW-GRO in the
-> first place.
 
-Your assessment is correct — HW GRO on hns3 does NOT zero IP ToS.
+Yeah, IIUC the described attacks rely heavily on x86-64's
+variable-length instructions. On arm64, instructions are
+strictly 4-byte aligned and jumping into the middle of an
+instruction is not allowed, so the attacks seem not feasible,
+at least in the current form.
 
-My earlier Tested-by claiming "HW GRO zeroes IP ToS" was wrong. The
-tos=0x0 I observed was caused by a test methodology error: I used
-iperf3 with --tos but did not set net.ipv4.tcp_ecn=1, so the sender's
-kernel TCP stack cleared the ECN bits before the packets hit the wire.
-I mistakenly attributed this TX-side clearing to HW GRO.
-
-I have retested with tesgine (direct packet construction, bypassing
-the kernel TCP stack) and confirmed:
-   - HW GRO preserves IP ToS — each aggregate group retains the head
-     packet's ToS value (verified with 0x00/0x02/0x03/0x10/0xB8)
-   - HW GRO segments flows by ToS boundaries — any ToS change (DSCP or
-     ECN bits) terminates the current aggregate group
-   - ECN signals are intact — CE packets (tos=0x03) are delivered
-     independently with the CE mark preserved
-     
-hns3 HW GRO is behaving correctly. Sorry for the confusion caused by
-my earlier report.
-
-Full test details in my correction reply to the patch 2/2 thread:
-https://lore.kernel.org/all/dd817755-eb4d-4ac2-b282-ac06f847270d@huawei.com/
-
-Regards,
-Jijie Shao
-
+>>>   long bpf_jit_limit   __read_mostly;
+>>>   long bpf_jit_limit_max __read_mostly;
+>>>   
+>>> -- 
+>>> 2.34.1
+>>>
+>>
+>> -- 
+>> Kees Cook
+> 
 
