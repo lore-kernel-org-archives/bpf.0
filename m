@@ -1,91 +1,202 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 699143CF054;
-	Wed, 19 Aug 2026 18:59:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0290B4078CE
+	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 19:11:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787165959; cv=none; b=E8cKOBDhvycPfAgzvdUseZ73s4yYicNK/jq3H0psYM50U0PSa7eqvojl0e5PlkYPIZ/hu/qfq0SBOST6ieE30pNZWEtNB7TRAT8MDtrYsZI2H+QMGN2qoZRUrm29uPsygoZDRtdcuvSlVu2Moq0dC8tgU1jpj6VkSryg+Y2qHWQ=
+	t=1787166695; cv=none; b=NUR10SMS/mRSNe/iUXpH5cRr/VK6aA/gtwiV4gJpWMz0foKiNmXaxf+nt6+l5zwjs7lbSDOtqXu1F+XSDrI2LH5MoGZQw9dsyrBk8ULKHD79hheKw6HtLGUKCjisPMJZ72e+bMt3pOFVrPhlir8/LrUKutcma2soXhKf7his3PA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787165959; c=relaxed/simple;
-	bh=sbKurF3MB5hsXtMP7HmwxrWZbHbt4HuspurYj7GgXtY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lKDH9QO5LqbLkFHUF+qruDjQpkG8+0GrNxB/kAk9MzMJCjGJjATWhGdCIbunKGOiUPYWfqn2Xo2dZMgI4IVeiizsExZyl+XFAwwnf7opbDfQRGwsHr+XMPkt+NeBGX9cWZ+EMMaq4G7zB2LS7oy+KiBmJ8gFNH+1Xky8P5DEvac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M6dQoAOT; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1787166695; c=relaxed/simple;
+	bh=LZH4Ig8rdsa+22GNL8Pma7P6dkGY16eM0dMSUGfgm4E=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=L/+zp6pZPwoMiaiizqK8exZj9iBocBU8iPQqWn0gz2o9LeoZarZOvTTUASIs3mYZ7zdrj1gCVKMJVIsWtpPc6SkRolIGmGWKdmfbewm//qRDl1r7wKj/ZokuNnp4zi683SSbPEP3aFl+wYY2X4i5Mv0b2nYvep6E7lifGG1r5D4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=U40JsDZU; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M6dQoAOT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787165958; x=1818701958;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sbKurF3MB5hsXtMP7HmwxrWZbHbt4HuspurYj7GgXtY=;
-  b=M6dQoAOTSGP1Sm6u+xqBNTzcekaYfnb+v1gUDD5TcBxvikr+xnsDSbHj
-   dvuYbMSqYahLAVDM2KbjPMw1Y5/TShxXKPKmAvvmjvMaUKixe6AJG4Xu8
-   V/CZAFNVjzvhX6jSeU7hZMZNz9vRFlvnuJxn0/s5t/KjEMYKi1hkSMlNI
-   882+QfnnPtHJyxRTKhKkJVWiEXUFL8k2qAyH8Jlsnu9VROiQFFnTHnB01
-   PUg6S0Lg8ve1gk0B7WXRrfWFYVDMGXp+7X8l+zfqj+IkgXbW6LEZ0oVX7
-   apvWSHofaAffySjOrbgmOqUD1LcoJyfPeFuhnidBKpI6tMXeUw3hMXFwq
-   A==;
-X-CSE-ConnectionGUID: hVtQPxJgRRuFnEtLvvpV/A==
-X-CSE-MsgGUID: jtoQPxQoRcyx/AkR0SQ5ZQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11880"; a="98362593"
-X-IronPort-AV: E=Sophos;i="6.25,231,1779174000"; 
-   d="scan'208";a="98362593"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2026 11:59:16 -0700
-X-CSE-ConnectionGUID: qgGqj6cESFugWTCUOU3eZQ==
-X-CSE-MsgGUID: cJ1hEMnBT3K0FmhDyWde6A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,231,1779174000"; 
-   d="scan'208";a="263868455"
-Received: from guptapa-desk.jf.intel.com (HELO desk) ([10.165.239.46])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2026 11:59:16 -0700
-Date: Wed, 19 Aug 2026 11:59:09 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: kernel test robot <yi1.lai@intel.com>, oe-lkp@lists.linux.dev, 
-	lkp@intel.com, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	x86@kernel.org, Daniel Borkmann <daniel@iogearbox.net>, 
-	Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [linus:master] [x86/bugs] a3af84b0fa:
- stress-ng.seccomp.ops_per_sec 95.7% regression
-Message-ID: <4h7zrdfpu3ailx5ajkyqohmcfuxgrk3tn7i7n3dkp3ksy5xehk@xqg5j6pqzocv>
-References: <202608191340.98574fe2-lkp@intel.com>
- <b771b524-ceca-4766-9eaa-07bee153802a@intel.com>
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="U40JsDZU"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2d560775ca2so11103815ad.1
+        for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 12:11:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1787166693; x=1787771493; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=iuJxNDnPI30koRC+wulDPOVDN1bFgNOxk8BAwV2kNWY=;
+        b=U40JsDZU6aEphzkDQJwnSW3GTgGFVj3cBv7vgTaGgS+hbDxOtvP4xKSc9YuspgVZJd
+         W3M80kQ1uWKCLxPiQ4+fLhN98mWNCts5BKiEdIpDxedzUSgONezR2UKSldZNg6IuL9uN
+         9xoriOldbRGchR7yPvT48MVxa3Wm9so+F5idduv4t6jNL+owZwTOZIWsljaeEAGAGV5Q
+         f25zwOv42rI3VKzLFg+LBOqoPdimE3/BGf9FcRVjlBhWEAd6lzv/cWLonuaw2yXXxbuN
+         LOCm/lPussorKKWLPaQX3z061y7UfKmY4dil1F/jq7m2NRKL49Jjs9QpN1fx6vzu3Yr0
+         6Sug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787166693; x=1787771493;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=iuJxNDnPI30koRC+wulDPOVDN1bFgNOxk8BAwV2kNWY=;
+        b=VQ0vbKktnDE3ab5spcFUiLKJ11Ctqthjw4tKER/ijGU9whuOzkcPVPZEger1rQzEVO
+         710uKMgg8V4hGaZ0Kgb1kwz3oRElMODBEWq7x/RAEr79jVb2zWVGo8vNVr1zLZrzoLlT
+         ieiZXOgDKGnysmTgHvxvmnRVU5LvI54VJSQUSp+4SOczxlAotOkEFryXcB8W+FHDMXgD
+         31FBiK+V48qmkx+/zzlyZIA2QE6QcLr3oMicmQmQ+fVQBvb6hCzq1A2bL7S6lvyf0j21
+         sOfKMVcmxMlknY6KcuWYZkWqTSlPygqxUxAj0BThdieAccH0bAGfz40IzLxB5Hr30Ndm
+         NPbQ==
+X-Gm-Message-State: AFuF++kcLC3rriVoao+UNbG1Rj4iMmEc/kv+B/QcIWwXakzl8HgLwQN7
+	TjsuBhJvzDXn9T7mIxWhQ9xMH0Gq6R0+kCgm3Lkt4iTgaO23v/GmfHaAbNiBTUHCyb8=
+X-Gm-Gg: AR+sD12aPXXSonCMFceqRrAbfrOMZWdXZbqR/zGeMA1EB6L87AMTuYpVktVwMEtlXgl
+	jUsOe/0vUDSFwToNTs1q3FXa7+uI7vFztQKnT4UvDRAlx0SdGNKu0lgdLKhK7CnlZvU9IwoLHIV
+	EqkY1KYCGYQkANXVjUwjnOFpjEsTWgxXrKVCBB0wOJzS1TidVCt4SE+34go5iZ9MxAUczP82VaG
+	rJrAU92thZvTfiaSRDZ265rV+5yYMlt7OVUt7F2EL2PxP0n5QBziYeo5EIw2CvOAYvHP/TdxoUd
+	+xF9LWHGMbqj5CmhVWF0l/YQv/ImwOFobZy9rwoulp1ADOJvBSHFPrAeF3TlfUIMmz27J+dcATy
+	SfSVXS0EPzxqOsVVTxg8URwTDhRcyq7t/YxIRAjTBelmNwb7vxbQpE3F81xqkesELl1g/HXcG8M
+	BUmunLg3H1FmWkg0s4dvqQqEsGfxTth+kUHs3ViQTEzBc/4Byg2VJhZDYYWbS1ptF9L7HnPwWt2
+	/NgXlNDwZ88zZYqPffz4nAKsC2GJ/qce97Q33yg
+X-Received: by 2002:a17:902:d2d0:b0:2c7:ebfb:618f with SMTP id d9443c01a7336-2d601985763mr103968165ad.14.1787166693067;
+        Wed, 19 Aug 2026 12:11:33 -0700 (PDT)
+Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d5c1e543besm28951195ad.41.2026.08.19.12.11.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Aug 2026 12:11:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b771b524-ceca-4766-9eaa-07bee153802a@intel.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 19 Aug 2026 15:11:31 -0400
+Message-Id: <DKT5PVZDPTZX.38GSKZBE4TPYR@etsalapatis.com>
+Cc: <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v3 3/3] bpf, arena: check range_tree_set return
+ in arena_free_pages and arena_free_worker
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: <sashiko-reviews@lists.linux.dev>, <chenyuan_fl@163.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260810134800.2875487-1-chenyuan_fl@163.com>
+ <20260810134800.2875487-4-chenyuan_fl@163.com>
+ <20260810140850.4214E1F000E9@smtp.kernel.org>
+In-Reply-To: <20260810140850.4214E1F000E9@smtp.kernel.org>
 
-On Wed, Aug 19, 2026 at 08:26:53AM -0700, Dave Hansen wrote:
-> On 8/18/26 23:20, kernel test robot wrote:
-> > kernel test robot noticed a 95.7% regression of stress-ng.seccomp.ops_per_sec on:
-> 
-> One one level this is a "vulnerability mitigations cause performance
-> loss, news at 11" kind of thing. Like, Duh!
-> 
-> The microbenchmark here does seem to be a pretty worse-case scenario
-> where it sits in a loop loading and running a seccomp filter program. In
-> other words, it's just about as pathological of a test as you can have.
-> 
-> I think Pawan had some more ideas about ways to optimize this. Is there
-> any appetite for that? Or is the test just too synthetic to worry about?
+On Mon Aug 10, 2026 at 10:08 AM EDT, sashiko-bot wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [High] Physical memory leak in the BPF arena allocation rollback and de=
+ferred free paths when `range_tree_set()` fails.
+> --
+>
+> --- Patch [3]: [PATCH bpf-next v3 3/3] bpf, arena: check range_tree_set r=
+eturn in arena_free_pages and arena_free_worker ---
+> commit 2ed41c8c8f7aaa211a3d44f83cea88768b2f5819
+> Author: Yuan Chen <chenyuan@kylinos.cn>
+>
+> bpf, arena: check range_tree_set return in arena_free_pages and arena_fre=
+e_worker
+>
+> This commit adds error checking for range_tree_set() in the BPF arena
+> allocation rollback and free paths. If the tree update fails, it aborts
+> the page free operation or skips clearing PTEs to prevent untracked pages=
+.
+>
+>> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+>> index 7b6847200b431..1e519c3c229ca 100644
+>> --- a/kernel/bpf/arena.c
+>> +++ b/kernel/bpf/arena.c
+>
+> [ ... ]
+>
+>> @@ -881,7 +883,12 @@ static void arena_free_pages(struct bpf_arena *aren=
+a, long uaddr, long page_cnt,
+>>  	if (ret)
+>>  		goto defer;
+>> =20
+>> -	range_tree_set(&arena->rt, pgoff, page_cnt);
+>> +	ret =3D range_tree_set(&arena->rt, pgoff, page_cnt);
+>> +	if (ret) {
+>> +		raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+>> +		bpf_map_memcg_exit(old_memcg, new_memcg);
+>> +		return;
+>> +	}
+>
+> [Severity: High]
+> Does this early return cause a physical memory leak bounded by the lifeti=
+me
+> of the BPF map?
+>
+> If arena_alloc_pages() fails midway due to memory limits, it attempts to
+> roll back the partially allocated physical pages by calling
+> arena_free_pages(). Under memory pressure, the range_tree_set() call is
+> highly likely to fail due to its internal kmalloc_nolock() allocation.
+>
+> Aborting here leaves the physical pages mapped in the kernel VMA and
+> completely orphaned. Exchanging a virtual address space leak for a physic=
+al
+> memory leak on an error path under OOM conditions worsens memory pressure=
+.
+>
+> The pre-patch behavior of freeing pages and clearing PTEs appeared safe,
+> since bpf_arena_fault_handler() handles unmapped PTEs by mapping the
+> scratch_page.
+>
 
-One of the optimization is to do fine-grained tracking, i.e. track reuse
-per-chunk instead of per-pack. This requires an additional bitmap per-pack.
+Imo this is debatable. If we are at the point where we can't allocate
+entries in the range tree, we are close to an OOM anyway and so it is
+better to keep the range tree and actual mappings consistent.
 
-Another option is to track the CPUs where the cBPF program ran, and only
-send IPIs to those CPUs. This mainly reduces the overhead on workloads on
-other CPUs, not necessarily the workload allocating programs. Seems more
-relevant on servers with many CPUs.
+>>  	init_llist_head(&free_pages);
+>>  	cdata.arena =3D arena;
+>
+> [ ... ]
+>
+>> @@ -1004,11 +1011,18 @@ static void arena_free_worker(struct work_struct=
+ *work)
+>>  		kaddr =3D arena_vm_start + s->uaddr;
+>>  		pgoff =3D compute_pgoff(arena, s->uaddr);
+>> =20
+>> +		/*
+>> +		 * Mark the range as free before clearing PTEs so that
+>> +		 * if the range tree update fails we leave the PTEs
+>> +		 * intact, avoiding an unrecoverable state where pages
+>> +		 * are freed but the arena free tree does not track them.
+>> +		 */
+>> +		if (range_tree_set(&arena->rt, pgoff, page_cnt))
+>> +			continue;
+>> +
+>
+> [Severity: High]
+> Can this continue statement permanently leak the physical pages from the
+> free system?
+>
+> When this skips PTE clearing and page collection, the subsequent loop in
+> arena_free_worker():
+>
+> arena_free_worker() {
+>     ...
+>     llist_for_each_safe(pos, t, list) {
+>         s =3D llist_entry(pos, struct arena_free_span, node);
+>         ...
+>         kfree_nolock(s);
+>     }
+>     ...
+> }
+>
+> unconditionally destroys the tracking span 's'. This abandons the pages,
+> leaving them orphaned rather than avoiding an unrecoverable state.
 
-Not sure if these are worth the effort yet, given that I am not aware of a
-real-world workload with a significant impact.
+
+This, however, seems valid. You can make it so that we do not free
+ranges for which we haven't called apply_range_clear_cb.
+
+pw-bot: cr
+
+>
+>>  		/* clear ptes and collect pages in free_pages llist */
+>>  		apply_to_existing_page_range(&init_mm, kaddr, page_cnt << PAGE_SHIFT,
+>>  					     apply_range_clear_cb, &cdata);
+>> -
+>> -		range_tree_set(&arena->rt, pgoff, page_cnt);
+>>  	}
+>>  	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+
