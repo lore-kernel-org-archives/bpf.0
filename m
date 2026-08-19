@@ -1,98 +1,174 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4C983515D5;
-	Wed, 19 Aug 2026 06:42:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 913123CEBA9
+	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 06:46:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787121774; cv=none; b=V9N+30m8vf57cji8OlsaiAct86lZxQBDw5u/hZhEkWVim2QG9vvYwb5fUPFJ8JFjktoI52IaRDPrQseleUZFFw3Y+xevg8l0covj6eAKU8wU5uxDRt7LvsPJ26hJjvs42ICWJvKVmPI8B10Q6JPWrjnKC8/0qGrrxwhNmbeVlBk=
+	t=1787121969; cv=none; b=P76rNoBQED2nEOL/GNqXZZfTJNb6IhcMt0SIMb2+Y15lsnr2RrUXU4E9rvb12kEWwY7CKPVuT10y0kpiIr38mMaq+j6boSafuZB/KeQbsLbakRE+qVBKkIxn2RyVneQTRJzyCiMpUmGQfWEim4lpQr+aVLYWQyNzdLNqplbqmkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787121774; c=relaxed/simple;
-	bh=EcHlaHX3gHJyEH/Zga+QN1oo/GzQGDIJpk5BiafgZcA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FxLx7KRqHIHLF8R30Uoo8NtmD0lJb7jehL46NCF6rvGbUPERnqCWCxxMq2js8bXsFfn8LHSN5P9O/6jClYSyHcJ5Evp+3NJVnMXne0jYRkNoxsrG5pdGxw3QquUXjhBg1T0WbaKHG/BpYyGhYBALO2Nf+z5Tb4q8HyHsdYMznpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IaEwTV3k; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787121969; c=relaxed/simple;
+	bh=cR9NmeJT7gSwgA/kS0UtQfvo91fdRcH7q/QCqsH6scM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=I3UPbRLBAchbE7UFH/V7kSBpalehzjKElvk+oX//CEnR7Kv1DAT41HBQOTPYyNLt158vC2tlAhkS2FbXVgIj/g0nfvl8bCvQlgZwzSiH5rBUwWSaTjThnkfhF0Xs/eHFz/eB8W2XOgC958fqLe5QD/9YAADx6L7PNL/Pee9IUo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VJ/PnVIy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IaEwTV3k"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBC4C1F000E9;
-	Wed, 19 Aug 2026 06:42:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VJ/PnVIy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 176581F000E9;
+	Wed, 19 Aug 2026 06:46:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787121773;
-	bh=CrEG9fFw1MFmWKmMTb/tSxBnpXHVdHRYHFBMBtOPBHs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=IaEwTV3ksNQJzjITQnGu05Ka6a4HdZJTbwpRx7eozxzTfG5sIjysaLWrIoHU3//65
-	 s8a3CwgrXic9Aa8jbJQTZA7WrKhIDLHYPk5jFrlkVBRfCjU3odJ8mEl7geAsFfl6Ww
-	 /PV2/nMs0E0fs0ZcQyp82MWJ7jU9zaDzmAtpR1yJQthpuMu4LSvDzPphSQbbuN9hi7
-	 zONGWCLJ1RAFJAVw4wC5/ucjFXtILsHMpjl7DJ92Qik494ju8EtgiiZ6/71cVtb7aY
-	 Wm2HM86Q7GFYCgYlInHiI2B8mQmTpO0FoxBIv9eEn+3DFlUevE9W6dT4G5eAQ/VsgR
-	 hvFN0/nZpYIZA==
-Date: Wed, 19 Aug 2026 09:42:41 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: bot+bpf-ci@kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, bp@alien8.de, daniel@iogearbox.net,
-	dave.hansen@linux.intel.com, eddyz87@gmail.com, mingo@redhat.com,
-	memxor@gmail.com, song@kernel.org, tglx@kernel.org,
-	emil@etsalapatis.com, hpa@zytor.com, jolsa@kernel.org,
-	john.fastabend@gmail.com, martin.lau@linux.dev,
-	yonghong.song@linux.dev, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, x86@kernel.org, olsajiri@gmail.com,
-	martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
-Subject: Re: [PATCH] x86/bpf: make arch_bpf_trampoline_size allocate from
- EXECMEM_MODULE_DATA
-Message-ID: <aoVQYYzUt_eCG4Ek@kernel.org>
-References: <20260818130510.3110054-1-rppt@kernel.org>
- <9b5c48df2b9e1f49191a459c822608751240e2243ae0cebb96bae0939037aadc@mail.kernel.org>
+	s=k20260515; t=1787121968;
+	bh=z/ndXVph8gOfkiC1fZYX3AbiMMn0GXHna9PhGdhr2hA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=VJ/PnVIyU+0UziubX7KLrrO9AzQvQZSiJ3v2SVqvnCd9Z3kBh0XTztDKgO5NLlgXm
+	 THcD1SE/1BeomRT6wOsY3f2N3FHimmcEKP7Zbq0CxydnmZ+YRMI7SSkpe1R12tB2wm
+	 0UM2S0pxano1ADRP+s8AHi9SjS+gK+7btwrSgyhM+zF7nUh7B5iGVBoTXp4vhg6HMi
+	 n9eFfqVZTBVKhR99+qYOMMIN0urKq7niKdzOOb2xtYcGrQMcUZYACdrk3ad5QTFkBL
+	 7rxiPanNmZBBttSsgJ4T2Nega+9cnnH7ck60ypzK82ayNjxd7031O6H4ARjMeHInoo
+	 Iqsbg2QatNjtQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: add memcg async reclaim
+ test
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Hui Zhu" <hui.zhu@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <052d445fe9d7741729447f1b90277dcdc6541b4f.1787120833.git.zhuhui@kylinos.cn>
+References: <cover.1787120833.git.zhuhui@kylinos.cn>
+ <052d445fe9d7741729447f1b90277dcdc6541b4f.1787120833.git.zhuhui@kylinos.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 19 Aug 2026 06:46:07 +0000
+Message-Id: <20260819064608.176581F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9b5c48df2b9e1f49191a459c822608751240e2243ae0cebb96bae0939037aadc@mail.kernel.org>
 
-On Tue, Aug 18, 2026 at 02:07:23PM +0000, bot+bpf-ci@kernel.org wrote:
-> >     x86/bpf: make arch_bpf_trampoline_size allocate from EXECMEM_MODULE_DATA
-> >
-> >     Jiri Olsa reports slowdown of tracing_multi benchmark that allocates huge
-> >     number of trampolines [1].
-> >
-> >     The slowdown caused by extra protection changes in execmem_alloc_rw() and
-> >     execmem_free().
-> >
-> >     With ROX caches enabled, all execmem allocations except EXECMEM_MODULE_DATA
-> >     are ROX after the allocation. execmem_alloc_rw() temporarily sets them to
-> >     W+NX and execmem_free() resets them back to ROX.
-> >
-> >     The only user of bpf_jit_alloc_exec_rw() is x86::arch_bpf_trampoline_size()
-> >     that only needs a temporary writable buffer in the modules address space.
-> >
-> >     On x86 executable memory and module data are constrained to the same
-> >     address range, so x86::arch_bpf_trampoline_size() can directly use
-> >     execmem_alloc(EXECMEM_MODULE_DATA)
-> >
-> >     Replace the call to bpf_jit_alloc_exec_rw() with a call to
-> >     execmem_alloc(EXECMEM_MODULE_DATA) in x86::arch_bpf_trampoline_size() and
-> >     drop bpf_jit_alloc_exec_rw() helper.
-> >
-> >     Reported-by: Jiri Olsa <olsajiri@gmail.com>
-> >     Link: https://lore.kernel.org/all/an8r7EODLIL-bZM3@krava
-> >     Fixes: f0334294a428 ("bpf, x86: make sure allocation in arch_bpf_trampoline_size() is writable")
->              ^^^^^^^^^^^^
-> 
-> The Fixes tag references commit f0334294a428, which does not exist in
-> this repository. Should this be:
-> 
->   Fixes: 5bf02dbf39fa ("bpf, x86: Make sure allocation in arch_bpf_trampoline_size() is writable")
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] Process leak due to overwriting child PID variable with the resu=
+lt of waitpid().
+- [Low] BPF comment style violation for multiline comments.
+--
 
-Argh, checked the log on a wrong branch.
+--- Patch [2]: [PATCH bpf-next v3 2/2] selftests/bpf: add memcg async recla=
+im test ---
+commit 4779648533dd0e49d1c2f5c9bdbbad1260ba333c
+Author: Hui Zhu <zhuhui@kylinos.cn>
 
-Can you folks fix it up when applying or you'd need v3?
- 
-> That commit introduced bpf_jit_alloc_exec_rw() and the performance issue
-> being addressed here.
+selftests/bpf: add memcg async reclaim test
 
--- 
-Sincerely yours,
-Mike.
+Add memcg_async_reclaim selftest that verifies BPF-driven async proactive
+reclaim can mitigate refault-induced slowdown under memory pressure.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c=
+ b/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
+> new file mode 100644
+> index 0000000000000..e990d1fdc79fd
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
+
+[ ... ]
+
+> +	low_pid =3D fork();
+> +	if (!ASSERT_GE(low_pid, 0, "fork low"))
+> +		goto cleanup;
+> +	if (low_pid =3D=3D 0)
+> +		exit(real_test_child_work(CG_LOW_DIR, low_data_file,
+> +					  low_time_file, read_times));
+> +
+> +	high_pid =3D fork();
+> +	if (!ASSERT_GE(high_pid, 0, "fork high"))
+> +		goto cleanup;
+> +	if (high_pid =3D=3D 0)
+> +		exit(real_test_child_work(CG_HIGH_DIR, high_data_file,
+> +					  high_time_file, read_times));
+> +
+> +	low_pid =3D waitpid(low_pid, &status, 0);
+> +	if (!ASSERT_GT(low_pid, 0, "low waitpid"))
+> +		goto cleanup;
+
+[Severity: Medium]
+If waitpid() fails and returns -1, does this overwrite low_pid with the err=
+or
+value?=20
+
+Later in the cleanup path, the code relies on the PID being positive to kill
+the left-behind child processes:
+
+	if (ret) {
+		if (high_pid > 0) {
+			...
+		}
+		if (low_pid > 0) {
+			kill(low_pid, SIGKILL);
+			(void)waitpid(low_pid, NULL, 0);
+		}
+	}
+
+Since low_pid was overwritten with -1, the cleanup logic will fail to kill =
+the
+child process, potentially leaving it running and consuming resources. Woul=
+d it
+be safer to store the waitpid() return value in a separate status or pid=20
+variable?
+
+> +	/*
+> +	 * The child has been reaped and its PID can already be reused,
+> +	 * so mark it to keep cleanup from signaling an unrelated process.
+> +	 */
+> +	low_pid =3D -1;
+> +	if (!ASSERT_TRUE(WIFEXITED(status), "low exited"))
+> +		goto cleanup;
+> +	if (WEXITSTATUS(status) !=3D CHILD_EXIT_OK) {
+> +		PRINT_FAIL("low child failed at: %s (exit status %d)",
+> +			   child_exit_str(WEXITSTATUS(status)),
+> +			   WEXITSTATUS(status));
+> +		goto cleanup;
+> +	}
+> +
+> +	high_pid =3D waitpid(high_pid, &status, 0);
+> +	if (!ASSERT_GT(high_pid, 0, "high waitpid"))
+> +		goto cleanup;
+
+[Severity: Medium]
+Similar to the issue above, if waitpid() returns an error, high_pid is
+overwritten. This prevents the cleanup code from terminating the high_pid c=
+hild
+process if the wait call is interrupted.
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/memcg_async_reclaim.c b/to=
+ols/testing/selftests/bpf/progs/memcg_async_reclaim.c
+> new file mode 100644
+> index 0000000000000..225f0bc667113
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/memcg_async_reclaim.c
+
+[ ... ]
+
+> +static u64 wq_high_cgroup_id;
+> +static u64 wq_low_cgroup_id;
+> +
+> +/* Statistics exposed to userspace through .bss, so the test can verify
+> + * that reclaim actually happened instead of relying on timing alone.
+> + */
+
+[Severity: Low]
+This isn't a bug, but the BPF subsystem prefers multi-line comments to have
+the opening /* on its own line:
+
+/*
+ * Statistics exposed to userspace through .bss, so the test can verify
+ * that reclaim actually happened instead of relying on timing alone.
+ */
+
+> +u64 reclaim_calls;
+> +u64 reclaimed_pages;
+> +
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1787120833.gi=
+t.zhuhui@kylinos.cn?part=3D2
