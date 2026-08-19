@@ -1,65 +1,65 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D46DC282F06
-	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 17:25:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 961673C4B89
+	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 17:30:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787160337; cv=none; b=QZAY6dtV59Fo8le+TTorKKAXzhxp2SOtRcYIXSDNQvdjnJZad91yvyedh1TnZ6UEQdY9T6lqk74QMTo1rGfK9+8T9J6PFFufjkNdFi0SgDo5sbZqZ7Hh+9ZA8+K62VTvvundsZxTMSRV8q6psENIToQtOwentNVv8oPfMMiUl/U=
+	t=1787160605; cv=none; b=RMp9Q11bwbf+7VYaBU8wCx16aw7LyUAwm5OJhjzgHFtQWEGL/gfgsxbQAp6zyBAAL53D8P5KR4p3nw/wae54SxO8pOMcYIptHwo5b7PsETlnfKLkWP17XpB9XmiswkpAQ8u0KhwtfgKTzGlMEdBBgKX5dNle9+n6oK6bYZFG63U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787160337; c=relaxed/simple;
-	bh=25RVr0PzaJB5SGq0J64QVvtXfLUWuggQny+pEzf2y5g=;
+	s=arc-20240116; t=1787160605; c=relaxed/simple;
+	bh=cdQv+fMfJ3iDt7AJoNvehg4/fOXMVvnhYq/SUXtsdYM=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=A8/6VGyE3tCEg4u/KlI/zEXP2f0tYNbYCCp6LR7fLS0IR+ddsyS7xJnREIdXUM8WYLhrw0D+rMQq8nMOiFfk/fcoIJ114DvjVu+YZetzBpb0aqg3n6KR1JKwmqJ2E51j+g5wlHRN6FJnxpYQ605oRlpBenER+YGmndv20t8kuP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=Wu8XlbrS; arc=none smtp.client-ip=209.85.210.171
+	 References:In-Reply-To; b=ZXEX5cFzvUl1Y+UHyCnysobnpCDiOrVCrwkjnuTeKMgdy4yIoJUYt7CVVgFStCCsFG1O67mYARHXuuE3vLaE3SLWoB1KmVFDRlJnMqrw3D1pc/mqG7DSsfNwtCQziSTQIaOGyKxkuYa4mFkWv4SDKsqDh/mv9UGiN8krRn5+ieo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=DIzovmB3; arc=none smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="Wu8XlbrS"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-84fa3b14ee1so1090029b3a.0
-        for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 10:25:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="DIzovmB3"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c9d1fff21edso861107a12.1
+        for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 10:30:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1787160335; x=1787765135; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1787160603; x=1787765403; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=T2WNbz/EDWuobLOQ3nNKJ3uRAjrkuktkhvK0BdgU1Z4=;
-        b=Wu8XlbrSnbiExm76tU/8htulKssxcYQ6au8CrOHS7zXclP+W6ZdaKIBr08j/75XOA7
-         dmRT/k80WzURqhRgdHEpaKQEHacO7hrVyIFTtdTWyLs0YzHGH6IC7lyDKh0n1DLtqbZy
-         0iBBU2sADVCt2GDN6YDyyixk+Am6/pXBLuS8q2ijXLGmyYa3CzxjiEF6JkaKB+EPDrL6
-         4lMMPyDZqkoCgXtrGx5lzy58I0h9Rx8Co9wq/TqJl06hKtrPxTZvd8WwLThx6l64HemL
-         MaeiPxYJFJj5eDCp+xsnypBLig+CgDI9Q404HcDCHEjKmMpG8wl2xUxVad4aDRDenWp/
-         IibA==
+        bh=msqDnawpFarSgDa4emNb/wmup3kT5sdWHmWWYNSinBY=;
+        b=DIzovmB3PoF+3IZQ6gmVh5R+lIu2DSiXQJwLh62/ToxP1Onclrt30axrlfL/oM9Ljn
+         phV0Ae4HqnRyooga3wThHiVsd711BDeJNmq3WRvODPiDB9lotlOs3505Yi4VgOsC+f3S
+         OYZvG9m8NkF2blxjGXKszXF7tC7dIS7naYjDPNd2TEtIijOXlOYb3JPceWegCou74nVD
+         DpUjpC2U8gFZREm+PbjbVdumL/IzuP4ueh5QpTwZ/5fjK5k2iq/jEkxpD2OoCLfTEvnB
+         x7tj7aIObvbtyi+0g4fQOT2pSLKW5+kRMrj2NdCVw9021wtNKoYt36JIhibIL057+st/
+         dFcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787160335; x=1787765135;
+        d=1e100.net; s=20251104; t=1787160603; x=1787765403;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=T2WNbz/EDWuobLOQ3nNKJ3uRAjrkuktkhvK0BdgU1Z4=;
-        b=g69zh2w/E6Ysok84PLbWdKPg6sIyeJ7ejXkEJv09YKnUhTuphy70Ec4mgsEYmQRXtG
-         vxEQYcWY2WeXmsTux/K6oTo11nHtzadDF1+G44c0Ifo99Hn9AHK6nzTHGAka5/391U40
-         GPLUaS/r/512B7FzCD7hajQ3PlV026emivfiUSvqz2Za5dN2tYHV9SyWOsgZ51cI8ZiF
-         Ox77bpLx4eV8VSURiYgvYhE3w9nzDdkmKYMw0u8klJsm0n1vuChK4+k0WeBbuK5JDTCe
-         C7ooHNknWPIPZtFXxsYbS5ybT2hlKDzwFIqHw9NfqHezsHfgT3j002yIGK8Aukbz3urG
-         gZVQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrDjhk/zpKvn5mK686m3IoUG0nOAxqbBRzr7aA/P36dY36ThfDp/qzsEj9hWBUVdql7680=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtWr17EnNONMqL75+t8VtFuC211NjZNGRnY/EM3rPkfILGr7Bn
-	qHe6OII0paKDxHdwicv2w4tdk4eku3S80YBbPt2M5/QEV1OsPQFQfNG4rp3/DPahPXQ=
-X-Gm-Gg: AR+sD11cSlLUTCXd8osu+vu3TG/CHw45ANkgyWthq1Up0VbBIyr5PpECyJA53FMXDFs
-	mg7V+WS4doX+Vt5RjXZKmnIEkZoVd5+eFtVhF2hK8tqMzVeqpBCqiqnpBSl/uBbexa+YjCRH6CB
-	OvROW4hNubYuxrxpZJrjPS4tYd8+aUz6PWBIn1KQSlyO/9J6jQqbdaMUjS891g0i8ySXh2Lw/Um
-	Wn+4V92GNDHfGPub5F/alYKcmXUsUJ2Gyxh20xwkWA7W8MSkOIffsY8ZUMo9oOjBQr+S9+y4bTr
-	ev/T7t6p695Epc1djJ2RFJC+iM2rpMrdVaz6EyK9K6nIEUfmKfU8LpJFAgEyzFrB0VnDqV2MutV
-	dIXl7iFN5U33L7XQxM+C8V3sG8QEzulLWkEvfp4vhYyMQJ4DuG9okxY/PZ6sdJULpKFbHg8px/I
-	nDcIfxJQFJgxNHEClQNBOPjYmgygKi2ieIxhsGWlop8j1BPJWDE88ZQRtXC+MZSjnydEitDeG+T
-	MH8KW4PllPDxNsxeWvIpG4l73g2
-X-Received: by 2002:a05:6a00:438d:b0:848:8619:c149 with SMTP id d2e1a72fcca58-851d380131cmr10676044b3a.2.1787160334810;
-        Wed, 19 Aug 2026 10:25:34 -0700 (PDT)
+        bh=msqDnawpFarSgDa4emNb/wmup3kT5sdWHmWWYNSinBY=;
+        b=BEYjmHKRhh/GbSD+Rc2+93W2rF8UI6z98vEPrikeRIQwPpGRCFyXZLY5otsMIdz0lg
+         GeJAH48Y/Ut9zzTSyFl4JRPFlh0M09F5drCdEx+97lfDrKRbFCMKRkjuqA0sOK5wyLKj
+         dG9/RN7RlKm2OhYViXvl1LNpNXjriUZcNbg08UR646PPuWdxlegOLFd1a6r+PTJwQGSy
+         3vLep+wIPuUOAlx/n5eKhgrq8mSREiVOCDK23OfwTYPnBR8QHtpcz/H2mxMNiObswVAc
+         ZXFIaUZ55Y3YxW7K8dikfS4WuP9sq4cnRjtPyCMyEYYzUCMF6BJ0WgNF0qPAPGqjx64x
+         5xiA==
+X-Forwarded-Encrypted: i=1; AHgh+RrJbzk0N2OUx93X2X8RfprfYFqPyxD2q9FoV6gUo5g0H9Y5glAB4US7Ma7CMg7J8QoB+mU=@vger.kernel.org
+X-Gm-Message-State: AFuF++mCSPjnofUaRvuyoO+b7qFqnZQKSD7xyUVnAHdc8DsmChuJELS6
+	W9wWyVZQsWBKXaYmSVjPjjbEpiKrueUg8CgRJLoQye5yUsPIRUlIOgx0v/KeuqWudS4=
+X-Gm-Gg: AR+sD10Y0VUolo/o7GOv4qAaE25OO7PAduSTF5qXsUHhMJGKL7CW5jSrKojF2IJ60Yz
+	fmDxJVrwaa10gbmEdSzYxifk21x7fgNBmSERVHlp0GBaQK2GmN0l4D8Gcd5zNuaxE7kFR4pT7LN
+	NtKUY1SOM8Y/g1E2sQi0HgIqi/43wfrJWn6vazhut6MBiY7hZBffbCYGsh7+MqOYAj/eSVeDr9q
+	yPgwpVJUu4w9wVUS2sXGYUt73nqDjBNISA6YRr1ynMhz9lLp5XLPeE+nddwpL5IqAQ9q/Bk2Zxg
+	GlKzsNagvyIiuK+/MQxa4vJ3zySgH+GL7CvX4Zz7JqypzfhYS+6iRdsW73681MLi/wzVjysMF95
+	u13V+Wu/14o8jFB816K3WZsazx5Qk60z08zLk8jkQjOHkj5edMtdyzJD/ia3crgfP1ys1jb6ZY6
+	NQOO3XP2PO/l00JTogXhPViTNmkwuhpwzOAjwgWifykNNlxCx1GKHP2akXz5BipmxeA4DeqAJNw
+	Or8yTrMfMFheUsuVS4reb+EZaTa
+X-Received: by 2002:a17:902:ef01:b0:2cf:8131:75f4 with SMTP id d9443c01a7336-2d5fd6fe255mr131620185ad.11.1787160602789;
+        Wed, 19 Aug 2026 10:30:02 -0700 (PDT)
 Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc154f1e54asm870811a12.0.2026.08.19.10.25.33
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d5bb4dfe6dsm30017965ad.18.2026.08.19.10.30.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Aug 2026 10:25:34 -0700 (PDT)
+        Wed, 19 Aug 2026 10:30:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,8 +68,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 19 Aug 2026 13:25:33 -0400
-Message-Id: <DKT3GQZABXQ6.39CXPMIP4DSKF@etsalapatis.com>
+Date: Wed, 19 Aug 2026 13:30:00 -0400
+Message-Id: <DKT3K5ONBQO6.16J47HLN6HS6@etsalapatis.com>
 Cc: <linux-kernel@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
  "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
  <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
@@ -78,115 +78,96 @@ Cc: <linux-kernel@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
  <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
  Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
  <ihor.solodrai@linux.dev>, "Yuan Chen" <chenyuan@kylinos.cn>
-Subject: Re: [PATCH bpf-next v3 2/3] bpf, arena: fix range_tree_set
- inconsistency on kmalloc_nolock failure
+Subject: Re: [PATCH bpf-next v3 3/3] bpf, arena: check range_tree_set return
+ in arena_free_pages and arena_free_worker
 From: "Emil Tsalapatis" <emil@etsalapatis.com>
 To: <chenyuan_fl@163.com>, <bpf@vger.kernel.org>
 X-Mailer: aerc 0.21.0-0-g5549850facc2
 References: <20260810134800.2875487-1-chenyuan_fl@163.com>
- <20260810134800.2875487-3-chenyuan_fl@163.com>
-In-Reply-To: <20260810134800.2875487-3-chenyuan_fl@163.com>
+ <20260810134800.2875487-4-chenyuan_fl@163.com>
+In-Reply-To: <20260810134800.2875487-4-chenyuan_fl@163.com>
 
-On Mon Aug 10, 2026 at 9:47 AM EDT, chenyuan_fl wrote:
+On Mon Aug 10, 2026 at 9:48 AM EDT, chenyuan_fl wrote:
 > From: Yuan Chen <chenyuan@kylinos.cn>
 >
-> range_tree_set() pre-allocates the node needed for a brand-new range
-> before calling range_tree_clear(), so an allocation failure returns
-> -ENOMEM without having modified the tree (previously the overlapping
-> nodes were already removed by range_tree_clear() before the allocation
-> was attempted, permanently losing the cleared sub-ranges).
+> arena_free_pages() and arena_free_worker() now handle range_tree_set()
+> errors. arena_free_pages() aborts the free on error, and
+> arena_free_worker() moves range_tree_set() before PTE clearing so that a
+> failed tree update leaves the PTEs intact instead of freeing pages that
+> the arena free tree does not track.
+>
+> Also check the range_tree_set() return value in arena_alloc_pages()'s
+> error path, which restores the unpopulated tail of a partially allocated
+> range; log a warning instead of silently leaking the virtual range when
+> the tree update fails.
 >
 > Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
 
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
+The fact we can fail to free a page because of an allocation failure is
+...not great. Especially considering the failure is silent (we can't
+turn this into a warning ofc bc it would be triggerable by user error).
+Imo this is very close to a silent memory leak, but the only mitigation
+I can think of is some kind of retry, and going down that route would get
+really messy really fast.
+
 > ---
->  kernel/bpf/range_tree.c | 45 +++++++++++++++++++++++++++++++----------
->  1 file changed, 34 insertions(+), 11 deletions(-)
+>  kernel/bpf/arena.c | 22 ++++++++++++++++++----
+>  1 file changed, 18 insertions(+), 4 deletions(-)
 >
-> diff --git a/kernel/bpf/range_tree.c b/kernel/bpf/range_tree.c
-> index 15b588377a76..54055b1fe541 100644
-> --- a/kernel/bpf/range_tree.c
-> +++ b/kernel/bpf/range_tree.c
-> @@ -199,6 +199,7 @@ int is_range_tree_set(struct range_tree *rt, u32 star=
-t, u32 len)
->  int range_tree_set(struct range_tree *rt, u32 start, u32 len)
->  {
->  	u32 last =3D start + len - 1;
-> +	struct range_node *new_rn =3D NULL;
->  	struct range_node *right;
->  	struct range_node *left;
->  	int err;
-> @@ -208,20 +209,40 @@ int range_tree_set(struct range_tree *rt, u32 start=
-, u32 len)
->  	if (left && left->rn_start <=3D start && left->rn_last >=3D last)
->  		return 0;
+> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> index 555ee2531ef9..d57a0b617525 100644
+> --- a/kernel/bpf/arena.c
+> +++ b/kernel/bpf/arena.c
+> @@ -766,7 +766,9 @@ static long arena_alloc_pages(struct bpf_arena *arena=
+, long uaddr, long page_cnt
+>  	bpf_map_memcg_exit(old_memcg, new_memcg);
+>  	return clear_lo32(arena->user_vm_start) + uaddr32;
+>  out:
+> -	range_tree_set(&arena->rt, pgoff + mapped, page_cnt - mapped);
+> +	if (range_tree_set(&arena->rt, pgoff + mapped, page_cnt - mapped))
+> +		pr_warn_ratelimited("bpf_arena: failed to restore free range %ld+%ld a=
+fter partial alloc\n",
+> +				    pgoff + mapped, page_cnt - mapped);
+>  	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+>  	if (mapped) {
+>  		flush_vmap_cache(kern_vm_start + uaddr32, mapped << PAGE_SHIFT);
+> @@ -881,7 +883,12 @@ static void arena_free_pages(struct bpf_arena *arena=
+, long uaddr, long page_cnt,
+>  	if (ret)
+>  		goto defer;
 > =20
-> +	/*
-> +	 * A new node is needed only when the range has no adjacent free
-> +	 * range on either side.  This is known before clearing: any range
-> +	 * covering start - 1 or last + 1 survives the clear as an adjacent
-> +	 * piece.  Allocate only in that case, before modifying the tree, so
-> +	 * a failure leaves the range tree unmodified
-> +	 */
-> +	left =3D range_it_iter_first(rt, start - 1, start - 1);
-> +	right =3D range_it_iter_first(rt, last + 1, last + 1);
-> +	if (!left && !right) {
-> +		new_rn =3D kmalloc_nolock(sizeof(struct range_node),
-> +					__GFP_ACCOUNT, NUMA_NO_NODE);
-> +		if (!new_rn)
-> +			return -ENOMEM;
+> -	range_tree_set(&arena->rt, pgoff, page_cnt);
+> +	ret =3D range_tree_set(&arena->rt, pgoff, page_cnt);
+> +	if (ret) {
+> +		raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+> +		bpf_map_memcg_exit(old_memcg, new_memcg);
+> +		return;
 > +	}
+> =20
+>  	init_llist_head(&free_pages);
+>  	cdata.arena =3D arena;
+> @@ -1004,11 +1011,18 @@ static void arena_free_worker(struct work_struct =
+*work)
+>  		kaddr =3D arena_vm_start + s->uaddr;
+>  		pgoff =3D compute_pgoff(arena, s->uaddr);
+> =20
+> +		/*
+> +		 * Mark the range as free before clearing PTEs so that
+> +		 * if the range tree update fails we leave the PTEs
+> +		 * intact, avoiding an unrecoverable state where pages
+> +		 * are freed but the arena free tree does not track them.
+> +		 */
+> +		if (range_tree_set(&arena->rt, pgoff, page_cnt))
+> +			continue;
 > +
->  	/* Clear out everything in the range we want to set. */
->  	err =3D range_tree_clear(rt, start, len);
->  	if (err)
-> -		return err;
-> +		goto out_free_new;
-> =20
->  	/* Do we have a left-adjacent range ? */
->  	left =3D range_it_iter_first(rt, start - 1, start - 1);
-> -	if (left && left->rn_last + 1 !=3D start)
-> -		return -EFAULT;
-> +	if (left && left->rn_last + 1 !=3D start) {
-> +		err =3D -EFAULT;
-> +		goto out_free_new;
-> +	}
-> =20
->  	/* Do we have a right-adjacent range ? */
->  	right =3D range_it_iter_first(rt, last + 1, last + 1);
-> -	if (right && right->rn_start !=3D last + 1)
-> -		return -EFAULT;
-> +	if (right && right->rn_start !=3D last + 1) {
-> +		err =3D -EFAULT;
-> +		goto out_free_new;
-> +	}
-> =20
->  	if (left && right) {
->  		/* Combine left and right adjacent ranges */
-> @@ -241,14 +262,16 @@ int range_tree_set(struct range_tree *rt, u32 start=
-, u32 len)
->  		right->rn_start =3D start;
->  		range_it_insert(right, rt);
->  	} else {
-> -		left =3D kmalloc_nolock(sizeof(struct range_node), __GFP_ACCOUNT, NUMA=
-_NO_NODE);
-> -		if (!left)
-> -			return -ENOMEM;
-> -		left->rn_start =3D start;
-> -		left->rn_last =3D last;
-> -		range_it_insert(left, rt);
-> +		/* No adjacent ranges; use the pre-allocated node */
-> +		new_rn->rn_start =3D start;
-> +		new_rn->rn_last =3D last;
-> +		range_it_insert(new_rn, rt);
+>  		/* clear ptes and collect pages in free_pages llist */
+>  		apply_to_existing_page_range(&init_mm, kaddr, page_cnt << PAGE_SHIFT,
+>  					     apply_range_clear_cb, &cdata);
+> -
+> -		range_tree_set(&arena->rt, pgoff, page_cnt);
 >  	}
->  	return 0;
-> +
-> +out_free_new:
-> +	kfree_nolock(new_rn);
-> +	return err;
->  }
+>  	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
 > =20
->  void range_tree_destroy(struct range_tree *rt)
 
