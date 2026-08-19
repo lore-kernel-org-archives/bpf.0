@@ -1,116 +1,131 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61EAE2D6E6C;
-	Wed, 19 Aug 2026 13:49:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B2163B3894;
+	Wed, 19 Aug 2026 14:19:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787147367; cv=none; b=eHJzk95NjtAX5BNFEEJzQ209oiMoapLKFxiznqLIujcFFYTrQzB2AUlzwGVUA+YMC4wGk30EpiELeI311ZxcnXvG20HqWsZq6gLXvaAyHcU0y0ciTRyE5i6xkxuEQ+BzAzZfwBkK7IcY/LkY5PG+QNDBTq8pqWE5tFdGRpItOck=
+	t=1787149194; cv=none; b=Z2xTOxDSLx50RM9xzVqlyZmWkOqI+ht5SDc/VpgLo2VABxavXjj8++N7qmPaRx9lYYQuIdFwagWsVUvTvOSMKInTJQ04I0ROU/X+kA9dXNe+HAME1TcMZZrZYYqBoeiyPhJZVksZ580Ap9IYrux6ELNYI0bWR4oDv91eL/9/mIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787147367; c=relaxed/simple;
-	bh=76BV944DpjMrV2cm6y0p2iL6hov1/xND6aq7l9zyaQM=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=XABEFoFPheyDg0t75biK1uZW1y3TZgiJ61O8GdzPG3tVAmT2InZObJddIUo61pEVjBR+1aAEtNQV0EgBwGlr3d+k3u/3TmEjE59mSyJR+yFPGBRnrbSVVpr5Q8xeUj3NzK3i1lWiVqpc3dJossMuwGHTq2WyN+R3CM7C0399hcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nMqwjWY2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787149194; c=relaxed/simple;
+	bh=EKdzdtV9gGDl90vDkZXHARTjVKH6GRgG90mcetkij1M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=c7E2cHMiJ2LVe8xMwO8vTgSpbVqK32G2UgDXEH6QUvT3gzBQvFv7WCuOR3Gt+c+8hIoIrpEczawY2twWTWFBgVFP7g4yiI7ruoaf7cKgnu1SutsJ6O2UYnGwOtIcyCU6dQ4vJIg5vkHdsKblvA6XmOapqJPMWLKEV2ZVAM4OG6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xc+GCmXX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nMqwjWY2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D12511F000E9;
-	Wed, 19 Aug 2026 13:49:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xc+GCmXX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F20E1F000E9;
+	Wed, 19 Aug 2026 14:19:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787147366;
-	bh=VPA81AHa7U28kBdDorMiNhbrDcZ/6QGeu80LYazQYQ8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=nMqwjWY2WAIIvSxljEL/rmYL87Q3XOGCLHG2mayKBDlCIk+ZNj/nMSDQ1Yb0QT4VB
-	 nohxnrYndrx4QGdMdP6vj34wfnq8D+35ScPag7sODXpTRzsRCrRZL1LIF0SkKg8kgH
-	 jjC8yaOl+cuFrGsidFvRZY6SAQK1ZqohJtVgjfHZfFGDW2v9MmeXDUsB0hnBdU8jSi
-	 Z6zlvW3hiMTrukWV2z030YzSF1y9M7ebUtdF5l2aq3GQXojy3aNki/Er7/xDg4CuyD
-	 kEhKuXisY2RQOhXXUqh4lEwRM5oZzHUC+1GyvRLOx5HLCjZ3Sg9rT/xQ8fWEbMO0Wg
-	 4z2T/fMYCc+cA==
-Content-Type: multipart/mixed; boundary="===============6076552742003848626=="
+	s=k20260515; t=1787149192;
+	bh=GOsETi3yZCXmrX9YQrYtabDAuoutuTIBcppaw8Vqk6w=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Xc+GCmXXjO7SWndjDHOMYXk4f3YbiyFouGV1Haxakt28T/a0hPCWi75njYqq9lrpg
+	 jVHZUoqXeajh7HibO9BnjItpPccS4yS0A48lVecHXa2WGu9PpTHpVW1zxnuZZwfgwX
+	 1jPzc9K04ceG8+g0zLdC+GoRkSzHvxieohtDKTrLEPjAQXWtWw1PH+nIi4g/Ohj8N5
+	 KiJg3E+ojnsoj1hbF/NXn93eLMrXOkXUsnsdfjrTP1+3yhATIcPp2NggQgQRcVkvAq
+	 Z8AfcmLB2cd26sfAN8nBzILxYZPDuPvf78VG8dT5oUdOrL4hjKmvoA14whUplp9QA2
+	 ShfzjJhXpvoTg==
+Message-ID: <3113ac8b-c1ce-4577-9e93-449b70818918@kernel.org>
+Date: Wed, 19 Aug 2026 16:19:41 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <6f1ad36389faad6328320aa25b4e8b0ff7bac66913d11273ee1f6ce43dbbbfbf@mail.kernel.org>
-In-Reply-To: <20260819125840.286434-2-jiayuan.chen@linux.dev>
-References: <20260819125840.286434-2-jiayuan.chen@linux.dev>
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: Add reg-invariants test for speculative pointer arithmetic
-From: bot+bpf-ci@kernel.org
-To: jiayuan.chen@linux.dev,bpf@vger.kernel.org
-Cc: jiayuan.chen@linux.dev,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,paul.chaignon@gmail.com,ameryhung@gmail.com,shung-hsi.yu@suse.com,danjwade95@gmail.com,kafai.wan@linux.dev,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 19 Aug 2026 13:49:25 +0000 (UTC)
-
---===============6076552742003848626==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 03/57] mm/collapse: add collapse.h for the shared
+ collapse state
+To: Kiryl Shutsemau <kirill@shutemov.name>, akpm@linux-foundation.org,
+ ljs@kernel.org, nico.pache@linux.dev
+Cc: baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com,
+ hughd@google.com, lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com,
+ rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com,
+ usama.arif@linux.dev, vbabka@kernel.org, ziy@nvidia.com,
+ usama.anjum@arm.com, agordeev@linux.ibm.com, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kas@kernel.org, jannh@google.com, willy@infradead.org, pfalcato@suse.de,
+ rostedt@goodmis.org, mhiramat@kernel.org,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+References: <20260816224609.308019-1-kirill@shutemov.name>
+ <20260816224609.308019-4-kirill@shutemov.name>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260816224609.308019-4-kirill@shutemov.name>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> index bc038ac2df98..91d4600aa677 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> @@ -2267,6 +2267,47 @@ __naked void deduce64_from_32_wrapping_32bit(void)
->  	: __clobber_all);
->  }
->
-> +/*
-> + * Unprivileged variable pointer arithmetic on a PTR_TO_MAP_VALUE whose
-> + * offset collapses to a constant. The Spectre-v1 speculative path snapshots
-> + * the pointer while its r32 has just been blanked but its offset not yet
-> + * synced; the following register move used to trip reg_bounds_sanity_check()
-> + * ("const subreg tnum out of sync with range bounds"). With
-> + * BPF_F_TEST_REG_INVARIANTS that violation turns into a load failure, so the
-> + * unprivileged program must still load.
-> + */
+On 8/17/26 00:45, Kiryl Shutsemau wrote:
+> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+> 
+> Preparation for building the new collapse engine in its own file.  The
+> engine and khugepaged.c need to agree on what a collapse result is and
+> what state a scan carries.
+> 
+> Move enum scan_result and struct collapse_control into a new
+> mm/collapse.h.
+> 
+> No functional change intended.
+> 
+> Assisted-by: Claude-Code:claude-opus-5
+> Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
+> ---
 
-This isn't a bug, but would it read more clearly to say the base
-PTR_TO_MAP_VALUE has a constant offset that the speculative snapshot
-captures, rather than that the offset "collapses to a constant"? The
-addend itself has to stay variable for sanitize_ptr_alu() to simulate the
-path at all.
+BTW, I'm wondering whether it would result in less churn (independent of the
+other changes) to
 
-> +SEC("socket")
-> +__success __success_unpriv
-> +__flag(BPF_F_TEST_REG_INVARIANTS)
-> +__naked void spec_ptr_alu_const_offset(void)
-> +{
-> +	asm volatile ("							\
-> +	call %[bpf_ktime_get_ns];					\
-> +	*(u64*)(r10 - 16) = r0;						\
-> +	r1 = 0;								\
-> +	*(u64*)(r10 - 8) = r1;						\
-> +	r2 = r10;							\
-> +	r2 += -8;							\
-> +	r1 = %[map_hash_8b] ll;						\
-> +	call %[bpf_map_lookup_elem];					\
-> +	if r0 == 0 goto l0_%=;						\
-> +	r1 = *(u64*)(r10 - 16);						\
-> +	r2 = 0x40000000;						\
-> +	if r1 > r2 goto l0_%=;						\
-> +	if r1 s> 1 goto l0_%=;		/* r1 in [0, 1] */		\
-> +	r0 += r1;			/* ptr += bounded scalar */	\
-> +	r9 = r0;			/* used to trip the warning */	\
-> +	*(u8*)(r0 + 0) = r1;						\
-> +l0_%=:	r0 = 0;								\
-> +	exit;								\
-> +	"
-> +	:
-> +	: __imm(bpf_ktime_get_ns),
-> +	  __imm(bpf_map_lookup_elem),
-> +	  __imm_addr(map_hash_8b)
-> +	: __clobber_all);
-> +}
-> +
->  /* Check that range_within() compares cnum ranges, not min/max projections. */
->  SEC("socket")
->  __failure __msg("div by zero")
+a) Rename mm/khugeapged.c to mm/collapse.c
 
+b) Move stuff into mm/collapse.h that a new ...
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+c) mm/khugapegd.c will need.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32257333410
---===============6076552742003848626==--
+-- 
+Cheers,
+
+David
