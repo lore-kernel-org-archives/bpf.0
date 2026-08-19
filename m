@@ -1,106 +1,157 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4132E3F4DCF
-	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 09:12:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35EE9427FA3
+	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 09:12:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787130746; cv=none; b=ttheBKFRCvfnIIcpM85VYrTpCQDcYU8L3kOsK2YT4sgH8JDk1q66CPpzI4gsUZYbQEEn+iQYgKmI6Q9hW7Ctbj7qK0wTHg5CFWz60Tvgo9ACilh2rNSdx8FtwdJQzJzuxy2spB40UEBgRWgkgS9dRHSi1dY9PMwUJoWSpKJeFqE=
+	t=1787130773; cv=none; b=Garmpsht9YqTMB8kDzI9SaSiXbHIfA1d3IMYPJTOhANEKQ3ZwmuTt9FuDQ4hVgLk8D5Ma7wTsCWwGZg9ZfVTNknfZoACD45L6CC7X40Qa69i569+1MHG7Lk0ZOGCeXwBD4herHc7uH0RSQ/Y2dL/5sUPJQKVRqvwOVHylWgnrHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787130746; c=relaxed/simple;
-	bh=wWsXxUAxW9Uv6vWuTfkpWbl+/olGaaBrRCztvovgLhM=;
+	s=arc-20240116; t=1787130773; c=relaxed/simple;
+	bh=vTFzmSNv7XMXuJlNO3zSwVtvIHg1TIspXKd65sFsDog=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=PoyCvhU7VVrYy1IDjdk9E4QI5u2jngN4bY1ajnyNq7ItJYEaFiqvM25aVwnZo49HhBTnLIksnyuUPbRoOszFk/OTwggL1knbWU2M1B1Ho2JnVcn2BW0utTyc0NwELGRe+XZ4MIBwfxmfx3RIzhGnBHFXev7Wmf5TfXXJ48I1Q7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=InTT3GxM; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=VL6YBCZ+XQ9bedmGda5Ahfcnd/J4yGwS6Rmj/PQ3CuQqJ4hQcVbEb1cFXddRqhM9w7KRNAYyYD55s4BORVOhheeFE6NPARt4CH1LhCdBrWG+tzceNOkCbmJGrsJPONMXa4wMk38hBsyQ/CRYmxhN7AzwGbmCSkARbRG/piwP/sI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cJP1HI5Q; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="InTT3GxM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED5CB1F00A3D;
-	Wed, 19 Aug 2026 09:12:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cJP1HI5Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76CAD1F000E9;
+	Wed, 19 Aug 2026 09:12:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787130745;
-	bh=qxALwQ6phVaYevk7vs1LeK5oCM0fXQtDciosgXlYVgY=;
+	s=k20260515; t=1787130770;
+	bh=YvfFmNuc8Ff+iuDiAYzJiIgeaAZr1FScRAmWCtBjwZU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=InTT3GxMNmCP+3MPxBhnYzcNzNe86hOaoa523b4uE4eQZ+vYDWqRu90c8yq5VMY7s
-	 GEWIop3hfBUIt1ohHVFISsJVq4AvKodQBdjXzpCr3aJdGl7SayqjreAmcNwnhSUz9m
-	 JSRT4pBOBCyWonTLOnUKkrDcQmGFx2W4IvX1lKlvSsjY7qa3smyqpJcFvJaFUKS/k9
-	 XOJTTG4uKLoOXGD+keEMD15foi7BwuwosHp9j+c3X8A7ZzklcKgagKq16MZcJG9NHG
-	 Rirk/iBjwy245R2oP60XhqOy/Rekt8vdoGmg/9K4BXjfT1L1NJz3Rv3hHj/5K2xhh9
-	 m/RHE9eluO7Kw==
+	b=cJP1HI5QDPHWoUL8vHDcFhvOvsZxPy3WpgBoqfsBt/IEElTuF+4JUaLDRfJ7tmFOr
+	 Mgt7wXyF3VUYlSpO3Sz1mNBfczmsd8+WpWBZWI02LqNlZUApg8DETVN1uO0a1PfzjG
+	 28C7cufXWb4dTQSCnW4iA58Ib3lnklRXB8kqJNr7ukCzW1oa2al4Pp0/OxtNE5x7Hg
+	 8PfD2OXqEDbN+6AJUSW8GaQLU3mWyNOwu6ulbvkuRoHGn1T2FvjGAnrOfpUB8lh4mr
+	 VDEnoFZ8mZ7Pne2jCMERyP3CVroI6Hzvsek/r2mFFOzkqJf6zWHneu8hpJxRdKCg91
+	 /XPmf16CqUKPw==
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH bpf-next v3 2/2] selftests/bpf: add tests for
- selective kmod BTF loading
+Subject: Re: [RFC PATCH bpf-next v3 1/2] libbpf: support selective kernel
+ module BTF loading via bpf_object_open_opts
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Fuyu Zhao" <zhaofuyu@vivo.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260819090426.267-3-zhaofuyu@vivo.com>
+In-Reply-To: <20260819090426.267-2-zhaofuyu@vivo.com>
 References: <20260819090426.267-1-zhaofuyu@vivo.com>
- <20260819090426.267-3-zhaofuyu@vivo.com>
+ <20260819090426.267-2-zhaofuyu@vivo.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 19 Aug 2026 09:12:24 +0000
-Message-Id: <20260819091224.ED5CB1F00A3D@smtp.kernel.org>
+Date: Wed, 19 Aug 2026 09:12:50 +0000
+Message-Id: <20260819091250.76CAD1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] The custom libbpf print callback silently drops all non-matching=
- libbpf logs, hiding crucial diagnostic information if the test fails.
+- [Medium] Premature loop termination in load_module_btfs when kernel conta=
+ins multiple BTF objects for the same module.
+- [Low] API design prevents users from explicitly skipping all kernel modul=
+e BTFs without providing a dummy name.
 --
 
---- Patch [2]: [RFC PATCH bpf-next v3 2/2] selftests/bpf: add tests for sel=
-ective kmod BTF loading ---
-commit 17f3a2340dd7be0947e3baabf30a8c7722ec91fe
+--- Patch [1]: [RFC PATCH bpf-next v3 1/2] libbpf: support selective kernel=
+ module BTF loading via bpf_object_open_opts ---
+commit 627a7f9dbb55055d6c4d1331859084b6d2f56792
 Author: Fuyu Zhao <zhaofuyu@vivo.com>
 
-selftests/bpf: add tests for selective kmod BTF loading
+libbpf: support selective kernel module BTF loading via bpf_object_open_opts
 
-This commit adds tests for the selective kmod BTF loading feature. It
-covers scenarios such as valid modules, non-existent modules, duplicate
-names, unneeded modules, and missing count properties.
+Add kmod_btf_names and kmod_btf_names_cnt fields to bpf_object_open_opts
+to support selective kernel module BTF loading. This allows libbpf to
+load only specified module BTFs and skip others.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c b/tools/t=
-esting/selftests/bpf/prog_tests/kmod_btfs.c
-> new file mode 100644
-> index 0000000000000..61d2845a731ff
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c
-> @@ -0,0 +1,196 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <test_progs.h>
-> +#include "kmod_btfs.skel.h"
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index b749c01742ee0..957415341caf1 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
 
 [ ... ]
 
-> +static int libbpf_print_cb(enum libbpf_print_level level, const char *fm=
-t,
-> +			   va_list args)
+> @@ -5851,6 +5858,121 @@ int bpf_core_add_cands(struct bpf_core_cand *loca=
+l_cand,
+>  	return 0;
+>  }
+
+[ ... ]
+
+> +static int bpf_object__init_kmod_btfs(struct bpf_object *obj,
+> +				      const struct bpf_object_open_opts *opts)
 > +{
-> +	if (!strcmp(fmt, btf_skip_fmt)) {
-> +		if (!strcmp(va_arg(args, char *), "bpf_test_no_cfi"))
-> +			btf_skipped =3D true;
-> +	} else if (!strcmp(fmt, dup_ignore_fmt)) {
-> +		if (!strcmp(va_arg(args, char *), "bpf_testmod"))
-> +			dup_ignored =3D true;
-> +	}
+> +	const char **kmod_btf_names;
+> +	size_t i, kmod_btf_names_cnt;
+> +	int err;
 > +
-> +	return 0;
+> +	kmod_btf_names =3D OPTS_GET(opts, kmod_btf_names, NULL);
+> +	if (!kmod_btf_names)
+> +		return 0;
+> +
+> +	kmod_btf_names_cnt =3D OPTS_GET(opts, kmod_btf_names_cnt, 0);
+> +	if (!kmod_btf_names_cnt) {
+> +		pr_warn("kmod_btf_names_cnt must be set when kmod_btf_names is provide=
+d\n");
+> +		return -EINVAL;
+> +	}
+
+[Severity: Low]
+If a user wants to optimize BPF object loading by skipping all module BTFs
+(for instance, when only vmlinux BTF is needed), setting kmod_btf_names to =
+NULL
+falls back to the default behavior of loading all modules, but providing a
+valid pointer with kmod_btf_names_cnt =3D 0 returns -EINVAL.
+
+Does this API design force users to allocate and pass a dummy module name j=
+ust
+to skip loading module BTFs entirely?
+
+> +
+> +	obj->kmod_btfs =3D calloc(1, sizeof(*obj->kmod_btfs));
+
+[ ... ]
+
+> +static bool all_needed_kmod_btfs_loaded(const struct bpf_object *obj)
+> +{
+> +	return obj->kmod_btfs &&
+> +	       obj->kmod_btfs->nr_names > 0 &&
+> +	       obj->kmod_btfs->nr_names =3D=3D obj->btf_module_cnt;
 > +}
 
 [Severity: Medium]
-Does this unconditionally swallow all other libbpf debug, info, and error l=
-ogs?
+If a kernel module is unloaded but its BTF object is kept alive by an open =
+file
+descriptor, and the module is then reloaded, the kernel will contain multip=
+le
+BTF objects with the same module name.
 
-Since old_print_cb is stored as a local variable in the subtests (like
-kmod_btfs_dup and kmod_btfs_skip) rather than globally, this callback has no
-way to forward unmatched logs to the original handler. If a BPF program fai=
-ls
-to load during these tests, will the underlying verifier or libbpf errors be
-completely hidden, making CI failures harder to debug?
+Because btf_module_cnt increments for every loaded BTF object, but nr_names
+tracks the number of unique requested module names, can duplicate BTF objec=
+ts
+inflate btf_module_cnt?
+
+If a user requests BTFs for multiple modules via kmod_btf_names, would this
+condition evaluate to true prematurely and skip the remaining requested mod=
+ules?
+
+> +
+>  static int load_module_btfs(struct bpf_object *obj)
+>  {
+
+[ ... ]
+
+> @@ -5939,6 +6066,9 @@ static int load_module_btfs(struct bpf_object *obj)
+>  			break;
+>  		}
+>  		obj->btf_module_cnt++;
+> +
+> +		if (all_needed_kmod_btfs_loaded(obj))
+> +			break;
+>  	}
+> =20
+>  	if (err) {
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260819090426.267-=
-1-zhaofuyu@vivo.com?part=3D2
+1-zhaofuyu@vivo.com?part=3D1
