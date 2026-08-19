@@ -1,147 +1,169 @@
-Received: from mail-pj2-f1.google.com (mail-pj2-f1.google.com [74.125.227.129])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEAB2485500
-	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 16:05:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.129
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36F9747FAFB;
+	Wed, 19 Aug 2026 16:10:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787155544; cv=none; b=HT9bXYhSZxztH5pRODqVN6C76yZVpZbIE3+CMR2uxVY5Z2FJ6zkICwvIXOLjBuPojlnQIAAs4fmobnfjBpcnzS4V3qRQMfYoRRnWTtlUHs+uqXRlR41CdwORk9yBvYtM0SaPQzTiE9P5imqaSSjddZtP1tPKphUGBJ1aDp1stCs=
+	t=1787155809; cv=none; b=MMRCBMs7A5+pUCAED6nfiyFKSTxYIYPX2VavLC5CYcM/w7eqcgVoAXAyPbnnq0V3InsF9enY0ca0MFKh8jVo7NJVXGxYDQSe6c5jTBDPhi44E76mM/8gdHlPEZAHzAGiAdgwtR70Icaf7znvdv1QrU/IckzQ0s3xsKKJwemfTh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787155544; c=relaxed/simple;
-	bh=cQTwj67zy7Laq/EhHZBENAZnhoe0otCikzM/pbJIwzE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QQc2ct1sDQ5dYfuxY8pyaWqA0759HLCtsyggfqAogp+PLa60u3opL8Nd1OwOG+ruCrGQRCfCr8iwF8zcEm37OaXuwclP8LOdz0tuaIqcnDRFJMDpa0pam/v3P4WEiDJgkw8b4UgtGnoeZ5JGxaaCklgotMCF/uD6wvfRCaEqkpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nTESn9Xd; arc=none smtp.client-ip=74.125.227.129
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787155809; c=relaxed/simple;
+	bh=lq/1VfZSQtEODh0JT8Q1DdjzQ6ayROxGwJKWiTl8J8k=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=uBldz/FW5oofHMfsEGJjxkoIkES43qcPqQXB/8rGK53RTCuygkB5fMCoPuH5eR/RJV8DuyTQYrbkq8MEhMc+LD3K5t2rHpriZPpXB+k0ERrLB0jZVEBZf3CvUvldzoxAMrBM+fVv6r2ramCODK7dA5miU7ZoD8EhsC8GU1wt7Ew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fGGf2kFG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nTESn9Xd"
-Received: by mail-pj2-f1.google.com with SMTP id d9443c01a7336-2cabfb70501so3289125ad.1
-        for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 09:05:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787155541; x=1787760341; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=CKdPBJAuwbKNHRSj/o9wx9GTRe/KKjDR+X94RAURNcg=;
-        b=nTESn9XdI2bnT31A6rjMNe8XOps2FXnK2IdAMHwlZb66qHA9q//IzNOCds//X13m4B
-         B6M533AYGYZn7B6ZkSBwBY9bk79Qb9qtedfroxLfFnL/9mHVtkh0SBqanWw/qRCcyhbx
-         PXbKjmjmLfw3hYUAabnJ9NCcDg/zAD+yGlBwfKsC6ECinw5bcm5N/+w6otEJNGeXFyHk
-         iy4JDjS4WVwRVSbIp3NF8XzH9D2dP7UC3Z3G6SOWW03oeRyohkMixfQ5oA/YFtEw01Dw
-         K8sxUreEQBJ4EuFDNL/6tFJa9WEblqVFlaJh0DsQt+AdpXWsobqDoFgcMwwe8JqPJWwb
-         CiXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787155541; x=1787760341;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=CKdPBJAuwbKNHRSj/o9wx9GTRe/KKjDR+X94RAURNcg=;
-        b=ZnHioBmQMA9V5vRpXeD44oU2atqVPMjBVUP8V8BWO3lw5UVDxUL1XWd0/GTVoWyCbo
-         CwV1m4uv+txw/r9nxT6R9IjohHg0Y8QtiX2cI4zoms/1nDMyzKc/LyB/7L9LTzNsgDuE
-         8mYETmhi27gybyFHvdWcWyyMi1xJPexyHrcdfKBtSHMEkfJc2WNq9Fdw/GREiXa4fDZp
-         p30cN4h3vYx2eOJLw5mWF3O8mqAAjvYeUolhZ9681lxjYr+n3KdwVfuIBWwZbUlS8Yu8
-         3eC75iG/UPPMa9V97g+cC1PrPvFn08pqwUpkH8GsZwxbavPbyoqyixNIgRF1Hdiz+kWr
-         l+Uw==
-X-Forwarded-Encrypted: i=1; AHgh+RrTkmMeoUBGgflsufK3nOo0/HpeJLME6NMyq/u1D1f994/Z9S7D9KSDpZ3eAON4Iu5sUKU=@vger.kernel.org
-X-Gm-Message-State: AFuF++nWxFcRXGctAxQd+1OjJT0Yq8fq27vsicMyCbBFu+sx/lWGJTGg
-	rGoOZspWhS3gcVm0F7lAq/s/IpGHE/oBucIQ9eCExIbK67INRb5M/5rF
-X-Gm-Gg: AR+sD12IBdMWsdUe/ScNTUjFyddb301FHGL73PjBRdD00JgAR6ZyU0QESVq3QpOSLjA
-	uguedCMT/yb3JpNk7OCbJ/M8mJdbJ3j1o5eguQKZwesMgKR7/1FFlG26uvi3FqP9lKvqUk5Jy3f
-	PtMli1v+MDbRGzNk34ppRU2uGmbhJYJxXP4e8lsioJkI0Ni6B/4wfsbbTkCZLgxGzFNusGrZKiZ
-	WpPO1KUr4JvFQVyTyQWrFZ02ewtWRbMtPL8R58aQ6/wU+B36gUZ4yUekRPmmgQEcvo+HXFM1RpW
-	tErfoBKKYp7yurrX+cPZ8Z3mkgpmC4B3ZC2TOjggrgeUFdkPR/HKFubZZuZTqkQ6UQW6CegT7Ju
-	QJKAnVELBJ1L227ruhLQV0aGcxlUd/twag5GHd4XJUpeB97UdQiR09R7iSjzWGS4zEQzohh2Gd/
-	65MWKob6cL0mlKnYQvS6Dr/7VPxEBXaclX5ySADNsrIDuIYvld4ipoizMOzJsxy3nD
-X-Received: by 2002:a17:90b:3fc4:b0:38e:11ba:992c with SMTP id 98e67ed59e1d1-3958110c755mr10914058a91.12.1787155541199;
-        Wed, 19 Aug 2026 09:05:41 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:4f::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3957fb17eb5sm3740911a91.3.2026.08.19.09.05.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Aug 2026 09:05:40 -0700 (PDT)
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-X-Google-Original-From: Stanislav Fomichev <sdf@fomichev.me>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	anthony.l.nguyen@intel.com,
-	przemyslaw.kitszel@intel.com,
-	andrew+netdev@lunn.ch,
-	saeedm@nvidia.com,
-	tariqt@nvidia.com,
-	mbloch@nvidia.com,
-	maxime.chevallier@bootlin.com,
-	mcoquelin.stm32@gmail.com,
-	alexandre.torgue@foss.st.com,
-	aleksander.lobakin@intel.com,
-	horms@kernel.org,
-	magnus.karlsson@intel.com,
-	maciej.fijalkowski@intel.com,
-	sdf@fomichev.me,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	guoren@kernel.org,
-	dtatulea@nvidia.com,
-	witu@nvidia.com,
-	martin.lau@kernel.org,
-	yoong.siang.song@intel.com,
-	intel-wired-lan@lists.osuosl.org,
-	linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	bpf@vger.kernel.org,
-	linux-csky@vger.kernel.org,
-	leon@kernel.org
-Subject: [PATCH net v3 3/3] net: stmmac: document oversized AF_XDP frame handling
-Date: Wed, 19 Aug 2026 09:05:35 -0700
-Message-ID: <20260819160535.1472459-4-sdf@fomichev.me>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260819160535.1472459-1-sdf@fomichev.me>
-References: <20260819160535.1472459-1-sdf@fomichev.me>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fGGf2kFG"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D9F4CC19425;
+	Wed, 19 Aug 2026 16:10:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1787155808;
+	bh=lq/1VfZSQtEODh0JT8Q1DdjzQ6ayROxGwJKWiTl8J8k=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=fGGf2kFGKD5h9ILRzy3nBcSnmyZoQ9opkOzF5UZ9FeTowbnPhYw8ZxLkFvFxSFWL9
+	 P/cpQQlNOxBP4xlXBJCHmkwRqODkGuPT7hpx7TxULJ3pEMMk1gBeWedar17xmGs7NZ
+	 T2XCIzd03wgKT2YpdaPUyWze1gxMpmxY77OvnBvwAIIq7+qj+WvLq58fUMbT7lR05h
+	 QN0+w88kk4FUqYjritF5nsLTf14aEfq4sLrwp7J5k7u+iQSe8/kyaJo5q1KbeY9YVh
+	 1+4fh5goDOyx3cmS5InJYU/DMU6nMcIV0yKGwWIhw3Sc8TAMVlFz1/JEJJqvBpWYNK
+	 WJdldKLzOMFUA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C43ECC5DF85;
+	Wed, 19 Aug 2026 16:10:08 +0000 (UTC)
+From: quanyeyang via B4 Relay <devnull+quanyeyang.proton.me@kernel.org>
+Date: Thu, 20 Aug 2026 00:10:06 +0800
+Subject: [PATCH] bpf: Annotate bpf_obj_memcpy with data_race
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260820-bpf-kcsan-obj-memcpy-v1-1-372c59462268@proton.me>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMQQ6CMBBA0auQWTtJ2xhQrkJctMNUB0NpOmg0h
+ LtbdfkW/2+gXIQV+maDwk9RWVKFPTRAN5+ujDJWgzOuNSd7xpAj3kl9wiVMOPNM+Y1tZ44u2Ej
+ cjVDTXDjK67cdLn/rI0xM6/cF+/4BluprtHgAAAA=
+X-Change-ID: 20260819-bpf-kcsan-obj-memcpy-67042b1fce7d
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ syzbot+44044637ef892e79ca2b@syzkaller.appspotmail.com, 
+ quanyeyang <quanyeyang@proton.me>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1787155807; l=4081;
+ i=quanyeyang@proton.me; s=20260801; h=from:subject:message-id;
+ bh=tfpKJW3phN1GEBcGG9Kq8oDiAg1lgr7Q83T4T+ixdto=;
+ b=rlcxDG6+IEslaqJKQTJzaUYLrSrpDSUvq8CUp8S0yYJ3UdneWGKzlUiPJfkqLEPWrYXd5kpbE
+ iG7CCA8orA/CyecI6e23BwrdxcdAv1aAMIQhDROhIhr9SGUp7foOXRB
+X-Developer-Key: i=quanyeyang@proton.me; a=ed25519;
+ pk=9L9FrcvzMgxPaBRU6XV0EnqTgjDqVO596rQKSZ9qZoY=
+X-Endpoint-Received: by B4 Relay for quanyeyang@proton.me/20260801 with
+ auth_id=963
+X-Original-From: quanyeyang <quanyeyang@proton.me>
+Reply-To: quanyeyang@proton.me
 
-stmmac drops AF_XDP zero-copy frames that exceed taprio's queueMaxSDU
-after xsk_tx_peek_desc() has reserved their completion entries.
+From: quanyeyang <quanyeyang@proton.me>
 
-Completing a rejected descriptor is unsafe because AF_XDP completions are
-ordered: xsk_tx_completed(pool, 1) would complete the oldest outstanding
-descriptor, which may still be owned by hardware. Instead, leave the
-completion pending so the ring eventually wedges and increment the drop
-counter to expose the application error without risking hardware
-misbehavior.
+syzbot reported KCSAN write-write races when two tasks concurrently
+update the same map value. Both accesses reach the ordinary memcpy()
+paths in bpf_obj_memcpy() through copy_map_value().
 
-Document this intentional ring imbalance at the check.
+Unlocked map value updates are intentionally not serialized. Therefore,
+a concurrent update may result in a torn value. Callers requiring
+consistency must provide external synchronization or use BPF_F_LOCK
+where supported. bpf_long_memcpy() already documents and annotates the
+same behavior for long-aligned copies.
 
-Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
+Annotate the ordinary memcpy() operations in bpf_obj_memcpy() with
+data_race() as well. This documents the existing concurrency semantics
+and prevents KCSAN from reporting these intentional races. It does not
+add synchronization or change map update behavior.
+
+Place the annotations at the memcpy() sites in the common helper, matching
+bpf_long_memcpy(), without changing the existing copy helper interfaces.
+
+Reported-by: syzbot+44044637ef892e79ca2b@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=44044637ef892e79ca2b
+Signed-off-by: quanyeyang <quanyeyang@proton.me>
 ---
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 4 ++++
- 1 file changed, 4 insertions(+)
+For this V1, the annotations are placed in the common
+bpf_obj_memcpy() helper. This also covers callers that may already
+provide synchronization. Restricting the annotations to known unlocked
+callers would require propagating the concurrency context through the
+copy_map_value() call chain or introducing separate copy helpers. I kept
+the existing interfaces unchanged for V1 and would appreciate feedback
+on whether a narrower annotation is preferred.
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 62de03e65a90..6a532747c039 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -2713,6 +2713,10 @@ static bool stmmac_xdp_xmit_zc(struct stmmac_priv *priv, u32 queue, u32 budget)
- 		if (priv->est && priv->est->enable &&
- 		    priv->est->max_sdu[queue] &&
- 		    xdp_desc.len > priv->est->max_sdu[queue]) {
-+			/* Completions are ordered, so this descriptor cannot
-+			 * be completed safely. Wedge the ring to expose the
-+			 * application error instead.
-+			 */
- 			priv->xstats.max_sdu_txq_drop[queue]++;
- 			continue;
- 		}
--- 
-2.53.0-Meta
+There are two classes of expected checkpatch warnings:
+
+  - DATA_RACE is reported for the three annotations because checkpatch
+    only recognizes an immediately adjacent comment. Their common
+    rationale is documented once above bpf_obj_memcpy().
+  - MISSING_FIXES_TAG is reported because the commit references
+    syzkaller. No Fixes tag is included because this documents
+    long-standing intentional lockless semantics rather than a
+    regression introduced by a particular commit.
+---
+ include/linux/bpf.h | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 7719f6528445..b37573b9d01d 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -560,7 +560,16 @@ static inline void bpf_long_memcpy(void *dst, const void *src, u32 size)
+ 		data_race(*ldst++ = *lsrc++);
+ }
+ 
+-/* copy everything but bpf_spin_lock, bpf_timer, and kptrs. There could be one of each. */
++/*
++ * Copy everything but bpf_spin_lock, bpf_timer, and kptrs. There could
++ * be one of each.
++ *
++ * Map value copies can race with unlocked updates from BPF programs or
++ * syscalls. Such copies are best effort and may be torn, so annotate the
++ * ordinary byte copies as intentional data races. Callers that require a
++ * consistent value must provide synchronization or use BPF_F_LOCK where
++ * supported.
++ */
+ static inline void bpf_obj_memcpy(struct btf_record *rec,
+ 				  void *dst, void *src, u32 size,
+ 				  bool long_memcpy)
+@@ -572,7 +581,7 @@ static inline void bpf_obj_memcpy(struct btf_record *rec,
+ 		if (long_memcpy)
+ 			bpf_long_memcpy(dst, src, round_up(size, 8));
+ 		else
+-			memcpy(dst, src, size);
++			data_race(memcpy(dst, src, size));
+ 		return;
+ 	}
+ 
+@@ -580,10 +589,10 @@ static inline void bpf_obj_memcpy(struct btf_record *rec,
+ 		u32 next_off = rec->fields[i].offset;
+ 		u32 sz = next_off - curr_off;
+ 
+-		memcpy(dst + curr_off, src + curr_off, sz);
++		data_race(memcpy(dst + curr_off, src + curr_off, sz));
+ 		curr_off += rec->fields[i].size + sz;
+ 	}
+-	memcpy(dst + curr_off, src + curr_off, size - curr_off);
++	data_race(memcpy(dst + curr_off, src + curr_off, size - curr_off));
+ }
+ 
+ static inline void copy_map_value(struct bpf_map *map, void *dst, void *src)
+
+---
+base-commit: bd5f485f3f026225b86573e559af0b7254ef4184
+change-id: 20260819-bpf-kcsan-obj-memcpy-67042b1fce7d
+
+Best regards,
+--  
+quanyeyang <quanyeyang@proton.me>
+
 
