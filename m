@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F305390CAB
-	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 06:14:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8258E3CC7F8
+	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 06:17:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787120055; cv=none; b=UmNI4wsFHUMslAg5MeuV3/97Vq5gcD+fhFTHu9gpCooQf58sr9/f91UirV4NRIygjyI6ZMUa3iIFMGyFpAHaGVbR1LTOMwdUv2M/b17zQnEyx+MVbIQzu2mPrmRrpcbf0FXidbLvRcaNT9bKmeeh5n3mKicXfkz0efC28m8U/GM=
+	t=1787120267; cv=none; b=Ri8NgIFopxHyxG/TqgW22rBxeeew78GDfwsZ21LkVUG2Xv9XfqNWRg5kHOXiSjw0DPBH6YUwVEOdBjv75tj83Sg6ui1FyTb8BzCuKRQsmRfthwW4b00lATCMDcObkmty9o8CGjKbIBB/WNxRfaYOkVVTzXNwY+g9+Pvw18oQRvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787120055; c=relaxed/simple;
-	bh=g2VXb8klEj4r/xby6FdavNqRjL+nz2K1InP47UVpdlk=;
+	s=arc-20240116; t=1787120267; c=relaxed/simple;
+	bh=7rEgQT4KnvArVBLmDSqTnM6xJbGO90jc3R+drbYDQPs=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=f0e6PlEtL4sZVLsEdb6zCZKEkZhCWcI2YiWOF7shKCpo3DexpVZEywnVr4SKY1tvbMa4nGsP4bDB6e6djnseqSXO+6v0AiydZrGsCxC7Ovv+O2OuH0+8XVIWvSoBprJMbSYYaC/BUZwSK4BAghU7DMkBkDrcP2dXb/XlOpeqqEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S8HiO5Le; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Lm67ma5WD33YMLPw3P8t4sj89y4L7u6nC/izbERlsORQFxUjsD7sSLn91ZxkfLyV77E1VgfQewqJo+2fjeNx52uUo4mMvX9vNgHncafpM+4OjFsL1N0dxjj8hoOzQATM1flyMsc6XSUyVpS0EaAGV3bSduJwjP2y0gAWIGCj6fk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CJajv2Qu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S8HiO5Le"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 070A61F000E9;
-	Wed, 19 Aug 2026 06:14:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CJajv2Qu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DFE71F00A3A;
+	Wed, 19 Aug 2026 06:17:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787120054;
-	bh=g2qyz+ZFLiKpRLbZnzF3X3i5V03tLIBN+cIwKd2VPz4=;
+	s=k20260515; t=1787120266;
+	bh=hl1JkkdCXGKPB/lBhqax/Vi6VitSuZieAqNf/JMenfo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=S8HiO5LeK4sNkjhvIvJw5dXgjiQYQjNJSURh/6cN8Lb+h1Q4PbZ7NF0L24ZQWFXbN
-	 o+QHHwpzHKCT+d1g3dd/Wc5OexmA8aonqip4HvzjUpbeTjmwrt9VOAj+eHXbReH/CG
-	 Pgl6th2Mb3UkOV2lu2hVVyV7CPdjzfkaHGCMrUzzRer2EU5s2XSiFA5Qqg0agyeRyU
-	 IwZCszIg0WTvBY12FDlyThFuNDZiNw9Ykm6PG5T2u3t9V09f+0+usMKCDeOPwVGO+q
-	 DGoBOVZW155P0Rkw/6NZH83vuTTFPjvOASK2GbPf4k8we0shdcuP70ifyJRJ1Zcyp7
-	 GCiR+PAaIL0Kg==
+	b=CJajv2QuanY/t9f+GjkPKiymsoZVhEb4WWm4JtvM32i3f7//tAZuk73ZOgfYsOg9S
+	 q7ytubQcr72ArvWY4RcLXHPjgJGzRGoLYhdQalb/sT/AtgoPJWLlUW5IQD64c+w77W
+	 ZYL1Lpjg7g9nuJ5DnFZyZrKffROg6+QYOTeBRmFPBKOg0qKh+hCzBl0yfLK97F9dm9
+	 SJJoH3K9tXQ4Aj2TEWR+uU337AXDEgbZ93WZykVUB2XYgyDiWqbAuJ3HlkY48QtJYe
+	 lBqWQTpCSPzAXxcfzmssGec5q+zSX+zKRhsA0sNOgj+vJcB1IPkN2NSM12vIdzXNN3
+	 7Nagw4IxzaYLQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v7 06/10] bpf: Add verifier support for 16-byte
- returns in R0:R2
+Subject: Re: [PATCH bpf-next v7 02/10] bpf: Add helpers to describe the
+ R0:R2 return register pair
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260819055309.3297684-1-yonghong.song@linux.dev>
+In-Reply-To: <20260819055249.3295283-1-yonghong.song@linux.dev>
 References: <20260819055239.3293449-1-yonghong.song@linux.dev>
- <20260819055309.3297684-1-yonghong.song@linux.dev>
+ <20260819055249.3295283-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 19 Aug 2026 06:14:13 +0000
-Message-Id: <20260819061414.070A61F000E9@smtp.kernel.org>
+Date: Wed, 19 Aug 2026 06:17:45 +0000
+Message-Id: <20260819061746.0DFE71F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,97 +47,81 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The newly added support for kfuncs returning structs is complete=
-ly unreachable due to an overlooked check in btf_distill_func_proto, and hi=
-des a critical missing size limit.
+- [High] Extension programs (BPF_PROG_TYPE_EXT) are mishandled because `bpf=
+_compute_subprog_ret_regs` skips subprog 0, failing to set up `ret_reg_pair=
+`.
 --
 
---- Patch [6]: [PATCH bpf-next v7 06/10] bpf: Add verifier support for 16-b=
-yte returns in R0:R2 ---
-commit c9e349733faae615b87f8da3417558d2ede26348
+--- Patch [2]: [PATCH bpf-next v7 02/10] bpf: Add helpers to describe the R=
+0:R2 return register pair ---
+commit f6c1f4f14c6e8bda9545fe1b82f42648b4f3c475
 Author: Yonghong Song <yonghong.song@linux.dev>
 
-bpf: Add verifier support for 16-byte returns in R0:R2
+bpf: Add helpers to describe the R0:R2 return register pair
 
-LLVM 23 added support for returning a value in two registers for an
-__int128, or a struct/union whose size is greater than 8 but not more than
-16 bytes. See LLVM patches [1] and [2].
+This commit adds bpf_ret_reg_pair() to determine if a BPF subprogram returns
+a value in the R0:R2 register pair. It implements
+bpf_compute_subprog_ret_regs() to compute this flag based on the BTF
+prototype of each subprogram, intentionally skipping the main program.
 
-Before LLVM 23 the BPF backend could not return these values at all.
-
-[ ... ]
+Link: https://github.com/llvm/llvm-project/pull/190894
+Link: https://github.com/llvm/llvm-project/pull/206876
 
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 991782b402f20..d79f0c069795c 100644
+> index d8bf897460eae..2b5e88fdda07e 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> @@ -13965,10 +13995,25 @@ static int check_kfunc_call(struct bpf_verifier=
-_env *env, struct bpf_insn *insn,
->  	}
-> =20
->  	if (btf_type_is_scalar(t)) {
-> -		mark_reg_unknown(env, regs, BPF_REG_0);
-> +		mark_kfunc_ret_regs(env, regs, t->size);
->  		if (meta.btf =3D=3D btf_vmlinux && (meta.func_id =3D=3D special_kfunc_=
-list[KF_bpf_res_spin_lock] ||
->  		    meta.func_id =3D=3D special_kfunc_list[KF_bpf_res_spin_lock_irqsav=
-e]))
->  			__mark_reg_const_zero(env, &regs[BPF_REG_0]);
-> +	} else if (btf_type_is_struct(t)) {
-> +		/*
-> +		 * The returned struct comes back as raw register bits modeled
-> +		 * as an unknown scalar, so it must contain only scalars:
-> +		 * otherwise a pointer field would be laundered into a scalar
-> +		 * and escape provenance and reference tracking.
-> +		 */
+> +static int bpf_compute_subprog_ret_regs(struct bpf_verifier_env *env)
+> +{
+> +	const struct btf *btf =3D env->prog->aux->btf;
+> +	const struct btf_type *type;
+> +	int subprog;
+> +	u32 size;
+> +
+> +	if (!env->prog->jit_requested || bpf_prog_is_offloaded(env->prog->aux))
+> +		return 0;
+> +
+> +	/*
+> +	 * Skip the main program: its return value is the program's exit code,
+> +	 * read out of R0, so it never uses the register pair. An extension does
+> +	 * have a real prototype for subprog 0, but bpf_check_attach_target()
+> +	 * refuses to replace a function returning more than 8 bytes.
+> +	 */
+> +	for (subprog =3D 1; subprog < env->subprog_cnt; subprog++) {
 
-[Severity: Medium]
-Is this new struct return handling reachable?
+[Severity: High]
+Does this code mishandle extension programs (BPF_PROG_TYPE_EXT)?
 
-Looking at early program loading, btf_distill_func_proto() unconditionally
-rejects struct return types:
+The comment mentions that bpf_check_attach_target() refuses to replace a
+function returning more than 8 bytes. However, for extension programs,
+prog->expected_attach_type is 0, so attach_uses_trampoline_retval(0) evalua=
+tes
+to false, bypassing the size check.
 
-kernel/bpf/btf.c:btf_distill_func_proto() {
-    ...
-	if (ret < 0 || btf_type_is_struct(t)) {
-		bpf_log(log,
-			"The function %s return type %s is unsupported.\n",
-			tname, btf_type_str(t));
-		return -EINVAL;
-	}
-    ...
-}
+If an extension program successfully attaches and replaces a subprogram
+returning an __int128 (16 bytes), skipping subprog 0 here means ret_reg_pair
+won't be set. Could this result in the verifier failing to enforce the
+initialization of R2, potentially leaking uninitialized register contents to
+the caller?
 
-As a result, wouldn't programs be rejected before check_kfunc_call() is
-executed?
-
-Additionally, if this code were reachable, does it lack a bounds check on
-t->size?
-
-Because kfuncs use the C ABI, returning a large struct requires a hidden
-'sret' pointer. Without a size limit, returning a struct larger than 16 byt=
-es
-might bypass the BPF return pair logic, as the BPF JIT would pass the
-attacker-controlled BPF R1 as this pointer.
-
-Could this potentially allow a kfunc to overwrite arbitrary kernel memory?
-
-> +		if (!__btf_type_is_scalar_struct(env, desc_btf, t, 0)) {
-> +			verbose(env,
-> +				"kernel function %s returns %s %s that is not composed of scalars\n",
-> +				func_name, btf_type_str(t),
-> +				btf_name_by_offset(desc_btf, t->name_off));
-> +			return -EINVAL;
+> +		type =3D subprog_ret_type(env, subprog);
+> +		if (!type || btf_type_is_void(type))
+> +			continue;
+> +		if (verifier_bug_if(IS_ERR(btf_resolve_size(btf, type, &size)), env,
+> +				    "cannot size return type of subprog %d", subprog))
+> +			return -EFAULT;
+> +		if (ret_regs_cnt(size) > 1) {
+> +			subprog_info(env, subprog)->ret_reg_pair =3D true;
+> +			env->prog->jit_required =3D 1;
 > +		}
-> +		mark_kfunc_ret_regs(env, regs, t->size);
->  	} else if (btf_type_is_ptr(t)) {
->  		ptr_type =3D btf_type_skip_modifiers(desc_btf, t->type, &ptr_type_id);
->  		err =3D check_special_kfunc(env, &meta, regs, insn_aux, ptr_type, desc=
-_btf);
+> +	}
+> +
+> +	return 0;
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260819055239.3293=
-449-1-yonghong.song@linux.dev?part=3D6
+449-1-yonghong.song@linux.dev?part=3D2
