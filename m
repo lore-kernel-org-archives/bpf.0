@@ -1,134 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-191.mta0.migadu.com [91.218.175.191])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 451BC1AB6F1
-	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 01:16:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C61E3AA1A1
+	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 01:22:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787102172; cv=none; b=CrCjsQ/DT94IrxWuLEVp5h8ehcBMEIP0OLeRRmVjIKayowyu2tI4LgCAHGUCiKpe/FCzt9qOFy9TfM/Tmic8eUdWnCcfmSr0FweEdNyqeRwBl50IxtsFcQmX3NSAHFQ3TnoAYA+DbEzbHgfaqTY1adj+BlCTj9bdENHVsWOM4OQ=
+	t=1787102535; cv=none; b=g6Ndh8LLMQAFFQWiMDrL/BamxsYjCB/buSbYpv+ZZHnl312Kg+9VhHqJhHb3wR5iTL0gaV20Aj/OJYEyPlGIffqrFVPkEYcRGrBbXzdH+Eot0ghtVzm/+LTlZiUgvbdjGBNdzoZ9P5T8GAAnM92OpfIB1Uqi4ML3U6YZ+JQdxIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787102172; c=relaxed/simple;
-	bh=XgXcFcK9K90wh/091Gc4/kaim3OfedS6mk7mYSHHjYs=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fld4JxuDCKzjnjhYrPtdpi87UE6lcTlEbgHcqvCeWtZggLygk9r+sfpRnsQu5Twar87WcnGsuKk1OGT7CXvUVh4aYErc07CwQ4N72c9lrdarE4EqcBzIs/xbBVr5jdaskkVb7KaS6RylD+cS3/j4mo6jafK1avOT1Vi2kRST+yg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HS06LUJS; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787102535; c=relaxed/simple;
+	bh=LW5oz5A7LnBblxcZER63gc3Wl37mjgopfABerrOaDJA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mtMAHNloieuaDlDluO2HwcAOsjlnQTt/ZUK2Ee8NEF/MSXOnH3jPYYryd2BBi+lAiBPnS7bauTsH6eD6KeV5eEyw4gBUSgh4679U71pPobSVM876UhCWxqUAOUBpB0YkEpMMSn3B7A+Gk0NcipkCuqUqJlnjI5oeFt0U3lT/008=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YxA++Afh; arc=none smtp.client-ip=91.218.175.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HS06LUJS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 014451F000E9;
-	Wed, 19 Aug 2026 01:16:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787102171;
-	bh=wW3CQA59bwP264jOFAQxUzdlVVJ1Xs7AcLf2pB/AVAg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=HS06LUJSaJg5Mqr/cETgfR7cBuNUfQeTFNr4st68oHTm1BjUOntaC+FQqUDsMpjaL
-	 XAy1E8DH0i0+4dP5bNW9yrRUShzA6pPJblZDIWCizgivmQz65WAGQAY0xywxHMavMh
-	 9yK9ef53a0zmU9J0qW1B9yleGWxwio/6FHAqrt2k9qEUgQhFulFW2t0i+u4DYkYG54
-	 0WsxlCZxQW2qhRPvY1Zl4aPzidvOviAsWYPeJLXZebivgyg1a1EQGIPA2ZlL+wGU6g
-	 vItpa3VPmD2iVykK2hbbrKXjmFsXtbJxYuL6yTLASpq9kNdcYcgsehJLb4Hor81nH8
-	 UaoSvpaQ/Dtdw==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC bpf-next 1/2] bpf, mips: Factor register moves into
- helpers
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Nicholas Dudar" <main.kalliope@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260819010523.1057789-2-main.kalliope@gmail.com>
-References: <20260819010523.1057789-1-main.kalliope@gmail.com>
- <20260819010523.1057789-2-main.kalliope@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 19 Aug 2026 01:16:10 +0000
-Message-Id: <20260819011611.014451F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YxA++Afh"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=LW5oz5A7LnBblxcZER63gc3Wl37mjgopfABerrOaDJA=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787102531; v=1; x=1787707331;
+ b=YxA++AfhJs6H0Ie26agIZ4uK++fXi2gUeEziLYZnXSSl4hw2R7qBZrhWjMm1HGbATUdo8Vmn
+ KcaNcDmJMBaY0z+9gbLxtuk6pH2NK3F0Ul83/booSlqkMcVDwUd3Y7ELEm0IqXiSQ6fK7bUAi5z
+ IrYYJJYU8ch6A9jCWvdRWe2I=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from ctao-book.. (223.70.159.239)
+	by smtp.migadu.com with ESMTPS id 71d2ed90ecf43179;
+	Wed, 19 Aug 2026 01:22:11 +0000
+X-Migadu-Flow: FLOW_OUT
+From: Tao Cui <cui.tao@linux.dev>
+To: tj@kernel.org
+Cc: void@manifault.com,
+	arighi@nvidia.com,
+	changwoo@igalia.com,
+	suzhidao@xiaomi.com,
+	sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	cui.tao@linux.dev,
+	Tao Cui <cuitao@kylinos.cn>
+Subject: [PATCH v2] docs/sched_ext: document that cgroup CPU knobs are scheduler-dependent
+Date: Wed, 19 Aug 2026 09:21:57 +0800
+Message-ID: <20260819012157.220932-1-cui.tao@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+From: Tao Cui <cuitao@kylinos.cn>
 
-Pre-existing issues:
-- [Critical] The MIPS BPF JIT silently miscompiles `BPF_MOVSX` (move with s=
-ign extension) instructions as standard zero-extended or 64-bit copies.
---
+The fair class enforces cpu controller knobs such as cpu.max,
+cpu.weight and cpu.idle in the kernel. sched_ext only passes them to
+the BPF scheduler through the ops.cgroup_set_*() callbacks. Whether
+and how a knob takes effect is up to the loaded scheduler: if it
+doesn't implement the corresponding callback, the knob is ignored.
+For example, none of scx_simple, scx_flatcg and scx_central implements
+ops.cgroup_set_bandwidth(), so with them cpu.max has no effect -- the
+cgroup runs at unlimited CPU with nr_throttled staying at 0.
 
---- Patch [1]: [RFC bpf-next 1/2] bpf, mips: Factor register moves into hel=
-pers ---
-commit a341e9c2445aa10a781c4264cc9b57117f7c9711
-Author: Nicholas Dudar <main.kalliope@gmail.com>
+The same applies to other knobs like nice levels.
 
-bpf, mips: Factor register moves into helpers
+Document this in the basics section so users and container
+orchestrators know what to expect from a BPF scheduler.
 
-This patch refactors the MIPS BPF JIT by introducing 32-bit and 64-bit
-register-move helpers to remove duplicated backend-specific handling for
-MOV instructions. It preserves the verifier-inserted zero-extension marker
-behavior.
+Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+---
+RFC -> v2: v1 added a pr_warn_once() for the missing
+ops.cgroup_set_bandwidth() implementation. Drop the warning and
+document the scheduler-dependent behavior in sched-ext.rst instead,
+as suggested in review.
 
-> diff --git a/arch/mips/net/bpf_jit_comp32.c b/arch/mips/net/bpf_jit_comp3=
-2.c
-> index 40a878b672f5d..bfe73b023983e 100644
-> --- a/arch/mips/net/bpf_jit_comp32.c
-> +++ b/arch/mips/net/bpf_jit_comp32.c
+v1: https://lore.kernel.org/r/20260818135328.174152-1-cui.tao@linux.dev
 
-[ ... ]
+ Documentation/scheduler/sched-ext.rst | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-> @@ -1485,8 +1501,7 @@ int build_insn(const struct bpf_insn *insn, struct =
-jit_context *ctx)
->  			/* Special mov32 for zext */
->  			emit_mov_i(ctx, hi(dst), 0);
->  		} else {
-> -			emit_mov_r(ctx, lo(dst), lo(src));
-> -			emit_zext_ver(ctx, dst);
-> +			emit_mov_r32(ctx, dst, src);
+diff --git a/Documentation/scheduler/sched-ext.rst b/Documentation/scheduler/sched-ext.rst
+index 0e97fd019994..b742af4d3127 100644
+--- a/Documentation/scheduler/sched-ext.rst
++++ b/Documentation/scheduler/sched-ext.rst
+@@ -242,6 +242,24 @@ optional. The following modified excerpt is from
+             .name                   = "simple",
+     };
+ 
++Scheduler-Dependent Knobs
++-------------------------
++
++The fair class enforces cpu controller knobs such as ``cpu.max``,
++``cpu.weight`` and ``cpu.idle`` in the kernel. sched_ext only passes
++them to the BPF scheduler through ``ops.cgroup_set_weight()``,
++``ops.cgroup_set_idle()``, ``ops.cgroup_set_bandwidth()`` and friends.
++Whether and how a knob takes effect is up to the loaded scheduler: if
++it doesn't implement the corresponding callback, the knob is ignored.
++For example, none of scx_simple, scx_flatcg and scx_central implements
++``ops.cgroup_set_bandwidth()``, so with them ``cpu.max`` has no effect
++-- the cgroup runs at unlimited CPU with ``nr_throttled`` staying
++at 0.
++
++The same applies to other knobs like nice levels: the scheduler may
++honor them partially or not at all. When relying on these knobs, check
++the documentation or source of the loaded scheduler.
++
+ Dispatch Queues
+ ---------------
+ 
+-- 
+2.43.0
 
-[Severity: Critical]
-This is a pre-existing issue, but does this switch case in build_insn()
-silently miscompile BPF_MOVSX (move with sign extension) instructions?
-
-When the BPF program uses a move with sign extension (insn->off !=3D 0), th=
-is
-code generation appears to perform a standard zero-extended copy instead.
-Since the verifier tracks bounds assuming the value was sign-extended,
-could this discrepancy allow a program to bypass verifier bounds checks
-and perform out-of-bounds memory accesses?
-
-Since you are refactoring the MOV handlers here, should emit_mov_r32() be
-updated to take insn->off and implement the proper sign extension logic?
-
->  		}
->  		break;
->  	/* dst =3D -dst */
-
-[ ... ]
-
-> diff --git a/arch/mips/net/bpf_jit_comp64.c b/arch/mips/net/bpf_jit_comp6=
-4.c
-> index fa7e9aa37f498..45fee6f6b87e9 100644
-> --- a/arch/mips/net/bpf_jit_comp64.c
-> +++ b/arch/mips/net/bpf_jit_comp64.c
-
-[ ... ]
-
-> @@ -742,7 +754,7 @@ int build_insn(const struct bpf_insn *insn, struct ji=
-t_context *ctx)
->  		break;
->  	/* dst =3D src (64-bit) */
->  	case BPF_ALU64 | BPF_MOV | BPF_X:
-> -		emit_mov_r(ctx, dst, src);
-> +		emit_mov_r64(ctx, dst, src);
-
-[Severity: Critical]
-This is also a pre-existing issue, but does the 64-bit MOV handler similarly
-ignore insn->off in build_insn()?
-
-Like the 32-bit case, if a program uses a BPF_MOVSX instruction, does this
-result in a standard 64-bit copy instead of the required sign extension?
-
->  		break;
->  	/* dst =3D -dst (64-bit) */
->  	case BPF_ALU64 | BPF_NEG:
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260819010523.1057=
-789-1-main.kalliope@gmail.com?part=3D1
