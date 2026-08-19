@@ -1,99 +1,182 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BDE037B3FD
-	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 04:07:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E36923ED60;
+	Wed, 19 Aug 2026 04:32:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787112436; cv=none; b=WmCE8F2/EP0132EWl3GU+zj2IlW5Ahq9Kbmnj5N+mlhJrCR043CfdoTS7t3gRanHwTNECc4PSoUu4MmdnkimSpXpQVlyDEEwzKgaYw7Xw5alPSTiE4EiXcIRl87UdhBmEm3JiZPs1fz4dT0fAppK6kTbRSh0WATIxQhUh8v8sLo=
+	t=1787113983; cv=none; b=IHIiNNaZkGLAOo2LS51KjhiYCU4+KFsgjZw3fOtzZUacdTuDozLj/9F4d3MvrsNw6yH2nfFzgBgv6F+GqBBcIRJpDuVnDyxBots9D6mtA8OvqYvyghad+8ikO/RCO064ngEWsnu9XZF+kBy7Lx1AiXDVC585w0/gUWdo+k1fYkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787112436; c=relaxed/simple;
-	bh=OaLue05Oo/WlRFNgYwj+AENc6fATkJKTEEra5eECPGs=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XruLDwy25kc2t1tDik9ZxyVIQP+7C5qSlDidAs6U0b/oiFgwrFzy11BcugFnc/ixfumGQAlh82O2Jpg6KIxTqykX9swLtCK3VScq1IXsAl3xU1l5Rip5zW/GcQgIgu8P2Dfn0TyLz3GNi2hCer0LEijCA0ZKV8g3t1PQu1Zkuco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qi6BQL/e; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qi6BQL/e"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3856d6fbcb3so660446a91.2
-        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 21:07:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787112435; x=1787717235; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=OaLue05Oo/WlRFNgYwj+AENc6fATkJKTEEra5eECPGs=;
-        b=qi6BQL/epslOOoRCHlIlt4AdPQFzHG2QmL0wKF9+GTgKl0CPweGGBbvuc921jtaLbA
-         OBxwVhAbOzJZ39aDQn/wH2BXf8Z25w2WeFswu8BJiMk6SxUGn5HjiKmcWTnDTXpxES82
-         wt2uzal27SP+aSzfHSdSmgRH6FPHyXG1NiHzfvgOXPPJsSog8lMjkGk9dtBVqMpMJQKs
-         Q/e1BSuyKIwfrZ3w8j+1HQkOtXamjHCoXq4R+UcYmWWrKQxrGB7aiSj0Wc0qJvNiLAIN
-         DDgX65JHOJM+UXaHZhzC7GciyJMF/kFek7vEPOFaF17twEGSUSmwZI3wvJDwCZFCqm70
-         Kheg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787112435; x=1787717235;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=OaLue05Oo/WlRFNgYwj+AENc6fATkJKTEEra5eECPGs=;
-        b=rZBlEfzNsq9JJfuPYnhP0/k/555n2bPXXvlflRdy2tpISM1gMavKmsChrVRJX7u+8L
-         i2TBwLdIKOrLYc1wjpZvOS+/Uw00k4Mto+wu0VRVaUdIrFNS/Y99HMgJkC1O6WkWBLD3
-         JwMLWINowOG9iAh6RDkXbYDR0WOSjRMOTNXVrnZTjHxhAkhoJ8aau/Z7tqkpLYODHCFg
-         pyc4OT7tYRuYVVioby1tPhpVzYhd7YGo3VRP7D0tVHLAe7tqZKqs9bgQzEbCdzRAkKDb
-         cXj1as5P6ghYLLI/ij6DmwhYGK6u57kC30GbK85OpSPk+31m8uXNtTqNyOXN0/FY6f1n
-         L07w==
-X-Forwarded-Encrypted: i=1; AHgh+RqEwRD4m73Q1W6WVFNBtTv9ie+Gfjq/n3LOqlujHqrdXMQgDH2MvtwwtsHINVE6SFHZs5s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvISLHdqyYwN48SuH2EZVGchlLjrmahJiXaPeBZ0zV39UjH5SK
-	6lJO463Ceod5cGio5kBtw4i0YjLZIQu9bVnI4w5KaD6vSsMTJJmgcsBZ
-X-Gm-Gg: AR+sD10iX2zIrvXCCkTlz2f14/HfE1EkjBwzl0SrKMfH3r171+ArKScyWSZAoeVoX4B
-	MigGQTmUsbn7cg500JPzrQPp8kTjWjLDZUcxAOE2XalvbWJuh5Qaz0Ss58iGNyhufR5JiA8SHE5
-	TwPpUQQBYaV/wXdn/HmStaDujZMonHeLKbw+/uMVCfj55QjJU/W3THLWe3IwXHKYghWQQlN7hTu
-	uz/lFzYC5dDtm9QOnxbvJJbcgQyo4fMqL0FEB4Hbl47fWs0WKHaKZ5Tqz+BdtpB08g8CKyaOs9v
-	kFa6VCZt48R+Iy/oAgJ0xU2UARLMgH3lKFOqqJhLUnqqnH9te3HNdZ1pNXBXW9K0gIjIsZLUX7Q
-	7SGaMSnIP0IW8/kRJV2FumBwgyjiP1tdS9+sCz8CMQpTgvIMDOH0hMEdthwKcqmntdJRF5FZifW
-	bwcfMwhehz61/8c8wYTToeKyNIUwwiT6fTZElQHFJPsiDj9RnORq7tjj6LrJlR/arNyDYbtGsVg
-	CypZQgp7FoXKsg5
-X-Received: by 2002:a17:90a:d60d:b0:392:6638:2e6a with SMTP id 98e67ed59e1d1-3958146f387mr3217929a91.13.1787112434469;
-        Tue, 18 Aug 2026 21:07:14 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3957f96cb76sm1061851a91.1.2026.08.18.21.07.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2026 21:07:14 -0700 (PDT)
-Message-ID: <3409369bebc67b512257583556b02104710fcd1c.camel@gmail.com>
-Subject: Re: [RFC bpf-next 3/6] bpf: support low-32 subreg scalar linking
- for zero-extending movs
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Vineet Gupta <vineet.gupta@linux.dev>, ast@kernel.org,
- daniel@iogearbox.net, 	andrii@kernel.org, memxor@gmail.com
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
-	john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Tue, 18 Aug 2026 21:07:11 -0700
-In-Reply-To: <20260814231945.3884596-4-vineet.gupta@linux.dev>
-References: <20260814231945.3884596-1-vineet.gupta@linux.dev>
-	 <20260814231945.3884596-4-vineet.gupta@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+	s=arc-20240116; t=1787113983; c=relaxed/simple;
+	bh=GODhuljw+vwCKR2nwV1KNUDB1Kqfo6DSPt49GbIzhl4=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=GpRRPbBgHkckv23/BeT6APkZF9dZcKf04p7FDam4SQpbGJ3WgV9c3o/GuP8temoBFUlICQ6R5RVBOKYOy3KvcdsnKCJMCvFjiINcvmB87wFNBaX1KZ9HogtGiS8WnyxBPPLvGN70gi1X1b7tNA0uMuc0vlO5N6L+WLKFtFcfzb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8BxW_D4MYVqt5ICAA--.7781S3;
+	Wed, 19 Aug 2026 12:32:56 +0800 (CST)
+Received: from [10.130.40.83] (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJAx3c72MYVqTy0KAA--.63623S2;
+	Wed, 19 Aug 2026 12:32:55 +0800 (CST)
+Subject: Re: [PATCH v1] LoongArch: Fix __smp_mb__{before,after}_atomic()
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Huacai Chen <chenhuacai@kernel.org>
+Cc: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+ Vincent Li <vincent.mc.li@gmail.com>, bpf@vger.kernel.org
+References: <20260817035908.460-1-yangtiezhu@loongson.cn>
+ <3103b3b4-5c0d-ed87-2e15-31a4d2289ec5@loongson.cn>
+ <DKS3YCAMWONO.2NVVH8IPARH7Y@gmail.com>
+ <48ade10d-dd1f-ac6f-e827-d76a81183486@loongson.cn>
+ <DKS4KWIT8C5I.2THOLN7FKRRJT@gmail.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <fe42c351-e6f9-8336-a5e0-895a4572fd3f@loongson.cn>
+Date: Wed, 19 Aug 2026 12:32:54 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <DKS4KWIT8C5I.2THOLN7FKRRJT@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJAx3c72MYVqTy0KAA--.63623S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxZw1rCw4UtFyfZr48JFWxZrc_yoWrZr4fpF
+	4xGF9rKFZ5XF48Zw1kJw4ru34fCw40k3y3WrWFgryYv3s0gry2qF1Ivr4a9FyDWw4ktryI
+	vw4jgay2va4DJagCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AK
+	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzV
+	AYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
+	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIx
+	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
+	wI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
+	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8j-e5UU
+	UUU==
 
-On Fri, 2026-08-14 at 16:19 -0700, Vineet Gupta wrote:
+On 2026/8/18 下午10:05, Kumar Kartikeya Dwivedi wrote:
+> On Tue Aug 18, 2026 at 3:50 PM CEST, Tiezhu Yang wrote:
+>> On 2026/8/18 下午9:35, Kumar Kartikeya Dwivedi wrote:
+>>> On Tue Aug 18, 2026 at 3:28 PM CEST, Tiezhu Yang wrote:
+>>>> On 2026/8/17 上午11:59, Tiezhu Yang wrote:
+>>>>> When testing the BPF selftest "sudo ./test_progs -t timer_lockup", there
+>>>>> is a kernel lockup and panic:
 
 ...
 
-> =C2=A0include/linux/bpf_verifier.h | 10 ++++
-> =C2=A0kernel/bpf/states.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 | 23 ++++++++-
-> =C2=A0kernel/bpf/verifier.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 9=
-1 ++++++++++++++++++++++++++++++++----
-> =C2=A03 files changed, 114 insertions(+), 10 deletions(-)
+>>> There is a full barrier in both cases. I don't know what performance improvement
+>>> will be achieved by changing this.
+>>
+>> We performed benchmarking using UnixBench on a physical LoongArch
+>> machine, the UnixBench score is different (amadd.w + dbar < amadd_db.w).
+>>
+> 
+> I mean, this function is already quite heavy. We have multiple fully ordered
+> atomics (refcount bumps/drops, xchg(), etc.) spread across the operation. Do you
+> observe any measurable speedup in the throughput of this function?  The second
+> question is whether timer cancellation is really frequent. In practice, I don't
+> think that is the case.  The actual hrtimer_cancel() in itself is heavy and
+> waits synchronously for the callback to finish.
+> 
+> I'm not opposed to it or anything, I just don't think it's worth it in this
+> case. If the latency of cancel is a problem there are other bigger opportunities
+> to pursue than this.
 
-Also, would be nice to reflect ZEXT flag when printing the register in log.=
-c.
+Hi Kumar,
+
+Thanks for your analysis. I totally agree that bpf_timer_cancel() is
+heavy and cancellation is not a frequent fast path.
+
+However, there is an interesting compiler and architecture background
+here:
+
+During our internal review, toolchain developers noted that executing
+two separate instructions (amadd.w + dbar) causes a noticeable pipeline
+bubble, and they are currently working on a compiler-level optimization
+to automatically fuse them into a single ordered instruction amadd_db.w.
+
+Since toolchain-level fusion into a single instruction is the clear
+goal, explicitly using atomic_fetch_add() in the BPF helper achieves
+this exact single-instruction benefit immediately, without waiting
+for compiler updates.
+
+More importantly, it hardens defensive programming, making the BPF
+core logic immune to any architecture-level macro omissions.
+
+To provide a concrete micro-architectural perspective, here is the
+actual objdump comparison on a physical LoongArch machine between
+the two approaches:
+
+Approach 1 (Architecture fix: atomic_inc + smp_mb__after_atomic):
+     2610:  amadd.w     $zero, $t2, $t3  /* Relaxed atomic increment */
+     2614:  dbar        0x10             /* Explicit data memory barrier */
+
+Approach 2 (Our BPF core change: atomic_fetch_add):
+     2610:  amadd_db.w  $t3, $t1, $t4    /* Consolidated ordered atomic */
+
+As the assembly shows, Approach 2 successfully eliminates a heavy
+standalone hardware fence instruction (dbar 0x10).
+
+What are your thoughts on this logic?
+
+---
+Appendix: Code Diff & Objdump for Reference
+
+[1] Code Diff & Objdump for Approach 1:
+diff --git a/arch/loongarch/include/asm/barrier.h 
+b/arch/loongarch/include/asm/barrier.h
+index 4b663f197706..adfe343dfa65 100644
+--- a/arch/loongarch/include/asm/barrier.h
++++ b/arch/loongarch/include/asm/barrier.h
+@@ -57,8 +57,8 @@
+  #define __WEAK_LLSC_MB         "                       \n"
+  #endif
+
+-#define __smp_mb__before_atomic()      barrier()
+-#define __smp_mb__after_atomic()       barrier()
++#define __smp_mb__before_atomic()      __smp_mb()
++#define __smp_mb__after_atomic()       __smp_mb()
+
+$ objdump -d -S kernel/bpf/helpers.o
+ATOMIC_OPS(add, i, add, +)
+     2608:	0280040e 	li.w        	$t2, 1
+     260c:	02c2e2ef 	addi.d      	$t3, $s0, 184
+     2610:	386139e0 	amadd.w     	$zero, $t2, $t3
+	smp_mb__after_atomic();
+     2614:	38720010 	dbar        	0x10
+
+[2] Code Diff & Objdump for Approach 2:
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index c18f1e16edee..ee2b3a4dcc05 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1591,9 +1591,7 @@ BPF_CALL_1(bpf_timer_cancel, struct bpf_async_kern 
+*, async)
+          */
+         if (!cur_t)
+                 goto drop;
+-       atomic_inc(&t->cancelling);
+-       /* Need full barrier after relaxed atomic_inc */
+-       smp_mb__after_atomic();
++       atomic_fetch_add(1, &t->cancelling);
+         inc = true;
+         if (atomic_read(&cur_t->cancelling)) {
+
+$ objdump -d -S kernel/bpf/helpers.o
+ATOMIC_OPS(add, i, add, +)
+     2608:	0280040d 	li.w        	$t1, 1
+     260c:	02c2e2f0 	addi.d      	$t4, $s0, 184
+     2610:	386a360f 	amadd_db.w  	$t3, $t1, $t4
+
+Thanks,
+Tiezhu
+
