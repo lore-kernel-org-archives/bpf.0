@@ -1,21 +1,21 @@
-Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
+Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC3138B124
-	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 05:53:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAD19280331
+	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 05:53:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787118783; cv=none; b=sVSOkxfQZQuHniAEszTpY1zqnA3ARgv7Vad7OvnAVtnCfbHjswoTin09ItRC6OPQIJfp2/zwc3Qf78edOf2aA2QsH1ZBIS/aAK/C1xQHFy6myUL0cQy9ILKzcGJ+uT/Bu0JRTuygD95QxwRY0b44jB1Uc/WOoRKl4slPeU73Mxg=
+	t=1787118792; cv=none; b=e0DfHh1pES+/MoKbJE3dutxJeyG7AXj7aEGCjpgn8WJsjnZAalWb0OKByO1W/xxwovDCTAKqBNAWwVK3kOgUm1r2ngbfF8P/o7LU3Qny1qB6NflXjS+7h7RnlObywJ6JThq5oDKJRVUCNaENR9LpxAenvED5KwDxi1Yfec891LQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787118783; c=relaxed/simple;
-	bh=VZGflafE2M3P3EDWgU8LVos0ZvJQreRtMPeHMDZU/h0=;
+	s=arc-20240116; t=1787118792; c=relaxed/simple;
+	bh=R8y6mtYSfCZXQf5YOkyiXeAtTiU1+7YJbDicQ9MXe0E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oU6HQWBpLKT8E/iAotiSSHKkED31VV3AR9xIUsVy5+qq6+brvVZ+Vaqb0NUt6EpA1V7/F07fvTw6jREzJA3uaJB/idSQ5aVUo5LvDd3U0hrLvqZqurON5PKL76gKaJiHtPHKEDI6M0J6FShgtmJVSeupEvQj7UM2PhPm+hosScU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
+	 MIME-Version; b=F5xjAoaD1PPxGrzqvAJKHTiTku9aJ2xzsh+82wYU05BtJi5kc+uWcSZYh/qa0w49rJqK9ym8h9xST5HJu4qURc2+xemSV5XdSu6PV8ZzCVtMwRGK5qwuJiMHUDkKnQ3iLXqcnMEYL/SPU1nAh4TNKhd7cjhz8uQZOtrsAtZlk34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 5B572250AA37F2; Tue, 18 Aug 2026 22:52:49 -0700 (PDT)
+	id 92143250AA389F; Tue, 18 Aug 2026 22:52:59 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v7 02/10] bpf: Add helpers to describe the R0:R2 return register pair
-Date: Tue, 18 Aug 2026 22:52:49 -0700
-Message-ID: <20260819055249.3295283-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v7 04/10] bpf: Handle R2 as a return register in precision backtracking
+Date: Tue, 18 Aug 2026 22:52:59 -0700
+Message-ID: <20260819055259.3295829-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260819055239.3293449-1-yonghong.song@linux.dev>
 References: <20260819055239.3293449-1-yonghong.song@linux.dev>
@@ -37,166 +37,141 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-LLVM 23 added support for returning a value in two registers for an
-__int128, or a struct/union whose size is greater than 8 but not more tha=
-n
-16 bytes: such a value comes back in the R0:R2 register pair, with R2
-holding the upper half. See LLVM patches [1] and [2].
+Precision backtracking treats only R0 as a return register at a
+call/return boundary, so once the verifier starts modeling R2 that way,
+marking the second half of such a return precise would trip the
+"unexpected regs" checks in backtrack_insn() and reject a valid
+program.
 
-Later patches teach the JIT, live register analysis and the verifier itse=
-lf
-about that convention. They need to answer the same question: does this
-subprogram return its value in a register pair? Add bpf_ret_reg_pair() up
-front so it can be used in subsequent patches. It is answered from a
-per-subprogram flag that bpf_compute_subprog_ret_regs() derives once from
-the BTF prototype.
+Marking the upper half precise, for example by branching on it after a
+call to a static subprogram, walks backtracking into the callee and
+reaches its BPF_EXIT with R2 still set in the mask. Handle R2 like R0
+in boundaries where a call defines the return registers.
 
-jit_requested only says that the JIT is enabled, not that it succeeded:
-bpf_fixup_call_args() falls back to the interpreter when bpf_jit_subprogs=
-()
-fails with anything other than -EFAULT. So jit_required is still set once
-the pair is modelled, which turns that fallback into a load failure rathe=
-r
-than a silent divergence from what was verified.
+R2 differs from R0 in that it is an argument register as well, so it is
+part of the BPF_REGMASK_ARGS check and has to be cleared before that chec=
+k
+rather than next to R0. Clear it unconditionally, rather than only where
+the callee or the kfunc really does return a pair. That gives up the
+"unexpected regs" assertion for R2, and in exchange keeps backtracking
+free of any BTF lookup. Nothing is lost: a callee that does not return
+a pair leaves the caller's R2 uninitialized, so the main verification
+pass has already rejected any program that reads it, and backtracking
+is never asked for its precision.
 
-  [1] https://github.com/llvm/llvm-project/pull/190894
-  [2] https://github.com/llvm/llvm-project/pull/206876
+At BPF_EXIT the return registers are sampled before the callback path
+clears R1-R5. That clear does not touch R0, but it does cover R2, and
+running it first would drop a pair return whenever the instruction
+following the call happens to be one that invokes a callback.
 
+Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/bpf_verifier.h |  7 ++++
- kernel/bpf/verifier.c        | 66 ++++++++++++++++++++++++++++++------
- 2 files changed, 62 insertions(+), 11 deletions(-)
+ kernel/bpf/backtrack.c | 46 +++++++++++++++++++++++++++---------------
+ 1 file changed, 30 insertions(+), 16 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 5fad59fdab0d..953d8191563a 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -819,6 +819,8 @@ struct bpf_subprog_info {
- 	bool is_async_cb: 1;
- 	bool is_exception_cb: 1;
- 	bool args_cached: 1;
-+	/* true if the return value is passed in the R0:R2 register pair */
-+	bool ret_reg_pair: 1;
- 	/* true if bpf_fastcall stack region is used by functions that can't be=
- inlined */
- 	bool keep_fastcall_stack: 1;
- 	bool changes_pkt_data: 1;
-@@ -1055,6 +1057,11 @@ static inline struct bpf_subprog_info *subprog_inf=
-o(struct bpf_verifier_env *env
- 	return &env->subprog_info[subprog];
- }
-=20
-+static inline bool bpf_ret_reg_pair(struct bpf_verifier_env *env, int su=
-bprog)
-+{
-+	return subprog_info(env, subprog)->ret_reg_pair;
-+}
+diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
+index a2b18a9f1694..653db80bcc47 100644
+--- a/kernel/bpf/backtrack.c
++++ b/kernel/bpf/backtrack.c
+@@ -423,6 +423,10 @@ static int backtrack_insn(struct bpf_verifier_env *e=
+nv, int idx, int subseq_idx,
+ 				 */
+ 				verifier_bug_if(idx + 1 !=3D subseq_idx, env,
+ 						"extra insn from subprog");
++				/* global subprog always sets R0 */
++				bt_clear_reg(bt, BPF_REG_0);
++				/* and if it does not set R2, main pass would catch it */
++				bt_clear_reg(bt, BPF_REG_2);
+ 				/* r1-r5 are invalidated after subprog call,
+ 				 * so for global func call it shouldn't be set
+ 				 * anymore
+@@ -432,8 +436,6 @@ static int backtrack_insn(struct bpf_verifier_env *en=
+v, int idx, int subseq_idx,
+ 						     bt_reg_mask(bt));
+ 					return -EFAULT;
+ 				}
+-				/* global subprog always sets R0 */
+-				bt_clear_reg(bt, BPF_REG_0);
+ 				return 0;
+ 			} else {
+ 				/* static subprog call instruction, which
+@@ -506,6 +508,8 @@ static int backtrack_insn(struct bpf_verifier_env *en=
+v, int idx, int subseq_idx,
+ 				return -ENOTSUPP;
+ 			/* regular helper call sets R0 */
+ 			bt_clear_reg(bt, BPF_REG_0);
++			/* kfunc might also set R2 */
++			bt_clear_reg(bt, BPF_REG_2);
+ 			if (bt_reg_mask(bt) & BPF_REGMASK_ARGS) {
+ 				/* if backtracking was looking for registers R1-R5
+ 				 * they should have been found already.
+@@ -520,7 +524,25 @@ static int backtrack_insn(struct bpf_verifier_env *e=
+nv, int idx, int subseq_idx,
+ 					return -EFAULT;
+ 			}
+ 		} else if (opcode =3D=3D BPF_EXIT) {
+-			bool r0_precise;
++			bool from_subprog_call, r0_precise, r2_precise;
 +
- struct bpf_call_summary {
- 	u8 num_params;
- 	bool is_void;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d8bf897460ea..2b5e88fdda07 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -385,27 +385,66 @@ bool bpf_subprog_is_global(const struct bpf_verifie=
-r_env *env, int subprog)
- 	return aux && aux[subprog].linkage =3D=3D BTF_FUNC_GLOBAL;
- }
-=20
--static bool subprog_returns_void(struct bpf_verifier_env *env, int subpr=
-og)
-+static const struct btf_type *subprog_ret_type(struct bpf_verifier_env *=
-env, int subprog)
- {
--	const struct btf_type *type, *func, *func_proto;
-+	const struct btf_type *func, *func_proto;
- 	const struct btf *btf =3D env->prog->aux->btf;
- 	u32 btf_id;
-=20
-+	if (!btf || !env->prog->aux->func_info)
-+		return NULL;
++			/* BPF_EXIT in subprog or callback always returns
++			 * right after the call instruction, so by checking
++			 * whether the instruction at subseq_idx-1 is subprog
++			 * call or not we can distinguish actual exit from
++			 * *subprog* from exit from *callback*. In the former
++			 * case, we need to propagate the precision of the
++			 * return registers, if necessary. In the latter we
++			 * never do that.
++			 */
++			from_subprog_call =3D subseq_idx - 1 >=3D 0 &&
++					    bpf_pseudo_call(&env->prog->insnsi[subseq_idx - 1]);
 +
- 	btf_id =3D env->prog->aux->func_info[subprog].type_id;
++			/* Sample the return registers before the callback
++			 * handling below clears R1-R5.
++			 */
++			r0_precise =3D from_subprog_call && bt_is_reg_set(bt, BPF_REG_0);
++			r2_precise =3D from_subprog_call && bt_is_reg_set(bt, BPF_REG_2);
 =20
-+	/* Both already validated by prepare_btf_func() at prog load. */
- 	func =3D btf_type_by_id(btf, btf_id);
--	if (verifier_bug_if(!func, env, "btf_id %u not found", btf_id))
--		return false;
+ 			/* Backtracking to a nested function call, 'idx' is a part of
+ 			 * the inner frame 'subseq_idx' is a part of the outer frame.
+@@ -533,30 +555,22 @@ static int backtrack_insn(struct bpf_verifier_env *=
+env, int idx, int subseq_idx,
+ 			if (subseq_idx >=3D 0 && bpf_calls_callback(env, subseq_idx))
+ 				for (i =3D BPF_REG_1; i <=3D BPF_REG_5; i++)
+ 					bt_clear_reg(bt, i);
++
++			bt_clear_reg(bt, BPF_REG_0);
++			bt_clear_reg(bt, BPF_REG_2);
+ 			if (bt_reg_mask(bt) & BPF_REGMASK_ARGS) {
+ 				verifier_bug(env, "backtracking exit unexpected regs %x",
+ 					     bt_reg_mask(bt));
+ 				return -EFAULT;
+ 			}
+=20
+-			/* BPF_EXIT in subprog or callback always returns
+-			 * right after the call instruction, so by checking
+-			 * whether the instruction at subseq_idx-1 is subprog
+-			 * call or not we can distinguish actual exit from
+-			 * *subprog* from exit from *callback*. In the former
+-			 * case, we need to propagate r0 precision, if
+-			 * necessary. In the former we never do that.
+-			 */
+-			r0_precise =3D subseq_idx - 1 >=3D 0 &&
+-				     bpf_pseudo_call(&env->prog->insnsi[subseq_idx - 1]) &&
+-				     bt_is_reg_set(bt, BPF_REG_0);
 -
- 	func_proto =3D btf_type_by_id(btf, func->type);
--	if (!func_proto)
--		return false;
+-			bt_clear_reg(bt, BPF_REG_0);
+ 			if (bt_subprog_enter(bt))
+ 				return -EFAULT;
 =20
--	type =3D btf_type_skip_modifiers(btf, func_proto->type, NULL);
--	if (!type)
--		return false;
-+	return btf_type_skip_modifiers(btf, func_proto->type, NULL);
-+}
-=20
--	return btf_type_is_void(type);
-+static bool subprog_returns_void(struct bpf_verifier_env *env, int subpr=
-og)
-+{
-+	const struct btf_type *type =3D subprog_ret_type(env, subprog);
-+
-+	return type && btf_type_is_void(type);
-+}
-+
-+static u32 ret_regs_cnt(u32 size)
-+{
-+	return size > 8 && size <=3D 16 ? 2 : 1;
-+}
-+
-+static int bpf_compute_subprog_ret_regs(struct bpf_verifier_env *env)
-+{
-+	const struct btf *btf =3D env->prog->aux->btf;
-+	const struct btf_type *type;
-+	int subprog;
-+	u32 size;
-+
-+	if (!env->prog->jit_requested || bpf_prog_is_offloaded(env->prog->aux))
-+		return 0;
-+
-+	/*
-+	 * Skip the main program: its return value is the program's exit code,
-+	 * read out of R0, so it never uses the register pair. An extension doe=
-s
-+	 * have a real prototype for subprog 0, but bpf_check_attach_target()
-+	 * refuses to replace a function returning more than 8 bytes.
-+	 */
-+	for (subprog =3D 1; subprog < env->subprog_cnt; subprog++) {
-+		type =3D subprog_ret_type(env, subprog);
-+		if (!type || btf_type_is_void(type))
-+			continue;
-+		if (verifier_bug_if(IS_ERR(btf_resolve_size(btf, type, &size)), env,
-+				    "cannot size return type of subprog %d", subprog))
-+			return -EFAULT;
-+		if (ret_regs_cnt(size) > 1) {
-+			subprog_info(env, subprog)->ret_reg_pair =3D true;
-+			env->prog->jit_required =3D 1;
-+		}
-+	}
-+
-+	return 0;
- }
-=20
- const char *bpf_subprog_name(const struct bpf_verifier_env *env, int sub=
-prog)
-@@ -21159,6 +21198,11 @@ int bpf_check(struct bpf_prog **prog, union bpf_=
-attr *attr, bpfptr_t uattr,
- 	if (ret < 0)
- 		goto skip_full_check;
-=20
-+	/* must precede the first bpf_ret_reg_pair() user below */
-+	ret =3D bpf_compute_subprog_ret_regs(env);
-+	if (ret < 0)
-+		goto skip_full_check;
-+
- 	ret =3D bpf_compute_live_registers(env);
- 	if (ret < 0)
- 		goto skip_full_check;
+ 			if (r0_precise)
+ 				bt_set_reg(bt, BPF_REG_0);
++			if (r2_precise)
++				bt_set_reg(bt, BPF_REG_2);
+ 			/* r6-r9 and stack slots will stay set in caller frame
+ 			 * bitmasks until we return back from callee(s)
+ 			 */
 --=20
 2.53.0-Meta
 
