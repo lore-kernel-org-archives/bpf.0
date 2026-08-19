@@ -1,21 +1,21 @@
 Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD26A280331
-	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 05:53:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE5693C0603
+	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 05:53:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787118802; cv=none; b=qh/kcfxF0/eiBeng6DVVuMmamMlOWiRgyPp8qY5NjbN5nJMzhhQBDX3dkghAILesnwsA+A78OqSd/dEEv28FNqGJvy3F6V9SXASPgjxTycg457DebgAahdXPO0780HgQuvy2a0c+KFgX2OuhLz7vu9f+Ti2rObCgvAYaABsSumM=
+	t=1787118804; cv=none; b=nlO6XOZSk03uLGiLNcYLvvPHboRSS7KIYm1vpJ5kNS1kTKATejE/ftPOP4xmJ61GaQgGIf2g5r7Wr5/qDLDSifBgmmH0nGTQQJcBB8nST3x+IDgJMa9PGWLir1YcxLC+C7i2l57IDwqeabfTt2Oof1iWAEt5DJxiBCP7IvqLhqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787118802; c=relaxed/simple;
-	bh=/D3sE9tSyBzdK59/zbYWq4xmf8FzvPGdVBOz4Z3WE4E=;
+	s=arc-20240116; t=1787118804; c=relaxed/simple;
+	bh=grYOHqrduDvSBVKtldTKjgM2QxDQVS90+EeMQ5WH99k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sazjHj9Yz6K5PvjTqJWQeQye/2QZTTCB3gwCJ98XXPRM8zJqqtoEvLokkR1qHHSBoOcYwzaG/heYwWtkYQJKlXbpzLBZFH6DWXTd81217o54dJtA6P13EnKoVz5oc7J7TycvvyS9tR1ZUpZom5d4NBr+QAR2Dj4ctSYWZswBg3c=
+	 MIME-Version; b=jud/35CyNHnY9X0ajm6pqOhR2MmRc87Pd96gsakLHU1XY9BxlWq7iGbo5VnmVY2HLckB2jvRJZwflJvTHftCykOorByFEUYGJAc5764I+6gk+wQQCuxICcpnMidbxLu6AdpSR5YvnNSA7zN3mwPrLrkuJ/LEY7MIGlySkvMwZDA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id C894A250AA3944; Tue, 18 Aug 2026 22:53:09 -0700 (PDT)
+	id 09E76250AA39CD; Tue, 18 Aug 2026 22:53:20 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v7 06/10] bpf: Add verifier support for 16-byte returns in R0:R2
-Date: Tue, 18 Aug 2026 22:53:09 -0700
-Message-ID: <20260819055309.3297684-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v7 08/10] selftests/bpf: Add C tests for 16-byte returns in R0:R2
+Date: Tue, 18 Aug 2026 22:53:20 -0700
+Message-ID: <20260819055320.3300114-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260819055239.3293449-1-yonghong.song@linux.dev>
 References: <20260819055239.3293449-1-yonghong.song@linux.dev>
@@ -37,229 +37,314 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-LLVM 23 added support for returning a value in two registers for an
-__int128, or a struct/union whose size is greater than 8 but not more tha=
+Add selftests that exercise a 16-byte return value passed in the R0:R2
+register pair, written in C so that they depend on the compiler lowering
+the register-pair return.
+
+The R0:R2 convention is only emitted by LLVM 23 and newer, and a by-value
+aggregate return does not compile at all before that, so the programs sit
+behind a __clang_major__ guard. An older compiler builds the dummy test i=
 n
-16 bytes. See LLVM patches [1] and [2].
+the #else branch instead, which keeps the object non-empty and says in it=
+s
+description why nothing was exercised.
 
-Before LLVM 23 the BPF backend could not return these values at all. A
-by-value struct or union return (of any size) was rejected at compile tim=
-e
-with:
-
-  error: aggregate returns are not supported
-
-and an __int128 return failed later in the backend with:
-
-  fatal error: error in backend: unable to allocate function return #1
-
-Both are resolved in LLVM 23, which lowers such returns into the R0:R2
-register pair.
-
-Model that pair at calls to global and static BPF subprograms and at kfun=
-c
-calls: R2 is marked alongside R0 at the call, propagated out of a callee
-at its exit, and held to the same scalar-only and no-stack-pointer rules
-that already apply to R0. A struct returned by a kfunc must be composed o=
-f
-scalars, since its bytes reach the program as raw register contents and a
-pointer field would otherwise be laundered into a scalar.
-
-An extension program is the one caller of the convention that cannot take
-part in it: only R0 is checked at its exit, since that is the program exi=
-t
-code, so it has no way to hand back an upper half. Replacing a function
-whose return value is larger than 8 bytes is therefore rejected in
-btf_check_func_type_match(). That function compares btf_type->info, which
-carries no size for an int, so an 8 byte long and a 16 byte __int128
-compared equal; sizes up to 8 bytes stay interchangeable, as they always
-have been, so this only rejects what the R0:R2 convention newly makes
-incompatible.
-
-  [1] https://github.com/llvm/llvm-project/pull/190894
-  [2] https://github.com/llvm/llvm-project/pull/206876
+The kfunc tests are tagged __arch_x86_64/__arch_arm64 and skip elsewhere.
+Those are the architectures whose JIT advertises
+bpf_jit_supports_kfunc_ret_reg_pair(), which bpf_add_kfunc_call() require=
+s
+before it accepts a kfunc returning more than 8 bytes, and they are also
+the only ones building the kfuncs.
 
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/btf.c      |  6 ++++
- kernel/bpf/verifier.c | 68 ++++++++++++++++++++++++++++++++++++++-----
- 2 files changed, 67 insertions(+), 7 deletions(-)
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../bpf/progs/verifier_aggregate_ret.c        | 178 ++++++++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  18 ++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |   9 +
+ 4 files changed, 207 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_aggregate_=
+ret.c
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 6967d48bba49..5e9f6a487524 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -7684,6 +7684,12 @@ static int btf_check_func_type_match(struct bpf_ve=
-rifier_log *log,
- 			btf_type_str(t2), fn2);
- 		return -EINVAL;
- 	}
-+	if (btf_type_has_size(t1) && (t1->size > 8 || t2->size > 8)) {
-+		bpf_log(log,
-+			"Return type of %s() has size %u and of %s() size %u, and a size abov=
-e 8 bytes cannot be replaced\n",
-+			fn1, t1->size, fn2, t2->size);
-+		return -EINVAL;
-+	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
+sting/selftests/bpf/prog_tests/verifier.c
+index 64ac49ad67e6..f7f94ccebce2 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -5,6 +5,7 @@
+ #include "arena_kfunc.skel.h"
+ #include "arena_kfunc_jit.skel.h"
+ #include "cap_helpers.h"
++#include "verifier_aggregate_ret.skel.h"
+ #include "verifier_align.skel.h"
+ #include "verifier_and.skel.h"
+ #include "verifier_arena.skel.h"
+@@ -170,6 +171,7 @@ void test_arena_kfunc(void)                   { RUN_T=
+ESTS(arena_kfunc); }
 =20
- 	for (i =3D 0; i < nargs1; i++) {
- 		t1 =3D btf_type_skip_modifiers(btf1, args1[i].type, NULL);
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 991782b402f2..d79f0c069795 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -415,6 +415,9 @@ static u32 ret_regs_cnt(u32 size)
- 	return size > 8 && size <=3D 16 ? 2 : 1;
- }
+ void test_arena_kfunc_jit(void)               { RUN_TESTS(arena_kfunc_ji=
+t); }
 =20
-+/* Registers holding a function return value, in order. See ret_regs_cnt=
-(). */
-+static const int ret_regs[] =3D { BPF_REG_0, BPF_REG_2 };
++void test_verifier_aggregate_ret(void)        { RUN_TESTS(verifier_aggre=
+gate_ret); }
+ void test_verifier_align(void)                { RUN(verifier_align); }
+ void test_verifier_and(void)                  { RUN(verifier_and); }
+ void test_verifier_arena(void)                { RUN(verifier_arena); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_aggregate_ret.c b=
+/tools/testing/selftests/bpf/progs/verifier_aggregate_ret.c
+new file mode 100644
+index 000000000000..7851bade2b40
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_aggregate_ret.c
+@@ -0,0 +1,178 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "../test_kmods/bpf_testmod_kfunc.h"
++#include "bpf_misc.h"
 +
- static int bpf_compute_subprog_ret_regs(struct bpf_verifier_env *env)
- {
- 	const struct btf *btf =3D env->prog->aux->btf;
-@@ -9904,6 +9907,7 @@ static int check_func_call(struct bpf_verifier_env =
-*env, struct bpf_insn *insn,
- 	u16 callee_incoming, stack_arg_cnt;
- 	struct bpf_func_state *caller;
- 	int err, subprog, target_insn;
-+	u32 i, nregs;
-=20
- 	target_insn =3D *insn_idx + insn->imm + 1;
- 	subprog =3D bpf_find_subprog(env, target_insn);
-@@ -9959,9 +9963,14 @@ static int check_func_call(struct bpf_verifier_env=
- *env, struct bpf_insn *insn,
- 		clear_caller_saved_regs(env, caller->regs);
- 		invalidate_outgoing_stack_args(env, cur_func(env));
-=20
--		/* All non-void global functions return a 64-bit SCALAR_VALUE. */
-+		/*
-+		 * A non-void global function returns a 64-bit SCALAR_VALUE in
-+		 * R0, or a >8 byte SCALAR_VALUE in the R0:R2 register pair.
-+		 */
- 		if (!returns_void) {
--			mark_reg_unknown(env, caller->regs, BPF_REG_0);
-+			nregs =3D bpf_ret_reg_pair(env, subprog) ? 2 : 1;
-+			for (i =3D 0; i < nregs; i++)
-+				mark_reg_unknown(env, caller->regs, ret_regs[i]);
- 			bpf_diag_mod_end(env);
- 		}
-=20
-@@ -10321,11 +10330,15 @@ static int prepare_func_exit(struct bpf_verifie=
-r_env *env, int *insn_idx)
- 	struct bpf_func_state *caller, *callee;
- 	struct bpf_reg_state *r0;
- 	bool in_callback_fn;
-+	u32 i, nregs;
- 	int err;
-=20
- 	callee =3D state->frame[state->curframe];
- 	r0 =3D &callee->regs[BPF_REG_0];
--	if (r0->type =3D=3D PTR_TO_STACK) {
-+	nregs =3D bpf_ret_reg_pair(env, callee->subprogno) ? 2 : 1;
-+	for (i =3D 0; i < nregs; i++) {
-+		if (callee->regs[ret_regs[i]].type !=3D PTR_TO_STACK)
-+			continue;
- 		/* technically it's ok to return caller's stack pointer
- 		 * (or caller's caller's pointer) back to the caller,
- 		 * since these pointers are valid. Only current stack
-@@ -10360,9 +10373,13 @@ static int prepare_func_exit(struct bpf_verifier=
-_env *env, int *insn_idx)
- 			return -EFAULT;
- 		}
- 	} else {
--		/* return to the caller whatever r0 had in the callee */
-+		/*
-+		 * return to the caller whatever the callee had in the
-+		 * return register(s)
-+		 */
- 		bpf_diag_mod_begin(env, &caller->regs[BPF_REG_0], r0, BPF_DIAG_MOD_WRI=
-TE);
--		caller->regs[BPF_REG_0] =3D *r0;
-+		for (i =3D 0; i < nregs; i++)
-+			caller->regs[ret_regs[i]] =3D callee->regs[ret_regs[i]];
- 		bpf_diag_mod_end(env);
- 	}
-=20
-@@ -11297,6 +11314,19 @@ static int check_helper_call(struct bpf_verifier=
-_env *env, struct bpf_insn *insn
++#if defined(__clang_major__) && __clang_major__ >=3D 23
++
++#define MIX_A	0xdeadbeefcafef00dULL
++#define MIX_B	0x0123456789abcdefULL
++
++typedef unsigned __int128 u128;
++
++struct pair {
++	__u64 lo;	/* R0 */
++	__u64 hi;	/* R2 */
++};
++
++union upair {
++	__u64 halves[2];
++	struct {
++		__u64 lo;	/* R0 */
++		__u64 hi;	/* R2 */
++	} parts;
++};
++
++static __noinline u128 make_i128(__u64 a, __u64 b)
++{
++	return ((u128)(a + b) << 64) | (a - b);
++}
++
++SEC("tc")
++__load_if_JITed()
++__success __retval(0)
++int aggregate_ret_int128_c_test(struct __sk_buff *skb)
++{
++	__u64 a =3D skb->len ^ MIX_A;
++	__u64 b =3D skb->len ^ MIX_B;
++	u128 v;
++
++	v =3D make_i128(a, b);
++	if ((__u64)(v >> 64) !=3D a + b)
++		return 1;
++	if ((__u64)v !=3D a - b)
++		return 2;
++
++	return 0;
++}
++
++static __noinline struct pair make_pair(__u64 a, __u64 b)
++{
++	struct pair p =3D { .lo =3D a + b, .hi =3D a - b };
++
++	return p;
++}
++
++SEC("tc")
++__load_if_JITed()
++__success __retval(0)
++int aggregate_ret_struct_c_test(struct __sk_buff *skb)
++{
++	__u64 a =3D skb->len ^ MIX_A;
++	__u64 b =3D skb->len ^ MIX_B;
++	struct pair p;
++
++	p =3D make_pair(a, b);
++	if (p.lo !=3D a + b)
++		return 1;
++	if (p.hi !=3D a - b)
++		return 2;
++
++	return 0;
++}
++
++__noinline struct pair make_pair_global(__u64 a, __u64 b)
++{
++	struct pair p =3D { .lo =3D a + b, .hi =3D a - b };
++
++	return p;
++}
++
++SEC("tc")
++__load_if_JITed()
++__success __retval(0)
++int aggregate_ret_global_struct_c_test(struct __sk_buff *skb)
++{
++	__u64 a =3D skb->len ^ MIX_A;
++	__u64 b =3D skb->len ^ MIX_B;
++	struct pair p;
++
++	p =3D make_pair_global(a, b);
++	if (p.lo !=3D a + b)
++		return 1;
++	if (p.hi !=3D a - b)
++		return 2;
++
++	return 0;
++}
++
++static __noinline union upair make_upair(__u64 a, __u64 b)
++{
++	union upair p;
++
++	p.halves[0] =3D a + b;
++	p.halves[1] =3D a - b;
++	return p;
++}
++
++SEC("tc")
++__load_if_JITed()
++__success __retval(0)
++int aggregate_ret_union_c_test(struct __sk_buff *skb)
++{
++	__u64 a =3D skb->len ^ MIX_A;
++	__u64 b =3D skb->len ^ MIX_B;
++	union upair p;
++
++	p =3D make_upair(a, b);
++	if (p.parts.lo !=3D a + b)
++		return 1;
++	if (p.parts.hi !=3D a - b)
++		return 2;
++
++	return 0;
++}
++
++SEC("tc")
++__arch_x86_64 __arch_arm64
++__load_if_JITed()
++__success __retval(0)
++int aggregate_ret_kfunc_int128_c_test(struct __sk_buff *skb)
++{
++	__u64 a =3D skb->len ^ MIX_A;
++	__u64 b =3D skb->len ^ MIX_B;
++	u128 v;
++
++	v =3D bpf_kfunc_call_test_i128(a, b);
++	if ((__u64)(v >> 64) !=3D a + b)
++		return 1;
++	if ((__u64)v !=3D a - b)
++		return 2;
++
++	return 0;
++}
++
++SEC("tc")
++__arch_x86_64 __arch_arm64
++__load_if_JITed()
++__success __retval(0)
++int aggregate_ret_kfunc_struct_c_test(struct __sk_buff *skb)
++{
++	__u64 a =3D skb->len ^ MIX_A;
++	__u64 b =3D skb->len ^ MIX_B;
++	struct prog_test_ret_pair p;
++
++	p =3D bpf_kfunc_call_test_ret_pair(a, b);
++	if (p.lo !=3D a + b)
++		return 1;
++	if (p.hi !=3D a - b)
++		return 2;
++
++	return 0;
++}
++
++#else
++
++SEC("socket")
++__description("verifier_aggregate_ret: needs LLVM 23, dummy test")
++__success
++int dummy_test(void)
++{
++	return 0;
++}
++
++#endif
++
++char _license[] SEC("license") =3D "GPL";
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
+/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index 9366a3c578f1..c4bc8e11c6e1 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -954,6 +954,20 @@ __bpf_kfunc int bpf_kfunc_call_test5(u8 a, u16 b, u3=
+2 c)
  	return 0;
  }
 =20
-+/*
-+ * Mark the register(s) holding a @size byte kfunc return value as unkno=
-wn
-+ * scalars. Both halves of a register pair are treated the same way.
-+ */
-+static void mark_kfunc_ret_regs(struct bpf_verifier_env *env,
-+				struct bpf_reg_state *regs, u32 size)
++#if defined(__x86_64__) || defined(__aarch64__)
++__bpf_kfunc __int128 bpf_kfunc_call_test_i128(u64 a, u64 b)
 +{
-+	u32 i, nregs =3D ret_regs_cnt(size);
-+
-+	for (i =3D 0; i < nregs; i++)
-+		mark_reg_unknown(env, regs, ret_regs[i]);
++	return (__int128)(((unsigned __int128)(a + b) << 64) | (a - b));
 +}
 +
- static bool is_kfunc_acquire(struct bpf_call_arg_meta *meta)
- {
- 	return meta->kfunc_flags & KF_ACQUIRE;
-@@ -13965,10 +13995,25 @@ static int check_kfunc_call(struct bpf_verifier=
-_env *env, struct bpf_insn *insn,
- 	}
-=20
- 	if (btf_type_is_scalar(t)) {
--		mark_reg_unknown(env, regs, BPF_REG_0);
-+		mark_kfunc_ret_regs(env, regs, t->size);
- 		if (meta.btf =3D=3D btf_vmlinux && (meta.func_id =3D=3D special_kfunc_=
-list[KF_bpf_res_spin_lock] ||
- 		    meta.func_id =3D=3D special_kfunc_list[KF_bpf_res_spin_lock_irqsav=
-e]))
- 			__mark_reg_const_zero(env, &regs[BPF_REG_0]);
-+	} else if (btf_type_is_struct(t)) {
-+		/*
-+		 * The returned struct comes back as raw register bits modeled
-+		 * as an unknown scalar, so it must contain only scalars:
-+		 * otherwise a pointer field would be laundered into a scalar
-+		 * and escape provenance and reference tracking.
-+		 */
-+		if (!__btf_type_is_scalar_struct(env, desc_btf, t, 0)) {
-+			verbose(env,
-+				"kernel function %s returns %s %s that is not composed of scalars\n"=
-,
-+				func_name, btf_type_str(t),
-+				btf_name_by_offset(desc_btf, t->name_off));
-+			return -EINVAL;
-+		}
-+		mark_kfunc_ret_regs(env, regs, t->size);
- 	} else if (btf_type_is_ptr(t)) {
- 		ptr_type =3D btf_type_skip_modifiers(desc_btf, t->type, &ptr_type_id);
- 		err =3D check_special_kfunc(env, &meta, regs, insn_aux, ptr_type, desc=
-_btf);
-@@ -17536,11 +17581,20 @@ static int check_global_subprog_return_code(str=
-uct bpf_verifier_env *env)
- {
- 	struct bpf_func_state *cur_frame =3D cur_func(env);
- 	u32 subprog =3D cur_frame->subprogno;
-+	u32 i, nregs;
-+	int err;
-=20
- 	if (subprog_returns_void(env, subprog))
- 		return 0;
-=20
--	return check_global_ret_scalar_reg(env, BPF_REG_0);
-+	nregs =3D bpf_ret_reg_pair(env, subprog) ? 2 : 1;
-+	for (i =3D 0; i < nregs; i++) {
-+		err =3D check_global_ret_scalar_reg(env, ret_regs[i]);
-+		if (err)
-+			return err;
-+	}
++__bpf_kfunc struct prog_test_ret_pair bpf_kfunc_call_test_ret_pair(u64 a=
+, u64 b)
++{
++	struct prog_test_ret_pair r =3D { .lo =3D a + b, .hi =3D a - b };
 +
-+	return 0;
- }
++	return r;
++}
++#endif /* __x86_64__ || __aarch64__ */
++
+ __bpf_kfunc u64 bpf_kfunc_call_stack_arg(u64 a, u64 b, u64 c, u64 d,
+ 					 u64 e, u64 f, u64 g, u64 h,
+ 					 u64 i, u64 j)
+@@ -1487,6 +1501,10 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test2)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test3)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test4)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test5)
++#if defined(__x86_64__) || defined(__aarch64__)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_pair)
++#endif
+ BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg_ptr)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_stack_arg_mix)
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b=
+/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+index 7d81070eefe7..426000f9a14f 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+@@ -55,6 +55,11 @@ struct prog_test_big_arg {
+ 	__u64 b;
+ };
 =20
- /* Bitmask with 1s for all caller saved registers */
++struct prog_test_ret_pair {	/* 16 bytes: R0:R2 */
++	__u64 lo;
++	__u64 hi;
++};
++
+ struct prog_test_fail1 {
+ 	void *p;
+ 	int x;
+@@ -131,6 +136,10 @@ int bpf_kfunc_call_test2(struct sock *sk, __u32 a, _=
+_u32 b) __ksym;
+ struct sock *bpf_kfunc_call_test3(struct sock *sk) __ksym;
+ long bpf_kfunc_call_test4(signed char a, short b, int c, long d) __ksym;
+ int bpf_kfunc_call_test5(__u8 a, __u16 b, __u32 c) __ksym;
++#ifdef __SIZEOF_INT128__
++__int128 bpf_kfunc_call_test_i128(__u64 a, __u64 b) __ksym;
++#endif
++struct prog_test_ret_pair bpf_kfunc_call_test_ret_pair(__u64 a, __u64 b)=
+ __ksym;
+ __u64 bpf_kfunc_call_stack_arg(__u64 a, __u64 b, __u64 c, __u64 d,
+ 			       __u64 e, __u64 f, __u64 g, __u64 h,
+ 			       __u64 i, __u64 j) __ksym;
 --=20
 2.53.0-Meta
 
