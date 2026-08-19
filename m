@@ -1,182 +1,188 @@
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D4463BBFBB;
-	Wed, 19 Aug 2026 02:48:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29AEF37C929;
+	Wed, 19 Aug 2026 02:48:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787107715; cv=none; b=YUMRAowvEJMLujBpCB/FJCQAWndsJrOxGwgtfQN5fdTRc2H1B61NUBfi+V2vK9zN0icNTzPKfHC9IIDtHMFQM7u4AU6oiM5S2EyVoON1kzoU3mpNDstKGvMAJut5lTKPnihGcAvGQcWxCU2+irlmAHwJ+YJZOJ3Fi5tzXnuyud0=
+	t=1787107737; cv=none; b=iIO277b0IbKIbM7TJwH78IHHsxt+onuHBcvm43iTOrwOHLwwcWtIwMLBv80YDNJF5Ki1utt8tgIdRovH0uNTpqO79QlbL9aoxQuJD9GnmhId7l1N5xyR1bXjD3IZnrIXy0m1biY3sMQbXi3CZZlae97IK2egn/r0cd+5Q6Wjq1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787107715; c=relaxed/simple;
-	bh=Gkqf6+TdDU4kKCwXQoTGyMTq/gF29FXKnIKAEHhTxx8=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=htWBaC6F1/XaGsG2+2F8Be3AiKBQU9cbI3/Lahe6msrNJaQMTv+h/2c+uDhnlGMhZYjjBj8wx/s/ibdS4+n9nAzBizN5MKlJWRRQu7eA1WsuHAH5BOYM8XG1z0byS1yTZoY82YlCh179F5ZzzbP84qxi2b5gyVhPUU74b0qWRow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=eZj0SN4j; arc=none smtp.client-ip=67.231.148.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+	s=arc-20240116; t=1787107737; c=relaxed/simple;
+	bh=m7XWBt4YIing3nJlkWfZI8EovhyTNZ4WiUShxjzch/U=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=qwBs+dj/qYQ2iF6D2U+L+6GT3v7wF0NCsVn3IG2dJe9ta51B0uDdbuxoziIHGJc84g8O+Ux5CorohuL4DCDUz+s66DujP9qKX9275JuF2apLQH/ut4aCC3Y47ZX4P2I4wrUIf0FXUl4+Foq5++0qF1fgdEe2F7g1+ED1dC7FkmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UTjsEzyN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="eZj0SN4j"
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-	by mx0a-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67INlvv51986725;
-	Tue, 18 Aug 2026 19:47:59 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=i
-	aIlQc49jlt3qkVvVgQJzuJ3WbZpTPn7ZJnIHzmU4Rg=; b=eZj0SN4juX6l28Lu9
-	/jlParonlm19+BcsfNjrik3QrVCbXgVrmCqCg+1NqVisbXNMEmVT84r2ljvzVjVG
-	SI/1YaM7jpp8BN5SNSjP2xzDh52I7GqmCpJnG4zeVoXJIocMVBNz34I/9pE5cqPN
-	/DAgNgQbIXr4Wz8ZtDbei8iYgCorlyMQIviqX2UQAoVbX30lJ6Ur8c7f825yHU84
-	yzTBlCwnekP30vMgPuFeODN+FLXG8acLf7/b6sw3twUBoMlw07uOWjb7hm+2Vax4
-	SJ25LNXo9DBo51k5WCaa9KlZmsnShbiKgSF9PW6HazCvDiZZEJIf2AyV/teu3vWU
-	+iQIQ==
-Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4g4yew90d0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Aug 2026 19:47:59 -0700 (PDT)
-Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
- DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Tue, 18 Aug 2026 19:47:58 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
- (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
- Transport; Tue, 18 Aug 2026 19:47:58 -0700
-Received: from rkannoth-OptiPlex-7090 (unknown [10.28.36.165])
-	by maili.marvell.com (Postfix) with ESMTP id 8C4A73F707E;
-	Tue, 18 Aug 2026 19:47:54 -0700 (PDT)
-Date: Wed, 19 Aug 2026 08:17:53 +0530
-From: Ratheesh Kannoth <rkannoth@marvell.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <andrew+netdev@lunn.ch>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <davem@davemloft.net>, <edumazet@google.com>,
-        <hawk@kernel.org>, <john.fastabend@gmail.com>, <pabeni@redhat.com>,
-        <sdf@fomichev.me>, <sgoutham@marvell.com>
-Subject: Re: [PATCH v9 net-next] octeontx2-pf: add mqprio bandwidth offload
- for NIX TX schedulers
-Message-ID: <aoUZWdZ2fy8rJUkM@rkannoth-OptiPlex-7090>
-References: <20260817032747.1765883-1-rkannoth@marvell.com>
- <20260817084212.5d46a501@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UTjsEzyN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 392F71F000E9;
+	Wed, 19 Aug 2026 02:48:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787107734;
+	bh=XCh9WDau8NQtT9O6ffQoN79XvrVW4jx7LKjvFD6VYwc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=UTjsEzyNbGdS/7eaVW49eZIoKcMoMtovTLpY0ktQCDI5dv1kxWC3hb+aZochkvkVU
+	 t0rOMIkpRsNQKq1QabHFl21XI/HreG3AAEk+NjHzws6Zg/HgRBcDIm1HI0Mwp9NnDI
+	 d8DpmPqhu+Dfwsa29gG2iuPIIJv3I3+j23hxQW+fPsVFfZjgJWtGolMNrCkbv3mvmC
+	 gAFwur8jA6UhqbJeNBZcthqY5LXeuN0HLKR1tlMMuzx00TtgRiqnqs+enttL1/3I/K
+	 U28wELZ2vs5wp+OLm/9q6gkTd60CW7VYzf25CO4YTa/AE603RPs6Oh8AUmEqnl9LaD
+	 sstlWYby4aVkw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH RFC v2 13/13] modpost: handle MODULE_SYSCTL_TABLE
+ symbols
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Mauricio Faria de Oliveira" <mfo@igalia.com>
+Cc: bpf@vger.kernel.org, "Vasily Gorbik" <gor@linux.ibm.com>, "Alexander
+ Gordeev" <agordeev@linux.ibm.com>, linux-s390@vger.kernel.org, "Heiko
+ Carstens" <hca@linux.ibm.com>, "Christian Borntraeger" <borntraeger@linux.ibm.com>, mptcp@lists.linux.dev
+In-Reply-To: <20260818-sysctl-module-aliases-v2-13-d5a69dae5798@igalia.com>
+References: <20260818-sysctl-module-aliases-v2-0-d5a69dae5798@igalia.com>
+ <20260818-sysctl-module-aliases-v2-13-d5a69dae5798@igalia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 19 Aug 2026 02:48:53 +0000
+Message-Id: <20260819024854.392F71F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260817084212.5d46a501@kernel.org>
-X-Proofpoint-ORIG-GUID: 9yteiy8kdWiTkYmUbgy3Lt9LnjLWtCsy
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODE5MDAxOCBTYWx0ZWRfX6von7AQ4WVMD
- P6ugMIZpQ6H6jclrZgw5KGV7UChQaeVi5BQXa5Rn/Z1SkSzZs7trN6bFFzLq36VEsYqGKYLu/Uf
- aZItra7959UA0ThJFN9dzoVR+1sIVLU=
-X-Authority-Analysis: v=2.4 cv=Je6Ma0KV c=1 sm=1 tr=0 ts=6a85195f cx=c_pps
- a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17
- a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=l0iWHRpgs5sLHlkKQ1IR:22 a=EAYMVhzMl8SCOHhVQcBL:22 a=VwQbUJbxAAAA:8
- a=Cp4kMkC2EwGtsqKAzdoA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODE5MDAxOCBTYWx0ZWRfX531VK0Bv/4Ag
- Ybii+zUw6g0K0uBICPE9mYx7G23SeyDc+8cr8qJTZqdC7Yf/VTKGpNTiX4mqQyCPZjkzX4J1jOQ
- Uk8RE2xlAEkN+AXEe5XQgdh3SdIR4V0z8UFA14tqanFFzl37D32qMu1SH1hsP+iRHiOpV4bnEQx
- l3DI8pfStuSJtVmekXlmtnbmDbf6Kx8eEUlibFChAqI4Q2cQlDQBPz1qGh3/XIu/b3omustLaXB
- zp4IuE88Q2df0jbwWmfc9bZRI2OAVH5ikr/mSGJXr8pVaHLhpLjb6JTq9dFQL8Dtx6Ud2q87jte
- kZtJ8K14Z3YnQ31byy+uK5qlDAqg9+qwXXPSmdvmEKw1g2LYk/BLQHV2fL2IT1z4terVLZ9yMEy
- Fp/Qbu9vIrkb62Y1iSD91b/T5G6ake/zKUNRcxbQ949fxuxzCFKHyi0cePx79IPOKEjNqt90Kyz
- h5c9G7FQHAtllA+xqTQ==
-X-Proofpoint-GUID: 9yteiy8kdWiTkYmUbgy3Lt9LnjLWtCsy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-18_05,2026-08-18_01,2025-10-01_01
 
-On 2026-08-17 at 21:12:12, Jakub Kicinski (kuba@kernel.org) wrote:
-> On Mon, 17 Aug 2026 08:57:47 +0530 Ratheesh Kannoth wrote:
-> > Subject: [PATCH v9 net-next] octeontx2-pf: add mqprio bandwidth offload for NIX TX schedulers
->
-> ## Form letter - net-next-closed
->
-> The merge window for v7.3 has started, and therefore net-next is closed
-> for new drivers, features, code refactoring and optimizations.
-> We will only consider applying net-next patches which were posted
-> before the announcement:
->
-> https://lore.kernel.org/20260816155953.072d73da@kernel.org
->
-> Fixes are obviously welcome at any time. net-next patches may be sent
-> for review and discussion only with an RFC tag.
->
-> Please repost when net-next reopens.
->
-> See: https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#development-cycle
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+s) to consider:
+- [High] Double addition of `sym->st_value` causes `modpost` to read sysctl=
+ table pointers from incorrect offsets on ARM and other architectures utili=
+zing `SHT_REL`.
+- [Medium] The sysctl table entries processing aborts iteration upon encoun=
+tering a relocation offset beyond the table's bounds, invalidly assuming EL=
+F relocations are strictly sorted.
+- [Low] The string replacement loop in `do_sysctl_entry()` skips the charac=
+ter immediately following a '%' without bounds checking, leading to an out-=
+of-bounds read.
+- [Low] The `entry_size` field parsed from the ELF file is used as a diviso=
+r without zero verification, allowing a malformed module to trigger a divis=
+ion-by-zero crash in `modpost`.
+--
 
-Jakub,
+--- Patch [13]: [PATCH RFC v2 13/13] modpost: handle MODULE_SYSCTL_TABLE sy=
+mbols ---
+commit 75e261ee7e3ce69bb021a98d7b4574fdc959ec34
+Author: Mauricio Faria de Oliveira <mfo@igalia.com>
 
-Will do. Thanks.
+modpost: handle MODULE_SYSCTL_TABLE symbols
 
-Resolving these pre-existing and error-handling issues from sashiko (see below table)
-will require additional time and refactoring. I've added temporary TODO
-comments and debug messages to track them.
+Update file2alias.c to handle 'mod_devicetable' symbols with type 'sysctl'.
+The key operation is to iterate over relocation entries and add module alia=
+ses
+for each entry.
 
-If acceptable, we would prefer to re-submit v9 and a follow up patchset to address
-these fully post-merge of this patch. Please let me know if this approach acceptable you.
+> diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
+> index 8d36c74dec2d5..797cfc2f478e2 100644
+> --- a/scripts/mod/file2alias.c
+> +++ b/scripts/mod/file2alias.c
+> @@ -1531,6 +1531,231 @@ static const struct devtable devtable[] =3D {
 
-+-----+------------------+-----------------------+------------------------+------------------------+
-| #   | Location         | Issue                 | Impact                 | TODO / user warn/debug |
-+-----+------------------+-----------------------+------------------------+------------------------+
-| 1   | otx2_common.c —  | Stale                 | MQPRIO transmit queues | TODO: yes (lines       |
-|     | otx2_txschq_conf | NIX_AF_TL4X_TOPOLOGY  | may be unexpectedly    | 790–797). User         |
-|     | ig()             | from HTB teardown is  | starved until topology | message: no — no       |
-|     |                  | not reset; MQPRIO     | is reprogrammed or HTB | netdev_warn/err/debug  |
-|     |                  | parents all MDQs      | teardown restores      | when stale TL4         |
-|     |                  | under TL4[0], which   | defaults.              | topology may starve    |
-|     |                  | may retain HTB        |                        | queues.                |
-|     |                  | RR_PRIO/PRIO_ANCHOR   |                        | {pre-existing issue)   |
-|     |                  | settings.             |                        |                        |
-+-----+------------------+-----------------------+------------------------+------------------------+
-| 2   | otx2_pf.c —      | If otx2_mqprio_up()   | Subsequent ip link set | TODO: yes (lines       |
-|     | otx2_open() /    | fails during          | up or driver reset     | 1983–1987). User       |
-|     | otx2_mqprio_up() | ndo_open(), the       | retries                | message: partial —     |
-|     |                  | driver aborts open    | otx2_mqprio_up()       | otx2_mqprio_up() logs  |
-|     |                  | and tears down HW but | blindly; interface     | netdev_err per failed  |
-|     |                  | does not clear        | stays administratively | txq shaper restore; no |
-|     |                  | mqprio.rate_limit or  | down until the qdisc   | message that           |
-|     |                  | the rate caches.      | is removed and         | rate_limit/cache       |
-|     |                  |                       | reapplied.             | remain set or that the |
-|     |                  |                       |                        | interface may stay     |
-|     |                  |                       |                        | stuck down.            |
-+-----+------------------+-----------------------+------------------------+------------------------+
-| 3   | otx2_tc.c — otx2 | otx2_mqprio_clear_sw( | Software reports       | TODO: yes (lines       |
-|     | _mqprio_down()   | ) runs                | offload inactive while | 1684–1688). User       |
-|     |                  | unconditionally even  | some queues retain     | message: yes —         |
-|     |                  | when otx2_nix_tm_clea | programmed CIR/PIR —   | netdev_err when        |
-|     |                  | r_queue_shaper()      | silent, persistent     | clear_queue_shaper     |
-|     |                  | fails partway through | rate limiting; later   | fails, noting some TX  |
-|     |                  | the MDQ batch.        | mqprio_up() may shape  | queues may retain      |
-|     |                  |                       | with wrong effective   | bandwidth limits.      |
-|     |                  |                       | rates.                 |                        |
-+-----+------------------+-----------------------+------------------------+------------------------+
-| 4   | otx2_tc.c — otx2 | After ndo_open()      | Driver sends mailbox   | TODO: no (for this     |
-|     | _mqprio_restart_ | fails, otx2_free_hw_r | messages to clear      | path; separate TODO at |
-|     | netdev() error   | esources() frees TX   | shapers on freed       | line 1749 covers live  |
-|     | path             | schedulers but        | queues; AF rejects     | reprogramming only).   |
-|     |                  | otx2_mqprio_down()    | them, causing spurious | User message: partial  |
-|     |                  | still runs because    | firmware errors.       | — netdev_err on        |
-|     |                  | netif_running()       |                        | restart failure and on |
-|     |                  | remains true          |                        | otx2_mqprio_down()     |
-|     |                  | (dev_close skipped).  |                        | failure after restart; |
-|     |                  |                       |                        | no message about       |
-|     |                  |                       |                        | clearing shapers on    |
-|     |                  |                       |                        | already-freed          |
-|     |                  |                       |                        | scheduler queues.      |
-+-----+------------------+-----------------------+------------------------+------------------------+
-| 5   | otx2_tc.c — otx2 | On failed tc qdisc    | Kernel keeps old qdisc | TODO: yes (lines       |
-|     | _setup_tc_mqprio | replace, otx2_mqprio_ | but driver uses new or | 1626–1629, 1900–1903,  |
-|     | () cleanup / otx | alloc_cache() already | zeroed config — state  | 2088–2095). User       |
-|     | 2_teardown_tc_mq | freed the old rate    | desynchronization and  | message: yes — otx2_mq |
-|     | prio()           | cache; cleanup sets   | incorrect bandwidth    | prio_replace_failed_ms |
-|     |                  | qopt->hw = 0 and      | shaping.               | g() netdev_err +       |
-|     |                  | skips HW/cache        |                        | NL_SET_ERR_MSG_MOD; ot |
-|     |                  | rollback. Similar     |                        | x2_mqprio_pre_graft_re |
-|     |                  | bypass when mqprio_re |                        | ject_msg() netdev_err  |
-|     |                  | place_pending is true |                        | on related reject      |
-|     |                  | in teardown.          |                        | path.                  |
-+-----+------------------+-----------------------+------------------------+------------------------+
+[ ... ]
+
+> +// Looks like: sysctl:*/path/procname
+> +static void do_sysctl_entry(const char *procname, const char *path,
+> +			    struct module *mod)
+> +{
+> +	const char *src;
+> +	char *dst, buf[256], *end =3D buf + sizeof(buf) - 1; /* -1 for NUL byte=
+ */
+> +
+> +	/* Replace '%s' from path template with '*' for wildcard in modprobe. */
+> +	for (src =3D path, dst =3D buf; *src && dst < end; src++, dst++)
+> +		*dst =3D (*src =3D=3D '%') ? (src++, '*') : *src;
+
+[Severity: Low]
+Does this loop advance past the end of the string if the path ends exactly
+with a '%' character?
+
+If *src is '%', the inline ternary operator does a src++. Then the loop's
+update step does another src++, which would skip the NUL terminator and lead
+to an out-of-bounds read on the next iteration.
+
+> +	*dst =3D '\0';
+> +
+> +	module_alias_printf(mod, false, "sysctl:*/%s/%s", buf, procname);
+> +}
+
+[ ... ]
+
+> +static bool do_sysctl_entries(struct elf_info *elf, Elf_Shdr *sechdr, El=
+f_Sym *sym,
+> +			      Elf_Addr r_offset, Elf_Addr r_addend, void *data)
+> +{
+> +	struct sysctl_entries *sysctl_entries =3D (struct sysctl_entries *) dat=
+a;
+> +
+> +	/* Skip until .table starts */
+> +	if (r_offset < sysctl_entries->table_offset)
+> +		return false;
+> +
+> +	/* Stop after .table ends */
+> +	if (r_offset >=3D sysctl_entries->table_offset + sysctl_entries->table_=
+size)
+> +		return true;
+
+[Severity: Medium]
+Is it safe to assume that relocation entries in the ELF section are strictly
+sorted by r_offset?
+
+By returning true here, the loop over relocation entries is aborted. The ELF
+specification does not guarantee strict sorting by offset. If a linker emits
+an out-of-order relocation entry earlier in the section but pointing past t=
+he
+table, could this prematurely abort the traversal and miss valid entries?
+
+> +
+> +	/* Check for alignment with an array entry (.procname at offset zero) */
+> +	if ((r_offset - sysctl_entries->table_offset) % sysctl_entries->entry_s=
+ize =3D=3D 0) {
+
+[Severity: Low]
+Can entry_size be zero here?
+
+Since entry_size is parsed directly from the ELF module, a malformed module
+with a size of 0 could trigger a division-by-zero crash in modpost.
+
+> +
+> +		/* The symbol for .procname points to a string */
+> +		const char *procname =3D (const char *)
+> +				       sym_get_data_addend(elf, sym, r_addend);
+
+[ ... ]
+
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index d18a87b882a67..10eb7273cdd81 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -340,6 +340,13 @@ void *sym_get_data(const struct elf_info *info, cons=
+t Elf_Sym *sym)
+>  				      sym->st_value);
+>  }
+> =20
+> +void *sym_get_data_addend(const struct elf_info *info, const Elf_Sym *sy=
+m,
+> +			  Elf_Addr r_addend)
+> +{
+> +	return sym_get_data_by_offset(info, get_secindex(info, sym),
+> +				      sym->st_value + r_addend);
+> +}
+
+[Severity: High]
+Does this result in adding sym->st_value twice on architectures like ARM
+that use SHT_REL?
+
+In for_each_reloc(), r_addend is calculated using addend_rel(). On ARM,
+addend_rel() already returns the instruction value plus sym->st_value.
+
+If sym->st_value is added again here (and in the manual table_offset
+calculation in do_sysctl_table()), modpost will read from the wrong
+offset, silently failing to extract .procname and missing the module
+aliases.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260818-sysctl-mod=
+ule-aliases-v2-0-d5a69dae5798@igalia.com?part=3D13
