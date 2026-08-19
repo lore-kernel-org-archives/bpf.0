@@ -1,74 +1,82 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44FDA36DA14;
-	Wed, 19 Aug 2026 19:49:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60FAA3D811E
+	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 19:59:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787168942; cv=none; b=MAK4RkvyDUjh6Ggb+m/eM4Zrn/bnZLf2zuFlpd069L0vLbRTmsb6Tq1mpRxPhXN92Hx/pKY0SIs5Uevc7NHYVYpoQjaQdfyboasXJ4z46lzojA4LjpbA7lOUitT/SQTNsNW9ik6+JI0Ec3zjmm7ol9PI25FQICpWSDBzl6VAhPY=
+	t=1787169559; cv=none; b=Gdw3ujvXH3Lp6rn3J0BTTi3+O4n/siQh4qdBke/IHgkf3TmtJt6Vbbqxfb7RSjK3GZOvlSLOGpZ9avQBlzEX2C/On/K/hBLQHfCk/tUjS8gb4uje0w5y99fmXTpp+4pXbH+RxV0I/NF4FRl+xbRvoHWDahqI/BeWW0PLXAde+2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787168942; c=relaxed/simple;
-	bh=JyE9x7cXkwrSsZzt+/aRirCd95ty1wWbupZ4ZRQbRGU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qlw0wdpEXjHKpVcvmE1m/wexb9Z3yhAx0h40i5sGTlEfRXeHvMqUg545lziYBofSIzwdhYhnrQ3IKfTmkuSKMzNWuPawI+dIcew9djcg4NQ5FVI1l0+3XvbIAFI1kvpVq+Yom++hIvPayBddBGiccq0ihGit1BbYE8zsDls/x/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LvkIXW69; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787169559; c=relaxed/simple;
+	bh=7L4NgTE6Jqz8ArqJMIVgftQ7jd9GEI5yFDch3FyHj7I=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:From:To:Subject; b=r8PqtzxXrQugRUgK/51peVgCHiFh4M2x1EirEmrE0VsR/HZANroZvBOzEMB9vfhP1ki76p/G3PWA+MG+bR50YlN1XvZDDjsCJxPJtogb19BnZ/a4SfDTUiZ2skN3a41fuZEDhHnbNly2KeDHkrqcE72Ab9Oo+JlXOhlgodS4KWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=i/ERBYjg; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LvkIXW69"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 874551F000E9;
-	Wed, 19 Aug 2026 19:49:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787168940;
-	bh=XfeZJd9fXnBmuXGRHztCBpLwV/tkKcdZ0yLGID9DHG0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=LvkIXW69lauoSwueX0qWqInb+OdvHA6E0a456fdQQSX7SUiFiidtUHaCz0bC97Nm1
-	 e2O3bwFosI9KXGlDsb6r3yAet+MCJLo4QKRx1cFENH9MEcwL+aLXTchVv+dFHpGG8n
-	 7eTNftFx5LkdHd+wVv5FQ78ID9c7zD73lahkaE5pLW2Mn8UUJ0JWV9ydg/ERNMQyn0
-	 58VOfk9GA07MAsToQ7c3DSbjVzMF177E0feq3AtF1OQO45fcwoOEAcclo5e2IMXDzV
-	 HnwvLDQThqlURaEZHOT0hOGulD+NdJU1HXW9RNIF7ntOgwgQL10+vqFpo6m/DaOHwW
-	 /ECsNqzEY/+7Q==
-Date: Wed, 19 Aug 2026 09:48:59 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Tao Cui <cui.tao@linux.dev>
-Cc: void@manifault.com, arighi@nvidia.com, changwoo@igalia.com,
-	suzhidao@xiaomi.com, sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	Tao Cui <cuitao@kylinos.cn>
-Subject: Re: [PATCH v2] docs/sched_ext: document that cgroup CPU knobs are
- scheduler-dependent
-Message-ID: <aoYIq-QwrSBagFB7@slm.duckdns.org>
-References: <20260819012157.220932-1-cui.tao@linux.dev>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="i/ERBYjg"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 913E51A1716
+	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 19:59:13 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 524F05FF42;
+	Wed, 19 Aug 2026 19:59:13 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 455E111C75B2C;
+	Wed, 19 Aug 2026 21:59:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1787169548; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=7L4NgTE6Jqz8ArqJMIVgftQ7jd9GEI5yFDch3FyHj7I=;
+	b=i/ERBYjgxpV9/kDRuk4FQJNj+R6EvSRHDZoDvSCbkOoe6+/HEQ4rDbBfEgKjX1Uj2T1ybe
+	xtFhas/YnAcKiegPPTgCqbAijGFla+UZgqeKna7aFiv8eqMQ3l2kxSVGUzvuWyOfCGAaPz
+	JGyRzcYTQ2iXXGmC4EWjalqZUJE5nDtm2wY1RPu87WQst3B/2IroO/wdT0E+pM4nh78UyU
+	VRMI70zdxZiZKJLfZgvpMufMSRrHATJAyyOtsYsq39w4gTFWxbKN1FkIKHHCZPerngNrH0
+	Ung4nD8caelXt4rMN/3peh1ffgVSfIzU7xzmsXzWvg1JaVe7uTy/qiUlqbcWMA==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260819012157.220932-1-cui.tao@linux.dev>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 19 Aug 2026 21:59:06 +0200
+Message-Id: <DKT6QBHWC8YM.4D90SOC807CW@bootlin.com>
+Cc: "Quentin Monnet" <qmo@kernel.org>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Bastien Curutchet" <bastien.curutchet@bootlin.com>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "bpf" <bpf@vger.kernel.org>
+Subject: [RFC] running bpftool build tests in CI
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+X-Last-TLS-Session-Version: TLSv1.3
 
-Hello,
+Hi,
+as part of the cleanup/automation effort in the BPF selfests directory,
+I am now taking a look at test_bpftool_build.sh, which ensures that the
+different supported ways of building bpftool work correctly. As this
+script does not really exercize anything at runtime but rather at build
+time, I'd like to propose to introduce a dedicated step in the CI
+automation that already builds and run selftests. I have opened two PRs
+in kernel-patches vmtest ([0]) and libbpf/ci ([1]), hoping I am not
+confusing which code should go where between the different repositories
+kept in sync with each other. I have also opened a dummy PR on
+kernel-patches/bpf ([2], not to be merged) that shows how this test
+would look like in CI.
 
-On Wed, Aug 19, 2026 at 09:21:57AM +0800, Tao Cui wrote:
-...
-> +The fair class enforces cpu controller knobs such as ``cpu.max``,
-> +``cpu.weight`` and ``cpu.idle`` in the kernel. sched_ext only passes
-> +them to the BPF scheduler through ``ops.cgroup_set_weight()``,
-> +``ops.cgroup_set_idle()``, ``ops.cgroup_set_bandwidth()`` and friends.
-> +Whether and how a knob takes effect is up to the loaded scheduler: if
-> +it doesn't implement the corresponding callback, the knob is ignored.
-> +For example, none of scx_simple, scx_flatcg and scx_central implements
-> +``ops.cgroup_set_bandwidth()``, so with them ``cpu.max`` has no effect
-> +-- the cgroup runs at unlimited CPU with ``nr_throttled`` staying
-> +at 0.
+This really is a RFC, as not all tests from test_bpftool_build.sh are
+being executed: I suspect those based on .config to be currently broken,
+but that can be handled as a second step, depending on the chosen
+direction.
 
-SCX doesn't have nr_throttled routing right now even for scheds that
-implement cpu.max (scx_lavd is the only one right now AFAIK). I'd keep the
-documentation more concise and generic. I don't think listing schedulers
-that don't implement the feature or specifically pointing to nr_throttled is
-all that useful given that most schedulers don't implement it right now.
+Any comment welcome !
 
-Thanks.
+Alexis
 
--- 
-tejun
+[0] https://github.com/kernel-patches/vmtest/pull/517
+[1] https://github.com/libbpf/ci/pull/236
+[2] https://github.com/kernel-patches/bpf/pull/13368
+
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
