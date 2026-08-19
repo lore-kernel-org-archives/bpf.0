@@ -1,166 +1,135 @@
-Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
+Received: from mta1.migadu.com (out-124.mta1.migadu.com [95.215.58.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F8E3955FB
-	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 05:53:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38F77389443
+	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 06:02:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787118822; cv=none; b=N6OtKl61ZUQ49hRyoiK7y9Xz6+sVYw1ALocckSbmm87XvCVaxcHEEsk26iZxbp8a2nsoRsoR2RkFvF8e/T0nhWhB8FFqUnXvxLTeNv17ka+Ehpt4bbtMMeTa9k/cWj+cpOszN5iPjpq8qvorzrDzuvB1zIeHPs9fVctdF8Vw070=
+	t=1787119330; cv=none; b=lkhNJqQnzKiIl9wlz+mTXOSlLq0+tHuokyHs5X+Eb7kRMmnIs1iGP8aKrBwIpn7q8/AEwH6bECPEBPG0Gg2oN5oe4bEoS0RDg7u/ojcQXP4ZCdVXjSx8DvOeYnlw5cFASeMwaNwowKfE5n3ZM6U4yT9aoGTESEGnW0ACfzzIHuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787118822; c=relaxed/simple;
-	bh=uazRDcrT1jStOOo6vwHJe9lsdFAtXFICBV17WAiNhBg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=p9v8MlQW1l9zawr3GrCxYpb3UrlciCJX/wMMhwFQQNaLxmg603i1uZOx+XJVoVZGd8sQwddFlT22ANOgG2j1btvlekmNaZyC/qF7y7H2NcKrcWVkd2txTUZlmuHzVj0SIV1F5YTeqgyQvkLX7yqoBEpCbqq9xz6Y+rloENqgsqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 4247F250AA3A4F; Tue, 18 Aug 2026 22:53:30 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	kernel-team@fb.com
-Subject: [PATCH bpf-next v7 10/10] Documentation/bpf: Document up to 16-byte kfunc return values in R0:R2
-Date: Tue, 18 Aug 2026 22:53:30 -0700
-Message-ID: <20260819055330.3301120-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260819055239.3293449-1-yonghong.song@linux.dev>
-References: <20260819055239.3293449-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1787119330; c=relaxed/simple;
+	bh=TRcVLG1Vv6NM5OM5mxttVlGyGNnRHNEKs8bjSr/qqvc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=ZDL0Jtr4nn+EBMeLpKCcT4kUCXo0xv/PrcseT4C+Ruz9US41sVDxkHU0oI/zcbOMVOrWS+KKOjwyvaAuqs3mhWtFH8L9UCriu0ZzNHEphn+KAVz4oHVDmxCGMr8gzOR8ThrGUgswuiPOaKTQpgI+i36LkeZfeGokRJb0ASMGZSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IJLwfDMQ; arc=none smtp.client-ip=95.215.58.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IJLwfDMQ"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=TRcVLG1Vv6NM5OM5mxttVlGyGNnRHNEKs8bjSr/qqvc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787119323; v=1; x=1787724123;
+ b=IJLwfDMQZvXXWiZBZt7D8llspl9lTSJAE8DgCheNggqiNugmS4GrTH7VppI9E1mbK6lsnb03
+ QW3WlFX4GP+BbppRTOfp+Qqcg+YUad7Glif8pvMD03DTjwm1N9kcWO4Q0KTOQ991mWiw+Sh61i5
+ YifEgZKpKbB9g31nlMUVMU2M=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from [IPV6:2600:381:1f1b:84cb:1036:829e:9bdc:e63d] (2600:381:1f1b:84cb:1036:829e:9bdc:e63d)
+	by smtp.migadu.com with ESMTPS id ab6c396956869644;
+	Wed, 19 Aug 2026 06:02:03 +0000
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <4f6c72f7-9d21-4240-849d-08e10b0b2055@linux.dev>
+Date: Tue, 18 Aug 2026 23:01:56 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: LLVM regression in memcpy struct bpf_sock_ops->remote_ip6 to
+ struct in6_addr
+Content-Language: en-GB
+To: YiFei Zhu <zhuyifei@google.com>, bpf <bpf@vger.kernel.org>,
+ =?UTF-8?Q?=C3=96mer_Sinan_A=C4=9Facan?= <omeragacan@gmail.com>,
+ yonghong-song <yhs@fb.com>
+References: <CAA-VZPmzCKF5uhP0OG4mPwEs8WaL-xyjAYW=bE8z7Z_J4-h6cw@mail.gmail.com>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CAA-VZPmzCKF5uhP0OG4mPwEs8WaL-xyjAYW=bE8z7Z_J4-h6cw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-kfuncs may now return a value larger than 8 bytes and up to 16 bytes (a
-scalar-only struct or union, or an __int128), passed back in the R0:R2
-register pair. Add a kfunc return-value section documenting this,
-including that a struct or union up to 8 bytes is returned in R0 alone,
-which struct and union members are accepted, that the R0:R2 register pair
-requires JIT support (bpf_jit_supports_kfunc_ret_reg_pair()), and that a
-return value larger than 16 bytes is unsupported.
 
-Also note that the same convention applies to BPF subprogram returns, and
-document the consequence for a global subprogram: it must assign both
-halves of a register-pair return, since an unassigned R2 may be left
-holding a pointer argument and is then rejected as a leak.
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- Documentation/bpf/kfuncs.rst | 65 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+On 7/21/26 4:56 PM, YiFei Zhu wrote:
+> In one of our BPF progs, there is a pattern of copying IPv6 addresses
+> (which are four u32s) off of struct bpf_sock_ops into a stack variable
+> (a larger struct that contains struct in6_addr), then updating a map
+> with that stack variable. After a recent LLVM upgrade, that program no
+> longer loads.
+>
+> I wrote a reproducer:
+>
+>    #include <string.h>
+>    #include <linux/in6.h>
+>    #include <linux/bpf.h>
+>    #include <bpf/bpf_helpers.h>
+>
+>    struct in6_addr addr6;
+>
+>    SEC("sockops")
+>    int test(struct bpf_sock_ops *skops)
+>    {
+>            struct in6_addr stack_addr6;
+>
+>            memcpy(&stack_addr6, skops->remote_ip6, sizeof(skops->remote_ip6));
+>            addr6 = stack_addr6;
+>            return 0;
+>    }
+>
+> This will fail loading at latest LLVM main with error:
+>
+>    -- BEGIN PROG LOAD LOG --
+>    0: R1=ctx() R10=fp0
+>    0: (7b) *(u64 *)(r10 -8) = r1         ; R1=ctx() R10=fp0 fp-8=ctx()
+>    1: (79) r1 = *(u64 *)(r10 -8)         ; R1=ctx() R10=fp0 fp-8=ctx()
+>    2: (79) r2 = *(u64 *)(r1 +40)
+>    invalid bpf_context access off=40 size=8
+>    processed 3 insns (limit 1000000) max_states_per_insn 0 total_states
+> 0 peak_states 0 mark_read 0
+>    -- END PROG LOAD LOG --
 
-diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-index 85f73e0bbd0f..89dea6b0b024 100644
---- a/Documentation/bpf/kfuncs.rst
-+++ b/Documentation/bpf/kfuncs.rst
-@@ -575,6 +575,71 @@ is also covered by this recovery. A kfunc handed an =
-arena pointer may
- therefore access up to ``GUARD_SZ / 2`` past it without bounds-checking
- against the arena. Larger accesses must verify the range explicitly.
-=20
-+2.9 kfunc Return Values
-+-----------------------
-+
-+A kfunc may return a scalar, a pointer, or a small struct or union by
-+value. A scalar or pointer of up to 8 bytes is returned in R0, as usual.
-+
-+A struct or union returned by value must be composed only of scalars
-+(recursively), where a scalar is an integer or an enum; arrays of scalar=
-s are
-+allowed as members. Its bytes are handed back to the program as the raw
-+contents of R0 (and R2), so a pointer field would be laundered into a sc=
-alar
-+and escape the verifier's pointer provenance and reference tracking. A s=
-truct
-+or union with a pointer member is therefore rejected at load time, and s=
-o is
-+one with a floating-point member, which the ABI may not return in R0:R2 =
-at
-+all.
-+
-+A kfunc may also return a value larger than 8 bytes and up to 16 bytes -=
-- a
-+scalar-only struct or union, or an ``__int128``. Such a value is returne=
-d
-+in the register pair R0:R2, matching the convention LLVM uses for the BP=
-F
-+target: the first 8 bytes in R0 and the second 8 bytes in R2. A struct o=
-r
-+union of 8 bytes or less is returned in R0 alone.
-+
-+::
-+
-+        struct bpf_pair { __u64 a, b; };   /* 16 bytes */
-+
-+        __bpf_kfunc struct bpf_pair bpf_kfunc_get_pair(void)
-+        {
-+                struct bpf_pair p =3D { .a =3D 1, .b =3D 2 };
-+
-+                return p;      /* p.a in R0, p.b in R2 */
-+        }
-+
-+Returning a value in the R0:R2 pair requires the JIT to place the second
-+half of the return value into R2, which not every architecture supports
-+right now. A kfunc with a return value larger than 8 bytes is therefore
-+rejected at load time on a JIT that does not advertise this capability (=
-see
-+``bpf_jit_supports_kfunc_ret_reg_pair()``), and such a program is never =
-run
-+by the interpreter. A return value larger than 16 bytes is not supported=
-.
-+
-+The same R0:R2 convention applies to a BPF subprogram, global or static,=
- that
-+returns an ``__int128`` or a struct or union larger than 8 bytes. It is =
-only
-+used when the program is JITed, since the interpreter propagates only R0=
- out of
-+a subprogram: without a JIT the return value stays in R0 alone, and a ca=
-ller
-+reading R2 is rejected for reading an uninitialized register. A global
-+subprogram is verified in isolation, so its by-value struct or union ret=
-urn is
-+restricted to scalars just like a kfunc's; a static subprogram is verifi=
-ed
-+inline and has no such restriction. The main program is not covered: its=
- return
-+value is the program's exit code, read out of R0 alone, so a declared up=
-per
-+half is never looked at.
-+
-+A global subprogram must leave a scalar in *every* register of the pair,=
- so
-+both halves of the returned value have to be assigned. Leaving the upper=
- half
-+uninitialized is not merely untidy: the compiler is then free to leave R=
-2
-+holding whatever it happened to hold, which for a subprogram taking a po=
-inter
-+argument is typically that pointer. Handing the caller an unknown scalar=
- built
-+from a pointer is a leak, so the verifier rejects it with::
-+
-+        At subprogram exit the register R2 is not a scalar value (...)
-+
-+Initialize the whole return value, for example ``struct pair p =3D {};``=
-, to
-+avoid this. A static subprogram is exempt from the scalar-only rule: it =
-is
-+verified inline, so an unassigned R2 is simply passed back to the caller=
- as
-+uninitialized and only a caller that reads it fails. A stack pointer lef=
-t in
-+R2 is still rejected there, just as one in R0 is.
-+
- .. _BPF_kfunc_lifecycle_expectations:
-=20
- 3. kfunc lifecycle expectations
---=20
-2.53.0-Meta
+Are you using -O0 compile flag? The above code is not optimal.
+
+I tried with llvm23/-O2, cpu v3, and get the following code:
+
+        0:       w2 = *(u32 *)(r1 + 0x2c)
+        1:       r3 = 0x0 ll
+                 0000000000000008:  R_BPF_64_64  addr6
+        3:       *(u32 *)(r3 + 0xc) = w2
+        4:       w2 = *(u32 *)(r1 + 0x28)
+        5:       *(u32 *)(r3 + 0x8) = w2
+        6:       w2 = *(u32 *)(r1 + 0x24)
+        7:       *(u32 *)(r3 + 0x4) = w2
+        8:       w1 = *(u32 *)(r1 + 0x20)
+        9:       *(u32 *)(r3 + 0x0) = w1
+       10:       w0 = 0x0
+       11:       exit
+
+>
+> It seems that the program is reading the address from the bpf_sock_ops
+> as two u64s instead of four u32s, and the verifier understandably does
+> not allow that due to the complexity of rewriting context accesses. I
+> bisected the regression to
+>
+>    commit 790f0623411d5d9d5c989f14e87f2fe86f52eaf3
+>    Author: Ömer Sinan Ağacan <omeragacan@gmail.com>
+>    Date:   Tue Jun 9 16:03:26 2026
+>
+>        [SelectionDAG] Pass dest and src alignments separately to memcpy
+> and memmove lowering functions (#201119)
+>
+> Looking at its PR [1], it seems that commit caused another regression
+> for BPF selftests and that has been fixed, but this regression is
+> still reproducible on main with that fix applied.
+>
+> I'm not really familiar enough with LLVM internals to understand
+> exactly why it generates the code this way or how to fix the
+> regression.
+>
+> YiFei Zhu
+>
+> [1] https://github.com/llvm/llvm-project/pull/201119
+>
 
