@@ -1,202 +1,147 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E59438AC6A;
-	Wed, 19 Aug 2026 16:29:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576753191CA;
+	Wed, 19 Aug 2026 16:49:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787156969; cv=none; b=TEPb5MfH2/0J2M5qCjRT5+Z+jvHXvNdypX7yiO/Zs/LPiLb1eNgvPiZ3whxJg9n2onkw3eDiZReX2SWOJFIr2dFV7ZxJPXP2/ccEwrRJPpjeOe73P4e4Lr0kdiHCMxX9UMD6JqTj8m0nJaEEhrgj/PM0B82pA3f47kx0wblQxCg=
+	t=1787158195; cv=none; b=llyB/7aO1SkuRR/+P/EdMoUNSnudyTN/W7yiz8G5UpflSi2E8oLU0ymwSRNBelxszeXHZ5jfCs2GKYNfthbG4iCsWwfe/OSvK6EFCasU787umm54wMA9BxvmI51nWWiQFsQ1EIjXKrX+8ek3m6aiCWE/GkHX+Exe55n4jOC8OyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787156969; c=relaxed/simple;
-	bh=EMyKPnso3CwtM5fWkxY91QYA3svonXDGJFqOhkFsRWQ=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=YWCYsaEn67GrRvh31w0NTWKdQq/Vua2/AkKyenvtikHcvxowtsPJU9RrUqfcL2yFRYvjnqdkLZ+2S3LSld/JlGGwEOg1meQqBWWZhGfCkuCrrByhApeU9hoqVf09Vr0kjeukjOj1olJ7aSRH4Fe+j3oNjz8hgnEc9TsgTi5jFuk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=sy6YzwhY; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	s=arc-20240116; t=1787158195; c=relaxed/simple;
+	bh=fzM/V9DS/EFdTFsVCqwAIO6JYDnIcVQh+xAcCsnn0NI=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=POtrLLqMTubc/ha+T4EsDiqwOYJ/H0f0lP+yTUvXCIDQDXF0DcFV6qHx/RvE5dGa4bEc0laPRxxmEWkjGys4jrZvUMZwji5sFxIJ8Qi5H1BUVB0oUvyYCiBVJ77axQROgRZwEdBCAo7b9E03GM9/fHRp6AJUeX2mO83Vny2gq/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XO2r5kDA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="sy6YzwhY"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:Message-ID:Subject:Cc:To
-	:From:Date:MIME-Version:From:Reply-To;
-	bh=yhqm2gd3OUOrLM3numVaJNibQOvWu36QavMvOKL7fiY=; b=sy6YzwhY6rArSkojS4kjVyhBGT
-	y6HSjOhcCU73FaQGbG/YjCosEMlPezpPyBm43zm3VawGVPwHj7gWAXd61wU0v17XwgbsqRBZ0EhDL
-	4XEiOIsSf091Rf1CYorZiimVkcLJuSeic3G6WA39pVJm2mvw5n/MxDVENKeOMzpLhGDGkusHL9+X9
-	7GTdLJaOfcn5uYSSs2GmIqA5tGNGty/Ult3pHhOUWTGBgjyn4c3pGco7SW6h9XHbyjg7b/F/gfH+l
-	bAzZBIO2aty5etDdV+mo3rhBS/MHTyPD2cddMTlGg44KwD0zxQiD+uAiDr39PWiVF2MVr7rayNCNX
-	fqej+boQ==;
-Received: from maestria.local.igalia.com ([192.168.10.14] helo=mail.igalia.com)
-	by fanzine2.igalia.com with esmtps 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1wwjAL-006BtD-Oq; Wed, 19 Aug 2026 18:29:25 +0200
-Received: from webmail.service.igalia.com ([192.168.21.45])
-	by mail.igalia.com with esmtp (Exim)
-	id 1wwjAK-00EYpN-FS; Wed, 19 Aug 2026 18:29:25 +0200
-Received: from localhost ([127.0.0.1] helo=webmail.igalia.com)
-	by webmail.service.igalia.com with esmtp (Exim 4.98.2)
-	(envelope-from <mfo@igalia.com>)
-	id 1wwjAK-000000027JE-1oLu;
-	Wed, 19 Aug 2026 18:29:24 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XO2r5kDA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A32301F000E9;
+	Wed, 19 Aug 2026 16:49:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787158194;
+	bh=eeseiYbVUBFAnoEx0H/BodnFVjkrBOO2bOFg4rATqS0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=XO2r5kDAhVr/e4Nqhuq5CVfLugyEC0rajTGDYJqqloCFn7KJ7ISv0AHGG3+LWe5VY
+	 VlIi3xi6b6RXY3V7dsBViDQQyxn4WmM6ALe4TNvIoTSKwLAroEptYexnDt27vWnc7l
+	 glLVWjVkXKG9Eefimn5QBEINdV6FJe71+tF2VUMt63Ub3uxZxsTA96JtBksElGQGZi
+	 nRwrId7+ygHq1WBkRhsDiyYu9GO0apQD8LR3cSAES8Sw/lR7RKjEeZziyrFerwmzB3
+	 tVZlwXdMCH5szsMDd8RKPwpyk2gC2g3GQDKAtUKl16wWnmlp17gfHsFyoZezQf4oxK
+	 oHhLDou57tIrQ==
+Content-Type: multipart/mixed; boundary="===============0014506347071189457=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 19 Aug 2026 13:29:24 -0300
-From: Mauricio Faria de Oliveira <mfo@igalia.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>, Alexander
- Gordeev <agordeev@linux.ibm.com>, linux-s390@vger.kernel.org, Heiko Carstens
- <hca@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>,
- mptcp@lists.linux.dev
-Subject: Re: [PATCH RFC v2 13/13] modpost: handle MODULE_SYSCTL_TABLE symbols
-In-Reply-To: <20260819024854.392F71F000E9@smtp.kernel.org>
-References: <20260818-sysctl-module-aliases-v2-0-d5a69dae5798@igalia.com>
- <20260818-sysctl-module-aliases-v2-13-d5a69dae5798@igalia.com>
- <20260819024854.392F71F000E9@smtp.kernel.org>
-Message-ID: <10d22abac939ce0b2c8784cd84e9c073@igalia.com>
-X-Sender: mfo@igalia.com
-Content-Type: text/plain; charset=US-ASCII
+Message-Id: <b8673f98d427261daf188214c07b0df994a1dae3bbd3e6ff7ef2d65df75292d2@mail.kernel.org>
+In-Reply-To: <20260820-bpf-kcsan-obj-memcpy-v1-1-372c59462268@proton.me>
+References: <20260820-bpf-kcsan-obj-memcpy-v1-1-372c59462268@proton.me>
+Subject: Re: [PATCH] bpf: Annotate bpf_obj_memcpy with data_race
+From: bot+bpf-ci@kernel.org
+To: quanyeyang@proton.me,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,syzbot+44044637ef892e79ca2b@syzkaller.appspotmail.com,quanyeyang@proton.me,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 19 Aug 2026 16:49:53 +0000 (UTC)
+
+--===============0014506347071189457==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Report: NO, Score=-2.1, Tests=ALL_TRUSTED=-3,BAYES_50=0.8,KAM_DMARC_NONE=0.125,KAM_DMARC_STATUS=0.005
-X-Spam-Score: -20
-X-Spam-Bar: --
 
-On 2026-08-18 23:48, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 4 potential issue(s) to consider:
-> - [High] Double addition of `sym->st_value` causes `modpost` to read sysctl table pointers from incorrect offsets on ARM and other architectures utilizing `SHT_REL`.
+> syzbot reported KCSAN write-write races when two tasks concurrently
+> update the same map value. Both accesses reach the ordinary memcpy()
+> paths in bpf_obj_memcpy() through copy_map_value().
+>
+> Unlocked map value updates are intentionally not serialized. Therefore,
+> a concurrent update may result in a torn value. Callers requiring
+> consistency must provide external synchronization or use BPF_F_LOCK
+> where supported. bpf_long_memcpy() already documents and annotates the
+> same behavior for long-aligned copies.
 
-The cross-compile tests had consistent output between e.g., ARM and
-other architectures. I'll take a look later.
+The BPF_F_LOCK remedy is mentioned here, but does it actually apply to
+the map type in the syzbot report? The report shows
+BPF_MAP_TYPE_PERCPU_ARRAY, which rejects BPF_F_LOCK in
+bpf_percpu_array_update() and cannot have a bpf_spin_lock field per
+map_check_btf(). Would it be more accurate to say that external
+synchronization is the only option for per-cpu arrays, and that
+BPF_F_LOCK is available for other map types where supported?
 
-> - [Medium] The sysctl table entries processing aborts iteration upon encountering a relocation offset beyond the table's bounds, invalidly assuming ELF relocations are strictly sorted.
+> Annotate the ordinary memcpy() operations in bpf_obj_memcpy() with
+> data_race() as well. This documents the existing concurrency semantics
+> and prevents KCSAN from reporting these intentional races. It does not
+> add synchronization or change map update behavior.
+>
+> Place the annotations at the memcpy() sites in the common helper, matching
+> bpf_long_memcpy(), without changing the existing copy helper interfaces.
 
-The cross-compile tests had consistent output among all architectures,
-thus this doesn't seem to be a problem. Assuming that table entries
-might have non-sequential/non-sorted relocations would probably incur
-significant design changes, which doesn't seem worth it or required at
-this point.
+This isn't a bug, but the last two paragraphs both describe where the
+data_race() annotations were placed. Would folding them together keep
+the changelog tighter without losing the rationale?
 
-> - [Low] The string replacement loop in `do_sysctl_entry()` skips the character immediately following a '%' without bounds checking, leading to an out-of-bounds read.
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index ffa5626411ac..68f022810fbc 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -560,7 +560,16 @@ static inline void bpf_long_memcpy(void *dst, const void *src, u32 size)
+>  		data_race(*ldst++ = *lsrc++);
+>  }
+>
+> -/* copy everything but bpf_spin_lock, bpf_timer, and kptrs. There could be one of each. */
+> +/*
+> + * Copy everything but bpf_spin_lock, bpf_timer, and kptrs. There could
+> + * be one of each.
+> + *
+> + * Map value copies can race with unlocked updates from BPF programs or
+> + * syscalls. Such copies are best effort and may be torn, so annotate the
+> + * ordinary byte copies as intentional data races. Callers that require a
+> + * consistent value must provide synchronization or use BPF_F_LOCK where
+> + * supported.
+> + */
 
-Fixed.
+The comment states that all map value copies "are best effort and may be
+torn", but is that accurate for every bpf_obj_memcpy() caller? Several
+callers copy into freshly allocated, not-yet-published elements
+(alloc_htab_elem, bpf_selem_alloc, bpf_sk_storage_clone_elem) or into
+private syscall buffers (bpf_map_copy_value), where no other writer can
+reach the destination. Would scoping the comment to in-place updates of
+published map values be more precise?
 
-> - [Low] The `entry_size` field parsed from the ELF file is used as a divisor without zero verification, allowing a malformed module to trigger a division-by-zero crash in `modpost`.
+Also, the BPF_F_LOCK advice appears again here. As with the commit
+message, this doesn't apply to per-cpu arrays - bpf_percpu_array_update()
+rejects the flag, and map_check_btf() won't allow a bpf_spin_lock field.
+Should the comment mention that per-cpu maps have no BPF_F_LOCK option?
 
-Fixed.
+>  static inline void bpf_obj_memcpy(struct btf_record *rec,
+>  				  void *dst, void *src, u32 size,
+>  				  bool long_memcpy)
 
-> --
-> 
-> --- Patch [13]: [PATCH RFC v2 13/13] modpost: handle MODULE_SYSCTL_TABLE symbols ---
-> commit 75e261ee7e3ce69bb021a98d7b4574fdc959ec34
-> Author: Mauricio Faria de Oliveira <mfo@igalia.com>
-> 
-> modpost: handle MODULE_SYSCTL_TABLE symbols
-> 
-> Update file2alias.c to handle 'mod_devicetable' symbols with type 'sysctl'.
-> The key operation is to iterate over relocation entries and add module aliases
-> for each entry.
-> 
->> diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
->> index 8d36c74dec2d5..797cfc2f478e2 100644
->> --- a/scripts/mod/file2alias.c
->> +++ b/scripts/mod/file2alias.c
->> @@ -1531,6 +1531,231 @@ static const struct devtable devtable[] = {
-> 
-> [ ... ]
-> 
->> +// Looks like: sysctl:*/path/procname
->> +static void do_sysctl_entry(const char *procname, const char *path,
->> +			    struct module *mod)
->> +{
->> +	const char *src;
->> +	char *dst, buf[256], *end = buf + sizeof(buf) - 1; /* -1 for NUL byte */
->> +
->> +	/* Replace '%s' from path template with '*' for wildcard in modprobe. */
->> +	for (src = path, dst = buf; *src && dst < end; src++, dst++)
->> +		*dst = (*src == '%') ? (src++, '*') : *src;
-> 
-> [Severity: Low]
-> Does this loop advance past the end of the string if the path ends exactly
-> with a '%' character?
-> 
-> If *src is '%', the inline ternary operator does a src++. Then the loop's
-> update step does another src++, which would skip the NUL terminator and lead
-> to an out-of-bounds read on the next iteration.
-> 
->> +	*dst = '\0';
->> +
->> +	module_alias_printf(mod, false, "sysctl:*/%s/%s", buf, procname);
->> +}
-> 
-> [ ... ]
-> 
->> +static bool do_sysctl_entries(struct elf_info *elf, Elf_Shdr *sechdr, Elf_Sym *sym,
->> +			      Elf_Addr r_offset, Elf_Addr r_addend, void *data)
->> +{
->> +	struct sysctl_entries *sysctl_entries = (struct sysctl_entries *) data;
->> +
->> +	/* Skip until .table starts */
->> +	if (r_offset < sysctl_entries->table_offset)
->> +		return false;
->> +
->> +	/* Stop after .table ends */
->> +	if (r_offset >= sysctl_entries->table_offset + sysctl_entries->table_size)
->> +		return true;
-> 
-> [Severity: Medium]
-> Is it safe to assume that relocation entries in the ELF section are strictly
-> sorted by r_offset?
-> 
-> By returning true here, the loop over relocation entries is aborted. The ELF
-> specification does not guarantee strict sorting by offset. If a linker emits
-> an out-of-order relocation entry earlier in the section but pointing past the
-> table, could this prematurely abort the traversal and miss valid entries?
-> 
->> +
->> +	/* Check for alignment with an array entry (.procname at offset zero) */
->> +	if ((r_offset - sysctl_entries->table_offset) % sysctl_entries->entry_size == 0) {
-> 
-> [Severity: Low]
-> Can entry_size be zero here?
-> 
-> Since entry_size is parsed directly from the ELF module, a malformed module
-> with a size of 0 could trigger a division-by-zero crash in modpost.
-> 
->> +
->> +		/* The symbol for .procname points to a string */
->> +		const char *procname = (const char *)
->> +				       sym_get_data_addend(elf, sym, r_addend);
-> 
-> [ ... ]
-> 
->> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
->> index d18a87b882a67..10eb7273cdd81 100644
->> --- a/scripts/mod/modpost.c
->> +++ b/scripts/mod/modpost.c
->> @@ -340,6 +340,13 @@ void *sym_get_data(const struct elf_info *info, const Elf_Sym *sym)
->>  				      sym->st_value);
->>  }
->> 
->> +void *sym_get_data_addend(const struct elf_info *info, const Elf_Sym *sym,
->> +			  Elf_Addr r_addend)
->> +{
->> +	return sym_get_data_by_offset(info, get_secindex(info, sym),
->> +				      sym->st_value + r_addend);
->> +}
-> 
-> [Severity: High]
-> Does this result in adding sym->st_value twice on architectures like ARM
-> that use SHT_REL?
-> 
-> In for_each_reloc(), r_addend is calculated using addend_rel(). On ARM,
-> addend_rel() already returns the instruction value plus sym->st_value.
-> 
-> If sym->st_value is added again here (and in the manual table_offset
-> calculation in do_sysctl_table()), modpost will read from the wrong
-> offset, silently failing to extract .procname and missing the module
-> aliases.
+[ ... ]
 
--- 
-Mauricio
+>  		if (long_memcpy)
+>  			bpf_long_memcpy(dst, src, size);
+>  		else
+> -			memcpy(dst, src, size);
+> +			data_race(memcpy(dst, src, size));
+>  		return;
+>  	}
+>
+> @@ -580,10 +589,10 @@ static inline void bpf_obj_memcpy(struct btf_record *rec,
+>  		u32 next_off = rec->fields[i].offset;
+>  		u32 sz = next_off - curr_off;
+>
+> -		memcpy(dst + curr_off, src + curr_off, sz);
+> +		data_race(memcpy(dst + curr_off, src + curr_off, sz));
+>  		curr_off += rec->fields[i].size + sz;
+>  	}
+> -	memcpy(dst + curr_off, src + curr_off, size - curr_off);
+> +	data_race(memcpy(dst + curr_off, src + curr_off, size - curr_off));
+>  }
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32275499243
+--===============0014506347071189457==--
