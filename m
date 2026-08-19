@@ -1,128 +1,161 @@
-Received: from mta0.migadu.com (out-100.mta0.migadu.com [91.218.175.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 512973603D3
-	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 01:44:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BEE1350285;
+	Wed, 19 Aug 2026 02:29:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787103863; cv=none; b=E/gG8Vournl4XPqBrCN8fS3l7iGxYtN8n9Fpw1f486JpigMDxUENWGRHDok/C57aGxAHCuP7M+eKn4TydWx5YtCwbkI69EdGx4IiB0iXtbIaVf+cLW32idxROOXSLNbQIwUThsz6+zgiHY82zBVoWe4Z+sbJQ2cexJsV3x14Bw4=
+	t=1787106552; cv=none; b=rr6KSn/XVCLpGk9c18lEkjXzRUyIGr0XAQ4CzFa+W3xYcow9zbinH40WnSWUmYmmnOBrc/IcInV7LA0PaTo3LuHWuPRLxFIQOBbvSbhjflUAFZfKnAZA8OzbMM2lXrnh0V1un8vOA/YxITqC4W62FEdYlzrrmhqsOZr5nFn1ofE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787103863; c=relaxed/simple;
-	bh=dz5A4sctYbARLpdNgcUYQ80SJTmDzvQs4bCQgtkuEcQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tTyNiaiOHvOQymfUXwfhEvNRdPzWq3BJ/eqJaL5x1FRJfqQVcNRZvUGVt9g5/4GaubN28tLVOO/ShZb/Rbuni92ND/wM3xjtF8QF/6UJI4Xb+o0oHghRl2m9hcc+QmYXCIZ+H3m7O/8XRDLHyJO49E+tVXUoGwdWIsgLelTORfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=My0gWCGh; arc=none smtp.client-ip=91.218.175.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787106552; c=relaxed/simple;
+	bh=hSDaHlp+AtiPrqNRHKQvKu/6PNks2N1dJWDbN7fuL1I=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=M3obCYh3yuV3cLmZLquVY2dZPjBiW1NRdl9M6VCITfSdhHphNAxMcyx29s7CRPvqKBa0ZTUGYG2V8bDMpa//O6zS2EZvmJ28jiYC0UrDzRQSj+Op6VXElFgsEyrrQO3ONauN7G9osrwf9s7ec77g9KF2tJn2nTYQsuSjs4GH4xw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=n2z84/Bk; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="My0gWCGh"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=dz5A4sctYbARLpdNgcUYQ80SJTmDzvQs4bCQgtkuEcQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787103858; v=1; x=1787708658;
- b=My0gWCGhQqxEHEtunLhJGH5eYBanII+KbSnaQDoDu1WOlLvmRY1fkvK8EzUqHJDZ5pRPr8xI
- ZQC/j/ecDsruByjByWorir7ffEEW450tspeBzA4jIWsYD8Yxc3x6vhDq41Fi00KW4SRXNUqMt0w
- LkEQrxk97GW8T9RIzJDPfy48=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [10.22.64.46] (118.201.124.118)
-	by smtp.migadu.com with ESMTPS id 5369898abe028d4b;
-	Wed, 19 Aug 2026 01:44:18 +0000
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <a1b1c6ee-ad7d-4972-a15b-f567e7787a6c@linux.dev>
-Date: Wed, 19 Aug 2026 09:44:08 +0800
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="n2z84/Bk"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Cc:To:Message-Id:Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Subject:Date:From:From:Reply-To;
+	bh=gXUB1QrnxsrjbOi4xhXBQHCEC2KmzTwW0NuAmy9Ikto=; b=n2z84/Bkg38wflHDu1N8jwEOo2
+	ZhL3oGXbc/uFEJNt0XoVhkQqsRre2N2fOyTCQuNQcmupM5U4xH/zfSaLtYI1aRIDo/YO0g1gqt4Ju
+	7p9NoN2QQbxE+l00ISPoz7HIP+7oCZcG92EJgUl3QzGaqJjQh9auxNr8bS4ZA9nATHJaFhzpDvRmO
+	UlKyIzG3ehc7I51bRyD7vFd+x0m4H27sXkgltjUagvY3qf8XeMChZzB0feZbvbrgL7xapazL7ucBq
+	NhoOXUbeOhAb812rK3zQurHa3LPJNqJjitOwEpKMCimzS3v+RLDXhGMeQuH+MLoIeR1UI6irvfMur
+	sXWvDxfA==;
+Received: from 186-249-144-28.shared.desktop.com.br ([186.249.144.28] helo=[127.0.1.1])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1wwW39-005tfG-1g; Wed, 19 Aug 2026 04:29:07 +0200
+From: Mauricio Faria de Oliveira <mfo@igalia.com>
+Date: Tue, 18 Aug 2026 23:28:00 -0300
+Subject: [PATCH RFC v2 01/13] keys, pidns, fs/verity, riscv/vector: reorder
+ '#include <linux/sysctl.h>'
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Avoid flaky resize value test
- for percpu data
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, shuah@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, martin.lau@kernel.org, clm@meta.com
-References: <20260818153202.90714-1-leon.hwang@linux.dev>
- <948e7ff41f942519880f9789faf6ca8ed9d0e2cf42eab5b9e1567ead5367b830@mail.kernel.org>
-Content-Language: en-US
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <948e7ff41f942519880f9789faf6ca8ed9d0e2cf42eab5b9e1567ead5367b830@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260818-sysctl-module-aliases-v2-1-d5a69dae5798@igalia.com>
+References: <20260818-sysctl-module-aliases-v2-0-d5a69dae5798@igalia.com>
+In-Reply-To: <20260818-sysctl-module-aliases-v2-0-d5a69dae5798@igalia.com>
+To: Kees Cook <kees@kernel.org>, Joel Granados <joel.granados@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>
+Cc: kernel-dev@igalia.com, linux-riscv@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, fsverity@lists.linux.dev, 
+ keyrings@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+ netdev@vger.kernel.org, linux-wpan@vger.kernel.org, 
+ lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org, 
+ coreteam@netfilter.org, linux-sctp@vger.kernel.org, 
+ linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org, 
+ bridge@lists.linux.dev, mptcp@lists.linux.dev, rds-devel@oss.oracle.com, 
+ virtualization@lists.linux.dev, Mauricio Faria de Oliveira <mfo@igalia.com>
+X-Mailer: b4 0.14.2
 
-On 19/8/26 00:15, bot+bpf-ci@kernel.org wrote:
->> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
->> index 5671c31085cd..2b69290bcc3e 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-> 
-> [ ... ]
-> 
->> @@ -236,6 +223,57 @@ static void test_global_percpu_data_lskel(void)
->>  	test_global_percpu_data_lskel__destroy(lskel);
->>  }
->>
->> +#define PAGE_SIZE 4096
->> +
->> +static void test_global_percpu_data_map_resize(void)
->> +{
->> +	const __u32 desired_sz = sysconf(_SC_PAGE_SIZE) * 2;
->> +	struct test_global_percpu_data *skel;
->> +	const int arr_value = -1;
->> +	struct bpf_map *map;
->> +	int err, prog_fd;
->> +	size_t data_sz;
->> +
->> +	if (sysconf(_SC_PAGE_SIZE) != PAGE_SIZE) {
->> +		test__skip();
->> +		return;
->> +	}
->> +
->> +	skel = test_global_percpu_data__open();
->> +	if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
->> +		return;
->> +
->> +	map = skel->maps.percpu_arr;
->> +	skel->percpu_arr->arr[0] = arr_value;
->> +	err = bpf_map__set_value_size(map, desired_sz);
-> 
-> This isn't a bug, but since the guard above already pins the page size to
-> 4096, would `const __u32 desired_sz = PAGE_SIZE * 2;` read more directly
+Fix an include loop error in preparation for sysctl.h to include module.h:
 
-Will change to 'PAGE_SIZE * 2' if the next revision is needed.
+    CC [M]  arch/x86/events/amd/uncore.o
+  In file included from .../include/linux/fs.h:44,         <<<
+                   from .../include/linux/compat.h:17,
+                   from .../arch/x86/include/asm/ia32.h:7,
+                   from .../arch/x86/include/asm/elf.h:10,
+                   from .../include/linux/elf.h:6,
+                   from .../include/linux/module.h:20,     <<<
+                   from .../include/linux/sysctl.h:245,    <<<
+                   from .../include/linux/key.h:17,        <<<
+                   from .../include/linux/cred.h:13,       <<<
+                   from .../include/linux/sched/signal.h:10,
+                   from .../include/linux/ptrace.h:7,
+                   from .../include/uapi/asm-generic/bpf_perf_event.h:4,
+                   from ./arch/x86/include/generated/uapi/asm/
+                        bpf_perf_event.h:1,
+                   from .../include/uapi/linux/bpf_perf_event.h:11,
+                   from .../include/linux/perf_event.h:18,
+                   from .../arch/x86/events/amd/uncore.c:8:
+  .../include/linux/mnt_idmapping.h: In function ‘mapped_fsuid’:
+  .../include/linux/mnt_idmapping.h:231:59: error: implicit declaration
+    of function ‘current_fsuid’ [-Wimplicit-function-declaration]
 
-> here - and is the unguarded `#define PAGE_SIZE 4096` preferable to the
-> `#ifndef PAGE_SIZE` form used in sockopt.c?
+Reason:
+ - cred.h includes key.h *before* defining current_fsuid();
+ - key.h includes sysctl.h;
+ - sysctl.h includes module.h;
+ - module.h includes fs.h via elf.h > asm/elf.h > asm/ia32.h > compat.h;
+ - fs.h includes mnt_idmapping.h, which uses *undefined* current_fsuid().
 
-No. PAGE_SIZE must be 4096 here.
+Note that fs.h does include cred.h (which defines current_fsuid()) right
+before mnt_idmapping.h (which uses it), but it is not parsed because the
+include guard of cred.h is defined earlier.
 
-> 
->> +	if (!ASSERT_OK(err, "bpf_map__set_value_size"))
->> +		goto out;
->> +	if (!ASSERT_EQ(bpf_map__value_size(map), desired_sz, "bpf_map__value_size"))
->> +		goto out;
->> +	if (!ASSERT_NEQ(bpf_map__btf_value_type_id(map), 0, "bpf_map__btf_value_type_id"))
->> +		goto out;
->> +
->> +	skel->percpu_arr = bpf_map__initial_value(map, &data_sz);
->> +	if (!ASSERT_EQ(data_sz, desired_sz, "data_sz"))
->> +		goto out;
->> +	if (!ASSERT_OK_PTR(skel->percpu_arr, "skel->percpu_arr"))
->> +		goto out;
-> 
-> This isn't a bug, but would it read more consistently with
-> test_global_percpu_data_init() to check ASSERT_OK_PTR(skel->percpu_arr)
-> before ASSERT_EQ(data_sz, desired_sz)? The block this replaces checked
-> pointer-then-size, and the surviving test_global_percpu_data_init() at the
-> same file still does pointer-then-size.
+Address this by removing sysctl.h from key.h, which does not need it,
+and adding it to files that actually need it.
 
-Unnecessary to keep consistent for their order. This is a really minor
-readability concern.
+Signed-off-by: Mauricio Faria de Oliveira <mfo@igalia.com>
+---
+ arch/riscv/kernel/vector.c    | 1 +
+ fs/verity/init.c              | 1 +
+ include/linux/key.h           | 1 -
+ include/linux/pid_namespace.h | 1 +
+ 4 files changed, 3 insertions(+), 1 deletion(-)
 
-Thanks,
-Leon
+diff --git a/arch/riscv/kernel/vector.c b/arch/riscv/kernel/vector.c
+index b112166d51e9f584f84c52d0f84feb92ccd60df1..9eac47c99f114304521fdc539018f3f84507e75f 100644
+--- a/arch/riscv/kernel/vector.c
++++ b/arch/riscv/kernel/vector.c
+@@ -10,6 +10,7 @@
+ #include <linux/sched.h>
+ #include <linux/uaccess.h>
+ #include <linux/prctl.h>
++#include <linux/sysctl.h>
+ 
+ #include <asm/thread_info.h>
+ #include <asm/processor.h>
+diff --git a/fs/verity/init.c b/fs/verity/init.c
+index 3aa55dec88fc919792a2cb4be476f8481ef78a9e..d460eef74fcfe49f6cf69974a8194a65de486819 100644
+--- a/fs/verity/init.c
++++ b/fs/verity/init.c
+@@ -9,6 +9,7 @@
+ #include "fsverity_private.h"
+ 
+ #include <linux/ratelimit.h>
++#include <linux/sysctl.h>
+ 
+ #ifdef CONFIG_SYSCTL
+ static const struct ctl_table fsverity_sysctl_table[] = {
+diff --git a/include/linux/key.h b/include/linux/key.h
+index 81b8f05c68985c6f0a5c5bbe0f1fd6661912c618..a74f8f1b7936d6ede584c0a8cd520f858f6a9758 100644
+--- a/include/linux/key.h
++++ b/include/linux/key.h
+@@ -14,7 +14,6 @@
+ #include <linux/list.h>
+ #include <linux/rbtree.h>
+ #include <linux/rcupdate.h>
+-#include <linux/sysctl.h>
+ #include <linux/rwsem.h>
+ #include <linux/atomic.h>
+ #include <linux/assoc_array.h>
+diff --git a/include/linux/pid_namespace.h b/include/linux/pid_namespace.h
+index b20baaa7e62b755e7e561fcd8018e2b61213503e..94b23471c7dec135e24c4c0c1fdbf841cea2e5de 100644
+--- a/include/linux/pid_namespace.h
++++ b/include/linux/pid_namespace.h
+@@ -10,6 +10,7 @@
+ #include <linux/nsproxy.h>
+ #include <linux/ns_common.h>
+ #include <linux/idr.h>
++#include <linux/sysctl.h>
+ 
+ /* MAX_PID_NS_LEVEL is needed for limiting size of 'struct pid' */
+ #define MAX_PID_NS_LEVEL 32
+
+-- 
+2.47.3
 
