@@ -1,124 +1,206 @@
-Received: from sender-pp-o93.zoho.in (sender-pp-o93.zoho.in [103.117.158.93])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E9132D6E6C
-	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 12:44:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=103.117.158.93
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787143491; cv=pass; b=Br5/SKCA2vhskKvM85t3k17DRRrZsT6EWC9L5Q7Dvp6rgPPBb6vSKQl5xkFSSiYP7Ug1KEHk5OLV2/t+ZC6ZTJO8gcSIU54cJCe/GuWaM28/K5A81x4wIsbNPDjlyouRCBcu15I/lTYT2nOiVhfmLOLHczyoPVydeYPrsnpxN7Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787143491; c=relaxed/simple;
-	bh=iY5LqCI1AO9guNI4PtSt9FM3/7YEJJCDxmhlmHedFnQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZbL9d7ZB0O8kGakQ//IHJC11vQZUMP+qaDa9olmNechH0VWtZONxCCGA6mDkFfE+mV8vuu1RuQNZ2Re1qkHGXRScJRGLKzUZAC/J+jGUK49bxbhDZypA2pejxgv+y/w31A/K/2M4cnYpRJBgUOVZNC9colV5KwY0hOXCv763SOE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.in; spf=pass smtp.mailfrom=zohomail.in; dkim=pass (1024-bit key) header.d=zohomail.in header.i=adi.sharma@zohomail.in header.b=GmRIftV5; arc=pass smtp.client-ip=103.117.158.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.in
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zohomail.in
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5513630274D
+	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 12:50:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787143833; cv=none; b=WwXXw+nqqStYv/E197SwPS40JSaD0Ek7cn1ON9Wdbsj2x8ERBDiBkJyht+qf7WkDjAKtSdcd5GiW6uK4C6AAInsqVqREOQxm501ITXwvz74C7lMUiy+FlhGVVVxFax26XmmML3aGAx6pAguR+evqM4O9/f0BeOwl6HtLebIhL94=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787143833; c=relaxed/simple;
+	bh=vfppvCG/qvbrNitjequc3qq46dLMqTHjUV4R5KJVO7E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tvsPTKVAbmdfvga6+wWsZmEw+VasJGmWG2EvxnQYaSmbtxSGvbeGzypeThqDivck8s/rdWISWZHMu86ZAtVoQAg9He4r/w8EgyVEdc0FK3/84OwPzyQTBlPypMcPL/8acaMR5w2Ru5kb8cK4oPxoowuFUYY83d73Bu5Da5ETB4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ExdQ86Bg; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zohomail.in header.i=adi.sharma@zohomail.in header.b="GmRIftV5"
-ARC-Seal: i=1; a=rsa-sha256; t=1787143441; cv=none; 
-	d=zohomail.in; s=zohoarc; 
-	b=G7JMsmLounAgasN09JbCn09qY1VElQQGT9ZCxUXA7k3BpyFmxL0GVoTOqVJeCyn1/+urdnBq+znTx9buVD90ePRjQwnfs3vWwpFs4P8alQs0wi9Ui7IzDFxizzuF4DU7ZNAEPh9gXtaUbFEqMhf1xpVQLL1o06jcQtH4F90x/NY=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-	t=1787143441; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=OW5KVsbLhJUGM2X+akMg7O9ipNctix45pkzL/Es2T60=; 
-	b=a/t2IBI8QOejOA1DwHswODqO+QSz9kMyx9NXObJyZ9nL84oSvGQJQYKic/FrgI9ZQJiI9dHLo8s5cf0FNRsco+oK22W5OzFE12Dn01m331XIW8XLvrY3rRd9ifK7IkLznTuN2FyKCQ4qzHpQEVYB62peBIQEo4xItBe4hqaGnq8=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-	dkim=pass  header.i=zohomail.in;
-	spf=pass  smtp.mailfrom=adi.sharma@zohomail.in;
-	dmarc=pass header.from=<adi.sharma@zohomail.in>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1787143441;
-	s=zoho; d=zohomail.in; i=adi.sharma@zohomail.in;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=OW5KVsbLhJUGM2X+akMg7O9ipNctix45pkzL/Es2T60=;
-	b=GmRIftV5HwR5CZfMRtNRDssKxwWrHSH52ufA/xm/OTrAvUQ7cCf3uRRT+cll74sy
-	svrmHi1GA4wjm5HXzD7MquXCt0PUWE8pafwChNbn5Tn/wtgC3/CmgbgHyaMpi3h+oE3
-	cBDc8IxhJ+9qJS+9yN3guOM3To2W2II9VhBy8KFE=
-Received: by mx.zoho.in with SMTPS id 1787143439516761.6116959013347;
-	Wed, 19 Aug 2026 18:13:59 +0530 (IST)
-From: Aditya Sharma <adi.sharma@zohomail.in>
-To: bpf@vger.kernel.org,
-	song@kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	puranjay@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org
-Subject: bpf: Is the nmi_uaccess_okay() check needed for bpf_send_signal_task()?
-Date: Wed, 19 Aug 2026 18:13:24 +0530
-Message-Id: <20260819124324.43162-1-adi.sharma@zohomail.in>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ExdQ86Bg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1787143829;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+KudDx4GWA6m0kymTqV9B5+pPC4d5wMXWeaLZi91N90=;
+	b=ExdQ86BgVFNBfMuw5J4ph0mu5HLRZPd3OIgLsXfoGF4fALI4Dkbm4XtST5c8e3sskXYY0v
+	xioF9/iNsD9cFrwjCJL5bn59QwLVi03nunDeWi3skZI9UWesOfJqTHWfji2PsHwnBrfVrf
+	+zuJTsY4bTQ9TWddO6myiNXs3663m+k=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-331-INSEtobNO6C9huKBqR73aQ-1; Wed,
+ 19 Aug 2026 08:50:25 -0400
+X-MC-Unique: INSEtobNO6C9huKBqR73aQ-1
+X-Mimecast-MFC-AGG-ID: INSEtobNO6C9huKBqR73aQ_1787143824
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D55061955DBE;
+	Wed, 19 Aug 2026 12:50:22 +0000 (UTC)
+Received: from fedora (unknown [10.44.33.127])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id A33BE180034F;
+	Wed, 19 Aug 2026 12:50:17 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Wed, 19 Aug 2026 14:50:22 +0200 (CEST)
+Date: Wed, 19 Aug 2026 14:50:16 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Jens Axboe <axboe@kernel.dk>, Peter Zijlstra <peterz@infradead.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	Steve French <sfrench@samba.org>, linux-fsdevel@vger.kernel.org,
+	bpf@vger.kernel.org, linux-cifs@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 0/4] Stop TIF_NOTIFY_SIGNAL from interrupting work that
+ can't be restarted
+Message-ID: <aoWmiL2Ea6YalTiy@redhat.com>
+References: <20260818-work-tif_notify_signal-v1-0-1ee1fcc5b3ff@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+In-Reply-To: <20260818-work-tif_notify_signal-v1-0-1ee1fcc5b3ff@kernel.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-Hi,
+Hi Christian,
 
-I hit this from a bpf_timer callback that signals a userspace task: the
-signal was not delivered some of the time. It turned out that
-bpf_send_signal_task() was returning -EPERM depending on which task the
-softirq happened to interrupt, and the source is this check in
-bpf_send_signal_common():
+I am still travelling without my work laptop, can't read the code.
+I'll try to take a look on Friday.
 
-bpf_trace.c:872:	if (unlikely(task->flags & (PF_KTHREAD | PF_EXITING)))
-bpf_trace.c:873:		return -EPERM;
-bpf_trace.c:874:	if (unlikely(!nmi_uaccess_okay()))
-bpf_trace.c:875:		return -EPERM;
+IIRC, zap_pid_ns() can use the new helper too...
 
-Is the nmi_uaccess_okay() check necessary in the bpf_send_signal_task()
-case?
+Oleg.
 
-When commit 6280cf7 ("bpf: Implement bpf_send_signal_task() kfunc")
-made the function take a task, the PF_KTHREAD and is_global_init()
-started testing task, while nmi_uaccess_okay() kept testing current.
+On 08/18, Christian Brauner wrote:
+>
+> Ok, so I was looking into things and as usual got
+> side-tracked so here we are. Oleg, save me please.
+> 
+> IF_NOTIFY_SIGNAL is used to kick a task in uninterruptible sleep to
+> return to userspace and run task work and then go back to sleep. This
+> mechanism works well but breaks coredumps. dump_interrupted() only
+> allows fatal signals to interrupt a coredump and the whole regular write
+> path going to actual filesystems is impervious to TIF_NOTIFY_SIGNAL as
+> well.
+> 
+> The core is that you can have quite deep callchains that end up calling
+> signal_pending() in both the pipe and the socket codepaths so it's like
+> we can just pass a flag through somehow.
+> 
+> For coredumps its very annoying because it means io_uring is - depending
+> on how much outstanding work you have - incompatible with generating
+> non-truncated coredumps. A process with too many file backed mappings
+> and io_uring requests in flight ends up losing most of the coredump.
+> 
+> While zap_threads() has cleared TIF_SIGPENDING for a long time, just
+> clearing TIF_NOTIFY_SIGNAL isn't going to work because the next
+> completion will just set it again.
+> 
+> The fun part also is that io_uring isn't actually the only case:
+> 
+> (1) io_uring
+> 
+> (2) klp_send_signals()
+> 
+> (3) bpf_task_work_schedule_signal()
+> 
+> (4) landlock's tsync
+> 
+> And technically, kthread_stop() and the printk kunit test set the bit
+> raw. So no simple way of just fixing this in one subsystem.
+> 
+> So, a fix for this issue has the following constraints:
+> 
+> (i) The places where a write is aborted are deep callchains that we
+>     can't reasonably parameterize. For example, anon_pipe_write(),
+>     unix_stream_sendmsg(), unix_stream_read_generic(),
+>     sk_stream_wait_memory(), or a bare wait_event_interruptible() in
+>     wait_for_dump_helpers(). All of them are shared with regular
+>     syscalls that must stay interruptible.
+> 
+>     IOW, the state has to be per-task and ambient.
+> 
+>     An LLM would call this "load bearing"...
+> 
+> (ii) There are multiple ways TIF_NOTIFY_SIGNAL can get raised and they
+>      can get set from irq context against any task. As said above we
+>      have at least io_uring paths (poll task_work, msg_ring, tctx exit,
+>      io-wq via __set_notify_signal()), bpf_task_work_schedule_signal(),
+>      klp_send_signals(), landlock tsync, plus kthread_stop() and the
+>      printk kunit stuff that set the bit raw.
+> 
+>      So fixing this up in the individual subsystems is doomed to fail or
+>      require constant audits in case some new variant shows up.
+> 
+> (iii) The coredump task is exiting and can't restart the work.
+> 
+> So here's some stuff that was considered but I think it not really
+> feasible:
+> 
+> (a) Check for task_is_coredumping(). That will end up forcing
+>     task_work_add() users to know about coredumps. This seems like a
+>     layering violation.
+> 
+>     I have a patch for this as well but it's ugly. It races with the
+>     dump staarting unless the bit setter takes a lock in the io_uring
+>     completion. I know someone that will disagree with this approach. ;)
+> 
+> (b) Oleg's old suggestion iirc. Just clear the bit at coredump entry.
+>     That doesn't work because io_uring poll completions just raise it
+>     again from irq context. So you also need synchronization with the
+>     setter of which there are quite a few.
+> 
+> (c) Let the setting task defer setting the bit if the task is flagged
+>     and then raise it again at exit.
+> 
+> (d) Take TIF_NOTIFY_SIGNAL out of singal_pending() and make it opt-in at
+>     specific points. That breaks io_uring quite badly and forces a
+>     tree-wide audit.
+> 
+> So the amount of patches for this issue over the years is impressive. So
+> let me add one to the pile for the lolz.
+> 
+> Add PF_NO_NOTIFY_SIGNAL and helpers to raise/restore it. This is the
+> same approach as memalloc_nofs_save(). signal_pending() will not report
+> a fake pending signal via TIF_NOTIFY_SIGNAL if inside a
+> PF_NO_NOTIFY_SIGNAL critical section. Obviously you can't
+> fork()/clone3() in such a section.
+> 
+> Fix coredumps and smb. Fwiw, I think there's a few other potential users
+> of the helpers that are left out of this series.
+> 
+> |         |    notify_signal_pipe     |   notify_signal_socket    |
+> |---------|---------------------------|---------------------------|
+> | fix     | ok                        | ok                        |
+> |---------|---------------------------|---------------------------|
+> | unfixed | 357324 of ≥ 5111808 bytes | 467336 of ≥ 5111808 bytes |
+> 
+> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+> ---
+> Christian Brauner (4):
+>       signal: allow taks to temporarily block TIF_NOTIFY_SIGNAL
+>       coredump: prevent TIF_NOTIFY_SIGNAL from interrupting coredumps
+>       selftests/coredump: test that TIF_NOTIFY_SIGNAL doesn't truncate a coredump
+>       smb: prevent TIF_NOTIFY_SIGNAL from interrupting
+> 
+>  fs/coredump.c                                      |   4 +
+>  fs/smb/client/transport.c                          |  13 +-
+>  include/linux/sched.h                              |   2 +-
+>  include/linux/sched/signal.h                       |  21 +-
+>  tools/testing/selftests/coredump/Makefile          |   7 +-
+>  .../selftests/coredump/coredump_notify_signal.h    |  29 ++
+>  .../coredump/coredump_notify_signal_helper.c       |  46 +++
+>  .../coredump/coredump_notify_signal_test.c         | 245 ++++++++++++++++
+>  tools/testing/selftests/coredump/coredump_test.h   |   1 +
+>  .../selftests/coredump/coredump_test_helpers.c     | 318 +++++++++++++++++++++
+>  10 files changed, 674 insertions(+), 12 deletions(-)
+> ---
+> base-commit: 8d3ae59288f1e7d58d76558a6ee96d533bc5019f
+> change-id: 20260817-work-tif_notify_signal-6ab080d33693
+> 
 
-As far as I can tell the path here does no user memory access, so
-there is nothing for the check to guard.
-
-Also, it compiles to true outside x86 (include/asm-generic/tlb.h:26),
-so if it were necessary here the kfunc would be broken on every other
-architecture.
-
-Thus, whether a signal can be sent depends on the caller's context,
-rather than the task it is to be sent to. And at the bpf_timer callback,
-we never know deterministically whether the signal would go through,
-or it would get rejected here.
-
-A quick reproducibility test by Claude Opus 5 (the issue I was facing
-from the timer callback context was not reproducible deterministically):
-
-SEC("tp_btf/workqueue_execute_start")   /* current is a kworker   */
-SEC("tp_btf/sys_enter")                 /* current is a user task */
-
-static __always_inline int probe(void)
-{
-struct task_struct *t;
-int ret;
-
-t = bpf_task_from_pid(target_pid);
-if (!t)
-  return -ESRCH;
-/* sig == 0: permission check only, nothing is delivered */
-ret = bpf_send_signal_task(t, 0, PIDTYPE_TGID, 0);
-bpf_task_release(t);
-return ret;
-}
-
-On bpf-next commit f79066c7 (selftests/bpf: Add tests for a store
-on a fault prone qdisc pointer), x86_64 under qemu:
-
-bpf_send_signal_task() from kworker context : -1  (-EPERM)
-bpf_send_signal_task() from syscall context :  0
-
-Same result on v6.18.29, x86_64, bare metal.
-
-I may be missing the reason for it to be there as well. If this check
-is intentional, what is it protecting in the _task case?
-
-Thanks,
-Aditya Sharma
