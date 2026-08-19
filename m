@@ -1,135 +1,147 @@
-Received: from mta1.migadu.com (out-31.mta1.migadu.com [95.215.58.31])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92B0F478E5A
-	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 15:41:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.31
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3CAE261B70
+	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 15:49:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787154086; cv=none; b=hevPx/KS7fttGdPw+6u3ug1BqSPhcOJimoEFZ4Sf0XXrs+2OE4HeC4KL8APKYGLIDpTj1XB2Mr8bJmiXXmyv+aYYzb8xEnhnnStt7a8uhPty5219RiQQvtF2y9QvqK4xdik/REXXgJYAZTgkFmm+Ah6GZ6i9I/OPafh1qAlcoH0=
+	t=1787154567; cv=none; b=DtQDYpEddsLj/5wGS3TNKO/lkewx1/kVrYggE61890DzwmsZn4vDzaGEhzRKeHAW72voEQpk/3qMhnMkWJg7OC4xDSytapJie2ByuvVSlz4mPOG+cMWnaTBq1a8sjqFDTa9fAq0UHZ3vDcBLCYHiEmYYcEH1U0xLoTVVgEg1owQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787154086; c=relaxed/simple;
-	bh=7+XZSFOtMnHYHziupaQkPdMkTzDBh8SwyfZNqXYHgZk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r0KSPgd8YAvwHtvz9eFOR5JZYm3SyG2LwvUNgH4JyYjpxS6+R4nA6GIg6U2wInHfML4+Htf2mjRH9Fl5UnS9OFCUF9ZOLt5xQ/QwqyOdZcmiGctVS5PGVHDroLl/A4JMMmwSa8U2san9oOZcX/Sdkf8/+fA53No64NrTHxccj0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=roEsv61p; arc=none smtp.client-ip=95.215.58.31
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787154567; c=relaxed/simple;
+	bh=KTSw12lLSVInjHSA9TXgWdz/vlAklt/fBX482HJZrU8=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=PrYU5RoFZg9hbZmUc/Y7xR6CsO/Wup61fCz8nNY6O36Jti9jLL6FdBjf5kROMr2qlVf+Hm5gqfLV+eex/m65OObVzPhWnrFFMWZu3mCnYfPMYAsUz9XRf6+ric97O8sBaThbwgx0KkH+yof0+m0VNkNKjJZ+ZwjH9I6MSx9F0JA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EJ3x6uB8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="roEsv61p"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=7+XZSFOtMnHYHziupaQkPdMkTzDBh8SwyfZNqXYHgZk=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787154080; v=1; x=1787758880;
- b=roEsv61pgGB66omaJ/Twqo22qJ2xxw6TwUxjpaILF4XDb6VMeQVifVrBXP34jDJ207LLhotl
- hfGNR0sv/2+BDOdTyzDwV7KNfuTN0hMeaZ0NyOoOWr+0wZFa6ZI7TG7C81Q4OUX7cb4FitVVumC
- AxIko40CXTanBnyKgsTxqlz8=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [IPV6:2a03:83e0:1151:15:1c5e:37e8:36:dd37] (2620:10d:c090:500::7:5d0e)
-	by smtp.migadu.com with ESMTPS id e95b706ce7f0e963;
-	Wed, 19 Aug 2026 15:41:10 +0000
-X-Mizu-Trace-ID: e95b706ce7f0e963
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <6dc42fbd-f5f8-4880-96b3-6e7fe2db59e8@linux.dev>
-Date: Wed, 19 Aug 2026 08:41:03 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EJ3x6uB8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 191821F000E9;
+	Wed, 19 Aug 2026 15:49:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787154566;
+	bh=pj55dsIdYQ+hDDuHBJ0jWoZKmh0tHh28GuaBq3Xw0eQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=EJ3x6uB876ZbQvYLMUYDn7G3cXulz+5MGsw0p7FslVoGkEIYWISqGo5AjeQToyozb
+	 G+PUWoe1kA65jKwbNTf4jGuLMcStJuSqSnfIinSFn0WbgHVRgN+yiicyjJ/SLCUoEH
+	 lpLJl180wrL5yJ/ixRVPBf6ML8XFFFAlbz6yH0Dyl0spdfX9XbTX57kNbTaQOmUmuf
+	 r6CATPPKcC3UiT4GezAbV9ZGOvZc53qOJaPT820p0stMXtRnUfdkR9Ww+gW9O2Njth
+	 r7RMnYyStT0hEUku4sm7k818j7Vi/2cbSgX5srzfGpDaUaOWOdnNon/dNgxf6nrbEf
+	 gWhrQHWROeQDg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net] xdp: fix zero-copy frame layout
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Weiming Shi" <bestswngs@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260818154516.793517-1-bestswngs@gmail.com>
+References: <20260818154516.793517-1-bestswngs@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 19 Aug 2026 15:49:25 +0000
+Message-Id: <20260819154926.191821F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v7 02/10] bpf: Add helpers to describe the R0:R2
- return register pair
-Content-Language: en-GB
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260819055239.3293449-1-yonghong.song@linux.dev>
- <20260819055249.3295283-1-yonghong.song@linux.dev>
- <20260819061746.0DFE71F00A3A@smtp.kernel.org>
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260819061746.0DFE71F00A3A@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
+Pre-existing issues:
+- [Critical] Double free of XSK buffer and memory leak of `xdp_frame` page =
+on redirect enqueue error.
+- [High] Silent truncation of fragmented AF_XDP (MEM_TYPE_XSK_BUFF_POOL) mu=
+lti-buffer packets during redirect.
+--
 
-On 8/18/26 11:17 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] Extension programs (BPF_PROG_TYPE_EXT) are mishandled because `bpf_compute_subprog_ret_regs` skips subprog 0, failing to set up `ret_reg_pair`.
-> --
->
-> --- Patch [2]: [PATCH bpf-next v7 02/10] bpf: Add helpers to describe the R0:R2 return register pair ---
-> commit f6c1f4f14c6e8bda9545fe1b82f42648b4f3c475
-> Author: Yonghong Song <yonghong.song@linux.dev>
->
-> bpf: Add helpers to describe the R0:R2 return register pair
->
-> This commit adds bpf_ret_reg_pair() to determine if a BPF subprogram returns
-> a value in the R0:R2 register pair. It implements
-> bpf_compute_subprog_ret_regs() to compute this flag based on the BTF
-> prototype of each subprogram, intentionally skipping the main program.
->
-> Link: https://github.com/llvm/llvm-project/pull/190894
-> Link: https://github.com/llvm/llvm-project/pull/206876
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index d8bf897460eae..2b5e88fdda07e 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
-> [ ... ]
->
->> +static int bpf_compute_subprog_ret_regs(struct bpf_verifier_env *env)
->> +{
->> +	const struct btf *btf = env->prog->aux->btf;
->> +	const struct btf_type *type;
->> +	int subprog;
->> +	u32 size;
->> +
->> +	if (!env->prog->jit_requested || bpf_prog_is_offloaded(env->prog->aux))
->> +		return 0;
->> +
->> +	/*
->> +	 * Skip the main program: its return value is the program's exit code,
->> +	 * read out of R0, so it never uses the register pair. An extension does
->> +	 * have a real prototype for subprog 0, but bpf_check_attach_target()
->> +	 * refuses to replace a function returning more than 8 bytes.
->> +	 */
->> +	for (subprog = 1; subprog < env->subprog_cnt; subprog++) {
-> [Severity: High]
-> Does this code mishandle extension programs (BPF_PROG_TYPE_EXT)?
->
-> The comment mentions that bpf_check_attach_target() refuses to replace a
-> function returning more than 8 bytes. However, for extension programs,
-> prog->expected_attach_type is 0, so attach_uses_trampoline_retval(0) evaluates
-> to false, bypassing the size check.
->
-> If an extension program successfully attaches and replaces a subprogram
-> returning an __int128 (16 bytes), skipping subprog 0 here means ret_reg_pair
-> won't be set. Could this result in the verifier failing to enforce the
-> initialization of R2, potentially leaking uninitialized register contents to
-> the caller?
+--- Patch [1]: [PATCH net] xdp: fix zero-copy frame layout ---
+commit 300f3eb2043fb6dcf3006d467327612f861ccc98
+Author: Weiming Shi <bestswngs@gmail.com>
 
-We should be okay. For freplace program, in later commit
-   bpf: Add verifier support for 16-byte returns in R0:R2
-freplace will get rejected if kernel function returns
-R0:R2 values. If the freplace is for original subprog 0,
-the R2 (if to-be-returned in freplace) may cause incorrect
-result but it is user's problem.
+xdp: fix zero-copy frame layout
 
->
->> +		type = subprog_ret_type(env, subprog);
->> +		if (!type || btf_type_is_void(type))
->> +			continue;
->> +		if (verifier_bug_if(IS_ERR(btf_resolve_size(btf, type, &size)), env,
->> +				    "cannot size return type of subprog %d", subprog))
->> +			return -EFAULT;
->> +		if (ret_regs_cnt(size) > 1) {
->> +			subprog_info(env, subprog)->ret_reg_pair = true;
->> +			env->prog->jit_required = 1;
->> +		}
->> +	}
->> +
->> +	return 0;
->> +}
+xdp_convert_zc_to_xdp_frame() clones an XSK packet into an order-0 page
+and advertises PAGE_SIZE as its frame size. It allows the copied frame
+to occupy the page tail needed by skb_shared_info and records zero
+headroom even when metadata separates the frame header from packet data.
 
+> diff --git a/net/core/xdp.c b/net/core/xdp.c
+> index 0194e69da339a..1d679e8fd6493 100644
+> --- a/net/core/xdp.c
+> +++ b/net/core/xdp.c
+> @@ -585,7 +585,7 @@ struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct =
+xdp_buff *xdp)
+>  		   xdp->data - xdp->data_meta;
+>  	totsize =3D xdp->data_end - xdp->data + metasize;
+> =20
+> -	if (sizeof(*xdpf) + totsize > PAGE_SIZE)
+> +	if (sizeof(*xdpf) + totsize > SKB_WITH_OVERHEAD(PAGE_SIZE))
+>  		return NULL;
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does this function silently
+drop fragments when an AF_XDP zero-copy buffer contains them?
+
+Looking at xdp_convert_zc_to_xdp_frame() in net/core/xdp.c, totsize is
+calculated using only xdp->data_end - xdp->data. It ignores
+xdp_buff_has_frags(xdp), meaning it allocates an order-0 page and copies on=
+ly
+the linear data.
+
+Any attached fragments in the tailroom's skb_shared_info seem to be ignored,
+and while they are freed via xsk_buff_free(xdp), the resulting xdp_frame is
+silently truncated.
+
+> =20
+>  	page =3D dev_alloc_page();
+[ ... ]
+> @@ -602,7 +602,7 @@ struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct =
+xdp_buff *xdp)
+> =20
+>  	xdpf->data =3D addr + metasize;
+>  	xdpf->len =3D totsize - metasize;
+> -	xdpf->headroom =3D 0;
+> +	xdpf->headroom =3D metasize;
+>  	xdpf->metasize =3D metasize;
+>  	xdpf->frame_sz =3D PAGE_SIZE;
+>  	xdpf->mem_type =3D MEM_TYPE_PAGE_ORDER0;
+
+[Severity: Critical]
+This is a pre-existing issue, but does freeing the zero-copy buffer at the =
+end
+of this function cause a double-free and memory leak if the subsequent enqu=
+eue
+operation fails?
+
+In net/core/xdp.c:xdp_convert_zc_to_xdp_frame(), the original buffer is
+explicitly freed via xsk_buff_free(xdp) upon successful conversion. It then
+returns the new xdp_frame to xdp_do_redirect():
+
+net/core/filter.c:xdp_do_redirect() {
+    ...
+    return __xdp_do_redirect_frame(ri, dev, xdp_convert_buff_to_frame(xdp),
+                                   xdp_prog);
+}
+
+If __xdp_do_redirect_frame() fails, it returns the error code without freei=
+ng
+the xdp_frame parameter:
+
+net/core/filter.c:__xdp_do_redirect_frame() {
+    ...
+err:
+    _trace_xdp_redirect_map_err(dev, xdp_prog, fwd, map_type, map_id, ri->t=
+gt_index, err);
+    return err;
+}
+
+Since the pointer is not saved in xdp_do_redirect(), the newly allocated
+page appears to be leaked.
+
+Additionally, because the error propagates back to the calling driver, the
+driver might assume the subsystem did not consume the packet and proceed to
+free the original ZC buffer again, potentially causing a double-free in the
+XSK pool.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260818154516.7935=
+17-1-bestswngs@gmail.com?part=3D1
