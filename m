@@ -1,37 +1,37 @@
-Received: from mta0.migadu.com (out-122.mta0.migadu.com [91.218.175.122])
+Received: from mta0.migadu.com (out-153.mta0.migadu.com [91.218.175.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15FC847F774
-	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 15:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BFA8480DCD
+	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 15:54:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787154746; cv=none; b=GvBnBJQl1w1FniA+BmaxMfgUxOwhZNXlIJNTGEBpovh3U7m44V3AvnoEXy4QpfDL4Aj0LjjaukkKnIpiC300rrsqL9th3saY7HgRb4GUC023jwzOfGatAWug82WmtLS1OAxhgPDb5/cuXMehHfD2ROov9XFodB+jImJT4+Snl7o=
+	t=1787154859; cv=none; b=EmXifJQXy6uZnqzPSwGMHxjbUwbp6DDiKO5n1rzbf4JoDw9NT3lbEX3xyTIHYQKvavz/zTf/275hbvhZrAhJb9+GO+h+nASRNCdd2bHgCzsp1wmM6u7vQFJ4l+d9B/ftHv/lnG+dZB+hFqKHuRhBw4lmy7zRlULbgMJjQ1LdWe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787154746; c=relaxed/simple;
-	bh=90SWeDUioP2o4mY+EocuTM513VEle6mMQm+bkDB+o3w=;
+	s=arc-20240116; t=1787154859; c=relaxed/simple;
+	bh=ga4iCN9MpDHY01rWYETPo7NaSHPsYk+IP9nQrpDupE4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NbPbWAh29AW1yQ1ZvZLBc1zzUp+5teFz8aFSTfohyLT36OlIavG2E+kpmDSYoHeP8UunM7GSEbTgE/TvKh8ewK/qu6aU5wk7kMDDY6Ac3Eary+11jQbrsAKJqnXyFBFEPADwSM8zahN7gnQE4xv54eAz3umAGAlkU/fo/TXsC2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=X8p2fr2n; arc=none smtp.client-ip=91.218.175.122
+	 In-Reply-To:Content-Type; b=jXzp1/B7deOgf9lx6BgOoGua5Xudckyf6mAVmvxw8dt6A+p2pZqQnCpHC44iOITpBkZkG/zp4l2ozVs/i9weR2v36grIH8bsf5gAMWDil4YC+r4CNhS7zBV+xZcsDfxc6qGeCW7T2qLrTcQhJ2fBEUvbOn5WigIZOL2WwoX8Emg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dG2pp71t; arc=none smtp.client-ip=91.218.175.153
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="X8p2fr2n"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dG2pp71t"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=90SWeDUioP2o4mY+EocuTM513VEle6mMQm+bkDB+o3w=;
+DKIM-Signature: a=rsa-sha256; bh=ga4iCN9MpDHY01rWYETPo7NaSHPsYk+IP9nQrpDupE4=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787154740; v=1; x=1787759540;
- b=X8p2fr2nGQ5XpSQgxvXJR5JpoXlciFZWOufqqu+EtOkxkw10FHUagsmsKQMz1sEvkHhmy65C
- JX+ZIXNjkdfS2hYdyCBMd2iFnhE+j7gIabJxoaY+YfKasPrcMjeDu4jXvprlyO6eswryPRWb+yl
- bL1Le1HO6G+jLI1tD1v99Pns=
+ t=1787154855; v=1; x=1787759655;
+ b=dG2pp71tw6mP+flcRkvv7mXVxeT4CXbI17Vlattm2inNryCH4DIZGZX1H/uF/MgAvJWDjhpg
+ M7PP7DtavZRGfk3BNm31LkZU1YbspnQgatUMqLYUN46TJlfpont4HaE9JTcpg83huhrAoJmc0Zv
+ Ya7kjU44JB/NqAU2oMl+Gyl8=
 X-Envelope-To: bpf@vger.kernel.org
 Received: from [IPV6:2a03:83e0:1151:15:1c5e:37e8:36:dd37] (2620:10d:c090:500::7:5d0e)
-	by smtp.migadu.com with ESMTPS id bff934f89a5438c1;
-	Wed, 19 Aug 2026 15:52:20 +0000
-X-Mizu-Trace-ID: bff934f89a5438c1
+	by smtp.migadu.com with ESMTPS id 4607e8584e3dc236;
+	Wed, 19 Aug 2026 15:54:15 +0000
+X-Mizu-Trace-ID: 4607e8584e3dc236
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <3b0d1471-9f59-4fda-b5b3-73fda3325ddd@linux.dev>
-Date: Wed, 19 Aug 2026 08:52:14 -0700
+Message-ID: <d1e1d798-4905-4d43-9b66-ac827f064381@linux.dev>
+Date: Wed, 19 Aug 2026 08:54:10 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -39,68 +39,76 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v7 03/10] bpf: Wire up JIT support for 16-byte
- kfunc returns
+Subject: Re: [PATCH bpf-next v7 04/10] bpf: Handle R2 as a return register in
+ precision backtracking
 Content-Language: en-GB
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org, clm@meta.com,
- ihor.solodrai@linux.dev
-References: <20260819055254.3295610-1-yonghong.song@linux.dev>
- <4533383af7562516a24ecadf8e2242d17e50ab4e8835bb8c9baf573b37944b0a@mail.kernel.org>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260819055239.3293449-1-yonghong.song@linux.dev>
+ <20260819055259.3295829-1-yonghong.song@linux.dev>
+ <20260819060306.6F2141F000E9@smtp.kernel.org>
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <4533383af7562516a24ecadf8e2242d17e50ab4e8835bb8c9baf573b37944b0a@mail.kernel.org>
+In-Reply-To: <20260819060306.6F2141F000E9@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 8/18/26 11:49 PM, bot+bpf-ci@kernel.org wrote:
->> bpf: Wire up JIT support for 16-byte kfunc returns
->>
->> LLVM 23 returns an __int128, or a struct/union larger than 8 bytes and no
->> larger than 16 bytes, in the BPF R0:R2 register pair. The previous patch
->> added the shared helpers describing that convention; wire up the JIT side
->> so that the second half of the return value actually lands in R2.
->>
->> Placing the second return half into R2 is possible on any JIT, but it needs
->> architecture-specific JIT work. Rather than requiring every JIT to
->> implement it at once, add a bpf_jit_supports_kfunc_ret_reg_pair()
->> capability, defaulting to false in the generic core; an architecture opts
->> in once its JIT handles the R0:R2 pair, and the remaining ones are left for
->> future work. Only the x86-64, arm64 and riscv64 JITs opt in so far.
->>
->> On arm64 and riscv64 the native second return register is already BPF R2
->> (x1 in bpf2a64[] and a1 in regmap[] respectively), so the upper half needs
->> no move at all, unlike x86-64's RDX->RSI. The lower half is covered by the
->> move into BPF R0 that those JITs already emit after every call, from x0
->> into x8 and from a0 into a5. This has been tested on x86-64 and arm64. The
->> riscv64 path is expected to work by the same register-mapping reasoning as
->> arm64 but has not been tested.
->>
->> bpf_add_kfunc_call() also rejects a kfunc that is marked KF_FASTCALL and
->> returns more than 8 bytes. The bpf_fastcall contract implemented by
->> mark_fastcall_pattern_for_call() assumes a call clobbers R0 plus the
->> registers holding its arguments, so a return in the R0:R2 pair would
->> clobber an R2 the caller expects the fastcall pattern to preserve. Such
->> a kfunc is rejected with -EOPNOTSUPP as well.
-> This isn't a bug, but could the closing sentence be folded into the opening
-> one? The paragraph opens by saying bpf_add_kfunc_call() rejects a
-> KF_FASTCALL kfunc that returns more than 8 bytes, and closes with "Such a
-> kfunc is rejected with -EOPNOTSUPP as well", which restates the same fact.
-> The middle sentence carries the rationale (the fastcall clobber mask covers
-> only R0 plus the argument registers, so R2 is assumed preserved), while the
-> closing sentence adds only the errno. Something like "... is rejected with
-> -EOPNOTSUPP" in the opening sentence would let the paragraph state the
-> rejection once and spend its length on the fastcall rationale.
+On 8/18/26 11:03 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Low] Multi-line comments do not follow the required BPF subsystem style.
+> --
+>
+> --- Patch [4]: [PATCH bpf-next v7 04/10] bpf: Handle R2 as a return register in precision backtracking ---
+> commit 827448f59c95b01086f128d7ec2894a154de5092
+> Author: Yonghong Song <yonghong.song@linux.dev>
+>
+> bpf: Handle R2 as a return register in precision backtracking
+>
+> This commit updates precision backtracking to treat R2 as a return register
+> alongside R0 at call/return boundaries. It clears R2 unconditionally when
+> evaluating subprograms or kfuncs, and samples it before callback paths clear
+> R1-R5.
+>
+>> diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
+>> index a2b18a9f1694c..653db80bcc47b 100644
+>> --- a/kernel/bpf/backtrack.c
+>> +++ b/kernel/bpf/backtrack.c
+> [ ... ]
+>
+>> @@ -520,7 +524,25 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
+>>   					return -EFAULT;
+>>   			}
+>>   		} else if (opcode == BPF_EXIT) {
+>> -			bool r0_precise;
+>> +			bool from_subprog_call, r0_precise, r2_precise;
+>> +
+>> +			/* BPF_EXIT in subprog or callback always returns
+> [Severity: Low]
+> This isn't a bug, but does this multi-line comment follow the preferred BPF
+> subsystem style? The opening /* is usually required to be on its own line.
+>
+>> +			 * right after the call instruction, so by checking
+>> +			 * whether the instruction at subseq_idx-1 is subprog
+>> +			 * call or not we can distinguish actual exit from
+>> +			 * *subprog* from exit from *callback*. In the former
+>> +			 * case, we need to propagate the precision of the
+>> +			 * return registers, if necessary. In the latter we
+>> +			 * never do that.
+>> +			 */
+>> +			from_subprog_call = subseq_idx - 1 >= 0 &&
+>> +					    bpf_pseudo_call(&env->prog->insnsi[subseq_idx - 1]);
+>> +
+>> +			/* Sample the return registers before the callback
+> [Severity: Low]
+> This isn't a bug either, but the same formatting question applies here. Should
+> the opening /* be on its own line for multi-line comments?
 
 We should be okay here.
 
 >
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32221968339
+>> +			 * handling below clears R1-R5.
+>> +			 */
+>> +			r0_precise = from_subprog_call && bt_is_reg_set(bt, BPF_REG_0);
+>> +			r2_precise = from_subprog_call && bt_is_reg_set(bt, BPF_REG_2);
 
