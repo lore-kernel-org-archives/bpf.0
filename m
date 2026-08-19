@@ -1,223 +1,334 @@
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2240D1A275
-	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 00:09:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787098178; cv=pass; b=dwcKLPez5s8iVDN6yWQhctetYcPhFqDfNjVMDpdyNMZYyUwM1yWYzebK1lPb85uhNwfr++lojfBYHEimX+Fvo3qjBVSNNB5Bnr7u5ds9xWJLagq6pTj6ZIM3ao8MNeYruejSG3Ke+QaoG1/rxpkXICwQzc9DXDRLSl5/sEa2gak=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787098178; c=relaxed/simple;
-	bh=r3zTW45nsyUnnxRg7xoJ7zODVVjB0nkyf2mk8yr4AGU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NmZx7qQPlt++pweqd57a8ytsQphNk/leAhioL2IOVOulQ8zjLYZGJzkZO/93MYkq5LRh7TJfyHxfcE13eK8ODHNueaXhSRskZxZ7cBEmXpVJnJMpBaciahuNNsXL2zfjBiAy0+q3ETpMbyHKrK08ucLt223ThSO+lPRZncWrIRs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UBgw9oaP; arc=pass smtp.client-ip=209.85.208.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5153B47D9
+	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 00:51:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787100724; cv=none; b=tTDcy1ChjstK8NgdGl1rqmkZ71ykFajKAwdQ6OGSk2wqCfqQjXIYuzwlcdK0FayKe9d6B3azsekyktDEjWILjRHXxme9kFFNAH6iiSl8zduiy6ck6TjgBvhuIV9FJI/rpSQgAx0p3JXr9Phy+9SuIv7Wuebwj3fwUAcyvfgZEjA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787100724; c=relaxed/simple;
+	bh=drmmQM2zQ/3arwMjOC24nDokB5ci0sg/YNQXNeZP4ZY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=fWkaEmxtnlyH0gMhLg7dQnuW6iUCAtWFkBAdx1eoRATu2oaSuWLOOsJjtGkdL3jLkXROXI1UDhpQwIcqdddJP8MMZuzXo6xolmltHD7O+SBPp0ql3G73dHAfdd8rweAri0H1ilypZwUqy5nLeOpCF2ZCAXUHsrowX7qdr7p5Nrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=0byo8aul; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UBgw9oaP"
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-39c8ee87f7eso4606711fa.3
-        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 17:09:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787098175; cv=none;
-        d=google.com; s=arc-20260327;
-        b=dBHVK9tpZV3TBjQxGrTWO/fRLZeleQHaW8IvoCzPAdAR+FkRm5Q5hlSRFEqAtGM3AE
-         6BVerOqAqM1guBQ/l/8o/KwW+JMJi6Ynb0qU3urFBkiGmS45nffNkOhQZFowMa4VqB5D
-         qzKKMdipj0IETFeSob5Pl5KFP5jBjgUGhSeLZiFCyXSsAAQF8VC2NP5yHGkaX0HGhMMZ
-         jkFT8E20+FHVJghsvn1rXZKfCQbM/sKRvYqPS3oX//cjeqQgzeRpqkmxUBFwcYo/5nJa
-         tt8sQQ3GSA06QAA0o/+OmM3dU76l4M+7R/N8o2XNq5dV85UBHEenZD48xs6PB2CFyJlF
-         cYDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=beYAJ6rd8hONAU+/B3i9DJe4/3st3v+JHwH8VcyoAzM=;
-        fh=FYhAVtR0j+TGlFMC8gtVDhc0kiV388hRLxbfYTwyyXE=;
-        b=kokOuwP9NhBwtWrVEfvAwiDg0J4rIZPlH/kEM/xFFJ6zm4AjPWocLTNJOiSdF9x9Q5
-         XOHTxGGV/ZtpLe0QpQnuVfP0cMV424o9Yb3B9evOB1qoJvW7io3RH6pmQGKsU2V5EM0O
-         SSA0m+qn3rmn68ajb3q5GlNHlMy2fh1EM4fNaLPuL2gVhx0o5vFLQs3/0n/+MJxtswST
-         I0Io20ZO2S4OS0HT7IUwmQEE1BuRAzsQqLGqVIB8mBOtNsb04BNtBcRGMtpbu3Ky4hs8
-         xiJfKU3CXloMmlaTDrm2Hjo9mzCilEDQm1s6iypNg3HoCn4I+5MzPBAGlbdfwK471X7Z
-         VN9Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="0byo8aul"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cbe6295f05bso1168507a12.1
+        for <bpf@vger.kernel.org>; Tue, 18 Aug 2026 17:51:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787098175; x=1787702975; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=beYAJ6rd8hONAU+/B3i9DJe4/3st3v+JHwH8VcyoAzM=;
-        b=UBgw9oaPdtT3oKAngrgfLc2GX8XoKzE1oz5pN+iZeFb8vDFx/fVfXXp8iqashYQHk1
-         AdoxI6E22/IrjA9hyIXEX+MFIruN1gEHUmT8Rt/WAaf7Sy4klNZNf2Cq8cXKgXBcjOcQ
-         4wACiXY8JndQdSKcgmC/SQcWbP8YMDXkN5O9hSxy+t6/zviY5hkOKH2mMG8TRUmwoKOV
-         gcD7eOZaaGFDZrf1vqHeCxLBLDgcpBkOv/FmnpiaI8iaVmK/+B9N88DsZ+EY3iFvdWOz
-         Jmt0ocE058R0bDI7LBfdEq4eGeCKYUJh+51DpubBCs8niZBZ0nIsF2EDSSbyY9YG45aI
-         JSEg==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1787100718; x=1787705518; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=YqZ+lquUct7OgV0Kb+n4xKfmL/YvvXGtH+0T7/T1vGA=;
+        b=0byo8aulb98gQBT1GOBiCV06WKlti9ylavZIfqFlVUYiR3UGz8TC9FH91UvGgX72W+
+         H3aC0Ibjqpblq+6vX35IlVtJXBkZdIWk7w4rNapu/PWWff2E2d6fktN1/6tuGJYCGYVQ
+         cYCyU3ggFdvLm3c/95U53vW83d+QUJF4FwOUkh4E7HK9+ORco9YWUwB4lr0Wn/8YW5Kh
+         kLPbwijCZC/+PhoTmZ7zsDkF8Af7wHZWmYVaGkAuxNE8HOaJl2M01mYALSOfZYGPr8az
+         ryjnZjS3E4x6Sx4seea06ooIH0+mQ5DTPgpJg8ah4ys22CuSKAoKTce3CXPfrkRKyBXl
+         SVFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787098175; x=1787702975;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1787100718; x=1787705518;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=beYAJ6rd8hONAU+/B3i9DJe4/3st3v+JHwH8VcyoAzM=;
-        b=ZcVH5GNWUVu5c1flhGZEPwT52b2zyNdZIl6WADPUveuw3xHZXAD7poOBDShuRiHRlF
-         Yfr2LyAeWWky8uUi6gTJUt9ilJ4iukuu1kwK8FigO97RDo51m+0BxBiuikX35GfpkFeE
-         R67DwczW43XuZWvHqOP1KjhUUNpT9yMAmn/tvfRVUHsrYCXbmtcj+Xqc6+6rxIQPMSd7
-         PhuWQDQsSXod8F61mXEA8Gu4s5Up8ADi40RuT+gz2xDlWtdhybVK1Uf3bKQQRFC0RGwL
-         Z+69fgbv/4h4gFW9afcf42p5QfNum4kwJZONtYF4Y4vfXGmRjNl3FzVH6WHZsBYMWnyE
-         DmGQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqjFvFGkYO65NheMBLkzrS1F5XZGaO40HQYlfi6DU2foHTWUanws2vNT7bpYxczy5FoC88=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3TSbfzQz0scRBOzIZLqwnrBcMateiJh1RGzpUZJ5c4sk8fnF8
-	qPW//8DJjcLpeN2Ec+HxpXAiroHHi3gLJPcHUERjsLalRSKtEiEiQI9A4KPbLc+QiK7qUP642HA
-	VmL5+OJp2PO0EGxTgbJvAluTKqSm65rQ=
-X-Gm-Gg: AR+sD134y6F62PeIBX9yCX0QB3SjwKv9201xpO5N8tpAU4NU7yLk+mlXjWJSzqvgRWk
-	xclb8RTgBStIV2QJ5q73HZ+ID/yogRK+pratTzOEzqDP1EiXGQmOPSKeu07DKLlIVfSmAL2JcIk
-	wdLBZ+CigSbs8euoQxZJjZk5BaWMyt4dVXoWFG4anDMDN9BEIc9gfCIE0Aa1jhWVFXlANWTNtz7
-	1kIkd3rXBW5dZW9JYfStfGaM3YvKnfBccVwd+RBpbaSOLEFamu+FNGkWZaDidzObGzK1A7aMnn4
-	zsRY9FQKidyWgxMmkdAaWuna3YGw32H/jeijiHIDSADP+Jj1IMXtayqf+9HESyu6wRXq5tTfZ8b
-	UYAa/4D2wM6Ad++E0s4oQWtbWwbUCUJGxjyh5NkOZQwEiS/zWVqexXEiW92o=
-X-Received: by 2002:a05:651c:222c:b0:39c:a346:8a36 with SMTP id
- 38308e7fff4ca-3a189974b61mr660931fa.8.1787098174857; Tue, 18 Aug 2026
- 17:09:34 -0700 (PDT)
+        bh=YqZ+lquUct7OgV0Kb+n4xKfmL/YvvXGtH+0T7/T1vGA=;
+        b=qay5Sjd8Mg2Mb518/7Gbm1K9Cz0fmiZBxA8eSc0ReVpLa6wYfIvm062kNNulXTEWxG
+         6iwNuGxYzZ1gstcz83MSCDWb84J3LJOb9M+wT9iFEH/RjOABTcYMhPaW3Oq/2syAElCM
+         uB5UzIutpGmkmIESomUZXOYsv6rv9GV9Hs8mNaaFdYhALqJndylUEtMhQgDT7VfZAURN
+         FkOAluDVh0+RnNhonmY0dKUGH2NlPBz70O/bdNQvgvz7PtpF9NkhBl58o9AcNZ/oVDpv
+         yu0HkVX/Rsc1LFDgwisGeBjR1JPGIP4prsnoJOpRkFwts4nW1PX9B6uTesyZm4HKqoK9
+         hxSQ==
+X-Forwarded-Encrypted: i=1; AHgh+RraE8/5zkm5oz22TYMyKJZdB4JxwTw3I99YyKscygF79BJt+iq0uASIBKk4KZA44b0LYQI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzoLPDW7Bn3XoSXZ0CzmzHN4okYcqRFuO0tsSvqSc1dfP3V6Boe
+	lChLKUXQ8MxTWkePP4xIR6VA3fNVm07QrfrKdQHqg9pWcdbt4mKUs8rJ4jJ2q7jrm+k=
+X-Gm-Gg: AR+sD13L9iiLVQbdV4JQFFT3AaZHYOAjezEcWGDSW9wN4X63/okjxOZamCUso2gOf41
+	NbGxw6HRzEHxbT0xOVWYJPzmw2n0FY+1FW024rXYWgTTvxlgEDcqURPmN1YqF8x9W3Tfk6VHcXQ
+	U3g+UEl+bs8jYoyoOIECZT/z8lju2VBYr3/Q9htLhqnXIIGX8DPZcwYwzStvTNhTLvnfxs2UM2X
+	gmr8zM4zyUjxLoIiYPxYiDg0gDrxvDbCPnExGTGqQ8glpYd5oV72Tyh5xZhOZnZKyZ66SsLC3qg
+	nPCsLzcnphRwgFRgWd7knBHuTp/4qP1MLF03EZRSsPJ+CnP9NvPwAtafAiS0bM2RD3btcWfUr0a
+	Vn9TY39KyBNFPyrH1UIjqCmiJp+OT+fiwVAD97Z5foDGLl+nhnJ6ZWm99lUMyKJwn8wIBmj/n4P
+	/Oc47zNXZrWN+4YIXcYxR9uQsT5r/fKKJKIEeXgZkhV84BoSgpodlk9uKTa/N3tf5pBg6hyciBB
+	xPuYUDyUwrVwkvV/g==
+X-Received: by 2002:a17:90b:4b91:b0:384:927f:3db9 with SMTP id 98e67ed59e1d1-3957f874e86mr1158483a91.1.1787100717529;
+        Tue, 18 Aug 2026 17:51:57 -0700 (PDT)
+Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3957fb87174sm519704a91.12.2026.08.18.17.51.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Aug 2026 17:51:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260813215328.99311-1-blbllhy@gmail.com>
-In-Reply-To: <20260813215328.99311-1-blbllhy@gmail.com>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Wed, 19 Aug 2026 08:08:57 +0800
-X-Gm-Features: AcwNN1W1pQE8vAeWnxc8X4qegJxfs2j5BNbiyglHNl_l4Fi90vnFBfcdT9VQ4FE
-Message-ID: <CAL+tcoBCsSuN_+uypBoP5KdKUkto7X0T8A7qN2Vx6TqqGe-Ymw@mail.gmail.com>
-Subject: Re: [PATCH net v4] xsk: fix NULL pointer dereference in __xsk_rcv()
-To: "Cen Zhang (Microsoft)" <blbllhy@gmail.com>
-Cc: magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, sdf@fomichev.me, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	horms@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, AutonomousCodeSecurity@microsoft.com, 
-	tgopinath@linux.microsoft.com, kys@microsoft.com
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 18 Aug 2026 20:51:55 -0400
+Message-Id: <DKSIBYZNN07W.12NSCHYUCJQPH@etsalapatis.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
+ <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
+ Solodrai" <ihor.solodrai@linux.dev>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Shuah Khan" <shuah@kernel.org>, "Sebastian
+ Andrzej Siewior" <bigeasy@linutronix.de>, "Clark Williams"
+ <clrkwllms@kernel.org>, "Steven Rostedt" <rostedt@goodmis.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-rt-devel@lists.linux.dev>
+Subject: Re: [PATCH bpf-next v3 4/4] selftests/bpf: Add a test for arena
+ fault-in under memory.max
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260808140720.293604-1-jiayuan.chen@linux.dev>
+ <20260808140720.293604-5-jiayuan.chen@linux.dev>
+In-Reply-To: <20260808140720.293604-5-jiayuan.chen@linux.dev>
 
-On Fri, Aug 14, 2026 at 5:53=E2=80=AFAM Cen Zhang (Microsoft) <blbllhy@gmai=
-l.com> wrote:
+On Sat Aug 8, 2026 at 10:05 AM EDT, Jiayuan Chen wrote:
+> A child joins a memcg capped 64M above its post-load usage and faults an
+> arena in until it runs out of that budget.
 >
-> In the __xsk_rcv() multi-buffer path, xsk_buff_alloc() is called in a
-> loop without checking its return value. xsk_buff_can_alloc() only
-> counts fill queue entries without validating their addresses, so it
-> can succeed while xsk_buff_alloc() rejects all remaining entries and
-> returns NULL.
+> With the fix the arena page comes from the sleepable allocator, so
+> hitting memory.max goes through the memcg OOM path and the child is
+> OOM-killed, which the test checks via memory.events "oom_kill".
 >
->   Oops: general protection fault, probably for non-canonical address
->    0xdffffc0000000000
->   KASAN: null-ptr-deref in range
->    [0x0000000000000000-0x0000000000000007]
->   RIP: 0010:__xsk_rcv+0x426/0xc20 (net/xdp/xsk.c:350)
->   Call Trace:
->    xsk_generic_rcv+0x26d/0x5f0
->    xdp_do_generic_redirect+0x3c5/0xcf0
->    do_xdp_generic+0x92f/0xe70
->    __netif_receive_skb_core.constprop.0+0xf7e/0x2b30
+> Without the fix the test may still pass, because a concurrent blocking
+> allocation in the child (e.g. a COW fault on an inherited page) can hit
+> memory.max and OOM-kill it first. The goal is only that the fixed kernel
+> passes reliably.
 >
-> Fix this with a two-stage transaction. First allocate and stage all
-> buffers required for the packet, recycling all staged buffers with
-> xsk_buff_free() if any allocation fails. Only after this stage
-> succeeds, copy the data, reserve the RX descriptors, and release the
-> buffers in an error-free loop.
+>   # test_progs -v -t arena_memcg
+>   serial_test_arena_memcg:PASS:child killed by signal
+>   serial_test_arena_memcg:PASS:memcg oom_kill
+>   #5       arena_memcg:OK
 >
-> Fixes: 804627751b42 ("xsk: add support for AF_XDP multi-buffer on Rx path=
-")
-> Reported-by: AutonomousCodeSecurity@microsoft.com
-> Signed-off-by: Cen Zhang (Microsoft) <blbllhy@gmail.com>
+>   # dmesg (the OOM comes from the arena sleepable allocation)
+>   test_progs invoked oom-killer: gfp_mask=3DGFP_KERNEL_ACCOUNT|__GFP_ZERO
+>    arena_vm_fault+0x4bc/0xad0
+>   Memory cgroup out of memory: Killed process 473 (test_progs)
+>
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-Thanks for working on different approaches!
-
-Reviewed-by: Jason Xing <kerneljasonxing@gmail.com>
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
 > ---
-
-I think it'd be better to put the previous discussion links like [1]
-here and then explain a bit about what you've changed through
-iterations next time. It would be beneficial for network folks to
-effortlessly trace your patches.
-
-[1]: https://lore.kernel.org/all/20260806204757.47817-1-blbllhy@gmail.com/
-
-Thanks,
-Jason
-
->  net/xdp/xsk.c | 30 +++++++++++++++++++++++++++---
->  1 file changed, 27 insertions(+), 3 deletions(-)
+>  .../selftests/bpf/prog_tests/arena_memcg.c    | 156 ++++++++++++++++++
+>  .../testing/selftests/bpf/progs/arena_memcg.c |  24 +++
+>  2 files changed, 180 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/arena_memcg.c
 >
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 7855ee09c4b6..33475b180ea6 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -298,9 +298,11 @@ static int __xsk_rcv(struct xdp_sock *xs, struct xdp=
-_buff *xdp, u32 len)
->         u32 frame_size =3D __xsk_pool_get_rx_frame_size(xs->pool);
->         void *copy_from =3D xsk_copy_xdp_start(xdp), *copy_to;
->         u32 from_len, meta_len, rem, num_desc;
-> -       struct xdp_buff_xsk *xskb;
-> +       struct xdp_buff_xsk *xskb, *tmp;
->         struct xdp_buff *xsk_xdp;
-> +       LIST_HEAD(xsk_buffs);
->         skb_frag_t *frag;
-> +       u32 i;
->
->         from_len =3D xdp->data_end - copy_from;
->         meta_len =3D xdp->data - copy_from;
-> @@ -343,23 +345,45 @@ static int __xsk_rcv(struct xdp_sock *xs, struct xd=
-p_buff *xdp, u32 len)
->                 frag =3D  &sinfo->frags[0];
->         }
->
-> +       for (i =3D 0; i < num_desc; i++) {
-> +               xsk_xdp =3D xsk_buff_alloc(xs->pool);
-> +               if (!xsk_xdp)
-> +                       goto err_alloc;
+> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_memcg.c b/tools=
+/testing/selftests/bpf/prog_tests/arena_memcg.c
+> new file mode 100644
+> index 000000000000..af49d8b1b995
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+> @@ -0,0 +1,156 @@
+> +// SPDX-License-Identifier: GPL-2.0
 > +
-> +               xskb =3D container_of(xsk_xdp, struct xdp_buff_xsk, xdp);
-> +               if (unlikely(!list_empty(&xskb->list_node)))
-> +                       goto err_alloc;
+> +#include <test_progs.h>
+> +#include <fcntl.h>
+> +#include <signal.h>
+> +#include <sys/mman.h>
+> +#include <sys/wait.h>
+> +#include <unistd.h>
+> +#include <sys/user.h>
+> +#ifndef PAGE_SIZE /* on some archs it comes in sys/user.h */
+> +#include <unistd.h>
+> +#define PAGE_SIZE getpagesize()
+> +#endif
 > +
-> +               list_add_tail(&xskb->list_node, &xsk_buffs);
-> +       }
+> +#include "cgroup_helpers.h"
+> +#include "arena_memcg.skel.h"
 > +
->         do {
->                 u32 to_len =3D frame_size + meta_len;
->                 u32 copied;
->
-> -               xsk_xdp =3D xsk_buff_alloc(xs->pool);
-> +               xskb =3D list_first_entry(&xsk_buffs, struct xdp_buff_xsk=
+> +#define CG_PATH		"/arena_memcg"
+> +
+> +/* Budget the arena gets on top of whatever is already charged after loa=
+d. */
+> +#define ARENA_BUDGET	(64 * 1024 * 1024)
+> +
+> +static void dump_memcg(int (*rd)(const char *, const char *, char *, siz=
+e_t))
+> +{
+> +	char buf[512];
+> +
+> +	/*
+> +	 * memory.current reads 0 once the child has left the cgroup, so it onl=
+y
+> +	 * carries information when dumped from the live child; memory.peak and
+> +	 * memory.events survive the child and tell the story either way.
+> +	 */
+> +	if (!rd(CG_PATH, "memory.current", buf, sizeof(buf)))
+> +		fprintf(stderr, "memory.current: %s", buf);
+> +	if (!rd(CG_PATH, "memory.max", buf, sizeof(buf)))
+> +		fprintf(stderr, "memory.max: %s", buf);
+> +	if (!rd(CG_PATH, "memory.peak", buf, sizeof(buf)))
+> +		fprintf(stderr, "memory.peak: %s", buf);
+> +	if (!rd(CG_PATH, "memory.events", buf, sizeof(buf)))
+> +		fprintf(stderr, "memory.events:\n%s", buf);
+> +	fflush(NULL); /* _exit() in the child would not flush stdio otherwise *=
+/
+> +}
+> +
+> +/* Read one key from a flat keyed cgroup file, e.g. "oom_kill" in memory=
+.events. */
+> +static long cg_read_key(const char *cg, const char *file, const char *ke=
+y)
+> +{
+> +	char buf[512], *p;
+> +
+> +	if (read_cgroup_file(cg, file, buf, sizeof(buf)))
+> +		return -1;
+> +	p =3D strstr(buf, key);
+> +	if (!p)
+> +		return -1;
+> +	return strtol(p + strlen(key), NULL, 10);
+> +}
+> +
+> +void serial_test_arena_memcg(void)
+> +{
+> +	int cgroup_fd =3D -1, status;
+> +	const long ps =3D PAGE_SIZE;
+> +	char buf[64];
+> +	pid_t pid;
+> +
+> +	if (setup_cgroup_environment())
+> +		return;
+> +
+> +	cgroup_fd =3D create_and_get_cgroup(CG_PATH);
+> +	if (!ASSERT_OK_FD(cgroup_fd, "create_and_get_cgroup"))
+> +		goto out;
+> +
+> +	/* No memory controller -> nothing to test. */
+> +	if (read_cgroup_file(CG_PATH, "memory.current", buf, sizeof(buf))) {
+> +		test__skip();
+> +		goto out;
+> +	}
+> +
+> +	pid =3D fork();
+> +	if (!ASSERT_GE(pid, 0, "fork"))
+> +		goto out;
+> +	if (pid =3D=3D 0) {
+> +		struct arena_memcg *cskel;
+> +		__u32 i, npages;
+> +		char *base;
+> +		size_t sz;
+> +		long cur;
+> +
+> +		/*
+> +		 * Do everything from the child: the arena vma is VM_DONTCOPY so
+> +		 * it would not survive fork(), only the child should be under the
+> +		 * limit so that a memcg OOM cannot pick test_progs, and a map is
+> +		 * charged to the memcg of the task that creates it - so join
+> +		 * before load. The cgroup work dir belongs to the parent that set
+> +		 * the environment up, so reach it with the _parent() helpers.
+> +		 * Errors are reported to the parent through the exit code, since
+> +		 * ASSERT_* in a forked child does not reach it.
+> +		 */
+> +		snprintf(buf, sizeof(buf), "%d", getpid());
+> +		if (write_cgroup_file_parent(CG_PATH, "cgroup.procs", buf))
+> +			_exit(2);
+> +
+> +		cskel =3D arena_memcg__open_and_load();
+> +		if (!cskel)
+> +			_exit(3);
+> +
+> +		base =3D bpf_map__initial_value(cskel->maps.arena, &sz);
+> +		if (!base)
+> +			_exit(4);
+> +		npages =3D bpf_map__max_entries(cskel->maps.arena);
+> +
+> +		/*
+> +		 * Cap only now, after load: everything but the fault-in is
+> +		 * charged, so the arena gets a fixed budget regardless of what
+> +		 * the load itself cost, and the load can never hit the limit.
+> +		 */
+> +		if (read_cgroup_file_parent(CG_PATH, "memory.current", buf, sizeof(buf=
+)))
+> +			_exit(5);
+> +		cur =3D strtol(buf, NULL, 10);
+> +		snprintf(buf, sizeof(buf), "%ld", cur + ARENA_BUDGET);
+> +		if (write_cgroup_file_parent(CG_PATH, "memory.max", buf))
+> +			_exit(6);
+> +
+> +		for (i =3D 0; i < npages; i++)
+> +			base[(size_t)i * ps] =3D 1;
+> +		/* Faulted everything without dying: no pressure built, dump why. */
+> +		dump_memcg(read_cgroup_file_parent);
+> +		_exit(0);
+> +	}
+> +
+> +	if (!ASSERT_EQ(waitpid(pid, &status, 0), pid, "waitpid"))
+> +		goto out;
+> +
+> +	/* A non-zero exit means the child failed to set up; the code says wher=
+e. */
+> +	if (WIFEXITED(status) && WEXITSTATUS(status)) {
+> +		ASSERT_OK(WEXITSTATUS(status), "child setup");
+> +		goto out;
+> +	}
+> +
+> +	/*
+> +	 * Faulting a valid arena address until memory.max is hit must not look
+> +	 * like an invalid access. Without the fix the fault path allocated wit=
+h
+> +	 * the non-blocking allocator, turned its -ENOMEM into VM_FAULT_SIGSEGV=
 ,
-> +                                       list_node);
-> +               list_del_init(&xskb->list_node);
-> +               xsk_xdp =3D &xskb->xdp;
->                 copy_to =3D xsk_xdp->data - meta_len;
->
->                 copied =3D xsk_copy_xdp(copy_to, &copy_from, to_len, &fro=
-m_len, &frag, rem);
->                 rem -=3D copied;
->
-> -               xskb =3D container_of(xsk_xdp, struct xdp_buff_xsk, xdp);
->                 __xsk_rcv_zc_safe(xs, xskb, copied - meta_len,
->                                   rem ? XDP_PKT_CONTD : 0);
->                 meta_len =3D 0;
->         } while (rem);
->
->         return 0;
+> +	 * and the child died with SIGSEGV on a valid address; now it is handle=
+d
+> +	 * by the memcg OOM path instead. A SIGKILL alone would not prove the
+> +	 * memcg OOM killer did it (a global OOM or an unrelated crash could al=
+so
+> +	 * kill the child), so check memory.events.oom_kill, which records the
+> +	 * memcg OOM and survives the child.
+> +	 */
+> +	if (!ASSERT_TRUE(WIFSIGNALED(status), "child killed by signal"))
+> +		goto out;
+> +	if (!ASSERT_GE(cg_read_key(CG_PATH, "memory.events", "oom_kill"), 1,
+> +		       "memcg oom_kill"))
+> +		dump_memcg(read_cgroup_file);
+> +out:
+> +	if (cgroup_fd >=3D 0)
+> +		close(cgroup_fd);
+> +	cleanup_cgroup_environment();
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/arena_memcg.c b/tools/test=
+ing/selftests/bpf/progs/arena_memcg.c
+> new file mode 100644
+> index 000000000000..adecd9e8463e
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/arena_memcg.c
+> @@ -0,0 +1,24 @@
+> +// SPDX-License-Identifier: GPL-2.0
 > +
-> +err_alloc:
-> +       list_for_each_entry_safe(xskb, tmp, &xsk_buffs, list_node) {
-> +               list_del_init(&xskb->list_node);
-> +               xsk_buff_free(&xskb->xdp);
-> +       }
-> +       xs->rx_dropped++;
-> +       return -ENOMEM;
->  }
->
->  static bool xsk_tx_writeable(struct xdp_sock *xs)
-> --
-> 2.52.0
->
+> +#include <vmlinux.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include "bpf_arena_common.h"
+> +
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_ARENA);
+> +	__uint(map_flags, BPF_F_MMAPABLE);
+> +	__uint(max_entries, 100000); /* number of pages */
+> +#ifdef __TARGET_ARCH_arm64
+> +	__ulong(map_extra, 0x1ull << 32); /* start of mmap() region */
+> +#else
+> +	__ulong(map_extra, 0x1ull << 44); /* start of mmap() region */
+> +#endif
+> +} arena SEC(".maps");
+> +
+> +SEC("syscall")
+> +int noop(void *ctx)
+> +{
+> +	return 0;
+> +}
+> +
+> +char _license[] SEC("license") =3D "GPL";
+
