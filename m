@@ -1,100 +1,108 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 375FA37E5F7;
-	Wed, 19 Aug 2026 09:37:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15FFA447808;
+	Wed, 19 Aug 2026 09:50:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787132238; cv=none; b=AEdO0XFCow7QBhz7kGsgEvSH5ovrbq8/J/o7O6XCk9tNTGhsZ5i9E89XK2pPjWDQxmric6KDVKcTBKSOVUmLz9u5ywRw36mCjNfxxQIRBJJATjN3lKgAJrOyfFzgC+pJsf2G9ZSKARrqZGTiLyb+l6+kLl4YjLZPEm5HvvFNWb0=
+	t=1787133031; cv=none; b=pyouwbh14W8hBOnaTjE1C+GwVmXNw0ZemlnYZE5Dy9EiXPng5x9y8zKoVUTD/DJ7yZQ+6IhgQy9o9QRzx3tp4JS3aN7zNYrV28ll7hkCfweUfZOuVMfy2r42u7nwV1WdqQwfTTVcvugEO18EOPYBpt5HIALJ43rcV7NpxSpkxYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787132238; c=relaxed/simple;
-	bh=hLshNJs6H6l1gMd8UezDIYuK43TzULmCLg+KG7lUOvU=;
+	s=arc-20240116; t=1787133031; c=relaxed/simple;
+	bh=bGshx65tPJzLHPyfAQSqN48bIF4BY9JjYycA2gortgc=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=ZLsfCc6Y13gJAxOD2fIT5v83t49bWjA0QWQYHaeqP+vfTnaXLbfyJQyJi9rNHKg5fFkOqGQ0J6ggOGKQKJztSeFLsNP09u4SwZ5GjxTIX/vN7ldzQSP6/1obMtayU8cwc04awFxTx/uNgJaytJqF8QlUCJNn00AAkeRPxlZqYeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mZf4dKXt; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=h40SUjLtC13bpb7+heerNfhizdIUTZ8jV7JvtmYE7ka5BwYkXRqzJsE7pXgH73uYg23ISDEZ3vK+EK7qcE0Lh8DO8F2ZskXMt1OG69ghnA+e5at3EdJ2usfrgPJyh6nnU2YrS0nAGCmja3Dy8qy9koQ1KPAkRN39LIXeTY/h22Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kfn2IXga; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mZf4dKXt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 801D21F000E9;
-	Wed, 19 Aug 2026 09:37:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kfn2IXga"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40C341F000E9;
+	Wed, 19 Aug 2026 09:50:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787132236;
-	bh=fJyoGP3XrQkM2JSSX+2B6BjxD7+I7azMU6AfMEN4XO8=;
+	s=k20260515; t=1787133029;
+	bh=VkUvoNUSZVGmsaJ7+eTyVxY0QCTsro/X+xC5EU1cIwQ=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=mZf4dKXt+JxLXKKzkZzp7KFmsjX4X0lXTiZ8DJZp9K5kxGopcmYfkd2ACAlqn29Yv
-	 +Vm2WPhmpPrpqpBUT+YPULtrzu4/NfiCX7AdpRjGsBpr1CFHQWhOSSb4GF4X2WVaZI
-	 XfYKDlojX8jExZ/v/QGLJF34VrrqbHiS7dDTCykg+JHkauna9rk1slBzOgpdj8xpfH
-	 0n3hnpVy9l/TtndPBpOLBBNALw0C9IQUN6tssFnvD5OVQ4Wqs2K8qkexDP3gLiMFdo
-	 npLytyEKw9mScsbXewMidpeZF8cguRilxIk4kC0RtobkSnzshHpUH6F+ciypCAoa9i
-	 9sGNIIpd9rFNg==
-Content-Type: multipart/mixed; boundary="===============7477287384193181481=="
+	b=kfn2IXgaXo3C7pQM+PAwTYHhhqcEcN5p4PLR52S6t8bL+VOQhv8q575hbvTFIuGC7
+	 Ad/qitFR7BF7mwvl9Xz9NJgqO+XAGUzNrE5ZPtzZ+wq19I/YbQK3YKIITfrYNhRaLA
+	 4CZpjUDIdlgU/9DoRY1hbHAQqqKShLdFmVr7OLOYfTpJSZhT0hTEj3I1j6X3aSzyo/
+	 pJVUaik/bi1N2l34FXNrn12zTFqSLiRJTFDUXCZHZPyUurfBVxcWjRXGxfWp6rmW4m
+	 1xeueyK49FgK6oJHXIZZppYMf3xAZEOSivs2UG6K36TXNs+T3tyOYIBbH8z+GPsCez
+	 LCdvInKxfkNUA==
+Content-Type: multipart/mixed; boundary="===============3293360164673853915=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f6d031ece454ad8a2a3e09bbdf48d9030c74cb6741f76aabf58bf7af1931abfd@mail.kernel.org>
-In-Reply-To: <a78cd29b238aa1aba87efeb2fc09d25a56c22f69.1787128322.git.cp0613@linux.alibaba.com>
-References: <a78cd29b238aa1aba87efeb2fc09d25a56c22f69.1787128322.git.cp0613@linux.alibaba.com>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf, riscv: Add support for signed arena loads
+Message-Id: <5cec664e8218aab8a7304ab755e65410dfa07ff5ef4f19a48ee3ce1baed80aff@mail.kernel.org>
+In-Reply-To: <20260819090426.267-3-zhaofuyu@vivo.com>
+References: <20260819090426.267-3-zhaofuyu@vivo.com>
+Subject: Re: [RFC PATCH bpf-next v3 2/2] selftests/bpf: add tests for selective kmod BTF loading
 From: bot+bpf-ci@kernel.org
-To: cp0613@linux.alibaba.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,memxor@gmail.com,bjorn@kernel.org,puranjay@kernel.org
-Cc: ihor.solodrai@linux.dev,eddyz87@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,pulehui@huawei.com,pjw@kernel.org,palmer@dabbelt.com,shuah@kernel.org,guoren@kernel.org,bpf@vger.kernel.org,linux-riscv@lists.infradead.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 19 Aug 2026 09:37:15 +0000 (UTC)
+To: zhaofuyu@vivo.com,bpf@vger.kernel.org,andrii.nakryiko@gmail.com,alan.maguire@oracle.com
+Cc: andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,yatsenko@meta.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,zhaofuyu@vivo.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 19 Aug 2026 09:50:29 +0000 (UTC)
 
---===============7477287384193181481==
+--===============3293360164673853915==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-> index 74efe4b138d2..56196b001286 100644
-> --- a/arch/riscv/net/bpf_jit_comp64.c
-> +++ b/arch/riscv/net/bpf_jit_comp64.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c b/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c
+> new file mode 100644
+> index 000000000000..61d2845a731f
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c
+> @@ -0,0 +1,196 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <test_progs.h>
+> +#include "kmod_btfs.skel.h"
+> +
+> +static bool btf_skipped;
+> +static bool dup_ignored;
+> +
+> +static const char btf_skip_fmt[] =
+> +	"libbpf: skipping module BTF '%s', not in kmod_btf_names\n";
+> +static const char dup_ignore_fmt[] =
+> +	"libbpf: duplicate kmod BTF name '%s' ignored\n";
+> +
+> +static int libbpf_print_cb(enum libbpf_print_level level, const char *fmt,
+> +			   va_list args)
+> +{
+> +	if (!strcmp(fmt, btf_skip_fmt)) {
+> +		if (!strcmp(va_arg(args, char *), "bpf_test_no_cfi"))
+> +			btf_skipped = true;
+> +	} else if (!strcmp(fmt, dup_ignore_fmt)) {
+> +		if (!strcmp(va_arg(args, char *), "bpf_testmod"))
+> +			dup_ignored = true;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void kmod_btfs_pass(void)
+> +{
+> +	struct kmod_btfs *skel = NULL;
+> +	int ret;
+> +	static const char *kmods[] = { "bpf_testmod" };
+> +
+> +	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts,
+> +		.kmod_btf_names = kmods,
+> +		.kmod_btf_names_cnt = 1,
+> +	);
+
+This isn't a bug, but would LIBBPF_OPTS() read better here than
+DECLARE_LIBBPF_OPTS()? The same pattern appears in all five subtests
+(kmod_btfs_pass, kmod_btfs_nonexist, kmod_btfs_dup, kmod_btfs_skip,
+kmod_btfs_no_cnt). DECLARE_LIBBPF_OPTS is defined in libbpf_legacy.h as a
+backwards-compatibility alias, and most of prog_tests/ uses LIBBPF_OPTS()
+directly.
 
 [ ... ]
-
-> @@ -1908,13 +1910,19 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
->  	case BPF_LDX | BPF_PROBE_MEM32 | BPF_H:
->  	case BPF_LDX | BPF_PROBE_MEM32 | BPF_W:
->  	case BPF_LDX | BPF_PROBE_MEM32 | BPF_DW:
-> +	/* LDX | PROBE_MEM32SX: sign-extending arena load */
-> +	case BPF_LDX | BPF_PROBE_MEM32SX | BPF_B:
-> +	case BPF_LDX | BPF_PROBE_MEM32SX | BPF_H:
-> +	case BPF_LDX | BPF_PROBE_MEM32SX | BPF_W:
->  	{
->  		bool sign_ext;
->
->  		sign_ext = BPF_MODE(insn->code) == BPF_MEMSX ||
-> -			   BPF_MODE(insn->code) == BPF_PROBE_MEMSX;
-> +			   BPF_MODE(insn->code) == BPF_PROBE_MEMSX ||
-> +			   BPF_MODE(insn->code) == BPF_PROBE_MEM32SX;
->
-> -		if (BPF_MODE(insn->code) == BPF_PROBE_MEM32) {
-> +		if (BPF_MODE(insn->code) == BPF_PROBE_MEM32 ||
-> +		    BPF_MODE(insn->code) == BPF_PROBE_MEM32SX) {
->  			emit_add(RV_REG_T2, rs, RV_REG_ARENA, ctx);
->  			rs = RV_REG_T2;
->  		}
-
-This isn't a bug, but would the comment fit the surrounding style better as
-an expression? The neighbouring case-group comments all spell the access
-out in pseudo-code form:
-
-    /* LDX: dst = *(unsigned size *)(src + off) */
-    /* LDSX: dst = *(signed size *)(src + off) */
-    /* LDX | PROBE_MEM32: dst = *(unsigned size *)(src + RV_REG_ARENA + off) */
-    /* ST | PROBE_MEM32: *(size *)(dst + RV_REG_ARENA + off) = imm */
-    /* STX | PROBE_MEM32: *(size *)(dst + RV_REG_ARENA + off) = src */
-
-Something like this would match the pattern:
-
-    /* LDX | PROBE_MEM32SX: dst = *(signed size *)(src + RV_REG_ARENA + off) */
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32235574103
---===============7477287384193181481==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32236360082
+--===============3293360164673853915==--
