@@ -1,135 +1,111 @@
-Received: from mta1.migadu.com (out-124.mta1.migadu.com [95.215.58.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38F77389443
-	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 06:02:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1C8D3CB8FC
+	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 06:03:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787119330; cv=none; b=lkhNJqQnzKiIl9wlz+mTXOSlLq0+tHuokyHs5X+Eb7kRMmnIs1iGP8aKrBwIpn7q8/AEwH6bECPEBPG0Gg2oN5oe4bEoS0RDg7u/ojcQXP4ZCdVXjSx8DvOeYnlw5cFASeMwaNwowKfE5n3ZM6U4yT9aoGTESEGnW0ACfzzIHuE=
+	t=1787119388; cv=none; b=N6Ciz+Igl+XdvdFSqfgoh9H+ADwxqhbfVR6Uw43UK9RZmjrVURcExtI2LpietZVahYQpZjZwsw9K0jJnnpmBL9pJPuilLr6XRc3kMTTPTu8HLoCQwGATPqeZ1Gre3cWyTq1ZD+EGO9YE7H9LjLsq4QmU5g+Y8JeMOwLRVlxzsYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787119330; c=relaxed/simple;
-	bh=TRcVLG1Vv6NM5OM5mxttVlGyGNnRHNEKs8bjSr/qqvc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=ZDL0Jtr4nn+EBMeLpKCcT4kUCXo0xv/PrcseT4C+Ruz9US41sVDxkHU0oI/zcbOMVOrWS+KKOjwyvaAuqs3mhWtFH8L9UCriu0ZzNHEphn+KAVz4oHVDmxCGMr8gzOR8ThrGUgswuiPOaKTQpgI+i36LkeZfeGokRJb0ASMGZSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IJLwfDMQ; arc=none smtp.client-ip=95.215.58.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787119388; c=relaxed/simple;
+	bh=VPj10a2KdjINbWZBWoSj7dkWP9AWbiMLl29nHh2g710=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=sth79eFMubZjVLWnpjE7oL7n2DBSDzfc8ANjePVux+AFD8Q0PiP4ZBu2W/625pf5j0owYhz2GI8tLKE8ICrwv702CwNwZZtBDj5zs/1Tf/R+YVcdVnUuJjals+ECahVXXA5olF5VnIRs2cexuFfQgpdgNZ0WJv0+/rD/2huw3nw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VikWEERN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IJLwfDMQ"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=TRcVLG1Vv6NM5OM5mxttVlGyGNnRHNEKs8bjSr/qqvc=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787119323; v=1; x=1787724123;
- b=IJLwfDMQZvXXWiZBZt7D8llspl9lTSJAE8DgCheNggqiNugmS4GrTH7VppI9E1mbK6lsnb03
- QW3WlFX4GP+BbppRTOfp+Qqcg+YUad7Glif8pvMD03DTjwm1N9kcWO4Q0KTOQ991mWiw+Sh61i5
- YifEgZKpKbB9g31nlMUVMU2M=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [IPV6:2600:381:1f1b:84cb:1036:829e:9bdc:e63d] (2600:381:1f1b:84cb:1036:829e:9bdc:e63d)
-	by smtp.migadu.com with ESMTPS id ab6c396956869644;
-	Wed, 19 Aug 2026 06:02:03 +0000
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <4f6c72f7-9d21-4240-849d-08e10b0b2055@linux.dev>
-Date: Tue, 18 Aug 2026 23:01:56 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VikWEERN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F2141F000E9;
+	Wed, 19 Aug 2026 06:03:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787119386;
+	bh=zOZ7ySciJzXmIqLE6O90JFYSQ9clSDatdlocBcQGJKw=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=VikWEERN1uYMMU8ZYNm0Oj4qpwdG138ICyFO4JFjbD2yfZ3EpaRy7pJmYq+K5632j
+	 iFno1D8PYGVLZ+AS5ruQCtO6e7RhAMZbP95lYrHQZBCLb45QRIA/HjxWYewNBDYUMU
+	 AtcdF3gIEbLfLzw4CCp/nFeEEBT5wUruqG8odTygpwApTyPFq+hlKWghTVJ7ZFGWVq
+	 7zckopGvfwBHle5XkKqgNyBuVIZqek/cSB5YsR/mvj/Y4B8tXjQVlPm8cA2ncl81rs
+	 V0It8vlgeW5JtFwJf/X9/M9x/JzUAtvup9bdm6VnEkwEBMRpn3tMrBZnuEg/XM8Nbx
+	 b45Y5iDCKf3fg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v7 04/10] bpf: Handle R2 as a return register
+ in precision backtracking
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yonghong Song" <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260819055259.3295829-1-yonghong.song@linux.dev>
+References: <20260819055239.3293449-1-yonghong.song@linux.dev>
+ <20260819055259.3295829-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 19 Aug 2026 06:03:06 +0000
+Message-Id: <20260819060306.6F2141F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: LLVM regression in memcpy struct bpf_sock_ops->remote_ip6 to
- struct in6_addr
-Content-Language: en-GB
-To: YiFei Zhu <zhuyifei@google.com>, bpf <bpf@vger.kernel.org>,
- =?UTF-8?Q?=C3=96mer_Sinan_A=C4=9Facan?= <omeragacan@gmail.com>,
- yonghong-song <yhs@fb.com>
-References: <CAA-VZPmzCKF5uhP0OG4mPwEs8WaL-xyjAYW=bE8z7Z_J4-h6cw@mail.gmail.com>
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <CAA-VZPmzCKF5uhP0OG4mPwEs8WaL-xyjAYW=bE8z7Z_J4-h6cw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] Multi-line comments do not follow the required BPF subsystem style.
+--
 
+--- Patch [4]: [PATCH bpf-next v7 04/10] bpf: Handle R2 as a return registe=
+r in precision backtracking ---
+commit 827448f59c95b01086f128d7ec2894a154de5092
+Author: Yonghong Song <yonghong.song@linux.dev>
 
-On 7/21/26 4:56 PM, YiFei Zhu wrote:
-> In one of our BPF progs, there is a pattern of copying IPv6 addresses
-> (which are four u32s) off of struct bpf_sock_ops into a stack variable
-> (a larger struct that contains struct in6_addr), then updating a map
-> with that stack variable. After a recent LLVM upgrade, that program no
-> longer loads.
->
-> I wrote a reproducer:
->
->    #include <string.h>
->    #include <linux/in6.h>
->    #include <linux/bpf.h>
->    #include <bpf/bpf_helpers.h>
->
->    struct in6_addr addr6;
->
->    SEC("sockops")
->    int test(struct bpf_sock_ops *skops)
->    {
->            struct in6_addr stack_addr6;
->
->            memcpy(&stack_addr6, skops->remote_ip6, sizeof(skops->remote_ip6));
->            addr6 = stack_addr6;
->            return 0;
->    }
->
-> This will fail loading at latest LLVM main with error:
->
->    -- BEGIN PROG LOAD LOG --
->    0: R1=ctx() R10=fp0
->    0: (7b) *(u64 *)(r10 -8) = r1         ; R1=ctx() R10=fp0 fp-8=ctx()
->    1: (79) r1 = *(u64 *)(r10 -8)         ; R1=ctx() R10=fp0 fp-8=ctx()
->    2: (79) r2 = *(u64 *)(r1 +40)
->    invalid bpf_context access off=40 size=8
->    processed 3 insns (limit 1000000) max_states_per_insn 0 total_states
-> 0 peak_states 0 mark_read 0
->    -- END PROG LOAD LOG --
+bpf: Handle R2 as a return register in precision backtracking
 
-Are you using -O0 compile flag? The above code is not optimal.
+This commit updates precision backtracking to treat R2 as a return register
+alongside R0 at call/return boundaries. It clears R2 unconditionally when
+evaluating subprograms or kfuncs, and samples it before callback paths clear
+R1-R5.
 
-I tried with llvm23/-O2, cpu v3, and get the following code:
+> diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
+> index a2b18a9f1694c..653db80bcc47b 100644
+> --- a/kernel/bpf/backtrack.c
+> +++ b/kernel/bpf/backtrack.c
 
-        0:       w2 = *(u32 *)(r1 + 0x2c)
-        1:       r3 = 0x0 ll
-                 0000000000000008:  R_BPF_64_64  addr6
-        3:       *(u32 *)(r3 + 0xc) = w2
-        4:       w2 = *(u32 *)(r1 + 0x28)
-        5:       *(u32 *)(r3 + 0x8) = w2
-        6:       w2 = *(u32 *)(r1 + 0x24)
-        7:       *(u32 *)(r3 + 0x4) = w2
-        8:       w1 = *(u32 *)(r1 + 0x20)
-        9:       *(u32 *)(r3 + 0x0) = w1
-       10:       w0 = 0x0
-       11:       exit
+[ ... ]
 
->
-> It seems that the program is reading the address from the bpf_sock_ops
-> as two u64s instead of four u32s, and the verifier understandably does
-> not allow that due to the complexity of rewriting context accesses. I
-> bisected the regression to
->
->    commit 790f0623411d5d9d5c989f14e87f2fe86f52eaf3
->    Author: Ömer Sinan Ağacan <omeragacan@gmail.com>
->    Date:   Tue Jun 9 16:03:26 2026
->
->        [SelectionDAG] Pass dest and src alignments separately to memcpy
-> and memmove lowering functions (#201119)
->
-> Looking at its PR [1], it seems that commit caused another regression
-> for BPF selftests and that has been fixed, but this regression is
-> still reproducible on main with that fix applied.
->
-> I'm not really familiar enough with LLVM internals to understand
-> exactly why it generates the code this way or how to fix the
-> regression.
->
-> YiFei Zhu
->
-> [1] https://github.com/llvm/llvm-project/pull/201119
->
+> @@ -520,7 +524,25 @@ static int backtrack_insn(struct bpf_verifier_env *e=
+nv, int idx, int subseq_idx,
+>  					return -EFAULT;
+>  			}
+>  		} else if (opcode =3D=3D BPF_EXIT) {
+> -			bool r0_precise;
+> +			bool from_subprog_call, r0_precise, r2_precise;
+> +
+> +			/* BPF_EXIT in subprog or callback always returns
 
+[Severity: Low]
+This isn't a bug, but does this multi-line comment follow the preferred BPF
+subsystem style? The opening /* is usually required to be on its own line.
+
+> +			 * right after the call instruction, so by checking
+> +			 * whether the instruction at subseq_idx-1 is subprog
+> +			 * call or not we can distinguish actual exit from
+> +			 * *subprog* from exit from *callback*. In the former
+> +			 * case, we need to propagate the precision of the
+> +			 * return registers, if necessary. In the latter we
+> +			 * never do that.
+> +			 */
+> +			from_subprog_call =3D subseq_idx - 1 >=3D 0 &&
+> +					    bpf_pseudo_call(&env->prog->insnsi[subseq_idx - 1]);
+> +
+> +			/* Sample the return registers before the callback
+
+[Severity: Low]
+This isn't a bug either, but the same formatting question applies here. Sho=
+uld
+the opening /* be on its own line for multi-line comments?
+
+> +			 * handling below clears R1-R5.
+> +			 */
+> +			r0_precise =3D from_subprog_call && bt_is_reg_set(bt, BPF_REG_0);
+> +			r2_precise =3D from_subprog_call && bt_is_reg_set(bt, BPF_REG_2);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260819055239.3293=
+449-1-yonghong.song@linux.dev?part=3D4
