@@ -1,37 +1,37 @@
-Received: from mta1.migadu.com (out-198.mta1.migadu.com [95.215.58.198])
+Received: from mta0.migadu.com (out-29.mta0.migadu.com [91.218.175.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15DE02DC79F
-	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 12:58:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ACEC30274D
+	for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 12:59:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.29
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787144337; cv=none; b=TtBcyyPwa4mD09P9yNm9sFdwqyC2nj7Dx/pIUqzZEd2X3ADDLhwhI4XEjkdI9oyik1/pw8N5Q5cLcwElIFdIxLhO79f8GvzFnHDPnt4z6kr07HJDrjdVhhsFNo6riI7+B1QTLw0rcEIiYiSxZ/aR6XaynalxEMS9TU0L84voEk4=
+	t=1787144348; cv=none; b=ZcO2MkOJTJSO4FWmDMOoMvX/i7tbHNFak1vd04vzTel19XFBuTUKmnB7QF+rw0JJhpgCS2Ui3t2qpQ0jPVzgcGSL6Q5rZCo1rvXg6b6TjSZaFfM/Sxnm17vWju50dOQgkujZpumncNEUNqUTvuGMgk+Zg7lppCTAcpW3hPICMmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787144337; c=relaxed/simple;
-	bh=nuEuCqtVQzUJQsbtXuvI4UvZUhxIcME75V6G2GfbE0I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=g4BgfKTwm9aWo7+Mp5ZV+SLTb8WL9Lcke7d5uwI1CHe5fcO/n4iV+jUjeFaM1RHAUiR06gxv3twiuAAHuwY7UOm4a+8UL7ZPGPSvET5ABR6Q/h+3yeEWSPzyPliWHjbhgyZitAim9YSLf1K9XCbL4uBjh+AXKZnd36yvfhEyI+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bS7dTXA/; arc=none smtp.client-ip=95.215.58.198
+	s=arc-20240116; t=1787144348; c=relaxed/simple;
+	bh=YHHGpBQsh966A2uqbUVkWULPEk/gHXX6SwIBwmV9YFs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=czpoS30RN+TZq8xgysxuwHkHFy7OzUN8sfY/enxyqRl2hOSglWLSwIdKdfX/BYJVly4lKkAEZGCf3CjDfks0nWQLga9moCxWyNL42CAq/CInoXY8q2gx349UrunVOOBSkw5c/BxZ6Jv4zd/WndQIFzIn481ympI4F26CZJr0Nbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EAyGmQe7; arc=none smtp.client-ip=91.218.175.29
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bS7dTXA/"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EAyGmQe7"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=nuEuCqtVQzUJQsbtXuvI4UvZUhxIcME75V6G2GfbE0I=;
+DKIM-Signature: a=rsa-sha256; bh=YHHGpBQsh966A2uqbUVkWULPEk/gHXX6SwIBwmV9YFs=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787144333; v=1; x=1787749133;
- b=bS7dTXA/6eDSiRLkgho3W//M3KyHHYwaEUJhBbP9BUALA1U8T/b9ewJ7j4/sE+ch8IWbWkW/
- twYsvd85KuKlZQbpBiLh2xVrStn0ZdM6l54G73hIlxQ/mGjBSSgOS0kizKadaLDqFA23QjQHbTn
- dUrD63MA9FiCPrZG/hDGrekY=
+ t=1787144343; v=1; x=1787749143;
+ b=EAyGmQe7DZtTspqnNDjXGKcexQc0LRcrfWuTqpfmsKin32FANB0FHaIZDR49BibPO409TRxY
+ LbltMzF3A65sLAkgGILhJGxStT+1Zjv3UEHLRwA8FqPyf5oXCQagWrhQwZttAfXHm/0cTwEoQKn
+ APc9Idn7uX0e/rn3hWUyi1jI=
 X-Envelope-To: bpf@vger.kernel.org
 Received: from localhost.localdomain (147.136.157.2)
-	by smtp.migadu.com with ESMTPS id 814b51ec32df0399;
-	Wed, 19 Aug 2026 12:58:53 +0000
+	by smtp.migadu.com with ESMTPS id c005072b8a956614;
+	Wed, 19 Aug 2026 12:59:03 +0000
 X-Migadu-Flow: FLOW_OUT
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Hiker Cl <clhiker365@gmail.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	John Fastabend <john.fastabend@gmail.com>,
@@ -48,14 +48,16 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Paul Chaignon <paul.chaignon@gmail.com>,
 	Amery Hung <ameryhung@gmail.com>,
 	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-	KaFai Wan <kafai.wan@linux.dev>,
 	Daniel Wade <danjwade95@gmail.com>,
+	KaFai Wan <kafai.wan@linux.dev>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 1/2] bpf: fix REG INVARIANTS VIOLATION on speculative pointer arithmetic
-Date: Wed, 19 Aug 2026 20:58:29 +0800
-Message-ID: <20260819125840.286434-1-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf 2/2] selftests/bpf: Add reg-invariants test for speculative pointer arithmetic
+Date: Wed, 19 Aug 2026 20:58:30 +0800
+Message-ID: <20260819125840.286434-2-jiayuan.chen@linux.dev>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260819125840.286434-1-jiayuan.chen@linux.dev>
+References: <20260819125840.286434-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -64,93 +66,77 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Take the following unprivileged program as an example:
+An unprivileged socket filter does variable pointer arithmetic on a
+PTR_TO_MAP_VALUE whose offset collapses to a constant. The Spectre-v1
+speculative path used to snapshot the pointer with a const offset and an
+unbounded r32, which tripped reg_bounds_sanity_check() on the following
+register move.
 
-	r0 = bpf_map_lookup_elem(...)	/* PTR_TO_MAP_VALUE, offset 0 */
-	...
-	14: r0 += r1			/* r1 is a bounded scalar */
-	15: r9 = r0
+Mark the test __success_unpriv (the speculative path only runs
+unprivileged) and flag it BPF_F_TEST_REG_INVARIANTS so the invariant
+violation becomes a hard load failure. The unprivileged run fails without
+the verifier fix and passes with it:
 
-Loading it triggers a verifier warning from reg_bounds_sanity_check():
+  verifier_bounds/spec_ptr_alu_const_offset @unpriv:FAIL   # without fix
+  verifier_bounds/spec_ptr_alu_const_offset @unpriv:OK     # with fix
 
-	verifier bug: REG INVARIANTS VIOLATION (alu): const subreg tnum out
-	of sync with range bounds r64={.base=0x0, .size=0x0}
-	r32={.base=0x0, .size=0xffffffff} var_off=(0x0, 0x0)
-
-What happens:
-
-1. Processing insn 14 (r0 += r1) in adjust_ptr_min_max_vals(), the new
-   offset is computed into dst_reg's var_off and 32/64-bit ranges.
-
-2. Because pointer registers do not track 32-bit subregister bounds,
-   __mark_reg32_unbounded() first sets r32 to the full range; r32 is
-   re-derived from the offset at the end of the function by
-   reg_bounds_sync().
-
-3. On the unprivileged path, sanitize_ptr_alu() is called and, via
-   sanitize_speculative_path() -> push_stack(), snapshots the current
-   register state and schedules the next instruction (insn 15) to be
-   verified directly as a speculative path.
-
-4. That snapshot is taken between step 2 and the final reg_bounds_sync():
-   at this point dst_reg's var_off still holds the (const) original
-   offset while r32 has just been blanked to the full range, i.e. the two
-   are out of sync. When the speculative path later verifies insn 15
-   (r9 = r0), the inconsistent state reaches reg_bounds_sanity_check() and
-   trips the warning.
-
-var_off and the 32-bit range must always be consistent. There are two
-ways to keep the snapshot consistent:
-
-  1. sync var_off and r32 before the snapshot so they match, or
-  2. leave r32 at its original (already consistent) value and blank it
-     only after the snapshot.
-
-The whole point of sanitize_ptr_alu() is to insert a harmless masking
-sequence that keeps the access in bounds under speculation, so the state
-it snapshots should faithfully represent that. Take approach 2: move
-__mark_reg32_unbounded() to after sanitize_ptr_alu(), so the speculative
-snapshot keeps the pointer's original, consistent r32. The non-speculative
-path is unchanged: r32 is still blanked before the offset is applied and
-re-derived by reg_bounds_sync().
-
-Fixes: 5f99f312bd3b ("bpf: add register bounds sanity checks and sanitization")
-Reported-by: Hiker Cl <clhiker365@gmail.com>
-Closes: https://lore.kernel.org/bpf/CAGM=xGB1fJ9kT8XTitVo74B0WGqgjkoUHdLwzytwV0AyqeVApw@mail.gmail.com/
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- kernel/bpf/verifier.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ .../selftests/bpf/progs/verifier_bounds.c     | 41 +++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d17f14b35b79..d79038a8da10 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -14558,9 +14558,6 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 		return -EINVAL;
- 	}
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+index 1a273e416fed..df8d5309657e 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+@@ -2267,6 +2267,47 @@ __naked void deduce64_from_32_wrapping_32bit(void)
+ 	: __clobber_all);
+ }
  
--	/* pointer types do not carry 32-bit bounds at the moment. */
--	__mark_reg32_unbounded(dst_reg);
--
- 	if (sanitize_needed(opcode)) {
- 		ret = sanitize_ptr_alu(env, insn, ptr_reg, off_reg, dst_reg,
- 				       &info, false);
-@@ -14568,6 +14565,14 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
- 			return sanitize_err(env, insn, ret);
- 	}
- 
-+	/* Pointer types do not carry 32-bit bounds at the moment. Blank r32
-+	 * only after sanitize_ptr_alu() may have snapshotted dst_reg into a
-+	 * speculative path: otherwise that snapshot freezes a const offset
-+	 * with an unbounded r32, which later trips reg_bounds_sanity_check().
-+	 * reg_bounds_sync() below re-derives r32 from the updated offset.
-+	 */
-+	__mark_reg32_unbounded(dst_reg);
++/*
++ * Unprivileged variable pointer arithmetic on a PTR_TO_MAP_VALUE whose
++ * offset collapses to a constant. The Spectre-v1 speculative path snapshots
++ * the pointer while its r32 has just been blanked but its offset not yet
++ * synced; the following register move used to trip reg_bounds_sanity_check()
++ * ("const subreg tnum out of sync with range bounds"). With
++ * BPF_F_TEST_REG_INVARIANTS that violation turns into a load failure, so the
++ * unprivileged program must still load.
++ */
++SEC("socket")
++__success __success_unpriv
++__flag(BPF_F_TEST_REG_INVARIANTS)
++__naked void spec_ptr_alu_const_offset(void)
++{
++	asm volatile ("							\
++	call %[bpf_ktime_get_ns];					\
++	*(u64*)(r10 - 16) = r0;						\
++	r1 = 0;								\
++	*(u64*)(r10 - 8) = r1;						\
++	r2 = r10;							\
++	r2 += -8;							\
++	r1 = %[map_hash_8b] ll;						\
++	call %[bpf_map_lookup_elem];					\
++	if r0 == 0 goto l0_%=;						\
++	r1 = *(u64*)(r10 - 16);						\
++	r2 = 0x40000000;						\
++	if r1 > r2 goto l0_%=;						\
++	if r1 s> 1 goto l0_%=;		/* r1 in [0, 1] */		\
++	r0 += r1;			/* ptr += bounded scalar */	\
++	r9 = r0;			/* used to trip the warning */	\
++	*(u8*)(r0 + 0) = r1;						\
++l0_%=:	r0 = 0;								\
++	exit;								\
++	"
++	:
++	: __imm(bpf_ktime_get_ns),
++	  __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_hash_8b)
++	: __clobber_all);
++}
 +
- 	switch (opcode) {
- 	case BPF_ADD:
- 		/*
+ /* Check that range_within() compares cnum ranges, not min/max projections. */
+ SEC("socket")
+ __failure __msg("div by zero")
 -- 
 2.43.0
 
