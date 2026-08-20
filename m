@@ -1,146 +1,146 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from flow-b7-smtp.messagingengine.com (flow-b7-smtp.messagingengine.com [202.12.124.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D963EEAD0
-	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 09:36:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4490418A29;
+	Thu, 20 Aug 2026 10:53:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787218571; cv=none; b=hmHnJrr5+TxHkKor4mgPmwwuJ6Yue1eFtNryJOdXF8EjFeqlqO/WIlhe57I4jtbjpg5s4E15g6bXAMqWmY1VDI0Ux+21weRHtiaGWuw1r/t3h8dSAiC787Rfc93Uex5ypAM6gVraHSdxmGIeND7GvrguLDvzxizjOroBN5vr4ds=
+	t=1787223183; cv=none; b=ssLexdsRPg13MbLOSzi29la/SXbsQHcx9KbmDoI/A0M/mUwxc1Xt+73rzc4BupuXYy3Npk+ZusfjqxI+B3grMQabzIH04Lkln3O9zM5NsCyAKM3KYbIMW8hPrAU2jeQ6T8drtujjs6crXujvebGDbjbnQ5yx0gnQhLRfwk7plxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787218571; c=relaxed/simple;
-	bh=kJ3cTYIYrtG7tlP3Fs01NISD4Xb/24ggyMndOowsHXE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y3qIqeRkcE3iR+2rf8UUDtyBGIPbjyINq5+TEs87cfWZmgAzGQ5tHQf0tFBolW211glkhsaxMsIUwzteQpSq3WE1o9a0AlURhhL7/uorOiYVSVBHm2SLISXCkXbZITcufKzpveI9mJIedyY4C9c+D7HBFbI9E1/LC01Mpx4LhF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Cd4vH6bL; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=rn5i2yLn; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1787223183; c=relaxed/simple;
+	bh=1x3G83+lsmYYDnZXUUc21SyZAESIqwuRlkVLLvM6xzg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ws0X9sI5JP6pU5sEa65F6TO3TZtZofMbtcEgFkrkdsHqX4WoBbRbVxjckQOZgew2IOs/UF4PQRNAczCZDOyxtBpYdWP5+6VgJPXmZlzwMofUSwfvazfAE+UJPZCIAuq8cbptnv8HcLaL7FclNBqvfpSVfWqOWRIClGgceQXaMNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=lGwToSj8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=meE7wau4; arc=none smtp.client-ip=202.12.124.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Cd4vH6bL";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="rn5i2yLn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1787218561;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cihLxc2CBVpIep8pW98bFEf2PHfl2dA2RKm6Z1hhqi4=;
-	b=Cd4vH6bLSUrdHeOw/LgoGGZZlbFmqzKzwjH3SuG6gbJa4SHBhrpWkoGW5UcXwQefAuEqgj
-	syC5pcBIaUJG0lfnbvU0/Y9l8uxgzFM0ACt1hf+ymCbZzsZIoP89n2Wntbta80zYbcwcnf
-	FaOb6aR/SHl78xAOE7dlT4Qvc6RqZMw=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-683-wneqgWY-M82SSOXN-iO1lA-1; Thu, 20 Aug 2026 05:35:57 -0400
-X-MC-Unique: wneqgWY-M82SSOXN-iO1lA-1
-X-Mimecast-MFC-AGG-ID: wneqgWY-M82SSOXN-iO1lA_1787218557
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4994d67d0e3so16353235e9.2
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 02:35:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1787218556; x=1787823356; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=cihLxc2CBVpIep8pW98bFEf2PHfl2dA2RKm6Z1hhqi4=;
-        b=rn5i2yLnKVHBxurkYxocygugSCKOySqUP1nPJHN+SMk2ZOdK+hnXlHZt4O6rMifPU5
-         YDQVOyPYCGdihxesUmbXWqFg8JxOxIlvWzFEdNunQo2V4e7Yh2sr/+JlqW6uKy84ysdK
-         ShQj6oxF/Rxq3yXqqa448xsyMY475Zjemh1S3b6E17zX5zkPMTyZ0c1LoWVOFEWpf0WE
-         W2ENksFhdDDkxUAYR3fTe98YtrzekBSGOY6AwJAuUo7tOOk2UIvCAMLbKVqThzOQI+fx
-         b0VY4FOxECNk304rYfW8eAlpgqN7lEKLd8vL8Ylqkyj+48lXM7u+OXaQiCkmRITP+0a3
-         dp7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787218556; x=1787823356;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=cihLxc2CBVpIep8pW98bFEf2PHfl2dA2RKm6Z1hhqi4=;
-        b=qS0DMstqs+jiEUTrtrmpUjg1ac4NhEHbb1JsbuC3xisZC2n/fY56tZ+YM7532BsdKZ
-         R5Lt5j2m6g+t3w3pMJH0qmW1S88dyRxxsC4IvMHYae12jQjhYb4Va9LvPaVDCAH7WbRS
-         O78J/hIHOsELsv56MJ0Uj5HzCdtVJNn9Ca3fifisqqBmUFWqMoZYBU2aIZKsJ2Xgjuan
-         Relwy1BHIZ2qXhWLUKyHjcfjb6pFJVgjhE5dg5k5KCtUorARDmLagW328ZAk7FRRZDUv
-         iCCPZHwwpK8IFR3ogMPYYSO7l2g6mWa9woVItUfQDxtv4/NjeKgOZRz8lVdSTYp4ayQ/
-         WYRQ==
-X-Gm-Message-State: AOJu0YxX6I4GTDN5QUMtcH/bCFO6rP4UT5JrYIDqMOS/jOVcsLEggxCO
-	S7cuDVDY4F+XsP+tD0BBZK9r8W3BqkR4Sg02p50N8Nz0214LPvapMAWr1XUfer+dLjKIsD/FTZZ
-	2GY5oGamFXpKXztS0myXwyg1GDtEeptI0yV02ssbrPcxv4U5VV2MMAQ==
-X-Gm-Gg: AR+sD10rHKvALkEXHflHPF8OkrfvlswdzXIl1+2KXGGEtWG6+QzZ8Ya9w2zD3fcHTyd
-	MPWG0ydvzcru2SbGJXFJaYMYTMaRFrs3yAnBcy5TKsQOwO1T4hrLzJoqS6pEDSakZ3pIwMUk2bG
-	dECU3HvoMy3QHp8F91UBw0sgE51zqGS0PFvthlsV4+IkjiOdbLGGv+WUdvJUaQKaJrvGBnf+BoN
-	TyQYD5P+r8RZAQhpF1l8Nj4IQsGNG+/+i1QAKAVOPz0DESl7zYNcNZwMapVqrAbrLqKsI0lpOiL
-	/QNTmV93d8erhDiYlqGVrAuyO/T6Q1RIzxTX08JZqWaNNWUU/Uuopt16W1PKUbvza6qm2hIoqJx
-	mz4sMh/8VBgwFA4SioowtQEL80Sdd3jMw8ncqBVVxt6Br4+vGUkTnmoRygbdzEx90kxCquMBWH2
-	s=
-X-Received: by 2002:a05:600c:4e47:b0:499:a0f3:9d5c with SMTP id 5b1f17b1804b1-499aa14a711mr219190285e9.3.1787218556423;
-        Thu, 20 Aug 2026 02:35:56 -0700 (PDT)
-X-Received: by 2002:a05:600c:4e47:b0:499:a0f3:9d5c with SMTP id 5b1f17b1804b1-499aa14a711mr219189435e9.3.1787218555984;
-        Thu, 20 Aug 2026 02:35:55 -0700 (PDT)
-Received: from [192.168.188.103] (ip239-44-231-195.pool-bba.aruba.it. [195.231.44.239])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-482b14b80a5sm12285701f8f.24.2026.08.20.02.35.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Aug 2026 02:35:55 -0700 (PDT)
-Message-ID: <a602a1f6-e279-4c7c-86df-1bd0ef244fd0@redhat.com>
-Date: Thu, 20 Aug 2026 11:35:53 +0200
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="lGwToSj8";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="meE7wau4"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailflow.stl.internal (Postfix) with ESMTP id F2BE213000D7;
+	Thu, 20 Aug 2026 06:52:57 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Thu, 20 Aug 2026 06:52:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1787223177; x=
+	1787230377; bh=1Hm6dRu/lDSOGHkykkLzQS7nEKTBeP5xgqIC54jHG7w=; b=l
+	GwToSj8vmRVt7iD8kNLWQM3v96QhNpGsPEAIsmLFJdObYyjPTBvrw7Ujk6VQKuDp
+	GCcFVbMUBnkDnKFediQ74DkjI0r5j9sygg69IGVprIeK/QZbukiszEh/8GT6zLyO
+	7qOQyfHwFR2vEffF+kH1h8xR3FHtjv+JzVnshE9icj3cLJNPFGGtBS+N4sCNnKE4
+	WCi+TVKbB0rs1hivSdibID+uGzDvlVf95YSq+EIS+1g1hDBgjK3hHbgyCgdpkFpo
+	WArd82fv+rxaxOBasx/YlltyJmaRk38eM43LSn0HQBY+0UdJNDJT40lEgZj8Gouv
+	IJwdIGvzlbFfbqpx/wLrQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1787223177; x=1787230377; bh=1Hm6dRu/lDSOGHkykkLzQS7nEKTBeP5xgqI
+	C54jHG7w=; b=meE7wau4CKenl5UIRKtWlLbHB0nH5Rd4PKesazkis9U68OKk4Wn
+	EQ3Z5R2pmVJ69WzQ6nQ9nIAaTMAoQtgsAikt3XwO+xFU7SeCwmNQenIdOf/PYzEZ
+	MYw0IhPYRj0yRM/c9q3oK76xpF9/JNGoFWnHGCObkf63ugBBYvOx4tMXBVF1s+xF
+	SiMSy9RmN+erVgJS/RQLTd+rESLKHl5B3vHQVPab+tLGMYhqMgeLK6h3ItmyW3vD
+	5IfFWiPeyEbuUvX4ZHugoazneYVRXdqxx0ulsuh215HxrGproxrWmp5eUeOykS9V
+	5kzIC+7I33DzGtBFvmvVR+/ZFpwUMopnoeg==
+X-ME-Sender: <xms:iNyGat54BC7xFMs_8l708cxxc_QNa1N1KRy3lm3UYpbEGggUlgpZaA>
+    <xme:iNyGarViOayqVZ8tXexJEDUOBz4FGxvlpPQEw1SI7PiuPfT9vIONKpD6EAahfXlIc
+    ugsaYtQ096OKZWtsK4pFHHSpfMIZWGwSX6KgtfyIGdWztTaOIozpEE4>
+X-ME-Received: <xmr:iNyGal47XIR6C_PL9lYLPJXFMcpAeMSpoWverE2zKXbOXLBAvYBdNDx6pWk>
+X-ME-Proxy-Cause: dmFkZTFWRza+tZqbwe6AvSvswwNn1vm2ouOEl3sD29XdKlxSbeb7SJ+ft0N23ZfHAXdLoD
+    HmugP2x8o1qZZdYgJ6uNKnryUZdf9vJIX7yG1Wd0puBWlPtUU9+QdT2J4Dz6j/J8OsU9Lu
+    cHBdXN2icIfdMLZpxUxDYeqctOT72wTuhC9gb/P4RO5svqtLV3/dQMxW07EDCY/HgRS0R5
+    hIWhoRHy8caBmuUGk6MLMFA2fTWneQj91H7dazgLVy+nDRNY6KF3ioVB/SCkQrHtuzDw57
+    zzT/SzyH8GGH6dfj0mKV7WEwwBQIKCfmWOLYVVVdY2G5L5TUscUlN0MnsMmOT7XGn5nqZ3
+    qTusjp1bsmaQ7NxNYNGdouQ+Lzho5PCtqMOZXHY/7N8mFMRgD536Lix289uLH1lUZ5l7Bs
+    0EKkfid8uPYzb8PyS0LZ5AGD6stNkDOaYLtEQ+FU4ShSANtBwfDpn7DoszKmWH82qWAlZf
+    IibZn0VeyWcdksSZ6k5AMmFRba7hM1obgBOhf0ePHT8321pqVtXzXm7r6Ac9BoQcxbdoGX
+    DiQyx+zJJ8bPCAxR69l9MIPqGhG3bFnUFNk13wc1BQkNJDAjeLqZCWgh8a/ngZ29YtnBdz
+    5UGnWNG2Fm8ctlMT15phLBhY3M3l86Iw7muaQrld5L7QUvHK5Ib+j58n5HSQ
+X-ME-Proxy: <xmx:iNyGamLi7qP7Vxx2Urm__5VWE9vtQY2VDeeZD2Ww17JIYTyID0H14g>
+    <xmx:iNyGagjcASSknb_rBn_7XGrZaAw0RVIp9r9LgWWiYqMx7ZibjiT0gg>
+    <xmx:iNyGaoIaZZAMY58wc3AOrGX1JTsHPReoBCi33oNnA_pSv5mWAwG5lw>
+    <xmx:iNyGatEnM3ejngFdRo3f_F-khoayz0ka4TzC0oi5RkdtRfyGbUZ5QQ>
+    <xmx:idyGahzkie0eSCaUoBYs-yYze10njpQW-hnyNaeDBMfy-8AIxueySSoN>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 20 Aug 2026 06:52:55 -0400 (EDT)
+Date: Thu, 20 Aug 2026 11:52:54 +0100
+From: Kiryl Shutsemau <kirill@shutemov.name>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: akpm@linux-foundation.org, ljs@kernel.org, nico.pache@linux.dev, 
+	baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com, hughd@google.com, 
+	lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com, rppt@kernel.org, 
+	ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, 
+	vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	jannh@google.com, willy@infradead.org, pfalcato@suse.de, rostedt@goodmis.org, 
+	mhiramat@kernel.org, linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 01/57] mm: add pte_folio()
+Message-ID: <aobZECx2aTUHP6n3@thinkstation>
+References: <20260816224609.308019-1-kirill@shutemov.name>
+ <20260816224609.308019-2-kirill@shutemov.name>
+ <7e40cdfe-67d2-4ddf-a048-f33b2d590371@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v3 0/4] selftests/xsk: improve shared-UMEM
- coverage
-To: Tushar Vyavahare <tushar.vyavahare@intel.com>, netdev@vger.kernel.org,
- magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
- stfomichev@gmail.com, kernelxing@tencent.com, davem@davemloft.net,
- kuba@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- tirthendu.sarkar@intel.com, andrii@kernel.org
-Cc: bpf@vger.kernel.org
-References: <20260819024443.781764-1-tushar.vyavahare@intel.com>
-From: Paolo Abeni <pabeni@redhat.com>
-Content-Language: en-US
-In-Reply-To: <20260819024443.781764-1-tushar.vyavahare@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7e40cdfe-67d2-4ddf-a048-f33b2d590371@kernel.org>
 
-On 8/19/26 4:44 AM, Tushar Vyavahare wrote:
-> AF_XDP shared-UMEM support in the existing XSK selftests is limited to
-> a small set of scenarios, while the supporting setup and cleanup paths
-> become fragile as coverage expands.
+On Tue, Aug 18, 2026 at 07:09:48PM +0200, David Hildenbrand (Arm) wrote:
+> On 8/17/26 00:45, Kiryl Shutsemau wrote:
+> > From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+> > 
+> > Callers that want the folio behind a present PTE spell it out as
+> > page_folio(pte_page(pte)).
+> > 
+> > Add pte_folio() as the folio companion to pte_page(), and convert the
+> > callers in fs/proc/task_mmu.c and mm/hugetlb.c.
+> > 
+> > Preparation for the anonymous collapse engine, which reads the folio
+> > behind a PTE in several places.
 > 
-> This series improves shared-UMEM testing and infrastructure in four
-> steps.
+> [...]
 > 
-> Patch 1 makes UMEM ownership explicit with refcounting and centralizes
-> socket and UMEM teardown, keeping cleanup behavior consistent across
-> normal completion and error paths. A UMEM that survives teardown now
-> fails the test instead of leaking silently.
+> >  
+> > +/**
+> > + * pte_folio - Return the folio mapped by a present PTE.
+> > + * @pte: A present page table entry.
+> > + *
+> > + * The folio companion to pte_page(); only meaningful for a present PTE
+> > + * that maps a struct-page-backed folio.
+> > + *
+> > + * Return: The folio containing the page @pte maps.
+> > + */
+> > +static inline struct folio *pte_folio(pte_t pte)
+> > +{
+> > +	return page_folio(pte_page(pte));
+> > +}
 > 
-> Patch 2 prevents TX setup when RX socket configuration has already
-> failed. This avoids shared-UMEM TX setup relying on incomplete RX-side
-> socket and UMEM state.
+> There is a reason why most code doesn't need that: because they should be using
+> vm_normal_page() / vm_normal_folio(), or need the exact page and handle special
+> ptes differently (see gup.c that uses pte_page()).
 > 
-> Patch 3 expands XSKMAP and test capacity to four sockets and adds a
-> length-based XDP steering program. The classifier uses total
-> XDP-visible packet length (data_end - data) and SHARED_UMEM_LEN_SPLIT.
-> 
-> Patch 4 adds the shared-UMEM callback runner and initial 4-socket,
-> length-based steering, uneven-distribution, and unaligned-chunk test
-> cases. The three packet-stream sequences share one transactional helper
-> that stages replacement streams and publishes them into the socket
-> arrays only after every allocation has succeeded.
-> 
-> Together, these patches strengthen shared-UMEM setup and cleanup and
-> extend selftest coverage to multi-socket and packet-distribution
-> scenarios.
-## Form letter - net-next-closed
+> And other code that uses pte_page() doesn't really operate on folios AFAIKs.
 
-We have already submitted our pull request with net-next material for v7.3,
-and therefore net-next is closed for new drivers, features, code refactoring
-and optimizations. We are currently accepting bug fixes only.
+Fair.  pte_folio() does not fit the abstraction as it stands, so I will
+drop it.
 
-Please repost when net-next reopens after Aug 31st.
+I thought that maybe we can rework vm_normal_*() to be a predicate on a
+page table entry, so if it returns true the caller can safely use
+pxx_folio(). It would be a cleaner interface in my opinion.
 
-RFC patches sent for review only are obviously welcome at any time.
+vm_ops->find_normal_page() breaks the idea, though.  Xen (being the single
+user of the vm_op) wants the special bit to indicate a custom translation
+to the page here.  A bool cannot describe this.
 
-See: https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#development-cycle
+Ugh..
 
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
