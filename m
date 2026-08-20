@@ -1,90 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail-24428.protonmail.ch (mail-24428.protonmail.ch [109.224.244.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67D094756C4;
-	Thu, 20 Aug 2026 14:21:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC5E3438BC
+	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 14:31:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787235697; cv=none; b=inXSoyGjWp+lzVjt4n2T3QY+EEVJK79yRAzxI2gVE90TYojuA6UUX2W1Kp8q3er8RhfSfuGQ7mjJuczUlUCZVwEdfX8lN7NRTK+ggr7nF6jQVRkSZg1LkajHdx+XPPCpI4B76zrSCK027kVMFI6V7jgNUaVyoCUkQ+NYjyHv+G4=
+	t=1787236267; cv=none; b=WuGYrREc1iuFnym6HAYl1L+QGkHzwg0/M+/F/sal0GeohMQg2XjcOfd/70wL8nshGijKdSYotUhziYQYI2+Vo9kzAqhX7FSQ1FR/THhhAuKybA9wzQOCVvlguQidiGwEg0KjZBmz+pziBUfAZut/f2nx5O5gWq4JV3V50RDTsQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787235697; c=relaxed/simple;
-	bh=5CxUmKEVi++wyAkDYX6+cqGMVDK0FLAe1j7nQJZ1V88=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=PU+mJDY2oo/XfI8jW2LdrqQTAC8fF0fDSA6SRttdPZ+2aFFTdP9rD16CJ5LfNm1ie8SLrTDGtNmuNWcS0c3YRV6Pxn/UxMI0nlspyE2O6w7Pfip7yhc9Ol8yTfATWJUs/LxVnJCEc4gZvS3+eVICzdme5aahOhNiiI79rph4lq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QWmvxwoV; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787236267; c=relaxed/simple;
+	bh=6nZekrGDR1e79cZp3d5jjVTk/CDtiCrwQg6z8O9+w08=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=A3mJfZmXglOfoURWGWbmPT35JxnMz8vBRFcy+pD1wNiGJuJ/cVcnBVQb7OvfQTDzlXRBAxNoyG1Ay29aIOqWGpTYZsRjxcCELpYmOxH/oSFusctJ+E3kEqpxqHisewDSj0OnwZCbe9TwwsAz/rIA6PFLhBI9eR8Sk4yTecunEkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=R7WaDDj4; arc=none smtp.client-ip=109.224.244.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QWmvxwoV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 650321F00A3A;
-	Thu, 20 Aug 2026 14:21:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787235694;
-	bh=5CxUmKEVi++wyAkDYX6+cqGMVDK0FLAe1j7nQJZ1V88=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=QWmvxwoVRXwSH+ba8lNb2j+x+lByMTvoH33o9NUzb2tVdKrWD88b14RuMWVl7UBCt
-	 Bg3R9xOkIFiVfJ1XfJIqN8fDxc47p5Zq24fGQGS54f2WsNmx9mSVzsVE5clsbuRMck
-	 ezYXewED8TpwPhd/6idLkCvtz8MJe8QMuP2tcVoh5X3VyUvamaZR5jlVBepBevB4Tb
-	 33w/9A6AkvlaBV9oNz+Yv+gzgcz4IFhYJTUjbhs9zyJg1eeiSyr7lw55xC8SzbYdf/
-	 XY1fNXA+Y5YDPi6beqKKX78e1H5SpVPMQsotUG/0HgcfPb51MC72Z836y9F+ubDhDP
-	 8MV5hzN6Qr8EQ==
-Content-Type: multipart/mixed; boundary="===============2268151016755920420=="
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="R7WaDDj4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=bev6y25i6ncctedy32ymibrkma.protonmail; t=1787236253; x=1787495453;
+	bh=6nZekrGDR1e79cZp3d5jjVTk/CDtiCrwQg6z8O9+w08=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=R7WaDDj4uDWfaqWgvp9hz3zmu3Ei0TOFlLNWcdXx8Dh9w4wKgoWIPW+cHVI8nfzUN
+	 fH/AETksbKuyd7FGPgCilPREML61oZWoTNrA2yDzaQnXSPJ3h9tFa0UaHT5i81Tdfp
+	 0kfPCHvHjbhNKN6J/+X4AvV/pUJzlU1botcUUUXvF7AE9C6LYbAd59RNuwVBQlrwUu
+	 mPdarLyk9qH6uCBIXUVJZSv86f/l7u21NB60CuZLrqJNgJ9ov4YPh0ki3+bPBfVtK7
+	 ZxJwr/09bSCRRjeeSwzV+4hQA0R/nqLy9Bc+0+qDntN7+3b8xJfX2etaBmXJi35PNG
+	 F1oG25mCT0DAg==
+Date: Thu, 20 Aug 2026 14:30:50 +0000
+To: sashiko-reviews@lists.linux.dev
+From: quanyeyang <quanyeyang@proton.me>
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCH v2] bpf: Annotate bpf_obj_memcpy with data_race
+Message-ID: <dxXTVwpQO7zo4ivW09N7H3v1-xi5XFS2KuY6EG17YJ7MdY5GLbHDXcG-8P3NYOKJHqkEUL8PEUwFX1nCVirLeNXR7y-MBLcx9WfAdt621Rg=@proton.me>
+In-Reply-To: <20260820112634.EC5881F000E9@smtp.kernel.org>
+References: <20260820-bpf-kcsan-obj-memcpy-v2-1-672517a3145f@proton.me> <20260820112634.EC5881F000E9@smtp.kernel.org>
+Feedback-ID: 206494642:user:proton
+X-Pm-Message-ID: 579cd2722e5d9fed5952d59023485ccda98b5b71
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <1355a0a05ef4ae8bf73f6f0392604df78e2d64995cb5e54cea3be01d2cd5e454@mail.kernel.org>
-In-Reply-To: <20260820131801.68759-3-tasos.papagiannnis@gmail.com>
-References: <20260820131801.68759-3-tasos.papagiannnis@gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/3] bpf: Add user memory access kfuncs for linux_binprm
-From: bot+bpf-ci@kernel.org
-To: tasos.papagiannnis@gmail.com,bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,linux-mm@kvack.org,linux-fsdevel@vger.kernel.org,viro@zeniv.linux.org.uk,brauner@kernel.org,akpm@linux-foundation.org,david@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,kpsingh@kernel.org,matt@bobrowski.net,song@kernel.org,utilityemal77@gmail.com,tasos.papagiannnis@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 20 Aug 2026 14:21:34 +0000 (UTC)
-
---===============2268151016755920420==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> bpf: Add user memory access kfuncs for linux_binprm
->
-> When security_bprm_check runs, the arg and env strings for the exec have
-> been copied into bprm->mm. The new address space has not been associated
-> yet with a task_struct until exec_mmap(), so existing BPF user memory
-> helpers can only read from the calling task's old address space.
->
-> This patch adds bpf_copy_from_user_bprm() and
-> bpf_copy_from_user_bprm_str() kfuncs. Both use the mm_struct provided by
-> struct linux_binprm.
-
-This isn't a bug, but could the opener be reworded to avoid "This patch
-adds"? Documentation/process/submitting-patches.rst asks for imperative mood
-("Add bpf_copy_from_user_bprm() ...").
-
-> Register these kfuncs on both MMU and NOMMU systems. On NOMMU systems,
-> exec arguments are staged in bprm->page[] rather than mapped in bprm->mm,
-> so the kfuncs return -EOPNOTSUPP.
->
-> bpf_copy_from_user_bprm() has similar semantics as
-> bpf_copy_from_user_task(). bpf_copy_from_user_bprm_str() copies one
-> NUL-terminated string and returns its size including the NUL terminator.
-> It accepts BPF_F_PAD_ZEROS to clear unused destination bytes on success.
->
-> This patch registers both kfuncs with KF_SLEEPABLE because accessing the
-> remote address space can fault. This allows BPF LSM programs attached to
-> security_bprm_check to read arguments beginning at bprm->p and reject an
-> exec based on its command-line arguments.
-
-Same for "This patch registers" here -- would "Register both kfuncs with
-KF_SLEEPABLE ..." fit better?
-
-> Signed-off-by: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32375104040
---===============2268151016755920420==--
+
+
+Sent with Proton Mail secure email.
+
+On Thursday, August 20th, 2026 at PM 7:26, sashiko-bot@kernel.org <sashiko-=
+bot@kernel.org> wrote:
+
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+>=20
+> Pre-existing issues:
+> - [High] bpf_obj_memcpy() ignores the long_memcpy parameter when a map va=
+lue contains special BTF fields (rec !=3D NULL), leading to data tearing an=
+d uninitialized memory leaks.
+> --
+>=20
+> --- Patch [1]: [PATCH v2] bpf: Annotate bpf_obj_memcpy with data_race ---
+> commit 1f96f25bd23990e4a6c598225059cbcbac9898bf
+> Author: quanyeyang <quanyeyang@proton.me>
+>=20
+> bpf: Annotate bpf_obj_memcpy with data_race
+>=20
+> This patch annotates the ordinary memcpy() sites in bpf_obj_memcpy() with
+> data_race(), matching bpf_long_memcpy(). This documents the existing
+> concurrency semantics and suppresses KCSAN reports for intentional races
+> without changing behavior.
+
+Thanks for the review.
+
+The per-CPU padding issue is pre-existing and has already been fixed by
+commit 7cf9cd98cf6f ("bpf: Copy per-CPU map value padding in
+copy_map_value_long()"):
+
+https://lore.kernel.org/bpf/20260624155115.85196-2-leon.hwang@linux.dev/
+
+That commit makes copy_map_value_long() pass
+round_up(map->value_size, 8) to bpf_obj_memcpy(), ensuring that the tail
+padding is copied even when map->record is non-NULL.
+
+My v2 was based on a Linus-tree commit that does not yet contain this
+BPF-tree fix. The data_race() annotations neither introduce nor change
+the padding behavior. I will make sure that the next revision is rebased
+onto the current bpf tree.
+
+As for tearing, bpf_long_memcpy() provides only a best-effort mitigation,
+rather than a strict anti-tearing guarantee. The syzbot update paths
+addressed by this patch use copy_map_value(), not copy_map_value_long().
+
+quanyeyang
+
