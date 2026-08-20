@@ -1,138 +1,106 @@
-Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5618312819;
-	Thu, 20 Aug 2026 04:12:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16247481B1;
+	Thu, 20 Aug 2026 05:20:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787199145; cv=none; b=j1DaNcM/gek7yRg0dIsIB66r7vZk2MHeybdfJ7TzZ6aKsctTM7aMoJibDiyaYaGoDEwbjG3PYDgiSpLQkkpkNXWXPvy/Di6Mln9GqbL88Fa42v7uFUDYHK7I60i0m9puESUn/ZIhtOGGJVTO809NTVpHUThtNuGYvXqlK+f2ZXw=
+	t=1787203224; cv=none; b=WRieLPQ2QyQWhi+SHIvMHbWQR8RCts5GmgHJnCifJJgIBxKiPtMX3/u+fAyHMXvkrj0fErb+KqcjtvcIh/RujYljyE7itxTAtVeVAg0ejM7OJLrmhehxGEEWcaJ8RgjRRthfbFx2Ltz/gvUIFLk2wVzUL9JogRHcBfeBH0wf6UA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787199145; c=relaxed/simple;
-	bh=V3ca0mlb/7KaViZBZMLIfqyopHMyAiDxQQ5RRvPTg6I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=uHzLTBXVd3qjP2s0fTs3WSBLgLm8LsVoMgRgoQ8suykkM3S/FJSuTDF65OXc0B6litWr+05IvZ595ihDdRpmhJi6xablOqXZevE3t6izJk+dhxEw/o4In4WE6LkQNlVjPzpMO3JEm0PIalmRGxy+jfFBPZvTljoDefdmGUlWk+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=XEBX6BNp; arc=none smtp.client-ip=113.46.200.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1787203224; c=relaxed/simple;
+	bh=m9D/HmIKu2w3+AnPOjYE0hFdp24SHi9mU4PniPoqmFA=;
+	h=Date:Message-ID:From:To:Cc:Subject; b=E93i2N3RsUxKIMOmbAfh1C5XQ9iIUQZKipamtgC6DTraGsnqo6/cx6hrMNBXsJwzzw8fKRC0mlxVYPt0J80PC5pNumNbH+SSr+VBu+7I2h0ijD1zB+Ui8X7hT0YdG9qn6qkDs07WMGou/DYUDa65m+qhsZkk0Dkgvxkub2TK/Rc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NTiM0aEd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="XEBX6BNp"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=C2UVYU8EnWG2+bWacBuEvh5oiuNPv4fmf2gWJFql9MI=;
-	b=XEBX6BNp6GkzfJ3nnaNPsv+uYf2n1fWJrMOsWXw+gnlzaDzZlGwAkYAQp0dJ9nko5djwQto/C
-	gaFzgPTKY3fwJaSjAD/1tD2LTGQgE7DuansFdTanUcq3MOFyK2VKKXfH48yjByVw4qWpdayOomb
-	8BZQuBfX1+bLOQCJ0XsTonQ=
-Received: from mail.maildlp.com (unknown [172.19.163.0])
-	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4hQVBD60Xrz12LDV;
-	Thu, 20 Aug 2026 12:01:56 +0800 (CST)
-Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7D46140561;
-	Thu, 20 Aug 2026 12:12:17 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
- (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Thu, 20 Aug
- 2026 12:12:16 +0800
-Message-ID: <0f57cace-5588-4f34-bd3e-1e737b8d0d7f@huawei.com>
-Date: Thu, 20 Aug 2026 12:12:15 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NTiM0aEd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77F6F1F000E9;
+	Thu, 20 Aug 2026 05:20:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787203222;
+	bh=DZfBtUsbi/HyiDVjWdSkKSDR9yp2oJWNUC9FSkzF5mo=;
+	h=Date:From:To:Cc:Subject;
+	b=NTiM0aEdcM8/R/J4BnTPmtRuUkMa2/ZQUSFyRVofJCTVWoa6Hxv1J6CQwgGQkplVe
+	 K4w8E+Dua1+ehcw3TFYjgzU/b8sCs15jAhndKdlt0lkduW4iTnfw7catYAWQQ9tu/i
+	 srgIdtzEjYYlDw1aO77qwqsP5G8ybYy39cYO8MGDSHjoYWa4Nhju4PoK8gVhwEbmGZ
+	 uosFc/uVHg+Z+n4LJCRsUGBap1U4JEDEB0g1BfKnBijkT1fl6c184gf6R4d5KPzmAH
+	 L5qSo7SKhwmMe0wnuXMSnE7dWORmAyogUStKZBm33WDzYf47056OAsXjH96kIRm/pz
+	 VjzLNDJjkUe5A==
+Date: Wed, 19 Aug 2026 19:20:21 -1000
+Message-ID: <95d7ccc17681aa3a4a2eeb1b073f00f7@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org,
+ David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>,
+ Changwoo Min <changwoo@igalia.com>, Emil Tsalapatis <emil@etsalapatis.com>,
+ sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] bpf: sched_ext: Mark ops argument container
+ pointer fields as trusted
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Enable arena LDSX tests
- for riscv64
-Content-Language: en-US
-To: Chen Pei <cp0613@linux.alibaba.com>, <ast@kernel.org>,
-	<daniel@iogearbox.net>, <andrii@kernel.org>, <memxor@gmail.com>,
-	<bjorn@kernel.org>, <puranjay@kernel.org>
-CC: <ihor.solodrai@linux.dev>, <eddyz87@gmail.com>, <martin.lau@linux.dev>,
-	<song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
-	<emil@etsalapatis.com>, <pjw@kernel.org>, <palmer@dabbelt.com>,
-	<shuah@kernel.org>, <guoren@kernel.org>, <bpf@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-References: <cover.1787140923.git.cp0613@linux.alibaba.com>
- <1bab696ec36f196fa6ec74a0f056030b39730da7.1787140923.git.cp0613@linux.alibaba.com>
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <1bab696ec36f196fa6ec74a0f056030b39730da7.1787140923.git.cp0613@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemf100007.china.huawei.com (7.202.181.221)
 
+Walking an unannotated pointer field of a trusted struct yields a bare
+PTR_TO_BTF_ID in non-sleepable programs, which kfuncs and helpers accept,
+but PTR_UNTRUSTED in sleepable programs, which they reject. This gets in the
+way of making ops.init_task() sleepable, which schedulers want for
+allocations. For example, passing args->cgroup into bpf_cgrp_storage_get()
+then fails verification and the only recourse is round-tripping through the
+cgroup ID with bpf_cgroup_from_id().
 
+The pointer fields in the sched_ext ops argument containers are all pinned
+by the callers for the duration of the ops calls and are never NULL. Add
+them to the verifier's trusted-fields whitelist so that they are PTR_TRUSTED
+in both sleepable and non-sleepable programs.
 
-On 2026/8/19 20:09, Chen Pei wrote:
-> Now that the riscv64 JIT supports signed arena loads
-> (BPF_PROBE_MEM32SX), enable the arena LDSX tests on riscv64:
-> add JIT disassembly assertions for arena_ldsx_disasm (arena base in
-> s7, add into t2, sign-extending lw/lh/lb loads) and run
-> arena_ldsx_exception and arena_ldsx_s8/s16/s32 on riscv64.
-> 
-> Reviewed-by: Pu Lehui <pulehui@huawei.com>
-> Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
-> ---
->   .../testing/selftests/bpf/progs/verifier_ldsx.c | 17 +++++++++++++++++
->   1 file changed, 17 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-> index 41340877dc9d..ed0a0f159bc1 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-> @@ -286,6 +286,19 @@ __jited("add	x11, x0, x28")
->   __jited("ldrsh	x22, [x11, #0x18]")
->   __jited("add	x11, x0, x28")
->   __jited("ldrsb	x22, [x11, #0x20]")
-> +__arch_riscv64
-> +__jited("add	t2, a5, s7")
-> +__jited("lw	s3, 0x10(t2)")
-> +__jited("add	t2, a5, s7")
-> +__jited("lh	s3, 0x18(t2)")
-> +__jited("add	t2, a5, s7")
-> +__jited("lb	s3, 0x20(t2)")
-> +__jited("add	t2, a0, s7")
-> +__jited("lw	s4, 0x10(t2)")
-> +__jited("add	t2, a0, s7")
-> +__jited("lh	s4, 0x18(t2)")
-> +__jited("add	t2, a0, s7")
-> +__jited("lb	s4, 0x20(t2)")
->   __naked void arena_ldsx_disasm(void *ctx)
->   {
->   	asm volatile (
-> @@ -317,6 +330,7 @@ __description("Arena LDSX Exception")
->   __success __retval(0)
->   __arch_x86_64
->   __arch_arm64
-> +__arch_riscv64
->   __naked void arena_ldsx_exception(void *ctx)
->   {
->   	asm volatile (
-> @@ -338,6 +352,7 @@ __description("Arena LDSX, S8")
->   __success __retval(-1)
->   __arch_x86_64
->   __arch_arm64
-> +__arch_riscv64
->   __naked void arena_ldsx_s8(void *ctx)
->   {
->   	asm volatile (
-> @@ -369,6 +384,7 @@ __description("Arena LDSX, S16")
->   __success __retval(-1)
->   __arch_x86_64
->   __arch_arm64
-> +__arch_riscv64
->   __naked void arena_ldsx_s16(void *ctx)
->   {
->   	asm volatile (
-> @@ -400,6 +416,7 @@ __description("Arena LDSX, S32")
->   __success __retval(-1)
->   __arch_x86_64
->   __arch_arm64
-> +__arch_riscv64
->   __naked void arena_ldsx_s32(void *ctx)
->   {
->   	asm volatile (
+Signed-off-by: Tejun Heo <tj@kernel.org>
+---
+ kernel/bpf/verifier.c |   26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-Tested-by: Pu Lehui <pulehui@huawei.com>
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5661,6 +5661,28 @@ BTF_TYPE_SAFE_TRUSTED(struct file) {
+ 	struct inode *f_inode;
+ };
+ 
++/*
++ * The pointer fields in the sched_ext ops argument containers are pinned by the
++ * callers for the duration of the ops calls and are never NULL.
++ */
++BTF_TYPE_SAFE_TRUSTED(struct scx_init_task_args) {
++#ifdef CONFIG_EXT_GROUP_SCHED
++	struct cgroup *cgroup;
++#endif
++};
++
++BTF_TYPE_SAFE_TRUSTED(struct scx_cpu_release_args) {
++	struct task_struct *task;
++};
++
++BTF_TYPE_SAFE_TRUSTED(struct scx_sub_attach_args) {
++	struct sched_ext_ops *ops;
++};
++
++BTF_TYPE_SAFE_TRUSTED(struct scx_sub_detach_args) {
++	struct sched_ext_ops *ops;
++};
++
+ BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct dentry) {
+ 	struct inode *d_inode;
+ };
+@@ -5705,6 +5727,10 @@ static bool type_is_trusted(struct bpf_v
+ 	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED(struct bpf_iter__task));
+ 	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED(struct linux_binprm));
+ 	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED(struct file));
++	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED(struct scx_init_task_args));
++	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED(struct scx_cpu_release_args));
++	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED(struct scx_sub_attach_args));
++	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED(struct scx_sub_detach_args));
+ 
+ 	return btf_nested_type_is_trusted(&env->log, reg, field_name, btf_id, "__safe_trusted");
+ }
