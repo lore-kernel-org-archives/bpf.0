@@ -1,181 +1,126 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074F41925BC
-	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 08:35:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [118.143.206.90])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D5A4376A12;
+	Thu, 20 Aug 2026 08:47:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=118.143.206.90
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787214908; cv=none; b=FkH3F+ckurjgTWZbPE5om5wp+vGvsokfVrxczvWB1r1iukLxELPdeELHPbyd+1/6ZPfofYJ7n1b5pqtydj2ZC+WVdRt9IBixIvBhfZCf0Wbo3WGltWa+fM335ZV3qin1GKAWU7TlxUi3p2LPpUPgzyrSsWOxUMeEfRIkeEuWNDk=
+	t=1787215626; cv=none; b=lEOS9IYjxqMlGPHE7EPsn+3WUTWOBo/C4BrdMZS/Y5kqARjcC9BI8D2ax1rjL5svl/jvmHNX5NdwCOFViDpiaUvfQ855EpgEBgQ2XZdKZy5RP3Xuu04fDLOFLej7yiQsEE+3N4cokIKtiK/9JkdAJoWX2AGm6y8HGkfMFHkkIrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787214908; c=relaxed/simple;
-	bh=7plH7WgQTs+l9zZOaLB5rWBEoARwlNS5Gqh95RX4byw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
-	 References:In-Reply-To; b=XFOUpG/1z9YWN8DpENJWixiuwKQOwNRjo2MrMke7ujCyL8zPMgzpBVHK5Bb9xLcK6D5y8JKVQEdEjp6MqDcKSG5x1bGBu4/e++ozj49+n65ZwfggftWY3edLtwr7TpqxX+xBk3kuDsmIfSwXx3St4KWA24LN02JfUUPPJuzdd6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=qLHU4AkE; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="qLHU4AkE"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id F23664E412F4;
-	Thu, 20 Aug 2026 08:35:00 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id C4EF9602B8;
-	Thu, 20 Aug 2026 08:35:00 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0CDEF11C75B7D;
-	Thu, 20 Aug 2026 10:34:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1787214896; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=bq/D9WVzFogb06jpCnh/bSgd7ZfHdWCL0Df6vR4FcE0=;
-	b=qLHU4AkEzXlrFqI/0jeXQiAIQugxiUruOR4Jk9xBw2B07ghDBASFKw7eUvlCsar3gukj7b
-	ea3t4z+0YBpDSalav6+eon/cDXlnrZgycNkReYCOxXz/z7tRV18S8ik/vycjCwblQxHjtv
-	5Muzamcg5BZhTt2EHL4AQsULtlUirE0bV9YqE+wCOsI5vkpt8jN9G3X0/OwqymAtQ5ObxH
-	hIWSPr2ZhbNXkQW9TmTsG8tDytkfZJ+xv50Wubqe602KN3ccyeIDQORDnknwrR6hmo0N+b
-	EHY9lzKE64vN+brZhkCnZp3m2XgDtsMSmE9WMB0/aEOnVIkD7zEs5l0f/MsaNw==
+	s=arc-20240116; t=1787215626; c=relaxed/simple;
+	bh=zF5fCM7nDYfymdMcvVadzG6IajfN+HxR0r9lfkbZLpg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Oobpn3fkrACdr89jOd1chtuiDNi2ToJUVjS+Z5HqjMiDbUuIPnmFS1auOkRjMjws/dvW+6hD1u/ZM0Cxc1TdXGV9ThZnzjVO2W46XIWKF+YaG/E0+zJvrcTRxCC5x1Oe8aCKDPIhAeAX+BpcRhpZuh6kWYBJdR1utY85H4Dbk2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com; spf=pass smtp.mailfrom=xiaomi.com; arc=none smtp.client-ip=118.143.206.90
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaomi.com
+X-CSE-ConnectionGUID: kjOtaCVCS2CZ8JCTdCG06w==
+X-CSE-MsgGUID: MWKiRehuTRGKF2xuzRaPlg==
+X-IronPort-AV: E=Sophos;i="6.25,232,1779120000"; 
+   d="scan'208";a="159903525"
+From: meishaoming <meishaoming@xiaomi.com>
+To: <ast@kernel.org>
+CC: meishaoming <meishaoming@xiaomi.com>, <daniel@iogearbox.net>,
+	<andrii@kernel.org>, <memxor@gmail.com>, <martin.lau@linux.dev>,
+	<eddyz87@gmail.com>, <song@kernel.org>, <yonghong.song@linux.dev>,
+	<jolsa@kernel.org>, <emil@etsalapatis.com>, <bpf@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH bpf] bpf: array: reject max_entries > INT_MAX to prevent signed-iterator overflow
+Date: Thu, 20 Aug 2026 16:46:43 +0800
+Message-ID: <20260820084643.35489-1-meishaoming@xiaomi.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 20 Aug 2026 10:34:51 +0200
-Message-Id: <DKTMSYRHS7B8.3FQB9UVGWOTX3@bootlin.com>
-Subject: Re: [RFC] running bpftool build tests in CI
-Cc: "Quentin Monnet" <qmo@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Bastien Curutchet"
- <bastien.curutchet@bootlin.com>, "Vineet Gupta" <vineet.gupta@linux.dev>,
- "Emil Tsalapatis" <emil@etsalapatis.com>, "Mykyta Yatsenko"
- <yatsenko@meta.com>, "Puranjay Mohan" <puranjay@kernel.org>, "Mykola
- Lysenko" <nickolay.lysenko@gmail.com>, <kernel-ci@meta.com>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>,
- =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, "bpf"
- <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <DKT6QBHWC8YM.4D90SOC807CW@bootlin.com>
- <16d6ca03-c8a4-4370-a8d2-c97a99d68bfc@linux.dev>
-In-Reply-To: <16d6ca03-c8a4-4370-a8d2-c97a99d68bfc@linux.dev>
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain
+X-ClientProxiedBy: bj-mbx11.mioffice.cn (10.237.8.131) To BJ-MBX03.mioffice.cn
+ (10.237.8.123)
 
-Hi Ihor,
-thanks for the feedback
+BPF_MAP_TYPE_PROG_ARRAY (and other array maps) take max_entries as a u32
+from userspace via bpf(BPF_MAP_CREATE), but array_map_alloc_check() only
+guards value_size > INT_MAX and leaves max_entries unchecked.
 
-On Wed Aug 19, 2026 at 10:46 PM CEST, Ihor Solodrai wrote:
-> On 8/19/26 12:59 PM, Alexis Lothor=C3=83=C2=A9 wrote:
->> Hi,
->> as part of the cleanup/automation effort in the BPF selfests directory,
->> I am now taking a look at test_bpftool_build.sh, which ensures that the
->> different supported ways of building bpftool work correctly. As this
->> script does not really exercize anything at runtime but rather at build
->> time, I'd like to propose to introduce a dedicated step in the CI
->> automation that already builds and run selftests. I have opened two PRs
->> in kernel-patches vmtest ([0]) and libbpf/ci ([1]), hoping I am not
->> confusing which code should go where between the different repositories
->> kept in sync with each other. I have also opened a dummy PR on
->> kernel-patches/bpf ([2], not to be merged) that shows how this test
->> would look like in CI.
->>=20
->> This really is a RFC, as not all tests from test_bpftool_build.sh are
->> being executed: I suspect those based on .config to be currently broken,
->> but that can be handled as a second step, depending on the chosen
->> direction.
->>=20
->> Any comment welcome !
->
-> Hi Alexis, thank you for working on this.
->
-> I am a little confused about what are we trying to test here and
-> why. Maybe you could explain.
+When the map is later freed, fd_array_map_free() iterates the ptrs[] array
+with a signed int loop variable:
 
-Sure, I may have been a bit light on this. The test_bpftool_build.sh
-located in tools/testing/selftests/bpf focuses on the various ways of
-building bpftool:
-- through kbuild (eg: make tools/bpf)
-- by changing make execution dir (eg: make -C tools/bpf/bpftool)
-- by running the tools/ main makefile (eg: cd tools && make bpf)
-- by running the bpftool main makefile (eg: cd tools/bpf/bpftool &&
-  make)
+    for (i =3D 0; i < array->map.max_entries; i++)
+        BUG_ON(array->ptrs[i] !=3D NULL);
 
-This listing is also cross-tested with output path configuration,
-testing both O=3D<output_dir> and OUTPUT=3D<output_dir>.
+On arm64 (and any LP64 arch) int is 32-bit signed, while max_entries is
+u32. With max_entries having bit 31 set (e.g. 0xFF00000A, observed from a
+syzkaller run), the loop runs past i =3D 0x7FFFFFFF: i++ wraps to 0x8000000=
+0,
+which as a signed int is negative. The address computation for
+&array->ptrs[i] sign-extends the 32-bit index (sxtw on arm64) into a
+64-bit negative offset:
 
-Will be included in the relevant commits if this RFC goes further in
-this direction.
+    array + sxtw(0x80000000) * 8 + offsetof(bpf_array, ptrs)
+  =3D array + 0xFFFFFFFC00000000 + 0x108
+  -> wraps to an unmapped address, level-1 translation fault, panic
 
-> Some variants of bpftool build are CI-exercised regularly:
->   * selftests/bpf directly depend on bpftool, it's built and is used
->     as part of the main "test_progs*" suite
->   * bpftool has a standalone github mirror with it's own CI pipeline:
->     https://github.com/libbpf/bpftool
->
-> Looking at test_bpftool_build.sh (written 6y ago btw), it seems to be
-> more of a Makefile infra test than bpftool test specifically.
->
-> Given how complicated some in-tree tools/selftests/ Makefiles are [1],
-> running infra tests like this would be nice. But then maybe we should
-> develop them beyond test_bpftool_build.sh?
->
-> I briefly skimmed over the CI PRs you've submitted, and one thing I
-> would say is that we don't want a "bpftool build" test to block the
-> kernel build when it fails. It either needs to be a separate job, or a
-> step that is allowed to fail.
->
-> Vineet recently did a similar thing, where the gcc-bpf selftests build
-> was interleaved with the kernel build and I nacked it with the same
-> justification [2].
+This is reachable today because the existing overflow backstop in
+array_map_alloc() lives inside the `if (!bypass_spec_v1)` block. Since
+commit 2c78ee898d8f ("bpf: Implement CAP_BPF") renamed the old
+`if (unpriv)` guard to `if (!bypass_spec_v1)`, the semantics inverted:
+a root caller with CAP_PERFMON (or mitigations=3Doff) takes the bypass
+path and skips the -E2BIG check entirely, so the raw attr->max_entries
+is stored into map->max_entries unchanged and the ~32 GB vmalloc
+(overcommit) region is handed out. The earlier unprivileged-path fix
+for max_entries overflow was carried along into the bypass block, so
+it does not cover the root path described here.
 
-Understood, thanks for the pointers. I see that Vineet came up with a
-new revision that eventually got merged, moving gcc-bpf as a dedicated
-job in kernel-build-test.yml instead of kernel-build.yml (and so, a
-failure on gcc-bpf does not mark kernel build as failed) I guess I can
-replicate this (also, making sure to add this run_tests toggle, maybe
-?). However, I feel like it would not make much sense to have a build
-and a test part, with artifacts going from the former to the latter, as
-the build step actually _is_ the test. Also, the only needed artifact to
-run the build is the kernel source tree (we don't need any vmlinux or
-.config, at least for now)
+Reject max_entries > INT_MAX in array_map_alloc_check(), the common entry
+point shared by all callers including the bypass path. This mirrors the
+existing value_size > INT_MAX guard a few lines above. The cut half of the
+u32 range (0x80000000..0xFFFFFFFF) cannot back a usable map today:
+  - a prog_array at the lower bound already needs ~16 GB of contiguous
+    virtual memory (and ~32 GB for the 0xFF00000A value seen in the field),
+    which either fails allocation or drives the system into OOM/softlockup
+    long before becoming a working map;
+  - legitimate prog_array usage is bounded by MAX_TAIL_CALL_CNT =3D 33 and
+    typical array maps are orders of magnitude below INT_MAX.
 
-Would it be ok if I try it this way ?
+No valid BPF use case is affected; the change converts a deferred
+whole-system BUG_ON panic (or OOM/softlockup) into an accurate -E2BIG at
+creation time.
 
-> I'm thinking the whole "kernel build" workflow should be refactored
-> into either separate selftests build jobs, or some post processing
-> that looks at what artifacts where built successfully and reports
-> failures. This will provide a little more friendly UI/UX. You're
-> welcome to look into that if you're interested. But that's not
-> directly relevant to the changes you're proposing.
+Fixes: 2c78ee898d8f ("bpf: Implement CAP_BPF")
+Signed-off-by: meishaoming <meishaoming@xiaomi.com>
+---
+ kernel/bpf/arraymap.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Trying to rephrase it to make sure I get your point, the goal would be
-to have green/red checks specifically on selftests builds, rather than a
-global green/red check on the macro job "build kernel and selftests" ?
-Or does it go further than that ?
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 248b4818178c..868bc9f66cdb 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -74,6 +74,9 @@ int array_map_alloc_check(union bpf_attr *attr)
+        /* avoid overflow on round_up(map->value_size) */
+        if (attr->value_size > INT_MAX)
+                return -E2BIG;
++       /* avoid signed int iterator overflow in fd_array_map_free() */
++       if (attr->max_entries > INT_MAX)
++               return -E2BIG;
+        /* percpu map value size is bound by PCPU_MIN_UNIT_SIZE */
+        if (percpu && round_up(attr->value_size, 8) > PCPU_MIN_UNIT_SIZE)
+                return -E2BIG;
+--
+2.50.1 (Apple Git-155)
 
-If I get it correctly, yes I'd be glad to try and help on that, as a
-separate task.
-
-Alexis
-
-> [1] https://lore.kernel.org/bpf/20260804170156.1709916-1-nickolay.lysenko=
-@gmail.com/
-> [2] https://github.com/kernel-patches/vmtest/pull/502#discussion_r3724931=
-742
->
->
->>=20
->> Alexis
->>=20
->> [0] https://github.com/kernel-patches/vmtest/pull/517
->> [1] https://github.com/libbpf/ci/pull/236
->> [2] https://github.com/kernel-patches/bpf/pull/13368
->>=20
-
-
-
-
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+#/******=B1=BE=D3=CA=BC=FE=BC=B0=C6=E4=B8=BD=BC=FE=BA=AC=D3=D0=D0=A1=C3=D7=
+=B9=AB=CB=BE=B5=C4=B1=A3=C3=DC=D0=C5=CF=A2=A3=AC=BD=F6=CF=DE=D3=DA=B7=A2=CB=
+=CD=B8=F8=C9=CF=C3=E6=B5=D8=D6=B7=D6=D0=C1=D0=B3=F6=B5=C4=B8=F6=C8=CB=BB=F2=
+=C8=BA=D7=E9=A1=A3=BD=FB=D6=B9=C8=CE=BA=CE=C6=E4=CB=FB=C8=CB=D2=D4=C8=CE=BA=
+=CE=D0=CE=CA=BD=CA=B9=D3=C3=A3=A8=B0=FC=C0=A8=B5=AB=B2=BB=CF=DE=D3=DA=C8=AB=
+=B2=BF=BB=F2=B2=BF=B7=D6=B5=D8=D0=B9=C2=B6=A1=A2=B8=B4=D6=C6=A1=A2=BB=F2=C9=
+=A2=B7=A2=A3=A9=B1=BE=D3=CA=BC=FE=D6=D0=B5=C4=D0=C5=CF=A2=A1=A3=C8=E7=B9=FB=
+=C4=FA=B4=ED=CA=D5=C1=CB=B1=BE=D3=CA=BC=FE=A3=AC=C7=EB=C4=FA=C1=A2=BC=B4=B5=
+=E7=BB=B0=BB=F2=D3=CA=BC=FE=CD=A8=D6=AA=B7=A2=BC=FE=C8=CB=B2=A2=C9=BE=B3=FD=
+=B1=BE=D3=CA=BC=FE=A3=A1 This e-mail and its attachments contain confidenti=
+al information from XIAOMI, which is intended only for the person or entity=
+ whose address is listed above. Any use of the information contained herein=
+ in any way (including, but not limited to, total or partial disclosure, re=
+production, or dissemination) by persons other than the intended recipient(=
+s) is prohibited. If you receive this e-mail in error, please notify the se=
+nder by phone or email immediately and delete it!******/#
