@@ -1,283 +1,85 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFCD5391501;
-	Thu, 20 Aug 2026 14:21:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67D094756C4;
+	Thu, 20 Aug 2026 14:21:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787235695; cv=none; b=WxFk+ArxRPFyEK/LZyMsPGTRDO1ELvR6nDaR+e/qGKs0jl33cN5aQGu7tXWYIduVdISiD64i2qwaWkOB+bQ2x4bisIiw+tb+b7zkQbbDfz5zeZ2G4u4cPj4LfKAf46rqqatAiUOSrRqnPG7U5oC2UJ6tudatmpkWMU/9Nrm/hsw=
+	t=1787235697; cv=none; b=inXSoyGjWp+lzVjt4n2T3QY+EEVJK79yRAzxI2gVE90TYojuA6UUX2W1Kp8q3er8RhfSfuGQ7mjJuczUlUCZVwEdfX8lN7NRTK+ggr7nF6jQVRkSZg1LkajHdx+XPPCpI4B76zrSCK027kVMFI6V7jgNUaVyoCUkQ+NYjyHv+G4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787235695; c=relaxed/simple;
-	bh=huj0f8M6gRSDzymVOy4Vt1MzEb6eqJhFFLVsz8N8wds=;
+	s=arc-20240116; t=1787235697; c=relaxed/simple;
+	bh=5CxUmKEVi++wyAkDYX6+cqGMVDK0FLAe1j7nQJZ1V88=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=eAQtzqb1tw1gTnkNuauY+8MeJDk9dkR/RuduMRcmmess2/9QCYH7zK3WOvHbA3Gx2n1rWhIzltsAv69HuS1DjxvK/dpvL5531H4X5bTd4m9Zr1cmAtUF0n/MW0/t8rRCda4y7lOgA9Ov7UAPWK+5xlAF44RfeV7i11srpct2lYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=odVNZzt8; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=PU+mJDY2oo/XfI8jW2LdrqQTAC8fF0fDSA6SRttdPZ+2aFFTdP9rD16CJ5LfNm1ie8SLrTDGtNmuNWcS0c3YRV6Pxn/UxMI0nlspyE2O6w7Pfip7yhc9Ol8yTfATWJUs/LxVnJCEc4gZvS3+eVICzdme5aahOhNiiI79rph4lq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QWmvxwoV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="odVNZzt8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5FC91F000E9;
-	Thu, 20 Aug 2026 14:21:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QWmvxwoV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 650321F00A3A;
+	Thu, 20 Aug 2026 14:21:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787235693;
-	bh=LJiZkdqnbJzbaLpp/SAkSW9OMlkWsEAqjmxRN4K9z3U=;
+	s=k20260515; t=1787235694;
+	bh=5CxUmKEVi++wyAkDYX6+cqGMVDK0FLAe1j7nQJZ1V88=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=odVNZzt8z0D62ioWfG6wavBpa5b4ieU2mNk2ZZSVepH7MZf6sCt9kfqR3X+sb4Fnp
-	 fHAuQcFlTgIx7R6I7Il0ESi+qahNCVg9joyHyvfy3nosMG2AdVQ4V7/sfdfDfCRe+j
-	 WtNrPdwObanccJHtxDOmdTuOs0JgaXLYTniuNCUSSeLELzpb99bJ/32Wfym3cDBPrI
-	 zAZWQKcX33IPwraw6DUikNMgmqpSuNUbOtjKVbBwrZQ/cHdNhLoQa5HnAGAVbrNX+h
-	 9q9+488GAN7zdPqbzgVI0Mh00MwvuPK4O3aHrFYRlVt731VZ+tKzpCYopgXHYq9mtH
-	 l1gJVFSO16H0Q==
-Content-Type: multipart/mixed; boundary="===============0216903816946372316=="
+	b=QWmvxwoVRXwSH+ba8lNb2j+x+lByMTvoH33o9NUzb2tVdKrWD88b14RuMWVl7UBCt
+	 Bg3R9xOkIFiVfJ1XfJIqN8fDxc47p5Zq24fGQGS54f2WsNmx9mSVzsVE5clsbuRMck
+	 ezYXewED8TpwPhd/6idLkCvtz8MJe8QMuP2tcVoh5X3VyUvamaZR5jlVBepBevB4Tb
+	 33w/9A6AkvlaBV9oNz+Yv+gzgcz4IFhYJTUjbhs9zyJg1eeiSyr7lw55xC8SzbYdf/
+	 XY1fNXA+Y5YDPi6beqKKX78e1H5SpVPMQsotUG/0HgcfPb51MC72Z836y9F+ubDhDP
+	 8MV5hzN6Qr8EQ==
+Content-Type: multipart/mixed; boundary="===============2268151016755920420=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d2d137d2202c87dd354c1f50f2b2e2db35c7e786b137970aa4512ad7737884a9@mail.kernel.org>
-In-Reply-To: <20260820131801.68759-4-tasos.papagiannnis@gmail.com>
-References: <20260820131801.68759-4-tasos.papagiannnis@gmail.com>
-Subject: Re: [PATCH bpf-next v2 3/3] selftests/bpf: Test linux_binprm user memory kfuncs
+Message-Id: <1355a0a05ef4ae8bf73f6f0392604df78e2d64995cb5e54cea3be01d2cd5e454@mail.kernel.org>
+In-Reply-To: <20260820131801.68759-3-tasos.papagiannnis@gmail.com>
+References: <20260820131801.68759-3-tasos.papagiannnis@gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/3] bpf: Add user memory access kfuncs for linux_binprm
 From: bot+bpf-ci@kernel.org
 To: tasos.papagiannnis@gmail.com,bpf@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,linux-mm@kvack.org,linux-fsdevel@vger.kernel.org,viro@zeniv.linux.org.uk,brauner@kernel.org,akpm@linux-foundation.org,david@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,kpsingh@kernel.org,matt@bobrowski.net,song@kernel.org,utilityemal77@gmail.com,tasos.papagiannnis@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 20 Aug 2026 14:21:32 +0000 (UTC)
+Date: Thu, 20 Aug 2026 14:21:34 +0000 (UTC)
 
---===============0216903816946372316==
+--===============2268151016755920420==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Test linux_binprm user memory kfuncs
+> bpf: Add user memory access kfuncs for linux_binprm
 >
-> This patch adds a sleepable BPF LSM program attached to
-> bprm_check_security to test bpf_copy_from_user_bprm() and
-> bpf_copy_from_user_bprm_str().
+> When security_bprm_check runs, the arg and env strings for the exec have
+> been copied into bprm->mm. The new address space has not been associated
+> yet with a task_struct until exec_mmap(), so existing BPF user memory
+> helpers can only read from the calling task's old address space.
+>
+> This patch adds bpf_copy_from_user_bprm() and
+> bpf_copy_from_user_bprm_str() kfuncs. Both use the mm_struct provided by
+> struct linux_binprm.
 
-This isn't a bug, but could the changelogs in this series use the
-imperative mood the kernel asks for, e.g. "Add a sleepable BPF LSM
-program attached to bprm_check_security ..." instead of "This patch
-adds ..."?
+This isn't a bug, but could the opener be reworded to avoid "This patch
+adds"? Documentation/process/submitting-patches.rst asks for imperative mood
+("Add bpf_copy_from_user_bprm() ...").
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/copy_from_user_bprm.c b/tools/testing/selftests/bpf/prog_tests/copy_from_user_bprm.c
-> new file mode 100644
-> index 000000000000..1007e3aec054
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/copy_from_user_bprm.c
-> @@ -0,0 +1,62 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <errno.h>
-> +#include <sys/wait.h>
-> +#include <unistd.h>
-> +
-> +#include <test_progs.h>
-> +
-> +#include "copy_from_user_bprm.skel.h"
-> +
-> +void test_copy_from_user_bprm(void)
-> +{
-> +	char arg0[] = "first";
-> +	char arg1[] = "second-argument";
-> +	char env0[] = "SOME_ENV=a";
-> +	char env1[] = "OTHER_ENV=something";
-> +	struct copy_from_user_bprm *skel;
-> +	pid_t child;
-> +	int status;
-> +
-> +	skel = copy_from_user_bprm__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-> +		return;
-> +
-> +	if (!ASSERT_OK(copy_from_user_bprm__attach(skel), "attach"))
-> +		goto out;
-> +
-> +	child = fork();
-> +	if (!ASSERT_GE(child, 0, "fork"))
-> +		goto out;
-> +
-> +	if (!child) {
-> +		char *const argv[] = { arg0, arg1, NULL };
-> +		char *const envp[] = { env0, env1, NULL };
-> +
-> +		skel->bss->monitored_pid = getpid();
-> +		execve("/bin/true", argv, envp);
-> +		_exit(errno);
-> +	}
-> +
-> +	if (!ASSERT_EQ(waitpid(child, &status, 0), child, "waitpid"))
-> +		goto out;
-> +
-> +	if (ASSERT_TRUE(WIFEXITED(status), "child_exited"))
-> +		ASSERT_EQ(WEXITSTATUS(status), EPERM, "exec_errno");
-> +
-> +	ASSERT_EQ(skel->bss->bprm_argc, 2, "bprm_argc");
-> +	ASSERT_EQ(skel->bss->bprm_envc, 2, "bprm_envc");
-> +	ASSERT_EQ(skel->bss->data_len_match, 1, "data_len_match");
-> +	ASSERT_EQ(skel->bss->invalid_flags_ret, -EINVAL, "invalid_flags_ret");
-> +	ASSERT_EQ(skel->bss->copy_ret, 0, "copy_ret");
-> +	ASSERT_EQ(skel->bss->str_arg0_ret, sizeof(arg0), "str_arg0_ret");
-> +	ASSERT_EQ(skel->bss->str_arg1_ret, sizeof(arg1), "str_arg1_ret");
-> +	ASSERT_EQ(skel->bss->str_env0_ret, sizeof(env0), "str_env0_ret");
-> +	ASSERT_EQ(skel->bss->str_env1_ret, sizeof(env1), "str_env1_ret");
+> Register these kfuncs on both MMU and NOMMU systems. On NOMMU systems,
+> exec arguments are staged in bprm->page[] rather than mapped in bprm->mm,
+> so the kfuncs return -EOPNOTSUPP.
+>
+> bpf_copy_from_user_bprm() has similar semantics as
+> bpf_copy_from_user_task(). bpf_copy_from_user_bprm_str() copies one
+> NUL-terminated string and returns its size including the NUL terminator.
+> It accepts BPF_F_PAD_ZEROS to clear unused destination bytes on success.
+>
+> This patch registers both kfuncs with KF_SLEEPABLE because accessing the
+> remote address space can fault. This allows BPF LSM programs attached to
+> security_bprm_check to read arguments beginning at bprm->p and reject an
+> exec based on its command-line arguments.
 
-A subsystem pattern flags this as potentially concerning: the test has
-no skip path for the configuration in which the kfuncs it exercises are
-deliberately unavailable.
+Same for "This patch registers" here -- would "Register both kfuncs with
+KF_SLEEPABLE ..." fit better?
 
-The immediately preceding commit in this series (6073b8df0008, "bpf: Add
-user memory access kfuncs for linux_binprm") registers both kfuncs on
-NOMMU as well, where they are documented and implemented to return
--EOPNOTSUPP:
-
-fs/bpf_fs_kfuncs.c, bpf_copy_from_user_bprm():
-  #else
-      memset(dst, 0, dst__sz);
-      return -EOPNOTSUPP;
-  #endif
-
-fs/bpf_fs_kfuncs.c, bpf_copy_from_user_bprm_str():
-  #else
-      if (flags & BPF_F_PAD_ZEROS)
-          memset(dst, 0, dst__sz);
-      else
-          *(char *)dst = '\0';
-      return -EOPNOTSUPP;
-  #endif
-
-The changelog of that commit states this explicitly: "On NOMMU systems,
-exec arguments are staged in bprm->page[] rather than mapped in bprm->mm,
-so the kfuncs return -EOPNOTSUPP."
-
-The BPF program records those return values verbatim into copy_ret,
-str_arg0_ret, str_arg1_ret, str_env0_ret, and str_env1_ret
-(progs/copy_from_user_bprm.c), and the userspace half then asserts the
-success values unconditionally, plus data_len_match, data_match,
-str_args_match, and str_envs_match. On a !CONFIG_MMU kernel every one of
-those assertions fails and the test is reported as a regression rather
-than skipped. Note that invalid_flags_ret (the assertion above) is the
-one assertion that would still pass, because the flags check precedes the
-#ifdef CONFIG_MMU block.
-
-Would it make sense to use test__skip() here with a reason string when
-the kfuncs return -EOPNOTSUPP? test_progs provides test__skip() for
-exactly this (123 existing call sites under
-tools/testing/selftests/bpf/prog_tests/).
-
-> +	ASSERT_EQ(skel->bss->data_match, 1, "data_match");
-> +	ASSERT_EQ(skel->bss->str_args_match, 1, "str_args_match");
-> +	ASSERT_EQ(skel->bss->str_envs_match, 1, "str_envs_match");
-> +
-> +out:
-> +	copy_from_user_bprm__destroy(skel);
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/copy_from_user_bprm.c b/tools/testing/selftests/bpf/progs/copy_from_user_bprm.c
-> new file mode 100644
-> index 000000000000..4d7e9002b45b
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/copy_from_user_bprm.c
-> @@ -0,0 +1,115 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include "vmlinux.h"
-> +
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +#include <errno.h>
-> +#include "bpf_misc.h"
-
-This isn't a bug, but is "bpf_misc.h" needed here? I could not spot
-anything in the program that comes from it, so the include may be
-droppable.
-
-> +
-> +char _license[] SEC("license") = "GPL";
-> +
-> +static const char expected_data[] = "first\0second-argument\0"
-> +				    "SOME_ENV=a\0OTHER_ENV=something";
-
-[ ... ]
-
-> +SEC("lsm.s/bprm_check_security")
-> +int BPF_PROG(check_exec_args, struct linux_binprm *bprm)
-> +{
-> +	u32 pid = bpf_get_current_pid_tgid() >> 32;
-> +	char data[sizeof(expected_data)];
-> +	char arg0[32];
-> +	char arg1[32];
-> +	char env0[32];
-> +	char env1[32];
-> +	u64 offset = 0;
-> +	u64 data_len;
-> +
-> +	if (pid != monitored_pid)
-> +		return 0;
-> +
-> +	bprm_argc = bprm->argc;
-> +	bprm_envc = bprm->envc;
-> +
-> +	/* this is the total size of args and envs starting from bprm->p */
-> +	data_len = bprm->exec - bprm->p;
-> +	data_len_match = data_len == sizeof(expected_data);
-> +
-> +	invalid_flags_ret = bpf_copy_from_user_bprm(data,
-> +						    sizeof(data), (void *)bprm->p, bprm, ~0ULL);
-> +
-> +	copy_ret = bpf_copy_from_user_bprm(data, sizeof(data), (void *)bprm->p,
-> +					   bprm, 0);
-> +	if (copy_ret)
-> +		return 0;
-> +
-> +	data_match =
-> +		!__builtin_memcmp(data, expected_data, sizeof(expected_data));
-> +
-> +	/* arg0 is at bprm->p */
-> +	str_arg0_ret = bpf_copy_from_user_bprm_str(arg0, sizeof(arg0),
-> +						   (void *)(bprm->p + offset),
-> +						   bprm, BPF_F_PAD_ZEROS);
-> +	if (str_arg0_ret != sizeof(expected_arg0))
-> +		return 0;
-> +	offset += str_arg0_ret;
-> +
-> +	/* arg1 is at bprm->p + sizeof(arg0) */
-> +	str_arg1_ret = bpf_copy_from_user_bprm_str(arg1, sizeof(arg1),
-> +						   (void *)(bprm->p + offset),
-> +						   bprm, BPF_F_PAD_ZEROS);
-
-This isn't a bug, but would these comments read more precisely as
-something like "arg1 follows arg0's NUL terminator", or by referring to
-the expected_* strings? In this scope arg0, arg1, env0 are the 32-byte
-destination buffers, so sizeof(arg0) here is the 32-byte destination
-buffer rather than the string length. The code actually advances offset
-by the value the kfunc returned (6, 22, 33).
-
-> +	if (str_arg1_ret != sizeof(expected_arg1))
-> +		return 0;
-> +	offset += str_arg1_ret;
-> +
-> +	/* env0 is at bprm->p + sizeof(arg0) + sizeof(arg1) */
-> +	str_env0_ret = bpf_copy_from_user_bprm_str(env0, sizeof(env0),
-> +						   (void *)(bprm->p + offset),
-> +						   bprm, BPF_F_PAD_ZEROS);
-> +	if (str_env0_ret != sizeof(expected_env0))
-> +		return 0;
-> +	offset += str_env0_ret;
-> +
-> +	/* env1 is at bprm->p + sizeof(arg0) + sizeof(arg1) + sizeof(env0) */
-> +	str_env1_ret = bpf_copy_from_user_bprm_str(env1, sizeof(env1),
-> +						   (void *)(bprm->p + offset),
-> +						   bprm, BPF_F_PAD_ZEROS);
-> +	if (str_env1_ret != sizeof(expected_env1))
-> +		return 0;
-> +
-> +	str_args_match =
-> +		!__builtin_memcmp(arg0, expected_arg0, sizeof(expected_arg0)) &&
-> +		!__builtin_memcmp(arg1, expected_arg1, sizeof(expected_arg1));
-> +	str_envs_match =
-> +		!__builtin_memcmp(env0, expected_env0, sizeof(expected_env0)) &&
-> +		!__builtin_memcmp(env1, expected_env1, sizeof(expected_env1));
-> +
-> +	return data_match && str_args_match && str_envs_match ? -EPERM : 0;
-> +}
+> Signed-off-by: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
 
 
 ---
@@ -285,4 +87,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32375104040
---===============0216903816946372316==--
+--===============2268151016755920420==--
