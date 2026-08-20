@@ -1,63 +1,132 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7CF147DFBF
-	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 15:41:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A3E347D444
+	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 15:44:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787240517; cv=none; b=eA+G2blvRf9mBsI1YjSvRFQhVUBmF75f22xbZUt3LCDBwpi/b7/iyAEpWEMz2C8lsK3pJGgrxYD3kJ+sABdpe8SfW/xHuwXNjxfTxwl7VuoT5ZyrqKu0R5NWqb/v3LeWo1DqzQKY+wNZ2ThbfK2yj36RRzFBUTNj5t46CS2lTYk=
+	t=1787240654; cv=none; b=Qd9ROEbovM5v1kzNZmh4ZeiaoRNtSOhgPAYTDw3cPXvsn5O1G3CKPt/Je/trJg3u7NCz8e1WAxObI8lF4Vl06rotLSMhTXydmRaYQMo4A+IMz0RRn09Z+yCMdPiLMheyspsI/T1soKTDTEg3Y/n6bVpmvlygCMvn8StQMyXMjvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787240517; c=relaxed/simple;
-	bh=qp63Sx44pioLtUlXrFllptm03qTWR3NdqLVKkggEOmw=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=D11Gnw8Ajy/9Tllnz0XwFwlOfrsbI8AeI1/oOFBeGN8qsQS0ZcpwyCyb9MMBhRK4in8od6zLdysTcC0q17X8Mztdo3x1rv39NXuGc/bn8EP9bVJCkuv0BGbvN3K4pEf+T/YETzy1i/jmLh/RNFcq3kRvqlBp+J3uXuHiwftQSmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kS/qz92d; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787240654; c=relaxed/simple;
+	bh=+ykhXc2aSoBvHXETc89y1YEGbKgKsH/lOZbjhL8eB2g=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=I3SvHdzmPq5WxOO4C7Ye8gr8HhUHMQDU/pK/OHUdEzmSpqDZ+/aBBHCQ8C/pHTYBMvZ7ouzqwCEbJHqKkCujbAQVkp0S2SvMn1Ik4Ufdrvw9D/cQqyivzQeHAWDOiVuZxBGK0Eyhe2I9K80lDTrt7e+hKE/hCRQSvM3UM4FoLrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U7QS7CRE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kS/qz92d"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF51B1F00ACF;
-	Thu, 20 Aug 2026 15:41:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U7QS7CRE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4269F1F00ADF;
+	Thu, 20 Aug 2026 15:44:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787240513;
-	bh=3NGQgV9KfvJRxXbnCZPnCLh3mbjvyrE2KK8Rp1sfC9w=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc;
-	b=kS/qz92dW/1CzLYuFj5QDM4xeKELDqrxwyleT5Eut2QwahkLW69UqJoLOQkWObaGn
-	 iMPw5oOcWcX7iNVsP4wsBMGIVtQQPG6gpKlGpzKM2TuyYso/gfcq0QuPSI158DiXEU
-	 CDzfoLA+/weO/qW9tf/kxlAlX8xF9E9M+sWY5BRHFE9iye6uLsYudJVMq68CRTqGLU
-	 qq4qmU4ZFJnFBN15A2Q5qL5TliR0G6gRQJvgiaSZyFGk4oE0/GWZwc61CN5WRKwsJx
-	 hNH3baUPz2bJ3XM1oRzz032zEssRXSTGF9c20yPhPn09mEnYWiQmQwA47S+KEZ/2fu
-	 y7sww2TRcyl3A==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 42F913812FD7;
-	Thu, 20 Aug 2026 15:41:05 +0000 (UTC)
-Subject: Re: [GIT PULL] BPF changes for 7.3
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20260817212624.902049-1-daniel@iogearbox.net>
-References: <20260817212624.902049-1-daniel@iogearbox.net>
-X-PR-Tracked-List-Id: <bpf.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20260817212624.902049-1-daniel@iogearbox.net>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git tags/bpf-next-7.3
-X-PR-Tracked-Commit-Id: f79066c784022fda83f5936559a1af414e41b603
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 5a8cd539ac19f7a68e68e1d25ef9ca2ff55b8500
-Message-Id: <178724046388.314069.3195244378553017180.pr-tracker-bot@kernel.org>
-Date: Thu, 20 Aug 2026 15:41:03 +0000
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: torvalds@linux-foundation.org, bpf@vger.kernel.org, alexei.starovoitov@gmail.com, daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com, eddyz87@gmail.com
+	s=k20260515; t=1787240647;
+	bh=4sZSlrcXcWJhC8sqfG8+Gp7wSo6CR7hcsIimlQCDagQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=U7QS7CREOeOUTCmntN+NXYnTgBDIhXjwuM3K7C6JScqIX03AUEBnTUt9WXBL7rrw/
+	 rhCmBj12VC2qvpQ+tfSt8ByBWeRD08ZSEJiFGv8sB1ZC53s3ZikJCQ/iTltY7BoJp4
+	 SCirN/bJdIWLUKjl9goqvEM7IjT03dX2+juv0T+tcjVXHaLNp1wpDlexeru82GdIep
+	 fHevbAAAWBYpYR0pYWQfBjvxPFu67dYpOM+fpjBrqjclpSuLyz3+0wS/BnE/dxuNvq
+	 FIHuvLImYJQ5t+NA8CD2s0q/qsv8vQES2q7Hhr+JWke7r1GmlneLoC/XV3NB72MJ9K
+	 gkNFyZ50wkdQQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf v2] bpf: Fix NULL pointer dereference in
+ bpf_sock_from_file
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Syeda Mahnur Asif" <s.mahnur.a@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260820152532.621639-1-s.mahnur.a@gmail.com>
+References: <20260820152532.621639-1-s.mahnur.a@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 20 Aug 2026 15:44:06 +0000
+Message-Id: <20260820154407.4269F1F00ADF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-The pull request you sent on Mon, 17 Aug 2026 23:26:22 +0200:
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git tags/bpf-next-7.3
+Pre-existing issues:
+- [High] Incomplete validation allows ERR_PTR to cause kernel panic in bpf_=
+sock_from_file.
+- [High] Missing NULL pointer checks in BPF helpers taking ARG_PTR_TO_BTF_I=
+D lead to kernel panics.
+--
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/5a8cd539ac19f7a68e68e1d25ef9ca2ff55b8500
+--- Patch [1]: [PATCH bpf v2] bpf: Fix NULL pointer dereference in bpf_sock=
+_from_file ---
+commit a54db842fd2086671fb2b904beab51f691e8cc8b
+Author: Syeda Mahnur Asif <s.mahnur.a@gmail.com>
 
-Thank you!
+bpf: Fix NULL pointer dereference in bpf_sock_from_file
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Adds a NULL check to bpf_sock_from_file to prevent kernel panics when
+fentry/fexit programs pass a NULL file pointer.
+
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 16845987b2449..7c3caae4bafc3 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -12182,7 +12182,10 @@ const struct bpf_func_proto bpf_skc_to_mptcp_soc=
+k_proto =3D {
+> =20
+>  BPF_CALL_1(bpf_sock_from_file, struct file *, file)
+>  {
+> -	return (unsigned long)sock_from_file(file);
+> +	if (file)
+> +		return (unsigned long)sock_from_file(file);
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does this check adequately
+handle error pointers?
+
+If an eBPF fexit program attaches to a kernel function returning a
+struct file pointer that fails (e.g., returning ERR_PTR(-ENOENT)), the BPF
+verifier treats this as a valid PTR_TO_BTF_ID.
+
+Since an error pointer is not NULL, this condition will pass, and
+sock_from_file() will attempt to dereference it, leading to a crash.
+
+Could we use IS_ERR_OR_NULL(file) instead to catch these cases as well?
+
+Also, while not introduced by this patch, are there similar missing NULL
+pointer checks in other BPF helpers taking ARG_PTR_TO_BTF_ID?
+
+When fentry/fexit programs pass context arguments, the verifier lacks BTF
+nullability annotations for most parameters. This means helpers can receive
+and blindly dereference NULL pointers.
+
+For instance, bpf_task_pt_regs() directly dereferences the task without
+checking:
+
+kernel/trace/bpf_trace.c:bpf_task_pt_regs() {
+	return (unsigned long) task_pt_regs(task);
+}
+
+Similarly, __bpf_get_task_stack() calls try_get_task_stack() which will
+dereference the task:
+
+kernel/bpf/stackmap.c:__bpf_get_task_stack() {
+	if (!try_get_task_stack(task))
+		return -EFAULT;
+}
+
+And bpf_xdp_get_buff_len() accesses the xdp buffer directly:
+
+net/core/filter.c:bpf_xdp_get_buff_len() {
+	return xdp_get_buff_len(xdp);
+}
+
+Do these helpers need similar runtime validation to prevent panics in the
+same execution context?
+
+> +
+> +	return (unsigned long)NULL;
+>  }
+> =20
+>  BTF_ID_LIST(bpf_sock_from_file_btf_ids)
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260820152532.6216=
+39-1-s.mahnur.a@gmail.com?part=3D1
