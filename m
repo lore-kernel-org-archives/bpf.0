@@ -1,152 +1,192 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C53BB45040A
-	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 13:25:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D49C046D2DB
+	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 13:43:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787232319; cv=none; b=U4KWkT+qZ1kbgbWbfuqlvYtQOj9Asnt58ctUSUZgZYxGfVOe3ZHIjppjmcAuY6JI3cNxSkIZVMcEp1LgMfqjjtHA/jCfLfMduKqbQhzJko6AnCTt4VNmu/vZbA2JqvzHZnMT+uQay6jhFdCwrzL6Fp91POTVEdP5bGeMrOI20YU=
+	t=1787233438; cv=none; b=m2E7NGNTunhHXdg/7aNsAeTgj98xfxGdK8L9q5hJdAgoyIkdpULzyFXbInCNGtUoADBGFEG61dCNaiU49AzfnMbW5McT5hD4aq8kzrzjFX59zW5EKCIbl8HwAXN8Wc3DmDwVdTIBoFBV1uV1kB7PB1B3DLp/q3ZaiFIKmFWBTrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787232319; c=relaxed/simple;
-	bh=oodidHthKqnaocJR7FdH/865yN9AxJYR0G1qnoJ8P5A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=HQLtcFM08AFfsl9rrW8I/l/7qluZaJXDCTwUZQ+YYxFzB8flETBZ3fxDDjmOElOJQ5cTfBIDIjf3ohopG5l5ubjc+2kxfcd+YZivhq5SCtdOtRhOhTfVAXiyDFyZHFPcY2MsiKdlVzHTbk+Ws2Iq0MsMkSNtNnixtMHOfsBLyFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XhrF66+5; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=HpSIZZEt; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1787233438; c=relaxed/simple;
+	bh=ZnAmjiVSKJYihj0B64j7d/zzIwGbot/sichQbuvRPK0=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nP7JvyYCXO6mPyZuFKZUVxGpcQB9Jk4f2n4l/VfaPoCJ+aeKnTobhhbEN60OfdakripQuhEUZxey0hG2aJd4OCB2C1SzFumhNe4gfLS6ELMEeXkYfWEAU0JLZwTYFRqjQkSjjojejdbPhBY9QNeUo4x/wrfWg66ZYhhWCU6/h8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ELlktNZt; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XhrF66+5";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="HpSIZZEt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1787232316;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=a/0v2ILIh5MBGsD0dXIHABcykS6dXc3s6xjBbGcHl2A=;
-	b=XhrF66+5ogFluDxKDHOm/Dlv1ra5Qs3beGm/MQexBNDI2hk3P7nWjhrzvaK5axz5lvw1GZ
-	eQemN8r6v9Q6QjBwGFXYGQ9UPuj8ZUXU7NAHsn1HWhLGc3ZdIjRIZDsQAzSvTwUAmbR0MT
-	6czdKrYrmNfwq6kG3h7OAszcb7bj+pU=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-179--ynK4owSNC6E7S2oAYlt1Q-1; Thu, 20 Aug 2026 09:25:10 -0400
-X-MC-Unique: -ynK4owSNC6E7S2oAYlt1Q-1
-X-Mimecast-MFC-AGG-ID: -ynK4owSNC6E7S2oAYlt1Q_1787232309
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-473ac08a6a4so1531483f8f.0
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 06:25:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ELlktNZt"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4954dff6536so19414345e9.0
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 06:43:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1787232309; x=1787837109; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :from:references:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=a/0v2ILIh5MBGsD0dXIHABcykS6dXc3s6xjBbGcHl2A=;
-        b=HpSIZZEtDm2WuTgE6YUUwteDAzT1GpcYXS/cUT13XnqIF3FfGYBUb1I48/va1XyRuw
-         MOxbzs9lZW1uKtkpPQ8ytuz8x034VvlLH9pmvIpErWGTLn4HWCD9Q06YbgElca/8PxNS
-         A8pi9I6It6dl64ThBcTCHCCsX4+Ie5F6l4NQ9+DWrfVuHM1k5qhC4Tz+nveBpGdSm7fn
-         RP3TKQELNCqsORJ597Nf+ktjwj5PMKU0PVAmbmktyllab6vIuWJ+nFdKALviRg8hCU0c
-         JkW0cMnZiQEZhDeCrVorpY/E6/ZIJU990ejsc7NOo9b2PA4SrX9peANovX+rDRJmB77u
-         Hqiw==
+        d=gmail.com; s=20251104; t=1787233435; x=1787838235; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=tJ9Yt7JrbYNUEPYLCZUAgAXvfeuA5IIBTzwglQ2xn1o=;
+        b=ELlktNZtzMrNSRf3ph7WEiQiQSyTxyy/mybDodQH/eUexRZ1fx99uHIzaG+IQH7lj1
+         UMA2XozayqhOz+ptNE3Q2UyQ1aN0Z3OL9QRjc7zzsrbQSBKME6U2WD0bKVKqUXkkjcmv
+         qtRLtFFmwEO8zvTSY/RgJP9xTKnVhuhQu0zxwcwxyvEKsDFodq818/khsZCgyTDlC8PC
+         MPWFdc/COubRWNsNuPsFBm+KBRlJoiNCAdZVvhPVh+fZRj0vZ3DaWo9jpY4jzehr/jZH
+         tq/xuoPX2WzkQqyKET2tmm7Mg1+6rThs1kUmvt5QkTpjTw6nOISmNW4WimTuRT1u5YGK
+         uCkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787232309; x=1787837109;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :from:references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=a/0v2ILIh5MBGsD0dXIHABcykS6dXc3s6xjBbGcHl2A=;
-        b=hhZk9cbnbmwZVNGVRdY39RfnsKJtaSBKYaONjVv0S4C9K93LPfA8UKpJdRM6jA1jmi
-         HH640AugelXQNbUJOJtXsAG+8qo2RUhAdgKezWOxLdlo10aiix2zsV/AChYAVm+3IHVU
-         Jl2sgnXnDU0exKCJJAJ/iDaP7xeWYaEob9CFYbc+s2UJEb4byKXfl7laBOQg44JH6MB8
-         2dotPxsN8uj8p5y/1ymyekpGzmqc01FOhvFr0hw0hhT7ZuY8308DKCOhD8iwqG/Wk5l0
-         VV5YU7oIFM0ywedRxYqUN8u9kvL07rKiiNtNcLIpDcar4zRnk3XkDNWAc9oOu1X2ehN0
-         icLA==
-X-Forwarded-Encrypted: i=1; AHgh+RqLt5bsLW+fNbjXIMxe/kNfkKGRnirCmDI3CeNhZNVO4lt3ProMvm36rwloyQXB1hDqAx0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQygDJyU8LUYOaMKiiDgbwU6ddf7Uumc37TGkQVlUcYBoDPru7
-	HWhOy9Ow1N9JTJGsuxJUet+IZmaj3Ml89xqkVkQk5JWgNrEKi/LIqs6x75geiKusVs0rng0JplJ
-	Jgtg3a+9VjNLUY+SOZlGrl6gYPM1+zKeXT5TLCpZlOYRIR2W6V/jWLQ==
-X-Gm-Gg: AR+sD107c8gmakdd9ohMhw9VEz5W+DuoKmBcLOnZtHKs/wCYGKAZ8XBwC7ZXLmV9hb5
-	uNWV80ONq2KVTusyoXpcO1jzhuuRc2BibZJ2vqppSLoS0Hala1qq044aXkhTU91EXQhz0hddApX
-	6DJXdooADzRmqbw4Q5WKJUTWchnUxtDp30GwW32Dj5L0TwkOQQlqBziXQ5PieAZ9ja3BHQIsz3S
-	r+tEtAohGKFumzC15jRFII1zrQ74Uw/6eDfzxwVnxv8MKjDR+imRQ8S28hVX4QXS+a4vMfk8l5/
-	giYjxmODiwTIbrhPRtTbKNPuDzBlowyh0A8rTBog9cXGEGeTbh9pawjAYFi8JQmwJhfq+PiZh97
-	1FXz9sNgOCa43mg4MiFCV3vViQ1KqXcqu/eTtgQVfCYYTowJOXbKnBPrBvpC6DtDoQK5cNzGkTG
-	0=
-X-Received: by 2002:a05:600c:a47:b0:499:726a:a017 with SMTP id 5b1f17b1804b1-499aa14a6ebmr196855725e9.1.1787232308998;
-        Thu, 20 Aug 2026 06:25:08 -0700 (PDT)
-X-Received: by 2002:a05:600c:a47:b0:499:726a:a017 with SMTP id 5b1f17b1804b1-499aa14a6ebmr196853915e9.1.1787232308364;
-        Thu, 20 Aug 2026 06:25:08 -0700 (PDT)
-Received: from [192.168.188.103] (ip239-44-231-195.pool-bba.aruba.it. [195.231.44.239])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-499b212fc11sm30099185e9.1.2026.08.20.06.25.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Aug 2026 06:25:07 -0700 (PDT)
-Message-ID: <840b8084-3ee8-457c-8717-f3c20cea45d6@redhat.com>
-Date: Thu, 20 Aug 2026 15:25:04 +0200
+        d=1e100.net; s=20251104; t=1787233435; x=1787838235;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=tJ9Yt7JrbYNUEPYLCZUAgAXvfeuA5IIBTzwglQ2xn1o=;
+        b=WfrMdFb2X1hATXZ8+GSfZ/CpzY72RhDzMAX7pWEuC/uD+xkMTHrMciIx/wDTO52QYE
+         L3FCupDNESYt8IiSstiTEW8ubOJWB3DiX+PNOaB0peTor5Nht1JFRt+SzMef49ZhKlpi
+         ZBuHkTaEmipmetsCFcoPVCBYoHhyZ39NYo5sp7AenBVz2RoWSMmi44i1toYJqxVWnxhJ
+         mn6RReuU4oEZPlskEMIrMG6evQbLFZJCWzVJBgYVg4vfDAkvrDY/JqpBL3zJTxCR0K9r
+         sZkB4qIIyg4zH26i1/2GPMcHVY5krkW3tYZDoneRbQNbym7K1k3jR+uTExQilXY0MvCa
+         Dwiw==
+X-Gm-Message-State: AOJu0YwSlnZn0EdbGHjLnl4PxOoQEaxMwgCyLSBnepWE10/8raYDeZNw
+	dcxb3gMfkTttPSvjW8yoby3QxDFx5Aarl9udewnYqP296xqqnXM/Yv6S
+X-Gm-Gg: AR+sD10VOybOaW8o6r2K1VcD2NZWPuUmjVW19Xgs+KWC4KMPmyN4aGCVEnl7DWVBCPe
+	HWV2JNOjzdlxD421rTZfADNpVtyEglqRGkW2wYmVlzcwuuHS++5REaWKAqWRFz6u9fD+kGSxiHZ
+	iI5NyZ6jo/QHlCYCD1+QuSdAeuuvM+JUhYIUZzp8RuwBMHQDhm+CrpwZdaOS0rX5fSVf2eoM9jG
+	KybnfWE9CYSaCi0qLKq9XjdEAGLKx7J0kefjwEaxrbuu7is0IRqpRX4Zi3n3nSG3Dqt+EWze6+h
+	37uEtwEwLq9YfdpsmWC0cgdzZGUJ03F5wQdwF9A8+eIMOkMwWSd20QTybuzDFsudQaDzbxdFbGV
+	VSxlQSCclZZ5iyUb6gE2BpK1QrQ0Wz95gBK6ICzZvWn8LAhqthKfVozy6wbKWdMmczr+3f6sFtg
+	kQK9HcHaxQZunQw1xK9KdpC/sx07ya5JBO1OZ+juNBNtnzyGdodq0SPFZP1JTAsctzlYW4IDU=
+X-Received: by 2002:a05:600c:3b95:b0:495:48d7:f178 with SMTP id 5b1f17b1804b1-499aa1b97ccmr212949125e9.11.1787233434628;
+        Thu, 20 Aug 2026 06:43:54 -0700 (PDT)
+Received: from krava (37-188-251-242.red.o2.cz. [37.188.251.242])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-499b4568a65sm23005125e9.2.2026.08.20.06.43.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Aug 2026 06:43:53 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 20 Aug 2026 15:43:48 +0200
+To: Christian Simon <simon@swine.de>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+	daniel@iogearbox.net, martin.lau@kernel.org, tj@kernel.org,
+	yonghong.song@linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH bpf v2] bpf: guard uprobes against private-stack
+ corruption
+Message-ID: <aocElNhiC22PVQqS@krava>
+References: <20260818203234.1142913-1-simon@swine.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next, v3] net/mlx5: Use dma_wmb() for completion queue
- doorbell updates
-To: lirongqing <lirongqing@baidu.com>, Saeed Mahameed <saeedm@nvidia.com>,
- Leon Romanovsky <leon@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
- Mark Bloch <mbloch@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Boris Pismenny <borisp@nvidia.com>,
- Richard Cochran <richardcochran@gmail.com>, Cosmin Ratiu
- <cratiu@nvidia.com>, Dragos Tatulea <dtatulea@nvidia.com>,
- Carolina Jubran <cjubran@nvidia.com>, Kees Cook <kees@kernel.org>,
- Akiva Goldberger <agoldberger@nvidia.com>, Simon Horman <horms@kernel.org>,
- netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-References: <20260816035605.1873-1-lirongqing@baidu.com>
-From: Paolo Abeni <pabeni@redhat.com>
-Content-Language: en-US
-In-Reply-To: <20260816035605.1873-1-lirongqing@baidu.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260818203234.1142913-1-simon@swine.de>
 
-On 8/16/26 5:56 AM, lirongqing wrote:
-> From: Li RongQing <lirongqing@baidu.com>
+On Tue, Aug 18, 2026 at 09:32:27PM +0100, Christian Simon wrote:
+> Eligible BPF programs use one private stack per program and CPU. Both
+> bpf_prog_run_array_uprobe() and uprobe_prog_run() use migrate_disable()
+> to keep an invocation on one CPU, but another task can still preempt it
+> and run the same program on that CPU. The second invocation then reuses
+> and can overwrite the first invocation's private stack.
 > 
-> dma_*() barriers are specifically for ordering writes to DMA
-> coherent memory that is accessible to both the CPU and DMA capable
-> devices.
+> Protect each real program invocation with the existing per-program
+> recursion context. When the program is already active on this CPU,
+> account for the missed invocation and skip it. Return zero when skipping
+> an uprobe-multi invocation so session handling does not suppress its
+> return probe.
 > 
-> The dma_wmb() barrier is lighter than wmb() on some architectures
-> because it only ensures ordering for DMA writes, not for all writes
-> including MMIO accesses.
+> Skip dummy_bpf_prog in the classic array path before acquiring the
+> recursion context because its active pointer is NULL.
 > 
-> In the MLX5 driver, completion queue (CQ) doorbell records are
-> allocated as DMA coherent memory via mlx5_dma_zalloc_coherent_node().
-> The CQ update pattern is:
->   1. Update CQ space (device reads via DMA)
->   2. Update doorbell record (device reads via DMA)
->   3. Memory barrier
->   4. Enable more CQEs
-> Since only DMA coherent memory accesses are involved (no MMIO accesses
-> follow), we can safely use dma_wmb() instead of wmb().
+> Add a regression test that pins two threads to one CPU and overlaps
+> classic and multi uprobe invocations while preserving a sentinel in a
+> private stack frame. Without the guards, the second invocation executes
+> and corrupts the first invocation's sentinel.
 > 
-> This change improves performance slightly on architectures where
-> dma_wmb() is lighter than wmb().
+> Fixes: 7d1cd70d4b16 ("bpf, x86: Support private stack in jit")
+> Fixes: 6c17a882d380 ("bpf, arm64: JIT support for private stack")
+> Closes: https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/issues/3056
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Christian Simon <simon@swine.de>
+> ---
+> Changes in v2:
+> - Address review comments from sashiko-bot
+>   - Guard the uprobe-multi path as well.
+>   - Remove const from correct line
+> - Add a regression selftest for uprobe-classic/multi paths.
+> - Add the arm64 Fixes tag.
 > 
-> Signed-off-by: Li RongQing <lirongqing@baidu.com>
-> Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
-## Form letter - net-next-closed
+>  include/linux/bpf.h                           |  33 +++--
+>  kernel/trace/bpf_trace.c                      |  11 +-
+>  .../bpf/prog_tests/uprobe_private_stack.c     | 118 ++++++++++++++++++
+>  .../bpf/progs/uprobe_private_stack.c          |  54 ++++++++
+>  4 files changed, 206 insertions(+), 10 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/uprobe_private_stack.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/uprobe_private_stack.c
 
-We have already submitted our pull request with net-next material for v7.3,
-and therefore net-next is closed for new drivers, features, code refactoring
-and optimizations. We are currently accepting bug fixes only.
+please split the change into 3 patches - uprobe, uprobe_multi, selftest
 
-Please repost when net-next reopens after Aug 31st.
+> 
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 7719f6528445..a94fc9898ece 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -2572,6 +2572,14 @@ static inline void bpf_reset_run_ctx(struct bpf_run_ctx *old_ctx)
+>  
+>  typedef u32 (*bpf_prog_run_fn)(const struct bpf_prog *prog, const void *ctx);
+>  
+> +#ifdef CONFIG_BPF_SYSCALL
+> +void notrace bpf_prog_inc_misses_counter(struct bpf_prog *prog);
+> +#else
+> +static inline void bpf_prog_inc_misses_counter(struct bpf_prog *prog)
+> +{
+> +}
+> +#endif
+> +
+>  static __always_inline u32
+>  bpf_prog_run_array(const struct bpf_prog_array *array,
+>  		   const void *ctx, bpf_prog_run_fn run_prog)
+> @@ -2617,7 +2625,7 @@ bpf_prog_run_array_uprobe(const struct bpf_prog_array *array,
+>  			  const void *ctx, bpf_prog_run_fn run_prog)
+>  {
+>  	const struct bpf_prog_array_item *item;
+> -	const struct bpf_prog *prog;
+> +	struct bpf_prog *prog;
+>  	struct bpf_run_ctx *old_run_ctx;
+>  	struct bpf_trace_run_ctx run_ctx;
+>  	u32 ret = 1;
+> @@ -2635,15 +2643,30 @@ bpf_prog_run_array_uprobe(const struct bpf_prog_array *array,
+>  	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
+>  	item = &array->items[0];
+>  	while ((prog = READ_ONCE(item->prog))) {
+> +		/* dummy_bpf_prog has no recursion state. */
+> +		if (unlikely(!prog->len)) {
+> +			item++;
+> +			continue;
+> +		}
+> +
+> +		if (unlikely(!bpf_prog_get_recursion_context(prog))) {
+> +			bpf_prog_inc_misses_counter(prog);
+> +			bpf_prog_put_recursion_context(prog);
+> +			item++;
+> +			continue;
 
-RFC patches sent for review only are obviously welcome at any time.
+so uprobe program has this problem only when using private stack, right?
+but we exclude all the programs, I think we should check program has private
+stack as well
 
-See: https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#development-cycle
+jirka
 
+> +		}
+> +
+>  		if (!prog->sleepable)
+>  			rcu_read_lock();
+>  
+>  		run_ctx.bpf_cookie = item->bpf_cookie;
+>  		ret &= run_prog(prog, ctx);
+> -		item++;
+>  
+>  		if (!prog->sleepable)
+>  			rcu_read_unlock();
+> +
+> +		bpf_prog_put_recursion_context(prog);
+> +		item++;
+
+SNIP
