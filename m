@@ -1,61 +1,62 @@
-Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11012059.outbound.protection.outlook.com [40.107.75.59])
+Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11012000.outbound.protection.outlook.com [52.101.126.0])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F4A2F0C74
-	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 03:28:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.59
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D396B1ACEDE
+	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 03:28:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.0
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787196483; cv=fail; b=btBduqJQguzMJL0W15qmIwvFrrMe5pYxJRKP+dPctGmNrSnUoxi6bV3ClZ1gKRpuDXr5fuNIPLA9FIzTlrBm74dkr5vQ/hpxNkVBw70EJJxZsbEGjqqd47WI4kOuQS6KU2kFul+y/LfmPrZpDYUscJigqLlVPNp6ZotBriAph10=
+	t=1787196496; cv=fail; b=hM/hwHUlc7PN+DfANbor3XYHn9Rr1ccerOXnPlHQ2GyvyBStLaCLSsWs45HskmfLEd816EMrCkrw0lDJUcwrisMD+fBWevEj+qHcwA3mGqbPQRrkHCZlwbIY89AETcGtcEvv6FqcqGPZ7xdI93CpkQGMhOK88Sg6i3NgOckxNM8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787196483; c=relaxed/simple;
-	bh=a9Vocrlm0hQfXUTlIyeZwyHq+NpxByVdce1pWvm/GwA=;
+	s=arc-20240116; t=1787196496; c=relaxed/simple;
+	bh=hr89yN83hibJJYIyjbWHyNWgxabvtaaWaKQNY2jYQAE=;
 	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=BurseycQXh/tBLz1QkMorQVN3h3qNpjq8uTUEczyy826SkAs3mbXvMuBUvY6cLw7vnwUM8jwe8wOshfLrexC12UjBQoskQwvzwsjYf2Evpnn4BIwWM+l5+DouXdPeJLYtaO1sAqXmSpSHlutxzpEJq5Igbka9zaHrPKWrY5ybsw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=qTUiSAJy; arc=fail smtp.client-ip=40.107.75.59
+	 Content-Type:MIME-Version; b=tOAeGtHG92tw7uyuo97YiOZm3+l8Gnywh/4K7WEkposxprqcVN9gcUFxoyYcmZ95buMjpwxtywHwCFkogpZu4qmi68lOTsVXzcZOES1pc582s/PJ7X8CEzfaO17fD6+cLcivsMo+GyJE2MDGALntNxp77zt6cXwEGscbdUPzKSs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=VXIKewDQ; arc=fail smtp.client-ip=52.101.126.0
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="qTUiSAJy"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="VXIKewDQ"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cCyyyQk78HVZu6s/tzvMotlUqPF3A7n8ABVnaSOKIUUfnQ6lUKQGE63fUbTYp5yqmV8OOEWdXy2Tq/TOzIvOusk7kYdzIUgqsdOaMzglzkP1MHqdTwj/PRhbl0stagg+F4Gml2Nump65MXqg5kKBKvev/LhqTo7WBCOpfaBk76iMMf34tKAOb7yRV4ox8mSgDAK1Z1x9p/RE5/hNiUooXv8klYx+btJmtUc76cu71tqFITWxmtJzOjTWYaJnI1OX9hgIeC99GkqFw7WagYrwFb7XylqBtS32xANt+9V/gxHUXEmxo13EhcIlFbKd1cHtgMmB/h4Qkx+a0gT3u1WW2g==
+ b=lO8L+SW6S96zzRWdkGh5YGEKfO6O3wznCYC1H1pXuAIoqdc059MNnIZ+wkOxOWE3T9DxNa6O9+ztgUhiQOR8RrArGmpuRr7nW9Jvf317V63hIus0xw+wq5P+113Rw+t4UE34GUohQBFIC2pwx4mWyV105rE3ZiMhtabfoaDU5vVSgwXi/a7YL1VdXtmw0JEWpPf6mQDQhqfh3rzwRnC6/ixFhvZ4xuRIYfgrq+ODSaqG6f1a1sS4K0sSaCwYX29zeYoUrLppQgeSwOKZuLp0y8+Tt95umxwA21V+ZPzjjhsfnQ0H1nKKmrR94IzDD+tuc1o6l9G/WPaFYg9YJF3AgA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iH9mDKi67RNOa3UqEIw0fZ/v+x0lIABFXT/7EPOBFzQ=;
- b=PE6Un8ijvXVyb0IbGRFshcpQIj2E8erINsnZPdc/SrQhkopteTJpWK0LLwGuKUuRJjQ13qGvbk0zwooNtUfK6gtETvsoYoq56vK44JbkaO0QvdA7A5i05u/VbOku83UjeTl/2azg0pNmDhHJlFDhJETicz1dWy3a4wE0T8BkMrwNdwsV2kjc8W27IlSaZOhLOFh8sXbQjWJzZfTl8Z0H4OodEZNsrJxz5IvKV4rzrEUZRFZcuYLCsQ4gCMIaRD4OzUWOY+fRqtnfadwT+cJt5ubVFfTFWkrwUUydC1OujMStS17tLfpWKeUTeW5+bbvX9m9e6hLPZHSu3Gx0hQhC1w==
+ bh=aLpnexAg2oigSEsDILCMDbUfoGtfKXwBtSarw3DTTm0=;
+ b=UbUW8ZoRaIaHu5FszD6YNPeSHkMlDDCUMxy+EwMml6c9zFuo2pk2yQ7jIVKwOK08Ne8Yp5QhxQgJvqKq6veaT7wEvh8N510/RUZ6/Z1EETmVQn/1Jwv1CkI4qHyleV6gcRcfCHaQpK5izGLwf0mpTRzjQuXHDxX5a/9ChdLkkwP/1mGELaSYPdF378P4FAsao3nLMQGxqaxfuAY2h70O1yBvGrgaBkp7/w7u/D5LmY5LG5cpfBbNTGsPbMjosoIHQLvBXyetev8AGBpaR9Y22zQsZnn6qY0oOLgnvgOw+JHMxFhtMmvJ4BFKf1f6/UdukK6FWS4lVQvWpiStFUF4/g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
  dkim=pass header.d=vivo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iH9mDKi67RNOa3UqEIw0fZ/v+x0lIABFXT/7EPOBFzQ=;
- b=qTUiSAJyp8ipXy7ZPTdeHncoq33/RpL+BhqTbpYBBN220Pxda9y5zSKAFrPtzVuxCbQF0NzKR0WBxc2V3djkKPsinZAZh1ESZXF0hUCl/K++hy61fWs0AMFsgOC4mria/WNWNsibp1zWMMTNgVFwBnJOqw8TgK/8OuhFy9wmoM3pq1ErPfgnsP3Epu454ieplACwDHiSSjREEH5yO9XoMSem4G48uXITqiuEBZ9zhXzzmx1cwb+RiAEXzl6wo9mjv+PgY6MS2otH1QYpDUIsRaMYLHzn5YQMozE/Lg3XXlD2Ti9ZDAfPlqHRJRajpvDWbs6HQ9siYM2XLkvTHwCing==
+ bh=aLpnexAg2oigSEsDILCMDbUfoGtfKXwBtSarw3DTTm0=;
+ b=VXIKewDQWuL3X0gaz1JYQhyB+O6s3JfMgYCF3/JWOSwfjOvf4EG3L0RjyYgeExQV5502ZdY4bgQVTZSZhiZs64RMBKoDcttCRAj8V3lnSngtUujrLS1emFTiawajTkJDVa+uWff7/mAvUi9Mb5Tr1YmgbNZb4J2zDqXL1mlpIhKOozhNCm7oSNruxLDMLKENdcGO5GLR2BzSF42MYXg0s3c75D1cuHr1ZSNVeIWqx/8Q09NBsxhw3IpERwQ/CLFs2/w35CLqXxKhErvbOoCNk3AlIO61i6i3tj0c7qx6RNkfYNsdG+1JwI7+GF0gmvSQzalzmod6J4bURbnEZvIgIA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vivo.com;
 Received: from PUZPR06MB4742.apcprd06.prod.outlook.com (2603:1096:301:b5::13)
  by SE2PPF4565C7005.apcprd06.prod.outlook.com (2603:1096:108:1::7cf) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.17; Thu, 20 Aug
- 2026 03:27:56 +0000
+ 2026 03:28:11 +0000
 Received: from PUZPR06MB4742.apcprd06.prod.outlook.com
  ([fe80::206c:c661:9838:5571]) by PUZPR06MB4742.apcprd06.prod.outlook.com
  ([fe80::206c:c661:9838:5571%6]) with mapi id 15.21.0339.007; Thu, 20 Aug 2026
- 03:27:56 +0000
-Message-ID: <31b304cd-11d8-47f5-a8ee-b26b4b88fcb0@vivo.com>
-Date: Thu, 20 Aug 2026 11:27:53 +0800
+ 03:28:11 +0000
+Message-ID: <4627d5c1-81b0-420c-bc43-36ad12348468@vivo.com>
+Date: Thu, 20 Aug 2026 11:28:08 +0800
 User-Agent: Mozilla Thunderbird
 From: Fuyu Zhao <zhaofuyu@vivo.com>
-Subject: Re: [RFC PATCH bpf-next v3 1/2] libbpf: support selective kernel
- module BTF loading via bpf_object_open_opts
+Subject: Re: [RFC PATCH bpf-next v3 2/2] selftests/bpf: add tests for
+ selective kmod BTF loading
 To: bot+bpf-ci@kernel.org
 Cc: bpf@vger.kernel.org
-References: <20260819090426.267-2-zhaofuyu@vivo.com>
- <150459b74dba9ea3f0bd133f97039f998e25830ada87b803fcbc6c77b17bcf93@mail.kernel.org>
-In-Reply-To: <150459b74dba9ea3f0bd133f97039f998e25830ada87b803fcbc6c77b17bcf93@mail.kernel.org>
+References: <20260819090426.267-3-zhaofuyu@vivo.com>
+ <5cec664e8218aab8a7304ab755e65410dfa07ff5ef4f19a48ee3ce1baed80aff@mail.kernel.org>
+In-Reply-To: <5cec664e8218aab8a7304ab755e65410dfa07ff5ef4f19a48ee3ce1baed80aff@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2P153CA0027.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c7::14)
- To PUZPR06MB4742.apcprd06.prod.outlook.com (2603:1096:301:b5::13)
+X-ClientProxiedBy: SI2PR01CA0021.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:192::19) To PUZPR06MB4742.apcprd06.prod.outlook.com
+ (2603:1096:301:b5::13)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -64,124 +65,123 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PUZPR06MB4742:EE_|SE2PPF4565C7005:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0653240b-e97c-4fab-05ab-08defe6b06d8
+X-MS-Office365-Filtering-Correlation-Id: cdd0b08f-ce1f-491b-d38a-08defe6b1003
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|1800799024|23010399003|376014|56012099006|10067099003|6133799003|22082099003|18002099003|4143699003|11063799006;
 X-Microsoft-Antispam-Message-Info:
-	+34HjOWxvOv89os9sY9tPiS/hAUzEpFc9PKi/t/XScTGkWydjJYxBxKazWSfgw9CuLTlnhBbiydM7E/Il+qSSQEo9XeZxg1CjIXc+wm/a8mt5gEvM9N6DE1GXS15B+l7830PxvTbXWux2vU5jasz5iqP1WWHlI+gUJ3SIaCX/ULKRrirMMnJcMoozyivM9vFDFWRdek9P7U6OjoXdDwdpNq/doacdau43fSW0/OIEWG5sG32TCaPLkzM781X7s4iqHVBSQlQY57OpHe8fqyI8P9EKf9sEiyE9WhyYEVZRBdfy1Lbl64MSXwDW/Sz5kH/0mFmI3/wt+JdQ882Uj7euQDYJd90oiAY6aaQv+3nC6vpG/R77if120buqTwqGaqYWT+JIZZLzpgU6/lHrtvpge4TcZf6CqXiVyuxpqw9C4+H83sbtaLrePdz4H+8+cyNZlok+HjM+JBjTTktts1Ff4q9oByk4swPqgwcYVppid+oD/4P8Jhbj+HOREsUNZzOcetHFxralDGfxdP+yDxAxPVUny6VIHBEx6r3aMAWTcO8EZUlcLbm1ouZEzdjzrDeh2rO9rGdUDhUCSkcqCAHRzivJbBWswX4TdbZggkgYATMnyiDPVYBgx1XyDGNTd21
+	hV6ilD6pcEHauToHTpLSXwLyTW764z4VBE7EhoN5n9yqsLa7MHXoApC1diaPWAMk18LNygqrhM128GjQgdbdKzI9qKuAVznMjCN3lA/tmO9jHZVtGqtKvlw43x5Z+FUHTM7Hs5jNOkz3SI5Hj/j0Qp7t0Znk6PkZn8SJm9pkAJ9cjI89Rwl9WUycrg1nP5SpQDApGEv2HSH9jcaGg2A96ebhPHMlT1VDSJVGqjOdL8wMYLRw2LZ6HHGQG/vyYlqarCrzHVArWvb5EklIEatWk/F3V0GOn0y7EVGO0FCplXK1WElRBorLiccPnDiPwMqjJ50IGKA4mypt9q7dBYSOIC81YyQFY/hRy3/OOx9Odv9hevt7cjWvxN9rcGj8MpuzE+M+lKPflIUqaMp2b9MbrZU9Ll9ovQtJdf22SLGRLma9kHhHR3mp1YOWaJRo/EESZLpfiFvJ5WDgQYHaWq9sAV9cqpCDwHAiS6LKwiRSNsnYnKe1fs2CkX9tWS/W5K/e8NkLqkMSO/ip6M+pgPP3VXzcLRLuIiYVxGDlXOiNnf5efa+VY1D2RY6BI81fW4zJaJSBsifkHZ0j24OKTnheO9eIf0zaNryIqsNg11LZ+ybhyQWQq4nXiPLLnFJSnaY2
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB4742.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(23010399003)(376014)(56012099006)(10067099003)(6133799003)(22082099003)(18002099003)(4143699003)(11063799006);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?QXFxTzNUcU9VaEM2WWxGOTlvNzEraGhYcVAzUnc4K1hCdXBRazdyb21heS9y?=
- =?utf-8?B?L2cwSzdMSzJQakd3eDZCS3owZURtVUVLSnhjYzEzNnlSNWhpenNvdy9ha3hB?=
- =?utf-8?B?czM0ZWxtalhnb3BTM1N1VHdlNnhtZXJzTEEwRndleDFyYm5RVW9wWSt3RTZQ?=
- =?utf-8?B?NWtXU2cxaWxmWlJEREZnMElYdDJYUFpKT2FqRXBNM0NqeUZ0ejF5OFZwR3d6?=
- =?utf-8?B?RVRJY1p5bjVTRDVTQnhvbGg4aW9kQ2g3QmtVSE1MbjdVVlRmQlVLYVd1TWpI?=
- =?utf-8?B?QXRNVExTMXMvSE5ZTkZoRE9STVMwTERaK3Z0ZTZHZEZId3FkQlpoak1NRXkr?=
- =?utf-8?B?eXRRWGt1bnp3Wmo1VHdsZUtYZWRnclJlbm1veUk3Vi9tQUxUSjVoTUVrWTFq?=
- =?utf-8?B?dG9IM1hKUG00ZlQwRk5CRVhwMWF3MHdpS05FekViTkFIWEFDcVZqbG5iVTRr?=
- =?utf-8?B?MFU0d0E0Qzh2NXlPby9WNnVLRUJqVXhraUtTUXlrTFFwK1JKK0pPc2VaUjJQ?=
- =?utf-8?B?U1E5Smx0YXJXVkRSSDUrWDUxeUxtWGZQQ0N5SGdxVmtlTlg3dmp5V2w1cUtB?=
- =?utf-8?B?emJkTmQ2WitrQXh5RmZnL2k4NjBiU1h2VVVLelZRVXc4Kzk4WEcyRllLek4z?=
- =?utf-8?B?cDlaMnA2SklYWUx5aG9wdjduV05JTlNqZVdaQUdYTm02V0xsc0gwK2dFaFNi?=
- =?utf-8?B?aitlTFRsZFZFTWlENGZROHlJQlhsU2dkak1kQk1ocDRxd0ZHekZZVkpwWUsv?=
- =?utf-8?B?c1pPQVFxWnZkcWRLSUlUbXA3LzMrZTBYcXhyc2Zaa1hqUmhxSVpuMlNTak90?=
- =?utf-8?B?SDJUSEVFR3FXaU9TUUJhSTg1Yml1aGxFcFZkUER4THIvSVEvRVJmZnBxb2dX?=
- =?utf-8?B?bFl2bVRTM0tOazBUdnVHaUxNWG94YjJWYlZpQVVvblNnNm5ONHdNTTdQMlM1?=
- =?utf-8?B?RmcvVGlYWnh2aEtaaHkyeUdJYmRBUlBXNGF1THdtZ2JmbVJOMURVUFZGaEw5?=
- =?utf-8?B?SUZVc1ZKNm9oM0RHRkd3RXVDajJLQUpVdGhuN21LdURKVXdPT1FkVDdIVk5H?=
- =?utf-8?B?Y1BtM09BY0pSWml3V095ZGk5ZzBwbXh1anhMWnp0QXNJQzlVOFJaSThSR1VZ?=
- =?utf-8?B?dWordmNNQ2pXNkZZNm1BclFYRUVBck1tUFdSZHBYU0hnK2tRTW5oNGxUeHFS?=
- =?utf-8?B?ODdZTlltdDFoOFNyWHIwV2J3RGpjMmtQNkc1NUZwN09UQXBKM0tkaTBONUtr?=
- =?utf-8?B?aE5RMUcxTkpSaWNqZGZiT1FSRW5ZK0tqSUY0MVJ6V29RMmVHK0ZZZFVqZlhZ?=
- =?utf-8?B?QVdUeHdxVUFEY2Z5MitKeGxzeDBmV0xSR3FPenVTY3JYbFArM2NMUjJwOFdH?=
- =?utf-8?B?VXZYQlBsWFVGeHhxVzNKeG93ZnFxTW9TdE1VUWVmdTRwdjZrM25RT0V6V1l3?=
- =?utf-8?B?ejFRS1pVZkl0ZFJlMkg2NTlweU5hZVFTdEZzTVo2dVk3cGlPQ0lrbEdkTGYx?=
- =?utf-8?B?cWMzSTA3VEpuQ04xcnJpcmRqMUoxemRrQm03UDhJZmZWTXgwbmpLdmRHbFlH?=
- =?utf-8?B?aDNkeDhUb3l1aVFTZ3pqdzNPT1VhMysvbDdDVE1WMnZ2RGk3dnl4N25JUU5m?=
- =?utf-8?B?bE1kSzZYWWtlQnRSTkdOOWxseDI1c3MzbEptK01NTE9ka1BPeWlTVGVVMlpz?=
- =?utf-8?B?NlpFT2wxSzBnS0dKQVdNd3I5NUhMU1hLcUhTdE5pVm16b05YdExFZkp4MUpP?=
- =?utf-8?B?OGxhUXZ5bENIYzRzODV0ZSt0NEt4cTkzQ003bmxUUnpNMWd2L2x3L1BJWnAy?=
- =?utf-8?B?YkhFaTU0WmZIeGNveTEvNEFDeERZZW5PWTFPUzlmVW1wT3dncUdidXNuMHhj?=
- =?utf-8?B?ZHppREZSRFZiMUFESXlUQjJrMjlTdEhZS0N2VVBDY1hSOHQwMWdHUmJCTlkx?=
- =?utf-8?B?aUxibDBMbERnRXIxdmVqR3lXLzhwNkNQakdxQTFJVkZncE1Ia2FBQ0VPempG?=
- =?utf-8?B?UVNENEFhT1pRMUZQZE0wVnpBSGl1SkdjbVZWRE1VdlhQN3kwaWZETVQxaElV?=
- =?utf-8?B?VGxlOTRQOHpEODY0RDhDTEJUZ3hWblRCdXo4TUdES2YvT1ByRWw0WDBDNExm?=
- =?utf-8?B?eXlMZjRMa25PTmwxYW04cENHbFZ1dHlyTkhFL0lhMFo3TmpJMGVST0hnWCtV?=
- =?utf-8?B?SGZsblBKRitiZTlSNjdnM1RlTTZIOHJzUGN4MFpsRGp6NWpXaklkVnE3Q3RH?=
- =?utf-8?B?Sy9RY0hXMy94R1ZsOVhtUVAzMmlVYklxSEVycElxckxON2tRSktWWXNRMHF6?=
- =?utf-8?B?Uk5iNkRPREJubVhXRGxoNXlmT1h6SVhQNit4eHJSdXV4ek9vRmpDQT09?=
+	=?utf-8?B?bHpkMkZ1alR4YTJjZmF6S3ZPc0hlWnBpUXprQmxIYUpjV1BlUm1aT2NQNUJs?=
+ =?utf-8?B?dEJhSE9mbTZLeGY1L01lV1RhVTV5QWR5T0RldDQwY1J4aGg2NXFnbk9Yakk5?=
+ =?utf-8?B?WkhWSFRucEFpRWorOVp5S01IcnVkai9yWkZqZi9QNmIwa1FrdVFVVFNmMytD?=
+ =?utf-8?B?dzJVc1p5YUxLbGJaTVRGbjFpYmd0blIwSUpNSHpOc1VGMGxZSDNLcXpnTTZq?=
+ =?utf-8?B?UTA3aEJyemRzOEN2elVEZk4wcHk2c0xHanFya1JJQVZVUTJmQWNyaHNMZ1VX?=
+ =?utf-8?B?eGRwU2dNNjZzYTR4aEhLNjJpUmtENFBSTmh0dmVMcWZOd2tuNzhEN2R1OFV5?=
+ =?utf-8?B?TENONlB1NG5HQStMaGcxUHVBVHVqb2xuTGxmRFZ4Rkh4VERXR0dWTHh4NkFy?=
+ =?utf-8?B?YzF5NGRNZkxBRG9KYjByekErWHZNaFlocE5Lcm5jZ1ZOMmFpcjd6Zmtod1J4?=
+ =?utf-8?B?MUh0SWkrbGZFeWNUbk1XejIyM3VtVW8wUk1lSk1adDB2ZjMvSWpsSDNydHp4?=
+ =?utf-8?B?OWhaNjRraGROWUZvdlRaOWRyam5VNUM4MG1jN2xjenluc2doWEhwNGhKOUtt?=
+ =?utf-8?B?cTJRVjlmdkp5SkgrRThqdWVlT3UxUk9ZYjRpUjE2ajJtQWw4OS9MUll0NnhQ?=
+ =?utf-8?B?MFVpeHdxSFJwQldrajdpMmtSeStpZ3NPQWRTcFVXcWFmZXdLRlhIRTR6TUVs?=
+ =?utf-8?B?ckVtM1NXOFM0ZUxCMGFKRUMvdXBpalp5ODUwdmpTL2VMNEgrWmxzVDZZU0hk?=
+ =?utf-8?B?aTVqL2dCaU1mdHZGQ21OeWVhZy9FMGdURjlHYVhyYStxR3pWbU1MVHlwcjMv?=
+ =?utf-8?B?SlhmZDdrMmt0dU95bEpGenF6VmkrN2hWRDBiSW5uY0xBeUE0dld0VGRxQjFN?=
+ =?utf-8?B?WUhkZUhNdnZVeHk3QUJuS1Vac0daODVpSEJVRGh4MTJISC9ZR0pnZkpxL2NM?=
+ =?utf-8?B?eXV4c0hNeit4R1NEK1Z3S0s1bEJsWmZ6RUFIbjhwVzFFK3YvOTNZbWdlSTQw?=
+ =?utf-8?B?YXhvcUpnZXVaY0Ixalk4WVNwQitOUUVmVUprbFhtcGRnL1F6UXVJT1hJdjVU?=
+ =?utf-8?B?aDFzNUpPaHdSSHFPRXpQdXhuQVQwVUI0ajQ2V1JrVTVKRlUxNmFWb2xaQ1R3?=
+ =?utf-8?B?bFJndzNqSXpnZGdlSDVxT09SUHRHUG1scXA2ZktvMkNiVHZxUmExblZ6QlEw?=
+ =?utf-8?B?a3NNQU14cXBCd1ZJNWwyNC9YWUxsZDhNY1IyNmdPcnl5RHM5QitqM1VxN0FP?=
+ =?utf-8?B?UEZEYjZwZDhkNjdiMmw4ckQyYkVqeStaVUU3VmxJZEhTZEFyM3EyYWtsRHd5?=
+ =?utf-8?B?NjViOFBZWlVyVXJZNEQzNHEyeWIyVlZ3YWcrTmQrckRyUllOS1lFNy9Pc053?=
+ =?utf-8?B?MkNuZDBuZGJEelV4SFJ6ZzdDWCtKbWJqTmgvcjllaiswVDdkeitLMk15aEto?=
+ =?utf-8?B?YXk5TVR5TmIyVURkNjZrYVF2encyUXVidVRhVGhKcjdncnhaZ055RzhvZngr?=
+ =?utf-8?B?dE10YVVZOFY5b09lRmt6TnZqK0xmRnZmcU1JNjhQeHV3TVBudFM2ZCtrTTc0?=
+ =?utf-8?B?S3h5RkNEb1BDL1ZweVcwY2ZUUHVDR1d2bmYzMDRnMk93dnhSNHlybkNUV2l5?=
+ =?utf-8?B?M09SMnRDVWZ5M2xtb01iOGVBcHpFNWtsSkZtcHNZRzVsVm5zZElheW9mTGhV?=
+ =?utf-8?B?ZjhNb042OEd6bEhpbk8velM1OFBOeDRxTm1WUlBlWHJjYit3dFpUT3NYd3lZ?=
+ =?utf-8?B?TDUwb2Z0WlhSRU5YYjNQRnorMHpDMlF6UEViQUpnRWs0Y0tpYWNWNmczNlhl?=
+ =?utf-8?B?SkxpS1NZVXNYckxEQkhmQTJ2cXRrZHNPc1JVMHkxVFU2eDExZkdVa01LbnQ1?=
+ =?utf-8?B?dTAyT3JhWDFMWWhNY3VyS0dFY2M5OGJENkhmSmFWc2E3UG9hNTVlTVZ0ekhZ?=
+ =?utf-8?B?UVN1eC9EUkNndlh4aTJXa1FkakFtWWxRKzl5OUlHd2JiU29oSWEyY1dVRThO?=
+ =?utf-8?B?bTVXcGowUnJHc3NtaGQva0VNRElOL0twV3ZkdUdlZGhTcERraVY2am82K0Qv?=
+ =?utf-8?B?T1ZvcFhJZGhRRHMyazVQN0tEdUJmKy80aWcxZ051dm8zbjlzUlZpZ2tuYjd5?=
+ =?utf-8?B?a3NYRUVqQ1k0SHF4dUlaN0hSR2NzSkhPT3hrWEpTSTZjTk9KUXZ3ZnB1bUk0?=
+ =?utf-8?B?Mm5hZW9oOXlPemRpZmZoeTJiQjZiK3V0ZlNRVnZDeERkeVZ3VVczcFM3UlVT?=
+ =?utf-8?B?REJkYUVlRkhzeVl1bFFxbG1kQlpRUDB3UTZnbm5hNFI5TDh3RFVWMjRjMW0x?=
+ =?utf-8?B?QW9sQUJpVjdLQmp5RmxVdzE3SXM4cU1PYUtMaDdQQkJJcDAweG9DZz09?=
 X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0653240b-e97c-4fab-05ab-08defe6b06d8
+X-MS-Exchange-CrossTenant-Network-Message-Id: cdd0b08f-ce1f-491b-d38a-08defe6b1003
 X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB4742.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2026 03:27:56.4637
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2026 03:28:11.7707
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mF9lxv+fB2BcFNwt3gg+IurXU5Z3vX68po+kNnJd+q6HfFH1SaCK78HjmpyhZFoQoX/reYHbhAGKzUElhCu0tQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 27bG22w6CV6ES0z7xEI43+ODS6JF0TJmXzlf+/tXhoh53w0GUTeeWQiVzkIejpH0FyI23NxMp/q5vOUcnE2yvw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SE2PPF4565C7005
 
 
 
-On 8/19/2026 5:35 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
->> index b749c01742ee..957415341caf 100644
->> --- a/tools/lib/bpf/libbpf.c
->> +++ b/tools/lib/bpf/libbpf.c
->> @@ -782,6 +782,13 @@ struct bpf_object {
->>  	char *token_path;
->>  	int token_fd;
->>
->> +	/* kernel module BTFs to load, as specified via bpf_object_open_opts */
->> +	struct {
->> +		char **names;
->> +		size_t nr_names;
->> +		struct hashmap *names_map;
->> +	} *kmod_btfs;
+On 8/19/2026 5:50 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c b/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c
+>> new file mode 100644
+>> index 000000000000..61d2845a731f
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c
+>> @@ -0,0 +1,196 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +#include <test_progs.h>
+>> +#include "kmod_btfs.skel.h"
 >> +
-> 
-> This isn't a bug, but since this holds module names rather than BTFs,
-> would a name like kmod_btf_filter read more clearly next to the existing
-> btf_modules field?
-> 
-
-I think kmod_btfs is sufficiently clear here. It represents the kernel
-module names used to select which module BTFs should be loaded. Using
-kmod_btf_filter could instead imply filtering BTFs, which would be
-ambiguous with the fact that the filter is based on module names.
-
->>  	char path[];
->>  };
-> 
-> [ ... ]
-> 
->> @@ -5851,6 +5858,121 @@ int bpf_core_add_cands(struct bpf_core_cand *local_cand,
->>  	return 0;
->>  }
->>
->> +static size_t mod_name_hash_fn(long key, void *ctx)
+>> +static bool btf_skipped;
+>> +static bool dup_ignored;
+>> +
+>> +static const char btf_skip_fmt[] =
+>> +	"libbpf: skipping module BTF '%s', not in kmod_btf_names\n";
+>> +static const char dup_ignore_fmt[] =
+>> +	"libbpf: duplicate kmod BTF name '%s' ignored\n";
+>> +
+>> +static int libbpf_print_cb(enum libbpf_print_level level, const char *fmt,
+>> +			   va_list args)
 >> +{
->> +	return str_hash((char *)key);
+>> +	if (!strcmp(fmt, btf_skip_fmt)) {
+>> +		if (!strcmp(va_arg(args, char *), "bpf_test_no_cfi"))
+>> +			btf_skipped = true;
+>> +	} else if (!strcmp(fmt, dup_ignore_fmt)) {
+>> +		if (!strcmp(va_arg(args, char *), "bpf_testmod"))
+>> +			dup_ignored = true;
+>> +	}
+>> +
+>> +	return 0;
 >> +}
 >> +
->> +static bool mod_name_equal_fn(long key1, long key2, void *ctx)
+>> +static void kmod_btfs_pass(void)
 >> +{
->> +	return strcmp((char *)key1, (char *)key2) == 0;
->> +}
+>> +	struct kmod_btfs *skel = NULL;
+>> +	int ret;
+>> +	static const char *kmods[] = { "bpf_testmod" };
+>> +
+>> +	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts,
+>> +		.kmod_btf_names = kmods,
+>> +		.kmod_btf_names_cnt = 1,
+>> +	);
 > 
-> This isn't a bug, but these look identical to str_hash_fn()/str_equal_fn()
-> in btf_dump.c - would it be worth hoisting one copy into libbpf_internal.h
-> instead of adding a second pair?
+> This isn't a bug, but would LIBBPF_OPTS() read better here than
+> DECLARE_LIBBPF_OPTS()? The same pattern appears in all five subtests
+> (kmod_btfs_pass, kmod_btfs_nonexist, kmod_btfs_dup, kmod_btfs_skip,
+> kmod_btfs_no_cnt). DECLARE_LIBBPF_OPTS is defined in libbpf_legacy.h as a
+> backwards-compatibility alias, and most of prog_tests/ uses LIBBPF_OPTS()
+> directly.
 > 
 
-I think it is better to keep these helpers separate. Although they are
-currently identical, the two use cases are unrelated and may evolve
-independently, so sharing them would unnecessarily couple the implementations.
+Agreed, I'll use LIBBPF_OPTS() instead.
 
 > [ ... ]
 > 
