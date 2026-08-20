@@ -1,46 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B74A747F2C8;
-	Thu, 20 Aug 2026 17:15:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DAC446F483;
+	Thu, 20 Aug 2026 17:44:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787246150; cv=none; b=My8Sf5tTamq+yC9MP8PtRU8WpWuqhytLdPRLDOIMdCbf6U9+iKg134tbbl7wx1yPBQFadi4KBCBGp1grJEZgoOSHu65uhzobe8df/wupM1eE+0m2G116nq/utDmBTcBp1/ZXSQ63J50ZYjR4cfM1blH8Xijw2VR4r72V3B4siFA=
+	t=1787247862; cv=none; b=coQeJDPEE8TslJYxgdd6+SUswf8iPcmODTARGS9VIpYy1pHm8pu/7VvY1ZSwjFpTSkRMk5zViQaxr6WoD0MNeyL3lDKKJhplcGRQRA9IwZlJawf5HPorHGa/HoA6mQC6V4kdfWlFpJAQNjOwftwxjxTaTkAZfW0n5YjZGSz5zlk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787246150; c=relaxed/simple;
-	bh=1e6wKhw1CG4ZfPd5rw0354soRsVciSGiHI/FONa2Fos=;
+	s=arc-20240116; t=1787247862; c=relaxed/simple;
+	bh=ufhwFmCuxqOmcf1bKOmVJlnlz+9Jzom57md5eAPV2b4=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=o0YoM8mAN4VUiZe4wrLOfeIC+DgjkDBkLyMbdSmKrPj8isaL+JZxviSZmiXoI7y2GvIyByIxF4LPblK5O8G6CeS6pAFcq6jU0Bu6ptWpmjhYEEqmtTKGc9h2zVzDCFn8AIHqk8uWO2QT6EHeGuWJFvE6zGdvRpN3QN35vPfuScE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EJMQg6NV; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=JChtBbggoDdAdWPYVG4OvYG1cWyVFo0MZ01lFA5HwWriOyX+oLfRpxXLb+jD0MGKmQTx2csPR5pK9XINNbRGRLO/UEzdVJHpv026JK1+2M0ByYe5ZScEGcZfJen02t8xcTOjG8CEmAf/4mLhwf2SDflpTGPmko2Z18yipZOz4uI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IQTLjMv/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EJMQg6NV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B677D1F000E9;
-	Thu, 20 Aug 2026 17:15:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IQTLjMv/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAEED1F00A3D;
+	Thu, 20 Aug 2026 17:44:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787246148;
-	bh=GBEUXij3saIoo9mKJC4Xzqpeo4qm1AjJczyu6HrDWtM=;
+	s=k20260515; t=1787247861;
+	bh=ufhwFmCuxqOmcf1bKOmVJlnlz+9Jzom57md5eAPV2b4=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=EJMQg6NVkSZ4fwmRxIpXvnXb65ziJRbLxHdtEsfW5SvEnJ83i3LMJDpu8PoEx84ww
-	 GAITmyH+sEG6ax50Ff1gC0Cf8/d/LjUABOSmLh1caHYkzKV5nP2ZnngcW8WPby/Ag/
-	 FbEzbeXmOIE5FDZABRkKUkevJfPwXm0tVJzwkIStVfMCtttrs6sQoFdXP4lXlqhHCH
-	 9jO5wCuoNhj1AE+8bm5s9hLRhBNx8vdR0YQCTovjFSssanbSiUYfsjI74tcNNOkGCt
-	 ZgiSuzrE3PAW34AKIbVmFIPpm4JS3/PUpFdMEfg0gCTBsooQetlzXIXP8SlZqgRbZa
-	 9dwg+HsI45atg==
-Date: Thu, 20 Aug 2026 10:15:45 -0700
+	b=IQTLjMv/O/zjtiLTDGvfB/vZSK1wkblM3aLaqbyqVfPXUL0+/z1e5Uw5YWrwwue5l
+	 w+aGJtb2wupWgI6TauId91kdAPzdpR7lWwp8cUxXXJ0L4KVx9d5sQIy+hL5FngFQv5
+	 Eo88+DsO68WW+hEjE2bU/O/42uoXnog47Eru4q8gpDeOcPJVjMgJWKJOdAiwPEUGas
+	 SMlQD50SkVZaAPRZyjwzV+jJnAZiC0cHSUX99GsRgCLKSuO17kZS9sDWrlXiFYDmeA
+	 s7hipU2wBCrC/HcPKajR+Btsrjy4MGMCIbkK4b/9jqqviYkTnIUFkAtpZcAbLh1vua
+	 ProqS+n7dUZwg==
+Date: Thu, 20 Aug 2026 10:44:19 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Ratheesh Kannoth <rkannoth@marvell.com>
-Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <netdev@vger.kernel.org>, <andrew+netdev@lunn.ch>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <davem@davemloft.net>, <edumazet@google.com>,
- <hawk@kernel.org>, <john.fastabend@gmail.com>, <pabeni@redhat.com>,
- <sdf@fomichev.me>, <sgoutham@marvell.com>
-Subject: Re: [PATCH v9 net-next] octeontx2-pf: add mqprio bandwidth offload
- for NIX TX schedulers
-Message-ID: <20260820101545.2c1c6199@kernel.org>
-In-Reply-To: <aoUZWdZ2fy8rJUkM@rkannoth-OptiPlex-7090>
-References: <20260817032747.1765883-1-rkannoth@marvell.com>
-	<20260817084212.5d46a501@kernel.org>
-	<aoUZWdZ2fy8rJUkM@rkannoth-OptiPlex-7090>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: Tushar Vyavahare <tushar.vyavahare@intel.com>, netdev@vger.kernel.org,
+ magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
+ stfomichev@gmail.com, kernelxing@tencent.com, davem@davemloft.net,
+ ast@kernel.org, daniel@iogearbox.net, tirthendu.sarkar@intel.com,
+ andrii@kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v3 0/4] selftests/xsk: improve shared-UMEM
+ coverage
+Message-ID: <20260820104419.050cbc44@kernel.org>
+In-Reply-To: <a602a1f6-e279-4c7c-86df-1bd0ef244fd0@redhat.com>
+References: <20260819024443.781764-1-tushar.vyavahare@intel.com>
+	<a602a1f6-e279-4c7c-86df-1bd0ef244fd0@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,12 +49,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Wed, 19 Aug 2026 08:17:53 +0530 Ratheesh Kannoth wrote:
-> Resolving these pre-existing and error-handling issues from sashiko (see below table)
-> will require additional time and refactoring. I've added temporary TODO
-> comments and debug messages to track them.
-> 
-> If acceptable, we would prefer to re-submit v9 and a follow up patchset to address
-> these fully post-merge of this patch. Please let me know if this approach acceptable you.
+On Thu, 20 Aug 2026 11:35:53 +0200 Paolo Abeni wrote:
+> ## Form letter - net-next-closed
 
-Fix the bugs first, please.
+these are bpf patches. Tushar, tools/testing/selftests/bpf is BPF
