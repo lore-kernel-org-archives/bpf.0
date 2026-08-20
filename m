@@ -1,203 +1,221 @@
-Received: from mail-wr2-f2.google.com (mail-wr2-f2.google.com [74.125.225.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF8C538E8D0
-	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 18:45:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2493936B932;
+	Thu, 20 Aug 2026 18:46:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787251531; cv=none; b=NPzB/pjZ9EruIRU8JsiYk/o2V/j2V6KBcKdyZ6rBnTbs679MERbS7YsXPSP/pdUrigFeWIhNkGEAwk+oa0ArzIgLYKOpmNROlcT3bQ9FXusICkOj9nIv+MGYKJgzid8IJNDJ2Fv/n0naG/JLSkEJX8erEiM/9CYuKdN2L0Tg25I=
+	t=1787251591; cv=none; b=Br0ETQ6B8VPdWddTGJSioxcOrZgMverofWBN9qI4/dL5+dNX+XnFtQNktF8zPHCe+ajX81a7NGq0gvhx8fl/hEcJrPUL/8Nx0b9YL7huP7ZAhjlNCkLXTxQsgsdm8oFqDPNkko9rF3McGjiamIFD4LDDkzm/KMQMA02PrTJSdL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787251531; c=relaxed/simple;
-	bh=IjxMcim8HOwP/6WRe0eNco3scu2oMXvxpsDJCD9rlFI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=r14JfaQRfX/gvv9EkSAsA8oBUvNmaIFAzBvexmT7yr87hHbiteKY07HSZiU1MxSOqhjH/4kxTZFsgKCriHvppoKLMp5fkawI1o1NUKlsbu3g5mEZqTTuAzP3x42bMaT6HWznHF2+hkBOM/Gm/k0oA+COX8Eq1Lf/3i/bgR+HMKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sg2XqjA0; arc=none smtp.client-ip=74.125.225.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787251591; c=relaxed/simple;
+	bh=rfF3HLh2l8W7T6w0erShcbdZsEf4ErrdRCsI4Lsif1w=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=AeRCfT/tgVk3C9yiGm70mvtRE75d4KYzc5SMPZB/1x3yZNRDxMu4A8TYjkc1AjKs8uSM1wYWkH+t8izyYNhYmqECBJlAKqMQ+AmexMIeO2t1cznueVQSJMfn9+Yz+ZM8sb6oxOk/TN7gnoiGHu1SZD2mICrbasxiWNlin+/Slsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JAqrH+sf; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sg2XqjA0"
-Received: by mail-wr2-f2.google.com with SMTP id ffacd0b85a97d-470713a9053so52957f8f.0
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 11:45:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787251528; x=1787856328; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=A8tRTZx6tC4oonTDhc/ZkLzvtSgV5Qt1wlSP8VYKMh0=;
-        b=Sg2XqjA0eTxGAE8KYDYOKtGXaFwNrI6HEjf4KOSOsRnywyx5t2nuMbdTehT46PHoZB
-         pjYGTeL6W3ZdyOkI6LoDF4Us3K8T05Xk0xqXSVnOcW+XquoQ6p/48HYT3WLDB5+J+3kE
-         q5SKedmeapbsQiOFOSchsnHadNesyvUIiKa3D7MRKhpPlWcbxZT0bu+Tzzs8tJRFkr6R
-         VHRf8IUoe0sop4DcO1Ml611K/6jpQamq+uQrVed92omgt7Vqkhy974QQaG85JpQ27QJA
-         nXc/gBqxuKwXNlBP6OxGC2QL8s1+ElyXVcD6AOi0xDmwaDUs1EnWziC8t4fGXvd2Vxc1
-         BSZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787251528; x=1787856328;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=A8tRTZx6tC4oonTDhc/ZkLzvtSgV5Qt1wlSP8VYKMh0=;
-        b=A9w59SIa6PY/VrzF4eRUPQP7iWF6ROwgktAiWoND8nxxpB9zWwmzp7s2Ltx+UM9Bvv
-         brI+BZtzhdSfeqOp453ckUmftvf5oWTGg9TkEfqSPXkZhATm6os8ZtEOhbNEOU+yaGYn
-         TpU/Ajb8eHM9p5o6vuv30A19ulCsPQCfa6hNr2z448tHfBmuTXaKRxMYppFBc5Ssu/JW
-         LWD/idOXDfRp+Bmf+5ObtE0004Rju8d62lg3IwhXIQPy5Bq1SWt+8MjZy3Tcdotrf+cm
-         ElMNYmCMvJqlJymDzSH4ryKF5yFl+WEkI61ao53f45aIw980WCzefUp+g6HH3a01dYYa
-         dj4w==
-X-Forwarded-Encrypted: i=1; AHgh+RodlkjfAcKk7u0tapB3mbkcB42l20PADkhFhYIo9hWrmxnMCwp2yzIn9xHQCxZcZ/KlPpk=@vger.kernel.org
-X-Gm-Message-State: AFuF++mc2TOPvzYoPalzObvlJMmb/sonCAOO9MQ2l4z1UrAiFaLJytBJ
-	e5YzHMFkwBK1/40+AZq00t5Tiy92J3aABJcVjbicFBB8InSeGdtu1E0w
-X-Gm-Gg: AR+sD139dHk1PnQLS0MtAHbAwdigx2qUYig9CdyesnG/6VL9H70y5KsxfKQgqo3Dkj5
-	oaMVdDuIsrzgFiZ/1gW0QO5WkvzxgH8rJxFEGSFZ+LlaywDo4dar12DJhQPzFni6+rmM4SobUmR
-	CESj0xlk40mrKUh1i9y6XNQquBCwjIxvgb1PTo2ii6ZxgKp33z1WbGpNSk+txC/Zlvkv7TEtIeX
-	Cu/LLOm4Jh85vSSOXjyKo1EVYq+V7bS5w2vNLtyucyBfvb7f9jXbEzA/FQVkEUHfEQRCYH1/1dz
-	iVEowF0wVLrqrsfD3HvNzsTE0N9obG0kG8lazjdh6hBbishlEg3Ym3uRqmPxey09rqTCkLYvAJ2
-	JKJ5zTL/5ods7zroIpJ/pju8s9UE/zA+YEJE0jlx87JVP94PqTBu01nVbYfOKgZVkHIjlXPMozE
-	gEnHYE5CpAE8AenGBCZ0O3BJO2NZd9RYFmBBwfBQcgZVJah+2wyAfO72XRLsM8hlQYRM0p2XPql
-	DVdvjiP1yn9r6/kSz8nqbIt2VBcH3Vp+zHadF6069+mJM5m9qKeUk4wq5ciQVFKHGt13GVWk2RT
-	eo/INGXV1MkPzATHFYxEiGfKs3KemHYqpU4I1w==
-X-Received: by 2002:a05:6000:1841:b0:47f:8b2c:3d98 with SMTP id ffacd0b85a97d-482c0b5883amr1210547f8f.4.1787251527954;
-        Thu, 20 Aug 2026 11:45:27 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-482b14b8038sm13224824f8f.20.2026.08.20.11.45.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Aug 2026 11:45:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JAqrH+sf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB3E71F000E9;
+	Thu, 20 Aug 2026 18:46:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787251590;
+	bh=85CoGMrbgo6hpuya2eU3QKLizIuVfSQg58+cQG2CLAk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=JAqrH+sf0DqL0p1N2TEKaYARAPejw5joRwhyaP31YIrViRI83bfkuVXG/XyviOsuY
+	 ifMN4WkPTwm1lm1B6Ef1iQXzzhzMaoLHNO2Bs0ooPojeLauUyNVco7wTljtxDfUgIj
+	 QXMAdAfUxqFaIrH5Xo38olKWvMctjmQQM5DjDJ11ky4QZ3pIf6//Wfl5WYQXgcbQoN
+	 SWR7vlN1HSajaVWf6+gs6k4+xXy7I+JxCYy9sOcng4FbR5pTtNHhCB0/Ue9ADuOGL9
+	 En+vNKQGWNY1VgV6RMDhv/kPcUxlDPnoEbsNRgccvZlSYCaIN7DezfDWMUSxtm7y60
+	 cQVMv4ITgRuHQ==
+Content-Type: multipart/mixed; boundary="===============4789690843552500985=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 20 Aug 2026 20:45:26 +0200
-Message-Id: <DKTZSGMQL5CC.18BOA9ZNRHQ5J@gmail.com>
-Cc: "Hiker Cl" <clhiker365@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "John
- Fastabend" <john.fastabend@gmail.com>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>, "Paul
- Chaignon" <paul.chaignon@gmail.com>, "Amery Hung" <ameryhung@gmail.com>,
- "Shung-Hsi Yu" <shung-hsi.yu@suse.com>, "KaFai Wan" <kafai.wan@linux.dev>,
- "Daniel Wade" <danjwade95@gmail.com>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf 1/2] bpf: fix REG INVARIANTS VIOLATION on
- speculative pointer arithmetic
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Eduard Zingerman" <eddyz87@gmail.com>, "Jiayuan Chen"
- <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260819125840.286434-1-jiayuan.chen@linux.dev>
- <57a57ed806a954de19774b7c0833dc1742560cd2.camel@gmail.com>
-In-Reply-To: <57a57ed806a954de19774b7c0833dc1742560cd2.camel@gmail.com>
+MIME-Version: 1.0
+Message-Id: <79ef5a0c38f6db7bd25876486bed41d8fc79f8503f2f35479c9322fc6c9d4567@mail.kernel.org>
+In-Reply-To: <20260820175154.708374-1-sean@mess.org>
+References: <20260820175154.708374-1-sean@mess.org>
+Subject: Re: [PATCH] selftests/bpf: convert lirc_mode2 to prog_tests and extend coverage
+From: bot+bpf-ci@kernel.org
+To: sean@mess.org,linux-kernel@vger.kernel.org,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
+Cc: sean@mess.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 20 Aug 2026 18:46:29 +0000 (UTC)
 
-On Thu Aug 20, 2026 at 8:25 PM CEST, Eduard Zingerman wrote:
-> On Wed, 2026-08-19 at 20:58 +0800, Jiayuan Chen wrote:
->> Take the following unprivileged program as an example:
->>
->> 	r0 =3D bpf_map_lookup_elem(...)	/* PTR_TO_MAP_VALUE, offset 0 */
->> 	...
->> 	14: r0 +=3D r1			/* r1 is a bounded scalar */
->> 	15: r9 =3D r0
->>
->> Loading it triggers a verifier warning from reg_bounds_sanity_check():
->>
->> 	verifier bug: REG INVARIANTS VIOLATION (alu): const subreg tnum out
->> 	of sync with range bounds r64=3D{.base=3D0x0, .size=3D0x0}
->> 	r32=3D{.base=3D0x0, .size=3D0xffffffff} var_off=3D(0x0, 0x0)
->>
->> What happens:
->>
->> 1. Processing insn 14 (r0 +=3D r1) in adjust_ptr_min_max_vals(), the new
->>    offset is computed into dst_reg's var_off and 32/64-bit ranges.
->>
->> 2. Because pointer registers do not track 32-bit subregister bounds,
->>    __mark_reg32_unbounded() first sets r32 to the full range; r32 is
->>    re-derived from the offset at the end of the function by
->>    reg_bounds_sync().
->>
->> 3. On the unprivileged path, sanitize_ptr_alu() is called and, via
->>    sanitize_speculative_path() -> push_stack(), snapshots the current
->>    register state and schedules the next instruction (insn 15) to be
->>    verified directly as a speculative path.
->>
->> 4. That snapshot is taken between step 2 and the final reg_bounds_sync()=
-:
->>    at this point dst_reg's var_off still holds the (const) original
->>    offset while r32 has just been blanked to the full range, i.e. the tw=
-o
->>    are out of sync. When the speculative path later verifies insn 15
->>    (r9 =3D r0), the inconsistent state reaches reg_bounds_sanity_check()=
- and
->>    trips the warning.
->>
->> var_off and the 32-bit range must always be consistent. There are two
->> ways to keep the snapshot consistent:
->>
->>   1. sync var_off and r32 before the snapshot so they match, or
->>   2. leave r32 at its original (already consistent) value and blank it
->>      only after the snapshot.
->>
->> The whole point of sanitize_ptr_alu() is to insert a harmless masking
->> sequence that keeps the access in bounds under speculation, so the state
->> it snapshots should faithfully represent that. Take approach 2: move
->> __mark_reg32_unbounded() to after sanitize_ptr_alu(), so the speculative
->> snapshot keeps the pointer's original, consistent r32. The non-speculati=
-ve
->> path is unchanged: r32 is still blanked before the offset is applied and
->> re-derived by reg_bounds_sync().
->>
->> Fixes: 5f99f312bd3b ("bpf: add register bounds sanity checks and sanitiz=
-ation")
->> Reported-by: Hiker Cl <clhiker365@gmail.com>
->> Closes: https://lore.kernel.org/bpf/CAGM=3DxGB1fJ9kT8XTitVo74B0WGqgjkoUH=
-dLwzytwV0AyqeVApw@mail.gmail.com/
->> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
->> ---
->
-> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
->
->>  kernel/bpf/verifier.c | 11 ++++++++---
->>  1 file changed, 8 insertions(+), 3 deletions(-)
->>
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index d17f14b35b79..d79038a8da10 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -14558,9 +14558,6 @@ static int adjust_ptr_min_max_vals(struct bpf_ve=
-rifier_env *env, struct bpf_insn
->>  		return -EINVAL;
->>  	}
->>
->> -	/* pointer types do not carry 32-bit bounds at the moment. */
->> -	__mark_reg32_unbounded(dst_reg);
->> -
->>  	if (sanitize_needed(opcode)) {
->>  		ret =3D sanitize_ptr_alu(env, insn, ptr_reg, off_reg, dst_reg,
->>  				       &info, false);
->> @@ -14568,6 +14565,14 @@ static int adjust_ptr_min_max_vals(struct bpf_v=
-erifier_env *env, struct bpf_insn
->>  			return sanitize_err(env, insn, ret);
->>  	}
->>
->> +	/* Pointer types do not carry 32-bit bounds at the moment. Blank r32
->> +	 * only after sanitize_ptr_alu() may have snapshotted dst_reg into a
->> +	 * speculative path: otherwise that snapshot freezes a const offset
->> +	 * with an unbounded r32, which later trips reg_bounds_sanity_check().
->> +	 * reg_bounds_sync() below re-derives r32 from the updated offset.
->> +	 */
->
-> Nit: comment is a bit too verbose. "... otherwise reg_bounds_sanity_check=
-()
->      might hit some constraints violations" should have been enough.
->
+--===============4789690843552500985==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Fixed style and verbosity while applying.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/lirc_mode2.c b/tools/testing/selftests/bpf/prog_tests/lirc_mode2.c
+> new file mode 100644
+> index 000000000000..17a38cd03845
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/lirc_mode2.c
 
->> +	__mark_reg32_unbounded(dst_reg);
->> +
->>  	switch (opcode) {
->>  	case BPF_ADD:
->>  		/*
+[ ... ]
 
+> +/* Load rc-loopback and find the lirc and input chardevs it created. */
+> +static bool find_loopback_devices(char *lirc_path, char *input_path,
+> +				  size_t path_sz)
+> +{
+> +	glob_t gl = {};
+> +	bool found = false;
+> +
+> +	/* Ignore failure, we check for the resulting devices below. */
+> +	system("modprobe rc-loopback > /dev/null 2>&1");
+
+A subsystem pattern flags this as potentially concerning: this hand-rolls
+a fire-and-forget shell invocation when test_progs.h already provides
+SYS_NOFAIL(fmt, ...) at test_progs.h:444, which handles both the ignored
+return value and the redirect to /dev/null. The line would become just
+SYS_NOFAIL("modprobe rc-loopback"). SYS_NOFAIL() is used 119 times across
+prog_tests/ for exactly this pattern.
+
+The subsystem guide flags tests that reimplement existing helpers instead
+of using them, though in this case raw system() is also widespread in
+prog_tests/ so the behaviour is identical either way. Worth considering
+for consistency?
+
+> +
+> +	if (glob("/sys/class/rc/rc*", 0, NULL, &gl)) {
+> +		fprintf(stderr, "No rc devices found, is CONFIG_RC_LOOPBACK enabled?\n");
+> +		return false;
+> +	}
+> +
+> +	for (size_t i = 0; i < gl.gl_pathc; i++) {
+[ ... ]
+> +		if (!strstr(uevent, "DRV_NAME=rc-loopback"))
+> +			continue;
+> +
+> +		snprintf(pattern, sizeof(pattern), "%s/lirc*/uevent", rcdir);
+> +		if (!find_devname(pattern, lirc_path, path_sz))
+> +			continue;
+> +
+> +		snprintf(pattern, sizeof(pattern), "%s/input*/event*/uevent", rcdir);
+> +		if (!find_devname(pattern, input_path, path_sz))
+> +			continue;
+> +
+> +		found = true;
+> +		break;
+> +	}
+> +
+> +	globfree(&gl);
+> +	return found;
+> +}
+
+A subsystem pattern flags this as potentially concerning: the only
+diagnostic is attached to the wrong condition, so the common unconfigured
+case skips with no explanation.
+
+glob("/sys/class/rc/rc*") fails only when there is no rc device at all
+(CONFIG_RC_CORE=n or no IR hardware), yet that's where the message names
+CONFIG_RC_LOOPBACK. The actual CONFIG_RC_LOOPBACK=n case (rc devices
+exist, but none has DRV_NAME=rc-loopback) and the CONFIG_LIRC=n case (no
+lirc*/uevent under the loopback rc device) both fall through the loop and
+reach the silent 'return found' with found=false.
+
+test_lirc_mode2() then calls test__skip() with no message (test__skip()
+takes no argument), so the run reports lirc_mode2:SKIP with nothing
+telling the reader which prerequisite was missing.
+
+> +
+> +void test_lirc_mode2(void)
+> +{
+> +	char lirc_path[PATH_MAX], input_path[PATH_MAX];
+> +	int lircfd = -1, inputfd = -1, progfd, progfd2 = -1;
+> +	struct lirc_mode2 *skel = NULL, *skel2 = NULL;
+[ ... ]
+> +
+> +	if (getuid() != 0) {
+> +		test__skip();
+> +		return;
+> +	}
+> +
+> +	if (!find_loopback_devices(lirc_path, input_path, sizeof(lirc_path))) {
+> +		test__skip();
+> +		return;
+> +	}
+
+A subsystem pattern flags this as potentially concerning: both skip paths
+call bare test__skip() with no accompanying message, so the two very
+different reasons for skipping are indistinguishable in the test output.
+
+The first skips because the test is not running as root; the second skips
+because find_loopback_devices() could not find an rc-loopback lirc/input
+device pair (which can mean CONFIG_RC_LOOPBACK is not built, or modprobe
+rc-loopback failed, or the sysfs walk did not match). A user seeing
+lirc_mode2:SKIP has no way to tell which precondition was missing.
+
+That said, bare test__skip() with no message is the overwhelmingly
+dominant idiom in this directory (126 call sites use it with no message),
+and test__skip() accepts no message parameter, so there is no in-framework
+way to attach a reason. By the 'compare to the neighbours' rule this would
+normally be consistent with established practice.
+
+> diff --git a/tools/testing/selftests/bpf/progs/lirc_mode2.c b/tools/testing/selftests/bpf/progs/lirc_mode2.c
+> new file mode 100644
+> index 000000000000..98137f3c5c03
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/lirc_mode2.c
+
+[ ... ]
+
+> +SEC("lirc_mode2")
+> +int bpf_decoder(unsigned int *sample)
+> +{
+> +	if (LIRC_IS_PULSE(*sample)) {
+> +		unsigned int duration = LIRC_VALUE(*sample);
+> +
+> +		/*
+> +		 * Flag bits picked deliberately low: rc-loopback simulates
+> +		 * a receiver overflow for any pulse over MS_TO_US(50) (see
+> +		 * loop_tx_ir() in rc-loopback.c), which would silently
+> +		 * swallow the sample before it ever reaches this decoder.
+> +		 */
+> +		if (duration & 0x8000)
+> +			bpf_rc_keydown(sample, 0x40, duration & 0x3fff, 0);
+> +		if (duration & 0x4000)
+> +			bpf_rc_pointer_rel(sample, (duration >> 7) & 0x7f,
+> +					   duration & 0x7f);
+> +	}
+> +
+> +	return 0;
+> +}
+
+Does the comment match what the code does? Looking at the deleted
+progs/test_lirc_mode2_kern.c, the old decoder used flag bits 0x1000/0x2000
+with masks 0xffff, >>8 & 0xff, and & 0xff. The new code uses 0x8000/0x4000
+with masks 0x3fff, >>7 & 0x7f, and & 0x7f.
+
+The comment claims the flag bits were "picked deliberately low" to stay
+under rc-loopback's MS_TO_US(50) overflow threshold, but the bits were
+moved UP: the largest encodable sample went from 0x3FFF (16383 us, ample
+margin under the 50000 us threshold) to 0xBFFF (49151 us, 849 us of
+margin), and with both flags set, 0xFFFF (65535 us) exceeds the threshold
+and would be discarded by ir_raw_event_overflow() rather than decoded.
+
+The two committed test vectors (0x8ead and 0x4081) are both safe, so the
+test passes today. The concern is future-facing: the comment actively
+misleads anyone adding a third vector into believing high-bit values are
+the safe choice, when the new layout leaves only 849 us of headroom and
+any value with both flag bits set is silently swallowed by the loopback
+overflow simulation.
+
+The new bit layout is genuinely cleaner than the old one (with flags at
+0x1000/0x2000 and rel_x extracted as (duration >> 8) & 0xff, the 0x2000
+flag bit landed inside rel_x, so flags and payload overlapped). Moving
+flags to the top two bits and shrinking the payload to 14 bits removes
+that overlap. Could the comment be updated to match what the code actually
+does, and perhaps mention the 50 ms ceiling on encodable samples?
+
+Also, the commit message enumerates five coverage additions but does not
+mention the format change at all.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32401351183
+--===============4789690843552500985==--
