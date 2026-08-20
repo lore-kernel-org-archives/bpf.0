@@ -1,128 +1,170 @@
-Received: from mta0.migadu.com (out-29.mta0.migadu.com [91.218.175.29])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A906F379C34
-	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 16:19:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.29
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787242762; cv=none; b=YbLOX/OS22aOU/aBGgPG8bXBsbBNnaAaXdAk+gv8Yju3gx0KqKQTKTYQtKdzrYD/LPS05HdnLhncQ9pVXPLnLlgBDwwKAuFNjkxZz2DFbXcduv3eftunLGr+gZQQIkvv5fW8QkrH3rBJkSijt/421FAzQ5eDBTlfcQYhrR08KiU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787242762; c=relaxed/simple;
-	bh=Ta87nboAeEmGET4Gro48v5LHulO2aDf6wsPbjIeZYB8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pQNVlpZiXW9llS9z3iPYGcfm5Romb/Ubx1zOb6Q7KbLWE+2Fw9jzMi3JmCkAW1IQTft9lMK3FXiROXpZL4OYSi47o9H3RD24kr4PRFEXqtSirb6urrV+FBdsxs5SO/uh9BucHqKKzLRq9R3cny2GOFZERL++/dS8gRi3zs2/JiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hJ4wKT69; arc=none smtp.client-ip=91.218.175.29
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A22147D93B
+	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 16:53:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787244818; cv=pass; b=e8UtqJFY7lX0B7J+5NrspX+OSArgQzuCX2IT2NGzf/5yHrgHbuQQho2ovk0ljgfN7PZSjEXiBHvN5RjRm8dlUN/NHQ0Jhmw5lvejdKfYpM2WhRSHXWbcM0afhX6OnMAzzP6GSCYIfJspP0j5F8wpBWagTPFIjKuLPlB+5HVzCMg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787244818; c=relaxed/simple;
+	bh=opv+LcA4ZOcz1hOTwwMwu8TEujjGyrr+wXGQrHmuxS4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=E4jZ2oHhHZgERtI92UtuVY/g0qIRo4//kpDUDGUtIOouQLQgGWvbq3FhXqm9ITUFRRcnrnl2Q+bgeyi3Df9aoi/Y0ToT0dWuj61rUu7sTLlI4e/WAHBeqtukaKPx95wX2nhtTsoFtR/01267foOdj4xAAszUnEBUf50clVuj3Us=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=c3VaW6cH; arc=pass smtp.client-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hJ4wKT69"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Ta87nboAeEmGET4Gro48v5LHulO2aDf6wsPbjIeZYB8=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787242758; v=1; x=1787847558;
- b=hJ4wKT69KJRyrm/2B/YhN3cbE0NCSyjRiXwyvJEQrr2YpV5nzxgQ8wGte4XdkrJB4ZDoveNR
- 1+vFam3UxlGgTgjLX96HTm3ZvAaXdXP0uMoZSm95Q3MzPgxlc+hJgPuDJqkDQs7HshPY/ieMakI
- QUgUqOBaG0qwoY8IxpkJBoZ4=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [172.20.10.7] (117.20.148.45)
-	by smtp.migadu.com with ESMTPS id ba81c413798945b9;
-	Thu, 20 Aug 2026 16:19:18 +0000
-X-Mizu-Trace-ID: ba81c413798945b9
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <c145f1ec-a4fc-42e4-a267-0667775bf5f8@linux.dev>
-Date: Fri, 21 Aug 2026 00:19:08 +0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="c3VaW6cH"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-51c2cce930cso148281cf.0
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 09:53:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787244816; cv=none;
+        d=google.com; s=arc-20260327;
+        b=qG90dS2yXmoJIv6WfOKI4ddoTxeXGR8XiKSlwxrQQOaEtnQ/GWgBDZKTknwKcAzECN
+         1qWiLq+4/pTpFZ5gwmHvzmIfMgfk61t5EE0vVBJiUguhhBzvWqFfFoG1qccIRL6CNPYr
+         icHl6jDwcB03deEji1ZiD+MBopTNFTik3TU2EOy8uZxK8k/BXhoH4mA9gFGFfznbBoqt
+         tFZqX5HZZ13unfqEDJUWgHhxykIQB9HvCjJSOqESUzQcFkwwwxRGibAXxjVj2kLdut13
+         YfqHtsjpI5rQRLOPBlDB4FwKhGydeKBgkwRQywtpCgHNVE9qjsUgAKjmxYYf61X+NzDO
+         B7DQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=NGH/yJHkK3M0IjwHdyO54yj9vy1LgGP/hn2OsWlWuBY=;
+        fh=Vip3FbV40aVdjj1Hcowis7XuNLzukVVeYKEq5hmr08c=;
+        b=fv4vxYq2fUczQ310bdFDn4HyhmaYMcn3FXujGHbzS95ZsfLg3dquCQM1v8h68tt66A
+         9vhlJbk525bz2J3BTopSiQa9Uq99r1qAWsdO7PdmYWDZiBb9gK1dHvfns3bazAOqVNV5
+         IdHa0ILoX3XvWc+kvsOYOB2ZZhcJnarKawp6ZEGBglmGZ8Aa66/hBe210X3vgYcIubwY
+         FwHy95Io4/jka8iifjxTN29O0nfNqrDoIOeyqHJfzrS2mbnV4+RrxAMYaiXPB60ETWsD
+         FlR8ugsWeWP1fucthTfA1ohi2bLTFvtSW8rv8U1pRGKCCG2CUKcx7bGmcV6HIZdIqyra
+         yWUQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1787244816; x=1787849616; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=NGH/yJHkK3M0IjwHdyO54yj9vy1LgGP/hn2OsWlWuBY=;
+        b=c3VaW6cH/RmcBLe5Q7owLG4Phz5yK5JoA/uuZzRoBbPVsOCV6ixO1lDMjRI0/f5yQQ
+         g0KSm69gsaK8kFhSgXFn1II6Tp5+wgnHszxwwC7SVUUw6MMgR60+lglwQm2RUAaL7ZO5
+         GrD8QJWMh9KJi0iIec3t+S8hFLxvqDdyNlGiT7msdLi81XtmOV7hXHX/ZFHw6GrnBY7F
+         ShTzrRg8Qrmn+STSiPh0Ra0KFmHTx28f0FN3GkhfkC1Hx73xNXssnza+Mq84pRNk/B7W
+         +YYWHKjRwaFY6M7HC61LgBWJROVVJNBEt4sl+uP/r8jIF2TwitzFak0l58VIpHJRhMUc
+         s5dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787244816; x=1787849616;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=NGH/yJHkK3M0IjwHdyO54yj9vy1LgGP/hn2OsWlWuBY=;
+        b=h69DFn0B00g6+7rSpSACWvRts6x/mtbdTh1mvBEJIBPssarFJFz4xxjuMpTAuTsNJZ
+         ye913/aW3izLQH77hSNNFbK5KIw4V/JP1YZenCRQybJRBrObWIrJDwOKQ6fjkmuTLq7s
+         44Mq50I4aSd3OsR7GcyLA002EQHKy4zvZp4J3ubAzoTzV9207ypJ9huzUF23Ht56/qGe
+         4WWPsPOr0dq7arV+mFhZwLtvy9M8WBySycYwPZp3OYGBwTGkvMps9ChoAXYU0BryrAc0
+         AUPPHC+4xpjquPIuyJnwP+ncvTDJl+tqCcNG46Xnrs4vgxO1ZQfw5l0oS216Nzxc8O0M
+         /Vsw==
+X-Forwarded-Encrypted: i=1; AHgh+RqPm2nT2FqBBSNUcKmSggOkD61rc5nXqBo8aQ3q/eh9zFmsS969OmLGR3oDZgQToAHZKVM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxto3z6VSkO3fL639XAnCLXSmRkwXzPxvDnVUCTVWeipDmTCEFQ
+	U4jxM95uuj00F42q2C2/UTsngCiKVKFDpsOMe7lSb1XvHxElj861y+xxXiiVUwS1ukmXvBc0Fp2
+	QQMUIqBW6x0g6YR6fw6UOlxJ5FmVqnZhJptPwUpSK
+X-Gm-Gg: AR+sD13chx2qFXpkC1ZMnwoS9FL0Q/XwoRI7UFXcpjtfcFezxSur3JNyBGJDeHjjP4J
+	7CTx6apl8IOq6HtGxsQxFY8LHgquu8fDg0yvqH7JGELIwmU4i1xE3stkMpxfYPResObQ1+lj/IS
+	q5XZO2UrfafzqVtSBlaPjc9um5E9b4ZGC12VtbH97gSjqPHzyG4xKrvZOAk22PY/jgmPHvSkTmN
+	2JFU31D0tLRQH4yVeNLuVpGBpayi9SRboookQYOitGMZuNF3dJy9qP3jl0qvrF/GNC3ZYyGfn3R
+	leNbPWEcxBKC1ETOleiUmLRst3CVIPbdrEmmoHGusXAcHKX+RTIZw1IhU84RrU2z7KP6O1qzux+
+	O2jMKfGXJ8uJGvbtMo2MF+PRdx09z+bsRkzIdBvJ6lIXkCwuptTDhPhewsg==
+X-Received: by 2002:ac8:5f0b:0:b0:52d:2ddd:27c with SMTP id
+ d75a77b69052e-52dd5cb09c7mr113827831cf.31.1787244815224; Thu, 20 Aug 2026
+ 09:53:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf] bpf: Keep progs alive until the trampoline image
- calling them is freed
-To: "Florent Revest (Anthropic)" <florent.revest@linux.dev>,
- bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- John Fastabend <john.fastabend@gmail.com>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Jose Fernandez <jose.fernandez@linux.dev>, linux-kernel@vger.kernel.org
-References: <20260819122252.1782790-1-florent.revest@linux.dev>
-Content-Language: en-US
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260819122252.1782790-1-florent.revest@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260817153957.3177627-1-poros@redhat.com>
+In-Reply-To: <20260817153957.3177627-1-poros@redhat.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Thu, 20 Aug 2026 18:53:23 +0200
+X-Gm-Features: AcwNN1Xb91DpV9WY_Q-Z2-aLqA5VqqqNBYRmDzZhkVHQO2OraLaV1QOhEcvG8-s
+Message-ID: <CANn89iKZe5reKy5uNxF7_G2=zytnPjWCUn+bX7-iGdJuTjBgMw@mail.gmail.com>
+Subject: Re: [PATCH net] xsk: reset the mac header in the generic Tx path
+To: Petr Oros <poros@redhat.com>
+Cc: netdev@vger.kernel.org, Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Willem de Bruijn <willemb@google.com>, 
+	Vladimir Oltean <olteanv@gmail.com>, Doruk Tan Ozturk <doruk@0sec.ai>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026/8/19 20:22, Florent Revest (Anthropic) wrote:
-> bpf_tramp_image_put() makes sure a trampoline image is not freed while
-> a task may still be running in it (call_rcu_tasks() + im->pcref), but
-> nothing similar is done for the progs called by that image. Since
-> commit e21aa341785c ("bpf: Fix fexit trampoline."), detach patches the
-> return path so that a task still in the original function skips the
-> fexit progs when it comes back, and counts on the prog's own RCU flavor
-> to cover a task that is inside a prog. On that basis the last prog
-> reference is dropped right away and the prog is freed after a single
-> RCU / RCU tasks trace grace period.
-> 
-> That leaves out a task in the trampoline glue itself: between two
-> progs, or already past the patched jump but not yet in the first fexit
-> prog's enter helper. On !PREEMPT kernels this is a few instructions
-> that cannot be preempted, so it did not matter. With CONFIG_PREEMPTION
-> a task can sit there, in no RCU read section of any flavor and holding
-> only im->pcref, for longer than it takes to free the prog it is about
-> to call:
-> 
->   CPU 0                               CPU 1
->   in image I, orig_call() returned
->   [preempted before lsm.s prog A]
->                                       bpf_tracing_link_release()
->                                        -> bpf_tramp_image_put(I)
->                                       bpf_link_dealloc()
->                                        bpf_prog_put(A), last ref
->                                       tasks trace GP, A's text freed
->   __bpf_prog_enter_sleepable(A)
->   call A->bpf_func
-> 
-> On x86 this is an int3 in poisoned bpf_prog_pack memory:
-> 
->   Oops: int3: 0000 [#1] SMP NOPTI
->   CPU: 18 UID: 0 PID: 94573 Comm: x169 Not tainted 6.18.44 #1 PREEMPT(lazy)
->   RIP: 0010:0xffffffffc0601d8d
->   Call Trace:
->    <TASK>
->    ? bpf_trampoline_6442515411+0x1a4/0x21b
->    bpf_lsm_bprm_committed_creds+0x5/0x10
->    security_bprm_committed_creds+0x5f/0x70
->    begin_new_exec+0x2d6/0x410
->    ...
-> 
-> We hit this in production on preemptible kernels when progs attached
-> through trampolines got detached while their hooks were busy. Adding
-> grace periods before the prog free would not help with sleepable progs:
-> neither RCU tasks nor RCU tasks trace waits for a task that slept in a
-> prog and then got preempted in the gap after it.
-> 
-> Fix it by having the image take a reference on every prog it calls, in
-> bpf_tramp_image_alloc(), and drop them in bpf_tramp_image_free(). A
-> detached prog now stays loaded until the old image is gone, which
-> reverts a deliberate choice of commit e21aa341785c ("bpf: Fix fexit
-> trampoline."). Detached fexit progs still stop being called right away
-> since the return path is patched.
-> 
-> Fixes: e21aa341785c ("bpf: Fix fexit trampoline.")
-> Assisted-by: Claude:unspecified
-> Signed-off-by: Florent Revest (Anthropic) <florent.revest@linux.dev>
+On Mon, Aug 17, 2026 at 5:40=E2=80=AFPM Petr Oros <poros@redhat.com> wrote:
+>
+> __dev_queue_xmit() resets skb->mac_header, __dev_direct_xmit() does not,
+> so a frame taking the qdisc bypass path reaches ndo_start_xmit() with
+> the sentinel left by __finalize_skb_around() and skb_mac_header() points
+> 65535 bytes past skb->head.
+>
+> The packet socket reaches it through packet_direct_xmit(), and
+> packet_parse_headers() was taught to anchor the header by
+> commit c2707480cfbf ("net/packet: reset the MAC header on the
+> packet-socket transmit path"). AF_XDP reaches it through
+> __xsk_generic_xmit(), and net/xdp/xsk.c never sets the mac header.
+>
+> ice reads eth->h_proto through skb_mac_header() on its ordinary Tx path.
+> On an E810 every one of 2817224 AF_XDP frames reached the driver with the
+> sentinel still in place, so the ethertype never came from the frame. With
+> this patch all 5757920 frames of the same test carried the correct 0x88b5=
+.
+> An AF_PACKET sender on the same port read 0x88b5 in both runs.
+>
+> On a KFENCE kernel that read lands inside the pool and gets reported as a
+> use after free of an unrelated object, 387 times in a 180 s run:
+>
+>         BUG: KFENCE: use-after-free read in ice_xmit_frame_ring+0xddb/0x1=
+650 [ice]
+>          ice_xmit_frame_ring+0xddb/0x1650 [ice]
+>          __dev_direct_xmit+0x347/0x4d0
+>          __xsk_generic_xmit+0xc13/0x1e70
+>          __xsk_sendmsg.constprop.0.isra.0+0x519/0x640
+>          xsk_sendmsg+0x6c/0x90
+>
+> Rerunning the same reproducer on the same E810 with this patch applied
+> produced no reports and no bad reads.
+>
+> Anchor the header in xsk_skb_init_misc(), which runs once per skb for
+> both build paths. With IFF_TX_SKB_NO_LINEAR the offset still is not a
+> real header, but it stays in bounds and no such driver reads it.
+>
+> Fixes: 35fcde7f8deb ("xsk: support for Tx")
+> Signed-off-by: Petr Oros <poros@redhat.com>
+> ---
+>  net/xdp/xsk.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 7855ee09c4b640..885427392cb6b3 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -931,6 +931,7 @@ static int xsk_skb_init_misc(struct sk_buff *skb, str=
+uct xdp_sock *xs,
+>         skb->priority =3D READ_ONCE(xs->sk.sk_priority);
+>         skb->mark =3D READ_ONCE(xs->sk.sk_mark);
+>         skb->destructor =3D xsk_destruct_skb;
+> +       skb_reset_mac_header(skb);
 
-lgtm,
+I don't know, I had at some point the goal of removing our dependency
+on mac header in ndo_start_xmit(),
+as this must be skb->data.
 
-Acked-by: Leon Hwang <leon.hwang@linux.dev>
+ice could use skb_eth_hdr() instead of eth_hdr() or skb_mac_header()
+and save few cycles.
 
-> [...]
+Some drivers call skb_reset_mac_header(skb), this is really a mess.
 
+With AI these days, it should not be too hard to completely remove our
+dependency on mac_header.
