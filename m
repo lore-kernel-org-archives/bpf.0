@@ -1,73 +1,73 @@
 Received: from flow-b7-smtp.messagingengine.com (flow-b7-smtp.messagingengine.com [202.12.124.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4490418A29;
-	Thu, 20 Aug 2026 10:53:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A558340D576;
+	Thu, 20 Aug 2026 11:03:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787223183; cv=none; b=ssLexdsRPg13MbLOSzi29la/SXbsQHcx9KbmDoI/A0M/mUwxc1Xt+73rzc4BupuXYy3Npk+ZusfjqxI+B3grMQabzIH04Lkln3O9zM5NsCyAKM3KYbIMW8hPrAU2jeQ6T8drtujjs6crXujvebGDbjbnQ5yx0gnQhLRfwk7plxA=
+	t=1787223804; cv=none; b=rCRS+c2Emh1hDv331T00bYKqCcw2Ni5jpdCrGdwiNi0I5UzDgN4td+cy6otVN/Ci2TdVUSagrIyhu6YnhPThdIWxLEEcy6bJ1K6gNLrWX74PVXWqUMOLo2Bpcb4qfu58ZFzudgKOlfxp++bV60cDpCGr7D/ljN2F9d6RMAoW1z4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787223183; c=relaxed/simple;
-	bh=1x3G83+lsmYYDnZXUUc21SyZAESIqwuRlkVLLvM6xzg=;
+	s=arc-20240116; t=1787223804; c=relaxed/simple;
+	bh=MshPta0iS4mZ0fKT4KHy6tm15BxxtVAwgEpW3rUAxA8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ws0X9sI5JP6pU5sEa65F6TO3TZtZofMbtcEgFkrkdsHqX4WoBbRbVxjckQOZgew2IOs/UF4PQRNAczCZDOyxtBpYdWP5+6VgJPXmZlzwMofUSwfvazfAE+UJPZCIAuq8cbptnv8HcLaL7FclNBqvfpSVfWqOWRIClGgceQXaMNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=lGwToSj8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=meE7wau4; arc=none smtp.client-ip=202.12.124.142
+	 Content-Type:Content-Disposition:In-Reply-To; b=Er4NIwWOVfK9m6bHCRQaav6gpKNkXAMbRJYuSGvq200okQPwHNI90YJ3v7Zj2gk64+7UivqA5F6f0W2V02G26gZCpX5krXAktcpmoFsAovns38W2E+DCoa4eGVSo05ZVS7AS/ZPPCNg1iNxogunqwDogDnI/rsdMsUX+C9kO5hY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=h4v6ksqI; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=NyRnjdYU; arc=none smtp.client-ip=202.12.124.142
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="lGwToSj8";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="meE7wau4"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailflow.stl.internal (Postfix) with ESMTP id F2BE213000D7;
-	Thu, 20 Aug 2026 06:52:57 -0400 (EDT)
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="h4v6ksqI";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="NyRnjdYU"
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailflow.stl.internal (Postfix) with ESMTP id 475A81300412;
+	Thu, 20 Aug 2026 07:03:20 -0400 (EDT)
 Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-05.internal (MEProxy); Thu, 20 Aug 2026 06:52:59 -0400
+  by phl-compute-03.internal (MEProxy); Thu, 20 Aug 2026 07:03:21 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-type:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1787223177; x=
-	1787230377; bh=1Hm6dRu/lDSOGHkykkLzQS7nEKTBeP5xgqIC54jHG7w=; b=l
-	GwToSj8vmRVt7iD8kNLWQM3v96QhNpGsPEAIsmLFJdObYyjPTBvrw7Ujk6VQKuDp
-	GCcFVbMUBnkDnKFediQ74DkjI0r5j9sygg69IGVprIeK/QZbukiszEh/8GT6zLyO
-	7qOQyfHwFR2vEffF+kH1h8xR3FHtjv+JzVnshE9icj3cLJNPFGGtBS+N4sCNnKE4
-	WCi+TVKbB0rs1hivSdibID+uGzDvlVf95YSq+EIS+1g1hDBgjK3hHbgyCgdpkFpo
-	WArd82fv+rxaxOBasx/YlltyJmaRk38eM43LSn0HQBY+0UdJNDJT40lEgZj8Gouv
-	IJwdIGvzlbFfbqpx/wLrQ==
+	:reply-to:subject:subject:to:to; s=fm1; t=1787223800; x=
+	1787231000; bh=Huxg0qnn8fJu2M90AV87+SuAfu8Ucyiqn+uzaPm0SrQ=; b=h
+	4v6ksqINBbc34I4HOLT3AbOu32/sKqYADiwHGzlD98l13WoAINBksGpyeoXXdD5f
+	UoqREfMddBIi975ert0Mr0i78QrK/e3xq7ECPR1JJuZBUY6pG1blQSfmtWDXavDV
+	1LEeanH6BTFYYsV/MFzYM2d6GD7CL214O4VUCGkEQQRwgh25GeZQPzGCVpJf9BFj
+	xRMrug9FwiWMvLy8W1nqPSlHBX2i92C8NQlJX35z6o3QydrSjCtIRT+eCsYyEYmN
+	Ip7k5Ri1LtzMcllkgVp6lZ29VyKIwr95MA5RNBuviG/P+AonvEY98qIp+ixk2t1k
+	YDYBHhJoKwzfuBSNfKtDw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:content-type:date:date
 	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
 	:message-id:mime-version:references:reply-to:subject:subject:to
 	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1787223177; x=1787230377; bh=1Hm6dRu/lDSOGHkykkLzQS7nEKTBeP5xgqI
-	C54jHG7w=; b=meE7wau4CKenl5UIRKtWlLbHB0nH5Rd4PKesazkis9U68OKk4Wn
-	EQ3Z5R2pmVJ69WzQ6nQ9nIAaTMAoQtgsAikt3XwO+xFU7SeCwmNQenIdOf/PYzEZ
-	MYw0IhPYRj0yRM/c9q3oK76xpF9/JNGoFWnHGCObkf63ugBBYvOx4tMXBVF1s+xF
-	SiMSy9RmN+erVgJS/RQLTd+rESLKHl5B3vHQVPab+tLGMYhqMgeLK6h3ItmyW3vD
-	5IfFWiPeyEbuUvX4ZHugoazneYVRXdqxx0ulsuh215HxrGproxrWmp5eUeOykS9V
-	5kzIC+7I33DzGtBFvmvVR+/ZFpwUMopnoeg==
-X-ME-Sender: <xms:iNyGat54BC7xFMs_8l708cxxc_QNa1N1KRy3lm3UYpbEGggUlgpZaA>
-    <xme:iNyGarViOayqVZ8tXexJEDUOBz4FGxvlpPQEw1SI7PiuPfT9vIONKpD6EAahfXlIc
-    ugsaYtQ096OKZWtsK4pFHHSpfMIZWGwSX6KgtfyIGdWztTaOIozpEE4>
-X-ME-Received: <xmr:iNyGal47XIR6C_PL9lYLPJXFMcpAeMSpoWverE2zKXbOXLBAvYBdNDx6pWk>
-X-ME-Proxy-Cause: dmFkZTFWRza+tZqbwe6AvSvswwNn1vm2ouOEl3sD29XdKlxSbeb7SJ+ft0N23ZfHAXdLoD
-    HmugP2x8o1qZZdYgJ6uNKnryUZdf9vJIX7yG1Wd0puBWlPtUU9+QdT2J4Dz6j/J8OsU9Lu
-    cHBdXN2icIfdMLZpxUxDYeqctOT72wTuhC9gb/P4RO5svqtLV3/dQMxW07EDCY/HgRS0R5
-    hIWhoRHy8caBmuUGk6MLMFA2fTWneQj91H7dazgLVy+nDRNY6KF3ioVB/SCkQrHtuzDw57
-    zzT/SzyH8GGH6dfj0mKV7WEwwBQIKCfmWOLYVVVdY2G5L5TUscUlN0MnsMmOT7XGn5nqZ3
-    qTusjp1bsmaQ7NxNYNGdouQ+Lzho5PCtqMOZXHY/7N8mFMRgD536Lix289uLH1lUZ5l7Bs
-    0EKkfid8uPYzb8PyS0LZ5AGD6stNkDOaYLtEQ+FU4ShSANtBwfDpn7DoszKmWH82qWAlZf
-    IibZn0VeyWcdksSZ6k5AMmFRba7hM1obgBOhf0ePHT8321pqVtXzXm7r6Ac9BoQcxbdoGX
-    DiQyx+zJJ8bPCAxR69l9MIPqGhG3bFnUFNk13wc1BQkNJDAjeLqZCWgh8a/ngZ29YtnBdz
-    5UGnWNG2Fm8ctlMT15phLBhY3M3l86Iw7muaQrld5L7QUvHK5Ib+j58n5HSQ
-X-ME-Proxy: <xmx:iNyGamLi7qP7Vxx2Urm__5VWE9vtQY2VDeeZD2Ww17JIYTyID0H14g>
-    <xmx:iNyGagjcASSknb_rBn_7XGrZaAw0RVIp9r9LgWWiYqMx7ZibjiT0gg>
-    <xmx:iNyGaoIaZZAMY58wc3AOrGX1JTsHPReoBCi33oNnA_pSv5mWAwG5lw>
-    <xmx:iNyGatEnM3ejngFdRo3f_F-khoayz0ka4TzC0oi5RkdtRfyGbUZ5QQ>
-    <xmx:idyGahzkie0eSCaUoBYs-yYze10njpQW-hnyNaeDBMfy-8AIxueySSoN>
+	1787223800; x=1787231000; bh=Huxg0qnn8fJu2M90AV87+SuAfu8Ucyiqn+u
+	zaPm0SrQ=; b=NyRnjdYUysVmvUR4O7aJctJHDmO840NF+AWUeFSZS+sNRLSS5me
+	oz0KWOjglgTalpUzbPZzKVK/mMRFZ5JVYsUW5sKc8ZCrrx5Eso8eDGVRLB1jSxSj
+	DmAQ0kHFZ/jJzkWTRLsnOODFagmetK2ZKkbLWCtnVQriDq1nB9tOQIIuehYSXM4U
+	rCYhTeVACwgvYa5spo+lakIKuRNkaQASaDZygF2TB0ItCbfwdx6v3xiTeK566iPR
+	kViOLi1IrVuxkou8bifuQOMm2kf9/dw/RN4SkfhzZSxy7AtJlNyPGxQNyQOxM1Lj
+	AH1rOcMYI4fgDfliD2GAB/FSFzL9CvUkA/w==
+X-ME-Sender: <xms:9t6GaocOyZ4Kcrw-dfXQvd3qt0Rn7dG1dtEEupg03sdidovPwIUm8A>
+    <xme:9t6GaqrxLtRyapyzx8x5aliQL-pUuuqZ_1ZVAYdZ4wEp8R_cnCC4TjLYh8U9s4BjA
+    epx9HZVQP4x4-IEQ-3ze9SC9Obm0E-FkbNM2-3aeZDuRbk1CwpAXLY>
+X-ME-Received: <xmr:9t6Gaq83NmZfRE5FXFHy56tn6PaN40rXnZyQzOQ_rLJj9QlTSY-GZg6djJc>
+X-ME-Proxy-Cause: dmFkZTGi6rYBThRI+gPyGqdk0gFejnshTs0jgIzYkHn1s57eIU7ysIOO/3U0Ycz+WDPRsG
+    Xg6Mi4zSwoYf+kByU9Z601ezWYRZ7CD5oBc3a8TT1GxISzvrIVbtQy07pVJjH6pMRKazKM
+    T5KmOo0T0kSDTIayR5gbXkxp/HgxutAVUB864oI+T4m9++yknzJUqkDAQxi5ZSDTnoe+PA
+    5sTANMdPYnapL/OG2KdEQdahdAUgDEnYurAINXjN7w1+/1He/I8pHReJNLNA+1mrtA7nh9
+    nApoJG+kju/satpHLA3UpprOXSmphHqB+XSj2l8+kJeLRXw6jQA2FjYZB1zzWUVtm4xmb4
+    kB0FhUDB+xl5IWAscGtOZYxq406x1djv4HpZ/5JsWMUiVQs96OfPkqP7yKWBEUf345lKr4
+    LjO4lpPzLKRDR/9Ft6wJYaBzdtr0VHuhPc09+qElWx7UTEi3oipPhURF+SNJpbux/wwdYX
+    BsY/QW08vXBu2VejLT6uNZqYpDCgZxqCHkvC4x3OYQMCsJoAEK8g5hihi2mGtNuVCVlc6Q
+    fTk0GKDiWw6jxYcFM8RMYeK7FV3KECjBemKaxPwQgfD4o590POwtB4foQvRiQwOXC/dcBR
+    Kw91DvwHqEHRZOFpia4ShePdJqP0IN++0iZI64Ou1VEw6j0yRbFXpue5udOw
+X-ME-Proxy: <xmx:9t6Gat8WHH_2XHJPtGOHMMmwD0oiKJVsMGaGWdtthGC2QIinKr7vSQ>
+    <xmx:9t6GakGDpdxRrNHyerT3FWlJFNQAE0hyiGtm-WfW0Csdx1O19cZVvA>
+    <xmx:9t6GaseD3MznHKp_gnNGiUzq72B66nmj32qekJgWwE_o1gyLK3bexg>
+    <xmx:9t6GajL4OmDCNkH7xMCXtvIO-G8bi9hyuMwdHoESCM5nhjci_uKgtg>
+    <xmx:-N6Gapksungxu3LqO7qD0bxG2JX_M0hlsf96JbCsppTXk_gujFucI2EO>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 20 Aug 2026 06:52:55 -0400 (EDT)
-Date: Thu, 20 Aug 2026 11:52:54 +0100
+ 20 Aug 2026 07:03:17 -0400 (EDT)
+Date: Thu, 20 Aug 2026 12:03:16 +0100
 From: Kiryl Shutsemau <kirill@shutemov.name>
 To: "David Hildenbrand (Arm)" <david@kernel.org>
 Cc: akpm@linux-foundation.org, ljs@kernel.org, nico.pache@linux.dev, 
@@ -78,11 +78,11 @@ Cc: akpm@linux-foundation.org, ljs@kernel.org, nico.pache@linux.dev,
 	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	jannh@google.com, willy@infradead.org, pfalcato@suse.de, rostedt@goodmis.org, 
 	mhiramat@kernel.org, linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 01/57] mm: add pte_folio()
-Message-ID: <aobZECx2aTUHP6n3@thinkstation>
+Subject: Re: [RFC PATCH 02/57] mm: add pte_none_or_zero()
+Message-ID: <aobe4JwweJ0DZV0X@thinkstation>
 References: <20260816224609.308019-1-kirill@shutemov.name>
- <20260816224609.308019-2-kirill@shutemov.name>
- <7e40cdfe-67d2-4ddf-a048-f33b2d590371@kernel.org>
+ <20260816224609.308019-3-kirill@shutemov.name>
+ <4e8e208c-3aa4-4060-b0a2-499bc76d19fa@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -91,56 +91,16 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7e40cdfe-67d2-4ddf-a048-f33b2d590371@kernel.org>
+In-Reply-To: <4e8e208c-3aa4-4060-b0a2-499bc76d19fa@kernel.org>
 
-On Tue, Aug 18, 2026 at 07:09:48PM +0200, David Hildenbrand (Arm) wrote:
-> On 8/17/26 00:45, Kiryl Shutsemau wrote:
-> > From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
-> > 
-> > Callers that want the folio behind a present PTE spell it out as
-> > page_folio(pte_page(pte)).
-> > 
-> > Add pte_folio() as the folio companion to pte_page(), and convert the
-> > callers in fs/proc/task_mmu.c and mm/hugetlb.c.
-> > 
-> > Preparation for the anonymous collapse engine, which reads the folio
-> > behind a PTE in several places.
+On Mon, Aug 17, 2026 at 07:57:29PM +0200, David Hildenbrand (Arm) wrote:
+> And let the callers still spell both cases out.
 > 
-> [...]
-> 
-> >  
-> > +/**
-> > + * pte_folio - Return the folio mapped by a present PTE.
-> > + * @pte: A present page table entry.
-> > + *
-> > + * The folio companion to pte_page(); only meaningful for a present PTE
-> > + * that maps a struct-page-backed folio.
-> > + *
-> > + * Return: The folio containing the page @pte maps.
-> > + */
-> > +static inline struct folio *pte_folio(pte_t pte)
-> > +{
-> > +	return page_folio(pte_page(pte));
-> > +}
-> 
-> There is a reason why most code doesn't need that: because they should be using
-> vm_normal_page() / vm_normal_folio(), or need the exact page and handle special
-> ptes differently (see gup.c that uses pte_page()).
-> 
-> And other code that uses pte_page() doesn't really operate on folios AFAIKs.
+> if (pte_none(pte) || pte_is_zero_page(pte))
+> 	/* Do something amazing */
 
-Fair.  pte_folio() does not fit the abstraction as it stands, so I will
-drop it.
-
-I thought that maybe we can rework vm_normal_*() to be a predicate on a
-page table entry, so if it returns true the caller can safely use
-pxx_folio(). It would be a cleaner interface in my opinion.
-
-vm_ops->find_normal_page() breaks the idea, though.  Xen (being the single
-user of the vm_op) wants the special bit to indicate a custom translation
-to the page here.  A bool cannot describe this.
-
-Ugh..
+Works for me.  I will drop pte_none_or_zero() and add pte_is_zero_page(),
+which lines up with is_zero_page() in mm.h.
 
 -- 
   Kiryl Shutsemau / Kirill A. Shutemov
