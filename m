@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5091B4138
-	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 06:22:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3006D2E2286
+	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 06:24:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787206938; cv=none; b=uRzeuKzz3LD3+kdXCLXeq0v3dC1RTwvkv4zwB8w7BG56U8chleJcCtCkm+vkwWFj4iRCV2YaFcuXR8q5cauA+ZS+saOE34kQwM7pUT9FiDS+eccxFdTBYvh9skzGx4u2tvhoeVlmNDnRdhSPLm9A8zRuf8EqE3vzXU+wY0tRQYI=
+	t=1787207079; cv=none; b=EDF87AdQkz+iHjQ9nttUQ87OykqGWiRSMfyEBmk6b4fGna4jILHtvb3TbV7qb1APZFga8K59/rEJcGyHSao2bMiF+BGUJUis0RX+PPiAQsxXZ6C5s/g4nrgG2Lo3qmaJw8UALsPeHrvuK3NMgxhD7Bz2yVKpCJ0nPT0O0UujMKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787206938; c=relaxed/simple;
-	bh=zej7AhaCx27LT3x0lQqLVhqMQmChzwx+e3W+dqrBbr4=;
+	s=arc-20240116; t=1787207079; c=relaxed/simple;
+	bh=FezNnkok3eNvo3QgVOvbF98eaPfQLWAjwVgnp7kiDls=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gqxkWeHcApcsU+rc3V8e4jqcnXs+jclpHwpNOMiVVdZDuLypploTsG1HhFmMZqyZyLPPk7d+PFglAn/4DnxV+5rsOiy4dEB+wED48qCGViQaxPMfn5GLei8Elqmbqk+BORptHclqvI/watck/1EZ725T+9fNMW+E7+sqBCEgQG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=akvBXVCY; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=K6A1xRan7kxhvi/kK8pA2cSOyqBAsQr9PmFNoz/D1kP248CpQMnRwbNjEN/UuHH3YrFPBuOaX2P1jJDwIT1I42Y2W/rqNPR8/76KcL/lCqSSFmJYg6xbeA5lX1Qw85TGIGHciJJrVjONb1hOkpt+l6ZsGLqnc1ch5HYtXeG9a7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n90vmhnm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="akvBXVCY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA0BC1F00A3A;
-	Thu, 20 Aug 2026 06:22:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n90vmhnm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD7251F000E9;
+	Thu, 20 Aug 2026 06:24:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787206936;
-	bh=UYEyd4KgNJtPkvJXiX8HnpRlUGLYZgXt9pKErghR2HE=;
+	s=k20260515; t=1787207077;
+	bh=CoJ30A7j6brBjQ7hW8JW4/8hesxbwyT4M5eJFTIrqDU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=akvBXVCYDSOlATisqbHxFBpyuxCQgkJ8ZYhzRU4lsJ05mxkhdW5CpmaIuZDOCAFRn
-	 ez6FTgZhxYVZWEH1yrFt8CdUbLc3HCN+DQTiaFk7XtFXI1Q/E1HygtZ6XxbB5hfNIk
-	 Bhb3MPDf2w8eUAIlS5bqgrJ8jhQpKEMEJGrDB9n5XzzrMY6lkHYNbIu3FDLgjCzufk
-	 QB3jiI+Voa6PiHbFyQh8w5W5eSM17btpT9mK18oJqXvl+e8GMgE5di3jOoNCPpxO9/
-	 7p7/JZfI/nttj+nC09eoj2fI2UNqPii447uyzknZCVsr5TrD/YhGWxEbWCIeoQKQxi
-	 EevfYltwcmwjA==
+	b=n90vmhnmXPfSDGgiqmZZPW1DXosjGN78xpghyN27saNVNbqNL51i7GUoAEmKcHrbH
+	 7+YQulGDOA4uHfyksAOIuk6MOg9GdzLqZb59p5lx/Mkj8bylEEIxjs9vWev3tFzDfQ
+	 qCNEf6/SXxycdf5U1ZBAJme7IaXdXQhVe3tXORqblRLhfB/QZIVVtcL0SHmBcaV3o9
+	 sdc0D9lry5vN2ZMKLx2Qe6BA6czoy7CQD21nXqzgOAF2LjnCGXRWG7o6r2LJf+ZAiO
+	 3Yn0zV0wZWvuOmX/e1jceNB6PfjmB66xbgEMKAgRwRRj34pJ98vGP8RBBPXvCUPWr0
+	 hv9qu/iOOyGKQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 2/2] selftests/bpf: add memcg async reclaim
- test
+Subject: Re: [PATCH bpf-next v4 1/2] mm/bpf: Add bpf_proactive_reclaim
+ kfuncs
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Hui Zhu" <hui.zhu@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <53762e3403fe8e8c263cf685cea5d55377ec5204.1787205002.git.zhuhui@kylinos.cn>
+In-Reply-To: <e9b2a34418919f5c3ee2b80bcb4f9d80ce6ec422.1787205002.git.zhuhui@kylinos.cn>
 References: <cover.1787205002.git.zhuhui@kylinos.cn>
- <53762e3403fe8e8c263cf685cea5d55377ec5204.1787205002.git.zhuhui@kylinos.cn>
+ <e9b2a34418919f5c3ee2b80bcb4f9d80ce6ec422.1787205002.git.zhuhui@kylinos.cn>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 20 Aug 2026 06:22:16 +0000
-Message-Id: <20260820062216.AA0BC1F00A3A@smtp.kernel.org>
+Date: Thu, 20 Aug 2026 06:24:37 +0000
+Message-Id: <20260820062437.AD7251F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,75 +47,103 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] Insecure temporary file creation pattern leading to a TOCTOU rac=
-e condition.
+- [High] Calling bpf_proactive_reclaim or bpf_proactive_reclaim_swappiness =
+from sleepable BPF programs can cause an ABBA deadlock with filesystem lock=
+s due to the unprotected use of GFP_KERNEL. Additionally, the recursion che=
+ck bpf_in_reclaim_context() misses paths like drop_caches that can lead to =
+nested shrinker deadlocks.
 --
 
---- Patch [2]: [PATCH bpf-next v4 2/2] selftests/bpf: add memcg async recla=
-im test ---
-commit 690f8d9075834023b364e130547a2026753c92e6
+--- Patch [1]: [PATCH bpf-next v4 1/2] mm/bpf: Add bpf_proactive_reclaim kf=
+uncs ---
+commit 4402e19f8110b925da0a7b84926bd5e1fe8cd6da
 Author: Hui Zhu <zhuhui@kylinos.cn>
 
-selftests/bpf: add memcg async reclaim test
+mm/bpf: Add bpf_proactive_reclaim kfuncs
 
-Add memcg_async_reclaim selftest that verifies BPF-driven async
-proactive reclaim can mitigate refault-induced slowdown under memory
-pressure.
+This commit exposes memory cgroup proactive reclaim to sleepable BPF
+programs via bpf_proactive_reclaim() and bpf_proactive_reclaim_swappiness().
+These kfuncs perform one pass of reclaim using try_to_free_mem_cgroup_pages.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c=
- b/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
-> new file mode 100644
-> index 0000000000000..ece7bceaab3c4
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
+> diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
+> index 716df49d76477..dc51868b3acfe 100644
+> --- a/mm/bpf_memcontrol.c
+> +++ b/mm/bpf_memcontrol.c
 
 [ ... ]
 
-> +static int
-> +run_high_low_workload(double *high_elapsed, double *low_elapsed, int rea=
-d_times)
+> +static bool bpf_in_reclaim_context(void)
 > +{
-> +	char high_data_file[PATH_MAX];
-> +	char low_data_file[PATH_MAX];
-> +	char high_time_file[PATH_MAX];
-> +	char low_time_file[PATH_MAX];
-> +	const char *dir =3D workload_files_dir();
-> +	pid_t high_pid =3D -1, low_pid =3D -1;
-> +	pid_t wait_ret;
-> +	int fd, status;
-> +	int ret =3D -1;
+> +	return (current->flags & PF_MEMALLOC) || current->reclaim_state;
+> +}
+
+[Severity: High]
+Could this recursion check miss contexts like /proc/sys/vm/drop_caches?
+
+Operations like drop_caches invoke shrinkers without setting PF_MEMALLOC or
+reclaim_state. If a BPF program traces a shrinker callback during drop_cach=
+es
+and calls bpf_proactive_reclaim(), it would bypass this check, potentially
+triggering nested shrinker invocations and deadlocks on shrinker-internal l=
+ocks.
+
+> +static unsigned long
+> +bpf_proactive_reclaim_pages(struct mem_cgroup *memcg, unsigned long nr_p=
+ages,
+> +			    int *swappiness)
+> +{
+> +	unsigned long nr_reclaimed;
 > +
-> +	snprintf(high_data_file, sizeof(high_data_file),
-> +		 "%s/memcg_async_high_data_XXXXXX", dir);
+> +	if (!nr_pages || unlikely(bpf_in_reclaim_context()))
+> +		return 0;
+> +
+> +	nr_reclaimed =3D try_to_free_mem_cgroup_pages(memcg, nr_pages, GFP_KERN=
+EL,
+> +						    MEMCG_RECLAIM_MAY_SWAP |
+> +						    MEMCG_RECLAIM_PROACTIVE,
+> +						    swappiness);
+
+[Severity: High]
+Does the unconditional use of GFP_KERNEL here risk an ABBA deadlock?
+
+If a sleepable BPF program (such as an LSM or fentry hook) attaches to a VFS
+function that holds a filesystem lock (like inode_lock), calling this kfunc
+will initiate memory reclaim with GFP_KERNEL. The reclaim path may then
+enter filesystem shrinkers that attempt to acquire the exact same filesystem
+locks.
+
+Since the BPF verifier cannot track kernel lock state to prevent this, expo=
+sing
+a kfunc that can deadlock the kernel could violate BPF safety guarantees.
 
 [ ... ]
 
-> +	fd =3D mkstemp(high_data_file);
-> +	if (!ASSERT_GE(fd, 0, "mkstemp"))
-> +		goto cleanup;
-> +	close(fd);
+> +/**
+> + * bpf_proactive_reclaim - proactively reclaim memory from a memory
+> + *                         cgroup
+> + * @memcg: the target memory cgroup to reclaim from
+> + * @size:  the amount of memory to reclaim, in bytes
+> + *
+> + * Trigger one proactive reclaim pass on @memcg, similar to a write to
+> + * the memory.reclaim cgroup file: pages are reclaimed according to the
+> + * cgroup's own swappiness setting and swap is allowed. Note that,
+> + * unlike memory.reclaim, this does not retry until @size is reached;
+> + * callers can invoke it again if needed.
+> + *
+> + * The reclaim runs with GFP_KERNEL, so this function must not be called
+> + * from a context that holds a filesystem lock (e.g. an LSM hook invoked
+> + * with inode_lock held): the reclaim path may enter filesystem shrinkers
+> + * and deadlock trying to reacquire the lock. Contexts that set
 
-[Severity: Medium]
-Is this temporary file creation vulnerable to a time-of-check to time-of-use
-race condition?
+[Severity: High]
+As noted in this comment, leaving the responsibility to the BPF programmer =
+to
+avoid deadlocks is risky given the BPF safety model.
 
-By immediately closing the file descriptor securely created by mkstemp()
-and reopening it by name later in write_file():
-
-write_file() {
-	fp =3D fopen(filename, "wb");
-}
-
-Could this allow a symlink attack in the window between the close and the
-open if the file is replaced?
-
-While selftests run in a controlled environment, this pattern is frequently
-flagged as a security anti-pattern by static analysis tools.
-
-Would it be possible to pass the file descriptor directly to the child
-process instead of closing it, or use exclusive creation flags when
-reopening?
+Is there a way to enforce this safety boundary within the kernel, perhaps by
+utilizing memalloc_nofs_save() internally or passing a more restricted GFP
+mask?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1787205002.gi=
-t.zhuhui@kylinos.cn?part=3D2
+t.zhuhui@kylinos.cn?part=3D1
