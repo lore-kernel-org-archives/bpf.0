@@ -1,188 +1,253 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A7EE44062B;
-	Thu, 20 Aug 2026 22:34:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DFF73876BE
+	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 23:58:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787265283; cv=none; b=D4yB2lxhkJ3MWUH0X5KQJ94lh7tL4NORE6j7BkqX8ViEfKsqe59f7Jqkrg2LaEIs9XJyKri2cuio1yEWY7yyENWXAj9If7PSVSGx27eqi0JguSlegfzG57SG38AaSoVydn65oUboFIMyWjOpUOaClfTFnTy98rXiLKY8yBNCR8M=
+	t=1787270306; cv=none; b=F9jufWkKRxBZODWqNdJmtmq6LnyqEEplSfLVYM882ycKdU+ZmV8xwmadQ/wF28Aem2mBviaTLkTTIx4Nf/nJHTwKfmBi6WDd/PBFjyr4sAri/k7YBZj90FlYscwepN0TPS9xJ5s5GoK5bfCMvKSfDz5g7s1hpDbrqA5vyOVWjTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787265283; c=relaxed/simple;
-	bh=g8fUCZCD593bu7tF5d7m7ZKelyYZU0v+x72Q6l8bTlc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=JyDogceTtWAUE1LpVcgv6Ukt33iujkxEatYsiEy2UnuHHPFTmbvEBugxtOIIduGAQrVzwJyWGkFGBCMzmy0+m2q4jPgsjhOpncq455uj4on55VFfSoaiSQuw65Y3BTwuyNVetdh/mHkGR8YW7Ecbs6wg8+kspQ8T1a0xR7hp7MY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iktcuM35; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787270306; c=relaxed/simple;
+	bh=OyDrBOxQvKRhxukCfiSfq2aSkIosUJyssEBLxAKEljs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=c+3ieX6np/rzODTVnf6DGa0KGzero/4dPEivN3a5ifQIWSAQhyz/FbY7AAYGQpeedT/s9rjpfe76OcGJlSHE4IZ6ktlOLDpeoDoWepq4cdIYPCT+3T1iNANKzM6nbDg8o4IukVm6aVpvTZsVk8DnUqE97N+2AN3x6FuO9cqMtTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O7Pkc0eD; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iktcuM35"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44DB71F000E9;
-	Thu, 20 Aug 2026 22:34:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787265281;
-	bh=Z65Uj+abR9rXUy9DVQRv9JEAa70b7rXlElcSc7Gp3Z0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=iktcuM35jCcA6Pp/78fNMQdAdB3BNN6xPofOq0XxENcqXopvposzpjJ+wRt2JjIZP
-	 cTO15bFNYZJ5UmNqTD+Bmgk0O8u6EsoJuovadtEGTFglGT3+u5BpDn+IwK4+iY+9fv
-	 GWMHlLaG773gi8x+rMCek/eXzOpNyXONQhrji3cIvyEjCMS0xmhEJY/bdQIiPhy1me
-	 Z5BeMtbDcUpsoWumc6K/vsEvFFbH6RucpBRqCKI+daXBisrSsb8IFj81r/yZtY25Hj
-	 155w9wJ2JWkNFhKFbLTcGTeClBcduHUCvxJ9CiqCCU7vIibwuLKCq0193/7jaVdzkL
-	 Z32VVux6Q5j0g==
-Content-Type: multipart/mixed; boundary="===============9105663885118799983=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O7Pkc0eD"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2cf27856f9cso4252865ad.2
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 16:58:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787270304; x=1787875104; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=TI1rQvwktw92uz/ySxNewgv2NVJCnxlAJKHLK2Zbxo0=;
+        b=O7Pkc0eDFHQ1UrmQsC7xEKUR+sEGkEI+3HKVGTP+PNiXQQSfNElu9Yi2Q59d7NO8tG
+         qnti0OmCgcMTOM6dpLMfpvRKA44SnuTteJJNnYmwWXKx4akcpA5aqomlKJzeHxcTUBlT
+         vE7oGwwV8qsiH6kCESlUH+5amw2gKC7N+ZiyNIDgvh7Zfew6NkyMARskQrtEjAN/36IW
+         cBGhdvtLrp5yEqgKB1736riXvHw7ESyFSQ0XnvU4jizTB4aNeui2NRi3Ol0UEhpxDDeB
+         KaN2bGpRJ1RGzNv33wxZV0Zg0VA6AGA2bUUZ7naG0KzUTEkncz/zaTrHLKz2oHkuaLrh
+         wFzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787270304; x=1787875104;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=TI1rQvwktw92uz/ySxNewgv2NVJCnxlAJKHLK2Zbxo0=;
+        b=ja2lt0mCB32/ZPkPJtSzi/SIC7j7/u8B3geqTn5g5Soi4ieswvHFiM5LVS8ZcxEmjB
+         q/I98zJXs+wxTCgvMnTHUHCgRYz9jcqvLgUzMgRC3fk2xF1QwTM9LlBXfDWJj0hQKpPn
+         voLj/eV5gcVfjvyuXcK28GDuiaHDLoIkfS4oeJcHUKqUyrfJ8U9LGgO2Cmdc+/wrlAfD
+         tQlkbzkKPXqpjA75zs4gFqjvRl0TQzQooDpKACOuwE5LML4Y6Jx5QfRHx3TRYeweYCML
+         1VBwzJDgiDviaSymDJlNm3EXfDt3NtFOxTOjdypGgZrffNYml59fh5WfCCS6Svems2NG
+         /mJQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpUxoTGK05n4M2yepv5Dmt7GyqsDDsv1XWppd8aB/09ypGMiN55WT8TCU2+CkVCxCdAhrc=@vger.kernel.org
+X-Gm-Message-State: AFuF++l6Exn+xgCQVFF1/BnBO69oXE/nwFi6/Pb4UBCsDtIVzyd9tO3P
+	EnbCgBJs9tG7K/OGowatQU2QRqUnxr6Q/h5F+iU+smYy2sdv1KXKj7WD
+X-Gm-Gg: AR+sD13bSNyLvcwp2NKgGdJJDu7WhTKrJQSMacj0ve5tzqDI1xsI4RO24c3iL3W711K
+	0TW0TQE9zIm5e/WxTUFpQfBKrgASSNy5luZn3moqOBj1PGduw7HAEK3Ss1f981XmZjSOltcMcaB
+	3b2f2uH6rm16HnGLmQWAFsYJILeXj7NUWlWvjo8QB5u/fPM3D/l7ySEawwz3fxLe5zevaJtOVZ8
+	CQ9Isgajvu3t71lqVYbROLpaK1mi27HBdl3ASWy5RRPNGttdS5g671IJ1l4GR39kvk6epJqLyw0
+	8euky2n59Q5SstPt2kBXwIv6TI//9jd3GCowQ6euqb8WkTpH+f0LPU047xwkavFDWwNGjhP5Gmc
+	1ZKtKlGqq7Ac1xvbbKFtutECdM+fr2HTumlvznbWsm0LUzMoLJ9azp9t6pEyXNYAQ3+m6h1AH1g
+	ZqaMirjrKymlY6S4j9qZWYDSHnTwoId1EHslIU0a62Nbla2vmovuc0cTxsA0Rua5hcPfp01CGAW
+	rUR57m+hbi3mY2JS8m8Sa+uzn4Eg5ki2U40L7h6TA/ueA==
+X-Received: by 2002:a17:90b:558b:b0:37f:fdc8:71b4 with SMTP id 98e67ed59e1d1-395c33371a9mr4208667a91.2.1787270304374;
+        Thu, 20 Aug 2026 16:58:24 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:89bc:48d2:9457:6223? ([2620:10d:c090:500::6:c5ba])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1416ad6060asm33729048c88.6.2026.08.20.16.58.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Aug 2026 16:58:23 -0700 (PDT)
+Message-ID: <5efea1c6d5feb9bfc4ffe3eedde9ab98c2613776.camel@gmail.com>
+Subject: Re: [RFC PATCH bpf-next v3 1/2] libbpf: support selective kernel
+ module BTF loading via bpf_object_open_opts
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Fuyu Zhao <zhaofuyu@vivo.com>, bpf@vger.kernel.org, 
+	andrii.nakryiko@gmail.com, alan.maguire@oracle.com
+Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ memxor@gmail.com, 	martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, 	emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, shuah@kernel.org, yatsenko@meta.com, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Thu, 20 Aug 2026 16:58:21 -0700
+In-Reply-To: <20260819090426.267-2-zhaofuyu@vivo.com>
+References: <20260819090426.267-1-zhaofuyu@vivo.com>
+	 <20260819090426.267-2-zhaofuyu@vivo.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <582672b5848bc6547246eae92b66d98e8dfd53569b964d02b76fa98ba563bdf2@mail.kernel.org>
-In-Reply-To: <20260820214332.89030-1-sean@mess.org>
-References: <20260820214332.89030-1-sean@mess.org>
-Subject: Re: [PATCH v3] selftests/bpf: convert lirc_mode2 to prog_tests and extend coverage
-From: bot+bpf-ci@kernel.org
-To: sean@mess.org,linux-kernel@vger.kernel.org,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
-Cc: sean@mess.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 20 Aug 2026 22:34:41 +0000 (UTC)
 
---===============9105663885118799983==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Wed, 2026-08-19 at 17:04 +0800, Fuyu Zhao wrote:
 
-> diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-> index 986a6389186b..b815bf0d8877 100644
-> --- a/tools/testing/selftests/bpf/.gitignore
-> +++ b/tools/testing/selftests/bpf/.gitignore
-> @@ -17,7 +17,6 @@ test_verifier_log
->  feature
->  urandom_read
->  test_sockmap
-> -test_lirc_mode2_user
->  flow_dissector_load
->  test_tcpnotify_user
->  test_libbpf
+Overall the logic seem to be fine for me, please find a few comments below.
 
-[ ... ]
+...
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/lirc_mode2.c b/tools/testing/selftests/bpf/prog_tests/lirc_mode2.c
-> new file mode 100644
-> index 000000000000..7b7352dbcd82
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/lirc_mode2.c
-> @@ -0,0 +1,334 @@
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 514e4e9daa82..37934ca49dd7 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -779,6 +779,13 @@ struct bpf_object {
+>  	char *token_path;
+>  	int token_fd;
+> =20
+> +	/* kernel module BTFs to load, as specified via bpf_object_open_opts */
+> +	struct {
+> +		char **names;
+> +		size_t nr_names;
+> +		struct hashmap *names_map;
 
-[ ... ]
+We already have a strset type, please use it instead of a direct
+hashmap reference. This would remove the need for `names` field
+and simplify the bpf_object__init_kmod_btfs() function.
 
-> +// This test works by sending IR over rc-loopback, so the IR is processed by
-> +// BPF and then decoded into scancodes. The lirc chardev must be the one
-> +// associated with rc-loopback, see the output of ir-keytable(1).
+Also, do you expect `nr_names` to be high?
+If not, wouldn't plain array search be simpler/faster here?
 
-This isn't a bug, but now that find_loopback_devices() discovers the
-nodes itself, should the ir-keytable(1) sentence be reworded (or
-dropped) so the header does not describe a manual step that no longer
-exists?
+> +	} *kmod_btfs;
 
-> +//
-> +// The following CONFIG options must be enabled for the test to succeed:
-> +// CONFIG_RC_CORE=y
-> +// CONFIG_BPF_LIRC_MODE2=y
-> +// CONFIG_RC_LOOPBACK=y
-> +// CONFIG_LIRC=y
-> +
-> +#include <linux/input.h>
-> +#include <linux/lirc.h>
+Why indirection?
 
-This isn't a bug, but is <linux/lirc.h> still needed in
-prog_tests/lirc_mode2.c, or can it be dropped now that the raw-IR
-values are written as plain ints?
+Also, I agree with the bot here, prior fields use "module" in the name,
+so something like "btf_module_names" or similar is a better fit.
+Same for publicly visible 'opts' name.
 
-> +#include <glob.h>
-> +#include <limits.h>
-> +#include <poll.h>
-> +#include <test_progs.h>
-> +#include "lirc_mode2.skel.h"
-> +
-> +/*
-> + * Read the DEVNAME= line out of the first uevent file that matches
-> + * pattern, and turn it into a /dev/<name> path.
-> + */
-> +static bool find_devname(const char *pattern, char *path, size_t path_sz)
+...
+
+> +static int bpf_object__init_kmod_btfs(struct bpf_object *obj,
+> +				      const struct bpf_object_open_opts *opts)
 > +{
-> +	glob_t gl = {};
-> +	bool found = false;
-> +	FILE *f;
+> +	const char **kmod_btf_names;
+> +	size_t i, kmod_btf_names_cnt;
+> +	int err;
 > +
-> +	if (glob(pattern, 0, NULL, &gl) || gl.gl_pathc == 0)
-> +		goto out;
+> +	kmod_btf_names =3D OPTS_GET(opts, kmod_btf_names, NULL);
+> +	if (!kmod_btf_names)
+> +		return 0;
 > +
-> +	f = fopen(gl.gl_pathv[0], "r");
-> +	if (!f)
-> +		goto out;
-> +
-> +	char line[256];
+> +	kmod_btf_names_cnt =3D OPTS_GET(opts, kmod_btf_names_cnt, 0);
+> +	if (!kmod_btf_names_cnt) {
+> +		pr_warn("kmod_btf_names_cnt must be set when kmod_btf_names is provide=
+d\n");
+> +		return -EINVAL;
 
-This isn't a bug, but could `char line[256]` move up with the other
-locals at the top of find_devname(), to match the rest of the function?
+I kinda agree with the bot here, why disallow an empty filter here?
 
-> +
-> +	while (fgets(line, sizeof(line), f)) {
-> +		char *val;
-> +
-> +		if (strncmp(line, "DEVNAME=", 8))
-> +			continue;
-> +
-> +		val = line + 8;
-> +		val[strcspn(val, "\n")] = '\0';
-> +		snprintf(path, path_sz, "/dev/%s", val);
-> +		found = true;
-> +		break;
 > +	}
 > +
-> +	fclose(f);
-> +out:
-> +	globfree(&gl);
-> +	return found;
+> +	obj->kmod_btfs =3D calloc(1, sizeof(*obj->kmod_btfs));
+> +	if (!obj->kmod_btfs)
+> +		return -ENOMEM;
+> +
+> +	obj->kmod_btfs->names =3D calloc(kmod_btf_names_cnt, sizeof(char *));
+> +	if (!obj->kmod_btfs->names) {
+> +		err =3D -ENOMEM;
+> +		goto err_out;
+> +	}
+> +
+> +	obj->kmod_btfs->names_map =3D hashmap__new(mod_name_hash_fn,
+> +						 mod_name_equal_fn, NULL);
+> +	if (IS_ERR(obj->kmod_btfs->names_map)) {
+> +		err =3D PTR_ERR(obj->kmod_btfs->names_map);
+> +		obj->kmod_btfs->names_map =3D NULL;
+> +		goto err_out;
+> +	}
+> +
+> +	for (i =3D 0; i < kmod_btf_names_cnt; i++) {
+> +		size_t idx =3D obj->kmod_btfs->nr_names;
+> +
+> +		if (!kmod_btf_names[i] || !kmod_btf_names[i][0]) {
+> +			pr_warn("invalid kernel module BTF name at index %zu\n", i);
+> +			err =3D -EINVAL;
+> +			goto err_out;
+> +		}
+> +
+> +		obj->kmod_btfs->names[idx] =3D strdup(kmod_btf_names[i]);
+> +		if (!obj->kmod_btfs->names[idx]) {
+> +			err =3D -ENOMEM;
+> +			goto err_out;
+> +		}
+> +
+> +		err =3D hashmap__add(obj->kmod_btfs->names_map,
+> +				   obj->kmod_btfs->names[idx], 0);
+> +		if (err) {
+> +			zfree(&obj->kmod_btfs->names[idx]);
+> +			if (err =3D=3D -EEXIST) {
+> +				pr_warn("duplicate kmod BTF name '%s' ignored\n",
+> +					kmod_btf_names[i]);
+
+Nit: I'd downgrade this to debug level, if at all.
+
+> +				continue;
+> +			}
+> +			goto err_out;
+> +		}
+> +		obj->kmod_btfs->nr_names++;
+> +	}
+> +	return 0;
+> +
+> +err_out:
+> +	bpf_object__free_kmod_btfs(obj);
+> +	return err;
 > +}
 
-[ ... ]
+...
 
-> commit 13acc020a68a79fa42ce134695e01654e17c1edf
-> Author: Sean Young <sean@mess.org>
->
->     selftests/bpf: convert lirc_mode2 to prog_tests and extend coverage
->
->     While porting, extend coverage of the BPF_LIRC_MODE2 attach/detach/
->     query API:
->
->      - bpf_prog_attach() with invalid flags is rejected with -EINVAL
->        and does not attach the program
->      - bpf_prog_query() with invalid flags is rejected with -EINVAL
->        without disturbing existing attachments
->      - bpf_prog_query() reports the correct program id, not just count,
->        at each step, via bpf_prog_get_info_by_fd()
->      - a lirc chardev can hold more than one attached program: load a
->        second, independent instance, attach it alongside the first,
->        confirm both are reported by bpf_prog_query(), then detach it
->        without disturbing the first program's attachment
->      - detaching an already-detached program consistently fails with
->        -ENOENT, for both the first and second program
+> @@ -8515,6 +8645,7 @@ static struct bpf_object *bpf_object_open(const cha=
+r *path, const void *obj_buf,
+>  	err =3D err ? : bpf_object__init_maps(obj, opts);
+>  	err =3D err ? : bpf_object_init_progs(obj, opts);
+>  	err =3D err ? : bpf_object__collect_relos(obj);
+> +	err =3D err ? : bpf_object__init_kmod_btfs(obj, opts);
 
-This isn't a bug, but could the changelog open with why the test is
-being moved under test_progs, before listing the extra coverage that
-was added while porting?
+Nit: all other options are collected before bpf_object__elf_init()
+     call just above.
 
-The changelog body starts at the secondary half of the change and
-enumerates the new assertions, but never states the primary change or
-its motivation. The conversion itself - deleting test_lirc_mode2.sh
-plus test_lirc_mode2_user.c and the standalone TEST_PROGS/
-TEST_GEN_PROGS_EXTENDED wiring, and re-adding the test as a prog_tests
-entry with a skeleton - is what most of the diff does, and a reader
-learns only what was added on top of it, not why running under
-test_progs is preferable (single runner, DENYLIST/CI integration, no
-separate binary to install).
+>  	if (err)
+>  		goto out;
+> =20
 
+...
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> index b965ad571540..2f8ff6d2d3df 100644
+> --- a/tools/lib/bpf/libbpf.h
+> +++ b/tools/lib/bpf/libbpf.h
+> @@ -224,10 +224,24 @@ struct bpf_object_open_opts {
+>  	 * point (/sys/fs/bpf), in case this default behavior is undesirable.
+>  	 */
+>  	const char *bpf_token_path;
+> +	/*
+> +	 * Optional list of kernel module names whose BTFs should be loaded.
+> +	 * kmod_btf_names_cnt specifies the number of entries in
+> +	 * kmod_btf_names.
+> +	 *
+> +	 * If kmod_btf_names is NULL, all module BTFs are loaded, preserving
+> +	 * the default behavior. Otherwise, only the specified module BTFs
+> +	 * are loaded.
+> +	 *
+> +	 * kmod_btf_names_cnt must be non-zero when kmod_btf_names is
+> +	 * non-NULL; otherwise -EINVAL is returned.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32422213902
---===============9105663885118799983==--
+Nit: please add a complete list of behaviors this affects, e.g. CO-RE,
+     fentry/fexit resolution, etc.
+
+> +	 */
+> +	const char **kmod_btf_names;
+> +	size_t kmod_btf_names_cnt;
+> =20
+>  	size_t :0;
+>  };
+> -#define bpf_object_open_opts__last_field bpf_token_path
+> +#define bpf_object_open_opts__last_field kmod_btf_names_cnt
+> =20
+>  /**
+>   * @brief **bpf_object__open()** creates a bpf_object by opening
