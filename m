@@ -1,501 +1,296 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33CBB485CF7
-	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 21:18:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C4CB3D566B;
+	Thu, 20 Aug 2026 21:22:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787260697; cv=none; b=r2ULRQr6qUx2nyBM0I5KwpP1Y92SgozM44z5xYW13yqA4rRNM9tj9cfD5Tpg1fVQLYjnqNwP+s2zk9IzlolY/GBbnPIQelvV6cxB7kZ38LNy9qPfWw3tutWnrrozzBTAe/AFerCy9UkTqZMVvOq33JTt4hGp/yFIzGlEblpOykk=
+	t=1787260966; cv=none; b=C9CUollFQo/LXg+9g9Yy3/Egaa5FKiXFiU5LZNlsoXUtBOT/NBttVefOdrDZXN5M6eO3EzeuxamD+ldex0ZG/hzuUvO2jihJzrC0W4dZhm+D+F/7FyuYhr+DUYX4YgeKVmpor8luxHJxITaG5MOgE7RoxjMQzrrYkEYesToh8mQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787260697; c=relaxed/simple;
-	bh=KGpOGxE5aDGI+YJk6SVQmRM6Iyv3svPXmm0zCZ8M3JM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RQTFbNnhiv1QTjm0+DV+mhEbgnjYOr73zZ+Znq5cxVYTOGT8cfz50eRVNIFf02WRJkZymMA0mP/Ux3ZPzeIYr5BUcf6v55AuTfVaH5UfG3PFTmBcETN4QSd9t6hqVKlvtUSazXI8gYAAdFOEGNRj7yb5L50P5zih36/GfQtNbNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CvGTBne3; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787260966; c=relaxed/simple;
+	bh=0En8EkEm19HbeogpuP0BWKqgnktwroJc/EPwLAEdJbg=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=CZpC/ALoQejrIDiwfk3IfOlaGWmCaPssaiCubTf1Zd6iL+fzqVKp3Flk07WsO3UERsCaqZJP5Y2HD5X1UQb0JPwYc7EtzREYi3/SNZzwWCYoJQWDzhCxc/cyDwr26Fl9e85+Nb3wnqnZK44QLN6oEi0L8BXYGEQ9ivNg63DoKbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=YBPdifGr; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CvGTBne3"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3811f512167so304702a91.3
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 14:18:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787260688; x=1787865488; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=pTVI5fQqcRejLtqxc3simDI2MaSc8wcnSCEjipsJOUc=;
-        b=CvGTBne3x3dy5StvYbKotfPM5CN0GGYIGCQPgCOQZ1TcPV6eoK2rUX9qFwEDyPrF9w
-         NB9eC9mny7lv7Sis4mQmIIg81RhW5W5mpHt1/dom96+hdQWxR4uijPnIJitTtVSeSK3F
-         Pp3Hk6DysR+0IPIY4mrMrC4hoFowXtY0PJMPQ6zBNpoXtCA/Hd613mQ7UObIlnz4urds
-         GEky3vPDsd9ZNLzEuK2u11C4MkixiQA6f1afkOodNilaPQ3ePYtYm/u64G2PXKPYNeyi
-         uuFLvwpw5n3EK5y9XVs+G9T+8ujXlXG4Aheqh42ClzAt8rz1v9sRtuCUbymYk/ZmuoDO
-         gHVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787260688; x=1787865488;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=pTVI5fQqcRejLtqxc3simDI2MaSc8wcnSCEjipsJOUc=;
-        b=P5uu0I/5CTffKAyscDIsEZS40elDX8mOmHGkR+JU38lBYNlVMWZHX7VBeoLZ372Nmg
-         d+JIB+wu9yhcpxqhXMVw73TWqFesOjWrcVzIPiMAHjiXWJDlj9LhNrjzCs50G7q0XFjq
-         OBxx2vf3RxpzJD8fB420ALsDULp15EyB2rWCIar0ZBNkURDEy81+c7twSBv9nxRjw9EX
-         w9KnoXUv8qPYrHwtpJk/ejYFaCAvh7lI4SOc0B5LA4TUGGTH3dC3MOdM5iozLyp0R4wt
-         ZKZxPU82fEu1NhhrxWULMpgNsYWF8Sp8YDGxHlcEHazJEOXx1nwHM1v+SjiW43jR/z6M
-         UfeQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrKnD9ATtpwDOm0rl+23PZCn2W4zI9yhdz344TflyYzuwhIRbPtDOo1hdgAnM4NHnW42iI=@vger.kernel.org
-X-Gm-Message-State: AFuF++nu/TdzvKp5bAFjg94vCINEwu4xDtifYVW8no2awD8yrppK4/Ym
-	p7/fhDrWuraFlN0PVsADNrBCsn2LvhWoqccOoYLmitPc1OVyydOMYeE2
-X-Gm-Gg: AR+sD12ZTUgFvrvIxrRVkVrhGAb7rRSpTHK1xab3dg2cM2YzUgewRZh2iN1LzoSbWOL
-	JAC+gjVAOxeg1BsHpwxoDRi/wklAq8rU2x6apA+gVpGgWmGZtISU50LCbBQdDGjRnK4RJFMq0Pd
-	f1YWhnAsdNptLmaYUFOpGlD36TZ0bnmak5RMXMEDhsfkax8w3M8mxKVQnxhQ6Ugj7FYVCSYWhty
-	dXRxEYU9O13OLmS0i7bcwv4F+saFYXzqna36VwSoI0wqF17DTTpffwPAVJrcRD+aAfauL5g8TCb
-	lZ9fxmBhQJvAYxoinWQup21kSjpZSxRH3JbtmksfaAAP8F45wRKD12ihCPsFRm0z78nkSZTtrd+
-	awI4VeyxBB4lPf8UmlvSJf+qVZ1M0BUq2np9b+jhVFB+jICR8DImpLsfbSmfivnoCiYXLywmqWW
-	p9X/xFEXJrlpAfEcPcoAskp7GSX/l3kDrfD/XO5iVDzO20FPUVwCNjy5A=
-X-Received: by 2002:a17:90b:1c90:b0:393:19a3:4f1 with SMTP id 98e67ed59e1d1-395c351d788mr2396492a91.6.1787260687664;
-        Thu, 20 Aug 2026 14:18:07 -0700 (PDT)
-Received: from localhost ([2a03:2880:9ff:40::])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1416ad53874sm30447128c88.4.2026.08.20.14.18.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Aug 2026 14:18:07 -0700 (PDT)
-From: Ziyang Men <ziyang.meme@gmail.com>
-To: kernel-team@meta.com,
-	Jens Axboe <axboe@kernel.dk>,
-	Tejun Heo <tj@kernel.org>,
-	Josef Bacik <josef@toxicpanda.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Ben Segall <bsegall@google.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Mykola Lysenko <mykolal@meta.com>,
-	Ziyang Men <ziyang.meme@gmail.com>,
-	linux-block@vger.kernel.org,
-	bpf@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/4] selftests/bpf: add test for blkcg io.stat BPF kfuncs
-Date: Thu, 20 Aug 2026 14:17:58 -0700
-Message-ID: <20260820211758.3393984-5-ziyang.meme@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260820211758.3393984-1-ziyang.meme@gmail.com>
-References: <20260820211758.3393984-1-ziyang.meme@gmail.com>
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="YBPdifGr"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:Message-ID:Subject:Cc:To
+	:From:Date:MIME-Version:From:Reply-To;
+	bh=VVmJbA2qSMFaP8opo9Ndr4fLkuQPcO1ld+9q8zqI4gU=; b=YBPdifGreGdx02v4W+03i1hb8P
+	kW1i1NpMNWAZvBa3xGSBVamJJvrLrxcuJJEWscfdKlGsjhU6WczaoYxpVh8lX6/UeYm82kHNbOQQ/
+	glTcrzL2PfmSiprrWg8EpipC3LS6L9xzpcxwylH0PLoofGYIJCpR3ubtgK3ODLKf6oH4qAazKHZ9/
+	uyFFl1bhgqYsfzIHPcKYF0R3ewT+w3J3TUi4sJWELfnHTTCbNxVzuuI0XA5LFc3YpgJGHHpn0PeM8
+	B+2/piTsRzf+T8xDavrRZphMysTDVCOgP3ba1xgFSZj0j6O99zOrgbS3hVt+qVsOk+iUB5PcA91OH
+	VygvGNjA==;
+Received: from maestria.local.igalia.com ([192.168.10.14] helo=mail.igalia.com)
+	by fanzine2.igalia.com with esmtps 
+	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1wxADH-006m8d-Ow; Thu, 20 Aug 2026 23:22:15 +0200
+Received: from webmail.service.igalia.com ([192.168.21.45])
+	by mail.igalia.com with esmtp (Exim)
+	id 1wxADF-00GOZQ-Si; Thu, 20 Aug 2026 23:22:15 +0200
+Received: from localhost ([127.0.0.1] helo=webmail.igalia.com)
+	by webmail.service.igalia.com with esmtp (Exim 4.98.2)
+	(envelope-from <mfo@igalia.com>)
+	id 1wxADF-00000002RTu-3Rre;
+	Thu, 20 Aug 2026 23:22:13 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Thu, 20 Aug 2026 18:22:13 -0300
+From: Mauricio Faria de Oliveira <mfo@igalia.com>
+To: Joel Granados <joel.granados@kernel.org>
+Cc: Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nicolas Schier <nsc@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ kernel-dev@igalia.com, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, fsverity@lists.linux.dev,
+ keyrings@vger.kernel.org, bpf@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
+ lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+ coreteam@netfilter.org, linux-sctp@vger.kernel.org,
+ linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+ bridge@lists.linux.dev, mptcp@lists.linux.dev, rds-devel@oss.oracle.com,
+ virtualization@lists.linux.dev
+Subject: Re: [PATCH RFC v3 00/13] sysctl: add module aliases
+In-Reply-To: <bpnqwggtidgiec5akns3fa5edbsvl7xf55dxabtwng2xspy4pn@ue554aii2ngk>
+References: <20260819-sysctl-module-aliases-v3-0-aab90569365d@igalia.com>
+ <bpnqwggtidgiec5akns3fa5edbsvl7xf55dxabtwng2xspy4pn@ue554aii2ngk>
+Message-ID: <53155340c897560bfc67e61ba9568fd6@igalia.com>
+X-Sender: mfo@igalia.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Report: NO, Score=-2.9, Tests=ALL_TRUSTED=-3,BAYES_20=-0.001,KAM_DMARC_NONE=0.125,KAM_DMARC_STATUS=0.005
+X-Spam-Score: -28
+X-Spam-Bar: --
 
-Add cgroup_iter_io to test the blkcg io.stat BPF kfuncs. The BPF
-program acquires the I/O css, flushes its statistics, converts it to a
-typed blkcg under RCU, walks the blkgs, and releases the css reference.
+On 2026-08-20 09:51, Joel Granados wrote:
+> On Wed, Aug 19, 2026 at 03:16:13PM -0300, Mauricio Faria de Oliveira wrote:
+>> This series adds 'sysctl:' aliases to modules that register sysctl tables; e.g.:
+>> 
+>>         $ modinfo ./mpls_router.ko  | grep sysctl:
+>>         alias:          sysctl:*/net/mpls/conf/*/input
+>>         alias:          sysctl:*/net/mpls/default_ttl
+>>         alias:          sysctl:*/net/mpls/ip_ttl_propagate
+>>         alias:          sysctl:*/net/mpls/platform_labels
+>> 
+>> It provides a trivial way to map /proc/sys files to modules (not trivial today),
+>> and for userspace to handle nonexistent /proc/sys files (e.g., procps's sysctl
+>> and systemd-sysctl applying tunables) with "modprobe sysctl:<...>" and a retry.
+>> 
+>> This is done almost automatically with register_sysctl(), register_net_sysctl()
+>> and friends as wrappers of MODULE_SYSCTL_TABLE (similar to MODULE_DEVICE_TABLE),
+>> which emits symbols for file2alias/modpost to find and parse the sysctl tables.
+>> 
+>> The big exception to 'almost' are sysctl tables and paths allocated or defined
+>> at runtime (e.g., per-namespace or per-device), as all information is required
+>> at build-time. Fortunately, such tables and paths are often based on 'templates'
+>> which are static and can be used.
+>> 
+>> This is done by plumbing the template table/path as optional arguments (macros
+>> with default values as default_gfp()), so not to create functions for all cases:
+>> 
+>>         register_sysctl(path, table [, table_tmpl [, path_tmpl]]);
+>>         register_net_sysctl(net, path, table [, table_tmpl[, path_tmpl]]);
+>>         register_net_sysctl_sz(net, path, table, size [, table_tmpl[, path_tmpl]]);
+> 
+> The "what" is described but I'm missing more clarity on the "why". Why
+> does this need to be trivial? Where is it that you will know the sysctl
+> file path of a module and not the module name or alias?
 
-The test performs O_DIRECT I/O on a private loop device. It checks the
-device ID and counters against io.stat.
+Thanks for looking at this.
 
-Assisted-by: Claude:claude-opus-5
-Signed-off-by: Ziyang Men <ziyang.meme@gmail.com>
----
- tools/testing/selftests/bpf/cgroup_iter_io.h  |  17 ++
- tools/testing/selftests/bpf/config            |   1 +
- .../selftests/bpf/prog_tests/cgroup_iter_io.c | 254 ++++++++++++++++++
- .../selftests/bpf/progs/cgroup_iter_io.c      |  74 +++++
- 4 files changed, 346 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/cgroup_iter_io.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter_io.c
- create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter_io.c
+The problem this feature addresses is sysctl settings not applied
+because modules aren't yet loaded when systemd-sysctl/procps's sysctl
+runs on boot, and the usage of /etc/modules as a workaround.
 
-diff --git a/tools/testing/selftests/bpf/cgroup_iter_io.h b/tools/testing/selftests/bpf/cgroup_iter_io.h
-new file mode 100644
-index 000000000000..f4bbaaccdf71
---- /dev/null
-+++ b/tools/testing/selftests/bpf/cgroup_iter_io.h
-@@ -0,0 +1,17 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+#ifndef __CGROUP_ITER_IO_H
-+#define __CGROUP_ITER_IO_H
-+
-+struct io_query {
-+	/* one device's io.stat counters */
-+	__u64 rbytes;
-+	__u64 wbytes;
-+	__u64 rios;
-+	__u64 wios;
-+	__u64 dbytes;
-+	__u64 dios;
-+	__u64 dev;	/* dev_t of the device the counters belong to */
-+};
-+
-+#endif /* __CGROUP_ITER_IO_H */
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index 482b40dde2f9..0e10d625de6e 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -1,3 +1,4 @@
-+CONFIG_BLK_CGROUP=y
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=y
- CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=1
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_io.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_io.c
-new file mode 100644
-index 000000000000..2267780912d8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_io.c
-@@ -0,0 +1,254 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+#define _GNU_SOURCE
-+#include <test_progs.h>
-+#include <bpf/libbpf.h>
-+#include <fcntl.h>
-+#include <linux/loop.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+#include <sys/stat.h>
-+#include <sys/sysmacros.h>
-+#include <unistd.h>
-+#include "cgroup_helpers.h"
-+#include "cgroup_iter_io.h"
-+#include "cgroup_iter_io.skel.h"
-+
-+#define IO_SIZE (4 * 1024 * 1024)
-+
-+static int read_stats(struct bpf_link *link)
-+{
-+	int fd, ret = 0;
-+	ssize_t bytes;
-+
-+	fd = bpf_iter_create(bpf_link__fd(link));
-+	if (!ASSERT_OK_FD(fd, "bpf_iter_create"))
-+		return 1;
-+
-+	/* Results land in skel->data_query; the read itself returns no data. */
-+	bytes = read(fd, NULL, 0);
-+	if (!ASSERT_EQ(bytes, 0, "read fd"))
-+		ret = 1;
-+
-+	close(fd);
-+	return ret;
-+}
-+
-+/* Set up a loop device for cgroup-charged I/O. */
-+static int loop_setup(char *loop_path, size_t sz, int *ctl_fd, int *loop_fd,
-+		      int *back_fd)
-+{
-+	char back_path[] = "/tmp/cgroup_iter_io.XXXXXX";
-+	int nr;
-+
-+	*ctl_fd = *loop_fd = *back_fd = -1;
-+
-+	*ctl_fd = open("/dev/loop-control", O_RDWR | O_CLOEXEC);
-+	if (*ctl_fd < 0)
-+		return -1;
-+
-+	nr = ioctl(*ctl_fd, LOOP_CTL_GET_FREE);
-+	if (nr < 0)
-+		goto err;
-+	snprintf(loop_path, sz, "/dev/loop%d", nr);
-+
-+	*back_fd = mkstemp(back_path);
-+	if (*back_fd < 0)
-+		goto err;
-+	unlink(back_path);
-+	if (ftruncate(*back_fd, (off_t)IO_SIZE * 4))
-+		goto err;
-+
-+	*loop_fd = open(loop_path, O_RDWR | O_CLOEXEC);
-+	if (*loop_fd < 0)
-+		goto err;
-+	if (ioctl(*loop_fd, LOOP_SET_FD, *back_fd))
-+		goto err;
-+
-+	return 0;
-+err:
-+	if (*loop_fd >= 0)
-+		close(*loop_fd);
-+	if (*back_fd >= 0)
-+		close(*back_fd);
-+	close(*ctl_fd);
-+	*ctl_fd = *loop_fd = *back_fd = -1;
-+	return -1;
-+}
-+
-+static void loop_teardown(const char *loop_path, int ctl_fd, int loop_fd,
-+			  int back_fd)
-+{
-+	int nr = -1;
-+
-+	if (loop_fd >= 0) {
-+		ioctl(loop_fd, LOOP_CLR_FD, 0);
-+		close(loop_fd);
-+	}
-+	if (back_fd >= 0)
-+		close(back_fd);
-+	if (ctl_fd >= 0) {
-+		if (sscanf(loop_path, "/dev/loop%d", &nr) == 1 && nr >= 0)
-+			ioctl(ctl_fd, LOOP_CTL_REMOVE, nr);
-+		close(ctl_fd);
-+	}
-+}
-+
-+/* O_DIRECT keeps I/O charged to the current cgroup. */
-+static int do_direct_io(const char *loop_path)
-+{
-+	void *buf;
-+	int fd, ret = -1;
-+
-+	fd = open(loop_path, O_RDWR | O_DIRECT | O_CLOEXEC);
-+	if (fd < 0)
-+		return -1;
-+	if (posix_memalign(&buf, 4096, IO_SIZE))
-+		goto out_fd;
-+	memset(buf, 0xab, IO_SIZE);
-+
-+	if (pwrite(fd, buf, IO_SIZE, 0) != IO_SIZE)
-+		goto out_buf;
-+	fsync(fd);
-+	if (pread(fd, buf, IO_SIZE, 0) != IO_SIZE)
-+		goto out_buf;
-+	ret = 0;
-+out_buf:
-+	free(buf);
-+out_fd:
-+	close(fd);
-+	return ret;
-+}
-+
-+/* Read @dev's io.stat counters. @dev uses kernel dev_t encoding. */
-+static int parse_io_stat(int cgroup_fd, __u64 dev, struct io_query *out)
-+{
-+	unsigned int want_maj = dev >> 20, want_min = dev & ((1U << 20) - 1);
-+	char buf[4096], *line, *saveptr;
-+	int fd, n, ret = -1;
-+
-+	fd = openat(cgroup_fd, "io.stat", O_RDONLY);
-+	if (fd < 0)
-+		return -1;
-+	n = read(fd, buf, sizeof(buf) - 1);
-+	close(fd);
-+	if (n <= 0)
-+		return -1;
-+	buf[n] = '\0';
-+
-+	for (line = strtok_r(buf, "\n", &saveptr); line;
-+	     line = strtok_r(NULL, "\n", &saveptr)) {
-+		unsigned long long rb = 0, wb = 0, ri = 0, wi = 0, db = 0, di = 0;
-+		unsigned int maj, min;
-+
-+		/* Only the device id is required; missing counters stay zero. */
-+		if (sscanf(line,
-+			   "%u:%u rbytes=%llu wbytes=%llu rios=%llu wios=%llu dbytes=%llu dios=%llu",
-+			   &maj, &min, &rb, &wb, &ri, &wi, &db, &di) < 2)
-+			continue;
-+		if (maj != want_maj || min != want_min)
-+			continue;
-+
-+		out->rbytes = rb;
-+		out->wbytes = wb;
-+		out->rios = ri;
-+		out->wios = wi;
-+		out->dbytes = db;
-+		out->dios = di;
-+		ret = 0;
-+		break;
-+	}
-+	return ret;
-+}
-+
-+void test_cgroup_iter_io(void)
-+{
-+	char *cgroup_rel_path = "/cgroup_iter_io_test";
-+	int ctl_fd = -1, loop_fd = -1, back_fd = -1;
-+	struct cgroup_iter_io *skel = NULL;
-+	struct bpf_link *link = NULL;
-+	char loop_path[64];
-+	struct io_query *q;
-+	int cgroup_fd;
-+
-+	cgroup_fd = cgroup_setup_and_join(cgroup_rel_path);
-+	if (!ASSERT_OK_FD(cgroup_fd, "cgroup_setup_and_join"))
-+		return;
-+
-+	if (loop_setup(loop_path, sizeof(loop_path), &ctl_fd, &loop_fd, &back_fd)) {
-+		test__skip();	/* needs root + CONFIG_BLK_DEV_LOOP */
-+		goto cleanup_cgroup_fd;
-+	}
-+
-+	skel = cgroup_iter_io__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "cgroup_iter_io__open_and_load"))
-+		goto cleanup_loop;
-+
-+	/* Convert glibc st_rdev to kernel dev_t format. */
-+	{
-+		struct stat lst;
-+
-+		if (!ASSERT_OK(fstat(loop_fd, &lst), "fstat loop"))
-+			goto cleanup_skel;
-+		skel->data_query->target_dev =
-+			((__u64)major(lst.st_rdev) << 20) | minor(lst.st_rdev);
-+	}
-+
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	union bpf_iter_link_info linfo = {
-+		.cgroup.cgroup_fd = cgroup_fd,
-+		.cgroup.order = BPF_CGROUP_ITER_SELF_ONLY,
-+	};
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+
-+	link = bpf_program__attach_iter(skel->progs.cgroup_io_query, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
-+		goto cleanup_skel;
-+
-+	/* This process is in the test cgroup, so the loop I/O is charged here. */
-+	if (!ASSERT_OK(do_direct_io(loop_path), "do_direct_io"))
-+		goto cleanup_link;
-+
-+	if (!ASSERT_OK(read_stats(link), "read stats"))
-+		goto cleanup_link;
-+
-+	q = &skel->data_query->io_query;
-+	if (test__start_subtest("cgroup_iter_io__write")) {
-+		ASSERT_GT(q->wbytes, 0, "wbytes");
-+		ASSERT_GT(q->wios, 0, "wios");
-+	}
-+	if (test__start_subtest("cgroup_iter_io__read")) {
-+		ASSERT_GT(q->rbytes, 0, "rbytes");
-+		ASSERT_GT(q->rios, 0, "rios");
-+	}
-+	if (test__start_subtest("cgroup_iter_io__dev"))
-+		ASSERT_GT(q->dev, 0, "dev");
-+
-+	/* Compare with io.stat without I/O between the reads. */
-+	if (test__start_subtest("cgroup_iter_io__match")) {
-+		struct io_query filev = {};
-+
-+		if (ASSERT_OK(read_stats(link), "read stats") &&
-+		    ASSERT_OK(parse_io_stat(cgroup_fd, q->dev, &filev),
-+			      "parse io.stat")) {
-+			ASSERT_EQ(q->rbytes, filev.rbytes, "rbytes");
-+			ASSERT_EQ(q->wbytes, filev.wbytes, "wbytes");
-+			ASSERT_EQ(q->rios, filev.rios, "rios");
-+			ASSERT_EQ(q->wios, filev.wios, "wios");
-+			ASSERT_EQ(q->dbytes, filev.dbytes, "dbytes");
-+			ASSERT_EQ(q->dios, filev.dios, "dios");
-+		}
-+	}
-+
-+cleanup_link:
-+	bpf_link__destroy(link);
-+cleanup_skel:
-+	cgroup_iter_io__destroy(skel);
-+cleanup_loop:
-+	loop_teardown(loop_path, ctl_fd, loop_fd, back_fd);
-+cleanup_cgroup_fd:
-+	close(cgroup_fd);
-+	cleanup_cgroup_environment();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/cgroup_iter_io.c b/tools/testing/selftests/bpf/progs/cgroup_iter_io.c
-new file mode 100644
-index 000000000000..0e9c9cd6e33a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/cgroup_iter_io.c
-@@ -0,0 +1,74 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_core_read.h>
-+#include "bpf_experimental.h"
-+#include "cgroup_iter_io.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct io_query io_query SEC(".data.query");
-+
-+/* Device selected by userspace in kernel dev_t format. */
-+__u64 target_dev SEC(".data.query");
-+
-+/* Keep inline: RCU and open-coded iterators cannot cross a BPF call. */
-+static __always_inline int read_target_dev(struct cgroup *cgrp,
-+					   struct io_query *out)
-+{
-+	struct cgroup_subsys_state *css;
-+	struct blkcg *blkcg;
-+	struct blkcg_gq *pos;
-+	__u64 dev;
-+	int ssid;
-+
-+	ssid = bpf_core_enum_value(enum cgroup_subsys_id, io_cgrp_id);
-+	css = bpf_cgroup_css(cgrp, ssid);
-+	if (!css)
-+		return 0;
-+
-+	css_rstat_flush(css);
-+
-+	bpf_rcu_read_lock();
-+
-+	blkcg = bpf_css_to_blkcg(css);
-+	if (!blkcg) {
-+		bpf_rcu_read_unlock();
-+		bpf_css_release(css);
-+		return 0;
-+	}
-+
-+	bpf_for_each(blkg, pos, blkcg) {
-+		dev = BPF_CORE_READ(pos, q, disk, part0, bd_dev);
-+		if (dev != target_dev)
-+			continue;
-+
-+		out->dev = dev;
-+		out->rbytes = BPF_CORE_READ(pos, iostat.cur.bytes[BLKG_IOSTAT_READ]);
-+		out->wbytes = BPF_CORE_READ(pos, iostat.cur.bytes[BLKG_IOSTAT_WRITE]);
-+		out->rios = BPF_CORE_READ(pos, iostat.cur.ios[BLKG_IOSTAT_READ]);
-+		out->wios = BPF_CORE_READ(pos, iostat.cur.ios[BLKG_IOSTAT_WRITE]);
-+		out->dbytes = BPF_CORE_READ(pos, iostat.cur.bytes[BLKG_IOSTAT_DISCARD]);
-+		out->dios = BPF_CORE_READ(pos, iostat.cur.ios[BLKG_IOSTAT_DISCARD]);
-+		break;
-+	}
-+	bpf_rcu_read_unlock();
-+	bpf_css_release(css);
-+	return 1;
-+}
-+
-+SEC("iter.s/cgroup")
-+int cgroup_io_query(struct bpf_iter__cgroup *ctx)
-+{
-+	struct cgroup *cgrp = ctx->cgroup;
-+
-+	if (!cgrp)
-+		return 1;
-+
-+	/* Start fresh so a device that is not found stays all-zero. */
-+	__builtin_memset(&io_query, 0, sizeof(io_query));
-+
-+	read_target_dev(cgrp, &io_query);
-+	return 0;
-+}
+This can be addressed with a way for sysctl tools to load the module for
+a non-existent sysctl file path.
+For that, the mapping between a sysctl file path (known) and its module
+(unknown) needs to be trivial.
+
+It may not seem serious at first, but I've seen this consume significant
+engineering time and impact production systems, in a previous technical
+support job.
+An example: cloud deployments with non-scalable network routing
+performance due to nf_conntrack_max not applied after reboot or an
+upgrade because the component which turned out to help with the
+/etc/modules workaround had its placement changed from network router
+nodes.
+
+> Additionally, sysctls are not module specific; they are a way to
+> read/write kernel variables. Putting a module specific aspect in the
+> function arguments (that needs to be ignored in non-module cases) seems
+> wrong. Why not use the module subsys to add sysctl alias instead of the
+> sysctl subsys?
+
+Fair point. The current design has 2 reasons:
+
+1) Use the 'path' argument (raised in [1]), only available in the
+register sysctl functions.
+2) Use a more implicit/transparent approach, instead of more
+explicit/declarative approach. 
+
+I guess that a different design could use MODULE_SYSCTL_TABLE() as
+MODULE_DEVICE_TABLE(), declared per table instead of wrapped into
+register sysctl functions.
+However, it seems to require moving the value of the path argument (or
+its template) into the macro and still referencing it in the function
+(or its instantiation of the template), which adds obfuscation, to all
+callers. 
+
+What do you think?
+
+[snip]
+
+>> P.S.
+>> ====
+>> 
+>> I wrote proof-of-concept patches for procps sysctl and systemd-sysctl some time
+>> ago, which worked as expected, i.e., successfully set sysctl tunables which did
+>> not exist in /proc/sys, by running 'modprobe sysctl:/proc/sys/...' and retrying.
+> 
+> Do you have links to this? To the old one, not necessarily a new
+> version.
+
+Sure, please see [2] and [3]. I did a quick rebase/refresh, but both
+seem to work:
+
+procps sysctl:
+
+    $ strace -e execve -f -s 64 ./src/sysctl --modprobe=1 -w net.test=1
+2>&1 | grep modprobe
+
+    [pid 505958] execve("/bin/sh", ["sh", "-c", "--", "modprobe
+sysctl:/proc/sys/net/test >/dev/null 2>&1"], 0x7ffc12efff80 /* 63 vars
+*/) = 0
+
+systemd-sysctl:
+
+$ cat /etc/sysctl.d/net-test.conf
+net.test = 1
+
+    $ sudo strace -e execve -f -s 64 ./build/systemd-sysctl
+--modprobe=true /etc/sysctl.d/net-test.conf  2>&1 | grep modprobe
+
+[pid 505777] execve("/usr/sbin/modprobe", ["modprobe",
+"sysctl:*/net/test"], 0x7ffd473d1418 /* 20 vars */) = 0
+
+Thanks,
+
+[1]
+https://lore.kernel.org/linux-fsdevel/CAK7LNAR=7zgOiqTD9okXfZXroFH1yagMFsRuq0G-z6OfSUPLQg@mail.gmail.com/
+[2] https://github.com/mfoliveira/procps/commits/sysctl-module-aliases/
+[3] https://github.com/mfoliveira/systemd/commits/sysctl-module-aliases/
+
+> 
+> Best
+>> 
+>> Should this series eventually be merged, the patches will be submitted upstream
+>> as well, for userspace to start consuming it.
+>> 
+>> Signed-off-by: Mauricio Faria de Oliveira <mfo@igalia.com>
+>> 
+>> Changes in v3:
+>> - All issues were reported by sashiko-bot@kernel.org.
+>> - Tested allmodconfig with option enabled on x86_64.
+>> - Patch 2:
+>>   - Fix typo ('s/options/option/').
+>> - Patch 3:
+>>   - Fix usage of __UNIQUE_ID().
+>>   - Add __must_be_array() in MODULE_SYSCTL_TABLE().
+>> - Patch 4:
+>>   - Remove trailing backslash in register_sysctl().
+>> - Patch 6:
+>>   - Fix missing __register_net_sysctl_sz() in !CONFIG_SYSCTL.
+>> - Patch 13:
+>>   - Fix potential out-of-bounds read in do_sysctl_entry().
+>>   - Add check for entry size of zero.
+>> - Link to v2: https://lore.kernel.org/r/20260818-sysctl-module-aliases-v2-0-d5a69dae5798@igalia.com
+>> 
+>> Changes in v2:
+>> - This is based on the series submitted 4 years ago,
+>>   with Originally-by: tags added in related patches.
+>> - Link to v1: https://lore.kernel.org/linux-fsdevel/20220722022416.137548-1-mfo@canonical.com/
+>> 
+>> ---
+>> Mauricio Faria de Oliveira (13):
+>>       keys, pidns, fs/verity, riscv/vector: reorder '#include <linux/sysctl.h>'
+>>       proc: add config option SYSCTL_MODULE_ALIASES
+>>       sysctl, mod_devicetable: add macro MODULE_SYSCTL_TABLE
+>>       sysctl: add register_sysctl() wrapper for MODULE_SYSCTL_TABLE
+>>       sysctl, parport: update register_sysctl() callers with template arguments
+>>       sysctl, net: add register_net_sysctl{_sz}() wrappers for MODULE_SYSCTL_TABLE
+>>       sysctl, net: update register_net_sysctl{_sz}() callers with template arguments
+>>       sysctl, net: update register_net_sysctl_sz(ARRAY_SIZE(table_tmpl)) with template arguments
+>>       sysctl, ipv6: update register_net_sysctl{_sz}() callers with template arguments
+>>       sysctl, net: update register_net_sysctl_sz() edge case
+>>       sysctl: unrandomize struct ctl_table.procname
+>>       modpost: move addend_*_rel() calls into addend_rel()
+>>       modpost: handle MODULE_SYSCTL_TABLE symbols
+>> 
+>>  arch/riscv/kernel/vector.c              |   1 +
+>>  drivers/net/vrf.c                       |   3 +-
+>>  drivers/parport/procfs.c                |  26 +++-
+>>  fs/proc/Kconfig                         |  13 ++
+>>  fs/verity/init.c                        |   1 +
+>>  include/linux/key.h                     |   1 -
+>>  include/linux/mod_devicetable.h         |   7 +
+>>  include/linux/pid_namespace.h           |   1 +
+>>  include/linux/sysctl.h                  | 110 ++++++++++++++-
+>>  include/net/ipv6.h                      |   6 +-
+>>  include/net/net_namespace.h             |  47 ++++++-
+>>  net/bridge/br_netfilter_hooks.c         |   3 +-
+>>  net/core/neighbour.c                    |  11 +-
+>>  net/core/sysctl_net_core.c              |   3 +-
+>>  net/ieee802154/6lowpan/reassembly.c     |   2 +-
+>>  net/ipv4/devinet.c                      |  12 +-
+>>  net/ipv4/ip_fragment.c                  |   3 +-
+>>  net/ipv4/route.c                        |   3 +-
+>>  net/ipv4/sysctl_net_ipv4.c              |   2 +-
+>>  net/ipv4/xfrm4_policy.c                 |   3 +-
+>>  net/ipv6/addrconf.c                     |   7 +-
+>>  net/ipv6/icmp.c                         |   6 +-
+>>  net/ipv6/netfilter/nf_conntrack_reasm.c |   4 +-
+>>  net/ipv6/reassembly.c                   |   3 +-
+>>  net/ipv6/route.c                        |  10 +-
+>>  net/ipv6/sysctl_net_ipv6.c              |  13 +-
+>>  net/ipv6/xfrm6_policy.c                 |   3 +-
+>>  net/mpls/af_mpls.c                      |   9 +-
+>>  net/mptcp/ctrl.c                        |   3 +-
+>>  net/netfilter/ipvs/ip_vs_ctl.c          |   4 +-
+>>  net/netfilter/ipvs/ip_vs_lblc.c         |   3 +-
+>>  net/netfilter/ipvs/ip_vs_lblcr.c        |   3 +-
+>>  net/netfilter/nf_conntrack_standalone.c |   5 +-
+>>  net/netfilter/nf_log.c                  |   9 +-
+>>  net/rds/tcp.c                           |   4 +-
+>>  net/sctp/sysctl.c                       |   3 +-
+>>  net/smc/smc_sysctl.c                    |   2 +-
+>>  net/sysctl_net.c                        |  10 +-
+>>  net/unix/sysctl_net_unix.c              |   3 +-
+>>  net/vmw_vsock/af_vsock.c                |   4 +-
+>>  net/xfrm/xfrm_sysctl.c                  |   2 +-
+>>  scripts/mod/devicetable-offsets.c       |   6 +
+>>  scripts/mod/file2alias.c                | 237 ++++++++++++++++++++++++++++++++
+>>  scripts/mod/modpost.c                   |  46 ++++---
+>>  scripts/mod/modpost.h                   |  25 ++++
+>>  45 files changed, 575 insertions(+), 107 deletions(-)
+>> ---
+>> base-commit: 2697ef8943c9985c14708a6429e21812693857b2
+>> change-id: 20260818-sysctl-module-aliases-2f5801b1eb71
+>> 
+>> Best regards,
+>> -- 
+>> Mauricio Faria de Oliveira <mfo@igalia.com>
+>>
+
 -- 
-2.53.0-Meta
-
+Mauricio
