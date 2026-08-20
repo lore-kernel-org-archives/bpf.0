@@ -1,34 +1,34 @@
-Received: from mta0.migadu.com (out-53.mta0.migadu.com [91.218.175.53])
+Received: from mta1.migadu.com (out-1.mta1.migadu.com [95.215.58.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F3BC1429D
-	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 00:06:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D87A24B28
+	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 00:07:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787184418; cv=none; b=nQZWlG59MA+J4RI5wijPa+QP19DkwlCR0Xe5ghRwuLVuxnFmx3txGRe3DepeRamYPjy1CSsu7EciDb0ZZOWWBM113LnhTWRZPTkF0Wag7qX8fhEApA3sYhJNAH1tSOy8euWjRGpTdB3WJoQuST6df3bge5oQE5GEYUIBwestJg8=
+	t=1787184425; cv=none; b=Y6mFad5SPMXKLmoLPQZlaJQqJRZlwJ670BalTEHFRBIQzGelmgbZt1gstcydJHzzmtV/xdIfCEo+m/VgJQPxWOf5/qwgWTIln2T7uRk3IFUuh6uydAwkUoXQonPoGNoizdp9HebiOA0UHMzBntAutaNL24k9+5ZLd1YaYGiXgb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787184418; c=relaxed/simple;
-	bh=SdV77KSxnrHvEFX/CUF4ChbQsWcZr8Ltos+JDdYjLrE=;
+	s=arc-20240116; t=1787184425; c=relaxed/simple;
+	bh=ABIoBjSE2emDABJEZS3XwipYH1/oMpbFlTN+TvgCZ14=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pYWsJzy8uyKWheEoycHG0r32bKJQNz+MssdDNSeSij/aZsb4khGr8qv11bI72jw+S2ddvCrcbkD1OeI9fpVF/dXCYfMb4fbcs65sbO4pC/uyBG0aQ3be7vPR2RGX7YcrEx+3Yo1Ig9HW1LWgH/moeZOp6TmU5Xx3+CAP7N5A0Hs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Gco8yBNr; arc=none smtp.client-ip=91.218.175.53
+	 MIME-Version; b=nGJSJ05LGn3OyiDB8i7czWjPBq99EqgA5bgGPQp8brjZyggDdZ5MLPPC+tzqEp0SWXEwtAQAXz0cyRnYWGmG50YvaaKQ/GYauFC87aeJMWS53vRo6JBsJVOXxbmcQwkZyu/cRty0tJy0gTw+3N9YMHbvSnwJcT0yCl/79z/l6Dc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WF3Nd2kd; arc=none smtp.client-ip=95.215.58.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Gco8yBNr"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WF3Nd2kd"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=SdV77KSxnrHvEFX/CUF4ChbQsWcZr8Ltos+JDdYjLrE=;
+DKIM-Signature: a=rsa-sha256; bh=ABIoBjSE2emDABJEZS3XwipYH1/oMpbFlTN+TvgCZ14=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787184415; v=1; x=1787789215;
- b=Gco8yBNr+jXyLy+rrlpVkEupM3ZzFhbZaL8I6kjoGizqZtpsSWPcOii/tWpoUcwBEVU0ombm
- vPy7xcpXlTZfL7kzlQLT4ATQrQU6Ik6zDbPTUGRa/U0Nrzu54VU8RsWu5G2jTMYoLUy81Jj6fvo
- 7qd6k893M2uW7kQkD5Ev+J7I=
+ t=1787184421; v=1; x=1787789221;
+ b=WF3Nd2kdhPDc7nV/rvlQXUzn8zzMWzTkvYujWfxKaqfsudHQ8RIzTRyoPXfp4p1ESAA1lFyD
+ iUXKF9FgjAOTfHY6gUX6TpcPffk0pnfqFDT+qOhwGc51xqVN2Pz1jCQdcn4b+C2IsL9DWokdDIi
+ NSFhtL1XQBV3rGlnaZ16YiLQ=
 X-Envelope-To: bpf@vger.kernel.org
 Received: from isolodrai-fedora-MJ0FVMD1.thefacebook.com (2620:10d:c090:500::5:942a)
-	by mta11.migadu.com with ESMTPS id a8a0046381649d78;
-	Thu, 20 Aug 2026 00:06:55 +0000
-X-Mizu-Trace-ID: a8a0046381649d78
+	by mta11.migadu.com with ESMTPS id 516f7423daf147aa;
+	Thu, 20 Aug 2026 00:07:01 +0000
+X-Mizu-Trace-ID: 516f7423daf147aa
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -38,9 +38,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Quentin Monnet <qmo@kernel.org>
 Cc: bpf@vger.kernel.org
-Subject: [PATCH bpf-next v1 3/4] bpftool: Don't drop a type in the sorted C dump
-Date: Wed, 19 Aug 2026 17:06:26 -0700
-Message-ID: <20260820000627.3826188-4-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v1 4/4] selftests/bpf: Check that sorting preserves types in bpftool dump
+Date: Wed, 19 Aug 2026 17:06:27 -0700
+Message-ID: <20260820000627.3826188-5-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260820000627.3826188-1-ihor.solodrai@linux.dev>
 References: <20260820000627.3826188-1-ihor.solodrai@linux.dev>
@@ -52,44 +52,134 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The C dump sorts types by default, so that generated headers are
-diffable. The sorted dump emits one type fewer than the unsorted dump
-of the same BTF.
+Sorting the C dump is meant to make generated headers diffable. The
+sorted and unsorted dumps of the same BTF have to emit the same types.
 
-dump_btf_c() starts its loop at index 1 to skip the void type at BTF
-type ID 0. That holds for the unsorted dump, where the array index is
-the type ID, but not after qsort(): position 0 is then the lowest ranked
-type, and btf_type_rank() ranks an anonymous enum 0 while void takes the
-default rank of 10. So the enum is skipped, and void is emitted instead
-as a no-op.
+Extend the fixture with a few more top-level definitions, including
+anonymous enums, and add a subtest comparing how many types are
+emitted with or without sort.
 
-Skip by type ID rather than by position.
-
-Fixes: 94133cf24bb3 ("bpftool: Introduce btf c dump sorting")
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- tools/bpf/bpftool/btf.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ .../bpf/prog_tests/bpftool_btf_dump.c         | 78 ++++++++++++++++++-
+ 1 file changed, 75 insertions(+), 3 deletions(-)
 
-diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index c9589026da8d..345d49a9a22c 100644
---- a/tools/bpf/bpftool/btf.c
-+++ b/tools/bpf/bpftool/btf.c
-@@ -805,9 +805,13 @@ static int dump_btf_c(const struct btf *btf,
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c b/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
+index 53bb7065b3ca..28059820ea0b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
+@@ -53,15 +53,18 @@ static char *dump_c(const char *path, bool sorted)
  
- 		if (sort_dump)
- 			datums = sort_btf_c(btf);
--		for (i = 1; i < cnt; i++) {
-+		for (i = 0; i < cnt; i++) {
- 			int idx = datums ? datums[i].index : i;
+ /*
+  * struct holey { int c; <32 bit hole> int tail; };
++ * enum { E0 = 1 }; enum { E1 = 2 }; enum { E2 = 3 };
++ * struct s { int f; };
++ * union u { int f; };
+  *
+  * One record with a hole, and a 4-byte long to pad it with. How records
+- * themselves are rendered is already covered by the build, so the fixture does
+- * not need to be more elaborate than that.
++ * themselves are rendered is already covered by the build.
++ * The anonymous enums matter to the sorting subtest.
+  */
+ static struct btf *mk_btf(void)
+ {
+ 	struct btf *btf;
+-	int id, err;
++	int id, err, i;
  
-+			/* type ID 0 is void, skip it */
-+			if (!idx)
-+				continue;
+ 	btf = btf__new_empty();
+ 	if (!ASSERT_OK_PTR(btf, "new_empty"))
+@@ -87,6 +90,36 @@ static struct btf *mk_btf(void)
+ 	if (!ASSERT_OK(err, "holey_tail"))
+ 		goto err_out;
+ 
++	for (i = 0; i < 3; i++) {
++		char name[16];
 +
- 			err = btf_dump__dump_type(d, idx);
- 			if (err)
- 				goto done;
++		snprintf(name, sizeof(name), "E%d", i);
++
++		id = btf__add_enum(btf, NULL, 4);
++		if (!ASSERT_GT(id, 0, "anon_enum"))
++			goto err_out;
++
++		err = btf__add_enum_value(btf, name, i + 1);
++		if (!ASSERT_OK(err, "enum_val"))
++			goto err_out;
++	}
++
++	id = btf__add_struct(btf, "s", 4);
++	if (!ASSERT_GT(id, 0, "struct_s"))
++		goto err_out;
++
++	err = btf__add_field(btf, "f", 1, 0, 0);
++	if (!ASSERT_OK(err, "s_field"))
++		goto err_out;
++
++	id = btf__add_union(btf, "u", 4);
++	if (!ASSERT_GT(id, 0, "union_u"))
++		goto err_out;
++
++	err = btf__add_field(btf, "f", 1, 0, 0);
++	if (!ASSERT_OK(err, "u_field"))
++		goto err_out;
++
+ 	btf__set_pointer_size(btf, 4);
+ 
+ 	return btf;
+@@ -95,6 +128,42 @@ static struct btf *mk_btf(void)
+ 	return NULL;
+ }
+ 
++static int count_substr(const char *haystack, const char *needle)
++{
++	const char *p = haystack;
++	int n = 0;
++
++	for (; (p = strstr(p, needle)); p++)
++		n++;
++
++	return n;
++}
++
++static void test_sort_preserves_types(const char *path)
++{
++	char *sorted = NULL, *unsorted = NULL;
++	int n_sorted, n_unsorted;
++
++	sorted = dump_c(path, true);
++	unsorted = dump_c(path, false);
++	if (!sorted || !unsorted)
++		goto out;
++
++	/*
++	 * Count definitions by the closing brace in their first column. Counting
++	 * "struct"/"union"/"enum" openers instead would also count forward
++	 * declarations, and which types need one depends on emission order.
++	 */
++	n_unsorted = count_substr(unsorted, "\n}");
++	n_sorted = count_substr(sorted, "\n}");
++	ASSERT_GT(n_unsorted, 0, "types_emitted");
++	ASSERT_EQ(n_sorted, n_unsorted, "same_type_count");
++
++out:
++	free(sorted);
++	free(unsorted);
++}
++
+ /*
+  * Check only what the selftests build cannot:
+  *   - bpf_helpers.h defines __ksym and __weak as well, and no program uses
+@@ -145,6 +214,9 @@ void test_bpftool_btf_dump(void)
+ 	if (test__start_subtest("c_unsorted"))
+ 		test_dump(path, false);
+ 
++	if (test__start_subtest("c_sort_preserves_types"))
++		test_sort_preserves_types(path);
++
+ 	unlink(path);
+ out:
+ 	btf__free(btf);
 -- 
 2.55.0
 
