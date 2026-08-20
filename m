@@ -1,100 +1,124 @@
-Received: from mail-wr2-f2.google.com (mail-wr2-f2.google.com [74.125.225.66])
+Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7C6345EAE
-	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 02:20:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DC8E233933
+	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 02:20:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787192425; cv=none; b=A2J0nn//adbDWFf7RdHt4so6fW4KLaKUvQzycqMOlyeW3xe6UNKPqRwjX1NiCC+rvmnjgUIzP+oieJohYt3/kOGCPthX2yYB0Jm1OsQUBK5YQWC8W9Rbu9KILpmH2Ily4/SAEVKmSYhF+Bg1cObqgjUJ6hEsMslg2dwW3+DN6v0=
+	t=1787192427; cv=none; b=IziIAyOSMzNn/oKm0hICAV/RLfprL3u0aEiiSq/KM/s3d0Y2HFN2uxO9Thjw0/v3keJAuvimRtNbosz14W4xkq05dqAjpoR4S+qVPKEqJv8/zQhqp/9csKRPe4IFuDPE51rHFPrCbZ9f1MGNZ3D2o/UZlg/TYLHAJ+wIVXlkers=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787192425; c=relaxed/simple;
-	bh=rRj4t3hq0uzv2GINZgytEUUPotRfc6WgQKxYdue+iKc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X0Iw5ZtzTFPuTCuVmiSa3ocQ+yWKqHN9/xDpYj08Dd5Ag6JvekzLeO3bJcr8Q18KieLf01H589H79lcrK4obxbTxASFDU9ut0VLKuHQc9mFQA9r0VxJGOeqFgILeMDjiLQv8xLPAOD68G6bm3c/YRwO29okLzK+KJPjEllovyS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bBa1gKXg; arc=none smtp.client-ip=74.125.225.66
+	s=arc-20240116; t=1787192427; c=relaxed/simple;
+	bh=Dzi/Qri9K8kzrUG7P1B65Khs//y+qKQWm9Z8Oi7w2Jc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=XAtssC990RfQMzYnYbsNMaLHMnab4igfUnFmQQZsM9+sPYhxJRsYGWee1ORRqiWLFLJIT3rfVlDqAADLjY0WKA9lw0HGOy4t+D2i68mgL7x6ueYM8sXWy4RFs5WXutaT9L/PjjyzB858l6zx6eqN3t4um3B7QJPzyiTxdAd5Dvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SA473GSd; arc=none smtp.client-ip=74.125.225.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bBa1gKXg"
-Received: by mail-wr2-f2.google.com with SMTP id ffacd0b85a97d-4730b8edae6so485953f8f.0
-        for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 19:20:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SA473GSd"
+Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-495482c36b8so6160035e9.0
+        for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 19:20:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787192422; x=1787797222; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=78tzQYKsOBUwWMYCYVJMnvL/iS7fUExR1nee8AfMFF0=;
-        b=bBa1gKXgK9LEY6y3SU9Xzvsb5yirRpzR1spuWrvIYKh7n/RcdWvsIYiy89jOlGuqQx
-         l86gnBF0VpHMBkFG1Uv7RT9SdidKEgs7ZEoiB74Rul1Df8L1aKWygmCYgaFGhk9i9bWN
-         NZap7YuoP07R744rggb+KVNA1RVfu8iFuJ6kcsbF5gYGfGEdpqV77d65twsApsPiLtHn
-         KT0XMq+GDVFufSDMYgo6DQVtt+/10t18bwNlpEg6Cz+soGIEBDT3bIQ9pjBBH9aEpR7L
-         n/iiWmEELC/pBE31FcSpnFg00UG9W5lh/x68MIQGo3ysjILyQULnvlX2dB7KsJ21VSXK
-         /qww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787192422; x=1787797222;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1787192424; x=1787797224; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=78tzQYKsOBUwWMYCYVJMnvL/iS7fUExR1nee8AfMFF0=;
-        b=dEqQAGlotZbfb3vn9e0JpMWTp0PbgS9fCgCJlIVclQHVHOVuRGMavz8cQh4Imv8YRv
-         JjjfFimepZ283sft7NtzPnILrzbXq2LVudpW7WOGwHQFF+SHfi0xZGUdPZ4AeaegJS8V
-         nWzgKyabGcU9zJgyDvngIiq6Xf9UVYfE0PuTYRRgrSQtmkP25td/LpQi9H5fgvLc2RFl
-         x3eHfMZcwh0P44WhgM85+WcBkpRmzau+7orY5tQlJF3Wq+6AW+rn1fVBosloAHhjKITP
-         nFX+wwdirRhiFTjtteiEPm1BHWtPTefvOOfkDTfNuz3LyZqAwxIAFSlCRrpwjqVo7feI
-         uHIg==
-X-Gm-Message-State: AFuF++mfdX9IgeN4lchuE8adWeIYaHtNuAUtzpFC3uybkS00aVrUgMky
-	EH/T2GLvjSQyBTaETblXQ2ZOZPCw6TUf6RE5oQ05OMFP+UUtnYh8X6P9wTyJ2pmo
-X-Gm-Gg: AR+sD11SQbsHAwXfgzCgKkCsDQq4cNx6Yq6s+7A1SUYq64UvAphs7T47uYuoet9Hfp/
-	hxsOA6cvhx9e363FjIseGlAUFSgj1q6wZZC1UVl5J2I0pZaD8TGww3QD/n8poiOE5WH72lUePLq
-	RFDVmLqpBY9FGvATKTVSo0q1g9RG5VReb/UICWacvqVpG/pTuJc2Dk1F6kRXNXQl28y1GFSkpa7
-	k/fKje3lvTwMpursqcE/TFhpxhuIrCIw/JUUy7QrRj44njTUnA0kpZrButE9Tz0Tf1ESTQnC01J
-	ZTuXJUTVyZ5aInunCPSfm1uq1TUzbXBJGPmRxpntJeqGHr0JKLKvZBaoF3tk6iuu6HjFPZUVBcY
-	oktckgOIZ69K+iV2vfNRxzMiz56VSKaU3RLcHmNStvN2CVxJ170uvdoAtXO2IoaU8VgwGxD6+1K
-	A+/Gpg0lY+dQWma17ZgWFfjEA2BY7vZvIsXYcSALfa7Xy2o3HiVTXq9M+TJEkRYmylA6A+HsPdc
-	DP9z2dqP7Hb05BMd2gbKDv8v+awFiEozjNGE1IFppsxlSep0ZybHKS4vK5uzNC2jex40vlFTWwu
-	vPm82bCMlLKn2EzM/c3Y+/hKduc=
-X-Received: by 2002:a05:6000:420e:b0:481:568e:11b5 with SMTP id ffacd0b85a97d-482b1e876admr14304431f8f.5.1787192422354;
-        Wed, 19 Aug 2026 19:20:22 -0700 (PDT)
+        bh=7MbD8n6D3p5OaYoVZnAW7eRWJzTqHf+c1/e1AY2Rzog=;
+        b=SA473GSdw4gkenvKfrUbqPejrw82cbE6FHLXtyk6pCeoScfkEnKE0Ng8GNf6iidn9f
+         bnOjEcaIuwPWt0ltqPUw1c2J04ZjWOQehgZTCgOykY8EFkOozdsb1PvrS8Gh+w5qWcvF
+         /t3IXfr4Sx19Y7EKvg6QmemO5Dx9/ZUHxWrSGcqRBl+wWTmVuJSb0W61FtNSViPvutyK
+         ZHQr3rY76ucZ2N8vVdiy5ThSW2E1M5ZbA/1jmY1wrbdkryOlFfxq5WBP1Q6K4MAwuH6S
+         1B+hyyLXy9BvxEmBOYClsCAFU2mu3js06MldNRNyta3TwET8ir9EwfUMa7PsrJj2XeXQ
+         52mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787192424; x=1787797224;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=7MbD8n6D3p5OaYoVZnAW7eRWJzTqHf+c1/e1AY2Rzog=;
+        b=sYEzTyoC0lSVVTfSNdhTDIVpVJS/Eme3JGHCH8wFhTBkkT8nvvRc/XXwYA3Da9glzk
+         sCpbKv7MGpZifiwNRMw85tRDGzzVH/lPUe5/J6ajJ+IvkGLd6E5oxbJsouJsSFV2Hhmb
+         JpS5I7IK8+7nPSqgkx6QgxsoD11jQk+RTbgShMUSIxUE1ooZHY2/wDEIxh+f3yyl08Fy
+         Vg63zQai1VTwpr39cKRBRUoLMZq6Ya3ufLtW1Lmo919bDJZLY3F9Gl/3uDsDVecDfxnj
+         LsCNux8RQsesT0jxjxPetWwnpITNjt7D/wo+XtZgFxsS51IMWk25KCoLeSLsT7SzXaR2
+         mL9Q==
+X-Gm-Message-State: AOJu0YztWT/WlXVfe/RBZXn7CeFJNZloMmJ6JrMdNUIdOqdM3PpmhdkJ
+	Jbx+0FicdqThtgAj/pXa/lXAhf4Qbi/iWfvSmoEMWFxwgwAkXIdde99KdOC7/EtB
+X-Gm-Gg: AR+sD11CxLmVrsQx2BgvIUmRdrjjapbO74HMFpN3vhhBgEbevOSBxXZoqIZouxAU8rz
+	rY/ry+mWXEvls7QyOxM884J9dS4jK5xU0iHHgkQCW0aOpM2QOgFYhakbmn3p8Xt57yRG2Kd/QQm
+	N4vHs1Zv1FDXeyfz72nKxViWhflXtHnWG8oZLinJowv53YI4SH68m+XP13HFA1GdTRhIxnT5Hwe
+	5fx1p3H51Q9TH5UKlPLyacB1DfLGKUbpr1F4udOlPPQGNDqR1etzmy8ZowrGe8onbmQTjb6JQBr
+	xCfle2tsWCzdRv5HSvkjOSAxd+Y3VrE4UP3HZaJn8hpR+fBEko0mIbFUX0o/Iv901ozYK345/Df
+	mm5darqV0maiGOyqhXJcQaRzyjM3F47/qKULt6A5+SmE4v6Ev6vzJU/3p0nAImw6g3JGKmtTKXY
+	+TZ37ADDtKhpDP4M8XZZtLaMX98/zsCFPiaCqHcu0+3sXTEBcH+VdbGuC+TYxFMth8tC1hoIM38
+	43jcOY60X6mUw9Qgwkxa5h2qsQ0ONDp8ycBsttE8UaxScz/SPNVWgdxtQqkBazY/OP2uaHGCQJo
+	RBRCSa7d+Lv6EAkGkt8NkzPGLPE=
+X-Received: by 2002:a05:600c:3ba2:b0:495:4d88:e630 with SMTP id 5b1f17b1804b1-499aa1a93fbmr171705015e9.10.1787192423656;
+        Wed, 19 Aug 2026 19:20:23 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-482b1441748sm9752546f8f.8.2026.08.19.19.20.21
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-482b14c46f2sm10880272f8f.29.2026.08.19.19.20.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Aug 2026 19:20:21 -0700 (PDT)
+        Wed, 19 Aug 2026 19:20:23 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
+Cc: syzbot+3544d9b2a9206be8ba37@syzkaller.appspotmail.com,
+	Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 0/2] Reject invalid LDSX instruction in disassembler
-Date: Thu, 20 Aug 2026 04:20:17 +0200
-Message-ID: <20260820022020.3450479-1-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 1/2] bpf: Reject invalid LDSX instruction in disassembly
+Date: Thu, 20 Aug 2026 04:20:18 +0200
+Message-ID: <20260820022020.3450479-2-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260820022020.3450479-1-memxor@gmail.com>
+References: <20260820022020.3450479-1-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=597; i=memxor@gmail.com; h=from:subject; bh=rRj4t3hq0uzv2GINZgytEUUPotRfc6WgQKxYdue+iKc=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIastRXNzUesal4lek3Y1pP29t1TtQXy9zNbZKQJv+/7u/ LJ6632+jlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAEyk+AIjw4Kk7/pv3H7MX9K/ dX2AywPOW46ijNys4VGPXcxP+kWwPWb4Z3Pg/7a/1/nXCp2r0Ttyw7F69sfa2Stq3HUn1ywqOPb qJycA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1562; i=memxor@gmail.com; h=from:subject; bh=Dzi/Qri9K8kzrUG7P1B65Khs//y+qKQWm9Z8Oi7w2Jc=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIastReu9wJQzzrPKaut/CVo+P7bAPsNc/obM1utNSjf+t xy8pHSyo5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABNZ4sDIsLJ3puWWgwavWeSi vzk/cU4RWrL44jy1Se7St1n3z//os4Xhf+Wz6byPPfu7pX4Fm6/3OhfidTEyLelIwBdt3u0b3W9 m8AIA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Reject invalid LDSX insn encoding in print_bpf_insn. This was reported
-by syzbot in [0]. See commit logs for details.
+The signed-load mnemonic table has entries for byte, half-word, and word
+loads because BPF_MEMSX does not support double-word loads. A BPF_MEMSX
+| BPF_DW instruction nevertheless selects index 3, past the end of this
+table.
 
-  [0]: https://lore.kernel.org/bpf/6a86596a.ae6ddae5.3da009.0015.GAE@google.com
+Program Structure diagnostics can disassemble a malformed instruction
+before check_and_resolve_insns() rejects its opcode. Placing the invalid
+signed double-word load at the end of a program therefore triggers an
+out-of-bounds access while reporting subprogram fallthrough.
 
-Kumar Kartikeya Dwivedi (2):
-  bpf: Reject invalid LDSX instruction in disassembly
-  selftests/bpf: Test invalid DW LDSX diagnostics
+Treat signed double-word loads as invalid in the disassembler and use
+the existing BUG_ldx fallback instead.
 
- kernel/bpf/disasm.c                              |  3 ++-
- tools/testing/selftests/bpf/progs/verifier_cfg.c | 14 ++++++++++++++
- 2 files changed, 16 insertions(+), 1 deletion(-)
+Fixes: a8f427835394 ("bpf: Report Program Structure CFG errors")
+Reported-by: syzbot+3544d9b2a9206be8ba37@syzkaller.appspotmail.com
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ kernel/bpf/disasm.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-
-base-commit: f79066c784022fda83f5936559a1af414e41b603
+diff --git a/kernel/bpf/disasm.c b/kernel/bpf/disasm.c
+index 50b3ca5149a0..b1a3fbe3fda5 100644
+--- a/kernel/bpf/disasm.c
++++ b/kernel/bpf/disasm.c
+@@ -295,7 +295,8 @@ void print_bpf_insn(const struct bpf_insn_cbs *cbs,
+ 			verbose(cbs->private_data, "BUG_st_%02x", insn->code);
+ 		}
+ 	} else if (class == BPF_LDX) {
+-		if (BPF_MODE(insn->code) != BPF_MEM && BPF_MODE(insn->code) != BPF_MEMSX) {
++		if ((BPF_MODE(insn->code) != BPF_MEM && BPF_MODE(insn->code) != BPF_MEMSX) ||
++		    (BPF_MODE(insn->code) == BPF_MEMSX && BPF_SIZE(insn->code) == BPF_DW)) {
+ 			verbose(cbs->private_data, "BUG_ldx_%02x", insn->code);
+ 			return;
+ 		}
 -- 
 2.53.0
 
