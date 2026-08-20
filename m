@@ -1,81 +1,113 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F25225228D;
-	Thu, 20 Aug 2026 16:00:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B603793CE
+	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 16:06:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787241657; cv=none; b=gCEwXVpbJg63J6cwy7D/o4Dq6lZxyhBhAdXjgiNh0cU33swZ4PUHGqxqeexgiAjI/QjSNk6gRQ8flJY3CpG2Abesy1JRHriAEfd6hUcyAgvZrEzhd6CmhZ7stEB0AX+Rrxe7A6jbckrvxkIbiN+bKLx3nn3NlWB4IkHF/ofC/ms=
+	t=1787242009; cv=none; b=l8npsC9h1sLDlyAU4+EtGOFJxGEHE0po4smmv/wRME6SOLbmfXaFwC1VqkbGbAIxk9uaAcxuoq/BXYAJjwO227ffwXNWPkoyWJhx1ZiwimfoWAP9LDB7BsF5K6QKyMVlJ6DqzsDUtc2AgyVWWD7bIviXSJHAbwaNeJw6AQBWGmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787241657; c=relaxed/simple;
-	bh=5SWX2gkFBK1Hxcn2n9HM5JqWmNBNwzMztpNQRkhGD70=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=cz8gfzeqeRwidO8kePMvdO2upybaDQnQhmNWYa+jm2E2iEZAAIRTbi7stZYNEhwbwPVf7otOhJEOXEit4GhfZyAgmUysQAzb98/5ENdB9HpRetmsHkyLMKd7YxnCya9NF5Wtt4uJ/CdTQHpw1am7AhxUNCzxJkPRgWxrdu2STG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GXC7zmsd; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787242009; c=relaxed/simple;
+	bh=RRCxNPVOONVNQZ7NW7UrA921J5NGVCFgKbaet/ZHfxU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=HJ4uTHPkmI+zT3sSPR/KtpAEeW+6Q+NjZ++G5/4rPsDhlRBAOa2JdR4zWxg0lLdWDSWj8+O62ri+pOY33/NP7DKz2buw5v5TPX6sS7X1vJZ3AWB4HFfY3WVYf5ItP24tSVkUe7I8koHJYDwKSw5RqMbzviCo9tRmQZCVd/d1oN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZnOH8HZL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GXC7zmsd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 681301F000E9;
-	Thu, 20 Aug 2026 16:00:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZnOH8HZL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AE451F000E9;
+	Thu, 20 Aug 2026 16:06:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787241656;
-	bh=1iL6uHiwuMj3OY0HN/FxzftnksGWy16FbNU4r2Wgz4o=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=GXC7zmsdI+VkjvF+X/3OXsUCqIAQxCr3nKFKOrBOJRa8wG2oHwh47G3RVNSMEY3sP
-	 jIk7f6eDve5Y3WUwJq0QJMP3A0f8B+aTXCVptCISCgLmXAr38Yv+8O9EhECen0YDv9
-	 KaBB/H1L9xip9WlPZvKdRrt4w0w964cDD20/EnoEgulOnUz01kIh+WzFPurfwrK3z1
-	 ElpeOzH8dSAtOy0Ab/gBtObrXwM2dTg8Jv7XqV3vgiZf7b3cvfJAaqRi06aih/VDdA
-	 eozrrklITWy2mtN5ZYIgWui/Zl3Ny46EssW5Ti0QTEuAEOQRmLkpYtNrDnhkGLdlY7
-	 47TeyfrJbncew==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EC5E23811A7B;
-	Thu, 20 Aug 2026 16:00:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1787242008;
+	bh=Ufi9r1jEt0fxp8DkLvLEAw/hdUt41++5Dq8QbeuQYOc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ZnOH8HZLrUpLIcV7KQb2Z4AdIuFLbKi3f2rcS3NcvcQJykaC2mSkJtHST+ptE4+7j
+	 Us8f27w8Q1nxeILV6eF6PZuq7GHZjsJgSIeLSzYQIhq94H958WYf0PHg3fuFk9jG8K
+	 G+KxVyPpwIAq4WwwnpB9UG6C0QfG7fly+hPoBeJpvthe7tdgxXrhSdpOSUDlY+08n/
+	 1QnZ7VxoD8E7dYwXX0kwcYSuHTKkI0Gaz5wrJhUZ/xxYE9nUC4iYR718BHEn5DrXPb
+	 i5qLLbHh6jAlvIQZv27r42CEqCiQx7AB8dAylafJz+eh2kqEvpjw0f4TRRk0v6/Rcm
+	 uHWtNY2BCtJ8Q==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net v3 3/3] net: stmmac: document oversized AF_XDP frame
+ handling
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Stanislav Fomichev" <sdf.kernel@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260819160535.1472459-4-sdf@fomichev.me>
+References: <20260819160535.1472459-1-sdf@fomichev.me>
+ <20260819160535.1472459-4-sdf@fomichev.me>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 20 Aug 2026 16:06:47 +0000
+Message-Id: <20260820160648.6AE451F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] x86/bpf: make arch_bpf_trampoline_size allocate from
- EXECMEM_MODULE_DATA
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178724160664.341736.16028923311216598674.git-patchwork-notify@kernel.org>
-Date: Thu, 20 Aug 2026 16:00:06 +0000
-References: <20260818130510.3110054-1-rppt@kernel.org>
-In-Reply-To: <20260818130510.3110054-1-rppt@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: ast@kernel.org, andrii@kernel.org, bp@alien8.de, daniel@iogearbox.net,
- dave.hansen@linux.intel.com, eddyz87@gmail.com, mingo@redhat.com,
- memxor@gmail.com, song@kernel.org, tglx@kernel.org, emil@etsalapatis.com,
- hpa@zytor.com, jolsa@kernel.org, john.fastabend@gmail.com,
- martin.lau@linux.dev, yonghong.song@linux.dev, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, x86@kernel.org, olsajiri@gmail.com
 
-Hello:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-This patch was applied to bpf/bpf.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+Pre-existing issues:
+- [High] The driver uses a bit flag and a polling loop to simulate a lock i=
+nstead of using standard synchronization primitives.
+--
 
-On Tue, 18 Aug 2026 16:05:10 +0300 you wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
-> Jiri Olsa reports slowdown of tracing_multi benchmark that allocates huge
-> number of trampolines [1].
-> 
-> The slowdown caused by extra protection changes in execmem_alloc_rw() and
-> execmem_free().
-> 
-> [...]
+--- Patch [3]: [PATCH net v3 3/3] net: stmmac: document oversized AF_XDP fr=
+ame handling ---
+commit 71d40d9a1bd119643235e87e55c9834a8a5c6c83
+Author: Stanislav Fomichev <sdf.kernel@gmail.com>
 
-Here is the summary with links:
-  - x86/bpf: make arch_bpf_trampoline_size allocate from EXECMEM_MODULE_DATA
-    https://git.kernel.org/bpf/bpf/c/c7a2a3618290
+net: stmmac: document oversized AF_XDP frame handling
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+This commit updates the driver to document its intentional ring imbalance
+when dropping AF_XDP zero-copy frames that exceed taprio's queueMaxSDU. It
+adds comments explaining that completing a rejected descriptor is unsafe
+due to ordered completions, and instead wedges the ring to expose the error.
 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
+net/ethernet/stmicro/stmmac/stmmac_main.c
+> index 62de03e65a90c..6a532747c0394 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -2713,6 +2713,10 @@ static bool stmmac_xdp_xmit_zc(struct stmmac_priv =
+*priv, u32 queue, u32 budget)
+>  		if (priv->est && priv->est->enable &&
+>  		    priv->est->max_sdu[queue] &&
+>  		    xdp_desc.len > priv->est->max_sdu[queue]) {
+> +			/* Completions are ordered, so this descriptor cannot
+> +			 * be completed safely. Wedge the ring to expose the
+> +			 * application error instead.
+> +			 */
+>  			priv->xstats.max_sdu_txq_drop[queue]++;
+>  			continue;
+>  		}
 
+[Severity: High]
+This isn't a bug introduced by this patch, but I noticed an ad-hoc locking
+pattern using a bit flag in stmmac_reset_subtask() in this file:
+
+drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:stmmac_reset_subtask() {
+    ...
+	rtnl_lock();
+	netif_trans_update(priv->dev);
+	while (test_and_set_bit(STMMAC_RESETING, &priv->state))
+		usleep_range(1000, 2000);
+
+	set_bit(STMMAC_DOWN, &priv->state);
+	dev_close(priv->dev);
+	dev_open(priv->dev, NULL);
+    ...
+}
+
+Are there any standard locking primitives that could be used here instead?
+
+Simulating a lock with a bit flag and a sleep loop avoids lockdep tracking,
+deadlock detection, and standard kernel memory ordering guarantees.
+
+Could this pattern lead to subtle concurrency issues or hidden deadlocks
+during the driver's reset task?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260819160535.1472=
+459-1-sdf@fomichev.me?part=3D3
