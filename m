@@ -1,120 +1,283 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B9B2473C9A;
-	Thu, 20 Aug 2026 14:05:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFCD5391501;
+	Thu, 20 Aug 2026 14:21:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787234718; cv=none; b=dgULHARGy4SUFVdpdEH/UujhqMDgeVsK9rnPEIdoPY5vRxsoF988kwKpdLZGHTLBaP6ZuXqZYISwiOAxSV4SbYP64W8kUoGFjSnOhSusxXhixlCOPU6lgMYZZ9R7m/uCP2VQyrP9xA0AfdzQsB/J0xNYV/WX+WsR6fJMTi2A8aQ=
+	t=1787235695; cv=none; b=WxFk+ArxRPFyEK/LZyMsPGTRDO1ELvR6nDaR+e/qGKs0jl33cN5aQGu7tXWYIduVdISiD64i2qwaWkOB+bQ2x4bisIiw+tb+b7zkQbbDfz5zeZ2G4u4cPj4LfKAf46rqqatAiUOSrRqnPG7U5oC2UJ6tudatmpkWMU/9Nrm/hsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787234718; c=relaxed/simple;
-	bh=TzI26xxSPdH7fCYXyfHqU+kpeVJ83eMTA2bklbn8mi0=;
+	s=arc-20240116; t=1787235695; c=relaxed/simple;
+	bh=huj0f8M6gRSDzymVOy4Vt1MzEb6eqJhFFLVsz8N8wds=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=V1TZ7afE6nOVf7rcOkvlDpMrCs8TNGwQNwJ44jefukxzFBo6TJ7hqVw/c9fy+OLavEfn82Pb8hkDWlnvrXcZ2r0Aopn83/ARUEjvJ7nqr9NyOqljfU+D6m0NgiGoE3D3pNJjQs7ynMJVLWUB/RrjlPey8kLQJjWolQGra7e6ZXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HZW7NfD3; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=eAQtzqb1tw1gTnkNuauY+8MeJDk9dkR/RuduMRcmmess2/9QCYH7zK3WOvHbA3Gx2n1rWhIzltsAv69HuS1DjxvK/dpvL5531H4X5bTd4m9Zr1cmAtUF0n/MW0/t8rRCda4y7lOgA9Ov7UAPWK+5xlAF44RfeV7i11srpct2lYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=odVNZzt8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HZW7NfD3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E84571F00A3A;
-	Thu, 20 Aug 2026 14:05:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="odVNZzt8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5FC91F000E9;
+	Thu, 20 Aug 2026 14:21:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787234717;
-	bh=Ylc+u/5RasCgGgNZnJ4+DIMEi8BfrrmNY9Qtx0gvX6k=;
+	s=k20260515; t=1787235693;
+	bh=LJiZkdqnbJzbaLpp/SAkSW9OMlkWsEAqjmxRN4K9z3U=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=HZW7NfD3vUyrAmEEQMtgPM7Ox+7vPRIZmETPZAjvuyVGwjfWTHoX0YJFIFccaqH+j
-	 GJ5/7r3axsNJJPjIs3blsLeJ2NWoTQ1BUgvz/pLYpvmU8kQRvqC7snAW7prz3VSVAL
-	 KzcXXuFKEJ67CvMO3rsFSwcBGKgxE/LMArTRr6vFRbDpfv9U9/tv9GTNiC/KyFnJmV
-	 UYTMBeWtDuhK7oq5U9wBHRjCHOJD44wmw/NUgcSK0Zvfwyg6zOwyYG+Gkl0C9M649w
-	 R1NzYSv/zUzFJDlrUt6RnUu4XiyZG3aNyEjjUtCri9FPxhw2HkuWT6SuTJwXKoawuR
-	 DWWW3BXXNmcDg==
-Content-Type: multipart/mixed; boundary="===============4336261480514913956=="
+	b=odVNZzt8z0D62ioWfG6wavBpa5b4ieU2mNk2ZZSVepH7MZf6sCt9kfqR3X+sb4Fnp
+	 fHAuQcFlTgIx7R6I7Il0ESi+qahNCVg9joyHyvfy3nosMG2AdVQ4V7/sfdfDfCRe+j
+	 WtNrPdwObanccJHtxDOmdTuOs0JgaXLYTniuNCUSSeLELzpb99bJ/32Wfym3cDBPrI
+	 zAZWQKcX33IPwraw6DUikNMgmqpSuNUbOtjKVbBwrZQ/cHdNhLoQa5HnAGAVbrNX+h
+	 9q9+488GAN7zdPqbzgVI0Mh00MwvuPK4O3aHrFYRlVt731VZ+tKzpCYopgXHYq9mtH
+	 l1gJVFSO16H0Q==
+Content-Type: multipart/mixed; boundary="===============0216903816946372316=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <fa7f719852be56e25978cc87b269948179378ec6e17c5a7dd7999f20c37f48b1@mail.kernel.org>
-In-Reply-To: <20260820131801.68759-2-tasos.papagiannnis@gmail.com>
-References: <20260820131801.68759-2-tasos.papagiannnis@gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/3] mm: Add copy_remote_mm_str()
+Message-Id: <d2d137d2202c87dd354c1f50f2b2e2db35c7e786b137970aa4512ad7737884a9@mail.kernel.org>
+In-Reply-To: <20260820131801.68759-4-tasos.papagiannnis@gmail.com>
+References: <20260820131801.68759-4-tasos.papagiannnis@gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/3] selftests/bpf: Test linux_binprm user memory kfuncs
 From: bot+bpf-ci@kernel.org
 To: tasos.papagiannnis@gmail.com,bpf@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,linux-mm@kvack.org,linux-fsdevel@vger.kernel.org,viro@zeniv.linux.org.uk,brauner@kernel.org,akpm@linux-foundation.org,david@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,kpsingh@kernel.org,matt@bobrowski.net,song@kernel.org,utilityemal77@gmail.com,tasos.papagiannnis@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 20 Aug 2026 14:05:16 +0000 (UTC)
+Date: Thu, 20 Aug 2026 14:21:32 +0000 (UTC)
 
---===============4336261480514913956==
+--===============0216903816946372316==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 485df9c2dbdd..eede435bf4a3 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -3222,6 +3222,8 @@ extern int access_remote_vm(struct mm_struct *mm, unsigned long addr,
->  		void *buf, int len, unsigned int gup_flags);
+> selftests/bpf: Test linux_binprm user memory kfuncs
 >
->  #ifdef CONFIG_BPF_SYSCALL
-> +extern int copy_remote_mm_str(struct mm_struct *mm, unsigned long addr,
-> +			      void *buf, int len, unsigned int gup_flags);
->  extern int copy_remote_vm_str(struct task_struct *tsk, unsigned long addr,
->  			      void *buf, int len, unsigned int gup_flags);
->  #endif
+> This patch adds a sleepable BPF LSM program attached to
+> bprm_check_security to test bpf_copy_from_user_bprm() and
+> bpf_copy_from_user_bprm_str().
 
-This isn't a bug, but does copy_remote_mm_str() read as expected next to
-copy_remote_vm_str(tsk, ...)? In this area of mm/memory.c, the
-established split is access_process_vm(struct task_struct *tsk, ...) for
-the task-based entry point and access_remote_vm(struct mm_struct *mm,
-...) for the mm-based one. By that convention _remote_vm already denotes
-the variant that takes an mm, so having copy_remote_mm_str(mm, ...)
-sitting next to copy_remote_vm_str(tsk, ...) inverts the expectation.
+This isn't a bug, but could the changelogs in this series use the
+imperative mood the kernel asks for, e.g. "Add a sleepable BPF LSM
+program attached to bprm_check_security ..." instead of "This patch
+adds ..."?
 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 6b8280cfc1db..da0010c4475d 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -7218,6 +7218,30 @@ static int __copy_remote_vm_str(struct mm_struct *mm, unsigned long addr,
->  	return buf - old_buf;
->  }
->
-> +/**
-> + * copy_remote_mm_str - copy a string from a remote address space.
-> + * @mm:	the remote address space
-> + * @addr:	start address to read from
-> + * @buf:	destination buffer
-> + * @len:	number of bytes to copy
-> + * @gup_flags:	flags modifying lookup behaviour
-> + *
-> + * The caller must hold a reference on @mm.
-> + *
-> + * Return: number of bytes copied from @addr (source) to @buf (destination),
-> + * not including the trailing NUL. If @len is zero, return 0 without accessing
-> + * @buf. Otherwise, @buf is always NUL-terminated. On any error, return
-> + * -EFAULT.
-> + */
-> +int copy_remote_mm_str(struct mm_struct *mm, unsigned long addr,
-> +		       void *buf, int len, unsigned int gup_flags)
+> diff --git a/tools/testing/selftests/bpf/prog_tests/copy_from_user_bprm.c b/tools/testing/selftests/bpf/prog_tests/copy_from_user_bprm.c
+> new file mode 100644
+> index 000000000000..1007e3aec054
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/copy_from_user_bprm.c
+> @@ -0,0 +1,62 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <errno.h>
+> +#include <sys/wait.h>
+> +#include <unistd.h>
+> +
+> +#include <test_progs.h>
+> +
+> +#include "copy_from_user_bprm.skel.h"
+> +
+> +void test_copy_from_user_bprm(void)
 > +{
-> +	if (unlikely(len == 0))
-> +		return 0;
+> +	char arg0[] = "first";
+> +	char arg1[] = "second-argument";
+> +	char env0[] = "SOME_ENV=a";
+> +	char env1[] = "OTHER_ENV=something";
+> +	struct copy_from_user_bprm *skel;
+> +	pid_t child;
+> +	int status;
 > +
-> +	return __copy_remote_vm_str(mm, addr, buf, len, gup_flags);
+> +	skel = copy_from_user_bprm__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
+> +		return;
+> +
+> +	if (!ASSERT_OK(copy_from_user_bprm__attach(skel), "attach"))
+> +		goto out;
+> +
+> +	child = fork();
+> +	if (!ASSERT_GE(child, 0, "fork"))
+> +		goto out;
+> +
+> +	if (!child) {
+> +		char *const argv[] = { arg0, arg1, NULL };
+> +		char *const envp[] = { env0, env1, NULL };
+> +
+> +		skel->bss->monitored_pid = getpid();
+> +		execve("/bin/true", argv, envp);
+> +		_exit(errno);
+> +	}
+> +
+> +	if (!ASSERT_EQ(waitpid(child, &status, 0), child, "waitpid"))
+> +		goto out;
+> +
+> +	if (ASSERT_TRUE(WIFEXITED(status), "child_exited"))
+> +		ASSERT_EQ(WEXITSTATUS(status), EPERM, "exec_errno");
+> +
+> +	ASSERT_EQ(skel->bss->bprm_argc, 2, "bprm_argc");
+> +	ASSERT_EQ(skel->bss->bprm_envc, 2, "bprm_envc");
+> +	ASSERT_EQ(skel->bss->data_len_match, 1, "data_len_match");
+> +	ASSERT_EQ(skel->bss->invalid_flags_ret, -EINVAL, "invalid_flags_ret");
+> +	ASSERT_EQ(skel->bss->copy_ret, 0, "copy_ret");
+> +	ASSERT_EQ(skel->bss->str_arg0_ret, sizeof(arg0), "str_arg0_ret");
+> +	ASSERT_EQ(skel->bss->str_arg1_ret, sizeof(arg1), "str_arg1_ret");
+> +	ASSERT_EQ(skel->bss->str_env0_ret, sizeof(env0), "str_env0_ret");
+> +	ASSERT_EQ(skel->bss->str_env1_ret, sizeof(env1), "str_env1_ret");
+
+A subsystem pattern flags this as potentially concerning: the test has
+no skip path for the configuration in which the kfuncs it exercises are
+deliberately unavailable.
+
+The immediately preceding commit in this series (6073b8df0008, "bpf: Add
+user memory access kfuncs for linux_binprm") registers both kfuncs on
+NOMMU as well, where they are documented and implemented to return
+-EOPNOTSUPP:
+
+fs/bpf_fs_kfuncs.c, bpf_copy_from_user_bprm():
+  #else
+      memset(dst, 0, dst__sz);
+      return -EOPNOTSUPP;
+  #endif
+
+fs/bpf_fs_kfuncs.c, bpf_copy_from_user_bprm_str():
+  #else
+      if (flags & BPF_F_PAD_ZEROS)
+          memset(dst, 0, dst__sz);
+      else
+          *(char *)dst = '\0';
+      return -EOPNOTSUPP;
+  #endif
+
+The changelog of that commit states this explicitly: "On NOMMU systems,
+exec arguments are staged in bprm->page[] rather than mapped in bprm->mm,
+so the kfuncs return -EOPNOTSUPP."
+
+The BPF program records those return values verbatim into copy_ret,
+str_arg0_ret, str_arg1_ret, str_env0_ret, and str_env1_ret
+(progs/copy_from_user_bprm.c), and the userspace half then asserts the
+success values unconditionally, plus data_len_match, data_match,
+str_args_match, and str_envs_match. On a !CONFIG_MMU kernel every one of
+those assertions fails and the test is reported as a regression rather
+than skipped. Note that invalid_flags_ret (the assertion above) is the
+one assertion that would still pass, because the flags check precedes the
+#ifdef CONFIG_MMU block.
+
+Would it make sense to use test__skip() here with a reason string when
+the kfuncs return -EOPNOTSUPP? test_progs provides test__skip() for
+exactly this (123 existing call sites under
+tools/testing/selftests/bpf/prog_tests/).
+
+> +	ASSERT_EQ(skel->bss->data_match, 1, "data_match");
+> +	ASSERT_EQ(skel->bss->str_args_match, 1, "str_args_match");
+> +	ASSERT_EQ(skel->bss->str_envs_match, 1, "str_envs_match");
+> +
+> +out:
+> +	copy_from_user_bprm__destroy(skel);
 > +}
+> diff --git a/tools/testing/selftests/bpf/progs/copy_from_user_bprm.c b/tools/testing/selftests/bpf/progs/copy_from_user_bprm.c
+> new file mode 100644
+> index 000000000000..4d7e9002b45b
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/copy_from_user_bprm.c
+> @@ -0,0 +1,115 @@
+> +// SPDX-License-Identifier: GPL-2.0
 > +
->  /**
->   * copy_remote_vm_str - copy a string from another process's address space.
->   * @tsk:	the task of the target address space
-> @@ -7247,7 +7271,7 @@ int copy_remote_vm_str(struct task_struct *tsk, unsigned long addr,
->  		return -EFAULT;
->  	}
->
-> -	ret = __copy_remote_vm_str(mm, addr, buf, len, gup_flags);
-> +	ret = copy_remote_mm_str(mm, addr, buf, len, gup_flags);
->
->  	mmput(mm);
->
+> +#include "vmlinux.h"
+> +
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +#include <errno.h>
+> +#include "bpf_misc.h"
+
+This isn't a bug, but is "bpf_misc.h" needed here? I could not spot
+anything in the program that comes from it, so the include may be
+droppable.
+
+> +
+> +char _license[] SEC("license") = "GPL";
+> +
+> +static const char expected_data[] = "first\0second-argument\0"
+> +				    "SOME_ENV=a\0OTHER_ENV=something";
 
 [ ... ]
+
+> +SEC("lsm.s/bprm_check_security")
+> +int BPF_PROG(check_exec_args, struct linux_binprm *bprm)
+> +{
+> +	u32 pid = bpf_get_current_pid_tgid() >> 32;
+> +	char data[sizeof(expected_data)];
+> +	char arg0[32];
+> +	char arg1[32];
+> +	char env0[32];
+> +	char env1[32];
+> +	u64 offset = 0;
+> +	u64 data_len;
+> +
+> +	if (pid != monitored_pid)
+> +		return 0;
+> +
+> +	bprm_argc = bprm->argc;
+> +	bprm_envc = bprm->envc;
+> +
+> +	/* this is the total size of args and envs starting from bprm->p */
+> +	data_len = bprm->exec - bprm->p;
+> +	data_len_match = data_len == sizeof(expected_data);
+> +
+> +	invalid_flags_ret = bpf_copy_from_user_bprm(data,
+> +						    sizeof(data), (void *)bprm->p, bprm, ~0ULL);
+> +
+> +	copy_ret = bpf_copy_from_user_bprm(data, sizeof(data), (void *)bprm->p,
+> +					   bprm, 0);
+> +	if (copy_ret)
+> +		return 0;
+> +
+> +	data_match =
+> +		!__builtin_memcmp(data, expected_data, sizeof(expected_data));
+> +
+> +	/* arg0 is at bprm->p */
+> +	str_arg0_ret = bpf_copy_from_user_bprm_str(arg0, sizeof(arg0),
+> +						   (void *)(bprm->p + offset),
+> +						   bprm, BPF_F_PAD_ZEROS);
+> +	if (str_arg0_ret != sizeof(expected_arg0))
+> +		return 0;
+> +	offset += str_arg0_ret;
+> +
+> +	/* arg1 is at bprm->p + sizeof(arg0) */
+> +	str_arg1_ret = bpf_copy_from_user_bprm_str(arg1, sizeof(arg1),
+> +						   (void *)(bprm->p + offset),
+> +						   bprm, BPF_F_PAD_ZEROS);
+
+This isn't a bug, but would these comments read more precisely as
+something like "arg1 follows arg0's NUL terminator", or by referring to
+the expected_* strings? In this scope arg0, arg1, env0 are the 32-byte
+destination buffers, so sizeof(arg0) here is the 32-byte destination
+buffer rather than the string length. The code actually advances offset
+by the value the kfunc returned (6, 22, 33).
+
+> +	if (str_arg1_ret != sizeof(expected_arg1))
+> +		return 0;
+> +	offset += str_arg1_ret;
+> +
+> +	/* env0 is at bprm->p + sizeof(arg0) + sizeof(arg1) */
+> +	str_env0_ret = bpf_copy_from_user_bprm_str(env0, sizeof(env0),
+> +						   (void *)(bprm->p + offset),
+> +						   bprm, BPF_F_PAD_ZEROS);
+> +	if (str_env0_ret != sizeof(expected_env0))
+> +		return 0;
+> +	offset += str_env0_ret;
+> +
+> +	/* env1 is at bprm->p + sizeof(arg0) + sizeof(arg1) + sizeof(env0) */
+> +	str_env1_ret = bpf_copy_from_user_bprm_str(env1, sizeof(env1),
+> +						   (void *)(bprm->p + offset),
+> +						   bprm, BPF_F_PAD_ZEROS);
+> +	if (str_env1_ret != sizeof(expected_env1))
+> +		return 0;
+> +
+> +	str_args_match =
+> +		!__builtin_memcmp(arg0, expected_arg0, sizeof(expected_arg0)) &&
+> +		!__builtin_memcmp(arg1, expected_arg1, sizeof(expected_arg1));
+> +	str_envs_match =
+> +		!__builtin_memcmp(env0, expected_env0, sizeof(expected_env0)) &&
+> +		!__builtin_memcmp(env1, expected_env1, sizeof(expected_env1));
+> +
+> +	return data_match && str_args_match && str_envs_match ? -EPERM : 0;
+> +}
 
 
 ---
@@ -122,4 +285,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32375104040
---===============4336261480514913956==--
+--===============0216903816946372316==--
