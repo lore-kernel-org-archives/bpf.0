@@ -1,113 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-29.mta0.migadu.com [91.218.175.29])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B603793CE
-	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 16:06:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A906F379C34
+	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 16:19:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.29
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787242009; cv=none; b=l8npsC9h1sLDlyAU4+EtGOFJxGEHE0po4smmv/wRME6SOLbmfXaFwC1VqkbGbAIxk9uaAcxuoq/BXYAJjwO227ffwXNWPkoyWJhx1ZiwimfoWAP9LDB7BsF5K6QKyMVlJ6DqzsDUtc2AgyVWWD7bIviXSJHAbwaNeJw6AQBWGmk=
+	t=1787242762; cv=none; b=YbLOX/OS22aOU/aBGgPG8bXBsbBNnaAaXdAk+gv8Yju3gx0KqKQTKTYQtKdzrYD/LPS05HdnLhncQ9pVXPLnLlgBDwwKAuFNjkxZz2DFbXcduv3eftunLGr+gZQQIkvv5fW8QkrH3rBJkSijt/421FAzQ5eDBTlfcQYhrR08KiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787242009; c=relaxed/simple;
-	bh=RRCxNPVOONVNQZ7NW7UrA921J5NGVCFgKbaet/ZHfxU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=HJ4uTHPkmI+zT3sSPR/KtpAEeW+6Q+NjZ++G5/4rPsDhlRBAOa2JdR4zWxg0lLdWDSWj8+O62ri+pOY33/NP7DKz2buw5v5TPX6sS7X1vJZ3AWB4HFfY3WVYf5ItP24tSVkUe7I8koHJYDwKSw5RqMbzviCo9tRmQZCVd/d1oN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZnOH8HZL; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787242762; c=relaxed/simple;
+	bh=Ta87nboAeEmGET4Gro48v5LHulO2aDf6wsPbjIeZYB8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pQNVlpZiXW9llS9z3iPYGcfm5Romb/Ubx1zOb6Q7KbLWE+2Fw9jzMi3JmCkAW1IQTft9lMK3FXiROXpZL4OYSi47o9H3RD24kr4PRFEXqtSirb6urrV+FBdsxs5SO/uh9BucHqKKzLRq9R3cny2GOFZERL++/dS8gRi3zs2/JiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hJ4wKT69; arc=none smtp.client-ip=91.218.175.29
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZnOH8HZL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AE451F000E9;
-	Thu, 20 Aug 2026 16:06:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787242008;
-	bh=Ufi9r1jEt0fxp8DkLvLEAw/hdUt41++5Dq8QbeuQYOc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ZnOH8HZLrUpLIcV7KQb2Z4AdIuFLbKi3f2rcS3NcvcQJykaC2mSkJtHST+ptE4+7j
-	 Us8f27w8Q1nxeILV6eF6PZuq7GHZjsJgSIeLSzYQIhq94H958WYf0PHg3fuFk9jG8K
-	 G+KxVyPpwIAq4WwwnpB9UG6C0QfG7fly+hPoBeJpvthe7tdgxXrhSdpOSUDlY+08n/
-	 1QnZ7VxoD8E7dYwXX0kwcYSuHTKkI0Gaz5wrJhUZ/xxYE9nUC4iYR718BHEn5DrXPb
-	 i5qLLbHh6jAlvIQZv27r42CEqCiQx7AB8dAylafJz+eh2kqEvpjw0f4TRRk0v6/Rcm
-	 uHWtNY2BCtJ8Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v3 3/3] net: stmmac: document oversized AF_XDP frame
- handling
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Stanislav Fomichev" <sdf.kernel@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260819160535.1472459-4-sdf@fomichev.me>
-References: <20260819160535.1472459-1-sdf@fomichev.me>
- <20260819160535.1472459-4-sdf@fomichev.me>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 20 Aug 2026 16:06:47 +0000
-Message-Id: <20260820160648.6AE451F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hJ4wKT69"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Ta87nboAeEmGET4Gro48v5LHulO2aDf6wsPbjIeZYB8=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787242758; v=1; x=1787847558;
+ b=hJ4wKT69KJRyrm/2B/YhN3cbE0NCSyjRiXwyvJEQrr2YpV5nzxgQ8wGte4XdkrJB4ZDoveNR
+ 1+vFam3UxlGgTgjLX96HTm3ZvAaXdXP0uMoZSm95Q3MzPgxlc+hJgPuDJqkDQs7HshPY/ieMakI
+ QUgUqOBaG0qwoY8IxpkJBoZ4=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from [172.20.10.7] (117.20.148.45)
+	by smtp.migadu.com with ESMTPS id ba81c413798945b9;
+	Thu, 20 Aug 2026 16:19:18 +0000
+X-Mizu-Trace-ID: ba81c413798945b9
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <c145f1ec-a4fc-42e4-a267-0667775bf5f8@linux.dev>
+Date: Fri, 21 Aug 2026 00:19:08 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf] bpf: Keep progs alive until the trampoline image
+ calling them is freed
+To: "Florent Revest (Anthropic)" <florent.revest@linux.dev>,
+ bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ John Fastabend <john.fastabend@gmail.com>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Jose Fernandez <jose.fernandez@linux.dev>, linux-kernel@vger.kernel.org
+References: <20260819122252.1782790-1-florent.revest@linux.dev>
+Content-Language: en-US
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260819122252.1782790-1-florent.revest@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On 2026/8/19 20:22, Florent Revest (Anthropic) wrote:
+> bpf_tramp_image_put() makes sure a trampoline image is not freed while
+> a task may still be running in it (call_rcu_tasks() + im->pcref), but
+> nothing similar is done for the progs called by that image. Since
+> commit e21aa341785c ("bpf: Fix fexit trampoline."), detach patches the
+> return path so that a task still in the original function skips the
+> fexit progs when it comes back, and counts on the prog's own RCU flavor
+> to cover a task that is inside a prog. On that basis the last prog
+> reference is dropped right away and the prog is freed after a single
+> RCU / RCU tasks trace grace period.
+> 
+> That leaves out a task in the trampoline glue itself: between two
+> progs, or already past the patched jump but not yet in the first fexit
+> prog's enter helper. On !PREEMPT kernels this is a few instructions
+> that cannot be preempted, so it did not matter. With CONFIG_PREEMPTION
+> a task can sit there, in no RCU read section of any flavor and holding
+> only im->pcref, for longer than it takes to free the prog it is about
+> to call:
+> 
+>   CPU 0                               CPU 1
+>   in image I, orig_call() returned
+>   [preempted before lsm.s prog A]
+>                                       bpf_tracing_link_release()
+>                                        -> bpf_tramp_image_put(I)
+>                                       bpf_link_dealloc()
+>                                        bpf_prog_put(A), last ref
+>                                       tasks trace GP, A's text freed
+>   __bpf_prog_enter_sleepable(A)
+>   call A->bpf_func
+> 
+> On x86 this is an int3 in poisoned bpf_prog_pack memory:
+> 
+>   Oops: int3: 0000 [#1] SMP NOPTI
+>   CPU: 18 UID: 0 PID: 94573 Comm: x169 Not tainted 6.18.44 #1 PREEMPT(lazy)
+>   RIP: 0010:0xffffffffc0601d8d
+>   Call Trace:
+>    <TASK>
+>    ? bpf_trampoline_6442515411+0x1a4/0x21b
+>    bpf_lsm_bprm_committed_creds+0x5/0x10
+>    security_bprm_committed_creds+0x5f/0x70
+>    begin_new_exec+0x2d6/0x410
+>    ...
+> 
+> We hit this in production on preemptible kernels when progs attached
+> through trampolines got detached while their hooks were busy. Adding
+> grace periods before the prog free would not help with sleepable progs:
+> neither RCU tasks nor RCU tasks trace waits for a task that slept in a
+> prog and then got preempted in the gap after it.
+> 
+> Fix it by having the image take a reference on every prog it calls, in
+> bpf_tramp_image_alloc(), and drop them in bpf_tramp_image_free(). A
+> detached prog now stays loaded until the old image is gone, which
+> reverts a deliberate choice of commit e21aa341785c ("bpf: Fix fexit
+> trampoline."). Detached fexit progs still stop being called right away
+> since the return path is patched.
+> 
+> Fixes: e21aa341785c ("bpf: Fix fexit trampoline.")
+> Assisted-by: Claude:unspecified
+> Signed-off-by: Florent Revest (Anthropic) <florent.revest@linux.dev>
 
-Pre-existing issues:
-- [High] The driver uses a bit flag and a polling loop to simulate a lock i=
-nstead of using standard synchronization primitives.
---
+lgtm,
 
---- Patch [3]: [PATCH net v3 3/3] net: stmmac: document oversized AF_XDP fr=
-ame handling ---
-commit 71d40d9a1bd119643235e87e55c9834a8a5c6c83
-Author: Stanislav Fomichev <sdf.kernel@gmail.com>
+Acked-by: Leon Hwang <leon.hwang@linux.dev>
 
-net: stmmac: document oversized AF_XDP frame handling
+> [...]
 
-This commit updates the driver to document its intentional ring imbalance
-when dropping AF_XDP zero-copy frames that exceed taprio's queueMaxSDU. It
-adds comments explaining that completing a rejected descriptor is unsafe
-due to ordered completions, and instead wedges the ring to expose the error.
-
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
-net/ethernet/stmicro/stmmac/stmmac_main.c
-> index 62de03e65a90c..6a532747c0394 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -2713,6 +2713,10 @@ static bool stmmac_xdp_xmit_zc(struct stmmac_priv =
-*priv, u32 queue, u32 budget)
->  		if (priv->est && priv->est->enable &&
->  		    priv->est->max_sdu[queue] &&
->  		    xdp_desc.len > priv->est->max_sdu[queue]) {
-> +			/* Completions are ordered, so this descriptor cannot
-> +			 * be completed safely. Wedge the ring to expose the
-> +			 * application error instead.
-> +			 */
->  			priv->xstats.max_sdu_txq_drop[queue]++;
->  			continue;
->  		}
-
-[Severity: High]
-This isn't a bug introduced by this patch, but I noticed an ad-hoc locking
-pattern using a bit flag in stmmac_reset_subtask() in this file:
-
-drivers/net/ethernet/stmicro/stmmac/stmmac_main.c:stmmac_reset_subtask() {
-    ...
-	rtnl_lock();
-	netif_trans_update(priv->dev);
-	while (test_and_set_bit(STMMAC_RESETING, &priv->state))
-		usleep_range(1000, 2000);
-
-	set_bit(STMMAC_DOWN, &priv->state);
-	dev_close(priv->dev);
-	dev_open(priv->dev, NULL);
-    ...
-}
-
-Are there any standard locking primitives that could be used here instead?
-
-Simulating a lock with a bit flag and a sleep loop avoids lockdep tracking,
-deadlock detection, and standard kernel memory ordering guarantees.
-
-Could this pattern lead to subtle concurrency issues or hidden deadlocks
-during the driver's reset task?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260819160535.1472=
-459-1-sdf@fomichev.me?part=3D3
