@@ -1,111 +1,100 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC46337C925
-	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 15:12:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D32B337FF54
+	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 15:13:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787238725; cv=none; b=IGXCp+XXE/DDux7Dz9oC318NYENOAQRk61LA5Q7DwqQH4PN5xWwn1RfAI3P4PH/HRYPHli7byKMCv6Yt5lg+f31HgS5Hy3RbH1RnBdJ18k81hUJlCOcmyL8Otruj02X01Cc+U7JIzQPqLLi3sUK3x1pDJnfUAPn30ceZyzLXdzI=
+	t=1787238838; cv=none; b=Rk0cJKf635/26T25L9jHzSvdQpGkRDnuy55v8+t978LAsb6AlltU1oD2kxepnsfe2JLbCcZEOj+jwBDV9xYlG/Nx/7RajpgLfg99/ONYSleZn3o1Tf3UkbflfXMcYfrnPLfwt4O57cF7cS4zIfE5X2BliSKwfaGoYempnB60K/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787238725; c=relaxed/simple;
-	bh=8a+KoKXYK/XT+p7eiS+WSNre4xuPpzkKUk6DZsU0AL4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=I1LHqtwygs8GN+0kOhcK+2OF77ZydP9dfVXCJqsPsumwh6pxz/B+MHuPnn1JLIFqHzYrMqKfhkDc0AI0tfYeOHixiHkcHTsspyoN/3BGfw78/4Vr5jLqCpLTFdUujOLIuYAi9HyDwiI6chFgd2z3+AZvynUxwl/L2qIaBdDIiEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=eBP22FT1; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1787238838; c=relaxed/simple;
+	bh=wZ9rIfQEs/Sn9EXINdWNfVzSfbAPdmtQbudKOaN6UUs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LZHPmsA8GuLfY9nxuoMMO9f6Vz6lVJXBC+YkGzNITs9flqFlWU3NfGtNSVInUjYjoPdX/pmcrWuIBSgFuYCt2XBQMfe5Q1mhg5qIctl9n/3yjKCfpqk7hhWPdCUDLgyZYz6/vaGmob4iVSUiooDD7LiXVuTwr82P5BSNQ0UyfM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XTjiODBp; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="eBP22FT1"
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c1c26d7e951so381721366b.0
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 08:12:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XTjiODBp"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2cace91f112so23451945ad.0
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 08:13:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1787238722; x=1787843522; darn=vger.kernel.org;
-        h=content-type:mime-version:message-id:date:user-agent:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=8a+KoKXYK/XT+p7eiS+WSNre4xuPpzkKUk6DZsU0AL4=;
-        b=eBP22FT1LldfC8dfsiLboWVTnPNTFpWPCuZrzpUuJ55MCh1taYTpcoQShS0u7Xu5+k
-         KLoKMKlNqi40WNgYBhGnp4gjo+WJeomg+NAbVD9RHVtvDgRX5FIOWlI/bSdaukAgKTyp
-         G+cYKJl7e+xhIw/+VftOmDCaWMAWgKspDlUEJAkbA6qZNjtuWdnESFK31R6QfZBR6crZ
-         HCk2tZeEkuW/uyLM+G+sAzSQoa2WuCcpKwfvh6EuLvNX9hBsNCacfnD+CND7GzBA5iNo
-         yZeoZz6BoKPFY+NlUcqvcsJE/PIOSvMqz8EmemAxNe3qBK2lHiVAQZH1WnGEYK6DNxK0
-         y4HA==
+        d=gmail.com; s=20251104; t=1787238836; x=1787843636; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=zq9BJSJTpGqEsUbNd3lkB4fbjkZt4kP+da3LlRPZq+0=;
+        b=XTjiODBp5cXHuVIW+w9KD6IHNACbIby57CvEbhlBEnrrsnpcz9kTUbHMIxXleqOB8S
+         AcFUfegppAwPCGTQhdk4/22XqKSGBxDCDX+W5xhkxNlsXcJd00K18QBVoPOXtdYj04ya
+         jEMeqyejTZ2sHjYPNoe+3gXr8fkWXOiVONjGuS0WKQ1INWEY2/ohzaFKAUldP5JGRzsg
+         CXf5Nq28t7TVouqhObSOdcv1XA96gwMClmlf6omQhEjwar1/k9V/SF0MjzxChB6ei+KG
+         mYgH8qHfUJlm3OoAXtbpQsb4wmGS0jpUSEEzybPVBPjm427Q90GhfJwNcv7ja+M9SHHS
+         YKlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787238722; x=1787843522;
-        h=content-type:mime-version:message-id:date:user-agent:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=8a+KoKXYK/XT+p7eiS+WSNre4xuPpzkKUk6DZsU0AL4=;
-        b=WlH0l/A6yHKGOWee/KJsROguNd8G4hfcm/r+Zb05hYo4KR7ERVMDk6w+0R6CckQ4Xd
-         i+JpbdhxVwPRN1I7CIkdKYWGPNQmw6TKX0JSbiS4w88FdgoaNDFpZuXUp/Dbk2tS25ZP
-         2JCov0ocx3MYZL5ldypFs8BiAB0v98LnQbxslAZmtldPeLZpc1oz/e2rfm+H6L25xVNB
-         SDKvI1BXIH9ep6nz7vHB/rcnN6B9bs1uVrjIfwzfq63gyG6zBXhPfT/BDSJltCWz2QoV
-         s0s9M+sTrRp69E5GL2Pem4mxGYIxYXIFdqD70S1pPA7OpK5xbSjzRNcfC4k3rc/Dvyv+
-         VCBQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rqaxt298An0GG8fjA8HB5h61QgBSmqigLwrwfm1dImg+0HS5jC9wWue0vyt89RbmRsSCTA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxi4ueszLETFdXptwaOHqRqYeDRJNULWWPHlamYr/6nqcznzVOY
-	58KJ6JWTovJgLPF3MpTd88dLnY5zCzCH4AQ4g5M+L2SFJBByinY9weOsJ4LnYsxw+N0=
-X-Gm-Gg: AR+sD12ssB3nHQBU6BrglllHORtnSwLUPOOc9ZJWOKO5jAUbSfFH1J6J36XNTUm6Tjx
-	0QpYmS9l09NI1rP/LEJgY3dLk7vjWoxTVNXEjUOpQ1XYo3DzZHTQ3M+EOInzVuxVo1lAXPF45UD
-	pSNFS3KJMa3t+b+ZLJBBl5h+1hkCZBPHnFTv2ZWhmH37IPKAi2RSFdvcFE08Um7L27GVsGkGtb/
-	BfHBitqA0Aqw5EoeEQW4no9VvJAYJ79+evN+3186oRdsWmT41y9LyZHRDvp2wbMS+tnT9z9aWcL
-	Nq614DVplQRcHvFPlDXWwziSTMHAUpmTLDmV9F7nIHVhAiHpes99TCg38SuyxjUAk36m8QWyIgP
-	czXu0iN5eChFOCz+6Puf20w9N7+15Uu5Ci/RBCn2KHFv1nVCFjFbWh0qHZkMrNMY4tgyGb3DDVb
-	+OjJcsiipxlDUyuWI/5+xU4RsLJBoqCY/Z8LcCRaGTFQGp77SGLJKRCWd7/6uLIPrbIMf/L0LXU
-	g==
-X-Received: by 2002:a17:906:9f8e:b0:c1c:64d4:5ba3 with SMTP id a640c23a62f3a-c242e20b758mr1100820366b.20.1787238722009;
-        Thu, 20 Aug 2026 08:12:02 -0700 (PDT)
-Received: from cloudflare.com ([104.28.21.182])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c24589e1b0csm90698766b.8.2026.08.20.08.12.01
+        d=1e100.net; s=20251104; t=1787238836; x=1787843636;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=zq9BJSJTpGqEsUbNd3lkB4fbjkZt4kP+da3LlRPZq+0=;
+        b=V35kM7MexFt3I+lUpZ9XFzftK5DvPpvxqnjRh8zs8jOfHsNmHVU6sL1niFarkechI8
+         Za/lSnPy+UFTUM47amPV1z2tanF+eTyOw1QoqObJ2gX3HKnMHCnJ9phqWgWKt0mbDqJ3
+         eH8ASl+cUi3QF7TaVvvwfdsOlJUODmh26XAO1/khadYzARYn9jhI3SfQfuCmDZANtN5d
+         SaKJDbHoJdU9tuHQB3b524edpotAAsXrlTwMn7NowIKRFM34yNMaALD12MaVk1uyTANW
+         o5BWtk/JHpbtPyq4Xi9kd1Sk1DvnXN7isvZljY40OvHh6Si5ixQaxDsO4SSG9whxXgNZ
+         MQIQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrBwa8VW1jhOY1rI3qBLL5Hc3rHuwnL+qBquI0ZKSdOBauimvjh2IFHtQmsZ4bB/8+vcmE=@vger.kernel.org
+X-Gm-Message-State: AFuF++nJBrtOz9Qc97pLxQF4+VknRNiEnhY9R4/SW8FaVjDPm50MaDQ4
+	gVrz8NfvAy2x4CfWb2M3Nc1NSA7GQtm/hhbdUDZaEd/i0Vh/FaK6eqGJ
+X-Gm-Gg: AR+sD12uV97F5boqBcsWqEg7WdqaNuYu8kkakbAYiSrkCSNDCa+UpW8ABV42PXuMs72
+	mL164cWFjl0yLl8mNcmibXeRWXNFsuh0ZHOF4X1Xg26HpXsgGd/aoO4JUzoesuq2FyKuEP85Jxt
+	SrZlpGVNEYBOJFDUaBBQUARv+9oCpptdD67ooYDWC9mOsnc/afzINpmJsrSgGTMwO3T7qYXdAQv
+	ttKZR1YChlqnR3wfGa1zguSsxi1HiMKY1h+TI445Yd5dFMSL1OhpoXgeuKIY6NYGgSs9d2gnnKQ
+	7rOlyZvK0616rl4t5VpwSjWl13qhILIPiQ2ZWpI4wYXcLWVJ6SnWX66tauRSffU+bqFv59CTzR8
+	ryEZ89o4O0PUv5erEVKmBrXgfyXbR+oXZEpZ2+w5smReKZEn1wjavHJFnZB0WO4B47zPMVS4pY/
+	y1YnEp8DKAfPYhXAENNY8H8UPadznl7CRwzsb/7Vv8fE0wnXtNoYDWGKg=
+X-Received: by 2002:a17:902:d2d0:b0:2c7:ebfb:618f with SMTP id d9443c01a7336-2d601985763mr206602935ad.14.1787238836124;
+        Thu, 20 Aug 2026 08:13:56 -0700 (PDT)
+Received: from omen-arch ([211.58.239.197])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d62e3c1924sm8448605ad.67.2026.08.20.08.13.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Aug 2026 08:12:01 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Kenneth Lee <kennethbwlee@snu.ac.kr>
-Cc: andrii@kernel.org,  ast@kernel.org,  bpf@vger.kernel.org,
-  daniel@iogearbox.net,  eddyz87@gmail.com,  john.fastabend@gmail.com,
-  jolsa@kernel.org,  linux-kernel@vger.kernel.org,  martin.lau@linux.dev,
-  memxor@gmail.com,  rhkrqnwk98@gmail.com,  sdf@fomichev.me,
-  song@kernel.org,  yonghong.song@linux.dev
-Subject: Re: BUG: bpf: task hung in lock_sock_nested during sockmap free
-In-Reply-To: <20260820022848.1408056-1-kennethbwlee@snu.ac.kr> (Kenneth Lee's
-	message of "Thu, 20 Aug 2026 11:28:48 +0900")
-References: <20260812050758.813489-1-kennethbwlee@snu.ac.kr>
-	<20260820022848.1408056-1-kennethbwlee@snu.ac.kr>
-User-Agent: mu4e 1.14.1; emacs 30.2
-Date: Thu, 20 Aug 2026 17:12:00 +0200
-Message-ID: <87ecfsvnb3.fsf@cloudflare.com>
+        Thu, 20 Aug 2026 08:13:55 -0700 (PDT)
+Date: Fri, 21 Aug 2026 00:13:48 +0900
+From: Junseo Lim <zirajs7@gmail.com>
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org, 
+	Sechang Lim <rhkrqnwk98@gmail.com>, "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: [PATCH bpf v2] bpf: keep trampoline progs alive until image
+ release
+Message-ID: <aocYr198Tjeb_7Mh@omen-arch>
+References: <20260820022831.18601-1-zirajs7@gmail.com>
+ <14c836d6-8919-40f8-8559-bd6048c14316@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <14c836d6-8919-40f8-8559-bd6048c14316@linux.dev>
 
-On Thu, Aug 20, 2026 at 11:28 AM +09, Kenneth Lee wrote:
-> After further analysis, we found that this report is triggered by an
-> SK_MSG BPF program repeatedly calling bpf_msg_apply_bytes(msg, 1).
->
-> For a message of about 557 KiB, this results in approximately 557,000
-> one-byte verdict and push iterations. The TCP BPF send path keeps the
-> socket lock while processing these iterations, so deferred
-> sock_map_free() waits for the same socket lock.
->
-> This appears to be a long lock-held processing path triggered by a valid
-> but very unrealistic msg_apply_bytes(1) workload. We believe this behavior
-> is benign, but let us know if other behavior is expected.
+On Thu, Aug 20, 2026 at 05:26:18PM +0800, Leon Hwang wrote:
+> 
+> There was an existing fix [1]. Could you take a look at that fix?
+> 
+> [1]
+> https://lore.kernel.org/bpf/20260819122252.1782790-1-florent.revest@linux.dev/
+> 
 
-Thanks for the follow up.
+Thanks for the pointer. This appears to be the same issue as my v1. I took
+a look at Florent's patch, and I think its flexible-array approach is cleaner,
+so I'm fine with that version going forward.
 
-Perhaps that is a convoluted scenario but what caught my attention is
-that if you got the hung task notification after ~120 seconds, and it
-took ~500k prog runs to trigger it, then something seems quite slow
-because we're talking ~240 usec/prog run.
-
-If you have the repro still at hand, it might be worth to take a look at
-the CPU trace [1] or a Flamegraph [2] to see where the CPU time goes.
-
--jkbs
-
-[1] https://perfetto.dev/docs/getting-started/system-tracing
-[2] https://www.brendangregg.com/FlameGraphs/cpuflamegraphs.html
+Thanks,
+Junseo
