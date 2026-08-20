@@ -1,296 +1,209 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C4CB3D566B;
-	Thu, 20 Aug 2026 21:22:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C70239B959
+	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 21:25:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787260966; cv=none; b=C9CUollFQo/LXg+9g9Yy3/Egaa5FKiXFiU5LZNlsoXUtBOT/NBttVefOdrDZXN5M6eO3EzeuxamD+ldex0ZG/hzuUvO2jihJzrC0W4dZhm+D+F/7FyuYhr+DUYX4YgeKVmpor8luxHJxITaG5MOgE7RoxjMQzrrYkEYesToh8mQ=
+	t=1787261127; cv=none; b=V+dOJMqp7iPIlgG+/QTSXz5RpGb87ae4o2hTgRh4nJtsgle/UlZv3OXOxcc0oqp4sFVoMZP6TKgXEeIzIKWNw4/qJISNU5lPDge3yT15GDTLJQw7TLKFyzHVd7J+yJ3kuzigYkPUzcwXhQ0oXg//4mfsTX8jD1t2jkwSb5npkbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787260966; c=relaxed/simple;
-	bh=0En8EkEm19HbeogpuP0BWKqgnktwroJc/EPwLAEdJbg=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=CZpC/ALoQejrIDiwfk3IfOlaGWmCaPssaiCubTf1Zd6iL+fzqVKp3Flk07WsO3UERsCaqZJP5Y2HD5X1UQb0JPwYc7EtzREYi3/SNZzwWCYoJQWDzhCxc/cyDwr26Fl9e85+Nb3wnqnZK44QLN6oEi0L8BXYGEQ9ivNg63DoKbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=YBPdifGr; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	s=arc-20240116; t=1787261127; c=relaxed/simple;
+	bh=iCbRXmqF0Y2aYW2NyPnvIdgWZk7MUpMyV9k9fq4acVY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=MkEzzSWIcjGfBdIdE+xPwmmznBxN1/cclAW4PiHEx+684uf14zYoZrcK6VNK4iZMdfD5AakUXEmEokN9eePC5XGhSx6eY/YUaCXEjPQSttuF6buk44V9bcWdjykW7gVUWDY+QB1NVTVs4IheqbZ6vg+9bl5QKg3QnDJKnS63XoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ESAsK3U6; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="YBPdifGr"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:Message-ID:Subject:Cc:To
-	:From:Date:MIME-Version:From:Reply-To;
-	bh=VVmJbA2qSMFaP8opo9Ndr4fLkuQPcO1ld+9q8zqI4gU=; b=YBPdifGreGdx02v4W+03i1hb8P
-	kW1i1NpMNWAZvBa3xGSBVamJJvrLrxcuJJEWscfdKlGsjhU6WczaoYxpVh8lX6/UeYm82kHNbOQQ/
-	glTcrzL2PfmSiprrWg8EpipC3LS6L9xzpcxwylH0PLoofGYIJCpR3ubtgK3ODLKf6oH4qAazKHZ9/
-	uyFFl1bhgqYsfzIHPcKYF0R3ewT+w3J3TUi4sJWELfnHTTCbNxVzuuI0XA5LFc3YpgJGHHpn0PeM8
-	B+2/piTsRzf+T8xDavrRZphMysTDVCOgP3ba1xgFSZj0j6O99zOrgbS3hVt+qVsOk+iUB5PcA91OH
-	VygvGNjA==;
-Received: from maestria.local.igalia.com ([192.168.10.14] helo=mail.igalia.com)
-	by fanzine2.igalia.com with esmtps 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1wxADH-006m8d-Ow; Thu, 20 Aug 2026 23:22:15 +0200
-Received: from webmail.service.igalia.com ([192.168.21.45])
-	by mail.igalia.com with esmtp (Exim)
-	id 1wxADF-00GOZQ-Si; Thu, 20 Aug 2026 23:22:15 +0200
-Received: from localhost ([127.0.0.1] helo=webmail.igalia.com)
-	by webmail.service.igalia.com with esmtp (Exim 4.98.2)
-	(envelope-from <mfo@igalia.com>)
-	id 1wxADF-00000002RTu-3Rre;
-	Thu, 20 Aug 2026 23:22:13 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ESAsK3U6"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2cace91f112so4146665ad.0
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 14:25:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787261125; x=1787865925; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=+jBaaW3/7DV61ofOtSS2599nkFP/ZDCkv5PJcbwy+K4=;
+        b=ESAsK3U6WzIG66pgra60nzJL/x62PEQ03YKOx3B5DZkQZm3johClTDoz7migpCxMol
+         tz558R/cQSWwo1BetetoEoIazu2LgJV2eUUrTWP9Q83ZCTT6C2bmQrUpIMIUD7EkLd1H
+         VJTkLFa080n7w8wLpDbYPDHaHf7DPt1CEwLEhxJNtokW3RmHPbzVZWhvGejPfGcQcpmI
+         Fo3tBfrq32IkYfTAPiVB65HBn0qPnBHiPL/VwLbkBi893z6vr5sbpNJ/rYa6InHD/2dD
+         5DZQkX3mBkNxmKjvAKJNZ/Kk/49sQiOG6u/Z2p+YdeMHqkAmRGRkDwO8gE/XpCm/srUq
+         af4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787261125; x=1787865925;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+jBaaW3/7DV61ofOtSS2599nkFP/ZDCkv5PJcbwy+K4=;
+        b=WcCjk8BQ49TVJ4U1DM9unErOdKJExSqgF+CHIcNTaA7+rcARnOTt6sB8ytETu61xL1
+         86t4nWUksdlD5r1tJjy9xygCBRAd8+6wiLIv+kQyptRrua58X7ZMP2bnKUb2NlMPPfAX
+         VUzXUY9WPzhpXDkGixgHFGa2TThFeBI4xh0FSBSqfSIv/uy++qzUJPeyFP2vUT038otH
+         YjwH9cNgFxjjULaaA1gynBlerZrBf9Ly25P3gUjvdf+Iid0fWrFMqeP0a/okfGNNHNfn
+         eHyTJiIo6UcUi1dfKVaUeF7mFdYjiRqA1Peo1cRZJKce0oVt3hh15khcK7PT65oGw/MY
+         qEIg==
+X-Gm-Message-State: AOJu0YxLxSRYDUT3J3X/WorKvqmw4dK12oEC6c0MRptk5QYdvKo9u4wu
+	ak3064IgDV6P18euPuUT5co/YrjDrfU5cMP7joOTFjfYy4QmxgLPt0yi
+X-Gm-Gg: AR+sD12j4C9IQnrhBJyO1EDfRfLvrjdLs32+5LdpJ7MFV22KjXt08dgClPFtDH51A7Y
+	5dJjjISg3XT7LPnsZHdm1WTZsLE85buUKfvp8U1SYP283BUdv+/UH6Nzxtby8uvcsrGCdIfdlUm
+	oa2LdGIRmAcPgoC/3aXjnnJjTUMV5MJx2pSZ+mGAr5vrU5I3T26ajlbDxChH6AwbwmiIYrNVVLb
+	B8c3O+fYHMCU6HEk8DXMgoIEImFvz6puU35k1Nlz9Vrbz6xk6ZF5W9NKKUQlUhlcwdLUYJp5ygr
+	LL1To1mBQ1FJw5VslQFIe4R5u7DWhEL/Dh0T9XmhumXnqLSnAp+F/YgF3rXx7flNhYDvOty2hWa
+	6Zizz/EIUQxxL6ENoWvgzdS1Ohc7upLZfhgNDHLvOiiM/cSkcgq7EBL4Fx5IWofoklTF1SF3Zlo
+	Pfieg4VuOgbV0F7M5PjzfysPPQ+zq0JpdUm8ZpJypwYvhCAVbceolrfIcYr0++l2yD2kF3G36vR
+	D4lCKfiQIepulYQT/F4tFU8U9gProUsKdT9TfzuDoi60aWzVKOhRsF/
+X-Received: by 2002:a17:902:f645:b0:2d6:3c2f:6a4 with SMTP id d9443c01a7336-2d64b0e23c8mr30255865ad.13.1787261125376;
+        Thu, 20 Aug 2026 14:25:25 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:89bc:48d2:9457:6223? ([2620:10d:c090:500::6:c5ba])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327bef3cde4sm23161107eec.4.2026.08.20.14.25.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Aug 2026 14:25:25 -0700 (PDT)
+Message-ID: <edf5e0536ce02a97579e16f16dcdda9537111472.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 4/4] selftests/bpf: Check that sorting
+ preserves types in bpftool dump
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>,
+ Quentin Monnet <qmo@kernel.org>
+Cc: bpf@vger.kernel.org
+Date: Thu, 20 Aug 2026 14:25:23 -0700
+In-Reply-To: <0c5148f0-f251-4c62-b903-bff81b8594fe@linux.dev>
+References: <20260820000627.3826188-1-ihor.solodrai@linux.dev>
+	 <20260820000627.3826188-5-ihor.solodrai@linux.dev>
+	 <6a0a841f4b41032cf69f5ba7d80189cfe7f4c4ab.camel@gmail.com>
+	 <0c5148f0-f251-4c62-b903-bff81b8594fe@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 20 Aug 2026 18:22:13 -0300
-From: Mauricio Faria de Oliveira <mfo@igalia.com>
-To: Joel Granados <joel.granados@kernel.org>
-Cc: Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- kernel-dev@igalia.com, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, fsverity@lists.linux.dev,
- keyrings@vger.kernel.org, bpf@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
- netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
- lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
- coreteam@netfilter.org, linux-sctp@vger.kernel.org,
- linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
- bridge@lists.linux.dev, mptcp@lists.linux.dev, rds-devel@oss.oracle.com,
- virtualization@lists.linux.dev
-Subject: Re: [PATCH RFC v3 00/13] sysctl: add module aliases
-In-Reply-To: <bpnqwggtidgiec5akns3fa5edbsvl7xf55dxabtwng2xspy4pn@ue554aii2ngk>
-References: <20260819-sysctl-module-aliases-v3-0-aab90569365d@igalia.com>
- <bpnqwggtidgiec5akns3fa5edbsvl7xf55dxabtwng2xspy4pn@ue554aii2ngk>
-Message-ID: <53155340c897560bfc67e61ba9568fd6@igalia.com>
-X-Sender: mfo@igalia.com
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Report: NO, Score=-2.9, Tests=ALL_TRUSTED=-3,BAYES_20=-0.001,KAM_DMARC_NONE=0.125,KAM_DMARC_STATUS=0.005
-X-Spam-Score: -28
-X-Spam-Bar: --
 
-On 2026-08-20 09:51, Joel Granados wrote:
-> On Wed, Aug 19, 2026 at 03:16:13PM -0300, Mauricio Faria de Oliveira wrote:
->> This series adds 'sysctl:' aliases to modules that register sysctl tables; e.g.:
->> 
->>         $ modinfo ./mpls_router.ko  | grep sysctl:
->>         alias:          sysctl:*/net/mpls/conf/*/input
->>         alias:          sysctl:*/net/mpls/default_ttl
->>         alias:          sysctl:*/net/mpls/ip_ttl_propagate
->>         alias:          sysctl:*/net/mpls/platform_labels
->> 
->> It provides a trivial way to map /proc/sys files to modules (not trivial today),
->> and for userspace to handle nonexistent /proc/sys files (e.g., procps's sysctl
->> and systemd-sysctl applying tunables) with "modprobe sysctl:<...>" and a retry.
->> 
->> This is done almost automatically with register_sysctl(), register_net_sysctl()
->> and friends as wrappers of MODULE_SYSCTL_TABLE (similar to MODULE_DEVICE_TABLE),
->> which emits symbols for file2alias/modpost to find and parse the sysctl tables.
->> 
->> The big exception to 'almost' are sysctl tables and paths allocated or defined
->> at runtime (e.g., per-namespace or per-device), as all information is required
->> at build-time. Fortunately, such tables and paths are often based on 'templates'
->> which are static and can be used.
->> 
->> This is done by plumbing the template table/path as optional arguments (macros
->> with default values as default_gfp()), so not to create functions for all cases:
->> 
->>         register_sysctl(path, table [, table_tmpl [, path_tmpl]]);
->>         register_net_sysctl(net, path, table [, table_tmpl[, path_tmpl]]);
->>         register_net_sysctl_sz(net, path, table, size [, table_tmpl[, path_tmpl]]);
-> 
-> The "what" is described but I'm missing more clarity on the "why". Why
-> does this need to be trivial? Where is it that you will know the sysctl
-> file path of a module and not the module name or alias?
+On Thu, 2026-08-20 at 13:58 -0700, Ihor Solodrai wrote:
+> On 2026-08-20 1:42 p.m., Eduard Zingerman wrote:
+> > On Wed, 2026-08-19 at 17:06 -0700, Ihor Solodrai wrote:
+> >=20
+> > ...
+> >=20
+> > > @@ -87,6 +90,36 @@ static struct btf *mk_btf(void)
+> > >   	if (!ASSERT_OK(err, "holey_tail"))
+> > >   		goto err_out;
+> > >  =20
+> > > +	for (i =3D 0; i < 3; i++) {
+> >=20
+> > Testing this locally, a single enum suffices to showcase the bug,
+> > why the complication?
+>=20
+> Hi Eduard, thank you for reviewing so quickly.
+>=20
+> For the bug that was fixed, yes. But in general, I thought it's good to=
+=20
+> have a couple of different things in the test sample.
 
-Thanks for looking at this.
+We have a good set of tests for libbpf's BTF dump logic (not bpftool).
+Given that, I think it is better to keep tests focused.
 
-The problem this feature addresses is sysctl settings not applied
-because modules aren't yet loaded when systemd-sysctl/procps's sysctl
-runs on boot, and the usage of /etc/modules as a workaround.
+>=20
+> >=20
+> > > +		char name[16];
+> > > +
+> > > +		snprintf(name, sizeof(name), "E%d", i);
+> > > +
+> > > +		id =3D btf__add_enum(btf, NULL, 4);
+> > > +		if (!ASSERT_GT(id, 0, "anon_enum"))
+> > > +			goto err_out;
+> > > +
+> > > +		err =3D btf__add_enum_value(btf, name, i + 1);
+> > > +		if (!ASSERT_OK(err, "enum_val"))
+> > > +			goto err_out;
+> > > +	}
+> > > +
+> > > +	id =3D btf__add_struct(btf, "s", 4);
+> > > +	if (!ASSERT_GT(id, 0, "struct_s"))
+> > > +		goto err_out;
+> > > +
+> > > +	err =3D btf__add_field(btf, "f", 1, 0, 0);
+> > > +	if (!ASSERT_OK(err, "s_field"))
+> > > +		goto err_out;
+> > > +
+> > > +	id =3D btf__add_union(btf, "u", 4);
+> > > +	if (!ASSERT_GT(id, 0, "union_u"))
+> > > +		goto err_out;
+> > > +
+> > > +	err =3D btf__add_field(btf, "f", 1, 0, 0);
+> > > +	if (!ASSERT_OK(err, "u_field"))
+> > > +		goto err_out;
+> > > +
+> > >   	btf__set_pointer_size(btf, 4);
+> > >  =20
+> > >   	return btf;
+> > > @@ -95,6 +128,42 @@ static struct btf *mk_btf(void)
+> >=20
+> > ...
+> >=20
+> > > +static void test_sort_preserves_types(const char *path)
+> > > +{
+> > > +	char *sorted =3D NULL, *unsorted =3D NULL;
+> > > +	int n_sorted, n_unsorted;
+> > > +
+> > > +	sorted =3D dump_c(path, true);
+> > > +	unsorted =3D dump_c(path, false);
+> > > +	if (!sorted || !unsorted)
+> > > +		goto out;
+> > > +
+> > > +	/*
+> > > +	 * Count definitions by the closing brace in their first column. Co=
+unting
+> > > +	 * "struct"/"union"/"enum" openers instead would also count forward
+> > > +	 * declarations, and which types need one depends on emission order=
+.
+> > > +	 */
+> > > +	n_unsorted =3D count_substr(unsorted, "\n}");
+> > > +	n_sorted =3D count_substr(sorted, "\n}");
+> >=20
+> > This does not include e.g. typedef. I'd just match for presence of enum=
+.
+> > Or better yet, compare full expected output with actual one and tailor
+> > several BTF definitions, each for a specific sub-test.
+>=20
+> I wanted to avoid committing a sample generated header. I think the
+> exact string check will also be too sensitive to the changes in libbpf
+> dumper or bpftool.
+>=20
+> Presence of enum only tests the concrete bug, and I wanted some simple
+> proxy to a more generic sorted vs unsorted output check.
+> That is, "did we drop anything while sorting?" check.
+>=20
+> Ideally we'd need to parse the headers and compare the full set of
+> emitted types.. An overkill here, I think.
+>=20
+> We can just add counting typedefs as well.
+> That's an easy improvement. wdyt?
 
-This can be addressed with a way for sysctl tools to load the module for
-a non-existent sysctl file path.
-For that, the mapping between a sysctl file path (known) and its module
-(unknown) needs to be trivial.
+I don't think bpftool output changes all that match.
+I won't block on this, but working with text is simpler in case if the
+test fails. One can get the 'diff' output directly pointing at what
+went wrong (and it would be nice to have a utility that shows the diff
+in case of mismatch, btf dump tests do that, but it is not abstracted).
 
-It may not seem serious at first, but I've seen this consume significant
-engineering time and impact production systems, in a previous technical
-support job.
-An example: cloud deployments with non-scalable network routing
-performance due to nf_conntrack_max not applied after reboot or an
-upgrade because the component which turned out to help with the
-/etc/modules workaround had its placement changed from network router
-nodes.
-
-> Additionally, sysctls are not module specific; they are a way to
-> read/write kernel variables. Putting a module specific aspect in the
-> function arguments (that needs to be ignored in non-module cases) seems
-> wrong. Why not use the module subsys to add sysctl alias instead of the
-> sysctl subsys?
-
-Fair point. The current design has 2 reasons:
-
-1) Use the 'path' argument (raised in [1]), only available in the
-register sysctl functions.
-2) Use a more implicit/transparent approach, instead of more
-explicit/declarative approach. 
-
-I guess that a different design could use MODULE_SYSCTL_TABLE() as
-MODULE_DEVICE_TABLE(), declared per table instead of wrapped into
-register sysctl functions.
-However, it seems to require moving the value of the path argument (or
-its template) into the macro and still referencing it in the function
-(or its instantiation of the template), which adds obfuscation, to all
-callers. 
-
-What do you think?
-
-[snip]
-
->> P.S.
->> ====
->> 
->> I wrote proof-of-concept patches for procps sysctl and systemd-sysctl some time
->> ago, which worked as expected, i.e., successfully set sysctl tunables which did
->> not exist in /proc/sys, by running 'modprobe sysctl:/proc/sys/...' and retrying.
-> 
-> Do you have links to this? To the old one, not necessarily a new
-> version.
-
-Sure, please see [2] and [3]. I did a quick rebase/refresh, but both
-seem to work:
-
-procps sysctl:
-
-    $ strace -e execve -f -s 64 ./src/sysctl --modprobe=1 -w net.test=1
-2>&1 | grep modprobe
-
-    [pid 505958] execve("/bin/sh", ["sh", "-c", "--", "modprobe
-sysctl:/proc/sys/net/test >/dev/null 2>&1"], 0x7ffc12efff80 /* 63 vars
-*/) = 0
-
-systemd-sysctl:
-
-$ cat /etc/sysctl.d/net-test.conf
-net.test = 1
-
-    $ sudo strace -e execve -f -s 64 ./build/systemd-sysctl
---modprobe=true /etc/sysctl.d/net-test.conf  2>&1 | grep modprobe
-
-[pid 505777] execve("/usr/sbin/modprobe", ["modprobe",
-"sysctl:*/net/test"], 0x7ffd473d1418 /* 20 vars */) = 0
-
-Thanks,
-
-[1]
-https://lore.kernel.org/linux-fsdevel/CAK7LNAR=7zgOiqTD9okXfZXroFH1yagMFsRuq0G-z6OfSUPLQg@mail.gmail.com/
-[2] https://github.com/mfoliveira/procps/commits/sysctl-module-aliases/
-[3] https://github.com/mfoliveira/systemd/commits/sysctl-module-aliases/
-
-> 
-> Best
->> 
->> Should this series eventually be merged, the patches will be submitted upstream
->> as well, for userspace to start consuming it.
->> 
->> Signed-off-by: Mauricio Faria de Oliveira <mfo@igalia.com>
->> 
->> Changes in v3:
->> - All issues were reported by sashiko-bot@kernel.org.
->> - Tested allmodconfig with option enabled on x86_64.
->> - Patch 2:
->>   - Fix typo ('s/options/option/').
->> - Patch 3:
->>   - Fix usage of __UNIQUE_ID().
->>   - Add __must_be_array() in MODULE_SYSCTL_TABLE().
->> - Patch 4:
->>   - Remove trailing backslash in register_sysctl().
->> - Patch 6:
->>   - Fix missing __register_net_sysctl_sz() in !CONFIG_SYSCTL.
->> - Patch 13:
->>   - Fix potential out-of-bounds read in do_sysctl_entry().
->>   - Add check for entry size of zero.
->> - Link to v2: https://lore.kernel.org/r/20260818-sysctl-module-aliases-v2-0-d5a69dae5798@igalia.com
->> 
->> Changes in v2:
->> - This is based on the series submitted 4 years ago,
->>   with Originally-by: tags added in related patches.
->> - Link to v1: https://lore.kernel.org/linux-fsdevel/20220722022416.137548-1-mfo@canonical.com/
->> 
->> ---
->> Mauricio Faria de Oliveira (13):
->>       keys, pidns, fs/verity, riscv/vector: reorder '#include <linux/sysctl.h>'
->>       proc: add config option SYSCTL_MODULE_ALIASES
->>       sysctl, mod_devicetable: add macro MODULE_SYSCTL_TABLE
->>       sysctl: add register_sysctl() wrapper for MODULE_SYSCTL_TABLE
->>       sysctl, parport: update register_sysctl() callers with template arguments
->>       sysctl, net: add register_net_sysctl{_sz}() wrappers for MODULE_SYSCTL_TABLE
->>       sysctl, net: update register_net_sysctl{_sz}() callers with template arguments
->>       sysctl, net: update register_net_sysctl_sz(ARRAY_SIZE(table_tmpl)) with template arguments
->>       sysctl, ipv6: update register_net_sysctl{_sz}() callers with template arguments
->>       sysctl, net: update register_net_sysctl_sz() edge case
->>       sysctl: unrandomize struct ctl_table.procname
->>       modpost: move addend_*_rel() calls into addend_rel()
->>       modpost: handle MODULE_SYSCTL_TABLE symbols
->> 
->>  arch/riscv/kernel/vector.c              |   1 +
->>  drivers/net/vrf.c                       |   3 +-
->>  drivers/parport/procfs.c                |  26 +++-
->>  fs/proc/Kconfig                         |  13 ++
->>  fs/verity/init.c                        |   1 +
->>  include/linux/key.h                     |   1 -
->>  include/linux/mod_devicetable.h         |   7 +
->>  include/linux/pid_namespace.h           |   1 +
->>  include/linux/sysctl.h                  | 110 ++++++++++++++-
->>  include/net/ipv6.h                      |   6 +-
->>  include/net/net_namespace.h             |  47 ++++++-
->>  net/bridge/br_netfilter_hooks.c         |   3 +-
->>  net/core/neighbour.c                    |  11 +-
->>  net/core/sysctl_net_core.c              |   3 +-
->>  net/ieee802154/6lowpan/reassembly.c     |   2 +-
->>  net/ipv4/devinet.c                      |  12 +-
->>  net/ipv4/ip_fragment.c                  |   3 +-
->>  net/ipv4/route.c                        |   3 +-
->>  net/ipv4/sysctl_net_ipv4.c              |   2 +-
->>  net/ipv4/xfrm4_policy.c                 |   3 +-
->>  net/ipv6/addrconf.c                     |   7 +-
->>  net/ipv6/icmp.c                         |   6 +-
->>  net/ipv6/netfilter/nf_conntrack_reasm.c |   4 +-
->>  net/ipv6/reassembly.c                   |   3 +-
->>  net/ipv6/route.c                        |  10 +-
->>  net/ipv6/sysctl_net_ipv6.c              |  13 +-
->>  net/ipv6/xfrm6_policy.c                 |   3 +-
->>  net/mpls/af_mpls.c                      |   9 +-
->>  net/mptcp/ctrl.c                        |   3 +-
->>  net/netfilter/ipvs/ip_vs_ctl.c          |   4 +-
->>  net/netfilter/ipvs/ip_vs_lblc.c         |   3 +-
->>  net/netfilter/ipvs/ip_vs_lblcr.c        |   3 +-
->>  net/netfilter/nf_conntrack_standalone.c |   5 +-
->>  net/netfilter/nf_log.c                  |   9 +-
->>  net/rds/tcp.c                           |   4 +-
->>  net/sctp/sysctl.c                       |   3 +-
->>  net/smc/smc_sysctl.c                    |   2 +-
->>  net/sysctl_net.c                        |  10 +-
->>  net/unix/sysctl_net_unix.c              |   3 +-
->>  net/vmw_vsock/af_vsock.c                |   4 +-
->>  net/xfrm/xfrm_sysctl.c                  |   2 +-
->>  scripts/mod/devicetable-offsets.c       |   6 +
->>  scripts/mod/file2alias.c                | 237 ++++++++++++++++++++++++++++++++
->>  scripts/mod/modpost.c                   |  46 ++++---
->>  scripts/mod/modpost.h                   |  25 ++++
->>  45 files changed, 575 insertions(+), 107 deletions(-)
->> ---
->> base-commit: 2697ef8943c9985c14708a6429e21812693857b2
->> change-id: 20260818-sysctl-module-aliases-2f5801b1eb71
->> 
->> Best regards,
->> -- 
->> Mauricio Faria de Oliveira <mfo@igalia.com>
->>
-
--- 
-Mauricio
+>=20
+> >=20
+> > > +	ASSERT_GT(n_unsorted, 0, "types_emitted");
+> > > +	ASSERT_EQ(n_sorted, n_unsorted, "same_type_count");
+> > > +
+> > > +out:
+> > > +	free(sorted);
+> > > +	free(unsorted);
+> > > +}
+> > > +
+> > >   /*
+> > >    * Check only what the selftests build cannot:
+> > >    *   - bpf_helpers.h defines __ksym and __weak as well, and no prog=
+ram uses
+> >=20
+> > ...
