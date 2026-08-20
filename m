@@ -1,586 +1,164 @@
-Received: from extorris.mess.org (extorris.mess.org [92.243.27.206])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA3BD47F2FA;
-	Thu, 20 Aug 2026 17:52:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.243.27.206
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787248338; cv=none; b=F7B3WwzHD1As24AsCicPx6aA4n7PDuRkHp6rMc2msUDNgx8bTwy/VMn51rkbxoaq4K81z41JtpvYq4Ru6B9QoQ7ZJ/4i3RRCf5l78NTCr1A1kmgpPOgIwNX6AQ17LBtq7KbA2DusmfljGrtk7Ys3aCoXsarFVZHANneqKojbbtQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787248338; c=relaxed/simple;
-	bh=j84ka8f7MZHGD2D+8Cw3ccVuwV8CMgZtzuTR4N8y/+Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TmglanOfdhSf/rqAvnFRlwCnkNwIRkemLKeozOL/5zdg0w4HxSXtzi6Ky+w2wSHR0UAjRGDqno1oILDCGPj7aq9TRHXdWhCwRsQnKnBKPn194qvcwuE832M+GnhqznXhj1w+qiizZT1IvfA/1qBwVK2H8oXwTkDxZDEvv7Bd1nI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org; spf=pass smtp.mailfrom=mess.org; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=G6DfQqhp; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=PsoZXk/Z; arc=none smtp.client-ip=92.243.27.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mess.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8871647F779;
+	Thu, 20 Aug 2026 17:53:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787248407; cv=fail; b=a/VpZHV2eTR0KK5mpvFkMoqUbZYj8AxIvRuw3oBI05SMw+DVnxbilkz0QETaAQbFtOv1xSiserKTRyjBFK8IR43Wa3bZpWsqCINeyRYnnUxawiLFDBzJniQ0KnSy0R2CzhzNAXSpJzF5eT7+RWcsv7eJJWJ0NjfkioIq8y8emKg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787248407; c=relaxed/simple;
+	bh=JilcGDqzLnpZZTGTvrSl+fgMA4Ikwl5pkmaazMeO3b0=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Yx7Bp6RMp7o3SUCYJ38IeQc4UrIgFCntAjB5W6Wc6HhOAX71cNbHkBnAjPpjBOlpuyxB5xLm6JnYSIcKccEg0y7s3LoKI+5iqhblV9qfeChZ+lrQa3l+57Hx4KL7q4sY4t+3NrZ5J26ggl79WDLF4PLNWOwI+qiF/jHAn4ZzqzI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PDTyUz5P; arc=fail smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="G6DfQqhp";
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="PsoZXk/Z"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1787248327; bh=j84ka8f7MZHGD2D+8Cw3ccVuwV8CMgZtzuTR4N8y/+Y=;
-	h=From:To:Cc:Subject:Date:From;
-	b=G6DfQqhprPTxNFlYR+SD5GmNkxvQtZ7CE4ODf1bGJ3p42cA54u4LXbOwWmA8x8B0q
-	 jcBxTgc9sB6erfkKPfM3xHkqO+qLfzbtTgbzE8dx/zkGgP83PbKFfXUA9mySNnPli2
-	 9qGIeIGw4a8SYhoc0fOBafVlfPDhrLeJARby87xkgEu8MH+EMndoj6xaEYfoJXJTRW
-	 O1u1wRZzSmudbsnKczEZF41rZC1Ou3tsr8OzEqoWSfKy14eQ5HkJU96gJI/clXFtNx
-	 a23R5cPv7oES5I6hdxuUhyHeokUwKdRBXJ1SWlbYLEwoZz1/Q/m6B39aWiN6UngOWG
-	 8UZyfd6ULqx9Q==
-Received: by extorris.mess.org (Postfix, from userid 1004)
-	id 7043640170; Thu, 20 Aug 2026 18:52:07 +0100 (BST)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1787248324; bh=j84ka8f7MZHGD2D+8Cw3ccVuwV8CMgZtzuTR4N8y/+Y=;
-	h=From:To:Cc:Subject:Date:From;
-	b=PsoZXk/Z/ewtVtDlMMTYgVzmtGePIyXjfnU/uSuywgjMXcStr6SVZIR6iZoacpdi9
-	 63QXH8sNF90KjHrEMx1vexiotfZ+Hp+gOLt87IWbkuCEkD8HTkAbK7RLlLNXCmkGAJ
-	 fOLUGBycdg+M9FUj6LkthoA5E66OTXmqP4VKXDSS5AUXXiRk/+n3o1aSjSFLTg0EZs
-	 H1uwlV7g6CLeJdocqcsnJ+gUuvTHVX1H26Yt6Z43rvyyY0zPoZq7DN9+sPkk9tY3Mx
-	 29/ekAAVnkPtHh33ohGbdCtOT1Mmbr2j/iM9oC2x3FelEFQY9ibf9jDUKddaoETjaj
-	 QWc1F56Yx2/Gw==
-Received: from maru.home (host86-154-188-238.range86-154.btcentralplus.com [86.154.188.238])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by extorris.mess.org (Postfix) with ESMTPSA id 77ACF40170;
-	Thu, 20 Aug 2026 18:52:04 +0100 (BST)
-From: Sean Young <sean@mess.org>
-To: linux-kernel@vger.kernel.org,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Sean Young <sean@mess.org>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/bpf: convert lirc_mode2 to prog_tests and extend coverage
-Date: Thu, 20 Aug 2026 18:51:51 +0100
-Message-ID: <20260820175154.708374-1-sean@mess.org>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PDTyUz5P"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1787248406; x=1818784406;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=JilcGDqzLnpZZTGTvrSl+fgMA4Ikwl5pkmaazMeO3b0=;
+  b=PDTyUz5Plz5mC2q66zL1akgAmTbO8jIqlQUvJEzZVUxOcfSdmYx9fQas
+   /QeW3Yd3wg1fNRyGNv+432jYknKx4d4AX4v2GAjV/UaI0Dlk1O37sztt6
+   UsCaKWwSpj8yZ/V9NMpRYhiOkc7O/g+VDNg4lFLAPM2hHAFcYOuYvOAKy
+   xGohysfFpoUkkNr7tsxdy7nszs97w+acyzPR/btrweIHNLJ+Lx37FDIq4
+   cd47MtFdcoqmxtAj7PIkndNGTD3Rp5R+bRVWcMY3IafiDi7Hfqgu+6cyw
+   jsaNYgDhIqgIHlybjF01QbXUiI4VgeEairBl8UAl/7zMAePWq4lZJvyeb
+   w==;
+X-CSE-ConnectionGUID: yif1bd3PSqizGPUq5Hi1vw==
+X-CSE-MsgGUID: rICjFNboQX+trIJS10ttPw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11881"; a="91664489"
+X-IronPort-AV: E=Sophos;i="6.25,233,1779174000"; 
+   d="scan'208";a="91664489"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2026 10:53:25 -0700
+X-CSE-ConnectionGUID: HDDaoIHaTFGRXVJLE+sDqQ==
+X-CSE-MsgGUID: znb9AyLZTsiwU9iaJy0Sxg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,233,1779174000"; 
+   d="scan'208";a="268043031"
+Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
+  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2026 10:53:23 -0700
+Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Thu, 20 Aug 2026 10:53:23 -0700
+Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
+ FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45 via Frontend Transport; Thu, 20 Aug 2026 10:53:23 -0700
+Received: from PH7PR06CU001.outbound.protection.outlook.com (52.101.201.28) by
+ edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Thu, 20 Aug 2026 10:53:20 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Lz5Frsi+bcMnq6s3F7f2FzrRvULMHtH8oGuJWKvU1TTrt8HpqvXMT/6wJPjW4lONzvFeQhM+2ID1AF3tB+JMY+kz9No0gbLKs+fsVjvAf0xJY6J47FUuXpL4KdAUnN07syezg2pLQ5jczDbEmVUPYlGhyGl8u8kWzfyl3GC884dNmKMldTWLNg5aPzVZ/kX3C6BhQIKp3/ZZBPO1iMwRgq3t11Whdc6++aPi2rbli+ymD0IWRz3DOX7rIApXZOtctyyKeKehYDa+Y7RMvs2FcPW+8FI8wqiNlFgMptxhXq1FF6sisEnzprhGE7gPwjiteo4MeROnej+QMIELAOlQSQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fSDLxRywgt4ro5jA247LpZcWz+RYTVnnHYkPZgRtN8I=;
+ b=acyet1LGyVwVLqBBgSY8VPjJ467c2t2ZF0bROm2Lznly7uAUWYcct62FQJHu/DCSLHOMpnbxCRW/gcgOAipu2RlWAMC1/hEXcSzDUEZ1Mqq2meubd//hNo3wkQ23amXyMGeH7x2ZTI1ALo4xZE7LfK/XuiO10ZIR4WKps3GqbfPabuyy/OiifSIVc8UbBu4SMJlHfc0hA3nBA/0U6LOvPY88ax/ZeIc5KVuBHd6p4iPjYgYZ/AN5gta4Y9e8gzEfP7nU7kqHKhVVJ5Pkodg9wKyMMj74a3NLthB6thRUkAMMJ2HRwuUktVlY76BXBaIi+OqsHxaqqyitbK5oKSFtcg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ IA1PR11MB7176.namprd11.prod.outlook.com (2603:10b6:208:418::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.339.8; Thu, 20 Aug 2026 17:53:09 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd%6]) with mapi id 15.21.0339.007; Thu, 20 Aug 2026
+ 17:53:09 +0000
+Date: Thu, 20 Aug 2026 19:53:00 +0200
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: Jakub Kicinski <kuba@kernel.org>
+CC: Paolo Abeni <pabeni@redhat.com>, Tushar Vyavahare
+	<tushar.vyavahare@intel.com>, <netdev@vger.kernel.org>,
+	<magnus.karlsson@intel.com>, <stfomichev@gmail.com>,
+	<kernelxing@tencent.com>, <davem@davemloft.net>, <ast@kernel.org>,
+	<daniel@iogearbox.net>, <tirthendu.sarkar@intel.com>, <andrii@kernel.org>,
+	<bpf@vger.kernel.org>
+Subject: Re: [PATCH net-next v3 0/4] selftests/xsk: improve shared-UMEM
+ coverage
+Message-ID: <aoc+/OW8Gy4ZOx+w@boxer>
+References: <20260819024443.781764-1-tushar.vyavahare@intel.com>
+ <a602a1f6-e279-4c7c-86df-1bd0ef244fd0@redhat.com>
+ <20260820104419.050cbc44@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20260820104419.050cbc44@kernel.org>
+X-ClientProxiedBy: TL0P290CA0003.ISRP290.PROD.OUTLOOK.COM
+ (2603:1096:950:5::18) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|IA1PR11MB7176:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4561c3d7-e449-4c9a-aceb-08defee3e548
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|1800799024|376014|366016|23010399003|4143699003|11063799006|56012099006|10067099003|6133799003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info: hg+57ZPxbPUlx2jip49OMSXZNQeL9YQ2yhZBzCRpdr9iRyAC9PcLHKjFKztZJbllfH17EoYagWZSdxZ+LN0djuGb28iS0wZ7SH5B5vtEO32J/QkKcf1MT4DPcY+SNywhyUj4q+yWyiG0ELb39eWiGsys60GGML/9oCpuXFigL+PUBGn0V+7Pm5NLVx6CX1HEeP+pZU8Ga3v/BV50F8f/TvgPe1JhB4MrEaaLqS03jH8/VrHi2gjNTYfaEdsgO5AKX3XxVz7eV0hpoqAv6Woi3gr8SjItGOPoXiaRL+Q60b0wvnuUT7tiF3rBOpP1WUwDyz0LofZdKEP9VEDjrNCZMdpJ/hIrRRwspfM1qZviSmQRHobHWxbADuojk1IkiFF3mvAXYmbXQqczjWQJ+4unq4/RPE08DgtSSwMxbx+HoTlNoM91j6xoPxRvwe3oJJGXOTiDBMpWwa0lmoMiq8SS2/fbDhyXbNLjeaclWy4DS2k9tL28q+Pj5zzsI0iq9q5mDYZKoLK+YwyvRJdyQKBetJFqi50y4b1VpOnf2Bjp2LdUhAuovk5JcfteNtw1leHSpgrcUxMjQQ1xenN0ddODAzeW0pAHxzS0ljuOrEVq9SMI/dkSRqtNreTsJI9/6koEYgGN/5wkZ/JRWRTe4gmxI1ymEHaROoicOP7RGJd01Xg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(376014)(366016)(23010399003)(4143699003)(11063799006)(56012099006)(10067099003)(6133799003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mhjbxmRR1RRukin75oZREGK77nXCKuchCZ2hvSXT1dKdCriDoBi9gwhkpmyG?=
+ =?us-ascii?Q?hsM5q+HJ9kaPIt66glBDIBGQqT+zCpfaHf+pbI15HAw5ZWJrvjFeVltv9nAG?=
+ =?us-ascii?Q?VlaCuOrWSGrGf0ZXUT+clUznlcNlASTn2Ze3Kf6o0nWlBI6zDOmZAs0asBo1?=
+ =?us-ascii?Q?Y7hBcReN09C/TdmJ8Ky3eI020hNiynBpG70HZbAZ2XaTD0JnjLf+XXOC3r/7?=
+ =?us-ascii?Q?1xwkYsFIUcRU3/0m9peddM4CvLAGmXIizsrwqZTxPSPeApSSJKm8TODsrNKE?=
+ =?us-ascii?Q?7VRBQQ6L5xxsKQtV98orknpy4R+cln3H60/z3HVLgnlO8NRsAjYhGqUZahzl?=
+ =?us-ascii?Q?gyQvm2QmLoyR2slswxzpwvosgz35B11ax4K/aD9EU/yl6Je9fgw9375unA6d?=
+ =?us-ascii?Q?0a7arvACfUs8gIGGp4TTbnvwtazuo36syAo5Pzyb5HtDhY77pTyJJk7XPeaC?=
+ =?us-ascii?Q?MxLTkkbgU58sljtRsPe1Ggswfgn6FkgIxHhYuzQ/ultAstBjg5XSoH4GrKUD?=
+ =?us-ascii?Q?OETcgyGb1fjak5vutigJ1PODBtPw6+WBHLWS3Kc2DdffArj8vGrmKa1H8cir?=
+ =?us-ascii?Q?9gSfw2sawhEyQV3KuWXhskXQD4rm6pEgRBf6skJHDSHgfkEu2HRHkpcysSPw?=
+ =?us-ascii?Q?YfQnCNusxQwtl8ItjJilWp6de0xEV2K2ZOO1qGy6SOatnpm6HGopizcZCcGC?=
+ =?us-ascii?Q?CxhUFdIPNXnTUj4bI0oBZSJrbJ1HvD6J/IoSngdZJ81E3kcTisH9TRhFjAMi?=
+ =?us-ascii?Q?FGryAdmbkTZ8PaPtaN4SpOHhqizqOWRD47IrrAU1OhqXq69uZgUmif3z3LRZ?=
+ =?us-ascii?Q?jvOETxyoWnTq8U4WcBpJ2ixow79HzaV1ddoA7Stz2yvV92VdgCr2X7gwzTB2?=
+ =?us-ascii?Q?YryTW8ce4hgZe8ZeBqxYMWtPE3CqXbgGnjYOy7dTIDRI7kZJbqRrOM9GcA5S?=
+ =?us-ascii?Q?CFNfLemwIw/9Xysinr+ZyY8jAs3MF3CVCay2s0znsUGbzAGUMH2nddsrXUlK?=
+ =?us-ascii?Q?LwTV3x1Hwy8SyUAOKXAqCBq5n7Jz8WHuMGnCwpwZ1tpqMEZED1brL0I//8Gg?=
+ =?us-ascii?Q?z1PrXP810XOO9unGMqZs574OoTuINP12yafIsXRZxg+LMXIoyx63swxLAIJg?=
+ =?us-ascii?Q?qkhdPuistXmAjNxa6NnpmPYWKWG1uiU5h5/wFtv8uKhcNG1dr2ZZAWRNldvu?=
+ =?us-ascii?Q?N/NbgLWR2nMAottpg78iv3dY41dMZcSgXBssoaFewffG+DBS60khpeFewLXR?=
+ =?us-ascii?Q?g1Z+37bGgExgW34yvt8qAIghJTkchBpPXmXt/RqPBrfSel9n3mFXlnbh6jwf?=
+ =?us-ascii?Q?LVN+2OPUxK+R9AW1D44ou1dxg0xUVk60KHzInRWvUj6+yS+PjABdNwM+0QMJ?=
+ =?us-ascii?Q?wjbLOybeiFW0L2D6D3+ZRo1KsclDW+W+bYP2pOhwqvRZupggllGl9cP30WMP?=
+ =?us-ascii?Q?lNPXvFfArj0sGOYa/Quhfe1Le14HawbmgeA38sF4H/eNw5FJWGhV9LEJMYh5?=
+ =?us-ascii?Q?+F/5LkuvvRkYn9iIG1EB/GsB4dzmG47tNF/UAKD5VpffmMIr+eZcCjG2qd+G?=
+ =?us-ascii?Q?Ipt+Eh5WhiazDnYQkJmKuHztnHmwuV+MQ9Rh5LHdfQKPS2qxcRhNaeAsiqQ0?=
+ =?us-ascii?Q?X59S36RQuMoffUf/kAkcncr8NjJDxbSohbhUFjrj1L1Ktw5d+84VsOPEN5Im?=
+ =?us-ascii?Q?HfFzxH5r9Jq6LEQEj8PSt8ePFSuN6h4j2T+D32AItLRh+V6tRkWc06kHu6YK?=
+ =?us-ascii?Q?BCz6VZN0PEvTyXL9dn8v1eFuaAm6fdg=3D?=
+X-Exchange-RoutingPolicyChecked: CJ+8UkQ6VLbTgbv0lEkr60EjXX/7dLIB7pE4vkZJlhIWLag157QhjWpo8kzNzx4TNH1zoAMSGapSRRFgjl1V37zA6Vy4DnoB9WxBwLAKGlUJoS/yjRpjeAR7gfCRoehWfgXA1lqNfH+QbVeWq3uS12JfRXeCSXa9CvYa79h/yzc7uBR9JSuChBysaJFpBmuLyHo+DClyTAJR8Eie16ij06rPFaWvw9FjsZcDmLMtyF1e+ILuwUF3HMcfJY8TS7k0W4rNS5Otn4ZlBT6mq5iYuhesv4mXOOJ/KclSNJX5PbpQeJh/Uy6nAf++m+YyN3oNYp1mnKZI0E668eMPiXinDA==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4561c3d7-e449-4c9a-aceb-08defee3e548
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2026 17:53:09.2354
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gUNl5k/KyMjAcBoIy7lhPH6YHREKNqyd5niXnaef3iBhywuOJ7zM1ap5FUf33eke3C1934nI2EOGhqlZ/l+wAiXvgnt7aGWBNsBW0vTHqoA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7176
+X-OriginatorOrg: intel.com
 
-While porting, extend coverage of the BPF_LIRC_MODE2 attach/detach/
-query API:
+On Thu, Aug 20, 2026 at 10:44:19AM -0700, Jakub Kicinski wrote:
+> On Thu, 20 Aug 2026 11:35:53 +0200 Paolo Abeni wrote:
+> > ## Form letter - net-next-closed
+> 
+> these are bpf patches. Tushar, tools/testing/selftests/bpf is BPF
 
- - bpf_prog_attach() with invalid flags is rejected with -EINVAL
-   and does not attach the program
- - bpf_prog_query() with invalid flags is rejected with -EINVAL
-   without disturbing existing attachments
- - bpf_prog_query() reports the correct program id, not just count,
-   at each step, via bpf_prog_get_info_by_fd()
- - a lirc chardev can hold more than one attached program: load a
-   second, independent instance, attach it alongside the first,
-   confirm both are reported by bpf_prog_query(), then detach it
-   without disturbing the first program's attachment
- - detaching an already-detached program consistently fails with
-   -ENOENT, for both the first and second program
-
-Signed-off-by: Sean Young <sean@mess.org>
-Assisted-by: Claude:claude-sonnet-5
----
- tools/testing/selftests/bpf/Makefile          |   3 -
- .../selftests/bpf/prog_tests/lirc_mode2.c     | 328 ++++++++++++++++++
- .../testing/selftests/bpf/progs/lirc_mode2.c  |  32 ++
- .../bpf/progs/test_lirc_mode2_kern.c          |  26 --
- .../testing/selftests/bpf/test_lirc_mode2.sh  |  41 ---
- 5 files changed, 360 insertions(+), 70 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/lirc_mode2.c
- create mode 100644 tools/testing/selftests/bpf/progs/lirc_mode2.c
- delete mode 100644 tools/testing/selftests/bpf/progs/test_lirc_mode2_kern.c
- delete mode 100755 tools/testing/selftests/bpf/test_lirc_mode2.sh
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 2b2f93dec474..f8ec0f574559 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -123,7 +123,6 @@ TEST_FILES = xsk_prereqs.sh $(wildcard progs/btf_dump_test_case_*.c)
- 
- # Order correspond to 'make run_tests' order
- TEST_PROGS := test_kmod.sh \
--	test_lirc_mode2.sh \
- 	test_bpftool_build.sh \
- 	test_doc_build.sh \
- 	test_xsk.sh \
-@@ -141,7 +140,6 @@ TEST_GEN_PROGS_EXTENDED = \
- 	bench \
- 	flow_dissector_load \
- 	test_cpp \
--	test_lirc_mode2_user \
- 	veristat \
- 	xdp_features \
- 	xdp_hw_metadata \
-@@ -338,7 +336,6 @@ $(OUTPUT)/test_sockmap: $(CGROUP_HELPERS) $(TESTING_HELPERS)
- $(OUTPUT)/test_tcpnotify_user: $(CGROUP_HELPERS) $(TESTING_HELPERS) $(TRACE_HELPERS)
- $(OUTPUT)/test_sock_fields: $(CGROUP_HELPERS) $(TESTING_HELPERS)
- $(OUTPUT)/test_tag: $(TESTING_HELPERS)
--$(OUTPUT)/test_lirc_mode2_user: $(TESTING_HELPERS)
- $(OUTPUT)/flow_dissector_load: $(TESTING_HELPERS)
- $(OUTPUT)/test_maps: $(TESTING_HELPERS)
- $(OUTPUT)/test_verifier: $(TESTING_HELPERS) $(CAP_HELPERS) $(UNPRIV_HELPERS)
-diff --git a/tools/testing/selftests/bpf/prog_tests/lirc_mode2.c b/tools/testing/selftests/bpf/prog_tests/lirc_mode2.c
-new file mode 100644
-index 000000000000..17a38cd03845
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/lirc_mode2.c
-@@ -0,0 +1,328 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// test ir decoder
-+//
-+// Copyright (C) 2018 Sean Young <sean@mess.org>
-+
-+// A lirc chardev is a device representing a consumer IR (cir) device which
-+// can receive infrared signals from remote control and/or transmit IR.
-+//
-+// IR is sent as a series of pulses and space somewhat like morse code. The
-+// BPF program can decode this into scancodes so that rc-core can translate
-+// this into input key codes using the rc keymap.
-+//
-+// This test works by sending IR over rc-loopback, so the IR is processed by
-+// BPF and then decoded into scancodes. The lirc chardev must be the one
-+// associated with rc-loopback, see the output of ir-keytable(1).
-+//
-+// The following CONFIG options must be enabled for the test to succeed:
-+// CONFIG_RC_CORE=y
-+// CONFIG_BPF_RAWIR_EVENT=y
-+// CONFIG_RC_LOOPBACK=y
-+
-+#include <linux/input.h>
-+#include <linux/lirc.h>
-+#include <glob.h>
-+#include <limits.h>
-+#include <poll.h>
-+#include <test_progs.h>
-+#include "lirc_mode2.skel.h"
-+
-+/* Read the DEVNAME= line out of the first uevent file that matches
-+ * pattern, and turn it into a /dev/<name> path.
-+ */
-+static bool find_devname(const char *pattern, char *path, size_t path_sz)
-+{
-+	glob_t gl = {};
-+	bool found = false;
-+	FILE *f;
-+
-+	if (glob(pattern, 0, NULL, &gl) || gl.gl_pathc == 0)
-+		goto out;
-+
-+	f = fopen(gl.gl_pathv[0], "r");
-+	if (!f)
-+		goto out;
-+
-+	char line[256];
-+
-+	while (fgets(line, sizeof(line), f)) {
-+		char *val;
-+
-+		if (strncmp(line, "DEVNAME=", 8))
-+			continue;
-+
-+		val = line + 8;
-+		val[strcspn(val, "\n")] = '\0';
-+		snprintf(path, path_sz, "/dev/%s", val);
-+		found = true;
-+		break;
-+	}
-+
-+	fclose(f);
-+out:
-+	globfree(&gl);
-+	return found;
-+}
-+
-+/* Load rc-loopback and find the lirc and input chardevs it created. */
-+static bool find_loopback_devices(char *lirc_path, char *input_path,
-+				  size_t path_sz)
-+{
-+	glob_t gl = {};
-+	bool found = false;
-+
-+	/* Ignore failure, we check for the resulting devices below. */
-+	system("modprobe rc-loopback > /dev/null 2>&1");
-+
-+	if (glob("/sys/class/rc/rc*", 0, NULL, &gl)) {
-+		fprintf(stderr, "No rc devices found, is CONFIG_RC_LOOPBACK enabled?\n");
-+		return false;
-+	}
-+
-+	for (size_t i = 0; i < gl.gl_pathc; i++) {
-+		const char *rcdir = gl.gl_pathv[i];
-+		char uevent_path[PATH_MAX];
-+		char uevent[4096];
-+		char pattern[PATH_MAX];
-+		FILE *f;
-+		size_t n;
-+
-+		snprintf(uevent_path, sizeof(uevent_path), "%s/uevent", rcdir);
-+		f = fopen(uevent_path, "r");
-+		if (!f)
-+			continue;
-+		n = fread(uevent, 1, sizeof(uevent) - 1, f);
-+		fclose(f);
-+		uevent[n] = '\0';
-+
-+		if (!strstr(uevent, "DRV_NAME=rc-loopback"))
-+			continue;
-+
-+		snprintf(pattern, sizeof(pattern), "%s/lirc*/uevent", rcdir);
-+		if (!find_devname(pattern, lirc_path, path_sz))
-+			continue;
-+
-+		snprintf(pattern, sizeof(pattern), "%s/input*/event*/uevent", rcdir);
-+		if (!find_devname(pattern, input_path, path_sz))
-+			continue;
-+
-+		found = true;
-+		break;
-+	}
-+
-+	globfree(&gl);
-+	return found;
-+}
-+
-+void test_lirc_mode2(void)
-+{
-+	char lirc_path[PATH_MAX], input_path[PATH_MAX];
-+	int lircfd = -1, inputfd = -1, progfd, progfd2 = -1;
-+	struct lirc_mode2 *skel = NULL, *skel2 = NULL;
-+	__u32 prog_ids[10], prog_flags[10], prog_cnt;
-+	struct bpf_prog_info info;
-+	__u32 info_len, prog_id, prog_id2;
-+	int testir1 = 0x8ead;	/* keydown flag (0x8000) | scancode 0xead */
-+	int testir2 = 0x4081;	/* pointer_rel flag (0x4000) | rel_x=1 | rel_y=1 */
-+	struct input_event event;
-+	struct pollfd pfd = {};
-+	int ret;
-+
-+	if (getuid() != 0) {
-+		test__skip();
-+		return;
-+	}
-+
-+	if (!find_loopback_devices(lirc_path, input_path, sizeof(lirc_path))) {
-+		test__skip();
-+		return;
-+	}
-+
-+	skel = lirc_mode2__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "lirc_mode2__open_and_load"))
-+		return;
-+
-+	progfd = bpf_program__fd(skel->progs.bpf_decoder);
-+
-+	memset(&info, 0, sizeof(info));
-+	info_len = sizeof(info);
-+	ret = bpf_prog_get_info_by_fd(progfd, &info, &info_len);
-+	if (!ASSERT_OK(ret, "get first program's info"))
-+		goto out;
-+	prog_id = info.id;
-+
-+	lircfd = open(lirc_path, O_RDWR | O_NONBLOCK);
-+	if (!ASSERT_GE(lircfd, 0, "open lirc device"))
-+		goto out;
-+
-+	/* Try to detach it before it was ever attached, should fail. */
-+	ret = bpf_prog_detach2(progfd, lircfd, BPF_LIRC_MODE2);
-+	if (!ASSERT_EQ(ret, -ENOENT, "detach unattached program"))
-+		goto out;
-+
-+	inputfd = open(input_path, O_RDONLY | O_NONBLOCK);
-+	if (!ASSERT_GE(inputfd, 0, "open input device"))
-+		goto out;
-+
-+	prog_cnt = ARRAY_SIZE(prog_ids);
-+	ret = bpf_prog_query(lircfd, BPF_LIRC_MODE2, 0, prog_flags, prog_ids,
-+			     &prog_cnt);
-+	if (!ASSERT_OK(ret, "query programs before attach"))
-+		goto out;
-+	if (!ASSERT_EQ(prog_cnt, 0, "no programs should be attached yet"))
-+		goto out;
-+
-+	/* Invalid attach flags must be rejected, and must not attach. */
-+	ret = bpf_prog_attach(progfd, lircfd, BPF_LIRC_MODE2, 1);
-+	if (!ASSERT_EQ(ret, -EINVAL, "attach with invalid flags"))
-+		goto out;
-+
-+	prog_cnt = ARRAY_SIZE(prog_ids);
-+	ret = bpf_prog_query(lircfd, BPF_LIRC_MODE2, 0, prog_flags, prog_ids,
-+			     &prog_cnt);
-+	if (!ASSERT_OK(ret, "query programs after rejected attach"))
-+		goto out;
-+	if (!ASSERT_EQ(prog_cnt, 0, "rejected attach should not attach"))
-+		goto out;
-+
-+	ret = bpf_prog_attach(progfd, lircfd, BPF_LIRC_MODE2, 0);
-+	if (!ASSERT_OK(ret, "attach program to lirc device"))
-+		goto out;
-+
-+	/* Invalid query flags must be rejected too, without upsetting state. */
-+	prog_cnt = ARRAY_SIZE(prog_ids);
-+	ret = bpf_prog_query(lircfd, BPF_LIRC_MODE2, 1, prog_flags, prog_ids,
-+			     &prog_cnt);
-+	ASSERT_EQ(ret, -EINVAL, "query with invalid flags");
-+
-+	prog_cnt = ARRAY_SIZE(prog_ids);
-+	ret = bpf_prog_query(lircfd, BPF_LIRC_MODE2, 0, prog_flags, prog_ids,
-+			     &prog_cnt);
-+	if (!ASSERT_OK(ret, "query programs after attach"))
-+		goto out_detach;
-+	if (!ASSERT_EQ(prog_cnt, 1, "one program should be attached"))
-+		goto out_detach;
-+	ASSERT_EQ(prog_ids[0], prog_id, "queried id should match attached program");
-+
-+	/* Write raw IR */
-+	ret = write(lircfd, &testir1, sizeof(testir1));
-+	if (!ASSERT_EQ(ret, sizeof(testir1), "send test IR message 1"))
-+		goto out_detach;
-+
-+	pfd.fd = inputfd;
-+	pfd.events = POLLIN;
-+
-+	for (;;) {
-+		poll(&pfd, 1, 100);
-+
-+		/* Read decoded IR */
-+		ret = read(inputfd, &event, sizeof(event));
-+		if (!ASSERT_EQ(ret, sizeof(event), "read decoded IR 1"))
-+			goto out_detach;
-+
-+		if (event.type == EV_MSC && event.code == MSC_SCAN &&
-+		    event.value == 0xead)
-+			break;
-+	}
-+
-+	/* Write raw IR */
-+	ret = write(lircfd, &testir2, sizeof(testir2));
-+	if (!ASSERT_EQ(ret, sizeof(testir2), "send test IR message 2"))
-+		goto out_detach;
-+
-+	for (;;) {
-+		poll(&pfd, 1, 100);
-+
-+		/* Read decoded IR */
-+		ret = read(inputfd, &event, sizeof(event));
-+		if (!ASSERT_EQ(ret, sizeof(event), "read decoded IR 2"))
-+			goto out_detach;
-+
-+		if (event.type == EV_REL && event.code == REL_Y &&
-+		    event.value == 1)
-+			break;
-+	}
-+
-+	prog_cnt = ARRAY_SIZE(prog_ids);
-+	ret = bpf_prog_query(lircfd, BPF_LIRC_MODE2, 0, prog_flags, prog_ids,
-+			     &prog_cnt);
-+	if (!ASSERT_OK(ret, "query programs after IR was decoded"))
-+		goto out_detach;
-+	if (!ASSERT_EQ(prog_cnt, 1, "one program should still be attached"))
-+		goto out_detach;
-+
-+	/*
-+	 * The lirc chardev can hold more than one attached program at once.
-+	 * Load a second, independent instance and check it can be attached
-+	 * alongside the first, queried, and then detached on its own
-+	 * without disturbing the first program's attachment.
-+	 */
-+	skel2 = lirc_mode2__open_and_load();
-+	if (!ASSERT_OK_PTR(skel2, "lirc_mode2__open_and_load (2nd)"))
-+		goto out_detach;
-+
-+	progfd2 = bpf_program__fd(skel2->progs.bpf_decoder);
-+
-+	memset(&info, 0, sizeof(info));
-+	info_len = sizeof(info);
-+	ret = bpf_prog_get_info_by_fd(progfd2, &info, &info_len);
-+	if (!ASSERT_OK(ret, "get second program's info"))
-+		goto out_detach;
-+	prog_id2 = info.id;
-+
-+	ret = bpf_prog_attach(progfd2, lircfd, BPF_LIRC_MODE2, 0);
-+	if (!ASSERT_OK(ret, "attach second program to lirc device"))
-+		goto out_detach;
-+
-+	prog_cnt = ARRAY_SIZE(prog_ids);
-+	ret = bpf_prog_query(lircfd, BPF_LIRC_MODE2, 0, prog_flags, prog_ids,
-+			     &prog_cnt);
-+	if (!ASSERT_OK(ret, "query programs after second attach"))
-+		goto out_detach2;
-+	if (!ASSERT_EQ(prog_cnt, 2, "two programs should be attached"))
-+		goto out_detach2;
-+	ASSERT_TRUE((prog_ids[0] == prog_id && prog_ids[1] == prog_id2) ||
-+		    (prog_ids[0] == prog_id2 && prog_ids[1] == prog_id),
-+		    "queried ids should be the two attached programs");
-+
-+	/* Detach the second program; the first should remain attached. */
-+	ret = bpf_prog_detach2(progfd2, lircfd, BPF_LIRC_MODE2);
-+	if (!ASSERT_OK(ret, "detach second program"))
-+		goto out_detach2;
-+
-+	/* Detaching an already-detached program should now fail. */
-+	ret = bpf_prog_detach2(progfd2, lircfd, BPF_LIRC_MODE2);
-+	ASSERT_EQ(ret, -ENOENT, "detach second program again");
-+
-+	prog_cnt = ARRAY_SIZE(prog_ids);
-+	ret = bpf_prog_query(lircfd, BPF_LIRC_MODE2, 0, prog_flags, prog_ids,
-+			     &prog_cnt);
-+	if (!ASSERT_OK(ret, "query programs after second detach"))
-+		goto out_detach;
-+	if (!ASSERT_EQ(prog_cnt, 1, "one program should remain attached"))
-+		goto out_detach;
-+	ASSERT_EQ(prog_ids[0], prog_id, "remaining program should be the first one");
-+
-+out_detach:
-+	/* Let's try detaching it now it is actually attached. */
-+	ret = bpf_prog_detach2(progfd, lircfd, BPF_LIRC_MODE2);
-+	ASSERT_OK(ret, "detach program from lirc device");
-+
-+	/* Detaching it again should now fail the same way. */
-+	ret = bpf_prog_detach2(progfd, lircfd, BPF_LIRC_MODE2);
-+	ASSERT_EQ(ret, -ENOENT, "detach program from lirc device again");
-+	goto out;
-+
-+out_detach2:
-+	/* Best-effort cleanup of the second program before bailing out. */
-+	bpf_prog_detach2(progfd2, lircfd, BPF_LIRC_MODE2);
-+	goto out_detach;
-+
-+out:
-+	if (inputfd >= 0)
-+		close(inputfd);
-+	if (lircfd >= 0)
-+		close(lircfd);
-+	lirc_mode2__destroy(skel2);
-+	lirc_mode2__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/lirc_mode2.c b/tools/testing/selftests/bpf/progs/lirc_mode2.c
-new file mode 100644
-index 000000000000..98137f3c5c03
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/lirc_mode2.c
-@@ -0,0 +1,32 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// test ir decoder
-+//
-+// Copyright (C) 2018 Sean Young <sean@mess.org>
-+
-+#include <linux/bpf.h>
-+#include <linux/lirc.h>
-+#include <bpf/bpf_helpers.h>
-+
-+SEC("lirc_mode2")
-+int bpf_decoder(unsigned int *sample)
-+{
-+	if (LIRC_IS_PULSE(*sample)) {
-+		unsigned int duration = LIRC_VALUE(*sample);
-+
-+		/*
-+		 * Flag bits picked deliberately low: rc-loopback simulates
-+		 * a receiver overflow for any pulse over MS_TO_US(50) (see
-+		 * loop_tx_ir() in rc-loopback.c), which would silently
-+		 * swallow the sample before it ever reaches this decoder.
-+		 */
-+		if (duration & 0x8000)
-+			bpf_rc_keydown(sample, 0x40, duration & 0x3fff, 0);
-+		if (duration & 0x4000)
-+			bpf_rc_pointer_rel(sample, (duration >> 7) & 0x7f,
-+					   duration & 0x7f);
-+	}
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/test_lirc_mode2_kern.c b/tools/testing/selftests/bpf/progs/test_lirc_mode2_kern.c
-deleted file mode 100644
-index cbe4284c032f..000000000000
---- a/tools/testing/selftests/bpf/progs/test_lirc_mode2_kern.c
-+++ /dev/null
-@@ -1,26 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--// test ir decoder
--//
--// Copyright (C) 2018 Sean Young <sean@mess.org>
--
--#include <linux/bpf.h>
--#include <linux/lirc.h>
--#include <bpf/bpf_helpers.h>
--
--SEC("lirc_mode2")
--int bpf_decoder(unsigned int *sample)
--{
--	if (LIRC_IS_PULSE(*sample)) {
--		unsigned int duration = LIRC_VALUE(*sample);
--
--		if (duration & 0x1000)
--			bpf_rc_keydown(sample, 0x40, duration & 0xffff, 0);
--		if (duration & 0x2000)
--			bpf_rc_pointer_rel(sample, (duration >> 8) & 0xff,
--					   duration & 0xff);
--	}
--
--	return 0;
--}
--
--char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_lirc_mode2.sh b/tools/testing/selftests/bpf/test_lirc_mode2.sh
-deleted file mode 100755
-index 5252b91f48a1..000000000000
---- a/tools/testing/selftests/bpf/test_lirc_mode2.sh
-+++ /dev/null
-@@ -1,41 +0,0 @@
--#!/bin/bash
--# SPDX-License-Identifier: GPL-2.0
--
--# Kselftest framework requirement - SKIP code is 4.
--ksft_skip=4
--ret=$ksft_skip
--
--msg="skip all tests:"
--if [ $UID != 0 ]; then
--	echo $msg please run this as root >&2
--	exit $ksft_skip
--fi
--
--GREEN='\033[0;92m'
--RED='\033[0;31m'
--NC='\033[0m' # No Color
--
--modprobe rc-loopback
--
--for i in /sys/class/rc/rc*
--do
--	if grep -q DRV_NAME=rc-loopback $i/uevent
--	then
--		LIRCDEV=$(grep DEVNAME= $i/lirc*/uevent | sed sQDEVNAME=Q/dev/Q)
--		INPUTDEV=$(grep DEVNAME= $i/input*/event*/uevent | sed sQDEVNAME=Q/dev/Q)
--	fi
--done
--
--if [ -n "$LIRCDEV" ];
--then
--	TYPE=lirc_mode2
--	./test_lirc_mode2_user $LIRCDEV $INPUTDEV
--	ret=$?
--	if [ $ret -ne 0 ]; then
--		echo -e ${RED}"FAIL: $TYPE"${NC}
--	else
--		echo -e ${GREEN}"PASS: $TYPE"${NC}
--	fi
--fi
--
--exit $ret
--- 
-2.55.0
-
+But AF_XDP is now net target since some time. Should we move the test
+suite out of bpf directory then?
