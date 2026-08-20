@@ -1,103 +1,127 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A1ED30D3E8
-	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 02:29:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86C132FD1AA
+	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 02:33:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787192972; cv=none; b=SnhuK7KWv3vlrx+KRxD9vurRayDarO2KCRKjx4bgauO79n+2+jDYlriYSON8UoakyxwRdFSp7bjdqM/fv11W1rPfWzJcGL6ihqHQIJbkMWHjXAbRdCfQzN6sHlY8M3+qmUaS5a1mVC4GccDbXHzdN786TAKBGr02aHR62omTbjI=
+	t=1787193225; cv=none; b=FBwsEl5GtUXfb/n8tYXsxTau7zTqKyZMRr5dlfO4ICTvr6VI5ByhwOdZ9gmEHox0XYV3/4/KcViwdEJReDvpikXVavCe+xcRD+0R7gbu0SgeCOQUKG1h6yAdDiqfO3mTLodwdiZLDI8dOqdLsZyZm4j32xRFJ8UHzaDAyRc9vFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787192972; c=relaxed/simple;
-	bh=IAnSTxiu+n1Jbcww1jG+ZGQ+aSqKiCfBQJyelUqaHZ8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=l4wPD0/WZSYword5aBfYmohlSKIl1z+L49Nru03Acw4BX1YdSakNf+52E2C+6LIZEhJqCSk1yqdeGK5EsfwFNbYXXRa5GqVAsZlDYqQISKsJuAknHjdEv5dSmbUdbty2dyiMn/TChDFryBGEQ5E87fRULjkC3u2EyTAB+t407IA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=snu.ac.kr; spf=pass smtp.mailfrom=snu.ac.kr; dkim=pass (1024-bit key) header.d=snu.ac.kr header.i=@snu.ac.kr header.b=wuu7Daq4; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=snu.ac.kr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=snu.ac.kr
+	s=arc-20240116; t=1787193225; c=relaxed/simple;
+	bh=SlDfy5C91wzXzlNZeQAHFIITWtbZaTlMYOFO371VqvI=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=rMYEFovMuQ5ZBkigbaxI5FCgQqScXSPlC896vhcvEzK1nw4OVuy3oZ4lIZVzhCT9rzC7ereLoFJN9EUgYvr7nvYxWUnjZrvFt0UU0JRgYX914RqrBo10ozZFEKziImMiI9Q7Q6moh+dhvO/Y2dx7GfD/wfP9J3hEyOAXhOqd4JI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VtJeV9y1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=snu.ac.kr header.i=@snu.ac.kr header.b="wuu7Daq4"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2cc7ef7ec27so21519705ad.1
-        for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 19:29:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=snu.ac.kr; s=google; t=1787192968; x=1787797768; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=IAnSTxiu+n1Jbcww1jG+ZGQ+aSqKiCfBQJyelUqaHZ8=;
-        b=wuu7Daq4R9qF2abUc97Pety3pvA7bVrzHozL7gO02dAZ6Bg+fuRzCF7PAuRFbtehQK
-         6GesbJJ8azDRknpWlJTNZ52mr8dxcP2VqZud3preTtRSdMpt6hNSyZjeq5fWut5bX8/v
-         ykn8UzrE3ZESpn+n8uDVf1P3wxZD4PNp+8FPY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787192968; x=1787797768;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=IAnSTxiu+n1Jbcww1jG+ZGQ+aSqKiCfBQJyelUqaHZ8=;
-        b=SciJUEIVR53t3sEdXAykPTKAVmmxEGilNrNWUz0/22SY6OAu+encEPTrm2YyfxY0W7
-         HlnxuJzygLDdcp4j6t12e6ebYgxW/k6LFthZEby8Gu5mFrgUh6fjR0f744IktXErtX5v
-         /eStUNxsuRWf9id943wPwHzGIqdwohdf4yFoJdP4U6NMUJ0JnG0WDroMA4h42leMYSDa
-         41l5NJTCJc+t5jrqLAEx1UyRaXlId2UOjWeFwS9TWzc25YDeUK+hdRRwnKQwoIiJSUJP
-         +9OMtKeoXYlka5t1lBaBSkYHusTWbtlnO8MkkFF4dwgYS6ID1IOfZ/93MW98wRsfVte5
-         b0xA==
-X-Forwarded-Encrypted: i=1; AHgh+RrAHX2Z2NGmOvMz+/DfIg58IHNFAyg5DhNKJ9rBCUhOwrRh6tZHdMW7tE/OiCJjpaaS0Tw=@vger.kernel.org
-X-Gm-Message-State: AFuF++nFsOzHFmh4sa/njYMQtFZKSEcCHpeMr0vrOaovSuoqoFSzPEJ9
-	GNoX0q4XZixJ1e+afcnjOSzZEUv/aq+JK20vpvF9zw4qf6THsoDjQoSXJayI/hO6kxo=
-X-Gm-Gg: AR+sD12x1U8H0rggyDsOQItRqYFSe7izj3WgDGyWt5PIJJAJYI7EwcHg96FWDReNGeo
-	g5cB4fLj+2y/cNEVQUDmJhYUeuXMXS+uY5XqDTASDXkCk+6So6L7CXMks/M6crf8XZ/+GBH0b2d
-	G/NuERuxt3EmdlvoP5gET6QRou7R/4sKmECIICoLI+tQkw61fKRjrm2bsxhJMRG1d1dhDt8vtn9
-	H7ZxsphoUcqzKAUsvWMNxCHmL5VNqvKyh1Q8STh6vNDNmCY39nltHvtKVnGDlnzSJwP3ejweBgK
-	HVCu4H4zamqx1T6dVKdm1DewG6yN+xIMQzn5477qTd62eRrTJ5+MrP5whCEwM2TPAQaa9Q2rAnF
-	57T5h8O4if4/Rhik8THUCUF4APnKlTWOn2dq1am/D6dMJFxuZiQ6Hbv7xRIeOvIMagmxj09aGIk
-	tyBAOAT8H2xqCFxdyi77a4pscF+mIRilppSJ2uVeR4F1qpO9mA71l0EdfP8O4=
-X-Received: by 2002:a17:90b:3945:b0:37f:eafd:3505 with SMTP id 98e67ed59e1d1-39580eafaa7mr18294546a91.6.1787192968268;
-        Wed, 19 Aug 2026 19:29:28 -0700 (PDT)
-Received: from desktop ([147.46.174.226])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3957fb5127csm4534321a91.8.2026.08.19.19.29.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Aug 2026 19:29:27 -0700 (PDT)
-From: Kenneth Lee <kennethbwlee@snu.ac.kr>
-To: kennethbwlee@snu.ac.kr
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	linux-kernel@vger.kernel.org,
-	martin.lau@linux.dev,
-	memxor@gmail.com,
-	rhkrqnwk98@gmail.com,
-	sdf@fomichev.me,
-	song@kernel.org,
-	yonghong.song@linux.dev
-Subject: Re: BUG: bpf: task hung in lock_sock_nested during sockmap free
-Date: Thu, 20 Aug 2026 11:28:48 +0900
-Message-ID: <20260820022848.1408056-1-kennethbwlee@snu.ac.kr>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260812050758.813489-1-kennethbwlee@snu.ac.kr>
-References: <20260812050758.813489-1-kennethbwlee@snu.ac.kr>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VtJeV9y1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CED2A1F000E9;
+	Thu, 20 Aug 2026 02:33:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787193224;
+	bh=gtViPOAbNA/VYyOkdFzWL6uGxTotB4edTyG9T5iCeSY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=VtJeV9y1XAblxyUX1SNdmhsQZtl9MVd1Hr1ZAE00wLyW0aQhz1tjvf0/CcKIRcRug
+	 9bCjmuoIoQNoLQALCDGEdWhBO7a4lLIkoL5yYv/X7qQKTMziaRvpz6AyZyK9LuqMhT
+	 UXAH1bYGs69DXXCd/u+I/BJ9EgiTBIVVLWkAHY71QPmrr4zYJi5BA+X5l/wjCPwGr6
+	 TxK1sGlioshy9XYQ7U6/PPa7Av/YhWcyaJEFiMUQWMMIS7TH6baUiBYXnhhflcP4gp
+	 RE+HxyNJaen3LrktQ6kUg4wQVD/wgMkfGYbef1lQRJPajNzU/ayMEIx3YcHJuw7MV6
+	 CF2BI/xv+WX+g==
+Content-Type: multipart/mixed; boundary="===============8216862283695747858=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <4e5c5b7f96f565f2f4746e836bd55e32f608d5774bf82df958669dab56ad8a04@mail.kernel.org>
+In-Reply-To: <20260820013925.2515018-1-yonghong.song@linux.dev>
+References: <20260820013925.2515018-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next] bpf: Track linked scalars across a "rX <<= 32; rX >>= 32" zero extension
+From: bot+bpf-ci@kernel.org
+To: yonghong.song@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 20 Aug 2026 02:33:43 +0000 (UTC)
 
-Hi,
+--===============8216862283695747858==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-After further analysis, we found that this report is triggered by an
-SK_MSG BPF program repeatedly calling bpf_msg_apply_bytes(msg, 1).
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index e421ea2b80c3..0fded097505e 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
-For a message of about 557 KiB, this results in approximately 557,000
-one-byte verdict and push iterations. The TCP BPF send path keeps the
-socket lock while processing these iterations, so deferred
-sock_map_free() waits for the same socket lock.
+[ ... ]
 
-This appears to be a long lock-held processing path triggered by a valid
-but very unrealistic msg_apply_bytes(1) workload. We believe this behavior
-is benign, but let us know if other behavior is expected.
+> @@ -15584,6 +15584,50 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
+>  	return 0;
+>  }
+>
+> +static bool linked_base_fits_u32(const struct bpf_reg_state *reg)
+> +{
+> +	if (reg->id & BPF_ADD_CONST32)
+> +		return true;
+> +	return reg_smin(reg) >= (s64)reg->delta &&
+> +	       reg_smax(reg) <= (s64)U32_MAX + (s64)reg->delta;
+> +}
+> +
+> +static bool is_shift32_insn(const struct bpf_insn *insn, u8 op)
+> +{
+> +	return insn->code == (BPF_ALU64 | op | BPF_K) && insn->off == 0 && insn->imm == 32;
+> +}
+> +
+> +/* Handle "rX <<= 32; rX >>= 32", which zero extends the lower 32 bits. */
+> +static bool is_zext_pair_lsh(struct bpf_verifier_env *env, struct bpf_insn *insn,
+> +			     const struct bpf_reg_state *dst_reg)
+> +{
+> +	struct bpf_insn *next;
+> +	int insn_idx = env->insn_idx;
+> +
+> +	if (!dst_reg->id || !is_shift32_insn(insn, BPF_LSH))
+> +		return false;
+> +	/* check_subprogs() guarantees a shift is never the last insn. */
+> +	next = &env->prog->insnsi[insn_idx + 1];
+> +	if (!is_shift32_insn(next, BPF_RSH) || next->dst_reg != insn->dst_reg)
+> +		return false;
+> +	/* Ensure the next insn has a single incoming edge. */
+> +	return !bpf_is_prune_point(env, insn_idx + 1);
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Is the comment accurate? In is_zext_pair_lsh(), the check
+bpf_is_prune_point(env, insn_idx + 1) returns false when
+env->insn_aux_data[idx].prune_point is not set, but not every merge point
+gets that flag.
 
-Thanks,
-Kenneth Lee
+Looking at kernel/bpf/cfg.c, visit_gotox_insn() marks the gotox
+instruction itself as a prune point, but marks each jump-table target with
+mark_jmp_point() only, not mark_prune_point(). So an indirect-jump target
+instruction can have many incoming edges (one per jump-table entry plus a
+possible fall-through) while bpf_is_prune_point() returns false for it.
+
+If such a target is the second shift of the pair, is_zext_pair_lsh()
+would still return true even though the instruction has multiple incoming
+edges.
+
+The property actually being relied on appears to be "no verifier state is
+checkpointed at insn_idx + 1", which does follow from
+!bpf_is_prune_point(), since bpf_is_state_visited() in do_check() is
+itself guarded by bpf_is_prune_point(). On an edge that arrives at the
+second shift from somewhere other than the preceding first shift,
+is_zext_pair_rsh() would fail its "env->prev_insn_idx != insn_idx - 1"
+test and the id would be cleared as before.
+
+Could the comment be reworded to state the actual invariant? For example:
+"No state is checkpointed at insn_idx + 1, so the intermediate state
+between the two shifts can never be pruned against."
+
+> +}
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32322608718
+--===============8216862283695747858==--
