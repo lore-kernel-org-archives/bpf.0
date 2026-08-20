@@ -1,126 +1,164 @@
-Received: from outboundhk.mxmail.xiaomi.com (outboundhk.mxmail.xiaomi.com [118.143.206.90])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D5A4376A12;
-	Thu, 20 Aug 2026 08:47:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=118.143.206.90
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1E3B3D9544;
+	Thu, 20 Aug 2026 09:06:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787215626; cv=none; b=lEOS9IYjxqMlGPHE7EPsn+3WUTWOBo/C4BrdMZS/Y5kqARjcC9BI8D2ax1rjL5svl/jvmHNX5NdwCOFViDpiaUvfQ855EpgEBgQ2XZdKZy5RP3Xuu04fDLOFLej7yiQsEE+3N4cokIKtiK/9JkdAJoWX2AGm6y8HGkfMFHkkIrk=
+	t=1787216798; cv=none; b=qu/b37XelHHy7pyHIreQxJvROojSMXSKl2/mYJ5qn7vDiASkhylgjxHeB4GAo6Ga9DiuCfb5BckTzaG6UV5+eB2O/oUbWPNwn/SxgYPXX2OmjUOD1X+z8tru3z0QIBwt1kcGu6er7Y6txEcm6+3f9Wt1cxUXQvvYRic7uGtIQbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787215626; c=relaxed/simple;
-	bh=zF5fCM7nDYfymdMcvVadzG6IajfN+HxR0r9lfkbZLpg=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Oobpn3fkrACdr89jOd1chtuiDNi2ToJUVjS+Z5HqjMiDbUuIPnmFS1auOkRjMjws/dvW+6hD1u/ZM0Cxc1TdXGV9ThZnzjVO2W46XIWKF+YaG/E0+zJvrcTRxCC5x1Oe8aCKDPIhAeAX+BpcRhpZuh6kWYBJdR1utY85H4Dbk2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com; spf=pass smtp.mailfrom=xiaomi.com; arc=none smtp.client-ip=118.143.206.90
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=xiaomi.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaomi.com
-X-CSE-ConnectionGUID: kjOtaCVCS2CZ8JCTdCG06w==
-X-CSE-MsgGUID: MWKiRehuTRGKF2xuzRaPlg==
-X-IronPort-AV: E=Sophos;i="6.25,232,1779120000"; 
-   d="scan'208";a="159903525"
-From: meishaoming <meishaoming@xiaomi.com>
-To: <ast@kernel.org>
-CC: meishaoming <meishaoming@xiaomi.com>, <daniel@iogearbox.net>,
-	<andrii@kernel.org>, <memxor@gmail.com>, <martin.lau@linux.dev>,
-	<eddyz87@gmail.com>, <song@kernel.org>, <yonghong.song@linux.dev>,
-	<jolsa@kernel.org>, <emil@etsalapatis.com>, <bpf@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH bpf] bpf: array: reject max_entries > INT_MAX to prevent signed-iterator overflow
-Date: Thu, 20 Aug 2026 16:46:43 +0800
-Message-ID: <20260820084643.35489-1-meishaoming@xiaomi.com>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1787216798; c=relaxed/simple;
+	bh=vLCJuTo2O4w3Vc3mb/CjGxyudUJug6yKCjoKKtnk1tQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qxi/RWXYH7wffb6AH08dNc8XuID3hp7IsfqTmvwvAM2szJfRXY18x4cDFMDhOzP4XrIfKDsCIKMizcdv2t59bEuT2eBS0twe4WRFkWUHuJE4oQe1HWtlX8WoVTo1LiWOnieT6J03w+NN+pT065ZDZ1g6ZWNsVn0dRFTxFWSSQ4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=KP1H4jTT; arc=none smtp.client-ip=67.231.156.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="KP1H4jTT"
+Received: from pps.filterd (m0431383.ppops.net [127.0.0.1])
+	by mx0b-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67K7kOQN528169;
+	Thu, 20 Aug 2026 02:06:08 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pfpt0220; bh=h0+GZBfUH1rNYwZE6ixoi9F
+	pqhGiRmR7WG1iPnQ75uo=; b=KP1H4jTTuv+4xEffutVbvv/B+uA214+9lpuKoft
+	IF/VEwTS9ztHs9G3EskMgY84quReyzJTDE/qJ2b/pXXYTNsubfrhniskdnEM5x7K
+	JFbOn4Y+CFHPzaj+cx9kwmNQfnjedP9YzWowFEhnXue+v/hvjSpRZcz+jQV9DYF+
+	enTCQPb3Zd9lECQmDP72vCNE0PUpt6B1ehdmlPYGOzsIpIE5LulH1oJKOzdOi0jQ
+	PgcMhgqAyD7JHfRvfAyhk6My/17E7uLTyHW3zumYOUrk4dMcMAz9Q3uqgp1TvUvd
+	DjgKlTWIoqlul3DFnsshyv0e9PgMutD6A0vFvBEB+oueOnw==
+Received: from dc5-exch05.marvell.com ([199.233.59.128])
+	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 4g4yeveyu2-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 20 Aug 2026 02:06:03 -0700 (PDT)
+Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
+ DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Thu, 20 Aug 2026 02:05:53 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
+ (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
+ Transport; Thu, 20 Aug 2026 02:05:53 -0700
+Received: from rkannoth-OptiPlex-7090.. (unknown [10.28.36.165])
+	by maili.marvell.com (Postfix) with ESMTP id D5B2B3F704F;
+	Thu, 20 Aug 2026 02:05:47 -0700 (PDT)
+From: Ratheesh Kannoth <rkannoth@marvell.com>
+To: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>, <sumang@marvell.com>
+CC: <andrew+netdev@lunn.ch>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <davem@davemloft.net>, <edumazet@google.com>, <hawk@kernel.org>,
+        <john.fastabend@gmail.com>, <kuba@kernel.org>, <sdf@fomichev.me>,
+        <sgoutham@marvell.com>, Geetha sowjanya <gakula@marvell.com>,
+        "Ratheesh
+ Kannoth" <rkannoth@marvell.com>
+Subject: [PATCH net] octeontx2-pf: fix NULL deref of af_xdp_zc_qidx on rep setup
+Date: Thu, 20 Aug 2026 14:35:33 +0530
+Message-ID: <20260820090533.2681578-1-rkannoth@marvell.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: bj-mbx11.mioffice.cn (10.237.8.131) To BJ-MBX03.mioffice.cn
- (10.237.8.123)
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODIwMDA2NiBTYWx0ZWRfX4MnFr7i4/3Yt
+ PmvzKxDEtopFeCopU4v78KGWxUGtVs3r2G8hS7WHa/AMz/8tsd+Ss+xxrDgPnuv3Kkq1zBgA5mX
+ OPMB+BVwjTu1FnNVBr6A0xJ6aRE/gIc=
+X-Proofpoint-GUID: ZrqwCeOWjkmBfIwRsZWaI25S2fv9q-mO
+X-Proofpoint-ORIG-GUID: ZrqwCeOWjkmBfIwRsZWaI25S2fv9q-mO
+X-Authority-Analysis: v=2.4 cv=Wq8b99fv c=1 sm=1 tr=0 ts=6a86c37b cx=c_pps
+ a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17
+ a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=l0iWHRpgs5sLHlkKQ1IR:22
+ a=qit2iCtTFQkLgVSMPQTB:22 a=M5GUcnROAAAA:8 a=QvjZ8wtghHIPiP3emeoA:9
+ a=OBjm3rFKGHvpk9ecZwUJ:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODIwMDA2NiBTYWx0ZWRfXxGO3doyG4TEv
+ GpOh1gurZo5ErpYKHE4pq+JHDG9Uz+Mwr1I1vlVfZspCtu4bxF5cDRolP8VNPRJEQ3MKUeDNfbk
+ p8CgVM87ygRHQ1Yj1U7SHQodC7hxKEfOXL8p0Xu0y5a45Z8svdP6i1KvFJm29fOSbJI/LydHQgQ
+ QCz9CbBKdpOtNDsRi2tuR4zeTz5uEWb6+iJZCsKvAYvj0HCjpVbTJbSFyZGrysi7mIj5dOlid2C
+ Bkh5tYPcVCH2kGvkb3FloS5kz7vMko7NRizKPv0wg9pdmTm5jy708xly5pcb9jnMzRHDDKOCno3
+ EMzRKkm0jZQagn3JFvD+zy0dXr7iwxLfIAHPj+UWBugjpvyeaMQtp5K5ksX6+pDgOeSogz0B9ln
+ POnZteuGCveHffGKaI2ZCiljoHvFiPhCFY6vTX3vU/q7afcJglqGuVhtQ7ALU9caeqBoFsbeCRw
+ zM/xS43rpxm5Sqk6KmQ==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-08-19_06,2026-08-19_02,2025-10-01_01
 
-BPF_MAP_TYPE_PROG_ARRAY (and other array maps) take max_entries as a u32
-from userspace via bpf(BPF_MAP_CREATE), but array_map_alloc_check() only
-guards value_size > INT_MAX and leaves max_entries unchecked.
+From: Suman Ghosh <sumang@marvell.com>
 
-When the map is later freed, fd_array_map_free() iterates the ptrs[] array
-with a signed int loop variable:
+af_xdp_zc_qidx tracks receive queues using AF_XDP zero-copy and is
+allocated during PF/VF probe. Representors and other non-AF_XDP paths
+leave the pointer NULL, but several call sites used test_bit() on it
+unconditionally.
 
-    for (i =3D 0; i < array->map.max_entries; i++)
-        BUG_ON(array->ptrs[i] !=3D NULL);
+Switching to devlink eswitch mode creates representors and runs
+otx2_init_hw_resources(), which reaches otx2_pool_aq_init() and oopses
+when dereferencing the NULL bitmap. Add NULL checks before every
+af_xdp_zc_qidx test_bit() use in the RSS, ethtool, XSK, and pool init
+paths.
 
-On arm64 (and any LP64 arch) int is 32-bit signed, while max_entries is
-u32. With max_entries having bit 31 set (e.g. 0xFF00000A, observed from a
-syzkaller run), the loop runs past i =3D 0x7FFFFFFF: i++ wraps to 0x8000000=
-0,
-which as a signed int is negative. The address computation for
-&array->ptrs[i] sign-extends the 32-bit index (sxtw on arm64) into a
-64-bit negative offset:
-
-    array + sxtw(0x80000000) * 8 + offsetof(bpf_array, ptrs)
-  =3D array + 0xFFFFFFFC00000000 + 0x108
-  -> wraps to an unmapped address, level-1 translation fault, panic
-
-This is reachable today because the existing overflow backstop in
-array_map_alloc() lives inside the `if (!bypass_spec_v1)` block. Since
-commit 2c78ee898d8f ("bpf: Implement CAP_BPF") renamed the old
-`if (unpriv)` guard to `if (!bypass_spec_v1)`, the semantics inverted:
-a root caller with CAP_PERFMON (or mitigations=3Doff) takes the bypass
-path and skips the -E2BIG check entirely, so the raw attr->max_entries
-is stored into map->max_entries unchanged and the ~32 GB vmalloc
-(overcommit) region is handed out. The earlier unprivileged-path fix
-for max_entries overflow was carried along into the bypass block, so
-it does not cover the root path described here.
-
-Reject max_entries > INT_MAX in array_map_alloc_check(), the common entry
-point shared by all callers including the bypass path. This mirrors the
-existing value_size > INT_MAX guard a few lines above. The cut half of the
-u32 range (0x80000000..0xFFFFFFFF) cannot back a usable map today:
-  - a prog_array at the lower bound already needs ~16 GB of contiguous
-    virtual memory (and ~32 GB for the 0xFF00000A value seen in the field),
-    which either fails allocation or drives the system into OOM/softlockup
-    long before becoming a working map;
-  - legitimate prog_array usage is bounded by MAX_TAIL_CALL_CNT =3D 33 and
-    typical array maps are orders of magnitude below INT_MAX.
-
-No valid BPF use case is affected; the change converts a deferred
-whole-system BUG_ON panic (or OOM/softlockup) into an accurate -E2BIG at
-creation time.
-
-Fixes: 2c78ee898d8f ("bpf: Implement CAP_BPF")
-Signed-off-by: meishaoming <meishaoming@xiaomi.com>
+Fixes: efabce290151 ("octeontx2-pf: AF_XDP zero copy receive support")
+Signed-off-by: Suman Ghosh <sumang@marvell.com>
+Signed-off-by: Geetha sowjanya <gakula@marvell.com>
+Signed-off-by: Ratheesh Kannoth <rkannoth@marvell.com>
 ---
- kernel/bpf/arraymap.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c  | 6 ++++--
+ drivers/net/ethernet/marvell/octeontx2/nic/otx2_ethtool.c | 3 ++-
+ drivers/net/ethernet/marvell/octeontx2/nic/otx2_xsk.c     | 3 ++-
+ 3 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 248b4818178c..868bc9f66cdb 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -74,6 +74,9 @@ int array_map_alloc_check(union bpf_attr *attr)
-        /* avoid overflow on round_up(map->value_size) */
-        if (attr->value_size > INT_MAX)
-                return -E2BIG;
-+       /* avoid signed int iterator overflow in fd_array_map_free() */
-+       if (attr->max_entries > INT_MAX)
-+               return -E2BIG;
-        /* percpu map value size is bound by PCPU_MIN_UNIT_SIZE */
-        if (percpu && round_up(attr->value_size, 8) > PCPU_MIN_UNIT_SIZE)
-                return -E2BIG;
---
-2.50.1 (Apple Git-155)
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+index 3d253132a17f..8a36ab8ab19e 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+@@ -333,7 +333,8 @@ int otx2_set_rss_table(struct otx2_nic *pfvf, int ctx_id, const u32 *ind_tbl)
+ 	/* Get memory to put this msg */
+ 	for (idx = 0; idx < rss->rss_size; idx++) {
+ 		/* Ignore the queue if AF_XDP zero copy is enabled */
+-		if (test_bit(ind_tbl[idx], pfvf->af_xdp_zc_qidx))
++		if (pfvf->af_xdp_zc_qidx &&
++		    test_bit(ind_tbl[idx], pfvf->af_xdp_zc_qidx))
+ 			continue;
+ 
+ 		aq = otx2_mbox_alloc_msg_nix_aq_enq(mbox);
+@@ -1510,7 +1511,8 @@ int otx2_pool_aq_init(struct otx2_nic *pfvf, u16 pool_id,
+ 	if (type != AURA_NIX_RQ)
+ 		return 0;
+ 
+-	if (!test_bit(pool_id, pfvf->af_xdp_zc_qidx)) {
++	if (pfvf->af_xdp_zc_qidx &&
++	    !test_bit(pool_id, pfvf->af_xdp_zc_qidx)) {
+ 		pp_params.order = get_order(buf_size);
+ 		pp_params.flags = PP_FLAG_DMA_MAP;
+ 		pp_params.pool_size = min(OTX2_PAGE_POOL_SZ, numptrs);
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_ethtool.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_ethtool.c
+index a0340f3422bf..9bee1b91eeaa 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_ethtool.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_ethtool.c
+@@ -939,7 +939,8 @@ static int otx2_get_rxfh(struct net_device *dev,
+ 
+ 	for (idx = 0; idx < rss->rss_size; idx++) {
+ 		/* Ignore if the rx queue is AF_XDP zero copy enabled */
+-		if (test_bit(rss->ind_tbl[idx], pfvf->af_xdp_zc_qidx))
++		if (pfvf->af_xdp_zc_qidx &&
++		    test_bit(rss->ind_tbl[idx], pfvf->af_xdp_zc_qidx))
+ 			continue;
+ 		indir[idx] = rss->ind_tbl[idx];
+ 	}
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_xsk.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_xsk.c
+index 7d67b4cbaf71..0e8a6a6486c4 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_xsk.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_xsk.c
+@@ -193,7 +193,8 @@ int otx2_xsk_wakeup(struct net_device *dev, u32 queue_id, u32 flags)
+ 
+ void otx2_attach_xsk_buff(struct otx2_nic *pfvf, struct otx2_snd_queue *sq, int qidx)
+ {
+-	if (test_bit(qidx, pfvf->af_xdp_zc_qidx))
++	if (pfvf->af_xdp_zc_qidx &&
++	    test_bit(qidx, pfvf->af_xdp_zc_qidx))
+ 		sq->xsk_pool = xsk_get_pool_from_qid(pfvf->netdev, qidx);
+ }
+ 
+-- 
+2.43.0
 
-#/******=B1=BE=D3=CA=BC=FE=BC=B0=C6=E4=B8=BD=BC=FE=BA=AC=D3=D0=D0=A1=C3=D7=
-=B9=AB=CB=BE=B5=C4=B1=A3=C3=DC=D0=C5=CF=A2=A3=AC=BD=F6=CF=DE=D3=DA=B7=A2=CB=
-=CD=B8=F8=C9=CF=C3=E6=B5=D8=D6=B7=D6=D0=C1=D0=B3=F6=B5=C4=B8=F6=C8=CB=BB=F2=
-=C8=BA=D7=E9=A1=A3=BD=FB=D6=B9=C8=CE=BA=CE=C6=E4=CB=FB=C8=CB=D2=D4=C8=CE=BA=
-=CE=D0=CE=CA=BD=CA=B9=D3=C3=A3=A8=B0=FC=C0=A8=B5=AB=B2=BB=CF=DE=D3=DA=C8=AB=
-=B2=BF=BB=F2=B2=BF=B7=D6=B5=D8=D0=B9=C2=B6=A1=A2=B8=B4=D6=C6=A1=A2=BB=F2=C9=
-=A2=B7=A2=A3=A9=B1=BE=D3=CA=BC=FE=D6=D0=B5=C4=D0=C5=CF=A2=A1=A3=C8=E7=B9=FB=
-=C4=FA=B4=ED=CA=D5=C1=CB=B1=BE=D3=CA=BC=FE=A3=AC=C7=EB=C4=FA=C1=A2=BC=B4=B5=
-=E7=BB=B0=BB=F2=D3=CA=BC=FE=CD=A8=D6=AA=B7=A2=BC=FE=C8=CB=B2=A2=C9=BE=B3=FD=
-=B1=BE=D3=CA=BC=FE=A3=A1 This e-mail and its attachments contain confidenti=
-al information from XIAOMI, which is intended only for the person or entity=
- whose address is listed above. Any use of the information contained herein=
- in any way (including, but not limited to, total or partial disclosure, re=
-production, or dissemination) by persons other than the intended recipient(=
-s) is prohibited. If you receive this e-mail in error, please notify the se=
-nder by phone or email immediately and delete it!******/#
