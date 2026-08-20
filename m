@@ -1,131 +1,179 @@
-Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC1D345EAE
-	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 02:20:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8386B24B28
+	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 02:28:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787192428; cv=none; b=IH663NdZvH9F5gyJscvntjsVZGPIN69TzVS6qoeRLP2R/T+iKqAXZsBcubMeCufNwFZMkLWS1HKIm6jAQFRZQG0oBWYt/j+tyVlvLHfVHRis40eWAdH435UUYsJp07FQokk5Aj2ay3DLAUFFYAy7+MwrG1QsZoMtD1nylD9PKdo=
+	t=1787192923; cv=none; b=ULtip10CwuRfvOfYG1NEI0lxGAZ7ANerlImw0AmvRrDQxC37SXlfcC9tTZFs7LF7VpIIXrYT8eOEMe+hRQWD9fFXLTZ5qumSvUnCVAma9vrBV6hN3Cwj/ypQJ6Z4MdI44Wsy2hOCPGo6rOxdZSoMSLJPvscRxHmD/VcoK5N8S1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787192428; c=relaxed/simple;
-	bh=w7vSsl+j+ceETVkMr6UCaRTi5HL/x2+87xnZGAxVWhw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GB7d1+wE5mAQFQiEuWqgcneQT+/oqIfiojMBVoUc7hJvSAsfrazNX6hzDzAgBvYsBt0OAE9l+kgWebiWk25ad10tQP6xYGZDXDyHysk5zqqKCSH/xxZXok5W/IQXRcuVSP51Zv0NVlWJEwFp283Te5rJDlUoM7kjdUO4rJcH2Kw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pLr9JOqG; arc=none smtp.client-ip=74.125.225.138
+	s=arc-20240116; t=1787192923; c=relaxed/simple;
+	bh=aDMV4fWnry11sHOGeTDQBHl4BLjtm39QiepqMGViGF4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZOF2avwJbQFvZTBPQKZFVXmeHKZX+h8c4uWCD/ORHxmiqmdXNw8OgUeFCv2a/fsoW3XpIOtSl5+rRLcESNSZ0wMQB5CpiSHmeRw2WYxPdXN6Q/hHt0WE/t2C4l4X3JfDDrg8ucR/1RHP7xTAPWjPMJqkQYbtL+pWmUPJgwDWsQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dNb7KqWI; arc=none smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pLr9JOqG"
-Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-495482c36b8so6160145e9.0
-        for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 19:20:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dNb7KqWI"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-38ec1402b05so1492299a91.2
+        for <bpf@vger.kernel.org>; Wed, 19 Aug 2026 19:28:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787192425; x=1787797225; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ldbZsclDL+rBn43k0zoIvCSDotMjePyywOw8n/SAt1U=;
-        b=pLr9JOqG9aNjop6rnIt3xlFfRBICebkoqyc4yZmexdhYdiHrTdwcOK32XMshlo9PDw
-         89weZJccngNee4ta20/OgCk7cMWd5SroiCry8Cz7TankLEbb+kNtu0uk8bBOdqzrEqqD
-         GHpNDTPUcpAAKjnnHlltWW0RDDdl0MsAZvym8QLkMzVXVe7kXlLd1ARQaF6j+cK7Txx4
-         IGeWD/KaUUO/27yH4AXGRTwi8EtSNL1tklO5p6zVvZrc2j7XLiy5fj2WY0X+wqza7+iY
-         jXuILglcJ600JTVX7Jsv9CK1fNgX6DmHl5uu03J99H78B53ptXaij2MRB2Se6ilomsDD
-         Sw1g==
+        d=gmail.com; s=20251104; t=1787192922; x=1787797722; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=2yzy1IkfQ00CUbnZFN+MDvkX8Z6/ZjHiaU67BweoYoY=;
+        b=dNb7KqWIKV3OP7qoSWTba5BuweAgi0Ut5RbWo1RahhY2YwayGxBmhS4vgs1PCFMHKE
+         3QCqfKDquTO9j7g5d394jrYVM1lp7elDzQlbi9JOwrKzN2eKvljDiiW9iBO3LS97AaAw
+         oQuBwZbc3IVlU4ey22e1GoENaOAH9WDQY6Di8X0Es1ZfDJ07jzvizplqIEkZfpLsuVq+
+         f7FBjgZATJmTfg8bv42J3tTses0lc2olGZaMw1N24BLa67JrcgWuWXnm/ZiN6EeTy++r
+         wDPpTq1RT67rjgj3XVYTsRodcI8Vn9qyBceWANvSfseq9Q1Qhwh/xcFt03bmXQVXanJ2
+         gCxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787192425; x=1787797225;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ldbZsclDL+rBn43k0zoIvCSDotMjePyywOw8n/SAt1U=;
-        b=TCMo21e1k8g6xXWlUDo3StaCUQeXfr1k8PvQsNk0Ou7y3Z63EoypG+IXILqElevPmo
-         BQiSxMXpvQc7Vu//trxt7cgFi18Nu6s77TaJD235GaD/sJl6VWvIHtAbQu/66v0awEYu
-         Y3why032igw6eR7L+iUZeHmJTMbA0rhAMe6ZNK1eMOdqV5xmg/4WDpp63UOl1AMixwrX
-         G9vQibaBHiVBJ/+QCdGby2rjlveaY2oAB6wLY1LMIRQUkdrpcugDzI3od1jeCwEA6QNj
-         6top8WVQr0Tg+hmqWr2gjxaTcldRgsR5qqQh4//qsfDr+oZd74VMq5Qwa5QPDhmEp3eG
-         21JA==
-X-Gm-Message-State: AOJu0YxtqpGs7gCK+K8HAShbQ9KyyBD0JtZy0R5L4SQyk6XSxdM6SDxu
-	w2twxBMNLwF/p/eIHWB8ewKXm4RCFYnPvoQT2YWCEq9+ZYLxHNfbvRM73RbYCCoi
-X-Gm-Gg: AR+sD12MwpMsCOGZSanxyiRKchzE8FuCb3Duc6i5q2JXvRMKUXJVI0zHZyyY+K2pV49
-	NO6PJmG4zZeIviV5kyQmqS41hXCJLG2u/FcOpVZImyS92s7KiuJQZQLoYZ2/sctkn3iVIvuLJdL
-	T4zMDAYquZYmcT9oJlVAJIKhpGCG4xT5/6L83oDNXuQZ+MU3DKI2hVf93NwrBXpcNFjEryaXriU
-	7+tkGE7To7R3jKr0/4OCtLel2WLuK7ncD0ZpsAxOZLU0fJlWr6aAKf3oI0IxxdIFK998prW2tg7
-	+dA5VXUzxRhS7d1zReUbzTS+fDsj7B1XCdr7qsoCi7+AV4XKVMeBbAuiSSvWbrK6OtL52Cf+M0i
-	RFlsOYJgO/NkbrJR3OhCAowkioxNdjiUdO1sXDjoq4dGDfXj4gf9PfQ7uEixTl6sK/3KROBd84m
-	faVlJKY3F5FYaUjYhwbI9NBGg4arouq73MDyyHEUSLVfblPem2VfTFuPpj89eH12frTHv9967Au
-	Lhtc9Cdbwo/kXRIXrWOMUs82aNshCysx8rKULadHLnHbQQtqbxn6EGVip8XPtDfVYuwZsc835iy
-	O1hDcB3wCu/7THpdY4Fuid0n9g4=
-X-Received: by 2002:a05:600c:4e94:b0:499:78b3:7b36 with SMTP id 5b1f17b1804b1-499aa1b549cmr153560145e9.11.1787192425206;
-        Wed, 19 Aug 2026 19:20:25 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-499aa17fc80sm114839305e9.14.2026.08.19.19.20.24
+        d=1e100.net; s=20251104; t=1787192922; x=1787797722;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=2yzy1IkfQ00CUbnZFN+MDvkX8Z6/ZjHiaU67BweoYoY=;
+        b=KaStDK2YXA2At86282S+4YUrdlEVMjBqHxkb0klUUEZLaCBlcfuvL4DSJ2/aFktrB8
+         NwoinxGR37di1j/ZASMOjYw9sZuC0/05pyh+itALtfBhqSREhDchXhAXlilqol7XqE0R
+         usBH27fVsqoCuPRG/T2rV0JL8FGUZrxH8HFKBwqg+yEGRK1hDr8MQLyXrtWJhGOQOpFL
+         Cr5um+vd4xHP1krrm7zldjMxCZ+ADFl2NmPc5ykq6wPLd4v8GwqA8Oa4wK7yuE2U5Q91
+         MDcfDvQVnRqDDc/H6r1c53CWous82zeHj6RaAb93/sSV4ujTbYy0EZIck/mXZ610qBAi
+         6/Cw==
+X-Forwarded-Encrypted: i=1; AHgh+RpgLMvc+fQocFZ9u4DhOXRUs7eg1rkpOFpC8n2PQmiBAdv+FZoeiEERJtGMtFw6ydTCdMM=@vger.kernel.org
+X-Gm-Message-State: AFuF++maV6pDXo7wbpu0RN9cb51IeW+pHmQ80UXV+Zg0C3hMjH05jY2n
+	l6KvBE1LeOZTO8P33XY/+mm17C0eDRWgoaFVVA5pMtiLRxh4uCczMCu+xJx+gg==
+X-Gm-Gg: AR+sD12w96hxydeflne+z2OctHQzB2sBCsZgwAInDvJttmkM5QgmhV4cD3zm/mAQF9w
+	PGG5Roqbd8R1cUkQuni4iOq47BrrBjq/ZKKSaGmyqx99ohs7i0hmwvscokT2G99OdLVAelIr5iN
+	2G4QBeNsc+RFHUZml33otp4LyWxF1ffOvuWfME3Fp+LKMAVIQeFPbzkXPrReOqynkg7p/kAXCMW
+	W7s4sxO72d5OD1GPfE937CPeCoxpphdO5nn/AvZyCzPOqiO6PcSRwjl2Q/ZVr5f0/09+tevRD/T
+	+GoEHprQfRdrKWos/ci2jQv0/29xfKzHHyYhQX21w/is1k8C67AEOYIotwrTw/ZaDd5TWg0Hu0V
+	cah6GBDCAxQCEwXhApmmSivOHkFFbrzaG2kiQKuvX9M0KfrPwRtasEGJoPg4VRUbfkcmAjmKjaU
+	wXUyd68/rZW5K8JSrnNIhniieouQkdwwCq8sUkNPZxhfibi/p648xam5CS
+X-Received: by 2002:a17:90b:258b:b0:38e:2e86:ed02 with SMTP id 98e67ed59e1d1-395810e9837mr18138079a91.14.1787192921760;
+        Wed, 19 Aug 2026 19:28:41 -0700 (PDT)
+Received: from omen-arch ([147.46.124.101])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3957fb14bbfsm4641872a91.1.2026.08.19.19.28.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Aug 2026 19:20:24 -0700 (PDT)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
+        Wed, 19 Aug 2026 19:28:40 -0700 (PDT)
+From: Junseo Lim <zirajs7@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: John Fastabend <john.fastabend@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 2/2] selftests/bpf: Test invalid DW LDSX diagnostics
-Date: Thu, 20 Aug 2026 04:20:19 +0200
-Message-ID: <20260820022020.3450479-3-memxor@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260820022020.3450479-1-memxor@gmail.com>
-References: <20260820022020.3450479-1-memxor@gmail.com>
+	bpf@vger.kernel.org,
+	Sechang Lim <rhkrqnwk98@gmail.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Leon Hwang <leon.hwang@linux.dev>
+Subject: [PATCH bpf v2] bpf: keep trampoline progs alive until image release
+Date: Thu, 20 Aug 2026 11:28:31 +0900
+Message-ID: <20260820022831.18601-1-zirajs7@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1398; i=memxor@gmail.com; h=from:subject; bh=w7vSsl+j+ceETVkMr6UCaRTi5HL/x2+87xnZGAxVWhw=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIastRWtd9/v9zB8eZV2L2TdnutqiWA49P/PsM+4/j7RZ/ 1o14f3HjlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAEzE9DPDX5m9e2TviH4wXv6g fJ578mpWU1tZVa2ury1aS9cyB/8UmcLwv/g613OZ/fx5ZxPSWha7HFTkemhdfD0zb9GX5Xtfljx bzA0A
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-An invalid BPF_MEMSX | BPF_DW instruction can reach Program Structure
-diagnostics before opcode validation when placed at the end of a subprogram.
-Exercise this path and require the disassembler fallback so table bounds
-regressions are caught.
+arch_prepare_bpf_trampoline() embeds program pointers in the generated
+image and passes them to __bpf_prog_enter_recur(). After
+bpf_trampoline_update() replaces the image, bpf_tramp_image_put() can keep
+the old image executable past a normal RCU grace period.
 
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+A detached non-sleepable prog can therefore be freed before a preempted
+task reaches rcu_read_lock_dont_migrate() in __bpf_prog_enter_recur(),
+leading to a use-after-free.
+
+Keep image-local prog refs and drop them from bpf_tramp_image_free().
+
+Fixes: e21aa341785c ("bpf: Fix fexit trampoline.")
+Reported-by: Sechang Lim <rhkrqnwk98@gmail.com>
+Signed-off-by: Junseo Lim <zirajs7@gmail.com>
 ---
- tools/testing/selftests/bpf/progs/verifier_cfg.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+v1 -> v2:
+- Factor prog ref get/put logic into helpers, per Leon Hwang's suggestion.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_cfg.c b/tools/testing/selftests/bpf/progs/verifier_cfg.c
-index c1f55e1d80a4..3c3bb03e8217 100644
---- a/tools/testing/selftests/bpf/progs/verifier_cfg.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_cfg.c
-@@ -3,6 +3,7 @@
+v1: https://lore.kernel.org/bpf/20260815071927.147049-1-zirajs7@gmail.com/T/
+
+ include/linux/bpf.h     |  5 +++++
+ kernel/bpf/trampoline.c | 30 ++++++++++++++++++++++++++++++
+ 2 files changed, 35 insertions(+)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 7719f6528445..bacb6bc2e27b 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1376,6 +1376,11 @@ struct bpf_tramp_image {
+ 		struct rcu_head rcu;
+ 		struct work_struct work;
+ 	};
++#ifdef CONFIG_PREEMPTION
++	/* Programs called from this image must outlive deferred image freeing. */
++	struct bpf_prog *progs[BPF_MAX_TRAMP_LINKS];
++	int nr_progs;
++#endif
+ };
  
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
-+#include "../../../include/linux/filter.h"
- #include "bpf_misc.h"
- 
- SEC("socket")
-@@ -55,6 +56,19 @@ __naked void out_of_range_jump2(void)
- "	::: __clobber_all);
+ struct bpf_trampoline {
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 1a721fc4bef5..33383d1dc1e0 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -529,8 +529,36 @@ bpf_trampoline_get_progs(const struct bpf_trampoline *tr, int *total, bool *ip_a
+ 	return tnodes;
  }
  
-+SEC("socket")
-+__description("invalid DW LDSX instruction in diagnostics")
-+__failure __msg("BUG_ldx_99")
-+__log_level(2)
-+__naked void invalid_dw_ldsx(void)
++static void bpf_tramp_image_get_progs(struct bpf_tramp_image *im,
++				      struct bpf_tramp_nodes *tnodes)
 +{
-+	asm volatile ("					\
-+	.8byte %[ldsx_dw];				\
-+"	:
-+	: __imm_insn(ldsx_dw, BPF_RAW_INSN(BPF_LDX | BPF_MEMSX | BPF_DW, BPF_REG_0, BPF_REG_0, 0, 0))
-+	: __clobber_all);
++#ifdef CONFIG_PREEMPTION
++	int i, kind;
++
++	for (kind = 0; kind < BPF_TRAMP_MAX; kind++)
++		for (i = 0; i < tnodes[kind].nr_nodes; i++) {
++			struct bpf_prog *prog = tnodes[kind].nodes[i]->link->prog;
++
++			bpf_prog_inc(prog);
++			im->progs[im->nr_progs++] = prog;
++		}
++#endif
 +}
 +
- SEC("socket")
- __description("loop (back-edge)")
- __failure __msg("unreachable insn 1")
++static void bpf_tramp_image_put_progs(struct bpf_tramp_image *im)
++{
++#ifdef CONFIG_PREEMPTION
++	int i;
++
++	for (i = 0; i < im->nr_progs; i++)
++		bpf_prog_put(im->progs[i]);
++#endif
++}
++
+ static void bpf_tramp_image_free(struct bpf_tramp_image *im)
+ {
++	bpf_tramp_image_put_progs(im);
++
+ 	bpf_image_ksym_del(&im->ksym);
+ 	arch_free_bpf_trampoline(im->image, im->size);
+ 	bpf_jit_uncharge_modmem(im->size);
+@@ -740,6 +768,8 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
+ 		goto out;
+ 	}
+ 
++	bpf_tramp_image_get_progs(im, tnodes);
++
+ 	err = arch_prepare_bpf_trampoline(im, im->image, im->image + size,
+ 					  &tr->func.model, tr->flags, tnodes,
+ 					  tr->func.addr);
 -- 
-2.53.0
+2.55.0
 
