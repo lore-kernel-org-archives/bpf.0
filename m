@@ -1,43 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C3001ACEDE
-	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 02:42:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D0BB5474F
+	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 02:47:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787193759; cv=none; b=mXIRkI3myw684ejawwS8XUdJcmHNBG/U+XYx2RzRLpEVDiZjG8xWeFjrs4AYiWJiCcfZr2otag1+S+a1E9uKYFRHjLUqj3/R7URq9b/rRrtObz+OXxqc+fvcNlVJOEzxp7cVI48xRzeTYKAn0hAW6+RspJzyovTyNGzUU+6ZG0k=
+	t=1787194066; cv=none; b=cHdUXbRvM3VHzC5Cn6pQZ+Np38cef2q4JfwsxX7D0bIVu1P43dVpkV6LS2e5ELXg6Ga/NIV7xERgWnrw/feT4djgc0vnunWUqrjzJ85aesgBFqXdBiSTIrvCLcC3iO3DsjM6wgKD+IUKbxZ6ux2YLItwPrMhg5+tql2XjmmvbvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787193759; c=relaxed/simple;
-	bh=F6V+dTisQbLf+K72lqiXNub8OBb9Lh1CgranDjAH5Pw=;
+	s=arc-20240116; t=1787194066; c=relaxed/simple;
+	bh=fYdPbrkuYbMb9+FM3rd/5UbcokKpgrUu58OGyFkoIUE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=jXewwO96EwwrGqeIQfNtzMFhsSLTjEJsCWoA+GjYgDWHFJWLqEtDLQ0AB96MCqKsRx/ARZDah/FYoKfLmzdhhoaULSXuFPvtQXF0K03cWeJx27jSPWE8TbRg0TlW+4BU2ImD2GawuXOqF7ILXEIm5Zlw6ZAKJY++PZNSofkhu24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M/SKQVyn; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=DNY//tt++78ScOZJpTs3tJ8Ni2vJEqXw7PlVw2ySh+5tSKgHFYRSpM2pIgwf3b9g43rYrqRaYFZm1ps86g8BCxwizikK/FJAJPKaK+FPZC/SaJAFuD9jtqgQalpPvF+D9vbC5//zK2bQVcaQy15us9i6WeDT0N8/wHrspCLkBXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Onsl8R9R; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M/SKQVyn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B27A21F000E9;
-	Thu, 20 Aug 2026 02:42:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Onsl8R9R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07FC81F000E9;
+	Thu, 20 Aug 2026 02:47:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787193757;
-	bh=Psnb0W4LLWRuK99pCQp7wIOgzhhF0ShxX3aPRl74Yj8=;
+	s=k20260515; t=1787194065;
+	bh=TcBkB1JS2XnvDsHqejMZYnMqkq9mcPQ+Mris4tr4aow=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=M/SKQVynvafXeunWekcHvwO3ZKGUhCXKeIIF0tfW0yCzBDpHbw7xO0nvwVCCBIDCW
-	 bf6lTJdgAYmRZoyNGbN/NuKUvq6Buz45ZFUu0ZpyCxATYtuWYm3OOwTYbqPzGsfYWz
-	 U7eV+BptHi4sg/STkZGrSI0zCNqeuzIxYreAq1r2nPtWBLA+yjgpqfv49CCRpQR+1p
-	 wCGxgbiTxLSEFSFFm6Z2w1gwt5/xfADx6xo1INamkbNDso68qmYqeanPf33SdXWj9v
-	 DtQzIX0DgISUbTjV0RRI9kIgLszK4SDuAw+f2XaUtbI7nuKM4Cw6ba3eALnRXfMpMT
-	 cCoXeKK19Y1WA==
+	b=Onsl8R9RZwFEWPXq0Fy6hgkWH+ObOtVp+yOEfOlm+gVcLckV33gMx7SUC4eQDGyG6
+	 8JAjM3i2t3cVl3qkHqFuWKnG9wz6aLlrr8GknWFENxD+bKHy0E8NRkCCMqtyo1miJb
+	 HluJIgBAQlMqMPQfvvnNUGvNmoxEYAobvEDxhlJxTQ2zIxDLxzCw/O3JLfT/BK5kLv
+	 /U9lXHGECEIyQ7+ilS+aD5GH8jPumWShkIj5l/9zQJ2nPTfd7Ia0LRHQ/08p1mrIN0
+	 ZzwOHa8Uzeai+IP8mBvVRWUWQR1na5L7YMsu2BGFjnNdz8nGkgvooK1n6SUVMjyYOU
+	 0byiQ+7f9we7A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v2] bpf: keep trampoline progs alive until image
- release
+Subject: Re: [PATCH net-next v3 1/4] selftests/xsk: add UMEM users refcount
+ and centralize socket teardown
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Junseo Lim" <zirajs7@gmail.com>
+To: "Tushar Vyavahare" <tushar.vyavahare@intel.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260820022831.18601-1-zirajs7@gmail.com>
-References: <20260820022831.18601-1-zirajs7@gmail.com>
+In-Reply-To: <20260819024443.781764-2-tushar.vyavahare@intel.com>
+References: <20260819024443.781764-1-tushar.vyavahare@intel.com>
+ <20260819024443.781764-2-tushar.vyavahare@intel.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 20 Aug 2026 02:42:37 +0000
-Message-Id: <20260820024237.B27A21F000E9@smtp.kernel.org>
+Date: Thu, 20 Aug 2026 02:47:44 +0000
+Message-Id: <20260820024745.07FC81F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,94 +47,60 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] The patch restricts the `bpf_tramp_image` program reference counti=
-ng fix to `CONFIG_PREEMPTION=3Dy`, leaving `CONFIG_PREEMPTION=3Dn` kernels =
-vulnerable to a Use-After-Free if `bpf_trampoline_update()` fails during pr=
-ogram unlinking.
+- [Medium] Shared UMEM TX sockets fail to create due to partial UMEM view l=
+acking the libbpf UMEM handle.
 --
 
---- Patch [1]: [PATCH bpf v2] bpf: keep trampoline progs alive until image =
-release ---
-commit e97f38fbbba7062b73e2785973928c70f36f1661
-Author: Junseo Lim <zirajs7@gmail.com>
+--- Patch [1]: [PATCH net-next v3 1/4] selftests/xsk: add UMEM users refcou=
+nt and centralize socket teardown ---
+commit ec175a3b2fa035fe1d6886d51e8d51aa7aaf1d62
+Author: Tushar Vyavahare <tushar.vyavahare@intel.com>
 
-bpf: keep trampoline progs alive until image release
+selftests/xsk: add UMEM users refcount and centralize socket teardown
 
-arch_prepare_bpf_trampoline() embeds program pointers in the generated
-image. After bpf_trampoline_update() replaces the image,
-bpf_tramp_image_put() can keep the old image executable past a normal RCU
-grace period, allowing a detached non-sleepable prog to be freed before a
-preempted task finishes, leading to a use-after-free. This patch keeps
-image-local prog refs and drops them from bpf_tramp_image_free().
+This commit adds a reference count to xsk_umem_info to track shared UMEM
+ownership and centralizes the teardown path to ensure sockets clean up
+properly across all error paths.
 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1376,6 +1376,11 @@ struct bpf_tramp_image {
->  		struct rcu_head rcu;
->  		struct work_struct work;
->  	};
-> +#ifdef CONFIG_PREEMPTION
-> +	/* Programs called from this image must outlive deferred image freeing.=
- */
-> +	struct bpf_prog *progs[BPF_MAX_TRAMP_LINKS];
-> +	int nr_progs;
-> +#endif
->  };
-
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/te=
+sting/selftests/bpf/prog_tests/test_xsk.c
+> index 38ce6060b8fac..fbec8afaadc99 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
 [ ... ]
-
-> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> --- a/kernel/bpf/trampoline.c
-> +++ b/kernel/bpf/trampoline.c
-> @@ -529,8 +529,36 @@ bpf_trampoline_get_progs(const struct bpf_trampoline=
- *tr, int *total, bool *ip_a
->  	return tnodes;
->  }
+> @@ -1508,8 +1529,15 @@ static int thread_common_ops_tx(struct test_spec *=
+test, struct ifobject *ifobjec
+>  	}
 > =20
-> +static void bpf_tramp_image_get_progs(struct bpf_tramp_image *im,
-> +				      struct bpf_tramp_nodes *tnodes)
-> +{
-> +#ifdef CONFIG_PREEMPTION
-        ^^^^
+>  	umem_rx =3D test->ifobj_rx->xsk_arr[0].umem;
+> +	/* Non-owning view used only for TX buffer arithmetic; the sockets belo=
+w bind to
+> +	 * the RX-owned UMEM, so the handle, cq and refcount stay in one place.
+> +	 */
+>  	umem_tx =3D ifobject->xsk_arr[0].umem_real;
+> -	memcpy(umem_tx, umem_rx, sizeof(*umem_tx));
+> +	umem_tx->num_frames =3D umem_rx->num_frames;
+> +	umem_tx->frame_headroom =3D umem_rx->frame_headroom;
+> +	umem_tx->buffer =3D umem_rx->buffer;
+> +	umem_tx->frame_size =3D umem_rx->frame_size;
+> +	umem_tx->unaligned_mode =3D umem_rx->unaligned_mode;
+>  	umem_tx->base_addr =3D 0;
+>  	umem_tx->next_buffer =3D 0;
 
-[Severity: High]
-This is a pre-existing issue, but does restricting this reference counting =
-to
-CONFIG_PREEMPTION=3Dy leave CONFIG_PREEMPTION=3Dn kernels vulnerable to a
-use-after-free if bpf_trampoline_update() fails during program unlinking?
+[Severity: Medium]
+Will this cause shared UMEM TX sockets to fail creation because the libbpf
+UMEM handle is not copied over?
 
-If a user detaches a BPF tracing program, bpf_tracing_link_release() calls
-__bpf_trampoline_unlink_prog(), which removes the program from the trampoli=
-ne
-list and calls bpf_trampoline_update().
+Since umem_tx is now constructed manually instead of using memcpy(), the
+umem_tx->umem field is left NULL. When xsk_configure_socket() is called lat=
+er
+in thread_common_ops_tx(), it passes this NULL umem->umem pointer to
+xsk_socket__create(), which causes it to fail.
 
-If bpf_trampoline_update() fails (for example, due to -ENOMEM in
-bpf_tramp_image_alloc()), the error is absorbed by a WARN_ON_ONCE. The link=
-'s
-reference to the program is subsequently dropped, and the program is freed.
-
-However, because the update failed, the old executable image remains active
-and continues to execute the embedded pointers to the freed program memory.
-
-Could the CONFIG_PREEMPTION ifdef guards be removed so that the image always
-holds references to its programs, preventing the use-after-free for
-CONFIG_PREEMPTION=3Dn kernels as well?
-
-> +	int i, kind;
-> +
-> +	for (kind =3D 0; kind < BPF_TRAMP_MAX; kind++)
-> +		for (i =3D 0; i < tnodes[kind].nr_nodes; i++) {
-> +			struct bpf_prog *prog =3D tnodes[kind].nodes[i]->link->prog;
-> +
-> +			bpf_prog_inc(prog);
-> +			im->progs[im->nr_progs++] =3D prog;
-> +		}
-> +#endif
-> +}
+Also, does leaving the users refcount zero-initialized on this umem_tx view
+conflict with the stated goal of keeping shared sockets pointing to the same
+reference count?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260820022831.1860=
-1-1-zirajs7@gmail.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260819024443.7817=
+64-1-tushar.vyavahare@intel.com?part=3D1
