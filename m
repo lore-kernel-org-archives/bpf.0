@@ -1,119 +1,81 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6983E47CA62
-	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 15:44:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F25225228D;
+	Thu, 20 Aug 2026 16:00:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787240693; cv=none; b=t2LJlvFxXW5Shjlwilo04zbuiR32t3xEEQy81PF7OtdbQiv6tansoz0XgopsYD4AxnG1oEdjcDOydXY5UOLvN83C91lIVmppLClTEwZ9igJkcWObbWWV619s/3wqCUoEz9jzzbmHBibz2QgjCYniHqgCiESTuIfcHXaP0c1VuzM=
+	t=1787241657; cv=none; b=gCEwXVpbJg63J6cwy7D/o4Dq6lZxyhBhAdXjgiNh0cU33swZ4PUHGqxqeexgiAjI/QjSNk6gRQ8flJY3CpG2Abesy1JRHriAEfd6hUcyAgvZrEzhd6CmhZ7stEB0AX+Rrxe7A6jbckrvxkIbiN+bKLx3nn3NlWB4IkHF/ofC/ms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787240693; c=relaxed/simple;
-	bh=K2wB/4FNhxDYjkUEsgonv42m9EJh8NMvhM7iCaEIGT4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Fp19L1te2zBlhRPad1zkcwH1ZLT8ZDvm7S/fLoUvJBdtg4uNI+jbt0Mb6VsKf1xzxrW98XUiS6TQcoHbPCdSxaDEVvCCjj6QfIwCeTpZ4FgXldi3Jz221vo3aADDLOicPYHiTpxbkFy0AES9zSUMwwHEHIEBItyThG9p8pTGcLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EG+U5ARL; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787241657; c=relaxed/simple;
+	bh=5SWX2gkFBK1Hxcn2n9HM5JqWmNBNwzMztpNQRkhGD70=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=cz8gfzeqeRwidO8kePMvdO2upybaDQnQhmNWYa+jm2E2iEZAAIRTbi7stZYNEhwbwPVf7otOhJEOXEit4GhfZyAgmUysQAzb98/5ENdB9HpRetmsHkyLMKd7YxnCya9NF5Wtt4uJ/CdTQHpw1am7AhxUNCzxJkPRgWxrdu2STG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GXC7zmsd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EG+U5ARL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A65CC1F01558;
-	Thu, 20 Aug 2026 15:44:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GXC7zmsd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 681301F000E9;
+	Thu, 20 Aug 2026 16:00:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787240683;
-	bh=11dvzmtD5jEiWJ5mF6PR8Wk1WS/7lNBZueh1DBLyciY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=EG+U5ARLsjJ955/a3uIM4KX5L+i1jnWLg4hsprFQ8lR7jJ4JFrJX1BusAOYoXA/H0
-	 0G1sbEQoJPR32tb7Y5MjE+xKgi1HWmAgOM0PxqnyD7TVtSypOVBv26iuQ4vVUGu1Ps
-	 9L49xNmia04kRUyJN6YbdzWqvK+dX9YhH9cv51k9vAq/LKqn65cBQQnan9Q00Le8/S
-	 QIxtzfEmvefgUmm83TrY40uNLy0KFLSRk3m4WIRQpBNXUQxF7Nd4Mh7kf8iK2ptEwB
-	 8e6gRbxHw6C471d7UU3nW8nz5fo47o/Vxta9SQR8ZKeI6lmBZonzFDaGxfD1i2VQFL
-	 0CA1dlX6gEKug==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 5/5] selftests/x86: add generic prctl shadow stack
- test
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Bill Roberts" <bill.roberts@arm.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260818225428.1983328-6-bill.roberts@arm.com>
-References: <20260818225428.1983328-1-bill.roberts@arm.com>
- <20260818225428.1983328-6-bill.roberts@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 20 Aug 2026 15:44:43 +0000
-Message-Id: <20260820154443.A65CC1F01558@smtp.kernel.org>
+	s=k20260515; t=1787241656;
+	bh=1iL6uHiwuMj3OY0HN/FxzftnksGWy16FbNU4r2Wgz4o=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=GXC7zmsdI+VkjvF+X/3OXsUCqIAQxCr3nKFKOrBOJRa8wG2oHwh47G3RVNSMEY3sP
+	 jIk7f6eDve5Y3WUwJq0QJMP3A0f8B+aTXCVptCISCgLmXAr38Yv+8O9EhECen0YDv9
+	 KaBB/H1L9xip9WlPZvKdRrt4w0w964cDD20/EnoEgulOnUz01kIh+WzFPurfwrK3z1
+	 ElpeOzH8dSAtOy0Ab/gBtObrXwM2dTg8Jv7XqV3vgiZf7b3cvfJAaqRi06aih/VDdA
+	 eozrrklITWy2mtN5ZYIgWui/Zl3Ny46EssW5Ti0QTEuAEOQRmLkpYtNrDnhkGLdlY7
+	 47TeyfrJbncew==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EC5E23811A7B;
+	Thu, 20 Aug 2026 16:00:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] x86/bpf: make arch_bpf_trampoline_size allocate from
+ EXECMEM_MODULE_DATA
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178724160664.341736.16028923311216598674.git-patchwork-notify@kernel.org>
+Date: Thu, 20 Aug 2026 16:00:06 +0000
+References: <20260818130510.3110054-1-rppt@kernel.org>
+In-Reply-To: <20260818130510.3110054-1-rppt@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: ast@kernel.org, andrii@kernel.org, bp@alien8.de, daniel@iogearbox.net,
+ dave.hansen@linux.intel.com, eddyz87@gmail.com, mingo@redhat.com,
+ memxor@gmail.com, song@kernel.org, tglx@kernel.org, emil@etsalapatis.com,
+ hpa@zytor.com, jolsa@kernel.org, john.fastabend@gmail.com,
+ martin.lau@linux.dev, yonghong.song@linux.dev, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, x86@kernel.org, olsajiri@gmail.com
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The global `_which_test` variable used by `segv_gp_handler` is o=
-nly initialized inside `test_32bit()`, creating an implicit execution depen=
-dency.
---
+Hello:
 
---- Patch [5]: [PATCH v3 5/5] selftests/x86: add generic prctl shadow stack=
- test ---
-commit 4df1cdb98415fac5314af3be03f1bd5e57dfbd7c
-Author: Bill Roberts <bill.roberts@arm.com>
+This patch was applied to bpf/bpf.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-selftests/x86: add generic prctl shadow stack test
+On Tue, 18 Aug 2026 16:05:10 +0300 you wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> Jiri Olsa reports slowdown of tracing_multi benchmark that allocates huge
+> number of trampolines [1].
+> 
+> The slowdown caused by extra protection changes in execmem_alloc_rw() and
+> execmem_free().
+> 
+> [...]
 
-This commit refactors the existing shadow stack selftests to allow running
-the suite using both arch_prctl and the generic prctl interfaces. It moves
-the core logic into a shared file and introduces a new test executable for
-the generic prctl.
+Here is the summary with links:
+  - x86/bpf: make arch_bpf_trampoline_size allocate from EXECMEM_MODULE_DATA
+    https://git.kernel.org/bpf/bpf/c/c7a2a3618290
 
-> diff --git a/tools/testing/selftests/x86/shadow_stack.c b/tools/testing/s=
-elftests/x86/shadow_stack.c
-> new file mode 100644
-> --- /dev/null
-> +++ b/tools/testing/selftests/x86/shadow_stack.c
-[ ... ]
-> +sigjmp_buf jmp_buffer;
-> +enum shadow_stack_test _which_test;
-> +void segv_gp_handler(int signum, siginfo_t *si, void *uc)
-> +{
-> +	segv_triggered =3D true;
-> +
-> +	/*
-> +	 * To work with old glibc, this can't rely on siglongjmp working with
-> +	 * shadow stack enabled, so disable shadow stack before siglongjmp().
-> +	 */
-> +	SHADOW_STACK_DISABLE(_which_test);
-> +	siglongjmp(jmp_buffer, -1);
-> +}
-[ ... ]
-> +int test_32bit(enum shadow_stack_test which_test)
-> +{
-> +	struct sigaction sa =3D {};
-> +	struct sigaction *sa32;
-> +
-> +	_which_test =3D which_test;
-[ ... ]
-> +int shadow_stack_run_tests(enum shadow_stack_test which_test)
-> +{
-> +	int ret =3D 0;
-> +
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-[Severity: Medium]
-Could this create a test execution order dependency?
 
-The global variable _which_test is used by segv_gp_handler to multiplex
-between the arch_prctl and prctl APIs before calling siglongjmp(). However,
-_which_test is only explicitly initialized when test_32bit() executes.
-
-Since segv_gp_handler is also used by test_uretprobe() and test_uprobe_call=
-(),
-if the test execution order changes or if test_32bit() gets skipped,
-_which_test will remain uninitialized (defaulting to 0, which corresponds
-to SHADOW_STACK_TEST_ARCH_PRCTL). This could cause the generic prctl test
-binary to incorrectly use the arch_prctl APIs in its signal handler.
-
-Should _which_test be initialized here at the entry of
-shadow_stack_run_tests() instead of inside test_32bit() to ensure it is
-always cleanly set for all tests that rely on this signal handler?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260818225428.1983=
-328-1-bill.roberts@arm.com?part=3D5
