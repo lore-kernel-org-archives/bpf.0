@@ -1,132 +1,173 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A3E347D444
-	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 15:44:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62D1A488DAE
+	for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 15:44:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787240654; cv=none; b=Qd9ROEbovM5v1kzNZmh4ZeiaoRNtSOhgPAYTDw3cPXvsn5O1G3CKPt/Je/trJg3u7NCz8e1WAxObI8lF4Vl06rotLSMhTXydmRaYQMo4A+IMz0RRn09Z+yCMdPiLMheyspsI/T1soKTDTEg3Y/n6bVpmvlygCMvn8StQMyXMjvk=
+	t=1787240666; cv=none; b=sbla8jZ59pcxe+1KtJsSv770dM9UcA/H3USLMBtphCdpfYUpaacF8/ChON2hKMQBisiaHUZLRHtq4tco1gHzN2nHSEzD+IJsam8xk52SIP+WaIPaECRRdUQjgaFQWKnwmFxItP9cvZ/dab1xoxU96FIzXKlGyySXwsvvSedHaJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787240654; c=relaxed/simple;
-	bh=+ykhXc2aSoBvHXETc89y1YEGbKgKsH/lOZbjhL8eB2g=;
+	s=arc-20240116; t=1787240666; c=relaxed/simple;
+	bh=g2v+tlbQI3sTKlTGRuzEcUSo/x6AIqKXvUP+YX2m7wA=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=I3SvHdzmPq5WxOO4C7Ye8gr8HhUHMQDU/pK/OHUdEzmSpqDZ+/aBBHCQ8C/pHTYBMvZ7ouzqwCEbJHqKkCujbAQVkp0S2SvMn1Ik4Ufdrvw9D/cQqyivzQeHAWDOiVuZxBGK0Eyhe2I9K80lDTrt7e+hKE/hCRQSvM3UM4FoLrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U7QS7CRE; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=HEeYO8Xg5GzRX9/Vel+gxDvjyDd9plckRGx0Jjlj3nUEA8X59ga0dsXV7Cld+TYYNE35740607MvmtQlm1LwPPITCKjdDcQcakDbUSEWPSxei2mIotnpl0ThAEVEsBMrWs8xyeiz3PHJsugzNlDX1HtgT20LDYhQblTTGNokuc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HXYM287+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U7QS7CRE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4269F1F00ADF;
-	Thu, 20 Aug 2026 15:44:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HXYM287+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE0B01F01559;
+	Thu, 20 Aug 2026 15:44:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787240647;
-	bh=4sZSlrcXcWJhC8sqfG8+Gp7wSo6CR7hcsIimlQCDagQ=;
+	s=k20260515; t=1787240658;
+	bh=HQRoL237DmR2u7P1eXzgoaf2mKwxetKZHaS3f8cGGsQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=U7QS7CREOeOUTCmntN+NXYnTgBDIhXjwuM3K7C6JScqIX03AUEBnTUt9WXBL7rrw/
-	 rhCmBj12VC2qvpQ+tfSt8ByBWeRD08ZSEJiFGv8sB1ZC53s3ZikJCQ/iTltY7BoJp4
-	 SCirN/bJdIWLUKjl9goqvEM7IjT03dX2+juv0T+tcjVXHaLNp1wpDlexeru82GdIep
-	 fHevbAAAWBYpYR0pYWQfBjvxPFu67dYpOM+fpjBrqjclpSuLyz3+0wS/BnE/dxuNvq
-	 FIHuvLImYJQ5t+NA8CD2s0q/qsv8vQES2q7Hhr+JWke7r1GmlneLoC/XV3NB72MJ9K
-	 gkNFyZ50wkdQQ==
+	b=HXYM287+O1gQPCO/W3yDI5bnTCuaN3Z0jnuGFdE+WSX3upgG7q+e8x9Qh/1sX7j6Y
+	 27YUVa2g5k7yUENvFUSmB78vp8knGxf6LWxPsIyIqqjMzjwf67oiO+QbFYSkzehtPg
+	 Kvpt1dv54vcZXh7zSXE5SJdWKkQDT9UStVrACby/pcmBudgAtv8f/E/Hg3g0+fMEaK
+	 /74BCZ9oiByu65LQjw+GkFTQpUykccREBc0oKI/eB+4bi1fcuRg1/nEF/ABG+Z/mok
+	 4Tzx0jep9xpvg5DiLwHvw1qK6vRYDhwhHhCC8jNBSY9QMWp6t3BDZlH4v1g5H+DQiS
+	 BNN8J2ykVve8A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v2] bpf: Fix NULL pointer dereference in
- bpf_sock_from_file
+Subject: Re: [PATCH v3 4/5] x86/shstk: support via prctl
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Syeda Mahnur Asif" <s.mahnur.a@gmail.com>
+To: "Bill Roberts" <bill.roberts@arm.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260820152532.621639-1-s.mahnur.a@gmail.com>
-References: <20260820152532.621639-1-s.mahnur.a@gmail.com>
+In-Reply-To: <20260818225428.1983328-5-bill.roberts@arm.com>
+References: <20260818225428.1983328-1-bill.roberts@arm.com>
+ <20260818225428.1983328-5-bill.roberts@arm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 20 Aug 2026 15:44:06 +0000
-Message-Id: <20260820154407.4269F1F00ADF@smtp.kernel.org>
+Date: Thu, 20 Aug 2026 15:44:17 +0000
+Message-Id: <20260820154417.EE0B01F01559@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] Incomplete validation allows ERR_PTR to cause kernel panic in bpf_=
-sock_from_file.
-- [High] Missing NULL pointer checks in BPF helpers taking ARG_PTR_TO_BTF_I=
-D lead to kernel panics.
+- [High] Flawed rollback logic destroys an already-enabled shadow stack if =
+enabling WRSS fails.
+- [High] Unconditional toggling of WRSS causes spurious failures and partia=
+l state application when features are locked.
+- [Medium] Setting PR_SHADOW_STACK_WRITE without PR_SHADOW_STACK_ENABLE sil=
+ently disables the shadow stack.
 --
 
---- Patch [1]: [PATCH bpf v2] bpf: Fix NULL pointer dereference in bpf_sock=
-_from_file ---
-commit a54db842fd2086671fb2b904beab51f691e8cc8b
-Author: Syeda Mahnur Asif <s.mahnur.a@gmail.com>
+--- Patch [4]: [PATCH v3 4/5] x86/shstk: support via prctl ---
+commit b3742dadd5cde35b115774fa09769c5a44a81e76
+Author: Bill Roberts <bill.roberts@arm.com>
+Subject: x86/shstk: support via prctl
 
-bpf: Fix NULL pointer dereference in bpf_sock_from_file
+This commit wires up the generic prctl handlers for shadow stack on x86,
+mapping PR_SHADOW_STACK_ENABLE, PR_SHADOW_STACK_DISABLE, and
+PR_SHADOW_STACK_LOCK to the internal CET helper routines. This provides a
+consistent cross-architecture interface for user-space applications to
+manage control-flow integrity.
 
-Adds a NULL check to bpf_sock_from_file to prevent kernel panics when
-fentry/fexit programs pass a NULL file pointer.
+> diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
+> index 0ca64900192f8..2c2a96b2d9367 100644
+> --- a/arch/x86/kernel/shstk.c
+> +++ b/arch/x86/kernel/shstk.c
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 16845987b2449..7c3caae4bafc3 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -12182,7 +12182,10 @@ const struct bpf_func_proto bpf_skc_to_mptcp_soc=
-k_proto =3D {
-> =20
->  BPF_CALL_1(bpf_sock_from_file, struct file *, file)
+[ ... ]
+
+> @@ -630,3 +631,58 @@ bool shstk_is_enabled(void)
 >  {
-> -	return (unsigned long)sock_from_file(file);
-> +	if (file)
-> +		return (unsigned long)sock_from_file(file);
+>  	return features_enabled(ARCH_SHSTK_SHSTK);
+>  }
+> +
+> +#define PR_SHADOW_STACK_SUPPORTED_STATUS_MASK \
+> +		(PR_SHADOW_STACK_ENABLE | PR_SHADOW_STACK_WRITE)
+> +
+> +/* Handles the generic prctl interface for PR_SET_SHADOW_STACK_STATUS an=
+d its feature bits */
+> +int arch_set_shadow_stack_status(struct task_struct *t, unsigned long st=
+atus)
+> +{
+> +	int rc;
+> +	int tmp_rc;
+> +
+> +	if (status & ~PR_SHADOW_STACK_SUPPORTED_STATUS_MASK)
+> +		return -EINVAL;
+> +
+> +	/*
+> +	 * x86 arch_prctl is single bit at a time, so handle these one at time
+> +	 * If anything fails, rollback state.
+> +	 */
+> +	if (!(status & PR_SHADOW_STACK_ENABLE))
+> +		return shstk_prctl(t, ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK);
 
-[Severity: High]
-This isn't a bug introduced by this patch, but does this check adequately
-handle error pointers?
+[Severity: Medium]
+Does this silently ignore a request for PR_SHADOW_STACK_WRITE without
+PR_SHADOW_STACK_ENABLE?
 
-If an eBPF fexit program attaches to a kernel function returning a
-struct file pointer that fails (e.g., returning ERR_PTR(-ENOENT)), the BPF
-verifier treats this as a valid PTR_TO_BTF_ID.
+If an application calls prctl(PR_SET_SHADOW_STACK_STATUS,
+PR_SHADOW_STACK_WRITE), the condition (!(status & PR_SHADOW_STACK_ENABLE))
+evaluates to true.
 
-Since an error pointer is not NULL, this condition will pass, and
-sock_from_file() will attempt to dereference it, leading to a crash.
-
-Could we use IS_ERR_OR_NULL(file) instead to catch these cases as well?
-
-Also, while not introduced by this patch, are there similar missing NULL
-pointer checks in other BPF helpers taking ARG_PTR_TO_BTF_ID?
-
-When fentry/fexit programs pass context arguments, the verifier lacks BTF
-nullability annotations for most parameters. This means helpers can receive
-and blindly dereference NULL pointers.
-
-For instance, bpf_task_pt_regs() directly dereferences the task without
-checking:
-
-kernel/trace/bpf_trace.c:bpf_task_pt_regs() {
-	return (unsigned long) task_pt_regs(task);
-}
-
-Similarly, __bpf_get_task_stack() calls try_get_task_stack() which will
-dereference the task:
-
-kernel/bpf/stackmap.c:__bpf_get_task_stack() {
-	if (!try_get_task_stack(task))
-		return -EFAULT;
-}
-
-And bpf_xdp_get_buff_len() accesses the xdp buffer directly:
-
-net/core/filter.c:bpf_xdp_get_buff_len() {
-	return xdp_get_buff_len(xdp);
-}
-
-Do these helpers need similar runtime validation to prevent panics in the
-same execution context?
+It appears this will call shstk_prctl() to disable the shadow stack and
+return 0 for success, instead of returning an error like -EINVAL for the
+unsupported configuration.
 
 > +
-> +	return (unsigned long)NULL;
->  }
-> =20
->  BTF_ID_LIST(bpf_sock_from_file_btf_ids)
+> +	rc =3D shstk_prctl(t, ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK);
+> +	if (rc)
+> +		return rc;
+> +
+> +	if (status & PR_SHADOW_STACK_WRITE) {
+> +		rc =3D shstk_prctl(t, ARCH_SHSTK_ENABLE, ARCH_SHSTK_WRSS);
+> +		/* rollback, best attempt, if we actually enabled shadow stack in feat=
+ure bits */
+> +		if (rc && (status & PR_SHADOW_STACK_ENABLE)) {
+> +			tmp_rc =3D shstk_prctl(t, ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK);
+> +			WARN(tmp_rc, "Could not rollback shadow stack enabled: %d\n", tmp_rc);
+> +		}
+
+[Severity: High]
+Can this rollback logic unintentionally destroy an already-enabled shadow
+stack?
+
+If an application already has its shadow stack enabled, but WRSS is locked
+to disabled, a call to prctl(PR_SET_SHADOW_STACK_STATUS,
+PR_SHADOW_STACK_ENABLE | PR_SHADOW_STACK_WRITE) will process the SHSTK
+enable as a no-op (returning 0).
+
+When it attempts to enable WRSS, shstk_prctl() will return -EPERM due to
+the lock. The rollback condition checks (status & PR_SHADOW_STACK_ENABLE)
+from the user request rather than checking if SHSTK was actually toggled
+during this specific call. Could this cause the pre-existing shadow stack
+to be disabled?
+
+Additionally, a concurrent thread locking the shadow stack during the
+rollback window could trigger a user-controllable kernel WARN, potentially
+leading to a denial of service if panic_on_warn is set.
+
+> +
+> +		return rc;
+> +
+> +	}
+> +
+> +	return shstk_prctl(t, ARCH_SHSTK_DISABLE, ARCH_SHSTK_WRSS);
+> +}
+
+[Severity: High]
+Will this unconditional disablement return spurious errors when features
+are locked?
+
+If an application locks WRSS to disabled, and later calls
+prctl(PR_SET_SHADOW_STACK_STATUS, PR_SHADOW_STACK_ENABLE) without the
+WRITE flag, the shadow stack is successfully enabled.
+
+However, the code falls through to unconditionally call shstk_prctl(t,
+ARCH_SHSTK_DISABLE, ARCH_SHSTK_WRSS). Because WRSS is locked,
+shstk_prctl() will fail with -EPERM, even though the target state matches
+the current disabled state.
+
+Could this return an error to user space after partially applying the
+state, potentially leaking the allocation if the application aborts based
+on the error?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260820152532.6216=
-39-1-s.mahnur.a@gmail.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260818225428.1983=
+328-1-bill.roberts@arm.com?part=3D4
