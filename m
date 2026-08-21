@@ -1,208 +1,151 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-ej2-f0.google.com (mail-ej2-f0.google.com [74.125.228.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4BFE383987
-	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 17:36:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7F8A381B10
+	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 17:36:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787333774; cv=none; b=q4Gdn2UOT24q1yy4CNc3+FR3IH+7Uzi9qEH2KUsmnMW90yjk5I7IieK968rPnwLvgGlcD9hxF4isxAfmhckzFJLy/frekseIOc3AZ76vf1DVDVAIk/Lgq+hNVvKJReXiLeJDAoXvGfZdRz74PbHav+Sh+hCEYLtxOlGnfsUBTHg=
+	t=1787333815; cv=none; b=XHv3it/01eWdQoPJ+RJbP4Pb7ln2/Pk8QE1EJ7nRGBlkQoXrVlHwKgtAfDt1pMSSXMncMW9B2/Fff4ggT6A6/YbT0RZ6iepfNUsAGhdEIMTJOSsEs4Y09FjVm+y4Ebh//pOVBfyUR48sFBpCFsM+06OHuFeVsku+YB0acOueUbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787333774; c=relaxed/simple;
-	bh=JPcoi5saOBHcu4nsG91gm8rcW51gGL8+/lBu6F2822c=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NqWVfzba3EEsovwdbTbvdPm0bTbwucmE+1cFjYCloXmyUQnM/Ede5wvg1PgvXlDgBh9wBtmohFB6K0jsY8IOrGBOLc6WuZMGdhCuhvL/x1AU+vrgTaNd445w4tjJ898GwDzZOHoOlm20Oaw7YyWxuKn0IGR8bI0A/4xxghXjeXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KhWJgqZq; arc=none smtp.client-ip=209.85.215.170
+	s=arc-20240116; t=1787333815; c=relaxed/simple;
+	bh=7SDC/MTTU8hRFq3X/I2Gt6RG8V7YNckjVfDN0wPB6zQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=tPBnrEJeQlZnbRLa1vkTu6i7sbCC1sinKmaCq+yl98aHzDhVHPtguEsxEPW+xkuXl820Y3hTgIp9RbWVP5m71nAZNb4KEhHfPrkPkojcpXNab2+6yY12B1JiyagFB2xkob9pGWF4EofwL+dooY059ho7WpzS+zUbo+FWyYh0OTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MIMkmUOG; arc=none smtp.client-ip=74.125.228.128
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KhWJgqZq"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-ca7c1176317so1093159a12.1
-        for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 10:36:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MIMkmUOG"
+Received: by mail-ej2-f0.google.com with SMTP id a640c23a62f3a-c166aef4f02so67788166b.0
+        for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 10:36:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787333770; x=1787938570; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=/7XAKgq4vNvdGZHJh3eTmjhy9qLeNGXR8tI6Jinfx3Y=;
-        b=KhWJgqZqxy1ExD+9ZYt4uvMwd4HKs6rZHGNeZxxkdsN2S26I46j5c2gTDG71HFXRYX
-         1FxMVAfiu9pkoYCGj7mj1jz0Yu8+9Eg4PzjIgV1yTBKrXi2XVuyTDvHbkg7ntaO5hHdy
-         L0fnB1Yyd0jlkveZMWMFRn0pGePAviDoph9cmRAcacooDr4JexuNm+Tsc5fkV/WR8aj7
-         5JR9iFR24imUViJSgc+Rl6lZvuxwDW0cqCjw8tN/e0Q56m4ca8ayMaek2yNPRv1h63f/
-         +ZGvWEL9wd9N3mZL6IWdhC06hBHz+euI8tZavi2iEcWdHANcz/5IKMvjtAHcYzHig36c
-         k6cA==
+        d=gmail.com; s=20251104; t=1787333808; x=1787938608; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=O2PTPfQYtKztKWOfpp7tANhwQtfUstakuw3wFNvmzQ0=;
+        b=MIMkmUOG79hUAMs4RZtLfcYCZoCMDBHowwBJtu6K7SBTfQJ7oibQfpDAR9+jRCsbxA
+         EKRLexxKhGUTL8Tg0+YXI9nmnQ3sa9nqR/opUWFS5heqfAqfbK0G/t1pCWSL7jfomHik
+         htB9lMWt8oHwy7sMzGhlqLkQZsSkhY5aVG6MPF9zLR1QWF6qm8cT7fGw+4gm96mcUxRP
+         P7JE8oZVN0ey76dfw9YDNwVBCbnk8RTM66cH/sHsif74tyQHZko37ue07zwLo2mnTNMv
+         VKyK8PISp7U7H4zJilCxz72mI1ygUiRlCQswo80c9L2q5ASrxpLRVEqr2g+U0MelLNE7
+         VM5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787333770; x=1787938570;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+        d=1e100.net; s=20251104; t=1787333808; x=1787938608;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=/7XAKgq4vNvdGZHJh3eTmjhy9qLeNGXR8tI6Jinfx3Y=;
-        b=VILje3+hmAQOfkEFxM/QUd3x7p/E7mMPSc38v22Eo8gJ39d0F00DU07kvwKSVI9PiT
-         OVtKdXVbXqt/xU98U+CFNr2Zq40DSd0Iq9/H5n0hvRwQqUTrXqpL0+4EElwf4Le2EZ3b
-         3iPcIpO3Roe86CtUx3yacmgk8Wv7GQBr/ORkAer17Wta0AISeKVUxImQzrauycs3nMyA
-         XBWuWU4x1BBYllkAhI5cKmHsxtfqmf9tH32kal6kauXfJqEtLippgKsDxLUmaWwD9eBr
-         op+1JzeGEocf6Lkg8k5rS/s9b0LA9PBPNrS+eD/3vU5P4wVHn5QctaUFXp6ijfqTesSn
-         fHEw==
-X-Forwarded-Encrypted: i=1; AHgh+RrcbjVmXKiRtkXcNqDOaKP9n5XW4pxlurclZnxJZBwpDVxFRfSDDCEd6Z6Ig48Fml/WZKU=@vger.kernel.org
-X-Gm-Message-State: AFuF++l9Y1Y51OLXiojeLO6dwWNqfLuYBUNxK12sr6yKC69jYX6pyVTn
-	LVFLiwReoNQlWlrOAVytphN64oovIoMkZV4cJM53SVnUaNolHXZAOEOx
-X-Gm-Gg: AR+sD13cE2PwRloXDESvcaQneOqtXQpSfifZYm8smcyl55x//lUSDHhkO9yjGrfKVvy
-	WlK6Btq+9TaOKsjt1pMht4qrJuH2xum8DPjutJeW4nWaFtKnwWj3/KXyZJ7utTYvThRHxemVe0S
-	Sn4ahtqr0n8BvEHPp5wphMm0YbMuyRJYCObKcfFTXL/71p70wTzDQ2XVSCEPC+HTcExba+EkZoC
-	XsNyu63mFS+bEO6f2tEAaUjWzHSWID0s88uFzqLP0j78k1wQxSc0FHJ9IjYmPhZ8LBOOWUodL8q
-	P+6N09u0AO9K0eciwDNwICH5VjX6kRhJZGZN+QTjDW9zt9IgieihuHTfb9RVksDt9onJs7cvP4i
-	UUfeOyPuH4mJoDMq+4MAshS+jFFih1V//pCu5fm5kFo3i+QgBohLMpB6WV2wnCRxneWLxG+FfVt
-	wA1pWfCNd7317HilwUAC9TMb3mhAAuXcZ7DguYyHJuyYTgHY0kbEX2KChRbBxUyPX5FUtF1687O
-	CamLdoTi4NOpeUq
-X-Received: by 2002:a17:90b:5867:b0:395:4de4:92c8 with SMTP id 98e67ed59e1d1-395df4dcdbcmr319265a91.15.1787333769859;
-        Fri, 21 Aug 2026 10:36:09 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-395c46b88e9sm3985209a91.7.2026.08.21.10.36.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2026 10:36:09 -0700 (PDT)
-Message-ID: <f97bb12895dea33aa8f79b0468b5ada81510cc9d.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf: Rewrite "rX <<= 32; rX >>= 32" into
- "wX = wX" to keep linked scalars
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
- kernel-team@fb.com
-Date: Fri, 21 Aug 2026 10:36:06 -0700
-In-Reply-To: <20260821042837.2786719-1-yonghong.song@linux.dev>
-References: <20260821042837.2786719-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+        bh=O2PTPfQYtKztKWOfpp7tANhwQtfUstakuw3wFNvmzQ0=;
+        b=ii7wUoFaAR5ewV7SqHqr4XCnBi+5L5KqPaYffthQJF0U2ybLGsCeHXFlmQlgux3kMY
+         gyOZO/O7KFsCMCNGNyMs2pdp/Y6idHd/W9arkgs2xsu0St4aLvql29gLYdmCQ4jqInk8
+         00JMP7dgKOxp/s0c2MDyDphMhzSW/LOzUT9sQhPtwDJgNlzJL/z92pnGJW/kMG0xOF8r
+         QHeMPhdE0GmvOi8EYqrs3l88SQ5jE/IS4MBff2omskWBB/h1OmfrZ3uAh2F8vYdhc3Cc
+         7C+MK5RwI4suEl14t7hkOP3gchVsMDM772fuY9NgbFhKnapMTwpPPOUD5miTdfqnb/+m
+         Zb3w==
+X-Gm-Message-State: AFuF++mtwdAsR/yJLrA+lFkmZiIyjWBNKxq6waTDYejYiK/AC5D+3iWf
+	alNAsYC0g5puv7vX43AcLtIRCP77J2c3QsUAf63cVd0yhRF8Ar0JZBcV
+X-Gm-Gg: AR+sD12sak8X8q73VtItQtR6QIOAi68ANf5gM5EcPTi6xiM6B9PrSAqwRxTjKs4Ukh7
+	fMoPFxg1ks6gIxjjzPGpH/T790n8N7Z01T5XQY88cosR8W/t3KbYpfrRYF7ayj9jLL7okXiuRAX
+	1pPN1g8zdYF1P7EnN3LeIJsO+N2b7iYKuvJDcRZAMsKVXrW1aTjCxwCDWsOU61D/UgjzFDkL4oH
+	XH1jep+I1a3c6mj1goyLV+LeBeHAv+C61LDHve0JZIPeBR1vOmLN046viod2Ee0XSKknFYGJ63N
+	3nGLpbpBFhDsCqpqdC3/ejGyU/XyfxB0SL1LxjJ+MSOIOBkCQ6pbjPZ+lvKBYd27Bjo9ImIPAZw
+	f2EW2L/vliDjysWszNLV+hrd5Yn490eEdalTrqdJjl0ZI8MlEotslvjpsOIUbcuo7cBa2JhCPNJ
+	EneDa35oFqGu54kLwRZyyyO+XTTnY/OIq9GiRBi7zl2sPykfkejatPHyz/+mZ7CQqQQyf9isVNC
+	1aaXeanJI7cCc6bUYrGaTc9wkJ6YzWNu+njC91uONyOX39dFBtUWJkTUCfg3H1Jb6uPNsTKCj5H
+	50S2JBA7CngVqSSG9bspKH0LGkU=
+X-Received: by 2002:a17:907:97c1:b0:c1c:64d4:5ba3 with SMTP id a640c23a62f3a-c246a651d39mr815803466b.20.1787333807866;
+        Fri, 21 Aug 2026 10:36:47 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2459197cd4sm580558666b.30.2026.08.21.10.36.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Aug 2026 10:36:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 21 Aug 2026 19:36:46 +0200
+Message-Id: <DKUSYFLEQ39S.2QP1DOZV5PZOP@gmail.com>
+Cc: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <netdev@vger.kernel.org>, <andrii@kernel.org>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>
+Subject: Re: [PATCH bpf v2] bpf: Fix NULL pointer dereference in
+ bpf_sock_from_file
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Andrii Nakryiko" <andrii.nakryiko@gmail.com>, "Syeda Mahnur Asif"
+ <s.mahnur.a@gmail.com>
+X-Mailer: aerc 0.21.0
+References: <20260820152532.621639-1-s.mahnur.a@gmail.com>
+ <CAEf4BzZd7BDdJrNb+N3uktbwMJRHjUFzG1xfzmTDibEmAKX8gA@mail.gmail.com>
+In-Reply-To: <CAEf4BzZd7BDdJrNb+N3uktbwMJRHjUFzG1xfzmTDibEmAKX8gA@mail.gmail.com>
 
-On Thu, 2026-08-20 at 21:28 -0700, Yonghong Song wrote:
-> For the following test in
-> tools/testing/selftests/bpf/progs/verifier_linked_scalars.c:
->=20
-> 	void alu32_negative_offset(void)
-> 	{
-> 		volatile char path[5];
-> 		volatile int offset =3D bpf_get_prandom_u32();
-> 		int off =3D offset;
->=20
-> 		if (off >=3D 5 && off < 10)
-> 			path[off - 5] =3D '.';
->=20
-> 		/* So compiler doesn't say: error: variable 'path' set but not used */
-> 		__sink(path[0]);
-> 	}
->=20
-> Without alu32 (-mcpu=3Dv2), the test
-> verifier_linked_scalars/alu32_negative_offset will fail with llvm22 and
-> llvm23 like below.
->=20
-> =C2=A0 3: (bf) r2 =3D r1=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ; R1=3Dscalar(id=3D1,...) R2=3Dscalar(=
-id=3D1,...)
+On Fri Aug 21, 2026 at 7:30 PM CEST, Andrii Nakryiko wrote:
+> On Thu, Aug 20, 2026 at 8:25=E2=80=AFAM Syeda Mahnur Asif <s.mahnur.a@gma=
+il.com> wrote:
+>>
+>> bpf_sock_from_file should not dereference a NULL file pointer.
+>> KASAN detects a null-ptr-deref when eBPF tracing
+>> fentry/fexit programs are attached to points such as
+>> __mmap_region and file_map_prot_check kernel functions. This can
+>> result in a NULL file pointer flowing from context to the helper.
+>>
+>> A minimal check before dereferencing can fix this.
+>>
+>> Fixes: b60da4955f53 ("bpf: Only provide bpf_sock_from_file with CONFIG_N=
+ET")
+>> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+>> Signed-off-by: Syeda Mahnur Asif <s.mahnur.a@gmail.com>
+>> ---
+>> v2:
+>> - Added Reviewed-by from Emil Tsalapatis
+>> - Fixed name in Signed-off-by
+>>
+>>  net/core/filter.c | 5 ++++-
+>>  1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/net/core/filter.c b/net/core/filter.c
+>> index 16845987b244..7c3caae4bafc 100644
+>> --- a/net/core/filter.c
+>> +++ b/net/core/filter.c
+>> @@ -12182,7 +12182,10 @@ const struct bpf_func_proto bpf_skc_to_mptcp_so=
+ck_proto =3D {
+>>
+>>  BPF_CALL_1(bpf_sock_from_file, struct file *, file)
+>>  {
+>> -       return (unsigned long)sock_from_file(file);
+>> +       if (file)
+>> +               return (unsigned long)sock_from_file(file);
+>
+> given this is a legacy ARG_PTR_TO_BTF_ID, it can be not just NULL, but
+> also a) small value bogus "pointer" resulting from NULL + offset
+> calculation and/or b) just random garbage casted to struct file
+> pointer with bpf_core_cast() (maybe this hole we've closed with
+> explicitly untrusted, not sure).
+>
+> Either way, this is not a sufficient fix at least.
+>
+> But I wonder if the proper fix is actually to mark this (and other
+> similar) argument as explicitly requiring trusted PTR_TO_BTF_ID?
+>
+> Thoughts?
+>
 
-Does r1 fit into 32-bit range at this point?
-I assume it does, otherwise it won't be possible to infer information
-about r1 range through zero extended r2.
++1, should bite the bullet and accelerate deprecation of legacy PTR_TO_BTF_=
+ID.
+We can mark specific arguments / fields in structs as trusted where there i=
+s a
+legitimate use case and the kernel guarantees their lifetime appropriately.
 
-> =C2=A0 4: (07) r2 +=3D -5=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ; R2=3Dscalar(id=3D1-5,smin=3D-5,smax=3D0xff=
-fffffa)
-> =C2=A0 5: (67) r2 <<=3D 32=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 ; R2=3Dscalar(smax=3D0x7fffffff00000000,...)
-> =C2=A0 6: (77) r2 >>=3D 32=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 ; R2=3Dscalar(smin=3D0,umax=3D0xffffffff,...)
-> =C2=A0 7: (25) if r2 > 0x4 goto pc+5 ; R2=3Dscalar(smin=3D0,smax=3Dumax=
-=3D4,...)
-> =C2=A0 8: (bf) r2 =3D r10
-> =C2=A0 9: (07) r2 +=3D -5
-> =C2=A010: (0f) r2 +=3D r1=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ; R1=3Dscalar(id=3D1,smin=3D0,umax=3D0xfffff=
-fff)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ; R2=3Dfp(smin=3D-5,smax=3D0xffffff=
-fa)
-> =C2=A011: (b7) r1 =3D 46=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ; R1=3D46
-> =C2=A012: (73) *(u8 *)(r2 -5) =3D r1
-> =C2=A0invalid unbounded variable-offset write to stack R2
->=20
-> R1 is never narrowed down, so the address stays unbounded and the store
-> is rejected.
+>> +
+>> +       return (unsigned long)NULL;
+>>  }
+>>
+>>  BTF_ID_LIST(bpf_sock_from_file_btf_ids)
+>> --
+>> 2.53.0
+>>
 
-...
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 821b47ac75c5..e1de442801d9 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -15610,6 +15610,14 @@ static int adjust_scalar_min_max_vals(struct bpf=
-_verifier_env *env,
-> =C2=A0	return 0;
-> =C2=A0}
-> =C2=A0
-> +static bool linked_base_fits_u32(const struct bpf_reg_state *reg)
-> +{
-> +	if (reg->id & BPF_ADD_CONST32)
-> +		return true;
-> +	return reg_smin(reg) >=3D (s64)reg->delta &&
-> +	=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg_smax(reg) <=3D (s64)U32_MAX + =
-(s64)reg->delta;
-> +}
-> +
-> =C2=A0/* Handles ALU ops other than BPF_END, BPF_NEG and BPF_MOV: compute=
-s new min/max
-> =C2=A0 * and var_off.
-> =C2=A0 */
-> @@ -15878,7 +15886,12 @@ static int check_alu_op(struct bpf_verifier_env =
-*env, struct bpf_insn *insn)
-> =C2=A0						insn->src_reg);
-> =C2=A0					return -EACCES;
-> =C2=A0				} else if (src_reg->type =3D=3D SCALAR_VALUE) {
-> -					if (insn->off =3D=3D 0) {
-> +					if (insn->off =3D=3D 0 && insn->src_reg =3D=3D insn->dst_reg &&
-> +					=C2=A0=C2=A0=C2=A0 (dst_reg->id & BPF_ADD_CONST) &&
-> +					=C2=A0=C2=A0=C2=A0 linked_base_fits_u32(dst_reg)) {
-> +						dst_reg->id =3D (dst_reg->id & ~BPF_ADD_CONST64) |
-> +							=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BPF_ADD_CONST32;
-
-This commit consists of two parts:
-- a special case for wA =3D wA assignment
-- a rewrite for `rA <<=3D 32; rA >>=3D 32;` pair
-
-Could you please split it in two with separate selftest for each.
-Also, could you please comment why the special case for `wA =3D wA` is nece=
-ssary?
-Is it because assign_scalar_id_before_mov() destroys the link:
-
-  static void assign_scalar_id_before_mov(struct bpf_verifier_env *env,
-					  struct bpf_reg_state *src_reg)
-	...
-	if (src_reg->id & BPF_ADD_CONST)
-		clear_scalar_id(src_reg);
-
-?
-
-If that's the only reason, is it possible to extend existing wA =3D wB
-logic instead of adding a special case?
-
-Also note that this overlaps with Vineet's series [1].
-Representing zero extension as a combination of BPF_ADD_CONST32 and
-delta =3D=3D 0 is a valid alternative for one of the patches there,
-but it also handles the value reconstruction on sync.
-
-[1] https://lore.kernel.org/bpf/20260814231945.3884596-1-vineet.gupta@linux=
-.dev/
-
-> +					} else if (insn->off =3D=3D 0) {
-> =C2=A0						bool is_src_reg_u32 =3D get_reg_width(src_reg) <=3D 32;
-> =C2=A0
-> =C2=A0						if (is_src_reg_u32)
-
-...
