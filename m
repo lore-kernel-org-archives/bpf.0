@@ -1,65 +1,65 @@
-Received: from mail-ej1-f67.google.com (mail-ej1-f67.google.com [209.85.218.67])
+Received: from mail-ej2-f11.google.com (mail-ej2-f11.google.com [74.125.228.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7DE6388873
-	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 23:35:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45ADB415B6B
+	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 23:35:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787355325; cv=none; b=rJGZ7eoFwwz0xMWw9Q6LbbaniP7Ug3Jqn+vvBvqzYr2kzBA1QlDWVH1ziEJJXFj25+bRS8Ku7iJ83NL66wmUbN0dhKlytn0o2ppydggeQgmP1Hy1waXZlCDqas6aJl1kaegnlnnB+YJP7cAT5vGzPIwFN2XQsmnEEeetd/G/lLI=
+	t=1787355327; cv=none; b=QLPbRGHZvlo7Oz52KKarGtXprERNsN5KL5ezUDIRJ5nRPkWQxdLp4ZUA6F1cGTz2L+pjg7hLIXF6YLGJVTmP0YoPH39ohrfP+Srrxr1DxeIEnflmmsFfIJOrmerJGKVdkNlMKiPGNOuBAfo34ZSseLStxcx3aTlKDWxM4HicLqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787355325; c=relaxed/simple;
-	bh=CHR4vu62waiMKk7n/r+/CMNqE/WyJ6VbVy8qU2EYouI=;
+	s=arc-20240116; t=1787355327; c=relaxed/simple;
+	bh=T8NfEh9c79YoCuOAjgk3zbgG/8q2KzP78B3kkFetlb8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VR61vvNkorOx9i/cAYV/WXCbLnLzqWtIORLGIxcM4TcWiNr4G0HNMA4k/cq+dCac47R8u+cPPBEB/1/bZ43EgnKIIaYU4AdEbJnTrUzr7vRd4aWUDh1khshE6EiJ++vbcw98MwvLvsNDT1X3SeY6rjXckQFteUlD+sMJBG0giMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sSlreCeR; arc=none smtp.client-ip=209.85.218.67
+	 MIME-Version:Content-Type; b=rvUGU9Sv9uztVqW9xL6lpIGOaABXJQL8FhNHzz63S3QqDARL5zH8abFqXun4GqevRyB7J2wcpUVgEgeF/UL9YQrSe25qaXKJnuk9NaOuHcNitfAgQOSignuRC4ZOqWXVRpiO5/PiW2/y/epbKcFu9sWRrS9qieTWuN/rtZc7jrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UuSX1plq; arc=none smtp.client-ip=74.125.228.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sSlreCeR"
-Received: by mail-ej1-f67.google.com with SMTP id a640c23a62f3a-c1600d040e4so237972166b.1
-        for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 16:35:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UuSX1plq"
+Received: by mail-ej2-f11.google.com with SMTP id a640c23a62f3a-c243d41dc07so79847066b.0
+        for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 16:35:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787355322; x=1787960122; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787355323; x=1787960123; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=HF7ZbiPxmHwCPV3MXqkAHglmpkDT5Htnozv1WtxM/lA=;
-        b=sSlreCeRRoU8pTrt5AywAi+XYU+hkjr65EoOX6oKsy3HAAh3aDrtO8FLhMnBgGwgqP
-         AGNMwIVeoYIA4KjmbdoYtXXh/uah9AJujmGdHDHEuKmfx3VDEFLO5fRfDt7InSLuKSjq
-         ynLa0AzN6h4Nt3Q0OYiSY1fgxU4RR/nDwf0ZDEmFfWuMPULGsNLfZD18dtBSMNqyoXpm
-         g/FSV1dkpk1FdHKszLofmygn9+EMvyui8GLyGgMYQVNBOy02U3d8LEEeR/XEAxEHOz/O
-         HZA2Fw4KZf+aViWmEd72M+gT4VeUi1x2WaGeEcGR5+48hYvl+dIeO4vmEi7c2dzLteyj
-         j2pw==
+        bh=S5NgJGdcu8lrsElLmjBi9a0vHoYrop7nEZ+jACrpUO8=;
+        b=UuSX1plqBp/2BboAUhSiznRL73VmswFhzWH5e4fsQYDeyzTu2OwbLdOphRnxzyCCti
+         I6GwKvBfAcrilFaDbjH/tXbMAtAqxM5Uqo5h6MoW6CrKmBD64kI6Bdjr6fQ+K86mfGIP
+         lWxSFbU4TUc2vOjaWWJdUwms/56nAtGi61L1L+4UWdXePORJd+TV7qoqJzfa10KQVM2t
+         EKgxMvrjjY0JT7mWQFcJyDiG7h9Is3QIJEyIKIO13w813KsWtgA0XbB0ZOV24O7qnjhc
+         iOmbd2Sb1bozg8b9aA9NdHUwhZoiatr5RTLxiBjwWX9R2hNxAApBZD46G94lwEJEjfJi
+         stgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787355322; x=1787960122;
+        d=1e100.net; s=20251104; t=1787355323; x=1787960123;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=HF7ZbiPxmHwCPV3MXqkAHglmpkDT5Htnozv1WtxM/lA=;
-        b=PFcUhZziXxpRCezwidtQ1vD8o3E7taYUwCqp+X4IwjCwihTIfv7q/pVcfNaTTmBLZe
-         OKSovomcxkWEhG9th5ZgrRH7KcKl3Ro5qinCD2Zm+JrhEK92Xdfhi3011EJbZJYFNK4B
-         IfmhbVbDBvomsDdwMR+1LswV/yI16nBQ4h4WplgUA5elNGMFbdIIkZNur0iLROqcXcS1
-         9xzUgn+014p4bonrtNy417ubFvdWGG/umjE/xkUl5ma5UiNcA8p0mgdfThdUE+dzYBYZ
-         R/qZ6eYzo9Ww9UgqD24DXvcNHVVgR90oQuLLMEgY0dy7pSY2RzHl/1SPRvrFtszXE/De
-         v72g==
-X-Gm-Message-State: AFuF++kj9yVs8fZqVlGE3PEadJszfA0Xozg0TnekRrHo4suNgTjNhaLV
-	T+6oOB7spphpiZ03gd/KZqquNG0yDgjbekgtd4mA5ozUjueUWYHP1Zp/AVfS60hm
-X-Gm-Gg: AR+sD11QQP82il4+xuv7Ohp+Sx6sH2pYDZNnhfxc4/OcUZM2w3rDXwh3G6KYSnztOG+
-	YV0mzvYS/Xd8pAh805VBlTQLXqxKyYntgqvoeXaiw4tN0kTwYRDg1ILIibh6/QaaXH/D60l6EXf
-	j4oZ7i43sA1frY2LN0HOK5KNS95SNp0Q/wDXuaLjKOJLR8VhVrumdidCaGMzFQefpZHSBjp7yaH
-	/1qUl7Og89hZNcDCnDDhdhnjFptT2NiMlAZnKTlwA/J/1rWMGhbkvhq18bnukZP0WIrnynle1a2
-	3sepi9cSDqaBgfJlCs/VbOxqf40EGoM5Qksq4p7KMQeWstQ/IMum8CDsRXGPcVtA2H+1WzOLYhx
-	s/NeRSIOmkOAfaaYODuETJXIIGAcnaTuysh/Rn8wrCasnH5dP3iL5UICdTc0B2vgUZ22NWUbsaz
-	YEBxtF318T99uUkoM0xaOeIzK2gMuctx3m2uLfRoNsSYyXxXz5i72ZKU/lzKrVIfyli7z0ZEDJn
-	cdi7YlDEIuZ4nUR+z8EjYjCKNfJgh1fPZtsjY8tiahJ11wqI440V9xX2B/DQj1MmqDA/UuHN7WX
-	qmDyrrvyvmxJr+SHPdL0bfuPPFgBlqHQSfWpgg==
-X-Received: by 2002:a17:907:5ce:b0:c1f:2cb2:c448 with SMTP id a640c23a62f3a-c244d672d37mr1466145866b.7.1787355321783;
-        Fri, 21 Aug 2026 16:35:21 -0700 (PDT)
+        bh=S5NgJGdcu8lrsElLmjBi9a0vHoYrop7nEZ+jACrpUO8=;
+        b=BvL3j38X/kVtQk+v18ePLyoxrAb25xTqg5Lg2oCu2lRMG8cBhvgFjkP7gUpLz2y8hS
+         5TkOvQ4cmMgggOIp7crOle8zDJ0ron4d5rE2PKcrIfuxhqxH9sV5qXBuRvH+Fh8kTStd
+         fTRwglRSgcZTy7LWYn25MMSCEFj8KaCVFDvEczl3waqz02ZWSngDUnX9jO/1EMHSsQgX
+         expbD9zM8dzh3lfFSoq93M3pELYZY611ZDnkEVDpDuwMF1WpsUVIKaT9z56wmkPJm/Yc
+         eSqGZSWXv8r7mO8gjXFqP+2l6X5I6kkM32wXylbGdHF5xoZSfHBPCe4XxTud+yllaCVI
+         NPRA==
+X-Gm-Message-State: AFuF++mPDQkX1urS08nEfszdmrzrcBnGTXVUjy4N0aH/qizs+C0o+kwc
+	ay81qboUoRALO+O5XEqOnC9W5MTk9l8bjicp/FjkKgtPm2ZzpSNZMg4mqnEnBr1J
+X-Gm-Gg: AR+sD11A9gETyZh5vy6339a7o4xJTfpdIpt1wQ/L/5id5i5nh2JXGKbv+TFKEO565yI
+	nGtLgmnptOiB7iSLjRmmenN4ahnNbfZMzX1ta6XEMmO5/pv6aOidA2Uus2PNPqqiRbKEu7CtU0Z
+	OtMi7HNHjLgx1sByna98K1H7PeTpmrfPH3MnWEayi0S1wNdhAinVEa3+SWzyWVkypv4w9qFhFre
+	frg7NpWO9uO3r/5XwHpdGIFzd/zt6hMH7abGX5s8WXgYXOd/2UGvYnM7fQm9EzwjDPWj/BPvqBc
+	qrKQz292Wh3BvQXo5mQ+IN2Ph4quP8UcCcrNXFMnolcFAamqgbeuYEs7QJoobJ1dRIFttVf8Pqu
+	BouxXmDsBHSx8Xd09POaqLspDJ/leTtWQiHJFXFz76J9CI6rhyfcfbpD19AGxyC02Kv7MM7ISXn
+	HkSJPT0getG/cQQAZJCuIlrldfrtMlhKoKJFPxpgTwqqfB4ElhpuOo5rf3Idu16q9tlHkZKM7TW
+	ZY0bEuCOINAO0dLdIIP0MbTulPXQNwF4xFQHD4yyf6CO5sDBORvT7u1qH60O+1uNxarvSakCgC2
+	JSzAPFajItbVvLxFEIUGsV1VGwg=
+X-Received: by 2002:a17:906:2481:b0:c1c:2007:298e with SMTP id a640c23a62f3a-c246b4c5e33mr820722666b.24.1787355323356;
+        Fri, 21 Aug 2026 16:35:23 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a3ff1780c9sm8556175a12.28.2026.08.21.16.35.21
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c249606b59fsm58281066b.12.2026.08.21.16.35.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2026 16:35:21 -0700 (PDT)
+        Fri, 21 Aug 2026 16:35:23 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
@@ -72,9 +72,9 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 03/14] bpf, riscv: JIT arena kfunc argument rebasing
-Date: Sat, 22 Aug 2026 01:34:57 +0200
-Message-ID: <20260821233516.3426127-4-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 04/14] bpf, riscv: Convert struct_ops arena arguments in the trampoline
+Date: Sat, 22 Aug 2026 01:34:58 +0200
+Message-ID: <20260821233516.3426127-5-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260821233516.3426127-1-memxor@gmail.com>
 References: <20260821233516.3426127-1-memxor@gmail.com>
@@ -85,95 +85,165 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3177; i=memxor@gmail.com; h=from:subject; bh=CHR4vu62waiMKk7n/r+/CMNqE/WyJ6VbVy8qU2EYouI=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIavjQY9/bTSD6YIKtxXvqrV533u2765n+3Otctfqmpent oWlrFfpKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwESUXzIy9K71ZSzYsVpA4J4Y T5ngwy+31ua9S8/mOp7wwDnkmfbOVIZ/dhIR8v3P65ZusJDbVtpfzZZSG7nxSEKMWLlzCre9bjQ PAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5907; i=memxor@gmail.com; h=from:subject; bh=T8NfEh9c79YoCuOAjgk3zbgG/8q2KzP78B3kkFetlb8=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIavjQc+/0hKfe84lfsY/exh+bBHhXllsst/1p0Pmpx+9Y u/cuf92lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCIH1jP8s1+2LeRI2IajUWcV vTSMt5d+uTpRdkXcae77C+sX7ha8LsXwT/Xq5Y5t5teOBQa+duL/sfLds98WsoYuAXs6tt4zUOd 6ywAA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-A BPF arena pointer is represented as a zero-extended 32-bit offset while
-a kfunc receives a kernel address. Kfuncs whose BTF argument names carry
-the __arena suffix therefore need the JIT to rebase those offsets
-immediately before the native call.
+A struct_ops callback receives native kernel addresses, while its BPF
+program expects an arena pointer argument as a zero-extended 32-bit offset.
+Convert arguments marked with BTF_FMODEL_ARENA_ARG while the trampoline
+copies them into the BPF context.
 
-RV_REG_ARENA already holds kern_vm_start whenever the program uses an
-arena. Zero-extend each tagged argument and add that base:
+bpf_tramp_arena_base() supplies the known base only for the single-program
+indirect trampoline. Materialize its low 32 bits once in t2, subtract it
+from each tagged argument through t1, and zero-extend the result before
+storing it. For a nullable argument, preserve the full native pointer in t1
+and branch over the variable-length subtraction sequence when it is NULL.
 
-  zext.w aN, aN
-  add    aN, s7, aN
+Walk the function model by argument while keeping a separate ABI slot
+index. This keeps the arena flags aligned with the correct native register
+or stack slot when an earlier argument occupies two slots, including the
+case where a 16-byte argument straddles a7 and the stack. Registered and
+stack-passed arena pointers use the same conversion helper.
 
-For an __arena__nullable argument, branch over the fixed-width add when
-the truncated offset is zero so that NULL remains NULL. An unconditionally
-tagged zero is intentionally converted to the arena base.
-
-The sequence is emitted as native code after the BPF instruction stream
-has been blinded, and its size depends only on the function model and
-enabled ISA extensions. Advertise the kfunc capability independently;
-struct_ops argument conversion is not enabled by this change.
+bpf_tramp_arena_base() returns zero for tracing trampolines, so their
+emitted argument-save sequence is unchanged. An indirect trampoline cannot
+call the original function, which ensures a converted pointer never escapes
+back into a native callback. Advertise the struct_ops capability
+independently now that the reverse conversion is implemented.
 
 Cc: Björn Töpel <bjorn@kernel.org>
 Cc: Pu Lehui <pulehui@huawei.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- arch/riscv/net/bpf_jit_comp64.c | 40 +++++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ arch/riscv/net/bpf_jit_comp64.c | 93 +++++++++++++++++++++++++++++----
+ 1 file changed, 82 insertions(+), 11 deletions(-)
 
 diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index b1084f30f3ce..c97d13a3eae4 100644
+index c97d13a3eae4..8db992a285f6 100644
 --- a/arch/riscv/net/bpf_jit_comp64.c
 +++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -714,6 +714,37 @@ static int sign_extend(u8 rd, u8 rs, u8 sz, bool sign, struct rv_jit_context *ct
- 	return 0;
+@@ -888,20 +888,75 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
+ 	return ret;
  }
  
+-static void store_args(int nr_arg_slots, int args_off, int stack_args_off,
 +/*
-+ * Rebase the __arena args of a kfunc call to arena kernel addresses,
-+ * aN = kern_vm_start + (u32)aN, with RV_REG_ARENA holding kern_vm_start.
-+ * A nullable arg preserves NULL by skipping the add, tested on the
-+ * truncated value as arena NULL is offset 0.
++ * Convert an arena kernel address into the arena pointer form on its way
++ * into the BPF ctx, dst = (u32)(src - kern_vm_start). A nullable arg
++ * preserves NULL, tested on the full 64-bit kernel pointer. The final
++ * zero-extension makes the stored value satisfy the JIT invariant for arena
++ * pointer registers.
 + */
-+static int emit_kfunc_arena_args(struct rv_jit_context *ctx,
-+				 const struct btf_func_model *fm)
++static void emit_arena_arg_conv(u8 dst, u8 src, bool nullable, u8 base,
++				struct rv_jit_context *ctx)
 +{
-+	int i;
++	int branch_off = 0;
 +
-+	for (i = 0; i < min_t(int, fm->nr_args, MAX_BPF_FUNC_REG_ARGS); i++) {
-+		u8 flags = fm->arg_flags[i];
-+		u8 reg = bpf_to_rv_reg(BPF_REG_1 + i, ctx);
-+
-+		if (!(flags & BTF_FMODEL_ARENA_ARG))
-+			continue;
-+		if (WARN_ON_ONCE(!ctx->arena_vm_start))
-+			return -EINVAL;
-+
-+		emit_zextw(reg, reg, ctx);
-+		if (flags & BTF_FMODEL_NULLABLE_ARG) {
-+			/* Skip the fixed-width add so that NULL stays NULL. */
-+			emit(rv_beq(reg, RV_REG_ZERO, 4), ctx);
-+		}
-+		emit(rv_add(reg, RV_REG_ARENA, reg), ctx);
++	if (nullable) {
++		if (dst != src)
++			emit_mv(dst, src, ctx);
++		branch_off = ctx->ninsns;
++		/* Patched below once the variable-length conversion is emitted. */
++		emit(rv_nop(), ctx);
++		src = dst;
 +	}
 +
-+	return 0;
++	emit_sub(dst, src, base, ctx);
++	emit_zextw(dst, dst, ctx);
++
++	if (nullable && ctx->insns) {
++		u32 insn = rv_beq(dst, RV_REG_ZERO, ctx->ninsns - branch_off);
++
++		*(u32 *)(ctx->insns + branch_off) = insn;
++	}
 +}
 +
- #define BPF_FIXUP_OFFSET_MASK   GENMASK(26, 0)
- #define BPF_FIXUP_REG_MASK      GENMASK(31, 27)
- #define REG_DONT_CLEAR_MARKER	0	/* RV_REG_ZERO unused in pt_regmap */
-@@ -1834,6 +1865,10 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 				if (sign_extend(reg, reg, fm->arg_size[idx], sign, ctx))
- 					return -EINVAL;
- 			}
-+
-+			ret = emit_kfunc_arena_args(ctx, fm);
-+			if (ret)
-+				return ret;
- 		}
++static void store_args(const struct btf_func_model *m, int args_off,
++		       int stack_args_off, u64 arena_base,
+ 		       struct rv_jit_context *ctx)
+ {
+-	int i;
++	int i, j, slot = 0;
  
- 		/* restore TCC to RV_REG_TCC before bpf2bpf call */
-@@ -2132,6 +2167,11 @@ bool bpf_jit_supports_kfunc_ret_reg_pair(void)
+-	for (i = 0; i < nr_arg_slots; i++) {
+-		if (i < RV_MAX_REG_ARGS) {
+-			emit_sd(RV_REG_FP, -args_off, RV_REG_A0 + i, ctx);
+-		} else {
+-			emit_ld(RV_REG_T1, stack_args_off +
+-				(i - RV_MAX_REG_ARGS) * 8, RV_REG_FP, ctx);
+-			emit_sd(RV_REG_FP, -args_off, RV_REG_T1, ctx);
++	/* Only the low 32 bits of the base take part in the subtraction. */
++	if (arena_base)
++		emit_imm(RV_REG_T2, (s32)(u32)arena_base, ctx);
++
++	/*
++	 * Walk arguments and slots together so a 16-byte argument consumes two
++	 * ABI locations before the flags for the following argument are used.
++	 */
++	for (i = 0; i < m->nr_args; i++) {
++		bool arena_arg = arena_base && (m->arg_flags[i] & BTF_FMODEL_ARENA_ARG);
++		bool nullable = m->arg_flags[i] & BTF_FMODEL_NULLABLE_ARG;
++		int slots = round_up(m->arg_size[i], 8) / 8;
++
++		for (j = 0; j < slots; j++, slot++) {
++			u8 src;
++
++			if (slot < RV_MAX_REG_ARGS) {
++				src = RV_REG_A0 + slot;
++			} else {
++				emit_ld(RV_REG_T1, stack_args_off +
++					(slot - RV_MAX_REG_ARGS) * 8, RV_REG_FP, ctx);
++				src = RV_REG_T1;
++			}
++
++			if (arena_arg) {
++				emit_arena_arg_conv(RV_REG_T1, src, nullable,
++						    RV_REG_T2, ctx);
++				src = RV_REG_T1;
++			}
++			emit_sd(RV_REG_FP, -args_off, src, ctx);
++			args_off -= 8;
+ 		}
+-		args_off -= 8;
+ 	}
+ }
+ 
+@@ -1039,9 +1094,20 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+ 	bool is_struct_ops = is_struct_ops_tramp(fentry);
+ 	void *orig_call = func_addr;
+ 	bool save_ret;
++	u64 arena_base;
+ 	u64 func_meta;
+ 	u32 insn;
+ 
++	/*
++	 * F_INDIRECT is only compatible with F_RET_FENTRY_RET. In particular,
++	 * an indirect trampoline never calls the original function with the
++	 * arena arguments converted into their BPF representation.
++	 */
++	WARN_ON_ONCE((flags & BPF_TRAMP_F_INDIRECT) &&
++		     (flags & ~(BPF_TRAMP_F_INDIRECT | BPF_TRAMP_F_RET_FENTRY_RET)));
++
++	arena_base = bpf_tramp_arena_base(m, tnodes, flags);
++
+ 	/* Two types of generated trampoline stack layout:
+ 	 *
+ 	 * 1. trampoline called from function entry
+@@ -1189,7 +1255,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+ 	 * SP, which the trampoline keeps as FP. The fentry path pushes the
+ 	 * parent frame first, so its incoming stack arguments start at FP + 16.
+ 	 */
+-	store_args(nr_arg_slots, args_off, is_struct_ops ? 0 : 16, ctx);
++	store_args(m, args_off, is_struct_ops ? 0 : 16, arena_base, ctx);
+ 
+ 	if (bpf_fsession_cnt(tnodes)) {
+ 		/* clear all session cookies' value */
+@@ -2172,6 +2238,11 @@ bool bpf_jit_supports_arena_kfunc_args(void)
  	return true;
  }
  
-+bool bpf_jit_supports_arena_kfunc_args(void)
++bool bpf_jit_supports_arena_struct_ops_args(void)
 +{
 +	return true;
 +}
