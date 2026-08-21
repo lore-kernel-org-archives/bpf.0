@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B2D493659
-	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 21:53:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C1B536E49B
+	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 21:53:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787349219; cv=none; b=QJD20mc4VYjBOY4QwHFFwcR3PIL/DOGFurkEW/7uldN6Fxdfkk/EK92XD8MZqSzuSjL5OV4BtN2ClbE/7Fbx/DjYZkQcDSnHca9FCo8j01VVIODH7XC0T5Zmk8hE0xuTw1fAg79WEdfPSxTWC/lb4T71Ng8FfBsV1w+6yOPffNk=
+	t=1787349236; cv=none; b=qJr9Og4rk3zEmrlYfJVTaaJuxQ7HQ2Jhr4vV9lg134B3o0ycBFwC8NdvZYdS4FKmFhVSSMl+xfh9HcmwAMz6UG8xphDI1GvhaqMMn1n/bTKhoNDHXp2wl7ohChGYXZfriQMz0oh9j9Trm2B6DbU54ubzzSt3wszVOcdRtFV9qCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787349219; c=relaxed/simple;
-	bh=tXuNwg5HqewBd0XUFSEWko9PLR3sZyNHbQGISIEZPHc=;
+	s=arc-20240116; t=1787349236; c=relaxed/simple;
+	bh=ecZuTYEEduf5cj7peRpB0q1J9/noCY5hK7bFY7BkPtY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Sd2O69DJSXGvwKgSmsqndTkbSnNlUOCEv80sLGXpcGpt7owdG+Yi6v6rQYfvJdEPMByNM8EuAq8WodcKeFx/QstfPlBFgQBU3iRRiXZchqk95cGRYIezRBiVqlKu+tvb/+PT3KRxxhwZ4ULgb4HHRjjOzz0xkMlksImhtOWlPH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LH8b5JNh; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=fv6RP72OFxQ6Bl2K6UokV693zdZCkmI7JPgp4W8vYNTYDxvtfFBlXqvNb9vO+CirK5um2KNzPGn5D6cCDxNj4QR4swK/RGbrJVq4Ez+BwHh0jd9M+cc4gW6DI4UG3PxZuOIuA7Nc/WG+/hcL/4m79gRJV1njUOebCbZAIfnloCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k3M3rBkl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LH8b5JNh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 152D61F000E9;
-	Fri, 21 Aug 2026 21:53:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k3M3rBkl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3F871F000E9;
+	Fri, 21 Aug 2026 21:53:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787349218;
-	bh=3F6JQ/rsjGyGs4bfcRZSM8v35qaVs1Mrj2AuW0jjhpM=;
+	s=k20260515; t=1787349233;
+	bh=bjptNR9ABEyemP2454AuYIzqzhDyP6wek0tzgpGybIU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=LH8b5JNhKce0/LY45d7bPVQXjQPEfMJidKsCVm7RdLbylOnSSAhZlFuxvWihTlMOl
-	 rKx0lCRmGPb0bE8Kl+xvzIhqEOQYNE+tcuWybJqqv21PMyI3UZVrmDWEWgCg3BU+m/
-	 WhwfUgJ1O/4Yx1NvD2lHUFB5sR6zlSXW0C3ng9+UJu3J+JJfssTkhLVZ/ZAGcap1Ph
-	 GQI9GAJ+Abw+ADR4SPDmHyCZciEMLDoR9DMxLWnijRxRpJHZkMqdSvwq7RhxQXJilw
-	 BWXsyUbcJgJckst2TxNGWuwcRYWsvLvVTHMIt5Be275MVsZZuCXzztEXeHsZ9NvHM1
-	 f6xltlH5WdSJg==
+	b=k3M3rBkl5fLks8jSvbIv4ESZL8j5FZu8S4InbcMtagYcI95eELirPf4LarFjannQC
+	 L1J87CXAzbomxcCNX5MNCkVvT1QVLYhPivWTzClCkWGBrLmPKYPijdkG5qowKrGRZI
+	 YUmNceh0sAWqjlPnGOD5WhbL/V5XrvvEPGYBEfK2THHJ7eCVIl+nurU2SQG6J7Zb07
+	 TYIG+erDEFKsKRdmxWZCTIZcju0GqzYAbUQ0wdhm4+Hvnh6HvdfL0fwlukqigKf8le
+	 pkDHpd/qrkeYdeCK5vqbT8/pemwBfAORbq/SPL98bRgMkkPIKEvsKvJkijp6ZLFDia
+	 52yGjf/xfBu/A==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 05/11] selftests/bpf: Add a test for the sealed
- bpf keyring
+Subject: Re: [PATCH bpf-next 10/11] selftests/bpf: Add tests for bpf keyring
+ in signed loader
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Daniel Borkmann" <daniel@iogearbox.net>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260821214111.1120748-6-daniel@iogearbox.net>
+In-Reply-To: <20260821214111.1120748-11-daniel@iogearbox.net>
 References: <20260821214111.1120748-1-daniel@iogearbox.net>
- <20260821214111.1120748-6-daniel@iogearbox.net>
+ <20260821214111.1120748-11-daniel@iogearbox.net>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 21 Aug 2026 21:53:37 +0000
-Message-Id: <20260821215338.152D61F000E9@smtp.kernel.org>
+Date: Fri, 21 Aug 2026 21:53:53 +0000
+Message-Id: <20260821215353.B3F871F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,53 +47,76 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] API conflict and UAPI omission: The BPF system keyring sentinel =
-value (3) collides with the valid user key serial number space.
+- [Medium] A ternary operator logic error causes a NULL pointer dereference=
+ if `strstr` returns `NULL` in `bpf_keyring_lookup`.
 --
 
---- Patch [5]: [PATCH bpf-next 05/11] selftests/bpf: Add a test for the sea=
-led bpf keyring ---
-commit 3de34ebcd8baa817e75280e15e9985c407307d98
+--- Patch [10]: [PATCH bpf-next 10/11] selftests/bpf: Add tests for bpf key=
+ring in signed loader ---
+commit c9f1ea97a7848e9a19ec91707712827e46792acd
 Author: Daniel Borkmann <daniel@iogearbox.net>
 
-selftests/bpf: Add a test for the sealed bpf keyring
+selftests/bpf: Add tests for bpf keyring in signed loader
 
-This commit adds a selftest to ensure that loading a program naming the BPF
-keyring fails with -ENOKEY when the keyring has not been provisioned. It
-verifies the ordering of error checks prior to real signature processing.
+This commit adds selftests for the bpf keyring in the signed loader. It
+verifies the keyring through its lifecycle, including key generation,
+enrollment, and testing loading restrictions based on the keyring state.
 
 > diff --git a/tools/testing/selftests/bpf/prog_tests/signed_loader.c b/too=
 ls/testing/selftests/bpf/prog_tests/signed_loader.c
-> index 0c5294738d6ce..94b57e7cdab39 100644
 > --- a/tools/testing/selftests/bpf/prog_tests/signed_loader.c
 > +++ b/tools/testing/selftests/bpf/prog_tests/signed_loader.c
-> @@ -32,8 +32,11 @@ enum {
->  	BPF_SIG_KEYRING_SECONDARY,
->  	BPF_SIG_KEYRING_PLATFORM,
->  	BPF_SIG_KEYRING_USER,
-> +	BPF_SIG_KEYRING_BPF,
->  };
-> =20
-> +#define BPF_KEYRING_BPF		3
+
+[ ... ]
+
+> +static int bpf_keyring_lookup(int *nr_keys)
+> +{
+> +	char line[512], type[32], desc[64];
+> +	int serial =3D -ENOENT;
+> +	FILE *f;
 > +
+> +	f =3D fopen("/proc/keys", "r");
+> +	if (!f)
+> +		return -errno;
+> +
+> +	while (fgets(line, sizeof(line), f)) {
+> +		unsigned int hex;
+> +		char *sum;
+> +
+> +		if (sscanf(line, "%x %*s %*s %*s %*s %*s %*s %31s %63s",
+> +			   &hex, type, desc) !=3D 3)
+> +			continue;
+> +		if (strcmp(type, "keyring") || strcmp(desc, ".bpf:"))
+> +			continue;
+> +
+> +		serial =3D (int)hex;
+> +		if (nr_keys) {
+> +			sum =3D strstr(line, ".bpf: ");
+> +			*nr_keys =3D (sum && !strncmp(sum + 6, "empty", 5)) ?
+> +				   0 : atoi(sum + 6);
 
 [Severity: Medium]
-Does this hardcoded magic number (3) for the BPF keyring collide with the
-valid user key serial number space?
+Could this ternary expression result in a NULL pointer dereference?
 
-Since key_alloc_serial() in security/keys/key.c only excludes values less
-than 3, a user's dynamically allocated key serial could theoretically be
-assigned serial 3.
+If strstr does not find ".bpf: ", sum will be NULL. In that case, the
+ternary condition (sum && !strncmp(sum + 6, "empty", 5)) evaluates to
+false. The execution will then fall through to the false branch,
+calling atoi(sum + 6).
 
-If a user creates a keyring and happens to get assigned serial 3, and then
-passes keyring_id =3D 3 to bpf_prog_load, wouldn't the verifier intercept it
-via VERIFY_USE_BPF_KEYRING (which is defined as 3 in
-include/linux/verification.h) and incorrectly route it to the .bpf system
-keyring instead of the user's provided keyring?
+Since sum is NULL, this leads to a dereference of NULL + 6, which
+would crash the selftest binary with a segmentation fault.
 
-Additionally, should this value be exposed via a UAPI header rather than
-requiring user-space to hardcode it in the selftest?
+This situation could occur if the keyring description is parsed as
+.bpf: by sscanf above, but the line does not contain the exact
+substring ".bpf: " (with the trailing space).
+
+> +		}
+> +		break;
+> +	}
+> +	fclose(f);
+> +	return serial;
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260821214111.1120=
-748-1-daniel@iogearbox.net?part=3D5
+748-1-daniel@iogearbox.net?part=3D10
