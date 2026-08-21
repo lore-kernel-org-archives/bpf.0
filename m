@@ -1,140 +1,117 @@
-Received: from mail-pz2-f9.google.com (mail-pz2-f9.google.com [74.125.228.9])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D58DA315D53
-	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 01:29:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787275764; cv=none; b=dsiFzRmcWTF5fn9AQWqXIZKFu50s7bWuHOMaJGvI/f2vCnqvTsFQ4cnxsAi1CS21hQgzhITWrMbYohSkJamsyMOAWaO1k+jwYnEbUzK3XJf2DWH3wKg8QJzMxywpybomEDnLQ/5/WOO0PJUzmBzxJDal42WIAiJeUa66tfZTQwg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787275764; c=relaxed/simple;
-	bh=gqWMHjglpbHY/2tqJjSk/6W2N13etU+sr8bVJuTM4ZU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gcOQfOpWLgEs7IzouTgfSRHdoEMbnPjZMD3ZDoNg3D/eA9BBNqkCMjGHS+7arW6afRXBNz/Cg6BvDvSkC71evKVGPFd8g3BiHigiMAnStd/p+qS12xtpheqBT5TVR/j83mgeyG2hxuiZ4vvoN6KsBzvei91VgWzUSPQ0zpJfAk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KBE9ytoq; arc=none smtp.client-ip=74.125.228.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC9F28505E
+	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 01:34:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787276091; cv=pass; b=PRJS09PyLblAwP2XbT/PrXxBmyHwincHGgiWsOCTTfw8jfwunfLwsEOIdX3zGGKJrpGUoBTPrvrdov4qDPMVVivUisbVHjbBdt/o04aLR/mw3gNgS/7ZnrHoWT50vc/bDur6YG5aj7/pjT0uuLypwWeg6jIwhhHaLFghiu1msyo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787276091; c=relaxed/simple;
+	bh=WfYTfDqlFqDiRBgWlVw/ucOoL2L7rph45JUv9iWsRYc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FrbhpTBuTsdSOO+mgA/uZ0LY/mOZNm/jm6cQ4SQ5L5eSE/m+IuqIt5b3u4G3n2srQc67twvsj3AcJjvzojW5jXg/tgPF/IjiDZgOIO1h7mYEkWnzNcAzYbE2o1Lg42G8Q24BYoruiEgalLieZgCBL5Zqgp/PWM7UGYfwf+ZNmk0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TtIusaXW; arc=pass smtp.client-ip=209.85.215.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KBE9ytoq"
-Received: by mail-pz2-f9.google.com with SMTP id 41be03b00d2f7-cc150711112so73355a12.0
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 18:29:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TtIusaXW"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-cc11a30a259so510659a12.3
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 18:34:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787276090; cv=none;
+        d=google.com; s=arc-20260327;
+        b=gmm65GbMpK/TQzr3vC+wGFqx5ddcWhXAPMNJWTnaMciscmkEhO4uk2uNfmT+bo226S
+         TlPb/S1PH6Xe19G9/BBnujGsOQLs/Va7lZuBwx0mB5+hpZa7GyN3AuoaVm3wDH6+5P1z
+         b77Y3I0MNUayuKY+hN4DwdNzEOF4PyPhIr87VYnNr1+Osy503NuGVSZ1JmxOLPWQXPjJ
+         RzvDuD56gn4zTU2v/QI3veixJvfK6PikgdBaH3tFgdocGlRfPmEyi63poKYmLC0i2hIt
+         8jwl0kcsjw8umNBfuB2xBGgxNxCzDMQmm6Ou+7xJmr/whuUtDtBbM3ulLXQ/HUTVQVZ0
+         t74g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=tRjMr8Z9LADn4qfCevJir9Kj4//t0MN4odINKyKdXnI=;
+        fh=+xaYQlC2PTXeSdVoW4K1KC8AIGTJeLd9XshXcoEuEmM=;
+        b=lRVe68IH/9bUcL0iGCeGoJROHJNUMFXpOPTiF8DJ+Fz1vXm8cZYE4AsfqY8p++P3wg
+         B6xtZw6wsSzFJJ7dVcMwJZMHtm/poV1MqQusKBNhDP1URDwJVBVnBLXoY8QZkFgcaNkO
+         KH4WDA40ccSZ12HsP+WOTYfCKHa9CpsL8B0FW1VTQ9/V+slcVNz4Yss5SJ52smUblr+1
+         yMp5ZpOpDizytBroZMqHCXhSjK3DHKTf3iv7ZYYCI2FqOZ2doGfgS2PULGHKcwp3Xulm
+         rkSobIgxgP3HWpBm/7dKvu2uo72c/JIidRju5/8Ljbe5qL4/CuZWhRN4fxDLDjvXP0TK
+         5Zxw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787275762; x=1787880562; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1787276090; x=1787880890; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=PL4vLuVN0ieJR1wtgaFdgTaFWontBf4roejCfLnzVDs=;
-        b=KBE9ytoqGNRk0tgsofHNaXiCHOv08zLHV/Tn5QNqEU6FbejhbPTrmHgiSqd9X/lPhA
-         ftwsSblQvDRaoeBW7p4WSTkipw5AvSJo+hqSQ8z8EliowpercQxBHDEikzcLz2Jw+jqH
-         1KjueGhPQSH5C9YUHHziDB+0+ChuUzDr0UDHUQqD0Ix7M22vFwKqC51lV70ZXuUj27Bg
-         F6Ul/NxR1NK60cC2O6pEGr9nd2YMcym/hXGdpIADJpJIKHRzFG/0rQnK52RmLCY5q/Se
-         bszGnLCoc7fHLzHo0qTFAMWd27RHLEODylghyZYDHllFAbTFxi3wSHVQfLcnw76hiUCS
-         HrWQ==
+        bh=tRjMr8Z9LADn4qfCevJir9Kj4//t0MN4odINKyKdXnI=;
+        b=TtIusaXW17GD8lp98a9a243R2HMsFyTJITFkoE0AE0/JiXrcHO6GE8W34VZ9IHaNcN
+         JWKp0YYGCkp564ekFt8Jj6+5fbID2xJWRs2lpLbksFwSde2BXEYVohfUfiHHAvGgC7Ov
+         L0o9lPUlVMw3QczDFlnt3iKqb2urUZd5AvCjwzu0Bb3IaP6Mbfjpek9HnoO1Qzz+1Uv8
+         CnMiyACOU0uJAfrgiz4zLmS7GZpZt+Pn6vM6rCcVkdc9LvxfdY4KTJSv3Ch1DOfi1brd
+         oQ2iRVNWiLIRIKmVj7EcG0vpSb19s8Ztd1wybw3ELaKkiQdtVaqrc05yl89JaASwOJ43
+         59sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787275762; x=1787880562;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1787276090; x=1787880890;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=PL4vLuVN0ieJR1wtgaFdgTaFWontBf4roejCfLnzVDs=;
-        b=OWHAmEbwvmPVC0cnjeCgcS79EXbkkrcOaYXxHjGfjamRkW0zvaKjlQgCeg7Sqkxq8w
-         3zl6SPHS68dkKXlZF04OL+dxtpMjSpxzFw96oDgbB0laVceHvIqcYUw7pDxRFUlyYGiB
-         EcsyBWMZzyNDIOQbfN++zbgmL2yQCHHg22tMhaGIQEuPB+rmnmzOr6lrhICwWIYtxNCG
-         5dCNT1WDQi+etMypJ7zK9UjHXX2/h6h+CpqQy7qetsfZlvhkcZ7hUe/RO+QH33dhkqC1
-         jYB9/bdZ3RNBuKGvBqO5VW7X4j3+DV6SkXs/3LkdffHHiCisf40zghzuERuLjnwFhfTc
-         WYUg==
-X-Forwarded-Encrypted: i=1; AHgh+RpF0nm7CF3bCzD11ru7Yq1AvmA1tEiuqq5PUc3mJco/Kf0zqlSBlPynnEnbQUB5sYpxYig=@vger.kernel.org
-X-Gm-Message-State: AFuF++kfyspce4chpg6gUldvA1AyeaN04a7+cdLlEYh3gYwFoj41Bg00
-	S9mjJpLe7F43f2NnA5m0vo7ACxOxjmT92QGvsmhi52Rnic+Oubna9RPB
-X-Gm-Gg: AR+sD12SfTpqHpX3fTnyZNWzEQ0D2ZllqokNeUjjmaK9x1/KaFpzP78p+0DtBUk8WF/
-	4XjEDOjS22UjMxIQ7o3sRiSVkpLeTTmvvUBSKw458va5lzG6+426zvdmGqVVqCrt2b3Cz50e6PY
-	myMwcvh7CNNZG3kqwaUOced2epxMAVgZqxKXZT/euXdZIfDXSLXO9dQ4pM1NW0HY/17yu2uOUmR
-	exp8qCTc3T8ki3K3TwHMrBgD9GWr58Ydf4epSBdSmos5g/DD5R97RZjCTxbPG4WLfNmYOwL6E3p
-	/1lxZHjLs6O6tk+98fv88kp9c2I4M6qu2QN5B150KeANL0PUL8ttfo+5XIj+MOdfa9NSA4WK4MM
-	F7HjQflk/Ce9+hOhx/DM080Vuhe97IilMz7jNVYVFfe4jtjECVy6xxAC7h40NwvSRZ5LaPZIP6U
-	DEvSNzBgNjQFBYsROXWPgTeTzJgVKkFD0WWvERYwFTuPVqkPbr7lS7grIKdj5E/lkg
-X-Received: by 2002:a05:6a00:170c:b0:845:e440:d0ca with SMTP id d2e1a72fcca58-851f9f0db82mr3439334b3a.8.1787275761986;
-        Thu, 20 Aug 2026 18:29:21 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:2::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-851d3640dd4sm2169685b3a.41.2026.08.20.18.29.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Aug 2026 18:29:21 -0700 (PDT)
-Date: Thu, 20 Aug 2026 18:29:16 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, anthony.l.nguyen@intel.com, 
-	przemyslaw.kitszel@intel.com, andrew+netdev@lunn.ch, saeedm@nvidia.com, tariqt@nvidia.com, 
-	mbloch@nvidia.com, maxime.chevallier@bootlin.com, mcoquelin.stm32@gmail.com, 
-	alexandre.torgue@foss.st.com, aleksander.lobakin@intel.com, horms@kernel.org, 
-	magnus.karlsson@intel.com, sdf@fomichev.me, ast@kernel.org, daniel@iogearbox.net, 
-	hawk@kernel.org, john.fastabend@gmail.com, guoren@kernel.org, dtatulea@nvidia.com, 
-	witu@nvidia.com, martin.lau@kernel.org, yoong.siang.song@intel.com, 
-	intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
-	linux-csky@vger.kernel.org, leon@kernel.org
-Subject: Re: [PATCH net v3 3/3] net: stmmac: document oversized AF_XDP frame
- handling
-Message-ID: <aoeoJ6-njBxcWs4w@devvm7509.cco0.facebook.com>
-References: <20260819160535.1472459-1-sdf@fomichev.me>
- <20260819160535.1472459-4-sdf@fomichev.me>
- <aoceSoSFMx69Z9up@boxer>
+        bh=tRjMr8Z9LADn4qfCevJir9Kj4//t0MN4odINKyKdXnI=;
+        b=Ix6yOXgxsKsIicIYTu6GUzQbHIglrD6NeCniROhheFe3wrKRaaO2EKWnqD7nWm6UkQ
+         O8LUNDSfPcML1GPXGDxOl6eAVA+j4Hx5NUPSAi8+SbojqJy571TFPJpeY4ywfUrDHF0N
+         K8xaRcnygMAXC10dpjrf9QOU4Il1lqSMmWO6eiAAxAwOX7HRWYhWix46y8aMyQXNcok0
+         RLWiEbtiy2EuA6gm52zMeI5LSGs5Cdp+7hyb+IbWe922DOxZWB5HINOl0+5Gfnm96JdK
+         zLjtVhoaIR5r8aYSsT6PL95rJv8+wvasNxq7BpdhL3d79dR3fcamCwg5oIrACG31B3aT
+         zxMg==
+X-Gm-Message-State: AOJu0YxZ0M1QQFrwk1pk1PSkRfysVJL8hSwK4iecIRcysZy7LykgwtRM
+	SG+INczuo4AXuOZ4W/t7WKLu4HnVP7f8UAfYROOoWPjLd9tRjHPTpvxcdLXHH4t/EgUMW2lL1Xm
+	yG4xk7m30Xqy04rujzLLZFsNl/xLAaVk=
+X-Gm-Gg: AR+sD103vsafOGZmkXrCQfrYrejD0gqIzrynhV1x0HPMeyU6eZA91dwphw4TBe1TDTL
+	kpeswHBPoyeY6JM91rITddNxrFcW7WWK2HFE03pZKnL+wZ2QsaNKFJPhQOHCVQPyS+jXgLJ/xAR
+	Gfk4eGCc54hqGVweW8Jca/Ug0PL4A2VerCtvBiDt+WFrvRH0L4wftnvw2X4EvEZabqJiHAf7CEf
+	GtHq87jk4vaTx5dFIvMyHtROoySWAG/sOXG1S0AaRqiMPwAi6TdmhSyxSUHdSkGRMZbIH+mYuTk
+	qDkN6h0/v96GdWHb3eBjqx8NcpUm1T0MNLYA29HGh6mebrTyXmCF5BtC58neN6T4gmCBPl/Jtd0
+	TrcAPVvQkOP7/nlwqetydW6hvsbgZ8jcp9AFNs7BhiBxcLbChyfcwbx3ycNwH6Uo=
+X-Received: by 2002:a05:6a20:438e:b0:3c3:a140:9392 with SMTP id
+ adf61e73a8af0-3cd2f9b4fbbmr5373593637.0.1787276089383; Thu, 20 Aug 2026
+ 18:34:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <aoceSoSFMx69Z9up@boxer>
+References: <aoen96RONJgf18E5@devvm7509.cco0.facebook.com>
+In-Reply-To: <aoen96RONJgf18E5@devvm7509.cco0.facebook.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 20 Aug 2026 18:34:38 -0700
+X-Gm-Features: AcwNN1Uh2K6g0kYN1lc1brSJwvGvTq2xrJAbDDhhHWgdkYQ_a9pwszsQC5ZzaUM
+Message-ID: <CAADnVQJ6h6btgOTdDT63gN7iN3dkAY3ZFFFmyyXot1Twr1x4Cg@mail.gmail.com>
+Subject: Re: [ANN] bpf development stats for 7.3
+To: Stanislav Fomichev <sdf.kernel@gmail.com>, Eduard <eddyz87@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Leon Hwang <leon.hwang@linux.dev>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: bpf <bpf@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 08/20, Maciej Fijalkowski wrote:
-> On Wed, Aug 19, 2026 at 09:05:35AM -0700, Stanislav Fomichev wrote:
-> > stmmac drops AF_XDP zero-copy frames that exceed taprio's queueMaxSDU
-> > after xsk_tx_peek_desc() has reserved their completion entries.
-> > 
-> > Completing a rejected descriptor is unsafe because AF_XDP completions are
-> > ordered: xsk_tx_completed(pool, 1) would complete the oldest outstanding
-> > descriptor, which may still be owned by hardware. Instead, leave the
-> > completion pending so the ring eventually wedges and increment the drop
-> > counter to expose the application error without risking hardware
-> > misbehavior.
-> > 
-> > Document this intentional ring imbalance at the check.
-> > 
-> > Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
-> > ---
-> >  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > index 62de03e65a90..6a532747c039 100644
-> > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > @@ -2713,6 +2713,10 @@ static bool stmmac_xdp_xmit_zc(struct stmmac_priv *priv, u32 queue, u32 budget)
-> >  		if (priv->est && priv->est->enable &&
-> >  		    priv->est->max_sdu[queue] &&
-> >  		    xdp_desc.len > priv->est->max_sdu[queue]) {
-> > +			/* Completions are ordered, so this descriptor cannot
-> > +			 * be completed safely. Wedge the ring to expose the
-> > +			 * application error instead.
-> > +			 */
-> >  			priv->xstats.max_sdu_txq_drop[queue]++;
-> >  			continue;
-> 
-> Hmm. I read the discussion on v2. Maybe we could cancel cq entry here in
-> this branch? Also it feels like something achievable at bind time when
-> taprio is configured and vice versa?
-> 
-> Otherwise we over-commit cq entries.
+On Thu, Aug 20, 2026 at 6:29=E2=80=AFPM Stanislav Fomichev <sdf.kernel@gmai=
+l.com> wrote:
+>
+> Developer rankings
+> ------------------
+>
+> Top reviewers (cs):                  Top reviewers (msg):
+>    1 ( +7) [7] Eduard Zingerman         1 ( +1) [34] Eduard Zingerman
+>    2 ( +1) [6] Emil Tsalapatis          2 ( +3) [13] Andrii Nakryiko
+>    3 ( +2) [6] Kumar Kartikeya Dwivedi    3 (   ) [13] Emil Tsalapatis
+>    4 ( +5) [6] Andrii Nakryiko          4 ( +4) [12] Kumar Kartikeya Dwiv=
+edi
+>    5 ( -4) [5] Alexei Starovoitov       5 ( -4) [ 8] Alexei Starovoitov
+>    6 ( -4) [3] Jakub Kicinski           6 (+22) [ 6] Ihor Solodrai
+>    7 ( +7) [3] Leon Hwang               7 (+22) [ 5] Leon Hwang
 
-What do you want to achieve with the cancel here? IIUC it will make it look
-as if some (if the user has posted many) tx descriptor has not been consumed
-by the kernel?
-
-I do agree that a better idea is to probably do these checks during control
-paths, but it's a bit more involved (and not sure if it's possible? if we
-have a bunch of xsk sockets and we change that max_sdu, do we go over all
-sockets on the system somehow?). My main motivation with this patch was
-to make our LLM reviewers less chatty about preexisting issues.
+I'm no longer first. Hooray! This is an excellent trend.
+Thank you folks. Much appreciated.
