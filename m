@@ -1,188 +1,140 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC7B337BAB
-	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 18:34:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B74BD3A9D80
+	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 18:39:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.172
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787337250; cv=pass; b=b4oWcYsphy/Ot8jz4VK+Z+bkw5WmoY3bGeVn+qKgsILlJjT3fYQY7dn4xRd/SqQI4hSND0DNtLm/4A7/bdDpB8m3WKFKhatPUnCqrjY9TRhdLAmIxnRMXbHwZBYjv52GgW2E4FzmJwisvWEe72gWe8GBtznpMWckNaR1NotL9h0=
+	t=1787337583; cv=pass; b=Xx2uvQzqbjUYss91D2R8QTCzJDJEeO4btZCBv2592DQoEX6DvKikeTa+VS7gT149GrjFEdykhL4JjLCBL+Pk/A/+X3kQWKGsOgund29TVSKt8IkQIL57jdpSR/oIacgjQRiwM/xeWlTKXLdjMkteg5VyP7GfgfU24w21wyaY9sE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787337250; c=relaxed/simple;
-	bh=2A92KqKoCJmcZ56ZasJV/t7WaDXgH6qSgLNOV+CEQaQ=;
+	s=arc-20240116; t=1787337583; c=relaxed/simple;
+	bh=H5ipRC5ikWPs4GHwCKt6WGiprEkcyH6ySvuXZqumRdI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=k8wlAuCkPOKIdztIAuivGEC2BvDgw7ycLsyIupZdBp4kW9MHkkugv15s9uQjlwOuDwiNkHuSPUyTSn6i66TKTZZ2XOunB2D1M1IiGIitKUrabYuy0zguTmYkMSV63/YeLQQs8BqrioetPSezmsp1WOn6khn+TxQextZbll5i4ts=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rUeypJUo; arc=pass smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=uVmfD2nh7uA5tE8RZrQuRCzuGB2GdnpXpauGZtMetNwBHpylcE+73d8CX5NQ2KaC4+phSVqnQWnnBszQq3zeVQEu7aJkIhVbKalAxRNiL183RJttSWYsT5KaaatgMeZUH3vxhvtFvzf2wl8cS8R8xS8XQmBYfu/drllz+KceQaI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AxsouX6A; arc=pass smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rUeypJUo"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2cc891373e0so16023795ad.2
-        for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 11:34:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787337248; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AxsouX6A"
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-51c8e2e39easo12622731cf.0
+        for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 11:39:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787337574; cv=none;
         d=google.com; s=arc-20260327;
-        b=q++SEo+B+KXTIUdOOW8qpBpGtfeZqfosYqUN25EehZD7j0vW1BRtIf+76RrCeSgRGi
-         Mnqr7BjWd/8xBXhwUclYknrvco5kspeNWKLEKVzkORGGUWEvZ1+d9iUXVyQwfehQCHRh
-         SgOTsEtur4hlyePP7qVjL5iU9ubgrxOIqRlODfxrwJBlS4RrsstTFIwKDWeDL6EQ836n
-         rZIJ3+c8yRgC8BupSSNLh9Ly49K0jIrOmUQ6pfYHQvymqN2ZWpfjEJ9a8T8YrF0gqRrZ
-         GAcioLxgqKPGX9HmheWUWe41IeT1KHcrZOocc9Z/vDe5OmC7SVIV0461A1ynL9gkP7Kj
-         fhNA==
+        b=SbtN8S9o3mmxL4I0lLVsCmtXgW0sLe+ZzRrQp+4S1f406POIH7AItXdyHeNF8bZow8
+         X96BFOol2QBFBPc1HooVltP0fOoIR4iKIdGFBQt3MLvWAvNkVYXHwseGYqhg/KuZzDV5
+         nDDeYz7H6c0iwVvBA88gHwPDtxvkLbf11q1WmplJ65FrkLBQRwbbGRH0s5yiRCbOcyPW
+         BlOLvFSNSLD8+gSHRE3ZxNxZOV3Yv2y+QfKiNs+kJpcrtCIiC1YQY1ug+GwHdfxGiGU3
+         CQNwQNMMlK/B5lf/hyoTRpA9eHS+wifmhXwzIOt3bEgGUgYStci0mmt++9TEG5aSZBdO
+         yS7Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=Y0Ukbw5yEgIofWImq0KqMRHmw7+kGVu41QRqHiQ2DTo=;
-        fh=PXqpcrZ4Mqfqz3/FG80qyVmLfiziwTPlOxhAo4b4ePw=;
-        b=eruLCZ9OqqoVkx1ph9KYVfaVgkZZCDeb4wBIJ97Fkh9RudA1253uJ5KKJtOyvQjjD6
-         GirwK2prBMjz96QcTL2En1pO5mtJOjLTSvuTQUBZRnUYGe3sL1stXLeeeAo5DhagrJqm
-         n1R95JUNl3ipqgv1kZuxf1IrWrHsYv07NSmrAX+Rc/hxjdh+XWl40uN2EXE/P7I40rNd
-         XKzkHUKLFUMDgGFR4oFOOlcTASgfZ3gy98/YslriUlni0maAnHr0sw/G47kANmWPP0I5
-         DI1M+TNty2VCT7aze9WDZTqlpiu9s/PvQrJIuBqIE1yjUXCt+DaNaUXlMGQzsqjWsXXD
-         Mqrw==;
+        bh=7IThE4nMDn/1KYzHCuK6EXhKBsZ+s3+Zdwpu521vHb0=;
+        fh=zTKOnOh5w8ZaK+PQXAkv5DbJkBQ+JGWZU1n3RFUTweU=;
+        b=CxeZB6h8lEvP1ceHNgpq/H/bPwdfWSviGFvYqG6r5h7tItm9R2tlQESoog1rW2Z2T/
+         7w9Xa8kMDEYcvrg3I8ii84gdy7AGi79ugazTbEeUekOdlSJhEufymUV62PoIevsvywAy
+         TJN3p/AJCLXPg2OsXNsjhvsxGGmKHeuKIcOgX5wDVnzI6KLtbnJ+qGH7/o7FLmQyID+W
+         pptkDGq3nzYnxwe9CSSI16zoWpOF81B4I0a3hxZghxWkm8CMmTR2l39wvaQjlB7sdFJA
+         ejEjVVeEIWeRe1P84O9wkNDc7sLG4cUojOyl5ciSMCJttaNfHhh+oadW5ICMrfrH26VN
+         4QtA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787337248; x=1787942048; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1787337574; x=1787942374; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=Y0Ukbw5yEgIofWImq0KqMRHmw7+kGVu41QRqHiQ2DTo=;
-        b=rUeypJUoO2uLmKZLOE7GfBMYob3PTQ79N2DcnLL/LhJC9mDO3pnAKaNL6TNfaECykp
-         CcamObRLnWx4MkSQST827fTRgvOgLogbCnIX2KEEb09oBCGGzv4lgmL/m5O2GLzPftsQ
-         qY3DXd/vAAzAVewNLOE69Kt1QpZb++e+P/jcjl6iotOmTmpoM3mGMankC5y8lfISy00Y
-         7UZ+bDBD/BaS5AyeE8fWo13zbjIA3PWepTsJ9JRnGSveeGHu4NTpPQBJEAPmWUvpwtc3
-         jmeef3xFBzApf3iKM4ztzTGKpD2ywjEc2b5AqP/xFc6RLEIfryNNrSqzG93pknqk0a19
-         obww==
+        bh=7IThE4nMDn/1KYzHCuK6EXhKBsZ+s3+Zdwpu521vHb0=;
+        b=AxsouX6Am1z6mIFATKB2wf+1uiSg6Jz4ujyimlTx0P3DvvvAQd4IKX0wlLY5pcPnwI
+         Z8H0CHDan5XbRuiT0x/3bnYE6fkWSb2kGpek4eIjQKn29FhojK+keY2B9F+uYI/95Ep0
+         bns8vtmE88fJdYBNq4f9g5dSdbtYvJs1bDdWZWa2v0bVqXPDGBULcv1qURl+ltp/lJDX
+         YFw/l6mczIZRSYHHPvf8fqo1YkOqZZYsQuP/yH6jD8zbOnvoT7f1XSX3g5zAdI3KsonS
+         H5frOTCBNb+FPo/ybRy6sfwYHcq8dFW3s8k4MfiuAhn1lU4G4NAcKZgG5dBE4h8QiR+/
+         FFIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787337248; x=1787942048;
+        d=1e100.net; s=20251104; t=1787337574; x=1787942374;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Y0Ukbw5yEgIofWImq0KqMRHmw7+kGVu41QRqHiQ2DTo=;
-        b=cyAlg1GdPRI4Tmqht842hTLib7eCzqTHyHaeZzPyR8x8kBLBucP4/3spwnKKNSgVPI
-         2GfFh3/Yo/8EAW6eniAQHVg9RZgZ6a2uCj/AVFEx+VN+a3Yt7FQ7mfSvknxZfU4tZrqY
-         V0l295UqW+0eHLCZpvsTukpF1WGg8/jF+a24GZ3+WYXDavHa7IoU8ClUKrQ8Noyh09OH
-         vHBxDgPQ+gVYyUWt1BOedAl+RGWuectdI2hYWPl0PMNIEcl7Bn23c/M1nvKtRfGDNpcn
-         bqrAHXPgQujSGUmA3fsVHp83ayR8VhRwe6XVRKyS98kDs/LSZBOfVjS2MJGumEdIUCWr
-         8gkA==
-X-Forwarded-Encrypted: i=1; AHgh+RoWiGcqztc8xC9qViQcu+Pcv2z09dysIZG4Ejn/iwo5U5D5kiUOT5v3mppHt04Lmk85mx8=@vger.kernel.org
-X-Gm-Message-State: AFuF++lsFlceLP0Q2qy82loIcApv2feZJWOn6dA6ULqNzgJqCsnZyruq
-	++3LTM0qnfkJHCmcsHRB1iLpXZM/OgLRlqzrQRsZaG7XKNYBdOU04E1re+ltL3ftSVNrd+IEzAg
-	sVNNN4JVbaMcYGAjBqqfPuNBNHl/hYeY=
-X-Gm-Gg: AR+sD12WOBILuSrNwbcdnZtgBTvT1EG5X09zlTVfDVzn/8X4VPv/KkKd7SD/2zn4lSb
-	ImdzRLxWZ2/qBrLJJpwT8NUn87/ST1MNP2m/NYjTKxj+ESKzW8yyTVg2pvirdON9wXFfPl2U2JU
-	QxNj+suqJnxtZvbaN9qdBXIoFLWvIWSWExPQjFgyHTiK0s6gHh8FynmL7wcIE6ZYiwkagkDnbPc
-	PazxjnIe0UehwPokdNarzsuHiolUt4H7jJbE3k/iBAmf6C2RZB6mv9gNCr9Pi4Bzh9r/HjI7LDB
-	9YRpYWGMMs/HeMW80q3FNZ68AmC9flHQB7FbVtyLc4lz/ieyWuaaKXkTIg4VEs2SAbdHj4lcRUw
-	f0aciWiZgUMbvLNkh4hMz2/VMt3jRWigif2Kx
-X-Received: by 2002:a05:6a21:3a45:b0:3cc:fb7d:a9ab with SMTP id
- adf61e73a8af0-3cd4b9ea5famr1632166637.2.1787337248227; Fri, 21 Aug 2026
- 11:34:08 -0700 (PDT)
+        bh=7IThE4nMDn/1KYzHCuK6EXhKBsZ+s3+Zdwpu521vHb0=;
+        b=GUUtFuCmkY1yJkD2mR4TMhvnrJfKQVMDbk1M09Xdi6Ck1TGn/zxOAZGLjoBLi6f0I7
+         +EhNi7nSJGevHv8jkvNISUXZhJMqvm3xu5MkOLxVp9HcxrdwHXJUiIP7lP2TzxIctT6t
+         OHqd9s9LY/7QgOGjWCxkt7fjC/fe0K0WDpMOAGGYZMaXMvpXufwlzrQ8q36/lOoMKAsA
+         nJd5mBWWpqDB6Qz7TNGcnUoO0XuJwiJP5m+TbwpzukUSORoo1CkdSzp4EX+Yq8RQfbC4
+         Pkv5ehAns8rd5ULJ/alEXJFIQJbBamrtB3nh0P8nHphfOS7/2ht5G9ZquuL2uC+jOQHH
+         WZjQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpiPlWuUwbmLccUskrpnHRIbYc/MjbRaYs+yNt5D4bumZR6otUdvwHa/4e/4xxujyTC5/A=@vger.kernel.org
+X-Gm-Message-State: AFuF++nRvTGjIWtzWIXW7BXeyYTLzQ7U5J+gR0wen0703TXJ2LgxwGo9
+	1qDGqYgk8fQ1qNUeYYe2gUCxhgsSguN/7wEO7BdbNb0vl9BOv+8exEgnaNjuQMCZVit6qshkvku
+	H+0u3uRuHddyLjZKlKx6YIQFFsE/G28mKM24ymRHw
+X-Gm-Gg: AR+sD10kuaDdDuRxVEUz2l/owGf/61l8FTGV+rBdN5CCnpVoXhE7ots6L+ZlP1Fli1p
+	q8o/rNrY8RNEVqBbXWXEXyJtHeDmmfUvEg8VrQjL4vLM2W84nHfTROAwashCnnZ2ow7c3mbaSCO
+	yb7mMeGi7xD+W6sf0rFFSLH/ge077z/gpxhiPGtLHGt6uZvqd1Nm8dA0g8dnqluDZ8FFY6FROWf
+	FbBAH8qiReI2FNGjLzzC0Yr+Ov368XQL9I/knoRfEblk0JKIkm6vDFh6uf/TJ+aF/pfbr4gWTAx
+	yGF0x0PcwM48l3flDnMiTXN/EkgVqg3A3awfJBmOnMvRTxm5ffWAg2s3k8oGLZR/jq99yhBeHzN
+	2ypazX3Cr0sJBeMWr4KsQI7seEVTTS66Agm5Sq81h3LSQ3DaumXwcMg0w0g==
+X-Received: by 2002:a05:622a:229f:b0:52d:8679:ba91 with SMTP id
+ d75a77b69052e-52e09baceb0mr2165411cf.8.1787337573580; Fri, 21 Aug 2026
+ 11:39:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260821014210.18681-1-kartikey406@gmail.com>
-In-Reply-To: <20260821014210.18681-1-kartikey406@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 21 Aug 2026 11:33:54 -0700
-X-Gm-Features: AcwNN1UMxCVEBEK7W_zIG4V60WyE6AsN7ajAZMnJmYaQz6_nFKVc9evdZTs2M6Q
-Message-ID: <CAEf4BzazKkRiOCAAERt6YueeVYnnYeNEPmxH+EW3F4CR_YVjsQ@mail.gmail.com>
-Subject: Re: [PATCH] perf/bpf: Fix lockless access to parent_event->prog in perf_event_alloc()
-To: Deepanshu Kartikey <kartikey406@gmail.com>
-Cc: peterz@infradead.org, mingo@redhat.com, acme@kernel.org, 
-	namhyung@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, 
-	jolsa@kernel.org, olsajiri@gmail.com, irogers@google.com, 
-	adrian.hunter@intel.com, james.clark@linaro.org, kpsingh@kernel.org, 
-	matt@bobrowski.net, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
-	rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com, 
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+References: <20260821182449.79785-1-blbllhy@gmail.com> <20260821182449.79785-3-blbllhy@gmail.com>
+In-Reply-To: <20260821182449.79785-3-blbllhy@gmail.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Fri, 21 Aug 2026 20:39:21 +0200
+X-Gm-Features: AcwNN1Uzk2tJZgFXNwH3oaoWgTa7_Y-gFylOUpo_j5d9Jt50Dmca5FeLa3OmU_Q
+Message-ID: <CANn89iKr1ypEFeL+7te3xWoNaK5AFyYQmr+pDh2zSZAxfgNKjw@mail.gmail.com>
+Subject: Re: [PATCH net 2/2] tcp: fix use-after-free in do_tcp_getsockopt(TCP_CC_INFO)
+To: "Cen Zhang (Microsoft)" <blbllhy@gmail.com>
+Cc: ncardwell@google.com, davem@davemloft.net, kuba@kernel.org, 
+	pabeni@redhat.com, kuniyu@google.com, horms@kernel.org, yhs@fb.com, 
+	kafai@fb.com, andriin@fb.com, ast@kernel.org, netdev@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	AutonomousCodeSecurity@microsoft.com, xmei5@asu.edu, 
+	tgopinath@linux.microsoft.com, kys@microsoft.com, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 20, 2026 at 6:42=E2=80=AFPM Deepanshu Kartikey
-<kartikey406@gmail.com> wrote:
+On Fri, Aug 21, 2026 at 8:25=E2=80=AFPM Cen Zhang (Microsoft) <blbllhy@gmai=
+l.com> wrote:
 >
-> During fork(), perf_event_alloc() reads parent_event->prog locklessly
-> which can race with a concurrent bpf_perf_link_release() clearing and
-> freeing the prog via perf_event_detach_bpf_prog(). This can result in
-> a NULL pointer dereference or use-after-free in bpf_prog_inc().
+> do_tcp_getsockopt() reads icsk->icsk_ca_ops and dereferences the
+> get_info function pointer without rcu_read_lock(). With BPF struct_ops
+> congestion control, ca_ops can point to dynamically allocated memory
+> that is freed concurrently, resulting in a use-after-free when the
+> kernel dereferences or calls through the stale pointer.
 >
-> Fix by holding bpf_event_mutex when inheriting the BPF program during
-> fork(). Make bpf_event_mutex non-static and declare it extern in
-> perf_event.h so it is accessible from kernel/events/core.c.
+>   BUG: KASAN: slab-use-after-free in do_tcp_getsockopt+0x2037/0x23e0
+>   Read of size 8 at addr ffff888013701258 by task exploit/149
+>    do_tcp_getsockopt+0x2037/0x23e0 (net/ipv4/tcp.c:4564)
+>    tcp_getsockopt+0x91/0xf0
+>    __sys_getsockopt+0xf7/0x170
 >
-> Fixes: 85192dbf4de0 ("bpf: Convert bpf_prog refcnt to atomic64_t")
-> Signed-off-by: Deepanshu Kartikey <kartikey406@gmail.com>
+> Fix this by wrapping the ca_ops load and get_info call within
+> rcu_read_lock()/rcu_read_unlock().
+>
+> Fixes: 0baf26b0fcd7 ("bpf: tcp: Support tcp_congestion_ops in bpf")
+> Reported-by: AutonomousCodeSecurity@microsoft.com
+> Reported-by: Cen Zhang (Microsoft) <blbllhy@gmail.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Cen Zhang (Microsoft) <blbllhy@gmail.com>
 > ---
->  include/linux/perf_event.h | 2 ++
->  kernel/events/core.c       | 8 +++++---
->  kernel/trace/bpf_trace.c   | 2 +-
->  3 files changed, 8 insertions(+), 4 deletions(-)
->
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> index 48d851fbd8ea..5c6dabb6dccb 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -2136,4 +2136,6 @@ static inline void perf_lopwr_cb(bool mode)
->  }
->  #endif
->
-> +extern struct mutex bpf_event_mutex;
-> +
+> The unsynchronized icsk_ca_ops load also constitutes a data race.
+> READ_ONCE()/WRITE_ONCE() annotations are intentionally left to a
+> separate change; related TCP annotation work is available at:
+> https://lore.kernel.org/all/20260416200319.3608680-1-edumazet@google.com/
 
-exposing this mutex like that is definitely a smell.
 
-AI tells me that this perf event inheritance case can happen for
-non-tracing (i.e., BPF_PROG_TYPE_PERF_EVENT) events, which are
-attached while holding perf_event_ctx_lock, not the bpf_event_mutex
-(this one is held for tracepoint/kprobe/uprobe programs).
+I don't understand.
 
-Please validate and adjust the fix.
+This patch is incomplete. Please fix the remaining issues in a single
+patch or series.
 
->  #endif /* _LINUX_PERF_EVENT_H */
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index ba5bd6a78fe7..a89e33c47073 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -13433,12 +13433,15 @@ perf_event_alloc(struct perf_event_attr *attr, =
-int cpu,
->                 overflow_handler =3D parent_event->overflow_handler;
->                 context =3D parent_event->overflow_handler_context;
->  #if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_EVENT_TRACING)
-> -               if (parent_event->prog) {
-> -                       struct bpf_prog *prog =3D parent_event->prog;
-> -
-> +               struct bpf_prog *prog;
-> +
-> +               mutex_lock(&bpf_event_mutex);
-> +               prog =3D parent_event->prog;
-> +               if (prog) {
->                         bpf_prog_inc(prog);
->                         event->prog =3D prog;
->                 }
-> +               mutex_unlock(&bpf_event_mutex);
->  #endif
->         }
->
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 75495a5c3507..730fc22a9daa 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -1944,7 +1944,7 @@ const struct bpf_verifier_ops perf_event_verifier_o=
-ps =3D {
->  const struct bpf_prog_ops perf_event_prog_ops =3D {
->  };
->
-> -static DEFINE_MUTEX(bpf_event_mutex);
-> +DEFINE_MUTEX(bpf_event_mutex);
->
->  #define BPF_TRACE_MAX_PROGS 64
->
-> --
-> 2.43.0
->
+We have limited time; we don't want to revisit the same area  in one month.
+
+pw-bot: cr
