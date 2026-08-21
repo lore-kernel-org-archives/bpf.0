@@ -1,181 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from aer-iport-8.cisco.com (aer-iport-8.cisco.com [173.38.203.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59DA840BCDB
-	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 21:00:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C76873AA4F6;
+	Fri, 21 Aug 2026 21:38:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.38.203.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787346034; cv=none; b=kg3iVMmViv578PlzE6PJzXkrJwSOlMtOMpEW+xnQi/L+CkwPgvbZVb+LZOXtli0bI5P2EcrYU/16l0SjLAp3VpWz4l1opC+llAQjemh6xPHmMC/x08xSavqudy630gdN2gUnRRKWGx9BtmZ9McKZxGEpnxV44XLa4eKapkjt83s=
+	t=1787348329; cv=none; b=K6KloNoiLhqtPfy2pKa4Vw4yhwQBo0TX/xKMzhhMCu99YlhSYhogSvbUQMzuKPkVoKOypsYtlzvwZ+Bz2pf4FZSJw5gCz2tLj7eAFXAvf2ZIZYHeaIcHWbscV9NFzfncGMeCSZ62RjC2jT3EVQPtL8SitfDbeS39pJgxl3xXKC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787346034; c=relaxed/simple;
-	bh=YtbCdn/V5NFzAT5C0uDkl1O+nMo/wiXH4OaYGduPgBQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=kWya+77hArW4Z1qeEr4n4jSqSwtu0ZrX0lWT517sO4Bx56PoLXjOW4DBAjlf4Gps1yvffJ2A/oKmjnB0moWaCv/pr8qazineuHYtOnH7mWwwT3scjQgdf6MfGqD1D85wjukBCuSVeji4DN4ck0HnU3UY1ES7m0lnfFgYOcVLKvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jUihJCXo; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787348329; c=relaxed/simple;
+	bh=Gc/7lBy3gbT7mQGnUkK/8rD2GP7clWUe59xDWl8TZvw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=tVKfr9URCqErmdxEBdnL5ZzYPH96kGOgw98Al9ni+dm8WFeJQlgaJvCuBIpWi3t6+X/44hNHS8QHx4hWC0KmvQhxIt722NSRw20E1cgTG27SCp77FOijPE9G1aXUuNrkrjd0xnQOB3o+XfbOZ0u2/PPGWrDDDFi51bc8qyT/JAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (2048-bit key) header.d=cisco.com header.i=@cisco.com header.b=kqtsx3Ez; arc=none smtp.client-ip=173.38.203.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cisco.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jUihJCXo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD60F1F000E9;
-	Fri, 21 Aug 2026 21:00:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787346032;
-	bh=xp/Yk2FcDC6EffNkXYzlcYbNlyAuBxgASVaVaAOnRIM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=jUihJCXoI/AlhNnea1g8cGqsiqUrbShZ2Jb8M/M2248I9nb5XMbbNeGp1nz2kxHbH
-	 D1Yf5fBlCwCS1Ssev1LeGwUsVpEHBCFg30KLltHYYTYtklbaYkvZ93hR2vN8K7gbvj
-	 xUyeIoc/lsMc9G1MgVduLD3uriz1VQzAHfcW7k0oopzTjQObFLQP/ibiASuKqStXlU
-	 lGQFD9KXzEVuFZipgpIIo/EGmse36YUxXftFrbYS/xg1iHFqbPTW6KzC5sgxvGoYy5
-	 o3Aqx5RwvcMPpMofh6DMOm0AdIbAINb0Q7CGqFy1suqpE//RJRQHzC3PknlaRkrLR2
-	 ieP+EVu6wVJ/A==
-Content-Type: multipart/mixed; boundary="===============2575258006610227616=="
+	dkim=pass (2048-bit key) header.d=cisco.com header.i=@cisco.com header.b="kqtsx3Ez"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=cisco.com; i=@cisco.com; l=1113; q=dns/txt;
+  s=iport01; t=1787348327; x=1788557927;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=SXWUYgWL4b+Bz3+W8zIynJxlan1c5WkPCLgXTDERme0=;
+  b=kqtsx3Ezla5B0/LJmJSAGS3Je+DTWz5Uj32glcoT+lwmMu5F9QyNwAdZ
+   muRyPqVfTcpkenQaYjo9G7lxzo6xLoOQmRqFZH9Yymgt9y4zo/glpHe84
+   8IdYRJ+8t08IER6o+pPpZBC1r7YZd5wWupiO8Lh9/6PA3MwGpDkMiQZbA
+   k3zh1cffOLH0oUQKYgLyASnoF872u4WQAe5BZcY5LR3vcr7kpDrPnSsFr
+   Rd4hbTXZ9vbWkN5MFjG0NzFjT5BlfIea3jSZyzk3RA6Wrrp3vmJx2mkQ9
+   20JE6iLFhty15SLBab1+Zf5SNt8N67jnTeFsMek6/y8BilYcb9Wp6aIqS
+   Q==;
+X-CSE-ConnectionGUID: 165d0COrSfayiv4oN5CASw==
+X-CSE-MsgGUID: /om3+WFNSpumQ0CO/Qsz9A==
+X-IPAS-Result: =?us-ascii?q?A0BkAwCGw4hq/9RK/pBaglmDS15DSQSUJYIhkiuLcxSBa?=
+ =?us-ascii?q?g8BAQEPRA0EAQGFBQKNbAImNAkOAQIEAwIDAQEBAQEBAQEBAQELAQEFAQEBA?=
+ =?us-ascii?q?gEHBYEOE4ZPDYZbAgEDMgFGEFFWGYMCAYJ0AxHBRYIsgQHeR4FsBhWBOI1hd?=
+ =?us-ascii?q?oR8JxuBSUSECAdvhCpmhXgEgxwSk1dIgR4DWSwBVRMNCgsHBYFmAzUSKhUyP?=
+ =?us-ascii?q?DIdgSM+F4ENGwYFgR2BKIQQIxk2eoEJXoErKWABEheBCYIHAoJaggUCAUlDD?=
+ =?us-ascii?q?gdIIgsYDUgRLDcUGQQ+bgeOXh+CGDWBDgoigUNQAZZ6sCOEKIwilVMBM5dfk?=
+ =?us-ascii?q?w2ZCI4KmzmBaDyBWTMaCBsVgyMSQBkPlzbHCEU0AToBAQcCBw4DC4FokX4BA?=
+ =?us-ascii?q?Q?=
+IronPort-Data: A9a23:wT7+P6DgGLLL5RVW/xnjw5YqxClBgxIJ4kV8jS/XYbTApDsl1zJUn
+ zcfWG7QPP7fZzb0KIh/YIrj9B4EvMTUxtdmOVdlrnsFo1CmBibm6XV1Cm+qYkt+++WaFBoPA
+ /02M4eGdIZvCCeA+n9BC5C5xVFkz6aEW7HgP+DNPyF1VGdMRTwo4f5Zs7ZRbrVA357jXmthh
+ fuo+5eBYA//gmYtWo4pw/vrRC1H7ayaVAww5jTSVdgT1HfCmn8cCo4oJK3ZBxPQXolOE+emc
+ P3Ixbe/83mx109F5gSNy+uTnuUiG9Y+DCDW4pZkc/HKbitq+kTe5p0G2M80Mi+7vdkmc+dZk
+ 72hvbToIesg0zaldO41C3G0GAkmVUFKFSOuzXWX6aSuI0P6n3TEmqszABkdGpcj9O9mAH8S8
+ tpFAxk2cUXW7w626OrTpuhEj8k5ac2uN4QFtzQ5lHfSDO0tRtbIRKCiCd1whWtswJoTQbCBO
+ 4xDMGAHgBfoO3WjPn8VFJU6mOq0rnL+aDZf7lmSoMLb5kCOk1UsjOGzbLI5fPTNQsAO3Xm2g
+ Fne4mHAWjo9c+WE22uspyfEaujn2HmTtJgpPLGx6PNvqFGa2GEWDBoYSR29rOXRolWyVfpRL
+ EkV8Sojs+43+SSDTN79WVu2qWWYtxQRXdZ4HOgz6QXLwa3Riy6UCnUBRyxMdPQps8g5QTFs3
+ ViM9/vlDDpuvbm9SHWS+76OpzSify4YMQcqbDQYZQgI+d/upMc0lB2nZtZqD62djdDvHzz0h
+ TeQo0AWhKgZhOYI2r+98FSBhCijzrDASAIv6xqUWG+54g5nTIq4YYru4lizxfpcJZqESlSIl
+ H4amsSf5aYFCpTlvCiAR+MXG5mv+feJMTSaillqd7Ek/TCq8H6Le55R7DB3YkxuN64sYjbkb
+ UPWkQVP5ZNSNT2haqofS564EcUz0YDmC9XpV/mSZd1LCrBpfQWK+iBGf0Oc32nx1kMrlMkXM
+ 4+VWdijAGxcCql9yjeyAeAH3tcDwiE42HOWRp3hyRmj+aSRaWTTSrofNlaKKOcj48uspATT7
+ sYaLcePwj1BX+DkJCra64geKRYNN3dTLZb7t8BaaMadLQd8XmIsEfncxfUmYYMNokhOvu7F5
+ DS5H0Rf0le63CSBIgSRYXclY7TqNXpikU8G0eUXFQ7A8xAejUyHtc/zq7NfkWEbydFe
+IronPort-HdrOrdr: A9a23:KFXrpK8fA3hHLipmZOtuk+D4I+orL9Y04lQ7vn2ZhyY4TiX+rb
+ HLoB1173HJYVoqMk3I3OrwW5VoIkmskKKdg7NxAV7KZmCP01dAbrsSj7cKqAeOJ8SRzINgPN
+ 9bE5RWOZnXEUVwi9r87U2TFtYtx8TCzYWT7N2uqEuEiWpRGthdB8ATMHf8LnFL
+X-Talos-CUID: 9a23:8abEt2z7Q51H4VrCUpfZBgVNRJ0pKlb61kzeKl65FzpubuC+YGSPrfY=
+X-Talos-MUID: 9a23:VV4+zwbY3Qcan+BT8Djp33JdGuFT+7mrMRgmttI/oNvVHHkl
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="6.25,235,1779148800"; 
+   d="scan'208";a="57154164"
+Received: from aer-l-core-11.cisco.com ([144.254.74.212])
+  by aer-iport-8.cisco.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384; 21 Aug 2026 21:37:33 +0000
+Received: from localhost (unknown [10.189.108.235])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by aer-l-core-11.cisco.com (Postfix) with ESMTPS id 17E93180001C5;
+	Fri, 21 Aug 2026 21:37:33 +0000 (GMT)
+From: Jerome Tollet <jtollet@cisco.com>
+To: netdev@vger.kernel.org
+Cc: saeedm@nvidia.com,
+	tariqt@nvidia.com,
+	mbloch@nvidia.com,
+	leonro@nvidia.com,
+	dtatulea@nvidia.com,
+	daniel@iogearbox.net,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	ast@kernel.org,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	linux-rdma@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH net v3 0/2] net/mlx5e: Prevent stale XSK buffer release on refill retries
+Date: Fri, 21 Aug 2026 23:37:30 +0200
+Message-ID: <cover.1787347981.git.jtollet@cisco.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260820151558.11015-1-jtollet@cisco.com>
+References: <20260820151558.11015-1-jtollet@cisco.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <a181212ec47fdfcbe52fde90fa8a3c6511f1d4497e98adf330d9f741f42aec37@mail.kernel.org>
-In-Reply-To: <20260821201316.1059129-3-vineet.gupta@linux.dev>
-References: <20260821201316.1059129-3-vineet.gupta@linux.dev>
-Subject: Re: [PATCH bpf-next 2/3] selftests/bpf: report placeholder tests as SKIP, not OK
-From: bot+bpf-ci@kernel.org
-To: vineet.gupta@linux.dev,bpf@vger.kernel.org
-Cc: vineet.gupta@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 21 Aug 2026 21:00:32 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-Outbound-Client-TLS: ANONYMOUS;unknown [10.189.108.235];TLSv1.3;TLS_AES_256_GCM_SHA384;256
+X-Outbound-SMTP-Client: 10.189.108.235, [10.189.108.235]
+X-Outbound-Node: aer-l-core-11.cisco.com
 
---===============2575258006610227616==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Prevent duplicate XSK buffer release when a deferred RX refill fails and
+the same WQE is retried.
 
-> diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-> index 5eacf1b43252..88b0bfba83bb 100644
-> --- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-> +++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-> @@ -106,6 +106,11 @@
->   * __description     Text to be used for display and as an additional filter
->   *                   alias, while the original program name stays matchable.
->   *
-> + * __skip            Report the test as SKIP with the given reason instead of
-> + *                   running it. For placeholder programs that stand in for a
-> + *                   feature the toolchain or JIT cannot provide, so a run does
-> + *                   not report OK for coverage it never executed.
-> + *
->   * __log_level       Log level to use for the program, numeric value expected.
->   *
->   * __flag            Adds one flag use for the program, the following values are valid:
-> @@ -139,6 +144,7 @@
->  #define __failure		__test_tag("test_expect_failure")
->  #define __success		__test_tag("test_expect_success")
->  #define __description(desc)	__test_tag("test_description=" desc)
-> +#define __skip(reason)		__test_tag("test_skip=" reason)
->  #define __msg_unpriv(msg)	__test_tag("test_expect_msg_unpriv=" msg)
+Patch 1 fixes legacy cyclic RQ. It is unchanged from v2 and retains
+Dragos' Reviewed-by tag.
 
-[ ... ]
+Patch 2 fixes the analogous striding-RQ MPWQE path pointed out by the
+Sashiko automated review. Targeted fault injection forced three
+consecutive allocation failures for one MPWQE. Stock freed the same 16
+XSK buffer pointers three times; the fix freed each pointer only once,
+made subsequent releases no-ops, and preserved the successful
+allocation path's bitmap reset.
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-> index 41340877dc9d..e58ea69e3854 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-> @@ -436,6 +436,7 @@ void kfunc_root(void)
->
->  SEC("socket")
->  __description("cpuv4 is not supported by compiler or jit, use a dummy test")
-> +__skip("cpuv4 is not supported by compiler or jit")
->  __success
->  int dummy_test(void)
->  {
+Changes in v3:
+- Turn the submission into a two-patch series.
+- Add the striding-RQ MPWQE fix and its dedicated Fixes tag.
+- Rebase onto net/main at 4e15e89faac9.
 
-[ ... ]
+v2: https://lore.kernel.org/netdev/20260820151558.11015-1-jtollet@cisco.com/
 
-> diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
-> index 07807757b518..794a7dfb0579 100644
-> --- a/tools/testing/selftests/bpf/test_loader.c
-> +++ b/tools/testing/selftests/bpf/test_loader.c
-> @@ -70,6 +70,7 @@ struct test_spec {
->  	int arch_mask;
->  	int load_mask;
->  	int linear_sz;
-> +	const char *skip_reason;
->  	bool auxiliary;
->  	bool valid;
->  };
-> @@ -456,6 +457,8 @@ static int parse_test_spec(struct test_loader *tester,
->  			continue;
->  		if ((val = str_has_pfx(s, "test_description="))) {
->  			description = val;
-> +		} else if ((val = str_has_pfx(s, "test_skip="))) {
-> +			spec->skip_reason = val;
->  		} else if (strcmp(s, "test_expect_failure") == 0) {
->  			spec->priv.expect_failure = true;
->  			spec->mode_mask |= PRIV;
-> @@ -1327,6 +1330,12 @@ void run_subtest(struct test_loader *tester,
->  	if (!test__start_subtest_with_desc(subspec->name, subspec->description))
->  		return;
->
-> +	if (spec->skip_reason) {
-> +		printf("%s:SKIP: %s\n", __func__, spec->skip_reason);
-> +		test__skip();
-> +		return;
-> +	}
-> +
->  	if ((get_current_arch() & spec->arch_mask) == 0) {
->  		test__skip();
->  		return;
+Jerome Tollet (2):
+  net/mlx5e: Prevent stale XSK buffer release on refill retry
+  net/mlx5e: Prevent stale XSK buffer release on MPWQE refill retry
 
-The commit converts 13 placeholder programs to use the new __skip()
-annotation, but two feature-gated placeholders with the identical
-pattern were not converted. Were these intentionally excluded?
+ drivers/net/ethernet/mellanox/mlx5/core/en_rx.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-The preceding commit b1831d82fe2c states "Eleven of the thirteen
-feature-gated placeholder programs are called dummy_test", but grep
-finds fifteen such programs.
-
-tools/testing/selftests/bpf/progs/verifier_aggregate_ret.c has a
-compile-time gate at line 8:
-
-  #if defined(__clang_major__) && __clang_major__ >= 23
-
-with its #else arm at lines 166-172 supplying the same __success
-placeholder pattern that this commit converts everywhere else:
-
-  #else
-
-  SEC("socket")
-  __description("verifier_aggregate_ret: needs LLVM 23, dummy test")
-  __success
-  int dummy_test(void)
-
-Similarly, tools/testing/selftests/bpf/progs/verifier_percpu_addr.c has
-a gate at line 7:
-
-  #if defined(__TARGET_ARCH_x86)
-
-with its #else placeholder at lines 60-66:
-
-  #else
-
-  SEC("raw_tp")
-  __description("percpu addr dummy")
-  __success
-  int dummy_test(void)
-
-Both reach the modified test_loader.c code path via
-prog_tests/verifier.c (test_verifier_aggregate_ret and
-test_verifier_percpu_addr), so __skip() would work for them.
-
-The gates fire today, so the placeholders are what actually gets built
-and reported:
-- verifier_aggregate_ret.c: any toolchain older than clang 23
-- verifier_percpu_addr.c: every non-x86 build (arm64, s390x, riscv64,
-  loongarch)
-
-On those builds these two tests still report OK for coverage that never
-executed.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32523960074
---===============2575258006610227616==--
+-- 
+2.55.0
