@@ -1,69 +1,84 @@
-Received: from mail-pj2-f1.google.com (mail-pj2-f1.google.com [74.125.227.129])
+Received: from mail-pz2-f9.google.com (mail-pz2-f9.google.com [74.125.228.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72BA12459E1
-	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 01:29:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.129
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D58DA315D53
+	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 01:29:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787275763; cv=none; b=COV8GwkzQYwer1ZRNuM+muV7/CZnkmTNHayrdZNHnTtHhbcsVkXNnoap8VKwTRozoowFm+jXWtNmFiMv+eSZF2/gSdrNHcLDxTFY3b/8jMLmtGEj4UlyBxuwH78BsEsjfWokKpD2KMZzoy20+fkMUz+rDMEnG/x52E2w9D6AEds=
+	t=1787275764; cv=none; b=dsiFzRmcWTF5fn9AQWqXIZKFu50s7bWuHOMaJGvI/f2vCnqvTsFQ4cnxsAi1CS21hQgzhITWrMbYohSkJamsyMOAWaO1k+jwYnEbUzK3XJf2DWH3wKg8QJzMxywpybomEDnLQ/5/WOO0PJUzmBzxJDal42WIAiJeUa66tfZTQwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787275763; c=relaxed/simple;
-	bh=TKoI37AZK2e3ysHnR9Rx+KS+32qGlXG1Dodbq7iZ35M=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=t2R5QNZx2tUfJ6WCpRU+uZy4WvQnDEXeOrZ+ZC9/L8TYCJu3M3nJZGCu51iiDQzw16U5+rxucotzUkAdYu1xNa4PNz5WbP9WX6QWNxLtGGg2kqCRnojeeOA5FONUx/QQdt4Ai3Nr5LS4OjE4YBkTdC/9UCLFFID8LTisDEZU/10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oWAI/BjT; arc=none smtp.client-ip=74.125.227.129
+	s=arc-20240116; t=1787275764; c=relaxed/simple;
+	bh=gqWMHjglpbHY/2tqJjSk/6W2N13etU+sr8bVJuTM4ZU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gcOQfOpWLgEs7IzouTgfSRHdoEMbnPjZMD3ZDoNg3D/eA9BBNqkCMjGHS+7arW6afRXBNz/Cg6BvDvSkC71evKVGPFd8g3BiHigiMAnStd/p+qS12xtpheqBT5TVR/j83mgeyG2hxuiZ4vvoN6KsBzvei91VgWzUSPQ0zpJfAk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KBE9ytoq; arc=none smtp.client-ip=74.125.228.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oWAI/BjT"
-Received: by mail-pj2-f1.google.com with SMTP id 98e67ed59e1d1-3810f0aba07so197507a91.1
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 18:29:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KBE9ytoq"
+Received: by mail-pz2-f9.google.com with SMTP id 41be03b00d2f7-cc150711112so73355a12.0
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 18:29:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787275761; x=1787880561; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-disposition:content-type
-         :mime-version:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1787275762; x=1787880562; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=FeCBhBAUXf/tLk0qYkndIlPCAN8chjge4igus+QKKi8=;
-        b=oWAI/BjTVZh1fNWtgfMY/m789dIXFLUivh6fEwEwCDoJkE2ZetRcjNFwDgMIyBbgtV
-         r1doENKbYFy5UpXT6sJQvwy+WTQo0e1LCKq1pk9455xxGUq1dS+8GzQbos2wCg+zAJ6E
-         Kc/2fmhKdzW7/hV0RahJpSGv8hj56MhDOrt2nTdvOFh2ezVIyA1NYwW98Ji4ElDjlDmX
-         Wb5BG7qB2RM2JIgmqbkYFmIUazogRcympfOMCUmEhuM0h2KEi91sK8lQYPEcG56GH/TJ
-         EuuWe5jFh+W0MGWqJ4qAf33J0UaqFNjoTIhImvGq9dUFoNd9BDqJgSCO/pfesevlAXiw
-         mZXg==
+        bh=PL4vLuVN0ieJR1wtgaFdgTaFWontBf4roejCfLnzVDs=;
+        b=KBE9ytoqGNRk0tgsofHNaXiCHOv08zLHV/Tn5QNqEU6FbejhbPTrmHgiSqd9X/lPhA
+         ftwsSblQvDRaoeBW7p4WSTkipw5AvSJo+hqSQ8z8EliowpercQxBHDEikzcLz2Jw+jqH
+         1KjueGhPQSH5C9YUHHziDB+0+ChuUzDr0UDHUQqD0Ix7M22vFwKqC51lV70ZXuUj27Bg
+         F6Ul/NxR1NK60cC2O6pEGr9nd2YMcym/hXGdpIADJpJIKHRzFG/0rQnK52RmLCY5q/Se
+         bszGnLCoc7fHLzHo0qTFAMWd27RHLEODylghyZYDHllFAbTFxi3wSHVQfLcnw76hiUCS
+         HrWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787275761; x=1787880561;
-        h=content-transfer-encoding:content-disposition:content-type
-         :mime-version:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1787275762; x=1787880562;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=FeCBhBAUXf/tLk0qYkndIlPCAN8chjge4igus+QKKi8=;
-        b=luCj0WxcqYl5B2bN5lenf489iD3euaxFFDoKAYTV5m0zNciPuSfUYQEphVkA16dIY+
-         +wi1x/DfCpu+lVDHYVB6gN09UVKoRpXy9+X3UYlaKzX1MfQxXKk0oXUsOit6SAHkZh2v
-         W9mC+IqpMM5IjPFuyNJWWFnv8W5Nt4G3fKTLzwyHZKLwJwpOL+BQFQtgYVTq0vkpEb1H
-         gNT7EIvsFVGF5hXpA20zHYi45TdZz6u+6TZIFjMlMk7rpsub7TrcJ4rQ9JNo5fNga0BG
-         Qgpk5WNwE4w58sRfrBybDhB2o2R/aPrStHdaKBgdy5Ujqsg2oAL2KkoeYwKBi3lc4Haq
-         itNw==
-X-Gm-Message-State: AFuF++lWolvTotl16zyF04NS+RKU5b7/vVy7zdUcQNv4cEuSFnF5MncM
-	wx2gT3ujkOW5NsrVsPjaWfYRR2vCnJgNvhLPGghgMnnXQQDNO+sBe6mmmpE3rKNE
-X-Gm-Gg: AR+sD13Z0AYiFLCvcyp4ztLlK/X4Ok6vnKNYeBCv7gBGQcEZZ3Ttd9ZnXJUTENejGPq
-	0bFGjOlq8Qq1vC/93/LKYtcQg5KTnQY6q0CeRP6x0uy0H9Jq8OTvjHgQlu4ksMlqffUTPs1Lt8W
-	5pSUu8nP8daUX+VAvIfNilqc6BQEkWBoOT0P29kjq0U2eU7cNc6cNbysqtstfREJJsZuiLpm8kP
-	E5uiE7cLHunjtoObejfGumA2+Tp271f/5tCQWYLXo1Sx9R840L5RXR8VpO5xmmF+tyOFutzCnSQ
-	XhGExU/bxbpkmSih3bkcGdm/3sXeiaj+c2OKdwsa8fWC6ETXWkje3ZjFm+PBpv+YjSvVTMBEpmx
-	ohkUHXynFCtNYU/cItesNw4cOyasBVtssCbH96o0EDRCGGUcclWRHUYUes9KGjfwgp7TwIMwyZ6
-	hOdgYm87Ibr7iUkHRJDPAAdJ2MA6k1olVuDzBO5LE9y0qtVzpF0y7yRQ==
-X-Received: by 2002:a17:90b:4a89:b0:38e:fea2:df53 with SMTP id 98e67ed59e1d1-395c3511456mr4278855a91.4.1787275760703;
-        Thu, 20 Aug 2026 18:29:20 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:4d::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-395c47f7d78sm907703a91.9.2026.08.20.18.29.20
+        bh=PL4vLuVN0ieJR1wtgaFdgTaFWontBf4roejCfLnzVDs=;
+        b=OWHAmEbwvmPVC0cnjeCgcS79EXbkkrcOaYXxHjGfjamRkW0zvaKjlQgCeg7Sqkxq8w
+         3zl6SPHS68dkKXlZF04OL+dxtpMjSpxzFw96oDgbB0laVceHvIqcYUw7pDxRFUlyYGiB
+         EcsyBWMZzyNDIOQbfN++zbgmL2yQCHHg22tMhaGIQEuPB+rmnmzOr6lrhICwWIYtxNCG
+         5dCNT1WDQi+etMypJ7zK9UjHXX2/h6h+CpqQy7qetsfZlvhkcZ7hUe/RO+QH33dhkqC1
+         jYB9/bdZ3RNBuKGvBqO5VW7X4j3+DV6SkXs/3LkdffHHiCisf40zghzuERuLjnwFhfTc
+         WYUg==
+X-Forwarded-Encrypted: i=1; AHgh+RpF0nm7CF3bCzD11ru7Yq1AvmA1tEiuqq5PUc3mJco/Kf0zqlSBlPynnEnbQUB5sYpxYig=@vger.kernel.org
+X-Gm-Message-State: AFuF++kfyspce4chpg6gUldvA1AyeaN04a7+cdLlEYh3gYwFoj41Bg00
+	S9mjJpLe7F43f2NnA5m0vo7ACxOxjmT92QGvsmhi52Rnic+Oubna9RPB
+X-Gm-Gg: AR+sD12SfTpqHpX3fTnyZNWzEQ0D2ZllqokNeUjjmaK9x1/KaFpzP78p+0DtBUk8WF/
+	4XjEDOjS22UjMxIQ7o3sRiSVkpLeTTmvvUBSKw458va5lzG6+426zvdmGqVVqCrt2b3Cz50e6PY
+	myMwcvh7CNNZG3kqwaUOced2epxMAVgZqxKXZT/euXdZIfDXSLXO9dQ4pM1NW0HY/17yu2uOUmR
+	exp8qCTc3T8ki3K3TwHMrBgD9GWr58Ydf4epSBdSmos5g/DD5R97RZjCTxbPG4WLfNmYOwL6E3p
+	/1lxZHjLs6O6tk+98fv88kp9c2I4M6qu2QN5B150KeANL0PUL8ttfo+5XIj+MOdfa9NSA4WK4MM
+	F7HjQflk/Ce9+hOhx/DM080Vuhe97IilMz7jNVYVFfe4jtjECVy6xxAC7h40NwvSRZ5LaPZIP6U
+	DEvSNzBgNjQFBYsROXWPgTeTzJgVKkFD0WWvERYwFTuPVqkPbr7lS7grIKdj5E/lkg
+X-Received: by 2002:a05:6a00:170c:b0:845:e440:d0ca with SMTP id d2e1a72fcca58-851f9f0db82mr3439334b3a.8.1787275761986;
+        Thu, 20 Aug 2026 18:29:21 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:2::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-851d3640dd4sm2169685b3a.41.2026.08.20.18.29.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Aug 2026 18:29:20 -0700 (PDT)
-Date: Thu, 20 Aug 2026 18:21:33 -0700
+        Thu, 20 Aug 2026 18:29:21 -0700 (PDT)
+Date: Thu, 20 Aug 2026 18:29:16 -0700
 From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: bpf@vger.kernel.org
-Cc: kuba@kernel.org
-Subject: [ANN] bpf development stats for 7.3
-Message-ID: <aoen96RONJgf18E5@devvm7509.cco0.facebook.com>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, anthony.l.nguyen@intel.com, 
+	przemyslaw.kitszel@intel.com, andrew+netdev@lunn.ch, saeedm@nvidia.com, tariqt@nvidia.com, 
+	mbloch@nvidia.com, maxime.chevallier@bootlin.com, mcoquelin.stm32@gmail.com, 
+	alexandre.torgue@foss.st.com, aleksander.lobakin@intel.com, horms@kernel.org, 
+	magnus.karlsson@intel.com, sdf@fomichev.me, ast@kernel.org, daniel@iogearbox.net, 
+	hawk@kernel.org, john.fastabend@gmail.com, guoren@kernel.org, dtatulea@nvidia.com, 
+	witu@nvidia.com, martin.lau@kernel.org, yoong.siang.song@intel.com, 
+	intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
+	linux-csky@vger.kernel.org, leon@kernel.org
+Subject: Re: [PATCH net v3 3/3] net: stmmac: document oversized AF_XDP frame
+ handling
+Message-ID: <aoeoJ6-njBxcWs4w@devvm7509.cco0.facebook.com>
+References: <20260819160535.1472459-1-sdf@fomichev.me>
+ <20260819160535.1472459-4-sdf@fomichev.me>
+ <aoceSoSFMx69Z9up@boxer>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -72,133 +87,54 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <aoceSoSFMx69Z9up@boxer>
 
-Regular development statistics update, similar Jakub's netdev post:
-https://lore.kernel.org/netdev/20260819114659.271292db@kernel.org/
+On 08/20, Maciej Fijalkowski wrote:
+> On Wed, Aug 19, 2026 at 09:05:35AM -0700, Stanislav Fomichev wrote:
+> > stmmac drops AF_XDP zero-copy frames that exceed taprio's queueMaxSDU
+> > after xsk_tx_peek_desc() has reserved their completion entries.
+> > 
+> > Completing a rejected descriptor is unsafe because AF_XDP completions are
+> > ordered: xsk_tx_completed(pool, 1) would complete the oldest outstanding
+> > descriptor, which may still be owned by hardware. Instead, leave the
+> > completion pending so the ring eventually wedges and increment the drop
+> > counter to expose the application error without risking hardware
+> > misbehavior.
+> > 
+> > Document this intentional ring imbalance at the check.
+> > 
+> > Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
+> > ---
+> >  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > index 62de03e65a90..6a532747c039 100644
+> > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > @@ -2713,6 +2713,10 @@ static bool stmmac_xdp_xmit_zc(struct stmmac_priv *priv, u32 queue, u32 budget)
+> >  		if (priv->est && priv->est->enable &&
+> >  		    priv->est->max_sdu[queue] &&
+> >  		    xdp_desc.len > priv->est->max_sdu[queue]) {
+> > +			/* Completions are ordered, so this descriptor cannot
+> > +			 * be completed safely. Wedge the ring to expose the
+> > +			 * application error instead.
+> > +			 */
+> >  			priv->xstats.max_sdu_txq_drop[queue]++;
+> >  			continue;
+> 
+> Hmm. I read the discussion on v2. Maybe we could cancel cq entry here in
+> this branch? Also it feels like something achievable at bind time when
+> taprio is configured and vice versa?
+> 
+> Otherwise we over-commit cq entries.
 
-Previous cycle:
-12 Apr to 14 Jun: 8289 mailing list messages, 63 days, 132 messages per day
-301 repo commits (5 commits/day, 44.85% of these are selftests)
-https://lore.kernel.org/bpf/ajRTHKxu6EOmGrsQ@devvm7509.cco0.facebook.com/
+What do you want to achieve with the cancel here? IIUC it will make it look
+as if some (if the user has posted many) tx descriptor has not been consumed
+by the kernel?
 
-Current cycle:
-14 Jun to 16 Aug: 8596 mailing list messages, 63 days, 136 messages per day
-377 repo commits (6 commits/day, 41.11% of these are selftests)
-
-Testing
--------
-
-Top contributors of selftests:
-   1 [ 18] Emil Tsalapatis
-   2 [ 14] Yonghong Song
-   3 [ 13] Puranjay Mohan
-   4 [ 12] Jiri Olsa
-   5 [ 11] Ricardo B. Marlière
-   6 [ 10] Amery Hung
-   7 [  6] Leon Hwang
-   8 [  6] Daniel Borkmann
-   9 [  5] Mykyta Yatsenko
-  10 [  4] Nuoqi Gui
-
-Developer rankings
-------------------
-
-Top reviewers (cs):                  Top reviewers (msg):                
-   1 ( +7) [7] Eduard Zingerman         1 ( +1) [34] Eduard Zingerman    
-   2 ( +1) [6] Emil Tsalapatis          2 ( +3) [13] Andrii Nakryiko     
-   3 ( +2) [6] Kumar Kartikeya Dwivedi    3 (   ) [13] Emil Tsalapatis     
-   4 ( +5) [6] Andrii Nakryiko          4 ( +4) [12] Kumar Kartikeya Dwivedi
-   5 ( -4) [5] Alexei Starovoitov       5 ( -4) [ 8] Alexei Starovoitov  
-   6 ( -4) [3] Jakub Kicinski           6 (+22) [ 6] Ihor Solodrai       
-   7 ( +7) [3] Leon Hwang               7 (+22) [ 5] Leon Hwang          
-   8 ( +8) [2] Jiri Olsa                8 ( -4) [ 5] Jakub Kicinski      
-   9 (+10) [2] Ihor Solodrai            9 ( +2) [ 5] Paul Moore          
-  10 ( -4) [2] Jiayuan Chen            10 ( -4) [ 4] Stanislav Fomichev  
-  11 ( +4) [2] Daniel Borkmann         11 (+11) [ 4] Jiri Olsa           
-  12 (***) [2] Tejun Heo               12 (***) [ 4] Pu Lehui            
-  13 (***) [1] Pu Lehui                13 ( -3) [ 4] Jiayuan Chen        
-  14 ( -1) [1] Stanislav Fomichev      14 (+20) [ 3] Amery Hung          
-  15 (+29) [1] John Fastabend          15 (   ) [ 3] Kuniyuki Iwashima   
-
-Top authors (cs):                    Top authors (msg):                  
-   1 (+31) [2] Kumar Kartikeya Dwivedi    1 (+18) [24] Kumar Kartikeya Dwivedi
-   2 (***) [2] Yiyang Chen              2 ( +5) [16] Leon Hwang          
-   3 (***) [2] Pu Lehui                 3 ( -1) [13] Yonghong Song       
-   4 ( +2) [2] Tiezhu Yang              4 ( +4) [13] Amery Hung          
-   5 ( +8) [1] Leon Hwang               5 (+17) [12] Daniel Borkmann     
-   6 ( +8) [1] Nuoqi Gui                6 ( +7) [11] Puranjay Mohan      
-   7 ( +4) [1] Jiayuan Chen             7 (***) [11] Yiyang Chen         
-   8 ( -7) [1] Daniel Borkmann          8 ( -7) [10] Jiri Olsa           
-   9 (***) [1] Christian Brauner        9 (***) [10] Pu Lehui            
-  10 (***) [1] Junseo Lim              10 (***) [ 9] Christian Brauner   
-
-Top scores (positive):               Top scores (negative):              
-   1 ( +7) [142] Eduard Zingerman       1 (***) [43] Yiyang Chen         
-   2 ( +1) [ 91] Andrii Nakryiko        2 ( +1) [38] Yonghong Song       
-   3 ( +2) [ 74] Emil Tsalapatis        3 (+10) [34] Puranjay Mohan      
-   4 ( -3) [ 71] Alexei Starovoitov     4 (***) [33] Christian Brauner   
-   5 ( -3) [ 38] Jakub Kicinski         5 (+18) [31] Mahe Tardy          
-   6 (***) [ 21] Kuniyuki Iwashima      6 ( +2) [28] Amery Hung          
-   7 (+24) [ 21] John Fastabend         7 ( +2) [25] Leon Hwang          
-
-Company rankings
-----------------
-
-Top reviewers (cs):                  Top reviewers (msg):                
-   1 (   ) [27] Meta                    1 (   ) [80] Meta                
-   2 ( +3) [ 6] Isovalent               2 (   ) [12] Google              
-   3 ( -1) [ 5] Google                  3 ( +1) [11] Isovalent           
-   4 (   ) [ 5] Shopee                  4 ( +2) [ 9] Shopee              
-   5 ( -2) [ 3] RedHat                  5 ( -2) [ 7] RedHat              
-   6 (   ) [ 3] Intel                   6 ( +2) [ 7] SUSE                
-   7 ( +2) [ 2] Huawei                  7 ( -2) [ 6] Intel               
-
-Top authors (cs):                    Top authors (msg):                  
-   1 (   ) [8] Meta                     1 (   ) [82] Meta                
-   2 ( +9) [4] Kylin Software           2 ( +1) [31] Isovalent           
-   3 (+10) [3] Tsinghua University (THU)    3 ( +1) [21] Shopee              
-   4 (   ) [3] Shopee                   4 (+10) [16] Huawei              
-   5 ( -3) [2] Google                   5 (+11) [16] Tsinghua University (THU)
-   6 ( -3) [2] Isovalent                6 ( +5) [14] Kylin Software      
-   7 (+11) [2] Huawei                   7 ( +5) [12] Intel               
-
-Top scores (positive):               Top scores (negative):              
-   1 ( +1) [171] Meta                   1 (+10) [64] Tsinghua University (THU)
-   2 (***) [ 39] Google                 2 ( +8) [56] Kylin Software      
-   3 (***) [ 29] Stable team            3 ( -2) [37] Isovalent           
-   4 (***) [ 22] SUSE                   4 ( +4) [34] Amazon              
-   5 (***) [ 20] Tencent                5 (+15) [28] Huawei              
-   6 ( +5) [ 15] nVidia                 6 (***) [25] Oracle              
-   7 ( -2) [ 14] Linux Foundation       7 ( -1) [22] Microsoft           
-
-More raw stats
---------------
-
-Prev: start: Sun, 12 Apr 2026 22:50:13 +0000
-	end: Sun, 14 Jun 2026 21:02:35 +0000
-Prev: messages: 8289 days: 63 (132 msg/day)
-Prev: direct commits: 301 (5 commits/day)
-Prev: test commits: 135 (44.85%)
-Prev: people: 343  {'author': 144, 'commenter': 131, 'both': 68, 'none': 25}
-Prev: people pct: {'author': 0.391, 'commenter': 0.356, 'both': 0.185, 'none': 0.068}
-Prev: review pct: 44.85%  x-corp pct: 39.53%
-Prev: avg revisions: single patch: 1.44 patch set: 2.35
-
-Curr: start: Mon, 15 Jun 2026 01:41:23 +0000
-	end: Sun, 16 Aug 2026 16:56:36 -0700
-Curr: messages: 8596 days: 63 (136 msg/day)
-Curr: direct commits: 377 (6 commits/day)
-Curr: test commits: 155 (41.11%)
-Curr: people: 353  {'author': 165, 'commenter': 133, 'both': 55, 'none': 29}
-Curr: people pct: {'author': 0.432, 'commenter': 0.348, 'both': 0.144, 'none': 0.076}
-Curr: review pct: 36.87%  x-corp pct: 32.1%
-Curr: avg revisions: single patch: 1.67 patch set: 3.10
-
-Diff: +50.4% linux-next size
-Diff:  +3.7% (-31.0%) msg/day
-Diff: +25.2% (-16.7%) commits/day
-Diff:  +2.9% (-31.6%) people/day
-Diff: review pct: -8.0%
-      x-corp pct: -7.4%
-Diff: avg revisions: single patch: +15.9% patch set: +31.5%
+I do agree that a better idea is to probably do these checks during control
+paths, but it's a bit more involved (and not sure if it's possible? if we
+have a bunch of xsk sockets and we change that max_sdu, do we go over all
+sockets on the system somehow?). My main motivation with this patch was
+to make our LLM reviewers less chatty about preexisting issues.
