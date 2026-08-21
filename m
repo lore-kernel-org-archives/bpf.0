@@ -1,42 +1,42 @@
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3124F38F64D
-	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 22:40:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D03E339A4AA;
+	Fri, 21 Aug 2026 22:40:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787352050; cv=none; b=AbsEwKnpQ1KwuIzLEllOB8/CINq9GJET3Q5BAg7QiORMg9jkJhvM2rlLZon8kLuUa/vPpalY70bL/GZWs5et75sLrotShmyX9pyO65lhZrWH9sCD930a0bSuFvZMU6jkHhbqBYzpr0p8HlMNID2KV8vHSZWslJcozzDtn0RN3KE=
+	t=1787352057; cv=none; b=EmxIkIifOF33Tzt2ojY0iY/tk3tjs4iIQ1cb1+uMLQClu2E2lv3PzAyHwMcCp2qKq4NM6vCVxAPbACnh/WVumz+BVumEqj3fJZL4+ll3XudPImtcPfTAKfsnOQJX9pmVjp5scbBASU45pEErICFij9lvqV8wrGUQ6tMDFMbZZOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787352050; c=relaxed/simple;
-	bh=HXi7NSRQhhf/igJ8sIZ5qhIpTU8wkcQ6VOAutXrLPIU=;
+	s=arc-20240116; t=1787352057; c=relaxed/simple;
+	bh=xdCnY/3DX3sXooEk/gY9+LpZS07QhwIdT3OEWA1yDMk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fO5wXKh9dOO51BnE6AQEz10po5Ms52qAy2TbxOLQqODq1ifKf+1W6Y1OuHuVoSo9uUkzJnifQtbSmowHyHFMDTL+qCZM0k22MSo67/FXCVJtnpnOf9Ayb3Zqe7qtW3TG93Mgs2Ai/TyGvYDrcN8hXclNh3314QJAXI9V+44LUUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=o3RXJU4M; arc=none smtp.client-ip=185.246.84.56
+	 In-Reply-To:To:Cc; b=cpUp6aV0SND+K/aVYEZmgaUyjbYgjmW4bWFBd/Zz90uaCU3QN/BxBluOpEH4Vv3MN72G7ihlrM1nDNYyJlrp9cVwVZKBHtbXXasf1R1W035dTePhdCYe3JaXvkb62+cUayycHqBALdFB+cIl002CM3RcYcRG5LhTbLIMW+3SD3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=g2/1Vg2K; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="o3RXJU4M"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="g2/1Vg2K"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id A822B1A1795;
-	Fri, 21 Aug 2026 22:40:47 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 4D59C1A1796;
+	Fri, 21 Aug 2026 22:40:54 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 7B685604AA;
-	Fri, 21 Aug 2026 22:40:47 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 27C3F11C77711;
-	Sat, 22 Aug 2026 00:40:39 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 20AA5604AA;
+	Fri, 21 Aug 2026 22:40:54 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3EA1E11C7770D;
+	Sat, 22 Aug 2026 00:40:46 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1787352041; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1787352048; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=YURpgYjUK0qnr6W3P7guU1YJ7lGdHWmKu6Gc7x/q/ZU=;
-	b=o3RXJU4MhwKi7HDZdncE6m2yvCoD/nBj4YiDw9Fjz76bJf76zwN5TluKDdq/cdUkUxwUTA
-	0Nm9WSRAFVMypSgzeBwSDQJrMXVqVSvjHwUZuj0p7UfevqIzjV1zdS9h5gPhVCqbMH6OIm
-	OGwb1iLW8+8I5OA02dhYfVlzTGadaF7Bc1TBOZGRAh29BvdWJrftOxoEOlEevKuuxTFxqc
-	Lv0GPi6iLmND5zd8WUi0vCyJSJc5nu4evRe2t1z9qQt7Fm++gn06Gt9MTtrZWjiFEiJlXB
-	xI9vmln7/ZCNwLN8AUV5gbmzSdjyEZZBDPtHFu12k50112J+kJOVfzHdpKgmkQ==
+	bh=NW+Ti3IITyJJsuvwqKKh41ldDnxjK1STj2/1r0/iZGs=;
+	b=g2/1Vg2KWr4ywQzRpKICKKDeh7bKDjmLO0ZQ0HFZfjqwTH72G7N6t+zb/rrFlWzv8svkJQ
+	Gkf18shMKyNNrjFbE+oIP5n0G39PiASrnRSpRzVrffVYdCWEwNHxK7+eQcDp39ibT7K/EW
+	ncp75lTI6F9C+Ixp+aIPvHn/UDYBiG57agNxsbQYe4yurfUtYVHYNwppjcP1Er63MhcfjH
+	YbM/T4yEfjpdsDkuPhtBTzotRt6/OtDcPFL5cpjk+qCWVisnBOPbm3bF74Lvccgkj8Nxdp
+	TfpI7MY6sXLjq6M3aCEMeciEKpVEPeQVnLRj4m2tpYLo9uUrv4J4/l7ZIHf09g==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Sat, 22 Aug 2026 00:39:48 +0200
-Subject: [PATCH bpf-next v7 6/9] selftests/bpf: make cmdline_contains
- stricter
+Date: Sat, 22 Aug 2026 00:39:49 +0200
+Subject: [PATCH bpf-next v7 7/9] selftests/bpf: add helpers for KASAN in
+ JIT testing
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260822-kasan-v7-6-99afee6ef7fd@bootlin.com>
+Message-Id: <20260822-kasan-v7-7-99afee6ef7fd@bootlin.com>
 References: <20260822-kasan-v7-0-99afee6ef7fd@bootlin.com>
 In-Reply-To: <20260822-kasan-v7-0-99afee6ef7fd@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -70,61 +70,54 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.15.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-cmdline_contains is used by BPF selftests to check the presence of
-specific kernel commandline parameters, but it currently suffers from
-two issues:
-- the read commandline isn't NULL terminated right after the read data
-  but only at the end of the buffer, leaving uninitialized bytes that
-  are then possibly tokenized
-- the comparison of found tokens is done based on the size of found
-  token. This could lead to too-short-but-matching tokens to wrongly
-  match the search pattern.
+Add two simple helpers to allow checking whether KASAN for eBPF tests
+should be executed:
+- one helper to check if BPF_JIT_KASAN is enabled in kernel
+  configuration
+- one helper to check if the kernel is running with kasan_multi_shot
+  (otherwise only the first test will be able to trigger a report)
 
-Enforce stricter checks in cmdline_contains to avoid accidental matches.
-
-Fixes: 399f6185a1c0 ("selftests/bpf: Fix selftests broken by mitigations=off")
+Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
-Changes in v7:
-- add missing Fixes tag
-- drop unneeded size check, already done by strcmp
+Changes in v5:
+- add kasan_multi_shot helper
+
+Changes in v2:
+- fix condition
 ---
- tools/testing/selftests/bpf/unpriv_helpers.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/unpriv_helpers.c | 10 ++++++++++
+ tools/testing/selftests/bpf/unpriv_helpers.h |  2 ++
+ 2 files changed, 12 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/unpriv_helpers.c b/tools/testing/selftests/bpf/unpriv_helpers.c
-index f997d7ec8fd0..9dadcacaef0c 100644
+index 9dadcacaef0c..2c8c5edb8751 100644
 --- a/tools/testing/selftests/bpf/unpriv_helpers.c
 +++ b/tools/testing/selftests/bpf/unpriv_helpers.c
-@@ -72,8 +72,8 @@ static int config_contains(const char *pat)
- 
- static bool cmdline_contains(const char *pat)
- {
-+	int fd, cnt, ret = false;
- 	char cmdline[4096], *c;
--	int fd, ret = false;
- 
- 	fd = open("/proc/cmdline", O_RDONLY);
- 	if (fd < 0) {
-@@ -81,14 +81,15 @@ static bool cmdline_contains(const char *pat)
- 		return false;
+@@ -143,3 +143,13 @@ bool get_unpriv_disabled(void)
  	}
+ 	return mitigations_off;
+ }
++
++bool get_kasan_jit_enabled(void)
++{
++	return config_contains("CONFIG_BPF_JIT_KASAN=y") == 1;
++}
++
++bool get_kasan_multi_shot_enabled(void)
++{
++	return cmdline_contains("kasan_multi_shot");
++}
+diff --git a/tools/testing/selftests/bpf/unpriv_helpers.h b/tools/testing/selftests/bpf/unpriv_helpers.h
+index 151f67329665..a7ceb51577cd 100644
+--- a/tools/testing/selftests/bpf/unpriv_helpers.h
++++ b/tools/testing/selftests/bpf/unpriv_helpers.h
+@@ -5,3 +5,5 @@
+ #define UNPRIV_SYSCTL "kernel/unprivileged_bpf_disabled"
  
--	if (read(fd, cmdline, sizeof(cmdline) - 1) < 0) {
-+	cnt = read(fd, cmdline, sizeof(cmdline) - 1);
-+	if (cnt < 0) {
- 		perror("read /proc/cmdline");
- 		goto out;
- 	}
- 
--	cmdline[sizeof(cmdline) - 1] = '\0';
-+	cmdline[cnt] = '\0';
- 	for (c = strtok(cmdline, " \n"); c; c = strtok(NULL, " \n")) {
--		if (strncmp(c, pat, strlen(c)))
-+		if (strcmp(c, pat))
- 			continue;
- 		ret = true;
- 		break;
+ bool get_unpriv_disabled(void);
++bool get_kasan_jit_enabled(void);
++bool get_kasan_multi_shot_enabled(void);
 
 -- 
 2.55.0
