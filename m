@@ -1,87 +1,125 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC64D47606E
-	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 14:35:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FA56424D6C
+	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 15:17:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787322943; cv=none; b=Jjg3NRd8BjUBAJxpuEl/PxhJtFtxaLM1jostc2cgDjIr+L16S5E0ia0qKVT7Z5CH4Vrg4njo/xs/oQOwd3GzCE8CC6FzCQirOxdCi2vreLJOVxtIJj3JrISrHbyL6HR+b70Dg0ArhV2HQMaz4TWUP/VKrpVE1IXl0DzfxKrJkdI=
+	t=1787325439; cv=none; b=Pq+XAa6ZgLphlfhvrq01CQHAfPyFX96xcyaHB0DAKdgIMXwWgfyQa0qdSSyoph0JnewS7Rc31eZ3shNg1VUbfzU/l522W+ADsNWxQRywBq7QR6klgbLqyPeKXch1lwPNKwC+iNOdo0w1SyYS4Q//ncphDp0x8WgStpMBKAMnxBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787322943; c=relaxed/simple;
-	bh=PDdqbyTYDnI6F2JI6t2go8vBhCAE1oCm9u6gpLxjUKM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X0y8RcMUgF1XMVQh8wD8y1QFStKUnPr9xGJ1lT2VY7uUJ4xRNvDAU/5vsP66NjxdEpVa/syIjQeZgg4KrMJ1iCCwYulRUDujkd3YcGItPkE27WcVUEStMoRf5WdNJv9Ca5zeoLEIWRWvpiaKqsWOcpppHFKcwQ3mdCLEu3M2W10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=N7XSbwGf; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1787325439; c=relaxed/simple;
+	bh=ThpaDSJUyscX+gZ0P5GSwxTh86mSrRmFDSneNtXt/XU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=GbauklcvlgFEgNHRFi4vNa5l0LbcLOYYGbHRPhVX+aVs3dt4oBDwB6UAALiYVMAWEp12re5jQUlfR+FTweyTSKO2zx32LuQMI3uPRihX71PcwFycqb+zvD8Lj1I2XAvgS5akk8/cu9RnuZjYH3zMWOdWHMRvayAAzmZ6U+zL+d8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mserXkUy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="N7XSbwGf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1787322941;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=11dPx6bGB018UBDYzKEYfI8AnpdGEAinmo2rW1PteIc=;
-	b=N7XSbwGfAVd93GWW12YpuGUw+Kl3ilO+Xymz3YX79fqpAEIkJEeSAlIgTSydaEcnUiGAJ3
-	0j/0EthTYf8zXbKGQk6eABp3ACxcyo/zZHJPOoqIXuhixzofP09oRdS68BaobplGlQ6jHE
-	5QPbXA9SAWVJjztQqlbynADV2qMFQ+Q=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-118-62cyuJzCPGGsO1KE7j6-FA-1; Fri,
- 21 Aug 2026 10:35:32 -0400
-X-MC-Unique: 62cyuJzCPGGsO1KE7j6-FA-1
-X-Mimecast-MFC-AGG-ID: 62cyuJzCPGGsO1KE7j6-FA_1787322929
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5D7921954B20;
-	Fri, 21 Aug 2026 14:35:28 +0000 (UTC)
-Received: from fedora (unknown [10.44.49.72])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 08EAD3002D30;
-	Fri, 21 Aug 2026 14:35:23 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Fri, 21 Aug 2026 16:35:27 +0200 (CEST)
-Date: Fri, 21 Aug 2026 16:35:22 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Jens Axboe <axboe@kernel.dk>, Peter Zijlstra <peterz@infradead.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	Steve French <sfrench@samba.org>, linux-fsdevel@vger.kernel.org,
-	bpf@vger.kernel.org, linux-cifs@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 1/4] signal: allow taks to temporarily block
- TIF_NOTIFY_SIGNAL
-Message-ID: <aohiKmI6IBpX7mvS@redhat.com>
-References: <20260818-work-tif_notify_signal-v1-0-1ee1fcc5b3ff@kernel.org>
- <20260818-work-tif_notify_signal-v1-1-1ee1fcc5b3ff@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mserXkUy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE0C71F000E9;
+	Fri, 21 Aug 2026 15:17:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787325438;
+	bh=ZQGWBkgXvE5rT1xmCwBmvFjTVgC8vH/cXw3neStwZFc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=mserXkUyTWAu0q+94sulng+3B+BZ2rWz4hkmIMir2z5GuOgzvEEUnpT/GocJXG3Dg
+	 6AETCYKP3Uo762scGT4AQSe4LpW8fUW/iYWYf+KS5oaMJPRTPn2EC0HCzOaqPfE2WA
+	 NigUSFJjYjSgsjo3MGHNWU2gks21+ELgCF6lnFlvjZOBAgrFsMHv7mxHSvI4doNQbq
+	 BxcjW9+HL6gJlolW5B9Aq/jRmRPY8sDLKqKdXg0VWQwVXonVrXAxfjZdDt0PVMxiX0
+	 Pudo+tEphiAdlUCU8z6hUOqvItYclYbRylDn+ih9yO5ZCYA6MJOt+b3UY7Swb2xPEW
+	 XxNqIzX583tLQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net v2] net/mlx5e: Prevent stale XSK buffer release on
+ refill retry
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jerome Tollet" <jtollet@cisco.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260820151558.11015-1-jtollet@cisco.com>
+References: <20260820151558.11015-1-jtollet@cisco.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 21 Aug 2026 15:17:17 +0000
+Message-Id: <20260821151717.CE0C71F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260818-work-tif_notify_signal-v1-1-1ee1fcc5b3ff@kernel.org>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Hi Christian, sorry for late reply.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-This series looks very good to me. Just one nit...
+Pre-existing issues:
+- [High] Incomplete Fix: Double Free in MPWQE path on XSK ring full
+--
 
-On 08/18, Christian Brauner wrote:
->
-> +/* Prevent TIF_NOTIFY_SIGNAL from interrupting this task. */
-> +static inline unsigned int no_notify_signal_save(void)
-> +{
-> +	unsigned int flags = current->flags & PF_NO_NOTIFY_SIGNAL;
+--- Patch [1]: [PATCH net v2] net/mlx5e: Prevent stale XSK buffer release o=
+n refill retry ---
+commit c24da150351198b044b52cb55d5ba341b752ae81
+Author: Jerome Tollet <jtollet@cisco.com>
 
-I think that
+net/mlx5e: Prevent stale XSK buffer release on refill retry
+   =20
+When an XDP redirect to an AF_XDP socket fails because its RX ring is
+full, the XSK core frees the buffer. During the subsequent batched refill
+of a legacy cyclic RQ, mlx5e also releases the WQE's XSK buffer before
+allocating a replacement. If that refill succeeds only partially, a WQE
+left without a replacement retains its old buffer pointer.
 
-	unsigned int flags = current->flags;
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/ne=
+t/ethernet/mellanox/mlx5/core/en_rx.c
+> index 6fc6605d20549..7967a27372981 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+> @@ -410,8 +410,11 @@ static inline void mlx5e_free_rx_wqe(struct mlx5e_rq=
+ *rq,
+> =20
+>  static void mlx5e_xsk_free_rx_wqe(struct mlx5e_wqe_frag_info *wi)
+>  {
+> -	if (!(wi->flags & BIT(MLX5E_WQE_FRAG_SKIP_RELEASE)))
+> -		xsk_buff_free(*wi->xskp);
+> +	if (wi->flags & BIT(MLX5E_WQE_FRAG_SKIP_RELEASE))
+> +		return;
+> +
+> +	xsk_buff_free(*wi->xskp);
+> +	wi->flags |=3D BIT(MLX5E_WQE_FRAG_SKIP_RELEASE);
+>  }
 
-should equally work?
+[Severity: High]
+This isn't a bug introduced by this patch, but does a similar double-free=20
+vulnerability exist in the MPWQE path?
 
-Oleg.
+It looks like the same sequence of events can happen for multi-packet WQEs
+when the XSK RX ring is full. In mlx5e_post_rx_mpwqes() (in en_rx.c):
 
+mlx5e_post_rx_mpwqes() {
+        ...
+        mlx5e_free_rx_mpwqe();
+        ...
+        alloc_err =3D mlx5e_xsk_alloc_rx_mpwqe();
+        if (unlikely(alloc_err)) {
+                ...
+                break;
+        }
+}
+
+If mlx5e_xsk_alloc_rx_mpwqe() fails (e.g., returning -ENOMEM), it returns
+without filling the skip_release_bitmap with 1s. This differs from the
+standard mlx5e_alloc_rx_mpwqe() path which correctly calls bitmap_fill()
+on error.
+
+When the allocation fails, the loop breaks early and actual_wq_head is not
+advanced.
+
+On the next NAPI poll, won't mlx5e_post_rx_mpwqes() process this same WQE
+head again? Since skip_release_bitmap is still 0, mlx5e_free_rx_mpwqe()
+will execute xsk_buff_free() on the same pointers, causing a double-free.
+
+Should mlx5e_xsk_alloc_rx_mpwqe() also fill the skip_release_bitmap on
+error, or should mlx5e_free_rx_mpwqe() update the bitmap immediately after
+freeing the buffers, similar to your fix here for the legacy cyclic RQ?
+
+> =20
+>  static void mlx5e_dealloc_rx_wqe(struct mlx5e_rq *rq, u16 ix)
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260820151558.1101=
+5-1-jtollet@cisco.com?part=3D1
