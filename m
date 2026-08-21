@@ -1,121 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304AF5695;
-	Fri, 21 Aug 2026 23:24:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBEE141DDFA;
+	Fri, 21 Aug 2026 23:24:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787354699; cv=none; b=tmjGC1jh+Nwt+AZ+/jde4md+v3xBPMq4zTcvCyNpgVF23jr3VJoiDeyqTS5gptUhIC/D0Yq2prDWERlgxeAmprSvAjvh0tCyUEA6C5rCeP/cvIY3enCG9ykVqudjuoPdWblKnEE7mrCTZsFl8+29FXzNYs7Fmcrr2nWk/mNafWg=
+	t=1787354700; cv=none; b=aiAciUR64NHn8SG9AoJNjtXmrdAdjEt4QEq6BN5l9iiq5pn2tfcXuIBrKp+IDMcEwaqQRYRK1i5k/ET4HkxG5M/G2hSBaC77iUWoBD7tOen0qppaksPFXQtASbi1k0biHpltgJXTiHepksxwj13rjWKbpBLYWWgRCYBGsLmDTeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787354699; c=relaxed/simple;
-	bh=llrd405ymITcCe7oclu0PC1CMDPWqVTzrXbgmTrXnms=;
+	s=arc-20240116; t=1787354700; c=relaxed/simple;
+	bh=HoC8evWdczBg6sd9Z6eu4Pyxj+fsYfodT9Lan2pW/5c=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=hRseUPgQaGlgwpgln8M/Y06P0pwraaLm5LpRf/fO9XSKIblRPdJAAMxlLz7agbss7cMnabgpiIK3gn/9k32o1j67aoq9xDFXXPfwjVfvb2Ecaq4QbzkBijwsSMcp7KaAO8+7wR2LBAilOzc3A5H84bGwCRZnOmK9NsyUHDGiYIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m41YMl8H; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=uF0uVGIgMmfpBlIydNpbS0hTBwu+rs/CtWojey6Nzg0Fb1AAgCSkEcus3m7u6bX6Ck19epGhxIPphsY3/SZjxI/w9KAFxjnQRTQiEk0VSDU1dck8HHoRqlr7Sh0QfxJl1g1s6ekb+a9r2tIg538MI+Uh4HeXVUtZXNVW7gyqRX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gXuGruv6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m41YMl8H"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 636981F000E9;
-	Fri, 21 Aug 2026 23:24:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gXuGruv6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E31B61F00A3D;
+	Fri, 21 Aug 2026 23:24:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787354698;
-	bh=DKkB54kHOxAtMQt10UJpB+CGTeDAHSHmdNkyuIycIxY=;
+	s=k20260515; t=1787354699;
+	bh=2Vde3PZOQK2Cad3GpKkDo48mkPTZOicB3sYdMiQflvs=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=m41YMl8HpVnMVS81xQRfmlmf37/c/5Jsrc/Qa95/P754fkpj7W1KrwQC1fhv+OOmr
-	 Yq7z/wTfsqyerA3aFwBBidvq3y/szocRYeLBkVIUQ9ZrJO1g7bxZdpkqiL7PQjLas0
-	 AnCoNQEWu08KoxkL/GnRJzEjXCaGaq9LEpYVaoAN5vRwg6fb40nP8tAJzJqnv1ptXw
-	 EEmxhnvq7NfXXzUozK/jsxwUk08MtppXXAGhm87bI9MZ3aYbvUMzvJVC9TCNZSm8+B
-	 Oa6Fx7NAzdrWnqnI28XglsoFn873o/x8FpBPw9ltW0NFqWsZQFUOJVELmKZPNmD9YF
-	 nrB1879wX0NsQ==
-Content-Type: multipart/mixed; boundary="===============6897875638889964055=="
+	b=gXuGruv6xcxtO7B6S5teyQpAaSDNTM8AFpK1Pc12wdTGmPDZ9e8dN0ca5UI3EjQPd
+	 C/4QhuNav6Is4NYoQQeXb/naJfgOrOscenSuzr7AYJzHMbzGizpw3G1mEvuw+rRRat
+	 6KARS/daYpvN872X32V3YW3xQ8EKuIML0lbdLjhezXrcFE+oMKl0mLXbshovlzWxZp
+	 +9AbN/+nEuKn3+Alx5n9JWJGmDVJDLFEd8hXFqcMIrU1AKG1IIfA0plVfriMvHArIv
+	 6qjpNLw63pT2NVZvkcLiBZiAjFdR0MPQK5a7m8Ne+YSRu86AakZrT6Dg9j1y90lMwY
+	 Jmf7Bb7/9HhFw==
+Content-Type: multipart/mixed; boundary="===============4179424211322569270=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f6a88fe55d543f5fe2a6d9e856acb4cf1b87b8210de58459df1272c8a456d926@mail.kernel.org>
-In-Reply-To: <20260822-kasan-v7-1-99afee6ef7fd@bootlin.com>
-References: <20260822-kasan-v7-1-99afee6ef7fd@bootlin.com>
-Subject: Re: [PATCH bpf-next v7 1/9] bpf: mark instructions accessing program stack
+Message-Id: <b2de3e4da41eccf60d05631644e3975af9a89584e96121f38fa9caac3ec76f2d@mail.kernel.org>
+In-Reply-To: <20260822-kasan-v7-4-99afee6ef7fd@bootlin.com>
+References: <20260822-kasan-v7-4-99afee6ef7fd@bootlin.com>
+Subject: Re: [PATCH bpf-next v7 4/9] bpf, x86: emit KASAN checks in x86 JITed programs
 From: bot+bpf-ci@kernel.org
 To: alexis.lothore@bootlin.com,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,tglx@kernel.org,bp@alien8.de,dave.hansen@linux.intel.com,x86@kernel.org,hpa@zytor.com,shuah@kernel.org,mingo@redhat.com,andreyknvl@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,laoar.shao@gmail.com
 Cc: ebpf@linuxfoundation.org,bastien.curutchet@bootlin.com,thomas.petazzoni@bootlin.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,alexis.lothore@bootlin.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 21 Aug 2026 23:24:57 +0000 (UTC)
+Date: Fri, 21 Aug 2026 23:24:58 +0000 (UTC)
 
---===============6897875638889964055==
+--===============4179424211322569270==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index 004b06785521..412a13a664fa 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -725,6 +725,8 @@ struct bpf_insn_aux_data {
->  	u16 const_reg_map_mask;
->  	u16 const_reg_subprog_mask;
->  	u32 const_reg_vals[10];
-> +	/* instruction can access non-stack memory */
-> +	bool non_stack_access;
->  };
-
-[ ... ]
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index e036ae20bf6b..040af75d9550 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -3272,6 +3272,11 @@ static void mark_indirect_target(struct bpf_verifier_env *env, int idx)
->  	env->insn_aux_data[idx].indirect_target = true;
->  }
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index 13ba3232993a..8134d028a2f2 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -21,6 +21,17 @@
+>  #include <asm/unwind.h>
+>  #include <asm/cfi.h>
 >
-> +static void mark_non_stack_access(struct bpf_verifier_env *env, int idx)
-> +{
-> +	env->insn_aux_data[idx].non_stack_access = true;
-> +}
+> +#if IS_ENABLED(CONFIG_BPF_JIT_KASAN)
+> +void __asan_load1(void *p);
+> +void __asan_store1(void *p);
+> +void __asan_load2(void *p);
+> +void __asan_store2(void *p);
+> +void __asan_load4(void *p);
+> +void __asan_store4(void *p);
+> +void __asan_load8(void *p);
+> +void __asan_store8(void *p);
+> +#endif
 > +
+
+This isn't a bug, but these eight prototypes duplicate declarations from
+mm/kasan/kasan.h. Would it be worth exporting them from a shared header
+such as include/linux/kasan.h under CONFIG_KASAN_GENERIC so each JIT does
+not have to re-declare them? Also, this uses #if IS_ENABLED() while the
+matching guard in emit_kasan_check() uses #ifdef CONFIG_BPF_JIT_KASAN.
 
 [ ... ]
-
-> @@ -6654,6 +6659,10 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
->  				clear_scalar_id(&regs[value_regno]);
->  		}
->  	}
-> +
-> +	if (!err && reg->type != PTR_TO_STACK)
-> +		mark_non_stack_access(env, insn_idx);
-> +
->  	return err;
->  }
-
-Does this test read the correct register type? For a load instruction where
-dst_reg == src_reg (e.g., rX = *(u64 *)(rX + off)), check_mem_access()
-receives reg = &regs[src_reg] and value_regno = dst_reg, so reg points to
-the same slot that gets overwritten by the load.
-
-When the pointer is PTR_TO_STACK, check_stack_read() runs:
-
-check_stack_read_fixed_off() {
-    state->regs[dst_regno] = *reg;  /* or mark_reg_stack_read() */
-}
-
-By the time execution reaches the new test, reg->type is the loaded value's
-type (typically SCALAR_VALUE), not PTR_TO_STACK. The condition evaluates to
-true and marks a stack-only access as non-stack.
-
-Both check_load_mem() and check_store_reg() snapshot the pointer type before
-calling check_mem_access():
-
-    /* verifier.c check_load_mem */
-    src_reg_type = regs[insn->src_reg].type;
-    err = check_mem_access(env, env->insn_idx, ...);
-
-    /* verifier.c check_store_reg */
-    dst_reg_type = regs[insn->dst_reg].type;
-    err = check_mem_access(env, env->insn_idx, ...);
-
-Could check_mem_access() snapshot reg->type at entry and test that snapshot
-instead?
 
 
 ---
@@ -123,4 +81,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32534828209
---===============6897875638889964055==--
+--===============4179424211322569270==--
