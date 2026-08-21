@@ -1,133 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69DB34119F4;
-	Fri, 21 Aug 2026 05:59:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787291951; cv=none; b=ubEIiJXrCf95RCe4FWOn9SSL7LHDMILQC30j/2d3w09kHElAWw3P53i4yEgTUFJhGhm6e5l2H0vP9pdLNnGKtD9ug2i9S9yAG8eWVFTFOr63BSehiwVurAgYMr93LMOO2lL6NqtRYBg/+zLL9pxpR6bneNA7Olclp8J3Q9IyZqU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787291951; c=relaxed/simple;
-	bh=GZEN3/4SCDPgBZ76gkXcCxBahI2EcOajzouuy3Y9xVs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=E5QHL5PeELESOCCMLq7svCgyB3tmcuwaKM9StQvnABhGOQZQOHCVPMKpw5eQnNLFngLgd+yvSCg5aqmBFHIwajUsxvGj0pJs3NIRhovrNcJlL2B4rXrydnS4H4YW/95QmuqoEEQQAQlS2srahePss9n/tJTtKi9zqDs2Ddm0fnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H4wNxyT9; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4246738236F
+	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 06:21:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.181
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787293296; cv=pass; b=JB4CZwq++oeY3JA8k6S6yFmJSrUoc+y9FVodY052rUKmiRcfXZoRuNyzL4DwaNF7xaOMvnYabM+nAEEkq33tOHR0xiv+xlU01xK3skW0DmZLL2xdKbO3X93iI1URGOrrbwOSrp4gaE/N26/+QHQLPcGPhr2GwK6HPJ+CEaLRrMI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787293296; c=relaxed/simple;
+	bh=67Qp5oUnGYfJE4bXm4CmyW/zD0GZcDQ/0nLUWxoKfAM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ihke1F4oZgox5TmfqiVo+mPMgoH/RwYwpD7n6fENUrARx0C+DMJv0GnR3RnUANS3P8YSH18aXMYDKbxVtN/ToXbffFLhZfxFv4JvGJuBz8cYZHs5KvpogwSDRS0QpeQLMWPaB0Mp5/TIZpLfw4YhrBwiMJUNe9pR+nnzGX6gX2s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=anyfinetworks.com; spf=none smtp.mailfrom=anyfinetworks.com; dkim=pass (2048-bit key) header.d=anyfinetworks-com.20251104.gappssmtp.com header.i=@anyfinetworks-com.20251104.gappssmtp.com header.b=wend5obP; arc=pass smtp.client-ip=209.85.160.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=anyfinetworks.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=anyfinetworks.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H4wNxyT9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02F081F000E9;
-	Fri, 21 Aug 2026 05:59:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787291950;
-	bh=IQPTg0dopiefX+ceQgvRa3Xq7Ko0okmJeAh7+on8IeM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=H4wNxyT9THaO3qStPOad6v7eG6qGV2t4SsxO9wkjUhs0rMHoZBDeDPJy5RCf8iwTQ
-	 GQi/N4kQ4ymQrEG51JecESowP3iW9D/efIYqDzlS/dcrb22BtXBXpG0iQKgUoUR2yz
-	 MPmPFxTuxvpMKs949xCuF1RYgmBkIOZZoVakdH2SzXmx68th895UMFIp2b92G1eD3N
-	 hX+jyyNW89nmHoN9JVDYQiXp1MnL+fBWjdz+hNYP/GsB0IegVaDi3Wu+O/3e8dAVX6
-	 ZLx86OBwjqsI58Ul8CflwiNB9QKm1qp4y/GEUJFm1XBrGWa1YeBCNRQ0/IsejqPKAS
-	 /g2AxaBvX+76w==
-Content-Type: multipart/mixed; boundary="===============3389001773132304324=="
+	dkim=pass (2048-bit key) header.d=anyfinetworks-com.20251104.gappssmtp.com header.i=@anyfinetworks-com.20251104.gappssmtp.com header.b="wend5obP"
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-51c2a449c57so3715861cf.1
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2026 23:21:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787293294; cv=none;
+        d=google.com; s=arc-20260327;
+        b=CReSaHAq7k6E7pWdg8NYtukLXkH54nq3XlYXwowQu1S4i9z4mthob7ddT3kbkavUxo
+         2/mBR9zGnHsxYl9dgO8VsTYTZb/hKnin8YG+kUTyutgx+qFx0sLGijMn813TMo5pwdm+
+         ZLFXICbU09Qv4ZkNe0zNXWzjDdIJz1FzmNVweBfY/ISKB2UsFcQpXUSCAs6SHJ7OgA8Q
+         dmyb6VsL7F0Fvw5f2i7y8FTMS0elfn/o/ZFGyDsqJrFuWKtp9b1B075XJueR1ZDGCXcG
+         yJDv0zxIVCtdODDnorMGiZHHHlJB/X62BNTpsYsqe8wuEylb7vEYUjT0varAeRAl+Tov
+         vWPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=67Qp5oUnGYfJE4bXm4CmyW/zD0GZcDQ/0nLUWxoKfAM=;
+        fh=NiiL9rfNSSG0m5Qxgmufc/msftPEeQN6NXB4kqc02No=;
+        b=SxdGSFjxjHuKJdhv2+/1xQHvSVQ38ZE4k9987lLXnYEHFqCpVg4U6GT29W3HkkkHZ7
+         7Y24yElRGYHF7OztIWKK4OsSHkoT7V+J/kvEV0EeCr1OstsNo5q9opKEtjpJIX+13CvN
+         icWEuroohV9+N1wXTe1HfmIXi5AKEIIsgLeaaU3o9Aaoz82YFRxCrsxowUNxquEWn6fE
+         ArRqwXQEUKuxuywNCVsmzIGVkuUjT0vvwXsFfzSTA8YFkQr6roOBZYK0XY8FboIghy0E
+         jx/SV9oUA43s2UPRTl0PRbnqwgM8X+tI+xJd8308krvslqMdKdM28R1wwOIRyG7hUAq/
+         J4vg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=anyfinetworks-com.20251104.gappssmtp.com; s=20251104; t=1787293294; x=1787898094; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=67Qp5oUnGYfJE4bXm4CmyW/zD0GZcDQ/0nLUWxoKfAM=;
+        b=wend5obP2zfozN9qJx2XfizUk6vl7JBOWt8BZfjf1xdcxZaF5PHbrpTOZ1U2p2Q62K
+         axVAd5IxSEY1H0b/GAGjk/NUJ7W/oleC4R/6xlcZrePT80Uf3WtTUK4XidDN2w4zDZHe
+         MnRBJMF/qSUv93hSR9KxhzDP2StI9hulnwsWFRAxfmjbn7Ka10WuhTJki5Y2GMTfzVaL
+         vTkB+bBy/iw63QRUa4CUQMX7aTeu6WMN8UGU9w9wYcAPHsWo66GhcsUJoCV35ZMUkalV
+         6TPHKVJBo7BSvhSzx0tRwXtlMfUnYCIqFETAqLyjCtaPMlOq/B8Pbfk6dWQ4tg5AbaKQ
+         Ne+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787293294; x=1787898094;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=67Qp5oUnGYfJE4bXm4CmyW/zD0GZcDQ/0nLUWxoKfAM=;
+        b=VoBydkSQU090QWhXb4m/L6l6aG7p9dXZjrLhXxBB1V5J49I7kEPOxUARfLb5aXJfb6
+         N0+/QZMZ0kduUwx6UPH52KOE38vO8g1bUc7vUxJemm3SnnEF18m39xrGjM6B1idvUhqh
+         sLRv9N4oWaq87x6CxQypR8kcRW/yPVSXUA7/0cv0lw4PbShtff+Py0MvW4KtLeS4TUL0
+         cegUl1vwMG92l3ToffPZ1zgV96oorf3BdCkdD22ZZscMZhcXTRwyATaWb2IVTXx1AdY0
+         GeoYRU8TEzZgWqhg5NtgNKQkat7/Tk7NqmgzX9DPG5gzEwPMuNAte65MNeegziupB4kO
+         kE5g==
+X-Forwarded-Encrypted: i=1; AHgh+RqC8Q1//Lo/wBZ6zVHFpv1aM24X32ydz6sxolZUA3MU95qgWgQSuUzFa+fML/QxJNQSrb8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywl/XsSDsPgp3P2/q4QdOrAMkr/kaSr29b3VE71Z3xcMUy75owT
+	cOELFIvUiI7B8p8AYqptyESqeS7ZPOOEd8seDqsB124P5K9ZtePydU3uDlLdob9nAl04edaRLDL
+	WfVVvUKdWlkjg00/HYzh+iQes5J9srNcCqCUWlbb9MA==
+X-Gm-Gg: AR+sD13DuQEFsOVsGc1LYYL5kaji2DpzTZtS1gjViRaVPdCslbx3ZelleBSivQxKDVz
+	3vy4m6s04dzpEvrhO9EJVQHCMXNUAtIewA+PV2IbxYK1iWB2Ybm074FpCIXmXV/9QYCSZFSFB62
+	4uXIISIpQbOVFtYIBd9uu2ZtuN2xi5wZNwX5avUAWUdWj+GgBpJJlpt1oXNpfAJeh8BGDh53RUB
+	NFO0dH2+vF9AYb9Ob3+wTHwvt+bJ2r3FrXLuAUmH+tABhz7xzIjbzxujhF+7ML0+lNIu0vxGZmP
+	QrrC/YhakO38tskJJrTRkYSSlQ3hAwGn9XCo1C/1I3SU
+X-Received: by 2002:ac8:7e96:0:b0:51e:e5a2:ac82 with SMTP id
+ d75a77b69052e-52df59f1866mr32825491cf.23.1787293294195; Thu, 20 Aug 2026
+ 23:21:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b951553281d4e1491647aad4c4c0a8fac03d6b78ecac351fd216888eaae6ce72@mail.kernel.org>
-In-Reply-To: <20260821050631.39784-2-jiayuan.chen@linux.dev>
-References: <20260821050631.39784-2-jiayuan.chen@linux.dev>
-Subject: Re: [PATCH bpf-next v4 2/4] bpf: arena: allocate the fault-in page outside the lock
-From: bot+bpf-ci@kernel.org
-To: jiayuan.chen@linux.dev,bpf@vger.kernel.org
-Cc: jiayuan.chen@linux.dev,emil@etsalapatis.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,ihor.solodrai@linux.dev,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 21 Aug 2026 05:59:09 +0000 (UTC)
+References: <20260810194215.3754591-1-main.kalliope@gmail.com>
+ <CAM1=_QTvdWzBpSGnoLV7wiW0dsn_nc04V8KnYuntptQ5mF9Pyg@mail.gmail.com> <CAJZwKkis=3NGw9At0WfiZaRYEoMPbQfqJKN0e+vtRDvp4VY5Ng@mail.gmail.com>
+In-Reply-To: <CAJZwKkis=3NGw9At0WfiZaRYEoMPbQfqJKN0e+vtRDvp4VY5Ng@mail.gmail.com>
+From: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Date: Fri, 21 Aug 2026 08:21:22 +0200
+X-Gm-Features: AcwNN1VUk7GQTVjN4D8OR1j7mLXVuiJC6bVhhR77XaCTceK3mcp8WAPe-tUzXYE
+Message-ID: <CAM1=_QSk9W1z6mT3EdKV=_cbHm9d5FH1HVO6CFjHcppy+s8OOg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 0/3] bpf, mips: Add signed div/mod support
+To: Nicholas Dudar <main.kalliope@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, tsbogend@alpha.franken.de, paulburton@kernel.org, 
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
+	philmd@oss.qualcomm.com, bpf@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============3389001773132304324==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Tue, Aug 18, 2026 at 3:11=E2=80=AFPM Nicholas Dudar <main.kalliope@gmail=
+.com> wrote:
+> I plan to post MOVSX today. For MEMSX, I will base it after MOVSX and
+> SDIV/SMOD and call out the dependency in the commit message. This avoids
+> carrying a temporary fail-closed check. Does that ordering work for BSWAP
+> and JMP32_JA?
 
-> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> index 7b6847200b43..50dac9ba0f5e 100644
-> --- a/kernel/bpf/arena.c
-> +++ b/kernel/bpf/arena.c
+Yes, I think that should work fine. If I understand it correctly, I
+would then add BSWAP and JMP32_JA on top of your patches? I plan to
+take a look at this when I am back next week.
 
-[ ... ]
-
-> @@ -489,59 +490,108 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
->  	kbase = bpf_arena_get_kern_vm_start(arena);
->  	kaddr = kbase + (u32)(vmf->address);
->
-> +	page = vmalloc_to_page((void *)kaddr);
-> +	if (!page && !(arena->map.map_flags & BPF_F_SEGV_ON_FAULT)) {
-> +		/*
-> +		 * We run in process context here, so preallocate the page
-> +		 * outside the lock with an explicitly sleepable allocator. It
-> +		 * can then go through reclaim (both memcg and global) and the
-> +		 * OOM path, the way do_anonymous_page() does; under
-> +		 * arena->spinlock only the non-blocking allocator is available,
-> +		 * which never reclaims. That also decides the return value:
-> +		 * VM_FAULT_OOM below is only meaningful if the OOM machinery was
-> +		 * actually engaged, which the non-blocking allocator never does.
-> +		 */
-> +		bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
-> +		new_page = bpf_map_alloc_page_sleepable(map);
-> +		bpf_map_memcg_exit(old_memcg, new_memcg);
-> +		if (!new_page)
-> +			return VM_FAULT_OOM;
-> +	}
-
-Can this return VM_FAULT_OOM when the allocation is charged to a foreign
-memcg?
-
-The preallocation charges the arena creator's memcg, not current's:
-
-    bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
-    /* set_active_memcg(bpf_map_get_memcg(map)) */
-
-    new_page = bpf_map_alloc_page_sleepable(map);
-    /* GFP_KERNEL|__GFP_ZERO|__GFP_ACCOUNT|__GFP_NOWARN */
-
-For an order-0 GFP_KERNEL allocation the only realistic NULL is a memcg
-charge rejection. mem_cgroup_oom() calls out_of_memory() with oom_control
-pointing at the arena owner's memcg, so the OOM killer can only select
-victims inside that cgroup.
-
-VM_FAULT_OOM reaches pagefault_out_of_memory() (mm/oom_kill.c:1180-1193),
-which only resolves current->memcg_in_oom; otherwise it prints the
-rate-limited "Huh VM_FAULT_OOM leaked out to the #PF handler. Retrying PF"
-message and returns. Because the over-limit memcg is foreign, killing
-tasks there never makes fatal_signal_pending(current) true, so
-try_charge_memcg()'s force-charge escape hatch never fires.
-
-If the owner memcg's charge is dominated by memory its tasks cannot free
-(for example the arena's own pages, which are only freed by the bpf program
-or by map destruction and are unreclaimable), or if that cgroup has no
-OOM-eligible tasks left, mem_cgroup_oom() returns false, try_charge_memcg()
-returns -ENOMEM, and the instruction is retried in a loop.
-
-This creates an unbounded fault/retry livelock burning CPU in the faulting
-task plus dmesg spam, where the pre-image returned a bounded
-VM_FAULT_SIGSEGV. Before this patch the in-lock allocator never engaged
-reclaim or the OOM killer, so a user touching an arena page could not kill
-anything. Now any task that can mmap the arena (the fd can be passed via
-SCM_RIGHTS or a bpffs pin, so the faulting task need not be in the owner's
-cgroup at all) can drive the memcg OOM killer in the owner's cgroup one
-task at a time simply by faulting in pages.
-
-VM_FAULT_OOM promises the caller that the OOM machinery was engaged on a
-domain where retrying can succeed. The in-code comment acknowledges the
-general point ("VM_FAULT_OOM below is only meaningful if the OOM machinery
-was actually engaged") but not the foreign-memcg case. Would it make sense
-to use a bounded status for the charge-failure case (VM_FAULT_SIGBUS, or
-VM_FAULT_OOM only when the charged memcg == current's memcg)? That would
-keep the fix's benefit (reclaim now runs, which is the routine memory.max
-case the changelog cares about) without the unbounded retry.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32450158690
---===============3389001773132304324==--
+Thanks,
+Johan
