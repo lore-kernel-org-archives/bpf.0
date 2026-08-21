@@ -1,175 +1,155 @@
-Received: from mail-pj2-f11.google.com (mail-pj2-f11.google.com [74.125.227.139])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2F337F74C
-	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 17:28:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.139
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787333336; cv=none; b=KvMz7mFJ0fNsgRNbI0bPYslQ0/TaX/X6fuXqouQpnfLg/UG4ML+aLmBRbsQXXcqvNHssqFu3/NouZ4+MYhwf09bmjsMckK/vMvaHJF/jZkrEZp/C24bzYlL+dKXARyjLtjxkzMdHIh/Ewond6dX33uZywjhiwgvrjVJEEP94B8o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787333336; c=relaxed/simple;
-	bh=8RUjnU6xRjcmNvUjJtxfa9pOtsNBEqKceMyc7GHbth8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hHJ7J3lSEjoKb9r4FovsQgE/okqcYADXLqehOy2QBEa4ZFWw1V38DzuB9IFjJLjS0gCRb8AqNfJ+g5b3IBOH1/iyCvZML2aWNM4jPx4/e4sfUrKYxtku/zo4WuRgYMvbx3Upn7UaH1dhXbz0EQcmrIfg65ip31TKfSFIbihqEeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qNxgTY18; arc=none smtp.client-ip=74.125.227.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC56F386C36
+	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 17:31:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.172
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787333478; cv=pass; b=uh7Rkw9D1DgKjTnhdLRLFOywn+wl0PGGNZ7oyBMm3sow3GRPqlQvgDEVkMMAC9+Ru7khgMo4JZO77tfuwupsvxI8XxeBgZFAZxxgKQ/9CHYjrL9SxTZwFrzjyEy80kq215mqkadKKLvmmPWuJUjxuSSZ08UGyUw17gJhl3o/2MU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787333478; c=relaxed/simple;
+	bh=71ETzD+l8/8KZpV9V//bdma2ToKvQ36gSqMPFnsxLrY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pSpHyp6QstpuSnPRqOiPvzKCn6tP1lkQNYWT9D9J04nbYZnx1QvOKdWjaUCRb/UREOowjQiwnzhehyC1JbDSWpJ38IEpN8+WOcXOfQrXy7fvzShyCGnugFK7rIzJhcgiy67SFwbV8dxJcYj5gJxlE1QSa2keS8WIMEjqHbGoG/s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=afG5T261; arc=pass smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qNxgTY18"
-Received: by mail-pj2-f11.google.com with SMTP id d9443c01a7336-2d59734a089so8363625ad.0
-        for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 10:28:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="afG5T261"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8485ef63b68so884345b3a.1
+        for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 10:31:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787333471; cv=none;
+        d=google.com; s=arc-20260327;
+        b=DCP7SutxMlY9SRtLj8t56VJahN8Z1/YG4VXP/hwBj/Kv2I4JIHY/ycddh/76TVDnXD
+         51LNOYc8OcAuohVhSQX7ikdoK8L3C/Eq0F2nliKHtsZIjKHMz47QQTcbjx62Sp27HhnK
+         gbiPudR28gAq0Mcq/+2hRPVzj3baF/ufEzGlmaPmcMplYtPCSsjQYSy4h8HQgT4apuk4
+         Gc63SxkofWZzW1d6rp7ueuQub+SeSyVD2ITN2oMJ5diGbPzheMiwGYyaYMInp9oylNqi
+         NhMGWkIgpuooqYekdJyGvG/ETM489ztoE4Oa0DwzuWEPZhG92x9TgRAnGQCg9wCbPCPE
+         pWXw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=3xhJ4UndN0UWjHcsEFLyO5RtzUQ8hNLN4OHrW5zWtVM=;
+        fh=kaBjKMHlv4BeS2Fvnn1k/wjBk4PsVkCFZm2GfzzOMvY=;
+        b=nELnJCP44Sru5tHzZoYeLDbjX/p0AWSXP7AfhXav6ra70WHuCgWretVaj8GldbzCsv
+         henQxxVuIjkA3MGhMomELi84xBlgauvAzSznWmx7RehbvVT3DKkF3xD01DZGuKfPWwnK
+         qHwSs2FwXlemaHN72TS2Vma2N9lxUhByh14YyTXTqiyLhLi+kMDt1ccsApDMZZ3QJpEL
+         uu9Lb78h+YPom1CiK/zrbndtRCIOKdoJ0cThydV6JkEL6X9HY4Pmsd6uHQ/f2QnDv4UA
+         GN1WAgZtR/ClAv0DZ2xvQruhrXwJwTl7LxP3ST/wZ9uWQJC14Og3iF/RDm4Bm8zNAUry
+         G7gw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787333332; x=1787938132; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1787333471; x=1787938271; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=+RpCheSrOdysr+r97ve0JN+xVtWYbZrCXCOuzISS1Oo=;
-        b=qNxgTY18rOb7T0OC5VtF0SuhunEmmcsk/6gTTAGgDGaKIylfjtjTQnxeL6DngsqYDz
-         zaDZTNMNmL/T82F72I3x60JxeumK3DKoSkRDl9R2GOaTyjmFXpQgDHi9UvURWtYAXQd8
-         2Ym+Hdi/6vKrBTZyNSBXCXyYdtE2J6NY6FgBnWJRp2icp4f/riSus4fp5f/SMYasIHvV
-         mqJsgQ+nEynE7aO+ose+SBqN2r+VRf4hYMzI8mhVJQpLi2ggGitsfJM6CK7BbkQmOV6r
-         pARfwYuZ0INZ9cMXZIJmNRGWXAqWgWOrecA/GmoHT4mA4iccPhmirpXnopgjHt5Squ0K
-         1rZQ==
+        bh=3xhJ4UndN0UWjHcsEFLyO5RtzUQ8hNLN4OHrW5zWtVM=;
+        b=afG5T261B1tH5P+vfHVr2EwMibpej48KG2Pp81h8vnxlfrOuyUIAn0zBkfcjQHUZti
+         10jvijvP0HNhbMejo7Bi3yIyXejabl2mqjVci3ISnm5YB8+FoiaaRVkV8NruELhRRYq3
+         gHw5RsXw4flz0kL+C8+fXlgXKew3uGj1twm4hFWSIWz6Hl4HYilzPurnc3ZvRF6joZKq
+         Q4yQqazWQ0LwZLg5GbfqZ8BDJWfsFoos6rkuCMBaNiLc5PLpazh5ROmAXVg5iYzyMZsw
+         z5K21EucjWuvjqycP6zuRD1eukBmGIF9VFnTtmiU4gb8hLWGEIIv0yqrFrE057ldd6Jb
+         MFJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787333332; x=1787938132;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1787333471; x=1787938271;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=+RpCheSrOdysr+r97ve0JN+xVtWYbZrCXCOuzISS1Oo=;
-        b=MJK6O7QPjz65OQxAU4DHV8ROT4vAtHV1P/nh4bMX6jrLPKF7fXaLm66dADx8e7RBQt
-         GBXu2fkQaWK5iL/mhdv/eceKxLy0juBvVS1kWNUXS28GgpMT1xO8/Wz/fSvBTlbogY9o
-         1sXDxg6hImV7CGLRzMQVCG7h5y5gxatgvESTkzVLNKeygfWqgOeC2iprcP6A73KyEpW0
-         /KYusatW6oTFlLBqWXEcTf8Hdt0rdw5P5nqJP75x0aec0grREXDdwDeWydUj0jgSrXLa
-         x1op6CluOq7oooCOCRbLmwggvT/E5Qx/5+Hbd0NLrOEtG0EKRgzFpP4ZZRcOVKciqSpL
-         VCRQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rozhr193Jz0YWi9Qnifgpk8obb07cOZFDXUSZvbUaG/J34ZzwV9rrvhlkm5gpXPSTrW3vg=@vger.kernel.org
-X-Gm-Message-State: AFuF++lhUS9Iy0VWId6UjnW8CuDVpDY8HPZQTr+19VBo2U6nFKE+jCj4
-	ee96g02mxW62cIycgMn4cDlLKRmKkhSKaOKdGvSDn7RUIoC0f+c4Cd4o
-X-Gm-Gg: AR+sD11RpHFbc4qaXMkpqTdzB8ilt18nqZshAUK3IKW4WzLW0AFn7a8TiSlhYTJQxFy
-	XSYxS08CRiwkncawQW7SuCdFZzoeXPRW9LdxZv+5GzGQEH/f+Ecgk88MafLbGj6/F5NO8U9Xsy0
-	fn1IsoByB9AYN6h/5FDbdnU/YAR1bh1cDv1qcFATBGne2Zrk0HhGa9uX0vMgNWXUrI9SNG1OL0y
-	sZRiyfykroiEMtZFStVSFm6bFNfeUNivy8ODgabjzAaZ4TijDXzvvvq77S0Q6+ygDsJ0GSCe2ky
-	+2MT3c7O0SR0ChbhiHgaNi0KOw2rrFDxIPInMr/6MNeAqsqPEpkqpCvMrmKA0mhms/4XBzVM0wr
-	s0udcuN71NZi3mH7EDFJU+ZrjU+SZRAYZqBBV+k3ZYtHul68cIip81Ui/zBhHCwtvgM/MK9gxrX
-	eakEyq7seP60zy0jU+q6Jf51cCkZHTeekW1/nwVuX+Lud3EKdolwMSNQ==
-X-Received: by 2002:a17:902:e943:b0:2d6:3c2f:69b with SMTP id d9443c01a7336-2d64af6f8cemr156390915ad.8.1787333331890;
-        Fri, 21 Aug 2026 10:28:51 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:48::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d62d555b51sm21790945ad.7.2026.08.21.10.28.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2026 10:28:51 -0700 (PDT)
-Date: Fri, 21 Aug 2026 10:28:47 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, anthony.l.nguyen@intel.com, 
-	przemyslaw.kitszel@intel.com, andrew+netdev@lunn.ch, saeedm@nvidia.com, tariqt@nvidia.com, 
-	mbloch@nvidia.com, maxime.chevallier@bootlin.com, mcoquelin.stm32@gmail.com, 
-	alexandre.torgue@foss.st.com, aleksander.lobakin@intel.com, horms@kernel.org, 
-	magnus.karlsson@intel.com, sdf@fomichev.me, ast@kernel.org, daniel@iogearbox.net, 
-	hawk@kernel.org, john.fastabend@gmail.com, guoren@kernel.org, dtatulea@nvidia.com, 
-	witu@nvidia.com, martin.lau@kernel.org, yoong.siang.song@intel.com, 
-	intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
-	linux-csky@vger.kernel.org, leon@kernel.org
-Subject: Re: [PATCH net v3 3/3] net: stmmac: document oversized AF_XDP frame
- handling
-Message-ID: <aoiIarzdjk92RkCN@devvm7509.cco0.facebook.com>
-References: <20260819160535.1472459-1-sdf@fomichev.me>
- <20260819160535.1472459-4-sdf@fomichev.me>
- <aoceSoSFMx69Z9up@boxer>
- <aoeoJ6-njBxcWs4w@devvm7509.cco0.facebook.com>
- <aogpDsa8hz6CPpD3@boxer>
+        bh=3xhJ4UndN0UWjHcsEFLyO5RtzUQ8hNLN4OHrW5zWtVM=;
+        b=Ea2gyEfm3cNLjoAu84sRp6Qs13PoOH6Z0W1tCDLVM7MiSj3xiB9sVshizzjorOsswh
+         9Zgm3dhhiiIqJKjx+6JQulV/z4ajA0+KoXVwpbG3jKkc+pgQJYDefLX9PuG+4zM/PpKl
+         pdf80SGPZUkj/AHZKNcLkpW846rxtknOH+eNgWVbBlfhQ1DP2/LGyIFdj/YYszR0SbW4
+         GTWDyo+WND1TCo6GddvVunHa7NFPWVV3O5cNakkWvR/O47iOLDZWvP6F1fRCcfsfKX/e
+         EuE+17l/8HbhaLmPB5evA0Cw8ae3BPt9wGmTFMKRaUVJs9KrhTBK6r/cYSVtao8acolb
+         qB3g==
+X-Gm-Message-State: AFuF++n3OOkqNdILQj8hyFQB8Wy5GwWKqRQfzCH8BQl5MKrff6Rh0C5V
+	3lfFbKkwaCqsWlApFJWsk7/8OCGm2v1n43hCmj060Xq9ABEvdUAWss996bSE5gWZ9Fhd8xKtwaA
+	bOhCAUW4LL4oZKHA4yiaH3e48F+X6UBU=
+X-Gm-Gg: AR+sD11xtO3l0ydh5JYsAVGRPz+7FPYMjEh8wqZC7D5GeD4NxWoN2q8b2QYaqT37Vgo
+	j8q5LMwMjKuxD58t8TjPxz++TG3UdtgO7RSCtqE9SZfwNalKKqqh6wJfqQH2oeGgLhOiRoUlwf9
+	jD1eo43qwYHl7PLbqPlFWRy9CKS/Ve80Siwrq8a93Mzmr3PUzes4ie9nMQWaIunN+JJfo9PR5EE
+	gGD5oKnxWq9wbkF52nk5b8R1vaAVokCTMbmqQ9jfIfg9Wy14+u5jOjME4MFjbC2xr3/dNYXO95R
+	WWjMwE94nf2RqVVi/uwo/Lo03qyxPyWKDPbi5uBJ//kLmPOzAbe7gofWq5yeqhlNKmh5aW4xoLR
+	Wj25YdIc7N7xJReu+DZP+BXHT4g==
+X-Received: by 2002:a05:6a00:1d9d:b0:848:67ca:bfd with SMTP id
+ d2e1a72fcca58-851fa017101mr13222177b3a.16.1787333470987; Fri, 21 Aug 2026
+ 10:31:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <aogpDsa8hz6CPpD3@boxer>
+References: <20260820152532.621639-1-s.mahnur.a@gmail.com>
+In-Reply-To: <20260820152532.621639-1-s.mahnur.a@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 21 Aug 2026 10:30:56 -0700
+X-Gm-Features: AcwNN1XANjk0n8jzavAweB4B0jx1QOPaM2D1vGwpdzDHxCe_LsEvJuMRqaxLGZo
+Message-ID: <CAEf4BzZd7BDdJrNb+N3uktbwMJRHjUFzG1xfzmTDibEmAKX8gA@mail.gmail.com>
+Subject: Re: [PATCH bpf v2] bpf: Fix NULL pointer dereference in bpf_sock_from_file
+To: Syeda Mahnur Asif <s.mahnur.a@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	netdev@vger.kernel.org, andrii@kernel.org, 
+	Emil Tsalapatis <emil@etsalapatis.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 08/21, Maciej Fijalkowski wrote:
-> On Thu, Aug 20, 2026 at 06:29:16PM -0700, Stanislav Fomichev wrote:
-> > On 08/20, Maciej Fijalkowski wrote:
-> > > On Wed, Aug 19, 2026 at 09:05:35AM -0700, Stanislav Fomichev wrote:
-> > > > stmmac drops AF_XDP zero-copy frames that exceed taprio's queueMaxSDU
-> > > > after xsk_tx_peek_desc() has reserved their completion entries.
-> > > > 
-> > > > Completing a rejected descriptor is unsafe because AF_XDP completions are
-> > > > ordered: xsk_tx_completed(pool, 1) would complete the oldest outstanding
-> > > > descriptor, which may still be owned by hardware. Instead, leave the
-> > > > completion pending so the ring eventually wedges and increment the drop
-> > > > counter to expose the application error without risking hardware
-> > > > misbehavior.
-> > > > 
-> > > > Document this intentional ring imbalance at the check.
-> > > > 
-> > > > Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
-> > > > ---
-> > > >  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 4 ++++
-> > > >  1 file changed, 4 insertions(+)
-> > > > 
-> > > > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > > > index 62de03e65a90..6a532747c039 100644
-> > > > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > > > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > > > @@ -2713,6 +2713,10 @@ static bool stmmac_xdp_xmit_zc(struct stmmac_priv *priv, u32 queue, u32 budget)
-> > > >  		if (priv->est && priv->est->enable &&
-> > > >  		    priv->est->max_sdu[queue] &&
-> > > >  		    xdp_desc.len > priv->est->max_sdu[queue]) {
-> > > > +			/* Completions are ordered, so this descriptor cannot
-> > > > +			 * be completed safely. Wedge the ring to expose the
-> > > > +			 * application error instead.
-> > > > +			 */
-> > > >  			priv->xstats.max_sdu_txq_drop[queue]++;
-> > > >  			continue;
-> > > 
-> > > Hmm. I read the discussion on v2. Maybe we could cancel cq entry here in
-> > > this branch? Also it feels like something achievable at bind time when
-> > > taprio is configured and vice versa?
-> > > 
-> > > Otherwise we over-commit cq entries.
-> > 
-> > What do you want to achieve with the cancel here? IIUC it will make it look
-> > as if some (if the user has posted many) tx descriptor has not been consumed
-> > by the kernel?
-> 
-> Oof. My bad. I meant completely different thing :D
-> 
-> Right now the semantics are that we post invalid/dropped addrs to cq (the
-> rationale was that dropped descs are gone and unreachable which might
-> eventually lead to dying traffic).
-> 
-> We should submit xdp_desc's addr to cq.
-> 
-> Regarding the comment included in code I must disagree. CQ entries no
-> longer imply that 'this particular descriptor has been successfully sent
-> by HW'.
+On Thu, Aug 20, 2026 at 8:25=E2=80=AFAM Syeda Mahnur Asif <s.mahnur.a@gmail=
+.com> wrote:
+>
+> bpf_sock_from_file should not dereference a NULL file pointer.
+> KASAN detects a null-ptr-deref when eBPF tracing
+> fentry/fexit programs are attached to points such as
+> __mmap_region and file_map_prot_check kernel functions. This can
+> result in a NULL file pointer flowing from context to the helper.
+>
+> A minimal check before dereferencing can fix this.
+>
+> Fixes: b60da4955f53 ("bpf: Only provide bpf_sock_from_file with CONFIG_NE=
+T")
+> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+> Signed-off-by: Syeda Mahnur Asif <s.mahnur.a@gmail.com>
+> ---
+> v2:
+> - Added Reviewed-by from Emil Tsalapatis
+> - Fixed name in Signed-off-by
+>
+>  net/core/filter.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 16845987b244..7c3caae4bafc 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -12182,7 +12182,10 @@ const struct bpf_func_proto bpf_skc_to_mptcp_soc=
+k_proto =3D {
+>
+>  BPF_CALL_1(bpf_sock_from_file, struct file *, file)
+>  {
+> -       return (unsigned long)sock_from_file(file);
+> +       if (file)
+> +               return (unsigned long)sock_from_file(file);
 
-But then we need to support some sort of out-of-order completions, no?
-This looks similar to
-https://lore.kernel.org/netdev/20260818162442.3980697-1-kuba@kernel.org/
+given this is a legacy ARG_PTR_TO_BTF_ID, it can be not just NULL, but
+also a) small value bogus "pointer" resulting from NULL + offset
+calculation and/or b) just random garbage casted to struct file
+pointer with bpf_core_cast() (maybe this hole we've closed with
+explicitly untrusted, not sure).
 
-We write desc to cq at xsk_tx_peek_desc, so when we get an error here
-we might have already "queued" a bunch of cq entries (which will be
-xsk_tx_completed(num) from sirq). So unless we rewrite the way
-we do completions, there is no easy way to put that desc on cq without
-breaking the order and racing with real completions from the HW.
-Am I missing something here?
+Either way, this is not a sufficient fix at least.
 
-> > I do agree that a better idea is to probably do these checks during control
-> > paths, but it's a bit more involved (and not sure if it's possible? if we
-> > have a bunch of xsk sockets and we change that max_sdu, do we go over all
-> > sockets on the system somehow?). My main motivation with this patch was
-> > to make our LLM reviewers less chatty about preexisting issues.
-> 
-> I hear you, however I feel like we do not know this driver too much and
-> probably we don't have a HW to test out such changes, so maybe let us try
-> to fix existing behavior?
+But I wonder if the proper fix is actually to mark this (and other
+similar) argument as explicitly requiring trusted PTR_TO_BTF_ID?
 
-Let's definitely fix it properly if you have better ideas. But since we
-don't have HW, I'm not super confident doing anything sophisticated
-myself :-D
+Thoughts?
+
+> +
+> +       return (unsigned long)NULL;
+>  }
+>
+>  BTF_ID_LIST(bpf_sock_from_file_btf_ids)
+> --
+> 2.53.0
+>
