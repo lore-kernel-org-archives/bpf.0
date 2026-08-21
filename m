@@ -1,243 +1,141 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mta0.migadu.com (out-59.mta0.migadu.com [91.218.175.59])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B46A12D9792
-	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 19:52:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787341978; cv=pass; b=MopPKxe6M8HCNDP7wgNIvBXt4SYge/9Qt46Y/Zv+1HkMwlwp07y4AH+IYN0it5vmCc+5FaOI/Edijmuncd/2GtZ1xtw0dCgjCrnHMFLjBNVKanHPKZcDwL5wziaFp2RBrCpRzDL7nG5js74cKqoMX0SCh48kF2wyAl9qH+q/qTo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787341978; c=relaxed/simple;
-	bh=SnKQAy4ryaVHU37EB0MreTs2voS4T4xBNuc5Ub8JIHs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ecz1xKAFPJyX55xy/Rjnxj00sS4jzhn8fyHMdLqhNPA79w4w2LX9EzhvzfQPC/2iCtlVspWmMYg8gOWT6KU7qO8nDyvJpXir5nlHfzP3Hzsfqy/tTVaPxeuyTYfPylsU2Nh1gKRx/oRTpNGK1qCYaIDjoibKRUYMUWUCb/nX9gc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bXbz86LK; arc=pass smtp.client-ip=209.85.215.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED35C29CE9
+	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 20:13:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.59
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787343210; cv=none; b=rj8ZYs946j+Td8eClyyn5HU8Yy5h+RFGEIQeJIH+MLm7h9lxhg+vG0KEX5WO5Zp3Y9Hr9KZSp7OaG62rPARBzOXhQuqFMQDUFQh2Csr0tn13JMce22ELIW3+FfhgKYaqs4JdndNpyZkBAi4d3bDshIRRtZkHTmyRlmPQk/lOUcI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787343210; c=relaxed/simple;
+	bh=l1uekfxNYkRpOTR2YrHa1y+lUXb+GnUT7Jl6n9qXqM4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dhbYQOaG/mL0Z0tMogfDrhFrGZklK2GVTY968VP4KjfDB8tKFlRas1qkuXpO4u8DD441fi6jReRDqtLZt0YNN3DWHHaaEiVmkdF9yGp3je3ImTh/Lw1i4l9WZwGuozi3VdAfu/PT9Db3yLO06VftzYP2kreI+5CRIJh+d0/LXvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UbB4rAOz; arc=none smtp.client-ip=91.218.175.59
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bXbz86LK"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-ca7c1176317so1203797a12.1
-        for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 12:52:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787341975; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ZCwZgqAiGDkZPOeib3DZkEOO5fNcf+GOZVFwdJBtFjvTEtJoTLy6bRMxEIj1fJFkl0
-         oaHuxdg1Cb2O7Fbaq5K2kyd+pu7dW5Q9RQnm4jQfPcGe69dYgUjOw3lxv9yeAw3IOrkA
-         Li/4/eR+gz/TlHFnfa60z8953euqR+1wO4OpbVttO5xdU7uPl3qanpd2+Beq+5YCurDT
-         UMu6CTNNneaG3qNr9hzyvYGwwfiR9FrrYej3M9XkQNDiF6fLUnDzzbUBcEUimMyRhGkt
-         tPqE2k9FYK0tb4Rn31v6j8etrnTBL2yw9hn7OD5hthEU4sR3ChVrhmx0KT2Dm3iHBojI
-         E2xA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=KidtnQB/eYDDRfHgfBWu/wvFzRWxKzN8GJX8+RxP7Rg=;
-        fh=WV/XN5X1oEf527+V7W8SMtugzL9N6qpwP4JTepq8Hy0=;
-        b=hWY1Md7mAdQeS5ETFOTE+AQiqf/EK8dqmXHMHshELRe4QI5U2fEOsk3QtuXDbvXHpY
-         hqhaUmxT0bYN0kdVXKyMqgEDp+ZmEWziLfTfMWpsXNENJ84zhUeqSGJ/TJj72CxaclMw
-         HKf0FE6uMCqQkebO3xJL6I4W8dZNhjIXC7j+fnXlPwl9UhExZ+G/yc6RmyLYZBF3nKLc
-         l39NHLz6MCJCge/IGVXFsRvNIMdAsim5KmB7Z+VFHQ7u1yE3QXKbxukAehWxJosTW2s4
-         NbgSGFrJUZwWmU1MonvPCY4fJhm84jegHlzFsJjdfWi9HJtqD4piDk/HyCTHhEg8yJ0e
-         DmQA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787341975; x=1787946775; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=KidtnQB/eYDDRfHgfBWu/wvFzRWxKzN8GJX8+RxP7Rg=;
-        b=bXbz86LK5KjNG5EcT5fxHHKkyhF/4R9FHatgg2zQafWVgEyfDra/0CygNwJrcY8EsT
-         tLI/o4cnu8GxXWVRSLHguT5/VmJfqKwT0aEc4aa2sNyqwOQnxEavUaO4rqyrfmzDH27c
-         nNJbFFp13eUPsRZtMrSt3UNDwbnQGL+oy9MrJSBarB6QBfKCyCGFn/SCJ2Rfe4XF9vGv
-         AYssl7fwSF+r5j+o0e5ze730MiQl5OuvGcHLfLYlz3n8+PfYOcfcrEQfDzA2a6jyLRtT
-         6+ZKJeVwycKw9E8CJKTYfuZREtoy0YKtRHjIF1JzIYhB035Vk/HvkqXUhTtg/PN4iIhP
-         hl4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787341975; x=1787946775;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=KidtnQB/eYDDRfHgfBWu/wvFzRWxKzN8GJX8+RxP7Rg=;
-        b=CshhtzjzZUehbFcsmePztqlLUJGU1C2F8U1RMVs0SEBLWbVPgW1t36H8YhiD9255QP
-         hvcOdH5/Jri+rX1zAbyviW6V85cQRVc0/TozmoVKAzBQ5sq8hegvCKQZGiOHftDiHiAm
-         /PslapIQITmvWDmm2APpkJNy4Se4uk69K6ikz5IZsGFZ7lRqHpzCKbknaA+kGURgqq4m
-         cBr+3VYsa9P1SQ2B7VecVF/qGWOm3xC3hgJ0LgyH9v7FONpSq65KwHJWNNSaN3GU4f68
-         jceL4uv5bXILDsDej8f1pGkzcTyhn3jHvY2yHodTf37XpYdhR3Asf58xrTo1iJHdoR8W
-         8Gtg==
-X-Gm-Message-State: AFuF++m1bT0FYl4NDmi88V+hAPRYdwUDgu2cN2iNv6tEoJ4/IW5bOIxC
-	wgZ1D/z39Qh86XCR2h19wl2HF3rEJRXlLkV8UZ8c01Av2Q5ZBzYFLSHp91wy+TY9GCizbUPPMY4
-	E1ptBSGCD2+4UhxBQlKIhRB1a0/rAUXM=
-X-Gm-Gg: AR+sD13Dn+J79stagt0aUPEmCPHX8fdLgUhY9muCyl+xkkK7clyuArJqFJLA7hUsdGW
-	gb1OpvlxMOLwpVPalQi1iIfDcF+w0E0gxoHM7LocAAgDTspQQ1nlTCaImSLtlqoN+uDgFcP4a3u
-	Foltz5Y8ULmyVbLHDUh6EKYiCrT1SD2/qOAFoqdSsupQ0xHw3MhSyqTG5kJ9LrUA80om5SB0vxP
-	WqoRS8ubhuAfqn0aG2E5ANY6HWIymcbV1mVFGcGx/5sPmti/y1Fh8o5zIYPRUjzsbL8qgp/ilYf
-	Hvi4GZv0vYzM7FNkLjziNtCrrVv/prYhsZbrfk5tNnkDueUR0xbX4qIZFV0z+OhtU75micsR0YV
-	uUNrjc3+fKKF0A9eD/dYKNJ6z9w==
-X-Received: by 2002:a05:6a21:6492:b0:3cb:853e:850e with SMTP id
- adf61e73a8af0-3cd4bbe8aa6mr2217187637.13.1787341975075; Fri, 21 Aug 2026
- 12:52:55 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UbB4rAOz"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=l1uekfxNYkRpOTR2YrHa1y+lUXb+GnUT7Jl6n9qXqM4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787343204; v=1; x=1787948004;
+ b=UbB4rAOz8cDqJYqMJqvCqMGRcVd5f21r+YTs2iFhTcX72cUHHgBYXSwl0+sv5J9Ozyxsc8HN
+ A/qfsyVW0FzL+ThqFmgW48Cq9BTYNDHKWyjFSLcPp5ih1EO8O0bqz9KidMGXFeD7aq0G7A2pmGs
+ YLeeTTSGDIJ+I6skd/32ZHEA=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from gvineet-fedora-PF5JGVFY (67.169.75.212)
+	by smtp.migadu.com with ESMTPS id 3f1655d114df58c5;
+	Fri, 21 Aug 2026 20:13:24 +0000
+X-Mizu-Trace-ID: 3f1655d114df58c5
+X-Migadu-Flow: FLOW_OUT
+From: Vineet Gupta <vineet.gupta@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Vineet Gupta <vineet.gupta@linux.dev>
+Subject: [PATCH bpf-next 0/3] selftests/bpf: unblock bpf-gcc test coverage
+Date: Fri, 21 Aug 2026 13:13:13 -0700
+Message-ID: <20260821201316.1059129-1-vineet.gupta@linux.dev>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260820131801.68759-1-tasos.papagiannnis@gmail.com> <20260820131801.68759-2-tasos.papagiannnis@gmail.com>
-In-Reply-To: <20260820131801.68759-2-tasos.papagiannnis@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 21 Aug 2026 12:52:42 -0700
-X-Gm-Features: AcwNN1WiobjREO1ATp2ZQpfgWCtJVvDwcD8UEwKRu-9pDckvpVIFCNaWpSBtzYk
-Message-ID: <CAEf4Bzb-43E7JSc5aNBEi4y1PKfQvjRi_FwTUyP7cYaQ+-JqXw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/3] mm: Add copy_remote_mm_str()
-To: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org, 
-	akpm@linux-foundation.org, david@kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
-	kpsingh@kernel.org, matt@bobrowski.net, song@kernel.org, 
-	utilityemal77@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 20, 2026 at 6:18=E2=80=AFAM Anastasios Papagiannis
-<tasos.papagiannnis@gmail.com> wrote:
->
-> copy_remote_vm_str() gets the target address space from a struct
-> task_struct. This does not work for an address space that exists but is
-> not yet associated with a task_struct, such as the mm held by struct
-> linux_binprm during exec.
->
-> Add copy_remote_mm_str(), which operates directly on a struct mm_struct.
->
-> Signed-off-by: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
-> ---
->  include/linux/mm.h |  2 ++
->  mm/memory.c        | 26 +++++++++++++++++++++++++-
->  mm/nommu.c         | 26 +++++++++++++++++++++++++-
->  3 files changed, 52 insertions(+), 2 deletions(-)
->
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 485df9c2dbdd..eede435bf4a3 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -3222,6 +3222,8 @@ extern int access_remote_vm(struct mm_struct *mm, u=
-nsigned long addr,
->                 void *buf, int len, unsigned int gup_flags);
->
->  #ifdef CONFIG_BPF_SYSCALL
-> +extern int copy_remote_mm_str(struct mm_struct *mm, unsigned long addr,
-> +                             void *buf, int len, unsigned int gup_flags)=
-;
->  extern int copy_remote_vm_str(struct task_struct *tsk, unsigned long add=
-r,
->                               void *buf, int len, unsigned int gup_flags)=
-;
->  #endif
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 6b8280cfc1db..da0010c4475d 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -7218,6 +7218,30 @@ static int __copy_remote_vm_str(struct mm_struct *=
-mm, unsigned long addr,
->         return buf - old_buf;
->  }
->
-> +/**
-> + * copy_remote_mm_str - copy a string from a remote address space.
-> + * @mm:        the remote address space
-> + * @addr:      start address to read from
-> + * @buf:       destination buffer
-> + * @len:       number of bytes to copy
-> + * @gup_flags: flags modifying lookup behaviour
-> + *
-> + * The caller must hold a reference on @mm.
-> + *
-> + * Return: number of bytes copied from @addr (source) to @buf (destinati=
-on),
-> + * not including the trailing NUL. If @len is zero, return 0 without acc=
-essing
-> + * @buf. Otherwise, @buf is always NUL-terminated. On any error, return
-> + * -EFAULT.
-> + */
-> +int copy_remote_mm_str(struct mm_struct *mm, unsigned long addr,
-> +                      void *buf, int len, unsigned int gup_flags)
-> +{
-> +       if (unlikely(len =3D=3D 0))
-> +               return 0;
-> +
-> +       return __copy_remote_vm_str(mm, addr, buf, len, gup_flags);
+When doing some unrelated testing, stumbled upon this. A lot of tests
+are skipped run under BPF_GCC due to clang only gate. On top, the test
+harness declares them passing/OK.
 
-we should rename __copy_remote_vm_str into __copy_remote_mm_str
+Patch 1 renames a few placeholders a consistent dummy_test name [NFC].
 
-> +}
-> +
->  /**
->   * copy_remote_vm_str - copy a string from another process's address spa=
-ce.
->   * @tsk:       the task of the target address space
-> @@ -7247,7 +7271,7 @@ int copy_remote_vm_str(struct task_struct *tsk, uns=
-igned long addr,
->                 return -EFAULT;
->         }
->
-> -       ret =3D __copy_remote_vm_str(mm, addr, buf, len, gup_flags);
-> +       ret =3D copy_remote_mm_str(mm, addr, buf, len, gup_flags);
->
->         mmput(mm);
->
-> diff --git a/mm/nommu.c b/mm/nommu.c
-> index ed3934bc2de4..1fca0bb7f042 100644
-> --- a/mm/nommu.c
-> +++ b/mm/nommu.c
-> @@ -1752,6 +1752,30 @@ static int __copy_remote_vm_str(struct mm_struct *=
-mm, unsigned long addr,
->         return ret;
->  }
->
-> +/**
-> + * copy_remote_mm_str - copy a string from a remote address space.
-> + * @mm:         the remote address space
-> + * @addr:       start address to read from
-> + * @buf:        destination buffer
-> + * @len:        number of bytes to copy
-> + * @gup_flags:  flags modifying lookup behaviour (unused)
-> + *
-> + * The caller must hold a reference on @mm.
-> + *
-> + * Return: number of bytes copied from @addr (source) to @buf (destinati=
-on),
-> + * not including the trailing NUL. If @len is zero, return 0 without acc=
-essing
-> + * @buf. Otherwise, @buf is always NUL-terminated. On any error, return
-> + * -EFAULT.
-> + */
-> +int copy_remote_mm_str(struct mm_struct *mm, unsigned long addr,
-> +                      void *buf, int len, unsigned int gup_flags)
-> +{
-> +       if (unlikely(len =3D=3D 0))
-> +               return 0;
+A sample test with BPF_GCC used to say:
 
-I'd just move this len check into __copy_remote_mm_str()
+| #587/1 verifier_bswap/cpuv4 is not supported by compiler or jit, use a dummy test:OK
+| #587	 verifier_bswap:OK
 
+Patch 2 adds a __skip("reason") annotation so a compile-time gated file
+reports SKIP rather than OK, making these gaps visible in test_progs
+output.
 
-> +
-> +       return __copy_remote_vm_str(mm, addr, buf, len);
-> +}
-> +
->  /**
->   * copy_remote_vm_str - copy a string from another process's address spa=
-ce.
->   * @tsk:       the task of the target address space
-> @@ -1781,7 +1805,7 @@ int copy_remote_vm_str(struct task_struct *tsk, uns=
-igned long addr,
->                 return -EFAULT;
->         }
->
-> -       ret =3D __copy_remote_vm_str(mm, addr, buf, len);
-> +       ret =3D copy_remote_mm_str(mm, addr, buf, len, gup_flags);
->
->         mmput(mm);
->
-> --
-> 2.55.0
->
+Now the output changes to
+
+| #587/1 verifier_bswap/cpuv4 is not supported by compiler or jit, use a dummy test:SKIP
+| #587	 verifier_bswap:SKIP
+
+Patch 3 augments the clang only gate with a per-feature gate supported
+by both the compilers. FWIW the clang half has to stay: clang only
+defines __BPF_FEATURE_MOVSX and friends at -mcpu=v4 but assembles the
+inline asm at -mcpu=v3 too, so dropping it would remove these tests from
+the default test_progs flavour where they run today.
+
+And finally the output now is
+
+| 587/1	 verifier_bswap/BSWAP, 16:OK
+| #587/2 verifier_bswap/BSWAP, 16 @unpriv:SKIP
+| #587/3 verifier_bswap/BSWAP, 32:OK
+| #587/4 verifier_bswap/BSWAP, 32 @unpriv:SKIP
+| #587/5 verifier_bswap/BSWAP, 64:OK
+| #587/6 verifier_bswap/BSWAP, 64 @unpriv:SKIP
+| #587/7 verifier_bswap/bswap16_range:OK
+| #587/8 verifier_bswap/bswap32_range:OK
+| #587/9 verifier_bswap/bswap64_range:OK
+| #587/10 verifier_bswap/be16_range:OK
+| #587/11 verifier_bswap/be32_range:OK
+| #587/12 verifier_bswap/be64_range:OK
+| #587/13 verifier_bswap/le16_range:OK
+| #587/14 verifier_bswap/le32_range:OK
+| #587/15 verifier_bswap/le64_range:OK
+| #587/16 verifier_bswap/BSWAP, reset reg id:OK
+| #587	 verifier_bswap:OK (SKIP: 3/16)
+
+Programs per object recovered under BPF_GCC, 124 in total:
+
+  verifier_sdiv                  1 -> 80
+  verifier_movsx                 1 -> 17
+  verifier_ldsx                  1 -> 14
+  verifier_bswap                 1 -> 13
+  compute_live_registers        17 -> 19
+  verifier_gotol                 1 -> 2
+  verifier_iterating_callbacks  34 -> 35
+
+Two things stay clang-only on purpose: the arena tests using
+addr_space_cast, and verifier_load_acquire/verifier_store_release. gas
+implements neither.
+
+The increased coverage bore fruits right away as I stumbled into a gas
+bug: PR gas/3455. Fix is posted however workaround is needed for the
+time being.
+
+Built for x86_64 with both clang and bpf-gcc; the per-object counts above
+were read back from the generated objects.
+
+Vineet Gupta (3):
+  selftests/bpf: name the remaining placeholder programs dummy_test
+    [NFC]
+  selftests/bpf: report placeholder tests as SKIP, not OK
+  selftests/bpf: Enable some of the blocked cpuv4 instruction tests for
+    bpf-gcc
+
+ .../testing/selftests/bpf/progs/arena_kfunc.c |  3 ++-
+ tools/testing/selftests/bpf/progs/bpf_misc.h  | 10 ++++++++--
+ .../bpf/progs/compute_live_registers.c        |  7 +++++++
+ .../selftests/bpf/progs/stack_arg_fail.c      |  3 ++-
+ .../selftests/bpf/progs/stack_arg_precision.c |  1 +
+ .../selftests/bpf/progs/verifier_bswap.c      |  3 ++-
+ .../selftests/bpf/progs/verifier_gotol.c      |  1 +
+ .../selftests/bpf/progs/verifier_ldsx.c       | 19 ++++++++++++-------
+ .../bpf/progs/verifier_load_acquire.c         |  1 +
+ .../selftests/bpf/progs/verifier_movsx.c      |  3 ++-
+ .../bpf/progs/verifier_private_stack.c        |  1 +
+ .../selftests/bpf/progs/verifier_sdiv.c       |  3 ++-
+ .../selftests/bpf/progs/verifier_stack_arg.c  |  1 +
+ .../bpf/progs/verifier_stack_arg_order.c      |  1 +
+ .../bpf/progs/verifier_store_release.c        |  1 +
+ tools/testing/selftests/bpf/test_loader.c     |  9 +++++++++
+ 16 files changed, 53 insertions(+), 14 deletions(-)
+
+-- 
+2.53.0-Meta
+
