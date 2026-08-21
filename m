@@ -1,345 +1,126 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68CDD415F36
-	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 21:41:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2730734D4E9
+	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 21:50:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787348497; cv=none; b=bDaDwfVyly+7qn7FPpA2g8slMtz1fP68c8Zl7GNWBz+3h0ipjUD1BQonB3qZQuGCTAFRqBNJgdCgmZiGSJaEH3Ye8V0GpMcmJuPDhRNAyPJ1gIWtwnJj3IOQqQOMbNc5u7sbVnTzhLY258MWlIHtnPyPEXKO0csYZbw83pj7DhI=
+	t=1787349038; cv=none; b=aRct7X1CABTPls0RyvMoatJJu138m4bPCmKIIoZVn8hy2KGBCEaLtnZ5/MS+eQvrIWVnTjVk07G4dH7bOezsUrwE6znkXRNNrNC5cIxGTJGXZ4M5qAnMq87U/DvK6mxs8U4VcAMIylRsZ7soroa1K7/Jt5r2T1i09K4GFckd5M0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787348497; c=relaxed/simple;
-	bh=K5vznmaKgMxeJUbdW8UOmmIchQmBJ31abbICXo8HRBU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=r6+g4GPKBCR9jRwkascUA4A9Y08btyGW+EltlJ5NSHaxOMC/D6f6OG+wwIzrF0JcoLusIz6jXyrkH+G/BbDMr9xxg4y0drOkbIjoQT7IEvmwLXR5u8LGXvUL2o7bLYtpMIzEb8c1clRPnOqG09rVWlAHnFOfOGklyoERSG4mNZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=fK14VD8L; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1787349038; c=relaxed/simple;
+	bh=uiVKo5YtFabjAke0vdnFH/kCVJkwDunn36dDB4NmI1k=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=hBsq+PAzU6SNPOXSnQmxg4tCgFQfrERZRTW+6JLjcdKSX7T9sjM/NEWfdoMn3oxmTMc6IOgKIAG3FP1KBRCZBpVfg9OHxZrD3ii108IxrYdJJRkDdka63CuFFkJgswYxTM5b36YXWtEsZM6kTbwC8YKdszwpI6wEfnLKIQWbsy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GhV/82UC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="fK14VD8L"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=wdsGOkudMP3zQXU4zo3ybRXE+5ea1AlH4IPOQHQvwqY=; b=fK14VD8LQaEOMfqcwVuhJyLb0C
-	lYcWT7GYZiKupzh+FKRnkbPUnkXrikJDV6b9LfUl+V3TVBsZZ3FtbxDmqLZv+Ghg8On54oP14hVbO
-	Kp7An3gAu3Zyqwwir5sYs2qdNVTSs+j8fJ/wKOnYbbva1xGqg/7Gl/DRXillaS4FmJ3775q7junHb
-	j+FIFNM6lfPrJIXr47V0q04PCesnrAXOX3gt37wLOvT6R3dU+WLoJpla54dBZ7g6OvWc4JqJPcxT6
-	v40X+cF0csAUe6TG07D7jaVA09+6TO+z7wsJS+7ueqfCqmXM9KKj7TeWI9bMkptwxZIbseVgKN7CM
-	tA9Wuy5g==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wxWzG-000Mqa-0V;
-	Fri, 21 Aug 2026 23:41:18 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: memxor@gmail.com
-Cc: brauner@kernel.org,
-	kpsingh@kernel.org,
-	ast@kernel.org,
-	john.fastabend@gmail.com,
-	a.s.protopopov@gmail.com,
-	bpf@vger.kernel.org
-Subject: [PATCH bpf-next 08/11] selftests/bpf: Add an end-to-end ML-DSA signed loader test
-Date: Fri, 21 Aug 2026 23:41:08 +0200
-Message-ID: <20260821214111.1120748-9-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260821214111.1120748-1-daniel@iogearbox.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GhV/82UC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E71A1F000E9;
+	Fri, 21 Aug 2026 21:50:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787349036;
+	bh=GSnShiwIckVJTlbZ/CsZegwLOMqu7gLcjw+PRUVZftM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=GhV/82UCkBzOLf3g8U7g/Rd//ECwpI2z0V79sWw+SZX0lPc2r/JGywUNhpuyqHln8
+	 y0Gs+3mGtRByxal0zL7lm1O39uFSDA0bMBEHu5X9zfDNgcfSSrxvqI5E2QV00ciT5c
+	 wUh+PewWRZ5cKz6Vr1ngxbX64axDT6H5JLZqYBDSHa1t822PKr0dnXF8dVVFFhTn39
+	 gBepvvu61BQX8tlQRKwIcTZsnb7ZpQJD5n7sBMBtdBdjZ84/tHhQatEcYqoDqZSrg9
+	 lgR8hfaJSqdHmjOQ8N+ANqD4xG+FHi9H8iLnVjohPu9pyGRlYwx2dOs72GCUYP/qkY
+	 SC5Tlh3W1XY/g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 08/11] selftests/bpf: Add an end-to-end ML-DSA
+ signed loader test
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Daniel Borkmann" <daniel@iogearbox.net>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260821214111.1120748-9-daniel@iogearbox.net>
 References: <20260821214111.1120748-1-daniel@iogearbox.net>
+ <20260821214111.1120748-9-daniel@iogearbox.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 21 Aug 2026 21:50:36 +0000
+Message-Id: <20260821215036.8E71A1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28099/Fri Aug 21 08:26:38 2026)
 
-The BPF signing is algorithm agnostic, but so far the BPF CI only
-has tested a single one. BPF hands verify_pkcs7_signature() a keyring
-and byte ranges, and everything below it already understands ML-DSA,
-so add a test for ML-DSA signed program to validate it works as well.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] Temporary directory and generated key files are leaked if `verify_s=
+ig_setup.sh setup-mldsa` fails.
+--
 
-  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t signed_loader
-  [...]
-  #424/10  signed_loader/signature_failure_logs:OK
-  #424/11  signed_loader/signature_too_large:OK
-  #424/12  signed_loader/signature_zero_size:OK
-  #424/13  signed_loader/signature_bad_keyring:OK
-  #424/14  signed_loader/bpf_keyring_sealed:OK
-  #424/15  signed_loader/mldsa_signed_load:OK
-  #424/16  signed_loader/metadata_ctx_max_entries_ignored:OK
-  #424/17  signed_loader/metadata_ctx_initial_value_ignored:OK
-  #424/18  signed_loader/signature_authenticates_insns:OK
-  #424/19  signed_loader/signature_authenticates_metadata:OK
-  #424/20  signed_loader/hash_requires_frozen:OK
-  [...]
-  #424     signed_loader:OK
-  Summary: 1/31 PASSED, 0 SKIPPED, 0/0 FAILED
+--- Patch [8]: [PATCH bpf-next 08/11] selftests/bpf: Add an end-to-end ML-D=
+SA signed loader test ---
+commit 3cc419c08f9d1d4d5a77de9eb5cccbc21b94232e
+Author: Daniel Borkmann <daniel@iogearbox.net>
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- tools/testing/selftests/bpf/config            |   1 +
- .../selftests/bpf/prog_tests/signed_loader.c  | 106 +++++++++++++++++-
- .../testing/selftests/bpf/verify_sig_setup.sh |  57 +++++++++-
- 3 files changed, 157 insertions(+), 7 deletions(-)
+selftests/bpf: Add an end-to-end ML-DSA signed loader test
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index ea7044f30adc..4e6d13dbf266 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -51,6 +51,7 @@ CONFIG_IPV6_SEG6_LWTUNNEL=y
- CONFIG_IPV6_SIT=y
- CONFIG_IPV6_TUNNEL=y
- CONFIG_KEYS=y
-+CONFIG_CRYPTO_MLDSA=y
- CONFIG_LIRC=y
- CONFIG_LIVEPATCH=y
- CONFIG_LWTUNNEL=y
-diff --git a/tools/testing/selftests/bpf/prog_tests/signed_loader.c b/tools/testing/selftests/bpf/prog_tests/signed_loader.c
-index 4b2416903d90..a1fa1c37815b 100644
---- a/tools/testing/selftests/bpf/prog_tests/signed_loader.c
-+++ b/tools/testing/selftests/bpf/prog_tests/signed_loader.c
-@@ -37,6 +37,12 @@ enum {
- 
- #define BPF_KEYRING_BPF		3
- 
-+/* verify_sig_setup.sh exits with this when openssl cannot do ML-DSA. */
-+#define SETUP_SKIP		(-77)
-+
-+/* FIPS-204 ML-DSA-87 signature size, see include/crypto/mldsa.h. */
-+#define MLDSA87_SIGNATURE_SIZE	4627
-+
- static int load_loader(const void *insns, __u32 insns_sz, int map_fd,
- 		       const void *sig, __u32 sig_sz, __s32 keyring_id,
- 		       __u32 fd_array_cnt)
-@@ -159,12 +165,13 @@ static int run_setup(const char *cmd, const char *dir)
- 	}
- 	if (waitpid(pid, &status, 0) < 0)
- 		return -errno;
--	return (WIFEXITED(status) &&
--		WEXITSTATUS(status) == 0) ? 0 : -EINVAL;
-+	if (!WIFEXITED(status))
-+		return -EINVAL;
-+	return -WEXITSTATUS(status);
- }
- 
--static int sign_buf(const char *dir, const void *buf, __u32 len,
--		    void *sig, __u32 *sig_sz)
-+static int sign_buf_digest(const char *dir, const void *buf, __u32 len,
-+			   void *sig, __u32 *sig_sz, const char *digest)
- {
- 	char data_tmpl[PATH_MAX], key[PATH_MAX];
- 	char sigpath[PATH_MAX + sizeof(".p7s")];
-@@ -193,7 +200,7 @@ static int sign_buf(const char *dir, const void *buf, __u32 len,
- 	}
- 	if (pid == 0) {
- 		snprintf(key, sizeof(key), "%s/signing_key.pem", dir);
--		execlp("./sign-file", "./sign-file", "-d", "sha256",
-+		execlp("./sign-file", "./sign-file", "-d", digest,
- 		       key, key, data_tmpl, NULL);
- 		exit(1);
- 	}
-@@ -231,6 +238,12 @@ static int sign_buf(const char *dir, const void *buf, __u32 len,
- 	return ret;
- }
- 
-+static int sign_buf(const char *dir, const void *buf, __u32 len,
-+		    void *sig, __u32 *sig_sz)
-+{
-+	return sign_buf_digest(dir, buf, len, sig, sig_sz, "sha256");
-+}
-+
- struct gen_loader_fixture {
- 	struct test_signed_loader *skel;
- 	struct gen_loader_opts gopts;
-@@ -1550,6 +1563,87 @@ static void loadtime_with_map(void)
- 	test_signed_loader_map__destroy(skel);
- }
- 
-+/*
-+ * End-to-end signed load with a post-quantum key. ML-DSA (FIPS-204) is wired
-+ * through the X.509 and PKCS#7 parsers, and BPF reaches them via
-+ * verify_pkcs7_signature() without knowing the algorithm, so an ML-DSA key in
-+ * the keyring should verify an ML-DSA signed program with no BPF-side work.
-+ */
-+static void mldsa_signed_load(void)
-+{
-+	char dir_tmpl[] = "/tmp/bpfmldsaXXXXXX";
-+	int map_fd = -1, prog_fd = -1, err;
-+	__u8 *sig = NULL, *buf = NULL;
-+	struct gen_loader_fixture f;
-+	bool have_fixture = false;
-+	__u32 sig_sz = 16384;
-+	char *dir;
-+
-+	dir = mkdtemp(dir_tmpl);
-+	if (!ASSERT_OK_PTR(dir, "mkdtemp"))
-+		return;
-+
-+	err = run_setup("setup-mldsa", dir);
-+	if (err == SETUP_SKIP) {
-+		printf("%s:SKIP:openssl has no ML-DSA support (needs 3.5+)\n",
-+		       __func__);
-+		test__skip();
-+		rmdir(dir);
-+		return;
-+	}
-+	if (!ASSERT_OK(err, "verify_sig_setup setup-mldsa")) {
-+		rmdir(dir);
-+		return;
-+	}
-+
-+	sig = malloc(sig_sz);
-+	if (!ASSERT_OK_PTR(sig, "sig buf"))
-+		goto out;
-+	have_fixture = true;
-+	if (gen_loader_fixture_init(&f) != 0)
-+		goto out;
-+
-+	buf = malloc((size_t)f.gopts.insns_sz + f.data_sz);
-+	if (!ASSERT_OK_PTR(buf, "signbuf"))
-+		goto out;
-+	memcpy(buf, f.gopts.insns, f.gopts.insns_sz);
-+	memcpy(buf + f.gopts.insns_sz, f.blob, f.data_sz);
-+
-+	/*
-+	 * ML-DSA hashes the message itself, but openssl before 4.0 cannot
-+	 * produce a CMS message without signedAttrs for it, and with those in
-+	 * play only SHA-512 is permitted for the messageDigest attribute.
-+	 */
-+	if (!ASSERT_OK(sign_buf_digest(dir, buf, f.gopts.insns_sz + f.data_sz,
-+				       sig, &sig_sz, "sha512"),
-+		       "sign insns||metadata with ML-DSA"))
-+		goto out;
-+
-+	/*
-+	 * Guard against the setup silently handing back some other key type:
-+	 * an RSA or ECDSA signature is a few hundred bytes, where an ML-DSA-87
-+	 * one cannot be smaller than the raw signature it carries.
-+	 */
-+	ASSERT_GT(sig_sz, MLDSA87_SIGNATURE_SIZE, "ML-DSA-87 signature size");
-+
-+	map_fd = setup_meta_map(&f);
-+	if (!ASSERT_OK_FD(map_fd, "meta_map"))
-+		goto out;
-+	prog_fd = load_loader(f.gopts.insns, f.gopts.insns_sz, map_fd, sig,
-+			      sig_sz, KEY_SPEC_SESSION_KEYRING, 1);
-+	ASSERT_OK_FD(prog_fd, "ML-DSA signed loader load");
-+out:
-+	if (prog_fd >= 0)
-+		close(prog_fd);
-+	if (map_fd >= 0)
-+		close(map_fd);
-+	if (have_fixture)
-+		gen_loader_fixture_fini(&f);
-+	free(buf);
-+	free(sig);
-+	run_setup("cleanup", dir);
-+}
-+
- /*
-  * A signed program need not bind any map. A plain BPF_PROG_TYPE_SYSCALL
-  * program with no fd_array is signed over its instructions alone: the kernel
-@@ -1833,6 +1927,8 @@ void test_signed_loader(void)
- 		signature_bad_keyring();
- 	if (test__start_subtest("bpf_keyring_sealed"))
- 		bpf_keyring_sealed();
-+	if (test__start_subtest("mldsa_signed_load"))
-+		mldsa_signed_load();
- 	if (test__start_subtest("metadata_ctx_max_entries_ignored"))
- 		metadata_ctx_max_entries_ignored();
- 	if (test__start_subtest("metadata_ctx_initial_value_ignored"))
-diff --git a/tools/testing/selftests/bpf/verify_sig_setup.sh b/tools/testing/selftests/bpf/verify_sig_setup.sh
-index 202e6e6418fe..2737c1a2bcfd 100755
---- a/tools/testing/selftests/bpf/verify_sig_setup.sh
-+++ b/tools/testing/selftests/bpf/verify_sig_setup.sh
-@@ -28,7 +28,7 @@ authorityKeyIdentifier=keyid
- 
- usage()
- {
--	echo "Usage: $0 <setup-rsa|cleanup <existing_tmp_dir>"
-+	echo "Usage: $0 <setup-rsa|setup-mldsa|cleanup <existing_tmp_dir>"
- 	exit 1
- }
- 
-@@ -57,6 +57,57 @@ setup_rsa()
- 	keyctl link $key_id $keyring_id
- }
- 
-+mldsa_supported()
-+{
-+	local tmp_dir="$1"
-+
-+	genkey_mldsa "${tmp_dir}" || return 1
-+	: > ${tmp_dir}/probe
-+	# Same digest as the caller signs with, see sign_buf_digest().
-+	./sign-file -d sha512 ${tmp_dir}/signing_key.pem \
-+		${tmp_dir}/signing_key.pem ${tmp_dir}/probe || return 1
-+	rm -f ${tmp_dir}/probe ${tmp_dir}/probe.p7s
-+}
-+
-+genkey_mldsa()
-+{
-+	local tmp_dir="$1"
-+
-+	echo "${x509_genkey_content}" > ${tmp_dir}/x509.genkey
-+
-+	# No -<digest> here: ML-DSA hashes the message itself, and openssl
-+	# rejects an explicit digest for it.
-+	openssl req -new -nodes -utf8 -days 36500 \
-+			-batch -x509 -newkey ML-DSA-87 \
-+			-config ${tmp_dir}/x509.genkey \
-+			-outform PEM -out ${tmp_dir}/signing_key.pem \
-+			-keyout ${tmp_dir}/signing_key.pem 2>&1
-+
-+	openssl x509 -in ${tmp_dir}/signing_key.pem -out \
-+		${tmp_dir}/signing_key.der -outform der
-+}
-+
-+mldsa_skip()
-+{
-+	local tmp_dir="$1"
-+
-+	rm -f ${tmp_dir}/x509.genkey ${tmp_dir}/signing_key.pem \
-+		${tmp_dir}/signing_key.der ${tmp_dir}/probe \
-+		${tmp_dir}/probe.p7s
-+	exit 77
-+}
-+
-+setup_mldsa()
-+{
-+	local tmp_dir="$1"
-+
-+	mldsa_supported "${tmp_dir}" || mldsa_skip "${tmp_dir}"
-+	key_id=$(cat ${tmp_dir}/signing_key.der |
-+		 keyctl padd asymmetric ebpf_testing_key @s)
-+	keyring_id=$(keyctl newring ebpf_testing_keyring @s)
-+	keyctl link $key_id $keyring_id
-+}
-+
- cleanup() {
- 	local tmp_dir="$1"
- 
-@@ -91,7 +142,7 @@ catch()
- 	local exit_code="$1"
- 	local log_file="$2"
- 
--	if [[ "${exit_code}" -ne 0 ]]; then
-+	if [[ "${exit_code}" -ne 0 && "${exit_code}" -ne 77 ]]; then
- 		cat "${log_file}" >&3
- 	fi
- 
-@@ -110,6 +161,8 @@ main()
- 
- 	if [[ "${action}" == "setup-rsa" ]]; then
- 		setup_rsa "${tmp_dir}"
-+	elif [[ "${action}" == "setup-mldsa" ]]; then
-+		setup_mldsa "${tmp_dir}"
- 	elif [[ "${action}" == "genkey" ]]; then
- 		genkey "${tmp_dir}"
- 	elif [[ "${action}" == "cleanup" ]]; then
--- 
-2.43.0
+This commit adds an end-to-end ML-DSA signed loader test to the BPF CI. It
+introduces a new test case that verifies an ML-DSA signed program can be
+loaded successfully using the existing pkcs7 signature verification.
 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/signed_loader.c b/too=
+ls/testing/selftests/bpf/prog_tests/signed_loader.c
+> index 4b2416903d90d..a1fa1c37815bf 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/signed_loader.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/signed_loader.c
+[ ... ]
+> @@ -1550,6 +1563,87 @@ static void loadtime_with_map(void)
+>  	test_signed_loader_map__destroy(skel);
+>  }
+> =20
+> +/*
+> + * End-to-end signed load with a post-quantum key. ML-DSA (FIPS-204) is =
+wired
+> + * through the X.509 and PKCS#7 parsers, and BPF reaches them via
+> + * verify_pkcs7_signature() without knowing the algorithm, so an ML-DSA =
+key in
+> + * the keyring should verify an ML-DSA signed program with no BPF-side w=
+ork.
+> + */
+> +static void mldsa_signed_load(void)
+> +{
+> +	char dir_tmpl[] =3D "/tmp/bpfmldsaXXXXXX";
+> +	int map_fd =3D -1, prog_fd =3D -1, err;
+> +	__u8 *sig =3D NULL, *buf =3D NULL;
+> +	struct gen_loader_fixture f;
+> +	bool have_fixture =3D false;
+> +	__u32 sig_sz =3D 16384;
+> +	char *dir;
+> +
+> +	dir =3D mkdtemp(dir_tmpl);
+> +	if (!ASSERT_OK_PTR(dir, "mkdtemp"))
+> +		return;
+> +
+> +	err =3D run_setup("setup-mldsa", dir);
+> +	if (err =3D=3D SETUP_SKIP) {
+> +		printf("%s:SKIP:openssl has no ML-DSA support (needs 3.5+)\n",
+> +		       __func__);
+> +		test__skip();
+> +		rmdir(dir);
+> +		return;
+> +	}
+> +	if (!ASSERT_OK(err, "verify_sig_setup setup-mldsa")) {
+> +		rmdir(dir);
+
+[Severity: Low]
+If run_setup("setup-mldsa", dir) fails after creating files in the temporary
+directory (for example, if keyctl padd fails in the bash script), does this
+code leak the temporary directory and its contents?
+
+Since rmdir() does not recursively remove files, it will fail with ENOTEMPTY
+if there are still generated files like signing_key.der inside the director=
+y.
+
+Would it be safer to call run_setup("cleanup", dir) here instead of rmdir()
+to ensure all temporary files are properly cleaned up?
+
+> +		return;
+> +	}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260821214111.1120=
+748-1-daniel@iogearbox.net?part=3D8
