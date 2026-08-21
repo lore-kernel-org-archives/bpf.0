@@ -1,137 +1,83 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0A423AE6F5
-	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 07:58:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB4383B2FF8
+	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 08:01:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787299103; cv=none; b=Y8vUlrikvE3/VPk45FzIAZMFGmf8O+ot0KpIBK7xmLGtRZuTfMzbiUg+yIa0HWfNGojiN/nSOhGs+ef+qJgx+CZR+vBIsin3lmIMHAIqVdJCBtNockNyJPIGHQgrOoy4JSvX8hitO5rl1b46JPEPONMvETXWNjiyNsY4l3WnQOU=
+	t=1787299262; cv=none; b=ac7/O0sI4/ZOJ0FUcaA/jfS/rIunowdXBBEV/1qKaIH2zQKIUUPs9PQEVB0Sl3sZowxiCVRH7ARjP90vq2uZqt8gKU22DCX2z9BEdqKawLJTgwIEXhIMJ/qh6hQ29dBRZL6DxqCR2haeqsPrfs0PFd0GyfQ7M3Y8dmMJ5wgpve8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787299103; c=relaxed/simple;
-	bh=+zIe5NVPDKz8/Ej7QeLs9cHzLQjVNcAlMk5IFomQP7w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GAD36pq7ZBIWmjAVb8jPl0tyk6N7TwaRRlHmHsfJW/PLLHcu39ipJ5amA42S8vZJTMHaXwbtQySmwmXtFWkMLkCeTK/4R7o/diaPlMuvS5RIelEUOZxeORQWEJsPLftPLdRI/gOMel4QBqMR5D7qmyZbdUE1cBrVx6JOGAzL3uQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KC/lqPVN; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787299262; c=relaxed/simple;
+	bh=hCspbKqKSZjKPwMpVzQpSC6ZnLYE2aCoTheh1QaYkYs=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=NSpDoneqPs6i9in0qabBszddb7MWJJPyE3MqSPaelb96IKocO6/cOIitzSwzx3BMnCDzhKt0EykYeF/Mx2XaCmxaNgVuZAVg7b2lhBG8JIym7fu736azaZ70KdwehabzkjUrHSNk+YY1RP8kES2QDr9gpFJlfcQSMiYrp6FcBTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nyTQGMmV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KC/lqPVN"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2d049069377so6974265ad.0
-        for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 00:58:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787299101; x=1787903901; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=tGqZc2QCVfVmshUDzN/Ox9VPqNMMVTOEB7NVHdB7+5E=;
-        b=KC/lqPVNo6ZzavEezjtZCjh/F53fKv7I2WSjrIZgBelEXaHCL8CQda/ioaAG9BOiSZ
-         5zA61YnQOgIPeCJQeNt5wmn6rXP9M/vvu/snes10iZMFOzR5l47rSfBaccdVTEnnMJxf
-         FHbdg5h09+5THtTMSNaNgE1n49j7bEpEHSptxVivLzsaCjyvO8AQGGFy4wdL3FLUW9cW
-         P6MYqdiIV00/St+Fq1+gS4HC5EszpL2iOUfkX7oqe1K55LwkvYIYz16ddW09GpIcWCOs
-         BGiqkA5pvnshjdH11Zf9SDKYNaZyMjOf89qtUkJjxablsk+k+0XCfvv32lZB1eiTHv5m
-         2xew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787299101; x=1787903901;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=tGqZc2QCVfVmshUDzN/Ox9VPqNMMVTOEB7NVHdB7+5E=;
-        b=Z/8iPX2BfugzVlZYy9OBTHjQ3wh8XgRBIckvzzSaFq46Vi+bmF5wiVfYMYPUiywSCz
-         L6xl6wko/vmbORf1vcjnwD2S6e7tiGp6+08gDGXwKQW+TXguBmSw4pf64H3oQn/jxC2y
-         /flQYavlrAebKsAuyeQQISFj89Aio87Tv5D/YkZgQdBkifpk2vlH3VPQ4uphPK/R/2pn
-         ik3wG0IN+hK5Kuuy2VGE6UUzzEHl/uevia6dYKbuoeodQybYzng0+7eEUkLltJ4lCZ+3
-         ioLns0eTejcop0JbRfXwHw+d47cIJRQmtn7jBvOGK++DGG0xbvSpmt07FgdME3Fe9O9T
-         ADQw==
-X-Gm-Message-State: AFuF++nc7H0u/rWum5mkEdmPlspWEiRIif4YP5oLjLb+lIN1BDKkea+0
-	75u83dU1Whxbv+Ge/iHdRdx4owAWdOSEO+AE5ARKjmCuVbRsXCPQNtOn
-X-Gm-Gg: AR+sD11YtM7QZwHFWFiEg/R/5zArMsS+nOg2Q58zW0S9/4uxL11joM2DBtCmt17OPVs
-	7/TIalHSriyLAoJsOXjB1g3BYuYmZSivfiUuLxLaPBWoK5sg19EYVtSk/G7m3NzwEZ0SgDtDAjA
-	j87mkHXgpea+xiXpoGdbZ9k2yhv2FX7EhSGvK9OHueBbL2+/d3TZjimnNJ+biGyqfQRH5Ged3bl
-	dsjo8RNqfKLiOaQAi8fwdNLOylRBkt+p6G53X/BWC2gkocAQXMuQcLoXSElobqv1Nz1FzrYl385
-	hQO1EjPENx0/4XO3CzxxxbU0DGafJL2JLlVXhJAxwMD0mUaOqPDez3hLHORsfz1F/KxdlHdzsYv
-	C8/s4TpkCgMMz6e/zTDHFHMMNs+jPUISV0XyE65QRb1L1SE0pkbVq+9a6qj7NGvKGq4HzcWfgE2
-	G1Hfp4Ngk4xOnvSjXhal2/+fUO49y9SkFa2m3uG6wr/Qh24+/3rbvvzwolNkVqZDHZ3w==
-X-Received: by 2002:a17:903:b4e:b0:2d0:8b28:51ab with SMTP id d9443c01a7336-2d64af3a1e9mr91546415ad.7.1787299100851;
-        Fri, 21 Aug 2026 00:58:20 -0700 (PDT)
-Received: from omen-arch ([147.46.124.101])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d62e3cf99csm15290755ad.74.2026.08.21.00.58.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2026 00:58:20 -0700 (PDT)
-Date: Fri, 21 Aug 2026 16:58:11 +0900
-From: Junseo Lim <zirajs7@gmail.com>
-To: florent.revest@linux.dev
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, John Fastabend <john.fastabend@gmail.com>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Jose Fernandez <jose.fernandez@linux.dev>, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf] bpf: Keep progs alive until the trampoline image
- calling them is freed
-Message-ID: <aogAKH0PEmuOa--X@omen-arch>
-References: <20260819122252.1782790-1-florent.revest@linux.dev>
- <aocadTp5OaOybxzT@omen-arch>
- <bc0edb11e07e0f6147e9c552805d0029c7aec7fc@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nyTQGMmV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97F6A1F000E9;
+	Fri, 21 Aug 2026 08:01:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787299261;
+	bh=DntpjWlbcBO/SNDu4QcamLYkbHQiWj0IHtruqekUdUU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=nyTQGMmVTFpuHW1ic0K7VcexOLlsgevEYqa2G9h+2OV/VqPdFNL8A+nr3IQvz2BDW
+	 SLWqZD7YEg+zdGz+/YueU1R1dGCHZciGTcqgojDrilVJ0N8pyOfYiQPRsVEsc+sz0T
+	 tzFK8hIRFmFcV5OfBtOW91XkrDOKBt/RlWesIl0llYI8XcnQ6+tMK6PIIqRXeps/r0
+	 0ZFpO/ADFsNDzv23vMIhdTNaaV318e2FAtfDPbpxCYhlbsg6zUXLtqRbE5+un7lfBt
+	 HWepbQPEtrbhYoAEiu8JwiBTZKJfUESfgitAd6nNGUtWsxKtdfxW2DqCP8yB/D6Efu
+	 Yrck78xuiqlKg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93A4F380820D;
+	Fri, 21 Aug 2026 08:00:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <bc0edb11e07e0f6147e9c552805d0029c7aec7fc@linux.dev>
+Subject: Re: [PATCH bpf-next v4 0/3] Simplify min()/max(),
+ contains() and normalize() cnum implementation
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178729921119.702555.109730715293541153.git-patchwork-notify@kernel.org>
+Date: Fri, 21 Aug 2026 08:00:11 +0000
+References: <20260730102129.15209-1-vldsampaio@pm.me>
+In-Reply-To: <20260730102129.15209-1-vldsampaio@pm.me>
+To: Vinicius Sampaio <vldsampaio@pm.me>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ tangyazhou518@outlook.com, shenghaoyuan0928@163.com
 
-On Thu, Aug 20, 2026 at 04:06:30PM +0000, florent.revest@linux.dev wrote:
-> 20 août 2026 à 17:26 "Junseo Lim" <zirajs7@gmail.com mailto:zirajs7@gmail.com?to=%22Junseo%20Lim%22%20%3Czirajs7%40gmail.com%3E > a écrit:
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Eduard Zingerman <eddyz87@gmail.com>:
+
+On Thu, 30 Jul 2026 10:21:11 +0000 you wrote:
+> This patches simplifies some functions of the cnum implementation:
 > 
-> > 
-> > On Wed, Aug 19, 2026 at 12:22:50PM +0000, Florent Revest (Anthropic) wrote:
-> > 
-> > > 
-> > > bpf_tramp_image_put() makes sure a trampoline image is not freed while
-> > >  a task may still be running in it (call_rcu_tasks() + im->pcref), but
-> > >  nothing similar is done for the progs called by that image. Since
-> > >  commit e21aa341785c ("bpf: Fix fexit trampoline."), detach patches the
-> > >  return path so that a task still in the original function skips the
-> > >  fexit progs when it comes back, and counts on the prog's own RCU flavor
-> > >  to cover a task that is inside a prog. On that basis the last prog
-> > >  reference is dropped right away and the prog is freed after a single
-> > >  RCU / RCU tasks trace grace period.
-> > > 
-> > >  [...] 
-> > >  
-> > >  Fix it by having the image take a reference on every prog it calls, in
-> > >  bpf_tramp_image_alloc(), and drop them in bpf_tramp_image_free(). A
-> > >  detached prog now stays loaded until the old image is gone, which
-> > >  reverts a deliberate choice of commit e21aa341785c ("bpf: Fix fexit
-> > >  trampoline."). Detached fexit progs still stop being called right away
-> > >  since the return path is patched.
-> > > 
-> > This appears to be the same issue addressed by my earlier patch [1].
-> > 
-> > I think the flexible-array approach here is cleaner, so I'm fine with this
-> > version going forward. Could you please carry the original Reported-by tag?
-> > 
-> > Reported-by: Sechang Lim <rhkrqnwk98@gmail.com>
-> > 
-> > [1] https://lore.kernel.org/bpf/20260815071927.147049-1-zirajs7@gmail.com/T/
-> > 
-> Oh wow, sorry, I had no idea we raced on this!
+> - smin()/smax()
+> - contains()
+> - normalize()
 > 
-> I also like the idea of guarding this with CONFIG_PREEMPTION and of
-> course I don't mind adding your Reported-by tag in a v2. I'll give a bit
-> of time for others to chime in first.
+> 
+> [...]
 
-Just in case it helps with the CONFIG_PREEMPTION angle: Sashiko pointed out
-on my patch that a CONFIG_PREEMPTION guard would leave the unlink/update
-failure path uncovered on CONFIG_PREEMPTION=n.
+Here is the summary with links:
+  - [bpf-next,v4,1/3] bpf: Simplify cnum contains() by removing redundant branches
+    https://git.kernel.org/bpf/bpf-next/c/4e3fb5bba680
+  - [bpf-next,v4,2/3] bpf: Simplify cnum normalize() by dropping unnecessary comparisons
+    https://git.kernel.org/bpf/bpf-next/c/b601a4ecbe67
+  - [bpf-next,v4,3/3] bpf: Avoid redundant min()/max() in cnum signed bounds
+    https://git.kernel.org/bpf/bpf-next/c/705249119d94
 
-So your unconditional version looks right to me.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Cheers,
-Junseo
+
