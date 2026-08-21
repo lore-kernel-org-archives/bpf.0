@@ -1,65 +1,65 @@
-Received: from mail-ej2-f2.google.com (mail-ej2-f2.google.com [74.125.228.130])
+Received: from mail-ej1-f67.google.com (mail-ej1-f67.google.com [209.85.218.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A689E415B6B
-	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 23:35:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7DE6388873
+	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 23:35:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787355324; cv=none; b=RUC4RjYNJ6Fe9B8/zjIo4eAyNmN7iUgAe69Djxl7zIOjTc1+Hq7eHw9i1T41oar95uzL3GgPUTXE6VH0eyTOs823FKefdUu1CbVTLk/burzLxwkgZEmCrUOuvx2UWrbp/Zq+rkCfbEGKC4idSz3LDJtMdxzRWKTD9Vaaz7QOGAc=
+	t=1787355325; cv=none; b=rJGZ7eoFwwz0xMWw9Q6LbbaniP7Ug3Jqn+vvBvqzYr2kzBA1QlDWVH1ziEJJXFj25+bRS8Ku7iJ83NL66wmUbN0dhKlytn0o2ppydggeQgmP1Hy1waXZlCDqas6aJl1kaegnlnnB+YJP7cAT5vGzPIwFN2XQsmnEEeetd/G/lLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787355324; c=relaxed/simple;
-	bh=p7Y4bEq0/hTyqNNb2Vk5KhzjwOByoEvgSRKCv1KKkOo=;
+	s=arc-20240116; t=1787355325; c=relaxed/simple;
+	bh=CHR4vu62waiMKk7n/r+/CMNqE/WyJ6VbVy8qU2EYouI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QErrQgn/Sp4LD6VLfKdnHcDlyK0rIFlM4AoQxCHaFc2VEM1+wOMDf1AeXmkcQnuQwuYuBRVxjqFpg15CXS9ATVGdlbqDsVbWp1HzP0vJi41bIbXsPbyG5M+/pspWWOE61XEWc63qU6vhcFf0xd/jC+byKD+DGxA1bl5dzw3gOq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nV0JcuUw; arc=none smtp.client-ip=74.125.228.130
+	 MIME-Version:Content-Type; b=VR61vvNkorOx9i/cAYV/WXCbLnLzqWtIORLGIxcM4TcWiNr4G0HNMA4k/cq+dCac47R8u+cPPBEB/1/bZ43EgnKIIaYU4AdEbJnTrUzr7vRd4aWUDh1khshE6EiJ++vbcw98MwvLvsNDT1X3SeY6rjXckQFteUlD+sMJBG0giMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sSlreCeR; arc=none smtp.client-ip=209.85.218.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nV0JcuUw"
-Received: by mail-ej2-f2.google.com with SMTP id a640c23a62f3a-c1c5cb0f9f1so67237766b.0
-        for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 16:35:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sSlreCeR"
+Received: by mail-ej1-f67.google.com with SMTP id a640c23a62f3a-c1600d040e4so237972166b.1
+        for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 16:35:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787355320; x=1787960120; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787355322; x=1787960122; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=QeXuIb62A7Y3Vu3YQ/zY8iFbFnHZEy+FLPBwoRMM2e8=;
-        b=nV0JcuUwXNuboXRQODLGfbZtU2ZLOmLB3Os6F4xHEsOXIBkrOyIyr9e+3jxp3PYYt/
-         NmZHduafoKxsya4t6877zaon7j3F5K44L724CJZjJFB4nLH5QqUW6Hd8WeU7mlSggmId
-         virh7vCDp1HTt5zAWBjaZ46xLFgEQ9RPrGJdCn3zz4YRn49TStOKBcv13dkriyj1x0SH
-         N4BmhtWAWd03fLxb322APcodKmIn1AWqo3rqOZu/cxHpAKvcJvK5GtS6fTboHfIqWENC
-         nNfYxPzV/9DttRL1iM1Dqdn0j5MCqByipcyEXQOh/lZUq6MBojBrKJQI5kKC33QGKvXK
-         Nvpg==
+        bh=HF7ZbiPxmHwCPV3MXqkAHglmpkDT5Htnozv1WtxM/lA=;
+        b=sSlreCeRRoU8pTrt5AywAi+XYU+hkjr65EoOX6oKsy3HAAh3aDrtO8FLhMnBgGwgqP
+         AGNMwIVeoYIA4KjmbdoYtXXh/uah9AJujmGdHDHEuKmfx3VDEFLO5fRfDt7InSLuKSjq
+         ynLa0AzN6h4Nt3Q0OYiSY1fgxU4RR/nDwf0ZDEmFfWuMPULGsNLfZD18dtBSMNqyoXpm
+         g/FSV1dkpk1FdHKszLofmygn9+EMvyui8GLyGgMYQVNBOy02U3d8LEEeR/XEAxEHOz/O
+         HZA2Fw4KZf+aViWmEd72M+gT4VeUi1x2WaGeEcGR5+48hYvl+dIeO4vmEi7c2dzLteyj
+         j2pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787355320; x=1787960120;
+        d=1e100.net; s=20251104; t=1787355322; x=1787960122;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=QeXuIb62A7Y3Vu3YQ/zY8iFbFnHZEy+FLPBwoRMM2e8=;
-        b=cfrHwdFQwyIP1hWSxf2drFb5yBPJyCfpY5cqDDMGda00Lxqa6rVrKQ92dqvIjME9QY
-         4N1R5BykEU5VVbiGLw1NmtMQam+nKv5yGqJENINZMfw4medn1lMXcVe8gDO4Qwvf55T5
-         11gC24npvwTfuyM48h5+8byL+5yLdZB3I5+afyG1p4Py1fAtnIeaKqGD3IVJCK38aCRV
-         dQ1O6Mz265y7WiiCcY7uWEufvrw9BpbuF02vuddiyyz/cPSbG83IAB+FIhxd/HWr8juU
-         tJonzO5V5yzENhNKH3tU/YRKjYPpuTR3h5q77EfurkRHX5e/tnaTwefT4IeOvTXVnMtV
-         u/6Q==
-X-Gm-Message-State: AFuF++mHNtkdNwJ8fKZVa2KpY3wBFnW7EDLQy1Fj1EB6PcklHgLflZ6Y
-	oBW6aSuWka2YRbTdXa37p/TVKGiNKaLhRU+qGfsqRjhgFY3Y9bpp/79KFPNsGmTa
-X-Gm-Gg: AR+sD13u4u9XTNDu/99u1raCdgaBmrz8zttfRwFwpAw9LCRFSgWjGAtYgVCieJ1sJH1
-	IINhoMrpQTe5Rb/OyBK6cypcgtqN17iPNr8Q7uBvCPTSL9wRhanxGg2SbWG7bs5GI58fWGcm36f
-	qwYZjoi/pzrepWd5McRECabjE1JurtmeCbox9YZXqork/BjSu7lxHBr8h5suW1WKVqmctbTJjsK
-	kKd7I7idoTedOcZJkqj64oRk/dJWdl9cYTvuBoRe0iAyoPCUpC66ZatUlkFoxr7zxH7v0LkSXMS
-	WOdct+Kv7Hkyx6tW5N39VHqFvZMIThueOxWWGcev0SB1obZtz0msPTr2bFtgkDsTtghOrbKn8Rg
-	0DNCFNFKs8U5RYJEkoRWGhLDJfrtjdCfrR3+D0yI8tRpmg2unk5qBKuIzAt6Rci262AhD4iLPtM
-	lG+wdHQSdfn7N976AXyWtVe29sfNHX6oVihbE8jSnABURSLjf9Pt/TNqlwK5zcHR6h2x4ZweMJz
-	O35s8o22N6b23QIlpWG2MtibAkHxxJlkI+Eoqs8/FXcelhoOMxE5NjWsB7NIoTFo/4qApIRvtR1
-	iwtTmY3PcIhGkxy2xHZ7B69vZ5g=
-X-Received: by 2002:a17:907:1c26:b0:c1f:29ce:76a1 with SMTP id a640c23a62f3a-c249272d9d8mr203829066b.19.1787355320282;
-        Fri, 21 Aug 2026 16:35:20 -0700 (PDT)
+        bh=HF7ZbiPxmHwCPV3MXqkAHglmpkDT5Htnozv1WtxM/lA=;
+        b=PFcUhZziXxpRCezwidtQ1vD8o3E7taYUwCqp+X4IwjCwihTIfv7q/pVcfNaTTmBLZe
+         OKSovomcxkWEhG9th5ZgrRH7KcKl3Ro5qinCD2Zm+JrhEK92Xdfhi3011EJbZJYFNK4B
+         IfmhbVbDBvomsDdwMR+1LswV/yI16nBQ4h4WplgUA5elNGMFbdIIkZNur0iLROqcXcS1
+         9xzUgn+014p4bonrtNy417ubFvdWGG/umjE/xkUl5ma5UiNcA8p0mgdfThdUE+dzYBYZ
+         R/qZ6eYzo9Ww9UgqD24DXvcNHVVgR90oQuLLMEgY0dy7pSY2RzHl/1SPRvrFtszXE/De
+         v72g==
+X-Gm-Message-State: AFuF++kj9yVs8fZqVlGE3PEadJszfA0Xozg0TnekRrHo4suNgTjNhaLV
+	T+6oOB7spphpiZ03gd/KZqquNG0yDgjbekgtd4mA5ozUjueUWYHP1Zp/AVfS60hm
+X-Gm-Gg: AR+sD11QQP82il4+xuv7Ohp+Sx6sH2pYDZNnhfxc4/OcUZM2w3rDXwh3G6KYSnztOG+
+	YV0mzvYS/Xd8pAh805VBlTQLXqxKyYntgqvoeXaiw4tN0kTwYRDg1ILIibh6/QaaXH/D60l6EXf
+	j4oZ7i43sA1frY2LN0HOK5KNS95SNp0Q/wDXuaLjKOJLR8VhVrumdidCaGMzFQefpZHSBjp7yaH
+	/1qUl7Og89hZNcDCnDDhdhnjFptT2NiMlAZnKTlwA/J/1rWMGhbkvhq18bnukZP0WIrnynle1a2
+	3sepi9cSDqaBgfJlCs/VbOxqf40EGoM5Qksq4p7KMQeWstQ/IMum8CDsRXGPcVtA2H+1WzOLYhx
+	s/NeRSIOmkOAfaaYODuETJXIIGAcnaTuysh/Rn8wrCasnH5dP3iL5UICdTc0B2vgUZ22NWUbsaz
+	YEBxtF318T99uUkoM0xaOeIzK2gMuctx3m2uLfRoNsSYyXxXz5i72ZKU/lzKrVIfyli7z0ZEDJn
+	cdi7YlDEIuZ4nUR+z8EjYjCKNfJgh1fPZtsjY8tiahJ11wqI440V9xX2B/DQj1MmqDA/UuHN7WX
+	qmDyrrvyvmxJr+SHPdL0bfuPPFgBlqHQSfWpgg==
+X-Received: by 2002:a17:907:5ce:b0:c1f:2cb2:c448 with SMTP id a640c23a62f3a-c244d672d37mr1466145866b.7.1787355321783;
+        Fri, 21 Aug 2026 16:35:21 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c249629a901sm42583966b.25.2026.08.21.16.35.19
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a3ff1780c9sm8556175a12.28.2026.08.21.16.35.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2026 16:35:19 -0700 (PDT)
+        Fri, 21 Aug 2026 16:35:21 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
@@ -72,9 +72,9 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 02/14] bpf, riscv: Fix stack-passed arguments for indirect trampolines
-Date: Sat, 22 Aug 2026 01:34:56 +0200
-Message-ID: <20260821233516.3426127-3-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 03/14] bpf, riscv: JIT arena kfunc argument rebasing
+Date: Sat, 22 Aug 2026 01:34:57 +0200
+Message-ID: <20260821233516.3426127-4-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260821233516.3426127-1-memxor@gmail.com>
 References: <20260821233516.3426127-1-memxor@gmail.com>
@@ -85,72 +85,102 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2801; i=memxor@gmail.com; h=from:subject; bh=p7Y4bEq0/hTyqNNb2Vk5KhzjwOByoEvgSRKCv1KKkOo=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIavjQU/rf6GvbMVr/Z/P4um9mpjylvGzmk+5brpp8SrLt TPM76ztKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwEQm+DH8d2wuuFrD8nb/24yW q13Ns35NtrmeqHiU5eP8YpdnehKCDxh+Mf3cxy9SxhxUJ9v+/Gjj/MfPlzz/YvBJ1f/61r3Z/I3 cvAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3177; i=memxor@gmail.com; h=from:subject; bh=CHR4vu62waiMKk7n/r+/CMNqE/WyJ6VbVy8qU2EYouI=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIavjQY9/bTSD6YIKtxXvqrV533u2765n+3Otctfqmpent oWlrFfpKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwESUXzIy9K71ZSzYsVpA4J4Y T5ngwy+31ua9S8/mOp7wwDnkmfbOVIZ/dhIR8v3P65ZusJDbVtpfzZZSG7nxSEKMWLlzCre9bjQ PAA==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-store_args() reads stack-passed arguments relative to FP assuming the
-trampoline was entered through the fentry call from a traced function. In
-that path, the trampoline pushes the parent frame before establishing its
-final FP, so the incoming stack arguments start at FP + 16.
+A BPF arena pointer is represented as a zero-extended 32-bit offset while
+a kfunc receives a kernel address. Kfuncs whose BTF argument names carry
+the __arena suffix therefore need the JIT to rebase those offsets
+immediately before the native call.
 
-An indirect trampoline for a struct_ops callback is called through a
-function pointer. Its prologue allocates only the trampoline frame and sets
-FP to the incoming SP. The RISC-V ABI places the first stack argument at
-that incoming SP, so the arguments start at FP, not FP + 16. Every
-stack-passed argument of a callback with more than eight argument slots is
-therefore read two slots late.
+RV_REG_ARENA already holds kern_vm_start whenever the program uses an
+arena. Zero-extend each tagged argument and add that base:
 
-Pass the prologue-dependent offset to store_args(), using zero for a direct
-struct_ops trampoline and 16 for the fentry path.
+  zext.w aN, aN
+  add    aN, s7, aN
 
-Fixes: 6801b0aef79d ("riscv, bpf: Add 12-argument support for RV64 bpf trampoline")
+For an __arena__nullable argument, branch over the fixed-width add when
+the truncated offset is zero so that NULL remains NULL. An unconditionally
+tagged zero is intentionally converted to the arena base.
+
+The sequence is emitted as native code after the BPF instruction stream
+has been blinded, and its size depends only on the function model and
+enabled ISA extensions. Advertise the kfunc capability independently;
+struct_ops argument conversion is not enabled by this change.
+
 Cc: Björn Töpel <bjorn@kernel.org>
 Cc: Pu Lehui <pulehui@huawei.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- arch/riscv/net/bpf_jit_comp64.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ arch/riscv/net/bpf_jit_comp64.c | 40 +++++++++++++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
 diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 47c7bf431ba8..b1084f30f3ce 100644
+index b1084f30f3ce..c97d13a3eae4 100644
 --- a/arch/riscv/net/bpf_jit_comp64.c
 +++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -857,7 +857,8 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
- 	return ret;
+@@ -714,6 +714,37 @@ static int sign_extend(u8 rd, u8 rs, u8 sz, bool sign, struct rv_jit_context *ct
+ 	return 0;
  }
  
--static void store_args(int nr_arg_slots, int args_off, struct rv_jit_context *ctx)
-+static void store_args(int nr_arg_slots, int args_off, int stack_args_off,
-+		       struct rv_jit_context *ctx)
- {
- 	int i;
- 
-@@ -865,8 +866,8 @@ static void store_args(int nr_arg_slots, int args_off, struct rv_jit_context *ct
- 		if (i < RV_MAX_REG_ARGS) {
- 			emit_sd(RV_REG_FP, -args_off, RV_REG_A0 + i, ctx);
- 		} else {
--			/* skip slots for T0 and FP of traced function */
--			emit_ld(RV_REG_T1, 16 + (i - RV_MAX_REG_ARGS) * 8, RV_REG_FP, ctx);
-+			emit_ld(RV_REG_T1, stack_args_off +
-+				(i - RV_MAX_REG_ARGS) * 8, RV_REG_FP, ctx);
- 			emit_sd(RV_REG_FP, -args_off, RV_REG_T1, ctx);
++/*
++ * Rebase the __arena args of a kfunc call to arena kernel addresses,
++ * aN = kern_vm_start + (u32)aN, with RV_REG_ARENA holding kern_vm_start.
++ * A nullable arg preserves NULL by skipping the add, tested on the
++ * truncated value as arena NULL is offset 0.
++ */
++static int emit_kfunc_arena_args(struct rv_jit_context *ctx,
++				 const struct btf_func_model *fm)
++{
++	int i;
++
++	for (i = 0; i < min_t(int, fm->nr_args, MAX_BPF_FUNC_REG_ARGS); i++) {
++		u8 flags = fm->arg_flags[i];
++		u8 reg = bpf_to_rv_reg(BPF_REG_1 + i, ctx);
++
++		if (!(flags & BTF_FMODEL_ARENA_ARG))
++			continue;
++		if (WARN_ON_ONCE(!ctx->arena_vm_start))
++			return -EINVAL;
++
++		emit_zextw(reg, reg, ctx);
++		if (flags & BTF_FMODEL_NULLABLE_ARG) {
++			/* Skip the fixed-width add so that NULL stays NULL. */
++			emit(rv_beq(reg, RV_REG_ZERO, 4), ctx);
++		}
++		emit(rv_add(reg, RV_REG_ARENA, reg), ctx);
++	}
++
++	return 0;
++}
++
+ #define BPF_FIXUP_OFFSET_MASK   GENMASK(26, 0)
+ #define BPF_FIXUP_REG_MASK      GENMASK(31, 27)
+ #define REG_DONT_CLEAR_MARKER	0	/* RV_REG_ZERO unused in pt_regmap */
+@@ -1834,6 +1865,10 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 				if (sign_extend(reg, reg, fm->arg_size[idx], sign, ctx))
+ 					return -EINVAL;
+ 			}
++
++			ret = emit_kfunc_arena_args(ctx, fm);
++			if (ret)
++				return ret;
  		}
- 		args_off -= 8;
-@@ -1152,7 +1153,12 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- 	func_meta = nr_arg_slots;
- 	emit_store_stack_imm64(RV_REG_T1, -func_meta_off, func_meta, ctx);
  
--	store_args(nr_arg_slots, args_off, ctx);
-+	/*
-+	 * A direct struct_ops call has its first stack argument at the incoming
-+	 * SP, which the trampoline keeps as FP. The fentry path pushes the
-+	 * parent frame first, so its incoming stack arguments start at FP + 16.
-+	 */
-+	store_args(nr_arg_slots, args_off, is_struct_ops ? 0 : 16, ctx);
+ 		/* restore TCC to RV_REG_TCC before bpf2bpf call */
+@@ -2132,6 +2167,11 @@ bool bpf_jit_supports_kfunc_ret_reg_pair(void)
+ 	return true;
+ }
  
- 	if (bpf_fsession_cnt(tnodes)) {
- 		/* clear all session cookies' value */
++bool bpf_jit_supports_arena_kfunc_args(void)
++{
++	return true;
++}
++
+ bool bpf_jit_supports_ptr_xchg(void)
+ {
+ 	return true;
 -- 
 2.53.0
 
