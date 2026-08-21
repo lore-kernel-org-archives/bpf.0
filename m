@@ -1,97 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-116.mta1.migadu.com [95.215.58.116])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9142F46DFF1;
-	Fri, 21 Aug 2026 09:41:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D2E344B663
+	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 10:26:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787305323; cv=none; b=ScVAsr4LsNOMn8BT3dABcXvMHG5DaWJ+S/HUraiw3Qh1SSEdkQ/J1SxCJgKRuh5+XcrMCFokBxtMJwD4PMPnh6NrsLJt/LqARVqcK9xTC5i67lLmnfSix8aDtn3vtwtjq0BhYTNWp8p++ZHAU35kIlfIxBWcTQU/njG8F/l08hI=
+	t=1787307996; cv=none; b=uSUTcZJ+UzWbYsPtOcHyxXG2XurrenNrDKhYXJy8THN/3SI/pGVEWakl5i4Rdd03JuT81udmW9R3D9Nng0cq+/LezvwXM5eREl+LBoMSPey7F4lXLF1psIKtLo329Ojg771O7PousKjbzBCmOxiUFP0mnSYrJlwjH4K5it/cQZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787305323; c=relaxed/simple;
-	bh=VeTcA5MwrGthUyG7cJEFRyk62o3fx96Kk0CLLwaSwzk=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=EmxN+Y4Iz0J/bjUaBS0CkKNm5SeVRU5kt1yc+WSl5Q2ec29k0fdUrQjNJdSHT6XqwGHu5aaMW68jdf26C4ACSjk5L0Tp91z27truqXC2mW97AuEe16EF1YipTg8eufzs1/tQiJapGCIBs/rRJC7EQ0HNFhKhpEYcZ1VeAoGIJWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ap8G/tj4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787307996; c=relaxed/simple;
+	bh=AZtGpB8cAixSCG1gYkxZYk7i2Aa5q842H31VCI3h/xY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HpSNfpW+HMARM90iUyPDaS0qq+x0B7WF1w4fuBbaXBSwrWMRZCKGtZkBAGjOAstKZrwNJJb75piTtB4VGmo6BlKvfANvr/T+TBTMZ93soOn4lg3de1nwT3oflj+qoYk0XuNtlpsmZe1AssNm+Bexf9TyI92loxxxvTjJT3uuTTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LVeXG4pU; arc=none smtp.client-ip=95.215.58.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ap8G/tj4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DE1C1F000E9;
-	Fri, 21 Aug 2026 09:41:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787305306;
-	bh=9A+8A6s25n0SQ5fvtYxPTDpevpeVYgRWJJtH69nAFyU=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Ap8G/tj4EcUTjQER6pk44eI4z2PXV9atIKHuOBNZMR9QuHnuXbeEE1JTG2+V9LngS
-	 KWVZz+T6pG8jLKKO9ByLWBQql6Dj/+5mJexoVVMwN28F4VZChQhNijaAyuyODYei4C
-	 GYHwQ0Yd96kIpez+GGh4YFd3aZorGsgOA7bLyxUd0jcOJIvWvd9mhYyfKXFLvsAteL
-	 KO4L1H111tOTjo9lmdSSGyFKxhwrfAreBsHUnW8o/9fYJS5BZjp4jLBFDRJT41iBgy
-	 PZcpTvJ3hi5G9d8e0gkjNUxJTrKoULauOfTHaiCjsSWRRF5VaG3fJ78sgsow2kIhu7
-	 wcSHz3JNyjOow==
-Content-Type: multipart/mixed; boundary="===============3203392408353547802=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LVeXG4pU"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=AZtGpB8cAixSCG1gYkxZYk7i2Aa5q842H31VCI3h/xY=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787307986; v=1; x=1787912786;
+ b=LVeXG4pUCxrOEUuwxSLNewDPJxIR2+HStDkek43mbsm/qSVNdEVVVKnpaPSkH1C4aejdjZdR
+ Ke1tO7thsFJgi7S+t+oDmhFilXRzW+M5WcsXwtNE9qhQEmL0hQZmvASc37x+NZjVcGSnPMSykPV
+ Le3SteHUO5vpoGUHK77zjgyQ=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from [10.22.64.46] (118.201.124.118)
+	by smtp.migadu.com with ESMTPS id b12b57000b2c7d09;
+	Fri, 21 Aug 2026 10:26:16 +0000
+X-Mizu-Trace-ID: b12b57000b2c7d09
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <b380f7e7-2e0e-4c8c-9a70-e6a577d268cf@linux.dev>
+Date: Fri, 21 Aug 2026 18:26:11 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0cc1a9e0e2964114bdae810b0d9bb32f49c589e379ebcf4df07d02a3993467f8@mail.kernel.org>
-In-Reply-To: <20260821084726.3769957-2-sanghyun.park.cnu@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3] bpf: Fix stack out-of-bounds write in cgroup
+ link update
+To: Sanghyun Park <sanghyun.park.cnu@gmail.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: John Fastabend <john.fastabend@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Stanislav Fomichev
+ <sdf@fomichev.me>, Pu Lehui <pulehui@huawei.com>,
+ linux-kernel@vger.kernel.org
 References: <20260821084726.3769957-2-sanghyun.park.cnu@gmail.com>
-Subject: Re: [PATCH bpf-next v3] bpf: Fix stack out-of-bounds write in cgroup link update
-From: bot+bpf-ci@kernel.org
-To: sanghyun.park.cnu@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,bpf@vger.kernel.org
-Cc: sanghyun.park.cnu@gmail.com,leon.hwang@linux.dev,john.fastabend@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,sdf@fomichev.me,pulehui@huawei.com,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 21 Aug 2026 09:41:46 +0000 (UTC)
-
---===============3203392408353547802==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Language: en-US
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260821084726.3769957-2-sanghyun.park.cnu@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
+On 21/8/26 16:47, Sanghyun Park wrote:
+> The cgroup link update path checks only the program type. Several cgroup
+> hooks share a type while using different runtime contexts or verifier
+> contracts. A UDP6 sock_addr program can therefore replace a UDP4 program
+> and write beyond the four-byte ipc.addr context into adjacent fields of
+> the stack-local struct ipcm_cookie. The same omission lets an LSM_MAC
+> program replace an LSM_CGROUP program despite the incompatible return
+> semantics.
+> 
+> Validate replacement programs against the link attach type. Use the
+> existing per-type rules where applicable, and compare LSM
+> expected_attach_type explicitly because both flavors share
+> BPF_PROG_TYPE_LSM. Preserve legacy non-enforcing CGROUP_SKB
+> ingress/egress updates.
+> 
+> CGROUP_SKB programs do not require CAP_NET_ADMIN when loaded. That
+> permission is checked when the program is attached. Once the link exists,
+> updates are controlled through its FD, so BPF_LINK_UPDATE does not check
+> CAP_NET_ADMIN again. Keep this behavior and only validate the attach type
+> during link update.
+
+Any issue of checking CAP_NET_ADMIN for BPF_LINK_UPDATE?
+
+If no, checking CAP_NET_ADMIN for BPF_LINK_UPDATE looks okay.
+
+> 
+> Fixes: 0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active bpf_cgroup_link")
+> Signed-off-by: Sanghyun Park <sanghyun.park.cnu@gmail.com>
+> ---
+> v3:
+>   - Factor the CGROUP_SKB CAP_NET_ADMIN check into an attach-only helper.
+> v2: https://lore.kernel.org/r/20260818061021.2551771-2-sanghyun.park.cnu@gmail.com
+>   - Extend validation from cgroup sock_addr programs to all cgroup program
+>     types, including exact LSM attach flavors.
+>   - Preserve legacy CGROUP_SKB ingress/egress replacement compatibility.
+>   - Keep the CGROUP_SKB CAP_NET_ADMIN check on attach, not link update.
+> v1: https://lore.kernel.org/r/20260805052858.2390918-3-sanghyun.park.cnu@gmail.com
+> ---
+>  kernel/bpf/syscall.c | 41 ++++++++++++++++++++++++++++++++---------
+>  1 file changed, 32 insertions(+), 9 deletions(-)
+> 
 > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 6874ba1424af..dfea337ff25e 100644
+> index 6874ba1424af05..dfea337ff25ea5 100644
 > --- a/kernel/bpf/syscall.c
 > +++ b/kernel/bpf/syscall.c
+> @@ -4483,12 +4483,6 @@ static int bpf_prog_attach_check_attach_type(const struct bpf_prog *prog,
+>  	case BPF_PROG_TYPE_SK_LOOKUP:
++	case BPF_PROG_TYPE_LSM:
 
-[ ... ]
+Add a 'case' here instead of checking it in link_update()?
 
-> @@ -4542,6 +4536,19 @@ static int bpf_prog_attach_check_attach_type(const struct bpf_prog *prog,
->  	}
->  }
->
-> +static int bpf_prog_attach_check(const struct bpf_prog *prog,
-> +				 enum bpf_attach_type attach_type)
-> +{
-> +	if (prog->type == BPF_PROG_TYPE_CGROUP_SKB &&
-> +	    !bpf_token_capable(prog->aux->token, CAP_NET_ADMIN))
-> +		/* cg-skb progs can be loaded by unpriv user.
-> +		 * check permissions at attach time.
-> +		 */
-> +		return -EPERM;
-> +
-> +	return bpf_prog_attach_check_attach_type(prog, attach_type);
-> +}
-> +
+And, a selftest is needed to verify the issue and the fix.
 
-This isn't a bug, but would a name that mentions the permission gate
-read more clearly next to bpf_prog_attach_check_attach_type()?
+Thanks,
+Leon
 
-The new helper bpf_prog_attach_check() sits near
-bpf_prog_attach_check_attach_type() in the same file, and the two names
-differ only by a suffix while the security-relevant difference is which
-one enforces CAP_NET_ADMIN.
-
-link_update() deliberately calls the longer-named, non-enforcing one
-(bpf_prog_attach_check_attach_type), and bpf_prog_attach() plus
-link_create() call the shorter, enforcing one (bpf_prog_attach_check).
-A name like bpf_prog_attach_check_perm would make the choice at each of
-the three call sites self-evident.
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32466070697
---===============3203392408353547802==--
+>  		return attach_type == prog->expected_attach_type ? 0 : -EINVAL;
+> [...]
