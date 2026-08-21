@@ -1,238 +1,189 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E313242AB
-	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 17:54:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 315123876D5
+	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 17:58:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.181
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787334893; cv=pass; b=IcZYw1zsuev2s//2UTkY67NwNJFWJGP13xQMm6VLvcdzo37dhsYXJAHQT0cxq9CZCwAkzSeUmLksJkq7ppw9oi4hKcfcyUgfXqpj32WtDWtdhdUOD8/6NwLIi3AiqZbt1kZmBXPrDadkop9MOetU8gnT2DGWcauOcJdpKQn0YPo=
+	t=1787335122; cv=pass; b=nCU9p4VCBZq2iGKkXsYnCi2fWNVvBr58Tu0smnUygCWk40u3JB8DoyZm2puMCP5zWc2bnTqX2PaySOSWRe6avgcYxkv2a2BRwqVf0gQJCP8B8wPLrXqaHCwEOvvdm1aBzi5wzevjm9pEroGAhm7jyEqEoBophmMtMg0/G8Ww+1g=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787334893; c=relaxed/simple;
-	bh=Wb10cQV0GNCQAmtrfdzlv1vAKN+Okzc2W2wJsiC8/3w=;
+	s=arc-20240116; t=1787335122; c=relaxed/simple;
+	bh=Q4YO3gW5+/ElgvrLASWt6W169GDgI6U2GbR0+q0Y9VQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RqQIAYgBcGdARi37DqQJJUmkn2rGwMKtpSfoh2RWoUqsPpCW9xTcYcPB+IGHtBluqzrgXSHU/tDhDUYLkgXw8sL4vnPh0AHLx77KfgS/KmeqjfpXB6iiqC9wbXRRVy90wBb8dYVkR5B3kF04DFbAj5JxBxnYTxIffHwXplCibUc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LdGUxZ3J; arc=pass smtp.client-ip=209.85.210.173
+	 To:Cc:Content-Type; b=TgVYOl/GWFTe6AO2fqv6hv7GGxrK16+aI25D/7jvSu39+eBdCRsVFBoMSXR3y2BsQILGE+J5DFNY3MNb65tMDndiBraLD/SW1wuNJ6y5ar9OUxNeU/Wg09lFN+DMLy9IuIBS4K7riNSD8Pxc4tsuRqx212ZUDA121J7DSgi3TiY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q5BL7ozj; arc=pass smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LdGUxZ3J"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-84faf0fa17eso1239873b3a.2
-        for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 10:54:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787334892; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q5BL7ozj"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-84e84a6c4bfso1076973b3a.1
+        for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 10:58:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787335120; cv=none;
         d=google.com; s=arc-20260327;
-        b=pbqfdVihrOc0y7oae3YvKe2aPNngwO2hcJB7H5d7DZP2xbfdthHZiTDbNlGnuUzfoU
-         wg9FtO1Cl6YIj6hwRNamlSPHPDWw6Bl1Wtp8wR6Hcqbs5qfu1WSdGVrclzMjtQzEOvLT
-         pRNrTaOi8oXDgtO+Qseg+qwWm4gX7Zby2OaP4jlF36e88cGFCvQ+pjbgtjO+CATlB7/C
-         Nn7YsZVZBJtDukAc/LJKnsRxB8huSHGLP1sTvsaEMP56kxfcntqQfUUj5EOASGKWCpyr
-         4IZYRFeM50XIbl1idmhJTVELBU3NkNkYtjjvA2tvXv+Q9ABAjFQmzsSzIm1dNdRCMSje
-         b5Dg==
+        b=UbC9OkxX27Hy3tDHWylPnfqq+9Yy4jDmRvnzaGlme2SK1mBsJWWwIMOLrYCj7brNvv
+         atOt3fpynsjEqZyvcH5HD3ZZpncjQiNHX6L4SYpohxt7o76Rn9Pti/rr0fFXLrKM2DtX
+         Jt2NqbUqf9PDtz4zizTBa4aXrYYxSWEh4PUU4c0UoJDHe+w04408W4IDrkyWT8baUUE3
+         J6YFNLgR9fjF69fys1bcoB3TOAcXb4l+GjbgrJ/A4M9KJ/snKfI/h0QjDnj+cV0d7a7c
+         KG8pFSAOB+TcVVbirLkd9+x+Tw1A3R/gsHHIL4bE3c7iOHDpFFpY9hr1ccTY+ZvziFgd
+         nAQA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=/l7e8SO5Ery+TpChjjrJ8KvNw8N8LmHU/7SuIDOmo/U=;
-        fh=rX1o07B57S/QwEf5isB8gL9f4uKasDukC1cg4473AhY=;
-        b=d84qixU8kygCHthtePEE5HYLCsRHSqzkA5I0ikGzm4kZnbM41CSWfWzpDlhEetuhcb
-         iJy4tBu+VS8li7dyzre2BynYDQbXuqN32ycT+NdEHqVEMYawhtKQe30jABBtOT6/wOJi
-         5i8J5Gh+ktddum9Cs5ibnoJHdqWWA6abWO2ahmw1jI43UfnXmmWgtQ7L+hjH7TVlrrtH
-         FawqEru1SYwoGsTSKTEZy3cWGSVl8uDI2rXuhtAr7fH1/wj/yS5IQE62cah2jAdDSX/v
-         Npu3vFtmh/LRSOGj3VYyvMZGT5p2onnMQc3fxcoE2OttbaM+72gaZ07pgkFfXQa4ONGm
-         Wx2w==;
+        bh=vY0AW2cZn1de8V5YbPks+VNx+ReYUlC/G8zlgT+JpJY=;
+        fh=gnWV1EzPUsezA44czL0vbamwc7jfvYfN/ZGFKf07q8E=;
+        b=kVOM/1Vmjoeu1GdfC63U0uOgzLHb2uzct1lXad5txXjU6j/rKiraidwpYFcDltIdyi
+         hJhrwHBz139Hc44e6EuWmIZBxdr2V/hGg+3KqAISNtuKPbMK5M0wuNhTPR5wZp3Q2dy2
+         oHGdTLwYASAceyXw2hpEFF1cxDppSR/veEwUDfQja3VOVvOCC+0yne7EHDYIugGJma5n
+         iyVum2KnM886imNfDTu1IyrTOmvBxyBNLmW3kwN1i8H6sqNVtRSEmfTgdQPEhZNboqst
+         ATT6frwvQmSdz0AHnh9O7a/emxF8yDGKTvkBPapxRv7wOqDAAMPaPKc7rSdiMx1nP9le
+         EzlA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787334892; x=1787939692; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787335120; x=1787939920; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=/l7e8SO5Ery+TpChjjrJ8KvNw8N8LmHU/7SuIDOmo/U=;
-        b=LdGUxZ3J4dw1x/9/8dlcl54Ca1uvjbxApxI9oE4OGe25v6/ia5AGok9Aj2yuASETi+
-         vKtF5zkh749zuMbPitVldCWxGyzoHGQWGYRQSbB8QNTjUGD6FP8J+Hj4CTv30pyYyEMa
-         zueVZNXuFtNorPMHnZWGOpSscJzYHLnepMqCRLSfgvptetLAXgDQMk04NftD9g2gQfL3
-         hlFM9kdXgly7cqyCAO/ryggrqQ7UMT1PRJ2TxMCnI5EIdxrcQJkp+wDFQtJe5vi9Xum1
-         hUGpXMF7k+BZrGYP95l72+HOv36+taG42eg588Phpe+1OKCQE662ftu3hKfJaqickjqH
-         Owaw==
+        bh=vY0AW2cZn1de8V5YbPks+VNx+ReYUlC/G8zlgT+JpJY=;
+        b=Q5BL7ozjPv9rQb3RAXRy94cbuVQdG9AAyZGyNNlly3JyOcD7JkegD2yQ4nn/M+REBq
+         LwCwnlppCbfAhxQYQO1RBpzLopkERX6qEcYC621wS+c8+lJpVrCoprs3Sl07/n4CmIa3
+         kmSfqooOG5uXbaAd+DaeSIBC1a6Mz9SM2QOaErWQa+ExIajgRnuWdpq3QJrUiooyTzCe
+         q7gtZGJtW5U7SGhsosehIfwwPbkQBJ8sRsbPHFDliRr7+dd81nCjF2hcw31Jb/Zirk05
+         aTVJ7woZWFjRksBkBrtg8nTyWewPAg5bMGD6y+vyJqTIrNepjgV5l596CqPJYnxeEHrf
+         Wugw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787334892; x=1787939692;
+        d=1e100.net; s=20251104; t=1787335120; x=1787939920;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=/l7e8SO5Ery+TpChjjrJ8KvNw8N8LmHU/7SuIDOmo/U=;
-        b=EPAyQtvo307waOwWjrNc6jaELtxLd/JOI/i8dEe6NVQGUZ+pyk0FaCT1mB9Zhy+j4e
-         GDteO13JLSzrU8QB83n9VShJux2nfkjqBYBSdz6V7b+pSe6AwyG19QCjEvDMbsrL6yLt
-         Go5EI3PrZV1fnkeHeM4fB6CoQYNUfxkxnKqMJxBCQXIhzVwhoJN8WbEU8frD/T2mkkgz
-         vYrDGy/sQ3tuYpt4Ypo4pMWPADCVrVxWreMfduF9jhmWtkDsm1Y+4gzkiekjNHsTGkYP
-         w25/OwIruPpMurtC0qqXXaGMYQK5DF05xzNRRQPAe4jTVmG/PnWJfBlCgS2IKrRziYZy
-         yG+Q==
-X-Gm-Message-State: AFuF++nFEz+1N6RuRg0r8uwWYpVXvHhN8YJFWzQkImTIU7zlaKCc5J6b
-	62ztQa0M5cQCvYb0M08bMsJmh7T4hAJOiO40EvQERJj+KrfWruOQDkFQhVXbq1LmAuSIRqXb5X1
-	dLqXo0sZVSj99wgPkID0D+cF0Q4WWSs4=
-X-Gm-Gg: AR+sD116LIUezhbX7FhapboiF2usLGajXqsRzbZiRd53n/5MZgshj6FQesJCydh2liQ
-	P9WXGi8v9yoJD3k/udXuMn8b2bQBs8IP8Lf6hFcoTih2Iky4VReCfrG8zwSbvHsxIToEfVfBZ1h
-	6LXAt+ecaNghQZemIfgPpzxY2zRkUE4hspP3zaR+6/QoyrsPxIp7DblmzIiGiVP92hIRmQ8FGUG
-	hghg4SwHuIY6b1PgONykqlyYDUxSpeSKNzPsJ2Q/q2jbJpuu5Ku7a/vZcAbt1haT03U7qeD12kW
-	0lGCGM3eGTnf5k1kMQIx59EclEIk8xYFaRaW+66iyXuZjTubqI8qfx+qXhwyUzBOqWxqAude1SD
-	b3pVvom/Lm1r1bU9MZjriVw/Lwg==
-X-Received: by 2002:aa7:88d5:0:b0:84f:3f5e:f072 with SMTP id
- d2e1a72fcca58-8520be6fd83mr505752b3a.10.1787334891506; Fri, 21 Aug 2026
- 10:54:51 -0700 (PDT)
+        bh=vY0AW2cZn1de8V5YbPks+VNx+ReYUlC/G8zlgT+JpJY=;
+        b=ZJnmmLDPSWG+Uq0xPimPw+7Bal7UuFyKbZ/XVfJY7/dMgI7Wjm9O+LRYBOag1iyHs+
+         d+NLUdN5U02Ky98zltNiQ6UykkaQIBLap3HikVn6L1mAVaJt/xPSrDOOgTsynMj4cpts
+         w718tu63K44xApwHYMNZCLH1PB4UIoUSm1n6BJJo/mWL9S4u3MSMJV7bppEO5klC0vLt
+         eEUB1avpdFSeV1gdEvxrP/gBGrIal+hnBs46fC9opP1QkjNXuc1x7m2on64HAyK84bno
+         snX/HpGWgL7jJvWIHrfeFYHndFVmT7N3OC4dfT5I5W8+WysuqEeyXedHmR203dfOv7kd
+         VqkQ==
+X-Forwarded-Encrypted: i=1; AHgh+RriEAEIKgIPO1frSkDMxDN788v+106qLqtEO16BGBZp3SIL6QWvPx9mZF85m/y6FouInSQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++ncPHXtRsArobr6WtapmFFbbpIOqQUM1e14ciJE5AnWGMEtgbMA
+	5bqtChPjBIGVsH5uzheIvEhxPq1t3faIzrFNf0PdxAdqRfi0PNYMNYKNx35cC8Gzu+AXviZKA/O
+	ncMt90WQj1cPHlElKiSAslzcCNYnjhJw=
+X-Gm-Gg: AR+sD123TWxbnMr/LQvwNWM+ErcTNRY2YCOyD/kIn4o60NH8IsXBSbi9JfJ/CKFCRKU
+	BfpPEkQPC3C/2bE8HYe5RtKrXJZRbKesYfLeAUiN1kPj5ZdJDIFpO7rWr+l+sg1DQNwm8HC4gmb
+	LjgupZUdDd7K1zW+Bhv6xDzt30qMeuwRV+CW7pklNXs93HyUXvZtI9DAFaCtGVuoYX03wANd4xm
+	CkE0hqLIsS5Hguh3aUf0U8fzyzlWC8IhJ0xGyLnreu+yQ+x5wlzTZXEonqyDc0VU0o0CToLoJkn
+	i3qRf+2RHk615pRZL8DQ9ndswEISyW5JtRtGU3TTHXoTibYhkLoZDG5CkRHFdwhuyKaQvLu7DQx
+	gNNmlBCTYn6P6JGD2pOZCOqguQA==
+X-Received: by 2002:a05:6a00:1a16:b0:84a:2b96:5986 with SMTP id
+ d2e1a72fcca58-851df920e5fmr15445121b3a.8.1787335120562; Fri, 21 Aug 2026
+ 10:58:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260220-veristat_prepare-v2-0-15bff49022a7@meta.com>
- <20260220-veristat_prepare-v2-1-15bff49022a7@meta.com> <CAOu3gNgW9+C7bOPkt0CGs8d_ad_TNyQ0AKv7_Jfg4=F5PET4ow@mail.gmail.com>
- <CAEf4BzYbUhpwP3nq=M4Ph12LwRYO+mYSQB8SJjsw0AzZAFqyVQ@mail.gmail.com>
- <CAOu3gNgv_nJ6tjZOZ-FnJNYntbnpKn+nRnO4G6j0fkBmeeu=GQ@mail.gmail.com>
- <CAOu3gNjg5vQ=t0C5UmStNpK8zutFC7kcYTrKt9aiR8Gia+rdNw@mail.gmail.com>
- <CAEf4BzY2ucQUsNbbaKcOyLhXNbMBS4ouoJknAqNJ6CN8rPG92Q@mail.gmail.com>
- <CAOu3gNggJbiDO+_2tq8W9mAY=BtP+wnpn314sJaq2e-y=vcpbg@mail.gmail.com> <CAOu3gNhc3NHdMkvvd=RvWyhBB4s4O5g2K==kcLvuUoR81zoJvw@mail.gmail.com>
-In-Reply-To: <CAOu3gNhc3NHdMkvvd=RvWyhBB4s4O5g2K==kcLvuUoR81zoJvw@mail.gmail.com>
+References: <20260818153202.90714-1-leon.hwang@linux.dev> <948e7ff41f942519880f9789faf6ca8ed9d0e2cf42eab5b9e1567ead5367b830@mail.kernel.org>
+ <a1b1c6ee-ad7d-4972-a15b-f567e7787a6c@linux.dev>
+In-Reply-To: <a1b1c6ee-ad7d-4972-a15b-f567e7787a6c@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 21 Aug 2026 10:54:39 -0700
-X-Gm-Features: AcwNN1WS5PeTdBJaYWy8mWhhfBktUfvKs7HSlhsmJFToF6tBam-yzLCI0UAulgs
-Message-ID: <CAEf4BzZKy5Wv_TxtEqsbzW+v-tO28kgY=9RhXrnbPhOZcVbOSA@mail.gmail.com>
-Subject: Re: [External] [PATCH bpf-next v2 1/2] libbpf: Introduce bpf_program__clone()
-To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Cc: bpf@vger.kernel.org, 
-	DL Linux Open Source Team <linux-open-source@crowdstrike.com>
+Date: Fri, 21 Aug 2026 10:58:26 -0700
+X-Gm-Features: AcwNN1Wfemt68pjxlxhVKlBjQGCM7z3Kdzzy_4k8tCZIXp4Ks6nXUMCLVcg67rU
+Message-ID: <CAEf4Bza6X9SZmnyqdZDFKJG5nWchuaEuFyC-MbuzQCuZ+dwq+w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Avoid flaky resize value test
+ for percpu data
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
+	shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, martin.lau@kernel.org, clm@meta.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 17, 2026 at 8:32=E2=80=AFAM Andrey Grodzovsky
-<andrey.grodzovsky@crowdstrike.com> wrote:
+On Tue, Aug 18, 2026 at 6:44=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> w=
+rote:
 >
-> > > > Hey Andrii, getting back to this important topic -
-> > > >
-> > > > I reviewed the proposed solution and the code . An object-wide
-> > > > bpf_object_open_opts flag that means "all programs must be
-> > > > considered loadable, but maybe later" collapses two things that nee=
-d
-> > > > to stay separate: a program that is not currently loaded but may lo=
-ad
-> > > > later (feature gated, config-driven), and a program that is
-> > > > permanently not going to load on this object instance (e.g. it
-> > > > targets a kernel symbol/struct field that doesn't exist on the runn=
-ing
-> > > > kernel, or it lost out to an equivalent alternative implementation =
-and
-> > > > will never be used). Today those are distinguished by the autoload
-> > > > bool: false + never load =3D the second case. If the semantics of "=
-not
-> > > > autoloaded" change object-wide to "loadable later," we lose the
-> > > > ability to express the second case at all -- every non-autoloaded
-> > > > program in the object now implicitly carries the cost and risk of
-> > > > being treated as eventually loadable, even the ones that never will
-> > > > be. So, every non-autoloaded program is implicitly pulled into
-> > > > relocation resolution and map creation, since nothing can rule out
-> > > > that it might load. For a program that  never will, that's
-> > > > wasted preprocessing, and if its relocations fail against this
-> > > > kernel's BTF, that failure is no longer isolated to just that progr=
-am.
-> > > >
-> > > > Given this I wonder if it's reasonable to re-evaluate the approach =
-of
-> > > > per-program enum from the original patch series we prosposed , rath=
-er than a
-> > > > boolean plus an object-wide opt-in flag. Keeping disabled as its ow=
-n
-> > > > per-program state (excluded from relocation and map-creation, failu=
-res
-> > > > isolated) alongside auto and the new dynamic case state gets us
-> > > > the capabilities we want without forcing every already-
-> > > > disabled program in an object to be reclassified as "maybe loadable=
-.
-> > > >
-> > >
-> > > Goodness, 4 month since that discussion... I don't remember all the
-> > > details, we can start a new conversation and go over details, but I'm
-> > > just about to leave for vacation and Mykyta is still out on vacation,
-> > > so I'd suggest to restart this conversation with all the details anew
-> > > in about a month of so, if that's ok?
+> On 19/8/26 00:15, bot+bpf-ci@kernel.org wrote:
+> >> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c=
+ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> >> index 5671c31085cd..2b69290bcc3e 100644
+> >> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> >> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
 > >
-> > Defenetly! So just to clarify, per your advice from earlier in this thr=
-ead,
-> > we don't plan to rely on the cloned sessions concept anymore and sugges=
-t
-> > instead to review again the approach we proposed initially [1].
+> > [ ... ]
 > >
-> > >
-> > > Explicit tri-state per program vs implicit tri-state (if not
-> > > explicitly disabled -> maybe enabled, if per-object setting is set) i=
-s
-> > > probably not the most blocking part of this. But again, let's come
-> > > back to this with fresh heads :)
+> >> @@ -236,6 +223,57 @@ static void test_global_percpu_data_lskel(void)
+> >>      test_global_percpu_data_lskel__destroy(lskel);
+> >>  }
+> >>
+> >> +#define PAGE_SIZE 4096
+> >> +
+> >> +static void test_global_percpu_data_map_resize(void)
+> >> +{
+> >> +    const __u32 desired_sz =3D sysconf(_SC_PAGE_SIZE) * 2;
+> >> +    struct test_global_percpu_data *skel;
+> >> +    const int arr_value =3D -1;
+> >> +    struct bpf_map *map;
+> >> +    int err, prog_fd;
+> >> +    size_t data_sz;
+> >> +
+> >> +    if (sysconf(_SC_PAGE_SIZE) !=3D PAGE_SIZE) {
+> >> +            test__skip();
+> >> +            return;
+> >> +    }
+> >> +
+> >> +    skel =3D test_global_percpu_data__open();
+> >> +    if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
+> >> +            return;
+> >> +
+> >> +    map =3D skel->maps.percpu_arr;
+> >> +    skel->percpu_arr->arr[0] =3D arr_value;
+> >> +    err =3D bpf_map__set_value_size(map, desired_sz);
 > >
-> > We will gladly review it again and adapt it so that it is acceptable
-> > to the community and can be
-> > beneficial to all users of libbpf.
-> >
-> > I will reach out again in the second half of August.
-> >
-> > Thans,
-> > Andrey
-> >
-> > [1] -https://lore.kernel.org/all/20250122215206.59859-1-slava.imameev@c=
-rowdstrike.com/t/#m93ec917b3dfe3115be2a4b6439e2c649c791686d
+> > This isn't a bug, but since the guard above already pins the page size =
+to
+> > 4096, would `const __u32 desired_sz =3D PAGE_SIZE * 2;` read more direc=
+tly
 >
-> Hi Andrii,
+> Will change to 'PAGE_SIZE * 2' if the next revision is needed.
 >
-> Following up as promised from our discussion last month regarding
-> dynamic program loading.
+> > here - and is the unguarded `#define PAGE_SIZE 4096` preferable to the
+> > `#ifndef PAGE_SIZE` form used in sockopt.c?
 >
-> I reviewed our initial patchset and the subsequent mailing list
-> thread. It seems the conversation previously veered into unrelated
-> topics, such as concurrent programs loading and dynamic map loading,
-> which are beyond the scope of the dynamic program loading capability
-> we are trying to introduce.
->
-> To recap our main point from July, using a global object-wide flag
-> collapses two distinct states: programs that are genuinely disabled
-> (e.g., due to missing kernel symbols, where we want failure isolation)
-> and programs intended for late, dynamic loading. If we use a
-> per-object setting, every non-autoloaded program is forced into
-> relocation resolution, potentially causing load failure and wasting
-> preprocessing time.
->
-> If that is ok with you, I would like to resend the original two-patch
-> series as an RFC with a cover letter, rebased and retested against the
-> latest bpf-next branch. This way we can review and discuss the
-> approach from a clean slate.
+> No. PAGE_SIZE must be 4096 here.
 >
 
-yes, let's start with resending patches (you can drop RFC, otherwise
-CI testing story is worse) and let's go from there.
+can you please elaborate why do we care about specific PAGE_SIZE
+value? it's a bit weird to guard test based on page size...
 
-I'm actually wondering, if we are going to introduce a their auto-load
-state from current true/false, whether we should also have a new SEC()
-naming convention for such programs so that one can declaratively
-specify that this program *might* be loaded after object load, and as
-such should go through a proper relocation and other manipulations.
-I.e., we have SEC("raw_tp/...") for eager load, SEC("?raw_tp/...") for
-default no-load, perhaps we have to add SEC("!raw_tp/...") (or some
-other appropriate prefix) for lazy-load programs?
-
-And actually (I won't erase the above, but it just occurred to me)
-nowadays perhaps decl_tag is the better way to go. Can you experiment
-with this? We can bikeshed on naming later ;)
-
-For bpf_program__set_autoload() API, I *think* we can manage backwards
-compatibility by converting bool argument to enum with zero matching
-to "don't load", 1 matching to "eagerly load" and 2 will be "lazy load
-maybe later if user ask for it".
-
+> >
+> >> +    if (!ASSERT_OK(err, "bpf_map__set_value_size"))
+> >> +            goto out;
+> >> +    if (!ASSERT_EQ(bpf_map__value_size(map), desired_sz, "bpf_map__va=
+lue_size"))
+> >> +            goto out;
+> >> +    if (!ASSERT_NEQ(bpf_map__btf_value_type_id(map), 0, "bpf_map__btf=
+_value_type_id"))
+> >> +            goto out;
+> >> +
+> >> +    skel->percpu_arr =3D bpf_map__initial_value(map, &data_sz);
+> >> +    if (!ASSERT_EQ(data_sz, desired_sz, "data_sz"))
+> >> +            goto out;
+> >> +    if (!ASSERT_OK_PTR(skel->percpu_arr, "skel->percpu_arr"))
+> >> +            goto out;
+> >
+> > This isn't a bug, but would it read more consistently with
+> > test_global_percpu_data_init() to check ASSERT_OK_PTR(skel->percpu_arr)
+> > before ASSERT_EQ(data_sz, desired_sz)? The block this replaces checked
+> > pointer-then-size, and the surviving test_global_percpu_data_init() at =
+the
+> > same file still does pointer-then-size.
+>
+> Unnecessary to keep consistent for their order. This is a really minor
+> readability concern.
+>
 > Thanks,
-> Andrey
-> >
-> >
-> >
-> > >
-> > >
-> > > > Thanks!
-> > > > Andrey
-> > > > >
-> > > > >
-> > >
-> > > [...]
+> Leon
+>
