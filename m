@@ -1,98 +1,87 @@
-Received: from mta1.migadu.com (out-159.mta1.migadu.com [95.215.58.159])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51DFA48C402
-	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 13:42:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC64D47606E
+	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 14:35:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787319726; cv=none; b=FgcIR1vJy2dpWQjaHO72zuO2r3gTq4MdZasgrXqUwxSxf3lUjyuFYKRLdcKNspXJ0+3oFdc+9W1ea1ifxF7JDMWtixiAVnbCW2DLG7gjJVb8bVGvkdbfyIcoPozYJgf64LwJLEH7viQU4GY/c9Dujd+kxzPar9xezILJCziWPhQ=
+	t=1787322943; cv=none; b=Jjg3NRd8BjUBAJxpuEl/PxhJtFtxaLM1jostc2cgDjIr+L16S5E0ia0qKVT7Z5CH4Vrg4njo/xs/oQOwd3GzCE8CC6FzCQirOxdCi2vreLJOVxtIJj3JrISrHbyL6HR+b70Dg0ArhV2HQMaz4TWUP/VKrpVE1IXl0DzfxKrJkdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787319726; c=relaxed/simple;
-	bh=xoHK9+X6f4afTg10I65h11RX5Yl8L7R5TuqKmK/7bIY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fnsOxxSDn3+BvEcK6zEgA6EdmnMXLuQVNKXNoorDSdUYxxAB9Km0s+T1Y68X3lfRttVFmNGnTNAl7XFx2PlXPbMtREwbh86kR0lo9Kmh+Dm15iuUvMTtLgjIFscVbr9ovrQiZgVXehmnzDMVj4lrMfisMGGlMjq/F8+xLbgeulk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DxykamQ+; arc=none smtp.client-ip=95.215.58.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787322943; c=relaxed/simple;
+	bh=PDdqbyTYDnI6F2JI6t2go8vBhCAE1oCm9u6gpLxjUKM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X0y8RcMUgF1XMVQh8wD8y1QFStKUnPr9xGJ1lT2VY7uUJ4xRNvDAU/5vsP66NjxdEpVa/syIjQeZgg4KrMJ1iCCwYulRUDujkd3YcGItPkE27WcVUEStMoRf5WdNJv9Ca5zeoLEIWRWvpiaKqsWOcpppHFKcwQ3mdCLEu3M2W10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=N7XSbwGf; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DxykamQ+"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=xoHK9+X6f4afTg10I65h11RX5Yl8L7R5TuqKmK/7bIY=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787319718; v=1; x=1787924518;
- b=DxykamQ+hnui9EXFCEsAxjUY1tZ+iCVayqvRiMv3jOMfjUeiJ1VDGYkbtokOMaKyNGfmHQMj
- 82ZGxMroXliEMCMlWplVhfiiHh42HlMsY0HTxq0fSQjiRnk4W+BxJ0IyzX5p5x1AF3FgR0po3Mb
- YwN4zEf3LimMRkph5Szxtqsw=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [172.20.10.7] (117.20.154.125)
-	by smtp.migadu.com with ESMTPS id e6011bafc4258f8b;
-	Fri, 21 Aug 2026 13:41:48 +0000
-X-Mizu-Trace-ID: e6011bafc4258f8b
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <1ab678ef-6349-4374-9ebf-22f857211ca7@linux.dev>
-Date: Fri, 21 Aug 2026 21:41:29 +0800
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="N7XSbwGf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1787322941;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=11dPx6bGB018UBDYzKEYfI8AnpdGEAinmo2rW1PteIc=;
+	b=N7XSbwGfAVd93GWW12YpuGUw+Kl3ilO+Xymz3YX79fqpAEIkJEeSAlIgTSydaEcnUiGAJ3
+	0j/0EthTYf8zXbKGQk6eABp3ACxcyo/zZHJPOoqIXuhixzofP09oRdS68BaobplGlQ6jHE
+	5QPbXA9SAWVJjztQqlbynADV2qMFQ+Q=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-118-62cyuJzCPGGsO1KE7j6-FA-1; Fri,
+ 21 Aug 2026 10:35:32 -0400
+X-MC-Unique: 62cyuJzCPGGsO1KE7j6-FA-1
+X-Mimecast-MFC-AGG-ID: 62cyuJzCPGGsO1KE7j6-FA_1787322929
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5D7921954B20;
+	Fri, 21 Aug 2026 14:35:28 +0000 (UTC)
+Received: from fedora (unknown [10.44.49.72])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 08EAD3002D30;
+	Fri, 21 Aug 2026 14:35:23 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Fri, 21 Aug 2026 16:35:27 +0200 (CEST)
+Date: Fri, 21 Aug 2026 16:35:22 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Jens Axboe <axboe@kernel.dk>, Peter Zijlstra <peterz@infradead.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	Steve French <sfrench@samba.org>, linux-fsdevel@vger.kernel.org,
+	bpf@vger.kernel.org, linux-cifs@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 1/4] signal: allow taks to temporarily block
+ TIF_NOTIFY_SIGNAL
+Message-ID: <aohiKmI6IBpX7mvS@redhat.com>
+References: <20260818-work-tif_notify_signal-v1-0-1ee1fcc5b3ff@kernel.org>
+ <20260818-work-tif_notify_signal-v1-1-1ee1fcc5b3ff@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3] bpf: Fix stack out-of-bounds write in cgroup
- link update
-To: Sanghyun Park <sanghyun.park.cnu@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: John Fastabend <john.fastabend@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Stanislav Fomichev
- <sdf@fomichev.me>, Pu Lehui <pulehui@huawei.com>,
- linux-kernel@vger.kernel.org
-References: <20260821084726.3769957-2-sanghyun.park.cnu@gmail.com>
-Content-Language: en-US
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260821084726.3769957-2-sanghyun.park.cnu@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260818-work-tif_notify_signal-v1-1-1ee1fcc5b3ff@kernel.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On 2026/8/21 16:47, Sanghyun Park wrote:
-[...]
->  
-> @@ -5968,6 +5975,22 @@ static int link_update(union bpf_attr *attr)
->  		goto out_put_progs;
->  	}
->  
-> +	if (link->type == BPF_LINK_TYPE_CGROUP) {
+Hi Christian, sorry for late reply.
 
-Furthermore, I think this link type check can be dropped. Then,
-link_update() will keep the same bpf_prog_attach_check_attach_type()
-with link_create().
+This series looks very good to me. Just one nit...
 
-WDYT?
+On 08/18, Christian Brauner wrote:
+>
+> +/* Prevent TIF_NOTIFY_SIGNAL from interrupting this task. */
+> +static inline unsigned int no_notify_signal_save(void)
+> +{
+> +	unsigned int flags = current->flags & PF_NO_NOTIFY_SIGNAL;
 
-Thanks,
-Leon
+I think that
 
-> +		atype = link->attach_type;
-> +		/*
-> +		 * BPF_LSM_MAC and BPF_LSM_CGROUP share BPF_PROG_TYPE_LSM, so
-> +		 * the helper's default prog-type check cannot distinguish them.
-> +		 */
-> +		if (new_prog->type == BPF_PROG_TYPE_LSM &&
-> +		    new_prog->expected_attach_type != atype)
-> +			ret = -EINVAL;
-> +		else
-> +			ret = bpf_prog_attach_check_attach_type(new_prog,
-> +								atype);
-> +		if (ret)
-> +			goto out_put_progs;
-> +	}
-> +
->  	if (link->ops->update_prog)
->  		ret = link->ops->update_prog(link, new_prog, old_prog);
->  	else
+	unsigned int flags = current->flags;
+
+should equally work?
+
+Oleg.
 
