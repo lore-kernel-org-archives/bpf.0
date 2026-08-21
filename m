@@ -1,64 +1,64 @@
-Received: from mail-ej2-f1.google.com (mail-ej2-f1.google.com [74.125.228.129])
+Received: from mail-ej2-f10.google.com (mail-ej2-f10.google.com [74.125.228.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A96744334CD
-	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 23:35:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.129
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA957400DFC
+	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 23:35:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787355341; cv=none; b=ROyLPmCkcw9RRyFAlyJAFeH5ORMmfhdktjqS2JVmy6AbG4yefjaeegsNkKId81dOhYVBXNl9rTWLGvq1QScqV6+vN7KLY6iXHbT+ujvITMauyYHiWgDgKSVek/8rFruD7ZRirvICxt7Dqit/f99FqKbHK4+9wF2SIJ0qSwTCL80=
+	t=1787355342; cv=none; b=RiiqF2anmCjHYcd1SrwHlS2GH03CzwSXemrZ8tbaJEk7VIFsezE2pSAa22D1DHi/eveMuGqT+OGAtmCmmW6O+GgV33bsODYuJK3lHGP05k2tgJ8CldWsLGXIIebxAVlpRaLlgXDLnaMrB22dfLGTxWnX9XzsH3rKjZ9da04aXm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787355341; c=relaxed/simple;
-	bh=UP8UarlaPbJGGDqPfkB4z8Px7M3mX78s0gbVSTi+R8Y=;
+	s=arc-20240116; t=1787355342; c=relaxed/simple;
+	bh=RZYh0Vkz33ernshYGQNEPEh6sacgZ5u1cmeiqxF/9Fo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SVOq3+JR7iYBjr04cAyJ1wN46wba/220o45FZA1nhtFmi6SlbW9d5/eq3KHqCCQwZ7uN3B25ooUSkcZHGor0Lg/yzwZP5CyR/ZLUY7jus97G1NnaFm0JaIGjtvvDzu35O1sOLiu8LUJu8oGr8vVfi2dbU2HJ+h3qvIyfwN6cZ/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BpfHMnhq; arc=none smtp.client-ip=74.125.228.129
+	 MIME-Version; b=GQzPXRtiVVEGTnpa0+II6wcg/WcHPe8rcKOkKrctCrtsTMu8SVKXDeEjQOkZZTWLLxZRAIrPHHRihRiIBVwi/JjMZh1vXO2kp/ud/N5u8qxkvmBqxBL6u0gaOyS2pTtx4Ds4XWMI+eyQarSKjAnZkCLvNZNUfH+LVLLGdcsEhhY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E9Kgw/ka; arc=none smtp.client-ip=74.125.228.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BpfHMnhq"
-Received: by mail-ej2-f1.google.com with SMTP id a640c23a62f3a-c1971f5efc3so89591766b.0
-        for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 16:35:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E9Kgw/ka"
+Received: by mail-ej2-f10.google.com with SMTP id a640c23a62f3a-c219353e5bbso98216166b.0
+        for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 16:35:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787355338; x=1787960138; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787355339; x=1787960139; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=I8DyRfH94//e75LObyCeiGduB5kIujTF3txe+GLd9/A=;
-        b=BpfHMnhqYbrEjh8KYbEof7WVJg1Xhys0Xfr7SjrRlFALQLjPLAQJg5IdLZx08GcWAw
-         zOExXnXFP67lJ2XGz1QRYuXgZWeO7tS2tjeBdLXwp+Q8FI3BCqEYQvt1NLm/vWK8O2lJ
-         izKHv+BKSnIkrFLXHPq0WQmIwrCkVt1pYfiC3vtnfWjy0PF2wGVY7esPF0oxe1zyRTa8
-         XDhQDattRqnAw8PNmzgPJdQjD14v7wwZpwHD33INAamsoFyA8tgBcBLr9arzeUfS4WvQ
-         j2Qu+NrcjjYhVqQTPzdTyAELSlNDLe7MJP5Jv/cYvbpHLoUGwf1ioFtxBgK/Y3/kLeJj
-         uaDQ==
+        bh=HdTQQowwwx5mxwkOjci4FtVllWvq/i/d6hbZbuLMrug=;
+        b=E9Kgw/kaaXO+VqkXMUER/MA+Dg8p0IASFWBtria5M/gdYkbpLh7PGJFWZwNxTNiEuS
+         hikJjg0a4or+9dhb7aK5HTPTAq0zpSaAvlv54a+SmE3cTSQa4mAGckV8JjA/8NbWacnE
+         qyT9KxiZ37SNOn2326rBm6+A61PGQrgv1ntGCAwyrrRwHaBdmhgVJawiaw1ekDKSJQfu
+         8T8m7cvjtRcIpj9nUA36RzTbwLpbqAWj36vucjPW+Y6CFVjm6L5lit764C/nudtZTsLl
+         41+xCOr9pM2cd/Fbqj/f2R6KmfCsB4sdkPMRx0BnbeAMh2hnQ8LYp0BwJEoS7JtkSivF
+         m6Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787355338; x=1787960138;
+        d=1e100.net; s=20251104; t=1787355339; x=1787960139;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=I8DyRfH94//e75LObyCeiGduB5kIujTF3txe+GLd9/A=;
-        b=DVAQO5AbfLUtE8NPZ3SgFcLleSb4pUMfkXdFB5X/IW1ybNdpKnhS3TS0RCG7+9hmRT
-         6WjzLzrx+v5ioSSeQZTbx2AbcsJZslbTE7xY4OCzJ3UCyh1yH1lqKsGwHym2fownBgMk
-         6BvSjBLlTiih7Zj6zFSOphx6zOClhkmbX0lA++FFG81ykyIL4hUW42GXpfPy0DQ/CcHy
-         xoFiyUwjeyJ0wjrvFm5K5tJucE4rKm7HieL9k7R4MRrJpx4/ZqQJZIhYEMo2185vz4Jh
-         A+0vmsVh5ah77qkMXUQtPQYEnYks/XKIffyAPsNyyHMT1LYUPxLZk97IW03YRMpqmjtJ
-         m8Gw==
-X-Gm-Message-State: AFuF++mpzeYDPtTqazUFgC4LVO3QS7KJscmRNxMmgPNqk6sL9SWPUH54
-	VaL15BGGFJNc3DGgXqCeCcBiWmBzrZ8XiZAh9DasH7kwMH3U99f1B9EodclMEVBD
-X-Gm-Gg: AR+sD121oL1MemsMEgxeTre3obO/x4rFnA27I9psWxfL0liU4tmfTmsEm1qrmrSwgsK
-	69F18O77zAP8E1zCAzIW5Dav2wvlCdeyv+4rPG33wv3ojyoTGVqnvSQewAhCmZLNbmljc5nEFP/
-	w02Y+M3OciJntBhDz5gEFTDTNZOfkIIlVdX2KYp6r1MGlurd0Do2cC5N3t7kahT0GqlzU6g9WQG
-	YPGxC2nrbJ6gkdQe1G2vwp9/6QikyTICEzZ+u7rBsu0aOOw08Cuv6gdOASsRqR2OX+DSjqO1RMe
-	McDvLoBFuNvRHHnEgYmT6gBWjlExateV7r/ElcvyXFfg+LgZ99bRw6UfxhvornWK6d0oHsQmPN7
-	IesmWKI7fdsYctM8spUeFGRAAo2o14Pizjk+gUoNzwIod+dHG9DvgkSYFCiJQcHeVt0gVLyA914
-	jVU0ngNfrxMwNDqPH6WD6LjZyXErdRX6StHSNURpBmNKCOzFF1lBmSEDlXJ14LrcffW07hJZkF+
-	AHw4DSA+6Vn4JFQHCyoXQSeVoX7dSe9wJD+1Wwdo8L/XP7+TPmhIxhg740tYI4AmEHITdNZiaYx
-	ouM1ofPB4/xF6925CSBgvhY3aTHgchPuc6I8SA==
-X-Received: by 2002:a17:906:eecd:b0:c20:f871:1018 with SMTP id a640c23a62f3a-c24920d5db2mr197304166b.21.1787355337674;
-        Fri, 21 Aug 2026 16:35:37 -0700 (PDT)
+        bh=HdTQQowwwx5mxwkOjci4FtVllWvq/i/d6hbZbuLMrug=;
+        b=KbFffQfG/K02+3pdzqP97KX5EVL8S4ZNM6hPKGjVhWIS14QY9k4lWH5z82o7LQbQ6d
+         3tXf+tNlP2X+rUwDVIKwFW9TNgznZTLTm1q6rmcWJRHEyob7+BaS3pT/0qlaIygccSEx
+         3eQ07Gg6XS8+LYqVkEuXP4YgRTiU7gdLz2Hzm88nixu96tvGSgvX6fqKk8vK6LBzufDk
+         QR5mF+Gvj7/1oKI45cnZNTvPWk6XdIHmyV1JwuwU93ir2AQYCSGUZ7oOe0J3t2oMlvtw
+         YnkoEI1fUK7wXKnaDYi5oGxG1uY2fi37imqo0gfgB3bntzx5NAIRueLpvGbqdt0T2kkX
+         4r8w==
+X-Gm-Message-State: AFuF++n8b+panBtCzWFTcF1BJDMG3/TUhii2eTZ/Uqnmi978HPzSD0dA
+	a2KsVDMAAh0zcIvFLqkvm5I+yU8poS79HzP1hw5H6riOvU14LhuixRAeMuFQtCdr
+X-Gm-Gg: AR+sD12l2NjY4H/U6ElMA3jrW9qGLpjcbpJicA4Qvm/Grd9YOhpmMRwnO9on9VCpufz
+	uDiqhFonnWXaQMOGITUEzfXdYAcmpeT/IWOkmdXTA0znUGCXBh/16fi4ak8YgDBcx1YZd1G8anh
+	TtOyoYYZddQ5Nbx8xjjqSircTelxTurx4Hpvm2M1WqTX20FuWTsUbGARCDla+g3L7tz9XNxMwRc
+	vOyr85N1/4hYpsKbrTJJiruZzHwzV8rXDqYcoho/bZUeIEvOXcYwNLA4BoQvdQ/fUqsVkBTZ72T
+	GBlKHWMd/z6YuF/YY9LXsrPc8jMF/pIEfTHj8YTZPzSSmLTzbtADhSZ3aVuwvghmZsIcxPx+xDg
+	ewhnlAq7ml9Qc/qDvPLIl8bLYfMPP1hLqwlvJdNiub2MjAFs1D3QbiviXnDxbgyRdwi064fvkzF
+	l2ZYmhCzOIkpnS4WjCPUbFNNAhIzCrVhcpLZaFIxOPp6EviOsnHDvFzoA098weJ0rvRPnqay/FT
+	ql+UbHfat3hDxVuRjbwv8ixivFFMr/C9SJVMvECIEdHUSXQ7r5PpqEOkD7b6b3Mf3jy6HgcHgJ2
+	Yn8bnESsBbOT+jyyYahY7v3/2lZ05PCWlA3aMA==
+X-Received: by 2002:a17:907:1ca0:b0:c16:14d1:b529 with SMTP id a640c23a62f3a-c249262043bmr188960566b.18.1787355339193;
+        Fri, 21 Aug 2026 16:35:39 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c24966f99basm37254966b.37.2026.08.21.16.35.37
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c24968ba7b6sm38862666b.62.2026.08.21.16.35.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2026 16:35:37 -0700 (PDT)
+        Fri, 21 Aug 2026 16:35:38 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -69,9 +69,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 13/14] selftests/bpf: Exercise arena arguments on every capable JIT
-Date: Sat, 22 Aug 2026 01:35:07 +0200
-Message-ID: <20260821233516.3426127-14-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 14/14] docs/bpf: Document split arena argument JIT capabilities
+Date: Sat, 22 Aug 2026 01:35:08 +0200
+Message-ID: <20260821233516.3426127-15-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260821233516.3426127-1-memxor@gmail.com>
 References: <20260821233516.3426127-1-memxor@gmail.com>
@@ -81,210 +81,54 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6708; i=memxor@gmail.com; h=from:subject; bh=UP8UarlaPbJGGDqPfkB4z8Px7M3mX78s0gbVSTi+R8Y=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIavjwQTf8hnzSv7sfro3VufCjKf7NAvzZyktDZ63fEJ2v EDYI6+KjlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAExk1nGGv9JODD0RUTnajOXy TwovsGVzh6vLLDkVMXmL/sO2vLushxgZ9hf9u/T65sJq5qV5hnd21X577OEyb5WR0o6Lc4yOb+Z 0ZgMA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2337; i=memxor@gmail.com; h=from:subject; bh=RZYh0Vkz33ernshYGQNEPEh6sacgZ5u1cmeiqxF/9Fo=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIavjwYS3uQpK93mmHmx76hraJS+28PblZC7xLr81v2aJL 9K633e3o5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABO53sfI8HMnd8tZy0yHg8tL 4uaciVpekJU5z5XLWvjl7+1ddrdDpjL8T9+2RPhWgX3XmWk/t+0yzbPWFQrj3jnR7VWPXYHKoht uHAA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-The arena kfunc runtime tests are restricted to x86-64 and arm64, so new
-JIT implementations can compile without exercising rebasing, nullable
-arguments, five-register calls, or the verifier capability gate.
+Arena kfunc calls and struct_ops callbacks perform opposite conversions
+at different JIT boundaries and are now advertised independently.
 
-Run those tests on RISC-V, s390, LoongArch, and PowerPC64 as well. Teach
-test_loader about PowerPC64 so it can select the newly annotated programs.
-
-Enable the struct_ops arena tests on RISC-V, s390, and LoongArch, whose
-indirect trampolines now implement the separate reverse-conversion path.
-PowerPC64 remains covered only for kfunc arguments because it does not
-advertise the struct_ops capability.
+Document the architectures supporting each capability so users can tell
+where arena allocation kfuncs and arena struct_ops arguments can load.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- .../bpf/prog_tests/test_struct_ops_arena.c    | 16 ++++++---
- .../testing/selftests/bpf/progs/arena_kfunc.c | 36 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/bpf_misc.h  |  1 +
- tools/testing/selftests/bpf/test_loader.c     |  5 +++
- 4 files changed, 53 insertions(+), 5 deletions(-)
+ Documentation/bpf/kfuncs.rst | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
-index 7f9f54ba3fbe..7f44b00af06d 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_arena.c
-@@ -6,7 +6,13 @@
- #include "struct_ops_arena_attach.skel.h"
- #include "struct_ops_arena_fail.skel.h"
+diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+index 89dea6b0b024..65e56491cae1 100644
+--- a/Documentation/bpf/kfuncs.rst
++++ b/Documentation/bpf/kfuncs.rst
+@@ -301,9 +301,10 @@ An example is given below::
+         }
  
--#if defined(__x86_64__) || defined(__aarch64__)
-+#if defined(__x86_64__) || defined(__aarch64__) || \
-+	(defined(__riscv) && __riscv_xlen == 64) || defined(__s390x__) || \
-+	defined(__loongarch__)
-+#define HAVE_ARENA_STRUCT_OPS_ARGS
-+#endif
-+
-+#ifdef HAVE_ARENA_STRUCT_OPS_ARGS
- /*
-  * Attach callbacks with __arena and __arena__nullable arguments and drive
-  * them through the bpf_testmod_ops3_call_test_arena*() kfuncs.
-@@ -111,11 +117,11 @@ static void arena_arg_attach(void)
- void serial_test_struct_ops_arena(void)
- {
- 	/*
--	 * Arena struct_ops arguments need JIT support, currently x86-64 and
--	 * arm64 only. Elsewhere verification fails with "JIT does not support
--	 * arena arguments", so the programs cannot even load.
-+	 * Arena struct_ops arguments need JIT support. Elsewhere verification
-+	 * fails with "JIT does not support arena arguments", so the programs
-+	 * cannot even load.
- 	 */
--#if defined(__x86_64__) || defined(__aarch64__)
-+#ifdef HAVE_ARENA_STRUCT_OPS_ARGS
- 	if (test__start_subtest("arena_arg"))
- 		arena_arg();
- 	if (test__start_subtest("arena_arg_fail"))
-diff --git a/tools/testing/selftests/bpf/progs/arena_kfunc.c b/tools/testing/selftests/bpf/progs/arena_kfunc.c
-index bf0d304e0e59..8ee2bd4d6633 100644
---- a/tools/testing/selftests/bpf/progs/arena_kfunc.c
-+++ b/tools/testing/selftests/bpf/progs/arena_kfunc.c
-@@ -28,6 +28,10 @@ volatile u64 stash;
- SEC("syscall")
- __arch_x86_64
- __arch_arm64
-+__arch_riscv64
-+__arch_s390x
-+__arch_loongarch
-+__arch_powerpc64
- __success __retval(0)
- int arena_arg_forms(void *ctx)
- {
-@@ -72,6 +76,10 @@ int arena_arg_forms(void *ctx)
- SEC("syscall")
- __arch_x86_64
- __arch_arm64
-+__arch_riscv64
-+__arch_s390x
-+__arch_loongarch
-+__arch_powerpc64
- __success __retval(0)
- int arena_arg_rebase(void *ctx)
- {
-@@ -114,6 +122,10 @@ int arena_arg_rebase(void *ctx)
- SEC("syscall")
- __arch_x86_64
- __arch_arm64
-+__arch_riscv64
-+__arch_s390x
-+__arch_loongarch
-+__arch_powerpc64
- __success __retval(0)
- int arena_args5(void *ctx)
- {
-@@ -146,6 +158,10 @@ int arena_args5(void *ctx)
- SEC("syscall")
- __arch_x86_64
- __arch_arm64
-+__arch_riscv64
-+__arch_s390x
-+__arch_loongarch
-+__arch_powerpc64
- __success __retval(0)
- int arena_arg_mixed(void *ctx)
- {
-@@ -174,6 +190,10 @@ int arena_arg_mixed(void *ctx)
- SEC("syscall")
- __arch_x86_64
- __arch_arm64
-+__arch_riscv64
-+__arch_s390x
-+__arch_loongarch
-+__arch_powerpc64
- __success __retval(0)
- int arena_arg_unpopulated(void *ctx)
- {
-@@ -195,6 +215,10 @@ int arena_arg_unpopulated(void *ctx)
- SEC("syscall")
- __arch_x86_64
- __arch_arm64
-+__arch_riscv64
-+__arch_s390x
-+__arch_loongarch
-+__arch_powerpc64
- __failure __msg("arena pointer requires a program with an associated arena")
- int arena_arg_no_arena(void *ctx)
- {
-@@ -205,6 +229,10 @@ int arena_arg_no_arena(void *ctx)
- SEC("syscall")
- __arch_x86_64
- __arch_arm64
-+__arch_riscv64
-+__arch_s390x
-+__arch_loongarch
-+__arch_powerpc64
- __failure __msg("is not a pointer to arena or scalar")
- int arena_arg_bad_reg(void *ctx)
- {
-@@ -221,6 +249,10 @@ int arena_arg_bad_reg(void *ctx)
- SEC("syscall")
- __arch_x86_64
- __arch_arm64
-+__arch_riscv64
-+__arch_s390x
-+__arch_loongarch
-+__arch_powerpc64
- __failure __msg("arena pointer cannot be a stack argument")
- int arena_arg_stack(void *ctx)
- {
-@@ -232,6 +264,10 @@ int arena_arg_stack(void *ctx)
- SEC("syscall")
- __arch_x86_64
- __arch_arm64
-+__arch_riscv64
-+__arch_s390x
-+__arch_loongarch
-+__arch_powerpc64
- __description("arena_arg_stack: not supported, dummy test")
- __success
- int arena_arg_stack(void *ctx)
-diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-index 5eacf1b43252..c35359c97e44 100644
---- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-@@ -159,6 +159,7 @@
- #define __arch_riscv64		__arch("RISCV64")
- #define __arch_s390x		__arch("s390x")
- #define __arch_loongarch	__arch("LOONGARCH")
-+#define __arch_powerpc64	__arch("POWERPC64")
- #define __caps_unpriv(caps)	__test_tag("test_caps_unpriv=" EXPAND_QUOTE(caps))
- #define __load_if_JITed()	__test_tag("load_mode=jited")
- #define __load_if_no_JITed()	__test_tag("load_mode=no_jited")
-diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
-index 07807757b518..221393f2a8ef 100644
---- a/tools/testing/selftests/bpf/test_loader.c
-+++ b/tools/testing/selftests/bpf/test_loader.c
-@@ -378,6 +378,7 @@ enum arch {
- 	ARCH_RISCV64	= 0x8,
- 	ARCH_S390X	= 0x10,
- 	ARCH_LOONGARCH	= 0x20,
-+	ARCH_POWERPC64	= 0x40,
- };
+ Calling such a kfunc requires the program to use an arena map and a JIT with
+-arena argument support (currently x86-64 and arm64); verification fails
+-otherwise. The program can pass any value without compromising the kernel. A
+-value that does not point into the arena is a program bug.
++arena kfunc argument support (currently x86-64, arm64, RISC-V, s390,
++LoongArch, and PowerPC64); verification fails otherwise. The program can pass
++any value without compromising the kernel. A value that does not point into
++the arena is a program bug.
  
- static int get_current_arch(void)
-@@ -392,6 +393,8 @@ static int get_current_arch(void)
- 	return ARCH_S390X;
- #elif defined(__loongarch__)
- 	return ARCH_LOONGARCH;
-+#elif defined(__powerpc64__)
-+	return ARCH_POWERPC64;
- #endif
- 	return ARCH_UNKNOWN;
- }
-@@ -585,6 +588,8 @@ static int parse_test_spec(struct test_loader *tester,
- 				arch = ARCH_S390X;
- 			} else if (strcmp(val, "LOONGARCH") == 0) {
- 				arch = ARCH_LOONGARCH;
-+			} else if (strcmp(val, "POWERPC64") == 0) {
-+				arch = ARCH_POWERPC64;
- 			} else {
- 				PRINT_FAIL("bad arch spec: '%s'\n", val);
- 				err = -EINVAL;
+ The suffixes have the same meaning on the arguments of struct_ops stub
+ functions, with the conversion running in the opposite direction. The
+@@ -311,9 +312,11 @@ kernel caller passes the kernel arena address and the trampoline converts
+ it while saving the arguments, so the callback receives an arena pointer
+ it can dereference directly. With ``__arena`` the kernel caller must not
+ pass NULL. With ``__arena__nullable`` a NULL kernel pointer arrives as NULL.
+-However, there is no obligation to prove to the verifier that such a pointer is
+-non-NULL before use, in-line with existing semantics of arena pointers used in
+-a program (or obtained from any other source).
++Struct_ops arena argument conversion is a separate JIT capability, currently
++provided by x86-64, arm64, RISC-V, s390, and LoongArch. However, there is no
++obligation to prove to the verifier that such a pointer is non-NULL before use,
++in-line with existing semantics of arena pointers used in a program (or
++obtained from any other source).
+ 
+ .. _BPF_kfunc_nodef:
+ 
 -- 
 2.53.0
 
