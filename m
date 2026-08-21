@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D063C196B
-	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 21:41:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE56439D6DD
+	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 21:41:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787348484; cv=none; b=HOfYRakvBaxBnhNbKgLjIJRqsu+Uulvi/5xuiurg5FSvAir2BXPEsyLcmqMe2L31oMYR0e2zlXvM7sWHxM+uORo6T3duil6EDumGPmaxDaa8DGyM16N3JUJhybR+U6PlyxpIOA+jJ0nY3qqc11GYJlgCZiM+jJEY1DRQOQXkJpA=
+	t=1787348484; cv=none; b=gYHv2jUSeETBY5J0IWiub5W/YG7jMN5t9qVmaVL+VBFuhN3QEK1mp1N/3KRPdz0MJrOOuUeUZtT6Fs+3/TqiYuTuacYi392Regx7HqHhhBUAG4/C/a+mINP33a8P6DJJ1EDHODaRp1czP8QsNCpontSmWbuYopdNVaLdhEnCMDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1787348484; c=relaxed/simple;
-	bh=VboGFFFrLwYtTBb5wYm3g1xEt3QGZbEdtcitgeCghHY=;
+	bh=+x9WbfERZdOskOLET28DhPFWGo+anDsgUap0ponAF4k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VrHGa4tSocHU/YqHpEt/Vn/LuO85D/Q21OxqEwWxuwa3fYItMx8It5fMAD9JbkuSf/Y7mRaLfWrhqvyk9y9mhLKAFGy2UIuRaCrBPYxLhNH4RvIff6n0CvZ6n1U6IU55jBxUPQusEP/pLgiw/wF98PK46ONHIwgcflGzqCF8KfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=HpV7SUnv; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=Izq8NhUpWVkvPuh9BqMImT4MUk/FLt4XGhMR7PSySciKGAxRsbZgeJ7OK8A2XVAHhx6wsm0zcDCEPpYf3BnBpI9eJWQQ7lZqiXWE4/0bhP2kiGaAHs11/ldK2eD6/QlMHDPBkgqlKQAru+tC5ykn62dsAWIda+ehZDOUQR9G+pY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=TZbsS0OJ; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="HpV7SUnv"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="TZbsS0OJ"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=xJINMvmrDTENbzN6j1NqwE34FpwAn23X3FGrIHP0Y4s=; b=HpV7SUnvHGsLIgK22EqEkAWD+O
-	kjLq6iXuKXm3NPazd97xOptK1NugEtKXUMNB3udQnWNzX5VNfJzxb2fZZsjndsPI1DwKebNBw3C7R
-	yea/WHxzWxRyUCvtRcv/56858AkKhwHtFnvUl9HS3xGDJLmOW+A7Iusxy6csx8lvRjfpmfGr/l+ly
-	LxGEjdJNrNOYjxFL/bR1haQrsBm8VryzpG+Fd3QK722wkktYguPgNjk3Cx/sBJ5MoBgb/eFeE4rgz
-	k3V7hygHrPBWe6OBNubydRs5J/PdFFKv6qMo9XNZkY3Iv1FjDT3+O7SxihEqYyTRCIBWUTD7TX6fP
-	nC/YKWpw==;
+	bh=8BuULVjail1D1lOGQq/B6O5KWN95fK8On9fo3eX1yjM=; b=TZbsS0OJCYLz9dXzj3rubCtY+b
+	n6IqUUNTK1yELr07fqgBzUUAv8WjcJOqiqFQHe8ci9P7VzcearYei5vC9zrlNb6B0aPKVuqXN3INp
+	/GqNcGbcslVd00oViyItxi8ILRm4Qyb6ZZRSIU34IVhm75XiNU4n/B7UPH85LR0Nh0Tz+Tyr+/+xn
+	7IoGuHaOX0QqKXw9HktGUoZogrgZkf36VKdyLeevLAvskD4cnZxP001KxOliQMPTIoMHGHdl2frJa
+	YPvXvYUj8MIl2Pcesgjb2b7J2Gqld43YxV8tW5cpLGZzhW5LBgfksG92kzNZ3isCoheSTcdJ7dazA
+	wQ5BhtDQ==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1wxWzC-000Mpk-23;
-	Fri, 21 Aug 2026 23:41:14 +0200
+	id 1wxWzG-000Mqi-2W;
+	Fri, 21 Aug 2026 23:41:18 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: memxor@gmail.com
 Cc: brauner@kernel.org,
@@ -41,9 +41,9 @@ Cc: brauner@kernel.org,
 	john.fastabend@gmail.com,
 	a.s.protopopov@gmail.com,
 	bpf@vger.kernel.org
-Subject: [PATCH bpf-next 03/11] bpf: Raise the bound on a program's signature size
-Date: Fri, 21 Aug 2026 23:41:03 +0200
-Message-ID: <20260821214111.1120748-4-daniel@iogearbox.net>
+Subject: [PATCH bpf-next 09/11] selftests/bpf: Allow appending to guest kernel cmdline in vmtest.sh
+Date: Fri, 21 Aug 2026 23:41:09 +0200
+Message-ID: <20260821214111.1120748-10-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260821214111.1120748-1-daniel@iogearbox.net>
 References: <20260821214111.1120748-1-daniel@iogearbox.net>
@@ -56,71 +56,60 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28099/Fri Aug 21 08:26:38 2026)
 
-signature_size is bounded by KMALLOC_MAX_CACHE_SIZE, which is 8 KiB on a
-4 KiB page system. Back then we chose it somewhat arbitrarily and was
-picked when a BPF program signature was RSA or ECDSA. ML-DSA (FIPS-204)
-verification is wired through the X.509 and PKCS#7 parsers, and BPF
-reaches them too via verify_pkcs7_signature() without having to know the
-concrete algorithm. The bound becomes a bit too small, thus add an
-explicit BPF_PROG_MAX_SIGNATURE_SIZE of 64 KiB and use that instead
-to cover all options.
+vmtest.sh currently hardcodes the guest command line, so there is no
+way to ask for such a setting without editing the script. Append
+$KERNEL_CMDLINE_EXTRA to it when set to it can be used for testing
+BPF keyring:
+
+   # KERNEL_CMDLINE_EXTRA="bpf.keyring_unsealed=1" \
+	./vmtest.sh -- ./test_progs -t signed_loader
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- kernel/bpf/verifier.c                              | 14 +++++++++-----
- .../selftests/bpf/prog_tests/signed_loader.c       |  5 +++--
- 2 files changed, 12 insertions(+), 7 deletions(-)
+ tools/testing/selftests/bpf/vmtest.sh | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a93a8dc427d8..575c4e5e4443 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -20972,6 +20972,13 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	return 0;
+diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
+index 6a3d026d76bd..e7e0b419a0b8 100755
+--- a/tools/testing/selftests/bpf/vmtest.sh
++++ b/tools/testing/selftests/bpf/vmtest.sh
+@@ -107,6 +107,14 @@ Options:
+ 	-s)		Instead of powering off the VM, start an interactive
+ 			shell. If <command> is specified, the shell runs after
+ 			the command finishes executing
++
++Environment variables:
++
++	KERNEL_CMDLINE_EXTRA
++			Extra arguments to append to the guest kernel command
++			line, for tests that need a boot-time setting. e.g:
++
++	  KERNEL_CMDLINE_EXTRA="bpf.keyring_unsealed=1" $0 -- ./test_progs -t signed_loader
+ EOF
  }
  
-+/*
-+ * Upper bound on the PKCS#7 signature blob passed with a program. Comfortably
-+ * above the largest signature the kernel can verify, and far below anything
-+ * that would make rejecting a load expensive.
-+ */
-+#define BPF_PROG_MAX_SIGNATURE_SIZE	(64 * 1024)
-+
- static enum bpf_sig_keyring bpf_classify_keyring(s32 keyring_id)
- {
- 	switch (keyring_id) {
-@@ -21011,13 +21018,10 @@ static int bpf_prog_verify_signature(struct bpf_verifier_env *env,
- 	u64 data_sz;
- 	int err = 0;
+@@ -286,6 +294,12 @@ EOF
+ 		QEMU_FLAGS=("${HOST_FLAGS[@]}")
+ 	fi
  
--	/*
--	 * Don't attempt to use kmalloc_large or vmalloc for signatures.
--	 * Practical signature for BPF program should be below this limit.
--	 */
- 	if (!attr->signature_size ||
--	    attr->signature_size > KMALLOC_MAX_CACHE_SIZE)
-+	    attr->signature_size > BPF_PROG_MAX_SIGNATURE_SIZE)
- 		return -EINVAL;
++	local kernel_cmdline="root=/dev/vda rw console=${QEMU_CONSOLE}"
 +
- 	if (!system_keyring_id_check(attr->keyring_id)) {
- 		key = bpf_lookup_system_key(attr->keyring_id);
- 	} else {
-diff --git a/tools/testing/selftests/bpf/prog_tests/signed_loader.c b/tools/testing/selftests/bpf/prog_tests/signed_loader.c
-index 77381d345435..0c5294738d6c 100644
---- a/tools/testing/selftests/bpf/prog_tests/signed_loader.c
-+++ b/tools/testing/selftests/bpf/prog_tests/signed_loader.c
-@@ -571,8 +571,9 @@ static void signature_too_large(void)
++	if [[ -n "${KERNEL_CMDLINE_EXTRA:-}" ]]; then
++		kernel_cmdline+=" ${KERNEL_CMDLINE_EXTRA}"
++	fi
++
+ 	${QEMU_BINARY} \
+ 		-nodefaults \
+ 		-display none \
+@@ -294,7 +308,7 @@ EOF
+ 		-m 4G \
+ 		-drive file="${rootfs_img}",format=raw,index=1,media=disk,if=virtio,cache=none \
+ 		-kernel "${kernel_bzimage}" \
+-		-append "root=/dev/vda rw console=${QEMU_CONSOLE}"
++		-append "${kernel_cmdline}"
+ }
  
- 	if (gen_loader_fixture_init(&f) == 0) {
- 		/*
--		 * signature_size beyond the kernel's bound (KMALLOC_MAX_CACHE_SIZE)
--		 * is rejected before the buffer is read.
-+		 * signature_size beyond the kernel's bound
-+		 * (BPF_PROG_MAX_SIGNATURE_SIZE) is rejected before the buffer
-+		 * is read.
- 		 */
- 		fd = load_loader(f.gopts.insns, f.gopts.insns_sz, -1, junk,
- 				 64 << 20, KEY_SPEC_SESSION_KEYRING, 0);
+ copy_logs()
 -- 
 2.43.0
 
