@@ -1,198 +1,98 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-159.mta1.migadu.com [95.215.58.159])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90B97478E39
-	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 12:32:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51DFA48C402
+	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 13:42:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787315564; cv=none; b=ALI5TuLVywYG8H1To+qLLbrsgq3bFhhoGHi7KudaoDvr6akkZvuq1LuhZ1gLxxpzmXXc5+B6GXU7rk8oPQRQW6/uZbnkkEVj/oLOOK5HMg66G1mXRpTpolax5/troVirYqRTbgw+yoVkOZA3+ISWqPbXjyNX2uB+BlzPfkcaV7s=
+	t=1787319726; cv=none; b=FgcIR1vJy2dpWQjaHO72zuO2r3gTq4MdZasgrXqUwxSxf3lUjyuFYKRLdcKNspXJ0+3oFdc+9W1ea1ifxF7JDMWtixiAVnbCW2DLG7gjJVb8bVGvkdbfyIcoPozYJgf64LwJLEH7viQU4GY/c9Dujd+kxzPar9xezILJCziWPhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787315564; c=relaxed/simple;
-	bh=pmSNxuyH/wG2c/iEw4Tj4WBkyUtLCA5+3cG11jF8U+Y=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
-	 References:In-Reply-To; b=KngNbP4FY1nzwQm/DouDpN/JerKCsFohCcOQWLvjfHKkRD5SdJRl/PJ35mpBHNda3dWxASyzr3ozs6Q0S/znCvv9gK1EGhFLgg/d/HNJLGShjXSW3Ki7l32f8rad1271KhzJ9CvlMrL25a/IqoH25OjQWwsOIi/2FM52E5CiPxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LMyx0zo5; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1787319726; c=relaxed/simple;
+	bh=xoHK9+X6f4afTg10I65h11RX5Yl8L7R5TuqKmK/7bIY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fnsOxxSDn3+BvEcK6zEgA6EdmnMXLuQVNKXNoorDSdUYxxAB9Km0s+T1Y68X3lfRttVFmNGnTNAl7XFx2PlXPbMtREwbh86kR0lo9Kmh+Dm15iuUvMTtLgjIFscVbr9ovrQiZgVXehmnzDMVj4lrMfisMGGlMjq/F8+xLbgeulk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DxykamQ+; arc=none smtp.client-ip=95.215.58.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LMyx0zo5"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 738E51A1779;
-	Fri, 21 Aug 2026 12:32:33 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 3F3C6604AA;
-	Fri, 21 Aug 2026 12:32:33 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8B51311C77092;
-	Fri, 21 Aug 2026 14:32:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1787315548; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=P/okyOxFdiUUod5QLoMbmhUXHjT1ii/NpGsbLcZR7cA=;
-	b=LMyx0zo5slGi86ZjY5mOL5O67VCvb592BKpstwHkfxvPANAuRTQoSSF4+lNsOn9Pq2jwA4
-	Gf4npCc7pHQfypFwuQLdJz3Q3ptrzVbKdUjduCZICuN7yQTYRPVlU4rbT3xRVuOh6YV49G
-	ZJ7OkPSBUQGHfGk4mesXyL1BhXVdi9wVTviL2Z7WlypxHRO4ZBiE9L6JTONps5nZNPEwkH
-	8ZtmPbPZCsA00zlOEZCWRz2T1RDc0PuU69DmQtVCBz8OsfonCMMy7SDERyfuMUDt4fsiAT
-	p6AJ2GgTYHYTXNBGWR4x9cSp0vM5guMojb5ZO876R5kSlZXozT3gx+2ldBkoog==
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DxykamQ+"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=xoHK9+X6f4afTg10I65h11RX5Yl8L7R5TuqKmK/7bIY=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787319718; v=1; x=1787924518;
+ b=DxykamQ+hnui9EXFCEsAxjUY1tZ+iCVayqvRiMv3jOMfjUeiJ1VDGYkbtokOMaKyNGfmHQMj
+ 82ZGxMroXliEMCMlWplVhfiiHh42HlMsY0HTxq0fSQjiRnk4W+BxJ0IyzX5p5x1AF3FgR0po3Mb
+ YwN4zEf3LimMRkph5Szxtqsw=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from [172.20.10.7] (117.20.154.125)
+	by smtp.migadu.com with ESMTPS id e6011bafc4258f8b;
+	Fri, 21 Aug 2026 13:41:48 +0000
+X-Mizu-Trace-ID: e6011bafc4258f8b
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <1ab678ef-6349-4374-9ebf-22f857211ca7@linux.dev>
+Date: Fri, 21 Aug 2026 21:41:29 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3] bpf: Fix stack out-of-bounds write in cgroup
+ link update
+To: Sanghyun Park <sanghyun.park.cnu@gmail.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: John Fastabend <john.fastabend@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Stanislav Fomichev
+ <sdf@fomichev.me>, Pu Lehui <pulehui@huawei.com>,
+ linux-kernel@vger.kernel.org
+References: <20260821084726.3769957-2-sanghyun.park.cnu@gmail.com>
+Content-Language: en-US
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260821084726.3769957-2-sanghyun.park.cnu@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 21 Aug 2026 14:32:23 +0200
-Message-Id: <DKUMHDFEVFRO.2OO8S3V3YE93Y@bootlin.com>
-Subject: Re: [RFC] running bpftool build tests in CI
-Cc: "Quentin Monnet" <qmo@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Bastien Curutchet"
- <bastien.curutchet@bootlin.com>, "Vineet Gupta" <vineet.gupta@linux.dev>,
- "Emil Tsalapatis" <emil@etsalapatis.com>, "Mykyta Yatsenko"
- <yatsenko@meta.com>, "Puranjay Mohan" <puranjay@kernel.org>, "Mykola
- Lysenko" <nickolay.lysenko@gmail.com>, <kernel-ci@meta.com>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>,
- =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, "bpf"
- <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <DKT6QBHWC8YM.4D90SOC807CW@bootlin.com>
- <16d6ca03-c8a4-4370-a8d2-c97a99d68bfc@linux.dev>
- <DKTMSYRHS7B8.3FQB9UVGWOTX3@bootlin.com>
- <51eaedf3-78af-40a4-b3d0-f668205808b9@linux.dev>
-In-Reply-To: <51eaedf3-78af-40a4-b3d0-f668205808b9@linux.dev>
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: 7bit
 
-On Thu Aug 20, 2026 at 10:12 PM CEST, Ihor Solodrai wrote:
-> On 2026-08-20 1:34 a.m., Alexis Lothor=C3=A9 wrote:
->> Hi Ihor,
->> thanks for the feedback
-
+On 2026/8/21 16:47, Sanghyun Park wrote:
 [...]
+>  
+> @@ -5968,6 +5975,22 @@ static int link_update(union bpf_attr *attr)
+>  		goto out_put_progs;
+>  	}
+>  
+> +	if (link->type == BPF_LINK_TYPE_CGROUP) {
 
->> Sure, I may have been a bit light on this. The test_bpftool_build.sh
->> located in tools/testing/selftests/bpf focuses on the various ways of
->> building bpftool:
->> - through kbuild (eg: make tools/bpf)
->> - by changing make execution dir (eg: make -C tools/bpf/bpftool)
->> - by running the tools/ main makefile (eg: cd tools && make bpf)
->> - by running the bpftool main makefile (eg: cd tools/bpf/bpftool &&
->>    make)
->>=20
->> This listing is also cross-tested with output path configuration,
->> testing both O=3D<output_dir> and OUTPUT=3D<output_dir>.
->
-> Right. That's what I meant by "it's testing makefile infra".  It's
-> checking whether any of the listed ways for initiating the build is
-> broken.
->
-> I agree that adding tests of this kind to CI is a good idea. My point
-> is it's worth expanding the coverage beyond the bpftool.
->
-> There was a patchset with fixes for out-of-tree build of selftests
-> recently, for example [1]. The tests would help to catch this earlier.
->
-> [1]=20
-> https://lore.kernel.org/bpf/20260728-selftests-bpf_oot-v1-0-05feb15d94db@=
-marliere.net/
+Furthermore, I think this link type check can be dropped. Then,
+link_update() will keep the same bpf_prog_attach_check_attach_type()
+with link_create().
 
-Ah, ok, thanks for the clarification, now I get how it would help to
-have the same kind of thing for selftests build (even though I am not
-clear about the exact list of supported cases aside from the one used in
-CI, but that can be sorted out later).
+WDYT?
 
-[...]
+Thanks,
+Leon
 
->> Understood, thanks for the pointers. I see that Vineet came up with a
->> new revision that eventually got merged, moving gcc-bpf as a dedicated
->> job in kernel-build-test.yml instead of kernel-build.yml (and so, a
->> failure on gcc-bpf does not mark kernel build as failed) I guess I can
->> replicate this (also, making sure to add this run_tests toggle, maybe
->> ?). However, I feel like it would not make much sense to have a build
->> and a test part, with artifacts going from the former to the latter, as
->> the build step actually _is_ the test. Also, the only needed artifact to
->> run the build is the kernel source tree (we don't need any vmlinux or
->> .config, at least for now)
->>=20
->> Would it be ok if I try it this way ?
->
-> I think if the "bpftool build" test doesn't depend on the kernel build
-> at all, it can be implemented as a new workflow independent of
-> everything. You don't even need new code in libbpf/ci for that, just a
-> new .yaml in kernel-patches/vmtest/.github/workflows/, and maybe a new
-> shell script.  And it can probably run on github-provided ubuntu
-> runners.  That would be a right way to implement it, given the current
-> state of things IMO.
-
-ACK, I'll try to apply all this decoupling from the existing workflows
-then.
-
->>> I'm thinking the whole "kernel build" workflow should be refactored
->>> into either separate selftests build jobs, or some post processing
->>> that looks at what artifacts where built successfully and reports
->>> failures. This will provide a little more friendly UI/UX. You're
->>> welcome to look into that if you're interested. But that's not
->>> directly relevant to the changes you're proposing.
->>=20
->> Trying to rephrase it to make sure I get your point, the goal would be
->> to have green/red checks specifically on selftests builds, rather than a
->> global green/red check on the macro job "build kernel and selftests" ?
->> Or does it go further than that ?
->>=20
->> If I get it correctly, yes I'd be glad to try and help on that, as a
->> separate task.
->
-> Ok, let me expand on this. Thinking out loud below.
->
-> As you correctly noted, currently we have a kernel build + selftests
-> build clumped together in a single job. I don't know if this was
-> intentional design when it was set up, but it's what's there.
->
-> The advantage of "build many things in one job" compared to "one job -
-> one artifact" extreme is in the cost of transition between the jobs on
-> the performance side (artifacts upload/download, potentially new
-> runner cold start etc.), and in the complexity of the independent jobs
-> (you have to set up prereqs every time, for example).
->
-> The disadvantage is in the coupling of the dependencies. For example,
-> currently if selftests/bpf build fails, veristat jobs don't run,
-> because they depend on the combined build job. But they actually *can*
-> run if the kernel build succeeded, but selftests build failed.
->
-> An argument can be made that if your CI run is red, you're going to
-> dig into the logs anyways, so this is all bikeshedding. But I think a
-> clear "kernel build failed" or "bpftool build failed" signal saves a
-> bit of time for everyone.
->
-> An idea I have on how we could have the cake and eat it too - avoid
-> the cost while keeping the clear signal - is to keep independent build
-> steps in the combined job as allowed to fail, so the job always
-> succeeds. And then have a separate check for "this artifact is missing
-> - that means the build failed - here is the log", either in a
-> dependent job or as a lightweight "check" job.
-
-Thanks, this clarifies a lot the direction to aim for. I now grasp the
-expected benefit from this potential rework.
-
-> It's not free though: some cost will remain in the complexity of the
-> combined job, and the checks.
->
-> Validating this idea requires github .yaml hackery (not a fun activity
-> in general) and experimentation. It looks doable to me, but there
-> might be problems with it I haven't thought about.
-
-So as stated before, unless someone picks it up before I do so, I can
-take a look at this and try to tweak those workflows to reach the
-improvements mentioned above, aiming to get clearer signals about what
-is failing, _while_ trying to keep complexity and CI execution time
-reasonable. I am definitely not an expert in github automation, so that
-will possibly lead to a few back and forths and experiments, but that
-will be an opportunity to learn :) I also have to state that I am still
-expected to make progress on the selftests conversion/cleanup though,
-but I can put this item right below in my todo list, as this is pretty
-related.
-
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> +		atype = link->attach_type;
+> +		/*
+> +		 * BPF_LSM_MAC and BPF_LSM_CGROUP share BPF_PROG_TYPE_LSM, so
+> +		 * the helper's default prog-type check cannot distinguish them.
+> +		 */
+> +		if (new_prog->type == BPF_PROG_TYPE_LSM &&
+> +		    new_prog->expected_attach_type != atype)
+> +			ret = -EINVAL;
+> +		else
+> +			ret = bpf_prog_attach_check_attach_type(new_prog,
+> +								atype);
+> +		if (ret)
+> +			goto out_put_progs;
+> +	}
+> +
+>  	if (link->ops->update_prog)
+>  		ret = link->ops->update_prog(link, new_prog, old_prog);
+>  	else
 
