@@ -1,99 +1,134 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C622641A4E5
-	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 22:50:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 595F237E5EF
+	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 22:54:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787352636; cv=none; b=dJ0x18Kc+3cZpfxB2afYhG4HQtwccRpjOck0dZcCcovOFDnYByrLf1NSjDLgkIucLFx/jmnKnXSqub6oooDT4vQYU6ljnbBn6gG2jijGhB2Mofh3HL22NckLvZz9vcM/U1/hQK1Obx2nLdZcr6/W7kcwXm+QJAtS0UqHrQpreqg=
+	t=1787352869; cv=none; b=ivjXMq11zh5IBpMui9JF1HdKy00sq+zXYYgO/6TNKRtWAM5dtMUuAHX1FPS0FCI3ChkQs3BL+NPl2ZW/Vk//5ninXzroMVl1yG/p+aBZfn7aecHsphoBgsp13LBwxt3TTgkX+HgloANR5n2x7J4TRYCQkPH6OnQ6CKrXrjGX5nI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787352636; c=relaxed/simple;
-	bh=mGXz1UMHhk0+md0JIpBwTDBGgzI16JVDAGkXPo6ecp8=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WDnJPUd/LvwlcIqdxZUuZs+ZOciaUU9jwWfDg/xDjByQ+8rVcN9CV51n2f/BAaMWW2mQMvIKH1hcbactcDioREnSWlMO0WWqyoNhFe4v09jvl5bR0B3QGGwJ9ribFxnXlhzC2FcerEcfX+BKk1z2L20//nFBL6+VzbOzR2HMP2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ks8hwjQR; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787352869; c=relaxed/simple;
+	bh=fhmG/PdQsc7hwgynJ4oQHd3jF5f+hsJnUmoAbiQDwQQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=hRWdLEA0J9e8a7fkRopBfs2ml4unOSy2GxElgHEwi6gueNCtZSOQC2WlC74LDg1Q50oQZR8uO0Qfb1fAqT0DWkXl8pIeFYy/tvr0imwmnreVa+gkXiBZUq1dmOYWx0XqUgKPB9GomuF+B3GsxXPYz0NIqlSfyWqOnz2jO9UaS3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZluiF9ad; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ks8hwjQR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E009D1F000E9;
-	Fri, 21 Aug 2026 22:50:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZluiF9ad"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D09F41F00A3A;
+	Fri, 21 Aug 2026 22:54:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787352633;
-	bh=y2gx9l84/TdaG7x8qD8if57DeO/Ru66H2uWn2GDUsWY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ks8hwjQR6GCeILntLKoBEc3Z2kdgW97ebpO6i0mq/FFqqLMxMNccg+z+If5GAHvGj
-	 mscnJoykTnp8mmfilKWdaHrQQ6RqcScr6mH4QYrng1rg+0C21PjDYg2k7fj5MFC74n
-	 D5Ao9JXNGdiwDdksvb6fwHvM7+EIrxmRqFfcD3+w23iAfdkGr4zRQ3n1iSqqRfxiuo
-	 Mp5Bs+yd6FqP8CLoDgJQB6pzFnPxE2tnpBgLBFU/1wGz7H8tUCWD08TUG9MJZxZwLP
-	 6KSOGQPkC4lBoCLSQG0tMEVEOFqHObRy7meIJYKXc5ed8RqT+xOgfC4KoJF6W7OvYF
-	 KsEqsYyQmBEZg==
-Content-Type: multipart/mixed; boundary="===============4882818045740024818=="
+	s=k20260515; t=1787352868;
+	bh=3Lwb+jAY66yb6bVipv/lytm1DLRs7O1ZaNU54pih/tw=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ZluiF9adw1C9DzQxzu1lFxn9FjBoRpn503HfpPvOpGymKWkRyKWB/cWLwcLj06mPs
+	 JC/Cfa0ggXo5Fjf2mZP6pO54VIAL8pY5k+y70gN2gJiSM+/NSUWfwvDbTnd/sFXmsm
+	 /H+HGOTKg/Gnx83JHI7akXXx80BX8P/kYmVWtk36RJVGXVANnmLUppwximFYn2Hhvf
+	 R0z7BoTRp03wuxENCF/Psxek6ivEBIY3u9Z3qDrIhjvMNK+yLyA7fPxQl5Quez+Jid
+	 h6MPN4xO5w59FdHXDDDAt7ulibCwkr0u1vMisHlsNKMhekJ6hhc9G0DmGG2/y+mVhQ
+	 tLEgerkVTKzBg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v7 1/9] bpf: mark instructions accessing
+ program stack
+Reply-To: sashiko-reviews@lists.linux.dev
+To: =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?= <alexis.lothore@bootlin.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260822-kasan-v7-1-99afee6ef7fd@bootlin.com>
+References: <20260822-kasan-v7-0-99afee6ef7fd@bootlin.com>
+ <20260822-kasan-v7-1-99afee6ef7fd@bootlin.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 21 Aug 2026 22:54:27 +0000
+Message-Id: <20260821225427.D09F41F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <5da9714b6f6348052cb0023924690970f39cc93c0eea16f47183eb18ab3f75f8@mail.kernel.org>
-In-Reply-To: <20260821214111.1120748-2-daniel@iogearbox.net>
-References: <20260821214111.1120748-2-daniel@iogearbox.net>
-Subject: Re: [PATCH bpf-next 01/11] bpf: Add a bpf keyring for program signature validation
-From: bot+bpf-ci@kernel.org
-To: daniel@iogearbox.net,memxor@gmail.com
-Cc: brauner@kernel.org,kpsingh@kernel.org,ast@kernel.org,john.fastabend@gmail.com,a.s.protopopov@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 21 Aug 2026 22:50:32 +0000 (UTC)
 
---===============4882818045740024818==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Low] The `adjust_insn_aux_data()` logic leaks the `non_stack_access` fla=
+g onto non-memory instructions when a patch entirely drops the original ins=
+truction.
+- [Low] Duplicated original instructions in a patch sequence lose their `no=
+n_stack_access` marking.
+--
 
-> diff --git a/include/linux/verification.h b/include/linux/verification.h
-> index dec7f2beabfd4..1cb59ddda2509 100644
-> --- a/include/linux/verification.h
-> +++ b/include/linux/verification.h
-> @@ -18,6 +18,16 @@
->  #define VERIFY_USE_SECONDARY_KEYRING ((struct key *)1UL)
->  #define VERIFY_USE_PLATFORM_KEYRING  ((struct key *)2UL)
->
-> +/*
-> + * The id of BPF's ".bpf" keyring, reserved from the same space. It is
-> + * explicitly not a sentinel like the two above as BPF resolves it to
-> + * the keyring itself and passes that, so verify_pkcs7_signature() never
-> + * sees this value, and system_keyring_id_check() must keep rejecting it.
-> + * Left as a plain integer so that handing it over as @trusted_keys does
-> + * not compile.
+--- Patch [1]: [PATCH bpf-next v7 1/9] bpf: mark instructions accessing pro=
+gram stack ---
+commit e45a03bdb90ce436777e9a9558206c04d0705394
+Author: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bootlin.com>
 
-Does the comment accurately describe what the code enforces?
+bpf: mark instructions accessing program stack
 
-The comment states the value is "left as a plain integer so that handing
-it over as @trusted_keys does not compile." Passing the integer 3 where
-struct key *trusted_keys is expected triggers -Wint-conversion, but that
-warning is not promoted to -Werror anywhere in scripts/Makefile.warn or
-scripts/Makefile.extrawarn.
+This commit adds tracking in the BPF verifier for load/store instructions
+that access memory other than the BPF program stack. It modifies instruction
+patching logic to retain or conservatively mark these instructions to aid
+JIT compilers in emitting KASAN checks.
 
-The kernel requires -Werror=implicit-function-declaration,
--Werror=implicit-int, -Werror=return-type, -Werror=strict-prototypes, and
--Werror=incompatible-pointer-types, but -Werror=int-conversion appears
-nowhere. int-conversion only became a hard error by compiler default in
-GCC 14 and Clang 16, while Documentation/process/changes.rst still lists
-GCC 8.1 as the minimum supported version.
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> index 65b441e4a3517..edcb0cbbb13de 100644
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
+[ ... ]
+> @@ -239,8 +259,25 @@ static void adjust_insn_aux_data(struct bpf_verifier=
+_env *env,
+>  		/* Expand insni[off]'s seen count to the patched range. */
+>  		data[i].seen =3D old_seen;
+>  		data[i].zext_dst =3D bpf_insn_def32(new_prog, insn + i) >=3D 0;
+> +		if (!memcmp(insn + i, original_insn, sizeof(struct bpf_insn))) {
+> +			data[i].non_stack_access =3D
+> +				data[off + cnt - 1].non_stack_access;
+> +			data[off + cnt - 1].non_stack_access =3D false;
 
-On a GCC 8.1-13 build, the misuse compiles with only a warning rather than
-an error. Could the phrasing be adjusted to reflect that this is a warning
-rather than a guaranteed compile-time failure across the full supported
-toolchain range?
+[Severity: Low]
+Does this logic correctly handle patch sequences that might duplicate the
+original instruction?
 
-> + */
-> +#define VERIFY_USE_BPF_KEYRING	3
-> +
->  static inline int system_keyring_id_check(u64 id)
->  {
->  	if (id > (unsigned long)VERIFY_USE_PLATFORM_KEYRING)
+If a patch duplicates the original instruction, the first match correctly
+inherits the non_stack_access marking, but then actively clears the source
+value by setting it to false here.
 
+Any subsequent duplicated original instruction would then inherit a cleared
+false marking, leading to missing KASAN runtime instrumentation checks for
+that memory access.
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> +		} else if (is_mem_insn(insn + i)) {
+> +			data[i].non_stack_access =3D true;
+> +		}
+>  	}
+> =20
+> +	/*
+> +	 * Last slot instruction could be a newly generated
+> +	 * BPF_ST/BPF_LDX/BPF_STX, systematically mark it for non-stack access
+> +	 * if it is not the original instruction, otherwise keep the
+> +	 * original marking
+> +	 */
+> +	if (is_mem_insn(insn + off + cnt - 1) &&
+> +	    memcmp(insn + off + cnt - 1, original_insn, sizeof(struct bpf_insn)=
+))
+> +		data[off + cnt - 1].non_stack_access =3D true;
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32530917987
---===============4882818045740024818==--
+[Severity: Low]
+Can the non_stack_access flag leak onto non-memory instructions if a patch
+entirely drops the original instruction?
+
+A preceding memmove copies the original instruction's marking to the final
+patched instruction's slot:
+
+	memmove(data + off + cnt - 1, data + off,
+		sizeof(struct bpf_insn_aux_data) * (prog_len - off - cnt + 1));
+
+If the original memory instruction is replaced by a sequence that does not
+contain the exact original instruction and ends in a non-memory instruction,
+this final check fails to reset the inherited true flag back to false since=
+ it
+only evaluates is_mem_insn().
+
+While the leaked flag is currently benign because JIT compilers exclusively
+evaluate the flag for memory instructions, it seems like an unintended state
+for the verifier auxiliary data.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260822-kasan-v7-0=
+-99afee6ef7fd@bootlin.com?part=3D1
