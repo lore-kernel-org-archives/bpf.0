@@ -1,105 +1,52 @@
-Received: from aer-iport-6.cisco.com (aer-iport-6.cisco.com [173.38.203.68])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12B03C988E;
-	Fri, 21 Aug 2026 21:38:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.38.203.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4161F12F8
+	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 21:41:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787348332; cv=none; b=C4MwjxHLFcvZA/j6Aq3UvwHQg2g13BuZ+w2baxDqLTjlBIo/g3mR0hO9J65QnAgk5IS1+Oj3gEKyoDGLtGQgstIugBgGryL5J4Gm7gKE9mF10A2jzbQ0kKPzU1pUS4oeC8Z3C/I0efltQt+HceGLwnN6F/+SKeetXJl4QKrKZBY=
+	t=1787348483; cv=none; b=oW8ZEGF6v4jNdvTRzd+IOEfElorEn+eJ9orLX0/JbLK1zw8LjZBWItSbM0dfSzYFx/q50QB+t6+NPrdmeqh1PQ8hkg3+6uuyi+J+LzrBIdDlz1DW/3XOh6P9nSa2heM6rvG+UReCynV1wUtvYFythcvXz5eZwjBe835ked+pXoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787348332; c=relaxed/simple;
-	bh=fL9I0FIOdljGTeoVp4eM1RD5K7ahN8IClrirStl9klU=;
+	s=arc-20240116; t=1787348483; c=relaxed/simple;
+	bh=p3IwKD7Nfx4+2OY0BDdOK0KAJHZgYG6oIzK3fG8MoTA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NQAhBul9/2kFlzPDKxqcTNTA40qFNdEtenu/XUZAEcnJJJyiKbih0Rk6JejbipU3uklcS+CRXGo4nazHkolIKDlCnKRoSMIrYYXy6encfhKF/4eSNh3T4M2L9X7tLry/gIMIGMZhAnAMg15YA9TZd/dx2oMRIBGWiGKyvtypquo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (2048-bit key) header.d=cisco.com header.i=@cisco.com header.b=R4hH6j8g; arc=none smtp.client-ip=173.38.203.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cisco.com
+	 MIME-Version; b=gi8TpNu/HGfp4fnKgqlJzp8bi/SpYPntBvionKW0TzHYPN8a9OTf8IFD4mxesKfPMobOsL+AgUlvIp9MhrhIJHKwH6vP+uj8tArLbl2EGpTYjtf8e8yN2OA2smZ0DIhnyOZONR57mThJZ3voMDibv/Yx2IIHinbl49Y4pqIsLns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=U+JBG/nv; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cisco.com header.i=@cisco.com header.b="R4hH6j8g"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=cisco.com; i=@cisco.com; l=2159; q=dns/txt;
-  s=iport01; t=1787348330; x=1788557930;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=JyBwlx5IO1iiLzZ8YxacdSgho9wzqqVl4F5mopwsHQE=;
-  b=R4hH6j8gzjhRbXPzxo4jwXNeHvZjkjZqYkJqpcqeyrFtj2+73UVljgVM
-   GkC6ORv6q0lOxRDdNlhb3DtRFjsUOpSWptJu3RdUniqoBtjOy2DwglT+I
-   ofm6C4OJ8UUZZUC24jrEJHLoAqOhtfwttKlyJRXrBdUP9kz0bitvZD647
-   H46fsERHmkRiAlwiA6IZbf5kF0V09GmUYr5Z5SFcxrYm4iTjPfsqqnSOk
-   Dw8WkzxvFb8NzQxEiLVEJjNa8JbxrhusRTlewlSiSg0VmcPyO7xWWe6jt
-   jcFwlLDu7Lb56MKhWWStUO7IMM2YW/Q+plAZ7zzxovSYgOOpBKhqoLfPR
-   A==;
-X-CSE-ConnectionGUID: a9Hd/yHDQvKF4zoi/0Vv1A==
-X-CSE-MsgGUID: w00Nf1UpRYC5EO3XoHy5qA==
-X-IPAS-Result: =?us-ascii?q?A0DEAgADxIhq/9JK/pBaglmCGD+BUkNJlCmCIYEWnQiBf?=
- =?us-ascii?q?g8BAQEPUQQBAYUFAo1sAiY1CA4BAgQDAgMBAQEBAQEBAQEBAQsBAQUBAQECA?=
- =?us-ascii?q?QcFgQ4ThlyGWwIBAycLAUYQUVYZgwKCdQPBV4F5M4EB3keBZgELFAGBOI1hd?=
- =?us-ascii?q?oR8JxuBSUSBFTKCQQdvhRCFeASDLpNXSIEeA1ksAVUTDQoLBwWBZgM1EioVM?=
- =?us-ascii?q?jwyHYEjPheBDRsGBYEdWU+EECMZNnqBCV6BKylgARIXgQmCBwKCWoIFAgFJQ?=
- =?us-ascii?q?w4HSCILGA1IESw3FBkEPm4Hjl4fggpCATFdCoFlbpZdsCOEKKF2M5dfkw2ZC?=
- =?us-ascii?q?KlDgWoBOYFZMxoIGxWDIlMZD45feAECzmRFMj0BAQcCBw4DC4FokX4BAQ?=
-IronPort-Data: A9a23:J82ej6/32NjuFusu5yI2DrUDSH6TJUtcMsCJ2f8bNWPcYEJGY0x3x
- jcaUGDUO//cYmXzc4p1Odyz8xtU6JKHnYA3GQs9pShEQiMRo6IpJzg2wmQcns+2BpeeJK6yx
- 5xGMrEsFOhtEDmE4EzrauS9xZVF/fngbqLmD+LZMTxGSwZhSSMw4TpugOdRbrRA2bBVOCvT/
- 4mvyyHjEAX9gWAsYjhNs/vrRC5H5ZwehhtJ5jTSWtgT1LPuvyF9JI4SI6i3M0z5TuF8dsamR
- /zOxa2O5WjQ+REgELuNyt4XpWVTH9Y+lSDX4pZnc/DKbipq/0Te4Y5nXBYoUnq7vh3S9zxHJ
- HqhgrTrIeshFvWkdO3wyHC0GQkmVUFN0OevzXRSLaV/wmWeG0YAzcmCA2k/bK0UvfdXLVhQ1
- tJEOjcMKUi9mbuflefTpulE3qzPLeHiMZlavjRryivUSK53B5vCWK7No9Rf2V/chOgXQaqYP
- ZdFL2UzKk6ZO3WjOX9PYH46tOW0gX37fiFwo1OOrq1x6G/WpOB0+OWzYYWNJ4fTLSlTtlnA/
- kTIplnhOCAxafG4kgqC0mPxn8aayEsXX6pXTtVU7MVCjFSNy2k7BBQIWF6/pvelzEizR7p3M
- EAa0iQpqKk59EG1CNzwNzW6p36C+BAVQMZZGeA85CmCz6PV50CSAW1sZjNNddkvpsIqbTMt0
- VCNkpXiAjkHmLGcT3OQ8p+Vqjy/MDIfKn9EYyIYJSMM+MXLo4wpiB/LCNF5H8adjtTqGhnzz
- iqMoSx4gK8c5eYIyq+y1VPKmTShot7OVAFdzgzRUnio8UB/aZKpapKA7UXd67BLLO6xQkWIo
- GUAlsG26v4PAZCE0ieKRY0lGLyu4eyCGDvCgFJuFt8q8DHF03upeYdb4Bl4OkZlM89CcjjsC
- GfIsA5c6Jp7OmWrYa5+JYm2DqwC0aH6FM35fvbKb9ZPa956cwrv1Dlnb0OW3kj3nUQsmL15M
- pCeGe6mFXgyF6tq1ny1Sv0b3LttwToxrUvXRJbm31Gk3KCYaXq9V7gIKh2NY/o/4afCpx/am
- /5bNs2X21BFXOj3SjfY/JRVLl0QK3U/Q5fspKR/cOOfLgd4MH8uBuWXwr47fYFh2aNPmY/g5
- W20UEtV4ETwiGeBKgiQbH1nLrT1Uv5CQWkTNCE2eFLt0H85bMP3veEUdoA8ev8s8+kLIeNIc
- sTpsv6oWpxnIgkrMRxEBXUhhOSOrCiWuD8=
-IronPort-HdrOrdr: A9a23:xG+T3qHOJkhD+CxFpLqEyMeALOsnbusQ8zAXPo5KJSC9Ffbo8/
- xG88506faZslwssTQb6LO90cq7MBbhHPxOgLX5VI3KNGLbUSmTXeNfBODZrAEIdReSygck78
- ddWpk7LsHsBl5nisu/ygy5H9E8hOSjysmT9IDjJ7MHd3ASV0mmhD0JbDqmLg==
-X-Talos-CUID: =?us-ascii?q?9a23=3AAhXSOWpyCrMlBAMGEPEzdaHmUcl0UnGa3Vf8GlG?=
- =?us-ascii?q?bJzp7T7zSEWGOoYoxxg=3D=3D?=
-X-Talos-MUID: 9a23:wc3g3glYYpm+evmU2jYndnp9bJ9O7f2TEHo8usgrnJK0MgxhZi602WE=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-AV: E=Sophos;i="6.25,235,1779148800"; 
-   d="scan'208";a="56970531"
-Received: from aer-l-core-09.cisco.com ([144.254.74.210])
-  by aer-iport-6.cisco.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384; 21 Aug 2026 21:37:35 +0000
-Received: from localhost (unknown [10.189.108.235])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by aer-l-core-09.cisco.com (Postfix) with ESMTPS id 8D7041800010E;
-	Fri, 21 Aug 2026 21:37:35 +0000 (GMT)
-From: Jerome Tollet <jtollet@cisco.com>
-To: netdev@vger.kernel.org
-Cc: saeedm@nvidia.com,
-	tariqt@nvidia.com,
-	mbloch@nvidia.com,
-	leonro@nvidia.com,
-	dtatulea@nvidia.com,
-	daniel@iogearbox.net,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="U+JBG/nv"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=NJlFOkyAlpqJg4XxGyCCksqotkVk5Lp76+nqNqEip+A=; b=U+JBG/nvIUQgWjLw3sQzjZX1LK
+	FLb+rWzUokN9gXO7FkY14/RFIAlZSmwa2chKk9nYMkHFzN4LtcTdP1NgtC4IZAV496Ofpt9uP0Cl4
+	V0M4hDhg3Fnzj/dgH42ljN3W9Z5xGU0PzqJRZDDgcHtDRIUFCaDcRFmEC8XM4B4MpRCC+WZqcqut+
+	MU7bbE6tdg6VbdCu8yatVVk9gIklKzf9Q3MdjJRL8fWfrJwHrDwEOjFWlBNNF4AH0Jq/AON4Zc9Wc
+	SylU01DSlZh63N5QG8SVPb0R1V8Wxd/Nb1H4OHR61u8Tej8fY7m8No9OrZ+Ay9hQDh+sNjyXCEdoV
+	UicANxVw==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wxWzB-000MpO-0s;
+	Fri, 21 Aug 2026 23:41:13 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: memxor@gmail.com
+Cc: brauner@kernel.org,
+	kpsingh@kernel.org,
 	ast@kernel.org,
-	hawk@kernel.org,
 	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	linux-rdma@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH net v3 2/2] net/mlx5e: Prevent stale XSK buffer release on MPWQE refill retry
-Date: Fri, 21 Aug 2026 23:37:32 +0200
-Message-ID: <675ce8a404cfe305e788a8e273b4091c9a90f867.1787347981.git.jtollet@cisco.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <cover.1787347981.git.jtollet@cisco.com>
-References: <20260820151558.11015-1-jtollet@cisco.com> <cover.1787347981.git.jtollet@cisco.com>
+	a.s.protopopov@gmail.com,
+	bpf@vger.kernel.org
+Subject: [PATCH bpf-next 01/11] bpf: Add a bpf keyring for program signature validation
+Date: Fri, 21 Aug 2026 23:41:01 +0200
+Message-ID: <20260821214111.1120748-2-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260821214111.1120748-1-daniel@iogearbox.net>
+References: <20260821214111.1120748-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -107,57 +54,235 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Outbound-Client-TLS: ANONYMOUS;unknown [10.189.108.235];TLSv1.3;TLS_AES_256_GCM_SHA384;256
-X-Outbound-SMTP-Client: 10.189.108.235, [10.189.108.235]
-X-Outbound-Node: aer-l-core-09.cisco.com
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28099/Fri Aug 21 08:26:38 2026)
 
-With AF_XDP on a striding RQ, mlx5e defers releasing XSK buffers until
-an MPWQE is refilled. If XSK allocation then returns -ENOMEM,
-actual_wq_head is not advanced and a later NAPI poll retries the same
-WQE.
+BPF program signatures can currently be verified against one of the
+system keyrings (builtin, secondary, platform) or against an arbitrary
+user/session caller-supplied keyring named through keyring_id. There
+is nothing in between: the system keyrings need a kernel rebuild or a
+vouched-for enrollment to rotate a key, while a caller-supplied keyring
+is fully controlled by the loader and therefore carries no trust on
+its own (unless explicitly combined with BPF LSM to protect against
+key tampering).
 
-mlx5e_free_rx_mpwqe() currently leaves each released slot marked as
-releasable. On retry it can therefore call xsk_buff_free() again through
-stale pointers after the frames have returned to the XSK pool and been
-reallocated.
+Add a dedicated bpf keyring to fill that gap, modelled after the
+dm-verity keyring which was added in commit 033724b1c627 ("dm-verity:
+add dm-verity keyring") and which can eventually be used also via
+systemd through the same enrollment method as in dm-verity's case. It
+is selected with the new well-known keyring_id VERIFY_USE_BPF_KEYRING
+and gives an operator a place to enroll a BPF-only signing key at boot,
+specifically scoped to BPF program loading and nothing else in the
+kernel's trust hierarchy.
 
-Mark each slot as released immediately after xsk_buff_free(). The
-successful allocation path already clears the bitmap after replacing
-all buffers, so retries become idempotent without changing the success
-path.
+By default the keyring is sealed empty at init. Systems that want to
+provision keys pass bpf.keyring_unsealed=1, which leaves the keyring
+open for the initrd to add keys to. The keyring is only ever consulted
+once it is both non-empty and restricted. An unrestricted keyring is
+ignored.
 
-Fault injection forced three consecutive allocation failures for one
-selected MPWQE in AF_XDP zero-copy mode. Stock freed the same 16 XSK
-buffer pointers on all three attempts, for 48 frees. With this change,
-only the initial 16 frees occurred; retries observed a full bitmap, and
-a later successful allocation cleared it.
-
-Fixes: 4c2a13236807 ("net/mlx5e: RX, Defer page release in striding rq for better recycling")
-Cc: stable@vger.kernel.org
-Signed-off-by: Jerome Tollet <jtollet@cisco.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en_rx.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ .../admin-guide/kernel-parameters.txt         |  8 +++
+ include/linux/bpf.h                           |  7 ++
+ include/linux/verification.h                  | 10 +++
+ kernel/bpf/Makefile                           |  3 +
+ kernel/bpf/keys.c                             | 67 +++++++++++++++++++
+ kernel/bpf/verifier.c                         | 13 +++-
+ 6 files changed, 106 insertions(+), 2 deletions(-)
+ create mode 100644 kernel/bpf/keys.c
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-index 7bd0606a5..5fe17d295 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-@@ -609,9 +609,12 @@ mlx5e_free_rx_mpwqe(struct mlx5e_rq *rq, struct mlx5e_mpw_info *wi)
- 		 * is no way to return the page to userspace when the interface
- 		 * goes down.
- 		 */
--		for (i = 0; i < rq->mpwqe.pages_per_wqe; i++)
--			if (no_xdp_xmit || !test_bit(i, wi->skip_release_bitmap))
-+		for (i = 0; i < rq->mpwqe.pages_per_wqe; i++) {
-+			if (no_xdp_xmit || !test_bit(i, wi->skip_release_bitmap)) {
- 				xsk_buff_free(xsk_buffs[i]);
-+				__set_bit(i, wi->skip_release_bitmap);
-+			}
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index e4643634a9b1..2beb61092bb3 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -667,6 +667,14 @@ Kernel parameters
+ 
+ 			See Documentation/admin-guide/bootconfig.rst
+ 
++	bpf.keyring_unsealed=
++			[BPF] When set to 1, leave the bpf keyring unsealed
++			after initialization so that userspace can provision
++			keys. Once the keyring is restricted it becomes active
++			and can be used for BPF program signature verification.
++
++			See Documentation/bpf/signing.rst
++
+ 	bttv.card=	[HW,V4L] bttv (bt848 + bt878 based grabber cards)
+ 	bttv.radio=	Most important insmod options are available as
+ 			kernel args too.
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index ffa5626411ac..240e527c864b 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1735,6 +1735,7 @@ enum bpf_sig_keyring {
+ 	BPF_SIG_KEYRING_SECONDARY,
+ 	BPF_SIG_KEYRING_PLATFORM,
+ 	BPF_SIG_KEYRING_USER,
++	BPF_SIG_KEYRING_BPF,
+ };
+ 
+ struct bpf_prog_aux {
+@@ -3819,6 +3820,7 @@ struct bpf_key {
+ #if defined(CONFIG_KEYS) && defined(CONFIG_BPF_SYSCALL)
+ struct bpf_key *bpf_lookup_user_key(s32 serial, u64 flags);
+ struct bpf_key *bpf_lookup_system_key(u64 id);
++struct bpf_key *bpf_lookup_keyring(void);
+ void bpf_key_put(struct bpf_key *bkey);
+ int bpf_verify_pkcs7_signature(const struct bpf_dynptr *data_p,
+ 			       const struct bpf_dynptr *sig_p,
+@@ -3839,6 +3841,11 @@ static inline struct bpf_key *bpf_lookup_system_key(u64 id)
+ 	return NULL;
+ }
+ 
++static inline struct bpf_key *bpf_lookup_keyring(void)
++{
++	return NULL;
++}
++
+ static inline void bpf_key_put(struct bpf_key *bkey)
+ {
+ }
+diff --git a/include/linux/verification.h b/include/linux/verification.h
+index dec7f2beabfd..1cb59ddda250 100644
+--- a/include/linux/verification.h
++++ b/include/linux/verification.h
+@@ -18,6 +18,16 @@
+ #define VERIFY_USE_SECONDARY_KEYRING ((struct key *)1UL)
+ #define VERIFY_USE_PLATFORM_KEYRING  ((struct key *)2UL)
+ 
++/*
++ * The id of BPF's ".bpf" keyring, reserved from the same space. It is
++ * explicitly not a sentinel like the two above as BPF resolves it to
++ * the keyring itself and passes that, so verify_pkcs7_signature() never
++ * sees this value, and system_keyring_id_check() must keep rejecting it.
++ * Left as a plain integer so that handing it over as @trusted_keys does
++ * not compile.
++ */
++#define VERIFY_USE_BPF_KEYRING	3
++
+ static inline int system_keyring_id_check(u64 id)
+ {
+ 	if (id > (unsigned long)VERIFY_USE_PLATFORM_KEYRING)
+diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+index 90255d80e5be..9a92c348bbda 100644
+--- a/kernel/bpf/Makefile
++++ b/kernel/bpf/Makefile
+@@ -27,6 +27,9 @@ obj-$(CONFIG_BPF_SYSCALL) += offload.o
+ obj-$(CONFIG_BPF_SYSCALL) += net_namespace.o
+ obj-$(CONFIG_BPF_SYSCALL) += tcx.o
+ endif
++ifeq ($(CONFIG_KEYS),y)
++obj-$(CONFIG_BPF_SYSCALL) += keys.o
++endif
+ ifeq ($(CONFIG_PERF_EVENTS),y)
+ obj-$(CONFIG_BPF_SYSCALL) += stackmap.o
+ endif
+diff --git a/kernel/bpf/keys.c b/kernel/bpf/keys.c
+new file mode 100644
+index 000000000000..dc4d3a33158a
+--- /dev/null
++++ b/kernel/bpf/keys.c
+@@ -0,0 +1,67 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (c) 2026 Isovalent */
++
++#include <linux/bpf.h>
++#include <linux/cred.h>
++#include <linux/err.h>
++#include <linux/init.h>
++#include <linux/key.h>
++#include <linux/moduleparam.h>
++#include <linux/slab.h>
++
++#undef MODULE_PARAM_PREFIX
++#define MODULE_PARAM_PREFIX "bpf."
++
++static struct key *bpf_keyring;
++
++static bool bpf_keyring_unsealed __ro_after_init;
++module_param_named(keyring_unsealed, bpf_keyring_unsealed, bool, 0444);
++MODULE_PARM_DESC(keyring_unsealed, "Leave the bpf keyring unsealed");
++
++struct bpf_key *bpf_lookup_keyring(void)
++{
++	struct bpf_key *bkey;
++
++	if (!bpf_keyring)
++		return NULL;
++	if (!READ_ONCE(bpf_keyring->keys.nr_leaves_on_tree) ||
++	    !READ_ONCE(bpf_keyring->restrict_link))
++		return NULL;
++
++	bkey = kmalloc_obj(*bkey);
++	if (!bkey)
++		return NULL;
++
++	bkey->key = bpf_keyring;
++	bkey->has_ref = false;
++	return bkey;
++}
++
++static int __init bpf_keyring_init(void)
++{
++	struct key *keyring;
++
++	keyring = keyring_alloc(".bpf",
++				GLOBAL_ROOT_UID, GLOBAL_ROOT_GID,
++				current_cred(), KEY_POS_SEARCH |
++				KEY_USR_VIEW | KEY_USR_READ |
++				KEY_USR_WRITE | KEY_USR_SEARCH |
++				KEY_USR_SETATTR, KEY_ALLOC_NOT_IN_QUOTA,
++				NULL, NULL);
++	if (IS_ERR(keyring)) {
++		pr_err("bpf: cannot allocate bpf keyring: %ld\n",
++		       PTR_ERR(keyring));
++		return 0;
++	}
++	if (!bpf_keyring_unsealed &&
++	    keyring_restrict(make_key_ref(keyring, true), NULL, NULL)) {
++		pr_err("bpf: cannot seal bpf keyring\n");
++		key_revoke(keyring);
++		key_put(keyring);
++		return 0;
++	}
++
++	bpf_keyring = keyring;
++	return 0;
++}
++late_initcall(bpf_keyring_init);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e036ae20bf6b..3be8d51d35ac 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -20981,6 +20981,8 @@ static enum bpf_sig_keyring bpf_classify_keyring(s32 keyring_id)
+ 		return BPF_SIG_KEYRING_SECONDARY;
+ 	case (s32)(unsigned long)VERIFY_USE_PLATFORM_KEYRING:
+ 		return BPF_SIG_KEYRING_PLATFORM;
++	case VERIFY_USE_BPF_KEYRING:
++		return BPF_SIG_KEYRING_BPF;
+ 	default:
+ 		return BPF_SIG_KEYRING_USER;
+ 	}
+@@ -21016,10 +21018,17 @@ static int bpf_prog_verify_signature(struct bpf_verifier_env *env,
+ 	if (!attr->signature_size ||
+ 	    attr->signature_size > KMALLOC_MAX_CACHE_SIZE)
+ 		return -EINVAL;
+-	if (system_keyring_id_check(attr->keyring_id) == 0)
++	if (attr->keyring_id == VERIFY_USE_BPF_KEYRING) {
++		key = bpf_lookup_keyring();
++		if (!key) {
++			verbose(env, "the bpf keyring is empty or has not been restricted\n");
++			return -ENOKEY;
 +		}
- 	} else {
- 		for (i = 0; i < rq->mpwqe.pages_per_wqe; i++) {
- 			if (no_xdp_xmit || !test_bit(i, wi->skip_release_bitmap)) {
++	} else if (system_keyring_id_check(attr->keyring_id) == 0) {
+ 		key = bpf_lookup_system_key(attr->keyring_id);
+-	else
++	} else {
+ 		key = bpf_lookup_user_key(attr->keyring_id, 0);
++	}
+ 	if (!key) {
+ 		verbose(env, "cannot resolve signing keyring with keyring_id %d\n",
+ 			attr->keyring_id);
 -- 
-2.55.0
+2.43.0
 
