@@ -1,124 +1,147 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A3449362B
-	for <bpf@vger.kernel.org>; Sat, 22 Aug 2026 23:10:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E435246781;
+	Sat, 22 Aug 2026 23:46:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787440236; cv=none; b=fhacatKT6VN1kwelHXp6Rn5qtmMsAMn7fnOCR0GuqIj/uM4GDhZvM9ckydOQVuqvY0qkAp8PjZFISp9pmU5paLmQDh6dWYuPw64+fH/KlAP4iKLPfAMtTqhvJg+BiqOAyYcKGaQQysZ08w9lJtunogkbfw/69wyANnYmQ1klhrE=
+	t=1787442385; cv=none; b=jqE0YTLXsTuFf4v9ObMn0ngc4cCpFva+RaSxI34MSos91Vah33OCXsPQJWR/IJZiUKZ9U065ZDDE2LCJrAnkD8RxvXsa+AOTYNTbJDI5468xUjzotpRPl1tmCe5t6sXxik6awsaJLXnog+Pcscp+EX5aN4BGvlhsdW+OzUJXLFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787440236; c=relaxed/simple;
-	bh=bHb5OulxnxGaxGi8J32PFLEJAozWvIcxUlnfWQn9Urs=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ojek642wUAWfxZYM/s7oIDzOzezPYQDMIV3tsCNVj67n1iQJLdsxSXRHBZPxyRvbRBr1GUfK9GfT2U41GXE+usF7xQbq3qT7F/748cge4se+B/f94ei00LqCke3OiaIyqcLiL9Oy6OAaoLg5opmwLcQkVwO/EIGZBcnGNe6K95M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EjDZ26Z4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787442385; c=relaxed/simple;
+	bh=UAPzIN7w023OtzD8hFszURq+goZ5BiuC6fV3FakAarY=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=P++mDDy6d9ZehuxEGcJPfivR3gyvGgbapI8pI9NwzDZQyvxY05AuWmFrajfNgCv15WfzSiT11uVR74JINpdz10ZyrBV+i5zmN8lI4VYt/sIIx/3d5Wdn6bOvLUKn2UOEiSfrFct0s9lJf+d+zVwIV6L7CFLQ0yhTrsQrVgpg0lc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NcdPn/9m; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EjDZ26Z4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 852F01F000E9;
-	Sat, 22 Aug 2026 23:10:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NcdPn/9m"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BF891F000E9;
+	Sat, 22 Aug 2026 23:46:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787440234;
-	bh=LzAbnWU67PVR7/LJG2KBmjtjc2KjMSJ+cKGxBGJf6LQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=EjDZ26Z4VMj6uoc4DHgWD4iurWPvzc6FzPbBfLTBN2U6K/MJqINQICPGLPK/I5PKA
-	 xo9A8pcBMLPcikCmQ5CxeILmzlPFipiY091JXvdEQfA+wZXrEn4YrYKuGFumeYOVDZ
-	 ds59yES37x0KKME+n9ccTQ+s5sQTb9x2+6Xj7KT8JACUVwY1m12DJiNOikNOE7TOIL
-	 g7FPcuCWVr/Io8Effb8oZhxNd4QLIBQ2M1WHLRMXmVeHwLQLNo/AuLjI1VYl1E+uxs
-	 h/ib0NqslwsZJ6Zyz+aVrFEjjNe7KvvtWJfUwHrzBpVw5wGV0gYXPISH668ve54Whf
-	 MlSkqaIEt6SyQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v3 1/2] bpf: disable private stack for sleepable
- programs
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Christian Simon" <simon@swine.de>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260822225444.2774461-2-simon@swine.de>
-References: <20260822225444.2774461-1-simon@swine.de>
- <20260822225444.2774461-2-simon@swine.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 22 Aug 2026 23:10:34 +0000
-Message-Id: <20260822231034.852F01F000E9@smtp.kernel.org>
+	s=k20260515; t=1787442383;
+	bh=dmdY0rRVY96lqwDqBiPyoFiRonX3ZZ/mephexaiP38Q=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=NcdPn/9mAPucJCBHN/9YxRhyr/89/pUwiGfgj05i2yKrR04/j2wtvmfUNuEbQbbm2
+	 1f0GqJZwafXVTyMKXthAnB0Rbwck0ADrQxx0zVixAjbLxa9HaAaAq4OVWYl7SMYjpj
+	 j2dxiQ+qWwr6hGaco348ynRRcy0jcEpPwLT4YENt+HRM9IrucVC6ZN4CYxooqNQwja
+	 /PqC5oy0NWEI6RuobswCWB2q8/y5B8OWW8H6qyei2LkV/TgTxv9RSxZ3B6qh0UJfYK
+	 ABQwPRjPOqnMUFW/IfahLMpNxz3P8RYr5KTX4r1qcmGKbpfpvck1R6tkoz7WmniDJ7
+	 okTHCAgplS7lA==
+Content-Type: multipart/mixed; boundary="===============2076503959956051201=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <541d85c3ca72e8955c562df851c52a6a0d364d95d1efb9fa6a584ed4d826fb01@mail.kernel.org>
+In-Reply-To: <20260822225444.2774461-2-simon@swine.de>
+References: <20260822225444.2774461-2-simon@swine.de>
+Subject: Re: [PATCH bpf v3 1/2] bpf: disable private stack for sleepable programs
+From: bot+bpf-ci@kernel.org
+To: simon@swine.de,bpf@vger.kernel.org
+Cc: simon@swine.de,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,tj@kernel.org,yonghong.song@linux.dev,stable@vger.kernel.org,andrii.nakryiko@gmail.com,olsajiri@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sat, 22 Aug 2026 23:46:23 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-
-Pre-existing issues:
-- [High] Non-sleepable BPF uprobe programs remain vulnerable to per-CPU pri=
-vate stack corruption.
---
-
---- Patch [1]: [PATCH bpf v3 1/2] bpf: disable private stack for sleepable =
-programs ---
-commit 5b27c96c855b5a6df31f1d2543a92540c69a5d98
-Author: Christian Simon <simon@swine.de>
-
-bpf: disable private stack for sleepable programs
-
-This commit disables the use of private stacks for sleepable BPF programs
-since they can be preempted, which would allow a second invocation of the
-program on the same CPU to corrupt the first invocation's stack. The fix
-forces sleepable programs to use the regular kernel stack which handles
-preemption correctly.
+--===============2076503959956051201==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 5e37ca75e5c4a..038753ef07a99 100644
+> index 5e37ca75e5c4..038753ef07a9 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
-> @@ -5237,6 +5237,15 @@ static enum priv_stack_mode bpf_enable_priv_stack(=
-struct bpf_prog *prog)
+> @@ -5237,6 +5237,15 @@ static enum priv_stack_mode bpf_enable_priv_stack(struct bpf_prog *prog)
 >  	if (!bpf_jit_supports_private_stack())
 >  		return NO_PRIV_STACK;
-> =20
+>
 > +	/*
 > +	 * Sleepable programs can be preempted, allowing another task to run
 > +	 * the same program on the same CPU. Since private stack is per-CPU
 > +	 * and per-program, the second invocation would corrupt the first's
 > +	 * stack. Disable private stack for sleepable programs.
 > +	 */
+
+Is this comment accurate for all the program types below?
+
+For BPF_PROG_TYPE_TRACING / LSM / STRUCT_OPS, private stack is only
+granted when bpf_prog_check_recur(prog) holds, and that same predicate
+makes bpf_trampoline_enter() install __bpf_prog_enter_sleepable_recur(),
+which bumps the per-CPU prog->active counter under migrate_disable() and
+skips the nested invocation.
+
+Similarly, the sleepable raw-tracepoint runner __bpf_trace_run() calls
+bpf_prog_get_recursion_context().
+
+The statement "the second invocation would corrupt the first's stack"
+would be true for sleepable uprobe programs run via uprobe_prog_run(),
+which takes no recursion context. Could the comment explain why the check
+is placed before the switch rather than in the case arm that actually
+needs it?
+
 > +	if (prog->sleepable)
 > +		return NO_PRIV_STACK;
 > +
+
+Does placing this check before the prog-type switch have unintended
+consequences?
+
+The check strips the private stack from BPF_PROG_TYPE_TRACING / LSM /
+STRUCT_OPS even though those paths are already protected. For these types,
+bpf_trampoline_enter() consults bpf_prog_check_recur(prog):
+
+kernel/bpf/trampoline.c:bpf_trampoline_enter() {
+    if (bpf_prog_check_recur(prog))
+            return sleepable ? __bpf_prog_enter_sleepable_recur :
+                    __bpf_prog_enter_recur;
+
+and __bpf_prog_enter_sleepable_recur() does migrate_disable() and then
+bpf_prog_get_recursion_context(prog), which uses a per-CPU prog->active
+counter. A second task entering the same program on the same CPU sees
+active != 1 and is skipped, so it can never reach the private stack.
+
+The real hole appears to be below the new check: BPF_PROG_TYPE_KPROBE /
+TRACEPOINT / PERF_EVENT / RAW_TRACEPOINT return PRIV_STACK_ADAPTIVE
+unconditionally. For sleepable uprobes (the only sleepable case allowed by
+can_be_sleepable()), the uprobe runner takes no recursion context:
+
+kernel/trace/bpf_trace.c:uprobe_prog_run() {
+    if (sleepable)
+            rcu_read_lock_trace();
+    ...
+    migrate_disable();
+    err = bpf_prog_run(link->link.prog, regs);
+
+so a sleepable uprobe can genuinely be re-entered on the same CPU.
+
+Moving the check into the case arm (BPF_PROG_TYPE_KPROBE through
+BPF_PROG_TYPE_RAW_TRACEPOINT) would close the uprobe hole without taking
+the private stack away from the trampoline types that already handle
+re-entry.
+
+There's also a user-visible side effect: priv_stack_mode decides how
+check_max_stack_depth_subprog() budgets stack. PRIV_STACK_ADAPTIVE checks
+each subprog on its own against MAX_BPF_STACK; NO_PRIV_STACK accumulates
+depth += subprog_depth across bpf2bpf frames and checks the combined total
+against MAX_BPF_STACK (512).
+
+Any existing sleepable program whose bpf2bpf subtree exceeds 512 bytes
+total - SEC("fentry.s/..."), SEC("fexit.s/..."), SEC("fmod_ret.s/..."),
+SEC("uprobe.s/...") - now fails to load with -EACCES and "combined stack
+size of %d calls is %d. Too large", where it verified fine before. The
+selftest at tools/testing/selftests/bpf/progs/verifier_private_stack.c:86
+("Private stack, subtree > MAX_BPF_STACK", 512-byte main + 32-byte
+subprog, __success) has exactly this shape; it only survives because it
+uses the non-sleepable SEC("kprobe"). With Cc: stable@vger.kernel.org,
+this would break working programs on a stable update.
+
 >  	/* bpf_prog_check_recur() checks all prog types that use bpf trampoline
 >  	 * while kprobe/tp/perf_event/raw_tp don't use trampoline hence checked
 >  	 * explicitly.
 
-[Severity: High]
-This is a pre-existing issue and was not introduced by this patch, but does
-this leave non-sleepable uprobes vulnerable to the same stack corruption?
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-The patch correctly fixes sleepable programs, but the commit message mentio=
-ns
-that preemptible non-sleepable dispatch paths require separate protection.
-However, non-sleepable uprobes are granted private stacks because they fall
-under BPF_PROG_TYPE_KPROBE in the switch statement immediately below this c=
-ode.
-
-If we look at bpf_prog_run_array_uprobe() in include/linux/bpf.h,
-non-sleepable uprobes are executed with only rcu_read_lock():
-
-    if (!prog->sleepable)
-        rcu_read_lock();
-       =20
-    run_ctx.bpf_cookie =3D item->bpf_cookie;
-    ret &=3D run_prog(prog, ctx);
-    item++;
-   =20
-    if (!prog->sleepable)
-        rcu_read_unlock();
-
-Under CONFIG_PREEMPT_RCU and CONFIG_PREEMPT, rcu_read_lock() does not disab=
-le
-preemption. Could a task executing this non-sleepable uprobe be preempted,
-allowing another task on the same CPU to trigger the same uprobe and overwr=
-ite
-its per-CPU private stack?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260822225444.2774=
-461-1-simon@swine.de?part=3D1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32604492082
+--===============2076503959956051201==--
