@@ -1,213 +1,146 @@
-Received: from SEYPR02CU001.outbound.protection.outlook.com (mail-koreacentralazon11013041.outbound.protection.outlook.com [40.107.44.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C6FA3C0605;
-	Sat, 22 Aug 2026 11:57:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.44.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787399867; cv=fail; b=RIktxnof0btBJulGL4LycSvwFJ2ayflVNco+XMKkciVfVaBcEuiI8gUDL50+oWtkyHc28Q4gHeoTq6RzUGuDbiGNSkeCidQAcizGf/b5MfanR2y2lrkGdYWl+DqT8pjClCxMw6bT6H9UI5LUoX/IEX83smKS18sO0/PwXY13Jyw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787399867; c=relaxed/simple;
-	bh=S7ZxM4wOXrV3ELwgpgdFuZSUuRzi3m/YhmBuHDs0kn8=;
-	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=M3JPrDtaIB+PeIC2lwtTGZ904bNt9EM7qZcC3JL9ezAkbmBIVeF/bksE3xjstVylzthulPL6ExQAa6jvpnkevomzEsI5jo8FnIMDAojfHGZd9YTgdswfJ7YDRLInU9zlLMngOi3JtZw2krW588GiblnbvSSk4xMX7btzuihfTJk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=coWHbkmx; arc=fail smtp.client-ip=40.107.44.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A65EB359A6F
+	for <bpf@vger.kernel.org>; Sat, 22 Aug 2026 13:41:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787406119; cv=none; b=uX8KXNPdSVzdb0lrSVo0c4VsfS9R/0lkxUJVULN0PAM2FRWgiLlofb8Uhtjfc+vDGemOslFoLgFtIweE5pqp3ojQLdtMRV/SKqJDOVmKIvTERdv6ac1iSgHmb7CnqZ8/tqP/18UejB1veoTN1TUa6iaOzC7fn9PEKHXHXxkOYsc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787406119; c=relaxed/simple;
+	bh=ShtTkIU3ezbFJIydaBLYCMvhC/wGsulze2uz5bQe5G4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fqDGkBcvOV4xbBLMGAdU9fQ/H4OYs+AUyAr5vrXzmzHlJh6M3cM3CnGETa4CKEGlmqOPRQHCA5iklS+YDBwu5uV259R72NbUwG40arytROg8JR2kTc5KBXKjXq7kPfyKIRsTYEV/uFHZsUx6GidjKkOBNPIK3P2tIF+1ucutFFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=NWr95Y6+; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="coWHbkmx"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cjlO/dNk2o0xLF96HiOt1NTle/ExwumdfJuuWD5OXm+ylukl73BazA2M19jOcZuYNIMI1co/CsM23z6ljG492IgmghEbRitaUyrFuN3bVA85HjL/ZcG3K2T3mgQFXDXZ+ncYzGvh5fqwVmLOgv7cBNz0uRgAAtE/NkwDydmzPo69uCuBTMWFc1xRgRrLgWrJL3Fr5JbQCQyfIPUdfjeknxcZ5MBvZgrpkjnVFfCmmV/l/6ig95cJgkHcTX/9Ly3+HL4BDpZp3nN2gwAAPzFLvoziOR5NxISPqDydc5YJWWwHsz37KOQ6wSTCAaoE7N9At5ujtG74FrpjRT1Xmk1DaQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=y46gjbdZwHZZbYvo6n1IYsgxb2hBarC7ZPqzX/Ai1ZE=;
- b=Ix9hiZ5S1EI9EoRSxp+7Aj22ozFuPk+v6w1zHEMTqbGNKWV+p/8b9IDjJcyTluLUZIXH7UzNcGh4lQzj14TdtogLEY2XZdsI4ps+24pEd0A7c2isNureG+Hyd8UVJMzNmuKkLL3EKSxN4/S2HHbKVRm+C44iNUPMhMP4jCpbOrrsHpJlmMeaanV8Sf7UZYxu5DF0QSqbLQNbdsXqHiB59tYr48fnmrX5paOSJTYN8Ma5x0yrH0SjAL3AE+qMPjrRCkFO7f2Da6zlZXLUttY0cgLu3yIXIo8wSpFu/aeS07ETblL4U/hi96dEKuGHAwkbIgXdGlUGw8d1Hqofv1nPFw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=y46gjbdZwHZZbYvo6n1IYsgxb2hBarC7ZPqzX/Ai1ZE=;
- b=coWHbkmxembQnCz1wr8jiVZg2G4fv1ZuWa44WQT6JwgTJ7LgnN63aU2Jkv8pWmfXzNaOOPKx6rlMr6aJWW51o3FHNDQLshKdWOIRULUp47msNsJisO2ioVWak9shQ5ol+Y9sEQ4Dr+kW6uUbiGqBE2N71q4H/ZlG3uqAfQMuaTPKGuopnV8cLgt98di60vYOuKgoF1YcOfN1eY9YP3tJl0/KnT7sOD9ToeTV8Wk0BuaQ410sGpof/3oTWxggb0BvjI/f1dlj50xfwuVQ/bkaMtv2WGV4eVvq7/MSyQ1Z4llqVSySPXW6uZfJ5vndjGTph9OCE226Hi9XK1xedm0cMw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from PUZPR06MB4742.apcprd06.prod.outlook.com (2603:1096:301:b5::13)
- by TY8PR06MB9101.apcprd06.prod.outlook.com (2603:1096:405:3ab::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.11; Sat, 22 Aug
- 2026 11:57:42 +0000
-Received: from PUZPR06MB4742.apcprd06.prod.outlook.com
- ([fe80::206c:c661:9838:5571]) by PUZPR06MB4742.apcprd06.prod.outlook.com
- ([fe80::206c:c661:9838:5571%6]) with mapi id 15.21.0339.010; Sat, 22 Aug 2026
- 11:57:42 +0000
-Message-ID: <bed1b548-7695-49b5-b2bd-84a218d1bcbf@vivo.com>
-Date: Sat, 22 Aug 2026 19:57:37 +0800
-User-Agent: Mozilla Thunderbird
-From: Fuyu Zhao <zhaofuyu@vivo.com>
-Subject: Re: [RFC PATCH bpf-next v3 2/2] selftests/bpf: add tests for
- selective kmod BTF loading
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
- alan.maguire@oracle.com, andrii@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, memxor@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, ihor.solodrai@linux.dev, shuah@kernel.org,
- yatsenko@meta.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260819090426.267-1-zhaofuyu@vivo.com>
- <20260819090426.267-3-zhaofuyu@vivo.com>
- <67d62b1943b093ac1eb16c9cc1ff38e0d5eda72b.camel@gmail.com>
- <d94fdb54-09b6-4d70-bfac-8483024e94ea@vivo.com>
- <CAEf4BzYkFPK37zaW10RBX04un5xuWs42gJ2pAtE0_iy2+X=58g@mail.gmail.com>
-In-Reply-To: <CAEf4BzYkFPK37zaW10RBX04un5xuWs42gJ2pAtE0_iy2+X=58g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SI3PR02CA0009.apcprd02.prod.outlook.com
- (2603:1096:4:295::14) To PUZPR06MB4742.apcprd06.prod.outlook.com
- (2603:1096:301:b5::13)
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="NWr95Y6+"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c15e592da74so276642666b.1
+        for <bpf@vger.kernel.org>; Sat, 22 Aug 2026 06:41:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1787406114; x=1788010914; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Aj3ZYubTvLgnR11pZYHVat4EVUJdKX6AnHgTVge4+Wc=;
+        b=NWr95Y6+8gr1dd6kImBWVKkc9Ow7+W1hOqUbome1tczYJ0l7VolXq0eP+XhSlE2lop
+         cfrU27AzjWjNSHtmZZ6RuHDw63H/Aw3j1SR3ZUJxRQSBgNqaamZlv7pWt8qP16vXkNr8
+         RFuxFu+K2wzi5JQkrBzAM56wOg7B0Pw6h7m1cwa5fQL+1N4vZ9VmnU0fSvXmiMFSSbLp
+         PwxvZznnm7VHgzn3KPh0fvhzv105HloBofPB+0hansRG9f8EL4WMC1/pwoxYuig5g5ac
+         rHPjkA9B4VHQUiuu3DSUboCniUrCCNStbMPToZGTj1YRemJ0JduZoppZNUOsUtWyRRr6
+         6eqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787406114; x=1788010914;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Aj3ZYubTvLgnR11pZYHVat4EVUJdKX6AnHgTVge4+Wc=;
+        b=kNTDeyaKhcMJNL7qZtTxMfs2PVOHTTa5iloWMXCK8QN3T3vD2HplE+SwppEDmpuR83
+         eCjIPmNATqTIFEzPv1cWIzwAXZnOndIaulT2cslgvUkEffAiPD1YKWmL2O/MU3sDnqCk
+         iKh/yOc/rX6774UKqwgovVF4zG94qxloENUPRggTr7vTw46dP4gu7XNXnhgLplP13lbw
+         6LszXiKqrapwtR8A3ggv5Qnb0+Gb7YSGzAVf+YQ8yKFSVIKR9LG2Rz2Pk5fRj1ETOOc+
+         ADSX8B8y7u3z+EzzIzU8paZpU8YKkU/qYMoKKH4Lu6rMOrftm5ZVyu3/9nXNAMO9HTlB
+         H2YQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpbVMGbY/wgZsKMGAuFmUZnas1jGeEvE9eTRJmN6+y6cSPhVFsi336yEq/T5Tt3WhArtWQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++ni2WIM5oCiUhhWcmFjskzdY+w5HicsT/kCsoNvLHkdgCDfvkg5
+	6YkAnlkg9fghUEtb3AzvaowLoWhTmuLAB2VeqqXWqM/ulZWm+45goa03oyT5MZrlB6g=
+X-Gm-Gg: AR+sD11tuLXE5+JuLtF0aZmvtp0f0r7ldqG8GpKBznW+ipN6dAHczyn1fS8wII7qP+Y
+	74F+zsXFiyjeOwdkJaeEAwmEXIikuYK/DgcXPUeCnrhFoIuDEc1boi33K8LoLBnS+JAxeUniFRr
+	NFt+NFHGuDzuNDztu8qk26fUqv7ifdGnmI5Ppboi86Sn+jrvhORKYpzy00sTjal0eVXSuGYcWUd
+	HNQ8xGO4zmp7nyODxMa0PjcNtH0aIJjsvyb7v5tIsqB4bp9C09hQhn0HTcJvph4R10qB+VJMEp6
+	/jZK7eEeT78lPiEhz/l2W+1vL26/dvkwMGE7YQ0pP9wzCBtkffnbjJNmdgwkmxyvYnf26uR60Cy
+	p/sS7m1o92VN4WI5gM0cpEa8G8W0/MKLRcfqKcnca1YnH7WZaSeDCq09M6LPa8hudysDdIDEBA9
+	6KN9Jfw6NALi6PHEKPh+m1PnOzOd1kw7iHui1Prx482jPnRSO5Zz4maaZWhByIEY5wBg==
+X-Received: by 2002:a17:907:8908:b0:c21:35d0:f435 with SMTP id a640c23a62f3a-c24924db408mr547750766b.10.1787406113365;
+        Sat, 22 Aug 2026 06:41:53 -0700 (PDT)
+Received: from localhost ([2a02:8071:56d1:2de0:1d24:d58d:2b65:c291])
+        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-c249606a8fasm387614266b.8.2026.08.22.06.41.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Aug 2026 06:41:52 -0700 (PDT)
+Date: Sat, 22 Aug 2026 15:41:50 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Mauricio Faria de Oliveira <mfo@igalia.com>
+Cc: Kees Cook <kees@kernel.org>, Joel Granados <joel.granados@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	kernel-dev@igalia.com, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	fsverity@lists.linux.dev, keyrings@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-wpan@vger.kernel.org, lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org, 
+	coreteam@netfilter.org, linux-sctp@vger.kernel.org, linux-rdma@vger.kernel.org, 
+	linux-s390@vger.kernel.org, bridge@lists.linux.dev, mptcp@lists.linux.dev, 
+	rds-devel@oss.oracle.com, virtualization@lists.linux.dev
+Subject: Re: [PATCH RFC v3 03/13] sysctl, mod_devicetable: add macro
+ MODULE_SYSCTL_TABLE
+Message-ID: <aomlfGJM61qZKxx2@monoceros>
+References: <20260819-sysctl-module-aliases-v3-0-aab90569365d@igalia.com>
+ <20260819-sysctl-module-aliases-v3-3-aab90569365d@igalia.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PUZPR06MB4742:EE_|TY8PR06MB9101:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7a9660ff-f5f1-44aa-a419-08df00449268
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|7416014|376014|366016|1800799024|6133799003|10067099003|11063799006|4143699003|56012099006|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	oJoeQOtm27mXk7M0QJhnutPL1/9v9Jw4K2A9qaErJgfvX99b3fBn8jrKJSCUFIb63zG8ZZSOkke4Wsu8AzxARtv9YgYN4KIHBc4wIYnq7mPM1cCzJ3ErBLwr7qOsUM0XCU2X7662HWDOTSlFisNmGLxCsfggAK4zEEKyU9KhfNgEEoMzZTi2F4XdQo6g15i0tIjYJOn2X7ouaN6+5nOO0TrBL/agqsFLAJr720lAH5tWmFVu9EA8X0RmEVzDnDAaXqthC9EX4uMAOEuOpVElzG6vCTYfsyUFqiA+0lQNubVB/OcUqaNrezDvt88bHFMF5FxIv/6QqnKu68EuBq4VKPkyrxD2FP7x+H+L6bqDYIcI/qVtoy85xzJskDq8tCnHY0sxfK/+K0DqM1XgfMchN6EuIAAyunFuSlU2AOThCx2hNHtKEUFHXBuXYf3HqGt3BCePghCTYZ8pXr8A45qsWEAfCvkdXIF8EaJ1vZgf9SJ+QvlZzlZNexuC06OMbweR2pHziWWjYR+/ztqvQMLzomjH8TF01bq43PsllnK3nXkWBGSHwDHm05x1zsU0D1Sp25QXhTMlkm+DKo3TSjlkt/fr0Oyg48B630gBVV5+SPZTxywGaSDpmhDFK4Y56ll9c9mbJ/wglsUS1qDEhb6A3XlTyJF5F8SPEeUtl8Foz+M=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB4742.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(7416014)(376014)(366016)(1800799024)(6133799003)(10067099003)(11063799006)(4143699003)(56012099006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?eVZadzhmWVd0QWFBY2U2WnR5Tk1YOTgrdXRRN2hzK2FVclBaeDF5bTdqbzZH?=
- =?utf-8?B?bjl6dkswaEIvMU1YVGkrc0lwT3h4bTdMS0lQVjJiazVZVFBON1owOTBSQ1o0?=
- =?utf-8?B?WTlHVm5SV2pRaEJCKzNmeExDSDA2aVZYcDFWWVhtaEVSNXg3RS80YTUzengw?=
- =?utf-8?B?UnluSlhPbmVTNE93VUxkZW9iZ042OVpPcXhQNVdKc1VvcGU1ZlVVcGpyeDVS?=
- =?utf-8?B?N2xkUDBkVnAwQW0vbXgzQU1adGJhTlJ4VnFlWDMrQ2gvL1F4OTVrREN1MGg0?=
- =?utf-8?B?SXIyeHNtd3pqQTM4OHNLL0xZam4xSVc0R3I1Y2JMMW5yMWZISUJVY0hvSENG?=
- =?utf-8?B?UlZSdFJ6SmNtZzBkWHZyd0JXYzk4VTEwb25IYUtWdHltcjQxdXllNW5FM2M3?=
- =?utf-8?B?S0F0dzNLVkRPODVmRWQ4bVNuK0RsTS9xVVFUMTJBZmpCMGxJODFtKzhBaFhQ?=
- =?utf-8?B?T2pQb0xXWFRqZVpuMXowWUVIR3c1WFRLZ0tobHk0c2YzZ0Jic1JxdGZMNm43?=
- =?utf-8?B?T00vUzg0TDBoalhaN3pGYVlDcVFkeDhsV2FlKzB1K2szYk8rWFAvNVhmY1Iz?=
- =?utf-8?B?ZSttZllpV1UyQS9YbjZjdXVKZ1NIMG1waXNER1Z3T0lrd0Ivd3lRM3V3UFh1?=
- =?utf-8?B?eXJublF3Y0IxVzcxcSs4YURURlJvRXZJNlN4SGp0QS9GZU1QbFNjSVZXM1Zh?=
- =?utf-8?B?R2pidjQ3Q0VKKzEvREtzc1dBd1VZUVpHSTQ0SUJTT3h4TDhGcExFVWo3akRL?=
- =?utf-8?B?VDRjMWhKWVV5Y0xYWE5QWjVjY2FlalRCd0M3RXh5NUdHdHFMajc2NGRveU9T?=
- =?utf-8?B?UlhUTnkrdFlSTGxvcnR6SWRxcjNoZ1pCdkl0YnBFRUtYSm16cWNJZzcwQjVs?=
- =?utf-8?B?azhPc01yY0FIYjlhbEdXQTZpYStwM2Z0M3BEallxQkVsbHNLZGx6elBnL0RT?=
- =?utf-8?B?K2JNUzJUQW1jc2wwamRhNlA1bGJaQ0JST0s2K3NhOEVMbTNjeCtUWVB1WEND?=
- =?utf-8?B?dmFaakhRVmFHd3B6dWRHenZJSi9Jb1A3Y1pBNkZ0bUNKL2MzM1M1WVJKeVZB?=
- =?utf-8?B?MXUzYlhIV3llZ05BWVVrd1dFT1U0clZzODVoc09ERWxWVStxT21YUXBtVWlV?=
- =?utf-8?B?Vnhsd3hDejdoeE05VjFCdElXMFJOM0IrSmF1ei9MMlBpdC9aRmVvTE1XSGIv?=
- =?utf-8?B?RjJ4YStaZCtSVVdyLytNTE5adkJsNGJDdWhrTWd1WGtZY2RLbzFwak5aZU5m?=
- =?utf-8?B?NjdGbTFJSE1hT29MZzc5ZldPQkZJSGx4ZE9najVxQ0pnRktBWkE3VGFZZXZa?=
- =?utf-8?B?Z3dxT05yQXdvNDFaeE1aU2Mwa2k1QUloQWdaa3hDVnh6azAzWXBONGk1ekJP?=
- =?utf-8?B?R00vaHZKeTJmTXpPdlNDdHhYQkRDeDBqdTlrSER2dlJoa2luWEsyRnBNOGVh?=
- =?utf-8?B?RjBTWldnNnU1R3l2eURzaHBCdG9hQnN0STVRUEhCTHNqcFh6aS9ibWdyZ1ov?=
- =?utf-8?B?RWtQSzFpdzhMK2c1S1pPbThUaHcrUGQvMk02WHpLQzJtWld2czBWQjN0ZUQv?=
- =?utf-8?B?cS9kVkpna243TmNrbWdCbGhvOVhjMGlHSGdyTk93T0NNRzhpS3Frb1A0Q0Qr?=
- =?utf-8?B?QlNnYjlDSFJmWU5FMWdGeEsweHNhcHZQRnlQNFdOS3dPRTQrNEp2UW5oeUtj?=
- =?utf-8?B?UG1QNGFtSmRHYXZNb1BFb0ZtL3R2VSswTHpUSUx3aWcyUkUyN2RKNFQzWlVB?=
- =?utf-8?B?SmpITHZPYVBJVkFMWFU5Q0NoU3hybEVzV1RVcERNM0ZJMitDU2VrMXZzZ3lK?=
- =?utf-8?B?dFhTaHhDVitJRzFTVTZuTEdPVzZWdFprSmFDeURrM0JQZnk5MjJDZ29RZlg3?=
- =?utf-8?B?Z0hJTWZOL2RISFNOZEpwWERHN3lKTk9iWnF5RmJub25FUnJWTGN2TEllcDhX?=
- =?utf-8?B?SWxrZlQxUWdCam9LTE5sY0ovTHNIOUF6TVdLUnNBMFV2Ujh1M2diOHNjV2pR?=
- =?utf-8?B?b0JuM3FyMUEwVmVLbld4R2NpcFJ4SDNoWm1iTU5OMktmWkVybmZmOUpCYmlV?=
- =?utf-8?B?REc3ZWFyQ0JrYWpFaDB2OCtsMEZaTjVRQTg5RThxY2plbGJOTGVtUC90UFZP?=
- =?utf-8?B?YUhYZkVQWCtuYjZ0S2tZQ2lTTll0QUxIWW5lcFhOb2RoNjMwYkFteEhONVJp?=
- =?utf-8?B?aUM5anVTdFB4UGQzZXZoTkV0V2xHblYzNFV0d2hXbG5sbEJMKzc4NmVyYXJs?=
- =?utf-8?B?eXNNSDNHekh4ZGZCTVI2Sk11SU9sMktQREJldWh4UVRSVnFSUnN1VDV3eEZn?=
- =?utf-8?B?dGJZWGw3VkV3dzRzMGk4cVBiU2t4TTVIbFFFT2JZaWt3YWt1L0YwUT09?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7a9660ff-f5f1-44aa-a419-08df00449268
-X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB4742.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2026 11:57:42.5383
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ayoeznN5jgdtwRSHDVBmnuKc3BoNIBVPGRwfsh8SIa5Yl0nANFDie/l6tjplLHOa/cjUrRNHcmtsKTkfR28qlg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY8PR06MB9101
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="akn7oxv4v2qk2wdq"
+Content-Disposition: inline
+In-Reply-To: <20260819-sysctl-module-aliases-v3-3-aab90569365d@igalia.com>
 
 
+--akn7oxv4v2qk2wdq
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH RFC v3 03/13] sysctl, mod_devicetable: add macro
+ MODULE_SYSCTL_TABLE
+MIME-Version: 1.0
 
-On 8/22/2026 2:55 AM, Andrii Nakryiko wrote:
-> On Thu, Aug 20, 2026 at 8:51 PM Fuyu Zhao <zhaofuyu@vivo.com> wrote:
->>
->>
->>
->> On 8/21/2026 8:10 AM, Eduard Zingerman wrote:
->>> On Wed, 2026-08-19 at 17:04 +0800, Fuyu Zhao wrote:
->>>
->>> ...
->>>
->>>> +++ b/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c
->>>> @@ -0,0 +1,196 @@
->>>> +// SPDX-License-Identifier: GPL-2.0
->>>> +#include <test_progs.h>
->>>> +#include "kmod_btfs.skel.h"
->>>> +
->>>> +static bool btf_skipped;
->>>> +static bool dup_ignored;
->>>> +
->>>> +static const char btf_skip_fmt[] =
->>>> +    "libbpf: skipping module BTF '%s', not in kmod_btf_names\n";
->>>> +static const char dup_ignore_fmt[] =
->>>> +    "libbpf: duplicate kmod BTF name '%s' ignored\n";
->>>> +
->>>> +static int libbpf_print_cb(enum libbpf_print_level level, const char *fmt,
->>>> +                       va_list args)
->>>> +{
->>>> +    if (!strcmp(fmt, btf_skip_fmt)) {
->>>> +            if (!strcmp(va_arg(args, char *), "bpf_test_no_cfi"))
->>>> +                    btf_skipped = true;
->>>> +    } else if (!strcmp(fmt, dup_ignore_fmt)) {
->>>> +            if (!strcmp(va_arg(args, char *), "bpf_testmod"))
->>>> +                    dup_ignored = true;
->>>> +    }
->>>> +
->>>> +    return 0;
->>>> +}
->>>
->>> Idk what Andrii would say about this, but I'd rather add an internal
->>> function akin to:
->>>
->>>   size_t bpf_object_btf_module_cnt(const struct bpf_object *obj);
->>>
->>> in libbpf.c and expose it via libbpf_internal.h (*not* via API),
->>> instead of intercepting log messages.
->>>
->>> ...
->>
->> I think your suggestion is better. It also addresses the issue raised by
->> the bot about potentially hiding other libbpf logs. I'll wait for Andrii's
->> feedback on this.
->>
-> 
-> I would do neither and just not validate explicitly that we skipped
-> (or not) some module. Instead, I'd see if it's simple and maintainable
-> to do a functional test: try to attach to a func or have relocation
-> fail against a type of a test module you explicitly do not allow to
-> load. If that succeeds, bad. Also have positive and negative tests to
-> show this custom kernel module list makes a difference as promised.
-> 
-> And try to keep the boilerplate to a minimum with all this, don't go overboard.
-> 
+Hello,
 
-Ah, this looks like a better approach. I'll follow your suggestion while
-keeping the tests minimal.
+On Wed, Aug 19, 2026 at 03:16:16PM -0300, Mauricio Faria de Oliveira wrote:
+> The MODULE_SYSCTL_TABLE macro emits a struct module_sysctl_table variable
+> with pointers to a sysctl table's path and entries, and table/entry sizes.
 
-Thanks,
-Fuyu
+That new struct doesn't seem to contain any pointer?
 
->> Thanks,
->> Fuyu
->>
+> That symbol will be handled by file2alias.c (modpost) with the changes in
+> mod_devicetable.h and devicetable-offsets.c.
+>=20
+> The option macros MODULE_SYSCTL_TABLE_{DISABLE,UNIQUE_ID} can be used on
+> a per-file basis to disable the macro and change the symbol name pattern.
+>=20
+> Signed-off-by: Mauricio Faria de Oliveira <mfo@igalia.com>
+> ---
+>  include/linux/mod_devicetable.h   |  7 +++++++
+>  include/linux/sysctl.h            | 42 +++++++++++++++++++++++++++++++++=
+++++++
+>  scripts/mod/devicetable-offsets.c |  6 ++++++
+>  3 files changed, 55 insertions(+)
 
+Please put the new struct in a separate header. Apart from not being
+about a device table, I'm currently work on removing
+<linux/mod_devicetable.h>. See commit
+ad428f5811bd7fb3d91fa002174de533f9da94d7 for more details.
+
+Best regards
+Uwe
+
+--akn7oxv4v2qk2wdq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmqJpxsACgkQj4D7WH0S
+/k5bfgf9HJoNnVEr9RCdAghOTP5QqFmH5ae7Kbmnodv6c6Pi9JGIjjGbeT5eKw3e
+JkSKqdEnlVMrLoKrhneRsxwTDGPrZvrLZrPLdZwJmPWZn5Fg+kkOO9yFAGPeMsPX
+S6UP1NY9kaCiBtlcsGT9EvMWz0jWVAWX1xb7Y2WcVZJsCWdcPhvWc3/lIbw3E4o7
+PqLtSFblkQmtGl2OL4WkP6xhEPH6qQO9BAmhLVKKZwFW5/l4sHmXRrpgSJlroR3b
+iH3liIeS6wxFp/fMYuFRryGHNMXn6gC447OnOCTmGNEj7+7Y3COwSGivgubcRIzI
+RkmxkMf2Iuntnwp4oQzCbipE5EiKGA==
+=SPY4
+-----END PGP SIGNATURE-----
+
+--akn7oxv4v2qk2wdq--
