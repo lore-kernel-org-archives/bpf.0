@@ -1,131 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A7C338550C
-	for <bpf@vger.kernel.org>; Sat, 22 Aug 2026 21:28:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A319A3009F2
+	for <bpf@vger.kernel.org>; Sat, 22 Aug 2026 22:55:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787434108; cv=none; b=rJ23GhQvUoyi8nLJ0Fkd7itJXPfEHQYqEFBWVWjW0NARxYNncqveki84CavxwObXCHSvyXDoq690ncKVuqZ3H+XF46S4pPxQrZQ/V+J0l/HVTlXKjL/1SEnFuVK9QEgUM/MNZ2usZSiYCKPqfUl1o1w/4oOdoClPCmTxQNzbsuU=
+	t=1787439309; cv=none; b=m36PnuuOXfqEr48imiTwJ9MGLDtXMCEQmqrI2tLXz+W5MohstyVZY2IT5X5mWS+R9R7roC7H7ubTwV2Ri4N4iFqYi2to/4IM8wZVu5NUBcn+mJ0cgnW96Ge0Uy4BfZTZQ0H1zmzw4T8axiXmRAY2iJA+qQWILOO8/R6uFRbbN2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787434108; c=relaxed/simple;
-	bh=46YxhYB0ua8HpKhHIiUrcnTwuYObYrgeFMVwHq/9JxU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=p6vyvkvjhi1Yjk6jh+4K/71smKYtcg4N8L949cPAKfcbnay3F4boMRnWImRvWV3L0bWwEfZ7S2QiFYxSuqVgdYaulyf3M15P/LgKeeMFVVVcBEGF91rMnkga0/XWf2qCGrZETO7YOopwllCDV17XedntpNTiy9GIyloteB9fC9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j47Jjkrj; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787439309; c=relaxed/simple;
+	bh=hCG1aonoDqL3VPxWXb5AJsXu8sZsT0Fdbgr3773Yh84=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=g1ROdfNrtGBBW3DMqY+1xu4AkROvxg5t3//mgpEcmjwL12lCa8zWhoDkysNPZELpdoPQIxQbEvVom26ITL2Vc6QMQLtahGnhofs6EHw7DdKT/DZdeyuYtfDX8AmxEZCkB+BzNeRGYjgldtP/7Wse3paYQ2FUI4c/rP4v4sTrUZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=swine.de; spf=pass smtp.mailfrom=swine.de; dkim=pass (2048-bit key) header.d=swine.de header.i=@swine.de header.b=hVwR5JA/; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=swine.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=swine.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j47Jjkrj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 126711F000E9;
-	Sat, 22 Aug 2026 21:28:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787434107;
-	bh=dBpnmi4bUQapNbBxrIdQxcLC4l2KIN5HNyedpa1Zbrc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=j47JjkrjvU9LD2cccPgpHcX81fa30mhL72r1AY/jCYGE9gYtUORUZbseIzhTPdWUc
-	 dRwT4+4/J4tvuG2kJ2y0/jvFz/jg1WGTmaD4Ze3jU19q6y839AmVA8qSk9QePml0ag
-	 0xM+TbnKVltIdw6E9mB7uxq2bOYRzFz8kmYOjxM7yjMafZArHGgJyWuMd0MPS+XQQ3
-	 nDTsmJ4CzIaUwd5D5DY5JE9gHV/gVL+zQ0i5z6RhFqtrlq5/ag8vU5uMkP2qT1xb1t
-	 FJ1sUlikBtZt5mR4bg172DOeC/jRaGnBQ2bYWup2Uj9XdRrUSpMaCLgpjwMXgQHxMv
-	 2bwZLA6h9vAbw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] netfilter: bpf: disallow conntrack kfuncs for token
- programs
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?SsOpcsOpbXkgSmVhbg==?= <Jeremy.Jean@oss.cyber.gouv.fr>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260822210945.1003967-2-Jeremy.Jean@oss.cyber.gouv.fr>
-References: <20260822210945.1003967-2-Jeremy.Jean@oss.cyber.gouv.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 22 Aug 2026 21:28:26 +0000
-Message-Id: <20260822212827.126711F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=swine.de header.i=@swine.de header.b="hVwR5JA/"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4954a9e8490so18745965e9.1
+        for <bpf@vger.kernel.org>; Sat, 22 Aug 2026 15:55:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=swine.de; s=google; t=1787439306; x=1788044106; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=IhHei1VKoqJ0zzoYbfccvAVZfX3h3oItEz3B+qvlJrI=;
+        b=hVwR5JA/oZclbfD7teot8/7cPg/dRcJf+2y4m7LRPnj3/C0xhDAb8St1TxrNOpu+uG
+         zFB6A7O75RliKWXIHPURt1OdU5b4ksGaLllHomoZtL2vlvFJBK1uwpKooCaHyo20tMzm
+         YVxN0nHBCUJdhAFuEQGKrUmLB0UMa82dfPV3fI94sHK0qt4D3qWR7g6KPQDo5EbfpKQP
+         FSDxh/mlJ+T9Fv3Q/OFdz8Iog7/5criErgt8GDBChw6FVzRLYOlDmKIhrcIHvsOW8D/M
+         sGueRKZwK55x19BEedDIY8bhr+ihON/rSvB4LupkUokbwr9ffrhG6fy18ZMP2LHZe95O
+         kigA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787439306; x=1788044106;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=IhHei1VKoqJ0zzoYbfccvAVZfX3h3oItEz3B+qvlJrI=;
+        b=i4V6uTKNn37RAROjn45V2F4Y+rv7TvqbmEh4mo1/345DQhI63hlaGZkJRj4gf+w+Ed
+         CdFSQLnd8N3Lx09Ee/7IcWA+MHHi4w4HFK7vbfuIKQIuIUMMulAln0JmMRPm9KbNdhy2
+         5m/MuiPo80vSHBwE9LCn7DmEoZI8dT1Li5rt1qNFsOcFqeJ/QICQKd0ChPdaMvZeOZ9H
+         MW0VTY2R285L3xZRLTxuegAZnaIwdFtiL769vZ/pLdt97IoZGR3c5LHTx81YC9DrJq8N
+         kpC3NIzwGnpPO8i/N3Tnl+uvNc9sG+w9QVQcNqeEaSUvm+EcUVoTtBLQ+tn/OjPgbSm8
+         iUSA==
+X-Gm-Message-State: AFuF++lyNJHEbFbqM3T7rvQprlgV5nmnC7Zl+vl0DCvXDl1HKzgYHjBs
+	OSzYp+CDdsQvLU4vvkJrk8SzCtkAhmMiwqO5HDFjwOJ7jLwOiCHDq+use/55hLfV1uS5I3D3+/l
+	dalzeBVonGg==
+X-Gm-Gg: AR+sD12QjbA3LSWB/4c0muFolnGvNCCIyAW8TtE0ua1K68v6CMM6MAvQ5mOl3Rd9Iyl
+	PyL9u0VPumVUESAE9NBLGz7z8yp5fzPyBXEo9ISCgPKEalz8gAITOjFNr99MftKWxBH4EPnXwxG
+	qm3okeg87gHX1tdRiQe4cfdp0bycAuZSRHmg1Y7b4xRyd1Qc0WjUhCUtKiYjQyOTIygMIaXEZ+f
+	sgEOWhFdi9aADWQIqqEytw7mx5dkBi/3oO5cPjw00v0IDxllBEkbu/bC+MIYJJSEPw2RIN7DRqB
+	AwNL9Kbd3WV1+NMUNYaJZ+P1kF/m8AM56eBWUZi9ss3NTbphdhPTqtGup97lmKhx9KHaEqGjXrZ
+	qj4rqD+qRw4lFD50uzOpT231oO38w38i8Q1Ec2eKpwBoK8Wedh3lwgKNlH9a7A149HjHwMQqFAo
+	zUhceuEdOiBfVyPEeGnVBrA5gn58aonpoQJ2khsaz9XlmZUwxaZ4b2HumVCV3jpfpIQvWoneCWl
+	eYoAj1Qk3LMVyU=
+X-Received: by 2002:a05:600c:4688:b0:499:5f80:83ac with SMTP id 5b1f17b1804b1-499b91ad940mr124259265e9.7.1787439305687;
+        Sat, 22 Aug 2026 15:55:05 -0700 (PDT)
+Received: from christian-gtr9.tailscale.swine.de ([2a02:6b67:d11b:4200:385d:79ca:2b97:1169])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-499b9ba5139sm41376435e9.2.2026.08.22.15.55.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Aug 2026 15:55:04 -0700 (PDT)
+From: Christian Simon <simon@swine.de>
+To: bpf@vger.kernel.org
+Cc: Christian Simon <simon@swine.de>,
+	ast@kernel.org,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@kernel.org,
+	tj@kernel.org,
+	yonghong.song@linux.dev,
+	stable@vger.kernel.org,
+	andrii.nakryiko@gmail.com,
+	olsajiri@gmail.com
+Subject: [PATCH bpf v3 0/2] disable private stack for sleepable programs
+Date: Sat, 22 Aug 2026 23:54:42 +0100
+Message-ID: <20260822225444.2774461-1-simon@swine.de>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+A JITed BPF program can use one private stack per program and CPU.
+Sleepable programs can be preempted, allowing another task to run the
+same program on the same CPU. The second invocation then reuses and can
+overwrite the first invocation's private stack.
 
-New issues:
-- [High] Security restriction bypass in `nf_conntrack_kfunc_filter` due to =
-unrelocated BTF ID comparison.
+This patch series disables private stacks for sleepable programs and
+adds a selftest covering that stack corruption.
 
-Pre-existing issues:
-- [High] Token-loaded BPF programs can bypass namespace isolation via `bpf_=
-xdp_get_xfrm_state`.
---
+---
+Changes in v3:
+- Target sleepable only.
+- Add the powerpc Fixes tag.
+- Split fix and selftests
 
---- Patch [1]: [PATCH] netfilter: bpf: disallow conntrack kfuncs for token =
-programs ---
-commit 392473e378423f74e738047589faa01940a34fa2
-Author: J=C3=A9r=C3=A9my Jean <Jeremy.Jean@oss.cyber.gouv.fr>
+v2: https://lore.kernel.org/bpf/20260818203234.1142913-1-simon@swine.de/
 
-netfilter: bpf: disallow conntrack kfuncs for token programs
+Christian Simon (2):
+  bpf: disable private stack for sleepable programs
+  selftests/bpf: verify preemptible uprobes avoid private stack
 
-BPF tokens delegate BPF and network-admin capability checks to the token
-owning user namespace. Conntrack kfuncs nevertheless accept a network
-namespace ID relative to the program context without checking whether the
-token has authority over the resolved namespace. This patch adds a filter
-to conservatively reject the conntrack kfunc set for token-loaded programs.
+ kernel/bpf/verifier.c                         |   9 +
+ .../bpf/prog_tests/uprobe_sleepable_stack.c   | 165 ++++++++++++++++++
+ .../bpf/progs/uprobe_sleepable_stack.c        |  89 ++++++++++
+ 3 files changed, 263 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/uprobe_sleepable_stack.c
+ create mode 100644 tools/testing/selftests/bpf/progs/uprobe_sleepable_stack.c
 
-> diff --git a/net/netfilter/nf_conntrack_bpf.c b/net/netfilter/nf_conntrac=
-k_bpf.c
-> index c2df7c9482812..4075ee1efa8ef 100644
-> --- a/net/netfilter/nf_conntrack_bpf.c
-> +++ b/net/netfilter/nf_conntrack_bpf.c
-> @@ -532,9 +532,24 @@ BTF_ID_FLAGS(func, bpf_ct_set_status)
->  BTF_ID_FLAGS(func, bpf_ct_change_status)
->  BTF_KFUNCS_END(nf_ct_kfunc_set)
-> =20
-> +static int nf_conntrack_kfunc_filter(const struct bpf_prog *prog, u32 kf=
-unc_id)
-> +{
-> +	/*
-> +	 * Conntrack kfuncs accept a netns ID relative to the program context.
-> +	 * The verifier cannot determine which user namespace owns that target.
-> +	 * Do not let a token delegate authority over arbitrary peer netns stat=
-e.
-> +	 */
-> +	if (prog->aux->token &&
-> +	    btf_id_set8_contains(&nf_ct_kfunc_set, kfunc_id))
 
-[Severity: High]
-Does btf_id_set8_contains() work correctly here when comparing the IDs?
+base-commit: 75b0a6db4300e4c2c9e97a0848deaa7acfb42fb7
+-- 
+2.54.0
 
-If the kernel is built with distilled base BTF, the statically allocated
-nf_ct_kfunc_set array remains unmodified and contains small, unrelocated
-IDs. Since the kfunc_id provided by the verifier is a relocated runtime BTF
-ID, will this comparison always fail and incorrectly return 0? If so, this
-would bypass the intended namespace isolation security fix.
-
-Also, is the btf_id_set8_contains() check necessary? It seems
-__btf_kfunc_is_allowed() only invokes the filter for kfuncs that have
-already been matched against the module's relocated registered set.
-
-> +		return -EACCES;
-> +
-> +	return 0;
-> +}
-
-[Severity: High]
-This is a pre-existing issue, but a similar vulnerability seems to exist in
-net/xfrm/xfrm_state_bpf.c for the bpf_xdp_get_xfrm_state kfunc.
-
-net/xfrm/xfrm_state_bpf.c:bpf_xdp_get_xfrm_state() {
-    ...
-    net =3D get_net_ns_by_id(net, opts->netns_id);
-    ...
-}
-
-This resolves arbitrary peer network namespaces without validating if the B=
-PF
-token has authority over them. Since xfrm_state_xdp_kfunc_set lacks a .filt=
-er
-hook to reject token-loaded programs, can an unprivileged token-loaded XDP
-program pass a netns_id to look up and access sensitive struct xfrm_state
-objects from the host init_net?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260822210945.1003=
-967-2-Jeremy.Jean@oss.cyber.gouv.fr?part=3D1
