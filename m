@@ -1,174 +1,169 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A5F433050
-	for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 23:58:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C9717C203
+	for <bpf@vger.kernel.org>; Sat, 22 Aug 2026 00:32:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787356737; cv=none; b=TvPany1zJ0HWh6NNcFf4moSGV6feEZ3Ga0YfUG+N5NCiL/HuXcpzl3Y4BsRXMqeTX6QQZhpF6w4HQqUiqDB5rUUhy3X1ZowcM2pzF3mcqgZGnAvCU/UstUm/4uirYQNPjYSigl7cKn11rNLm7guSGjQQ0ZR3BwSY42vu76qBgqM=
+	t=1787358780; cv=none; b=eTzoX2klQMdlxDKU/+FEZWe0923AkxyKg4dULSaclEPjFFSHV5WkO2Ahh8s3qQmeFgx9uW5qzrZGxLbEB8Oc+K1i0ZIEV9BvyZmKgS3l2zHG9uP90rU4o4ZBl43KC74034k9wcLoub6rn6C5Xs3S60OUyVv4aq163Lk48RF23TI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787356737; c=relaxed/simple;
-	bh=xS+Y5KT/3cTVUW4X+yX26MaKtkMBf43Ao/UVCkcQ2RI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=oB+VCNbWXQ2dSBKouIgvS1dM5H8fL9gpJM89uO0Am+HrwL51CXl1p+IUowEY71YXshb8hlSFtjCRU+udvP1BrV9wubJFwwzooa52eWo+sOi840vxIN+jFTbkF0hYwfm9JnRYGDLkC1aB+gIWo21Qo0hVVHLF6i3ELFi7fFZOjIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KI0WdDdU; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787358780; c=relaxed/simple;
+	bh=QfEbQyFqvW8CpPspGrQ1blzamqXZ1u1iEVrvsc4p1i4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NOD8GMpl6npTHfQXzTNvubs+pEZl7Dvx9PVgWaoxOUjcprho7LYqw+3e7BBgx5WO/RL9Ku1Y7FpjaqzzChF1gUQt4vemluyBEqnHncuiY47q4GBqcy7/ls3xG+Pg1QEtKMmsrKK6ryQp2CAR/pQzE4wwaUPwZ3VqzwJ1IBZGtiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FGhp6sG+; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KI0WdDdU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AE161F00A3A;
-	Fri, 21 Aug 2026 23:58:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787356735;
-	bh=SaW0EgZSp29CniIJMmoqN2h8US81Rslj5VXqPioaU54=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=KI0WdDdUmwq514UHEezw2CYitnxGI/9ndLaquijaftTamHyejpg2lH3mzwLvEOQkb
-	 9xzzJcB1tqCA6Ej446SxecmvM0iJJPGXlkWx6dd/9B2Zd2i7RdtKbeP+57gYRi5HAR
-	 EveNtFH2YsVe7ZxdosqF+l5tDGswn3OdgC1kTIkumWqOuSpp03CbaLoBeAKOo1Pod5
-	 S7MFyWyhiqf1iH/tgaLC7UORD2tYcVan3B4r2mshBK9FRE9uAPdSdqMUDNdym3Xmvj
-	 8flJQGi0QHxGRX3sk6eQJwdgEEWT/ekwAONUvbwuxTmldOxURNFtkz7DLAujS2T1aB
-	 qZhae7GlpyU2Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 11/14] bpf: Replace arena kfunc argument
- flags with suffixes
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260821233516.3426127-12-memxor@gmail.com>
-References: <20260821233516.3426127-1-memxor@gmail.com>
- <20260821233516.3426127-12-memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 21 Aug 2026 23:58:55 +0000
-Message-Id: <20260821235855.8AE161F00A3A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FGhp6sG+"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-381b831d535so2180284a91.0
+        for <bpf@vger.kernel.org>; Fri, 21 Aug 2026 17:32:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787358778; x=1787963578; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=kTAv9LK91MR9tUtG3jyEiGCf1TbsMNt6lZu15Q7HKv8=;
+        b=FGhp6sG+00EwGJtko5AORVO81dlhM5VPxCxsegespADggTBj38pqAJ5j3vDgDQduO1
+         MfI9JbcrTz5mls2orzN+cy8OEHY5ZoSHgaJZL58x6+hbgjzlYIZya2qZJTQlAG3RGO8m
+         rVSliJLCaWxifVJmoerc4YqZUP4qsrCNeeBEGEZQ0F36oETkWr5Fla+7Nz6uetZq8+kq
+         sMAn2835A+chqp+4aILJAZjxM3MNhVvf3LuNcvRQWvEBGc0hDfkT749/VK6DwuSazH21
+         qNmRNW53OnjEwLwYcjxFGoOI49MMyU5BvuGo/kPdHRqWCYskYerjg+c4eWZpehDW4oEH
+         ZPlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787358778; x=1787963578;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=kTAv9LK91MR9tUtG3jyEiGCf1TbsMNt6lZu15Q7HKv8=;
+        b=fck4IHk7a9hehXw4fxlVfRM+d8m0/MPfFCbaVYAc6Nep2JSl1wRpvAxcw2O9jaAVJM
+         /U3HUb6CDal9iyxIuqqihEbVGsggKs2Mhk0/rU+wXnw98uDLX1nmzTxjbhOEBwNNb7Su
+         T+J5YAXgtH7XEWZ4kLxVf+CBAtcZk6MK3SFsILZbM2VMHaZ7R+FT6sNreGFxQ9wWhmp3
+         mQqW33D1lSCaJsM/5HgDcgaNZ4az77NG6l87+ZCZy8m3/rMmsiH/XxtBtPN1l2pj4x7d
+         9HIdTyeEq6+FGWChUtAEItPrWG0T03Ee+5hiKtVmidgl08/aSQ+pg8gxyz1AlkUqZUyx
+         6OaA==
+X-Gm-Message-State: AFuF++mODj4lzJcq230sIKmqPFRePz8n3ntc6wmu6bC3oujq3QfAjLOJ
+	AFqjQ9+j0NiJbYZaTVNbA7QU2Zsm1Po63KmR2rTPcmq5ipJKSThao4ZZ1vhI/g==
+X-Gm-Gg: AR+sD11mWnY3BNzdi4GVpizYbyupNmXVDFmQe6nPqT48RuIELzCw7IiXAw7Ia7h3s+Z
+	KN09Dw4q9vgC97aUP0fY9YLFJj+FrJGFq5t7EwAUJTFp0xPiIJ+xcfobJa+yHSWNZ0hpkL2szJf
+	3GS+mJxB+7qF1d3soMYAgZaPbuijqlK4ROXsvTatc+Ox3+7mtgu7XQW9MCXH5Il3iQKkvY0SAj4
+	w5zQM9mEjJ7CKAb8Wj9f2e/j3HmGaseGwrTMh0DPHiluI9//ul1PbKvlgmq+WooJnx1JeMVGEcR
+	OzrMoBRAp/+TnFP/dAgc86l4qjyWB1z7Gsp8vZctXQoVKAreAzo1Z1hZVNTxU7zBZTwWW9fWLer
+	Q4mLIsDvSOvCx6a6aSlrfoD/Qbfp2RHRMg7m47YDT7WIeVi61w3jm9lACLPn5C4FHJpodFG5p7Q
+	kAvJGiwuT1JU/8m9hk9pqIP06IRj4HP9ACRDNU8ItO+fGy64MTn7dURmeQrmcQ/QRlWzX2Xj7oF
+	0d/1FwMgK6GaNJ6jyhvYQ==
+X-Received: by 2002:a17:90b:5347:b0:395:a7eb:a4d8 with SMTP id 98e67ed59e1d1-395c3a4bd22mr19471823a91.14.1787358778374;
+        Fri, 21 Aug 2026 17:32:58 -0700 (PDT)
+Received: from badger ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-395e4968618sm880297a91.3.2026.08.21.17.32.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Aug 2026 17:32:57 -0700 (PDT)
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org
+Cc: andrii@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	kernel-team@fb.com,
+	yonghong.song@linux.dev,
+	npc@anthropic.com,
+	Eduard Zingerman <eddyz87@gmail.com>
+Subject: [PATCH bpf-next 1/2] bpf: check_cond_jmp_op(): properly infer if register is null
+Date: Fri, 21 Aug 2026 17:32:36 -0700
+Message-ID: <20260821-bug-029-bad-non-null-inference-v1-1-45ddc0f7c308@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Missing address translation in non-sleepable arena kfuncs leads to=
- arena memory corruption.
---
+Nicholas Carlini reported a bug when verifier can incorrectly infer
+that a pointer is non-null. The bug occurs when two pointers are
+compared and one of them has a type w/o PTR_MAYBE_NULL flag,
+but which allows a value to be NULL at runtime.
+Here is an example:
 
---- Patch [11]: [PATCH bpf-next v1 11/14] bpf: Replace arena kfunc argument=
- flags with suffixes ---
-commit a7446937b514c39a83585718956aa0b543092b07
-Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+  // `a` is PTR_TO_MEM | MEM_RDONLY | PTR_UNTRUSTED
+  // `a` is 0 at runtime.
+  // `b` is PTR_TO_MAP_VALUE | PTR_MAYBE_NULL
+  void *a = bpf_rdonly_cast(0, 0);
+  int  *b = bpf_map_lookup_elem(...);
 
-bpf: Replace arena kfunc argument flags with suffixes
+  if (a == b)
+    *b = 42;  // verifier does not catch null pointer dereference
 
-This commit replaces the KF_ARENA_ARG1 and KF_ARENA_ARG2 flags with
-__arena and __arena__nullable BTF suffixes for arena kfuncs. It also
-updates the main kfuncs to translate JIT-provided kernel addresses back to
-user addresses using arena_kaddr_to_uaddr().
+This happens because of a special case in check_cond_jmp_op(),
+which attempts to strip PTR_MAYBE_NULL flags from pointer types,
+when processing comparisons like `rA == rB`, if either rA or rB can't
+be null.
 
-> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> index 7b6847200b431..6c34a0d34b3f9 100644
-> --- a/kernel/bpf/arena.c
-> +++ b/kernel/bpf/arena.c
-[ ... ]
-> @@ -1044,18 +1044,28 @@ static void arena_free_irq(struct irq_work *iw)
->  	schedule_work(&arena->free_work);
->  }
-> =20
-> +static long arena_kaddr_to_uaddr(struct bpf_arena *arena, const void *ad=
-dr)
-> +{
-> +	if (!addr)
-> +		return 0;
-> +
-> +	return (long)addr - bpf_arena_get_kern_vm_start(arena);
-> +}
-> +
->  __bpf_kfunc_start_defs();
-> =20
-> -__bpf_kfunc void *bpf_arena_alloc_pages(void *p__map, void *addr__ign, u=
-32 page_cnt,
-> -					int node_id, u64 flags)
-> +__bpf_kfunc void *bpf_arena_alloc_pages(void *p__map, void *addr__arena_=
-_nullable,
-> +					u32 page_cnt, int node_id, u64 flags)
->  {
->  	struct bpf_map *map =3D p__map;
->  	struct bpf_arena *arena =3D container_of(map, struct bpf_arena, map);
-> +	long addr;
-> =20
->  	if (map->map_type !=3D BPF_MAP_TYPE_ARENA || flags || !page_cnt)
->  		return NULL;
-> =20
-> -	return (void *)arena_alloc_pages(arena, (long)addr__ign, page_cnt, node=
-_id, true);
-> +	addr =3D arena_kaddr_to_uaddr(arena, addr__arena__nullable);
-> +	return (void *)arena_alloc_pages(arena, addr, page_cnt, node_id, true);
->  }
-> =20
->  void *bpf_arena_alloc_pages_non_sleepable(void *p__map, void *addr__ign,=
- u32 page_cnt,
+The non-null property is derived based on the absence of
+PTR_MAYBE_NULL flag on rA's or rB's type. But that is not sufficient
+for types like PTR_TO_MEM, as in the example.
 
-[Severity: High]
-Does this code miss address translation when the verifier dynamically repla=
-ces
-the kfunc with its non-sleepable or sleepable variants?
+This patch replaces type_may_be_null() call with reg_not_null(),
+which contains an allowlist of types for which absence of
+PTR_MAYBE_NULL actually means that the value can't be NULL at runtime.
 
-When a BPF program calls bpf_arena_alloc_pages() from within a non-sleepable
-context, the verifier replaces the call with bpf_arena_alloc_pages_non_slee=
-pable().
+At the moment, the list in the reg_not_null() omits two types for
+which PTR_MAYBE_NULL is applicable: PTR_TO_XDP_SOCK and PTR_TO_BUF.
+In order to remain backward compatible, and assuming that only
+comparison between pointers of the same type makes sense,
+this commit extends reg_not_null(). W/o such an extension e.g.
+verifier_jeq_infer_not_null/null_ptr_to_map_value fails.
 
-Since the BPF JIT adds kern_vm_start to the pointer argument based on the
-__arena__nullable annotation on the main kfunc, won't bpf_arena_alloc_pages=
-_non_sleepable()
-receive a kernel address in addr__ign?
+reg_not_null() can be extended further, but I deem that out of scope
+for the fix at hand. Explicit base_type(...) != PTR_TO_BTF_ID
+checks in the check_cond_jmp_op() can be removed with migration to
+reg_not_null(), but that is a behavioural change, as the special case
+would start matching for PTR_TO_BTF_ID that is also is_trusted_reg().
+I omit the behavioural change from this commit.
 
-Because bpf_arena_alloc_pages_non_sleepable() just casts addr__ign without =
-calling
-arena_kaddr_to_uaddr(), it appears this will pass a kernel address directly=
- to
-arena_alloc_pages(), potentially causing arena memory corruption or silent
-allocation failures.
+Fixes: befae75856ab ("bpf: propagate nullness information for reg to reg comparisons")
+Suggested-by: Nicholas Carlini <npc@anthropic.com>
+Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+---
+ kernel/bpf/verifier.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-[ ... ]
-> @@ -1082,14 +1092,20 @@ void *bpf_arena_alloc_pages_sleepable(void *p__ma=
-p, void *addr__ign, u32 page_cn
->  	return (void *)arena_alloc_pages(arena, (long)addr__ign, page_cnt, node=
-_id, true);
->  }
-> =20
-> -__bpf_kfunc void bpf_arena_free_pages(void *p__map, void *ptr__ign, u32 =
-page_cnt)
-> +/*
-> + * A valid arena address can have zero low 32 bits, so ptr must be rebas=
-ed
-> + * unconditionally instead of being treated as nullable.
-> + */
-> +__bpf_kfunc void bpf_arena_free_pages(void *p__map, void *ptr__arena, u3=
-2 page_cnt)
->  {
->  	struct bpf_map *map =3D p__map;
->  	struct bpf_arena *arena =3D container_of(map, struct bpf_arena, map);
-> +	long ptr;
-> =20
-> -	if (map->map_type !=3D BPF_MAP_TYPE_ARENA || !page_cnt || !ptr__ign)
-> +	if (map->map_type !=3D BPF_MAP_TYPE_ARENA || !page_cnt)
->  		return;
-> -	arena_free_pages(arena, (long)ptr__ign, page_cnt, true);
-> +	ptr =3D arena_kaddr_to_uaddr(arena, ptr__arena);
-> +	arena_free_pages(arena, ptr, page_cnt, true);
->  }
-> =20
->  void bpf_arena_free_pages_non_sleepable(void *p__map, void *ptr__ign, u3=
-2 page_cnt)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e036ae20bf6b..897ec4b38dea 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -355,6 +355,8 @@ static bool reg_not_null(struct bpf_verifier_env *env, const struct bpf_reg_stat
+ 	type = base_type(type);
+ 	return type == PTR_TO_SOCKET ||
+ 		type == PTR_TO_TCP_SOCK ||
++		type == PTR_TO_XDP_SOCK ||
++		type == PTR_TO_BUF ||
+ 		type == PTR_TO_MAP_VALUE ||
+ 		type == PTR_TO_MAP_KEY ||
+ 		type == PTR_TO_SOCK_COMMON ||
+@@ -17085,7 +17087,6 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+ 	 */
+ 	if (!is_jmp32 && BPF_SRC(insn->code) == BPF_X &&
+ 	    __is_pointer_value(false, src_reg) && __is_pointer_value(false, dst_reg) &&
+-	    type_may_be_null(src_reg->type) != type_may_be_null(dst_reg->type) &&
+ 	    base_type(src_reg->type) != PTR_TO_BTF_ID &&
+ 	    base_type(dst_reg->type) != PTR_TO_BTF_ID) {
+ 		eq_branch_regs = NULL;
+@@ -17101,9 +17102,11 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+ 			break;
+ 		}
+ 		if (eq_branch_regs) {
+-			if (type_may_be_null(src_reg->type))
++			/* src == dst && dst != NULL => src != NULL */
++			if (reg_not_null(env, dst_reg) && type_may_be_null(src_reg->type))
+ 				mark_ptr_not_null_reg(&eq_branch_regs[insn->src_reg]);
+-			else
++			/* src == dst && src != NULL => dst != NULL */
++			if (reg_not_null(env, src_reg) && type_may_be_null(dst_reg->type))
+ 				mark_ptr_not_null_reg(&eq_branch_regs[insn->dst_reg]);
+ 		}
+ 	}
 
-[Severity: High]
-Does this have the same issue with the non-sleepable variant of free?
-
-When bpf_arena_free_pages_non_sleepable() is substituted by the verifier, i=
-t will
-receive a JIT-rebased kernel address but will pass ptr__ign directly to
-arena_free_pages() without address translation.
-
-Will this cause the wrong pages inside the arena to be freed?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260821233516.3426=
-127-1-memxor@gmail.com?part=3D11
+-- 
+2.53.0
