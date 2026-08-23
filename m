@@ -1,63 +1,63 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A6CD370D61
-	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 01:09:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 412B235975
+	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 01:09:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787447381; cv=none; b=BUqCMPDfEdxO5+niOQrDtrRZIVXiZXaNLabVyYK4EmMIltNmvGg1b0ova8e2H/J+uJmeigGmIsIyX5Z3kbCs0BCydvHlQbNw8GgVJ2TekUUCnvkpmwnK9H9m/gx1nPPI2dDa4Zwic/DJbFIBlxv/iU50uh9x9jEpDqZEvXTjARc=
+	t=1787447383; cv=none; b=lTYlBAOfMK3hICHEgoZjlfXWiSdm3SDtdx6xtCCpAH8yOM9+a8/AJT+0eo19EGDeA3OMGIj5vMAMiQIWcNlm6VIfqqdMpH3phIXGTnRqXveDalAhgYiVkfFaZEgrKvaWxhVSdzxk06GVdkMM/K300hPD60PR0o04BdKrM+r85FY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787447381; c=relaxed/simple;
-	bh=h+B7Qg0HlW8n8JKdcP4s0noqZmQ8rg/w882lMkjds6w=;
+	s=arc-20240116; t=1787447383; c=relaxed/simple;
+	bh=WEP/xiKJ7Ytn8NZhEWeRF9t5kOOWbCVtFKZZ3vRNGFs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jIoc9jSu7BCp3dCrVQuip1cH6OcDaBvVADQgK663RcQusgWwjYzOZTuu8u77Im+tzNKb6At8eurOnQDwt+MSGrON9FEtxMfncrPxck2iR9EkyBbWk1AYSyHfgxHDBgrlC8OfmdYQTTyEDx8IRwhzeHuI4TJQ241U8ZGAlK42m4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rv/9W1of; arc=none smtp.client-ip=209.85.214.172
+	 MIME-Version; b=TtbpX6irIP/iGcFydumIQUlAXfduhgaVLP7RwvaxZSJcRQriMmPmiNPqf0Oi90byU3qD3AO61brOvWQT3usXW0sxNtQKJDLASLS+Q1CiZD3RLtXIa5ntFXsLWRN23dZLKCwRD0YfDRB/YdtplSSx4HmPuW2Cz+bprp+AhIRCg0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pdkeZOmh; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rv/9W1of"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2cc7e86e7aeso30799925ad.2
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pdkeZOmh"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2caed617615so23698925ad.3
         for <bpf@vger.kernel.org>; Sat, 22 Aug 2026 18:09:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787447372; x=1788052172; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787447373; x=1788052173; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=sC4cmVAyzCBkeVkGL2KoW0PWLik78rhv/g/hr8wEP1M=;
-        b=Rv/9W1of40ID9j6WZL+LSrktLgFvMkCFSV4T4/gyV2yEDw9XeKA210SENqQlbyUk3x
-         3YDHW48+utgAXMFaXqDjPe8tIigxYhGSFhXDHqSdE9sVgsOb5jZpv/nm/+x3ac+jjDbt
-         O2Qe/SQ9l5VoTsqiUObLLAX65beuTr2yxxENpUYY7RfI5fYVZ+Gv2m2TibL6bHgtRRFs
-         IP88od0W/PGhJhL6zgHtDcrTGL3ddFKFUCVHbsDfZtSroUbyeOi990RSkAJkm694dH/M
-         1eL5ytwcrhrFJuLB2VlaWlNW7gGclHSlNTkHe5Hcwp8bSBlNKceBnC2zrdwhhNI+9tyD
-         +VbA==
+        bh=8miRh1ZdGGKCW2NT2qVvXgZK5Yz5UsBCYc4UUu5cVsU=;
+        b=pdkeZOmh7Va4MGIC//CVqNkebCW9ZN8GNBy8VbN9LuZQHd4hvzU/yrQfO2WdOsGtxq
+         p2NaFkwHpyT/wjhBTqqFz5LDgHk3xNO3sB5gbtj6KKdfxTTOKjt+9YSrlyMZrpKBB78j
+         3Fwvwqe3cvQoRYAgCtNr2B5fwqxB9VAwqU3bdyiwMUdGvNY3mI88macpwnb29hHIqSBn
+         OVFaWOrAtRgOZmy7aidxYy9ilzm+qzYpR2LC2vb2afNcSrmaQ1ofcpM71b+iBS02bTQr
+         qdWNwpTY1KbYFZayHqhs6JBBJu9ugDTEGuUAMe2A/fND3niNDlnrE5rzbPFxkh1K+U4c
+         kT4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787447372; x=1788052172;
+        d=1e100.net; s=20251104; t=1787447373; x=1788052173;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=sC4cmVAyzCBkeVkGL2KoW0PWLik78rhv/g/hr8wEP1M=;
-        b=n0p30ymzbFX3KkU5yBokP96BiyuxiYLiSjc+N7m2QtslNn9/hnRz4FAyPWrvqLQ1oN
-         TSQv4ve4/FO67iozDaZ/+1YKYFUyeR5NKkbHqsiNh5nwcc8Lhc+8MJEn7zQB4r3qwrLh
-         ClQBEWDJ4x0X+PtDN5mFjvwPPvyAPtckG6q+iTdlju7VJBfkVpjMlvqhZgY2tvSx5hLt
-         T1uaGS1V2jxa6IQyyFheN5DrE5V2haaFX5FswVkckHVtrdoeNL35Hb5As2SOJc9pEH/7
-         PsC6QQlPd1wsQzn4cER6HLiJt0MCDyfI5zZ83nS6Ta3IFgCRx2LCKGiAa5XPIlihCp46
-         G/fQ==
-X-Gm-Message-State: AFuF++n9C99Sf6Ciqu2K9CtvI4qBsmcOngIX9EdnMjNoqO93qkOH5vM3
-	hyrauWDPx+TVfA/KCG/5c2FmVkxZDRISIMdbKUC6LHjFTv/qduqilbSmEiiQcErg
-X-Gm-Gg: AR+sD12F9MgZ7yDDE+iwtIXHrdR6YpJ+Csa8n2XxgO0nXlO/sgOylWfy+5AFAuervZa
-	M5vU5rJic/e0/hReameCG773sihr7mIO6XnEFXhHJvrIXocjF9uu6TVw90ibtvB6nvjENYHU25h
-	XbUdFHmzVQESZRQAzTFmtXcCsIW+C102DzIK7FigUep7AVQj9rVq6079GCvt9zM9S194kGLe+vv
-	Wl0ID/wL8l6aLnoRLy7ZIQKN0B0SUCIq9qE3nB4bxwWqzaUWj1Qo76ByWRqWfqHb1zDUZb1JI0H
-	52rkm5CKQoWXObhDTel0CfGewvfllVMAgpViAqDjBwI2kVpbzPXvp7DdST/rZZ2yyHZJ1L1crEW
-	LZWCl3UexeKCNC/LbJ52RVP0Nm0dRs7TBnjgnmcTTa9sks57mqTIS9o/B9GrKdV8L1WD4lh5q2P
-	Xn5JSLjzI6784i0anPE0KGOudt/2Myw6A3VpkHP4jA543HBkh9ywC2gcE+Wk1O9NEE+xhK5qUG2
-	1fcgl5yQ2PTe71g3CiOaaxHAOA7dcF32ZVBZ/y8bUJv5miiBli18uw=
-X-Received: by 2002:a17:90a:c88b:b0:38e:6a44:671b with SMTP id 98e67ed59e1d1-395c2f4b17emr32178803a91.0.1787447371076;
-        Sat, 22 Aug 2026 18:09:31 -0700 (PDT)
+        bh=8miRh1ZdGGKCW2NT2qVvXgZK5Yz5UsBCYc4UUu5cVsU=;
+        b=AG8mhPdIHA4roqim4ObM742ivecNj19gPXHOCXe+aL6P1yrgbn/1quvbqVfwKmM+Ji
+         hC3aRZ4wfaNVr6tk25SutdnanTO6FXUYp34YFBa6TjlM+xW+MncSSkXnBSCBWrhCb8cA
+         gfXXv5AWC05CT6sOUYsvGIefZXYthk3ZH8lVIcT4RHk38s21R7ADJX+s1dRY5l9OUH5k
+         XOWJUVZrSQgTuZ5sFKKxJONBhpagG5MWU8X6M4pRL1V+IEEIDsfZwC4cKitoam+xn43u
+         VCTw4RhQZDwAOxsDrWzoCZ17bNg/83d0IL6v95qVAnhZjGk3xMUsk6ZFkbVnEIpU/Wxt
+         TafA==
+X-Gm-Message-State: AFuF++kqwvMsM8PJ/NBxqcJL+Q+1Ii2gUecI2d88iw1QYZIvgvConOV9
+	+/R0CknVl/HHE+RYB8N2AIsWphr8SWrR0hUir0St5wItd32vpz92B68g2v5ULBX7
+X-Gm-Gg: AR+sD11MHyjuKNzH0KLtFjn9RTxq5xBUcs1LLkBiQcdcrvEuFqarUypKPoMRMjVNDcF
+	ClGYcxJFRmFUi0xDCOKiA+Ha92QhWHCeq7F3qGkzB68XPsHpoiHt0GvOapiDe52yn2taAwWPEq6
+	YdcTuJO76jE0HEFVpMpeNR+E5obOFs4qPiZX1CcW01ZnDNT24lAYz8950Ydl1Z2kidkaJrpngsp
+	4nJJnldFSqXNUL470MgD4+H/X4B3gQkPnzcJKgzQaQixnsSkSORTP58kLJBrvoXD1MidGgjA37j
+	ZLkM9G39L2UOHbpqWwAjaAe6dYEB4h8/5m6w8ub5gza1g1uPfyO1mxc/xmZYlxhyBX2TukRIRJe
+	SQroepuM88qP0sLMReTTdxkgarJETsErVDLxWPf+8dDEVv24tiD2DYuCeDMFl4mWsZjrgEL/c2l
+	7oaCgji9iLc6inGcSow06oLiWqRZJXj7k+ODz1P9t0n+3n9ErSoEjhtRDgWfVI2/l7yqK+MND6/
+	nWBiCFJR8SAJySswVOKR9mKrvzt+wtMXz3tYfhBf9qieudsQ5BUKWvpG0vkBhi2lQ==
+X-Received: by 2002:a17:90b:2808:b0:37d:f983:7b5 with SMTP id 98e67ed59e1d1-395df289c4bmr15612760a91.9.1787447372605;
+        Sat, 22 Aug 2026 18:09:32 -0700 (PDT)
 Received: from powertower.tail474ae1.ts.net (d173-181-19-173.bchsia.telus.net. [173.181.19.173])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-395e4b240e7sm4219994a91.13.2026.08.22.18.09.30
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-395e4b240e7sm4219994a91.13.2026.08.22.18.09.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Aug 2026 18:09:30 -0700 (PDT)
+        Sat, 22 Aug 2026 18:09:32 -0700 (PDT)
 From: Mykola Lysenko <nickolay.lysenko@gmail.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -70,9 +70,9 @@ Cc: ast@kernel.org,
 	jolsa@kernel.org,
 	memxor@gmail.com,
 	nickolay.lysenko@gmail.com
-Subject: [PATCH bpf-next v6 4/9] selftests/bpf: generate the signing key and certificate once
-Date: Sat, 22 Aug 2026 18:08:55 -0700
-Message-ID: <20260823010900.1730708-5-nickolay.lysenko@gmail.com>
+Subject: [PATCH bpf-next v6 5/9] selftests/bpf: generate verifier/tests.h in a regular recipe
+Date: Sat, 22 Aug 2026 18:08:56 -0700
+Message-ID: <20260823010900.1730708-6-nickolay.lysenko@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260823010900.1730708-1-nickolay.lysenko@gmail.com>
 References: <20260823010900.1730708-1-nickolay.lysenko@gmail.com>
@@ -84,37 +84,36 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-$(VERIFICATION_CERT) and $(PRIVATE_KEY) come from a single genkey
-invocation, but a rule with two normal targets runs its recipe once
-per stale target - under -j both runs execute concurrently and the
-openssl invocations race on the same output files. Rewrite it as a
-pattern rule: pattern rules with multiple targets are implicitly
-grouped even before make 4.3 introduced grouped (&:) targets - the
-same workaround the test_kmods rule already uses.
+The verifier/tests.h recipe is a $(shell ...) expansion: the command
+runs while make expands the recipe line - including under make -n -
+its exit status is discarded, and the resulting (empty) expansion is
+what make actually executes. Turn it into a plain recipe.
 
 Signed-off-by: Mykola Lysenko <nickolay.lysenko@gmail.com>
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/testing/selftests/bpf/Makefile | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 04eea6ebc75c..d30f2e46b136 100644
+index d30f2e46b136..2a99b040301a 100644
 --- a/tools/testing/selftests/bpf/Makefile
 +++ b/tools/testing/selftests/bpf/Makefile
-@@ -789,7 +789,11 @@ VERIFY_SIG_HDR := verification_cert.h
- VERIFICATION_CERT   := $(BUILD_DIR)/signing_key.der
- PRIVATE_KEY := $(BUILD_DIR)/signing_key.pem
- 
--$(VERIFICATION_CERT) $(PRIVATE_KEY): $(VERIFY_SIG_SETUP)
-+# One genkey run produces both files. A plain two-target rule is not
-+# grouped - under -j make would run genkey twice concurrently and the
-+# openssl invocations race; the pattern form is implicitly grouped even
-+# with make < 4.3.
-+$(BUILD_DIR)/%.pem $(BUILD_DIR)/%.der: $(VERIFY_SIG_SETUP)
- 	$(Q)mkdir -p $(BUILD_DIR)
- 	$(Q)$(VERIFY_SIG_SETUP) genkey $(BUILD_DIR)
- 
+@@ -915,12 +915,12 @@ $(eval $(call DEFINE_TEST_RUNNER,test_maps))
+ # them (e.g., test.h is using completely pattern), that it's worth just
+ # explicitly defining all the rules explicitly.
+ verifier/tests.h: verifier/*.c
+-	$(shell ( cd verifier/; \
++	$(Q)( cd verifier/; \
+ 		  echo '/* Generated header, do not edit */'; \
+ 		  echo '#ifdef FILL_ARRAY'; \
+ 		  ls *.c 2> /dev/null | sed -e 's@\(.*\)@#include \"\1\"@'; \
+ 		  echo '#endif' \
+-		) > verifier/tests.h)
++		) > verifier/tests.h
+ $(OUTPUT)/test_verifier: test_verifier.c verifier/tests.h $(BPFOBJ) | $(OUTPUT)
+ 	$(call msg,BINARY,,$@)
+ 	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
 -- 
 2.43.0
 
