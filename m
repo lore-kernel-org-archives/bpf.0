@@ -1,146 +1,245 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D6671A8F7B
-	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 02:01:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D767737DAA3
+	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 02:01:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787450488; cv=none; b=aehpm/BdxvTz+A5XRo4cH3FXnCQP3zzkmmY1TVnk8+pX21xrmltkQqCsx3pfvNlgCf9EZrmT6mrugCeBPQjOj3bRZGKai5OPSd4M5Mo0XBnD7IfzzvGpW/2+0J2GJPTlFnj/UC/CX3OgDWU/B2wXlkOjsIUpiTL/C2UZmUCr9lM=
+	t=1787450490; cv=none; b=pqIzdUmnlrtZViQppKA0nXyNElNJCZC+srOGM7JdL5pEdpNanTURdiR2Xo1c/HADAKfudRXzwsz8omxadJ+T1emay/iwX35pw9ZlrjQCts4D5w8Kyh+ncYE2R5LPuMytW+g9GtdYgzua3ezdfG9z4kt/tFFoZn2Yo95EMDAsslU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787450488; c=relaxed/simple;
-	bh=5EZGTHEEAIckD9tYoBfwn/hWPRK0FMX9M61cqCAR5Bc=;
+	s=arc-20240116; t=1787450490; c=relaxed/simple;
+	bh=UE9Zi5pmTB2E7vKiifdidWmPBGzUzFyOqlt2PYF9+DA=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=s1tLdLyZ0ioiPpSphZqDOIx/ZDSpth5G8B5/Z4TwBePl6LJmAXupT+EzVCKGHqNZUW8YuWPwm5wv6pBmrKAvb04CuC2O4EDUhnVm7FYwrZ/PVZ8aHQIPmtLiIIU907TBTN0SZFD98q/Vvwktq/6nfRCVQqWGMFy4E6JOcIkx+1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HgrYKLlN; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=dTfrOeSbZeeB9BfGMq2sssSuAI+XPZcq/j1p8vQ3m2Jc65LN9Fo6Imj18xvCloJmVY74r3dsSM1CLgtUGBVyRkkJsZc06pjONve0JvMrHhwvkQGW2c6pAttkjBLr/UFTqBoXNJFyTEMqWG9CCmXxbRaoyoQZcK3Gb90Zxau19AE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z3NVZovF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HgrYKLlN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 716E91F000E9;
-	Sun, 23 Aug 2026 02:01:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z3NVZovF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DCD81F00A3A;
+	Sun, 23 Aug 2026 02:01:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787450486;
-	bh=I1eJofPV5iUj+EhBpoMLs2jqMBnxCPOekgbSnu7dT3o=;
+	s=k20260515; t=1787450488;
+	bh=k2ZpuDLWCpTqbAXmDI8oeZXZMeQOqB1bvhah3uX0St8=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=HgrYKLlN8zcpoe+3s9z1rsich6g/mjLql55i6HSpO65X+qsuhEoIQmwMo6+SoZHWZ
-	 i+gMf7Q5UwKoUN7/uBqs5ejI/a/a6xUCb2phpHNWXmXUCGFe8OVkqu42hy4EHM2PUC
-	 v3ToXCD7ymQjBkBqZYg61x2cbwoJVaw3/U6Eum0qcUmQ8MTPeTUGeKeHxfqWW4Scyk
-	 A6IdDjifBz5IiXRvonmKxaYPnQeTeKexYO91uCtLCQVrwYKf8K3Mhgs3iGY/XN6xoH
-	 nLuAnJjGNJZzuKFu7i+k3hWCehLNGkXWOwBRZmx/PkFAz0sY8UhXV2yBHd79++7D9K
-	 Afr6TrEq7UYag==
-Content-Type: multipart/mixed; boundary="===============8946505077942693406=="
+	b=Z3NVZovF+xJG6a0comY3oHEa4oReQWfUqA98/CKfMweDjG/q9FcZP/EtRp5Yi33rO
+	 vwKAMmD27jtuziAkWq2Qhwppl0P+X3oVvqrdwkL0JXdr7F2rYreAma9YKWu19/cyYS
+	 OYaaH6RKPct66JYsVurI9DKDC8c6pq7eUh6c9dzA/buYoKVca0bIYLPqy6fQIsOeB+
+	 sb7C7O5RpnELudzF0YPaS9zLMM4M62W41IZ4byDxaMIXyKGPZZSo3waQGBFkdnZXt1
+	 CWCLedUypNwshsMkEgc6sJxrBURJUYeG7lPujue9PTIi/E2rrEgdbWTfoQkOk8sEpO
+	 IDzJn2lP4kabw==
+Content-Type: multipart/mixed; boundary="===============5692812760472591581=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <e9f88f9519021ce15bb886a84246e786aba20cb6395d7c73bbe14905dd329967@mail.kernel.org>
-In-Reply-To: <20260823010900.1730708-5-nickolay.lysenko@gmail.com>
-References: <20260823010900.1730708-5-nickolay.lysenko@gmail.com>
-Subject: Re: [PATCH bpf-next v6 4/9] selftests/bpf: generate the signing key and certificate once
+Message-Id: <55896f58afb15a9dc7885ecde76ca861854084146a31c2eacf21370411f19158@mail.kernel.org>
+In-Reply-To: <20260823010900.1730708-9-nickolay.lysenko@gmail.com>
+References: <20260823010900.1730708-9-nickolay.lysenko@gmail.com>
+Subject: Re: [PATCH bpf-next v6 8/9] selftests/bpf: move shared build definitions into Makefile.buildvars
 From: bot+bpf-ci@kernel.org
 To: nickolay.lysenko@gmail.com,bpf@vger.kernel.org
 Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,memxor@gmail.com,nickolay.lysenko@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sun, 23 Aug 2026 02:01:26 +0000 (UTC)
+Date: Sun, 23 Aug 2026 02:01:28 +0000 (UTC)
 
---===============8946505077942693406==
+--===============5692812760472591581==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: generate the signing key and certificate once
->
-> $(VERIFICATION_CERT) and $(PRIVATE_KEY) come from a single genkey
-> invocation, but a rule with two normal targets runs its recipe once
-> per stale target - under -j both runs execute concurrently and the
-> openssl invocations race on the same output files.
-
-The -j race described here isn't reachable at this commit. Can the
-changelog clarify the ordering?
-
-At af5eea54, $(PRIVATE_KEY) appears only at Makefile:569 where it is
-embedded in LSKEL_SIGN, and at Makefile:790 as a variable assignment. It
-never appears in a prerequisite list. The only consumer is
-
-    $(VERIFY_SIG_HDR): $(VERIFICATION_CERT)
-
-which lists a single stale target, so the old recipe could only run once.
-The -j race becomes reachable five commits later (8cedb1c0019b, 'build
-each test runner instance in its own sub-make') when that commit adds
-
-    RUNNER_PREREQS := ... $(VERIFY_SIG_HDR) $(PRIVATE_KEY) $(VERIFICATION_CERT) ...
-
-listing both files as prerequisites of the same target. This change is
-correct and needed, but as a prerequisite for that later commit rather
-than as a fix for current behaviour, which is also consistent with the
-absence of a Fixes: tag.
-
-> Rewrite it as a
-> pattern rule: pattern rules with multiple targets are implicitly
-> grouped even before make 4.3 introduced grouped (&:) targets - the
-> same workaround the test_kmods rule already uses.
-
 > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 57907859c210..fe838bb23bcd 100644
 > --- a/tools/testing/selftests/bpf/Makefile
 > +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -789,7 +789,11 @@
->  VERIFICATION_CERT   := $(BUILD_DIR)/signing_key.der
->  PRIVATE_KEY := $(BUILD_DIR)/signing_key.pem
+
+[ ... ]
+
+> @@ -5,109 +5,21 @@ include ../../../scripts/Makefile.include
 >
-> -$(VERIFICATION_CERT) $(PRIVATE_KEY): $(VERIFY_SIG_SETUP)
-> +# One genkey run produces both files. A plain two-target rule is not
-> +# grouped - under -j make would run genkey twice concurrently and the
-> +# openssl invocations race; the pattern form is implicitly grouped even
-> +# with make < 4.3.
-> +$(BUILD_DIR)/%.pem $(BUILD_DIR)/%.der: $(VERIFY_SIG_SETUP)
->  	$(Q)mkdir -p $(BUILD_DIR)
->  	$(Q)$(VERIFY_SIG_SETUP) genkey $(BUILD_DIR)
+>  CXX ?= $(CROSS_COMPILE)g++
+>
+> -TOOLSDIR := $(abspath ../../..)
+> -LIBDIR := $(TOOLSDIR)/lib
+> -BPFDIR := $(LIBDIR)/bpf
+> -TOOLSINCDIR := $(TOOLSDIR)/include
+> -TOOLSARCHINCDIR := $(TOOLSDIR)/arch/$(SRCARCH)/include
+> -BPFTOOLDIR := $(TOOLSDIR)/bpf/bpftool
+> -APIDIR := $(TOOLSINCDIR)/uapi
+> -ifneq ($(O),)
+> -GENDIR := $(O)/include/generated
+> -else
+> -GENDIR := $(abspath ../../../../include/generated)
+> -endif
+> -GENHDR := $(GENDIR)/autoconf.h
+> -PKG_CONFIG ?= $(CROSS_COMPILE)pkg-config
 
-Is this pattern too broad?
+[ ... ]
 
-The old rule named exactly two targets, $(BUILD_DIR)/signing_key.der and
-$(BUILD_DIR)/signing_key.pem. The new pattern claims every .pem and .der
-under $(BUILD_DIR):
+> -# Check whether clang supports BPF address sanitizer (requires LLVM 22+)
+> -CLANG_HAS_ARENA_ASAN := $(shell echo 'int x;' | \
+> -	$(CLANG) --target=bpf -fsanitize=kernel-address \
+> -	-mllvm -asan-shadow-addr-space=1 \
+> -	-x c -c - -o /dev/null 2>/dev/null && echo 1)
+> -
+>  # Order correspond to 'make run_tests' order
+>  TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_progs \
+>  	test_sockmap \
 
-    $(BUILD_DIR)/%.pem $(BUILD_DIR)/%.der: $(VERIFY_SIG_SETUP)
+[ ... ]
 
-Because the target patterns contain a slash, GNU make matches them against
-the whole target name and the stem may itself contain slashes, so the rule
-also covers arbitrary depths such as $(BUILD_DIR)/libbpf/anything.der.
-$(BUILD_DIR) is $(OUTPUT)/tools/build, the same directory the libbpf,
-bpftool and resolve_btfids sub-builds write into (Makefile:223-236,
-255-257).
+>  include ../lib.mk
+> +include Makefile.buildvars
 
-The recipe only ever produces one stem. verify_sig_setup.sh genkey()
-hardcodes the names:
+[ ... ]
 
-    -outform PEM -out ${tmp_dir}/signing_key.pem -keyout ${tmp_dir}/signing_key.pem
-    openssl x509 -in ${tmp_dir}/signing_key.pem -out ${tmp_dir}/signing_key.der -outform der
+> diff --git a/tools/testing/selftests/bpf/Makefile.buildvars b/tools/testing/selftests/bpf/Makefile.buildvars
+> new file mode 100644
+> index 000000000000..75e4cfddeb62
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/Makefile.buildvars
 
-So for any stem other than signing_key the rule matches, make runs genkey,
-openssl succeeds, make reports no error, and the requested file still does
-not exist. The failure surfaces at the consumer instead of as 'No rule to
-make target', and it repeats on every invocation. The same applies to a
-mistyped .der/.pem prerequisite anywhere under $(BUILD_DIR). Also, 'mkdir
--p $(BUILD_DIR)' only creates $(BUILD_DIR) itself, so a stem containing a
-directory component would not even have a writable destination.
+[ ... ]
 
-The grouping the change needs does not require this width. The precedent
-the changelog cites, Makefile:313, deliberately keeps its multi-target
-pattern narrow:
+> +PCAP_CFLAGS	:= $(shell $(PKG_CONFIG) --cflags libpcap 2>/dev/null && echo "-DTRAFFIC_MONITOR=1")
+> +PCAP_LIBS	:= $(shell $(PKG_CONFIG) --libs libpcap 2>/dev/null)
+> +LDLIBS += $(PCAP_LIBS)
+> +# Unlike the pre-split Makefile, this file is included after ../lib.mk
+> +# (top level) or without it (runner), so COMMON_CFLAGS is prepended to
+> +# preserve the original include-search order.
+> +LIB_MK_CFLAGS := $(CFLAGS)
+> +CFLAGS = $(COMMON_CFLAGS) $(PCAP_CFLAGS) $(LIB_MK_CFLAGS)
 
-    $(addprefix test_kmods/,$(subst .ko,%ko,$(TEST_KMODS))): ...
+The comment says this preserves the original include-search order, but
+does this handle inherited CFLAGS correctly?
 
-where % only stands in for the '.' of each known module name. The same
-trick applies here, such as
+In the pre-split Makefile, the assembly was `CFLAGS += $(COMMON_CFLAGS)
+$(PCAP_CFLAGS)` executed before `include ../lib.mk`, producing:
 
-    $(BUILD_DIR)/signing%key.pem $(BUILD_DIR)/signing%key.der
+  [env CFLAGS] [COMMON_CFLAGS] [PCAP_CFLAGS] [lib.mk additions]
 
-or
+After this patch, `LIB_MK_CFLAGS := $(CFLAGS)` captures the environment
+value plus lib.mk's additions, and the new `CFLAGS =` puts that snapshot
+last:
 
-    $(BUILD_DIR)/%_key.pem $(BUILD_DIR)/%_key.der
+  [COMMON_CFLAGS] [PCAP_CFLAGS] [env CFLAGS] [lib.mk additions]
 
-with stem 'signing', which keeps the implicit grouping while matching only
-the intended pair.
+So an exported CFLAGS moves from first to after COMMON_CFLAGS/PCAP_CFLAGS.
+Two observable consequences when CFLAGS is set in the environment (e.g. a
+distro/packaging build where rpmbuild and dpkg-buildpackage both export
+CFLAGS):
+
+* `-O` level flips. COMMON_CFLAGS contains `$(OPT_FLAGS)`, which defaults
+  to `-O0`. Previously an environment `-O2` was overridden by the
+  selftests' `-O0`; now the environment `-O2` comes last and wins. Anything
+  that depends on the selftests being built at -O0 by default (and on
+  RELEASE=1 being the way to opt into -O2) changes behaviour.
+
+* `-I` search order flips for environment-supplied include paths, which is
+  exactly what the comment and the changelog claim is preserved. The claim
+  is accurate only when CFLAGS is empty at the include point.
+
+Separately, USERCFLAGS is no longer the final entry:
+`-Wno-unused-command-line-argument` (LLVM builds) and
+`-DHAS_BPF_ARENA_ASAN` are appended after it, and the matching
+`LDFLAGS += $(SAN_LDFLAGS)` now lands after lib.mk's
+`LDFLAGS += $(USERLDFLAGS)` instead of before it. lib.mk documents
+USERCFLAGS/USERLDFLAGS as the user's extension point.
+
+Could LIB_MK_CFLAGS capture only lib.mk's additions, or should the
+comment/changelog be narrowed to say the order is preserved for lib.mk's
+own additions rather than claiming it is identical?
+
+> +
+> +ifneq ($(LLVM),)
+> +# Silence some warnings when compiled with clang
+> +CFLAGS += -Wno-unused-command-line-argument
+> +endif
+> +
+> +# Check whether clang supports BPF address sanitizer (requires LLVM 22+)
+> +CLANG_HAS_ARENA_ASAN := $(shell echo 'int x;' | \
+> +	$(CLANG) --target=bpf -fsanitize=kernel-address \
+> +	-mllvm -asan-shadow-addr-space=1 \
+> +	-x c -c - -o /dev/null 2>/dev/null && echo 1)
+
+This probe moved from before the ../lib.mk include to after it, changing
+which $(CLANG) it uses. Does this need to be documented?
+
+Before the patch the probe sat at Makefile line 106, before
+`include ../lib.mk` (Makefile:188), so $(CLANG) was
+`tools/scripts/Makefile.include`'s `CLANG ?= clang`. After the patch it
+lives in Makefile.buildvars, which is included at Makefile:101, after
+../lib.mk. lib.mk:3-10 does:
+
+  ifneq ($(LLVM),)
+  ifneq ($(filter %/,$(LLVM)),)
+  LLVM_PREFIX := $(LLVM)
+  else ifneq ($(filter -%,$(LLVM)),)
+  LLVM_SUFFIX := $(LLVM)
+  endif
+  CLANG := $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
+
+That `CLANG :=` overrides the `?=` default, so for `make LLVM=-22` or
+`make LLVM=/opt/llvm/bin/` the probe now runs a different compiler than
+it used to. The result is not cosmetic: CLANG_HAS_ARENA_ASAN gates
+`LIBARENA_ASAN_SKEL := libarena/libarena_asan.skel.h` and
+`CFLAGS += -DHAS_BPF_ARENA_ASAN` (Makefile.buildvars lines 170-173), and
+LIBARENA_ASAN_SKEL is a member of TRUNNER_EXTRA_SOURCES. So on a host
+whose default `clang` is older than the LLVM-selected one, the set of
+built artifacts and the test_progs preprocessor state change with this
+commit.
+
+The new value is arguably the correct one (the BPF objects are compiled
+with the post-lib.mk $(CLANG)), but two things argue for making it
+explicit:
+
+1. The changelog states "No rules or recipes are changed; definitions keep
+   their order" and then calls out exactly two evaluation-time changes (the
+   CFLAGS prepend and CLANG_SYS_INCLUDES becoming immediate). This is a
+   third one, and unlike those two it changes what gets built.
+
+2. The sibling probe `CLANG_CPUV4` (Makefile lines 19-21) deliberately
+   stayed before ../lib.mk. After this patch the two clang capability
+   probes in the same build disagree about which clang they are testing,
+   which is a new inconsistency that will confuse the next person to touch
+   either.
+
+Either move CLANG_CPUV4 into Makefile.buildvars as well so both probes use
+the resolved $(CLANG), or note the change in the changelog?
+
+Regarding the commit message itself:
+
+>     selftests/bpf: move shared build definitions into Makefile.buildvars
+>
+>     Move the definitions that are not rules into Makefile.buildvars:
+>     output-tree layout, libbpf/bpftool binary locations,
+>     BPF_CFLAGS/COMMON_CFLAGS assembly, libelf/libpcap probes, endianness
+>     and clang feature detection, signing key paths, the permissive-mode
+>     knob with its skip_on_fail and skip_if_missing helpers, the srctree
+>     fallback, PKG_CONFIG and the libarena skeleton names.
+
+[ ... ]
+
+>     Definitions nothing outside the Makefile reads also stay: CXX in its
+>     original place; BPFTOOLDIR, HOST_BPFOBJ, BPF_TARGET_ENDIAN, CLANG_CFLAGS
+>     and VERIFY_SIG_HDR in a block right after the include, since they derive
+>     from Makefile.buildvars values.
+
+There are two small accuracy items in the final paragraph. First,
+"BPFTOOLDIR, HOST_BPFOBJ, BPF_TARGET_ENDIAN, CLANG_CFLAGS and
+VERIFY_SIG_HDR ... since they derive from Makefile.buildvars values" - four
+of the five do (TOOLSDIR, HOST_BUILD_DIR, IS_LITTLE_ENDIAN,
+CLANG_SYS_INCLUDES respectively), but `VERIFY_SIG_HDR := verification_cert.h`
+(Makefile:109) is a bare literal with no dependency on anything. It was at
+old Makefile line 765 and has been relocated ~650 lines earlier for no
+reason the changelog gives; it could have stayed where it was, which would
+have kept it next to the `$(VERIFY_SIG_HDR): $(VERIFICATION_CERT)` rule
+that consumes it.
+
+Second, "and the libarena skeleton names" in the list of what moved reads
+as if all of them moved. LIBARENA_SKEL and LIBARENA_ASAN_SKEL moved;
+LIBARENA_BENCH_SKEL (Makefile line ~657) stayed in the Makefile.
+
+Could these be clarified?
 
 
 ---
@@ -148,4 +247,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32610372822
---===============8946505077942693406==--
+--===============5692812760472591581==--
