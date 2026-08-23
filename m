@@ -1,202 +1,349 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D392242D7B
-	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 00:38:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787445489; cv=pass; b=PccF9cuK5R6v4CpiyGM/Qfmfu2y3aSK4zOrmxHwNx5SfSkkUbQSGE27n4z25K7lnwVVihsktZTDQIjZe+Fwy7E/n7oChJS5IFK9px/9u9yC7XgRbprGiEpdH2DKxRywLOa14N5siDQzDQGpwE+alRZdwaJRyQlYyx/2twv92HAQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787445489; c=relaxed/simple;
-	bh=CQQUk7WyMlimATvN2TubBpiV7t6/kdjxTiXJmzO+/I4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VbcqDVds39p50lzhchtTXAoVB5XHMSCK9d8RJQ0tqcG842+rvqexbwbR6STgoGv2wTK/4qYDuLIL/nG0vgRaw30S1CvtaTd3L7otvFM0r96FTdseoEoTXXMXr1iJJesZ0f/kUzVVQwe5NBCjk1gxGzn7bmH4LIIyo1o5v+n9bmQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NufCVPLW; arc=pass smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0592937A836
+	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 01:09:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787447368; cv=none; b=bQzux/i13gYu9oqIE+uUK7vbojE22D8ZoumE+Nk0cHBe5YXo4IE5rqsplmwMM1wIZET62YI6qd9mu/at0JpOAKXpdaTFWbUAZLZCD28ldiMywgoA0oF6wjWZQUmxLAPN6ad+5wwU5ANCVuFHOq3GWzbcAKkjfKXbyz91TWNmlMQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787447368; c=relaxed/simple;
+	bh=Xan4vJZCB5TZsjt2mx2cHcFS1RSzNrCxD8qgU2FFA/k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=L/Uhx51X0pkLtdcYLuhYuQDz+SNKbm8oQOJSXMj5+2rvO6WmHk14QLn0FrKBjSl83CH4uvdpI1RALeGv/AcXxG6bhc/fk2K4QrY9Ailu5nObCPwoCFkr1OMVY8rIUfbZ2tMoCGYko9RFRWWirTwf00FDnJ4fZrz7wVprsgqVg3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WrukjR1Q; arc=none smtp.client-ip=209.85.216.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NufCVPLW"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c207cb16cf5so359355766b.1
-        for <bpf@vger.kernel.org>; Sat, 22 Aug 2026 17:38:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787445486; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Ffrkx499VEBx2HYTcsOX8E5quSCBHLW4iQwYdeHzFuRTSk43dU9pO/ktSsT3071YxE
-         3Rs02Nk2CA7HWaOhVnoL3BNYxPr3uSTswmsOx3U+/lLwxUX6WV9v0aTYsO/1LBB0XYZe
-         5B9+9gyhy19zpWSdrDCcxmKKvrJAsoTHp2QG+R5sdumSjvFyVGunDC9qJAPkVqkDD/1x
-         KICXM7aQsoMuzDha0vEn+OArAiwnw9CBwgfCXwb3GPRYUaRZG07HYcTwMrBImhgX5Ms6
-         XaAm+SjnwCriD6D1L1yaulxyOoMkxaB7aO80a/xve0LS6W0+OjE4MqY8C726gWwdbBoc
-         jIxg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=qzqwutXDtz6cXpjQVmrAsIlzR2xXjGkclkw2fB1yovU=;
-        fh=FthGvuR3K9/4OOpgmQJp7FB64mSmSiZB6V3xeZ/77Q8=;
-        b=W7W0SNPv87tkzBrVBy76r5IPwzixvy0aGAG9zDcOcBH1qEsFXONKFqot4Y+LzUAjV0
-         6mANpibLsv26F+dYs4MUdtrvMx9ie589B/9FjIYgo3PfrdAKFpCAzgCQjpe0dO+DIxH8
-         5MQX4zOoE5GrdHdonVau/J7toN5192KKAt5psq0t7ForL2ksHwtZ5FsU0TC7oIJDTqJo
-         plnXfVd0kGxbO1pz2b0r+OBgHyN7Pu1ucuQ9lkkOsYgnzsEgNUWBAUNOZTIrWA8Ul6+7
-         VXMS2GGY/0zdPKAAXDPCDYZIBasC3ihdaFQVKAlNxWn2k5/f/MrBNocCNHjzc5Mecx8Z
-         IMqw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WrukjR1Q"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-38759bcd877so2682186a91.2
+        for <bpf@vger.kernel.org>; Sat, 22 Aug 2026 18:09:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787445486; x=1788050286; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=qzqwutXDtz6cXpjQVmrAsIlzR2xXjGkclkw2fB1yovU=;
-        b=NufCVPLWCemoUe1Kp1bw2Ap1+lBV6aNkICBFMKitBKVXARPCOlNqC2g6wU+Jut1g0R
-         ZWRc0JciGD8qD+6y32HaP3X3aXwZpMPd7KgTaJYK963/QnlYh51JEutDgum69KQrCtoK
-         f7QT/pCB9Si4JRMZ48bBY5zx14Yp/pu4q9KVndgUif+vYHpswxHbnTQkTcfZWwauHLmF
-         joctW9koypoanr4b4y/54hs0fDdvgeosFUQfXl+xx8TGyPlIkezozF9XopyJEoePaYcv
-         HbckVfowUScX1JJsBQqYbRT/dy4LeRg8i82AWL4j9SaXMCEOI2Xm2gbpMlmMJTcepDZe
-         6Bsg==
+        d=gmail.com; s=20251104; t=1787447360; x=1788052160; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=o/gH69iTHpDhaF44vGh2D3DmfkRNEJwYrKIE9aO+tfA=;
+        b=WrukjR1Q9Tvhxneo5wIBRpCdXSLxG/q3AjurUJv9ivl8fn8b0ryN1yIAWSq2thDeQs
+         F45kq/LjgI6LTnWhAPuXWVVnZwoOHg8F6XDUOej1gBKS/3iaM5VLnms6OvF98KSS0Eaq
+         /saSczepMaIrumaBCVMWXcwX9gFz28mWsGU0iyVRqwWgocL7w4dx8UBvUGKWxkBQgaUP
+         2wRqM4SrzuztyCPqqq9UbSrhBOPPcX+SEf89eFe5Upl1Jk+zqNSE7AX2bHZOCWfk2hdR
+         dPihOz6swjMlOkNMwYbC++24tXSGvuehVjD9pb5EKSP7oLPIudSJ0E90u1XbJwtwhiz4
+         ocNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787445486; x=1788050286;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=qzqwutXDtz6cXpjQVmrAsIlzR2xXjGkclkw2fB1yovU=;
-        b=AcZaorgdEKpOGo9qusNOt11BQTJdO3ExJipG7PpjmcFidpOjsjCCqCoYLezqCxcZMB
-         juV2drozMJuZPbzWjNOx+1HJZawJAjI8h4UXwkFXES16g7EUdlQyqLITZ0DuWcY3e1ut
-         GD1mVvgdnGP4B6vDnI61Cyt1tfbfbSTNiJSwoEEgUxVRylTrJfSznkdRcVZzcv5Dri5u
-         Enx5taBqLbF6Hw29F7lfL0I2slt5LzSZnV1UzKJDfx4eX/NI6FhM9DLbhsrwFtX1OptZ
-         l+ii95kLZE23A7OHG4/qdhA175xI1R8hnsWSgU7S2GPtzs2Tl3aDlfODzZz3J2JsBTUc
-         4s/w==
-X-Gm-Message-State: AFuF++mJPWSv0WqStEFuDL0Y9SwehAb9Sc3XopRf6dfZI5jpuE/KS3lS
-	W9yuenOUKTgpE9fKUrZ+ZQ4TguO7omRuQgE9i/9yVAEg5gNLTaEY7yCwd23Xoe2JQdPn8mvIujx
-	fIbplbyAyHiqLgtIrCQ0n9g4J2XvNTZWm80NKRhA=
-X-Gm-Gg: AR+sD12d2hM1uIkB54KKo+6NXFOg2tAo2xVW4K6Zx+pGzbKu4TRL2pFxwnAPZfQnBOi
-	zSitQ4U2ohGBOOMtsULBBrZkrKiWHystiaq7Xc82uSWqAcpr2YEC6aPlWe3xWUD0eUq496rABoD
-	Ncm9+p9pZUhurgQvYPLl5MgjFF4RCHyVmzGGNAH0YaetVmEwOt/2qXMwLMsCAak414F9AkVk/NQ
-	HM5taBy2IIbKlGZJJPM5Mra14Q531sszQRd6n5EeeXpfxX3KFzomDuo8MVAGiQvcGnUCYyllyGN
-	2K+RUX+rXasIX7ZAizyhqFsR36Pd20qWc3QZ+6G9p1Q0soBumdQUOLfND6uTO46TbfJVtpYuWoU
-	S
-X-Received: by 2002:a17:907:7b93:b0:c20:5213:56f1 with SMTP id
- a640c23a62f3a-c246a60348emr1674469766b.13.1787445486069; Sat, 22 Aug 2026
- 17:38:06 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1787447360; x=1788052160;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=o/gH69iTHpDhaF44vGh2D3DmfkRNEJwYrKIE9aO+tfA=;
+        b=QoneAt3KyWRlDx0gWpqXVCqPfb5am/lzoe4sXl1zKzvcgSTfVehA/ldl7JWbIF69WM
+         jI2oo6b+qiy9zo94IQ4fUhnI61TbVrR2VtHA7qtCLBlCjYwkpvvuqoJ4C9Wsp3pqBkeR
+         E89LthVgwVzUHEzdr2RN1gA/1LCaRkvA+HFfuQrlmkvg9xOx/NjWcTZQ8pYqu+atpLuS
+         B88tsNui6IDoTOKXw4FAhkZaG5+b5yn6aEe8Y7LW6fKS4+JmmFfaguLUzxdT3dOvhZJb
+         MC/gxj8LpWt0iOX+/MD9MFdjftBcYF8IoqHvY03nwjjFD/FclLrBY87WHqnaiHGMJvEn
+         yr0Q==
+X-Gm-Message-State: AFuF++khQZeOBTbZOYXcGALv+9HB1BFUo8f6oRxN9P2+6bHvOcCj0blB
+	9NRAKLcYCrYr0C5zpUPj7TVz7nPuYeSCzqBO8jqw2s6DT+w7QApoHElwDSKMVzbo
+X-Gm-Gg: AR+sD10UN0kjfxteXTVYKOxyXd3MXbXRaDvzEQ168inHuSfbA9QclBjndoivRSrVhXO
+	MHCF1/0MeygYGcK/vwhH0iozkmyeWrreZaRpjQmeCZk8S/631RxtI6logBj/5Fa+aqrbpPEFAho
+	CPgwu+FqK9e3BIeyfcV209TgD6ZWOBLxMJRQRhlzX5Sce73wMzMvlTM9IYFFj6hGhnkFOEryp59
+	tx7J3fZYr2lkvHZif/zR2XKbR9bbcgcKs2zE0fy5Q6JKLdopTpyEF/JHsHb4SHoyftjNbQuxuCS
+	SK3Nc7UOq2rVuZKWODywuibNKbgS8y/ahlHdNiKA8TfUm2Y7wRAUd3WCG8J3aZ2/D9Ty4IUvJkL
+	68RSm9q2kjHcnTxi8vgnn/oWTDCIlrNBWPSs14Ujk7/VYVFMUt23cs6MSluObcF1r1GzmjjtXTS
+	Pk+UEjqFe1bTU86fk8UzehksqT10nVMmLZ3vs1bkFVGuSYfiKE4jCgoTGR6vMsnT0qppyL4HaI/
+	QFj2HLso5o7XxpJXP1RfQmfBxATG75GAEH4buluCpyxUhhhx4YU94k=
+X-Received: by 2002:a17:90b:39ab:b0:393:19a3:4e5 with SMTP id 98e67ed59e1d1-395df686f1dmr14020217a91.16.1787447360261;
+        Sat, 22 Aug 2026 18:09:20 -0700 (PDT)
+Received: from powertower.tail474ae1.ts.net (d173-181-19-173.bchsia.telus.net. [173.181.19.173])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-395e4b240e7sm4219994a91.13.2026.08.22.18.09.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Aug 2026 18:09:19 -0700 (PDT)
+From: Mykola Lysenko <nickolay.lysenko@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	memxor@gmail.com,
+	nickolay.lysenko@gmail.com
+Subject: [PATCH bpf-next v6 0/9] selftests/bpf: restructure the Makefile as a layered build
+Date: Sat, 22 Aug 2026 18:08:51 -0700
+Message-ID: <20260823010900.1730708-1-nickolay.lysenko@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260804170156.1709916-1-nickolay.lysenko@gmail.com>
- <20260804170156.1709916-9-nickolay.lysenko@gmail.com> <8da8aa48afa6ef52c22f976793af75b334b189a1.camel@gmail.com>
- <c3f59776953b04e20e18da57e22b9cae2db5c9b6.camel@gmail.com>
-In-Reply-To: <c3f59776953b04e20e18da57e22b9cae2db5c9b6.camel@gmail.com>
-From: Mykola Lysenko <nickolay.lysenko@gmail.com>
-Date: Sat, 22 Aug 2026 17:37:54 -0700
-X-Gm-Features: AcwNN1UszvV9m-2bFoOTfr3SElHR6wZkjb5cYpc0G4rABqrR9AB8gbliTh98bvo
-Message-ID: <CAMtxOX0PJUEv_05aQ_AQmseREAUMeESCK1NC1Sq0hcDsffo5cw@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v5 8/8] selftests/bpf: build each test runner
- instance in its own sub-make
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, memxor@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 6, 2026 at 11:30=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
->
-> On Thu, 2026-08-06 at 01:02 -0700, Eduard Zingerman wrote:
->
-> ...
->
-> > > +# The default flavor's skeletons are also inputs of bench, test_maps=
-,
-> > > +# xskxceiver, xdp_* and test_cpp; "default-skels" builds just those
-> > > +# without the test_progs test objects and binary.
-> > > +.PHONY: default-skels
-> > > +default-skels: $(RUNNER_PREREQS)
-> > > +   +$(Q)$(RUNNER_MAKE) RUNNER=3Dtest_progs FLAVOR=3D TESTS_DIR=3Dpro=
-g_tests \
-> > > +           BPF_CC=3D'$(CLANG)' BPF_CC_MSG=3DCLNG-BPF BPF_SYS_INCLUDE=
-S=3D'$(CLANG_SYS_INCLUDES)'  \
-> > > +           BPF_CC_FLAGS=3D'-O2 $(BPF_TARGET_ENDIAN) -mcpu=3Dv3'     =
-           \
-> > > +           BPF_DEFINES=3D-DENABLE_ATOMICS_TESTS skels
-> > > +
-> > > +$(OUTPUT)/test_progs: $(RUNNER_PREREQS) default-skels FORCE
-> > > +   +$(Q)$(RUNNER_MAKE) RUNNER=3Dtest_progs FLAVOR=3D TESTS_DIR=3Dpro=
-g_tests \
-> > > +           BPF_CC=3D'$(CLANG)' BPF_CC_MSG=3DCLNG-BPF BPF_SYS_INCLUDE=
-S=3D'$(CLANG_SYS_INCLUDES)'  \
-> > > +           BPF_CC_FLAGS=3D'-O2 $(BPF_TARGET_ENDIAN) -mcpu=3Dv3'     =
-           \
-> > > +           BPF_DEFINES=3D-DENABLE_ATOMICS_TESTS
-> >
-> > Is there a way to reduce copy-paste between default-skels and
-> > test_progs? Why does test_progs depend on default-skels?
->
-> Overall, I don't like the default-skels dependency for `bench` and compan=
-y.
-> Previously these depended only on a subset of skel.h/bpf.o files.
-> But idk if that could be avoided. One option is to extract Makefile.skel
-> with the rules necessary to build bpf object files, and include it from
-> Makefile.runner and from the main makefile. Making `bench` and others
-> depend on the exact set of skels they want. But I'm not sure I like this
-> option either.
->
-> Please think a bit about this thing, maybe you can come up with
-> something.
+The BPF selftests Makefile has grown to ~1,100 lines, with much of the
+complexity concentrated in the DEFINE_TEST_RUNNER double-expansion
+machinery: the per-runner rules are written in $$-escaped make and
+eval'd once per flavor, so the rules that actually run never appear in
+the source, are invisible to make's own debugging facilities, and are
+easy to break for one flavor while testing another.
 
-I prototyped your Makefile.skel option and I think it is the right
-call - it comes out simpler than what it replaces, not more complex.
+The series opens with six small stand-alone changes, each usable
+(or droppable) on its own: patch 1 filters headers off the generic
+link rule's command line (gcc tolerates a stray .h there, clang
+refuses); patch 2 drops four stale target-specific lines that name
+objects nothing builds - restoring the two dependencies of value
+among them in working form (flow_dissector_load.h against the
+binary; cgroup_getset_retval_hooks.h by moving it under progs/,
+where the blanket header prerequisite of the BPF object rules covers
+it) - plus three never-referenced linked-skeleton dependency-map
+entries, a no-op CURDIR override and the OBJCOPY definition nothing
+reads; patch 3 factors the eleven
+identical permissive-mode "remove the target, print SKIP, report
+success" recipe tails into a skip_on_fail helper; patch 4 makes the
+signing key generation race-free under -j; patch 5 turns the
+verifier/tests.h $(shell)-in-recipe into a regular recipe; patch 6
+derives the bench object list from the sources with a wildcard. The
+restructure itself is three steps, each independently buildable and
+each producing byte-identical artifacts:
 
-The observation that convinced me: it is the same move as your
-RUNNER_OBJS change, applied to the BPF artifacts. The main Makefile
-owns everything shared (now including the default flavor's BPF
-objects and skeletons, via the included rule file instantiated with
-the default parameters), and a runner instance owns only what is
-private to it (the flavored artifacts, the test objects, the binary).
-With the main Makefile able to build any individual skeleton:
+  7) the four near-identical skeleton generation recipes move into a
+     parameterized helper script (gen_bpf_skel.sh);
+  8) shared (non-rule) definitions move into Makefile.buildvars;
+  9) each test runner instance (test_progs, test_progs-<flavor>,
+     test_maps) becomes its own plain-make sub-make (Makefile.runner),
+     with the BPF object and skeleton rules both sides share in
+     Makefile.skel, replacing the eval/escaping layer.
 
-- bench, xskxceiver, xdp_*, test_cpp and the install list go back to
-  depending on exactly the files they consume - the stock per-target
-  dependency lines, unchanged;
-- default-skels disappears, and with it the delegation rules and the
-  test_progs-depends-on-default-skels serialization trick you asked
-  about this morning (so the DEFAULT_RUNNER_ARGS deduplication and
-  the two pattern rules from your first mail dissolve rather than
-  get adopted);
-- every output path has exactly one owner again: the main Makefile
-  writes $(OUTPUT)'s BPF artifacts, each flavored runner writes only
-  its own directory. The unflavored sub-makes include the same rule
-  file, and since the delegating rules list the full artifact set as
-  prerequisites, a runner sub-make always finds them fresh - same
-  file, same rules, so there is no two-lists invariant to maintain.
+After the series the top Makefile owns everything that exists once
+(toolchain setup, the libbpf/bpftool/resolve_btfids sub-builds,
+vmlinux.h, all userspace objects the runners link, the default
+flavor's BPF objects and skeletons, standalone binaries, and the
+lib.mk run/install contract), while every runner instance is an
+ordinary single-flavor makefile with no escaping. Total line count is
+roughly a wash; the point is the structure, not the size.
 
-Cold "make bench" builds 19 BPF objects and 19 skeletons with this,
-versus the full default-flavor pass (982 objects, 1,792 skeleton
-headers) with default-skels - that was the regression you called out.
+Validation (each patch, x86_64, identical toolchains, clean builds):
+3,031 BPF objects and 5,517 skeleton headers byte-identical to the
+current Makefile's output - except the one object whose header
+patch 2 moves (and its skeletons), which differs only in the
+source-path strings recorded in BTF/debug info, verified by
+comparing the objects with those sections stripped - with identical
+build-artifact file lists through patch 8. For the end state
+additionally: all userspace objects and binaries byte-identical
+except (a) bench (from patch 6 on) and test_maps, which differ only
+in object link order, proven by relinking the current Makefile's
+objects in the new order and comparing bytes, (b) the test_progs binaries and two test
+objects that embed the moved header's skeleton or record its path,
+and (c) the flavor output directories, which no longer contain their
+21 duplicate copies each of the shared userspace objects (the
+flavored binaries link the shared objects); emit_tests output and
+the installed tree identical; BPF CI green on manual pre-submission
+runs of the full series and of every cumulative intermediate
+(patch 1, patches 1-2, ..., patches 1-8) across x86_64 gcc/llvm,
+aarch64 and s390x, including the GCC-BPF, ASAN and veristat jobs;
+and all 78 benchmarks produce identical outcomes on old- and
+new-built bench binaries.
 
-While folding it in, the file split settled one step further:
-Makefile.skel is self-contained - the hand-maintained skeleton
-metadata (the light-skeleton demand lists, LINKED_SKELS with its
--deps map, the skeleton blacklist, the BPF-object header list, the
-per-source flag overrides) sits right next to the derivations and
-rules that read it, and since both the main Makefile and
-Makefile.runner include the file, both instantiations read the same
-data with no second copy to keep in sync. Makefile.buildvars keeps
-only definitions genuinely shared between files (toolchain, paths,
-flags, the permissive-mode helpers, the runner link lists).
+v5 -> v6 (all on review of v5 - thanks Eduard!):
+- the permissive-mode missing-input guards at the top of the skeleton
+  recipes are restored, factored into a skip_if_missing helper next
+  to skip_on_fail: when a BPF object's compile already failed and was
+  skipped, the skeleton skips quietly again (SKIP-SKEL and nothing
+  else) instead of running bpftool against the missing file first
+  (reported by Sashiko AI review on v5 patch 6; v5 had regressed the
+  guards away, changing permissive-mode build logs)
+- patch 2: cgroup_getset_retval_hooks.h moves under progs/ next to
+  its BPF consumer instead of growing a hand-written per-flavor
+  dependency line - the blanket progs/*.h prerequisite covers it
+  (suggested by Eduard)
+- patch 2 also picks up the three linked-skeleton -deps map entries
+  (xsk_xdp_progs, xdp_hw_metadata, xdp_features) that were dead on
+  arrival - added without ever being listed in LINKED_SKELS, the only
+  reader of that map - instead of letting them disappear silently
+  with the machinery in patch 9
+- patch 7: the Makefile.buildvars include is hoisted to directly
+  after ../lib.mk, ahead of the Makefile.feature evaluation, so the
+  srctree fallback and PKG_CONFIG live only in Makefile.buildvars and
+  the top Makefile's duplicates are gone (suggested by Eduard)
+- patch 8: the userspace objects the runners link are built once by
+  the main Makefile from per-runner lists in Makefile.buildvars; the
+  runner loses its object compile rules, disables make's built-in
+  rules so a missing object is an error instead of a silent rebuild
+  with default flags, and the flavored instances link the shared
+  objects instead of compiling identical copies (patch by Eduard,
+  replacing the HELPER_OBJS pre-build arrangement and its
+  keep-in-sync invariant)
+- the rules for one flavor's BPF objects and skeletons move into
+  Makefile.skel, instantiated by the main Makefile
+  for the default flavor and by Makefile.runner for the flavored
+  instances - bench, xskxceiver, xdp_*, test_cpp and the install list
+  depend on exactly the skeletons they consume again (cold "make
+  bench" builds 19 BPF objects and 19 skeletons instead of the full
+  default-flavor pass), and the default-skels indirection with its
+  delegation rules is gone; Makefile.skel is self-contained - the
+  hand-maintained skeleton metadata (demand lists, LINKED_SKELS with
+  its -deps map, the blacklist, the header list, per-source flag
+  overrides) sits next to the derivations and rules that read it,
+  and Makefile.buildvars keeps only definitions shared between files
+  (the Makefile.skel split suggested by Eduard)
+- the buildvars move set is trimmed to match: CXX, BPFTOOLDIR,
+  HOST_BPFOBJ, BPF_TARGET_ENDIAN, CLANG_CFLAGS and VERIFY_SIG_HDR are
+  read by nothing outside the main Makefile and stay in it
+- the bench object list derivation is split out of the runner patch
+  into its own lead patch (6), which also carries the resulting bench
+  link-order change; rebasing onto current bpf-next, the new bpf_for
+  and libarena benchmarks are picked up by the derived list, and the
+  xskxceiver/xdp decoupling commit is untouched by the series (those
+  standalone binaries keep their stock rules and exact dependencies)
+- the runner patch carries a FORCE comment; each patch cleans up only
+  its own comment and blank-line leftovers (suggested by Eduard)
+- Acked-by collected on patches 1, 3, 4, 5 and 7 (patch 7 was acked
+  as v5 patch 6; it since gained the skip_if_missing guards above)
+- the RFC tag is dropped - the direction question the RFC asked has
+  its answer in the v5 review
+- v5: https://lore.kernel.org/bpf/20260804170156.1709916-1-nickolay.lysenko@gmail.com/
 
-The cost is a fourth makefile and ~20 lines of parameter plumbing in
-the top Makefile; Makefile.runner shrinks by the extracted section.
-Functional checks on the prototype: no-op builds stay no-ops, a
-full build settles, touching one bench prog rebuilds exactly its
-skeleton, bench object and the binary, and touching a shared prog
-rebuilds object, signed lskel, test objects and relinks test_progs.
-The folded version passes the same full A/B as the rest of the
-series: BPF objects, skeletons and artifact lists match the current
-Makefile's output modulo the two changes already accounted for (the
-moved header's recorded paths, the flavored duplicate .o removal).
+v4 -> v5:
+- the four stale target-specific lines (test_l4lb_noinline /
+  test_xdp_noinline -fno-inline, flow_dissector_load.o /
+  cgroup_getset_retval_hooks.o header deps) move out of the runner
+  patch into a leading cleanup patch (which also redeclares the
+  flow_dissector_load.h and cgroup_getset_retval_hooks.h
+  dependencies, the two of the four with value, in working form), preceded by a patch filtering headers off the
+  generic link command line so every intermediate state builds with
+  either compiler - the series is now 6 patches; per-patch validation
+  notes leave the commit messages - validation for every patch is
+  summarized above instead.
+- the permissive-mode skip suffix becomes the skip_on_fail helper in
+  its own patch before the restructure, so the script patch's new
+  skeleton recipes never carry the open-coded tails and the buildvars
+  patch stays a pure move; the signing-key race fix and the
+  verifier/tests.h recipe conversion likewise become their own
+  patches instead of riding inside the runner patch.
+- runner patch sheds incidental churn: the '# Some utility functions
+  use LLVM libraries' comment moves to Makefile.runner together with
+  the jit_disasm_helpers CFLAGS line it describes; the notdir
+  convenience rule, the generic compile rule, BPF_GCC's stock ?=
+  probe and surrounding blank lines are left exactly as they are in
+  the current Makefile.
+- buildvars patch: moving the srctree fallback and PKG_CONFIG into
+  Makefile.buildvars put them after ../../../build/Makefile.feature is
+  parsed, which captures both at parse time - in a standalone build
+  srctree was empty there, so the LLVM feature probe targeted
+  /tools/build/feature, failed with stderr discarded, and feature-llvm
+  silently read 0: the jit-disassembler helpers compiled into their
+  -EOPNOTSUPP stubs and the __jited verifier tests
+  (verifier_private_stack, verifier_jit_inline, verifier_jit_convergence,
+  verifier_tailcall_jit) silently flipped to SKIP, confirmed in the v4
+  BPF CI logs ("llvm: [ OFF ]" in the feature display). Both now stay
+  untouched at their original positions in the Makefile, with guarded
+  copies kept in Makefile.buildvars for the runner sub-makes (found by
+  the bpf-ci AI reviewer).
+- buildvars patch: the changelog now names both evaluation-time changes
+  (CFLAGS prepend, CLANG_SYS_INCLUDES immediate assignment) instead of
+  claiming a single exception (bpf-ci AI reviewer).
+- runner patch: the commit message no longer claims the light-skeleton
+  demand lists are derived from #include lines - that derivation was
+  dropped in v4; the lists stay hand-maintained (found by Sashiko AI
+  review).
 
-This is folded into v6.
+- v4: https://lore.kernel.org/bpf/20260724042600.175440-1-nickolay.lysenko@gmail.com/
 
->
-> ...
+v3 -> v4:
+- fix patch 2: "export BPF_GCC TEST_KMODS" preceded the TEST_KMODS
+  definition, and 'export NAME' on an undefined variable creates it
+  empty, turning the ?= default into a no-op - the kernel test modules
+  were silently neither built nor installed and every BPF CI
+  test-runner job failed with "Can't find bpf_testmod.ko" (caught by
+  BPF CI; not reproducible locally where TEST_KMODS is overridden).
+  The definitions now precede the export, with a comment on the trap.
+- addressed Eduard's (partial) review of patch 3: header comment
+  trimmed; CHECK_FEAT cosmetic reverted; the stock named helper
+  variables and per-binary dependency lines are kept (HELPER_OBJS is
+  defined from them); map_tests/tests.h added to the runner
+  prerequisites; the include-derived skeleton lists are dropped from
+  this series in favor of the current hand-maintained lists (the
+  derivation can be a follow-up); the per-flavor BPF compiler
+  differences became plain sub-make parameters, removing the runner's
+  only conditional compile block; content the series does not change
+  (helper variables and dependency lines, docs and resolve_btfids
+  rules, uprobe_multi, verifier/tests.h, the libarena targets) keeps
+  its original file position, so it appears as context rather than
+  churn in the diff
+- addressed Eduard's review of patch 2: Makefile.buildvars keeps the
+  definitions in the order they had in the original Makefile; knobs
+  the runner never reads (SKIP_*, submake_extras, VMLINUX_BTF,
+  TEST_KMOD_TARGETS) stay in the main Makefile (TEST_KMOD_TARGETS is
+  inlined at its single runner use); patch 2 no longer touches
+  TEST_KMODS, TEST_KMOD_TARGETS or the VMLINUX_BTF block at all - they
+  keep their current positions, and the export the runners need moves
+  to patch 3 next to the LLVM-probe export; file header comments
+  trimmed
+- addressed Eduard's review of patch 1: the gen_bpf_skel.sh interface
+  shrinks to --name/--skel/--subskel/--lskel/--sign - the
+  linked/llinked intermediate infix is derived inside the script,
+  --sign is a boolean taking the key and certificate from
+  $PRIVATE_KEY/$VERIFICATION_CERT in the environment, the build-log
+  lines moved into the make recipes ($(call msg,...)), and the unused
+  --no-determinism-check escape hatch is gone (the determinism check
+  is unconditional)
+- v3: https://lore.kernel.org/bpf/20260722040830.387979-1-nickolay.lysenko@gmail.com/
+
+v2 -> v3:
+- BPF_GCC and TEST_KMODS are defined once (main Makefile, which needs
+  them before lib.mk) and exported to the runner sub-makes instead of
+  being duplicated in Makefile.buildvars, where the copies could
+  silently drift (reported by Sashiko AI review)
+- the permissive-mode runner link rule keeps the current Makefile's
+  incremental semantics: test objects existing at parse time are
+  normal prerequisites again, so editing a test source relinks the
+  runner (reported by Sashiko AI review; v2 had regressed this to
+  order-only)
+- v2: https://lore.kernel.org/bpf/20260721194111.334795-1-nickolay.lysenko@gmail.com/
+
+v1 -> v2:
+- rebased onto current bpf-next: ported the semantics of commit
+  0b236ac75d04 ("selftests/bpf: Fix make install target") - bpftool
+  installed under tools/sbin/, *.BTF files installed - into the new
+  install rule (resolves the CI apply conflict against v1)
+- gen_bpf_skel.sh is a prerequisite of every skeleton rule, so editing
+  the script regenerates the headers (reported by Sashiko AI review)
+- the shared helper objects the top Makefile pre-builds now depend on
+  a superset of the prerequisites the runner-side object rule uses
+  (libarena skeletons, both generated tests.h headers), closing a
+  window where the unflavored test_progs and test_maps sub-makes could
+  both consider a shared helper object stale and recompile it
+  concurrently in the shared output directory (reported by Sashiko AI
+  review)
+- v1: https://lore.kernel.org/bpf/20260721174909.8044-1-nickolay.lysenko@gmail.com/
+
+Mykola Lysenko (9):
+  selftests/bpf: keep headers off the generic link command line
+  selftests/bpf: drop stale and no-op lines
+  selftests/bpf: factor the permissive-mode skip suffix into a helper
+  selftests/bpf: generate the signing key and certificate once
+  selftests/bpf: generate verifier/tests.h in a regular recipe
+  selftests/bpf: derive the bench object list from the sources
+  selftests/bpf: extract BPF skeleton generation into a helper script
+  selftests/bpf: move shared build definitions into Makefile.buildvars
+  selftests/bpf: build each test runner instance in its own sub-make
+
+ tools/testing/selftests/bpf/Makefile          | 736 ++++--------------
+ .../testing/selftests/bpf/Makefile.buildvars  | 185 +++++
+ tools/testing/selftests/bpf/Makefile.runner   | 175 +++++
+ tools/testing/selftests/bpf/Makefile.skel     | 143 ++++
+ tools/testing/selftests/bpf/gen_bpf_skel.sh   |  93 +++
+ .../bpf/prog_tests/cgroup_getset_retval.c     |   2 +-
+ .../{ => progs}/cgroup_getset_retval_hooks.h  |   0
+ 7 files changed, 749 insertions(+), 585 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/Makefile.buildvars
+ create mode 100644 tools/testing/selftests/bpf/Makefile.runner
+ create mode 100644 tools/testing/selftests/bpf/Makefile.skel
+ create mode 100755 tools/testing/selftests/bpf/gen_bpf_skel.sh
+ rename tools/testing/selftests/bpf/{ => progs}/cgroup_getset_retval_hooks.h (100%)
+
+
+base-commit: 669e4fa766000ae4137bb02eb22ce75ba78ad32d
+-- 
+2.43.0
+
