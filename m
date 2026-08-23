@@ -1,63 +1,63 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA7E2345EB5
-	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 19:43:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E3863AE6E2
+	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 19:43:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787514187; cv=none; b=f51hJGxYzJSZT4C5MSd6s/sTyDDMy4xQaUA5IechSCb7MZ5ghLJL8kUx/8I80gV+kLD0tO9CTshRfgAJ/MUSv+aEGtGPrIuuusgodYpM6QAyQMX6n4pstd5TXgAFz2MmbclXXjOrGGqKxwJF0+0aoZ7NqgZ+VMiMJGGRnaEW7kM=
+	t=1787514189; cv=none; b=J1eOzfXGunoZ73DS0zmVe+cpY76PqxHAihG2Up3eqOQzEawSc5dDjY0P9rSb0Y2JssHcQ/9uqqlrPTnKlvvbNABIsPfqvf2gIG5W3UUKncwnhkKjvEZupBoVQExxJjimJw1oBrmOL1hoYqQ5i4r/C2UO64mLjZ0MQwZ4ePo8qwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787514187; c=relaxed/simple;
-	bh=+yqz6wwpJItpfxAE1IZ0k1HUNOmBF1RBdq+ePyJMMX8=;
+	s=arc-20240116; t=1787514189; c=relaxed/simple;
+	bh=Ity4FHSgN/zMXqzsTfEV+8GUJ2OF9pbJutKzIvxr75A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KmxJuuR1NwEUY3yeISz/zMKSGceOMvL32p6cHNxyuCVAnXa1ar8eAGRRsKAe6/zbeRI+RdJu+G36c5QP/Lt6HQ2lLXGu002JBi37NQ+NR6/1cChbccw7xkbkm4/Ndq0EJofMx6xWH8FMKi1ehnQPUT7B/r5AMQiYif0IIgzOMMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=o2n65c2f; arc=none smtp.client-ip=209.85.216.48
+	 MIME-Version; b=VG8gm+fwdEFzS3xXoBs3eBdCWScqSiCXrXn+489y8FfB2y07ERqzgZctqxQRU2L4pKcFK/QQrSQrPTFvVG2dUaWxx0CCd/aUzVx4KB88F8LpzSuukJgplq+AsTJ0LPWThqEqDd9HceLR22tWQ3lmLUXIFb5iN6WwYKE860mGosE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MEnJ9aiV; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o2n65c2f"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-38e347638adso2407009a91.0
-        for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 12:43:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MEnJ9aiV"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-38dcbade417so3088529a91.1
+        for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 12:43:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787514186; x=1788118986; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787514187; x=1788118987; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=XiuUJ2wWB8cbCMqy540b9XS0HZW4uhFOZpmD2jVetYo=;
-        b=o2n65c2f6iDydF5R5EXEbufjbxUuhiYDUOtHM3vLXg2E6StB28Xyd3VFBDGxwLL2UF
-         ZzkYba46yTdE85T3Tblq+uR3mwXJ1YUJ7+Nfs4HV+gR7F7Jcp+QokOzsBg4dwiaWOEA5
-         6TrPMY/VRbKgBMGsVg3x/J9fi4kABNwH8p/83IBbaYxpOn26lI4HpKu44Jwv7SVCn6MM
-         JL/LnMNnok2YYDqBJU8vUaeT+6Oz/nwCyiUEVCoZ8nOhlDEv3c6qWNNhZS5RZbNiyxjq
-         3XQPwPNPh9GI36muFMsSY/0V5FfClmM471d9yot0O74xqzfDlgvBB0ZN9QEgtkgSFOEZ
-         2GPg==
+        bh=OwVM5hM84kZaxojLqepslYUjP5WP1gcDJ7RcoM4IYrg=;
+        b=MEnJ9aiVPjIB5H986rf0ox8BGO8OlnKlH5TcIy3t97WXvaavpLLmTfXFosI1d+6YW4
+         dJbgWHvyFGAlHF+bx0FdEPGQ39WGe9rgPIhbRyEU32aFUEyiq68hMSeWsntlhtQfiDYM
+         6meWKm7XQ9LQSLaWF7ZDnOwvj023RZRqp3CwDCNbJ8UO99Enq7kL0ANlcDN3z/YhlVWG
+         90xx6O22fFSjTHgG4SKNFF/YbJ0yrm6qYl31le2dmAH2mwD58wPHGRhWKnC1gIrol/3M
+         Z9KqXm253T8PoWumG3mx7fS9X4nVWud7DKk1yUKRibDyq7JJ1hXZKiStdtTr9v5ODbQR
+         Eqyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787514186; x=1788118986;
+        d=1e100.net; s=20251104; t=1787514187; x=1788118987;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=XiuUJ2wWB8cbCMqy540b9XS0HZW4uhFOZpmD2jVetYo=;
-        b=IYxRrFgEtjsz+EuuHH6zmFUmh7HpS7b8k5xOk5/JJicGkTzJJxs0EA89NlGKxZWlXg
-         BgXIgc0hxDlZXMHpMXXZ1BofUQFTkgWcj56u2dD7NsqpwD9EnzA0csOJeeSz38wh96XE
-         wz7kizHMG3IJ6h7oE52YH+J1Gey9/ToMcJUx//80Sa+HhYANoR1qCOPq7VwHkmZvNRQK
-         +YhkeguqMk8KdAMvNQT2Rjb9+HzQdAUFXfAcG2qEpgxJnYQEGbUC5pExQmKirDQWce3a
-         IJ6titUm71mQsdUceR6tiimWxufLWRHIYoUOTl0WKZqg+rbOmYw/6HQB0tewa7LFXO+g
-         rxkA==
-X-Gm-Message-State: AFuF++lDFM/Qm3mrnRoCakkUZaCqg/vw+jE778oL/MaPMi9i4Pa/uenD
-	vssk5pPVSC6JKg7lZU93m0T1u4NiWH5oVVIrcW29pEH3KBK60kNKmzeH5POH02xo
-X-Gm-Gg: AR+sD111Rw+kdR0TZhzCSLHthx6wDKy8I57Ud/UUBnfgcC62C3labAyyR1wKnMkGeMp
-	/cs2KhlKLl7nujn/VJhgnI4i0t4FI7+zrR7Ep6DGDg3ukyL/pquNJk3HLYi3Wr+zgJOGxP2DldA
-	xx9fBnIJB9dn4v50x7zJLrTf31mPUlgDxA/asNxPem8zfm46BLBgrfnrWae3hE/FhvZDYm4kL3x
-	F7Yi8MzwwjO2g718c9sRH33fcVCQCCyW8Q+/71XzY1fPRv0W9bNZ46N+ebI5ErQgRW6acbyL074
-	am+TjWmnCAPn2k2BEYqd63kb/lB+2b5vFaUWKsRCMdicpIR0GWs9vcbQQ2pe6/cX8kV2rIgnNtF
-	dnC4usU2cOvzePWt8tPFOEXwudZOc+FUfOjavPnkBNckyR3XxxxEnqqQefAT3CsmKkxaQEoMOLk
-	Jgmt4/7jLAe1FyPkaHEdoJPAmuEizNz3FK2zXQ9OcZYgbMFTuXaVVzBtEf0chAQVg4JnC1KPVNY
-	vc0r4wiAla7n04zf87jXOKMJrlL+8zHuOwoo/whUwd+wBQtzk2xxf4=
-X-Received: by 2002:a17:90b:4c4d:b0:380:7688:fbe9 with SMTP id 98e67ed59e1d1-395deffbb5amr22217442a91.8.1787514186017;
+        bh=OwVM5hM84kZaxojLqepslYUjP5WP1gcDJ7RcoM4IYrg=;
+        b=cwxrQtXbHW+M+QgbnuyKPaQI42ocbMG8G8SFBterS267XyCgss6mikNsy946d8od3g
+         /4GLV1kXn4IZCxBInLsx1BPDKEuf2/A+o2QWoee0kf7ojtHMqvg0Y6ed2FYMlkIBf262
+         5KF2Z+YPiSciOay5yd4cXAqYuDEJw5yb207OrL9eW2GwE8V1Ao9OrhTP6JWbCfsCM5HA
+         2/sJe1+Fa/9RvY1v/AFpYOuCY5p02ldWgclGQkA+OXD7JusQ5ExE7Bpw1JbLvefCikgA
+         alh63hLtpR2zNNSKw+dno5U94qNDVirWjy56cQkR9oploJ3jOkVL+nVcVPSl+Sz/p7Ul
+         leoQ==
+X-Gm-Message-State: AFuF++l5Ano3KqRofQItX1XFoKSpBgCHtrKr9VN6HMsyRZeZrA4s9tgb
+	1I4N9zmfT1w83xHU/739N7KBnaFddAXJtO9JsCXFpi4CcTuKrOUubgZHSImR+tX9
+X-Gm-Gg: AR+sD13sSDyGDa3XJZIfJu08W1Tcz6eaTO8QtlVaw06TCm7e0Wcn5qyqBs964bTxBa3
+	C0Y0KVRux8+FtvcF41Z0cUjYZk2+xZ++p5A7+AGHb1QOVwOBeOLBhc9Sinptxo9XQkfWx+EtESh
+	wsm4Q0lQyW4Zxs0B0TnjwqFs6yDkHLIjSiYvME5ofr/T83t9D94FCCCxty0qn6y6LReqpEPNc94
+	5YDSqiOU/URoo0hK+n4D6h9I7PEhNqkOsvS1ZE6Gmp/ZH/Mp8UdMlhX5YBv3rlEah3FD2jkI44j
+	JKGtasXeUOfzwMmlcyAAu+KYRWu7AVsyz8qLCBP7x11usJLY1vCyS8+GKfGCo70zFUKUTFZ6Csr
+	xr2AtGNlndygRm119oybJwzSvCkXeMuSW13O04+sa63LybEJSZwEjfMDVbABUL5tRd13cUbz8Wf
+	xtVn4ytmmdHGheYfQmath46NvOdAE0qTSd7N3Vp6wimXtABwFkBZf1OKoroy1u/+kI/stmq9/tT
+	K0983oXnRqTFECqRtgvZIiR+B7L5zGtcwI3OEhjwqJBqbb5L6+9wZU=
+X-Received: by 2002:a17:90a:16d6:b0:395:f0b1:1fb6 with SMTP id 98e67ed59e1d1-395f0b11feemr13206565a91.3.1787514186970;
         Sun, 23 Aug 2026 12:43:06 -0700 (PDT)
 Received: from powertower.tail474ae1.ts.net (d173-181-19-173.bchsia.telus.net. [173.181.19.173])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-395e4b2af01sm6839723a91.14.2026.08.23.12.43.05
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-395e4b2af01sm6839723a91.14.2026.08.23.12.43.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Aug 2026 12:43:05 -0700 (PDT)
+        Sun, 23 Aug 2026 12:43:06 -0700 (PDT)
 From: Mykola Lysenko <nickolay.lysenko@gmail.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -70,9 +70,9 @@ Cc: ast@kernel.org,
 	jolsa@kernel.org,
 	memxor@gmail.com,
 	nickolay.lysenko@gmail.com
-Subject: [PATCH bpf-next v7 1/9] selftests/bpf: keep headers off the generic link command line
-Date: Sun, 23 Aug 2026 12:42:33 -0700
-Message-ID: <20260823194241.3415152-2-nickolay.lysenko@gmail.com>
+Subject: [PATCH bpf-next v7 2/9] selftests/bpf: drop stale lines, restore two header dependencies
+Date: Sun, 23 Aug 2026 12:42:34 -0700
+Message-ID: <20260823194241.3415152-3-nickolay.lysenko@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260823194241.3415152-1-nickolay.lysenko@gmail.com>
 References: <20260823194241.3415152-1-nickolay.lysenko@gmail.com>
@@ -84,42 +84,126 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The generic '$(OUTPUT)/%:%.c' rule links with '$(LINK.c) $^', so
-every prerequisite of such a binary lands on the compiler driver's
-command line. That only works while none of them is a header: gcc
-tolerates a stray .h argument on a link line, but clang treats it as
-a request to precompile the header and fails with "cannot specify -o
-when generating multiple output files".
+Four target-specific lines name objects nothing builds. Three name
+the BPF objects by their pre-rename names: commit afef88e65554
+("selftests/bpf: Store BPF object files with .bpf.o extension") left
+them without a target; the flow_dissector_load.o dependency names an
+intermediate the generic one-step compile+link rule does not produce.
 
-Filter headers out of the recipe, with a comment: header
-prerequisites on these targets are useful for dependency tracking -
-the next patch declares one - and the constraint is easy to
-rediscover the hard way.
+Three linked-skeleton dependency map entries (xsk_xdp_progs,
+xdp_hw_metadata, xdp_features) were dead on arrival: commit
+f0a249df1b07 ("selftests/xsk: get rid of built-in XDP program"),
+commit 297a3f124155 ("selftests/bpf: Simple program to dump XDP RX
+metadata") and commit 4dba3e7852b7 ("selftests/bpf: introduce XDP
+compliance test tool") each added one, mimicking the neighboring
+entries without adding the skeleton to LINKED_SKELS, the only place
+the -deps map is read from; these three skeletons are generated by
+the regular pattern rule, which never consults it.
+
+The '-fno-inline' pair (test_l4lb_noinline, test_xdp_noinline) had
+stopped taking effect even earlier, with commit 74b5a5968fe8
+("selftests/bpf: Replace test_progs and test_maps w/ general rule"):
+since then the BPF compile recipe expands TRUNNER_BPF_CFLAGS, a
+simply-expanded copy of BPF_CFLAGS taken when the runner rules are
+instantiated, which a target-specific 'BPF_CFLAGS +=' cannot reach.
+Both programs have compiled without the flag since, and nothing was
+lost: every function they define
+carries a noinline annotation, except the SEC() entry points, which
+nothing in the file calls, and the single __always_inline helper in
+each, a deliberate exception the flag never overrode; and
+compiling with -fno-inline restored yields byte-identical objects.
+
+The two header dependencies with remaining value are restored in
+working form. flow_dissector_load.h moves to the binary itself, which
+is linked straight from its .c by the generic '$(OUTPUT)/%:%.c' rule
+- editing the header now rebuilds it - on the line that already lists
+the binary's helper object. cgroup_getset_retval_hooks.h -
+added by commit e7215f574079 ("selftests/bpf: Make sure
+bpf_{g,s}et_retval is exposed everywhere") days before the rename
+orphaned it - lived in the top directory, outside the progs/*.h
+blanket prerequisite of the BPF object rules, so editing it never
+rebuilt the BPF object. Move it under progs/, next to its only BPF
+consumer, where the blanket prerequisite covers it - the arrangement
+several other headers shared between progs/ and prog_tests/ already
+use. Its userspace consumer is tracked exactly by the
+compiler-generated dependency files.
+
+'CURDIR := $(abspath .)' redefines make's builtin to the value it
+already has, and 'OBJCOPY ?= $(CROSS_COMPILE)objcopy' defines a
+variable nothing in the selftests build or the included kselftest
+infrastructure ever reads; drop both.
 
 Signed-off-by: Mykola Lysenko <nickolay.lysenko@gmail.com>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/testing/selftests/bpf/Makefile | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/Makefile                | 13 +------------
+ .../selftests/bpf/prog_tests/cgroup_getset_retval.c |  2 +-
+ .../bpf/{ => progs}/cgroup_getset_retval_hooks.h    |  0
+ 3 files changed, 2 insertions(+), 13 deletions(-)
+ rename tools/testing/selftests/bpf/{ => progs}/cgroup_getset_retval_hooks.h (100%)
 
 diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 5f1a3bfc0569..118a7c356e26 100644
+index 118a7c356e26..c7c7f27dd860 100644
 --- a/tools/testing/selftests/bpf/Makefile
 +++ b/tools/testing/selftests/bpf/Makefile
-@@ -258,9 +258,12 @@ $(OUTPUT)/%.o: %.c
- 	$(call msg,CC,,$@)
- 	$(Q)$(CC) $(CFLAGS) -c $(filter %.c,$^) $(LDLIBS) -o $@
+@@ -4,9 +4,7 @@ include ../../../scripts/Makefile.arch
+ include ../../../scripts/Makefile.include
  
-+# Headers may appear among the prerequisites for dependency tracking;
-+# they must not reach the clang/gcc command line (clang treats a bare .h
-+# argument as a precompiled-header job and refuses -o).
- $(OUTPUT)/%:%.c
- 	$(call msg,BINARY,,$@)
--	$(Q)$(LINK.c) $^ $(LDLIBS) -o $@
-+	$(Q)$(LINK.c) $(filter-out %.h,$^) $(LDLIBS) -o $@
+ CXX ?= $(CROSS_COMPILE)g++
+-OBJCOPY ?= $(CROSS_COMPILE)objcopy
  
- # LLVM's ld.lld doesn't support all the architectures, so use it only on x86
- ifeq ($(SRCARCH),$(filter $(SRCARCH),x86 riscv))
+-CURDIR := $(abspath .)
+ TOOLSDIR := $(abspath ../../..)
+ LIBDIR := $(TOOLSDIR)/lib
+ BPFDIR := $(LIBDIR)/bpf
+@@ -342,7 +340,7 @@ $(OUTPUT)/test_tcpnotify_user: $(CGROUP_HELPERS) $(TESTING_HELPERS) $(TRACE_HELP
+ $(OUTPUT)/test_sock_fields: $(CGROUP_HELPERS) $(TESTING_HELPERS)
+ $(OUTPUT)/test_tag: $(TESTING_HELPERS)
+ $(OUTPUT)/test_lirc_mode2_user: $(TESTING_HELPERS)
+-$(OUTPUT)/flow_dissector_load: $(TESTING_HELPERS)
++$(OUTPUT)/flow_dissector_load: $(TESTING_HELPERS) flow_dissector_load.h
+ $(OUTPUT)/test_maps: $(TESTING_HELPERS)
+ $(OUTPUT)/test_verifier: $(TESTING_HELPERS) $(CAP_HELPERS) $(UNPRIV_HELPERS)
+ $(OUTPUT)/xsk.o: $(BPFOBJ)
+@@ -480,12 +478,6 @@ BPF_CFLAGS = -g -Wall -Werror -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)	\
+ 
+ CLANG_CFLAGS = $(CLANG_SYS_INCLUDES)
+ 
+-$(OUTPUT)/test_l4lb_noinline.o: BPF_CFLAGS += -fno-inline
+-$(OUTPUT)/test_xdp_noinline.o: BPF_CFLAGS += -fno-inline
+-
+-$(OUTPUT)/flow_dissector_load.o: flow_dissector_load.h
+-$(OUTPUT)/cgroup_getset_retval_hooks.o: cgroup_getset_retval_hooks.h
+-
+ # Build BPF object using Clang
+ # $1 - input .c file
+ # $2 - output .o file
+@@ -546,9 +538,6 @@ linked_maps.skel.h-deps := linked_maps1.bpf.o linked_maps2.bpf.o
+ test_subskeleton.skel.h-deps := test_subskeleton_lib2.bpf.o test_subskeleton_lib.bpf.o test_subskeleton.bpf.o
+ test_subskeleton_lib.skel.h-deps := test_subskeleton_lib2.bpf.o test_subskeleton_lib.bpf.o
+ test_usdt.skel.h-deps := test_usdt.bpf.o test_usdt_multispec.bpf.o
+-xsk_xdp_progs.skel.h-deps := xsk_xdp_progs.bpf.o
+-xdp_hw_metadata.skel.h-deps := xdp_hw_metadata.bpf.o
+-xdp_features.skel.h-deps := xdp_features.bpf.o
+ tracing_multi.skel.h-deps := tracing_multi_attach.bpf.o tracing_multi_check.bpf.o
+ tracing_multi_module.skel.h-deps := tracing_multi_attach_module.bpf.o tracing_multi_check.bpf.o
+ tracing_multi_intersect.skel.h-deps := tracing_multi_intersect_attach.bpf.o tracing_multi_check.bpf.o
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_getset_retval.c b/tools/testing/selftests/bpf/prog_tests/cgroup_getset_retval.c
+index 2bb5773d6f99..ea342859d6ce 100644
+--- a/tools/testing/selftests/bpf/prog_tests/cgroup_getset_retval.c
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_getset_retval.c
+@@ -465,7 +465,7 @@ struct exposed_hook {
+ 		.expected_err = EXPECTED_ERR, \
+ 	},
+ 
+-#include "cgroup_getset_retval_hooks.h"
++#include "progs/cgroup_getset_retval_hooks.h"
+ 
+ #undef BPF_RETVAL_HOOK
+ };
+diff --git a/tools/testing/selftests/bpf/cgroup_getset_retval_hooks.h b/tools/testing/selftests/bpf/progs/cgroup_getset_retval_hooks.h
+similarity index 100%
+rename from tools/testing/selftests/bpf/cgroup_getset_retval_hooks.h
+rename to tools/testing/selftests/bpf/progs/cgroup_getset_retval_hooks.h
 -- 
 2.43.0
 
