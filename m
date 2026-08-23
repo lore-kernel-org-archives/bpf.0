@@ -1,80 +1,76 @@
-Received: from mail-pj2-f10.google.com (mail-pj2-f10.google.com [74.125.227.138])
+Received: from mail-pj2-f0.google.com (mail-pj2-f0.google.com [74.125.227.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88BBB372B27
-	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 10:18:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89AC11EFFA1
+	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 14:17:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787480309; cv=none; b=P3hWbgmZkkbhCe+mwztnYXasEflRaaeJn1BlqVisyumqP1hBpEOBFoLLFsUnakgBJVjhR66ozOXDVpSJPCsIIooAoT4WCehIkaKVRPJvPcbXy9NN71iqjU6kA9q0VD6qEKUTRFbeqDJKkQ3P8ioivfyJhwPxMYXnW4+yKeCFOX4=
+	t=1787494662; cv=none; b=Q7eZwzC7/Af3QgBLAufCFTEvK9ig4a8uqbKW0eeDKgzHk7Rs/WD4pegO284YeS6Y5tm5seWY34si339v+ZgkeBydE8rqygcD7ihRHbFWxaB8uz2RvPJOsSlbfWuAHpH8O7g4Li6o4hMudJuVngX5G3aaFaucuYYz4KT1LKd5HQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787480309; c=relaxed/simple;
-	bh=S8BPB7Qjsw6r96pi4uoQRaT+P0oPrJHiJIl1kunlkxs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZPCI7Xeuhl4T8xMDOrOoyLRiUjgK9BrFqxtla2Mtgpa49ttKsFwBZQ+40Cr1li4XVNC8/oPA68EvCaVzGn46PZw8Uxm7orSi5S8q2Tbu8FjYvVGYn61uH6DE7svrU6vK7wGuqLcR+Pn6FJebnWZQCM/F0hEmKRa5e6FteZY4Jnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EhRcqSLQ; arc=none smtp.client-ip=74.125.227.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1787494662; c=relaxed/simple;
+	bh=Vg7chm6Z3ZZ80kKMcLsPZtpP1r31vdvD6SHVm4f5dT8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qOdTsmeflUQrGPzB3Th0QhjhS2x4HxyvMSaghLPOxaDw/aZ5AxYX0ew9/MhUnviigNYcQbO3peGjGwNZioKt9FxGtGydS/S0d3iObu6Bc4G1eP4Ff0bSMFBxVp8MFuUpjMgOYAtjz9Cqxg1vEH6veK8gVFePg44+py0EdKf0H2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.227.128
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EhRcqSLQ"
-Received: by mail-pj2-f10.google.com with SMTP id 98e67ed59e1d1-3931e624fd8so1367680a91.1
-        for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 03:18:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787480308; x=1788085108; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=YSNVncEMgEraytLD+WR3MzrZH+OTuZ38jo7hC58bHW0=;
-        b=EhRcqSLQh+BNU1/FNj1zBNreLFib369AjA/8JanTOi+6bmRpIubYUad6T3r0kpFiW7
-         OmAImxPrJfoZwUPNQmqQX+aoKTY85NGFnWeKvCpcdYrcn1OXwAgFzDjUqtg4wcwWcwh2
-         twm/d38q7bcpRlke2WC3aYtqB7khy7Kyzjp0xDL8Q8QclKnFbB9bN5dlfci+4WteQCFy
-         7U1xwKzaQISthLZPB1EP8dXzg8taQjqg3Ba4yyp5X013+UYDVU5RdNyq6Gqm+JlKBjkX
-         kxM3dqVdXXZk7vrVoK1zFhfdZfpSNuxBEapigP8MSbCs4GxEMcHz9EtGfz/4lq9A4/Kf
-         UREQ==
+Received: by mail-pj2-f0.google.com with SMTP id d9443c01a7336-2cc2c6e0688so14505945ad.0
+        for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 07:17:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787480308; x=1788085108;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=YSNVncEMgEraytLD+WR3MzrZH+OTuZ38jo7hC58bHW0=;
-        b=Z/4Y255l0mZAtbbywuXTMkYuyXtMEaa4GsM0+qi+qdT5+IXloqgLLi3yvOeFwzTCTA
-         2Tl0hnLbmXJWnqqtsLvbsAu3N1w+wdpkGM4EVK1VDg0Np3YTn1KNFTbAf3FOfhKenZrV
-         0qlnnMoBuC4PKKbNEsfXuWXmIKIUW7m5LSvXd2WwxZh0j5bdsxvDfmg/r2DIAkpb6EvH
-         7gi1pLeSN5RTxJ9A95UMGTXSAZ5rYpiyifvjPLoqntc+Sull3KyYpTeNOhnWx5LqqCaP
-         VNZCcAVpGOX85QCzIgrLH4uBO7CiugsJ5JjQeMhfTTQbnHAddAnnyezyh61tZa2q8Cg2
-         79zA==
-X-Forwarded-Encrypted: i=1; AHgh+RroPcgO8tBy9xxaTkz1Qjg3MH/AA3fEVoiUUJzi6ZI2nTyrM5GJF5Z4RR1Amn5EoWrN/pU=@vger.kernel.org
-X-Gm-Message-State: AFuF++lUkV1JFkJ0c2Lq2+iYPABUc+7t9pAkz95e4AaNnGTPhGPFYxV8
-	eMpXpy0fR6Tcen9oFg31AZ5OvI40f5ynIZWPAO3edqy5SW8gamznIMS/
-X-Gm-Gg: AR+sD11ccH8AjynrL7JDXBK/dxYGpV2EQHS37N/FIUfvpCyDh7SRcaWnxoGKDX90rXJ
-	vS2w+sWhJUclrC5bsyYPu22r1Mbq/5g4mFk4sDxfNLyu6PwS/tiMbqs6BgNyY8V0VDEdfvE8Zxm
-	Kv6aZSPQ+9tB3vWzomiPo1CaswG88/MNfdxZRDN45Gb5FES5peFDfmuwXUhZ9Lrpyl89Pi9mz9t
-	OjOXoXAYsCiT1MZW0FYhMJhFOX+NyFO4sXN7GmP9q01NpSI/QDnBB4tdneD1iR81AkTxLlkFLFI
-	GAAzyqqQMTgF6aDrrFKjjA5dSiC4FOUjYbvSipX6FUKEzZCgRoqZMV2xrJ9KXEFGPCGvg4JAZs6
-	Sn0TVp/JEtDC0ZY6KlhMMv4Tsu1oOxVXdxs83jVzDZrtVQiYCrAwcvUg3KslCrlmOKaY9GKssum
-	GqGuKbL0glZKO+j0knmLAFUJH7bXlD16N4KytdFdLZc4yYVVu362dZ7QMddchHdtNQ4Jsuk+lEb
-	4xYjzR+ow==
-X-Received: by 2002:a17:90b:530c:b0:395:5404:95 with SMTP id 98e67ed59e1d1-395c35516a0mr34092527a91.12.1787480307838;
-        Sun, 23 Aug 2026 03:18:27 -0700 (PDT)
-Received: from J4f-Laptop.localdomain ([2409:8a55:94ee:7131:6dfa:11e6:f115:ea42])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-395e42cc144sm5471603a91.0.2026.08.23.03.18.23
+        d=1e100.net; s=20251104; t=1787494660; x=1788099460;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=iW9TZy5t7X8VGYLC2u3VxtI7rFgsxhmuA9rnPKoznsM=;
+        b=lOBzr3AUZ9wpqegmfY3JYyzDaNYlNUQxBXIwyqPQ7yfff+dR4J282WoakHTnFlw51r
+         ErCq2sVl0bNt/goq5B/YpUKO3KPHlDVLbYKZz1Ima4Dcxn+F9lE0MHy0CxJ8TAVw5/lX
+         B4D0Ce7HnwDK7TT05qycMH1Pl1+wEJmUYrFAXIcozXFETtwfOWCCTY9Ov/bcFwx9LXBL
+         wDEX59H8MM9dCcG97CRnff4S97FghO0uC7zyGrw/fTqboIa1ofzILIYf6uzVpRFAJscX
+         bMpMbb6pVfdHvcDS+w3gQ84d4ZPVtgaFS0wGmNfTPrxliY+dlElltDDr/t+0d1ouleL1
+         m7UA==
+X-Gm-Message-State: AFuF++nnJJIH0Tpej0KnT8w6ZetH51z6hTOEGCmPKMC1mn5Z2oMyf34q
+	CGqUVysRJIbmswJw0wMVz9w0EE9AWTXIMoek7KpOddV5xfLIzJpey/0v0E0QsbSMVoF3Ds/3xdk
+	=
+X-Gm-Gg: AR+sD11A/TjCb5cP/uvfIqManbQw9ws83i0RVij3PsAwFmzc8GBkueRlO968i4wBKsV
+	vaAdzaXZSbyxqt/rNttNdtB5ZrUg/HBrExYLhWTcAwn7+//0tO4oD6lf8cXWVhRlCvTwzlC9Mcy
+	9jMy0F4R6YZYz0pab3ku7UxJ7fAdwqMyBGiPzMZ15mdGCxw1p9undTdta9xhD5lhfJ9wI2nc3Si
+	q5Bf4iuj3ua25KeD5fBbwvym/Gs+fKjbPP0ZL0tnCrlPDmPTOcyvhqFVb+Y1paGm6P9emJjAY7V
+	e7efS8dE5YsyXCUWZwX/k2yM9RmUXEu1N4KhDIcPjJnfB8NudUdhHF024y6+Dc19JrUiehej4eP
+	PNnDZ3Eo6tBkNzN2/F9iSsRNlwI37xVptLrCp+l89Na8eFF4SkYNcP8gVAU9pEJA5fMtJGWFrAF
+	/+6mX6zGwRus3yukib3cuFATU5PpHZQImQGMXsVOmHtvIhGcla260CajBhMRGVvNGHVBR4WF/od
+	LsqNFu/AuFPvQifUw==
+X-Received: by 2002:a17:902:fc43:b0:2d5:2f49:b3f4 with SMTP id d9443c01a7336-2d64ad9562dmr313282145ad.2.1787494659721;
+        Sun, 23 Aug 2026 07:17:39 -0700 (PDT)
+Received: from localhost.localdomain ([180.153.160.8])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d676791d44sm9944575ad.24.2026.08.23.07.17.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Aug 2026 03:18:27 -0700 (PDT)
-From: Shihuang Liu <shlomojune6@gmail.com>
-To: netdev@vger.kernel.org
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Joe Stringer <joe@wand.net.nz>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Martin KaFai Lau <kafai@fb.com>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Shihuang Liu <shlomojune6@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH net 1/1] net: Don't deliver IPv6 packets to IPv4 sockets
-Date: Sun, 23 Aug 2026 18:17:19 +0800
-Message-ID: <20260823101809.26802-1-shlomojune6@gmail.com>
+        Sun, 23 Aug 2026 07:17:39 -0700 (PDT)
+From: Jianlin Shi <shijianlin11@foxmail.com>
+To: bpf@vger.kernel.org,
+	memxor@gmail.com
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@kernel.org,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@chromium.org,
+	sdf@falco.dk,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	emil@tsalapatis.com,
+	pulehui@huawei.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v4 0/5] bpf: fix stream capacity, read, and oversize handling
+Date: Sun, 23 Aug 2026 22:17:23 +0800
+Message-ID: <cover.1787492521.git.shijianlin11@foxmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <tencent_E69EAE29327E25B3548A9AF3F4FA289A6806@qq.com>
+References: <tencent_E69EAE29327E25B3548A9AF3F4FA289A6806@qq.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -83,63 +79,49 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_sk_assign() allows a TC ingress program to attach an arbitrary
-hashed socket to an skb, without checking that the socket family
-matches the packet's network layer. As a result, an IPv6 UDP packet
-can be assigned to an AF_INET UDP socket: udpv6_rcv() steals the
-socket via inet6_steal_sock(), which also lacks a family check, and
-queues the IPv6 skb on the AF_INET socket.
+v3 addressed Kartikeya's review on v2 and the related Sashiko findings.
+v4 fixes the stream_oversize selftest to verify capacity rollback on the
+same BPF program stream, since streams live on prog->aux and are not
+shared across programs.
 
-recvmsg() on that socket then runs the IPv4 udp_recvmsg(), which
-interprets the IPv6 skb control block as IPv4 IP options. When
-IP_RETOPTS is enabled on the target socket, __ip_options_echo()
-copies up to 153 bytes of attacker-controlled data from the IPv6
-Destination Options extension header into the 40-byte option-data
-area of the stack-allocated optbuf in ip_cmsg_recv_retopts():
+Tested locally:
+  stream_oversize and stream_partial_read (equivalent to
+  ./test_progs -t stream_oversize,stream_partial_read).
 
-    BUG: KASAN: stack-out-of-bounds in __ip_options_echo
-    Write of size 153
-    ...
-    __ip_options_echo
-    ip_cmsg_recv_offset
-    udp_recvmsg
+Changelog:
+v3 -> v4:
+  - In stream_oversize, perform the oversized bpf_stream_printk() and a
+    subsequent successful "foo" push in the same program; read that
+    program's stream in userspace instead of switching to stream_syscall.
+  - Drop a redundant vscnprintf() comment in bpf_stream_stage_printk().
 
-Reject sockets whose family is not AF_INET6 in inet6_steal_sock().
-An IPv6 packet can never be legitimately delivered to an AF_INET
-socket, so drop the stolen socket and return NULL, letting the
-callers continue with the regular IPv6 lookup. When the socket is
-refcounted, release it with sock_gen_put(), the same type-safe
-helper sock_pfree() and sock_edemux() use, so the release stays
-correct no matter which kind of socket a future BPF helper allows
-to be assigned. This covers both the UDPv6 and TCPv6 receive
-paths. The opposite direction, an IPv4 packet assigned to a
-dual-stack AF_INET6 socket, remains allowed since that is a
-supported configuration.
+v2 -> v3:
+  - Refactor bpf_stream_release_capacity() to take a length.
+  - Fix staging-path capacity leak; use vscnprintf().
+  - Return partial bpf_stream_read() progress on copy_to_user() fault.
+  - Reject truncated bpf_stream_vprintk() output with -E2BIG.
+  - Add selftests for oversize and straddling-buffer partial read.
 
-Fixes: cf7fbe660f2d ("bpf: Add socket assign support")
-Cc: stable@vger.kernel.org
-Assisted-by: GLM:GLM-5.3
-Signed-off-by: Shihuang Liu <shlomojune6@gmail.com>
----
- include/net/inet6_hashtables.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+v1 -> v2:
+  - Retarget to bpf-next as suggested by Pu Lehui.
 
-diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
-index 2cc5d416bbb5..b39e59efac8d 100644
---- a/include/net/inet6_hashtables.h
-+++ b/include/net/inet6_hashtables.h
-@@ -115,6 +115,12 @@ struct sock *inet6_steal_sock(struct net *net, struct sk_buff *skb, int doff,
- 	if (!sk)
- 		return NULL;
- 
-+	if (unlikely(sk->sk_family != AF_INET6)) {
-+		if (*refcounted)
-+			sock_gen_put(sk);
-+		return NULL;
-+	}
-+
- 	if (!prefetched || !sk_fullsock(sk))
- 		return sk;
- 
+Links:
+v3: https://lore.kernel.org/bpf/?q=%22PATCH+bpf-next+v3+0%2F5%22+fix+stream+capacity
+v2: https://lore.kernel.org/bpf/tencent_C919BB32458A4DAD645A68F441345B971E05@qq.com/
+v1: https://lore.kernel.org/bpf/tencent_E69EAE29327E25B3548A9AF3F4FA289A6806@qq.com/
+
+Jianlin Shi (5):
+  bpf: roll back stream capacity when allocation fails
+  bpf: fix stream capacity leak in staging path
+  bpf: return partial progress from bpf_stream_read on fault
+  bpf: reject oversized bpf_stream_vprintk output with -E2BIG
+  selftests/bpf: cover stream capacity and partial read edge cases
+
+ kernel/bpf/stream.c                           | 53 +++++++++------
+ .../testing/selftests/bpf/prog_tests/stream.c | 65 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/stream.c    | 18 +++++
+ 3 files changed, 116 insertions(+), 20 deletions(-)
+
 -- 
 2.43.0
+
