@@ -1,143 +1,153 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B3128D8D0
-	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 20:53:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F230927A92D
+	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 20:53:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787518381; cv=none; b=f+RfbYGuqnnk6uevel2VPQUBEPOIprVAEWJi8rtcMOTMtljfEfx781bei/dzI27gwapZw7OF7YDtzID8lz/eRcDvA+/JeB0egjiPFrnLJO+S9joYTvlddJdEP5cXh6T7SYNDn8oWWYV6akruieO4F5bVIXrnE9Zzc4Witl2+4hM=
+	t=1787518402; cv=none; b=I238SDYYrUtrrx55MvTCFy/fj+99vCND/wzh0KndSBQ53gWzlIG/riUrXqmeNae+Y6Eeg5wdjkvBd1nflSVN/ViV2U8XnQEeLgq1bWGTBPry6946VUnjdZKJTkR3a4yCcHctVIwZzRJnnYyXzgwm9gB983pStQue7pWYWSWo6bs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787518381; c=relaxed/simple;
-	bh=hGdQCM6B/cYrO0QJo8yQYVlSBv4V2Wkme9U9HMPyjGI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ZbDYbnsp+TAcglYrVH0ucqKJfmAPpM+2jKBfnU34CmOx9B3aKTl049hsYgPswcm4cS6AOvl4RuP5H3LdzAaNFIpIx2lzT6cEigyeaaSgpS7iTwRWL1r7kncRyPJnYIvWC8Wk32TtRaMUUm3pz5/s7wszfPGrBZbQeW5oQvU/iMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V119w3zC; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787518402; c=relaxed/simple;
+	bh=Zl7q29bHYhIMWcciUbGoA8FjvMvYbKMWxWxIHZ97ScI=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=dSxJN7tpmPqf2MJRjd60BMU2kgYKWN1bAzA6haoqMxJ+iZjNVrrOomHzr02R3KzN1jK6jfeTe+8UO+hNgbQZnreQSjiJ8DuXLXGJ4SJ4Pd8X9dyrnZEc+GQkRTKcN0opxvi9dPAtwmzm9XdhEWHMhlqVSs1jxc9lfpKZE93vW9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SoJs9PGR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V119w3zC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BF091F00A3A;
-	Sun, 23 Aug 2026 20:53:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SoJs9PGR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90D491F000E9;
+	Sun, 23 Aug 2026 20:53:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787518380;
-	bh=StU0SvRF+U7Cjku25QBPz+wQp7zE3sFWSKjPh5+WKsY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=V119w3zC7CCPZLrG3cJhJggzUUJnRxKJTnfroTXT10D+DOCH75vtk/Qzg1jNWDOXR
-	 B1Hjpud+bEr0TvCgvXJOaFSlFI3yOSR0DAs8aAgsMr0lbiyAlnNtkyaja1AcVuiyJC
-	 04PEH1oDtdoQVHTV2Pc7qqsXxlpX/sBlH5nG5Mvfx1LGTPBcJWlZTQZa5TkM3Jm5Bq
-	 dWw6GTVy3mP3OmwoUxlxpOXT4PnAcmg715tV118mCTOdCs0JMqTT+cjaCv/OpM8cnU
-	 rBaN3GGC55NB0irpiZCj87QKD+/mVSGj5K1hfuZtNVH7rkfpOO14ApR0zC6/rPo//R
-	 ItwXIuw5H3/Gw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] bpf, x86: Sign-extend narrow signed kfunc returns
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?SsOpcsOpbXkgSmVhbg==?= <Jeremy.Jean@oss.cyber.gouv.fr>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260823203944.2084994-2-Jeremy.Jean@oss.cyber.gouv.fr>
-References: <20260823203944.2084994-2-Jeremy.Jean@oss.cyber.gouv.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 23 Aug 2026 20:52:59 +0000
-Message-Id: <20260823205300.4BF091F00A3A@smtp.kernel.org>
+	s=k20260515; t=1787518400;
+	bh=sIDYXg6BfpzzTTI0rP7769+LuIo2LTiRLtmQKCI3Ivs=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=SoJs9PGRFDY04/2EgAGP4rWzHYIk29INAVhHd2Ym6GVNJEaxL0GUZD5SkileDtvGm
+	 1PO8VYT3polxdP+N/X8/TGLvgXMkNMd2d6yueGJaQirec9d6Ufy5qUm2t/cuaie5gt
+	 L3EGBCPv9WDP4XcbT/X2v3w8LHtCIkuhDDG+eEl+X95X7bMBRkyQMARvxFhvChCFch
+	 8fYowCVwAWbeu3/C6AwgTgqcJQTqrt+Ot64eQ8mZImxleS3eqEnOobWpaPosFa5wJY
+	 ZKh4Ig/RF0Qq7KF3sFye3VYWm2dJbMElHPcCzDDMH24JeZOSIEpcm0l/NxfX8TDZ29
+	 r8Hq/dZ0AjOkg==
+Content-Type: multipart/mixed; boundary="===============5769583648148096049=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <bed7a2884d1dc2b8beed35030d9f7b7f2056e381bb875f80588a344411f4d574@mail.kernel.org>
+In-Reply-To: <20260823194241.3415152-9-nickolay.lysenko@gmail.com>
+References: <20260823194241.3415152-9-nickolay.lysenko@gmail.com>
+Subject: Re: [PATCH bpf-next v7 8/9] selftests/bpf: move shared build definitions into Makefile.buildvars
+From: bot+bpf-ci@kernel.org
+To: nickolay.lysenko@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,memxor@gmail.com,nickolay.lysenko@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sun, 23 Aug 2026 20:53:20 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+--===============5769583648148096049==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Pre-existing issues:
-- [High] The sign-extension fix for kfunc returns is implemented for x86-64=
- but omitted for other architectures (ARM64, PowerPC64, x86-32) where ident=
-ical verifier/runtime divergence exists.
---
+> commit 79d6c61a930a7bcff9e424734672a09c86fbdcf2
+> Author: Mykola Lysenko <nickolay.lysenko@gmail.com>
+> Date:   Sun Aug 23 12:42:40 2026 -0700
+>
+>     selftests/bpf: move shared build definitions into Makefile.buildvars
+>
+>     Move the build definitions a test runner needs - tree layout and
+>     tool locations, flag assembly, feature probes, signing key paths, the
+>     permissive-mode helpers - into Makefile.buildvars, in their current
+>     order, as preparation for building each test runner instance in its
+>     own sub-make: the definitions become includable by more than one
+>     makefile. No rules or recipes are changed.
+>
+>     The include sits directly after ../lib.mk, ahead of the
+>     ../../../build/Makefile.feature evaluation, so the definitions are in
+>     place for everything the top Makefile parses afterwards - in particular
+>     the LLVM feature probe captures srctree and PKG_CONFIG from their new
+>     location, and the top Makefile's remaining uses of both are all
+>     recipe-time expansions. Two evaluation-time changes follow from
+>     the new position and a third is made on the way, each commented in
+>     place: CFLAGS and LDFLAGS are
+>     reassembled around a snapshot taken before lib.mk, keeping the
+>     pre-split order;
+>     CLANG_SYS_INCLUDES becomes an immediate assignment (its inputs are
+>     final by this point, and expanding it forks shells); and the
+>     CLANG_HAS_ARENA_ASAN probe now sees CLANG as resolved from
+>     LLVM=<suffix-or-path> rather than the bare 'clang' default it saw
+>     above the include, while the CLANG_CPUV4 probe, needed before lib.mk,
+>     keeps the old behavior.
+>
+>     BPF_GCC, TEST_KMODS and the knobs the runner never reads (SKIP_*,
+>     submake_extras, TEST_KMOD_TARGETS, the VMLINUX_BTF block) stay in the
+>     Makefile - the first two are needed before lib.mk is included, where
+>     Makefile.buildvars cannot yet be, and reach the runners from there once
+>     a later patch adds them: TEST_KMODS exported in the environment, BPF_GCC
+>     as the bpf_gcc flavor's compiler parameter. Definitions that reach no
+>     runner, directly or as a sub-make parameter, also stay - except
+>     HOST_INCLUDE_DIR, which moves with the conditional block it shares
+>     with the host build directories - and the four that derive from
+>     Makefile.buildvars values sit in a block right after the include.
+>
+>     Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+>     Assisted-by: Claude:claude-fable-5 shellcheck
+>     Signed-off-by: Mykola Lysenko <nickolay.lysenko@gmail.com>
 
---- Patch [1]: [PATCH] bpf, x86: Sign-extend narrow signed kfunc returns ---
-commit 9b3fa67779a40b052a3a12d689e1b9cac8ac02a9
-Author: J=C3=A9r=C3=A9my Jean <Jeremy.Jean@oss.cyber.gouv.fr>
+This isn't a bug, but the second paragraph has some lines that look
+unfinished mid-paragraph ("place: CFLAGS and LDFLAGS are" at 29
+columns, then "pre-split order;" at 16 columns), as if the text was
+edited but not rewrapped. Would it help to reflow those lines?
 
-bpf, x86: Sign-extend narrow signed kfunc returns
+The third paragraph walks through which variables moved and which
+stayed ("BPF_GCC, TEST_KMODS and the knobs the runner never reads...
+also stay - except HOST_INCLUDE_DIR..."), restating what the diff shows.
+The key detail - that BPF_GCC and TEST_KMODS must be defined before
+../lib.mk - is there, but it's somewhat buried in the inventory. Would
+trimming the list and keeping just the reason make this clearer?
 
-This patch fixes an issue on x86-64 where narrow signed kfunc return values
-are not properly sign-extended to 64 bits. This divergence between verifier
-assumptions and runtime execution can lead to state corruption and unbalanc=
-ed
-locks. The JIT is updated to use the kfunc's BTF model to sign-extend these
-returns into R0 after the native call.
-
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index 2853e87797a78..ec8a7694adb62 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
+> diff --git a/tools/testing/selftests/bpf/Makefile.buildvars b/tools/testing/selftests/bpf/Makefile.buildvars
+> new file mode 100644
+> index 0000000000000..dc0be9ee72bc0
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/Makefile.buildvars
+> @@ -0,0 +1,184 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Shared toolchain, path and flag definitions for the BPF selftests
+> +# build, included by both Makefile and Makefile.runner. Definitions
+> +# follow the order they had in the Makefile before the split.
+> +
+> +TOOLSDIR := $(abspath ../../..)
 
 [ ... ]
 
-> @@ -2665,6 +2682,11 @@ st:			insn_off =3D insn->off;
->  			ip +=3D x86_call_depth_emit_accounting(&prog, func, ip);
->  			if (emit_call(&prog, func, ip))
->  				return -EINVAL;
-> +			if (src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL) {
-> +				err =3D emit_kfunc_return(bpf_prog, insn, &prog);
-> +				if (err)
-> +					return err;
-> +			}
+> +# Before the split these definitions sat above the ../lib.mk include:
+> +# they appended to the flags inherited from the environment, and
+> +# lib.mk's additions (USERCFLAGS/USERLDFLAGS among them) came last.
+> +# This file is parsed after lib.mk at the top level and in its place
+> +# in the runner sub-makes, so the same order is rebuilt here. The
+> +# includer snapshots the inherited flags in INHERITED_CFLAGS and
 
-[Severity: High]
-This isn't a bug introduced by this patch, but it appears this same issue
-is present in other architectures where the native calling convention leaves
-the upper 32 bits undefined for 32-bit returns.
+This isn't a bug, but the header and several comments are written from
+the patch's point of view rather than as documentation of the current
+state. The header says definitions "follow the order they had in the
+Makefile before the split", and this block starts with "Before the
+split these definitions sat above the ../lib.mk include". A reader
+arriving later has no "before" to compare against.
 
-For example, in the ARM64 JIT:
+The header also says this file is "included by both Makefile and
+Makefile.runner", but Makefile.runner doesn't exist until the next
+commit. If someone lands here during a bisect, that sentence is
+inaccurate.
 
-arch/arm64/net/bpf_jit_comp.c:build_insn() {
-    ...
-    if (insn->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL) {
-        ret =3D emit_kfunc_arena_args(ctx, insn);
-        if (ret < 0)
-            return ret;
-    }
-    emit_call(func_addr, ctx);
-    ...
-}
+Would these comments read better stated as the current invariant ("lib.mk
+appends to CFLAGS/LDFLAGS; this file's additions must come first, so
+the includer snapshots them in INHERITED_*"), and should the header
+mention Makefile.runner only once it exists?
 
-The ARM64 JIT lacks post-call return value sign-extension, leaving the upper
-32 bits of X0 undefined per the AAPCS64.
 
-Similarly, in PowerPC64:
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-arch/powerpc/net/bpf_jit_comp64.c:bpf_jit_build_body() {
-    ...
-    ret =3D bpf_jit_emit_func_call_rel(image, fimage, ctx, func_addr);
-    if (ret)
-        return ret;
-    /* move return value from r3 to BPF_REG_0 */
-    EMIT(PPC_RAW_MR(bpf_to_ppc(BPF_REG_0), _R3));
-    ...
-}
-
-And on x86-32, the upper 32 bits of BPF_REG_0 are left uninitialized
-on the stack for 32-bit and narrower returns, leaving stale data from
-before the call:
-
-arch/x86/net/bpf_jit_comp32.c:emit_kfunc_call() {
-    ...
-    if (fm->ret_size > sizeof(u32))
-        /* mov dword ptr [ebp+off],edx */
-        EMIT3(0x89, add_2reg(0x40, IA32_EBP, IA32_EDX),
-              STACK_VAR(bpf2ia32[BPF_REG_0][1]));
-    ...
-}
-
-Since a BPF program calling a kfunc that returns a narrow signed type
-(like bpf_res_spin_lock) would also experience the verifier/runtime diverge=
-nce
-on these architectures, does this sign-extension fix need to be applied
-there as well to prevent state corruption?
-
->  			if (priv_frame_ptr)
->  				pop_r9(&prog);
->  			break;
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260823203944.2084=
-994-2-Jeremy.Jean@oss.cyber.gouv.fr?part=3D1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32662817569
+--===============5769583648148096049==--
