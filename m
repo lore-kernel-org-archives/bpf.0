@@ -1,137 +1,113 @@
-Received: from mail-ej2-f2.google.com (mail-ej2-f2.google.com [74.125.228.130])
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33118362154
-	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 19:59:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.130
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787515189; cv=none; b=V13v/Whis1a2TP7m0I6OxqD64dheLd4hJ4omgeCJ2nxkdvFcYm1e2sE6PiSZ41mR7QKPSbkQ2BzapHLEWZFZNollN2I3a8soMFyUw62PbkzelSsyOxHdIoN0bjnXqJ4WVxNCsH+7tqR4wEoHt3LNap0FyUcYK/3Ata/a+DTldFs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787515189; c=relaxed/simple;
-	bh=lOmZk64DPfrz+xmxtznT5MjKh1OPLPfXC4UK3NqjbJc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=jYusBxPOLJWNwBFBW38znBZaFvErNX5y0bLcm3s9zDLE6zcVsbYT+J6FxfM+F2R+PyMSzyl+4ltH4WeMoaYoQMnTlJT3ZNYwp5c0gP69kiyyB+K9n2btELlsqSO0v6Lqt/rVaC5y4rhIObcX4N1UXoRDzB49MmIhpbkbt8a+WFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NbzEFY8s; arc=none smtp.client-ip=74.125.228.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFDBE29B78F
+	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 20:05:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.172
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787515522; cv=pass; b=rstvFHNaDQO6EDYBEDBmdDu7yEzL/V09pQC0WHRMJSzFWOilWjJIDj0pwoIHZh2A83vGaMAHxaFj4Ix1g3j7uhYmanl581N3FNw+r25UBqFd0KCL06sMLx3OIcjX7aOONSO4s/SW3UeRqIvE7XBhzp3Rrb8LR4iARbiiHol5QYo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787515522; c=relaxed/simple;
+	bh=/6BI5WubpMDqx8+ZQ3ft70NuBXZgnd1gABzZNFUcAeA=;
+	h=MIME-Version:From:In-Reply-To:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Hfu4d0SSrF8CRs5ck+vQFy1HxM8GQQsYdMJvD9I0qWRFbGCXgG7eBL3EAmmQVZ0y6WLqiBKVjC3GiCy1jtJipS/MAYElr3CbOTOEZAHcXb5HLkDQFEVnGjnfjWIDYKI/j1Xm12By9qiRkdBv9srjT6iuHCeiqpmkeme5JquDpLA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g1PALAoz; arc=pass smtp.client-ip=209.85.221.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NbzEFY8s"
-Received: by mail-ej2-f2.google.com with SMTP id a640c23a62f3a-c15f8dd6f18so225008066b.1
-        for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 12:59:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g1PALAoz"
+Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-5c5a818a3d6so2178894e0c.1
+        for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 13:05:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787515519; cv=none;
+        d=google.com; s=arc-20260327;
+        b=rCOdlI7WKiOb1Mo95a0JdymTVAZZj4LC3mbC/UVGZJhnHijubH/37UAH4Nm3qB815U
+         7vyGsx2qizhhL5yaBx4A6dQP3cwfeif9Zggk9iIgto+yv3qtiCjdsoXOW2B9dk0JjeA6
+         CUX8u8WZf6vg18MgGrwcbHDllBAFByNuWoUsTUH3Jkxrza1PMKUNYQ6d9eJhFeehyLS8
+         Y5sFHFh3X8L5UTrUdVufLzCB84t+RlicTivA9P0tsvJeJ7vEkB4kF+0G85gSDoWSjPVQ
+         fw34kfZegFqzvl05jDrya1oImrd+WQcgwG6kowVG3d43lSSN5o588lSmHIR5psQSeWTr
+         29tw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:references:in-reply-to:from
+         :mime-version:dkim-signature;
+        bh=/6BI5WubpMDqx8+ZQ3ft70NuBXZgnd1gABzZNFUcAeA=;
+        fh=gfPqSG0LBBDiK0+Lwb0mRmE9tV4Cc8oUHLQ+DV1GW9I=;
+        b=QiONuCR2WTJ3VIys8mBdEj4JTY+LbZFBS0BV4toDAVwv8EJLC170mzMZ2uzKrUMr52
+         G6bmS+V+pRpd6wbAK2qCM0L6fPABONulpAjSLqR1gQPJEnHZStbHOaQlZVFudhk/Hend
+         2gIOhQ+Qb4p2aRRWLMP9xCoolvOOyvy7/PHO1zw2Qd+tNteBBW1ykPUOK7IgVNxiq+RP
+         YgnFTYuQNG5kyx1IQdPZpupxIdQ+zLX7etQfRxAmXr/FldX68a/8nNdgw7EWEwMJWtYa
+         irm+cFa8F1rP4qIl4GgVnSFdQcmvG3ZdlR+Ur4Tr16E9s/RubZN1fernL1zlXUQ+PTRn
+         2c7A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787515185; x=1788119985; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=0QasYc6RCSMa5sPreNe5srZRIz9d6Ol1y/kYNoBuD2o=;
-        b=NbzEFY8sF7vBA3nLEfS848A+ql5OEQioZCDUZrQEDy3vknCBCJibIkGktYQelJ+e+5
-         uHCaaDNcTwqhKERvc9FKctLzwzteFDKOs+PmT4UFQmM7K8rLCY1vsDBQsySoPLJq0P/f
-         iUWuE8vJCIQd8i9xo6TCrhx2GbQHKvItgcEgC7l3hnz5qT06GuyxgQQWVSzz/ywOy1vv
-         sMU7EX+EJ90Kie/qLZsn6SfPH8TzCw693uajeWLNT4xp3QLxHdQscz68u2nRxI0V0fMt
-         LRK46DgU93oRw+NvKxbtfZPrVhHXoavbEYpKGXXo2Eq1AV4TXn08U8m1XWB4jCVDPHGv
-         Hrig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787515185; x=1788119985;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1787515519; x=1788120319; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:references:in-reply-to
+         :from:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=0QasYc6RCSMa5sPreNe5srZRIz9d6Ol1y/kYNoBuD2o=;
-        b=K5hLkWaVa7RgyoipO2mUUMZmom4DeZ5pEXd6xhbjCWzzSx3i4r89sIR2YZT19iIv9M
-         3cDgj7i64adCxxVLXmB+23r07lBuzOsU0USG1jYoU0BbHwbBtuTtBeqCRMlwdpjfU99z
-         usPYsR74GvwlGySfFY9lRyONuorsSO180u9+VJCc5Dzp/quCxVwq28C0Avk4MYXWd2Kh
-         7jOx6rGhNwYDyqk0YKVIYBGIykEycWkjuJzGVHs2GU/s6VwEE5uhNP8tKLmCvvENMaYU
-         in2BL7NUCyxeHB5Otp9T0tFrP5PgcumXJGzhnaGZJhAbFPMEjSSgQtaT9I5xLApIArP6
-         nO4A==
-X-Gm-Message-State: AFuF++nz/1xkkK1aNWNJPbvzRzm5vThA06ehxXb2SC1nn2x6abyjlH1B
-	hvW0gLKawWiiZompKTJwWvJzRb+GRjJ1S2ZUdDZvxR0oKwUdtkhU+Y4W
-X-Gm-Gg: AR+sD13P8oNQgAkefFnlSmAPv+bsAlQ6yB+W2qLKf8fAP/N1em705+Rt/0POHRLsYU6
-	VT248pkkKBylswo/69SDAkTCbd1BMo88r+crzWFaU3n2M+bcI9I9KaTKuR6ZjVxyVjViqu56qdh
-	2kHOngBm+jHSW+I/wZeL10q1Pdr0M05puJwcmI4BG4Q60RladWeRVcDcYTt+AQtNP401aHz86d9
-	FUwSpLajp7k6nPVOypcMWr7atTUjQ0m2w2F2WTljuHB67ei9UN+crHi+n+naF93QI9HSkvbDjUH
-	s8fvPo8253FCAd3c8VTr08s5DYGEJTqE1PkduPpxpu3F1HuvPBFuxLosZ9L1JPB123YwDPRUOuZ
-	8CDlC++hhmc8lVshfXuKiCFDM2FDums+isvE6M1GVG513Zz5WJffQkzuguc//VvctT2zF0Jthi9
-	x/Qjjjrf/9djlJ91/gmp+3GUbLjI5VQjieqXu0L557hjJRFLKu02e8XZnuLCHrXopBH2/psaPwF
-	LPwyCyXDI9JQ48u4YiMLJmyWymH2Vo53CTpTM0fKJAmGywZh1xlZY0n+zNSkdVkJ96eEYWhn1MO
-	7ceCjYfQ202HLnexJAhO0C8K3/lmxcSHmQmXCA==
-X-Received: by 2002:a17:906:7316:b0:c19:45e3:2f57 with SMTP id a640c23a62f3a-c2491cbca79mr1481849266b.9.1787515185174;
-        Sun, 23 Aug 2026 12:59:45 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2496738e7esm992377566b.46.2026.08.23.12.59.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Aug 2026 12:59:44 -0700 (PDT)
+        bh=/6BI5WubpMDqx8+ZQ3ft70NuBXZgnd1gABzZNFUcAeA=;
+        b=g1PALAoz/aV9m5TLTJ0wNVrvvpQMYdo8l8mSMFnJsYf17VYzCaHIXbs+tB1T+JgBNm
+         pf5tM0GiGz7CQeFKcrGYO+Z9g0EbduSIN/aOgiieZ2cBUDNetf0Vngz0oQPdS8luj6Lr
+         hifp/eN3xTj5keKmi+0uQJNJeHf0hghh6c3twO+BELqsTsE6epvJeRoLn5bTpBvYcY1a
+         FsakluQKfbz3oBsxa1VwnilSm/geYCfpT8rfzzEHOOY+JMfR/fQ+Bg6CJQ26YYBa2xJb
+         oCluEHxWHGSyDPJfgX3u1KE8KPKZzKAEU+/Ef4NKmDZI0MX+yuOw72ZqW5LOk+NPXgV7
+         xeRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787515519; x=1788120319;
+        h=content-type:cc:to:subject:message-id:date:references:in-reply-to
+         :from:mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=/6BI5WubpMDqx8+ZQ3ft70NuBXZgnd1gABzZNFUcAeA=;
+        b=B+y3mYot8LM3b8EodXCtaM3TC4VKgKYLlSBRqpTBdhj0cXMl2ed34wNWAzgQaz+mtT
+         OQoqiyxaCmgZ2WJjWr7ECM9f0HYH4gEWcNYNPM+AXTG0bzZDJ/uzKddEz5AhnjCJnNUU
+         CzbOjEIBwQnw1TxqkjzdvDCTeGiBw8Ens9rk30g+ArqX7PT28PLvyQb0we9I5EA5jIe1
+         RIhrniM8aox61M/8YQ1SYCiYDNUolsC6AKLS0o4I90Hs8AGZxpDXiQHM44syXrkO3ahX
+         3FASrD8caNVMIZQM2w64uT8lpuKEJRshsbg2PTudlTmCNu0mD/t2uYJL/NObeTQcLWLH
+         Fz9Q==
+X-Forwarded-Encrypted: i=1; AHgh+RoUbzla/IHQsqZm+FP9htM0lPUYHJehoJuFmoqjGPlDJaoN4QsGTg9M8ztcd7+S9wAmH/o=@vger.kernel.org
+X-Gm-Message-State: AFuF++m46k93UN8CKJwDrl9wKe3BmH7sn1SyNEk6cr1kcih+u8T3C5Ns
+	VibWD6oBgX7XFM0e/WXHsbl3cJWuGXrznVypH8+Koha2CsmgJoEdUvagTHEHUaIqyTZKlLNu2/c
+	U3JrU/eJXi1CSz+Nhe7Fp2qL81BAOcr4q1GX6
+X-Gm-Gg: AR+sD12/TQZy2Qox4C/v8+saLW5D8XbAq0GKpm8iBCifSETsDJi2ulsJxYAy9AIDPZ2
+	LkLzOJSIiwrI2EDaGj4Xjka+xzMN8jCNqClrn4qRiTworatGb5BXpDNauj6+zV6F2LSdIWGk7GV
+	edSTw04veEz6x4FiqJnqrQDqBPaVjFewJpAHeTumG6d6Sl/Qyl1PzOLdziX7FdzepajMrRaRpa6
+	CphsYhPxqSHkMBpYEEE9QNeaGz4ZE1M4BeQ0B6tB4O5pqPtataJuSE4aMBHry+XEveGm+iLSDIl
+	U+QzFSaGX7G6Dq4pVKLe6HBEW8Vz42oJeYy5Ii/mxMPDKczWDkG6fSUlKTO6MZUtf6gks2fOB7h
+	gIkXV3KtABn+kmOUf9sJqS1I7corK67lNWmtrjGakiY6BITTaH575OQrctzY=
+X-Received: by 2002:a05:6102:94d:b0:77b:2ce5:76bc with SMTP id
+ ada2fe7eead31-77b2cf4bcc8mr6924268137.13.1787515519619; Sun, 23 Aug 2026
+ 13:05:19 -0700 (PDT)
+Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
+ Sun, 23 Aug 2026 15:05:18 -0500
+Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
+ Sun, 23 Aug 2026 15:05:09 -0500
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 23 Aug 2026 21:59:44 +0200
-Message-Id: <DKWL8ZCP4JFW.1YNYR2ZU4BCQZ@gmail.com>
-Cc: <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v1 1/2] bpf: Reject oversized stream read
- buffers
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: <sashiko-reviews@lists.linux.dev>
-X-Mailer: aerc 0.21.0
-References: <20260823193202.2389715-1-memxor@gmail.com>
- <20260823193202.2389715-2-memxor@gmail.com>
- <20260823193918.347B51F000E9@smtp.kernel.org>
-In-Reply-To: <20260823193918.347B51F000E9@smtp.kernel.org>
+MIME-Version: 1.0
+From: Seunghyeon Lee <hyeon3125@gmail.com>
+In-Reply-To: <CACvzRyD2ScyBt-6eS2FoWPRN5o1ZK-4RYruKY0k7QTSuohzbzA@mail.gmail.com>
+References: <178004391665.3522.4865582628003357086@gmail.com>
+ <DIVM9YXYJV5N.2TEM951JWKD95@gmail.com> <CACvzRyD2ScyBt-6eS2FoWPRN5o1ZK-4RYruKY0k7QTSuohzbzA@mail.gmail.com>
+Date: Sun, 23 Aug 2026 15:05:18 -0500
+X-Gm-Features: AcwNN1VVzOLXmYUMTZaDhf53TltwgqgNHoMGCRjqFXI5xAW8B6dzhkStrde48yU
+Message-ID: <CACvzRyBgKYf+r+hFUOi8z8EebOHzXMXGVRTnRw1kNJ+QiB5BUA@mail.gmail.com>
+Subject: Re: [PATCH RFC] bpf: add DAG fast-path in verifier to skip redundant
+ state pruning
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Sun Aug 23, 2026 at 9:39 PM CEST, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
->
-> Pre-existing issues:
-> - [High] bpf_stream_read() permanently loses successfully consumed stream=
- data and incorrectly returns -EFAULT instead of a short read length on par=
-tial copy_to_user() failures.
-> --
->
-> --- Patch [1]: [PATCH bpf-next v1 1/2] bpf: Reject oversized stream read =
-buffers ---
-> commit ec0075a06e269ba85371f18607bd524dfc2cb4f7
-> Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
->
-> bpf: Reject oversized stream read buffers
->
-> This patch updates bpf_prog_stream_read() to accept a u32 length and
-> explicitly rejects values larger than INT_MAX. This prevents oversized
-> lengths from becoming negative when passed to the internal signed stream
-> reader.
->
->> diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
->> index be9ce98e94692..c8d1d0b03f180 100644
->> --- a/kernel/bpf/stream.c
->> +++ b/kernel/bpf/stream.c
->> @@ -196,13 +196,15 @@ static int bpf_stream_read(struct bpf_stream *stre=
-am, void __user *buf, int len)
->>  	return ret ? ret : len - rem_len;
->
-> [Severity: High]
-> This is a pre-existing issue, but does this error path permanently lose
-> stream data on a partial read failure?
->
-> Looking at the while loop in bpf_stream_read(), if a buffer spans multipl=
-e
-> elements and copy_to_user() succeeds for the first element, that element
-> is permanently consumed and bpf_stream_free_elem() is called.
->
-> If copy_to_user() then fails on a subsequent element, the loop breaks wit=
-h
-> ret =3D -EFAULT. Because of the ternary return statement here, the functi=
-on
-> unconditionally returns -EFAULT instead of the bytes already read.
->
-> Could this return a short read (len - rem_len) when some data was already
-> successfully copied to user space, so the caller knows those bytes were
-> consumed and the stream data is not silently lost?
->
+Alexei, Daniel, Eduard,
 
-Already fixed.
+A brief ping on the follow-up below. I may have missed newer work: has
+the transfer + join prototype been posted somewhere public, and would
+the tnum x cnum Kani model be useful to compare against it?
 
-> [ ... ]
+A one-line pointer, or "already covered / not useful", would be enough
+for me to decide whether to continue or stop here.
 
+Thanks,
+Seunghyeon
