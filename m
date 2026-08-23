@@ -1,324 +1,140 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FE38352C5B
-	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 21:05:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A7A3AD513;
+	Sun, 23 Aug 2026 21:29:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787519105; cv=none; b=lyPzRO7jJWJnKlWORxMtSpdQZtOdSLuRDwYOrChdpoI4MUmki/VI4kEpw34/sfPLeLIgKkCpKpU+yy+wo0StT7RytZD5707SvyHqMlfPqXnmGQ2imIA2bZNbwQVvWaxRvdaYYJdJZFET5DLZE/7Q/dOgnlbVvZRmRXOotzAOND4=
+	t=1787520563; cv=none; b=DG+82md8a16GYTMqIhURwgxWb5E7r8FMQbqIAiJtyZiPRB6l/xv8mklmvLlSJG5NdSP+v5VwG0Dbf78JjrGoBZZbWWsz7TqhQNgkoqO6q/NflqhQ/VL7UECmgg9zcnymNXCcIFIabslMLdTvuj9yUJTCqg3WU5Wv8bE3xI8BDzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787519105; c=relaxed/simple;
-	bh=TdLPf0TwQxyIGBAKSuD/+Np+ed9t6iOarszJv77/hCE=;
+	s=arc-20240116; t=1787520563; c=relaxed/simple;
+	bh=K2Ezk3PTBsSgmq5jxU0ghUJSnZRFcuxHFM8pZhVTqDY=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=VkXkVajdmdfPZaj4lhqWWEUf0fJB2bAXq5PUS27gS+tgQw76EHfLCegysFuRteIrFZgPXD8V5Rtc/nZK6wpDAW5jM3blamlYrhUR1U3j00jSO0RG73jQ1izf/GDLQknDGAu3Ky3MDffyqV5gkmElhw5ZEO2LF86/FqxTJ3Q3fJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PmJxHs2r; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=Z2BIEi1P5jpL9Y8iuEA9CfLGxtcbWZmRxK7JmFag2z4C1fuJtgb4Jf369TFd5PnIhilR5DTzoX6Me16kcFxh77y9HwdLcsGReiCbmHYoRDZmCF9+QZkBnqPD8/RFDa3ykmQhUIEadNyGWL1dp4MGnM0imeucoShHP+cAOYJz3sA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FddI/lTq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PmJxHs2r"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 769151F000E9;
-	Sun, 23 Aug 2026 21:05:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FddI/lTq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D9DB1F000E9;
+	Sun, 23 Aug 2026 21:29:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787519103;
-	bh=99lZjKyhc1mbBPDrJaHUVJhj29KWiy8TPXLY2PX1vKI=;
+	s=k20260515; t=1787520562;
+	bh=y307OTUWHRZjctIfcjymbVBtGKCmjsbA+lD3bXtmFvM=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=PmJxHs2rbFs/78HgjCuJvi1G00JRoeC6mcmuMniXpw0VWF3tvlW9dl0AW/LHF8PMu
-	 UpvupST5XVy5lcuGQG55hfMKpYOhUgWGPOJ2JpP/w+6OUvFDydEOYV+K0X/uDpbHkH
-	 klKMyZ3aBw4kUUyOjwVO69pyE26uZFnsgIbVF20pQTH2km53QJIlDHP0biDQXcQQSp
-	 ZTwfcuPD67BTnb9b8+19dRUDVQFJR/QNKTeqUXtEQZcrpdVZHMO45ng47k6pk9nUq/
-	 6cq8YjOmKxTPGOGdCo9k2j9Vas+xlTltEKia9orK7Mk7yMtafXbtASGrkW5bhlnxZH
-	 wVYeqxpD1c+9g==
-Content-Type: multipart/mixed; boundary="===============8947748123915798385=="
+	b=FddI/lTq1vdNT69NxP8c5xaUaC8unOBWUtEgsWwxM18Af9HbKbGnJjxMZEL5a98s1
+	 N7j1XDlBOyF9dz375KZK1R9CRYAT/br7QVPtPRBD7/c9zwWycPq3Fb2t05I9+kHzG2
+	 z5wPILwCeCR/ruMoBKfTrErk5GXPn4bmOuNr5ie+HoiGLUM/JRCAmMhm3qg4A8tRb3
+	 YgU2F3hHCwEsAuLygbo618jBxJwtZHiouN8wDqdU2hcEy6r/YdsJENM8iXaXPWgjbu
+	 VE7IIQK+KtdduURjTODxlppjxkYw6Rcn9xrQgQ5ViXQfHVIjPMuKxSpusnCEkShLn+
+	 7SxJkEAYn2A/Q==
+Content-Type: multipart/mixed; boundary="===============7098532397741696681=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0d5046cc308a268dbc6ec6d61f05e6632343b92ad46be892135bcb0561b1beae@mail.kernel.org>
-In-Reply-To: <20260823194241.3415152-10-nickolay.lysenko@gmail.com>
-References: <20260823194241.3415152-10-nickolay.lysenko@gmail.com>
-Subject: Re: [PATCH bpf-next v7 9/9] selftests/bpf: build each test runner instance in its own sub-make
+Message-Id: <82290fa17a3ae684d551ef0843c5022472b2422b3e230313bac3b1d2c65fc63f@mail.kernel.org>
+In-Reply-To: <20260823203944.2084994-2-Jeremy.Jean@oss.cyber.gouv.fr>
+References: <20260823203944.2084994-2-Jeremy.Jean@oss.cyber.gouv.fr>
+Subject: Re: [PATCH] bpf, x86: Sign-extend narrow signed kfunc returns
 From: bot+bpf-ci@kernel.org
-To: nickolay.lysenko@gmail.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,memxor@gmail.com,nickolay.lysenko@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sun, 23 Aug 2026 21:05:03 +0000 (UTC)
+To: Jeremy.Jean@oss.cyber.gouv.fr,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,Jeremy.Jean@oss.cyber.gouv.fr,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sun, 23 Aug 2026 21:29:21 +0000 (UTC)
 
---===============8947748123915798385==
+--===============7098532397741696681==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> Replace the DEFINE_TEST_RUNNER/DEFINE_TEST_RUNNER_RULES double-expansion
-> machinery - whose rules never appear in the source as written, are
-> invisible to make's own debugging facilities, and are easy to break
-> for one flavor while testing another - with Makefile.runner: one
-> sub-make invocation per test runner
-> instance (test_progs, test_progs-no_alu32, test_progs-cpuv4,
-> test_progs-bpf_gcc, test_maps), each in its own single-flavor namespace
-> written in plain make - no define/eval layer, no per-flavor guards,
-> no accumulating vpath directives.
-> The main Makefile keeps everything that exists once - tool sub-builds,
-> vmlinux.h, signing keys, tests.h generation, standalone binaries and
-> the kselftest lib.mk contract - and delegates to the runner through
-> explicit per-instance rules.
-> The rules for one flavor's BPF objects and skeletons live in
-> Makefile.skel, instantiated by the main Makefile for the default
-> flavor and by each runner sub-make that builds BPF objects. lib.mk's
-> install rule copies the default flavor's BPF objects - the files the
-> flat copy of every flavor's objects resolved to before. No file is
-> built twice in one build: the main Makefile produces the default
-> flavor's artifacts before the unflavored test_progs sub-make runs,
-> and each flavored runner writes its own subdirectory plus its binary
-> in $(OUTPUT) (the bpftool
-> link in $(OUTPUT) is refreshed by both unflavored sub-makes, as
-> before).
-> The runner instances link userspace objects the main Makefile
-> builds once; the
-> flavored instances link the shared objects instead of compiling
-> their own identical copies.
-
-This isn't a bug, but the wrapping looks unusual here. Several lines
-break after only a few words in the middle of a sentence (e.g., "with
-Makefile.runner: one / sub-make invocation per test runner / instance"
-and "and each flavored runner writes its own subdirectory plus its
-binary / in $(OUTPUT) (the bpftool / link in $(OUTPUT) is refreshed").
-
-Could the changelog be reflowed to a consistent width? Kernel changelogs
-are conventionally wrapped at around 72-75 columns with blank lines
-between paragraphs.
-
-> Smaller behaviour changes that come with the move, for the record:
-> the skeleton recipes' build-log lines take the msg helper's format
-> and stream, the shared userspace objects log as CC rather than
-> EXT-OBJ/LIB-OBJ, and TEST-HDR lines lose their runner tag; the signed
-> light-skeleton rule lists the key and certificate it uses as
-> prerequisites; the extras copy skips an empty file list and, in
-> permissive mode, does not wait for files whose build was skipped;
-> $(OUTPUT)/test_maps waits for the same shared prerequisites as the
-> other runners; the bare-name convenience targets for the
-> linked-skeleton constituents (make linked_funcs1.bpf.o) are gone; the
-> .d include no longer special-cases the clean, docs-clean and
-> emit_tests goals,
-> which a runner sub-make never runs; and the test objects' first-build
-> ordering lists only the generated headers the runner itself consumes,
-> the rest being built by the main Makefile before any runner starts.
-
-This isn't a bug, but the behaviour changes paragraph is written as one
-sentence with roughly ten semicolon-separated clauses spanning about 20
-lines. At least two of these are user-visible interface changes (the
-bare-name convenience targets like "make linked_funcs1.bpf.o" are gone,
-and the .d include no longer special-cases clean/docs-clean/emit_tests)
-rather than cosmetic log changes.
-
-Could this be turned into a bulleted list with the interface-affecting
-changes called out separately?
-
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-
-[ ... ]
-
-> @@ -672,76 +416,109 @@
->  	+$(MAKE) -C libarena libarena_asan.skel.h $(LIBARENA_MAKE_ARGS)
->  endif
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index 48429fae0641..93b9e36df1d2 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -1721,6 +1721,23 @@ static int emit_kfunc_arena_args(struct bpf_prog *bpf_prog,
+>  	return prog - start;
+>  }
 >
-> -# Define test_progs test runner.
-> -TRUNNER_TESTS_DIR := prog_tests
-> -TRUNNER_BPF_PROGS_DIR := progs
-> -TRUNNER_EXTRA_SOURCES := test_progs.c		\
-> -			 cgroup_helpers.c	\
-> -			 trace_helpers.c	\
-> -			 network_helpers.c	\
-> -			 testing_helpers.c	\
-> -			 btf_helpers.c		\
-> -			 cap_helpers.c		\
-> -			 unpriv_helpers.c 	\
-> -			 sysctl_helpers.c	\
-> -			 netlink_helpers.c	\
-> -			 jit_disasm_helpers.c	\
-> -			 io_helpers.c		\
-> -			 test_loader.c		\
-> -			 xsk.c			\
-> -			 disasm.c		\
-> -			 disasm_helpers.c	\
-> -			 json_writer.c 		\
-> -			 $(VERIFY_SIG_HDR)		\
-> -			 flow_dissector_load.h	\
-> -			 ip_check_defrag_frags.h	\
-> -			 bpftool_helpers.c	\
-> -			 usdt_1.c usdt_2.c	\
-> -			 $(LIBARENA_SKEL)	\
-> -			 $(LIBARENA_ASAN_SKEL)
-> -TRUNNER_LIB_SOURCES := find_bit.c
-> -TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read				\
-> -		       $(OUTPUT)/liburandom_read.so			\
-> -		       $(OUTPUT)/xdp_synproxy				\
-> -		       $(OUTPUT)/sign-file				\
-> -		       $(OUTPUT)/uprobe_multi				\
-> -		       $(TEST_KMOD_TARGETS)				\
-> -		       ima_setup.sh 					\
-> -		       $(VERIFY_SIG_SETUP)				\
-> -		       $(wildcard progs/btf_dump_test_case_*.c)		\
-> -		       $(wildcard progs/*.bpf.o)
-> -TRUNNER_BPF_BUILD_RULE := CLANG_BPF_BUILD_RULE
-> -TRUNNER_BPF_CFLAGS := $(BPF_CFLAGS) $(CLANG_CFLAGS) -DENABLE_ATOMICS_TESTS
-> -$(eval $(call DEFINE_TEST_RUNNER,test_progs))
-> +# Generated test list headers
+> +static int emit_kfunc_return(const struct bpf_prog *bpf_prog,
+> +			     const struct bpf_insn *insn, u8 **pprog)
+> +{
+> +	const struct btf_func_model *fm;
 > +
-> +define gen_tests_hdr
-> +	$(call msg,TEST-HDR,,$@)
-> +	$(Q)(echo '/* Generated header, do not edit */';		\
-> +		  sed -n -E 's/^void (serial_)?test_([a-zA-Z0-9_]+)\((void)?\).*/DEFINE_TEST(\2)/p'	\
-> +		$(@D)/*.c | sort) > $@
-> +endef
+> +	fm = bpf_jit_find_kfunc_model(bpf_prog, insn);
+> +	if (!fm)
+> +		return -EINVAL;
+> +	if (!(fm->ret_flags & BTF_FMODEL_SIGNED_ARG) || fm->ret_size == 8)
+> +		return 0;
+> +	if (fm->ret_size != 1 && fm->ret_size != 2 && fm->ret_size != 4)
+                    ^^^^
+
+Does this reject supported kfunc return sizes?  The early-out skips only
+fm->ret_size == 8, so a signed return of size 16 falls through to this
+check and triggers -EINVAL.
+
+Size 16 is a valid kfunc return size:
+
+kernel/bpf/btf.c:__get_type_size() returns t->size for any
+btf_type_is_int(), and btf_distill_func_proto() only rejects ret > 16, so
+fm->ret_size legitimately reaches 16.
+
+kernel/bpf/btf.c:__get_type_fmodel_flags() sets BTF_FMODEL_SIGNED_ARG for
+every BTF_KIND_INT carrying BTF_INT_SIGNED. __int128 is encoded exactly
+that way (BTF_KIND_INT, size 16, BTF_INT_SIGNED), so both the SIGNED flag
+and ret_size 16 are set together.
+
+do_jit() already handles the wide case just below this call site:
+
+	if (fm && fm->ret_size > 8)
+		emit_mov_reg(&prog, true, BPF_REG_2, BPF_REG_3);
+
+Concrete in-tree instance at
+tools/testing/selftests/bpf/test_kmods/bpf_testmod.c:
+
+#if defined(__x86_64__) || defined(__aarch64__)
+__bpf_kfunc __int128 bpf_kfunc_call_test_i128(u64 a, u64 b)
+
+exercised by tools/testing/selftests/bpf/progs/verifier_aggregate_ret.c
+(__arch_x86_64 __arch_arm64 __load_if_JITed() __success __retval(0)) and
+tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c.
+
+emit_kfunc_return() returning -EINVAL causes do_jit() to return -EINVAL.
+In bpf_int_jit_compile(), this takes the proglen <= 0 branch, which frees
+the image and clears prog->jited. On the common CONFIG_BPF_JIT_ALWAYS_ON=y
+configuration, program load fails outright instead of falling back to the
+interpreter. Any BPF program calling a kfunc with a signed 16-byte return
+stops loading on x86-64.
+
+Should the first check use fm->ret_size >= 8 instead of fm->ret_size == 8
+to keep the whitelist meaningful while preserving the existing wide-return
+behaviour?
+
+> +		return -EINVAL;
 > +
-> +prog_tests/tests.h: $(wildcard prog_tests/*.c)
-> +	$(gen_tests_hdr)
+> +	emit_movsx_reg(pprog, fm->ret_size * 8, true, BPF_REG_0, BPF_REG_0);
+> +	return 0;
+> +}
 > +
-> +map_tests/tests.h: $(wildcard map_tests/*.c)
-> +	$(gen_tests_hdr)
-> +
-> +# Test runner instances, one sub-make each (see Makefile.runner).
->
-> -# Define test_progs-no_alu32 test runner.
-> -TRUNNER_BPF_BUILD_RULE := CLANG_NOALU32_BPF_BUILD_RULE
-> -TRUNNER_BPF_CFLAGS := $(BPF_CFLAGS) $(CLANG_CFLAGS)
-> -$(eval $(call DEFINE_TEST_RUNNER,test_progs,no_alu32))
-> +# The LLVM feature-probe results and TEST_KMODS are exported
-> +# to the runner sub-makes. CC is passed explicitly instead: exporting it
-> +# would also leak lib.mk's CC into the libbpf sub-build, which computes
-> +# its own. ('export NAME' on an undefined
-> +# variable creates an empty one, so these stay below the definitions.)
-> +export LLVM_LDLIBS LLVM_LDFLAGS TEST_KMODS
-> +export INHERITED_CFLAGS INHERITED_LDFLAGS
->
-> -# Define test_progs-cpuv4 test runner.
-> +RUNNER_MAKE := $(MAKE) -f Makefile.runner OUTPUT=$(OUTPUT) CC='$(CC)'	\
-> +	       CLANG='$(CLANG)'
-> +
-> +# Everything a runner instance references but does not know how to build.
-> +RUNNER_PREREQS := $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ) $(BPFTOOL)		\
-> +		  $(TRUNNER_BPFTOOL) $(RESOLVE_BTFIDS)			\
-> +		  $(OUTPUT)/veristat					\
-> +		  $(VERIFY_SIG_HDR) $(PRIVATE_KEY) $(VERIFICATION_CERT)	\
-> +		  $(LIBARENA_SKEL) $(LIBARENA_ASAN_SKEL)		\
-> +		  prog_tests/tests.h map_tests/tests.h			\
-> +		  $(RUNNER_OBJS)					\
-> +		  $(OUTPUT)/urandom_read $(OUTPUT)/liburandom_read.so	\
-> +		  $(OUTPUT)/xdp_synproxy $(OUTPUT)/sign-file		\
-> +		  $(OUTPUT)/uprobe_multi $(TEST_KMOD_TARGETS)
-> +
-> +# The main Makefile cannot tell whether $(OUTPUT)/test_progs is stale -
-> +# only the runner sub-make knows its full dependency graph. FORCE makes
-> +# the delegating rules below always run; their dependents still rebuild
-> +# on mtime only.
-> +FORCE:
-> +
-> +# The default flavor's BPF objects and skeletons are consumed here as
-> +# well as inside the runner sub-makes: bench, xskxceiver, xdp_* and
-> +# test_cpp depend on individual skeletons, and lib.mk's
-> +# install rule copies the BPF objects. Instantiate the shared rules
-> +# (Makefile.skel) for the default flavor, so those consumers depend on
-> +# exactly the files they use; the unflavored runners' delegation rules
-> +# below list the whole set as prerequisites, so those sub-makes find the
-> +# files this Makefile owns up to date.
-> +RDIR := $(OUTPUT)
-> +FLAVOR :=
-> +BINARY := test_progs
-> +BPF_CC := $(CLANG)
-> +BPF_CC_MSG := CLNG-BPF
-> +BPF_SYS_INCLUDES := $(CLANG_SYS_INCLUDES)
-> +BPF_CC_FLAGS := -O2 $(BPF_TARGET_ENDIAN) -mcpu=v3
-> +BPF_DEFINES := -DENABLE_ATOMICS_TESTS
-> +include Makefile.skel
-> +
-> +DEFAULT_RUNNER_ARGS := RUNNER=test_progs FLAVOR= TESTS_DIR=prog_tests	\
-> +	BPF_CC='$(BPF_CC)' BPF_CC_MSG=$(BPF_CC_MSG)			\
-> +	BPF_SYS_INCLUDES='$(BPF_SYS_INCLUDES)'				\
-> +	BPF_CC_FLAGS='$(BPF_CC_FLAGS)' BPF_DEFINES=$(BPF_DEFINES)
-> +
-> +$(OUTPUT)/test_progs: $(RUNNER_PREREQS) $(BPF_OBJS) $(ALL_SKELS) FORCE
-> +	+$(Q)$(RUNNER_MAKE) $(DEFAULT_RUNNER_ARGS)
-> +
-> +$(OUTPUT)/test_progs-no_alu32: $(RUNNER_PREREQS) FORCE
-> +	+$(Q)$(RUNNER_MAKE) RUNNER=test_progs FLAVOR=no_alu32 TESTS_DIR=prog_tests \
-> +		BPF_CC='$(CLANG)' BPF_CC_MSG=CLNG-BPF BPF_SYS_INCLUDES='$(CLANG_SYS_INCLUDES)'	\
-> +		BPF_CC_FLAGS='-O2 $(BPF_TARGET_ENDIAN) -mcpu=v2'
-> +
->  ifneq ($(CLANG_CPUV4),)
-> -TRUNNER_BPF_BUILD_RULE := CLANG_CPUV4_BPF_BUILD_RULE
-> -TRUNNER_BPF_CFLAGS := $(BPF_CFLAGS) $(CLANG_CFLAGS) -DENABLE_ATOMICS_TESTS
-> -$(eval $(call DEFINE_TEST_RUNNER,test_progs,cpuv4))
-> +$(OUTPUT)/test_progs-cpuv4: $(RUNNER_PREREQS) FORCE
-> +	+$(Q)$(RUNNER_MAKE) RUNNER=test_progs FLAVOR=cpuv4 TESTS_DIR=prog_tests \
-> +		BPF_CC='$(CLANG)' BPF_CC_MSG=CLNG-BPF BPF_SYS_INCLUDES='$(CLANG_SYS_INCLUDES)'	\
-> +		BPF_CC_FLAGS='-O2 $(BPF_TARGET_ENDIAN) -mcpu=v4'		\
-> +		BPF_DEFINES=-DENABLE_ATOMICS_TESTS
->  endif
-
-This isn't a bug, but since DEFAULT_RUNNER_ARGS already factors the
-clang argument list, would a shared CLANG_RUNNER_ARGS (with just -mcpu=
-and BPF_DEFINES varying per flavor) read better than repeating
-BPF_CC/BPF_CC_MSG/BPF_SYS_INCLUDES in each of the three clang flavor
-recipes?
-
-> diff --git a/tools/testing/selftests/bpf/Makefile.runner b/tools/testing/selftests/bpf/Makefile.runner
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/Makefile.runner
-> @@ -0,0 +1,199 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# Build one BPF test-runner instance: test_progs, one of its flavors
-> +# (no_alu32, cpuv4, bpf_gcc), or test_maps.
-
-[ ... ]
-
-> +# Keep in sync with the CFLAGS/LDFLAGS additions in ../lib.mk, in its
-> +# order (the selftests include path is spelled from srctree here; lib.mk
-> +# spells it from its own directory).
-> +ifneq ($(LLVM),)
-> +CFLAGS += -Wno-address-of-packed-member
-> +CFLAGS += -Wno-gnu-variable-sized-type-not-at-end
-> +endif
-> +CFLAGS += -D_GNU_SOURCE=
-> +CFLAGS += -I$(srctree)/tools/testing/selftests
-> +CFLAGS += $(USERCFLAGS)
-> +LDFLAGS += $(USERLDFLAGS)
-
-The runner rebuilds the CFLAGS that ../lib.mk used to add, but spells
-the selftests include path from $(srctree) instead of lib.mk's
-$(top_srcdir). These are not equivalent.
-
-lib.mk derives its path from a realpath, so it is always absolute:
-
-  tools/testing/selftests/lib.mk:61  top_srcdir = $(selfdir)/../../..
-  tools/testing/selftests/lib.mk:203 CFLAGS += -I${top_srcdir}/tools/testing/selftests
-
-$(srctree) is exported by the kernel top-level Makefile and is relative
-for common cases: '.' for an in-tree build and '..' for a build in a
-subdirectory of the source tree. Makefile.buildvars' fallback only fires
-when srctree is empty, so it does not normalize a relative value.
-
-The test-object recipe compiles with the working directory changed to
-the output directory:
-
-  $(Q)(cd $(@D) && $(CC) -I. $(CFLAGS) -MMD -MT $@ -c $(CURDIR)/$< $(LDLIBS) -o $(@F))
-
-so a relative -I is resolved against $(RDIR), not against the source
-tree, and the flag silently names a non-existent directory when the bpf
-selftests are built through the kernel top level.
-
-The only include in prog_tests/ or map_tests/ that needs that directory
-is prog_tests/test_xsk.h's #include "../kselftest.h", and it is
-satisfied earlier by COMMON_CFLAGS' -I$(CURDIR), so this does not break
-today. Using an absolute spelling here would keep the runner's
-compilation environment identical to the top level's in every
-configuration. Was the relative-srctree case considered?
+>  static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+>  		  u8 *rw_image, int oldproglen, struct jit_context *ctx, bool jmp_padding)
+>  {
+> @@ -2664,6 +2681,11 @@ st:			insn_off = insn->off;
+>  			ip += x86_call_depth_emit_accounting(&prog, func, ip);
+>  			if (emit_call(&prog, func, ip))
+>  				return -EINVAL;
+> +			if (src_reg == BPF_PSEUDO_KFUNC_CALL) {
+> +				err = emit_kfunc_return(bpf_prog, insn, &prog);
+> +				if (err)
+> +					return err;
+> +			}
+>  			if (priv_frame_ptr)
+>  				pop_r9(&prog);
+>  			/*
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32662817569
---===============8947748123915798385==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32665981826
+--===============7098532397741696681==--
