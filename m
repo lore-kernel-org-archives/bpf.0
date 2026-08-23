@@ -1,66 +1,66 @@
-Received: from mail-ej2-f1.google.com (mail-ej2-f1.google.com [74.125.228.129])
+Received: from mail-ej2-f10.google.com (mail-ej2-f10.google.com [74.125.228.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DB4733D4EC
-	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 22:53:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.129
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8D07364044
+	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 22:53:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787525589; cv=none; b=eRauzqww/418iBhCJ5VJ0gTPi/NcPHAR9tIpf27OU8hh3l6vltaDUFN6v6extpDX1U1MZeDCCjXK1dKmm54H0qaN8E+JO/sz56VOER5V4czAkHX3VX5TBUcSoZAWJdavlHzpoA//dUMv/tK+q2Fm46opPJpqD2yjli2ibFKakoY=
+	t=1787525615; cv=none; b=bRUAgAId1MQiaAyQbFDqoi2N3MFTMzirqdE9i/yOBSVR/PtMp0aFR3fdRKXaPecGsGKAKzDnC2FIIhrJ8WODWXMd2QTXH5/gNq1wf5JoskX5qK3Jkk+MTrxwqCH82/0E+pNLHu6s6o7lSJJc/fAP13+Mid5CJPw6JfHSZnvw8hU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787525589; c=relaxed/simple;
-	bh=McQxEWizuwvYe0QY6yDsUQEQxAe6VHDqWj1hr73k0Og=;
+	s=arc-20240116; t=1787525615; c=relaxed/simple;
+	bh=kSc2iWBq6NNFWCVJsOq0qcpmoH/0G7aeMHl9SbJuoQQ=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=nRiFgreyqGR5mWEhs6wX92iqbiINiaFPPf7igdV0MVelyHHBvo1myhKUdShTdbNnG6nNohP67+DQRSXZxkb98a6uqbXvff85sGm39KpXv2s8xSdamY4KmaEnzzAqDKQbYEbcvT32YvbDbo9E2BWSDsdBmUHAX0DJhoGkO4JeOUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R2wB9K2f; arc=none smtp.client-ip=74.125.228.129
+	 References:In-Reply-To; b=tFCGSFErOqJL0tnKz3qhxIap8wQOu9E+PeYfR2o0tJBUxUN+Ia5QV1mZPZQrIvvNb5rZGzkYtnSEso5NmBwfy7Zkef1kWthyHOKsidBG+PRvWEaVMgjd4SoyMl8/EQS8A50JIbNnPFD0qCFmsiA3gZSG/udNz9g/CNsYyAK7FWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BiKOSA36; arc=none smtp.client-ip=74.125.228.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R2wB9K2f"
-Received: by mail-ej2-f1.google.com with SMTP id a640c23a62f3a-c15e0279316so136812266b.0
-        for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 15:53:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BiKOSA36"
+Received: by mail-ej2-f10.google.com with SMTP id a640c23a62f3a-c219353e5bbso192570866b.0
+        for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 15:53:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787525585; x=1788130385; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787525612; x=1788130412; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=cF/nKW6BzduyHSxJj4+7z+12HQgDeEpMqu/UQzO/8HU=;
-        b=R2wB9K2fPG6lZLA3M7nYDt+U2KdhpuLdC2/gEG8O02b+etx7FqEYo/01utZyMeIxhm
-         DVsFlZkCtfSKy0c9/oaXd5JAHBpzQaGdr+i/5jvFL7d9N7K8AVObG1W0xO74T2rNZ2wQ
-         iVBjKUdx+PILMb2a+si3i5twjlDqYZh+4Rtr5Ppvn4+SNzTFx4FpddTZdKRR+Pjf4L5O
-         rS9gjumquCldzJrMm1IgtCkaGBvv00cPvtPvBSyN6Qzfe0hM91VqOZJ+Gij4GG3G/vAB
-         zzrARogFYM8YTFH1SERvCwdnNw8aiVEsmPikRY1Y301u6s9IaBWrWJquqc6nXZdFKWQl
-         JbHQ==
+        bh=shh+4G7Ad2A5MDdLtMta4NRTKb/yZL2mSIcG26UgKdw=;
+        b=BiKOSA36uHmTwTIK0QLJqh1jdsaqB1O8oPw4fKuggUp2t1eWQB7+ZmVO3Jf+cLvWuU
+         hFAKGdLHvrYMmwQLR905S1xZceCuzO4CxJGFHeOdbLgGSpOd0IW72YhYyT1dyA8qDUOX
+         OdaVvvZcnCA505MeQyUvqUq08l33q0b09xak+7NnRs3RDH3uiXyzJsHzDPdVFS2hHK1z
+         LpdRXlwjN3IcV1nmVhY436PzneD5f+VS8Fmzr4oR3NUCE04eI8w2YggXKatsrADFT0eA
+         OL+dWWN/farVIEFy7nLljIy0yuH2cfRipHKhxcTSOcLuFu1vAOHPh0YgIgMJg71QF/yQ
+         p1BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787525585; x=1788130385;
+        d=1e100.net; s=20251104; t=1787525612; x=1788130412;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=cF/nKW6BzduyHSxJj4+7z+12HQgDeEpMqu/UQzO/8HU=;
-        b=pZJ7TMihAx/varXnoorCbB9BxeFXWhd4CRakSsb8+qws6NckDgUbWhO3kSkL0snlBG
-         cdCS80MWFRGyveHNpg1C1R+KbUBns/5whDgAT7fe3yGbquTMl2/BBSlQyh+8qjyCjMY7
-         7SBNwIER485mzgWc+uTQWi25caw5u+RpeqKrUlXiUlnpylhptYAPDL4L5vlvd6EcPE6d
-         AYI1UDoPlof+AK0MB4A/ieYl6mrd6fVOZx8kEzCjjMwYEGOz0/m7hfuUXNif1oKsWuc9
-         OaLA9PgZ6jmSEXkgYsj+kA3lhga2Tpa3Eoum7BK3/5IzO4DUu7DtIMtpH7B7YDI8XtsK
-         ML7A==
-X-Forwarded-Encrypted: i=1; AHgh+RqcHPMqz25KYRCBiUoZhYKhl1dakFEsVZG7rmDvYYNZYKstPQwQ3tWpY4dukkOiQfklmxM=@vger.kernel.org
-X-Gm-Message-State: AFuF++lnqa8gXsN+u872HRrZjEnlNiYc1mU1Yd39YkXdAWp9cjTWSwvL
-	Sqeu8Ibq3R1hp9RGvcfS5d0+sHHADErEW9y+rS2ZkwQA+3bZo6dVC0x0
-X-Gm-Gg: AR+sD10SE85KCiA9lOnMxNPT/wSpPjK9+5saYPyY2nLWCOR4tO/Fh89QLYwzU2KRZMD
-	8XAzKP/ewpWLhjXsOavy76oPYcZU0EgzzXQlDb52hRktlnuJ9MVafB4TMZspaQABuSC6GoOKX8F
-	eb3auSZMMb61E2s7a+s4fLR9BQbtLpFnrUrfzoeewWa4WpVmAt/MHTUlB6axT/3ukSTK4PfuDxL
-	JJv7cErHvt8Dxvd8T5+p+y2UtWsyVvTTwJMB38ZB+KAnt/R1QA/pdcA/4JFSvVMXsD/cGvnjHTc
-	kpANZVS6v2Cuw29V7HqUzMWrb3PKGnB/lhdocOI0bCdoBmceg9aMEFJ+UF06vNaxquJ52La73I6
-	ldiRdZpROLyIn/oZd6Swnukp4Ln8U+LFk4mPscAQpIxGrqxhia0K+b6AQJk75M2iZ9oKPmtb6Kb
-	keXVr5UAEdEfUup+yyn3YXclbLMPi0wXPVplL0XAZb01EdJ5ei42GsG/hGM+bpkeAvhwdPNf/FM
-	vy2Hg+7mOgz3OokALfrJeT4VIfZnhtAlZzCVtfRlRX3hWC4iFb5dmRP6sjAEcKglyMPxs1FB+H5
-	PKjB9obFZEJN3d1RVV65cY9DOa8=
-X-Received: by 2002:a17:907:3c83:b0:c21:7584:fc58 with SMTP id a640c23a62f3a-c246a60cd41mr2448670466b.12.1787525585255;
-        Sun, 23 Aug 2026 15:53:05 -0700 (PDT)
+        bh=shh+4G7Ad2A5MDdLtMta4NRTKb/yZL2mSIcG26UgKdw=;
+        b=Yg22a3I3YnMAxHv3I4530bqNeZB7Ct9XCv7kK67DpX1dKa0Jc/n0U+CWb8dBfcti58
+         cgjLj2/Ft4LmGwzMN7eC0ChjZi7O398umRVsHec/NvvAWxv2Ni5QdeTFiXBg+pmNre0Y
+         JRQ692oUGE3XKoQLI4zz2AIrT0IMxDoDsp+/hGnBcjdvZj6eYvnHqy9fRHh1Dx3iIrRj
+         wMn/YMF7v3GXIpMVCcwXj7ajgwXPAr7zlP1YktybcNG7hhgz3BFTr5L68DrZbNBt74P5
+         DwIwBEzf0Yd7fh5G+UlFIZ9pm5Q4twJz32mz/Kpr5DR62SSNqVnCVt5wGvQg9jcVRF73
+         5EQg==
+X-Forwarded-Encrypted: i=1; AHgh+RpV8vpG18GfWThW7L1/IfmbDBGoOhGxmc6BinhIL7xa6WfOdcqRj52aNwQuI6UbpY525jw=@vger.kernel.org
+X-Gm-Message-State: AFuF++k2d1QTtyPJzD4J88zHDLNo8P/hxUeZluAzj4bpqZqPV7Xf5d0e
+	wYQ+WXRfGrrHfbxuu5Ex7qmDlpW805Rf/dA3MFUd3UiguO0ovnvrbFUg
+X-Gm-Gg: AR+sD11UISW1q37dLQVc/sft+wk0hvZT1wDXGHT6ToSuekN/eyCmfY9j4FEjm2BsHxA
+	4C/ZayrG4rxa0Cr7kZbYcY1H7OiBeXXrJEt61C8sYLWy5P/flQZ2XgrLafVENnAVPj4PfW4za/w
+	iQ3QMF+JFp1F9NuEdqeYrKU10jUFVeH4EW3kjS3WhY3aC0zT+wX0gGK1WV7NkQBftxJtMBR9jr5
+	oajctnF247/7DgeMy/2+9uKDcLrYkPACgzjJVhR3i3+uhxsjD3hR/8fWRzx7uLUQE4vqQzU2Eru
+	4bBQKDmx7QZz73ToySCiepYbS8huRmL6o1yel95uKQpl24BHqu36Oq7ZSH8E41m14fOWkgHA9vC
+	gROglKaNJHto2io5kQyFjZ2YfH2bP43Dic1cWznlaT5OSL/kpeZAT6/PQ6c55I61y+8G9Vmty1j
+	LCQK+oA2/s8tW/Q7a5+vZc6qWyTK7XZmCyiX284lNjEQ21eltIjjotwiQdP3mR74VfJfRoEc+kG
+	Mw15rdEp3JDBfy5uXCAzy2xq5oAYpsQWwh6TvvDo4VG0YY92opr5bHx+GsROcCyHZmCTBUiT1Pr
+	PZCQX6bW5ogRLf82HaZBxu+cS1o=
+X-Received: by 2002:a05:6402:24a1:b0:69c:76c6:9bef with SMTP id 4fb4d7f45d1cf-6a582b6278emr15539422a12.10.1787525611877;
+        Sun, 23 Aug 2026 15:53:31 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c24966f64f6sm978414766b.40.2026.08.23.15.53.04
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a59e19a05bsm7223288a12.17.2026.08.23.15.53.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Aug 2026 15:53:04 -0700 (PDT)
+        Sun, 23 Aug 2026 15:53:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,14 +69,14 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 24 Aug 2026 00:53:03 +0200
-Message-Id: <DKWOXOPN11A1.1BNV5J6RJ7MGJ@gmail.com>
+Date: Mon, 24 Aug 2026 00:53:30 +0200
+Message-Id: <DKWOY12R4ZJJ.A8KDS1DU1PHS@gmail.com>
 Cc: <ebpf@linuxfoundation.org>, "Bastien Curutchet"
  <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
  <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
  <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v7 9/9] selftests/bpf: add tests to validate
- KASAN on JIT programs
+Subject: Re: [PATCH bpf-next v7 0/9] bpf: add support for KASAN checks in
+ JITed programs
 From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 To: =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
  <alexis.lothore@bootlin.com>, "Alexei Starovoitov" <ast@kernel.org>,
@@ -93,119 +93,57 @@ To: =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
  <ihor.solodrai@linux.dev>, "Yafang Shao" <laoar.shao@gmail.com>
 X-Mailer: aerc 0.21.0
 References: <20260822-kasan-v7-0-99afee6ef7fd@bootlin.com>
- <20260822-kasan-v7-9-99afee6ef7fd@bootlin.com>
- <DKWONS3UI84A.382GORI5CXC51@gmail.com>
-In-Reply-To: <DKWONS3UI84A.382GORI5CXC51@gmail.com>
+In-Reply-To: <20260822-kasan-v7-0-99afee6ef7fd@bootlin.com>
 
-On Mon Aug 24, 2026 at 12:40 AM CEST, Kumar Kartikeya Dwivedi wrote:
-> On Sat Aug 22, 2026 at 12:39 AM CEST, Alexis Lothor=C3=A9 (eBPF Foundatio=
-n) wrote:
->> Add a basic KASAN test runner that loads and test-run programs that can
->> trigger memory management bugs. The test captures kernel logs and ensure
->> that the expected KASAN splat is emitted by searching for the
->> corresponding first lines in the report, hence validated that the needed
->> instrumentation has been inserted by the JIT compiler before the
->> relevant memory accesses. To allow each test to trigger the expected
->> report, the kernel must run with the kasan_multi_shot configuration.
->>
->> The runner covers different cases and settings: in the nominal case, it
->> validates kasan reports on basic instructions (on all supported accesses
->> sizes) but also when report _should not_ be emitted (eg: for accesses on
->> program stack). The runner also comes with a few specialized tests that
->> are then not executed for all sizes/locations:
->> - specific atomic ops
->> - test for instructions involving different verifier states, with some
->>   states flagging memory as stack, and other states as non-stack memory
->> - tests that validate the stack marking shifting when a patch is emitted
->>   by the verifier (zext/rnd_hi32, constant blindind).
->> Most of those tests are able to trigger kasan reports by altering the
->> shadow memory (triggering faulty accesses is otherwise complex, because
->> of the verifier). A few tests trigger actual faulty accesses (eg
->> out-of-bound accesses)
->>
->> A few of those tests depends on cpuv4 (load_acquire and store_release).
->>
->>   # ./test_progs -a kasan
->>   #171/1   kasan/st_1_not_on_stack:OK
->>   #171/2   kasan/st_1_on_stack:OK
->>   #171/3   kasan/st_2_not_on_stack:OK
->>   #171/4   kasan/st_2_on_stack:OK
->>   #171/5   kasan/st_4_not_on_stack:OK
->>   #171/6   kasan/st_4_on_stack:OK
->>   #171/7   kasan/st_8_not_on_stack:OK
->>   #171/8   kasan/st_8_on_stack:OK
->>   #171/9   kasan/stx_1_not_on_stack:OK
->>   #171/10  kasan/stx_1_on_stack:OK
->>   #171/11  kasan/stx_2_not_on_stack:OK
->>   #171/12  kasan/stx_2_on_stack:OK
->>   #171/13  kasan/stx_4_not_on_stack:OK
->>   #171/14  kasan/stx_4_on_stack:OK
->>   #171/15  kasan/stx_8_not_on_stack:OK
->>   #171/16  kasan/stx_8_on_stack:OK
->>   #171/17  kasan/ldx_1_not_on_stack:OK
->>   #171/18  kasan/ldx_1_on_stack:OK
->>   #171/19  kasan/ldx_2_not_on_stack:OK
->>   #171/20  kasan/ldx_2_on_stack:OK
->>   #171/21  kasan/ldx_4_not_on_stack:OK
->>   #171/22  kasan/ldx_4_on_stack:OK
->>   #171/23  kasan/ldx_8_not_on_stack:OK
->>   #171/24  kasan/ldx_8_on_stack:OK
->>   #171/25  kasan/simple_atomic_4_not_on_stack:OK
->>   #171/26  kasan/simple_atomic_4_on_stack:OK
->>   #171/27  kasan/simple_atomic_8_not_on_stack:OK
->>   #171/28  kasan/simple_atomic_8_on_stack:OK
->>   #171/29  kasan/simple_atomic_fetch:OK
->>   #171/30  kasan/simple_atomic_fetch:OK
->>   #171/31  kasan/load_acquire_1_not_on_stack:SKIP
->>   #171/32  kasan/load_acquire_1_on_stack:SKIP
->>   #171/33  kasan/load_acquire_2_not_on_stack:SKIP
->>   #171/34  kasan/load_acquire_2_on_stack:SKIP
->>   #171/35  kasan/load_acquire_4_not_on_stack:SKIP
->>   #171/36  kasan/load_acquire_4_on_stack:SKIP
->>   #171/37  kasan/load_acquire_8_not_on_stack:SKIP
->>   #171/38  kasan/load_acquire_8_on_stack:SKIP
->>   #171/39  kasan/store_release_1_not_on_stack:SKIP
->>   #171/40  kasan/store_release_1_on_stack:SKIP
->>   #171/41  kasan/store_release_2_not_on_stack:SKIP
->>   #171/42  kasan/store_release_2_on_stack:SKIP
->>   #171/43  kasan/store_release_4_not_on_stack:SKIP
->>   #171/44  kasan/store_release_4_on_stack:SKIP
->>   #171/45  kasan/store_release_8_not_on_stack:SKIP
->>   #171/46  kasan/store_release_8_on_stack:SKIP
->>   #171/47  kasan/ldx_patched:OK
->>   #171/48  kasan/ldx_patched:OK
->>   #171/49  kasan/verifier_paths_stack_and_non_stack:OK
->>   #171/50  kasan/ldx_oob_1_not_on_stack:OK
->>   #171/51  kasan/ldx_oob_2_not_on_stack:OK
->>   #171/52  kasan/ldx_oob_4_not_on_stack:OK
->>   #171/53  kasan/ldx_oob_8_not_on_stack:OK
->>   #171/54  kasan/st_blinded:OK
->>   #171     kasan:OK (SKIP: 16/54)
->>   Summary: 1/38 PASSED, 16 SKIPPED, 0 FAILED
->>
->> Signed-off-by: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@boo=
-tlin.com>
->> ---
+On Sat Aug 22, 2026 at 12:39 AM CEST, Alexis Lothor=C3=A9 (eBPF Foundation)=
+ wrote:
+> Hello,
+> this is v7 of the series aiming to bring basic support for KASAN checks
+> to BPF JITed programs. This new revision just makes the series rebased
+> on top of current bpf-next_base.
 >
-> 1. Should this test be made serial to make sure bpf_jit_harden sysctl cha=
-nge
-> doesn't affect other tests?
-> 2. Clang currently collapses the intended ST/STX distinction for *_on_sta=
-ck
-> tests: default/v3 emits STX for both pairs, cpuv4 emits ST for both, and =
-the
-> default st_blinded object is already STX and therefore is not blinded. Pl=
-ease
-> check and assert that xlated insns are correct in the test itself if poss=
-ible.
-> It might be necessary to use asm volatile assembly blocks in case you can=
-not
-> work around the compiler in C.
+> Please note that with the recent kernel splat detector introduced in
+> kernel-patches/vmtest through commit 8109e5928cd0 ("ci: own the kernel
+> splat matching (#509)"), CI runs on this series will fail with the
+> following error.
+>
+>    Error: kernel splat detected: [  100.689549] BUG: KASAN: \
+>    slab-use-after-free in \
+>    bpf_prog_eba69524d1d949b1_st_not_on_stack+0x12f/0x17a \
+>
+> which is pretty normal, as the new selftests introduced by this series
+> are expected to trigger KASAN splats (the test_progs part will pass,
+> only the kernel_splats part will trigger errors). The right fix may be
+> to just put a list of regex matching all the kasan subtests progs in the
+> relevant SPLAT_ALLOWLIST file; something like:
+>
+> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16=
+}_(st|ld)(x)?(_not)?_on_stack\+
+> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16=
+}_simple_atomic(_fetch)?(_not)_on_stack\+
+> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16=
+}_ldx_patched(_not)?_on_stack\+
+> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16=
+}_verifier_paths_stack_and_non_stack\+
+> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16=
+}_ldx_oob\+
+> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16=
+}_st_blinded\+
+> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16=
+}_(load_acquire|store_release)(_not)?_on_stack\+
+>
+> I can take care of opening the relevant PR in kernel-patches/vmtest with
+> this if it ends up being the correct solution, but it will make sense to
+> do so only once the selftests list is validated (but before merging the
+> series).
 
-For 2, I guess as a whole you still get coverage, since we run with both cp=
-u
-versions in CI. So it should be fine I guess, for the blinded case too, but
-perhaps it would still make sense and be clearer to verify and only enable =
-st
-case for v4, and force stx to remain stx on v4.
+We need to resolve this before landing the set. To me it looks inevitable, =
+esp.
+if we exercise the support and produce such warnings. That said I'll let Ih=
+or
+respond and provide guidance for this. We should probably land the vmtest P=
+R
+before v8 is posted, so that v8 can go through CI and be processed without
+failures.
 
+> [...]
