@@ -1,65 +1,66 @@
-Received: from mail-ej2-f0.google.com (mail-ej2-f0.google.com [74.125.228.128])
+Received: from mail-ed2-f0.google.com (mail-ed2-f0.google.com [74.125.228.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13012233929
-	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 22:30:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D1F2798F8
+	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 22:33:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787524217; cv=none; b=bahW6lma5ZD26qZmbV1TtE6CKBK9jdFh4zUl5Yf6B4IZVDd5Nc6qCv1tsY+YzjLipN3jMrJB8B5nACZDGfy+gk8o57+FivKm24NalMYBL39dS2oUP+bH3iH9s1Jd3+zCd88312Ltvfw92oZhRsvjn7A2R4JvK9f5j7xFIl9G7mo=
+	t=1787524429; cv=none; b=VJeRZHr6snYdYLFs1R0istbjw+euyJXOa5LBEcapKtpgkHB7JcRqCCDi4LLrVjgCoN0TBf6R/FL6D06abDSM7Cv4tCgi+u5nr42YtypFIlII2c+NOLtGhw5UI7ag3sRuljISPFggzLsI03jQ2910qBuIJb8CNog+5eatra5bIKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787524217; c=relaxed/simple;
-	bh=HzNHAp/+TJfUjXXWEnogjJGqkrJ3ii1AYw6lhaubKoc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=LPCsj5+54Dwnu3856c2NCdzdMb3W+jRuBDLbc3tQiopgehuamTXoVfgnt9qWqU2qC9n7aZWFDat/80aSFjsbwECZFxhchpEwhyZoEfnEYr2a7l/8E5NMBXLMj+wipMeaQPtqtpdHtAZanJG6XEc+d6qn5h4xgXUcU2SV2VvTQ2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MKsA7am9; arc=none smtp.client-ip=74.125.228.128
+	s=arc-20240116; t=1787524429; c=relaxed/simple;
+	bh=MF014Wn/1ktJMcxYPUeAv5S7kpw33NiOXZNubDqHMVE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=C7NWNP25m2EafNaf0fUAjuFC74/AAFD+KH/rGePNip+frsHM1JPgjrRGl6qXM+c6qa1oZzvj0PYfbO6Cps0r3sQL5V9JhdJxSyxOFqiMepfIhc2WXqtUY6Bm+wv7FwcT6V7iMChiaqLZbiazTpNZJkw1er84q2MQ3bfAQp22ifE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KJVDN0bv; arc=none smtp.client-ip=74.125.228.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MKsA7am9"
-Received: by mail-ej2-f0.google.com with SMTP id a640c23a62f3a-c166aef4f02so193202266b.0
-        for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 15:30:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KJVDN0bv"
+Received: by mail-ed2-f0.google.com with SMTP id 4fb4d7f45d1cf-698447ea5aeso1497213a12.0
+        for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 15:33:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787524214; x=1788129014; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=gmail.com; s=20251104; t=1787524426; x=1788129226; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=7Dy5Yv3xbtQhVQZHI+P6ldc3t/46mRsEhINgaHLDtjM=;
-        b=MKsA7am9ulxVfKUyn90J2YDBsNe2PmJeUBtNqTeM0RyNQOgeKR1JenMk9ib7n3lcHp
-         g1NbH/tPX93kRzkl/3HvvuBTEh2jpVbyZgLuoKFGjur0kHY4fJYM7T704gVR0nL9H8cn
-         DiGbfpIuvHZsaC8bOO3bIIBRdOOY6rUDQMMr/yTI29nQDJRTfO8aIdl7BIeqqSmMY7B/
-         RkiXwXBRRAcO4MuHvZagUI7MzzmMK97qgSuLscAl1rHHZjC5k+bZehmQIx+WXMc0ffCa
-         NfFLfJEG7wz8WB8WbfyaED6a7YzKxkPbmnk3OL4EEgdgbJaJ/u7aPxqkUKwQ7wZCjVHT
-         GkdA==
+        bh=lYkyJQ0qHX3nXddsJ2v+UVkUlJlJF6rc7cRHknYRPik=;
+        b=KJVDN0bvvDAQLtJtPNyNclLbxA4OGHllvFcZX/oqCpbHBvYRD6Xwaf0JupTe1aYbMj
+         izJuSJKNbCLb3x4V7wC/p5VKF6/sAJ9xGPlOXmldxrAPHTNVjGLXoMBz5XJ6dn7JwJdf
+         jYQTID+RJDOxqnk9BMFk7J5K5U37N+3s2sNMegMtGJYlGaj9bO897PJXQuRo+fI5IHP7
+         5ApZstztGgcnnIeDvFNxOlWbCnxuriAm62KENxOOnduoKqi6wtCoKhkaORSBHTnILEhx
+         F1BnK3FDZ+mkOFU1CFPsrlelGW5W4hO+2vI8T+B4r9rXwHMbSKfeSXp8x/nWh4JA0hIa
+         4YiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787524214; x=1788129014;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=1e100.net; s=20251104; t=1787524426; x=1788129226;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=7Dy5Yv3xbtQhVQZHI+P6ldc3t/46mRsEhINgaHLDtjM=;
-        b=g1dcSafWIE/c9QMa+7PwtHRMtfyZBF7AW/9XGrkgO5cz4urc5YFU4vL0fKx9dvdJ9L
-         0Pqy5Eb7jO5RPttjTE7eC49fkZGbnha6ASgDkH6FvNZCb9e+ffQlqg7a8f2TB92URTGv
-         KhNB3mP9FXCOyATaNjSjBgcHswD1v3Z5gZoPHsu++q2hdRrPBkNvONPADyigAetUcSPp
-         WTrQ1LOkemfk5bveEEwHKtwrkYaPBnf2DEUOmlusZkrPL0xLRpMFWj8e7rIOQyV68ile
-         dA0l7NORoWrsfH2dmbilGqvphKEBP5QgjxTD7FVAxyy4YH12XoW0aPEAsB99o+GhEFYx
-         C2dw==
-X-Gm-Message-State: AFuF++mCEyKchEdvEetAXeQJfaAugwezaO1m6GWv3fNr9xqvxOyQvX7H
-	jrYQnQrbp7oDlBcqJwZmfocjq3vEY6KfELjlO/XAHEVwopDR62G3DROMts/Q3TZo
-X-Gm-Gg: AR+sD11MX4FZPQpkjJ7F5WFRi2BgzU7pk61HDMbTG900wwmhKwulgTBbs2AYn/dcbfv
-	I2y9X194Whz5e2AC0Du52N8omGQz2Ykn+zjai4uLhpd2V+hWtgG976u5Mg7du4/6+DX+hTi+0QH
-	B63a5SSY+DCg8S/YYvulvYZAa0hCv2zi1AL6k1zuGYHLZ5mhldvO9e6xMUOJ2yf2VKU9OBXhgay
-	ctaYRGiva9JqpuI3edtEsWiToWNmVlXlWX2RP7imrPKNSjeHrzuxjmvAK57qWN0zwzJ83TMzLcT
-	HXQS7XIGU9mjNM44kx/NDN+PovWrqAztyeqSOZAsodSDIZxKm6VHyTpQbqSeosJYCGYJaCG9jEY
-	auIIGkv8odH9LrfXoFCGTiFu+CtTJe53w5/EYxc4KRtMDQSCFDGUNzlIfSJnAfZ3smTqKjWPiSs
-	4zB/SDwEbwCSNrkngFMVHr1QW3boC6SctxMJEhwNEL30ORrUyFpMQboYFqOMLlUbZdHMQsEGGuD
-	JAxKibeIMxd2fT2xzeVWeYSXSjeFgqYJwQgzQ6Z4Sx9jIQbTnCrLxDXlZW1Xd/z3KTVMVSvBING
-	/lI3R8dy+ljDAoZxvWeIyuCGmeoOMTqoMDky9A==
-X-Received: by 2002:a17:907:6094:b0:c1f:9c3b:96a7 with SMTP id a640c23a62f3a-c246a6269d2mr2341625266b.17.1787524213841;
-        Sun, 23 Aug 2026 15:30:13 -0700 (PDT)
+        bh=lYkyJQ0qHX3nXddsJ2v+UVkUlJlJF6rc7cRHknYRPik=;
+        b=O4e1fGjXDV5RZK6YZ+CY03fGXB59Z2TOvUE/p+G9a3PJwsEETRKc2qPbHGlnkgGMzX
+         aEp3+gHO4GkfQjKNI/+qqYZj/OWnsbZO2E0R4mEJelitzJAIGYAv/wnfeUOS93YztE1I
+         084w/gRY0ZXWGwqLKNcXZijYntMaak59CAokQUf1IbGyGgWi+jKA9VJ/sPz1Uy4v9zij
+         cV4j2TOdbecWgLfRf4qj8t7zWNDNC3dYIEfYqsHLrQd/kCNBRKQqYIaLQhEKyeJBVbTa
+         MzERt/iRUThWVbZ4j5h0ZeBlxjfuDCAAVH6WtaIKDV72/lb97JE//QQPWmJQkg0vl/yU
+         ovlA==
+X-Forwarded-Encrypted: i=1; AHgh+RpEEYUz6GRUSKD4xN23/YwOIZ6Liy6iliIBf5HdqwsLZlLMqmL6eghpNzLHtd4W+ie21nY=@vger.kernel.org
+X-Gm-Message-State: AFuF++kuwJ4IxTm4nIaNG1m2AbdSZhns6CncGXhhQU+OZYILO4xdPNBB
+	OaM06+Rc7jZQ76dq71BvkSJX/SK3fCvZ+3aFfyEq3Q1pAPjhGZJ02kV+
+X-Gm-Gg: AR+sD13Xtoxm88BWfkKw+M/sTGAJqQ08YGc4L4aN8jZeLlDD0VziCEJO2DoUHCWFg+H
+	H9mmyaBn0gs/PDJndvLwRm2JXk80HZ7pgKfmxD9SpxF+Mf2Ys6poM2iCYcv4VAy0d+B+nqOnNjh
+	/g9PLStB7OKYtAJKwmLOYKFWinON6d7/YIVPg42/kkqPe4Bhljopp7ZH7dj7kVzt1TSCa5o5D3Q
+	VC/6gCJcCxEk2eXPwiWmrVXsDmUpshoKctCzX7z/NBwbxNb/wS4d11CubxkIl0q8pO8oo/VtyjU
+	tO3PBHFwsgVJ/b8GHNW3ts8HjnJXpBifLhkjmHJhXFnL4twA/JREswbzqHSOfwix4JAI/fLZIrF
+	B+7rx507GlODwtTdCmzWcN6zX9SBuJVWBaT6v3A+c5aAAYLjgHqjcLWmTxFEjiiZsgggaxd1QSe
+	KYiWoA6QVqo/+2SZzgKbYfx/BT+OUPE/d10Kb5yOjgr63yQU4/e0pOq4ZsxDA4hval3NGEXIxOI
+	UDdWRsP4t+h0j4Shjs++Ejqej8wYnf+CH1eFUzvlKjonQb8DUxGZPO+EnT5Aifiy88N+uOgyOnD
+	lmLiQAwc5olk7XmDH5AvFMsH5oo=
+X-Received: by 2002:a05:6402:190b:b0:6a3:fdb6:9db2 with SMTP id 4fb4d7f45d1cf-6a42f14dee5mr24209554a12.3.1787524426138;
+        Sun, 23 Aug 2026 15:33:46 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2496296cafsm958999366b.14.2026.08.23.15.30.13
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a59e025158sm5810420a12.11.2026.08.23.15.33.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Aug 2026 15:30:13 -0700 (PDT)
+        Sun, 23 Aug 2026 15:33:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,153 +69,121 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 24 Aug 2026 00:30:12 +0200
-Message-Id: <DKWOG6YKM2NY.1FJHLE7BKZW9Y@gmail.com>
-Cc: <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v7 4/9] bpf, x86: emit KASAN checks in x86
- JITed programs
+Date: Mon, 24 Aug 2026 00:33:44 +0200
+Message-Id: <DKWOIW8NUFZA.1QPBXZJY5YYOL@gmail.com>
 From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: <sashiko-reviews@lists.linux.dev>,
- =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
- <alexis.lothore@bootlin.com>
+To: <bot+bpf-ci@kernel.org>, <alexis.lothore@bootlin.com>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <andrii@kernel.org>,
+ <martin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <tglx@kernel.org>,
+ <bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+ <hpa@zytor.com>, <shuah@kernel.org>, <mingo@redhat.com>,
+ <andreyknvl@gmail.com>, <emil@etsalapatis.com>, <ihor.solodrai@linux.dev>,
+ <laoar.shao@gmail.com>
+Cc: <ebpf@linuxfoundation.org>, <bastien.curutchet@bootlin.com>,
+ <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <martin.lau@kernel.org>, <clm@meta.com>
+Subject: Re: [PATCH bpf-next v7 1/9] bpf: mark instructions accessing
+ program stack
 X-Mailer: aerc 0.21.0
-References: <20260822-kasan-v7-0-99afee6ef7fd@bootlin.com>
- <20260822-kasan-v7-4-99afee6ef7fd@bootlin.com>
- <20260821233332.1D2201F00A3A@smtp.kernel.org>
-In-Reply-To: <20260821233332.1D2201F00A3A@smtp.kernel.org>
+References: <20260822-kasan-v7-1-99afee6ef7fd@bootlin.com>
+ <f6a88fe55d543f5fe2a6d9e856acb4cf1b87b8210de58459df1272c8a456d926@mail.kernel.org>
+In-Reply-To: <f6a88fe55d543f5fe2a6d9e856acb4cf1b87b8210de58459df1272c8a456d926@mail.kernel.org>
 
-On Sat Aug 22, 2026 at 1:33 AM CEST, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [High] `emit_kasan_check` fails to save the caller-saved register %r10 =
-(BPF_REG_AX), which corrupts BPF_REG_0 and memory pointers during atomic fe=
-tch operations.
-> --
->
-> --- Patch [4]: [PATCH bpf-next v7 4/9] bpf, x86: emit KASAN checks in x86=
- JITed programs ---
-> commit 6bca50db6e9af9416363fe2e60f4e42f924950c9
-> Author: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bootlin.com=
->
->
-> bpf, x86: emit KASAN checks in x86 JITed programs
->
-> Insert KASAN shadow memory checks before memory load and store
-> operations in JIT-compiled BPF programs. This helps detect memory safety
-> bugs such as use-after-free and out-of-bounds accesses at runtime.
->
->> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
->> index 13ba3232993ac..8134d028a2f2c 100644
->> --- a/arch/x86/net/bpf_jit_comp.c
->> +++ b/arch/x86/net/bpf_jit_comp.c
+On Sat Aug 22, 2026 at 1:24 AM CEST, bot+bpf-ci wrote:
+>> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+>> index 004b06785521..412a13a664fa 100644
+>> --- a/include/linux/bpf_verifier.h
+>> +++ b/include/linux/bpf_verifier.h
+>> @@ -725,6 +725,8 @@ struct bpf_insn_aux_data {
+>>  	u16 const_reg_map_mask;
+>>  	u16 const_reg_subprog_mask;
+>>  	u32 const_reg_vals[10];
+>> +	/* instruction can access non-stack memory */
+>> +	bool non_stack_access;
+>>  };
 >
 > [ ... ]
 >
->> @@ -1110,6 +1121,92 @@ static void maybe_emit_1mod(u8 **pprog, u32 reg, =
-bool is64)
->>  	*pprog =3D prog;
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index e036ae20bf6b..040af75d9550 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -3272,6 +3272,11 @@ static void mark_indirect_target(struct bpf_verif=
+ier_env *env, int idx)
+>>  	env->insn_aux_data[idx].indirect_target =3D true;
 >>  }
 >>
->> +static int emit_kasan_check(struct bpf_verifier_env *env, u8 **pprog,
->> +			    u32 addr_reg, struct bpf_insn *insn, u8 *ip,
->> +			    bool is_write)
+>> +static void mark_non_stack_access(struct bpf_verifier_env *env, int idx=
+)
 >> +{
->> +#ifdef CONFIG_BPF_JIT_KASAN
->> +	u32 bpf_size =3D BPF_SIZE(insn->code);
->> +	s32 off =3D insn->off;
->> +	u8 *prog =3D *pprog;
->> +	void *kasan_func;
+>> +	env->insn_aux_data[idx].non_stack_access =3D true;
+>> +}
 >> +
->> +	if (!env)
->> +		return 0;
+>
+> [ ... ]
+>
+>> @@ -6654,6 +6659,10 @@ static int check_mem_access(struct bpf_verifier_e=
+nv *env, int insn_idx, struct b
+>>  				clear_scalar_id(&regs[value_regno]);
+>>  		}
+>>  	}
 >> +
->> +	/* Derive KASAN check function from access type and size */
->> +	switch (bpf_size) {
->> +	case BPF_B:
->> +		kasan_func =3D is_write ? __asan_store1 : __asan_load1;
->> +		break;
->> +	case BPF_H:
->> +		kasan_func =3D is_write ? __asan_store2 : __asan_load2;
->> +		break;
->> +	case BPF_W:
->> +		kasan_func =3D is_write ? __asan_store4 : __asan_load4;
->> +		break;
->> +	case BPF_DW:
->> +		kasan_func =3D is_write ? __asan_store8 : __asan_load8;
->> +		break;
->> +	default:
->> +		return -EINVAL;
->> +	}
+>> +	if (!err && reg->type !=3D PTR_TO_STACK)
+>> +		mark_non_stack_access(env, insn_idx);
 >> +
->> +	/* Save rax */
->> +	EMIT1(0x50);
->> +	/* Save rcx */
->> +	EMIT1(0x51);
->> +	/* Save rdx */
->> +	EMIT1(0x52);
->> +	/* Save rsi */
->> +	EMIT1(0x56);
->> +	/* Save rdi */
->> +	EMIT1(0x57);
->> +	/* Save r8 */
->> +	EMIT2(0x41, 0x50);
->> +	/* Save r9 */
->> +	EMIT2(0x41, 0x51);
->> +	/*
->> +	 * SystemV ABI states that we should also save r10/r11, but in
->> +	 * practice those registers are _not_ used by the limited set of
->> +	 * kasan helpers we are calling here, so that's fine not to save those=
-.
->> +	 */
->> +
->> +	/* mov rdi, addr_reg */
+>>  	return err;
+>>  }
 >
-> [Severity: High]
-> Is it safe to skip saving %r10 and %r11 here?
+> Does this test read the correct register type? For a load instruction whe=
+re
+> dst_reg =3D=3D src_reg (e.g., rX =3D *(u64 *)(rX + off)), check_mem_acces=
+s()
+> receives reg =3D &regs[src_reg] and value_regno =3D dst_reg, so reg point=
+s to
+> the same slot that gets overwritten by the load.
 >
-> In the x86 BPF JIT, %r10 is mapped to BPF_REG_AX. During atomic fetch
-> operations, BPF_REG_0 is stashed into BPF_REG_AX before calling
-> emit_kasan_check():
+> When the pointer is PTR_TO_STACK, check_stack_read() runs:
 >
-> arch/x86/net/bpf_jit_comp.c:do_jit() {
->     ...
->     /* Will need RAX as a CMPXCHG operand so save R0 */
->     emit_mov_reg(&prog, true, BPF_REG_AX, BPF_REG_0);
->     if (src_reg =3D=3D BPF_REG_0)
->         real_src_reg =3D BPF_REG_AX;
->     if (dst_reg =3D=3D BPF_REG_0)
->         real_dst_reg =3D BPF_REG_AX;
->
->     if (!bpf_atomic_is_load_store(insn)) {
->         if (!accesses_stack_only) {
->             err =3D emit_kasan_check(env, &prog, real_dst_reg, insn, ip, =
-true);
->     ...
+> check_stack_read_fixed_off() {
+>     state->regs[dst_regno] =3D *reg;  /* or mark_reg_stack_read() */
 > }
 >
-> Since the KASAN helpers are standard C functions, they are permitted by t=
-he
-> System V AMD64 ABI to clobber caller-saved registers like %r10 (especiall=
-y if
-> kasan_report is called).
+> By the time execution reaches the new test, reg->type is the loaded value=
+'s
+> type (typically SCALAR_VALUE), not PTR_TO_STACK. The condition evaluates =
+to
+> true and marks a stack-only access as non-stack.
 >
-> If %r10 is clobbered, could this corrupt the stashed BPF_REG_0 and potent=
-ially
-> cause a crash when real_dst_reg is used as a memory pointer in the subseq=
-uent
-> emit_ldx() call?
+> Both check_load_mem() and check_store_reg() snapshot the pointer type bef=
+ore
+> calling check_mem_access():
 >
-> arch/x86/net/bpf_jit_comp.c:do_jit() {
->     ...
->     /* Load old value */
->     emit_ldx(&prog, BPF_SIZE(insn->code), BPF_REG_0, real_dst_reg, insn->=
-off);
->     ...
->     /* Restore R0 after clobbering RAX */
->     emit_mov_reg(&prog, true, BPF_REG_0, BPF_REG_AX);
->     ...
-> }
+>     /* verifier.c check_load_mem */
+>     src_reg_type =3D regs[insn->src_reg].type;
+>     err =3D check_mem_access(env, env->insn_idx, ...);
+>
+>     /* verifier.c check_store_reg */
+>     dst_reg_type =3D regs[insn->dst_reg].type;
+>     err =3D check_mem_access(env, env->insn_idx, ...);
+>
+> Could check_mem_access() snapshot reg->type at entry and test that snapsh=
+ot
+> instead?
 
-This looks like a real bug, R10 is used for both atomics and constant blind=
-ing.
-We probably also should save R11.
+This one also looks like a real bug, we should probably save the type befor=
+e the
+call as suggested and done elsewhere.
+
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/325348=
+28209
+
