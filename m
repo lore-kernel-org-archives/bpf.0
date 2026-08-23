@@ -1,117 +1,69 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12E03361DBF
-	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 09:30:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3941049362B
+	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 10:00:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787477428; cv=none; b=YZoE2+4CanhL7sU4YlRpDAPDKfVxzmXYgEgIcIDyAx7AUVTRaL62LQSchwAcC9xmby/TPBYp4CNB36i/XKiFdhliPq5LQVXbfQNHTPRt4leRTJCoh7d9BvhfddYulbzuiY7+YZ4jrOU9lOt/V93KLCABYGw6cwHb3Jde7ekALLs=
+	t=1787479236; cv=none; b=oyydBVQl6a8m8cHYx4Mx09yMzvt5G80hPJMRSG5B0hHIHedcsHmbDSD1vMLAZmeXO4gpIrNK+1ChPuwP4vqVAXTipcFF2tmsjiaHzoTYpjlOUMoj0WQ2OSH4R+EPQv3kc60nyB7HB9vhY0J7p9UbWlUwvwQy+Z680JoMSgrtQKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787477428; c=relaxed/simple;
-	bh=Vt4q/92E4jRtS0Hi4rLiIfHNH5lFzDA87jVaXqMDxBE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=TkSKsOEfJQLzqumzxJ+PkONWBSsreF/nsO0j5XsqIhfq03B7UAeL3UgtL1/n2kU2sRsfPU0ye4iVlZ/XLNThJXe6j3+cK0/vGm8bHm2J4aOdn7xTO6ZqVSzI80BcBL1JDfSbfFOEmuH2ErXxTdtyGdLrwTraMJP1CnanC9EsAXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SBbwQXSP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787479236; c=relaxed/simple;
+	bh=5K8MgwVtgdo0Sj14U8Whu9SZw1tAdmnuZlcIQcnukE4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Vhd9qjgGWNXczSE22cj+y0MhVntjtMqTte8qWD7OWN4g9k63oSHqGxVOvV001ycGxPhur4yQ8nrqp8UmJLszwUZ96EjIa34DXIgWPZRSmtM4LMjlOKmHHdM4FMn+0cXSYr7lEwQ8mzEwAtYYnZpdmNx7p40a4L8oEMjeiZMrGpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=npeco7VV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SBbwQXSP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBF861F000E9;
-	Sun, 23 Aug 2026 09:30:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="npeco7VV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5B0F1F00A3A;
+	Sun, 23 Aug 2026 10:00:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787477422;
-	bh=RGGpA8865rGkM6leUEAJYSNa9ODjXWJ9v3wGlP0DddQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=SBbwQXSPNy2BVd2D1xCg7mNnIPeMvwPBt4TVPf6IPKlsafT9eFxtuARb2c79NhAeU
-	 Cww70MOpSHozzmYXu/I3aYMdlyzUoYVbiOTok6McZj7whUcW/sCSr4NNlKYTLuJPW8
-	 mmHBMo7g0uyotEiYM/Bt9A5DuXO+NEPlbXqDxLDlzO7Wa+7OfD+6I4rtQiPncWj9xW
-	 R5TKmtTJZLCXiC5mIzCU+kWta/N/IOaZ9jefgUpuri8zmcKZf4X/P4B+ndpDRXvUnJ
-	 /Hnp7favRFOFZAWLKfZpeAyIBMPQ0N/7xabS6hhUqNHQ7V6h/9uOaokCKx53OzBwxT
-	 fu4yHxJTAW/tg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] libbpf: Ignore exception frame section
-Reply-To: sashiko-reviews@lists.linux.dev
-To: Tw <tw19881113@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260823092057.82200-1-tw19881113@gmail.com>
-References: <20260823092057.82200-1-tw19881113@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 23 Aug 2026 09:30:21 +0000
-Message-Id: <20260823093021.EBF861F000E9@smtp.kernel.org>
+	s=k20260515; t=1787479234;
+	bh=5K8MgwVtgdo0Sj14U8Whu9SZw1tAdmnuZlcIQcnukE4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=npeco7VVAldg7NJpzuoN9XXdT/R8Xmw+o6IO6hu6R3QYrqaWIbOkMMA3zDfvw4kAN
+	 wfs+P6Tv9UPs2YkW/2iedX3/GxW8ymO7MtGNK8fjE6LTTT/n18ZTdoA5XqKOe8cjOx
+	 rTsTU/V4CYgj8krlcDz3iQfSLEfqWutdTZMudfSITuC0exDLwZvPEbwBzBnth9zUVY
+	 +Wh2posOl0qJ9N75mvjEiDZG6D+VmM0ihsB4DqFcTepcZoTReJ0QwnxDNPG6Wkx4b2
+	 y8CHkeRZqUV710o43L9F57hE7137vvr842hlmwsoXeMiZllasytIVLkcw8tsOCN2mE
+	 eIj46EkrvXclw==
+Content-Type: multipart/mixed; boundary="===============6384407726067875673=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <a0b91ec136b7425738019b06e21ba49df0e0462a8b43c0ee489cee990e395dcc@mail.kernel.org>
+In-Reply-To: <20260823092057.82200-1-tw19881113@gmail.com>
+References: <20260823092057.82200-1-tw19881113@gmail.com>
+Subject: Re: [PATCH] libbpf: Ignore exception frame section
+From: bot+bpf-ci@kernel.org
+To: tw19881113@gmail.com,bpf@vger.kernel.org
+Cc: tw19881113@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sun, 23 Aug 2026 10:00:34 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Incomplete handling of exception frame sections by using exact s=
-tring matching instead of prefix matching.
---
+--===============6384407726067875673==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
---- Patch [1]: [PATCH] libbpf: Ignore exception frame section ---
-commit 7e5607d9374ac0c905a5c8970316c258ed4eb5cf
-Author: Tw <tw19881113@gmail.com>
+> libbpf: Ignore exception frame section
+>
+> Exception handing should not be the interest yet, let's skip it.
+> BTW, I found this when building BPF with Zig compiler[1].
+>
+> [1]: https://github.com/tw4452852/bb
+>
+> Signed-off-by: Tw <tw19881113@gmail.com>
+> Change-Id: I5ee6c05bd8a684261c53effe9c95d9f26a6a6964
 
-libbpf: Ignore exception frame section
-   =20
-This commit updates the ELF section filtering logic to ignore ".eh_frame"
-sections during BPF object linking and loading. This resolves issues when
-building BPF programs with compilers that emit exception handling frames,
-as they are not needed by the kernel.
+This isn't a bug, but should 'Exception handing' be corrected to
+'Exception handling' in the first line of the commit message?
 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index b749c01742ee0..05727c418c402 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -3867,7 +3867,8 @@ static Elf64_Rel *elf_rel_by_idx(Elf_Data *data, si=
-ze_t idx)
->  static bool is_sec_name_dwarf(const char *name)
->  {
->  	/* approximation, but the actual list is too long */
-> -	return str_has_pfx(name, ".debug_");
-> +	return str_has_pfx(name, ".debug_") ||
-> +		   strcmp(name, ".eh_frame") =3D=3D 0;
 
-[Severity: Medium]
-Does this exact string match correctly handle variants like ".eh_frame_hdr"=
-=20
-or function-split ".eh_frame.*" sections?
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-If a compiler emits these variant sections, they would bypass this filter a=
-nd
-could potentially cause build-time link failures against STT_SECTION. Would
-it be more robust to use a prefix match like str_has_pfx() here, similar to=
-=20
-how ".debug_" is handled?
-
->  }
-> =20
->  static bool ignore_elf_section(Elf64_Shdr *hdr, const char *name)
-
-[ ... ]
-
-> diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
-> index 78f92c39290af..1fb0efdbfae7f 100644
-> --- a/tools/lib/bpf/linker.c
-> +++ b/tools/lib/bpf/linker.c
-> @@ -599,7 +599,8 @@ int bpf_linker__add_buf(struct bpf_linker *linker, vo=
-id *buf, size_t buf_sz,
->  static bool is_dwarf_sec_name(const char *name)
->  {
->  	/* approximation, but the actual list is too long */
-> -	return strncmp(name, ".debug_", sizeof(".debug_") - 1) =3D=3D 0;
-> +	return strncmp(name, ".debug_", sizeof(".debug_") - 1) =3D=3D 0 ||
-> +		   strcmp(name, ".eh_frame") =3D=3D 0;
-
-[Severity: Medium]
-Similarly, would it be beneficial to use a prefix match (e.g. strncmp) here
-to ensure we also ignore related exception frame sections?
-
->  }
-> =20
->  static bool is_ignored_sec(struct src_sec *sec)
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260823092057.8220=
-0-1-tw19881113@gmail.com?part=3D1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32631556401
+--===============6384407726067875673==--
