@@ -1,73 +1,114 @@
-Received: from mail-pj2-f4.google.com (mail-pj2-f4.google.com [74.125.227.132])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D99A4F5E0
-	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 14:37:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F4F31715D;
+	Sun, 23 Aug 2026 15:10:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787495835; cv=none; b=YSML46PYc5pYVjn7AA2vqzV0Gq9EbTOV1zqCHEzRnoKScQKLZx6rernEecUNftl8gFLH//Ho3Bjo67vRSFCGb9J9ytoLgp3Pmgq7zXGLoQCF75UqRewHQsZ76POMIG6JdwhLPMN61yrruO39GpVrwUabWD2gl/t27BbsWNvbwkk=
+	t=1787497835; cv=none; b=RxddL0Xz2RwrtSb9XcrG5pV/dCEbYNcGsGZlPcX45t82YfOyw/i0Drl5K2thSbd7TpGzppv9igO3KwAEqe5gyRmTIb3apwEtQvQ2eK/jszxMUfYlNeUrxSLfRPGbKuVh5zbAQR0Kv+6DlxXEUPfUv6Obb6mV1W1W805t/sEAENE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787495835; c=relaxed/simple;
-	bh=4+Lf74ULlICmjdorCaIwrwnuSldmzw9nufhg4ObdNE8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gAuCqfriTguCDpEj7qykzIBhXGGVWTeXT0Outi18KqlQxCwS8WsGGBs4ZZD7sfcETOrjL4XwrPV6mVSE7b18cIaqwpxPBzR9VCV8kxPnGBrnxpCxV8TRSgYVzi59LgyIca9zZBea0/fcJMS9oL90di2xkv117FIUvfE31w9Zc/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.227.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj2-f4.google.com with SMTP id 98e67ed59e1d1-3896ccc93b5so787707a91.1
-        for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 07:37:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787495833; x=1788100633;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=4+Lf74ULlICmjdorCaIwrwnuSldmzw9nufhg4ObdNE8=;
-        b=Kv881IBs+ipvo8A2x9CvARWh6/xX+BPbh/Q+v+JAXMX4qcjtodVyxeOx3sOOham5H7
-         1NyMq3pj/1W1+9CE0rssNFvkcGGkZfDx7KpkRU2ZXkdEASZVlDPPFLxVGBketOU3NoWN
-         at80mgjgErZvXUIrE+4kQPCF4NhiOIOjQNn3ojG+seb7Gyus49iNLGywPv2FBmEx4o4X
-         8T7dpjGsmgnZUBaPCWLHCrjjoYZm3cpHdDjyzBmes4Grbn6onQ02uVFnNr/2AEbZq1Pn
-         WAB8FPj99xIL9yzMYBPQKi+wRmVRyA27ZHpRI2UtWJaYh2osQ+p2b5J84StL0OBKiye6
-         5wPg==
-X-Gm-Message-State: AFuF++m0gYxnIjrMr/e3DSnc1NZc6FAk1/ZBb/MKZagnX7DrpvO3LCqQ
-	qaFmmxcYfZ6CtjT2tvii2pSdzkaabtuU2Wpfrb/d/3Lx+vNcxPdMVvj350RIsPZItgyK3J8Q
-X-Gm-Gg: AR+sD12P71CraW12CP1oddvHa+ws70N8Q27hEufrfNqOBTYbS9ycxCBnNIpBD7gJbd7
-	dP1cgKuhS8C6v/pVkOlZcK7zbRFpuNGtH+jHBCMjo0tWgA0MS1fSaL5q/D9Nn2dTYa6aERysM1E
-	RquJVojWNqAeJl2Uv6UF6HNDrh4At/awD9kSf2Aln8argFXXYmy7gt/F6hbUjhJ4Rl5hDQBz9jR
-	ruS0soo4WmRkFZ5MbEF5zeC7LsVoEKIMYkUJV1n54Yz/ToftUG+BEYcWQB3gCBn/+R1smjwav2c
-	rh9QsdTgvus8ViYFRtWsAyIL4BQUITArkJN3TX1tx7aPqIkmpOKJ0h0J1JNTvvw7Ca5CokN9rRY
-	NMHf9Mr9ZChQhNwC4S70NfE5lsdKnAKsGBn6lrykAKtowwZBvdYuTG4p1XzaFOz5F5sVQdECzXl
-	kMIc8f6/+pHkoAuA1x3J3+gpEELac1UJVtp++4u7WCyB2+TJSH7UXyUEmJmukOr9P9gBO3vnBy5
-	QCsBPY=
-X-Received: by 2002:a17:90b:1b03:b0:38e:524:8797 with SMTP id 98e67ed59e1d1-395c39cb2damr31159267a91.13.1787495833290;
-        Sun, 23 Aug 2026 07:37:13 -0700 (PDT)
-Received: from localhost.localdomain ([180.153.160.8])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-395e4a15829sm6241397a91.14.2026.08.23.07.37.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Aug 2026 07:37:12 -0700 (PDT)
-From: Jianlin Shi <shijianlin11@foxmail.com>
-To: bpf@vger.kernel.org
-Cc: memxor@gmail.com
-Subject: Re: [PATCH bpf-next v3 5/5] selftests/bpf: cover stream capacity and partial read edge cases
-Date: Sun, 23 Aug 2026 22:37:09 +0800
-Message-ID: <20260823143709.1184788-1-shijianlin11@foxmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260815082700.E74B61F000E9@smtp.kernel.org>
-References: <20260815082700.E74B61F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1787497835; c=relaxed/simple;
+	bh=cNGViKUeLrqguxUzckyDJnzMV+iy2eGG1Qyg4wP1PEE=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=PpfDA3d5HJTZb48x3YpcSIsbYyGeVcmfxeInGW74EV/nqk0ctjV+p7OIo59JzaLtnsRepvU/XTuYgbuAR21MjZ05cmLHhTKIZNcimgMWWUSX6ju1r7sNJJDB/mc4TnTvgkk3ucwlBFXKHi2hNh6azGTWDemmatF+yzaKphvAQbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c6EdGqkT; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c6EdGqkT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A49451F000E9;
+	Sun, 23 Aug 2026 15:10:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787497834;
+	bh=tWlaAE1Q6qksw44SENj+z/BNOCBz/g85rWYVaEo/HyI=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=c6EdGqkTY21kWz3sGyCOAp7r9R7iCuAQOsc7iFCZ5a53O6BUltDNSBFdP2zywIXws
+	 eb66UJ9dbKAr5HwAcWEeP2inE7rijogKuHEmdskErXS0Eksa7P+iciRQaXmibJ4xmd
+	 KwYfcOLn38dGLgBFEajIWZV7lE8rDStBxxcYuIVnawmXrlQaP5bYndcNlbayppkuHK
+	 YfYkaexo08bGwW/NR+4buMgSTFqMmzxiQE+I/Mnu9GXWVM6y9dvh71pH+kversV5bj
+	 rRexQYEn49axl3eodHkQ+WRC8IwfuwOHA035u0lXzwrFFOskQQtoBVUgbNSsXt9ott
+	 QWJietj8HVrkQ==
+Content-Type: multipart/mixed; boundary="===============3192848384867124340=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <da5a6c614e37c974f920293a9abf7b97a00874340c7b599b004d5404bd92745b@mail.kernel.org>
+In-Reply-To: <c5a79efbd3cb52cc0668ab50db5379c907cfe6a6.1787492521.git.shijianlin11@foxmail.com>
+References: <c5a79efbd3cb52cc0668ab50db5379c907cfe6a6.1787492521.git.shijianlin11@foxmail.com>
+Subject: Re: [PATCH bpf-next v4 5/5] selftests/bpf: cover stream capacity and partial read edge cases
+From: bot+bpf-ci@kernel.org
+To: shijianlin11@foxmail.com,bpf@vger.kernel.org,memxor@gmail.com
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@kernel.org,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@chromium.org,sdf@falco.dk,haoluo@google.com,jolsa@kernel.org,emil@tsalapatis.com,pulehui@huawei.com,shuah@kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sun, 23 Aug 2026 15:10:33 +0000 (UTC)
 
-On Sat, Aug 15, 2026 at 08:27 UTC, sashiko-bot wrote:
-> Should the test verify a subsequent successful push using the same program
-> that performed the oversized push?
+--===============3192848384867124340==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Good catch. v4 fixes this: stream_oversize now performs the oversized
-bpf_stream_printk() and a subsequent "foo" push in the same program, and
-userspace reads that program's stream only.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/stream.c b/tools/testing/selftests/bpf/prog_tests/stream.c
+> index e4e9374309e2..9a21f055d80a 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/stream.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/stream.c
 
-Thanks,
-Jianlin
+[ ... ]
+
+> +void test_stream_partial_read(void)
+> +{
+> +	LIBBPF_OPTS(bpf_test_run_opts, opts);
+> +	struct stream *skel;
+> +	int ret, prog_fd;
+> +	long page_size;
+> +	char *page, *buf;
+> +	char rest[8] = {};
+> +
+> +	skel = stream__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "stream__open_and_load"))
+> +		return;
+> +
+> +	prog_fd = bpf_program__fd(skel->progs.stream_syscall);
+> +	ret = bpf_prog_test_run_opts(prog_fd, &opts);
+> +	ASSERT_OK(ret, "ret");
+> +	ASSERT_OK(opts.retval, "retval");
+> +
+> +	page_size = sysconf(_SC_PAGESIZE);
+> +	page = mmap(NULL, page_size * 2, PROT_READ | PROT_WRITE,
+> +		    MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +	if (!ASSERT_NEQ(page, MAP_FAILED, "mmap")) {
+> +		stream__destroy(skel);
+> +		return;
+> +	}
+> +	/* Leave only the first page mapped so a straddling copy faults. */
+> +	ASSERT_OK(munmap(page + page_size, page_size), "munmap second page");
+                     ^^^^
+
+Should this munmap() be gated like the other setup steps?  The mmap() above
+returns early on failure, but this munmap() just records the result and
+continues.
+
+If the unmap fails, page + page_size stays mapped, copy_to_user() in
+bpf_stream_read() no longer faults, and the first bpf_prog_stream_read()
+returns 3 instead of 1.  The test then reports confusing failures
+('partial bytes: actual 3 != expected 1' and 'remaining bytes: actual 0
+!= expected 2') that point away from the real cause.
+
+Also, the trailing cleanup only unmaps the first page:
+
+> +	munmap(page, page_size);
+> +	stream__destroy(skel);
+> +}
+
+so the still-mapped second page would be leaked for the remainder of the
+test-runner process.  Would gating it the same way as the surrounding
+checks work here?
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32645868670
+--===============3192848384867124340==--
