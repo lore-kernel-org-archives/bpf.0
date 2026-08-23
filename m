@@ -1,130 +1,72 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f10.google.com (mail-pj2-f10.google.com [74.125.227.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61157356741
-	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 14:29:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D2C43D9046
+	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 14:33:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787495352; cv=none; b=HHLcUh1Y3VUg8Ojh9u0X62F+uhWufksy8jTZXZeQM4Q8XZprkSVQ+xkiKM9ElcPjMrbIkj1gtE4XTUWYUkRCeO+BESRjz760v7oxVUXjGaf1MoCsaAtWXf8PPkr7RdX49FR2aeot+Q7GezH8XigNSPyV0TZQnA29i/kkSd42d5I=
+	t=1787495585; cv=none; b=M6d4pWNL8LuwHtPr+AGrqKNjRJhT2m0TB0FXpbgn7zsWLI0U/omjiWlIXRytmBj9pnoBkElj3YZnX/ueFGSxp+4RRCcHoZczVucBXsU3D0byqO5ZmXIRxcQg7Drvq3kFRU55qhb7V+pGEg0ODsd4vnGNGgjuSLQ7ZYYZfQQ5q5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787495352; c=relaxed/simple;
-	bh=r1xVGRXwpmbMxCxLR+XcMrQkazs0kCN2vlqQd2Hbun4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=bc5TEog9SjmUpDtsMuLJIJKrmWJ5tB03TTI3BGL+p/b5R6jeAyZ9+AyNwgSZr8ineFXEqAbziq2FvHqMLwHRKiPpRyI1PsndzrZeDGiKeoENeuTiXGzE+24kym7Pin07OisJiCp/SVk2LKyl1eRPl+1PBSSBh935jTTP1xAtu3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GLULyd36; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GLULyd36"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE76B1F000E9;
-	Sun, 23 Aug 2026 14:29:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787495351;
-	bh=yhvpUjhsaYKlcOYuPLtxmAp0t1nTI5LQMt4Nt0PzlJA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=GLULyd36aJKqKIX2Kto5mOCSBtGJyP4ZLoZg+YtP+ecRhhcHfUonhc6z3RARC71z5
-	 740vAs5zgTdtYgAtC7nYMUsWM9MH28760tDwiXCgUqka4NBgWLRl2JkvtE7LfY0iXx
-	 bKSME7TpW+6cv6n9X86sseupD7MMkd4HwWvmy45YChaeOCy+6qf+83APG0Kofs1JcZ
-	 Z2xN19tzPQ8HYF6XBy7QyG5o95kAo4aGFZMjtIHz15H+qPTgMmE4VjU0ecqpwSf6tG
-	 QUD8eI7PRKQFy8cGXey8bC1avrGoElrUDtep967JOMleCyk5b+0qng0Lnc+AoXkglH
-	 bfxqNHiUOimjQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 3/5] bpf: return partial progress from
- bpf_stream_read on fault
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jianlin Shi" <shijianlin11@foxmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <7668c5838c6beafeea719df8d55319e2fe08cfef.1787492521.git.shijianlin11@foxmail.com>
-References: <cover.1787492521.git.shijianlin11@foxmail.com>
- <7668c5838c6beafeea719df8d55319e2fe08cfef.1787492521.git.shijianlin11@foxmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 23 Aug 2026 14:29:10 +0000
-Message-Id: <20260823142910.CE76B1F000E9@smtp.kernel.org>
+	s=arc-20240116; t=1787495585; c=relaxed/simple;
+	bh=BSqfu0vw/3q62qHFnlH6cBl4gI5VMo7Cpgj2Dx1Qf0c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=VjX3Hz2XGClHZSqsIeUtjrFqUbibw84sBxiAg/tlbiWeUGZHvShPIf4ON1YH8F8DI15rR+hujEdY6ZpNOMantqjmaNpwUQRewsbaVHabzV/cgCHWER+Upj9eAp8FRQvAVjsMa4MPkoXG7fED7ItcoVvDn/LekdwqTNwaEfl5g+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.227.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj2-f10.google.com with SMTP id 98e67ed59e1d1-38dc4f9462cso866548a91.0
+        for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 07:33:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787495577; x=1788100377;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=BSqfu0vw/3q62qHFnlH6cBl4gI5VMo7Cpgj2Dx1Qf0c=;
+        b=TLshmoxB6b05lViobR2Ti9H2OseDiQoM9ISkOa2B8Vn6j8n1KLItCbIi4NKpBpCwUr
+         Q7P4hduUWbKriAJyYZnccivGLyb/I9b4u6YT0TuaaNvX3BfvPTayu4V6lYIllOfH7j4K
+         5xwUIaqISS/gbYTbizWhtVwu+O/UsfoM+ImTPfYp3YEBT/y4ttQALwETzSvXjlU1LDN+
+         fAA3wBqeQW28t8Ap3OVEE7Lvl1Ia/Bke5ZxcfZy0LH6ArjGepw0Yv64AySSfaKXQ3U1/
+         uvAFSJuEfC0c3M170pDCbbK7Ul7e+jywk4upL1IeLyYn4huCHBeyArAvuwjYraNLL0o+
+         Q38g==
+X-Gm-Message-State: AFuF++lmFDYhgin5BBGrOmbYsdxiejLkGANus1CIOMIAG4s7yRvX0siz
+	8U/LmDjtnUe/YcJNZkkSAMLCVmmLUcyMBZjZZYwkZbYmE2+pktuYfx/8vPqlk1SZXnvVNemj
+X-Gm-Gg: AR+sD119zraC5Wy9iTE0n6HEPExtVMfXwM7oLAi3NlWprnzGr3a73DZvYMARtP8Ssix
+	ZFVG2BiI53SC/7suDvajaSIuhIqcoHdW7ybbdKIqIPQHclSPNQcTX5tY4vKMwYg4zoG1vigEQPo
+	WmU5AWxzPE7dx4qBNW2C/RD4tRlgFVNGt6RA/ddiDR8hmOnoEsoBMeGZJ8HNfdF27CXbv5GKSq9
+	t9SKialazmigrAHK8EQahAXBhwGzP3oDJnZ+xvv+BdQ4Kupb4uISKlHid2Apg/KO5OmDgfoGX8O
+	kEWAJgwmpo7Cmu2pLEeAiw6dIGE8NtOiWQt5joSCw4rslmzWQFY8CDlLAw7PB9TWaCwlcP00i50
+	Oa8/v1UuZxNdoK/EY+VceHKeh6v9IchhDX39D1+bOeQDbw2FEnHbnS09DAd+xqv3JSiIierG9v9
+	hS6XWPBFfPcPnLMChGQQBq0J4klMenDW/NLFZCr3BybndgsveXKGHhxEydrroC5l23Fz3fMG1yc
+	zsXkOQ=
+X-Received: by 2002:a17:90b:5886:b0:395:4de4:92c7 with SMTP id 98e67ed59e1d1-395dee7d5f6mr22666217a91.3.1787495576954;
+        Sun, 23 Aug 2026 07:32:56 -0700 (PDT)
+Received: from localhost.localdomain ([180.153.160.8])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-395e42d6139sm6223422a91.0.2026.08.23.07.32.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Aug 2026 07:32:56 -0700 (PDT)
+From: Jianlin Shi <shijianlin11@foxmail.com>
+To: bpf@vger.kernel.org
+Cc: memxor@gmail.com
+Subject: Re: [PATCH bpf-next v3 2/5] bpf: fix stream capacity leak in staging path
+Date: Sun, 23 Aug 2026 22:32:51 +0800
+Message-ID: <20260823143251.1173587-1-shijianlin11@foxmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <30e41d6a6f8c19fee31fb09839d9b896b590df1f585ea6976d0c77f3d065383e@mail.kernel.org>
+References: <30e41d6a6f8c19fee31fb09839d9b896b590df1f585ea6976d0c77f3d065383e@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On Sat, Aug 15, 2026 at 09:02 UTC, bot+bpf-ci wrote:
+> does the new comment above vscnprintf() add anything, or could one of the
+> two be dropped?
 
-Pre-existing issues:
-- [High] The length parameter passed from userspace is cast from an unsigne=
-d 32-bit integer to a signed integer, allowing negative values that bypass =
-bounds checks and result in massive out-of-bounds reads via `copy_to_user()=
-`.
---
+Not a bug. v4 drops the redundant vscnprintf() comment and keeps the
+existing "Exclude NULL byte during push." comment.
 
---- Patch [3]: [PATCH bpf-next v4 3/5] bpf: return partial progress from bp=
-f_stream_read on fault ---
-commit 4510393da76186ad876fa17b3e2eb0055506983a
-Author: Jianlin Shi <shijianlin11@foxmail.com>
-
-bpf: return partial progress from bpf_stream_read on fault
-
-bpf_stream_read() pops and frees stream elements after a successful
-copy_to_user(). If a later copy_to_user() fails, it currently restores
-only the current element's consumed_len and returns -EFAULT, hiding
-bytes already delivered to userspace and making the consumed data
-unrecoverable on retry.
-
-> diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
-> index a36fc93389677..09471a6052682 100644
-> --- a/kernel/bpf/stream.c
-> +++ b/kernel/bpf/stream.c
-> @@ -180,13 +181,14 @@ static int bpf_stream_read(struct bpf_stream *strea=
-m, void __user *buf, int len)
-> =20
->  		cons_len =3D elem->consumed_len;
->  		cont =3D bpf_stream_consume_elem(elem, &rem_len) =3D=3D false;
-> -
-> -		ret =3D copy_to_user(buf + pos, elem->str + cons_len,
-> -				   elem->consumed_len - cons_len);
-> -		/* Restore in case of error. */
-> -		if (ret) {
-> -			ret =3D -EFAULT;
-> -			elem->consumed_len =3D cons_len;
-> +		chunk =3D elem->consumed_len - cons_len;
-> +
-> +		n =3D copy_to_user(buf + pos, elem->str + cons_len, chunk);
-
-[Severity: High]
-This isn't a bug introduced by this patch, but could this chunk size end up
-as a large negative number, causing a massive out-of-bounds read?
-
-If a user issues BPF_PROG_STREAM_READ_BY_FD with a stream_buf_len greater
-than INT_MAX (e.g. 0x80000000), the length is read as an unsigned 32-bit
-integer from userspace:
-
-kernel/bpf/syscall.c:prog_stream_read() {
-    u32 len =3D attr->prog_stream_read.stream_buf_len;
-    ...
-    ret =3D bpf_prog_stream_read(prog, attr->prog_stream_read.stream_id, bu=
-f, len);
-}
-
-This is then implicitly cast to a signed int here in bpf_stream_read(). If
-len becomes negative, rem_len also starts negative.
-
-When bpf_stream_consume_elem() is called, it calculates used =3D min(rem, *=
-len).
-Because *len (which is rem_len) is negative, used evaluates to a negative
-value.
-
-This makes chunk a negative value, which is implicitly cast to an enormous
-unsigned long when passed to copy_to_user(). This could lead to a guaranteed
-kernel panic or denial of service when hitting unmapped kernel pages.
-
-Should len be bounds checked or treated as unsigned int to prevent this?
-
-> +		if (n) {
-> +			/* Keep any successfully copied bytes; -EFAULT only if none. */
-> +			elem->consumed_len -=3D n;
-> +			rem_len +=3D n;
-> +			ret =3D (len =3D=3D rem_len) ? -EFAULT : 0;
->  			break;
->  		}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1787492521.gi=
-t.shijianlin11@foxmail.com?part=3D3
+Thanks,
+Jianlin
