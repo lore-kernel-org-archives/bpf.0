@@ -1,140 +1,187 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A7A3AD513;
-	Sun, 23 Aug 2026 21:29:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BD123AF66D
+	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 22:12:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787520563; cv=none; b=DG+82md8a16GYTMqIhURwgxWb5E7r8FMQbqIAiJtyZiPRB6l/xv8mklmvLlSJG5NdSP+v5VwG0Dbf78JjrGoBZZbWWsz7TqhQNgkoqO6q/NflqhQ/VL7UECmgg9zcnymNXCcIFIabslMLdTvuj9yUJTCqg3WU5Wv8bE3xI8BDzc=
+	t=1787523165; cv=none; b=aVeWMkFCJpaM41AjQ8Cd9AkhbM5BfBNaFnVxI5RiFTwjgzarGz0Xgq5nrZsiw31ik0lz+pzWin+3FnH+4Kjos/IFc6tm6QmNPth2tZmv4tBgbzprQj8b1oHjqIGk47pN9WjxQzur2X3ynqZw2FlxXGFxOAskHEGNVKeINWOIoB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787520563; c=relaxed/simple;
-	bh=K2Ezk3PTBsSgmq5jxU0ghUJSnZRFcuxHFM8pZhVTqDY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Z2BIEi1P5jpL9Y8iuEA9CfLGxtcbWZmRxK7JmFag2z4C1fuJtgb4Jf369TFd5PnIhilR5DTzoX6Me16kcFxh77y9HwdLcsGReiCbmHYoRDZmCF9+QZkBnqPD8/RFDa3ykmQhUIEadNyGWL1dp4MGnM0imeucoShHP+cAOYJz3sA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FddI/lTq; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787523165; c=relaxed/simple;
+	bh=GqPg7liRNMqrm8j4qggfPJWb6w6iifsnP6+v+SgJcSk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UJoLWNww6ir0/qNi9RS4Mv9hPhkZMhwfT/sJczH1hYBvhxK6UfMEPJxhAGPYmKNT8MR4z5zK027vRQVjFvsVsszpL91vk9cOayryfdYuFUeP0e7dJeCe/sUF4noDfT3SKjjuhx6aZB/FbHhLB8q5MYE0Fg3TFsB+lTb5J9fhUPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=HtAiPHmN; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FddI/lTq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D9DB1F000E9;
-	Sun, 23 Aug 2026 21:29:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787520562;
-	bh=y307OTUWHRZjctIfcjymbVBtGKCmjsbA+lD3bXtmFvM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=FddI/lTq1vdNT69NxP8c5xaUaC8unOBWUtEgsWwxM18Af9HbKbGnJjxMZEL5a98s1
-	 N7j1XDlBOyF9dz375KZK1R9CRYAT/br7QVPtPRBD7/c9zwWycPq3Fb2t05I9+kHzG2
-	 z5wPILwCeCR/ruMoBKfTrErk5GXPn4bmOuNr5ie+HoiGLUM/JRCAmMhm3qg4A8tRb3
-	 YgU2F3hHCwEsAuLygbo618jBxJwtZHiouN8wDqdU2hcEy6r/YdsJENM8iXaXPWgjbu
-	 VE7IIQK+KtdduURjTODxlppjxkYw6Rcn9xrQgQ5ViXQfHVIjPMuKxSpusnCEkShLn+
-	 7SxJkEAYn2A/Q==
-Content-Type: multipart/mixed; boundary="===============7098532397741696681=="
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="HtAiPHmN"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6a378f90555so4621433a12.3
+        for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 15:12:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1787523160; x=1788127960; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=//7iEXuM0dwaErrYwlxiIsbco7Xb10BSWAJJRQqIeEQ=;
+        b=HtAiPHmN2cDwcdR57+nVPm79Bqmt5EFmrechceL9eOdPqvtm7XlhCdN90EfvrYvC30
+         xyiSqLbWFXgRVJ2uF7cDWOuOSFM/OtpL9Jq06wbBN9U7hl0Z1+3VDXlwRWJA1JGakqoF
+         GF5k0u5gF97lYRquh2NIOw3Jj6kZTKKJbn9W1dujbFmfFlYKMGyWLz7i98bVU34bfhD9
+         FKug+jvyVP1TCFBby0MAFYlfcWF7S2nPMhtwgA1iLzf7NwHw5j3a3vdbQVKQGzaaeqVE
+         UAmGHSVqkpdxdl8cqRT18mdu9gBcHZrbPXo/N9A9zPnVIflAQ5qUJyxZlOEMu5wwzbod
+         89ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787523160; x=1788127960;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=//7iEXuM0dwaErrYwlxiIsbco7Xb10BSWAJJRQqIeEQ=;
+        b=XsCYCLpa1NDxZc6XKuVlV8oVjB0HsPK5sA+14xySfNXcGiAr9ZwiEnKe8aJ74Ng5o9
+         /cZlT5O0dHzegC9VzfQjcjKpERYVMIJU3Fh0216wkeiLDIu+U3nDM/A5/TCbZL8bazsj
+         oirjqHSeidGVq2UToYCwB0NNYWjVMf9yozqyAvUu5Iby/QC+f4jyl+tYwXxALnUvSb3e
+         WnjxOTxTksDJgbhUTMW47d6I0XR8pQ0z01THB6XQ7DcBlm9YaiEFtgvUNLh7MwSfaZEU
+         MLVXxU30lKwcKwx7N9sFBAnvvPA/DlHGNg6woRuqxMI2EW1bQqrtFOOS8pwcxnxP0coY
+         wGUQ==
+X-Forwarded-Encrypted: i=1; AHgh+RoowIO5NRw9vEB/sy0DqCxrPi96PuOP23ZBgmSTCdfaIyYRWqMg7gjozNTIQL5KnydZ3tc=@vger.kernel.org
+X-Gm-Message-State: AFuF++nS9TN5oEyA9rCOuVhI1w3IBdZnFnz7vbFpafAgDqUtrXr3WUoN
+	1vmVsVie3KLMpSTPkqZv+eFWCTlKlty8PwtlfjVUfqgwavbfG2i+Tp/q9sEYx1BLBUU=
+X-Gm-Gg: AR+sD11l7DBNFWXEIcksC+eCyoI9sCnMzXbPgr0qoQbfOK5d1dr7Ys9WNDe2MCBsCpP
+	mPk1sAFs55CzZER1rL+TzGeN0HoR/LYmlxeOQIDPaDhp3rlDRAiU7vb3mmJzjJ0YkwbVBU8jy9E
+	RRN2+jlzDjXYUhlRglCkuxJitx0Aec/R77f8mLbJVehMzaHyPGsWaSEP46tg0ywWv5qj2cBgIOD
+	dn7quXjdXez7tuzmkRDR4npcUypsOyoJeHitE8uvYu9h6HMmwxEG/jRXJx9p8Y7nbO/a5fSXg7I
+	kkbaDh6P4dBh1ovM4NXBZJ3/7tawzRvpWjpSa2aeSApQvtsFTDTYL5tMcc9J2PgUBfci3wwAIMy
+	h8xnZr00g2if7dp3+CO1zKhFhx1HpuuF0cfXP/AyhB7kkWn1Uv73iO/CDeoF/KlQr1pBJgQG6/s
+	KUkFpECepk02x0EoUJyTC7rx+h7ZUnrHmAMDJtesrjAuE2S39LdzZM6JHiXXuhIBPuI6gVn1qbV
+	KBF
+X-Received: by 2002:a05:6402:505b:b0:69c:811f:8f5 with SMTP id 4fb4d7f45d1cf-6a42f1b9325mr25356134a12.6.1787523160405;
+        Sun, 23 Aug 2026 15:12:40 -0700 (PDT)
+Received: from localhost ([2a02:8071:56d1:2de0:1d24:d58d:2b65:c291])
+        by smtp.gmail.com with UTF8SMTPSA id 4fb4d7f45d1cf-6a59e00108asm7547158a12.2.2026.08.23.15.12.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Aug 2026 15:12:39 -0700 (PDT)
+Date: Mon, 24 Aug 2026 00:12:38 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Mauricio Faria de Oliveira <mfo@igalia.com>
+Cc: Kees Cook <kees@kernel.org>, Joel Granados <joel.granados@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	kernel-dev@igalia.com, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	fsverity@lists.linux.dev, keyrings@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-wpan@vger.kernel.org, lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org, 
+	coreteam@netfilter.org, linux-sctp@vger.kernel.org, linux-rdma@vger.kernel.org, 
+	linux-s390@vger.kernel.org, bridge@lists.linux.dev, mptcp@lists.linux.dev, 
+	rds-devel@oss.oracle.com, virtualization@lists.linux.dev
+Subject: Re: [PATCH RFC v3 03/13] sysctl, mod_devicetable: add macro
+ MODULE_SYSCTL_TABLE
+Message-ID: <aotteDcc588iwC6g@monoceros>
+References: <20260819-sysctl-module-aliases-v3-0-aab90569365d@igalia.com>
+ <20260819-sysctl-module-aliases-v3-3-aab90569365d@igalia.com>
+ <aomlfGJM61qZKxx2@monoceros>
+ <4e3eaf1d3419e808be046035f114bf6c@igalia.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <82290fa17a3ae684d551ef0843c5022472b2422b3e230313bac3b1d2c65fc63f@mail.kernel.org>
-In-Reply-To: <20260823203944.2084994-2-Jeremy.Jean@oss.cyber.gouv.fr>
-References: <20260823203944.2084994-2-Jeremy.Jean@oss.cyber.gouv.fr>
-Subject: Re: [PATCH] bpf, x86: Sign-extend narrow signed kfunc returns
-From: bot+bpf-ci@kernel.org
-To: Jeremy.Jean@oss.cyber.gouv.fr,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,Jeremy.Jean@oss.cyber.gouv.fr,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sun, 23 Aug 2026 21:29:21 +0000 (UTC)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="6dsww6grbwx7uy7i"
+Content-Disposition: inline
+In-Reply-To: <4e3eaf1d3419e808be046035f114bf6c@igalia.com>
 
---===============7098532397741696681==
-Content-Type: text/plain; charset="us-ascii"
+
+--6dsww6grbwx7uy7i
+Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH RFC v3 03/13] sysctl, mod_devicetable: add macro
+ MODULE_SYSCTL_TABLE
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index 48429fae0641..93b9e36df1d2 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -1721,6 +1721,23 @@ static int emit_kfunc_arena_args(struct bpf_prog *bpf_prog,
->  	return prog - start;
->  }
->
-> +static int emit_kfunc_return(const struct bpf_prog *bpf_prog,
-> +			     const struct bpf_insn *insn, u8 **pprog)
-> +{
-> +	const struct btf_func_model *fm;
-> +
-> +	fm = bpf_jit_find_kfunc_model(bpf_prog, insn);
-> +	if (!fm)
-> +		return -EINVAL;
-> +	if (!(fm->ret_flags & BTF_FMODEL_SIGNED_ARG) || fm->ret_size == 8)
-> +		return 0;
-> +	if (fm->ret_size != 1 && fm->ret_size != 2 && fm->ret_size != 4)
-                    ^^^^
+Hello Mauricio,
 
-Does this reject supported kfunc return sizes?  The early-out skips only
-fm->ret_size == 8, so a signed return of size 16 falls through to this
-check and triggers -EINVAL.
+On Sat, Aug 22, 2026 at 01:57:24PM -0300, Mauricio Faria de Oliveira wrote:
+> On 2026-08-22 10:41, Uwe Kleine-K=F6nig wrote:
+> > On Wed, Aug 19, 2026 at 03:16:16PM -0300, Mauricio Faria de Oliveira wr=
+ote:
+> >> The MODULE_SYSCTL_TABLE macro emits a struct module_sysctl_table varia=
+ble
+> >> with pointers to a sysctl table's path and entries, and table/entry si=
+zes.
+> >=20
+> > That new struct doesn't seem to contain any pointer?
+>=20
+> The struct module_sysctl_table fields .path and .table are pointers,
+> although with kernel_ulong_t type so that the same 32/64-bit size is
+> used in file2alias.c based on KERNEL_ELFCLASS (and not on the host,
+> which might differ with CROSS_COMPILE).
 
-Size 16 is a valid kfunc return size:
+Cross compilation isn't an issue for the already existing device id
+structures; many of them also contain pointers.
+(While modpost doesn't use the pointers, the size of the structures must
+be known to correctly interpret the arrays.)
+Also sizeof(long) differs between architectures and I can compile for
+arm(32) just fine on amd64.
 
-kernel/bpf/btf.c:__get_type_size() returns t->size for any
-btf_type_is_int(), and btf_distill_func_proto() only rejects ret > 16, so
-fm->ret_size legitimately reaches 16.
+Additionally there is hardware out there that has sizeof(void *) =3D 16
+but sizeof(long) =3D 8. Up until recently I worked on mainlining that (and
+it has business reasons only I stopped, so I guess and hope I will
+continue at some point in the future). See
+https://lwn.net/Articles/1037974/ for some details if you're interested.
 
-kernel/bpf/btf.c:__get_type_fmodel_flags() sets BTF_FMODEL_SIGNED_ARG for
-every BTF_KIND_INT carrying BTF_INT_SIGNED. __int128 is encoded exactly
-that way (BTF_KIND_INT, size 16, BTF_INT_SIGNED), so both the SIGNED flag
-and ret_size 16 are set together.
+I would be great if your series didn't introduce a new obstacle for
+that.
 
-do_jit() already handles the wide case just below this call site:
+> >> That symbol will be handled by file2alias.c (modpost) with the changes=
+ in
+> >> mod_devicetable.h and devicetable-offsets.c.
+> >>=20
+> >> The option macros MODULE_SYSCTL_TABLE_{DISABLE,UNIQUE_ID} can be used =
+on
+> >> a per-file basis to disable the macro and change the symbol name patte=
+rn.
+> >>=20
+> >> Signed-off-by: Mauricio Faria de Oliveira <mfo@igalia.com>
+> >> ---
+> >>  include/linux/mod_devicetable.h   |  7 +++++++
+> >>  include/linux/sysctl.h            | 42 ++++++++++++++++++++++++++++++=
++++++++++
+> >>  scripts/mod/devicetable-offsets.c |  6 ++++++
+> >>  3 files changed, 55 insertions(+)
+> >=20
+> > Please put the new struct in a separate header. Apart from not being
+> > about a device table, I'm currently work on removing
+> > <linux/mod_devicetable.h>. See commit
+> > ad428f5811bd7fb3d91fa002174de533f9da94d7 for more details.
+>=20
+> Sure; I looked at that earlier (thanks for the instructive commit
+> message, by the way) and found the new struct to be similar to "struct
+> cpu_feature isn't really a device_id struct" (not moved), but apparently
+> missed the trailing "fow now", which is clearer now. Fixed for v4.
 
-	if (fm && fm->ret_size > 8)
-		emit_mov_reg(&prog, true, BPF_REG_2, BPF_REG_3);
+Yeah, I didn't move that because it was an outlier in the header as it's
+not a device id. IMHO it should go to something like
+include/linux/cpu_feature.h.
 
-Concrete in-tree instance at
-tools/testing/selftests/bpf/test_kmods/bpf_testmod.c:
+Best regards
+Uwe
 
-#if defined(__x86_64__) || defined(__aarch64__)
-__bpf_kfunc __int128 bpf_kfunc_call_test_i128(u64 a, u64 b)
+--6dsww6grbwx7uy7i
+Content-Type: application/pgp-signature; name="signature.asc"
 
-exercised by tools/testing/selftests/bpf/progs/verifier_aggregate_ret.c
-(__arch_x86_64 __arch_arm64 __load_if_JITed() __success __retval(0)) and
-tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c.
+-----BEGIN PGP SIGNATURE-----
 
-emit_kfunc_return() returning -EINVAL causes do_jit() to return -EINVAL.
-In bpf_int_jit_compile(), this takes the proglen <= 0 branch, which frees
-the image and clears prog->jited. On the common CONFIG_BPF_JIT_ALWAYS_ON=y
-configuration, program load fails outright instead of falling back to the
-interpreter. Any BPF program calling a kfunc with a signed 16-byte return
-stops loading on x86-64.
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmqLcFMACgkQj4D7WH0S
+/k74fgf+L2E+C5s7/Uv60MggM8SluqqYOIYVRQMrJ0YZ292Po2lSpcrxuhUuQU2B
+oXhO4fsc1HgZsK331x/O/bMuTOPLltQaKOsxLiMi24UglNQqmujyzSUFLnsr9NlL
+1xjI1icd6tMaie8k1PK7ynotnvtfYE9Fbl/52MAUgNFbTbWqnaXhNv+fzm/C72Cc
+xjp+GuDi0DimbriiFBYP3aUccUEUCgsrwh3Zwss3iQSaV2gZ3Y+jYlUBB3YlBSZQ
++m5a8ZWC4FeqCD+8NXyqc01adbOF9gkilqmoa2KsUhRY9+jPqn0pQhpfPxEl6Lf9
+/YNG96sk855Er0BHcQ1R8Pg+AcsRrg==
+=t37g
+-----END PGP SIGNATURE-----
 
-Should the first check use fm->ret_size >= 8 instead of fm->ret_size == 8
-to keep the whitelist meaningful while preserving the existing wide-return
-behaviour?
-
-> +		return -EINVAL;
-> +
-> +	emit_movsx_reg(pprog, fm->ret_size * 8, true, BPF_REG_0, BPF_REG_0);
-> +	return 0;
-> +}
-> +
->  static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *addrs, u8 *image,
->  		  u8 *rw_image, int oldproglen, struct jit_context *ctx, bool jmp_padding)
->  {
-> @@ -2664,6 +2681,11 @@ st:			insn_off = insn->off;
->  			ip += x86_call_depth_emit_accounting(&prog, func, ip);
->  			if (emit_call(&prog, func, ip))
->  				return -EINVAL;
-> +			if (src_reg == BPF_PSEUDO_KFUNC_CALL) {
-> +				err = emit_kfunc_return(bpf_prog, insn, &prog);
-> +				if (err)
-> +					return err;
-> +			}
->  			if (priv_frame_ptr)
->  				pop_r9(&prog);
->  			/*
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32665981826
---===============7098532397741696681==--
+--6dsww6grbwx7uy7i--
