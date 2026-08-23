@@ -1,113 +1,135 @@
-Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFDBE29B78F
-	for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 20:05:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787515522; cv=pass; b=rstvFHNaDQO6EDYBEDBmdDu7yEzL/V09pQC0WHRMJSzFWOilWjJIDj0pwoIHZh2A83vGaMAHxaFj4Ix1g3j7uhYmanl581N3FNw+r25UBqFd0KCL06sMLx3OIcjX7aOONSO4s/SW3UeRqIvE7XBhzp3Rrb8LR4iARbiiHol5QYo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787515522; c=relaxed/simple;
-	bh=/6BI5WubpMDqx8+ZQ3ft70NuBXZgnd1gABzZNFUcAeA=;
-	h=MIME-Version:From:In-Reply-To:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Hfu4d0SSrF8CRs5ck+vQFy1HxM8GQQsYdMJvD9I0qWRFbGCXgG7eBL3EAmmQVZ0y6WLqiBKVjC3GiCy1jtJipS/MAYElr3CbOTOEZAHcXb5HLkDQFEVnGjnfjWIDYKI/j1Xm12By9qiRkdBv9srjT6iuHCeiqpmkeme5JquDpLA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g1PALAoz; arc=pass smtp.client-ip=209.85.221.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF51F233929;
+	Sun, 23 Aug 2026 20:40:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.188.251
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787517611; cv=none; b=PjWszsvqjenHjvYzSFIhH7jlpe7KjVitQAwox5LlrRSglgq8URtyh9beq1F3bDwrONr9/A9FzGRrEHPDmArLvPls7FP5GvzZoLS1aAmOdzZfeUoZLyk79IPwv4DEztWeP6EtJLFmpw5hn61j5smEOUe4y+A22EAAXO5G7lk3p7Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787517611; c=relaxed/simple;
+	bh=inLkKLRyZxghm81mcOWQIbHaxEJw3JSxF7zuxmX0+hI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=lY6/Am60BG+dM5xZHWAvTNxmYbkE8sVLbdRDzXkv6exfTT06U4XqLdS+Og/3VUnTv8IRT1N8j7o8DJB/TJZ57rvXZu1+FRaYeKxnlh1ydFF2AbN0e8whc8I+MRCTkHxlWP4LOLRcghs0TUlNTKGGXIjILn4K7uI/sOJKGiu0hD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr; spf=pass smtp.mailfrom=oss.cyber.gouv.fr; dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b=SB2ivEmU; arc=none smtp.client-ip=51.159.188.251
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g1PALAoz"
-Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-5c5a818a3d6so2178894e0c.1
-        for <bpf@vger.kernel.org>; Sun, 23 Aug 2026 13:05:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787515519; cv=none;
-        d=google.com; s=arc-20260327;
-        b=rCOdlI7WKiOb1Mo95a0JdymTVAZZj4LC3mbC/UVGZJhnHijubH/37UAH4Nm3qB815U
-         7vyGsx2qizhhL5yaBx4A6dQP3cwfeif9Zggk9iIgto+yv3qtiCjdsoXOW2B9dk0JjeA6
-         CUX8u8WZf6vg18MgGrwcbHDllBAFByNuWoUsTUH3Jkxrza1PMKUNYQ6d9eJhFeehyLS8
-         Y5sFHFh3X8L5UTrUdVufLzCB84t+RlicTivA9P0tsvJeJ7vEkB4kF+0G85gSDoWSjPVQ
-         fw34kfZegFqzvl05jDrya1oImrd+WQcgwG6kowVG3d43lSSN5o588lSmHIR5psQSeWTr
-         29tw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:references:in-reply-to:from
-         :mime-version:dkim-signature;
-        bh=/6BI5WubpMDqx8+ZQ3ft70NuBXZgnd1gABzZNFUcAeA=;
-        fh=gfPqSG0LBBDiK0+Lwb0mRmE9tV4Cc8oUHLQ+DV1GW9I=;
-        b=QiONuCR2WTJ3VIys8mBdEj4JTY+LbZFBS0BV4toDAVwv8EJLC170mzMZ2uzKrUMr52
-         G6bmS+V+pRpd6wbAK2qCM0L6fPABONulpAjSLqR1gQPJEnHZStbHOaQlZVFudhk/Hend
-         2gIOhQ+Qb4p2aRRWLMP9xCoolvOOyvy7/PHO1zw2Qd+tNteBBW1ykPUOK7IgVNxiq+RP
-         YgnFTYuQNG5kyx1IQdPZpupxIdQ+zLX7etQfRxAmXr/FldX68a/8nNdgw7EWEwMJWtYa
-         irm+cFa8F1rP4qIl4GgVnSFdQcmvG3ZdlR+Ur4Tr16E9s/RubZN1fernL1zlXUQ+PTRn
-         2c7A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787515519; x=1788120319; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:references:in-reply-to
-         :from:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=/6BI5WubpMDqx8+ZQ3ft70NuBXZgnd1gABzZNFUcAeA=;
-        b=g1PALAoz/aV9m5TLTJ0wNVrvvpQMYdo8l8mSMFnJsYf17VYzCaHIXbs+tB1T+JgBNm
-         pf5tM0GiGz7CQeFKcrGYO+Z9g0EbduSIN/aOgiieZ2cBUDNetf0Vngz0oQPdS8luj6Lr
-         hifp/eN3xTj5keKmi+0uQJNJeHf0hghh6c3twO+BELqsTsE6epvJeRoLn5bTpBvYcY1a
-         FsakluQKfbz3oBsxa1VwnilSm/geYCfpT8rfzzEHOOY+JMfR/fQ+Bg6CJQ26YYBa2xJb
-         oCluEHxWHGSyDPJfgX3u1KE8KPKZzKAEU+/Ef4NKmDZI0MX+yuOw72ZqW5LOk+NPXgV7
-         xeRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787515519; x=1788120319;
-        h=content-type:cc:to:subject:message-id:date:references:in-reply-to
-         :from:mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=/6BI5WubpMDqx8+ZQ3ft70NuBXZgnd1gABzZNFUcAeA=;
-        b=B+y3mYot8LM3b8EodXCtaM3TC4VKgKYLlSBRqpTBdhj0cXMl2ed34wNWAzgQaz+mtT
-         OQoqiyxaCmgZ2WJjWr7ECM9f0HYH4gEWcNYNPM+AXTG0bzZDJ/uzKddEz5AhnjCJnNUU
-         CzbOjEIBwQnw1TxqkjzdvDCTeGiBw8Ens9rk30g+ArqX7PT28PLvyQb0we9I5EA5jIe1
-         RIhrniM8aox61M/8YQ1SYCiYDNUolsC6AKLS0o4I90Hs8AGZxpDXiQHM44syXrkO3ahX
-         3FASrD8caNVMIZQM2w64uT8lpuKEJRshsbg2PTudlTmCNu0mD/t2uYJL/NObeTQcLWLH
-         Fz9Q==
-X-Forwarded-Encrypted: i=1; AHgh+RoUbzla/IHQsqZm+FP9htM0lPUYHJehoJuFmoqjGPlDJaoN4QsGTg9M8ztcd7+S9wAmH/o=@vger.kernel.org
-X-Gm-Message-State: AFuF++m46k93UN8CKJwDrl9wKe3BmH7sn1SyNEk6cr1kcih+u8T3C5Ns
-	VibWD6oBgX7XFM0e/WXHsbl3cJWuGXrznVypH8+Koha2CsmgJoEdUvagTHEHUaIqyTZKlLNu2/c
-	U3JrU/eJXi1CSz+Nhe7Fp2qL81BAOcr4q1GX6
-X-Gm-Gg: AR+sD12/TQZy2Qox4C/v8+saLW5D8XbAq0GKpm8iBCifSETsDJi2ulsJxYAy9AIDPZ2
-	LkLzOJSIiwrI2EDaGj4Xjka+xzMN8jCNqClrn4qRiTworatGb5BXpDNauj6+zV6F2LSdIWGk7GV
-	edSTw04veEz6x4FiqJnqrQDqBPaVjFewJpAHeTumG6d6Sl/Qyl1PzOLdziX7FdzepajMrRaRpa6
-	CphsYhPxqSHkMBpYEEE9QNeaGz4ZE1M4BeQ0B6tB4O5pqPtataJuSE4aMBHry+XEveGm+iLSDIl
-	U+QzFSaGX7G6Dq4pVKLe6HBEW8Vz42oJeYy5Ii/mxMPDKczWDkG6fSUlKTO6MZUtf6gks2fOB7h
-	gIkXV3KtABn+kmOUf9sJqS1I7corK67lNWmtrjGakiY6BITTaH575OQrctzY=
-X-Received: by 2002:a05:6102:94d:b0:77b:2ce5:76bc with SMTP id
- ada2fe7eead31-77b2cf4bcc8mr6924268137.13.1787515519619; Sun, 23 Aug 2026
- 13:05:19 -0700 (PDT)
-Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
- Sun, 23 Aug 2026 15:05:18 -0500
-Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
- Sun, 23 Aug 2026 15:05:09 -0500
+	dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b="SB2ivEmU"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=oss.cyber.gouv.fr; s=default; h=Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=KFStYUHlDF3EUq36GFJXNcRflZtsW7zKhFe264ncgjA=; b=SB2ivEmUQ0mf/3oSZ551ofjnGs
+	oq8SJbE4rwKjsMQxIF5RoFRApNuyNlCPAoYxk1RySi942Md3IUrGPkkRJCOX9JWGwXMpDrM3QETUo
+	C1O7FJBHfrQMbbPq88g9xOQehkjOapRm1oDmQe/FlnJLba3G+gEy6zbJLnq8JlfTYc41DnNsjhrfN
+	9UJ3/sFmg23hi1ztSOvLN/x9W/ICFnoWEACE+j3v7Rmvei3+FIzb3uQ1kigQHd+XtqD+L0uTnT6X8
+	19SY64dqu7yWquXq3jpulaP4IYJifx9venM+cdQQcTkB1H8j01VY9XGaXpztAXVgJrJ5lCrmwp7Y+
+	1vWNEC7w==;
+Received: from [151.115.150.205] (port=39244 helo=gepetto..)
+	by pf-012.whm.fr-par.scw.cloud with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.99.5)
+	(envelope-from <Jeremy.Jean@oss.cyber.gouv.fr>)
+	id 1wyEz9-00000006zla-49BU;
+	Sun, 23 Aug 2026 22:40:08 +0200
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	=?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
+Subject: [PATCH] bpf, x86: Sign-extend narrow signed kfunc returns
+Date: Sun, 23 Aug 2026 20:39:45 +0000
+Message-ID: <20260823203944.2084994-2-Jeremy.Jean@oss.cyber.gouv.fr>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Seunghyeon Lee <hyeon3125@gmail.com>
-In-Reply-To: <CACvzRyD2ScyBt-6eS2FoWPRN5o1ZK-4RYruKY0k7QTSuohzbzA@mail.gmail.com>
-References: <178004391665.3522.4865582628003357086@gmail.com>
- <DIVM9YXYJV5N.2TEM951JWKD95@gmail.com> <CACvzRyD2ScyBt-6eS2FoWPRN5o1ZK-4RYruKY0k7QTSuohzbzA@mail.gmail.com>
-Date: Sun, 23 Aug 2026 15:05:18 -0500
-X-Gm-Features: AcwNN1VVzOLXmYUMTZaDhf53TltwgqgNHoMGCRjqFXI5xAW8B6dzhkStrde48yU
-Message-ID: <CACvzRyBgKYf+r+hFUOi8z8EebOHzXMXGVRTnRw1kNJ+QiB5BUA@mail.gmail.com>
-Subject: Re: [PATCH RFC] bpf: add DAG fast-path in verifier to skip redundant
- state pruning
-To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Eduard Zingerman <eddyz87@gmail.com>
-Cc: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
+X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: jeremy.jean@oss.cyber.gouv.fr
+X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: jeremy.jean@oss.cyber.gouv.fr
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 
-Alexei, Daniel, Eduard,
+bpf_res_spin_lock() returns a 32-bit int. On failure, the verifier
+models R0 as a signed 64-bit value in [-MAX_ERRNO, -1].
 
-A brief ping on the follow-up below. I may have missed newer work: has
-the transfer + join prototype been posted somewhere public, and would
-the tnum x cnum Kani model be useful to compare against it?
+On x86-64, returning -EDEADLK writes 0xffffffdd to EAX and clears the
+upper half of RAX. Since the JIT leaves the native return value as-is,
+BPF sees 0x00000000ffffffdd instead of the sign-extended
+0xffffffffffffffdd. A 64-bit signed comparison therefore treats the
+value as positive, while the verifier treats it as -35.
 
-A one-line pointer, or "already covered / not useful", would be enough
-for me to decide whether to continue or stop here.
+As a result, a signed comparison against zero can take one path during
+verification and another at run time. With rqspinlock aliases, this can
+lead to unmatched bpf_res_spin_unlock() calls, corrupting the per-CPU
+rqspinlock state and unbalancing the preemption count.
 
-Thanks,
-Seunghyeon
+Use the kfunc's BTF model to sign-extend signed 8-, 16-, and 32-bit
+returns into R0 after the native call.
+
+Fixes: 0de2046137f9 ("bpf: Implement verifier support for rqspinlock")
+Assisted-by: Codex:gpt-5
+Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
+---
+ arch/x86/net/bpf_jit_comp.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 1a9fb530adc3..713ac70613ff 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -1726,6 +1726,23 @@ static int emit_kfunc_arena_args(struct bpf_prog *bpf_prog,
+ 	return prog - start;
+ }
+ 
++static int emit_kfunc_return(const struct bpf_prog *bpf_prog,
++			     const struct bpf_insn *insn, u8 **pprog)
++{
++	const struct btf_func_model *fm;
++
++	fm = bpf_jit_find_kfunc_model(bpf_prog, insn);
++	if (!fm)
++		return -EINVAL;
++	if (!(fm->ret_flags & BTF_FMODEL_SIGNED_ARG) || fm->ret_size == 8)
++		return 0;
++	if (fm->ret_size != 1 && fm->ret_size != 2 && fm->ret_size != 4)
++		return -EINVAL;
++
++	emit_movsx_reg(pprog, fm->ret_size * 8, true, BPF_REG_0, BPF_REG_0);
++	return 0;
++}
++
+ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 		  u8 *rw_image, int oldproglen, struct jit_context *ctx, bool jmp_padding)
+ {
+@@ -2664,6 +2681,11 @@ st:			insn_off = insn->off;
+ 			ip += x86_call_depth_emit_accounting(&prog, func, ip);
+ 			if (emit_call(&prog, func, ip))
+ 				return -EINVAL;
++			if (src_reg == BPF_PSEUDO_KFUNC_CALL) {
++				err = emit_kfunc_return(bpf_prog, insn, &prog);
++				if (err)
++					return err;
++			}
+ 			if (priv_frame_ptr)
+ 				pop_r9(&prog);
+ 			break;
+-- 
+2.47.3
+
