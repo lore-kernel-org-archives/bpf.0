@@ -1,135 +1,192 @@
-Received: from alln-iport-8.cisco.com (alln-iport-8.cisco.com [173.37.142.95])
+Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012038.outbound.protection.outlook.com [52.101.53.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C97D43846C;
-	Mon, 24 Aug 2026 14:09:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.37.142.95
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787580596; cv=none; b=LeIG2vyPku8CwZhd/gfvaYR2qpq9J41LicG9SN8skJAlfVr9sLsnVUD1JMbUOH/Sva00kJQmUwnF9mcRu0zDG3JUk3xWQ2xGkJFnRP8WKp7nkZe1g6ALkoZiMFwLFrS20bOj4rIPo54ul4RgeIWYhmnVej5LdpzujVf76a+oVX4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787580596; c=relaxed/simple;
-	bh=EWk4hyPG7+FOgPwNlMRsuGfg5oxxmX/Xb9vd6xeiMSk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HgGx+ysnGMuy/rgvRRRoAxgm6C3Mzyakr1J5LXGVZb6K7o9wm0PdPztz/4rNXKrzRvqzI+cHKT2WAP9wqDHDBelIfhrwNsHrga+inkgxZtAD2cdiw+aKnkSPnivV3LK+vuIHkSyiDNmMwwp1tyh80T11UEn3CISxxTMhHgHHztA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (2048-bit key) header.d=cisco.com header.i=@cisco.com header.b=CTvRWbFI; arc=none smtp.client-ip=173.37.142.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cisco.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A4E041DDF0;
+	Mon, 24 Aug 2026 14:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.38
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787580733; cv=fail; b=EwR40PH69rljqkCn9p4b68u417HM+/DBsyGcaEqMzXb+31sGmIrKy7nKXTYzvO75E2MoTqC7dwYHMYTd5T9tb8VVmVPA70UaGBfoBrEnEGWOWT6izVhRxQc4E7keByvbNBug0U9hnt8PexcI9iAWmKUFvzvaWErdHGeAiZtmb3Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787580733; c=relaxed/simple;
+	bh=SMVuzGvBHpravNfostXCv5x4PW0r+Q9fAlvOm9YMlGI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=YJV1T1nZt7KsIl21DeqLPa6A64gQqRsMP3xmvSq6Ut83PMj7uCdBqcoH+56TaCGk9IRc4h94P3gwe07L3KhlYs1rFWimTj7f8blNpTyPyiprzN1t6DLS+xMV6B88YHpAZRgbpkjctgZ1PK8tzkNx+s/j4cXKaDb83Afa06CVKn0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=AxjZkSoH; arc=fail smtp.client-ip=52.101.53.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cisco.com header.i=@cisco.com header.b="CTvRWbFI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=cisco.com; i=@cisco.com; l=771; q=dns/txt;
-  s=iport01; t=1787580594; x=1788790194;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=EWk4hyPG7+FOgPwNlMRsuGfg5oxxmX/Xb9vd6xeiMSk=;
-  b=CTvRWbFIGaubNPrCVLp+cFTlhsnlT0Zv7Mk+e5t/pCmswJgSPuMZvTnc
-   ZunkFzYtb08fkinKPCLjusz/UmgLCpiyLpGfujlyxEbxuRhGQcV4ZFvnc
-   RDuNkleDTadoJqIsO1YCDi4bEmJKs6fBdE6US5fOhRBAB9avSEAC5VL9D
-   OALOuQ4K1L7o1RyXXT4tiGfKTnTiXP/E008tgZbRNH7evlqU8xkVjsj0x
-   Zt5XIFs5EVrf+3UoUxzAKwPiBs02TjJJl7On3cT/K6Tu0Dwg7R0GXxnnq
-   2+wa98qORkhSbXZeq+djCPPO1dwdHXzFjbEX+SrSUr0oAf21AYGuwDpq3
-   A==;
-X-CSE-ConnectionGUID: Ch0jTdYOQZmVofPRK3MPUg==
-X-CSE-MsgGUID: Dj2cqU4SQLGstu02LBJnEQ==
-X-IPAS-Result: =?us-ascii?q?A0BnBAA1T4xq/4sQJK1aglmEKUOUcoIhnh6Bfg8BAQEPU?=
- =?us-ascii?q?QQBAYUFAo1sAiY2Bw4BAgQDAgMBAQEBAQEBAQEBAQsBAQUBAQECAQcFgQ4Th?=
- =?us-ascii?q?lyGWwIBAzIBRhALDjhWBoMVgnUDvnaCLIEB3keBchWBOI1hdhuEYScbgUlEh?=
- =?us-ascii?q?A8xPosIBIIigQyTVUgKgRQDWSwBVRMNCgsHBYEjQwM1EioVIw88BS0dgSMhH?=
- =?us-ascii?q?RcXdhsGBRIgKkFEFQ4DPoEZQQKBdT8jGTZ8gQlegSspYAECEBdGLhWCBwKCW?=
- =?us-ascii?q?oEnXgIBSUMOB0ciCxgNSBEsNxQZBD5uB5FBBgExSlaBAStvllywI4QooVwaM?=
- =?us-ascii?q?5dfkw2ZCKlDgW4BNYFZMxoIGxWDI1IZD45fz19FbwEBBwIHDgMLgWiRfgEB?=
-IronPort-Data: A9a23:W4a3yaNwgCZaqh7vrR1vl8FynXyQoLVcMsEvi/4bfWQNrUoqgzZVy
- zdOD2GGa/ffYWqgf493bY63ph9Q7JCHz9JkSXM5pCpnJ55oRWUpJjg4wmPYZX76whjrFRo/h
- ykmQoCeaphyFTmE+kvF3oHJ9RFUzbuPSqf3FNnKMyVwQR4MYCo6gHqPocZh6mJTqYb/WV7lV
- e/a+ZWFZgf1gWIsawr41orawP9RlKWq0N8nlgRWicBj5Df2i3QTBZQDEqC9R1OQapVUBOOzW
- 9HYx7i/+G7Dlz91Yj9yuu+mGqGiaue60Tmm0hK6aYD76vRxjnBaPpIACRYpQRw/ZwNlMDxG4
- I4lWZSYEW/FN0BX8QgXe0Ew/ypWZcWq9FJbSJSymZT78qHIT5fj695uVEMKMbw/w9RyP2ZAz
- cY7cxU1Ux/W0opawJrjIgVtrs0nKM+uOMYUvWttiGmDS/0nWpvEBa7N4Le03h9p2ZsIRqiYP
- pRfMGE+BPjDS0Un1lM/Co45mOOlmlH0ciZTrxSeoq9fD237nFUhj+C9boeIEjCMbelXxE2Bm
- z79xkDWGQ0HbIa74xiD30v504cjmgu+Aur+DoaQ+vd0jVi7ymUNBRgSUlWn5/+0liaWQN5RA
- 0IT/yslraUsskmmJvH/WB2+5nCNpQIVUddWH8U17QiMzuzf5APxLmUIUztIetE6nMAxQjMu2
- xmCmNaBLTBmtryYTVqc8biZpCm4PjhTK2IeDQcNVhct4NT5pow3yBXVQb5LEKeqjfX2FCv2z
- jTMqzIx750QkMQC/6a251bKh3SrvJehZgcz6h/aQSGj4x91aZCNY5Gu7x7Q7Z5oIJqQUkSFs
- XEsndaf4OEHS5qKkUSlROgKGquuz/CbMTHdiBhkGJxJ3zGn/3mofahW/jByJU4vOcEBERfya
- ULetQZ54oFSMHqjK6RwZuqZF80wzLH8PdL7V/zVZ5xFZZ0ZXBeO9ixoZGaK0mztmVRqmqY6U
- b+RaciEE3kXE+JkwSCwSuNb1qUkrgg6xGXOVdX4wg6h3L62enGYU/EGPUGIY+R/67mLyC3R8
- tBCJ46QxxBWePPxbzOR8oMJK10Oa38hCvjercFLeuOdChRpFXtnCPLLx74lPYt/kMx9jfvB9
- HWwclFXxUC5hnDdLwiOLHd5Z9vSsY1XpHY/O2koeF2vwXVmOdzp56YEfJxxdr4inAB+8cNJo
- zA+U53oKpxypv7volzxsbGVQFReSSmW
-IronPort-HdrOrdr: A9a23:7hitjKumPSL4Rgy0f8kWD2rZ7skDVtV00zEX/kB9WHVpmwKj+/
- xG+85rsSMc5wx+ZJhNo7q90ey7MBDhHP1OkOws1NWZPTUO0VHAROpfBMnZsl/d8kbFmdK1u5
- 0MT0EHMr3NJGk/q9rm6w+lFNtl6tyG/Ke0wdr69R5WPGZXg2UK1XYBNu5deXcGIjV7OQ==
-X-Talos-CUID: =?us-ascii?q?9a23=3Azh53mmiI/0HrjrqmMJZp2NW90zJuWX2FzkvcEmi?=
- =?us-ascii?q?BO2NXT7Otc3zL3ZtZnJ87?=
-X-Talos-MUID: =?us-ascii?q?9a23=3AaPAE6g2mWk1KVrU7mZaQmuEiaTUjz6b0A1kwza4?=
- =?us-ascii?q?/n+afKTEoYRO3rjKae9py?=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-AV: E=Sophos;i="6.25,240,1779148800"; 
-   d="scan'208";a="818708655"
-Received: from alln-l-core-02.cisco.com ([173.36.16.139])
-  by alln-iport-8.cisco.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384; 24 Aug 2026 14:09:46 +0000
-Received: from localhost (unknown [10.228.224.45])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by alln-l-core-02.cisco.com (Postfix) with ESMTPS id B3FF51800015B;
-	Mon, 24 Aug 2026 14:09:45 +0000 (GMT)
-From: Jerome Tollet <jtollet@cisco.com>
-To: Dragos Tatulea <dtatulea@nvidia.com>
-Cc: Jerome Tollet <jtollet@cisco.com>,
-	netdev@vger.kernel.org,
-	saeedm@nvidia.com,
-	tariqt@nvidia.com,
-	mbloch@nvidia.com,
-	leonro@nvidia.com,
-	daniel@iogearbox.net,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	ast@kernel.org,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	linux-rdma@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH net v3 2/2] net/mlx5e: Prevent stale XSK buffer release on MPWQE refill retry
-Date: Mon, 24 Aug 2026 16:09:43 +0200
-Message-ID: <20260824140943.20665-1-jtollet@cisco.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <b4abc8e4-aa9e-4e92-97b8-c6a661014c16@nvidia.com>
-References: <20260820151558.11015-1-jtollet@cisco.com> <cover.1787347981.git.jtollet@cisco.com> <675ce8a404cfe305e788a8e273b4091c9a90f867.1787347981.git.jtollet@cisco.com> <b4abc8e4-aa9e-4e92-97b8-c6a661014c16@nvidia.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="AxjZkSoH"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=tgMMtr5zL1zri44jdtZTe/Bs12VCS3vSHGCl+yTskJhw6gi39Put8ZnesMg2CUnvEW2IA47QrccaAiuvpgyxLgrBvFCMzBq6kt/PhwR4ttBe0caCSkin3KLGdxledcaSuhc4y2mU/KVZ/0Zm0WNdmmF91G/X3mEJjnW+53OcWm1U8t9u1WL3rOalTodrqPz7GYjizex9mLj9goYY3+JVAGzeN+i6TQ4h3sML219CStmwHFmRoXHy17jrCFpebNlFK6rO1gBwnhg5uy+D9UdFXZ4s2Mg9ZtmAtxPKJo1UOwFt9/aRhnsxXyVaS9DhK4T1Vnb22GmslBy6/vsesJWrpg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=k+tmGtowXpUi0h9uC/zshG9rzdXVg/YIKOUIy+U3jfI=;
+ b=CcaZWiVb+ElzBeAapN1RIq9n01wF3sqesxEklQ4BqOlh4MFS/7E3KM4v9ojYq0igQ3YpqdmkHDpIoJ9wRduUQygKyl0tCOt6afRf4CTQqFj+Bg7IKJbD2bHacTkMl4BYtETFKLfg/tuhEzhWEIJVWf5hHlHUGZX4Z4l99B1pIRAzEOyWrKG7PCLJxP7cVpJn0S8L0hRMs4iUMGuDWiahxVhOKQtXcgyI37JFlyxdtyEM3vsW4geB5pLASGDkfKd5lQBH+bwc+tc4hN4TtN8PGtZMhwzyUIw2Ds1OkMs6V1MZtDLPTZD+LY7tWj+p15kAb9c2rlhB7vOvOHoWpgyxRg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k+tmGtowXpUi0h9uC/zshG9rzdXVg/YIKOUIy+U3jfI=;
+ b=AxjZkSoH2VCMKbsPbiHYixI3XJ0OomHBr4syGZfBcO96ClviUQ0y1DTshZ7bI8HK03/p6IvDRI3GnnsfwJBfnsf3T2lbfGb7PlE1Dyyhh2GdLbcT38DVJNOSIy264uJg677G8yFMCDPCKLzy20Eb3xIpRYjZCibosP5YQFnfYU75uiu70UpBg8Wu/o5suQnrFraNKUucVOI+abCmQej0plr39KyolRZckA3lRRzGtp3h1nfOLcRC5TRIB76A3HE+I/++dH7e0xs/kRidBmX8FJX4O7L32i0dUish9S5DoxDQD4/6Td7JolKSP7MBY+c/fB7tpG9K+HzW6lNVlT3i7Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM6PR12MB4827.namprd12.prod.outlook.com (2603:10b6:5:1d6::14)
+ by CH3PR12MB8354.namprd12.prod.outlook.com (2603:10b6:610:12f::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.12; Mon, 24 Aug
+ 2026 14:11:52 +0000
+Received: from DM6PR12MB4827.namprd12.prod.outlook.com
+ ([fe80::6261:3040:864b:159c]) by DM6PR12MB4827.namprd12.prod.outlook.com
+ ([fe80::6261:3040:864b:159c%5]) with mapi id 15.21.0339.012; Mon, 24 Aug 2026
+ 14:11:51 +0000
+Date: Mon, 24 Aug 2026 16:11:43 +0200
+From: Andrea Righi <arighi@nvidia.com>
+To: Tao Cui <cui.tao@linux.dev>
+Cc: tj@kernel.org, void@manifault.com, changwoo@igalia.com,
+	suzhidao@xiaomi.com, sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	Tao Cui <cuitao@kylinos.cn>
+Subject: Re: [PATCH] sched_ext: pass the initial cpu.idle state in
+ scx_cgroup_init_args
+Message-ID: <aoxRHw-Q5FCUX6zo@gpd4>
+References: <20260824133954.561956-1-cui.tao@linux.dev>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260824133954.561956-1-cui.tao@linux.dev>
+X-ClientProxiedBy: MI3PEPF0000753C.ITAP293.PROD.OUTLOOK.COM
+ (2603:10a6:298:1::4d8) To DM6PR12MB4827.namprd12.prod.outlook.com
+ (2603:10b6:5:1d6::14)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Outbound-Client-TLS: ANONYMOUS;unknown [10.228.224.45];TLSv1.3;TLS_AES_256_GCM_SHA384;256
-X-Outbound-SMTP-Client: 10.228.224.45, [10.228.224.45]
-X-Outbound-Node: alln-l-core-02.cisco.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4827:EE_|CH3PR12MB8354:EE_
+X-MS-Office365-Filtering-Correlation-Id: 34f3086e-f40e-4da7-cdde-08df01e9a4b3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|1800799024|23010399003|366016|3023799007|10067099003|56012099006|11063799006|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	iEkV/aJPJUFP3VZDteQUwT4mPRqGpIiVf2godLTw+oYI1wksyOZC0ocCUrxnIpRz3k6e+0Ay8/J3tfjQmyipT+2XJANl/jTSvpbZNrliaJZK+RQwEGVEPjiZW8H7dihqJS/iXDcqXc+Dey0UssHc4q/MyauWbk/I/QxxrSeouj6vSpLlsoIsdWewbaFnpteCKXv5r0oablh9mZup1qzbVHpMVC0Xj3b7+CgtdGVT76BJocWWAXXY3k8LJtu+4VkIlfg6oyLANZUdCGaU8PTTM6bG4MX6lsGDH6AV4B1U3DKNEuPutz/gf3B/r5ck9E4XZPC9KpfSgtOATU0rIaO9kMWoGu483/ZeKdFjOzi1IYxcQawnqpPsQkhHvSWEwsD9Zkyn221BiG4hQIICPZuf1+dgGp1S2FAEcfE1ZiPaECgoJ/KApRQWdALzGmaRMO63f6r8ZNcyGVetI6LWdPQgUdEeEmtjK8EFn5frt5mcm6B16Bf8XFBF4obqdBsoz7xNX61VhZhj8pt9lQLici5/AhqvCGa6ZjpPT4+0GYpL9GZoyslAzz7TiIfm8qB750i9Ht4Ai3jNm7i8q5qCqZG5kUIMpLmAZfK8OGoIdyuQjBw5tqXhNuJLogDqHOve6ZXOzlL/ECt2CChpiLtSCmxxAuTgnEG2s6p5KEqjlt4+k8k=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4827.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(23010399003)(366016)(3023799007)(10067099003)(56012099006)(11063799006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?QsFduAkPaVvq0pS1A5Dgt0vvE/NHIWik9J6ks8xmcz3YxRIZWudR16kYNqDf?=
+ =?us-ascii?Q?xFnzQZB9Umd2NIfeJmRKLbkJBKvOPKn+zTWfAWRWwbtw9i585xMrZYr55S4v?=
+ =?us-ascii?Q?pmjmIzArjQO8HJHAgzzSmlsMoneuUY4nzE14BUyla+hFMmgH8OSMyZpy7riy?=
+ =?us-ascii?Q?tASixobj4od+OCKv6wnXfEDUaZTEJCoIN7oz1pMHnIlEzHGOM8nE9iNXm0eM?=
+ =?us-ascii?Q?dR9El0sZF5Z7Oa+3hPQWOZhXXlQ2ojwBkq7cLbkEG1DqO5k4k/tmhqbHPz+6?=
+ =?us-ascii?Q?Mj9+jFwSkrv/gKsMafcO9xu6s7Km84mIfJFLrqwbQk+U8kJpNEIs9X8q9onI?=
+ =?us-ascii?Q?BqW5+RFWi6bwVrX3+Nte3t1esqMnB05FhxEztwGNLwEBxvtLp+8IWntiaP+j?=
+ =?us-ascii?Q?KMuHjet7kcCEhPf592mLtZHiWMg7pTywHf0ryvxTXZdNIoDtl2geJQ0WtLzW?=
+ =?us-ascii?Q?TDKuKZTSPOoWu7SuzGPscnJ8LZwrfRCRncILKlFLg4JZeUAheTG23uE8wEiR?=
+ =?us-ascii?Q?05xQOU2igjbcp0Pmng/N3vs54hNocgv3OCODvcJmVhEvw0F7UOdOmR8pBEYZ?=
+ =?us-ascii?Q?3O1O5YxJkxJ9dT0hQo9CltGh2qQ9D+tjsK32mh5nUQ/TQEtW3cGXppk6dYwz?=
+ =?us-ascii?Q?YAolweXfa/JfXS786rTtBXYNiIrkjDPMKYOmJzXBkbG6ohe9uIvvYnu8Ez0p?=
+ =?us-ascii?Q?FfxuFxU2xBh8WEuX4BvenN4EBCIztUPXcgop9zLD62wt+KXhgkvH5ivMoyUV?=
+ =?us-ascii?Q?E7+xo0pa+Gca+nqJ1R0EjACVIyBPoPE2SWO2A0tUc2pb+CDNAOTSOP7h1obg?=
+ =?us-ascii?Q?eGTUgrEWMbB28bsVBZY2d1BeKQaABejGXcdZ+GyeQsbG7+kJbnofLtk41DM8?=
+ =?us-ascii?Q?b+uNm2x/ZvG4T5UugmAImddYivtdmCI5eOG3STcUOZfE9xb2G5iYzLUmoMAa?=
+ =?us-ascii?Q?1Hlh5jUFKb0vuxxkwLw7DUWTTTDtVSYx/Jg9tftqpDLm6EfJIjIGcN9Pd9jP?=
+ =?us-ascii?Q?Tx0qHLqqkHt5TFu3lRNdYC4T8LLufBs2DbPpVTEY9j1DP3E3XpwIDcC8soEb?=
+ =?us-ascii?Q?qGdu5ZruC7qIr7wlXIEgOSAWCMmR3kxB2iJReajcZFRvKjLWRn8pwFAgb4tK?=
+ =?us-ascii?Q?67K2TOYb8z1oPiBEmaV+k7AIlhq0DkK4S00QJFlCVDPMVf7CEYb4sKc9xWLf?=
+ =?us-ascii?Q?RYpmqxU+OKB4sIllWUpfVHpG1+JjdM23gbF79olRtJX5MsTi7uRd/5mH950r?=
+ =?us-ascii?Q?lThGKka30XmYqvdQf395myxRBLs6RWL3JfRcpWyji5oPiQPntGj2ww0or+yG?=
+ =?us-ascii?Q?qAJmYPF92HSI+B3+5oWUs9UxApfRXQq3jafd4M8u3aHQvAWEBkHDIqAbRvnC?=
+ =?us-ascii?Q?p9y+7ninqVGi5jBXLiNu5ZUAWjPFiotETupVLvMPSVJFyC92tqSkn8oLAKKK?=
+ =?us-ascii?Q?Y0CicKziyjXQJstNrGpiQUDpEKgq30vw+NMcCyE7ld9KxobeYefmkR5apFKD?=
+ =?us-ascii?Q?cjh3+937QuHwymFrwAI9oO5GcjuXSksd4AYroVCi9Wuois+alCEcZKikNLMQ?=
+ =?us-ascii?Q?qBvCoKohreaN4OpOR8B7Y2UiGPY1+mrpu/wvQJH+Z0VaGv3rAxFj8/Z2zIKS?=
+ =?us-ascii?Q?OdUM/58bGVvLoENtsomdvAaMpeDoZTjpYzvA7nqdfOb9l8cYr/GSyXLetjth?=
+ =?us-ascii?Q?54k8XO8uSAB4d9QPu1TO0WXwpmb04vgmSC91RDgDOypcVyFOLhVVGu5M1VKT?=
+ =?us-ascii?Q?8HRSgZtDPQ=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 34f3086e-f40e-4da7-cdde-08df01e9a4b3
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4827.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2026 14:11:51.3436
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zhLUu3wp8XY1zlcLL4uR9Jc63Bo80B+H4AKmlfu2bElScXw5uv7nic97iuPw8KBoun45MMNTR7RFAEacf+JsiQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8354
 
-Hi Dragos,
+Hi Tao,
 
-Agreed, thanks. I changed the patch to set all skip_release_bitmap bits in
-the common error path of mlx5e_xsk_alloc_rx_mpwqe(), consistently with
-mlx5e_alloc_rx_mpwqe().
+On Mon, Aug 24, 2026 at 09:39:54PM +0800, Tao Cui wrote:
+> From: Tao Cui <cuitao@kylinos.cn>
+> 
+> scx_cgroup_init_args carries the initial weight and bandwidth control
+> parameters of a cgroup to ops.cgroup_init(), but not its cpu.idle
+> state. A cgroup that was already configured idle before the scheduler
+> was loaded (or before it was onlined under it) is presented as
+> non-idle, and the BPF scheduler only learns about it if cpu.idle is
+> written again later.
+> 
+> Add the idle state to scx_cgroup_init_args and fill it in both places
+> that build the args -- scx_tg_online() for cgroups created under the
+> scheduler and scx_cgroup_init() for cgroups that already exist when
+> the scheduler is loaded.
+> 
+> Verified in a VM with a probe scheduler printing the init args: a
+> cgroup configured cpu.idle=1 before loading shows idle=1 in
+> ops.cgroup_init(), the default shows 0, and later cpu.idle writes
+> still come through ops.cgroup_set_idle().
+> 
+> Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+> ---
+>  kernel/sched/ext/ext.c      | 4 +++-
+>  kernel/sched/ext/internal.h | 3 +++
+>  2 files changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
+> index b646711a45fe..a7218314dcfb 100644
+> --- a/kernel/sched/ext/ext.c
+> +++ b/kernel/sched/ext/ext.c
+> @@ -4764,7 +4764,8 @@ int scx_tg_online(struct task_group *tg)
+>  				{ .weight = tg->scx.weight,
+>  				  .bw_period_us = tg->scx.bw_period_us,
+>  				  .bw_quota_us = tg->scx.bw_quota_us,
+> -				  .bw_burst_us = tg->scx.bw_burst_us };
+> +				  .bw_burst_us = tg->scx.bw_burst_us,
+> +				  .idle = tg->scx.idle };
+>  
+>  			ret = SCX_CALL_OP_RET(sch, cgroup_init,
+>  					      NULL, tg->css.cgroup, &args);
+> @@ -5185,6 +5186,7 @@ static int scx_cgroup_init(struct scx_sched *sch)
+>  				.bw_period_us = tg->scx.bw_period_us,
+>  				.bw_quota_us = tg->scx.bw_quota_us,
+>  				.bw_burst_us = tg->scx.bw_burst_us,
+> +				.idle = tg->scx.idle,
+>  			};
+>  
+>  			ret = SCX_CALL_OP_RET(sch, cgroup_init, NULL, css->cgroup, &args);
+> diff --git a/kernel/sched/ext/internal.h b/kernel/sched/ext/internal.h
+> index 53e136a47924..aa149a9c29f7 100644
+> --- a/kernel/sched/ext/internal.h
+> +++ b/kernel/sched/ext/internal.h
+> @@ -259,6 +259,9 @@ struct scx_cgroup_init_args {
+>  	u64			bw_period_us;
+>  	u64			bw_quota_us;
+>  	u64			bw_burst_us;
+> +
+> +	/* whether the cgroup is configured idle via cpu.idle */
+> +	bool			idle;
+>  };
 
-I tested both early and partial allocation failures. With three consecutive
-failures on the same MPWQE, the original 16 XSK buffers were released only
-once. Retries observed a full bitmap, and a later successful allocation
-cleared it. The partial case allocated 8 of 16 replacement buffers before
-unwinding.
-
-I also ran a 20-second AF_XDP zero-copy striding-RQ pressure test with the
-clean patch. It exercised 1,575,262 XSK buffer allocation failures and
-reported no invalid descriptors, WQE errors, or kernel warnings.
-
-I'll send v4 with this change.
+It looks like there are two more places in kernel/sched/ext/sub.c,
+scx_cgroup_claim_subtree() and scx_cgroup_return_subtree(), they should also
+initialize idle. Otherwise the field defaults to false and an idle cgroup would
+be presented as non-idle when it's handed to a sub-scheduler.
 
 Thanks,
-Jerome
+-Andrea
