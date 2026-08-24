@@ -1,130 +1,217 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-160.mta1.migadu.com [95.215.58.160])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5750E407CF6
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 10:59:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53C494137BC
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 11:20:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.160
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787569145; cv=none; b=bXuznCzY4gxl2fFVFJp3qIx3oz3Efq8hrgYxTyObPWWr7O6KnRFWJodq/Hw5Yh8trrFaPhcUUMukP6T7AbZ5tyJq3+pPXkWD7rWTH75k7jmhFA7ixKfTReS+Ys6mWs8n/9vRuXJMzdajlRKb//jABwPcQQtbHTd0TlOuVAxXmqI=
+	t=1787570418; cv=none; b=EIR5V/c/7Nkjg1vSyXszr680ggvmnMubWE2qe14ViqS3ThBAyIxhKc1s3acqfZUKRLyomZeM/H2Whgy1GyZIORa/9MDhkJoYUzLTVb64IYBeKowqLSzdKOFhj54Bpy7WC929xet1qT9IUsfMFdN2Pclwtq4PQ4VI/iz4HOJjSBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787569145; c=relaxed/simple;
-	bh=K4UfoqWs5C+ZX8Sh/vDX4rOUMCv1oq4qPrS8+trHU08=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=UGinOsJdhLQ5qWLqJA26C7pVIse+wdhvoJvduueC1QhFYbhJAOZyOud/QlHXatVPtD5sad+u3ME6dH4RyjSA66vFHs2wPkZG1HBkwnu2sDqU0OAGGt/Ev/FMMGgQs2GaJDbm5zaoGnhVAWwPT8y3nW5bnv+LUt6kPc5xCVdb74s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kZNwTaZo; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787570418; c=relaxed/simple;
+	bh=YqtmwJj1TSTjAKuc+RN5KV+zNyJi4YEBO9daURTvoKI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jtrwfXZWFqwjFMKswF6gdK9mI/Js4rHitiLzzDN3tjqSlXaGqDbKpS9jsG/0FZr+Q27V0guy5h5UAu/Dfp2d7ZEBHWW9DkBBTUlsCZ7WqfqiFReCsnEYQlnXBhXC1hX89njrgKV7Lc7dGH6vb3m0fp3W3lzWkt3kO6ktusWX4+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cBxRjeXT; arc=none smtp.client-ip=95.215.58.160
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kZNwTaZo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A1051F000E9;
-	Mon, 24 Aug 2026 10:59:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787569144;
-	bh=cEyNuHTqx1wy0X0uBn6yc2rDvT09+OVDMETm8LbI5gA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kZNwTaZo979hfu0z5Da9ArHGS4/46aCgmS903rFXuOxEC0Eelz5GL1TpbR3Rd29R+
-	 9siYuz5+2FmafSbvyauGTeV/j8ByyItcSvavhIeo1ipLYTBnPFHALfe/LOMobW3F62
-	 RVM88ZWn5TXtCEbRpMcMFjKtKmUFyXFhhx08JSlYm2toL9TZNzP+/aqlcwqKce0oFw
-	 tOSdt0K/uLOhNDCqtGAOfa+P0hsv6BMpZVYOeTgtXCjIZE7M2ZdhK82tLd9vlF2uJ+
-	 u8zvWpsOZrgQj+EaLKyXqe4dq+ba5HzkYeIEqK03ad366Y/Yl/4TRnzDYUObPtMfH+
-	 DqUL/zB0KZhAQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] bpf: Cancel special fields on rhashtab value recycle
- instead of freeing
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Muhammad Falak R Wani" <falakreyaz@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260824103502.3154292-1-falakreyaz@gmail.com>
-References: <20260824103502.3154292-1-falakreyaz@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 24 Aug 2026 10:59:03 +0000
-Message-Id: <20260824105904.0A1051F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cBxRjeXT"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=YqtmwJj1TSTjAKuc+RN5KV+zNyJi4YEBO9daURTvoKI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787570414; v=1; x=1788175214;
+ b=cBxRjeXTr4YoFroncha9ILGDO2EQVAsiq/XLTi7JFU0fh2h2l+dISPpK41qq2aJ9ayS+SWbb
+ bBR7d6CG5pmQ3bY+IE2bxmx/rtb/1Cw9FRHCDILGTd23CG6X+mPHKGlJZsZTrngfostncwh1tz8
+ 7qbQ7fd/GKe1jfnQ9on6DEM8=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from localhost (2602:fce1:44f:115e::)
+	by smtp.migadu.com with ESMTPS id dbcc094937eb36f3;
+	Mon, 24 Aug 2026 11:20:13 +0000
+X-Mizu-Trace-ID: dbcc094937eb36f3
+X-Migadu-Flow: FLOW_OUT
+From: Lance Yang <lance.yang@linux.dev>
+To: kirill@shutemov.name
+Cc: akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	nico.pache@linux.dev,
+	baolin.wang@linux.alibaba.com,
+	baohua@kernel.org,
+	dev.jain@arm.com,
+	hughd@google.com,
+	liam@infradead.org,
+	mhocko@suse.com,
+	rppt@kernel.org,
+	ryan.roberts@arm.com,
+	shuah@kernel.org,
+	surenb@google.com,
+	usama.arif@linux.dev,
+	vbabka@kernel.org,
+	ziy@nvidia.com,
+	usama.anjum@arm.com,
+	agordeev@linux.ibm.com,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kas@kernel.org,
+	jannh@google.com,
+	willy@infradead.org,
+	pfalcato@suse.de,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Lance Yang <lance.yang@linux.dev>
+Subject: Re: [RFC PATCH 12/57] mm/collapse: allocate a destination per candidate
+Date: Mon, 24 Aug 2026 19:20:05 +0800
+Message-Id: <20260824112005.63097-1-lance.yang@linux.dev>
+X-Mailer: git-send-email 2.39.3 (Apple Git-146)
+In-Reply-To: <20260816224609.308019-13-kirill@shutemov.name>
+References: <20260816224609.308019-13-kirill@shutemov.name>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Deferring kptr destruction to the BPF memory allocator's destructo=
-r causes permanent resource leaks because the allocator routinely recycles =
-elements without invoking the destructor.
---
 
---- Patch [1]: [PATCH] bpf: Cancel special fields on rhashtab value recycle=
- instead of freeing ---
-commit 1ee647bc226bed9cb1804699aa9faf7fa9345ec2
-Author: Muhammad Falak R Wani <falakreyaz@gmail.com>
+On Sun, Aug 16, 2026 at 11:45:24PM +0100, Kiryl Shutsemau wrote:
+>From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+>
+>Fill in the allocation, which happens on both sides of the freeze.
+>
+>A destination is a folio of the candidate's order, charged to the memcg,
+>with the memcg's deferred-split list entry taken up front while sleeping
+>is still allowed: the PMD-order install would otherwise need one under
+>the pmd lock.
+>
+>collapse_alloc() does all of that for one candidate with the gfp it is
+>handed, and counts nothing when it fails: what a miss means is up to the
+>caller.
+>
+>collapse_provision() is the caller inside the window.  The sources are
+>frozen by then and a faulter on any of them is waiting, so it asks
+>without __GFP_DIRECT_RECLAIM: reclaim entered there would be paid for by
+>that faulter.
+[...]
+>+/*
+>+ * Allocate one candidate's destination with @gfp: a folio of its order, charged,
+>+ * with the memcg's deferred-split list heads in place so the install cannot need
+>+ * to allocate under the pmd lock.  Those heads cost only the first collapse in a
+>+ * memcg.
+>+ *
+>+ * A failure counts nothing and changes nothing: what a miss means is the caller's
+>+ * policy.
+>+ */
+>+static enum scan_result collapse_alloc(struct mm_struct *mm,
+>+				       struct collapse_control *cc,
+>+				       struct collapse_candidate *cand,
+>+				       gfp_t gfp)
+>+{
+>+	struct folio *folio;
+>+
+>+	folio = __folio_alloc(gfp, cand->order, collapse_find_target_node(cc),
+>+			      &cc->alloc_nmask);
+>+	if (!folio)
+>+		return SCAN_ALLOC_HUGE_PAGE_FAIL;
+>+
+>+	if (unlikely(mem_cgroup_charge(folio, mm, gfp)) ||
+>+	    folio_memcg_alloc_deferred(folio)) {
 
-bpf: Cancel special fields on rhashtab value recycle instead of freeing
+One small nit: folio_memcg_alloc_deferred() passes GFP_KERNEL to the
+deferred_split_lru allocation.
 
-This commit alters the update and delete paths for resizable hashtables
-(BPF_MAP_TYPE_RHASH) to avoid fully freeing special fields like referenced
-kptrs. Instead, it uses bpf_obj_cancel_fields() so that these operations are
-safe to execute in NMI context, deferring kptr destruction to the allocator=
-'s
-destructor.
+At the full series tip, collapse_round() invokes it after
+collapse_freeze() and before collapse_putback(), while faults on the
+source migration entries wait:
 
-Fixes: 6905f8601298e ("bpf: Allow special fields in resizable hashtab")
+static void collapse_round(struct mm_struct *mm, unsigned long pmd_addr,
+			   struct collapse_control *cc)
+{
+...
+	collapse_freeze(vma, cc, pmd);
+	collapse_provision(mm, cc);
+...
+	collapse_putback(vma, cc);
+...
+}
 
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index d8db1cebc1936..5f521d02784f3 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
+collapse_provision() strips direct reclaim before calling
+collapse_alloc():
 
-[ ... ]
+static void collapse_provision(struct mm_struct *mm,
+			       struct collapse_control *cc)
+{
+	const gfp_t gfp = cc->policy.gfp & ~__GFP_DIRECT_RECLAIM;
+...
+		result = collapse_alloc(mm, cc, cand, gfp);
+...
+}
 
-> @@ -2964,8 +2954,12 @@ static int rhtab_delete_elem(struct bpf_rhtab *rht=
-ab, struct rhtab_elem *elem, v
->  		rhtab_read_elem_value(&rhtab->map, copy, elem, flags);
->  		check_and_init_map_value(&rhtab->map, copy);
->  	}
-> -	/* Release internal structs: kptr, bpf_timer, task_work, wq */
-> -	rhtab_check_and_free_fields(rhtab, elem);
-> +	/*
-> +	 * Cancel timer, workqueue, and task_work fields before deferring the
-> +	 * element free. Referenced kptr destruction is not NMI-safe, so leave
-> +	 * it for rhtab_mem_dtor() after the RCU grace periods.
-> +	 */
-> +	bpf_obj_cancel_fields(&rhtab->map, rhtab_elem_value(elem, rhtab->map.ke=
-y_size));
->  	bpf_mem_cache_free_rcu(&rhtab->ma, elem);
+collapse_alloc() uses that gfp for the charge, then calls
+folio_memcg_alloc_deferred():
 
-[Severity: High]
-Does this code leak the referenced kptr fields if the BPF memory allocator
-recycles the element?
-
-When rhtab_delete_elem() defers the element free to bpf_mem_cache_free_rcu()
-without freeing the kptr, the allocator might recycle the element directly=
-=20
-to satisfy a new allocation request without ever calling the registered
-destructor.
-
-For example, looking at alloc_bulk() in kernel/bpf/memalloc.c:
-
-	for (i =3D 0; i < cnt; i++) {
-		obj =3D llist_del_first(&c->free_by_rcu_ttrace);
-		if (!obj)
-			break;
-		add_obj_to_free_list(c, obj);
+static enum scan_result collapse_alloc(struct mm_struct *mm,
+				       struct collapse_control *cc,
+				       struct collapse_candidate *cand,
+				       gfp_t gfp)
+{
+...
+	if (unlikely(mem_cgroup_charge(folio, mm, gfp)) ||
+	    folio_memcg_alloc_deferred(folio)) {
+...
 	}
+...
+}
 
-Because this path moves the object straight to the free list without invoki=
-ng
-c->dtor (which would ordinarily call rhtab_mem_dtor -> bpf_obj_free_fields),
-the kptr remains intact. When this recycled element is subsequently
-initialized for a new key, check_and_init_map_value() zeroes out the kptr
-field, which permanently loses the reference without decrementing the
-refcount.
+The helper substitutes GFP_KERNEL:
 
-Could this lead to permanent resource leaks of kptrs, or potentially cause a
-new map element to unexpectedly inherit a valid kptr from a previously dele=
-ted
-element?
+int folio_memcg_alloc_deferred(struct folio *folio)
+{
+...
+	return folio_memcg_list_lru_alloc(folio, &deferred_split_lru, GFP_KERNEL);
+}
 
->  	return 0;
->  }
+When this metadata has not been allocated for a memcg yet,
+folio_memcg_list_lru_alloc() can take its blocking slow branch:
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260824103502.3154=
-292-1-falakreyaz@gmail.com?part=3D1
+int folio_memcg_list_lru_alloc(struct folio *folio, struct list_lru *lru,
+			       gfp_t gfp)
+{
+...
+	/* Fast path when list_lru heads already exist */
+	rcu_read_lock();
+	memcg = folio_memcg(folio);
+	res = memcg_list_lru_allocated(memcg, lru);
+	rcu_read_unlock();
+	if (likely(res))
+		return 0;
+
+	/* Allocation may block, pin the memcg */
+	memcg = get_mem_cgroup_from_folio(folio);
+	res = __memcg_list_lru_alloc(memcg, lru, gfp);
+...
+}
+
+GFP_KERNEL includes __GFP_DIRECT_RECLAIM:
+
+...
+#define __GFP_DIRECT_RECLAIM	((__force gfp_t)___GFP_DIRECT_RECLAIM) /* Caller can reclaim */
+#define __GFP_KSWAPD_RECLAIM	((__force gfp_t)___GFP_KSWAPD_RECLAIM) /* kswapd can wake */
+#define __GFP_RECLAIM ((__force gfp_t)(___GFP_DIRECT_RECLAIM|___GFP_KSWAPD_RECLAIM))
+
+...
+#define GFP_KERNEL	(__GFP_RECLAIM | __GFP_IO | __GFP_FS)
+
+This only affects calls that find the metadata missing; after it has been
+installed, later calls take the fast branch. Still, it bypasses the gfp
+with direct reclaim stripped for the freeze window. Could
+folio_memcg_alloc_deferred() take that gfp here?
+
+[...]
+
+Cheers, Lance
