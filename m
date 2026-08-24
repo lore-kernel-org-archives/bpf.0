@@ -1,164 +1,151 @@
-Received: from flow-a7-smtp.messagingengine.com (flow-a7-smtp.messagingengine.com [103.168.172.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF242367F2F;
-	Mon, 24 Aug 2026 15:18:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.142
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787584702; cv=none; b=U09e+o9ZESRSmJs+el93qCN25F1nEAf2j8ByEybqIAYvb+52XIRTNFyTdWT7rkLf4SK66+iU6m9stk7SinTP7nQp1GXzPFBAhlk5VnQMlLky9gcjV5QXrF78Pb03YpI3HHgRkUsek+CwzPdhX0o8CWp3uCHiwGxF8r5BGUDOKjk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787584702; c=relaxed/simple;
-	bh=PP1y4aqvLHRliamyoG5EjEe6vfK2AuBc4DMSzl02Xl8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uN7TnMvGSBrR6iLQ4ZoQwTqd8lCtqv/ceUTJ2DC5dyPSxHZcvTt5BqKA9sKQoOyeiWc4RVJHO6Xn4eTBVKyCBHURoe2WUngjp7Zfkyd1eVOxHTE33ji9BhPB6zZwKwZpLYrBCDMUKay89TKltKnrt3AoIawY9MiSILOd2EIA1Bc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=ex6lSv0R; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=eXIwBBcO; arc=none smtp.client-ip=103.168.172.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67FE6367F2F
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 15:18:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.172
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787584733; cv=pass; b=QAQCNEuCRwcm9P/zu7n2GnLWlWSaLD5DuADCUzdDZFQseSCq8l7Y95XdCm8dV9ho/FVveXPaPXGhtBWEYf3ijikGOxh1fZ5hMy5ZSZUgBs/F4ERPOM9bze4LNk79yYHNz8Gz+37t9FtmDT3rp1SeGW+/bshrfw8P8wX0Sswdca4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787584733; c=relaxed/simple;
+	bh=BcIjz0TwFTjpzBBWL7usC6KhzrrYdTOn3cvUnb4jHYo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QEO7QT3U8/CmJeLgO0rgQRLx+p41cZeqK0A9bLHSG7k86Al8jjiMR0dLbBmlTw3RhPvsn7+Z1D6DNq+t/pQzpU7tBWmuZbHhXwHPgk9Gmkk7z+zk1b/UOFk7ikiEiagHYZW/voP2mIB6H5TiHfMn2fa4exanFJR/bao96PmLe94=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=DmC7Tzi/; arc=pass smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="ex6lSv0R";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="eXIwBBcO"
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailflow.phl.internal (Postfix) with ESMTP id 1151B13800A8;
-	Mon, 24 Aug 2026 11:18:12 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Mon, 24 Aug 2026 11:18:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1787584692; x=
-	1787591892; bh=4R6k+VGQFBFgbdVkejhQOb6Te72Cxsv0t9TgFx0RFGw=; b=e
-	x6lSv0RmxW1dIXXOIctP4xvxwCD/6zarto4OIWdVBnvkArMCeecOEbu+y8PLQhIB
-	6ponAN7LqihLnVf0N/yjdVVmCjxdCTVSLhTrkbDYsT7P6JWC7avYuFHpHrz/hSHn
-	6PYGhD6sdte4V+OTTQQYjWrlhazuiOFmaROb1A0JW5KxSIqgcZnZ+1X46XFvIWSf
-	qeG2kV9wWcDlMQ3Mk5EplVME2tmHumhVv5qXKeqFg+q9B8SWqNnC5mx6VHnXvDwr
-	a3sNyH1Q4u6GWdyVhdr0TrTItngXZaO+NI/dPdMrhxrzV2uDhKRSRn/U8KyMjQLk
-	DlACT+3bmup67zuX9IeYQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1787584692; x=1787591892; bh=4R6k+VGQFBFgbdVkejhQOb6Te72Cxsv0t9T
-	gFx0RFGw=; b=eXIwBBcOMgrId0MhT7xGuonZzAYLQ9SBGCEPcbmcKyg9l1PzkUk
-	Yhw7LwfYOeNQ6elISa2zIXf/jB/bH0y3Rj6zn413xCVqLf3peDLiSUaxPQ5KJXWD
-	r2vqo4dA5UU65m7gG9hbdQ4Y3SOKm9upPbFANQ5GyZOQbVyCunTLhcLJki6/Ad8q
-	o57O3cJ+hd8bSsJrVIrPWGAzFK1xn6GfzIJ8EdywOShTpsaSSxOXKvmnilp1INfo
-	kWYfVXoO0vpHltlzokeyc6cIgR0L5pP2eyX/+17Xc2lhRnz7LZD7ZuLqQCox/31x
-	9CFMvGSpZVwQlMdQb/lfoxB5gAzssyd++Ug==
-X-ME-Sender: <xms:s2CMairB-nwOo8v6DJvtdmGxKRiGemGGci4o5LBN6GF_VGU1JHpt9g>
-    <xme:s2CMahFzGh4bQvKRDKEQi9iGC0EU6fs26lowijrj2FmWk7m88PkpcmquTngXjM6cw
-    z31aSdkCVQccQ0wo7UnTGeOWv8MU9Y1lXpV5fzp5d8yt9WJI8Q7Wg4C>
-X-ME-Received: <xmr:s2CMaorashIvIbYmsjjdIYE91lHBLQGRHdYktoCSh_A3xNxTqkd2yopz3YM>
-X-ME-Proxy-Cause: dmFkZTGrBq7uozOw7CWLzs3aCJpzeKWRqct+d+RCVU9svwkeowOaexP/k82TDyvrYpcQk3
-    Q7jqJWPlENomBJKwj/jR2LArhCRXHgiq40dgP7t7yWSOXj11RJ6R1h7viiEzDizAYccCw/
-    ZZmhfTuPIBJXVDZpD+V7oB8L2RMW4gJrEbS5FSpC1xcMeiyqq1Lm1GIn+t+Rk11YKQRa37
-    VTVNYdzwafpHraSiE5HEeCM+qyaMII50+cfSXno6a41Sf+rt+vTA7/WfiycI5sIAkvme1A
-    oAEOSQdFJZaPv7bp+4GSqCfjwHeGbUC2JmWAg1LPa+qv7hN7JdpdZaOlE2yR99CWq0Azkg
-    Knn6habbA0x6s63gF1opIJmbmyiW/LoR0hd/CKbJM2F/hH1HBP5Nvn3iReUEKBDROVKZkv
-    YhvYR6nNedejhLKFH7OXblMi0XMiyKZIecPj7KRo8Pwqc2NKhwFC0FyRIn3RCe/9JOy2Qg
-    CNLQuqKyntEFDhuUlUDVH5syxGie4whYjGqUI8GnO4zYCfktmPd1GsTjMveEA1f3/oXabY
-    8CYVaEo0wFrLj0XhrTrORL5xDUQ8lw61cgQsRcjswWbiisdbWsRo8XgzjFXfXeZQ5l5iF1
-    fJPYCmAz3qD2mRZGL555Yz9+JwFG5ZZWvIdxyYUKAnYnARbiB5bRvHKmTsNg
-X-ME-Proxy: <xmx:s2CMah4wYvZbj6R7EJ9YPrG4Gp-gGKzx-uIf6swKk5TBraFQoPuyuQ>
-    <xmx:s2CMahTdQIhtSGFldSDJqf7wpi646AJCYPwHvTPJS5j2d1oiYsoKvw>
-    <xmx:s2CMap5UOTk7_UI21zazLuvUr0qDgnzTCN-fRMCGx8G4kWtB0CcSYw>
-    <xmx:s2CMar0Nld_nG-oHqzposRto5TvAcbGhUiHU1V9Bl8TnKuufIyhKyQ>
-    <xmx:tGCMatihjfbFNlvOfqG59HofWvaw06MKJ8-znghXGqljSc1SlI8xCh4c>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 24 Aug 2026 11:18:10 -0400 (EDT)
-Date: Mon, 24 Aug 2026 16:18:09 +0100
-From: Kiryl Shutsemau <kirill@shutemov.name>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>, 
-	akpm@linux-foundation.org, nico.pache@linux.dev, baolin.wang@linux.alibaba.com, 
-	baohua@kernel.org, dev.jain@arm.com, hughd@google.com, lance.yang@linux.dev, 
-	liam@infradead.org, mhocko@suse.com, rppt@kernel.org, ryan.roberts@arm.com, 
-	shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, vbabka@kernel.org, 
-	ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, jannh@google.com, 
-	willy@infradead.org, pfalcato@suse.de, rostedt@goodmis.org, mhiramat@kernel.org, 
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 03/57] mm/collapse: add collapse.h for the shared
- collapse state
-Message-ID: <aoxe92BxF-5xaScD@thinkstation>
-References: <20260816224609.308019-1-kirill@shutemov.name>
- <20260816224609.308019-4-kirill@shutemov.name>
- <3113ac8b-c1ce-4577-9e93-449b70818918@kernel.org>
- <aobglSY5L1KoIqxF@thinkstation>
- <65433d1e-95ca-4434-828e-8f381d3384b1@kernel.org>
- <aow0Z6mrG2esKpRZ@thinkstation>
- <e1c8c6f5-1b5a-4cad-a52a-f7eff00997c3@kernel.org>
- <aow6J1i2G7U0spjH@thinkstation>
- <aoxPzKTVRmZgmBKg@gremlin>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="DmC7Tzi/"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cbe6295f05bso3161853a12.1
+        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 08:18:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787584732; cv=none;
+        d=google.com; s=arc-20260327;
+        b=WkV3Ou14GCP3ogdrVGykecgJ086n1mmMdmGlcmmNG1jjWg+uX8V+UHFFeONsBFQfG5
+         p7zWuTg4UMbh5pFmkFwj9Eo3XH0D9V+1zoDMNhIjZ88ID7CUCcNT4jvKAovadADaH3f8
+         DzI/JchCKct+gSHe578txekmLy0h/ngNl4CBRlyDAKXtXR3WwhmKtilRbD+rwFmh//gn
+         d50iaF/ulJW9Fw3RkxrdiHHXZ+JWscWW+AlD4bXAVIygmvlpjQok7y9tmHISh2mlrW8w
+         WqE5S+PDxcT5NcJ+8I7AeFb/5fcC2Ni9JUrKpoVJe5p7Siag1o6ydVCkZnN1dqBJV6Wn
+         VDcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=gqb137FAD3j5AecU+kBp3iNtBsHjhinz7tGtlFwvT1g=;
+        fh=j60FGbLnMTzZics3jwX74xxVFAFNheP5iRgEYEyAO5s=;
+        b=e9SgwLExE8rQ0jHoj4sRepyPy316AfV8FdkAa72Tp1U8pgpPb5BXdcj1leO1pIZaBC
+         uP+vF4kaI0qARjwAe9iwtnQUPERdzWklJlcoRjNHR0BBTOpn0URG2c6l2Imeh1EFelDb
+         xQ6hJ6YsBj0hC2VXW6Mpju509G9s3fkwLiiPO2qtX5DjtYgM3t0rYKuDdPk30fBHuEXJ
+         REh9/W59BVW8MpoH7h43rBGiivT4DOUHHV1ghqdyh0hVfbND8PJk9OLMZ+3cRMJ71IxC
+         eqJJA+zq7vBqUTAmaQk2gxnGe3PbASzRoPOK2fAYOd8YB+nuqBnBLsVBHwMMX/dUkasf
+         yX+Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1787584732; x=1788189532; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=gqb137FAD3j5AecU+kBp3iNtBsHjhinz7tGtlFwvT1g=;
+        b=DmC7Tzi/pqA1ivkYiKhm4VJ4/+FkXwv8qpNPqPOlpvZ74P/sl1t4Jy139gOQtY7RDL
+         uCFU6cklEI2Wa8Da28cf23dyMILTvIsn/wpMAnXxGmno8vtwhs6u/M1xhuZxk3k2SoZ/
+         T/h9/o4RecRGw8/QtDe2LUHD8itb3b0S60pdFlegWxNwg1ez9/80pCrynu/pl7XJkyGZ
+         UVua9hBtiy/wX1d4smdlv6AmBCREEMGj3IlPxGb0sY5tzyzCSQqMzSyhkKn7ywRta0ZZ
+         Geest7hN3h6VoGYE38PRxrdsZzIKfxTBWlu8EZNnNeumFvSrTXwLVBNWobINQswcq7sy
+         astA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787584732; x=1788189532;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=gqb137FAD3j5AecU+kBp3iNtBsHjhinz7tGtlFwvT1g=;
+        b=FcQ6wlh+K7OFvjh1/nrwDvP0TmRwEXTgD7p0AebsiFX0beUqgVMQvOXZ0yjRl7Wo+4
+         t5VtoxQGNgMvHHRTSsU8dystJJwG4C3s5s1/jISDyO7xdY4M6Pu6mcarXUDdkfe/v2F9
+         uw+NwpNivilkl9oabvcyxo/7/Q9i6/PVo+5tK8W3WGuv25A2ShVYBeiibim6Co4SB7gt
+         cbuELNBcPnYcNbKKxZsXaf/JuK2vimtxw1oZgu8lOXTto+2cFI8uOrcAGSiWcm2LZMhv
+         JdjLTFD5apfLTOl5NqgXVH4Gpiy0HoAvSKbg/iNB2D4c9Y3w4KgSmwFnVymzraU38vB0
+         kLeA==
+X-Forwarded-Encrypted: i=1; AHgh+Rq3BxP/sQulx0dtD5CmZ8ovna7C8Yi3qG4PaY4KrSjaUiWmSbVJqUaJw0q4L9KWgVXoqNc=@vger.kernel.org
+X-Gm-Message-State: AFuF++lEFyAbtFaIsQx1BEW19TIGU9RC11wyff8ii/tio641c0rWewaz
+	2dF3Qtr4mS4aaTxfqJTUbbJFUDlEFORJNSVmr4b6G83LYBCTlQazVyugrsN6zS9nRDw9RWTr2n7
+	+6fJ/QjjFaYVrhtqBsVqrWL+w9k15D2C2a17oQV0G
+X-Gm-Gg: AR+sD110lwXmSPR9Ximc25yFEcsFH4naHXJYlzVKDWdJz2Usci/pUnWHs4hDde0sLMd
+	+FWzGNctDzB3TLy37f2+1t8zegAqVpO7BSR91M7vYqwPkcNug3uMj+ZvXSnKCegmU6BTIPP2wIk
+	DYz6Mt5wvV8HU73TsYUafXvZkMvfK90W1IXZWE3I8oPGUjc8Yqh4panruKqRKknz+UwiGDNx8Zc
+	gJvnPDqRv+m7iOSAMA8TT9iAVav6vnJW+pDPZ88ZRIfZhYyIAiG1/cmbFRUDfD3617eUD7a/K+2
+	0qrocrf6y44di2Xho0t7GWbuvwKoMc7Px96tVJV338AY
+X-Received: by 2002:a17:90b:4aca:b0:390:84db:888e with SMTP id
+ 98e67ed59e1d1-395c50b3dd6mr21407866a91.7.1787584731573; Mon, 24 Aug 2026
+ 08:18:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aoxPzKTVRmZgmBKg@gremlin>
+References: <20260821214111.1120748-1-daniel@iogearbox.net>
+In-Reply-To: <20260821214111.1120748-1-daniel@iogearbox.net>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 24 Aug 2026 11:18:39 -0400
+X-Gm-Features: AcwNN1WWEwc8Nxt5gv5xsgwSa3ey-6k014cKfPpsLJfAMhEvNSlS6jEnRNiPYeM
+Message-ID: <CAHC9VhQb9-zR-W5acwACe=bH0VvmwPEAyGvsJNG5VyVxEVhtJg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 00/11] BPF keyring and signed loader ML-DSA support
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: David Howells <dhowells@redhat.com>, Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org, 
+	memxor@gmail.com, brauner@kernel.org, kpsingh@kernel.org, ast@kernel.org, 
+	john.fastabend@gmail.com, a.s.protopopov@gmail.com, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 24, 2026 at 03:09:00PM +0100, Lorenzo Stoakes (ARM) wrote:
-> On Mon, Aug 24, 2026 at 01:36:03PM +0100, Kiryl Shutsemau wrote:
-> > On Mon, Aug 24, 2026 at 02:28:39PM +0200, David Hildenbrand (Arm) wrote:
-> > > On 8/24/26 14:10, Kiryl Shutsemau wrote:
-> > > > On Mon, Aug 24, 2026 at 01:47:54PM +0200, David Hildenbrand (Arm) wrote:
-> > > >> On 8/20/26 13:11, Kiryl Shutsemau wrote:
-> > > >>>
-> > > >>> I went for a clean collapse.c on purpose: the engine is new code, and a
-> > > >>> new file keeps it readable while both mechanisms are in the tree, with 28
-> > > >>> as a plain delete from khugepaged.c.
-> > > >>>
-> > > >>> Your shape is less churn, though, and it keeps blame: 29-35 move about
-> > > >>> 1700 lines as add-and-delete today, and most of that would stay put, with
-> > > >>> only the daemon -- mm_slot, the scan loop, sysfs -- extracted into a new
-> > > >>> khugepaged.c.
-> > > >>>
-> > > >>> If you prefer it that way, I can give it a try for v2.
-> 
-> Please don't respin this as a 57 patch series.
+On Fri, Aug 21, 2026 at 5:41=E2=80=AFPM Daniel Borkmann <daniel@iogearbox.n=
+et> wrote:
+>
+> Add a dedicated BPF keyring which is integrated for BPF signing. It
+> is modelled after the dm-verity keyring which was added in commit
+> 033724b ("dm-verity: add dm-verity keyring") and which can eventually
+> be used also via systemd through the same enrollment method as in
+> dm-verity's case. It is selected with a new well-known keyring_id
+> VERIFY_USE_BPF_KEYRING and gives an operator a place to enroll a
+> BPF-only signing key at boot, specifically scoped to signed BPF
+> program loading. Next, to demonstrate that BPF signing is algorithm
+> agnostic, we add a few small tooling changes to support ML-DSA and
+> integrate everything into BPF selftest for BPF CI to ensure nothing
+> breaks with future changes. For more details, see individual commits.
+>
+> Daniel Borkmann (11):
+>   bpf: Add a bpf keyring for program signature validation
+>   bpf: Refuse caller-supplied keyrings when the bpf one is active
+>   bpf: Raise the bound on a program's signature size
+>   bpftool: Support ML-DSA program signing
+>   selftests/bpf: Add a test for the sealed bpf keyring
+>   selftests/bpf: Rebuild signed lskels when signing key changes
+>   selftests/bpf: Rename the verify_sig_setup.sh setup into setup-rsa
+>   selftests/bpf: Add an end-to-end ML-DSA signed loader test
+>   selftests/bpf: Allow appending to guest kernel cmdline in vmtest.sh
+>   selftests/bpf: Add tests for bpf keyring in signed loader
+>   Documentation/bpf: Document the bpf keyring and improve examples
+>
+>  .../admin-guide/kernel-parameters.txt         |  15 +
+>  Documentation/bpf/signing.rst                 | 274 +++++++--
+>  include/linux/bpf.h                           |  13 +
+>  include/linux/verification.h                  |  10 +
+>  kernel/bpf/Makefile                           |   3 +
+>  kernel/bpf/keys.c                             |  72 +++
+>  kernel/bpf/verifier.c                         |  42 +-
+>  tools/bpf/bpftool/main.h                      |   2 +-
+>  tools/bpf/bpftool/sign.c                      |  22 +-
+>  tools/testing/selftests/bpf/Makefile          |   2 +-
+>  tools/testing/selftests/bpf/config            |   1 +
+>  .../selftests/bpf/prog_tests/signed_loader.c  | 518 +++++++++++++++++-
+>  .../bpf/prog_tests/verify_pkcs7_sig.c         |   4 +-
+>  .../testing/selftests/bpf/verify_sig_setup.sh |  63 ++-
+>  tools/testing/selftests/bpf/vmtest.sh         |  16 +-
+>  15 files changed, 974 insertions(+), 83 deletions(-)
+>  create mode 100644 kernel/bpf/keys.c
 
-I didn't plan to.
+CC'ing the keyring folks for obvious reasons.  A lore link to the full
+thread can be found below:
 
-The goal of this RFC was to show the final form I want to reach.
+https://lore.kernel.org/all/20260821214111.1120748-1-daniel@iogearbox.net
 
-I will move cleanups and refactoring to the front of the patchset and
-submit in small self-contained chunks while keeping the rest working in
-a private branch.
-
-> You need to break this into a smaller initial series that lays some
-> foundations.
-> 
-> Cf. what I've done with scalable CoW series as an example.
-> 
-> > > >>>
-> > > >>> The rename has to open the series, so it will collide with anything in
-> > > >>> flight that touches khugepaged.c.
-> > > >>>
-> > > >>
-> > > >> Kiryl, I have to ask, are you using AI to write your replies?
-> > > >
-> > > > Yes. I use it check my claims and fix my grammar.
-> > > >
-> > > > Why?
-> > > >
-> > >
-> > > It doesn't read the way you would usually write. In a bad way.
-> > >
-> > > E.g., "Your shape", "has to open the series"
-> > >
-> > > Consider telling the LLM to not change your writing style and focus only on
-> > > fixing grammar.
-> >
-> > Right. Asking for rewrite with proper grammar was a bad move on my part.
-> 
-> Even this reads as AI-generated... Consider writing the replies yourself
-> please.
-
-Seriously? This is border-line insult.
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+--=20
+paul-moore.com
