@@ -1,258 +1,234 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D971D432BC1;
-	Mon, 24 Aug 2026 15:42:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C478944D685
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 15:49:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787586154; cv=none; b=fcATk1/Mcaandr15lioDl+kOrZHfI1QB484tJJw0GDGJSTYuX0BfGZLX+0yPaqmdk2sOajiHS201ScdvhhNVsPnyPmvTXV2lqYHmHOkqHXiLeiveFhZ8+CSrLGgeGK0rWl8p6tUD69VZFSPXF2pxnWCia4BCPcqTR242uuIyZXI=
+	t=1787586575; cv=none; b=AczPwzVl5dTJ3zjx5I4vQwJFA5yCXjSqn6V7SzkyJ+fZyUFP1YSzNqhCwSxUse8hYEUh7sJFTYhV6XjApjC76m8wij15PbeFuGcMZUxA18L6k3eaPpuoq6/sgVK1hEUOeOgUWaJqq6g4gdhuHDwNgY/zwQoynhmEWf72p0kArLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787586154; c=relaxed/simple;
-	bh=CDRP4gpzUsluUAF7MS5tPXjvTozOS+POpWSlIvrPn18=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=ECf1punK+DDYJg/wb37WCm0BfnC+rv2nBZMNC4Ws6En3ImRBBz24PKZkr9Lr6wvgULiQzUIEIJgiL8t9SvdZI26Rhw3KDyTTzt2YLNkbdLKclhWwLGlZd9GXhHSjjNPFo/bYGSPMALRIJ+OS5spe5znK+M0tlZc3wX2/SIVEwtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g11qAZlT; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787586575; c=relaxed/simple;
+	bh=WM3MVN1PRqwYY42ec9gLBm7NmwB8V1GCbU6/PFNW214=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ic5/l6C8WDQFeAWD/ZkI2fMOi4znOzwuzb80A1hTSAKLKhQ6KAbX9/G0ppkoMF4Ve0azYpKo9Lq6XN7gQsHwvmxE0Q9psEWYKZ3kl5+RECu18nHe00movueQzceZDcpT3UTzFZ459PbeE8pzr1sYasHcj+fDlCmkFBJ2ANXSKyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org; spf=pass smtp.mailfrom=cmpxchg.org; dkim=pass (2048-bit key) header.d=cmpxchg.org header.i=@cmpxchg.org header.b=Ok1TNobG; arc=none smtp.client-ip=209.85.219.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmpxchg.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g11qAZlT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 959191F00A3E;
-	Mon, 24 Aug 2026 15:42:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787586143;
-	bh=kpPtmU1Onj8DRaxmofLIIStTgTFjuXkztqouUkk0qt0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=g11qAZlTEiN8hoaWzzmflsSUWzpxzjnqQD8qiLMS5+7n3t8zbe0xT4js826bKG0v7
-	 pDtUzQeU5qVEWLeTLwyYcpb6C7tz4ultLjumjv40wV0KoHJNsTfrHe1+XisiN2JZ9y
-	 M7gDOfS1Sx9L7d1QP02zEc8irC06AJz4yuGGOf9dtuYVHYB2SR6DG3Z71JnEgFUfKT
-	 02ljP6U9ntrJt8hB/OnFgmA5PHPECWPDmBKr1k2FtGl9rOLTnR2njM0zZEgzbzbowN
-	 K/+Ma1+2tqTDWgdgL8LoiPaH/VqTEYkTPJjjhkoJ6UeXdiag3NLYzC3gYcuw+wmbTu
-	 7E43bAmrZLoLg==
-Content-Type: multipart/mixed; boundary="===============5325228425749837176=="
+	dkim=pass (2048-bit key) header.d=cmpxchg.org header.i=@cmpxchg.org header.b="Ok1TNobG"
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-90a6b298889so29513016d6.3
+        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 08:49:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg.org; s=google; t=1787586572; x=1788191372; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=3bUpuIKeVP88lgTSCxGsoiU0GQ4MnqPzmUq2XXBctZw=;
+        b=Ok1TNobG+C/axL4qamOjO0I2V5DnYRwsRmMfrb/qe9uFtyp6eWmlrlzAJRAyn1AUuY
+         8fB/DIiulsNe860x2qsNpyRiuu89ggyW7WmY36d3UUD+C8DyiWijNIvVGaXsX0xISe/v
+         64ws313wyzHlMT1DAgqu8KYHPlF+HvAvR9zH04yCOm1KVGVT54T957x55z7f8DSP0Gre
+         3cR0UnQFGM6cwgeUdZyyBXEhfDYA2oxinoNp2qFNpglhT9W0GC0WRjGvNLjR8hsjdZeW
+         JXlutdAiHkZ15E7pZj8axsU8ZRMpTxwhc0O/1EG+crbjrcN37TH+LGY/l9/RxflVFgD+
+         mPSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787586572; x=1788191372;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=3bUpuIKeVP88lgTSCxGsoiU0GQ4MnqPzmUq2XXBctZw=;
+        b=H/MTjEik3A/3+KKyLTIxOQdZP475DHciPbFvfkDdZvnoMJREgzOXAs1IyXrPmC36jT
+         H08fNvUzY1UaWJjF2NkZhfNYPL4+N2oPZG5ehzqvz42/zu9X0Ahg4XLrQVy6/V86GEeq
+         NP40AwqGZ07cY3YytMeyiiVp7Qd2s5ls1t9GwjHv/rvm5rbXwjMIK39m5tVmcy9+HYGz
+         uhmXYiGeOgC/77Rm564pQ8c5v2EJYxjDf6kmc4xWzxgw/6URJ7KeBw6uIYlWnMZbVbLu
+         r0NsjMiIpI+EI1tJU3SBM4DZdRpICXs91QeYg7RJ+kQ+wkSvWjQRfa6MSzNW0HxLvWrP
+         OceA==
+X-Forwarded-Encrypted: i=1; AHgh+RrISIss5vG0UIOQuh/xSyl8YVq9NirLc47exiz9qkh6EeLiWs2oxBsBICERXxMrBu18fO4=@vger.kernel.org
+X-Gm-Message-State: AFuF++l2jVhXvPEKSkKDJkjLTUObuYQ6drFzGxLfTL98Y17A6/1vDAYu
+	wHmFdRHCBg9vBjLA9qSrt4fgOorUt5HaaFNUEs39GhNjiHGy9/UhCocIZHXsSklDRUU=
+X-Gm-Gg: AR+sD11lGuvGMbS5QTiAJcfpbfmIxgN6yXpnnZeJK4k4/raj7WFgZ7uTsWZNbtU82eS
+	8wcJ4So7ZtCNHU4Wo4yY+pYQbsjk4zxhaKwiMB9OPtgwWsXiTEs96zerxcdR2JNacFoaf25D3CI
+	AbgqcDCofS/k5tOi8JrthIqd8PSu88sDyCsFKQEfDzCtcwRQoPGLrszZJGvSuepPFycNyho3NFq
+	yVm1gpjRXm8jR4kE7Z/FNDjSK3C8JpmDBFdtwKnieG3IWZo34tMvYX/VZ9O3ZAcfUd1rEZ4A22O
+	2v93CR73MtLBJPxUUjaTYaAN51uoLEmPBuBdN6f+aWNwEiCUNS/4Z0hHDSLMSLMC3OtO/zzp3B7
+	R2Xvnq7Vp52yKNlRGoVwlDGqn9b1N9ePPYAqbYvzNmqJlqY8dPfI0TYgO744STe6cDksjOyfrcJ
+	uRt6JhClA2x1dUanKROptkUl2eb/kPvmf7qJ8nj+xHKMOBtfhyW/6rZYKH48k=
+X-Received: by 2002:a05:6214:f2f:b0:908:a916:4727 with SMTP id 6a1803df08f44-90c8fa2cb39mr194848236d6.25.1787586572331;
+        Mon, 24 Aug 2026 08:49:32 -0700 (PDT)
+Received: from localhost ([2600:382:8b2b:357c:c834:fad7:4274:2299])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-90c93a7af21sm64308866d6.41.2026.08.24.08.49.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Aug 2026 08:49:30 -0700 (PDT)
+Date: Mon, 24 Aug 2026 11:49:21 -0400
+From: Johannes Weiner <hannes@cmpxchg.org>
+To: Kiryl Shutsemau <kirill@shutemov.name>
+Cc: Lance Yang <lance.yang@linux.dev>, akpm@linux-foundation.org,
+	david@kernel.org, ljs@kernel.org, nico.pache@linux.dev,
+	baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com,
+	hughd@google.com, liam@infradead.org, mhocko@suse.com,
+	rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org,
+	surenb@google.com, usama.arif@linux.dev, vbabka@kernel.org,
+	ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jannh@google.com, willy@infradead.org,
+	pfalcato@suse.de, rostedt@goodmis.org, mhiramat@kernel.org,
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 16/57] mm/collapse: freeze the sources behind
+ migration entries
+Message-ID: <20260824154921.GA863036@cmpxchg.org>
+References: <20260816224609.308019-17-kirill@shutemov.name>
+ <20260824131224.73344-1-lance.yang@linux.dev>
+ <aoxQnuEacGpzp2I7@thinkstation>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <5145190152118190974936dc5749fc562d898f27e212a6bfe12fcf08460198ff@mail.kernel.org>
-In-Reply-To: <20260824143621.2098856-4-chenyuan_fl@163.com>
-References: <20260824143621.2098856-4-chenyuan_fl@163.com>
-Subject: Re: [PATCH 3/4] selftests/bpf: Test rhtab kptr recycle from NMI context
-From: bot+bpf-ci@kernel.org
-To: chenyuan_fl@163.com,bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,gnq25@mails.tsinghua.edu.cn,chenyuan@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 24 Aug 2026 15:42:22 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aoxQnuEacGpzp2I7@thinkstation>
 
---===============5325228425749837176==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Mon, Aug 24, 2026 at 03:13:10PM +0100, Kiryl Shutsemau wrote:
+> On Mon, Aug 24, 2026 at 09:12:24PM +0800, Lance Yang wrote:
+> > 
+> > On Sun, Aug 16, 2026 at 11:45:28PM +0100, Kiryl Shutsemau wrote:
+> > >+		if (!folio_ref_freeze(folio,
+> > >+				      folio_expected_ref_count(folio) + 1)) {
+> > >+			result = SCAN_PAGE_COUNT;
+> > >+			goto unfreeze;
+> > >+		}
+> > >+		nr_frozen = nr_saved;
+> > 
+> > Just one thing I was wondering about ... can deferred_split_isolate()
+> > remove a source folio from deferred_split_lru while its refcount is
+> > frozen by collapse_freeze_candidate()?
+> > 
+> > Assume an earlier span belongs to an anonymous large folio on the
+> > deferred split queue, then a later span fails folio_trylock().
+> > collapse_freeze_candidate() continues after freezing each source folio
+> > and calls collapse_unfreeze_candidate() on a later failure:
+> > 
+> > static noinline enum scan_result collapse_freeze_candidate(struct mm_struct *mm,
+> > 		struct collapse_candidate *cand, pte_t *pte)
+> > {
+> > ...
+> > 	for (i = 0, addr = cand->addr; i < nr_pages;) {
+> > ...
+> > 		if (!folio_trylock(folio)) {
+> > 			folio_put(folio);
+> > 			result = SCAN_PAGE_LOCK;
+> > 			goto unfreeze;
+> > 		}
+> > ...
+> > 		nr_saved = i + nr;
+> > 
+> > 		if (!folio_ref_freeze(folio,
+> > 				      folio_expected_ref_count(folio) + 1)) {
+> > 			result = SCAN_PAGE_COUNT;
+> > 			goto unfreeze;
+> > 		}
+> > 		nr_frozen = nr_saved;
+> > 
+> > 		i += nr;
+> > 		addr += nr * PAGE_SIZE;
+> > 	}
+> > 
+> > ...
+> > unfreeze:
+> > 	collapse_unfreeze_candidate(mm, cand, pte, nr_saved, nr_frozen);
+> > 	return result;
+> > }
+> > 
+> > folio_ref_freeze() takes the source folio's refcount to zero:
+> > 
+> > static inline int folio_ref_freeze(struct folio *folio, int count)
+> > {
+> > 	return page_ref_freeze(&folio->page, count);
+> > }
+> > 
+> > static inline int page_ref_freeze(struct page *page, int count)
+> > {
+> > 	int ret = likely(atomic_cmpxchg(&page->_refcount, count, 0) == count);
+> > 
+> > ...
+> > 	return ret;
+> > }
+> > 
+> > While collapse_freeze_candidate() still holds the source folio lock,
+> > deferred_split_scan() can call deferred_split_isolate():
+> > 
+> > static unsigned long deferred_split_scan(struct shrinker *shrink,
+> > 		struct shrink_control *sc)
+> > {
+> > 	LIST_HEAD(dispose);
+> > 	struct folio *folio, *next;
+> > 	int split = 0;
+> > 	unsigned long isolated;
+> > 
+> > 	isolated = list_lru_shrink_walk_irq(&deferred_split_lru, sc,
+> > 					    deferred_split_isolate, &dispose);
+> > }
+> > 
+> > static enum lru_status deferred_split_isolate(struct list_head *item,
+> > 					      struct list_lru_one *lru,
+> > 					      void *cb_arg)
+> > {
+> > 	struct folio *folio = container_of(item, struct folio, _deferred_list);
+> > 	struct list_head *freeable = cb_arg;
+> > 
+> > 	if (folio_try_get(folio)) {
+> > 		list_lru_isolate_move(lru, item, freeable);
+> > 		return LRU_REMOVED;
+> > 	}
+> > 
+> > 	/*
+> > 	 * We lost race with folio_put(). Read folio state before the
+> > 	 * isolate: folio_unqueue_deferred_split() checks list_empty()
+> > 	 * locklessly, so once removed the folio can be freed any time.
+> > 	 */
+> > 	if (folio_test_partially_mapped(folio)) {
+> > 		folio_clear_partially_mapped(folio);
+> > 		mod_mthp_stat(folio_order(folio),
+> > 			      MTHP_STAT_NR_ANON_PARTIALLY_MAPPED, -1);
+> > 	}
+> > 	list_lru_isolate(lru, item);
+> > 	return LRU_REMOVED;
+> > }
+> > 
+> > And folio_try_get() fails because the source folio has a frozen refcount.
+> > deferred_split_isolate() treats the failure as a race with folio_put(),
+> > clears PG_partially_mapped and its MTHP_STAT_NR_ANON_PARTIALLY_MAPPED
+> > accounting when set, then removes the folio from deferred_split_lru ...
+> 
+> Hm. So, the premise in deferred_split_isolate() is false:
+> !folio_try_get() doesn't mean lost race with folio_put().
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/rhtab_kptr.c b/tools/testing/selftests/bpf/prog_tests/rhtab_kptr.c
-> new file mode 100644
-> index 000000000000..13158d74cbc1
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/rhtab_kptr.c
-> @@ -0,0 +1,146 @@
+I suppose you mean, not exclusively. But it can also mean that. And
+then the question is, who cleans up the partially_mapped state.
 
-[ ... ]
+> I think deferred_split_isolate() should do something like:
+> 
+>       if (!folio_try_get(folio))
+>               return LRU_SKIP;
+> 
+>       list_lru_isolate_move(lru, item, freeable);
+>       return LRU_REMOVED;
+> 
+> Johannes, do I miss something?
 
-> +	skel = rhtab_kptr__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-> +		return;
-> +
-> +	/* Create the element and stash a referenced task kptr in it. */
-> +	if (!ASSERT_OK(bpf_map_update_elem(bpf_map__fd(skel->maps.rhtab),
-> +					   &key, &zero, BPF_ANY), "create_elem"))
-> +		goto out;
+Ah. The idea being: leave the item on the LRU when there is a race
+with the refcount going zero; and then it's up to that other side to
+deal with/clean up the partially_mapped state as appropriate. Thus:
 
-Does this code pass the correct value size to bpf_map_update_elem()?
+folio_put()
+  __folio_put()
+    folio_unqueue_deferred_split()
+      if __list_lru_del():
+        // clear partially_mapped state & stats
 
-The map value type is struct val_t which contains an 8-byte kptr and a
-u32 magic field, making sizeof(struct val_t) == 16 bytes (with 4 bytes
-of trailing padding). The code passes &zero where zero is a single __u64
-(8 bytes).
+will always succeed, even if it races with the shrinker. And you are
+also guaranteed on the collapse side that the state won't vanish from
+underneath you.
 
-kernel/bpf/syscall.c:map_update_elem() copies the full 16 bytes from
-&zero via kvmemdup_bpfptr(), reading 8 bytes past the end of the stack
-variable. This has two consequences: the test performs an out-of-bounds
-read of its own stack, and the element's magic field gets initialised
-with whatever stack garbage followed zero.
-
-The same undersized buffer is used again for the recreate_elem call
-further down. Would declaring a correctly sized buffer fix this?
-
-> +	if (!ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(skel->progs.init_elem),
-> +					      &topts), "test_run_init") ||
-> +	    !ASSERT_EQ(topts.retval, 0, "init_ret"))
-> +		goto out;
-> +
-> +	pmu_fd = syscall(__NR_perf_event_open, &attr, -1, 0, -1, 0);
-> +	if (pmu_fd >= 0) {
-> +		skel->links.nmi_update = bpf_program__attach_perf_event(skel->progs.nmi_update,
-> +									pmu_fd);
-> +		if (!ASSERT_OK_PTR(skel->links.nmi_update, "attach_perf_event")) {
-> +			close(pmu_fd);
-> +			goto out;
-> +		}
-> +
-> +		/* Let the NMI handler overwrite the element, and make sure it
-> +		 * actually ran before probing (otherwise the probe would pass
-> +		 * vacuously even on an unfixed kernel).
-> +		 */
-
-This isn't a bug, but the opening /* of a multi-line comment should sit
-on its own line per BPF subsystem style. The file's other block comments
-already follow that form.
-
-> +		for (i = 0; i < 20 && read_counter(skel, 1) == 0; i++)
-> +			usleep(100000);
-> +		ASSERT_GT(read_counter(skel, 1), 0, "nmi_update_ran");
-
-Can this assertion fail for environmental reasons on an otherwise correct
-kernel?
-
-The perf event is opened with pid == -1 and cpu == 0, so it only samples
-CPU 0. PERF_COUNT_HW_CPU_CYCLES does not advance while a core is in a
-deep C-state, and the polling thread is not pinned to CPU 0. On an
-otherwise idle host the counter can stay at 0 and the test hard-fails
-here, even though nothing is wrong with the kernel.
-
-Contrast lru_lock_nmi.c, which makes the same assertion safe by attaching
-on every CPU and running busy threads pinned per CPU during the sampling
-window.
-
-> +
-> +		bpf_link__destroy(skel->links.nmi_update);
-> +		skel->links.nmi_update = NULL;
-> +		close(pmu_fd);
-
-Does this code close pmu_fd twice?
-
-bpf_program__attach_perf_event() takes ownership of the perf fd on
-success: libbpf stores it in bpf_link_perf::perf_event_fd and
-bpf_link_perf_detach() closes it. So bpf_link__destroy() above already
-closed pmu_fd, and this explicit close() closes an fd number that is no
-longer owned by the test.
-
-The file gets the ownership rule right on the failure path: it closes
-pmu_fd only because the attach failed. The neighbouring NMI test
-lru_lock_nmi.c documents it explicitly at lines 203-206. Today nothing
-allocates a descriptor between the destroy and close so the stray close()
-just returns EBADF, but a double close in a test that later grows an
-intervening open()/socket()/map creation will silently close an unrelated
-descriptor.
-
-[ ... ]
-
-> +		ASSERT_EQ(read_counter(skel, 2), 1, "xchg_non_null");
-> +		ASSERT_EQ(read_counter(skel, 3), 0, "xchg_null");
-> +	} else {
-> +		test__skip();
-> +	}
-
-Does calling test__skip() in a test that defines no subtests make the
-whole test report SKIP even though the second phase still runs?
-
-test_progs.c:print_test_result() reads the subtests_cnt and with
-subtest_num == 0, a single test__skip() turns the entire test into
-'#N rhtab_kptr:SKIP'. On the common BPF CI setup (QEMU without a vPMU)
-perf_event_open() always fails, so this test would permanently print SKIP
-while silently exercising the delete/re-insert recycle path - a failure
-there is still reported, but a pass is indistinguishable from nothing ran.
-
-The neighbouring lru_lock_nmi.c wraps each phase in test__start_subtest()
-so that skips and passes are accounted per phase.
-
-A subsystem pattern flags this as potentially concerning: the NMI phase is
-skipped with a bare test__skip() that records no reason, so a reader of
-the CI log cannot tell whether the PMU was absent, perf_event_paranoid
-blocked the open, or something else failed. errno from the failed
-perf_event_open() is discarded. The guide warns about tests that skip
-silently with no message, though test__skip() takes no reason argument and
-this is the dominant idiom across prog_tests/.
-
-[ ... ]
-
-> +	for (i = 0; i < 2000; i++) {
-> +		topts.retval = 0;
-> +		err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.init_elem),
-> +					     &topts);
-> +		if (err || topts.retval) {
-> +			/* Element may be gone; recreate and retry once. */
-> +			if (!ASSERT_OK(bpf_map_update_elem(bpf_map__fd(skel->maps.rhtab),
-> +							   &key, &zero, BPF_ANY),
-> +				       "recreate_elem"))
-> +				goto out;
-
-Same value-size issue here as the earlier create_elem call.
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/progs/rhtab_kptr.c b/tools/testing/selftests/bpf/progs/rhtab_kptr.c
-> new file mode 100644
-> index 000000000000..fd6bd63cb405
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/rhtab_kptr.c
-> @@ -0,0 +1,132 @@
-
-[ ... ]
-
-> +} counters SEC(".maps");
-> +
-> +/* 0: init ok, 1: nmi update ok, 2: probe xchg non-NULL, 3: probe xchg NULL,
-> + * 4: probe saw expected magic value
-> + */
-
-This isn't a bug, but the opening /* of a multi-line comment should sit on
-its own line. The file's own header comment already uses the correct form,
-so this is inconsistent with its own neighbours as well as with the
-subsystem style.
-
-> +static __always_inline void bump(u32 idx)
-> +{
-> +	u64 *v = bpf_map_lookup_elem(&counters, &idx);
-> +
-> +	if (v)
-> +		(*v)++;
-> +}
-
-[ ... ]
-
-> +SEC("syscall")
-> +int upd_elem(void *ctx)
-> +{
-> +	struct val_t val = { .magic = 0x52484153 }; /* "RHAS" */
-> +	u32 key = 0;
-> +
-> +	bpf_map_update_elem(&rhtab, &key, &val, BPF_ANY);
-> +	return 0;
-> +}
-
-Can upd_elem() and del_elem() communicate map operation failures to the
-userspace loop?
-
-Both discard the return value of bpf_map_update_elem() and
-bpf_map_delete_elem() and unconditionally return 0. The userspace loop
-only checks bpf_prog_test_run_opts() and never inspects topts.retval for
-these two programs.
-
-rhtab_map_update_elem() has several real failure returns reachable from
-this loop - -ENOMEM from bpf_mem_cache_alloc(), -EBUSY when
-rhtab->freeing_internal is set, and -E2BIG/insert errors - and
-rhtab_map_delete_elem() returns -ENOENT. If any of them fires, the
-following probe_elem() returns 1 early, so neither counter 2/3 nor counter
-4 is bumped, and the only symptom is the final ASSERT_EQ for
-recycle_magic_roundtrip reporting an off-by-N count with no indication of
-which operation failed or why.
-
-The sibling programs init_elem()/probe_elem() already use the return value
-as a status code, so propagating the map-op error here would turn a silent
-count mismatch into a diagnosable failure.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32741782570
---===============5325228425749837176==--
+I think that should work. Usama?
