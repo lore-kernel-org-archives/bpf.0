@@ -1,93 +1,109 @@
-Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 917A12931F5;
-	Mon, 24 Aug 2026 21:35:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.188.251
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22980391505
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 21:42:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787607348; cv=none; b=kbRlr6Mu+A11a+zHsWjiM8NH36DH3Ff3OqDRR38ALb066S6isANxmzMaF1OfcHDq8hYjndQ0KcIsfbYaxkTn8Qjqd2MgO5bLTLEjfBHZhiBJjvgakNAzw4vUk0M+GRL1SjehOCg2I2aBBg7hY9iNfGAZjSGGmvQV5z2PcB01Ky8=
+	t=1787607735; cv=none; b=Dbs+V0dLF8pElWgpDGX0YRFZtPEdajdG9iHACz7uhavDEF13ofuUoCkiAUvVhDu6rFYf+4cz8cZebFVjDOubrIdxTQKq2VhtI7bWdhD/HaHmMwtcHn/H0aRmuKrn2I1l7hcHHtEQkSlEPJPDSNfX21LbHF5bb4c6ahxuU/NbM+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787607348; c=relaxed/simple;
-	bh=or5/Ign9Tx8uUQIxKHT6UljtUhHg5mUD+YdutTct/jU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dIGoLqMSWllbakW5AItEd+D3/LuCRnaB03bgsbGaJ2dIP04l81lblZwCHYEwmUl4xBiiyt80VpO+Ow6DXFFH80Bm8TqhhteYY2sPI9kTzzKzEcuvzA4EfkYspNW2VyrUUbkQWm9uuNq2vY2GU7IGd2z4IDR4W9d5j/mMUB0MX+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr; spf=pass smtp.mailfrom=oss.cyber.gouv.fr; dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b=JSydmGU9; arc=none smtp.client-ip=51.159.188.251
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
+	s=arc-20240116; t=1787607735; c=relaxed/simple;
+	bh=8ckIdohhacHIraLHt2XVf1t5FrJuR2rhIPMD4h+NS4g=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=DerHvJW6L3kgpBr+SZLai8Pl0P3GYVRTXOMBhJXte/JIZ0mAN/0GsGA9YIkir0kHJHtwhi1BKqUFqtD/E2ZhnkQBPrdh8R4dAMv4oVailcCQLHJPVBDUYtS+xOd9TvAxsf1IOmeDh9ojgQbF+gfDd1up60ri5divdyHOAIfvo0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HN4g3jml; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b="JSydmGU9"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=oss.cyber.gouv.fr; s=default; h=Content-Transfer-Encoding:Content-Type:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=or5/Ign9Tx8uUQIxKHT6UljtUhHg5mUD+YdutTct/jU=; b=JSydmGU9cQwNrA5hEXrc2ZQEqV
-	lUshVT43Z5ZNvereW6ocyIXx1ohlMv2+CAy43EnVenVTMNLdORWP6vYpl1W6asBIyjcSzLaZqoYmu
-	jmurHlHBJ/U0FWHRB5fqpHHwJBHMrRSHAwy4BWqyWwBLD+nNp9xgDgjjPa1JXLKtN0vT1loYAxzWz
-	KNGxiWKriHj5Ny6wczu4kokR1PBYYc7TP07Kr4Z4BQbSaMO2nIwnCc/uHvzcxZoEc7w+SbsEcTeu+
-	e2N1Un5mmG7jk6QtwQfGNyFf4Uru4O9nOccpCwbUdLzaT6dPQQfIE5BhFhPOPMR8ppr558o2PyaDI
-	wpS9OgiA==;
-Received: from [151.115.150.205] (port=54026 helo=gepetto..)
-	by pf-012.whm.fr-par.scw.cloud with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.99.5)
-	(envelope-from <Jeremy.Jean@oss.cyber.gouv.fr>)
-	id 1wycKX-0000000EQJy-0JLt;
-	Mon, 24 Aug 2026 23:35:44 +0200
-From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
-Subject: [BUG] bpf: x86 timed may_goto corrupts private-stack JIT state
-Date: Mon, 24 Aug 2026 21:31:57 +0000
-Message-ID: <20260824213158.3755932-2-Jeremy.Jean@oss.cyber.gouv.fr>
-X-Mailer: git-send-email 2.47.3
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HN4g3jml"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E9AB1F000E9;
+	Mon, 24 Aug 2026 21:42:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787607733;
+	bh=Li28rOc8tcdSGBxH+YTBy1uSfvPxFdjr/Kd3/A7QfNY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=HN4g3jmljQxAfzGnqlMZS+BbxvSTaA6FEbq/fLmLfDOscl5jSivxM4sSQTVX6Gwpn
+	 +SIC+LA53rq0etuihSyFvkf5mW9ggRXA7s6osgZm3zERcAtIVV3QyLhErwRLG97jP/
+	 iICFOMEHNV9p13wYNG51NBhjQ5QTJ+Ow3zBUTHDnkkUq0Dcn7JWZnr6Najdo67eVQT
+	 AhneDBimljWOK5XJWnMhs1Kth3OZmS555+JTJYL3umZugQGzTfXfYKhIm532gwO4OA
+	 wvlZNtYwnDHt5j4OPL1FSK4qYMMvFCF8qo82qEjtHJaGgn7vuFqK5uyxtqV4wbzq9A
+	 CP40wa0jwmNUg==
+Content-Type: multipart/mixed; boundary="===============7154996866721288548=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
-X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: jeremy.jean@oss.cyber.gouv.fr
-X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: jeremy.jean@oss.cyber.gouv.fr
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Message-Id: <f1de7701b1f8968bc1c017f017c8ea4e2e759c6545ffb6ca8249d51c613ee44d@mail.kernel.org>
+In-Reply-To: <20260824210142.3933580-3-vineet.gupta@linux.dev>
+References: <20260824210142.3933580-3-vineet.gupta@linux.dev>
+Subject: Re: [PATCH bpf-next v2 2/3] selftests/bpf: report placeholder tests as SKIP, not OK
+From: bot+bpf-ci@kernel.org
+To: vineet.gupta@linux.dev,bpf@vger.kernel.org
+Cc: vineet.gupta@linux.dev,eddyz87@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 24 Aug 2026 21:42:13 +0000 (UTC)
 
-Hello,
+--===============7154996866721288548==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-With the help of AI models, I found a bug in the x86 timed may_goto path that
-leads to a verifier/JIT state mismatch on private-stack programs.
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
+> index 41340877dc9d..e58ea69e3854 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
+> @@ -436,6 +436,7 @@ void kfunc_root(void)
+>
+>  SEC("socket")
+>  __description("cpuv4 is not supported by compiler or jit, use a dummy test")
+> +__skip("cpuv4 is not supported by compiler or jit")
+>  __success
+>  int dummy_test(void)
+>  {
 
-The root cause is that timed may_goto fixups pass a stack offset in BPF_REG_AX
-and the x86 trampoline reconstructs the counter pointer from native %rbp. That
-is incorrect once private-stack JIT mode is enabled: ordinary BPF frame pointer
-accesses are remapped from %rbp to %r9, but arch_bpf_timed_may_goto() still
-uses %rbp and ends up reading and writing the native JIT frame instead of the
-private BPF stack.
+This isn't a bug, but since the SKIP line is already labelled with the
+__description text, would it read better for __skip(reason) to supply a
+distinct message rather than repeating the same wording? Looking at all
+15 converted placeholders (arena_kfunc.c, stack_arg_fail.c,
+stack_arg_precision.c, verifier_aggregate_ret.c, verifier_bswap.c,
+verifier_gotol.c, verifier_ldsx.c, verifier_load_acquire.c,
+verifier_movsx.c, verifier_percpu_addr.c, verifier_private_stack.c,
+verifier_sdiv.c, verifier_stack_arg.c, verifier_stack_arg_order.c,
+verifier_store_release.c), each has __skip() repeating the adjacent
+__description() nearly verbatim, differing only by a trailing clause like
+", use a dummy test" or ", dummy test". This means each file now stores
+the reason twice and the two strings can drift apart independently.
 
-The bug was introduced by 2fb761823ead ("bpf, x86: Add x86 JIT support for timed
-may_goto"). I reproduced it on a KASAN-enabled x86_64 kernel based on v7.2,
-however KASAN does not trigger because the bad write stays inside the native
-JIT frame. Yet, the saved-register corruption is observable.
+> diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
+> index 07807757b518..794a7dfb0579 100644
+> --- a/tools/testing/selftests/bpf/test_loader.c
+> +++ b/tools/testing/selftests/bpf/test_loader.c
+> @@ -1327,6 +1330,12 @@ void run_subtest(struct test_loader *tester,
+>  	if (!test__start_subtest_with_desc(subspec->name, subspec->description))
+>  		return;
+>
+> +	if (spec->skip_reason) {
+> +		printf("%s:SKIP: %s\n", __func__, spec->skip_reason);
+> +		test__skip();
+> +		return;
+> +	}
+> +
+>  	if ((get_current_arch() & spec->arch_mask) == 0) {
+>  		test__skip();
+>  		return;
 
-I have not included a patch here because the fix seems subtle to me and would
-likely touch many files for different arch.
+This isn't a bug, but is the extra reason line reachable in a normal
+(non -v) run? Since test__start_subtest_with_desc() has already called
+stdio_hijack_init(), this printf() goes into subtest_state->log_buf.
+Looking at dump_test_log() in test_progs.c, the log_buf is only emitted
+when verbose() || force_log || subtest_failed is true, which would be
+false for a skipped subtest in a default run. Meanwhile the SKIP verdict
+itself is printed by print_subtest_name() using the __description text,
+so in the default output only the subtest name appears next to :SKIP.
 
-I can share the minimal reproducer and other details privately with maintainers
-if useful.
 
-Best regards,
-Jérémy
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Fixes: 2fb761823ead ("bpf, x86: Add x86 JIT support for timed may_goto")
-Assisted-by: Codex:gpt-5
-Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32778075708
+--===============7154996866721288548==--
