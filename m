@@ -1,80 +1,78 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06E0E38332A
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 18:25:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F513839A9
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 18:29:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787595923; cv=none; b=Zh3KsQoOQKdVbEcIG7cO0v0xyUqM6rX1Wo2HtaugxXQzlRwHLZ4ZqdQq/ONpnpFY/3x+KhxFY6qINhcHOUB1XsxuBcUxRisuhgtuyx1Uuj15SByWIy1YZXma2XTnff3oINGE2WN1rtiSjIbL79ibU/NW9KgUrsY1g/bvN13xz6k=
+	t=1787596182; cv=none; b=jr2LGmcaQ5EwLUq0SB5CRbPzPpy2DXQiM9uxxHUwEjiQ+ufm0mtij2SMDLBLDTeV+se74uKj3rUgCSOh/ujOHx85ONFa/e/JlsJUvlEe9UyV9L6Z5AmNWIuOIqbtNNWbDUqYJIs83C/dYgsdXLM2r7cCeq6IWsMb9WUgGlk/94Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787595923; c=relaxed/simple;
-	bh=XDqu3ir8uCjUXMcTFCiuaDugRlIbGOwBTxDfcD7Mprk=;
+	s=arc-20240116; t=1787596182; c=relaxed/simple;
+	bh=lf7dQ7NnskAy3ATAOFdF26vnu8RkVCtT1uDpmn5bCk0=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=uV8PbiFpQT/heF61yaTd56J4lB01iLiaZQcU68uFGo3d+r1VsBfRSIucF9/hhwQO6UACeC/aA2HV7hg9H3SEvPO7H2d/GF8xNCH5JvtiJSxyDjAoS8dvqr4Um4xUtXFGLmwXMMjMdRbI1fkG2GhpVx3+0JLL8uISd6DTwbD5wDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D62UHBHI; arc=none smtp.client-ip=209.85.210.176
+	 Content-Type:MIME-Version; b=KoBGd30E+o+92ZC2b77He/6vIcThfjO27qgs0vPagjkWivJ9Ns3iStIuSwSIkQn8i0jeUctHlkty08OBFBxapPSusXLJr2GnEz97qctwrM2QlgIAig3NRYnZf2bMoK+Ca+KYpzab0vzhHM0Mro2DkqryxKk0EYqlGbo4fJT+pv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JxJXIjhU; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D62UHBHI"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-84a4d8fd6ecso4002601b3a.1
-        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 11:25:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JxJXIjhU"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-84867f07d63so4111653b3a.2
+        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 11:29:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787595921; x=1788200721; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787596180; x=1788200980; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=xfDfEV2qkpa4xbSOFqOL6y0p1nO4JV/7xWUfb7bdf1A=;
-        b=D62UHBHI/+RkOC6WPICpgKj6164EtOoiVx9PZI58XZzh5WyDzyNuQWFAOK1F+SPLcF
-         GFbI3mO0QpSYlrXCFOPsPvlpj118enQVrQSOafl3zjUsgFQIFHv55gLqNSM3UgB08H8C
-         rl7XNUxdz+x3WEdYK1T9apfokjKtr9ne+yrOhyqaVHFq/cU23wjbfdwEe8AhRmpCEPsC
-         J2FPjEKI/I2UoRhvjz/3+BpClHOyIuxJtRicdji/wGboJfI/wDgqmi/DPS31gRktUjof
-         NLIIhp5CjZn8T4ehAIXWXCCNSTnqlvXWDnA1Jz5f8f6AvoQ7IjkAg9uK8PYdwifHUg8s
-         c5UA==
+        bh=iwTimE3tMK3wAwPhjwKLsiVricZAjo6qRLA/H5Hgmrg=;
+        b=JxJXIjhUlM0sGqpVNFldhn5O0uy8+zznUEGO24mSurGhRKCpAAJ4mPELEfbTBhXU8a
+         pxsvPW/cLdIUvUyICL46Du7VQVngUnr4XTqeFX4oLKHM8cG01SELKY6PTISup2r/FvZl
+         DSrHR8OoBc0DSmgNrjSOQ+lUXKY6+0Cvr6Km/AzHFJ4byRVdPL3V2IjJDZdOfF00FB1H
+         I9SwyzIz4IJ6D4YDLDfghl0v2fSYBXNbVs1nkvFMzxmHyq1NwlI2m/NwKKNnXDQHY28H
+         8zTjna3fzfJZQZht1QV6JnyhPVh9DGCjX1xfPTJVQ5Fkd3abko94cYRoIc4SYp71qrzV
+         kTnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787595921; x=1788200721;
+        d=1e100.net; s=20251104; t=1787596180; x=1788200980;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=xfDfEV2qkpa4xbSOFqOL6y0p1nO4JV/7xWUfb7bdf1A=;
-        b=CTJEt4IB2PjsFGV4nPkkcvGqTftJDX7D+903IKskUGJhax5sQ4SENTF9hqLqhny7lk
-         DqymSWcH+ggbLVI943SmLnjT9qpT9erWQeHqlvH76k1UeFto7+Cx6i8tuKc24kkqKL9L
-         MnfAHPn8zWX8qpV6jhl/Zdtqvjlacx5D62RRxLSgd/97e33lcZ5P4O3YFDMh9zFJk/v3
-         OWfHuwYc0bCbXfLXMq4KlTAI3BzagyRa8Mt3b3fl72VeyZMiXEdD3/EbCvLPmL3dXjP3
-         xfcLn4+of/48Knbshqn6SVCyGyjxgMqWH+9LvyPVD6X8GbDmZ5f/6FdqVJxebrgdREm/
-         efpA==
-X-Gm-Message-State: AFuF++kAeeU3+YXkyezKzSTVtf7KwXHi/4PtuBgOXtLL56MD4vGYPBAF
-	6hpuV7r+aZNqXp+LALNAYOsg5hhaPPxK+1UgKV/baGxbQctFF1iTULGR
-X-Gm-Gg: AR+sD12bn8yBph8AR0YyrOgDQOq9ssl8TTQH0T4OLrz+HO+wERKnJpEyumzPCXFSVon
-	yt6fkhqGJirqBOkJ60zftoa0It2fWx2JlGzQuvoztJlUOwT6R1iIdtI9XRZnzgM5weLVml6XHui
-	n9thTJ77ro/oox4NUKPRfUReQz/2A/jd4ir4HwxLKCtKrVgVEsX8iBK+duUaOn0XGpYH6JltoGV
-	tIc2bpuPGr5mzsxf530SJV+OaFswxqMspFotYeGAhyx0V2/cEfDVOxk1zyHVEhq5lImID6mUfnl
-	DglI5reeGHB11fvPnkR74aR0YS8fn1xBiJs8zMmJKCd8hLHraHxZ9DMEV1SlGwpm0mVNXpkHseM
-	IT6Si4wlDikd7xJsTPir1l906f5jO3mMzs1RH6u0m/oPhFeGddMqiw+VP3mAwbtxObpggBSj8r6
-	0z7iyKtnb0H+k7ctr0xDCZRJ3lJxhGv7EIvFtsqzR7S4sxT9ptbBgPXM+xABAQtkaGUD9sO2TbN
-	Ikiti76Rm7k7owBTcMNAHXhqG5RFqvhxta9G3e3MPofhAEBcnKljFCamt4aVg==
-X-Received: by 2002:a05:6300:398:b0:3bf:7081:9356 with SMTP id adf61e73a8af0-3cd4bc4540dmr35582321637.17.1787595921100;
-        Mon, 24 Aug 2026 11:25:21 -0700 (PDT)
+        bh=iwTimE3tMK3wAwPhjwKLsiVricZAjo6qRLA/H5Hgmrg=;
+        b=WhOPrpkpxxdUJGuESga7WobrXcDPlJzQ7G9UCa6u4cihqEKswcHQoy/9hBsgqQB3qx
+         qKqovjGjg4fkxJqX6D1EhV1fjYoKgTtMpnyDUgsRlzrml0XmZ8eMKY80J7iwDStlkCvG
+         dfVpyMjyWo5B0CrkjR+qFM6Aq6cNQqVAz1rM/H662t9cB49kg+x1Mp8aYCFUTGyf8grG
+         IV/oNnLvufloT4rg3YojDwYbCr0d1EDu+S4CgHWXRNyHzPpUn8d8WRtj5tw2pTsCE/kF
+         IqNLOyBufzo458DOB9co9c8HgVpNvItHj+WPNxwpjDPnpMoVk5JA6NlPa9EXI58FySDN
+         g/Hw==
+X-Forwarded-Encrypted: i=1; AHgh+Rq8AR/oGm+1x7gl8w79R2poEmrsFSXv/mvm/jWOiQi0qB1F5Bac/l1J8L/7xnVFX54lrbU=@vger.kernel.org
+X-Gm-Message-State: AFuF++k1gVazLFhaP2g2vJR42EeBlCnvBvx70f85KdlFQ5FgtYc0ODT+
+	qq04b18/1kSLvD4uEawuollJ2Mp7I8xBo6F28ls+lHkoy8oVD2DRLD1L
+X-Gm-Gg: AR+sD13QC6CUEs9Mkz3xXwehUtgkUSuwMt1nAfRxaD4uHpPngBNOKxE4mgDbyMlotUh
+	PVg5LWXgiEFh4MgpHK+TbX+mMj27DRG9dCNWN7AJdLmyo7JhKM0SEXUu4RQ9i8AerHAIOdsmKur
+	FOgkPb4dABt5m/JFW9FERyIbKnSoQK1sCMytJZONACnIpxrAkIfXe4DyAVD2SpPpM5QcDlGfm1f
+	EC2mYJ9/hKnDiFWycGWb7Q2kXGAvAjn2UnPQU+KeE2a3b1VFbRNeuFi3+IAXcBX4klv2iD4Mhzv
+	Wfr6BFBrNzkhuzpoGNKwffyxxu6zSl3nxE9mWUVtHLtiSS9QQhaKcBQB55+d4nsgN1wvazAoUR/
+	alfJSuW39DBmCNe+O0Iq0TqO8qz1j3W6dvSAmPe+VNvOeMrUBjQPcFBuokzeueht0w3UCGg+6+P
+	DXrZumbXutQoWFi8oIUOzJ+YGjUNfFY8FlbkjU14DP6oP5B1iIvHJwpZ1B+k0IW3kmFg5OLH+Pb
+	t3szRWHI/youFdj295m5GCb32syhSc+NIzQzSl8fzWP5w==
+X-Received: by 2002:a05:6a20:258e:b0:3b3:2703:115 with SMTP id adf61e73a8af0-3cd4bbf65a8mr36946123637.16.1787596180076;
+        Mon, 24 Aug 2026 11:29:40 -0700 (PDT)
 Received: from ?IPv6:2a03:83e0:115c:1:21a6:ad3f:64a7:7661? ([2620:10d:c090:500::5:ef40])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1418617378bsm25849886c88.11.2026.08.24.11.25.19
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-141861732f8sm27027765c88.10.2026.08.24.11.29.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2026 11:25:20 -0700 (PDT)
-Message-ID: <20c41530282cdad1a15dc1c46c7fdd370f7373b8.camel@gmail.com>
-Subject: Re: [PATCH v2 1/2] bpf: reject stack-argument callback subprograms
+        Mon, 24 Aug 2026 11:29:39 -0700 (PDT)
+Message-ID: <6a991c643d475d77d0b5f478d760429eeb5dd554.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2] bpf: Rewrite "rX <<= 32; rX >>= 32" into
+ "wX = wX" to keep linked scalars
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>, =?ISO-8859-1?Q?J=E9r=E9my?=
- Jean	 <Jeremy.Jean@oss.cyber.gouv.fr>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Date: Mon, 24 Aug 2026 11:25:18 -0700
-In-Reply-To: <e2a7e092-df3c-4f92-8f12-5eb371f004df@linux.dev>
-References: <20260817204812.1637171-1-Jeremy.Jean@oss.cyber.gouv.fr>
-	 <20260817204812.1637171-2-Jeremy.Jean@oss.cyber.gouv.fr>
-	 <5d02cbe3-fd71-44e4-a6dd-706233ba248e@linux.dev>
-	 <9f50810d45db0b60248f106d21b4a278f3ec2156.camel@gmail.com>
-	 <e2a7e092-df3c-4f92-8f12-5eb371f004df@linux.dev>
+To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
+ kernel-team@fb.com
+Date: Mon, 24 Aug 2026 11:29:37 -0700
+In-Reply-To: <bd05af85-eedf-4749-813d-452fecd2bcbe@linux.dev>
+References: <20260821042837.2786719-1-yonghong.song@linux.dev>
+	 <f97bb12895dea33aa8f79b0468b5ada81510cc9d.camel@gmail.com>
+	 <bd05af85-eedf-4749-813d-452fecd2bcbe@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
@@ -85,144 +83,107 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Sat, 2026-08-22 at 11:27 -0700, Yonghong Song wrote:
->
-> On 8/20/26 3:32 PM, Eduard Zingerman wrote:
-> > On Tue, 2026-08-18 at 08:23 -0700, Yonghong Song wrote:
-> > > On 8/17/26 1:48 PM, J=C3=A9r=C3=A9my Jean wrote:
-> > > > Helper callbacks enter BPF subprograms through bpf_callback_t, whos=
-e
-> > > > runtime ABI supplies five arguments. BTF validation nevertheless pe=
-rmits
-> > > > static callback subprograms to declare more than five arguments whe=
-n JIT
-> > > > stack arguments are supported.
-> > > >
-> > > > This lets verifier state for a callback use outgoing stack argument=
- slots
-> > > > prepared at the helper call site. The helper does not pass those sl=
-ots. On
-> > > > x86-64, callback loads of arguments seven and later therefore read =
-the
-> > > > helper native frame instead of the synthetic values checked by the
-> > > > verifier. KASAN reports a slab OOB write.
-> > > >
-> > > > Reject callback subprograms with incoming stack arguments when proc=
-essing
-> > > > callback calls.
-> > > >
-> > > > Fixes: 0f6bd5e7a804 ("bpf: Support stack arguments for bpf function=
-s")
-> > > > Assisted-by: Codex:gpt-5
-> > > > Signed-off-by: J=C3=A9r=C3=A9my Jean <Jeremy.Jean@oss.cyber.gouv.fr=
->
-> > > > ---
-> > > >    kernel/bpf/verifier.c | 2 ++
-> > > >    1 file changed, 2 insertions(+)
-> > > >
-> > > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > > > index fdc5fbb1f78c..5fcefc0eaba0 100644
-> > > > --- a/kernel/bpf/verifier.c
-> > > > +++ b/kernel/bpf/verifier.c
-> > > > @@ -9285,6 +9285,8 @@ static int push_callback_call(struct bpf_veri=
-fier_env *env, struct bpf_insn *ins
-> > > >    	err =3D btf_check_subprog_call(env, subprog, caller->regs);
-> > > >    	if (err =3D=3D -EFAULT)
-> > > >    		return err;
-> > > > +	if (bpf_in_stack_arg_cnt(&env->subprog_info[subprog]))
-> > > > +		return -EINVAL;
-> > > This is not good as user will not know why it failed. Your v1 does ha=
-ve an error message.
-> > >
-> > > But this is not needed. Without above verifer.c change, user will get=
- an error message:
-> > >      func#0 writes 4 stack arg slots, but calls only require 0
-> > >
-> > > NACK, see my v1 comment: https://lore.kernel.org/bpf/14a7e7c2-36f7-4a=
-a2-9b20-cc54700a9f1b@linux.dev/
-> > >
-> > > >
-> > > >    	/* set_callee_state is used for direct subprog calls, but we ar=
-e
-> > > >    	 * interested in validating only BPF helpers that can call subp=
-rogs as
-> > Yonghong,
-> >
-> > this is a real bug. Here is an example of a program that exposes
-> > unsafe behavior:
-> >
-> >      unsigned long arr[10];
-> >
-> >      __noinline __used
-> >      static int callback_9args(__u32 index, void *ctx, long a3, long a4=
+On Sat, 2026-08-22 at 09:47 -0700, Yonghong Song wrote:
+
+...
+
+> > > @@ -15878,7 +15886,12 @@ static int check_alu_op(struct bpf_verifier_=
+env *env, struct bpf_insn *insn)
+> > >  =C2=A0						insn->src_reg);
+> > >  =C2=A0					return -EACCES;
+> > >  =C2=A0				} else if (src_reg->type =3D=3D SCALAR_VALUE) {
+> > > -					if (insn->off =3D=3D 0) {
+> > > +					if (insn->off =3D=3D 0 && insn->src_reg =3D=3D insn->dst_reg &&
+> > > +					=C2=A0=C2=A0=C2=A0 (dst_reg->id & BPF_ADD_CONST) &&
+> > > +					=C2=A0=C2=A0=C2=A0 linked_base_fits_u32(dst_reg)) {
+> > > +						dst_reg->id =3D (dst_reg->id & ~BPF_ADD_CONST64) |
+> > > +							=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BPF_ADD_CONST32;
+> > This commit consists of two parts:
+> > - a special case for wA =3D wA assignment
+> > - a rewrite for `rA <<=3D 32; rA >>=3D 32;` pair
+> >=20
+> > Could you please split it in two with separate selftest for each.
+>=20
+> Let me explain a little bit more.
+>=20
+> For these four insns
+>=20
+>    3: (bf) r2 =3D r1               ; R1=3Dscalar(id=3D1,...) R2=3Dscalar(=
+id=3D1,...)
+>    4: (07) r2 +=3D -5              ; R2=3Dscalar(id=3D1-5,smin=3D-5,smax=
+=3D0xfffffffa)
+>    5: (67) r2 <<=3D 32             ; R2=3Dscalar(smax=3D0x7fffffff0000000=
+0,...)
+>    6: (77) r2 >>=3D 32             ; R2=3Dscalar(smin=3D0,umax=3D0xffffff=
+ff,...)
+>=20
+> Eventually, the above insns will be converted to
+>=20
+>    3: (bf) r2 =3D r1               ; R1=3Dscalar(id=3D1,...) R2=3Dscalar(=
+id=3D1,...)
+>    4: (07) r2 +=3D -5              ; R2=3Dscalar(id=3D1-5,smin=3D-5,smax=
+=3D0xfffffffa)
+>    5: (bc) w2 =3D w2               ; R2=3Dscalar(id=3D1-5,smin=3D0,umax=
+=3D0xffffffff)
+>    6: (bc) w2 =3D w2               ; R2=3Dscalar(id=3D1-5,smin=3D0,umax=
+=3D0xffffffff)
+>=20
+> insn 5 and 6 are the ones to be changed.
+>=20
+> Here:
+>=20
+>    5: (67) r2 <<=3D 32             ; R2=3Dscalar(smax=3D0x7fffffff0000000=
+0,...)
+>    6: (77) r2 >>=3D 32             ; R2=3Dscalar(smin=3D0,umax=3D0xffffff=
+ff,...)
+> converted to
+>    5: (bc) w2 =3D w2               ; R2=3Dscalar(id=3D1-5,smin=3D0,umax=
+=3D0xffffffff)
+>=20
+> This insn
+>    6: (bc) w2 =3D w2               ; R2=3Dscalar(id=3D1-5,smin=3D0,umax=
+=3D0xffffffff)
+> is not really necessary. I put it here to maintain existing control flow =
+graph.
+> Previously for insn 6, I used "goto pc+0" which will be removed later.
+> But "goto pc+0" has some impact on verification as it added yet another j=
+ump.
+> See bpf_is_state_visited():
+>=20
+>          if (env->jmps_processed - env->prev_jmps_processed >=3D 2 &&
+>              env->insn_processed - env->prev_insn_processed >=3D 8)
+>                  add_new_state =3D true;
+>=20
+> Here "goto pc+0" may impact for some programs. I didn't investigate this
+> in detail but probably I should investigate and fix the root cause.
+>=20
+> Alternatively, we can rebuild the control flow graph by removing insn 6.
+> I am just not sure whether this is worthwhile or not.
+>=20
+> > Also, could you please comment why the special case for `wA =3D wA` is =
+necessary?
+>=20
+> The second wA =3D wA is not needed. We can remove it and rebuild the cont=
+rol flow
+> for it, just not sure whether this is worthwhile or not. Probably yes.
+
+I understand why you insert `wA =3D wA` twice, the question is about a
+special case for `wA =3D wA` in check_alu_op(), why would you need
+additional handling there specifically?
+
+> > Is it because assign_scalar_id_before_mov() destroys the link:
+> >=20
+> >    static void assign_scalar_id_before_mov(struct bpf_verifier_env *env=
 ,
-> >                                long a5, long a6, long a7, long a8, long=
- a9)
-> >      {
-> >              return arr[a9] % 2;    // verifier sees a9 as 0 and allows=
- this memory access
-> >      }
-> >
-> >      SEC("tc")
-> >      __description("stack_arg: callback with incoming stack args")
-> >      __failure
-> >      __naked void stack_arg_callback_many_args(void)
-> >      {
-> >              asm volatile (
-> >                      "r6 =3D 0;"
-> >                      "*(u64 *)(r11 - 32) =3D 0;"
-> >                      "*(u64 *)(r11 - 24) =3D 0;"
-> >                      "*(u64 *)(r11 - 16) =3D 0;"
-> >                      "*(u64 *)(r11 - 8) =3D 0;"
-> >                      "r1 =3D 1;"
-> >                      "r2 =3D %[callback_9args];"
-> >                      "r3 =3D 0;"
-> >                      "r4 =3D 0;"
-> >                      "call %[bpf_loop];"
-> >                      "r1 =3D 1;"
-> >                      "r2 =3D 2;"
-> >                      "r3 =3D 3;"
-> >                      "r4 =3D 4;"
-> >                      "r5 =3D 5;"
-> >                      "*(u64 *)(r11 - 32) =3D 0;"
-> >                      "*(u64 *)(r11 - 24) =3D 0;"
-> >                      "*(u64 *)(r11 - 16) =3D 0;"
-> >                      "*(u64 *)(r11 - 8) =3D 0;"
-> >                      "call callback_9args;"   // this hides the callbac=
-k call from the check in bpf_fixup_call_args()
-> >                      "r0 =3D 0;"
-> >                      "exit;"
-> >                      :
-> >                      : __imm_ptr(callback_9args),
-> >                        __imm(bpf_loop)
-> >                      : __clobber_common, "r6"
-> >              );
-> >      }
-> >
-> > J=C3=A9r=C3=A9my,
-> >
-> > Please update the test case as above, as your test case does not
-> > really expose the bug. Also, I think that a better fix would be to
-> > make stack arguments not-init in the callback frame. This way the
-> > verifier would produce a proper error message.
->
-> Okay, I see. The key thing is the below:
->     "call callback_9args;"   // this hides the callback call from the che=
-ck in bpf_fixup_call_args()
->
-> So callback_9args appears twice, and bpf_fixup_call_args() only checks th=
-e second callback_9args(), right?
->
+> > 					  struct bpf_reg_state *src_reg)
+> > 	...
+> > 	if (src_reg->id & BPF_ADD_CONST)
+> > 		clear_scalar_id(src_reg);
+> >=20
+> > ?
+> >=20
+> > If that's the only reason, is it possible to extend existing wA =3D wB
+> > logic instead of adding a special case?
 
-I wouldn't say it is tied to callback_9args() being called twice,
-it can be some other function with stack arguments.
-The check in the bpf_fixup_call_args() goes as follows:
-- if there is a subprogram that writes M stack argument slots max;
-- and only calls subprograms that require N(i) stack argument slots where N=
-(i) < M;
-- then report an error.
-
-So a presence of a subprogram call with 12 parameters would silence
-this error for a specific subprogram. But this is not related to the
-issue at hand, the issue at hand is that we need to correctly model
-that stack arguments are not passed via callbacks.
+^^^
+The above part is still relevant for the question.
