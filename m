@@ -1,143 +1,140 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mta1.migadu.com (out-25.mta1.migadu.com [95.215.58.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C24364EB0
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 20:10:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787602224; cv=pass; b=lj6vFugr8sY7PYa1RI4d53GgTd1RMOmQKKCKQSSDW4XGmG0H8wlJmeXnEHA0Ug6syA32pXbV9uPkst48jM/kXxYAxksm+7jJ6dfXHGSxyr85hHNtCdaoaWu/SQpkCTVoCf+FheZ1nTGbvyFHvVAgUPrk1dUuWv49BQEqcpyrY2w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787602224; c=relaxed/simple;
-	bh=Nh2W+2KjkIZezYDnX6rM/9HtlU37yBwv5+yVF52FLHc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gswjzd0EYyT62CbdiiAUXoYz6p59cvgyjlhSxlFNzR6WjGKtvjJDujyuJVWYD2VdET5yjUmEyUOBn4efMAh4LUMyAUpI1n1kpn5uLjeLiSxnS5aKAsDzXQEEkA0m49Qx0OSDq5QLTAh5D6KbVZERVCWPXFfZLyOxg4ZtMj8zq4M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g38WZvUW; arc=pass smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FB033839A1
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 20:15:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.25
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787602552; cv=none; b=GwZ8Ksrbk+zPqhsQaL1iQqFVLcbfLcNQrVfAZb4fPsZ3TIkweGs8cFQo+r//dkT6zQhHBUxRQItnaTk0HjB5tunr74CBXbnDpMWXdt0swBh6uanzsiy+DXPSrOu2BYmGKLWxaS/B4hY9YlAgQcGFMkV0rhs91FWTIYNAbQgKYpQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787602552; c=relaxed/simple;
+	bh=nLzdm/qCP+HJMriRMsBX2NapVlTGsrYyj+a9BUlHHi0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aS/PH73ye6qctEab+KNOHlWxSLQ2kRp/28/n7T8o7nK06tfkznMXcOICOOSVMvtltO4kch990/bWc3Syu7EdCRzP+zudi52J/7Z0Icd3U9GMT8+3sJgIfS9FXJDBpUbHJu8PHcmnndFl2hEfTIfqnUsQKiGJmoGNkMCJTFy7dM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JkRXcuAV; arc=none smtp.client-ip=95.215.58.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g38WZvUW"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-84e0688b7e8so2886906b3a.1
-        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 13:10:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787602223; cv=none;
-        d=google.com; s=arc-20260327;
-        b=JHyq82hcJTlysG3QhavNnW9ZAjWWBH88iX1285z0XWqcXxiSgg3zYKb+4sb1MZbfXc
-         s8Nklop0TH68bG9REXTMii1eMvXfPgRFRTxEoX8qW1U83FC4oNBBGvoqAK4Q3hg6Rlq/
-         Btkjz9iPvBiK1nxQLo9tH/X+CDhaLgXmJRxLD6jrWZa7x/RPgOsnSLjJtMTcCK7mLlYG
-         6s7nWd2ICHHOvndmNU4nLLDojh9avWySvQNWogmL2fQHG/NlrpDH5nTr+DrqpT396umz
-         unFBQM+V0znO1bbjUdcBe8GvoyciL8sbNPJoU3dWS+Cqp40akl1Oc5fLfqWWiKKsWbYI
-         0DDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Nh2W+2KjkIZezYDnX6rM/9HtlU37yBwv5+yVF52FLHc=;
-        fh=m3oDtSgaAl9UYjaqrwO4w5R8c8FhTBBUVo559Bs/fdc=;
-        b=bFnU2SiLG5LCRORHxRyUs1kTAAmNTSTfZXTdlpODuwFvUmFivlw1dsnai9u+mCbAfP
-         GnZbFUS+52EiWHtJex8Pv6PgV0nbp6r1oARiC8eYKJBD8P8lgPMHx9837eJrr/Wssbb3
-         jTyzly9q7+nsit2AqnMBoiIkTBv+LLsHcA3eFhTp2yRPffkA86x67WFXgHh3joKHFfe2
-         AuGH4LqJM62fUtbv87PURhEGpkY2D65sYCgVMR74w7hFyW3NmwwVumAswt0iK4Q7frXE
-         MEr4XR1lVotihOiawGXDGA8Qz2HWUFZnOlWLvxLTrbLUJGh/2fu1FNUez2siznuV13Kx
-         ugLA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787602223; x=1788207023; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Nh2W+2KjkIZezYDnX6rM/9HtlU37yBwv5+yVF52FLHc=;
-        b=g38WZvUWG+oWfihRJWHI2Wbwbf7uIdP16hUxUGc9bqV8+TTzgrezOzAqbO4Die0l/D
-         HxAJ5uY06bZEtfowCkL+Y7NkWEDma2IO6fWNG7sY53bhNm1G/bh07aRjQjlOfeHELhMH
-         hCEfYtScysAdJnoJvxPgxYRRYkf8NAlNhB5Aw0QiwWbjTcFYJlvRAC+FJn0QPqqOz72c
-         CW2IGXszcNiAJBZvSBCeJd2yg4jl4Pr9qPNI8b4GBAnWkHMOmdEw1fO3OwBpmc2r973X
-         tczI/+qY86XeH1UtGIv2OkLCmsvR25iIM6yd3FA7PylY20v198eRN6O4GNavOn8Tu91a
-         bVqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787602223; x=1788207023;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Nh2W+2KjkIZezYDnX6rM/9HtlU37yBwv5+yVF52FLHc=;
-        b=BK+wlu/Jc8HtuY+1ibxxOjyf9sOHk9+5es07iYoL12U86CcKkNJm2Xw8sJ2vJYgUcQ
-         s6rgoEON+uBlIV1e74jpe3F8jNsJksiTWSgCq2MEBw5lJALIM25e33UghmjWkhNACWm4
-         bedRrMx98mTgrckR+fzegrKrpAqzRNtHyHHAE9frTQTm3UsS77KjAFJIzGNil0ZtVLgT
-         oon8HQ6mmJFKkLBb8hneykUKE9OPqweVNPBVV/z2ereUJoVTK2189+AqHKQ2TKhZRAXc
-         X4tPBZto4r+Hc3AW977Dlh1Vo/OdlgOTNPhKr803S3qUyrex9GYFyJ/x6rp5RWqOZ2tZ
-         nuew==
-X-Forwarded-Encrypted: i=1; AHgh+RqZwlbb4KZ2ZU0eNaWpmv/lW0G3LfDlx5FzK36pBdw1MF1/hixihs5XXFdAgHd3CWhZ6Yw=@vger.kernel.org
-X-Gm-Message-State: AFuF++lpAFHqBWf+0Q5Ds0ZjREcJXZ4r5KtW7OhFJ4zdeTaigGPf7ySW
-	WdC+zZHYRKOzSSWeGcbv5sG3nHbaCtQJ0/N23eOcIinFPBGD7QytibJnps0VH6jB1R1Q+Xxk8ba
-	e4Vh40iPzy82zZSXNfMtKNBEL57hSt2Q=
-X-Gm-Gg: AR+sD11MUECKtMkqMy9tolxr7jT8rL1eTN1RSRCrjeuk3QQX66aADXHwpuQrJ/DpuYg
-	S4ImJC3cLIlFMdi7JBXz7s3uE8XPo09Xk2s0eh7v5q7WcOEctziMJ0KKW2t9hRRPlgr5IKQBYHr
-	JEtof8QwVUoGgEoHAUWPHogkSmCDxFPfSrWejNxT7QQ1sbJzgk8ktDsbDHc+rc403yBcLHGSQl/
-	d0EGW5xU9K8D26Vsbn6ZTB40f4tb9fq28JD+b9kObUuUBhgtbpGPezrwNPKpWQZgBddh/Q/34D+
-	KnYwWBI9U7xx1qmWoB5twJDHtukPZDS1O1U/b+c4RhAIezaqtpBa+1W1sK7XDfzH26QSW4A0G8o
-	xnf8BFgJCk2gmHrxT0jvx3a8uScYgko/ZDV2y+M/8YA==
-X-Received: by 2002:a05:6a21:a41:b0:3c3:68b0:e273 with SMTP id
- adf61e73a8af0-3cd4bbf659dmr43462906637.15.1787602222753; Mon, 24 Aug 2026
- 13:10:22 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JkRXcuAV"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=nLzdm/qCP+HJMriRMsBX2NapVlTGsrYyj+a9BUlHHi0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787602547; v=1; x=1788207347;
+ b=JkRXcuAV7eH9fS9NjOutkiyCjEus98SYFLEZEHYx3Mh3T2oCfMUKsWBvxZP5J3kTmFwJiDc6
+ u2Ey5dOKKyqPluUZX6HwlJSo7obEc4whhAAY2e5FWWRQL4w55FswPR9BCPcGaL21B8vfsd1Utik
+ sndRQtWsmFo9pe6rKawzi/0o=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from localhost (2a03:2880:10ff:5::)
+	by smtp.migadu.com with ESMTPS id d3cffa5edf59e1e6;
+	Mon, 24 Aug 2026 20:15:46 +0000
+X-Mizu-Trace-ID: d3cffa5edf59e1e6
+X-Migadu-Flow: FLOW_OUT
+Date: Mon, 24 Aug 2026 13:15:41 -0700
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Hui Zhu <hui.zhu@linux.dev>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>, 
+	JP Kobryn <inwardvessel@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, Barry Song <baohua@kernel.org>, 
+	Geliang Tang <geliang@kernel.org>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, Hui Zhu <zhuhui@kylinos.cn>
+Subject: Re: [PATCH bpf-next v4 0/2] bpf: BPF-driven proactive memcg reclaim
+Message-ID: <aoyl4IrvfUl8swv_@linux.dev>
+References: <cover.1787205002.git.zhuhui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260821084726.3769957-2-sanghyun.park.cnu@gmail.com>
- <b380f7e7-2e0e-4c8c-9a70-e6a577d268cf@linux.dev> <CAEf4BzYM+b4E5S6ZCDcpEaw2uvdNPDVUdTgxUxkvCdM86DkubQ@mail.gmail.com>
- <68358803-57c9-4a89-9da3-fb5e12547e0f@linux.dev>
-In-Reply-To: <68358803-57c9-4a89-9da3-fb5e12547e0f@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 24 Aug 2026 13:10:08 -0700
-X-Gm-Features: AcwNN1UAux-27eVZW2UEkzLhPVB-7lVOFEI2nI5VIkBvH_HvpQM8AhH4b_Vgl80
-Message-ID: <CAEf4BzaBxRuU_W=UDoy9EB53PvPWdsEAo0=mV4E-N-bmZ1gs5w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3] bpf: Fix stack out-of-bounds write in cgroup
- link update
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Sanghyun Park <sanghyun.park.cnu@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org, 
-	John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Pu Lehui <pulehui@huawei.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1787205002.git.zhuhui@kylinos.cn>
 
-On Sun, Aug 23, 2026 at 10:04=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> =
-wrote:
->
-> On 22/8/26 03:35, Andrii Nakryiko wrote:
-> > On Fri, Aug 21, 2026 at 3:26=E2=80=AFAM Leon Hwang <leon.hwang@linux.de=
-v> wrote:
-> [...]
-> >>
-> >> Any issue of checking CAP_NET_ADMIN for BPF_LINK_UPDATE?
-> >>
-> >> If no, checking CAP_NET_ADMIN for BPF_LINK_UPDATE looks okay.
-> >>
-> >
-> > Why do we need extra capability checks during LINK_UPDATE if we
-> > already performed the check during LINK_CREATE? If you pass link fd to
-> > some process that doesn't have CAP_NET_ADMIN, but has link fd and
-> > another validated prog fd, they should be able to update the
-> > underlying program without extra checks, IMO.
-> >
-> What if a pinned link is updated by non-CAP_NET_ADMIN users? I (LLM)
-> verified the case by the selftest [1]. Is this case allowed intentionally=
-?
+On Thu, Aug 20, 2026 at 02:12:25PM +0800, Hui Zhu wrote:
+> From: Hui Zhu <zhuhui@kylinos.cn>
+> 
+> This series lets a BPF program decide when to trigger memcg reclaim
+> and how aggressively to do it, based on whatever runtime signal it
+> chooses to observe -- rather than reclaim only being triggered once a
+> cgroup's usage crosses a fixed threshold. The core idea is a pair of
+> new kfuncs, bpf_proactive_reclaim() and
+> bpf_proactive_reclaim_swappiness(), which give BPF direct access to
+> the proactive reclaim path so this decision can be made in BPF policy
+> rather than hard-coded threshold logic.
+> 
+> This was originally part of a larger series posted here [1].
+> That series also adds a memcg BPF struct_ops (memcg_charged,
+> memcg_uncharged, below_low, below_min) for synchronous, in-line memory
+> protection decisions. That mechanism and this one solve different
+> problems -- struct_ops hooks run inline on the charge/reclaim path,
+> while the kfuncs here are for asynchronous, out-of-band reclaim
+> decided independently by a BPF program -- so they are reviewed as
+> separate series. This series carries only the async reclaim piece.
+> 
+> Compared to v1, the kfunc interface has been reworked based on review
+> feedback: instead of a thin wrapper around
+> try_to_free_mem_cgroup_pages() exposing raw gfp/reclaim-option knobs,
+> the series now provides use-case-driven kfuncs that perform one
+> proactive reclaim pass with the same parameters memory.reclaim uses.
+> The bpf_thread_wq patches from v1 (old patches 2-3) are dropped from
+> this series: following the discussion in [2], the cgroup-aware
+> workqueue is being superseded by a disaggregated set of async
+> primitives (bpf_kthread/bpf_waitq) that will be developed separately
+> (discussion in [3]), and the selftest now queues its reclaim work
+> through bpf_wq.
+> 
+> Patch 1 adds bpf_proactive_reclaim() and
+> bpf_proactive_reclaim_swappiness(), sleepable kfuncs that perform one
+> reclaim pass on a target memcg, like a write to memory.reclaim: swap
+> is allowed, and the anon/file balance follows the cgroup's swappiness
+> or an explicit override in [MIN_SWAPPINESS, MAX_SWAPPINESS] plus
+> SWAPPINESS_ANON_ONLY. Both go through a shared helper,
+> bpf_proactive_reclaim_pages(), which guards against reclaim recursion
+> and calls try_to_free_mem_cgroup_pages() with GFP_KERNEL and
+> MEMCG_RECLAIM_MAY_SWAP | MEMCG_RECLAIM_PROACTIVE, the same parameters
+> user_proactive_reclaim() uses, and unlike memory.reclaim they do not
+> retry until the requested size is reached. Both refuse to run when
+> the caller already holds PF_MEMALLOC or has a non-NULL
+> current->reclaim_state, since a nested try_to_free_mem_cgroup_pages()
+> would clobber the outer reclaim's current->reclaim_state (e.g. MGLRU
+> dereferences current->reclaim_state->mm_walk); the reclaim_state
+> check also closes the window where try_to_free_mem_cgroup_pages() has
+> installed it but not yet set PF_MEMALLOC, reachable by a sleepable
+> program attaching fentry to the generated trace iterator function.
+> The size argument and the return value are both in bytes, matching
+> the byte-based unit of bpf_mem_cgroup_usage() and
+> bpf_mem_cgroup_page_state() so callers can mix them without manual
+> page/byte conversions. An out-of-range swappiness is reported with
+> (unsigned long)-1 rather than 0, since 0 cannot be told apart from a
+> pass that reclaimed nothing.
+> 
+> Patch 2 (selftests/bpf: add memcg async reclaim test) ties the kfuncs
+> into a worked example: it watches the WORKINGSET_REFAULT_FILE counter
+> of a high-priority cgroup as a proxy for memory-pressure impact, and
+> once it starts climbing, proactively reclaims memory from a
+> low-priority cgroup via bpf_proactive_reclaim(), with the reclaim
+> work queued asynchronously through bpf_wq. The test asserts that the
+> monitored cgroup's workload finishes faster once async reclaim kicks
+> in, and -- as timing alone cannot distinguish a working reclaim from
+> a no-op one -- that the BPF program actually made reclaim calls and
+> reclaimed bytes, via counters it exports through its .bss. This
+> demonstrates the end-to-end use case: BPF observes pressure on the
+> cgroup it wants to protect, and reclaims from the cgroup it wants to
+> reclaim from, in one self-contained mechanism. Note that, without
+> bpf_thread_wq, the CPU cost of the reclaim work is not yet attributed
+> to a chosen cgroup; that part waits for the async primitives work
+> mentioned above.
 
-I (human) think that yes, it's allowed by checking CAP_NET_ADMIN on
-initial LINK_CREATE for a given target and program (which fixes
-program type), and after that FD ownership can be transferred and BPF
-program can atomically be updated by whoever has that link FD (and new
-program's FD).
+All of this is unnecessary text. You don't need to explain the patches here and
+then again in their commit messages. Please remove this explanation.
 
-But Leon, show a bit more respect to humans next time, please.
+Also don't need to give history. Just explain why you want to add memcg reclaim
+kfunc and what use-cases you are looking into. (Ask your AI to be very concise
+and precise).
 
->
-> [1] https://github.com/Asphaltt/bpf/commits/bpf/link-update-issue/v1/
->
-> Thanks,
-> Leon
->
