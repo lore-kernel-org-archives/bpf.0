@@ -1,116 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-86.mta0.migadu.com [91.218.175.86])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2889F3EDE4A
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 08:47:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EBF13AA1AE
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 09:15:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.86
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787561229; cv=none; b=jiNS69b7pwxhd1cjKHtYAXjRdgaFjM0kanpCpMfI187VrT93LfjgxSpZPud+OVXLUFMDmAnxXVWWhZBPBbjKvWwanpp9+liL5VdMUkNdr/xUsdpe+gUlY5BqSuTfCaejNxSIQNoNfr1eipmOJax9YIhzGqspJ3A3f6UmekKe6Vk=
+	t=1787562923; cv=none; b=Rdfw71f+DDMBI8MMOzoFNLcyGgwCEJCKtRdtv4txLvimqAwGjWrClIpjIUZ2p3d+JbhtmdhTZADbxoqSI3ox40bCHENdJMg1qSFaHYp9F4gtoHrQTClLyq03UisWz5Du19CFLTH6nRBDJobaN5OefJVb4ZBOk1Q9VIU0ypSlyjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787561229; c=relaxed/simple;
-	bh=ugNuF1GpWakRFH4BRru2hwSseBhLHIa+Lni01iRWSKU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=h3XZFVxFwu6S+f/onw8zCjX8atHGKy9Jk/ZUt+Eu4YDk96b1pkzsaChtdwqtico6Vv4SP9o5olEXiKgM9OXMqXt1NqPgQ3ruMYtSztCti2Vt6rCBXQaAX3JZe9dBOAZxRJ8yIoxUlnc8yzzDb5UYoQwK6rtz+EowvVw1/MS/ev8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D8tRUbwV; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787562923; c=relaxed/simple;
+	bh=/a3UdMAG3Wpio/vEfjbyWbIH9dXhD1uWGifnE5BbjaA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=l6o48b/iNFFFljR4fazq+A5hF3HaHdl9+dEEL6mTKGQcA/3r4A2SmG3OOgBv38eOaUPU/I2BHeoqJtsyTDYzEv07sqY3vhIEUj4+xXZZrgwRYQR1+QPtAq98ds2+sbMxBWvY78LwwvGVw2cnxo0xZcaOvZAn/NH1QmfNWQylGUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nSZKSwUo; arc=none smtp.client-ip=91.218.175.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D8tRUbwV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 174E21F000E9;
-	Mon, 24 Aug 2026 08:47:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787561224;
-	bh=8av29sOfpJe/i7/mHjr+hwf62vtKRtDF+GDMnhufRbU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=D8tRUbwViCDDDU/VoCNG2v6hAT0jzBVq6C+J+HLtU3dAuTKFvneb6QnI+Kd2O8V+S
-	 AEIB1rpIInEl/Be3v0i1enWqxyY3UTvQWa7eiI6WlDNp5dBd90o9W25EuUUAgcxwRj
-	 mfWLH4To1ECsxuDAkn30AmDTiLsFCUGjmyhO5PxVFfLYqpWkbyLUrjGg66BOVZ3Zke
-	 f40xBibCHUck58lB198z5NMIGQmAAR4/5tv3XvKMj1kxSYffpigBqvWVEJbgydGhRY
-	 7niu0q7MOv92aa77ykeK0QWLsTfpKKhjGScPlAyw+kVxWJXZdDirzV9WIH4LBjTGu8
-	 hiu3AJPy2+5vg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v4 1/2] bpf: Fix queue/stack map u32 index overflow
-Reply-To: sashiko-reviews@lists.linux.dev
-To: chenyuan_fl@163.com
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260824083327.1708560-2-chenyuan_fl@163.com>
-References: <CAEf4BzbGe74OuUKiDz7oBrWzQCD54JVhYuCTQEWNHOHmnBEtbQ@mail.gmail.com>
- <20260824083327.1708560-1-chenyuan_fl@163.com>
- <20260824083327.1708560-2-chenyuan_fl@163.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 24 Aug 2026 08:47:03 +0000
-Message-Id: <20260824084704.174E21F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nSZKSwUo"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=/a3UdMAG3Wpio/vEfjbyWbIH9dXhD1uWGifnE5BbjaA=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787562919; v=1; x=1788167719;
+ b=nSZKSwUo4gbe1HFB2TvoLyx8LqR8a+rGdKx4QGRKsGWoR6Iz/8Bf2Zy0UOwK46gCKa/kkOr2
+ Y1M/je0hNrzPtqNh8JKMD840NIZ7ap+WAZ5ZpYMByFclEaHTueUoGbuqrl3PVxYswneObacW/zk
+ Ka+tS4B8f6vbYZBKz2KOSrLI=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from ctao-book.. (223.70.160.239)
+	by smtp.migadu.com with ESMTPS id 9901acb9e34782cb;
+	Mon, 24 Aug 2026 09:15:14 +0000
+X-Mizu-Trace-ID: 9901acb9e34782cb
+X-Migadu-Flow: FLOW_OUT
+From: Tao Cui <cui.tao@linux.dev>
+To: tj@kernel.org
+Cc: void@manifault.com,
+	arighi@nvidia.com,
+	changwoo@igalia.com,
+	suzhidao@xiaomi.com,
+	sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	cui.tao@linux.dev,
+	Tao Cui <cuitao@kylinos.cn>
+Subject: [PATCH v3] docs/sched_ext: document that cgroup CPU knobs are scheduler-dependent
+Date: Mon, 24 Aug 2026 17:15:01 +0800
+Message-ID: <20260824091501.547649-1-cui.tao@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+From: Tao Cui <cuitao@kylinos.cn>
 
-Pre-existing issues:
-- [High] Kfuncs using enum parameters as array indices lack bounds checking=
- for negative values.
---
+The fair class enforces cpu controller knobs such as cpu.max,
+cpu.weight and cpu.idle in the kernel. sched_ext only passes them to
+the BPF scheduler through the ops.cgroup_set_*() callbacks. Whether
+and how a knob takes effect is up to the loaded scheduler: it may
+implement the corresponding callback partially or not at all. The
+same applies to other knobs like nice levels.
 
---- Patch [1]: [PATCH bpf v4 1/2] bpf: Fix queue/stack map u32 index overfl=
-ow ---
-commit b3cc6df8f8f6a83f377bada50a4de0c2ebde4779
-Author: Yuan Chen <chenyuan@kylinos.cn>
+Document this in the basics section so users and container
+orchestrators know what to expect from a BPF scheduler.
 
-bpf: Fix queue/stack map u32 index overflow
+Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+---
+v2 -> v3: Drop the scheduler list and the nr_throttled example, keep
+the section concise and generic, per review.
 
-This commit fixes an integer overflow in queue/stack maps by restoring a
-bounds check in queue_stack_map_alloc_check(). It rejects max_entries and
-value_size combinations that would reach or exceed U32_MAX bytes.
+v2: https://lore.kernel.org/r/20260819012157.220932-1-cui.tao@linux.dev
 
-[ ... ]
+ Documentation/scheduler/sched-ext.rst | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-While reviewing BPF bounds checking, I noticed a pre-existing issue in
-mm/bpf_memcontrol.c:
+diff --git a/Documentation/scheduler/sched-ext.rst b/Documentation/scheduler/sched-ext.rst
+index 35b550671ca7..b594d93dd6aa 100644
+--- a/Documentation/scheduler/sched-ext.rst
++++ b/Documentation/scheduler/sched-ext.rst
+@@ -242,6 +242,18 @@ optional. The following modified excerpt is from
+             .name                   = "simple",
+     };
+ 
++Scheduler-Dependent Knobs
++-------------------------
++
++The fair class enforces cpu controller knobs such as ``cpu.max``,
++``cpu.weight`` and ``cpu.idle`` in the kernel. sched_ext only passes
++them to the BPF scheduler through ``ops.cgroup_set_weight()``,
++``ops.cgroup_set_idle()``, ``ops.cgroup_set_bandwidth()`` and friends.
++Whether and how a knob takes effect is up to the loaded scheduler: it
++may implement the corresponding callback partially or not at all. The
++same applies to other knobs like nice levels. When relying on these
++knobs, check the documentation or source of the loaded scheduler.
++
+ Dispatch Queues
+ ---------------
+ 
+-- 
+2.43.0
 
-> mm/bpf_memcontrol.c
->=20
-> __bpf_kfunc unsigned long bpf_mem_cgroup_vm_events(struct mem_cgroup *mem=
-cg,
-> 						   enum vm_event_item event)
-> {
-> 	if (unlikely(!memcg_vm_event_item_valid(event)))
-> 		return (unsigned long)-1;
-
-[Severity: High]
-This is a pre-existing issue, but since enums are represented as signed
-integers in C, could a BPF program bypass this bounds check by passing a
-negative enum value?
-
-It appears that a negative event value could evade the upper bounds check
-and lead to an out-of-bounds read when the event is used as an array index.
-
->=20
-> 	return memcg_events(memcg, event);
-> }
->=20
-> ...
->=20
-> __bpf_kfunc unsigned long bpf_mem_cgroup_memory_events(struct mem_cgroup =
-*memcg,
-> 						       enum memcg_memory_event event)
-> {
-> 	if (unlikely(event >=3D MEMCG_NR_MEMORY_EVENTS))
-> 		return (unsigned long)-1;
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does this signed comparison
-handle negative event values?
-
-Similar to the above, a negative event value would pass this check and
-subsequently be used as a negative index for the memory_events array.
-Does this result in an out-of-bounds memory read?
-
->=20
-> 	return atomic_long_read(&memcg->memory_events[event]);
-> }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260824083327.1708=
-560-1-chenyuan_fl@163.com?part=3D1
