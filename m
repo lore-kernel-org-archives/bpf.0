@@ -1,31 +1,31 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0446C45FFBD;
-	Mon, 24 Aug 2026 16:06:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFB9F4611E1;
+	Mon, 24 Aug 2026 16:06:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787587569; cv=none; b=NJ9Ywgh0mzwXJu/d+/2dk8QaGGBLVpGCHWWYGpqoO3OicsYdXnwfRjOei7kQsTgF7NQEcEX+oZY3OqJppTLTzgRkCVjtOjNXL2M1H6Fr0Es6/Y78Ol4bgKnpqSdKycS9h6YIownIO0gX3ClXfCL552pT10i5mpswO4tWdDI3YXQ=
+	t=1787587574; cv=none; b=oi5bRNotO2xhAgnCqL6PKeZI5umkiWnTrdke9wLCx77K6AOC/VpqrZ1Zdy3fEyjcUvHvAEwx9+orYsqIXCafqHeEmZd+pd0IxI0twLcpdIcyWqjvKoTw9Ax73e6KQqwRA7yQ7Ojr583t8S1uV28VYgjqxZT6NwAVsW13Rt69rDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787587569; c=relaxed/simple;
-	bh=nodn3/K9trBK+2wWrkLJGeFqd0INql6u2EHBqnLbWuc=;
+	s=arc-20240116; t=1787587574; c=relaxed/simple;
+	bh=RrebhXATXwELFIUm3sfpDdh92ACD3QNlTwQzpg9AkNk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XVH8phTNaGNlC2L6NklNkDKKHY4PuJD3d9csZ7HtRfzVoBP8TIbwzyBPTHVe2WtZXyvggz3PPR+ghyB0hfiUCgg1sG8B4Iu2HVxHUkyToV9nltCzKGvTsdO3fdHhUrM98d98zEOB66sTCfLLdDr3ERlj2pGVKKemE1BDHXfNLoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=cM4OF4zK; arc=none smtp.client-ip=217.140.110.172
+	 MIME-Version; b=qYsER3GCw3PRI/SDcYgJfsnrilb8btt3LZwmq22RHt+8rntGbsS+/z4XYFqTFeY27pkcJcEO8HY/aaCIh3Cnngbdie+VGecdTF7GjJDVJrylEgphVI9IZ2IzW8+WivJarGEVznmg7j9iWbzXpljedx/mBpbIcoVHG4cW3GmIomM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Jc91idwU; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="cM4OF4zK"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="Jc91idwU"
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E2D1F16F2;
-	Mon, 24 Aug 2026 09:06:00 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 684411756;
+	Mon, 24 Aug 2026 09:06:04 -0700 (PDT)
 Received: from e142334-100.cambridge.arm.com (e142334-100.cambridge.arm.com [10.2.198.93])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 846553F85F;
-	Mon, 24 Aug 2026 09:06:01 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0C5DE3F85F;
+	Mon, 24 Aug 2026 09:06:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1787587564; bh=nodn3/K9trBK+2wWrkLJGeFqd0INql6u2EHBqnLbWuc=;
+	t=1787587568; bh=RrebhXATXwELFIUm3sfpDdh92ACD3QNlTwQzpg9AkNk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cM4OF4zKGJ1P/SjzDr6eXMRdqUQP3re7P3X9242MP8mexIfZldlzw0sfMcbAUSh1L
-	 1a49U9Gw7XBFBsIGu7em0nv2/uib4e3xK/sCEUzr4sS4BhFi9PqpXz8JGLANNTKTay
-	 tyBid6SLPtTSmY70IX5SC9k9RdCKMRCJUje9FtAk=
+	b=Jc91idwUPeyzoMBCcMqqcJfBY/NipSip+nx0Vu2SSHMLt0GB1cy1vcJ0XIHfHuDVt
+	 ZfysIhqHXV5A+RsGPMQs5ObrYLtPAo5PLdYurj6y9VDAQ+21gPimS5kpua6pOqy5p/
+	 cu3IO/eY89jF1Cl+5pzRLPOStBWlPPk/3hQnsiX0=
 From: Muhammad Usama Anjum <usama.anjum@arm.com>
 To: Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>,
@@ -54,9 +54,9 @@ To: Catalin Marinas <catalin.marinas@arm.com>,
 	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
 	linux-mm@kvack.org (open list:MEMORY MANAGEMENT - CORE)
 Cc: Muhammad Usama Anjum <usama.anjum@arm.com>
-Subject: [PATCH 4/7] maccess: Use a scoped guard to re-enable page faults
-Date: Mon, 24 Aug 2026 17:04:50 +0100
-Message-ID: <20260824160523.3907021-6-usama.anjum@arm.com>
+Subject: [PATCH 5/7] maccess: Batch TCO handling in kernel nofault loops
+Date: Mon, 24 Aug 2026 17:04:51 +0100
+Message-ID: <20260824160523.3907021-7-usama.anjum@arm.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260824160523.3907021-1-usama.anjum@arm.com>
 References: <20260824160523.3907021-1-usama.anjum@arm.com>
@@ -68,106 +68,120 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Kernel nofault copy and string paths open-code page-fault disable and
-enable around label-based loops, duplicating cleanup on success and
-failure.
+With Hardware Tag-Based KASAN in asynchronous or asymmetric mode, every
+arm64 kernel nofault access sets and clears PSTATE.TCO. Copy and string
+loops repeat that pair even though tag checking can stay disabled for the
+whole operation.
 
-Use a page-fault scope guard instead. Leaving the scope now re-enables
-page faults on both paths without separate cleanup at the fault label.
+Cover each non-empty operation with one bare nofault region and use bare
+accessors in the loop. Leaving the region restores TCO before page faults
+are enabled again, including after an access fault. Existing empty-work
+checks ensure that every new region performs at least one access.
 
-No functional change.
+The number of dynamic MSR TCO executions therefore changes as follows:
+
+    Work                         Before    After
+    N nofault accesses          2N        2
+    4 KiB nofault copy          1,024     2
+    N-byte strncpy              2N        2
+
+The 4 KiB case assumes 512 64-bit accesses. These figures come from the
+control flow rather than a runtime measurement, so the time saved depends
+on the CPU and workload. Generic fallbacks leave other architectures
+unchanged.
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 ---
- mm/maccess.c | 53 +++++++++++++++++++++++++---------------------------
- 1 file changed, 25 insertions(+), 28 deletions(-)
+ mm/maccess.c | 48 +++++++++++++++++++++++++++---------------------
+ 1 file changed, 27 insertions(+), 21 deletions(-)
 
 diff --git a/mm/maccess.c b/mm/maccess.c
-index c59a0e092d24a..f695ceefe6fcc 100644
+index f695ceefe6fcc..87486bf98d15a 100644
 --- a/mm/maccess.c
 +++ b/mm/maccess.c
-@@ -38,18 +38,17 @@ long copy_from_kernel_nofault(void *dst, const void *src, size_t size)
- 	if (!size)
+@@ -19,7 +19,7 @@ bool __weak copy_from_kernel_nofault_allowed(const void *unsafe_src,
+  */
+ #define copy_from_kernel_nofault_loop(dst, src, len, type, err_label)	\
+ 	while (len >= sizeof(type)) {					\
+-		__get_kernel_nofault(dst, src, type, err_label);	\
++		__get_kernel_nofault_bare(dst, src, type, err_label);	\
+ 		kmsan_check_memory(src, sizeof(type));			\
+ 		dst += sizeof(type);					\
+ 		src += sizeof(type);					\
+@@ -39,13 +39,15 @@ long copy_from_kernel_nofault(void *dst, const void *src, size_t size)
  		return 0;
  
--	pagefault_disable();
--	if (!(align & 7))
--		copy_from_kernel_nofault_loop(dst, src, size, u64, Efault);
--	if (!(align & 3))
--		copy_from_kernel_nofault_loop(dst, src, size, u32, Efault);
--	if (!(align & 1))
--		copy_from_kernel_nofault_loop(dst, src, size, u16, Efault);
--	copy_from_kernel_nofault_loop(dst, src, size, u8, Efault);
--	pagefault_enable();
-+	scoped_guard(pagefault) {
-+		if (!(align & 7))
-+			copy_from_kernel_nofault_loop(dst, src, size, u64, Efault);
-+		if (!(align & 3))
-+			copy_from_kernel_nofault_loop(dst, src, size, u32, Efault);
-+		if (!(align & 1))
-+			copy_from_kernel_nofault_loop(dst, src, size, u16, Efault);
-+		copy_from_kernel_nofault_loop(dst, src, size, u8, Efault);
-+	}
+ 	scoped_guard(pagefault) {
+-		if (!(align & 7))
+-			copy_from_kernel_nofault_loop(dst, src, size, u64, Efault);
+-		if (!(align & 3))
+-			copy_from_kernel_nofault_loop(dst, src, size, u32, Efault);
+-		if (!(align & 1))
+-			copy_from_kernel_nofault_loop(dst, src, size, u16, Efault);
+-		copy_from_kernel_nofault_loop(dst, src, size, u8, Efault);
++		scoped_guard(__kernel_nofault_bare) {
++			if (!(align & 7))
++				copy_from_kernel_nofault_loop(dst, src, size, u64, Efault);
++			if (!(align & 3))
++				copy_from_kernel_nofault_loop(dst, src, size, u32, Efault);
++			if (!(align & 1))
++				copy_from_kernel_nofault_loop(dst, src, size, u16, Efault);
++			copy_from_kernel_nofault_loop(dst, src, size, u8, Efault);
++		}
+ 	}
  	return 0;
  Efault:
--	pagefault_enable();
- 	return -EFAULT;
- }
- EXPORT_SYMBOL_GPL(copy_from_kernel_nofault);
-@@ -73,18 +72,17 @@ long copy_to_kernel_nofault(void *dst, const void *src, size_t size)
- 	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS))
+@@ -55,7 +57,7 @@ EXPORT_SYMBOL_GPL(copy_from_kernel_nofault);
+ 
+ #define copy_to_kernel_nofault_loop(dst, src, len, type, err_label)	\
+ 	while (len >= sizeof(type)) {					\
+-		__put_kernel_nofault(dst, src, type, err_label);	\
++		__put_kernel_nofault_bare(dst, src, type, err_label);	\
+ 		instrument_write(dst, sizeof(type));			\
+ 		dst += sizeof(type);					\
+ 		src += sizeof(type);					\
+@@ -73,13 +75,15 @@ long copy_to_kernel_nofault(void *dst, const void *src, size_t size)
  		align = (unsigned long)dst | (unsigned long)src;
  
--	pagefault_disable();
--	if (!(align & 7))
--		copy_to_kernel_nofault_loop(dst, src, size, u64, Efault);
--	if (!(align & 3))
--		copy_to_kernel_nofault_loop(dst, src, size, u32, Efault);
--	if (!(align & 1))
--		copy_to_kernel_nofault_loop(dst, src, size, u16, Efault);
--	copy_to_kernel_nofault_loop(dst, src, size, u8, Efault);
--	pagefault_enable();
-+	scoped_guard(pagefault) {
-+		if (!(align & 7))
-+			copy_to_kernel_nofault_loop(dst, src, size, u64, Efault);
-+		if (!(align & 3))
-+			copy_to_kernel_nofault_loop(dst, src, size, u32, Efault);
-+		if (!(align & 1))
-+			copy_to_kernel_nofault_loop(dst, src, size, u16, Efault);
-+		copy_to_kernel_nofault_loop(dst, src, size, u8, Efault);
-+	}
+ 	scoped_guard(pagefault) {
+-		if (!(align & 7))
+-			copy_to_kernel_nofault_loop(dst, src, size, u64, Efault);
+-		if (!(align & 3))
+-			copy_to_kernel_nofault_loop(dst, src, size, u32, Efault);
+-		if (!(align & 1))
+-			copy_to_kernel_nofault_loop(dst, src, size, u16, Efault);
+-		copy_to_kernel_nofault_loop(dst, src, size, u8, Efault);
++		scoped_guard(__kernel_nofault_bare) {
++			if (!(align & 7))
++				copy_to_kernel_nofault_loop(dst, src, size, u64, Efault);
++			if (!(align & 3))
++				copy_to_kernel_nofault_loop(dst, src, size, u32, Efault);
++			if (!(align & 1))
++				copy_to_kernel_nofault_loop(dst, src, size, u16, Efault);
++			copy_to_kernel_nofault_loop(dst, src, size, u8, Efault);
++		}
+ 	}
  	return 0;
  Efault:
--	pagefault_enable();
- 	return -EFAULT;
- }
- 
-@@ -97,18 +95,17 @@ long strncpy_from_kernel_nofault(char *dst, const void *unsafe_addr, long count)
- 	if (!copy_from_kernel_nofault_allowed(unsafe_addr, count))
+@@ -96,11 +100,13 @@ long strncpy_from_kernel_nofault(char *dst, const void *unsafe_addr, long count)
  		return -ERANGE;
  
--	pagefault_disable();
--	do {
--		__get_kernel_nofault(dst, src, u8, Efault);
--		dst++;
--		src++;
--	} while (dst[-1] && src - unsafe_addr < count);
--	pagefault_enable();
-+	scoped_guard(pagefault) {
-+		do {
-+			__get_kernel_nofault(dst, src, u8, Efault);
-+			dst++;
-+			src++;
-+		} while (dst[-1] && src - unsafe_addr < count);
-+	}
+ 	scoped_guard(pagefault) {
+-		do {
+-			__get_kernel_nofault(dst, src, u8, Efault);
+-			dst++;
+-			src++;
+-		} while (dst[-1] && src - unsafe_addr < count);
++		scoped_guard(__kernel_nofault_bare) {
++			do {
++				__get_kernel_nofault_bare(dst, src, u8, Efault);
++				dst++;
++				src++;
++			} while (dst[-1] && src - unsafe_addr < count);
++		}
+ 	}
  
  	dst[-1] = '\0';
- 	return src - unsafe_addr;
- Efault:
--	pagefault_enable();
- 	dst[0] = '\0';
- 	return -EFAULT;
- }
 -- 
 2.47.3
 
