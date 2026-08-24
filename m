@@ -1,125 +1,172 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CABA217B50A;
-	Mon, 24 Aug 2026 13:21:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9443331EB3;
+	Mon, 24 Aug 2026 13:31:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787577710; cv=none; b=EV9u4Y7TeYJPLn7wtcyfM0+jxZq+eQCOHxzz4sLuiuK9rbEKJWzUZdMquHs6xDhUhjtOgW78ZPa8m3cs+rwObsyy5ovhVlVTDl5XYMfOniKOEzHxNO63PtSY23gGLW2szD2/33Xd/09BcB+4XBApTcwL0Xa3pd+QFmB2ZN6ZFdU=
+	t=1787578317; cv=none; b=T83jdhN/Uveks89sGqMWKMFpEque37iSzX/xEiKXjCGTUPYYz2I2gzk4pgR33/BViUgUTW+/vvLpMO4djni3bUhcN+Ef8ZVqLEhGNAtSZ8q+k1fbaBJwGTCf1V36GqJ7cMpbd8vxQshzKZZ6nYD3cSr/6gCwlxxfGiK3+5mZC64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787577710; c=relaxed/simple;
-	bh=Lw0JsDV0WTzHsR1mYq2sQkaCsFm2SnOuXntn3KxvQ10=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BEDk3HyBB0mmRXnnD0e8WcEm+cH6t5Mlhglz/IUrIUlR71PjVj0u059G7ZRRsLQSsmAC22XQv41Faq9ZRH1feU/h6/OYW/nAAT0JOpme1i5gRBm96kzD+RblmCsfY0CxFbE4/XrzCLdNNbI4TuKlwL11yyDyDsjSr2wGXN0FX/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C3kIUzMh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787578317; c=relaxed/simple;
+	bh=7Hatc2zV5FfAKhnfWttJ+BsGXbNICswh6VWNXJat5xo=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Omc3hv+rz0Cz/e2ZSZERZMPPoyyo5QR1MWkusnNk6rSmBeGbFNhYtboEPE/yYj4LIjj/CGxKqH5GeIKv63h8+GEyGFarTV6aihVtjPA1Hx5OtqRVJTai6Dr8uun0AKaUQfgfsFPU2VaPFc829/wPioAAyz+2dQbSQgdNKWXlsr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ARvNyLAQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C3kIUzMh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8431A1F000E9;
-	Mon, 24 Aug 2026 13:21:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ARvNyLAQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EBCF1F000E9;
+	Mon, 24 Aug 2026 13:31:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787577709;
-	bh=C1JOhLm4zg8p33Eesvf4KAwYUKhywd17N8ZTmUOFlhU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=C3kIUzMhBQVJBfsXshHzLfqtoxocGaUhRkQoECbAKeJQlpCpUfZUYrgKN+hbK6Fmm
-	 vZ+AH6AecQm4ImUrVUYSpRNZ7vp6fEPBYgLlAwq6ojg0QZ8ExNDQ/BV5BMi0+PSfOS
-	 jnFW3wNpWO7dNuN4Z+5XMMJReiDd/893GjpZhJuhHBn6d5+l+XALb/h3/DysSKN75q
-	 cf7disUtAvAF8RdKux/E1FKxBTsU2c0cTsyEdfslqfP/riTetz4RZ8IJMw0HHxujLW
-	 aaB0xLOyX3AwIgIoHEIxVwXQl3pBUpttWNkd0G+TOdXoi+eK8lDcC16I2Syb/hHUXI
-	 TGqNKfKngLeig==
-Date: Mon, 24 Aug 2026 16:21:38 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Daehyeon Ko <4ncienth@gmail.com>, stable@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Hagen Paul Pfeifer <hagen@jauu.net>, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v2] mm/secretmem: properly account locked pages
-Message-ID: <aoxFYlkTvHMqdqf_@kernel.org>
-References: <20260822-secretmem-accounting-v2-1-fe445a7c6eb1@kernel.org>
+	s=k20260515; t=1787578310;
+	bh=xBktXjr4+luzNS0VOioTLx4w43eI72HBqtwkdE/5h9M=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=ARvNyLAQbtNOaRamIgI7F3Z35jmaDyWK8of4qhhDK10K/pRUEfy87P7S4BZv08CC3
+	 lRHjECpNZcRw+E1LQf3jCbkz9zgA8pzpI2C4yAxkmv2t+ev/KwRDyEdOzlwZBf1EIf
+	 uaP/8rNdRPuHenQJlevCu0lXGjqY46ulZgytJBq9SS3WtfJqGMaeQageTjEkJzb1VE
+	 MV/JXrOeajLz0uehQxeEZD+PJEkZiSaSH5Zd0OKiRpTx8kml7aYee3R4tAZRFu7E+/
+	 ncItnjRoyw066fdaZAGQK38jSbzWbxglymKBh0MHI/Kce8oQuSYTgkI9WT1KJZW0Ur
+	 pgZMpRWacfe8w==
+Content-Type: multipart/mixed; boundary="===============5108074018797379411=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260822-secretmem-accounting-v2-1-fe445a7c6eb1@kernel.org>
+Message-Id: <dc7224531e66a752eba5ac70daaab3a6401526d3003271c956ace42a0b04585d@mail.kernel.org>
+In-Reply-To: <20260824125310.1384-3-zhaofuyu@vivo.com>
+References: <20260824125310.1384-3-zhaofuyu@vivo.com>
+Subject: Re: [PATCH bpf-next v4 2/2] selftests/bpf: add tests for selective module BTF loading
+From: bot+bpf-ci@kernel.org
+To: zhaofuyu@vivo.com,bpf@vger.kernel.org,eddyz87@gmail.com,andrii.nakryiko@gmail.com,alan.maguire@oracle.com
+Cc: andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,yatsenko@meta.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,zhaofuyu@vivo.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 24 Aug 2026 13:31:50 +0000 (UTC)
 
-On Sat, Aug 22, 2026 at 08:14:02PM +0100, Lorenzo Stoakes (ARM) wrote:
-> secretmem has a relatively laissez-faire attitude to accounting the folios
-> it allocates.
-> 
-> The intention is that the memory is treated as if it were mlock()'d and
-> thus is limited by the RLIMIT_MEMLOCK limit if the CAP_IPC_LOCK capability
-> is not in place (which broadly allows unlimited ranges of mlock()'d
-> memory).
-> 
-> The lifecycle for memfd accounting against this limit is - account on map,
-> unaccount on unmap but the lifecycle of memfd folios is allocate on fault,
-> deallocate on inode eviction.
-> 
-> This mismatch is problematic because the folios are unevictable and remain
-> so until the inode is evicted (set using mapping_set_unevictable()).
-> 
-> This is problematic as it eliminates usual mlock() semantics - mapping
-> folios then unmapping them does not clear their unevictable state, since it
-> depends on AS_UNEVICTABLE, not PG_mlocked.
-> 
-> A user can therefore easily work around the RLIMIT_MEMLOCK limit - simply
-> map then unmap and VmLck no longer counts the secretmem range (or more
-> involved - fork which also achieves the same thing).
-> 
-> Worse - they are not accounted in the process's RSS even if mapped again,
-> meaning the OOM killer won't know to kill the process.
-> 
-> A user without the CAP_IPC_LOCK capability can therefore repeatedly
-> map/unmap (or map/fork) and consume all available system memory with
-> unevictable folios and cause system instability.
-> 
-> A secretmem fd can be passed between processes and over fork so a
-> per-process limit simply does not make sense.
-> 
-> So follow the precedent set by io_uring, perf, skbuff, iommufd and xdp -
-> track the number of locked pages in user_struct->locked_vm.
-> 
-> Since the scope tracked is actually inode lifetime, the RLIMIT_MEMLOCK
-> applies per-user not per-process. Also given the change in scope it doesn't
-> make sense to bypass for users with CAP_IPC_LOCK, so remove it.
-> 
-> There is simply no reason to carry on marking the mapping as mlock()'d
-> since it's misleading and the lifecycle is now correctly handled, so remove
-> this too.
-> 
-> Additionally, fix the selftest which checks the limit as this now must
-> assert SIGBUS on limit violation on fault-in.
-> 
-> __secretmem_account_pages() is more or less a duplicate of the code that
-> io_uring etc. use, but since this is a bug fix that needs backporting,
-> defer any de-duplication efforts to a follow-up.
-> 
-> Reported-by: Daehyeon Ko <4ncienth@gmail.com>
-> Closes: https://lore.kernel.org/linux-mm/20260813225328.2010303-1-4ncienth@gmail.com/
-> Fixes: 1507f51255c9 ("mm: introduce memfd_secret system call to create "secret" memory areas")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+--===============5108074018797379411==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_module_names.c b/tools/testing/selftests/bpf/prog_tests/btf_module_names.c
+> new file mode 100644
+> index 000000000000..d5674cad0017
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/btf_module_names.c
+> @@ -0,0 +1,93 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <test_progs.h>
+> +#include "btf_module_names.skel.h"
+> +
+> +static void btf_module_names_load(void)
+> +{
+> +	struct btf_module_names *skel = NULL;
+> +	int ret;
+> +	static const char *mod_names[] = { "bpf_testmod" };
+> +
+> +	LIBBPF_OPTS(bpf_object_open_opts, opts,
+> +		.btf_module_names = mod_names,
+> +		.nr_btf_module_names = 1,
+> +	);
+> +
+> +	skel = btf_module_names__open_opts(&opts);
+> +	if (!ASSERT_OK_PTR(skel, "btf_module_names__open_opts"))
+> +		goto out;
+> +
+> +	ret = btf_module_names__load(skel);
+> +	ASSERT_OK(ret, "btf_module_names__load");
 
--- 
-Sincerely yours,
-Mike.
+The three subtests (btf_module_names_load, btf_module_names_skip, and
+btf_module_names_empty) leave the input-validation paths from the
+preceding commit completely unexercised.
+
+That commit adds checks in bpf_object_init_btf_module_names() that are
+documented in libbpf.h as part of the API contract, particularly:
+"The list must not contain duplicate entries; otherwise -EINVAL is
+returned."
+
+Uncovered paths in bpf_object_init_btf_module_names():
+- Empty or NULL entry detection (if (!names[i] || !names[i][0]))
+- Duplicate name detection (the for loop with strcmp checking all
+  previous entries)
+- Error cleanup path (err_out:) that calls
+  bpf_object_free_btf_module_names() after partial strdup() walk
+
+Would it make sense to add subtests covering these validation paths? A
+single extra __open_opts() call checked with ASSERT_ERR_PTR() or
+ASSERT_NULL() would exercise each. The duplicate-detection loop is
+non-trivial enough to deserve one.
+
+Also, nothing in the series asserts the default btf_module_names == NULL
+case (load everything, unchanged behaviour), so a regression that makes
+the option mandatory would pass undetected.
+
+> +out:
+> +	btf_module_names__destroy(skel);
+> +}
+> +
+> +/*
+> + * Verify that an unrequested module BTF is skipped. The BPF program
+> + * requires the BTF of bpf_testmod, but bpf_testmod is not specified in
+> + * btf_module_names, so its BTF is skipped and the BPF program fails to load.
+> + */
+> +static void btf_module_names_skip(void)
+> +{
+> +	struct btf_module_names *skel = NULL;
+> +	int ret;
+> +	static const char *mod_names[] = { "module_nonexist" };
+> +
+> +	LIBBPF_OPTS(bpf_object_open_opts, opts,
+> +		.btf_module_names = mod_names,
+> +		.nr_btf_module_names = 1,
+> +	);
+> +
+> +	skel = btf_module_names__open_opts(&opts);
+> +	if (!ASSERT_OK_PTR(skel, "btf_module_names__open_opts"))
+> +		goto out;
+> +
+> +	ret = btf_module_names__load(skel);
+> +	ASSERT_ERR(ret, "btf_module_names__load");
+
+A subsystem pattern flags this as potentially concerning: both negative
+subtests assert only that the load failed, not the specific reason why.
+ASSERT_ERR expands to check ___res < 0, so btf_module_names_skip() and
+btf_module_names_empty() pass for any negative return from
+btf_module_names__load().
+
+The intended error is specific: with bpf_testmod's BTF filtered out,
+find_kernel_btf_id() walks obj->btf_modules and falls through to return
+-ESRCH, which bpf_object_load() propagates to __load(). Asserting that
+value (for example, ASSERT_EQ(ret, -ESRCH, ...)) would pin the
+behaviour.
+
+As written, several unrelated conditions make both subtests report
+success while proving nothing about the new filter:
+
+- CONFIG_DEBUG_INFO_BTF_MODULES=n: bpf_testmod loads (so env.has_testmod
+  is true and the test is not skipped) but has no BTF at all.
+  Attach-target resolution then fails regardless of btf_module_names, so
+  both negative subtests pass vacuously.
+
+- Unprivileged/EPERM: load_module_btfs() returns 0 early without loading
+  any module BTF (pr_debug skipping message), again yielding -ESRCH from
+  an unrelated cause.
+
+- Any future validation of the new opts that rejects the list at load
+  time rather than at open time.
+
+Would pinning the expected -ESRCH value make these subtests more robust?
+
+> +
+> +out:
+> +	btf_module_names__destroy(skel);
+> +}
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32730521630
+--===============5108074018797379411==--
