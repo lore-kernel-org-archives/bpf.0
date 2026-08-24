@@ -1,113 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8C32B2D7
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 09:25:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3798373BF2
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 09:27:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787563507; cv=none; b=O4qgsEK1tXRawWirZeWySvLigyokRqVwD4zxWkbu0cszvPS9cnQH4GDiFBkxmqo3cib876Fummj+uJ0FBH40mN2RVLVUnhlrUXm5qlvfi0Ofjg9stEDFfwfdLXSxcgy7A/AipqSUfRSkHNYqqMEXHdHBTUn40NVAbJ4kmNr9sIY=
+	t=1787563668; cv=none; b=INq2pykoCBmy0oTa6JhwVYtmcJaZom0/a0uNKc97//QDTm+uVU63HR97Q73EMjcHbUCjq7YxUM3D/4+LgYdBsBffSDnWaJwB8k8tIU1KPLHyiME8rb5RIslEph3I2WybNI/wJSeLQxctRJ3452o1kACDX+9bNMp2v2QPj+z/O6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787563507; c=relaxed/simple;
-	bh=qznjS0PDXi9SjI1y/d2z4oNPd3PO0frpXJiY1S+t6/o=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=swe9D1i6fpQrsoI2emh2Kde9RM5fFYsyHfw2DFO/Os7XccEbqJXg/wKin9H+EYPFQChcKD3/V+g7d1xjVDI0cfKnoI0Vmi3vyqh7Ik98Ivcc2YR8y9/EATrHM8csPy5hNnNRnJAuGqlR78UcmHDWMLQr4HxrFfO13eaySL+xyoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KxPUNBye; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787563668; c=relaxed/simple;
+	bh=tVu4r/4x7IbA2VH4N262G4JpEbygb/d/IigRoMPFvD4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=hYRdylztsO0FWbapBDpBCbkx1B+NXpYxLV3WPwLBio3NWh/fTJfnxNbzG+XG7zWIC7aERSusni+j+Lbw1WFfkhsfArQBLZvmrOQ7BgZVFNgpQTSj81KnSmGsgELlg81JoSl+AqP5PJ5fh/L1R9jGN8+8H/yNIZZJAwbQUe5XtH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=LfCk+bCk; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KxPUNBye"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C6D41F000E9;
-	Mon, 24 Aug 2026 09:25:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787563505;
-	bh=gBR1nD9IQuVtB35TbOSBC9lUwE1N2JT+vIt11iczKgQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=KxPUNBye53Eh6rzQp/U2RZAj/5/c6y1DiJaJ4iAfOGAdxlYb27LI2apW3rL17vj5s
-	 tChF1ZK9fLeNfGGMvLpYcEHs31o7xbNTWv1ecD6OhMDuBP9h55CAWTp+75WEZofiD3
-	 xervwo8p1n+IQJm1skz9fXkHEi632+pK9fMKON1efuaN1giyf98Aplqay2Q8HpH005
-	 nvc0dlVfXSp8HB0GyfhuIcQXjDAXwTQFiale/gCVDaPIDlVIywDeD1DF9zfE+mqlfZ
-	 8aFwttfFHjR2RFb4Vbke/xZZkSn/piqFVyRcMdA37ILYgvllBPbLRNCph3LxeD+pnc
-	 FVfoV5E8m7NTg==
-Content-Type: multipart/mixed; boundary="===============4496037626131391778=="
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="LfCk+bCk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=mU
+	2XjzNeumue/4DBlIEID38U3nPgw1tydSOIERbyM+8=; b=LfCk+bCknC0l8ACj3Q
+	2hq7P/9JZZhkBP/eaQ2LrpPNM1SfThaqezR5eYYJoESD+q+lmMVV+mbr7LeAMbmj
+	yviuxca3EGZjAp70MHi2ShOpnYuU3v5WUg/U0UVjwGM+JMrHwmdZvoc5OkQEhpqz
+	bjKNdCRf4faUaJb9vDyYEjtlk=
+Received: from nec8-i7 (unknown [])
+	by gzsmtp4 (Coremail) with SMTP id PygvCgB3Kd9sDoxq8J3wNw--.45458S3;
+	Mon, 24 Aug 2026 17:27:11 +0800 (CST)
+From: Yuan Chen <chenyuan_fl@163.com>
+To: bpf@vger.kernel.org
+Cc: Quentin Monnet <qmo@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+	Yuan Chen <chenyuan_fl@163.com>,
+	Yuan Chen <chenyuan@kylinos.cn>
+Subject: [PATCH bpf-next v6 1/2] bpftool: fix spurious batch file read error
+Date: Mon, 24 Aug 2026 17:26:56 +0800
+Message-ID: <20260824092657.1789956-2-chenyuan_fl@163.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260810142224.2907373-1-chenyuan_fl@163.com>
+References: <20260810142224.2907373-1-chenyuan_fl@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <bec6e986016d9cda455a763f444f78bd78df2ffa7a1025e6e4c640039f850f91@mail.kernel.org>
-In-Reply-To: <20260824083327.1708560-3-chenyuan_fl@163.com>
-References: <20260824083327.1708560-3-chenyuan_fl@163.com>
-Subject: Re: [PATCH bpf v4 2/2] selftests/bpf: Add regression test for queue/stack map size limit
-From: bot+bpf-ci@kernel.org
-To: chenyuan_fl@163.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,andrii.nakryiko@gmail.com,chenyuan@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 24 Aug 2026 09:25:05 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PygvCgB3Kd9sDoxq8J3wNw--.45458S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Kw4rurWrZryfZw4rWFWUtwb_yoW8CF45pF
+	Zxtry3trW8X34rZrWxGF4FqFy5Jr9ayrWDXr48GayYvr15Zr1SqrWxKas5Wa43Z34fAa4U
+	ZF1S9aykZF9rXFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zKQ6dbUUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAQ9cGmqMDm9SkQAA3M
 
---===============4496037626131391778==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+do_batch() checks errno after the read loop to detect read failures,
+but fgets() does not clear errno on success, so a stale errno left by
+a previously executed command (e.g. map dump's EBADF from a double
+close) makes bpftool report a batch file read failure and exit with an
+error even though every command succeeded.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c b/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
-> index 41441325e179..efe808eedd9a 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
+Clear errno before each fgets() call, so the post-loop check only
+sees the outcome of the last read: zero on success or EOF, E2BIG for
+an overlong line, and a genuine errno when fgets() fails.
 
-[ ... ]
+Since errno is now reset before every read in batch mode, drop the
+USE_LIBCAP errno reset in main() that existed only to keep errno clean
+for the batch mode.
 
-> +static void test_queue_stack_map_alloc_check(void)
-> +{
-> +	LIBBPF_OPTS(bpf_map_create_opts, opts);
-> +	const __u32 big_value = 1 << 20; /* 1MB */
-> +	int fd;
-> +
-> +	/*
-> +	 * Regression test for the u32 index overflow in queue/stack maps:
-> +	 * a map whose element storage (max_entries * value_size) exceeds
-> +	 * U32_MAX bytes must be rejected at creation time, otherwise the
-> +	 * u32 head/tail index multiplication wraps and push/peek/pop
-> +	 * address the wrong element. 8192 * 1MB = 8GB > U32_MAX.
-> +	 */
-> +	fd = bpf_map_create(BPF_MAP_TYPE_QUEUE, NULL, 0, big_value, 8192, &opts);
-> +	ASSERT_EQ(fd, -E2BIG, "queue_oversize");
-> +
-> +	/*
-> +	 * max_entries == U32_MAX would make the u32 capacity counter
-> +	 * qs->size (max_entries + 1) wrap to 0, permanently breaking the
-> +	 * map, so it must be rejected as well.
-> +	 */
-> +	fd = bpf_map_create(BPF_MAP_TYPE_QUEUE, NULL, 0, 1, U32_MAX, &opts);
-> +	ASSERT_EQ(fd, -E2BIG, "queue_u32max");
-> +
-> +	fd = bpf_map_create(BPF_MAP_TYPE_STACK, NULL, 0, big_value, 8192, &opts);
-> +	ASSERT_EQ(fd, -E2BIG, "stack_oversize");
-
-Should these three negative test cases close the fd if the map creation
-unexpectedly succeeds?
-
-On a kernel without the fix in patch 1/2, queue_stack_map_alloc_check
-returns 0 for these attributes. The allocation then attempts an 8.59 GB
-or 4 GB bpf_map_area_alloc in queue_stack_map_alloc. On a host with
-enough memory, __vmalloc_node_range can succeed, returning fd >= 0
-instead of -E2BIG.
-
-When that happens, the assertion fails correctly, but the fd remains open
-for the rest of test_progs, pinning roughly 20 GB of kernel memory across
-all remaining tests. The positive test case below shows the pattern:
-
-> +	/* A normal-sized map must still be created successfully. */
-> +	fd = bpf_map_create(BPF_MAP_TYPE_QUEUE, NULL, 0, 64, 100, &opts);
-> +	ASSERT_GE(fd, 0, "queue_normal");
-> +	if (fd >= 0)
-> +		close(fd);
-> +}
-
-Adding the same guard after each of the three ASSERT_EQ calls would bound
-the damage to the failing subtest rather than OOMing the rest of the run.
-
-
+Fixes: 71bb428fe2c1 ("tools: bpf: add bpftool")
+Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+v6: clear errno before each fgets() call instead of tracking the
+    too-long-line case with an explicit flag and checking ferror(), as
+    suggested by Andrii Nakryiko
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32709296749
---===============4496037626131391778==--
+ tools/bpf/bpftool/main.c | 16 +++++-----------
+ 1 file changed, 5 insertions(+), 11 deletions(-)
+
+diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
+index c91e1a6e1a1e..7a0c214f08a0 100644
+--- a/tools/bpf/bpftool/main.c
++++ b/tools/bpf/bpftool/main.c
+@@ -365,7 +365,11 @@
+ 
+ 	if (json_output)
+ 		jsonw_start_array(json_wtr);
+-	while (fgets(buf, sizeof(buf), fp)) {
++	for (;;) {
++		errno = 0;
++		if (!fgets(buf, sizeof(buf), fp))
++			break;
++
+ 		cp = strchr(buf, '#');
+ 		if (cp)
+ 			*cp = '\0';
+@@ -467,16 +471,6 @@
+ 
+ 	setlinebuf(stdout);
+ 
+-#ifdef USE_LIBCAP
+-	/* Libcap < 2.63 hooks before main() to compute the number of
+-	 * capabilities of the running kernel, and doing so it calls prctl()
+-	 * which may fail and set errno to non-zero.
+-	 * Let's reset errno to make sure this does not interfere with the
+-	 * batch mode.
+-	 */
+-	errno = 0;
+-#endif
+-
+ 	last_do_help = do_help;
+ 	pretty_output = false;
+ 	json_output = false;
+-- 
+2.43.0
+
