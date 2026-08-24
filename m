@@ -1,248 +1,176 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFC5E377ED9
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 20:01:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71C3386C25
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 20:03:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.174
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787601694; cv=pass; b=SZv5wiyMVTIuSZboNWcjG4v3pe9+wTyDu4gZCtAtrKdKv8/swuFodkZlaRPRPWCMf12oKfzj/aDpTjPedgaa/fUSwPu9EN/YpeD0AU1AQFboNAPyi64uUftNxBIflAfl2mTf7oJ3UHgkbD+asakhr5UET1D9DWGryTrkjMKv12I=
+	t=1787601783; cv=pass; b=L11PQgvc/f8F/WQV3nWUQPpX9YAlj81SSP9H+VzdR3MeCd6PpeL3z4dgwVAB9Qzn+Mwlz9/SKuEBke9f40Gr/n5wHFV5dvJhe+znL4RMH3prm6n07QxVR3wtsUYwUjEGLUM885IgyiWqKWKtlBufpMptM/bMt+EE210IhMXT58E=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787601694; c=relaxed/simple;
-	bh=AhPdWam+MmDkim0rHFIqc0fVyLI3SCTIPl3Q617vj+8=;
+	s=arc-20240116; t=1787601783; c=relaxed/simple;
+	bh=Jj1eMW4hRuQ95Mf8+sMk0J8dXwuhop1yzKow3ZKRqdc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=utaR5yAoIvOI0q8PSh3UQKlnb5E0L0CMT7UOn89RhJqWS/T94ucl0R32FxmdSYvYpd1K3Yks5PcVLuzhtZw51Y1dd8hkWyBIAWQjdQ2hTBwccpmHoqU3+sqWmJJn7KzhAeln77uh3ynU/8NWxVLXrp7kRKV4CAJ11uM+QL0oPAs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=blkq5EBa; arc=pass smtp.client-ip=209.85.215.181
+	 To:Cc:Content-Type; b=MYjFpHDWHRCzn8IHvBxD0AjF25Nf8Ec4uh441oQskUpAAQRwvZ+qglhddxU2aTAqg3selep5r3QEmxxvCdbBE6eBprZz2bfVNAMuQU+G+pz2o4g2q32N5dhtN9hFhGRTdW5bPCCDxMogpGrk87MnrjRV9sBsos2tyEQhCnXzIo4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J7VMH41k; arc=pass smtp.client-ip=209.85.215.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="blkq5EBa"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c9aea40d799so2387101a12.0
-        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 13:01:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787601692; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J7VMH41k"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cc11a905ba5so2829706a12.2
+        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 13:03:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787601781; cv=none;
         d=google.com; s=arc-20260327;
-        b=nLL8vikrlsbJYKTBAXECtqWnWjYO+r/7AYUaaOz7xuAcnBAWudUwRJWZlnJXtfuXau
-         L5KOfLw+9eIA84QtzXHroi1f7sn/ebp18xhgN2GHlnrPUGDCxoWVS34YW8Yu8e3CI3w3
-         H0ro0AgQc2rQZ0UCXuqy9YXbQBev94I98L6xFrp9+hzednMo3+Klnx3f5uMcjyDNJGoG
-         RS7pdAPQFeypm0w7gh9b+pr8YrSijKKrbyVtRXQcZTP9ueOn/POwlhlWNSD84FlOJGPH
-         gCSELLR+pA0uEWHlvRpH0FqN6Vyp6fUjlV4PLcsV8XEuzDdsBQMEHxdx/fAXXgAx7n3R
-         6v5g==
+        b=kGwl3G0oV6iWlKrM/cu+Pfi/5zPVEn+LiwT1Scel7XqCTTuQv7/8xGHzJzWzIZYvbn
+         zCKQ04thUzFJIOQKiJz1S+9tC+VBmN3bkYZ/TWgQPEBHzemZUNxKgn15CmWTeCjwcX85
+         iSfElWz3uSbsKPAchOjfw44FXpsqrum00veK5fS3CDv0+TsfF4fpsQiD42Xr3PVIXVkf
+         91/0xV5pChP8KC3+3pSInfEf2Bl76E2fBln9AVsqX0KfynyqRs01bBw+v93vvAabGrVY
+         6pBv2iHA+6pgQI/mNk5lJ0jYvawSc1sb9cryc+Ps5m37nOt67kO/G2ig5GWr6OK2tswe
+         EJ2g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=3YYVbHmzYNMo9iR3w7Aron4iVAyXE98ecr/hPSAyXc4=;
-        fh=k8Y6OPditsoubPWWn43Skfp6MXC0hOe+KlMIBaHC7pU=;
-        b=FDk8x7D7qizh61WQli0EHU94IaNtZR0DyE9cHAmTS+ULXt0hq+j7wLGBjldLp6oE2A
-         WqJZfzdmE2Rp29mzaThcniX7jfXWK1c1GLq1IwnCtOtTMGVE2ppJAkbjLmw9c/Z1/k9Q
-         Gwnjhjn8OjKS0pZhmQjcWfaMfDhBn6aP+VQioT527JpcGuAPkMbDbdEiFNwsQuif64CW
-         jkERPkrVnwKm2VgSmcIgvDjVt8qEifWvJxkMo12DCTR91x83p0g3JcvEP7m2czSrR3Pn
-         CVa1Mk0QN5HRxe9cBaWLJi8a0eL0gdFMI8OwxpsFaPQBJkeFJwb+wlAbdaRJCdfHhT7F
-         2QJw==;
+        bh=3mEWmWLPfbBEGQVJCFnc4zzX5ivCTH8MT18ptDlEOY4=;
+        fh=7PZC37LH2sGqwLEK76lee9BsohGzibMfIH5NgvVumkM=;
+        b=SczsC3frXV7E67mN6wYdGUsJl1suMUzJtIj3ycUjPy06DUcjkUucLS4mjoRABxMAH7
+         hODILqJklQlRvffOB3E8PM4AwWraFp+tWH3Qc45TCs5VhX3NoOhNGaNDsMW8LwJ+To9I
+         PuC2fR73TVBVORFkEzFEuwNzNmPwytU/Gd6z6sJyg+COqt6yeh2Nl6vJN/+KNpqiwWIM
+         1eWDSGUHADFl0CjgdJtVSAYv5ueDiktvfqRf3ZUVkSicxFyzjAnc2puBMvdN+RvjitCS
+         qYDK1l6gsg77kkXeeFam5EfneI4C3MAStz80uL/VFH5hGjgUsIxmYTfLSkl7hI73tySf
+         54DA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787601692; x=1788206492; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787601781; x=1788206581; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=3YYVbHmzYNMo9iR3w7Aron4iVAyXE98ecr/hPSAyXc4=;
-        b=blkq5EBa9yljjXGU1+8Qj4MaRDfO6c/hN81r8AOVCBlW8n01Nk2S8vCfNomdSBocfU
-         i3Bhe34yWDhH+J623x53PrNpt1qaZX5fz0yuEyV4ZyzVc1YZRSQKYUeyHMcoa51FfZVZ
-         Us/7q5jFlQ9BvReI0yyb3xrN7tTEzySaZGncFvPn1ZY9tSgmuJc73Xa4dyBY50U54w1J
-         xps22D2xa14Tkv5kp8YQSBGSHCbcsjgB7n0AX2At4zxnDx4nh0h1OnuGEG7iTGnuYITi
-         QDiAwRoWJCGEPjF8iG/06+hmbzf/OGGx/2VkgaTxXhEXX0ZZf2DeFUbPYFppfvZvJ6Sr
-         mzGw==
+        bh=3mEWmWLPfbBEGQVJCFnc4zzX5ivCTH8MT18ptDlEOY4=;
+        b=J7VMH41kmK8mIuh9ZjV9D9Avu9Xa6+mp8Rq9yfrfFzNvpEQTiMn7b40k1QNkQenpuU
+         Kl5JjYabDxgWO0yyz2VX9daDVetNFn8sQsJbxPE8e9SOjNm7P/geY7Ao1iLlrnO8UPTg
+         2KGPa4wak9VhlrL423otduYahQMbmTOSO37R6amPpv3/tl1HmSdBL89hM6Zt0sTNeh6g
+         9rNZk+wL3O5WyiynYwH/L9Z8b6SxCgulO4C2XDQvn3uBQTBp6sjaSRmUcbE0T0zGbg9R
+         vyUVoLV0N81FfLrt2eIvf9/4x+AS6GF1Yzw2nGx7sCD2Z9/U2xKTnyhsC2KgYm4ekO77
+         nX8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787601692; x=1788206492;
+        d=1e100.net; s=20251104; t=1787601781; x=1788206581;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=3YYVbHmzYNMo9iR3w7Aron4iVAyXE98ecr/hPSAyXc4=;
-        b=ssKEIjHSWvtF5hInIspZvj/eDl5XJujndIZclGrhcYAtqe/ZawLD9x/pmv2JfuNslg
-         5WKuDyDTOz4nSHsBcbFpor6tvtE2sJE4BrNx4R/iZC5uaA8vag6VTyG/7JRSTl9+N9al
-         MJhvSc0kJICMI54hMI+iDM16s5umZYhSd9ggS5VnPpxU3/3yOuYEb4MbdnTlIQgqVIL3
-         +iBOQQsGM60vz3svwTZ5O4shHucE/7yFNNR32rrXqUthmtb7uefFswCtj39Fp/yxvVxE
-         p8BlQiU7oJ3BQ26yZM22LCDBeS/7egoX2fY0+F5kkrDfTOT7LUtTgqKMlXL5uswwsna8
-         OCow==
-X-Forwarded-Encrypted: i=1; AHgh+Rpqcb6R0jIiyXkWEfQyrGSqg3Qjvgkmymw4+FIOLWED+JfSnRcbnarUU1SvnzhbTXslH7A=@vger.kernel.org
-X-Gm-Message-State: AFuF++kW1PMACjLdTRLELojFQu0W87M3dvMDbOZBtJvcJJQ+oaDcpdfH
-	csmILJrxsvlGmVptOqPz+3p7FWmLP0i3jfgM8bUBAI1Xipzp/zUFQIZLcJifOlDO94ine/xPcGf
-	LhdyEhC6NA2fqGgU8NgyrlzDpHvbjjr0=
-X-Gm-Gg: AR+sD13APFpJxRBJ6baGyud7d+sSt1CLmkJ3LvNKufw1GjDN0orQREJ0SYsFjiaOqMG
-	jKhongAU4PqERlZ5nO5iUIC/HsYjjOYrrmgd05RewQxJZRTALKOlZQXGkg610lZYkF4vbxdvuiX
-	/qEUFm7va33dMtTnYr7NqlopUgQi6MRsg53fD75i4Nt+68zKNeWkdZ8aEULx6akbB84GikUO96j
-	r/H4CoyHzBAJDbQfsfm7Dxm6RIS5/z2j2SJG4abC8hS9HP5GrwFY8DHo1yBpMadE830NYzcIIz3
-	gWyMumjn09dnva4l8cV0nSLqwzckkfNRNaA8dZ6sVmerHZqu9FZdSiyuO20aVz7ZVItXE0YESST
-	BkSycz9NBjXfHcv1At52IJN/G5spa5HWWHPlm7yRSVg==
-X-Received: by 2002:a05:6a21:3381:b0:3cc:841d:bb26 with SMTP id
- adf61e73a8af0-3cd913240damr2559487637.15.1787601691946; Mon, 24 Aug 2026
- 13:01:31 -0700 (PDT)
+        bh=3mEWmWLPfbBEGQVJCFnc4zzX5ivCTH8MT18ptDlEOY4=;
+        b=nO/UqevnrQ07kaN+wyqvFtJ9nf4KTW//yRDWcNIr/Kg9pUpkqvGzKMTbrQDmIaJnuS
+         YESYqFJHep0NvluYdSMsjGDgb9ZrjchhEici9DMK8f59kudEZLKl4L8NZhF66dpRoNso
+         p+n3RxVUs6wyjF4tHCfk2XlAl38rolorrvoHpIHJGq1k3kmD9qf+uJc7z44KrjNI26yp
+         uSTLUIn9eFPEi3sz+ne4MqhjMLrkgsQBaDdJwILsNSWv4wZbWfbiGJfrx55SIAj5R/AD
+         YZkrYcfnSyj+hmF6QLIyBY6ONANeEasnKouUsICDRKVEHRCgK2tzjIS0CEPmqNjBVDVI
+         qZTw==
+X-Gm-Message-State: AFuF++mbR5c9JS9d+5dlGCJIqOu17Rl17ndpTy9ian7BCuaOJEHHb0aK
+	9fkPib9yYeGDGf6Uq1drsAKtxd38eXMMcyFdiiHjix7RjnXg50Edb4fk7F7h5Z+MnEJ9a/XKi+V
+	qEV7cX0h59qenv6IOHmGmUZsxUG0Z7d4=
+X-Gm-Gg: AR+sD10xpfqjXlWjjsOgLr1qS7st+0Nu+j6/T2/2HIy7ky9bpiNXoA13SnhysbrBhke
+	tL6k30XpWIrnluJo0gwTRLLDoZAoubSXOjJUW7FA32PktjXVCzs5f3ApEuIiO5dzQSNIaAqvIf/
+	ra0jofTNe2HtgemdKJbH62EqqpG+9qFwIPktc2vh1MMlBu9qiAHE9jzOd4RkNuOlbRYEJsSNOnS
+	oCTperl3/v07Qd2cuTirxBSCVp2dAPlCFrf6BJPD/VoDJJTU/lvBYual2t8JnkitQz7NqrO6SR/
+	nSCR76SGKjOOZz+YdaqjqstLnhC6WL50wLe33MtKhpqGRZri1j9OQoNTxlCvVaajz9V3aRT6U/7
+	83ysDV5TCiJhlLU3s4WJZEiG/fO9LmLTqOt2nMSnM+g==
+X-Received: by 2002:a05:6a21:e96:b0:3cc:b26a:7686 with SMTP id
+ adf61e73a8af0-3cd9107fdecmr2555856637.6.1787601779615; Mon, 24 Aug 2026
+ 13:02:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAEf4BzZTM5SehNnM83U3Kj0cz=NN=JwUtG-pcvSHdvZBsHdM3g@mail.gmail.com>
- <20260824104930.83453-1-tasos.papagiannnis@gmail.com>
-In-Reply-To: <20260824104930.83453-1-tasos.papagiannnis@gmail.com>
+References: <20260809150111.45000-1-leon.hwang@linux.dev> <CAEf4Bzam=0V6n4_vBahhYh2Qn9KfriDKXSz58L4L+teHJRWfPQ@mail.gmail.com>
+ <0b30bc97-2ecf-46eb-a863-94e706e18c6b@linux.dev> <CAEf4BzaXaLLqs6XXCG_02c7UcvNWfbGUAJTYosr22oaD4iokuQ@mail.gmail.com>
+ <c71d27ab-ec59-4b72-855f-7bf437095cd5@linux.dev>
+In-Reply-To: <c71d27ab-ec59-4b72-855f-7bf437095cd5@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 24 Aug 2026 13:01:15 -0700
-X-Gm-Features: AcwNN1VRJvQsJzFSZeK4Dv3vlANYJItg-44_okx_VAvveMLZt9tyHGMAHD-LhsE
-Message-ID: <CAEf4Bzb9szFTDo5uUxLgUVD3qA1XF-5A7GZGxJjX6d1MYLhbFQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/3] bpf: Add user memory access kfuncs for linux_binprm
-To: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
-Cc: akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org, 
-	bpf@vger.kernel.org, brauner@kernel.org, daniel@iogearbox.net, 
-	david@kernel.org, eddyz87@gmail.com, kpsingh@kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, matt@bobrowski.net, memxor@gmail.com, song@kernel.org, 
-	utilityemal77@gmail.com, viro@zeniv.linux.org.uk
+Date: Mon, 24 Aug 2026 13:02:42 -0700
+X-Gm-Features: AcwNN1W7QHx2RbjWvAKjCJKxsiFvI4VgPdw5RI8B_3Oxui6UCoF584p_UxygwRo
+Message-ID: <CAEf4BzZpB-qkhu3SAu5MrYYAT2+ZN8WaXqpmnKruOOdjJOLK2A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 00/13] bpf: Add tracing_multi link support for
+ bpf progs
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>, 
+	Avinash Duduskar <avinash.duduskar@gmail.com>, Anton Protopopov <a.s.protopopov@gmail.com>, 
+	Amery Hung <ameryhung@gmail.com>, Jordan Rife <jordan@jrife.io>, Rong Tao <rongtao@cestc.cn>, 
+	Eyal Birger <eyal.birger@gmail.com>, Pu Lehui <pulehui@huawei.com>, 
+	Jingguo Tan <tanjingguo@huawei.com>, Lin Ma <malin89@huawei.com>, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 24, 2026 at 3:49=E2=80=AFAM Anastasios Papagiannis
-<tasos.papagiannnis@gmail.com> wrote:
+On Sun, Aug 23, 2026 at 10:00=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> =
+wrote:
 >
-> Thanks for the review!
+> On 22/8/26 01:46, Andrii Nakryiko wrote:
+> > On Sun, Aug 16, 2026 at 11:20=E2=80=AFPM Leon Hwang <leon.hwang@linux.d=
+ev> wrote:
+> >>
+> >> On 15/8/26 04:14, Andrii Nakryiko wrote:
+> >>> On Sun, Aug 9, 2026 at 8:01=E2=80=AFAM Leon Hwang <leon.hwang@linux.d=
+ev> wrote:
+> >>>>
+> >>>> Similar to the tracing_multi link support for kernel functions [1], =
+add
+> >>>> support for bpf progs.
+> >>>>
+> >>>> When attaching to bpf progs, it must attaches to the target by text =
+poke
+> >>>> way.
+> >>>>
+> >>>
+> >>> Please spend a bit more human effort on justification for the change
+> >>> and explaining your use case. In what case you'll be attaching to a
+> >>> large amount of BPF programs such that attachment speed-up (if there
+> >>> is any) matters.
+> >>
+> >> Will update the cover letter with justification and my use case.
+> >>
+> >> Here's my use case:
+> >>
+> >> I'm planning to enhance the function-graph feature of bpfsnoop [1]. It
+> >> will trace all bpf progs, including their subprogs, to draw a full
+> >> function call graph including bpf prog call sites.
+> >>
+> >
+> > fair enough, interesting use case, definitely outline that in the next
+> > revision (and provide before/after attach time as well for such use
+> > case, please)
+> >
+> Will include my use case.
 >
-> > making this linux_binprm-specific seems short-sighted and overly
-> > specialized, why not pass `const struct mm *` and call new kfuncs
-> > bpf_copy_from_user_mm[_str] ?
+> Implemented the attachment micro-benchmark. Here's the result on an
+> x86_64 16c16g VM:
 >
-> > and this seems to belong right next to bpf_copy_from_user_task_str()
-> > and others in kernel/bpf/helpers.c (and bpf_copy_from_user_task
-> > variants should just delegate to this mm-based APIs and minimize code
-> > duplication)
+> ./bench tracing-multi-attach-progs
+> Setting up benchmark 'tracing-multi-attach-progs'...
+> tracing-multi-attach-progs: prepared 1000 identical BPF program targets
+> tracing-multi-attach-progs: fentry created and attached 1000
+> programs/links in 679.324ms
+> tracing-multi-attach-progs: fentry.multi created one program and
+> attached one 1000-target link in 470.042ms
+> tracing-multi-attach-progs: fentry.multi creation/attachment speedup is
+> 1.45x
 >
-> This is exactly what I did in my previous set of patches:
-> https://lore.kernel.org/bpf/20260811112154.94053-1-tasos.papagiannnis@gma=
-il.com/T/
-> https://patchwork.kernel.org/project/netdevbpf/list/?series=3D1144046&sta=
-te=3D*
-> https://sashiko.dev/#/patchset/20260811112154.94053-1-tasos.papagiannnis%=
-40gmail.com
-> https://github.com/kernel-patches/bpf/pull/13211
->
-> where I got AI reviews with 2 main issues:
->
-> 1.  Does marking bprm->mm as trusted-or-null here create a use-after-free
->     vulnerability on the execve error path?
->     Looking at free_bprm() in fs/exec.c, when an error occurs:
->     fs/exec.c:free_bprm() {
->         ...
->         if (bprm->mm) {
->             acct_arg_size(bprm, 0);
->             mmput(bprm->mm);
->         }
->         ...
->     }
->     The object is freed via mmput(), but the bprm->mm pointer is not set =
-to NULL.
->     Could subsequent traceable cleanup functions (such as free_arg_pages)=
- expose
->     this dangling reference to BPF programs, bypassing the verifier's saf=
-ety
->     guarantees?
->
-> This is something that I believe is easy to fix.
->
-> 2.  Does this break the BPF load-compatibility guarantee documented in
->     Documentation/bpf/bpf_design_QA.rst?
->
->     Before this patch, walking bprm->mm produced a dereferenceable regist=
-er
->     in every program type. In sleepable programs, in_rcu_cs() is false, s=
-o
->     check_ptr_to_btf_access() sets flag =3D PTR_UNTRUSTED. In non-sleepab=
-le
->     programs, in_rcu_cs() is true but mm is not in any __safe_rcu* list, =
-so
->     clear_trusted_flags() produces a plain PTR_TO_BTF_ID.
->
->     Both PTR_TO_BTF_ID and PTR_TO_BTF_ID|PTR_UNTRUSTED satisfy the guard =
-in
->     check_mem_access():
->
->     } else if (base_type(reg->type) =3D=3D PTR_TO_BTF_ID &&
->                 !type_may_be_null(reg->type)) {
->             err =3D check_ptr_to_btf_access(env, regs, reg, argno, off, s=
-ize, t,
->                                             value_regno);
->
->     so bprm->mm->arg_start loads with no NULL check.
->
->     After this patch, btf_nested_type_is_trusted() matches
->     linux_binprm__safe_trusted_or_null.mm, so check_ptr_to_btf_access() s=
-ets
->     flag |=3D PTR_TRUSTED | PTR_MAYBE_NULL. Now type_may_be_null() is tru=
-e, the
->     arm above is skipped, and control falls to the final else:
->
->     } else {
->             verbose(env, "%s invalid mem access '%s'\n", reg_arg_name(env=
-, argno),
->                     reg_type_str(env, reg->type));
->             return -EACCES;
->     }
->
->     Any existing program that reads through bprm->mm without an explicit =
-NULL
->     check now fails bpf_prog_load() with -EACCES.
->
-> This sounds to me a bit more complicated. In a prog attached to lsm/secur=
-ity_bprm_check,
-> bprm is trusted but bprm->mm is not trusted. So we need a way to have bpr=
-m->mm trusted
-> to pass it as an argument to the helpers. In that series, I marked linux_=
-binprm->mm as
-> trusted-or-null, which breaks all existing programs that use
-> linux_binprm->mm->something.
+> The speedup 1.45x looks good. But attaching to 1000 progs via fentry
 
-this is probably ok, but also we might want to look into having
-verifier still allow to dereference trusted ptr-or-null into untrusted
-ptr_to_btf_id to help with smooth transitions like this.
+I'd say "meh". If 500ms is ok, 700ms is not that much more noticeable.
 
-Not sure how complicated that would be in the verifier, but that would
-be a nice backwards compat preserving behavior.
-
-But to keep things simple today, I'd just mark that bprm->mm pointer
-as TRUSTED_OR_NULL.
-
+> costs less than 1 second, which is really faster than attaching to
+> around 1000 kernel functions via fentry:
 >
-> Another approach would be to add one more kfunc (i.e. bpf_get_bprm_mm) to=
- get
-> the mm from bprm and have it trusted.
-
-sound quite specialized, but I don't have a strong opinion
-
->
-> The reason that I didn't push that further was that mm in general is
-> bound to either linux_binprm or task_struct during its lifetime. We alrea=
-dy
-> have helpers for task_struct, and I thought that adding helpers for linux=
-_binprm
-> would be enough. Other than that, there is only one security_*() function=
- that
-> takes mm_struct as an argument (i.e. security_vm_enough_memory_mm), and p=
-ossibly
-> in that case we do not need to read the memory contents, but only metadat=
-a
-> (possibly I am oversimplifying here, but this is to show my thinking).
->
-> Unless I am missing something obvious, I can see two possible approaches =
-here:
->   1. Keep the bprm-specific kfuncs as they are now.
-
-no, I think that's a bad idea
-
->   2. Rework this around the mm variants that you proposed and add one
->      more kfunc (i.e. bpf_get_bprm_mm) to make that work.
->
-> Does the second approach sound reasonable to you?
-
-yes
-
+> bpfsnoop -k '*:(struct sock *)sk' -m entry -D
+>  Tracing 1096 tracees costs 11.597266736s
 >
 > Thanks,
-> Anastasios
+> Leon
+>
