@@ -1,67 +1,106 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from alln-iport-6.cisco.com (alln-iport-6.cisco.com [173.37.142.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4BD22F5313
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 14:15:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE64942DA4D;
+	Mon, 24 Aug 2026 14:16:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.37.142.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787580949; cv=none; b=TGI6kMYePx/vdIpohxpKhzICGOuXx5+yw8TDYIsyqyr7SP5QBbqsaN2iO6g+lZkPimGuaVV4+6w/K/yuqJJlPfBR4VQFTSKIfOxhQNvSomM4ftVFVuQ6vya1zeNm5y1qNWW3TJ0kn1PjsTWcfKJ5icQ9bdkE+NvawxgG43vvlHE=
+	t=1787581014; cv=none; b=jvhD9ufMJxOOfRZAPsSeCLNBjnTroLvpb12Keh08G10FT6IGdsmn1obiKyn1R/sRupHZMl4zZyR/HmgDzaHcW62dsYiT6tbC46GN7hmtOERPEkV0my/sEFHs/u9Arc64+jq+83b1NbcBQfnX4Gzvzj+vlYLtYhwHVjAPRDrIIBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787580949; c=relaxed/simple;
-	bh=id8aaOBApNzFAlvMtqZtuplLt7NXDJHb+c2pmGHdE38=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NuksLF0RWNJbUtrFrDvlHCiAdGYWmTihST7EPRSLsa+nqBg7Z3Txr+KpFcP5aZ2klvOXiE1SDW8JgLAr2E9AWCYXGhpHI1Q2X29A0CbZibf0AR/FjLMwWFnpHH/95Ybnv0mo9FmYsIDFdsVWXuPbXw5rEZwmCbATQFXbjYh0GTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G+mvcwM2; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787581014; c=relaxed/simple;
+	bh=EIHCMUQc/JLupmOSZV2pOn2JscGhvZ9UDM+cY/Admmo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Co/fxl3vO7UcM8wOeAaDr5+wZug7nFkhWaCWWwklPkKyy2rK42DEQUrEXHqJ15aWpIWqhGtg0K9q/fOVlTMOcF/ThsO+0lzvImyvKUksR1+ZD3QXlY2M2uZb58iMX6m7QKS4XRkSMS2nFOsgwArffUlXYp8a0qBlfbyW2rLRTwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (2048-bit key) header.d=cisco.com header.i=@cisco.com header.b=XTNF01MG; arc=none smtp.client-ip=173.37.142.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cisco.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G+mvcwM2"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-84a4d8fd6ecso3645765b3a.1
-        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 07:15:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cisco.com header.i=@cisco.com header.b="XTNF01MG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787580948; x=1788185748; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=dBI60On20/l+KZxVgc65ZDWskVOQQ+0+IeTrpO40fxU=;
-        b=G+mvcwM2h2wzSUM8Y2XrfxWCDjjrPxrrTNH6KEV8UfUbP6KHteX7UWkVqUIwlnzad0
-         SbSIr5+I2rf4+meTMgxIWOcZTBemsPU7Tq+7H2FE3k8KKfTHW28dsUbf0BX2YjavMTg9
-         Zm8PI3SVDBx0HtWcA0RizIFsJDWSUFqRTkkCr5I0KCkB3N8EITYwDKiIsuw4FF5t4OmM
-         kntl30FY3cVxRHVCnP28TsJ269uAdOj3JIVfwkYQqtXNiFLfvwPIgHLy5A/N1fFIUvzV
-         gVAkIdDEPQ5EWC9MA5+tKB9vz/3mEmp3LnaGyYN2vBEdSzZIdXetBuyoqcoPtZvP/JDO
-         l6yQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787580948; x=1788185748;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=dBI60On20/l+KZxVgc65ZDWskVOQQ+0+IeTrpO40fxU=;
-        b=T2FHbX6/71NyQ6b93VHczykPsGXoHdOA4cAjY43d6YStLSAH6qq45MVv/bO+hYUj9Y
-         eFMb3WgFeJBPy2V9Wjtz0u2at97gNJdVnMsj1xpW97XW9o41u7z8aCvgVtqFcWji+8yx
-         NN7sAEYdHXWmWPfcVh/mbGxna8wstHuu1IaUtQnCm7Z9iIr4VkRRC7cYVir1khJq0PW/
-         6+1Z78L3OEveFnyByMP7rEkI3Lyg1ZZcY6+OoGnzauBkxOnfIbcP2LcfJ9y5N2HJXT5Q
-         4SpIZWKTG3f6iwMJ3rp5ehQ1BZbO1ZEwTIoXSCrBYcIOr0W/1XOAWgbDNNpV+T0XXNsh
-         gpyQ==
-X-Gm-Message-State: AFuF++niWQ2f+G38v/aN9JJd7qKKpXnmc2RRHFZnw4JS9YzQccbX6mHr
-	3A7j3xxtMHfaqzCBgaPXnr1N+JzeqfPujEizUeWPSLKlmGqI7jhIPN1m264swZkPVyo=
-X-Gm-Gg: AR+sD11pqrPVSmfESP/6Lzfo59cl3xF7P3ea5LD8Ya/dWpHe4Lv+bmHCIerMaCcBGUj
-	ryWtPO+L2wNyWmrV9TLTQrx26zsZxMAbF7KYWJR82m1ivXrA1Gej4qoh4sCB0MuRMnECys3CwcW
-	CzG7qkwScvYpTngpdvDdpP4hS7etaEOf320p8Anq2cW2QIuVmenAHB9zBSo+RyKxpJCJqd8UDUF
-	+gubBRB+GUajDHneUMy3KXfNnkNsI4fBLAEeTHN0a3obVZF3xJqQ5xrL0AiT7gcoLXrx7+2drnT
-	EWOsGxiwUygpr7c7ZLdDA/4hgUNXMV2k6AZSwElpCEXo8cgp82zj1eCs4R5I/ayUiIFA/tUMNXZ
-	BZKIl2Ea/NfzFi3zm5vhwuL9tzE42fFgva1JkH80Ojpk+YHR4+z0bQe+J3gi9NFjy6O2b05iLWX
-	DAvXUluFcGojrfy/pSBE2L2P7Stp+P7dOrWO1iLEockoK9YJxysN2PRB7hyjZMWE0=
-X-Received: by 2002:a05:6a00:1d8f:b0:84f:a7bf:8fb9 with SMTP id d2e1a72fcca58-8520b9c6cfemr33696541b3a.3.1787580947799;
-        Mon, 24 Aug 2026 07:15:47 -0700 (PDT)
-Received: from void ([114.86.104.221])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8520f149e77sm2064253b3a.42.2026.08.24.07.15.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2026 07:15:45 -0700 (PDT)
-From: Tw <tw19881113@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Tw <tw19881113@gmail.com>
-Subject: [PATCH] libpf: Fix for the compiler sanity checking
-Date: Mon, 24 Aug 2026 22:15:27 +0800
-Message-ID: <20260824141532.604269-1-tw19881113@gmail.com>
-X-Mailer: git-send-email 2.54.0
+  d=cisco.com; i=@cisco.com; l=2099; q=dns/txt;
+  s=iport01; t=1787581013; x=1788790613;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=q7ne7I+tVhtIe/1r7EzMVEOlt/B1u1kz/bTxSe2FFUw=;
+  b=XTNF01MGDTbGWXzbINRw/6O+Py4pKHaKJPxkkLrPO2I7mdODPsucz9xA
+   DDyurt3dd70Gwvp61Lo2U9kzEYhxkXXoRtSrWTwSPSDVPRRKR6LnZ84nm
+   BG+iy8ee9WZGltwAEzJI9YNxILpMbvu9qWxwm2lbg06kWEuTDBScJlKWx
+   LFWY1oUIHRLSkkA29QZtMWwmOVYp15tEISEpJ5kUbsAXLWcj5kn+L0pKS
+   AhdrxaBSAt7Udse5OPgU9pNmi2BlHCfmX0SbAwxsJZqy5y8SB4sxzRkOw
+   Q+5E5bAayW90976bujg0EoL4nc2Ed6VVpqKrahrfI6is4+RFI3mKlQ8gH
+   w==;
+X-CSE-ConnectionGUID: 2EGB+J+dQw23ZghRG7NdGg==
+X-CSE-MsgGUID: PV/UhBSUQ2af6Ps8rTMzhg==
+X-IPAS-Result: =?us-ascii?q?A0BCAgArUYxq/4sQJK1aglmCV4FSQ0mUKYIhgRadCIF+D?=
+ =?us-ascii?q?wEBAQ9RBAEBhQUCjWwCJjQJDgECBAMCAwEBAQEBAQEBAQEBCwEBBQEBAQIBB?=
+ =?us-ascii?q?wWBDhOGXIZbAgEDJwsBRhBRVhmDAoJ1A750gXkzgQHeR4FmAQsUAYE4jWF2h?=
+ =?us-ascii?q?HwnG4FJRIEVgnMHb4UQhXgEgy6TVUiBHgNZLAFVEw0KCwcFgWYDNRIqFTI8M?=
+ =?us-ascii?q?h2BIz4XgQ0bBgWBHVlPhBAjGTZ8gQlegSspYAESF4EJggcCglqCBQIBSUMOB?=
+ =?us-ascii?q?0ciCxgNSBEsNxQZBD5uB45dH4JMMUoJCgo5gQErbpZdsCOEKKFcGjOXX5MNm?=
+ =?us-ascii?q?QipQ4FoPIFZMxoIGxWDIlMZD45fz19FMj0BAQcCBw4DC4FokX4BAQ?=
+IronPort-Data: A9a23:W/g69Km90lXkHr+y5EICRl3o5gxLJkRdPkR7XQ2eYbSJt1+Wr1Gzt
+ xIdDWjUP/rcZ2v1ed8lOY7koU4H7cDWxtQwTVc+/Co9RltH+JHPbTi7wugcHM8zwunrFh8PA
+ xA2M4GYRCwMZiaC4E/raf658SUUOZigHtLUEPTDNj16WThqQSIgjQMLs+Mii+aEu/Dha++2k
+ Y20+ZC31GONgWYubDpEsf7b8XuDgdyr0N8mlg1mDRx0lAe2e0k9VPo3Oay3Jn3kdYhYdsbSb
+ /rD1ryw4lTC9B4rDN6/+p6jGqHdauePVeQmoiM+t5mK2nCulARrukoIHKZ0hXNsttm8t4sZJ
+ OOhGnCHYVxB0qXkwIzxWvTDes10FfUuFLTveRBTvSEPpqHLWyOE/hlgMK05Fdc11cw0IyJCz
+ ONCcwICbiqs2MS6773uH4GAhux7RCXqFIobvnclyXTSCuwrBMiZBa7L/tRfmjw3g6iiH96HO
+ JFfMmQpNUqGOkYeUrsUIMpWcOOAhGX4dzlVtHqepLE85C7YywkZPL3FYIOLJYbTHpoN9qqej
+ lr4uFn5KConDYaWx2S96SK2usrdnSyuDer+E5X9rJaGmma7ymUNBRg+WVKlrPy9jUCiHdRSN
+ yQ84SYghaY18U2gTtTjGRi1yFaGuR4aHdRZCPEz4gyLxoLb5g+YAi4PSTspQNEqqco/VzE2/
+ lCOmNztCHpkt7j9YX6U8LaZqRuzPicYJHUIYj9CSwYZi/Hqu50bjR/VSNtnVqmvgbXdGTjvw
+ BiJoTI4irFVitQEv4244FrOqzGhvJ7ESkgy/Aq/dmuj4hl0e82japCk5Ebz6etGKsCSTjGps
+ GQNh9Wa4ekmC4+MmC2EBu4KGdmB4/uCNifbqVhxHpUg/nKm/HvLVYVa5DZ1JG9vLMcIeDava
+ 0jW0StK7ZJeMH6Ca7F2b4O4Tc8tyMDICd3/V+nIRtxQY5RwfUmM+yQGTVaZ1W3rkWA2nK0/M
+ IvdesGpZV4QEapP0jW7XaEe3KUtyyR4wnncLbj/zhK6wf+daWSTRLMtLlSDdKY64bmCrQGT9
+ MxQX+OOyhNCQKjkbize2ZAcIEpMLnUhA53y7ctNeYarJAd6FGw/I+HezKlneIF/malR0ODS8
+ RmVQVNRwl7yrWPIJB/MaX15br7rG5FlohoG0TcENFKs3T0nJI2o9qpaL8Fxdrg8/+slxvlxJ
+ xUYR/i97j10Ymyv01wggVPV9eSOqDzDadqyAheY
+IronPort-HdrOrdr: A9a23:0LJdcKDh5cuB53rlHemM55DYdb4zR+YMi2TDGXocdfUzSL39qy
+ nAppomPHPP4gr5HUtQ+uxoW5PwJE80l6QV3WB5B97LNzUO+lHYTr2KhrGM/9SPIUDDH5ZmtZ
+ tIQuxZFMD6C0R8gILR5Qm1FMtl/fy8mZrY4ts3CxxWPHhXg2YK1XYeNjqm
+X-Talos-CUID: 9a23:04fQd2BCjeuTWIP6E3NK22RXOIMpS2KHl0XfI3WXVkBlZ7LAHA==
+X-Talos-MUID: 9a23:6WrzmQZ6jZF+YOBTjwGruTFID/pRua2gVngWwY86ntuEOnkl
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="6.25,240,1779148800"; 
+   d="scan'208";a="816721370"
+Received: from alln-l-core-02.cisco.com ([173.36.16.139])
+  by alln-iport-6.cisco.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384; 24 Aug 2026 14:16:52 +0000
+Received: from localhost (unknown [10.228.224.45])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by alln-l-core-02.cisco.com (Postfix) with ESMTPS id 7CBDB18000216;
+	Mon, 24 Aug 2026 14:16:51 +0000 (GMT)
+From: Jerome Tollet <jtollet@cisco.com>
+To: netdev@vger.kernel.org
+Cc: saeedm@nvidia.com,
+	tariqt@nvidia.com,
+	mbloch@nvidia.com,
+	leonro@nvidia.com,
+	dtatulea@nvidia.com,
+	daniel@iogearbox.net,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	ast@kernel.org,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	linux-rdma@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Jerome Tollet <jtollet@cisco.com>,
+	stable@vger.kernel.org
+Subject: [PATCH net v4 2/2] net/mlx5e: Prevent stale XSK buffer release on MPWQE refill retry
+Date: Mon, 24 Aug 2026 16:16:45 +0200
+Message-ID: <20260824141645.23700-3-jtollet@cisco.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260824141645.23700-1-jtollet@cisco.com>
+References: <cover.1787347981.git.jtollet@cisco.com>
+ <20260824141645.23700-1-jtollet@cisco.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,31 +108,59 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Outbound-Client-TLS: ANONYMOUS;unknown [10.228.224.45];TLSv1.3;TLS_AES_256_GCM_SHA384;256
+X-Outbound-SMTP-Client: 10.228.224.45, [10.228.224.45]
+X-Outbound-Node: alln-l-core-02.cisco.com
 
-When compiling libbpf with sanitation, ubsan will report the following:
-```
-left shift of 1 by 31 places cannot be represented in type 'int'
-```
-let's fix it by casting int to u32 before shifting.
+With AF_XDP on a striding RQ, mlx5e defers releasing XSK buffers until
+an MPWQE is refilled. If XSK allocation then returns -ENOMEM,
+actual_wq_head is not advanced and a later NAPI poll retries the same
+WQE.
 
-Signed-off-by: Tan Wei <tw19881113@gmail.com>
+mlx5e_free_rx_mpwqe() leaves each released slot marked as releasable. On
+retry it can therefore call xsk_buff_free() again through stale pointers
+after the frames have returned to the XSK pool and been reallocated.
+
+Set all skip_release_bitmap bits in the common error path of
+mlx5e_xsk_alloc_rx_mpwqe(). This matches mlx5e_alloc_rx_mpwqe(). A
+successful allocation already clears the bitmap after replacing every
+buffer, so retries become idempotent without changing the success path.
+
+Fault injection forced three consecutive failures for one selected MPWQE.
+Both an early allocation failure and a partial 8-of-16-buffer unwind
+released the original 16 XSK buffers only once. Each error left a full
+bitmap, the following NAPI retry skipped the release, and a later
+successful allocation cleared it. A 20-second AF_XDP zero-copy pressure
+run exercised 1,575,262 buffer allocation failures without invalid
+descriptors, WQE errors, or kernel warnings.
+
+Fixes: 4c2a13236807 ("net/mlx5e: RX, Defer page release in striding rq for better recycling")
+Cc: stable@vger.kernel.org
+Signed-off-by: Jerome Tollet <jtollet@cisco.com>
 ---
- tools/lib/bpf/libbpf_internal.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index 4c46d34fc..222d2f1c0 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -259,7 +259,7 @@ static inline enum btf_func_linkage btf_func_linkage(const struct btf_type *t)
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c
+index 4f984f6a2cb9..55ec6387ab28 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c
+@@ -3,6 +3,7 @@
  
- static inline __u32 btf_type_info(int kind, int vlen, int kflag)
- {
--	return (kflag << 31) | (kind << 24) | vlen;
-+	return ((__u32)kflag << 31) | (kind << 24) | vlen;
+ #include "rx.h"
+ #include "en/xdp.h"
++#include <linux/bitmap.h>
+ #include <net/xdp_sock_drv.h>
+ #include <linux/filter.h>
+ 
+@@ -156,6 +157,7 @@ err_reuse_batch:
+ 		xsk_buff_free(xsk_buffs[batch]);
+ 
+ err:
++	bitmap_fill(wi->skip_release_bitmap, rq->mpwqe.pages_per_wqe);
+ 	rq->stats->buff_alloc_err++;
+ 	return -ENOMEM;
  }
- 
- enum map_def_parts {
 -- 
-2.54.0
+2.55.0
 
