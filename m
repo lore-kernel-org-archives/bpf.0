@@ -1,30 +1,31 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8426D450413;
-	Mon, 24 Aug 2026 16:05:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D41A36B90D;
+	Mon, 24 Aug 2026 16:05:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787587551; cv=none; b=dFCiBduXitqFI5mKuDabvZLxi3lkQmO5+IHvIUJMQg6v6ak7iIlbL456zQWIiqxwSO7bDqv3HkREvACrFD9V0cCZUDA7fAgA6GTOci1XFte7IacWqjJ8PzbDrjqJ510FcwT2OC6kHpZHK5QNzUkSJo/dDT19/sPdzJ3lR0i0fBU=
+	t=1787587554; cv=none; b=ECKQVoOoAQNpKAoiAasmwKgkPzyDI7/7I7o4c4sY03cB5s+SmDDG1NO3VcfITeKhRYuxvBp3YNKXSiw72d2QvwTz0oPnJE7vj3wn+w7ex4zIk5xfHjRM0wEWeW0uSiwJhc8IEnggeBywhnjUtxJPB0dQHcSTaSrQ9DFMiAKbOtI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787587551; c=relaxed/simple;
-	bh=1MvPs/PV2tLB4HDsvTjKWixuWNV1rCXGW/G3quH+LLs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=n+3epPUZKq20SIbfNl6fHR7Hd+p97ED8uh8HgQkOheoksbBDx4GXtFWpzsLhmIjk+sVp2w0zgFduyScS30AMD97jLdB+RftoajzLa/NfkKuBGHHk4lUbNGmLFbswSw4GPNuAq30ba9yEVojDfv1VU3SoQQDbapu5/DFnzEmKmAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=vw1mzenU; arc=none smtp.client-ip=217.140.110.172
+	s=arc-20240116; t=1787587554; c=relaxed/simple;
+	bh=z3HgR5JrV87UUef5omwF+7GRZHLLMVnWFEywPKlYZN8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=N/sj/DoyaQb47X3AbYuArKAePMPcZUflJ7O7nJCst1rzJP/98iu4MzpWVrSMysf4u8NuK1W/eDVd73uGDsCm3WGJh2d5nNPLGKtuKHPJaJ7sT/4pCH32hIWfG2pq2C2z2wRO7p6/AVeUNet/Obe0xyCfi/F0EXtUZ8ikfmBehDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=MzfdHSGU; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="vw1mzenU"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="MzfdHSGU"
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 492D816F2;
-	Mon, 24 Aug 2026 09:05:43 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C63FC1756;
+	Mon, 24 Aug 2026 09:05:46 -0700 (PDT)
 Received: from e142334-100.cambridge.arm.com (e142334-100.cambridge.arm.com [10.2.198.93])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DD55E3F85F;
-	Mon, 24 Aug 2026 09:05:43 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 67FFE3F85F;
+	Mon, 24 Aug 2026 09:05:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1787587547; bh=1MvPs/PV2tLB4HDsvTjKWixuWNV1rCXGW/G3quH+LLs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=vw1mzenUY8gK8nUmmAxeKjb9a86TCQ0iVEQWg8R7B4POGuzbglchYJbzDSfmmTfv0
-	 gXGiOcK9oIuGSjJ3XjCUH6YEhOp7EgFCD0Z04j3UVhXsw8NB6vnhAHCoq6Him6v4/4
-	 emWSAony0re2jPv4WqmCIZPzZeU8g/k+ttOmssaA=
+	t=1787587550; bh=z3HgR5JrV87UUef5omwF+7GRZHLLMVnWFEywPKlYZN8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=MzfdHSGUI4MR4hpSZEjGYjwit9tca6UiDVjwbEHbeT9dUPE7UHQ86d+HRFpo98vex
+	 uwdglyCvZ9EqcSEXQhaNrCFd3FdwW9vV37RTPRQ7R85BMRMoAFvajoPp1TuM/0tmJ7
+	 7w742yIUkmItIqYVPtE8QtBTxCTTT7GLQC3vNQVc=
 From: Muhammad Usama Anjum <usama.anjum@arm.com>
 To: Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>,
@@ -53,10 +54,12 @@ To: Catalin Marinas <catalin.marinas@arm.com>,
 	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
 	linux-mm@kvack.org (open list:MEMORY MANAGEMENT - CORE)
 Cc: Muhammad Usama Anjum <usama.anjum@arm.com>
-Subject: [PATCH 0/7] arm64: Batch PSTATE.TCO handling in kernel nofault loops
-Date: Mon, 24 Aug 2026 17:04:45 +0100
-Message-ID: <20260824160523.3907021-1-usama.anjum@arm.com>
+Subject: [PATCH 1/7] arm64: uaccess: Add batched kernel nofault accessors
+Date: Mon, 24 Aug 2026 17:04:46 +0100
+Message-ID: <20260824160523.3907021-2-usama.anjum@arm.com>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260824160523.3907021-1-usama.anjum@arm.com>
+References: <20260824160523.3907021-1-usama.anjum@arm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -65,41 +68,168 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-With Hardware Tag-Based KASAN in asynchronous or asymmetric mode, kernel
-nofault loops currently set and clear PSTATE.TCO around every access.
+With Hardware Tag-Based KASAN in asynchronous or asymmetric mode, arm64
+sets and clears PSTATE.TCO around every kernel nofault load or store. A
+loop pays that cost for every access even though tag checking can stay
+disabled until the operation finishes.
 
-Introduce bare nofault accessors, batching hooks, and an internal scope
-guard. Convert maccess page-fault cleanup to scoped form. Skip
-page-fault setup for zero-sized kernel nofault copies and zero-length
-BPF string operations. Then use bare primitives in the maccess and BPF
-loops. For non-empty operations, this reduces the code-derived dynamic
-MSR TCO execution count from 2N to 2. Two-string BPF comparisons fall
-from 4N to 2.
+Separate TCO management from the fault-tolerant access and add begin and
+end hooks for callers that want to batch several accesses. Keep the
+existing accessors self-contained, and provide aliases and no-op hooks
+for architectures that do not need special handling.
 
-The BPF changes and an earlier maccess implementation with explicit
-cleanup were tested with QEMU arm64 using Hardware Tag-Based KASAN in
-synchronous, asynchronous, and asymmetric modes. All nine arm64 MTE
-kselftests passed in each mode, as did the 138 focused BPF string_kfuncs
-and varlen subtests. The focused BPF tests also passed with the default
-non-MTE arm64 CPU model. Both final maccess scoped-guard patches were
-arm64 cross-built. Runtime tests have not been rerun after that
-conversion.
+A context switch re-enables tag checking, so a batched region must not
+schedule. Continue to evaluate accessor arguments before overriding TCO,
+as those expressions may block.
 
-Muhammad Usama Anjum (7):
-  arm64: uaccess: Add batched kernel nofault accessors
-  uaccess: Add scope guard for bare kernel nofault regions
-  maccess: Skip setup for zero-sized kernel nofault copies
-  maccess: Use a scoped guard for page faults
-  maccess: Batch TCO handling in kernel nofault loops
-  bpf: Skip setup for zero-length string kfunc operations
-  bpf: Batch TCO handling in string kfuncs
-
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+---
  arch/arm64/include/asm/uaccess.h | 71 ++++++++++++++++++++++++--------
- include/linux/uaccess.h          | 20 +++++++++
- kernel/bpf/helpers.c             | 41 ++++++++++++------
- mm/maccess.c                     | 68 ++++++++++++++++--------------
- 4 files changed, 139 insertions(+), 61 deletions(-)
+ include/linux/uaccess.h          | 16 +++++++
+ 2 files changed, 69 insertions(+), 18 deletions(-)
 
+diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
+index 9f5bd9c69c249..1a14eb2a51dce 100644
+--- a/arch/arm64/include/asm/uaccess.h
++++ b/arch/arm64/include/asm/uaccess.h
+@@ -270,28 +270,43 @@ do {									\
+ #define get_user	__get_user
+ 
+ /*
+- * We must not call into the scheduler between __mte_enable_tco_async() and
+- * __mte_disable_tco_async(). As `dst` and `src` may contain blocking
+- * functions, we must evaluate these outside of the critical section.
++ * Nofault load without TCO management for use inside a
++ * __begin/__end_kernel_nofault_bare() region.
+  */
+-#define __get_kernel_nofault(dst, src, type, err_label)			\
++#define __get_kernel_nofault_bare(dst, src, type, err_label)		\
+ do {									\
+ 	__typeof__(dst) __gkn_dst = (dst);				\
+ 	__typeof__(src) __gkn_src = (src);				\
+ 	do { 								\
+ 		__label__ __gkn_label;					\
+-									\
+-		__mte_enable_tco_async();				\
+ 		__raw_get_mem("ldr", *((type *)(__gkn_dst)),		\
+ 		      (__force type *)(__gkn_src), __gkn_label, K);	\
+-		__mte_disable_tco_async();				\
+ 		break;							\
+ 	__gkn_label:							\
+-		__mte_disable_tco_async();				\
+ 		goto err_label;						\
+ 	} while (0);							\
+ } while (0)
+ 
++/*
++ * We must not call into the scheduler between __mte_enable_tco_async() and
++ * __mte_disable_tco_async(). As dst and src may contain blocking functions,
++ * evaluate them before overriding TCO.
++ */
++#define __get_kernel_nofault(dst, src, type, err_label)			\
++do {									\
++	__label__ __gkn_tco_err;					\
++	__typeof__(dst) __gkn_tco_dst = (dst);				\
++	__typeof__(src) __gkn_tco_src = (src);				\
++	__mte_enable_tco_async();					\
++	__get_kernel_nofault_bare(__gkn_tco_dst, __gkn_tco_src, type,	\
++				     __gkn_tco_err);			\
++	__mte_disable_tco_async();					\
++	break;								\
++__gkn_tco_err:								\
++	__mte_disable_tco_async();					\
++	goto err_label;							\
++} while (0)
++
+ #define __put_mem_asm(store, reg, x, addr, label, type)			\
+ 	asm goto(							\
+ 	"1:	" store "	" reg "0, [%1]\n"			\
+@@ -366,28 +381,48 @@ do {									\
+ 
+ #define put_user	__put_user
+ 
+-/*
+- * We must not call into the scheduler between __mte_enable_tco_async() and
+- * __mte_disable_tco_async(). As `dst` and `src` may contain blocking
+- * functions, we must evaluate these outside of the critical section.
+- */
+-#define __put_kernel_nofault(dst, src, type, err_label)			\
++/* Nofault store without TCO management; see __get_kernel_nofault_bare. */
++#define __put_kernel_nofault_bare(dst, src, type, err_label)		\
+ do {									\
+ 	__typeof__(dst) __pkn_dst = (dst);				\
+ 	__typeof__(src) __pkn_src = (src);				\
+ 									\
+ 	do {								\
+ 		__label__ __pkn_err;					\
+-		__mte_enable_tco_async();				\
+ 		__raw_put_mem("str", *((type *)(__pkn_src)),		\
+ 			      (__force type *)(__pkn_dst), __pkn_err, K);	\
+-		__mte_disable_tco_async();				\
+ 		break;							\
+ 	__pkn_err:							\
+-		__mte_disable_tco_async();				\
+ 		goto err_label;						\
+ 	} while (0);							\
+-} while(0)
++} while (0)
++
++/*
++ * We must not call into the scheduler between __mte_enable_tco_async() and
++ * __mte_disable_tco_async(). As `dst` and `src` may contain blocking
++ * functions, we must evaluate these outside of the critical section.
++ */
++#define __put_kernel_nofault(dst, src, type, err_label)			\
++do {									\
++	__label__ __pkn_tco_err;					\
++	__typeof__(dst) __pkn_tco_dst = (dst);				\
++	__typeof__(src) __pkn_tco_src = (src);				\
++	__mte_enable_tco_async();					\
++	__put_kernel_nofault_bare(__pkn_tco_dst, __pkn_tco_src, type,	\
++				     __pkn_tco_err);			\
++	__mte_disable_tco_async();					\
++	break;								\
++__pkn_tco_err:								\
++	__mte_disable_tco_async();					\
++	goto err_label;							\
++} while (0)
++
++/*
++ * A context switch re-enables tag checking, hence the no-scheduling
++ * requirement for a bare nofault region.
++ */
++#define __begin_kernel_nofault_bare()	__mte_enable_tco_async()
++#define __end_kernel_nofault_bare()	__mte_disable_tco_async()
+ 
+ extern unsigned long __must_check __arch_copy_from_user(void *to, const void __user *from, unsigned long n);
+ #define raw_copy_from_user(to, from, n)					\
+diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+index eddbbb65ccc4f..7ae1854673471 100644
+--- a/include/linux/uaccess.h
++++ b/include/linux/uaccess.h
+@@ -637,6 +637,22 @@ do {							\
+ 
+ #endif  /* !__get_kernel_nofault */
+ 
++/*
++ * Architectures may use the begin/end hooks to establish state shared by a
++ * sequence of bare nofault accesses. Every path out of the region must call
++ * the end hook. The region, including expressions passed to the bare
++ * accessors, must not call into the scheduler.
++ */
++#ifndef __get_kernel_nofault_bare
++#define __get_kernel_nofault_bare	__get_kernel_nofault
++#define __put_kernel_nofault_bare	__put_kernel_nofault
++#endif
++
++#ifndef __begin_kernel_nofault_bare
++#define __begin_kernel_nofault_bare()	do {} while (0)
++#define __end_kernel_nofault_bare()	do {} while (0)
++#endif
++
+ /**
+  * get_kernel_nofault(): safely attempt to read from a location
+  * @val: read into this variable
 -- 
 2.47.3
 
