@@ -1,136 +1,159 @@
-Received: from mta0.migadu.com (out-59.mta0.migadu.com [91.218.175.59])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 702E5438495
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 14:16:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.59
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4F9742902E;
+	Mon, 24 Aug 2026 14:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787581021; cv=none; b=uDzN41JYt0rvx2wMnyITNvHqngA77Ioq4w43uMHxk2SU2J4eDF4vFXmZ6nPY4NcVZRqss9QywB4zbrXMfSHSE4bNWUEYKrwZQpFEsiDagkZq6b8/4lFFdg4a1YsGRnA6JOWUjId7kcfi3utlZgWuuQ7QFAByrAEi7jwxvQLlQd0=
+	t=1787581331; cv=none; b=u4Z5KNbp+Dw2WfutCYDb/fAHp9XszqWBgsn8qKdQIo4KiOPhHOS7KQ3aUvkG6j0O/W9cPiEMcW/FXX9VzTYk9kkbH71km6pS5nVVrx3ip29B8+t8BbOfp3+LcRHYmpsU6A/Dumflq86r5jGyddQkKTij3MVK9+KhjvsXd74LImk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787581021; c=relaxed/simple;
-	bh=hrf2Ufu7tuw2vu6nasTmIL9nYNzZk+TC4keTT8NzI0g=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=g3GUtHCkAPPqsZdvlappb5YA/v/4DEY/7lDzK3ZpWkQ3PAFFe3umndhRoH5tUKMgci9FiaHEW2x8HPbPufQ9nWFuDsiv2eXucKWoTUhIwDOGE+RnHPtn0rNWhotaeJI6wQuW6Xn1UvxpFWtLDDTsmctGr5+M0MWB2ag/NyeaL6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=U7uFAkDB; arc=none smtp.client-ip=91.218.175.59
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787581331; c=relaxed/simple;
+	bh=KJAluXXdqui4zkMtLXpfXyj5UR3ic0BTN3h4iuzhLM4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BAC099lvohUULlkp7q6BGApztrZko3lbxa2FuFj2+7vDETE6PACsPAc1CyFt2j95ecaOzJGzumYcN9zTLxIw9px9DmYC99xcm4OB/HSidUnkaRMtd7ekXbI6U0tTwapRMW7XmiUXJDbk1SKiyRI5eVwpOecC6wiKpSyU0cX4XXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KaO+iZO2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="U7uFAkDB"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=hrf2Ufu7tuw2vu6nasTmIL9nYNzZk+TC4keTT8NzI0g=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787581016; v=1; x=1788185816;
- b=U7uFAkDB4c3WQALs5xLYKcfRP9/KU1P8rltcCg43CARJp1BERVmuTJYeH+teIWEE6Zz0lbwT
- t0A/RT7CSLImTwZFqbpcdY/LU4966u8cculT+VpNBQ2ZfJo7zgl6nEYlr0C72DUmnKpqO/Zn0HQ
- GfxEEuCkUY9YDFVNQtCnRWUk=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [192.168.110.173] (223.70.159.239)
-	by smtp.migadu.com with ESMTPS id 263c525af6cb8c23;
-	Mon, 24 Aug 2026 14:16:56 +0000
-X-Mizu-Trace-ID: 263c525af6cb8c23
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <13ca7798-d10e-471d-aab7-e3199199e07f@linux.dev>
-Date: Mon, 24 Aug 2026 22:16:49 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KaO+iZO2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 142241F00A3A;
+	Mon, 24 Aug 2026 14:22:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787581330;
+	bh=5j5DWKJN3cdhmHqdN8rCpFWNLqVKoHQJspSwWStoi7I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=KaO+iZO2NSk2Mb6Znp4wkLjU5Psq+sSLTkfTwe0+7WB9WPQgyt6fGHjYZV/zU3Ij4
+	 jlJwIh1FB4tUanbeYBsel3kuT6oDpApt/nGc2A/jpsx8No/76t7v8SkSIGmFPCQZHq
+	 x/stZ2CCZMEYIwBH2TMkf2I6Kb6U4Vb0qQpg+buiH2VOWmHgTwuJ7fLAW4vrSs/qqT
+	 FFfr9sG3A9qW1t2+BBLBIHX/wpRTS0+mcevOWj9fdts3KEZ9zaJXvQwRkTw4iabRz2
+	 MRD5fdodUOKKmoRUSt4jl6yvfX60M8VPs27KzmhOBhTfVgKE8xrxwTcZCVAJ/MhsjO
+	 FxmiBGAPOYNOw==
+Date: Mon, 24 Aug 2026 15:22:02 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Kiryl Shutsemau <kirill@shutemov.name>
+Cc: "David Hildenbrand (Arm)" <david@kernel.org>, 
+	akpm@linux-foundation.org, nico.pache@linux.dev, baolin.wang@linux.alibaba.com, 
+	baohua@kernel.org, dev.jain@arm.com, hughd@google.com, lance.yang@linux.dev, 
+	liam@infradead.org, mhocko@suse.com, rppt@kernel.org, ryan.roberts@arm.com, 
+	shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, vbabka@kernel.org, 
+	ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, jannh@google.com, 
+	willy@infradead.org, pfalcato@suse.de, rostedt@goodmis.org, mhiramat@kernel.org, 
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 00/57] mm/collapse: rebuild collapse on migration
+ primitives
+Message-ID: <aoxRs0mjyQnpO-IT@gremlin>
+References: <20260816224609.308019-1-kirill@shutemov.name>
+ <aoLAly-oL2OAa4n8@lucifer>
+ <aoLkMUtmzRVuv2Hx@thinkstation>
+ <aoQ77EcD3M2kjeya@lucifer>
+ <0153303d-f9d6-45ea-a276-fbf2e5625ef9@kernel.org>
+ <aoXn1B7cPnPq7uxd@thinkstation>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, tj@kernel.org, void@manifault.com,
- changwoo@igalia.com, suzhidao@xiaomi.com, sched-ext@lists.linux.dev,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- Tao Cui <cuitao@kylinos.cn>
-Subject: Re: [PATCH] sched_ext: pass the initial cpu.idle state in
- scx_cgroup_init_args
-To: Andrea Righi <arighi@nvidia.com>
-References: <20260824133954.561956-1-cui.tao@linux.dev>
- <aoxRHw-Q5FCUX6zo@gpd4>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <aoxRHw-Q5FCUX6zo@gpd4>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aoXn1B7cPnPq7uxd@thinkstation>
 
-Hello, Andrea
+On Wed, Aug 19, 2026 at 07:08:07PM +0100, Kiryl Shutsemau wrote:
+> On Tue, Aug 18, 2026 at 04:12:17PM +0200, David Hildenbrand (Arm) wrote:
+> > I think we all agree that there is a lot of room for improvement, but the big
+> > question is:
+> >
+> > (a) When does it stop being a cleanup and is a new feature in disguise that
+> >     makes the code more complicated and even harder to maintain.
+> >
+> > (b) Can it just naturally be made looking like a cleanup.
+> >
+> > Ideally, we'd get b), in small, nice-to-review chunks that incrementally improve
+> > the code without inflating it heavily or moving everything around.
+>
+> It is not a cleanup and I would rather not sell it as one.  It replaces a
+> mechanism, so judged as (b) it fails by construction.
+>
+> I believe the end result is much cleaner. But I might be biased. :)
+>
+> > The current locking is nasty, so anything that moves us one step closer into
+> > something that is not only simpler but also more scalable is nice. I am a bit
+> > concerned with the churn in the series as is.
+> >
+> > After this series, mm/collapse.c itself is way larger than just mm/khugepaged.c
+> > originally, which raises some eyebrows.
+>
+> Line count is a poor proxy for simplicity or scalability.  What the
+> engine changes is the serialization model, and that is the part collapse
+> needs changed: the PMD granularity and the exclusion both come out of
+> the locking.
+>
+> Incremental does not reach it, though.  The old mechanism is correct
+> because it holds mmap_write_lock, the anon_vma write lock and a reference
+> from the LRU; the engine is correct because the sources are frozen behind
+> migration entries.  There is no halfway state that is correct under both,
+> so the switch lands as one patch.
+>
+> What can be incremental is everything around it: the engine goes in beside
+> the old mechanism, patch 25 points the anon path at it, and 28 removes what
+> it replaces.  Until 28 both are in the tree with only one of them
+> reachable, so the switch can be reverted on its own.
+>
+> > We should also be aware that people are proposing file/shmem mTHP collapse, so
+> > ideally what we refactor would naturally unify some of these code paths.
+> >
+> > I am wondering whether shmem mTHP collapse should come first. (I'm hoping that
+> > shmem mTHP collapse can unify some of the anon+file collapse code in a nice way,
+> > to similarly just look like a cleanup while enabling a new scenario.
+>
+> mTHP collapse as it stands has limited usability: PMD-aligned windows only,
+> and one VMA has to own the PMD.  Bolting file collapse onto the same
+> structure adds to the debt instead of paying it down.
+>
+> It would fit the new design.  The frame -- scan, candidate selection, the
+> round and its passes -- has nothing anon-specific in it; what is
+> anon-specific sits in the freeze (folio_test_anon(), PageAnonExclusive())
+> and the unshare in the fault-in pass.  A file source would bring its own
+> check, freeze, copy and install.
+>
+> I am not sure it should, though.
+>
+> Do we want to find file collapse candidates by walking the virtual
+> address space at all?
+>
+> collapse_file() already works on the mapping -- it builds the folio in
+> the page cache and then repairs every mapping through
+> retract_page_tables() -- so the VMA walk only picks which inode range to
+> try, and it reaches only what a registered mm maps right now.  Large
+> folios buy more than TLB reach: fewer page cache entries, cheaper
+> writeback, natural locking batch, etc.  Those apply whether the file is
+> mapped or not, and going at the inode directly would reach them.
+>
+> > Agreed, I think we really should unify+cleanup the existing code first before
+> > doing more drastic changes.
+> >
+> > Having a series that throws all of khugepaged.c into a mixer and pours something
+> > new into collapse.c is ... concerning :)
+>
+> The moving around is patches 29-35 and the tracing after them.  None of it
+> is needed for the engine: 1-28 add it, switch the anon path over and delete
+> the old mechanism, without moving anything else out of khugepaged.c.  If
+> the churn is the problem, v2 can stop there and the moves can come later as
+> their own series.
 
-在 2026/8/24 22:11, Andrea Righi 写道:
-> Hi Tao,
-> 
-> On Mon, Aug 24, 2026 at 09:39:54PM +0800, Tao Cui wrote:
->> From: Tao Cui <cuitao@kylinos.cn>
->>
->> scx_cgroup_init_args carries the initial weight and bandwidth control
->> parameters of a cgroup to ops.cgroup_init(), but not its cpu.idle
->> state. A cgroup that was already configured idle before the scheduler
->> was loaded (or before it was onlined under it) is presented as
->> non-idle, and the BPF scheduler only learns about it if cpu.idle is
->> written again later.
->>
->> Add the idle state to scx_cgroup_init_args and fill it in both places
->> that build the args -- scx_tg_online() for cgroups created under the
->> scheduler and scx_cgroup_init() for cgroups that already exist when
->> the scheduler is loaded.
->>
->> Verified in a VM with a probe scheduler printing the init args: a
->> cgroup configured cpu.idle=1 before loading shows idle=1 in
->> ops.cgroup_init(), the default shows 0, and later cpu.idle writes
->> still come through ops.cgroup_set_idle().
->>
->> Signed-off-by: Tao Cui <cuitao@kylinos.cn>
->> ---
->>  kernel/sched/ext/ext.c      | 4 +++-
->>  kernel/sched/ext/internal.h | 3 +++
->>  2 files changed, 6 insertions(+), 1 deletion(-)
->>
->> diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
->> index b646711a45fe..a7218314dcfb 100644
->> --- a/kernel/sched/ext/ext.c
->> +++ b/kernel/sched/ext/ext.c
->> @@ -4764,7 +4764,8 @@ int scx_tg_online(struct task_group *tg)
->>  				{ .weight = tg->scx.weight,
->>  				  .bw_period_us = tg->scx.bw_period_us,
->>  				  .bw_quota_us = tg->scx.bw_quota_us,
->> -				  .bw_burst_us = tg->scx.bw_burst_us };
->> +				  .bw_burst_us = tg->scx.bw_burst_us,
->> +				  .idle = tg->scx.idle };
->>  
->>  			ret = SCX_CALL_OP_RET(sch, cgroup_init,
->>  					      NULL, tg->css.cgroup, &args);
->> @@ -5185,6 +5186,7 @@ static int scx_cgroup_init(struct scx_sched *sch)
->>  				.bw_period_us = tg->scx.bw_period_us,
->>  				.bw_quota_us = tg->scx.bw_quota_us,
->>  				.bw_burst_us = tg->scx.bw_burst_us,
->> +				.idle = tg->scx.idle,
->>  			};
->>  
->>  			ret = SCX_CALL_OP_RET(sch, cgroup_init, NULL, css->cgroup, &args);
->> diff --git a/kernel/sched/ext/internal.h b/kernel/sched/ext/internal.h
->> index 53e136a47924..aa149a9c29f7 100644
->> --- a/kernel/sched/ext/internal.h
->> +++ b/kernel/sched/ext/internal.h
->> @@ -259,6 +259,9 @@ struct scx_cgroup_init_args {
->>  	u64			bw_period_us;
->>  	u64			bw_quota_us;
->>  	u64			bw_burst_us;
->> +
->> +	/* whether the cgroup is configured idle via cpu.idle */
->> +	bool			idle;
->>  };
-> 
-> It looks like there are two more places in kernel/sched/ext/sub.c,
-> scx_cgroup_claim_subtree() and scx_cgroup_return_subtree(), they should also
-> initialize idle. Otherwise the field defaults to false and an idle cgroup would
-> be presented as non-idle when it's handed to a sub-scheduler.
-> 
+This whole reply seems AI-generated...
 
-Right, I missed those two. v2 fills .idle in all four places that
-build scx_cgroup_init_args, including both sub-scheduler handover
-paths in sub.c. The main paths are verified in a VM; the sub.c ones
-are compile-tested only.
+You replying only to David twice in this sub-thread which isn't exactly giving
+me warm fuzzy feelings about the working-around-me concerns I raised here.
 
-Thanks,
-Tao> Thanks,
-> -Andrea
+So simple feedback - send a relatively small, no-functional-change series that
+improves THP code and lays foundations for future changes. After the merge
+window.
 
+Can you explicitly ack this please?
+
+>
+> --
+>   Kiryl Shutsemau / Kirill A. Shutemov
+
+--
+Cheers, Lorenzo
