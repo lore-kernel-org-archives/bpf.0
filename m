@@ -1,165 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-227.mta0.migadu.com [91.218.175.227])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CF103F3288;
-	Mon, 24 Aug 2026 10:18:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3242B406261
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 10:27:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787566725; cv=none; b=SfQ+7x/jeq1Z/L3E8EVFXewSYQQx2DCfAbaMrvRKub48qpJUiJqsJQu4E6OdeHsO2ARA3KVzJUrNom/gaVLFBl+Owv2Uf3wfHxH/vS9NQLFYE+yg0/sQxsd6Us56JDfFAu2ytWQ43UAISEXG6lVmNH6MuYlYKjj9a1Q5b31NNd4=
+	t=1787567265; cv=none; b=eIu3hSgXjxHOo7fg26alDPTz7quR9h+TMmJJ4iqbb9rNtDZy+laPIuRoQq1SQY6ULxQ9U0YGnD4RvrbCauMJ427z7qUdtkuxyDtuhoE7r5FHO63S55np4ZDlBUPFAb0iCibKJFag/gmrNnIXJYwZNJ4yoOlW0Vr9+/9fJECbd/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787566725; c=relaxed/simple;
-	bh=8GIhY6ChDBEehkhWNqytYkaTSt0wJ4ExfN4jgPKFXQs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=b5ERrJ1Lni1FQSgckCk7efPxcCrY7ql6c3GnCZYJmsjbw7Wg713gi9H3nU9jzodaPawa7S10w8YD57h1KOA/KzDhs+P0nDfj7gTJ2JG1VgPNW55NA52gLWC5C8wqjcpWePft/hhN4GoWOLs/I/MacOUcWZe4ra9PDe3DUaEvulY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G80pTPbt; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787567265; c=relaxed/simple;
+	bh=A2b42CG6jc7Hbgx9lgLOdBLDKlBvbSbrAcDtokEjdNo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=joz9vGHnprH7dC2CVOq9VU4XxKUMtyUdo86gDkFibCgmv4LfBvb27O91FNB9asXcF6V6e0Cj56eBs85/APMYrUrBAKYY4l65m4UTLDeomQ9gtjpjFy0Gp/0XbRr9zoh6e1cQ9GeYjpIe9l2/r/trBayM2b+RVclqtsplMQsTTZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gV16iYxF; arc=none smtp.client-ip=91.218.175.227
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G80pTPbt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 488F61F00A3A;
-	Mon, 24 Aug 2026 10:18:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787566723;
-	bh=tCVy6tO25b1C0EBMahBMXTxY265+oZLsyi3tsJ1HWiw=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=G80pTPbt24dmJxKUm1lLBKABnx2Hz6gfYAPAunMLZwYbWrBb6EcgVTfBAc9vfQm91
-	 zuLwnEbZOi6Tq53LaWnXTg7EPw8Iub9X12P4mpFpxgdSBeI9Vojif4aIP87ast7nvO
-	 Afxu5T0ry2ZP3QhSEk6BByFIrX+30UT0lpBzu/il118Ee94o3f9XtmZhFCje+tWyLd
-	 vEHRfaD6KwOYT6Dz/NeaLJRFBzqK63dAU1ZK9JbyZri940rglJ6/6mye91daooMvc2
-	 Ln5KD+rdKBoLuZ8FCD1tEdxNEJjlRSxScP+fIEIF0CCBlvg+VWxiwDmzvMUhdePh4Q
-	 KF4XAp4RSnvfQ==
-Content-Type: multipart/mixed; boundary="===============9062433700612394963=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gV16iYxF"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=A2b42CG6jc7Hbgx9lgLOdBLDKlBvbSbrAcDtokEjdNo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787567261; v=1; x=1788172061;
+ b=gV16iYxFtGHDxzo6MpsrlzOjV2RYs5NInaE1R4/ZwSdoz/3doCrdsoKAhBwWEczlXPgz09Cf
+ kbWvBWEoN3F4agqm6Nf5PVlePPMNnJElKjMKdWEuUISGcvP5XPRgmJSfebS17JLX7t9uApsFmd1
+ N+Xpihq2zYENVfPIz2EeKbvI=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from [10.54.25.56] (222.72.143.228)
+	by smtp.migadu.com with ESMTPS id 136207cde75cea7a;
+	Mon, 24 Aug 2026 10:27:31 +0000
+X-Mizu-Trace-ID: 136207cde75cea7a
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <d485f3e8-e254-4bf8-8619-982df0e160fe@linux.dev>
+Date: Mon, 24 Aug 2026 18:27:17 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <df25bcf177930345988034cd7ccf4c7f11036b7aad52f98262b39a7c34e7c3be@mail.kernel.org>
-In-Reply-To: <20260824093122.362135-5-jiayuan.chen@linux.dev>
-References: <20260824093122.362135-5-jiayuan.chen@linux.dev>
-Subject: Re: [PATCH bpf-next v5 4/4] selftests/bpf: Add a test for arena fault-in under memory.max
-From: bot+bpf-ci@kernel.org
-To: jiayuan.chen@linux.dev,bpf@vger.kernel.org
-Cc: jiayuan.chen@linux.dev,emil@etsalapatis.com,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,ihor.solodrai@linux.dev,shuah@kernel.org,bigeasy@linutronix.de,clrkwllms@kernel.org,rostedt@goodmis.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-rt-devel@lists.linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 24 Aug 2026 10:18:43 +0000 (UTC)
-
---===============9062433700612394963==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf 1/2] libbpf: Fix usdt attach failure when nop10
+ crosses page boundary
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, shuah@kernel.org, jakub@cloudflare.com,
+ peterz@infradead.org, phoenix500526@163.com, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com
+References: <20260824092847.361683-1-jiayuan.chen@linux.dev>
+ <3cbe827e0809b8f8e521cac3f904986e6d885780838a4118da311f40e70b1c2b@mail.kernel.org>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <3cbe827e0809b8f8e521cac3f904986e6d885780838a4118da311f40e70b1c2b@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_memcg.c b/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
-> new file mode 100644
-> index 000000000000..c57b98494cfa
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
-> @@ -0,0 +1,158 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <test_progs.h>
-> +#include <fcntl.h>
-> +#include <signal.h>
-> +#include <sys/mman.h>
-> +#include <sys/wait.h>
-> +#include <unistd.h>
-> +#include <sys/user.h>
-> +#ifndef PAGE_SIZE /* on some archs it comes in sys/user.h */
-> +#include <unistd.h>
-> +#define PAGE_SIZE getpagesize()
-> +#endif
 
-This isn't a bug, but are fcntl.h, signal.h and sys/mman.h needed here?
-Nothing in the file appears to use open()/O_* flags, signal APIs (SIGSEGV
-and SIGKILL appear only in comments, and WIFSIGNALED comes from
-sys/wait.h), or mmap()/PROT_*/MAP_* constants.
-
-Also, since unistd.h is already included above, could the copy inside the
-PAGE_SIZE block be dropped?
-
-> +
-> +#include "cgroup_helpers.h"
-> +#include "arena_memcg.skel.h"
-
-[ ... ]
-
-> +void serial_test_arena_memcg(void)
-> +{
-
-A subsystem pattern flags this as potentially concerning: a new standalone
-test file is added to prog_tests/ for user-space arena fault-in, while
-prog_tests/arena_mem_usage.c in the same directory already exercises that
-same interface. arena_mem_usage.c's 'User-space fault-in' block does
-exactly the same thing this test's inner loop does:
-
-  base = bpf_map__initial_value(skel->maps.arena, &sz);
-  ...
-  for (i = 0; i < 8; i++)
-          base[i * ps] = 1;
-
-Both files are serial_ tests, both duplicate the same PAGE_SIZE preamble,
-the same page-size local, and the same bpf_map__initial_value() /
-base[i * ps] = 1 fault-in idiom, and progs/arena_memcg.c's map stanza is
-byte-identical to progs/arena_mem_usage.c's apart from max_entries. The
-question is whether this belongs as an additional case or subtest in the
-existing arena fault-in test rather than a new binary-level test with its
-own setup.
-
-On the other hand, the two tests assert different behaviour, not a narrow
-variant of one behaviour: arena_mem_usage.c asserts the memlock accounting
-value after fault-in, while this test asserts that hitting memory.max
-during fault-in produces a memcg OOM kill rather than a SIGSEGV on a valid
-address. The new test also needs a harness the existing one does not have:
-setup_cgroup_environment(), a cgroup created and joined before skeleton
-load so the map is charged to the right memcg, a forked child (the arena
-vma is VM_DONTCOPY and the parent must stay outside the limit so the memcg
-OOM cannot pick test_progs), and exit-code-based error reporting because
-ASSERT_* does not cross fork(). Folding that into arena_mem_usage.c would
-put every one of its existing assertions behind a fork and a memory limit.
-
-Is the separate file the right call here, or should this be integrated
-into the existing test?
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/progs/arena_memcg.c b/tools/testing/selftests/bpf/progs/arena_memcg.c
-> new file mode 100644
-> index 000000000000..88259cfea06b
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/arena_memcg.c
-> @@ -0,0 +1,24 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <vmlinux.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include "bpf_arena_common.h"
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_ARENA);
-> +	__uint(map_flags, BPF_F_MMAPABLE);
-> +	__uint(max_entries, 50000); /* number of pages */
-> +#ifdef __TARGET_ARCH_arm64
-> +	__ulong(map_extra, 0x1ull << 32); /* start of mmap() region */
-> +#else
-> +	__ulong(map_extra, 0x1ull << 44); /* start of mmap() region */
-> +#endif
-> +} arena SEC(".maps");
-> +
-> +SEC("syscall")
-> +int noop(void *ctx)
-> +{
-> +	return 0;
-> +}
-
-This isn't a bug, but is the noop program load-bearing here - does the
-object need at least one program for the skeleton/load path - or could
-progs/arena_memcg.c be just the arena map definition? The test only calls
-arena_memcg__open_and_load() and then works through bpf_map__initial_value()
-/ bpf_map__max_entries() on maps.arena, so cskel->progs.noop is never
-referenced.
+On 8/24/26 6:03 PM, bot+bpf-ci@kernel.org wrote:
+>> Fixes: 41a5c7df4466 ("libbpf: Add support to detect nop,nop5 instructions combo for usdt probe")
+>> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> Does the Fixes tag point at the right commit? The -ENOTSUPP attach
+> failure could not happen at 41a5c7df4466.
+>
+> At 41a5c7df4466 the uprobe was shifted onto a nop5 (0f 1f 44 00 00), and
+> arch_uprobe_analyze_insn() ran uprobe_init_insn() unconditionally:
+>
+>      ret = uprobe_init_insn(auprobe, &insn, is_64bit_mm(mm));
+>      if (ret)
+>          return ret;
+>      if (can_optimize(&insn, addr))
+>          set_bit(ARCH_UPROBE_FLAG_CAN_OPTIMIZE, &auprobe->flags);
+>
+> uprobe_init_insn() accepts nop5: is_prefix_bad() finds no prefix, and
+> test_bit(OPCODE1 == 0x0f, good_insns_64) is set. So a nop5 that crossed
+> a page boundary simply produced a normal, working int3 uprobe. The attach
+> succeeded.
+>
+> The failure was introduced by the nop10 switch:
+>
+> 554ba38456da ("uprobes/x86: Move optimized uprobe from nop5 to nop10")
+> made can_optimize() failure fall through to uprobe_init_insn(), and the
+> nop10's 0x2e byte is a CS prefix that is_prefix_bad() rejects:
+>
+>      if (can_optimize(&insn, addr)) {
+>          set_bit(ARCH_UPROBE_FLAG_CAN_OPTIMIZE, &auprobe->flags);
+>      } else {
+>          ret = uprobe_init_insn(auprobe, &insn);
+>          if (ret)
+>              return ret;
+>      }
+>
+> ee2862439e5c ("libbpf: Change has_nop_combo to work on top of nop10")
+> made libbpf shift the uprobe onto that nop10.
+>
+> Should the tag be:
+>
+>      Fixes: ee2862439e5c ("libbpf: Change has_nop_combo to work on top of nop10")
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ee2862439e5c is correct.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32713810092
---===============9062433700612394963==--
+Waiting for more feedback.
+
+> This also matters for backport scope: a tree that has 41a5c7df4466 but
+> not ee2862439e5c still matches the 6-byte nop,nop5 pattern, where the
+> new hardcoded +10 in nop10_within_page() would be over-strict by 5 bytes
+> while the bug being fixed does not exist there.
+>
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32712703327
