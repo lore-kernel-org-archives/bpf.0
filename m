@@ -1,170 +1,109 @@
-Received: from mta0.migadu.com (out-147.mta0.migadu.com [91.218.175.147])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ECF2415F35
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 12:20:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BEE840DB29
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 12:26:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787574011; cv=none; b=IOQswd9ThJmW3XQpEM+GFJ2jlhZgJ7sbwsUfjX+GpoPXB0u2pfkFGy4j+SbXUC/QHWUkn3GOhIa2YWyhkEk5azlnBRcgHD8EQ42bm79mn/UcKyuqXZi8LR3V0+AahPUvHAI/A6TLKMnK88fShczSf2+kOukiha6rUHpsofV0eYg=
+	t=1787574373; cv=none; b=DLfKKUKrmeUbA1HiNWAWVFIA5WUeDuiaM23UNtMn9CZarAcaF/URrNjQ2DkpcP4SRA9woECFVegjfsu5elFW6Lax8LAVVYiB2NWi4E/ueadhkUVpiAuxt71hrIdqWKp0A2he6b2dghGwKPd+c2lMmwclq7FHO6f5/HmyyxBcme4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787574011; c=relaxed/simple;
-	bh=NbaD03yilMmk0puKZ/RanUhxoZrnyNj20MyBlr5dU3c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PBu1qADfsB5iQB58krT0KMD4KWT8gV41zH6p2P109JIWIq8mpIGTemuOAMxIM057CLWigZ4F4joGC9ad9N6DEYrcrAUarHQwXEIZFmrtJVowcgi6wqQozW0Bcvq3NbvMvBRayRmzq7FUVFnCSyuOYwzLa3p8/zHmyshxEVT1mzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HChm1EYs; arc=none smtp.client-ip=91.218.175.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787574373; c=relaxed/simple;
+	bh=/+ibtZfVhOlusR6XfSWvFqs9qwlfi4JTFLX1PAuC/Go=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tjE7MnL35WHdjs3azo0oLvFh4a7YWIaOkED8MXvCDXy6r4oFMafZD8i+yv5p615mC9e8TuZ5DmE+X69wv35BnKqA2bUFegERyY7gtNDDc3CP1D35BBGy0HZV6T3k/NUeAyL2FGvS1rJfvV/EozLbXJvgU72Urna9y/+qk7I3A2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=IQXo6jYW; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HChm1EYs"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=NbaD03yilMmk0puKZ/RanUhxoZrnyNj20MyBlr5dU3c=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787574007; v=1; x=1788178807;
- b=HChm1EYsGv+3NZSwPcRB8Kqk1ncAXfvuYVFBpj2Rj2ukenVGpajY1wfGvMF1OtVMZgwdrcyi
- 4loStMrlRqSefmYR4ov966+HE4ehIaamGaDsEPVtHU/k/T54NEssawfVa5OrDldPy+3YjjOceqh
- 2mPQatqui3squ+geO9WcVJqI=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [10.54.25.56] (222.72.143.228)
-	by smtp.migadu.com with ESMTPS id 9a9d63bd1232e71b;
-	Mon, 24 Aug 2026 12:19:57 +0000
-X-Mizu-Trace-ID: 9a9d63bd1232e71b
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <01fd251d-1134-4251-9c11-79943e367ffe@linux.dev>
-Date: Mon, 24 Aug 2026 20:19:44 +0800
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="IQXo6jYW"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c15b1da6b82so358693266b.1
+        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 05:26:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1787574370; x=1788179170; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=HiNLXqPQtkSfd0I+8Qv+U8OwvNuLKuIdd4i+Pk8Ei5M=;
+        b=IQXo6jYWdvKiRfRtGSdClubgd8llan1X58q4zPFYgLLZ4jbwyBbJ8RTQBV6vzI1SZs
+         bfH2ASW5eSS3qq1N+5/Y4fQ9Z0uuLQ8R8SSh/IqF12l/k9uULv6rPif4kLjk/uz4BUiD
+         4UkndRCG0rhQXPwQvUkJFSevJpF57ILghPQq46JUqT1hiKuAQj/S9SHdqdTk/bRvYlKc
+         roS33fT1TOVQUWuV7IPrlGoyxjpPh+ST6tWvz3QPwOqG+kdlCvMjXbyKc47WYZGiqn49
+         s+awgofDxE7tA//tj/Z1HELpHM1TvAtxJIoyTFzmzVZ+W1niIkk1pli83vxkT/XJrwMV
+         5A6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787574370; x=1788179170;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=HiNLXqPQtkSfd0I+8Qv+U8OwvNuLKuIdd4i+Pk8Ei5M=;
+        b=eyeTnt7KkksfmC8RROgbREC+qOaImKL4lAVKmZYpShwbkpqegeVZi+zJV0HVl+34uT
+         +mGMpT6gQhAiQvGJhskpu5cJXPkhSYt6jYcAuZpXqDvzEm0b2hgr5TZafw7uXPA58ij+
+         1A6Dr41elOBCOrtZh8uNrFBE8F18lE8aB5bYAp8+8Gn8T/nWHiVDMQFG/gbZ/l6CBD3Z
+         0oDfBPlhOmr3uEcJayB/MHHWs/qtulb+OdwrleiQC1zzsgQ/gj9JFFAzC95Vy5laI59p
+         Seimf7W4UmNh59FcvdozEFZO99BD7bEZLxT8EgRKnuigxHUH7/x9Ul5FS5L9k+jwa6b/
+         Eobw==
+X-Gm-Message-State: AFuF++mSJPu4ZWVJjuZgeWr6RrDsF2+6KMja5QwGKNpKhNP90UBcZ1II
+	PrON4la+ozJi18ZXsTOR9U6P0g7uXiir0U+nR/woW8/ud8A0M+uBKuunt2BB1lOSwvA=
+X-Gm-Gg: AR+sD139XscN8m8516+7JviIGPm3tkOCfvhTD9k+Wb3bpol3GaQgnvvk0Rhxhx2zHS+
+	ox3J9TWo00AP8unallQzNjWDu9SRQzJksjOAwPZzzbrKPtC+4hzH9tQOWMZ7G9B4Pl4Mp6Ynv0q
+	1zrDOjKBxojZxNk//lQPRXTRiHW0SLO17tNQ3woT0HLcsA6O5VZ7zrof8ZGA96CXl4QtIg+E7uZ
+	Qz0CRwIISxmzllNTM8bGiP0peuRvuIAxumZC6VSmml6IqW5b9ohyf5BywemdUQMB/48nE57UE/3
+	Zj31r8qWLng1bsZ6eZH2flUIXjljCcjjmArSxXvioDUf5nkjj96lAjJm6dkd357w1S/ONrG88a1
+	z5j8H2DFIFRu3x1Z1Gjzgv8zP+TAvWmv6DDwtOkVeGNpTnCOHOzwK2eWmrmfi/b20by4PyjbeFq
+	QUmgEl5eOp/PFsDJrqeIC2CQMQUCtrtW57Ss2rL4QjnRjo564P+BFK7o4cvprso+v2K85b/2Cde
+	g==
+X-Received: by 2002:a17:907:d12:b0:c15:f26a:3438 with SMTP id a640c23a62f3a-c246a6b0994mr3185124066b.24.1787574370353;
+        Mon, 24 Aug 2026 05:26:10 -0700 (PDT)
+Received: from localhost (109-81-81-112.rct.o2.cz. [109.81.81.112])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c24d8375776sm177761566b.31.2026.08.24.05.26.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Aug 2026 05:26:10 -0700 (PDT)
+Date: Mon, 24 Aug 2026 14:26:08 +0200
+From: Michal Hocko <mhocko@suse.com>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: bpf@vger.kernel.org, Emil Tsalapatis <emil@etsalapatis.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH bpf-next v4 1/4] bpf: Add a sleepable page allocator for
+ map memory
+Message-ID: <aow4YNCDa0gDwbfj@tiehlicka>
+References: <20260821050250.35112-1-jiayuan.chen@linux.dev>
+ <20260821050631.39784-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2 1/2] bpf, veth: xdp: fix page_pool page leak on
- skb-backed XDP
-To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
- syzbot+237bbeed8dfe0699b7f5@syzkaller.appspotmail.com,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Simon Horman <horms@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
- Kuniyuki Iwashima <kuniyu@google.com>, Hangbin Liu <liuhangbin@gmail.com>,
- Krishna Kumar <krikku@gmail.com>, Martin Karsten <mkarsten@uwaterloo.ca>,
- =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260824030257.263179-1-jiayuan.chen@linux.dev>
- <20260824030705.266049-1-jiayuan.chen@linux.dev> <aowdem3KQVfvocE7@lore-desk>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <aowdem3KQVfvocE7@lore-desk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260821050631.39784-1-jiayuan.chen@linux.dev>
 
+On Fri 21-08-26 13:06:12, Jiayuan Chen wrote:
+> bpf_map_alloc_pages() picks the allocator via can_alloc_pages(), a
+> conservative guess for BPF program context that is always false under
+> PREEMPT_RT. So even a caller that really is sleepable gets the
+> non-blocking allocator, which never reclaims and never engages the OOM
+> machinery.
 
-On 8/24/26 6:31 PM, Lorenzo Bianconi wrote:
->> bpf_xdp_shrink_data() frees a released frag via __xdp_return() using
->> xdp->rxq->mem.type, but that type is wrong for skb-backed XDP: the skb is
->> cow'd into page_pool memory while the rxq still says MEM_TYPE_PAGE_SHARED,
->> so the page_pool page is freed with page_frag_free() and we hit
->> "Bad page state ... page_pool leak".
->>
->> Both generic XDP and veth are affected. A non-linear skb is cow'd into
->> page_pool memory (skb_cow_data_for_xdp() -> skb_pp_cow_data() for generic
->> XDP, veth_convert_skb_to_xdp_buff() for veth), so its frags become
->> page_pool pages while the rxq keeps MEM_TYPE_PAGE_SHARED.
->>
->> We can't just fix rxq->mem.type in place:
->> - generic XDP: xdp->rxq is dev->_rx[queue].xdp_rxq (see
->>    bpf_prog_run_generic_xdp()), a shared rxq that other CPUs may access in
->>    parallel, so we must not write to it.
->> - veth: rq->xdp_rxq.mem is shared per-queue state that veth resets on XDP
->>    teardown, and with GRO that reset runs without stopping in-flight NAPI,
->>    so a type stashed there can be clobbered under a packet still in flight.
->>
->> Adding a check in __xdp_return() or bpf_xdp_shrink_data() itself is not an
->> option either: without recording it somewhere, both can only guess the
->> frag's memory type, which quickly gets confusing.
->>
->> So record it in the xdp_buff. Add a XDP_FLAGS_FRAGS_PAGE_POOL flag; the two
->> skb-cow sites set it, and bpf_xdp_shrink_data() frees the frag to the
->> page_pool when it is set, otherwise it keeps falling back to
->> xdp->rxq->mem.type unchanged. No other path changes behaviour.
->>
->> Fixes: e6d5dbdd20aa ("xdp: add multi-buff support for xdp running in generic mode")
->> Fixes: 0ebab78cbcbf ("net: veth: add page_pool for page recycling")
-> Hi Jiayuan Chen,
->
-> thx for fixing it. Can we do something like the patch below instead?
->
-> Regards,
-> Lorenzo
->
-> diff --git a/net/core/xdp.c b/net/core/xdp.c
-> index 1d679e8fd649..4ed659b58141 100644
-> --- a/net/core/xdp.c
-> +++ b/net/core/xdp.c
-> @@ -433,16 +433,16 @@ EXPORT_SYMBOL_GPL(xdp_rxq_info_attach_page_pool);
->   void __xdp_return(netmem_ref netmem, enum xdp_mem_type mem_type,
->   		  bool napi_direct, struct xdp_buff *xdp)
->   {
-> +	netmem_ref head_netmem = netmem_compound_head(netmem);
-> +	if (netmem_is_pp(head_netmem))
-> +		mem_type = MEM_TYPE_PAGE_POOL;
-> +
->   	switch (mem_type) {
->   	case MEM_TYPE_PAGE_POOL:
-> -		netmem = netmem_compound_head(netmem);
->   		if (napi_direct && xdp_return_frame_no_direct())
->   			napi_direct = false;
-> -		/* No need to check netmem_is_pp() as mem->type knows this a
-> -		 * page_pool page
-> -		 */
-> -		page_pool_put_full_netmem(netmem_get_pp(netmem), netmem,
-> -					  napi_direct);
-> +		page_pool_put_full_netmem(netmem_get_pp(head_netmem),
-> +					  head_netmem, napi_direct);
->   		break;
->   	case MEM_TYPE_PAGE_SHARED:
->   		page_frag_free(__netmem_address(netmem));
+I thought one of the main motivations was reentrancy. As you cannot
+really assume the context bpf_map_alloc_pages is called from there is an
+extra care needed so that this doesn't re-enter the allocator from bpf
+program called from allocator path and deadlock.
 
-
-Hi Lorenzo,
-
-I tried this, but it regresses the bpf selftest with a page_pool ref 
-underflow (0 warns on master, 45 with the patch):
-
-     WARNING: include/net/page_pool/helpers.h:297 at 
-page_pool_alloc_frag_netmem
-     skb_pp_cow_data
-     veth_xdp_rcv_skb
-
-
-On XDP_TX/XDP_REDIRECT veth has to take plain page refs via get_page() 
-(veth_xdp_get()) and then
-consume_skb(): the skb itself must be freed while the data pages stay 
-alive for the frame. consume_skb()
-already returns the skb's page_pool ref, so what the frame holds 
-afterwards is a plain page ref, to be
-dropped with page_frag_free().
-
-netmem_is_pp() can't see that: it only says the page still belongs to a 
-pool (other users may still hold pool refs on the same page),
-not what kind of ref we're dropping. So __xdp_return() turns those 
-plain-ref drops into a second pool
-put and pp_ref goes negative.
-
-That's why I kept the type in the xdp_buff and only override it in the 
-shrink path, where we know the
-frag ref is the cow'd page_pool one.
-
-Regards,
-Jiayuan
-
+-- 
+Michal Hocko
+SUSE Labs
