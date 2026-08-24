@@ -1,93 +1,89 @@
 Received: from flow-a2-smtp.messagingengine.com (flow-a2-smtp.messagingengine.com [103.168.172.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41240407CDC;
-	Mon, 24 Aug 2026 12:36:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97C8F3F328C;
+	Mon, 24 Aug 2026 12:37:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787574970; cv=none; b=sg90tBP2Bi4IEdlZpgjoPnn9T00ygG7eulSZecVwe3qSjosbiKQyZ2gbUjNlGxmJU+mZ3tnZClSJGpyko3dcw8RdLM6gGPgGAHzQVhdJ4mN01YTWKWNPq0+V6VlUrJDqEz+odSNwXCfm7xtCCH7qs6JTGWt7lwskf5jvb6T1Ft4=
+	t=1787575081; cv=none; b=NTphdmPkF2HA8UFYJZFv1sv1HP1UCs3/bg2yklD/APKvkU3/ztlPhKDzoMIZTQJrzu7g1TqY1ZZkF8tgVwkiAPCoTHjw3AK1u08MH5jJ9KhVuwJVGDxuZnmm2kkbUcb+66JJFKo4SmN0Z6WGWZvkqbJMTzOaG4Y5iN5TyZnoXHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787574970; c=relaxed/simple;
-	bh=E30+cevaORePpAWWr/679C2MvRN5qNVL1DZyBYYvRkA=;
+	s=arc-20240116; t=1787575081; c=relaxed/simple;
+	bh=YuKm5h4FJivTzNYFtQBsp3v95fibyY50aVxIZ1hFB6I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MAOqUL/yCj4RFBgKm1WaYdZX0hFqMRwoNOU0cvFFcSTSiahj1NWouG2YVOOIEAB3/nUcyEK2Oa5Pz6RIfsUyt3EPQ9pAwtzNJxzhaPSU3eFjZ3Xoh0WzhcXti4yjHF4BQgjKZP+yUh1dC+6O+jA/1ah9c3+2IkniD2otomdza1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=XNwaLhEt; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=lAaqQiL6; arc=none smtp.client-ip=103.168.172.137
+	 Content-Type:Content-Disposition:In-Reply-To; b=NJvPpL63Xr0Edm28rVSjCCRAS+VofN9FnoZzOVCJl+v5Joy5RFFj4nVKREGJcHeqejReWrCYCkQKM3WSXqOe8of9pHfHkxnUBNNlzLdC+Rp6kzSUnhkuph+lfr3YOzKptgo8OOfrrm4DZ+DbGMJxxQBA59TNIhsOeoxppuMn+10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=SJOBuqoT; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Y0T5/pTM; arc=none smtp.client-ip=103.168.172.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="XNwaLhEt";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="lAaqQiL6"
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailflow.phl.internal (Postfix) with ESMTP id E7350138016E;
-	Mon, 24 Aug 2026 08:36:06 -0400 (EDT)
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="SJOBuqoT";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Y0T5/pTM"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailflow.phl.internal (Postfix) with ESMTP id ACCAF1380293;
+	Mon, 24 Aug 2026 08:37:58 -0400 (EDT)
 Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-03.internal (MEProxy); Mon, 24 Aug 2026 08:36:06 -0400
+  by phl-compute-05.internal (MEProxy); Mon, 24 Aug 2026 08:37:58 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-type:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1787574966; x=
-	1787582166; bh=Halq/ghpcpjzwRr3hDl5BiBIUuH+KlXyRVEyX5gTykY=; b=X
-	NwaLhEt6lreAhnuNhuYe63yeUnz+8ExWqYEdcHnZCISOYS8/qXsSqpifilTYi1DI
-	8zo2jldWxtdl4pD8CJlIWfW9CG/NLLGislyFEzxc3gzE9Yf9vKZSoWATbHtVUMxQ
-	pivnCFwCWoYAl1Kpqp9SO79QylBp6KTbJlexw+k2icgNKIdtoG8AMZmQvEEVak7X
-	JRDIwY0ypINns7AT7bbRaSwSxfEBKxeXJJ8Q6sMLS/8QluI+Lwkriup7kOIe6fb8
-	58GK2W8pKO+y7ajxH7O/eM8O8EaWbu9GYQnEFaSjLPOgpGhdzTs6S6cgOOwcPVV9
-	aNDMMTqSAif9XoQFllo4Q==
+	:reply-to:subject:subject:to:to; s=fm2; t=1787575078; x=
+	1787582278; bh=4+ZXrHhOcBNBIWSTKX8h/D+gSOatS4LTJk6DxU43bvs=; b=S
+	JOBuqoTpRZnoUcj18paDGTJxmqQMHeGAO5tqVOMb66NOsjBsqN0usyDojsqHFm8o
+	YwhyH8Qge/ybjiXY0sSwgbOXtG0A+yk6xGopSvJyVUugG6tfD9dpGLBOgVrIwuHa
+	tT3S/LPCJThrY5PEDkrjeOPNkyfM9plZ3H5R1dYxxnph67zJCb6TgGoatk7jjNJl
+	ZTFj8yrOz39JuAVZO0+XNfTybA/KLxtq/o7U2k4Sbd72q+HWV3VFbEzxj6HsDbSu
+	Kb3KeFQJe300YRMCVnbDbvI3YSy9RkzB+NIaJmMwQMMgBiqPELjbY2DuAIkxh4xj
+	npFAnGnfpJQtdoLL9uItA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:content-type:date:date
 	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
 	:message-id:mime-version:references:reply-to:subject:subject:to
 	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1787574966; x=1787582166; bh=Halq/ghpcpjzwRr3hDl5BiBIUuH+KlXyRVE
-	yX5gTykY=; b=lAaqQiL6lDNBiMyO3Z7e08OKXhMvrp5xhkZoYhMTbb/j8K7Q329
-	myZFj4BjPqbhIsI3djhffaIuvqkSsnJ8wXjKI7dH98N6En7feIz1tXfLNQmVmJd6
-	nJ21tQdjsbSYIyWbYWDiSmCK7iw/M0dtpn4CwgiBH8okjUQ3bbmk7f9ecL34EiN+
-	8bxghrtPFKX5rXtR3ph4tfwUWzA1IZ1XnHFYLoVV25mbsCuw6r/boNFnBbMwYEXX
-	8dZSpP1c5BnbPIPoAf3KxbAHMTz74Rj7HAqwKRiU8WNXfuH9jBlI2IuPSO4rI0Fd
-	qZsLujEYC79xHlTreIQjbkgjfdpoYzJR2IA==
-X-ME-Sender: <xms:tTqMatE9POykR7jIxPD9lT7tQRJ_-tdaFro38r-Y_nrNISjrxn8SCg>
-    <xme:tTqMaiyQ7g5tidC7DNd8cz6-HuP_MQQXOqZqmWReC0S-PIM_h3P80hUmkHC3Bt1aI
-    j5nyXQOdx7L0Tj8EVuYmruv89vq_XiTNRCEZJ0Pr0of1O47_ND5Uza5>
-X-ME-Received: <xmr:tTqMagmBDW5MjyUhQ26nLxMFm-wtpKIkyE154-qRIyzyMo2AVu-R3WZwXXw>
-X-ME-Proxy-Cause: dmFkZTF5asgg6APcHCRRNjBCQ9gXGuK668V8MVNtl2aHA4haIibMMp4f3mU+yDh2HpFJDp
-    VGKvyfsEX1iisUN0oqJLUZfcpBudESliKqaFOjN29FGcLMQCGn8WzCD04M2gPcqh2jOXxq
-    TWnruryoiEaOIooipC/o5/MDxXkEEbgRERWfvB3dt8tPQpH9AFStR2lQR4bB9O3re0vryU
-    7C3LwMzGnKw6zBjJF0G+xJ+GRjs7okbNLLc8dp5YQcQK5Six3viX2tWrqs2p/aeuTnIIcM
-    Q8+LtpYicGcP7U1JC54V/izDp1hRw8aC/tlX4mikhZ5SOri7gblL2enAiIAFgJxVoWjAYY
-    Rfval5jE8DZcqhBmfu0ydqxPIOi/NiYqlAU11QhGJpMeHrURgNFF2OA0S8Ysz6Jwt9ats/
-    B4EHeVDTOLRJebKUiFqIyvIcqp04ZI0LJ32DM0NNSWN1L+XUHuXgFR98hTlXAVgUsCZk/n
-    eq8r//W+ksz63YcYPzIZ9w+9KtMOse/d+yVYekz7F0doIARM/tnzGwBbW+SJVbcaaVmUx+
-    qe8/cKpSB64Vme+mQdTDfUZmVf8g7sD0N5nZvbxzExcHVwh2xL2wdI2WJw6LjYdDcsn+ct
-    Cu+PTZpzEPcBo00oDOWorqPCg/9nbFDNRZH4MoaEEgLwR5PdW4ACMKPIzUbg
-X-ME-Proxy: <xmx:tTqMajEupezKhPuT7WIpBHJwmpvwG2t9wQwMY0YCQDUO1cdslQ1Zjw>
-    <xmx:tTqMaisdkEYUs9T-PmIn6tTiigbTagx_vCnbRV_i7aa1vOxJT2nqzA>
-    <xmx:tTqMamlIwHsafL1sXhxVcsGwLPQvGEL_okVBmXvuostnCpngnSJUvw>
-    <xmx:tTqMaiw9NztmLX6IU7iPoQJX9YGE3oiM1shaUWUGCpWRu7UHA2lvuA>
-    <xmx:tjqMauvLoeCO_dMAYDuNOv_aqgV2Yg2Na_2VUUSSvBzyiYAq7zYd4Nv8>
+	1787575078; x=1787582278; bh=4+ZXrHhOcBNBIWSTKX8h/D+gSOatS4LTJk6
+	DxU43bvs=; b=Y0T5/pTMB8VJ8mAceiSRNanYWt5zXnC43h3jCMJ9QAWf04l2swi
+	pD5ddTN3S+Nw1F5JW+8vuLVAorMf8hW1spoGbvc1O8Gwgot5R5z6P6J9nlUbmFG7
+	/1hv9zWTuy5ZASLdgxjfiZo/OpS85uzxwTcUAXIokMhS5v0ikDpS8JNm27I8cW8Z
+	UBKnsm+/NlfubBzl3AKjtZqVvNqAaNC1UUdg8Umse3u15hFTGUV0hbICcG9dUyFc
+	GLlYFnGREr6vb5eH1q0AylyxcPt0kh3yhmurEJ/mQZHJ68y4hLKJW39T1q/msfwy
+	CiryKQAfbho+uBRuEJLMm/BK1/MwPB7AeIA==
+X-ME-Sender: <xms:JjuMauxO6FySxIcOaHs8arOohEaT0-DcSVy5FI2jB-iQtE_makpRZg>
+    <xme:JjuMaqsadM63Co14tbsXNwp4z8utQUMx6Nm32_8qCg_8jEK18Voch4B4N2P94_jk1
+    xY2Fu-W8Z2tRdqvHghcDv0SrgI8jXoSM_QEc9VtHd5ERvLDI_oc1dBx>
+X-ME-Received: <xmr:JjuMahyTa8PTHf-d_XN6m8oBoE4uI8fSJLDXQFO4Zj16Ww4D_YWd4upLLy4>
+X-ME-Proxy-Cause: dmFkZTFatED5oZ77MZ22tmOlCD7GXKUCkzazb9gE5N4jgJhO01yYiclBrAnEbUBwSMdDoc
+    xpS8o1ggZwKBr0QTMYS32p4YvobQag58DBIKQmfASsSYKFAQkV56vf0rfC+M5T/OAxyf9+
+    0BZZrbk1y3cjZ7YKuDxC1b7JW+tNrUw6zPDKlukbK3F1Ex8Ss+kandwlYX1KARtnat28hK
+    +dtQLf49G4LcemSGTffDvkSTWzHV3mDceKuVvXIWrRZx5JR0WlkLGTn9wDNBBZi/llCEgY
+    dyPJRCsKQyE+/7S/K1X1tfD5wJhh2tcYYfhhBh9LbMoMvU6qhEbhxGy/O6t5DGZuoCPFR8
+    yte7bPjdZw6iZbXU1WqcKwdEQD+O45PZpWtLMr2N2TfP9kDgMEcFkVGBIQCGc4hZghM1hx
+    HB6bGHOO1H3WwR8Igy6WL0tBYTv2HEkz3LZkl/Uu28pT5K5aekNMDVy6452N2FOOQSl99T
+    pTQg0PGbhGIw1sz6c3kzH7JbbE+CUGVqMcgkMRsqa8VkM0K4ul76/czBecME8fJQlNok2e
+    VOnYxVTTGDk9pI8UG4hofchPXLr85+xVdD/TArfiawIBOJNLbNPW7C8IdUjB2Ebgv/ApYq
+    yvyePaUH7xTtILMBfO2o0Q+CTU9+OpD6r6t/zIEJaG8WKE7p9Jdnxbb2XkLA
+X-ME-Proxy: <xmx:JjuMakjyc-2lgDWCP_lubdQSINTnPd2c7mC3kuta_Tj3w4HCQixyCg>
+    <xmx:JjuMavZE-hmQOIB3IlqJr7s_7f2F7PxPD-3h2S0jrAUGVP7n_9YcIQ>
+    <xmx:JjuMatib15jvUIdzdqXUBi8FczOeLG2jOwd_rCWLD5tMHYsbTPydMw>
+    <xmx:JjuMam99b79C06mkp61kQLmt3F1GM_CkeV-aY-YV-zYhcOTJP-08Mg>
+    <xmx:JjuMagJMmNs3FIFLkKCEOfVwULclr412rRPHM0btNEi_XdxgVHRK83jj>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 24 Aug 2026 08:36:04 -0400 (EDT)
-Date: Mon, 24 Aug 2026 13:36:03 +0100
+ 24 Aug 2026 08:37:57 -0400 (EDT)
+Date: Mon, 24 Aug 2026 13:37:56 +0100
 From: Kiryl Shutsemau <kirill@shutemov.name>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: akpm@linux-foundation.org, ljs@kernel.org, nico.pache@linux.dev, 
-	baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com, hughd@google.com, 
-	lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com, rppt@kernel.org, 
-	ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, 
-	vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	jannh@google.com, willy@infradead.org, pfalcato@suse.de, rostedt@goodmis.org, 
-	mhiramat@kernel.org, linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 03/57] mm/collapse: add collapse.h for the shared
- collapse state
-Message-ID: <aow6J1i2G7U0spjH@thinkstation>
-References: <20260816224609.308019-1-kirill@shutemov.name>
- <20260816224609.308019-4-kirill@shutemov.name>
- <3113ac8b-c1ce-4577-9e93-449b70818918@kernel.org>
- <aobglSY5L1KoIqxF@thinkstation>
- <65433d1e-95ca-4434-828e-8f381d3384b1@kernel.org>
- <aow0Z6mrG2esKpRZ@thinkstation>
- <e1c8c6f5-1b5a-4cad-a52a-f7eff00997c3@kernel.org>
+To: Lance Yang <lance.yang@linux.dev>
+Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
+	nico.pache@linux.dev, baolin.wang@linux.alibaba.com, baohua@kernel.org, 
+	dev.jain@arm.com, hughd@google.com, liam@infradead.org, mhocko@suse.com, 
+	rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com, 
+	usama.arif@linux.dev, vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, 
+	agordeev@linux.ibm.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, jannh@google.com, willy@infradead.org, pfalcato@suse.de, 
+	rostedt@goodmis.org, mhiramat@kernel.org, linux-trace-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 12/57] mm/collapse: allocate a destination per
+ candidate
+Message-ID: <aow636Xhrof8hj38@thinkstation>
+References: <20260816224609.308019-13-kirill@shutemov.name>
+ <20260824112005.63097-1-lance.yang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -96,43 +92,25 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e1c8c6f5-1b5a-4cad-a52a-f7eff00997c3@kernel.org>
+In-Reply-To: <20260824112005.63097-1-lance.yang@linux.dev>
 
-On Mon, Aug 24, 2026 at 02:28:39PM +0200, David Hildenbrand (Arm) wrote:
-> On 8/24/26 14:10, Kiryl Shutsemau wrote:
-> > On Mon, Aug 24, 2026 at 01:47:54PM +0200, David Hildenbrand (Arm) wrote:
-> >> On 8/20/26 13:11, Kiryl Shutsemau wrote:
-> >>>
-> >>> I went for a clean collapse.c on purpose: the engine is new code, and a
-> >>> new file keeps it readable while both mechanisms are in the tree, with 28
-> >>> as a plain delete from khugepaged.c.
-> >>>
-> >>> Your shape is less churn, though, and it keeps blame: 29-35 move about
-> >>> 1700 lines as add-and-delete today, and most of that would stay put, with
-> >>> only the daemon -- mm_slot, the scan loop, sysfs -- extracted into a new
-> >>> khugepaged.c.
-> >>>
-> >>> If you prefer it that way, I can give it a try for v2.
-> >>>
-> >>> The rename has to open the series, so it will collide with anything in
-> >>> flight that touches khugepaged.c.
-> >>>
-> >>
-> >> Kiryl, I have to ask, are you using AI to write your replies?
-> > 
-> > Yes. I use it check my claims and fix my grammar.
-> > 
-> > Why?
-> > 
+On Mon, Aug 24, 2026 at 07:20:05PM +0800, Lance Yang wrote:
+> >+	if (unlikely(mem_cgroup_charge(folio, mm, gfp)) ||
+> >+	    folio_memcg_alloc_deferred(folio)) {
 > 
-> It doesn't read the way you would usually write. In a bad way.
-> 
-> E.g., "Your shape", "has to open the series"
-> 
-> Consider telling the LLM to not change your writing style and focus only on
-> fixing grammar.
+> One small nit: folio_memcg_alloc_deferred() passes GFP_KERNEL to the
+> deferred_split_lru allocation.
 
-Right. Asking for rewrite with proper grammar was a bad move on my part.
+...
+
+> This only affects calls that find the metadata missing; after it has been
+> installed, later calls take the fast branch. Still, it bypasses the gfp
+> with direct reclaim stripped for the freeze window. Could
+> folio_memcg_alloc_deferred() take that gfp here?
+
+Right. Passing down gfp is the right thing to do here.
+
+Thanks, will fix.
 
 -- 
   Kiryl Shutsemau / Kirill A. Shutemov
