@@ -1,20 +1,21 @@
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CDF42D0C82
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 14:49:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A3C42D592D
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 14:50:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787582999; cv=none; b=pu7HytN5SSzhIo1trPUmqor/934j3TQYnJOBRJVpbjohZIrsxpH0F8zfqW4WDHGgtxVo7k6VDEdVHuGDDLV8oThK65HdpCDgsOPBBFg53WrcU4wOt0Y4YkJDfn8ND4w8SbodaxhuMEECLgewHk0i/4KlFa93q1UgM9aVskzlo7k=
+	t=1787583004; cv=none; b=gU7Bf9MjCI2qcvTAJoMca2YYe5GKl2eB0xXulqgMqXqCkb07p49HQO/HXeCjSa11mc8G4hwQyw2rhrK7iYEDOq31jwt+Xvn+I5CbA/UBL5e6Vcb/8FCa1Y+MaLZlirsgC4ba7LQpL6DMdY5v7q5SVREBvgOn4Fq5kc+y+17yY9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787582999; c=relaxed/simple;
-	bh=aV0klniMvKgnkCHy057kM3WBJl5pOIdxArZ3e6Te7DA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=vAA8YVnq/osaflGcdhxCp9f0d2MzGjBGYW7nSsMQ5KWZLDpzqCHbxYvlDwNKgQdBKwGMMkYWOSIScGr/COKVAHICbfqVuKu2+51uKRgjs8HQOnA+OweDrli/RpyXWSnwMVp/1cYlAh8bLaE9uMe4XHE62xJrKJfeCfRpWPkRPps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
+	s=arc-20240116; t=1787583004; c=relaxed/simple;
+	bh=5Ksbuz67hckbe5/nIbcF53l6fg1W27F0JHjbiba59Ik=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fjbOWiCe4Yy6TTSdaQb6/mTEzEDuFMZhJB7j/8+sehLIkXoP2qlRprJsBG8STULvckg43NpbyT7QJVUdkDUghrDf4frvoPg0mp832BhTNNIizcDrnYfODyzSPD0Z0Jqjfwj2Xv9dUuZh4nmih2COmVnIQx7+ytgy/tEM+fDq9Ao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 9C3CA263E89C5F; Mon, 24 Aug 2026 07:49:43 -0700 (PDT)
+	id B1233263E89CA7; Mon, 24 Aug 2026 07:49:48 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -22,10 +23,12 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next 1/2] bpf: Record each half of a paired return value in verifier diagnostics
-Date: Mon, 24 Aug 2026 07:49:43 -0700
-Message-ID: <20260824144943.991316-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 2/2] bpf: Report which member makes a kfunc return type unsupported
+Date: Mon, 24 Aug 2026 07:49:48 -0700
+Message-ID: <20260824144948.992324-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260824144943.991316-1-yonghong.song@linux.dev>
+References: <20260824144943.991316-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -34,49 +37,168 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-A subprogram returning more than 8 bytes comes back in the R0:R2 register
-pair, and prepare_func_exit() copies both registers into the caller. The
-diagnostic modification scope around that copy names only R0, so the writ=
-e
-into R2 is never recorded.
+A kfunc returning a struct by value must return only scalars, and the
+message that rejects one names the type but not the member at fault:
 
-Fix it by opening a diagnostic modification scope for each return registe=
-r.
-This way, both return registers are recorded.
+  kernel function bpf_kfunc_call_test_ret_ptr returns STRUCT
+  prog_test_ret_ptr that is not composed of scalars
 
-Fixes: 0630ad00d96d ("bpf: Add verifier support for 16-byte returns in R0=
-: R2")
+For a wide struct that leaves the reader to find the offending member by
+inspection. Record the member that made the answer no while walking the
+type and name it, so the verifier also dumps:
+
+  member 'p' has type PTR
+
+The detailed diagnostics for this failure:
+
+  Verification failed: Program Structure: Unsupported kernel function ret=
+urn type
+
+  Reason:
+    bpf_kfunc_call_test_ret_ptr() returns STRUCT prog_test_ret_ptr by
+    value. Its member 'p' is PTR, not a scalar. A by-value return arrives
+    as raw register bits that the verifier can only model as unknown
+    scalars, so e.g. a pointer may lose the provenance and reference
+    tracking that make it safe to use.
+  ...
+  Suggestion:
+    Call a kernel function that returns only scalars by value.
+
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/verifier.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ kernel/bpf/verifier.c                         | 58 ++++++++++++++++---
+ .../selftests/bpf/progs/aggregate_ret_kfunc.c |  1 +
+ 2 files changed, 50 insertions(+), 9 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e036ae20bf6b..9aa29c367008 100644
+index 9aa29c367008..c6aecba6437a 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -10403,10 +10403,14 @@ static int prepare_func_exit(struct bpf_verifie=
-r_env *env, int *insn_idx)
- 		 * return to the caller whatever the callee had in the
- 		 * return register(s)
- 		 */
--		bpf_diag_mod_begin(env, &caller->regs[BPF_REG_0], r0, BPF_DIAG_MOD_WRI=
-TE);
--		for (i =3D 0; i < nregs; i++)
--			caller->regs[ret_regs[i]] =3D callee->regs[ret_regs[i]];
--		bpf_diag_mod_end(env);
-+		for (i =3D 0; i < nregs; i++) {
-+			u32 regno =3D ret_regs[i];
-+
-+			bpf_diag_mod_begin(env, &caller->regs[regno], &callee->regs[regno],
-+					   BPF_DIAG_MOD_WRITE);
-+			caller->regs[regno] =3D callee->regs[regno];
-+			bpf_diag_mod_end(env);
-+		}
- 	}
+@@ -11623,10 +11623,14 @@ static bool is_kfunc_arg_implicit(const struct =
+bpf_call_arg_meta *meta, u32 arg_
+ 	return argn <=3D arg_idx;
+ }
 =20
- 	/* for callbacks like bpf_loop or bpf_for_each_map_elem go back to call=
-site,
+-/* Returns true if struct is composed of scalars, 4 levels of nesting al=
+lowed */
+-bool btf_type_is_scalar_struct(struct bpf_verifier_env *env,
+-			       const struct btf *btf,
+-			       const struct btf_type *t, int rec)
++/*
++ * Returns true if struct is composed of scalars, 4 levels of nesting al=
+lowed.
++ * On failure @bad, when given, names the member that made the answer no=
+, so a
++ * diagnostic can point at it rather than at the whole type.
++ */
++static bool btf_scalar_struct_walk(struct bpf_verifier_env *env, const s=
+truct btf *btf,
++				   const struct btf_type *t, int rec,
++				   const struct btf_member **bad)
+ {
+ 	const struct btf_type *member_type;
+ 	const struct btf_member *member;
+@@ -11644,23 +11648,35 @@ bool btf_type_is_scalar_struct(struct bpf_verif=
+ier_env *env,
+ 				verbose(env, "max struct nesting depth exceeded\n");
+ 				return false;
+ 			}
+-			if (!btf_type_is_scalar_struct(env, btf, member_type, rec + 1))
++			if (!btf_scalar_struct_walk(env, btf, member_type, rec + 1, bad))
+ 				return false;
+ 			continue;
+ 		}
+ 		if (btf_type_is_array(member_type)) {
+ 			array =3D btf_array(member_type);
+ 			if (!array->nelems)
+-				return false;
++				goto bad_member;
+ 			member_type =3D btf_type_skip_modifiers(btf, array->type, NULL);
+ 			if (!btf_type_is_scalar(member_type))
+-				return false;
++				goto bad_member;
+ 			continue;
+ 		}
+ 		if (!btf_type_is_scalar(member_type))
+-			return false;
++			goto bad_member;
+ 	}
+ 	return true;
++
++bad_member:
++	if (bad)
++		*bad =3D member;
++	return false;
++}
++
++bool btf_type_is_scalar_struct(struct bpf_verifier_env *env,
++			       const struct btf *btf,
++			       const struct btf_type *t, int rec)
++{
++	return btf_scalar_struct_walk(env, btf, t, rec, NULL);
+ }
+=20
+ enum kfunc_ptr_arg_type {
+@@ -14030,17 +14046,41 @@ static int check_kfunc_call(struct bpf_verifier=
+_env *env, struct bpf_insn *insn,
+ 		    meta.func_id =3D=3D special_kfunc_list[KF_bpf_res_spin_lock_irqsav=
+e]))
+ 			__mark_reg_const_zero(env, &regs[BPF_REG_0]);
+ 	} else if (btf_type_is_struct(t)) {
++		const struct btf_member *bad =3D NULL;
++
+ 		/*
+ 		 * The returned struct comes back as raw register bits modeled
+ 		 * as an unknown scalar, so it must contain only scalars:
+ 		 * otherwise a pointer field would be laundered into a scalar
+ 		 * and escape provenance and reference tracking.
+ 		 */
+-		if (!btf_type_is_scalar_struct(env, desc_btf, t, 0)) {
++		if (!btf_scalar_struct_walk(env, desc_btf, t, 0, &bad)) {
++			const char *member_note =3D "";
++
+ 			verbose(env,
+ 				"kernel function %s returns %s %s that is not composed of scalars\n"=
+,
+ 				func_name, btf_type_str(t),
+ 				btf_name_by_offset(desc_btf, t->name_off));
++			if (bad) {
++				const char *bad_name =3D btf_name_by_offset(desc_btf, bad->name_off)=
+;
++				const struct btf_type *bad_type;
++
++				bad_type =3D btf_type_skip_modifiers(desc_btf, bad->type, NULL);
++				verbose(env, "member '%s' has type %s\n", bad_name,
++					btf_type_str(bad_type));
++				member_note =3D bpf_diag_fmt(
++					env, " Its member '%s' is %s, not a scalar.", bad_name,
++					btf_type_str(bad_type));
++			}
++			bpf_diag_program_structure(
++				env, insn_idx, "unsupported kernel function return type",
++				"Call a kernel function that returns only scalars by value.",
++				"%s() returns %s %s by value.%s "
++				"A by-value return arrives as raw register bits that the verifier "
++				"can only model as unknown scalars, so e.g. a pointer may lose "
++				"the provenance and reference tracking that make it safe to use.",
++				func_name, btf_type_str(t),
++				btf_name_by_offset(desc_btf, t->name_off), member_note);
+ 			return -EINVAL;
+ 		}
+ 		mark_kfunc_ret_regs(env, regs, t->size);
+diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c b/to=
+ols/testing/selftests/bpf/progs/aggregate_ret_kfunc.c
+index d6b422ae9784..bc9afffc7c68 100644
+--- a/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c
++++ b/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c
+@@ -72,6 +72,7 @@ __naked int aggregate_ret_kfunc_fastcall_fail(void)
+ SEC("tc")
+ __arch_x86_64 __arch_arm64
+ __failure __msg("is not composed of scalars")
++__msg("member 'p' has type PTR")
+ __naked int aggregate_ret_kfunc_ptr_fail(void)
+ {
+ 	asm volatile (
 --=20
 2.53.0-Meta
 
