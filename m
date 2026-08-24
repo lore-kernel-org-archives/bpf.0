@@ -1,109 +1,163 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BEE840DB29
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 12:26:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A44B64156C6;
+	Mon, 24 Aug 2026 12:27:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787574373; cv=none; b=DLfKKUKrmeUbA1HiNWAWVFIA5WUeDuiaM23UNtMn9CZarAcaF/URrNjQ2DkpcP4SRA9woECFVegjfsu5elFW6Lax8LAVVYiB2NWi4E/ueadhkUVpiAuxt71hrIdqWKp0A2he6b2dghGwKPd+c2lMmwclq7FHO6f5/HmyyxBcme4=
+	t=1787574456; cv=none; b=jKYWNVJeNtpDSYQVR5DsDiM7OJ+YT/yyp2s3cmP5EmtN7CgXovd1dqHLrg4Cb4iNSTnOZTvuxm90bSkd85KlBgiTiKSiR5Wycu8rsFSwBZ6W3nFFCqtdbZbn2NgEDPlvjYszYapq1hCh00GfjXmuWQDR58bt2ICYDPtYky9HC5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787574373; c=relaxed/simple;
-	bh=/+ibtZfVhOlusR6XfSWvFqs9qwlfi4JTFLX1PAuC/Go=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tjE7MnL35WHdjs3azo0oLvFh4a7YWIaOkED8MXvCDXy6r4oFMafZD8i+yv5p615mC9e8TuZ5DmE+X69wv35BnKqA2bUFegERyY7gtNDDc3CP1D35BBGy0HZV6T3k/NUeAyL2FGvS1rJfvV/EozLbXJvgU72Urna9y/+qk7I3A2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=IQXo6jYW; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1787574456; c=relaxed/simple;
+	bh=4txqTH0l5Wo4GujP7am3e1PJUprrwhWcfRAEUI1s2rw=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=LZh8Q4olyrzQXGwvlsot1yP2VC/pIfl1sMnvnK/MPqo8BOmpPJi9NWMlj891HLPSZSk7mq8WSom6dxrVYXl1Yg9VoIoq1WEvkKH1EZSC5k20uklcgbG0a84b+i0ifEZ+ODj1QiLqt/tVR0dskHPrpxpUkpBww93eakqT60J55M8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Cz3LPYS/; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=sH+9zCrJ; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=WbTw2fdx; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=1UD1K44k; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="IQXo6jYW"
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c15b1da6b82so358693266b.1
-        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 05:26:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1787574370; x=1788179170; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=HiNLXqPQtkSfd0I+8Qv+U8OwvNuLKuIdd4i+Pk8Ei5M=;
-        b=IQXo6jYWdvKiRfRtGSdClubgd8llan1X58q4zPFYgLLZ4jbwyBbJ8RTQBV6vzI1SZs
-         bfH2ASW5eSS3qq1N+5/Y4fQ9Z0uuLQ8R8SSh/IqF12l/k9uULv6rPif4kLjk/uz4BUiD
-         4UkndRCG0rhQXPwQvUkJFSevJpF57ILghPQq46JUqT1hiKuAQj/S9SHdqdTk/bRvYlKc
-         roS33fT1TOVQUWuV7IPrlGoyxjpPh+ST6tWvz3QPwOqG+kdlCvMjXbyKc47WYZGiqn49
-         s+awgofDxE7tA//tj/Z1HELpHM1TvAtxJIoyTFzmzVZ+W1niIkk1pli83vxkT/XJrwMV
-         5A6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787574370; x=1788179170;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=HiNLXqPQtkSfd0I+8Qv+U8OwvNuLKuIdd4i+Pk8Ei5M=;
-        b=eyeTnt7KkksfmC8RROgbREC+qOaImKL4lAVKmZYpShwbkpqegeVZi+zJV0HVl+34uT
-         +mGMpT6gQhAiQvGJhskpu5cJXPkhSYt6jYcAuZpXqDvzEm0b2hgr5TZafw7uXPA58ij+
-         1A6Dr41elOBCOrtZh8uNrFBE8F18lE8aB5bYAp8+8Gn8T/nWHiVDMQFG/gbZ/l6CBD3Z
-         0oDfBPlhOmr3uEcJayB/MHHWs/qtulb+OdwrleiQC1zzsgQ/gj9JFFAzC95Vy5laI59p
-         Seimf7W4UmNh59FcvdozEFZO99BD7bEZLxT8EgRKnuigxHUH7/x9Ul5FS5L9k+jwa6b/
-         Eobw==
-X-Gm-Message-State: AFuF++mSJPu4ZWVJjuZgeWr6RrDsF2+6KMja5QwGKNpKhNP90UBcZ1II
-	PrON4la+ozJi18ZXsTOR9U6P0g7uXiir0U+nR/woW8/ud8A0M+uBKuunt2BB1lOSwvA=
-X-Gm-Gg: AR+sD139XscN8m8516+7JviIGPm3tkOCfvhTD9k+Wb3bpol3GaQgnvvk0Rhxhx2zHS+
-	ox3J9TWo00AP8unallQzNjWDu9SRQzJksjOAwPZzzbrKPtC+4hzH9tQOWMZ7G9B4Pl4Mp6Ynv0q
-	1zrDOjKBxojZxNk//lQPRXTRiHW0SLO17tNQ3woT0HLcsA6O5VZ7zrof8ZGA96CXl4QtIg+E7uZ
-	Qz0CRwIISxmzllNTM8bGiP0peuRvuIAxumZC6VSmml6IqW5b9ohyf5BywemdUQMB/48nE57UE/3
-	Zj31r8qWLng1bsZ6eZH2flUIXjljCcjjmArSxXvioDUf5nkjj96lAjJm6dkd357w1S/ONrG88a1
-	z5j8H2DFIFRu3x1Z1Gjzgv8zP+TAvWmv6DDwtOkVeGNpTnCOHOzwK2eWmrmfi/b20by4PyjbeFq
-	QUmgEl5eOp/PFsDJrqeIC2CQMQUCtrtW57Ss2rL4QjnRjo564P+BFK7o4cvprso+v2K85b/2Cde
-	g==
-X-Received: by 2002:a17:907:d12:b0:c15:f26a:3438 with SMTP id a640c23a62f3a-c246a6b0994mr3185124066b.24.1787574370353;
-        Mon, 24 Aug 2026 05:26:10 -0700 (PDT)
-Received: from localhost (109-81-81-112.rct.o2.cz. [109.81.81.112])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c24d8375776sm177761566b.31.2026.08.24.05.26.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2026 05:26:10 -0700 (PDT)
-Date: Mon, 24 Aug 2026 14:26:08 +0200
-From: Michal Hocko <mhocko@suse.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, Emil Tsalapatis <emil@etsalapatis.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH bpf-next v4 1/4] bpf: Add a sleepable page allocator for
- map memory
-Message-ID: <aow4YNCDa0gDwbfj@tiehlicka>
-References: <20260821050250.35112-1-jiayuan.chen@linux.dev>
- <20260821050631.39784-1-jiayuan.chen@linux.dev>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Cz3LPYS/";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="sH+9zCrJ";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="WbTw2fdx";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="1UD1K44k"
+Received: from localhost.localdomain (unknown [IPv6:2a07:de40:b2bf:1b::12ef])
+	by smtp-out2.suse.de (Postfix) with ESMTP id 6A24E1F45F;
+	Mon, 24 Aug 2026 12:27:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1787574448; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JMc/x1rdloXuC7dC57Av3Q7J3rtkSe30s8O/AlNDAFg=;
+	b=Cz3LPYS/hTh9wJv5dmx8YNw4Y+pE8y455ihDZZBXbzrZ6wZo+d1gXZ/N2cIG71Z6P1HnKN
+	mTL28UMRegSA2vHKrpbynAny7UGBpNl6JLFG67wIAmdSQd93+EsshOsCL4RVvptTJYglIX
+	KvvFcR+yiVhDsubPs9Mt2kAxvt2bR7o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1787574448;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JMc/x1rdloXuC7dC57Av3Q7J3rtkSe30s8O/AlNDAFg=;
+	b=sH+9zCrJl170EN6he4XlJnFESe3Fm7VZ154Q/kgyI0MjRMNkh0i0hI3Mi9JfmHtGjGA5ft
+	GChiD1zOOWohEgBw==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=WbTw2fdx;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=1UD1K44k
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1787574444; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JMc/x1rdloXuC7dC57Av3Q7J3rtkSe30s8O/AlNDAFg=;
+	b=WbTw2fdxTm86F9SoLTPl9DnMk4ULh7ZKqOVhLkyvfhw5Q3IM15AuHG33aW3mkTALeyWtfN
+	/Ns9VnAsJD++KGBGct/oyTAzIBtHJQt2kIQAW5smnTsb6Gr0YxaTpM2UK1wleTpTI5zlJ1
+	0DoKTVumpLRiS4qCOmBmY6HOdH+tGUo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1787574444;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JMc/x1rdloXuC7dC57Av3Q7J3rtkSe30s8O/AlNDAFg=;
+	b=1UD1K44koEAJ8owi1Xp0Yp1EOOhzPIb9q1D9Fqma0FPGLEovKaYHX0S5kEQkjckmGZARbi
+	JJcLabiDtd4F6ICg==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260821050631.39784-1-jiayuan.chen@linux.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [RFC PATCH bpf-next v3 1/2] ftrace: deprecate disabling via
+ ftrace_enabled sysctl
+From: Miroslav Benes <mbenes@suse.cz>
+To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Cc: Song Liu <song@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+ bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+ live-patching@vger.kernel.org, mbenes@suse.cz, jolsa@kernel.org, 
+ mhiramat@kernel.org, jpoimboe@kernel.org, joe.lawrence@redhat.com, 
+ mark.rutland@arm.com, corbet@lwn.net, stable@vger.kernel.org, 
+ linux-open-source@crowdstrike.com
+In-Reply-To: <CAOu3gNhgRTh8uZdfNf+XBpYuJWAFu5i+UNjQC2jce4DdRc-bGg@mail.gmail.com>
+References: <20260806153000.4184871-1-andrey.grodzovsky@crowdstrike.com>
+ <20260806153000.4184871-2-andrey.grodzovsky@crowdstrike.com>
+ <CAPhsuW53yRgFMkNuAPCrCm9fhNNb4EpN7vbcSEGkNCZXHjk7AA@mail.gmail.com>
+ <CAOu3gNhjDNFgzg0nf458FdMMMPx4WJi=n01musucvk=hbY0HMg@mail.gmail.com>
+ <CAOu3gNhgRTh8uZdfNf+XBpYuJWAFu5i+UNjQC2jce4DdRc-bGg@mail.gmail.com>
+Date: Mon, 24 Aug 2026 14:27:21 +0200
+Message-Id: <178757444126.29054.5684338666506602450.b4-reply@b4>
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=933; i=mbenes@suse.cz;
+ h=from:subject:message-id; bh=4txqTH0l5Wo4GujP7am3e1PJUprrwhWcfRAEUI1s2rw=;
+ b=owGbwMvMwMHYWJt9x2W1tA7jabUkhqwei5WvnB5uj5xa+XbSCZlfgas1Djn2fej6LN/87IPGj
+ S1fGef5dzL6szAwcjBYiimyvN7rLGc4JddAs/rdXZhBrEwgU6RFGhiAgIWBLzcxr9RIx0jPVNtQ
+ zxDI0DFi4OIUgKkO1mH/7872nkNxb3aY3rq1MXkn3R7KVz2VX5/CYvlI5JWK0f0JErJJppKb1/Z
+ VOWnkTLayan389HuGse3vXVobP+ilWQbdmSHNxV17O3qPxYTu6oWLjrS0hYfvZDP2nNzQ2ZP9K3
+ aVf9vTB5X6Z08rzcv64/GveqO8rlWdtUNtEXP1VycLCea03Y+2XXkfq/F4u4j6/Q/LXx/IY626+
+ q1pDkvtr8nxBleWPdy97/ovvjmfXRYtX/G2P6TT9FaHUU1G3/x3riEcarKBAhZW70J+LivbqsZ/
+ 68rsvyFCVXfKb+ncZzdes3jC4qNlQZxa8gFsi3XFk75qLVO/eG3OsZK49dVsV9YFzXS/FG2zrOT
+ wj2NOAA==
+X-Developer-Key: i=mbenes@suse.cz; a=openpgp;
+ fpr=91BB0699882EF39D46654BB3FF98A38DA80834DA
+X-Spamd-Result: default: False [17.38 / 50.00];
+	SPAM_FLAG(5.00)[];
+	NEURAL_SPAM_LONG(3.50)[1.000];
+	HFILTER_HELO_5(3.00)[localhost.localdomain];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_SPAM_SHORT(2.99)[0.997];
+	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
+	RDNS_NONE(2.00)[];
+	ONCE_RECEIVED(1.20)[];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	DIRECT_TO_MX(0.00)[b4 0.17-dev];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b2bf:1b::12ef:from];
+	RCVD_COUNT_ZERO(0.00)[0];
+	DWL_DNSWL_BLOCKED(0.00)[suse.cz:dkim];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim]
+X-Spamd-Bar: +++++++++++++++++
+X-Rspamd-Queue-Id: 6A24E1F45F
+X-Rspamd-Action: add header
+X-Spam-Flag: YES
+X-Spam-Score: 17.38
+X-Spam-Level: *****************
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spam: Yes
 
-On Fri 21-08-26 13:06:12, Jiayuan Chen wrote:
-> bpf_map_alloc_pages() picks the allocator via can_alloc_pages(), a
-> conservative guess for BPF program context that is always false under
-> PREEMPT_RT. So even a caller that really is sleepable gets the
-> non-blocking allocator, which never reclaims and never engages the OOM
-> machinery.
+On 2026-08-09 14:32:16-04:00, Andrey Grodzovsky wrote:
+> On Thu, Aug 6, 2026 at 5:52 PM Andrey Grodzovsky
+> <andrey.grodzovsky@crowdstrike.com> wrote:
+> 
+> > On Thu, Aug 6, 2026 at 5:22 PM Song Liu <song@kernel.org> wrote:
+> >
+> > The bot has 2 comments.
+> >
+> > In my opinion, the test-breaking comment is wrong as he looked
+> > strictly at this patch w/o reviewing the follow-up live patch testing
+> > changes which update the tests to avoid breaks.
+> >
+> > The cleanup comment is valid but since we aren't sure if we'll need to
+> > revert this change later if it breaks userspace in some unseen way, I
+> > wonder how extensive the cleanup should be? Steven, can you advise
+> > please ?
+> >
+> > Andrey
+> 
+> Gentle ping on this question above Steven.
 
-I thought one of the main motivations was reentrancy. As you cannot
-really assume the context bpf_map_alloc_pages is called from there is an
-extra care needed so that this doesn't re-enter the allocator from bpf
-program called from allocator path and deadlock.
+I am not Steven but I think we should wait with the cleanup exactly
+due to a possible revert. The same as for PERMANENT flag we talked about
+elsewhere.
 
--- 
-Michal Hocko
-SUSE Labs
