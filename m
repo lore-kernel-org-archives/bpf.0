@@ -1,31 +1,31 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B42741F347;
-	Mon, 24 Aug 2026 16:06:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0446C45FFBD;
+	Mon, 24 Aug 2026 16:06:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787587565; cv=none; b=Yrtwp9W4Xyy9D6enl3Z6Yi71bUxgPK1HQMzyKQ3lKMyhyPjlx1zZ6lH3Suxk59ZJHgvYnrrQTXDUZQiHhG0izGzK1HBZB6N3W2syuTaPIall5H1KpQwL9VqYtIyub/DuZf2cKiDnSNVEcY33kiT9qU9ZBhwb+Tp1KaXfZFPctB8=
+	t=1787587569; cv=none; b=NJ9Ywgh0mzwXJu/d+/2dk8QaGGBLVpGCHWWYGpqoO3OicsYdXnwfRjOei7kQsTgF7NQEcEX+oZY3OqJppTLTzgRkCVjtOjNXL2M1H6Fr0Es6/Y78Ol4bgKnpqSdKycS9h6YIownIO0gX3ClXfCL552pT10i5mpswO4tWdDI3YXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787587565; c=relaxed/simple;
+	s=arc-20240116; t=1787587569; c=relaxed/simple;
 	bh=nodn3/K9trBK+2wWrkLJGeFqd0INql6u2EHBqnLbWuc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oRP1LvrD8PeZnLaTu1qOOB9Qfuq9fJwCfDD0M2uVUxmm0og5AYQaTxEdZGTydHLXO+sK2OZ77gKLT5cu/QuqQj8zJw9M0CubJSz+ki175nRiOi/ODKGScjYEHlfmtyOK3wOIVsCAU2LA/vkqMLXLoJ5C7O5J5HrWbL6+PJX4JbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=mNGt+rmw; arc=none smtp.client-ip=217.140.110.172
+	 MIME-Version; b=XVH8phTNaGNlC2L6NklNkDKKHY4PuJD3d9csZ7HtRfzVoBP8TIbwzyBPTHVe2WtZXyvggz3PPR+ghyB0hfiUCgg1sG8B4Iu2HVxHUkyToV9nltCzKGvTsdO3fdHhUrM98d98zEOB66sTCfLLdDr3ERlj2pGVKKemE1BDHXfNLoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=cM4OF4zK; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="mNGt+rmw"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="cM4OF4zK"
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 66CAC1BA8;
-	Mon, 24 Aug 2026 09:05:57 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E2D1F16F2;
+	Mon, 24 Aug 2026 09:06:00 -0700 (PDT)
 Received: from e142334-100.cambridge.arm.com (e142334-100.cambridge.arm.com [10.2.198.93])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0779D3F85F;
-	Mon, 24 Aug 2026 09:05:57 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 846553F85F;
+	Mon, 24 Aug 2026 09:06:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1787587561; bh=nodn3/K9trBK+2wWrkLJGeFqd0INql6u2EHBqnLbWuc=;
+	t=1787587564; bh=nodn3/K9trBK+2wWrkLJGeFqd0INql6u2EHBqnLbWuc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mNGt+rmw+m3ruCwnhja8afWvDAIEG0qPzwe79zxnTqszfW0fgkmn7kM6QqJS5/+ej
-	 jNIvAv0fF2vEvSYW8xIbW03slFbzO7/T4PlF0kwnb3MRc3Itdj++wKmSqG7vbSAzpV
-	 QanHuh35qBM3KtYjRoJ5HgcXGbly8RHUXJTfOLGQ=
+	b=cM4OF4zKGJ1P/SjzDr6eXMRdqUQP3re7P3X9242MP8mexIfZldlzw0sfMcbAUSh1L
+	 1a49U9Gw7XBFBsIGu7em0nv2/uib4e3xK/sCEUzr4sS4BhFi9PqpXz8JGLANNTKTay
+	 tyBid6SLPtTSmY70IX5SC9k9RdCKMRCJUje9FtAk=
 From: Muhammad Usama Anjum <usama.anjum@arm.com>
 To: Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>,
@@ -54,9 +54,9 @@ To: Catalin Marinas <catalin.marinas@arm.com>,
 	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
 	linux-mm@kvack.org (open list:MEMORY MANAGEMENT - CORE)
 Cc: Muhammad Usama Anjum <usama.anjum@arm.com>
-Subject: [PATCH 4/7] maccess: Use a scoped guard for page faults
-Date: Mon, 24 Aug 2026 17:04:49 +0100
-Message-ID: <20260824160523.3907021-5-usama.anjum@arm.com>
+Subject: [PATCH 4/7] maccess: Use a scoped guard to re-enable page faults
+Date: Mon, 24 Aug 2026 17:04:50 +0100
+Message-ID: <20260824160523.3907021-6-usama.anjum@arm.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260824160523.3907021-1-usama.anjum@arm.com>
 References: <20260824160523.3907021-1-usama.anjum@arm.com>
