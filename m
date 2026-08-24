@@ -1,43 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4D703AF643
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 08:43:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2889F3EDE4A
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 08:47:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787561020; cv=none; b=gNmzqUyJMzVoW0Zs6XG8rEXNr8OGnrj7IPdKNb8bbIzxbHxHlj7uSX7hCdavFsZMSsY4rZjwlRLCO6rAEj2rvLKZNifIAWMOXD3w7ZUXte/9rC2EC1diOd48aUcYGLfV/rqiO6HKO7xHym6DzonEXwM/80hR4s9e7bPXSNWUK/0=
+	t=1787561229; cv=none; b=jiNS69b7pwxhd1cjKHtYAXjRdgaFjM0kanpCpMfI187VrT93LfjgxSpZPud+OVXLUFMDmAnxXVWWhZBPBbjKvWwanpp9+liL5VdMUkNdr/xUsdpe+gUlY5BqSuTfCaejNxSIQNoNfr1eipmOJax9YIhzGqspJ3A3f6UmekKe6Vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787561020; c=relaxed/simple;
-	bh=zfV53D9AytvRC2ddkEKFrfhcUymgxKOEu6qXGeDpmmA=;
+	s=arc-20240116; t=1787561229; c=relaxed/simple;
+	bh=ugNuF1GpWakRFH4BRru2hwSseBhLHIa+Lni01iRWSKU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=d+doVdgyIk7f8sxIOlwvGnyssKVt10/UIB20ji5LgutDtx21OFIsdXPl3DoegjCupGo+6jpzq7dtf9JarQ7NJkDGebx4Ozne3qwj7K5a6OribyHTx3rsRTry7Cf7Y39k1/eu4m+wpRJ0tH0pqJu+xTQnGEhObP6LMt9wOfLvWUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HsYluLg4; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=h3XZFVxFwu6S+f/onw8zCjX8atHGKy9Jk/ZUt+Eu4YDk96b1pkzsaChtdwqtico6Vv4SP9o5olEXiKgM9OXMqXt1NqPgQ3ruMYtSztCti2Vt6rCBXQaAX3JZe9dBOAZxRJ8yIoxUlnc8yzzDb5UYoQwK6rtz+EowvVw1/MS/ev8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D8tRUbwV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HsYluLg4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 501411F00A3D;
-	Mon, 24 Aug 2026 08:43:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D8tRUbwV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 174E21F000E9;
+	Mon, 24 Aug 2026 08:47:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787561019;
-	bh=mW2nKuP9JfCJx527KgrhzlIBEwJXGKvfdbtpi4ba7qY=;
+	s=k20260515; t=1787561224;
+	bh=8av29sOfpJe/i7/mHjr+hwf62vtKRtDF+GDMnhufRbU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=HsYluLg4WlSC1RVIwJYCArDij79sf++7clg4cHfELto78VXcR2INO3BABzEmaPeem
-	 xigA/mxXerzYJDfZcaRnFnfBAOosGIBcOI/4VYbhJSa6jrQEXD5n4AlyIOgtiGR8iK
-	 /As0EDEMK5XeT7GZhaGHS4ezUk/mRWzv4IU/WXhkkf9BJ97Rzr8xQitivqn2yGLRpt
-	 I7rOQNiFnxTNdRXoJQpc+wtUUP44temWX7x8YyE/JbrX1W32kStyS/niDNNfjWNuwq
-	 83pDveQxoGm+3ApToNxHjHuSRTxMRWQC2va5Q0CKvDuHQGLaR11bq95YXAKJ9DbjJ/
-	 cAD1TsQMTJUdg==
+	b=D8tRUbwViCDDDU/VoCNG2v6hAT0jzBVq6C+J+HLtU3dAuTKFvneb6QnI+Kd2O8V+S
+	 AEIB1rpIInEl/Be3v0i1enWqxyY3UTvQWa7eiI6WlDNp5dBd90o9W25EuUUAgcxwRj
+	 mfWLH4To1ECsxuDAkn30AmDTiLsFCUGjmyhO5PxVFfLYqpWkbyLUrjGg66BOVZ3Zke
+	 f40xBibCHUck58lB198z5NMIGQmAAR4/5tv3XvKMj1kxSYffpigBqvWVEJbgydGhRY
+	 7niu0q7MOv92aa77ykeK0QWLsTfpKKhjGScPlAyw+kVxWJXZdDirzV9WIH4LBjTGu8
+	 hiu3AJPy2+5vg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 2/3] bpf: Add sleepable arena page allocation path
+Subject: Re: [PATCH bpf v4 1/2] bpf: Fix queue/stack map u32 index overflow
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: chenyuan_fl@163.com
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260824082530.47553-3-emil@etsalapatis.com>
-References: <20260824082530.47553-1-emil@etsalapatis.com>
- <20260824082530.47553-3-emil@etsalapatis.com>
+In-Reply-To: <20260824083327.1708560-2-chenyuan_fl@163.com>
+References: <CAEf4BzbGe74OuUKiDz7oBrWzQCD54JVhYuCTQEWNHOHmnBEtbQ@mail.gmail.com>
+ <20260824083327.1708560-1-chenyuan_fl@163.com>
+ <20260824083327.1708560-2-chenyuan_fl@163.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 24 Aug 2026 08:43:38 +0000
-Message-Id: <20260824084339.501411F00A3D@smtp.kernel.org>
+Date: Mon, 24 Aug 2026 08:47:03 +0000
+Message-Id: <20260824084704.174E21F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,58 +47,70 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] Hard lockup via integer overflow: `data.i << PAGE_SHIFT` passes an=
- astronomically large negative size to `flush_vmap_cache` on mapping failur=
-e.
+
+Pre-existing issues:
+- [High] Kfuncs using enum parameters as array indices lack bounds checking=
+ for negative values.
 --
 
---- Patch [2]: [PATCH 2/3] bpf: Add sleepable arena page allocation path ---
-commit a93c0f542ad1ecf8f00cde8cf86699ce952035a7
-Author: Emil Tsalapatis <emil@etsalapatis.com>
+--- Patch [1]: [PATCH bpf v4 1/2] bpf: Fix queue/stack map u32 index overfl=
+ow ---
+commit b3cc6df8f8f6a83f377bada50a4de0c2ebde4779
+Author: Yuan Chen <chenyuan@kylinos.cn>
 
-bpf: Add sleepable arena page allocation path
+bpf: Fix queue/stack map u32 index overflow
 
-This commit adds a separate sleepable allocation path for BPF arena memory.
-It preallocates memory before taking the critical section to prevent
-frequent allocation failures from sleepable BPF contexts.
-
-> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> index da356989786a0..126ddae763f9a 100644
-> --- a/kernel/bpf/arena.c
-> +++ b/kernel/bpf/arena.c
+This commit fixes an integer overflow in queue/stack maps by restoring a
+bounds check in queue_stack_map_alloc_check(). It rejects max_entries and
+value_size combinations that would reach or exceed U32_MAX bytes.
 
 [ ... ]
 
-> +static long arena_alloc_pages_sleepable(struct bpf_arena *arena, long pa=
-ge_cnt,
-> +		long uaddr, long pgoff, int node_id)
-> +{
+While reviewing BPF bounds checking, I noticed a pre-existing issue in
+mm/bpf_memcontrol.c:
 
-[ ... ]
-
-> +out_unmap:
-> +	/* data.i pages were mapped, undo only those who failed to map */
-> +	flush_vmap_cache(kern_vm_start + uaddr32, data.i << PAGE_SHIFT);
+> mm/bpf_memcontrol.c
+>=20
+> __bpf_kfunc unsigned long bpf_mem_cgroup_vm_events(struct mem_cgroup *mem=
+cg,
+> 						   enum vm_event_item event)
+> {
+> 	if (unlikely(!memcg_vm_event_item_valid(event)))
+> 		return (unsigned long)-1;
 
 [Severity: High]
-Can this shift operation overflow?
+This is a pre-existing issue, but since enums are represented as signed
+integers in C, could a BPF program bypass this bounds check by passing a
+negative enum value?
 
-If apply_to_page_range() maps a large number of pages (e.g. over 524,287)
-before failing, data.i << PAGE_SHIFT will overflow since data.i is a
-signed 32-bit int.
+It appears that a negative event value could evade the upper bounds check
+and lead to an out-of-bounds read when the event is used as an array index.
 
-Because flush_vmap_cache() expects an unsigned long size, a negative value
-here would sign-extend to a massive 64-bit size, potentially causing a CPU
-stall or lockup in the flush routine.
+>=20
+> 	return memcg_events(memcg, event);
+> }
+>=20
+> ...
+>=20
+> __bpf_kfunc unsigned long bpf_mem_cgroup_memory_events(struct mem_cgroup =
+*memcg,
+> 						       enum memcg_memory_event event)
+> {
+> 	if (unlikely(event >=3D MEMCG_NR_MEMORY_EVENTS))
+> 		return (unsigned long)-1;
 
-Would casting data.i to unsigned long before the shift prevent this?
+[Severity: High]
+This isn't a bug introduced by this patch, but does this signed comparison
+handle negative event values?
 
-> +	range_tree_set(&arena->rt, pgoff + data.i, page_cnt - data.i);
-> +
-> +	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+Similar to the above, a negative event value would pass this check and
+subsequently be used as a negative index for the memory_events array.
+Does this result in an out-of-bounds memory read?
 
-[ ... ]
+>=20
+> 	return atomic_long_read(&memcg->memory_events[event]);
+> }
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260824082530.4755=
-3-1-emil@etsalapatis.com?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260824083327.1708=
+560-1-chenyuan_fl@163.com?part=3D1
