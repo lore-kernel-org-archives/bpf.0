@@ -1,150 +1,212 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3794944C4E3;
-	Mon, 24 Aug 2026 15:42:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D971D432BC1;
+	Mon, 24 Aug 2026 15:42:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787586152; cv=none; b=G0FC9rNpJ+2xzk5Hh6wv/xHMig3sR5RHiCIIrbvMqYTKsRMLcV9AWQqzbp6KO0ssNrCarjC5QANoMAj0cjESaJ8DtGQl5Qovf1QK5SXCyaQsYun1gqnV1/svPdwaTZSu1akXDBjD2W0O7+x1QJPvOm45iIr+GWasOce2YG8Qs2s=
+	t=1787586154; cv=none; b=fcATk1/Mcaandr15lioDl+kOrZHfI1QB484tJJw0GDGJSTYuX0BfGZLX+0yPaqmdk2sOajiHS201ScdvhhNVsPnyPmvTXV2lqYHmHOkqHXiLeiveFhZ8+CSrLGgeGK0rWl8p6tUD69VZFSPXF2pxnWCia4BCPcqTR242uuIyZXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787586152; c=relaxed/simple;
-	bh=PvyzodrdFvixXE6EDBp/1EK6jSvLtlZ1x2kE2DaESgY=;
+	s=arc-20240116; t=1787586154; c=relaxed/simple;
+	bh=CDRP4gpzUsluUAF7MS5tPXjvTozOS+POpWSlIvrPn18=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=YXjKWtUjNUJnRAs7Zh9fnPVZ0dgQiuViuwG3BwnDi5pVwi4DsoU7ngcmmdPvbNFNShHq15JfzKw8AwM5Qqo1gCPGhR5gyBAfkDPRq7GcavcjeYNMr610YgoDM5juIdlFoHoFHO5OijG8OuVYIKf9sH9eaCZvjSkXn9RQ/QNM188=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PiYZ9bCM; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=ECf1punK+DDYJg/wb37WCm0BfnC+rv2nBZMNC4Ws6En3ImRBBz24PKZkr9Lr6wvgULiQzUIEIJgiL8t9SvdZI26Rhw3KDyTTzt2YLNkbdLKclhWwLGlZd9GXhHSjjNPFo/bYGSPMALRIJ+OS5spe5znK+M0tlZc3wX2/SIVEwtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g11qAZlT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PiYZ9bCM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AF801F00A3F;
-	Mon, 24 Aug 2026 15:42:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g11qAZlT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 959191F00A3E;
+	Mon, 24 Aug 2026 15:42:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787586144;
-	bh=n8EekAtIXzdxe+B9XX2755FWpb2SomWsIMyY12oi6F0=;
+	s=k20260515; t=1787586143;
+	bh=kpPtmU1Onj8DRaxmofLIIStTgTFjuXkztqouUkk0qt0=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=PiYZ9bCMt5LaRbh1mKOcSk8JAoATQFoAqC100qvoVH//FwYKs8AGsg+Jo+ZQVzkPc
-	 FyghZfY5vRnexIPiPkS808kI0jdH3koTdq3z+tuPLTAWRUohToawf0Jo2I6Wvd3sNv
-	 dHGsmmkKT2trSPxDPcmLNyZh2KnIFSU8/cF5tNDxkGhu+vaimUqXLeSBCELGQQxaok
-	 MhKfpL4jgf9Zkgrpqjz3/01E5R8qZXosiTzF4/Voxny7/mhxIcotbZbWJJrbjZSLYm
-	 g0J4OR+zozAWzMZRSCRR03n7OXqLp7p3JsnyHI+NrNlUC9g10Kagrw5rOvkIRx9/id
-	 C2QeS1NOi9/TA==
-Content-Type: multipart/mixed; boundary="===============3130900610336689776=="
+	b=g11qAZlTEiN8hoaWzzmflsSUWzpxzjnqQD8qiLMS5+7n3t8zbe0xT4js826bKG0v7
+	 pDtUzQeU5qVEWLeTLwyYcpb6C7tz4ultLjumjv40wV0KoHJNsTfrHe1+XisiN2JZ9y
+	 M7gDOfS1Sx9L7d1QP02zEc8irC06AJz4yuGGOf9dtuYVHYB2SR6DG3Z71JnEgFUfKT
+	 02ljP6U9ntrJt8hB/OnFgmA5PHPECWPDmBKr1k2FtGl9rOLTnR2njM0zZEgzbzbowN
+	 K/+Ma1+2tqTDWgdgL8LoiPaH/VqTEYkTPJjjhkoJ6UeXdiag3NLYzC3gYcuw+wmbTu
+	 7E43bAmrZLoLg==
+Content-Type: multipart/mixed; boundary="===============5325228425749837176=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d89fc04e61dddf9661a334b4ce9142b3bc081ab11fb287ce1ea2aee0661b6e7a@mail.kernel.org>
-In-Reply-To: <20260824143621.2098856-5-chenyuan_fl@163.com>
-References: <20260824143621.2098856-5-chenyuan_fl@163.com>
-Subject: Re: [PATCH 4/4] selftests/bpf: Test rhtab special-field combinations
+Message-Id: <5145190152118190974936dc5749fc562d898f27e212a6bfe12fcf08460198ff@mail.kernel.org>
+In-Reply-To: <20260824143621.2098856-4-chenyuan_fl@163.com>
+References: <20260824143621.2098856-4-chenyuan_fl@163.com>
+Subject: Re: [PATCH 3/4] selftests/bpf: Test rhtab kptr recycle from NMI context
 From: bot+bpf-ci@kernel.org
 To: chenyuan_fl@163.com,bpf@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,gnq25@mails.tsinghua.edu.cn,chenyuan@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 24 Aug 2026 15:42:24 +0000 (UTC)
+Date: Mon, 24 Aug 2026 15:42:22 +0000 (UTC)
 
---===============3130900610336689776==
+--===============5325228425749837176==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/rhtab_fields.c b/tools/testing/selftests/bpf/prog_tests/rhtab_fields.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/rhtab_kptr.c b/tools/testing/selftests/bpf/prog_tests/rhtab_kptr.c
 > new file mode 100644
-> index 000000000000..29de05bcbd4b
+> index 000000000000..13158d74cbc1
 > --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/rhtab_fields.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/rhtab_kptr.c
+> @@ -0,0 +1,146 @@
 
 [ ... ]
 
-> +static void subtest_timer(struct rhtab_fields *skel)
-> +{
-> +	u64 zero = 0;
-> +	u32 key = 0;
-> +	int fired, map_fd;
-> +
-> +	map_fd = bpf_map__fd(skel->maps.tmap);
-> +	if (!ASSERT_OK(bpf_map_update_elem(map_fd, &key, &zero, BPF_ANY),
-> +		       "create_elem"))
-> +		return;
-
-Does this read past the end of the zero variable?  The tmap value type
-is struct timer_val which is 24 bytes (16-byte bpf_timer plus 8-byte
-data field), but zero is only 8 bytes.  The syscall copies value_size
-bytes from the user pointer in kernel/bpf/syscall.c:
-
-    value_size = bpf_map_value_size(map);
-    value = kvmemdup_bpfptr(uvalue, value_size);
-
-so it appears 16 bytes above zero on the stack would be read.  The same
-pattern is also used later when recreating the element.
-
-> +
-> +	if (!ASSERT_OK(run_prog(skel, "arm_timer"), "arm_timer_first"))
-> +		return;
-> +	usleep(300000);
-> +	if (!ASSERT_GT(skel->bss->timer_fired, 0, "timer_fired_first"))
+> +	skel = rhtab_kptr__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
 > +		return;
 > +
-> +	/* Deleting the element must cancel the timer. */
-> +	fired = skel->bss->timer_fired;
-> +	if (!ASSERT_OK(bpf_map_delete_elem(map_fd, &key), "delete_elem"))
-> +		return;
-> +	usleep(300000);
-> +	ASSERT_EQ(skel->bss->timer_fired, fired, "timer_cancelled_after_delete");
+> +	/* Create the element and stash a referenced task kptr in it. */
+> +	if (!ASSERT_OK(bpf_map_update_elem(bpf_map__fd(skel->maps.rhtab),
+> +					   &key, &zero, BPF_ANY), "create_elem"))
+> +		goto out;
 
-Can this assertion actually verify timer cancellation?  Looking at
-arm_timer() in progs/rhtab_fields.c, it arms the timer with a 50us
-expiry (50000ns), and the callback doesn't re-arm.  The test waits
-300ms before the delete, and the preceding ASSERT_GT confirms the timer
-has already fired.  So by the time bpf_map_delete_elem() runs, the
-timer has been inactive for ~300ms.  Whether or not the delete path
-cancels the timer field, timer_fired cannot advance during the second
-sleep, so the assertion would pass even on a kernel that doesn't cancel
-the timer at all.
+Does this code pass the correct value size to bpf_map_update_elem()?
 
-The commit message says "delete the element and verify the timer is
-cancelled" - to actually test cancellation, wouldn't the timer need to
-still be pending at delete time?  For example, arming it with a delay
-longer than the deletion (say 200ms), deleting immediately, then
-sleeping past the original expiry and checking that timer_fired did not
-change.
+The map value type is struct val_t which contains an 8-byte kptr and a
+u32 magic field, making sizeof(struct val_t) == 16 bytes (with 4 bytes
+of trailing padding). The code passes &zero where zero is a single __u64
+(8 bytes).
 
-> diff --git a/tools/testing/selftests/bpf/progs/rhtab_fields.c b/tools/testing/selftests/bpf/progs/rhtab_fields.c
-> new file mode 100644
-> index 000000000000..85335f19f172
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/rhtab_fields.c
+kernel/bpf/syscall.c:map_update_elem() copies the full 16 bytes from
+&zero via kvmemdup_bpfptr(), reading 8 bytes past the end of the stack
+variable. This has two consequences: the test performs an out-of-bounds
+read of its own stack, and the element's magic field gets initialised
+with whatever stack garbage followed zero.
+
+The same undersized buffer is used again for the recreate_elem call
+further down. Would declaring a correctly sized buffer fix this?
+
+> +	if (!ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(skel->progs.init_elem),
+> +					      &topts), "test_run_init") ||
+> +	    !ASSERT_EQ(topts.retval, 0, "init_ret"))
+> +		goto out;
+> +
+> +	pmu_fd = syscall(__NR_perf_event_open, &attr, -1, 0, -1, 0);
+> +	if (pmu_fd >= 0) {
+> +		skel->links.nmi_update = bpf_program__attach_perf_event(skel->progs.nmi_update,
+> +									pmu_fd);
+> +		if (!ASSERT_OK_PTR(skel->links.nmi_update, "attach_perf_event")) {
+> +			close(pmu_fd);
+> +			goto out;
+> +		}
+> +
+> +		/* Let the NMI handler overwrite the element, and make sure it
+> +		 * actually ran before probing (otherwise the probe would pass
+> +		 * vacuously even on an unfixed kernel).
+> +		 */
+
+This isn't a bug, but the opening /* of a multi-line comment should sit
+on its own line per BPF subsystem style. The file's other block comments
+already follow that form.
+
+> +		for (i = 0; i < 20 && read_counter(skel, 1) == 0; i++)
+> +			usleep(100000);
+> +		ASSERT_GT(read_counter(skel, 1), 0, "nmi_update_ran");
+
+Can this assertion fail for environmental reasons on an otherwise correct
+kernel?
+
+The perf event is opened with pid == -1 and cpu == 0, so it only samples
+CPU 0. PERF_COUNT_HW_CPU_CYCLES does not advance while a core is in a
+deep C-state, and the polling thread is not pinned to CPU 0. On an
+otherwise idle host the counter can stay at 0 and the test hard-fails
+here, even though nothing is wrong with the kernel.
+
+Contrast lru_lock_nmi.c, which makes the same assertion safe by attaching
+on every CPU and running busy threads pinned per CPU during the sampling
+window.
+
+> +
+> +		bpf_link__destroy(skel->links.nmi_update);
+> +		skel->links.nmi_update = NULL;
+> +		close(pmu_fd);
+
+Does this code close pmu_fd twice?
+
+bpf_program__attach_perf_event() takes ownership of the perf fd on
+success: libbpf stores it in bpf_link_perf::perf_event_fd and
+bpf_link_perf_detach() closes it. So bpf_link__destroy() above already
+closed pmu_fd, and this explicit close() closes an fd number that is no
+longer owned by the test.
+
+The file gets the ownership rule right on the failure path: it closes
+pmu_fd only because the attach failed. The neighbouring NMI test
+lru_lock_nmi.c documents it explicitly at lines 203-206. Today nothing
+allocates a descriptor between the destroy and close so the stray close()
+just returns EBADF, but a double close in a test that later grows an
+intervening open()/socket()/map creation will silently close an unrelated
+descriptor.
 
 [ ... ]
 
-> +struct timer_val {
-> +	struct bpf_timer timer;
-> +	__u64 data;
-> +};
+> +		ASSERT_EQ(read_counter(skel, 2), 1, "xchg_non_null");
+> +		ASSERT_EQ(read_counter(skel, 3), 0, "xchg_null");
+> +	} else {
+> +		test__skip();
+> +	}
 
-Is the data field used anywhere?  I don't see it read or written in
-any of the programs or in the test harness.  Compare struct
-lock_kptr_val::magic which exists for a similar purpose (plain bytes
-alongside a special field) and is actually exercised by lk_upd/lk_probe
-to verify plain bytes round-trip through recycled elements.
+Does calling test__skip() in a test that defines no subtests make the
+whole test report SKIP even though the second phase still runs?
 
-The field does affect the value_size (making it 24 bytes instead of
-16), which creates a mismatch with prog_tests/rhtab_fields.c where
-subtest_timer() seeds the map from an 8-byte local (u64 zero).
+test_progs.c:print_test_result() reads the subtests_cnt and with
+subtest_num == 0, a single test__skip() turns the entire test into
+'#N rhtab_kptr:SKIP'. On the common BPF CI setup (QEMU without a vPMU)
+perf_event_open() always fails, so this test would permanently print SKIP
+while silently exercising the delete/re-insert recycle path - a failure
+there is still reported, but a pass is indistinguishable from nothing ran.
+
+The neighbouring lru_lock_nmi.c wraps each phase in test__start_subtest()
+so that skips and passes are accounted per phase.
+
+A subsystem pattern flags this as potentially concerning: the NMI phase is
+skipped with a bare test__skip() that records no reason, so a reader of
+the CI log cannot tell whether the PMU was absent, perf_event_paranoid
+blocked the open, or something else failed. errno from the failed
+perf_event_open() is discarded. The guide warns about tests that skip
+silently with no message, though test__skip() takes no reason argument and
+this is the dominant idiom across prog_tests/.
+
+[ ... ]
+
+> +	for (i = 0; i < 2000; i++) {
+> +		topts.retval = 0;
+> +		err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.init_elem),
+> +					     &topts);
+> +		if (err || topts.retval) {
+> +			/* Element may be gone; recreate and retry once. */
+> +			if (!ASSERT_OK(bpf_map_update_elem(bpf_map__fd(skel->maps.rhtab),
+> +							   &key, &zero, BPF_ANY),
+> +				       "recreate_elem"))
+> +				goto out;
+
+Same value-size issue here as the earlier create_elem call.
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/rhtab_kptr.c b/tools/testing/selftests/bpf/progs/rhtab_kptr.c
+> new file mode 100644
+> index 000000000000..fd6bd63cb405
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/rhtab_kptr.c
+> @@ -0,0 +1,132 @@
+
+[ ... ]
 
 > +} counters SEC(".maps");
 > +
-> +/* 0: lk init ok, 1: lk probe xchg non-NULL, 2: lk probe xchg NULL,
-> + * 3: lk probe magic ok, 4: u init ok, 5: u probe ptr non-NULL,
-> + * 6: pc init ok, 7: pc probe xchg non-NULL, 8: pc probe xchg NULL
+> +/* 0: init ok, 1: nmi update ok, 2: probe xchg non-NULL, 3: probe xchg NULL,
+> + * 4: probe saw expected magic value
 > + */
 
-This isn't a bug, but the comment style here differs from the file
-header above.  The BPF subsystem prefers the opening /* on its own
-line:
-
-    /*
-     * 0: lk init ok, 1: lk probe xchg non-NULL, ...
-     */
+This isn't a bug, but the opening /* of a multi-line comment should sit on
+its own line. The file's own header comment already uses the correct form,
+so this is inconsistent with its own neighbours as well as with the
+subsystem style.
 
 > +static __always_inline void bump(u32 idx)
 > +{
@@ -153,139 +215,39 @@ line:
 > +	if (v)
 > +		(*v)++;
 > +}
-> +
-> +extern struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
-> +extern void bpf_task_release(struct task_struct *p) __ksym;
-> +
-> +int timer_fired;
-> +
-> +/* Map 1: spin lock + referenced kptr + plain data. */
-> +
-> +SEC("syscall")
-> +int lk_init(void *ctx)
-> +{
-> +	struct lock_kptr_val *val;
-> +	struct task_struct *task, *old;
-> +	u32 key = 0;
-> +
-> +	val = bpf_map_lookup_elem(&lkmap, &key);
-> +	if (!val)
-> +		return 1;
-> +	task = bpf_task_acquire(bpf_get_current_task_btf());
-> +	if (!task)
-> +		return 2;
-> +	old = bpf_kptr_xchg(&val->tsk, task);
-> +	if (old)
-> +		bpf_task_release(old);
-> +	bump(0);
-> +	return 0;
-> +}
-> +
-> +SEC("syscall")
-> +int lk_del(void *ctx)
-> +{
-> +	u64 key = 0;
-> +
-> +	bpf_map_delete_elem(&lkmap, &key);
-> +	return 0;
-> +}
-> +
-> +SEC("syscall")
-> +int lk_upd(void *ctx)
-> +{
-> +	struct lock_kptr_val val = { .magic = 0x52484142 };
-> +	u32 key = 0;
-> +
-> +	bpf_map_update_elem(&lkmap, &key, &val, BPF_ANY);
-> +	return 0;
-> +}
-> +
-> +SEC("syscall")
-> +int lk_probe(void *ctx)
-> +{
-> +	struct lock_kptr_val *val;
-> +	struct task_struct *old;
-> +	u32 key = 0;
-> +
-> +	val = bpf_map_lookup_elem(&lkmap, &key);
-> +	if (!val)
-> +		return 1;
-> +	old = bpf_kptr_xchg(&val->tsk, NULL);
-> +	if (old) {
-> +		bpf_task_release(old);
-> +		bump(1);
-> +	} else {
-> +		bump(2);
-> +	}
-> +	if (val->magic == 0x52484142)
-> +		bump(3);
-> +	return 0;
-> +}
-
-A subsystem pattern flags this as potentially concerning: the
-lk_init/lk_del/lk_upd/lk_probe quartet appears to re-implement a test
-that the immediately preceding commit in this same series (81f409ba449d)
-just added to the same directory.  progs/rhtab_kptr.c already covers
-the rhtab referenced-kptr recycle path with an identical four-program
-template over the same map type.
-
-The shared scaffolding is duplicated as well: bump() and the extern
-bpf_task_acquire/bpf_task_release declarations are byte-identical
-between the two files.
-
-Given that rhtab_fields.c adds the spin-lock, timer, untrusted-kptr,
-and per-cpu-kptr combinations that rhtab_kptr.c doesn't cover, while
-rhtab_kptr.c covers the NMI (perf_event) update path that
-rhtab_fields.c doesn't, neither file strictly subsumes the other.
-Should the two files share a header for the common helpers, or would it
-make sense to merge them into one test that covers all field
-combinations including the NMI case?
-
-> +
-> +/* Map 2: bpf_timer. */
-> +
-> +static int timer_cb(void *map, void *key, struct timer_val *value)
-> +{
-> +	timer_fired++;
-> +	return 0;
-> +}
-> +
-> +SEC("syscall")
-> +int arm_timer(void *ctx)
-> +{
-> +	struct timer_val *val;
-> +	u32 key = 0;
-> +
-> +	val = bpf_map_lookup_elem(&tmap, &key);
-> +	if (!val)
-> +		return 1;
-> +	/* 1 == CLOCK_MONOTONIC */
-> +	if (bpf_timer_init(&val->timer, &tmap, 1))
-> +		return 2;
-> +	bpf_timer_set_callback(&val->timer, timer_cb);
-> +	if (bpf_timer_start(&val->timer, 50000, 0))
-> +		return 3;
-> +	return 0;
-> +}
-
-Does arming a one-shot timer with a 50us expiry make the timer subtest's
-delete-cancellation assertion unfalsifiable?  The callback doesn't
-re-arm, so the timer fires exactly once.  The consumer in
-prog_tests/rhtab_fields.c waits 300ms (6000x the expiry) and confirms
-the timer has already fired before calling bpf_map_delete_elem().  The
-hrtimer is therefore inactive at delete time, so timer_fired cannot
-change during the second sleep regardless of whether the delete path
-actually cancels anything.
-
-The existing convention in this directory is to arm a long timer so
-it is still pending at delete time - progs/timer_start_delete_race.c
-uses bpf_timer_start(&value->timer, 100000000, 0) (100ms) for exactly
-this delete-vs-pending-timer scenario, and progs/timer.c uses
-1ull << 35 (~34s) as its 'must not fire' expiry.  Would arming with an
-expiry longer than the arm-to-delete window make the assertion able to
-fail?
 
 [ ... ]
+
+> +SEC("syscall")
+> +int upd_elem(void *ctx)
+> +{
+> +	struct val_t val = { .magic = 0x52484153 }; /* "RHAS" */
+> +	u32 key = 0;
+> +
+> +	bpf_map_update_elem(&rhtab, &key, &val, BPF_ANY);
+> +	return 0;
+> +}
+
+Can upd_elem() and del_elem() communicate map operation failures to the
+userspace loop?
+
+Both discard the return value of bpf_map_update_elem() and
+bpf_map_delete_elem() and unconditionally return 0. The userspace loop
+only checks bpf_prog_test_run_opts() and never inspects topts.retval for
+these two programs.
+
+rhtab_map_update_elem() has several real failure returns reachable from
+this loop - -ENOMEM from bpf_mem_cache_alloc(), -EBUSY when
+rhtab->freeing_internal is set, and -E2BIG/insert errors - and
+rhtab_map_delete_elem() returns -ENOENT. If any of them fires, the
+following probe_elem() returns 1 early, so neither counter 2/3 nor counter
+4 is bumped, and the only symptom is the final ASSERT_EQ for
+recycle_magic_roundtrip reporting an off-by-N count with no indication of
+which operation failed or why.
+
+The sibling programs init_elem()/probe_elem() already use the return value
+as a status code, so propagating the map-op error here would turn a silent
+count mismatch into a diagnosable failure.
 
 
 ---
@@ -293,4 +255,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32741782570
---===============3130900610336689776==--
+--===============5325228425749837176==--
