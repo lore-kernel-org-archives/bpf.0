@@ -1,31 +1,31 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED77536897F;
-	Mon, 24 Aug 2026 16:05:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3AEE439913;
+	Mon, 24 Aug 2026 16:05:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787587558; cv=none; b=Tn9Pk8auMwiKjqOt/oIvkYM48pYeWJE/ajcsp3KN9fy+Xa5GyFa3ZmcuwJJhVcQlqU1vEsvnqUYB9bSF3QfFoEIqV3+gfsl6SyOpDeSWoaSOBXy4kSfXVy+4GhOcCLXwB5GLYjKEH5KYF3m9qc5CkzPYWVcDnn8gh8vcO+51BLo=
+	t=1787587561; cv=none; b=sb71T+6WTpMNG+rVUDMY617sFD9A5I2i6ZHapcp6GkiKyPeHvlRs2inQdGT/x+McSjd1s88kkIBEwmsNLx6YMNt6sSeSbKHhPGB+MtsdiMohwFd5xxdkhkREeM6fh7Yoc4+5LJAcgYx2r+vNuT+pKo6pk/kOepwMpFCcG6M98YE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787587558; c=relaxed/simple;
-	bh=mAnn8lCC8CIaJdHDU1rhT42Z2WA5jMjaMEMo8Y0pB/s=;
+	s=arc-20240116; t=1787587561; c=relaxed/simple;
+	bh=m2SBTQpkWSQqtHWMxAh9TvwsKocaEw70262S7IijE4E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WxPYlkVbPwRFxn1MEQVHPAPLkqn2aMEi8IH+Ebq8xx351sjK7Va2qe+Hqv0MaFqBCo7AfqMqh3c/YgbuS00BAmL1OW+6oxYXTfdKUjOZSutjz/eZRg3DS5ip6VWJbx1NkVUHa3fb+RCbbKJh0dwNfsEcu9WTxT27BRcJysiWINU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=KXcATGYi; arc=none smtp.client-ip=217.140.110.172
+	 MIME-Version; b=KvWvY7qgUNJSX8xm+j/l/P0I89hQL7X9rN3SMhRYxuDyc9BY3YGyrneymQocC4bFAf4R4ZReNDxLEeIdHfsH8YEbzIS7GH1OErff+2civZcokBZA+jqPhfrFpvk4Ov0RGF1QxmVqNxvHf5hz6jTgiV019KQ4R2SJrv01poB9mGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=IJ4nzVeh; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="KXcATGYi"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="IJ4nzVeh"
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 57321176C;
-	Mon, 24 Aug 2026 09:05:50 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC93A1AC1;
+	Mon, 24 Aug 2026 09:05:53 -0700 (PDT)
 Received: from e142334-100.cambridge.arm.com (e142334-100.cambridge.arm.com [10.2.198.93])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E50133F85F;
-	Mon, 24 Aug 2026 09:05:50 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 769D03F85F;
+	Mon, 24 Aug 2026 09:05:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1787587554; bh=mAnn8lCC8CIaJdHDU1rhT42Z2WA5jMjaMEMo8Y0pB/s=;
+	t=1787587557; bh=m2SBTQpkWSQqtHWMxAh9TvwsKocaEw70262S7IijE4E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KXcATGYiblCFLHpkpJ3dWLchgVGcO9Fkn7aLt+0hDsnP3bpXXPHFXftjmt7pR58vR
-	 2bXx6QlmsEr8OZamAZdP5OCw7v/hT+jfDQRoSou7GvXm1ImM5oCovGMfQyOGW9P/Gn
-	 em69FAcrIUlVaiYSuADP1SL6CUzdUrdZlVbQffZ4=
+	b=IJ4nzVehS8Hj4+HT2oldjrWLZfDgo41bmtZTUlst4kclYjz6JGUKaYe6MBCCvzi8t
+	 7KG05+LCjlzm0mxwo5U1+zEPCt1LJnfci69d5G/n9XN09VbrmnvKqGB7eAhMcCqd+S
+	 ZBYO+C1F8Knznuik3pACO1Cht3v7ezOhwpBKTvfg=
 From: Muhammad Usama Anjum <usama.anjum@arm.com>
 To: Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>,
@@ -54,9 +54,9 @@ To: Catalin Marinas <catalin.marinas@arm.com>,
 	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
 	linux-mm@kvack.org (open list:MEMORY MANAGEMENT - CORE)
 Cc: Muhammad Usama Anjum <usama.anjum@arm.com>
-Subject: [PATCH 2/7] uaccess: Add scope guard for bare kernel nofault regions
-Date: Mon, 24 Aug 2026 17:04:47 +0100
-Message-ID: <20260824160523.3907021-3-usama.anjum@arm.com>
+Subject: [PATCH 3/7] maccess: Skip setup for zero-sized kernel nofault copies
+Date: Mon, 24 Aug 2026 17:04:48 +0100
+Message-ID: <20260824160523.3907021-4-usama.anjum@arm.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260824160523.3907021-1-usama.anjum@arm.com>
 References: <20260824160523.3907021-1-usama.anjum@arm.com>
@@ -68,35 +68,44 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A batched nofault region must run its end hook on every exit. Pairing the
-hooks by hand makes early returns and error paths easy to get wrong.
+A zero-sized kernel nofault copy does not enter an access loop, but it
+still disables and re-enables page faults.
 
-Add a scope guard that starts the region on entry and ends it when the
-scope is left. Callers can keep their natural control flow while the
-architecture state remains balanced on success and failure.
+Zero sizes are valid. BPF probe-read helpers accept them, and KGDB memory
+packets may carry a zero length.
 
-No functional change until a caller uses the guard.
+Return before changing page-fault state when there is nothing to copy.
+For reads, keep architecture-specific address validation before the fast
+path so its behavior is unchanged.
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 ---
- include/linux/uaccess.h | 4 ++++
- 1 file changed, 4 insertions(+)
+ mm/maccess.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-index 7ae1854673471..b25e778ddc38a 100644
---- a/include/linux/uaccess.h
-+++ b/include/linux/uaccess.h
-@@ -653,6 +653,10 @@ do {							\
- #define __end_kernel_nofault_bare()	do {} while (0)
- #endif
+diff --git a/mm/maccess.c b/mm/maccess.c
+index 486559d688583..c59a0e092d24a 100644
+--- a/mm/maccess.c
++++ b/mm/maccess.c
+@@ -35,6 +35,8 @@ long copy_from_kernel_nofault(void *dst, const void *src, size_t size)
  
-+DEFINE_LOCK_GUARD_0(__kernel_nofault_bare,
-+		    __begin_kernel_nofault_bare(),
-+		    __end_kernel_nofault_bare())
+ 	if (!copy_from_kernel_nofault_allowed(src, size))
+ 		return -ERANGE;
++	if (!size)
++		return 0;
+ 
+ 	pagefault_disable();
+ 	if (!(align & 7))
+@@ -65,6 +67,9 @@ long copy_to_kernel_nofault(void *dst, const void *src, size_t size)
+ {
+ 	unsigned long align = 0;
+ 
++	if (!size)
++		return 0;
 +
- /**
-  * get_kernel_nofault(): safely attempt to read from a location
-  * @val: read into this variable
+ 	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS))
+ 		align = (unsigned long)dst | (unsigned long)src;
+ 
 -- 
 2.47.3
 
