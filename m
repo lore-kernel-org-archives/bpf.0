@@ -1,113 +1,93 @@
-Received: from mta0.migadu.com (out-47.mta0.migadu.com [91.218.175.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ABD039280A
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 21:31:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 917A12931F5;
+	Mon, 24 Aug 2026 21:35:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.188.251
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787607070; cv=none; b=cQ3GLa1Hpwo+7cL6N0XnWltuZSVVU1oEtxdP46P80pp++W4FhU6CCyiiBaaV0t6NRTtJUK5PrbrR5nnQIKKhVaB7GOcYYv0sxjxnN5YytrQSMkgOtgCMnG6oaI0Spcv3XX0ieRW8x/B6EZ7GtatEnnTwJU3HOgm6+mQMvaJ/GIQ=
+	t=1787607348; cv=none; b=kbRlr6Mu+A11a+zHsWjiM8NH36DH3Ff3OqDRR38ALb066S6isANxmzMaF1OfcHDq8hYjndQ0KcIsfbYaxkTn8Qjqd2MgO5bLTLEjfBHZhiBJjvgakNAzw4vUk0M+GRL1SjehOCg2I2aBBg7hY9iNfGAZjSGGmvQV5z2PcB01Ky8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787607070; c=relaxed/simple;
-	bh=WZcBcfW1L70I1fxAaNA8stbBZTTedz2WeJJI5m9KWhc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uRDDmF5ojPC47Lk1V5412OspyYNsF/fq1oYIdV6ltVe3S72406GJwleVeC3hbYrgu+Fgh2v3Ze8Qa31Bi9OUbIKiRGNrEWkzXHFjsJE2Z0fuctdSxUrWrBF6IlJtFiDs3BjFXeLyjBxeAy8u1R5ZZLrGC4SyDdL8VHbTnKpxADA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=p9KcRQZr; arc=none smtp.client-ip=91.218.175.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787607348; c=relaxed/simple;
+	bh=or5/Ign9Tx8uUQIxKHT6UljtUhHg5mUD+YdutTct/jU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dIGoLqMSWllbakW5AItEd+D3/LuCRnaB03bgsbGaJ2dIP04l81lblZwCHYEwmUl4xBiiyt80VpO+Ow6DXFFH80Bm8TqhhteYY2sPI9kTzzKzEcuvzA4EfkYspNW2VyrUUbkQWm9uuNq2vY2GU7IGd2z4IDR4W9d5j/mMUB0MX+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr; spf=pass smtp.mailfrom=oss.cyber.gouv.fr; dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b=JSydmGU9; arc=none smtp.client-ip=51.159.188.251
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="p9KcRQZr"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=WZcBcfW1L70I1fxAaNA8stbBZTTedz2WeJJI5m9KWhc=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787607063; v=1; x=1788211863;
- b=p9KcRQZrBucBIS/4YWq2uqyS83qwum6PI/oTK1fR+zxALAOEAMWP6atGaM1vQ0j0RSaIwaLU
- tEq77O0vVu1n9uMB2pwCbLwfHfb8ISPdfJv5mJMtbZj/OPJhjWu1zPLm7rOaMcmcEDmJcZbYW2a
- T87c9VVK/j47Ug0Oi6BqQ108=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [IPV6:2a03:83e0:1251:27:f67e:b349:d735:9d02] (2620:10d:c090:500::4:2c42)
-	by smtp.migadu.com with ESMTPS id b8fd059c6c5c5754;
-	Mon, 24 Aug 2026 21:31:03 +0000
-X-Mizu-Trace-ID: b8fd059c6c5c5754
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <d94a8330-79d4-485d-ae46-cc93c0ceac5e@linux.dev>
-Date: Mon, 24 Aug 2026 14:30:57 -0700
+	dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b="JSydmGU9"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=oss.cyber.gouv.fr; s=default; h=Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=or5/Ign9Tx8uUQIxKHT6UljtUhHg5mUD+YdutTct/jU=; b=JSydmGU9cQwNrA5hEXrc2ZQEqV
+	lUshVT43Z5ZNvereW6ocyIXx1ohlMv2+CAy43EnVenVTMNLdORWP6vYpl1W6asBIyjcSzLaZqoYmu
+	jmurHlHBJ/U0FWHRB5fqpHHwJBHMrRSHAwy4BWqyWwBLD+nNp9xgDgjjPa1JXLKtN0vT1loYAxzWz
+	KNGxiWKriHj5Ny6wczu4kokR1PBYYc7TP07Kr4Z4BQbSaMO2nIwnCc/uHvzcxZoEc7w+SbsEcTeu+
+	e2N1Un5mmG7jk6QtwQfGNyFf4Uru4O9nOccpCwbUdLzaT6dPQQfIE5BhFhPOPMR8ppr558o2PyaDI
+	wpS9OgiA==;
+Received: from [151.115.150.205] (port=54026 helo=gepetto..)
+	by pf-012.whm.fr-par.scw.cloud with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.99.5)
+	(envelope-from <Jeremy.Jean@oss.cyber.gouv.fr>)
+	id 1wycKX-0000000EQJy-0JLt;
+	Mon, 24 Aug 2026 23:35:44 +0200
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	linux-kernel@vger.kernel.org,
+	=?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
+Subject: [BUG] bpf: x86 timed may_goto corrupts private-stack JIT state
+Date: Mon, 24 Aug 2026 21:31:57 +0000
+Message-ID: <20260824213158.3755932-2-Jeremy.Jean@oss.cyber.gouv.fr>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 3/3] selftests/bpf: Enable some of the blocked
- cpuv4 instruction tests for bpf-gcc
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260824210142.3933580-1-vineet.gupta@linux.dev>
- <20260824210142.3933580-4-vineet.gupta@linux.dev>
- <20260824211401.3C3D91F000E9@smtp.kernel.org>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <20260824211401.3C3D91F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
+X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: jeremy.jean@oss.cyber.gouv.fr
+X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: jeremy.jean@oss.cyber.gouv.fr
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 
+Hello,
 
+With the help of AI models, I found a bug in the x86 timed may_goto path that
+leads to a verifier/JIT state mismatch on private-stack programs.
 
-On 8/24/26 2:14 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] The newly added `#ifdef __BPF_FEATURE_ADDR_SPACE_CAST` guard unintentionally drops 5 arena tests from the default test_progs flavour for clang.
-> --
->
-> --- Patch [3]: [PATCH bpf-next v2 3/3] selftests/bpf: Enable some of the blocked cpuv4 instruction tests for bpf-gcc ---
-> commit ad6608dfd47ddd6a7068cdc6e0e6d467ec3558b8
-> Author: Vineet Gupta <vineet.gupta@linux.dev>
->
-> selftests/bpf: Enable some of the blocked cpuv4 instruction tests for bpf-gcc
->
-> This commit relaxes clang-only checks in BPF selftests by adding specific
-> feature checks like __BPF_FEATURE_LDSX to allow building under bpf-gcc.
-> It also wraps arena tests with __BPF_FEATURE_ADDR_SPACE_CAST to skip them
-> on bpf-gcc.
->
->> diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
->> index e58ea69e38549..75762e11b443f 100644
->> --- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
->> +++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-> [ ... ]
->> @@ -263,6 +257,14 @@ __naked void ldsx_ctx_8(void)
->>   	: __clobber_all);
->>   }
->>   
->> +#ifdef __BPF_FEATURE_ADDR_SPACE_CAST
->> +
->> +struct {
->> +	__uint(type, BPF_MAP_TYPE_ARENA);
->> +	__uint(map_flags, BPF_F_MMAPABLE);
->> +	__uint(max_entries, 1);
->> +} arena SEC(".maps");
->> +
-> [Severity: Medium]
-> Does this inner guard unintentionally drop the arena tests for clang under
-> the default test_progs flavour?
->
-> The commit message notes that clang only defines feature macros like this at
-> -mcpu=v4, but successfully assembles the inline asm at -mcpu=v3. Because of
-> this, you kept the clang version checks on the file's main guard to avoid
-> removing tests where they run today.
->
-> However, since this inner guard lacks a || __clang_major__ >= 18 fallback,
-> clang at -mcpu=v3 evaluates this as false,
+The root cause is that timed may_goto fixups pass a stack offset in BPF_REG_AX
+and the x86 trampoline reconstructs the counter pointer from native %rbp. That
+is incorrect once private-stack JIT mode is enabled: ordinary BPF frame pointer
+accesses are remapped from %rbp to %r9, but arch_bpf_timed_may_goto() still
+uses %rbp and ends up reading and writing the native JIT frame instead of the
+private BPF stack.
 
-Is this just by review or was it actually tested - I'm guessing former ...
+The bug was introduced by 2fb761823ead ("bpf, x86: Add x86 JIT support for timed
+may_goto"). I reproduced it on a KASAN-enabled x86_64 kernel based on v7.2,
+however KASAN does not trigger because the bad write stays inside the native
+JIT frame. Yet, the saved-register corruption is observable.
 
-> silently dropping the arena map
-> and the subsequent 5 arena tests from the default test flavour.
+I have not included a patch here because the fix seems subtle to me and would
+likely touch many files for different arch.
 
-... since clang (at least recent ones, I testet recent and a local jan 
-build) defines this for all -mcpus
+I can share the minimal reproducer and other details privately with maintainers
+if useful.
 
-So this is invalid claim.
+Best regards,
+Jérémy
 
-Thx,
--Vineet
+Fixes: 2fb761823ead ("bpf, x86: Add x86 JIT support for timed may_goto")
+Assisted-by: Codex:gpt-5
+Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
