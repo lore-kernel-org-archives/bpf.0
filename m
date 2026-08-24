@@ -1,52 +1,45 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4F9742902E;
-	Mon, 24 Aug 2026 14:22:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35D27415F3B;
+	Mon, 24 Aug 2026 14:22:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787581331; cv=none; b=u4Z5KNbp+Dw2WfutCYDb/fAHp9XszqWBgsn8qKdQIo4KiOPhHOS7KQ3aUvkG6j0O/W9cPiEMcW/FXX9VzTYk9kkbH71km6pS5nVVrx3ip29B8+t8BbOfp3+LcRHYmpsU6A/Dumflq86r5jGyddQkKTij3MVK9+KhjvsXd74LImk=
+	t=1787581352; cv=none; b=BUmmH+zJc+YegdgccwVn9Ub0z9XP+Sx1ZVQqn3rlmUjEJv0YhmJwLDJZ6Ea04jdp1vZ06Aibemmzomne25e/9dQUjBx17ihnxjUq0ib/ZCMMYQRXq+jfirv/SFTnm4+vq6Eqq5NXLKNdLU+jR7HefB7ZUnvJxLOa6gG9fHaUxCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787581331; c=relaxed/simple;
-	bh=KJAluXXdqui4zkMtLXpfXyj5UR3ic0BTN3h4iuzhLM4=;
+	s=arc-20240116; t=1787581352; c=relaxed/simple;
+	bh=D+4tYAyf4DaTItNcUJePJOcDeRyZSmVBFL3oPIVBqDU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BAC099lvohUULlkp7q6BGApztrZko3lbxa2FuFj2+7vDETE6PACsPAc1CyFt2j95ecaOzJGzumYcN9zTLxIw9px9DmYC99xcm4OB/HSidUnkaRMtd7ekXbI6U0tTwapRMW7XmiUXJDbk1SKiyRI5eVwpOecC6wiKpSyU0cX4XXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KaO+iZO2; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=E8YjTAIwRoOwbWH2aY/EgtyG0udrvAVLlyipWD4qQ0bg3kth7agW0Vuy/gHMep5MOQuoWeP6ucH1aZzLJ1O5wQ2nz4hlPNKmjLxtNMGfS6OCnKx0O7LRv0DYbZdeuLLu9fX/etqgGdKjoyhQq4Vc+q5hWhBq84bIeIpTVdDAB9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=U59ZVEET; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KaO+iZO2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 142241F00A3A;
-	Mon, 24 Aug 2026 14:22:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787581330;
-	bh=5j5DWKJN3cdhmHqdN8rCpFWNLqVKoHQJspSwWStoi7I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=KaO+iZO2NSk2Mb6Znp4wkLjU5Psq+sSLTkfTwe0+7WB9WPQgyt6fGHjYZV/zU3Ij4
-	 jlJwIh1FB4tUanbeYBsel3kuT6oDpApt/nGc2A/jpsx8No/76t7v8SkSIGmFPCQZHq
-	 x/stZ2CCZMEYIwBH2TMkf2I6Kb6U4Vb0qQpg+buiH2VOWmHgTwuJ7fLAW4vrSs/qqT
-	 FFfr9sG3A9qW1t2+BBLBIHX/wpRTS0+mcevOWj9fdts3KEZ9zaJXvQwRkTw4iabRz2
-	 MRD5fdodUOKKmoRUSt4jl6yvfX60M8VPs27KzmhOBhTfVgKE8xrxwTcZCVAJ/MhsjO
-	 FxmiBGAPOYNOw==
-Date: Mon, 24 Aug 2026 15:22:02 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Kiryl Shutsemau <kirill@shutemov.name>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>, 
-	akpm@linux-foundation.org, nico.pache@linux.dev, baolin.wang@linux.alibaba.com, 
-	baohua@kernel.org, dev.jain@arm.com, hughd@google.com, lance.yang@linux.dev, 
-	liam@infradead.org, mhocko@suse.com, rppt@kernel.org, ryan.roberts@arm.com, 
-	shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, vbabka@kernel.org, 
-	ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, jannh@google.com, 
-	willy@infradead.org, pfalcato@suse.de, rostedt@goodmis.org, mhiramat@kernel.org, 
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 00/57] mm/collapse: rebuild collapse on migration
- primitives
-Message-ID: <aoxRs0mjyQnpO-IT@gremlin>
-References: <20260816224609.308019-1-kirill@shutemov.name>
- <aoLAly-oL2OAa4n8@lucifer>
- <aoLkMUtmzRVuv2Hx@thinkstation>
- <aoQ77EcD3M2kjeya@lucifer>
- <0153303d-f9d6-45ea-a276-fbf2e5625ef9@kernel.org>
- <aoXn1B7cPnPq7uxd@thinkstation>
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="U59ZVEET"
+Received: by linux.microsoft.com (Postfix, from userid 1216)
+	id B50D320B7166; Mon, 24 Aug 2026 07:21:59 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B50D320B7166
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1787581319;
+	bh=V648zRbvn2IfPRlwQWD8kqCMILZw1a3NsTdczu0orWU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=U59ZVEETLhaL2/NhnxsRUI5q9GxojcZy2GmaAJZSOskG7hLq9kkoMEkivJNnqTFFJ
+	 cKzN9EzDmBgpSZRsO63jLSi+d6s4AGGzect2Wp1ofwDA9tyhN5001F7r/rVWi6dZ0T
+	 cVoSQeN7r5ZgBWgczlKG1LrGEBgGHwAUjF1pyXsI=
+Date: Mon, 24 Aug 2026 10:21:59 -0400
+From: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
+To: Muhammad Falak R Wani <falakreyaz@gmail.com>
+Cc: "K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next] net: mana: remove unreachable dead code in
+ mana_bpf()
+Message-ID: <aoxThygUBWq0WqfS@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <DKWZHHOFA1F3.1EL2DMFNGMP0Y@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -55,105 +48,46 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aoXn1B7cPnPq7uxd@thinkstation>
+In-Reply-To: <DKWZHHOFA1F3.1EL2DMFNGMP0Y@gmail.com>
 
-On Wed, Aug 19, 2026 at 07:08:07PM +0100, Kiryl Shutsemau wrote:
-> On Tue, Aug 18, 2026 at 04:12:17PM +0200, David Hildenbrand (Arm) wrote:
-> > I think we all agree that there is a lot of room for improvement, but the big
-> > question is:
-> >
-> > (a) When does it stop being a cleanup and is a new feature in disguise that
-> >     makes the code more complicated and even harder to maintain.
-> >
-> > (b) Can it just naturally be made looking like a cleanup.
-> >
-> > Ideally, we'd get b), in small, nice-to-review chunks that incrementally improve
-> > the code without inflating it heavily or moving everything around.
->
-> It is not a cleanup and I would rather not sell it as one.  It replaces a
-> mechanism, so judged as (b) it fails by construction.
->
-> I believe the end result is much cleaner. But I might be biased. :)
->
-> > The current locking is nasty, so anything that moves us one step closer into
-> > something that is not only simpler but also more scalable is nice. I am a bit
-> > concerned with the churn in the series as is.
-> >
-> > After this series, mm/collapse.c itself is way larger than just mm/khugepaged.c
-> > originally, which raises some eyebrows.
->
-> Line count is a poor proxy for simplicity or scalability.  What the
-> engine changes is the serialization model, and that is the part collapse
-> needs changed: the PMD granularity and the exclusion both come out of
-> the locking.
->
-> Incremental does not reach it, though.  The old mechanism is correct
-> because it holds mmap_write_lock, the anon_vma write lock and a reference
-> from the LRU; the engine is correct because the sources are frozen behind
-> migration entries.  There is no halfway state that is correct under both,
-> so the switch lands as one patch.
->
-> What can be incremental is everything around it: the engine goes in beside
-> the old mechanism, patch 25 points the anon path at it, and 28 removes what
-> it replaces.  Until 28 both are in the tree with only one of them
-> reachable, so the switch can be reverted on its own.
->
-> > We should also be aware that people are proposing file/shmem mTHP collapse, so
-> > ideally what we refactor would naturally unify some of these code paths.
-> >
-> > I am wondering whether shmem mTHP collapse should come first. (I'm hoping that
-> > shmem mTHP collapse can unify some of the anon+file collapse code in a nice way,
-> > to similarly just look like a cleanup while enabling a new scenario.
->
-> mTHP collapse as it stands has limited usability: PMD-aligned windows only,
-> and one VMA has to own the PMD.  Bolting file collapse onto the same
-> structure adds to the debt instead of paying it down.
->
-> It would fit the new design.  The frame -- scan, candidate selection, the
-> round and its passes -- has nothing anon-specific in it; what is
-> anon-specific sits in the freeze (folio_test_anon(), PageAnonExclusive())
-> and the unshare in the fault-in pass.  A file source would bring its own
-> check, freeze, copy and install.
->
-> I am not sure it should, though.
->
-> Do we want to find file collapse candidates by walking the virtual
-> address space at all?
->
-> collapse_file() already works on the mapping -- it builds the folio in
-> the page cache and then repairs every mapping through
-> retract_page_tables() -- so the VMA walk only picks which inode range to
-> try, and it reaches only what a registered mm maps right now.  Large
-> folios buy more than TLB reach: fewer page cache entries, cheaper
-> writeback, natural locking batch, etc.  Those apply whether the file is
-> mapped or not, and going at the inode directly would reach them.
->
-> > Agreed, I think we really should unify+cleanup the existing code first before
-> > doing more drastic changes.
-> >
-> > Having a series that throws all of khugepaged.c into a mixer and pours something
-> > new into collapse.c is ... concerning :)
->
-> The moving around is patches 29-35 and the tracing after them.  None of it
-> is needed for the engine: 1-28 add it, switch the anon path over and delete
-> the old mechanism, without moving anything else out of khugepaged.c.  If
-> the churn is the problem, v2 can stop there and the moves can come later as
-> their own series.
+On Mon, Aug 24, 2026 at 12:39:06PM +0530, Muhammad Falak R Wani wrote:
+> mana_bpf() declares an uninitialized 'ret' and falls through to a
+> trailing 'return ret;' after a switch statement whose every case
+> (XDP_SETUP_PROG and default) already returns unconditionally. This
+> statement is therefore unreachable dead code left over from an
+> earlier refactor, and it would return an uninitialized value if it
+> were ever reached.
+> 
+> Drop the unused variable and the unreachable return.
+> 
+> Signed-off-by: Muhammad Falak R Wani <falakreyaz@gmail.com>
 
-This whole reply seems AI-generated...
+Fixes: ed5356b53f07 ("net: mana: Add XDP support")
+Reviewed-by: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
 
-You replying only to David twice in this sub-thread which isn't exactly giving
-me warm fuzzy feelings about the working-around-me concerns I raised here.
-
-So simple feedback - send a relatively small, no-functional-change series that
-improves THP code and lays foundations for future changes. After the merge
-window.
-
-Can you explicitly ack this please?
-
->
-> --
->   Kiryl Shutsemau / Kirill A. Shutemov
-
---
-Cheers, Lorenzo
+> ---
+>  drivers/net/ethernet/microsoft/mana/mana_bpf.c | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_bpf.c b/drivers/net/ethernet/microsoft/mana/mana_bpf.c
+> index 53308e139cbe9..70bb8c9dc3413 100644
+> --- a/drivers/net/ethernet/microsoft/mana/mana_bpf.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_bpf.c
+> @@ -253,7 +253,6 @@ static int mana_xdp_set(struct net_device *ndev, struct bpf_prog *prog,
+>  int mana_bpf(struct net_device *ndev, struct netdev_bpf *bpf)
+>  {
+>  	struct netlink_ext_ack *extack = bpf->extack;
+> -	int ret;
+>  
+>  	switch (bpf->command) {
+>  	case XDP_SETUP_PROG:
+> @@ -262,6 +261,4 @@ int mana_bpf(struct net_device *ndev, struct netdev_bpf *bpf)
+>  	default:
+>  		return -EOPNOTSUPP;
+>  	}
+> -
+> -	return ret;
+>  }
+> -- 
+> 2.55.0
+> 
