@@ -1,132 +1,103 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78FD63FB07B
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 10:02:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF7F403AF0;
+	Mon, 24 Aug 2026 10:03:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787565779; cv=none; b=LKDHUXvFf2QbQxsM33gLvtsBPJW0fnbCMwDVNqATO92skqotSQAPxhFuPf08agBje+PjgUWUs9tIHtgapKBnNYPuVt4NdHOErh9LSoPPM14tUbNiQh+/ZStJ9B/gmMEXgb6wT4QBhTBH7P3aaDB2+8+MlaVZZgJyKcgsWmyuNUg=
+	t=1787565806; cv=none; b=oJRRlUFEunM5kwxUMay4rjls+V5K1aSI8PorUkQtRxaLuKF9B5UrDdMBAxmdzME9qrGONo7xJ0/iKcBMRB9rL79GlzrJ4Ty6KLv2PYHb1JU0kqZYfeOUOQL+DxTMqM1l3wMOGyQywLNscMiyk1+IpB7tyI9aY4GetfZ/w+Qf15k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787565779; c=relaxed/simple;
-	bh=CyXh99nJVh4YHtjtd5KjlCiBiMwLbXppdMbZN9c4Eu4=;
+	s=arc-20240116; t=1787565806; c=relaxed/simple;
+	bh=bl2/JDyUIY2cKbFiZIUMIP2PnlIXZxF++39iwVc5ROo=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=pJdhX7PWlBYeVnnZZdvURRnrcO4Cr3s3/eck2/bn1XaMQHNTJRXB7+H3PdYdH7YXPbY2Ht0G/f7ltSVxoqXOfiNbVSoJqyyCNGv1mfMYML5QYkH49rOhzmXhhZGeJV4n3P5+upmTShn3OKA60dcR+puYN8aQUgv/zfZTV8WGxZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c7A8KBXU; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=PmtTSXY0Y8v9Cr4XY87IacWGidnAT4xmb8Ut9w0Z94h916o54m66ZKhJWAzoVshA3iVJzLNFLuzGRhOZUAENkbgVzM13WewXRx9n5Kw1Z/VlDTeVGPB0kL/GNYe11oOED9AS9cQ7sEKkF4CBMq8Tbi8ULuY30gLNgiLuFwvWMGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yi15t1mn; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c7A8KBXU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C91971F000E9;
-	Mon, 24 Aug 2026 10:02:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yi15t1mn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E787C1F000E9;
+	Mon, 24 Aug 2026 10:03:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787565778;
-	bh=f8Q0tMJvFokQucJtUUDl41nPcq0e/gR1KmgyPyO5vSY=;
+	s=k20260515; t=1787565805;
+	bh=xKn8qTxqzS158Z3ICLOg/hDCwSDwh4Gg+J8H5lfa/2U=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=c7A8KBXUDYrpyLPlSg1Bqg5zBhiDyJH/ojKLaz+QZ9QPZruR2bqL14vO0fBpiiCC+
-	 owzopFL9uU2nm84PeRZ01Egpw44/uSJm5eOuNLC9bdjBh34OYZ37yikkaSLHay5ZAQ
-	 uqOiG11FwPDpWwBoCbMaf2Jx6fZDKbMf+41jQiUBihk+P/kUC8T30fPE6nsNIhVXWz
-	 zRFT19Z3TYp7N38rUhGkbEp+jlW2+zcTtCe0ipbX3diW8IUWbc7Hu72BD7b3q3NF7Z
-	 ldIHWzoT3v5ZHIMUq/2Cj34YYl3f/gAJFvr/V4oUmQZyuz/NFMrZVGz2Iv7epQGaqu
-	 6zzD69wxlVZ9Q==
-Content-Type: multipart/mixed; boundary="===============8895680357147544790=="
+	b=Yi15t1mn+QZPbqHGqwEVHzXoi+lJ3uj7thbJ+k3XI7+FPwFR0B1PXsag03yBuAOl0
+	 FS8KXLq+xwGP1yvlrZ8mS/LbhPPVzD1L6xfymzOUMb8AzCZLgsEj0i/U7gaxCLnU+l
+	 y8spFYPvF9kmBl06ZClkFla1KXrtYSmCcYP4J2E0zkUSYhpsEne4IW0TFkcNahf9ya
+	 NAwpcxCtiv3rKjOMxxjO31ThKeN/LUu0CPYv1uuB1HSG/tgKsRUF4mWyNH1INGp/7K
+	 1pj/98AqEDydhTj4YPKiEMA6zsJsklSRYQC8o4kQ4oFw3zTF7ESO97pa9Ih5DJMntS
+	 enNXoyYhM0YxA==
+Content-Type: multipart/mixed; boundary="===============0730891725083695924=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <cd8d37561a1cc725fb9c430ea234be45176942964d246b435c441d640ad8d824@mail.kernel.org>
-In-Reply-To: <20260824092657.1789956-2-chenyuan_fl@163.com>
-References: <20260824092657.1789956-2-chenyuan_fl@163.com>
-Subject: Re: [PATCH bpf-next v6 1/2] bpftool: fix spurious batch file read error
+Message-Id: <3cbe827e0809b8f8e521cac3f904986e6d885780838a4118da311f40e70b1c2b@mail.kernel.org>
+In-Reply-To: <20260824092847.361683-1-jiayuan.chen@linux.dev>
+References: <20260824092847.361683-1-jiayuan.chen@linux.dev>
+Subject: Re: [PATCH bpf 1/2] libbpf: Fix usdt attach failure when nop10 crosses page boundary
 From: bot+bpf-ci@kernel.org
-To: chenyuan_fl@163.com,bpf@vger.kernel.org
-Cc: qmo@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,andrii.nakryiko@gmail.com,chenyuan_fl@163.com,chenyuan@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 24 Aug 2026 10:02:57 +0000 (UTC)
+To: jiayuan.chen@linux.dev,bpf@vger.kernel.org
+Cc: jiayuan.chen@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,jakub@cloudflare.com,peterz@infradead.org,phoenix500526@163.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 24 Aug 2026 10:03:24 +0000 (UTC)
 
---===============8895680357147544790==
+--===============0730891725083695924==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-> index c91e1a6e1a1e..7a0c214f08a0 100644
-> --- a/tools/bpf/bpftool/main.c
-> +++ b/tools/bpf/bpftool/main.c
-> @@ -365,7 +365,11 @@ static int do_batch(int argc, char **argv)
->
->  	if (json_output)
->  		jsonw_start_array(json_wtr);
-> -	while (fgets(buf, sizeof(buf), fp)) {
-> +	for (;;) {
-> +		errno = 0;
-> +		if (!fgets(buf, sizeof(buf), fp))
-> +			break;
-> +
+> Fixes: 41a5c7df4466 ("libbpf: Add support to detect nop,nop5 instructions combo for usdt probe")
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-[ ... ]
+Does the Fixes tag point at the right commit? The -ENOTSUPP attach
+failure could not happen at 41a5c7df4466.
 
->  		if (errno && errno != ENOENT) {
->  			p_err("reading batch file failed: %s", strerror(errno));
->  			err = -1;
+At 41a5c7df4466 the uprobe was shifted onto a nop5 (0f 1f 44 00 00), and
+arch_uprobe_analyze_insn() ran uprobe_init_insn() unconditionally:
 
-This isn't a bug, but now that errno is cleared before each fgets() and the
-post-loop check only sees the last fgets() outcome, is the errno != ENOENT
-exemption still needed?
+    ret = uprobe_init_insn(auprobe, &insn, is_64bit_mm(mm));
+    if (ret)
+        return ret;
+    if (can_optimize(&insn, addr))
+        set_bit(ARCH_UPROBE_FLAG_CAN_OPTIMIZE, &auprobe->flags);
 
-Looking at the code, fgets() and read() cannot fail with ENOENT. The
-exemption was load-bearing before this change: commands like map show
-(map.c:740), link show (link.c:1356), and map dump (map.c:875) all return
-with errno == ENOENT, and the exemption prevented those stale values from
-triggering false failures. This patch fixes that at the source by clearing
-errno before each read.
+uprobe_init_insn() accepts nop5: is_prefix_bad() finds no prefix, and
+test_bit(OPCODE1 == 0x0f, good_insns_64) is set. So a nop5 that crossed
+a page boundary simply produced a normal, working int3 uprobe. The attach
+succeeded.
 
-Would dropping the errno != ENOENT check here (similar to how the
-USE_LIBCAP reset is removed) make the intent clearer?
+The failure was introduced by the nop10 switch:
 
->
-> @@ -467,16 +471,6 @@ int main(int argc, char **argv)
->
->  	setlinebuf(stdout);
->
-> -#ifdef USE_LIBCAP
-> -	/* Libcap < 2.63 hooks before main() to compute the number of
-> -	 * capabilities of the running kernel, and doing so it calls prctl()
-> -	 * which may fail and set errno to non-zero.
-> -	 * Let's reset errno to make sure this does not interfere with the
-> -	 * batch mode.
-> -	 */
-> -	errno = 0;
-> -#endif
-> -
->  	last_do_help = do_help;
->  	pretty_output = false;
->  	json_output = false;
+554ba38456da ("uprobes/x86: Move optimized uprobe from nop5 to nop10")
+made can_optimize() failure fall through to uprobe_init_insn(), and the
+nop10's 0x2e byte is a CS prefix that is_prefix_bad() rejects:
 
-This isn't a bug, but could the changelog use an example that still
-reproduces on current bpf-next?
+    if (can_optimize(&insn, addr)) {
+        set_bit(ARCH_UPROBE_FLAG_CAN_OPTIMIZE, &auprobe->flags);
+    } else {
+        ret = uprobe_init_insn(auprobe, &insn);
+        if (ret)
+            return ret;
+    }
 
-The commit message cites "map dump's EBADF from a double close" as the
-example of a stale errno:
+ee2862439e5c ("libbpf: Change has_nop_combo to work on top of nop10")
+made libbpf shift the uprobe onto that nop10.
 
->     do_batch() checks errno after the read loop to detect read failures,
->     but fgets() does not clear errno on success, so a stale errno left by
->     a previously executed command (e.g. map dump's EBADF from a double
->     close) makes bpftool report a batch file read failure and exit with an
->     error even though every command succeeded.
+Should the tag be:
 
-Looking at the current code, map_dump() no longer closes the fd
-(tools/bpf/bpftool/map.c:893-898 just has exit_free: free(key);
-free(value); free_map_kv_btf(btf);), and do_dump() is the sole owner
-(map.c:941-962). So there's no double close and no EBADF left behind.
+    Fixes: ee2862439e5c ("libbpf: Change has_nop_combo to work on top of nop10")
 
-A successful map dump actually leaves errno == ENOENT from
-bpf_map_get_next_key() exhaustion (map.c:874-877), which the existing
-errno != ENOENT exemption already suppressed. This means map dump isn't
-actually a command that could have triggered the symptom described.
+This also matters for backport scope: a tree that has 41a5c7df4466 but
+not ee2862439e5c still matches the 6-byte nop,nop5 pattern, where the
+new hardcoded +10 in nop10_within_page() would be over-strict by 5 bytes
+while the bug being fixed does not exist there.
+
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32712601990
---===============8895680357147544790==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32712703327
+--===============0730891725083695924==--
