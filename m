@@ -1,80 +1,228 @@
-Received: from mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A57FF3F12E2
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 12:44:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4759541D13D
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 12:46:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787575469; cv=none; b=rkpi+vvIV/r0VuNhuvswkQOkA5nzFKFhEMRepJhxPXRs7Kk7EjyWMKtCIjZJi79KIPLTr0NJ1Dtbnh+cqWkG7qMFTWcfwbq4q9KYlzq5diLWFMBYWmpXPYI4ClEXPvglCcyZESZhvPkGCzE0DFDV/c2xL3Te48PUrEAk7++tGg0=
+	t=1787575619; cv=none; b=dKZwJuEmq7sj/IXtKwPiX9d1BpBDJiX4ifK80E5A9dpo22z3y09sDyvB/jT1DWXjZmDqOZtI6vQW4fqxiv7LyM3rejNxxbOtC6slrNrbDFPfi/yX3IsPB4PkFTL9v7YGI0KPxs3SjuC7tgTxbMB21lIG8I78f4iJyyNQ7POZqdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787575469; c=relaxed/simple;
-	bh=vT3O2EFG7/yjVwFg0uSlFnkUl6zDMUcxN7qLIgRmen4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u9Mzx5ZgHyf2/+uM2TxbsqmdbvrmU9S1mfPH4CMGkePUX1yWqQdegUW5tYEVS7HKa9yBp3M6eNwb2lrWEyNaKKiATHEBtgrZC7eO71EiYHnEXzmCmgJGObX8+s4nCNgvmCtKHmIeihU67T1u+E/qdBosl+2anIFOjNBOhvJrgRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=O+tkFzfn; arc=none smtp.client-ip=95.215.58.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787575619; c=relaxed/simple;
+	bh=oiPqNJmLv2fIaGOuPfxjDG2ky9SG1c6WHibfcGvB3S4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=BGbmzmNfJMgqcrD9MpQQblKfDbltf319ThNG60OZPsJy6aehf9rI+97/2NDi3mocq8bIz88FwVlPMTe5GwGGcVzc+f12tqgxRZeNg1ipd32p0vlo7U0h7Z8a8oXqGT9w0FwFxUPbOQkNbbPuYf96lwasYIPpu6Y0snBl/jF4R58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kIOfQQL7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="O+tkFzfn"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=vT3O2EFG7/yjVwFg0uSlFnkUl6zDMUcxN7qLIgRmen4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787575465; v=1; x=1788180265;
- b=O+tkFzfny4HA/lFv8f/P24sIDt3lMhVGFYRdiF20ls1wpgrPzAfrd8gPa7sPcCMUBUpYuDuF
- 4LVgAp0vxLbHwFVN2z1XCGTbc6QlvOvb7/ELyUm9OHxHcTGlATzTW0D5M+8FFQjLtQYGpciY4Hm
- rEaFnCVE9AzZps8ghRgaiAkw=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [10.54.25.56] (222.72.143.228)
-	by smtp.migadu.com with ESMTPS id 773f15d935439da7;
-	Mon, 24 Aug 2026 12:44:25 +0000
-X-Mizu-Trace-ID: 773f15d935439da7
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <de12ff1b-2f7c-4efe-ba1f-95e0b8d259f2@linux.dev>
-Date: Mon, 24 Aug 2026 20:44:18 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kIOfQQL7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 030551F000E9;
+	Mon, 24 Aug 2026 12:46:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787575618;
+	bh=dTDl+P1PqqCi8yjFiUMrE4V7lA2ljvNXqYtZsFNVUb8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=kIOfQQL7XIrK0dWeTCvNVDjtNwvY8z50O53IGntwWk+92BoHBgERfj60yv+ZHgO+5
+	 WXBf1PEBuGcDmw6vyBxt+UdBv+dZJ0w9iD51bwa0AWTtzJuxF2skgXlAsLbqABHBFs
+	 AtqO0KTvqy2Pj9TgZwit6uZZHBpmfdnExV4GeUDFnt96C7UO09QC9ukIeEUlvEF3RD
+	 hKUW9GJLJ80u5my6Rn/d/3Jwmx24z0bTGm6puAWCdsWM80jmy0nvaNCYF2h9Pb0NFD
+	 0TmZ98dK0EsqPZj0cKwc+GzXOng1WLAHi0yb7hRX78jwDe03FFZwFGC+cfW9/wp98v
+	 dSs/JQrGNqqoA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 3/5] selftests/coredump: test that TIF_NOTIFY_SIGNAL
+ doesn't truncate a coredump
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Christian Brauner" <brauner@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260824-work-tif_notify_signal-v2-3-6609e42b3157@kernel.org>
+References: <20260824-work-tif_notify_signal-v2-0-6609e42b3157@kernel.org>
+ <20260824-work-tif_notify_signal-v2-3-6609e42b3157@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 24 Aug 2026 12:46:57 +0000
+Message-Id: <20260824124658.030551F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v4 1/4] bpf: Add a sleepable page allocator for
- map memory
-To: Michal Hocko <mhocko@suse.com>
-Cc: bpf@vger.kernel.org, Emil Tsalapatis <emil@etsalapatis.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev
-References: <20260821050250.35112-1-jiayuan.chen@linux.dev>
- <20260821050631.39784-1-jiayuan.chen@linux.dev> <aow4YNCDa0gDwbfj@tiehlicka>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <aow4YNCDa0gDwbfj@tiehlicka>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] Insecure use of hardcoded `/tmp` paths allows arbitrary file overw=
+rites via symlink attacks, leading to Local Privilege Escalation.
+- [Low] Incorrect substring replacement using `strstr()` leads to path corr=
+uption and erroneous test skipping.
+--
 
-On 8/24/26 8:26 PM, Michal Hocko wrote:
-> On Fri 21-08-26 13:06:12, Jiayuan Chen wrote:
->> bpf_map_alloc_pages() picks the allocator via can_alloc_pages(), a
->> conservative guess for BPF program context that is always false under
->> PREEMPT_RT. So even a caller that really is sleepable gets the
->> non-blocking allocator, which never reclaims and never engages the OOM
->> machinery.
-> I thought one of the main motivations was reentrancy. As you cannot
-> really assume the context bpf_map_alloc_pages is called from there is an
-> extra care needed so that this doesn't re-enter the allocator from bpf
-> program called from allocator path and deadlock.
+--- Patch [3]: [PATCH v2 3/5] selftests/coredump: test that TIF_NOTIFY_SIGN=
+AL doesn't truncate a coredump ---
+commit a5948cd46d81fc56087575c59d9596b04cf72843
+Author: Christian Brauner <brauner@kernel.org>
 
+selftests/coredump: test that TIF_NOTIFY_SIGNAL doesn't truncate a coredump
 
-Agreed, bpf_map_alloc_pages() is designed to be safe to run in any context.
+Add a test that verifies that a coredump cannot be cut short by
+TIF_NOTIFY_SIGNAL through io_uring running task work for uninterruptible
+tasks.
 
-The commit message should be precise.
+> diff --git a/tools/testing/selftests/coredump/coredump_notify_signal_help=
+er.c b/tools/testing/selftests/coredump/coredump_notify_signal_helper.c
+> new file mode 100644
+> index 0000000000000..849f5c1ea7365
+> --- /dev/null
+> +++ b/tools/testing/selftests/coredump/coredump_notify_signal_helper.c
+> @@ -0,0 +1,46 @@
 
+[ ... ]
+
+> +int main(int argc, char *argv[])
+> +{
+> +	int fd_core_file;
+> +	ssize_t ret;
+> +
+> +	fd_core_file =3D open(NOTIFY_SIGNAL_CORE_TMPFILE,
+> +			    O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 0600);
+
+[Severity: High]
+Could this hardcoded path be exploited via a symlink attack?
+
+Since this helper is spawned as root by the kernel via core_pattern, an
+unprivileged local attacker could pre-create a symlink at
+/tmp/coredump.notify_signal.core.tmp pointing to a sensitive file like
+/etc/shadow.
+
+Because open() is called with O_TRUNC but without O_EXCL or O_NOFOLLOW,
+would this blindly follow the symlink and truncate the target file?
+
+> +	if (fd_core_file < 0) {
+> +		fprintf(stderr, "%s: open failed: %m\n", argv[0]);
+> +		return EXIT_FAILURE;
+> +	}
+> +
+> +	ret =3D recv_coredump_notify_signal(STDIN_FILENO, fd_core_file, true);
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/coredump/coredump_notify_signal_test=
+.c b/tools/testing/selftests/coredump/coredump_notify_signal_test.c
+> new file mode 100644
+> index 0000000000000..4a98ab141c419
+> --- /dev/null
+> +++ b/tools/testing/selftests/coredump/coredump_notify_signal_test.c
+> @@ -0,0 +1,245 @@
+
+[ ... ]
+
+> +TEST_F(coredump, notify_signal_pipe)
+> +{
+> +	char pattern[PATH_MAX], helper[PATH_MAX], *p;
+> +	struct stat st;
+> +	int status, i;
+> +	pid_t pid;
+> +	ssize_t n;
+> +
+> +	if (!coredump_io_uring_available())
+> +		SKIP(return, "io_uring not available");
+> +
+> +	n =3D readlink("/proc/self/exe", helper, sizeof(helper) - 1);
+> +	ASSERT_GT(n, 0);
+> +	helper[n] =3D '\0';
+> +	p =3D strstr(helper, "coredump_notify_signal_test");
+> +	ASSERT_NE(p, NULL);
+> +	ASSERT_LE((size_t)(p - helper) + sizeof("coredump_notify_signal_helper"=
+),
+> +		  sizeof(helper));
+> +	strcpy(p, "coredump_notify_signal_helper");
+
+[Severity: Low]
+Can this strstr() matching lead to path corruption if the kernel source
+tree is placed in a directory named coredump_notify_signal_test?
+
+By matching the first occurrence of the string rather than the basename,
+the directory component would be replaced instead, leading to a failed
+access() check and the test being silently skipped.
+
+> +	if (access(helper, X_OK))
+> +		SKIP(return, "coredump_notify_signal_helper not built");
+
+[ ... ]
+
+> +TEST_F(coredump, notify_signal_socket)
+> +{
+> +	pid_t pid, pid_coredump_server;
+> +	int ipc_sockets[2], status;
+> +	char pattern[PATH_MAX];
+> +	char c;
+
+[ ... ]
+
+> +	pid_coredump_server =3D fork();
+> +	ASSERT_GE(pid_coredump_server, 0);
+> +	if (pid_coredump_server =3D=3D 0) {
+> +		int fd_server =3D -1, fd_coredump =3D -1, fd_core_file =3D -1;
+> +		int exit_code =3D EXIT_FAILURE;
+> +
+> +		close(ipc_sockets[0]);
+> +
+> +		fd_server =3D create_and_listen_unix_socket(NOTIFY_SIGNAL_SOCKET);
+> +		if (fd_server < 0)
+> +			goto out;
+> +		if (write_nointr(ipc_sockets[1], "1", 1) < 0)
+> +			goto out;
+> +		close(ipc_sockets[1]);
+> +
+> +		fd_coredump =3D accept4(fd_server, NULL, NULL, SOCK_CLOEXEC);
+> +		if (fd_coredump < 0)
+> +			goto out;
+> +
+> +		fd_core_file =3D open(NOTIFY_SIGNAL_CORE_FILE,
+> +				    O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC,
+> +				    0600);
+
+[Severity: High]
+Is this open() vulnerable to the same /tmp symlink attack as the helper
+above?
+
+Adding O_NOFOLLOW | O_EXCL might be necessary to ensure we aren't
+overwriting arbitrary files if the test runner operates with elevated
+privileges.
+
+> +		if (fd_core_file < 0)
+> +			goto out;
+> +
+> +		if (recv_coredump_notify_signal(fd_coredump, fd_core_file,
+> +						true) < 0)
+> +			goto out;
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/coredump/coredump_test_helpers.c b/t=
+ools/testing/selftests/coredump/coredump_test_helpers.c
+> index 2a20faf9cb0ad..f8d416180d5b3 100644
+> --- a/tools/testing/selftests/coredump/coredump_test_helpers.c
+> +++ b/tools/testing/selftests/coredump/coredump_test_helpers.c
+> @@ -381,3 +391,304 @@
+
+[ ... ]
+
+> +static int make_file_mappings(void)
+> +{
+> +	long pgsz =3D sysconf(_SC_PAGESIZE);
+> +	int fd, i;
+> +
+> +	fd =3D open(NOTIFY_SIGNAL_MAPFILE,
+> +		  O_RDWR | O_CREAT | O_TRUNC | O_CLOEXEC, 0600);
+
+[Severity: High]
+Does this file creation face the same symlink overwrite vulnerability as
+the other hardcoded /tmp paths?
+
+> +	if (fd < 0)
+> +		return 0;
+> +	if (ftruncate(fd, (off_t)NOTIFY_SIGNAL_MAP_COUNT * pgsz)) {
+> +		close(fd);
+> +		return 0;
+> +	}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260824-work-tif_n=
+otify_signal-v2-0-6609e42b3157@kernel.org?part=3D3
