@@ -1,122 +1,117 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9DCE15A85A
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 13:01:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A37EF3E4C72
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 13:02:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787576489; cv=none; b=fJwkoIvo4r0v/idyl8CvEPfPlK9/2TxayvpHp0RgE156+vdIOFpL76yRBvT4/3LpoDo547VXehv925e89blMDsTuWYcxNTb/Ufierpo+Lqud6SdwK5EMCK1rWPyKalLsO944w/zdkfxbfejVKBunxdIy3BXcvrJN/NCI7GlUeuQ=
+	t=1787576574; cv=none; b=i+O2LlMjn3Ab6M7V17qhUeZUWPVOCO767u6WkbXSCTG6s+Vvst29v18nt6u3LrNvOJTHGzr1zrrdXCTtHlxJwvGu+p2pzVzQGQFkxx2kc8NvCIvWNZ0PNq4P3HFgJnHh8ZvNRdSi/GSbd0YDdsSoyxXlDeWU1Sfvga/sD236WOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787576489; c=relaxed/simple;
-	bh=ehxKGCl2X5B/1IOEDTS8ANSWyiXGlGGYkVM+GEl+HLo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Axwd3bmhxTh6y4G47itTmQlZ3KvrnNlLN44pAM5wD0gx/AxtdB4iawwi37deTS98txdv6+YPVhHI1Wpfb2IE5INV1h6K0byIOAOUlfdUTXaoaWwoe9yc6HcOszUvNYy6y+lGAKkg7a2/pGOaKM81LGibnJJZw/943+XQV+F4024=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PPdsAzEP; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1787576574; c=relaxed/simple;
+	bh=Yf3CocZxlfDiGRJYeS7Ln0JnuXxH4X/3PH3KUml+5EA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E3OSgnyZlQiA+72GGAk4SzNTwH5LnV3aneurr8iXp56S3+a5bKpO4/eQFtOg8XMocT1K+RGVzBMwm4DkTV5bjAKArIfQdHv85CgjvpzxgjIb3IqWkt6geOfEuCbOOo/9fKyL+HYNfhzG6dJfxt91K3Gm6HNhA/ZzlSAwJ6NeGtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TFj+31bi; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PPdsAzEP"
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c15ba3a2b4bso484422566b.1
-        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 06:01:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TFj+31bi"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cc147d86bebso2907780a12.0
+        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 06:02:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1787576486; x=1788181286; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Pt4qchYiVKMNGY6XXirkSLkRJOx81JgmCbFLO8XAS28=;
-        b=PPdsAzEP3WR9fvnlFoRlYtxYSiDozQMMHC4ZXgewlGOcwDFeQ645JfMX7C42tRY/49
-         6gIN4/uDQmWmZIbslqJEpVZarkog0pIMOSSPoXTaJuSSIAk4AWikZFmrYQ++1xoptHy3
-         sZN55sbNhSpwRjTWxv6oFT9KRHNX8xE1SON7ZHr4rxpG9cJNMY/z65a20aLOgd6vWJIk
-         rloEXodPJDiav2FDGESPTM7wsewJ02nqq8PnbqhyRjv2gg6ylI1hiOGie3a1siFsCIDk
-         cGtfDbUX/v2rjd/DmXcIcYy7/9vfbOqsu7Yvb35OD0bCR5HK7YgdvnpYJS4Yq+NSgiwa
-         sGvg==
+        d=gmail.com; s=20251104; t=1787576572; x=1788181372; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=TJ7oBady2LpWxPMZn0imQAKTUkwJ/XDLCM06C9AlGKQ=;
+        b=TFj+31biEZ3wP93wrxmQbsFXjQyX31qwyT7dvrFHAreqcVb0ke1cgDlp1dYkt1YaBu
+         Y9/fsHdUoRhwGMDjVKtIk+R92AvzasvKl39v2Zk3dYFlIVXxdIKtr9pnjGqSllYh0LdK
+         gEzPJ79EmSaJ0NRCOf8M3eOVr8IZVpRK/Fyu7Zyo13jTQUo3QkTs68J4kYUlCwvBhsuI
+         cmKysfyMSjfbkcf1yn6v7sqgmtmA+DZHoxi/rHG0JUYeara+VG3WfhF5W4DNQBVtRJh/
+         0tqG259LM4lW45C7OC5g4FHylN/PNKbl2u9cNGKa5HHFerpX1PzuIvUXnDO/5RiEwzaW
+         XeSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787576486; x=1788181286;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Pt4qchYiVKMNGY6XXirkSLkRJOx81JgmCbFLO8XAS28=;
-        b=Kyh3hWI7F0aaZ/spCDCM++YE9S9TalOW88L5fojFAlpwtBwPw4RQBnLhDcNIne4iPp
-         Ydz5jRwV42Zfq8JC2XojG9pRThwf8b5uyJtkGsQ+nkg2Im1uMVbqjHDmpsrGgVEe1WC/
-         3n5VedCAcFRBFs/RgDsbNy0wm+4mDU3EL42DdnbcaNXzPSvA3ellZ/xzgVJ7fmdat60x
-         DUqY2dV4oA1VYnfVdNFRZ3rdIuPqVXcJD2iVWf2IEtbEjXtfN6G9qM76gTbFhRx2vWLE
-         qi6bggzdiMix0ZC5KRREDHh3XHYxbNp9y1niNIC7El0mRdDwXr7q9lZF2TLe6l5rZEa7
-         uu6Q==
-X-Gm-Message-State: AFuF++nWfS4gyvWSCeIFV8hoplxReOMsbaFY3z0SilQ6zh4kFkvj1kUa
-	lh0SwSawyk+yDAcxFTvsvi9F+JRzy3Wnp9fSHsqWzx7h7TZoObgHol+e+jlZpYoLpm8=
-X-Gm-Gg: AR+sD12bo4KlWxxfD1MHy/GtgBx6pw5JCpMFGHIvyHWIYDGtTrX1UUrFHhbm06NWSht
-	hxi+Scj+1WNTl21n+bdRzjb4LL1AidDO2JSI1sxTvwHBZe9t17bFRxyxpMsoJ8/0IJ2CFczz1st
-	x6iuhX9BXzXWr+Ny3qHYIFQVT+ZKW4Nw4Or2q8v+KbWab/NHLObDXX8jCpib4Nb3/6EDl5d8rP/
-	NOeM4+o8gG3PF+pvfv2FwtiHwBnv0oYX/Te69UHUwcFHRzD+Lp7pIswLf7tBFUEpLhoYunQgyaz
-	VuMrjw2I7sv3IDVzaxRm6oICofAO9IZCQwNYqP0/VIQLxxb2ePR7GyIq7Q8IBj/7TeD5PaBxUlU
-	F4yyvwrn2ZzhsEEJvHeDG01ySuUTqF8XQwDS8Uekx7QaBlGLG0bHhWNzbIIbJIl8hxYyRNwEm4k
-	sDpS54v8wI3Ht5MsKdS1pbFqF83k7cWDcrURFvnlYk7UmWrr6/pjno+qV5d0qWyChDB0eWg8j2+
-	g==
-X-Received: by 2002:a17:907:930a:b0:c1c:6f0d:5b22 with SMTP id a640c23a62f3a-c246a654342mr3127903466b.11.1787576485993;
-        Mon, 24 Aug 2026 06:01:25 -0700 (PDT)
-Received: from localhost (109-81-81-112.rct.o2.cz. [109.81.81.112])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c249672becesm1294715466b.42.2026.08.24.06.01.24
+        d=1e100.net; s=20251104; t=1787576572; x=1788181372;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=TJ7oBady2LpWxPMZn0imQAKTUkwJ/XDLCM06C9AlGKQ=;
+        b=JptHBdq9fmRWB3uCa99ppKNwO7xBFOCLmnv0Aia3KUCnYIx1SwPMrSJR84t07fum7z
+         GM4Uyvv1V0+xclJTxWJ5nvhPFONzajr6vXiPKYugHysbhPwJPC8HHLsq7DyfgAzx6lzc
+         UjXyF+fBHqIUjGgWQ95enE56u/Xn9owGjUt5sPgRQx3cLGyYok+xoAApG1wPEENY2DEw
+         2ocklt5oOJ4zjaeROxa40OSQwNbKlytbUR/Pkw0GYlx6FwIzrPnL4kuPlGssBM3Xgr74
+         mImx9WqD/3+kRYbGSYTj9pHSUZqE90rW0FyDI/rEg9jON8j2q4s3S6IQhgNbX36K3TbK
+         1rxg==
+X-Gm-Message-State: AFuF++nCBreqj+oKmXeCfxqwW+AwG3gewfMrqpiLcc+qYeQKY6FmN1z4
+	rux+quzXQw2FWjZDCdAbaQltruz8wy6+a5voS3wjmQe9SqrAGWXETVF3UfJjeXNT
+X-Gm-Gg: AR+sD10vZqQ7Pmh6mAAUpoimVsnPdTaW3zpIFCPgEJ5m5WnT5mL0AlXDT4G1ktrR3Fi
+	K9drnddFmSusFWVkqC/ypsun3PsoP+7wrFhN0EYAdXzdrdIRr3bOJ10DRcvOoGzAqYzaNHwC6bo
+	bnLSJCGJ0Mwks+qmwP9JnwnQKOxEvs9Pnzpqtt9Nkg/k1FtyH35P7jy5PV/LDpbQkY4Pq2YXBi6
+	xLq5MsENpxXx+WrjC1ecQv0C5AK43l/9Xv/1yWMnBgK4Kh7zvzXi2sUHxBBiLSbPuQCuPBhKMm3
+	T51jEeWMennLOxRWZfIaKBdFwb3FMWzw2ztYpurBv8kg/u6oouQP9C94tJ1zihQti5Pm+b+Bpo7
+	EnV5B9dvCOEbAyGKI5G3JPS5Mif8rPvmnsDQgft/5qGkueBL/SNtuGBkQA860z2PhN/6EYdctHZ
+	C/vLQjm6FBHePjYK303BvzW/AR8OdsH+kpiZKeihtLQUcVEdrO4pAMo0vYiHQiKww=
+X-Received: by 2002:a17:90b:37c5:b0:38e:6d55:b1a6 with SMTP id 98e67ed59e1d1-395c4c35ac3mr24350418a91.3.1787576571408;
+        Mon, 24 Aug 2026 06:02:51 -0700 (PDT)
+Received: from void ([114.86.104.221])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-395c8fce4fbsm4330776a91.1.2026.08.24.06.02.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2026 06:01:25 -0700 (PDT)
-Date: Mon, 24 Aug 2026 15:01:23 +0200
-From: Michal Hocko <mhocko@suse.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, Emil Tsalapatis <emil@etsalapatis.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH bpf-next v4 1/4] bpf: Add a sleepable page allocator for
- map memory
-Message-ID: <aoxAo6gDK00PeCzG@tiehlicka>
-References: <20260821050250.35112-1-jiayuan.chen@linux.dev>
- <20260821050631.39784-1-jiayuan.chen@linux.dev>
- <aow4YNCDa0gDwbfj@tiehlicka>
- <de12ff1b-2f7c-4efe-ba1f-95e0b8d259f2@linux.dev>
+        Mon, 24 Aug 2026 06:02:51 -0700 (PDT)
+From: Tw <tw19881113@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Tw <tw19881113@gmail.com>
+Subject: [PATCH v2] libbpf: Ignore exception frame section
+Date: Mon, 24 Aug 2026 21:01:33 +0800
+Message-ID: <20260824130245.580545-1-tw19881113@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <de12ff1b-2f7c-4efe-ba1f-95e0b8d259f2@linux.dev>
+Content-Transfer-Encoding: 8bit
 
-On Mon 24-08-26 20:44:18, Jiayuan Chen wrote:
-> 
-> On 8/24/26 8:26 PM, Michal Hocko wrote:
-> > On Fri 21-08-26 13:06:12, Jiayuan Chen wrote:
-> > > bpf_map_alloc_pages() picks the allocator via can_alloc_pages(), a
-> > > conservative guess for BPF program context that is always false under
-> > > PREEMPT_RT. So even a caller that really is sleepable gets the
-> > > non-blocking allocator, which never reclaims and never engages the OOM
-> > > machinery.
-> > I thought one of the main motivations was reentrancy. As you cannot
-> > really assume the context bpf_map_alloc_pages is called from there is an
-> > extra care needed so that this doesn't re-enter the allocator from bpf
-> > program called from allocator path and deadlock.
-> 
-> 
-> Agreed, bpf_map_alloc_pages() is designed to be safe to run in any context.
-> 
-> The commit message should be precise.
+Exception handling in BPF program is not supported right now, let's skip it.
+BTW, I found this when building BPF with Zig compiler[1].
 
-How do you achive any level of safety for the _sleepable version? Vast
-majority of the kernel is sleepable but that doesn't mean this is safe
-from the mm reentrancy POV.
+[1]: https://github.com/tw4452852/bb
 
+Signed-off-by: Tw <tw19881113@gmail.com>
+---
+v2:
+ Revise the commit message.
+
+ tools/lib/bpf/libbpf.c | 3 ++-
+ tools/lib/bpf/linker.c | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index b749c0174..05727c418 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -3867,7 +3867,8 @@ static Elf64_Rel *elf_rel_by_idx(Elf_Data *data, size_t idx)
+ static bool is_sec_name_dwarf(const char *name)
+ {
+ 	/* approximation, but the actual list is too long */
+-	return str_has_pfx(name, ".debug_");
++	return str_has_pfx(name, ".debug_") ||
++		   strcmp(name, ".eh_frame") == 0;
+ }
+ 
+ static bool ignore_elf_section(Elf64_Shdr *hdr, const char *name)
+diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
+index 78f92c392..1fb0efdbf 100644
+--- a/tools/lib/bpf/linker.c
++++ b/tools/lib/bpf/linker.c
+@@ -599,7 +599,8 @@ int bpf_linker__add_buf(struct bpf_linker *linker, void *buf, size_t buf_sz,
+ static bool is_dwarf_sec_name(const char *name)
+ {
+ 	/* approximation, but the actual list is too long */
+-	return strncmp(name, ".debug_", sizeof(".debug_") - 1) == 0;
++	return strncmp(name, ".debug_", sizeof(".debug_") - 1) == 0 ||
++		   strcmp(name, ".eh_frame") == 0;
+ }
+ 
+ static bool is_ignored_sec(struct src_sec *sec)
 -- 
-Michal Hocko
-SUSE Labs
+2.54.0
+
