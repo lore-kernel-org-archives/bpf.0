@@ -1,197 +1,118 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D812429CE7;
-	Mon, 24 Aug 2026 13:43:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B645242B756
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 13:44:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787579016; cv=none; b=I0ESkW6yt5w3+ym4AU950SytzRNMEyxPlhUp0XojXnb2HdJJ3xIEwb7GTppUYsMF8iRw835WjJC4354NXbzwW4i2LrS+rSbuKBiBQVWtje9oVv9rugzfRiNWm5zmSTcBdlag/JfOH5zIBQPwSDq9EK0bHN8bciOVQtVpEEyInbc=
+	t=1787579046; cv=none; b=REjJxF1qQMS6CYEeNMEYyFKA+SOxwaviIctlHdpNQuBbPsLpcT+O6WqTkLsFgVFQ8lBCtftmTAikJ85DwW+hxgkaRF1PcQy+/tm+jcXNYfPhXUVPW0g15GrEtYb2t4iU0QfQCeulN1WhBgq+3cMzh0TjE5yE0NZ/UxavEZEuRgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787579016; c=relaxed/simple;
-	bh=34U9Hlzt8usGoop5DP8cQaWQgf4BxMng4CmGve075xc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CA8EAq+52i82JGmd73UsJvZF16bKhM6S1xMzHgFPiTZelb1UvFESDdKWtWPFIOQDlJhVA5QV/sAD+DL56exzUkGfc71zWlqUQuDCC8G642DDF3rwGcuJfEbqg9TUrx78zut7ORijkmeeRWxUIVwvKI1NlRxSFSZbMkVlJ1EuLf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=fzHNpn72; arc=none smtp.client-ip=117.135.210.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1787579046; c=relaxed/simple;
+	bh=6qGkc1qIo3cva8JUravmV4rZZSb/rMPFDcg6AQdg+LQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=cdJ6nX87Eamw+0l1oTQ1i1H3eFfVeg41onqQXjYpPRZ3qfMPhGxfaNQS9xc57Pb2VoXEJYG1TUyT0HSggFDShZArgXzuWuKTHAQalgvaP4P93osryb3ekDZlATftCyTplt1DXSi2Go/guM36gCl0tkmaxfCJEZS8u3OhSDnLZdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nYeesFCl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="fzHNpn72"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=sj
-	lyGP7SmyNlVt9ERhiLH2GbPXg5tcviTAl4Ckd83TI=; b=fzHNpn72FUmA1zDmxe
-	CfSTOGf4lrTSmDi+xuuYqsLQi0Wo5PykKBm67Cd823pIXE47XHvfVbZKgzaxq+/k
-	6ZbXr3hPOWImKiIKDrLOEYw6BHRjNlDv1rsozZzsJOMFDXzGm2EK5JW5pCuEyLVl
-	+cByCr5txy569Ur2tcNu221sU=
-Received: from nec8-i7 (unknown [])
-	by gzsmtp5 (Coremail) with SMTP id QCgvCgCHGCDISYxqeuS4Nw--.46468S5;
-	Mon, 24 Aug 2026 21:40:27 +0800 (CST)
-From: chenyuan_fl@163.com
-To: bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Yuan Chen <chenyuan@kylinos.cn>
-Subject: [PATCH bpf-next v4 3/3] bpf, arena: check range_tree_set return in arena_free_pages and arena_free_worker
-Date: Mon, 24 Aug 2026 21:40:16 +0800
-Message-ID: <20260824134016.2006188-4-chenyuan_fl@163.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260824134016.2006188-1-chenyuan_fl@163.com>
-References: <20260824134016.2006188-1-chenyuan_fl@163.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nYeesFCl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 508231F000E9;
+	Mon, 24 Aug 2026 13:44:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787579044;
+	bh=GtrLlvShZyM22+pKVnI9I5XhXGFchINtBu00gIe+N8U=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=nYeesFCl0kW2tbWkv/tY95RZDs0ot2L0VQe2RXUrME9WcAhT2d5llx51VQq+r7oh0
+	 WzVZGObalMoKtZLrlj0sKvM/CaMYzmvbHT6Fi3a6i5XbNOCJzXUUlFABCIrBY1HTKf
+	 5DvHFRb2VQZWifyQY4o0yLObSaG6c4Qeni7ODsRu+lB4UGZQkJS9MuwJFAlKzFOytT
+	 3CEYlcZeG05sl6XPBHkMe1B2V5I7hJ0fz6q/7ZOZvqMPKncSuk9XPcmmVUSOY2S3P8
+	 mmrsaXLcwCxsxJfl/TMsA/zE0233a64mq/r4KALD3oJiq5yMoqB10zZ7fA70jXIthh
+	 CiOI3YjuNeMLw==
+Content-Type: multipart/mixed; boundary="===============5539401712765086994=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:QCgvCgCHGCDISYxqeuS4Nw--.46468S5
-X-Coremail-Antispam: 1Uf129KBjvJXoW3Jw43ZF1UXrWkWr15AFW7XFb_yoW7Cry8pF
-	43GFn8trs5Jw4Svr43ur4v9r13KwsYqw48GFWjka4rZry5Z3sxtF4xCF1Uua4UCrWkXw12
-	gF4jq345Kr4qqFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j9AwxUUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAgtCAGqMScv5GwAA3N
+Message-Id: <ce55595370c8629d3a962c78a2f1b4c385fa0253d85e74552f45beccb7e45667@mail.kernel.org>
+In-Reply-To: <20260824130245.580545-1-tw19881113@gmail.com>
+References: <20260824130245.580545-1-tw19881113@gmail.com>
+Subject: Re: [PATCH v2] libbpf: Ignore exception frame section
+From: bot+bpf-ci@kernel.org
+To: tw19881113@gmail.com,bpf@vger.kernel.org
+Cc: tw19881113@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 24 Aug 2026 13:44:04 +0000 (UTC)
 
-From: Yuan Chen <chenyuan@kylinos.cn>
+--===============5539401712765086994==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-arena_free_pages() and arena_free_worker() now handle range_tree_set()
-errors. arena_free_pages() aborts the free on error, and
-arena_free_worker() moves range_tree_set() before PTE clearing so that a
-failed tree update leaves the PTEs intact instead of freeing pages that
-the arena free tree does not track.
+>     libbpf: Ignore exception frame section
+>
+>     Exception handling in BPF program is not supported right now, let's skip it.
+>     BTW, I found this when building BPF with Zig compiler[1].
+>
+>     [1]: https://github.com/tw4452852/bb
+>
+>     Signed-off-by: Tw <tw19881113@gmail.com>
 
-Also check the range_tree_set() return value in arena_alloc_pages()'s
-error path, which restores the unpopulated tail of a partially allocated
-range; log a warning instead of silently leaking the virtual range when
-the tree update fails.
+Kumar Kartikeya Dwivedi pointed out in both v1 and v2 reviews that the
+Signed-off-by tag must contain the author's full real name, not just
+'Tw'. The v2 review explicitly stated: 'You need to have your full real
+name in the SoB tag. Patches cannot be accepted otherwise.'
 
-range_tree_set() is failure-atomic (it pre-allocates the node before
-touching the tree), so on -ENOMEM the range stays tracked as allocated
-and the pages remain mapped and accessible. A failed free is therefore
-retryable, and arena_map_free() reclaims any retained pages at map
-destruction; aborting the free avoids clearing PTEs for pages the arena
-free tree does not track.
+Could you update the Signed-off-by to include your full name?
 
-In arena_free_worker() a failed tree update used to leave the span in
-the drained list, where the second loop would still flush TLB entries,
-zap user VMAs, and free the span itself: the free request was dropped,
-user mappings were destroyed for a free that never happened, and the
-pages stayed mapped until map destruction. Keep failed spans on
-arena->free_spans instead and retry them on a later worker run; only
-spans whose PTE clearing actually ran are flushed, zapped, and released.
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index b749c01742ee..05727c418c40 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -3867,7 +3867,8 @@ static Elf64_Rel *elf_rel_by_idx(Elf_Data *data, size_t idx)
+>  static bool is_sec_name_dwarf(const char *name)
+>  {
+>  	/* approximation, but the actual list is too long */
+> -	return str_has_pfx(name, ".debug_");
+> +	return str_has_pfx(name, ".debug_") ||
+> +		   strcmp(name, ".eh_frame") == 0;
 
-Suggested-by: Emil Tsalapatis <emil@etsalapatis.com>
-Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+This isn't a bug, but could the continuation line be aligned under the
+first operand (tab + 7 spaces) so the two operands line up? Every other
+wrapped return statement in libbpf.c uses tab plus seven spaces to align
+the continuation, like in bpf_map__is_ringbuf():
+
+    return map->def.type == BPF_MAP_TYPE_RINGBUF ||
+           map->def.type == BPF_MAP_TYPE_USER_RINGBUF;
+
+>  }
+>
+>  static bool ignore_elf_section(Elf64_Shdr *hdr, const char *name)
+> diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
+> index 78f92c39290a..1fb0efdbfae7 100644
+> --- a/tools/lib/bpf/linker.c
+> +++ b/tools/lib/bpf/linker.c
+> @@ -599,7 +599,8 @@ int bpf_linker__add_buf(struct bpf_linker *linker, void *buf, size_t buf_sz,
+>  static bool is_dwarf_sec_name(const char *name)
+>  {
+>  	/* approximation, but the actual list is too long */
+> -	return strncmp(name, ".debug_", sizeof(".debug_") - 1) == 0;
+> +	return strncmp(name, ".debug_", sizeof(".debug_") - 1) == 0 ||
+> +		   strcmp(name, ".eh_frame") == 0;
+
+This isn't a bug, but since the same .eh_frame check now has to be
+extended in both is_sec_name_dwarf() and is_dwarf_sec_name(), and their
+callers ignore_elf_section() and is_ignored_sec() are also near-verbatim
+copies including the same .rel prefix-stripping and the same BTF section
+exclusions, would it be worth moving the shared predicate into
+libbpf_internal.h so future additions only need one edit?
+
+>  }
+>
+>  static bool is_ignored_sec(struct src_sec *sec)
+
+
 ---
- kernel/bpf/arena.c | 43 ++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 36 insertions(+), 7 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index 555ee2531ef9..1315872941e1 100644
---- a/kernel/bpf/arena.c
-+++ b/kernel/bpf/arena.c
-@@ -766,7 +766,9 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt
- 	bpf_map_memcg_exit(old_memcg, new_memcg);
- 	return clear_lo32(arena->user_vm_start) + uaddr32;
- out:
--	range_tree_set(&arena->rt, pgoff + mapped, page_cnt - mapped);
-+	if (range_tree_set(&arena->rt, pgoff + mapped, page_cnt - mapped))
-+		pr_warn_ratelimited("bpf_arena: failed to restore free range %ld+%ld after partial alloc\n",
-+				    pgoff + mapped, page_cnt - mapped);
- 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
- 	if (mapped) {
- 		flush_vmap_cache(kern_vm_start + uaddr32, mapped << PAGE_SHIFT);
-@@ -881,7 +883,18 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt,
- 	if (ret)
- 		goto defer;
- 
--	range_tree_set(&arena->rt, pgoff, page_cnt);
-+	ret = range_tree_set(&arena->rt, pgoff, page_cnt);
-+	if (ret) {
-+		/*
-+		 * range_tree_set() is failure-atomic, so -ENOMEM leaves the
-+		 * range allocated and the pages mapped. Abort the free rather
-+		 * than returning pages the free tree does not track; a later
-+		 * free of the same range can succeed.
-+		 */
-+		raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
-+		bpf_map_memcg_exit(old_memcg, new_memcg);
-+		return;
-+	}
- 
- 	init_llist_head(&free_pages);
- 	cdata.arena = arena;
-@@ -977,12 +990,13 @@ static void arena_free_worker(struct work_struct *work)
- 	struct llist_node *list, *pos, *t;
- 	struct arena_free_span *s;
- 	u64 arena_vm_start, user_vm_start;
--	struct llist_head free_pages;
-+	struct llist_head free_pages, cleared;
- 	struct clear_range_data cdata;
- 	struct page *page;
- 	unsigned long full_uaddr;
- 	long kaddr, page_cnt, pgoff;
- 	unsigned long flags;
-+	bool retry = false;
- 
- 	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags)) {
- 		schedule_work(work);
-@@ -992,28 +1006,43 @@ static void arena_free_worker(struct work_struct *work)
- 	bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
- 
- 	init_llist_head(&free_pages);
-+	init_llist_head(&cleared);
- 	cdata.arena = arena;
- 	cdata.free_pages = &free_pages;
- 	arena_vm_start = bpf_arena_get_kern_vm_start(arena);
- 	user_vm_start = bpf_arena_get_user_vm_start(arena);
- 
- 	list = llist_del_all(&arena->free_spans);
--	llist_for_each(pos, list) {
-+	llist_for_each_safe(pos, t, list) {
- 		s = llist_entry(pos, struct arena_free_span, node);
- 		page_cnt = s->page_cnt;
- 		kaddr = arena_vm_start + s->uaddr;
- 		pgoff = compute_pgoff(arena, s->uaddr);
- 
-+		/*
-+		 * Set the range free before clearing PTEs, and requeue the
-+		 * span on failure: the PTEs stay intact and the free is
-+		 * retried later. Only spans moved to @cleared (PTE clearing
-+		 * actually ran) reach the flush/zap/release loop below.
-+		 */
-+		if (range_tree_set(&arena->rt, pgoff, page_cnt)) {
-+			llist_add(&s->node, &arena->free_spans);
-+			retry = true;
-+			continue;
-+		}
-+
- 		/* clear ptes and collect pages in free_pages llist */
- 		apply_to_existing_page_range(&init_mm, kaddr, page_cnt << PAGE_SHIFT,
- 					     apply_range_clear_cb, &cdata);
--
--		range_tree_set(&arena->rt, pgoff, page_cnt);
-+		llist_add(&s->node, &cleared);
- 	}
- 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
- 
-+	if (retry)
-+		irq_work_queue(&arena->free_irq);
-+
- 	/* Iterate the list again without holding spinlock to do the tlb flush and zap_pages */
--	llist_for_each_safe(pos, t, list) {
-+	llist_for_each_safe(pos, t, cleared.first) {
- 		s = llist_entry(pos, struct arena_free_span, node);
- 		page_cnt = s->page_cnt;
- 		full_uaddr = clear_lo32(user_vm_start) + s->uaddr;
--- 
-2.54.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32731757949
+--===============5539401712765086994==--
