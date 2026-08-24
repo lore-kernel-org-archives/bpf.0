@@ -1,132 +1,294 @@
-Received: from flow-b1-smtp.messagingengine.com (flow-b1-smtp.messagingengine.com [202.12.124.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F413EFFC2;
-	Mon, 24 Aug 2026 09:36:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F32483F4116
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 09:42:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787564208; cv=none; b=snisnMLOBIUZr90Zq1ba0BUBcRf77H3ta/nwdirxC22wN3fvx91szK1+8dNe33fb6nEwixpSquypGq4obFVYOmlqUmWtEXjgbw5CFP3yz7lsXQiidzsh1fl8gQjKZY3pn1Z7WUC0RV7/0hMLH3d8n+iEzdVnbVVtI8EB7wLjoo4=
+	t=1787564575; cv=none; b=TYO9dq2VrjsfXWLbESSQrH+Zvo7lj9uMqAVnUDlylGxVEJ4FLJBhPDxZZ0KCZP39y871C9xJ/iK9qjhZr8ymqnKUEnmPDHKdNVbHpSyrH9AeLoGEC35dXOMC9qeCXaExW4MuYT9uyUlrGepyg53rfmjw9t+8t8zviLp/eFa3wm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787564208; c=relaxed/simple;
-	bh=furb5eTjrZhtAjb2Y4dwcu8oqL9mLcd1WB5TFqTWqvI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aB+7UV9PHbjTg5yvvozOGGH6eNGeYRSMXzajBrnj5BCtSDru8C2DusZT8SRjn2Grv5edHjvPAwnHW2clpGCGsJC9mLg/2X7zhBHD7+vx4EJDhoxXNPfaEpu1Zb+tPgnssZyhTKkHJY+VXGSe5di57s1UF+XF/u34sVkY5+iVWiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=DXMCZjBE; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=f1TPtFlX; arc=none smtp.client-ip=202.12.124.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+	s=arc-20240116; t=1787564575; c=relaxed/simple;
+	bh=ijRgKlS8W7CfCP/dSceUMOGkqQycnVDAGEu9/t3gSPc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=VQNAPnG5KiR7JDp3IGhpnH/07yFA2wxGf1y3g9yduTxsBBGEAO5oGnc68bk/WW1bmCx8Yo09EarSsxtqMBoBVT9cX177CbT+AJImQjwQZBU/dYb8J+X6zAnZLQV8dAFpOQOm4PhG74zULo1Ec9gIe8zv+H8dy7ywaX6OxUN1TN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cxw3co/U; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="DXMCZjBE";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="f1TPtFlX"
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailflow.stl.internal (Postfix) with ESMTP id 4CE1413000ED;
-	Mon, 24 Aug 2026 05:36:43 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-06.internal (MEProxy); Mon, 24 Aug 2026 05:36:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1787564203; x=
-	1787571403; bh=2Nx+Hb1cJLavCtqS/5dokCLvUqZ5zLYRMFKnI3FyAaE=; b=D
-	XMCZjBEjE2WRkjfTT/l93Z2ppMDuTmy6M2b+tGmG6Pe6cgYWS/QJpmFE/CdNMMMT
-	jzMhjfIQIdszw2DOjRSpI/586aBchUC9AT1qPbo8v3wdZKKhlZ5Kpg+cZgqqUQgF
-	gx7csWp8hNW5v/+deheOnROg29BxPD0V9iNRJxd9KyDU+ajWO8FmgvraUvhjkmU9
-	nE8CBMmUuQp7QkiVnIvqLf4eFzFGwXF/QTKtHaInl9ugaw3FHuIf+k3brfeI4rkQ
-	GEAZdY9YVG+OmfStuuPDvLZ6fFGA/SWqw0aC6ZhSkUzmr3i8bXXEm0jN58JYzEyh
-	J9GVFE3cd/eATkRKkJTlg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1787564203; x=1787571403; bh=2Nx+Hb1cJLavCtqS/5dokCLvUqZ5zLYRMFK
-	nI3FyAaE=; b=f1TPtFlXInsC6zBZ9Ay4DThFOjrt39+tJOW0YUNfX2yYr4B85lB
-	Bt/uNkxNF4rGsOIZa+P2Z4FXHMJCAfDQZ8uA9f0UtGwADmpzc1xLwbzWXTWFDCv7
-	F4+e0UQ2+c6UYlR0sBTlmeEsR1pvpwAFAVljawi0eYq++jb71XpKtmMd7DLPVpki
-	MXmFqLpbXUkaCTajElC1DEfRCWBbdyz5byyxowa18y+IWeLgtbDWKFWvnDhSpZ0Y
-	lRLc07UlSeXN+WPOOC4Ue+Md1z1dNrHzeCMiGAW/w0gIE6amxPurKPMGCrhwFV00
-	HRsNqN/EMEJexTQGhwnniSQSF5ICVbXXUkg==
-X-ME-Sender: <xms:qhCMamQ37TdeqI-8c0wyxwX4KjaL5V_FFqpYU-lK0Fg0WLjMOwJ2-g>
-    <xme:qhCMasPlBtdhrDLj96UANI2IB47ABZAfi5OyMuylgubxKxnWIIWWgICNr0A2G4Ai3
-    0ciF0ryd7KZcPJOWfSMgC9_fQmMtwgBb40-k7clB_HaOTmh1EtNV5w>
-X-ME-Received: <xmr:qhCMalScg1ZkjSdwXXhg2VS7paIFLyzeiHzwF5yFy9mEQ1AXSu6liZ_nOoU>
-X-ME-Proxy-Cause: dmFkZTGz2jKxdMw4ERsyN6C8iQmqO+8xUhsL9pZAKxT69wFsIBys6xB5LktOPJ4MI0l3D4
-    YlQadQlnEULRi3wFdFmH6J6Q8kOxZQ66f3Y59fqSOl3sUuOKJyBZVkwP5F6bCwor0D4c1j
-    gWQvh+36ctO8XdjR32mGCjZTL7fyCcLpjQDQ1iGjdJj/+SYA83G6of8uS0pWlA7axesh8u
-    HWEBAcFTwYyhzVS1HsUvRPl3jc+FFnGEDM7Z5rwtBPS5sXCOn2wLUJWaRCE/5l8OQTIyl5
-    aQorjdmPeS4asVy6AP0atTHEfHFq/SWWHDzBowQEToeLuoCh8aVSMWmCd2dHb4AdJVptru
-    M3jBUrNeIY2YnduC523fa8mPAYP2Wp62CxBO6cl25BResJENTq0fvto5ryW7GDnZnJUODj
-    FAY4dqLp4Bd68fBeVKpNNRd+lQ3DkUTzCJye397QJoqDU4vwpPjJ2SAKEFhCGMYZTeShgn
-    hfnINvkBcagzM4zgrpkWQYc2Eypj5LSuP0FLfgxSk2U/TjQIQYJ23knpwjHSd6HW7BwMfW
-    J2sfFufBDoqKYso8TIWw4eZTHWZd46+UWkANzrimpT4M1+Q3Edr3yRcV4DDUE1eciOEeMt
-    u4ynfdRZwB0yiRDbuR7W1cGkJZ9oxpCZzcLqutIZYpPJQbf25PnbcoUi2WrQ
-X-ME-Proxy: <xmx:qhCMaiAvmDZ9d8WATh6CVccjjdVgDgZD-ATr803hgjx-jCFJvptaIw>
-    <xmx:qhCMau48MjRLWCDIWbpjXuTa7IN_1WC1HaeNAjU1YLXIUY_Q9vhUMQ>
-    <xmx:qhCManAAFbQJAxNCN_lgbOpTJZlqNmj8vZcOVOmLVIEBA_50xeMQPg>
-    <xmx:qhCMaifiEw2UntNmGOI3F20xqaC7E_YuxmmtQLe81ruQZXh9Oz1HvA>
-    <xmx:qxCMamsgyLPF5we723-a0VKd-R3Khai29a0-_8ma3PHL_N9lh8Mdh97r>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 24 Aug 2026 05:36:41 -0400 (EDT)
-Date: Mon, 24 Aug 2026 10:36:40 +0100
-From: Kiryl Shutsemau <kirill@shutemov.name>
-To: Lance Yang <lance.yang@linux.dev>
-Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
-	nico.pache@linux.dev, baolin.wang@linux.alibaba.com, baohua@kernel.org, 
-	dev.jain@arm.com, hughd@google.com, liam@infradead.org, mhocko@suse.com, 
-	rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com, 
-	usama.arif@linux.dev, vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, 
-	agordeev@linux.ibm.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, jannh@google.com, willy@infradead.org, pfalcato@suse.de, 
-	rostedt@goodmis.org, mhiramat@kernel.org, linux-trace-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 08/57] mm/collapse: scan a table for what a collapse
- could use
-Message-ID: <aowPqZU0aj2gSEjW@thinkstation>
-References: <20260816224609.308019-9-kirill@shutemov.name>
- <20260824083903.52962-1-lance.yang@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cxw3co/U"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C642F1F000E9;
+	Mon, 24 Aug 2026 09:42:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787564572;
+	bh=yfyl0DM/6yFBAmzW2O79GbuNg+TWTlsALOuJj6SJ5WQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=cxw3co/UcCiSUNHlfUUZuN0QAHviUVCa+3CEDUQs8vqHS16KqAgNUhagYn1dBl92z
+	 zGZ39UJ2x7UUIEgywWZgFM5k93zbGK6usO7qTZr70TH552zVRAELRYSXyd6ykAJeRs
+	 rUh6FYWNIeVksZom42E78IkU56mgYppBCFPRHf0jrj6pwAh4EadT5Oy0o/NU91+Jy8
+	 4X3D7a8xyfWdqhN15dV/5ZbgA/jksVp3z6pe3xL/XLImIV735vWzg21qFhQ9tqSTmr
+	 /4IhC97eqmUNe9bCHAQS8DQ4O+bPsJADz1c+Iax75azg/62Q3bZe7CGtV2xXHgH2tZ
+	 86QaEb+AvhEqA==
+Content-Type: multipart/mixed; boundary="===============4624490049248520616=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260824083903.52962-1-lance.yang@linux.dev>
+Message-Id: <8a507954693fb4a93adff4bde6a5869998de8f2a1c1a316758ee7b7eb0746246@mail.kernel.org>
+In-Reply-To: <20260824082530.47553-3-emil@etsalapatis.com>
+References: <20260824082530.47553-3-emil@etsalapatis.com>
+Subject: Re: [PATCH 2/3] bpf: Add sleepable arena page allocation path
+From: bot+bpf-ci@kernel.org
+To: emil@etsalapatis.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,memxor@gmail.com,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 24 Aug 2026 09:42:51 +0000 (UTC)
 
-On Mon, Aug 24, 2026 at 04:39:03PM +0800, Lance Yang wrote:
-> >+	/*
-> >+	 * The bitmap and the selection offsets stay relative to the table:
-> >+	 * natural-alignment math needs the table-absolute position, not the
-> >+	 * position within an arbitrarily placed VMA.
-> >+	 */
-> >+	first_offset = (start - pmd_addr) >> PAGE_SHIFT;
-> >+	for (i = first_offset, addr = start; addr < end;
-> >+	     i++, addr += PAGE_SIZE) {
-> >+		pte_t pteval = ptep_get(pte + (i - first_offset));
-> 
-> Hmm, ptep_get() does not look right for a lockless scan ...
-> 
-> On arm64, a contiguous PTE sends ptep_get() to contpte_ptep_get():
+--===============4624490049248520616==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-...
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index b3cd28d9e3b5..fcb21c29aef2 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -710,6 +710,12 @@ void bpf_map_free_internal_structs(struct bpf_map *map, void *obj);
+>  int bpf_dynptr_from_file_sleepable(struct file *file, u32 flags,
+>  				   struct bpf_dynptr *ptr__uninit);
+>
+> +static inline bool is_bpf_alloc_nonsleepable(void)
+> +{
+> +	return preempt_count() > 0 || irqs_disabled() ||
+> +		IS_ENABLED(CONFIG_PREEMPT_RT);
+> +}
+> +
+>  #if defined(CONFIG_MMU) && defined(CONFIG_64BIT)
+>  void *bpf_arena_alloc_pages_non_sleepable(void *p__map, void *addr__ign, u32 page_cnt, int node_id,
+>  					  u64 flags);
+> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> index da356989786a..126ddae763f9 100644
+> --- a/kernel/bpf/arena.c
+> +++ b/kernel/bpf/arena.c
+> @@ -683,8 +683,73 @@ static int arena_adjust_tree(struct bpf_arena *arena, long uaddr, long page_cnt,
+>  	return range_tree_clear(&arena->rt, *pgoff, page_cnt);
+>  }
+>
+> -static long arena_alloc_pages_internal(struct bpf_arena *arena, long page_cnt,
+> -		long uaddr, long pgoff, int node_id, bool sleepable)
+> +static long arena_alloc_pages_sleepable(struct bpf_arena *arena, long page_cnt,
+> +		long uaddr, long pgoff, int node_id)
+> +{
+> +	u64 kern_vm_start = bpf_arena_get_kern_vm_start(arena);
+> +	struct apply_range_data data;
+> +	struct page **pages = NULL;
+> +	unsigned long flags;
+> +	u32 uaddr32;
+> +	int ret, i;
+> +
+> +	pages = kvcalloc(page_cnt, sizeof(struct page *), GFP_KERNEL_ACCOUNT);
+> +	if (!pages)
+> +		return 0;
+> +
+> +	ret = bpf_map_alloc_pages(&arena->map, node_id, page_cnt, pages);
+> +	if (ret) {
+> +		kvfree(pages);
+> +		return 0;
+> +	}
+> +
+> +	data.i = 0;
+> +	data.pages = pages;
+> +	data.arena = arena;
+> +
+> +	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags))
+> +		goto out_free_pages;
+> +
+> +	ret = arena_adjust_tree(arena, uaddr, page_cnt, &pgoff);
+> +	if (ret) {
+> +		raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+> +		goto out_free_pages;
+> +	}
+> +
+> +	uaddr32 = (u32)(arena->user_vm_start + pgoff * PAGE_SIZE);
+> +
+> +	ret = apply_to_page_range(&init_mm, kern_vm_start + uaddr32,
+> +			page_cnt << PAGE_SHIFT, apply_range_set_cb, &data);
+> +
+> +	if (ret)
+> +		goto out_unmap;
+> +
+> +	flush_vmap_cache(kern_vm_start + uaddr32, page_cnt << PAGE_SHIFT);
+> +	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+> +
+> +	kvfree(pages);
+> +
+> +	return clear_lo32(arena->user_vm_start) + uaddr32;
+> +
+> +out_unmap:
+> +	/* data.i pages were mapped, undo only those who failed to map */
+> +	flush_vmap_cache(kern_vm_start + uaddr32, data.i << PAGE_SHIFT);
+> +	range_tree_set(&arena->rt, pgoff + data.i, page_cnt - data.i);
+> +
+> +	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+> +
+> +	arena_free_pages(arena, uaddr32, data.i, true);
 
-> The later freeze can reject a stale candidate, but the earlier PTE read
-> is still lockless. Should the read use ptep_get_lockless() so arm64 can
-> retry if it finds an inconsistent PTE in the contpte range?
+This isn't a bug, but does the comment describe the right thing?
 
-Good catch, thanks -- switched to ptep_get_lockless() for v2.
+The comment says "undo only those who failed to map", but the code below
+unmaps the pages that succeeded:
 
-I don't think it would lead to any correctness issues: both variants
-take the pfn and the protection bits from one __ptep_get() of the target
-entry, so all contpte_ptep_get() can get wrong here is the young and
-dirty bits it gathers from the neighbours.  The scan reads dirty only
-for the lazyfree skip, which the freeze re-tests under the page table
-lock, and young only as a hint.
+  arena_free_pages(arena, uaddr32, data.i, true);
 
-But it is still the wrong accessor for a walk that holds no lock.
+This unmaps exactly data.i pages starting at uaddr32, which are the ones
+that apply_range_set_cb() installed (data.i is incremented once per
+successful PTE). The pages that failed to map get freed in the
+out_free_pages loop below:
 
-collapse_faultin_addr() already reads its entry with ptep_get_lockless().
+  for (i = data.i; i < page_cnt; i++)
+          __free_page(pages[i]);
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Should the comment say something like "data.i pages were mapped, undo
+those" instead?
+
+> +
+> +out_free_pages:
+> +	for (i = data.i; i < page_cnt; i++)
+> +		__free_page(pages[i]);
+> +
+> +	kvfree(pages);
+> +	return 0;
+> +}
+> +
+> +static long arena_alloc_pages_non_sleepable(struct bpf_arena *arena, long page_cnt,
+> +		long uaddr, long pgoff, int node_id)
+>  {
+>  	u64 kern_vm_start = bpf_arena_get_kern_vm_start(arena);
+>  	struct apply_range_data data;
+
+[ ... ]
+
+> @@ -802,7 +867,10 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt
+>
+>  	bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
+>
+> -	addr = arena_alloc_pages_internal(arena, page_cnt, uaddr, pgoff, node_id, sleepable);
+> +	if (sleepable && !is_bpf_alloc_nonsleepable())
+> +		addr = arena_alloc_pages_sleepable(arena, page_cnt, uaddr, pgoff, node_id);
+> +	else
+> +		addr = arena_alloc_pages_non_sleepable(arena, page_cnt, uaddr, pgoff, node_id);
+
+Can this dispatch block while in an RCU read-side critical section?
+
+The sleepable parameter is hardcoded to true by the kfunc entry point
+in kernel/bpf/arena.c:
+
+  void *bpf_arena_alloc_pages(struct bpf_map *map, void *addr__ign,
+                              u32 page_cnt, int node_id) {
+    return (void *)arena_alloc_pages(arena, (long)addr__ign,
+                                     page_cnt, node_id, true);
+  }
+
+and that kfunc is registered without KF_SLEEPABLE:
+
+  BTF_ID_FLAGS(func, bpf_arena_alloc_pages,
+               KF_ARENA_RET | KF_ARENA_ARG2 | KF_SPINLOCK_SAFE)
+
+The verifier checks in kernel/bpf/verifier.c specifically prevent
+non-sleepable programs from calling sleepable kfuncs:
+
+  sleepable = bpf_is_kfunc_sleepable(&meta);
+  if (sleepable && !in_sleepable(env)) {
+          verbose(env, "program must be sleepable to call sleepable "
+                  "kfunc %s\n", func_name);
+          return -EACCES;
+  }
+
+but that check never triggers because bpf_arena_alloc_pages() is not
+tagged KF_SLEEPABLE. So non-sleepable programs can call it.
+
+is_bpf_alloc_nonsleepable() checks for:
+
+  preempt_count() > 0 || irqs_disabled() || IS_ENABLED(CONFIG_PREEMPT_RT)
+
+That detects hardirq/softirq/NMI/preempt-disabled/IRQ-disabled/RT
+contexts, but it does not detect the RCU read-side critical section
+that every non-sleepable BPF program runs inside.
+
+Non-sleepable trampoline programs (fentry/fexit/fmod_ret/raw_tp/
+struct_ops) enter via __bpf_prog_enter() in kernel/bpf/trampoline.c,
+which calls rcu_read_lock_dont_migrate():
+
+  rcu_read_lock_dont_migrate() {
+    if (IS_ENABLED(CONFIG_PREEMPT_RCU))
+            migrate_disable();
+    rcu_read_lock();
+  }
+
+On CONFIG_PREEMPT_RCU=y kernels (the default for CONFIG_PREEMPT_DYNAMIC
+distro kernels), rcu_read_lock() is __rcu_read_lock() which only
+increments current->rcu_read_lock_nesting, and migrate_disable() uses
+a scoped guard(preempt) so it does not leave preempt_count() elevated.
+
+So with CONFIG_PREEMPT_RT=n, is_bpf_alloc_nonsleepable() returns false
+and arena_alloc_pages_sleepable() is selected.
+
+arena_alloc_pages_sleepable() then calls:
+
+  kvcalloc(page_cnt, sizeof(struct page *), GFP_KERNEL_ACCOUNT)
+  bpf_map_alloc_pages() -> alloc_pages_node(..., GFP_KERNEL, ...)
+  arena_free_pages() -> mutex_lock() and flush_tlb_kernel_range()
+
+All of these can sleep. Documentation/RCU/whatisRCU.rst states "It is
+illegal to block while in an RCU read-side critical section" even under
+CONFIG_PREEMPT_RCU. Being preempted is permitted, but voluntarily
+blocking is not.
+
+The blocked reader is queued on rnp->blkd_tasks, so every concurrent
+synchronize_rcu() on the system waits for the duration of the direct
+reclaim. Under memory pressure (which the commit message says triggers
+this path for "heavy BPF arena users like scx"), this yields unbounded
+RCU grace-period extension, RCU CPU stall warnings, and delayed freeing
+kernel-wide. The task also blocks with current->migration_disabled set
+and rq->nr_pinned elevated, which stalls CPU hotplug for the same
+duration.
+
+The in-tree selftests confirm that non-sleepable programs are accepted:
+tools/testing/selftests/bpf/progs/verifier_arena.c has several
+SEC("socket") __success programs calling bpf_arena_alloc_pages(), and
+tools/testing/selftests/bpf/progs/struct_ops_arena.c shows non-sleepable
+SEC("struct_ops/...") callbacks bound to an arena map.
+
+Should the sleepability decision be based on the verifier-known program
+context rather than this runtime heuristic? For example, tagging
+bpf_arena_alloc_pages() with KF_SLEEPABLE and adding a separate
+non-sleepable kfunc, or plumbing the prog's sleepable flag down to
+arena_alloc_pages()?
+
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 6874ba1424af..700ed7a99579 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -596,15 +596,9 @@ static void bpf_map_release_memcg(struct bpf_map *map)
+>  }
+>  #endif
+>
+> -static bool can_alloc_pages(void)
+> -{
+> -	return preempt_count() == 0 && !irqs_disabled() &&
+> -		!IS_ENABLED(CONFIG_PREEMPT_RT);
+> -}
+> -
+>  static struct page *__bpf_alloc_page(int nid)
+>  {
+> -	if (!can_alloc_pages())
+> +	if (is_bpf_alloc_nonsleepable())
+>  		return alloc_pages_nolock(__GFP_ACCOUNT, nid, 0);
+>
+>  	return alloc_pages_node(nid,
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32709208315
+--===============4624490049248520616==--
