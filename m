@@ -1,140 +1,181 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-wm2-f1.google.com (mail-wm2-f1.google.com [74.125.225.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C89D83947AC
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 22:47:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787611635; cv=none; b=gUmMg/rV2w8ZVNxkRgJxvoORkl1MwNYjtQGfTvDW/NlaQ73Z3igVA0GhEnbXeIMgjlhnVjljtkVUBbx/LOpU1utBMDlyp366oKPMMpezB+WQZckw3Ydhe2g4O4qhpSvZS/JTDhPefC3647HZSEbMoY790MvOa+LHFBLM26/JG48=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787611635; c=relaxed/simple;
-	bh=rPn63S0h2dv5WF342vRecp9qdxxBLhfV+ClSY9vatQY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=MmPVflqugS9JJsA65JIJcAT08Df9TSS2t8fewL1C5uOwKs5yw3A1kbe2DpKevaeTGhnUdgPeReA86eoJZDh055Bbqa/o9zQ2NxAe80wAanxWgZetWJsJdNV7TQsKZKAWyKo3LSITiJEHsdSAmVwLb5H2H3ELhUGuatqypHlHiPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J47IswC6; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01CF636C0AC
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 22:53:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.225.129
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787612006; cv=pass; b=oRQaiZkzBnkGaQGeBBekcSRHPmrqUQCyvA2rHoJCSPDIw9UZ6LuByLVus9Elc6PAU39TZXoe0KxpdGXSQCDKe8Dcl8wjhrifQqESGWVD40ekj6pXdmQ1LMSuinsMBsCAjVbBAAo9riqSC5DcF9SN4YP8qP3dTpP3iyQi07RZMMs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787612006; c=relaxed/simple;
+	bh=WML6/NVEQP2UvEXlc/GJB9zDjq4QQKHn5jCuMlwu6e4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MHmMQ1c5ALXGw4gA/dlUniVPHeTxIIyTNYMUUOsQRje04W2tyuOTJRq9/B8oAYbN840qwKYkryu1kbiLzsdqnG4VLpAhPU5xRVX5CmTK5C5bneG+Jl2dGIRPKan8/Y7voBeP8HPNAC2B68pNNhuTbQth137rCbj6G8/qNFo9eQs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GVpxFr/7; arc=pass smtp.client-ip=74.125.225.129
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J47IswC6"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-cbee846deecso4613557a12.1
-        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 15:47:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GVpxFr/7"
+Received: by mail-wm2-f1.google.com with SMTP id 5b1f17b1804b1-492367f3094so12433955e9.0
+        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 15:53:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787612003; cv=none;
+        d=google.com; s=arc-20260327;
+        b=oTK7LVJ2Cu+ndgO3zEvl/uP59wlMMBohYU15ZJRQxvFOwWHbMTk+OKhQxu5swuxIWQ
+         UusEhIoVpiJc1st2y0fjt99//JjwkXKbTBmH8sDTD03B80Cp8AuDmn1Catpf6/lP+dpn
+         rq81oPl/bXWnj1XBtHoIUG/+VIa1VlrYaWp6dhQuwFhyUGGq9kHAjyfEG/DaTZjM/jPG
+         NEqsAYgoY8CbYhCXkmDfiHqirRzd53TiIKFsFo2sjEwBprtw2j1rEiurOLBlKC8tUM+C
+         AlXOb+blj+q0AXetbNmwtMw5Tf9KfSAK/TBhfmnflHWIxqDL/cJJZU6W0iO8DLvOZmQu
+         LQsA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=67ASuesnpuL7XUb0K/yI1NJVKhkQTVD14LhVGIkcNnk=;
+        fh=j32kraQBvGnT7sBi2cI2niS49axgMloD3RaZATMi/as=;
+        b=LaFVpZfmpQMY8+1rBQsBke0VkaTq93Y0YWax/oNUT5z1Ft5uptukBg4No7SAiAfZrh
+         bMtMD4hie1U+ovl7Nexynqdkb0dWyBiMRPvVSfoZbZ6Ne5EN/GrgIlngHUsIANw+U+D0
+         xeNRQa2Tq5WBiIkW0OdRLAWTzYSemKNVp3MF8lfVIGtRG1nXOwT/9TMu0iWPtbb7bzdo
+         LAeFumDTTgaQfmPZ1JKC0L6sXazRxroudEKqrjayDtPXh2alqkZYWZDU4dDYVi2hkEln
+         XzkezhIghdlqWwNn0RC4FyrZcRxV6ZDeSzq2GpjL7tI+yGrNZuC4mKDExNkeOrYChtJ2
+         tTmQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787611633; x=1788216433; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=rPn63S0h2dv5WF342vRecp9qdxxBLhfV+ClSY9vatQY=;
-        b=J47IswC6Q0NiKyskRCfXiL0b3btbERCnd2kJ2QFTyW+GfXtXk3eekYrEWQ3rewjooy
-         2xRBiNC9BCJlAkHsURmSD5h/ZWwiWgf0LNgrsv1NpaX6HTvVWWDTKTV1mbr4R/ticPvk
-         n8RLPM6xT99TLak4hEF4786z2Qy9W0Ov0GC2fc7OJYpFaJ7Lnoqmd7gSdPIiorH3226C
-         6OMZq4kiUm/pkzSDafZ9u28YftMuIEY2EBdQzthoXuVNDaA+zHx1bX+ntfZDNYPvNGYt
-         /0psiaF1gN8VtPTdqc6b2vDlyCKbeXXyS88WG8Gp7KRQzwQxF43HXEx228JVKAleAAV9
-         WQmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787611633; x=1788216433;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1787612003; x=1788216803; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=rPn63S0h2dv5WF342vRecp9qdxxBLhfV+ClSY9vatQY=;
-        b=SJRNZFeUTXsFsXbE/wMz34lDSMTsCYBqoFNGs+9QC5IiPzn/Ms9rTt1j+3b4ZZ1ckd
-         aXRhc/65caERRtcKcqzqgEEC/OxuArnBdVUlYlLQySIRcXq9mmBXlbpJpbl61TKK+Gvm
-         ZFyWjfm349Cs00+fy/E5ikOQCFIFh+RP+rOiyThR+MjXE8VmGeAzAYrMHEDVrIcQQrRA
-         IdYwErSmDisd6chH1mJSScOpRvxV9DPyOfwQjhlLwi/bVzeeAEi9grUFCOxH0xkpHuPr
-         v19Yb29zw2xQgr1dvstnMNFHYYGLjH+TIVmo7rWwmmuVyhQfhBPVR3geKptyK25xDEVi
-         aVMw==
-X-Forwarded-Encrypted: i=1; AHgh+RoFtAnZN021MvXPuZuiySjMFhHIfd39+kYfl4HlFky3s7I7/K8YobTj8XFj5Qo5P58a9bI=@vger.kernel.org
-X-Gm-Message-State: AFuF++lp2gPN3AG2MtRxPF/lY4ynyZQuJQabRf3gPOu+7CkBoLfQwSPt
-	EaONrujuzzCg6WziO/7KJIGUOuOGtBRondDjz0IJGDgO1jDDLFXofIRdBOfiQ50veKU=
-X-Gm-Gg: AR+sD11ALsc13acYW99G2tDykbj2MwJsRVrY8TuTfwp1kcpnTxRaXgpVQoXpe0BD2hl
-	jwXn5eQVCSpkEbm1jrZLGXDjn4je5H8dNvUksz2URs0VqFHL0N2t1iF7OQCWy5G52Ry+HHtKkpX
-	J30KjxGi40I11pCIB1QgGl+ArSBVadiKCaNFcuBFjxZ1iIM2KpHRNBWBQ8VQVYkNr3eWHSurbKr
-	SV3rimdx7NoBLVZAxBvFNRbB/Vf2Lu7ELkiH1wODKT5CDwNMewMltdrEqn/esNrg5nAN77Kb9EV
-	kiHkPfYF9gicoymuEcoQyK+oTniyRnd+4Ccrb711923YAU9cFVUsRpvmfwODs4/oibHHzMB6hOd
-	g+6YZ5gc1WPv4sTaHQy9L7osY0jH5r5SNf+XYaThZ/9lUT87PPURK3U2vuzvJsXlInpchrHaNb9
-	SziuH6bcGO4v0eJ0EI3vcqYJnTYhiq+8/X+sP1YsLbK9mftoL9mvpsyGddRYXoAgZrfJKNujLGL
-	D2Q181OdULJ7MXqddVDoNbliGLRCCIxxorpsbXFLvGEwBkny9autOof
-X-Received: by 2002:a05:6a20:6a0c:b0:3cd:3e77:1dcd with SMTP id adf61e73a8af0-3cd9103c9d7mr3717370637.1.1787611633125;
-        Mon, 24 Aug 2026 15:47:13 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:21a6:ad3f:64a7:7661? ([2620:10d:c090:500::5:ef40])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327f9099ce7sm27975259eec.5.2026.08.24.15.47.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2026 15:47:12 -0700 (PDT)
-Message-ID: <08a3b5f472899c06ff43f0b8e71c6f9c4871143a.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v7 2/9] selftests/bpf: drop stale lines,
- restore two header dependencies
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Mykola Lysenko <nickolay.lysenko@gmail.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, 	song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, memxor@gmail.com
-Date: Mon, 24 Aug 2026 15:47:10 -0700
-In-Reply-To: <20260823194241.3415152-3-nickolay.lysenko@gmail.com>
-References: <20260823194241.3415152-1-nickolay.lysenko@gmail.com>
-	 <20260823194241.3415152-3-nickolay.lysenko@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+        bh=67ASuesnpuL7XUb0K/yI1NJVKhkQTVD14LhVGIkcNnk=;
+        b=GVpxFr/756QsSPt3f6aGElE27U0FSM4oV3szN/Xyj4h0eWS7q/w2JTseEaEFKFnn04
+         aut8xlJRYd5XkESx4YxVB6UIvg9JmUB3eHFSLtanPcOTQhVuSlP+7X7bjFmhFQpSEUUX
+         zbn+Tp7K6fICli5Lx6VVflpU9AQTbQCAGJIin+6mk+iNz6W98qaSERHuQHZrLhBi9g+q
+         TAWuirsfiL5p3oPHWrF1ursWgif/5NGVSfyA3FMmIIqAuULTcxqw+xamUX2OyIiI91Nj
+         K9YKxl/ipezZ+AE9fBIkoWz5gvWdwvCFnjH1wM5dhsGRbYQ+PhjwH2P2rNTFFZhkktPm
+         dULg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787612003; x=1788216803;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=67ASuesnpuL7XUb0K/yI1NJVKhkQTVD14LhVGIkcNnk=;
+        b=sku81DvEWfpJhV7bv49CIqtj/PPesVJkrahdjw3cIoKu1F21oJowu4b462AJrYm7PZ
+         kms0EVM5O0bNnYlvcScTkSejTrDWUX7TaN3ekAPMwuNrtRbnBSmk4ReFEFenTFYuIgXn
+         oN/dFmxsIdvrJK93WhV3EuTJ4wrWLgM7b/mO4jsujA9l5/wJULlLupzd3hvbSd2irzbB
+         3OzbnX8l0q78dP8yl9Uh22QmnpOJ69U1+ozjN83Naw3FkZsj5dpxpYnr3p/1u+tqYtva
+         8SoJ7oC64lRuK+n8o35nXjOVTbseTCXsCTBVH/iu/4ezLiAELNn/Ia9DoDO2SsJiA3Lb
+         fECw==
+X-Gm-Message-State: AFuF++m6R+gq9OpA6NYyIJA8RAGcwpDFJ206wNaYUv3arAjD5u1HeLij
+	x8fRSUrf/1Rg3rIGjX0aCIP9H8hVqL5iNgcmIZlioZ9gsTpRHb5wIdF7uis/LCvd5LXL7m2OAgF
+	r8jByeaxlZpI/JuieTFNltRQlJ3pt7h8=
+X-Gm-Gg: AR+sD13EvPF3x0kcLcSdCs4HYR9YyQNHAZb0WvxyyWqMsXfgK1Z2xpfP4iLTIltkwu5
+	QcLSKuLOH7qRtJkFFUMlIbDufP89uAAZyKg6ux6AKDhONBiew6aDAmiTM3k204blDj+ZbK1aSo3
+	i9BEN14HLFloqKXWlS+yy5Qb5VXmH3wt53EaXpaFkjljDurXUACd6hLDBpOuTCnW2NfiZT5lzIv
+	pDmg+mqDGkXmWYGyRr8dvcbznKyiEBwUYjNjAGDmBbX9EucmWaXNu3kZvokuTtiLgRxfTQ+cgSH
+	hfHIqgvCyl1qsN85Ikl6joEVkKGpnC2mMsjm8EJMMyNqcEmiEUGIIo4GAVbuuNbAmD5WrnENQFf
+	0RsFAlqUbCTyDn880ePIJp8ZhKWCLZ5+4bXHAAIKc5FSdVGHuY2kQQpcL7S71YhUkfJu3r8J0Ec
+	pMo9jENmyG3ZcRmq0t5nkP
+X-Received: by 2002:a05:600d:4452:20b0:499:7219:122f with SMTP id
+ 5b1f17b1804b1-499c19a351amr215467035e9.4.1787612002948; Mon, 24 Aug 2026
+ 15:53:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260821233516.3426127-1-memxor@gmail.com> <20260821233516.3426127-12-memxor@gmail.com>
+ <3bb599fb6840c650c8408054bef8cfbcba0f8878.camel@gmail.com>
+In-Reply-To: <3bb599fb6840c650c8408054bef8cfbcba0f8878.camel@gmail.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Tue, 25 Aug 2026 00:52:45 +0200
+X-Gm-Features: AcwNN1XdcAe8PY82inNeGTpO1eVuVT-AXePs0tMafT2ZKWdB_K4kwbmmq_62sEI
+Message-ID: <CAP01T75hU6CZ2O+1Ap01m5eZNMQUpbGBPpkTRWSDeYk3DJ5avw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 11/14] bpf: Replace arena kfunc argument flags
+ with suffixes
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, kkd@meta.com, 
+	kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Sun, 2026-08-23 at 12:42 -0700, Mykola Lysenko wrote:
-> Four target-specific lines name objects nothing builds. Three name
-> the BPF objects by their pre-rename names: commit afef88e65554
-> ("selftests/bpf: Store BPF object files with .bpf.o extension") left
-> them without a target; the flow_dissector_load.o dependency names an
-> intermediate the generic one-step compile+link rule does not produce.
->=20
-> Three linked-skeleton dependency map entries (xsk_xdp_progs,
-> xdp_hw_metadata, xdp_features) were dead on arrival: commit
-> f0a249df1b07 ("selftests/xsk: get rid of built-in XDP program"),
-> commit 297a3f124155 ("selftests/bpf: Simple program to dump XDP RX
-> metadata") and commit 4dba3e7852b7 ("selftests/bpf: introduce XDP
-> compliance test tool") each added one, mimicking the neighboring
-> entries without adding the skeleton to LINKED_SKELS, the only place
-> the -deps map is read from; these three skeletons are generated by
-> the regular pattern rule, which never consults it.
->=20
-> The '-fno-inline' pair (test_l4lb_noinline, test_xdp_noinline) had
-> stopped taking effect even earlier, with commit 74b5a5968fe8
-> ("selftests/bpf: Replace test_progs and test_maps w/ general rule"):
-> since then the BPF compile recipe expands TRUNNER_BPF_CFLAGS, a
-> simply-expanded copy of BPF_CFLAGS taken when the runner rules are
-> instantiated, which a target-specific 'BPF_CFLAGS +=3D' cannot reach.
-> Both programs have compiled without the flag since, and nothing was
-> lost: every function they define
-> carries a noinline annotation, except the SEC() entry points, which
-> nothing in the file calls, and the single __always_inline helper in
-> each, a deliberate exception the flag never overrode; and
-> compiling with -fno-inline restored yields byte-identical objects.
->=20
-> The two header dependencies with remaining value are restored in
-> working form. flow_dissector_load.h moves to the binary itself, which
-> is linked straight from its .c by the generic '$(OUTPUT)/%:%.c' rule
-> - editing the header now rebuilds it - on the line that already lists
-> the binary's helper object. cgroup_getset_retval_hooks.h -
-> added by commit e7215f574079 ("selftests/bpf: Make sure
-> bpf_{g,s}et_retval is exposed everywhere") days before the rename
-> orphaned it - lived in the top directory, outside the progs/*.h
-> blanket prerequisite of the BPF object rules, so editing it never
-> rebuilt the BPF object. Move it under progs/, next to its only BPF
-> consumer, where the blanket prerequisite covers it - the arrangement
-> several other headers shared between progs/ and prog_tests/ already
-> use. Its userspace consumer is tracked exactly by the
-> compiler-generated dependency files.
->=20
-> 'CURDIR :=3D $(abspath .)' redefines make's builtin to the value it
-> already has, and 'OBJCOPY ?=3D $(CROSS_COMPILE)objcopy' defines a
-> variable nothing in the selftests build or the included kselftest
-> infrastructure ever reads; drop both.
->=20
-> Signed-off-by: Mykola Lysenko <nickolay.lysenko@gmail.com>
-> ---
+On Tue, 25 Aug 2026 at 00:15, Eduard Zingerman <eddyz87@gmail.com> wrote:
+>
+> On Sat, 2026-08-22 at 01:35 +0200, Kumar Kartikeya Dwivedi wrote:
+>
+> ...
+>
+> > diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> > index 7b6847200b43..6c34a0d34b3f 100644
+> > --- a/kernel/bpf/arena.c
+> > +++ b/kernel/bpf/arena.c
+>
+> ...
+>
+> > @@ -1082,14 +1092,20 @@ void *bpf_arena_alloc_pages_sleepable(void *p__map, void *addr__ign, u32 page_cn
+> >       return (void *)arena_alloc_pages(arena, (long)addr__ign, page_cnt, node_id, true);
+> >  }
+> >
+> > -__bpf_kfunc void bpf_arena_free_pages(void *p__map, void *ptr__ign, u32 page_cnt)
+> > +/*
+> > + * A valid arena address can have zero low 32 bits, so ptr must be rebased
+> > + * unconditionally instead of being treated as nullable.
+> > + */
+> > +__bpf_kfunc void bpf_arena_free_pages(void *p__map, void *ptr__arena, u32 page_cnt)
+> >  {
+> >       struct bpf_map *map = p__map;
+> >       struct bpf_arena *arena = container_of(map, struct bpf_arena, map);
+> > +     long ptr;
+> >
+> > -     if (map->map_type != BPF_MAP_TYPE_ARENA || !page_cnt || !ptr__ign)
+> > +     if (map->map_type != BPF_MAP_TYPE_ARENA || !page_cnt)
+> >               return;                                      ^^^^^^^^^^^^
+>
+> This is a behavioral change, as far as I understand.
+> Is it intended?
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Well, I guess I should have added it to the commit log, but rejecting
+off=0 leaves no way to express freeing the first page.
+I am not sure whether accepting the base address now would cause any
+issues. We can change this to __arena__nullable to preserve current
+behavior I guess.
 
-...
+>
+> > -     arena_free_pages(arena, (long)ptr__ign, page_cnt, true);
+> > +     ptr = arena_kaddr_to_uaddr(arena, ptr__arena);
+> > +     arena_free_pages(arena, ptr, page_cnt, true);
+> >  }
+> >
+> >  void bpf_arena_free_pages_non_sleepable(void *p__map, void *ptr__ign, u32 page_cnt)
+>
+> ...
+>
+> > diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
+> > index 815f342eb4b0..d76490e059f9 100644
+> > --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
+> > +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
+> > @@ -445,6 +445,8 @@ int iter_maps1(struct bpf_iter__bpf_map *ctx)
+> >
+> >       if (!map)
+> >               return 0;
+> > +     /* Associate an arena before testing the generic map-pointer path. */
+> > +     bpf_arena_reserve_pages(&arena, NULL, 0);
+>
+> Is this behavioral change intended?
+>
+
+I think we have this problem elsewhere, but we need to know what arena
+a program is associated to (addr_space_cast e.g. gets rejected
+whenever it cannot see an associated arena map for a prog, so people
+add fake references).
+
+The second bit is that programs could allocate pages for random arena
+maps they got access to for other programs, but probably cannot
+anymore... Earlier, that was determined using the map argument at
+runtime, now the burden shifts to verifier time. If we want to the
+conversion to happen it seems to be inevitable.
+
+> >       bpf_arena_alloc_pages(map, NULL, map->max_entries, 0, 0);
+> >       return 0;
+> >  }
+>
+> ...
