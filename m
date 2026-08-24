@@ -1,145 +1,129 @@
-Received: from mta0.migadu.com (out-217.mta0.migadu.com [91.218.175.217])
+Received: from mail-ej2-f2.google.com (mail-ej2-f2.google.com [74.125.228.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5330E36B917
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 13:09:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A976541E6DF
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 13:12:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787576949; cv=none; b=ULG7CG/niNyRfcoUBNB2puXaakf+0/XzaGFZbF/tzKvJ8+EZvIPDiE7ncg94WldEaKUSHcfdBnUYyODAApJ2i8jNFj5hT9RWsHD6YMjcGzrwDDFRaOPy1o2GFGZT9HSYSl5/JlbLnqTJ6gnYyxs8KBZc54QwoKUz36TY+ZZ9de8=
+	t=1787577122; cv=none; b=uy6XevHcuPkmBeMlrzfE/o4N0Tce0AZw3yWvkVnPa/Q9j7UDhlGc+x3LkMgzE5KLy/W6a9KcgwlMg2c1xvppvAA4nztwXzLzMW22Af0NKjR6ihen1bpsts5Ljkz3m1dUhB7u+2MMJ6mkyN5flduJVWnW05S+FVxtuoclIIHFp3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787576949; c=relaxed/simple;
-	bh=yscKTag0IJQGv9/KR0AUjg/as0gLtN/BNAtD6JEBZL4=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=SM7Ju21DCp1hika9PVynJlguD6H8ctNaCPQ9/sQERQzXOj3lCSMMaerluW4/ynWjhF1GTytRKSi1KrdH/sZlxF431Tob5BJxJ0y8SsffGAWxT10n7jqWkyEoWyT28NSzvraMvDdCyfN/uvdoEb7NG/UiQbZevPuXfijVFWH8Jko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JPPmYPX7; arc=none smtp.client-ip=91.218.175.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787577122; c=relaxed/simple;
+	bh=UoDDENVMVF5Bz2fZwHd0lFydgvPhiZFqNxWecRPzuk0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=ksmtZqw7XxU8YkkpZsXEa1W8aNLFvu/PsAm0UWICD11lusZQURkNgw2bpEVf3jcb6OPh6JdBQVdFe6HQg0Y9/bXtS0zVEM6rejrAbfu1oAJroqBJgVsG5Ai96/1jgZwaaP3xcAcPykURukY765KByQ5b14T2mYjj628dKAOHcgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AZzFvAVc; arc=none smtp.client-ip=74.125.228.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JPPmYPX7"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=yscKTag0IJQGv9/KR0AUjg/as0gLtN/BNAtD6JEBZL4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787576944; v=1; x=1788181744;
- b=JPPmYPX70RM+Xb3j9f49Nh5GtaTqzBLMfZmMt9UT5o9zHXb4tLjsf4wZCsfyTt3CWGvkJe1s
- OQZ1++vhS2DUrCJTlbHUuvVcK1ivt7w2kn6kosqlW15l2o2iGW5NlGE/agGrTzksrMXoG3XW8DJ
- kNXUKwP/CPHUHSpnf1Bfu10c=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [192.168.110.173] (223.70.160.239)
-	by smtp.migadu.com with ESMTPS id fe487304b85a5a72;
-	Mon, 24 Aug 2026 13:08:54 +0000
-X-Mizu-Trace-ID: fe487304b85a5a72
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <1b2f54bd-97f5-4175-9a92-34871dd6f375@linux.dev>
-Date: Mon, 24 Aug 2026 21:08:45 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AZzFvAVc"
+Received: by mail-ej2-f2.google.com with SMTP id a640c23a62f3a-c1c5cb0f9f1so165660366b.0
+        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 06:12:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787577119; x=1788181919; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=UoDDENVMVF5Bz2fZwHd0lFydgvPhiZFqNxWecRPzuk0=;
+        b=AZzFvAVc4/abtFv+MghODW8LNTapD/MPMAerkvoZas6krUkY/Yc43Ma3d7Of9dijpQ
+         bcPGOMsU0W/1K8DzhEo7kzLg9oLa1ucO6LcpFFG0mEO6YbmeasAnYKQKpaPUhHuRF+/9
+         TqzJx1rhqbrtSqx1RwrCoPnWMQWsrNSMkeBq5ysdDke04i1WcDRMrmbz1Lp4XjGescwm
+         u0hMidZeKktJaP0i2Q3PtBLQWt3qXZDVDPyiz31MKktCK/S2cak4ijK0i8GMTTtbnsFw
+         UEKMMngmbvF6w/ypSTzzl6nruxoDcZITvYaBWu0V7/llEnPp015/B7i1bD67CwYfKaan
+         AG8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787577119; x=1788181919;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=UoDDENVMVF5Bz2fZwHd0lFydgvPhiZFqNxWecRPzuk0=;
+        b=QcP5aLE7TC3y4LmhDirzjzCCzZp9q10JUjKr+MKq9LfPtuvgUDTBiUbPzxI6HQZU9l
+         pPoMNEnqRp4AIuICqrgobk4xrrgIDdLKVnqR9FfHBLsXbqYofzLgMeI6Tx8548Q/esnl
+         ElbUp7i8phXtf+gFKVSwC/7LCv3X4vVePkrH3dH6E0N1Shk1rXz/kXOZpQ1CDhvBCMNg
+         XTcd5ixqc2gzBS0/pAIE5bYugvm8+A56OZM3uRsvSGjpOATexn4nkarlt68tMI8EQHZV
+         MJ+XKHnrrdvJaJorpaAbaRJu3BUk+C0zuueSrHEJX5RfLBBxV5nzWgUbLaimLqis9kKs
+         vJsA==
+X-Gm-Message-State: AFuF++nt+9OjWsFVRzXC5FRFNwiGC6PseGew3MnWNxbvuhArMYAUBINi
+	u+WZCTULw+7yNab+q45oe/KRqAxHnPcsNGd+G5bqXAfkblQM7T34Xmgb
+X-Gm-Gg: AR+sD13W72pd+CV+QBfv38sKULLWo02KDuWsmg+awc6IdnNojI5ooDb1e0Y9+OPXRz6
+	zfWGlJdpzUHZOmyMXPCt1Zga5dFcL/lza6TdU3wmRsBNR2aqYcbUsFD9EjsRqqtMCRiutDjiaYP
+	xQISiXkEhHuABd5Cd+o9uEJAh5NRr783yr/Y72LmrthqU6XfnPzGOPGd36PtELAZl2HPajox0BC
+	fTBzQyHuPZJpXhAgO76Qzu59FfRle2hxhnh7oRG2ToPLxBuQHJ32Yx282kM91neM9COGLepiK5d
+	VG0f67DGnr6njRICaCrCQZbG2uqbIA3nVA8XtvWpt8d+y6Uy+VID5Y7A8AO9SsWTvxaUXMMoLNt
+	qhuW2Lg2Dv9fw+j/+gk+ewLOE3FnGu6JX0THCpR6e9BYKE/1qjF64S1vca87WiWpvwTEwx3rdpq
+	Ly2ZBGkKInAO6Y+/U0Jr1Jm0mT08MVM29iDKOWH1ttZGzx3/Cb/c20AvpWUou+zyqTxcvO4fYaZ
+	uQ5wTzJSHJTPNeUkkOP9W7ECv0hcTafs2h8c0mm8dhde3LsMikhwVNAdzlg8UK89x8UFcjAyf1u
+	aErdG8o64xL9Zqbby87U2tyDLt4=
+X-Received: by 2002:a17:907:3d42:b0:c12:6632:e7f0 with SMTP id a640c23a62f3a-c2492797eb0mr2083634066b.24.1787577118741;
+        Mon, 24 Aug 2026 06:11:58 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2496295627sm1207740566b.15.2026.08.24.06.11.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Aug 2026 06:11:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, tj@kernel.org, void@manifault.com,
- changwoo@igalia.com, suzhidao@xiaomi.com, sched-ext@lists.linux.dev,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- Tao Cui <cuitao@kylinos.cn>
-Subject: Re: [PATCH v3] docs/sched_ext: document that cgroup CPU knobs are
- scheduler-dependent
-To: Andrea Righi <arighi@nvidia.com>
-References: <20260824091501.547649-1-cui.tao@linux.dev>
- <aowxJK_KgBLLnyiN@gpd4>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <aowxJK_KgBLLnyiN@gpd4>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Date: Mon, 24 Aug 2026 15:11:57 +0200
+Message-Id: <DKX77B18XF28.LG3DX8NUFQGI@gmail.com>
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Michal Hocko" <mhocko@suse.com>, "Jiayuan Chen"
+ <jiayuan.chen@linux.dev>
+Cc: <bpf@vger.kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "John Fastabend" <john.fastabend@gmail.com>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Martin KaFai
+ Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Sebastian Andrzej Siewior"
+ <bigeasy@linutronix.de>, "Clark Williams" <clrkwllms@kernel.org>, "Steven
+ Rostedt" <rostedt@goodmis.org>, <linux-kernel@vger.kernel.org>,
+ <linux-rt-devel@lists.linux.dev>
+Subject: Re: [PATCH bpf-next v4 1/4] bpf: Add a sleepable page allocator for
+ map memory
+X-Mailer: aerc 0.21.0
+References: <20260821050250.35112-1-jiayuan.chen@linux.dev>
+ <20260821050631.39784-1-jiayuan.chen@linux.dev>
+ <aow4YNCDa0gDwbfj@tiehlicka>
+ <de12ff1b-2f7c-4efe-ba1f-95e0b8d259f2@linux.dev>
+ <aoxAo6gDK00PeCzG@tiehlicka>
+In-Reply-To: <aoxAo6gDK00PeCzG@tiehlicka>
 
-Hello, Andrea,
-
-在 2026/8/24 19:55, Andrea Righi 写道:
-> Hi Tao,
-> 
-> On Mon, Aug 24, 2026 at 05:15:01PM +0800, Tao Cui wrote:
->> From: Tao Cui <cuitao@kylinos.cn>
+On Mon Aug 24, 2026 at 3:01 PM CEST, Michal Hocko wrote:
+> On Mon 24-08-26 20:44:18, Jiayuan Chen wrote:
 >>
->> The fair class enforces cpu controller knobs such as cpu.max,
->> cpu.weight and cpu.idle in the kernel. sched_ext only passes them to
->> the BPF scheduler through the ops.cgroup_set_*() callbacks. Whether
->> and how a knob takes effect is up to the loaded scheduler: it may
->> implement the corresponding callback partially or not at all. The
->> same applies to other knobs like nice levels.
+>> On 8/24/26 8:26 PM, Michal Hocko wrote:
+>> > On Fri 21-08-26 13:06:12, Jiayuan Chen wrote:
+>> > > bpf_map_alloc_pages() picks the allocator via can_alloc_pages(), a
+>> > > conservative guess for BPF program context that is always false unde=
+r
+>> > > PREEMPT_RT. So even a caller that really is sleepable gets the
+>> > > non-blocking allocator, which never reclaims and never engages the O=
+OM
+>> > > machinery.
+>> > I thought one of the main motivations was reentrancy. As you cannot
+>> > really assume the context bpf_map_alloc_pages is called from there is =
+an
+>> > extra care needed so that this doesn't re-enter the allocator from bpf
+>> > program called from allocator path and deadlock.
 >>
->> Document this in the basics section so users and container
->> orchestrators know what to expect from a BPF scheduler.
 >>
->> Signed-off-by: Tao Cui <cuitao@kylinos.cn>
->> ---
->> v2 -> v3: Drop the scheduler list and the nr_throttled example, keep
->> the section concise and generic, per review.
+>> Agreed, bpf_map_alloc_pages() is designed to be safe to run in any conte=
+xt.
 >>
->> v2: https://lore.kernel.org/r/20260819012157.220932-1-cui.tao@linux.dev
->>
->>  Documentation/scheduler/sched-ext.rst | 12 ++++++++++++
->>  1 file changed, 12 insertions(+)
->>
->> diff --git a/Documentation/scheduler/sched-ext.rst b/Documentation/scheduler/sched-ext.rst
->> index 35b550671ca7..b594d93dd6aa 100644
->> --- a/Documentation/scheduler/sched-ext.rst
->> +++ b/Documentation/scheduler/sched-ext.rst
->> @@ -242,6 +242,18 @@ optional. The following modified excerpt is from
->>              .name                   = "simple",
->>      };
->>  
->> +Scheduler-Dependent Knobs
->> +-------------------------
->> +
->> +The fair class enforces cpu controller knobs such as ``cpu.max``,
->> +``cpu.weight`` and ``cpu.idle`` in the kernel. sched_ext only passes
->> +them to the BPF scheduler through ``ops.cgroup_set_weight()``,
->> +``ops.cgroup_set_idle()``, ``ops.cgroup_set_bandwidth()`` and friends.
-> 
-> Existing cpu.weight and bandwidth values are delivered via ops.cgroup_init(),
-> ops.cgroup_set_*() callbacks handle later changes.
-> 
-> Moreover, cpu.idle state is not included in scx_cgroup_init_args, so apparently
-> BPF schedulers don't receive an initial value (only subsequent writes). This
-> should be probably fixed separately.
-> 
->> +Whether and how a knob takes effect is up to the loaded scheduler: it
->> +may implement the corresponding callback partially or not at all. The
->> +same applies to other knobs like nice levels. When relying on these
->> +knobs, check the documentation or source of the loaded scheduler.
->> +
-> 
-> "nice levels" can be a bit ambiguous, per-task nice changes are converted to
-> weights and reported through ops.set_weight(), writes to the cgroup file
-> cpu.weight.nice are reported through ops.cgroup_set_weight().
-> 
-> Maybe we can rephrase the whole paragraph as following, or something along these
-> lines:
-> 
->   The fair-class scheduler enforces CPU controller settings such as cpu.max,
->   cpu.weight, and cpu.idle. For sched_ext tasks, the scheduler core communicates
->   these settings to the BPF scheduler through ops.cgroup_init() and reports
->   subsequent changes through the corresponding ops.cgroup_set_*() callbacks.
->   Similarly, per-task nice changes are converted to weights and reported through
->   ops.set_weight().
-> 
->   Each BPF scheduler is responsible for implementing the scheduling semantics of
->   these settings and may choose to ignore them. Consult the loaded scheduler's
->   documentation before relying on these controls.
-> 
+>> The commit message should be precise.
+>
+> How do you achive any level of safety for the _sleepable version? Vast
+> majority of the kernel is sleepable but that doesn't mean this is safe
+> from the mm reentrancy POV.
 
-Thanks for the review. v4 adopts your wording: ops.cgroup_init()
-for the initial values, ops.cgroup_set_*() only for subsequent
-changes, and per-task nice disambiguated from cpu.weight.nice via
-ops.set_weight().
-
-On the missing cpu.idle initial value in scx_cgroup_init_args: I can
-look into a separate fix for that.
-
-Thanks,
-Tao
-
-> Thanks,
-> -Andrea
-
+I think it will only be invoked directly in the arena map fault handler, wh=
+ich
+runs in task context. If an interrupt occurs and tries to allocate pages,
+can_alloc_pages() will return false and it should pick the _nolock() varian=
+t
+which is safe against reentrancy.
