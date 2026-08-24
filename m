@@ -1,123 +1,158 @@
-Received: from mail-ed2-f7.google.com (mail-ed2-f7.google.com [74.125.228.71])
+Received: from mta1.migadu.com (out-127.mta1.migadu.com [95.215.58.127])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D64B138E8C9
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 20:45:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C60F826ED46
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 21:01:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.127
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787604345; cv=none; b=Ix+/zvU2R4zKt4FoacKz4VY3p3vSVDXZLbtRagLj8ZOnyfDBLKJ+mwkQOdPn7Qe0AeZykkG8VS2eUdnCEuUIrdjIVmasEWpCAtmSLeekzhXfD8S1a0BMG4Lkb1Le/xwn5JBZBP6Z6ZKgC/lwIF+sMb+3QSbz6VV7Vxee4cnWqOs=
+	t=1787605319; cv=none; b=q9EFP3L06k4wAUOCmRK9oW5nWngFSXBdb68oDjN3/OGQIYOvGEVtC0oAmqX02Xco5NrMjEKQZ7zeaD0ruUPo/nJuTyEpDsV608+gRBfGIk7hxvSthSMAU3tasjHJJh7FKtytIQ8txWTQEku19gjlifS9At6An8qMmRi6FRyrcmY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787604345; c=relaxed/simple;
-	bh=5lhs+DnDtIjGjpWJul38VwotNXwZAyjlRWl8g9ipxLc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=Fdx395PxbclFEW+BK/vMl05ZLreAK5zuoyek+FPJUJR+CP8W6eiwnakMH+QAa9CYEYjcV1GiUwcPAyeyuaWAKtHYb2sUV2w7nn5nK89hP3E5a1crGU5Sz8wCqy8E5FVWejT/C93DtrXm8iJUkgAU1suVlGr+yjlcRovCR3TTAo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JNcDpCdp; arc=none smtp.client-ip=74.125.228.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787605319; c=relaxed/simple;
+	bh=XmK3Wjj2vKoHmLoephmO2/7kAr9fbCbw79HWmEJDIl4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Wqxn6me4C3h0LtSGWttgZdQxPiTuqe9QFGp5vgZiwg7V8ijgHYLKhnoWPbGA+HLEJULQAeqrSW3927nh63xGOeyrubnK2fpIZTBIpK1PJTdK+CGu9QaFsvNxH6XuRDW1qUfF1/NLj5Wwg7r9GMJ2cAVJmUb5bBpjOW8oOza2KuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EYU2CAqT; arc=none smtp.client-ip=95.215.58.127
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JNcDpCdp"
-Received: by mail-ed2-f7.google.com with SMTP id 4fb4d7f45d1cf-6a403027d38so2049790a12.0
-        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 13:45:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787604342; x=1788209142; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=1jc7yPTsdl9s9ZCxYejVGBlGDxAAvpHITyYBq8v8lr4=;
-        b=JNcDpCdpPsRjvmFKaKWQgFVI2kjHrrD8d7xj5s05/gn/RItYA5xzdo76Ayt0DeZpnN
-         Gi54EHRwJB+YMudiBnxwMhg0oa74NRrqGCbWEFA8olk73GOFB9HEu86gTFRp4128ZKb2
-         rwdPn7NLfb69lgwV8KkTeAXwWFEXf8M8ezGcyJk3KTnJmy1T5ToS9KMF1vWosJipM7v8
-         hDIQU/WExsFU0Qi9EHfVcSli/j7UXcuhnxTdtPxtOteAz4+zex08bo2QIEP2c1rhiFNO
-         dnT9HL1GB9Wotq+gRCS487qn0BB5EfbIl1m5D4ULRn4EL90sm22W/cvosSf9wjg4Gqru
-         UWiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787604342; x=1788209142;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=1jc7yPTsdl9s9ZCxYejVGBlGDxAAvpHITyYBq8v8lr4=;
-        b=d9VXuRUpcjBtmpThIIviATnb3h060mUaHiaKvSUUFCxbjIke5rDpJOZRv7hdspaztY
-         7d2j/q8c+YwZCcU+RaMymlhyf1YL6Q3bfY+/D/xy+g8LG+7nMPe6SroL6j0zpY6LNfkj
-         VmglXOo7LjeRG5yQZrI57WIP0ktnWF/FH4eTLw1HEcVs7N3ynheLFV3mfWqRVD1Apzz1
-         zzha/TC/M763Cn0PUaNNr8KPO0D7ZvsyF4J+Hh/0hVJCP6ebodKTkLknwFgiPZpLS+1o
-         I0d5LXVKIZ0pz2sZsYRg9BowzAXX2G7nrNvjTDFPySs90ayvCkV4yaS4NLsSwS0KqqLo
-         3t+g==
-X-Forwarded-Encrypted: i=1; AHgh+RquGL1ULIGYyFOdeEdpjk4quRvQST/McNogSs6NSzV4xmQok705xPm8uWBEJS2/CRkvSFU=@vger.kernel.org
-X-Gm-Message-State: AFuF++nXhfC5utua60bSGxc582PTFIbam34tpHaNX3A6lW286DfkAw+G
-	cOb7z1Xu2SNdCp/cfNkrDN3TZ6gOn2b8Manawt/aBlF234JGzc5HVFpA
-X-Gm-Gg: AR+sD138njtKqMVG9mFzZTKuCWSs7jZE86KRhzxOJgQwRRIqRMdC7XU5UqJEjo6Hbtt
-	hNIkqrX8FZZP+6KaS7B1olIosSievZ63Ktqv9S3Ews48pEyeuKrl2bS6Wl0UkcJe0pSF/Y5BLs6
-	IAsQtEfB2Ty2FKXZAPXxbFVvHfWyb+IxjKD2jr7coBOL3/V/+B+P9crgrgY5lFNTjh5UZTFEM1Z
-	eRWypkl8Fum73+6igQt2jswyoG8MEN0FJnnqN9cQHPspQfq4q8png/p/5tpVaE8g7q3UmJSBOHO
-	loGHg9wb1Jzg+/a4q05t1FGk4lWOjFVFCOlga4Do+EkndjYKapypPiun0NOZwQC8qUGqGbaD65a
-	mD+iXcU/NGw+D4QuSlSHtrNE1X7v45pK2GAUkN4bKzI0VUr4wgTuUF+8vRnSYiOGs2fzHYJkCQ8
-	XCI8cY+j9h7p/R4pyYj0NvK1TCgJbKSzmhoGq+4EfgQrIC1bKdumcvb0GBBnd7nD1CgU7CIRRWT
-	K51HvGYz8Jp2fzI6bmbjMiZfF0PtrOFvsT5+p1fVsh9d3XKTdbHv5gjbgrNBC5/7u99BSWq1uJ0
-	fCsYYB2PVMkw00P4Sepu6qchA2o=
-X-Received: by 2002:a05:6402:24a1:b0:6a3:f74d:6a20 with SMTP id 4fb4d7f45d1cf-6a582b0c6aamr25186057a12.4.1787604342002;
-        Mon, 24 Aug 2026 13:45:42 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a59e1ae4efsm9450637a12.21.2026.08.24.13.45.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Aug 2026 13:45:41 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EYU2CAqT"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=XmK3Wjj2vKoHmLoephmO2/7kAr9fbCbw79HWmEJDIl4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787605314; v=1; x=1788210114;
+ b=EYU2CAqThY1aVn2NjvO2ClvRYG3XsBVQ/QG39A99r3R0OQAy3LI9eAosrMMcfrcbqPAsFief
+ a1rRY/PCOHeu1GaGOk2zWGI1P1S7l8GbDGKCDSemyGvrPs3Capcb+l7aEugEXl+KJUVoQSUBnY9
+ t41YbfHdHeZTL0VK+Jdx7Qyw=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from gvineet-fedora-PF5JGVFY.thefacebook.com (2620:10d:c090:500::4:2c42)
+	by smtp.migadu.com with ESMTPS id 0d1a4000fa0072aa;
+	Mon, 24 Aug 2026 21:01:54 +0000
+X-Mizu-Trace-ID: 0d1a4000fa0072aa
+X-Migadu-Flow: FLOW_OUT
+From: Vineet Gupta <vineet.gupta@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Vineet Gupta <vineet.gupta@linux.dev>
+Subject: [PATCH bpf-next v2 0/3] selftests/bpf: unblock bpf-gcc test coverage
+Date: Mon, 24 Aug 2026 14:01:39 -0700
+Message-ID: <20260824210142.3933580-1-vineet.gupta@linux.dev>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 24 Aug 2026 22:45:40 +0200
-Message-Id: <DKXGUP3WYZAD.1ZH64HX717QXD@gmail.com>
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Rik van Riel" <riel@surriel.com>, "Alexei Starovoitov" <ast@kernel.org>
-Cc: "Quentin Monnet" <qmo@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
- "Jiri Olsa" <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>,
- <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] bpf: fix array-index-out-of-bounds in print_bpf_insn
-X-Mailer: aerc 0.21.0
-References: <20260824164143.485301ca@fangorn>
-In-Reply-To: <20260824164143.485301ca@fangorn>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon Aug 24, 2026 at 10:41 PM CEST, Rik van Riel wrote:
-> syzkaller triggers UBSAN array-index-out-of-bounds and panic_on_warn
-> panic in print_bpf_insn() when loading a BPF program containing
-> BPF_LDX | BPF_MEMSX | BPF_DW.
->
-> bpf_ldsx_string[] holds three entries for B/H/W (s8/s16/s32).
-> BPF_DW gives index 3 and reads past the array. check_subprogs()
-> prints the program via bpf_diag_program_structure() before
-> do_check() validates the instruction, so the illegal insn reaches
-> the disassembler.
->
->     UBSAN: array-index-out-of-bounds in kernel/bpf/disasm.c:306:21
->     index 3 is out of range for type 'char *[3]'
->     print_bpf_insn+0x2328/0x2940 kernel/bpf/disasm.c:306
->     format_disasm_line kernel/bpf/diagnostics.c:633
->     diag_print_insn_context+0x3a5/0x930 kernel/bpf/diagnostics.c:783
->     bpf_diag_source+0x615/0x14a0 kernel/bpf/diagnostics.c:896
->     bpf_diag_program_structure+0x1f9/0x280 kernel/bpf/diagnostics.c:1215
->     check_subprogs+0x5c3/0x650 kernel/bpf/verifier.c:3057
->     bpf_check+0x1935/0x89f0 kernel/bpf/verifier.c:21097
->     bpf_prog_load+0x17dd/0x2990 kernel/bpf/syscall.c:3133
->
-> Guard any size index beyond the corresponding string table and emit
-> BUG_ldx instead of accessing memory beyond the end of the the array.
->
-> Fixes: f835bb622299 ("bpf: Add kernel/bpftool asm support for new instruc=
-tions")
-> Assisted-by: claw:muse-spark-1.2 syzkaller
-> Signed-off-by: Rik van Riel <riel@surriel.coM>
-> ---
+When doing some unrelated testing, stumbled upon this. A lot of tests
+are skipped under BPF_GCC due to clang only gate. On top, the test
+harness declares them passing/OK.
 
-Already fixed by https://lore.kernel.org/bpf/20260820022020.3450479-2-memxo=
-r@gmail.com.
+Patch 1 renames a few placeholders a consistent dummy_test name [NFC].
 
-pw-bot: cr
+A sample test with BPF_GCC used to say:
 
-> [...]
+| #587/1 verifier_bswap/cpuv4 is not supported by compiler or jit, use a dummy test:OK
+| #587	 verifier_bswap:OK
+
+Patch 2 adds a __skip("reason") annotation so a compile-time gated file
+reports SKIP rather than OK, making these gaps visible in test_progs
+output.
+
+Now the output changes to
+
+| #587/1 verifier_bswap/cpuv4 is not supported by compiler or jit, use a dummy test:SKIP
+| #587	 verifier_bswap:SKIP
+
+Patch 3 augments the clang only gate with a per-feature gate supported
+by both the compilers. FWIW the clang half has to stay: clang only
+defines __BPF_FEATURE_MOVSX and friends at -mcpu=v4 but assembles the
+inline asm at -mcpu=v3 too, so dropping it would remove these tests from
+the default test_progs flavour where they run today.
+
+And finally the output now is
+
+| #587/1 verifier_bswap/BSWAP, 16:OK
+| #587/2 verifier_bswap/BSWAP, 16 @unpriv:SKIP
+| #587/3 verifier_bswap/BSWAP, 32:OK
+| #587/4 verifier_bswap/BSWAP, 32 @unpriv:SKIP
+| #587/5 verifier_bswap/BSWAP, 64:OK
+| #587/6 verifier_bswap/BSWAP, 64 @unpriv:SKIP
+| #587/7 verifier_bswap/bswap16_range:OK
+| #587/8 verifier_bswap/bswap32_range:OK
+| #587/9 verifier_bswap/bswap64_range:OK
+| #587/10 verifier_bswap/be16_range:OK
+| #587/11 verifier_bswap/be32_range:OK
+| #587/12 verifier_bswap/be64_range:OK
+| #587/13 verifier_bswap/le16_range:OK
+| #587/14 verifier_bswap/le32_range:OK
+| #587/15 verifier_bswap/le64_range:OK
+| #587/16 verifier_bswap/BSWAP, reset reg id:OK
+| #587	 verifier_bswap:OK (SKIP: 3/16)
+
+Programs per object recovered under BPF_GCC, 124 in total:
+
+  verifier_sdiv                  1 -> 80
+  verifier_movsx                 1 -> 17
+  verifier_ldsx                  1 -> 14
+  verifier_bswap                 1 -> 13
+  compute_live_registers        17 -> 19
+  verifier_gotol                 1 -> 2
+  verifier_iterating_callbacks  34 -> 35
+
+Two things stay clang-only on purpose: the arena tests using
+addr_space_cast, and verifier_load_acquire/verifier_store_release. gas
+implements neither.
+
+The increased coverage bore fruits right away as I stumbled into a gas
+bug: PR gas/34558. Fix is posted however workaround is needed for the
+time being.
+
+Built for x86_64 with both clang and bpf-gcc; the per-object counts above
+were read back from the generated objects.
+
+Changes since v1:
+
+ - 1/3: Nothing functional just Eduard's Ack.
+
+ - 2/3: convert the two feature-gated placeholders that were missed.
+   Spotted by the BPF CI AI reviewer.
+
+ - 3/3: Fix comment to kernel-style, not netdev (Sashiko review).
+
+ - Eduard's Acked-by carried over from v1. Note 2/3 grew two more
+   placeholder conversions after he acked it.
+
+v1:
+https://lore.kernel.org/bpf/20260821201316.1059129-1-vineet.gupta@linux.dev/
+
+Vineet Gupta (3):
+  selftests/bpf: name the remaining placeholder programs dummy_test
+    [NFC]
+  selftests/bpf: report placeholder tests as SKIP, not OK
+  selftests/bpf: Enable some of the blocked cpuv4 instruction tests for
+    bpf-gcc
+
+ .../testing/selftests/bpf/progs/arena_kfunc.c |  3 ++-
+ tools/testing/selftests/bpf/progs/bpf_misc.h  | 10 ++++++++--
+ .../bpf/progs/compute_live_registers.c        |  8 ++++++++
+ .../selftests/bpf/progs/stack_arg_fail.c      |  3 ++-
+ .../selftests/bpf/progs/stack_arg_precision.c |  1 +
+ .../bpf/progs/verifier_aggregate_ret.c        |  1 +
+ .../selftests/bpf/progs/verifier_bswap.c      |  3 ++-
+ .../selftests/bpf/progs/verifier_gotol.c      |  1 +
+ .../selftests/bpf/progs/verifier_ldsx.c       | 19 ++++++++++++-------
+ .../bpf/progs/verifier_load_acquire.c         |  1 +
+ .../selftests/bpf/progs/verifier_movsx.c      |  3 ++-
+ .../bpf/progs/verifier_percpu_addr.c          |  1 +
+ .../bpf/progs/verifier_private_stack.c        |  1 +
+ .../selftests/bpf/progs/verifier_sdiv.c       |  3 ++-
+ .../selftests/bpf/progs/verifier_stack_arg.c  |  1 +
+ .../bpf/progs/verifier_stack_arg_order.c      |  1 +
+ .../bpf/progs/verifier_store_release.c        |  1 +
+ tools/testing/selftests/bpf/test_loader.c     |  9 +++++++++
+ 18 files changed, 56 insertions(+), 14 deletions(-)
+
+-- 
+2.53.0-Meta
+
