@@ -1,109 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-167.mta0.migadu.com [91.218.175.167])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9C4033A6E2;
-	Mon, 24 Aug 2026 13:31:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C1E34B66F
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 13:40:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.167
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787578319; cv=none; b=uQEN4kwO8dbJF8gcYC7J0Spy3QAXJc0wpG64QSmub5BnWsOQT2V1hztsMQuZNZiY6FJcbiedU/TpM1fhwseNnLr6Uuu8IOESpPcpoqG+eplrDcsJSgl7CpakuDdgppvBGrQrP0aYemZ1zj96SUDz6i8/JZLtf3LSkOrX0ix6AZM=
+	t=1787578834; cv=none; b=MBsV8eHosoq2Pn1Sk8qrO4bzTBH6BM0FGrxVolhiVC1XL+/gZG5c4HQ4d64eZ2U1qxCtIMNo4hXnvI6FYLRzuVNxk6KwcS+sHplZlwLOGiKURD8UpEjAokK5XMBH+MDkOcKZaZw1h0sw7sFkyaI6imOCoCnM1CWohQwOYdMddjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787578319; c=relaxed/simple;
-	bh=GNCGui7P2AnmzIfr9ZkhsD6RefuXjdvfS82HsheqZsM=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=sQrEuo6A0TRVlHL7/JU3ykvpAePwnCDkM1kA6+bG7vkICP8vCwO7UXwirycGKRrC+mJbuoHSBY1ofCZu4tO5WXYrO1yNUXe3bxcwJRtAiEXPx3kmebSVfxxYHYlgG8c3+EtKXDpN8aERWPDNjnLDy66FxJroxdZ7HRu0haN7EZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HamXLMwu; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787578834; c=relaxed/simple;
+	bh=3edNKJO7hDiLr+6N33bx+1GdVJff9by9zddu2YSlVF4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=i/HojjNwlJfzNaAUNJLdkSbTwdXVhVodQziMCngdInYFVhd+ssICnBP3Sjie90cstKMGyy//wRaoWNdUhEmRXmyj4AkeUKaLXoEyM+hGtHKemu6KRVQo+GZh58zWNWL71GGTTfSUwIGpkpoL7Qg/Nu8rEud1pEN9fmdmXZK8SMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xQuc6FhW; arc=none smtp.client-ip=91.218.175.167
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HamXLMwu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B4B01F00A3A;
-	Mon, 24 Aug 2026 13:31:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787578312;
-	bh=OxKKi0/V2fk/sc/a1SKNBUlsnCLui6ACXsD+B8Vtw+U=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=HamXLMwur7SX02Ge2bLzY/iwZrndwDJFx0RlbP8TT9F4Vi47tCSuvukrjZDpQZ1LP
-	 7f09Xdm7br6FYqdjFFpZ7TO8EMiSiCv1r8sZi0tJL/3PMW8s6DEG/Gm3Ik4fBIVfHv
-	 Vw4KK9rQnUmBXefQSjc8DkoOY9oG5+A3Mo8VcY9JOwqu0BJF0c4uJ4AhZW9ImN3UjK
-	 xDb18Lshg5zKfi01mSwsgAXTWcCs1QPDwEX+b0CNIZAd3RBRCxRjrDr7dmdgA0ub/9
-	 bTlBEMrchJfbjEBXECuSFtHOhkZCNpoivwhogaXQvgK/eXX01vWJMFwwp2Nfddv+9l
-	 11OouhnNyIosw==
-Content-Type: multipart/mixed; boundary="===============2052238105983823877=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xQuc6FhW"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=3edNKJO7hDiLr+6N33bx+1GdVJff9by9zddu2YSlVF4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787578824; v=1; x=1788183624;
+ b=xQuc6FhW/z6Z9uSvkP6+PZczfWmDZv5iDy9KtfrZGlwSZpgD0pEm04Mi6Z+wW5FBfIzEdXtn
+ iNn3I3xtemI+HQyDrU9WYG6NtHk8F8Aq+y9QvZz1CmtUvlv8XcIJdw+e6tGIqTAGhgW42eJVD6H
+ Gfp1wSNTjAu4WiQLh5lC0PDU=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from ctao-book.. (223.70.159.239)
+	by smtp.migadu.com with ESMTPS id c8db36bdc943f2b5;
+	Mon, 24 Aug 2026 13:40:03 +0000
+X-Mizu-Trace-ID: c8db36bdc943f2b5
+X-Migadu-Flow: FLOW_OUT
+From: Tao Cui <cui.tao@linux.dev>
+To: tj@kernel.org,
+	void@manifault.com,
+	arighi@nvidia.com
+Cc: changwoo@igalia.com,
+	suzhidao@xiaomi.com,
+	sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	cui.tao@linux.dev,
+	Tao Cui <cuitao@kylinos.cn>
+Subject: [PATCH] sched_ext: pass the initial cpu.idle state in scx_cgroup_init_args
+Date: Mon, 24 Aug 2026 21:39:54 +0800
+Message-ID: <20260824133954.561956-1-cui.tao@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <8b583f9deb409bec43e97f558b1e3197f2cd54ca4e5121eacada28b04749f812@mail.kernel.org>
-In-Reply-To: <20260824125310.1384-2-zhaofuyu@vivo.com>
-References: <20260824125310.1384-2-zhaofuyu@vivo.com>
-Subject: Re: [PATCH bpf-next v4 1/2] libbpf: support selective kernel module BTF loading via bpf_object_open_opts
-From: bot+bpf-ci@kernel.org
-To: zhaofuyu@vivo.com,bpf@vger.kernel.org,eddyz87@gmail.com,andrii.nakryiko@gmail.com,alan.maguire@oracle.com
-Cc: andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,yatsenko@meta.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,zhaofuyu@vivo.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 24 Aug 2026 13:31:52 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============2052238105983823877==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From: Tao Cui <cuitao@kylinos.cn>
 
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index b965ad571540..838602319da8 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
+scx_cgroup_init_args carries the initial weight and bandwidth control
+parameters of a cgroup to ops.cgroup_init(), but not its cpu.idle
+state. A cgroup that was already configured idle before the scheduler
+was loaded (or before it was onlined under it) is presented as
+non-idle, and the BPF scheduler only learns about it if cpu.idle is
+written again later.
 
-[ ... ]
+Add the idle state to scx_cgroup_init_args and fill it in both places
+that build the args -- scx_tg_online() for cgroups created under the
+scheduler and scx_cgroup_init() for cgroups that already exist when
+the scheduler is loaded.
 
-> @@ -224,10 +224,32 @@ struct bpf_object_open_opts {
->  	 * point (/sys/fs/bpf), in case this default behavior is undesirable.
->  	 */
->  	const char *bpf_token_path;
-> +	/*
-> +	 * Optional list of kernel module names whose BTFs should be loaded.
-> +	 * nr_btf_module_names specifies the number of entries in
-> +	 * btf_module_names.
-> +	 *
-> +	 * If btf_module_names is NULL, all module BTFs are loaded,
-> +	 * preserving the default behavior. Otherwise, only the BTFs of
-> +	 * the listed modules are loaded. A non-NULL btf_module_names
-> +	 * with nr_btf_module_names equal to zero means that no module
-> +	 * BTFs are loaded.
-> +	 *
-> +	 * The list must not contain duplicate entries; otherwise
-> +	 * -EINVAL is returned.
-> +	 *
-> +	 * This affects:
-> +	 * - BPF CO-RE relocations against types defined in modules;
-> +	 * - BTF-based resolution of function attach targets for
-> +	 *   fentry/fexit/fmod_ret/freplace/LSM programs;
-> +	 * - extern (ksym) resolution for kernel symbols defined in modules.
-                   ^^^^
+Verified in a VM with a probe scheduler printing the init args: a
+cgroup configured cpu.idle=1 before loading shows idle=1 in
+ops.cgroup_init(), the default shows 0, and later cpu.idle writes
+still come through ops.cgroup_set_idle().
 
-This isn't a bug, but would it be worth adding struct_ops kernel-type
-resolution to the "This affects:" list?
-
-find_struct_ops_kern_types() (tools/lib/bpf/libbpf.c:1049) looks up
-'bpf_struct_ops_<name>' via find_ksym_btf_id(), which falls back to
-obj->btf_modules[] after load_module_btfs().
-
-A struct_ops implementation whose kernel type lives in a module (e.g. a
-module-provided tcp_congestion_ops or sched_ext-style struct_ops) will
-therefore stop resolving once a filter that omits that module is supplied.
-
-> +	 */
-> +	const char **btf_module_names;
-> +	size_t nr_btf_module_names;
->
->  	size_t :0;
->  };
-> -#define bpf_object_open_opts__last_field bpf_token_path
-> +#define bpf_object_open_opts__last_field nr_btf_module_names
-
-
-
+Signed-off-by: Tao Cui <cuitao@kylinos.cn>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ kernel/sched/ext/ext.c      | 4 +++-
+ kernel/sched/ext/internal.h | 3 +++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32730521630
---===============2052238105983823877==--
+diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
+index b646711a45fe..a7218314dcfb 100644
+--- a/kernel/sched/ext/ext.c
++++ b/kernel/sched/ext/ext.c
+@@ -4764,7 +4764,8 @@ int scx_tg_online(struct task_group *tg)
+ 				{ .weight = tg->scx.weight,
+ 				  .bw_period_us = tg->scx.bw_period_us,
+ 				  .bw_quota_us = tg->scx.bw_quota_us,
+-				  .bw_burst_us = tg->scx.bw_burst_us };
++				  .bw_burst_us = tg->scx.bw_burst_us,
++				  .idle = tg->scx.idle };
+ 
+ 			ret = SCX_CALL_OP_RET(sch, cgroup_init,
+ 					      NULL, tg->css.cgroup, &args);
+@@ -5185,6 +5186,7 @@ static int scx_cgroup_init(struct scx_sched *sch)
+ 				.bw_period_us = tg->scx.bw_period_us,
+ 				.bw_quota_us = tg->scx.bw_quota_us,
+ 				.bw_burst_us = tg->scx.bw_burst_us,
++				.idle = tg->scx.idle,
+ 			};
+ 
+ 			ret = SCX_CALL_OP_RET(sch, cgroup_init, NULL, css->cgroup, &args);
+diff --git a/kernel/sched/ext/internal.h b/kernel/sched/ext/internal.h
+index 53e136a47924..aa149a9c29f7 100644
+--- a/kernel/sched/ext/internal.h
++++ b/kernel/sched/ext/internal.h
+@@ -259,6 +259,9 @@ struct scx_cgroup_init_args {
+ 	u64			bw_period_us;
+ 	u64			bw_quota_us;
+ 	u64			bw_burst_us;
++
++	/* whether the cgroup is configured idle via cpu.idle */
++	bool			idle;
+ };
+ 
+ enum scx_cpu_preempt_reason {
+-- 
+2.43.0
+
