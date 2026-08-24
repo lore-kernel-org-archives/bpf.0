@@ -1,78 +1,74 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED052376A10
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 18:37:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 372D7381EA7
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 18:46:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787596637; cv=none; b=l2JRTS/HWOkLKiwDCMfWPWiHxGmaf55ILrHb5tuRd/BnlkdnGGjRLTNYTNfBk241LoyqCPVAwPesh+iRCQfiM7PnnNB/4J5KbcGJWF/UaE5AzdjguUo81elEIDA8yW8EElVexUv1sNPfOwdQhE6KAD2Mb8yOkeTsFQmYJkTA4vU=
+	t=1787597179; cv=none; b=cSHjgI01fwGep3/aA3WnO1oAZNm6mAjiaG4SvTQhrz+5RsTaA+4AhnaMsvpak3lIEXp/SvGh66xpxQpef3acmZq2ER5bRuo5vyg3/GDJV8wtNSP4DdbcBIWlhxjL3RVmRpSae0hJzvWzwUPZaIEujXMi/X236kvCAhlhgt84Z3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787596637; c=relaxed/simple;
-	bh=18F52JusIfI5n0mVWubrAuGSoJ32jJt4S906bKcE0oE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Pfi2QEK8/Ok5fWqifRZUDvcVEc31heVtdfEGI2BIYDc2IIHFfX9CGlJUTe0873hXs8pGuV4HPsyEamasaB0wSsYBQaPL5Medaatd1Cb7ENmkuUDBAZznrZGgPCgKOk+0+M4cbWLFXWhcCqYS578p05YkkR/RwA9iFe9tGfT1UJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Em0TUZvG; arc=none smtp.client-ip=209.85.216.45
+	s=arc-20240116; t=1787597179; c=relaxed/simple;
+	bh=hFlisPcov7OHDuouIps3HhL1FyS6IGvS24RllpVrcuw=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=J+O9e7uONqQ7tqK+sz8Gxv4K6lG9u7ZHchsKRH7hi6Xf0EBhzjd6veQVT9dBAa8/vSZUj1w6FuW63kME8P9QYqlJAQRQfaNQG1SlVEOYX7zvKFNmZiL4D8bEj1uYYi/gNdwX+B0DXiIkthhcjcjKCh9RmHUPF9MmA+Oo5ihISxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vrzbezsq; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Em0TUZvG"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-383b4a3755fso4191531a91.3
-        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 11:37:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vrzbezsq"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-381c51fde6bso4765276a91.2
+        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 11:46:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787596635; x=1788201435; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787597177; x=1788201977; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=q0QxQ4CXNIoVn+24IcKcIYFbwctD75pXwmCrxYybtUM=;
-        b=Em0TUZvGoWk0TlIO64Iehzlb10b+ZgO9OkB9vC0+wSHLxY92fnXfI2j9RZ9+GEXvpa
-         jmDVnK/58ZKF0pn94GCiOMUkai9opcfN4tp5o1+LC502MDHfmfileks0FRBgNEqbKHaT
-         FW84Lrhq8Dv9QVzwfch9xAO2A1189BZ++cBrHkUeNf3oUZalqpz7vIb/7XeFdI6al3zW
-         L9OxsRPXdgF+qjbQ7JxSQop1mRGn5RuAGj0VDJCj7HtinSFFmQgJXNWjK6uo7v6jA5S1
-         XuWDpjhW1QWkZlXA1x+139h9+azwprL7XNh4EoPB5j4flcocf04aICTDoCZfRUizFMtW
-         e2qg==
+         :references:in-reply-to:date:to:from:subject:message-id:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=hFlisPcov7OHDuouIps3HhL1FyS6IGvS24RllpVrcuw=;
+        b=Vrzbezsqj4TMiZeTPryZFU8fU2xZxNIjFKh3jV7u0M8M6d89/58kHQ9VKzq+xvc/VI
+         QrVIh+uXV8fdkNvoQpK3Z+VjesH6lTiL0GwSmfBi3LY8F9tl53obbl92GTv36wtfW0D4
+         nGMkdbQBKvuy/RagDDdrMM7I7J3QKDi14raCaP+kXN2KMmuURuhHQNBuJThJFUZJH3ic
+         16J7tSkCITNAexLcqrUxVGhx4d+ja7Shw4tAEtNuN47dy54w3qpOu1vuNMcvK8OHG+XV
+         WY7YLfATx9RuSeJpwRFV1gV09tKSaZZ6IN9YxqVYMGVwcJhlNO09vOzMBKSh4e/1SYI0
+         7p2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787596635; x=1788201435;
+        d=1e100.net; s=20251104; t=1787597177; x=1788201977;
         h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :references:in-reply-to:date:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=q0QxQ4CXNIoVn+24IcKcIYFbwctD75pXwmCrxYybtUM=;
-        b=J4EtwWXFnKQvY0PRq+kyn9WByjMbh3cmOr6PKJQKB1E/w/5M7VAzsGZiVwn7NcWWaY
-         8J4tpcXwqTcKWlv3gbmu4pWWSsqc6CWM7ao5HXY82kfHqsEa6XDkGA0buW6N1X2rd/v+
-         RI6eHK3paKYPNaf+MH6vUrZUxzmxHgycz2J2iUJxtptWWc3G8EUys5lbBbOiK1dp68Dq
-         20FKRnseGLsGy+SvfTHZLd3FyPIrkeTB1FLRgJJut35GDxJDzvo7Q16faw4fr6Yri70w
-         ba3bcb/Ja3VeAiJNVxWenCQQmcfeTPRpajtQ5YzZqh1CPFvUQIJhAWUOJnL6i25QVW4M
-         V/zw==
-X-Gm-Message-State: AFuF++lcrB2yq8LjzOFV6Ae4rPIgmsIjt7+/ix97W8aOZ34UGp74GoXv
-	7DV9BBI7gHrhPr/TGjM/6/0y7+SW4xZDKqiNhPf+JXAjmZaMuNLTuZ8c
-X-Gm-Gg: AR+sD11vqzaofBxuleO5QxX41z5GjOo1udxH19zb7VaiD8O26rhIyUd9dciMg3yVu9d
-	9bb/Vkjrxx/VJJAk4OWZuCS7Ir6GivpShn/qohiIjx3H8Ny5E3sfk2VD9KLMSLE7X2BItHBhk7P
-	Kv31Uq3cZ8Utgk1mYl1UP6+XhRen4PZL2R4W3Opa/zmj/RfRDA+Zgd738oOVga0IgNvMqOk2ABw
-	9A4L21UT6QWyoGomLVMDpYYTjyN9xGJbyqvLYPJ4WS16+x8XG5HHYU1QuPgDlDYD/Z2f7DI7nJx
-	RkBYNJ192pZHJNhkRlLdUX+2YrX+NmOnY2sP106Lgqvb5F3HBtJWWMDrJbqITeVEHYv9Sc9mAKj
-	SbUSCnzuV12UIZZUYiT9WHDKmSPGJ3VOEoYtHfxp7gPagkLCuI8K48aasJS9rmL82+jR6ND0s2K
-	QkRmyDCHCAtaXH2YjYtUAUBcdXgkM/AtB1ceufhAuhauvJsdZlXsW3J4bKC72EqcqiCjVJjVisE
-	5aXwJGC170H2VOsyKtfHw7WMDxgzPzXUuAqhqSQZRkAIA==
-X-Received: by 2002:a17:90b:44:b0:395:a7eb:a4d8 with SMTP id 98e67ed59e1d1-3964652186fmr1764638a91.14.1787596635313;
-        Mon, 24 Aug 2026 11:37:15 -0700 (PDT)
+        bh=hFlisPcov7OHDuouIps3HhL1FyS6IGvS24RllpVrcuw=;
+        b=YqQp+xa/jpReN82lE5HB+dPGqG4+hf0WvAJbHf4xpQpxn+tRUNunYzgBQl2dxidFoC
+         myx44BNur7p2F1+T5+mxxcpqbG7t6yIi7fjWA3igLVZeJWkv3/dP1L39kJI+sh1bblxs
+         cM9cqbNwzg+lm7CHzxyLvTz/dklpRqnb6xWN7Y6ONa4DJ9djneeVElK2Udzc6oaF2aaR
+         fyM+w+ZzWs3KXOxhNEw7XOuq3aVPkBlxbevEf6HpOEFWzApeYc8+2ZkOEMgLoS89IthH
+         dgjNq+9+uOt8rFrNU2FNASGAnPfsWfqWoPDNruBGB63inKARfKWn/0KXiSqZkXjzQuL8
+         /x1Q==
+X-Forwarded-Encrypted: i=1; AHgh+Rp2RyaAflpFotkeut8/nlrKGUp4S1ZEM0jUKeIvbzfcjXBOrdTE+MMD8/eiu/c9/jcdDWE=@vger.kernel.org
+X-Gm-Message-State: AFuF++k5lYYIoPulQU0E3NzKll5yYxtloA4SeXgXsPRkU0h4zwM63Ftd
+	5MFSOUTdOosBomFnYm1G8gRWKut+DxRQXOgaGepQSMoRX8ilFL4yoAsL63fJcVz2frM=
+X-Gm-Gg: AR+sD10fWUsAKgCp/leiQhezFt0p9zMjz80Hf0YDOJxb7fR6uQ5xbg6fiF9olvAsv8X
+	cSTiF1iCHgDpJkyMA4WZtEetGOPXKEgmkgavtIVbUw+3H9tBczofQTwIKGzRR8yjiHEwNhTdZRX
+	wjw14N2hp4f3fsQ1weiSlOHkjj5BlyC6dLngGL/r11YeFr9OBz/aITptBeQLUTGhjX22elJzD/i
+	VCOuruuS7JYgd3d1b3YBhjb80O6THP7LdssUaAa4x02nN4eDS16CHEHol2gQSZ5DO9s5Ne0bUqv
+	THWHCWwgkGoaVVj7s8FHRt/jOzEzONAW603e64hzCwyHdXWc4x6l4N5I68DczIwsmtGFN0Q931U
+	5qe9th2SXGSOJmHFDpUjEmZ5E4xwm6WoWx6aP6/iQCJ3s7KHvUP/MM2SnRbX3RrRbkf6KYCnPfU
+	sIQQaxGd1gsDSQ7HtHapRM4tXaON+t2XC6mtPv/vr6pG9+AqLIP0b+kso9dU4sMutFKudEcIMvg
+	YvjcuEpvaKjyjT8UTly1F3WNH+JRQqdEe+81M0osRNmXg==
+X-Received: by 2002:a17:90b:4a82:b0:38d:dfd1:7a8 with SMTP id 98e67ed59e1d1-395dee5610fmr32906627a91.2.1787597177390;
+        Mon, 24 Aug 2026 11:46:17 -0700 (PDT)
 Received: from ?IPv6:2a03:83e0:115c:1:21a6:ad3f:64a7:7661? ([2620:10d:c090:500::5:ef40])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-141860c6989sm26756382c88.2.2026.08.24.11.37.13
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327f909c6c9sm32958787eec.6.2026.08.24.11.46.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2026 11:37:14 -0700 (PDT)
-Message-ID: <1667c9542f7ef67ed970c1825de87d16f90c9ee7.camel@gmail.com>
-Subject: Re: [RFC PATCH bpf-next v5 8/8] selftests/bpf: build each test
- runner instance in its own sub-make
+        Mon, 24 Aug 2026 11:46:16 -0700 (PDT)
+Message-ID: <12fa2710ff8650bb8cd89b9ffc128b419f43a254.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/3] selftests/bpf: name the remaining
+ placeholder programs dummy_test [NFC]
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Mykola Lysenko <nickolay.lysenko@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, 	martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, 	memxor@gmail.com
-Date: Mon, 24 Aug 2026 11:37:12 -0700
-In-Reply-To: <CAMtxOX3KFvfvbYOLB9WqbrxBhi=k8J5eXGs1wE0peg24CdAQiw@mail.gmail.com>
-References: <20260804170156.1709916-1-nickolay.lysenko@gmail.com>
-	 <20260804170156.1709916-9-nickolay.lysenko@gmail.com>
-	 <8da8aa48afa6ef52c22f976793af75b334b189a1.camel@gmail.com>
-	 <CAMtxOX3KFvfvbYOLB9WqbrxBhi=k8J5eXGs1wE0peg24CdAQiw@mail.gmail.com>
+To: Vineet Gupta <vineet.gupta@linux.dev>, bpf@vger.kernel.org
+Date: Mon, 24 Aug 2026 11:46:15 -0700
+In-Reply-To: <20260821201316.1059129-2-vineet.gupta@linux.dev>
+References: <20260821201316.1059129-1-vineet.gupta@linux.dev>
+	 <20260821201316.1059129-2-vineet.gupta@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
@@ -83,70 +79,15 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Sat, 2026-08-22 at 17:34 -0700, Mykola Lysenko wrote:
-
-...
-
-> > > -# Define test_progs BPF-GCC-flavored test runner.
-> > >  ifneq ($(BPF_GCC),)
-> > > -TRUNNER_BPF_BUILD_RULE :=3D GCC_BPF_BUILD_RULE
-> > > -TRUNNER_BPF_CFLAGS :=3D $(BPF_CFLAGS) $(call get_sys_includes,gcc,)
-> > > -$(eval $(call DEFINE_TEST_RUNNER,test_progs,bpf_gcc))
-> > > +# Sys includes come from the *host* gcc, not $(BPF_GCC) - bpf-gcc's =
-own
-> > > +# search path lacks the host's asm-generic/ headers.
-> > > +GCC_SYS_INCLUDES :=3D $(call get_sys_includes,gcc,)
-> > > +
-> > > +$(OUTPUT)/test_progs-bpf_gcc: $(RUNNER_PREREQS) FORCE
-> > > +     +$(Q)$(RUNNER_MAKE) RUNNER=3Dtest_progs FLAVOR=3Dbpf_gcc TESTS_=
-DIR=3Dprog_tests \
-> > > +             BPF_CC=3D'$(BPF_GCC)' BPF_CC_MSG=3DGCC-BPF             =
-             \
-> > > +             BPF_SYS_INCLUDES=3D'$(GCC_SYS_INCLUDES)'               =
-           \
-> > > +             BPF_CC_FLAGS=3D'-DBPF_NO_PRESERVE_ACCESS_INDEX -Wno-att=
-ributes -O2'
-> > >  endif
-> >=20
-> > Did you test the bpf_gcc flavor?
-> > I have a recipe to build the toolchain somewhere, if you need it.
+On Fri, 2026-08-21 at 13:13 -0700, Vineet Gupta wrote:
+> Eleven of the thirteen feature-gated placeholder programs are called
+> dummy_test. Two are not: hence this patch.
 >=20
-> Two data points. The BPF CI GCC-BPF job builds the flavor and is
-> green on this series. Locally I ran it with the bpf-gcc Ubuntu
-> packages (gcc 14 snapshot, 2024): the machinery works - 671 of 982
-> programs compile, the ones that old gcc cannot handle skip cleanly
-> under BPF_STRICT_BUILD=3D0, skeletons generate or skip with the
-> objects - until resolve_btfids aborts on btf_data.bpf.o carrying no
-> .BTF section, which that gcc does not emit; the BTFIDS recipe step is
-> not covered by the permissive suffix in the current Makefile either,
-> so the behavior matches stock. I would take your toolchain recipe -
-> with a current gcc-bpf I expect the flavor to complete, and I'd like
-> it in my pre-send checklist.
+> This is purely cosmetic as nothing depends on those names.
+> The non-complaint setups use RUN_TESTS(skel) which does thru all
+> programs normally. This is just more consistent and grep friendly.
+>=20
+> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+> ---
 
-#!/bin/bash
-
-set -e
-
-base=3D/home/ezingerman/gcc-bpf-toolchain
-build_base=3D$base/build
-gcc_repo=3D$base/gcc
-gcc_build_dir=3D$build_base/gcc
-binutils_repo=3D$base/binutils-gdb
-binutils_build_dir=3D$build_base/binutils
-install_dir=3D$base/install
-
-mkdir -p $gcc_build_dir $binutils_build_dir
-
-cd $binutils_build_dir
-$binutils_repo/configure --target=3Dbpf-unknown-none --prefix=3D$install_di=
-r --disable-gdb
-make -j
-make install
-
-export PATH=3D"$install_dir/bin:$PATH"
-
-cd $gcc_build_dir
-$gcc_repo/configure --target=3Dbpf-unknown-none --prefix=3D$install_dir --e=
-nable-languages=3Dc,lto --disable-multilib
-make -j
-make install
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
