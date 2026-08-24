@@ -1,143 +1,163 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F4A46EF8F;
-	Mon, 24 Aug 2026 17:02:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC64346D0A2;
+	Mon, 24 Aug 2026 17:02:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787590952; cv=none; b=KRTUX9Ns+GQ790x2AoX0sHf++2r/p2nygXlV15mMqaeAb6HKnX6ztbrWZ6V3KrQeTh8/tcVYXYBBbAC+99wjQlmehP1OzRVcE6N5sMRTelLVMST5FfgiB3mAOKp9ZZ7gHKc2xuVkQ7OobJ/yQh/V62Uven4+FSZfhdTS00Itw+g=
+	t=1787590954; cv=none; b=A72562+4kxTcGBqtGHfaxoKuh/st2vLQeeaowullINzv07Z3hogEt9NcRdsmdXJeOQRlsiGnt4JOdVcFOg1jxh+xtf4li/6BRrxFkMZepei8eUCKLEtFURXHQ0C5qOOelbGc1bZFCn4WUVQQaDgxX1Nzap9sI+UgunlY1WIqq9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787590952; c=relaxed/simple;
-	bh=MoRPa9J6iy1YwNC/u7MGA7q0QxHJX/JFCmBt9jk0uUI=;
+	s=arc-20240116; t=1787590954; c=relaxed/simple;
+	bh=LIqe1zhyJRsFtXSuE7EC32BeFULMCqrcDE6KuXrYd7M=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=ok4X3z62R4vKlN1tnRu9YxYkblA/mLNrHIpZE6KO8kttcruDm1k0VYkvRYmLbF/p54LkdIoj9hKc6N3mj02pSD3OSgE90i09UbRDUaZy4uUxkctGKuSWY0YvRZlTeqji+Uo43api3P3I2aj3EysZmrrSm/AsuwsHScnN6K3wsf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SN4thJ/W; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=i/KMOgVhsGmgi1C9aaB2d9R9EyVAiEAynE+FBFvkcjOI948aPbZo2VNOX586iYAwkShybMVD7Q6BJKKDxiABNOVD1dY9xcqGlKofchVKs6AdOf1cSDy3mI8vj+bR6IuucQ9g06BybKB1HKNxxieyxhyu3xaV9bm7LSHPPPMo7HQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hjp281es; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SN4thJ/W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0C3D1F000E9;
-	Mon, 24 Aug 2026 17:02:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hjp281es"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 478681F00A3D;
+	Mon, 24 Aug 2026 17:02:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787590951;
-	bh=eWo8y5s7j9MJICjDRJikNnWcZwvVCVhZEXRYA5uAtSw=;
+	s=k20260515; t=1787590952;
+	bh=sb19YqNCvHDPnmH6ryJdd+X4+F9dTKDQQXONQh6LBq8=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=SN4thJ/WJQM9Zykv4pJZWKcuQx2Qo/cbzcTyvouFW/nTHLWzigGAKH1RsJRnp3tHI
-	 kQX2/6D/cGd3zZ6gA+fYkHP1Tn/0ZzcosNZVPCeMg7bi95lnSfGTbuNsFOPsBkpYXu
-	 /DKXz0kiwbft+9t0xjrLsSQRsHp4q5++9eRQjTeMyzqMaEvc169B7sccC/YorWElHW
-	 U6bGVf3Fzpapea9YJUQiluDyvaZmSYr/3fJ7gFYuqerIP5z6GEet1hCx82/J9v16BK
-	 t1SPJ4d8qwxcS+2WDRPlPl1iqEcDLptbNOHcEsQZOU3CDWKtFMbgnhKasKYwcAn+iU
-	 slzdbeycy5hkg==
-Content-Type: multipart/mixed; boundary="===============4795484880704545916=="
+	b=hjp281esMOQl/VRkVAZ229TpQYamujcYyyzJ2Qu0HNzTx4zzP4v6yYeDeJQIYHb3o
+	 CNoiWqbewm2buRJB71JwX79xm4JQhoBMFedpJ4YfhQyJuLD3pOlSC0kzWtPUuiQp6H
+	 i7rfx7Yw9thOVTWCiW3Cde9jpp/q05EW7JJv22v5HC5IC8S0GVzeg5IxNDj6gNTx+I
+	 fbYl2Azo0+kqG2PqVIfMrx7JRPNk1nms/URo8pZHfAHXVIoTXRTUdsP0t+RCTWeGJd
+	 WhQXOcZafmYkrCnUsHcJPkSB0uFxfofpUMmJyveqh5liQR4vwcifSjGvbQRuz2EwqX
+	 WI4dLXAYt2LKQ==
+Content-Type: multipart/mixed; boundary="===============4419128066865244280=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <9d40f172903042acd1692be0fecf4fbafbdd2c627051f38faf962015d745884d@mail.kernel.org>
-In-Reply-To: <20260824160523.3907021-7-usama.anjum@arm.com>
-References: <20260824160523.3907021-7-usama.anjum@arm.com>
-Subject: Re: [PATCH 5/7] maccess: Batch TCO handling in kernel nofault loops
+Message-Id: <4c2bee332eb4173076cebaff6988f2d2ee283d7c6fe43993e957335cdc319a6f@mail.kernel.org>
+In-Reply-To: <20260824160523.3907021-2-usama.anjum@arm.com>
+References: <20260824160523.3907021-2-usama.anjum@arm.com>
+Subject: Re: [PATCH 1/7] arm64: uaccess: Add batched kernel nofault accessors
 From: bot+bpf-ci@kernel.org
 To: usama.anjum@arm.com,catalin.marinas@arm.com,will@kernel.org,mark.rutland@arm.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,akpm@linux-foundation.org,david@kernel.org,ljs@kernel.org,liam@infradead.org,vbabka@kernel.org,rppt@kernel.org,surenb@google.com,mhocko@suse.com,linux-arm-kernel@lists.infradead.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-mm@kvack.org
 Cc: usama.anjum@arm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 24 Aug 2026 17:02:30 +0000 (UTC)
+Date: Mon, 24 Aug 2026 17:02:32 +0000 (UTC)
 
---===============4795484880704545916==
+--===============4419128066865244280==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> The number of dynamic MSR TCO executions therefore changes as follows:
+> diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
+> index 9f5bd9c69c24..1a14eb2a51dc 100644
+> --- a/arch/arm64/include/asm/uaccess.h
+> +++ b/arch/arm64/include/asm/uaccess.h
+> @@ -270,28 +270,43 @@ do {									\
+>  #define get_user	__get_user
 >
->     Work                         Before    After
->     N nofault accesses          2N        2
->     4 KiB nofault copy          1,024     2
->     N-byte strncpy              2N        2
->
-> The 4 KiB case assumes 512 64-bit accesses. These figures come from the
-> control flow rather than a runtime measurement, so the time saved depends
-> on the CPU and workload.
-
-This isn't a bug, but would it be worth either dropping the table in favour
-of one sentence (one TCO pair per operation instead of one per access) or
-backing it with a measurement on a real HW-tag-KASAN async config? Also,
-could the "N nofault accesses" row say whether N accesses are within a
-single batched operation?
-
-> diff --git a/mm/maccess.c b/mm/maccess.c
-> index f695ceefe6fc..87486bf98d15 100644
-> --- a/mm/maccess.c
-> +++ b/mm/maccess.c
-> @@ -19,7 +19,7 @@ bool __weak copy_from_kernel_nofault_allowed(const void *unsafe_src,
+>  /*
+> - * We must not call into the scheduler between __mte_enable_tco_async() and
+> - * __mte_disable_tco_async(). As `dst` and `src` may contain blocking
+> - * functions, we must evaluate these outside of the critical section.
+> + * Nofault load without TCO management for use inside a
+> + * __begin/__end_kernel_nofault_bare() region.
 >   */
->  #define copy_from_kernel_nofault_loop(dst, src, len, type, err_label)	\
->  	while (len >= sizeof(type)) {					\
-> -		__get_kernel_nofault(dst, src, type, err_label);	\
-> +		__get_kernel_nofault_bare(dst, src, type, err_label);	\
->  		kmsan_check_memory(src, sizeof(type));			\
->  		dst += sizeof(type);					\
->  		src += sizeof(type);					\
-> @@ -39,13 +39,15 @@ long copy_from_kernel_nofault(void *dst, const void *src, size_t size)
->  		return 0;
+> -#define __get_kernel_nofault(dst, src, type, err_label)			\
+> +#define __get_kernel_nofault_bare(dst, src, type, err_label)		\
+>  do {									\
+>  	__typeof__(dst) __gkn_dst = (dst);				\
+>  	__typeof__(src) __gkn_src = (src);				\
+>  	do { 								\
+>  		__label__ __gkn_label;					\
+> -									\
+> -		__mte_enable_tco_async();				\
+>  		__raw_get_mem("ldr", *((type *)(__gkn_dst)),		\
+>  		      (__force type *)(__gkn_src), __gkn_label, K);	\
+> -		__mte_disable_tco_async();				\
+>  		break;							\
+>  	__gkn_label:							\
+> -		__mte_disable_tco_async();				\
+>  		goto err_label;						\
+>  	} while (0);							\
+>  } while (0)
 >
->  	scoped_guard(pagefault) {
-> -		if (!(align & 7))
-> -			copy_from_kernel_nofault_loop(dst, src, size, u64, Efault);
-> -		if (!(align & 3))
-> -			copy_from_kernel_nofault_loop(dst, src, size, u32, Efault);
-> -		if (!(align & 1))
-> -			copy_from_kernel_nofault_loop(dst, src, size, u16, Efault);
-> -		copy_from_kernel_nofault_loop(dst, src, size, u8, Efault);
-> +		scoped_guard(__kernel_nofault_bare) {
-> +			if (!(align & 7))
-> +				copy_from_kernel_nofault_loop(dst, src, size, u64, Efault);
-> +			if (!(align & 3))
-> +				copy_from_kernel_nofault_loop(dst, src, size, u32, Efault);
-> +			if (!(align & 1))
-> +				copy_from_kernel_nofault_loop(dst, src, size, u16, Efault);
-> +			copy_from_kernel_nofault_loop(dst, src, size, u8, Efault);
-> +		}
->  	}
->  	return 0;
->  Efault:
+>  /*
+> + * We must not call into the scheduler between __mte_enable_tco_async() and
+> + * __mte_disable_tco_async(). As dst and src may contain blocking functions,
+> + * evaluate them before overriding TCO.
+> + */
+> +#define __get_kernel_nofault(dst, src, type, err_label)			\
+> +do {									\
+> +	__label__ __gkn_tco_err;					\
+> +	__typeof__(dst) __gkn_tco_dst = (dst);				\
+> +	__typeof__(src) __gkn_tco_src = (src);				\
+> +	__mte_enable_tco_async();					\
+> +	__get_kernel_nofault_bare(__gkn_tco_dst, __gkn_tco_src, type,	\
+> +				     __gkn_tco_err);			\
+> +	__mte_disable_tco_async();					\
+> +	break;								\
+> +__gkn_tco_err:								\
+> +	__mte_disable_tco_async();					\
+> +	goto err_label;							\
+> +} while (0)
 
-A subsystem pattern flags this as potentially concerning: the nested
-scoped_guard(__kernel_nofault_bare) introduces a second cleanup scope
-inside an existing goto-based error path. include/linux/cleanup.h states
-"the expectation is that usage of 'goto' and cleanup helpers is never
-mixed in the same function. I.e. for a given routine, convert all
-resources that need a 'goto' cleanup to scope-based cleanup, or convert
-none of them." Every goto Efault now escapes two nested __cleanup()
-scopes (the inner __kernel_nofault_bare and outer pagefault), relying on
-the compiler to run both destructors in the correct order. The same
-pattern also appears in copy_to_kernel_nofault and
-strncpy_from_kernel_nofault below.
+This isn't a bug, but the get and put variants now carry the same rule
+in two different wordings - would it read better to keep the two
+comments identical, or to have the put side just point at the get side?
 
-Tracing through the implementation suggests the unwind is correct in
-practice: GCC and Clang run __attribute__((cleanup)) destructors when
-leaving a scope via goto, in reverse order of declaration, so goto Efault
-runs __end_kernel_nofault_bare() followed by pagefault_enable() in the
-expected order. include/linux/uaccess.h's scoped-access documentation also
-explicitly blesses leaving these scopes "with 'return', 'break' and 'goto'
-at any point".
+The comment above __get_kernel_nofault says "As dst and src may contain
+blocking functions, evaluate them before overriding TCO," while the
+comment above __put_kernel_nofault keeps the original "As `dst` and
+`src` may contain blocking functions, we must evaluate these outside of
+the critical section" - including the backticks that the get variant
+dropped.
 
-Is this an acceptable deepening of the goto-plus-guard mixing to two
-levels, or should this be restructured to avoid the nested cleanup scopes?
+Also, should the wrapped argument line up under the open paren here
+(four tabs plus two spaces rather than five)?
 
-This isn't a bug, but could this use guard(__kernel_nofault_bare)() as the
-first statement of the existing pagefault scope instead of a nested
-scoped_guard(), to keep the reindentation out of the diff and match the
-form used in the BPF patch later in the series?
+> +	__get_kernel_nofault_bare(__gkn_tco_dst, __gkn_tco_src, type,	\
+> +				     __gkn_tco_err);			\
 
-> @@ -55,7 +57,7 @@ EXPORT_SYMBOL_GPL(copy_from_kernel_nofault);
+The continuation line sits at column 37, while the open parenthesis of
+__get_kernel_nofault_bare( sits at column 34. The same three-column
+offset appears in __put_kernel_nofault at line 412.
+
+[ ... ]
+
+> @@ -366,28 +381,48 @@ do {									\
 >
->  #define copy_to_kernel_nofault_loop(dst, src, len, type, err_label)	\
->  	while (len >= sizeof(type)) {					\
-> -		__put_kernel_nofault(dst, src, type, err_label);	\
-> +		__put_kernel_nofault_bare(dst, src, type, err_label);	\
->  		instrument_write(dst, sizeof(type));			\
->  		dst += sizeof(type);					\
->  		src += sizeof(type);					\
+>  #define put_user	__put_user
+>
+> -/*
+> - * We must not call into the scheduler between __mte_enable_tco_async() and
+> - * __mte_disable_tco_async(). As `dst` and `src` may contain blocking
+> - * functions, we must evaluate these outside of the critical section.
+> - */
+> -#define __put_kernel_nofault(dst, src, type, err_label)			\
+> +/* Nofault store without TCO management; see __get_kernel_nofault_bare. */
+> +#define __put_kernel_nofault_bare(dst, src, type, err_label)		\
+>  do {									\
+>  	__typeof__(dst) __pkn_dst = (dst);				\
+>  	__typeof__(src) __pkn_src = (src);				\
+>  									\
+>  	do {								\
+>  		__label__ __pkn_err;					\
+> -		__mte_enable_tco_async();				\
+>  		__raw_put_mem("str", *((type *)(__pkn_src)),		\
+>  			      (__force type *)(__pkn_dst), __pkn_err, K);	\
+> -		__mte_disable_tco_async();				\
+>  		break;							\
+>  	__pkn_err:							\
+> -		__mte_disable_tco_async();				\
+>  		goto err_label;						\
+>  	} while (0);							\
+> -} while(0)
+> +} while (0)
+> +
+> +/*
+> + * We must not call into the scheduler between __mte_enable_tco_async() and
+> + * __mte_disable_tco_async(). As `dst` and `src` may contain blocking
+> + * functions, we must evaluate these outside of the critical section.
+> + */
 
 [ ... ]
 
@@ -147,4 +167,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32751368606
---===============4795484880704545916==--
+--===============4419128066865244280==--
