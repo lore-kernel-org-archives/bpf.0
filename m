@@ -1,205 +1,178 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3DC444A3E8
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 15:41:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954F544683D;
+	Mon, 24 Aug 2026 15:42:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787586066; cv=none; b=KVIWYgwwpJ2VZ/wzpXP17fwesxyrN1OU9FsRaPLIRlA9xokdTdTBnvW6ZBnSiysUwcXKBF7aCmgu/tydM5HDi/1pQbWxWQ1jEFUIfHsaM3x5Gx+hHT8Cn/F20qS63UO6KbbyGeYjSkbwtZ1vRabssUiSuePXCjPxpel74eRGq+Q=
+	t=1787586151; cv=none; b=Qc1AFsuRhtbw/H39BKVOeSPV6R7DSubaBtQQ3cs4fDswTaADg8bWq+x/WtpsobgPnS06Iommd6UktAZ6O888GticxkV9D3eo9IipjhxzAjVN08doyHALbLMlcUomlv6kpHNZNePxnEpTcHSFs3VwWuTmvlOAIyHeJHY/qW3mXUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787586066; c=relaxed/simple;
-	bh=kDp+HmrajfIyPpvqgGNMXxHc/clICS7CUUov5AlOHeE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=twnd8QJ1GHBgddqa/PL8igA1OkZfuzgTjy0EzIhB9t3iXo2WB3SuV674BsALDPiFwglxeZVuR1bWwqXLVvYG2oFTaa/KzSdaj6z+35ap8xhv5Liwrv0864u1RzV3RFSV9a9KseirzI2nv9ey4wNDulNKjKccyPHbmASKbiQNUfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gWHxUkAs; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787586151; c=relaxed/simple;
+	bh=kbWjEPmus8NJNscV+jIp4xnuVIMhXR/RgDSHqzz5e1Q=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=okdZgLZnnpeakQ1JQD+VyKVKpAHDLf28AzuT6BoVkd+++hRM03zpiQ/VLgiKk3CUx4VtqwDqgpTn2fR3gibFoZr3nhsK5AUxczvkrvAGDMZ7A0VLsFSe+Gt8bBxaKbCfl7Rj85Jj65d38JKdf+z2Gr6SMhughjDOEzjfKK0fyXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TIlXLvJQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gWHxUkAs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E0401F000E9;
-	Mon, 24 Aug 2026 15:40:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TIlXLvJQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A2FC1F00A3A;
+	Mon, 24 Aug 2026 15:42:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787586059;
-	bh=9CRAvXtGGIineNs2nIubMJOR7yDb+QHAQfh5i40WDcM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=gWHxUkAsXsXdGu8w98x1Xo+MGnCA/w5ui6XMNJFlMu8YH2OJbsr64noQsW6p2OQEA
-	 jJlMcqWWOI3yRhAdZcXeX37dwzSV9W7ehzYdWd+A4I3gxXQuiLjO05K2kKbr6J1qQd
-	 W3I3xS4Ll7TL3LWKFyacOPSr7AMPQKCfNkd6VDSXGlOKWdNA1m962zTFfBTXqyRh1r
-	 TDdG7DQPbdmOJauI/mDcz2xpLFDJz/gdTt3dMK/WBFVIlQnlBhdc0E6Ul12ymwMrBg
-	 Ysv9RfNwzKFDlXBHTcxrVvgLUPgtiUrGYl4aBmFWUVFq1Trbna/7H9eWkMn+cTm/Qm
-	 C8s8Za2byJgFQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 4/4] selftests/bpf: Test rhtab special-field
- combinations
-Reply-To: sashiko-reviews@lists.linux.dev
-To: chenyuan_fl@163.com
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260824143621.2098856-5-chenyuan_fl@163.com>
-References: <DKM6K95EN9OF.3O9XNYWVLYHDE@gmail.com>
- <20260824143621.2098856-1-chenyuan_fl@163.com>
- <20260824143621.2098856-5-chenyuan_fl@163.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 24 Aug 2026 15:40:58 +0000
-Message-Id: <20260824154059.1E0401F000E9@smtp.kernel.org>
+	s=k20260515; t=1787586139;
+	bh=jR+4zKKXR5BvPkByjE5lYUpa/8YYQNd7HFexqo/3Y48=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=TIlXLvJQPD46pK9TNTJeL5raw1ONtHavbcw+M7eMyG4gNGu1dbUXiSPRUtdYjzLyw
+	 trckQVLTzNjHwh9oMdpYxARVPQDdRZ622gzi+3C7hHJk5jdWN8ZnT3hSOmZqUN7kp3
+	 oQ9ORpSqL0q+sO6Ja9SMu7XXbyLtkzeUH3vXN4SDiSyu20y9ODbsx5+rXE/tjTDw1G
+	 6VernUGpanuNCKgPsEP31YHDQVOUyKq7mAfMar1kVTFv2gXuNXqoULL8jspatohgR9
+	 xj2hKSDfAffgRa5dJ5IX18PUHl1P9Cpuk7Db6soPnhqJgNxDhP4CLBuo4YTp+d1fe2
+	 QbMZsunsvEnSA==
+Content-Type: multipart/mixed; boundary="===============6793583527708650850=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <72b64f467854103cba316523709d5f1f9c533e1762d979e26fd6aa6cc44b63bb@mail.kernel.org>
+In-Reply-To: <20260824143621.2098856-3-chenyuan_fl@163.com>
+References: <20260824143621.2098856-3-chenyuan_fl@163.com>
+Subject: Re: [PATCH 2/4] bpf: Fix use-after-free of program BTF in mem-alloc destructor
+From: bot+bpf-ci@kernel.org
+To: chenyuan_fl@163.com,bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,gnq25@mails.tsinghua.edu.cn,chenyuan@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 24 Aug 2026 15:42:19 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
-- [Medium] Passing an undersized buffer to `bpf_map_update_elem` causes an =
-out-of-bounds read on the userspace stack.
-- [Medium] Missing file descriptor validation after manual BPF program look=
-up.
-- [Medium] The timer cancellation test is ineffective because it attempts t=
-o cancel a one-shot timer that has already expired.
-- [Low] Multi-line comment does not follow the mandatory BPF subsystem styl=
-e.
---
+--===============6793583527708650850==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
---- Patch [4]: [PATCH 4/4] selftests/bpf: Test rhtab special-field combinat=
-ions ---
-commit 97a820b266ff0381e757c9ee521aee4aca7caef2
-Author: Yuan Chen <chenyuan@kylinos.cn>
-
-selftests/bpf: Test rhtab special-field combinations
-
-This commit adds selftests for BPF_MAP_TYPE_RHASH special-field combination=
-s,
-verifying the recycling of memory for various field types like spin locks,
-timers, and kptrs.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/rhtab_fields.c b/tool=
-s/testing/selftests/bpf/prog_tests/rhtab_fields.c
-> new file mode 100644
-> index 0000000000000..29de05bcbd4b0
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/rhtab_fields.c
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index 0df8db27cd8c..b8df2bc9a9a0 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
 
 [ ... ]
 
-> @@ -28,34 +28,45 @@ static int run_prog(struct rhtab_fields *skel, const =
-char *name)
->  {
->  	LIBBPF_OPTS(bpf_test_run_opts, topts);
->  	struct bpf_program *prog;
->  	int err;
-> =20
->  	prog =3D bpf_object__find_program_by_name(skel->obj, name);
->  	if (!ASSERT_OK_PTR(prog, name))
->  		return -1;
->  	err =3D bpf_prog_test_run_opts(bpf_program__fd(prog), &topts);
-
-[Severity: Medium]
-Is it necessary to validate the file descriptor returned by bpf_program__fd=
-()
-before using it? According to BPF selftest patterns, file descriptors from
-manual lookups should be verified (>=3D 0) before use, as they can return a
-negative value if the program is invalid.
-
->  	if (!ASSERT_OK(err, name))
->  		return -1;
->  	return topts.retval;
->  }
-> =20
->  static void recycle_loop(struct rhtab_fields *skel, int map_fd,
->  			 const char *init, const char *del,
->  			 const char *upd, const char *probe)
->  {
->  	u64 zero =3D 0;
->  	u32 key =3D 0;
->  	int i;
-> =20
->  	for (i =3D 0; i < RECYCLE_LOOPS; i++) {
->  		if (run_prog(skel, init) !=3D 0) {
->  			/* Element may be gone; recreate and retry once. */
->  			if (!ASSERT_OK(bpf_map_update_elem(map_fd, &key, &zero, BPF_ANY),
-
-[Severity: Medium]
-Could this result in an out-of-bounds read on the userspace stack? The zero
-variable is 8 bytes, but this function is called for maps like lkmap which
-expects a 24-byte value structure. bpf_map_update_elem() will read
-map->value_size bytes from this pointer.
-
->  				       "recreate_elem"))
->  				return;
-
-[ ... ]
-
-> @@ -119,25 +130,24 @@ static void subtest_timer(struct rhtab_fields *skel)
->  {
->  	u64 zero =3D 0;
->  	u32 key =3D 0;
->  	int fired, map_fd;
-> =20
->  	map_fd =3D bpf_map__fd(skel->maps.tmap);
->  	if (!ASSERT_OK(bpf_map_update_elem(map_fd, &key, &zero, BPF_ANY),
-
-[Severity: Medium]
-Could this also lead to an out-of-bounds read? The tmap map value
-(struct timer_val) is 24 bytes in size, but it's being updated from the
-8-byte zero variable.
-
->  		       "create_elem"))
->  		return;
-> =20
->  	if (!ASSERT_OK(run_prog(skel, "arm_timer"), "arm_timer_first"))
->  		return;
->  	usleep(300000);
->  	if (!ASSERT_GT(skel->bss->timer_fired, 0, "timer_fired_first"))
->  		return;
-> =20
->  	/* Deleting the element must cancel the timer. */
->  	fired =3D skel->bss->timer_fired;
->  	if (!ASSERT_OK(bpf_map_delete_elem(map_fd, &key), "delete_elem"))
->  		return;
->  	usleep(300000);
->  	ASSERT_EQ(skel->bss->timer_fired, fired, "timer_cancelled_after_delete"=
-);
-
-[Severity: Medium]
-Does this assertion actually test the cancellation of the timer? Since
-arm_timer() sets a 50us one-shot timer and this code sleeps for 300ms
-before calling bpf_map_delete_elem(), the timer has already fired by the
-time the element is deleted.
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/progs/rhtab_fields.c b/tools/tes=
-ting/selftests/bpf/progs/rhtab_fields.c
-> new file mode 100644
-> index 0000000000000..85335f19f1722
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/rhtab_fields.c
-
-[ ... ]
-
-> @@ -89,20 +89,20 @@ struct {
->  	__uint(max_entries, 9);
->  	__type(key, __u32);
->  	__type(value, __u64);
->  } counters SEC(".maps");
-> =20
-> +/* 0: lk init ok, 1: lk probe xchg non-NULL, 2: lk probe xchg NULL,
-> + * 3: lk probe magic ok, 4: u init ok, 5: u probe ptr non-NULL,
-> + * 6: pc init ok, 7: pc probe xchg non-NULL, 8: pc probe xchg NULL
+> +/*
+> + * bpf_ma_set_dtor() duplicates the map's btf_record. For kptr fields whose
+> + * btf is the program BTF (MEM_ALLOC kptrs, e.g. objects allocated with
+> + * bpf_obj_new()/bpf_percpu_obj_new()) btf_record_dup() only borrows the
+> + * reference, like btf_parse_fields() did for the map's own record. The
+> + * duplicated record is released later from the deferred bpf_mem_alloc
+> + * destructor workqueue, by which time the program BTF may already have been
+> + * freed (the map dropped its own reference in bpf_map_free()), so reading
+> + * field->kptr.btf there would be a use-after-free.
+> + *
+> + * Hold a reference on non-kernel (program) BTF for the lifetime of the
+> + * duplicated record and release it before the record is freed. After the
+> + * last btf_put() the object is only destroyed after an RCU grace period, so
+> + * btf_record_free() can still safely read the field descriptors.
 > + */
-
-[Severity: Low]
-This isn't a bug, but does this multi-line comment format violate the
-BPF subsystem style? BPF subsystem multi-line comments should have the open=
-ing
-/* on its own line.
-
->  static __always_inline void bump(u32 idx)
+> +static void htab_record_prog_btf_ref(struct btf_record *rec, bool get)
+> +{
+> +	int i;
+> +
+> +	if (IS_ERR_OR_NULL(rec))
+> +		return;
+> +
+> +	for (i = 0; i < rec->cnt; i++) {
+> +		const struct btf_field *field = &rec->fields[i];
+> +
+> +		switch (field->type) {
+> +		case BPF_KPTR_UNREF:
+> +		case BPF_KPTR_REF:
+> +		case BPF_KPTR_PERCPU:
+> +		case BPF_UPTR:
+> +			if (field->kptr.btf && !btf_is_kernel(field->kptr.btf)) {
+> +				if (get)
+> +					btf_get(field->kptr.btf);
+> +				else
+> +					btf_put(field->kptr.btf);
+> +			}
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +	}
+> +}
+> +
+>  static void htab_dtor_ctx_free(void *ctx)
 >  {
->  	u64 *v =3D bpf_map_lookup_elem(&counters, &idx);
-> =20
->  	if (v)
->  		(*v)++;
+>  	struct htab_btf_record *hrec = ctx;
+>
+> +	htab_record_prog_btf_ref(hrec->record, false);
+>  	btf_record_free(hrec->record);
+>  	kfree(ctx);
 >  }
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260824143621.2098=
-856-1-chenyuan_fl@163.com?part=3D4
+Does this ordering still have a use-after-free?
+
+The comment states that "After the last btf_put() the object is only
+destroyed after an RCU grace period, so btf_record_free() can still safely
+read the field descriptors." But in htab_dtor_ctx_free(), the program-BTF
+reference is dropped one statement before the record is freed:
+
+    htab_record_prog_btf_ref(hrec->record, false);   /* btf_put() */
+    btf_record_free(hrec->record);                   /* reads field->kptr.btf */
+
+htab_record_prog_btf_ref(..., false) ends in btf_put(field->kptr.btf).
+Looking at btf_put() in kernel/bpf/btf.c, it only queues the object for RCU
+destruction if this was the last reference:
+
+    void btf_put(struct btf *btf)
+    {
+            if (btf && refcount_dec_and_test(&btf->refcnt)) {
+                    btf_free_id(btf);
+                    call_rcu(&btf->rcu, btf_free_rcu);
+            }
+    }
+
+and btf_free_rcu() -> btf_free() -> kfree(btf). The very next statement,
+btf_record_free() in kernel/bpf/syscall.c, does for every kptr field:
+
+            if (btf_is_kernel(rec->fields[i].kptr.btf))
+                    btf_put(rec->fields[i].kptr.btf);
+
+and btf_is_kernel() is 'return btf->kernel_btf;' - a dereference of the
+object whose kfree() was just queued.
+
+In the deferred path this is the last reference, so the drop queues an RCU
+free and the following read can land on freed memory. The reachable path is
+exactly the scenario described in the commit message:
+
+  bpf_map_free_deferred()
+    -> bpf_map_free()
+       -> map->ops->map_free (rhtab_map_free / htab_map_free)
+          -> bpf_mem_alloc_destroy()
+             -> destroy_mem_alloc(), rcu_in_progress != 0
+                -> queue_work(system_dfl_wq, &copy->work)
+       -> btf_record_free(rec); btf_put(btf);   /* map drops its own BTF ref */
+    ... later, on the workqueue ...
+  free_mem_alloc_deferred()
+    -> free_mem_alloc()
+       -> free_mem_alloc_no_barrier()
+          -> ma->dtor_ctx_free(ma->dtor_ctx) == htab_dtor_ctx_free
+
+By then the map's reference is gone, so the btf_put() inside
+htab_record_prog_btf_ref() drops the last reference and queues
+btf_free_rcu. free_mem_alloc_deferred() is a plain, fully preemptible
+workqueue worker; there is no rcu_read_lock() anywhere between the work
+callback and htab_dtor_ctx_free() or btf_record_free(). Being preempted
+outside an RCU read-side critical section is itself a quiescent state, so
+on CONFIG_PREEMPT/PREEMPT_RT the grace period can complete and
+btf_free_rcu() can run before the worker resumes in btf_record_free().
+
+Could the reference be held until after btf_record_free() has read the
+descriptors, or could the pair be wrapped in rcu_read_lock()/
+rcu_read_unlock()?
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32741782570
+--===============6793583527708650850==--
