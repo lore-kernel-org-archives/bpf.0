@@ -1,222 +1,291 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D03C44D685;
-	Mon, 24 Aug 2026 15:42:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3794944C4E3;
+	Mon, 24 Aug 2026 15:42:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787586150; cv=none; b=Ponx+JMkVxF9Kg326ibMqlXJnJF2gB1FJLiZp8mPOXeRXAT60eFstDCJ7aUlxww1yYNKa+a29P7MdljJat6cVPS8L8781n4jd1oPZ5moUtLilw7UwRC2U5LHz4mr6ZXKKEVr3ZTFyBZFBdESxKuHBFIJOzI0MNjFgaM6Wq78W18=
+	t=1787586152; cv=none; b=G0FC9rNpJ+2xzk5Hh6wv/xHMig3sR5RHiCIIrbvMqYTKsRMLcV9AWQqzbp6KO0ssNrCarjC5QANoMAj0cjESaJ8DtGQl5Qovf1QK5SXCyaQsYun1gqnV1/svPdwaTZSu1akXDBjD2W0O7+x1QJPvOm45iIr+GWasOce2YG8Qs2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787586150; c=relaxed/simple;
-	bh=jHFchdjdGcnOQpwM/xnJ2rXTRBJ9Z07e4UdPB5SjEgM=;
+	s=arc-20240116; t=1787586152; c=relaxed/simple;
+	bh=PvyzodrdFvixXE6EDBp/1EK6jSvLtlZ1x2kE2DaESgY=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=egergZghEP3MjT4jaXWw+7zcj4MbQVC/AlvXSk56JxZxdoePezlsk0drHiQ6qhzUtAG9bWtTn3IuLppeyK4KI5JDm0f6IpK+iRM8+ImIYiu8qe3hRC8WuX0wynBkarwKUywF9gW3WzMPkGYnpseZr6NUBa0WHjfLups0VKJidVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EHIMt5vR; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=YXjKWtUjNUJnRAs7Zh9fnPVZ0dgQiuViuwG3BwnDi5pVwi4DsoU7ngcmmdPvbNFNShHq15JfzKw8AwM5Qqo1gCPGhR5gyBAfkDPRq7GcavcjeYNMr610YgoDM5juIdlFoHoFHO5OijG8OuVYIKf9sH9eaCZvjSkXn9RQ/QNM188=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PiYZ9bCM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EHIMt5vR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7EFB1F00A3D;
-	Mon, 24 Aug 2026 15:42:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PiYZ9bCM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AF801F00A3F;
+	Mon, 24 Aug 2026 15:42:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787586141;
-	bh=GDGm9kCuRIA/gsg9zQDj/jBe/CB8+xesttXtkMtpukg=;
+	s=k20260515; t=1787586144;
+	bh=n8EekAtIXzdxe+B9XX2755FWpb2SomWsIMyY12oi6F0=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=EHIMt5vRpKjIqZ+EKC7kxJgIjHlJ2hUElrIjAR1eSPfXUhcbVjXxseGY4SYHjIe+6
-	 scaqg0WnqTo9pCFewfggZGD7wES4oCESHJ74T+sXlShmnV5qX+uS8ta72Ysnj9AUnJ
-	 q+48Dcyfmwwk4PZ9M9Lj96Y8UBG7zEvGBpIxbyqUcnoK1c9IRu2Eh0AsvbOuldAS1F
-	 44q2yOcwvF9B8ekc2T4N3Cy+Eu7h1ldDNJpHj94cReEI5pkaZccZaFU4OuMFc8oG82
-	 5apjShKFBjZxlSzI/EJvgEqwlJfOZ3WU6dWi9p6jTSx5P33Apyzfnaopfh6kxtRAJT
-	 fRAcdIMQUHawA==
-Content-Type: multipart/mixed; boundary="===============1208854577277626609=="
+	b=PiYZ9bCMt5LaRbh1mKOcSk8JAoATQFoAqC100qvoVH//FwYKs8AGsg+Jo+ZQVzkPc
+	 FyghZfY5vRnexIPiPkS808kI0jdH3koTdq3z+tuPLTAWRUohToawf0Jo2I6Wvd3sNv
+	 dHGsmmkKT2trSPxDPcmLNyZh2KnIFSU8/cF5tNDxkGhu+vaimUqXLeSBCELGQQxaok
+	 MhKfpL4jgf9Zkgrpqjz3/01E5R8qZXosiTzF4/Voxny7/mhxIcotbZbWJJrbjZSLYm
+	 g0J4OR+zozAWzMZRSCRR03n7OXqLp7p3JsnyHI+NrNlUC9g10Kagrw5rOvkIRx9/id
+	 C2QeS1NOi9/TA==
+Content-Type: multipart/mixed; boundary="===============3130900610336689776=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <ceccb98284af19c29afad1d8269ec4376a3e430db17870352c21374330c6a09a@mail.kernel.org>
-In-Reply-To: <20260824143621.2098856-2-chenyuan_fl@163.com>
-References: <20260824143621.2098856-2-chenyuan_fl@163.com>
-Subject: Re: [PATCH 1/4] bpf: Cancel special fields in resizable hashtab on recycle
+Message-Id: <d89fc04e61dddf9661a334b4ce9142b3bc081ab11fb287ce1ea2aee0661b6e7a@mail.kernel.org>
+In-Reply-To: <20260824143621.2098856-5-chenyuan_fl@163.com>
+References: <20260824143621.2098856-5-chenyuan_fl@163.com>
+Subject: Re: [PATCH 4/4] selftests/bpf: Test rhtab special-field combinations
 From: bot+bpf-ci@kernel.org
 To: chenyuan_fl@163.com,bpf@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,gnq25@mails.tsinghua.edu.cn,chenyuan@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 24 Aug 2026 15:42:20 +0000 (UTC)
+Date: Mon, 24 Aug 2026 15:42:24 +0000 (UTC)
 
---===============1208854577277626609==
+--===============3130900610336689776==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index d40cb5dd446c..0df8db27cd8c 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-> @@ -2864,14 +2864,56 @@ static int rhtab_map_alloc_check(union bpf_attr *attr)
->  	return htab_map_alloc_check(attr);
->  }
->
-> -static void rhtab_check_and_free_fields(struct bpf_rhtab *rhtab,
-> -					struct rhtab_elem *elem)
-> +static void rhtab_cancel_fields(struct bpf_rhtab *rhtab,
-> +				struct rhtab_elem *elem)
->  {
->  	if (IS_ERR_OR_NULL(rhtab->map.record))
->  		return;
->
-> -	bpf_obj_free_fields(rhtab->map.record,
-> -			    rhtab_elem_value(elem, rhtab->map.key_size));
-> +	/*
-> +	 * Only cancel NMI-safe fields (timer, workqueue, task_work) here.
-> +	 * RHASH values can also carry referenced kptrs (and per-cpu kptrs),
-> +	 * whose destructors must not run from arbitrary BPF execution
-> +	 * contexts (e.g. NMI); leave them attached to the recycled element
-> +	 * and let rhtab_mem_dtor() destroy them once the element is
-> +	 * eventually freed. This matches the hash map semantics introduced
-> +	 * by a3a81d247651 ("bpf: Cancel special fields on map value
-> +	 * recycle").
-> +	 */
-> +	bpf_map_free_internal_structs(&rhtab->map,
-> +				      rhtab_elem_value(elem, rhtab->map.key_size));
-> +}
-
-This isn't a bug, but could the explanation live in one place with the call
-sites pointing at it? The same rationale appears in five spots throughout
-this change: here above rhtab_cancel_fields(), above rhtab_init_map_value(),
-and in three more comments in the call sites below. That's roughly 33
-comment lines against 25 lines of code, and any future adjustments to the
-reasoning need to be synced across all five. For comparison, the equivalent
-hash map helpers check_and_cancel_fields() and htab_elem_free() carry no
-comment at all.
-
-> +
-> +/*
-> + * Initialize special fields of a freshly allocated rhtab element, but keep
-> + * kptr fields untouched. A recycled element may carry a referenced kptr from
-> + * its previous life: the delete path only cancels NMI-safe fields (matching
-> + * the hash map semantics), so the kptr reference stays owned by the element
-> + * until rhtab_mem_dtor() destroys it. Zeroing it here (as
-> + * check_and_init_map_value() would) would drop the reference without
-> + * releasing it.
-> + */
-> +static void rhtab_init_map_value(struct bpf_map *map, void *value)
-> +{
-> +	struct btf_record *rec = map->record;
-> +	int i;
-> +
-> +	if (IS_ERR_OR_NULL(rec))
-> +		return;
-> +
-> +	for (i = 0; i < rec->cnt; i++) {
-> +		struct btf_field *field = &rec->fields[i];
-> +		void *field_ptr = value + field->offset;
-> +
-> +		switch (field->type) {
-> +		case BPF_KPTR_UNREF:
-> +		case BPF_KPTR_REF:
-> +		case BPF_KPTR_PERCPU:
-> +			continue;
-> +		default:
-> +			bpf_obj_init_field(field, field_ptr);
-> +		}
-> +	}
-> +}
-
-This isn't a bug, but could this kptr-filtering init be unified with
-bpf_obj_init() rather than duplicated here? rhtab_init_map_value()
-re-implements the field walk from bpf_obj_init() with a kptr filter in
-front of bpf_obj_init_field(). The hash map path this change says it is
-matching takes a different route: alloc_htab_elem() does no special-field
-initialization at all on a recycled or fresh element, relying on __GFP_ZERO
-for fresh memory and on bpf_obj_cancel_fields() having left the cancelled
-fields reusable. Would it be simpler to drop the init call entirely the way
-alloc_htab_elem() does, or to add the kptr skip as a flag or variant of
-bpf_obj_init() so the field walk lives in one place?
+> diff --git a/tools/testing/selftests/bpf/prog_tests/rhtab_fields.c b/tools/testing/selftests/bpf/prog_tests/rhtab_fields.c
+> new file mode 100644
+> index 000000000000..29de05bcbd4b
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/rhtab_fields.c
 
 [ ... ]
 
-> @@ -3022,10 +3064,11 @@ static long rhtab_map_update_existing(struct bpf_map *map, struct rhtab_elem *el
->  	 * BPF_F_LOCK, matching arraymap semantics.
->  	 *
->  	 * copy_map_value() skips special-field offsets, so old timers/
-> -	 * kptrs/etc. still sit in the slot. Cancel them after the copy
-> -	 * to match arraymap's update semantics.
-> +	 * kptrs/etc. still sit in the slot. Cancel the NMI-safe ones after
-> +	 * the copy to match arraymap's update semantics; referenced kptrs
-> +	 * stay attached and are destroyed by rhtab_mem_dtor().
->  	 */
-> -	rhtab_check_and_free_fields(rhtab, elem);
-> +	rhtab_cancel_fields(rhtab, elem);
->  	return 0;
->  }
+> +static void subtest_timer(struct rhtab_fields *skel)
+> +{
+> +	u64 zero = 0;
+> +	u32 key = 0;
+> +	int fired, map_fd;
+> +
+> +	map_fd = bpf_map__fd(skel->maps.tmap);
+> +	if (!ASSERT_OK(bpf_map_update_elem(map_fd, &key, &zero, BPF_ANY),
+> +		       "create_elem"))
+> +		return;
 
-A subsystem pattern flags this as potentially concerning: after this change,
-rhtab_map_update_existing() overwrites an existing map value in place with
-copy_map_value() but then only calls rhtab_cancel_fields(), which now calls
-bpf_map_free_internal_structs() instead of bpf_obj_free_fields().
-bpf_map_free_internal_structs() handles only BPF_TIMER, BPF_WORKQUEUE and
-BPF_TASK_WORK. The BPF_KPTR_REF or BPF_KPTR_PERCPU reference held by the
-value the user just overwrote is no longer released at update time; it stays
-attached to the live element and is only destroyed when the element is
-eventually freed to the slab.
+Does this read past the end of the zero variable?  The tmap value type
+is struct timer_val which is 24 bytes (16-byte bpf_timer plus 8-byte
+data field), but zero is only 8 bytes.  The syscall copies value_size
+bytes from the user pointer in kernel/bpf/syscall.c:
 
-Before the change:
+    value_size = bpf_map_value_size(map);
+    value = kvmemdup_bpfptr(uvalue, value_size);
 
-rhtab_check_and_free_fields(rhtab, elem);   /* -> bpf_obj_free_fields() */
+so it appears 16 bytes above zero on the stack would be read.  The same
+pattern is also used later when recreating the element.
 
-After:
+> +
+> +	if (!ASSERT_OK(run_prog(skel, "arm_timer"), "arm_timer_first"))
+> +		return;
+> +	usleep(300000);
+> +	if (!ASSERT_GT(skel->bss->timer_fired, 0, "timer_fired_first"))
+> +		return;
+> +
+> +	/* Deleting the element must cancel the timer. */
+> +	fired = skel->bss->timer_fired;
+> +	if (!ASSERT_OK(bpf_map_delete_elem(map_fd, &key), "delete_elem"))
+> +		return;
+> +	usleep(300000);
+> +	ASSERT_EQ(skel->bss->timer_fired, fired, "timer_cancelled_after_delete");
 
-rhtab_cancel_fields(rhtab, elem);           /* -> bpf_map_free_internal_structs() */
+Can this assertion actually verify timer cancellation?  Looking at
+arm_timer() in progs/rhtab_fields.c, it arms the timer with a 50us
+expiry (50000ns), and the callback doesn't re-arm.  The test waits
+300ms before the delete, and the preceding ASSERT_GT confirms the timer
+has already fired.  So by the time bpf_map_delete_elem() runs, the
+timer has been inactive for ~300ms.  Whether or not the delete path
+cancels the timer field, timer_fired cannot advance during the second
+sleep, so the assertion would pass even on a kernel that doesn't cancel
+the timer at all.
 
-The change appears intentional and mirrors array_map_update_elem(), which
-was itself converted from bpf_obj_free_fields() to bpf_obj_cancel_fields()
-by a3a81d247651. The reference is not leaked, only its release is deferred:
-the element keeps ownership, and rhtab_mem_dtor() runs bpf_obj_free_fields()
-before returning memory to the allocator. The kptr slot holds at most one
-reference and copy_map_value() never writes it, so repeated updates cannot
-accumulate references. Is this deferred-release semantic for RHASH
-intentional, matching the hash map and array behavior?
+The commit message says "delete the element and verify the timer is
+cancelled" - to actually test cancellation, wouldn't the timer need to
+still be pending at delete time?  For example, arming it with a delay
+longer than the deletion (say 200ms), deleting immediately, then
+sleeping past the original expiry and checking that timer_fired did not
+change.
 
-> @@ -3066,7 +3109,14 @@ static long rhtab_map_update_elem(struct bpf_map *map, void *key, void *value, u
->
->  	memcpy(elem->data, key, map->key_size);
->  	copy_map_value(map, rhtab_elem_value(elem, map->key_size), value);
-> -	check_and_init_map_value(map, rhtab_elem_value(elem, map->key_size));
-> +	/*
-> +	 * Initialize special fields of the (possibly recycled) element, but
-> +	 * leave kptr slots alone: a recycled element may still own a
-> +	 * referenced kptr that rhtab_mem_dtor() will release, so zeroing it
-> +	 * here would leak the reference. Fresh memory from the bpf mem
-> +	 * allocator is zeroed, so skipping the kptr init is safe there too.
-> +	 */
-> +	rhtab_init_map_value(map, rhtab_elem_value(elem, map->key_size));
+> diff --git a/tools/testing/selftests/bpf/progs/rhtab_fields.c b/tools/testing/selftests/bpf/progs/rhtab_fields.c
+> new file mode 100644
+> index 000000000000..85335f19f172
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/rhtab_fields.c
 
-A subsystem pattern flags this as potentially concerning: after this change,
-rhtab_map_update_elem() copies the user value into a newly allocated element
-with copy_map_value() and the paired check_and_init_map_value() call is
-replaced by rhtab_init_map_value(), which explicitly skips BPF_KPTR_UNREF,
-BPF_KPTR_REF and BPF_KPTR_PERCPU instead of calling bpf_obj_init_field().
-copy_map_value() also skips special-field offsets via bpf_obj_memcpy(), so
-no code writes the kptr slots of the new element. bpf_mem_cache_alloc() may
-hand back an element recycled from a previous operation whose kptr slots
-were left populated, and the element is then published into the rhashtable
-under a new key while still carrying the previous occupant's kptr.
+[ ... ]
 
-Before the change:
+> +struct timer_val {
+> +	struct bpf_timer timer;
+> +	__u64 data;
+> +};
 
-check_and_init_map_value(map, rhtab_elem_value(elem, map->key_size));
+Is the data field used anywhere?  I don't see it read or written in
+any of the programs or in the test harness.  Compare struct
+lock_kptr_val::magic which exists for a similar purpose (plain bytes
+alongside a special field) and is actually exercised by lk_upd/lk_probe
+to verify plain bytes round-trip through recycled elements.
 
-After:
+The field does affect the value_size (making it 24 bytes instead of
+16), which creates a mismatch with prog_tests/rhtab_fields.c where
+subtest_timer() seeds the map from an 8-byte local (u64 zero).
 
-rhtab_init_map_value(map, rhtab_elem_value(elem, map->key_size));
+> +} counters SEC(".maps");
+> +
+> +/* 0: lk init ok, 1: lk probe xchg non-NULL, 2: lk probe xchg NULL,
+> + * 3: lk probe magic ok, 4: u init ok, 5: u probe ptr non-NULL,
+> + * 6: pc init ok, 7: pc probe xchg non-NULL, 8: pc probe xchg NULL
+> + */
 
-Skipping BPF_KPTR_REF and BPF_KPTR_PERCPU init appears required for the
-accounting to balance: zeroing the slot with bpf_obj_init_field() would drop
-the pointer without running the destructor. The equivalent reference path,
-alloc_htab_elem() for non-prealloc hash maps, performs no special-field
-initialization at all, so htab inherits recycled kptrs the same way. Fresh
-memory from the allocator is verified to be zeroed via __GFP_ZERO. Is the
-kptr inheritance across recycled elements under new keys the intended
-behavior?
+This isn't a bug, but the comment style here differs from the file
+header above.  The BPF subsystem prefers the opening /* on its own
+line:
+
+    /*
+     * 0: lk init ok, 1: lk probe xchg non-NULL, ...
+     */
+
+> +static __always_inline void bump(u32 idx)
+> +{
+> +	u64 *v = bpf_map_lookup_elem(&counters, &idx);
+> +
+> +	if (v)
+> +		(*v)++;
+> +}
+> +
+> +extern struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
+> +extern void bpf_task_release(struct task_struct *p) __ksym;
+> +
+> +int timer_fired;
+> +
+> +/* Map 1: spin lock + referenced kptr + plain data. */
+> +
+> +SEC("syscall")
+> +int lk_init(void *ctx)
+> +{
+> +	struct lock_kptr_val *val;
+> +	struct task_struct *task, *old;
+> +	u32 key = 0;
+> +
+> +	val = bpf_map_lookup_elem(&lkmap, &key);
+> +	if (!val)
+> +		return 1;
+> +	task = bpf_task_acquire(bpf_get_current_task_btf());
+> +	if (!task)
+> +		return 2;
+> +	old = bpf_kptr_xchg(&val->tsk, task);
+> +	if (old)
+> +		bpf_task_release(old);
+> +	bump(0);
+> +	return 0;
+> +}
+> +
+> +SEC("syscall")
+> +int lk_del(void *ctx)
+> +{
+> +	u64 key = 0;
+> +
+> +	bpf_map_delete_elem(&lkmap, &key);
+> +	return 0;
+> +}
+> +
+> +SEC("syscall")
+> +int lk_upd(void *ctx)
+> +{
+> +	struct lock_kptr_val val = { .magic = 0x52484142 };
+> +	u32 key = 0;
+> +
+> +	bpf_map_update_elem(&lkmap, &key, &val, BPF_ANY);
+> +	return 0;
+> +}
+> +
+> +SEC("syscall")
+> +int lk_probe(void *ctx)
+> +{
+> +	struct lock_kptr_val *val;
+> +	struct task_struct *old;
+> +	u32 key = 0;
+> +
+> +	val = bpf_map_lookup_elem(&lkmap, &key);
+> +	if (!val)
+> +		return 1;
+> +	old = bpf_kptr_xchg(&val->tsk, NULL);
+> +	if (old) {
+> +		bpf_task_release(old);
+> +		bump(1);
+> +	} else {
+> +		bump(2);
+> +	}
+> +	if (val->magic == 0x52484142)
+> +		bump(3);
+> +	return 0;
+> +}
+
+A subsystem pattern flags this as potentially concerning: the
+lk_init/lk_del/lk_upd/lk_probe quartet appears to re-implement a test
+that the immediately preceding commit in this same series (81f409ba449d)
+just added to the same directory.  progs/rhtab_kptr.c already covers
+the rhtab referenced-kptr recycle path with an identical four-program
+template over the same map type.
+
+The shared scaffolding is duplicated as well: bump() and the extern
+bpf_task_acquire/bpf_task_release declarations are byte-identical
+between the two files.
+
+Given that rhtab_fields.c adds the spin-lock, timer, untrusted-kptr,
+and per-cpu-kptr combinations that rhtab_kptr.c doesn't cover, while
+rhtab_kptr.c covers the NMI (perf_event) update path that
+rhtab_fields.c doesn't, neither file strictly subsumes the other.
+Should the two files share a header for the common helpers, or would it
+make sense to merge them into one test that covers all field
+combinations including the NMI case?
+
+> +
+> +/* Map 2: bpf_timer. */
+> +
+> +static int timer_cb(void *map, void *key, struct timer_val *value)
+> +{
+> +	timer_fired++;
+> +	return 0;
+> +}
+> +
+> +SEC("syscall")
+> +int arm_timer(void *ctx)
+> +{
+> +	struct timer_val *val;
+> +	u32 key = 0;
+> +
+> +	val = bpf_map_lookup_elem(&tmap, &key);
+> +	if (!val)
+> +		return 1;
+> +	/* 1 == CLOCK_MONOTONIC */
+> +	if (bpf_timer_init(&val->timer, &tmap, 1))
+> +		return 2;
+> +	bpf_timer_set_callback(&val->timer, timer_cb);
+> +	if (bpf_timer_start(&val->timer, 50000, 0))
+> +		return 3;
+> +	return 0;
+> +}
+
+Does arming a one-shot timer with a 50us expiry make the timer subtest's
+delete-cancellation assertion unfalsifiable?  The callback doesn't
+re-arm, so the timer fires exactly once.  The consumer in
+prog_tests/rhtab_fields.c waits 300ms (6000x the expiry) and confirms
+the timer has already fired before calling bpf_map_delete_elem().  The
+hrtimer is therefore inactive at delete time, so timer_fired cannot
+change during the second sleep regardless of whether the delete path
+actually cancels anything.
+
+The existing convention in this directory is to arm a long timer so
+it is still pending at delete time - progs/timer_start_delete_race.c
+uses bpf_timer_start(&value->timer, 100000000, 0) (100ms) for exactly
+this delete-vs-pending-timer scenario, and progs/timer.c uses
+1ull << 35 (~34s) as its 'must not fire' expiry.  Would arming with an
+expiry longer than the arm-to-delete window make the assertion able to
+fail?
+
+[ ... ]
 
 
 ---
@@ -224,4 +293,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32741782570
---===============1208854577277626609==--
+--===============3130900610336689776==--
