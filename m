@@ -1,30 +1,30 @@
 Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8B0D43BDB0;
-	Mon, 24 Aug 2026 14:38:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 199D3438011;
+	Mon, 24 Aug 2026 14:38:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787582298; cv=none; b=TCG57MJ7fEAILnTIT0d0NbQFsiXmIFPM3z0McV9xVr+iuRuUNj4g0jRHZ/UtS1FjcxJZbBPlnaY9vbnpG9jGrfape1Cc4MA4vM43lo5i5bBzuttcQwAYhKvPT9006WrEobgvsURRcgdU/xjw+k3DMnlAOY3Xi8bVMGhghbTYVYs=
+	t=1787582300; cv=none; b=qq5oD5u7Qq/reYja6JcH6vqmIr7bd1dkIMGYa+g+Ox2Y0u4tWIuheoIn8fJQbRUUDErFzdegW/pFW3faWr13r0c6ouPD3Gm6PlG1kWW5DtNZnzAjO0jADyl/J4EAWu/kN7Ou6zTF2V9y7BBuBDkqUao945gsAC5+BOXE/fUhjDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787582298; c=relaxed/simple;
-	bh=Mq3JT+y2wtR59Cls9A4fPzAtPv8G+4dAfs0zBYK2vrc=;
+	s=arc-20240116; t=1787582300; c=relaxed/simple;
+	bh=yiUiflDVanlKSVYyi+qbFEeVwBkElRInG2Qf/yLZgbw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Bplce2MA+L46DnONBIUtR4HMoIK2zloWu1AVROrNUMkmXTQr75UMKJDs3PRMNIXDm14hEUng8GzIuOxg4nshMttAkKHUNe8q7EMwrEeywoWuvD3JGni9m++40qCUM3px2NtUYNP8kBZxrHj9h2B8q50eUmrHmPTxTBW4IN1t6yM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=aYTFXDlf; arc=none smtp.client-ip=220.197.31.5
+	 MIME-Version; b=XTJZ9mm1j1hRtY0yH0RzAQiXp3zeIZcJKR9dH75ZeFx8x+ayVcDNGuC1fPeLVl4PVmdkvWrCnFaefQZ0Y4lEKYzK3dAHxbCxns+g/y0GocvcV04qpaggg+12QNw4a2m8o+KJxrTlnZ5HK44x53EbMfq+qRrC8DO3skIIWbi6K4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Xxio33sw; arc=none smtp.client-ip=220.197.31.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="aYTFXDlf"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Xxio33sw"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=8N
-	4RqK7HDllSr4FqoWUGorP8PSr122gThyISmvPSrIU=; b=aYTFXDlf7MI4VSSP2+
-	MTjIfKyAyyQdgZvaWfMRbMfYjD+qz6V3nmEa3FVRrgbWBzHMHqqZzlJWfvclKUnq
-	2yRH6L48mg1yBCIzTF86J36X9PnIhqyYCNxan7wK7hsxVut41dozvSTCBWAdejZZ
-	to9H4pht67xRCuX4utEIEiwvA=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=3E
+	TUOZnkD0p5Jk119NJQbzsZZOFcufeLhAP1I1izjpY=; b=Xxio33swPz5Fhapz34
+	0thUa1EdnAAF7nDO2Di02YvIL44LaR7+QsPK5+QU2BilxOsqgSuHkAn845i8GCsA
+	nOiaVtAjKTgfihivrVehZzjBXgAa+RG/tsF0pzTqgVmWIrqKZeCVxomR8HWXd80M
+	XPGMufncJIfx/9eDJn4O5DyzY=
 Received: from nec8-i7 (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgDn+osAV4xqIt5SMw--.54939S2;
-	Mon, 24 Aug 2026 22:36:49 +0800 (CST)
+	by gzsmtp2 (Coremail) with SMTP id PSgvCgDn+osAV4xqIt5SMw--.54939S4;
+	Mon, 24 Aug 2026 22:36:50 +0800 (CST)
 From: chenyuan_fl@163.com
 To: bpf@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -43,12 +43,13 @@ Cc: linux-kernel@vger.kernel.org,
 	Shuah Khan <shuah@kernel.org>,
 	Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>,
 	Yuan Chen <chenyuan@kylinos.cn>
-Subject: [PATCH bpf-next v2 0/4] bpf: Cancel special fields in resizable hashtab on recycle
-Date: Mon, 24 Aug 2026 22:36:17 +0800
-Message-ID: <20260824143621.2098856-1-chenyuan_fl@163.com>
+Subject: [PATCH 2/4] bpf: Fix use-after-free of program BTF in mem-alloc destructor
+Date: Mon, 24 Aug 2026 22:36:19 +0800
+Message-ID: <20260824143621.2098856-3-chenyuan_fl@163.com>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <DKM6K95EN9OF.3O9XNYWVLYHDE@gmail.com>
+In-Reply-To: <20260824143621.2098856-1-chenyuan_fl@163.com>
 References: <DKM6K95EN9OF.3O9XNYWVLYHDE@gmail.com>
+ <20260824143621.2098856-1-chenyuan_fl@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -56,57 +57,111 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PSgvCgDn+osAV4xqIt5SMw--.54939S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Ar18Kr15XF47uw1DCF4kWFg_yoW5JrW3pF
-	W8W34akrn7JFn3G3Z3Ga129ryrG3Z5JF1Ykr43XryYy345JF9rAr4fKr43CF9YyFWvqr1F
-	v3saqF93Ga1UArDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jSPfdUUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAgGTUWqMVwG08gAA33
+X-CM-TRANSID:PSgvCgDn+osAV4xqIt5SMw--.54939S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWxZw4kZFWDGFy3Kr4rCw45Wrg_yoWrJFy5pF
+	4xCr4akw4ktrs7CwsxWwsxCry5Wan7ZF1UuFyfWw1Ygw4rXr1DXr409FWa9FW5Cr4rtws5
+	Ar1jgFZxGry5AFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jwZ2fUUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAQKTUWqMVwKt+AAA3n
 
 From: Yuan Chen <chenyuan@kylinos.cn>
 
-Posted in reply to Kumar Kartikeya Dwivedi's review [1] of Nuoqi Gui's
-overlapping series [2]: switching rhtab to bpf_obj_cancel_fields() alone
-leaks referenced kptrs, because rhtab_map_update_elem() zeroes the kptr
-slot of a recycled element via check_and_init_map_value() before the
-allocator destructor can release it.
+bpf_ma_set_dtor() duplicates the map's btf_record for the bpf_mem_alloc
+destructor. For kptr fields backed by the program BTF (MEM_ALLOC kptrs,
+e.g. objects allocated with bpf_obj_new()/bpf_percpu_obj_new()),
+btf_record_dup() only borrows the reference, matching what
+btf_parse_fields() did for the map's own record.
 
-The resizable hashtab still eagerly calls bpf_obj_free_fields() on element
-delete/replace, which runs kptr destructors from the caller's execution
-context (unsafe in NMI). Patch 1 applies the cancel semantics like hash/array
-maps (a3a81d247651) and fixes the recycle-path kptr leak with
-rhtab_init_map_value(); patch 2 fixes a program-BTF use-after-free in the
-mem-alloc destructor found while testing; patches 3-4 add regression tests
-(NMI update, and per-field delete/re-insert cycles).
+The duplicated record, however, is released later from the deferred
+bpf_mem_alloc destructor workqueue (free_mem_alloc_deferred), by which
+time the program BTF may already have been freed: bpf_map_free() drops
+the map's own reference, and the RCU callback can run before the
+workqueue. Reading field->kptr.btf in btf_record_free() (via
+btf_is_kernel()) is then a use-after-free, detected by KASAN as
+"slab-use-after-free in btf_is_kernel" when a map with a MEM_ALLOC kptr
+field is destroyed.
 
-Verified in QEMU (KASAN, current bpf-next): rhtab_kptr, rhtab_fields (4/4)
-and rhash pass with the fix; on the unfixed kernel the kptr subtests fail at
-the recycle assertions and the program-BTF UAF reproduces.
+Hold a reference on program BTF for the lifetime of the duplicated
+record and drop it right before the record is freed. The last btf_put()
+only schedules the object for RCU destruction, so btf_record_free() can
+still safely read the field descriptors.
 
-Changes since v1: fix the recycle-path kptr leak, extend the selftests with
-delete/re-insert recycle coverage, add per-field combination tests, fix the
-program-BTF UAF (patch 2).
+The rhtab kptr selftests exercise this path on every map teardown and
+triggered the bug under KASAN; with this fix they pass cleanly.
 
-[1] https://lore.kernel.org/bpf/DKEVG8ZVJDDQ.2G40FTOIZKU57@gmail.com/
-[2] https://lore.kernel.org/bpf/20260726-f01-23-rhash-cancel-bpf-next-v1-0-6e5e1131d885@mails.tsinghua.edu.cn/
+Fixes: 1df97a7453ee ("bpf: Register dtor for freeing special fields")
+Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+---
+ kernel/bpf/hashtab.c | 45 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-Yuan Chen (4):
-  bpf: Cancel special fields in resizable hashtab on recycle
-  bpf: Fix use-after-free of program BTF in mem-alloc destructor
-  selftests/bpf: Test rhtab kptr recycle from NMI context
-  selftests/bpf: Test rhtab special-field combinations
-
- kernel/bpf/hashtab.c                          | 115 ++++++-
- .../selftests/bpf/prog_tests/rhtab_fields.c   | 213 ++++++++++++
- .../selftests/bpf/prog_tests/rhtab_kptr.c     | 146 +++++++++
- .../selftests/bpf/progs/rhtab_fields.c        | 305 ++++++++++++++++++
- .../testing/selftests/bpf/progs/rhtab_kptr.c  | 132 ++++++++
- 5 files changed, 901 insertions(+), 10 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/rhtab_fields.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/rhtab_kptr.c
- create mode 100644 tools/testing/selftests/bpf/progs/rhtab_fields.c
- create mode 100644 tools/testing/selftests/bpf/progs/rhtab_kptr.c
-
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 0df8db27cd8c..b8df2bc9a9a0 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -493,10 +493,54 @@ static void htab_pcpu_mem_dtor(void *obj, void *ctx)
+ 		bpf_obj_free_fields(hrec->record, per_cpu_ptr(pptr, cpu));
+ }
+ 
++/*
++ * bpf_ma_set_dtor() duplicates the map's btf_record. For kptr fields whose
++ * btf is the program BTF (MEM_ALLOC kptrs, e.g. objects allocated with
++ * bpf_obj_new()/bpf_percpu_obj_new()) btf_record_dup() only borrows the
++ * reference, like btf_parse_fields() did for the map's own record. The
++ * duplicated record is released later from the deferred bpf_mem_alloc
++ * destructor workqueue, by which time the program BTF may already have been
++ * freed (the map dropped its own reference in bpf_map_free()), so reading
++ * field->kptr.btf there would be a use-after-free.
++ *
++ * Hold a reference on non-kernel (program) BTF for the lifetime of the
++ * duplicated record and release it before the record is freed. After the
++ * last btf_put() the object is only destroyed after an RCU grace period, so
++ * btf_record_free() can still safely read the field descriptors.
++ */
++static void htab_record_prog_btf_ref(struct btf_record *rec, bool get)
++{
++	int i;
++
++	if (IS_ERR_OR_NULL(rec))
++		return;
++
++	for (i = 0; i < rec->cnt; i++) {
++		const struct btf_field *field = &rec->fields[i];
++
++		switch (field->type) {
++		case BPF_KPTR_UNREF:
++		case BPF_KPTR_REF:
++		case BPF_KPTR_PERCPU:
++		case BPF_UPTR:
++			if (field->kptr.btf && !btf_is_kernel(field->kptr.btf)) {
++				if (get)
++					btf_get(field->kptr.btf);
++				else
++					btf_put(field->kptr.btf);
++			}
++			break;
++		default:
++			break;
++		}
++	}
++}
++
+ static void htab_dtor_ctx_free(void *ctx)
+ {
+ 	struct htab_btf_record *hrec = ctx;
+ 
++	htab_record_prog_btf_ref(hrec->record, false);
+ 	btf_record_free(hrec->record);
+ 	kfree(ctx);
+ }
+@@ -521,6 +565,7 @@ static int bpf_ma_set_dtor(struct bpf_map *map, struct bpf_mem_alloc *ma,
+ 		kfree(hrec);
+ 		return err;
+ 	}
++	htab_record_prog_btf_ref(hrec->record, true);
+ 	bpf_mem_alloc_set_dtor(ma, dtor, htab_dtor_ctx_free, hrec);
+ 	return 0;
+ }
 -- 
 2.54.0
 
