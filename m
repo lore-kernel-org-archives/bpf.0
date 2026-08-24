@@ -1,102 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59B835C6A1
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 15:01:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CACE36D9EC
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 15:03:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787583707; cv=none; b=FRnCEzxHO3y6HvV9XzClVD02jcdU0N/Z3CHsw+SQg9N6qcRPZhuDLSxzb2VOs/XjNVZ5cYDs0wIdg6/m3DNoEheG8aoZJahkQzAz3oFkylm7ZTGAF52Dr8lub9RvScKiCcnW+wj04rBGubd1OFgrym+kASF4h42FTpZCuLhXOBc=
+	t=1787583827; cv=none; b=tk9vBGcxFufqZH7Urq8iPYCfk90YR3zDWV/AHxPJOiUWtG5KwuTYNu6YRkfLK9rzXerPh+JX4xyEN40rtPXllmnNMgrV7rmA9zLNYHTOZRpA/ZtvvLTiuPL9nsSd73VRlRJ8d6z+skOc6mfcrnNECrJ1ubNEzaULIrB9DYaIzD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787583707; c=relaxed/simple;
-	bh=m/N6+HqnDANi1F1g27+mPl/pjVayTfK26PYd27xT5zI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=TfSmEbxcA/RQx20r8lZHwePeZiYUA1KyCzVzDOnwLXN1mZOfe8htqAmrFCuVbf7diMk1dAMzlyjOj16UufCeryqftYoW52ZV6py5vmmWWXFlsrYs1yCNO0miKPrLgb3nt+NgDNNBJChiUr0AMjmeJobgP2EbXuBRXfl8l6uITtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lri7B4e5; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787583827; c=relaxed/simple;
+	bh=+btdl5rvtiJzh8XPj4RG86SBosoRWA9bFHjoye2hLcY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bA6qE3pb5QNm6IUueNDm3ORWRGPT6An1pjx5mrQyLTA8BIA04wHMm/1m/VIc6qkEH0oEkJpSPzEXmVU/uGY4HnZRBWDAnR+Vu2tQbMzkLtLfl8ijLSrx20tW0+RbUzXcnLTaMiaKU2/7KMwrgvOnVMUxKr/yPYAy3mRae850pbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DoXWHiTU; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lri7B4e5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 433861F000E9;
-	Mon, 24 Aug 2026 15:01:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787583705;
-	bh=m/N6+HqnDANi1F1g27+mPl/pjVayTfK26PYd27xT5zI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Lri7B4e5jsQO67ovK1KRmAJd4xS9j72Gmsj7ZncD5dFuU2fgPd0KzAdtAgPMfS6uQ
-	 Fkk2PssqRxTmwvpLf+bi9DDddxq2pV9fMVZU588KIaFfr8M100MzyOme3ISPm7uEt5
-	 39FlgmIhASYOjv2x6hHAH5FHb9x8QFCGdDHPqp7aagGZaTdS8W9r5CjuT2F+M8hIFs
-	 VXJGe0PAslnXr3pIIMzntphHsPe+o1y5V41Q//b4exKziMeJPVa+lEX5/ir70nY6sn
-	 WDQick9PsDxg121tUB/YzPS7oWU2D7lm/7Ir/D+U40qxXJ+5cCso6pcwLpi2d8+n8I
-	 /MAv9hZBe+hJw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v10 03/35] cachefiles,netfs: sunset ondemand mode
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "David Howells" <dhowells@redhat.com>
-Cc: "Jeff Layton" <jlayton@kernel.org>, "Chuck Lever" <cel@kernel.org>, bpf@vger.kernel.org, "Anna
- Schumaker" <anna@kernel.org>
-In-Reply-To: <20260824144130.759997-4-dhowells@redhat.com>
-References: <20260824144130.759997-1-dhowells@redhat.com>
- <20260824144130.759997-4-dhowells@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 24 Aug 2026 15:01:44 +0000
-Message-Id: <20260824150145.433861F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DoXWHiTU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1787583824;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aZ3erjJduSWntjWxjPCCJpediljarFwjV+7IHAqxu6o=;
+	b=DoXWHiTUWI9RArWLzJNxvceZ/qttsOqQxUe9t9S6Ovxo/JoAnhh1Nr7d6K1hVwBWXgRKj+
+	gNrPwb0Uloc00hYqfDmd3pt8R2ftyTJrL3wfoNRnNky2gn9+p+dk3deByCH4qgb9mUQhAu
+	j90RJUHnR8ZIqJL721nSX3MlMcsgDvg=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-673-2cWygwANNtm8DIgIiEXztA-1; Mon,
+ 24 Aug 2026 11:03:38 -0400
+X-MC-Unique: 2cWygwANNtm8DIgIiEXztA-1
+X-Mimecast-MFC-AGG-ID: 2cWygwANNtm8DIgIiEXztA_1787583816
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9B3BD1944F01;
+	Mon, 24 Aug 2026 15:03:36 +0000 (UTC)
+Received: from fedora (unknown [10.44.32.9])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 4B0C630002ED;
+	Mon, 24 Aug 2026 15:03:31 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Mon, 24 Aug 2026 17:03:36 +0200 (CEST)
+Date: Mon, 24 Aug 2026 17:03:30 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Jens Axboe <axboe@kernel.dk>, Peter Zijlstra <peterz@infradead.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	Steve French <sfrench@samba.org>, linux-fsdevel@vger.kernel.org,
+	bpf@vger.kernel.org, linux-cifs@vger.kernel.org, linux-mm@kvack.org,
+	stable@vger.kernel.org, Paulo Alcantara <pc@manguebit.org>
+Subject: Re: [PATCH v2 0/5] Stop TIF_NOTIFY_SIGNAL from interrupting work
+ that can't be restarted
+Message-ID: <aoxdQmFMK7pjH9qk@redhat.com>
+References: <20260824-work-tif_notify_signal-v2-0-6609e42b3157@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260824-work-tif_notify_signal-v2-0-6609e42b3157@kernel.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Critical] Removal of the exported UAPI header `include/uapi/linux/cachef=
-iles.h` breaks userspace compilation.
---
+On 08/24, Christian Brauner wrote:
+>
+> Christian Brauner (5):
+>       signal: allow taks to temporarily block TIF_NOTIFY_SIGNAL
+>       coredump: prevent TIF_NOTIFY_SIGNAL from interrupting coredumps
+>       selftests/coredump: test that TIF_NOTIFY_SIGNAL doesn't truncate a coredump
+>       smb: prevent TIF_NOTIFY_SIGNAL from interrupting
+>       pid_namespace: prevent TIF_NOTIFY_SIGNAL from interrupting the reaper
 
---- Patch [3]: [PATCH v10 03/35] cachefiles,netfs: sunset ondemand mode ---
-commit eb4335001c5a2237f8379d09b27bb7484e9e516a
-Author: Gao Xiang <xiang@kernel.org>
+For 1-2 and 4-5 feel free to add
 
-cachefiles,netfs: sunset ondemand mode
+Reviewed-by: Oleg Nesterov <oleg@redhat.com>
 
-This commit removes the on-demand read mode from cachefiles, as EROFS
-over fscache is no longer an in-tree user and fscache is now focused
-on netfslib. It also cleans up the related netfs, fscache, and cachefiles
-code paths.
+-------------------------------------------------------------------------------
+sigprocmask(SIG_BLOCK) in fs/smb/client/transport.c:__smb_send_rqst() looks
+a bit suspicious. Even if we forget about TIF_NOTIFY_SIGNAL, sigprocmask()
+doesn't necessarily clear TIF_SIGPENDING, nor it can protect from (say)
+do_signal_stop()->signal_wake_up() from a sub-thread. But this is offtopic.
 
-Link: https://lore.kernel.org/r/CAOQ4uxi4dzxArY24YO=3D+kBCK2gGoq3Ptb8WkzCqS=
-ogPgU_R3dQ@mail.gmail.com
-Link: https://sashiko.dev/#/patchset/20260716103030.3065561-1-dhowells%40re=
-dhat.com
-Link: https://sashiko.dev/#/patchset/20260722130218.78958-1-dhowells%40redh=
-at.com
+Oleg.
 
-[ ... ]
-
-> diff --git a/include/uapi/linux/cachefiles.h b/include/uapi/linux/cachefi=
-les.h
-> deleted file mode 100644
-> index 78caa73e53434..0000000000000
-> --- a/include/uapi/linux/cachefiles.h
-> +++ /dev/null
-> @@ -1,68 +0,0 @@
-> -/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> -#ifndef _LINUX_CACHEFILES_H
-> -#define _LINUX_CACHEFILES_H
-> -
-> -#include <linux/types.h>
-> -#include <linux/ioctl.h>
-
-[Severity: Critical]
-Does removing this exported header break source-level compatibility for
-userspace applications? Any program or container runtime that includes
-<linux/cachefiles.h> will now encounter a file not found compilation
-error when built against these updated kernel headers.
-
-Should the UAPI header and its definitions be kept intact so userspace
-builds continue to succeed, while instead just returning errors like
--EOPNOTSUPP from the kernel for these legacy ioctls and operations?
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260824144130.7599=
-97-1-dhowells@redhat.com?part=3D3
