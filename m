@@ -1,217 +1,124 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA2043F4BD
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 15:28:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA6C6439F86
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 15:35:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787585329; cv=none; b=ouMwQ7TmXgjjmDYAgMmubBDaFSXO2QfqtYi9fmy4PnTA+pQUfrjeXEhqJha9gDHMl/SVvUmWTOtHQXg8Uur9s4gq3EWusxuBV3ukptpl9V6HyBBaVgWMHiEkixTgmqrwX4gnGnB0WWpDh+96HVrwIDrESXI8x67IN8TfqXs/5Gw=
+	t=1787585717; cv=none; b=SsEB/FYewRM+/ASqkRN4Q1VSjL1ORUUYGuCkj/4XY2UOX2FnnV0V+wNJDQK6U2x+PcCIPB13CJf11j/NXIRVpCu7zo1T7/G95opLnE6/v3+J7o4gVAdV1reAzALikCW1mmIbxnZgA/fJSO5gVnTxdB4Kbe/23WpF/7FxRfJhr4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787585329; c=relaxed/simple;
-	bh=HZA/AjISZ1q7luIeEvWMMaCO240uQNgGCKd70tgKhmI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fNaWW/lEVEq0Ge+ShqxHNV7MZe5XsgjUgX0gkgnoEAW5hP0fCf0AVLZh0UmfdJofLQPJ95RRzD+51NGBsRxpNhNA1SJiiaXofx/eSw+ro/yHL7N0tV7nK52TbXMnQ7DzYp7y1lIEqb0zWTJd5oyicKYyK1gi6qBt2YLcF7ScPWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UTwBjQ3E; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787585717; c=relaxed/simple;
+	bh=CVp8c4e34w9lAAD2MbnrrgIT4la5eCCFFfl0AvsQZRk=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=NRYIgHcEEQvVw0XMlvlrzTa8HB6A+KIimjl6v7P+8SGwYKMuhHW1yKA+6VNv5zqcwJBU8busR8VARLsi9WyaRWNcmppyRLdz8xk2Y2JGCjKjPKuxUIlcelcidlQuLIPO9x3dMKYtKazty5Z4h1NJ8cX1Uf1D5Fg7neF9TxoUr4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GRl6dN3/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UTwBjQ3E"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 301C51F00A3D;
-	Mon, 24 Aug 2026 15:28:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GRl6dN3/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27D721F000E9;
+	Mon, 24 Aug 2026 15:35:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787585322;
-	bh=irthaFuMjSRHCfK4X/ylSlqch/10VLbWDurcU9gEY/8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=UTwBjQ3EvEsCHwSpv/64VducD8O4bViqdPq34uvnuYXAbnca4RICF/0EMo1APAK9b
-	 9iBBDP7MHov7QpLjDZa1yvSqi8VknXZmNojKrnXZcywD1eeqJZ1dLGt4KvR176Afle
-	 3VO2+I0Cb7ZmqA4Mg/tErErhecCXEJ5xSwv9yDaNWQjfhQcA6E6ONqpkrOgF+DfwLH
-	 mlP9fJkTSZknqgW+o43M/2n04EApKoOk+XcrQaG5zBZ+oaye7yVQ9+3KG4hIqORsAG
-	 XzNLLkO6q2ExJ0nrGnibLeka5afl19WmVK+FzkZMVkfbOScLGTAq7advvMNLs/50mC
-	 +LP+lifdGpc9g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 3/4] selftests/bpf: Test rhtab kptr recycle from NMI
- context
-Reply-To: sashiko-reviews@lists.linux.dev
-To: chenyuan_fl@163.com
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260824143621.2098856-4-chenyuan_fl@163.com>
-References: <DKM6K95EN9OF.3O9XNYWVLYHDE@gmail.com>
- <20260824143621.2098856-1-chenyuan_fl@163.com>
- <20260824143621.2098856-4-chenyuan_fl@163.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 24 Aug 2026 15:28:41 +0000
-Message-Id: <20260824152842.301C51F00A3D@smtp.kernel.org>
+	s=k20260515; t=1787585715;
+	bh=CVp8c4e34w9lAAD2MbnrrgIT4la5eCCFFfl0AvsQZRk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=GRl6dN3/d7YdSxoLj1ldFpGW4YYlbhmbDf09djgGI6gijsDrIsLOwXM3kaZ/3qhvS
+	 /T6dIsLrx4CMsvYtpXvhf9Ljxjl4XuB/TSdnQ9w3m5EYSCiIsZ8JzfsO3x+HuDXarE
+	 5qi6IUZSoGdaBysLEZF9J1Bm9Px2SdCo/+Mp/kdMoMgflZ0mT5+6qi2QUM17uT2i75
+	 SePVqlETTLADV+INfBNnw7H/pr2qM324RfGhRj1gaBfhdlJSZOEL9qFecYrwTklroK
+	 yhk7GXn5gqH+t1d+a2kN44W19UqxhoeVFpqTlxb+EsTe9JUYeEI7hxuHzLLcFtT5vI
+	 p1ybAOlFvqvMA==
+Content-Type: multipart/mixed; boundary="===============8092900729003572184=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <762d005c393b97778a570fff6736d9b3756faf795e876105640dd5b94ae0b3a4@mail.kernel.org>
+In-Reply-To: <20260824144948.992324-1-yonghong.song@linux.dev>
+References: <20260824144948.992324-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next 2/2] bpf: Report which member makes a kfunc return type unsupported
+From: bot+bpf-ci@kernel.org
+To: yonghong.song@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 24 Aug 2026 15:35:15 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Medium] Userspace stack out-of-bounds read in `bpf_map_update_elem()` du=
-e to mismatched value size.
-- [Medium] Double close of the perf_event file descriptor (pmu_fd).
-- [Low] Multi-line comments do not follow the mandatory BPF subsystem comme=
-nt style.
---
+--===============8092900729003572184==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
 
---- Patch [3]: [PATCH 3/4] selftests/bpf: Test rhtab kptr recycle from NMI =
-context ---
-commit ce5b7999a24e0290b526f254441d70dcbf59a6cf
-Author: Yuan Chen <chenyuan@kylinos.cn>
+PiBkaWZmIC0tZ2l0IGEva2VybmVsL2JwZi92ZXJpZmllci5jIGIva2VybmVsL2JwZi92ZXJpZmll
+ci5jCj4gaW5kZXggOWFhMjljMzY3MDA4Li5jNmFlY2JhNjQzN2EgMTAwNjQ0Cj4gLS0tIGEva2Vy
+bmVsL2JwZi92ZXJpZmllci5jCj4gKysrIGIva2VybmVsL2JwZi92ZXJpZmllci5jCj4gQEAgLTEx
+NjIzLDEwICsxMTYyMywxNCBAQCBzdGF0aWMgYm9vbCBpc19rZnVuY19hcmdfaW1wbGljaXQoY29u
+c3Qgc3RydWN0IGJwZl9jYWxsX2FyZ19tZXRhICptZXRhLCB1MzIgYXJnXwo+ICAJcmV0dXJuIGFy
+Z24gPD0gYXJnX2lkeDsKPiAgfQo+Cj4gLS8qIFJldHVybnMgdHJ1ZSBpZiBzdHJ1Y3QgaXMgY29t
+cG9zZWQgb2Ygc2NhbGFycywgNCBsZXZlbHMgb2YgbmVzdGluZyBhbGxvd2VkICovCj4gLWJvb2wg
+YnRmX3R5cGVfaXNfc2NhbGFyX3N0cnVjdChzdHJ1Y3QgYnBmX3ZlcmlmaWVyX2VudiAqZW52LAo+
+IC0JCQkgICAgICAgY29uc3Qgc3RydWN0IGJ0ZiAqYnRmLAo+IC0JCQkgICAgICAgY29uc3Qgc3Ry
+dWN0IGJ0Zl90eXBlICp0LCBpbnQgcmVjKQo+ICsvKgo+ICsgKiBSZXR1cm5zIHRydWUgaWYgc3Ry
+dWN0IGlzIGNvbXBvc2VkIG9mIHNjYWxhcnMsIDQgbGV2ZWxzIG9mIG5lc3RpbmcgYWxsb3dlZC4K
+PiArICogT24gZmFpbHVyZSBAYmFkLCB3aGVuIGdpdmVuLCBuYW1lcyB0aGUgbWVtYmVyIHRoYXQg
+bWFkZSB0aGUgYW5zd2VyIG5vLCBzbyBhCj4gKyAqIGRpYWdub3N0aWMgY2FuIHBvaW50IGF0IGl0
+IHJhdGhlciB0aGFuIGF0IHRoZSB3aG9sZSB0eXBlLgo+ICsgKi8KPiArc3RhdGljIGJvb2wgYnRm
+X3NjYWxhcl9zdHJ1Y3Rfd2FsayhzdHJ1Y3QgYnBmX3ZlcmlmaWVyX2VudiAqZW52LCBjb25zdCBz
+dHJ1Y3QgYnRmICpidGYsCj4gKwkJCQkgICBjb25zdCBzdHJ1Y3QgYnRmX3R5cGUgKnQsIGludCBy
+ZWMsCj4gKwkJCQkgICBjb25zdCBzdHJ1Y3QgYnRmX21lbWJlciAqKmJhZCkKPiAgewo+ICAJY29u
+c3Qgc3RydWN0IGJ0Zl90eXBlICptZW1iZXJfdHlwZTsKPiAgCWNvbnN0IHN0cnVjdCBidGZfbWVt
+YmVyICptZW1iZXI7Cj4gQEAgLTExNjQ0LDIzICsxMTY0OCwzNSBAQCBib29sIGJ0Zl90eXBlX2lz
+X3NjYWxhcl9zdHJ1Y3Qoc3RydWN0IGJwZl92ZXJpZmllcl9lbnYgKmVudiwKPiAgCQkJCXZlcmJv
+c2UoZW52LCAibWF4IHN0cnVjdCBuZXN0aW5nIGRlcHRoIGV4Y2VlZGVkXG4iKTsKPiAgCQkJCXJl
+dHVybiBmYWxzZTsKPiAgCQkJfQo+IC0JCQlpZiAoIWJ0Zl90eXBlX2lzX3NjYWxhcl9zdHJ1Y3Qo
+ZW52LCBidGYsIG1lbWJlcl90eXBlLCByZWMgKyAxKSkKPiArCQkJaWYgKCFidGZfc2NhbGFyX3N0
+cnVjdF93YWxrKGVudiwgYnRmLCBtZW1iZXJfdHlwZSwgcmVjICsgMSwgYmFkKSkKICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgXl5eCj4gIAkJCQlyZXR1cm4gZmFsc2U7Cj4gIAkJCWNvbnRpbnVlOwo+ICAJ
+CX0KCkRvZXMgYnRmX3NjYWxhcl9zdHJ1Y3Rfd2FsaygpIGNvcnJlY3RseSBoYW5kbGUgbmVzdGVk
+IHN0cnVjdCBtZW1iZXJzPyBXaGVuCml0IHJlY3Vyc2VzIHRocm91Z2ggYSBuZXN0ZWQgc3RydWN0
+LCBpdCBwYXNzZXMgQGJhZCB1bmNoYW5nZWQ6CgogICAgaWYgKGJ0Zl90eXBlX2lzX3N0cnVjdCht
+ZW1iZXJfdHlwZSkpIHsKICAgICAgICBpZiAoIWJ0Zl9zY2FsYXJfc3RydWN0X3dhbGsoZW52LCBi
+dGYsIG1lbWJlcl90eXBlLCByZWMgKyAxLCBiYWQpKQogICAgICAgICAgICByZXR1cm4gZmFsc2U7
+CiAgICAgICAgY29udGludWU7CiAgICB9CgpUaGlzIG1lYW5zICpiYWQgZW5kcyB1cCBuYW1pbmcg
+YSBtZW1iZXIgb2YgYW4gaW5uZXIgc3RydWN0IHdpdGggbm8gcmVjb3JkCm9mIHRoZSBlbmNsb3Np
+bmcgbWVtYmVyLgoKRm9yIGV4YW1wbGUsIGlmIGEga2Z1bmMgcmV0dXJuczoKCiAgICBzdHJ1Y3Qg
+b3V0ZXIgewogICAgICAgIHN0cnVjdCBpbm5lciB7CiAgICAgICAgICAgIHZvaWQgKnA7CiAgICAg
+ICAgfSBpbjsKICAgICAgICBfX3U2NCB0YWc7CiAgICB9OwoKdGhlIGxvZyB3b3VsZCByZWFkOgoK
+ICAgIGtlcm5lbCBmdW5jdGlvbiBmb28gcmV0dXJucyBTVFJVQ1Qgb3V0ZXIgdGhhdCBpcyBub3Qg
+Y29tcG9zZWQgb2Ygc2NhbGFycwogICAgbWVtYmVyICdwJyBoYXMgdHlwZSBQVFIKCmJ1dCAncCcg
+aXMgbm90IGEgbWVtYmVyIG9mIG91dGVyIOKAlCB0aGUgZW5jbG9zaW5nIG1lbWJlciAnaW4nIGlz
+IG5ldmVyCm5hbWVkLiBBIHJlYWRlciBncmVwcGluZyBzdHJ1Y3Qgb3V0ZXIgZm9yICdwJyBmaW5k
+cyBub3RoaW5nLgoKU2luY2UgdGhpcyBjb2RlIHdhbGtzIG5lc3RlZCBzdHJ1Y3RzIHVwIHRvIDQg
+bGV2ZWxzLCBzaG91bGQgQGJhZCBjYXB0dXJlCnRoZSBwYXRoIHRvIHRoZSBvZmZlbmRpbmcgbWVt
+YmVyIChlLmcuLCAibWVtYmVyICdpbi5wJyBoYXMgdHlwZSBQVFIiKSBvcgphdCBsZWFzdCBuYW1l
+IHRoZSBvdXRlcm1vc3Qgb2ZmZW5kaW5nIG1lbWJlcj8KClsgLi4uIF0KCj4gQEAgLTE0MDMwLDE3
+ICsxNDA0Niw0MSBAQCBzdGF0aWMgaW50IGNoZWNrX2tmdW5jX2NhbGwoc3RydWN0IGJwZl92ZXJp
+Zmllcl9lbnYgKmVudiwgc3RydWN0IGJwZl9pbnNuICppbnNuLAo+ICAJCSAgICBtZXRhLmZ1bmNf
+aWQgPT0gc3BlY2lhbF9rZnVuY19saXN0W0tGX2JwZl9yZXNfc3Bpbl9sb2NrX2lycXNhdmVdKSkK
+PiAgCQkJX19tYXJrX3JlZ19jb25zdF96ZXJvKGVudiwgJnJlZ3NbQlBGX1JFR18wXSk7Cj4gIAl9
+IGVsc2UgaWYgKGJ0Zl90eXBlX2lzX3N0cnVjdCh0KSkgewo+ICsJCWNvbnN0IHN0cnVjdCBidGZf
+bWVtYmVyICpiYWQgPSBOVUxMOwo+ICsKPiAgCQkvKgo+ICAJCSAqIFRoZSByZXR1cm5lZCBzdHJ1
+Y3QgY29tZXMgYmFjayBhcyByYXcgcmVnaXN0ZXIgYml0cyBtb2RlbGVkCj4gIAkJICogYXMgYW4g
+dW5rbm93biBzY2FsYXIsIHNvIGl0IG11c3QgY29udGFpbiBvbmx5IHNjYWxhcnM6Cj4gIAkJICog
+b3RoZXJ3aXNlIGEgcG9pbnRlciBmaWVsZCB3b3VsZCBiZSBsYXVuZGVyZWQgaW50byBhIHNjYWxh
+cgo+ICAJCSAqIGFuZCBlc2NhcGUgcHJvdmVuYW5jZSBhbmQgcmVmZXJlbmNlIHRyYWNraW5nLgo+
+ICAJCSAqLwo+IC0JCWlmICghYnRmX3R5cGVfaXNfc2NhbGFyX3N0cnVjdChlbnYsIGRlc2NfYnRm
+LCB0LCAwKSkgewo+ICsJCWlmICghYnRmX3NjYWxhcl9zdHJ1Y3Rfd2FsayhlbnYsIGRlc2NfYnRm
+LCB0LCAwLCAmYmFkKSkgewo+ICsJCQljb25zdCBjaGFyICptZW1iZXJfbm90ZSA9ICIiOwo+ICsK
+PiAgCQkJdmVyYm9zZShlbnYsCj4gIAkJCQkia2VybmVsIGZ1bmN0aW9uICVzIHJldHVybnMgJXMg
+JXMgdGhhdCBpcyBub3QgY29tcG9zZWQgb2Ygc2NhbGFyc1xuIiwKPiAgCQkJCWZ1bmNfbmFtZSwg
+YnRmX3R5cGVfc3RyKHQpLAo+ICAJCQkJYnRmX25hbWVfYnlfb2Zmc2V0KGRlc2NfYnRmLCB0LT5u
+YW1lX29mZikpOwo+ICsJCQlpZiAoYmFkKSB7Cj4gKwkJCQljb25zdCBjaGFyICpiYWRfbmFtZSA9
+IGJ0Zl9uYW1lX2J5X29mZnNldChkZXNjX2J0ZiwgYmFkLT5uYW1lX29mZik7Cj4gKwkJCQljb25z
+dCBzdHJ1Y3QgYnRmX3R5cGUgKmJhZF90eXBlOwo+ICsKPiArCQkJCWJhZF90eXBlID0gYnRmX3R5
+cGVfc2tpcF9tb2RpZmllcnMoZGVzY19idGYsIGJhZC0+dHlwZSwgTlVMTCk7Cj4gKwkJCQl2ZXJi
+b3NlKGVudiwgIm1lbWJlciAnJXMnIGhhcyB0eXBlICVzXG4iLCBiYWRfbmFtZSwKPiArCQkJCQli
+dGZfdHlwZV9zdHIoYmFkX3R5cGUpKTsKPiArCQkJCW1lbWJlcl9ub3RlID0gYnBmX2RpYWdfZm10
+KAo+ICsJCQkJCWVudiwgIiBJdHMgbWVtYmVyICclcycgaXMgJXMsIG5vdCBhIHNjYWxhci4iLCBi
+YWRfbmFtZSwKPiArCQkJCQlidGZfdHlwZV9zdHIoYmFkX3R5cGUpKTsKPiArCQkJfQoKWyAuLi4g
+XQoKCi0tLQpBSSByZXZpZXdlZCB5b3VyIHBhdGNoLiBQbGVhc2UgZml4IHRoZSBidWcgb3IgZW1h
+aWwgcmVwbHkgd2h5IGl0J3Mgbm90IGEgYnVnLgpTZWU6IGh0dHBzOi8vZ2l0aHViLmNvbS9rZXJu
+ZWwtcGF0Y2hlcy92bXRlc3QvYmxvYi9tYXN0ZXIvY2kvY2xhdWRlL1JFQURNRS5tZAoKQ0kgcnVu
+IHN1bW1hcnk6IGh0dHBzOi8vZ2l0aHViLmNvbS9rZXJuZWwtcGF0Y2hlcy9icGYvYWN0aW9ucy9y
+dW5zLzMyNzQyNzg1MDE2
 
-selftests/bpf: Test rhtab kptr recycle from NMI context
-
-This patch introduces a test to verify that the rhtab update and delete
-recycle paths do not eagerly destroy referenced kptrs from NMI context.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/rhtab_kptr.c b/tools/=
-testing/selftests/bpf/prog_tests/rhtab_kptr.c
-> index 0000000000000..13158d74cbc1b
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/rhtab_kptr.c
-
-[ ... ]
-
-> +void test_rhtab_kptr(void)
-> +{
-> +	struct perf_event_attr attr =3D {
-> +		.type =3D PERF_TYPE_HARDWARE,
-> +		.config =3D PERF_COUNT_HW_CPU_CYCLES,
-> +		.freq =3D 1,
-> +		.sample_freq =3D read_perf_max_sample_freq(),
-> +		.size =3D sizeof(struct perf_event_attr),
-> +	};
-> +	LIBBPF_OPTS(bpf_test_run_opts, topts);
-> +	struct rhtab_kptr *skel;
-> +	__u32 key =3D 0;
-> +	__u64 zero =3D 0;
-> +	__u64 nonnull_before;
-> +	int pmu_fd, i, err;
-> +
-> +	skel =3D rhtab_kptr__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-> +		return;
-> +
-> +	/* Create the element and stash a referenced task kptr in it. */
-> +	if (!ASSERT_OK(bpf_map_update_elem(bpf_map__fd(skel->maps.rhtab),
-> +					   &key, &zero, BPF_ANY), "create_elem"))
-
-[Severity: Medium]
-Does this code cause an out-of-bounds stack read?
-
-The rhtab map expects a value of type struct val_t, which is 16 bytes in si=
-ze
-on 64-bit systems (an 8-byte pointer plus a 4-byte u32 and padding).
-
-However, zero is defined as an 8-byte __u64 local variable. When
-bpf_map_update_elem() copies 16 bytes from this address, it will read 8 byt=
-es
-of uninitialized or unrelated stack memory adjacent to zero.
-
-> +		goto out;
-> +	if (!ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(skel->progs.init_=
-elem),
-> +					      &topts), "test_run_init") ||
-> +	    !ASSERT_EQ(topts.retval, 0, "init_ret"))
-> +		goto out;
-> +
-> +	pmu_fd =3D syscall(__NR_perf_event_open, &attr, -1, 0, -1, 0);
-> +	if (pmu_fd >=3D 0) {
-> +		skel->links.nmi_update =3D bpf_program__attach_perf_event(skel->progs.=
-nmi_update,
-> +									pmu_fd);
-> +		if (!ASSERT_OK_PTR(skel->links.nmi_update, "attach_perf_event")) {
-> +			close(pmu_fd);
-> +			goto out;
-> +		}
-> +
-> +		/* Let the NMI handler overwrite the element, and make sure it
-
-[Severity: Low]
-This isn't a bug, but does this comment violate the BPF subsystem multi-line
-comment style?
-
-The BPF subsystem requires multi-line comments to have the opening /* on its
-own line.
-
-> +		 * actually ran before probing (otherwise the probe would pass
-> +		 * vacuously even on an unfixed kernel).
-> +		 */
-> +		for (i =3D 0; i < 20 && read_counter(skel, 1) =3D=3D 0; i++)
-> +			usleep(100000);
-> +		ASSERT_GT(read_counter(skel, 1), 0, "nmi_update_ran");
-> +
-> +		bpf_link__destroy(skel->links.nmi_update);
-> +		skel->links.nmi_update =3D NULL;
-> +		close(pmu_fd);
-
-[Severity: Medium]
-Does this result in a double close of pmu_fd?
-
-The function bpf_program__attach_perf_event() takes ownership of the passed
-perf_event file descriptor upon successful attachment. When bpf_link__destr=
-oy()
-is called, it automatically closes the file descriptor.
-
-Calling close(pmu_fd) here explicitly could accidentally close an unrelated=
- file
-descriptor opened by another thread.
-
-> +
-> +		/*
-> +		 * The old kptr must still be attached to the element: the
-
-[ ... ]
-
-> +	for (i =3D 0; i < 2000; i++) {
-> +		topts.retval =3D 0;
-> +		err =3D bpf_prog_test_run_opts(bpf_program__fd(skel->progs.init_elem),
-> +					     &topts);
-> +		if (err || topts.retval) {
-> +			/* Element may be gone; recreate and retry once. */
-> +			if (!ASSERT_OK(bpf_map_update_elem(bpf_map__fd(skel->maps.rhtab),
-> +							   &key, &zero, BPF_ANY),
-
-[Severity: Medium]
-Can this also cause an out-of-bounds stack read?
-
-This is the same issue as above where zero is 8 bytes but the map expects
-16 bytes.
-
-> +				       "recreate_elem"))
-> +				goto out;
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/progs/rhtab_kptr.c b/tools/testi=
-ng/selftests/bpf/progs/rhtab_kptr.c
-> index 0000000000000..fd6bd63cb405e
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/rhtab_kptr.c
-
-[ ... ]
-
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-> +	__uint(max_entries, 5);
-> +	__type(key, __u32);
-> +	__type(value, __u64);
-> +} counters SEC(".maps");
-> +
-> +/* 0: init ok, 1: nmi update ok, 2: probe xchg non-NULL, 3: probe xchg N=
-ULL,
-
-[Severity: Low]
-This isn't a bug, but should the opening /* be on its own line to match the=
- BPF
-subsystem multi-line comment style?
-
-> + * 4: probe saw expected magic value
-> + */
-> +static __always_inline void bump(u32 idx)
-> +{
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260824143621.2098=
-856-1-chenyuan_fl@163.com?part=3D3
+--===============8092900729003572184==--
