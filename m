@@ -1,163 +1,159 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A44B64156C6;
-	Mon, 24 Aug 2026 12:27:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68F6415F20;
+	Mon, 24 Aug 2026 12:28:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787574456; cv=none; b=jKYWNVJeNtpDSYQVR5DsDiM7OJ+YT/yyp2s3cmP5EmtN7CgXovd1dqHLrg4Cb4iNSTnOZTvuxm90bSkd85KlBgiTiKSiR5Wycu8rsFSwBZ6W3nFFCqtdbZbn2NgEDPlvjYszYapq1hCh00GfjXmuWQDR58bt2ICYDPtYky9HC5c=
+	t=1787574533; cv=none; b=pDMbBs4Lm4+Tt7IlyodKNG2A317zKlQ7KmCrz/aKBwE2VMzdoMSsPYOzwitMgs6cKH3KLQrYZNwtry/2A7gGwo6mgk/vgfRNM3b0370XBJj6pkrOE1C0HqcdQBIl488zpDskLkLSaOpJnmPr3PyiO4TXP2uPAw9Cx5q5r7J56tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787574456; c=relaxed/simple;
-	bh=4txqTH0l5Wo4GujP7am3e1PJUprrwhWcfRAEUI1s2rw=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=LZh8Q4olyrzQXGwvlsot1yP2VC/pIfl1sMnvnK/MPqo8BOmpPJi9NWMlj891HLPSZSk7mq8WSom6dxrVYXl1Yg9VoIoq1WEvkKH1EZSC5k20uklcgbG0a84b+i0ifEZ+ODj1QiLqt/tVR0dskHPrpxpUkpBww93eakqT60J55M8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Cz3LPYS/; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=sH+9zCrJ; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=WbTw2fdx; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=1UD1K44k; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1787574533; c=relaxed/simple;
+	bh=X5rw01p3I1rWZQw8UlgLk6/i0l/x1O41CHn0vbzHLIg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KLY+T7/aA4nYszUbHAbPzGPY/VDkxnQr3P9IlpP38D8lNhhKH+RryZG7RU8gZvEqLCWyKLO/pEe2S+IkkD0y1d97ZTW1jnIA2xkkK8vNU0zBIap34tJjvLuXm1OWD2pGqtC+Cu6BtEf2RdGVXB9ifCe8ye/QlqPNXw9ZuFHWrTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YUIXwQPF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Cz3LPYS/";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="sH+9zCrJ";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="WbTw2fdx";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="1UD1K44k"
-Received: from localhost.localdomain (unknown [IPv6:2a07:de40:b2bf:1b::12ef])
-	by smtp-out2.suse.de (Postfix) with ESMTP id 6A24E1F45F;
-	Mon, 24 Aug 2026 12:27:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1787574448; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JMc/x1rdloXuC7dC57Av3Q7J3rtkSe30s8O/AlNDAFg=;
-	b=Cz3LPYS/hTh9wJv5dmx8YNw4Y+pE8y455ihDZZBXbzrZ6wZo+d1gXZ/N2cIG71Z6P1HnKN
-	mTL28UMRegSA2vHKrpbynAny7UGBpNl6JLFG67wIAmdSQd93+EsshOsCL4RVvptTJYglIX
-	KvvFcR+yiVhDsubPs9Mt2kAxvt2bR7o=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1787574448;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JMc/x1rdloXuC7dC57Av3Q7J3rtkSe30s8O/AlNDAFg=;
-	b=sH+9zCrJl170EN6he4XlJnFESe3Fm7VZ154Q/kgyI0MjRMNkh0i0hI3Mi9JfmHtGjGA5ft
-	GChiD1zOOWohEgBw==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=WbTw2fdx;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=1UD1K44k
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1787574444; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JMc/x1rdloXuC7dC57Av3Q7J3rtkSe30s8O/AlNDAFg=;
-	b=WbTw2fdxTm86F9SoLTPl9DnMk4ULh7ZKqOVhLkyvfhw5Q3IM15AuHG33aW3mkTALeyWtfN
-	/Ns9VnAsJD++KGBGct/oyTAzIBtHJQt2kIQAW5smnTsb6Gr0YxaTpM2UK1wleTpTI5zlJ1
-	0DoKTVumpLRiS4qCOmBmY6HOdH+tGUo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1787574444;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JMc/x1rdloXuC7dC57Av3Q7J3rtkSe30s8O/AlNDAFg=;
-	b=1UD1K44koEAJ8owi1Xp0Yp1EOOhzPIb9q1D9Fqma0FPGLEovKaYHX0S5kEQkjckmGZARbi
-	JJcLabiDtd4F6ICg==
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YUIXwQPF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76C941F000E9;
+	Mon, 24 Aug 2026 12:28:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787574529;
+	bh=oNv7ijS+WXVt3LXvoJCY8yKw7rjzIvyfrsdNOo8RgCo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=YUIXwQPFvhi9rTBqyyZKnxmp3a2AAz9PWJEcTYWWpuet1pTH/A6x1pvgG6luvAv/L
+	 EQpbyg5R5WgffgowgYMBeTua3i4AEyYOelkU3zRASsazScmOOWLIqQ7awKjId8Zilk
+	 Ab9psW+oMxa3lYtRkotonbX8QmYbTLfQ25ypscBvfQoPolne8tq4HgN1jMQl2+nbSc
+	 JwhHrhDgO5lVYcPur2JmJJgdMb5VMbnkcvA18bhwyeEKiKxlo9uL821XNXgCNbB2J4
+	 xplQOvfiL7+JVnpFAj4fGYlSco0kvy0UhbeRspvMixfdbyWAjmTgxshDDgQhJ3n/rR
+	 /wk44OJuk3Qrg==
+Message-ID: <e1c8c6f5-1b5a-4cad-a52a-f7eff00997c3@kernel.org>
+Date: Mon, 24 Aug 2026 14:28:39 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 03/57] mm/collapse: add collapse.h for the shared
+ collapse state
+To: Kiryl Shutsemau <kirill@shutemov.name>
+Cc: akpm@linux-foundation.org, ljs@kernel.org, nico.pache@linux.dev,
+ baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com,
+ hughd@google.com, lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com,
+ rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com,
+ usama.arif@linux.dev, vbabka@kernel.org, ziy@nvidia.com,
+ usama.anjum@arm.com, agordeev@linux.ibm.com, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ jannh@google.com, willy@infradead.org, pfalcato@suse.de,
+ rostedt@goodmis.org, mhiramat@kernel.org,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+References: <20260816224609.308019-1-kirill@shutemov.name>
+ <20260816224609.308019-4-kirill@shutemov.name>
+ <3113ac8b-c1ce-4577-9e93-449b70818918@kernel.org>
+ <aobglSY5L1KoIqxF@thinkstation>
+ <65433d1e-95ca-4434-828e-8f381d3384b1@kernel.org>
+ <aow0Z6mrG2esKpRZ@thinkstation>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <aow0Z6mrG2esKpRZ@thinkstation>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [RFC PATCH bpf-next v3 1/2] ftrace: deprecate disabling via
- ftrace_enabled sysctl
-From: Miroslav Benes <mbenes@suse.cz>
-To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Cc: Song Liu <song@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
- bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
- live-patching@vger.kernel.org, mbenes@suse.cz, jolsa@kernel.org, 
- mhiramat@kernel.org, jpoimboe@kernel.org, joe.lawrence@redhat.com, 
- mark.rutland@arm.com, corbet@lwn.net, stable@vger.kernel.org, 
- linux-open-source@crowdstrike.com
-In-Reply-To: <CAOu3gNhgRTh8uZdfNf+XBpYuJWAFu5i+UNjQC2jce4DdRc-bGg@mail.gmail.com>
-References: <20260806153000.4184871-1-andrey.grodzovsky@crowdstrike.com>
- <20260806153000.4184871-2-andrey.grodzovsky@crowdstrike.com>
- <CAPhsuW53yRgFMkNuAPCrCm9fhNNb4EpN7vbcSEGkNCZXHjk7AA@mail.gmail.com>
- <CAOu3gNhjDNFgzg0nf458FdMMMPx4WJi=n01musucvk=hbY0HMg@mail.gmail.com>
- <CAOu3gNhgRTh8uZdfNf+XBpYuJWAFu5i+UNjQC2jce4DdRc-bGg@mail.gmail.com>
-Date: Mon, 24 Aug 2026 14:27:21 +0200
-Message-Id: <178757444126.29054.5684338666506602450.b4-reply@b4>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=933; i=mbenes@suse.cz;
- h=from:subject:message-id; bh=4txqTH0l5Wo4GujP7am3e1PJUprrwhWcfRAEUI1s2rw=;
- b=owGbwMvMwMHYWJt9x2W1tA7jabUkhqwei5WvnB5uj5xa+XbSCZlfgas1Djn2fej6LN/87IPGj
- S1fGef5dzL6szAwcjBYiimyvN7rLGc4JddAs/rdXZhBrEwgU6RFGhiAgIWBLzcxr9RIx0jPVNtQ
- zxDI0DFi4OIUgKkO1mH/7872nkNxb3aY3rq1MXkn3R7KVz2VX5/CYvlI5JWK0f0JErJJppKb1/Z
- VOWnkTLayan389HuGse3vXVobP+ilWQbdmSHNxV17O3qPxYTu6oWLjrS0hYfvZDP2nNzQ2ZP9K3
- aVf9vTB5X6Z08rzcv64/GveqO8rlWdtUNtEXP1VycLCea03Y+2XXkfq/F4u4j6/Q/LXx/IY626+
- q1pDkvtr8nxBleWPdy97/ovvjmfXRYtX/G2P6TT9FaHUU1G3/x3riEcarKBAhZW70J+LivbqsZ/
- 68rsvyFCVXfKb+ncZzdes3jC4qNlQZxa8gFsi3XFk75qLVO/eG3OsZK49dVsV9YFzXS/FG2zrOT
- wj2NOAA==
-X-Developer-Key: i=mbenes@suse.cz; a=openpgp;
- fpr=91BB0699882EF39D46654BB3FF98A38DA80834DA
-X-Spamd-Result: default: False [17.38 / 50.00];
-	SPAM_FLAG(5.00)[];
-	NEURAL_SPAM_LONG(3.50)[1.000];
-	HFILTER_HELO_5(3.00)[localhost.localdomain];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_SPAM_SHORT(2.99)[0.997];
-	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
-	RDNS_NONE(2.00)[];
-	ONCE_RECEIVED(1.20)[];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	DIRECT_TO_MX(0.00)[b4 0.17-dev];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b2bf:1b::12ef:from];
-	RCVD_COUNT_ZERO(0.00)[0];
-	DWL_DNSWL_BLOCKED(0.00)[suse.cz:dkim];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim]
-X-Spamd-Bar: +++++++++++++++++
-X-Rspamd-Queue-Id: 6A24E1F45F
-X-Rspamd-Action: add header
-X-Spam-Flag: YES
-X-Spam-Score: 17.38
-X-Spam-Level: *****************
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spam: Yes
 
-On 2026-08-09 14:32:16-04:00, Andrey Grodzovsky wrote:
-> On Thu, Aug 6, 2026 at 5:52 PM Andrey Grodzovsky
-> <andrey.grodzovsky@crowdstrike.com> wrote:
+On 8/24/26 14:10, Kiryl Shutsemau wrote:
+> On Mon, Aug 24, 2026 at 01:47:54PM +0200, David Hildenbrand (Arm) wrote:
+>> On 8/20/26 13:11, Kiryl Shutsemau wrote:
+>>>
+>>> I went for a clean collapse.c on purpose: the engine is new code, and a
+>>> new file keeps it readable while both mechanisms are in the tree, with 28
+>>> as a plain delete from khugepaged.c.
+>>>
+>>> Your shape is less churn, though, and it keeps blame: 29-35 move about
+>>> 1700 lines as add-and-delete today, and most of that would stay put, with
+>>> only the daemon -- mm_slot, the scan loop, sysfs -- extracted into a new
+>>> khugepaged.c.
+>>>
+>>> If you prefer it that way, I can give it a try for v2.
+>>>
+>>> The rename has to open the series, so it will collide with anything in
+>>> flight that touches khugepaged.c.
+>>>
+>>
+>> Kiryl, I have to ask, are you using AI to write your replies?
 > 
-> > On Thu, Aug 6, 2026 at 5:22 PM Song Liu <song@kernel.org> wrote:
-> >
-> > The bot has 2 comments.
-> >
-> > In my opinion, the test-breaking comment is wrong as he looked
-> > strictly at this patch w/o reviewing the follow-up live patch testing
-> > changes which update the tests to avoid breaks.
-> >
-> > The cleanup comment is valid but since we aren't sure if we'll need to
-> > revert this change later if it breaks userspace in some unseen way, I
-> > wonder how extensive the cleanup should be? Steven, can you advise
-> > please ?
-> >
-> > Andrey
+> Yes. I use it check my claims and fix my grammar.
 > 
-> Gentle ping on this question above Steven.
+> Why?
+> 
 
-I am not Steven but I think we should wait with the cleanup exactly
-due to a possible revert. The same as for PERMANENT flag we talked about
-elsewhere.
+It doesn't read the way you would usually write. In a bad way.
 
+E.g., "Your shape", "has to open the series"
+
+Consider telling the LLM to not change your writing style and focus only on
+fixing grammar.
+
+Otherwise it will be very load bearing to read and we'll be sorry to have to
+gently push back against that.
+
+
+Imagine I would instead have written the following:
+
+The text does not read the way you would normally write, and the difference is
+noticeable in a way that makes it feel less natural.
+
+For example, phrases such as “Your shape” and “has to open the series” do not
+sound consistent with your usual writing style.
+
+It may be worth instructing the LLM to preserve your original tone and phrasing
+as much as possible, and to focus only on correcting grammar and obvious
+language issues.
+
+-- 
+Cheers,
+
+David
