@@ -1,29 +1,30 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289EA33B97B;
-	Mon, 24 Aug 2026 13:41:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33C9635E1A5;
+	Mon, 24 Aug 2026 13:41:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787578887; cv=none; b=dpTly9ZN85hsfH1RusnkgADLxD/51RStL4Vf3RhqR1Co9Txnovhg4UrWr7TYwvcq6W55IZhHf21sPPiwvwIOMOs2WvTconOenUudMQ/bcMVY8g0ABvN5Q1ZHk0Flv0lI8yomovOp6lTkKnRv9tE4MJ/thmlXmprHtrDgU4EcZTE=
+	t=1787578890; cv=none; b=coz/IXpFcWhhSogF0zSB31a9OZbHX7qiVjg4DR0NakgEIfKt1aC6xKDEfKik5zLHh5OChpA8fle1TOlYbAJAtPrpR/hIZxxYt3bLWxc7x4uioB+nEMEyFIpZIBHW4lZMEYGGk4aYLh1wfyNG/fedHZoYa1jaE0ggqBfVUixHy/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787578887; c=relaxed/simple;
-	bh=G8IYwxAbP4AB7tx8M+r6dzYPsZNyDVhrhnOvqL/NVq4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hFcsa+pWVpkcFZaFgHVtRD4xLEvpTC8wD3Jlf39NieMWz0SUuzH4tAFsOTM/8sfq1vwuUPVzDdhdcBs/Qbo6/F76TldR7FDt2Q6ZhnHDRLqIT9S9JtffHVhlfH+QBiLzEHppJeGJrViPWuOG+sc2sNDQInLPYX+E0Yxfrp4i/IA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=AlVj/Dc0; arc=none smtp.client-ip=117.135.210.2
+	s=arc-20240116; t=1787578890; c=relaxed/simple;
+	bh=s0eDlEyhWhKwZINONwJAuf9I/2mSlEEBqqnzWw018TU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=WQ6xIIM7E8bMqdcINrTIttjahtoNPLCkuIVBqSih6o5VPPaP6HdMajMkLZHvsw0YFfOnAhncf1c8zzEcVbU653agIXah0Kc09t3ZO24NXizuHCdritfBEG14bJjx+eReqc0FghGaD8GHeM/SMUggDClkVctF6AfMnN37uartv/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=AsNAd9Ib; arc=none smtp.client-ip=117.135.210.3
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="AlVj/Dc0"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="AsNAd9Ib"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=kN
-	GRjNhc9YMoHfhS72o996O5geyvE+DfgEHw75nOxmk=; b=AlVj/Dc0E6OrWrvpDa
-	d5PdfW5Ka7WfjDFDkSBieGVUqIb56VtR5mWOPMd81GS24VWiQiRROjlj0foZOBjo
-	dz6uc+5caFZQ9MLAzG3GXFidJjly/lGhMtxcufkn1AOwdHWGEkOsb8YBxK6H/ffK
-	+kwGeM6VRYae6OS+we+w/KUDk=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=tL
+	TL2ZpglUla0GwJf+IdatjY2pI7kZBakztj9ClJ+Y0=; b=AsNAd9Ib7RGUFAJt2b
+	1MC6LBow5t2+29IQu+2XX4uqZsbXtwopSuNOGjR6aKPCTV1CEgSTiXM+pQPBipGX
+	5mxQghvP5i5YptyW063Ov2Js5ivq2TSdlwHoWVRYv/e/PgoKlPXC0/GUjfEIHT80
+	jDfiE3A8QiF0036VYBXQLbOVQ=
 Received: from nec8-i7 (unknown [])
-	by gzsmtp5 (Coremail) with SMTP id QCgvCgCHGCDISYxqeuS4Nw--.46468S2;
-	Mon, 24 Aug 2026 21:40:26 +0800 (CST)
+	by gzsmtp5 (Coremail) with SMTP id QCgvCgCHGCDISYxqeuS4Nw--.46468S4;
+	Mon, 24 Aug 2026 21:40:27 +0800 (CST)
 From: chenyuan_fl@163.com
 To: bpf@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -39,10 +40,12 @@ Cc: linux-kernel@vger.kernel.org,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	Yuan Chen <chenyuan@kylinos.cn>
-Subject: [PATCH bpf-next v4 0/3] bpf, arena: fix range_tree consistency on allocation failure
-Date: Mon, 24 Aug 2026 21:40:13 +0800
-Message-ID: <20260824134016.2006188-1-chenyuan_fl@163.com>
+Subject: [PATCH bpf-next v4 2/3] bpf, arena: fix range_tree_set inconsistency on kmalloc_nolock failure
+Date: Mon, 24 Aug 2026 21:40:15 +0800
+Message-ID: <20260824134016.2006188-3-chenyuan_fl@163.com>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260824134016.2006188-1-chenyuan_fl@163.com>
+References: <20260824134016.2006188-1-chenyuan_fl@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,53 +53,107 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:QCgvCgCHGCDISYxqeuS4Nw--.46468S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Cw4fJw47AF4rtry7Zw1DZFb_yoW8Ar18pr
-	W3Gws8JayDG3yfuF4fCr48XFn5Gw4rXw4UGry3Kw1kZry5Crn7tr40kF1UWr1UCFyfXw4r
-	KF4Yqa4I934DZFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jnb18UUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAgpCAGqMScr5CwAA3d
+X-CM-TRANSID:QCgvCgCHGCDISYxqeuS4Nw--.46468S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWxCw13AF1kWr48GF4xAFy8Grg_yoW5CF4Upw
+	45KrWrJrsxJ3yxWr1Svr4ruryrCw1fXws5trZrGw4kA3ZxAr97Arn0kF4jkFWDAFykCr15
+	tF1jva1UKF4UuFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jbo7NUUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5gtCAGqMSctLKwAA3r
 
 From: Yuan Chen <chenyuan@kylinos.cn>
 
-The arena range tree can be left inconsistent when kmalloc_nolock()
-fails mid-operation. Patch 1 fixes range_tree_clear(), patch 2 fixes
-range_tree_set(), patch 3 makes the arena free paths handle
-range_tree_set() failures and checks the return value in
-arena_alloc_pages()'s partial-allocation error path.
+range_tree_set() pre-allocates the node needed for a brand-new range
+before calling range_tree_clear(), so an allocation failure returns
+-ENOMEM without having modified the tree (previously the overlapping
+nodes were already removed by range_tree_clear() before the allocation
+was attempted, permanently losing the cleared sub-ranges).
 
-Changes in v4:
-  - arena_free_worker(): keep a span whose range_tree_set() failed on
-    arena->free_spans and retry it on a later worker run, instead of
-    leaving it in the drained list where the second loop would still
-    zap user VMAs and free the span (dropping the free request), as
-    pointed out by Emil Tsalapatis.
+Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+---
+ kernel/bpf/range_tree.c | 45 +++++++++++++++++++++++++++++++----------
+ 1 file changed, 34 insertions(+), 11 deletions(-)
 
-Changes in v3:
-  - Check range_tree_set() return value in arena_alloc_pages()'s error
-    path, which restores the unpopulated tail of a partially allocated
-    range (previously ignored), as pointed out in review.
-
-Changes in v2:
-  - Fix multi-line comment style in patches 1 and 3 (opening /* on its
-    own line), as pointed out in review.
-
-Note: arena_vm_fault()'s two recovery paths (restoring the range to the
-free tree after allocation/mapping failure) also call range_tree_set()
-without checking the return value; that is addressed in a separate
-series.
-
-Yuan Chen (3):
-  bpf, arena: fix range_tree_clear inconsistency on kmalloc_nolock
-    failure
-  bpf, arena: fix range_tree_set inconsistency on kmalloc_nolock failure
-  bpf, arena: check range_tree_set return in arena_free_pages and
-    arena_free_worker
-
- kernel/bpf/arena.c      | 43 ++++++++++++++++++++++++-----
- kernel/bpf/range_tree.c | 61 ++++++++++++++++++++++++++++++-----------
- 2 files changed, 81 insertions(+), 23 deletions(-)
-
+diff --git a/kernel/bpf/range_tree.c b/kernel/bpf/range_tree.c
+index 15b588377a76..54055b1fe541 100644
+--- a/kernel/bpf/range_tree.c
++++ b/kernel/bpf/range_tree.c
+@@ -199,6 +199,7 @@ int is_range_tree_set(struct range_tree *rt, u32 start, u32 len)
+ int range_tree_set(struct range_tree *rt, u32 start, u32 len)
+ {
+ 	u32 last = start + len - 1;
++	struct range_node *new_rn = NULL;
+ 	struct range_node *right;
+ 	struct range_node *left;
+ 	int err;
+@@ -208,20 +209,40 @@ int range_tree_set(struct range_tree *rt, u32 start, u32 len)
+ 	if (left && left->rn_start <= start && left->rn_last >= last)
+ 		return 0;
+ 
++	/*
++	 * A new node is needed only when the range has no adjacent free
++	 * range on either side.  This is known before clearing: any range
++	 * covering start - 1 or last + 1 survives the clear as an adjacent
++	 * piece.  Allocate only in that case, before modifying the tree, so
++	 * a failure leaves the range tree unmodified
++	 */
++	left = range_it_iter_first(rt, start - 1, start - 1);
++	right = range_it_iter_first(rt, last + 1, last + 1);
++	if (!left && !right) {
++		new_rn = kmalloc_nolock(sizeof(struct range_node),
++					__GFP_ACCOUNT, NUMA_NO_NODE);
++		if (!new_rn)
++			return -ENOMEM;
++	}
++
+ 	/* Clear out everything in the range we want to set. */
+ 	err = range_tree_clear(rt, start, len);
+ 	if (err)
+-		return err;
++		goto out_free_new;
+ 
+ 	/* Do we have a left-adjacent range ? */
+ 	left = range_it_iter_first(rt, start - 1, start - 1);
+-	if (left && left->rn_last + 1 != start)
+-		return -EFAULT;
++	if (left && left->rn_last + 1 != start) {
++		err = -EFAULT;
++		goto out_free_new;
++	}
+ 
+ 	/* Do we have a right-adjacent range ? */
+ 	right = range_it_iter_first(rt, last + 1, last + 1);
+-	if (right && right->rn_start != last + 1)
+-		return -EFAULT;
++	if (right && right->rn_start != last + 1) {
++		err = -EFAULT;
++		goto out_free_new;
++	}
+ 
+ 	if (left && right) {
+ 		/* Combine left and right adjacent ranges */
+@@ -241,14 +262,16 @@ int range_tree_set(struct range_tree *rt, u32 start, u32 len)
+ 		right->rn_start = start;
+ 		range_it_insert(right, rt);
+ 	} else {
+-		left = kmalloc_nolock(sizeof(struct range_node), __GFP_ACCOUNT, NUMA_NO_NODE);
+-		if (!left)
+-			return -ENOMEM;
+-		left->rn_start = start;
+-		left->rn_last = last;
+-		range_it_insert(left, rt);
++		/* No adjacent ranges; use the pre-allocated node */
++		new_rn->rn_start = start;
++		new_rn->rn_last = last;
++		range_it_insert(new_rn, rt);
+ 	}
+ 	return 0;
++
++out_free_new:
++	kfree_nolock(new_rn);
++	return err;
+ }
+ 
+ void range_tree_destroy(struct range_tree *rt)
 -- 
 2.54.0
 
