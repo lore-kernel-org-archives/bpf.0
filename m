@@ -1,214 +1,221 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9466D468C38;
-	Mon, 24 Aug 2026 16:06:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mta1.migadu.com (out-246.mta1.migadu.com [95.215.58.246])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D860843DA4C
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 16:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787587577; cv=none; b=GDON+3OH8nWI88YhC+KSmjgw04sYtckhUG06rPHgcXsrYf3UKaTheo7Kmb0XVvIIHOAUHiTzBICA9PD8vjQy1ZiTLZGqHLv2+Q/eUaqTPs3Rx621dYYfP4rkeKPllzfHkz1DSjkLy6ousJhrShTeNvpk5QD1YCTru4Vrj2zd4mg=
+	t=1787588038; cv=none; b=UlIPxvRYgS35kRKJTMR8GCu7b2/qnCkqa2MQTabFaefPAOeeB7kWHBaI9rUxxQ9s9zrGm1FaCt+F6wnsCtiKfMem5mng6eSKhUE09CXrvq+iGICHTppbhKBYJdLX6fqoChcxA1/NtYfltjgGXTH/113FLGQM3l+Ot0J8IeEcuL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787587577; c=relaxed/simple;
-	bh=Eti3rTlv+cxAVxk1vV0UCcKrMWkCOHT4UCvaZN/ysVQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SQYz4megbcGDIqh9xpebUlvnBF5gc5oZIr1uZXHC5jz+bH32B3ibB0KELrF2noCY6erL9QiHO1Em75PSmA2iPkP4WlckzD8gEboqYwhNn3b4xWuxFkSTtMBIDZvsVDkDML9Tr6j7OdePtWjrdwOC1pcB8zBEWSczXGvYgkJ3xDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=n5AF6xbs; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1787588038; c=relaxed/simple;
+	bh=moWMKDFo1ejO1Y+SvTSn1ZBtiqsMttxF5PTsWQBALgw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fxpOKLctuayMcsIPHxAIhmF+vnB6a38btJNOiZjGRCFv+ukYEA9JmyB6OXluGxMnHy+Uiaki1zM/WglSvqQDbJCBfbuYW2JR4Jvw299lxpzZ+SJCDo3vSF+rWBX65HwIMkc1Xh+VP5/v+03BtxnHO/fsGYKaiG52z2vDzSEM730=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=abSqDNyw; arc=none smtp.client-ip=95.215.58.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="n5AF6xbs"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6BE991AC1;
-	Mon, 24 Aug 2026 09:06:11 -0700 (PDT)
-Received: from e142334-100.cambridge.arm.com (e142334-100.cambridge.arm.com [10.2.198.93])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 102303F85F;
-	Mon, 24 Aug 2026 09:06:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1787587575; bh=Eti3rTlv+cxAVxk1vV0UCcKrMWkCOHT4UCvaZN/ysVQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=n5AF6xbsvYOJDb232Qg50DCemCE4qaYKTCUYp0BZbfqNZ6nujWbXQrRHrQjDCm99n
-	 akrUnA9aq9/VXusaTW0mhrDpjwetDpb7unbe70ZAAywW7Ln4KarRk8gPk63sHOgK51
-	 kLE5ugmLz2WbYPD7/SK3iKuatOMbzXplh0cSB1Mg=
-From: Muhammad Usama Anjum <usama.anjum@arm.com>
-To: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)),
-	linux-kernel@vger.kernel.org (open list),
-	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
-	linux-mm@kvack.org (open list:MEMORY MANAGEMENT - CORE)
-Cc: Muhammad Usama Anjum <usama.anjum@arm.com>
-Subject: [PATCH 7/7] bpf: Batch TCO handling in string kfuncs
-Date: Mon, 24 Aug 2026 17:04:53 +0100
-Message-ID: <20260824160523.3907021-9-usama.anjum@arm.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260824160523.3907021-1-usama.anjum@arm.com>
-References: <20260824160523.3907021-1-usama.anjum@arm.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="abSqDNyw"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=moWMKDFo1ejO1Y+SvTSn1ZBtiqsMttxF5PTsWQBALgw=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787588033; v=1; x=1788192833;
+ b=abSqDNyw/yKFT4k9pLTjpemjs+ZnH5r8henQ2NmyzQknZ14BHwMXRUfqVQMmcLNGLFEE7/uY
+ pTcnnG5iAw+jRUjqYzg+K/ucUb7aDuxNY9j27CPnV6GrV9Dy10m2Kd1Os6trGrY3qiTzqCcDjon
+ N2wOgPrDYlkyv60NIzhbaSdg=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from [192.168.50.204] (146.199.86.12)
+	by smtp.migadu.com with ESMTPS id eea20e0d7aa22208;
+	Mon, 24 Aug 2026 16:13:52 +0000
+X-Mizu-Trace-ID: eea20e0d7aa22208
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <f81160ac-0c7c-43f2-985f-43ab54a52358@linux.dev>
+Date: Mon, 24 Aug 2026 17:13:52 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 16/57] mm/collapse: freeze the sources behind
+ migration entries
+To: Johannes Weiner <hannes@cmpxchg.org>,
+ Kiryl Shutsemau <kirill@shutemov.name>
+Cc: Lance Yang <lance.yang@linux.dev>, akpm@linux-foundation.org,
+ david@kernel.org, ljs@kernel.org, nico.pache@linux.dev,
+ baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com,
+ hughd@google.com, liam@infradead.org, mhocko@suse.com, rppt@kernel.org,
+ ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com,
+ vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com,
+ agordeev@linux.ibm.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, jannh@google.com, willy@infradead.org,
+ pfalcato@suse.de, rostedt@goodmis.org, mhiramat@kernel.org,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+References: <20260816224609.308019-17-kirill@shutemov.name>
+ <20260824131224.73344-1-lance.yang@linux.dev> <aoxQnuEacGpzp2I7@thinkstation>
+ <20260824154921.GA863036@cmpxchg.org>
+Content-Language: en-US
+From: Usama Arif <usama.arif@linux.dev>
+In-Reply-To: <20260824154921.GA863036@cmpxchg.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-BPF string kfuncs cannot rely on NUL termination, so they scan memory with
-kernel nofault loads. With Hardware Tag-Based KASAN in asynchronous or
-asymmetric mode, every arm64 load sets and clears PSTATE.TCO.
 
-Use bare loads and hold one nofault region across each string operation.
-The scope guard restores TCO before page faults are enabled again on every
-exit, including an access fault.
 
-A character comparison performs two nofault loads. For N compared
-characters, the number of dynamic MSR TCO executions therefore falls from
-4N to 2.
+On 24/08/2026 16:49, Johannes Weiner wrote:
+> On Mon, Aug 24, 2026 at 03:13:10PM +0100, Kiryl Shutsemau wrote:
+>> On Mon, Aug 24, 2026 at 09:12:24PM +0800, Lance Yang wrote:
+>>>
+>>> On Sun, Aug 16, 2026 at 11:45:28PM +0100, Kiryl Shutsemau wrote:
+>>>> +		if (!folio_ref_freeze(folio,
+>>>> +				      folio_expected_ref_count(folio) + 1)) {
+>>>> +			result = SCAN_PAGE_COUNT;
+>>>> +			goto unfreeze;
+>>>> +		}
+>>>> +		nr_frozen = nr_saved;
+>>>
+>>> Just one thing I was wondering about ... can deferred_split_isolate()
+>>> remove a source folio from deferred_split_lru while its refcount is
+>>> frozen by collapse_freeze_candidate()?
+>>>
+>>> Assume an earlier span belongs to an anonymous large folio on the
+>>> deferred split queue, then a later span fails folio_trylock().
+>>> collapse_freeze_candidate() continues after freezing each source folio
+>>> and calls collapse_unfreeze_candidate() on a later failure:
+>>>
+>>> static noinline enum scan_result collapse_freeze_candidate(struct mm_struct *mm,
+>>> 		struct collapse_candidate *cand, pte_t *pte)
+>>> {
+>>> ...
+>>> 	for (i = 0, addr = cand->addr; i < nr_pages;) {
+>>> ...
+>>> 		if (!folio_trylock(folio)) {
+>>> 			folio_put(folio);
+>>> 			result = SCAN_PAGE_LOCK;
+>>> 			goto unfreeze;
+>>> 		}
+>>> ...
+>>> 		nr_saved = i + nr;
+>>>
+>>> 		if (!folio_ref_freeze(folio,
+>>> 				      folio_expected_ref_count(folio) + 1)) {
+>>> 			result = SCAN_PAGE_COUNT;
+>>> 			goto unfreeze;
+>>> 		}
+>>> 		nr_frozen = nr_saved;
+>>>
+>>> 		i += nr;
+>>> 		addr += nr * PAGE_SIZE;
+>>> 	}
+>>>
+>>> ...
+>>> unfreeze:
+>>> 	collapse_unfreeze_candidate(mm, cand, pte, nr_saved, nr_frozen);
+>>> 	return result;
+>>> }
+>>>
+>>> folio_ref_freeze() takes the source folio's refcount to zero:
+>>>
+>>> static inline int folio_ref_freeze(struct folio *folio, int count)
+>>> {
+>>> 	return page_ref_freeze(&folio->page, count);
+>>> }
+>>>
+>>> static inline int page_ref_freeze(struct page *page, int count)
+>>> {
+>>> 	int ret = likely(atomic_cmpxchg(&page->_refcount, count, 0) == count);
+>>>
+>>> ...
+>>> 	return ret;
+>>> }
+>>>
+>>> While collapse_freeze_candidate() still holds the source folio lock,
+>>> deferred_split_scan() can call deferred_split_isolate():
+>>>
+>>> static unsigned long deferred_split_scan(struct shrinker *shrink,
+>>> 		struct shrink_control *sc)
+>>> {
+>>> 	LIST_HEAD(dispose);
+>>> 	struct folio *folio, *next;
+>>> 	int split = 0;
+>>> 	unsigned long isolated;
+>>>
+>>> 	isolated = list_lru_shrink_walk_irq(&deferred_split_lru, sc,
+>>> 					    deferred_split_isolate, &dispose);
+>>> }
+>>>
+>>> static enum lru_status deferred_split_isolate(struct list_head *item,
+>>> 					      struct list_lru_one *lru,
+>>> 					      void *cb_arg)
+>>> {
+>>> 	struct folio *folio = container_of(item, struct folio, _deferred_list);
+>>> 	struct list_head *freeable = cb_arg;
+>>>
+>>> 	if (folio_try_get(folio)) {
+>>> 		list_lru_isolate_move(lru, item, freeable);
+>>> 		return LRU_REMOVED;
+>>> 	}
+>>>
+>>> 	/*
+>>> 	 * We lost race with folio_put(). Read folio state before the
+>>> 	 * isolate: folio_unqueue_deferred_split() checks list_empty()
+>>> 	 * locklessly, so once removed the folio can be freed any time.
+>>> 	 */
+>>> 	if (folio_test_partially_mapped(folio)) {
+>>> 		folio_clear_partially_mapped(folio);
+>>> 		mod_mthp_stat(folio_order(folio),
+>>> 			      MTHP_STAT_NR_ANON_PARTIALLY_MAPPED, -1);
+>>> 	}
+>>> 	list_lru_isolate(lru, item);
+>>> 	return LRU_REMOVED;
+>>> }
+>>>
+>>> And folio_try_get() fails because the source folio has a frozen refcount.
+>>> deferred_split_isolate() treats the failure as a race with folio_put(),
+>>> clears PG_partially_mapped and its MTHP_STAT_NR_ANON_PARTIALLY_MAPPED
+>>> accounting when set, then removes the folio from deferred_split_lru ...
+>>
+>> Hm. So, the premise in deferred_split_isolate() is false:
+>> !folio_try_get() doesn't mean lost race with folio_put().
+> 
+> I suppose you mean, not exclusively. But it can also mean that. And
+> then the question is, who cleans up the partially_mapped state.
+> 
+>> I think deferred_split_isolate() should do something like:
+>>
+>>       if (!folio_try_get(folio))
+>>               return LRU_SKIP;
+>>
+>>       list_lru_isolate_move(lru, item, freeable);
+>>       return LRU_REMOVED;
+>>
+>> Johannes, do I miss something?
+> 
+> Ah. The idea being: leave the item on the LRU when there is a race
+> with the refcount going zero; and then it's up to that other side to
+> deal with/clean up the partially_mapped state as appropriate. Thus:
+> 
+> folio_put()
+>   __folio_put()
+>     folio_unqueue_deferred_split()
+>       if __list_lru_del():
+>         // clear partially_mapped state & stats
+> 
+> will always succeed, even if it races with the shrinker. And you are
+> also guaranteed on the collapse side that the state won't vanish from
+> underneath you.
+> 
+> I think that should work. Usama?
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
----
- kernel/bpf/helpers.c | 35 ++++++++++++++++++++++-------------
- 1 file changed, 22 insertions(+), 13 deletions(-)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 3574a9a5721ec..f8c557161584e 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -3726,7 +3726,8 @@ __bpf_kfunc void __bpf_trap(void)
-  *
-  * Since strings are not necessarily %NUL-terminated, we cannot directly call
-  * in-kernel implementations. Instead, we open-code the implementations using
-- * __get_kernel_nofault instead of plain dereference to make them safe.
-+ * __get_kernel_nofault_bare under guard(__kernel_nofault_bare)() to make them
-+ * safe.
-  */
- 
- static int __bpf_strncasecmp(const char *s1, const char *s2, bool ignore_case, size_t len)
-@@ -3742,9 +3743,10 @@ static int __bpf_strncasecmp(const char *s1, const char *s2, bool ignore_case, s
- 		return 0;
- 
- 	guard(pagefault)();
-+	guard(__kernel_nofault_bare)();
- 	for (i = 0; i < len && i < XATTR_SIZE_MAX; i++) {
--		__get_kernel_nofault(&c1, s1, char, err_out);
--		__get_kernel_nofault(&c2, s2, char, err_out);
-+		__get_kernel_nofault_bare(&c1, s1, char, err_out);
-+		__get_kernel_nofault_bare(&c2, s2, char, err_out);
- 		if (ignore_case) {
- 			c1 = tolower(c1);
- 			c2 = tolower(c2);
-@@ -3843,8 +3845,9 @@ __bpf_kfunc int bpf_strnchr(const char *s__ign, size_t count, char c)
- 		return -ENOENT;
- 
- 	guard(pagefault)();
-+	guard(__kernel_nofault_bare)();
- 	for (i = 0; i < count && i < XATTR_SIZE_MAX; i++) {
--		__get_kernel_nofault(&sc, s__ign, char, err_out);
-+		__get_kernel_nofault_bare(&sc, s__ign, char, err_out);
- 		if (sc == c)
- 			return i;
- 		if (sc == '\0')
-@@ -3897,8 +3900,9 @@ __bpf_kfunc int bpf_strchrnul(const char *s__ign, char c)
- 		return -ERANGE;
- 
- 	guard(pagefault)();
-+	guard(__kernel_nofault_bare)();
- 	for (i = 0; i < XATTR_SIZE_MAX; i++) {
--		__get_kernel_nofault(&sc, s__ign, char, err_out);
-+		__get_kernel_nofault_bare(&sc, s__ign, char, err_out);
- 		if (sc == '\0' || sc == c)
- 			return i;
- 		s__ign++;
-@@ -3929,8 +3933,9 @@ __bpf_kfunc int bpf_strrchr(const char *s__ign, int c)
- 		return -ERANGE;
- 
- 	guard(pagefault)();
-+	guard(__kernel_nofault_bare)();
- 	for (i = 0; i < XATTR_SIZE_MAX; i++) {
--		__get_kernel_nofault(&sc, s__ign, char, err_out);
-+		__get_kernel_nofault_bare(&sc, s__ign, char, err_out);
- 		if (sc == c)
- 			last = i;
- 		if (sc == '\0')
-@@ -3964,8 +3969,9 @@ __bpf_kfunc int bpf_strnlen(const char *s__ign, size_t count)
- 		return 0;
- 
- 	guard(pagefault)();
-+	guard(__kernel_nofault_bare)();
- 	for (i = 0; i < count && i < XATTR_SIZE_MAX; i++) {
--		__get_kernel_nofault(&c, s__ign, char, err_out);
-+		__get_kernel_nofault_bare(&c, s__ign, char, err_out);
- 		if (c == '\0')
- 			return i;
- 		s__ign++;
-@@ -4014,12 +4020,13 @@ __bpf_kfunc int bpf_strspn(const char *s__ign, const char *accept__ign)
- 	}
- 
- 	guard(pagefault)();
-+	guard(__kernel_nofault_bare)();
- 	for (i = 0; i < XATTR_SIZE_MAX; i++) {
--		__get_kernel_nofault(&cs, s__ign, char, err_out);
-+		__get_kernel_nofault_bare(&cs, s__ign, char, err_out);
- 		if (cs == '\0')
- 			return i;
- 		for (j = 0; j < XATTR_SIZE_MAX; j++) {
--			__get_kernel_nofault(&ca, accept__ign + j, char, err_out);
-+			__get_kernel_nofault_bare(&ca, accept__ign + j, char, err_out);
- 			if (cs == ca || ca == '\0')
- 				break;
- 		}
-@@ -4058,12 +4065,13 @@ __bpf_kfunc int bpf_strcspn(const char *s__ign, const char *reject__ign)
- 	}
- 
- 	guard(pagefault)();
-+	guard(__kernel_nofault_bare)();
- 	for (i = 0; i < XATTR_SIZE_MAX; i++) {
--		__get_kernel_nofault(&cs, s__ign, char, err_out);
-+		__get_kernel_nofault_bare(&cs, s__ign, char, err_out);
- 		if (cs == '\0')
- 			return i;
- 		for (j = 0; j < XATTR_SIZE_MAX; j++) {
--			__get_kernel_nofault(&cr, reject__ign + j, char, err_out);
-+			__get_kernel_nofault_bare(&cr, reject__ign + j, char, err_out);
- 			if (cs == cr || cr == '\0')
- 				break;
- 		}
-@@ -4090,9 +4098,10 @@ static int __bpf_strnstr(const char *s1, const char *s2, size_t len,
- 	}
- 
- 	guard(pagefault)();
-+	guard(__kernel_nofault_bare)();
- 	for (i = 0; i < XATTR_SIZE_MAX; i++) {
- 		for (j = 0; i + j <= len && j < XATTR_SIZE_MAX; j++) {
--			__get_kernel_nofault(&c2, s2 + j, char, err_out);
-+			__get_kernel_nofault_bare(&c2, s2 + j, char, err_out);
- 			if (c2 == '\0')
- 				return i;
- 			/*
-@@ -4102,7 +4111,7 @@ static int __bpf_strnstr(const char *s1, const char *s2, size_t len,
- 			 */
- 			if (i + j == len)
- 				break;
--			__get_kernel_nofault(&c1, s1 + j, char, err_out);
-+			__get_kernel_nofault_bare(&c1, s1 + j, char, err_out);
- 
- 			if (ignore_case) {
- 				c1 = tolower(c1);
--- 
-2.47.3
+Kiryl's suggestion makes sense. I think there is a bug here. If we dont
+get the reference, whoever owns the reference should decide how partially_mapped
+is treated for that folio:
+
+- If its the last folio_put(), it will clear partially_mapped and cleanup
+after itself.
+- If its folio_ref_freeze(), clearing partially_mapped is wrong (which we
+are currently doing in deferred_split_isolate)
 
