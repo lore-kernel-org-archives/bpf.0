@@ -1,152 +1,196 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010065.outbound.protection.outlook.com [52.101.61.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 352443B05A7;
-	Mon, 24 Aug 2026 11:48:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787572086; cv=none; b=Aiad/iq84R9NIsgjNmcq1MIkc28yBGJhDpOq5EF2biMxd8tUz/Er0R/9BxsBShcVOEVAugVTIxJaSQpt04Xt8iGGqni8Mjid/Y4/lEi2rpKLTS8PTCoouWO6k83vrWwyP7BDeWurTvwdOLTrv4qQnFSJcaJ1UU6dxxDFpmSWnDE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787572086; c=relaxed/simple;
-	bh=VgiN9mOqZ2nMHCxe8Teh3Neg0it/yA0MaK2gEg4XNAQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BcK/EwptBI3PjdFs0xZddzwa6TMZ0utsnF/W0k/Wx1le4BI9hynP1lxX2Fj+zTWSpO1sO8ybRKfQ2mW+6GYECgatHZjQ9v1nxNCoV9inOPljOqVhNEDa7mfliRQWR2qq5X0MvPtLkIcMgbKgnJyxsR5kokJRErhcIGAMOlsJk6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kZYLGiz8; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B94417BEB;
+	Mon, 24 Aug 2026 11:55:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.65
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787572537; cv=fail; b=Jg7P7pOQuq3ZBuYVJphxnemmNF8v+fvo6ZrASr1WeKdAjEeA1MeZRtHmNcSYZar+2f9PMmKgQXpPFyLqHPQ6nANyb9d4L0cYnmvKudXdszz+JyVgz0//lRm3EFz0IB5pxX+wREqEdSyx/jZaW/msTi3ubGG6KxJmddtJrK5BUzg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787572537; c=relaxed/simple;
+	bh=gEKznmazVAqD3aD5x5HYOQyGYj8AllAjnYlE7jToN0s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=ONsX3/TgSOoQmdeZ0URkQ2DlVJWIvBh+rwxo4IA3FcirY7My+1SN4QNavMqWc7teASTQQORwIKSjQOqIAMkKTeMT4EjiMq5QlXTypUqVVTs2vjacCweM02qRpiIroJ1sEET/9shZDLhcmzuLyv4hmp10BeaLbEvOy7e2LM0IcIM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=FOZYdgd3; arc=fail smtp.client-ip=52.101.61.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kZYLGiz8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B3531F000E9;
-	Mon, 24 Aug 2026 11:47:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787572084;
-	bh=xnWILcZvAXPIFAU4ds9k+iQvpoOkwI2Z2KySfwbLn7o=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=kZYLGiz8XKSmI+FIu8i76ktaY6BJPhmezuife5zN6x8SqWXB6n28hCH+ws9jcVaN5
-	 P+Dc8Nyvnk0T10K+QDLHfktnn/e9iBR1HC7H2opBXLSnsAAjI63S0Eo9IzOyA7CnbG
-	 q3HrxQ/XayzJaziKlOhBUH0fkAhzCE8DTBPlZZE7r12VG9JVncydOWXpOsVh2dN/ZI
-	 aXgMDUJOTxKKjKxiYHgw43YQRghaqn7Bmy/R+oluTiROhRJRtlTwpTw4AoqLy+KteW
-	 50yA0nZIE+DxzYQRGy3xkjNlwJW+DMsIYt2/eK2z4kGSzyA01q1+m+UxJlkn0GOpgk
-	 e/NGGwJtFX6qw==
-Message-ID: <65433d1e-95ca-4434-828e-8f381d3384b1@kernel.org>
-Date: Mon, 24 Aug 2026 13:47:54 +0200
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="FOZYdgd3"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=OISKNRySUbBB0mFgsvYHS/OeLKE/9jrhkqyyeOlyt9T+ffR4PpW1oJCstlwFsm/czAO6oOgxsQeSbVX+TTaap9+ldBmtc3pZj05D7T0KpktUob4L+gzXwNCwTqQAGXB6fPctYRG0KORsZDBJivNI08vQ0SRgW/mklID01pgTmDSk0oNPG9eov67hTUmR3NvxNscU3gcee/kFXq3IKtYDkAXRlg+GUXo1J+PG80xhGvWT4yP3jfioncfWArtXV4yegQdvH6LkuRjKIDEBxl/7a+93K659/7Zq0Db1qSK+m+Vb8bVG2MyHVRJZ1y8QBxYuFfKoC8xeMax5Ym8D6ziEqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/N8FQwrTLx14mKpMXPjBPT8NvdFxJOdJU4T32EjJbGg=;
+ b=L6SZJMAicrZ52hwHSCrjqdUW0xaKwqg78Fh4zj2IBfMyWduCJ2YY75D4kAIfuy98H3WvuPNcCEYKY0AR8mCTz8uTdgzhm5r+LAUNZB04HcLbDtN9QuG+5eK3gUzkDCc+bPyDihdb4wmC39QE/2x1DF5VWRT+9tR+WtlAEgFPgdXguQ8GdhIhFfcbK0/np2gAD2SrmSjR/0i/6vwGC2hzgjm41ejKHvOEx3vv933s84xUtN84kwN6Nn8WRn55MLISalRp9DxJsnERusi3axmSbPp8nJx5/J8EpdOOFjDc4LSG10sj9fNALSK5nfoy1Y95MC2RMJx5ByC1AySvOHFwkw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/N8FQwrTLx14mKpMXPjBPT8NvdFxJOdJU4T32EjJbGg=;
+ b=FOZYdgd3wt45VL+qWsKNjsAcW42+mCwfbvW6L5sv+N07bAvZPsnyl6awKUYvrWfNJfZHEXdI1ZrnZDDhR0V7y8TjWi0eTGOKuxH5FQFzyDgr7nfZ4Ap0BDnhq6g5y6sGVEQXbmDeNPRVjlr+TwpIpfLiPxm0LhC4iCjABCqR4o7oruy9HFlZtiVsFztWuL38mICLXTMLbG3/0VIldA8MLUNiWRBe5O7dOVqoBSmJTH8EgkBUenWP8nHUdbsLzFrTAqp3Adyw/GyThY2rGtyN9ztJZoxquAq60A3f+QvzPcQ6xC8jBuVKGZsz9wkZ0lkyBwDOqAJwirN+vkU3a1v0Xg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM6PR12MB4827.namprd12.prod.outlook.com (2603:10b6:5:1d6::14)
+ by SJ5PPF8AECCE022.namprd12.prod.outlook.com (2603:10b6:a0f:fc02::99c) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.12; Mon, 24 Aug
+ 2026 11:55:31 +0000
+Received: from DM6PR12MB4827.namprd12.prod.outlook.com
+ ([fe80::6261:3040:864b:159c]) by DM6PR12MB4827.namprd12.prod.outlook.com
+ ([fe80::6261:3040:864b:159c%5]) with mapi id 15.21.0339.012; Mon, 24 Aug 2026
+ 11:55:30 +0000
+Date: Mon, 24 Aug 2026 13:55:16 +0200
+From: Andrea Righi <arighi@nvidia.com>
+To: Tao Cui <cui.tao@linux.dev>
+Cc: tj@kernel.org, void@manifault.com, changwoo@igalia.com,
+	suzhidao@xiaomi.com, sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	Tao Cui <cuitao@kylinos.cn>
+Subject: Re: [PATCH v3] docs/sched_ext: document that cgroup CPU knobs are
+ scheduler-dependent
+Message-ID: <aowxJK_KgBLLnyiN@gpd4>
+References: <20260824091501.547649-1-cui.tao@linux.dev>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260824091501.547649-1-cui.tao@linux.dev>
+X-ClientProxiedBy: MI3PEPF00007544.ITAP293.PROD.OUTLOOK.COM
+ (2603:10a6:298:1::4cf) To DM6PR12MB4827.namprd12.prod.outlook.com
+ (2603:10b6:5:1d6::14)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 03/57] mm/collapse: add collapse.h for the shared
- collapse state
-To: Kiryl Shutsemau <kirill@shutemov.name>
-Cc: akpm@linux-foundation.org, ljs@kernel.org, nico.pache@linux.dev,
- baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com,
- hughd@google.com, lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com,
- rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com,
- usama.arif@linux.dev, vbabka@kernel.org, ziy@nvidia.com,
- usama.anjum@arm.com, agordeev@linux.ibm.com, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- jannh@google.com, willy@infradead.org, pfalcato@suse.de,
- rostedt@goodmis.org, mhiramat@kernel.org,
- linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-References: <20260816224609.308019-1-kirill@shutemov.name>
- <20260816224609.308019-4-kirill@shutemov.name>
- <3113ac8b-c1ce-4577-9e93-449b70818918@kernel.org>
- <aobglSY5L1KoIqxF@thinkstation>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <aobglSY5L1KoIqxF@thinkstation>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4827:EE_|SJ5PPF8AECCE022:EE_
+X-MS-Office365-Filtering-Correlation-Id: ca5238fc-7a30-4a6b-73ba-08df01d69871
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|23010399003|1800799024|366016|56012099006|10067099003|11063799006|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	u0Cp6JYqRwOQAx1q6/BoFfFDM/SdCqFt9aSJ91OY1PAMRfPttiNzDJWDXdpt5sb5YOcqAks7r7U7JkgQmrePOfBrSOR3fDCCsIS5uspaC71KFTWmgodP/2S12uXKCWDRF8kYngZ2pJobP/kVCYRX+HfQuhRxDltNoFj6sGo/K0Yxj1B/CfXzaYZstSnMgNd8mU8A70/Umyodcm2PgaU19/yRNiIBRDcEUxG1iiZe4/pJJMKxYDXs0cOjQZGRSDXBWnzihrm4FFar4mEcqlJJIOszbDXud/AtYgPbK4HUh+gjrBqpxZbiwCrmGv9PJJzS0LFa5R9JAcyVPTQTi/CPUO9mcfBcrIpoh4ga1gwk0qJkQNlB06IcZUf5OZGnvkWx1CK6dAeYerC5/bpZJianrWvOl+aUCC5h5G2BNFanaSJnOI/J73UHRjnMB+EEWOsLZS0riMsJaKWaqa6LikEmcwC42s8+VaJoMHl783nWopPS7+PS/7PQAPeduWW8bIPTGgjSSoDm+VuZ1smAxfYHU7CLasZ3ugnX6ENsKZ+G4u8AJubeLjI/wpQ261MnxzNKUhxqHh8wYAh67BcnGTAf1HL6YZNs+W5aJX9E6foIHHF+jw1MauCjjyWQFz/NpHd9iu9zn4aG/fF1Wrt1FPvX5bujvqsk2y6sgnVEzLVREUI=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4827.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(23010399003)(1800799024)(366016)(56012099006)(10067099003)(11063799006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?y+5adPFMfAgsb6cHxS3tTJfGqu6WYlHCKWMtKdGpBSzQuSTEmHm/FqDelDJr?=
+ =?us-ascii?Q?vrXwszQH4slgc8miHYNw+8BS3/zcJ9ANQhtQ/uVBjpbcc1JiW16hGgk6myqM?=
+ =?us-ascii?Q?zdExYsqk3fj2+qkCjnWTR2Mh2cS/VX7ytQeQlDLNXgSM421fdeaX+1lC1+o1?=
+ =?us-ascii?Q?NB5X5JbZfiFz4dNOdOHRAbnOwRE1iV8B/ySMT+SrbJZjE7ptC15qTSujT0+k?=
+ =?us-ascii?Q?UUXsOndI1iaoICcc3gtaHqm06QAA5ZKrsDH6TX8jhmo3WXnm2mY/BK8MWl1j?=
+ =?us-ascii?Q?8t/vU3/TOwAhyffRDuchEfQbn7P847shAD3ZPB6hxf3uU+MWbUX+6OScZluT?=
+ =?us-ascii?Q?sqwRGjOhR0adYq/3qOKjrYrPcAm56vWqrBbxTaps7WUJ2cz9bqUWHbSLXdmq?=
+ =?us-ascii?Q?lB7pk1zky/Ysa30oy5fADAgMYV1aMyNQ540NuQabrzeJRJh5tVaTXCs5AeTO?=
+ =?us-ascii?Q?IIq9S85HCXdLZS9NRQQSDWClwnWxFkl80LmV7Zwc9OIlKoAD5R6gPnk5JPeF?=
+ =?us-ascii?Q?xtEx9Kj2dEVlMuuRvOUCFCQjCiDlU96YLph+PMjROZZ9LvidssFSX2ILRNx+?=
+ =?us-ascii?Q?T76ekvdT5A1qgYovRCVVC1X3Hr/LGp+73OfOHrDYXeYYOHr9TUFeXZZ4OBl6?=
+ =?us-ascii?Q?CbCEk4Y/3JAvYOIAjH/mMKNLN+OywdohlMzSVLdc9h8QJPHTWhqrmTxltm0k?=
+ =?us-ascii?Q?xMOrPITN8yIxDGiAyzv0RLFXnfdiPrsWf+urDXBLmkflkX74/sq0J/mI5PBl?=
+ =?us-ascii?Q?Aac+JDcs5GsUFSwre10LIbyFXfZNY1pQddJoGRt383dFU6oF6IBFHkzlx6rn?=
+ =?us-ascii?Q?ar9nWp2HxdQBIVRLVQZNdxuT5bp+uaQ/zCHZB6gHuLuj70fxaXOPr77WksOg?=
+ =?us-ascii?Q?CLsnnyx4FHXm3lDyaULKyXSLD9q8ScqtQjpwrnO4COy6CR5EPeGu/L5D26T0?=
+ =?us-ascii?Q?IxE0Z/z1IsCRg7Za4tdy5+SCNiLAdUAG25l9VFSRlgDl1lu7aDKdQXFczMzV?=
+ =?us-ascii?Q?bewOdd6WAXoKUU9GMdEFc7LHW3J47xf5TazT/nUvSL8SZZcjfKKaBP7CRl7F?=
+ =?us-ascii?Q?chX36rMViMf7Sewnkdbz48O5R0ZdFYj9dzJpJAhkweCKiUBX4i2kdcJXyxGq?=
+ =?us-ascii?Q?us/x0Mk6NRVXjQPLuTvj1QYCpIysWGjdeGERsK85hCWvOPvkwjHX+Aw50ARO?=
+ =?us-ascii?Q?QPmV3oFCtRbdfYOQLFE6xHNkYVWm6dwfhmhL+7jt9dys/Ls48KuMDzPKpAkK?=
+ =?us-ascii?Q?SX6ZKLuQney9uU9eJkdwmxXgTsxfX+cDNW1dHvcbtb16E8lncJFfHV6TwVXY?=
+ =?us-ascii?Q?J2xAzptygayelwEZVssTWzgS9ZaNh3cYzUlPnMXkXyc2XjnRqo+ZkqJWKTgA?=
+ =?us-ascii?Q?vlJe4FCuNUh0hvYsowdhmiExej9O/BYKDAtnsZI3qcWID4nFYsf57nnZsZAx?=
+ =?us-ascii?Q?j17re7cmGl3usb2K3CUm1TSIbY7umHrtIFONP6Q4tdtMqzNs6ChDkJdtFWKA?=
+ =?us-ascii?Q?Il52eY9nJTF01ZmaVb5ZP3DuVHYIMnuZQttClIEH+LKOrUwyyWLU2qYefuB/?=
+ =?us-ascii?Q?hsuMWV0v+w+DI40+ewjg9ua56cn+oCrL54F3Ek8y8LWyvuCwD3vz9G4QVBWD?=
+ =?us-ascii?Q?7kX4IIOvIeIRLDTq0dLiJ1z5rDB9uAa2T2IvBwA+Mo4Rf3T2eU8RYaSPdSPq?=
+ =?us-ascii?Q?pdLT8/mJaCi9HVx5jdRt04k2+u7wXMl/YQxjVcESMdm5HP1wgmZz0ZyeuMCC?=
+ =?us-ascii?Q?jsW8s9DWdg=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca5238fc-7a30-4a6b-73ba-08df01d69871
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4827.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2026 11:55:30.7412
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hBnIU1rrWB4oQvK801CT5oO+/pOKwfn67JlbAMoRBUgbGjS4uXfruMMMFskpehcwvfOIUP9RwSNoGAvYxrNHXg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ5PPF8AECCE022
 
-On 8/20/26 13:11, Kiryl Shutsemau wrote:
-> On Wed, Aug 19, 2026 at 04:19:41PM +0200, David Hildenbrand (Arm) wrote:
->> On 8/17/26 00:45, Kiryl Shutsemau wrote:
->>> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
->>>
->>> Preparation for building the new collapse engine in its own file.  The
->>> engine and khugepaged.c need to agree on what a collapse result is and
->>> what state a scan carries.
->>>
->>> Move enum scan_result and struct collapse_control into a new
->>> mm/collapse.h.
->>>
->>> No functional change intended.
->>>
->>> Assisted-by: Claude-Code:claude-opus-5
->>> Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
->>> ---
->>
->> BTW, I'm wondering whether it would result in less churn (independent of the
->> other changes) to
->>
->> a) Rename mm/khugeapged.c to mm/collapse.c
->>
->> b) Move stuff into mm/collapse.h that a new ...
->>
->> c) mm/khugapegd.c will need.
-> 
-> I went for a clean collapse.c on purpose: the engine is new code, and a
-> new file keeps it readable while both mechanisms are in the tree, with 28
-> as a plain delete from khugepaged.c.
-> 
-> Your shape is less churn, though, and it keeps blame: 29-35 move about
-> 1700 lines as add-and-delete today, and most of that would stay put, with
-> only the daemon -- mm_slot, the scan loop, sysfs -- extracted into a new
-> khugepaged.c.
-> 
-> If you prefer it that way, I can give it a try for v2.
-> 
-> The rename has to open the series, so it will collide with anything in
-> flight that touches khugepaged.c.
-> 
+Hi Tao,
 
-Kiryl, I have to ask, are you using AI to write your replies?
+On Mon, Aug 24, 2026 at 05:15:01PM +0800, Tao Cui wrote:
+> From: Tao Cui <cuitao@kylinos.cn>
+> 
+> The fair class enforces cpu controller knobs such as cpu.max,
+> cpu.weight and cpu.idle in the kernel. sched_ext only passes them to
+> the BPF scheduler through the ops.cgroup_set_*() callbacks. Whether
+> and how a knob takes effect is up to the loaded scheduler: it may
+> implement the corresponding callback partially or not at all. The
+> same applies to other knobs like nice levels.
+> 
+> Document this in the basics section so users and container
+> orchestrators know what to expect from a BPF scheduler.
+> 
+> Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+> ---
+> v2 -> v3: Drop the scheduler list and the nr_throttled example, keep
+> the section concise and generic, per review.
+> 
+> v2: https://lore.kernel.org/r/20260819012157.220932-1-cui.tao@linux.dev
+> 
+>  Documentation/scheduler/sched-ext.rst | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/Documentation/scheduler/sched-ext.rst b/Documentation/scheduler/sched-ext.rst
+> index 35b550671ca7..b594d93dd6aa 100644
+> --- a/Documentation/scheduler/sched-ext.rst
+> +++ b/Documentation/scheduler/sched-ext.rst
+> @@ -242,6 +242,18 @@ optional. The following modified excerpt is from
+>              .name                   = "simple",
+>      };
+>  
+> +Scheduler-Dependent Knobs
+> +-------------------------
+> +
+> +The fair class enforces cpu controller knobs such as ``cpu.max``,
+> +``cpu.weight`` and ``cpu.idle`` in the kernel. sched_ext only passes
+> +them to the BPF scheduler through ``ops.cgroup_set_weight()``,
+> +``ops.cgroup_set_idle()``, ``ops.cgroup_set_bandwidth()`` and friends.
 
--- 
-Cheers,
+Existing cpu.weight and bandwidth values are delivered via ops.cgroup_init(),
+ops.cgroup_set_*() callbacks handle later changes.
 
-David
+Moreover, cpu.idle state is not included in scx_cgroup_init_args, so apparently
+BPF schedulers don't receive an initial value (only subsequent writes). This
+should be probably fixed separately.
+
+> +Whether and how a knob takes effect is up to the loaded scheduler: it
+> +may implement the corresponding callback partially or not at all. The
+> +same applies to other knobs like nice levels. When relying on these
+> +knobs, check the documentation or source of the loaded scheduler.
+> +
+
+"nice levels" can be a bit ambiguous, per-task nice changes are converted to
+weights and reported through ops.set_weight(), writes to the cgroup file
+cpu.weight.nice are reported through ops.cgroup_set_weight().
+
+Maybe we can rephrase the whole paragraph as following, or something along these
+lines:
+
+  The fair-class scheduler enforces CPU controller settings such as cpu.max,
+  cpu.weight, and cpu.idle. For sched_ext tasks, the scheduler core communicates
+  these settings to the BPF scheduler through ops.cgroup_init() and reports
+  subsequent changes through the corresponding ops.cgroup_set_*() callbacks.
+  Similarly, per-task nice changes are converted to weights and reported through
+  ops.set_weight().
+
+  Each BPF scheduler is responsible for implementing the scheduling semantics of
+  these settings and may choose to ignore them. Consult the loaded scheduler's
+  documentation before relying on these controls.
+
+Thanks,
+-Andrea
