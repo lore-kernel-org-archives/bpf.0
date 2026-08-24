@@ -1,125 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej2-f10.google.com (mail-ej2-f10.google.com [74.125.228.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDEFD415F22
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 13:08:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 642C841D226
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 13:08:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787576888; cv=none; b=A6MvJvYIJ6/5o0QYVhAJ8VMsulYwmmcvopkgnqYUcvH3/E0LSSucYrIfbwNxTyb2g8YgPEHb25sphHr3utv6AbSIemcRbuqJm7cE+DRQkr3nPaHEkRO0dpuxZrH+32vqEE5F8Cqn36fVdMaORf4Lf116A9DW0v3KL9whLe8mG/Q=
+	t=1787576891; cv=none; b=qKaPz8UbWAobGnX/ZuNo+XpoIk71Ni7v/7I6nfrssDz3BjFRUifEhQgXyd85PUDAh00/wdvTFuSqf7rRdWQVFUM56YPwHLhuPrKqAq/DecnNv/7GEAfiLdQeUuEz0PVMG4Hpgc/ufj4yfzyGXPOTYvpx4B6DkySUqhT4lL2eVBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787576888; c=relaxed/simple;
-	bh=qO+nkpzzNr9bzpu0Uj9zT6L4H3UWMK4DHmn5pYmoBHw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=RikCxoNfPeyjlKLTKVWACf5zzMYQ89pPEzKfEChfLaC4ZNkefpxWzlJpGdxWU/fWs/4TT9t+3TUHEriNqzBt4I/CxpDFMXbOQ7LHmQ66qvevI5AnY0iQuHL5TKH920/eRiDRJjRJsmDF5P9dapWi0hJn1eOEK16B4B8jTewWQhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OqyPSstG; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787576891; c=relaxed/simple;
+	bh=9pE7VibI+LRgd3qmkeN99DFY67r9KmGEbI/RLWt8S7c=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:
+	 References:In-Reply-To; b=lEKtIpOtW1QOrJOqxgUX/UvO1T1TKyaup5/7cyZmJuuFhV6pxJgOEmWbLd/DfE9ek4u+GIG/N5EoABrad13Y/MEbkkbJFIY9H9Fj7Gei9CDeEzt0RF6pdtO05dAwYMxYqOPItYZughuDu7mqMpXFnltZJ6DWnvZpuDbt3O1wAK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yvxfobi1; arc=none smtp.client-ip=74.125.228.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OqyPSstG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51B591F000E9;
-	Mon, 24 Aug 2026 13:08:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787576886;
-	bh=tK+xgnlFdVlPIr7JXIcW65vEn30RRH2pE3VvoDzMn/w=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=OqyPSstGbTlFo192apJxn/r/nEjr+opMU+/5kTCRZhEtcS86T1swENaVDOmV57k5c
-	 i9o0+myiptSe5XU+1huvUN4/7PXPFIKFxMpyqsPNAyNULnJo4u8Whpg9SvUeCeHhYY
-	 +KG50DhLHdZbhwXYcmm+Li6hq63GHkpd/gd3F9MKQf6Qs+z4TA+zyG4vkaYjYYFngj
-	 vLtyWVDljIspD18aMd9KKE8fCVNlHJQ/WSBuQgk5yayd/7U4phXQusZBXKOXrgEDXZ
-	 uDe2gEIUf4lKx8XcR9v9HE6vd42h517MkgElrXYk52UlDRWSnsfFC1kFCRkU4NPQ/h
-	 9PmqDqmklEHwg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 1/2] libbpf: support selective kernel module
- BTF loading via bpf_object_open_opts
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Fuyu Zhao" <zhaofuyu@vivo.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260824125310.1384-2-zhaofuyu@vivo.com>
-References: <20260824125310.1384-1-zhaofuyu@vivo.com>
- <20260824125310.1384-2-zhaofuyu@vivo.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 24 Aug 2026 13:08:05 +0000
-Message-Id: <20260824130806.51B591F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yvxfobi1"
+Received: by mail-ej2-f10.google.com with SMTP id a640c23a62f3a-c2193fc3dabso220339366b.1
+        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 06:08:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787576889; x=1788181689; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:message-id:date:content-type
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=GzX3Jpoh2AUuavTdT66Gmv5ikLJdO2iPsNTVIieKaPI=;
+        b=Yvxfobi1pvi6Bg2fg19hazzw5kSj9sxsdhyX7ADntLm7e34ZCm3yxU1LiYAXp4g0Aq
+         JBwz/pX+6QyeqgAmLAwaiiZcFMFv96Ztr8/lVjxFC2soGeUoH/isBzwQ/yluj42GYavt
+         5ie39FUqMn+pZYOkCN1RngJEfLzYLzeM9BXmr9XM1J409g/RuAF/0B9jw8tW5trTxskR
+         H1tdd4KMgnVB59KILSqjaPX3+GezrCeZvMcVDMwt4NzGm0w2P9C6gOGV6AuoyMG6tuyl
+         AvSe0QcwwBlg0AL+UpR6hXO/6+5iBhqJcEHzvdjg9yPY4yuvU3FkbAZwfjRk9p2ugy/e
+         AdgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787576889; x=1788181689;
+        h=in-reply-to:references:to:from:subject:message-id:date:content-type
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=GzX3Jpoh2AUuavTdT66Gmv5ikLJdO2iPsNTVIieKaPI=;
+        b=FCSEgKiBPF4EDlvL8TX7xkIDSwAs3FPR4qhGEVjGeh2wUqyJUveASUZ0dLFhDOP6TL
+         FdMO8n3MGGCJMWwge78UwnYcjFPI1bImGmifFdcvNatzUKkQfHBRUHkn+h2XqWB4FTJf
+         whAp7MmviY8yakAbcjo93zSiONVyLQ/nDGrYnERHXXNfDpvPG4+d5+eJxIC6owjYJS5b
+         nwsyt1oCQmYLqUJGg41vzm3Dl1w0tpwvvstuXuKoQdlDRobgjn2qZnhMktvphqkoMGUc
+         NQb6Uzp8ou2N1tFaV0UISLvTrR1tIDnZnOfY770kB+nN7kTmGr1XqwqCkVp/+vAtDdBh
+         58mw==
+X-Forwarded-Encrypted: i=1; AHgh+Rqns93gAErt3hVMcnDLLL7lbTNhVjkHlnm4sj2JqyReArCpG00AEkxFafzuTe9i2HdIaXY=@vger.kernel.org
+X-Gm-Message-State: AFuF++nGM+0P5VUGJ3lHlHsgm5wDtjMFZvShpIiRhtQTnG4F8i0UFgIp
+	17cXq5CPg8X5dg9Z17h0k9fZf4RSL2R87qPYnbPZ/YxXf7WrV1FvnYcXLOcPlbGt
+X-Gm-Gg: AR+sD11Jgs5uiep9d7wlAy6Jbx4/XmoE44Zb1A8sE7aSZf4eSPXBwED2czTX5cE4pvi
+	bBptqnuNNsj+cCKy503wNH4oznyM0SeLP2WPofefPZz0GjCpVtq/XsA69uyYOpQYSQGbZI6ugfj
+	a4TaXs2AoXBDlmpUVJprf34ZP6mRonwwvHaMN61wFtuaWDYXqLfTj4PdtrRy+POxppiqYRxNUqz
+	/4v4sTZ5cTixQf8C8UPyomz74pts48GiZ8jBLX0mds6XnCdDkY6Pu6lzxQTAAlm3gzZ28fD3+J9
+	UsJfWfJhuiNPg8kuF4mrz3BzpLuCpQdijkEr4yjl0imy4y90IdXHfEVbXWXbR7kFgLxrR1aNNya
+	jAmCgVNiEm3dhvR7SSxz1Nz7GKSWHjxnwIrr0FzxMi0BK0rH6UVs0jXcD8OiY755CbnNlfSFMoK
+	sSsHpOXTGBTlTki9+t2HiYElRioigkKdMNF5iv6PFmYiUatKMKyjVL4sHB9y0Lkxt5aYHWAXDEw
+	EizyVlY8ztQhrZq5DCz07T+1AnDdJ5Y2OuQ1pQGR6EMOR9nnPJb/PBc8GECUc2dN7zcyXnwB3aj
+	31G3rNb9tWDPE/cyxAzv/8isM6s=
+X-Received: by 2002:a17:906:a349:20b0:c21:8191:12cc with SMTP id a640c23a62f3a-c246ac03db1mr2320301966b.22.1787576888268;
+        Mon, 24 Aug 2026 06:08:08 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2496296a46sm1381383766b.21.2026.08.24.06.08.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Aug 2026 06:08:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 24 Aug 2026 15:08:07 +0200
+Message-Id: <DKX74D69UDFU.3ICXMZO2VWVDG@gmail.com>
+Subject: Re: [PATCH v2] libbpf: Ignore exception frame section
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Tw" <tw19881113@gmail.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0
+References: <20260824130245.580545-1-tw19881113@gmail.com>
+In-Reply-To: <20260824130245.580545-1-tw19881113@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Failure to short-circuit BTF loading when the requested module l=
-ist is empty.
---
+On Mon Aug 24, 2026 at 3:01 PM CEST, Tw wrote:
+> Exception handling in BPF program is not supported right now, let's skip =
+it.
+> BTW, I found this when building BPF with Zig compiler[1].
+>
+> [1]: https://github.com/tw4452852/bb
+>
+> Signed-off-by: Tw <tw19881113@gmail.com>
 
---- Patch [1]: [PATCH bpf-next v4 1/2] libbpf: support selective kernel mod=
-ule BTF loading via bpf_object_open_opts ---
-commit 45ee1cea8b0fa604bfa594a065030f18301877c5
-Author: Fuyu Zhao <zhaofuyu@vivo.com>
+You need to have your full real name in the SoB tag. Patches cannot be acce=
+pted
+otherwise.
 
-libbpf: support selective kernel module BTF loading via bpf_object_open_opts
+pw-bot: cr
 
-This commit adds btf_module_names and nr_btf_module_names to
-bpf_object_open_opts, allowing selective loading of kernel module BTFs. Whe=
-n a
-list is provided, libbpf will skip module BTFs not in the list to reduce BPF
-object loading time.
-
+> ---
+> v2:
+>  Revise the commit message.
+>
+>  tools/lib/bpf/libbpf.c | 3 ++-
+>  tools/lib/bpf/linker.c | 3 ++-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+>
 > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index b749c01742ee0..d8ef6ecc6f5dd 100644
+> index b749c0174..05727c418 100644
 > --- a/tools/lib/bpf/libbpf.c
 > +++ b/tools/lib/bpf/libbpf.c
-
-[ ... ]
-
-> @@ -5851,6 +5854,94 @@ int bpf_core_add_cands(struct bpf_core_cand *local=
-_cand,
-
-[ ... ]
-
-> +static bool all_needed_module_btfs_loaded(const struct bpf_object *obj)
-> +{
-> +	return obj->btf_module_names &&
-> +	       obj->nr_btf_module_names =3D=3D obj->btf_module_cnt;
-> +}
-> +
->  static int load_module_btfs(struct bpf_object *obj)
+> @@ -3867,7 +3867,8 @@ static Elf64_Rel *elf_rel_by_idx(Elf_Data *data, si=
+ze_t idx)
+>  static bool is_sec_name_dwarf(const char *name)
 >  {
+>  	/* approximation, but the actual list is too long */
+> -	return str_has_pfx(name, ".debug_");
+> +	return str_has_pfx(name, ".debug_") ||
+> +		   strcmp(name, ".eh_frame") =3D=3D 0;
+>  }
+>
+>  static bool ignore_elf_section(Elf64_Shdr *hdr, const char *name)
+> diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
+> index 78f92c392..1fb0efdbf 100644
+> --- a/tools/lib/bpf/linker.c
+> +++ b/tools/lib/bpf/linker.c
+> @@ -599,7 +599,8 @@ int bpf_linker__add_buf(struct bpf_linker *linker, vo=
+id *buf, size_t buf_sz,
+>  static bool is_dwarf_sec_name(const char *name)
+>  {
+>  	/* approximation, but the actual list is too long */
+> -	return strncmp(name, ".debug_", sizeof(".debug_") - 1) =3D=3D 0;
+> +	return strncmp(name, ".debug_", sizeof(".debug_") - 1) =3D=3D 0 ||
+> +		   strcmp(name, ".eh_frame") =3D=3D 0;
+>  }
+>
+>  static bool is_ignored_sec(struct src_sec *sec)
 
-[Severity: Medium]
-Could we short-circuit this function earlier when the requested module list=
- is
-empty?
-
-If a user passes a non-NULL btf_module_names with nr_btf_module_names =3D 0
-(meaning no module BTFs should be loaded), this function still proceeds into
-the while (true) loop, issuing system calls for every BTF object on the
-system.
-
-[ ... ]
-
-> @@ -5915,6 +6006,11 @@ static int load_module_btfs(struct bpf_object *obj)
->  			continue;
->  		}
-> =20
-> +		if (!is_module_btf_needed(obj, name)) {
-> +			close(fd);
-> +			continue;
-> +		}
-> +
-
-[Severity: Medium]
-Does this continue bypass the early exit check when nr_btf_module_names is =
-0?
-
-When the requested list is empty, is_module_btf_needed() always returns fal=
-se,
-triggering this continue on every iteration. This skips the
-all_needed_module_btfs_loaded() check at the bottom of the loop entirely,
-causing the loop to exhaustively iterate all BTFs unnecessarily.
-
->  		btf =3D btf_get_from_fd(fd, obj->btf_vmlinux);
->  		err =3D libbpf_get_error(btf);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260824125310.1384=
--1-zhaofuyu@vivo.com?part=3D1
