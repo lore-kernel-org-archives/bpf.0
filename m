@@ -1,362 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD167395ACC;
-	Mon, 24 Aug 2026 22:53:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787612012; cv=none; b=O4srPX5Ci1QQ2VNJA9YAtQ898rBOs1iTI35D4VB1yC+JiJMgfFDhnwJBKxh9X7FqlAy53rk1SXli5236jvvs+pcEiO9jYbnHyd9VJmlBFN781dfkfLqNFUByeHLEBdV40URBCzB2wmpuxmR0BNTfAhWsDYngh8cE6bNlgaxhl9A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787612012; c=relaxed/simple;
-	bh=OSMMVu7VFL35TTrsovGeLIodUwZe57kclqb8HcBlHhs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iuptjHwQE2sB6IRSr5gdQkz7+tu1t3MZCy9fwvYaN4IDmRGCHLGhBCDhretSQs33Sk+A+xB5v/Mw4PpAr00HzVKUFEmG4lVNytEe0SeZZ7weVeliB+QwCqdjMQY5MtUmm/xzJ6UKclMDzBjgvU3i0fxACk9mKW0uICaIp7/ssPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TGmuGPiO; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D958395ACC
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 22:54:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.225.65
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787612055; cv=pass; b=qf1gNsTHCYCBWjUgaaMepeWDps/dpwLTgYY6VeqxJJPUvpygE/OP74ItPogejyU1z0wpRpaLxklv9+XKlqGBWoiC0HyWOAm8XxLu2UM9WiAVmS2dODsJ1ZG9O1FKzvZE6q4v6kIL88xEfbZiWSEHKeZ2hcsgsjNgxDsVaMXy2eU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787612055; c=relaxed/simple;
+	bh=+xUTBWWUiVy00ozpJeB7LFUbe7I8yxK6IklfDpccSL4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rxlDYSv0ju7IBQMRetpiNEMj3O31o910OPFyDmEoJVPWR9Tp88R5bipn9KlR/RDC80NDtshMiZpWh3s39gmpbYAstSwdQ+OVQsfL9E8GALLMZ7NGgTctWLgZnaDTE+3LY5767iJLK04Iu067KeX6iB1/KwP67mThjFryjEwCsoU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qN6oLX//; arc=pass smtp.client-ip=74.125.225.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TGmuGPiO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787612010; x=1819148010;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OSMMVu7VFL35TTrsovGeLIodUwZe57kclqb8HcBlHhs=;
-  b=TGmuGPiORJaXY8IUfxuBhky7QgifV5FDWFW+tL5plW+cyVoA3G9sZFVU
-   0gnIoJT15TYLwDMgifddMcql1IOMQye99QpnI46pflZpv2LsKA3t2NZBt
-   5ZlAeNfNFGZ9xI4V7Dr1S74agvl6qc008T0Ja2y6FEx0kez9nszmkDVJf
-   O90GhFl3hVvuoYoRWJfZkr6j2ZHmP/7Wyx/WxlQxWv6x4pZNXcP8W6sz+
-   h4YqmgwbQ94NbT0jVmfJOLIlgA0xi33SWshTZVgJmtY+2216QRpylYwqW
-   Pj2mtsDhxkOl+kvzNqKOcHMKre7GlcEPtMO8vVxgMj5MLJRGjpTia1MCn
-   A==;
-X-CSE-ConnectionGUID: 2yeCM9HsRCqOdHJuho7zZA==
-X-CSE-MsgGUID: aAgDs5oWQ7q4eoLjJof66Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11885"; a="99423442"
-X-IronPort-AV: E=Sophos;i="6.25,241,1779174000"; 
-   d="scan'208";a="99423442"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2026 15:53:29 -0700
-X-CSE-ConnectionGUID: poYr+gngQgCiwcMHZ9VOYw==
-X-CSE-MsgGUID: 7cuXLLBMS8KT04O3MlzeWQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,241,1779174000"; 
-   d="scan'208";a="291974966"
-Received: from lkp-server01.sh.intel.com (HELO 3532383e6126) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 24 Aug 2026 15:53:23 -0700
-Received: from kbuild by 3532383e6126 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wydXU-000000004Nj-2GVm;
-	Mon, 24 Aug 2026 22:53:13 +0000
-Date: Tue, 25 Aug 2026 06:52:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Deepanshu Kartikey <kartikey406@gmail.com>, peterz@infradead.org,
-	mingo@redhat.com, acme@kernel.org, namhyung@kernel.org,
-	mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-	jolsa@kernel.org, olsajiri@gmail.com, irogers@google.com,
-	adrian.hunter@intel.com, james.clark@linaro.org, kpsingh@kernel.org,
-	matt@bobrowski.net, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
-	emil@etsalapatis.com, ihor.solodrai@linux.dev, rostedt@goodmis.org,
-	mhiramat@kernel.org, mathieu.desnoyers@efficios.com
-Cc: oe-kbuild-all@lists.linux.dev, linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH] perf/bpf: Fix lockless access to parent_event->prog in
- perf_event_alloc()
-Message-ID: <202608250601.kP2R1VQE-lkp@intel.com>
-References: <20260821014210.18681-1-kartikey406@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qN6oLX//"
+Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-473913157edso1031551f8f.1
+        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 15:54:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787612052; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Y/4B4STYstTiDCH+FvIKIM38kH15cgznT1nZ/fWl1AlAAaO8XX1jKiWtU40MVJ/hD3
+         1cqHmrp4fE40y7MVUYkp8J+EE7uJX/+GheZOqoxYm02R7tAK+mKKLW8i+L8VX3T+KDqd
+         RIJTum5E5wzmA4oOI1gnsvn8yK0uWPNyDvPaHQCR8py3SoE18CXBwfLDCIZ1s6yCCciq
+         e8b9DWeedoDhAkx5iJLDYA4iCEtvPbATEPLb+eFPRvAFrK6kFStL7+FUTXn8xNc1Mwqz
+         3uBFz+/DGPDa8ZmBdPSK9KN24f6q03NVjd/dqUdNCRBDmHiwRwujKRbLc1Fboiyby+GR
+         bmZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=5zlMv2e6DM7PZ+P5lffrEKvGMK71rMFWp0f3bprp35o=;
+        fh=j32kraQBvGnT7sBi2cI2niS49axgMloD3RaZATMi/as=;
+        b=TCM8GvW02b+pHwh/7+Q6fnZA59IO87iJ0qAPNIY38ywhrB+YoxhTTTlyjvacbdQ75t
+         JbdQoEwZc8IA9gLnhOG3M+pmxX24rHnknheMdZ0g2DPNP0exjnYnOkA3qsVN4y3F8Xiw
+         DY8fLT2VizPYWIDYISs3Pt7+uhwiZBcTz2lBCov+nfQ09aGgJnEdiuwPrL+2M55XnLq9
+         CkmXISwWY8tIQHN64GgS9rn9dp9DkpxNCKE01HS3SgS0squcEehWPFAstdZgvZI3aMnM
+         Vb/OVD8qXL4YhQday2xgTG7DlmnCEuIR8ZPehb51l5LzTgyLqLNlpPz/r1Xe9a0QHZHj
+         5zQw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787612052; x=1788216852; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5zlMv2e6DM7PZ+P5lffrEKvGMK71rMFWp0f3bprp35o=;
+        b=qN6oLX//DBtrXRwSO8VnorK5ORng4knxjbjmPY5jyboV/PKYB6zoUhDhZlUmol3K36
+         3Mh6406+kFtj0+mgo7adpa6LKk/r/HRWlc2bpqwM0xOJsYIHsZpLi5h0en6xiDJTwBFb
+         PkR8+r2XT49Vjtc+JQRt4m2pBaKdwNqIQjGfv2ErUwQ2sbF+5mXDI5Oneap9AyvTxUct
+         WEjRXJSU9SEMlZvW3xUGqgvkpO/fniQDqzo2w3RHi5Y+3Ri339X7U24xY/cdYC8hsCcn
+         qW11Swh2bw6ztf9i8eUgLjFJg+fymJOuj6BtmexHiXKqGNbMhXG/M/HdTwJ7KbgX7Zbq
+         gRlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787612052; x=1788216852;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=5zlMv2e6DM7PZ+P5lffrEKvGMK71rMFWp0f3bprp35o=;
+        b=lBhIeNmXd8MdvJqHwpzgQbtIisY8blF6890nusQwZqyV9Ls4C5YPLc+YeSWoEQoNXP
+         b+LQHx0qsIUGbca479kbwyWA0KPwS9RwbYxeuOTeT1P0/2C8PHJIXR7iFnXaXaWkOKYA
+         JiaJmHiILNXyMrQQ2Yuv2OhOQK6brlBgVg6zbTps89gIAGJoXNj+D6lS6RrzUQRQpkg3
+         92BXMkPmFLOrieg1+2gpeC8Vtg8PVADAKHJIK7jv5oFxEk+Df5k+gz1Ji85t4s9bTo22
+         y9RDDNYRyu1LbWgjylkhPNmhbXhA5rKz9C/8ew2bDYfkXIIiPQrY87UFDw78SkAwkeC+
+         EhRQ==
+X-Gm-Message-State: AFuF++mRTzeSmrV4zTCDxN6M03ZQgVGU5KrTdrduxd+GsSAZxytcSoLM
+	oLdFJgxvEr0UftGJ7CKywlOf+fOpGurtAYrkCW+jJM362+MOjUPRYWxNh37XP2WxOfhdT2iw5fD
+	7n01AjlK08eYlv7OVNV5HAgIehadOgnU=
+X-Gm-Gg: AR+sD13FpiMxqgKCjSphHyz5lg47RSfdJdW1sejUENEIwfXjYWAUSI0XaSGh+2L3mMZ
+	YDZnFnvLOzxU35ocFk7BpXUqzDKf6+OEiiXnKZRCRAe6VJSl2H5b5AOOmxm4oXcM5ZLaqemLJH7
+	2hV4HnuigmAIHIYLZ347dM9agW6sJ/TkbwNi8735dtF/02y90GuBO1krxA+FdbycKxN1JznI7/X
+	VuxNWiCsQOHbdlm33RBKFgwd+AiluYPiwt9dTntfpCeHQk/1DnOL7gZFUT1r3AmqSwzjIYxpnVC
+	2IIBhPk4WGW4OiXXJdCGcqYlbHkUX4L/Xzd0FlQkMU9js4uWAMEmDCw2acQNBGs4QWHpLDeoIJG
+	XwT391e3V+mi/CzGiJ63VjwkOWbMHQjOdITR1uy7X4FY5GFoRzys/Rh5GJrjfiKLvCWs6TVyZoi
+	Ew1GNz7B2sp9dV8FmtMkrqc79yZWBuGJc=
+X-Received: by 2002:a05:600c:840f:b0:490:e5c1:b8bf with SMTP id
+ 5b1f17b1804b1-499c19f5111mr248602325e9.13.1787612051687; Mon, 24 Aug 2026
+ 15:54:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260821014210.18681-1-kartikey406@gmail.com>
+References: <20260821233516.3426127-1-memxor@gmail.com> <20260821233516.3426127-13-memxor@gmail.com>
+ <aa7fd53b3521c5f402700c5df7056a23962e4ac0.camel@gmail.com>
+In-Reply-To: <aa7fd53b3521c5f402700c5df7056a23962e4ac0.camel@gmail.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Tue, 25 Aug 2026 00:53:34 +0200
+X-Gm-Features: AcwNN1VMV2UUrCrfGfPmWbUcf3nA-p6_YO_pEiSXPrdytbURkLWBdx5Alkrw8rE
+Message-ID: <CAP01T744sZA8w8aLx7raT4h-aWcjsAidUAT2edsui7u1XXWSwA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 12/14] resolve_btfids: Drop KF_ARENA_ARG flag support
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, kkd@meta.com, 
+	kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Deepanshu,
+On Tue, 25 Aug 2026 at 00:25, Eduard Zingerman <eddyz87@gmail.com> wrote:
+>
+> On Sat, 2026-08-22 at 01:35 +0200, Kumar Kartikeya Dwivedi wrote:
+>
+> ...
+>
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+> > index 3f9949e8227d..a4381c7fa7da 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+>
+> ...
+>
+> > @@ -57,9 +50,8 @@ struct kfunc_symbol {
+> >  static struct kfunc_symbol kfunc_symbols[] = {
+> >       { "kfunc_a", -1, 0, 0, false },
+> >       { "kfunc_b", -1, KF_FASTCALL, 0, false },
+> > -     { "kfunc_c", -1, KF_ARENA_RET | KF_ARENA_ARG1 | KF_ARENA_ARG2,
+> > -       ARENA_ARG(0) | ARENA_ARG(1), true },
+> > -     { "kfunc_d", -1, KF_ARENA_ARG2, ARENA_ARG(1), false },
+> > +     { "kfunc_c", -1, KF_ARENA_RET, 0, true },
+> > +     { "kfunc_d", -1, 0, 0, false },
+>
+> This changes test cases for kfunc_{c,d}, which previously were
+> expected to have arena args. Why?
 
-kernel test robot noticed the following build errors:
+They got it because they were tagged with KF_ARENA_ARG{1,2}. They
+don't have suffix otherwise, so they don't get it now.
+I can add the suffixes though in v2.
 
-[auto build test ERROR on perf-tools-next/perf-tools-next]
-[also build test ERROR on tip/perf/core perf-tools/perf-tools linus/master v7.2 next-20260821]
-[cannot apply to acme/perf/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Deepanshu-Kartikey/perf-bpf-Fix-lockless-access-to-parent_event-prog-in-perf_event_alloc/20260821-071210
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git perf-tools-next
-patch link:    https://lore.kernel.org/r/20260821014210.18681-1-kartikey406%40gmail.com
-patch subject: [PATCH] perf/bpf: Fix lockless access to parent_event->prog in perf_event_alloc()
-config: sparc-randconfig-002-20260825 (https://download.01.org/0day-ci/archive/20260825/202608250601.kP2R1VQE-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260825/202608250601.kP2R1VQE-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608250601.kP2R1VQE-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   sparc64-linux-ld: kernel/events/core.o: in function `perf_event_alloc':
->> kernel/events/core.c:13438:(.text+0x9be0): undefined reference to `bpf_event_mutex'
->> sparc64-linux-ld: kernel/events/core.c:13438:(.text+0x9bec): undefined reference to `bpf_event_mutex'
-   sparc64-linux-ld: kernel/events/core.c:13444:(.text+0x9c14): undefined reference to `bpf_event_mutex'
-
-
-vim +13438 kernel/events/core.c
-
- 13340	
- 13341	/*
- 13342	 * Allocate and initialize an event structure
- 13343	 */
- 13344	static struct perf_event *
- 13345	perf_event_alloc(struct perf_event_attr *attr, int cpu,
- 13346			 struct task_struct *task,
- 13347			 struct perf_event *group_leader,
- 13348			 struct perf_event *parent_event,
- 13349			 perf_overflow_handler_t overflow_handler,
- 13350			 void *context, int cgroup_fd)
- 13351	{
- 13352		struct pmu *pmu;
- 13353		struct hw_perf_event *hwc;
- 13354		long err = -EINVAL;
- 13355		int node;
- 13356	
- 13357		if ((unsigned)cpu >= nr_cpu_ids) {
- 13358			if (!task || cpu != -1)
- 13359				return ERR_PTR(-EINVAL);
- 13360		}
- 13361		if (attr->sigtrap && !task) {
- 13362			/* Requires a task: avoid signalling random tasks. */
- 13363			return ERR_PTR(-EINVAL);
- 13364		}
- 13365	
- 13366		node = (cpu >= 0) ? cpu_to_node(cpu) : -1;
- 13367		struct perf_event *event __free(__free_event) =
- 13368			kmem_cache_alloc_node(perf_event_cache, GFP_KERNEL | __GFP_ZERO, node);
- 13369		if (!event)
- 13370			return ERR_PTR(-ENOMEM);
- 13371	
- 13372		/*
- 13373		 * Single events are their own group leaders, with an
- 13374		 * empty sibling list:
- 13375		 */
- 13376		if (!group_leader)
- 13377			group_leader = event;
- 13378	
- 13379		mutex_init(&event->child_mutex);
- 13380		INIT_LIST_HEAD(&event->child_list);
- 13381	
- 13382		INIT_LIST_HEAD(&event->event_entry);
- 13383		INIT_LIST_HEAD(&event->sibling_list);
- 13384		INIT_LIST_HEAD(&event->active_list);
- 13385		init_event_group(event);
- 13386		INIT_LIST_HEAD(&event->rb_entry);
- 13387		INIT_LIST_HEAD(&event->active_entry);
- 13388		INIT_LIST_HEAD(&event->addr_filters.list);
- 13389		INIT_HLIST_NODE(&event->hlist_entry);
- 13390		INIT_LIST_HEAD(&event->pmu_list);
- 13391	
- 13392	
- 13393		init_waitqueue_head(&event->waitq);
- 13394		init_irq_work(&event->pending_irq, perf_pending_irq);
- 13395		event->pending_disable_irq = IRQ_WORK_INIT_HARD(perf_pending_disable);
- 13396		init_task_work(&event->pending_task, perf_pending_task);
- 13397	
- 13398		mutex_init(&event->mmap_mutex);
- 13399		raw_spin_lock_init(&event->addr_filters.lock);
- 13400	
- 13401		atomic_long_set(&event->refcount, 1);
- 13402		event->cpu		= cpu;
- 13403		event->attr		= *attr;
- 13404		event->group_leader	= group_leader;
- 13405		event->pmu		= NULL;
- 13406		event->oncpu		= -1;
- 13407	
- 13408		event->parent		= parent_event;
- 13409	
- 13410		event->ns		= get_pid_ns(task_active_pid_ns(current));
- 13411		event->id		= atomic64_inc_return(&perf_event_id);
- 13412	
- 13413		event->state		= PERF_EVENT_STATE_INACTIVE;
- 13414	
- 13415		if (parent_event)
- 13416			event->event_caps = parent_event->event_caps;
- 13417	
- 13418		if (task) {
- 13419			event->attach_state = PERF_ATTACH_TASK;
- 13420			/*
- 13421			 * XXX pmu::event_init needs to know what task to account to
- 13422			 * and we cannot use the ctx information because we need the
- 13423			 * pmu before we get a ctx.
- 13424			 */
- 13425			event->hw.target = get_task_struct(task);
- 13426		}
- 13427	
- 13428		event->clock = &local_clock;
- 13429		if (parent_event)
- 13430			event->clock = parent_event->clock;
- 13431	
- 13432		if (!overflow_handler && parent_event) {
- 13433			overflow_handler = parent_event->overflow_handler;
- 13434			context = parent_event->overflow_handler_context;
- 13435	#if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_EVENT_TRACING)
- 13436			struct bpf_prog *prog;
- 13437	
- 13438			mutex_lock(&bpf_event_mutex);
- 13439			prog = parent_event->prog;
- 13440			if (prog) {
- 13441				bpf_prog_inc(prog);
- 13442				event->prog = prog;
- 13443			}
- 13444			mutex_unlock(&bpf_event_mutex);
- 13445	#endif
- 13446		}
- 13447	
- 13448		if (overflow_handler) {
- 13449			event->overflow_handler	= overflow_handler;
- 13450			event->overflow_handler_context = context;
- 13451		} else if (is_write_backward(event)){
- 13452			event->overflow_handler = perf_event_output_backward;
- 13453			event->overflow_handler_context = NULL;
- 13454		} else {
- 13455			event->overflow_handler = perf_event_output_forward;
- 13456			event->overflow_handler_context = NULL;
- 13457		}
- 13458	
- 13459		perf_event__state_init(event);
- 13460	
- 13461		pmu = NULL;
- 13462	
- 13463		hwc = &event->hw;
- 13464		hwc->sample_period = attr->sample_period;
- 13465		if (is_event_in_freq_mode(event))
- 13466			hwc->sample_period = 1;
- 13467		hwc->last_period = hwc->sample_period;
- 13468	
- 13469		local64_set(&hwc->period_left, hwc->sample_period);
- 13470	
- 13471		/*
- 13472		 * We do not support PERF_SAMPLE_READ on inherited events unless
- 13473		 * PERF_SAMPLE_TID is also selected, which allows inherited events to
- 13474		 * collect per-thread samples.
- 13475		 * See perf_output_read().
- 13476		 */
- 13477		if (has_inherit_and_sample_read(attr) && !(attr->sample_type & PERF_SAMPLE_TID))
- 13478			return ERR_PTR(-EINVAL);
- 13479	
- 13480		if (!has_branch_stack(event))
- 13481			event->attr.branch_sample_type = 0;
- 13482	
- 13483		pmu = perf_init_event(event);
- 13484		if (IS_ERR(pmu))
- 13485			return (void*)pmu;
- 13486	
- 13487		/*
- 13488		 * The PERF_ATTACH_TASK_DATA is set in the event_init()->hw_config().
- 13489		 * The attach should be right after the perf_init_event().
- 13490		 * Otherwise, the __free_event() would mistakenly detach the non-exist
- 13491		 * perf_ctx_data because of the other errors between them.
- 13492		 */
- 13493		if (event->attach_state & PERF_ATTACH_TASK_DATA) {
- 13494			err = attach_perf_ctx_data(event);
- 13495			if (err)
- 13496				return ERR_PTR(err);
- 13497		}
- 13498	
- 13499		/*
- 13500		 * Disallow uncore-task events. Similarly, disallow uncore-cgroup
- 13501		 * events (they don't make sense as the cgroup will be different
- 13502		 * on other CPUs in the uncore mask).
- 13503		 */
- 13504		if (pmu->task_ctx_nr == perf_invalid_context && (task || cgroup_fd != -1))
- 13505			return ERR_PTR(-EINVAL);
- 13506	
- 13507		if (event->attr.aux_output &&
- 13508		    (!(pmu->capabilities & PERF_PMU_CAP_AUX_OUTPUT) ||
- 13509		     event->attr.aux_pause || event->attr.aux_resume))
- 13510			return ERR_PTR(-EOPNOTSUPP);
- 13511	
- 13512		if (event->attr.aux_pause && event->attr.aux_resume)
- 13513			return ERR_PTR(-EINVAL);
- 13514	
- 13515		if (event->attr.aux_start_paused) {
- 13516			if (!(pmu->capabilities & PERF_PMU_CAP_AUX_PAUSE))
- 13517				return ERR_PTR(-EOPNOTSUPP);
- 13518			event->hw.aux_paused = 1;
- 13519		}
- 13520	
- 13521		if (cgroup_fd != -1) {
- 13522			err = perf_cgroup_connect(cgroup_fd, event, attr, group_leader);
- 13523			if (err)
- 13524				return ERR_PTR(err);
- 13525		}
- 13526	
- 13527		err = exclusive_event_init(event);
- 13528		if (err)
- 13529			return ERR_PTR(err);
- 13530	
- 13531		if (has_addr_filter(event)) {
- 13532			event->addr_filter_ranges = kcalloc(pmu->nr_addr_filters,
- 13533							    sizeof(struct perf_addr_filter_range),
- 13534							    GFP_KERNEL);
- 13535			if (!event->addr_filter_ranges)
- 13536				return ERR_PTR(-ENOMEM);
- 13537	
- 13538			/*
- 13539			 * Clone the parent's vma offsets: they are valid until exec()
- 13540			 * even if the mm is not shared with the parent.
- 13541			 */
- 13542			if (event->parent) {
- 13543				struct perf_addr_filters_head *ifh = perf_event_addr_filters(event);
- 13544	
- 13545				raw_spin_lock_irq(&ifh->lock);
- 13546				memcpy(event->addr_filter_ranges,
- 13547				       event->parent->addr_filter_ranges,
- 13548				       pmu->nr_addr_filters * sizeof(struct perf_addr_filter_range));
- 13549				raw_spin_unlock_irq(&ifh->lock);
- 13550			}
- 13551	
- 13552			/* force hw sync on the address filters */
- 13553			event->addr_filters_gen = 1;
- 13554		}
- 13555	
- 13556		if (!event->parent) {
- 13557			if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN) {
- 13558				err = get_callchain_buffers(attr->sample_max_stack);
- 13559				if (err)
- 13560					return ERR_PTR(err);
- 13561				event->attach_state |= PERF_ATTACH_CALLCHAIN;
- 13562			}
- 13563		}
- 13564	
- 13565		err = security_perf_event_alloc(event);
- 13566		if (err)
- 13567			return ERR_PTR(err);
- 13568	
- 13569		err = mediated_pmu_account_event(event);
- 13570		if (err)
- 13571			return ERR_PTR(err);
- 13572	
- 13573		/* symmetric to unaccount_event() in _free_event() */
- 13574		account_event(event);
- 13575	
- 13576		/*
- 13577		 * Event creation should be under SRCU, see perf_pmu_unregister().
- 13578		 */
- 13579		lockdep_assert_held(&pmus_srcu);
- 13580		scoped_guard (spinlock, &pmu->events_lock)
- 13581			list_add(&event->pmu_list, &pmu->events);
- 13582	
- 13583		return_ptr(event);
- 13584	}
- 13585	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> >       { "kfunc_e", -1, 0, ARENA_ARG(0) | ARENA_ARG(1) | ARENA_ARG(2) |
+> >         ARENA_ARG(3) | ARENA_ARG(4), false },
+> >       { "kfunc_f", -1, 0, ARENA_ARG(1), false },
+>
+> ...
