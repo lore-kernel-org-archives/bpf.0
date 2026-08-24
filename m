@@ -1,173 +1,222 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954F544683D;
-	Mon, 24 Aug 2026 15:42:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D03C44D685;
+	Mon, 24 Aug 2026 15:42:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787586151; cv=none; b=Qc1AFsuRhtbw/H39BKVOeSPV6R7DSubaBtQQ3cs4fDswTaADg8bWq+x/WtpsobgPnS06Iommd6UktAZ6O888GticxkV9D3eo9IipjhxzAjVN08doyHALbLMlcUomlv6kpHNZNePxnEpTcHSFs3VwWuTmvlOAIyHeJHY/qW3mXUE=
+	t=1787586150; cv=none; b=Ponx+JMkVxF9Kg326ibMqlXJnJF2gB1FJLiZp8mPOXeRXAT60eFstDCJ7aUlxww1yYNKa+a29P7MdljJat6cVPS8L8781n4jd1oPZ5moUtLilw7UwRC2U5LHz4mr6ZXKKEVr3ZTFyBZFBdESxKuHBFIJOzI0MNjFgaM6Wq78W18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787586151; c=relaxed/simple;
-	bh=kbWjEPmus8NJNscV+jIp4xnuVIMhXR/RgDSHqzz5e1Q=;
+	s=arc-20240116; t=1787586150; c=relaxed/simple;
+	bh=jHFchdjdGcnOQpwM/xnJ2rXTRBJ9Z07e4UdPB5SjEgM=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=okdZgLZnnpeakQ1JQD+VyKVKpAHDLf28AzuT6BoVkd+++hRM03zpiQ/VLgiKk3CUx4VtqwDqgpTn2fR3gibFoZr3nhsK5AUxczvkrvAGDMZ7A0VLsFSe+Gt8bBxaKbCfl7Rj85Jj65d38JKdf+z2Gr6SMhughjDOEzjfKK0fyXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TIlXLvJQ; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=egergZghEP3MjT4jaXWw+7zcj4MbQVC/AlvXSk56JxZxdoePezlsk0drHiQ6qhzUtAG9bWtTn3IuLppeyK4KI5JDm0f6IpK+iRM8+ImIYiu8qe3hRC8WuX0wynBkarwKUywF9gW3WzMPkGYnpseZr6NUBa0WHjfLups0VKJidVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EHIMt5vR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TIlXLvJQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A2FC1F00A3A;
-	Mon, 24 Aug 2026 15:42:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EHIMt5vR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7EFB1F00A3D;
+	Mon, 24 Aug 2026 15:42:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787586139;
-	bh=jR+4zKKXR5BvPkByjE5lYUpa/8YYQNd7HFexqo/3Y48=;
+	s=k20260515; t=1787586141;
+	bh=GDGm9kCuRIA/gsg9zQDj/jBe/CB8+xesttXtkMtpukg=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=TIlXLvJQPD46pK9TNTJeL5raw1ONtHavbcw+M7eMyG4gNGu1dbUXiSPRUtdYjzLyw
-	 trckQVLTzNjHwh9oMdpYxARVPQDdRZ622gzi+3C7hHJk5jdWN8ZnT3hSOmZqUN7kp3
-	 oQ9ORpSqL0q+sO6Ja9SMu7XXbyLtkzeUH3vXN4SDiSyu20y9ODbsx5+rXE/tjTDw1G
-	 6VernUGpanuNCKgPsEP31YHDQVOUyKq7mAfMar1kVTFv2gXuNXqoULL8jspatohgR9
-	 xj2hKSDfAffgRa5dJ5IX18PUHl1P9Cpuk7Db6soPnhqJgNxDhP4CLBuo4YTp+d1fe2
-	 QbMZsunsvEnSA==
-Content-Type: multipart/mixed; boundary="===============6793583527708650850=="
+	b=EHIMt5vRpKjIqZ+EKC7kxJgIjHlJ2hUElrIjAR1eSPfXUhcbVjXxseGY4SYHjIe+6
+	 scaqg0WnqTo9pCFewfggZGD7wES4oCESHJ74T+sXlShmnV5qX+uS8ta72Ysnj9AUnJ
+	 q+48Dcyfmwwk4PZ9M9Lj96Y8UBG7zEvGBpIxbyqUcnoK1c9IRu2Eh0AsvbOuldAS1F
+	 44q2yOcwvF9B8ekc2T4N3Cy+Eu7h1ldDNJpHj94cReEI5pkaZccZaFU4OuMFc8oG82
+	 5apjShKFBjZxlSzI/EJvgEqwlJfOZ3WU6dWi9p6jTSx5P33Apyzfnaopfh6kxtRAJT
+	 fRAcdIMQUHawA==
+Content-Type: multipart/mixed; boundary="===============1208854577277626609=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <72b64f467854103cba316523709d5f1f9c533e1762d979e26fd6aa6cc44b63bb@mail.kernel.org>
-In-Reply-To: <20260824143621.2098856-3-chenyuan_fl@163.com>
-References: <20260824143621.2098856-3-chenyuan_fl@163.com>
-Subject: Re: [PATCH 2/4] bpf: Fix use-after-free of program BTF in mem-alloc destructor
+Message-Id: <ceccb98284af19c29afad1d8269ec4376a3e430db17870352c21374330c6a09a@mail.kernel.org>
+In-Reply-To: <20260824143621.2098856-2-chenyuan_fl@163.com>
+References: <20260824143621.2098856-2-chenyuan_fl@163.com>
+Subject: Re: [PATCH 1/4] bpf: Cancel special fields in resizable hashtab on recycle
 From: bot+bpf-ci@kernel.org
 To: chenyuan_fl@163.com,bpf@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,gnq25@mails.tsinghua.edu.cn,chenyuan@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 24 Aug 2026 15:42:19 +0000 (UTC)
+Date: Mon, 24 Aug 2026 15:42:20 +0000 (UTC)
 
---===============6793583527708650850==
+--===============1208854577277626609==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
 > diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index 0df8db27cd8c..b8df2bc9a9a0 100644
+> index d40cb5dd446c..0df8db27cd8c 100644
 > --- a/kernel/bpf/hashtab.c
 > +++ b/kernel/bpf/hashtab.c
+> @@ -2864,14 +2864,56 @@ static int rhtab_map_alloc_check(union bpf_attr *attr)
+>  	return htab_map_alloc_check(attr);
+>  }
+>
+> -static void rhtab_check_and_free_fields(struct bpf_rhtab *rhtab,
+> -					struct rhtab_elem *elem)
+> +static void rhtab_cancel_fields(struct bpf_rhtab *rhtab,
+> +				struct rhtab_elem *elem)
+>  {
+>  	if (IS_ERR_OR_NULL(rhtab->map.record))
+>  		return;
+>
+> -	bpf_obj_free_fields(rhtab->map.record,
+> -			    rhtab_elem_value(elem, rhtab->map.key_size));
+> +	/*
+> +	 * Only cancel NMI-safe fields (timer, workqueue, task_work) here.
+> +	 * RHASH values can also carry referenced kptrs (and per-cpu kptrs),
+> +	 * whose destructors must not run from arbitrary BPF execution
+> +	 * contexts (e.g. NMI); leave them attached to the recycled element
+> +	 * and let rhtab_mem_dtor() destroy them once the element is
+> +	 * eventually freed. This matches the hash map semantics introduced
+> +	 * by a3a81d247651 ("bpf: Cancel special fields on map value
+> +	 * recycle").
+> +	 */
+> +	bpf_map_free_internal_structs(&rhtab->map,
+> +				      rhtab_elem_value(elem, rhtab->map.key_size));
+> +}
 
-[ ... ]
+This isn't a bug, but could the explanation live in one place with the call
+sites pointing at it? The same rationale appears in five spots throughout
+this change: here above rhtab_cancel_fields(), above rhtab_init_map_value(),
+and in three more comments in the call sites below. That's roughly 33
+comment lines against 25 lines of code, and any future adjustments to the
+reasoning need to be synced across all five. For comparison, the equivalent
+hash map helpers check_and_cancel_fields() and htab_elem_free() carry no
+comment at all.
 
+> +
 > +/*
-> + * bpf_ma_set_dtor() duplicates the map's btf_record. For kptr fields whose
-> + * btf is the program BTF (MEM_ALLOC kptrs, e.g. objects allocated with
-> + * bpf_obj_new()/bpf_percpu_obj_new()) btf_record_dup() only borrows the
-> + * reference, like btf_parse_fields() did for the map's own record. The
-> + * duplicated record is released later from the deferred bpf_mem_alloc
-> + * destructor workqueue, by which time the program BTF may already have been
-> + * freed (the map dropped its own reference in bpf_map_free()), so reading
-> + * field->kptr.btf there would be a use-after-free.
-> + *
-> + * Hold a reference on non-kernel (program) BTF for the lifetime of the
-> + * duplicated record and release it before the record is freed. After the
-> + * last btf_put() the object is only destroyed after an RCU grace period, so
-> + * btf_record_free() can still safely read the field descriptors.
+> + * Initialize special fields of a freshly allocated rhtab element, but keep
+> + * kptr fields untouched. A recycled element may carry a referenced kptr from
+> + * its previous life: the delete path only cancels NMI-safe fields (matching
+> + * the hash map semantics), so the kptr reference stays owned by the element
+> + * until rhtab_mem_dtor() destroys it. Zeroing it here (as
+> + * check_and_init_map_value() would) would drop the reference without
+> + * releasing it.
 > + */
-> +static void htab_record_prog_btf_ref(struct btf_record *rec, bool get)
+> +static void rhtab_init_map_value(struct bpf_map *map, void *value)
 > +{
+> +	struct btf_record *rec = map->record;
 > +	int i;
 > +
 > +	if (IS_ERR_OR_NULL(rec))
 > +		return;
 > +
 > +	for (i = 0; i < rec->cnt; i++) {
-> +		const struct btf_field *field = &rec->fields[i];
+> +		struct btf_field *field = &rec->fields[i];
+> +		void *field_ptr = value + field->offset;
 > +
 > +		switch (field->type) {
 > +		case BPF_KPTR_UNREF:
 > +		case BPF_KPTR_REF:
 > +		case BPF_KPTR_PERCPU:
-> +		case BPF_UPTR:
-> +			if (field->kptr.btf && !btf_is_kernel(field->kptr.btf)) {
-> +				if (get)
-> +					btf_get(field->kptr.btf);
-> +				else
-> +					btf_put(field->kptr.btf);
-> +			}
-> +			break;
+> +			continue;
 > +		default:
-> +			break;
+> +			bpf_obj_init_field(field, field_ptr);
 > +		}
 > +	}
 > +}
-> +
->  static void htab_dtor_ctx_free(void *ctx)
->  {
->  	struct htab_btf_record *hrec = ctx;
->
-> +	htab_record_prog_btf_ref(hrec->record, false);
->  	btf_record_free(hrec->record);
->  	kfree(ctx);
->  }
 
-Does this ordering still have a use-after-free?
-
-The comment states that "After the last btf_put() the object is only
-destroyed after an RCU grace period, so btf_record_free() can still safely
-read the field descriptors." But in htab_dtor_ctx_free(), the program-BTF
-reference is dropped one statement before the record is freed:
-
-    htab_record_prog_btf_ref(hrec->record, false);   /* btf_put() */
-    btf_record_free(hrec->record);                   /* reads field->kptr.btf */
-
-htab_record_prog_btf_ref(..., false) ends in btf_put(field->kptr.btf).
-Looking at btf_put() in kernel/bpf/btf.c, it only queues the object for RCU
-destruction if this was the last reference:
-
-    void btf_put(struct btf *btf)
-    {
-            if (btf && refcount_dec_and_test(&btf->refcnt)) {
-                    btf_free_id(btf);
-                    call_rcu(&btf->rcu, btf_free_rcu);
-            }
-    }
-
-and btf_free_rcu() -> btf_free() -> kfree(btf). The very next statement,
-btf_record_free() in kernel/bpf/syscall.c, does for every kptr field:
-
-            if (btf_is_kernel(rec->fields[i].kptr.btf))
-                    btf_put(rec->fields[i].kptr.btf);
-
-and btf_is_kernel() is 'return btf->kernel_btf;' - a dereference of the
-object whose kfree() was just queued.
-
-In the deferred path this is the last reference, so the drop queues an RCU
-free and the following read can land on freed memory. The reachable path is
-exactly the scenario described in the commit message:
-
-  bpf_map_free_deferred()
-    -> bpf_map_free()
-       -> map->ops->map_free (rhtab_map_free / htab_map_free)
-          -> bpf_mem_alloc_destroy()
-             -> destroy_mem_alloc(), rcu_in_progress != 0
-                -> queue_work(system_dfl_wq, &copy->work)
-       -> btf_record_free(rec); btf_put(btf);   /* map drops its own BTF ref */
-    ... later, on the workqueue ...
-  free_mem_alloc_deferred()
-    -> free_mem_alloc()
-       -> free_mem_alloc_no_barrier()
-          -> ma->dtor_ctx_free(ma->dtor_ctx) == htab_dtor_ctx_free
-
-By then the map's reference is gone, so the btf_put() inside
-htab_record_prog_btf_ref() drops the last reference and queues
-btf_free_rcu. free_mem_alloc_deferred() is a plain, fully preemptible
-workqueue worker; there is no rcu_read_lock() anywhere between the work
-callback and htab_dtor_ctx_free() or btf_record_free(). Being preempted
-outside an RCU read-side critical section is itself a quiescent state, so
-on CONFIG_PREEMPT/PREEMPT_RT the grace period can complete and
-btf_free_rcu() can run before the worker resumes in btf_record_free().
-
-Could the reference be held until after btf_record_free() has read the
-descriptors, or could the pair be wrapped in rcu_read_lock()/
-rcu_read_unlock()?
+This isn't a bug, but could this kptr-filtering init be unified with
+bpf_obj_init() rather than duplicated here? rhtab_init_map_value()
+re-implements the field walk from bpf_obj_init() with a kptr filter in
+front of bpf_obj_init_field(). The hash map path this change says it is
+matching takes a different route: alloc_htab_elem() does no special-field
+initialization at all on a recycled or fresh element, relying on __GFP_ZERO
+for fresh memory and on bpf_obj_cancel_fields() having left the cancelled
+fields reusable. Would it be simpler to drop the init call entirely the way
+alloc_htab_elem() does, or to add the kptr skip as a flag or variant of
+bpf_obj_init() so the field walk lives in one place?
 
 [ ... ]
+
+> @@ -3022,10 +3064,11 @@ static long rhtab_map_update_existing(struct bpf_map *map, struct rhtab_elem *el
+>  	 * BPF_F_LOCK, matching arraymap semantics.
+>  	 *
+>  	 * copy_map_value() skips special-field offsets, so old timers/
+> -	 * kptrs/etc. still sit in the slot. Cancel them after the copy
+> -	 * to match arraymap's update semantics.
+> +	 * kptrs/etc. still sit in the slot. Cancel the NMI-safe ones after
+> +	 * the copy to match arraymap's update semantics; referenced kptrs
+> +	 * stay attached and are destroyed by rhtab_mem_dtor().
+>  	 */
+> -	rhtab_check_and_free_fields(rhtab, elem);
+> +	rhtab_cancel_fields(rhtab, elem);
+>  	return 0;
+>  }
+
+A subsystem pattern flags this as potentially concerning: after this change,
+rhtab_map_update_existing() overwrites an existing map value in place with
+copy_map_value() but then only calls rhtab_cancel_fields(), which now calls
+bpf_map_free_internal_structs() instead of bpf_obj_free_fields().
+bpf_map_free_internal_structs() handles only BPF_TIMER, BPF_WORKQUEUE and
+BPF_TASK_WORK. The BPF_KPTR_REF or BPF_KPTR_PERCPU reference held by the
+value the user just overwrote is no longer released at update time; it stays
+attached to the live element and is only destroyed when the element is
+eventually freed to the slab.
+
+Before the change:
+
+rhtab_check_and_free_fields(rhtab, elem);   /* -> bpf_obj_free_fields() */
+
+After:
+
+rhtab_cancel_fields(rhtab, elem);           /* -> bpf_map_free_internal_structs() */
+
+The change appears intentional and mirrors array_map_update_elem(), which
+was itself converted from bpf_obj_free_fields() to bpf_obj_cancel_fields()
+by a3a81d247651. The reference is not leaked, only its release is deferred:
+the element keeps ownership, and rhtab_mem_dtor() runs bpf_obj_free_fields()
+before returning memory to the allocator. The kptr slot holds at most one
+reference and copy_map_value() never writes it, so repeated updates cannot
+accumulate references. Is this deferred-release semantic for RHASH
+intentional, matching the hash map and array behavior?
+
+> @@ -3066,7 +3109,14 @@ static long rhtab_map_update_elem(struct bpf_map *map, void *key, void *value, u
+>
+>  	memcpy(elem->data, key, map->key_size);
+>  	copy_map_value(map, rhtab_elem_value(elem, map->key_size), value);
+> -	check_and_init_map_value(map, rhtab_elem_value(elem, map->key_size));
+> +	/*
+> +	 * Initialize special fields of the (possibly recycled) element, but
+> +	 * leave kptr slots alone: a recycled element may still own a
+> +	 * referenced kptr that rhtab_mem_dtor() will release, so zeroing it
+> +	 * here would leak the reference. Fresh memory from the bpf mem
+> +	 * allocator is zeroed, so skipping the kptr init is safe there too.
+> +	 */
+> +	rhtab_init_map_value(map, rhtab_elem_value(elem, map->key_size));
+
+A subsystem pattern flags this as potentially concerning: after this change,
+rhtab_map_update_elem() copies the user value into a newly allocated element
+with copy_map_value() and the paired check_and_init_map_value() call is
+replaced by rhtab_init_map_value(), which explicitly skips BPF_KPTR_UNREF,
+BPF_KPTR_REF and BPF_KPTR_PERCPU instead of calling bpf_obj_init_field().
+copy_map_value() also skips special-field offsets via bpf_obj_memcpy(), so
+no code writes the kptr slots of the new element. bpf_mem_cache_alloc() may
+hand back an element recycled from a previous operation whose kptr slots
+were left populated, and the element is then published into the rhashtable
+under a new key while still carrying the previous occupant's kptr.
+
+Before the change:
+
+check_and_init_map_value(map, rhtab_elem_value(elem, map->key_size));
+
+After:
+
+rhtab_init_map_value(map, rhtab_elem_value(elem, map->key_size));
+
+Skipping BPF_KPTR_REF and BPF_KPTR_PERCPU init appears required for the
+accounting to balance: zeroing the slot with bpf_obj_init_field() would drop
+the pointer without running the destructor. The equivalent reference path,
+alloc_htab_elem() for non-prealloc hash maps, performs no special-field
+initialization at all, so htab inherits recycled kptrs the same way. Fresh
+memory from the allocator is verified to be zeroed via __GFP_ZERO. Is the
+kptr inheritance across recycled elements under new keys the intended
+behavior?
 
 
 ---
@@ -175,4 +224,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32741782570
---===============6793583527708650850==--
+--===============1208854577277626609==--
