@@ -1,349 +1,231 @@
-Received: from mta1.migadu.com (out-90.mta1.migadu.com [95.215.58.90])
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C244E42125A
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 13:12:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.90
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787577156; cv=none; b=YyYVsE6nf9StCu4Q1WDbcMCOWsiCtH5TEaBZQPi25o5FiEg0hIwchn/NDaiF6xo9NwzJrWakF3o68aneX0R57Xv5ZGzwhB2TCl+6otoaC+BWNxf3TylJcEF+s5bMeGH+wTw1IOVRgVibvRUOiATEWYECDdVZaTW9QHrlTdjXk/I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787577156; c=relaxed/simple;
-	bh=/b5A6pKJXdJDFq/apoa26JYD1JiLS7wRusBfDVE9t8A=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Y368UltrYHjK0SvAAhakPqpaENLb/3TWa8gCzGkt3tBDKToUh9GJ4TaPbF67yzNlWyKkcw1tiE80BzbVdk75utbSoVEqbbu44QrGqEvlHW4MpZ9M1k/yivYkpg9ZrVlWDtglW7Jbu9BxtJi/PDvwpSsw7uzrK1bS6gGBVa0w2OE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BOoEAsLQ; arc=none smtp.client-ip=95.215.58.90
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0DC5423A85
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 13:14:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787577279; cv=pass; b=PDViDosOpX3rC3mg6IZ9P2hXWm4Xey8fKmnf6uPW9VeTzDm/29ecMmd3ACW3XhuB1xbU+FLInyxuay/HY2XXVE3+d9iVUQBJvsG8y+an9egEoQ7ljwB+7XLSY9srbgrReB3MvsinqKKPuY+UPiBrntHhl6vsSizrNnMWj+Qummo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787577279; c=relaxed/simple;
+	bh=H9ESRqbYFKIzVphlKxi6kHHfLBQ/3zka1Lcl3k+zGKA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rJ+hdfTqmMsHG7DlHt0ZVj0XuHu51XtkxwajVZeqHvPTKOJIAtLPzYzIZRum2+B6SP3Lo6M2uuSzqJwi1IhOy7+EeqVEDT3+Po9VjCkuvcZTup4ljwA5hr2Q+Ykw5CXQ1rkxupmUyt+ytpMXlkgiSNEHqZhcWKW1lpYDyTP3i0o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NYrFf1gd; arc=pass smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BOoEAsLQ"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=/b5A6pKJXdJDFq/apoa26JYD1JiLS7wRusBfDVE9t8A=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787577152; v=1; x=1788181952;
- b=BOoEAsLQzmYT5bu8nMEdHCRy4VSguhfQDyPBJVE08HYsAbcPlwtozpevsCGaw0BmAWqGImn7
- AU0stAAd9jWj1TN8fShNItWqm8sIy0sP8mZ5iVm7oU3ymin3EQBGctmsWLcDkGNhQmhJT5R2prP
- xdKZGsGtcsafYgphfDWmYcsU=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from localhost (2602:fce1:44f:115e::)
-	by smtp.migadu.com with ESMTPS id c9d12fd6d0b2f922;
-	Mon, 24 Aug 2026 13:12:32 +0000
-X-Mizu-Trace-ID: c9d12fd6d0b2f922
-X-Migadu-Flow: FLOW_OUT
-From: Lance Yang <lance.yang@linux.dev>
-To: kirill@shutemov.name
-Cc: akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	nico.pache@linux.dev,
-	baolin.wang@linux.alibaba.com,
-	baohua@kernel.org,
-	dev.jain@arm.com,
-	hughd@google.com,
-	lance.yang@linux.dev,
-	liam@infradead.org,
-	mhocko@suse.com,
-	rppt@kernel.org,
-	ryan.roberts@arm.com,
-	shuah@kernel.org,
-	surenb@google.com,
-	usama.arif@linux.dev,
-	vbabka@kernel.org,
-	ziy@nvidia.com,
-	usama.anjum@arm.com,
-	agordeev@linux.ibm.com,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kas@kernel.org,
-	jannh@google.com,
-	willy@infradead.org,
-	pfalcato@suse.de,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 16/57] mm/collapse: freeze the sources behind migration entries
-Date: Mon, 24 Aug 2026 21:12:24 +0800
-Message-Id: <20260824131224.73344-1-lance.yang@linux.dev>
-X-Mailer: git-send-email 2.39.3 (Apple Git-146)
-In-Reply-To: <20260816224609.308019-17-kirill@shutemov.name>
-References: <20260816224609.308019-17-kirill@shutemov.name>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NYrFf1gd"
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-841f1dfc30fso61490477b3.1
+        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 06:14:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787577272; cv=none;
+        d=google.com; s=arc-20260327;
+        b=lNXYLXIRfzISlXzRE+xncF9AHhvDpQvczi5xGrzqlTfdb4g3sWdkxEheC0ooPqWYKF
+         g/vNH6tdBAHhydwp6nYadjSQEIfIwG/sS/ztjZum+D2pMES5khoqAMoX2zB6CLN1sQlg
+         Vt9o+9qhPtKqBDneSfiy2NvYXXrGZxZ0rQTwEMxiOzvFvlEI1gB9JWXSI4eIxaWAOu8U
+         GYknT59d2fw5tXbZmjFnAd83Hrp4uCx8ewxTzQEyuUjTWeC1vvThEALlkdRLD2Dp/lW5
+         mQqRL8A6AJsqS0CoXwE9KnQoFhiKZ55T5MsO3Yd/zOZnrZdRgwvrno1zyWOJGkWoklRf
+         Z/9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=m4A5oM0s12UDxTBgx5tT3y/RZNqLbYSEaj9e4gxD5is=;
+        fh=HzqyG/YIgusRQkCSZ0HndiveuBBxKFoDZUOQ6zi95oM=;
+        b=NsmYkj9D/Y1aXCarp+5+2hoUdKdUkCa9jalz4lkdmKTyZlk2fOhiWBHHskFKR4xipa
+         1w++zS7eRl9861vwRpd/uGunFtQt2HlfitKoFnsg/lrpgUWPaj+8V7zelPV7sI7yBBeR
+         WrwhZCXQmW0YnKh/p7dNrTjokySikqi27s3izLu5vlt+D8yAB1T8eokdZu1EOn1Yn7bx
+         i0CrGgl1FTWWXi+925Z8VmIxKncYBmznWphDHGQhBPVLYc3ZXodtFV/MQ1v29uIUUAqO
+         PW2dDldtDj+f9TER8ETJM8Q8iDVq3yf11c77+bXmLzwI7jqvGaJ/xIPkihjWAp2lJN0Y
+         gDfg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1787577272; x=1788182072; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=m4A5oM0s12UDxTBgx5tT3y/RZNqLbYSEaj9e4gxD5is=;
+        b=NYrFf1gdnDspYhhpfZzvi0hq3PA6KoNtaG0H+Uwt9KNnzRhkIZn6/CorKt9XW19cP8
+         7VU7kYHSC5EowFgyyB4u9iHu498KFRLTvyYQ8iI7Cb2UKJc2v2E+DhxnGpueV7lD/dvg
+         n/h0/68+2g1sVlmJfIekaHJoPDElJxLTb3g5ooCIDJYIf2U7V+uO2vu383QfocC/Tm2u
+         8yGNs291H77pD7d3Q5P0Pu4dFGyXPHGfiYN4aA0kKhcdyEtRZymOOOgJIjzRIs8SRK0S
+         TKlSSNQCm4oatjI6KnM4HysOdhDgSUEBvNYezuNplR/C+CXf8pZ3Fnuv8WBVCW9UF9Qn
+         lP2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787577272; x=1788182072;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=m4A5oM0s12UDxTBgx5tT3y/RZNqLbYSEaj9e4gxD5is=;
+        b=Bgw8tozecewCQmw0Q6rUXn1+p+LCgFQ2VntB42gp3x6nU2FFm0DuYcUfHWQvLlNyWX
+         U2Gagv0d4ui2biqEp/mlOAdrSVfLvWFZ1TMNhHuEYSOARx5LXJsdjBC+/nY7TQtmPNi/
+         sTnAYFKsFa4FAFC7Y+OFcO7iLUIGbPe/RFCxJbRt3E8DOnoMmrYhQs+n/WjYG1zqUDPB
+         58s0U+MdtegRIZ8OOMQ0gAj79XjwlQ5XNtsd2NzI4Qk0OIVyBAvWjmLiFswPeHQumndt
+         a+kjW/PyNQGtNbSN/vY5VsCL73JNMmruI4F7UnzfWFGo1MxRnefzXa+neofz5P/t5+vi
+         1Muw==
+X-Forwarded-Encrypted: i=1; AHgh+RqheSS/XXuNmbnDPzrRsj21ZUqi0rFOen1fkqEY+prAILUST7EyrUohbCjoNa3ZLzCT4z4=@vger.kernel.org
+X-Gm-Message-State: AFuF++m+L3hjyfXnTxFGFyYbZAKqFgS4Qw6qkdC1wMFpQhKSmN45XY/C
+	pvQq8E/VcPFK+HB9N1oVBnfR1/vxO7UstXAlpmQadsPDKktrSLAPePWumPPkZEAAq1CXfiGkPvh
+	twyAsxh7zrM4UMfg60ktYpFWkVI8MincbOwkKXxY5
+X-Gm-Gg: AR+sD11KzEy/S8qAFq0LHoYwp2lW5/0z3iIWU10+wxMK45I54CYR7NSmBkGh7OCzpuC
+	8/R2GNQODd9yto5nUHHgmBfgKugtj3cM24cs5HcFaOcID3LGs7dHG7P338KXRtV3vGYY4A48Wtr
+	L/t/Sq5XDRnWuEgO3To3vRlUmq+bTAV1H10iBdqkK4fznbRWWNW7clX9n+h7Pk+P5l5EGmGkuAd
+	Nrd5RiPoEQ5gD4YuZC//v25YIlm6Nb01KSQOq74SvSxwp3tmoq0wjBkMuL84YpLafaUOWBoQHe9
+	swMMoNfJ2E/FA7Y633uMQt834l+47V6DVx/bu1u5X261hItWMq9ZzKFWp8rYBhob4dEBc/iGLeR
+	ysmB4WPpdGAYdQqDKkVjBPij/aoo8v/dA4Od9JiRsfjU5HaBo8c7eWNYRDKBa4+KSP9k=
+X-Received: by 2002:a05:690c:e681:10b0:80e:c332:1796 with SMTP id
+ 00721157ae682-8470b3d3316mr89912227b3.10.1787577271496; Mon, 24 Aug 2026
+ 06:14:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260817153957.3177627-1-poros@redhat.com> <CANn89iKZe5reKy5uNxF7_G2=zytnPjWCUn+bX7-iGdJuTjBgMw@mail.gmail.com>
+ <CAL+tcoBX+3_oiy5KCtnBkjEdmDgzY6PYAT2oOqDSLXezDCFfHw@mail.gmail.com>
+In-Reply-To: <CAL+tcoBX+3_oiy5KCtnBkjEdmDgzY6PYAT2oOqDSLXezDCFfHw@mail.gmail.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Mon, 24 Aug 2026 15:14:20 +0200
+X-Gm-Features: AcwNN1Uv9lIX3zmkxdB3EjIqAVKKZ0pLsVj08EKSHGvCV-nTg0FsVN0v-Sg6ExE
+Message-ID: <CANn89i+aacS2PfaMXnimzGgbCLz-JSnqo6QyoS122Gf+kxya3w@mail.gmail.com>
+Subject: Re: [PATCH net] xsk: reset the mac header in the generic Tx path
+To: Jason Xing <kerneljasonxing@gmail.com>
+Cc: Petr Oros <poros@redhat.com>, netdev@vger.kernel.org, 
+	Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Willem de Bruijn <willemb@google.com>, 
+	Vladimir Oltean <olteanv@gmail.com>, Doruk Tan Ozturk <doruk@0sec.ai>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-On Sun, Aug 16, 2026 at 11:45:28PM +0100, Kiryl Shutsemau wrote:
->From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+On Mon, Aug 24, 2026 at 2:47=E2=80=AFPM Jason Xing <kerneljasonxing@gmail.c=
+om> wrote:
 >
-[...]
->+static enum scan_result collapse_freeze_candidate(struct mm_struct *mm,
->+		struct collapse_candidate *cand, pte_t *pte)
->+{
->+	const unsigned int nr_pages = candidate_nr_pages(cand);
->+	unsigned int nr_saved = 0, nr_frozen = 0;
->+	enum scan_result result;
->+	struct folio *folio;
->+	unsigned long addr;
->+	unsigned int i;
->+
->+	for (i = 0, addr = cand->addr; i < nr_pages;) {
->+		pte_t ptent = ptep_get(pte + i);
->+		unsigned int nr, nr_max, k;
->+		pte_t rep;
->+
->+		if (pte_none(ptent)) {
->+			/* Hole: nothing to freeze; install verifies it stayed one */
->+			cand->saved_ptes[i] = ptent;
->+			nr_saved = ++i;
->+			addr += PAGE_SIZE;
->+			continue;
->+		}
->+		if (is_zero_pfn(pte_pfn(ptent))) {
->+			/*
->+			 * Clear the zeropage mapping now, covered by the round's
->+			 * ranged flush: overwriting a live PTE at install would
->+			 * be a valid->valid transition, breaking arm64's
->+			 * break-before-make.  The zeropage has neither rmap nor
->+			 * per-map references -- the saved value alone undoes it.
->+			 */
->+			cand->saved_ptes[i] =
->+				ptep_get_and_clear(mm, addr, pte + i);
->+			nr_saved = ++i;
->+			addr += PAGE_SIZE;
->+			continue;
->+		}
->+
->+		folio = pte_folio(ptent);
->+
->+		/*
->+		 * A folio revisited by a second span of this round is already
->+		 * ours and frozen at its first span: folio_get() on a zero count
->+		 * is a bug, and try-get fails cleanly.  Scrambled layouts
->+		 * (mremap) construct this; nothing else can hold a folio frozen
->+		 * while its PTE is live under our ptl, so it is not transient.
->+		 */
->+		if (!folio_try_get(folio)) {
->+			result = SCAN_PAGE_COUNT;
->+			goto unfreeze;
->+		}
->+		if (!folio_trylock(folio)) {
->+			folio_put(folio);
->+			result = SCAN_PAGE_LOCK;
->+			goto unfreeze;
->+		}
->+
->+		/*
->+		 * Never freeze a folio under writeback.  PG_writeback holds no
->+		 * reference of its own -- the swapcache reference keeps the folio
->+		 * alive, and everything that would drop it waits for the flag --
->+		 * so folio_end_writeback() plain folio_get()s a folio it may
->+		 * assume is alive: a BUG on a frozen one, or with
->+		 * CONFIG_DEBUG_VM off, a free under our copy.
->+		 *
->+		 * Unlike every other hazard here, the freeze does not catch it.
->+		 * folio_expected_ref_count() counts the swapcache reference, so
->+		 * the count is exactly right and the freeze succeeds.  Nor can
->+		 * "is it in the swapcache" stand in for this test: that would
->+		 * refuse the pages the fault-in pass just swapped in.
->+		 *
->+		 * Reachable even though writeback starts on an unmapped folio: a
->+		 * re-fault from the swapcache maps it back before the bio
->+		 * completes, and folio_free_swap() will not drop the cache entry
->+		 * under writeback.  Testing once is enough -- writeback starts
->+		 * only under the folio lock, which we hold from here through
->+		 * putback.
->+		 */
->+		if (folio_test_writeback(folio)) {
->+			folio_unlock(folio);
->+			folio_put(folio);
->+			result = SCAN_PAGE_DIRTY_OR_WRITEBACK;
->+			goto unfreeze;
->+		}
->+
->+		/* Each slot's own value: a span agrees on the PFN, not the rest */
->+		cand->saved_ptes[i] = ptent;
->+		nr_max = collapse_span_max(ptent, nr_pages - i);
->+		for (nr = 1; nr < nr_max; nr++) {
->+			pte_t tail = ptep_get(pte + i + nr);
->+
->+			if (!pte_present(tail) ||
->+			    pte_pfn(tail) != pte_pfn(ptent) + nr)
->+				break;
->+			cand->saved_ptes[i + nr] = tail;
->+		}
->+
->+		/*
->+		 * The clear is the GUP-fast linearization point: a grab landing
->+		 * before it elevates the refcount and the freeze below fails
->+		 * (the candidate unfreezes); one landing after fails its PTE
->+		 * re-read and retries.  Clear and store sit adjacent under one
->+		 * uninterrupted ptl hold, batched per span
->+		 * (get_and_clear_full_ptes() unfolds contpte), so the transient
->+		 * none window is invisible to installers, which all take the ptl.
->+		 */
->+		rep = get_and_clear_full_ptes(mm, addr, pte + i, nr, 0);
->+
->+		/*
->+		 * Dirty from the clear -- including any the hardware set since
->+		 * the reads above -- goes to the folio, the way unmap does,
->+		 * rather than onto PTEs that never had it.  Young needs no such
->+		 * care: a migration entry drops it either way.
->+		 */
->+		if (pte_dirty(rep))
->+			folio_mark_dirty(folio);
->+
->+		for (k = 0; k < nr; k++) {
->+			pte_t saved = cand->saved_ptes[i + k];
->+			swp_entry_t entry;
->+			pte_t swp_pte;
->+
->+			entry = make_readable_migration_entry(pte_pfn(saved));
->+			swp_pte = swp_entry_to_pte(entry);
->+			if (pte_soft_dirty(saved))
->+				swp_pte = pte_swp_mksoft_dirty(swp_pte);
->+			set_pte_at(mm, addr + k * PAGE_SIZE, pte + i + k,
->+				   swp_pte);
->+		}
->+		nr_saved = i + nr;
->+
->+		if (!folio_ref_freeze(folio,
->+				      folio_expected_ref_count(folio) + 1)) {
->+			result = SCAN_PAGE_COUNT;
->+			goto unfreeze;
->+		}
->+		nr_frozen = nr_saved;
+> On Fri, Aug 21, 2026 at 1:07=E2=80=AFAM Eric Dumazet <edumazet@google.com=
+> wrote:
+> >
+> > On Mon, Aug 17, 2026 at 5:40=E2=80=AFPM Petr Oros <poros@redhat.com> wr=
+ote:
+> > >
+> > > __dev_queue_xmit() resets skb->mac_header, __dev_direct_xmit() does n=
+ot,
+> > > so a frame taking the qdisc bypass path reaches ndo_start_xmit() with
+> > > the sentinel left by __finalize_skb_around() and skb_mac_header() poi=
+nts
+> > > 65535 bytes past skb->head.
+> > >
+> > > The packet socket reaches it through packet_direct_xmit(), and
+> > > packet_parse_headers() was taught to anchor the header by
+> > > commit c2707480cfbf ("net/packet: reset the MAC header on the
+> > > packet-socket transmit path"). AF_XDP reaches it through
+> > > __xsk_generic_xmit(), and net/xdp/xsk.c never sets the mac header.
+> > >
+> > > ice reads eth->h_proto through skb_mac_header() on its ordinary Tx pa=
+th.
+> > > On an E810 every one of 2817224 AF_XDP frames reached the driver with=
+ the
+> > > sentinel still in place, so the ethertype never came from the frame. =
+With
+> > > this patch all 5757920 frames of the same test carried the correct 0x=
+88b5.
+> > > An AF_PACKET sender on the same port read 0x88b5 in both runs.
+> > >
+> > > On a KFENCE kernel that read lands inside the pool and gets reported =
+as a
+> > > use after free of an unrelated object, 387 times in a 180 s run:
+> > >
+> > >         BUG: KFENCE: use-after-free read in ice_xmit_frame_ring+0xddb=
+/0x1650 [ice]
+> > >          ice_xmit_frame_ring+0xddb/0x1650 [ice]
+> > >          __dev_direct_xmit+0x347/0x4d0
+> > >          __xsk_generic_xmit+0xc13/0x1e70
+> > >          __xsk_sendmsg.constprop.0.isra.0+0x519/0x640
+> > >          xsk_sendmsg+0x6c/0x90
+> > >
+> > > Rerunning the same reproducer on the same E810 with this patch applie=
+d
+> > > produced no reports and no bad reads.
+> > >
+> > > Anchor the header in xsk_skb_init_misc(), which runs once per skb for
+> > > both build paths. With IFF_TX_SKB_NO_LINEAR the offset still is not a
+> > > real header, but it stays in bounds and no such driver reads it.
+> > >
+> > > Fixes: 35fcde7f8deb ("xsk: support for Tx")
+> > > Signed-off-by: Petr Oros <poros@redhat.com>
+> > > ---
+> > >  net/xdp/xsk.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> > > index 7855ee09c4b640..885427392cb6b3 100644
+> > > --- a/net/xdp/xsk.c
+> > > +++ b/net/xdp/xsk.c
+> > > @@ -931,6 +931,7 @@ static int xsk_skb_init_misc(struct sk_buff *skb,=
+ struct xdp_sock *xs,
+> > >         skb->priority =3D READ_ONCE(xs->sk.sk_priority);
+> > >         skb->mark =3D READ_ONCE(xs->sk.sk_mark);
+> > >         skb->destructor =3D xsk_destruct_skb;
+> > > +       skb_reset_mac_header(skb);
+> >
+> > I don't know, I had at some point the goal of removing our dependency
+> > on mac header in ndo_start_xmit(),
+> > as this must be skb->data.
+> >
+> > ice could use skb_eth_hdr() instead of eth_hdr() or skb_mac_header()
+> > and save few cycles.
+> >
+> > Some drivers call skb_reset_mac_header(skb), this is really a mess.
+> >
+> > With AI these days, it should not be too hard to completely remove our
+> > dependency on mac_header.
+> >
+>
+> I saw the status has been changed to 'rejected'. Why is that, I
+> wonder? I think it's just a fix that can be done in xsk like
+> skb_reset_network_header() that I'm going to add.
+>
 
-Just one thing I was wondering about ... can deferred_split_isolate()
-remove a source folio from deferred_split_lru while its refcount is
-frozen by collapse_freeze_candidate()?
+skb_reset_network_header() is orthogonal.
 
-Assume an earlier span belongs to an anonymous large folio on the
-deferred split queue, then a later span fails folio_trylock().
-collapse_freeze_candidate() continues after freezing each source folio
-and calls collapse_unfreeze_candidate() on a later failure:
+Patching net/xdp/xsk.c (and follow-up network header resets) only covers on=
+e
+caller while leaving the core issue open.
 
-static noinline enum scan_result collapse_freeze_candidate(struct mm_struct *mm,
-		struct collapse_candidate *cand, pte_t *pte)
-{
+The discrepancy is that __dev_queue_xmit() unconditionally executes
+skb_reset_mac_header(skb), whereas __dev_direct_xmit() does not.
+
+As a result, other paths bypassing qdisc hit the exact same out-of-bounds r=
+ead
+in ice. For example, AF_PACKET with PACKET_QDISC_BYPASS only resets mac_hea=
+der
+in packet_parse_headers() under:
+
+if ((!skb->protocol || skb->protocol =3D=3D htons(ETH_P_ALL)) &&
+   sock->type =3D=3D SOCK_RAW) {
+skb_reset_mac_header(skb);
 ...
-	for (i = 0, addr = cand->addr; i < nr_pages;) {
-...
-		if (!folio_trylock(folio)) {
-			folio_put(folio);
-			result = SCAN_PAGE_LOCK;
-			goto unfreeze;
-		}
-...
-		nr_saved = i + nr;
-
-		if (!folio_ref_freeze(folio,
-				      folio_expected_ref_count(folio) + 1)) {
-			result = SCAN_PAGE_COUNT;
-			goto unfreeze;
-		}
-		nr_frozen = nr_saved;
-
-		i += nr;
-		addr += nr * PAGE_SIZE;
-	}
-
-...
-unfreeze:
-	collapse_unfreeze_candidate(mm, cand, pte, nr_saved, nr_frozen);
-	return result;
 }
 
-folio_ref_freeze() takes the source folio's refcount to zero:
+Any PACKET_QDISC_BYPASS socket using SOCK_DGRAM or SOCK_RAW with an explici=
+t
+protocol (e.g. ETH_P_IP) sends an skb with mac_header unset (0xffff sentine=
+l)
+directly into ndo_start_xmit().
 
-static inline int folio_ref_freeze(struct folio *folio, int count)
-{
-	return page_ref_freeze(&folio->page, count);
-}
+If the core stack was expected to guarantee mac_header for direct xmit, tha=
+t
+reset belongs in __dev_direct_xmit(), not duplicated in xsk, packet,
+selftests, etc.
 
-static inline int page_ref_freeze(struct page *page, int count)
-{
-	int ret = likely(atomic_cmpxchg(&page->_refcount, count, 0) == count);
+Work in net-next would presumably audit / change all drivers to not
+rely on mac_header
+being set (This I can do when net-next reopens)
 
-...
-	return ret;
-}
-
-While collapse_freeze_candidate() still holds the source folio lock,
-deferred_split_scan() can call deferred_split_isolate():
-
-static unsigned long deferred_split_scan(struct shrinker *shrink,
-		struct shrink_control *sc)
-{
-	LIST_HEAD(dispose);
-	struct folio *folio, *next;
-	int split = 0;
-	unsigned long isolated;
-
-	isolated = list_lru_shrink_walk_irq(&deferred_split_lru, sc,
-					    deferred_split_isolate, &dispose);
-}
-
-static enum lru_status deferred_split_isolate(struct list_head *item,
-					      struct list_lru_one *lru,
-					      void *cb_arg)
-{
-	struct folio *folio = container_of(item, struct folio, _deferred_list);
-	struct list_head *freeable = cb_arg;
-
-	if (folio_try_get(folio)) {
-		list_lru_isolate_move(lru, item, freeable);
-		return LRU_REMOVED;
-	}
-
-	/*
-	 * We lost race with folio_put(). Read folio state before the
-	 * isolate: folio_unqueue_deferred_split() checks list_empty()
-	 * locklessly, so once removed the folio can be freed any time.
-	 */
-	if (folio_test_partially_mapped(folio)) {
-		folio_clear_partially_mapped(folio);
-		mod_mthp_stat(folio_order(folio),
-			      MTHP_STAT_NR_ANON_PARTIALLY_MAPPED, -1);
-	}
-	list_lru_isolate(lru, item);
-	return LRU_REMOVED;
-}
-
-And folio_try_get() fails because the source folio has a frozen refcount.
-deferred_split_isolate() treats the failure as a race with folio_put(),
-clears PG_partially_mapped and its MTHP_STAT_NR_ANON_PARTIALLY_MAPPED
-accounting when set, then removes the folio from deferred_split_lru ...
-
->+
->+		i += nr;
->+		addr += nr * PAGE_SIZE;
->+	}
->+
->+	cand->state = CAND_FROZEN;
->+	return SCAN_SUCCEED;
->+
->+unfreeze:
->+	collapse_unfreeze_candidate(mm, cand, pte, nr_saved, nr_frozen);
->+	return result;
-
-And collapse_unfreeze_candidate() restores the source PTEs and refcount,
-then unlocks and puts the source folio :)
-
-The source folio is not added back to the deferred split queue, so an
-underused or partially mapped folio can remain off the queue.
-
-Should collapse unqueue the source folio after folio_ref_freeze()
-succeeds, remember whether it was on the deferred split queue and whether
-PG_partially_mapped was set, then requeue it if
-collapse_unfreeze_candidate() restores the source folio?
-
-[...]
-
-Cheers, Lance
+Then we can remove skb_reset_mac_header(skb) from __dev_queue_xmit()
+and __dev_direct_xmit(), and from dpaa_tx() / dpaa_tx_extended()
