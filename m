@@ -1,192 +1,191 @@
-Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011056.outbound.protection.outlook.com [52.101.57.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5481D282F12;
-	Mon, 24 Aug 2026 10:48:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.56
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787568503; cv=fail; b=SlMMuaiDNtuqKj2yHtuXsKedhBWcxb1wP+uZXIiml3vt+2dsCBhwM9dyljgWQ+Z7D4Dt5ApjD4OErIRr6+ourcOrtgiMA95VlMm5h4zaxR35hyDxUUZ3LTHjxbjZCOpj4c/so52YEALLoRYUg/niuTNONDRP/g0aFu/RhxIZNhs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787568503; c=relaxed/simple;
-	bh=Jy2E5J7xdi4V0lQxoFamVUfPUCqEuTjjd+TqB6LRMFY=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=KmAsU18V/h+hhcjT4CZbNVPqT44anCQp7rl+GLDjW+0AlfNTtustB1RAlAccA4+0BPIEqPlGT9QypVArOK4VIXRyUN3j2Ag+7UHnaHzieZppBk0RwwZqREhk8rgojTFazGANSCnFfc3fCZWrpDeqF4ciTgj+FTZcruXVuRWsu3A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=otvCfM8n; arc=fail smtp.client-ip=52.101.57.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 082F73A9630
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 10:49:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787568600; cv=none; b=B73l6fhAh6NyOnb8FpRJBR9zXBVGJ0PCSKW2V+oEMWczOZ6nG47nTxspW8W4dJAAsQQ//VVRChXx20GDyJAYWU4i7xkKBpefMRg4wnS8Xeyv4OoK22gmi14eaMkVpx452BJZ8s6uYh8TNUcr8e/FXeFuVcHjUqWlt0rTzxac3uw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787568600; c=relaxed/simple;
+	bh=9/5FmTiNUNjJFDcgH5TqdZlD6TMa0N0OQTmCfTGJzbw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RcEDwxadxSq8B7Ys+DQKaFXkS43LTEOG7vvEimgeO+6Zz1zN4i4HQAvo7TLyluXzJF0y0W9Lyoga98tF0FheXC72OTQQ7jN3aDTUkpNFcCiOgZlZvqaWezzM98F0Jigz1ei4FC4wPflKKzReZ2QDbQ150gqXP85/8CNu+6UjQ3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iNqtlhIl; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="otvCfM8n"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=I9CC7ge4zURTMH9LFb/LYPDQksS1G+cxKImvW6OI8rPKuDn4GnNgjEL8hBiQOdfzyV66undCj2Me0wHeXufb2K6ilLTSM8/kLsPPAym+N1C+LzndFZ11703A3vDBAIR4a4FNUleDrZGXNq+Q7G0J7XUBOFeGrfrFnIETRiNdlGCkuwTqLLnfMOsoH1dxcPHzPNXArdF7PPfbdYWzSb6X+sFbWnILEV1m2EvKMA0/JiGexquZEbN2Zw20F8LSNXyVfvCJrYwkZ0CN4AUgJdFjsdKWrCB8nVWMCAJp8X4Xiy28KdGywnq3BIZFRufCQaXf2hzaL1b8nbMGzkDOIGevcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kGM8YvRWqjFqBuQlY/QeDKxAeedk5yZDuPKLFP3ZqKk=;
- b=oWnRYal7fG0CexORHi7fQ3PsFCV9SEsDYqqoZliT2Ka2iWeIlraLJZa49/AnHPeHisFQYYk0en8lUlcootwW5Cg/+RFt1KREV03d7gGFSYrba81H6JpmU53xDWR+vC4FAgguPKLsxjEJ3YQADlX32Zxn1guL+ktNbbHCchMdqlxIUzxyaKHWHVrz3IsZKXCTe1QpNvnk35G03pcPXIy7f13hbkVCxWfSTcj4Xd9mUDzwVAGVWlpNzkIimFkHWM9DrLRgeB9RonSu5qhxRUPQPcSS3B4IOocAs5EeNrpmPxz3eSHnEmK1FdXUGswNPV+qwVszphXx2KIjqScp9kqlvw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kGM8YvRWqjFqBuQlY/QeDKxAeedk5yZDuPKLFP3ZqKk=;
- b=otvCfM8ntZh0JofDvGKFTzd1YDvsJY3rDsYOJXetjRDiW5mN/kCx6IPoq4YbGZnfGZeH1lIdyTMN+BOp43wmJtn1aJjwCSbn4Ol1R9j4oG1BP71+Q+5AZpEFZfshGpm88Rtg4Yh7/66kUn+O6RmQTw32tZkq9ByBB6wV0QW6L+CMK+/rYwPlv7RLhg27tosieTTVMydEfAoHQ94SsHfxpNbK7I3WNAGugEo3uR5ZYf1fSbiJTnHHRKjFnzyvpx6M+gvN1AToi3z4LDPs5B0kAP/EaDgEtAHvDGbO4gpq12TQKzJdJPJjuMkwJZC7icAI3GU3I80DspDKHogH0nFKXg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8728.namprd12.prod.outlook.com (2603:10b6:610:171::12)
- by CH2PR12MB4245.namprd12.prod.outlook.com (2603:10b6:610:af::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.12; Mon, 24 Aug
- 2026 10:48:16 +0000
-Received: from CH3PR12MB8728.namprd12.prod.outlook.com
- ([fe80::2641:1046:bdf3:93d7]) by CH3PR12MB8728.namprd12.prod.outlook.com
- ([fe80::2641:1046:bdf3:93d7%6]) with mapi id 15.21.0339.012; Mon, 24 Aug 2026
- 10:48:16 +0000
-Message-ID: <b4abc8e4-aa9e-4e92-97b8-c6a661014c16@nvidia.com>
-Date: Mon, 24 Aug 2026 12:48:10 +0200
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net v3 2/2] net/mlx5e: Prevent stale XSK buffer release on
- MPWQE refill retry
-To: Jerome Tollet <jtollet@cisco.com>, netdev@vger.kernel.org
-Cc: saeedm@nvidia.com, tariqt@nvidia.com, mbloch@nvidia.com,
- leonro@nvidia.com, daniel@iogearbox.net, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, ast@kernel.org, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, linux-rdma@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, stable@vger.kernel.org
-References: <20260820151558.11015-1-jtollet@cisco.com>
- <cover.1787347981.git.jtollet@cisco.com>
- <675ce8a404cfe305e788a8e273b4091c9a90f867.1787347981.git.jtollet@cisco.com>
-Content-Language: en-US
-From: Dragos Tatulea <dtatulea@nvidia.com>
-In-Reply-To: <675ce8a404cfe305e788a8e273b4091c9a90f867.1787347981.git.jtollet@cisco.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0075.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9a::17) To CH3PR12MB8728.namprd12.prod.outlook.com
- (2603:10b6:610:171::12)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iNqtlhIl"
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-c15d3cd51b2so496049966b.3
+        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 03:49:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787568596; x=1788173396; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=nOd8+4g2mnunbTTjfkzCI8WvVdyCHxk83j5KrKNRFdg=;
+        b=iNqtlhIlX7p9KvhuZlW+Yqi46IQu3N8hGulfoHBax2dGORT9oLq8ElIoezjSD/2RGC
+         WBOT1zXWPb4pp1Qn8XiFxjkGnAF5zV8KgDdzlDKORVvTXWGUkMrM/f0MkgZRYN1Uj+tk
+         THIdma38C4c0BUO9Bm36IHaEUKEune9Q+bGb12z747QwlWKUa5r29lq5e/8AwI38/GO9
+         feCo6IU7xXC2kdRwsAYaePzbkDsz8DU5qCf/kV3h5I/Lg9fGlNL2L9hzg0+HFajKJWwh
+         E5bjoN/a0OuGqTbXklPTFTpFf9+oa/qEmT9R76PdEHdxmuYrUardP/K+Iw48cCMCc9+j
+         Soww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787568596; x=1788173396;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=nOd8+4g2mnunbTTjfkzCI8WvVdyCHxk83j5KrKNRFdg=;
+        b=F8jZqE8sPBdTKF8wduWirccNtu2bm8U7RFUs+om4WGzAL+gwlsd0MLYCln72JsW5iJ
+         pOjxd6tNIXMtkdod6DBGMeIEI++07rupNviGpGqQlC6r9QKh/8WgXekXf075L4pFY7wh
+         8Oijpu9aHAQHzhCbwn2gLPpTgoOh73WdiVtgZ4TJhTTY5oFBl/CBWpgG5nEfH34J4Uun
+         yZLpHQYou+ueGmZ3iC0wKy5XnO4k4Q4FhbOeceXxGDVCC4oNJIPKEmIS9g5rMQEXc6bz
+         7YMGjnj/yiOXux6j4+AdZy8d13OmBeX02ZzBJZ935EoUwPu/ijz/aYO3NwE+MwCRBwVL
+         dGvw==
+X-Forwarded-Encrypted: i=1; AHgh+RrluVevnDjNcFgTHu3vdt3vpuTsnJP+a6MniHGOaD7hO1d1SYyQ+CC7WLo3c54qMnzKVLM=@vger.kernel.org
+X-Gm-Message-State: AFuF++lqWBgRGb69KDgSS9oj21qjCmQ5+W5dpCQVBpI3XimDvO+NyoH1
+	53j4Qe8UU4sS/j4195NcMaZNEMxonD+t1B/KUt77WGbt1TJBEW7gjK6M
+X-Gm-Gg: AR+sD13hoP0pF6u2cPpRePWcBvNMVXcQkhY0mjYSra7gZyDKtlDoLJJTOoJBmLHeDCS
+	EiwHb6Ww5EePYtzh6anDnj4HPf2+AtD7AgPS+Gs2xJcwYQXYcudngkkYJ1FqezAnWNmiRr8dx+B
+	PGe/29F6+Mr/eaymCLuqB63EYxF9jd6l79/CwApIIVGzHXJtMG6AICwSGRQCnoL6r0uaeUt/2DL
+	UKOEEhHfKjGlVR3ftLaiK2Z/13reETgaPvMQ4O4kZ3ofh6ESaBQvyqqRXfBLuH8bsTlkF6CkGXY
+	s8EFY9Ptyoq35dGTC/OSwYQT0EP+k5DURDnTB6oqC4osrjOjCvPAWPtgM6ZocFvnjhOgbm53nER
+	7cCN1Xdzg9+jm33gs7MryyrkoNQ1sgGc1vUvuF6yV8OoPdefobAQ32Qzxy8W8ZuxsgHhJFy/9M6
+	q3p56+gW4xNm4BCnxBNHTTJsG0nHOOB9WsugigNnldI4mkA8S4/g2XUEVv70qjtUYPZWh144Mmt
+	yLc
+X-Received: by 2002:a17:907:97c4:b0:c20:af9d:454a with SMTP id a640c23a62f3a-c2492621bf8mr1999188266b.16.1787568595897;
+        Mon, 24 Aug 2026 03:49:55 -0700 (PDT)
+Received: from dell-desktop ([2a02:587:4b5e:1100:7303:647d:7cc4:8552])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c249672becesm1236373966b.42.2026.08.24.03.49.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Aug 2026 03:49:55 -0700 (PDT)
+From: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
+To: andrii.nakryiko@gmail.com
+Cc: akpm@linux-foundation.org,
+	andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	brauner@kernel.org,
+	daniel@iogearbox.net,
+	david@kernel.org,
+	eddyz87@gmail.com,
+	kpsingh@kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	matt@bobrowski.net,
+	memxor@gmail.com,
+	song@kernel.org,
+	tasos.papagiannnis@gmail.com,
+	utilityemal77@gmail.com,
+	viro@zeniv.linux.org.uk
+Subject: Re: [PATCH bpf-next 2/3] bpf: Add user memory access kfuncs for linux_binprm
+Date: Mon, 24 Aug 2026 13:49:30 +0300
+Message-ID: <20260824104930.83453-1-tasos.papagiannnis@gmail.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <CAEf4BzZTM5SehNnM83U3Kj0cz=NN=JwUtG-pcvSHdvZBsHdM3g@mail.gmail.com>
+References: <CAEf4BzZTM5SehNnM83U3Kj0cz=NN=JwUtG-pcvSHdvZBsHdM3g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8728:EE_|CH2PR12MB4245:EE_
-X-MS-Office365-Filtering-Correlation-Id: f97cb439-452f-404f-96cf-08df01cd3409
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|1800799024|366016|23010399003|10067099003|56012099006|11063799006|4143699003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	JY42zwRivUnCyDxGk6zYwx8E4hRNgszoqI0VJpY6O0yxHPpwZ56GLMtLe9j55SkfSe5ZrJNL6E4uoBuYga+15PRJ2yXWuHFznSfC8WSdHdJCgfnazm/u03IA5Nu5AJteUigdKrKky5EKufxCOpkQCR94TfRFuq8B6Y3VEODtWEwP26iDKlGf9IbqH/YrmHUkmhNS8bHLTsnWTi07EshEilJlrAET+d9ulEoBgNx34arYTqXOCM3XIFg+TPbzPhGXL/FR2W39nOWXR63QQVwENfU29tHnQotzHYNS5Fw3xl/UY1/tJwXdrfck/gRwLuQDCwUCDhAWZVVz5AQwuUOMUUoF3hn7UA0QM/YFCluhcarlCNCcv301jUJ0JMhUhjZWtQy1719HijTOKF5NlHYltdu5OUenCIrdqMo5UlRTrQlpX+9s2zmZXqdaVyPuUBMNrrm6l+6wDQ85V8Bv3dHi9dzREzyfvc8CimMT5oQXvrUgXxPzTG4nh83w8UO0fCv73k82Y8j8sZVcY7vQUtt2vsGTaqnCXz/Dv48E0PnpJAsOiKC2QdN7YIi/ojjL4t9iGyGuAtQzxgoZcl6zxK6GRRIk6EIZaYE4O2NBgutNR5XdENjnaF0UYCZ8XEJrw7CAeBCql0LmTI9L68Vv1h9xdnTTvQsuEXaGn+xqmtTfYD0=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8728.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(23010399003)(10067099003)(56012099006)(11063799006)(4143699003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?UU4ydHZ5NmJQTmE0UWRjWjN6SDhFdW4yV3RwKzJoRjBKWkhvc3Y2RWc5cDBD?=
- =?utf-8?B?MGhMWEFRTUtPcm9QQ0FndEVVNjY3TU9qM3N4NVFaeUJHeHNJMi9Ea2ZyWkZp?=
- =?utf-8?B?MkgxNlpzYmZ1VWJ1cnQyTWxYQXYwNkZhS2JQcnYrOFpCU0F3T21PUThyUzk3?=
- =?utf-8?B?a0JyTzdkVjNTQ3ZhOW5YYThsOXhuTmVCRWhtcVRLWFZURGNVUmNSbTRWWlRV?=
- =?utf-8?B?OTUvdXJ5VUdEMWJaeE1hMG5WekcyUDA1enUzREZEc1gxQUxOYWRZcGQvQ0Vu?=
- =?utf-8?B?UXZKNlpLVG9vU0FWMFI5aHJsY0d1N2M0NEVIamY1ZTFTRzBJcUpWUWVxQm1K?=
- =?utf-8?B?elhSajJ5SzhjZjk2bXZJMDZrbkh5dGJCVmpwaytaWS9qQjNiTzNMMVRVUW9U?=
- =?utf-8?B?aGFmaGJsM3h6dUZrZW0yRlRmTmxzbTgzREZ6cGJ0M0ZQNS91M1MvdWF0L1FZ?=
- =?utf-8?B?di9EYU96NzJSV2I3ZWRjY3V0UnA4TEx2MHZuZ1FQaGxVUjhkNXJqOGZhY1M5?=
- =?utf-8?B?SHJOVkozbWtnTXppV3FrWWZmMyttY09DdkxNaW9YV1QxYUxGWThzdUFPNXZm?=
- =?utf-8?B?bVRsRFRjcHNkTS9DTEZOdUhZM29SSHF6d2kyZlRWUlJNRG5ZaGxpSTRyQStM?=
- =?utf-8?B?ZFBhaVZoYmpZclZUd1IzNnZJTVI4SlQ3OGdTc21kWUR0dHVIOWVjZmpoaEJ1?=
- =?utf-8?B?OGE5NnI3aU00TEFRSjg4d3B0QlpkVUEvd1F6ejhKZ3hpK0t0THRkQkNOeDBY?=
- =?utf-8?B?K2t2emtRTHZJc3ZWUjM5aWFmWVdGVVhFLzVCZFg2SnlHNUN3Q1QyaXc5UVla?=
- =?utf-8?B?OHJuMGE4blE0SkVLMmxlT2hrWi95M1M5U3hUOVZmZ0dIci9LQWxrUGlITjg1?=
- =?utf-8?B?KzQxRHVPbW5JSzVxZmd5dVZZanp5cTFsZXRHMlFjUXVpNE9jS1V2S0VGUExp?=
- =?utf-8?B?M3VhYmszSWxkb3c5NkVXeTFxR0lHY0laaG81bjh6eXNKaDZtYlVVUThFRXR2?=
- =?utf-8?B?aDJILzhJMkxMOEg0cTRIemR0c1ExaS9tOFZzMFlnSzREbzkyT0pFQnlMRnc3?=
- =?utf-8?B?SEwwRFYzVzM4ekNZOU8xOEV1cUhzVllkaStMaVdhcC9PdFZGcGhNYSsyQTR3?=
- =?utf-8?B?ZGpnaXJPQ251QU5KZnRXWllsQVM5aFBDTmxLamhrdWhVMDdsd0ZpcDlQRW9P?=
- =?utf-8?B?c1JhVzZMY2xtV1hwT1FRY3RueDUrMlh5amxuSkZOVjVEcnNYNCtNUjIvQmp2?=
- =?utf-8?B?Tk4yMkJuUTBBSjRvNmJPZ2pxRGJITVNMRzZIa1BUVVEzQTBOSVVEMGx0SmFp?=
- =?utf-8?B?UG5QMWdnQkM0OEpPTUlRb0hIL3kxYUxnL1d2TFRDMTFxczlSQzBMcXNjejNE?=
- =?utf-8?B?ek9DTXpBWFIyc0lQK0IxZGZpM2JGRy84bit5UG5keHVkNm8wTDdETkFreUpo?=
- =?utf-8?B?WStiOUh6L2xsK0lBMFBCUzNLU1ArYU53RXNIU1VJYk1mSDFKdCtaMFFGNFBC?=
- =?utf-8?B?RHN4eDdNcS9pYTJsT2VoOFVUY3FtTVVmNTNQODRkZFVnQWRONGdpZHZlVTl4?=
- =?utf-8?B?VFFLZmRTbXNraGxXL2RCUTErcjdVMkxhQXV3cm5RSW04TG5wMnRtVVp3eUg1?=
- =?utf-8?B?QnBCMERJQk9VOTVRbEpJek10MStZczlkUXdYclQrYnVOdVowMjVUL29IRkRh?=
- =?utf-8?B?Mmd2cHlWZzJ1ZjZRZ0JpMXliU2xTSjkvU29TV1U3Y3I5SDZwaFEvV2tIVHQ2?=
- =?utf-8?B?ck52a2taMjVPUExROHM0ZjFxTy9nVGhYZkJyN2NLK1RCUktRVU5xQ1g0Qk1F?=
- =?utf-8?B?R1J3S09ib08vQml5TmZpSXA5c3ZxdWxCVDJ4S3N5d0RkaHVLQ0NZOW1kckV4?=
- =?utf-8?B?QnR5MDcxL1JyazR5aldYYllWNVliRkhCVmRVQkhPWjgrZEhkLzFwSk16c3po?=
- =?utf-8?B?ZURxY3JLTStjM2I0KzZEMlYxdHR0TElIcGlSQnJxeFJKT3U5TXptUzlkRmxT?=
- =?utf-8?B?dVBQdGVJZ2lpNHVpTm9MSFo4TFBOOHBvb2hRaTRsajVEd2pjYjJxZ0Zpcml6?=
- =?utf-8?B?TGpaMDVFaHdPSjZweDFRT2x6ZUJOekd0NHY3eHNwQnZGeUFyei9pMld0L1Z5?=
- =?utf-8?B?UVluWHFtRUs5MkdrcjhVSUxleXQwSERxWEtZVFZQZFdwdXpML2ZMaFgrSGNy?=
- =?utf-8?B?WVdzZkhFNXQrY3JDaTB5MkZtZVB0TVZzZmJ6OE1OdUhNT3NRWjVjd0s5OFF4?=
- =?utf-8?B?MnVrdHIvUUhQSisrQ3NLYkZ2SEFUdXNFOGYwWnp4UkxlRTRyclY3aXRDUFEx?=
- =?utf-8?B?YjNibG9LcXdmUnB6cFFiZThXdGEwU2s5Z2FIeEZrd2h6M3VIYXBQdz09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f97cb439-452f-404f-96cf-08df01cd3409
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8728.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2026 10:48:16.5314
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: a8ur94K9ptIIHdBw6+cL4TVa67W1lj51fR5TI8Yj3n2VTg22qGG4OlxXX8LJO7HsIkJSH9R/HoDg9uNhWXZoNw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4245
+Content-Transfer-Encoding: 8bit
 
+Thanks for the review!
 
+> making this linux_binprm-specific seems short-sighted and overly
+> specialized, why not pass `const struct mm *` and call new kfuncs
+> bpf_copy_from_user_mm[_str] ?
 
-On 21.08.26 23:37, Jerome Tollet wrote:
-> With AF_XDP on a striding RQ, mlx5e defers releasing XSK buffers until
-> an MPWQE is refilled. If XSK allocation then returns -ENOMEM,
-> actual_wq_head is not advanced and a later NAPI poll retries the same
-> WQE.
-> 
-> mlx5e_free_rx_mpwqe() currently leaves each released slot marked as
-> releasable. On retry it can therefore call xsk_buff_free() again through
-> stale pointers after the frames have returned to the XSK pool and been
-> reallocated.
-> 
-> Mark each slot as released immediately after xsk_buff_free(). The
-> successful allocation path already clears the bitmap after replacing
-> all buffers, so retries become idempotent without changing the success
-> path.
-> 
-> Fault injection forced three consecutive allocation failures for one
-> selected MPWQE in AF_XDP zero-copy mode. Stock freed the same 16 XSK
-> buffer pointers on all three attempts, for 48 frees. With this change,
-> only the initial 16 frees occurred; retries observed a full bitmap, and
-> a later successful allocation cleared it.
-> 
-> Fixes: 4c2a13236807 ("net/mlx5e: RX, Defer page release in striding rq for better recycling")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jerome Tollet <jtollet@cisco.com>
-> ---
->  drivers/net/ethernet/mellanox/mlx5/core/en_rx.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-> index 7bd0606a5..5fe17d295 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-> @@ -609,9 +609,12 @@ mlx5e_free_rx_mpwqe(struct mlx5e_rq *rq, struct mlx5e_mpw_info *wi)
->  		 * is no way to return the page to userspace when the interface
->  		 * goes down.
->  		 */
-> -		for (i = 0; i < rq->mpwqe.pages_per_wqe; i++)
-> -			if (no_xdp_xmit || !test_bit(i, wi->skip_release_bitmap))
-> +		for (i = 0; i < rq->mpwqe.pages_per_wqe; i++) {
-> +			if (no_xdp_xmit || !test_bit(i, wi->skip_release_bitmap)) {
->  				xsk_buff_free(xsk_buffs[i]);
-> +				__set_bit(i, wi->skip_release_bitmap);
-> +			}
-> +		}
->  	} else {
->  		for (i = 0; i < rq->mpwqe.pages_per_wqe; i++) {
->  			if (no_xdp_xmit || !test_bit(i, wi->skip_release_bitmap)) {
-I'd change this to be consistent with mlx5e_alloc_rx_mpwqe(): set skip_release_bitmap
-bits in error path of mlx5e_xsk_alloc_rx_mpwqe.
+> and this seems to belong right next to bpf_copy_from_user_task_str()
+> and others in kernel/bpf/helpers.c (and bpf_copy_from_user_task
+> variants should just delegate to this mm-based APIs and minimize code
+> duplication)
+
+This is exactly what I did in my previous set of patches:
+https://lore.kernel.org/bpf/20260811112154.94053-1-tasos.papagiannnis@gmail.com/T/
+https://patchwork.kernel.org/project/netdevbpf/list/?series=1144046&state=*
+https://sashiko.dev/#/patchset/20260811112154.94053-1-tasos.papagiannnis%40gmail.com
+https://github.com/kernel-patches/bpf/pull/13211
+
+where I got AI reviews with 2 main issues:
+
+1.  Does marking bprm->mm as trusted-or-null here create a use-after-free
+    vulnerability on the execve error path?
+    Looking at free_bprm() in fs/exec.c, when an error occurs:
+    fs/exec.c:free_bprm() {
+        ...
+        if (bprm->mm) {
+            acct_arg_size(bprm, 0);
+            mmput(bprm->mm);
+        }
+        ...
+    }
+    The object is freed via mmput(), but the bprm->mm pointer is not set to NULL.
+    Could subsequent traceable cleanup functions (such as free_arg_pages) expose
+    this dangling reference to BPF programs, bypassing the verifier's safety
+    guarantees?
+
+This is something that I believe is easy to fix.
+
+2.  Does this break the BPF load-compatibility guarantee documented in
+    Documentation/bpf/bpf_design_QA.rst?
+
+    Before this patch, walking bprm->mm produced a dereferenceable register
+    in every program type. In sleepable programs, in_rcu_cs() is false, so
+    check_ptr_to_btf_access() sets flag = PTR_UNTRUSTED. In non-sleepable
+    programs, in_rcu_cs() is true but mm is not in any __safe_rcu* list, so
+    clear_trusted_flags() produces a plain PTR_TO_BTF_ID.
+
+    Both PTR_TO_BTF_ID and PTR_TO_BTF_ID|PTR_UNTRUSTED satisfy the guard in
+    check_mem_access():
+
+    } else if (base_type(reg->type) == PTR_TO_BTF_ID &&
+                !type_may_be_null(reg->type)) {
+            err = check_ptr_to_btf_access(env, regs, reg, argno, off, size, t,
+                                            value_regno);
+
+    so bprm->mm->arg_start loads with no NULL check.
+
+    After this patch, btf_nested_type_is_trusted() matches
+    linux_binprm__safe_trusted_or_null.mm, so check_ptr_to_btf_access() sets
+    flag |= PTR_TRUSTED | PTR_MAYBE_NULL. Now type_may_be_null() is true, the
+    arm above is skipped, and control falls to the final else:
+
+    } else {
+            verbose(env, "%s invalid mem access '%s'\n", reg_arg_name(env, argno),
+                    reg_type_str(env, reg->type));
+            return -EACCES;
+    }
+
+    Any existing program that reads through bprm->mm without an explicit NULL
+    check now fails bpf_prog_load() with -EACCES.
+
+This sounds to me a bit more complicated. In a prog attached to lsm/security_bprm_check,
+bprm is trusted but bprm->mm is not trusted. So we need a way to have bprm->mm trusted
+to pass it as an argument to the helpers. In that series, I marked linux_binprm->mm as
+trusted-or-null, which breaks all existing programs that use
+linux_binprm->mm->something.
+
+Another approach would be to add one more kfunc (i.e. bpf_get_bprm_mm) to get
+the mm from bprm and have it trusted.
+
+The reason that I didn't push that further was that mm in general is
+bound to either linux_binprm or task_struct during its lifetime. We already
+have helpers for task_struct, and I thought that adding helpers for linux_binprm
+would be enough. Other than that, there is only one security_*() function that
+takes mm_struct as an argument (i.e. security_vm_enough_memory_mm), and possibly
+in that case we do not need to read the memory contents, but only metadata
+(possibly I am oversimplifying here, but this is to show my thinking).
+
+Unless I am missing something obvious, I can see two possible approaches here:
+  1. Keep the bprm-specific kfuncs as they are now.
+  2. Rework this around the mm variants that you proposed and add one
+     more kfunc (i.e. bpf_get_bprm_mm) to make that work.
+
+Does the second approach sound reasonable to you?
 
 Thanks,
-Dragos
+Anastasios
