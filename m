@@ -1,34 +1,34 @@
-Received: from mta0.migadu.com (out-164.mta0.migadu.com [91.218.175.164])
+Received: from mta1.migadu.com (out-166.mta1.migadu.com [95.215.58.166])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C12D372B45
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 09:32:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.164
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4EE3F39E4
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 09:32:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787563949; cv=none; b=bamw4A/siWEGajuah/WkNdmT1sP7KM+eloNDDZiJIViIGLl9rdGr7VyNSjt2ArNGH5dtLfng6HQBGsL4CGJbs4FxFgo8aL0KiKRdI8DrD+JNQNwXBrqLIb0QZZZ1EzokFzYZPC2eiRq5amilD7NUKuhdP/RfflyqXOW9yyIrN0Q=
+	t=1787563981; cv=none; b=rKeurTBwHZG1Mk2wtgyUZJMfVBaJv5OG8kb4PpJ5I//oAa7HgAPxaPkbOyflERYAjUBktRIMIe+ocJ6Z/JQxobcSfN3tX6V0p+mNFM+5CpugAdKQbWCls6puLmIr+RnkF/JrONINqj8dxczYhc3bOfWbST5i1ISc8OIpgYA2Rd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787563949; c=relaxed/simple;
-	bh=tm6u+ZlBoJQgiuGsXMgzX4HKl9jwnrAdYGPMvgSLM/Y=;
+	s=arc-20240116; t=1787563981; c=relaxed/simple;
+	bh=fFLoGUaXIuhLs7RlyqnHs+S1ANmR65p8p4xh2riS5jE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WOzTl9cpr24HgF8sgQ4cVDp/t23/OHhWt/3ACXyLLWtu3qVX00hjJ+Mc2Ry+a2Q7dJEFbJI6f87YdwdCRMTUEf/YAYb/cEboZ3gWzki1snOSWw/uUxCxZUDejy+wbkDuX2fuK2+HsSVv63i/xPjjUxSGTCowntimwYScOOfFnn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lkC7F6Sp; arc=none smtp.client-ip=91.218.175.164
+	 MIME-Version; b=O2oxe4z2Mvyy0Ek28X++3y8Ss0kX9x+4pOYgK7TBJNXLs7SLF/WM347d6WrhRCWeydqAV2g2nbAk+vPoMYcm5Il6MdMAnU8i0kaHYZSZdwiOUdN7eAfkl0PbQ7fc7v+OEMDM5YCa1BgEiMivzetwZu/INcS+tdMjYgRHiqknSlo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nngKV/sM; arc=none smtp.client-ip=95.215.58.166
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lkC7F6Sp"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nngKV/sM"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=tm6u+ZlBoJQgiuGsXMgzX4HKl9jwnrAdYGPMvgSLM/Y=;
+DKIM-Signature: a=rsa-sha256; bh=fFLoGUaXIuhLs7RlyqnHs+S1ANmR65p8p4xh2riS5jE=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787563945; v=1; x=1788168745;
- b=lkC7F6SpzJyMMwo3CVocX8ywrUwBESoPMeOp7JLUO5wT2WADqrTg/nnQjtZt+dJa9TlQdLdf
- nuhhWaj2llDOiElxZqR5wEUSqSqOfW8Sd5jtM1pp6c3IyJSCatXiRiR83aADc45DPD7CyrfvaWj
- UQIDLd4R2Wpj5kEFSYc6M4VA=
+ t=1787563976; v=1; x=1788168776;
+ b=nngKV/sMwido9/M2Xf3gaAS7VHzQM1fxXf9Q85cLdI0YgcvmolIPmG5c8GtG0SilcqIQQIss
+ 6iJMZBmK8tVzdvvDwXVf3LmWjizYzCMpmj2G1tXLr4JErA0q9BIFlIIVKw46527wXvHCyWPPZab
+ WCNlKYsulyHIWVLIE+Po2bnY=
 X-Envelope-To: bpf@vger.kernel.org
-Received: from localhost.localdomain (147.136.157.0)
-	by smtp.migadu.com with ESMTPS id 9c2e04fcaeed2936;
-	Mon, 24 Aug 2026 09:32:25 +0000
-X-Mizu-Trace-ID: 9c2e04fcaeed2936
+Received: from localhost.localdomain (147.136.157.1)
+	by smtp.migadu.com with ESMTPS id ad39717f30a18997;
+	Mon, 24 Aug 2026 09:32:56 +0000
+X-Mizu-Trace-ID: ad39717f30a18997
 X-Migadu-Flow: FLOW_OUT
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
@@ -36,6 +36,7 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
@@ -44,7 +45,6 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
 	Shuah Khan <shuah@kernel.org>,
 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
 	Clark Williams <clrkwllms@kernel.org>,
@@ -52,9 +52,9 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-rt-devel@lists.linux.dev
-Subject: [PATCH bpf-next v5 1/4] bpf: Add a sleepable page allocator for map memory
-Date: Mon, 24 Aug 2026 17:29:52 +0800
-Message-ID: <20260824093122.362135-2-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next v5 2/4] bpf: arena: allocate the fault-in page outside the lock
+Date: Mon, 24 Aug 2026 17:29:53 +0800
+Message-ID: <20260824093122.362135-3-jiayuan.chen@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260824093122.362135-1-jiayuan.chen@linux.dev>
 References: <20260824093122.362135-1-jiayuan.chen@linux.dev>
@@ -66,87 +66,188 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_map_alloc_pages() picks the allocator via can_alloc_pages(), a
-conservative guess for BPF program context that is always false under
-PREEMPT_RT. So even a caller that really is sleepable gets the
-non-blocking allocator, which never reclaims and never engages the OOM
-machinery.
+arena_vm_fault() allocated the page while holding arena->spinlock, so it
+could only use the non-blocking allocator. Once the memcg is at
+memory.max that allocation just fails, the fault turns into
+VM_FAULT_SIGSEGV, and the process gets a SIGSEGV on a perfectly valid
+arena address. Hitting memory.max is routine (e.g. page cache from
+reading a big file), so this kills innocent processes.
 
-Add bpf_map_alloc_page_sleepable() for callers that know they are
-sleepable. Like the other bpf map allocators it places the page on the
-map's numa_node and does not follow the faulting task's NUMA mempolicy;
-arena memory is shared, so the map's node is the right placement policy.
-The next patch uses it from the arena page fault handler.
+Rework the fault handler:
 
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+- Preallocate the page before taking the lock, like do_anonymous_page()
+  does, so it can sleep and go through reclaim and the memcg OOM killer,
+  instead of turning a routine memory.max into a fake segfault.
+
+- On allocation failure return VM_FAULT_SIGBUS. The allocation already
+  ran reclaim and the OOM killer, so the failure is non-recoverable. For
+  a task faulting its own arena this changes nothing: the OOM killer
+  already picked it inside the allocation and it dies by SIGKILL, the
+  SIGBUS is shadowed by the pending fatal signal, and the memcg OOM is
+  still reported. VM_FAULT_OOM would instead be retried by the fault
+  path and can livelock when the charged memcg is not the faulting
+  task's (e.g. a shared arena) and its OOM killer cannot reach it.
+
+- A lockless probe skips that preallocation when a page is already mapped
+  (e.g. allocated by the bpf program), so the common case wastes no
+  allocation. The rare race where such a page is freed before we take the
+  lock falls back to the non-blocking allocator under the lock.
+
+- Return VM_FAULT_SIGBUS for the other non-recoverable errors (lock
+  failure, range-tree and page-table failures) instead of
+  VM_FAULT_SIGSEGV; only BPF_F_SEGV_ON_FAULT, and a scratch-page hole
+  under that flag, is a real user addressing error and keeps
+  VM_FAULT_SIGSEGV.
+
+- Tidy up the error labels.
+
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
-To sashiko:
-- The alloc_pages_nolock() fallback still zeroes: it forces __GFP_ZERO
-  internally and only accepts __GFP_ACCOUNT.
-- __GFP_ZERO is unchanged from the existing __bpf_alloc_page(), and no
-  arena-capable arch has D-cache aliasing, so there is no dcache concern.
----
- include/linux/bpf.h  |  1 +
- kernel/bpf/syscall.c | 21 +++++++++++++++++----
- 2 files changed, 18 insertions(+), 4 deletions(-)
+ kernel/bpf/arena.c | 90 +++++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 69 insertions(+), 21 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index ffa5626411ac..18e84ec4692d 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2784,6 +2784,7 @@ struct bpf_prog *bpf_prog_get_curr_or_next(u32 *id);
+diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+index 7b6847200b43..fa462a0ff1ad 100644
+--- a/kernel/bpf/arena.c
++++ b/kernel/bpf/arena.c
+@@ -481,7 +481,8 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
+ 	struct bpf_map *map = vmf->vma->vm_file->private_data;
+ 	struct bpf_arena *arena = container_of(map, struct bpf_arena, map);
+ 	struct mem_cgroup *new_memcg, *old_memcg;
+-	struct page *page;
++	struct page *page, *new_page = NULL;
++	vm_fault_t fault_ret;
+ 	long kbase, kaddr;
+ 	unsigned long flags;
+ 	int ret;
+@@ -489,59 +490,106 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
+ 	kbase = bpf_arena_get_kern_vm_start(arena);
+ 	kaddr = kbase + (u32)(vmf->address);
  
- int bpf_map_alloc_pages(const struct bpf_map *map, int nid,
- 			unsigned long nr_pages, struct page **page_array);
-+struct page *bpf_map_alloc_page_sleepable(const struct bpf_map *map);
- #ifdef CONFIG_MEMCG
- void bpf_map_memcg_enter(const struct bpf_map *map, struct mem_cgroup **old_memcg,
- 			 struct mem_cgroup **new_memcg);
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 6874ba1424af..f9b81638e537 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -602,15 +602,14 @@ static bool can_alloc_pages(void)
- 		!IS_ENABLED(CONFIG_PREEMPT_RT);
- }
- 
-+#define BPF_PAGE_GFP (GFP_KERNEL | __GFP_ZERO | __GFP_ACCOUNT | __GFP_NOWARN)
+-	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags))
++	page = vmalloc_to_page((void *)kaddr);
++	if (!page && !(arena->map.map_flags & BPF_F_SEGV_ON_FAULT)) {
++		/*
++		 * Preallocate outside the lock with a sleepable allocator so it
++		 * can reclaim and run the memcg OOM killer, which the
++		 * non-blocking allocator under arena->spinlock cannot. A NULL
++		 * return is non-recoverable, so fail with VM_FAULT_SIGBUS;
++		 * VM_FAULT_OOM would be retried by the fault path and can
++		 * livelock when the charged memcg is not the faulting task's.
++		 */
++		bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
++		new_page = bpf_map_alloc_page_sleepable(map);
++		bpf_map_memcg_exit(old_memcg, new_memcg);
++		if (!new_page)
++			return VM_FAULT_SIGBUS;
++	}
 +
- static struct page *__bpf_alloc_page(int nid)
- {
- 	if (!can_alloc_pages())
- 		return alloc_pages_nolock(__GFP_ACCOUNT, nid, 0);
++	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags)) {
+ 		/*
+ 		 * A failed lock means a possible deadlock was detected. Don't
+ 		 * return VM_FAULT_RETRY: this handler never took mmap_lock, but
+ 		 * the fault path would re-take it on retry and deadlock. Fail.
+ 		 */
++		if (new_page)
++			free_pages_nolock(new_page, 0);
+ 		return VM_FAULT_SIGBUS;
++	}
  
--	return alloc_pages_node(nid,
--				GFP_KERNEL | __GFP_ZERO | __GFP_ACCOUNT
--				| __GFP_NOWARN,
--				0);
-+	return alloc_pages_node(nid, BPF_PAGE_GFP, 0);
- }
+ 	page = vmalloc_to_page((void *)kaddr);
+ 	if (page) {
+-		if (page == arena->scratch_page)
+-			/* BPF triggered scratch here; don't lazy-alloc over it */
+-			goto out_sigsegv;
++		if (page == arena->scratch_page) {
++			/*
++			 * A scratch page marks a hole. Segfault only if the user
++			 * asked for it; otherwise we could lazy-allocate but
++			 * choose not to over a hole, so report a bus error.
++			 */
++			fault_ret = (arena->map.map_flags & BPF_F_SEGV_ON_FAULT) ?
++				    VM_FAULT_SIGSEGV : VM_FAULT_SIGBUS;
++			goto out_err_locked;
++		}
+ 		/* already have a page vmap-ed */
+ 		goto out;
+ 	}
  
- int bpf_map_alloc_pages(const struct bpf_map *map, int nid,
-@@ -636,6 +635,20 @@ int bpf_map_alloc_pages(const struct bpf_map *map, int nid,
- 	return ret;
- }
- 
-+/*
-+ * For callers that know they run in a sleepable context, e.g. a user page
-+ * fault handler. can_alloc_pages() is a conservative guess made for BPF
-+ * program context - notably it is always false on PREEMPT_RT - so going
-+ * through bpf_map_alloc_pages() there would needlessly pick the
-+ * non-blocking allocator, which never reclaims and never engages the OOM
-+ * machinery.
-+ */
-+struct page *bpf_map_alloc_page_sleepable(const struct bpf_map *map)
-+{
-+	might_sleep();
-+	return alloc_pages_node(map->numa_node, BPF_PAGE_GFP, 0);
-+}
++	if (arena->map.map_flags & BPF_F_SEGV_ON_FAULT) {
++		/* User space requested to segfault when page is not allocated by bpf prog */
++		fault_ret = VM_FAULT_SIGSEGV;
++		goto out_err_locked;
++	}
 +
- static int btf_field_cmp(const void *a, const void *b)
- {
- 	const struct btf_field *f1 = a, *f2 = b;
+ 	bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
+ 
+-	if (arena->map.map_flags & BPF_F_SEGV_ON_FAULT)
+-		/* User space requested to segfault when page is not allocated by bpf prog */
+-		goto out_sigsegv_memcg;
++	if (!new_page) {
++		/*
++		 * Very rare race: the bpf program had allocated a page here, so
++		 * the lockless probe saw it and we skipped preallocation, but it
++		 * freed the page before we took the lock. Now we do need one;
++		 * sleeping is not allowed here, so fall back to the non-blocking
++		 * allocator and give up if it fails.
++		 */
++		ret = bpf_map_alloc_pages(map, map->numa_node, 1, &new_page);
++		if (ret) {
++			fault_ret = VM_FAULT_SIGBUS;
++			goto out_err_locked_memcg;
++		}
++	}
+ 
+ 	ret = range_tree_clear(&arena->rt, vmf->pgoff, 1);
+-	if (ret)
+-		goto out_sigsegv_memcg;
+-
+-	struct apply_range_data data = { .arena = arena, .pages = &page, .i = 0 };
+-	/* Account into memcg of the process that created bpf_arena */
+-	ret = bpf_map_alloc_pages(map, NUMA_NO_NODE, 1, &page);
+ 	if (ret) {
+-		range_tree_set(&arena->rt, vmf->pgoff, 1);
+-		goto out_sigsegv_memcg;
++		fault_ret = VM_FAULT_SIGBUS;
++		goto out_err_locked_memcg;
+ 	}
++	struct apply_range_data data = { .arena = arena, .pages = &new_page, .i = 0 };
+ 
+ 	ret = apply_to_page_range(&init_mm, kaddr, PAGE_SIZE, apply_range_set_cb, &data);
+ 	if (ret) {
+ 		range_tree_set(&arena->rt, vmf->pgoff, 1);
+-		free_pages_nolock(page, 0);
+-		goto out_sigsegv_memcg;
++		fault_ret = VM_FAULT_SIGBUS;
++		goto out_err_locked_memcg;
+ 	}
+ 	flush_vmap_cache(kaddr, PAGE_SIZE);
+ 	bpf_map_memcg_exit(old_memcg, new_memcg);
++	/* new_page was consumed */
++	page = new_page;
++	new_page = NULL;
+ out:
+ 	page_ref_add(page, 1);
+ 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
++	if (new_page)
++		free_pages_nolock(new_page, 0);
+ 	vmf->page = page;
+ 	return 0;
+-out_sigsegv_memcg:
++
++out_err_locked_memcg:
+ 	bpf_map_memcg_exit(old_memcg, new_memcg);
+-out_sigsegv:
++out_err_locked:
+ 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+-	return VM_FAULT_SIGSEGV;
++	if (new_page)
++		free_pages_nolock(new_page, 0);
++	return fault_ret;
+ }
+ 
+ static const struct vm_operations_struct arena_vm_ops = {
 -- 
 2.43.0
 
