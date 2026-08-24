@@ -1,116 +1,124 @@
-Received: from flow-a2-smtp.messagingengine.com (flow-a2-smtp.messagingengine.com [103.168.172.137])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97C8F3F328C;
-	Mon, 24 Aug 2026 12:37:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C6D641A517;
+	Mon, 24 Aug 2026 12:41:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787575081; cv=none; b=NTphdmPkF2HA8UFYJZFv1sv1HP1UCs3/bg2yklD/APKvkU3/ztlPhKDzoMIZTQJrzu7g1TqY1ZZkF8tgVwkiAPCoTHjw3AK1u08MH5jJ9KhVuwJVGDxuZnmm2kkbUcb+66JJFKo4SmN0Z6WGWZvkqbJMTzOaG4Y5iN5TyZnoXHw=
+	t=1787575285; cv=none; b=kqnV2MO9pXlZi08+6Bl1tOr2/GGPbHe4yI9GEuvRGLnY0x+n+0/ZUS/vL5hu8b22VC6h7tGSJ9bePXCPf0VVxbcV30Li9tlpWDDWp44Pve6zO7Fb+H+B2H/quXO3EmZ+kzuif8FkDHww+X/9uixVj9zikl043EUlYzkpmdb9EHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787575081; c=relaxed/simple;
-	bh=YuKm5h4FJivTzNYFtQBsp3v95fibyY50aVxIZ1hFB6I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NJvPpL63Xr0Edm28rVSjCCRAS+VofN9FnoZzOVCJl+v5Joy5RFFj4nVKREGJcHeqejReWrCYCkQKM3WSXqOe8of9pHfHkxnUBNNlzLdC+Rp6kzSUnhkuph+lfr3YOzKptgo8OOfrrm4DZ+DbGMJxxQBA59TNIhsOeoxppuMn+10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=SJOBuqoT; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Y0T5/pTM; arc=none smtp.client-ip=103.168.172.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+	s=arc-20240116; t=1787575285; c=relaxed/simple;
+	bh=h2xysoDU2wsOWO/UwsGV+ZP0KAU8el7Jn0hXBLKGtBs=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=QTAhZQfe/FEjvnBbeCG3VUP1oZtS50qn4jI2JOENh4/OH/fmxY9cUZMBUY3oiqijd+k15DFP/LTgq23h2PedwfW8KegF2sLpv/kcspG3zwaULwIJYnm9yQR2ZvKSGKVFaYkyeual4WzgfeuHNnXp04iYwlLPM6Vdm/3JELURpTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=FmwU5TO7; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=4vU64sVi; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=NDbDXTDQ; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=MLS8qWvl; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="SJOBuqoT";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Y0T5/pTM"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailflow.phl.internal (Postfix) with ESMTP id ACCAF1380293;
-	Mon, 24 Aug 2026 08:37:58 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Mon, 24 Aug 2026 08:37:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1787575078; x=
-	1787582278; bh=4+ZXrHhOcBNBIWSTKX8h/D+gSOatS4LTJk6DxU43bvs=; b=S
-	JOBuqoTpRZnoUcj18paDGTJxmqQMHeGAO5tqVOMb66NOsjBsqN0usyDojsqHFm8o
-	YwhyH8Qge/ybjiXY0sSwgbOXtG0A+yk6xGopSvJyVUugG6tfD9dpGLBOgVrIwuHa
-	tT3S/LPCJThrY5PEDkrjeOPNkyfM9plZ3H5R1dYxxnph67zJCb6TgGoatk7jjNJl
-	ZTFj8yrOz39JuAVZO0+XNfTybA/KLxtq/o7U2k4Sbd72q+HWV3VFbEzxj6HsDbSu
-	Kb3KeFQJe300YRMCVnbDbvI3YSy9RkzB+NIaJmMwQMMgBiqPELjbY2DuAIkxh4xj
-	npFAnGnfpJQtdoLL9uItA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1787575078; x=1787582278; bh=4+ZXrHhOcBNBIWSTKX8h/D+gSOatS4LTJk6
-	DxU43bvs=; b=Y0T5/pTMB8VJ8mAceiSRNanYWt5zXnC43h3jCMJ9QAWf04l2swi
-	pD5ddTN3S+Nw1F5JW+8vuLVAorMf8hW1spoGbvc1O8Gwgot5R5z6P6J9nlUbmFG7
-	/1hv9zWTuy5ZASLdgxjfiZo/OpS85uzxwTcUAXIokMhS5v0ikDpS8JNm27I8cW8Z
-	UBKnsm+/NlfubBzl3AKjtZqVvNqAaNC1UUdg8Umse3u15hFTGUV0hbICcG9dUyFc
-	GLlYFnGREr6vb5eH1q0AylyxcPt0kh3yhmurEJ/mQZHJ68y4hLKJW39T1q/msfwy
-	CiryKQAfbho+uBRuEJLMm/BK1/MwPB7AeIA==
-X-ME-Sender: <xms:JjuMauxO6FySxIcOaHs8arOohEaT0-DcSVy5FI2jB-iQtE_makpRZg>
-    <xme:JjuMaqsadM63Co14tbsXNwp4z8utQUMx6Nm32_8qCg_8jEK18Voch4B4N2P94_jk1
-    xY2Fu-W8Z2tRdqvHghcDv0SrgI8jXoSM_QEc9VtHd5ERvLDI_oc1dBx>
-X-ME-Received: <xmr:JjuMahyTa8PTHf-d_XN6m8oBoE4uI8fSJLDXQFO4Zj16Ww4D_YWd4upLLy4>
-X-ME-Proxy-Cause: dmFkZTFatED5oZ77MZ22tmOlCD7GXKUCkzazb9gE5N4jgJhO01yYiclBrAnEbUBwSMdDoc
-    xpS8o1ggZwKBr0QTMYS32p4YvobQag58DBIKQmfASsSYKFAQkV56vf0rfC+M5T/OAxyf9+
-    0BZZrbk1y3cjZ7YKuDxC1b7JW+tNrUw6zPDKlukbK3F1Ex8Ss+kandwlYX1KARtnat28hK
-    +dtQLf49G4LcemSGTffDvkSTWzHV3mDceKuVvXIWrRZx5JR0WlkLGTn9wDNBBZi/llCEgY
-    dyPJRCsKQyE+/7S/K1X1tfD5wJhh2tcYYfhhBh9LbMoMvU6qhEbhxGy/O6t5DGZuoCPFR8
-    yte7bPjdZw6iZbXU1WqcKwdEQD+O45PZpWtLMr2N2TfP9kDgMEcFkVGBIQCGc4hZghM1hx
-    HB6bGHOO1H3WwR8Igy6WL0tBYTv2HEkz3LZkl/Uu28pT5K5aekNMDVy6452N2FOOQSl99T
-    pTQg0PGbhGIw1sz6c3kzH7JbbE+CUGVqMcgkMRsqa8VkM0K4ul76/czBecME8fJQlNok2e
-    VOnYxVTTGDk9pI8UG4hofchPXLr85+xVdD/TArfiawIBOJNLbNPW7C8IdUjB2Ebgv/ApYq
-    yvyePaUH7xTtILMBfO2o0Q+CTU9+OpD6r6t/zIEJaG8WKE7p9Jdnxbb2XkLA
-X-ME-Proxy: <xmx:JjuMakjyc-2lgDWCP_lubdQSINTnPd2c7mC3kuta_Tj3w4HCQixyCg>
-    <xmx:JjuMavZE-hmQOIB3IlqJr7s_7f2F7PxPD-3h2S0jrAUGVP7n_9YcIQ>
-    <xmx:JjuMatib15jvUIdzdqXUBi8FczOeLG2jOwd_rCWLD5tMHYsbTPydMw>
-    <xmx:JjuMam99b79C06mkp61kQLmt3F1GM_CkeV-aY-YV-zYhcOTJP-08Mg>
-    <xmx:JjuMagJMmNs3FIFLkKCEOfVwULclr412rRPHM0btNEi_XdxgVHRK83jj>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 24 Aug 2026 08:37:57 -0400 (EDT)
-Date: Mon, 24 Aug 2026 13:37:56 +0100
-From: Kiryl Shutsemau <kirill@shutemov.name>
-To: Lance Yang <lance.yang@linux.dev>
-Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
-	nico.pache@linux.dev, baolin.wang@linux.alibaba.com, baohua@kernel.org, 
-	dev.jain@arm.com, hughd@google.com, liam@infradead.org, mhocko@suse.com, 
-	rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com, 
-	usama.arif@linux.dev, vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, 
-	agordeev@linux.ibm.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, jannh@google.com, willy@infradead.org, pfalcato@suse.de, 
-	rostedt@goodmis.org, mhiramat@kernel.org, linux-trace-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 12/57] mm/collapse: allocate a destination per
- candidate
-Message-ID: <aow636Xhrof8hj38@thinkstation>
-References: <20260816224609.308019-13-kirill@shutemov.name>
- <20260824112005.63097-1-lance.yang@linux.dev>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="FmwU5TO7";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="4vU64sVi";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="NDbDXTDQ";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="MLS8qWvl"
+Received: from pobox.suse.cz (unknown [10.128.32.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 8BB0E868C1;
+	Mon, 24 Aug 2026 12:41:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1787575275; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=C8BmM3PDphVGAMVOAbsIY+lFVPl8D0EsHUi4vr3vsyc=;
+	b=FmwU5TO7sw+f7xTaYHfEy9blehcgnJ1uVPHbvo/jtcrldF3LeeWo8OJOZkKHrbNA88EZZp
+	ulNvqrAonkfkxzSzaUP84BkpcdIk+m/F3MIicREYSN5fDD1wIGbUK5iHVtduiWhRyWW+pJ
+	mInj/9UoXkW83OpjdYnljUG/72bBiPo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1787575275;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=C8BmM3PDphVGAMVOAbsIY+lFVPl8D0EsHUi4vr3vsyc=;
+	b=4vU64sVi+KZ00QdUk3SlXX/YnjrpQyTK1gR9audE5Hj1/8/zOR6PSjmibBJ162HRQfgvkx
+	2qBugm68pge3ivBQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1787575271; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=C8BmM3PDphVGAMVOAbsIY+lFVPl8D0EsHUi4vr3vsyc=;
+	b=NDbDXTDQAzi00K6RjxmKquwHIZwdOhNMbf+0+uvaDM8d4LNo16ng19y6cFpQu+1P1x1Q93
+	wyjzwkp7heqn0EouLj2/zuF6a9l/sro26AF3U5sktOmAYmnlHrJmtrXxBODM87FbNW4cVl
+	lP9owZNytXjhKZUv15qjeZw28yqg+1M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1787575271;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=C8BmM3PDphVGAMVOAbsIY+lFVPl8D0EsHUi4vr3vsyc=;
+	b=MLS8qWvlQ1EH1qkq+O7Y/6ud4TGkQ4UNJuTCsg9y7A3ujOrQdoYJpmU2RT3n1+Ow0UvNEm
+	eftWjdj4i7v9tGAg==
+Date: Mon, 24 Aug 2026 14:41:11 +0200 (CEST)
+From: Miroslav Benes <mbenes@suse.cz>
+To: Song Liu <song@kernel.org>
+cc: Steven Rostedt <rostedt@goodmis.org>, 
+    Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>, bpf@vger.kernel.org, 
+    linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org, 
+    jolsa@kernel.org, mhiramat@kernel.org, jpoimboe@kernel.org, 
+    joe.lawrence@redhat.com, mark.rutland@arm.com, corbet@lwn.net, 
+    stable@vger.kernel.org, linux-open-source@crowdstrike.com, 
+    pmladek@suse.com
+Subject: Re: [RFC PATCH bpf-next v3 2/2] selftests/livepatch: update
+ test-ftrace.sh for deprecated ftrace_enabled
+In-Reply-To: <CAPhsuW5bW-xogJESb=ydUMH-ZjczoTP9JbuwPJZgbGZBzv-1CA@mail.gmail.com>
+Message-ID: <alpine.LSU.2.21.2608241437380.17149@pobox.suse.cz>
+References: <20260806153000.4184871-1-andrey.grodzovsky@crowdstrike.com> <20260806153000.4184871-3-andrey.grodzovsky@crowdstrike.com> <CAPhsuW7gOs2Opo5DRm+YKxBxwU+ncBmEAKHYO5jPjzxM9S8i5w@mail.gmail.com> <CAOu3gNi8i9m7nEuKF28G8cYqJULvE4W6CuDeYVFk58z1xSbBoQ@mail.gmail.com>
+ <20260806205144.743c45e6@gandalf.local.home> <CAPhsuW7vPwX-BGWmtMhA8dYwDOQYQLVXOUddZPbTvoazMpaKgA@mail.gmail.com> <20260807084257.56a5984e@gandalf.local.home> <CAPhsuW5bW-xogJESb=ydUMH-ZjczoTP9JbuwPJZgbGZBzv-1CA@mail.gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260824112005.63097-1-lance.yang@linux.dev>
+Content-Type: text/plain; charset=US-ASCII
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	ARC_NA(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[pobox.suse.cz:mid,pobox.suse.cz:helo]
+X-Spam-Flag: NO
+X-Spam-Score: -4.30
+X-Spam-Level: 
 
-On Mon, Aug 24, 2026 at 07:20:05PM +0800, Lance Yang wrote:
-> >+	if (unlikely(mem_cgroup_charge(folio, mm, gfp)) ||
-> >+	    folio_memcg_alloc_deferred(folio)) {
+> > We do not deprecate features. tracefs code is user API. We do not break
+> > user space. The ftrace_enabled is something that is being removed because
+> > it is broken to begin with. In fact, if we find out that anything depends
+> > on ftrace_enabled, we need to revert the change that disabled it.
+> >
+> > The removal of ftrace_enabled is the exception and not the rule.
 > 
-> One small nit: folio_memcg_alloc_deferred() passes GFP_KERNEL to the
-> deferred_split_lru allocation.
+> Agreed that ftrace APIs need to be very stable, as there are many out
+> of tree users. OTOH, I think livepatch can afford breaking some
+> compatibility.
 
-...
+We discussed that a bit in the context of this patch set [1]. I think it 
+is valuable to have the kselftests backward compatibility but there is of 
+course some limit to it. We can talk about it at Plumbers during the
+backward compatibility session as well [2].
 
-> This only affects calls that find the metadata missing; after it has been
-> installed, later calls take the fast branch. Still, it bypasses the gfp
-> with direct reclaim stripped for the freeze window. Could
-> folio_memcg_alloc_deferred() take that gfp here?
+Miroslav
 
-Right. Passing down gfp is the right thing to do here.
-
-Thanks, will fix.
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+[1] https://lore.kernel.org/all/20260413-lp-tests-old-fixes-v2-0-367c7cb5006f@suse.com/
+[2] https://lpc.events/event/20/contributions/2530/
