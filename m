@@ -1,196 +1,123 @@
-Received: from mta1.migadu.com (out-2.mta1.migadu.com [95.215.58.2])
+Received: from mail-ed2-f7.google.com (mail-ed2-f7.google.com [74.125.228.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F12A38F251
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 20:44:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D64B138E8C9
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 20:45:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787604281; cv=none; b=mGyzANr94vmyVYBpibO0IQPFaqbngjvU0wR6y1D8fO0nqJt50H43km3K+jRbUQe6AMC2Yeqq3ZG7i1DpuviyVBFzAn7utFvlx/QdNhVa0wcy5DQBtDf3pyptSXXLxngCj4lFuJk05plx64mvm4g1mNk/Eh4e233yhY2NyHK9GfE=
+	t=1787604345; cv=none; b=Ix+/zvU2R4zKt4FoacKz4VY3p3vSVDXZLbtRagLj8ZOnyfDBLKJ+mwkQOdPn7Qe0AeZykkG8VS2eUdnCEuUIrdjIVmasEWpCAtmSLeekzhXfD8S1a0BMG4Lkb1Le/xwn5JBZBP6Z6ZKgC/lwIF+sMb+3QSbz6VV7Vxee4cnWqOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787604281; c=relaxed/simple;
-	bh=5nA/fRtCSR4KLqzF4PwZXE2rf3z/kOL/iYgTx4Jd9B0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VcQVYRzIBfMdbOgKvEbxz0lQ0EANxFfhGIczI0HRtQy1+DTj1hs9L9wQmkKgYlI07o+yMjHSDbMeew1qMGnRwrkzbvKKeSQWD+pO+b98C2hPLwJrcX+0TF/3Jxq7KJf+oVB6itxgt8CEFDjNWcEcbK+npp+MTZx2xqbRRK3ao7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bstgo8vT; arc=none smtp.client-ip=95.215.58.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787604345; c=relaxed/simple;
+	bh=5lhs+DnDtIjGjpWJul38VwotNXwZAyjlRWl8g9ipxLc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=Fdx395PxbclFEW+BK/vMl05ZLreAK5zuoyek+FPJUJR+CP8W6eiwnakMH+QAa9CYEYjcV1GiUwcPAyeyuaWAKtHYb2sUV2w7nn5nK89hP3E5a1crGU5Sz8wCqy8E5FVWejT/C93DtrXm8iJUkgAU1suVlGr+yjlcRovCR3TTAo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JNcDpCdp; arc=none smtp.client-ip=74.125.228.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bstgo8vT"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=5nA/fRtCSR4KLqzF4PwZXE2rf3z/kOL/iYgTx4Jd9B0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787604276; v=1; x=1788209076;
- b=bstgo8vTl1TI6SaZKbc/bua21eAxPPbWOfSRLCzrAbFf6AGFIYW1/dRkLSw3zjBqbSaPZuB+
- 7hc0ltUYOrt8BqtzFFLA3qVP+wZTcMINghbQWO64rb3AWnaM1IZ8H8C734SxSxiFSzsrCDFgTKf
- /iV4mNpN9nnfLDf5dhp8S0lU=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [IPV6:2600:381:d615:1a9c:14b5:6794:fad4:7620] (2600:381:d615:1a9c:14b5:6794:fad4:7620)
-	by smtp.migadu.com with ESMTPS id 1e3a1eff3c0ecf52;
-	Mon, 24 Aug 2026 20:44:35 +0000
-X-Mizu-Trace-ID: 1e3a1eff3c0ecf52
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <5667dbc2-a71e-4050-8592-39d735fc4f40@linux.dev>
-Date: Mon, 24 Aug 2026 13:44:32 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JNcDpCdp"
+Received: by mail-ed2-f7.google.com with SMTP id 4fb4d7f45d1cf-6a403027d38so2049790a12.0
+        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 13:45:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787604342; x=1788209142; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=1jc7yPTsdl9s9ZCxYejVGBlGDxAAvpHITyYBq8v8lr4=;
+        b=JNcDpCdpPsRjvmFKaKWQgFVI2kjHrrD8d7xj5s05/gn/RItYA5xzdo76Ayt0DeZpnN
+         Gi54EHRwJB+YMudiBnxwMhg0oa74NRrqGCbWEFA8olk73GOFB9HEu86gTFRp4128ZKb2
+         rwdPn7NLfb69lgwV8KkTeAXwWFEXf8M8ezGcyJk3KTnJmy1T5ToS9KMF1vWosJipM7v8
+         hDIQU/WExsFU0Qi9EHfVcSli/j7UXcuhnxTdtPxtOteAz4+zex08bo2QIEP2c1rhiFNO
+         dnT9HL1GB9Wotq+gRCS487qn0BB5EfbIl1m5D4ULRn4EL90sm22W/cvosSf9wjg4Gqru
+         UWiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787604342; x=1788209142;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=1jc7yPTsdl9s9ZCxYejVGBlGDxAAvpHITyYBq8v8lr4=;
+        b=d9VXuRUpcjBtmpThIIviATnb3h060mUaHiaKvSUUFCxbjIke5rDpJOZRv7hdspaztY
+         7d2j/q8c+YwZCcU+RaMymlhyf1YL6Q3bfY+/D/xy+g8LG+7nMPe6SroL6j0zpY6LNfkj
+         VmglXOo7LjeRG5yQZrI57WIP0ktnWF/FH4eTLw1HEcVs7N3ynheLFV3mfWqRVD1Apzz1
+         zzha/TC/M763Cn0PUaNNr8KPO0D7ZvsyF4J+Hh/0hVJCP6ebodKTkLknwFgiPZpLS+1o
+         I0d5LXVKIZ0pz2sZsYRg9BowzAXX2G7nrNvjTDFPySs90ayvCkV4yaS4NLsSwS0KqqLo
+         3t+g==
+X-Forwarded-Encrypted: i=1; AHgh+RquGL1ULIGYyFOdeEdpjk4quRvQST/McNogSs6NSzV4xmQok705xPm8uWBEJS2/CRkvSFU=@vger.kernel.org
+X-Gm-Message-State: AFuF++nXhfC5utua60bSGxc582PTFIbam34tpHaNX3A6lW286DfkAw+G
+	cOb7z1Xu2SNdCp/cfNkrDN3TZ6gOn2b8Manawt/aBlF234JGzc5HVFpA
+X-Gm-Gg: AR+sD138njtKqMVG9mFzZTKuCWSs7jZE86KRhzxOJgQwRRIqRMdC7XU5UqJEjo6Hbtt
+	hNIkqrX8FZZP+6KaS7B1olIosSievZ63Ktqv9S3Ews48pEyeuKrl2bS6Wl0UkcJe0pSF/Y5BLs6
+	IAsQtEfB2Ty2FKXZAPXxbFVvHfWyb+IxjKD2jr7coBOL3/V/+B+P9crgrgY5lFNTjh5UZTFEM1Z
+	eRWypkl8Fum73+6igQt2jswyoG8MEN0FJnnqN9cQHPspQfq4q8png/p/5tpVaE8g7q3UmJSBOHO
+	loGHg9wb1Jzg+/a4q05t1FGk4lWOjFVFCOlga4Do+EkndjYKapypPiun0NOZwQC8qUGqGbaD65a
+	mD+iXcU/NGw+D4QuSlSHtrNE1X7v45pK2GAUkN4bKzI0VUr4wgTuUF+8vRnSYiOGs2fzHYJkCQ8
+	XCI8cY+j9h7p/R4pyYj0NvK1TCgJbKSzmhoGq+4EfgQrIC1bKdumcvb0GBBnd7nD1CgU7CIRRWT
+	K51HvGYz8Jp2fzI6bmbjMiZfF0PtrOFvsT5+p1fVsh9d3XKTdbHv5gjbgrNBC5/7u99BSWq1uJ0
+	fCsYYB2PVMkw00P4Sepu6qchA2o=
+X-Received: by 2002:a05:6402:24a1:b0:6a3:f74d:6a20 with SMTP id 4fb4d7f45d1cf-6a582b0c6aamr25186057a12.4.1787604342002;
+        Mon, 24 Aug 2026 13:45:42 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a59e1ae4efsm9450637a12.21.2026.08.24.13.45.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Aug 2026 13:45:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 2/2] bpf: Report which member makes a kfunc
- return type unsupported
-Content-Language: en-GB
-To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com
-References: <20260824144943.991316-1-yonghong.song@linux.dev>
- <20260824144948.992324-1-yonghong.song@linux.dev>
- <5add32b3e212f7bcc01eb920c51749ae6d2aafcd.camel@gmail.com>
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <5add32b3e212f7bcc01eb920c51749ae6d2aafcd.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 24 Aug 2026 22:45:40 +0200
+Message-Id: <DKXGUP3WYZAD.1ZH64HX717QXD@gmail.com>
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Rik van Riel" <riel@surriel.com>, "Alexei Starovoitov" <ast@kernel.org>
+Cc: "Quentin Monnet" <qmo@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
+ "Jiri Olsa" <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>,
+ <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] bpf: fix array-index-out-of-bounds in print_bpf_insn
+X-Mailer: aerc 0.21.0
+References: <20260824164143.485301ca@fangorn>
+In-Reply-To: <20260824164143.485301ca@fangorn>
 
-
-
-On 8/24/26 12:27 PM, Eduard Zingerman wrote:
-> On Mon, 2026-08-24 at 07:49 -0700, Yonghong Song wrote:
+On Mon Aug 24, 2026 at 10:41 PM CEST, Rik van Riel wrote:
+> syzkaller triggers UBSAN array-index-out-of-bounds and panic_on_warn
+> panic in print_bpf_insn() when loading a BPF program containing
+> BPF_LDX | BPF_MEMSX | BPF_DW.
 >
-> ...
+> bpf_ldsx_string[] holds three entries for B/H/W (s8/s16/s32).
+> BPF_DW gives index 3 and reads past the array. check_subprogs()
+> prints the program via bpf_diag_program_structure() before
+> do_check() validates the instruction, so the illegal insn reaches
+> the disassembler.
 >
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 9aa29c367008..c6aecba6437a 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -11623,10 +11623,14 @@ static bool is_kfunc_arg_implicit(const struct bpf_call_arg_meta *meta, u32 arg_
->>   	return argn <= arg_idx;
->>   }
->>   
->> -/* Returns true if struct is composed of scalars, 4 levels of nesting allowed */
->> -bool btf_type_is_scalar_struct(struct bpf_verifier_env *env,
->> -			       const struct btf *btf,
->> -			       const struct btf_type *t, int rec)
->> +/*
->> + * Returns true if struct is composed of scalars, 4 levels of nesting allowed.
->> + * On failure @bad, when given, names the member that made the answer no, so a
->> + * diagnostic can point at it rather than at the whole type.
->> + */
->> +static bool btf_scalar_struct_walk(struct bpf_verifier_env *env, const struct btf *btf,
->> +				   const struct btf_type *t, int rec,
->> +				   const struct btf_member **bad)
->>   {
->>   	const struct btf_type *member_type;
->>   	const struct btf_member *member;
->> @@ -11644,23 +11648,35 @@ bool btf_type_is_scalar_struct(struct bpf_verifier_env *env,
->>   				verbose(env, "max struct nesting depth exceeded\n");
->>   				return false;
->>   			}
->> -			if (!btf_type_is_scalar_struct(env, btf, member_type, rec + 1))
->> +			if (!btf_scalar_struct_walk(env, btf, member_type, rec + 1, bad))
->>   				return false;
->>   			continue;
->>   		}
->>   		if (btf_type_is_array(member_type)) {
->>   			array = btf_array(member_type);
->>   			if (!array->nelems)
->> -				return false;
->> +				goto bad_member;
->>   			member_type = btf_type_skip_modifiers(btf, array->type, NULL);
->>   			if (!btf_type_is_scalar(member_type))
->> -				return false;
->> +				goto bad_member;
->>   			continue;
->>   		}
->>   		if (!btf_type_is_scalar(member_type))
->> -			return false;
->> +			goto bad_member;
->>   	}
->>   	return true;
->> +
->> +bad_member:
->> +	if (bad)
->> +		*bad = member;
-> The bot is correct about the nested types, would be nice to return the
-> containing struct.
-
-Sounds good, will do.
-
+>     UBSAN: array-index-out-of-bounds in kernel/bpf/disasm.c:306:21
+>     index 3 is out of range for type 'char *[3]'
+>     print_bpf_insn+0x2328/0x2940 kernel/bpf/disasm.c:306
+>     format_disasm_line kernel/bpf/diagnostics.c:633
+>     diag_print_insn_context+0x3a5/0x930 kernel/bpf/diagnostics.c:783
+>     bpf_diag_source+0x615/0x14a0 kernel/bpf/diagnostics.c:896
+>     bpf_diag_program_structure+0x1f9/0x280 kernel/bpf/diagnostics.c:1215
+>     check_subprogs+0x5c3/0x650 kernel/bpf/verifier.c:3057
+>     bpf_check+0x1935/0x89f0 kernel/bpf/verifier.c:21097
+>     bpf_prog_load+0x17dd/0x2990 kernel/bpf/syscall.c:3133
 >
->> +	return false;
->> +}
->> +
->> +bool btf_type_is_scalar_struct(struct bpf_verifier_env *env,
->> +			       const struct btf *btf,
->> +			       const struct btf_type *t, int rec)
->> +{
-> Nit: all callers specify 'rec == 0', hide it as well and remove the parameter?
-
-Ack, will do.
-
+> Guard any size index beyond the corresponding string table and emit
+> BUG_ldx instead of accessing memory beyond the end of the the array.
 >
->> +	return btf_scalar_struct_walk(env, btf, t, rec, NULL);
->>   }
->>   
->>   enum kfunc_ptr_arg_type {
->> @@ -14030,17 +14046,41 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->>   		    meta.func_id == special_kfunc_list[KF_bpf_res_spin_lock_irqsave]))
->>   			__mark_reg_const_zero(env, &regs[BPF_REG_0]);
->>   	} else if (btf_type_is_struct(t)) {
->> +		const struct btf_member *bad = NULL;
->> +
->>   		/*
->>   		 * The returned struct comes back as raw register bits modeled
->>   		 * as an unknown scalar, so it must contain only scalars:
->>   		 * otherwise a pointer field would be laundered into a scalar
->>   		 * and escape provenance and reference tracking.
->>   		 */
->> -		if (!btf_type_is_scalar_struct(env, desc_btf, t, 0)) {
->> +		if (!btf_scalar_struct_walk(env, desc_btf, t, 0, &bad)) {
->> +			const char *member_note = "";
->> +
->>   			verbose(env,
->>   				"kernel function %s returns %s %s that is not composed of scalars\n",
->>   				func_name, btf_type_str(t),
->>   				btf_name_by_offset(desc_btf, t->name_off));
->> +			if (bad) {
->> +				const char *bad_name = btf_name_by_offset(desc_btf, bad->name_off);
->> +				const struct btf_type *bad_type;
->> +
->> +				bad_type = btf_type_skip_modifiers(desc_btf, bad->type, NULL);
->> +				verbose(env, "member '%s' has type %s\n", bad_name,
->> +					btf_type_str(bad_type));
->> +				member_note = bpf_diag_fmt(
->> +					env, " Its member '%s' is %s, not a scalar.", bad_name,
->> +					btf_type_str(bad_type));
->> +			}
-> Nit: since we are going into some details with this message,
->       it seems appropriate to handle the case when bad == NULL,
->       but btf_scalar_struct_walk() returns false, saying that
->       the structure is more then 4 levels deep.
+> Fixes: f835bb622299 ("bpf: Add kernel/bpftool asm support for new instruc=
+tions")
+> Assisted-by: claw:muse-spark-1.2 syzkaller
+> Signed-off-by: Rik van Riel <riel@surriel.coM>
+> ---
 
-Okay, will handle else branch as you suggested.
+Already fixed by https://lore.kernel.org/bpf/20260820022020.3450479-2-memxo=
+r@gmail.com.
 
->
->> +			bpf_diag_program_structure(
->> +				env, insn_idx, "unsupported kernel function return type",
->> +				"Call a kernel function that returns only scalars by value.",
->> +				"%s() returns %s %s by value.%s "
->> +				"A by-value return arrives as raw register bits that the verifier "
->> +				"can only model as unknown scalars, so e.g. a pointer may lose "
->> +				"the provenance and reference tracking that make it safe to use.",
-> Nit: I think this description adds more confusion. I'd say something
->       like "Only kfuncs returning scalar values or arena pointers, or
->       structures composed of scalar values and arena pointers are
->       supported".
+pw-bot: cr
 
-Okay.
-
->
->> +				func_name, btf_type_str(t),
->> +				btf_name_by_offset(desc_btf, t->name_off), member_note);
->>   			return -EINVAL;
->>   		}
->>   		mark_kfunc_ret_regs(env, regs, t->size);
-
+> [...]
