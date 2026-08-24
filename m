@@ -1,116 +1,148 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-55.mta1.migadu.com [95.215.58.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83979432E8D
-	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 14:24:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8834F4399D5
+	for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 14:28:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787581488; cv=none; b=WL69TSY35GlgLfRuIG3sOfXPNTgfwJaZWyvcNV7E55lHKwCN8iIs00REXxMA1moPaPUDIw0tqmJ2a9ZRPhVYX53FbWUndl7WJUOK2yX4OnWuQdUAd2E947s66lmaft+/pu3ouEnKyyxxOLhUWp5TX/FtwYWYP66iXLv8XPNuTSo=
+	t=1787581714; cv=none; b=XiN8T3r0RwjS2Im1fvot+7tLNTNbZdA9ba4iAOlirpuXQsBwmCS/Kh1sA1iAT6veLcv8Rl2mouS8qZGFnOEdlETKZK9fEqbFn0iQJvLg5ix4/HXzRLOJ5Cq8FnHzOYxhhTz1iV0FcLNgeqkb37ACwulvO+x3bkjr/QARxN3EXwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787581488; c=relaxed/simple;
-	bh=b6O/Ru0YUI4xxdn5yRnfR8SQCNYg7XaIURZIG265mZc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=XhlKuItx7HSOwmPK6GF6LvoDjPDg0PNDw0U2ZPkPUQsYtEAKBEuc8HLUuhghUBz2sqRwWEFVHdTu3YlYgqg4dVyJ6HMgQ3CcgC1t6nndBrCTyQLUtDNB81yxJEq22Ggkc8zXJH4o6HFHAdi54WqvEWP7cg7BmO09xbO3Y8IlBlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IloMf/6B; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787581714; c=relaxed/simple;
+	bh=Gtw+u7xc8n5mWxXketVqTcpiCYuUBRGGZLwfNTG/LBY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ph9TZQpaXHUzdkevNUXr6y8O54fUhdxezbw+5Z13nbcv2HQnihwCEBU/eIiAq62kloEBtCNXPFpiu2wdfS0DA0nsLqN2V6zehlayMhNOIoPzLppRWxUzP2HytGaf8C8dvScTLtV2D+M4s+k0FSUR7hn5WkckxsiSN4i4EPhCZnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BeyJVGba; arc=none smtp.client-ip=95.215.58.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IloMf/6B"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 035571F00A3A;
-	Mon, 24 Aug 2026 14:24:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787581487;
-	bh=pSl1ImY5zi73EfwD/SEljJs8/JKLYhAUAX1aG6LkZHo=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=IloMf/6BS+5X2QoSijIUUGn/VDxiJd+rEWnUyKjAY5S4wlG8BxDeiI0hhtyrYnRHX
-	 EWu7nzSOdsapJ7IYrLgbn/ljC3gYb1/UDvLcnCaREpy8eM4es2BOLlDn02kSZWMPym
-	 17Ck+ktuks4fN4/DknmdUJAw4p+4LBJVMdZqnWUkFOkOoQPm4e/7Y059GYOvTqhmmm
-	 Mvi+rTBQQ8wjNWHvFJNF7sdFloXRkWSZsUogcZx/TFJEBUgOX0lUMCW1GQTc9vpS9o
-	 XWMbayWTcY+5XUIoEzyZQIKO54pUieRfzbV3d+poMC8b+KHNiHiB8p2keWGN/2gss+
-	 busDFn3kWAf/g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] libpf: Fix for the compiler sanity checking
-Reply-To: sashiko-reviews@lists.linux.dev
-To: Tw <tw19881113@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260824141532.604269-1-tw19881113@gmail.com>
-References: <20260824141532.604269-1-tw19881113@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 24 Aug 2026 14:24:46 +0000
-Message-Id: <20260824142447.035571F00A3A@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BeyJVGba"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Gtw+u7xc8n5mWxXketVqTcpiCYuUBRGGZLwfNTG/LBY=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787581709; v=1; x=1788186509;
+ b=BeyJVGbas0TJK6Ycu6DLTB/r+RQVSTCYrmYtQegFpEqW5T7LPi3sF1AcDjIrp5Fi+GMLrEw2
+ ATd3m9v1xd1XDHuxa6/w7XitWHlvcK5XQA63G48lCSpHm1kFRgrWAGhi2lyrviavHtpOCgL1zrR
+ Rp2FLUWqWI807uyhVMHdS2E0=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from ctao-book.. (223.70.160.239)
+	by smtp.migadu.com with ESMTPS id 4b083152c76dfaa4;
+	Mon, 24 Aug 2026 14:28:29 +0000
+X-Mizu-Trace-ID: 4b083152c76dfaa4
+X-Migadu-Flow: FLOW_OUT
+From: Tao Cui <cui.tao@linux.dev>
+To: tj@kernel.org,
+	void@manifault.com,
+	arighi@nvidia.com
+Cc: changwoo@igalia.com,
+	suzhidao@xiaomi.com,
+	sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	cui.tao@linux.dev,
+	Tao Cui <cuitao@kylinos.cn>
+Subject: [PATCH v2] sched_ext: pass the initial cpu.idle state in scx_cgroup_init_args
+Date: Mon, 24 Aug 2026 22:28:16 +0800
+Message-ID: <20260824142817.568085-1-cui.tao@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+From: Tao Cui <cuitao@kylinos.cn>
 
-Pre-existing issues:
-- [Medium] Latent undefined behavior due to signed left-shift overflow in t=
-he `BTF_INFO_ENC()` macro.
-- [Medium] Latent undefined behavior due to signed left-shift when setting =
-retprobe bit in `attr.config`.
---
+scx_cgroup_init_args carries the initial weight and bandwidth control
+parameters of a cgroup to ops.cgroup_init(), but not its cpu.idle
+state. A cgroup that was already configured idle before the scheduler
+was loaded (or before it was onlined under it) is presented as
+non-idle, and the BPF scheduler only learns about it if cpu.idle is
+written again later.
 
---- Patch [1]: [PATCH] libpf: Fix for the compiler sanity checking ---
-commit 6bb550337600fb1ee129a0b5ed1c50e66620bbc5
-Author: Tw <tw19881113@gmail.com>
+Add the idle state to scx_cgroup_init_args and fill it in all four
+places that build the args: scx_tg_online() for cgroups onlined under
+the scheduler, scx_cgroup_init() for cgroups that already exist when
+the scheduler is loaded, and the sub-scheduler handover paths
+scx_cgroup_claim_subtree() and scx_cgroup_return_subtree().
 
-libpf: Fix for the compiler sanity checking
+Verified in a VM with a probe scheduler printing the init args: a
+cgroup configured cpu.idle=1 before loading shows idle=1 in
+ops.cgroup_init(), the default shows 0, and later cpu.idle writes
+still come through ops.cgroup_set_idle(). The sub-scheduler paths
+are compile-tested only.
 
-This patch fixes an undefined behavior issue during libbpf compilation.
-It resolves a ubsan warning about left shifting 1 by 31 places in an int
-by casting the integer to a u32 before performing the shift.
+Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+---
+v1 -> v2: Also fill .idle in the sub-scheduler handover paths in
+sub.c, scx_cgroup_claim_subtree() and scx_cgroup_return_subtree(),
+missed in v1 and pointed out by Andrea Righi and the sashiko AI
+review bot.
 
-> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
-nal.h
-> index 4c46d34fc055d..222d2f1c0ed3a 100644
-> --- a/tools/lib/bpf/libbpf_internal.h
-> +++ b/tools/lib/bpf/libbpf_internal.h
-> @@ -259,7 +259,7 @@ static inline enum btf_func_linkage btf_func_linkage(=
-const struct btf_type *t)
-> =20
->  static inline __u32 btf_type_info(int kind, int vlen, int kflag)
->  {
-> -	return (kflag << 31) | (kind << 24) | vlen;
-> +	return ((__u32)kflag << 31) | (kind << 24) | vlen;
->  }
+v1: https://lore.kernel.org/r/20260824133954.561956-1-cui.tao@linux.dev
 
-[Severity: Medium]
-This isn't a bug introduced by this patch, but since you are fixing the
-shift in btf_type_info(), should we also apply this fix to the BTF_INFO_ENC
-macro in this same file?
+ kernel/sched/ext/ext.c      | 4 +++-
+ kernel/sched/ext/internal.h | 3 +++
+ kernel/sched/ext/sub.c      | 2 ++
+ 3 files changed, 8 insertions(+), 1 deletion(-)
 
-tools/lib/bpf/libbpf_internal.h:
-#define BTF_INFO_ENC(kind, kind_flag, vlen) \
-	((!!(kind_flag) << 31) | ((kind) << 24) | ((vlen) & BTF_MAX_VLEN))
+diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
+index b646711a45fe..a7218314dcfb 100644
+--- a/kernel/sched/ext/ext.c
++++ b/kernel/sched/ext/ext.c
+@@ -4764,7 +4764,8 @@ int scx_tg_online(struct task_group *tg)
+ 				{ .weight = tg->scx.weight,
+ 				  .bw_period_us = tg->scx.bw_period_us,
+ 				  .bw_quota_us = tg->scx.bw_quota_us,
+-				  .bw_burst_us = tg->scx.bw_burst_us };
++				  .bw_burst_us = tg->scx.bw_burst_us,
++				  .idle = tg->scx.idle };
+ 
+ 			ret = SCX_CALL_OP_RET(sch, cgroup_init,
+ 					      NULL, tg->css.cgroup, &args);
+@@ -5185,6 +5186,7 @@ static int scx_cgroup_init(struct scx_sched *sch)
+ 				.bw_period_us = tg->scx.bw_period_us,
+ 				.bw_quota_us = tg->scx.bw_quota_us,
+ 				.bw_burst_us = tg->scx.bw_burst_us,
++				.idle = tg->scx.idle,
+ 			};
+ 
+ 			ret = SCX_CALL_OP_RET(sch, cgroup_init, NULL, css->cgroup, &args);
+diff --git a/kernel/sched/ext/internal.h b/kernel/sched/ext/internal.h
+index 53e136a47924..aa149a9c29f7 100644
+--- a/kernel/sched/ext/internal.h
++++ b/kernel/sched/ext/internal.h
+@@ -259,6 +259,9 @@ struct scx_cgroup_init_args {
+ 	u64			bw_period_us;
+ 	u64			bw_quota_us;
+ 	u64			bw_burst_us;
++
++	/* whether the cgroup is configured idle via cpu.idle */
++	bool			idle;
+ };
+ 
+ enum scx_cpu_preempt_reason {
+diff --git a/kernel/sched/ext/sub.c b/kernel/sched/ext/sub.c
+index 0554448835bd..9701bd1d8ea0 100644
+--- a/kernel/sched/ext/sub.c
++++ b/kernel/sched/ext/sub.c
+@@ -1361,6 +1361,7 @@ static s32 scx_cgroup_claim_subtree(struct scx_sched *sch)
+ 			.bw_period_us = tg->scx.bw_period_us,
+ 			.bw_quota_us = tg->scx.bw_quota_us,
+ 			.bw_burst_us = tg->scx.bw_burst_us,
++			.idle = tg->scx.idle,
+ 		};
+ 
+ 		if (tg->scx.sched != parent ||
+@@ -1464,6 +1465,7 @@ static void scx_cgroup_return_subtree(struct scx_sched *sch)
+ 			.bw_period_us = tg->scx.bw_period_us,
+ 			.bw_quota_us = tg->scx.bw_quota_us,
+ 			.bw_burst_us = tg->scx.bw_burst_us,
++			.idle = tg->scx.idle,
+ 		};
+ 
+ 		/* the first pass must have transferred everything */
+-- 
+2.43.0
 
-The !! operator results in a signed int. If a caller provides a non-zero
-kind_flag, shifting it left by 31 places into the sign bit will also result
-in undefined behavior. Would it make sense to cast to __u32 here as well?
-
-[Severity: Medium]
-This is another pre-existing issue, but I noticed a similar left-shift
-that could cause undefined behavior when setting the retprobe bit:
-
-tools/lib/bpf/libbpf.c:perf_event_open_probe()
-	if (retprobe) {
-		int bit =3D uprobe ? determine_uprobe_retprobe_bit()
-				 : determine_kprobe_retprobe_bit();
-
-		if (bit < 0) {
-[ ... ]
-			return bit;
-		}
-		attr.config |=3D 1 << bit;
-	}
-
-Since bit is read from sysfs, if a future kernel update returns a bit index
-of 31 or higher, would 1 << bit overflow and incorrectly configure
-attr.config? Should this use 1ULL << bit to safely set the 64-bit config
-field?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260824141532.6042=
-69-1-tw19881113@gmail.com?part=3D1
