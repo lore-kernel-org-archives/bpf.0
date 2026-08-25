@@ -1,61 +1,61 @@
-Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11013065.outbound.protection.outlook.com [52.101.127.65])
+Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11012057.outbound.protection.outlook.com [52.101.126.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6232F8EBC
-	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 03:42:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED6DE347BA7
+	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 03:45:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.57
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787629369; cv=fail; b=hQKoQdw8lUYE4dUzU4qGl73SPD6wOyoRcLHM25s/V4yIWQ72ljfg5vGAGIjn+kDWIS60ijUxSv+nC0Y7rbHyEnvVe+OpheaQaZALRhycupWZluhCfuaddMG5PcMPw9+vAb8KXSO7pj1LvXIix4erepgqCbrii3bwE9vsuw4YtOw=
+	t=1787629520; cv=fail; b=HS0sSVgllEjdVM/wrs6WddhA9pldLwUWpZLp5EYVgEYLcyfO9fCwf3REwNqUVBq4YlhdZiT18zHxDQ7EXPCWH2rZk4e0/NofOz+wwtTnnZp9yKjERTHWdQtqfNcdo8WAt+SyB2HZ7jgYoyyTmEiwIwR5/QWUrek9kFkMVUHogLY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787629369; c=relaxed/simple;
-	bh=a2n17Ucos+vBs8dxznO7PANhL322dnOts33/HVcoi7M=;
+	s=arc-20240116; t=1787629520; c=relaxed/simple;
+	bh=1thkyYyRjFpUblr7Mv/PhvgbQI0XHD+mhnIpwKS5Uak=;
 	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=lclkl11QtYWhRtorRhKFT9DTC32QhYSsuTj+Byp+T6qNSNh3sTnwc6pavrbcqbJShscE2HcWTv06VFORPmKGvylAopdlnSR84GUWE5Xfb201+u/5D6bpMnYsgyf3raIVQ3E/aB3Z2CCm+3UFo5cx4NweUkiQOnvlHdqYVoLc9Qw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=YIkrdDcJ; arc=fail smtp.client-ip=52.101.127.65
+	 Content-Type:MIME-Version; b=fiPiPAl38HV+OfKi8mLWi3flIhQBrR/i2+rSGnOPY9lLR0BE15AAMQa3CVwWp47vRNlAtnTsLS00CxVrPUi/XIHHv2to4aJ+n4I3MS/wYc7C7bcIZrUrk5zb4QsDvyuAu4iKwpYqrSajVDcZeVUwQTw9Miz9rtbYEmFUeaGMX14=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=K6LMt4f+; arc=fail smtp.client-ip=52.101.126.57
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="YIkrdDcJ"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="K6LMt4f+"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=d3okSsCf9UslzCQDXblZHG3fHh75dOpfIsY5TJiXdrLF8fvY6BRNaWPudbIgKPnzfkbAon4KkT0IDApeXPfDr8Bbjtblb12eLIjohL911LSvecGvQyVEZ4oNyJBQ5MLGlOVV0yQA/RkRY5BBAltUbV0gBM3AtkM7x9XPUJ+fA5tC+dijtgT2L4L85vybswnKBOwsYmas0qrO/DgW9qD5uhdJZDh79l/17BYhP0GRajjTMVYzisF25TMr8xkUB5ce2tXY5dKN3Ey1EnL6QK0p9byuz+5vkMt6fxoUkufX9QfvXLx1BCYVzyirKj0BL5WclKQQFaBp0ZhxkqtXjE8I1A==
+ b=mjuCaAyNwoOAWVb7GaQupsrRooIEcG3LQYCgk7h/9QwXUiuiyOlcOw9VAxXSTZTsxAeZ5A2iDY5LUCMi4KtjeUU0X+DtKVUqISfCvB2JDqHaencFFNZQ2AigyXeCb1RMwI3LxFQDr78GLva9iiYviFB3gDNQMK8bo0fk0un3NyuSMvgD7/QWbmQDGcqFJEejqhx3SPqftDMIRB905bkVn/XNKxA37WBfHMxYJ4AZkv6bur/FnBNE50hlJQUuUd3ejJcRa7Nm4DF2aF/WpKE3DMzSayC0QKiQaapiZd+/DkmE55S2IA6QJO1annmmRcsv4lxiuzxl6Nr4aIsKj1E4Bw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lIQyOPvhewrGcdr6tJ1e5rryeddwVETqa5sh1epp2Nw=;
- b=rnDoCT8lA+ttDgv5h2teiqh9gfcayMEoqezjT55pAAQa8BRMI7pJ5f2f5iD92fBzkEw33njt7P9Gpxng1Q2ncUGyVoXP444BBkturnYb1wtfL77oxYTJZo1/8mnaJmkCZeUh+hPoZ7SCcU/RTQJTN7p16RVO93IVYUd210M1PkZ0YKoPpa9vgxv3AP+A6H2+wQGSKpnu1Gq+7U6i/Ut9d6dEoH30cYxgszGDfQxBAk8cdH56zGe8OymKrf8TtI97pHnGhli9ZAxcdl0Okpg6qKefrUIbULFqbaYEIeZPyCHa8AvkRd+WUFbo/NYqM/YGlYHL7MhuOKC3FHEa7Xvs3g==
+ bh=AwyZ2no4Zl2gyw6WZ5i3C2hKMKaxL2uufmkYmQgwKXk=;
+ b=uJi8fxMNWrkdzOcpg2fuKQEknGUP4PoCqNGg5te8LPTh4XPfkxd4FW+FQGMwTXbb3unCkuK/qg31ccg0abjfV4GYu3ab1yEowbyjnLNvY24hhewYr2lgql2u37CHULhS8yv1RITjaw3kwuKfrO/3+vMlUXIDqO30LQP7DXde6YcsJWYqgjkeqJD1aRvX3cDDcFI7IyDTdguDVlKPTttoYvuvdIlFFyf7q+LQXjectq+EztF+7f/diSgVfRGm5wvhntqAjmgSlCg9BEH1w6xEMLm7f8cJsjSK25pcu+irQzMDk+G2VYFV+jBR4gD9IpHpyMI0CEftbXxkpRgLm6JLtQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
  dkim=pass header.d=vivo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lIQyOPvhewrGcdr6tJ1e5rryeddwVETqa5sh1epp2Nw=;
- b=YIkrdDcJL8K7ntapmcL4Oj1pqTFoMLKu6N/sVoQADHK6ULXN94Xy1txg58J72abQTarJJs5XWgHKfRalp0OGsW2qg5IKZ48vnDlUmwS/PRJNLkFD2z/YVjxmr53pTqDlsF7+0v+eV4OoMjls407US9bYJCe4WcXB7EmAJiBI/H5+GejaZHwCbsx0J+HNHlV0eba81w4VIH6OUpAaqmMjv7303cu/Wpaczu4C4POeuptZc/1IcbShrHKRdeGnaJhl8t8AqaDWNS+7JOr6dBMBOGG7bN3/tPqTT6AvgtIZbO8Dl//um2fbwaYIzda9RdDynq25aG6uIbT1T4W/NM/XYQ==
+ bh=AwyZ2no4Zl2gyw6WZ5i3C2hKMKaxL2uufmkYmQgwKXk=;
+ b=K6LMt4f+tQ/mC5n1dYFJrLFkw36t/T1wRDpWsqPV/bZWYYAFkj8Y0xK+qKjp1EibDGWNBO6/HPG37Rqo1CMtdmAsnempDc4/eaf5ahhGkPadXsFDbcGe4gDYWyPkUpMgvmZiKV6uF9arRRAS2TgzX844s3Ou5jkcJjoIsGBRA+NSf6RZtbzWru561kOZ6tylHmgLqoQDvgDa9luMNvA8heaiAwR2zYdwbjftFPN9r79hgsDkR7I+oPlH8/jO9yKSNuL9FW9BKc6mUVnqe4a8RpDqb9Izajca0thVpODAkyG0vaYXQJjayJD67NW49oReK8TY6BKcCNYKjv54XQhZoA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vivo.com;
 Received: from PUZPR06MB4742.apcprd06.prod.outlook.com (2603:1096:301:b5::13)
  by KUZPR06MB8967.apcprd06.prod.outlook.com (2603:1096:d10:86::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.6; Tue, 25 Aug
- 2026 03:42:44 +0000
+ 2026 03:45:16 +0000
 Received: from PUZPR06MB4742.apcprd06.prod.outlook.com
  ([fe80::206c:c661:9838:5571]) by PUZPR06MB4742.apcprd06.prod.outlook.com
  ([fe80::206c:c661:9838:5571%6]) with mapi id 15.21.0339.012; Tue, 25 Aug 2026
- 03:42:44 +0000
-Message-ID: <d2b58551-dce5-4295-aa65-7b85d8dbd8e6@vivo.com>
-Date: Tue, 25 Aug 2026 11:42:41 +0800
+ 03:45:16 +0000
+Message-ID: <bb90f655-7a1a-4d29-9c38-ffd4454245cf@vivo.com>
+Date: Tue, 25 Aug 2026 11:45:12 +0800
 User-Agent: Mozilla Thunderbird
 From: Fuyu Zhao <zhaofuyu@vivo.com>
-Subject: Re: [PATCH bpf-next v4 1/2] libbpf: support selective kernel module
- BTF loading via bpf_object_open_opts
+Subject: Re: [PATCH bpf-next v4 2/2] selftests/bpf: add tests for selective
+ module BTF loading
 To: bot+bpf-ci@kernel.org
 Cc: bpf@vger.kernel.org
-References: <20260824125310.1384-2-zhaofuyu@vivo.com>
- <8b583f9deb409bec43e97f558b1e3197f2cd54ca4e5121eacada28b04749f812@mail.kernel.org>
-In-Reply-To: <8b583f9deb409bec43e97f558b1e3197f2cd54ca4e5121eacada28b04749f812@mail.kernel.org>
+References: <20260824125310.1384-3-zhaofuyu@vivo.com>
+ <dc7224531e66a752eba5ac70daaab3a6401526d3003271c956ace42a0b04585d@mail.kernel.org>
+In-Reply-To: <dc7224531e66a752eba5ac70daaab3a6401526d3003271c956ace42a0b04585d@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: TP0P295CA0012.TWNP295.PROD.OUTLOOK.COM
- (2603:1096:910:2::16) To PUZPR06MB4742.apcprd06.prod.outlook.com
+X-ClientProxiedBy: TP0P295CA0013.TWNP295.PROD.OUTLOOK.COM
+ (2603:1096:910:2::18) To PUZPR06MB4742.apcprd06.prod.outlook.com
  (2603:1096:301:b5::13)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -65,127 +65,194 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PUZPR06MB4742:EE_|KUZPR06MB8967:EE_
-X-MS-Office365-Filtering-Correlation-Id: 87d17f5a-644a-4334-ce23-08df025aec4d
+X-MS-Office365-Filtering-Correlation-Id: b1f7b521-3840-4453-7135-08df025b4673
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|23010399003|1800799024|366016|22082099003|18002099003|11063799006|56012099006|6133799003|4143699003|10067099003;
+	BCL:0;ARA:13230040|376014|23010399003|1800799024|366016|22082099003|18002099003|5023799004|11063799006|56012099006|6133799003|4143699003|10067099003;
 X-Microsoft-Antispam-Message-Info:
-	hRy3GHKskKlYwVIg/Y1nTfmylXNvC8YbMgfyxpZ0Abonq4esmkVYTGsB8S1liLsyYTFOwT7G3GPY2e4g1BxGqC52oy8KqR4UyMVv6Mu28SZIlR+f/UDfZA01eYyDvBOAWrTf2Cu8R/JFwlv5hj4qUQlj7i0X2aTGnLvTfl4cXVgtKj3ZI4G8DCxhtuaiLfQM49YYO/nptCg5Dr4mSitOHfgWg1IGApuRU6TVdWfQ5rNcWpbSRiPR9Gnwn7ouvDzUqXZMMzoZrEc4lKmfsWnxGDCOcvK0Pfe63tO77LzcuByA7x3Q4yN7W/HXR++My77zozFoKcuVsU6wUTIpwxRm/cl/9J2OU+R81AoiM7fDRNhWjrI6z0FZ4IyTPBzzfv0OdJWthmrbZzFht1o08R7M6udsxR94wEA4leHaVID8xu7LwPwWPzV4P24ejsHkLrO5shBa/G8NDRX5wYzS5UAFVtYKY0RpLcpajne8+OqHOc0Z3SATuFUZrlFtr72aCP4acCqFb44NBsQTcbc/y/kioAGJqwWAAiBQH+9wYsJtkzY0/Mn1Qa1l/jV6F6cz1U9w7cn7dQwywUKXNwncA0JxgO9SH94196LxnhH/Oo1BAT3M6Zx3SqFOzB50fDsEA8wM
+	BdVvgoq7OvgANcEkFTtIkZ8d1GYPuF986bzFfVhnpJtipEMNPPGZjmrGJrz+9NAAcxBpOPx+Ic1ROjf+98kjpL6JW4NHsMRXnExD/eUZ0wexCX0gupM6Ah082bCr080s7kG59RXrFA8DivZtnNa2/XWVCeskIo0+8+CdMeLqAG6NRr0a6//Eu62s2WJiuIY5YAmfgARDeLgyBbecL8iZLcfPo5jRt8Fw3g7z+gj0nLka1jbdMNLAnaXM7cgsJfGm4JcBl/LWQAVI5pr38ez/SmT3/EuRXShinCFnWqESMxsatqLn9C7zgjcvRC+bFhN0kMh1bEkEhz33S/N2GVsV5n8P0GPwYzvjjp51J+Fq4Pvp/UTyMbz+ol3o8Eqqaco5He4yF7lQqMLEN1UjSpkd9WNiHmqIfGXzX/u8HGDEAX+N9iWiJdRUEqs7F0Gj1c3iJym4K1m5E3wZuPQYqBL7b0601FpRt/wZy/mG8PE3Y+8nOOIisb9sbSIeLoomZSQOm35C2nLBSmWqTaBmOL8jdf53w1T1cBjDoDs7ZqPYiLAAGSIdLahQNQFSSRphvAytg02OVzGyJ6iG64IgVwUxBgeKhrW5VE3OKRogeVjG8+8=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB4742.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(23010399003)(1800799024)(366016)(22082099003)(18002099003)(11063799006)(56012099006)(6133799003)(4143699003)(10067099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB4742.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(23010399003)(1800799024)(366016)(22082099003)(18002099003)(5023799004)(11063799006)(56012099006)(6133799003)(4143699003)(10067099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Z2c0L05kOGduN1NaaUpmaUVmUzU1TEJ6WTVia0FobjF4OGxDeEdxY2ZvS3ls?=
- =?utf-8?B?dlV3bG1HbkFXNHZVZ1IzYmYwUGs2VnhxamNWZ2F1QkNIRk9Ja1piWXEwNFlS?=
- =?utf-8?B?bUtEeDR2Uk1EbnVjd0U3NkJQZldWRnJHVW93QzNpemxXSmVnUEx0RmhUZDg4?=
- =?utf-8?B?YkM5N3Z5OWorU29xejFva1hWd0Z6emlHNXg0TkJJOFl6Z0J5d3FLOEhZMVRR?=
- =?utf-8?B?WlNqaTI3dm01VnBISE5uRjFUcUhNV1IwN0w0K3ArYjVkWGFtbHZTemZMaUNK?=
- =?utf-8?B?WDlUb1grWjc5K0J3MzZqUFJxYmNFdGgrUFF2SUxZZ0haRUhYSkVBSWNOWGVr?=
- =?utf-8?B?T3NIcWVIdm5oYSs5d3owM2xIdDF5aUF2RFpGZWVXSlV1dm5wdjEraTYvOWtU?=
- =?utf-8?B?TGozckh1SERXb25SM3lweHdwUWFFNkwzckwxOWsvTW5BVzliMDlFekliMnZx?=
- =?utf-8?B?RlFaajY5TUpuZzlUV3NKUXB3Nnk3SXo3OE1MOEMxcElqc05OOGNCaXYzTUgz?=
- =?utf-8?B?WUNTV2JKcFd5c2gxaEFPc2dVQlFFZkpmcHlMVGZYUklNY2xQTnp1bXpIR0NP?=
- =?utf-8?B?K3VBNWhuOWZrTWNXa2ZaeHZxQUJXWFZON09YYmRucTRoR0hkWjkwTUFuSUNJ?=
- =?utf-8?B?OHlqUUpzaGNjZlh2Y25OSjZ2S1JzSjY0cm1sVXI1eWRRUzU3RmF6c1I0RkNQ?=
- =?utf-8?B?ZmRGQ1QxQzVoZytnRElMR2RJYS9ub2NmRkE4M0VKVVJxU3d0RmVKNkVINC9r?=
- =?utf-8?B?eTF1UTRUWnZHaG9vUjRNU0l4RGRYOGpURDhtSDNnNDR4RVFGT3VZclZrL1U5?=
- =?utf-8?B?c0trRVZQMTlIZnBPcUNOWlFHb0JqNGRURkVOY3pKZXVwd3VaVHdGVWh5Wk0v?=
- =?utf-8?B?VUs1U1lveTF1Wk9kVmdsQXFacHZBTkkzbTgvSHZ1MXVPcm96aHc0VjBJWXY4?=
- =?utf-8?B?NzgvMUZtYXFNeWhNcjZ4cFBSd1pUTTJPUVlQZHZwdk83c0pqMXhMSXJ5RnhV?=
- =?utf-8?B?OTFENWlsVUtXUTR1R3JIbCtPdDJEekRiNHNNMHVsRlFQeW5CbFhPajR1TEp0?=
- =?utf-8?B?RjhkR1MrY2dadlZGZDRqbEEvb09VSVBFb1NZVjFyV3oxZ0FFL0xYZUpqRStR?=
- =?utf-8?B?NnNuNWVYVU9OT3JNTjVLL3JscGdDSUIrRUc3WVJMKzUxRmE3enBXUkwwZTBn?=
- =?utf-8?B?UDBjamszNEhGT3UwUGdwMVJCWDZ0NVVXQzhGSExweFIyRnQwT3hldHluQ0lr?=
- =?utf-8?B?WURrYUZtVTBWTEpESERiS3hVOHE5bmRyTExhZjhad01YVHNiaHB3R1RDS1My?=
- =?utf-8?B?M0RKR204WkJrRnppUlpYMVhYNnQ2aWpKN2w2NkVaK1pRajREVmZhalZ0allY?=
- =?utf-8?B?VFpxVUV2VFQ0MlBXZzBmdDJRLzNpR3hibVhjTzBRV1JqSTJESDVRbml3dkNq?=
- =?utf-8?B?RzE0dU1qK3JnS2dQVDN1WWpGVVVHTGl2WkZGamhtY0FqdTd2alk4Y2JBREdJ?=
- =?utf-8?B?WnBXZEFqUDAxY28vQjhKaXM0SW5kek1OQmFzcWlCMERZV3g2ZXUwVllXT0hV?=
- =?utf-8?B?K3pybW13RGNLRzk5TWJjYW5mUTFEVmIyQXprbWpPTTBmUHQ3TUpFZ1hWMXFa?=
- =?utf-8?B?aG1BRjYxR0lsVWxMWEtUd2xaRTF5bmw3OThZbnNhbzIwcm0wZVc5dldxOG9r?=
- =?utf-8?B?WG1XbzdSUVYvK2lTOHRYWWZzenNmTE1POUJIOUxNcWM2cG1YWjJwSGJ3TUZU?=
- =?utf-8?B?eEJhRTZPUWcxdi8wMEZrZStHQmlYcSs4cHI0YURhMENUMkJtSThONXlrU2J1?=
- =?utf-8?B?NFpGcEtrNlhFVkxtemU5TkxDNlZ2eGIwOC93bEN5S0dOMERYVFgxaC9EV01u?=
- =?utf-8?B?MjNBZ3RuMlJ2bHZ1d3RpRzZpTmluVUFSc3hrMENQaXNxQlFrd1ZoUFZzaVdx?=
- =?utf-8?B?cURlZTdNUWZ1Ujcra2tHb3lMWmJOd3lUZmsvR1N1YWJLaHVSaUcwVDNHbnU3?=
- =?utf-8?B?d0NDajhZNE11bFpjendBU0JyQ2NUU2hJVklEU2ZIN0V5Wi85NVN2Mk9scTZO?=
- =?utf-8?B?NEk1azVHSGhuL1UwWEN6cFhRSXZoZ1dDWFQyVkZJQTZzSU9TT0NWbjVGU2E3?=
- =?utf-8?B?SnRab0xsY1doMnFiSGNMdUEwdXpXZkIvMmxISkovOCtQOHBsMGRoODNOdG5j?=
- =?utf-8?B?MDE4SHAwOUtQc3U0QjdUd3BUaVlONDJRamxKc3cyMXVMZG9LNVYvRUIxTVlN?=
- =?utf-8?B?MzJJOHJicTYxWGRIdDlmZUtjLzk2ZmZGVVR1TUJyenRJNmhiY0V0dXdBVDZi?=
- =?utf-8?B?UGlJM29WdDJaTnZObTQyMlNLV0MxQzFuZzE0QTEvZXJjSUxoMERwUT09?=
+	=?utf-8?B?aEExb3VLTVZaKzZpdkVaekdCSjBxQlJteXRlY0VjWU9Ra3o1MGhxdWRTc1NU?=
+ =?utf-8?B?RDJuMFp2QksyNG5IdGtYQ1BCRmJUa1NSOHgyODRqOURwcUxMTkk5aXhFTEwz?=
+ =?utf-8?B?Y09Ic3p5Rmxxc2ZYeGFPUzN3VXdFZmU2cjNIR2tVYVB4NEtacjNmV2hsb0sw?=
+ =?utf-8?B?ckhBWWRHZTlRWGtpTyt2TU1QWUI1TTF4ZTNiS09yei9IbTNpUjlQalFoTWxy?=
+ =?utf-8?B?NEVZLzJSRmFORWpwVmNPU2pmV3ZCMlY5L3dVN1NaQTdyTVl6eW11L0FPSXJ5?=
+ =?utf-8?B?MEN0OXNmZWg5bHV3TFJvZjdHNFBqWTgxSkc1TXVnY2xVM1FqSlJ3NU5OeEsr?=
+ =?utf-8?B?WFJja203ZmF3SHdJVXk4cmowQ3lEL3ZOYmplQzVrOHkyaUJtMVFBc0RVaS9E?=
+ =?utf-8?B?cXlTb2tOOTRrTFRKWHRUUUtGRDhwaUxNL2RSRkVsOU5TaXlrc09wYjZHUHgv?=
+ =?utf-8?B?YkVmQlBCbFJMcnlRYVdWbHkzM29pZjd4Ty9SVytUR2FoaThEZjErLzNuS1lC?=
+ =?utf-8?B?ODlZOENERkQxdkhaUVVTbUdLT1hSNzBhS2pIVldnMmpieFNPb2tHajhBODRO?=
+ =?utf-8?B?U0RDbHRUdkg2OTZzV29DQzVJUGt6R2VwNHRSQ3J1cFlqck8vSXZLTGZaQUdW?=
+ =?utf-8?B?VDJGZWZEcGFWU0hBNTk2MFc2dWpIMmYwUEtzYUZxa1pSUjF0SVh4ekQwYlB3?=
+ =?utf-8?B?d3FGS01nbnJtRFREYnRZVlNCMDV3czg1M1dBOUZzUjI2bUhlVlg5NTJJdERz?=
+ =?utf-8?B?WndRM1FrOXdhRmlEZ0FGNnpUVjRqbmVTQzd1Uk56MWIrZis0K3doRmtzS2VE?=
+ =?utf-8?B?Z2FXMnRSMjJlWnVXaVBvWmdxWjBQU3AvR0VBR3ZPSExpemdUSG9aeWQ5clF3?=
+ =?utf-8?B?MXBaV282aE1kS09jSE8vLzI4TEJEbHBIQ1A0Yzg5RTRDTEdpdzhBYWU4RnhX?=
+ =?utf-8?B?aGsvSlBlTDV6UFVPbXhmeHQ3S3ZYUG9oTkZzaVFoZWE0VmoybDEzaUpQa3U3?=
+ =?utf-8?B?SGVVZkVjbzZsRTdSWHBRMnRPWkIzOVNZYkNlaCt1VUgxRmgvY1diL3RoVXlu?=
+ =?utf-8?B?UjIrYk5XeVBaY3ZuTytQUnZOWmpDOWEycHd2R09SSnBwZXhEZVcxVGRCd093?=
+ =?utf-8?B?cE1kTkpGK1pnSVFGSHIyRjFMMUdRWm1LcHgxUm5OV29RV0VQVy9YNExZWEYw?=
+ =?utf-8?B?aE8xQVlLWXQ5REovUUZnZ3RtTVJMWHhleHBjb1VPcDdJM2kvNGhMckREaERE?=
+ =?utf-8?B?Vm9JZ0VWeDlRQkt4ZUFKNEhaSE4rdGxKNXdacU9xVFp1alNrWEorelI2NnhZ?=
+ =?utf-8?B?THVhbDdaM2VHNEY3R2Q1NHloOG1QZTU2aVVsMHR3dnpTVVpYMGM2eG44dnh0?=
+ =?utf-8?B?a2JnMGl3Q25MSUk0WUNpSEhjVldQWUVIZzhlVlRqU3JiNkVub3laWFVoWktM?=
+ =?utf-8?B?akM4Y0NMdXBJQmEvek4rOU4wa2lDMHdBUTVKOVovcmUvU1plRWU3US9abEx3?=
+ =?utf-8?B?Nm9UZWpRM2Y5OGwwMktGNDVkU01jTU9VZmtkc0dSYkpVY1RrU3FWYmZmbVhL?=
+ =?utf-8?B?NHh6OXN6VjR3MS9CT0l0RDFhNzRIVk9qWWdaejJhYm5uZXpiUFpKbFNPMTd5?=
+ =?utf-8?B?ZlU1R00zUUVNWTk2UnVoVFBhakZiZlgrK2R5V2l3U1hULytMWjF4QmE3ak9q?=
+ =?utf-8?B?TWlQYlg3Sm94VGFiRWdlVkQwN1BrRUVkbk5BL01JY2syLy9ZZHhublZnNlVD?=
+ =?utf-8?B?b0hBOFNjUEUyUjVEZGRleUZxcy9NQTFWQ2ZMMzBXQ0hlWE5WSUNKNkRJVG1N?=
+ =?utf-8?B?ckFDQUFmUzdzK0JaSzhic2EzeGwvZENsT3RFVUlpdmo2TFJtemtEQ0Fma2du?=
+ =?utf-8?B?Tm8xMDFQbjFldGZVT0NhMGw5d0xxd3V4ek1seThSd2xCK0s4N29ETmlwcW0w?=
+ =?utf-8?B?Qk5VUVNWQ3BkMFBSN244Rkg3SkNXTjJNU1VkSWJTeGVobXZLMnBsck1iYk8r?=
+ =?utf-8?B?QXBuMWNCR0gwTlhGTnIrYzNUWXo2TGtUK3lQQWxya29SbW5mbWlLbWNVS1lW?=
+ =?utf-8?B?b0x1Z2tWc2J6QWgxbjlGRkdvb1JVbGI5a2ZneTJ5R1hxSm9CS1dqWVpzMURB?=
+ =?utf-8?B?b2ZiWGpibmRRSDNDK1JxSHU2Vk9JcDlSYkxBcVhZeFpFbUcwbElLMjU4a3Jl?=
+ =?utf-8?B?UFlydnJoNmdwSkJzeUcrdUhWeGlCdzdrS0x1VGZBSDAxdDVBNWdib0o2blBN?=
+ =?utf-8?B?YThQZ2Qwd0puVWtmcG5uNDRVN044ZTNDTTY0QUw5WHhlZGtSR2FCR25LUkhP?=
+ =?utf-8?B?djRnVlo4RGFkNlM0eHJ5emdRSTNDMGF2aHVUNkpBMmNnSUtwVWRxdz09?=
 X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87d17f5a-644a-4334-ce23-08df025aec4d
+X-MS-Exchange-CrossTenant-Network-Message-Id: b1f7b521-3840-4453-7135-08df025b4673
 X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB4742.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2026 03:42:44.5780
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2026 03:45:15.9097
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bt8LP3/4HfMUPDwwR6mcH1K+9B40PshK0w2EBqF+Uag6sz0NONJOlKExm9bKX/IhgJ5xx6TWuQfBgg78sp1GRQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 56TzYr/IqblwqjirjFysDGaXdxw4CbN+amR/Ksa2/8vEhi+BY0aECO7vIgo1NFZH8tnlKXqZ1392ttMZ5CVavA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: KUZPR06MB8967
 
 
 
 On 8/24/2026 9:31 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
->> index b965ad571540..838602319da8 100644
->> --- a/tools/lib/bpf/libbpf.h
->> +++ b/tools/lib/bpf/libbpf.h
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_module_names.c b/tools/testing/selftests/bpf/prog_tests/btf_module_names.c
+>> new file mode 100644
+>> index 000000000000..d5674cad0017
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/prog_tests/btf_module_names.c
+>> @@ -0,0 +1,93 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +#include <test_progs.h>
+>> +#include "btf_module_names.skel.h"
+>> +
+>> +static void btf_module_names_load(void)
+>> +{
+>> +	struct btf_module_names *skel = NULL;
+>> +	int ret;
+>> +	static const char *mod_names[] = { "bpf_testmod" };
+>> +
+>> +	LIBBPF_OPTS(bpf_object_open_opts, opts,
+>> +		.btf_module_names = mod_names,
+>> +		.nr_btf_module_names = 1,
+>> +	);
+>> +
+>> +	skel = btf_module_names__open_opts(&opts);
+>> +	if (!ASSERT_OK_PTR(skel, "btf_module_names__open_opts"))
+>> +		goto out;
+>> +
+>> +	ret = btf_module_names__load(skel);
+>> +	ASSERT_OK(ret, "btf_module_names__load");
+> 
+> The three subtests (btf_module_names_load, btf_module_names_skip, and
+> btf_module_names_empty) leave the input-validation paths from the
+> preceding commit completely unexercised.
+> 
+> That commit adds checks in bpf_object_init_btf_module_names() that are
+> documented in libbpf.h as part of the API contract, particularly:
+> "The list must not contain duplicate entries; otherwise -EINVAL is
+> returned."
+> 
+> Uncovered paths in bpf_object_init_btf_module_names():
+> - Empty or NULL entry detection (if (!names[i] || !names[i][0]))
+> - Duplicate name detection (the for loop with strcmp checking all
+>   previous entries)
+> - Error cleanup path (err_out:) that calls
+>   bpf_object_free_btf_module_names() after partial strdup() walk
+> 
+> Would it make sense to add subtests covering these validation paths? A
+> single extra __open_opts() call checked with ASSERT_ERR_PTR() or
+> ASSERT_NULL() would exercise each. The duplicate-detection loop is
+> non-trivial enough to deserve one.
+> 
+> Also, nothing in the series asserts the default btf_module_names == NULL
+> case (load everything, unchanged behaviour), so a regression that makes
+> the option mandatory would pass undetected.
+> 
+
+Yes, I may have missed some scenarios. I'll add a simple subtest
+using __open_opts() to cover these invalid cases. Thanks.
+
+>> +out:
+>> +	btf_module_names__destroy(skel);
+>> +}
+>> +
+>> +/*
+>> + * Verify that an unrequested module BTF is skipped. The BPF program
+>> + * requires the BTF of bpf_testmod, but bpf_testmod is not specified in
+>> + * btf_module_names, so its BTF is skipped and the BPF program fails to load.
+>> + */
+>> +static void btf_module_names_skip(void)
+>> +{
+>> +	struct btf_module_names *skel = NULL;
+>> +	int ret;
+>> +	static const char *mod_names[] = { "module_nonexist" };
+>> +
+>> +	LIBBPF_OPTS(bpf_object_open_opts, opts,
+>> +		.btf_module_names = mod_names,
+>> +		.nr_btf_module_names = 1,
+>> +	);
+>> +
+>> +	skel = btf_module_names__open_opts(&opts);
+>> +	if (!ASSERT_OK_PTR(skel, "btf_module_names__open_opts"))
+>> +		goto out;
+>> +
+>> +	ret = btf_module_names__load(skel);
+>> +	ASSERT_ERR(ret, "btf_module_names__load");
+> 
+> A subsystem pattern flags this as potentially concerning: both negative
+> subtests assert only that the load failed, not the specific reason why.
+> ASSERT_ERR expands to check ___res < 0, so btf_module_names_skip() and
+> btf_module_names_empty() pass for any negative return from
+> btf_module_names__load().
+> 
+> The intended error is specific: with bpf_testmod's BTF filtered out,
+> find_kernel_btf_id() walks obj->btf_modules and falls through to return
+> -ESRCH, which bpf_object_load() propagates to __load(). Asserting that
+> value (for example, ASSERT_EQ(ret, -ESRCH, ...)) would pin the
+> behaviour.
+> 
+> As written, several unrelated conditions make both subtests report
+> success while proving nothing about the new filter:
+> 
+> - CONFIG_DEBUG_INFO_BTF_MODULES=n: bpf_testmod loads (so env.has_testmod
+>   is true and the test is not skipped) but has no BTF at all.
+>   Attach-target resolution then fails regardless of btf_module_names, so
+>   both negative subtests pass vacuously.
+> 
+> - Unprivileged/EPERM: load_module_btfs() returns 0 early without loading
+>   any module BTF (pr_debug skipping message), again yielding -ESRCH from
+>   an unrelated cause.
+> 
+> - Any future validation of the new opts that rejects the list at load
+>   time rather than at open time.
+> 
+> Would pinning the expected -ESRCH value make these subtests more robust?
+> 
+
+This is a good point. I'll check the expected -ESRCH error explicitly
+in the negative subtests to make the tests more robust.
+
+>> +
+>> +out:
+>> +	btf_module_names__destroy(skel);
+>> +}
 > 
 > [ ... ]
-> 
->> @@ -224,10 +224,32 @@ struct bpf_object_open_opts {
->>  	 * point (/sys/fs/bpf), in case this default behavior is undesirable.
->>  	 */
->>  	const char *bpf_token_path;
->> +	/*
->> +	 * Optional list of kernel module names whose BTFs should be loaded.
->> +	 * nr_btf_module_names specifies the number of entries in
->> +	 * btf_module_names.
->> +	 *
->> +	 * If btf_module_names is NULL, all module BTFs are loaded,
->> +	 * preserving the default behavior. Otherwise, only the BTFs of
->> +	 * the listed modules are loaded. A non-NULL btf_module_names
->> +	 * with nr_btf_module_names equal to zero means that no module
->> +	 * BTFs are loaded.
->> +	 *
->> +	 * The list must not contain duplicate entries; otherwise
->> +	 * -EINVAL is returned.
->> +	 *
->> +	 * This affects:
->> +	 * - BPF CO-RE relocations against types defined in modules;
->> +	 * - BTF-based resolution of function attach targets for
->> +	 *   fentry/fexit/fmod_ret/freplace/LSM programs;
->> +	 * - extern (ksym) resolution for kernel symbols defined in modules.
->                    ^^^^
-> 
-> This isn't a bug, but would it be worth adding struct_ops kernel-type
-> resolution to the "This affects:" list?
-> 
-> find_struct_ops_kern_types() (tools/lib/bpf/libbpf.c:1049) looks up
-> 'bpf_struct_ops_<name>' via find_ksym_btf_id(), which falls back to
-> obj->btf_modules[] after load_module_btfs().
-> 
-> A struct_ops implementation whose kernel type lives in a module (e.g. a
-> module-provided tcp_congestion_ops or sched_ext-style struct_ops) will
-> therefore stop resolving once a filter that omits that module is supplied.
-> 
-
-Good point. I'll add struct_ops kernel type resolution to the
-documentation.
-
->> +	 */
->> +	const char **btf_module_names;
->> +	size_t nr_btf_module_names;
->>
->>  	size_t :0;
->>  };
->> -#define bpf_object_open_opts__last_field bpf_token_path
->> +#define bpf_object_open_opts__last_field nr_btf_module_names
-> 
 > 
 > 
 > ---
