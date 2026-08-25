@@ -1,134 +1,135 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3663C3E5EDB;
-	Tue, 25 Aug 2026 08:43:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7DC33E5EFD;
+	Tue, 25 Aug 2026 08:58:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787647428; cv=none; b=YHUL4AJlBpq84S5tR8aNW+FU/zeuy1Q0INxVGQUXWOhKiQA6fd3IbXjE9BzWrtnWei0SCls0Slzn4ryzSNVH/fTmCBl1+fY4pynFznTDJeibMPAD/YCPNFtJVWiAPwFOh/gOl8c/kdzfZWFHcO83skEdzB4wiOVh8FSKjsxi6Vk=
+	t=1787648306; cv=none; b=YaD0FzYZ/W2csDkBjYnugJZl+UL6hOzbmIepGO5fooWkGAZoirCwudKlZ0AUqkqOnCO8TQ9FIgWm/x/Ct2JlVw5JFPC7ZtqjRP3rgY2kCAbqpWL3FdZeiR53oFeoXnHYgoC1Zd5IQ4swDA8VmV2u6NieAl2qmTJEVHhg/JcNSZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787647428; c=relaxed/simple;
-	bh=eSEf0NJ/FDzTZdK6KbIhOnTFJmviX53xcLE5mdfpiqM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gNT0hZvi/VUIVqhFLVWxqC8pcvEsJGw7FTKr3BW7YqmW/VOFkXx89qaMKG0DqONPrv8/VA2pFTk8/B54Li3JTF+PlzyCXLlceUbSgkGKJlEymF6H/fhGZo3x6FwDjMtH1qok0UVY07In2aQuye8AQSqt8Mq0xEkQNexwGrO+BfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CAJSZ5UB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787648306; c=relaxed/simple;
+	bh=EK1/Ib+rBSpQ9pKoq2169QpNgDqsI7CRk3X7Qt6XL2Q=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=iX3h2PgkChgoVhWqINyr0DfjyPXVZLFuFwPzYlVnfcJCsVuy7C2hWRFTpQMl708e4BUE5m7E5YzKUJI2rIAOOuBjAvPQiGHztLvTtO+/6WKmzh9+9rvlfdsUqrAll6OEni8qq9OsZZ3rw+AW7VWPj1ozW/ylUL6mQRjf6Ob1tI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I5jE7QSo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CAJSZ5UB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 521151F00A3A;
-	Tue, 25 Aug 2026 08:43:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I5jE7QSo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44AAC1F000E9;
+	Tue, 25 Aug 2026 08:58:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787647426;
-	bh=WZC2dlrRslY57zHDt+VshR3khc8bqhpzVRl64eOUUiw=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=CAJSZ5UBNLE8/NBP0SDCBYiXubYo2DLQjNcYn1387Re/HCw1TkNmH6crwy2yWmcjz
-	 GZj98GaQuHp7ZAJPOQkQ0NOG5us7c4z5zF+1BqxYagfH5n85y6xN9M5SzJGUX0C26R
-	 Y76UprMAdFfl/UUPAf23Mz73ZCB9dwooTe0++fOmn92fUycq5LiPpvU/MaFsg2T/8L
-	 OyaZNe8/ITGmUXmkbzsIJd8pXAUBQ35tiY2SqrbmWV/Y5W+eskAy7GfQiu5L94y6PL
-	 b8k2R5og6HQYQMJp7B3RM8JBw45y7nDiy7Th/2faq6vO8Aqwwd3Q1LA5el+xcyAth9
-	 I4x2a/+3cWPZQ==
-From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Tue, 25 Aug 2026 10:43:18 +0200
-Subject: [PATCH 3/3] selftests/hid: prepare
- test_rdesc_fixup_get_data_overflow for the new verifier
+	s=k20260515; t=1787648304;
+	bh=6GNfiK6XsGpiEpLb7Pb6WGqBKmvn7uV9/5pPZmhSERA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=I5jE7QSomTTfZJpAzSpItwHzpUcmw84er0FVbsMVnbWXAvGHBOsvwzopsmuF0INkU
+	 gDFL9Z84E6OAxIXV3cF9zEpdfxRsV6LdhB43tsiZxR4phkOzR3dRtBpH8Ee13O9Lel
+	 qoRy8YRMjSq5UXQCKk7HLjJJgBUoQNg3/bM1ieR/D9a3EenIx3EacXPAHo3FMr2WIr
+	 27t7wVgxQNVs3RlIFWmuP+lC/evrh91dj8iqVyXf5bNeqoww8cId0Ns39Tpe05nv1F
+	 LZ8pbltqgrHfMcWoCtuzh1sZH5/SVXSLJsug/PnZ3udO29k3IwrfGL33qAhW1s6Z+m
+	 tvXM1IZWB9/Vg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 2/3] selftests/hid: Add a test to ensure we can write
+ fields in hid_device
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Benjamin Tissoires" <bentiss@kernel.org>
+Cc: dmitry.torokhov@gmail.com, linux-input@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20260825-wip-bpf-safe-v1-2-ab9e0e111c5c@kernel.org>
+References: <20260825-wip-bpf-safe-v1-0-ab9e0e111c5c@kernel.org>
+ <20260825-wip-bpf-safe-v1-2-ab9e0e111c5c@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 25 Aug 2026 08:58:23 +0000
+Message-Id: <20260825085824.44AAC1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260825-wip-bpf-safe-v1-3-ab9e0e111c5c@kernel.org>
-References: <20260825-wip-bpf-safe-v1-0-ab9e0e111c5c@kernel.org>
-In-Reply-To: <20260825-wip-bpf-safe-v1-0-ab9e0e111c5c@kernel.org>
-To: Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>
-Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Benjamin Tissoires <bentiss@kernel.org>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1787647419; l=2813;
- i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=eSEf0NJ/FDzTZdK6KbIhOnTFJmviX53xcLE5mdfpiqM=;
- b=qoXOgQf22fImftlD6UPF3E9x+s7ffrNVxWAB0aOAstymIsKUz41rUcAZjwfwGOYnKMv3X1NKO
- 4DX7RHE1etqC7HGcZJLCe5rjEo72R7jCDA8G95FX9fqEYJigBjLjwDN
-X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-The new verifier in the bpf-next branch is now capable of detecting the
-overflow that was triggered by test_rdesc_fixup_get_data_overflow.
-This is better in terms of UI, but now the test is failing and should be
-marked as expected to fail.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] Flaky test due to off-by-one error when searching for the null t=
+erminator of a device ID string.
+- [Low] Incorrect macro undefinition leaves `HID_BPF_MEMCPY` defined and at=
+tempts to undefine a nonexistent macro.
+--
 
-Add a new parameter to load_programs() when we expect the test to fail,
-and dynamically validate the test by checkcing if it loads (it should
-fail to load with new verifier), but if it still loads, HID-BPF should
-detect the overflow itself and return an error in hid_bpf_get_data().
+--- Patch [2]: [PATCH 2/3] selftests/hid: Add a test to ensure we can write=
+ fields in hid_device ---
+commit ac5a75219b6789481c51176040f60dd282ac248f
+Author: Benjamin Tissoires <bentiss@kernel.org>
 
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
----
- tools/testing/selftests/hid/hid_bpf.c | 25 +++++++++++++++++--------
- 1 file changed, 17 insertions(+), 8 deletions(-)
+selftests/hid: Add a test to ensure we can write fields in hid_device
 
-diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selftests/hid/hid_bpf.c
-index 069ebdbb4d1c..7ab86296ff23 100644
---- a/tools/testing/selftests/hid/hid_bpf.c
-+++ b/tools/testing/selftests/hid/hid_bpf.c
-@@ -67,14 +67,17 @@ struct test_program {
- 	int insert_head;
- };
- #define LOAD_PROGRAMS(progs) \
--	load_programs(progs, ARRAY_SIZE(progs), _metadata, self, variant)
-+	load_programs(progs, ARRAY_SIZE(progs), false, _metadata, self, variant)
-+#define LOAD_PROGRAMS_MAY_FAIL(progs) \
-+	load_programs(progs, ARRAY_SIZE(progs), true, _metadata, self, variant)
- #define LOAD_BPF \
--	load_programs(NULL, 0, _metadata, self, variant)
--static void load_programs(const struct test_program programs[],
--			  const size_t progs_count,
--			  struct __test_metadata *_metadata,
--			  FIXTURE_DATA(hid_bpf) * self,
--			  const FIXTURE_VARIANT(hid_bpf) * variant)
-+	load_programs(NULL, 0, false, _metadata, self, variant)
-+static int load_programs(const struct test_program programs[],
-+			 const size_t progs_count,
-+			 bool load_may_fail,
-+			 struct __test_metadata *_metadata,
-+			 FIXTURE_DATA(hid_bpf) * self,
-+			 const FIXTURE_VARIANT(hid_bpf) * variant)
- {
- 	struct bpf_map *iter_map;
- 	int err = -EINVAL;
-@@ -128,6 +131,9 @@ static void load_programs(const struct test_program programs[],
- 	}
- 
- 	err = hid__load(self->skel);
-+	if (err && load_may_fail)
-+		return err;
-+
- 	ASSERT_OK(err) TH_LOG("hid_skel_load failed: %d", err);
- 
- 	for (int i = 0; i < progs_count; i++) {
-@@ -147,6 +153,7 @@ static void load_programs(const struct test_program programs[],
- 
- 	self->hidraw_fd = open_hidraw(&self->hid);
- 	ASSERT_GE(self->hidraw_fd, 0) TH_LOG("open_hidraw");
-+	return 0;
- }
- 
- /*
-@@ -904,7 +911,9 @@ TEST_F(hid_bpf, test_rdesc_fixup_get_data_overflow)
- 		{ .name = "hid_rdesc_fixup_get_data_overflow" },
- 	};
- 
--	LOAD_PROGRAMS(progs);
-+	/* newer verifier can detect the overflow at load time */
-+	if (LOAD_PROGRAMS_MAY_FAIL(progs))
-+		return;
- 
- 	ASSERT_EQ(self->skel->bss->get_data_overflow_check, 1);
- }
+This commit adds a selftest to verify that the name, uniq, and phys
+fields of struct hid_device can be modified by a BPF program. This
+ensures these fields remain writeable for BPF programs.
 
--- 
-2.55.0
+> diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selfte=
+sts/hid/hid_bpf.c
+> index b851339308c21..069ebdbb4d1c4 100644
+> --- a/tools/testing/selftests/hid/hid_bpf.c
+> +++ b/tools/testing/selftests/hid/hid_bpf.c
+[ ... ]
+> +TEST_F(hid_bpf, test_rdesc_fixup_change_uniq_name_phys)
+> +{
+[ ... ]
+> +	snprintf(expected, sizeof(expected), "%d phys:coming:from:bpf", self->h=
+id.dev_id);
+> +
+> +	err =3D ioctl(self->hidraw_fd, HIDIOCGRAWPHYS(sizeof(buf)), buf);
+> +	ASSERT_GE(err, 0) TH_LOG("HIDIOCGRAWPHYS");
+> +	ASSERT_STREQ(expected, buf);
 
+[Severity: Medium]
+Will this test intermittently trigger a regression if dev_id is 1000 or
+greater?
+
+In setup_uhid(), dev_id is set as a random number between 0 and 1023. If
+the number is 4 digits long, the string representation takes 4 characters,
+placing the null terminator at index 4, which the BPF loop below doesn't
+reach. This would cause the ASSERT_STREQ check to fail because the suffix
+is not appended.
+
+[ ... ]
+> diff --git a/tools/testing/selftests/hid/progs/hid.c b/tools/testing/self=
+tests/hid/progs/hid.c
+> index b21fbb13c926f..b5d9aea1bda1d 100644
+> --- a/tools/testing/selftests/hid/progs/hid.c
+> +++ b/tools/testing/selftests/hid/progs/hid.c
+[ ... ]
+> +SEC("?struct_ops.s/hid_rdesc_fixup")
+> +int BPF_PROG(hid_rdesc_fixup_change_uniq_name_phys, struct hid_bpf_ctx *=
+hid_ctx)
+> +{
+> +#define HID_BPF_MEMCPY(target, str) \
+> +	__builtin_memcpy(target, str, sizeof(str))
+> +
+> +	HID_BPF_MEMCPY(hid_ctx->hid->name, "name coming from bpf");
+> +	HID_BPF_MEMCPY(hid_ctx->hid->uniq, "uniq:coming:from:bpf");
+> +	/* hid_bpf relies on a phys being a rand % 1024 */
+> +	for (int i =3D 0; i < 4; i++) {
+> +		if (!hid_ctx->hid->phys[i]) {
+> +			HID_BPF_MEMCPY(hid_ctx->hid->phys + i, " phys:coming:from:bpf");
+> +			break;
+> +		}
+> +	}
+
+[Severity: Medium]
+Could this loop condition cause regressions when the phys string is 4
+characters long?
+
+If the random dev_id is >=3D 1000, the string will take up indices 0
+through 3, and the null terminator will be at index 4. The loop stops at
+i =3D 3, so it will miss the null terminator and skip the memcpy. Should the
+loop condition be i < 5?
+
+> +
+> +#undef HID_BPF_CONCAT
+
+[Severity: Low]
+This isn't a bug, but it looks like there is a typo here. Should this be
+undefining HID_BPF_MEMCPY instead?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260825-wip-bpf-sa=
+fe-v1-0-ab9e0e111c5c@kernel.org?part=3D2
