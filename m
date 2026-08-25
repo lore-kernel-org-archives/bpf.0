@@ -1,200 +1,239 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8533A3B6BFE;
-	Tue, 25 Aug 2026 19:10:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDF653C10A6
+	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 20:07:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787685054; cv=none; b=MBPFQ3JgaDmKBiwp2KDEEb4ecL+mLtph2ZDH5dUDq281tYFeEFrYTLqmj0fBsymWglvCHWxzIyTDZH9MReokSD6fJm8HvhUVSdj64YaC6gFEul3gP+c1AhtP9aAPtjK4OhXlImrdGrh8yAEgF7mDS3GGgLhWgOKsl1c6AF3TeI4=
+	t=1787688458; cv=none; b=nGiqLdGVC8GTo9bpBPpZbqDf4LVExN1VVeuiKrpyc53DTKQoi0fsbObaF8TgZyQsHcPgm55E7RFcAolimlso6f3ufBWfaFLM9++zdWaHSmWqn0IghFLgox7v9SovgVOjT+rLp3K24l+IdZ7vQmzZZ/db/ATgzfvAf7Mo8yOXxHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787685054; c=relaxed/simple;
-	bh=OtchHb6GBRRv68k/gioU/7xbxZ19B8WsvvWJaYWNtpk=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=ipvLNwRYVe5qMCdwNi3DiLYUr8wa3BDCTTRR0oDbzguPyZv8t4cUzxHe9TeftT02dHk+LbW69SxsAwO7zSBhor2O9024k3t1P3Jqc+SNVIrIC9YItyp7L0nInMqvVzRwIKyPuzRPy4Mm4VQ7gBGxSu1mtANzzbw4nfK7j1dIW1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=RHvx1Ado; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="RHvx1Ado"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:Message-ID:Subject:Cc:To
-	:From:Date:MIME-Version:From:Reply-To;
-	bh=elAJm2a/yvCuwNZQN8cT8iWBlOljI1OpyGvFLYC11uo=; b=RHvx1Ado+WH9EzbHIOX+ZddNR4
-	p497xG/usjgdtyDE/kA/xbjOpyLIBJuOI92EZRwc1yOZOItUmNe5+oSRd4oxCZHOSJIg77xqmE+Tc
-	K5PFV0rWFpwnhQ6m9KAj6Aq1yxVDoopN2BKsaUVqLC48h9H3wG5IGBXSnMlrjvxadR17ZpA62zFv6
-	qnk+hsPSnk1nJmmcLcs7OjTT5cXXOefE42zyl0b94RK82DSvgwElUXWEAW9MTO2l5NBp9Zejkwn6T
-	YNgx8l8tDqfY2WGCtiFY0jVvYc0jEiv34rN7tch6qSf2TkOPn3XRxDKM1uTJZIDi4f2h9zACbsB7B
-	9kW+H63w==;
-Received: from maestria.local.igalia.com ([192.168.10.14] helo=mail.igalia.com)
-	by fanzine2.igalia.com with esmtps 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1wywXL-009BHb-A7; Tue, 25 Aug 2026 21:10:19 +0200
-Received: from webmail.service.igalia.com ([192.168.21.45])
-	by mail.igalia.com with esmtp (Exim)
-	id 1wywXJ-00530G-Og; Tue, 25 Aug 2026 21:10:19 +0200
-Received: from localhost ([127.0.0.1] helo=webmail.igalia.com)
-	by webmail.service.igalia.com with esmtp (Exim 4.98.2)
-	(envelope-from <mfo@igalia.com>)
-	id 1wywXJ-00000003he5-2ugE;
-	Tue, 25 Aug 2026 21:10:17 +0200
+	s=arc-20240116; t=1787688458; c=relaxed/simple;
+	bh=IqUPtS1OrVVKgQDl+JiFu/y4TbwemwqEKa/UGKCWMWE=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=U/3htXMN7nzHrBZLxj85inVIghfBBESte8FSQiH1Ph/bsuZoJSKYx5KdUGoJCnPLOkFGaWESnVzxtMAUNojZrjOUvpRyxVR3tJocCY4gN2yp5yzLN39seQE0pBdYETBP13IoPE5tYbZ6/gp5l/+nTar16dI5F+c90RnmIce3fHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-4ab260600easo2157817b6e.1
+        for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 13:07:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787688456; x=1788293256;
+        h=content-type:cc:to:from:subject:message-id:in-reply-to:date
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=pV1WjeHgrdLhIcvemmYEAIzR81INpamnbzvykyKd8bI=;
+        b=nYQ+PTudKz3RCjSdiG4N0k+2Rn9nMh0T/hUjHUefXutFFSrQwvlC/5G76IL1kKIr48
+         28snp/cQeRK0P+akHfc7pXQfKTv6ak+nMnrVi7ZjPRSb33m2vtxnpSCLmH0W/bfdKtMG
+         yIZ67qDCcCny3FRuKpr7wj2TLxNQFFOumnK4RDi75v5eKIL4nKwu08WjnC3D7llgNao0
+         InYCTFD9vsZd1hOOJoMOYmYJMfoVHKwX5+3eBBOtriGXM2J8Xh/wXEI2RjKrdsCFTSqL
+         iMxUP3YiHA1RBY850Xn1dY4l6+2AfFEIyoax5YoiWOCqPJ988oISaishsy1angoBpcth
+         upvw==
+X-Forwarded-Encrypted: i=1; AHgh+Ro7xeysrR482+H+ykBQk5Sd/QBs3GNrwSfoYZ3yI/LUNKP3O3Wc2i1iKZcRQqD1dhNDvPY=@vger.kernel.org
+X-Gm-Message-State: AFuF++ltm06s61YDO0odFvERLHDMJUwzd6rEnRieySu9fc8g1gxVWOZu
+	Th9Skgw23J2Gs6cMe/LPmXkzGxoqhNqQhuGEICNrdK2c7fG+JMyh11bYzyMbRUxDqlJZuRhVh2Z
+	syvZccpjb2uiSLfVAC0Unvpz76btwNcv2LEbnjpHCndGcrWg2h8DNgv+UlnM=
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 25 Aug 2026 16:10:17 -0300
-From: Mauricio Faria de Oliveira <mfo@igalia.com>
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-Cc: Kees Cook <kees@kernel.org>, Joel Granados <joel.granados@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon
- Horman <horms@kernel.org>, kernel-dev@igalia.com,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- fsverity@lists.linux.dev, keyrings@vger.kernel.org, bpf@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
- netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
- lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
- coreteam@netfilter.org, linux-sctp@vger.kernel.org,
- linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
- bridge@lists.linux.dev, mptcp@lists.linux.dev, rds-devel@oss.oracle.com,
- virtualization@lists.linux.dev
-Subject: Re: [PATCH RFC v3 03/13] sysctl, mod_devicetable: add macro
- MODULE_SYSCTL_TABLE
-In-Reply-To: <ao1P_mEJdyRExG3v@monoceros>
-References: <20260819-sysctl-module-aliases-v3-0-aab90569365d@igalia.com>
- <20260819-sysctl-module-aliases-v3-3-aab90569365d@igalia.com>
- <aomlfGJM61qZKxx2@monoceros> <4e3eaf1d3419e808be046035f114bf6c@igalia.com>
- <aotteDcc588iwC6g@monoceros> <4aa22e41e8ff4bab6638cf0baaa9d07b@igalia.com>
- <ao1P_mEJdyRExG3v@monoceros>
-Message-ID: <4a7925a800f0c9b36078a70bf35e960d@igalia.com>
-X-Sender: mfo@igalia.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Report: NO, Score=-2.1, Tests=ALL_TRUSTED=-3,BAYES_50=0.8,KAM_DMARC_NONE=0.125,KAM_DMARC_STATUS=0.005
-X-Spam-Score: -20
-X-Spam-Bar: --
+X-Received: by 2002:a05:6808:3090:b0:495:ca1b:7865 with SMTP id
+ 5614622812f47-4b3504b104amr7078694b6e.11.1787688455876; Tue, 25 Aug 2026
+ 13:07:35 -0700 (PDT)
+Date: Tue, 25 Aug 2026 13:07:35 -0700
+In-Reply-To: <20260825152152.86092-1-ahemadkhawar123@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6a8df607.dbb3a75c.7844.002c.GAE@google.com>
+Subject: [syzbot ci] Re: xsk: Fix circular locking dependency in xsk_bind
+From: syzbot ci <syzbot+ci9230f67b2f9ec34f@syzkaller.appspotmail.com>
+To: ahemadkhawar123@gmail.com, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, kuba@kernel.org, linux-kernel@vger.kernel.org, 
+	maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, 
+	netdev@vger.kernel.org, pabeni@redhat.com, sdf@fomichev.me, 
+	syzbot@syzkaller.appspotmail.com
+Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 2026-08-25 05:24, Uwe Kleine-König wrote:
-> Hello,
-> 
-> On Mon, Aug 24, 2026 at 06:04:03PM -0300, Mauricio Faria de Oliveira wrote:
->> On 2026-08-23 19:12, Uwe Kleine-König wrote:
->> > On Sat, Aug 22, 2026 at 01:57:24PM -0300, Mauricio Faria de Oliveira wrote:
->> >> On 2026-08-22 10:41, Uwe Kleine-König wrote:
->> >> > On Wed, Aug 19, 2026 at 03:16:16PM -0300, Mauricio Faria de Oliveira wrote:
->> >> >> The MODULE_SYSCTL_TABLE macro emits a struct module_sysctl_table variable
->> >> >> with pointers to a sysctl table's path and entries, and table/entry sizes.
->> >> >
->> >> > That new struct doesn't seem to contain any pointer?
->> >>
->> >> The struct module_sysctl_table fields .path and .table are pointers,
->> >> although with kernel_ulong_t type so that the same 32/64-bit size is
->> >> used in file2alias.c based on KERNEL_ELFCLASS (and not on the host,
->> >> which might differ with CROSS_COMPILE).
->> >
->> > Cross compilation isn't an issue for the already existing device id
->> > structures; many of them also contain pointers.
->> > (While modpost doesn't use the pointers, the size of the structures must
->> > be known to correctly interpret the arrays.)
->> 
->> Indeed. I missed some device_id structures with pointers, and that
->> devicetable-offsets.c is cross-compiled to generate
->> devicetable-offsets.h for file2alias.c to use offsets and sizes of the
->> target architecture.
->> 
->> I'll change .path and .table to pointers in the next version.
-> 
-> I *think* the existing device-id structs use char[] for strings that are
-> relevant for modpost. I look forward to you finding out if there is
-> still a justification for that :-D
+syzbot ci has tested the following series
 
-AFAICT, an array is simpler to read in file2alias as it is stored
-directly in the symbol:
+[v1] xsk: Fix circular locking dependency in xsk_bind
+https://lore.kernel.org/all/20260825152152.86092-1-ahemadkhawar123@gmail.com
+* [PATCH bpf-next] xsk: Fix circular locking dependency in xsk_bind
 
-For example:
+and found the following issue:
+possible deadlock in xp_clear_dev
 
-@ include/linux/device-id/of.h 
+Full report is available here:
+https://ci.syzbot.org/series/6f095c15-0f05-4d2e-a9eb-8d4d85f669a6
 
-	struct of_device_id {
-	...
-		char compatible[128];
-	...
+***
 
-@ drivers/net/ethernet/korina.c
+possible deadlock in xp_clear_dev
 
-	static const struct of_device_id korina_match[] = {
-		{
-		        .compatible = "idt,3243x-emac",
-	...
-	MODULE_DEVICE_TABLE(of, korina_match);
+tree:      bpf-next
+URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
+base:      5e289c5a4a526e870efac0ca658635c47138593a
+arch:      amd64
+compiler:  Debian clang version 22.1.8 (++20260613092233+e80beda6e255-1~exp1~20260613092250.77), Debian LLD 22.1.8
+config:    https://ci.syzbot.org/builds/cde9ebbb-b104-4fe4-8779-17786d4f4336/config
+syz repro: https://ci.syzbot.org/findings/bb56c4f2-d20c-4177-a137-583624105374/syz_repro
 
-which builds
+netlink: 14 bytes leftover after parsing attributes in process `syz.0.17'.
+======================================================
+WARNING: possible circular locking dependency detected
+syzkaller #0 Not tainted
+------------------------------------------------------
+syz.0.17/5789 is trying to acquire lock:
+ffff88816f80ee70 (&dev_instance_lock_key#3){+.+.}-{4:4}, at: netdev_lock include/linux/netdevice.h:2861 [inline]
+ffff88816f80ee70 (&dev_instance_lock_key#3){+.+.}-{4:4}, at: netdev_lock_ops include/net/netdev_lock.h:42 [inline]
+ffff88816f80ee70 (&dev_instance_lock_key#3){+.+.}-{4:4}, at: xp_clear_dev+0x13b/0x340 net/xdp/xsk_buff_pool.c:297
 
-	$ objdump -t drivers/net/ethernet/korina.o | grep __mod_device_table
-	0000000000001020 l     O .rodata	0000000000000190
-__mod_device_table__kmod_korina__of__korina_match
+but task is already holding lock:
+ffff8881741d06b8 (&xs->mutex){+.+.}-{4:4}, at: xsk_notifier+0xcd/0x230 net/xdp/xsk.c:2109
 
-	$ objdump -s -j .rodata --start-address=0x1020
---stop-address=$((0x1020+0x190)) drivers/net/ethernet/korina.o
-	...
-	 1020 00000000 00000000 00000000 00000000  ................
-	 1030 00000000 00000000 00000000 00000000  ................
-	 1040 00000000 00000000 00000000 00000000  ................
-	 1050 00000000 00000000 00000000 00000000  ................
-	 1060 6964742c 33323433 782d656d 61630000  idt,3243x-emac..
-	 1070 00000000 00000000 00000000 00000000  ................
-	...
+which lock already depends on the new lock.
 
-@ scripts/mod/file2lias.c
 
-	#define DEF_FIELD_ADDR(m, devid, f) \
-		typeof(((struct devid *)0)->f) *f = ((m) + OFF_##devid##_##f)
+the existing dependency chain (in reverse order) is:
 
-	static void do_of_entry(struct module *mod, void *symval)
-	{
-	...
-		DEF_FIELD_ADDR(symval, of_device_id, compatible);
-	...
-	
-void handle_moddevtable(struct module *mod, struct elf_info *info,
-                        Elf_Sym *sym, const char *symname)
-{
-        void *symval;
-...
-                symval = sym_get_data(info, sym);
+-> #1 (&xs->mutex){+.+.}-{4:4}:
+       __mutex_lock_common kernel/locking/mutex.c:646 [inline]
+       __mutex_lock+0x19d/0x1550 kernel/locking/mutex.c:821
+       xsk_bind+0x2c0/0x1370 net/xdp/xsk.c:1622
+       __sys_bind_socket net/socket.c:1945 [inline]
+       __sys_bind+0x2e3/0x410 net/socket.c:1976
+       __do_sys_bind net/socket.c:1981 [inline]
+       __se_sys_bind net/socket.c:1979 [inline]
+       __x64_sys_bind+0x7a/0x90 net/socket.c:1979
+       do_syscall_x64 arch/x86/entry/syscall_64.c:61 [inline]
+       do_syscall_64+0x166/0x520 arch/x86/entry/syscall_64.c:84
+       entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
-On the other hand, a pointer is stored indirectly through a relocation
-in the symbol, which is not as simple to read (i.e., 1. find the
-relocation section for the symbol's section; 2. find the relocation in
-that section by matching relocation offsets with an offset in the symbol
-+ symbol address; 3. finally read the relocation's target).
+-> #0 (&dev_instance_lock_key#3){+.+.}-{4:4}:
+       check_prev_add kernel/locking/lockdep.c:3181 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3300 [inline]
+       validate_chain kernel/locking/lockdep.c:3924 [inline]
+       __lock_acquire+0x1520/0x2cf0 kernel/locking/lockdep.c:5253
+       lock_acquire+0x106/0x350 kernel/locking/lockdep.c:5886
+       __mutex_lock_common kernel/locking/mutex.c:646 [inline]
+       __mutex_lock+0x19d/0x1550 kernel/locking/mutex.c:821
+       netdev_lock include/linux/netdevice.h:2861 [inline]
+       netdev_lock_ops include/net/netdev_lock.h:42 [inline]
+       xp_clear_dev+0x13b/0x340 net/xdp/xsk_buff_pool.c:297
+       xsk_notifier+0x1a1/0x230 net/xdp/xsk.c:2118
+       notifier_call_chain+0x1a5/0x3d0 kernel/notifier.c:85
+       call_netdevice_notifiers_extack net/core/dev.c:2313 [inline]
+       call_netdevice_notifiers net/core/dev.c:2327 [inline]
+       unregister_netdevice_many_notify+0x17f9/0x2140 net/core/dev.c:12518
+       rtnl_delete_link net/core/rtnetlink.c:3652 [inline]
+       rtnl_dellink+0x5be/0x810 net/core/rtnetlink.c:3694
+       rtnetlink_rcv_msg+0x802/0xc00 net/core/rtnetlink.c:7132
+       netlink_rcv_skb+0x226/0x4a0 net/netlink/af_netlink.c:2556
+       netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+       netlink_unicast+0x7bd/0x940 net/netlink/af_netlink.c:1345
+       netlink_sendmsg+0x813/0xb40 net/netlink/af_netlink.c:1900
+       sock_sendmsg_nosec+0x13a/0x180 net/socket.c:800
+       __sock_sendmsg net/socket.c:815 [inline]
+       ____sys_sendmsg+0x54e/0x850 net/socket.c:2713
+       ___sys_sendmsg+0x2a5/0x360 net/socket.c:2767
+       __sys_sendmsg net/socket.c:2799 [inline]
+       __do_sys_sendmsg net/socket.c:2804 [inline]
+       __se_sys_sendmsg net/socket.c:2802 [inline]
+       __x64_sys_sendmsg+0x1b1/0x290 net/socket.c:2802
+       do_syscall_x64 arch/x86/entry/syscall_64.c:61 [inline]
+       do_syscall_64+0x166/0x520 arch/x86/entry/syscall_64.c:84
+       entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
->> > I would be great if your series didn't introduce a new obstacle for
->> > [CHERI].
->> 
->> Absolutely. I'll be happy to adjust the series and testing for that.
->> 
->> Could you please confirm one should just follow [1], which uses [2] to
->> build the LLVM toolchain, and use it to build the kernel [3]?
->> 
->> [1] https://github.com/cheri-linux#building-and-running
->> [2] https://github.com/cheri-linux/buildroot
->> [3] https://github.com/CHERI-Alliance/linux/tree/codasip-cheri-riscv-7.1
-> 
-> I used
-> https://github.com/CHERI-Alliance/meta-cheri/tree/codasip-scarthgap and
-> didn't care about toolchain and rootfs. It also has qemu integrated, so
-> you can actually test it.
+other info that might help us debug this:
 
-I'll take a look; thanks!
+ Possible unsafe locking scenario:
 
-cheers,
+       CPU0                    CPU1
+       ----                    ----
+  lock(&xs->mutex);
+                               lock(&dev_instance_lock_key#3);
+                               lock(&xs->mutex);
+  lock(&dev_instance_lock_key#3);
 
-> 
-> Best regards
-> Uwe
+ *** DEADLOCK ***
 
--- 
-Mauricio
+locks held by syz.0.17/5789: 3, last CPU#1:
+ #0: ffffffff90036040 (rtnl_mutex){+.+.}-{4:4}, at: rtnl_lock net/core/rtnetlink.c:80 [inline]
+ #0: ffffffff90036040 (rtnl_mutex){+.+.}-{4:4}, at: rtnl_net_lock include/linux/rtnetlink.h:134 [inline]
+ #0: ffffffff90036040 (rtnl_mutex){+.+.}-{4:4}, at: rtnl_dellink+0x41b/0x810 net/core/rtnetlink.c:3686
+ #1: ffff88801d81eed0 (&net->xdp.lock){+.+.}-{4:4}, at: xsk_notifier+0x89/0x230 net/xdp/xsk.c:2105
+ #2: ffff8881741d06b8 (&xs->mutex){+.+.}-{4:4}, at: xsk_notifier+0xcd/0x230 net/xdp/xsk.c:2109
+
+stack backtrace:
+CPU: 1 UID: 0 PID: 5789 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
+ print_circular_bug+0x2e1/0x300 kernel/locking/lockdep.c:2059
+ check_noncircular+0x12e/0x150 kernel/locking/lockdep.c:2191
+ check_prev_add kernel/locking/lockdep.c:3181 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3300 [inline]
+ validate_chain kernel/locking/lockdep.c:3924 [inline]
+ __lock_acquire+0x1520/0x2cf0 kernel/locking/lockdep.c:5253
+ lock_acquire+0x106/0x350 kernel/locking/lockdep.c:5886
+ __mutex_lock_common kernel/locking/mutex.c:646 [inline]
+ __mutex_lock+0x19d/0x1550 kernel/locking/mutex.c:821
+ netdev_lock include/linux/netdevice.h:2861 [inline]
+ netdev_lock_ops include/net/netdev_lock.h:42 [inline]
+ xp_clear_dev+0x13b/0x340 net/xdp/xsk_buff_pool.c:297
+ xsk_notifier+0x1a1/0x230 net/xdp/xsk.c:2118
+ notifier_call_chain+0x1a5/0x3d0 kernel/notifier.c:85
+ call_netdevice_notifiers_extack net/core/dev.c:2313 [inline]
+ call_netdevice_notifiers net/core/dev.c:2327 [inline]
+ unregister_netdevice_many_notify+0x17f9/0x2140 net/core/dev.c:12518
+ rtnl_delete_link net/core/rtnetlink.c:3652 [inline]
+ rtnl_dellink+0x5be/0x810 net/core/rtnetlink.c:3694
+ rtnetlink_rcv_msg+0x802/0xc00 net/core/rtnetlink.c:7132
+ netlink_rcv_skb+0x226/0x4a0 net/netlink/af_netlink.c:2556
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x7bd/0x940 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x813/0xb40 net/netlink/af_netlink.c:1900
+ sock_sendmsg_nosec+0x13a/0x180 net/socket.c:800
+ __sock_sendmsg net/socket.c:815 [inline]
+ ____sys_sendmsg+0x54e/0x850 net/socket.c:2713
+ ___sys_sendmsg+0x2a5/0x360 net/socket.c:2767
+ __sys_sendmsg net/socket.c:2799 [inline]
+ __do_sys_sendmsg net/socket.c:2804 [inline]
+ __se_sys_sendmsg net/socket.c:2802 [inline]
+ __x64_sys_sendmsg+0x1b1/0x290 net/socket.c:2802
+ do_syscall_x64 arch/x86/entry/syscall_64.c:61 [inline]
+ do_syscall_64+0x166/0x520 arch/x86/entry/syscall_64.c:84
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f2ec039e0d9
+Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f2ec1214028 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007f2ec0625fa0 RCX: 00007f2ec039e0d9
+RDX: 0000000004048004 RSI: 00002000000001c0 RDI: 0000000000000005
+RBP: 00007f2ec0435024 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007f2ec0626038 R14: 00007f2ec0625fa0 R15: 00007ffca00aa538
+ </TASK>
+
+
+***
+
+If these findings have caused you to resend the series or submit a
+separate fix, please add the following tag to your commit message:
+  Tested-by: syzbot@syzkaller.appspotmail.com
+
+---
+This report is generated by a bot. It may contain errors.
+syzbot ci engineers can be reached at syzkaller@googlegroups.com.
+
+To test a fix for this bug, please reply with `#syz test`
+(on a separate line) and attach the patch to the email.
+
+Notes:
+- The patch will be applied on top of the tested series (as an
+  incremental fix).
+- To test a new version of the whole series, please send it directly
+  to syzbot@lists.linux.dev.
+- Arguments like custom git repos and branches are not supported.
