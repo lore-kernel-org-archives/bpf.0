@@ -1,136 +1,119 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A63E83955EB
-	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 11:39:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAEE23F99E3
+	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 11:56:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787657997; cv=none; b=pTZT0J4pS0pCyS/jr/S9MSVOqUWGZEQTGsWr42XXtyz5H3R66LboMCyybm++x3a4NtHoenntL1bCL9TsTLSioaW3ktfa+hBwyhoR4WHvYR6ACs3iUZ47N+ph5z6x6Or5mZdfbUPAO6atHEf9n0cYAsSK2kiCl1tnouwZE6jUgJA=
+	t=1787658964; cv=none; b=tk5mzfhCLrgK68DqkIzdrNrQeETWYfNyMxT9YGvbndLO62W4Ios/Bdx67nKzWe8nImMUBGyQ/JtewNtRpf34ZrOBwU34/L59O+n1+2FM7m9EXNG3E8b8KVncn/CVQoKCPTG+7t1dftfF/GebyNd4p/ckF01/lr3lfuolDwONgnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787657997; c=relaxed/simple;
-	bh=ziN5dHVkV7ZdQAPjkzWjVLHjoV13nwProvcGUTsmyDU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Fcd3enqGD83svp0/jGkgMSxzw2wXUbwUm5+cAPgx0ePWg3ZQ8qGfkTHMr5891BBF70AA676tUphOXrIVFfopLf9IyQO5W3yX5IIXE6kGI5G//uBg86LaXR/w6d5/3Uw6B1BU3dEIuWLJi9vcreQjcxAk60/ORJ0/T3jlZ1xasas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DA1aMAEk; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787658964; c=relaxed/simple;
+	bh=oIj5B3kzjM22m/bXOmlwJmDPA14ql9Jd0vB0Olc5xE4=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=VPbNmtqgWM37V4cGSNDB5h9RYxRCzFuDjo3zuGn7IbrxySNvKHdhsRpm3YxtXMYndKD62KpndlBbqE9wWViQzzvUxH8z+R0H1nqgpgBRpJAKS1kiYmvG+7uISyUL+XVheGEGXDHxjAB78qdjyhyAkuMFHtrcHEhT7b2qeaTDveU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e/Luqbsa; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DA1aMAEk"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c9d1fff21edso3826582a12.1
-        for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 04:39:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787657996; x=1788262796; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=c7GgJoXYOELWkqQCC4YCb3LS5MbgnsksiqjGFB0Iuyk=;
-        b=DA1aMAEkVDqufl+F4IT/112LAraoB66rzwXfyw2uQ4C2LN320OKrRbBbPVGnZTDMdw
-         k/Fs8uHBiSyy5aHyTcZVa1bx9wwPewJcbuUr6nvhmFqV7Wtv5KFPkR3Md/9uI+mPv/sh
-         2RQNVZqd3wX84fqmJJ7I6InTIlt+eNFjTdeCGLfoqHr41UP2ufiQhpsEK/EFOKyYl4r/
-         S6B2VS8isPfJ7UbSPDHaWw+LD5KH7ii68cB0vVCVCRsBB5R++FMCN0o+urN4YXh854av
-         FbYjrDSQzf3xJY/Hfm09s3XZ9uAFBUWR5Ytc6VKbb5psyJ+wNYMuyhtxwyT5i2tSMt7B
-         bxHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787657996; x=1788262796;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=c7GgJoXYOELWkqQCC4YCb3LS5MbgnsksiqjGFB0Iuyk=;
-        b=V705n7sca/zWhD1+D45KDHNrJOble1b6nj3hMwXG+JKtxwqB2Mgudd+wdV2+4mHGID
-         edCAY5UaVYYNskO0vA7XjkVA5PA7m6vJ1V9QO7CCKigVINvYGZn2qljP7PGw+lxv4/Al
-         8CbSehfTR1xGeZ+IuCjlRJIW24DXdneLsmRUWXswbjuGgW5z04YNFPkRdfbPqlo/Saso
-         FadoPf5S1zueWIXDYWj5BH7DSs4NNWl4EPD9KqESpjXV3nh1dXi3hZFi8jEHWwJKrTsQ
-         n0mDcDwXac8pbnqyrzzHNnt7Dq3BnlV8En38p0ZAYw/yTme2DmDgbQR72mSH8LFeaxyo
-         TBJQ==
-X-Gm-Message-State: AFuF++nX4LCc2Yp+et+npY3hKtnwnFC3USlzaRu0JYo30C84UFH9TBXC
-	vcMJ5lDQ5zdhyoK3ucPvtDJ3VQkcKN1u8QHv9boah8/zxI6hjdEbLluRkH1w5Xeampk=
-X-Gm-Gg: AR+sD10SAuH1NEIImOKDqGi6BfgIKrximu5Lh+VW2cp6QQNV6PwXUXhYV/4Rb5QvZKp
-	wLFbL4PgP4ZN70E6DEadJzFXC4JPeLtiXxRy1HpTPofMCvaMHtkBSHk4LEe/v556mDTvcELncBt
-	W5Gy8faJSP2Gm7yolnC0IRPNtcaDnI4/mZZxEBb+yABZdn3u2DhqcWp0E+obM0+weLBO1+hh29Y
-	PKnd5ie1e0MVJ/g20pOg+GQ+/Bf8QMt1ImuNLp2PN4v85BvDd+sjLcUDOONLzTF75ke049NwSh5
-	6mfV2wgWcHwlXdH5I0FSsksGpLGxaVbhTAINGFZgJDAh9zud8PKa3NMcpMtaL4Cvm3rv6PUdjPl
-	AyWMqQNWIqra13Thz5wKsFpF2ShfYb4UPPa8xO9Xt3+LMvq5DKEmicijSb7rj5xT5AVmHvqiFT4
-	RIx+6zMv1m+jRV0Shb29zBd6/WJBF8VoceM6QD3XEdaXAXqLYVwH6YH97etZFALNQxo+7vk37jE
-	azWiJW2IGsm7dvFB+AYlR6nnQ==
-X-Received: by 2002:a17:902:e785:b0:2ca:6eca:492f with SMTP id d9443c01a7336-2d64b0e2c7fmr683379535ad.14.1787657995861;
-        Tue, 25 Aug 2026 04:39:55 -0700 (PDT)
-Received: from localhost.localdomain ([103.120.31.178])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327f920e0desm6962043eec.24.2026.08.25.04.39.51
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 25 Aug 2026 04:39:55 -0700 (PDT)
-From: Khawar Ahemad <ahemadkhawar123@gmail.com>
-To: bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	ahemadkhawar123@gmail.com
-Subject: [PATCH bpf-next] bpf: Fix stream capacity leak and spurious -ENOSPC in bpf_stream_stage_commit
-Date: Tue, 25 Aug 2026 17:09:48 +0530
-Message-ID: <20260825113948.85020-1-ahemadkhawar123@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e/Luqbsa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B538F1F000E9;
+	Tue, 25 Aug 2026 11:56:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787658962;
+	bh=MHZ6Dgsqr/I/QkvVdpbSBe/uiFRkQBn40AvtCUt+W8o=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=e/Luqbsa8sXdqoMtfmDQuP9XWq4i90Uf1FUUYyS2pTH1dekW01obImn1GBC+qMJHb
+	 0g4EozHE34iWEs453ZPwUjnwX3d59+SiNshBXACipm+LV9N8GkgefMalAQFuRRXill
+	 9x+REtjOBN5+gfqeKAZrlTvZRctvNYJ/k7zm8giGKhk7ea6KgY5WEcX0KsY2BWW9zh
+	 iZCfHDpie+lJDyynMFwWDJWKDgMNw1fpOHXSlwnF6UXNSFR485YTs2ZtJHdWyqD1b4
+	 GsY1Bl/sEFt0Gr2WN64wrtCaksuNtk6Y/Zv/niifXhrT14OpUn0wZCCXugqercMDxV
+	 Loyb6u2mvlaQQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next] bpf: Fix stream capacity leak and spurious
+ -ENOSPC in bpf_stream_stage_commit
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Khawar Ahemad" <ahemadkhawar123@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260825113948.85020-1-ahemadkhawar123@gmail.com>
+References: <20260825113948.85020-1-ahemadkhawar123@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 25 Aug 2026 11:56:01 +0000
+Message-Id: <20260825115602.B538F1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-bpf_stream_stage_commit() accounts the staged string length against
-the stream capacity via bpf_stream_consume_capacity() before
-detaching the queued elements with llist_del_all().
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] Dead code and commit message mismatch regarding a structurally i=
+mpossible capacity leak.
+- [Low] The patch inconsistently drops 0-byte stream commits when `ss->len =
+=3D=3D 0`.
+--
 
-If no elements are returned by llist_del_all() (for instance, when
-the staging list was empty or failed to allocate elements), the
-function returns early without releasing the consumed capacity.
-Because no elements are queued into stream->log, no reader will ever
-pop or release this capacity, leading to a permanent capacity leak.
+--- Patch [1]: [PATCH bpf-next] bpf: Fix stream capacity leak and spurious =
+-ENOSPC in bpf_stream_stage_commit ---
+commit 55dd4746dd7b2e3d562a36b8b50cd0857f9d9bcc
+Author: Khawar Ahemad <ahemadkhawar123@gmail.com>
 
-Furthermore, if ss->len is 0, bpf_stream_consume_capacity() is invoked
-needlessly and fails with -ENOSPC if the stream is currently at
-capacity, spuriously rejecting a zero-byte commit.
+bpf: Fix stream capacity leak and spurious -ENOSPC in bpf_stream_stage_comm=
+it
 
-Fix both issues by:
-1. Returning early if ss->len is 0.
-2. Rolling back the consumed capacity with bpf_stream_release_capacity()
-   if llist_del_all() returns NULL.
+This patch updates bpf_stream_stage_commit() to return early if the staged
+length is 0, avoiding a spurious -ENOSPC. It also adds a rollback to release
+consumed capacity if the staging list is empty when detached.
 
-Fixes: 5ab154f1463a ("bpf: Introduce BPF standard streams")
-Signed-off-by: Khawar Ahemad <ahemadkhawar123@gmail.com>
----
- kernel/bpf/stream.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+> diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
+> index 7a5c3ac8676b9..3ad58c82846ba 100644
+> --- a/kernel/bpf/stream.c
+> +++ b/kernel/bpf/stream.c
+> @@ -350,15 +350,21 @@ int bpf_stream_stage_commit(struct bpf_stream_stage=
+ *ss, struct bpf_prog *prog,
+>  	if (!stream)
+>  		return -EINVAL;
+> =20
+> +	if (!ss->len)
+> +		return 0;
 
-diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
-index 7a5c3ac867..3ad58c8284 100644
---- a/kernel/bpf/stream.c
-+++ b/kernel/bpf/stream.c
-@@ -350,15 +350,21 @@ int bpf_stream_stage_commit(struct bpf_stream_stage *ss, struct bpf_prog *prog,
- 	if (!stream)
- 		return -EINVAL;
- 
-+	if (!ss->len)
-+		return 0;
-+
- 	ret = bpf_stream_consume_capacity(stream, ss->len);
- 	if (ret)
- 		return ret;
- 
- 	list = llist_del_all(&ss->log);
--	head = tail = list;
--
--	if (!list)
-+	if (!list) {
-+		bpf_stream_release_capacity(stream, ss->len);
- 		return 0;
-+	}
-+
-+	head = list;
-+	tail = list;
- 	while (llist_next(list)) {
- 		tail = llist_next(list);
- 		list = tail;
--- 
-2.54.0 (Apple Git-157)
+[Severity: Low]
+Does this early return introduce an inconsistency with 0-byte elements?
 
+If a BPF program stages only 0-byte elements, this early return discards th=
+em
+entirely without transferring them to the stream. However, if a 0-byte
+element is staged alongside a >0-byte element, ss->len will be > 0, and the
+0-byte element will be successfully pushed to the stream.
+
+> +
+>  	ret =3D bpf_stream_consume_capacity(stream, ss->len);
+>  	if (ret)
+>  		return ret;
+> =20
+>  	list =3D llist_del_all(&ss->log);
+> -	head =3D tail =3D list;
+> -
+> -	if (!list)
+> +	if (!list) {
+> +		bpf_stream_release_capacity(stream, ss->len);
+>  		return 0;
+> +	}
+
+[Severity: Medium]
+Is this rollback path actually reachable?
+
+The commit message states this fixes a capacity leak if llist_del_all()
+returns NULL. But because of the new if (!ss->len) check above, execution
+only reaches here when ss->len > 0. Since ss->len is the sum of the lengths
+of elements successfully added to ss->log, having ss->len > 0 seems to
+guarantee that ss->log is not empty, meaning list will never be NULL.
+
+Additionally, in the unpatched code, if ss->len was 0,
+bpf_stream_consume_capacity() consumed exactly 0 capacity. Returning early
+without releasing 0 capacity wouldn't have actually leaked anything.
+
+Could the commit message be clarified, or is this dead code?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260825113948.8502=
+0-1-ahemadkhawar123@gmail.com?part=3D1
