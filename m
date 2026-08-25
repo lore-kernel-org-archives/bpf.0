@@ -1,165 +1,250 @@
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011071.outbound.protection.outlook.com [52.101.62.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BAAC34389D;
-	Tue, 25 Aug 2026 05:52:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7EB3C109F
+	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 06:22:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.173
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787637129; cv=fail; b=udemgWfvcU7X/5pjuqLpEdrrs/ZLrhScbGzBkQbOpd1/Yg3lMxleTDXWVxT8oWBCNPC6racsKK8EKB+eVsemqOFKfaprYFRrNai7c6NQX66zd3WQd4rTAFpn7BvhZl5zvmY9jRhbnbcz8mCWpI00QDEBGoU2HBBhfQR015xult4=
+	t=1787638936; cv=pass; b=bbiqBW1XyZhdWNPUtV0Pc3ktH0KnjcsBIK56k82jwXLQUDcNIE9I6jRLyRhHtA0KLuFCPWKWZM8OYPAWKhCVsV57rMKGCU+KWHtyE0biQpnmyoc29LSGTUPgVC3x+5DafwRKUgorZRdilapPFMWGPAurwWu8PVZGhsPC7wQzyD4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787637129; c=relaxed/simple;
-	bh=IrUIob51D1Juc9sBW77wICSK+FtYksjSzyUYM4qbYxs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=YXI1bqTMNmueL8WhoRb9jVKrFCe6C1TRCfXZrB27lIgLXBXoofdMUv8pTAgzpjKAdStKYtLDPhF1BANlaEMzHXoqx+n7wZjxtRLjbMVWjyTHSEbqy6c+9+xmPTvaf0q4PpVyNvt2O57pGPuPruQnY2921/mf0evHd0Lhlwlwtd0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=XVT/G59G; arc=fail smtp.client-ip=52.101.62.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1787638936; c=relaxed/simple;
+	bh=1XJycN1eKzm1slwbyQsbcSHLl6wYSi/yDaumlrFerJw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=phmiaFzIjMm4/RSIC2bTIfXJvU0B63LV8eW1WKDrrZqCrwKJJkrwwXy6hhoD6UWHRZOaKtANCOFeVKQDm12CLguNVFXa2vmXpPw600lFNm7EjCa0pzM49B/ENUSnas/INeWyu21dGhC/bnsW98RWVcdjEpT6TBl2fSwEXk7kwx4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kp7dOIcG; arc=pass smtp.client-ip=209.85.208.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="XVT/G59G"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LpU6KX9AGKF0Tr56I3weSl23PKL5kvyGsjpSDH1aE6TN//6QNkYe5GKXVpU7o0aK6iY1QSrDkBUlL89WhsvPFtAQfq+pzMsEQFYbDT/1rCjXFYp8kldzyROwlzu91mhvRwj18VHmqg9J0P0F9YVmNLFRKruK3CjTiZUuN0MAfrnYMN2vFjzF+qTzYaKDPhvASDtlbkATFrNRBUtBBRY0vDGE4lrkooJa64RK0nZejGkAcVKJuzhi6OL708Q/0+HIIZ2etJvmNcIQgK3lL+4YK7460mBPlhql5E8jl4ems9J2OqjZU+u+4RbTFAlvdLI5at8YmP8nn8dCWOvlbV03Ug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PxAcs0YqUVqLT4vemcmHrfvUxc53l0rFGjflMsSIQzo=;
- b=tJYzlKlhwmExR4kCREP1FQu+9suijCOB0YvdjYHnTHYxdicY/ZBdsaX528173fyzF6XT+cQGPZN9u137Ih3Lcf4etFvJ5HOzTNI+lXxE9be+OAR4EAmA/JqALpPP4ILAvjFM+l7CfwBrTqGff6G1FsGP/owyUM1eH6JWDl48RIq53pk5pxt1VUF64IP9/lfIU8Ib7yL+jp2S8z0Bb5lKqiyQjOuBHr/zvaY69qIoADPOwVJgqG1E/S7eUt6mO464t21XbjQ6br53okqr7QniaZq0ZTWtb67GpeebCrPPTGCJcXdNruHDssVe2mWVnhrTMVLPPYkUlhpfCbIhOEmS5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PxAcs0YqUVqLT4vemcmHrfvUxc53l0rFGjflMsSIQzo=;
- b=XVT/G59G4u9iKUhZgYOLSaV3ZZ0PE+GIE4KhMdX4/IvCuBUDA1Wvf3ePVw01fPVRsbBSPcqbcUOe0PGN2pn/yy92JIvuyCZlt4EgNCNZ31vCepDJ4FLoMf5BCA6329mn2J/z6DfLLcKNWmT6FEsATNncynN9eO77ezQLi8cNfk5ILnHRWCJbWDqLSfzT9BMM+agycxyCJL2dky9RwnM4gpKp8HRDwS158f8y85LsLairfCbNFik/fVo4QxC/H/SDOKnLFmlq+sr2OGtO2uqPL0g03KmWdQnSLwVmTLxJn1FVKWiD6qjJ2mTFryDmmpiRwNA2XEEHTViJff49uwe9aw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM6PR12MB4827.namprd12.prod.outlook.com (2603:10b6:5:1d6::14)
- by MW4PR12MB7117.namprd12.prod.outlook.com (2603:10b6:303:221::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.6; Tue, 25 Aug
- 2026 05:52:02 +0000
-Received: from DM6PR12MB4827.namprd12.prod.outlook.com
- ([fe80::6261:3040:864b:159c]) by DM6PR12MB4827.namprd12.prod.outlook.com
- ([fe80::6261:3040:864b:159c%5]) with mapi id 15.21.0339.012; Tue, 25 Aug 2026
- 05:52:02 +0000
-Date: Tue, 25 Aug 2026 07:51:57 +0200
-From: Andrea Righi <arighi@nvidia.com>
-To: Tao Cui <cui.tao@linux.dev>
-Cc: tj@kernel.org, void@manifault.com, changwoo@igalia.com,
-	suzhidao@xiaomi.com, sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	Tao Cui <cuitao@kylinos.cn>
-Subject: Re: [PATCH v3 0/2] sched_ext: pass the initial cpu.idle state in
- scx_cgroup_init_args
-Message-ID: <ao0tfbNNcs514WgU@gpd4>
-References: <20260825023557.27881-1-cui.tao@linux.dev>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260825023557.27881-1-cui.tao@linux.dev>
-X-ClientProxiedBy: MI1PEPF000008C7.ITAP293.PROD.OUTLOOK.COM
- (2603:10a6:298:1::429) To DM6PR12MB4827.namprd12.prod.outlook.com
- (2603:10b6:5:1d6::14)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kp7dOIcG"
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-3a14f6613fdso47297101fa.0
+        for <bpf@vger.kernel.org>; Mon, 24 Aug 2026 23:22:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787638932; cv=none;
+        d=google.com; s=arc-20260327;
+        b=aKROJEt9abqR58jvjIsu77pLJYi57F3eE5AWWduXTVbDyRHW1vW/r0d+ffNnSfIls4
+         MR9jVAUfECStVz+2IX1GVRwj/4cAvuiN4RM9Y8QWOKhI0dhoFnXjpXkBmgwERJeH8iu2
+         GL8M6ifvjZlU2AO0ZEoRzKMfDMU9nyHKSHelozECYy8iQzweuZdfT60KdvSPKvs9eiMN
+         CJphWS32k+rShBU989SMHaBYqlOOyzKdYSr7s4vs57VSvnGkj/lM1iVLHSu+xFhORldl
+         0DukIEcCXZ9UTD5wBCYMGcBYPwa3ZcRQuQmB/pcZRud/wvnhaDQQpnjGsaPQEvxfGar2
+         Kx9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=lmfxIomckmLv6QtHhQG41G6LPwKSajfTzLUuEWwyKE4=;
+        fh=tXznerIKAIj4AlzLq8BB8FRO/VOAClgbFVW+aGPcWUM=;
+        b=aTYaYeZu3iP3cA4xr6AGZ+5ib90cNsqAMBZ7HFw8Tr0Nq36odEQzx08AdYhk6t2GeM
+         K0UoyitHWcMaido9eRr3kOX+jWNhBuHmZrUNQKmeFk1XICqFllXfcYr+fkstlmC1EUod
+         cqEi8LoaRZR8bo/moJFujXTk+gOcVrLibyGVLcgOSISkm9IWptx+Dqpt4cJlp1jo4N5u
+         l20rfLcw0DLG2BOGkIXwEAk6e3MoZE7IuIarsnw6myc1vLP9hP7KhFEJbzmr9YVshmpM
+         Qk9sITznWUbNZ3OjpTmML3WDU3KjVI6V06ha9RJ/YwdVmT78eFwUvXpLIwQcqmAFIls5
+         4LJg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787638932; x=1788243732; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=lmfxIomckmLv6QtHhQG41G6LPwKSajfTzLUuEWwyKE4=;
+        b=kp7dOIcGaWAm6eyKL7k4efqwBdupV5Yug+k5mKsz4o0gnfhi4GOEZWpp8IkOUmviVQ
+         JW3WvjYO0eJrxbdUzjfHFV3YqFXL/4FvmwHAlHxmn/aLjH8cJ1Ucw7Qti8Dk8vCqNNlF
+         ks/OBA9FQyEOeAm7f1t0BHQggiJbCs9+Hgt8H1fBkjX74HjzsRDKw8il68BEL6eF4KFy
+         GBgCp3tAvmU5W11dQcpM8vwEvrzdurhByaZgIfpnQZ82W/r4hVry1N8D9qHt6djOl/nW
+         bHVsz0VqGx4vEWbNzVOT0UHrOg8ZSF9b8z3435AIVP3NxiD9POqPK+Ma6Ud8HKKhH1j2
+         HwCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787638932; x=1788243732;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lmfxIomckmLv6QtHhQG41G6LPwKSajfTzLUuEWwyKE4=;
+        b=n17E32ctFsJf7q3Z+yDLkOYyTDztUd23novV1CV1touEAWfWIMaHIPEQYx/9xjhu+u
+         GF4O6jk4D3g4KWzi2pCHlqGDx/Z2IveN9PvQ2MibX+AaefSJ6UsJqLSx06Gh/WEIbheT
+         2s+9Ntd6qxSCy8OCAvBZTxdE3BiwiHmtiFk/lQNuwug5ZwG4LdWQnh9UTxIK73/frRDT
+         nrPUwPLGGFlWjsq3U5rWsUoNMN69SVukb0Wmp5vsLGD4630bymnXufBwimVL1AapJ4TP
+         MALT9CMwuxQf3jr9Ah/IjW11Fq5yWnJ7JckW59NoIxKkYiBC8+NOP0pHmInf6B/gGJum
+         XbwQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rq6QiMQDRJJx3dRewK8Ma1p7zR08qR8JsXrBa1R5wzU4+HAfGa6CnkzjO5ZBhFq6wpKrrc=@vger.kernel.org
+X-Gm-Message-State: AFuF++lUEGcSijhoxMdrjtswN3Ya9FLEvN9r77UEdEKZfIRnt5mYUfMl
+	tQpyk829Dr/7MqXnOkBnPXb/ENG7BrhNX6VD9UQNEueNwbNUezh4b13IrObdRmNJgpbV56pdCWL
+	vOUEpZlnKFWJN9Vipt4XgbJr7nQkP5oQ=
+X-Gm-Gg: AR+sD119t7COHtONxPTIxJ2zvqFM4dKmRX5clX7gp5/oGyCU+drko6U86gbk1/nxq+1
+	FBw6SkKFj5n0eHdOlyh6RMCvBFxZQxVeeJBNAoeFjGe53SfP+MrNjvTMYkL7U6sNzDitRvQwSgP
+	EJjDB/7K9E60QjYofo8arE0DhKRmMWVAQXbKdNlFKTBaYnT3qXHqSi4kFRz4C/vf+41p8XMGIwE
+	qPvAGd0ouQU8kfJfCJDPj4TOwomU0TBaeEV69fJOh3Uvde3LW25OvJIes90V5kaGz/FUfDz76xY
+	2acs6tq5pS8tuQuZVR9uD02PI6/ljcPo50cDHDAbiNNoO3hIdiNYLXVITUmkzXcrVKpahQ8CbXV
+	uO/rMsYwYwConJ1f8xsomCuuT5bV05CYnHyXudtK3ZwaCJ5/ksgGeYZOuJEA=
+X-Received: by 2002:a05:651c:3242:b0:3a1:11d3:173e with SMTP id
+ 38308e7fff4ca-3a1ef41de62mr8160691fa.14.1787638932016; Mon, 24 Aug 2026
+ 23:22:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4827:EE_|MW4PR12MB7117:EE_
-X-MS-Office365-Filtering-Correlation-Id: 772aabfd-2d7a-4983-1f65-08df026cfc3e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|23010399003|366016|56012099006|10067099003|11063799006|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	We6G8qxfcbvtmo5i1Yn5/PO4L2rv2baY4qGia/eVLRdHZdT9FIciCpT0xl/etuo8qauAeei8rM1e/LafJv3dTsPpqB8sqab6HDVHqIWrPKEp/y/b/8AL/mEPuZQq7IA/DKuxptCdPVVNALLUYOATcRWxkBdv3s+CKjqG8u319YSy2TfpHgkKX1gICv2u08ocNrl68bGlAxU//ycsggOWJlDWAdHF4HeUKebplISHWx0Vy2z74bjdynlZ1OwtQVK4hj8rvWJ/SFTAwheKOynFurOjbNW8a7eLO5MYL4vtZbFnq1+hFwrUH+cOEASt1odL6N4vkaPOebIidnvNdxz1aYGwGMO9GSXgSZzxaCs87cVkcG7zm850KyyrYcDvbRY+HYEBj2wTHMTBnkdrPRv9SSD7YKE5pp17v4YVMnDLXgFXNAry4wm4hSv2+XeHsTv0xQWWF9HGJb9nA4MzcZnpYyLgV8YKS4yxmVFR4AXzwUUQLmF1/ccrGVuqwPQsnB2yka/y3npht5uE5wNfgA0dCmy9IHWzUtDQXuHCiLcbZinA2kOVMk2eBGj0jynzyMq5MaET2a3mZHqcc32RcYrpShp54qQ9arbWZP7+tVcQbWhJ/t9wJ2Mw5aVPztjoWzJs6QJvhzSiGPOAs2TcVMHq8zkxtCSqdzn00+pWAz5Myig=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4827.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(23010399003)(366016)(56012099006)(10067099003)(11063799006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?OMAXZ29+YTP2KsqnamrWhqoGw3bCtWcZolxfMEuwv03orho8cqGAWjnaPu9A?=
- =?us-ascii?Q?r+dQzdt8HURw8wj9JUnIvQEZfBUMIe1Or3hKfon+6kZErIKRSe39WXZ0TPbi?=
- =?us-ascii?Q?CwtTNl4RVv7Ds7XCdpHoqkqCOY/ZO3hdJ/WXdWdkOCd1zXFYS0Skhfk1gP38?=
- =?us-ascii?Q?7IMdb35vWs/WI6AO39eOZktbjwRhl8r7KWsIKaOmtWOGEPw6KlhyUvh/irEp?=
- =?us-ascii?Q?kZ5lswgYwBuXWG0dLiNWTvpvM0ECgq/CKXdXz4srwbt7Rdw3Vwx4V7KFz4WL?=
- =?us-ascii?Q?A5jaeYlrxreGlqWz/yzEWV4tNL33zOR1BpeuOrMjoeZKrzhd7hGhdv0or3hj?=
- =?us-ascii?Q?S4vAcxr+uIrsHgfY4/q/S9jt9geZWp8/cDsLRXBpcxGIWXCFSwxN78rMQJXJ?=
- =?us-ascii?Q?xU9T2n546H7iryImt6ImzhaeqyxhZUuGuGIN+3tNMAx9yMWjHk+8RJgWFifH?=
- =?us-ascii?Q?khTicvC+/g3ZczHiBcnTqh7GRMvhY7HFqjouOQmlFi5BM61I1tuufFq+UB9J?=
- =?us-ascii?Q?HgB0nxfulBBpzjtVozNsPAb7E/gfUOXA0nqpjDzbJssknoqusVC4BAj1aCqD?=
- =?us-ascii?Q?rwkF9djBfZ1iTSF64/vHN9FVzy+yYxc8VX9OjQ17WYt7mfx4FrzhREBWEz4r?=
- =?us-ascii?Q?cqlTMHOHezJd1hBsl1WcythjReH7nsp5GnY2QevM84ycvgmNHnkDyL0Fcure?=
- =?us-ascii?Q?PgRglTJkquXLiRymWT1TXrI3ZvysRztoMzpe0HCgLENGmBTosCmX4ZosZWou?=
- =?us-ascii?Q?F0Mn5KsRu+S40IpF6dcK1dTnTOpSmT0Kvuk4JDMtI2OwFSyugTv7n8x9xJMz?=
- =?us-ascii?Q?V75+eORf2T+xnWWtHwonHTk4YQb8XzKEeNmAA7oX6hnSQ1J0vKmJ+ZGDiknf?=
- =?us-ascii?Q?DI/YyrK55P158EOK9DIwFagECxZFWaWlTC/x3Kxkt/0NvKpOBPlXjJrKL7yu?=
- =?us-ascii?Q?6y5RWTmzOvK7gNoS6sO9xBc8Z728XTHhQlTwSfHo6o9XTjLPyLELPymVLUiN?=
- =?us-ascii?Q?SpXwinRD2pIaPX0LuxLyE+2fR7O2qXbRlhaSawhMxhXP4TQz8Dod/GmJ2tJW?=
- =?us-ascii?Q?aQkuikbL/dZz/h497vAC6ZrQIRvJyR3sRPuAJRO0/w4gdaf7u8ZB2aUbhjZ0?=
- =?us-ascii?Q?behjlCuMUMKDCFR62FYW+3DmUGoV7WbUQ6i2rEjRVjhqi46+jFJTAVhxuHHf?=
- =?us-ascii?Q?Fb0hGWpVlyeWK9kqQIWxFf/lhTWbmYlEl7Qu3qF+FgcfUtq6oPuPfVWOr5c+?=
- =?us-ascii?Q?aIomVMbwVxVheo2MiR7S+mHwpWXsRPkF2YC/MtKI/yzM3BLVQ8KgZNcQdTlA?=
- =?us-ascii?Q?bWz3JbiX5wpcF/k0zC+ounb8mLB+9C6KthhAJpk4eQE315yFLungZG6D3Bof?=
- =?us-ascii?Q?F/cPOIP6R5ni+I3L/Hnom8RROqwrdppYwFOzlZgVf6ZsyHYzRUsNscMiauqw?=
- =?us-ascii?Q?qE505FMQXjWsGDiy6aa3lVaBDmWR3oP9a5Atb9CNvauAZ+o6gqdzJTNsL1fR?=
- =?us-ascii?Q?dPcBymypuduTvRuP0YMUKtqVmmDEUw4/3ORg6caV9uaYAUFVKEuvpecieIQj?=
- =?us-ascii?Q?wbGkyWFoggx2Qv4Re/x9GFKyGlwFOHgbdMAUxVNpv+KRJ8i0jWto/JX37DEP?=
- =?us-ascii?Q?q29KzQ/G73PT+RwHsV6xa9YM8UFK6L6d8m6d0NFTIoig8d+jcW1dcSdFDb1y?=
- =?us-ascii?Q?Zg+WU3zC75vPs3c76u4SVa0TdzJ02iNP1B2yOewx/SYxfStF4bHeqyLaJwNi?=
- =?us-ascii?Q?2fmqXIxCpg=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 772aabfd-2d7a-4983-1f65-08df026cfc3e
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4827.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2026 05:52:02.3994
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OfsVRxEm34KEbSKZT35MKBLWpgmYOVxryRafK2psUGww3CiM2JYLy7TrtOP/ZXQZMluc6IqVTwaPB/JZJBh9hA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7117
+References: <20260817153957.3177627-1-poros@redhat.com> <CANn89iKZe5reKy5uNxF7_G2=zytnPjWCUn+bX7-iGdJuTjBgMw@mail.gmail.com>
+ <CAL+tcoBX+3_oiy5KCtnBkjEdmDgzY6PYAT2oOqDSLXezDCFfHw@mail.gmail.com> <CANn89i+aacS2PfaMXnimzGgbCLz-JSnqo6QyoS122Gf+kxya3w@mail.gmail.com>
+In-Reply-To: <CANn89i+aacS2PfaMXnimzGgbCLz-JSnqo6QyoS122Gf+kxya3w@mail.gmail.com>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Tue, 25 Aug 2026 14:21:34 +0800
+X-Gm-Features: AcwNN1V7KGrHTI3nUtkITBErK4SK8jYm4mBMcZcrHQYCTHlnZyUa999e2sIfyTc
+Message-ID: <CAL+tcoB80wATncgNQDnWS6-W+VxqiANph1ogGz6zLv0TKLxG1g@mail.gmail.com>
+Subject: Re: [PATCH net] xsk: reset the mac header in the generic Tx path
+To: Eric Dumazet <edumazet@google.com>
+Cc: Petr Oros <poros@redhat.com>, netdev@vger.kernel.org, 
+	Magnus Karlsson <magnus.karlsson@intel.com>, 
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Willem de Bruijn <willemb@google.com>, 
+	Vladimir Oltean <olteanv@gmail.com>, Doruk Tan Ozturk <doruk@0sec.ai>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 25, 2026 at 10:35:55AM +0800, Tao Cui wrote:
-> From: Tao Cui <cuitao@kylinos.cn>
-> 
-> This carries the initial cpu.idle state of a cgroup through
-> ops.cgroup_init(), which was the only cpu controller knob whose
-> initial value never reached the BPF scheduler. Patch 1 is the fix;
-> patch 2 renames tg->scx.idle to tg->scx.sched_idle, suggested in
-> review, as a separate cleanup.
+On Mon, Aug 24, 2026 at 9:14=E2=80=AFPM Eric Dumazet <edumazet@google.com> =
+wrote:
+>
+> On Mon, Aug 24, 2026 at 2:47=E2=80=AFPM Jason Xing <kerneljasonxing@gmail=
+.com> wrote:
+> >
+> > On Fri, Aug 21, 2026 at 1:07=E2=80=AFAM Eric Dumazet <edumazet@google.c=
+om> wrote:
+> > >
+> > > On Mon, Aug 17, 2026 at 5:40=E2=80=AFPM Petr Oros <poros@redhat.com> =
+wrote:
+> > > >
+> > > > __dev_queue_xmit() resets skb->mac_header, __dev_direct_xmit() does=
+ not,
+> > > > so a frame taking the qdisc bypass path reaches ndo_start_xmit() wi=
+th
+> > > > the sentinel left by __finalize_skb_around() and skb_mac_header() p=
+oints
+> > > > 65535 bytes past skb->head.
+> > > >
+> > > > The packet socket reaches it through packet_direct_xmit(), and
+> > > > packet_parse_headers() was taught to anchor the header by
+> > > > commit c2707480cfbf ("net/packet: reset the MAC header on the
+> > > > packet-socket transmit path"). AF_XDP reaches it through
+> > > > __xsk_generic_xmit(), and net/xdp/xsk.c never sets the mac header.
+> > > >
+> > > > ice reads eth->h_proto through skb_mac_header() on its ordinary Tx =
+path.
+> > > > On an E810 every one of 2817224 AF_XDP frames reached the driver wi=
+th the
+> > > > sentinel still in place, so the ethertype never came from the frame=
+. With
+> > > > this patch all 5757920 frames of the same test carried the correct =
+0x88b5.
+> > > > An AF_PACKET sender on the same port read 0x88b5 in both runs.
+> > > >
+> > > > On a KFENCE kernel that read lands inside the pool and gets reporte=
+d as a
+> > > > use after free of an unrelated object, 387 times in a 180 s run:
+> > > >
+> > > >         BUG: KFENCE: use-after-free read in ice_xmit_frame_ring+0xd=
+db/0x1650 [ice]
+> > > >          ice_xmit_frame_ring+0xddb/0x1650 [ice]
+> > > >          __dev_direct_xmit+0x347/0x4d0
+> > > >          __xsk_generic_xmit+0xc13/0x1e70
+> > > >          __xsk_sendmsg.constprop.0.isra.0+0x519/0x640
+> > > >          xsk_sendmsg+0x6c/0x90
+> > > >
+> > > > Rerunning the same reproducer on the same E810 with this patch appl=
+ied
+> > > > produced no reports and no bad reads.
+> > > >
+> > > > Anchor the header in xsk_skb_init_misc(), which runs once per skb f=
+or
+> > > > both build paths. With IFF_TX_SKB_NO_LINEAR the offset still is not=
+ a
+> > > > real header, but it stays in bounds and no such driver reads it.
+> > > >
+> > > > Fixes: 35fcde7f8deb ("xsk: support for Tx")
+> > > > Signed-off-by: Petr Oros <poros@redhat.com>
+> > > > ---
+> > > >  net/xdp/xsk.c | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > >
+> > > > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> > > > index 7855ee09c4b640..885427392cb6b3 100644
+> > > > --- a/net/xdp/xsk.c
+> > > > +++ b/net/xdp/xsk.c
+> > > > @@ -931,6 +931,7 @@ static int xsk_skb_init_misc(struct sk_buff *sk=
+b, struct xdp_sock *xs,
+> > > >         skb->priority =3D READ_ONCE(xs->sk.sk_priority);
+> > > >         skb->mark =3D READ_ONCE(xs->sk.sk_mark);
+> > > >         skb->destructor =3D xsk_destruct_skb;
+> > > > +       skb_reset_mac_header(skb);
+> > >
+> > > I don't know, I had at some point the goal of removing our dependency
+> > > on mac header in ndo_start_xmit(),
+> > > as this must be skb->data.
+> > >
+> > > ice could use skb_eth_hdr() instead of eth_hdr() or skb_mac_header()
+> > > and save few cycles.
+> > >
+> > > Some drivers call skb_reset_mac_header(skb), this is really a mess.
+> > >
+> > > With AI these days, it should not be too hard to completely remove ou=
+r
+> > > dependency on mac_header.
+> > >
+> >
+> > I saw the status has been changed to 'rejected'. Why is that, I
+> > wonder? I think it's just a fix that can be done in xsk like
+> > skb_reset_network_header() that I'm going to add.
+> >
+>
+> skb_reset_network_header() is orthogonal.
+>
+> Patching net/xdp/xsk.c (and follow-up network header resets) only covers =
+one
+> caller while leaving the core issue open.
+>
+> The discrepancy is that __dev_queue_xmit() unconditionally executes
+> skb_reset_mac_header(skb), whereas __dev_direct_xmit() does not.
+>
+> As a result, other paths bypassing qdisc hit the exact same out-of-bounds=
+ read
+> in ice. For example, AF_PACKET with PACKET_QDISC_BYPASS only resets mac_h=
+eader
+> in packet_parse_headers() under:
+>
+> if ((!skb->protocol || skb->protocol =3D=3D htons(ETH_P_ALL)) &&
+>    sock->type =3D=3D SOCK_RAW) {
+> skb_reset_mac_header(skb);
+> ...
+> }
+>
+> Any PACKET_QDISC_BYPASS socket using SOCK_DGRAM or SOCK_RAW with an expli=
+cit
+> protocol (e.g. ETH_P_IP) sends an skb with mac_header unset (0xffff senti=
+nel)
+> directly into ndo_start_xmit().
+>
+> If the core stack was expected to guarantee mac_header for direct xmit, t=
+hat
+> reset belongs in __dev_direct_xmit(), not duplicated in xsk, packet,
+> selftests, etc.
 
-This looks good to me.
+Spot on. That's a general approach.
 
-Reviewed-by: Andrea Righi <arighi@nvidia.com>
+>
+> Work in net-next would presumably audit / change all drivers to not
+> rely on mac_header
+> being set (This I can do when net-next reopens)
+>
+> Then we can remove skb_reset_mac_header(skb) from __dev_queue_xmit()
+> and __dev_direct_xmit(), and from dpaa_tx() / dpaa_tx_extended()
+
+Thanks, Eric.
+
+But my minor confusion is that the current patch still holds for the
+older stable kernels, right? So it seems reasonable to accept it in
+this way since it targets the net branch?
 
 Thanks,
--Andrea
-
-> 
-> Changes since v2:
-> 
-> - rename the new field to sched_idle, as a bare "idle" reads as CPU
->   idle state in sched_ext (Tejun)
-> - split the tg->scx.idle rename into 2/2 so 1/2 stays minimal for
->   stable backport
-> - add the Fixes: tag (Andrea)
-> - regenerate on top of current linux-next, which also resolves the CI
->   conflict reported against v2
-> 
-> v2: https://lore.kernel.org/r/20260824142817.568085-1-cui.tao@linux.dev
-> v1: https://lore.kernel.org/r/20260824133954.561956-1-cui.tao@linux.dev
-> 
-> Tao Cui (2):
->   sched_ext: pass the initial cpu.idle state in scx_cgroup_init_args
->   sched_ext: rename tg->scx.idle to tg->scx.sched_idle
-> 
->  include/linux/sched/ext.h   | 2 +-
->  kernel/sched/ext/ext.c      | 8 +++++---
->  kernel/sched/ext/internal.h | 3 +++
->  kernel/sched/ext/sub.c      | 2 ++
->  4 files changed, 11 insertions(+), 4 deletions(-)
-> 
-> -- 
-> 2.43.0
-> 
+Jason
