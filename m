@@ -1,130 +1,198 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738473F4105
-	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 10:03:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28873E9F93;
+	Tue, 25 Aug 2026 10:09:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787652200; cv=none; b=APDn1qL8a1aJ19QoG3c65d7ne31IreUYZCPQBHcNeMSXumD7RR+ZOtpG0HffjFNMOcsNiLe5jdKuDoT1k79If/gwOk/HjkAtR5b8nw/BpN8aWn/R7bTi5nzNJbproylPrR7HaWcJ+m2L8XtOvhJwb4/xxnpYgmZ05MBDm+U1jJw=
+	t=1787652581; cv=none; b=WpTTjxYRZIT7crvAbcg4M0pUKQgHj7kTHxuTK0xBusBtfFKMVTER0S/sVI0fiUOp4VdU+dOeO0WEHtnuJhX5e8BCxB2flFS7VfUOEzENlZ8/RTDPv/5nQmEXtdLKF1CNG8TLTxpZQtzCNsFDWEPGzY87sb0CbOXr6GjJUOukaGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787652200; c=relaxed/simple;
-	bh=uhN4fxJ15enqo3k8CkDLZlRghvRaPv3HpnOP6VDNWkc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=teEEnmMNuAjOkWQQhH7cl6E4cM+Bv7SSMVSrvSHSa46LM+LmLjeo/7ZTJ4oMJ3YZOPIdd6iI26Fslz6xWgwvg8teYus8D9QjlXjx6MZF1JvVcNPJcjngIcHSdnWKaDK398rFgYxddgVUppPIQsw/IftuizkHNb81N5iSFWMlmzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JPkb/I3Z; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=FL0L4TEw; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1787652581; c=relaxed/simple;
+	bh=nz39AJYxBtpSBlMvja6UqpL7HVQWUrhfdvIJ/jdncT8=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=auAvVtLbBARzZxZNbwBYFo0UpXOAjWt2q325U+6WS3zfrzQIdUWU4MHPX9cpVKkbZViCMZhwyB+ZChwJJq7QOVpTy9oVjffGqYbnZLukF1Flz5WxgrW1A26A7K33fai0rzlMPTLbkI1W441Uuun3BIBqv/gvek2981Y1xfGAXmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J1ADOhGR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JPkb/I3Z";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="FL0L4TEw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1787652198;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NUhW54Gf8EXfhXYKN6isHtSeMLz3jtca0/EX8wxX+Ac=;
-	b=JPkb/I3Z3elXoDr9ZQRAplXoQfbV3dRgq6vZ+ZY/bIaZJbXer8Fb5JWyaY+0DjLofahUbW
-	iBh3+fTsecz9QinrIOtrvlgQtdEnhhMZYOQ2Uch+d9U2iftO/IlF8OSOwBOS3LBOiIyOPt
-	QM6h1XEMbGF2JvhsiRoIaPIGqnI2s50=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-460-RHAMlbLMOhuHSKkyK-mkNQ-1; Tue, 25 Aug 2026 06:03:17 -0400
-X-MC-Unique: RHAMlbLMOhuHSKkyK-mkNQ-1
-X-Mimecast-MFC-AGG-ID: RHAMlbLMOhuHSKkyK-mkNQ_1787652196
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-c217f249fa1so488605066b.0
-        for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 03:03:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1787652196; x=1788256996; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=NUhW54Gf8EXfhXYKN6isHtSeMLz3jtca0/EX8wxX+Ac=;
-        b=FL0L4TEwZPqy4XIQGN+cT+RT6R1kvMehXCRUH+tSyz0+a+iJHy6HGK7Bl+0aemusqQ
-         U+HXqyuQ961m79bJu4KxkODXKz3Qu6FVQWU3H7zeuMyjBW5vYoCBjgXkazHiL2eP/ZNB
-         zhVn7+PA0q4aqrQ6wskhgzGRsFXUA1Ds2jPR8MU+AJ4q+b+iTHw7Tz0Ly7Wq2Zixhf/s
-         2yrsztm/IBKuGydIMie/mWwta0YhyLMh+l+qrd7PRKuUKDuoPe7+LIlzvXnVLyD+VGaF
-         SUb7OjfyTBInEgYChYh4a0ORvBFFniX5K0p48+fj9JDyY/08TOKSpngw7ir7pWRM4RBC
-         xMSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787652196; x=1788256996;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=NUhW54Gf8EXfhXYKN6isHtSeMLz3jtca0/EX8wxX+Ac=;
-        b=LAi8+2Odpgz7BBeho4zf8gSNL9Mzmu3+cUkdqiCE1iU2nfbyZncQ2JeSFKuqNUHBGk
-         oNZ+a49gD5+PL9J+APKPoSlRszWiPKE8OfR2aJDshwY5F4fKyqjDbBDu3MUXG/Ilan+k
-         T4iQ5dmh3JLcQipH/dWPCn6jdw4h+eghAbEKHwOdmE1GOBBRdMjkMmimltrw/m9oufXL
-         zMcbZBHG3XZO0SFlxdhb7pi8pgANjaS4ISNcqWb+aMrzQ8paTLHkkxvLT3Rsj8bU9ZNR
-         jlMnz6aEesDkt2WJ0IFPbALS3rpfyNbMsSUXEmQBAsJY1uBXQHDM1L3fhi6qKC/Reu8L
-         SFQg==
-X-Forwarded-Encrypted: i=1; AHgh+Rp4I5RcTqdAsqBW7qqG9b9VTWF0/RR5pEmR+ttiQOnqnocD+l5OceWCStCLXVJ6wiabcYw=@vger.kernel.org
-X-Gm-Message-State: AFuF++kdakv1h5jbl+z3IJ63LPFPk84/0xnz5uzwPBZoeJrKsNiWXXmo
-	UVVH/5w12s7l7L3g/E8zn4WzPezvXqL8abe0DG005+1SRWZLGeRzMbym2BsK0unG+2d4qvpda+b
-	E+XztUUJgkR6bv3NBYlR1s6yOHTNeGbSSJM1cxYHXOrjcHFy9fEUDsw==
-X-Gm-Gg: AR+sD13Ydqd0VIBsybb+0Ojyrp72V98p8YbOzpQd0SV6lUNuwY247V/CdPGpmKgLh5H
-	JwUxos/nq1zyrkKu1SQwfs5qXDeKEkgT6xudvAFvbr/raA146qXAMaB6Pqr7adPNGqTpqkxfzma
-	AiJC0HT9hc0i4jdTJ9wlyy92Z+4r0vEdQlmcuBTUEjqNLRyn+fvHAZWOtEB0hTDzyhqp9aB8WVH
-	UEDkQ8eYwXzNwn8F0NU2xXtLqT9tQdKF9Mgt5Qm1i0CyM3JZdVnGc4FDz0z/97W4GhWz3ZnTEM/
-	09E5OHiZl6grby5Q9SMGNkbKeKFwPBMz+tU6dthbbgMjpQAfj5dJcay5l/xAcHVYeVrAIwzJljP
-	pJ0Up8mDnhmx5c0b9p3Ogq79RRhV3r1UtUCjdwK5H6xpT8E2aokXviuE/VK0e5JiosgNiGFB+
-X-Received: by 2002:a17:907:a089:b0:c21:450d:cd88 with SMTP id a640c23a62f3a-c24924b8000mr2757839166b.6.1787652195917;
-        Tue, 25 Aug 2026 03:03:15 -0700 (PDT)
-X-Received: by 2002:a17:907:a089:b0:c21:450d:cd88 with SMTP id a640c23a62f3a-c24924b8000mr2757831066b.6.1787652195293;
-        Tue, 25 Aug 2026 03:03:15 -0700 (PDT)
-Received: from [192.168.188.103] (ip46-47-231-195.pool-bba.aruba.it. [195.231.47.46])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c249606b683sm1843812966b.5.2026.08.25.03.03.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Aug 2026 03:03:13 -0700 (PDT)
-Message-ID: <478bf88c-cb76-416d-831a-5fa7856d65ce@redhat.com>
-Date: Tue, 25 Aug 2026 12:03:12 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J1ADOhGR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BB791F000E9;
+	Tue, 25 Aug 2026 10:09:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787652580;
+	bh=veIVyHSw4YI1fAcSwJqVgRMnqo++Va4vwbz9uMvQgZM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=J1ADOhGRV8kLsE8saQjxahzlm8eVCzyfdlGUCcJ2bRE2+xtUog99o4gYA9Q8MDBGW
+	 04PVHLqNRlLjFnF/0brDMxf1qpoG1SRnBEKmT5Wzx39vFgX4biYiZQ9z+i81CdSO0J
+	 i0Bm9p9MgHuGVqplLtEDid1rCVRfULG6ju5O8JD7B33/2LE+BPV6sLmwh/qz/GwhxN
+	 ZPkiBkSQ6p323G1B3yPeoVBeukJA6z2P3JdzpdIvYCpsY3QEck0pKfybhCH6QpGANW
+	 qDajNohMZRldSC6v9jz8M0khx1F6vnIIenNt053hUVFyEkDRJH7PLcnk2fqKM2Acm8
+	 C2y6ZLIjd/Ftw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 3/3] selftests/hid: prepare
+ test_rdesc_fixup_get_data_overflow for the new verifier
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Benjamin Tissoires" <bentiss@kernel.org>
+Cc: bpf@vger.kernel.org, linux-input@vger.kernel.org, dmitry.torokhov@gmail.com
+In-Reply-To: <20260825-wip-bpf-safe-v2-3-d044355c09d8@kernel.org>
+References: <20260825-wip-bpf-safe-v2-0-d044355c09d8@kernel.org>
+ <20260825-wip-bpf-safe-v2-3-d044355c09d8@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 25 Aug 2026 10:09:39 +0000
+Message-Id: <20260825100940.1BB791F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next] net: mana: remove unreachable dead code in
- mana_bpf()
-To: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>,
- Muhammad Falak R Wani <falakreyaz@gmail.com>
-Cc: "K. Y. Srinivasan" <kys@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
- Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, linux-hyperv@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-References: <DKWZHHOFA1F3.1EL2DMFNGMP0Y@gmail.com>
- <aoxThygUBWq0WqfS@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-From: Paolo Abeni <pabeni@redhat.com>
-Content-Language: en-US
-In-Reply-To: <aoxThygUBWq0WqfS@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 8/24/26 4:21 PM, Hamza Mahfooz wrote:
-> On Mon, Aug 24, 2026 at 12:39:06PM +0530, Muhammad Falak R Wani wrote:
->> mana_bpf() declares an uninitialized 'ret' and falls through to a
->> trailing 'return ret;' after a switch statement whose every case
->> (XDP_SETUP_PROG and default) already returns unconditionally. This
->> statement is therefore unreachable dead code left over from an
->> earlier refactor, and it would return an uninitialized value if it
->> were ever reached.
->>
->> Drop the unused variable and the unreachable return.
->>
->> Signed-off-by: Muhammad Falak R Wani <falakreyaz@gmail.com>
-> 
-> Fixes: ed5356b53f07 ("net: mana: Add XDP support")
-> Reviewed-by: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
-Please note that the current guidance is no fixes tag for net-next changes.
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
 
-Also this specific change does not address any real issue, it's just
-code cleanup.
+New issues:
+- [Medium] The test silently passes on any program load failure, masking un=
+related infrastructure issues.
 
-/P
+Pre-existing issues:
+- [High] Using TEARDOWN_LOG with ASSERT_OK_PTR causes FIXTURE_TEARDOWN to e=
+xecute twice, leading to undefined behavior (double pthread_join).
+- [High] Teardown deadlock with uhid background thread on assertion failure.
+--
 
+--- Patch [3]: [PATCH v2 3/3] selftests/hid: prepare test_rdesc_fixup_get_d=
+ata_overflow for the new verifier ---
+commit 2045d9e4296113259f889a7b753ecfe091d15ecf
+Author: Benjamin Tissoires <bentiss@kernel.org>
+
+selftests/hid: prepare test_rdesc_fixup_get_data_overflow for the new verif=
+ier
+
+The new verifier in the bpf-next branch is now capable of detecting the
+overflow that was triggered by test_rdesc_fixup_get_data_overflow.
+This is better in terms of UI, but now the test is failing and should be
+marked as expected to fail.
+
+Add a new parameter to load_programs() when we expect the test to fail,
+and dynamically validate the test by checkcing if it loads (it should
+fail to load with new verifier), but if it still loads, HID-BPF should
+detect the overflow itself and return an error in hid_bpf_get_data().
+
+> diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selfte=
+sts/hid/hid_bpf.c
+> index 069ebdbb4d1c4..7ab86296ff236 100644
+> --- a/tools/testing/selftests/hid/hid_bpf.c
+> +++ b/tools/testing/selftests/hid/hid_bpf.c
+> @@ -67,14 +67,17 @@ struct test_program {
+>  	int insert_head;
+>  };
+>  #define LOAD_PROGRAMS(progs) \
+> -	load_programs(progs, ARRAY_SIZE(progs), _metadata, self, variant)
+> +	load_programs(progs, ARRAY_SIZE(progs), false, _metadata, self, variant)
+> +#define LOAD_PROGRAMS_MAY_FAIL(progs) \
+> +	load_programs(progs, ARRAY_SIZE(progs), true, _metadata, self, variant)
+>  #define LOAD_BPF \
+> -	load_programs(NULL, 0, _metadata, self, variant)
+> -static void load_programs(const struct test_program programs[],
+> -			  const size_t progs_count,
+> -			  struct __test_metadata *_metadata,
+> -			  FIXTURE_DATA(hid_bpf) * self,
+> -			  const FIXTURE_VARIANT(hid_bpf) * variant)
+> +	load_programs(NULL, 0, false, _metadata, self, variant)
+> +static int load_programs(const struct test_program programs[],
+> +			 const size_t progs_count,
+> +			 bool load_may_fail,
+> +			 struct __test_metadata *_metadata,
+> +			 FIXTURE_DATA(hid_bpf) * self,
+> +			 const FIXTURE_VARIANT(hid_bpf) * variant)
+>  {
+>  	struct bpf_map *iter_map;
+>  	int err =3D -EINVAL;
+
+[Severity: High]
+This is a pre-existing issue, but does using TEARDOWN_LOG with ASSERT_OK_PTR
+inside load_programs() cause FIXTURE_TEARDOWN to execute twice?
+
+If hid__open() fails in this function and returns NULL:
+
+tools/testing/selftests/hid/hid_bpf.c:load_programs() {
+    self->skel =3D hid__open();
+    ASSERT_OK_PTR(self->skel) TEARDOWN_LOG("Error while calling hid__open");
+
+ASSERT_OK_PTR() evaluates as false and executes its optional handler
+TEARDOWN_LOG(), which directly calls hid_bpf_teardown() and pthread_join().
+
+Afterward, the kselftest_harness __bail() mechanism triggers the test
+framework's wrapper teardown:
+
+tools/testing/selftests/kselftest_harness.h:wrapper_##fixture_name##_##test=
+_name##_teardown() {
+    if (fixture_name##_teardown_parent =3D=3D in_parent && \
+        !__atomic_test_and_set(_metadata->no_teardown, __ATOMIC_RELAXED)) \
+        fixture_name##_teardown(_metadata, self, variant); \
+}
+
+Since _metadata->no_teardown wasn't updated by TEARDOWN_LOG, this calls
+hid_bpf_teardown() a second time. Can this result in undefined behavior
+crashing the test runner child process via a segfault?
+
+[ ... ]
+
+> @@ -904,7 +911,9 @@ TEST_F(hid_bpf, test_rdesc_fixup_get_data_overflow)
+>  		{ .name =3D "hid_rdesc_fixup_get_data_overflow" },
+>  	};
+> =20
+> -	LOAD_PROGRAMS(progs);
+> +	/* newer verifier can detect the overflow at load time */
+> +	if (LOAD_PROGRAMS_MAY_FAIL(progs))
+> +		return;
+> =20
+>  	ASSERT_EQ(self->skel->bss->get_data_overflow_check, 1);
+>  }
+
+[Severity: Medium]
+Does returning on any load failure silently mark the test as PASSED?
+
+If hid__load(self->skel) fails for an unrelated infrastructure reason
+(e.g., -ENOMEM), load_programs() will return that error code and make
+LOAD_PROGRAMS_MAY_FAIL(progs) truthy. The test then executes a normal
+return, exiting with a 0 status.
+
+Should the test instead verify that the program was specifically rejected
+by the verifier with the expected error code?
+
+[Severity: High]
+This is a pre-existing issue, but is there a potential teardown deadlock in
+test_hid_user_output_report_call() on assertion failure?
+
+If an assertion fails while the main thread holds uhid_output_mtx:
+
+tools/testing/selftests/hid/hid_bpf.c:test_hid_user_output_report_call() {
+    pthread_mutex_lock(&uhid_output_mtx);
+    ...
+    ASSERT_EQ(args.retval, 3);
+    ...
+    pthread_mutex_unlock(&uhid_output_mtx);
+}
+
+The test executes __bail() and initiates teardown without releasing the mut=
+ex.
+Teardown sends a UHID_DESTROY event and blocks on pthread_join(self->hid.ti=
+d).
+
+Concurrently, the listener thread might process a UHID_OUTPUT event:
+
+tools/testing/selftests/hid/hid_common.h:uhid_event() {
+    case UHID_OUTPUT:
+        ...
+        pthread_mutex_lock(&uhid_output_mtx);
+        ...
+        pthread_mutex_unlock(&uhid_output_mtx);
+        break;
+}
+
+Does this cause the listener thread to block indefinitely attempting to
+acquire uhid_output_mtx, which in turn causes pthread_join to hang in the
+main thread?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260825-wip-bpf-sa=
+fe-v2-0-d044355c09d8@kernel.org?part=3D3
