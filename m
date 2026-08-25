@@ -1,62 +1,61 @@
-Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11013023.outbound.protection.outlook.com [52.101.127.23])
+Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11013065.outbound.protection.outlook.com [52.101.127.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CF45305680
-	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 03:42:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6232F8EBC
+	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 03:42:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.65
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787629349; cv=fail; b=fWiUBMSTdLzcfSVkBZ/IdCLP3litmDudqlRrnyN07byO0GLyXb53LQSFxXUEhqWNX4NApIafWsMTbeSy2Lgne+1mf6Jo8Pyj3Nc6Ai8yPcKTUaz914NlBXcumGn+GFNM2/VigGFXPItY8ZH4rLjzHIWbekNfwEdATjUSuvwd4BM=
+	t=1787629369; cv=fail; b=hQKoQdw8lUYE4dUzU4qGl73SPD6wOyoRcLHM25s/V4yIWQ72ljfg5vGAGIjn+kDWIS60ijUxSv+nC0Y7rbHyEnvVe+OpheaQaZALRhycupWZluhCfuaddMG5PcMPw9+vAb8KXSO7pj1LvXIix4erepgqCbrii3bwE9vsuw4YtOw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787629349; c=relaxed/simple;
-	bh=t6uKGfZLEoAfsKYuc7CHHph6a0xiyKZvr75SWejqqzo=;
+	s=arc-20240116; t=1787629369; c=relaxed/simple;
+	bh=a2n17Ucos+vBs8dxznO7PANhL322dnOts33/HVcoi7M=;
 	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Hs1GQdj1jx4txbZE6PLmpsaV1aJTSAlw0aVfVoIAk3b2sE7dAgj60zlk50GzVJAlz+ZaEFNFHj19o7M4CCmj/+jyfckHktsuizR2WjejwusxqduWiSFCGyDd63Lgba752ZbbsmbgCLqgqzf1kWUci4+OIBArS5gb9QamjhInSlw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=T4K7iZet; arc=fail smtp.client-ip=52.101.127.23
+	 Content-Type:MIME-Version; b=lclkl11QtYWhRtorRhKFT9DTC32QhYSsuTj+Byp+T6qNSNh3sTnwc6pavrbcqbJShscE2HcWTv06VFORPmKGvylAopdlnSR84GUWE5Xfb201+u/5D6bpMnYsgyf3raIVQ3E/aB3Z2CCm+3UFo5cx4NweUkiQOnvlHdqYVoLc9Qw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=YIkrdDcJ; arc=fail smtp.client-ip=52.101.127.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="T4K7iZet"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="YIkrdDcJ"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=N/NnG0hnSKxGFKFHjrfk2/DuDabSwxNW6luYBDIeRUZMipPhe4FFog4hlrwR+vAqu4z8FBF0I1E0RDlup2y11qafGK3bj288qdmdeuVTGkPaXJ36mBgDYjg8UBJnalPsxOHTmkx6Tf+p8q9ib3H4d4AHhGLBUXxZtlhEmbv3JY9MLu9B64D2i/MWiKUfe4HWZWPtMgDmfPVlMP3nBIPRDxnNL7PKQOOVn9HfYt1HPx0ukMe9UA8caRuusrVJCLBrF2mGxFw4oWfhsyOHYm3Uy71A/JLuCNCFro2OTsnQWcDN+DenHQoR48294VNqWjgfrSFwdKnfE0uq/V8ZsgyM7g==
+ b=d3okSsCf9UslzCQDXblZHG3fHh75dOpfIsY5TJiXdrLF8fvY6BRNaWPudbIgKPnzfkbAon4KkT0IDApeXPfDr8Bbjtblb12eLIjohL911LSvecGvQyVEZ4oNyJBQ5MLGlOVV0yQA/RkRY5BBAltUbV0gBM3AtkM7x9XPUJ+fA5tC+dijtgT2L4L85vybswnKBOwsYmas0qrO/DgW9qD5uhdJZDh79l/17BYhP0GRajjTMVYzisF25TMr8xkUB5ce2tXY5dKN3Ey1EnL6QK0p9byuz+5vkMt6fxoUkufX9QfvXLx1BCYVzyirKj0BL5WclKQQFaBp0ZhxkqtXjE8I1A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YU9zVG43/+BjZXme8wiL+oDFGPr5j37iNjnxlaa1srk=;
- b=H4R5e+gHCym1PsCxgSnvFzwpASQvK97Std9fSpavu0uaoEAEhDilu7a4sqdf07c225qUbsz1htix0Sb51V4bfr/AMnsSzVoWnyDnFk+0mOGrk5Nvk+CLnQ5/N4qxDV8dPs8s2vv9MqgEhvWLaxB4FQi3NOh/BHT5d+E/60lz/TBOE9+ixymxp56qpUCx+4Dc9dcs6Q7rgn3UW8iLkQ0QhXggi4sXf1oClnzNOMCO/y2hwGcfkAUWFvLz165MbBmmHKVxjDjIYCUpsRyS14Z3j80UYqmsuK1l62RWMtImknKTpEpQRfih/rzrHwHjQPoo6re8kczpzys9HDT+P0HNHg==
+ bh=lIQyOPvhewrGcdr6tJ1e5rryeddwVETqa5sh1epp2Nw=;
+ b=rnDoCT8lA+ttDgv5h2teiqh9gfcayMEoqezjT55pAAQa8BRMI7pJ5f2f5iD92fBzkEw33njt7P9Gpxng1Q2ncUGyVoXP444BBkturnYb1wtfL77oxYTJZo1/8mnaJmkCZeUh+hPoZ7SCcU/RTQJTN7p16RVO93IVYUd210M1PkZ0YKoPpa9vgxv3AP+A6H2+wQGSKpnu1Gq+7U6i/Ut9d6dEoH30cYxgszGDfQxBAk8cdH56zGe8OymKrf8TtI97pHnGhli9ZAxcdl0Okpg6qKefrUIbULFqbaYEIeZPyCHa8AvkRd+WUFbo/NYqM/YGlYHL7MhuOKC3FHEa7Xvs3g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
  dkim=pass header.d=vivo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YU9zVG43/+BjZXme8wiL+oDFGPr5j37iNjnxlaa1srk=;
- b=T4K7iZet3Ny1Lli4A8KKe/wJYE6212mndlY4CTawf7Y+Y9dLADIW1Udd6LEwI2Eh+BFZdtFeyFvzmPN9OIKIozLJ0J6MemHpx/H/Kqh7SObwBcvPJ5ceC0ZxKHetBaReaPxq37ykilyWz2X2kCIETaah7zNg5+KlLCOXlaLVyuIK/QbzhROiYcnKjpHQEpOu6LK3htbdMeDncyB9KmFPpeb9n/9rUZlKq3ZbE5K0D9mf9LBzdV0YPOTHtLjwnNUJKhy7nhK3iyFfjbQ03OJw3Zzf3I9aoj2gYlHKlavBsRsjjEO9Feaz+6QLJiidoW4eebiSy+pj90qNZv5tMq1FkQ==
+ bh=lIQyOPvhewrGcdr6tJ1e5rryeddwVETqa5sh1epp2Nw=;
+ b=YIkrdDcJL8K7ntapmcL4Oj1pqTFoMLKu6N/sVoQADHK6ULXN94Xy1txg58J72abQTarJJs5XWgHKfRalp0OGsW2qg5IKZ48vnDlUmwS/PRJNLkFD2z/YVjxmr53pTqDlsF7+0v+eV4OoMjls407US9bYJCe4WcXB7EmAJiBI/H5+GejaZHwCbsx0J+HNHlV0eba81w4VIH6OUpAaqmMjv7303cu/Wpaczu4C4POeuptZc/1IcbShrHKRdeGnaJhl8t8AqaDWNS+7JOr6dBMBOGG7bN3/tPqTT6AvgtIZbO8Dl//um2fbwaYIzda9RdDynq25aG6uIbT1T4W/NM/XYQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vivo.com;
 Received: from PUZPR06MB4742.apcprd06.prod.outlook.com (2603:1096:301:b5::13)
  by KUZPR06MB8967.apcprd06.prod.outlook.com (2603:1096:d10:86::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.6; Tue, 25 Aug
- 2026 03:42:23 +0000
+ 2026 03:42:44 +0000
 Received: from PUZPR06MB4742.apcprd06.prod.outlook.com
  ([fe80::206c:c661:9838:5571]) by PUZPR06MB4742.apcprd06.prod.outlook.com
  ([fe80::206c:c661:9838:5571%6]) with mapi id 15.21.0339.012; Tue, 25 Aug 2026
- 03:42:23 +0000
-Message-ID: <507d54af-a50a-4370-b0ee-ea80c87b1a45@vivo.com>
-Date: Tue, 25 Aug 2026 11:42:18 +0800
+ 03:42:44 +0000
+Message-ID: <d2b58551-dce5-4295-aa65-7b85d8dbd8e6@vivo.com>
+Date: Tue, 25 Aug 2026 11:42:41 +0800
 User-Agent: Mozilla Thunderbird
 From: Fuyu Zhao <zhaofuyu@vivo.com>
 Subject: Re: [PATCH bpf-next v4 1/2] libbpf: support selective kernel module
  BTF loading via bpf_object_open_opts
-To: sashiko-reviews@lists.linux.dev
+To: bot+bpf-ci@kernel.org
 Cc: bpf@vger.kernel.org
-References: <20260824125310.1384-1-zhaofuyu@vivo.com>
- <20260824125310.1384-2-zhaofuyu@vivo.com>
- <20260824130806.51B591F000E9@smtp.kernel.org>
-In-Reply-To: <20260824130806.51B591F000E9@smtp.kernel.org>
+References: <20260824125310.1384-2-zhaofuyu@vivo.com>
+ <8b583f9deb409bec43e97f558b1e3197f2cd54ca4e5121eacada28b04749f812@mail.kernel.org>
+In-Reply-To: <8b583f9deb409bec43e97f558b1e3197f2cd54ca4e5121eacada28b04749f812@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: TP0P295CA0008.TWNP295.PROD.OUTLOOK.COM
- (2603:1096:910:2::20) To PUZPR06MB4742.apcprd06.prod.outlook.com
+X-ClientProxiedBy: TP0P295CA0012.TWNP295.PROD.OUTLOOK.COM
+ (2603:1096:910:2::16) To PUZPR06MB4742.apcprd06.prod.outlook.com
  (2603:1096:301:b5::13)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -66,142 +65,132 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PUZPR06MB4742:EE_|KUZPR06MB8967:EE_
-X-MS-Office365-Filtering-Correlation-Id: 341259d2-b408-455c-3baa-08df025adf44
+X-MS-Office365-Filtering-Correlation-Id: 87d17f5a-644a-4334-ce23-08df025aec4d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|23010399003|1800799024|366016|22082099003|18002099003|11063799006|56012099006|3023799007|6133799003|4143699003|10067099003;
+	BCL:0;ARA:13230040|376014|23010399003|1800799024|366016|22082099003|18002099003|11063799006|56012099006|6133799003|4143699003|10067099003;
 X-Microsoft-Antispam-Message-Info:
-	yBLiUnURVm7V0Dud2IPIhgMbbQthv4zRToL7RKLDGxhdRzaPCb0kZ/kIY/SxpAqJx1gyWB0tpIjrhSCEHxdQvJSWHf5FUzWlQzGP0/IovgivXrABI/Y9X9o4nL/X3inLdlCkbQwzKaIyvyhoiXX9gg8eCGQGhBFknv7ryDTRGD4Y0ylfgIHdat20j1hKDnvRUewDqfYkQXLD12LzVn+/xyocTbu4DtdZA1jPHn9La3xXT5ECqrT28QdYgJiSC+24CV7AnqT5queXH0OFBhIZVSJaatIg94JigGyMFrQqgr0R4qfKdVWcGj6YGQDDa3HceUYan/A7vqogHF9I/yfi5gLGBAP/25I5z0Kg18jc8V+yhr4LyISjZaYkFV841zqKkTxaz44L3tCibhMUdB2WPISmLk3KiorlE1cd80X3vdXPmP/w7Uab2Qdo8uC3zfOWAqOH7b1qhRawIWl6TxX7mp2qRQxpT32RjLHYUUsFWU39q5Uo1oN53f1ZfME2lz+myMZSLQdJHbokwGSMCv+Dy9AeVgZwmvp10Xocvy03uRpdfgoKsX0gUXdYNYb0Hlf//xCjsUyPwf1AMjhreVgm+ttZeLuXIArDPQ7uwcubi8Z/363riYkphmHQkH6j921MQ+PpIF4nH0D7GaN3n1whSV6wbFsQSAKZbjl7t+4Lbuw=
+	hRy3GHKskKlYwVIg/Y1nTfmylXNvC8YbMgfyxpZ0Abonq4esmkVYTGsB8S1liLsyYTFOwT7G3GPY2e4g1BxGqC52oy8KqR4UyMVv6Mu28SZIlR+f/UDfZA01eYyDvBOAWrTf2Cu8R/JFwlv5hj4qUQlj7i0X2aTGnLvTfl4cXVgtKj3ZI4G8DCxhtuaiLfQM49YYO/nptCg5Dr4mSitOHfgWg1IGApuRU6TVdWfQ5rNcWpbSRiPR9Gnwn7ouvDzUqXZMMzoZrEc4lKmfsWnxGDCOcvK0Pfe63tO77LzcuByA7x3Q4yN7W/HXR++My77zozFoKcuVsU6wUTIpwxRm/cl/9J2OU+R81AoiM7fDRNhWjrI6z0FZ4IyTPBzzfv0OdJWthmrbZzFht1o08R7M6udsxR94wEA4leHaVID8xu7LwPwWPzV4P24ejsHkLrO5shBa/G8NDRX5wYzS5UAFVtYKY0RpLcpajne8+OqHOc0Z3SATuFUZrlFtr72aCP4acCqFb44NBsQTcbc/y/kioAGJqwWAAiBQH+9wYsJtkzY0/Mn1Qa1l/jV6F6cz1U9w7cn7dQwywUKXNwncA0JxgO9SH94196LxnhH/Oo1BAT3M6Zx3SqFOzB50fDsEA8wM
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB4742.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(23010399003)(1800799024)(366016)(22082099003)(18002099003)(11063799006)(56012099006)(3023799007)(6133799003)(4143699003)(10067099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB4742.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(23010399003)(1800799024)(366016)(22082099003)(18002099003)(11063799006)(56012099006)(6133799003)(4143699003)(10067099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?eEw0QStMY0VtalFFc25GYjFWT2pKOXljYTk0ZDJpY0RNaERNK2k3VTRubXhY?=
- =?utf-8?B?Q1M1QUYyUmp3YklkRkkzOTdlMVJDdGc4c2FOclNBM2ZpSUw2TXJ1ekZ0ZWNu?=
- =?utf-8?B?Tzl3YkZJemtQcExTUEtmcU1sRzdDcmgyR05OQjlQTEkrNTFncDhSTzRvUTRJ?=
- =?utf-8?B?dGhZYzBJN0lKRHhaTTh4U1pHcVJJYmU4RGNjMzU1N2J3NkZrNG94NlI5UzMr?=
- =?utf-8?B?VCtCMGIxb2hYRHAvSFlsbGU3TlZSVzZOcENGOTlQbjJYdDVobHE5WUYxZDdi?=
- =?utf-8?B?MytVWWgvR0xhVHhwVGF0NVAwLzM2WjlNd0h6Zyt0ODhRRG12MjdEd3NoS0xW?=
- =?utf-8?B?MkFhc3ZiYzNFT3drZWhHV0pzSmVkWWducVRvT0RLZ0k4UnNJcEROeTNQQ0Jz?=
- =?utf-8?B?WFVGK1BsWXJSUjVDMEZBSG9mK3AzVjk5aEFzU2hwd1BMNFcrNnMrUDlDcndw?=
- =?utf-8?B?ZnZiUzhmODJubWdPbGZrODE4aGxhdGdIZTNXR1REeGhtUlRkZjk4OG9Wam5C?=
- =?utf-8?B?MHE4VFFlQ0UzWGkwdGVDcFYxUG5IT3lIRk5sNEJEdGNkNHo0T3hyUlJCTENV?=
- =?utf-8?B?SGsyeFZSYUthYTN0RzJ5TFVYbzVyWVhkUVVFcmp0MTlnd2Y5bzAvYkxZN041?=
- =?utf-8?B?dnROUnp6OURkRUU0cnRDdDl5QS9FUXdaZm1BdmJJMU01Sm5NNnlJTktpUWxL?=
- =?utf-8?B?YkgyemNQQ2JqOGx0VnJLa0pxSlcvd1Fzb3VzWk9KNWZDQmgreWttV2NQUFNN?=
- =?utf-8?B?Uy9HR1AzTzY3cTJQWWFoZmtDVm5GdWJHQ0FiWFNaYXZiTnlaWnNoUGtiMTFr?=
- =?utf-8?B?Q2YySnNONnU4WWszVWFXamlmaHlMdldVWWI0U3dwbnIyMTQwRU1oSlYwQmNy?=
- =?utf-8?B?ZU5aN3EzMWE1ZXQ0NFFJUE0zWThSZUE0VFN0am5NZHFaR2dBTnRiU05OUGFL?=
- =?utf-8?B?U21lUzF6SHRrMVlkRjBrVXFlTzBYczNKYWpmdVlWWGxmNXVsRlIxL25oeDl1?=
- =?utf-8?B?M2R1dVJSaHJmZmpyUWdPbDRma2U3MkRNQ1RiWmsrS2hqRjBHU0FRenU5WGwv?=
- =?utf-8?B?aDBuS2duNVRETnpkUllaTGxHNmMwUldiT09qQVRsa0UyZ0pST2FqRjAyRVJn?=
- =?utf-8?B?dVNNRGtFUWhTemFNT2g2SWFjbkY2SnVJNVBjZ1M2SHZtVVJ3STJIUzc2TXNH?=
- =?utf-8?B?VnFwL043OWQ5UElFZUhqWlVOemlLMEJDaDZrZlZnTVhEajdwVzdwVzk4ZlBm?=
- =?utf-8?B?Z1ROdzRORTZFTUlJdVppZ1BwMEVDcXNKREZXVy9idGdqV0U3c1dWSU03QkVh?=
- =?utf-8?B?VmY2QVlyMXZGZS80Q3Y5ZzI1SWJTSzhGNHAvOTg4UUFVbWpiQS8vQVJBWVM0?=
- =?utf-8?B?ZHNmU0JiZmphWVh4dUxFNmZhUVZHTUJEaG1Ud3ZNU25NQzJaZnNrVWwzZVh5?=
- =?utf-8?B?cWQzSTN4MHo0bmhLYUJhSGdtbk9QeWxud3JvZE4zQmdhVkloeGRlR2hWNTJq?=
- =?utf-8?B?OVFhMWRaeVlXMWZPL2h6TkhZYWVIcmFEcjFxcGF6bXRGYk9ubThWeC8xb05m?=
- =?utf-8?B?N3gvc25ZZnJJcGxYTTNWRTdlQ1IyN2ZOOUdHSjgwWi9TWi9KOVE1cnNGRStw?=
- =?utf-8?B?WHVTQ1R4ZXkyYzIwNHRyZDczUTJzeGx3OS9ZUmczTVBiZEZ1K2ZDYzVrelJD?=
- =?utf-8?B?b21Xd0ZZdkFrMFJtUWxSR2NLWlcvRitkOU52RXVvNEVHVG1wNFFvYjYvbDhM?=
- =?utf-8?B?Ui9jVFlWUm9memc0bW1QenRyd3k5QUUrUDJmSEg5TlVOSFVwNk9XNnBrN2lz?=
- =?utf-8?B?K2NLRHhPdE0vajNpVjVBdEVhWXJUeHNzSFRmY2s3KzVjdStpZE5FeUx1dnVs?=
- =?utf-8?B?eFJpL2NzQU0rdlNKR0kxcVhjZVRGYXI5N3FMdFRhajhrNllkdmJnS0g3SWNE?=
- =?utf-8?B?UWRtZ3BmK3I1UE1vb0REQVo4UXYyV3cwMFdaMHo1dHN6MEtxdTBKeU9yWldB?=
- =?utf-8?B?L1p2MmdaRW92S2R5TDFxQkRNeERSUHdwY0l6T0orNUx0Vm1kaHRsV3NuTUcv?=
- =?utf-8?B?ZmNKY3A4Y2ZnM0hzZktrM2U1MklTTVF4dXFWaXdMeVFuY3hVN3lnNk5GR1kx?=
- =?utf-8?B?QXVlMm9HWHJ0ZUE4MkRRaGhmMllpVWVteFRrQWtIMGdXTE42cjRsOHBTR0NK?=
- =?utf-8?B?N1pTRCs0akZjVjZNY2tvNVBCbGhKNnBCbm9Ldk41WHI2THJaOVNEWmMwZUZY?=
- =?utf-8?B?YW5xK2dxdTBDWHVqSkdPby9vUzNoZjU0RnowTzUwZC9hMVh3WWtDaTR6Znpk?=
- =?utf-8?B?U2ZBaEt5TG1NdGlzbExSckFnVUJHYWZsSlVZMkZoSUUzTlBFOVZQUT09?=
+	=?utf-8?B?Z2c0L05kOGduN1NaaUpmaUVmUzU1TEJ6WTVia0FobjF4OGxDeEdxY2ZvS3ls?=
+ =?utf-8?B?dlV3bG1HbkFXNHZVZ1IzYmYwUGs2VnhxamNWZ2F1QkNIRk9Ja1piWXEwNFlS?=
+ =?utf-8?B?bUtEeDR2Uk1EbnVjd0U3NkJQZldWRnJHVW93QzNpemxXSmVnUEx0RmhUZDg4?=
+ =?utf-8?B?YkM5N3Z5OWorU29xejFva1hWd0Z6emlHNXg0TkJJOFl6Z0J5d3FLOEhZMVRR?=
+ =?utf-8?B?WlNqaTI3dm01VnBISE5uRjFUcUhNV1IwN0w0K3ArYjVkWGFtbHZTemZMaUNK?=
+ =?utf-8?B?WDlUb1grWjc5K0J3MzZqUFJxYmNFdGgrUFF2SUxZZ0haRUhYSkVBSWNOWGVr?=
+ =?utf-8?B?T3NIcWVIdm5oYSs5d3owM2xIdDF5aUF2RFpGZWVXSlV1dm5wdjEraTYvOWtU?=
+ =?utf-8?B?TGozckh1SERXb25SM3lweHdwUWFFNkwzckwxOWsvTW5BVzliMDlFekliMnZx?=
+ =?utf-8?B?RlFaajY5TUpuZzlUV3NKUXB3Nnk3SXo3OE1MOEMxcElqc05OOGNCaXYzTUgz?=
+ =?utf-8?B?WUNTV2JKcFd5c2gxaEFPc2dVQlFFZkpmcHlMVGZYUklNY2xQTnp1bXpIR0NP?=
+ =?utf-8?B?K3VBNWhuOWZrTWNXa2ZaeHZxQUJXWFZON09YYmRucTRoR0hkWjkwTUFuSUNJ?=
+ =?utf-8?B?OHlqUUpzaGNjZlh2Y25OSjZ2S1JzSjY0cm1sVXI1eWRRUzU3RmF6c1I0RkNQ?=
+ =?utf-8?B?ZmRGQ1QxQzVoZytnRElMR2RJYS9ub2NmRkE4M0VKVVJxU3d0RmVKNkVINC9r?=
+ =?utf-8?B?eTF1UTRUWnZHaG9vUjRNU0l4RGRYOGpURDhtSDNnNDR4RVFGT3VZclZrL1U5?=
+ =?utf-8?B?c0trRVZQMTlIZnBPcUNOWlFHb0JqNGRURkVOY3pKZXVwd3VaVHdGVWh5Wk0v?=
+ =?utf-8?B?VUs1U1lveTF1Wk9kVmdsQXFacHZBTkkzbTgvSHZ1MXVPcm96aHc0VjBJWXY4?=
+ =?utf-8?B?NzgvMUZtYXFNeWhNcjZ4cFBSd1pUTTJPUVlQZHZwdk83c0pqMXhMSXJ5RnhV?=
+ =?utf-8?B?OTFENWlsVUtXUTR1R3JIbCtPdDJEekRiNHNNMHVsRlFQeW5CbFhPajR1TEp0?=
+ =?utf-8?B?RjhkR1MrY2dadlZGZDRqbEEvb09VSVBFb1NZVjFyV3oxZ0FFL0xYZUpqRStR?=
+ =?utf-8?B?NnNuNWVYVU9OT3JNTjVLL3JscGdDSUIrRUc3WVJMKzUxRmE3enBXUkwwZTBn?=
+ =?utf-8?B?UDBjamszNEhGT3UwUGdwMVJCWDZ0NVVXQzhGSExweFIyRnQwT3hldHluQ0lr?=
+ =?utf-8?B?WURrYUZtVTBWTEpESERiS3hVOHE5bmRyTExhZjhad01YVHNiaHB3R1RDS1My?=
+ =?utf-8?B?M0RKR204WkJrRnppUlpYMVhYNnQ2aWpKN2w2NkVaK1pRajREVmZhalZ0allY?=
+ =?utf-8?B?VFpxVUV2VFQ0MlBXZzBmdDJRLzNpR3hibVhjTzBRV1JqSTJESDVRbml3dkNq?=
+ =?utf-8?B?RzE0dU1qK3JnS2dQVDN1WWpGVVVHTGl2WkZGamhtY0FqdTd2alk4Y2JBREdJ?=
+ =?utf-8?B?WnBXZEFqUDAxY28vQjhKaXM0SW5kek1OQmFzcWlCMERZV3g2ZXUwVllXT0hV?=
+ =?utf-8?B?K3pybW13RGNLRzk5TWJjYW5mUTFEVmIyQXprbWpPTTBmUHQ3TUpFZ1hWMXFa?=
+ =?utf-8?B?aG1BRjYxR0lsVWxMWEtUd2xaRTF5bmw3OThZbnNhbzIwcm0wZVc5dldxOG9r?=
+ =?utf-8?B?WG1XbzdSUVYvK2lTOHRYWWZzenNmTE1POUJIOUxNcWM2cG1YWjJwSGJ3TUZU?=
+ =?utf-8?B?eEJhRTZPUWcxdi8wMEZrZStHQmlYcSs4cHI0YURhMENUMkJtSThONXlrU2J1?=
+ =?utf-8?B?NFpGcEtrNlhFVkxtemU5TkxDNlZ2eGIwOC93bEN5S0dOMERYVFgxaC9EV01u?=
+ =?utf-8?B?MjNBZ3RuMlJ2bHZ1d3RpRzZpTmluVUFSc3hrMENQaXNxQlFrd1ZoUFZzaVdx?=
+ =?utf-8?B?cURlZTdNUWZ1Ujcra2tHb3lMWmJOd3lUZmsvR1N1YWJLaHVSaUcwVDNHbnU3?=
+ =?utf-8?B?d0NDajhZNE11bFpjendBU0JyQ2NUU2hJVklEU2ZIN0V5Wi85NVN2Mk9scTZO?=
+ =?utf-8?B?NEk1azVHSGhuL1UwWEN6cFhRSXZoZ1dDWFQyVkZJQTZzSU9TT0NWbjVGU2E3?=
+ =?utf-8?B?SnRab0xsY1doMnFiSGNMdUEwdXpXZkIvMmxISkovOCtQOHBsMGRoODNOdG5j?=
+ =?utf-8?B?MDE4SHAwOUtQc3U0QjdUd3BUaVlONDJRamxKc3cyMXVMZG9LNVYvRUIxTVlN?=
+ =?utf-8?B?MzJJOHJicTYxWGRIdDlmZUtjLzk2ZmZGVVR1TUJyenRJNmhiY0V0dXdBVDZi?=
+ =?utf-8?B?UGlJM29WdDJaTnZObTQyMlNLV0MxQzFuZzE0QTEvZXJjSUxoMERwUT09?=
 X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 341259d2-b408-455c-3baa-08df025adf44
+X-MS-Exchange-CrossTenant-Network-Message-Id: 87d17f5a-644a-4334-ce23-08df025aec4d
 X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB4742.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2026 03:42:22.7491
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2026 03:42:44.5780
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wjTvJrK3R54MeFxKpwye+gbCi4tU7qy7cgt/Yy75l2I60QjnKq1eLldZNsdHGhGAFm2Yu4lAXBXw4SMsJ6oFoQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: bt8LP3/4HfMUPDwwR6mcH1K+9B40PshK0w2EBqF+Uag6sz0NONJOlKExm9bKX/IhgJ5xx6TWuQfBgg78sp1GRQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: KUZPR06MB8967
 
 
 
-On 8/24/2026 9:08 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] Failure to short-circuit BTF loading when the requested module list is empty.
-> --
-> 
-> --- Patch [1]: [PATCH bpf-next v4 1/2] libbpf: support selective kernel module BTF loading via bpf_object_open_opts ---
-> commit 45ee1cea8b0fa604bfa594a065030f18301877c5
-> Author: Fuyu Zhao <zhaofuyu@vivo.com>
-> 
-> libbpf: support selective kernel module BTF loading via bpf_object_open_opts
-> 
-> This commit adds btf_module_names and nr_btf_module_names to
-> bpf_object_open_opts, allowing selective loading of kernel module BTFs. When a
-> list is provided, libbpf will skip module BTFs not in the list to reduce BPF
-> object loading time.
-> 
->> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
->> index b749c01742ee0..d8ef6ecc6f5dd 100644
->> --- a/tools/lib/bpf/libbpf.c
->> +++ b/tools/lib/bpf/libbpf.c
+On 8/24/2026 9:31 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+>> index b965ad571540..838602319da8 100644
+>> --- a/tools/lib/bpf/libbpf.h
+>> +++ b/tools/lib/bpf/libbpf.h
 > 
 > [ ... ]
 > 
->> @@ -5851,6 +5854,94 @@ int bpf_core_add_cands(struct bpf_core_cand *local_cand,
+>> @@ -224,10 +224,32 @@ struct bpf_object_open_opts {
+>>  	 * point (/sys/fs/bpf), in case this default behavior is undesirable.
+>>  	 */
+>>  	const char *bpf_token_path;
+>> +	/*
+>> +	 * Optional list of kernel module names whose BTFs should be loaded.
+>> +	 * nr_btf_module_names specifies the number of entries in
+>> +	 * btf_module_names.
+>> +	 *
+>> +	 * If btf_module_names is NULL, all module BTFs are loaded,
+>> +	 * preserving the default behavior. Otherwise, only the BTFs of
+>> +	 * the listed modules are loaded. A non-NULL btf_module_names
+>> +	 * with nr_btf_module_names equal to zero means that no module
+>> +	 * BTFs are loaded.
+>> +	 *
+>> +	 * The list must not contain duplicate entries; otherwise
+>> +	 * -EINVAL is returned.
+>> +	 *
+>> +	 * This affects:
+>> +	 * - BPF CO-RE relocations against types defined in modules;
+>> +	 * - BTF-based resolution of function attach targets for
+>> +	 *   fentry/fexit/fmod_ret/freplace/LSM programs;
+>> +	 * - extern (ksym) resolution for kernel symbols defined in modules.
+>                    ^^^^
 > 
-> [ ... ]
+> This isn't a bug, but would it be worth adding struct_ops kernel-type
+> resolution to the "This affects:" list?
 > 
->> +static bool all_needed_module_btfs_loaded(const struct bpf_object *obj)
->> +{
->> +	return obj->btf_module_names &&
->> +	       obj->nr_btf_module_names == obj->btf_module_cnt;
->> +}
->> +
->>  static int load_module_btfs(struct bpf_object *obj)
->>  {
+> find_struct_ops_kern_types() (tools/lib/bpf/libbpf.c:1049) looks up
+> 'bpf_struct_ops_<name>' via find_ksym_btf_id(), which falls back to
+> obj->btf_modules[] after load_module_btfs().
 > 
-> [Severity: Medium]
-> Could we short-circuit this function earlier when the requested module list is
-> empty?
-> 
-> If a user passes a non-NULL btf_module_names with nr_btf_module_names = 0
-> (meaning no module BTFs should be loaded), this function still proceeds into
-> the while (true) loop, issuing system calls for every BTF object on the
-> system.
-> 
-> [ ... ]
-> 
->> @@ -5915,6 +6006,11 @@ static int load_module_btfs(struct bpf_object *obj)
->>  			continue;
->>  		}
->>  
->> +		if (!is_module_btf_needed(obj, name)) {
->> +			close(fd);
->> +			continue;
->> +		}
->> +
-> 
-> [Severity: Medium]
-> Does this continue bypass the early exit check when nr_btf_module_names is 0?
-> 
-> When the requested list is empty, is_module_btf_needed() always returns false,
-> triggering this continue on every iteration. This skips the
-> all_needed_module_btfs_loaded() check at the bottom of the loop entirely,
-> causing the loop to exhaustively iterate all BTFs unnecessarily.
-> 
->>  		btf = btf_get_from_fd(fd, obj->btf_vmlinux);
->>  		err = libbpf_get_error(btf);
+> A struct_ops implementation whose kernel type lives in a module (e.g. a
+> module-provided tcp_congestion_ops or sched_ext-style struct_ops) will
+> therefore stop resolving once a filter that omits that module is supplied.
 > 
 
-This makes sense. Passing an empty list currently causes unnecessary
-iterations. I'll add a `no_module_btfs_requested()` helper before entering
-the `while (true)` loop to handle this case and exit the loop early in the
-next version.
+Good point. I'll add struct_ops kernel type resolution to the
+documentation.
 
+>> +	 */
+>> +	const char **btf_module_names;
+>> +	size_t nr_btf_module_names;
+>>
+>>  	size_t :0;
+>>  };
+>> -#define bpf_object_open_opts__last_field bpf_token_path
+>> +#define bpf_object_open_opts__last_field nr_btf_module_names
+> 
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32730521630
 
