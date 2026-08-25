@@ -1,21 +1,21 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025383D5661
-	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 20:54:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7AB43D648A
+	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 20:54:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787691281; cv=none; b=ikVW87KK0TQNX/WlEpOliTASJp/K5A3cN3FweeWDYLGY5ibrVRY0JRWN+HaQEfuGqwSAn4n2t5RTI9S8u84MTsPg/kq/x0rEtQevFDhj492DJyMOzau5s4JiTU9k/Pu5onqmfWWIXKOvgBPxnEwNIk5GyoN3YwNzYH1ADyn85/Q=
+	t=1787691288; cv=none; b=NLpWXo9S2E4ne7wnqTQ8yahDPD9HQz+u7cQyzxQ7ccC/PeIf+oakza6YLHL4+pn5XeHYDj9454BUbIU1w9qwoh6XmtuRpFUXb/y5isIWIONPj89+Tvke40R0hfoHWirdhIxMwKqeE1iBBA3EA/LOfbhw2Qi8yPxeApXsdGT78lI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787691281; c=relaxed/simple;
-	bh=JS70Di+5kBqE4iNwWA+PkmJBQjRYJJYIh8LlRh6658c=;
+	s=arc-20240116; t=1787691288; c=relaxed/simple;
+	bh=v/PT2GfUSTApN3EgynjTzvsIo0tpKf8WZWvCfBTTkpk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ENRnbPLShUYie8qDnhhWyD9XLY2giI1FRq1aenVHAqDQtQMVWIO2NcSG4WcH0PesxyF2xvINS1PnuhGl9SVade7PemoJgJ5BOyQ3ymxGGR1bz3v5BUnHa6YTxmTU8iWBJ96vFrtQoEfDfwMdvA8kbVm6KxdBuvUZoK489YeZDf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+	 MIME-Version; b=LXfZdMNS4g1eaNxJdtCch0WcdyqlVk9XP1IoUKWIUSL11BikOxO01yJ2btXqBEHBw7cxJpgKH08ppvzy/i5+KORBQRRu0OYzfRjuB8KxU+aw8udA/KDxdGr41+4cMr2LA9VDOaKpyxs3WhP1KAc65AXEPgsMp80KN308BlN//Nk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id C376C268293D1F; Tue, 25 Aug 2026 13:54:27 -0700 (PDT)
+	id 05C8C268293D6E; Tue, 25 Aug 2026 13:54:38 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v2 03/10] bpf: Add btf_type_is_arena_ptr()
-Date: Tue, 25 Aug 2026 13:54:27 -0700
-Message-ID: <20260825205427.1322594-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v2 05/10] bpf: Report which member makes a kfunc return type unsupported
+Date: Tue, 25 Aug 2026 13:54:37 -0700
+Message-ID: <20260825205438.1323042-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260825205412.1320099-1-yonghong.song@linux.dev>
 References: <20260825205412.1320099-1-yonghong.song@linux.dev>
@@ -37,144 +37,218 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Simplify btf_scan_type_tags() and added a new helper
-btf_type_is_arena_ptr(). No functional change.
+A kfunc that returns a struct by value may only return scalars, and the
+message that rejects one names the type but not the member at fault:
+
+  kernel function bpf_kfunc_call_test_ret_ptr returns STRUCT
+  prog_test_ret_ptr that is not composed of scalars
+
+For a large struct that leaves the reader to find the offending member
+by inspection. Record the member that made the walk fail and name it, so
+the verifier also dumps:
+
+  member 'p' has type PTR
+
+What is recorded is a path rather than a single member, because the walk
+descends up to 4 levels. For
+
+  struct outer { struct inner { void *p; } in; __u64 tag; };
+
+naming 'p' alone would send the reader looking for a member struct outer
+does not have, so the message reads "member 'in.p' has type PTR".
+
+The detailed diagnostics for this failure:
+
+  Verification failed: Program Structure: Unsupported kernel function
+  return type
+
+  Reason:
+    bpf_kfunc_call_test_ret_ptr() returns STRUCT prog_test_ret_ptr by
+    value. Its member 'p' is PTR, not a scalar. Only scalar values, or
+    structs composed of scalar values, are supported as by-value kernel
+    function return types.
+  ...
+  Suggestion:
+    Call a kernel function that returns only scalars by value.
+
+A type nested deeper than the walk descends has no single member to
+blame, so that case reports the depth instead:
+
+  Reason:
+    bpf_kfunc_call_test_ret_deep() returns STRUCT prog_test_ret_deep by
+    value. It nests structs more than 4 levels deep. ...
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/btf.h |  1 +
- kernel/bpf/btf.c    | 62 ++++++++++++++++-----------------------------
- 2 files changed, 23 insertions(+), 40 deletions(-)
+ kernel/bpf/verifier.c | 86 +++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 74 insertions(+), 12 deletions(-)
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 89d5a5c4f117..ddd0f4f32d24 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -235,6 +235,7 @@ struct btf_record *btf_parse_fields(const struct btf =
-*btf, const struct btf_type
- 				    u32 field_mask, u32 value_size);
- int btf_check_and_fixup_fields(const struct btf *btf, struct btf_record =
-*rec);
- bool btf_type_is_void(const struct btf_type *t);
-+bool btf_type_is_arena_ptr(const struct btf *btf, const struct btf_type =
-*t);
- s32 btf_find_by_name_kind(const struct btf *btf, const char *name, u8 ki=
-nd);
- s32 bpf_find_btf_id(const char *name, u32 kind, struct btf **btf_p);
- struct btf *btf_get_module_btf(const struct module *module);
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 47d43eb983a5..280530d25886 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -3523,6 +3523,22 @@ static int btf_type_tag_walk(const struct btf *btf=
-,
- 	return 0;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 5ea95e75e726..edbc48a1fdc8 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11623,6 +11623,15 @@ static bool is_kfunc_arg_implicit(const struct b=
+pf_call_arg_meta *meta, u32 arg_
+ 	return argn <=3D arg_idx;
  }
 =20
-+bool btf_type_is_arena_ptr(const struct btf *btf, const struct btf_type =
-*t)
-+{
-+	if (!btf_type_is_ptr(t))
-+		return false;
++#define BTF_MEMBER_MAX_DEPTH	4
++#define BTF_MEMBER_PATH_LEN	64
 +
-+	for (t =3D btf_type_by_id(btf, t->type); btf_type_is_modifier(t);
-+	     t =3D btf_type_by_id(btf, t->type)) {
-+		if (!btf_type_is_type_tag(t) || btf_type_kflag(t))
-+			continue;
-+		if (!strcmp(__btf_name_by_offset(btf, t->name_off), "arena"))
-+			return true;
-+	}
++struct btf_member_path {
++	const struct btf_member *member[BTF_MEMBER_MAX_DEPTH];
++	int depth;
++	bool too_deep;
++};
 +
+ static bool btf_member_kind_allowed(const struct btf *btf, const struct =
+btf_type *t,
+ 				    u32 member_kinds)
+ {
+@@ -11635,10 +11644,11 @@ static bool btf_member_kind_allowed(const struc=
+t btf *btf, const struct btf_type
+=20
+ /*
+  * Returns true if every member of struct @t is of a kind listed in
+- * @member_kinds, 4 levels of nesting allowed.
++ * @member_kinds, BTF_MEMBER_MAX_DEPTH levels of nesting allowed.
+  */
+ static bool btf_struct_member_walk(struct bpf_verifier_env *env, const s=
+truct btf *btf,
+-				   const struct btf_type *t, u32 member_kinds, int rec)
++				   const struct btf_type *t, u32 member_kinds, int rec,
++				   struct btf_member_path *path)
+ {
+ 	const struct btf_type *member_type;
+ 	const struct btf_member *member;
+@@ -11652,31 +11662,42 @@ static bool btf_struct_member_walk(struct bpf_v=
+erifier_env *env, const struct bt
+=20
+ 		member_type =3D btf_type_skip_modifiers(btf, member->type, NULL);
+ 		if (btf_type_is_struct(member_type)) {
+-			if (rec >=3D 3) {
++			if (rec >=3D BTF_MEMBER_MAX_DEPTH - 1) {
+ 				verbose(env, "max struct nesting depth exceeded\n");
++				if (path)
++					path->too_deep =3D true;
+ 				return false;
+ 			}
+-			if (!btf_struct_member_walk(env, btf, member_type, member_kinds, rec =
++ 1))
+-				return false;
++			if (!btf_struct_member_walk(env, btf, member_type, member_kinds,
++						    rec + 1, path))
++				goto bad_path;
+ 			continue;
+ 		}
+ 		if (btf_type_is_array(member_type)) {
+ 			array =3D btf_array(member_type);
+ 			if (!array->nelems)
+-				return false;
++				goto bad_member;
+ 			member_type =3D btf_type_skip_modifiers(btf, array->type, NULL);
+ 		}
+ 		if (!btf_member_kind_allowed(btf, member_type, member_kinds))
+-			return false;
++			goto bad_member;
+ 	}
+ 	return true;
++
++bad_member:
++	if (path)
++		path->depth =3D rec + 1;
++bad_path:
++	if (path && path->depth)
++		path->member[rec] =3D member;
 +	return false;
+ }
+=20
+ bool btf_struct_is_composed_of(struct bpf_verifier_env *env,
+ 			       const struct btf *btf,
+ 			       const struct btf_type *t, u32 member_kinds)
+ {
+-	return btf_struct_member_walk(env, btf, t, member_kinds, 0);
++	return btf_struct_member_walk(env, btf, t, member_kinds, 0, NULL);
+ }
+=20
+ static bool btf_type_is_scalar_struct(struct bpf_verifier_env *env,
+@@ -11686,6 +11707,18 @@ static bool btf_type_is_scalar_struct(struct bpf=
+_verifier_env *env,
+ 	return btf_struct_is_composed_of(env, btf, t, BTF_MEMBER_SCALAR);
+ }
+=20
++static void btf_member_path_str(const struct btf *btf, const struct btf_=
+member_path *path,
++				char *buf, size_t buf_sz)
++{
++	size_t len =3D 0;
++	int i;
++
++	buf[0] =3D '\0';
++	for (i =3D 0; i < path->depth; i++)
++		len +=3D scnprintf(buf + len, buf_sz - len, "%s%s", i ? "." : "",
++				 btf_name_by_offset(btf, path->member[i]->name_off));
 +}
 +
- static int btf_find_kptr(const struct btf *btf, const struct btf_type *t=
+ enum kfunc_ptr_arg_type {
+ 	KF_ARG_CONST_MEM_SIZE,
+ 	KF_ARG_MEM_SIZE,
+@@ -14053,17 +14086,46 @@ static int check_kfunc_call(struct bpf_verifier=
+_env *env, struct bpf_insn *insn,
+ 		    meta.func_id =3D=3D special_kfunc_list[KF_bpf_res_spin_lock_irqsav=
+e]))
+ 			__mark_reg_const_zero(env, &regs[BPF_REG_0]);
+ 	} else if (btf_type_is_struct(t)) {
++		struct btf_member_path path =3D {};
++		const char *member_note =3D "";
++
+ 		/*
+ 		 * The returned struct comes back as raw register bits modeled
+ 		 * as an unknown scalar, so it must contain only scalars:
+ 		 * otherwise a pointer field would be laundered into a scalar
+ 		 * and escape provenance and reference tracking.
+ 		 */
+-		if (!btf_type_is_scalar_struct(env, desc_btf, t)) {
+-			verbose(env,
+-				"kernel function %s returns %s %s that is not composed of scalars\n"=
 ,
- 			 u32 off, int sz, struct btf_field_info *info, u32 field_mask)
- {
-@@ -7927,51 +7943,19 @@ static int btf_scan_decl_tags(struct bpf_verifier=
-_env *env,
- 	return 0;
- }
-=20
--static int btf_scan_type_tags(struct bpf_verifier_env *env,
--			      const struct btf *btf, u32 type_id,
--			      u32 *tags)
-+static void btf_scan_type_tags(const struct btf *btf, u32 type_id, u32 *=
-tags)
- {
--	static const struct btf_type_tag_match func_type_tags[] =3D {
--		{ "arena", ARG_TAG_ARENA },
--	};
--	struct btf_type_tag_walk_ctx ctx;
--	const struct btf_type *t;
--	int err;
--
- 	/* Find the first pointer type in the chain. */
--	t =3D btf_type_skip_modifiers(btf, type_id, NULL);
-+	const struct btf_type *t =3D btf_type_skip_modifiers(btf, type_id, NULL=
-);
-=20
--	/*
--	 * We currently reject type tags on non-pointer types,
--	 * which neither LLVM nor GCC support anyway.
--	 */
--	if (!t || !btf_type_is_ptr(t))
--		return 0;
--
--	ctx.t =3D t;
--	err =3D btf_type_tag_walk(btf, &ctx, func_type_tags,
--				ARRAY_SIZE(func_type_tags));
--	if (err) {
--		bpf_log(&env->log,
--			"function signature member has multiple type tags\n");
--		return err;
--	}
--	*tags |=3D ctx.res;
--
--	return 0;
-+	if (btf_type_is_arena_ptr(btf, t))
-+		*tags |=3D ARG_TAG_ARENA;
- }
-=20
- /* Check whether the type is a valid return type. */
- static int btf_validate_return_type(struct bpf_verifier_env *env, struct=
- btf *btf,
- 		const struct btf_type *t, int subprog, bool is_global)
- {
--	u32 tags =3D 0;
--	int err;
--
--	err =3D btf_scan_type_tags(env, btf, t->type, &tags);
--	if (err)
--		return err;
--
- 	t =3D btf_type_skip_modifiers(btf, t->type, NULL);
-=20
- 	/*
-@@ -7979,7 +7963,7 @@ static int btf_validate_return_type(struct bpf_veri=
-fier_env *env, struct btf *bt
- 	 * General arena variables are not allowed, since it makes no sense to =
-return by value
- 	 * a variable that's on the heap in the first place.
- 	 */
--	if (subprog && (tags & ARG_TAG_ARENA) && btf_type_is_ptr(t))
-+	if (subprog && btf_type_is_arena_ptr(btf, t))
- 		return 0;
-=20
- 	/* We always accept void or scalars. */
-@@ -8106,9 +8090,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
-env, int subprog)
- 		if (err)
- 			return err;
-=20
--		err =3D btf_scan_type_tags(env, btf, args[i].type, &tags);
--		if (err)
--			return err;
-+		btf_scan_type_tags(btf, args[i].type, &tags);
-=20
- 		t =3D btf_type_by_id(btf, args[i].type);
- 		while (btf_type_is_modifier(t))
++		if (!btf_struct_member_walk(env, desc_btf, t, BTF_MEMBER_SCALAR, 0, &p=
+ath)) {
++			if (path.too_deep) {
++				member_note =3D bpf_diag_fmt(
++					env, " It nests structs more than %d levels deep.",
++					BTF_MEMBER_MAX_DEPTH);
++			} else if (path.depth) {
++				const struct btf_member *bad =3D path.member[path.depth - 1];
++				char bad_name[BTF_MEMBER_PATH_LEN];
++				const struct btf_type *bad_type;
++
++				verbose(env,
++					"kernel function %s returns %s %s that is not composed of scalars\n=
+",
++					func_name, btf_type_str(t),
++					btf_name_by_offset(desc_btf, t->name_off));
++				btf_member_path_str(desc_btf, &path, bad_name, sizeof(bad_name));
++				bad_type =3D btf_type_skip_modifiers(desc_btf, bad->type, NULL);
++				verbose(env, "member '%s' has type %s\n", bad_name,
++					btf_type_str(bad_type));
++				member_note =3D bpf_diag_fmt(
++					env, " Its member '%s' is %s, not a scalar.", bad_name,
++					btf_type_str(bad_type));
++			}
++			bpf_diag_program_structure(
++				env, insn_idx, "unsupported kernel function return type",
++				"Call a kernel function that returns only scalars by value.",
++				"%s() returns %s %s by value.%s "
++				"Only kfuncs returning scalar values, or "
++				"structures composed of scalar values are "
++				"supported.",
+ 				func_name, btf_type_str(t),
+-				btf_name_by_offset(desc_btf, t->name_off));
++				btf_name_by_offset(desc_btf, t->name_off), member_note);
+ 			return -EINVAL;
+ 		}
+ 		mark_kfunc_ret_regs(env, regs, t->size);
 --=20
 2.53.0-Meta
 
