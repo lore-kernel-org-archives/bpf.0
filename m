@@ -1,165 +1,200 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D81A33E37A
-	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 16:35:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94EBF37CD2C
+	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 16:52:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.173
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787675718; cv=pass; b=lH9mTNLqg3dGxUmJ4tUqW/kJ4qkv87eZUqUtQKp5416qbHSKuVcs+6XDjuYv94JZU9RApJ9w5Gk8gc7d8BjOKsXRORW6bYRvFwrv+ONlpY1AzqY2Cf0sAU6p8kURzGgqi5t6FETlP0xVGLFfpAjEQqkXsL82ERR3ZsyIvWK/B+4=
+	t=1787676778; cv=pass; b=fusba8Pn6tgy5MjOF+nq+WoM2Y+fhKZyl2HMaPpARBDCmamB7PP3Qj04qFcWNfk9fL9qpAGdzOLx1/UadFlsBZF3+c7wuBQx2/3IX0zrEbPGriRNVogXNZKckHO1zRc2mb2ftSzil8FYFSjeQFGCYhZUmD0CVetsBJPxwz7NZk0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787675718; c=relaxed/simple;
-	bh=XEFaONL8xYC/7ZTJ7N0jE0D6XCHhZNztG+W53n6kkco=;
+	s=arc-20240116; t=1787676778; c=relaxed/simple;
+	bh=A5rbQUVdXmCBXh8cS9dRt5lu7uhOJRVPi0ZJmSOwvEY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PcJfYY7JVAsNMK5hWFgIrEfHLfziY0BbvB3GWzKODjg2DpH/VH0tdpHTCpzCBOuiA7ich62MHfhbRhpgbyYW5xNLNpjKEZh3YYjoGE3x9GtaI/KVwWF+m4uaIIw9T/F1Y9zcCGxtaeNh/s9/9OG9d5CWn2LOdsrTOb4qWe4AWqg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iYqYPqWm; arc=pass smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=XOYUdKosZc8K8CZ6IpZ/pv8n+XbF2I4xOqqD8r+kVXFVb3foWa9/HHt/XasudD8uv9LWhyQr92pROoBPCrKNq0y8YxgxUtxiA+8tgtd7ingEMWP1u44jE3W0Mtvo+CdkN5CnfY21gewfVEDj3rqiVnP8qfi+gkIMZGY/hV5VYpI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=I9YPmGKX; arc=pass smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iYqYPqWm"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-84e507b079dso58184b3a.0
-        for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 09:35:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787675716; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="I9YPmGKX"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2cede6375caso1375ad.0
+        for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 09:52:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787676776; cv=none;
         d=google.com; s=arc-20260327;
-        b=FvVvxeyusZ9fFCTTvK67dROyrXWf3B+y5racW+T3Lw6mMfeYN6rYjko1dACgxxPXAM
-         UrmaUxgeNKgJuTw06GXlmB19jTkhQ4ApW7H3C9c+esAD9k4pbeSaFYjxR3Vt215J8sem
-         xeLIq2/qCLmHAvYWQJSeCWtLd0ZQfrngOcweaLkhVSQIAS6dIcc3Bbge5uqxLGyUceyM
-         sd0n+CObT1GFTY0BjB3aRMqN+GzimhAjlhFRWYj84c6D84keq0izuk/zLXmuwhqZozjS
-         KTAjg33KnDTWDcwogTlgXJI3J4xYZKyXc3Qmp3bg0beUjnDvLCW4l7pukd2eDSMF7R15
-         XDkg==
+        b=G7Mrn0yRqnScL7SqkzSVgPMxCzQ0oFfMMz3ppAik3VBalSXP1qFbhj/WPDAl0n9ONu
+         8bdBsp+EvmCLgTwYbsZ6ZJg+18PEvT9W9QXXG8vMGdehhKzOyFRFJaBBPkovCwMVhYla
+         JYbdJMvtbP/o+f5JGLiecayqe24uvdGm4x8vmYRRGEIj2wuI0gdfhG9w5WOQWMsnmjCj
+         pi54cMAzskaIQwEGqW7lXQtYogzmE/35Y632A+RWEbbJo4zRREaFVqA5couODwJybFtt
+         6kRgPJtqWZ6hLL1JNLQ5sCKY1IcHjDSOtF32onnADVdA047dss6j9LWtXJFW3h4k4GqE
+         DWig==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=H0MU9SiN4cYunR3HktWWkcncktf+nU2XpGwFxF8Xzfs=;
-        fh=YqiyZXhfxn4kSi3L+L758fjm6RPHuIThR0sloNOrzVQ=;
-        b=lZg0rpmtGFfS19xjhBtzFTYWPedYFuhm0zQCtdduizbaPrOpXp5lAvNoKCSKbDhjOc
-         GVCoWsh7hnVrcQrAT4P6sXUl5xc8p6v7hQegN28JpaSTXq7wUvS1nAh+1naKlDPpLmmk
-         sYZBtrATOBCqHfBapaA9O1Fs00IhYx2CW5eG75jpt06oR4cCd8TxomKzEwauRQxm7kCN
-         OWUBy5jO8OyRHCGwodkQ42sGxQBWBNo4yPC3D106NLy7JtYX/kvz1GpBV5+dgwTYHR79
-         lJsTSpK4qDNiRTX8dwBjB3bdKvlTm6jUm/Z51ai1jJieMpqwsisEVwN735ZjU8us42Nl
-         N/FA==;
+        bh=ImkuahcqiET0r0yh2i1x0Wqcf5zuafLmEw6TOE3oMq4=;
+        fh=tcv1GfNNVYVA94hGgQPZvaymZ23xew0HDaEcmm1d+PM=;
+        b=YKjFJD+50tP8nOnExzN7Cg8dqU6t9QPgIPCCwpumYMTG1w/HOeTOid4dn5t5e0NkJ0
+         bGwm9OisCQP5YJ8lRsmuhZ663yDMvI6v0agvjMYsRLeVIqCR4nFV48it1fnZkrJFK55h
+         2xNHeIXwJMFXnt57RhdmTg3+TapqNq4u7SdMLaWBdMv7c+P3uafYuYs+Tdngp+OyQpQm
+         vfP0F1R6Bo9UWhVlUDluSG1dRvUmsxLP0sAZXzLagpgWJccQGx2G7DvctO+PbPVwix+v
+         9P2EeTMH5CNs6aQ1BPWVinEHWQkdKp/Fgwc2XlC3P+IuL9lr1bHuxFJK5jViJrogSAdj
+         RzGQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787675716; x=1788280516; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1787676776; x=1788281576; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=H0MU9SiN4cYunR3HktWWkcncktf+nU2XpGwFxF8Xzfs=;
-        b=iYqYPqWmjR+kZUt5iXsryJLFGT2ko+6vFfY2RtU4aevSxTprQJwb6usyd5MYkerQlo
-         OzsoxIDtP2TKA0+JexXRRCSuIjz1un0bYT7EWEdIXYLn0QQvo4oEXec2Xoc71JkKwDd5
-         ieA8K5tJE1WZfjINI50q+8wBYZSzLgQmfR4/9howMnbrYUCgLH4svMi5fl9otm2CDmxE
-         yQdYtW213NBnD3+Zz/Wo8mvoz/W65Xfq/BYJB3zSSZPvbSbIGQzvwQ34nLDI32IXTSpZ
-         aKCqIZ5Puzv1l+rh8DVcqojnG9CRYKvg5pjZhfTjyzlkcR5iq4DQS3TUCYhelskDaY1G
-         LcVg==
+        bh=ImkuahcqiET0r0yh2i1x0Wqcf5zuafLmEw6TOE3oMq4=;
+        b=I9YPmGKXlkGQLRB3WsRrm6J7NNac5Y+u90Dj6v+ZdElThLVs4zxZL1fwt+jZeLluVW
+         eStQTJXcasyfe0DrwkPbK0ptSWcdRk9yT1cu3eNGSDNmKRVAnhBg/+bMcBD5WeL8xQ62
+         JT/ugJ1GmXM/N2sJQ9hXvSivyRYjgXemLkET3pLDSqjpaju3ZAr/j6hHwRj/sH9TcrRU
+         4qKriNXvh0gTl+tBUXEJyrmu79U/HLK/E8HAS4T9fltKhlMJyPJTUGZdrMIawJVIxrGC
+         wN6U+a34+vO119VU+E0OBJ5BbB3CF8qNCFd//7fT3B26+3Rr0oqxt3an6xPeGc4iTB0r
+         so8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787675716; x=1788280516;
+        d=1e100.net; s=20251104; t=1787676776; x=1788281576;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=H0MU9SiN4cYunR3HktWWkcncktf+nU2XpGwFxF8Xzfs=;
-        b=hjj85g0U4rEcfNala9gPBwci2VXi9/R2lJbfPe4W3xSjmLO+/kqYYxGHGTOexXa16c
-         POAttmPuw02eF5/euaNXzM2qhbDUyVQbfcBB+30ERKi+N6T8Ph/MMSsrctmxjp3if3Tz
-         Lr8yceJQhwmgPcA512PLBNQ9f/tlReu25N8yJujdZaNPhWLfMGngd77JYD8cJUE19U/x
-         sftxerYbiPyy12LNFoi1jIPfdHFJOY1eaaSkPaO6jvlC5Gy6ZHMMHOMUvFiLh/eMMhsM
-         lcjbDdSqkAe6/OMiJENT5E838+YxOnOeBzIts8TpZNYeloSprc+cZJNxuTYhHVbVUiGJ
-         XuqA==
-X-Forwarded-Encrypted: i=1; AHgh+Ro3yzZjn5J+wmUw9xYbKHoWN+Tg5LNw8EFv/kDEB7HYyhR33HKHJY7OUop2Rb4ej5S0F2w=@vger.kernel.org
-X-Gm-Message-State: AFuF++mcuKJzhXHZd3779y1F6tqka8Y2+0AXIHicZxucW+lK/KkcxPIL
-	iU8S3UX8N9yfJL808tBdV04mUml3356Jj2fxML01mfCD7e718E0l6GMif8Bn48sHu09dOCDrDCg
-	1HsZpOa7nacjUZnI2/xE2dpaolbJs5grdl8EP
-X-Gm-Gg: AR+sD10OhDJydeBvboqyFWpnalwSqPjyCP3qT/M5bYtaVxij50s79q5imrpA5XAgo9i
-	Me57cFD9Dw07t1dd+UBIMQsQQwwV1CQPBeyPdJvclpA1HXztFrxXWLZxTtMhtouOzcaoynIO6CC
-	l4wfLOeQbKKdExSU9hlgSSB67u7XgmIbKktCNy/rhFIk9A87J9jT6daz1KPEOL2EGEZWo4eERWV
-	JkRCDvn5BePWFH2MSB4+c8Wef8ALJJpd6lmLr168B5gqYqSE2eOTeVicfhoFHhOhnGALvZM5B6U
-	I27LIjFUayTbOAa39NWyYXM+ZmbR5EdskPZSbxDNTSB1Ye0QxP3xslgoSZd3iJd3RU2/uy2PdjQ
-	I4XwdD9BWVM6bPQbUJwJkjlhEh4DYZXU+RdXS9QBr1QJOU4AAVT1mMJ9ye4BK
-X-Received: by 2002:a05:6a00:2ea0:b0:847:99bb:b6d0 with SMTP id
- d2e1a72fcca58-8523c9474b5mr12854188b3a.15.1787675714932; Tue, 25 Aug 2026
- 09:35:14 -0700 (PDT)
+        bh=ImkuahcqiET0r0yh2i1x0Wqcf5zuafLmEw6TOE3oMq4=;
+        b=moSyLe+rQhUgbQJVHa+zMVlPZ+5Q/cRxINmLQOfyWAPglMEns86PkVY0Fz1VfkCrCw
+         0oavsqE5D9bYxUSIq4EPqpIYMxBcaYrGTI8UkgCKd7K+Kb1DdeG2XPjkPrXFxsGFVQVD
+         +qcoBqpUVga7rUvlPvdChJveunffu4vlRxyGiR7b8r+0sKEBSRDdD+tAqzv2aDRtQsmj
+         IwfDwF/MHrwyuFX/1VEJrUq2PF3S/o4i3hTNoXAxKZqU5/oUylK2kIqr3FPURvOe3pbT
+         mGEfQci/A0/Zl4OKoi19E5cxAqOda0NnmmD/KVapIyMAo2+CDv7vqwGPF28x8FpdrE+T
+         rOHA==
+X-Forwarded-Encrypted: i=1; AHgh+RryZ3DWuntR4Meg4utTBtDZzLM65Vqy0p88QaHqdizF2smbkfgIxZqKur4PM374jsFowuM=@vger.kernel.org
+X-Gm-Message-State: AFuF++nbG2Jro+m3jzpI38JEOIoqzv+zXEV63ecwxzNsq9lM0JwowNEU
+	Hazotr/hdM7Pf2vTkrWYXhZ9J8YPWFhLAEudqnhXlyZCJ1Kkt4uY8LMFdP05F85DSKjsgbppf9b
+	ZJldjpvk/bhmVoz9zZljstg0TOATu5rZNWOnRe6OV
+X-Gm-Gg: AR+sD12o+Lhrj34UyKy1eepElLqXI/1g9hsjaMUXvYP5j6A2YiTeodt72oRcaH848ex
+	4oy/Klu+fHZEJQY+Gr3LQb4b1fRML24avkntysXkW9ET0dO4XBj0EVQ5LhbInSd+RIuGUVJh3wW
+	U1CTMMKRhaZxO8gT/tXIi7ngcHXCjpE3ZXkGnz/0Vg8Ufa163nrDPKJIBhWyvA/QOPn0ZOmcpby
+	zVdICrihxKP1vkULC9/DHbCLO8S/q6+tY4oBH/HEJLqMQ6tCIM2AMrkx3zf55w2AeeCQo0G9UUo
+	wpGTrQtasJI9Bkx1snJlc8hwHJ9bDJUfPXakqsRIwehX4VlxK0uvfI5CLYxw2Qi4tfqf4NLmFZF
+	njXlydN3nJrsV2YMQzYXYTzUJlReri7/NvyyQ7sLh
+X-Received: by 2002:a17:902:f705:b0:2d5:db3d:1a41 with SMTP id
+ d9443c01a7336-2d6e0757d7amr9055105ad.14.1787676775185; Tue, 25 Aug 2026
+ 09:52:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260824-b4-bpf-arena-free-resched-v1-1-5c447477a64b@debian.org>
- <20260824170831.33E051F000E9@smtp.kernel.org> <ao2gP7Y6UJ2o2tUc@gmail.com>
-In-Reply-To: <ao2gP7Y6UJ2o2tUc@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 25 Aug 2026 09:35:03 -0700
-X-Gm-Features: AcwNN1WjlWkMaVf3-1mw13hLMnxI3KEyHvkkyPcaIqvfs5peMp6PpF-5TCuL0uE
-Message-ID: <CAADnVQKP8R=1aZiDcnfkqD3mA=32R2Yrw642u3w7de4JSfMWKg@mail.gmail.com>
-Subject: Re: [PATCH] bpf: arena: reschedule while freeing the arena pages
-To: Breno Leitao <leitao@debian.org>
-Cc: sashiko-reviews@lists.linux.dev, bpf <bpf@vger.kernel.org>
+References: <20260816224609.308019-1-kirill@shutemov.name> <20260816224609.308019-20-kirill@shutemov.name>
+In-Reply-To: <20260816224609.308019-20-kirill@shutemov.name>
+From: Jann Horn <jannh@google.com>
+Date: Tue, 25 Aug 2026 18:52:17 +0200
+X-Gm-Features: AcwNN1Vvom-LUSAxEjMWXrQR9qZrcTO8aY2l_-w47SQrAcC9eH4E9yF2js957ac
+Message-ID: <CAG48ez1fiCzTMATN07HHfzvUGFuZ5gELNpZXdXx=ySa7nihxmA@mail.gmail.com>
+Subject: Re: [RFC PATCH 19/57] mm/collapse: install a PMD leaf as the terminal layer
+To: Kiryl Shutsemau <kirill@shutemov.name>
+Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
+	nico.pache@linux.dev, baolin.wang@linux.alibaba.com, baohua@kernel.org, 
+	dev.jain@arm.com, hughd@google.com, lance.yang@linux.dev, liam@infradead.org, 
+	mhocko@suse.com, rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org, 
+	surenb@google.com, usama.arif@linux.dev, vbabka@kernel.org, ziy@nvidia.com, 
+	usama.anjum@arm.com, agordeev@linux.ibm.com, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, kas@kernel.org, 
+	willy@infradead.org, pfalcato@suse.de, rostedt@goodmis.org, 
+	mhiramat@kernel.org, linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 25, 2026 at 7:29=E2=80=AFAM Breno Leitao <leitao@debian.org> wr=
-ote:
+On Mon, Aug 17, 2026 at 12:46=E2=80=AFAM Kiryl Shutsemau <kirill@shutemov.n=
+ame> wrote:
+> Fill in the PMD install.  Under the pmd lock, with the pte ptl nested
+> inside it: verify, detach the table with pmdp_collapse_flush(), deposit a
+> fresh one and map the leaf.
 >
-> On Mon, Aug 24, 2026 at 05:08:30PM +0000, sashiko-bot@kernel.org wrote:
-> > > diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> > > index 7b6847200b431..c5f6bebbb15c3 100644
-> > > --- a/kernel/bpf/arena.c
-> > > +++ b/kernel/bpf/arena.c
-> > > @@ -364,6 +364,7 @@ static int existing_page_cb(pte_t *ptep, unsigned=
- long addr, void *data)
-> > >      * the freed page. So it all relies on 1.
-> > >      */
-> > >     __free_page(page);
-> > > +   cond_resched();
-> >
-> > [Severity: High]
-> > Does adding cond_resched() here violate the lazy MMU mode contract?
-> >
-> > The callback existing_page_cb() is a pte_fn_t called by apply_to_pte_ra=
-nge(),
-> > which establishes an atomic context by wrapping the callback loop in
-> > lazy_mmu_mode_enable():
-> >
-> > mm/memory.c:apply_to_pte_range() {
-> > ...
-> >       lazy_mmu_mode_enable();
-> >       if (fn) {
-> >               do {
-> >                       if (create || !pte_none(ptep_get(pte))) {
-> >                               err =3D fn(pte, addr, data);
-> > ...
-> > }
-> >
-> > On architectures like PowerPC64 with hash MMUs, lazy_mmu_mode_enable()
-> > explicitly disables preemption. Since preemption is disabled, cond_resc=
-hed()
-> > evaluates to a no-op, which means it won't actually yield the CPU and w=
-ill
-> > fail to resolve the original softlockup.
-> >
-> > Additionally, if CONFIG_DEBUG_ATOMIC_SLEEP is enabled, this could trigg=
-er a
-> > "sleeping function called from invalid context" bug during teardown.
->
-> That is a good point, I think a better approach would be to drop the
-> cond_resched() from the callback -- existing_page_cb() goes back to its
-> original form.
->
-> Then we walks the range in chunks from arena_map_free() instead, so the
-> resched happens outside the lazy MMU section (FREE_CHUNK_SZ is SZ_64M):
->
->       addr =3D bpf_arena_get_kern_vm_start(arena);
->       end =3D addr + SZ_4G + GUARD_SZ / 2;
->       while (addr < end) {
->               u64 size =3D min_t(u64, end - addr, FREE_CHUNK_SZ);
->
->               apply_to_existing_page_range(&init_mm, addr, size,
->                                            existing_page_cb, arena);
->               cond_resched();
->               addr +=3D size;
->       }
->
-> Would this be a better approach?
+> That is one atomic section, so no pmd_none() window ever exists: faults
 
-Just to be clear.. Is this needed to backport to some older kernel?
-New kernel with CONFIG_PREEMPT_LAZY=3Dy shouldn't need
-this old practice of sprinkling cond_resched().
+What do you mean by "atomic" and "no pmd_none() window ever exists"?
+Is that supposed to be with respect to a subset of readers?
+
+While the PMD table spinlock is held, you clear the PMD entry
+(pmdp_collapse_flush) and set it to a new value
+(map_anon_folio_pmd_nopf). But codepaths that walk page tables don't
+take that spinlock unless they already know they're in a THP case.
+
+zap_pmd_range() does not lock the PMD table before checking
+pmd_none(), and if that is true, it skips over the PMD. I think this
+means that THP collapse can race with MADV_DONTNEED or zap_vma_range()
+such that the zap wrongly has no effect?
+
+> stay held down at pte level by the migration entries throughout.  It is
+
+But you don't have a migration entry at the PMD level, right?
+
+> what lets PMD collapse run under mmap_read like everything else here.
+>
+> Two things force that nesting, which is the one the tree already uses to
+
+I'm lost, what is "the tree"?
+
+> reinstall a table.  A racing zap of a frozen entry takes the pte ptl, so
+> the verify has to hold it.  And the table must not come apart between
+> verify and detach, which is the pmd lock's job.
+>
+> Nothing leaves the section early, aborts included.  An abort only
+> restores PTEs and would need no pmd-level exclusion of its own, except
+> that its pte pointer came from pte_offset_map_rw_nolock(), whose caller
+> must establish that the pmd is stable.
+>
+> The deposited table is the freshly allocated one, never the table just
+> detached.  A deposited table has to be quiescent, because whoever
+> withdraws it frees it immediately with nothing to hold a lockless walker
+> off first, and a table that has never been reachable is quiescent by
+> construction.
+>
+> The detached one is not: GUP-fast and RCU pte walks that read the old PMD
+> may still be inside it, and on broadcast-TLBI architectures the flush
+> expels nobody.  Quiescing it would need an IPI, which has nowhere to go
+> here -- outside the pmd lock it opens the pmd_none() window this design
+> does not have, inside it is a broadcast under a spinlock.  So the
+> detached table goes to pte_free_defer(), which holds the free until those
+> walkers finish.  One transient table page per PMD collapse is the cost.
+>
+> No anon_vma_lock_write() is taken, unlike the mechanism being replaced:
+>
+>  - rmap walks on the sources are unreachable, their refcounts frozen and
+>    their folio locks held from freeze to putback;
+
+To be clear, we can concurrently rmap-walk into the PMD, right?
+Because we might be looking at a different folio which was created in
+the parent process or something like that? And so a
+page_vma_mapped_walk() without PVMW_SYNC might look at stale PTEs?
+(Which may or may not be fine, but would not be what this commit
+message claims.)
+
+>  - non-rmap pte walkers see migration entries;
+>  - pmd-level observers see either the old table or the leaf, never an
+>    intermediate;
+
+(or pmd_none(), see above)
+
+> +       old_pmd =3D pmdp_collapse_flush(vma, cand->addr, pmd);
+> +       old_table =3D pmd_pgtable(old_pmd);
+[...]
+> +       pgtable_trans_huge_deposit(mm, pmd, cand->deposit);
+> +       map_anon_folio_pmd_nopf(cand->new_folio, pmd, vma, cand->addr);
+[...]
+> +out_unlock:
+> +       if (pte_ptl !=3D pmd_ptl)
+> +               spin_unlock(pte_ptl);
+> +       pte_unmap(pte);
+> +       spin_unlock(pmd_ptl);
+> +
+> +       /* The deposit balanced the detached table, so the count is alrea=
+dy right */
+> +       if (old_table)
+> +               pte_free_defer(mm, old_table);
+
+What does old_table contain at this point - migration entries? I
+wonder if we should zero all the PTEs inside it before dropping its
+spinlock and scheduling its freeing, so that a concurrent
+pte_offset_map_rw_nolock()+spin_lock() wouldn't see dangling migration
+entries. (I'm not sure if we actually have a codepath that does that,
+but even if not, this seems like it might cause problems later.)
