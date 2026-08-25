@@ -1,128 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-120.mta0.migadu.com [91.218.175.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1F681A23A6;
-	Tue, 25 Aug 2026 04:59:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C3E049362B
+	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 05:15:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787633992; cv=none; b=oIoms1Xnt9SFCs5iXwKiM9OQEgdLAY8gzfz9xUwNrZqBqaoOxuHArWi9Prlmox8NiITTFQempBeRTZ4/C2ywOs388izZrB6y82IrtV0b2kFcNo4zjLWTxn0pocG9Irp0qQ4BtNI/FABY0wYWpMILXw5yTC+zHZnUazJJbMyRPPs=
+	t=1787634942; cv=none; b=UFo8zN8Ppbk2YuY0hU1LfU7XZPWtqaOdj9QAjPHJbbJLYLBQd1/ctw5AHpfPP2T7KJlXCBLQfQaZC5HUXNMReQKkwddTaeyeux1JOSDzu6jukT9gB4s+L4tXVNZe5SfMUYkXmRcHizElLbIykDqpslKChdH1AINSD9tG0g5vJtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787633992; c=relaxed/simple;
-	bh=io0kW5534eDF+L+RpRgvD2AWXMbPz+j32qnU717fNzQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=shV5pQWDf5Hn21/Lkl2FOpFDTFsAnnSXZfXW+5wdlDFp6+XlhVzcBrxVUNCoEymicdIox2ocGfiboornYpJORCX5EaCy+9LQBKxWywFJW0RYJP7LDPWMc0ylv781f7mUaqU9uPaq5juU8xT6tro8tgC9nvil7QiOgRFvgdlk2y4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EMqy+EsO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787634942; c=relaxed/simple;
+	bh=ycU45ByNsgHHDtVWA4mXYRQ4N25WsNGqUmcu/vjY5q8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cLc6S8pWdRnQZtp/tYlGqDIPF2Bvf/0SbUIZi2Q9WpkzwP05yTf+tDavjyUQ32x76yqrsCVR5FG2RCFNZwtxKJAVYF7Yutkq63r7V6xXv93w+EaMFTcbgtJwcTub37b7T/6i3+Ee/AYfZ3nbTmklnJRzot2EIf1uXNZLm8AdMLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EvvhJI3R; arc=none smtp.client-ip=91.218.175.120
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EMqy+EsO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 237741F000E9;
-	Tue, 25 Aug 2026 04:59:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787633991;
-	bh=lHfDie5F5max9MKzz+gxrCgxFZP2trMABvlkqsnVMnQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=EMqy+EsOSVLu7w1NDIvqmDEXNCbsC9j+LDLRr12dQ2rFTr8PzeW5UB5//M1wqo8ir
-	 ytBWqhOhamq2+M/yvdepN1hkSHhv0sDX+nfrOLTp+BCg8bvdo4hYGwq1C5PjsVzt9d
-	 HsCp/SgaIqboSuWaDCYgQYsAz2RtiwfZIETIZJbg6Y1vWSheMxbzi36dVJ2uCe/rVH
-	 i17JEtXZcFH25Wdq865NwKX6N3sxzt0Nq2a8QrQNk3RDCKMSXr20GKDML4PVYfV2NK
-	 H/43i5DjVlM9C4pS76RAkUDAoOH3FnKmmFhQmdiVdGff16fSg2qfYtDjyFIk6UNzKv
-	 fZt2QDkVWD4JQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2] perf/bpf: Fix lockless access to parent_event->prog
- in perf_event_alloc()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Deepanshu Kartikey" <kartikey406@gmail.com>
-Cc: bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-In-Reply-To: <20260825044507.15217-1-kartikey406@gmail.com>
-References: <20260825044507.15217-1-kartikey406@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 25 Aug 2026 04:59:50 +0000
-Message-Id: <20260825045951.237741F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EvvhJI3R"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=ycU45ByNsgHHDtVWA4mXYRQ4N25WsNGqUmcu/vjY5q8=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787634937; v=1; x=1788239737;
+ b=EvvhJI3R3guGGlRj9hKGkJUOsWa4c4qUnDtpySWZtFAnQH/Wyt8IDRpb+c8FoidYlYIncK3c
+ cyEZogLD2i76MENcoseG2N42xzkN7HGPve4WIczaBhNkEV7hrOJTgYwlh5+4ktEYZcLT9V16gjr
+ N32jBSNL11VzNyU3kWK1LZ8M=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from [10.22.64.46] (122.11.166.8)
+	by smtp.migadu.com with ESMTPS id 4cf59cd3d753658a;
+	Tue, 25 Aug 2026 05:15:37 +0000
+X-Mizu-Trace-ID: 4cf59cd3d753658a
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <7f18980c-0c15-4862-af1f-f451ca12dac5@linux.dev>
+Date: Tue, 25 Aug 2026 13:15:23 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 00/13] bpf: Add tracing_multi link support for
+ bpf progs
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Quentin Monnet <qmo@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>,
+ Avinash Duduskar <avinash.duduskar@gmail.com>,
+ Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
+ <ameryhung@gmail.com>, Jordan Rife <jordan@jrife.io>,
+ Rong Tao <rongtao@cestc.cn>, Eyal Birger <eyal.birger@gmail.com>,
+ Pu Lehui <pulehui@huawei.com>, Jingguo Tan <tanjingguo@huawei.com>,
+ Lin Ma <malin89@huawei.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260809150111.45000-1-leon.hwang@linux.dev>
+ <CAEf4Bzam=0V6n4_vBahhYh2Qn9KfriDKXSz58L4L+teHJRWfPQ@mail.gmail.com>
+ <0b30bc97-2ecf-46eb-a863-94e706e18c6b@linux.dev>
+ <CAEf4BzaXaLLqs6XXCG_02c7UcvNWfbGUAJTYosr22oaD4iokuQ@mail.gmail.com>
+ <c71d27ab-ec59-4b72-855f-7bf437095cd5@linux.dev>
+ <CAEf4BzZpB-qkhu3SAu5MrYYAT2+ZN8WaXqpmnKruOOdjJOLK2A@mail.gmail.com>
+Content-Language: en-US
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CAEf4BzZpB-qkhu3SAu5MrYYAT2+ZN8WaXqpmnKruOOdjJOLK2A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+On 25/8/26 04:02, Andrii Nakryiko wrote:
+> On Sun, Aug 23, 2026 at 10:00 PM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>
+>> On 22/8/26 01:46, Andrii Nakryiko wrote:
+>>> On Sun, Aug 16, 2026 at 11:20 PM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>>>
+>>>> On 15/8/26 04:14, Andrii Nakryiko wrote:
+>>>>> On Sun, Aug 9, 2026 at 8:01 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>>>>>
+>>>>>> Similar to the tracing_multi link support for kernel functions [1], add
+>>>>>> support for bpf progs.
+>>>>>>
+>>>>>> When attaching to bpf progs, it must attaches to the target by text poke
+>>>>>> way.
+>>>>>>
+>>>>>
+>>>>> Please spend a bit more human effort on justification for the change
+>>>>> and explaining your use case. In what case you'll be attaching to a
+>>>>> large amount of BPF programs such that attachment speed-up (if there
+>>>>> is any) matters.
+>>>>
+>>>> Will update the cover letter with justification and my use case.
+>>>>
+>>>> Here's my use case:
+>>>>
+>>>> I'm planning to enhance the function-graph feature of bpfsnoop [1]. It
+>>>> will trace all bpf progs, including their subprogs, to draw a full
+>>>> function call graph including bpf prog call sites.
+>>>>
+>>>
+>>> fair enough, interesting use case, definitely outline that in the next
+>>> revision (and provide before/after attach time as well for such use
+>>> case, please)
+>>>
+>> Will include my use case.
+>>
+>> Implemented the attachment micro-benchmark. Here's the result on an
+>> x86_64 16c16g VM:
+>>
+>> ./bench tracing-multi-attach-progs
+>> Setting up benchmark 'tracing-multi-attach-progs'...
+>> tracing-multi-attach-progs: prepared 1000 identical BPF program targets
+>> tracing-multi-attach-progs: fentry created and attached 1000
+>> programs/links in 679.324ms
+>> tracing-multi-attach-progs: fentry.multi created one program and
+>> attached one 1000-target link in 470.042ms
+>> tracing-multi-attach-progs: fentry.multi creation/attachment speedup is
+>> 1.45x
+>>
+>> The speedup 1.45x looks good. But attaching to 1000 progs via fentry
+> 
+> I'd say "meh". If 500ms is ok, 700ms is not that much more noticeable.
+> 
+Besides the attachment speedup, this series provides a way to attach to
+multiple bpf progs via one link. The current revision reuses the
+ftrace-based attachment, which relies on
+CONFIG_HAVE_SINGLE_FTRACE_DIRECT_OPS. In the next revision, it will get
+rid of CONFIG_HAVE_SINGLE_FTRACE_DIRECT_OPS with its own attachment
+implementation. Hence, this series will be able to run on those arches
+that have trampoline support.
 
-Pre-existing issues:
-- [Critical] Missing RCU read lock around the lockless read and increment o=
-f `parent_event->prog` allows a Use-After-Free.
-- [High] The BPF program reference is leaked on error paths of `perf_event_=
-alloc()`.
---
+Thanks,
+Leon
 
---- Patch [1]: [PATCH v2] perf/bpf: Fix lockless access to parent_event->pr=
-og in perf_event_alloc() ---
-commit 14870f355d1ed182bbc1e31accf43918dde6051a
-Author: Deepanshu Kartikey <kartikey406@gmail.com>
-
-perf/bpf: Fix lockless access to parent_event->prog in perf_event_alloc()
-
-This commit attempts to fix a race condition during fork() where
-perf_event_alloc() locklessly reads parent_event->prog. It updates the code
-to use READ_ONCE() and bpf_prog_inc_not_zero() to safely increment the
-reference count without locks.
-
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index a6c8e38a31104..9d456b03c4969 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -13465,11 +13465,13 @@ perf_event_alloc(struct perf_event_attr *attr, =
-int cpu,
->  		overflow_handler =3D parent_event->overflow_handler;
->  		context =3D parent_event->overflow_handler_context;
->  #if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_EVENT_TRACING)
-> -		if (parent_event->prog) {
-> -			struct bpf_prog *prog =3D parent_event->prog;
-> =20
-> -			bpf_prog_inc(prog);
-> -			event->prog =3D prog;
-> +		struct bpf_prog *prog;
-> =20
-> +		prog =3D READ_ONCE(parent_event->prog);
-> +		if (prog) {
-> +			prog =3D bpf_prog_inc_not_zero(prog);
-
-[Severity: Critical]
-This isn't a bug introduced by this patch, but since it aims to fix a race
-here, does this code still leave a use-after-free window?
-
-Because perf_event_alloc() executes in a sleepable context, the RCU grace
-period could expire between reading parent_event->prog and calling
-bpf_prog_inc_not_zero().
-
-If a concurrent thread detaches the BPF program by closing the bpf_link fd,
-it can locklessly release the program before the atomic increment happens.
-
-Should this section be protected by an rcu_read_lock() and rcu_read_unlock()
-block to ensure the memory isn't freed before the atomic increment
-completes?
-
-> +			if (!IS_ERR(prog))
-> +				event->prog =3D prog;
-
-[Severity: High]
-This is a pre-existing issue, but does this increment leak the BPF program
-reference if perf_event_alloc() fails later on?
-
-If a subsequent initialization step like attach_perf_ctx_data() or
-perf_cgroup_connect() fails, perf_event_alloc() returns an error pointer
-and triggers the cleanup via __free_event().
-
-Unlike _free_event() which calls perf_event_free_bpf_prog(), the
-__free_event() error cleanup path doesn't appear to release the acquired
-bpf_prog reference.
-
-Could an unprivileged user systematically exhaust memory by forcing failures
-during fork() on an inherited perf event?
-
->  		}
->  #endif
->  	}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260825044507.1521=
-7-1-kartikey406@gmail.com?part=3D1
