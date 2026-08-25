@@ -1,159 +1,200 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D57E437C902
-	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 18:40:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787683211; cv=pass; b=pgsRN/yzH2x5MR9S2jffHqs4ccYOMQSOU4nworqpZjPe43bQBfqszorXA0lAYqdtzlpeNKpTOX3uURHNvZ+8m95nqsruBSDy94TOL2roizeV+Z6aJ5Iht6hrYZ2UcpfRWXAh5wj7CQ+OPRi/TGOYzfqe0OxXP0TzlUKEuu/T0+k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787683211; c=relaxed/simple;
-	bh=3eO6w9Bp5ObcuqLzTmFiLRp+r+T/pTgWq8ud6+7x5xI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LNClnW5QvkqpRi6qCzAgt0WCLh+vy6Otnzflt+78WftDBPE6DhVJj9iZyKhrft0J0zvixeNGz0cuCRDzYIQcIOUJBGvyq/OAjMxdUfvzn3NXlaqgK7G4LH8jbCauSZchv7VszrEklfxjkRdPZ/yRfVuYVeTgpe9V/qAolpqQuXM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iuxHEkvS; arc=pass smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8533A3B6BFE;
+	Tue, 25 Aug 2026 19:10:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787685054; cv=none; b=MBPFQ3JgaDmKBiwp2KDEEb4ecL+mLtph2ZDH5dUDq281tYFeEFrYTLqmj0fBsymWglvCHWxzIyTDZH9MReokSD6fJm8HvhUVSdj64YaC6gFEul3gP+c1AhtP9aAPtjK4OhXlImrdGrh8yAEgF7mDS3GGgLhWgOKsl1c6AF3TeI4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787685054; c=relaxed/simple;
+	bh=OtchHb6GBRRv68k/gioU/7xbxZ19B8WsvvWJaYWNtpk=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=ipvLNwRYVe5qMCdwNi3DiLYUr8wa3BDCTTRR0oDbzguPyZv8t4cUzxHe9TeftT02dHk+LbW69SxsAwO7zSBhor2O9024k3t1P3Jqc+SNVIrIC9YItyp7L0nInMqvVzRwIKyPuzRPy4Mm4VQ7gBGxSu1mtANzzbw4nfK7j1dIW1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=RHvx1Ado; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iuxHEkvS"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c96c92c0980so41183a12.3
-        for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 11:40:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787683209; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Y+7Ncm9snvpCOFDQI3ihCt/XB14ntfhyKeUgmcAoj+aCEGKXzmHDWr8K9qlzS7Phq4
-         6FnOYgpwPoQRpYqwGaFs6JVP4R0vUkyJCZrmNP0xwOlBZgtOormKYu/5YcCeKcLWOc9p
-         IFz2qafxN0e/cSglVfMWFMG5NeFNnVJqNbXb4nzvh8aQzW5Y5PSdiHS+kjaZVrlJG6mt
-         vTk32KWCiwjATeemwIIiROLox7AGjB7CesSBL8wHnrLrRQYIiBaeNTU6QOBkg1K+ScN0
-         vsplSE/ODfl2sdhW1WWFh5r6DNUAeubPDNcI/txMrXTJ5iUyx4W1/Gr98egLqxqjxaqE
-         vd+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=vQaiqPlt1mbgROpOCjaOHGFPcF+Em/O/8v9mBKdo3T4=;
-        fh=QAxeyacYi8rEhb34NDBKSVdNN1iPkocnnMRWucbWTXU=;
-        b=T6r4pHEQ5Kg7xqIQNkAayqydBr59+pqQxBl6iw5Q/Xbk+KB5VugFDMDpMsTVE0/EB4
-         oDWy15Pa98MXE+/dOZGpICpEC5oCj5pDq4JjOFn1I1MQYNLAnb+r3Nbt+ScoNx7CSyAy
-         gAO6j6PZJRRyNm1Mp4yMuN2ag99ZTq/3BvKdpaX0UbcOTiLf0PfzWZjzyEi/8Dcaf4RX
-         E4K1qusdagXBPVFd6Uj1P95WFGz7idoril3NYcjE/wDW+lyx7jjTEWforOoD6Qknq8St
-         JWBqSYLEp6aLMatoKQBqX2fA23c37gA0ctkgb7ADjgwKXBLTn+CqZhxVGVztY3RtZ0tR
-         weoA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787683209; x=1788288009; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=vQaiqPlt1mbgROpOCjaOHGFPcF+Em/O/8v9mBKdo3T4=;
-        b=iuxHEkvSiB6EdcTJMypDgXuK5rvNe15pvJFB8vlBX3DJEJpi0rwmg3vBm/Opm0Udu0
-         dFXOiCI2WMQQKxsgUuFTZ+cFAu6ohBijSvgREtvMc9zvmYu4lbpMxuBp/yB5efrR5kXf
-         6vCcRDTt7wyhVcPyOrvb4HUyude0KkVPsQIw/0k7UCdeZt1RXXWFdDc3d9jsah+dcSvc
-         7/Gm02O1nkParfhA5xECgh4XML2JO4lME+redU9dw2YZh8s8w5NE9ZHoqDw0Ol8YRfcx
-         cFhwV1zVtzFBvAh46jie5Gj6PQqpaxMOncIJJp/B/EpollQ/oKCSMGYgfYQHlK9Ck9Na
-         5grQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787683209; x=1788288009;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=vQaiqPlt1mbgROpOCjaOHGFPcF+Em/O/8v9mBKdo3T4=;
-        b=V2qPRxvi+UUkTdq8iNYeQLJQmWo/VNObN5ZcWdZN9/Bc2JFSC1p58FJb3iPrEzAaXv
-         hzKmn37Atm9tm0QzzDNuWS/iHMAmYksJyTKh5d0FszjJGDXQpgo8gcLwzOHQxaAEhbSF
-         bppfjE19LwK4yflUq7qdIeFAH44Vh0Hq+7eCDfFpl8UJF/WeM+2UUvhcBaPSCaVZarvn
-         VGp4jYkOWQsqOJZ2rtWTqYpzumCw0cQuZmY3FrHHsYQ+2+WT0GsWvaagl/JpdrI3VuEp
-         hFLGxHOZCCL0LI5K+tMHPxvLEkcjcpU3/zOmepgRlL3LlP2CQ5KImJev3RZAVxM2lmak
-         Btag==
-X-Gm-Message-State: AFuF++lUipddwABvACVrm8ap0q+tMH87IKI1cWZmp2LlxGFjPEq6asIU
-	pyrWR/aS6MWmUyEK7TbADDY1o4XsA6e63JKEgQyyxUGn9C/eaLtSxArSsV6jffRhbN2G82FBvwo
-	LTw6R0rfMIffyWneb7vfTNNLZ7R8hK/s=
-X-Gm-Gg: AR+sD11vWxypk+dsb9qTo7HBEj1E+geUS3GVNqEUA8Yh2fuAccdfq97P4dtryJbGKbE
-	gGcLikCnzG9N5YfxKIl1G9/bn+vFi18USfQPNO25YjNMmJxRDbs2wKybLbCxhQNj/sse12I3lS0
-	4xDcdKVrZy2bU2GNy3dhKtnLg6RbEnR7mte2gvT733YSGfYNtIGSh6TsrfNU2HblX+NV5jfkurY
-	R14xUVBPxga5nSW3IE2Y1rMEkomfx040Ht1igepJrQRkVqzzooy26wrHgfMTEKYT/OXIZg4uWDW
-	766QDC3NWMjC4FEBzaiKal6QhQVlWlKdAITFvFx7Vl9FICZgbTtxhET5uygSJsHThkO+80hoYyn
-	UeJ0cUK8RVmiiGPhX4km4g7k9/xMY5iiBEMo12ZRpTw==
-X-Received: by 2002:a05:6a21:a95:b0:3c1:657:4c95 with SMTP id
- adf61e73a8af0-3cf84459271mr851171637.15.1787683209224; Tue, 25 Aug 2026
- 11:40:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="RHvx1Ado"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:Message-ID:Subject:Cc:To
+	:From:Date:MIME-Version:From:Reply-To;
+	bh=elAJm2a/yvCuwNZQN8cT8iWBlOljI1OpyGvFLYC11uo=; b=RHvx1Ado+WH9EzbHIOX+ZddNR4
+	p497xG/usjgdtyDE/kA/xbjOpyLIBJuOI92EZRwc1yOZOItUmNe5+oSRd4oxCZHOSJIg77xqmE+Tc
+	K5PFV0rWFpwnhQ6m9KAj6Aq1yxVDoopN2BKsaUVqLC48h9H3wG5IGBXSnMlrjvxadR17ZpA62zFv6
+	qnk+hsPSnk1nJmmcLcs7OjTT5cXXOefE42zyl0b94RK82DSvgwElUXWEAW9MTO2l5NBp9Zejkwn6T
+	YNgx8l8tDqfY2WGCtiFY0jVvYc0jEiv34rN7tch6qSf2TkOPn3XRxDKM1uTJZIDi4f2h9zACbsB7B
+	9kW+H63w==;
+Received: from maestria.local.igalia.com ([192.168.10.14] helo=mail.igalia.com)
+	by fanzine2.igalia.com with esmtps 
+	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1wywXL-009BHb-A7; Tue, 25 Aug 2026 21:10:19 +0200
+Received: from webmail.service.igalia.com ([192.168.21.45])
+	by mail.igalia.com with esmtp (Exim)
+	id 1wywXJ-00530G-Og; Tue, 25 Aug 2026 21:10:19 +0200
+Received: from localhost ([127.0.0.1] helo=webmail.igalia.com)
+	by webmail.service.igalia.com with esmtp (Exim 4.98.2)
+	(envelope-from <mfo@igalia.com>)
+	id 1wywXJ-00000003he5-2ugE;
+	Tue, 25 Aug 2026 21:10:17 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260825150444.31603-1-jiayuan.chen@linux.dev>
-In-Reply-To: <20260825150444.31603-1-jiayuan.chen@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 25 Aug 2026 11:39:54 -0700
-X-Gm-Features: AcwNN1VK5DUH4dTy-rnq5LsKwTmVH-bvp0xFbY5kQSIl5JV7Y6BEETHTTuVfCmE
-Message-ID: <CAEf4BzZ_b3=MM2Fh0dEMv0N2TXD31DXdsJaAiDc64HcDoFYvxg@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 1/2] libbpf: Fix usdt attach failure when nop10
- crosses page boundary
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, jolsa@kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>, 
-	Jakub Sitnicki <jakub@cloudflare.com>, Ingo Molnar <mingo@kernel.org>, 
-	Jiawei Zhao <phoenix500526@163.com>, "Peter Zijlstra (Intel)" <peterz@infradead.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Date: Tue, 25 Aug 2026 16:10:17 -0300
+From: Mauricio Faria de Oliveira <mfo@igalia.com>
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Kees Cook <kees@kernel.org>, Joel Granados <joel.granados@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, kernel-dev@igalia.com,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ fsverity@lists.linux.dev, keyrings@vger.kernel.org, bpf@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
+ lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+ coreteam@netfilter.org, linux-sctp@vger.kernel.org,
+ linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
+ bridge@lists.linux.dev, mptcp@lists.linux.dev, rds-devel@oss.oracle.com,
+ virtualization@lists.linux.dev
+Subject: Re: [PATCH RFC v3 03/13] sysctl, mod_devicetable: add macro
+ MODULE_SYSCTL_TABLE
+In-Reply-To: <ao1P_mEJdyRExG3v@monoceros>
+References: <20260819-sysctl-module-aliases-v3-0-aab90569365d@igalia.com>
+ <20260819-sysctl-module-aliases-v3-3-aab90569365d@igalia.com>
+ <aomlfGJM61qZKxx2@monoceros> <4e3eaf1d3419e808be046035f114bf6c@igalia.com>
+ <aotteDcc588iwC6g@monoceros> <4aa22e41e8ff4bab6638cf0baaa9d07b@igalia.com>
+ <ao1P_mEJdyRExG3v@monoceros>
+Message-ID: <4a7925a800f0c9b36078a70bf35e960d@igalia.com>
+X-Sender: mfo@igalia.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Report: NO, Score=-2.1, Tests=ALL_TRUSTED=-3,BAYES_50=0.8,KAM_DMARC_NONE=0.125,KAM_DMARC_STATUS=0.005
+X-Spam-Score: -20
+X-Spam-Bar: --
 
-On Tue, Aug 25, 2026 at 8:05=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.de=
-v> wrote:
->
-> The kernel refuses to attach to a nop10 that crosses a page boundary,
-> since it can't be atomically rewritten:
->
->         /* can_optimize(), arch/x86/kernel/uprobes.c */
->         /* We can't do cross page atomic writes yet. */
->         return PAGE_SIZE - (vaddr & ~PAGE_MASK) >=3D OPT_INSN_SIZE;
->
-> Whether the nop10 crosses a page is purely up to the binary layout, so
-> this does happen in practice. libbpf doesn't check for it and blindly
-> shifts the uprobe onto the nop10, and the attach then fails with
-> -ENOTSUPP. Just keep the uprobe on the preceding 1-byte nop in that
-> case, it works everywhere as a regular int3 uprobe.
->
-> Fixes: ee2862439e5c ("libbpf: Change has_nop_combo to work on top of nop1=
-0")
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
->
-> ---
-> v1 -> v2: move check into has_nop_combo.
-> v1: https://lore.kernel.org/bpf/20260824092847.361683-1-jiayuan.chen@linu=
-x.dev/
-> ---
->  tools/lib/bpf/usdt.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
-> index 2e56e3ab5b6c..ee9d1b614883 100644
-> --- a/tools/lib/bpf/usdt.c
-> +++ b/tools/lib/bpf/usdt.c
-> @@ -608,8 +608,12 @@ static bool has_nop_combo(int fd, long off)
->         unsigned char nop_combo[11] =3D {
->                 0x90, 0x66, 0x2e, 0x0f, 0x1f, 0x84, 0x00, 0x00, 0x00, 0x0=
-0, 0x00,
->         };
-> +       long page_sz =3D getpagesize();
->         unsigned char buf[11];
->
-> +       /* the kernel can't attach to a nop10 that crosses a page boundar=
-y */
-> +       if ((off + 1) % page_sz + 10 > page_sz)
-> +               return false;
+On 2026-08-25 05:24, Uwe Kleine-König wrote:
+> Hello,
+> 
+> On Mon, Aug 24, 2026 at 06:04:03PM -0300, Mauricio Faria de Oliveira wrote:
+>> On 2026-08-23 19:12, Uwe Kleine-König wrote:
+>> > On Sat, Aug 22, 2026 at 01:57:24PM -0300, Mauricio Faria de Oliveira wrote:
+>> >> On 2026-08-22 10:41, Uwe Kleine-König wrote:
+>> >> > On Wed, Aug 19, 2026 at 03:16:16PM -0300, Mauricio Faria de Oliveira wrote:
+>> >> >> The MODULE_SYSCTL_TABLE macro emits a struct module_sysctl_table variable
+>> >> >> with pointers to a sysctl table's path and entries, and table/entry sizes.
+>> >> >
+>> >> > That new struct doesn't seem to contain any pointer?
+>> >>
+>> >> The struct module_sysctl_table fields .path and .table are pointers,
+>> >> although with kernel_ulong_t type so that the same 32/64-bit size is
+>> >> used in file2alias.c based on KERNEL_ELFCLASS (and not on the host,
+>> >> which might differ with CROSS_COMPILE).
+>> >
+>> > Cross compilation isn't an issue for the already existing device id
+>> > structures; many of them also contain pointers.
+>> > (While modpost doesn't use the pointers, the size of the structures must
+>> > be known to correctly interpret the arrays.)
+>> 
+>> Indeed. I missed some device_id structures with pointers, and that
+>> devicetable-offsets.c is cross-compiled to generate
+>> devicetable-offsets.h for file2alias.c to use offsets and sizes of the
+>> target architecture.
+>> 
+>> I'll change .path and .table to pointers in the next version.
+> 
+> I *think* the existing device-id structs use char[] for strings that are
+> relevant for modpost. I look forward to you finding out if there is
+> still a justification for that :-D
 
-yeah, this works ok, applied this version, disregard request to unify
-has_nop_combo() with man->has_uprobe_syscall check
+AFAICT, an array is simpler to read in file2alias as it is stored
+directly in the symbol:
 
->         if (pread(fd, buf, 11, off) !=3D 11)
->                 return false;
->         return memcmp(buf, nop_combo, 11) =3D=3D 0;
-> --
-> 2.43.0
->
+For example:
+
+@ include/linux/device-id/of.h 
+
+	struct of_device_id {
+	...
+		char compatible[128];
+	...
+
+@ drivers/net/ethernet/korina.c
+
+	static const struct of_device_id korina_match[] = {
+		{
+		        .compatible = "idt,3243x-emac",
+	...
+	MODULE_DEVICE_TABLE(of, korina_match);
+
+which builds
+
+	$ objdump -t drivers/net/ethernet/korina.o | grep __mod_device_table
+	0000000000001020 l     O .rodata	0000000000000190
+__mod_device_table__kmod_korina__of__korina_match
+
+	$ objdump -s -j .rodata --start-address=0x1020
+--stop-address=$((0x1020+0x190)) drivers/net/ethernet/korina.o
+	...
+	 1020 00000000 00000000 00000000 00000000  ................
+	 1030 00000000 00000000 00000000 00000000  ................
+	 1040 00000000 00000000 00000000 00000000  ................
+	 1050 00000000 00000000 00000000 00000000  ................
+	 1060 6964742c 33323433 782d656d 61630000  idt,3243x-emac..
+	 1070 00000000 00000000 00000000 00000000  ................
+	...
+
+@ scripts/mod/file2lias.c
+
+	#define DEF_FIELD_ADDR(m, devid, f) \
+		typeof(((struct devid *)0)->f) *f = ((m) + OFF_##devid##_##f)
+
+	static void do_of_entry(struct module *mod, void *symval)
+	{
+	...
+		DEF_FIELD_ADDR(symval, of_device_id, compatible);
+	...
+	
+void handle_moddevtable(struct module *mod, struct elf_info *info,
+                        Elf_Sym *sym, const char *symname)
+{
+        void *symval;
+...
+                symval = sym_get_data(info, sym);
+
+On the other hand, a pointer is stored indirectly through a relocation
+in the symbol, which is not as simple to read (i.e., 1. find the
+relocation section for the symbol's section; 2. find the relocation in
+that section by matching relocation offsets with an offset in the symbol
++ symbol address; 3. finally read the relocation's target).
+
+>> > I would be great if your series didn't introduce a new obstacle for
+>> > [CHERI].
+>> 
+>> Absolutely. I'll be happy to adjust the series and testing for that.
+>> 
+>> Could you please confirm one should just follow [1], which uses [2] to
+>> build the LLVM toolchain, and use it to build the kernel [3]?
+>> 
+>> [1] https://github.com/cheri-linux#building-and-running
+>> [2] https://github.com/cheri-linux/buildroot
+>> [3] https://github.com/CHERI-Alliance/linux/tree/codasip-cheri-riscv-7.1
+> 
+> I used
+> https://github.com/CHERI-Alliance/meta-cheri/tree/codasip-scarthgap and
+> didn't care about toolchain and rootfs. It also has qemu integrated, so
+> you can actually test it.
+
+I'll take a look; thanks!
+
+cheers,
+
+> 
+> Best regards
+> Uwe
+
+-- 
+Mauricio
