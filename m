@@ -1,151 +1,358 @@
-Received: from mta1.migadu.com (out-120.mta1.migadu.com [95.215.58.120])
+Received: from mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73C9930B509
-	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 02:36:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.120
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1E330D3EF
+	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 02:44:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787625412; cv=none; b=fOkwnpdFXFQAs3YZsnZrmaVUDWpWojVXWzcsYluE0VYNsF7AimENhWlQjFUXJ6Dc2CbMTwDYwjQJLkTgz0ELxOG1z1ltzbCe9Gg86t4/KEB9AkaP7rfKRqeG7zQHJSrXV4+8+PARdSEV+OF+C1oxV1EjBQXP+zWoNR3aZCmh0zo=
+	t=1787625887; cv=none; b=OaMs9dh7LIEwZvCY1boBjSr2sQ+rXmavq09/lcZFgEf/hXCI45Ah1BpSRuhss58ZGgaFIIgAaaTFeKQSCnnV7h46Ksf5Mnu05dHmrja++cZN9atfG1wQxwRYXWX4DRbWOo4BGeRd60gEtS6wCCYYpwgNO0vz4pO3bBcDYZZlCrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787625412; c=relaxed/simple;
-	bh=kQYD7IQyAYV/gcw5kEmzhLPfEyEbr9orpZ++l7MzIcg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Kr7F92xvrB9vuOsL0NJMpyahFXGkXr1xjkWoY1bPHfTwwP2hmMGXh7GTQTaocOLpamS9d8w98s3pxurRrcqK3ZCzqyLeEjvK1hKpcTM1v4kpL3jGEAMkdRL0ZW2og+kaRNyrGZ16+ACN9iVXEavgs8rgqdCWmxszwMdDS0HTQ+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MRgN9g5w; arc=none smtp.client-ip=95.215.58.120
+	s=arc-20240116; t=1787625887; c=relaxed/simple;
+	bh=QGaCBBZqoDLwrT1fV2aQjhVthAgbGXSKI1ufVgpgOao=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XDPDqoDvcgD5SKxzU/m/whCk0m5X+AY2z5oO9GC9IvKzkNxENf1dXKjuooAprhYImSpCQ8pctkMg5a9CZgKitkKEiusBAm2YfGpANtBs6AF3DAyqQPwVSaDlEUNA/FlG3vhUiJiAER/HY3WT68Hi2rxF9T3x6aeA/B1PHOZWZuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LJFOfwau; arc=none smtp.client-ip=95.215.58.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MRgN9g5w"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LJFOfwau"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=kQYD7IQyAYV/gcw5kEmzhLPfEyEbr9orpZ++l7MzIcg=;
+DKIM-Signature: a=rsa-sha256; bh=QGaCBBZqoDLwrT1fV2aQjhVthAgbGXSKI1ufVgpgOao=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787625408; v=1; x=1788230208;
- b=MRgN9g5wT/LEtXCkkOu1HasVY2QjD0ioOzsnWVpjrnNzN7h6CoblzDM/b9WrwbFubevuuGWe
- RM+jXNlzem1vLmNS0hZ9VIC4oi8HEwRZpM93l2BSwFYR8w6kddAb1lLlqNFGPpo/6HY8fXk4P1m
- 7k4THW+/CCwq2Zy4BiEeLhYg=
+ t=1787625883; v=1; x=1788230683;
+ b=LJFOfwau3//i2kp3whENs9ZtI0YKJrTfDxuNh0uIF3xHks1G0RF7IvjeBmck5DlQNCoIQ0Hy
+ uTr0IvOkXrIOQyLu3+t0QAlnjFtToQlRI/a7u4wH/eL99Kvw1EZelaxlJjKvz+76l9Q2HyvEuyh
+ Cj34eFN4LHNe56MCyvquMs0Y=
 X-Envelope-To: bpf@vger.kernel.org
-Received: from ctao-book.. (223.70.159.239)
-	by smtp.migadu.com with ESMTPS id eaf90f4b94f5b259;
-	Tue, 25 Aug 2026 02:36:48 +0000
-X-Mizu-Trace-ID: eaf90f4b94f5b259
+Received: from localhost (2602:fce1:44f:115e::)
+	by smtp.migadu.com with ESMTPS id 72a80e7a41d0f84b;
+	Tue, 25 Aug 2026 02:44:43 +0000
+X-Mizu-Trace-ID: 72a80e7a41d0f84b
 X-Migadu-Flow: FLOW_OUT
-From: Tao Cui <cui.tao@linux.dev>
-To: tj@kernel.org,
-	void@manifault.com,
-	arighi@nvidia.com
-Cc: changwoo@igalia.com,
-	suzhidao@xiaomi.com,
-	sched-ext@lists.linux.dev,
+From: Lance Yang <lance.yang@linux.dev>
+To: usama.arif@linux.dev,
+	hannes@cmpxchg.org,
+	kirill@shutemov.name
+Cc: akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	nico.pache@linux.dev,
+	baolin.wang@linux.alibaba.com,
+	baohua@kernel.org,
+	dev.jain@arm.com,
+	hughd@google.com,
+	liam@infradead.org,
+	mhocko@suse.com,
+	rppt@kernel.org,
+	ryan.roberts@arm.com,
+	shuah@kernel.org,
+	surenb@google.com,
+	vbabka@kernel.org,
+	ziy@nvidia.com,
+	usama.anjum@arm.com,
+	agordeev@linux.ibm.com,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
+	jannh@google.com,
+	willy@infradead.org,
+	pfalcato@suse.de,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	linux-trace-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
-	cui.tao@linux.dev,
-	Tao Cui <cuitao@kylinos.cn>
-Subject: [PATCH v3 2/2] sched_ext: rename tg->scx.idle to tg->scx.sched_idle
-Date: Tue, 25 Aug 2026 10:35:57 +0800
-Message-ID: <20260825023557.27881-3-cui.tao@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260825023557.27881-1-cui.tao@linux.dev>
-References: <20260825023557.27881-1-cui.tao@linux.dev>
+	Lance Yang <lance.yang@linux.dev>
+Subject: Re: [RFC PATCH 16/57] mm/collapse: freeze the sources behind migration entries
+Date: Tue, 25 Aug 2026 10:44:34 +0800
+Message-Id: <20260825024434.39662-1-lance.yang@linux.dev>
+X-Mailer: git-send-email 2.39.3 (Apple Git-146)
+In-Reply-To: <f81160ac-0c7c-43f2-985f-43ab54a52358@linux.dev>
+References: <f81160ac-0c7c-43f2-985f-43ab54a52358@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Tao Cui <cuitao@kylinos.cn>
 
-A bare "idle" reads as CPU idle state in sched_ext (ops.update_idle(),
-idle cpumasks, scx_bpf_pick_idle_cpu()). cpu.idle is the cgroup analog
-of the SCHED_IDLE policy, so name the task_group field sched_idle to
-match scx_cgroup_init_args.sched_idle.
+On Mon, Aug 24, 2026 at 05:13:52PM +0100, Usama Arif wrote:
+>
+>
+>On 24/08/2026 16:49, Johannes Weiner wrote:
+>> On Mon, Aug 24, 2026 at 03:13:10PM +0100, Kiryl Shutsemau wrote:
+>>> On Mon, Aug 24, 2026 at 09:12:24PM +0800, Lance Yang wrote:
+>>>>
+>>>> On Sun, Aug 16, 2026 at 11:45:28PM +0100, Kiryl Shutsemau wrote:
+>>>>> +		if (!folio_ref_freeze(folio,
+>>>>> +				      folio_expected_ref_count(folio) + 1)) {
+>>>>> +			result = SCAN_PAGE_COUNT;
+>>>>> +			goto unfreeze;
+>>>>> +		}
+>>>>> +		nr_frozen = nr_saved;
+>>>>
+>>>> Just one thing I was wondering about ... can deferred_split_isolate()
+>>>> remove a source folio from deferred_split_lru while its refcount is
+>>>> frozen by collapse_freeze_candidate()?
+>>>>
+>>>> Assume an earlier span belongs to an anonymous large folio on the
+>>>> deferred split queue, then a later span fails folio_trylock().
+>>>> collapse_freeze_candidate() continues after freezing each source folio
+>>>> and calls collapse_unfreeze_candidate() on a later failure:
+>>>>
+>>>> static noinline enum scan_result collapse_freeze_candidate(struct mm_struct *mm,
+>>>> 		struct collapse_candidate *cand, pte_t *pte)
+>>>> {
+>>>> ...
+>>>> 	for (i = 0, addr = cand->addr; i < nr_pages;) {
+>>>> ...
+>>>> 		if (!folio_trylock(folio)) {
+>>>> 			folio_put(folio);
+>>>> 			result = SCAN_PAGE_LOCK;
+>>>> 			goto unfreeze;
+>>>> 		}
+>>>> ...
+>>>> 		nr_saved = i + nr;
+>>>>
+>>>> 		if (!folio_ref_freeze(folio,
+>>>> 				      folio_expected_ref_count(folio) + 1)) {
+>>>> 			result = SCAN_PAGE_COUNT;
+>>>> 			goto unfreeze;
+>>>> 		}
+>>>> 		nr_frozen = nr_saved;
+>>>>
+>>>> 		i += nr;
+>>>> 		addr += nr * PAGE_SIZE;
+>>>> 	}
+>>>>
+>>>> ...
+>>>> unfreeze:
+>>>> 	collapse_unfreeze_candidate(mm, cand, pte, nr_saved, nr_frozen);
+>>>> 	return result;
+>>>> }
+>>>>
+>>>> folio_ref_freeze() takes the source folio's refcount to zero:
+>>>>
+>>>> static inline int folio_ref_freeze(struct folio *folio, int count)
+>>>> {
+>>>> 	return page_ref_freeze(&folio->page, count);
+>>>> }
+>>>>
+>>>> static inline int page_ref_freeze(struct page *page, int count)
+>>>> {
+>>>> 	int ret = likely(atomic_cmpxchg(&page->_refcount, count, 0) == count);
+>>>>
+>>>> ...
+>>>> 	return ret;
+>>>> }
+>>>>
+>>>> While collapse_freeze_candidate() still holds the source folio lock,
+>>>> deferred_split_scan() can call deferred_split_isolate():
+>>>>
+>>>> static unsigned long deferred_split_scan(struct shrinker *shrink,
+>>>> 		struct shrink_control *sc)
+>>>> {
+>>>> 	LIST_HEAD(dispose);
+>>>> 	struct folio *folio, *next;
+>>>> 	int split = 0;
+>>>> 	unsigned long isolated;
+>>>>
+>>>> 	isolated = list_lru_shrink_walk_irq(&deferred_split_lru, sc,
+>>>> 					    deferred_split_isolate, &dispose);
+>>>> }
+>>>>
+>>>> static enum lru_status deferred_split_isolate(struct list_head *item,
+>>>> 					      struct list_lru_one *lru,
+>>>> 					      void *cb_arg)
+>>>> {
+>>>> 	struct folio *folio = container_of(item, struct folio, _deferred_list);
+>>>> 	struct list_head *freeable = cb_arg;
+>>>>
+>>>> 	if (folio_try_get(folio)) {
+>>>> 		list_lru_isolate_move(lru, item, freeable);
+>>>> 		return LRU_REMOVED;
+>>>> 	}
+>>>>
+>>>> 	/*
+>>>> 	 * We lost race with folio_put(). Read folio state before the
+>>>> 	 * isolate: folio_unqueue_deferred_split() checks list_empty()
+>>>> 	 * locklessly, so once removed the folio can be freed any time.
+>>>> 	 */
+>>>> 	if (folio_test_partially_mapped(folio)) {
+>>>> 		folio_clear_partially_mapped(folio);
+>>>> 		mod_mthp_stat(folio_order(folio),
+>>>> 			      MTHP_STAT_NR_ANON_PARTIALLY_MAPPED, -1);
+>>>> 	}
+>>>> 	list_lru_isolate(lru, item);
+>>>> 	return LRU_REMOVED;
+>>>> }
+>>>>
+>>>> And folio_try_get() fails because the source folio has a frozen refcount.
+>>>> deferred_split_isolate() treats the failure as a race with folio_put(),
+>>>> clears PG_partially_mapped and its MTHP_STAT_NR_ANON_PARTIALLY_MAPPED
+>>>> accounting when set, then removes the folio from deferred_split_lru ...
+>>>
+>>> Hm. So, the premise in deferred_split_isolate() is false:
+>>> !folio_try_get() doesn't mean lost race with folio_put().
+>> 
+>> I suppose you mean, not exclusively. But it can also mean that. And
+>> then the question is, who cleans up the partially_mapped state.
+>> 
+>>> I think deferred_split_isolate() should do something like:
+>>>
+>>>       if (!folio_try_get(folio))
+>>>               return LRU_SKIP;
+>>>
+>>>       list_lru_isolate_move(lru, item, freeable);
+>>>       return LRU_REMOVED;
+>>>
+>>> Johannes, do I miss something?
+>> 
+>> Ah. The idea being: leave the item on the LRU when there is a race
+>> with the refcount going zero; and then it's up to that other side to
+>> deal with/clean up the partially_mapped state as appropriate. Thus:
+>> 
+>> folio_put()
+>>   __folio_put()
+>>     folio_unqueue_deferred_split()
+>>       if __list_lru_del():
+>>         // clear partially_mapped state & stats
+>> 
+>> will always succeed, even if it races with the shrinker. And you are
+>> also guaranteed on the collapse side that the state won't vanish from
+>> underneath you.
+>> 
+>> I think that should work. Usama?
+>
+>
+>Kiryl's suggestion makes sense. I think there is a bug here. If we dont
+>get the reference, whoever owns the reference should decide how partially_mapped
+>is treated for that folio:
+>
+>- If its the last folio_put(), it will clear partially_mapped and cleanup
+>after itself.
+>- If its folio_ref_freeze(), clearing partially_mapped is wrong (which we
+>are currently doing in deferred_split_isolate)
 
-Pure rename, no behavior change.
+Yeah, returning LRU_SKIP looks right. I have this locally:
 
-Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+---8<---
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index e771244f42f3..a269775129c4 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -3939,11 +3939,8 @@ static int __folio_freeze_and_split_unmapped(struct folio *folio, unsigned int n
+
+ 	VM_WARN_ON_ONCE(!mapping && end);
+ 	/*
+-	 * If this folio can be on the deferred split queue, lock out
+-	 * the shrinker before freezing the ref. If the shrinker sees
+-	 * a 0-ref folio, it assumes it beat folio_put() to the list
+-	 * lock and must clean up the LRU state - the same dequeue we
+-	 * will do below as part of the split.
++	 * If this folio can be on the deferred split queue, hold the list_lru
++	 * lock across the refcount freeze and dequeue.
+ 	 */
+ 	dequeue_deferred = folio_test_anon(folio) && old_order > 1;
+ 	if (dequeue_deferred) {
+@@ -4592,22 +4589,10 @@ static enum lru_status deferred_split_isolate(struct list_head *item,
+ 	struct folio *folio = container_of(item, struct folio, _deferred_list);
+ 	struct list_head *freeable = cb_arg;
+
+-	if (folio_try_get(folio)) {
+-		list_lru_isolate_move(lru, item, freeable);
+-		return LRU_REMOVED;
+-	}
++	if (!folio_try_get(folio))
++		return LRU_SKIP;
+
+-	/*
+-	 * We lost race with folio_put(). Read folio state before the
+-	 * isolate: folio_unqueue_deferred_split() checks list_empty()
+-	 * locklessly, so once removed the folio can be freed any time.
+-	 */
+-	if (folio_test_partially_mapped(folio)) {
+-		folio_clear_partially_mapped(folio);
+-		mod_mthp_stat(folio_order(folio),
+-			      MTHP_STAT_NR_ANON_PARTIALLY_MAPPED, -1);
+-	}
+-	list_lru_isolate(lru, item);
++	list_lru_isolate_move(lru, item, freeable);
+ 	return LRU_REMOVED;
+ }
 ---
- include/linux/sched/ext.h | 2 +-
- kernel/sched/ext/ext.c    | 8 ++++----
- kernel/sched/ext/sub.c    | 4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/sched/ext.h b/include/linux/sched/ext.h
-index 582d7cd4a983..7b9cdb65deef 100644
---- a/include/linux/sched/ext.h
-+++ b/include/linux/sched/ext.h
-@@ -323,7 +323,7 @@ struct scx_task_group {
- 	u64			bw_period_us;
- 	u64			bw_quota_us;
- 	u64			bw_burst_us;
--	bool			idle;
-+	bool			sched_idle;
- #endif
- };
- 
-diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
-index 82cf8f57e15c..4a9c38297093 100644
---- a/kernel/sched/ext/ext.c
-+++ b/kernel/sched/ext/ext.c
-@@ -4682,7 +4682,7 @@ void scx_tg_init(struct task_group *tg)
- 	tg->scx.weight = CGROUP_WEIGHT_DFL;
- 	tg->scx.bw_period_us = default_bw_period_us();
- 	tg->scx.bw_quota_us = RUNTIME_INF;
--	tg->scx.idle = false;
-+	tg->scx.sched_idle = false;
- }
- 
- /**
-@@ -4765,7 +4765,7 @@ int scx_tg_online(struct task_group *tg)
- 				  .bw_period_us = tg->scx.bw_period_us,
- 				  .bw_quota_us = tg->scx.bw_quota_us,
- 				  .bw_burst_us = tg->scx.bw_burst_us,
--				  .sched_idle = tg->scx.idle };
-+				  .sched_idle = tg->scx.sched_idle };
- 
- 			ret = SCX_CALL_OP_RET(sch, cgroup_init,
- 					      NULL, tg->css.cgroup, &args);
-@@ -4935,7 +4935,7 @@ void scx_group_set_idle(struct task_group *tg, bool idle)
- 		SCX_CALL_OP(sch, cgroup_set_idle, NULL, tg_cgrp(tg), idle);
- 
- 	/* Update the task group's idle state */
--	tg->scx.idle = idle;
-+	tg->scx.sched_idle = idle;
- 
- 	percpu_up_read(&scx_cgroup_ops_rwsem);
- }
-@@ -5186,7 +5186,7 @@ static int scx_cgroup_init(struct scx_sched *sch)
- 				.bw_period_us = tg->scx.bw_period_us,
- 				.bw_quota_us = tg->scx.bw_quota_us,
- 				.bw_burst_us = tg->scx.bw_burst_us,
--				.sched_idle = tg->scx.idle,
-+				.sched_idle = tg->scx.sched_idle,
- 			};
- 
- 			ret = SCX_CALL_OP_RET(sch, cgroup_init, NULL, css->cgroup, &args);
-diff --git a/kernel/sched/ext/sub.c b/kernel/sched/ext/sub.c
-index 385302d19914..a17d84db93bd 100644
---- a/kernel/sched/ext/sub.c
-+++ b/kernel/sched/ext/sub.c
-@@ -1361,7 +1361,7 @@ static s32 scx_cgroup_claim_subtree(struct scx_sched *sch)
- 			.bw_period_us = tg->scx.bw_period_us,
- 			.bw_quota_us = tg->scx.bw_quota_us,
- 			.bw_burst_us = tg->scx.bw_burst_us,
--			.sched_idle = tg->scx.idle,
-+			.sched_idle = tg->scx.sched_idle,
- 		};
- 
- 		if (tg->scx.sched != parent ||
-@@ -1465,7 +1465,7 @@ static void scx_cgroup_return_subtree(struct scx_sched *sch)
- 			.bw_period_us = tg->scx.bw_period_us,
- 			.bw_quota_us = tg->scx.bw_quota_us,
- 			.bw_burst_us = tg->scx.bw_burst_us,
--			.sched_idle = tg->scx.idle,
-+			.sched_idle = tg->scx.sched_idle,
- 		};
- 
- 		/* the first pass must have transferred everything */
--- 
-2.43.0
+One detail, though ...
 
+deferred_split_isolate()'s assumption predates patch 16. Patch 16 lets
+collapse_freeze_candidate() leave refcount at zero and later unfreeze it
+on rollback.
+
+Existing split code takes a list_lru lock for deferred_split_lru before
+folio_ref_freeze() and holds it through dequeue. The shrinker cannot see
+that temporary zero.
+
+collapse_freeze_candidate() does not take that lock and can roll back
+later.
+
+Say a candidate has two source folios. After the first one is frozen,
+deferred_split_isolate() can see refcount 0, dequeue it, clear
+PG_partially_mapped and decrement its accounting. If freezing the second
+one fails, collapse rolls the first one back:
+
+static void collapse_unfreeze_candidate(struct mm_struct *mm,
+					struct collapse_candidate *cand,
+					pte_t *pte, unsigned int nr_saved,
+					unsigned int nr_frozen)
+{
+	unsigned long addr = cand->addr;
+	unsigned int i = 0;
+
+	while (i < nr_saved) {
+		pte_t saved = cand->saved_ptes[i];
+		struct folio *folio;
+		unsigned int nr, k;
+
+...
+		folio = pte_folio(saved);
+		nr = collapse_saved_span_len(cand, i, nr_saved);
+
+		for (k = 0; k < nr; k++) {
+			set_pte_at(mm, addr + k * PAGE_SIZE, pte + i + k,
+				   cand->saved_ptes[i + k]);
+		}
+		if (i < nr_frozen) {
+			folio_ref_unfreeze(folio,
+					   folio_expected_ref_count(folio) + 1);
+		}
+		folio_unlock(folio);
+		folio_put(folio);
+
+		i += nr;
+		addr += nr * PAGE_SIZE;
+	}
+}
+
+PTEs and the folio's refcount are restored, but its deferred split queue
+entry, PG_partially_mapped flag, and accounting are already gone. So yeah,
+patch 16 has a real state-loss bug when collapse rolls back a partially
+mapped folio.
+
+LRU_SKIP looks right. A failed folio_try_get() only says refcount is zero.
+It cannot tell a final folio_put() from a temporary freeze. A final put
+still reaches:
+
+void __folio_put(struct folio *folio)
+{
+...
+	folio_unqueue_deferred_split(folio);
+...
+}
+
+folio_unqueue_deferred_split() takes the same list_lru lock and clears
+PG_partially_mapped + its accounting if the entry is still queued.
+
+Cheers, Lance
