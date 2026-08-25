@@ -1,198 +1,115 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28873E9F93;
-	Tue, 25 Aug 2026 10:09:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2C53F39DD
+	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 10:11:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787652581; cv=none; b=WpTTjxYRZIT7crvAbcg4M0pUKQgHj7kTHxuTK0xBusBtfFKMVTER0S/sVI0fiUOp4VdU+dOeO0WEHtnuJhX5e8BCxB2flFS7VfUOEzENlZ8/RTDPv/5nQmEXtdLKF1CNG8TLTxpZQtzCNsFDWEPGzY87sb0CbOXr6GjJUOukaGo=
+	t=1787652712; cv=none; b=qDR6HtP97cvazSJVWtqWLIrs8y+OtjNMbqWZ+g3v4Ywi2FN1X232iVvwfNNpNIp11/2eKWzOUh2gUc2lhL+rELFe3Y0JjvxRmLVk7omZgBVmdm1abjCTkyJDRoW6gG9u+6GOxKxgFSFngr1YNq7pBztizLM8sXl89EDaYc253z0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787652581; c=relaxed/simple;
-	bh=nz39AJYxBtpSBlMvja6UqpL7HVQWUrhfdvIJ/jdncT8=;
+	s=arc-20240116; t=1787652712; c=relaxed/simple;
+	bh=W19ZITm3IzDaC5FXxy2nrBHB/SmZMM25p1NfcScWc5I=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=auAvVtLbBARzZxZNbwBYFo0UpXOAjWt2q325U+6WS3zfrzQIdUWU4MHPX9cpVKkbZViCMZhwyB+ZChwJJq7QOVpTy9oVjffGqYbnZLukF1Flz5WxgrW1A26A7K33fai0rzlMPTLbkI1W441Uuun3BIBqv/gvek2981Y1xfGAXmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J1ADOhGR; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=QzUcKrLTpXv54svycnWYn+Np9fdvkZRFEpb/BxyKhhue3IwVkgemn0ZJgE9N4YHP2HEm12TXWbiTwdvh0sSOt9aSNEFCd4eE3ke/kfZtKl7G22PnReZr9za3Jptmxs/5eDYScaSdrN5bEjNG20Jh9gR4uD1RuEJ7OblLJyOWOV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ckiGDbj5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J1ADOhGR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BB791F000E9;
-	Tue, 25 Aug 2026 10:09:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ckiGDbj5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21A4C1F000E9;
+	Tue, 25 Aug 2026 10:11:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787652580;
-	bh=veIVyHSw4YI1fAcSwJqVgRMnqo++Va4vwbz9uMvQgZM=;
+	s=k20260515; t=1787652711;
+	bh=zbsB/pHZlLF+ulctIpFIUMt9Wzablcks6W5aD9RDO8c=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=J1ADOhGRV8kLsE8saQjxahzlm8eVCzyfdlGUCcJ2bRE2+xtUog99o4gYA9Q8MDBGW
-	 04PVHLqNRlLjFnF/0brDMxf1qpoG1SRnBEKmT5Wzx39vFgX4biYiZQ9z+i81CdSO0J
-	 i0Bm9p9MgHuGVqplLtEDid1rCVRfULG6ju5O8JD7B33/2LE+BPV6sLmwh/qz/GwhxN
-	 ZPkiBkSQ6p323G1B3yPeoVBeukJA6z2P3JdzpdIvYCpsY3QEck0pKfybhCH6QpGANW
-	 qDajNohMZRldSC6v9jz8M0khx1F6vnIIenNt053hUVFyEkDRJH7PLcnk2fqKM2Acm8
-	 C2y6ZLIjd/Ftw==
+	b=ckiGDbj5JuKYrH3coiUnR9ToRXLhv5U1tclX5KqdWvJokcvY4krDLETeJOaYAEG/8
+	 K/Y+kqLcftD+TZBI2LqOQoQbY6GqyhyQb/FzVSSE+smVT9gdz2ZtP1PIx510ShOm6H
+	 gnt4tDNsf6B5r8U1qb3VZsxkL4Ri8EkhShNpFxB52IXjWXeqdFdUKsTSVCYZIJ7GZa
+	 3aRh1WuJzaKM2/2frbxNxxWxPYp2IRBjmYb0nL3g52cFGMNbwvSar+TwFsvM5VNWGu
+	 xX/R9hrvZfNs/cWVSBYi0GA8ajMS/6M2gCX7+YymGbvTKDuPnwTyzWPrBMYepxnToA
+	 B28lApHSxDXVw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 3/3] selftests/hid: prepare
- test_rdesc_fixup_get_data_overflow for the new verifier
+Subject: Re: [PATCH bpf-next v6 1/4] bpf: Add a sleepable page allocator for
+ map memory
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Benjamin Tissoires" <bentiss@kernel.org>
-Cc: bpf@vger.kernel.org, linux-input@vger.kernel.org, dmitry.torokhov@gmail.com
-In-Reply-To: <20260825-wip-bpf-safe-v2-3-d044355c09d8@kernel.org>
-References: <20260825-wip-bpf-safe-v2-0-d044355c09d8@kernel.org>
- <20260825-wip-bpf-safe-v2-3-d044355c09d8@kernel.org>
+To: "Khawar Ahemad" <ahemadkhawar123@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260825094955.83240-2-ahemadkhawar123@gmail.com>
+References: <20260825094955.83240-1-ahemadkhawar123@gmail.com>
+ <20260825094955.83240-2-ahemadkhawar123@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 25 Aug 2026 10:09:39 +0000
-Message-Id: <20260825100940.1BB791F000E9@smtp.kernel.org>
+Date: Tue, 25 Aug 2026 10:11:50 +0000
+Message-Id: <20260825101151.21A4C1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
-New issues:
-- [Medium] The test silently passes on any program load failure, masking un=
-related infrastructure issues.
-
 Pre-existing issues:
-- [High] Using TEARDOWN_LOG with ASSERT_OK_PTR causes FIXTURE_TEARDOWN to e=
-xecute twice, leading to undefined behavior (double pthread_join).
-- [High] Teardown deadlock with uhid background thread on assertion failure.
+- [Critical] Pages allocated via `__bpf_alloc_page()` in non-sleepable cont=
+exts are not zeroed, leading to a critical information leak. When `can_allo=
+c_pages()` is false (e.g., in BPF programs running inside a BPF spinlock wh=
+ere IRQs are disabled, or under the spinlock in `arena_vm_fault`), the allo=
+cator falls back to `alloc_pages_nolock(__GFP_ACCOUNT, nid, 0)`. Because `_=
+_GFP_ZERO` is omitted and the page is never manually cleared, uninitialized=
+ physical memory is returned and subsequently mapped into the BPF arena. Us=
+er space can then read this uninitialized kernel memory. (Note: The origina=
+lly provided concern regarding missing dcache flushes on cache-aliasing arc=
+hitectures is a false positive because BPF arenas are only supported on har=
+dware-coherent PIPT architectures like x86_64, arm64, riscv64, etc., via `b=
+pf_jit_supports_arena()`).
 --
 
---- Patch [3]: [PATCH v2 3/3] selftests/hid: prepare test_rdesc_fixup_get_d=
-ata_overflow for the new verifier ---
-commit 2045d9e4296113259f889a7b753ecfe091d15ecf
-Author: Benjamin Tissoires <bentiss@kernel.org>
+--- Patch [1]: [PATCH bpf-next v6 1/4] bpf: Add a sleepable page allocator =
+for map memory ---
+commit 49db9a147d01ab11180f1f75062c2ee24918b7a4
+Author: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-selftests/hid: prepare test_rdesc_fixup_get_data_overflow for the new verif=
-ier
+bpf: Add a sleepable page allocator for map memory
+   =20
+This commit adds bpf_map_alloc_page_sleepable() for callers that are known =
+to
+be in a sleepable context. It allows them to use the normal blocking alloca=
+tor
+which can reclaim memory and engage the OOM machinery.
 
-The new verifier in the bpf-next branch is now capable of detecting the
-overflow that was triggered by test_rdesc_fixup_get_data_overflow.
-This is better in terms of UI, but now the test is failing and should be
-marked as expected to fail.
-
-Add a new parameter to load_programs() when we expect the test to fail,
-and dynamically validate the test by checkcing if it loads (it should
-fail to load with new verifier), but if it still loads, HID-BPF should
-detect the overflow itself and return an error in hid_bpf_get_data().
-
-> diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selfte=
-sts/hid/hid_bpf.c
-> index 069ebdbb4d1c4..7ab86296ff236 100644
-> --- a/tools/testing/selftests/hid/hid_bpf.c
-> +++ b/tools/testing/selftests/hid/hid_bpf.c
-> @@ -67,14 +67,17 @@ struct test_program {
->  	int insert_head;
->  };
->  #define LOAD_PROGRAMS(progs) \
-> -	load_programs(progs, ARRAY_SIZE(progs), _metadata, self, variant)
-> +	load_programs(progs, ARRAY_SIZE(progs), false, _metadata, self, variant)
-> +#define LOAD_PROGRAMS_MAY_FAIL(progs) \
-> +	load_programs(progs, ARRAY_SIZE(progs), true, _metadata, self, variant)
->  #define LOAD_BPF \
-> -	load_programs(NULL, 0, _metadata, self, variant)
-> -static void load_programs(const struct test_program programs[],
-> -			  const size_t progs_count,
-> -			  struct __test_metadata *_metadata,
-> -			  FIXTURE_DATA(hid_bpf) * self,
-> -			  const FIXTURE_VARIANT(hid_bpf) * variant)
-> +	load_programs(NULL, 0, false, _metadata, self, variant)
-> +static int load_programs(const struct test_program programs[],
-> +			 const size_t progs_count,
-> +			 bool load_may_fail,
-> +			 struct __test_metadata *_metadata,
-> +			 FIXTURE_DATA(hid_bpf) * self,
-> +			 const FIXTURE_VARIANT(hid_bpf) * variant)
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -602,15 +602,14 @@ static bool can_alloc_pages(void)
+>  		!IS_ENABLED(CONFIG_PREEMPT_RT);
+>  }
+> =20
+> +#define BPF_PAGE_GFP (GFP_KERNEL | __GFP_ZERO | __GFP_ACCOUNT | __GFP_NO=
+WARN)
+> +
+>  static struct page *__bpf_alloc_page(int nid)
 >  {
->  	struct bpf_map *iter_map;
->  	int err =3D -EINVAL;
+>  	if (!can_alloc_pages())
+>  		return alloc_pages_nolock(__GFP_ACCOUNT, nid, 0);
 
-[Severity: High]
-This is a pre-existing issue, but does using TEARDOWN_LOG with ASSERT_OK_PTR
-inside load_programs() cause FIXTURE_TEARDOWN to execute twice?
+[Severity: Critical]
+This is a pre-existing issue, but does missing __GFP_ZERO here cause an
+information leak?
 
-If hid__open() fails in this function and returns NULL:
+When can_alloc_pages() evaluates to false (e.g., in BPF programs running
+inside a BPF spinlock where IRQs are disabled, or under the spinlock in
+arena_vm_fault), the allocator falls back to alloc_pages_nolock() without
+zeroing the page.=20
 
-tools/testing/selftests/hid/hid_bpf.c:load_programs() {
-    self->skel =3D hid__open();
-    ASSERT_OK_PTR(self->skel) TEARDOWN_LOG("Error while calling hid__open");
+Because this uninitialized kernel memory can subsequently be mapped into the
+BPF arena, user space could read it.
 
-ASSERT_OK_PTR() evaluates as false and executes its optional handler
-TEARDOWN_LOG(), which directly calls hid_bpf_teardown() and pthread_join().
-
-Afterward, the kselftest_harness __bail() mechanism triggers the test
-framework's wrapper teardown:
-
-tools/testing/selftests/kselftest_harness.h:wrapper_##fixture_name##_##test=
-_name##_teardown() {
-    if (fixture_name##_teardown_parent =3D=3D in_parent && \
-        !__atomic_test_and_set(_metadata->no_teardown, __ATOMIC_RELAXED)) \
-        fixture_name##_teardown(_metadata, self, variant); \
-}
-
-Since _metadata->no_teardown wasn't updated by TEARDOWN_LOG, this calls
-hid_bpf_teardown() a second time. Can this result in undefined behavior
-crashing the test runner child process via a segfault?
-
-[ ... ]
-
-> @@ -904,7 +911,9 @@ TEST_F(hid_bpf, test_rdesc_fixup_get_data_overflow)
->  		{ .name =3D "hid_rdesc_fixup_get_data_overflow" },
->  	};
-> =20
-> -	LOAD_PROGRAMS(progs);
-> +	/* newer verifier can detect the overflow at load time */
-> +	if (LOAD_PROGRAMS_MAY_FAIL(progs))
-> +		return;
-> =20
->  	ASSERT_EQ(self->skel->bss->get_data_overflow_check, 1);
+> -	return alloc_pages_node(nid,
+> -				GFP_KERNEL | __GFP_ZERO | __GFP_ACCOUNT
+> -				| __GFP_NOWARN,
+> -				0);
+> +	return alloc_pages_node(nid, BPF_PAGE_GFP, 0);
 >  }
 
-[Severity: Medium]
-Does returning on any load failure silently mark the test as PASSED?
-
-If hid__load(self->skel) fails for an unrelated infrastructure reason
-(e.g., -ENOMEM), load_programs() will return that error code and make
-LOAD_PROGRAMS_MAY_FAIL(progs) truthy. The test then executes a normal
-return, exiting with a 0 status.
-
-Should the test instead verify that the program was specifically rejected
-by the verifier with the expected error code?
-
-[Severity: High]
-This is a pre-existing issue, but is there a potential teardown deadlock in
-test_hid_user_output_report_call() on assertion failure?
-
-If an assertion fails while the main thread holds uhid_output_mtx:
-
-tools/testing/selftests/hid/hid_bpf.c:test_hid_user_output_report_call() {
-    pthread_mutex_lock(&uhid_output_mtx);
-    ...
-    ASSERT_EQ(args.retval, 3);
-    ...
-    pthread_mutex_unlock(&uhid_output_mtx);
-}
-
-The test executes __bail() and initiates teardown without releasing the mut=
-ex.
-Teardown sends a UHID_DESTROY event and blocks on pthread_join(self->hid.ti=
-d).
-
-Concurrently, the listener thread might process a UHID_OUTPUT event:
-
-tools/testing/selftests/hid/hid_common.h:uhid_event() {
-    case UHID_OUTPUT:
-        ...
-        pthread_mutex_lock(&uhid_output_mtx);
-        ...
-        pthread_mutex_unlock(&uhid_output_mtx);
-        break;
-}
-
-Does this cause the listener thread to block indefinitely attempting to
-acquire uhid_output_mtx, which in turn causes pthread_join to hang in the
-main thread?
-
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260825-wip-bpf-sa=
-fe-v2-0-d044355c09d8@kernel.org?part=3D3
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260825094955.8324=
+0-1-ahemadkhawar123@gmail.com?part=3D1
