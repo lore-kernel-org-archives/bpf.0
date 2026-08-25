@@ -1,82 +1,88 @@
-Received: from mta1.migadu.com (out-24.mta1.migadu.com [95.215.58.24])
+Received: from mta1.migadu.com (out-108.mta1.migadu.com [95.215.58.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A1B531E847
-	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 02:27:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE242FF672
+	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 02:36:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787624823; cv=none; b=IBnu9df8Tn3oC8L2QVuiYTEXEZ1R2fri2jdl4uWk0YtV89v9spQP2D+pxZY/S6piDFb1ZqkXSDBllyAPjgiXZr1FdErmrEBy60tRpmoS2v4ltffqCvymjlChdW5Ig3KlzZgah31wqimeVpHUPNn8maaZHtpXneMgqVxNgRDTA8c=
+	t=1787625378; cv=none; b=SRciXnHmfxXo62ux5tFHnjaJsd0xegwws3DG7TdJB9d96lsJxvIY0cK6hXYesGDnqfUHr7VqTuT9/i4z/WedgNPHMLCtzKzlqDxp2Y1IOayl4LS8Gs7dvxpk5JkqZermpMBVCuEEA10XuhxMjq0ErM5wNsjew3nGJ2pT5qc53f4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787624823; c=relaxed/simple;
-	bh=HupIf7Cl7uDpKXaRUm6oRZH6XKwPsDXMGDPyL3LI/DQ=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=ji+JDQioSEx4WjQ5F1WVDHhuD9ULeRoOdJTkq9MvRSbN2jF6TVJwQCC8ndrvlKrEeDZVgUjYC3A28HGeuztKRxlfSzb2BGGKSwCE+FxNb0Ep/zh70pjfV/BAO84RQ7ETfqB7S8RyYvH3Fza20ayQe6SxkyKIpHf93URXnI46Kts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rYPt255s; arc=none smtp.client-ip=95.215.58.24
+	s=arc-20240116; t=1787625378; c=relaxed/simple;
+	bh=mrpRGuen2KGmyKtUXu56TYY8k8w9GN1WoAwOuJn64RI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PVBQNIDRTg77tPhJPVqvD0PIS5SQyys/SRAAkdvgXCeT8bOMPPPNSnYeRlFAh0noz+IrXrbpycR9A2rCZuoz3qQIxjYCO+OUqP7SxKoBxxWQxU4JGcBbSaoWFcF1hmxTtxXEQiAXyyybnLJ1IAlaAuglqjoMPbkSMnAhfvfZTOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=n8mzvqb4; arc=none smtp.client-ip=95.215.58.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rYPt255s"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="n8mzvqb4"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=HupIf7Cl7uDpKXaRUm6oRZH6XKwPsDXMGDPyL3LI/DQ=;
+DKIM-Signature: a=rsa-sha256; bh=mrpRGuen2KGmyKtUXu56TYY8k8w9GN1WoAwOuJn64RI=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787624819; v=1; x=1788229619;
- b=rYPt255shSOoPDwSBA3kwZH3yhrl90tL6tILsDn7BGyONId4EDSlcOtoItO4DdBU8DfIJB9w
- EcOaInVvaOTVoffGgC1D7nWUjGlWFwrgpRfbb+4hDrCUg8EH+AP2YwBM/Pk/2DDl0FbqRx0yMBF
- MwiyvtiPThW7UiI5CBX/FvEw=
+ t=1787625374; v=1; x=1788230174;
+ b=n8mzvqb4xEqXeDHjJUNYXHkMQ9wMsF0RuYPVADZ1Fr8TZmGcqDeUVlj+UbD/cZL7KomHI0R0
+ kubTVIKSPBoZVrtYTEsKIhIcS+Q7XDzZXCOawUX/pld3SseRVj1KnfQ4Mg+WdtedVvXZIYslvyB
+ 9ngGXpZhJlPb83fPkpMn96KY=
 X-Envelope-To: bpf@vger.kernel.org
-Received: from [192.168.110.173] (223.70.160.239)
-	by smtp.migadu.com with ESMTPS id 733aeb1c8d3e640f;
-	Tue, 25 Aug 2026 02:26:59 +0000
-X-Mizu-Trace-ID: 733aeb1c8d3e640f
+Received: from ctao-book.. (223.70.159.239)
+	by smtp.migadu.com with ESMTPS id 8fa0f5375f5d2478;
+	Tue, 25 Aug 2026 02:36:14 +0000
+X-Mizu-Trace-ID: 8fa0f5375f5d2478
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <596acf85-5332-463b-a4d0-a8fcfca903a5@linux.dev>
-Date: Tue, 25 Aug 2026 10:26:51 +0800
+From: Tao Cui <cui.tao@linux.dev>
+To: tj@kernel.org,
+	void@manifault.com,
+	arighi@nvidia.com
+Cc: changwoo@igalia.com,
+	suzhidao@xiaomi.com,
+	sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	cui.tao@linux.dev,
+	Tao Cui <cuitao@kylinos.cn>
+Subject: [PATCH v3 0/2] sched_ext: pass the initial cpu.idle state in scx_cgroup_init_args
+Date: Tue, 25 Aug 2026 10:35:55 +0800
+Message-ID: <20260825023557.27881-1-cui.tao@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, void@manifault.com, arighi@nvidia.com,
- changwoo@igalia.com, suzhidao@xiaomi.com, emil@etsalapatis.com,
- sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, cuitao@kylinos.cn
-Subject: Re: [PATCH v2] sched_ext: pass the initial cpu.idle state in
- scx_cgroup_init_args
-To: Tejun Heo <tj@kernel.org>
-References: <20260824142817.568085-1-cui.tao@linux.dev>
- <20eb5e65cb330a6f9cc41781af302873@kernel.org>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <20eb5e65cb330a6f9cc41781af302873@kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hello, Tejun,
+From: Tao Cui <cuitao@kylinos.cn>
 
-在 2026/8/25 00:54, Tejun Heo 写道:
-> Hello, Tao.
-> 
-> On Mon, Aug 24, 2026 at 10:28:16PM +0800, Tao Cui wrote:
->> +
->> +	/* whether the cgroup is configured idle via cpu.idle */
->> +	bool			idle;
-> 
-> In sched_ext, a bare "idle" reads as CPU idle state (ops.update_idle(),
-> idle cpumasks, scx_bpf_pick_idle_cpu()). cpu.idle is the cgroup analog
-> of the SCHED_IDLE policy, so please name the field sched_idle instead.
-> Renaming tg->scx.idle to match would be nice too.
-> 
+This carries the initial cpu.idle state of a cgroup through
+ops.cgroup_init(), which was the only cpu controller knob whose
+initial value never reached the BPF scheduler. Patch 1 is the fix;
+patch 2 renames tg->scx.idle to tg->scx.sched_idle, suggested in
+review, as a separate cleanup.
 
-Thanks for the review. Both are renamed in v3: the new
-scx_cgroup_init_args field, and tg->scx.idle -> tg->scx.sched_idle
-as a separate second patch in the series, so 1/2 stays minimal for
-stable backport.
+Changes since v2:
 
-Thanks,
-Tao
+- rename the new field to sched_idle, as a bare "idle" reads as CPU
+  idle state in sched_ext (Tejun)
+- split the tg->scx.idle rename into 2/2 so 1/2 stays minimal for
+  stable backport
+- add the Fixes: tag (Andrea)
+- regenerate on top of current linux-next, which also resolves the CI
+  conflict reported against v2
 
-> Thanks.
-> 
+v2: https://lore.kernel.org/r/20260824142817.568085-1-cui.tao@linux.dev
+v1: https://lore.kernel.org/r/20260824133954.561956-1-cui.tao@linux.dev
+
+Tao Cui (2):
+  sched_ext: pass the initial cpu.idle state in scx_cgroup_init_args
+  sched_ext: rename tg->scx.idle to tg->scx.sched_idle
+
+ include/linux/sched/ext.h   | 2 +-
+ kernel/sched/ext/ext.c      | 8 +++++---
+ kernel/sched/ext/internal.h | 3 +++
+ kernel/sched/ext/sub.c      | 2 ++
+ 4 files changed, 11 insertions(+), 4 deletions(-)
+
+-- 
+2.43.0
 
