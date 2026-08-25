@@ -1,21 +1,21 @@
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F25D3D6477
-	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 20:55:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8237F3D9041
+	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 20:55:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787691307; cv=none; b=uUoOI0zdy1So2iEL1QFhF0afhuBtrTDpR7AhGQCg55xh+HoLaE3dlRHajEwBKVmWmrAHpZ6inrHkVRdZvUWR/WBgon70JivtldQgdm9cVH/ID5s6YS+V6w5sAWTxU1soBl/wqHNLgEg1aigdaf346ncO95YjRrM0WPcl7FDgdNY=
+	t=1787691318; cv=none; b=ZiQmCeei81W9NYdaqLJjH7KusQvk7i/2wccgbX/zdB+sCb+t5TKeybZYi7oai+lNAN+Z8Hlwdx2xWyfYX+00UffcwkyQ53hK5LiW9I6DYVOyBscnu36DOlZAS/Fyxmp1Aiv5JiLPqf0OfSQEr5YedMOBiCgPT44ejoMj0WyX5ok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787691307; c=relaxed/simple;
-	bh=GRTnTpR8rGTRdIyu1cIxu3uACV7CHDGUnC7wfoHe7ho=;
+	s=arc-20240116; t=1787691318; c=relaxed/simple;
+	bh=2WB89QDw8cE2/cb54iwiO/q3GQykxGS9MdlqaBZthVI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NyRhRalFdf5nstmqaSO7rnaD0J+AgSF/x8sQWHKtZGrrbvfmVvkBUTzmTyinrTZYp/9lw+c6qIQYAdYfSvA+6nZGPxBtgbnXQS1oQ+QX/+Qe/qqlDv84c32X9OKtN8tNqbZQUeiBvmbrtZ3fZNiUgU0IGVrPNft07FLNU207ldM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
+	 MIME-Version; b=kQ90LdGLWU5Nz2PCkFwIalzr7nyfFWAOnbZKcqWBaoLGYpgf3Pp5iomwRXVX2E0nyPabNCG6u7sjF16LCpxbCpZoOPGcvn29cxtRZj2+ud0141fDwDLE+CkW1kmeDHb/Esy2Z0zpIp8hHEE7hGxsDF1Cvpej8rFRglxjYttnqWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 72F79268293E0C; Tue, 25 Aug 2026 13:54:58 -0700 (PDT)
+	id 8D308268293E39; Tue, 25 Aug 2026 13:55:03 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v2 09/10] selftests/bpf: Test global functions returning arena pointers by value
-Date: Tue, 25 Aug 2026 13:54:58 -0700
-Message-ID: <20260825205458.1325916-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v2 10/10] selftests/bpf: Test kfuncs returning arena pointers by value
+Date: Tue, 25 Aug 2026 13:55:03 -0700
+Message-ID: <20260825205503.1327012-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260825205412.1320099-1-yonghong.song@linux.dev>
 References: <20260825205412.1320099-1-yonghong.song@linux.dev>
@@ -37,201 +37,227 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Cover the by-value struct returns a global function may now make: two
-arena pointers filling R0:R2, an arena pointer beside a scalar, an array
-of them, and an eight byte struct returned in R0 alone. The existing
-cases for a struct and a union carrying a plain pointer stay rejected.
+Cover the by-value struct returns a kfunc may now make: two arena
+pointers filling R0:R2, and an arena pointer beside a scalar. The
+existing cases for a struct and a nested struct carrying a plain pointer
+stay rejected.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../selftests/bpf/progs/aggregate_ret_func.c  | 118 ++++++++++++++++++
- .../selftests/bpf/progs/verifier_arena.c      |  37 ++++++
- 2 files changed, 155 insertions(+)
+ .../selftests/bpf/prog_tests/aggregate_ret.c  | 42 +++++++++++++++++
+ .../bpf/progs/aggregate_ret_kfunc_arena.c     | 47 +++++++++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    | 16 +++++++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        | 18 +++++++
+ 4 files changed, 123 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_ret_kfunc=
+_arena.c
 
-diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_func.c b/too=
-ls/testing/selftests/bpf/progs/aggregate_ret_func.c
-index 6f66fc822ced..237adb8e5ee1 100644
---- a/tools/testing/selftests/bpf/progs/aggregate_ret_func.c
-+++ b/tools/testing/selftests/bpf/progs/aggregate_ret_func.c
-@@ -2,6 +2,7 @@
+diff --git a/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c b/too=
+ls/testing/selftests/bpf/prog_tests/aggregate_ret.c
+index e0b94ed10f94..07d9d6e1d6b8 100644
+--- a/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c
++++ b/tools/testing/selftests/bpf/prog_tests/aggregate_ret.c
+@@ -1,11 +1,53 @@
+ // SPDX-License-Identifier: GPL-2.0
  /* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
-+#include <bpf_arena_common.h>
- #include "bpf_misc.h"
-=20
- typedef unsigned __int128 u128;
-@@ -234,4 +235,121 @@ __naked int aggregate_ret_global_union_ptr_fail(voi=
-d)
-=20
- #endif
-=20
-+/*
-+ * gcc returns a by-value struct through a hidden pointer, and emits the
-+ * 'r0 =3D r1' returning it after the __naked body's exit, leaving the
-+ * subprogram falling through. Build these with clang only.
-+ */
-+#if defined(__clang__)
+ #include <test_progs.h>
++#include <bpf/btf.h>
+ #include "aggregate_ret_func.skel.h"
+ #include "aggregate_ret_kfunc.skel.h"
++#include "aggregate_ret_kfunc_arena.skel.h"
 +
-+struct arena_pair {
-+	void __arena *lo;
-+	void __arena *hi;
-+};
-+
-+struct arena_and_scalar {
-+	void __arena *p;
-+	__u64 x;
-+};
-+
-+struct arena_array {
-+	void __arena *p[2];
-+};
-+
-+struct arena_single {
-+	void __arena *p;
-+};
-+
-+__naked struct arena_pair global_ret_arena_pair(void)
++static bool testmod_has_arena_tagged_member(void)
 +{
-+	asm volatile (
-+	"r0 =3D 0;"
-+	"r2 =3D 0;"
-+	"exit;"
-+	);
++	struct btf *vmlinux_btf, *module_btf =3D NULL;
++	const struct btf_type *t;
++	bool tagged =3D false;
++	__s32 id;
++
++	vmlinux_btf =3D btf__load_vmlinux_btf();
++	if (!vmlinux_btf)
++		return false;
++
++	module_btf =3D btf__load_module_btf("bpf_testmod", vmlinux_btf);
++	if (!module_btf)
++		goto out;
++
++	/* prog_test_ret_arena::a is 'void __arena_tag *': PTR -> TYPE_TAG -> v=
+oid */
++	id =3D btf__find_by_name_kind(module_btf, "prog_test_ret_arena", BTF_KI=
+ND_STRUCT);
++	if (id <=3D 0)
++		goto out;
++
++	t =3D btf__type_by_id(module_btf, btf_members(btf__type_by_id(module_bt=
+f, id))[0].type);
++	if (!t || !btf_is_ptr(t))
++		goto out;
++
++	t =3D btf__type_by_id(module_btf, t->type);
++	tagged =3D t && btf_is_type_tag(t) &&
++		 !strcmp(btf__name_by_offset(module_btf, t->name_off), "arena");
++
++out:
++	btf__free(module_btf);
++	btf__free(vmlinux_btf);
++
++	return tagged;
++}
+=20
+ void test_aggregate_ret(void)
+ {
+ 	RUN_TESTS(aggregate_ret_func);
+ 	RUN_TESTS(aggregate_ret_kfunc);
++
++	if (testmod_has_arena_tagged_member())
++		RUN_TESTS(aggregate_ret_kfunc_arena);
++	else
++		test__skip();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc_arena.=
+c b/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc_arena.c
+new file mode 100644
+index 000000000000..f68deae6c900
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc_arena.c
+@@ -0,0 +1,47 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++#include "../test_kmods/bpf_testmod_kfunc.h"
++
++void __kfunc_btf_root(void)
++{
++	asm volatile (""
++	:
++	: "r"(&bpf_kfunc_call_test_ret_arena),
++	  "r"(&bpf_kfunc_call_test_ret_arena_mixed));
 +}
 +
 +SEC("tc")
++__arch_x86_64 __arch_arm64
 +__load_if_JITed()
 +__success __retval(0)
-+__naked int aggregate_ret_global_arena_pair(void)
++__naked int aggregate_ret_kfunc_arena(void)
 +{
 +	asm volatile (
-+	"call %[global_ret_arena_pair];"
++	"call %[bpf_kfunc_call_test_ret_arena];"
 +	"r0 =3D 0;"
 +	"exit;"
 +	:
-+	: __imm(global_ret_arena_pair)
++	: __imm(bpf_kfunc_call_test_ret_arena)
 +	: __clobber_all);
 +}
 +
-+__naked struct arena_and_scalar global_ret_arena_and_scalar(void)
-+{
-+	asm volatile (
-+	"r0 =3D 0;"
-+	"r2 =3D 0;"
-+	"exit;"
-+	);
-+}
-+
 +SEC("tc")
++__arch_x86_64 __arch_arm64
 +__load_if_JITed()
 +__success __retval(0)
-+__naked int aggregate_ret_global_arena_and_scalar(void)
++__naked int aggregate_ret_kfunc_arena_mixed(void)
 +{
 +	asm volatile (
-+	"call %[global_ret_arena_and_scalar];"
++	"r1 =3D 0;"
++	"call %[bpf_kfunc_call_test_ret_arena_mixed];"
 +	"r0 =3D 0;"
 +	"exit;"
 +	:
-+	: __imm(global_ret_arena_and_scalar)
++	: __imm(bpf_kfunc_call_test_ret_arena_mixed)
 +	: __clobber_all);
 +}
 +
-+__naked struct arena_array global_ret_arena_array(void)
-+{
-+	asm volatile (
-+	"r0 =3D 0;"
-+	"r2 =3D 0;"
-+	"exit;"
-+	);
-+}
-+
-+SEC("tc")
-+__load_if_JITed()
-+__success __retval(0)
-+__naked int aggregate_ret_global_arena_array(void)
-+{
-+	asm volatile (
-+	"call %[global_ret_arena_array];"
-+	"r0 =3D 0;"
-+	"exit;"
-+	:
-+	: __imm(global_ret_arena_array)
-+	: __clobber_all);
-+}
-+
-+__naked struct arena_single global_ret_arena_single(void)
-+{
-+	asm volatile (
-+	"r0 =3D 0;"
-+	"exit;"
-+	);
-+}
-+
-+SEC("tc")
-+__success __retval(0)
-+__naked int aggregate_ret_global_arena_single(void)
-+{
-+	asm volatile (
-+	"call %[global_ret_arena_single];"
-+	"r0 =3D 0;"
-+	"exit;"
-+	:
-+	: __imm(global_ret_arena_single)
-+	: __clobber_all);
-+}
-+
-+#endif
-+
- char _license[] SEC("license") =3D "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/t=
-esting/selftests/bpf/progs/verifier_arena.c
-index 815f342eb4b0..d37424d1161a 100644
---- a/tools/testing/selftests/bpf/progs/verifier_arena.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-@@ -734,4 +734,41 @@ int check_arena_arg_ret(void *ctx)
- 	return 0;
++char _license[] SEC("license") =3D "GPL";
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
+/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index 76acbe29054a..81fb93ea466e 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -981,6 +981,20 @@ __bpf_kfunc struct prog_test_ret_ptr bpf_kfunc_call_=
+test_ret_ptr(u64 tag)
+ 	return r;
  }
 =20
-+#if defined(__clang_major__) && __clang_major__ >=3D 23
-+
-+struct arena_page_pair {
-+	u32 __arena *first;
-+	u32 __arena *second;
-+};
-+
-+__weak struct arena_page_pair split_arena_page(u32 __arena *page)
++__bpf_kfunc struct prog_test_ret_arena bpf_kfunc_call_test_ret_arena(voi=
+d)
 +{
-+	struct arena_page_pair pair;
++	struct prog_test_ret_arena r =3D { .a =3D NULL, .b =3D NULL };
 +
-+	pair.first =3D page;
-+	pair.second =3D page + 1;
-+
-+	return pair;
++	return r;
 +}
 +
-+SEC("syscall")
-+__load_if_JITed()
-+__success __retval(0)
-+int check_arena_struct_ret(void *ctx)
++__bpf_kfunc struct prog_test_ret_arena_mixed bpf_kfunc_call_test_ret_are=
+na_mixed(u64 tag)
 +{
-+	u32 __arena *page =3D bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NO=
-DE, 0);
-+	struct arena_page_pair pair;
++	struct prog_test_ret_arena_mixed r =3D { .p =3D NULL, .tag =3D tag };
 +
-+	if (!page)
-+		return 1;
-+
-+	pair =3D split_arena_page(page);
-+	if (!pair.first || !pair.second)
-+		return 2;
-+
-+	return 0;
++	return r;
 +}
 +
+ __bpf_kfunc struct prog_test_ret_nested bpf_kfunc_call_test_ret_nested(u=
+64 tag)
+ {
+ 	struct prog_test_ret_nested r =3D { .in =3D { .p =3D NULL }, .tag =3D t=
+ag };
+@@ -1553,6 +1567,8 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_pair)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_fastcall, KF_FASTCALL)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_ptr)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_arena)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_arena_mixed)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_nested)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_deep)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_ii)
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b=
+/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+index 52227129a49e..aebf88102dc6 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+@@ -26,6 +26,12 @@ struct prog_test_ref_kfunc {
+ };
+ #endif
+=20
++#if __has_attribute(btf_type_tag)
++#define __arena_tag __attribute__((btf_type_tag("arena")))
++#else
++#define __arena_tag
 +#endif
 +
- char _license[] SEC("license") =3D "GPL";
+ struct bpf_iter_testmod_seq;
+=20
+ struct prog_test_pass1 {
+@@ -70,6 +76,16 @@ struct prog_test_ret_ptr {	/* 16 bytes: contains a poi=
+nter */
+ 	__u64 tag;
+ };
+=20
++struct prog_test_ret_arena {	/* 16 bytes: two arena pointers */
++	void __arena_tag *a;
++	void __arena_tag *b;
++};
++
++struct prog_test_ret_arena_mixed {	/* 16 bytes: an arena pointer and a s=
+calar */
++	void __arena_tag *p;
++	__u64 tag;
++};
++
+ struct prog_test_ret_nested {	/* 16 bytes: the pointer hides one level d=
+own */
+ 	struct {
+ 		void *p;
+@@ -179,6 +195,8 @@ struct prog_test_ret_pair bpf_kfunc_call_test_ret_fas=
+tcall(__u64 a, __u64 b) __k
+ struct prog_test_ret_ii bpf_kfunc_call_test_ret_ii(int a, int b) __ksym;
+ struct prog_test_ret_ptr bpf_kfunc_call_test_ret_ptr(__u64 tag) __ksym;
+ struct prog_test_ret_nested bpf_kfunc_call_test_ret_nested(__u64 tag) __=
+ksym;
++struct prog_test_ret_arena bpf_kfunc_call_test_ret_arena(void) __ksym;
++struct prog_test_ret_arena_mixed bpf_kfunc_call_test_ret_arena_mixed(__u=
+64 tag) __ksym;
+ struct prog_test_ret_deep bpf_kfunc_call_test_ret_deep(__u64 v) __ksym;
+ struct prog_test_ret_big bpf_kfunc_call_test_ret_big(void) __ksym;
+ __u64 bpf_kfunc_call_stack_arg(__u64 a, __u64 b, __u64 c, __u64 d,
 --=20
 2.53.0-Meta
 
