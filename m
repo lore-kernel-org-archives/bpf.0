@@ -1,178 +1,83 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4669A7081E
-	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 08:24:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C80E7081E;
+	Tue, 25 Aug 2026 08:25:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787646261; cv=none; b=SkomR2bxmvOoVVmSj3CG49dTA0/uT/T0O1VCJTw7bZ6GZW04yws0L+h1JrMqTTfUnxrQ+Y9RZz7mJ7bQlQ67xg7K7eVyaRji8RU0icfDnb28jVj5VfXlUjrnQ3gABLekKiN3zbwkg6XbfCta1uL5eOpNgengJHW5yWcNOnl2+/4=
+	t=1787646306; cv=none; b=VLOxrsC1yh2BOXoUfGtCjkOahlRWDvFKh8kRL2LWPG4FeC9QQox5J9QtQxAMA+pUpDMKkduLQrXJwUVmKYsySBN52qGM6RONwhLmHxZDLx9GX6cAKay7NG5dLQSDfyGrwjuP0uiw28b4ZeEptZyqrPRjMY8C0MRUCu3o7RJYh4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787646261; c=relaxed/simple;
-	bh=DZQvgMF9MtoSMKn9/xxgPT3t+kYxUHeBLkPFZwmxGy0=;
+	s=arc-20240116; t=1787646306; c=relaxed/simple;
+	bh=3Arvg/Z7t541bnNnv8tATh8KJx3KCUVvAbe3BqetXAc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CCLQ2OsQdlvNQXBPQSrB3pEuust6mBTTC0qFY9cFJ4CF83bB0ZNAn0M5j3sLmgEKrJzb1BGxCEnffix/bNjLxNokmTUGbz2hDVgRW8tCcF6O+pHW6fW64xuz5Tj+7y+4peg24fQqpKdQ0rjUnJwKgCttxn2UyZ3YVDSChKKSI6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=BFeqlQ0q; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y0n9eCwnzw2mDdYtgsHIb7BEVRi2ZvE7dSpb/RmK//FXYLeQwywQ2ROHH2+mPCufXvIyfF4sl4bBsfpdekB85ehvFfI1u9P8LTSJ1hncVTQbCl+D8YPPejNH4xSHlZjhUrE1CHjcW8vYJJh7QNPkGXuwNucdx2htx8oHatOwDSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=2PwchZaK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="BFeqlQ0q"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-69c600f76ccso7561319a12.0
-        for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 01:24:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1787646255; x=1788251055; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=DZQvgMF9MtoSMKn9/xxgPT3t+kYxUHeBLkPFZwmxGy0=;
-        b=BFeqlQ0q/iI/Y9xCCyZW9DcLrNuxdKfN+Y+//0GtDmUjYy2yEe/So/1C91iOhFggaa
-         w+PoJMpJllcqUOV1XX00bD7B84xNhMcsllE/0Nmh9dN8tZqJJBTNzbShKDQnxPsEmaEB
-         ADAFZ+g3kLKRuXMS8OJko/112mNWDH4sfjFIo4ughfQq/cnFDH/p9Dc0K0AtS70+B4FM
-         F9fsHPDaiztrmyZ3lyUZT3jElm9oP2eZVU4cOzQu3ucYmiskPZDEWm9d/KJQ6ZtJ4Xeu
-         uIa0swNl0ttsWWPbGXJPM6SHTBQ7jF+5mcgT6fWzV+zAaPzszidX3t44XfJa0Wfi3HSP
-         gdqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787646255; x=1788251055;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=DZQvgMF9MtoSMKn9/xxgPT3t+kYxUHeBLkPFZwmxGy0=;
-        b=Nxre5CQrBq4prEiCOzayMDHQNq0id4sAzTvvWdn2Jz8QkRPTNu8kk5byH6asFLo8ao
-         6XOIL1tqArHuAkycBesZeTke0us0UWa5LGMhxsMFGqJ7ecG7ZmZauQQwq1Z2y/rNIQrQ
-         HaYzUxsMsxocQxgUO0iDAH3r7uH7/POd5BZKFwTD1mbKBovrl0iMhVkTP1wrL1hKbhz+
-         6+KItZa8OKPcUoZaQInaMaA6fncSnwkEF0lU1lfZyniyewWTr6NY7L07Hmsf/pcSYpHq
-         iOGDFPuLqrxVJOJXHoNSed51zb3+9yNs2aMikH0in/TgYwialqryegULuLoCI522zJx5
-         0kiA==
-X-Forwarded-Encrypted: i=1; AHgh+RqTKZTYYtWKImbpyXuTOvKh0Wm8HLuRursrQ37Bk9k7Q7YTov8He5JUEag+vRfzkzIfmxA=@vger.kernel.org
-X-Gm-Message-State: AFuF++l9PHPfQp6oJnOeqkxEApjEItp9xRsJWFIsyM8maj7eXgMOTHv1
-	/A74O3X449OstEpvQoMUVcipSxvosTvdh7nHjxjQZTNpuzwsUjfu+xHdOCx7ZmpqXfY=
-X-Gm-Gg: AR+sD12Us9CVzx0lJkncqLxMF8tvQqWq7w/GSNDCEq8FY5Xx57b2YOOmhN+AcGRpOa0
-	cZghIVSPHGP+8hHDKF+RWouqrAJ3JkRHR+MNf6zey4dBeGeN9hXubqcfrvbPszg2sgE1smVR3Ag
-	wtYTGlBIY/j8GkLTqZ7oBCMHzQt5c76D7ewU9chaOvRzIqTj4GkbepxCkE3e1xe6tOR0rZxU8Sp
-	7U402ODEx1VKE8QNFGrOF0o39apSVtAXM7tZs+oMvDi6wSlJMOTQc3kedZrRhJafvKMZk7E4VEC
-	rXP/m9FEOz3j2Dr18wZyoEc1O0RLNgV69znPBD87WaTXGxtZRta5ozzWqayEjtVaW8U3z3NXxUL
-	ht0q+0g1znifpRIeqGt5NW1Cuo5tnM+uEHqNHJP88iVLEg64xvshM1PAiaTbonsaMd7qd4URbn1
-	yt6XCyMySFHPGCkBV/v3tsgAr8eHABlc/cuqCJ/2KeulPucZg0ias1uUEHC+L2+hRmgV43lmqWy
-	/g6wn0qIWAOWk71TJ892vxiITirkXaJKOVOi+PUewB2B8Gs4A==
-X-Received: by 2002:a17:907:1c07:b0:c15:f26a:3438 with SMTP id a640c23a62f3a-c24e5c1ffd3mr497229766b.24.1787646255345;
-        Tue, 25 Aug 2026 01:24:15 -0700 (PDT)
-Received: from localhost (p200300f65f19a904037016a565660d5e.dip0.t-ipconnect.de. [2003:f6:5f19:a904:370:16a5:6566:d5e])
-        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-c24966f9cbcsm1874351966b.29.2026.08.25.01.24.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Aug 2026 01:24:14 -0700 (PDT)
-Date: Tue, 25 Aug 2026 10:24:12 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Mauricio Faria de Oliveira <mfo@igalia.com>
-Cc: Kees Cook <kees@kernel.org>, Joel Granados <joel.granados@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	kernel-dev@igalia.com, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	fsverity@lists.linux.dev, keyrings@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-wpan@vger.kernel.org, lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org, 
-	coreteam@netfilter.org, linux-sctp@vger.kernel.org, linux-rdma@vger.kernel.org, 
-	linux-s390@vger.kernel.org, bridge@lists.linux.dev, mptcp@lists.linux.dev, 
-	rds-devel@oss.oracle.com, virtualization@lists.linux.dev
-Subject: Re: [PATCH RFC v3 03/13] sysctl, mod_devicetable: add macro
- MODULE_SYSCTL_TABLE
-Message-ID: <ao1P_mEJdyRExG3v@monoceros>
-References: <20260819-sysctl-module-aliases-v3-0-aab90569365d@igalia.com>
- <20260819-sysctl-module-aliases-v3-3-aab90569365d@igalia.com>
- <aomlfGJM61qZKxx2@monoceros>
- <4e3eaf1d3419e808be046035f114bf6c@igalia.com>
- <aotteDcc588iwC6g@monoceros>
- <4aa22e41e8ff4bab6638cf0baaa9d07b@igalia.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2PwchZaK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A7ED1F000E9;
+	Tue, 25 Aug 2026 08:25:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1787646304;
+	bh=L6GLVc9MfIyepECb6CymswjSoYeLQ6qjUw2dWWPhrkw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=2PwchZaK3WE9iWY7HOqWOn6RSXiuVVp67sjlE6lQse13ehgQODSYZwMsUB+Ktfy7h
+	 P9p/jdDSgqnZEVQWyTE301qBJ8BqSt0fjGm+HntyGpXuxvK1XE4CNO6DCCZdwZLH92
+	 jWLg0Lhn3jtbr30WVY83k1i0E9L4BhymMJeOnsNc=
+Date: Tue, 25 Aug 2026 10:25:00 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: =?utf-8?B?7ZWY7YOc6rWs?= <hataegu0826@gmail.com>
+Cc: stable@vger.kernel.org, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>
+Subject: Re: [STABLE REQUEST] bpf: backport de36adca6346 to 7.1.y
+Message-ID: <2026082526-remindful-aids-773b@gregkh>
+References: <CAPa51zmwhbD2Xc1kFJY8HmpG-DY3OsK=G=h2Yn5ismeGCxo==g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ajsyed3ibfmsggn6"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <4aa22e41e8ff4bab6638cf0baaa9d07b@igalia.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPa51zmwhbD2Xc1kFJY8HmpG-DY3OsK=G=h2Yn5ismeGCxo==g@mail.gmail.com>
 
+On Tue, Aug 25, 2026 at 04:00:34AM +0900, 하태구 wrote:
+> Hello,
+> 
+> Please consider backporting the following upstream commit to Linux 7.1.y:
+> 
+> de36adca634634c205a9eb8b56a28175ab7abf5f
+> ("bpf: reject overlarge global subprog argument sizes")
+> 
+> The issue was introduced by:
+> 
+> 2cb27158adb3 ("bpf: poison dead stack slots")
+> 
+> which is present in Linux 7.1.
+> 
+> The fix rejects BTF-derived global subprogram argument sizes larger
+> than S32_MAX. Without the check, the caller-side PTR_TO_STACK
+> validation can interpret an overlarge size differently from the
+> callee-side PTR_TO_MEM state, potentially allowing the verifier to
+> validate accesses outside the actual stack object.
+> 
+> The upstream commit includes a selftest and applies cleanly to the
+> current linux-7.1.y tree. The fix is present in Linux 7.2 but is not
+> present in Linux 7.1.10 or the current 7.1 stable queue.
+> 
+> Upstream commit:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=de36adca634634c205a9eb8b56a28175ab7abf5f
+> 
+> Target stable series:
+> 
+> 7.1.y
 
---ajsyed3ibfmsggn6
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH RFC v3 03/13] sysctl, mod_devicetable: add macro
- MODULE_SYSCTL_TABLE
-MIME-Version: 1.0
+It does not actually build properly, how did you test this?  Please
+provide a working backport that has been tested if you wish to see this
+added to the 7.1.y tree.
 
-Hello,
+thanks,
 
-On Mon, Aug 24, 2026 at 06:04:03PM -0300, Mauricio Faria de Oliveira wrote:
-> On 2026-08-23 19:12, Uwe Kleine-K=F6nig wrote:
-> > On Sat, Aug 22, 2026 at 01:57:24PM -0300, Mauricio Faria de Oliveira wr=
-ote:
-> >> On 2026-08-22 10:41, Uwe Kleine-K=F6nig wrote:
-> >> > On Wed, Aug 19, 2026 at 03:16:16PM -0300, Mauricio Faria de Oliveira=
- wrote:
-> >> >> The MODULE_SYSCTL_TABLE macro emits a struct module_sysctl_table va=
-riable
-> >> >> with pointers to a sysctl table's path and entries, and table/entry=
- sizes.
-> >> >=20
-> >> > That new struct doesn't seem to contain any pointer?
-> >>=20
-> >> The struct module_sysctl_table fields .path and .table are pointers,
-> >> although with kernel_ulong_t type so that the same 32/64-bit size is
-> >> used in file2alias.c based on KERNEL_ELFCLASS (and not on the host,
-> >> which might differ with CROSS_COMPILE).
-> >=20
-> > Cross compilation isn't an issue for the already existing device id
-> > structures; many of them also contain pointers.
-> > (While modpost doesn't use the pointers, the size of the structures must
-> > be known to correctly interpret the arrays.)
->=20
-> Indeed. I missed some device_id structures with pointers, and that
-> devicetable-offsets.c is cross-compiled to generate
-> devicetable-offsets.h for file2alias.c to use offsets and sizes of the
-> target architecture.
->=20
-> I'll change .path and .table to pointers in the next version.
-
-I *think* the existing device-id structs use char[] for strings that are
-relevant for modpost. I look forward to you finding out if there is
-still a justification for that :-D
-
-> > I would be great if your series didn't introduce a new obstacle for
-> > [CHERI].
->=20
-> Absolutely. I'll be happy to adjust the series and testing for that.
->=20
-> Could you please confirm one should just follow [1], which uses [2] to
-> build the LLVM toolchain, and use it to build the kernel [3]?
->=20
-> [1] https://github.com/cheri-linux#building-and-running
-> [2] https://github.com/cheri-linux/buildroot
-> [3] https://github.com/CHERI-Alliance/linux/tree/codasip-cheri-riscv-7.1
-
-I used
-https://github.com/CHERI-Alliance/meta-cheri/tree/codasip-scarthgap and
-didn't care about toolchain and rootfs. It also has qemu integrated, so
-you can actually test it.
-
-Best regards
-Uwe
-
---ajsyed3ibfmsggn6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmqNUSoACgkQj4D7WH0S
-/k5rHwf/eQKyjSm4dfYOnpO+kyESzhGSDXacrU0BK/nrQ7Z3BN+QipNdHe9BZ4f7
-k+3uxaB8pZmyHeh98alfg/5Bq9HBt62YSsVo0f1LrxdEuw+otojZstZ5BajlC1fB
-uCZWsGYJ1lROqcGUkm3WTuwmO+VkI4no1e0+OMnKjMkIdarwm+SRxroNmGXPxjFS
-0c5XzO8ufI4T330xBhTtUCfIGtmOib0XeyZT/dCtT8wNoKlznA36ojMl4ZOArWgW
-VYBN9/JdmoDGTZxdbWqXoETzY//dT0yaCQF2J8+eM7vMW+ay0vkBIpxXkR9QmIGF
-KIDH4l3txv82X35T5GJP5y9myooT6g==
-=Ph6i
------END PGP SIGNATURE-----
-
---ajsyed3ibfmsggn6--
+greg k-h
