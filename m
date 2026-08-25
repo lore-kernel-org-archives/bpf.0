@@ -1,62 +1,35 @@
-Received: from mta1.migadu.com (out-128.mta1.migadu.com [95.215.58.128])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9917A3955F5
-	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 15:05:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A15A8485CDE
+	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 15:11:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787670330; cv=none; b=BqzRwLdCdGTGHKmz9RSjOJmZUXlIayMnRlNGK2QAe6rXWZws9bwDfGgD2M0Xnz1xDqn7vkR8aE/tQedpOrg07YKoENm2ecNZysdDAnTHasPRrC9m6lUQNpsGm6MKlsRt1VdwDTtE005OtqJrC64gFK/Mpv/JrQxj5xoj6qiKAXw=
+	t=1787670662; cv=none; b=qAGFpVI9wF1ArOtkFEwqv/e0jNh0KlLj0r1GbfGsQrchOOYS44YXI7h6/WdLhhb0LmbbfM5+zi2e07eFGVCU9eo6ytac0jy0EmLCfHbBN4DLjugcPmzgXge7m3d+FKYH4mBI42LTg8KuGq5oZgiXnngfbhrt5ZMJf2BlD8QBSnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787670330; c=relaxed/simple;
-	bh=uYU2qg0EoBNSsLVN1LXKLFou3zzAEe8tQs0NvwzqPwc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IDpiiuJUWuscHugb/8mq1bNQsJybNJhar/65d0rOeiueuWcZj37ydC/MuVVMB6NhHOwuj+gbLWne72U+s9b/SGu//CWUdrAMbOEuZp/u42x7JUOrJsdpRJV6fdIQb6bw6/cvYE++2qKsrPI5CdIrKZ6syIpdv0yFE2f2ActltT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WQEKNSAd; arc=none smtp.client-ip=95.215.58.128
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787670662; c=relaxed/simple;
+	bh=atRU3rYHt4zjwWK1W0/qXmzaJGl5HFKX2meef6iOdqM=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=niordNCR2Z8GvqkZPasHDu6t6ARkpGft6VG01zAakyYY3Fc6zWAuqlc7JcM9zflXE+pf39XoHFJBzNRx75JnpQHL+yRZyHdppFWftv23LPfiCwaJVcL1oAR19O2+V9E3M/YY8WMW+spcjTbfIV38srWRnwZ7ccABQIwS3v+CGx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kDB/f1G7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WQEKNSAd"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=uYU2qg0EoBNSsLVN1LXKLFou3zzAEe8tQs0NvwzqPwc=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787670326; v=1; x=1788275126;
- b=WQEKNSAdFpBzx0ALkpcXjzoYtiT1MBhCtJ28YPRg4zGFK5H6WFWxlTaHTwHjyAoSeFQvDgIg
- r+cQHlWmdHq9GmgmkuX/jWAtVETt88OTs1d60qQ4/wxw8nW4OLk83JOiIuvahGfN07hTdKPsJFK
- g1cIhgXFFDbQll60xSLrQyv0=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from localhost.localdomain (147.136.157.2)
-	by smtp.migadu.com with ESMTPS id 3022ce5690d1a011;
-	Tue, 25 Aug 2026 15:05:26 +0000
-X-Mizu-Trace-ID: 3022ce5690d1a011
-X-Migadu-Flow: FLOW_OUT
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org,
-	jolsa@kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	Jiawei Zhao <phoenix500526@163.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v2 2/2] selftests/bpf: Add test for usdt probe with page-crossing nop10
-Date: Tue, 25 Aug 2026 23:04:34 +0800
-Message-ID: <20260825150444.31603-2-jiayuan.chen@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260825150444.31603-1-jiayuan.chen@linux.dev>
-References: <20260825150444.31603-1-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kDB/f1G7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 746B61F000E9;
+	Tue, 25 Aug 2026 15:11:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787670660;
+	bh=c0joD/2s52R6txHoI6upTo7AL6QqI17uQFB9uBlGg/M=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=kDB/f1G7tTo+i0gK3m1HYTthLZmeUXMVgO4T3jP7FIvnm1Y5Al3TY7+8YbmXz8N8F
+	 omRs2AmsO4rDe5LE7U89G9i643YsvyJYv8wJ22vfcmeazb6dSQ5BuCwRV/FOJKXrHn
+	 NZmEyP/8panv6PSTDMzc6IlFBvJiZ140ux1fBf0OWdC7tS7Em1D8bPwc/wOUgjifiH
+	 Caoxht9WMICRYs1AM7hNlQlk4GiFJ31/E17K7KxRMMKffLeBPIU7+uqzeLX/mGv0g3
+	 6YLFwvteTZlZNmpUHvYmNIfpxwTS1dJ5oEk2r/O3qbaYj8PhdnGRqScgSzX8rjcHMR
+	 bAjOPn62Oxzgw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93A3E3924FEE;
+	Tue, 25 Aug 2026 15:10:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -64,124 +37,43 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v1 0/2] Reject oversized stream read buffers
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178767060739.3931813.2761477952792688796.git-patchwork-notify@kernel.org>
+Date: Tue, 25 Aug 2026 15:10:07 +0000
+References: <20260823193202.2389715-1-memxor@gmail.com>
+In-Reply-To: <20260823193202.2389715-1-memxor@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, emil@etsalapatis.com, kkd@meta.com,
+ kernel-team@meta.com
 
-Add a USDT probe laid out so that its nop10 crosses a page boundary
-and check that attaching to it succeeds and the probe fires. Without
-the previous fix libbpf shifts the uprobe onto the nop10 and the
-attach fails with -ENOTSUPP.
+Hello:
 
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- tools/testing/selftests/bpf/prog_tests/usdt.c | 54 +++++++++++++++++++
- tools/testing/selftests/bpf/usdt_2.c          | 16 ++++++
- 2 files changed, 70 insertions(+)
+This series was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/usdt.c b/tools/testing/selftests/bpf/prog_tests/usdt.c
-index 8004c9568ffa..eff1e57ab13c 100644
---- a/tools/testing/selftests/bpf/prog_tests/usdt.c
-+++ b/tools/testing/selftests/bpf/prog_tests/usdt.c
-@@ -250,6 +250,7 @@ static void subtest_basic_usdt(bool optimized)
- #ifdef __x86_64__
- extern void usdt_1(void);
- extern void usdt_2(void);
-+extern void usdt_2_cross_page(void);
- extern void usdt_red_zone_trigger(void);
- 
- static unsigned char nop1[1] = { 0x90 };
-@@ -342,6 +343,57 @@ static void subtest_optimized_attach(void)
- 	test_usdt__destroy(skel);
- }
- 
-+/*
-+ * Test attachment to a USDT probe whose nop10 crosses a page boundary.
-+ * The kernel can't optimize such nop10, so libbpf keeps the uprobe on
-+ * the preceding 1-byte nop. Do not assume any particular placement
-+ * here, though: however the probe ends up attached, the attachment
-+ * must succeed and the probe must fire.
-+ */
-+static void subtest_optimized_attach_cross_page(void)
-+{
-+	long page_sz = sysconf(_SC_PAGESIZE);
-+	struct test_usdt *skel;
-+	__u8 *addr = NULL;
-+	long i;
-+
-+	/* combo is placed up to a page of padding after the function start */
-+	for (i = 0; i < 2 * page_sz; i++) {
-+		if (!memcmp((void *)usdt_2_cross_page + i, nop1_nop10_combo, 11)) {
-+			addr = (void *)usdt_2_cross_page + i;
-+			break;
-+		}
-+	}
-+	if (!ASSERT_OK_PTR(addr, "find_nop1_nop10_combo"))
-+		return;
-+
-+	/* layout sanity check: the nop10 must cross the page boundary */
-+	if (!ASSERT_GT((unsigned long)(addr + 1) % page_sz + 10, page_sz,
-+		       "nop10_crosses_page"))
-+		return;
-+
-+	skel = test_usdt__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_usdt__open_and_load"))
-+		return;
-+
-+	skel->bss->my_pid = getpid();
-+
-+	skel->links.usdt0 = bpf_program__attach_usdt(skel->progs.usdt0,
-+						     0 /*self*/, "/proc/self/exe",
-+						     "optimized_attach",
-+						     "usdt_2_cross_page", NULL);
-+	if (!ASSERT_OK_PTR(skel->links.usdt0, "bpf_program__attach_usdt"))
-+		goto cleanup;
-+
-+	usdt_2_cross_page();
-+	usdt_2_cross_page();
-+
-+	ASSERT_EQ(skel->bss->usdt0_called, 2, "usdt0_called");
-+
-+cleanup:
-+	test_usdt__destroy(skel);
-+}
-+
- /*
-  * Test that USDT arguments survive nop10 optimization in a function where
-  * the compiler places operands in the red zone.
-@@ -660,6 +712,8 @@ void test_usdt(void)
- 		subtest_basic_usdt(true);
- 	if (test__start_subtest("optimized_attach"))
- 		subtest_optimized_attach();
-+	if (test__start_subtest("optimized_attach_cross_page"))
-+		subtest_optimized_attach_cross_page();
- 	if (test__start_subtest("optimized_red_zone"))
- 		subtest_optimized_red_zone();
- #endif
-diff --git a/tools/testing/selftests/bpf/usdt_2.c b/tools/testing/selftests/bpf/usdt_2.c
-index 5e38f8605b02..3b7024b9b08b 100644
---- a/tools/testing/selftests/bpf/usdt_2.c
-+++ b/tools/testing/selftests/bpf/usdt_2.c
-@@ -13,6 +13,22 @@ void usdt_2(void)
- 	USDT(optimized_attach, usdt_2);
- }
- 
-+/*
-+ * Force the nop1,nop10 combo of the USDT probe to a spot where the nop10
-+ * crosses a page boundary: .balign starts the padding exactly at a page
-+ * start regardless of the compiler-generated prologue size, and the 4086
-+ * one-byte nops put the nop1 at page offset 4086, so the following nop10
-+ * occupies the last 9 bytes of that page and 1 byte of the next one.
-+ * The kernel can't optimize such nop10, so libbpf must keep the uprobe
-+ * on the 1-byte nop.
-+ */
-+__attribute__((noinline))
-+void usdt_2_cross_page(void)
-+{
-+	asm volatile (".balign 4096, 0x90\n\t.skip 4086, 0x90");
-+	USDT(optimized_attach, usdt_2_cross_page);
-+}
-+
- static volatile unsigned long usdt_red_zone_arg1 = 0xDEADBEEF;
- static volatile unsigned long usdt_red_zone_arg2 = 0xCAFEBABE;
- static volatile unsigned long usdt_red_zone_arg3 = 0xFEEDFACE;
+On Sun, 23 Aug 2026 21:31:59 +0200 you wrote:
+> Reject stream read lengths above INT_MAX before they reach the signed
+> internal reader, and add regression coverage for the error path. See
+> commit logs for details.
+> 
+> Kumar Kartikeya Dwivedi (2):
+>   bpf: Reject oversized stream read buffers
+>   selftests/bpf: Cover oversized stream read buffers
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v1,1/2] bpf: Reject oversized stream read buffers
+    https://git.kernel.org/bpf/bpf-next/c/ea0b60fae724
+  - [bpf-next,v1,2/2] selftests/bpf: Cover oversized stream read buffers
+    https://git.kernel.org/bpf/bpf-next/c/05ea1b6e2a5d
+
+You are awesome, thank you!
 -- 
-2.43.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
