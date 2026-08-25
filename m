@@ -1,239 +1,185 @@
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDF653C10A6
-	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 20:07:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.197
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787688458; cv=none; b=nGiqLdGVC8GTo9bpBPpZbqDf4LVExN1VVeuiKrpyc53DTKQoi0fsbObaF8TgZyQsHcPgm55E7RFcAolimlso6f3ufBWfaFLM9++zdWaHSmWqn0IghFLgox7v9SovgVOjT+rLp3K24l+IdZ7vQmzZZ/db/ATgzfvAf7Mo8yOXxHo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787688458; c=relaxed/simple;
-	bh=IqUPtS1OrVVKgQDl+JiFu/y4TbwemwqEKa/UGKCWMWE=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=U/3htXMN7nzHrBZLxj85inVIghfBBESte8FSQiH1Ph/bsuZoJSKYx5KdUGoJCnPLOkFGaWESnVzxtMAUNojZrjOUvpRyxVR3tJocCY4gN2yp5yzLN39seQE0pBdYETBP13IoPE5tYbZ6/gp5l/+nTar16dI5F+c90RnmIce3fHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-4ab260600easo2157817b6e.1
-        for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 13:07:36 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FB5A1C84AB
+	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 20:17:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787689064; cv=pass; b=Umd6kAztI6UBkxkJk6vytBzd3tvlV1a04aTxwWWZ6ZaNRWjEsJW/VLec32sj1zmd6BonwL4IUBoxmIPIa0LwMshUcRY4oPjg3atAqBDluxR0LAWwcc2d4DtHMykzjKRZFeSQal3vhVOElm3IQsqjjiJQwmACpmcouUOrzeCtQ5k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787689064; c=relaxed/simple;
+	bh=gsK9EquHUCTCUctLlW+W6DQK6qMNpIH9wwEQLrIuhKg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cy2R/YXJRiEI6FeEV4zaIbZJDP4WDBp3ouLL2PVjlOAv3ovYTC0vvUyz8iyPDpL5shrMxi+VKtbdjJqDwXJvZZ1LOCedWRoluJFKKxPLr7XiDMno4g2Fmyzbu55yiRqmkfb+4QfNz+Fk1xGGM5RQD6wzV3ZHkQYboMaa2t7Vlfg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YFS9TQ3J; arc=pass smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YFS9TQ3J"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-85377c8bc96so221419b3a.3
+        for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 13:17:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787689062; cv=none;
+        d=google.com; s=arc-20260327;
+        b=TTj0mzR2X9sfCi1yOj7sX7Ijjt9QIU92XjvwILqEE68368rSrRXO2b9pXBMOsp3CfF
+         C9ivclhKcJVAW6GABBSEIY0+Q5C9xOpeZS/U05kqnyB5IVQ+GcfVkc7MtbwkN1T2BfdM
+         3XjGQwOSPCYkP0tDykQppvzD3gAN3XscFd4IlSx9dq7M2sZUp+ZzpLI1afpNLgjO3NrS
+         +LvYc8wWFs3N7ZgzSU7UxvhYHIuCpSTpOlbJYkNBZqcACOCHHPP7pVCE+yhhzb469KWI
+         16LCfCRMs8VQVAzLbOwLk4SjXFJrwEPULksnlu7DXGUjr25HG8gwla05hOMD2iQfxtbS
+         1s7w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=dLj5tFbsVzyfDXo+huHpotVXFR8uK9xfqZioaQh04Iw=;
+        fh=aOx9SLYhgPng7QfgSUpuJjHcM34M584z4lEY0zfLgfo=;
+        b=HUuWmFdtf/fvCRkSW9ZkJEanwTAtBpWpbNj6Y47pxMJ481vugz7lVthO5NFwcChM54
+         yb/kvxLXrgqMB2mdGQ+VxSh1uNaRSlHHAmDWkqzc4gkSEmyiagN7vjwg/Mo007K3F94w
+         LG+3xQnafNOgR/OEO7U8tvVMpb2469Zo+uXl8zvDUjBacu5Sy58KuAJWSHokO1WiaIPf
+         Yu/hfL8NrswHY54cySOJiyPsb3JIKCON0C+8nmFRjHxlUj+m6zzUmCwgVdtzvOlHnxsd
+         Ju5X+j3KhLzvZkGZud3gpjzAm1SD4xoRU30eQwZg5RDKj2LPAVvcelJaI14o6LNPEc/W
+         on8Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787689062; x=1788293862; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=dLj5tFbsVzyfDXo+huHpotVXFR8uK9xfqZioaQh04Iw=;
+        b=YFS9TQ3JsB0SX8lZe6o02PUI9dOSXR1531Tw4yxI9bHKnl00MsfJSwKGjfJlcA9Z1y
+         Jn7Gi6nOO7B+hjEvb49DwHMi1YCS/P2aiYIceQsh+8o3jcY7J4avi/nFq30mXO6wjkJR
+         140kNJuDkM2PZr//syS7BwYagpFpYQN+7yqt9fmqfN1pWYRXyCstknNOYlV/nBIN3qXQ
+         PmCcEIqBM/owQitzArovaLnduOxI8QQnesGYSlft0NonxnM+foD3j59qatEnmHQfGaX/
+         +4Rkm1gyJOMThqD1NtXVTJ9EqsEsZs30rqiLdOIamfGXTPaof3zwMY/LEb4A08RzzFdU
+         dFcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787688456; x=1788293256;
-        h=content-type:cc:to:from:subject:message-id:in-reply-to:date
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=pV1WjeHgrdLhIcvemmYEAIzR81INpamnbzvykyKd8bI=;
-        b=nYQ+PTudKz3RCjSdiG4N0k+2Rn9nMh0T/hUjHUefXutFFSrQwvlC/5G76IL1kKIr48
-         28snp/cQeRK0P+akHfc7pXQfKTv6ak+nMnrVi7ZjPRSb33m2vtxnpSCLmH0W/bfdKtMG
-         yIZ67qDCcCny3FRuKpr7wj2TLxNQFFOumnK4RDi75v5eKIL4nKwu08WjnC3D7llgNao0
-         InYCTFD9vsZd1hOOJoMOYmYJMfoVHKwX5+3eBBOtriGXM2J8Xh/wXEI2RjKrdsCFTSqL
-         iMxUP3YiHA1RBY850Xn1dY4l6+2AfFEIyoax5YoiWOCqPJ988oISaishsy1angoBpcth
-         upvw==
-X-Forwarded-Encrypted: i=1; AHgh+Ro7xeysrR482+H+ykBQk5Sd/QBs3GNrwSfoYZ3yI/LUNKP3O3Wc2i1iKZcRQqD1dhNDvPY=@vger.kernel.org
-X-Gm-Message-State: AFuF++ltm06s61YDO0odFvERLHDMJUwzd6rEnRieySu9fc8g1gxVWOZu
-	Th9Skgw23J2Gs6cMe/LPmXkzGxoqhNqQhuGEICNrdK2c7fG+JMyh11bYzyMbRUxDqlJZuRhVh2Z
-	syvZccpjb2uiSLfVAC0Unvpz76btwNcv2LEbnjpHCndGcrWg2h8DNgv+UlnM=
+        d=1e100.net; s=20251104; t=1787689062; x=1788293862;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=dLj5tFbsVzyfDXo+huHpotVXFR8uK9xfqZioaQh04Iw=;
+        b=sFHdNaOZ34v8WR3t4chH2yMxbXl/AUJN1gwxndUZNQMVp31oPJoQ0eZ5dM8Bj0/xaX
+         hhq57SsRPaCOa5GGNkoi5Vlq6NqNZ1mMh9oTVpHwDlalg00PlWQtjF6jmtBzYsbYceB2
+         nYf1kRI5nedMdkEoDviwFlScaZTd2qL4UJWr1rGayQNq5NgM01VJqkgw4ahcrmqM/Tii
+         WlGXY3olZGTNK3FQ3ylJYkBdxGy0I/fhi631LwtJ7SfDFZUgphYomdWzcNNI/35H8fjR
+         qCcZ3WVLJ+WHhtUE40rh8odLD798Z9quqXoPnm0wjqVbuyxnDeFBAjRbWyuXRWI87+Px
+         ejGA==
+X-Forwarded-Encrypted: i=1; AHgh+Rpsncu6KyMhh5SQktkQ1DAHHaxkMSEhmSLoGN1zmfPrk3TDKKok9XVyg9mdnmKcWkhloFI=@vger.kernel.org
+X-Gm-Message-State: AFuF++k443nrbPJvrIvTLrToVZHPRhBhs8D5WxP2wr682MQ11eQsq5qi
+	cWH30/oxWi3E+LztWsdOP/Q0tXpNtX+sZLSHGAIAZ9gvTZ2QnOOZYs2DUvOd9Q75mtfnVbkN8YV
+	jTUfyvrIfxh5r6ngHWnxh2uycbl6GOxVkwYVE
+X-Gm-Gg: AR+sD11MdMlZUL86YP9KlRujOLtLkv8FU4y2j20hOoqRWP4tXfzF+gje/5GEahbvdpo
+	DkE5bXlNvjUrMsX/uvE1CnbwB8mTXOStAT7xkgTOgGfWjVTdKBheMoAFZ1UkP9qM8+iEvw7WC2d
+	GZ7zaBMySdq6W8Y+s3OlZrFgbAyQm4+CfU+PUlRqx3ozGOu6ccyEooAgxkapuMSP92zVeaYhM+F
+	tYsrZClEsIK75bSdhmxKVrQs/nK1i04vc7Bb2OZED74AJatHnyiFWpdio3yLoqyj54CzpIuBLBy
+	d6Bo+/JrCz8lCGBaK+11rwKnAJ/3ysf+vcVou66P6bSU0IzZh5XshWWVz5e2qEz4vmgdmZFcLnD
+	NMQ8umdlXfJYeFzaGVvJmZ7Fxn4mD2kGvY5C7Fevg/EQTZek=
+X-Received: by 2002:a05:6a00:bb8b:b0:84a:29a7:f650 with SMTP id
+ d2e1a72fcca58-8536eb1c497mr2831738b3a.0.1787689062518; Tue, 25 Aug 2026
+ 13:17:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:3090:b0:495:ca1b:7865 with SMTP id
- 5614622812f47-4b3504b104amr7078694b6e.11.1787688455876; Tue, 25 Aug 2026
- 13:07:35 -0700 (PDT)
-Date: Tue, 25 Aug 2026 13:07:35 -0700
-In-Reply-To: <20260825152152.86092-1-ahemadkhawar123@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6a8df607.dbb3a75c.7844.002c.GAE@google.com>
-Subject: [syzbot ci] Re: xsk: Fix circular locking dependency in xsk_bind
-From: syzbot ci <syzbot+ci9230f67b2f9ec34f@syzkaller.appspotmail.com>
-To: ahemadkhawar123@gmail.com, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, kuba@kernel.org, linux-kernel@vger.kernel.org, 
-	maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, 
-	netdev@vger.kernel.org, pabeni@redhat.com, sdf@fomichev.me, 
-	syzbot@syzkaller.appspotmail.com
-Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
+References: <20260824141532.604269-1-tw19881113@gmail.com> <20260824142447.035571F00A3A@smtp.kernel.org>
+In-Reply-To: <20260824142447.035571F00A3A@smtp.kernel.org>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 25 Aug 2026 13:17:26 -0700
+X-Gm-Features: AcwNN1VCQHSw3nU6QhSo-1ZByqeidn6E6Wdw3NzuiX-CFo6mIVp4fAwsj6X4kbY
+Message-ID: <CAEf4BzYRftm_bbr8wsc2JKkxegYuMEuOPyRp79knU0ZnjH7TDQ@mail.gmail.com>
+Subject: Re: [PATCH] libpf: Fix for the compiler sanity checking
+To: sashiko-reviews@lists.linux.dev
+Cc: Tw <tw19881113@gmail.com>, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-syzbot ci has tested the following series
+On Mon, Aug 24, 2026 at 7:30=E2=80=AFAM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 2 potential issu=
+e(s) to consider:
+>
+> Pre-existing issues:
+> - [Medium] Latent undefined behavior due to signed left-shift overflow in=
+ the `BTF_INFO_ENC()` macro.
+> - [Medium] Latent undefined behavior due to signed left-shift when settin=
+g retprobe bit in `attr.config`.
+> --
+>
 
-[v1] xsk: Fix circular locking dependency in xsk_bind
-https://lore.kernel.org/all/20260825152152.86092-1-ahemadkhawar123@gmail.com
-* [PATCH bpf-next] xsk: Fix circular locking dependency in xsk_bind
-
-and found the following issue:
-possible deadlock in xp_clear_dev
-
-Full report is available here:
-https://ci.syzbot.org/series/6f095c15-0f05-4d2e-a9eb-8d4d85f669a6
-
-***
-
-possible deadlock in xp_clear_dev
-
-tree:      bpf-next
-URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
-base:      5e289c5a4a526e870efac0ca658635c47138593a
-arch:      amd64
-compiler:  Debian clang version 22.1.8 (++20260613092233+e80beda6e255-1~exp1~20260613092250.77), Debian LLD 22.1.8
-config:    https://ci.syzbot.org/builds/cde9ebbb-b104-4fe4-8779-17786d4f4336/config
-syz repro: https://ci.syzbot.org/findings/bb56c4f2-d20c-4177-a137-583624105374/syz_repro
-
-netlink: 14 bytes leftover after parsing attributes in process `syz.0.17'.
-======================================================
-WARNING: possible circular locking dependency detected
-syzkaller #0 Not tainted
-------------------------------------------------------
-syz.0.17/5789 is trying to acquire lock:
-ffff88816f80ee70 (&dev_instance_lock_key#3){+.+.}-{4:4}, at: netdev_lock include/linux/netdevice.h:2861 [inline]
-ffff88816f80ee70 (&dev_instance_lock_key#3){+.+.}-{4:4}, at: netdev_lock_ops include/net/netdev_lock.h:42 [inline]
-ffff88816f80ee70 (&dev_instance_lock_key#3){+.+.}-{4:4}, at: xp_clear_dev+0x13b/0x340 net/xdp/xsk_buff_pool.c:297
-
-but task is already holding lock:
-ffff8881741d06b8 (&xs->mutex){+.+.}-{4:4}, at: xsk_notifier+0xcd/0x230 net/xdp/xsk.c:2109
-
-which lock already depends on the new lock.
+let's fix these as well while at it, otherwise this will come up again
+(however silly this undefined behavior really is)
 
 
-the existing dependency chain (in reverse order) is:
+and please make patch subject more specific, "compiler sanity
+checking" is a bit to generic
 
--> #1 (&xs->mutex){+.+.}-{4:4}:
-       __mutex_lock_common kernel/locking/mutex.c:646 [inline]
-       __mutex_lock+0x19d/0x1550 kernel/locking/mutex.c:821
-       xsk_bind+0x2c0/0x1370 net/xdp/xsk.c:1622
-       __sys_bind_socket net/socket.c:1945 [inline]
-       __sys_bind+0x2e3/0x410 net/socket.c:1976
-       __do_sys_bind net/socket.c:1981 [inline]
-       __se_sys_bind net/socket.c:1979 [inline]
-       __x64_sys_bind+0x7a/0x90 net/socket.c:1979
-       do_syscall_x64 arch/x86/entry/syscall_64.c:61 [inline]
-       do_syscall_64+0x166/0x520 arch/x86/entry/syscall_64.c:84
-       entry_SYSCALL_64_after_hwframe+0x77/0x7f
+pw-bot: cr
 
--> #0 (&dev_instance_lock_key#3){+.+.}-{4:4}:
-       check_prev_add kernel/locking/lockdep.c:3181 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3300 [inline]
-       validate_chain kernel/locking/lockdep.c:3924 [inline]
-       __lock_acquire+0x1520/0x2cf0 kernel/locking/lockdep.c:5253
-       lock_acquire+0x106/0x350 kernel/locking/lockdep.c:5886
-       __mutex_lock_common kernel/locking/mutex.c:646 [inline]
-       __mutex_lock+0x19d/0x1550 kernel/locking/mutex.c:821
-       netdev_lock include/linux/netdevice.h:2861 [inline]
-       netdev_lock_ops include/net/netdev_lock.h:42 [inline]
-       xp_clear_dev+0x13b/0x340 net/xdp/xsk_buff_pool.c:297
-       xsk_notifier+0x1a1/0x230 net/xdp/xsk.c:2118
-       notifier_call_chain+0x1a5/0x3d0 kernel/notifier.c:85
-       call_netdevice_notifiers_extack net/core/dev.c:2313 [inline]
-       call_netdevice_notifiers net/core/dev.c:2327 [inline]
-       unregister_netdevice_many_notify+0x17f9/0x2140 net/core/dev.c:12518
-       rtnl_delete_link net/core/rtnetlink.c:3652 [inline]
-       rtnl_dellink+0x5be/0x810 net/core/rtnetlink.c:3694
-       rtnetlink_rcv_msg+0x802/0xc00 net/core/rtnetlink.c:7132
-       netlink_rcv_skb+0x226/0x4a0 net/netlink/af_netlink.c:2556
-       netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
-       netlink_unicast+0x7bd/0x940 net/netlink/af_netlink.c:1345
-       netlink_sendmsg+0x813/0xb40 net/netlink/af_netlink.c:1900
-       sock_sendmsg_nosec+0x13a/0x180 net/socket.c:800
-       __sock_sendmsg net/socket.c:815 [inline]
-       ____sys_sendmsg+0x54e/0x850 net/socket.c:2713
-       ___sys_sendmsg+0x2a5/0x360 net/socket.c:2767
-       __sys_sendmsg net/socket.c:2799 [inline]
-       __do_sys_sendmsg net/socket.c:2804 [inline]
-       __se_sys_sendmsg net/socket.c:2802 [inline]
-       __x64_sys_sendmsg+0x1b1/0x290 net/socket.c:2802
-       do_syscall_x64 arch/x86/entry/syscall_64.c:61 [inline]
-       do_syscall_64+0x166/0x520 arch/x86/entry/syscall_64.c:84
-       entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&xs->mutex);
-                               lock(&dev_instance_lock_key#3);
-                               lock(&xs->mutex);
-  lock(&dev_instance_lock_key#3);
-
- *** DEADLOCK ***
-
-locks held by syz.0.17/5789: 3, last CPU#1:
- #0: ffffffff90036040 (rtnl_mutex){+.+.}-{4:4}, at: rtnl_lock net/core/rtnetlink.c:80 [inline]
- #0: ffffffff90036040 (rtnl_mutex){+.+.}-{4:4}, at: rtnl_net_lock include/linux/rtnetlink.h:134 [inline]
- #0: ffffffff90036040 (rtnl_mutex){+.+.}-{4:4}, at: rtnl_dellink+0x41b/0x810 net/core/rtnetlink.c:3686
- #1: ffff88801d81eed0 (&net->xdp.lock){+.+.}-{4:4}, at: xsk_notifier+0x89/0x230 net/xdp/xsk.c:2105
- #2: ffff8881741d06b8 (&xs->mutex){+.+.}-{4:4}, at: xsk_notifier+0xcd/0x230 net/xdp/xsk.c:2109
-
-stack backtrace:
-CPU: 1 UID: 0 PID: 5789 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-Call Trace:
- <TASK>
- dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
- print_circular_bug+0x2e1/0x300 kernel/locking/lockdep.c:2059
- check_noncircular+0x12e/0x150 kernel/locking/lockdep.c:2191
- check_prev_add kernel/locking/lockdep.c:3181 [inline]
- check_prevs_add kernel/locking/lockdep.c:3300 [inline]
- validate_chain kernel/locking/lockdep.c:3924 [inline]
- __lock_acquire+0x1520/0x2cf0 kernel/locking/lockdep.c:5253
- lock_acquire+0x106/0x350 kernel/locking/lockdep.c:5886
- __mutex_lock_common kernel/locking/mutex.c:646 [inline]
- __mutex_lock+0x19d/0x1550 kernel/locking/mutex.c:821
- netdev_lock include/linux/netdevice.h:2861 [inline]
- netdev_lock_ops include/net/netdev_lock.h:42 [inline]
- xp_clear_dev+0x13b/0x340 net/xdp/xsk_buff_pool.c:297
- xsk_notifier+0x1a1/0x230 net/xdp/xsk.c:2118
- notifier_call_chain+0x1a5/0x3d0 kernel/notifier.c:85
- call_netdevice_notifiers_extack net/core/dev.c:2313 [inline]
- call_netdevice_notifiers net/core/dev.c:2327 [inline]
- unregister_netdevice_many_notify+0x17f9/0x2140 net/core/dev.c:12518
- rtnl_delete_link net/core/rtnetlink.c:3652 [inline]
- rtnl_dellink+0x5be/0x810 net/core/rtnetlink.c:3694
- rtnetlink_rcv_msg+0x802/0xc00 net/core/rtnetlink.c:7132
- netlink_rcv_skb+0x226/0x4a0 net/netlink/af_netlink.c:2556
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x7bd/0x940 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0x813/0xb40 net/netlink/af_netlink.c:1900
- sock_sendmsg_nosec+0x13a/0x180 net/socket.c:800
- __sock_sendmsg net/socket.c:815 [inline]
- ____sys_sendmsg+0x54e/0x850 net/socket.c:2713
- ___sys_sendmsg+0x2a5/0x360 net/socket.c:2767
- __sys_sendmsg net/socket.c:2799 [inline]
- __do_sys_sendmsg net/socket.c:2804 [inline]
- __se_sys_sendmsg net/socket.c:2802 [inline]
- __x64_sys_sendmsg+0x1b1/0x290 net/socket.c:2802
- do_syscall_x64 arch/x86/entry/syscall_64.c:61 [inline]
- do_syscall_64+0x166/0x520 arch/x86/entry/syscall_64.c:84
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f2ec039e0d9
-Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f2ec1214028 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00007f2ec0625fa0 RCX: 00007f2ec039e0d9
-RDX: 0000000004048004 RSI: 00002000000001c0 RDI: 0000000000000005
-RBP: 00007f2ec0435024 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007f2ec0626038 R14: 00007f2ec0625fa0 R15: 00007ffca00aa538
- </TASK>
-
-
-***
-
-If these findings have caused you to resend the series or submit a
-separate fix, please add the following tag to your commit message:
-  Tested-by: syzbot@syzkaller.appspotmail.com
-
----
-This report is generated by a bot. It may contain errors.
-syzbot ci engineers can be reached at syzkaller@googlegroups.com.
-
-To test a fix for this bug, please reply with `#syz test`
-(on a separate line) and attach the patch to the email.
-
-Notes:
-- The patch will be applied on top of the tested series (as an
-  incremental fix).
-- To test a new version of the whole series, please send it directly
-  to syzbot@lists.linux.dev.
-- Arguments like custom git repos and branches are not supported.
+> --- Patch [1]: [PATCH] libpf: Fix for the compiler sanity checking ---
+> commit 6bb550337600fb1ee129a0b5ed1c50e66620bbc5
+> Author: Tw <tw19881113@gmail.com>
+>
+> libpf: Fix for the compiler sanity checking
+>
+> This patch fixes an undefined behavior issue during libbpf compilation.
+> It resolves a ubsan warning about left shifting 1 by 31 places in an int
+> by casting the integer to a u32 before performing the shift.
+>
+> > diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_int=
+ernal.h
+> > index 4c46d34fc055d..222d2f1c0ed3a 100644
+> > --- a/tools/lib/bpf/libbpf_internal.h
+> > +++ b/tools/lib/bpf/libbpf_internal.h
+> > @@ -259,7 +259,7 @@ static inline enum btf_func_linkage btf_func_linkag=
+e(const struct btf_type *t)
+> >
+> >  static inline __u32 btf_type_info(int kind, int vlen, int kflag)
+> >  {
+> > -     return (kflag << 31) | (kind << 24) | vlen;
+> > +     return ((__u32)kflag << 31) | (kind << 24) | vlen;
+> >  }
+>
+> [Severity: Medium]
+> This isn't a bug introduced by this patch, but since you are fixing the
+> shift in btf_type_info(), should we also apply this fix to the BTF_INFO_E=
+NC
+> macro in this same file?
+>
+> tools/lib/bpf/libbpf_internal.h:
+> #define BTF_INFO_ENC(kind, kind_flag, vlen) \
+>         ((!!(kind_flag) << 31) | ((kind) << 24) | ((vlen) & BTF_MAX_VLEN)=
+)
+>
+> The !! operator results in a signed int. If a caller provides a non-zero
+> kind_flag, shifting it left by 31 places into the sign bit will also resu=
+lt
+> in undefined behavior. Would it make sense to cast to __u32 here as well?
+>
+> [Severity: Medium]
+> This is another pre-existing issue, but I noticed a similar left-shift
+> that could cause undefined behavior when setting the retprobe bit:
+>
+> tools/lib/bpf/libbpf.c:perf_event_open_probe()
+>         if (retprobe) {
+>                 int bit =3D uprobe ? determine_uprobe_retprobe_bit()
+>                                  : determine_kprobe_retprobe_bit();
+>
+>                 if (bit < 0) {
+> [ ... ]
+>                         return bit;
+>                 }
+>                 attr.config |=3D 1 << bit;
+>         }
+>
+> Since bit is read from sysfs, if a future kernel update returns a bit ind=
+ex
+> of 31 or higher, would 1 << bit overflow and incorrectly configure
+> attr.config? Should this use 1ULL << bit to safely set the 64-bit config
+> field?
+>
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260824141532.60=
+4269-1-tw19881113@gmail.com?part=3D1
+>
