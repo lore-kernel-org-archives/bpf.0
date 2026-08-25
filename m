@@ -1,142 +1,178 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEF9E31E859
-	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 07:04:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4669A7081E
+	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 08:24:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787641456; cv=none; b=tDu2A1CoKl+oOHem0NzmrQihX7FBtWXuT32IVcFd1bVkTA+Jx/YGj+VYC0HLlBDBWipDtU42rpHFnVHKTQgND1/Mov3/PHeRDClLQ+NR6x9r2WgzE9QoY+jkZ+N7NfAhrLlQh+VUZXISIImEwv2IiUpzSgmHup4kfc+ps5QSxw4=
+	t=1787646261; cv=none; b=SkomR2bxmvOoVVmSj3CG49dTA0/uT/T0O1VCJTw7bZ6GZW04yws0L+h1JrMqTTfUnxrQ+Y9RZz7mJ7bQlQ67xg7K7eVyaRji8RU0icfDnb28jVj5VfXlUjrnQ3gABLekKiN3zbwkg6XbfCta1uL5eOpNgengJHW5yWcNOnl2+/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787641456; c=relaxed/simple;
-	bh=7QzfSxxXOZc7Sg+1rnXXpNsNdIw13HsMt9k9cbp05dg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Subject:Cc:From:
-	 References:In-Reply-To; b=e7/BfeeleyJ3YEcgRRq4NF65ntX2+Ukaju/P4ibXNwoZqljdzoepeoXEdXW+h9shanoW2kKj4PQwnzmgLvhLsBraL58Eye1JrkFG9LRgBevMZ1j88l5G8p9EtOYSLlA5YufAU2rWjNXjwuI3YMsfY8S5DYDgZ21n5sYXRq+NQ1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=wlufZJ8k; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1787646261; c=relaxed/simple;
+	bh=DZQvgMF9MtoSMKn9/xxgPT3t+kYxUHeBLkPFZwmxGy0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CCLQ2OsQdlvNQXBPQSrB3pEuust6mBTTC0qFY9cFJ4CF83bB0ZNAn0M5j3sLmgEKrJzb1BGxCEnffix/bNjLxNokmTUGbz2hDVgRW8tCcF6O+pHW6fW64xuz5Tj+7y+4peg24fQqpKdQ0rjUnJwKgCttxn2UyZ3YVDSChKKSI6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=BFeqlQ0q; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="wlufZJ8k"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 56E734E413AA;
-	Tue, 25 Aug 2026 07:04:06 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 15286604C4;
-	Tue, 25 Aug 2026 07:04:06 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id EBE6711C79627;
-	Tue, 25 Aug 2026 09:03:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1787641441; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=waD4o/I1Ndx/IZ1UJER8xvX3Xn3Bx5OwJxxwZTGepWA=;
-	b=wlufZJ8kpt2bS0nqetdBOK2T+x5s8+LmgGaijPyZZyvw8eoPNBHAFykY8Tyj68tr2Ah8Ml
-	Us3oCCmJzGgDfzgh6cMGH7/FZVRsTHSki2MPBndKcTQ+V/0OeroxXV4yo8giHkPGRPdWwo
-	g8Cd7lj5BupqgmvDA1xBzrii/ju8oVZljIiNiDG18hi9LHqGh9IpDITjw8lRrcQbnIinvn
-	JdUicZOxqdwpgZG7pFwvBPdvFmAlbU3xQGF2nM6Y7YmjTh2JjdhS2CVWNRY0VX9Sz1ZOs/
-	VYHh+/RKfkambEAAQpuag/tT9Mv6+oaCAiqiy0psg5nyYy5v8N13LYN8jQa3Fw==
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="BFeqlQ0q"
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-69c600f76ccso7561319a12.0
+        for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 01:24:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1787646255; x=1788251055; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=DZQvgMF9MtoSMKn9/xxgPT3t+kYxUHeBLkPFZwmxGy0=;
+        b=BFeqlQ0q/iI/Y9xCCyZW9DcLrNuxdKfN+Y+//0GtDmUjYy2yEe/So/1C91iOhFggaa
+         w+PoJMpJllcqUOV1XX00bD7B84xNhMcsllE/0Nmh9dN8tZqJJBTNzbShKDQnxPsEmaEB
+         ADAFZ+g3kLKRuXMS8OJko/112mNWDH4sfjFIo4ughfQq/cnFDH/p9Dc0K0AtS70+B4FM
+         F9fsHPDaiztrmyZ3lyUZT3jElm9oP2eZVU4cOzQu3ucYmiskPZDEWm9d/KJQ6ZtJ4Xeu
+         uIa0swNl0ttsWWPbGXJPM6SHTBQ7jF+5mcgT6fWzV+zAaPzszidX3t44XfJa0Wfi3HSP
+         gdqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787646255; x=1788251055;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=DZQvgMF9MtoSMKn9/xxgPT3t+kYxUHeBLkPFZwmxGy0=;
+        b=Nxre5CQrBq4prEiCOzayMDHQNq0id4sAzTvvWdn2Jz8QkRPTNu8kk5byH6asFLo8ao
+         6XOIL1tqArHuAkycBesZeTke0us0UWa5LGMhxsMFGqJ7ecG7ZmZauQQwq1Z2y/rNIQrQ
+         HaYzUxsMsxocQxgUO0iDAH3r7uH7/POd5BZKFwTD1mbKBovrl0iMhVkTP1wrL1hKbhz+
+         6+KItZa8OKPcUoZaQInaMaA6fncSnwkEF0lU1lfZyniyewWTr6NY7L07Hmsf/pcSYpHq
+         iOGDFPuLqrxVJOJXHoNSed51zb3+9yNs2aMikH0in/TgYwialqryegULuLoCI522zJx5
+         0kiA==
+X-Forwarded-Encrypted: i=1; AHgh+RqTKZTYYtWKImbpyXuTOvKh0Wm8HLuRursrQ37Bk9k7Q7YTov8He5JUEag+vRfzkzIfmxA=@vger.kernel.org
+X-Gm-Message-State: AFuF++l9PHPfQp6oJnOeqkxEApjEItp9xRsJWFIsyM8maj7eXgMOTHv1
+	/A74O3X449OstEpvQoMUVcipSxvosTvdh7nHjxjQZTNpuzwsUjfu+xHdOCx7ZmpqXfY=
+X-Gm-Gg: AR+sD12Us9CVzx0lJkncqLxMF8tvQqWq7w/GSNDCEq8FY5Xx57b2YOOmhN+AcGRpOa0
+	cZghIVSPHGP+8hHDKF+RWouqrAJ3JkRHR+MNf6zey4dBeGeN9hXubqcfrvbPszg2sgE1smVR3Ag
+	wtYTGlBIY/j8GkLTqZ7oBCMHzQt5c76D7ewU9chaOvRzIqTj4GkbepxCkE3e1xe6tOR0rZxU8Sp
+	7U402ODEx1VKE8QNFGrOF0o39apSVtAXM7tZs+oMvDi6wSlJMOTQc3kedZrRhJafvKMZk7E4VEC
+	rXP/m9FEOz3j2Dr18wZyoEc1O0RLNgV69znPBD87WaTXGxtZRta5ozzWqayEjtVaW8U3z3NXxUL
+	ht0q+0g1znifpRIeqGt5NW1Cuo5tnM+uEHqNHJP88iVLEg64xvshM1PAiaTbonsaMd7qd4URbn1
+	yt6XCyMySFHPGCkBV/v3tsgAr8eHABlc/cuqCJ/2KeulPucZg0ias1uUEHC+L2+hRmgV43lmqWy
+	/g6wn0qIWAOWk71TJ892vxiITirkXaJKOVOi+PUewB2B8Gs4A==
+X-Received: by 2002:a17:907:1c07:b0:c15:f26a:3438 with SMTP id a640c23a62f3a-c24e5c1ffd3mr497229766b.24.1787646255345;
+        Tue, 25 Aug 2026 01:24:15 -0700 (PDT)
+Received: from localhost (p200300f65f19a904037016a565660d5e.dip0.t-ipconnect.de. [2003:f6:5f19:a904:370:16a5:6566:d5e])
+        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-c24966f9cbcsm1874351966b.29.2026.08.25.01.24.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Aug 2026 01:24:14 -0700 (PDT)
+Date: Tue, 25 Aug 2026 10:24:12 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Mauricio Faria de Oliveira <mfo@igalia.com>
+Cc: Kees Cook <kees@kernel.org>, Joel Granados <joel.granados@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	kernel-dev@igalia.com, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	fsverity@lists.linux.dev, keyrings@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-wpan@vger.kernel.org, lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org, 
+	coreteam@netfilter.org, linux-sctp@vger.kernel.org, linux-rdma@vger.kernel.org, 
+	linux-s390@vger.kernel.org, bridge@lists.linux.dev, mptcp@lists.linux.dev, 
+	rds-devel@oss.oracle.com, virtualization@lists.linux.dev
+Subject: Re: [PATCH RFC v3 03/13] sysctl, mod_devicetable: add macro
+ MODULE_SYSCTL_TABLE
+Message-ID: <ao1P_mEJdyRExG3v@monoceros>
+References: <20260819-sysctl-module-aliases-v3-0-aab90569365d@igalia.com>
+ <20260819-sysctl-module-aliases-v3-3-aab90569365d@igalia.com>
+ <aomlfGJM61qZKxx2@monoceros>
+ <4e3eaf1d3419e808be046035f114bf6c@igalia.com>
+ <aotteDcc588iwC6g@monoceros>
+ <4aa22e41e8ff4bab6638cf0baaa9d07b@igalia.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ajsyed3ibfmsggn6"
+Content-Disposition: inline
+In-Reply-To: <4aa22e41e8ff4bab6638cf0baaa9d07b@igalia.com>
+
+
+--ajsyed3ibfmsggn6
+Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 25 Aug 2026 09:03:59 +0200
-Message-Id: <DKXU03VFF1HG.1LI7OCCH41D5E@bootlin.com>
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, <sashiko-reviews@lists.linux.dev>,
- =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
- <alexis.lothore@bootlin.com>
-Subject: Re: [PATCH bpf-next v7 4/9] bpf, x86: emit KASAN checks in x86
- JITed programs
-Cc: <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260822-kasan-v7-0-99afee6ef7fd@bootlin.com>
- <20260822-kasan-v7-4-99afee6ef7fd@bootlin.com>
- <20260821233332.1D2201F00A3A@smtp.kernel.org>
- <DKWOG6YKM2NY.1FJHLE7BKZW9Y@gmail.com>
- <fa7cc4ad-6b8d-4bdf-8e2c-66d98ddef7df@linux.dev>
- <DKXLJLAMA1KZ.14CXAXXD5S0WQ@gmail.com>
-In-Reply-To: <DKXLJLAMA1KZ.14CXAXXD5S0WQ@gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [PATCH RFC v3 03/13] sysctl, mod_devicetable: add macro
+ MODULE_SYSCTL_TABLE
+MIME-Version: 1.0
 
-Hi Ihor, Kumar,
+Hello,
 
-On Tue Aug 25, 2026 at 2:26 AM CEST, Kumar Kartikeya Dwivedi wrote:
+On Mon, Aug 24, 2026 at 06:04:03PM -0300, Mauricio Faria de Oliveira wrote:
+> On 2026-08-23 19:12, Uwe Kleine-K=F6nig wrote:
+> > On Sat, Aug 22, 2026 at 01:57:24PM -0300, Mauricio Faria de Oliveira wr=
+ote:
+> >> On 2026-08-22 10:41, Uwe Kleine-K=F6nig wrote:
+> >> > On Wed, Aug 19, 2026 at 03:16:16PM -0300, Mauricio Faria de Oliveira=
+ wrote:
+> >> >> The MODULE_SYSCTL_TABLE macro emits a struct module_sysctl_table va=
+riable
+> >> >> with pointers to a sysctl table's path and entries, and table/entry=
+ sizes.
+> >> >=20
+> >> > That new struct doesn't seem to contain any pointer?
+> >>=20
+> >> The struct module_sysctl_table fields .path and .table are pointers,
+> >> although with kernel_ulong_t type so that the same 32/64-bit size is
+> >> used in file2alias.c based on KERNEL_ELFCLASS (and not on the host,
+> >> which might differ with CROSS_COMPILE).
+> >=20
+> > Cross compilation isn't an issue for the already existing device id
+> > structures; many of them also contain pointers.
+> > (While modpost doesn't use the pointers, the size of the structures must
+> > be known to correctly interpret the arrays.)
+>=20
+> Indeed. I missed some device_id structures with pointers, and that
+> devicetable-offsets.c is cross-compiled to generate
+> devicetable-offsets.h for file2alias.c to use offsets and sizes of the
+> target architecture.
+>=20
+> I'll change .path and .table to pointers in the next version.
 
-[...]
+I *think* the existing device-id structs use char[] for strings that are
+relevant for modpost. I look forward to you finding out if there is
+still a justification for that :-D
 
->>>> If %r10 is clobbered, could this corrupt the stashed BPF_REG_0 and pot=
-entially
->>>> cause a crash when real_dst_reg is used as a memory pointer in the sub=
-sequent
->>>> emit_ldx() call?
->>>>
->>>> arch/x86/net/bpf_jit_comp.c:do_jit() {
->>>>     ...
->>>>     /* Load old value */
->>>>     emit_ldx(&prog, BPF_SIZE(insn->code), BPF_REG_0, real_dst_reg, ins=
-n->off);
->>>>     ...
->>>>     /* Restore R0 after clobbering RAX */
->>>>     emit_mov_reg(&prog, true, BPF_REG_0, BPF_REG_AX);
->>>>     ...
->>>> }
->>>
->>> This looks like a real bug, R10 is used for both atomics and constant b=
-linding.
->>> We probably also should save R11.
->>
->>
->> Hi Kumar, Alexis.
->>
->> This topic has a bit of history now [1][2].
->
-> From [1],
->
-> "I built the kernel with gcc 11.5, gcc 15.2 and clang 22 and
-> disassembled __asan_{load,store}{1,2,4,8}: none of them touch r10 or
-> r11. gcc goes up to r8, clang uses nothing above rdi."
->
-> Isn't this dependent on register pressure inside the function, i.e. depen=
-ding on
-> different code or whatever, it might begin using those registers?
->
->> I don't quite like it, but IMO we should give in to the bots.
->>
->> Reasons to save r10 and r11:
->> * SystemV ABI
->> * bots wouldn't shut up about it (think of future llm bot reports!)
->> * if our analysis of the kasan helpers is wrong about r10/r11 usage OR
->>   if something changes (the helpers themselves, the compilers, build
->>   flags, JIT's usage of r10/r11 etc.) - we'll get clobbered regs
+> > I would be great if your series didn't introduce a new obstacle for
+> > [CHERI].
+>=20
+> Absolutely. I'll be happy to adjust the series and testing for that.
+>=20
+> Could you please confirm one should just follow [1], which uses [2] to
+> build the LLVM toolchain, and use it to build the kernel [3]?
+>=20
+> [1] https://github.com/cheri-linux#building-and-running
+> [2] https://github.com/cheri-linux/buildroot
+> [3] https://github.com/CHERI-Alliance/linux/tree/codasip-cheri-riscv-7.1
 
-Indeed, there's this risk of future versions of compilers deciding to
-change the way those asan helpers are compiled, it will then silently
-break (not sure how big of a risk it is, though).
+I used
+https://github.com/CHERI-Alliance/meta-cheri/tree/codasip-scarthgap and
+didn't care about toolchain and rootfs. It also has qemu integrated, so
+you can actually test it.
 
->> Reasons to *not* save r10 and r11:
->> * we make the bpf prog a bit smaller and faster, the win is not very
->>   clear but it's percentages, not a factor
->>
->
-> Yeah, also, we're already saving a ton of other registers, I don't know w=
-hether
-> saving two would matter, even if it wasn't incorrect. I wouldn't worry to=
-o much
-> about KASAN performance, it's already orders of magnitude slower than nor=
-mal
-> kernel build.
+Best regards
+Uwe
 
-Ok, let's settle this then, I'll re-apply the r10/r11 save/restore
-mechanism. If we eventually end up wanting to optimize it, this can be
-revisited later.
+--ajsyed3ibfmsggn6
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Alexis
+-----BEGIN PGP SIGNATURE-----
 
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmqNUSoACgkQj4D7WH0S
+/k5rHwf/eQKyjSm4dfYOnpO+kyESzhGSDXacrU0BK/nrQ7Z3BN+QipNdHe9BZ4f7
+k+3uxaB8pZmyHeh98alfg/5Bq9HBt62YSsVo0f1LrxdEuw+otojZstZ5BajlC1fB
+uCZWsGYJ1lROqcGUkm3WTuwmO+VkI4no1e0+OMnKjMkIdarwm+SRxroNmGXPxjFS
+0c5XzO8ufI4T330xBhTtUCfIGtmOib0XeyZT/dCtT8wNoKlznA36ojMl4ZOArWgW
+VYBN9/JdmoDGTZxdbWqXoETzY//dT0yaCQF2J8+eM7vMW+ay0vkBIpxXkR9QmIGF
+KIDH4l3txv82X35T5GJP5y9myooT6g==
+=Ph6i
+-----END PGP SIGNATURE-----
 
+--ajsyed3ibfmsggn6--
