@@ -1,278 +1,201 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6189A35E958
-	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 18:25:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 194BC48663D
+	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 18:27:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.179
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787682318; cv=pass; b=uipO6Ocs1foX3xa3G9neX6GfD81Pfesb/Sef2vqOkKbynDBnHXa0Adrx4eILOH0bbSIeMyeoA8rDrLNUs93865or0UR3jrIHxt922WDZjDac2cflcUpLoV0GO5GdwhcWCQNbMPdLSnbDAeFfpBv6Pgjibm0W0B5tD2+zYg7/h9Q=
+	t=1787682452; cv=pass; b=lcQuQTINbezRs2RXxa9MeouhW9JcmzFKNHqZyvOw7jC3PI07h6tWV5656nPKFLY2ZIJuoMlhmniEWO2+LH6dVL7Wjwda77ulitvWVGzyaAxAOyyuDFJNlVOIigX68oKlSirMNjfks9WujuJfk4jXN1uIOb+9scsRLnk9yoa0DgI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787682318; c=relaxed/simple;
-	bh=edvAyAV2B7rRFLTXUn3ZaH2JUJ3C/Mmk1zUbHa27RwY=;
+	s=arc-20240116; t=1787682452; c=relaxed/simple;
+	bh=pjrV0fg8wzQcSqA/vlhGpXXq9/2wjhDE9WMxRk+zoWg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lG6tCIPM4q0Xzb4wLwvbldI5GpjS5FqTZwBpc3CYpEi+pWgj6Lb8TofgVcOoyucTwcYylwp/N3HHCBwCWMrBlqGHZWg1lj+hwMXBkvVyZBdPjp81hBVGuhe+dsy0MrQUXQn4EaLp21nIM1Z59Ti8X0fH0wUSy/2bGOYAE+54fNg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h0yKpFPP; arc=pass smtp.client-ip=209.85.215.171
+	 To:Cc:Content-Type; b=S1VvkkIqQeo7h1qPwR8ycdf/ai9U/fwTC+zlfoj3FTKOCjhT7Kayta5nKTJwv+nfUKM5nHbVOrCyrRXsvdbfp8q5Uv39BsI6R65TZpwuHzEm+Dc8ZFTTK71uLLlzW306F41pIZAaW/wSoqEUQVJkPFd0SbirqGqmmhwQcrE/05E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X3In9U80; arc=pass smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h0yKpFPP"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c998fd549a8so44472a12.2
-        for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 11:25:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787682317; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X3In9U80"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-cc1bcdb3c4cso38449a12.2
+        for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 11:27:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787682450; cv=none;
         d=google.com; s=arc-20260327;
-        b=HIdQdiw05IjV5GT7sG7KLoLoS/sh0MA8dFsD48xtituiInVZRU6s0cM/az2V9EAFOZ
-         zdsUnWO+4JLu525nPTr4N5FEsVAyyjEvhFvdSZQF03qoQnLzuOKpYGKfqGuGz9HzW+7w
-         4NyZhEcEnu7epSlhy+nHP4eXAvep13B61dV4VYXSthevw4SpuLTsoVs0XAotnPpy7MTu
-         sHKClqzX9EEX0VXDaf1n4wNOL8V7oCKiA0Ix5oqsyO5nCfPn4DqVcV9UWLIeOTEHaPw0
-         J5NUa8sOdKbx/ZEDb8QJGMKWPAyesXopmzp1Ywp7cRVUC8UbBuZKauLDfUnBhAJkFRJi
-         r3rA==
+        b=StWKR6RQ8Jvog06nkWgdJMTMtPF3dFBo0xhvjicWYsg60dzJFP9mnz0FyO5WlpGv+0
+         LzyaSTLfcU/Q6pcePhtbUXQLKdlpOFLrlbxrNakaVrrNNuNTkTCi4EXU2xO46EnCBnCI
+         ARwIrYvW9ZetmCJ2g3GJc95LuCB+Qvra/t04JUdbQjpPTYb0FwEDiRRv7HAgUXkxknh+
+         bqucY5TrBxdbeXmgWroyAcUMO6em2gLc1TRDtADzRxE1TwzOeupHxT3+4UlwAFoyA55w
+         JgRQkvmiYn/c426YOcSX85ucVQ4KA8RJBTeUTl+qOQqGevSmPBwlcUbq5GV875jgMz8m
+         kQdQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=S/1Pr9NkaXBmIiFBKFLsBDr4+QWaBpFdxaq8v2gBmK4=;
-        fh=WYlztf09kSRekv6FI/aiZXat7WgRlLQoHKe163kae1Y=;
-        b=rIW346z3Y7KGwvexgJZtVY5i7tprbzQqCPgsRQihvDThbGiClCUOR1D07I+SU+bl8O
-         zrLpZS92ee0r7DxSb439IpyM7gaGlL+fIXYc54sN/SiF59XneUxiWr9LsNMfSBd85QDX
-         BgDRqGutYn0KA3l+SG1+MrN1RwVsiwVa4/iVzt/1FNk+l1qDcq6eX9VpS0XuYj7bHrHy
-         Ye1St3MkWv0aYfSYVbANtf63rexdwxnLgzoXO3f2RklV9gzUSHkA1Y0T2SuW0nlxIWGm
-         52FumIlKBD4SeI41ePHVkIh/zFeouw1Rt5Ei0hsh3+MEyFDui8MU2GVEXk54La2sVEaA
-         iPSw==;
+        bh=pjrV0fg8wzQcSqA/vlhGpXXq9/2wjhDE9WMxRk+zoWg=;
+        fh=7PZC37LH2sGqwLEK76lee9BsohGzibMfIH5NgvVumkM=;
+        b=gFiftu8BGttIkwI8ml73wkARrd39vxKd/8JCnn5pXpaYEDt7fC0E/0OChiL2gLWm7X
+         EfYy8zOMIaTmGUPbb9S9R/sX3g2aIdG3oqrWDRKCSAB5R8SCngDXLRonXn3g6j/eDnui
+         FeRqp542Ug6TMxiUOJCPUMZSZpvUyWF4ZoSlUWnXgHb9p+UR7Qb7MGiGIoRLOlTdcW3r
+         PchsCSaiTM5cmX3ia1PCuGT63Ff/Wp29zw1m1m/jIUYDUE3qlAUypWHOqUFc9IXBVNG1
+         CrYRJzmEb8aJNY49iQGcYbGaJ38oGTLaVEFAqOIce6N75KeG2fY1i8jnIeH8vQDu5skn
+         SKag==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787682317; x=1788287117; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787682450; x=1788287250; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=S/1Pr9NkaXBmIiFBKFLsBDr4+QWaBpFdxaq8v2gBmK4=;
-        b=h0yKpFPPxRlRjnF+bFM1vrotOykjC2RKUcdR10My1iljuViSBMqb1M0+ZuLGUB+Hm4
-         KFzkkUdeXYLKXhS2ltrbc8hJ1ndKXS3C4ZPXwZ688iMh99e3peHgFwkZ/DnASHorixFo
-         /kEXXoNH4PDEmCnsH2puwPQwsb3lR4S9rb1ULL1AfaVvnSCvyGC/3T5+YyXkfsGfh7Ye
-         IwGeyKS/1LGUuKdQA7rPImpIg9iq8+ClF4KQL0G2dfwKu7g1M7TPwIFlkQN9VpSiIGSH
-         HHoFzOekZomYmgWeOd0xQ7XcsEpUPZEGJAMBJ607sg5QZ8cB/YXPZwKyVVmvr0QHhqLr
-         gIBw==
+        bh=pjrV0fg8wzQcSqA/vlhGpXXq9/2wjhDE9WMxRk+zoWg=;
+        b=X3In9U80BKpQbeNg61vgbUs9CA+a1cg135fGIgEm3O2UMuK73+9jQKnn7SQFIUlkxJ
+         ob8U1VCXRkIG+yu+uMkoVPk9Z+wgw5eDoX+7kXkYd99d3E1QhOgl+GaSpynJ8UtWANSd
+         Z1BYU2bUxEAQjYX5rJg79izzLf5cowzGtmS+JqMhY+kjgIVaO0IKEMX6Zb+2Ym32Pi7P
+         13RUX4PPkQasY/K4n7qcbNPESlgl/1vn+Wq0fFDKZ2cxC3dP4Di3d3NG/b7XS4kJZUQ0
+         4YBtH7F13ecWUJge969Aw/ezoX0nYnWlBEYJjn4woAVHsXgEAjW2Tptr8+RncoR80tsB
+         DNzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787682317; x=1788287117;
+        d=1e100.net; s=20251104; t=1787682450; x=1788287250;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=S/1Pr9NkaXBmIiFBKFLsBDr4+QWaBpFdxaq8v2gBmK4=;
-        b=hrlD4w5L6UDlK7ZDIH/oM/3QmizWW0+IXYlb+i3BN/cAP8UM+tSELpPI2VN5DqJyUr
-         OtbW1A3hQ/Q9Ynlb2rZf4eFOwIPUby/fKmB390hvBm2MT0p/PgXPcxzmKE0+Jitk6M8E
-         vBzJDmWHUAci+uhyHNBvclkD89dI/Hz3N9s0FtOojxb7zlM+CW3DYyAGMH3R6jKtE3Ge
-         CbjINU/Bs7K2ADOlkzSTlwKs+IXuFtDIhBcur2MIFytm6OhOLUMeyXEOPI1vpP1QSY97
-         0sBvX/zPUJ6b5CrmXzq2dQbHKUwhdyUF7Rgx0Bt+B8qusJb8pCi5R7mMjTGRs5JqvFyW
-         S8kw==
-X-Forwarded-Encrypted: i=1; AHgh+Ro/83Asz/51PIjdsCjbDgvYL+YY4VpYl2cP/UFTlHmW5fmqR7RrDZZjsoxUsG1Qe3VitAM=@vger.kernel.org
-X-Gm-Message-State: AFuF++l3vidWkQ+gjfKqP1JLb2rjauUQS+iC81w8NOPB/nlijGnkHBYQ
-	kzUHLOFuK1oXvZCM9DsJbWaiXMnDwm46/h3smbMv9asAkUl3nXB0YWoMTB02jRKRRSZE7JdRGZd
-	B/AxQ+WbdS/nHZl2rVG7pOog2laWQji0=
-X-Gm-Gg: AR+sD11bN7qZxffaaJwD11Ai1LjePirwc4ttx7x2gCDdczcKBJBZWbGWVWewDue7uWW
-	j3Cu/y8XXAR4r3sdMHt0CqFdljUjbNmhbg9IPmdPgpqc7y6ZcBFYNtBnweQW4i5Z+Sm+OB9oQwL
-	Wb0JJpyFSQgaBBC2ZGhS3k5XwOdD68aOnv3+fwVZMl0NgLQ9puA64RZywt7DUqvtxy4EhJo5yP9
-	Q0I1EIclDqiItA50hX5abfknEJhE0p/6QDFG50JvRzIbesVALfDE6S4kEEIRIykWVUBl4mccs1R
-	6M5cnYt1v/QTqoOCSYlI1kM8ztnnW/SxUfRFHeo7zbbbY8yH4hxqiYIyP/FeXyFwQ6Arb+WFzvG
-	SUYMClE5nmkpJ3L8MvPzmkYUT3+xLhgH2AQ7AG0AJgg==
-X-Received: by 2002:a05:6a21:4514:b0:3c3:88a5:83db with SMTP id
- adf61e73a8af0-3cf7607aa02mr845026637.5.1787682316507; Tue, 25 Aug 2026
- 11:25:16 -0700 (PDT)
+        bh=pjrV0fg8wzQcSqA/vlhGpXXq9/2wjhDE9WMxRk+zoWg=;
+        b=qb8JQN3Is4yPEGrlJ+NFzAG5/I9+1TLK4UP5UX2Q70zage/CuBi/c2PKNmo+m4Q3Fc
+         KcZBuXfW/Y3RydFQ1bgQhRgNL6dRLN6a1dlna8w+77WN4khhGbSwD9EZwWxk5nTTWdpH
+         rKVdjN8hWhKXptox9IKqD+VCyTWggN0oN+xKEUG0RwGPWnB/+hK7dOwVUsZDJlDwxU6e
+         fzt4zdQ/wfGw9Xv2SWq5z69YUSvtuQV3wglO1lhE0ogahtbf7PgdiKZR+T2bj/E/+HRB
+         EAZH+v2XaecM2Im533mnhsrxlXc8Gv8iP4Qg5/iWWCmjBC/0sJeu0dVBpQkI6EsrIgq9
+         +sGw==
+X-Gm-Message-State: AFuF++mJmTssYeD7sRdKAT2aSvUi+yzHFXfyeThrYJFx3SmAhps6HeK2
+	xFrXACzbRNh8gqWiylMTZe9zsG6iuDmnGVCBNzbZd0g3tMwJsOtZO/tmez/FUtxlAYJmMfYt4ZG
+	1MJcKOXdwdqwy+f2yTpONBWE/87xM3zw=
+X-Gm-Gg: AR+sD12t03xvTl6ifzoxr3qazSMl8FGJfcdlMniQPKBT0QBzMYzY5PQlZxF4xHux4kF
+	NzwC7VY7l4vwllfU0W0ThkJ5IKxmsGuEhNAhZPVJI4Br4utTbLmktXtwN5hBW1R9mgzhcBVKsLg
+	byfrnigLem/5BIJs8HnNLxUwk/tazSQdKbp1Ut4rUpmRfHnoicrb455KDjJlAjaY48hKfcFaobX
+	hIvW2fw50yeryEflXni9MYsCzjGEBOCpoO4ii0hNv4MpOramcCync8VcBLTOVGPpqFJmBULkZ1g
+	IAAd1eh3ME+dh7utXSjXYuam2cnjJjR3mLc23UwdRJeJ3GiQZIhMhIKD4P4bgm90jbopOHEIK4T
+	sHf3MxEgfYruaP9qXP5DepOrfg1GIwjJl5sAazk4RhA==
+X-Received: by 2002:a05:6a20:eec7:20b0:3cf:a7a5:e310 with SMTP id
+ adf61e73a8af0-3cfa7a5e417mr148047637.9.1787682450200; Tue, 25 Aug 2026
+ 11:27:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260818203234.1142913-1-simon@swine.de> <CAEf4BzbkKwM-uwc1=o2p2v-bjuYNxM++La8Gr5edv5H6sGGqDA@mail.gmail.com>
- <aooIR-oRaN4iIQRy@krava> <CAE_y42AS2egu9athNHmqSYVP7wc8E4fhLg5T51tDTVx6QL3LMQ@mail.gmail.com>
- <ao2f-rBgT0SqX6Pw@krava>
-In-Reply-To: <ao2f-rBgT0SqX6Pw@krava>
+References: <20260809150111.45000-1-leon.hwang@linux.dev> <CAEf4Bzam=0V6n4_vBahhYh2Qn9KfriDKXSz58L4L+teHJRWfPQ@mail.gmail.com>
+ <0b30bc97-2ecf-46eb-a863-94e706e18c6b@linux.dev> <CAEf4BzaXaLLqs6XXCG_02c7UcvNWfbGUAJTYosr22oaD4iokuQ@mail.gmail.com>
+ <c71d27ab-ec59-4b72-855f-7bf437095cd5@linux.dev> <CAEf4BzZpB-qkhu3SAu5MrYYAT2+ZN8WaXqpmnKruOOdjJOLK2A@mail.gmail.com>
+ <7f18980c-0c15-4862-af1f-f451ca12dac5@linux.dev>
+In-Reply-To: <7f18980c-0c15-4862-af1f-f451ca12dac5@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 25 Aug 2026 11:25:01 -0700
-X-Gm-Features: AcwNN1Ubykf5Gnf0-64UjfJ-P4ZUe9OrImEiLJNVde-Q11fNcy5dc189CLBU-Ag
-Message-ID: <CAEf4BzZfQwOTS8HGryFR0V7FKxtAbbs=qe+2eYk=RTj7gNK09Q@mail.gmail.com>
-Subject: Re: [PATCH bpf v2] bpf: guard uprobes against private-stack corruption
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Christian Simon <simon@swine.de>, bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, martin.lau@kernel.org, tj@kernel.org, 
-	yonghong.song@linux.dev, stable@vger.kernel.org
+Date: Tue, 25 Aug 2026 11:27:14 -0700
+X-Gm-Features: AcwNN1X2RE3UG00GfCM7tcLMBWO7FTBVU9F1ssGpubHcRFwnWfxEEW3QwlAbcZ0
+Message-ID: <CAEf4BzbS8enxXg7YfWXssBg4jPHr2Z6L9cAigpfUNxiOep3BJg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 00/13] bpf: Add tracing_multi link support for
+ bpf progs
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>, 
+	Avinash Duduskar <avinash.duduskar@gmail.com>, Anton Protopopov <a.s.protopopov@gmail.com>, 
+	Amery Hung <ameryhung@gmail.com>, Jordan Rife <jordan@jrife.io>, Rong Tao <rongtao@cestc.cn>, 
+	Eyal Birger <eyal.birger@gmail.com>, Pu Lehui <pulehui@huawei.com>, 
+	Jingguo Tan <tanjingguo@huawei.com>, Lin Ma <malin89@huawei.com>, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 25, 2026 at 7:00=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
-e:
+On Mon, Aug 24, 2026 at 10:15=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> =
+wrote:
 >
-> On Sun, Aug 23, 2026 at 12:05:40AM +0100, Christian Simon wrote:
-> > On Sat, 22 Aug 2026 at 21:36, Jiri Olsa <olsajiri@gmail.com> wrote:
-> > >
-> > > On Fri, Aug 21, 2026 at 11:06:16AM -0700, Andrii Nakryiko wrote:
-> > > > On Tue, Aug 18, 2026 at 1:33=E2=80=AFPM Christian Simon <simon@swin=
-e.de> wrote:
-> > > > >
-> > > > > Eligible BPF programs use one private stack per program and CPU. =
-Both
-> > > > > bpf_prog_run_array_uprobe() and uprobe_prog_run() use migrate_dis=
-able()
-> > > > > to keep an invocation on one CPU, but another task can still pree=
-mpt it
-> > > > > and run the same program on that CPU. The second invocation then =
-reuses
-> > > > > and can overwrite the first invocation's private stack.
-> > > > >
-> > > > > Protect each real program invocation with the existing per-progra=
-m
-> > > > > recursion context. When the program is already active on this CPU=
-,
-> > > > > account for the missed invocation and skip it. Return zero when s=
-kipping
-> > > > > an uprobe-multi invocation so session handling does not suppress =
-its
-> > > > > return probe.
-> > > > >
-> > > > > Skip dummy_bpf_prog in the classic array path before acquiring th=
+> On 25/8/26 04:02, Andrii Nakryiko wrote:
+> > On Sun, Aug 23, 2026 at 10:00=E2=80=AFPM Leon Hwang <leon.hwang@linux.d=
+ev> wrote:
+> >>
+> >> On 22/8/26 01:46, Andrii Nakryiko wrote:
+> >>> On Sun, Aug 16, 2026 at 11:20=E2=80=AFPM Leon Hwang <leon.hwang@linux=
+.dev> wrote:
+> >>>>
+> >>>> On 15/8/26 04:14, Andrii Nakryiko wrote:
+> >>>>> On Sun, Aug 9, 2026 at 8:01=E2=80=AFAM Leon Hwang <leon.hwang@linux=
+.dev> wrote:
+> >>>>>>
+> >>>>>> Similar to the tracing_multi link support for kernel functions [1]=
+, add
+> >>>>>> support for bpf progs.
+> >>>>>>
+> >>>>>> When attaching to bpf progs, it must attaches to the target by tex=
+t poke
+> >>>>>> way.
+> >>>>>>
+> >>>>>
+> >>>>> Please spend a bit more human effort on justification for the chang=
 e
-> > > > > recursion context because its active pointer is NULL.
-> > > > >
-> > > > > Add a regression test that pins two threads to one CPU and overla=
-ps
-> > > > > classic and multi uprobe invocations while preserving a sentinel =
-in a
-> > > > > private stack frame. Without the guards, the second invocation ex=
-ecutes
-> > > > > and corrupts the first invocation's sentinel.
-> > > > >
-> > > > > Fixes: 7d1cd70d4b16 ("bpf, x86: Support private stack in jit")
-> > > > > Fixes: 6c17a882d380 ("bpf, arm64: JIT support for private stack")
-> > > > > Closes: https://github.com/open-telemetry/opentelemetry-ebpf-inst=
-rumentation/issues/3056
-> > > > > Cc: stable@vger.kernel.org
-> > > > > Signed-off-by: Christian Simon <simon@swine.de>
-> > > > > ---
-> > > > > Changes in v2:
-> > > > > - Address review comments from sashiko-bot
-> > > > >   - Guard the uprobe-multi path as well.
-> > > > >   - Remove const from correct line
-> > > > > - Add a regression selftest for uprobe-classic/multi paths.
-> > > > > - Add the arm64 Fixes tag.
-> > > > >
-> > > > >  include/linux/bpf.h                           |  33 +++--
-> > > > >  kernel/trace/bpf_trace.c                      |  11 +-
-> > > > >  .../bpf/prog_tests/uprobe_private_stack.c     | 118 ++++++++++++=
-++++++
-> > > > >  .../bpf/progs/uprobe_private_stack.c          |  54 ++++++++
-> > > > >  4 files changed, 206 insertions(+), 10 deletions(-)
-> > > > >  create mode 100644 tools/testing/selftests/bpf/prog_tests/uprobe=
-_private_stack.c
-> > > > >  create mode 100644 tools/testing/selftests/bpf/progs/uprobe_priv=
-ate_stack.c
-> > > > >
-> > > > > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> > > > > index 7719f6528445..a94fc9898ece 100644
-> > > > > --- a/include/linux/bpf.h
-> > > > > +++ b/include/linux/bpf.h
-> > > > > @@ -2572,6 +2572,14 @@ static inline void bpf_reset_run_ctx(struc=
-t bpf_run_ctx *old_ctx)
-> > > > >
-> > > > >  typedef u32 (*bpf_prog_run_fn)(const struct bpf_prog *prog, cons=
-t void *ctx);
-> > > > >
-> > > > > +#ifdef CONFIG_BPF_SYSCALL
-> > > > > +void notrace bpf_prog_inc_misses_counter(struct bpf_prog *prog);
-> > > > > +#else
-> > > > > +static inline void bpf_prog_inc_misses_counter(struct bpf_prog *=
-prog)
-> > > > > +{
-> > > > > +}
-> > > > > +#endif
-> > > > > +
-> > > > >  static __always_inline u32
-> > > > >  bpf_prog_run_array(const struct bpf_prog_array *array,
-> > > > >                    const void *ctx, bpf_prog_run_fn run_prog)
-> > > > > @@ -2617,7 +2625,7 @@ bpf_prog_run_array_uprobe(const struct bpf_=
-prog_array *array,
-> > > > >                           const void *ctx, bpf_prog_run_fn run_pr=
-og)
-> > > > >  {
-> > > > >         const struct bpf_prog_array_item *item;
-> > > > > -       const struct bpf_prog *prog;
-> > > > > +       struct bpf_prog *prog;
-> > > > >         struct bpf_run_ctx *old_run_ctx;
-> > > > >         struct bpf_trace_run_ctx run_ctx;
-> > > > >         u32 ret =3D 1;
-> > > > > @@ -2635,15 +2643,30 @@ bpf_prog_run_array_uprobe(const struct bp=
-f_prog_array *array,
-> > > > >         old_run_ctx =3D bpf_set_run_ctx(&run_ctx.run_ctx);
-> > > > >         item =3D &array->items[0];
-> > > > >         while ((prog =3D READ_ONCE(item->prog))) {
-> > > > > +               /* dummy_bpf_prog has no recursion state. */
-> > > > > +               if (unlikely(!prog->len)) {
-> > > > > +                       item++;
-> > > > > +                       continue;
-> > > > > +               }
-> > > > > +
-> > > > > +               if (unlikely(!bpf_prog_get_recursion_context(prog=
-))) {
-> > > > > +                       bpf_prog_inc_misses_counter(prog);
-> > > > > +                       bpf_prog_put_recursion_context(prog);
-> > > > > +                       item++;
-> > > > > +                       continue;
-> > > > > +               }
-> > > > > +
-> > > >
-> > > > I think it's unacceptable to skip sleepable uprobe execution just
-> > > > because there is the same BPF program attached to a *different* upr=
-obe
-> > > > (and all due to a private stack that no one asked for or needs for
-> > > > uprobes, really).
-> > > >
-> > > > As a short-term fix, we should probably disable private stack for
-> > > > sleepable uprobe/kprobe program (and tracepoint/raw_tracepoint), an=
-d
-> > > > think how we can make private stack less per-CPU dependent.
-> > >
-> > > +1 for disabling private stack for uprobes
-> > >
-> > > thanks,
-> > > jirka
+> >>>>> and explaining your use case. In what case you'll be attaching to a
+> >>>>> large amount of BPF programs such that attachment speed-up (if ther=
+e
+> >>>>> is any) matters.
+> >>>>
+> >>>> Will update the cover letter with justification and my use case.
+> >>>>
+> >>>> Here's my use case:
+> >>>>
+> >>>> I'm planning to enhance the function-graph feature of bpfsnoop [1]. =
+It
+> >>>> will trace all bpf progs, including their subprogs, to draw a full
+> >>>> function call graph including bpf prog call sites.
+> >>>>
+> >>>
+> >>> fair enough, interesting use case, definitely outline that in the nex=
+t
+> >>> revision (and provide before/after attach time as well for such use
+> >>> case, please)
+> >>>
+> >> Will include my use case.
+> >>
+> >> Implemented the attachment micro-benchmark. Here's the result on an
+> >> x86_64 16c16g VM:
+> >>
+> >> ./bench tracing-multi-attach-progs
+> >> Setting up benchmark 'tracing-multi-attach-progs'...
+> >> tracing-multi-attach-progs: prepared 1000 identical BPF program target=
+s
+> >> tracing-multi-attach-progs: fentry created and attached 1000
+> >> programs/links in 679.324ms
+> >> tracing-multi-attach-progs: fentry.multi created one program and
+> >> attached one 1000-target link in 470.042ms
+> >> tracing-multi-attach-progs: fentry.multi creation/attachment speedup i=
+s
+> >> 1.45x
+> >>
+> >> The speedup 1.45x looks good. But attaching to 1000 progs via fentry
 > >
-> > Thanks for your guidance. I have just posted v3 of the patch set, which
-> > disables private stacks for sleepable programs.
+> > I'd say "meh". If 500ms is ok, 700ms is not that much more noticeable.
 > >
-> > I am still unsure why non-sleepable uprobes would be unaffected. On a
->
-> I think we need to disable both sleepable and non-sleepable uprobes
->
-> problem is that we can't say if kprobe program is going to be attached
-> as uprobe or kprobe, so we'd need to disable both kprobe/uprobes, which
-> I'm not sure is a problem
+> Besides the attachment speedup, this series provides a way to attach to
+> multiple bpf progs via one link. The current revision reuses the
+
+that's mostly a convenience which is pretty trivial to abstract away
+in user space, not really a hard requirement for kernel to support
+this
+
+> ftrace-based attachment, which relies on
+> CONFIG_HAVE_SINGLE_FTRACE_DIRECT_OPS. In the next revision, it will get
+> rid of CONFIG_HAVE_SINGLE_FTRACE_DIRECT_OPS with its own attachment
+> implementation. Hence, this series will be able to run on those arches
+> that have trampoline support.
 >
 
-I don't think it is, private stack is most critical for struct_ops
-where we can have intentionally recursive calls (sched-ext had/has
-such use case, I believe), I think it's much less of a problem and
-risk for normal uprobe/kprobe (and other tracing programs for that
-matter)
+sure, post a new version, but it's a bit less motivating to add extra
+complexity to the kernel if the only outcome is slight speed up and
+user space convenience of having single FD
 
-> I don't see how tracepoint/raw_tracepoint are affected by this problem,
-> because they have either retursion context or bpf_prog_active check
+let's look at new revision and see how this goes
+
+> Thanks,
+> Leon
 >
-> jirka
->
->
-> > preemptible kernel, their execution paths use migrate_disable() rather =
-than
-> > preempt_disable(), and rcu_read_lock() does not prevent preemption with
-> > preemptible RCU. It therefore seems possible for a task to be scheduled=
- out
-> > while running a non-sleepable uprobe, after which another task could in=
-voke the
-> > same program on the same CPU and reuse its per-CPU, per-program private=
- stack.
-> > Am I missing another mechanism that prevents this?
-> >
-> > Cheers,
-> > Christian
-> >
-> > ---
-> > v3: https://lore.kernel.org/bpf/20260822225444.2774461-1-simon@swine.de=
-/
