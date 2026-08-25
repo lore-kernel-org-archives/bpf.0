@@ -1,142 +1,401 @@
-Received: from mail-ej2-f11.google.com (mail-ej2-f11.google.com [74.125.228.139])
+Received: from mta0.migadu.com (out-229.mta0.migadu.com [91.218.175.229])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC7BC426429
-	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 12:23:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD440429023
+	for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 12:24:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.229
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787660594; cv=none; b=WfF36V23lrVHyTJjSiVeIcgNMzuefl9gnS38pdTOehFRMRBeCqq/Wq6fhWeqXZoOdN2PFREFGviNv4cPE0kMRzeECbB4ZajAMNOySMn8jFBfsDeF/R4OlqFjqCFemAXiRuvjqhkM+2Pz4SKzjkcruk3HuACDwFmtKB3JsN6IrLs=
+	t=1787660650; cv=none; b=VwBRCAWNKNr6OBaX2nwowwtP2Ce/oFxpE12YgWBOkt/aC51mvxP4GupzANsg1Bo1cJc0h2L4jMHFo47aCdZm/lYNsY+wV1GLim5H04Y2sJ8lq7bwHIf1Q6xT9VAswAESWEMDRbNowk/5GjbyT73lB20fiijcuLc5tMHyJPQs6rU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787660594; c=relaxed/simple;
-	bh=T82kPS0r20tb52VMwMiP90ZL+6R9xinNvOVGOM6Amm4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=ITDtj7KiU7r6HsqDy3AkPGOyqPjxnpG8xRpjIVehGS6RYQ8XyJu89yB4nqjAohkTnF5KKXVnISiA1df8+it3WHwY5BiBn+kpgBKDWx/n29r0rVG6jbHEj/BBQK9dD2HHc1e2MUpNBXmvjKa/mHuoQWwpFx7rgSxNvkwXx+7bJB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ij/XQ/w4; arc=none smtp.client-ip=74.125.228.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787660650; c=relaxed/simple;
+	bh=JiDl8+rRZvEx3bnQnR/RfiWHkTkG5g/aS9NhKFJB3N4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jNQ0edTEL8yFnJ4kFjIzrYQeNlPAzWZOxCi/xwGaSJu8YjlpxKHigXdRWfqJLyNeuamRb4lIJwn19tYnfKjB0dLaBHGWcwwW7RcPJRgWm2VII3V1Gj38rhiM3krxC8aErEkcuLLXD/02sa3rWgYOu+WGv07C6inwbvyW29vOVOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dIMNKCfg; arc=none smtp.client-ip=91.218.175.229
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ij/XQ/w4"
-Received: by mail-ej2-f11.google.com with SMTP id a640c23a62f3a-c2117cb0c09so183772066b.0
-        for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 05:23:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787660591; x=1788265391; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=bjm6ttTTLAAxVRPB57CUI15k21GkGZTZ0M8HFR93li8=;
-        b=ij/XQ/w4hJMAW/ppnF3tfa8BoVn9rOdrvNN/Bdmd1eJUrc79zcCTYLLgJuJngGkZZn
-         JfjdYtYGqOGsgBZgH+ap2ZhV9yH14P/yyXgmYaUXS2aWLbVkcDqaQMHxCpvVXUPToNYa
-         Hedgnm4Ct8ComGJJ9aV7gj37KtNeoSYIRVMDFTqpfqtdZp/gJR4iJVZhaQKhGaXpveAV
-         OXcCLhYRBIkxrFAYxI8mOiUsOf16VxTX0j5dKCfWNqnLLtUdT4CL1wQ19y734Q7HK5xb
-         8AHx+0xya9V2az5euzLt8rM2vAIv5BybbzTtby3t6gPIXSTpB1zeUL/6NtgrgCC0+EW7
-         iIOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787660591; x=1788265391;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=bjm6ttTTLAAxVRPB57CUI15k21GkGZTZ0M8HFR93li8=;
-        b=Afssth+MV4t8QS7IKpWf4v05gx8Zh51svj64JnKQ72GeVZUOt82sz+ZwXnfz1uR4CZ
-         +YXe8dPGVNbzhQhtTYtudwQ/izx7L5FsXtmm2BMOcE6/PKzmQxzL5iirkJFrX27tK6WN
-         METUS6L/m7qic6qmqjwRGaEszeYkElgFIdZKyLfDUGQ8DkG+PItNTV3C88W0d5SY9xtC
-         bG6Xfdt+HE1XnrnjC+LHPZVIrfF0d3Zd0EAKpMzlKwYFaKcJZu1ZNdpfnjZQrO89tE5h
-         Tlnvl0V7JfAWlEVx3GjGyoZquzNXArRMc8K7pY36+A4SRpaIy6yRcAx+XWOJeNFMdPb7
-         YT5A==
-X-Forwarded-Encrypted: i=1; AHgh+RpVQm56fubU8Y1ME9d8K79BInxwGbLl//r0tbtW4JM71y1O3U2+Obclx88/6gdPUtq99Vg=@vger.kernel.org
-X-Gm-Message-State: AFuF++kLVc5tl6SViWYIsXCCmi9Z6/gja7+dx8xsDX/i37cfvAcmxjk6
-	kH2x7z50g2iHE0YUPJ2M83On76a2ddGUwYgZo1wqgmsmL7PRJvZY17mn
-X-Gm-Gg: AR+sD10xy+foZ55IxMNoPeZ0nICXTWIjdJiphDUq90/ltijzym3PWtxC4vQAmpq+Q83
-	pmZ87GxkupXEcbY0UHKEK+MD8ftidm9JVxr2PNafhQc2eNNdQ2zoAzkactSmSCKuuAWTmWzkmK+
-	mZDjo4zV8CvVTfAnEa69H77vLMMQFg3ucIcs4LnlRNoN8+fbVIwBi8nwdB0/JeBd+vgfP+4m0yK
-	4mZaYe2PS3b3e5FJR0dcCL0Q0Rv/2MjYw0ukLj8N8NaeEfGIC9Pp5e3luvtxTiZRDV30bgK7AnK
-	uSWReHo1dzy+9Xnh3c5veg8OcRD0azM9vkQ4mayCz2mdAhKcNe45VOkTcyLVgINqZCZDoyW8S9a
-	U53S2Neq6tGcPx2hVVJI+JyPvAoQUjSGWkzKQnDdoF1esYzN3f4sPagnZJAEzNPJN18apAHFhMN
-	4Cihxso14wEYXariKeOnWxaOg3M+Kefyxn63hNUvRwaHLJNXvOgVXC6WZHmurdp778m2y8IHrTb
-	j3pUwbRpfrcl9Of+S/QdCoHXbxL6l9bqC28j9oBmuujyal5QZPL6YIISbWa6CfvE3SDRdmoCx3r
-	nzE6C0cbQ3JLHQsixxdTgYokDU6HO/rcFHkbzQ==
-X-Received: by 2002:a17:907:3e1a:b0:c24:6505:8f67 with SMTP id a640c23a62f3a-c24e589a884mr660203266b.10.1787660590418;
-        Tue, 25 Aug 2026 05:23:10 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c249606b60asm1629389366b.9.2026.08.25.05.23.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Aug 2026 05:23:08 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dIMNKCfg"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=JiDl8+rRZvEx3bnQnR/RfiWHkTkG5g/aS9NhKFJB3N4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787660639; v=1; x=1788265439;
+ b=dIMNKCfgaqGIc/cA2lPQ9/RS/2cur8EN9iDIesLlMIElAIn3Pqv6pDj7/kttKJikRViM1E8Y
+ ox2npj8qs5zrdPK3i+/ZTzEB7ZhrARH4sV2yczPlJp/1eX5MFcZFRQp3nUNtLz9LdXHdeB+sRk2
+ mMmb+4Mmg+N8b2muZjPZoUso=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from localhost (2602:fce1:44f:115e::)
+	by smtp.migadu.com with ESMTPS id a44e0ee79fd3e8ed;
+	Tue, 25 Aug 2026 12:23:59 +0000
+X-Mizu-Trace-ID: a44e0ee79fd3e8ed
+X-Migadu-Flow: FLOW_OUT
+From: Lance Yang <lance.yang@linux.dev>
+To: hughd@google.com,
+	kirill@shutemov.name
+Cc: akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	nico.pache@linux.dev,
+	baolin.wang@linux.alibaba.com,
+	baohua@kernel.org,
+	dev.jain@arm.com,
+	lance.yang@linux.dev,
+	liam@infradead.org,
+	mhocko@suse.com,
+	rppt@kernel.org,
+	ryan.roberts@arm.com,
+	shuah@kernel.org,
+	surenb@google.com,
+	usama.arif@linux.dev,
+	vbabka@kernel.org,
+	ziy@nvidia.com,
+	usama.anjum@arm.com,
+	agordeev@linux.ibm.com,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kas@kernel.org,
+	jannh@google.com,
+	willy@infradead.org,
+	pfalcato@suse.de,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 19/57] mm/collapse: install a PMD leaf as the terminal layer
+Date: Tue, 25 Aug 2026 20:23:54 +0800
+Message-Id: <20260825122354.98021-1-lance.yang@linux.dev>
+X-Mailer: git-send-email 2.39.3 (Apple Git-146)
+In-Reply-To: <20260816224609.308019-20-kirill@shutemov.name>
+References: <20260816224609.308019-20-kirill@shutemov.name>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 25 Aug 2026 14:23:08 +0200
-Message-Id: <DKY0SGUZGSIY.3NR8NYCRVQNM@gmail.com>
-Cc: <linux-kernel@vger.kernel.org>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <emil@etsalapatis.com>, <martin.lau@linux.dev>, <yonghong.song@linux.dev>,
- <clm@meta.com>, <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf-next v6 4/4] selftests/bpf: Add a test for arena
- fault-in under memory.max
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, "Khawar Ahemad"
- <ahemadkhawar123@gmail.com>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260825094955.83240-5-ahemadkhawar123@gmail.com>
- <20260825104311.84038-1-ahemadkhawar123@gmail.com>
- <ab878224-d75f-45e7-b625-39c4f56e548b@linux.dev>
-In-Reply-To: <ab878224-d75f-45e7-b625-39c4f56e548b@linux.dev>
+Content-Transfer-Encoding: 8bit
 
-On Tue Aug 25, 2026 at 1:19 PM CEST, Jiayuan Chen wrote:
->
-> On 8/25/26 6:43 PM, Khawar Ahemad wrote:
->> Addressing the three CI review comments on the v6 series:
->>
->> ---
->> [Patch 4/4] max_entries comment
->> ---
->>
->>> could the 50000 carry a short note that it just has to outrun
->>> ARENA_BUDGET on the smallest page size
->> Accepted. Will be fixed in v7 as a proper preceding block comment:
->>
->>    /*
->>     * 50000 pages must exceed ARENA_BUDGET / PAGE_SIZE (64M / 4k =3D 163=
-84)
->>     * so the fault loop hits memory.max before exhausting the arena itse=
-lf.
->>     */
->>    __uint(max_entries, 50000);
->
->
-> Not that simple.
->
-> It also make sure the arean not exceed 4G when page size is 64K.
->
->
-> ---
->
-> Please don't submit further versions of this patchset. I have already
-> prepared a
->
-> V6 (the one you sent), and I'm planning to send it myself. Additional
-> submissions
->
-> from you would create unnecessary conflicts and confusion.
->
->
-> If you're interested in this series, I'd really appreciate your review
-> and feedback instead.
+@Hugh, who added pmdp_get_lockless_sync() for the PAE case in
+146b42e07494.
 
-Khawar, it's not acceptable to take someone else's patchset, and then spam =
-the
-list multiple times without their permission. If you continue doing this we=
- will
-have no choice but to redirect all your emails to spam.
-
+On Sun, Aug 16, 2026 at 11:45:31PM +0100, Kiryl Shutsemau wrote:
+>From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 >
-> I'll also be sure to cc you on future versions.
+>Fill in the PMD install.  Under the pmd lock, with the pte ptl nested
+>inside it: verify, detach the table with pmdp_collapse_flush(), deposit a
+>fresh one and map the leaf.
 >
+>That is one atomic section, so no pmd_none() window ever exists: faults
+>stay held down at pte level by the migration entries throughout.  It is
+>what lets PMD collapse run under mmap_read like everything else here.
+>
+>Two things force that nesting, which is the one the tree already uses to
+>reinstall a table.  A racing zap of a frozen entry takes the pte ptl, so
+>the verify has to hold it.  And the table must not come apart between
+>verify and detach, which is the pmd lock's job.
+>
+>Nothing leaves the section early, aborts included.  An abort only
+>restores PTEs and would need no pmd-level exclusion of its own, except
+>that its pte pointer came from pte_offset_map_rw_nolock(), whose caller
+>must establish that the pmd is stable.
+>
+>The deposited table is the freshly allocated one, never the table just
+>detached.  A deposited table has to be quiescent, because whoever
+>withdraws it frees it immediately with nothing to hold a lockless walker
+>off first, and a table that has never been reachable is quiescent by
+>construction.
+>
+>The detached one is not: GUP-fast and RCU pte walks that read the old PMD
+>may still be inside it, and on broadcast-TLBI architectures the flush
+>expels nobody.  Quiescing it would need an IPI, which has nowhere to go
+>here -- outside the pmd lock it opens the pmd_none() window this design
+>does not have, inside it is a broadcast under a spinlock.  So the
+>detached table goes to pte_free_defer(), which holds the free until those
+>walkers finish.  One transient table page per PMD collapse is the cost.
 
-I think that is unnecessary, I don't think Khawar is providing any meaningf=
-ul
-input for this.
+Well, git history spells out why pmdp_get_lockless_sync() is needed here.
+
+146b42e07494 added PAE safety because pmdp_get_lockless() can assemble a
+pmd_low + pmd_high pair that never belonged to the same PMD value.
+
+1d65b771bc08 then put pmdp_get_lockless_sync() right after
+pmdp_collapse_flush() (with pmd lock + pte lock held), and 1043173eb5eb
+used the same placement in collapse_pte_mapped_thp().
+
+Current implementation spells out the reader-side rule as well:
+
+#if CONFIG_PGTABLE_LEVELS > 2
+static inline pmd_t pmdp_get_lockless(pmd_t *pmdp)
+{
+	pmd_t pmd;
+
+	do {
+		pmd.pmd_low = pmdp->pmd_low;
+		smp_rmb();
+		pmd.pmd_high = pmdp->pmd_high;
+		smp_rmb();
+	} while (unlikely(pmd.pmd_low != pmdp->pmd_low));
+
+	return pmd;
+}
+#define pmdp_get_lockless pmdp_get_lockless
+#define pmdp_get_lockless_sync() tlb_remove_table_sync_one()
+#endif /* CONFIG_PGTABLE_LEVELS > 2 */
+
+#if defined(CONFIG_GUP_GET_PXX_LOW_HIGH) && \
+	(defined(CONFIG_SMP) || defined(CONFIG_PREEMPT_RCU))
+/*
+ * See the comment above ptep_get_lockless() in include/linux/pgtable.h:
+ * the barriers in pmdp_get_lockless() cannot guarantee that the value in
+ * pmd_high actually belongs with the value in pmd_low; but holding interrupts
+ * off blocks the TLB flush between present updates, which guarantees that a
+ * successful __pte_offset_map() points to a page from matched halves.
+ */
+static unsigned long pmdp_get_lockless_start(void)
+{
+	unsigned long irqflags;
+
+	local_irq_save(irqflags);
+	return irqflags;
+}
+static void pmdp_get_lockless_end(unsigned long irqflags)
+{
+	local_irq_restore(irqflags);
+}
+...
+#endif
+
+pte_t *__pte_offset_map(pmd_t *pmd, unsigned long addr, pmd_t *pmdvalp)
+{
+	unsigned long irqflags;
+	pmd_t pmdval;
+
+	rcu_read_lock();
+	irqflags = pmdp_get_lockless_start();
+	pmdval = pmdp_get_lockless(pmd);
+	pmdp_get_lockless_end(irqflags);
+
+	if (pmdvalp)
+		*pmdvalp = pmdval;
+	if (unlikely(pmd_none(pmdval) || !pmd_present(pmdval)))
+		goto nomap;
+	if (unlikely(pmd_trans_huge(pmdval)))
+		goto nomap;
+	if (unlikely(pmd_bad(pmdval))) {
+		pmd_clear_bad(pmd);
+		goto nomap;
+	}
+	return __pte_map(&pmdval, addr);
+nomap:
+	rcu_read_unlock();
+	return NULL;
+}
+
+Hmm, Patch #19 still has the present table PMD -> none -> present leaf
+PMD transition. collapse_install_pmd() does pmdp_collapse_flush() and
+installs the new PMD through map_anon_folio_pmd_nopf() without
+pmdp_get_lockless_sync() in between. pte_free_defer() keeps the old table
+alive for RCU readers, but it can't stop pmdp_get_lockless() in
+__pte_offset_map() from assembling halves across that transition.
+
+FWIW, pmdp_get_lockless_sync() is an empty inline when pmdp_get_lockless()
+doesn't use the pmd_low/pmd_high reader. On x86,
+CONFIG_GUP_GET_PXX_LOW_HIGH is selected only by X86_PAE, so other x86
+configs wouldn't pay the IPI cost.
+
+@Hugh, do I miss something?
+
+Could we keep pmdp_get_lockless_sync() right after pmdp_collapse_flush(),
+before map_anon_folio_pmd_nopf() (and while the locks are still held)?
+
+Maybe:
+
+---8<---
+diff --git a/mm/collapse.c b/mm/collapse.c
+index 7c10888031f7..cf4e57b598f9 100644
+--- a/mm/collapse.c
++++ b/mm/collapse.c
+@@ -1585,6 +1585,7 @@ static void collapse_install_pmd(struct vm_area_struct *vma,
+ 	 * is why the helper shoots down a pte range rather than a pmd.
+ 	 */
+ 	old_pmd = pmdp_collapse_flush(vma, cand->addr, pmd);
++	pmdp_get_lockless_sync();
+ 	old_table = pmd_pgtable(old_pmd);
+
+ 	/*
+@@ -1601,14 +1602,11 @@ static void collapse_install_pmd(struct vm_area_struct *vma,
+ 	 * construction, which is why collapse_alloc() secured one.
+ 	 *
+ 	 * The detached table is not.  GUP-fast and RCU pte walks that read the
+-	 * old PMD before pmdp_collapse_flush() may still be inside it, and on
+-	 * broadcast-TLBI arches that flush expels nobody.  Quiescing it would
+-	 * take an IPI (tlb_remove_table_sync_one()), which has nowhere to go
+-	 * here: outside the pmd lock it opens a pmd_none window a fault can fill,
+-	 * inside it is a broadcast under a spinlock.  So it goes to
+-	 * pte_free_defer(), which holds the free until those walkers finish, as
+-	 * retract_page_tables() does.  One transient table page per PMD collapse
+-	 * is what that costs.
++	 * old PMD before pmdp_collapse_flush() may still be inside it.
++	 * pmdp_get_lockless_sync() keeps split-PMD readers from observing
++	 * unmatched halves across the transition, while pte_free_defer() holds
++	 * the free until RCU readers finish.  One transient table page per PMD
++	 * collapse is what that costs.
+ 	 */
+ 	pgtable_trans_huge_deposit(mm, pmd, cand->deposit);
+ 	map_anon_folio_pmd_nopf(cand->new_folio, pmd, vma, cand->addr);
+---
+
+Cheers, Lance
+
+>No anon_vma_lock_write() is taken, unlike the mechanism being replaced:
+>
+> - rmap walks on the sources are unreachable, their refcounts frozen and
+>   their folio locks held from freeze to putback;
+> - non-rmap pte walkers see migration entries;
+> - pmd-level observers see either the old table or the leaf, never an
+>   intermediate;
+> - fork, mremap and munmap take mmap_write, which the mmap_read held here
+>   excludes.
+>
+>Assisted-by: Claude-Code:claude-opus-5
+>Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
+>---
+> mm/collapse.c | 118 ++++++++++++++++++++++++++++++++++++++++++++++++++
+> 1 file changed, 118 insertions(+)
+>
+>diff --git a/mm/collapse.c b/mm/collapse.c
+>index 842adc30aeb0..ab7476471b8d 100644
+>--- a/mm/collapse.c
+>+++ b/mm/collapse.c
+>@@ -1232,6 +1232,124 @@ static bool collapse_verify_candidate(struct collapse_candidate *cand,
+> static void collapse_install_pmd(struct vm_area_struct *vma,
+> 				 struct collapse_control *cc, pmd_t *pmd)
+> {
+>+	struct collapse_candidate *cand = &cc->candidates[0];
+>+	struct mm_struct *mm = vma->vm_mm;
+>+	spinlock_t *pmd_ptl, *pte_ptl;
+>+	pgtable_t old_table = NULL;
+>+	unsigned int nr_populated;
+>+	pmd_t old_pmd, pmdval;
+>+	pte_t *pte;
+>+
+>+	if (cand->state != CAND_FROZEN)
+>+		return;
+>+
+>+	/* No destination: the provision pass could not spare one */
+>+	if (!cand->new_folio) {
+>+		pte = pte_offset_map_lock(mm, pmd, cand->addr, &pte_ptl);
+>+		collapse_abort_candidate(vma, cand, pte);
+>+		if (pte)
+>+			pte_unmap_unlock(pte, pte_ptl);
+>+		return;
+>+	}
+>+
+>+	/*
+>+	 * The pte ptl nests inside the pmd lock, the nesting the tree already
+>+	 * uses for reinstalling a table: a racing zap of a frozen entry takes
+>+	 * the pte ptl, so the verify must hold it, and the table must not come
+>+	 * apart between verify and detach.  pmd_same() rechecks are unnecessary,
+>+	 * the pmd lock being held across the whole section.
+>+	 */
+>+	pmd_ptl = pmd_lock(mm, pmd);
+>+	pte = pte_offset_map_rw_nolock(mm, pmd, cand->addr, &pmdval, &pte_ptl);
+>+	if (!pte) {
+>+		/* Table gone under us; see collapse_abort_candidate() on @pte */
+>+		spin_unlock(pmd_ptl);
+>+		cand->result = SCAN_NO_PTE_TABLE;
+>+		collapse_abort_candidate(vma, cand, NULL);
+>+		return;
+>+	}
+>+	if (pte_ptl != pmd_ptl)
+>+		spin_lock_nested(pte_ptl, SINGLE_DEPTH_NESTING);
+>+
+>+	/*
+>+	 * Every exit is inside that section, the aborts as much as the install.
+>+	 * An abort needs no pmd-level exclusion of its own; it only restores
+>+	 * PTEs.  But the table it works on came from pte_offset_map_rw_nolock(),
+>+	 * which leaves its caller to establish that the pmd is stable, and the
+>+	 * held pmd lock is what does that here.
+>+	 */
+>+	if (cand->result != SCAN_SUCCEED) {
+>+		/* Machine check during the copy */
+>+		collapse_abort_candidate(vma, cand, pte);
+>+		goto out_unlock;
+>+	}
+>+
+>+	if (!collapse_verify_candidate(cand, pte, &nr_populated)) {
+>+		cand->result = SCAN_PTE_NON_PRESENT;
+>+		collapse_abort_candidate(vma, cand, pte);
+>+		goto out_unlock;
+>+	}
+>+
+>+	/*
+>+	 * Nothing fallible sits past here.  No anon_vma_lock_write either: rmap
+>+	 * walks on the sources are unreachable -- refcounts frozen, folio locks
+>+	 * held from freeze to putback -- non-rmap pte walkers see migration
+>+	 * entries, pmd-level observers see the old table or the leaf and never an
+>+	 * intermediate, and fork, mremap and munmap take mmap_write, which our
+>+	 * mmap_read excludes.
+>+	 *
+>+	 * The flush inside pmdp_collapse_flush() is the round's second over this
+>+	 * range: the freeze displaced every leaf here and flushed before dropping
+>+	 * the ptl, and the verify above proved nothing has been mapped since.
+>+	 * What it covers is the paging-structure caches -- a CPU may still hold
+>+	 * the pmd-to-table link, for a table that is about to be freed -- which
+>+	 * is why the helper shoots down a pte range rather than a pmd.
+>+	 */
+>+	old_pmd = pmdp_collapse_flush(vma, cand->addr, pmd);
+>+	old_table = pmd_pgtable(old_pmd);
+>+
+>+	/*
+>+	 * The smp_wmb() in __folio_mark_uptodate() orders the copied data before
+>+	 * the install below publishes it.
+>+	 */
+>+	__folio_mark_uptodate(cand->new_folio);
+>+
+>+	/*
+>+	 * Deposit a freshly allocated table, not the one just detached: a
+>+	 * deposited table has to be quiescent, because whoever withdraws it frees
+>+	 * it immediately (zap_huge_pmd()) with nothing to hold a lockless walker
+>+	 * off first.  A table that has never been reachable is quiescent by
+>+	 * construction, which is why collapse_alloc() secured one.
+>+	 *
+>+	 * The detached table is not.  GUP-fast and RCU pte walks that read the
+>+	 * old PMD before pmdp_collapse_flush() may still be inside it, and on
+>+	 * broadcast-TLBI arches that flush expels nobody.  Quiescing it would
+>+	 * take an IPI (tlb_remove_table_sync_one()), which has nowhere to go
+>+	 * here: outside the pmd lock it opens a pmd_none window a fault can fill,
+>+	 * inside it is a broadcast under a spinlock.  So it goes to
+>+	 * pte_free_defer(), which holds the free until those walkers finish, as
+>+	 * retract_page_tables() does.  One transient table page per PMD collapse
+>+	 * is what that costs.
+>+	 */
+>+	pgtable_trans_huge_deposit(mm, pmd, cand->deposit);
+>+	map_anon_folio_pmd_nopf(cand->new_folio, pmd, vma, cand->addr);
+>+
+>+	/* Slots with no source gain anon memory that no zap accounted */
+>+	if (nr_populated)
+>+		add_mm_counter(mm, MM_ANONPAGES, nr_populated);
+>+	cand->deposit = NULL;
+>+	cand->new_folio = NULL;	/* ownership: the mapping */
+>+	cand->state = CAND_INSTALLED;
+>+
+>+out_unlock:
+>+	if (pte_ptl != pmd_ptl)
+>+		spin_unlock(pte_ptl);
+>+	pte_unmap(pte);
+>+	spin_unlock(pmd_ptl);
+>+
+>+	/* The deposit balanced the detached table, so the count is already right */
+>+	if (old_table)
+>+		pte_free_defer(mm, old_table);
+> }
+> 
+> /* Publish each destination folio in place of the sources it replaces */
+>-- 
+>2.54.0
+>
+>
