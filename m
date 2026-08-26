@@ -1,46 +1,46 @@
 Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11012024.outbound.protection.outlook.com [40.107.75.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E05E83F54D3;
-	Wed, 26 Aug 2026 13:14:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8F9B423E8F;
+	Wed, 26 Aug 2026 13:14:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.24
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787750093; cv=fail; b=nsMZ/jl4oJlG78lRIBoM0+pmJFFCxbocyyBFxf/wMrCFseDdzLW10KNXOm2YG8KNE0U5myEK3+MRyhkISyEDU3dd/OmdDSSh4g0IxU5ow3ZUs7t0tvx3RALiWYbjjmoehNGtJB7nD9UziW03Z3uVwVA8IlB5TeqIQw3wWg6Xr8E=
+	t=1787750100; cv=fail; b=W0OsjX4Dua4C+pOT4qaqfdKwwuFIANLH9YT8qVQJMPzbXdiNWacSg2yfJlvYXCtIIdCefJtkHOiClEf/4i1Dr6bwzn6CnebW+Fj2NvUn1LYuvFfCrk0I1gvANK1zWWZX2KzqtPfUmyi1pge6ZEapukwvx+PlAT3etuxrmDyKdvQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787750093; c=relaxed/simple;
-	bh=8xhh7cdALk4EW8eTFFtZdarMUWI2CSKrQfZhZ6+OSVQ=;
+	s=arc-20240116; t=1787750100; c=relaxed/simple;
+	bh=u6pAL8JE8cdhKjIP0p1tOt58jClTDVkbZqAkGgLUPSA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=mPD0Z5S7sAx056Xr0y1yWDXlun27XjSeowidPtsaQSYwohFJtO9AtPic2yAYAPRVgCoOlZlUN4PGuc3UYwkefpxy4zFtzh731HAyUS1o6Hjv2TEslM3DvNaMwltv4S6cOjs/kyfL0lbP4UHw1sQrFpYR44AIxnDOLonDY882AYc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=HkD7BlVR; arc=fail smtp.client-ip=40.107.75.24
+	 Content-Type:MIME-Version; b=UvJkqMsQ2vJoxjEVisP86In0Xg/a6wRZFQ3sghM3Pi1vzAutnllhBJAqbL8RI30N65JWWJ3DIwaiMCN2h53WpjN0UpLhNNb4tQINIevWpIaK/tVu2l7/eBL/69iemzvONgprt0bEq+Y/1oFoR5Sg5XitV8Uo75a8aEFf+zACD/o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=MBUsXA4g; arc=fail smtp.client-ip=40.107.75.24
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="HkD7BlVR"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="MBUsXA4g"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=n2nOtsmHaKLcr4KvNTFTxylvJSBzOYbTozXa6bHVef61fQiIvbQjfv9dYKnqQX+FZo/5UFZ/AhrEIjuuspjYVAa0YyHLcPj7uZ51w6InPVkAfRu6o/MaKFXV+0YPWiQfwqQCNkR7Cd7Uir+AYrlmvy34iVH7pBiuAf12HWygCrg3NVvbiS+FWlTRbGwqd9DGD3EaQzPYPzHBU5hRw/MrPpSA4f7vU8mHZUTeTS9T9UShizbDPPLfErTFbO6Wm9GnO+GUXIp0blSRx0Nn1GHJ6LeZr5+nncLVw7KcLS1UZaOD/VL8+t15+47fithjA8V72eX+/EGdgV9gLwigCcCrcg==
+ b=Lh+Y+CNTRBZzAcgPm4q0px2RdkHmZYs/DKxpBbE6e/jd23yjQzCPafgM5aynAPA0xOOyCtEbm0UfOItEj829S2nGzH0uicMFSFd4pPQmVIF7J7L0ZqyJyLpkZDYLb6CkjHGN3SduqQJ7mkVcFINoYd5QlPZSbdBVFgE3pFdW9IJKGzlesh1hi2Cfx2mhhAbxO6l82tF30eOXTS+hWS3k3nhnX9xrJJqq+QG/6NfmVqsoG7kVGuDdIj6o+I1aR34bPw+q1oAc6w7bPXybCtjgPQuN1aRvX6du5hike9YtgTX9GdflaPtamfg7+5NICUrUPCX4OfsNIgV2xm0w+eZeFA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hsZmQT3jH01/ADQY9n4c/vfWNUuC2ZZinnk1eVWjfVY=;
- b=aDcgJPrLQ+4PY6XgzUovDDBuPkjyNxywSh4/qjzcIT/IxrR8+ifiMxBBP06HF+E2mj1cC9SlyvELELd6JV85g+eLYAQUmck6ZxyUKVC+mEZT436wXDoSTowUUlIDzsqXyYxODCfUgv2yP1md5srKSqTc5D2imOrXgBTvpybKi0ayyKef4N9hwQcAi5ioMsgDR8xUBA/Hz00dPrtcM8DKjQ4PkGJw24KRYirsZ9NFp4x6zRbmr1p2xpwwkTsEbbV2c/XlQE6icZcGwQ+k9jRYH8QkYsgf6JGoST8Kdr+YUXnhPdNju3r3xpUrapV7EU+d72o1zqptaAitwsk+k2eAbA==
+ bh=G1sJ0fbczbAWA/jc8wEUkFYp/SMO92pgFtSiBMpEVtA=;
+ b=BFPs35J7Ye4ilefXKKakVmhqx3OHE39HMsNnDeS+Pl+vRImg29Ze2/p+nCVLFQmxYeAwiKwLrFDDTIrfSXDjQe2qyEpPlQaI5sXaAr/2Wzh04heWSfFmpoNoOGzFjPGd1FdBwbTAIlAeM5CI7Qx2mdoPNwP3u0wUWGVRXCLoW07XlSr6G8GBaY74E/dkg9LCE1BVuy3FsCXi0VocIrdukMMfujZZpgrfD4jRP+LyMNAVBQYQZs4QBlngRGLRhuJRLUAH3q4w2LxtWVLwLCt7mx6Oq0hfv3kkCzD37chkMrMYe73TXYda3EVwTB6z4QVYEpfKSLUft/u9IiNUoUYsuA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
  dkim=pass header.d=vivo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hsZmQT3jH01/ADQY9n4c/vfWNUuC2ZZinnk1eVWjfVY=;
- b=HkD7BlVR7SepLa06zaE7d1Oavvhh39/FTN3/MOEKomGJ9oTdgM1hBo0xkS/60P5t29KIZvXopDUTWbXv52YF7z52RVBBYBpqHYNlIYbQBmSXT8spE6Is2bQZAao1/y6Wu32hVm2Yh4zZ9FJxfUHoWzpFlZG1UvNracrnesnh3GCVkmTdLaKkxHwKIsmNoM6W+BGmmPe59HfIJyo3S2jk8luUhKpSPixsUS+n3D55gLATp2FMJCBNUiFz9TcQFSXWvHQHVqQuK6BlzFD8sQPM2Rv4fdptfa1TZY6CEUHTblgF9Di0oWxyrQFf8ub6m6vN+0TKw/9e/KQPGydFVaX+/w==
+ bh=G1sJ0fbczbAWA/jc8wEUkFYp/SMO92pgFtSiBMpEVtA=;
+ b=MBUsXA4glPlWtBzcFtGIXixaQfxyGhx15HfbtG1HmNIc/RVZwYTrPFMnOMDAmP7qDnifcDN/JhijHC49K4l4W003SuLTbBEsRuueTJ2ovCZY8DFzU9Ou/LFRRLD4VRIzLYPIHUk+pF8nQ73+zqZNco9QGg81d1qPyIb9GKy7ARNqdcp0WdeJpDqa5MFVWiQizYO7V8m8R6aO5ZeIAN0kVfwx2Jp3bsX7zpozq60gnMHLX6tl/yz1cxI8Zozn0AVFFLw+ZaidFDD0wFTQO10eHG0fumkrbfgPT1Ibo7+NlR+aWn9I0gqjG2U7BMkC765kKi8O6iFlSDUsCSQB5gnYHA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vivo.com;
 Received: from PUZPR06MB4742.apcprd06.prod.outlook.com (2603:1096:301:b5::13)
  by SEYPR06MB5866.apcprd06.prod.outlook.com (2603:1096:101:c6::7) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.8; Wed, 26 Aug
- 2026 13:14:45 +0000
+ 2026 13:14:48 +0000
 Received: from PUZPR06MB4742.apcprd06.prod.outlook.com
  ([fe80::206c:c661:9838:5571]) by PUZPR06MB4742.apcprd06.prod.outlook.com
  ([fe80::206c:c661:9838:5571%6]) with mapi id 15.21.0360.008; Wed, 26 Aug 2026
- 13:14:45 +0000
+ 13:14:48 +0000
 From: Fuyu Zhao <zhaofuyu@vivo.com>
 To: bpf@vger.kernel.org,
 	eddyz87@gmail.com,
@@ -61,9 +61,9 @@ Cc: andrii@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Fuyu Zhao <zhaofuyu@vivo.com>
-Subject: [PATCH bpf-next v5 1/2] libbpf: support selective kernel module BTF loading via bpf_object_open_opts
-Date: Wed, 26 Aug 2026 21:14:27 +0800
-Message-Id: <20260826131428.302-2-zhaofuyu@vivo.com>
+Subject: [PATCH bpf-next v5 2/2] selftests/bpf: add tests for selective module BTF loading
+Date: Wed, 26 Aug 2026 21:14:28 +0800
+Message-Id: <20260826131428.302-3-zhaofuyu@vivo.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260826131428.302-1-zhaofuyu@vivo.com>
 References: <20260826131428.302-1-zhaofuyu@vivo.com>
@@ -79,281 +79,243 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PUZPR06MB4742:EE_|SEYPR06MB5866:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2990219f-687a-4184-0f84-08df0373ff8e
+X-MS-Office365-Filtering-Correlation-Id: 8d3ce9a3-c3a7-4354-56ed-08df0374014b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|376014|52116014|7416014|23010399003|366016|1800799024|22082099003|18002099003|56012099006|11063799006|10067099003|6133799003|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	f2BOXn0GdOqz0Gh/JGD5Jn76Qk0heooK593gDmVSY/wW4Di0jBY6C2/VQ4EQZzYSllxqB4pChdFZxZ37YN/5Ev6FCkVLc+YNbArms50XEcsOBRS5y4ungjKAWRpX0/TzESOtSXNxA1qqrgxJNy0ppIRSJ17rv95xaz2uqr6gvy+2hZjc9Hwo660aUAfu/Hw2wZXvBymc48obEig8OTbwhkFh/LfzQOyE8qB/tliJgm81GbOw2uVUtsyi1npBnKnugenFlbO6+e8GqrpGsDg4H4+TViCMebaEqzAEbqkfMvQI/k/tD4SaRmEJPaDO1N27+s10uiHoEPok63oDjwg5UAybYAeECC9bK7lThts7nnw1BnT5jdfKtsnzSNPwLhRMlkxvFJCYL/M+KwXOx/6lHo903vNPtMQYCelXa1fMBYdz0PNdzLFg4Jp8GJHtVGgm4ggGRdMqzVe1AoSZ5t+hfYt02Dbu6KSMDYtAYs+OG9ojGq8XeDzuknhlh5+7sIL/U6gzDF3W94LOn4eUDBqBP/HXZ+1XdxO4U/9JkZ9+nfW94cWDJ+kw8Yu/17TWj2DQI5J+tIA7x1VUtLaq94aMGbm2mBrHaAjDSxecpnhKstUaIOyjfvePk/Hd1oJBfUMPqc8Uotnp28QxcLAw4XgUR9q6wlVyFiQoqN5HHVuRJgMcm+n+veubudn2pxkh9MvFKn6Z7y8QqIiEgy7pMH5uJznr8hnmTt/D4QoLd03cG3o=
+	iVk5TR0KanZjvjIWvIbsXl4LyfRCrlAGQJFmil9zWXSnt31iSyuh9vajdxnpe9F5pNUQDPhlwbnzxInWv2gIeZLZmpr7679tKWw6C5LwF6OdOZKjBCD6AGrRBymXy/QKEeASnSyVqmdK86WgbEvsU0JFUK+hWO5+rd6PgCrJyhqDrACBDuWodxUYhbHXRH1lMZMzW0HzTGGEI+pxf36zp4AxOzW2oYrWnfPnywZ/ngVcINnDLLS3bmowNXgXARuw+5rONbXfgSIFC6X38sCXwk9S7OPZEamfAFXfLsXruw3XiRB6/AJc99ckE6lxu1u5hUIqAXpjY7WPOOlzmfqYRafKA6BMKZ2RkxSjKSt8ab5888s0Kim6Oes7isH9cMYvU1oJT2eFIcjVN+0S2dQUoEGG7w0hPaCROwFH4+3BzntEkjxnm0wht/Pnxqc0xyt2TIE6JMBjKZ1s5oc47e3B02S3MrCj1GVznuVPBIXOzjQp7yK3uMayyfd9QIT840zDW+8Z22k/8dzXcGmKmt7n7MUQIn2eFIFhohRpxl3z/UiC2UG0eUGuJdmHcQ1eXC38P1hpqQ+xSqZaqPUCuZqvJVOQFNRysbAJPwp5fN+4bw3CbkTP2+6Alcd7atHq38UtThIKsbu6JcjHpGOGNVuYzMGGDYT87jMGPVyqN/ef2V1ADHP+oQlJXEdPV1f91rGYUMytjK5w/qEwa33y8mr2OoVn43AdsPIPJHS0lOizdps=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB4742.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(7416014)(23010399003)(366016)(1800799024)(22082099003)(18002099003)(56012099006)(11063799006)(10067099003)(6133799003)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ZyXHbWkfmbnqU66qyQsNaWCAo6ZtSE0GHGiiZUdXdcUuUpFtCttEi1XN1LyH?=
- =?us-ascii?Q?gv1iTuKYy5fJmH6OEWDEmgnRDSRKpCLafYzl6S99DwdpM7UCuO8NyILNsbf5?=
- =?us-ascii?Q?CDpEEJDOkcQIEuT4Mtc5/SSq3dGRF3zk80wrEYjZryB4q7pD415Oq7Ww7Jl/?=
- =?us-ascii?Q?i/Rjdhmpdll3hfolely9C3LPbHdGaqjIbnL7YghbNtsHCbLwKYDnMnhK69Tf?=
- =?us-ascii?Q?KO8hSVG/VyUZ1lP1f6fSpgrzF58I+XOXlk0e6Hx8hAvruQk91GB3VFTCoGm5?=
- =?us-ascii?Q?Q259XC8a98UPWR5cFsNvCwV/WpM9NlgM7Oq3ueSZ7wyOY2k6UA9irbhEyIG1?=
- =?us-ascii?Q?+ecYDuAIxvsdoVTmj8Ao0qJFPN/2Ka8mCUisAo28oDFfQdYBTGzB9PrGN7Jg?=
- =?us-ascii?Q?DP1TBnsV0ARSPtFum8JcPFdKcTGZYvOB4jjmjoyjC9aca+g3HpoLAS9UnTwu?=
- =?us-ascii?Q?PXZExY5/0Zv6WmR44X7l/NHU/FStXLvycFxIiFceeyklN1pFbHX4eau5YEs8?=
- =?us-ascii?Q?R5YLcII2op+bNstbjeDwY9IwtBe5HPDfgyBJQPLEfvmgv/HBkpSrrV9fE7+5?=
- =?us-ascii?Q?UYkoBVRNbt0I1bp4RVgThszUuqN2duuHrhawzRZcji1TRC2k1uCaA80R8eYm?=
- =?us-ascii?Q?00Cjmsb8XgXl0ocU2745wa+wIoLVbDMq9dxMUIv89UIpRxiEbhfOxB1RYXf8?=
- =?us-ascii?Q?VBgYgSOQCR2PCz9TfvgLiAJAJgvJMwf32wy2ASNr29VnHbkRh//J7iN/S0vq?=
- =?us-ascii?Q?QZd5FmL5R6Db8gJLgJRFBG1tEf8iYcNaUf6cW8hifPnLxkFstXvhGWyB0LyA?=
- =?us-ascii?Q?RqQrpLM56XKHCNMvbf0Erve+SQ3o4EUmO8Fm/YhbQyyVTDV00K2DaHAZxh8O?=
- =?us-ascii?Q?seDLHanHQOg80tLvWKrCLWKvP+yZOCB3N9HuSeXa83y3i38Fb9+5EOKicdtY?=
- =?us-ascii?Q?P6f9ZbPpqnA5am7359FKUVv7v/JTk3naxpHtJt754uJ4K8KZwmtxZTzNoPPH?=
- =?us-ascii?Q?cnPO+RHS4tsmEuTEh0c2odersILd9xFEMKadiYw4+M9A2ILiiQGyHYZzSbQO?=
- =?us-ascii?Q?8Xm+uJbIcXFd/L5BlLPG5UP4G/Iyo+UvB4wHaqSsR+jWvknsujMJwUXG1rWp?=
- =?us-ascii?Q?3fF2gO+uio5pQM9/QPhaU70AvLQxtc5RLJE3PfCBqcuOIwnpTu+SLZRzqwrI?=
- =?us-ascii?Q?L1uUlqNGeAHLjf9xVZ+hxWRmmbLHDnagCXivznIlAp3F4SwlnwjKqcGghR6H?=
- =?us-ascii?Q?Y/aWLcNIz9TSJiwATtz7et9u8p4Rb7mskksYUm6MWPlqdhYfEGZiOAqLmHJv?=
- =?us-ascii?Q?PN+E1szSM9hHaEmljAxGIJZzXfGKvw3f6jVtdqXGCK8dCvSczdtQLpBh7xA8?=
- =?us-ascii?Q?2mA+e70HJbA9JN2WKxfsZmVxJ8RK7ySnsHpAFNnKgkqGPBxhcMmf8OfiZD95?=
- =?us-ascii?Q?jR+tOueCXGdy++OgEpmsA2eq/2lAkfZ6glNZUiqEEUAaA/rZi4iohWUxKOgT?=
- =?us-ascii?Q?KMm8QjXOvGL92sLI90e8M+ZA9kU35hN/ArRek+cRrMZOuoJMyKOu/x6Ks/PG?=
- =?us-ascii?Q?brnjngvzIw8M2cujoqIgbi0vqd4jjmsKwAy+1HQvzTp7n4Q0Za2Nnkm+53Fi?=
- =?us-ascii?Q?Yr08Qutd24RX8Qb3ETJqhE6z8E/F4uT8X8ButFJPC5c5MvZ2rdjkgrSMIrLh?=
- =?us-ascii?Q?TFFYHaTOvX9JzX2PuMgsXDJ0ZdeaB6bU2cllCt+TWW7jsHycMVR4V/o64Nq+?=
- =?us-ascii?Q?r8MYh5rXzg=3D=3D?=
+	=?us-ascii?Q?jHYFe/rzrphBRhG/U+Xt5uA85h30dNQkjoHyHSRpNNEXs+tE2lgNfNdgBvTE?=
+ =?us-ascii?Q?LU30yXbYMKaeGcQibktB8NyjXFCGgCDblO5V0I0O9re32Eq9nltTZjERnis4?=
+ =?us-ascii?Q?m+Gp9ynhGej0tMiLJq9Y69ykMDlVf7CJCvaiI4l5vYwo0B5gY17UwCRSUtRo?=
+ =?us-ascii?Q?jF+KD0SkgdXWq3lpReBOxk8D/xpV0WHJ/DpmA+JNMQLSp0kW+bg5TNVeaTuS?=
+ =?us-ascii?Q?Rr2TetUAvwB/Dyx9UTV9vZxRbTnvMNP2YWOXvEE2VzMCLomekX9m+G7G9KG+?=
+ =?us-ascii?Q?JptBhXpw43vGv02JBxZ/xcmC2tjp9bLbCycShQPCePwbbAFAtxJfM/hKCkO9?=
+ =?us-ascii?Q?AOQer7pgJTiy8rdi/erlfEzy7jCo3qy48AY14Px+Nha+MiDmRJkX9go0gbCX?=
+ =?us-ascii?Q?5nN5zemXzgAGgWqY887iUK8wyJrWrREGiWb82gUbUJZ8u5ir08hXevs8OOum?=
+ =?us-ascii?Q?NYHWQ2L3UTe4dxK6iCZWhTG/QQ5UBmX+/9hTHa31uCgO0zD4pw+6Msynbb4z?=
+ =?us-ascii?Q?L+zqPeGFt2Kj64PU96+uopvdme9FufuyKRAt7ME95L6W0KcLtIMWvU+ux8ON?=
+ =?us-ascii?Q?WjslKEUeryfAUZ4Ci2GWNnGSFJL+qQP0zyEjPTdrnD5OIuA3MJBIPUZvDkap?=
+ =?us-ascii?Q?yFdLpA5dvvRoP/NeiGdo9GqgL6br4U3Se6CJKXe4rh6tsl+O+Fk6tBzgY3TK?=
+ =?us-ascii?Q?D+V8+r0kXU8OX0xwZHT1cvdWa+BoFfQaG23fWmq99ChpefluHVNv2oCqHc6w?=
+ =?us-ascii?Q?jlwbxOJA0JFux/ewD2DlS+5WrbNYpL7SzbToPahGC9u/KSrLnUiR7GjVsbdQ?=
+ =?us-ascii?Q?TjDPnv1xxkLOc3TdT41bsr/nzACUPJnErPfzGEzwlnHrgEbYAMgzl1/OIQ1L?=
+ =?us-ascii?Q?ll8MPIRs6zm4/jd3GuLlPnl26L1kotQU9AMmsM7yMQZI/VxigcgKYp7gUZtq?=
+ =?us-ascii?Q?8OKNtDlMHNNKfSN1Bl9HUS6337FYRGbQDTQxjQ20zLuLRPsWe7fydslRHgR/?=
+ =?us-ascii?Q?utm4FnYg/k9o3u/WQwZzR/DfPYqzjRs3KNaXUuprTMR179e4oqZYgreJBfra?=
+ =?us-ascii?Q?wEUavbAF69Cksc49NMQTgvyN2HMb03Es7pquv7EDRUbk7VV2ETIDt8HSgBw6?=
+ =?us-ascii?Q?dKgYqvThiG93VnqV61cymqsX7cEuj8xYjBaI5g3MpZDb4rsLp0gE9nUU4LgG?=
+ =?us-ascii?Q?vtebYNglMRZmZODB8bDU0jGCjRNGhJb1r9C8/Kvo0qJDzZcU+yRX9+dtOXQ2?=
+ =?us-ascii?Q?Y7N09HYw7lyGDkeBOPqEOjRL+y7QUbMESU1aZ1+iG7Xo4V3BSsTUEINllwrr?=
+ =?us-ascii?Q?5122bpZ7GqV+zVTjqAFBf9fLzI3GuLbBVr+02fo91yVJKH/ss5LMCkvdnd4h?=
+ =?us-ascii?Q?QiqKKnzOBKOvbgdifgD0G7CLtP6pjJJndDadP/5LnRJhpo8m6iRgbwCA+I0p?=
+ =?us-ascii?Q?TuMmpbsB+ilmsFH4kvt/E/jRE/PiJ/YvdZ7ENEBU49JLpUZA71F23sMPW4Ih?=
+ =?us-ascii?Q?1vowzcD16B0TNmE4pLAdI067pXlaC//SGAsEq7c01oN7Gg8epvcLi6mls6Ku?=
+ =?us-ascii?Q?g/RdHNvpFqY+rZx3J2rbZqhX1O0Yvydruk2tlFfbAXBm4hCGFMZ47i9eCaA0?=
+ =?us-ascii?Q?li/Tyb0dQZoPzK1ImhR+efYUXr9HVM5ZQfemp/wMb0mxHQa0ZLgjW56YFWZ2?=
+ =?us-ascii?Q?AE9nTauzyGxm+Nwwh4hpu22jBdfc2dw35pfrImF979OepIwJPw72lJqjU/lb?=
+ =?us-ascii?Q?QeZYK6132g=3D=3D?=
 X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2990219f-687a-4184-0f84-08df0373ff8e
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8d3ce9a3-c3a7-4354-56ed-08df0374014b
 X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB4742.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2026 13:14:45.4315
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2026 13:14:48.4129
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TmnMi60PTjVGeTf0tGe6jQboG2EWBZ+kneM3X7eFLEnu8IrknVmODBTK9ND8lat08PHzBIy0XHuIcEv90FWicg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: LbIr7cyxHPa2y+e/7OzMT6H14NXsI++mCBMaYNDci7E5t44E5FT56q9xfBXybW3r+vBhhsVpvDLZZlO5rBJgiQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5866
 
-Add btf_module_names and nr_btf_module_names fields to
-bpf_object_open_opts to support selective kernel module BTF loading.
+Add selftests covering selective kernel module BTF loading through
+bpf_object_open_opts.
 
-With btf_module_names:
-- when provided, only the specified kernel module BTFs are loaded;
-- when an empty list is provided, no module BTFs are loaded;
-- when NULL, all module BTFs are loaded as before.
+The tests verify that:
+- the existing behavior is preserved when btf_module_names is not
+  specified, and loading succeeds when the required module BTF is
+  specified;
+- a required module BTF is skipped when the module is not specified in
+  btf_module_names;
+- an empty btf_module_names list skips loading all module BTFs;
+- invalid module BTF name lists are rejected.
 
-This avoids unnecessary module BTF loading and reduces BPF object
-loading time when only a subset of kernel module BTFs is needed.
-
-Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Signed-off-by: Fuyu Zhao <zhaofuyu@vivo.com>
 ---
- tools/lib/bpf/libbpf.c | 113 +++++++++++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf.h |  24 ++++++++-
- 2 files changed, 136 insertions(+), 1 deletion(-)
+ .../bpf/prog_tests/btf_module_names.c         | 139 ++++++++++++++++++
+ .../selftests/bpf/progs/btf_module_names.c    |  13 ++
+ 2 files changed, 152 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_module_names.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf_module_names.c
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 514e4e9daa82..1f061f4873b5 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -779,6 +779,9 @@ struct bpf_object {
- 	char *token_path;
- 	int token_fd;
- 
-+	char **btf_module_names;
-+	size_t nr_btf_module_names;
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_module_names.c b/tools/testing/selftests/bpf/prog_tests/btf_module_names.c
+new file mode 100644
+index 000000000000..3dc72bef014c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/btf_module_names.c
+@@ -0,0 +1,139 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include "btf_module_names.skel.h"
 +
- 	char path[];
- };
- 
-@@ -5803,6 +5806,99 @@ int bpf_core_add_cands(struct bpf_core_cand *local_cand,
- 	return 0;
- }
- 
-+static void bpf_object_free_btf_module_names(struct bpf_object *obj)
++static void btf_module_names_load(void)
 +{
-+	size_t i;
++	struct btf_module_names *skel = NULL;
++	int ret;
++	static const char *mod_names[] = { "bpf_testmod" };
 +
-+	if (!obj->btf_module_names)
-+		return;
++	LIBBPF_OPTS(bpf_object_open_opts, opts,
++		.btf_module_names = mod_names,
++		.nr_btf_module_names = 1,
++	);
 +
-+	for (i = 0; i < obj->nr_btf_module_names; i++)
-+		zfree(&obj->btf_module_names[i]);
-+	zfree(&obj->btf_module_names);
-+	obj->nr_btf_module_names = 0;
-+}
-+
-+static int bpf_object_init_btf_module_names(struct bpf_object *obj,
-+					    const struct bpf_object_open_opts *opts)
-+{
-+	const char **names;
-+	size_t i, j, cnt;
-+	int err;
-+
-+	names = OPTS_GET(opts, btf_module_names, NULL);
-+	if (!names)
-+		return 0;
-+
-+	cnt = OPTS_GET(opts, nr_btf_module_names, 0);
-+
-+	/*
-+	 * Allocate one entry for an empty list to distinguish it from the
-+	 * default behavior.
-+	 */
-+	obj->btf_module_names = calloc(cnt ?: 1,
-+				       sizeof(*obj->btf_module_names));
-+	if (!obj->btf_module_names)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < cnt; i++) {
-+		if (!names[i] || !names[i][0]) {
-+			pr_warn("invalid kernel module BTF name at index %zu\n", i);
-+			err = -EINVAL;
-+			goto err_out;
-+		}
-+
-+		for (j = 0; j < i; j++) {
-+			if (strcmp(obj->btf_module_names[j], names[i]) == 0) {
-+				pr_warn("duplicate kernel module BTF name '%s'\n",
-+					names[i]);
-+				err = -EINVAL;
-+				goto err_out;
-+			}
-+		}
-+
-+		obj->btf_module_names[i] = strdup(names[i]);
-+		if (!obj->btf_module_names[i]) {
-+			err = -ENOMEM;
-+			goto err_out;
-+		}
-+
-+		obj->nr_btf_module_names++;
-+	}
-+	return 0;
-+
-+err_out:
-+	bpf_object_free_btf_module_names(obj);
-+	return err;
-+}
-+
-+static bool is_module_btf_needed(const struct bpf_object *obj, const char *name)
-+{
-+	size_t i;
-+
-+	if (!obj->btf_module_names)
-+		return true;
-+
-+	for (i = 0; i < obj->nr_btf_module_names; i++) {
-+		if (strcmp(obj->btf_module_names[i], name) == 0)
-+			return true;
-+	}
-+
-+	pr_debug("skipping module BTF '%s', not in btf_module_names\n", name);
-+	return false;
-+}
-+
-+static bool no_module_btfs_needed(const struct bpf_object *obj)
-+{
-+	return obj->btf_module_names && !obj->nr_btf_module_names;
-+}
-+
-+static bool all_needed_module_btfs_loaded(const struct bpf_object *obj)
-+{
-+	return obj->btf_module_names &&
-+	       obj->nr_btf_module_names == obj->btf_module_cnt;
-+}
-+
- static int load_module_btfs(struct bpf_object *obj)
- {
- 	struct bpf_btf_info info;
-@@ -5825,6 +5921,9 @@ static int load_module_btfs(struct bpf_object *obj)
- 	if (!kernel_supports(obj, FEAT_MODULE_BTF))
- 		return 0;
- 
-+	if (no_module_btfs_needed(obj))
-+		return 0;
-+
- 	while (true) {
- 		err = bpf_btf_get_next_id(id, &id);
- 		if (err && errno == ENOENT)
-@@ -5867,6 +5966,11 @@ static int load_module_btfs(struct bpf_object *obj)
- 			continue;
- 		}
- 
-+		if (!is_module_btf_needed(obj, name)) {
-+			close(fd);
-+			continue;
-+		}
-+
- 		btf = btf_get_from_fd(fd, obj->btf_vmlinux);
- 		err = libbpf_get_error(btf);
- 		if (err) {
-@@ -5891,6 +5995,9 @@ static int load_module_btfs(struct bpf_object *obj)
- 			break;
- 		}
- 		obj->btf_module_cnt++;
-+
-+		if (all_needed_module_btfs_loaded(obj))
-+			break;
- 	}
- 
- 	if (err) {
-@@ -8508,6 +8615,10 @@ static struct bpf_object *bpf_object_open(const char *path, const void *obj_buf,
- 		}
- 	}
- 
-+	err = bpf_object_init_btf_module_names(obj, opts);
-+	if (err)
++	/* Verify backward compatibility. */
++	skel = btf_module_names__open_opts(NULL);
++	if (!ASSERT_OK_PTR(skel, "btf_module_names__open_opts default"))
 +		goto out;
 +
- 	err = bpf_object__elf_init(obj);
- 	err = err ? : bpf_object__elf_collect(obj);
- 	err = err ? : bpf_object__collect_externs(obj);
-@@ -9629,6 +9740,8 @@ void bpf_object__close(struct bpf_object *obj)
- 		close(obj->jumptable_maps[i].fd);
- 	zfree(&obj->jumptable_maps);
- 
-+	bpf_object_free_btf_module_names(obj);
++	ret = btf_module_names__load(skel);
++	ASSERT_OK(ret, "btf_module_names__load default");
 +
- 	free(obj);
- }
- 
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index b965ad571540..b8c1d98d69d8 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -224,10 +224,32 @@ struct bpf_object_open_opts {
- 	 * point (/sys/fs/bpf), in case this default behavior is undesirable.
- 	 */
- 	const char *bpf_token_path;
-+	/*
-+	 * Optional list of kernel module names whose BTFs should be loaded.
-+	 * nr_btf_module_names specifies the number of entries in
-+	 * btf_module_names.
-+	 *
-+	 * With btf_module_names:
-+	 * - when provided, only the BTFs of the specified modules are loaded;
-+	 * - when an empty list is provided, no module BTFs are loaded;
-+	 * - when NULL, all module BTFs are loaded as before.
-+	 *
-+	 * The list must not contain duplicate entries; otherwise -EINVAL is
-+	 * returned.
-+	 *
-+	 * This affects:
-+	 * - BPF CO-RE relocations against types defined in modules;
-+	 * - BTF-based resolution of function attach targets for
-+	 *   fentry/fexit/fmod_ret/freplace/LSM programs;
-+	 * - struct_ops kernel type resolution;
-+	 * - extern (ksym) resolution for kernel symbols defined in modules.
-+	 */
-+	const char **btf_module_names;
-+	size_t nr_btf_module_names;
- 
- 	size_t :0;
- };
--#define bpf_object_open_opts__last_field bpf_token_path
-+#define bpf_object_open_opts__last_field nr_btf_module_names
- 
- /**
-  * @brief **bpf_object__open()** creates a bpf_object by opening
++	btf_module_names__destroy(skel);
++	skel = NULL;
++
++	skel = btf_module_names__open_opts(&opts);
++	if (!ASSERT_OK_PTR(skel, "btf_module_names__open_opts"))
++		goto out;
++
++	ret = btf_module_names__load(skel);
++	ASSERT_OK(ret, "btf_module_names__load");
++out:
++	btf_module_names__destroy(skel);
++}
++
++/*
++ * Verify that an unrequested module BTF is skipped. The BPF program
++ * requires the BTF of bpf_testmod, but bpf_testmod is not specified in
++ * btf_module_names, so its BTF is skipped and the BPF program fails to load.
++ */
++static void btf_module_names_skip(void)
++{
++	struct btf_module_names *skel = NULL;
++	int ret;
++	static const char *mod_names[] = { "module_nonexist" };
++
++	LIBBPF_OPTS(bpf_object_open_opts, opts,
++		.btf_module_names = mod_names,
++		.nr_btf_module_names = 1,
++	);
++
++	skel = btf_module_names__open_opts(&opts);
++	if (!ASSERT_OK_PTR(skel, "btf_module_names__open_opts"))
++		goto out;
++
++	ret = btf_module_names__load(skel);
++	ASSERT_EQ(ret, -ESRCH, "btf_module_names__load");
++
++out:
++	btf_module_names__destroy(skel);
++}
++
++/*
++ * Verify that an empty filter skips loading all module BTFs. The BPF
++ * program requires bpf_testmod BTF, so it fails to load.
++ */
++static void btf_module_names_empty(void)
++{
++	struct btf_module_names *skel = NULL;
++	int ret;
++	static const char *mod_names[] = { "" };
++
++	LIBBPF_OPTS(bpf_object_open_opts, opts,
++		.btf_module_names = mod_names,
++	);
++
++	skel = btf_module_names__open_opts(&opts);
++	if (!ASSERT_OK_PTR(skel, "btf_module_names__open_opts empty"))
++		goto out;
++
++	ret = btf_module_names__load(skel);
++	ASSERT_EQ(ret, -ESRCH, "btf_module_names__load empty");
++
++out:
++	btf_module_names__destroy(skel);
++}
++
++static void btf_module_names_invalid(void)
++{
++	struct btf_module_names *skel = NULL;
++	const char *names[] = { NULL };
++	const char *empty_names[] = { "" };
++	const char *duplicate_names[] = {
++		"bpf_testmod", "bpf_testmod",
++	};
++	LIBBPF_OPTS(bpf_object_open_opts, opts,
++		.btf_module_names = names,
++		.nr_btf_module_names = 1,
++	);
++
++	skel = btf_module_names__open_opts(&opts);
++	ASSERT_EQ(libbpf_get_error(skel), -EINVAL,
++		  "btf_module_names__open_opts null");
++	btf_module_names__destroy(skel);
++
++	opts.btf_module_names = empty_names;
++	skel = btf_module_names__open_opts(&opts);
++	ASSERT_EQ(libbpf_get_error(skel), -EINVAL,
++		  "btf_module_names__open_opts empty");
++	btf_module_names__destroy(skel);
++
++	opts.btf_module_names = duplicate_names;
++	opts.nr_btf_module_names = 2;
++	skel = btf_module_names__open_opts(&opts);
++	ASSERT_EQ(libbpf_get_error(skel), -EINVAL,
++		  "btf_module_names__open_opts duplicate name");
++	btf_module_names__destroy(skel);
++}
++
++void test_btf_module_names(void)
++{
++	if (!env.has_testmod) {
++		test__skip();
++		return;
++	}
++
++	if (test__start_subtest("btf_module_names_load"))
++		btf_module_names_load();
++
++	if (test__start_subtest("btf_module_names_skip"))
++		btf_module_names_skip();
++
++	if (test__start_subtest("btf_module_names_empty"))
++		btf_module_names_empty();
++
++	if (test__start_subtest("btf_module_names_invalid"))
++		btf_module_names_invalid();
++}
+diff --git a/tools/testing/selftests/bpf/progs/btf_module_names.c b/tools/testing/selftests/bpf/progs/btf_module_names.c
+new file mode 100644
+index 000000000000..232adc0f33f6
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/btf_module_names.c
+@@ -0,0 +1,13 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++SEC("fentry/bpf_testmod_loop_test")
++int BPF_PROG(test_btf_module_names)
++{
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.34.1
 
