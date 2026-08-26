@@ -1,49 +1,47 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B950F356772;
-	Wed, 26 Aug 2026 07:57:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD29035F19D;
+	Wed, 26 Aug 2026 10:03:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787731080; cv=none; b=Ov+Pj1FmF9J8NjxE0b0izzw+ru7FDD/+rzQ3l2vzj+zXEvvpwonftXWRBmI/IQiL7VRdigTg5DH6q/sGb0oOxli2fB2eP0deAzt/vnJqNXfobLo3eTdXzuPyEHar4kVJoGPi3pwjde06zxKi9Ir6jIxD4poK0nVeULj3fXA4LYc=
+	t=1787738604; cv=none; b=cZ48MinSKVDSXmfCIsTO9Z/4hxKRb7tETOZQ36oPIccB59ycHd0tCGJxCn9dwOrDkdQCf9OAiVBKgAQtGOb/U3v47W+xx0f9NwvdZIu6D+iUTFMLIFrJOUui1d/bshrkCX2vwFV6ZNjcHAewSjlPvut5QfOi5ahmek8BKFbKDqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787731080; c=relaxed/simple;
-	bh=V7FiM7QenTRWsgqaGWzg3RYAyNKlEcw03OJlNm5IuwI=;
+	s=arc-20240116; t=1787738604; c=relaxed/simple;
+	bh=jiqHUks1m0JXbpeFcnNwxpziXVJoP1qjEoguu8lM/WI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GxP4l3vjzXp7ScCNhF4bSflZWtXFkZQbIRJ+z3sN9qSoI5IPkZpuWZgdFvtoq/RPvV1CyJXAr99d2E2IINMkQGspIT6z13rwY1PBUr6l8jGBEfXdSVcgJFLq3QQHut/lxf1NIb+Bm4gtvWpqjTusq5+XnGI0nPK+jAWri3jP2jQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i4XP55Rr; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z89lVykZfln89tjqQIe8UzaLBJbaTaApYP2a2xXJOUfhIgJyNB0Zz5gStcH+alQURfqfF1jGN9FctGqnIxMRo0Hg4IafyewrvoRo1LCChnXEmokAe7kbX4Aq5gm0VJsnEAbrlg4a8Ir7PuN6GHFs8+83/jhqBr7pg99iSSMyVEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=egVz/zbA; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i4XP55Rr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E561C1F00A3A;
-	Wed, 26 Aug 2026 07:57:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787731079;
-	bh=hmpj9TgfHr39DOeJCr3cPmBxSCLXnUOZroFpMszuCEo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=i4XP55Rr+Zq1oMAbamvhLn2jYWDSAxn48TNZaZEz5P3ZKmIE1IX7khswMhbPdSWE+
-	 uhI8Lv6erPUMa+ScYtxq0ZO4sXD9PNTlGvcI6S47IlegKuJymUVmtxe7c9Hn8YD9wR
-	 Gg8zF+BV8xqN77G8FsZAiWg26oBPAZMlrEughbpdYMmjwbipEp0G94Z9HbSASuiyE3
-	 4OjEZc4s1zcx/aHozv6IR/Us1jec+P35irhJA7po2XoY65iUm/nchU+0Dxtx8V4wEl
-	 Jktjq1UDtKjFJQxG10lml1FZscJMDI9z/PjfVNiJcoQg7Io0TL+QuNMsy2ImoTOXtq
-	 KP71dWh/Adj2Q==
-Date: Wed, 26 Aug 2026 08:57:51 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Daehyeon Ko <4ncienth@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Mike Rapoport <rppt@kernel.org>, David Hildenbrand <david@kernel.org>, 
-	"Liam R . Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	"David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, James Bottomley <James.Bottomley@hansenpartnership.com>, 
-	Hagen Paul Pfeifer <hagen@jauu.net>, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2] mm/secretmem: properly account locked pages
-Message-ID: <ao6b7b9AIUPWRTkJ@gremlin>
-References: <20260822-secretmem-accounting-v2-1-fe445a7c6eb1@kernel.org>
- <20260826013948.1325213-1-4ncienth@gmail.com>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="egVz/zbA"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=WZakOKFiw1qwrXHhV0NoUSm3EeQmFpLc6hHbXxKxp4w=; b=egVz/zbAaKyEoDL6mec9PlJmKR
+	S0HI06OfojIuS8q55yHaRp10zVsWuRnv4NJ47AgFAr3Jgc5e5I3lUd40o2I2x5+/3vKWCk5vfjnRC
+	W8i/C9kFrAf2hYc6LGqfGt9Q/+Ewe0drS5bnywL83w2+OCBBxNz4ZSnJXiF92vt4xpcoTAcDbCW3F
+	5vd09+38/5qaBqM4HI10/7+GHQWx63vnOKSj7cZncpze94BPHo04cPQUhcthyFOtCR9q4tUlkoWEX
+	9j7Ox0ORjD0W04UDwlWrL//J4a7uSkhDAUEpFHOSQ74mtl2viIOkRlUMZ/4h2SMyY3MTrNxdM6x7o
+	LPnA17Fw==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wzATY-00F8SY-28;
+	Wed, 26 Aug 2026 10:03:20 +0000
+Date: Wed, 26 Aug 2026 03:03:17 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: sashiko-reviews@lists.linux.dev, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH] bpf: arena: reschedule while freeing the arena pages
+Message-ID: <ao61BrPZiCx7erAR@gmail.com>
+References: <20260824-b4-bpf-arena-free-resched-v1-1-5c447477a64b@debian.org>
+ <20260824170831.33E051F000E9@smtp.kernel.org>
+ <ao2gP7Y6UJ2o2tUc@gmail.com>
+ <CAADnVQKP8R=1aZiDcnfkqD3mA=32R2Yrw642u3w7de4JSfMWKg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,54 +50,37 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260826013948.1325213-1-4ncienth@gmail.com>
+In-Reply-To: <CAADnVQKP8R=1aZiDcnfkqD3mA=32R2Yrw642u3w7de4JSfMWKg@mail.gmail.com>
+X-Debian-User: leitao
 
-On Wed, Aug 26, 2026 at 10:39:48AM +0900, Daehyeon Ko wrote:
-> Hi Lorenzo,
->
-> I tested the exact v2 from this Message-ID on its stated base with an x86_64
-> KASAN kernel. The supplied memfd_secret selftest passed 6/6 in three boots,
-> and my accounting-boundary suite also passed in three boots. I saw no
-> patch-attributable KASAN report, warning, Oops, or panic.
->
-> A v1/v2 differential also confirms that v2 fixes the CAP_IPC_LOCK creator
-> delegation issue Mike identified:
->
->   v1: CAP_DELEGATION creator_cap_ipc_lock=1 receiver_uid=2001 receiver_pages=2
->   v2: CAP_DELEGATION creator_cap_ipc_lock=1 receiver_uid=2001 receiver_pages=1
->
-> I have one policy question before adding Tested-by. With a one-page soft and
-> hard RLIMIT_MEMLOCK, a non-root task whose only effective and permitted
-> capability was CAP_IPC_LOCK produced this on v2:
->
->   CAP_ONLY uid=2002 cap_ipc_lock=1 mlock_two_pages=1 faulted_pages=1 raise_hard_rc=-1 raise_hard_errno=1
->
-> Thus ordinary mlock() of two pages succeeded, while only one secretmem page
-> could be faulted. Raising the hard limit failed with EPERM because that
-> requires CAP_SYS_RESOURCE. Is this divergence from ordinary mlock() the
-> intended consequence of removing the CAP_IPC_LOCK exemption for secretmem?
+Hello Alexei,
 
-I'm not quite sure what you're getting at here, as stated in the patch
-CAP_IPC_LOCK does not bypass this limit for secretmem because the scope of
-the folios is greater than the process so a process-level capability isn't
-suited to bypass it.
+On Tue, Aug 25, 2026 at 09:35:03AM -0700, Alexei Starovoitov wrote:
+> Just to be clear.. Is this needed to backport to some older kernel?
+> New kernel with CONFIG_PREEMPT_LAZY=y shouldn't need
+> this old practice of sprinkling cond_resched().
 
-Also a typical use case of secretmem is privileged process establishes,
-then passes fd to less-privileged user. So it's relatively unique in this
-respect and therefore it is not enforced.
+Yes, this is happening on our Meta kernel, and it is crashing a lot on old
+kernel in production.
 
-The idea is that those with CAP_IPC_LOCK could raise the limits as needed
-should they wish to bypass.
+It does crash a lot for us: 56780 crashes over 1538 hosts in the last 30
+days, 41% of all our kernel crashes in that window.  But it stops dead
+at 6.13:
 
->
-> I saw the planned selftest split and cleanup in the follow-up discussion. I
-> will retest the revised patch before adding Tested-by.
+    6.11.1     26060 crashes /  160 hosts
+    6.13.2     26014 crashes / 1119 hosts
 
-Thanks!
+Looking further, it seems that commit 517e8a7835e8c ("bpf: Fix softlockup in
+arena_map_free on 64k page kernel") is what is what makes the
+difference, which landed in v6.14.  Meta's arm64 kernels use 64k pages,
+so before that commit GUARD_SZ / 2 is 32768 and
+bpf_arena_get_kern_vm_start() is not page aligned
 
->
-> Thanks,
-> Daehyeon
+So there is nothing to fix upstream, and nothing to fix in the teardown
+loop.  We just need 517e8a7835e8c in our 6.11 and 6.13 branches.
+
+Sorry for the noise
+Thanks,
 
 --
-Cheers, Lorenzo
+pw-bot: rejected
