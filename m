@@ -1,83 +1,81 @@
-Received: from mta1.migadu.com (out-42.mta1.migadu.com [95.215.58.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40FF43A8FEA
-	for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 20:50:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E63C3AD52B;
+	Wed, 26 Aug 2026 20:58:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787777417; cv=none; b=sulLiUnTNPhqybND7M3kw6mBlsjfFhDeuOkIFwPvenPFAAVjv07DozeKURTnkq4Qw2T6zdgU+UQjSUgIogOReYRVwpFZ5Qm8IP0sPaLa1eouWn9bU03f2fpOj5yXs1C33DQiL8erGALwcRIoj25G9t2CF5knsAe7M/Jx7bFvupM=
+	t=1787777892; cv=none; b=krrCOz1akLTAjzg+bi4jOHPho7Muqe3FXZtYrd8i8uF5nqSvH/q8ETsOzX7MgN48yi3bM0z1G/s5CoF2Lt02U/eXq0l0f8HHICVD0gpppKaEUw9POg4xeo3e8kRVPPicHxGABN2lUdIRjbzTykpr7pjXPT9UnS77Swfqy4vW+qw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787777417; c=relaxed/simple;
-	bh=NuHQ37y7CzWAQweYdjmqnkNoKGELF4DP89ytcjs/cvg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Hk9xHcOacS5bm/Tm+r/aXYB88jZw1FLnK7ZyvX8eFMlynMZmYCl4LjnB0/25FmLdDPkGxWzJ7qO2vkwl6ruWd8E357f0ubN3hrS+oNAEyFUbeIhoPzKbBvJB22dj4VF4rQfPJKcMVsAInRwC7PmP5WpgTeUceokc7YDwONWWpIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=f4fT0Btx; arc=none smtp.client-ip=95.215.58.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787777892; c=relaxed/simple;
+	bh=0z9/8QDTndRX0GOVClV5gilwMHhR4WDORaNJ2Jj8ySM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UKLThnQq66BZ0fAmZxH9s4AsVjqdq2rVtZn9v48jOEqwwaMazjOMGJ8s+RA+Ptc2WejDajFqLUeflS9psRRo7dsEhLsebsMZoDblmODS4sGKzbcPR9xhpP8nBV29G/MlDuWIYdcIiO/8DskvN3+v4e2l3OLtRKCURdmt0jOOGE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=Gk++gNb7; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="f4fT0Btx"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=NuHQ37y7CzWAQweYdjmqnkNoKGELF4DP89ytcjs/cvg=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787777414; v=1; x=1788382214;
- b=f4fT0BtxeRdJOMYohbVZcB5Z9fnrdjIYUXbo0IBLmwDY9BhJv/3zIBbhSAAER3AFp0bFxg4D
- bilxVsNJ4lMqxatTZY1mdS+rdTbfGqaekgw+DtKxrkbjiHPvYulyjPco1KeOOYO6e6sSy17elq5
- sn+P4XEeyFHkbvW9FKx//HbQ=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [IPV6:2620:10d:c085:21c1::1576] (2620:10d:c090:400::5:7641)
-	by smtp.migadu.com with ESMTPS id 59d66917ee13c9d0;
-	Wed, 26 Aug 2026 20:50:06 +0000
-X-Mizu-Trace-ID: 59d66917ee13c9d0
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <d293e07d-4039-4c25-8dec-6da22906a6df@linux.dev>
-Date: Wed, 26 Aug 2026 13:50:03 -0700
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="Gk++gNb7"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=6BSYdpEPt01McAnG4u8lln5Yld57nZzWrLhCayqxD+0=; b=Gk++gNb7sGZR1YerBxsUPWVOAv
+	UOLsd1KSFlgVFGFo/4Dm7AT9R5ueV3ELForjXbWCOik5M3t7GhBzcbhrDpk6H5obJIo838smYoKG9
+	390FgaW/u4wyOhISwb+DP4JolTFF9jLWkY8P5JQLIqmEqKIli3ytdmFt7jXYDAAzgGfQ=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1wzKgm-001Zg2-1Q; Wed, 26 Aug 2026 22:57:40 +0200
+Date: Wed, 26 Aug 2026 22:57:40 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	Stanislav Fomichev <sdf.kernel@gmail.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+	pabeni@redhat.com, anthony.l.nguyen@intel.com,
+	przemyslaw.kitszel@intel.com, andrew+netdev@lunn.ch,
+	saeedm@nvidia.com, tariqt@nvidia.com, mbloch@nvidia.com,
+	mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+	aleksander.lobakin@intel.com, horms@kernel.org,
+	magnus.karlsson@intel.com, sdf@fomichev.me, ast@kernel.org,
+	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+	guoren@kernel.org, dtatulea@nvidia.com, witu@nvidia.com,
+	martin.lau@kernel.org, yoong.siang.song@intel.com,
+	intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
+	linux-csky@vger.kernel.org, leon@kernel.org
+Subject: Re: [PATCH net v3 3/3] net: stmmac: document oversized AF_XDP frame
+ handling
+Message-ID: <0c17200b-105b-463a-8677-45f575c294f0@lunn.ch>
+References: <20260819160535.1472459-1-sdf@fomichev.me>
+ <20260819160535.1472459-4-sdf@fomichev.me>
+ <aoceSoSFMx69Z9up@boxer>
+ <aoeoJ6-njBxcWs4w@devvm7509.cco0.facebook.com>
+ <aogpDsa8hz6CPpD3@boxer>
+ <aoiIarzdjk92RkCN@devvm7509.cco0.facebook.com>
+ <20260824111443.34bffe04@kernel.org>
+ <dc2ccb14-c7c0-402b-93b3-afba52df78fa@bootlin.com>
+ <20260826132043.39fb435a@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v1 13/14] selftests/bpf: Exercise arena arguments
- on every capable JIT
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
- <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, kkd@meta.com,
- kernel-team@meta.com
-References: <20260821233516.3426127-1-memxor@gmail.com>
- <20260821233516.3426127-14-memxor@gmail.com>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260821233516.3426127-14-memxor@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260826132043.39fb435a@kernel.org>
 
-On 2026-08-21 4:35 p.m., Kumar Kartikeya Dwivedi wrote:
-> The arena kfunc runtime tests are restricted to x86-64 and arm64, so new
-> JIT implementations can compile without exercising rebasing, nullable
-> arguments, five-register calls, or the verifier capability gate.
-> 
-> Run those tests on RISC-V, s390, LoongArch, and PowerPC64 as well. Teach
-> test_loader about PowerPC64 so it can select the newly annotated programs.
-> 
-> Enable the struct_ops arena tests on RISC-V, s390, and LoongArch, whose
-> indirect trampolines now implement the separate reverse-conversion path.
-> PowerPC64 remains covered only for kfunc arguments because it does not
-> advertise the struct_ops capability.
+> Also if you try running driver ksfts - please keep us posted on what
+> the blockers are. I _think_ we just need to teach ksft to cross compile
+> C binaries?
 
-I'd avoid adding these unless you actually ran it.
+It would be nice to make it not give out 1000s of warnings on 32 bit
+builds. At least that is my experience doing a native ARM 32 bit
+build.
 
-Have you tried non-x86 / arm64 arches at least in emulation?
-
-> 
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
->   .../bpf/prog_tests/test_struct_ops_arena.c    | 16 ++++++---
->   .../testing/selftests/bpf/progs/arena_kfunc.c | 36 +++++++++++++++++++
->   tools/testing/selftests/bpf/progs/bpf_misc.h  |  1 +
->   tools/testing/selftests/bpf/test_loader.c     |  5 +++
->   4 files changed, 53 insertions(+), 5 deletions(-)
-> 
-> [...]
+	Andrew
