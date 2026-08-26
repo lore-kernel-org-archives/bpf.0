@@ -1,167 +1,296 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-1.mta1.migadu.com [95.215.58.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583E7445AC1;
-	Wed, 26 Aug 2026 14:46:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4279944607C
+	for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 14:57:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787755605; cv=none; b=s80RgSkrg8OCRdXbWXLalN13v/RdAfJnb8OucGugxzkl/VhnCFKBeddd2gUNz4hSXzvPEOYrpfzIXRKFwC7CM4L5xHMy0JS8+/qhN+NCad1aF4PYlEBPAE5yIChgLj5iChQ0YiVN9IdBQWYqvg8EhCx+qLVwZCgCPqziWBLN1P8=
+	t=1787756235; cv=none; b=jlScYew/4zrzhIeSbwBU8jhe31zc4Iimi+0LvKg40JL/V8awoHPfgFLuS1zq+vuxUqKztRDrwOWezbZHwtgYygyuP1dbo8BEUCI0wpWp1WzBDIMlobaEyLXsX+WLe+08F7LSZmoPnCwTewXNQ0PDrXH7pW8mgz5dfDfzDqoDpDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787755605; c=relaxed/simple;
-	bh=n/5mZkYkKK5GavBNGTNXlJp3qMnQh82rUrq1G8+x6Nw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PG7n8Qmnzrq6WMkF8nEXoErNdjk1XPJrXQCAvXOuPfUE6Teox7nPEO0FFl30Y905mX2hbkOwLnrJATFTtoIBt6wWRtnCwcItRVzclWUtGhuLEdHsDngGGoEMGkcIuvYV/ioWEJjkdSY2ocPh5k41OxbMUUcmceZ7DapZtBng4/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=LrU6HUGT; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gozkSWv+; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1787756235; c=relaxed/simple;
+	bh=P61/CZ4aaAwA+5xlFDVZ1Xvshkk76UHu0j9/A+GJqM4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ax/DqB0HVRBjv9DHCJSDYODp2wnr94HpU2ogAgYkcqOw4d3eEZTHL+VuPGRGlcjUePvD3CFmKy+koLYqytSmB669heCwdzQBtiQcWwod1knAbcddokLKPWRwd8nZbBL6M+loRJCXtqzGhA6oPBh4IMHcEOWmBb+Ls4w1uKcDKQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Rzf9IDFw; arc=none smtp.client-ip=95.215.58.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="LrU6HUGT";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gozkSWv+"
-Date: Wed, 26 Aug 2026 16:46:36 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1787755597;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=S0Kkynge44FrWWoalc/XYt1t696+d537CJ47hQiSN5E=;
-	b=LrU6HUGTkQ/HPzremJzckNm2cqpOlgdcnVt6mDteTHCiWw38x2TkLAPOkDqwYKiASklx/L
-	16cJ8SSSTa7or4LPHRb9naKFyEoYjDUeC7RsEIQySnA5ZWHWjJpJZq6N+xS9FalE0OB3OB
-	5V9TADPX2yz9EYITk0j2qBA0v2y9Df+m0oRzu7NNGth7jHhLBktHDad8Pihk2vvXfkTrQ+
-	glUH2itooDT6gk79kYPFH7nSw6/HU13o8ew/kJO5j9u4RUvJhRViY/HhprQ2x5OK/bIzth
-	bq0bvFl8/T0ixvO1FIui8ErYqQPhceCZ3BQH6abLN5pj9+WLUvBHxWuYjTljEA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1787755597;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=S0Kkynge44FrWWoalc/XYt1t696+d537CJ47hQiSN5E=;
-	b=gozkSWv+kjmm1LlGRIFiYIde5MxTEoTadSEOrNSFuVaThoY56VhcztspbhDoqkXFnMK/mz
-	hyMu85VWKTOTPkBw==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: Lai Jiangshan <jiangshanlai@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
-	Davidlohr Bueso <dave@stgolabs.net>,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Rzf9IDFw"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=P61/CZ4aaAwA+5xlFDVZ1Xvshkk76UHu0j9/A+GJqM4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787756230; v=1; x=1788361030;
+ b=Rzf9IDFwMKl6KzknVjsVfIR6cmuh2fPklErq+Hc8B+eNsk9LwNRtb394htFmWHrwqveLznPp
+ K/zKFqRTRw2yiwF62iqEUe8PtjbxJsQIUvktouNxbVxDrkba0LAEbhQmismHjN1or6odpw36Hts
+ Z3YpR4FpyF1q3rATP+1sQORQ=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from .linux.dev (117.20.148.1)
+	by smtp.migadu.com with ESMTPS id 99426f2ea7423afc;
+	Wed, 26 Aug 2026 14:57:09 +0000
+X-Mizu-Trace-ID: 99426f2ea7423afc
+X-Migadu-Flow: FLOW_OUT
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Zqiang <qiang.zhang@linux.dev>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
-	Matt Fleming <mfleming@cloudflare.com>,
-	"Harry Yoo (Oracle)" <harry@kernel.org>,
-	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-	bpf@vger.kernel.org, linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH v4 1/6] rcu: Make call_rcu() safe to call from any context
-Message-ID: <20260826144636.3IRUXeFV@linutronix.de>
-References: <20260810122758.183765-1-puranjay@kernel.org>
- <20260810122758.183765-2-puranjay@kernel.org>
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v3] selftests/bpf: Avoid flaky resize value test for percpu data
+Date: Wed, 26 Aug 2026 22:56:13 +0800
+Message-ID: <20260826145613.34182-1-leon.hwang@linux.dev>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20260810122758.183765-2-puranjay@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On 2026-08-10 05:27:50 [-0700], Puranjay Mohan wrote:
-> --- a/kernel/rcu/rcu.h
-> +++ b/kernel/rcu/rcu.h
-> @@ -572,6 +572,17 @@ static inline void tasks_cblist_init_generic(void) {=
+The bpf_map__set_value_size() test for percpu data relies on the tail
+'cpu_id' field in the ".percpu" map. The test would fail, when 'cpu_id' is
+not the last field in the map.
+
+To avoid the flaky test, factor out a subtest to use a dedicated
+".percpu.arr" map that only has one field 'int arr[1]'. And, skip the
+subtest when fail to load skel with errno E2BIG and the new value size is
+larger than ALIGN(32KiB, PAGE_SIZE).
+
+And, drop 'args' in test_percpu_data_on_cpus(), which isn't used in bpf
+prog side.
+
+And, enhance the test to cover 'set' and 'nums[6]'.
+
+Fixes: 4c9241bd731a ("selftests/bpf: Add tests to verify global percpu data")
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+v2 -> v3:
+* Drop 4KiB page size guard. (Andrii)
+* Expect -E2BIG, and skip the test, when PAGE_SIZE is >= 64KiB. (Andrii)
+* v2: https://lore.kernel.org/bpf/20260818153202.90714-1-leon.hwang@linux.dev/
+
+v1 -> v2:
+* Factor out a subtest to test bpf_map__set_value_size().
+* Run the new subtest only on 4K page systems. (Sashiko)
+* v1: https://lore.kernel.org/bpf/20260814173206.93082-5-leon.hwang@linux.dev/
+---
+ .../bpf/prog_tests/global_data_init.c         | 96 ++++++++++++++-----
+ .../bpf/progs/test_global_percpu_data.c       | 10 +-
+ 2 files changed, 80 insertions(+), 26 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+index 5671c31085cd..7c539cbcf3a1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
++++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+@@ -68,12 +68,9 @@ static void test_percpu_data_on_cpus(struct bpf_map *map, int map_fd, int prog_f
+ {
+ 	struct test_global_percpu_data__percpu *data = NULL;
+ 	int i, err, key = 0, num_online, run = 0;
+-	__u64 args[2] = {0x1234ULL, 0x5678ULL};
+ 	size_t data_sz;
+ 	bool *online;
+ 	LIBBPF_OPTS(bpf_test_run_opts, topts,
+-		    .ctx_in = args,
+-		    .ctx_size_in = sizeof(args),
+ 		    .flags = BPF_F_TEST_RUN_ON_CPU,
+ 	);
+
+@@ -81,7 +78,7 @@ static void test_percpu_data_on_cpus(struct bpf_map *map, int map_fd, int prog_f
+ 	if (!ASSERT_OK(err, "parse_cpu_mask_file"))
+ 		return;
+
+-	data_sz = map ? bpf_map__value_size(map) : sizeof(*data);
++	data_sz = sizeof(*data);
+ 	data = calloc(1, data_sz);
+ 	if (!ASSERT_OK_PTR(data, "calloc percpu data"))
+ 		goto out;
+@@ -109,7 +106,7 @@ static void test_percpu_data_on_cpus(struct bpf_map *map, int map_fd, int prog_f
+ 			break;
+
+ 		ASSERT_EQ(*runp, ++run, "run");
+-		ASSERT_EQ(data->cpu_id[0], i, "cpu_id");
++		ASSERT_EQ(data->cpu_id, i, "cpu_id");
+ 		ASSERT_EQ(data->data, 1, "data");
+ 		ASSERT_TRUE(data->set, "set");
+ 		ASSERT_EQ(data->nums[6], 0xc0de, "nums[6]");
+@@ -127,7 +124,6 @@ static void test_global_percpu_data_init(void)
+ {
+ 	struct test_global_percpu_data__percpu init_value = {};
+ 	struct test_global_percpu_data__percpu *init_data;
+-	const __u32 desired_sz = sysconf(_SC_PAGE_SIZE);
+ 	struct test_global_percpu_data *skel = NULL;
+ 	size_t init_data_sz;
+ 	struct bpf_map *map;
+@@ -163,9 +159,11 @@ static void test_global_percpu_data_init(void)
+ 	if (!ASSERT_EQ(bpf_map__type(map), BPF_MAP_TYPE_PERCPU_ARRAY, "bpf_map__type"))
+ 		goto out;
+
++	init_value.set = 1;
+ 	init_value.data = 2;
+ 	init_value.nums[6] = -1;
+ 	init_value.struct_data.i = 2;
++	init_value.struct_data.set = 1;
+ 	init_value.struct_data.nums[6] = -1;
+ 	err = bpf_map__set_initial_value(map, &init_value, sizeof(init_value));
+ 	if (!ASSERT_OK(err, "bpf_map__set_initial_value"))
+@@ -177,35 +175,24 @@ static void test_global_percpu_data_init(void)
+
+ 	ASSERT_EQ(init_data->data, init_value.data, "init_value data");
+ 	ASSERT_EQ(init_data->set, init_value.set, "init_value set");
++	ASSERT_EQ(init_data->nums[6], init_value.nums[6], "init_value nums[6]");
+ 	ASSERT_EQ(init_data->struct_data.i, init_value.struct_data.i, "init_value struct_data.i");
++	ASSERT_EQ(init_data->struct_data.set, init_value.struct_data.set,
++		  "init_value struct_data.set");
+ 	ASSERT_EQ(init_data->struct_data.nums[6], init_value.struct_data.nums[6],
+ 		  "init_value struct_data.nums[6]");
+ 	ASSERT_EQ(init_data_sz, sizeof(init_value), "init_value size");
+ 	ASSERT_EQ((void *) init_data, (void *) skel->percpu, "skel->percpu eq init_data");
+ 	ASSERT_EQ(skel->percpu->data, init_value.data, "skel->percpu->data");
+ 	ASSERT_EQ(skel->percpu->set, init_value.set, "skel->percpu->set");
++	ASSERT_EQ(skel->percpu->nums[6], init_value.nums[6], "skel->percpu->nums[6]");
+ 	ASSERT_EQ(skel->percpu->struct_data.i, init_value.struct_data.i,
+ 		  "skel->percpu->struct_data.i");
++	ASSERT_EQ(skel->percpu->struct_data.set, init_value.struct_data.set,
++		  "skel->percpu->struct_data.set");
+ 	ASSERT_EQ(skel->percpu->struct_data.nums[6], init_value.struct_data.nums[6],
+ 		  "skel->percpu->struct_data.nums[6]");
+
+-	ASSERT_GT(desired_sz, sizeof(init_value), "desired_sz");
+-	err = bpf_map__set_value_size(map, desired_sz);
+-	if (!ASSERT_OK(err, "bpf_map__set_value_size"))
+-		goto out;
+-	if (!ASSERT_EQ(bpf_map__value_size(map), desired_sz, "percpu value size"))
+-		goto out;
+-	if (!ASSERT_NEQ(bpf_map__btf_value_type_id(map), 0, "percpu BTF value type"))
+-		goto out;
+-
+-	init_data = bpf_map__initial_value(map, &init_data_sz);
+-	if (!ASSERT_OK_PTR(init_data, "resized bpf_map__initial_value"))
+-		goto out;
+-	if (!ASSERT_EQ(init_data_sz, desired_sz, "resized initial value size"))
+-		goto out;
+-	if (!ASSERT_EQ(init_data->data, init_value.data, "resized initial value data"))
+-		goto out;
+-
+ 	err = test_global_percpu_data__load(skel);
+ 	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
+ 		goto out;
+@@ -236,6 +223,67 @@ static void test_global_percpu_data_lskel(void)
+ 	test_global_percpu_data_lskel__destroy(lskel);
  }
->  #define RCU_SCHEDULER_INIT	1
->  #define RCU_SCHEDULER_RUNNING	2
-> =20
-> +/*
-> + * Defer whenever interrupts are disabled, since a callback-list operati=
-on may
-> + * be in flight on this CPU.  Not before the scheduler is up: irq_work i=
-s not
-> + * usable that early, and rcu_init() itself calls call_rcu().
-> + */
-> +static inline bool should_rcu_defer(void)
-> +{
-> +	return IS_ENABLED(CONFIG_RCU_DEFER) && irqs_disabled() &&
-> +	       rcu_scheduler_active !=3D RCU_SCHEDULER_INACTIVE;
-> +}
 
-Why does the description say that the defer part is for usage from NMI
-and the test here has irqs_disabled() instead of in_nmi()?
++#define PCPU_MIN_UNIT_SIZE (32 << 10)
++
++static void test_global_percpu_data_map_resize(void)
++{
++	const __u32 page_size = sysconf(_SC_PAGE_SIZE);
++	const __u32 pcpu_max_value_size = ALIGN(PCPU_MIN_UNIT_SIZE, page_size);
++	const __u32 desired_sz = page_size * 2;
++	struct test_global_percpu_data *skel;
++	const int arr_value = -1;
++	struct bpf_map *map;
++	int err, prog_fd;
++	size_t data_sz;
++
++	skel = test_global_percpu_data__open();
++	if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
++		return;
++
++	map = skel->maps.percpu_arr;
++	skel->percpu_arr->arr[0] = arr_value;
++	err = bpf_map__set_value_size(map, desired_sz);
++	if (!ASSERT_OK(err, "bpf_map__set_value_size"))
++		goto out;
++	if (!ASSERT_EQ(bpf_map__value_size(map), desired_sz, "bpf_map__value_size"))
++		goto out;
++	if (!ASSERT_NEQ(bpf_map__btf_value_type_id(map), 0, "bpf_map__btf_value_type_id"))
++		goto out;
++
++	skel->percpu_arr = bpf_map__initial_value(map, &data_sz);
++	if (!ASSERT_EQ(data_sz, desired_sz, "data_sz"))
++		goto out;
++	if (!ASSERT_OK_PTR(skel->percpu_arr, "skel->percpu_arr"))
++		goto out;
++	if (!ASSERT_EQ(skel->percpu_arr->arr[0], arr_value, "arr[0]"))
++		goto out;
++
++	err = test_global_percpu_data__load(skel);
++	if (bpf_map__value_size(map) > pcpu_max_value_size) {
++		if (ASSERT_EQ(err, -E2BIG, "test_global_percpu_data__load E2BIG"))
++			/*
++			 * When the PAGE_SIZE is 64KiB, the new value size will
++			 * be 128KiB. Creating a percpu_array map with the new
++			 * value size will fail with -E2BIG due to percpu_array
++			 * map value size limit 64KiB, which is calculated by
++			 * PFN_ALIGN(32KiB).
++			 * Let's skip the test for such case.
++			 */
++			test__skip();
++		goto out;
++	}
++	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
++		goto out;
++
++	map = skel->maps.percpu;
++	prog_fd = bpf_program__fd(skel->progs.update_percpu_data);
++	test_percpu_data_on_cpus(map, bpf_map__fd(map), prog_fd, &skel->bss->run);
++	ASSERT_EQ(skel->bss->arr_sum, arr_value * skel->bss->run, "arr_sum");
++
++out:
++	test_global_percpu_data__destroy(skel);
++}
++
+ static int create_rdonly_percpu_array(void)
+ {
+ 	LIBBPF_OPTS(bpf_map_create_opts, map_opts,
+@@ -388,6 +436,8 @@ void test_global_percpu_data(void)
+ 		test_global_percpu_data_init();
+ 	if (test__start_subtest("lskel"))
+ 		test_global_percpu_data_lskel();
++	if (test__start_subtest("map_resize"))
++		test_global_percpu_data_map_resize();
+ 	if (test__start_subtest("rdonly_direct_read"))
+ 		test_global_percpu_data_rdonly_direct_read();
+ 	if (test__start_subtest("rdonly_direct_write"))
+diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+index 5dc21b3b4cb5..2765cd46e9af 100644
+--- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
++++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+@@ -8,9 +8,12 @@ int loong SEC(".percpu.looooooooong");
+ int data3 SEC(".data.percpu");
+ int data2 SEC(".percpu.data");
 
-> +
->  enum rcutorture_type {
->  	RCU_FLAVOR,
->  	RCU_TASKS_FLAVOR,
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index 21b6ce1dffb63..3bf3a250f9de8 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -3206,6 +3204,103 @@ __call_rcu_common(struct rcu_head *head, rcu_call=
-back_t func, bool lazy_in)
->  	local_irq_restore(flags);
->  }
-> =20
-> +/*
-> + * Re-issue deferred callbacks straight to the enqueue so they cannot de=
-fer
-> + * again.  ->defer_lock serializes the drainers: this CPU's irq_work,
-> + * rcu_defer_flush() and rcutree_migrate_callbacks().
-> + */
-> +static void __rcu_defer_drain(struct rcu_data *rdp)
-> +{
-> +	struct llist_node *node, *next;
-> +	unsigned long flags;
-> +
-> +	if (!IS_ENABLED(CONFIG_RCU_DEFER))
-> +		return;
-> +
-> +	raw_spin_lock_irqsave(&rdp->defer_lock, flags);
-> +	llist_for_each_safe(node, next, llist_del_all(&rdp->defer_head)) {
-> +		struct rcu_head *head =3D (struct rcu_head *)node;
++/* Used for testing bpf_map__set_value_size(). */
++int arr[1] SEC(".percpu.arr");
++int arr_sum;
++
+ int run;
+-/* cpu_id as array to verify map value resizing. */
+-int cpu_id[1] SEC(".percpu");
++int cpu_id SEC(".percpu");
+ int data SEC(".percpu") = -1;
+ int nums[7] SEC(".percpu");
+ bool set SEC(".percpu") = false;
+@@ -34,7 +37,8 @@ int update_percpu_data(void *ctx)
+ 	data = 1;
+ 	run++;
+ 	set = true;
+-	cpu_id[0] = bpf_get_smp_processor_id();
++	cpu_id = bpf_get_smp_processor_id();
++	arr_sum += arr[0];
+ 	return 0;
+ }
 
-Why do you need the lock. This is still not clear to me despite the
-comment. You can do llist_del_all() towards another list and then feed
-it into rcu_do_enqueue() one by one. And you use the LAZY part.
-
-> +
-> +		/* Bounds a node self-linked by a double call_rcu(). */
-> +		head->next =3D NULL;
-> +		rcu_do_enqueue(head, head->func, false);
-> +	}
-> +	raw_spin_unlock_irqrestore(&rdp->defer_lock, flags);
-> +}
-=E2=80=A6
-> @@ -4231,6 +4330,9 @@ rcu_boot_init_percpu_data(int cpu)
->  	rdp->rcu_onl_gp_state =3D RCU_GP_CLEANED;
->  	rdp->last_sched_clock =3D jiffies;
->  	rdp->cpu =3D cpu;
-> +	init_llist_head(&rdp->defer_head);
-> +	raw_spin_lock_init(&rdp->defer_lock);
-> +	rdp->defer_work =3D IRQ_WORK_INIT_HARD(rcu_defer_drain);
-
-Why is this IRQ_WORK_INIT_HARD() instead, say, IRQ_WORK_INIT_LAZY()? Is
-there a requirement that the RCU callback needs to complete asap and not
-be delayed to the next tick? This would give kind of the LAZY part.
-
->  	rcu_boot_init_nocb_percpu_data(rdp);
->  }
-> =20
-
-Sebastian
+--
+2.55.0
