@@ -1,103 +1,128 @@
-Received: from skyblue.cherry.relay.mailchannels.net (skyblue.cherry.relay.mailchannels.net [23.83.223.167])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9210913777E;
-	Wed, 26 Aug 2026 01:34:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.83.223.167
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6502D2773EC
+	for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 01:40:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787708064; cv=none; b=Yhlbco7QgEcjPNnmSeGNGilOk+jWantb1KBwFAkFrg8UTHmtR9MBC/Swpj1sXHBX2BZkBI59e4SU91UwRrW4p36llx+PGwJR8s865aW98ZcgSUeIzkbnW0dVaQ1IuJvrdhHayEg09MTXDEZ+ahnFqXo7NSnCVGC8xdGRBxOOzBE=
+	t=1787708404; cv=none; b=Mdvg+PINKZXRI6LY9TCh7mDw+SFl8Nbm5Wcmlb/tR3+/bSzqKdN+OO3ekGxUJGZ5gvP9BQ1Y6VfvCWySnbuvmHZel+dypo9OiiLYvbtrXABO/MGeMbp5PkGDQInAaFpmRTGhettwF0/LsnAL1avgT9KGIUB7/UTSi2+9s7XHdkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787708064; c=relaxed/simple;
-	bh=8mvVAM5/C4VKX+uyn+Ue+KiWk4xHiIhC8s/6hAlyMMs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H2nqq40Q9ZbQX84zZ7tsKX8SIKOsIkx1ngTV2KaSqxoTaNsj/KzcpJM6yk9gqc1SYuhuqiv/pnXjH4xVCR8g8SB0yhwClAZsyAav++lUphX7cxZzCTKxx0kZszUqxKvq0Q7w3PApdZTRmeyBm7TdmeNi+YV6tSWcIhaiXLXadj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net; spf=fail smtp.mailfrom=stgolabs.net; dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b=j6is/86G; arc=none smtp.client-ip=23.83.223.167
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=stgolabs.net
+	s=arc-20240116; t=1787708404; c=relaxed/simple;
+	bh=xddEwg9RunMRuvB/k049ds1rBCYLv2ELWCpHxLMwfus=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=bfoHCWjZbW8LBDVL0/ZIyG+QBZ9Elp2gYqHipg+LZRgW6/0q5O6cUZ9T9VDJ4BaZG+yKNYU14QQ2RYBlHUZCI0Z8993A4Z8/qwdH8y6nW/DGw8rUUW+pby7unlH8lqqmrL4Ox0gWFSZF2H+UASii3JpFVTvnTZapVZQ59oRkB9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YFoWZiby; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b="j6is/86G"
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-	by relay.mailchannels.net (Postfix) with ESMTP id CF1D84E1377;
-	Wed, 26 Aug 2026 01:25:03 +0000 (UTC)
-Received: from pdx1-sub0-mail-a204.dreamhost.com (trex-green-7.trex.outbound.svc.cluster.local [100.96.17.28])
-	(Authenticated sender: dreamhost)
-	by relay.mailchannels.net (Postfix) with ESMTPA id 2F6304E1551;
-	Wed, 26 Aug 2026 01:25:03 +0000 (UTC)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Shoe-Trade: 329137dc4d059e0c_1787707503612_153827419
-X-MC-Loop-Signature: 1787707503612:1092170596
-X-MC-Ingress-Time: 1787707503612
-Received: from pdx1-sub0-mail-a204.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-	by 100.96.17.28 (trex/8.0.2);
-	Wed, 26 Aug 2026 01:25:03 +0000
-Received: from offworld (unknown [76.167.199.67])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dave@stgolabs.net)
-	by pdx1-sub0-mail-a204.dreamhost.com (Postfix) with ESMTPSA id 4hV6QN4m4Qz1V;
-	Tue, 25 Aug 2026 18:25:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-	s=dreamhost; t=1787707503;
-	bh=8mvVAM5/C4VKX+uyn+Ue+KiWk4xHiIhC8s/6hAlyMMs=;
-	h=Date:From:To:Cc:Subject:Content-Type;
-	b=j6is/86GlPmrZ409Z13BQVNYvcmsOqVE5NPB3rajquDkLuKgFEq0vQWaBy2ze21v2
-	 guCgQsPzj672ix7aiK7PSuDhiCMVjcjSMi5txQiqHwQLAfOf8Q+hShk7ufHCvwCnu6
-	 /OOITLkG4BMZPC1jlQGIAZRiaTZPHCF39n3GLKv+l55qryyNpe2zkTeOVzWiW9IfKV
-	 U4T5po5xCW5Xej0JU0qJ7HjxmAtVCs9RuJ5fB+qIkZXb2R7sB5qT4/LKDKeIHj1LOQ
-	 jU8YPXWFwRY8qmN6V26lMSe1iKhNLDNkTu+x6NyKkDURg3qwofhyDd7XtCE6LBvdVX
-	 DHlAkm+mFg8/w==
-Date: Tue, 25 Aug 2026 18:24:57 -0700
-From: Davidlohr Bueso <dave@stgolabs.net>
-To: Yunhui Cui <cuiyunhui@bytedance.com>
-Cc: pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	alex@ghiti.fr, dennis@kernel.org, tj@kernel.org, cl@gentwo.org,
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
-	bjorn@kernel.org, pulehui@huawei.com, puranjay@kernel.org,
-	thuth@redhat.com, ajones@ventanamicro.com,
-	ben.dooks@codethink.co.uk, rkrcmar@ventanamicro.com,
-	samuel.holland@sifive.com, zong.li@sifive.com,
-	conor.dooley@microchip.com, tglx@kernel.org, debug@rivosinc.com,
-	seanwascoding@gmail.com, andybnac@gmail.com,
-	menglong8.dong@gmail.com, cyrilbur@tenstorrent.com,
-	wangruikang@iscas.ac.cn, atishp@rivosinc.com,
-	apatel@ventanamicro.com, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	bpf@vger.kernel.org, arnd@arndb.de, nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com, morbo@google.com,
-	justinstitt@google.com, qingfang.deng@siflower.com.cn,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v8 3/3] riscv: store percpu offset into thread_info
-Message-ID: <20260826012457.ig3rfmji7vywf6kc@offworld>
-References: <20260703122832.15984-1-cuiyunhui@bytedance.com>
- <20260703122832.15984-4-cuiyunhui@bytedance.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YFoWZiby"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-38dc69c74b8so637889a91.0
+        for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 18:40:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787708402; x=1788313202; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=9D0ya7fAGHD4mh1WhP+JBRzlt0nXa7uSYqgCddP+Sco=;
+        b=YFoWZibyJ9THs0OTsUudD2LnUXl4W3tn0eE9KBlZVzb95U94ymGYhGfYtC3Z5hTI2f
+         jLymFKwlMIoHwur59BfZeR21MqmI7o7WaAt6lMh+XifUk9B1usC0CszpVUufpG7etk/I
+         uucNDtjhL7r/fLhR2JrpPQeGxgePxmhAftqmJvsjq6Iu3soavwL8BEjs0Q+KFS/XyM+p
+         pEn6iFi8ZhFRwJ6mPCE/ZY4T+mhGL+VAOzhkW6VrF2k3lh5ED4RK9lKnDllaY7wYRErx
+         TfkyrSJjM1JvwxJAipciqVPy85DFpSAOGZp/P4uxJfuuWNfB4q/4CncH3A5dalyqZvDa
+         KHlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787708402; x=1788313202;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=9D0ya7fAGHD4mh1WhP+JBRzlt0nXa7uSYqgCddP+Sco=;
+        b=LTBLa9xVZbLKd+9CUBeEfFyg/YIprif28qMAML8o8eQYORM4QaOlE2+6Xo4qdlwQw7
+         rykD2YRZD3MhAKbB9UCxoA9j/9sMm9Kvl+9m2207qzYG4S4HCzyoJS6PJHe59903kMdL
+         lYmAUTccOFKBibj6OukUszOCUlmBpZ6NFtEl7j4nCaJTqLK+HZnXWyhYcrRlJrkjoLN3
+         XC85s3VN5F77h63RwMvYmLKFuuIDlQMm/Gi/aAW7aZzD5MqJu6TestelKj2iFrPUwbs6
+         scWPsLd0SvXErlGm77yGHpYTsDOvxvQoWLUse6DHWV2mLY8rkU5m8MhvzoSjvGbPTNtO
+         cbRQ==
+X-Forwarded-Encrypted: i=1; AHgh+RoBHupuPd0FWSYLbfs92CPmGuBsalzaE+OSGkBNAeT7HU44V33WF1GNCl9YbSbbw/F9hJQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++nTimiTKIaRL/n+LMz47HkkdV/QOJZMu5nGJ6MszLlj9sPJ5LnI
+	UfMK8VXT+FquIF3uW7AneuS0MbhySY8/6uAFYrr55zaAjv4/3YBo436J
+X-Gm-Gg: AR+sD13K7oSJXU/j+FN3jQo/IjK/2va1eXMPdvAcn1RgHMjeVUESOsdD5XQJ+PymHxn
+	IDegNF7flKWF/MpPvvex6ODORSUeX0yST10Tb0ndfiomrTaXZ6732eymGHs7l3t3rZbcCIwAJiF
+	w3SGEoFp3xiYgdV8IXNxMbffu1kWBCQstl25YIrxxGDvnfDoeAB3Vk2J8DwJXtDEYZUaEp52Ify
+	92bcqEW0CF/kqklatY+kIRJkMISTUKvA/M38vaVFoqQeZDRTrW7xLC+IKDxJ53gQvGDlyn+A7nx
+	PmQ4eFk5b+ZfFOR1PNX71RV8DIK0J2KBqN5jZtJMPyuzpcUuasqP/4lb9VEcNJhDP+g3itUPzIP
+	7B7XJ6kPbBVOmrzoNq1u0S9SIyNzoU1CFN7zcSJcmLamuMQgnyjj8I2YgFMrRHyPJpCwRUsvOmk
+	Gu2DCV9SGogsD4Ak32WAkR3yK4u8ZBaC56GUHDaueGg9sLW0SI74HePjbnd4B+DUM7kEwUIzMM
+X-Received: by 2002:a17:90b:3cc3:b0:38f:18f9:785 with SMTP id 98e67ed59e1d1-3966d20cde1mr7186084a91.8.1787708402417;
+        Tue, 25 Aug 2026 18:40:02 -0700 (PDT)
+Received: from ancienth-X870E-Nova-WiFi ([125.186.72.2])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3965d119724sm3674887a91.2.2026.08.25.18.39.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Aug 2026 18:40:01 -0700 (PDT)
+From: Daehyeon Ko <4ncienth@gmail.com>
+To: Lorenzo Stoakes <ljs@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	David Hildenbrand <david@kernel.org>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Hagen Paul Pfeifer <hagen@jauu.net>,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2] mm/secretmem: properly account locked pages
+Date: Wed, 26 Aug 2026 10:39:48 +0900
+Message-ID: <20260826013948.1325213-1-4ncienth@gmail.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260822-secretmem-accounting-v2-1-fe445a7c6eb1@kernel.org>
+References: <20260822-secretmem-accounting-v2-1-fe445a7c6eb1@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20260703122832.15984-4-cuiyunhui@bytedance.com>
-User-Agent: NeoMutt/20220429
+Content-Transfer-Encoding: 8bit
 
-On Fri, 03 Jul 2026, Yunhui Cui wrote:
+Hi Lorenzo,
 
->RISC-V percpu addressing currently derives the base offset from the CPU
->number and __per_cpu_offset[]. Cache the current CPU percpu offset in
->thread_info so percpu accesses can load it directly.
+I tested the exact v2 from this Message-ID on its stated base with an x86_64
+KASAN kernel. The supplied memfd_secret selftest passed 6/6 in three boots,
+and my accounting-boundary suite also passed in three boots. I saw no
+patch-attributable KASAN report, warning, Oops, or panic.
 
-fyi on a sifive p550 I am seeing this_cpu_inc() cost dropping by ~15-20%
-an adhoc microbench measuring/grouping various calls.
+A v1/v2 differential also confirms that v2 fixes the CAP_IPC_LOCK creator
+delegation issue Mike identified:
+
+  v1: CAP_DELEGATION creator_cap_ipc_lock=1 receiver_uid=2001 receiver_pages=2
+  v2: CAP_DELEGATION creator_cap_ipc_lock=1 receiver_uid=2001 receiver_pages=1
+
+I have one policy question before adding Tested-by. With a one-page soft and
+hard RLIMIT_MEMLOCK, a non-root task whose only effective and permitted
+capability was CAP_IPC_LOCK produced this on v2:
+
+  CAP_ONLY uid=2002 cap_ipc_lock=1 mlock_two_pages=1 faulted_pages=1 raise_hard_rc=-1 raise_hard_errno=1
+
+Thus ordinary mlock() of two pages succeeded, while only one secretmem page
+could be faulted. Raising the hard limit failed with EPERM because that
+requires CAP_SYS_RESOURCE. Is this divergence from ordinary mlock() the
+intended consequence of removing the CAP_IPC_LOCK exemption for secretmem?
+
+I saw the planned selftest split and cleanup in the follow-up discussion. I
+will retest the revised patch before adding Tested-by.
 
 Thanks,
-Davidlohr
+Daehyeon
