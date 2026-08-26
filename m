@@ -1,118 +1,95 @@
-Received: from mta0.migadu.com (out-250.mta0.migadu.com [91.218.175.250])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC88370AD7
-	for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 17:28:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.250
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51017375F65;
+	Wed, 26 Aug 2026 17:29:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787765358; cv=none; b=Y8ElBHe4gn6mDdszxouEc8IS5e+svqMYT4xeJBFC36RFlL4//WdSnHyKknEbuIpm/v7ryBAy44BooTYeaBq5UheCh95F361IuBKqVy8OJO+nZehmF9DNVWLcXs4tPlPMTVv6P/tDapScTwVxMAIsaw+W7TMzSP8LzC3QHhl0eoY=
+	t=1787765392; cv=none; b=b8yl5K1E+u4Z019ake+hcVrjrSZMNmx3m0FwOWQoHigjLId5K7jHQrAO5kAxQ+hlpw4q+wloaw+fxQloVay7LQX6TwPny/rjpiBk1O9kbAEvH9GVOSnk1OKSyuI6+mLd5bzNwu1pVr1kb5uMs4RRYiMrO1iif40b+NCGsWE9jhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787765358; c=relaxed/simple;
-	bh=brB0Ej4oEC/D3NIjXkupym/SZhHaRuyz8kTu6uk2aCY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dOaxLsVrJmS1ml5u3SqBasRXGTuqcvhgznRIpVHMBiVL1EiOqKYWd2bT2QfI11kF3vahGjYouhpmKNz3jb2hgJNC3NZT1/BWudlppz86EYWVg6vb9PboMBR1esrY0Go1K34WPn3wGfmNHYldvMJY8pfT8G2wNMK2+99K06r0bqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NXLyN7sJ; arc=none smtp.client-ip=91.218.175.250
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787765392; c=relaxed/simple;
+	bh=IHpSubs3I7mj2LkS2HowxSYFU9IhoGvNIjFMZxWlhvc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=bmjEBKPZnXJgqzQ3zmWLlKqZge3jWLIaM7w7lY9DRPsCZn+JhkqlMAfLW7OWp4UvqpJbs9X6YY0juRYjyybyVyDm0/dOKfBzFkefUC9V9JFhgZe53hCc4SDZZbilEPStijVtCQ5Aly32kl9nrZ3Aqg6ugaqS45hjnjLelQpPuYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K8WVup98; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NXLyN7sJ"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=brB0Ej4oEC/D3NIjXkupym/SZhHaRuyz8kTu6uk2aCY=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787765328; v=1; x=1788370128;
- b=NXLyN7sJ3P0yHWVWK2MDR8911z9/TMw2DWQbh4JGrinm6Nv6ECUQhUahP28K0c8F597RL7lA
- 55gobyS3GTnWaoAYSuqrK1/egCcQHoTLbtEg5MZupSR9bYLfuZOdQy5haXm3ByRmuuxRX+LY+gO
- dLutPjc4gIEFHOzQmNGAWuTw=
-X-Envelope-To: bpf@vger.kernel.org
-Received: from [IPV6:2a03:83e0:1151:15:1c5e:37e8:36:dd37] (2620:10d:c090:500::7:2cdc)
-	by smtp.migadu.com with ESMTPS id 097dab9261c31e5f;
-	Wed, 26 Aug 2026 17:28:48 +0000
-X-Mizu-Trace-ID: 097dab9261c31e5f
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <60851aa9-9483-4fcc-9013-0679d191d001@linux.dev>
-Date: Wed, 26 Aug 2026 10:28:44 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K8WVup98"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9F621F000E9;
+	Wed, 26 Aug 2026 17:29:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787765376;
+	bh=x1NLkkMCEcxfiyNKhz6qBXX+0ZUXE57V6HJcVrklnMA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=K8WVup98/Awo8koXqVLpqIP41gR11NIfq01P8fhS+Cm52u7yReQj30ClDhccCKBLk
+	 yXwRE/35/spPziMSn9RpvjexLArUThTtY4SWeL7KqQ02Rsl1MbMzPBeu9BB6wtJ/AZ
+	 gF+nem9MRdiV3ShYTxdG3xKpUKmY3mbwW6t9f1l5ofkASu7Jd+yZgpnQP+f1bwp2VW
+	 ncHxoRNysHDRh72uM2CIZYqPLCewoZ+iIBE8qwznDoyd8aalg+t3UmW+TIoDM4wiEN
+	 E32BxE+vUZa7FlH8OOxYZX8qgZIpExwJmd0JJUDawlRSoBFg+Y1WzmoIASZBGcPc4m
+	 56+YMNOS5qOTg==
+Content-Type: multipart/mixed; boundary="===============6413054825729676466=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 03/10] bpf: Add btf_type_is_arena_ptr()
-Content-Language: en-GB
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org, clm@meta.com,
- ihor.solodrai@linux.dev
-References: <20260825205427.1322594-1-yonghong.song@linux.dev>
- <bf7b20c25763c95f0438bd265d8a3abb1871c527882e6e7f0944be76f88d90f7@mail.kernel.org>
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <bf7b20c25763c95f0438bd265d8a3abb1871c527882e6e7f0944be76f88d90f7@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Message-Id: <4aafb74ee385a13ec7e1b97285fab2f402a76d506e84a4a40c5ccc61477a4129@mail.kernel.org>
+In-Reply-To: <20260826164136.1400997-8-daniel@iogearbox.net>
+References: <20260826164136.1400997-8-daniel@iogearbox.net>
+Subject: Re: [PATCH bpf-next v3 07/11] selftests/bpf: Rename the verify_sig_setup.sh setup into setup-rsa
+From: bot+bpf-ci@kernel.org
+To: daniel@iogearbox.net,memxor@gmail.com
+Cc: brauner@kernel.org,kpsingh@kernel.org,ast@kernel.org,john.fastabend@gmail.com,a.s.protopopov@gmail.com,bpf@vger.kernel.org,dhowells@redhat.com,jarkko@kernel.org,keyrings@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 26 Aug 2026 17:29:35 +0000 (UTC)
 
+--===============6413054825729676466==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-
-On 8/25/26 2:59 PM, bot+bpf-ci@kernel.org wrote:
->> bpf: Add btf_type_is_arena_ptr()
->>
->> Simplify btf_scan_type_tags() and added a new helper
->> btf_type_is_arena_ptr(). No functional change.
-> This isn't a bug, but could the changelog use the imperative mood
-> consistently (e.g., "Simplify ... and add ...")?  Also, could it explain
-> why the helper needs external linkage, such as noting that a later patch
-> calls it from verifier.c?
+> diff --git a/tools/testing/selftests/bpf/verify_sig_setup.sh b/tools/testing/selftests/bpf/verify_sig_setup.sh
+> index 09179fb551f09..202e6e6418fe2 100755
+> --- a/tools/testing/selftests/bpf/verify_sig_setup.sh
+> +++ b/tools/testing/selftests/bpf/verify_sig_setup.sh
+> @@ -28,7 +28,7 @@ authorityKeyIdentifier=keyid
 >
->> diff --git a/include/linux/btf.h b/include/linux/btf.h
->> index 89d5a5c4f1171..ddd0f4f32d24b 100644
->> --- a/include/linux/btf.h
->> +++ b/include/linux/btf.h
->> @@ -235,6 +235,7 @@ struct btf_record *btf_parse_fields(const struct btf *btf, const struct btf_type
->>   				    u32 field_mask, u32 value_size);
->>   int btf_check_and_fixup_fields(const struct btf *btf, struct btf_record *rec);
->>   bool btf_type_is_void(const struct btf_type *t);
->> +bool btf_type_is_arena_ptr(const struct btf *btf, const struct btf_type *t);
->>   s32 btf_find_by_name_kind(const struct btf *btf, const char *name, u8 kind);
->>   s32 bpf_find_btf_id(const char *name, u32 kind, struct btf **btf_p);
->>   struct btf *btf_get_module_btf(const struct module *module);
->> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
->> index 47d43eb983a50..280530d25886c 100644
->> --- a/kernel/bpf/btf.c
->> +++ b/kernel/bpf/btf.c
->> @@ -3523,6 +3523,22 @@ static int btf_type_tag_walk(const struct btf *btf,
->>   	return 0;
->>   }
->>
->> +bool btf_type_is_arena_ptr(const struct btf *btf, const struct btf_type *t)
->> +{
->> +	if (!btf_type_is_ptr(t))
->> +		return false;
->> +
->> +	for (t = btf_type_by_id(btf, t->type); btf_type_is_modifier(t);
->> +	     t = btf_type_by_id(btf, t->type)) {
->> +		if (!btf_type_is_type_tag(t) || btf_type_kflag(t))
->> +			continue;
->> +		if (!strcmp(__btf_name_by_offset(btf, t->name_off), "arena"))
->> +			return true;
->> +	}
->> +
->> +	return false;
->> +}
-> This isn't a bug, but since btf_type_tag_walk() sits right above this and
-> is still used by btf_find_kptr() and friends, could btf_type_is_arena_ptr()
-> be expressed in terms of it rather than repeating the modifier/type-tag
-> walk?
+>  usage()
+>  {
+> -	echo "Usage: $0 <setup|cleanup <existing_tmp_dir>"
+> +	echo "Usage: $0 <setup-rsa|cleanup <existing_tmp_dir>"
+>  	exit 1
+>  }
 
-Okay, will have more information in commit message.
+This isn't a bug, but while updating this usage line for the rename, would
+it be worth listing the other actions main() accepts (genkey,
+fsverity-create-sign, fsverity-enable) and closing the '<' bracket, so the
+help text matches the dispatch?
 
+> @@ -47,7 +47,7 @@ genkey()
+>  		${tmp_dir}/signing_key.der -outform der
+>  }
 >
-> [ ... ]
+> -setup()
+> +setup_rsa()
+>  {
+>  	local tmp_dir="$1"
 >
+> @@ -108,8 +108,8 @@ main()
 >
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>  	[[ ! -d "${tmp_dir}" ]] && echo "Directory ${tmp_dir} doesn't exist" && exit 1
 >
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32899532405
+> -	if [[ "${action}" == "setup" ]]; then
+> -		setup "${tmp_dir}"
+> +	if [[ "${action}" == "setup-rsa" ]]; then
+> +		setup_rsa "${tmp_dir}"
+>  	elif [[ "${action}" == "genkey" ]]; then
+>  		genkey "${tmp_dir}"
+>  	elif [[ "${action}" == "cleanup" ]]; then
 
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32991355707
+--===============6413054825729676466==--
