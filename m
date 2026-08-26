@@ -1,141 +1,143 @@
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1CFB223DFF
-	for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 01:20:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A7922B594
+	for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 01:21:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787707221; cv=none; b=R/ydizGJvhC1aojiTVkbpvhjr/JA9ez6RErWTw05JmbLcv9GYE3JVL2g3Jf0IKc139sVmZyS1MqUs1CVSMYxgKUjV01/PP8RwNrNyyxdNxL5a3zQCFKFR8obfbTXokxTEJauoNdnUik3vsxQ5quWIhbFLJhG3AODR0UScZJ0+O0=
+	t=1787707263; cv=none; b=hnqwAb+aKohCOB9wm1EbPlZaGqCHYxpXssHIEVfxXIofG3lx9s8WXN9YE3ux7zSmD+j686Bzyg8ZhxEmMywUIXnhEf1+cslUzASQnX0OIVVycg/wyCxweaFoKTwWwjDN1S4Dfki+ANn4vN6xLx5+PbhC18evgEyBTGW9IOh4Tyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787707221; c=relaxed/simple;
-	bh=XnC0OAV8aac6dSnM/x5f16DLZfKmuzQPmXK1c/DyNuQ=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=cEKV/nrS+ktvttwcpZEV4+H6Q2NtyV1kVT+Mgi23yJjj9SBnx+5g4W3uR9TNoSOc7yjBamZCYJ1IZ8Dwz860wCAeBfoKhCtRpataAgW7eAyRfoRYwljboyIU8zzBx/4mp5c20aQdLQO5f+7LfU4MWZZS5TmyMs7WtZYyKCZFWh4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HvXDqPCw; arc=none smtp.client-ip=209.85.160.54
+	s=arc-20240116; t=1787707263; c=relaxed/simple;
+	bh=bz61J4YOFg11l1sMxw5vCXVYmj4NA/d7KtZsdIpszek=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ie1784ZCOx6t3u4+vqsCWGL+nIuI6xeQ7g7r4S9pISEpdF8XU05KstQdThMEfmo8cS+kUe1JdhlGd3XyiGJcWAbCmAJPH5W0N3xpOUuX/icjkf4gXXmpkqqQQU0P1YUMMjz1prSnOmLPK2n0FMTIZQ4TraTKLKqxJHCE+zviAyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XEOG/ZRM; arc=none smtp.client-ip=209.85.216.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HvXDqPCw"
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-44caeb973b3so112772fac.1
-        for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 18:20:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XEOG/ZRM"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-395cf2535acso515037a91.1
+        for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 18:21:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787707218; x=1788312018; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=fUDFu0Aj3iEpRXjvLMN725jqc9wt6Juyi3TstW1quH4=;
-        b=HvXDqPCwS3WmApsIZxRk/LmujckKD/zFiNYJLt9nYFf/jckjdQ5su2iEzw8Qiz3NRb
-         BtNpHC+MlUY5Us+RkWmFUwkCwcZnI8iys1HHMHjXcF3P5sz3Np/IUHAZZJXEyo8+wxAW
-         06rW67lAJF6VaN9kKj/+Q8D4VZsdbDYOjjZyUwRwOZBfBi8phQ1+u5FDvbvHJmG4h7JL
-         RZRp5jvtEhKTOb1OlNkZrVMSb0jN0q+/8C3cm2AION+ldD45LGW/CgZjPs8AAQBaTx7E
-         TnCr64jx2OlamCUnqDwTYvzl582HJpjLxfUpE5AZV58WPybVO+3fIB9YLWeBO/KL/wQ3
-         NZiA==
+        d=gmail.com; s=20251104; t=1787707262; x=1788312062; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=5ahNP6I/2SnsCaDqpAftcnvuu1z4RoYXIL+nfdxKNNk=;
+        b=XEOG/ZRMGKzs+he1BZ4lTAb0qnbJBC1uscvRpc2EXZpImyICAouiWNugJMXuNPpHZP
+         SZiIyFwCc1D154R9FeWPKI8UgcXAv/UCM8qPQmZTF4x9Q0ouRkaUx4FJzjflncb2p8jI
+         IEeeDRR2dJy+wsmtP3G3ujoTtH0KdThA0fS9DvQJpqafURauGuIqsbw5BjQXrjo0rpRi
+         u6TZx1dNqe1zApNFc820xWZSD1hoAdAGBi1NHGh2Ibs+vqnC5ypM1UBM/l4uW6rzvS/H
+         KyA/ER+BqdY3RMhHAoAZYuMfrOvbMy3AUKDF2Z1nO7fc7f9gf+ta9Mevhnz+bc7K620V
+         OoRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787707218; x=1788312018;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=fUDFu0Aj3iEpRXjvLMN725jqc9wt6Juyi3TstW1quH4=;
-        b=Nhvgh2DiYoDyc9x781dRuAGviu4E8Lw/quRw+TiL21A1cTUSK/HT0utJrn9GOf+Rxd
-         XdAbJkI7JGYWntgG+8irUb1l0xDLFZb9+Bv9nJie03m/Gn/Hzhejlmq4YTWKYxVBdxeh
-         9iEX8hGDoMYh5A3SrV1g/J2h9HVJoR3TPCed1qwnqU+aj7kM+byZzE/Z05uU9fXahjoS
-         Asdt2Zsuwq6wL8Kp6v2+ABoucmSO3KFJ/G6kYHpinXHqueuQfm0PFt/rvCcxjn+MC5rW
-         eGBXtMFF3ZWS/qbTXE1VZ2bQKgN1dops0dU4WSrG3lHbr4e1gMeohBdzKYiG104rtsQ2
-         r7hA==
-X-Forwarded-Encrypted: i=1; AHgh+Rp+cTY3bL0gVc98Zqz62clMAlWF9Zb8okzZHUU7N2oj3j9FwmJgWe5C4B9ZGEAXXXqB8W4=@vger.kernel.org
-X-Gm-Message-State: AFuF++kQ3/cPT9eJSt4+PFwTUeG3IxosW9iJZ4HjFatCKiWR6CyXTgYV
-	P8AUZmbmHEZ3cUqdeYo42nNleHLcxBJ325EPTCLGdZYg7Z32tdlxjIc3
-X-Gm-Gg: AR+sD112kt0+/LrHZO0Sz49F/pVhAlkmXb3dySfV6IYhAREqcM79as/QUI8SiwsVu6b
-	5PhtjuZBDH25zsPVfAGaYvODOjqMNkm2c+5vqB5ft51Db3iPbHEW05gVarFClJcj3iYVwpoyBVY
-	hHLwaTEOt+w4GLm9LbSvAigiCRBonatu8pgUeBamtg23e/fiFhudeG0C0CWc86dK6FnOJhZJd0+
-	DHfrmPAG/VV69DfNqxofbARWKpxALfRM1ytizCBH6dpe7vgcqKq7i3PBO25sItFsAKqowICjtvg
-	rrKBn2DEiNxs5eUde97mS9J/uydPnzqpUEyhh7d+eXjz9FZCIhC8ll/Xg3F8EWUVvZo4LVIjVZ3
-	RboVeIiqyszXH4AtrjdEixon1lS4aGgiLeaLKzrLipK4MkErK0q0v3n9PLcSvb1EERq9YjV6eDd
-	ZRR4vYk5ygvALZNvKHkaidLGsKxUHdFuooJpFHRNZWjflWa/Kxwy8wDzHEp6SHmbDWxPQQ4RSNT
-	kT4en+XhPVUPaCEfEBsRJ5OtbTmdmiVTjJPxZoalUVEz6moQ11Q9A==
-X-Received: by 2002:a05:6870:7d1a:b0:463:18a0:959b with SMTP id 586e51a60fabf-4659ab270acmr4525251fac.21.1787707218263;
-        Tue, 25 Aug 2026 18:20:18 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:7::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-465b014ca15sm841315fac.14.2026.08.25.18.20.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Aug 2026 18:20:17 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1787707262; x=1788312062;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=5ahNP6I/2SnsCaDqpAftcnvuu1z4RoYXIL+nfdxKNNk=;
+        b=FpgS49uMH6hRR7MqztE7CuRtj93LTc9H9U4kziWz9uGYm+BaQVndNxbIoi7J5MzdNi
+         e9aDhiacs7qpwEoDbedaFna9BB9UPWrIRM0vMe0gkXVZzfHjsEvLnKPIGAI9EKKYEFha
+         F4DjVUrHlJ8V9wU4KOdg5oCWeRNGLHvKEo2zvkYv70k6Zi8+O4fYQYfc4VDtkyVW6Cwz
+         B41nUItKiym6q+ZbJBkHOYC0ok7vLf2b9Sm+yWGXFZOfelVs9qcaJazK6ggPPquoCLmG
+         c/l0lOkMmV4+/ScruYN8KTyJHqkjVLd9bBhuTrbO0+LEpqL4E15ghF7ZXFLh9MAx4YQq
+         rDsQ==
+X-Gm-Message-State: AFuF++muLQU5Vc1cKDVzIaZb+6m/T9EGnvL7Ka9S3kgvLMWw+3PASTpL
+	MBFbv/WGbf11ci/02fkiiYGAD5E1tc/A6ER2Cazwi1tqjQlKVZtZ4oO5
+X-Gm-Gg: AR+sD10cETphI9jmF1P3lHtFx56oAkTa6lRWZ++4hDFW4r9kthivCeRfEOK/Y1fCD0f
+	ZyDiZBwFROs3RIdel/l/2ZwaReaHM+Cx0eyFJFRwLrFyQeB7PIklU6c/jfPCUjzK7KFmocfZ6HY
+	ySKs8aWVqM4hQ71Qiw2xrbtP8AEsqlppLqg8HoKPQpGL139GUhZ3SpZD3rzSeqhrTEr4fmjkEXs
+	AaxVqNe45s8ka9qytAYj4CoKFaVMhOyfQ9IaP/enuKA1jU90m71Z/DQOFKPzSMCji6Xey9NWrTh
+	E8lDAHHs6HSK9iBcdhzsY9Kaan8P7V/FaZUW7RMiFuyKrfDGtSrJ1FOMJ6WdnnttoeRLpTdWykZ
+	JmeX/QQNF0UXCYmTsg1kSoBdRkAriLU6b0x4WIU4/MFZgfHlTBCfwrL9e2padTId4Wr14bpJPmr
+	+MHE4HiBKHTCPcvi/+AE14l9jU+8er77SiUEGNuW4s1azE6QypZs4PClDFZdBiCYivA7ckEA8wQ
+	4vB09h5+KZeVZp72MUts6krjOkdL0w7XaGKSGd/4RamUCg2sGZZyu8TCcaVArrLCmREkg0Wqkts
+	X2puw7C6uWI6KGn0NlfNQgj93b0rT/QCZ67Bedo=
+X-Received: by 2002:a17:90a:d407:b0:390:84db:888e with SMTP id 98e67ed59e1d1-3966d8528c7mr3397729a91.7.1787707261638;
+        Tue, 25 Aug 2026 18:21:01 -0700 (PDT)
+Received: from KERNELXING-MC1.tencent.com ([114.253.38.195])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39662c80d6csm2795631a91.1.2026.08.25.18.20.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Aug 2026 18:21:00 -0700 (PDT)
+From: Jason Xing <kerneljasonxing@gmail.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	bjorn@kernel.org,
+	magnus.karlsson@intel.com,
+	maciej.fijalkowski@intel.com,
+	sdf@fomichev.me,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	horms@kernel.org,
+	andrew+netdev@lunn.ch
+Cc: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	syzbot+f16c1b285c9f63994eec@syzkaller.appspotmail.com
+Subject: [PATCH net] xsk: set network header on skb at generic transmit
+Date: Wed, 26 Aug 2026 09:20:52 +0800
+Message-Id: <20260826012052.51028-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 25 Aug 2026 18:20:16 -0700
-Message-Id: <DKYHBHNAMR03.B8SKDLC9FQ94@gmail.com>
-Subject: Re: [PATCH bpf v3 1/2] bpf: disable private stack for sleepable
- programs
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Christian Simon" <simon@swine.de>, <bpf@vger.kernel.org>
-Cc: <ast@kernel.org>, <andrii@kernel.org>, <daniel@iogearbox.net>,
- <martin.lau@kernel.org>, <tj@kernel.org>, <yonghong.song@linux.dev>,
- <stable@vger.kernel.org>, <andrii.nakryiko@gmail.com>, <olsajiri@gmail.com>
-X-Mailer: aerc
-References: <20260822225444.2774461-1-simon@swine.de>
- <20260822225444.2774461-2-simon@swine.de>
-In-Reply-To: <20260822225444.2774461-2-simon@swine.de>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Sat Aug 22, 2026 at 3:54 PM PDT, Christian Simon wrote:
-> A JITed BPF program can use one private stack per program and CPU.
-> Sleepable programs can be preempted, allowing another task to run the
-> same program on the same CPU. The second invocation then reuses and can
-> overwrite the first invocation's private stack.
+When constructing an skb in the XSK generic transmit path, neither
+xsk_build_skb() nor xsk_build_skb_zerocopy() calls
+skb_reset_network_header(). After __finalize_skb_around(), the
+network_header offset defaults to 0 (pointing to skb->head). The
+subsequent skb_reserve(skb, hr) moves skb->data forward by hr bytes,
+but leaves network_header still at 0. This makes skb_network_offset()
+return a negative value (-hr).
 
-I'm confused by this. sleepable progs go through __bpf_prog_enter_sleepable=
-_recur()
-which has per-prog recurison counter. So preemption of the prog
-doesn't break private stack.
-If the same prog attemps to execute on the same cpu it will be skipped.
+When such an skb reaches a tunnel driver like ipgre_xmit(), the call
+chain pskb_inet_may_pull() -> pskb_network_may_pull_reason() computes:
 
-syscall prog types go via bpf_prog_run_array_sleepable()
-that have per prog recursions counter.
+    pskb_may_pull_reason(skb, skb_network_offset(skb) + nhlen)
 
-Looks like we're not doing it for bpf_prog_run_array_uprobe().
-I'm not sure what the right trade off here.
-I feel universally checking for recursion is better
-then selectively disabling private stack for uprobe.
+The negative int from skb_network_offset() is implicitly promoted to
+unsigned int, wrapping around to a huge value. This triggers the
+DEBUG_NET_WARN_ON_ONCE(len > INT_MAX) in pskb_may_pull_reason().
 
-> Disable private stack for sleepable programs so they use the regular kern=
-el
-> stack, which handles preemption correctly. This change is intentionally
-> limited to programs marked sleepable; preemptible non-sleepable dispatch
-> paths require separate protection.
->
-> Fixes: 7d1cd70d4b16 ("bpf, x86: Support private stack in jit")
-> Fixes: 6c17a882d380 ("bpf, arm64: JIT support for private stack")
-> Fixes: 156d985123b6 ("powerpc64/bpf: Implement JIT support for private st=
-ack")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Christian Simon <simon@swine.de>
-> ---
->  kernel/bpf/verifier.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 5e37ca75e5c4..038753ef07a9 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -5237,6 +5237,15 @@ static enum priv_stack_mode bpf_enable_priv_stack(=
-struct bpf_prog *prog)
->  	if (!bpf_jit_supports_private_stack())
->  		return NO_PRIV_STACK;
-> =20
-> +	/*
-> +	 * Sleepable programs can be preempted, allowing another task to run
-> +	 * the same program on the same CPU. Since private stack is per-CPU
-> +	 * and per-program, the second invocation would corrupt the first's
-> +	 * stack. Disable private stack for sleepable programs.
-> +	 */
-> +	if (prog->sleepable)
-> +		return NO_PRIV_STACK;
+Call trace from syzkaller:
+  ipgre_xmit+0x958/0xcd0 net/ipv4/ip_gre.c:658
+  __netdev_start_xmit include/linux/netdevice.h:5400
+  netdev_start_xmit include/linux/netdevice.h:5409
+  __dev_direct_xmit+0x4b6/0x730 net/core/dev.c:4942
+  __xsk_generic_xmit net/xdp/xsk.c:1079
+  xsk_generic_xmit+0x277a/0x40a0 net/xdp/xsk.c:1120
 
-This is not true in genreal. sleepable progs can use priv stack.
+Fix this by calling skb_reset_network_header() in the common path to
+cover both the copy and the zerocopy cases, so that network_header
+points at skb->data and skb_network_offset() returns 0.
 
-pw-bot: cr
+Fixes: 3914d88f7608 ("xsk: Respect device's headroom and tailroom on generic xmit path")
+Reported-by: syzbot+f16c1b285c9f63994eec@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=f16c1b285c9f63994eec
+Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
+---
+ net/xdp/xsk.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 33475b180ea6..2077bb6299ca 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -947,6 +947,8 @@ static int xsk_skb_init_misc(struct sk_buff *skb, struct xdp_sock *xs,
+ {
+ 	int err;
+ 
++	skb_reset_network_header(skb);
++
+ 	err = xsk_skb_destructor_set_addr(skb, addr);
+ 	if (unlikely(err))
+ 		return err;
+-- 
+2.43.5
+
