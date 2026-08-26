@@ -1,105 +1,196 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71264772B9
-	for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 17:49:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D16DF407CF4;
+	Wed, 26 Aug 2026 17:54:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787766586; cv=none; b=Q5zFGw9t8qKTce8HV46eEOtq9UXBV9V0mAxP3ES+dXj26qVN0A0fWnU21Sc4JtbXBkVfMxzud1FIH/d/2xVxOFfrHoVcBoP5wkdZZ2M/ruKS/FVwEkp5r6UUIoJMOY1I3g13VY17MyvARl99NgfKLnUztev3+Jc9ENhlNwumMpA=
+	t=1787766866; cv=none; b=UZQg8iW8Q/ACdsehVR9m+4YH0bzdFqS41NUQs1R4WkGQtCfMAwEkyY9/D90BK6RRKb8Krwr0NxKwPOM9KNlg2ntFJSpx8MF6IpGW/12EsbQpb5ASyM7hoX1Yqn2pTqytTN8e7u3pUaqJHMdO7yL0ohZuy8+2jeHKlVHDxqM+Q/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787766586; c=relaxed/simple;
-	bh=8o8c4IAe8U75qnpSJQagYzi56CmZ3s7yR+zEHSeQMv4=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nmDf3P+ynspJDeREmU6xG+cfwk8zlIx0nNcdhnXGwqLq49GVg2FOVOWB1HfMykWCmkHDSiMnFP7Tt9sxSVCOlUkp2zgX9Zdb+UR9RJ6G4EfxORQhvAe0AaZ4AlHK00DVQ46tTFMALcx+zkLzkKnBvHPGs5ysObnSuIvPeQbTOfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C1H9l2hJ; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787766866; c=relaxed/simple;
+	bh=w9skj64TxRaJWqssAJlZeApfM4Av3byQ44QULYgGPRk=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=AqwmrVIK4xWx8LtDKIM7PYxs/UIzToGEmMEqi31oYZB/IhTt8s7UGNKSvsq7UZQ4ybXEd+3dZ0If3hfX/7m9qKUsW6BychItvgvzWKiYyiqBHznVxyw6EBC9anGnZMdJ/vbPOwihT/ycaIe2hjVONS+dENFy8vBmCwT/BC7erdc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OdigilCm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C1H9l2hJ"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-38f620399a0so793730a91.2
-        for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 10:49:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787766574; x=1788371374; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=8o8c4IAe8U75qnpSJQagYzi56CmZ3s7yR+zEHSeQMv4=;
-        b=C1H9l2hJBtw4weAQ/oKw+cjQHWqeQsUlUAow8SQpk84X54abaaybOUQinHu7eqHUFJ
-         mCUfB4yEfT3dZ6hqIp4k31CWDdFiz61mVLYUeGlKXHNEXD4bvRuCfcyDdZTbOCMwmKUg
-         dhe152XPxRUB8dRlZ4JAQ4m7FheCqTxqpezXuYhl2y7I7kMtCsupOEqRIZAEpl35GLlH
-         SslYZWnE0LdEYfOJCwpB6TWSUstJKZq9kDnFXaXVlsfvYi2xCaUkcSQ5Rj+MqUnNXFwg
-         B4xk/0/sO3CSAtlyEiCYIuQpNMr3W9AH9LoPMxTFZBn5eAADeProfvRM6z3RmwtzoWR7
-         5uHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787766574; x=1788371374;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=8o8c4IAe8U75qnpSJQagYzi56CmZ3s7yR+zEHSeQMv4=;
-        b=YJgbo2VwSn1dXv+sPdWJ141vCqRICxnJv+hkKN4nsMeC4/6qYp/IvQNplUYwgLNARX
-         w50b6mX0XPR8an+Std1NUhhbHsQlOl+DNw03G5qWOJWefBmp1VFErWfuJx9W9JGv7NnT
-         ULFUrnI/NC4iiZKsPWNlat5S1sxHq/IJ+/qBS17x9sWEQX6BjrmtUarf0xBV5LiF3ujl
-         tKK7Yl4lhALzQTOvHw6gwbo6THM4zvl06OEwkdDFmtEjT7JRnc0a75x0ZuZT4gLu7fOQ
-         FNrZAt/hJi8DvpClv/T80lBMtNAQQDhndpzqgKIRecy7v7JpY8jKyahubw9b5jVMaDt9
-         6F8w==
-X-Gm-Message-State: AFuF++n+D+BiDdqVJDGnl/xDvLAG2QSyL18lXLBG18dv9MLsakmMqNw+
-	NdJPnA97KLJiUnYsp4Bi7m9nwSDw2AmH55q9Z8XPGrmupRwyzI7Z+QU8tjwnMg==
-X-Gm-Gg: AR+sD11y/B0dTTPHEmxlC8ouK8SDNqf390l61l8BJyljolb/O+hQKjAkbGYcFby8lU8
-	2hX7hr0ykgH8aEEpQeIu+bA8elbHkh2qvS0ZCnmOZ2/aWGYe1kyraKF4pzLtCIj0Cm5IO6W4tX2
-	Jc1KvL06mRckJ7yeiyHab5dBaaf1KNn2deNfwpX06NFjxaLXg6I25rUXmDYthgYUSREvhODdySR
-	de7PzaJCebO5lhbUjOp5Jf0FDBJ4qnRkSaVvCaXVE/c00dtZA2rEWGRgthCSR8gip5Zeb1pIQpY
-	/hBrIZr7ce9BlLBYS0JPN5xRlFKKUz48v/FokooDO6ssnZBQdsOeK4r2vshEuZyJw/Bw3DMYKnn
-	0RwmlTYpvqwwl79OYD19e3Hjy60uwEFi1QSqR7upgHoL8kw3qrNwlhKtIOKpTwLgWVkyrA90Q9L
-	rWaEaUahsWfIYk7ZbkG9ta/T5WfqWLtww9fhHdzcwj5Y8nSdF7CL7eWkx9X7C2/2Vnnr292I1xp
-	qUMGblStpYyAKvbSw72Iys=
-X-Received: by 2002:a17:90b:280a:b0:380:9f17:6df3 with SMTP id 98e67ed59e1d1-3966d1e226bmr18902135a91.4.1787766573836;
-        Wed, 26 Aug 2026 10:49:33 -0700 (PDT)
-Received: from localhost.localdomain ([103.210.91.38])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3966875e5c3sm5093511a91.7.2026.08.26.10.49.28
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 26 Aug 2026 10:49:33 -0700 (PDT)
-From: Khawar Ahemad <ahemadkhawar123@gmail.com>
-To: bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	magnus.karlsson@intel.com,
-	maciej.fijalkowski@intel.com,
-	sdf@fomichev.me,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	horms@kernel.org,
-	syzbot+aa48b5fe7bfda62d1682@syzkaller.appspotmail.com
-Subject: Re: [PATCH bpf-next v3] xsk: Fix circular locking dependency between &net->xdp.lock, &xs->mutex, and netdev_lock_ops
-Date: Wed, 26 Aug 2026 23:19:25 +0530
-Message-ID: <20260826174925.3425-1-ahemadkhawar123@gmail.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260826173019.2917-1-ahemadkhawar123@gmail.com>
-References: <20260826173019.2917-1-ahemadkhawar123@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OdigilCm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3F861F00A3A;
+	Wed, 26 Aug 2026 17:54:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787766861;
+	bh=djoosPotoK1GKZs9afsH0ieLbmjIxU9SrjjGSy7Po9o=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=OdigilCm1VIurW4nQSwokrnq7jEGRLuhAXLq7mi4skWnVD6+D4EmEwRLHDuT/xk3E
+	 Ay6NNNeGu3AGCb6hAQ78nuZ79TsKnMjY3Wp/0vQhFStmzdPpo6LdpFkcNWvyjoRKBy
+	 wRQq4ke6qvhcCIp2PlfHxT6vR2KPdTdkEpMMqLaSj3Y8pqsmhhGu/tiBC6aJFPXNUj
+	 fWg3tp6CKf2iY0ZtzVWa1RxQeLLiIjzB0GYz6G6zz2Ug//fm1JbzhxN8l+Z3NYyPzI
+	 PD+KrSMUP8hGYB7AKDfKA6+RBTd00ACv1d24RIYhWoL9pe4zhOXwN+135WqNkhMDMN
+	 hNRuCeSEm2j8w==
+Content-Type: multipart/mixed; boundary="===============2876771852046386153=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Message-Id: <85816e37ec75b37214a821f28fe985baf2d9e2e5f2b3c7d39bc7c0f0f97a6dcd@mail.kernel.org>
+In-Reply-To: <20260826164136.1400997-2-daniel@iogearbox.net>
+References: <20260826164136.1400997-2-daniel@iogearbox.net>
+Subject: Re: [PATCH bpf-next v3 01/11] bpf, keys: Add a bpf keyring for program signature validation
+From: bot+bpf-ci@kernel.org
+To: daniel@iogearbox.net,memxor@gmail.com
+Cc: brauner@kernel.org,kpsingh@kernel.org,ast@kernel.org,john.fastabend@gmail.com,a.s.protopopov@gmail.com,bpf@vger.kernel.org,dhowells@redhat.com,jarkko@kernel.org,keyrings@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 26 Aug 2026 17:54:20 +0000 (UTC)
 
-Hi,
+--===============2876771852046386153==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-I sincerely apologize for the noise and mailing list churn. You are completely
-right—I made a mistake in rebasing against v2 rather than upstream master,
-and I should have respected the mandatory 24-hour waiting window.
+> diff --git a/kernel/bpf/keys.c b/kernel/bpf/keys.c
+> new file mode 100644
+> index 0000000000000..08549b3220c13
+> --- /dev/null
+> +++ b/kernel/bpf/keys.c
+> @@ -0,0 +1,68 @@
 
-I will pause here, stop sending revisions, and ensure future submissions
-strictly adhere to the 24-hour rule after thorough local validation.
+[ ... ]
 
-Thank you for the correction, and apologies again for the inconvenience.
+> +struct bpf_key *bpf_lookup_keyring(void)
+> +{
+> +	struct bpf_key *bkey;
+> +
+> +	if (!bpf_keyring)
+> +		return NULL;
+> +	if (!READ_ONCE(bpf_keyring->keys.nr_leaves_on_tree) ||
+> +	    !READ_ONCE(bpf_keyring->restrict_link))
+> +		return NULL;
 
-Best regards,
-Khawar
+A subsystem pattern flags this as potentially concerning: the activation
+gate samples bpf_keyring->keys.nr_leaves_on_tree and
+bpf_keyring->restrict_link while holding neither bpf_keyring->sem nor
+rcu_read_lock().
+
+Both fields are written by assoc_array_apply_edit() and
+keyring_restrict() under down_write(&keyring->sem), and the stores are
+unmarked, so the READ_ONCE() loads form marked-read/unmarked-write pairs.
+
+The two existing analogues, drivers/md/dm-verity-verify-sig.c and
+fs/verity/signature.c, perform the same unlocked check with plain loads
+and no annotation at all, so this patch is if anything stricter than
+precedent.
+
+Could a keyring maintainer confirm whether the gate is safe as written,
+or whether all three sites need the keyring semaphore?
+
+> +
+> +	bkey = kmalloc_obj(*bkey);
+> +	if (!bkey)
+> +		return NULL;
+> +
+> +	bkey->key = bpf_keyring;
+> +	bkey->has_ref = false;
+> +	return bkey;
+> +}
+
+Does this overload struct bpf_key::has_ref in a way that breaks its
+existing consumers?
+
+bpf_lookup_keyring() introduces a third meaning for has_ref: a valid
+struct key pointer with has_ref == false. The existing contract,
+documented in bpf_lookup_system_key()'s kernel-doc, is that
+has_ref == false means bkey->key is not a real pointer at all - it is a
+sentinel understood only by verify_pkcs7_signature().
+
+bpf_lookup_user_key() sets has_ref = true for real keys;
+bpf_lookup_system_key() sets has_ref = false and stores
+(struct key *)(unsigned long)id. This new code stores a real, live,
+borrowed keyring pointer but flags it like a sentinel.
+
+The borrow itself is safe - bpf_keyring keeps keyring_alloc()'s initial
+reference for the lifetime of the system. But the two existing readers
+of has_ref now behave wrongly for this case:
+
+1) bpf_verify_pkcs7_signature() in kernel/bpf/helpers.c skips validation
+   for has_ref == false:
+
+     if (trusted_keyring->has_ref) {
+             ret = key_validate(trusted_keyring->key);
+             if (ret < 0)
+                     return ret;
+     }
+
+   Revocation and invalidation of the .bpf keyring are still caught
+   downstream by search_nested_keyrings(). Expiry is not caught anywhere.
+
+   keyring_search_rcu() never tests the root keyring's expiry, and
+   keyring_search_iterator() only tests the expiry of candidate leaf
+   keys. Because the perm mask includes KEY_USR_SETATTR, root can
+   'keyctl timeout <.bpf serial> <n>'; after the timeout the .bpf keyring
+   keeps validating BPF program signatures, whereas the same operation on
+   a caller-supplied keyring correctly makes the load fail with
+   -EKEYEXPIRED.
+
+2) bpf_key_serial() in include/linux/bpf.h is:
+
+     return key->has_ref ? key->key->serial : 0;
+
+   so the caller records prog->aux->sig.keyring_serial = 0 even though a
+   genuine serial is available here. BPF LSM programs read this field
+   directly, so they cannot see which keyring was used; they only get
+   the new keyring_type == BPF_SIG_KEYRING_BPF.
+
+Would it be clearer to either call key_validate() explicitly in
+bpf_lookup_keyring(), or split the sentinel meaning out of has_ref with
+a separate flag?
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index e036ae20bf6b9..b45d201c25357 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -21016,10 +21019,17 @@ static int bpf_prog_verify_signature(struct bpf_verifier_env *env,
+>  	if (!attr->signature_size ||
+>  	    attr->signature_size > KMALLOC_MAX_CACHE_SIZE)
+>  		return -EINVAL;
+> -	if (system_keyring_id_check(attr->keyring_id) == 0)
+> +	if (attr->keyring_id == KEY_SPEC_BPF_KEYRING) {
+> +		key = bpf_lookup_keyring();
+> +		if (!key) {
+> +			verbose(env, "the bpf keyring is empty or has not been restricted\n");
+> +			return -ENOKEY;
+
+bpf_lookup_keyring() returns NULL for four distinct reasons:
+
+  kernel/bpf/keys.c:
+    if (!bpf_keyring)                              /* (a) never created */
+            return NULL;
+    if (!READ_ONCE(bpf_keyring->keys.nr_leaves_on_tree) ||
+        !READ_ONCE(bpf_keyring->restrict_link))
+            return NULL;                           /* (b) empty or (c) unrestricted */
+    bkey = kmalloc_obj(*bkey);
+    if (!bkey)
+            return NULL;                           /* (d) allocation failure */
+
+(a) covers 'the keyring was never created' - if keyring_alloc() or
+keyring_restrict() failed at late_initcall, both leave bpf_keyring NULL
+after only pr_err(). It also covers CONFIG_KEYS=n builds, where
+bpf_lookup_keyring() is the static inline stub that unconditionally
+returns NULL.
+
+(d) is an -ENOMEM condition reported to userspace as -ENOKEY together
+with the message "empty or has not been restricted", which is actively
+misleading when debugging an OOM.
+
+Could the message and errno distinguish these cases so the feedback is
+actionable when provisioning the keyring?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32991355707
+--===============2876771852046386153==--
