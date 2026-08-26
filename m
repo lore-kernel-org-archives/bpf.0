@@ -1,224 +1,167 @@
-Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F279241DE03;
-	Wed, 26 Aug 2026 14:20:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.188.251
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583E7445AC1;
+	Wed, 26 Aug 2026 14:46:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787754034; cv=none; b=Ru7BTVaGOAvFc5CmyKJk/YXqjR0SRuhw6kIbul8vyj+jhdF3mbfSrtGslbcTAalh9BbdUXJkuMZTvaBMYeT+PWkXqhJUKoI3M6ighhsOeWx+BjcjVKm8xNqyeY0u6V+CvJ72ErEPau5/vbfmGKfVJjI4TgOc8wKFa6pk+xrtUMc=
+	t=1787755605; cv=none; b=s80RgSkrg8OCRdXbWXLalN13v/RdAfJnb8OucGugxzkl/VhnCFKBeddd2gUNz4hSXzvPEOYrpfzIXRKFwC7CM4L5xHMy0JS8+/qhN+NCad1aF4PYlEBPAE5yIChgLj5iChQ0YiVN9IdBQWYqvg8EhCx+qLVwZCgCPqziWBLN1P8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787754034; c=relaxed/simple;
-	bh=vvnjMAsefRQ+DnfrgY23xPJtyDMNFeaY1cGfQERlK5E=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=TSa/nWJrxdPYEqn1J0A3sNWYKYDxD82AEdtMWbyQ5OzNTOZYCTYUtMEruqwLlql+m3EqrMCkNJDjlUGwSb2rTOTUp34rbYmV10ImUj3O5ALDR00Tx1aNZ/FypgHxKk2UDHnPfljj2KtlqCTQtx/c/XPP3aYJAzO/I0bY+HWrta8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr; spf=pass smtp.mailfrom=oss.cyber.gouv.fr; dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b=b2QxcLHo; arc=none smtp.client-ip=51.159.188.251
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
+	s=arc-20240116; t=1787755605; c=relaxed/simple;
+	bh=n/5mZkYkKK5GavBNGTNXlJp3qMnQh82rUrq1G8+x6Nw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PG7n8Qmnzrq6WMkF8nEXoErNdjk1XPJrXQCAvXOuPfUE6Teox7nPEO0FFl30Y905mX2hbkOwLnrJATFTtoIBt6wWRtnCwcItRVzclWUtGhuLEdHsDngGGoEMGkcIuvYV/ioWEJjkdSY2ocPh5k41OxbMUUcmceZ7DapZtBng4/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=LrU6HUGT; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gozkSWv+; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b="b2QxcLHo"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=oss.cyber.gouv.fr; s=default; h=Content-Transfer-Encoding:Content-Type:
-	Message-ID:References:In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=UoZAyj+/eoYN4IkW3Mi+iU0qOKkk/pFBiqUNxsSexGc=; b=b2QxcLHoOqgvGPgDoILFpiPdWb
-	YZgE/IRM1MNSMVpuSLHXMMoO7MP2/fzIg/scMm/osKWQUHyGAOgxeMmixzOm2rtH/ejKi0I5YjvEy
-	JTe5AZk2rW517gFSZ2jafe7o0AZ9SC3OFDAXhvrUvoEZgc2PEgfe+m+LedkujvE5XSYagOwHuZaeT
-	GOx8FWBKq9IVj00ijgJIsAnVpNT4D7ti0L/IbZFUMT/XTD4Ktfw+J6k7sl4p6HDsWGoVWGX37tmr6
-	O7y5JZlU5erinatqG/mnDnodfcTggSkOi3P8ZT1GaoYcs1qajXw3eL6eryfXR2nvkzdjFJ7/BOHPO
-	8edqVghA==;
-Received: from [::1] (port=36938 helo=pf-012.whm.fr-par.scw.cloud)
-	by pf-012.whm.fr-par.scw.cloud with esmtpa (Exim 4.99.5)
-	(envelope-from <jeremy.jean@oss.cyber.gouv.fr>)
-	id 1wzEUP-000000038Oy-3jTy;
-	Wed, 26 Aug 2026 16:20:29 +0200
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="LrU6HUGT";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gozkSWv+"
+Date: Wed, 26 Aug 2026 16:46:36 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1787755597;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=S0Kkynge44FrWWoalc/XYt1t696+d537CJ47hQiSN5E=;
+	b=LrU6HUGTkQ/HPzremJzckNm2cqpOlgdcnVt6mDteTHCiWw38x2TkLAPOkDqwYKiASklx/L
+	16cJ8SSSTa7or4LPHRb9naKFyEoYjDUeC7RsEIQySnA5ZWHWjJpJZq6N+xS9FalE0OB3OB
+	5V9TADPX2yz9EYITk0j2qBA0v2y9Df+m0oRzu7NNGth7jHhLBktHDad8Pihk2vvXfkTrQ+
+	glUH2itooDT6gk79kYPFH7nSw6/HU13o8ew/kJO5j9u4RUvJhRViY/HhprQ2x5OK/bIzth
+	bq0bvFl8/T0ixvO1FIui8ErYqQPhceCZ3BQH6abLN5pj9+WLUvBHxWuYjTljEA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1787755597;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=S0Kkynge44FrWWoalc/XYt1t696+d537CJ47hQiSN5E=;
+	b=gozkSWv+kjmm1LlGRIFiYIde5MxTEoTadSEOrNSFuVaThoY56VhcztspbhDoqkXFnMK/mz
+	hyMu85VWKTOTPkBw==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Zqiang <qiang.zhang@linux.dev>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Matt Fleming <mfleming@cloudflare.com>,
+	"Harry Yoo (Oracle)" <harry@kernel.org>,
+	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+	bpf@vger.kernel.org, linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH v4 1/6] rcu: Make call_rcu() safe to call from any context
+Message-ID: <20260826144636.3IRUXeFV@linutronix.de>
+References: <20260810122758.183765-1-puranjay@kernel.org>
+ <20260810122758.183765-2-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 26 Aug 2026 16:20:29 +0200
-From: =?UTF-8?Q?J=C3=A9r=C3=A9my_Jean?= <jeremy.jean@oss.cyber.gouv.fr>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard
- Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] bpf, x86: Sign-extend narrow signed kfunc returns
-In-Reply-To: <DKYHCWYCB5XV.3MSN6ZJGOW2R7@gmail.com>
-References: <20260823203944.2084994-2-Jeremy.Jean@oss.cyber.gouv.fr>
- <DKYHCWYCB5XV.3MSN6ZJGOW2R7@gmail.com>
-User-Agent: Roundcube Webmail/1.6.18
-Message-ID: <fe9ae59b603848f59757086c6309aec9@oss.cyber.gouv.fr>
-X-Sender: jeremy.jean@oss.cyber.gouv.fr
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
-X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: jeremy.jean@oss.cyber.gouv.fr
-X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: jeremy.jean@oss.cyber.gouv.fr
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20260810122758.183765-2-puranjay@kernel.org>
 
-Hello Alexei,
+On 2026-08-10 05:27:50 [-0700], Puranjay Mohan wrote:
+> --- a/kernel/rcu/rcu.h
+> +++ b/kernel/rcu/rcu.h
+> @@ -572,6 +572,17 @@ static inline void tasks_cblist_init_generic(void) {=
+ }
+>  #define RCU_SCHEDULER_INIT	1
+>  #define RCU_SCHEDULER_RUNNING	2
+> =20
+> +/*
+> + * Defer whenever interrupts are disabled, since a callback-list operati=
+on may
+> + * be in flight on this CPU.  Not before the scheduler is up: irq_work i=
+s not
+> + * usable that early, and rcu_init() itself calls call_rcu().
+> + */
+> +static inline bool should_rcu_defer(void)
+> +{
+> +	return IS_ENABLED(CONFIG_RCU_DEFER) && irqs_disabled() &&
+> +	       rcu_scheduler_active !=3D RCU_SCHEDULER_INACTIVE;
+> +}
 
-On 2026-08-26 03:22, Alexei Starovoitov wrote:
-> On Sun Aug 23, 2026 at 1:39 PM PDT, Jérémy Jean wrote:
->> bpf_res_spin_lock() returns a 32-bit int. On failure, the verifier
->> models R0 as a signed 64-bit value in [-MAX_ERRNO, -1].
->> 
->> On x86-64, returning -EDEADLK writes 0xffffffdd to EAX and clears the
->> upper half of RAX. Since the JIT leaves the native return value as-is,
->> BPF sees 0x00000000ffffffdd instead of the sign-extended
->> 0xffffffffffffffdd. A 64-bit signed comparison therefore treats the
->> value as positive, while the verifier treats it as -35.
->> 
->> As a result, a signed comparison against zero can take one path during
->> verification and another at run time. With rqspinlock aliases, this 
->> can
->> lead to unmatched bpf_res_spin_unlock() calls, corrupting the per-CPU
->> rqspinlock state and unbalancing the preemption count.
-> 
-> Is that a theory? I'm pretty sure we have selftests for negative
-> error codes from res_spin_lock.
+Why does the description say that the defer part is for usage from NMI
+and the test here has irqs_disabled() instead of in_nmi()?
 
-> I'm pretty sure we have selftests for negative
-> error codes from res_spin_lock.
+> +
+>  enum rcutorture_type {
+>  	RCU_FLAVOR,
+>  	RCU_TASKS_FLAVOR,
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 21b6ce1dffb63..3bf3a250f9de8 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -3206,6 +3204,103 @@ __call_rcu_common(struct rcu_head *head, rcu_call=
+back_t func, bool lazy_in)
+>  	local_irq_restore(flags);
+>  }
+> =20
+> +/*
+> + * Re-issue deferred callbacks straight to the enqueue so they cannot de=
+fer
+> + * again.  ->defer_lock serializes the drainers: this CPU's irq_work,
+> + * rcu_defer_flush() and rcutree_migrate_callbacks().
+> + */
+> +static void __rcu_defer_drain(struct rcu_data *rdp)
+> +{
+> +	struct llist_node *node, *next;
+> +	unsigned long flags;
+> +
+> +	if (!IS_ENABLED(CONFIG_RCU_DEFER))
+> +		return;
+> +
+> +	raw_spin_lock_irqsave(&rdp->defer_lock, flags);
+> +	llist_for_each_safe(node, next, llist_del_all(&rdp->defer_head)) {
+> +		struct rcu_head *head =3D (struct rcu_head *)node;
 
-As far as I could checked, this is not entirely covered: when the
-returned 32-bit signed int is a negative integer in %eax
-(0xffffffdd), it is later mapped to 64-bit register r0, which clears
-the 32 MSB as its value is taken from %rax, and this makes the
-negative error code a large 32-bit value stored in r0
-(0x00000000ffffffdd). When writing raw BPF, one could check the
-return code using r0 instead of w0, and this would introduce a
-mismatch with the verifier that sees a real negative value.
+Why do you need the lock. This is still not clear to me despite the
+comment. You can do llist_del_all() towards another list and then feed
+it into rcu_do_enqueue() one by one. And you use the LAZY part.
 
-In my understanding, the current selftests do not exactly verify this?
+> +
+> +		/* Bounds a node self-linked by a double call_rcu(). */
+> +		head->next =3D NULL;
+> +		rcu_do_enqueue(head, head->func, false);
+> +	}
+> +	raw_spin_unlock_irqrestore(&rdp->defer_lock, flags);
+> +}
+=E2=80=A6
+> @@ -4231,6 +4330,9 @@ rcu_boot_init_percpu_data(int cpu)
+>  	rdp->rcu_onl_gp_state =3D RCU_GP_CLEANED;
+>  	rdp->last_sched_clock =3D jiffies;
+>  	rdp->cpu =3D cpu;
+> +	init_llist_head(&rdp->defer_head);
+> +	raw_spin_lock_init(&rdp->defer_lock);
+> +	rdp->defer_work =3D IRQ_WORK_INIT_HARD(rcu_defer_drain);
 
-> Pls craft a selftest if the issue is real.
+Why is this IRQ_WORK_INIT_HARD() instead, say, IRQ_WORK_INIT_LAZY()? Is
+there a requirement that the RCU callback needs to complete asap and not
+be delayed to the next tick? This would give kind of the LAZY part.
 
-Below is an attempt for a selftest. I got help from an LLM to write
-the BPF instructions, and then try my best to shrink it but it is a
-bit long; hope that's okay. The point is to craft the check on r0
-manually after the call to bpf_res_spin_lock(), and forces the branch
-taken to be different between the verifier and the jitted code.
+>  	rcu_boot_init_nocb_percpu_data(rdp);
+>  }
+> =20
 
-The need for raw BPF instructions is required as the compilation from
-C correctly uses w0 for the check. I added comments to emphasize this.
-
-SEC("?tc")
-__arch_x86_64
-__load_if_JITed()
-__success
-__retval(0)
-__naked int res_spin_lock_return_sign_extension(void)
-{
-   asm volatile ("                                                       
-\
-   *(u32 *)(r10 - 4) = 0;                                                
-\
-   r2 = r10;                                                             
-\
-   r2 += -4;                                                             
-\
-   r9 = r2;                                                              
-\
-   r1 = %[arrmap] ll;                                                    
-\
-   call %[bpf_map_lookup_elem];                                          
-\
-   if r0 == 0 goto out_%=;                                               
-\
-   r6 = r0;                                                              
-\
-   /* Adversarial setup: give one map value two verifier pointer IDs. */ 
-\
-   r2 = r9;                                                              
-\
-   r1 = %[arrmap] ll;                                                    
-\
-   call %[bpf_map_lookup_elem];                                          
-\
-   if r0 == 0 goto out_%=;                                               
-\
-   r7 = r0;                                                              
-\
-   r8 = 0;                                                               
-\
-   r1 = r6;                                                              
-\
-   call %[bpf_res_spin_lock];                                            
-\
-   if w0 != 0 goto out_%=;                                               
-\
-   r1 = r7;                                                              
-\
-   call %[bpf_res_spin_lock];                                            
-\
-   /* Adversarial check: treat the negative int return as 64-bit R0. */  
-\
-   if r0 s< 0 goto unlock_%=;                                            
-\
-   r8 = 1;                                                               
-\
-   if r0 != 0 goto unlock_%=;                                            
-\
-   r1 = r7;                                                              
-\
-   call %[bpf_res_spin_unlock];                                          
-\
-unlock_%=:                                                              
-\
-   r1 = r6;                                                              
-\
-   call %[bpf_res_spin_unlock];                                          
-\
-   r0 = r8;                                                              
-\
-   exit;                                                                 
-\
-out_%=:                                                                 
-\
-   exit;                                                                 
-\
-"  :
-  : __imm(bpf_map_lookup_elem),
-    __imm(bpf_res_spin_lock),
-    __imm(bpf_res_spin_unlock),
-    __imm_addr(arrmap)
-  : __clobber_all);
-}
-
-When I run the selftest (I used 9328b3b03bdc), I get:
-
-#1/1     res_spin_lock_failure/res_spin_lock_arg:OK
-#1/2     res_spin_lock_failure/res_spin_lock_AA:OK
-#1/3     res_spin_lock_failure/res_spin_lock_cond_AA:OK
-#1/4     res_spin_lock_failure/res_spin_lock_mismatch_1:OK
-#1/5     res_spin_lock_failure/res_spin_lock_mismatch_2:OK
-#1/6     res_spin_lock_failure/res_spin_lock_irq_mismatch_1:OK
-#1/7     res_spin_lock_failure/res_spin_lock_irq_mismatch_2:OK
-#1/8     res_spin_lock_failure/res_spin_lock_ooo:OK
-#1/9     res_spin_lock_failure/res_spin_lock_ooo_irq:OK
-(..snip..)
-#1/10    res_spin_lock_failure/pin_lock_return_sign_extension:FAIL
-#1/11    res_spin_lock_failure/res_spin_lock_ooo_unlock:OK
-#1/12    res_spin_lock_failure/res_spin_lock_bad_off:OK
-#1/13    res_spin_lock_failure/res_spin_lock_var_off:OK
-#1/14    res_spin_lock_failure/res_spin_lock_no_lock_map:OK
-#1/15    res_spin_lock_failure/res_spin_lock_no_lock_kptr:OK
-
-If you confirm this is not yet covered in the selftests, I can send a
-two-commit patch (one with the previous patch, one with the selftest).
-
-Regards,
-Jérémy
+Sebastian
