@@ -1,118 +1,126 @@
-Received: from flow-a3-smtp.messagingengine.com (flow-a3-smtp.messagingengine.com [103.168.172.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-59.mta1.migadu.com [95.215.58.59])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C617466B57;
-	Wed, 26 Aug 2026 16:57:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7CDE38238C
+	for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 17:09:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.59
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787763492; cv=none; b=mNSIxc0xZGQMQ3ADMpCMOvgXtTL4UcQw8ijAwe5X2xuO/hxDZGNOGWkhNUsWl+eIEcMc1bql8LrTsT6mVEIPLtc6SzeGpB1UYsYbK78bYKbITLAbh/6ibeGnAgNtI8RWi5J7ajRa+nYoUCpXjaNkxxJnhYmz1WVREnw20Z6KmsA=
+	t=1787764158; cv=none; b=rPSwRscpivdJKWqfUnYeiqQrKSzI/ARFq8iDTEDXFJ3sM374+Sc+tDjuHI8P6Bvixbrqjr8kBrBXKn7XyM7/1ZyEqOTq6TyWy4N6moZ3Sdxec8CnqFuU1JiRN9ckHu+M583yLo+m0sGRZotlHpdmZssJDqVV1w8q5viXeC7GcjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787763492; c=relaxed/simple;
-	bh=zD4dqAdxXW0Er1wshogf68T7eQtR8N6wUmTMcgSvP24=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VmpgZy/y5s9UELNCD8gkbgPUU6XJm7oKqOqGQjmqxPKEtBPg+konZLwIZVw3Sdavl9Weq0JeOl89MOxh7g62MP+rrkL+gIM0Cyx+CkKoAxd0tWsP1TbNDAEqOnrMkBrgYNMIg8XySAYfzw54ISTjnp/IdVGsVxoCBNWp9aycBG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=lAEQPsWP; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=FWcJzcvI; arc=none smtp.client-ip=103.168.172.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+	s=arc-20240116; t=1787764158; c=relaxed/simple;
+	bh=yRptlCddIvKwIVZvoFDJxj9tMJw2EsA8DqoO5SRLE7Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Lk7CBiDYtWKDZp7dnZXOMIuI3jWX6HRW5fGc0Sf+o4IGCILkSq04ipejdB7RZXr9TE3nwlBmm9W7UlhIb8vNjB0XhU5NDv0p8WkDKEbZJtBW2MiVj7deZ7J9irDFp4osFp4ExyogWmyhFdcZsJSLkWD1/cLNwl87bl+nL+gpgmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=G5xdld2E; arc=none smtp.client-ip=95.215.58.59
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="lAEQPsWP";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="FWcJzcvI"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailflow.phl.internal (Postfix) with ESMTP id C2A131380030;
-	Wed, 26 Aug 2026 12:57:52 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Wed, 26 Aug 2026 12:57:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1787763472; x=
-	1787770672; bh=b/RQVU7x/2Ow8BFt80nTwsnGflSL0G5KQoMqCALTqgw=; b=l
-	AEQPsWPGylc/rDV+icMKHCvV0frQXk7F5fjF/UWtvHS3U9fWb1ezXQP7ShieFlvj
-	GRHu4wj3M0M93AcK6Fk+g0gXO/K1ggVsaQoAtUzo/X7P8nFmbU8FYPwrOSRT/f9e
-	K8ehYKgucU/hhblvFh6gJVzwtpue21D8RH6qOhIP9VgSLjzBvcNWlYSd2E9GEAE/
-	rptw18RRTdRcy16z9qXWzwSBFQIHkye5hOPOBUJthoVYdNZ2mKXOIK8HHDV/+KQ9
-	OuS7oD7vv0OwukUNt0sbRCKWM8g3F9lA/URc0OliMRI76XOfoa10xGDMpreFOEZw
-	TM0E2lfzsLh7Rj8u+H/IQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1787763472; x=1787770672; bh=b/RQVU7x/2Ow8BFt80nTwsnGflSL0G5KQoM
-	qCALTqgw=; b=FWcJzcvIbsh6QBt38zORnV7P0eeo8kO9WRVqoXVqib8+79FS694
-	XuKDCqcuP8xSUq35/uiGv29rROwTWvnQIfT3oylh06izCKj0M3joTmPZlU47Q4Oe
-	3loNfsttBTPANJ3cHFvfNXWdCw0pPQd+2JpG6RTFBc8VMAeOj1lDcOiQaCQaW3H+
-	nlZGkNrwXaxWBE6U+6fuS/vhfs6O6JRCigwrHViNUdATu8xEJ0UF5Mtfj+X9E8y0
-	7lFkn3SroSWUDnay32P8/uUW1sobt87f/JpREWi7wYr2NjMIEARJ4EyUuk86KUr7
-	2aLV0GEJgf39oJ2X/KZqY6UwHX3Lxp+uzIw==
-X-ME-Sender: <xms:DxuPak_Ack9LrPRHKaASHS2wMVcpgG-689x44Ryij79y7lQVrFEVtA>
-    <xme:DxuPavBx2WNCktSwtgXC0SxfLbBEckvRxdJfhs7E9wmLJzgle1DLPmakYzLyGGnTR
-    4WNecrHxs-j4WVhirpK9ouXZhMnQ4889TjbA439uPnzkggzixb8lw1D>
-X-ME-Received: <xmr:DxuPaoxK3jWLjl2liKXaRMPDLyn8sdJrUDu7fIXrSdR4UfIMDoQI3XCIRuY>
-X-ME-Proxy-Cause: dmFkZTFJ4uM7XbmV139GeFVyMoFnf31HwoxJmPLJ3DOlCGleDxaZYboTq/8g92bw2Tr80S
-    wGFNepRmFciZXpZxop62rBrDkHPnv9nXc7KEvSWS/8GpVlaNgXKa6dfYTeFCYhn2wtJOiK
-    307oxwUoWuxtmYGFBjteL06s8X6htc+nvVtjVU1989gEb4MnzMjTATDrZasvNpIzgTin/4
-    7VGQP/85bb5l9LG5OrzuOshjFlmmTq4AsyZh9HGehMneCAhVUK6bc/pCgfQZDFR3x2TwYp
-    uo425DdKwIGf1YipHDcTUXwhFZvn69o/vAlmdQD2hXiHy7vx7Q0z9WPqV/j11J2qlpRNFP
-    N0s33neGxgTZZfYnhJK2+RUlWyP4sJ4EnQb1rLd7dDD7onVFIkM3Si6Mqw8hRUnRhJ3FI1
-    yd7zVWfgPMI4XKuEiHVCS3DmOtq/A5sbrr3G0llk7qra0Ip8+g/oxdsmWQKj2Zz0hg4kGt
-    qz4W6lHUETFMI3z0klSBqecxB0Ht3A+X6YW0W2k0UD3GMOgQgejr6TQFlAOnu6D9X0kjs6
-    7RovcdajI+QYh0ZCP+e0ltkW7g35gD/7KAmPd40hfyJR3mBOnA1DxHo/tOjI4SwFyC0eXy
-    3fAYexBao+lcCDPzbZXITlpM6JIGVZrdRfMCosWDlctgLcUZVs35a2aMXAMA
-X-ME-Proxy: <xmx:DxuPaurxPtHNM4zlRhQUucemYoop_cPCcuSi4QG6ZU93-kiH8PsIkA>
-    <xmx:DxuParx3aF35QlDHf8Ot-LSEgCyypoaVBQoro0MUdxDgW10Pjg-V_w>
-    <xmx:DxuPaoP12wTEyHve1fnxqo8xoWT0M0b81Y1HMZTWOvA4YSlEo9BfPg>
-    <xmx:DxuPatdNAzkwxWAxHwQ7pFsN_taxnKCvmFIevzCVIdFHV2Dv3CPCAg>
-    <xmx:EBuPamdFSp7fldrFIU6gA4GT4OKDZYKJ4F5FNQFbvKSXyMShOLEGLOLt>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 26 Aug 2026 12:57:50 -0400 (EDT)
-Date: Wed, 26 Aug 2026 17:57:49 +0100
-From: Kiryl Shutsemau <kirill@shutemov.name>
-To: Lance Yang <lance.yang@linux.dev>
-Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
-	nico.pache@linux.dev, baolin.wang@linux.alibaba.com, baohua@kernel.org, 
-	dev.jain@arm.com, hughd@google.com, liam@infradead.org, mhocko@suse.com, 
-	rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com, 
-	usama.arif@linux.dev, vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, 
-	agordeev@linux.ibm.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, jannh@google.com, willy@infradead.org, pfalcato@suse.de, 
-	rostedt@goodmis.org, mhiramat@kernel.org, linux-trace-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 18/57] mm/collapse: install the destinations at PTE
- level
-Message-ID: <ao8Yz5tqr2WVlPj5@thinkstation>
-References: <20260816224609.308019-19-kirill@shutemov.name>
- <20260825064851.87309-1-lance.yang@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="G5xdld2E"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=yRptlCddIvKwIVZvoFDJxj9tMJw2EsA8DqoO5SRLE7Q=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787764133; v=1; x=1788368933;
+ b=G5xdld2EhPmNEZ/BLK6Pug+8fllAiKzrbQPn/o5IL1qiET4NzMzuN5c1A2vf7hxweJzSWXbj
+ /erWJtAIGj3v0WKd52mvNFEblJ8zEPL2Ykn1c8ri8Owbnq35iqUQcitTzmoe13zcQzp6hHqHPIW
+ dXXPKkCRpDW/+dAHW2ciJa44=
+X-Envelope-To: bpf@vger.kernel.org
+Received: from [IPV6:2a03:83e0:1151:15:1c5e:37e8:36:dd37] (2620:10d:c090:500::7:2cdc)
+	by smtp.migadu.com with ESMTPS id f01e58e0d40ca4de;
+	Wed, 26 Aug 2026 17:08:53 +0000
+X-Mizu-Trace-ID: f01e58e0d40ca4de
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <47991bc5-5f31-4cf0-a979-245e75d6bad7@linux.dev>
+Date: Wed, 26 Aug 2026 10:08:49 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260825064851.87309-1-lance.yang@linux.dev>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 01/10] bpf: Record each half of a paired
+ return value in verifier diagnostics
+Content-Language: en-GB
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org, clm@meta.com,
+ ihor.solodrai@linux.dev
+References: <20260825205417.1320403-1-yonghong.song@linux.dev>
+ <0406cb29c1419b2bdf8ab69ca7c14ffe6a5dacde23a387b9b43071e6017cf423@mail.kernel.org>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <0406cb29c1419b2bdf8ab69ca7c14ffe6a5dacde23a387b9b43071e6017cf423@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Aug 25, 2026 at 02:48:51PM +0800, Lance Yang wrote:
-> 
-> On Sun, Aug 16, 2026 at 11:45:30PM +0100, Kiryl Shutsemau wrote:
-> >+		/* Slots with no source gain anon memory that no zap accounted */
-> >+		if (nr_populated)
-> >+			add_mm_counter(mm, MM_ANONPAGES, nr_populated);
-> 
-> Well ... KSM zero-page accounting gets out of sync here.
 
-True. Thanks for catching this!
 
-> I was thinking of something like this:
+On 8/25/26 2:59 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index e036ae20bf6b9..9aa29c3670087 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -10403,10 +10403,14 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
+>>   		 * return to the caller whatever the callee had in the
+>>   		 * return register(s)
+>>   		 */
+>> -		bpf_diag_mod_begin(env, &caller->regs[BPF_REG_0], r0, BPF_DIAG_MOD_WRITE);
+>> -		for (i = 0; i < nregs; i++)
+>> -			caller->regs[ret_regs[i]] = callee->regs[ret_regs[i]];
+>> -		bpf_diag_mod_end(env);
+>> +		for (i = 0; i < nregs; i++) {
+>> +			u32 regno = ret_regs[i];
+>> +
+>> +			bpf_diag_mod_begin(env, &caller->regs[regno], &callee->regs[regno],
+>> +					   BPF_DIAG_MOD_WRITE);
+>> +			caller->regs[regno] = callee->regs[regno];
+>> +			bpf_diag_mod_end(env);
+>> +		}
+>>   	}
+>>
+>>   	/* for callbacks like bpf_loop or bpf_for_each_map_elem go back to callsite,
+> This fix looks correct for prepare_func_exit(). Should check_func_call()
+> and check_kfunc_call() get the same per-return-register diagnostic scope,
+> or is R2 intentionally left out there?
+>
+> Commit 0630ad00d96d introduced the same pattern in three places, and this
+> patch addresses only prepare_func_exit().
+>
+> In check_func_call(), the global-subprog path has:
+>
+>      bpf_diag_mod_begin(env, &caller->regs[BPF_REG_0], NULL, BPF_DIAG_MOD_WRITE);
+>      ...
+>      nregs = bpf_ret_reg_pair(env, subprog) ? 2 : 1;
+>      for (i = 0; i < nregs; i++)
+>              mark_reg_unknown(env, caller->regs, ret_regs[i]);
+>      bpf_diag_mod_end(env);
+>
+> When nregs is 2, mark_reg_unknown() writes into caller->regs[BPF_REG_2],
+> but the scope target is caller->regs[BPF_REG_0], so the write emits no
+> BPF_DIAG_HISTORY_MOD event.
+>
+> Similarly in check_kfunc_call():
+>
+>      bpf_diag_mod_begin(env, &regs[BPF_REG_0], NULL, BPF_DIAG_MOD_WRITE);
+>      ...
+>      mark_kfunc_ret_regs(env, regs, t->size);   /* writes R0 and, for 8 < size <= 16, R2 */
+>      ...
+>      bpf_diag_mod_end(env);
+>
+> When t->size is between 8 and 16 bytes, mark_kfunc_ret_regs() writes the
+> second half into R2, but again with no MOD event.
+>
+> In both cases R2 does get a BPF_DIAG_MOD_CALLER_SAVED scrub record, so
+> the history shows R2 as clobbered by the call but never shows it being
+> written with the second half of the return value.
 
-Your code looks correct to me. I will take the collapse_abort_candidate()
-hunk as is.
+Yes, I need to add these two cases for bpf_diag_mod.
 
-The install side I will organize slightly differently: a
-collapse_account_install() that does the MM_ANONPAGES accounting in
-addition to the KSM stuff, called from both install paths.
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32899532405
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
