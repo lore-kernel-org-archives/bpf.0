@@ -1,187 +1,237 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78F40223DC6;
-	Wed, 26 Aug 2026 15:19:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787757585; cv=none; b=Po7CBxrpay7AQyryGw7aQE3bKRDVqaJFRA//mkwEUoMFuOGw9ETTkV08CRk4oUL54n+BAR5YvMi8KaRSzBtR3DKMCxXsrD31KSf/YUOQCZNV9LqwefO6CIHC8w7bLeRZjiOiJSNacTAWo5R9fjnKjPvfMkRigz0pJoywfXA+y2A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787757585; c=relaxed/simple;
-	bh=ebsJXJehWq8vQ2+yk0Ww03KoJu5igP9PLWsd/FlrZiI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:From:To:Subject:
-	 References:In-Reply-To; b=G5YZlAizTpcl18TUW1RbyWzkmWT5bHtowVXwd+0jg1kvmWzEuNNZkozk73OWqYvMD7iebNcjbM2Aos2JLj9+b4u1bDoF+XXWfpX12bOICgyjTU7mPxMFaPZwKVLFi0QQSuHMzzYDYw/l++iEcP/oWkVxe0/nM+CNMcXCDYotQuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=HjpO8jxg; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20D4F400E0D
+	for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 15:43:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787759025; cv=pass; b=roYB9lg5qfw8A8WpNvRKRXaJ2z0LEgBzuzzegfndNczh7J1r4hpZCo4zTqtMWAm60PgtGo23cfLAshvtUtM65aOcYPMqA8tKIBewtaqEzOU41sssH1em3XIzYTfd7Dubv52SgEZIX97yXSvHaF+/4rezYeybuZa96UogiKX5HiM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787759025; c=relaxed/simple;
+	bh=t+UZJG+GzsSQuOgLA31dorYvO2F8pVYT+Y4HWV4K/Bw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=E2e4lht39fkwwXABu+oXZO/0pKDGyTL0snzV77m4eaSM0LHcB2CHifhcCnli/j1ConLcdKkrg20IbKv3CxYWSKh5TOtwIrZB6rpRtB9qQk/YwG9jri0UHBCfX5BnUkKaq74RtWRHxNTktBM2aB9z0S6QJV09yJvSBSU1atdUCgU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sq08v3ls; arc=pass smtp.client-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="HjpO8jxg"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id C248A1A1842;
-	Wed, 26 Aug 2026 15:19:39 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 90193604EC;
-	Wed, 26 Aug 2026 15:19:39 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 6759111C783C1;
-	Wed, 26 Aug 2026 17:19:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1787757573; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=dcHHWyRJIterVIg89zHGHjBsGnWPtPc3BMd4jHQ4tok=;
-	b=HjpO8jxgTnzphcnBhRkTuVBnoROWiD8ubMM1sxHlKesRQbfnHEQ7GBcYy6SH1Hy9r14VPR
-	s0OeD/uZAPPWDN+FdAqVsdEEQrjb2Jmb1oEkEOwN9jBl1Da3/MmjY1qwz56A7I0Rn7VEg1
-	T+4ZkXQr+RHeewEMt/BL6sZj0re/LM68MpNLNnkFw88bSakavz1jwNgGpXdJXMg65p9jfv
-	VZ5V00qUyWZoyIsw/yozVWe9iQgxFbmQ51Fbqlttk9coWzl1De01/TetpG5C8W5CqpgD4N
-	cnA5K4PgCJ0e2sraXUT7bJOF45weSFkaUVmWS57sLEBErb4wJ3cBrgYx2CYdtA==
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sq08v3ls"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-52f1a320162so2573101cf.2
+        for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 08:43:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787759020; cv=none;
+        d=google.com; s=arc-20260327;
+        b=TLr23NhWxA1cS6i5L2IwZYelrlGqW0W/pOcsUWkkqTIwqKJLPSPKAdPm5ZtFsvmccm
+         1AHw+6AlnnEWz0vAJUhcCB+/ULhxAoErDpkHQsnNqA3hzRS7yOlvyE41vttxPCJBDV1C
+         FbXg48q4/4KgckSTi84AwZPYpatU+9OZaO5Tb4Lb5dfv1k/jc/+WZyYltJ/S5UlxLfKa
+         MvNz8UtPOmxs75VzQ85AquG5bwVZfu3aoIghTQWNuES7h9GLPKudFx4hKATc5rl0eoln
+         hYhueR/WL34jG7W98x5xpyTz+GBFTIqxehICSSdVj/1MgFCgnEtvrD1yWqYTE5a5MPFY
+         gaAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=UVSjhIziBnajqA7H4PUHZrhD1u9T6d8YmCozPYiqoT4=;
+        fh=FoAOeS+ex0ebq/rg62KWWKAztsoxE7wJvgXuDWuy8ZU=;
+        b=Shx0sZN1CM+KVN3I8d1g38sOAn34UeganBEIMKvoo05IzoTHt10sPZvd7u6BP/oxm1
+         6gSnx0e/o/CXnCwiKBNfkAP+R9AiRXc0EMZ6F3KV0TgULNM+MozTRZy6sJnlv5zsDIwj
+         0Wqwh+mDgdLAPMBZT/yQeXIYvEwBjCt0F605ToeFUKW38K2tLjmV9a9S9mrlej1HtRxU
+         heooX9iTlW/bCBJOteAjsXqO+LdV0TEKzo/MZSRQMEdso0Q+sCah/MVFLS2vEbZqUkXy
+         ALPoDOiA3ye8ZhYzmzz+jEiPjjx9I9s2DeV9gqrfDe65rqtO7tf7MSplvVtRaeUbXA81
+         OPEg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1787759020; x=1788363820; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=UVSjhIziBnajqA7H4PUHZrhD1u9T6d8YmCozPYiqoT4=;
+        b=sq08v3lsVH1MUXBCYBCk+GmN3jJsBgpTgxTV9kvMCJy24rFlGhmv6zRYHL2E/GnWvV
+         L4YCrmvdMQpFlBnCeUs6xMZR5r7lnAQbYUzki5lLAMqeIf20eQDnXuhjjm7rFfxIeOeO
+         1LvuwkbHU3sPG4/3I5FwkRe89FK8Jk2iRkta+7sZud2GT/nvMNmaSMz1G9YWkQDAnRtn
+         rMm0P2zYz3djEBL2fSIPTvKtik1D1qaZLRbW3O/ctNId2HomrvHulnxXQBPV4OSk1Yg9
+         O9DuxOkS5sk3k2TqOsKiAo1mDI0zXFGPBBaXBqHlZGJpiV2YYcCFpxUGi0/RPARDJ9oL
+         ZvgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787759020; x=1788363820;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=UVSjhIziBnajqA7H4PUHZrhD1u9T6d8YmCozPYiqoT4=;
+        b=QGfnRu9fNno8HRQN3L2q0UPpGWrGKOWGD/iU9d4he3tTYiFpziHLr0Hndu18XjbrC7
+         +zV1MosT2Hz0uqcmwUnevAvwy8tqLeruDmGamtpV4KGdSIYjiks+WorWLOVoY3SC+uBK
+         0o0+/5n1vN5HV+OSiQHse4rMrCpJqZvfxGzgJgPQ4LDoRIClseBUsuPrRTZxjaM6yyBY
+         4QMOKqbEF8YzPjJ6IGOsjt/kSCWvZfQcuPzeKN8hHfY05ZEsSA64Nx8uL45aaUt1aHby
+         xIx+w+yw7lcc2XpEPhgijiyWgFHI2+Zz/u2nKAzyhsaENFL9GW8ApizNmOTf2vsrx6mV
+         lCHw==
+X-Forwarded-Encrypted: i=1; AHgh+Rp8WJokdNHwO2aK+mBBoVTHk1Q1oIoePi385rX2HrZFhyz+VvDO9HwuTqpFXFk0o5VYsBM=@vger.kernel.org
+X-Gm-Message-State: AFuF++l7CHVPVy6WM50kvYfRC1RV6o5JjWMFdWkTSscacnscwicbGXna
+	786OaEiyOjKlCLVSC4X4L6Y09qmsFF87/KimWdMV1oQReZRu2Q5WmO3Ixxlw/18eGRNWpeBupf4
+	9iYPeHUzyfakk0iJBCOtgfxqtG5pBGF/jCZqwdHnv
+X-Gm-Gg: AR+sD107pa7l7Tm8IXoPSLjHrv2+w4G3Vz3UNKQuu577BmhLSsJeAkscUk9qXFJUeK+
+	P9YRtfbLpnwBT/6OGJc/P11NUMjUAUpNZ7Ny1f0RQi2dxiw+uD8aKRjJfEidsBewgKOSikFGlB6
+	ffesC2XhkDU98nDtUBHd9+Z3QpuEp+D/rUD6KPkn6EzzbkwdAMRdEO5ZBpiNyDt8MBUa5OmJZQM
+	bzBhZH82MYGLrtTi866ExNnKhFV+ij0DnaL9y4yIrSBwIWeQ3Jw+z2JPY7WTWU+vHPUo5U0AJDQ
+	owtEIMj4gG+RY7OfyHpyxbboDtKoeg08wkjnXvTkkq9Zxlm8Fin6DW9OdJemM741mUF6wOhAQO8
+	dLnr3SVi2/YLBMItrqsZNY6KuMqoZ52haetPoH1rRW0Bxvalc7RwMrcoD2wE=
+X-Received: by 2002:a05:622a:1e15:b0:52b:4c5a:5844 with SMTP id
+ d75a77b69052e-52e4232333emr81680181cf.20.1787759019324; Wed, 26 Aug 2026
+ 08:43:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260826135252.3091193-1-florian@schauer.to>
+In-Reply-To: <20260826135252.3091193-1-florian@schauer.to>
+From: Eric Dumazet <edumazet@google.com>
+Date: Wed, 26 Aug 2026 17:43:25 +0200
+X-Gm-Features: AcwNN1UPcaNMSfJEESXZg0-2cY-GKNHw_shclvxV2PmWjE2AEs75WcK4lyzHWtU
+Message-ID: <CANn89iJ7p5P-Ryufr1MBCcYEnzDTMBJbLjNiTNGsVuktMNQOcA@mail.gmail.com>
+Subject: Re: [PATCH net] page_pool: keep frag_offset aligned for odd-sized requests
+To: Florian Schauer <florian@schauer.to>
+Cc: hawk@kernel.org, ilias.apalodimas@linaro.org, netdev@vger.kernel.org, 
+	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 26 Aug 2026 17:19:25 +0200
-Message-Id: <DKYZ5ZH2J5A4.2E44FZDA68OKK@bootlin.com>
-Cc: <ebpf@linuxfoundation.org>, <bastien.curutchet@bootlin.com>,
- <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <martin.lau@kernel.org>, <clm@meta.com>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bot+bpf-ci@kernel.org>,
- <alexis.lothore@bootlin.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
- <john.fastabend@gmail.com>, <andrii@kernel.org>, <martin.lau@linux.dev>,
- <eddyz87@gmail.com>, <song@kernel.org>, <yonghong.song@linux.dev>,
- <jolsa@kernel.org>, <tglx@kernel.org>, <bp@alien8.de>,
- <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
- <shuah@kernel.org>, <mingo@redhat.com>, <andreyknvl@gmail.com>,
- <emil@etsalapatis.com>, <ihor.solodrai@linux.dev>, <laoar.shao@gmail.com>
-Subject: Re: [PATCH bpf-next v7 1/9] bpf: mark instructions accessing
- program stack
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260822-kasan-v7-1-99afee6ef7fd@bootlin.com>
- <f6a88fe55d543f5fe2a6d9e856acb4cf1b87b8210de58459df1272c8a456d926@mail.kernel.org> <DKWOIW8NUFZA.1QPBXZJY5YYOL@gmail.com>
-In-Reply-To: <DKWOIW8NUFZA.1QPBXZJY5YYOL@gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
 
-On Mon Aug 24, 2026 at 12:33 AM CEST, Kumar Kartikeya Dwivedi wrote:
-> On Sat Aug 22, 2026 at 1:24 AM CEST, bot+bpf-ci wrote:
->>> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.=
-h
->>> index 004b06785521..412a13a664fa 100644
->>> --- a/include/linux/bpf_verifier.h
->>> +++ b/include/linux/bpf_verifier.h
->>> @@ -725,6 +725,8 @@ struct bpf_insn_aux_data {
->>>  	u16 const_reg_map_mask;
->>>  	u16 const_reg_subprog_mask;
->>>  	u32 const_reg_vals[10];
->>> +	/* instruction can access non-stack memory */
->>> +	bool non_stack_access;
->>>  };
->>
->> [ ... ]
->>
->>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->>> index e036ae20bf6b..040af75d9550 100644
->>> --- a/kernel/bpf/verifier.c
->>> +++ b/kernel/bpf/verifier.c
->>> @@ -3272,6 +3272,11 @@ static void mark_indirect_target(struct bpf_veri=
-fier_env *env, int idx)
->>>  	env->insn_aux_data[idx].indirect_target =3D true;
->>>  }
->>>
->>> +static void mark_non_stack_access(struct bpf_verifier_env *env, int id=
-x)
->>> +{
->>> +	env->insn_aux_data[idx].non_stack_access =3D true;
->>> +}
->>> +
->>
->> [ ... ]
->>
->>> @@ -6654,6 +6659,10 @@ static int check_mem_access(struct bpf_verifier_=
-env *env, int insn_idx, struct b
->>>  				clear_scalar_id(&regs[value_regno]);
->>>  		}
->>>  	}
->>> +
->>> +	if (!err && reg->type !=3D PTR_TO_STACK)
->>> +		mark_non_stack_access(env, insn_idx);
->>> +
->>>  	return err;
->>>  }
->>
->> Does this test read the correct register type? For a load instruction wh=
-ere
->> dst_reg =3D=3D src_reg (e.g., rX =3D *(u64 *)(rX + off)), check_mem_acce=
-ss()
->> receives reg =3D &regs[src_reg] and value_regno =3D dst_reg, so reg poin=
-ts to
->> the same slot that gets overwritten by the load.
->>
->> When the pointer is PTR_TO_STACK, check_stack_read() runs:
->>
->> check_stack_read_fixed_off() {
->>     state->regs[dst_regno] =3D *reg;  /* or mark_reg_stack_read() */
->> }
->>
->> By the time execution reaches the new test, reg->type is the loaded valu=
-e's
->> type (typically SCALAR_VALUE), not PTR_TO_STACK. The condition evaluates=
- to
->> true and marks a stack-only access as non-stack.
->>
->> Both check_load_mem() and check_store_reg() snapshot the pointer type be=
-fore
->> calling check_mem_access():
->>
->>     /* verifier.c check_load_mem */
->>     src_reg_type =3D regs[insn->src_reg].type;
->>     err =3D check_mem_access(env, env->insn_idx, ...);
->>
->>     /* verifier.c check_store_reg */
->>     dst_reg_type =3D regs[insn->dst_reg].type;
->>     err =3D check_mem_access(env, env->insn_idx, ...);
->>
->> Could check_mem_access() snapshot reg->type at entry and test that snaps=
-hot
->> instead?
+On Wed, Aug 26, 2026 at 3:53=E2=80=AFPM Florian Schauer <florian@schauer.to=
+> wrote:
 >
-> This one also looks like a real bug, we should probably save the type bef=
-ore the
-> call as suggested and done elsewhere.
+> page_pool_alloc_frag_netmem() rounds the requested fragment size with
+>
+>         size =3D ALIGN(size, dma_get_cache_alignment());
+>
+> dma_get_cache_alignment() returns 1 unless the architecture defines
+> ARCH_DMA_MINALIGN, which DMA-coherent architectures such as x86 do not.
+> There the ALIGN() is a no-op and pool->frag_offset advances by the raw,
+> unrounded size.
+>
+> A single caller asking for an odd size then leaves frag_offset misaligned
+> for every fragment carved out of that page afterwards.  The pool is share=
+d,
+> so the damage is not confined to the caller that caused it.
+>
+> The per-cpu system_page_pool used by generic XDP hits this.
+> skb_pp_cow_data() allocates data fragments with the raw packet length:
+>
+>         size =3D min_t(u32, len, PAGE_SIZE);
+>         truesize =3D size;
+>         page =3D page_pool_dev_alloc(pool, &page_off, &truesize);
+>
+> and later calls page_pool_dev_alloc_va() for a new skb head, which
+> napi_build_skb() installs as skb->head.  Once frag_offset is odd that hea=
+d
+> is misaligned, and so is skb_shinfo(skb) =3D=3D skb->head + skb->end.
+>
+> struct skb_shared_info begins with an atomic_t dataref, so the increment =
+in
+> __skb_clone() straddles a cache line.  On x86 with split lock detection -=
+-
+> fatal for kernel split locks by default -- this panics the machine:
+>
+>   Oops: Split lock detected
+>   RIP: 0010:skb_clone+0x154/0x1e0
+>   Call Trace:
+>    <IRQ>
+>    raw_local_deliver+0x1ed/0x2c0
+>    ip_protocol_deliver_rcu+0x54/0x1c0
+>    ip_local_deliver_finish+0x85/0x100
+>    ip_local_deliver+0x67/0x100
+>    __netif_receive_skb_one_core+0x85/0xa0
+>    process_backlog+0x87/0x130
+>
+> Reproduced by attaching any generic-mode XDP program to loopback and
+> opening a RAW IPPROTO_UDP socket, which makes raw_local_deliver() clone
+> every locally delivered UDP packet; ordinary DNS traffic then triggers it=
+,
+> roughly once per 2500 clones.  Observed on 6.12.101 and 7.1.8.
+>
+> Tracing page_pool_alloc_frag_netmem() over one such run shows the
+> amplification -- two odd-sized requests, nine misaligned offsets:
+>
+>   requested size & 7:   0: 17035    5: 1    7: 1
+>   frag_offset & 7:      0: 17028    3: 1    4: 1    5: 1    6: 1    7: 5
+>
+> and skb_pp_cow_data() returning heads that were aligned on entry:
+>
+>   head 0xffff8f4c86aeac00 -> 0xffff8f4c53a9a9c4 (&7=3D4)
+>   head 0xffff8f4d6a8a42c0 -> 0xffff8f4c4f7b7a45 (&7=3D5)
+>
+> Round the fragment size up to at least the natural word size so fragments
+> are always suitably aligned for the objects callers build on them.
+> Architectures needing a larger DMA alignment keep it.
+>
+> This also makes the remainder computed in page_pool_alloc_netmem(),
+>
+>         *size =3D max_size - *offset;
+>
+> aligned, since max_size is a power of two -- which fixes the matching
+> misalignment of skb->end.
+>
+> Verified with a controlled A/B under QEMU/KVM: same tree, same config, sa=
+me
+> compiler, same rootfs and identical traffic, differing only by this patch=
+.  A
+> SEC("xdp.frags") XDP_PASS program on lo plus UDP datagrams larger than
+> max_head_size drives skb_pp_cow_data()'s fragment loop, which passes raw =
+packet
+> lengths to the pool.  Measured at the return of skb_pp_cow_data():
+>
+>                           unpatched   patched
+>   skb_pp_cow_data calls       40800     40800
+>   misaligned skb->head         1120         0
+>   dataref at line offset >60     80         0
+>
+> The last row counts the accesses that actually fault: skb_shinfo()->datar=
+ef
+> sits at head+end+0x20 and is a 4-byte atomic, so `lock incl` splits a 64-=
+byte
+> cache line only when that address lands at offset 61..63.  All 80 occurre=
+nces
+> were at offset 61; the panic reported above was at offset 62.  Eliminatin=
+g the
+> misalignment removes every one of them.
+>
+> Same class of bug as commit 3bed3cc4156e ("net: Do not allocate page
+> fragments that are not skb aligned"), which fixed the older
+> netdev_alloc_frag()/napi_alloc_frag() allocators.
+>
+> Fixes: 53e0961da1c7 ("page_pool: add frag page recycling support in page =
+pool")
+> Signed-off-by: Florian Schauer <florian@schauer.to>
+> ---
+>  net/core/page_pool.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+> index 1234567..89abcde 100644
+> --- a/net/core/page_pool.c
+> +++ b/net/core/page_pool.c
+> @@ -1065,7 +1065,14 @@ netmem_ref page_pool_alloc_frag_netmem(struct page=
+_pool *pool,
+>         if (WARN_ON(size > max_size))
+>                 return 0;
+>
+> -       size =3D ALIGN(size, dma_get_cache_alignment());
+> +       /* dma_get_cache_alignment() is 1 on DMA-coherent architectures, =
+so on
+> +        * its own it cannot keep frag_offset aligned.  Callers build obj=
+ects
+> +        * on these fragments -- skb_pp_cow_data() turns one into skb->he=
+ad,
+> +        * where skb_shinfo() must be aligned -- and the pool is shared, =
+so an
+> +        * odd-sized request must not skew every fragment that follows it=
+.
+> +        */
+> +       size =3D ALIGN(size, max_t(unsigned int, dma_get_cache_alignment(=
+),
+> +                                sizeof(long)));
 
-It took me a bit of time to fully grasp it, but indeed, that's an actual
-issue, possibly over-instrumenting programs. I failed to reproduce it
-with any existing selftest, and also failed to make clang output a
-faulty program just from C, but playing with a bit of BPF assembly, I
-managed to observe it:
+Perhaps the comment would not be needed with something more descriptive.
 
-  SEC("tcx/ingress")
-  int ldx_self_alias_on_stack(struct __sk_buff *skb)
-  {
-  	struct kasan_test_val val;
-  	__u64 addr;
- =20
-  	addr =3D (__u64)&val;
-  	asm volatile(
-  	        "r1 =3D %0\n"
-  	        "r1 =3D *(u64 *)(r1 + 0)\n"
-  	        :
-  	        : "r"(addr)
-  	        : "r1", "memory");
- =20
-  	return 0;
-  }
-
-This r1 =3D *(u64 *)(r1) ends up being wrongly instrumented, despite
-accessing only stack. I'll then add this reg->type saving to preserve
-and pass the initial state to the check.
-
-Alexis
-
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+size =3D ALIGN(size, max_t(unsigned int, dma_get_cache_alignment(),
+                      __alignof__(struct skb_shared_info)));
