@@ -1,166 +1,103 @@
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from skyblue.cherry.relay.mailchannels.net (skyblue.cherry.relay.mailchannels.net [23.83.223.167])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D35C265606
-	for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 01:25:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9210913777E;
+	Wed, 26 Aug 2026 01:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.83.223.167
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787707560; cv=none; b=N7sfobezf4zK4OKC8XyV0qqXH12cOIB3ICXEK99ckNklnLFEqvY2HcChE+01llHSrs5Rxu5SoVtS3G+jHZCyfHbUocinXGwwlX3fUD8MN92zv4BJNH+WQnvDOoZaWEMqTazTuHA8caFZDZsFJ2arpQ4X6sMKjDKE/Df73chDCU8=
+	t=1787708064; cv=none; b=Yhlbco7QgEcjPNnmSeGNGilOk+jWantb1KBwFAkFrg8UTHmtR9MBC/Swpj1sXHBX2BZkBI59e4SU91UwRrW4p36llx+PGwJR8s865aW98ZcgSUeIzkbnW0dVaQ1IuJvrdhHayEg09MTXDEZ+ahnFqXo7NSnCVGC8xdGRBxOOzBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787707560; c=relaxed/simple;
-	bh=sVn59ACXb8w4iDg1AHXcvkreINPcbzzNTBkIlI3ORMQ=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=VFPd6rwnr4zpWRQQx8xRFMXOYcixsw1yMRjRKGyqrrN4edQr+/UtgfEBP++Sobluxwwv21VpRBhxceOE22AKikJ1KFrUVyLycFoFswxCu9IgwsPS7T2AUu9qM8bNWjl2QEd3hhpJjcJ/8GuOsgSdICLH2DkDjM26eqXmhMWVlTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=p/RNPca5; arc=none smtp.client-ip=209.85.210.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787708064; c=relaxed/simple;
+	bh=8mvVAM5/C4VKX+uyn+Ue+KiWk4xHiIhC8s/6hAlyMMs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H2nqq40Q9ZbQX84zZ7tsKX8SIKOsIkx1ngTV2KaSqxoTaNsj/KzcpJM6yk9gqc1SYuhuqiv/pnXjH4xVCR8g8SB0yhwClAZsyAav++lUphX7cxZzCTKxx0kZszUqxKvq0Q7w3PApdZTRmeyBm7TdmeNi+YV6tSWcIhaiXLXadj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net; spf=fail smtp.mailfrom=stgolabs.net; dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b=j6is/86G; arc=none smtp.client-ip=23.83.223.167
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=stgolabs.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p/RNPca5"
-Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-7f3f52143cdso384225a34.2
-        for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 18:25:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787707558; x=1788312358; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=ley2zAksbGJi0111Diaaw3UTcUYD3jHLMyKx284iLKQ=;
-        b=p/RNPca54bDZDwS/HqoX2B6Z3xYErbx5UXmXwcKfwASBtntWYiSsg0rqQgfbsaG7SK
-         aDNrk54gK0ARZLndK3IoAcawlMl1jWec8WuMhgDOO08mp95bEdrr80W9eG0b6s3o34Na
-         1PIaLF3e3gewxjXQk5YYDkxv161HOhrq+Y0ct5/jIFf6925VPcJG0a+1/9D2WL9c6YqM
-         ztfUWMBY1CpvHarkKfJ6PRA3nYzq25rFNWt+AdRCPZG8kacz22/CHARcrGd+H7fGGWbo
-         Ffmciiw0OuxfGEtcGR1hnlNbCQGtGdGe7o/WRp/r6FyJ72LzN2emqlvaF/W2ZvzVf6Mj
-         hzZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787707558; x=1788312358;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ley2zAksbGJi0111Diaaw3UTcUYD3jHLMyKx284iLKQ=;
-        b=a0CVjbfruUFjRAzxfa/fdJTQQML1n9RyRgb/DPQclx7c8dUi6qBmqFuDyEB0rw9uU0
-         fKHJkUqTUb1DFA/SlTxmHBF3bnSnB0RHmDCTcVU2QGvG8YQqbyMvf4PthLocb0PF88OX
-         civyRaJnQj2WfHS7wEiCvCb0Hn0K1aqdwqsRFzIqR5imR5F1upV6E/8iSLxH8bBEUsDJ
-         o4gEoX+KTS9hB/ljHPmO/ZUIdcV52nfC63sI01VyZeEYWOzhsyC0PVnQZHJ16zG0YYwU
-         z6oB9WzR/5Xy/LFgs+LOxwQF//GplRefdbBC0MyxnzfP3WjPH5oyYSFr+wQNgl+vooG7
-         ItIQ==
-X-Forwarded-Encrypted: i=1; AHgh+RozpbZH9bReZwlE8xJjRmSqYfTR8OZ1wTK5K/7Zo5keMHycs7J6MWZrPb/BL8KkPtnjoS8=@vger.kernel.org
-X-Gm-Message-State: AFuF++nJGdMGRiHLkJMsQkkIvsn39gIh5k7piLgN18R+kNuyjSMeIPpl
-	TXHA/OpOKI+GjpvdbyQkRQDcDK4QssqFtd86SslG5xuku21o0qad3qR/x3n/CQ==
-X-Gm-Gg: AR+sD10HO0TnCN4SGidLp5VLBkNbkC+Iq8eFWn8tiypuTI96o3L41UeX97iBI4pfFBd
-	MVHYG1V/aY/j1BfDGzVUwPI66zTJq5IdhUI65WW438adoIxNd21g49/mepRfSfQMA5PZCI6qj4y
-	E+0qJjaM4G98ppttitYGS1CV8Sg33pR/2mT/UuwS7SK68R1VO7kbE+U0vWT+kB16VJJsxMGjAYz
-	rHe9WgplKmppp4Oy1y2bdTxqw8Fnjgdm0Fb5X0MDanOPt0zFA3J457mqO8ziMY9A8ERASsQ93i7
-	ykl9+Bgqul0UtDJSQuNjIhp9SqRnwTTNW5zjRFddnZh2pEXgONKIl1hgaPycqZD4FrCPATzD3Sl
-	HBm9PhZiWtQv+plUvmvmXJqsRNGYNe8hHlBxhP0gDaDenFJAdKbgkN5rWMX14QwhXy835u9oWSi
-	Z1sqFvTlzkddAdiIV4TjfaEnZ8wF3Jh6YcUhr5t9E3jIXQP4KL/Np9n7u8HaqzXLijBANcesH5R
-	UX6tdNwa84G92yLq1XFMIm2s5NsYwTWSCCQ/H1sKaiB3UfASKoEOw==
-X-Received: by 2002:a05:6820:4c89:b0:6b1:a0cf:863a with SMTP id 006d021491bc7-6b1a0cfc68cmr2798036eaf.35.1787707558007;
-        Tue, 25 Aug 2026 18:25:58 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:e::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6b1a24bce78sm406255eaf.3.2026.08.25.18.25.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Aug 2026 18:25:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b="j6is/86G"
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id CF1D84E1377;
+	Wed, 26 Aug 2026 01:25:03 +0000 (UTC)
+Received: from pdx1-sub0-mail-a204.dreamhost.com (trex-green-7.trex.outbound.svc.cluster.local [100.96.17.28])
+	(Authenticated sender: dreamhost)
+	by relay.mailchannels.net (Postfix) with ESMTPA id 2F6304E1551;
+	Wed, 26 Aug 2026 01:25:03 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Shoe-Trade: 329137dc4d059e0c_1787707503612_153827419
+X-MC-Loop-Signature: 1787707503612:1092170596
+X-MC-Ingress-Time: 1787707503612
+Received: from pdx1-sub0-mail-a204.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.96.17.28 (trex/8.0.2);
+	Wed, 26 Aug 2026 01:25:03 +0000
+Received: from offworld (unknown [76.167.199.67])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: dave@stgolabs.net)
+	by pdx1-sub0-mail-a204.dreamhost.com (Postfix) with ESMTPSA id 4hV6QN4m4Qz1V;
+	Tue, 25 Aug 2026 18:25:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+	s=dreamhost; t=1787707503;
+	bh=8mvVAM5/C4VKX+uyn+Ue+KiWk4xHiIhC8s/6hAlyMMs=;
+	h=Date:From:To:Cc:Subject:Content-Type;
+	b=j6is/86GlPmrZ409Z13BQVNYvcmsOqVE5NPB3rajquDkLuKgFEq0vQWaBy2ze21v2
+	 guCgQsPzj672ix7aiK7PSuDhiCMVjcjSMi5txQiqHwQLAfOf8Q+hShk7ufHCvwCnu6
+	 /OOITLkG4BMZPC1jlQGIAZRiaTZPHCF39n3GLKv+l55qryyNpe2zkTeOVzWiW9IfKV
+	 U4T5po5xCW5Xej0JU0qJ7HjxmAtVCs9RuJ5fB+qIkZXb2R7sB5qT4/LKDKeIHj1LOQ
+	 jU8YPXWFwRY8qmN6V26lMSe1iKhNLDNkTu+x6NyKkDURg3qwofhyDd7XtCE6LBvdVX
+	 DHlAkm+mFg8/w==
+Date: Tue, 25 Aug 2026 18:24:57 -0700
+From: Davidlohr Bueso <dave@stgolabs.net>
+To: Yunhui Cui <cuiyunhui@bytedance.com>
+Cc: pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	alex@ghiti.fr, dennis@kernel.org, tj@kernel.org, cl@gentwo.org,
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+	bjorn@kernel.org, pulehui@huawei.com, puranjay@kernel.org,
+	thuth@redhat.com, ajones@ventanamicro.com,
+	ben.dooks@codethink.co.uk, rkrcmar@ventanamicro.com,
+	samuel.holland@sifive.com, zong.li@sifive.com,
+	conor.dooley@microchip.com, tglx@kernel.org, debug@rivosinc.com,
+	seanwascoding@gmail.com, andybnac@gmail.com,
+	menglong8.dong@gmail.com, cyrilbur@tenstorrent.com,
+	wangruikang@iscas.ac.cn, atishp@rivosinc.com,
+	apatel@ventanamicro.com, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	bpf@vger.kernel.org, arnd@arndb.de, nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com, morbo@google.com,
+	justinstitt@google.com, qingfang.deng@siflower.com.cn,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v8 3/3] riscv: store percpu offset into thread_info
+Message-ID: <20260826012457.ig3rfmji7vywf6kc@offworld>
+References: <20260703122832.15984-1-cuiyunhui@bytedance.com>
+ <20260703122832.15984-4-cuiyunhui@bytedance.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 25 Aug 2026 18:25:56 -0700
-Message-Id: <DKYHFTVFY5T7.1TLXUTDOWQXF7@gmail.com>
-Cc: <ast@kernel.org>, <andrii@kernel.org>, <memxor@gmail.com>,
- <daniel@iogearbox.net>, <eddyz87@gmail.com>
-Subject: Re: [PATCH 2/3] bpf: Add sleepable arena page allocation path
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Emil Tsalapatis" <emil@etsalapatis.com>, <bpf@vger.kernel.org>
-X-Mailer: aerc
-References: <20260824082530.47553-1-emil@etsalapatis.com>
- <20260824082530.47553-3-emil@etsalapatis.com>
-In-Reply-To: <20260824082530.47553-3-emil@etsalapatis.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20260703122832.15984-4-cuiyunhui@bytedance.com>
+User-Agent: NeoMutt/20220429
 
-On Mon Aug 24, 2026 at 1:25 AM PDT, Emil Tsalapatis wrote:
-> The bpf_arena_alloc_pages() function currently only allocates pages
-> inside a spinlock critical section with IRQs off. This forces the use
-> of alloc_pages_nolock() in the BPF allocator, even when the caller is
-> a sleepable BPF function. This in turn causes allocation failures even
-> in cases where falling into the allocator slow path and possibly
-> sleeping would eventually succeed. This can be triggered consistently
-> by heavy BPF arena users like scx.
->
-> Add a separate arena page allocation path just for sleepable callers.
-> The path preallocates the arena memory to be added to the tree before
-> taking the critical section.
->
-> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
-> ---
->  include/linux/bpf.h  |  6 ++++
->  kernel/bpf/arena.c   | 76 +++++++++++++++++++++++++++++++++++++++++---
->  kernel/bpf/syscall.c |  8 +----
->  3 files changed, 79 insertions(+), 11 deletions(-)
->
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index ffa5626411ac..d15ed7a3879b 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -710,6 +710,12 @@ void bpf_map_free_internal_structs(struct bpf_map *m=
-ap, void *obj);
->  int bpf_dynptr_from_file_sleepable(struct file *file, u32 flags,
->  				   struct bpf_dynptr *ptr__uninit);
-> =20
-> +static inline bool is_bpf_alloc_nonsleepable(void)
-> +{
-> +	return preempt_count() > 0 || irqs_disabled() ||
-> +		IS_ENABLED(CONFIG_PREEMPT_RT);
-> +}
-> +
->  #if defined(CONFIG_MMU) && defined(CONFIG_64BIT)
->  void *bpf_arena_alloc_pages_non_sleepable(void *p__map, void *addr__ign,=
- u32 page_cnt, int node_id,
->  					  u64 flags);
-> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> index da356989786a..126ddae763f9 100644
-> --- a/kernel/bpf/arena.c
-> +++ b/kernel/bpf/arena.c
-> @@ -683,8 +683,73 @@ static int arena_adjust_tree(struct bpf_arena *arena=
-, long uaddr, long page_cnt,
->  	return range_tree_clear(&arena->rt, *pgoff, page_cnt);
->  }
-> =20
-> -static long arena_alloc_pages_internal(struct bpf_arena *arena, long pag=
-e_cnt,
-> -		long uaddr, long pgoff, int node_id, bool sleepable)
-> +static long arena_alloc_pages_sleepable(struct bpf_arena *arena, long pa=
-ge_cnt,
-> +		long uaddr, long pgoff, int node_id)
-> +{
-> +	u64 kern_vm_start =3D bpf_arena_get_kern_vm_start(arena);
-> +	struct apply_range_data data;
-> +	struct page **pages =3D NULL;
-> +	unsigned long flags;
-> +	u32 uaddr32;
-> +	int ret, i;
-> +
-> +	pages =3D kvcalloc(page_cnt, sizeof(struct page *), GFP_KERNEL_ACCOUNT)=
-;
-> +	if (!pages)
-> +		return 0;
-> +
-> +	ret =3D bpf_map_alloc_pages(&arena->map, node_id, page_cnt, pages);
-> +	if (ret) {
-> +		kvfree(pages);
-> +		return 0;
-> +	}
-> +
-> +	data.i =3D 0;
-> +	data.pages =3D pages;
-> +	data.arena =3D arena;
-> +
+On Fri, 03 Jul 2026, Yunhui Cui wrote:
 
-Why have this split?
-Always use an approach of allocating pages outside of the lock?
+>RISC-V percpu addressing currently derives the base offset from the CPU
+>number and __per_cpu_offset[]. Cache the current CPU percpu offset in
+>thread_info so percpu accesses can load it directly.
 
-Considering severity of the issue bpf tree is probably appropriate.
+fyi on a sifive p550 I am seeing this_cpu_inc() cost dropping by ~15-20%
+an adhoc microbench measuring/grouping various calls.
 
-pw-bot: cr
+Thanks,
+Davidlohr
