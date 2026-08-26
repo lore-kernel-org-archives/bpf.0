@@ -1,52 +1,48 @@
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3196376BCC
-	for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 18:18:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695C036DA15
+	for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 18:18:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787768335; cv=none; b=Xma26Lz6cWPUcO+MvUE7uBk1X6mhrelRwOz8f4CxLiHWy4gecMXrS2MFsfxFiapux1j0Ko5/suBOczHMsi1oFBfchGBa6eDdFz7Ul4hXy70UaGgx1mO9a5nYJTs8HOqQ5HQhMwluvAJjE7eouSpVi/SxZ6G4gl4pjEInYCyaPbI=
+	t=1787768337; cv=none; b=rK+Za6iAia2BL5Zz1rxhxUBsBrOqPAlk8wAg3eAeTBLw/UCDRLkORhBk1bNdyaFBELjKRLR88WpjGTyD2hldwHFU5oV2d1eXWcjJ7TbEU7aLK3TEDo/hl5PJL70MozKRbY31EfAiEoPoj7eicp0kfRxEWZbfU8e9LZQ7XeXnkeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787768335; c=relaxed/simple;
-	bh=VJ5QiUk2WgjsbwpYre8VqtVZgcBVvFm/w07s6NHhYtM=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=B6yVusChcD4Ir2iM9YEAlk0kwtZQCcHtkMnEBCA7hmmWYyLMZQ1I+2o3nD/hQ3xdLo8aO5nVEk41vDkxZ47PxfLoGMYrLZTDEEso6Tc8u4v06/SNu0nM3CBZ4zeIOl+KTPTc9NgQIbW8/pyvVCnpAR2gWPrU4kVK8NH6iYCZgCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=mD2IGIYC; arc=none smtp.client-ip=148.163.148.77
+	s=arc-20240116; t=1787768337; c=relaxed/simple;
+	bh=mNi/porhF2jOitDuvfoC35lGPyuWdRA7n/lSZlGRLZE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BQVHUnr1IBQStjGXj/IPxqIWgf7qbGAz9n7zoZV+UvAqPNE20QcqQgg7SZAZEN0ADQjGLv4KSNLnMjJqREvLLG3KMT9EUG1fh7SzDsLfTMSxMhzwrr84jmBDJf5SnIT7Khm8ad1w7dj18JlHgDMMNKPCErCcdPyBU6yqki20m8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=NjHe8qTa; arc=none smtp.client-ip=148.163.152.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="mD2IGIYC"
-Received: from pps.filterd (m0354650.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67QGuWOw4140136;
-	Wed, 26 Aug 2026 18:18:29 GMT
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="NjHe8qTa"
+Received: from pps.filterd (m0354654.ppops.net [127.0.0.1])
+	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67QHorEM014210;
+	Wed, 26 Aug 2026 18:18:28 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
 	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=Q9j5EfwBRwIhzzDX/FW//4S7HR0D0fAky9sRTWKhOmc=; b=mD2I
-	GIYCTJTlcUXMswbp1caJIOScplHec1dQt7NdMRXozDummjJ63oh1szck1CfRnx6N
-	0ohd76qht6XrsP5HL1AE1yVycSohqRoiRUv2N0ktaPXmKCgtzuWQZZzHNl2lG/+s
-	3GscMzZu58HOxyV8TZAGfKhKD84F2cwkN5Q2bts6K1zVwVTrZdzDvhJKaF11rUJT
-	D9VCrtaTChYOIU85vG0ar5CJI0QP0UA3EMX1aLdmBda2CnCeh5CpiMK3m+b0p8LL
-	7Ai6ohWaFESJXxBqDbZMdaxuuCgoRG1EGL4/ZJPZhu4fLj15MCQSqUYDxktIqCKr
-	WlNTjZTwpM9K2yPwwA==
+	:message-id:mime-version:subject:to; s=default; bh=Ea1qNcdD9EBr6
+	IUt99GvLLALPPKzlQqCckwV9jKLo5E=; b=NjHe8qTaxQ/V/lunZ4U48sHVlddRw
+	vbfZgnOHyJe8n4mw7lJbWuLpU8n9+/xM8kVzMRmOIfoCyH4FtRt/oHHhCrcMLJHX
+	fw2ms0gamoIcFiEy8Spez+8f+ReBHkFSOoGPOlt5LldqyteD+rF0LomniEdAXomL
+	MvRPAfhqQ+JmQh/Dsa1e3N3cPj7eyHoAHZ0ZWa5EODf/lugEMWEU/eMtHgw0a8c6
+	1bdskZglOogN1bE/LUM+uFIr8iVPO4vPh63i3jHbDH+PDH9UEYEgBLfrWGnebs4s
+	67ly7DuVjPAOtiwScf+f475iulqhiqteojXBrNqMx6/5211Uql8I1yA8g==
 Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4g9m7qbrc1-1
+	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4ga4wcr6dw-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 26 Aug 2026 18:18:29 +0000 (GMT)
+	Wed, 26 Aug 2026 18:18:28 +0000 (GMT)
 Received: from LL-DJCZ134.crowdstrike.sys (10.100.11.122) by
  04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.43; Wed, 26 Aug 2026 18:18:27 +0000
+ 15.2.2562.43; Wed, 26 Aug 2026 18:18:26 +0000
 From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
 To: <bpf@vger.kernel.org>, <andrii@kernel.org>
 CC: <martin.kelly@crowdstrike.com>, <slava.imameev@crowdstrike.com>,
         <linux-open-source@crowdstrike.com>
-Subject: [PATCH bpf-next v2 1/5] libbpf: BPF program load type enum
-Date: Wed, 26 Aug 2026 14:18:21 -0400
-Message-ID: <20260826181825.1826541-2-andrey.grodzovsky@crowdstrike.com>
+Subject: [PATCH bpf-next v2 0/5] libbpf: BPF program dynamic loading
+Date: Wed, 26 Aug 2026 14:18:20 -0400
+Message-ID: <20260826181825.1826541-1-andrey.grodzovsky@crowdstrike.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260826181825.1826541-1-andrey.grodzovsky@crowdstrike.com>
-References: <20260826181825.1826541-1-andrey.grodzovsky@crowdstrike.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -57,234 +53,131 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: 04WPEXCH016.crowdstrike.sys (10.100.11.68) To
  04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODI2MDE1MyBTYWx0ZWRfX+SrHShoC0Cyz
- lS7gHzUvhAsNUvIOAqKa12u/0W98jDp3yh+5J2pQ8V1S4vzDabwtjWl1YkEQYRB0cwSS0I9J3OK
- jp9oLLJcT92WkqRmodyUvttvFtxM1w6km3sdAz+tY9cn6n2trswmpq6oUGyN7zmty++Tzlb6mmq
- 7gJElD7jLc4H4Ng/EIdgjqw9XASeMlpZPJqVCZR3K0FnnN7BElXJmOwLgK8N2lnBqJRs66TM63e
- OS4TKoU0vhFjbkTwT1zbnvghDAzuw+5y22X9UaGxHSWSUBPl4G4ZnmFM6Q0h9juTzm3ogToOrVF
- g2FOyVtJCRjToKkiBOpeVbNvhzNQ2N5bEdgyMrzg1NViT6z77o0A9BY1+9aDVkYsWZhvNNxWHHs
- mxDbPUDMyg9Nk0eORKsw6VY8nAVZWiO7NP6AWCRyS1SJpWVIolcMIdjyHjjrvh1J6gDCCogpqmR
- oFIIf9KEOVIfVCSG/Ag==
-X-Authority-Analysis: v=2.4 cv=BaroFLt2 c=1 sm=1 tr=0 ts=6a8f2df5 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODI2MDE1MyBTYWx0ZWRfX6Rl7vQ8gpvm4
+ pCNM2Vv9hDSWuFp7bIbkVbCigAA7GVD9pODnCPt0dj4KQ5U/w8ZphoRVy6JtBqPX3e66pzf3oOf
+ Py0uoqnyWWCf5sP0uqlCcLmliZgUjtuJh3XBvJOZST0CSd9fwCP+aSty+YvoE2PYBozQgq13/Rz
+ SYDAvmIiNrH+FZOtmopHksylNxAxZMHB4S87ckFas2JPwBGxQp/qZRYuuhsCdcME/hQlc1E6MlX
+ 1P6rU7U0fyBoNuJxLt7cxCJ6EGhlSZxCswjzeSQW//Rbj+O2q1cmnApqTHSFYWVsjP9ppAd8x2z
+ dglu50ZVFLUhShzQWizrhZZQGg+hzvaCDly/QGbODar5ofLTdzddvvrFihuN1sIUjEbrlmXS4Gz
+ sIzAGPs0TL3d3eL7AbE0hnjWC4jKD6cTnHj28Cg6+6SnAVs+yUgK8MVz5iXcmBCRnblaeUjTyus
+ VtOFn7wyoFegswRj+2g==
+X-Authority-Analysis: v=2.4 cv=SbfHsPRu c=1 sm=1 tr=0 ts=6a8f2df4 cx=c_pps
  a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
  a=EjBHVkixTFsA:10 a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=t04HzT_fAfAF5W-3wVZy:22 a=pl6vuDidAAAA:8
- a=jpiZ5Bf68AYXYWgi8RAA:9
-X-Proofpoint-ORIG-GUID: bnC-q1RjqD3Mt0E8dOmD-em9SAKV6f8Q
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODI2MDE1MyBTYWx0ZWRfX2OTcazDZQWiZ
- u10s9uAQM9hJVT7LfahfrCKnhVhs71dG3fA7HGk7IfkFGca0CPhuG42GT6N/cZjROYmCRo7O5rP
- ZBgSlcgREll/CnH3dWYKKwdxaLv7Fk6G7QB+tWkQyr6fs0RfOsvH
-X-Proofpoint-GUID: bnC-q1RjqD3Mt0E8dOmD-em9SAKV6f8Q
+ a=T2KQ53IYiC3MXPrxx8bB:22 a=R_n4Uisa8axJ7jemP0ek:22 a=VwQbUJbxAAAA:8
+ a=pl6vuDidAAAA:8 a=pGLkceISAAAA:8 a=Kb_ievDTB7_4XtEly2oA:9
+X-Proofpoint-ORIG-GUID: OxK5_CVUdp2MXSYmp4KOqYFRRv6zUpN8
+X-Proofpoint-GUID: OxK5_CVUdp2MXSYmp4KOqYFRRv6zUpN8
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODI2MDE1MyBTYWx0ZWRfX6t5eF4qasPlw
+ zcsXP5I22kgvs9I3bqUqhWG5s8v4fEhzHoI2PhFz83q/F1Vm4OpPwRd4WPcNEXFB/iSo8Cq3D2z
+ VG8B4rJ9xEE5bdOctn+w5cr4oYWg3iEjlqU4TgSbsjTI0mnPKkxT
 X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11887
  signatures=596817
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 malwarescore=0 spamscore=0 impostorscore=0 adultscore=0
- priorityscore=1501 bulkscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608260153
+ impostorscore=0 spamscore=0 priorityscore=1501 malwarescore=0
+ lowpriorityscore=0 bulkscore=0 adultscore=0 phishscore=0 clxscore=1015
+ suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
+ definitions=main-2608260153
 
-From: Slava Imameev <slava.imameev@crowdstrike.com>
+This series was originally posted in January 2025 [1] as
+a two-patch RFC introducing a per-program tri-state load type
+(disabled/auto/dynamic) to let large BPF applications load a subset of
+their programs lazily, after the initial bpf_object load.
 
-Replacing the boolean field with an enum simplifies the addition
-of new load types. Currently, the bpf_program structure defines
-the autoload type using a boolean field. This field is now
-replaced with an enum, allowing new BPF program loading types
-to be introduced by extending the enum value range.
+We looked at the object-wide opt-in flag Andrii suggested as a
+lighter-weight alternative to a per-program enum ("all programs may load
+later, opt in via bpf_object_open_opts"). Problem was that it collapses two
+states that need to stay distinguishable at the level of a single program:[2]
 
-Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
-Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
----
- tools/lib/bpf/libbpf.c   | 50 +++++++++++++++++++++++++---------------
- tools/lib/bpf/libbpf.h   | 15 ++++++++++++
- tools/lib/bpf/libbpf.map |  2 ++
- 3 files changed, 48 insertions(+), 19 deletions(-)
+  - a program that is not currently loaded but is *expected* to load
+    later, gated on runtime configuration; and
+  - a program that is *permanently* not going to load on this kernel
+    (e.g. it targets a symbol or struct field that doesn't exist on the
+    running kernel, or it lost out to an alternative implementation and
+    will never be used on this object instance).
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index b749c01742ee..821d854d43a9 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -494,7 +494,7 @@ struct bpf_program {
- 	struct bpf_object *obj;
- 
- 	int fd;
--	bool autoload;
-+	enum bpf_prog_load_type load_type;
- 	bool autoattach;
- 	bool sym_global;
- 	bool mark_btf_static;
-@@ -872,11 +872,11 @@ bpf_object__init_prog(struct bpf_object *obj, struct bpf_program *prog,
- 	 * autoload set to false.
- 	 */
- 	if (sec_name[0] == '?') {
--		prog->autoload = false;
-+		prog->load_type = BPF_PROG_LOAD_TYPE_DISABLED;
- 		/* from now on forget there was ? in section name */
- 		sec_name++;
- 	} else {
--		prog->autoload = true;
-+		prog->load_type = BPF_PROG_LOAD_TYPE_AUTO;
- 	}
- 
- 	prog->autoattach = true;
-@@ -1163,7 +1163,8 @@ static int bpf_object_adjust_struct_ops_autoload(struct bpf_object *obj)
- 			}
- 		}
- 		if (use_cnt)
--			prog->autoload = should_load;
-+			prog->load_type = should_load ? BPF_PROG_LOAD_TYPE_AUTO
-+				: BPF_PROG_LOAD_TYPE_DISABLED;
- 	}
- 
- 	return 0;
-@@ -1248,7 +1249,7 @@ static int bpf_map__init_kern_struct_ops(struct bpf_map *map)
- 				 * then bpf_object_adjust_struct_ops_autoload() will update its
- 				 * autoload accordingly.
- 				 */
--				st_ops->progs[i]->autoload = false;
-+				st_ops->progs[i]->load_type = BPF_PROG_LOAD_TYPE_DISABLED;
- 				st_ops->progs[i] = NULL;
- 			}
- 
-@@ -1287,7 +1288,7 @@ static int bpf_map__init_kern_struct_ops(struct bpf_map *map)
- 			 * if user replaced it with another program or NULL
- 			 */
- 			if (st_ops->progs[i] && st_ops->progs[i] != prog)
--				st_ops->progs[i]->autoload = false;
-+				st_ops->progs[i]->load_type = BPF_PROG_LOAD_TYPE_DISABLED;
- 
- 			/* Update the value from the shadow type */
- 			st_ops->progs[i] = prog;
-@@ -3600,7 +3601,7 @@ static bool obj_needs_vmlinux_btf(const struct bpf_object *obj)
- 	}
- 
- 	bpf_object__for_each_program(prog, obj) {
--		if (!prog->autoload)
-+		if (prog->load_type == BPF_PROG_LOAD_TYPE_DISABLED)
- 			continue;
- 		if (prog_needs_vmlinux_btf(prog))
- 			return true;
-@@ -6194,7 +6195,7 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
- 			/* no need to apply CO-RE relocation if the program is
- 			 * not going to be loaded
- 			 */
--			if (!prog->autoload)
-+			if (prog->load_type == BPF_PROG_LOAD_TYPE_DISABLED)
- 				continue;
- 
- 			/* adjust insn_idx from section frame of reference to the local
-@@ -7530,7 +7531,7 @@ static int bpf_object__relocate(struct bpf_object *obj, const char *targ_btf_pat
- 		 */
- 		if (prog_is_subprog(obj, prog))
- 			continue;
--		if (!prog->autoload)
-+		if (prog->load_type == BPF_PROG_LOAD_TYPE_DISABLED)
- 			continue;
- 
- 		err = bpf_object__relocate_calls(obj, prog);
-@@ -7566,7 +7567,7 @@ static int bpf_object__relocate(struct bpf_object *obj, const char *targ_btf_pat
- 		prog = &obj->programs[i];
- 		if (prog_is_subprog(obj, prog))
- 			continue;
--		if (!prog->autoload)
-+		if (prog->load_type == BPF_PROG_LOAD_TYPE_DISABLED)
- 			continue;
- 
- 		/* Process data relos for main programs */
-@@ -8398,8 +8399,8 @@ bpf_object__load_progs(struct bpf_object *obj, int log_level)
- 		prog = &obj->programs[i];
- 		if (prog_is_subprog(obj, prog))
- 			continue;
--		if (!prog->autoload) {
--			pr_debug("prog '%s': skipped loading\n", prog->name);
-+		if (prog->load_type != BPF_PROG_LOAD_TYPE_AUTO) {
-+			pr_debug("prog '%s': skipped auto-loading\n", prog->name);
- 			continue;
- 		}
- 		prog->log_level |= log_level;
-@@ -9799,16 +9800,13 @@ const char *bpf_program__section_name(const struct bpf_program *prog)
- 
- bool bpf_program__autoload(const struct bpf_program *prog)
- {
--	return prog->autoload;
-+	return prog->load_type == BPF_PROG_LOAD_TYPE_AUTO;
- }
- 
- int bpf_program__set_autoload(struct bpf_program *prog, bool autoload)
- {
--	if (prog->obj->state >= OBJ_LOADED)
--		return libbpf_err(-EINVAL);
--
--	prog->autoload = autoload;
--	return 0;
-+	return bpf_program__set_load_type(prog,
-+		autoload ? BPF_PROG_LOAD_TYPE_AUTO : BPF_PROG_LOAD_TYPE_DISABLED);
- }
- 
- bool bpf_program__autoattach(const struct bpf_program *prog)
-@@ -15111,7 +15109,7 @@ int bpf_object__attach_skeleton(struct bpf_object_skeleton *s)
- 		struct bpf_program *prog = *prog_skel->prog;
- 		struct bpf_link **link = prog_skel->link;
- 
--		if (!prog->autoload || !prog->autoattach)
-+		if (prog->load_type != BPF_PROG_LOAD_TYPE_AUTO || !prog->autoattach)
- 			continue;
- 
- 		/* auto-attaching not supported for this program */
-@@ -15221,3 +15219,17 @@ void bpf_object__destroy_skeleton(struct bpf_object_skeleton *s)
- 	free(s->progs);
- 	free(s);
- }
-+
-+int bpf_program__set_load_type(struct bpf_program *prog, enum bpf_prog_load_type type)
-+{
-+	if (prog->obj->state >= OBJ_LOADED)
-+		return libbpf_err(-EINVAL);
-+
-+	prog->load_type = type;
-+	return 0;
-+}
-+
-+enum bpf_prog_load_type bpf_program__load_type(const struct bpf_program *prog)
-+{
-+	return prog->load_type;
-+}
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index b965ad571540..700634664e32 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -2078,6 +2078,21 @@ LIBBPF_API int libbpf_unregister_prog_handler(int handler_id);
-  */
- LIBBPF_API int bpf_program__clone(struct bpf_program *prog, const struct bpf_prog_load_opts *opts);
- 
-+/**
-+ * The program load type:
-+ *
-+ * - BPF_PROG_LOAD_TYPE_DISABLED: the program is not loaded.
-+ * - BPF_PROG_LOAD_TYPE_AUTO: the program is autoloaded when the bpf_object is loaded.
-+ */
-+enum bpf_prog_load_type {
-+	BPF_PROG_LOAD_TYPE_DISABLED = 0,
-+	BPF_PROG_LOAD_TYPE_AUTO,
-+};
-+
-+LIBBPF_API int bpf_program__set_load_type(struct bpf_program *prog,
-+					  enum bpf_prog_load_type loadtype);
-+LIBBPF_API enum bpf_prog_load_type bpf_program__load_type(const struct bpf_program *prog);
-+
- #ifdef __cplusplus
- } /* extern "C" */
- #endif
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 08ab2ea881fb..4d63dac8c3b7 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -462,4 +462,6 @@ LIBBPF_1.8.0 {
- 		bpf_program__clone;
- 		btf__find_by_name_kind_own;
- 		btf__new_empty_opts;
-+		bpf_program__load_type;
-+		bpf_program__set_load_type;
- } LIBBPF_1.7.0;
+A per-program enum keeps that distinction where it belongs: disabled
+stays fully excluded from relocation/map-creation with isolated failure
+handling, auto is unchanged, and the new dynamic state is the only one
+that opts a given program into later loading -- without implicitly
+promoting every other disabled program in the object along with it.
+
+This v2 keeps the same programs and tests we originally proposed, and
+addresses two additional requests from Andrii [3]:
+
+1. bpf_program__set_autoload() is converted from bool to the new
+   enum bpf_prog_load_type, so it remains source- and ABI-compatible
+   with the ~200 existing bool callers (false->0, true->1 already match
+   the enum's DISABLED/AUTO numbering), while becoming a thin forwarder
+   to bpf_program__set_load_type(). It intentionally continues to reject
+   BPF_PROG_LOAD_TYPE_DYNAMIC, to preserve its original on/off meaning --
+   dynamic load is only reachable through set_load_type().
+
+2. A declarative way to mark a program dynamic-load-eligible from its
+   source, as an alternative to an imperative set_load_type() call, using
+   a new BTF decl_tag.
+
+Motivation:
+
+Security tools built on top of libbpf commonly ship as a single large
+BPF object containing many programs, only a subset of which are needed
+on any given system -- the rest are gated on optional features or on
+kernel/runtime capabilities that vary across deployments. For this class
+of application, per-program dynamic loading helps in two ways:
+
+  - it shortens the initial load, since only the programs actually
+    needed for the running configuration are loaded and attached up
+    front instead of the whole object; and
+  - it lets a single failing program be unloaded and possibly
+    reloaded (or a feature toggled at runtime) without tearing down
+    and reloading the entire bpf_object.
+
+Both reduce the time window during which the tool is partially loaded or
+inactive -- for a security tool specifically, that is also the time
+window during which the system it protects is unprotected.
+
+We have been running this with our internal fork of libbpf in production
+for about a year. Depending on kernel and configuration support, around
+250 of our programs are potentially loadable on any given system; with
+dynamic loading, only around 90 of those are actually loaded by default,
+growing to the full 250 only when every optional feature is enabled.
+Cutting the default set of loaded programs from 250 down to 90 measurably
+reduces load time (we observed ~60% reduction in our own measurements),
+and since unload time scales with the number of loaded programs, it
+correspondingly shortens unload time as well -- which matters, since
+slow unload can delay system shutdown. We believe this functionality
+would benefit other libbpf consumers with similarly large, modular BPF
+applications.
+
+
+[1] https://lore.kernel.org/bpf/20250122215206.59859-1-slava.imameev@crowdstrike.com/
+[2] https://lore.kernel.org/bpf/CAOu3gNjg5vQ=t0C5UmStNpK8zutFC7kcYTrKt9aiR8Gia+rdNw@mail.gmail.com/
+[3] https://lore.kernel.org/bpf/CAEf4BzZKy5Wv_TxtEqsbzW+v-tO28kgY=9RhXrnbPhOZcVbOSA@mail.gmail.com/
+
+Andrey Grodzovsky (2):
+  libbpf: Convert bpf_program__set_autoload() to load-type enum
+  libbpf: Support declarative dynamic load via BTF decl_tag
+
+Slava Imameev (3):
+  libbpf: BPF program load type enum
+  libbpf: BPF programs dynamic loading and attaching
+  selftests/bpf: Cover BPF program dynamic loading
+
+ tools/lib/bpf/bpf_helpers.h                   |   5 +
+ tools/lib/bpf/libbpf.c                        | 273 ++++++++++++++++--
+ tools/lib/bpf/libbpf.h                        |  32 +-
+ tools/lib/bpf/libbpf.map                      |   4 +
+ .../selftests/bpf/prog_tests/dynamicload.c    | 222 ++++++++++++++
+ .../selftests/bpf/prog_tests/load_type.c      | 167 +++++++++++
+ .../selftests/bpf/progs/test_dynamicload.c    |  40 +++
+ .../selftests/bpf/progs/test_load_type.c      |  31 ++
+ 8 files changed, 741 insertions(+), 33 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/dynamicload.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/load_type.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_dynamicload.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_load_type.c
+
 -- 
 2.34.1
 
