@@ -1,60 +1,62 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70F793909A2
-	for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 18:18:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D5839060C
+	for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 18:19:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787768346; cv=none; b=Y4J3Z4ZjbKNVbwo3fbhrMocb9X17KDLNifhGSavO3ForcOntREk0e+EvKjmWR5WHS7QVs8CrKtIIJgX5BD1ZTw2tOmGXH/WciMjAOahkBXwi27MXFxffPgggyvSWhvKniEGw3b4x8Wz9++mbDNvfx5QfX7aODop13tFdQBxnReM=
+	t=1787768349; cv=none; b=NEihaaUHFTcpY4CEfN2s1UO3AWWm1LU2mZnUnQCGrCBjWCuFWegNJ/mA13dlF0qH0mxoGIttzxRD0uL4otqHv92a2k8fXiiYSaDSPHX2cDfI6s6foJM3eScqsRiAEuAXIAe1OXROLT919hPLBqVXcHHAo5wdUZJzBBLduz+0fqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787768346; c=relaxed/simple;
-	bh=J6UklPYiUWaTxbBCd22Z3eZdchUvKmjGiYo9f5xDHQw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YyXh2gDV/qxfLXcd3M1Bf0q0qmHgmaOQKQk1DpBifM7aA7l0PEn5TDwT2u4BfSQo8B5Ztgse7rx2tJlssKNAx76MMow7VXEkQJ+xNpGzkYSom/zRQfcfCCDARtJDZKKyT7knj7+d/RUYurZgQ6xUYNNtuggx/4UDTZCXc9GTei8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fhoI8RAV; arc=none smtp.client-ip=209.85.216.46
+	s=arc-20240116; t=1787768349; c=relaxed/simple;
+	bh=O5BaCsGrFG2dfWZW0RyoyuM1zkopaWbAk3pbAGgS4bc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=m28NRQXT0v9jnXLhf7zs2WWg4SS7Q5f3o5gAjRV/AwzR9ZSBvfIcbTbZo0IrFejMOmWd114gGaqFJWBN6/bpZEmCYZQFq1ZalaEOC+QCcL+WrTQ0UhcpRoQxo3vh2991r4KTMmQrgCFJR0mthMfnKgpYSGH+whkzxN183Xlbtb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ACulTohx; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fhoI8RAV"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-395cf2535acso232087a91.1
-        for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 11:18:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ACulTohx"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-39686abd426so935610a91.1
+        for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 11:19:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20251104; t=1787768335; x=1788373135; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ie0UM2c2V/bOQ7/kdNLj+Tj8N/dzdmLwE50Wxf5eKeU=;
-        b=fhoI8RAV0TBIomYU9wRuLdz81afLcqlGpMaUeTM9ZypP45P6hCG9w90taUq8MjO0s3
-         OzEKmYDkDZ+3NLSZNxBeNYTQXCSn0JdprpzD81o4uQtXiW1xyzE2rLK3Mfyn8DFD0NC8
-         vWbPsQlbacM6SXz4osc3BgsV7FGQ9apTRf+1SVKQzO3rT/9B56GIB/u5VCHcY0miKNam
-         vWZKqVX0THFVyFLjLDmJRlCLKHCWKYwmZFAPmhhU1T8RUhfP4P1COF3U4ruTM4Aq3sRg
-         /lewDVf3Y3Lal8DWyWAMHMTWlTb6h8LZtVMp7E0OoPQXkgFeaFJv9+fHgU2q/TFc9X9t
-         3Ylw==
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=o0tFLu5UrdQ5aJbv6zv2wYvHWm/AT6aUc9ZQ1d+7PDU=;
+        b=ACulTohxjEg/jQOhDJyMmcwhkM/7MZPfBcxVmjLf7pOh/ZepZU/TlS9pH/L24ffvFP
+         TNxrLlLR33KOYy3GEwOrFxKIdLe0+/oO02R1z28mrH1qJB358yt0kCSlpDVuLXhq/b7A
+         eN/vBeIbfMrsDA31x3ADz8iuJ04Ph086jPfnnQnWzpT5AS4T2R7dP8s59kKICzLbpJaS
+         vXROWnGssaYP64mxeBkpgDvE93gL7UxkHbB6k01jqc5YwB6P0sfGLYM0JEs+1fdfcf6R
+         12Zw98VGHnZCpHEh0oR8N+UtNQzk/BxTTptzDtL62/h36jauqR0fUKjrbGF1xAT2PRC6
+         sVNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20251104; t=1787768335; x=1788373135;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ie0UM2c2V/bOQ7/kdNLj+Tj8N/dzdmLwE50Wxf5eKeU=;
-        b=eA6CKrDHpRnENYZ4VPQ1O5hgER0OEgUpTU8zaTCygFK/ln8ze+p2haumETcoDSjZD2
-         8bsvb/u4Z1VYtY/k4Ipyk0rCQVaRnkALSt6SaetlTSE2kjqr/8LGOGFoUv0QROeX9Kc/
-         440ZtHCKlthe+xybgR2vrr5CNHq2Kkn5s0UMVoSRnA95Ed0veHfsREOsbuyYB6CQdb/W
-         Yn75Zh1c9bU5wj/xY/HaDBNgWEQlxjinQaBSBb2MyjviLWmR34RbZhbb5EefCK17AhBU
-         jGj6QnIjSvh6fIAfLK0QjurAxwWB0NJKVSTUO87swPxM6p9sbFeyQ7oCrtRiIS0VultY
-         Z7WA==
-X-Gm-Message-State: AFuF++kTq9pE02Cjes/WLGU7IOm51g6cvcxbNBp519P4cUH/BnsDyyEt
-	SbDhw4Sn3oPHvK9GvlKkH0eI6+xe1MEbls5vVMDGJGjY3vsyUynjKXQk6W9Qe/cJ
-X-Gm-Gg: AR+sD13vy0OkZCKQPm/fTXv9H1gHX+kuoSqN8etOLv2r9bhnewPCQCxgJj9aJCPfqOF
-	KWiHhf67RLRlHINy0iqTIyUH+iBVuD3q7UQI1D46NEUoq+fqORidel2LoYtct770FquwjuVOCqA
-	Sqfonn3TrBhq08LWbXo7O+8BykxiKpKyzXK5jJb/cdG07zeFYP14RlRBlY5NnOgY2Gr2tCH6KJk
-	TYclnbwvtNh1fpxnNfmG6DsizfEYeTBM7OHM8rDZpKTF870fH9aVj1H9LZHa62bFVp892C7Nf8i
-	FONvbJCepVEXHU6varJENw5/lfJF4VGf0vLLS68xCPKScj8CHc7J6L6+NuzhT/3ithXX3PxcusW
-	hgVwVyWUN5+TC2Tgk5ImGZjOfHM4FXwYX0CjOq7BJGEfmRKiAPuv/YiXf2GkvuXDoK1SMhLrOke
-	/uoBReC9r/tzdLKxtcwEpRG2uLcNXTFy2+7RHdc1Khvp/A+YTRxKXRnY7U2jjOp6S1BIUMP1Son
-	dXbFw==
-X-Received: by 2002:a17:90b:57ec:b0:38e:7297:a92e with SMTP id 98e67ed59e1d1-3969bc27a13mr1039070a91.9.1787768334529;
-        Wed, 26 Aug 2026 11:18:54 -0700 (PDT)
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=o0tFLu5UrdQ5aJbv6zv2wYvHWm/AT6aUc9ZQ1d+7PDU=;
+        b=SAqXKeeTbapgl3+8S+d8LMDkH9kWtGb4Lc1+LPkfUYHyVkQlyMJ+h+X2B6IOiJW9ui
+         TMvt7w8LqZeeXoW0yj6Bm7csrrkfPU/IGc75PxwC09z9K+QJhmAu4IfkjP/T4R0ehT7/
+         Mis8uoS7oCZqtps2ZNbTZjdd5WVgDyNQ1LmMaPI/9fTw75kuueXs+nFoLbrqnlGL3zi/
+         c6sxZSb+4Jh2nEO1ti9NE4Udupkj4V9lBmDg0FiPACnAn2R8q8BwUnfpp/eV2hcJAtXD
+         zYUdloWoX19RNrsqmyD+rcNJdrEAs5pGW0DtXdi4M5Pmh707X5Na+pAUevTUHKtznjgY
+         JkWQ==
+X-Gm-Message-State: AFuF++kZlCP51loK+HyvTSA7756v8OoB3jxSYeNxZN7iNFhZm/CBtiy6
+	vZVCo4rH3nxV50kvnlaKsbLbi2WjB5Ys4/vP2BgWDeYkt3RgYw88u+2RocPZsEq1
+X-Gm-Gg: AR+sD11THkO3gjUmFw/Uii8Jm2U28FBFuikbKvBfy9DYdSQC7upV2Gw/pU5rPgeQbQn
+	xrm1Yw76+Cf+2znI2pNf46gnL1qH3UOJpRu1rvAE/d8rdsdEnhCJHOG4qpy3/o68MLD12/94v5n
+	xCHEzZ6rwCd/GC0S55u1AzxIuoI4reZeZsQkNC7/Rw1hdV0jn8cvSIFuEG+sBpUOqjFj/kCAzCi
+	xwATd0jrl9z6vhYazCYsuno1cxraxw2acuJPZtkal+cZMaX+xvoB75vxg7nWIyd5sxB3XvqIu7n
+	3BuLK9dyskEKYNl3Dt6k4cVnUfPCqTbXl78vBJPCx6gdlehf1xR8C9TFr7geMelqDY2A00HrP36
+	btGmUX7zsAzGyGgGR1xaX4gtXoaa9u2ISEQe/g1YjDEwfOCivp5285y/XCjQ6aZO4CteWS3XcTo
+	4+IkMbzwqeN8He0MJeiA7aJpolgpmj4NXsElcIESOpqpjUmDbgfgjLEZunIsIg0PShbHVhmfNmz
+	c0WnDPXPZNmc/9T
+X-Received: by 2002:a17:90b:2b4c:b0:38e:97f0:aa4b with SMTP id 98e67ed59e1d1-3966d4592fdmr19973298a91.13.1787768335236;
+        Wed, 26 Aug 2026 11:18:55 -0700 (PDT)
 Received: from badger ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3966875e5c3sm5182901a91.7.2026.08.26.11.18.53
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3966875e5c3sm5182901a91.7.2026.08.26.11.18.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 26 Aug 2026 11:18:54 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
@@ -67,10 +69,12 @@ Cc: andrii@kernel.org,
 	yonghong.song@linux.dev,
 	npc@anthropic.com,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next v2 1/2] bpf: check_cond_jmp_op(): properly infer if register is null
-Date: Wed, 26 Aug 2026 11:18:44 -0700
-Message-ID: <20260826-bug-029-bad-non-null-inference-v2-1-136789ace9e9@localhost>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: a demo for check_cond_jmp_op() non-null inference bug
+Date: Wed, 26 Aug 2026 11:18:45 -0700
+Message-ID: <20260826-bug-029-bad-non-null-inference-v2-2-136789ace9e9@localhost>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260826-bug-029-bad-non-null-inference-v2-1-136789ace9e9@localhost>
+References: <20260826-bug-029-bad-non-null-inference-v2-1-136789ace9e9@localhost>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -80,94 +84,96 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Nicholas Carlini reported a bug when verifier can incorrectly infer
-that a pointer is non-null. The bug occurs when two pointers are
-compared and one of them has a type w/o PTR_MAYBE_NULL flag,
-but which allows a value to be NULL at runtime.
-Here is an example:
+A comparison between PTR_TO_MEM | MEM_RDONLY | PTR_UNTRUSTED and
+PTR_TO_MAP_VALUE_OR_NULL should not infer that map pointer is not null.
+A bug in check_cond_jmp_op() made such inference possible.
 
-  // `a` is PTR_TO_MEM | MEM_RDONLY | PTR_UNTRUSTED
-  // `a` is 0 at runtime.
-  // `b` is PTR_TO_MAP_VALUE | PTR_MAYBE_NULL
-  void *a = bpf_rdonly_cast(0, 0);
-  int  *b = bpf_map_lookup_elem(...);
-
-  if (a == b)
-    *b = 42;  // verifier does not catch null pointer dereference
-
-This happens because of a special case in check_cond_jmp_op(),
-which attempts to strip PTR_MAYBE_NULL flags from pointer types,
-when processing comparisons like `rA == rB`, if either rA or rB can't
-be null.
-
-The non-null property is derived based on the absence of
-PTR_MAYBE_NULL flag on rA's or rB's type. But that is not sufficient
-for types like PTR_TO_MEM, as in the example.
-
-This patch replaces type_may_be_null() call with reg_not_null(),
-which contains an allowlist of types for which absence of
-PTR_MAYBE_NULL actually means that the value can't be NULL at runtime.
-
-At the moment, the list in the reg_not_null() omits two types for
-which PTR_MAYBE_NULL is applicable: PTR_TO_XDP_SOCK and PTR_TO_BUF.
-In order to remain backward compatible, and assuming that only
-comparison between pointers of the same type makes sense,
-this commit extends reg_not_null(). W/o such an extension e.g.
-verifier_jeq_infer_not_null/null_ptr_to_map_value fails.
-
-reg_not_null() can be extended further, but I deem that out of scope
-for the fix at hand. Explicit base_type(...) != PTR_TO_BTF_ID
-checks in the check_cond_jmp_op() can be removed with migration to
-reg_not_null(), but that is a behavioural change, as the special case
-would start matching for PTR_TO_BTF_ID that is also is_trusted_reg().
-I omit the behavioural change from this commit.
-
-Fixes: befae75856ab ("bpf: propagate nullness information for reg to reg comparisons")
-Suggested-by: Nicholas Carlini <npc@anthropic.com>
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 
 ---
   v1->v2:
-  - no changes
+  - selftest updated to use regular BPF_MAP_TYPE_HASH map
+    (bot+bpf-ci).
 ---
- kernel/bpf/verifier.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ .../bpf/progs/verifier_jeq_infer_not_null.c        | 52 ++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e036ae20bf6b..897ec4b38dea 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -355,6 +355,8 @@ static bool reg_not_null(struct bpf_verifier_env *env, const struct bpf_reg_stat
- 	type = base_type(type);
- 	return type == PTR_TO_SOCKET ||
- 		type == PTR_TO_TCP_SOCK ||
-+		type == PTR_TO_XDP_SOCK ||
-+		type == PTR_TO_BUF ||
- 		type == PTR_TO_MAP_VALUE ||
- 		type == PTR_TO_MAP_KEY ||
- 		type == PTR_TO_SOCK_COMMON ||
-@@ -17085,7 +17087,6 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 	 */
- 	if (!is_jmp32 && BPF_SRC(insn->code) == BPF_X &&
- 	    __is_pointer_value(false, src_reg) && __is_pointer_value(false, dst_reg) &&
--	    type_may_be_null(src_reg->type) != type_may_be_null(dst_reg->type) &&
- 	    base_type(src_reg->type) != PTR_TO_BTF_ID &&
- 	    base_type(dst_reg->type) != PTR_TO_BTF_ID) {
- 		eq_branch_regs = NULL;
-@@ -17101,9 +17102,11 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 			break;
- 		}
- 		if (eq_branch_regs) {
--			if (type_may_be_null(src_reg->type))
-+			/* src == dst && dst != NULL => src != NULL */
-+			if (reg_not_null(env, dst_reg) && type_may_be_null(src_reg->type))
- 				mark_ptr_not_null_reg(&eq_branch_regs[insn->src_reg]);
--			else
-+			/* src == dst && src != NULL => dst != NULL */
-+			if (reg_not_null(env, src_reg) && type_may_be_null(dst_reg->type))
- 				mark_ptr_not_null_reg(&eq_branch_regs[insn->dst_reg]);
- 		}
- 	}
+diff --git a/tools/testing/selftests/bpf/progs/verifier_jeq_infer_not_null.c b/tools/testing/selftests/bpf/progs/verifier_jeq_infer_not_null.c
+index 3d1e8de4390c..b412a542ef76 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_jeq_infer_not_null.c
++++ b/tools/testing/selftests/bpf/progs/verifier_jeq_infer_not_null.c
+@@ -3,7 +3,9 @@
+ 
+ #include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
++#include <stdbool.h>
+ #include "bpf_misc.h"
++#include "bpf_kfuncs.h"
+ 
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_XSKMAP);
+@@ -12,6 +14,13 @@ struct {
+ 	__type(value, int);
+ } map_xskmap SEC(".maps");
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, int);
++} map_hash SEC(".maps");
++
+ /* This is equivalent to the following program:
+  *
+  *   r6 = skb->sk;
+@@ -264,4 +273,47 @@ __naked void jne_reg_reg_null_check(void)
+         : __clobber_all);
+ }
+ 
++/*
++ * A comparison between PTR_TO_MEM | MEM_RDONLY | PTR_UNTRUSTED and
++ * PTR_TO_MAP_VALUE_OR_NULL should not infer that map pointer is not null.
++ * A bug in check_cond_jmp_op() made such inference possible.
++ */
++SEC("raw_tp")
++__failure
++__msg("error: invalid dereference of R0 (a nullable map value pointer)")
++__msg(">>> 11 | (61) r0 = *(u32 *)(r0 +0)")
++__naked void untrusted_mem_does_not_infer_map_value_non_null(void)
++{
++	asm volatile ("					\
++	/* r6 = bpf_rdonly_cast(0, 0); */		\
++	r1 = 0;						\
++	r2 = 0;						\
++	call %[bpf_rdonly_cast];			\
++	r6 = r0;					\
++	/* r0 = bpf_map_lookup_elem(map_hash, &key); */	\
++	*(u64 *)(r10 - 8) = 0;				\
++	r1 = %[map_hash] ll;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	call %[bpf_map_lookup_elem];			\
++	/*						\
++	 * buggy verifier assumed that r6 can't be null	\
++	 * and marked r0 non-null as well.		\
++	 */						\
++	if r6 != r0 goto 1f;				\
++	r0 = *(u32 *)(r0 + 0);				\
++1:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_rdonly_cast),
++	  __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_hash)
++	: __clobber_all);
++}
++
++void kfunc_root(void)
++{
++	bpf_rdonly_cast(0, 0);
++}
++
+ char _license[] SEC("license") = "GPL";
 
 -- 
 2.53.0
