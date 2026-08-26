@@ -1,143 +1,103 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A7922B594
-	for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 01:21:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F8B4260565
+	for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 01:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787707263; cv=none; b=hnqwAb+aKohCOB9wm1EbPlZaGqCHYxpXssHIEVfxXIofG3lx9s8WXN9YE3ux7zSmD+j686Bzyg8ZhxEmMywUIXnhEf1+cslUzASQnX0OIVVycg/wyCxweaFoKTwWwjDN1S4Dfki+ANn4vN6xLx5+PbhC18evgEyBTGW9IOh4Tyg=
+	t=1787707331; cv=none; b=D5prE49upBVGWUVIb/58+Ya1KS8Ca5eEPYT1e9Ec/MpZXAd8IuKV2gOcMaOiCAngCJ3Tt6NUUKdBFWCT+K3Fz1+WG5qXDMkBwnYtKRUq3Y06ti4s6XN1fVsUnw18Vo5seSp7TwAAd5Ou5Lw4ScNFkJY8qVAfrt4HS2p3tdxELKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787707263; c=relaxed/simple;
-	bh=bz61J4YOFg11l1sMxw5vCXVYmj4NA/d7KtZsdIpszek=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ie1784ZCOx6t3u4+vqsCWGL+nIuI6xeQ7g7r4S9pISEpdF8XU05KstQdThMEfmo8cS+kUe1JdhlGd3XyiGJcWAbCmAJPH5W0N3xpOUuX/icjkf4gXXmpkqqQQU0P1YUMMjz1prSnOmLPK2n0FMTIZQ4TraTKLKqxJHCE+zviAyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XEOG/ZRM; arc=none smtp.client-ip=209.85.216.51
+	s=arc-20240116; t=1787707331; c=relaxed/simple;
+	bh=eWmsP8/duMgZOhQwQ6HLfSt5fYqzsTaL20iUEBH7/4g=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=AqGVvcCOoIrJOUQ5gcJ8z2nMiq+bk4AnbcyT01CpwcaBSFLEPdsKou3K5VCu4fo9C8FXIYGjNyoYQw8Pi/UbIhYcAAGw5sCgmX+AcPUW7e7KeVDfLOThkRDlfSLd6kJo2kl3pRwaI2eeuZ8ZpjLGi61t/XUjUT0TcszlLb4TYQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=r+Q8yuRW; arc=none smtp.client-ip=209.85.210.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XEOG/ZRM"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-395cf2535acso515037a91.1
-        for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 18:21:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r+Q8yuRW"
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7f3f52143cdso382245a34.2
+        for <bpf@vger.kernel.org>; Tue, 25 Aug 2026 18:22:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787707262; x=1788312062; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=5ahNP6I/2SnsCaDqpAftcnvuu1z4RoYXIL+nfdxKNNk=;
-        b=XEOG/ZRMGKzs+he1BZ4lTAb0qnbJBC1uscvRpc2EXZpImyICAouiWNugJMXuNPpHZP
-         SZiIyFwCc1D154R9FeWPKI8UgcXAv/UCM8qPQmZTF4x9Q0ouRkaUx4FJzjflncb2p8jI
-         IEeeDRR2dJy+wsmtP3G3ujoTtH0KdThA0fS9DvQJpqafURauGuIqsbw5BjQXrjo0rpRi
-         u6TZx1dNqe1zApNFc820xWZSD1hoAdAGBi1NHGh2Ibs+vqnC5ypM1UBM/l4uW6rzvS/H
-         KyA/ER+BqdY3RMhHAoAZYuMfrOvbMy3AUKDF2Z1nO7fc7f9gf+ta9Mevhnz+bc7K620V
-         OoRg==
+        d=gmail.com; s=20251104; t=1787707329; x=1788312129; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=eWmsP8/duMgZOhQwQ6HLfSt5fYqzsTaL20iUEBH7/4g=;
+        b=r+Q8yuRWmZVEt2cSJCmqZioW5I/1PMi76ZlZ0kLuGWfbQ0hFevNlf10JjnpU4KNSI2
+         kBNXSlmd9YPtIZVDQwAC9XheAMk0QqVk3uYbePy8gXHSiSE70aNtfSdwmsd3p9PWl2uE
+         Hh6wsslI3GxnfYol8Rs/o1iwqQllzUoZ7tLjVnLkAyOXW0OFWukX6kpyCdhkbI18w8wt
+         HsI5EgO1AZhU9IZdEb2bJoyH+zRO7fi2vIHeoKMj+HCMm0r/GFYDQBiisIeR1iihNYoa
+         8nNstgcRt5n437nzsrZZ6u9dQqdQs1yc+T+THmiRqQCiWfDHaVvXKh3G9MJC3nhCT6m7
+         2afQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787707262; x=1788312062;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=5ahNP6I/2SnsCaDqpAftcnvuu1z4RoYXIL+nfdxKNNk=;
-        b=FpgS49uMH6hRR7MqztE7CuRtj93LTc9H9U4kziWz9uGYm+BaQVndNxbIoi7J5MzdNi
-         e9aDhiacs7qpwEoDbedaFna9BB9UPWrIRM0vMe0gkXVZzfHjsEvLnKPIGAI9EKKYEFha
-         F4DjVUrHlJ8V9wU4KOdg5oCWeRNGLHvKEo2zvkYv70k6Zi8+O4fYQYfc4VDtkyVW6Cwz
-         B41nUItKiym6q+ZbJBkHOYC0ok7vLf2b9Sm+yWGXFZOfelVs9qcaJazK6ggPPquoCLmG
-         c/l0lOkMmV4+/ScruYN8KTyJHqkjVLd9bBhuTrbO0+LEpqL4E15ghF7ZXFLh9MAx4YQq
-         rDsQ==
-X-Gm-Message-State: AFuF++muLQU5Vc1cKDVzIaZb+6m/T9EGnvL7Ka9S3kgvLMWw+3PASTpL
-	MBFbv/WGbf11ci/02fkiiYGAD5E1tc/A6ER2Cazwi1tqjQlKVZtZ4oO5
-X-Gm-Gg: AR+sD10cETphI9jmF1P3lHtFx56oAkTa6lRWZ++4hDFW4r9kthivCeRfEOK/Y1fCD0f
-	ZyDiZBwFROs3RIdel/l/2ZwaReaHM+Cx0eyFJFRwLrFyQeB7PIklU6c/jfPCUjzK7KFmocfZ6HY
-	ySKs8aWVqM4hQ71Qiw2xrbtP8AEsqlppLqg8HoKPQpGL139GUhZ3SpZD3rzSeqhrTEr4fmjkEXs
-	AaxVqNe45s8ka9qytAYj4CoKFaVMhOyfQ9IaP/enuKA1jU90m71Z/DQOFKPzSMCji6Xey9NWrTh
-	E8lDAHHs6HSK9iBcdhzsY9Kaan8P7V/FaZUW7RMiFuyKrfDGtSrJ1FOMJ6WdnnttoeRLpTdWykZ
-	JmeX/QQNF0UXCYmTsg1kSoBdRkAriLU6b0x4WIU4/MFZgfHlTBCfwrL9e2padTId4Wr14bpJPmr
-	+MHE4HiBKHTCPcvi/+AE14l9jU+8er77SiUEGNuW4s1azE6QypZs4PClDFZdBiCYivA7ckEA8wQ
-	4vB09h5+KZeVZp72MUts6krjOkdL0w7XaGKSGd/4RamUCg2sGZZyu8TCcaVArrLCmREkg0Wqkts
-	X2puw7C6uWI6KGn0NlfNQgj93b0rT/QCZ67Bedo=
-X-Received: by 2002:a17:90a:d407:b0:390:84db:888e with SMTP id 98e67ed59e1d1-3966d8528c7mr3397729a91.7.1787707261638;
-        Tue, 25 Aug 2026 18:21:01 -0700 (PDT)
-Received: from KERNELXING-MC1.tencent.com ([114.253.38.195])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39662c80d6csm2795631a91.1.2026.08.25.18.20.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Aug 2026 18:21:00 -0700 (PDT)
-From: Jason Xing <kerneljasonxing@gmail.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	bjorn@kernel.org,
-	magnus.karlsson@intel.com,
-	maciej.fijalkowski@intel.com,
-	sdf@fomichev.me,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	horms@kernel.org,
-	andrew+netdev@lunn.ch
-Cc: bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	syzbot+f16c1b285c9f63994eec@syzkaller.appspotmail.com
-Subject: [PATCH net] xsk: set network header on skb at generic transmit
-Date: Wed, 26 Aug 2026 09:20:52 +0800
-Message-Id: <20260826012052.51028-1-kerneljasonxing@gmail.com>
-X-Mailer: git-send-email 2.33.0
+        d=1e100.net; s=20251104; t=1787707329; x=1788312129;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=eWmsP8/duMgZOhQwQ6HLfSt5fYqzsTaL20iUEBH7/4g=;
+        b=Gcg7VeEB8pAWg9M5vpA2aZmT0SaSA6YRfK7iWbGJc2gx1qjKYUQ6FQ9/2dcGavRgtU
+         arPCtwGzr28lCYWTHhcEHr3I7xj4QRbc4KuIK9u5Ilc14/v+74ijesKIa8zIRHD0FtyJ
+         Y7ZbeBfWagrXrJ3WoE7tdTp7GE/QZw6r6H/71NWEFABynuKhrOw6A/rwWHb8o1gmYiNU
+         W0YhLRBJAunxMDN2NfNOT+98KJtlhU0la6S/WItrQTYSBSO6+0qTFAZCpXb46/vICfwz
+         PJTHDq5o1UBofhUXBPNd9+fatBG1j1Ye7srIP9TgQvlxhccMSrNCZ2hBttFf/4R6BJ3T
+         d3tg==
+X-Gm-Message-State: AFuF++l3x7QXlo0GoKGUMNxvs5+Xpr2udfsOyTUKL9b+CN8e0mN58EB+
+	cKEPGKXBfSw8ierrKaCUhSXx3qqmWHeBo+CL313uPyPLkKyac07LQufE
+X-Gm-Gg: AR+sD10L34YIzMdc2T3X9IJ5ukdknvh+nQWIZXzjyQmdlpMkVqTeIu06J2GGwKr5GH3
+	BZInOajOY+x2u9Sr2I3q/Sd/+tq/lGK2ohJEOjBBmQsFtTdkwH0ICxHaMCynnGuIsctZWoNnVyB
+	OjoeS6aPPVBioN6kUNNLOwxtYY53BS76yvB9Try5IOKMURz6GqPc23TDaI5UyQh1dcnCAUVAzfe
+	Nti25N6fJf7jKSQbfbS7V7Lvi2+pCpjz1DeZfo4VY5autpG7PMBGdLd5ug2TPZIVPjm1lz2QJ9k
+	0EogZCAWqZcWbmYX6aqDOlNF3nLQNLIbdTCEbIEAED32a6pMU4jPkTphnrWSyV39GfaH1IUjKSB
+	PIk7m9R1JRUZaBF9tfimsNvFZWDM5b2ITHHo08BOpif/mM+i/EUYODjdSyfDm//6OoN6Xbj4vnt
+	pchX/avvgWx8e6seOh2DpnFC9YfNyOXBna0KuGR/Bg/OyuR71FKRobpTJEdanfp6BLe9asC53Zz
+	djs2o+xIXsSMA03kkmYsi/XrWy1aBrfvRcihebfj6xNbGUJQn/8Q3s=
+X-Received: by 2002:a05:6820:4c12:b0:6aa:c3f3:fbb0 with SMTP id 006d021491bc7-6b1a0522f54mr3493815eaf.32.1787707329410;
+        Tue, 25 Aug 2026 18:22:09 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:12::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f4c8413ba3sm415340a34.20.2026.08.25.18.22.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Aug 2026 18:22:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 25 Aug 2026 18:22:08 -0700
+Message-Id: <DKYHCWYCB5XV.3MSN6ZJGOW2R7@gmail.com>
+Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] bpf, x86: Sign-extend narrow signed kfunc returns
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: =?utf-8?q?J=C3=A9r=C3=A9my_Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>
+X-Mailer: aerc
+References: <20260823203944.2084994-2-Jeremy.Jean@oss.cyber.gouv.fr>
+In-Reply-To: <20260823203944.2084994-2-Jeremy.Jean@oss.cyber.gouv.fr>
 
-When constructing an skb in the XSK generic transmit path, neither
-xsk_build_skb() nor xsk_build_skb_zerocopy() calls
-skb_reset_network_header(). After __finalize_skb_around(), the
-network_header offset defaults to 0 (pointing to skb->head). The
-subsequent skb_reserve(skb, hr) moves skb->data forward by hr bytes,
-but leaves network_header still at 0. This makes skb_network_offset()
-return a negative value (-hr).
+On Sun Aug 23, 2026 at 1:39 PM PDT, J=C3=A9r=C3=A9my Jean wrote:
+> bpf_res_spin_lock() returns a 32-bit int. On failure, the verifier
+> models R0 as a signed 64-bit value in [-MAX_ERRNO, -1].
+>
+> On x86-64, returning -EDEADLK writes 0xffffffdd to EAX and clears the
+> upper half of RAX. Since the JIT leaves the native return value as-is,
+> BPF sees 0x00000000ffffffdd instead of the sign-extended
+> 0xffffffffffffffdd. A 64-bit signed comparison therefore treats the
+> value as positive, while the verifier treats it as -35.
+>
+> As a result, a signed comparison against zero can take one path during
+> verification and another at run time. With rqspinlock aliases, this can
+> lead to unmatched bpf_res_spin_unlock() calls, corrupting the per-CPU
+> rqspinlock state and unbalancing the preemption count.
 
-When such an skb reaches a tunnel driver like ipgre_xmit(), the call
-chain pskb_inet_may_pull() -> pskb_network_may_pull_reason() computes:
+Is that a theory? I'm pretty sure we have selftests for negative
+error codes from res_spin_lock.
+Pls craft a selftest if the issue is real.
 
-    pskb_may_pull_reason(skb, skb_network_offset(skb) + nhlen)
-
-The negative int from skb_network_offset() is implicitly promoted to
-unsigned int, wrapping around to a huge value. This triggers the
-DEBUG_NET_WARN_ON_ONCE(len > INT_MAX) in pskb_may_pull_reason().
-
-Call trace from syzkaller:
-  ipgre_xmit+0x958/0xcd0 net/ipv4/ip_gre.c:658
-  __netdev_start_xmit include/linux/netdevice.h:5400
-  netdev_start_xmit include/linux/netdevice.h:5409
-  __dev_direct_xmit+0x4b6/0x730 net/core/dev.c:4942
-  __xsk_generic_xmit net/xdp/xsk.c:1079
-  xsk_generic_xmit+0x277a/0x40a0 net/xdp/xsk.c:1120
-
-Fix this by calling skb_reset_network_header() in the common path to
-cover both the copy and the zerocopy cases, so that network_header
-points at skb->data and skb_network_offset() returns 0.
-
-Fixes: 3914d88f7608 ("xsk: Respect device's headroom and tailroom on generic xmit path")
-Reported-by: syzbot+f16c1b285c9f63994eec@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=f16c1b285c9f63994eec
-Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
----
- net/xdp/xsk.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 33475b180ea6..2077bb6299ca 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -947,6 +947,8 @@ static int xsk_skb_init_misc(struct sk_buff *skb, struct xdp_sock *xs,
- {
- 	int err;
- 
-+	skb_reset_network_header(skb);
-+
- 	err = xsk_skb_destructor_set_addr(skb, addr);
- 	if (unlikely(err))
- 		return err;
--- 
-2.43.5
-
+pw-bot: cr
