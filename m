@@ -1,238 +1,244 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 165B1363C50
-	for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 18:05:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA0A13939B6
+	for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 18:18:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787767516; cv=none; b=gggs1M4yy2VrV6rG5miSEGqbzwIkLQyGsNIwPzdpatLP1sVmouXHia0VW2s6wZVOUxWS9Ks8Pup0n5aCObtxf3Q4wLtWFqOy7Vr3aIUrmUzSD4Qz7lyEbz60QYRtTk1S2EgfJk0+vR8/5wXlyv1dP7Tea4asiZmwqrU/vOGUMZE=
+	t=1787768341; cv=none; b=D5cZyHJiIGVHBZWC/MJt5mu6apsRIdvP56EQqXzwD7oAeqyJKGbH+7XqKIzdYe+JO4Xyc35JdOnFEweCNuhbcgnFP7OR9dJGES1+uhghrqeHhyLCEYhSMwq4sbUtjUhgeZcKv17wHPeSfw7lNY1bTj5YaUgztSjfNNR5CR3IgzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787767516; c=relaxed/simple;
-	bh=GUIjnxBDe2HhtwsBhND2B2QBGvG6qYppxji3qtxltmc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=lkdqNrGPJ+AHA5bJMwWJ7Dy1H0fSEqxxm9MmXwgwHkweThkqanABlbNzBTimr6PP4nTHyxOHohc4Vb2H/S7NB7OClV4vl/grqHfaLBkkQGrJncgeXYZdLsk7uH3JkZwkE8sU5tqGwcSYS7zYo9OFeyCuDGvXIVmzunhPOQeJ6OI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N3UAgx2I; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787768341; c=relaxed/simple;
+	bh=VvWVRkQhNSTUmRVcn/BRcSVRzP9tCFR7L71Pydy6LwY=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UxvVRMUnb/tXz8ftE2ieDd4/LfX2MLhA3tb6asEedtBnj452uKAO/BQEYWi5jcR2jqBzZ/GVK1YTulS891CDY+est/JRq3wrx3HqkaDq6Qm447xrwBkaDI/7l+Jo3k+anUJmXNfKJyE77M8rH5bTn8WBt6y0FXj4UJo7tas+L+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=DKSwrA6f; arc=none smtp.client-ip=148.163.148.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N3UAgx2I"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B3331F000E9;
-	Wed, 26 Aug 2026 18:05:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787767508;
-	bh=W4cXZV7UhTPKKjNycBVUa8rTgcrFeptqYZgXWU40CvQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=N3UAgx2IvZ3canqbCnE4S5U/pI9avqisQn6s5pG4g4tqMOyihJmLkr+/yLqYe/KDO
-	 hqux89uLOcEYJQYUPAMUN/VSmMK3ls4qFj69pm3eybqTbbdaOLvjePbrHApRF0aVnE
-	 O60QyPabTe2sJMnwy/aeNjEm7MOHjqErrW1fyNG667EYPcYhdL9EpvxBh9HKZ0SjNz
-	 crPXC5sx8ZYYUI8RbNqwfnAoRxohZnrJUq0eEcJwE3kghFDqmvA9WajyMs0wtWieK/
-	 mpm3o39CGHN69lVX37aL8Rk8n8FxKm+M34W8kb2t6QHrwf6PPBFKBah25bwzKzQo4G
-	 mGFdqgx6JZ6hA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4] xsk: Fix circular locking dependency
- between &net->xdp.lock, &xs->mutex, and netdev_lock_ops
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Khawar Ahemad" <ahemadkhawar123@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260826174744.3394-1-ahemadkhawar123@gmail.com>
-References: <20260826174744.3394-1-ahemadkhawar123@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 26 Aug 2026 18:05:07 +0000
-Message-Id: <20260826180508.3B3331F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="DKSwrA6f"
+Received: from pps.filterd (m0354652.ppops.net [127.0.0.1])
+	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67QI2rNc011882;
+	Wed, 26 Aug 2026 18:18:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	default; bh=LyHW2qu1Y8vdjOS8pRRPSmV8B2EIdpIfwiukQUWIom4=; b=DKSw
+	rA6fNkm8kYjcXsV3SXgVIWogmmmo9g8yBQZ41JKHsFms1IGhX7QE4l19d4ENcPNR
+	O2jM/EsU5X25vLrL3x03dA46b3lz6Y4gbOBYQin726RUEz71SR9QASV8fKj33E04
+	T4c0UkcvxJdlYloFzPY30TgkHQjLwjAWrB0eJb63j4ky4i3aHQ4qmfJlLrZy6Fea
+	NCrYtgLSYAV+Tr3HPhffSFhWz1kiqkM6fJFMtj7ykIrhyd6WVjEiZj1fqBGHYHPJ
+	Q0ZYgUeM46fp5HcJ2gpB9canqxkcY8jHao1ik+JgTWbRpW0UfzS9cU8SJWCHfSKM
+	OKnQEJ82iSonP2VG3A==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4ga53283g1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 26 Aug 2026 18:18:31 +0000 (GMT)
+Received: from LL-DJCZ134.crowdstrike.sys (10.100.11.122) by
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.43; Wed, 26 Aug 2026 18:18:29 +0000
+From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+To: <bpf@vger.kernel.org>, <andrii@kernel.org>
+CC: <martin.kelly@crowdstrike.com>, <slava.imameev@crowdstrike.com>,
+        <linux-open-source@crowdstrike.com>
+Subject: [PATCH bpf-next v2 3/5] libbpf: Convert bpf_program__set_autoload() to load-type enum
+Date: Wed, 26 Aug 2026 14:18:23 -0400
+Message-ID: <20260826181825.1826541-4-andrey.grodzovsky@crowdstrike.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260826181825.1826541-1-andrey.grodzovsky@crowdstrike.com>
+References: <20260826181825.1826541-1-andrey.grodzovsky@crowdstrike.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: 04WPEXCH016.crowdstrike.sys (10.100.11.68) To
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70)
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODI2MDE1MyBTYWx0ZWRfX87YmtrWZhRvS
+ 3ODV1MzcYUjj2ObxSFS5d5nUoLeIZ9vrcfl2EqCpX5qfbcy7QlX7C5STq3YoNQS2zoIC5Gfcw4M
+ U7oBV+YpWUOTa3PIYG0r4vb3Bu74f0E8V64M2K9W4+xo8Ui5TW/QB/ZeQzMBxd5XsoLtYCuMxbL
+ 9LF6urOB84AdnHG9UwrKU6xIzxxVnzbw+Ox/J/mc1UkMbniQsuAOJVb637FW/4AHhkpPh6tTQbg
+ VYRhaRJU2YWMLcUCmHXH138gUlZHQCslVVrt/0r3tc8hTui6Y/FxWoVBOislaX42LkHVjkbvhPm
+ Dhnq8LXfLlDA74sC+3rcg3rc0os3PU8U6QzouYexXb6WF4MJbLCPK8Xt1U9vqYROCX+LlG0IL+W
+ 9NQbnLebYFpfeIysg7yi352z5jyT3H6zWQhOgwrBrWp4+YUVYNi1QmZN2gjuUDCETgAm4XsxsSC
+ cpvgr/gAMAnVekOP8JA==
+X-Proofpoint-GUID: nnlyVDQmb0wM56tNuPPOp2aJ3fUXosLx
+X-Proofpoint-ORIG-GUID: nnlyVDQmb0wM56tNuPPOp2aJ3fUXosLx
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODI2MDE1MyBTYWx0ZWRfX1fCGcdepEbO8
+ l9MdIYYaIDwxOGjAuazGOVip4WS4dnVlX0x5cqgs8JfnXeqSG/AOn0ZyRxjXSZf0fpKSz8eWBzc
+ x0a9F0AVDn/0VuRjwmGyya83Kt2E4mZc0OeGuZNtB/jBU7v5CEKx
+X-Authority-Analysis: v=2.4 cv=QclWeMbv c=1 sm=1 tr=0 ts=6a8f2df7 cx=c_pps
+ a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
+ a=EjBHVkixTFsA:10 a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=T2KQ53IYiC3MXPrxx8bB:22 a=2KvRFfd_T_-xjmS8C1aD:22 a=VwQbUJbxAAAA:8
+ a=pl6vuDidAAAA:8 a=QFY7RvWF8OokBNrb0VEA:9
+X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11887
+ signatures=596817
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 spamscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
+ phishscore=0 impostorscore=0 adultscore=0 bulkscore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608260153
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
+Convert bpf_program__set_autoload() from bool to enum bpf_prog_load_type,
+to unify the API with the new tri-state load type. Reject
+BPF_PROG_LOAD_TYPE_DYNAMIC to preserve the original autoload on/off
+meaning; only BPF_PROG_LOAD_TYPE_DYNAMIC is dynamic-load-only. Also
+restore autoattach when leaving BPF_PROG_LOAD_TYPE_DYNAMIC via
+set_load_type(), fixing a bug where a program left dynamic load and
+became autoload-eligible but never re-attached.
 
-New issues:
-- [High] Queue-based iteration in xsk_notifier() using real_num_rx/tx_queue=
-s misses stranded pools, leading to net_device refcount leaks and Use-After=
--Free.
-- [High] O(N^2) list traversal in xsk_diag_dump() causes CPU soft lockups, =
-exacerbated by skipping unbound sockets.
-- [Medium] Netlink DUMP rule violation: missing NLM_F_DUMP_INTR flag when d=
-ropping locks.
+Assisted-by: Claude:claude-sonnet-5
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+---
+ tools/lib/bpf/libbpf.c   | 29 ++++++++++++++++++-----------
+ tools/lib/bpf/libbpf.h   | 39 +++++++++++++++++++++++++--------------
+ tools/lib/bpf/libbpf.map |  6 +++---
+ 3 files changed, 46 insertions(+), 28 deletions(-)
 
-Pre-existing issues:
-- [High] The circular locking dependency is not fully resolved because `xsk=
-_notifier()` still acquires `&xs->mutex` while holding `&net->xdp.lock`.
---
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index c3fe1de43210..cd1d00c47841 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -9814,18 +9814,12 @@ bool bpf_program__autoload(const struct bpf_program *prog)
+ 	return prog->load_type == BPF_PROG_LOAD_TYPE_AUTO;
+ }
+ 
+-int bpf_program__set_autoload(struct bpf_program *prog, bool autoload)
++int bpf_program__set_autoload(struct bpf_program *prog, enum bpf_prog_load_type autoload)
+ {
+-	enum bpf_prog_load_type type = prog->load_type;
+-
+-	if (autoload)
+-		type = BPF_PROG_LOAD_TYPE_AUTO;
+-	else if (prog->load_type == BPF_PROG_LOAD_TYPE_AUTO)
+-		type = BPF_PROG_LOAD_TYPE_DISABLED;
+-	else
+-		return 0; /* Otherwise, keep the current load type. */
++	if (autoload != BPF_PROG_LOAD_TYPE_AUTO && autoload != BPF_PROG_LOAD_TYPE_DISABLED)
++		return libbpf_err(-EINVAL);
+ 
+-	return bpf_program__set_load_type(prog, type);
++	return bpf_program__set_load_type(prog, autoload);
+ }
+ 
+ bool bpf_program__autoattach(const struct bpf_program *prog)
+@@ -15295,15 +15289,28 @@ static int bpf_program__set_dynamicload(struct bpf_program *prog)
+ 
+ int bpf_program__set_load_type(struct bpf_program *prog, enum bpf_prog_load_type type)
+ {
++	if (!prog)
++		return libbpf_err(-EINVAL);
++
+ 	if (prog->obj->state >= OBJ_LOADED)
+ 		return libbpf_err(-EINVAL);
+ 
+ 	switch (type) {
+ 	case BPF_PROG_LOAD_TYPE_DYNAMIC:
+ 		return bpf_program__set_dynamicload(prog);
+-	default:
++	case BPF_PROG_LOAD_TYPE_AUTO:
++	case BPF_PROG_LOAD_TYPE_DISABLED:
++		/*
++		 * Leaving the dynamic state: set_dynamicload() cleared
++		 * autoattach because dynamically loaded programs are attached
++		 * explicitly. Restore the default for the target load type.
++		 */
++		if (prog->load_type == BPF_PROG_LOAD_TYPE_DYNAMIC)
++			prog->autoattach = true;
+ 		prog->load_type = type;
+ 		break;
++	default:
++		return libbpf_err(-EINVAL);
+ 	}
+ 
+ 	return 0;
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 54d755861289..a56068f0f112 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -356,6 +356,19 @@ LIBBPF_API int libbpf_attach_type_by_name(const char *name,
+ LIBBPF_API int libbpf_find_vmlinux_btf_id(const char *name,
+ 					  enum bpf_attach_type attach_type);
+ 
++/*
++ * The program load type:
++ *
++ * - BPF_PROG_LOAD_TYPE_DISABLED: the program is not loaded.
++ * - BPF_PROG_LOAD_TYPE_AUTO: the program is autoloaded when the bpf_object is loaded.
++ * - BPF_PROG_LOAD_TYPE_DYNAMIC: the program is loaded and attached dynamically.
++ */
++enum bpf_prog_load_type {
++	BPF_PROG_LOAD_TYPE_DISABLED = 0,
++	BPF_PROG_LOAD_TYPE_AUTO,
++	BPF_PROG_LOAD_TYPE_DYNAMIC,
++};
++
+ /* Accessors of bpf_program */
+ struct bpf_program;
+ 
+@@ -376,7 +389,18 @@ LIBBPF_API void bpf_program__set_ifindex(struct bpf_program *prog,
+ LIBBPF_API const char *bpf_program__name(const struct bpf_program *prog);
+ LIBBPF_API const char *bpf_program__section_name(const struct bpf_program *prog);
+ LIBBPF_API bool bpf_program__autoload(const struct bpf_program *prog);
+-LIBBPF_API int bpf_program__set_autoload(struct bpf_program *prog, bool autoload);
++/**
++ * @brief **bpf_program__set_autoload()** is retained for backwards
++ * compatibility; **bpf_program__set_load_type()** is the preferred API.
++ * The enum's numbering (DISABLED=0, AUTO=1, DYNAMIC=2) matches the previous
++ * bool semantics (false=0, true=1), so existing bool callers keep compiling
++ * and behaving unchanged. Only BPF_PROG_LOAD_TYPE_AUTO and
++ * BPF_PROG_LOAD_TYPE_DISABLED are accepted, preserving the original
++ * autoload on/off meaning; use bpf_program__set_load_type() to set
++ * BPF_PROG_LOAD_TYPE_DYNAMIC.
++ */
++LIBBPF_API int bpf_program__set_autoload(struct bpf_program *prog,
++					 enum bpf_prog_load_type autoload);
+ LIBBPF_API bool bpf_program__autoattach(const struct bpf_program *prog);
+ LIBBPF_API void bpf_program__set_autoattach(struct bpf_program *prog, bool autoattach);
+ 
+@@ -2078,19 +2102,6 @@ LIBBPF_API int libbpf_unregister_prog_handler(int handler_id);
+  */
+ LIBBPF_API int bpf_program__clone(struct bpf_program *prog, const struct bpf_prog_load_opts *opts);
+ 
+-/**
+- * The program load type:
+- *
+- * - BPF_PROG_LOAD_TYPE_DISABLED: the program is not loaded.
+- * - BPF_PROG_LOAD_TYPE_AUTO: the program is autoloaded when the bpf_object is loaded.
+- * - BPF_PROG_LOAD_TYPE_DYNAMIC: the program is loaded and attached dynamically.
+- */
+-enum bpf_prog_load_type {
+-	BPF_PROG_LOAD_TYPE_DISABLED = 0,
+-	BPF_PROG_LOAD_TYPE_AUTO,
+-	BPF_PROG_LOAD_TYPE_DYNAMIC,
+-};
+-
+ LIBBPF_API int bpf_program__set_load_type(struct bpf_program *prog,
+ 					  enum bpf_prog_load_type loadtype);
+ LIBBPF_API enum bpf_prog_load_type bpf_program__load_type(const struct bpf_program *prog);
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index a0389c58efe9..74312c95d328 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -460,10 +460,10 @@ LIBBPF_1.8.0 {
+ 	global:
+ 		bpf_program__attach_tracing_multi;
+ 		bpf_program__clone;
+-		btf__find_by_name_kind_own;
+-		btf__new_empty_opts;
++		bpf_program__load_dynamically;
+ 		bpf_program__load_type;
+ 		bpf_program__set_load_type;
+-		bpf_program__load_dynamically;
+ 		bpf_program__unload_dynamically;
++		btf__find_by_name_kind_own;
++		btf__new_empty_opts;
+ } LIBBPF_1.7.0;
+-- 
+2.34.1
 
-commit 5d27bb72970d01c1b3fb96dd5f15dd2e0ec89bb0
-Author: Khawar Ahemad <ahemadkhawar123@gmail.com>
-
-xsk: Fix circular locking dependency between &net->xdp.lock, &xs->mutex, an=
-d netdev_lock_ops
-
-This commit attempts to fix a circular locking dependency involving
-net->xdp.lock, port->pnodes_lock, netdev_lock_ops, and xs->mutex. It modifi=
-es
-xsk_diag_dump() to release net->xdp.lock temporarily and defers xp_clear_de=
-v()
-outside of the locks in xsk_notifier().
-
-Closes: https://syzkaller.appspot.com/bug?extid=3Daa48b5fe7bfda62d1682
-
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 7855ee09c4b64..e72344fccbf26 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -2114,13 +2116,21 @@ static int xsk_notifier(struct notifier_block *th=
-is,
->  					sk_error_report(sk);
-> =20
->  				xsk_unbind_dev(xs);
-
-[Severity: High]
-This is a pre-existing issue, but does this code still preserve the circular
-locking dependency?
-
-The patch intended to fix a 4-lock circular dependency involving
-port->pnodes_lock -> net->xdp.lock -> xs->mutex -> netdev_lock_ops.
-However, xsk_notifier() still acquires &xs->mutex while holding
-&net->xdp.lock (just prior to this xsk_unbind_dev() call).
-
-Since xsk_bind() still fundamentally acquires netdev_lock_ops while holding
-&xs->mutex, the exact lock dependency chain is preserved and lockdep will
-continue to report the cycle.
-
->  			}
->  			mutex_unlock(&xs->mutex);
->  		}
->  		mutex_unlock(&net->xdp.lock);
-> +
-> +		/* Clear device references outside AF_XDP locks to avoid
-> +		 * lock inversion with netdev_lock_ops().
-> +		 */
-> +		max_queues =3D max(dev->real_num_rx_queues, dev->real_num_tx_queues);
-> +		for (qid =3D 0; qid < max_queues; qid++) {
-> +			struct xsk_buff_pool *pool =3D xsk_get_pool_from_qid(dev, qid);
-> +
-> +			if (pool)
-> +				xp_clear_dev(pool);
-> +		}
-
-[Severity: High]
-Can this loop miss pools that were bound to queues which have since been
-disabled?
-
-If an unprivileged user binds an AF_XDP socket to a high queue index
-(e.g., qid=3D3), and the interface's active queues are then reduced via
-ethtool (e.g., rx 2), max_queues will be 2. When the device is unregistered,
-this loop will only iterate up to max_queues and miss the pool on qid 3
-because xsk_get_pool_from_qid() strictly enforces current queue counts.
-
-Missing stranded pools during device unregistration fails to clear
-pool->netdev, leaking the net_device reference. This causes an infinite
-loop in netdev_wait_allrefs() upon device removal, freezing the network
-stack. A subsequent socket close will trigger a Use-After-Free when
-xp_clear_dev() dereferences the freed net_device.
-
->  		break;
->  	}
->  	return NOTIFY_DONE;
-
-[ ... ]
-
-> diff --git a/net/xdp/xsk_diag.c b/net/xdp/xsk_diag.c
-> index 0170363eb542c..bad0b13064f8b 100644
-> --- a/net/xdp/xsk_diag.c
-> +++ b/net/xdp/xsk_diag.c
-> @@ -153,28 +156,48 @@ static int xsk_diag_dump(struct sk_buff *nlskb, str=
-uct netlink_callback *cb)
->  	struct xdp_diag_req *req =3D nlmsg_data(cb->nlh);
->  	struct net *net =3D sock_net(nlskb->sk);
->  	int num =3D 0, s_num =3D cb->args[0];
-> -	struct sock *sk;
-> -
-> -	mutex_lock(&net->xdp.lock);
-> -
-> -	sk_for_each(sk, &net->xdp.list) {
-> -		if (!net_eq(sock_net(sk), net))
-> -			continue;
-> -		if (num++ < s_num)
-> -			continue;
-> -
-> -		if (xsk_diag_fill(sk, nlskb, req,
-> -				  sk_user_ns(NETLINK_CB(cb->skb).sk),
-> -				  NETLINK_CB(cb->skb).portid,
-> -				  cb->nlh->nlmsg_seq, NLM_F_MULTI,
-> -				  sock_i_ino(sk)) < 0) {
-> -			num--;
-> -			break;
-> +	struct sock *sk, *target_sk;
-> +	int err;
-> +
-> +	for (;;) {
-> +		target_sk =3D NULL;
-> +		num =3D 0;
-> +
-> +		mutex_lock(&net->xdp.lock);
-> +		sk_for_each(sk, &net->xdp.list) {
-> +			if (!net_eq(sock_net(sk), net))
-> +				continue;
-> +			if (num++ =3D=3D s_num) {
-> +				sock_hold(sk);
-> +				target_sk =3D sk;
-> +				break;
-> +			}
->  		}
-
-[Severity: High]
-Does this introduce an O(N^2) list traversal that could cause CPU soft
-lockups?
-
-By dropping locks and restarting the sk_for_each traversal from the list
-head up to s_num on every iteration, this loop introduces an O(N^2) time
-complexity.
-
-Crucially, the loop never yields (e.g., via cond_resched()), and skipped
-unbound sockets (-ENOENT) cause the loop to increment s_num and continue
-without returning to userspace. If a user creates tens of thousands of
-unbound AF_XDP sockets and triggers an xsk_diag_dump, the kernel will
-execute billions of loop iterations within a single recvmsg syscall,
-leading to severe lock contention on net->xdp.lock and CPU starvation.
-
-> +		mutex_unlock(&net->xdp.lock);
-> +
-> +		if (!target_sk)
-> +			break;
-
-[Severity: Medium]
-When dropping locks during a netlink dump iteration, should this set the
-NLM_F_DUMP_INTR flag on the SKB?
-
-Iterating over a list using an index while dropping locks allows concurrent
-modifications to the list, which can cause the dump iteration to silently
-skip elements or dump the same element multiple times.
-
-The Netlink API contract mandates setting the NLM_F_DUMP_INTR flag when this
-occurs so userspace is warned of the inconsistency.
-
-> +
-> +		err =3D xsk_diag_fill(target_sk, nlskb, req,
-> +				    sk_user_ns(NETLINK_CB(cb->skb).sk),
-> +				    NETLINK_CB(cb->skb).portid,
-> +				    cb->nlh->nlmsg_seq, NLM_F_MULTI,
-> +				    sock_i_ino(target_sk));
-> +		sock_put(target_sk);
-> +
-> +		/*
-> +		 * xsk_diag_fill() returns:
-> +		 *   0:         entry added successfully.
-> +		 *   -ENOENT:   socket is unbound, skip it.
-> +		 *   -EMSGSIZE: skb is full, retry this socket on the next dump callba=
-ck.
-> +		 */
-> +		if (err =3D=3D -EMSGSIZE)
-> +			break;
-> +
-> +		s_num++;
->  	}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260826174744.3394=
--1-ahemadkhawar123@gmail.com?part=3D1
