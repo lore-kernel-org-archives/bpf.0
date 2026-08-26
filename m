@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC7AE416878;
-	Wed, 26 Aug 2026 15:55:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF353FB067;
+	Wed, 26 Aug 2026 15:56:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787759760; cv=none; b=mcee/SpjfGonQrDoB8pWnJOh0tR0vqO9vlAdtSwgNGAj0RzJ71CJs++BdGZFV3IWVlRYbpnp9r1gcO2rb5j9KWSNQOKVS+zK1B/QX6wA5sVO38NVQ7a+JCwgWu0i2qJZyEyHD3f1UzvZmJHCpllZl1NeNUS6oDUO+oDex6twqRw=
+	t=1787759765; cv=none; b=LVT6iwGtRXDJoPQE9n4cgldpbH8ADOKsULiGqX+Ysm9+uuM6nORWV/qfk0hju9i4yy1/RLK8RE/UtXtzXUrUBHwGksZsr3MriiZJAJKU4yDGVWqS1Kf8dNRcuOQRPMdey+OWCvFj4EFciG+mhxWJXup9nZwbivyZqQHh/SoTByI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787759760; c=relaxed/simple;
-	bh=Phb72AoqbVHIC31C23WEo20gDWkMp0/dpMPIljHQDwM=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=A4bdJxmLGwBmTAiM6r7XUN3ZFxEQ4mcGdd5bC9PTkxKa1YGRkzPQe1+NpdYH7doQkMrFsxhLxhjHXaNWcqw9nBR1KPNViRwaWLrH6m18ppCi6k17bOS7UUcHb9Ft4JTEoD1ia3t/tb+BrucfTfy0d2FRzLdrmbodkhaHhYvlNr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UB7f7OhW; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787759765; c=relaxed/simple;
+	bh=/DI1LeiV4wOLRgjpw4V8nHUf0uW01ksKySY2chdDeSU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=WcCFyux3+6nyS1dJ58bqmLLrUuVX9mZV2gck9CQnHnem6LuEeG1qhMn5cnWJUFWEzooF8vnOcSTzsiH82bqxFrlg18lHAQJ7yxkjbrmSA7irlc4scJPq4ZXoTpYzyHf/PRHZb/SpVd32w+rNiIvp8A0/giq+kPHzgUgVXMe7dFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aG2+GO6G; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UB7f7OhW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFD141F00A3E;
-	Wed, 26 Aug 2026 15:55:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aG2+GO6G"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F3DF1F00A3A;
+	Wed, 26 Aug 2026 15:55:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787759758;
-	bh=BwOwlrsMKFa+viIlDHPfEgFRdNQZleimxjv4DOddYv8=;
-	h=From:Subject:Date:To:Cc;
-	b=UB7f7OhWq1DxpKTgfVroj21MHn7Asx3BUizcAKwgMLDZI89Ej0SK4pvtDO+QrYvBq
-	 LUpuQp7ZGpyjzVXCp2OVa4TTmYXwP6+QGEBMkRdWcUT3UUviOFeQ++kU8MwDuj+MpU
-	 xk4iMSPnBlscuNkNry6+AtEEAL/JBFT2ENYY7sk5LnTXPOSdCKMwBGZT4iqhscLdbw
-	 qMcnDIXZpulbTFQIbJ9XMIp5nDa3BEvWTFh/NOoyR5Mf13Amwb0ymTEm/XQYAQeItP
-	 3DeakQqDplWN6tcYhTP36A3jhIKTIcU2rhwSrs2lSPslf0aIiSHgh0Fec8e1aXhmDe
-	 4s9bQvFqRFFwA==
+	s=k20260515; t=1787759761;
+	bh=Xv6LvbJXor25svpyF1shB5+LUX7dxOQBbe5g57lme0s=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=aG2+GO6GAZcXlhCpgH4qqw7omdbZ3lTajbsgfjPtKnShfu336O/+yok0gpWBwbMyW
+	 UnC3yKhfup2dfl8lfHCHm19GXWaVZy3azoYf08PvN+emHgQA68VZmlbExfYvzG4ekO
+	 yB1ubax7/mGSYGYh7XcMZqHFdcvDb9Ka7DtDiYl1HMXEsh8yginUNM2seFi/jfnExZ
+	 7k42I0xrAC9bIOd8BJ49XyO5DrZa5syu9TCHEDgn3iFFmDyKa3pXDmiSNUkNu4UJoM
+	 kUuQEOZyLKlJSMPF63ra2VbzjCIRXHlhL0QFhj6CKWD5OyK1lW4h7TEsF5DE3f6A+w
+	 7kQdiwLbw+CMQ==
 From: Christian Brauner <brauner@kernel.org>
-Subject: [PATCH 0/3] binfmt_misc: only let punctuation delimit a register
+Date: Wed, 26 Aug 2026 17:55:46 +0200
+Subject: [PATCH 1/3] binfmt_misc: only let punctuation delimit a register
  string
-Date: Wed, 26 Aug 2026 17:55:45 +0200
-Message-Id: <20260826-work-binfmt_misc-delim-v1-0-43618adf8599@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,10 +38,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/03M0QrCMAyF4VcZuTal62AMX0VE2i51UddJs6kw9
- u6288bLP5x8KwglJoFjtUKiFwtPMUd9qMAPNl4Juc8NRptWd7XG95Tu6DiGcb6MLB57evCIXRN
- a450PZBrIz89EgT87fDr/WhZ3Iz8XrSycFUKXbPRDORVX/blqd1VZwbZ9AfjKkpGoAAAA
-X-Change-ID: 20260810-work-binfmt_misc-delim-83f62cbcfe23
+Message-Id: <20260826-work-binfmt_misc-delim-v1-1-43618adf8599@kernel.org>
+References: <20260826-work-binfmt_misc-delim-v1-0-43618adf8599@kernel.org>
+In-Reply-To: <20260826-work-binfmt_misc-delim-v1-0-43618adf8599@kernel.org>
 To: linux-fsdevel@vger.kernel.org
 Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
  Kees Cook <kees@kernel.org>, linux-mm@kvack.org, 
@@ -49,12 +48,12 @@ Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
  linux-doc@vger.kernel.org, Farid Zakaria <farid.m.zakaria@gmail.com>, 
  "Christian Brauner (Amutable)" <brauner@kernel.org>
 X-Mailer: b4 0.17-dev-362b8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1243; i=brauner@kernel.org;
- h=from:subject:message-id; bh=Phb72AoqbVHIC31C23WEo20gDWkMp0/dpMPIljHQDwM=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWT183Qz3+6pPNDT/i0r7sXcF57JC4O2usbrec2s+HdOz
- 8dlQt3CjlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgIlYX2dkeOHV7qt0W9bnfazv
- rh2nMjKV76gViE2MzLH3cK+6+Uarn5Fh8caLLOWfL3MtXaPKqF/f/TL7zOnJO8WnL8v9wHniVuw
- EDgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1730; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=/DI1LeiV4wOLRgjpw4V8nHUf0uW01ksKySY2chdDeSU=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWT183Qz6cbvOhpjcTr2U+iqQ49fPVTbfn5tje3Mt9t/r
+ rkoOeHixI5SFgYxLgZZMUUWh3aTcLnlPBWbjTI1YOawMoEMYeDiFICJsOkyMkzVKO9/Z66x/tG9
+ n8vYinpqf/s85Ft4z/Drr7KZE0WOGl1kZLgotkVbfnXS9FDJX/cXL1pcsXyFxu6F6z6/z+bsteP
+ teswNAA==
 X-Developer-Key: i=brauner@kernel.org; a=openpgp;
  fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
@@ -70,19 +69,44 @@ as the field delimiter").
 Letters, digits, whitespace, control characters, bytes above 0x7f and
 the backslash now get -EINVAL. Everything deployed uses ':' anyway.
 
+Suggested-by: Farid Zakaria <farid.m.zakaria@gmail.com>
 Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
-Christian Brauner (3):
-      binfmt_misc: only let punctuation delimit a register string
-      selftests/exec: test delimiter restrictions
-      binfmt_misc: document the field delimiter
+ fs/binfmt_misc.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
- Documentation/admin-guide/binfmt-misc.rst        |   3 +
- fs/binfmt_misc.c                                 |  12 ++-
- tools/testing/selftests/exec/Makefile            |   4 +
- tools/testing/selftests/exec/binfmt_misc_delim.c | 127 +++++++++++++++++++++++
- 4 files changed, 143 insertions(+), 3 deletions(-)
----
-base-commit: 66498c75b4f8017f62d720d9b59675bdf3abce91
-change-id: 20260810-work-binfmt_misc-delim-83f62cbcfe23
+diff --git a/fs/binfmt_misc.c b/fs/binfmt_misc.c
+index ddfd3aa57ac8..809c91d21b39 100644
+--- a/fs/binfmt_misc.c
++++ b/fs/binfmt_misc.c
+@@ -100,6 +100,13 @@ static const struct binfmt_misc_flag *misc_flag_by_char(const char c)
+ 	return NULL;
+ }
+ 
++static bool misc_valid_delim(const char c)
++{
++	if (!isascii(c) || !ispunct(c))
++		return false;
++	return c != '\\';
++}
++
+ struct binfmt_misc_entry {
+ 	struct hlist_node node;
+ 	unsigned long flags;		/* type, status, etc. */
+@@ -872,10 +879,9 @@ static struct binfmt_misc_entry *create_entry(const char __user *buffer,
+ 
+ 	del = *p++;	/* delimiter */
+ 
+-	pr_debug("register: delim: %#x {%c}\n", del, del);
++	pr_debug("register: delim: %#x\n", del);
+ 
+-	/* A flag-char delimiter runs the flag scan off the buffer. */
+-	if (misc_flag_by_char(del))
++	if (!misc_valid_delim(del))
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	/* Pad the buffer with the delim to simplify parsing below. */
+
+-- 
+2.53.0
 
