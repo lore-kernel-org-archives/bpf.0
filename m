@@ -1,105 +1,149 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D02D3EA968;
-	Wed, 26 Aug 2026 12:42:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A9A93DA5C7
+	for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 13:11:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787748168; cv=none; b=mKYG+t5CRj7D0Ek+67echUz8TJ8J+ZUZfdCpohVzCTZHtujklYy4Ylxuux96Q00WDh6TM6k/vJBraOVwRwzyXPYwWxnjXH3UZQ45sST/3nVvZH2BzuvWsNc2Rh4k+o1gUfCWxTyoLKciVO/vgHTA2UDLgLmDVtA9vDxTC4NwYGs=
+	t=1787749912; cv=none; b=n5gWF0SIpnYBTYagytt7v9R2tVe5L4ITL/VwrAW+DSFOQZCPkvP1oN9Ro7gpb6SvPQLtJ7niV54+8BQVDuIVREJEyxZJMwC2jY5EPVRG4yCxSamDT4CfmaPUbarBrf3bIHAmv0qeMpk0rqVmx7jfR7YZYoTXrsOiIdy7C29dECE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787748168; c=relaxed/simple;
-	bh=RykpmzM8VP8N4jPqmzJi7NQdEiXLFd6KA86mNzmsUac=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WMPVwRWsl7XVxc1ySgnZgOly1sUInH3G9SnpN964YsVZvtLWxo7uF0XFUhbv+LTo1ZzksEydeX85bD0pUCY4Q8IrYvdohwFOp+G1+H3iKG3AQCu7+8RgWIYunYeR+PpadJtS5xbdFthRgUBsawH2KjSuev/J7UqEzhlTCc8B8VU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LemI+t6G; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1787749912; c=relaxed/simple;
+	bh=iYXUe0s8goeacHQlmKJ3f9w79aXm+BLB+1SI5FmNLhs=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oBElsGQ4bPpZ9xNO37ACQaGZ1wQyeJDBL3ftZqh0ST/Q5fYjbdDKjZdJhHhluqWr+atnxd/Aw3Sjbu0SsTvYQgGDNPU6izOSGoc+0AW6M5L7V9wJxZwoMimSAsARIRxLDaVTQhSz+Vldurwyv6Cp8BMnY/GUBil3TFYtcrvd/Rw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UHcOEytK; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LemI+t6G"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 2D1F94E413C4;
-	Wed, 26 Aug 2026 12:42:43 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id D5886604EC;
-	Wed, 26 Aug 2026 12:42:42 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8DC8D11C78133;
-	Wed, 26 Aug 2026 14:42:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1787748157; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=Bp6YGE+7SBR9E9ISCb4FnjJrUlmaJNlhCUdcBy6XW0M=;
-	b=LemI+t6Gl02EuLwgM4WqthJR9G5PUktBl8kNfwXcMV/8nWLGaa2BsOt44Vkqbz6oplPPdt
-	DdiFqkVnwrNOHgjAaAr+CQDy6hQkmyDyH6LTPU5Svvm0eAsmnUWvJ27Xoj8ZVtMsOKkcL9
-	zwxXv6cLhzf/Sz1O8GC0laJQ2eQbQu4BMBYgQF6Ukfz2vQWZOWB++dpksI7MVgMoTnLmuJ
-	H88vYk7W5+a6djiGjPyrDCVHfikhMaaTq3TnFkitjzKdmvtfnNu5wc6mtLZb7jn1Zo2BlH
-	QDI6oFmvvQq6J6gn4zSGjlPCfxFPYeHU6IUHO5nEld/ScdEG1t1LeIcnXVgXyg==
-Message-ID: <dc2ccb14-c7c0-402b-93b3-afba52df78fa@bootlin.com>
-Date: Wed, 26 Aug 2026 14:42:25 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UHcOEytK"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-c247f6687dcso117729466b.2
+        for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 06:11:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787749908; x=1788354708; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=7M5t9v5XwKSZ3VZcQrdmnixl9ZSmqbJvPFx6wEt+sCo=;
+        b=UHcOEytKwqTrP3/bYCFJYliOVV16KXbK4jB07J+DBzs1nHlo/HpmkzDDeYAWMPpmDk
+         F4mk8jncnnay3idLSKlr54JYrRHfs9sci+n72qoQhNbsYJ4fU6APFW1sDTij+nVKdvBK
+         963ARIFZdSp1SY1WwIsY44rQ9zBowd2MRtl/p8rAaJUQpoW/HF5FYGqf8n7Fca/VcaR/
+         EPyrZkiBF7VyfGY3NJPBo5ntwgp3tuWWXUs61iaMP/V9m14ZPGGT7cmTivHX3D168z8J
+         clemAPbXxJ/lOTevAT01WcXMN947RngN7wdj5AiAus0fGQ9GP25pu7dCix8TM9Y+FVzm
+         h/Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787749908; x=1788354708;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=7M5t9v5XwKSZ3VZcQrdmnixl9ZSmqbJvPFx6wEt+sCo=;
+        b=HfTaz0+wXF8rfgl8JjLUwh3vpXUdnsT7M3aXgnIBu+6Yz0N+OnBocjDEkr4P4mVJ0+
+         aFWCUmdEJqiSJbjJwIeq//7c+p6meTxLdMTSBH3KKppWCjbretcsiIWwPnxJzwNdwHsZ
+         AXwBw/tiSysUjqLhBGS8hcuppg1DRrm93ptwDB229cgaRgO9JREWR2hHGTxgSRMhekI0
+         HCO1sb0gx68eNx+p78I8kqXl+oHxQX5A7wNF1za2oykQI6HM9zhHfLRLZmV7ZK4q6nrn
+         jcULreQHvqeIPYJsFCaFDUN0Eap6D5Hdjg5FMzuJUdHUPwUeI3b/Bm04rjuMJCIwTRko
+         HmXw==
+X-Forwarded-Encrypted: i=1; AHgh+Ro0Mo2clMVBVl2aQjeHpyZy//q9xVlpky9l41vTSXnAhIvfN9pvYfqsEDxOcvZYJAkN9DI=@vger.kernel.org
+X-Gm-Message-State: AFuF++nXrxvHwgsvgd6LFB7CCwCZnljNp7Dlg3NLjOg2Sf5UqcpQ1iWZ
+	COfwQGoyMMWmeobeY8sS2u6DuXGxzwaOrHdhBrexTQ1i4pzsv/08qblO
+X-Gm-Gg: AR+sD11yhxf1vVdv8ZvFIuc3WswStMGLmT8pgqx5YhAk71IbqITdwNcbPw8UMl4xc89
+	feFdJEViNI9iXGX/+jeaXL/7K0deUymPteBZejcs08/3B1JtUWqAYn/I/KcM8GLysS3oXR4/Laj
+	CTFrnDU7BgNT30hThjxkJpJrCmdTqdxKv9DuFmYWyxMGTV1kAFu+VX3Ug8vSeS1h5sIffr3zcCB
+	9KGJVjoYL5wK7kQiQ1BjY/cZ1BNkt0h9b1C/GyXA1+RBZTNgq6GQ2l0BwCB0ijzH+8nObJHCO1F
+	EWpr4B5SZIsvWdtwKW+mrNB2jqE3UKhbYRr7anjd8aOGrO+EvACMVlDmq6JGqiJh5UNRSNyCf9J
+	7WEo+gHjpEl5405iD1rROM5xZH26mCVXepmaFWfEHQbR3+tdfQBFSeZRH6GDzyPkgKGzibitftX
+	gtWGWwOgAuWAM2dP7kGdJtVNGSPN5mXZl4ZkJBOD33f6Rwegu7
+X-Received: by 2002:a17:907:3d44:b0:c25:5a7:87f with SMTP id a640c23a62f3a-c250ba06e3cmr876138966b.0.1787749908066;
+        Wed, 26 Aug 2026 06:11:48 -0700 (PDT)
+Received: from krava ([173.38.220.54])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2523ea83a1sm299172666b.60.2026.08.26.06.11.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Aug 2026 06:11:47 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 26 Aug 2026 15:11:46 +0200
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Christian Simon <simon@swine.de>, bpf@vger.kernel.org, ast@kernel.org,
+	andrii@kernel.org, daniel@iogearbox.net, martin.lau@kernel.org,
+	tj@kernel.org, yonghong.song@linux.dev, stable@vger.kernel.org,
+	andrii.nakryiko@gmail.com, olsajiri@gmail.com
+Subject: Re: [PATCH bpf v3 1/2] bpf: disable private stack for sleepable
+ programs
+Message-ID: <ao7mEnrgVNj7prrI@krava>
+References: <20260822225444.2774461-1-simon@swine.de>
+ <20260822225444.2774461-2-simon@swine.de>
+ <DKYHBHNAMR03.B8SKDLC9FQ94@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v3 3/3] net: stmmac: document oversized AF_XDP frame
- handling
-To: Jakub Kicinski <kuba@kernel.org>,
- Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com,
- andrew+netdev@lunn.ch, saeedm@nvidia.com, tariqt@nvidia.com,
- mbloch@nvidia.com, mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
- aleksander.lobakin@intel.com, horms@kernel.org, magnus.karlsson@intel.com,
- sdf@fomichev.me, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, guoren@kernel.org, dtatulea@nvidia.com,
- witu@nvidia.com, martin.lau@kernel.org, yoong.siang.song@intel.com,
- intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
- linux-rdma@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
- linux-csky@vger.kernel.org, leon@kernel.org
-References: <20260819160535.1472459-1-sdf@fomichev.me>
- <20260819160535.1472459-4-sdf@fomichev.me> <aoceSoSFMx69Z9up@boxer>
- <aoeoJ6-njBxcWs4w@devvm7509.cco0.facebook.com> <aogpDsa8hz6CPpD3@boxer>
- <aoiIarzdjk92RkCN@devvm7509.cco0.facebook.com>
- <20260824111443.34bffe04@kernel.org>
-Content-Language: en-US
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-In-Reply-To: <20260824111443.34bffe04@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DKYHBHNAMR03.B8SKDLC9FQ94@gmail.com>
 
-
-
-On 8/24/26 20:14, Jakub Kicinski wrote:
-> On Fri, 21 Aug 2026 10:28:47 -0700 Stanislav Fomichev wrote:
->>>> I do agree that a better idea is to probably do these checks during control
->>>> paths, but it's a bit more involved (and not sure if it's possible? if we
->>>> have a bunch of xsk sockets and we change that max_sdu, do we go over all
->>>> sockets on the system somehow?). My main motivation with this patch was
->>>> to make our LLM reviewers less chatty about preexisting issues.  
->>>
->>> I hear you, however I feel like we do not know this driver too much and
->>> probably we don't have a HW to test out such changes, so maybe let us try
->>> to fix existing behavior?  
->>
->> Let's definitely fix it properly if you have better ideas. But since we
->> don't have HW, I'm not super confident doing anything sophisticated
->> myself :-D
+On Tue, Aug 25, 2026 at 06:20:16PM -0700, Alexei Starovoitov wrote:
+> On Sat Aug 22, 2026 at 3:54 PM PDT, Christian Simon wrote:
+> > A JITed BPF program can use one private stack per program and CPU.
+> > Sleepable programs can be preempted, allowing another task to run the
+> > same program on the same CPU. The second invocation then reuses and can
+> > overwrite the first invocation's private stack.
 > 
-> Let me take the first 2 patches and leave the stmmac for later.
-> I don't think anyone involved care particularly deeply here.
+> I'm confused by this. sleepable progs go through __bpf_prog_enter_sleepable_recur()
+> which has per-prog recurison counter. So preemption of the prog
+> doesn't break private stack.
+> If the same prog attemps to execute on the same cpu it will be skipped.
 > 
-> Maxime said he bought a bunch of relevant HW. If we finally wrap 
-> the AF_XDP tests into driver runtime he should be able to help us...
+> syscall prog types go via bpf_prog_run_array_sleepable()
+> that have per prog recursions counter.
+> 
+> Looks like we're not doing it for bpf_prog_run_array_uprobe().
+> I'm not sure what the right trade off here.
+> I feel universally checking for recursion is better
+> then selectively disabling private stack for uprobe.
 
-Indeed, I haven't started looking into the AF_XDP (and XDP in general) on
-stmmac, lots of fixes lately on the subject so I'll get there eventually :)
+also during the load we can't tell if kprobe program will be attached
+as kprobe or uprobe [1] so having a way to disable private stack for
+a program would solve this as well
 
-I'm currently plumbing the driver selftest on my setup (ethtool -t) and just
-runnign this uncovers lots of issues al lover the place, once this
-passes I'll get on the kselftests and see what we can do on this.
+jirka
 
-Maxime
+
+[1] https://lore.kernel.org/bpf/ao2f-rBgT0SqX6Pw@krava/
+
+> 
+> > Disable private stack for sleepable programs so they use the regular kernel
+> > stack, which handles preemption correctly. This change is intentionally
+> > limited to programs marked sleepable; preemptible non-sleepable dispatch
+> > paths require separate protection.
+> >
+> > Fixes: 7d1cd70d4b16 ("bpf, x86: Support private stack in jit")
+> > Fixes: 6c17a882d380 ("bpf, arm64: JIT support for private stack")
+> > Fixes: 156d985123b6 ("powerpc64/bpf: Implement JIT support for private stack")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Christian Simon <simon@swine.de>
+> > ---
+> >  kernel/bpf/verifier.c | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> >
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 5e37ca75e5c4..038753ef07a9 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -5237,6 +5237,15 @@ static enum priv_stack_mode bpf_enable_priv_stack(struct bpf_prog *prog)
+> >  	if (!bpf_jit_supports_private_stack())
+> >  		return NO_PRIV_STACK;
+> >  
+> > +	/*
+> > +	 * Sleepable programs can be preempted, allowing another task to run
+> > +	 * the same program on the same CPU. Since private stack is per-CPU
+> > +	 * and per-program, the second invocation would corrupt the first's
+> > +	 * stack. Disable private stack for sleepable programs.
+> > +	 */
+> > +	if (prog->sleepable)
+> > +		return NO_PRIV_STACK;
+> 
+> This is not true in genreal. sleepable progs can use priv stack.
+> 
+> pw-bot: cr
