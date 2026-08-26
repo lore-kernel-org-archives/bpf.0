@@ -1,304 +1,214 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C468453A37
-	for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 19:25:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4404B39794B
+	for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 19:25:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787772332; cv=none; b=n1S9s6sWC1Q2Xh2aNgf0143zjnpNZGQJXxH15tY/DU5Ny8D06+wZCjCb6+DNHropxMcvfRqw+6Ksk1zwor3GErscjTlo5WDg9b4JWzZ1u+pmA/7KbmW1g9DVvZ8tFOMnPBAKGX5yuChaWieKK0ZytcgWdv08LnZbTm59KKzjhTg=
+	t=1787772347; cv=none; b=rwUPu6ShVEBFjCI3OSfOuu20A6gzQPqOUr0CLGBbs9Z7Vo0jVNmSKtuINmIx7ijacmdf1KBBZkltR+ROWLehIhW60kf2U0fKGIg89XD6iNAv+tJwCamsNSCe9vYfW4G6k+iQepJXJtHCapohff0S2Vo+mRS6rGG3SUVOnU7YFog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787772332; c=relaxed/simple;
-	bh=McwFDqTbttLzCMctYSJxtAIY72+/qOO/4GeXMlDtQnM=;
+	s=arc-20240116; t=1787772347; c=relaxed/simple;
+	bh=5b/ECp49L8jIiLp3ssx0mAGt7VfHIzSie+MNRnWE+cY=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=ncXelD1XKeSE5PERhHG5DWSV8VGsxxugtrPAUtKF6Kr7zxSYj12QPAkHC9yaIMo7v8JuTdQzropH4F5f2oVqIezlmbey9nA57dAOky194GKwFZIdhd4Hq6OlgRyd2LStkyKSZLz41HF3jVQF5APsbbdQgZsMUDjmpin6e8Ky3UU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nRzN5+Y+; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=k1O+bMINLtt6xffPy0od4z7cenf8woaAKz+kKHymg6xCDnxinzy4DVuQKvFedBq91I+bHwPzSbz8VEkYH5zbWyStW3YWWM1OQSwEOl50ryPwKrfkskS4t8PdTfQj08nPp4aSJkVf+yMfjjcsG4q/rQy9JGjIkyqQCZMtPxYIu5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hy2rrx3z; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nRzN5+Y+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B5061F00A3D;
-	Wed, 26 Aug 2026 19:25:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hy2rrx3z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 312931F00A3E;
+	Wed, 26 Aug 2026 19:25:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787772322;
-	bh=4WsM+8O+xmT4e3cdt9kJfzvEoddNFRS+jtYc1+oMM/0=;
+	s=k20260515; t=1787772324;
+	bh=0LDphrX3Dvk1QBCU3Wh6IE+qbImUi+jsT9rlFq+dohE=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=nRzN5+Y+R0UzrJ0grFUFA7h+2XYPW2o+a8xz8IAj1R5p7OA3WgTedKWfKl71ZCGyi
-	 EEj9t2VyH/o3m9IEYTqXPhdtuUag6hSxbcfAQgPjURnCBY8Luq0nw7nMo8DZ4Pe7o9
-	 0RLNMMeO/FuiC1YvNbqBkXdC4xp2lW7krpCsM1s290sFCv4DhrADCDVPbU0KyM7x6Z
-	 dpSrw4lxtH5lUjUeqdLPL193EnGVlLEisK79sxHW74hVRNMHS/a4aXfAbT4u+2VzC1
-	 SeoLSNzJ7LWgM7J5NtJGSYUfm1V83Cv48R/U3HD9c55mVTgXMwBHrYKsmhpK8FnEKj
-	 7xNwvgA1RNn2g==
-Content-Type: multipart/mixed; boundary="===============9001334394806845660=="
+	b=hy2rrx3zOb4su3TnoT+I2vzXZ8veCUV5kh5OA/Yzuhdmgao+UnKtLnrjBEpysyym+
+	 6Nw82GrJWL9HUqeZH86C8SiITTr37zoHY41CmmgRVrQvSVE8hr7aCkVU0WYqe8aGqb
+	 nT7wtveEcQh7VhzHYGUlGFt/X6u7KVFwKOFlcmhZ2c1cbgMkJ+9yRrIOgxEnzuDBo8
+	 BgHQooagRrXxkIJZN/amfZYHSaGuf93ghGuQFaQuNFI8wJnBaOKHClVOnrl4k3r2kV
+	 SC1oFd9wuzeaYo2fORsnhKLIXoztG9txHMUBvKr5wTvD8eTowHOv4JheEyC/JilDFH
+	 J9ch7aBfIQ5/w==
+Content-Type: multipart/mixed; boundary="===============6681129137149194261=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <ad827eec215a17030e0dc3fd6aaa0d11f3449f4347523fdbf07dc9830ae13600@mail.kernel.org>
-In-Reply-To: <20260826181825.1826541-6-andrey.grodzovsky@crowdstrike.com>
-References: <20260826181825.1826541-6-andrey.grodzovsky@crowdstrike.com>
-Subject: Re: [PATCH bpf-next v2 5/5] selftests/bpf: Cover BPF program dynamic loading
+Message-Id: <397260f6e73079ddc30bb5a8e25b78d23850b6e043f7f5e1cc64522cdcc8c7f8@mail.kernel.org>
+In-Reply-To: <20260826181825.1826541-5-andrey.grodzovsky@crowdstrike.com>
+References: <20260826181825.1826541-5-andrey.grodzovsky@crowdstrike.com>
+Subject: Re: [PATCH bpf-next v2 4/5] libbpf: Support declarative dynamic load via BTF decl_tag
 From: bot+bpf-ci@kernel.org
 To: andrey.grodzovsky@crowdstrike.com,bpf@vger.kernel.org,andrii@kernel.org
 Cc: martin.kelly@crowdstrike.com,slava.imameev@crowdstrike.com,linux-open-source@crowdstrike.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 26 Aug 2026 19:25:22 +0000 (UTC)
+Date: Wed, 26 Aug 2026 19:25:24 +0000 (UTC)
 
---===============9001334394806845660==
+--===============6681129137149194261==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/dynamicload.c b/tools/testing/selftests/bpf/prog_tests/dynamicload.c
-> new file mode 100644
-> index 0000000000000..799c43034ff92
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/dynamicload.c
+> diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+> index 9d160b5b9c0ee..52978f0e04539 100644
+> --- a/tools/lib/bpf/bpf_helpers.h
+> +++ b/tools/lib/bpf/bpf_helpers.h
+> @@ -218,6 +218,11 @@ enum libbpf_tristate {
+>  #define __arg_untrusted __attribute((btf_decl_tag("arg:untrusted")))
+>  #define __arg_arena __attribute((btf_decl_tag("arg:arena")))
+>
+> +/* Mark a BPF program to be loaded dynamically instead of autoloaded,
+> + * equivalent to bpf_program__set_load_type(prog, BPF_PROG_LOAD_TYPE_DYNAMIC).
+> + */
+> +#define __load_dynamic __attribute__((btf_decl_tag("loadtype:dynamic")))
+> +
+>  #ifndef ___bpf_concat
+>  #define ___bpf_concat(a, b) a ## b
+>  #endif
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index cd1d00c47841b..5d58dbf25234f 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
 
 [ ... ]
 
-> +static void dynamicload_verify_override(void)
+> @@ -7156,6 +7158,50 @@ static int bpf_prog_assign_exc_cb(struct bpf_object *obj, struct bpf_program *pr
+>  	return 0;
+>  }
+>
+> +#define DYNLOAD_DECL_TAG "loadtype:dynamic"
+> +
+> +/*
+> + * Check whether a BPF program is annotated with the DYNLOAD_DECL_TAG BTF
+> + * decl tag, requesting that it be loaded dynamically after the object load.
+> + *
+> + * Returns 1 if the tag is present, 0 if it is not, negative error otherwise.
+> + */
+> +static int prog_has_dynload_tag(struct bpf_object *obj, struct bpf_program *prog)
 > +{
-> +	struct test_dynamicload *skel;
-> +	int err;
+> +	int i, n;
 > +
-> +	skel = test_dynamicload__open();
-> +	if (!ASSERT_OK_PTR(skel, "skel_open"))
-> +		return;
+> +	if (!obj->btf)
+> +		return 0;
 > +
-> +	err = bpf_program__set_load_type(skel->progs.prog4, BPF_PROG_LOAD_TYPE_DISABLED);
-> +	if (!ASSERT_OK(err, "set_load_type_disabled"))
-> +		goto cleanup;
+> +	n = btf__type_cnt(obj->btf);
+> +	for (i = 1; i < n; i++) {
+> +		const struct btf_type *tag_t, *fn_t;
 > +
-> +	if (!ASSERT_EQ(bpf_program__load_type(skel->progs.prog4), BPF_PROG_LOAD_TYPE_DISABLED,
-> +		       "prog4_load_type_overridden"))
-> +		goto cleanup;
+> +		tag_t = btf__type_by_id(obj->btf, i);
+> +		if (!btf_is_decl_tag(tag_t) || btf_decl_tag(tag_t)->component_idx != -1)
+> +			continue;
+> +		if (strcmp(btf__str_by_offset(obj->btf, tag_t->name_off),
+> +			   DYNLOAD_DECL_TAG) != 0)
+> +			continue;
 > +
-> +	/* keep the other dynamic-load-only programs out of the way of this load */
-> +	bpf_program__set_load_type(skel->progs.prog1, BPF_PROG_LOAD_TYPE_DISABLED);
-> +	bpf_program__set_load_type(skel->progs.prog3, BPF_PROG_LOAD_TYPE_DISABLED);
-
-The comment says prog1 and prog3 are "dynamic-load-only programs" that
-need to be kept out of the way, but in test_dynamicload.c only prog4
-has the __load_dynamic tag. prog1 and prog3 are plain
-SEC("raw_tp/sys_enter") programs, so bpf_object__init_prog() assigns
-load_type = BPF_PROG_LOAD_TYPE_AUTO to both. Without these calls they
-would autoload alongside prog2, but that wouldn't affect the prog4
-override assertion. Does the comment need updating?
-
-Also, these two bpf_program__set_load_type() calls discard the return
-value while all other calls in this function check them. Is the
-inconsistency intentional?
-
+> +		/* a decl tag's type field points at the entity it decorates */
+> +		fn_t = btf__type_by_id(obj->btf, tag_t->type);
+> +		if (!btf_is_func(fn_t) || btf_func_linkage(fn_t) != BTF_FUNC_GLOBAL) {
+> +			pr_warn("prog '%s': " DYNLOAD_DECL_TAG
+> +				" decl tag must be applied to a global function\n",
+> +				prog->name);
+> +			return -EINVAL;
+> +		}
 > +
-> +	err = test_dynamicload__load(skel);
-> +	if (!ASSERT_OK(err, "skel_load"))
-> +		goto cleanup;
+> +		if (strcmp(btf__str_by_offset(obj->btf, fn_t->name_off), prog->name) != 0)
+> +			continue;   /* tag belongs to a different program */
 > +
-> +	/* prog4 was never loaded, so it cannot be loaded dynamically either */
-> +	err = bpf_program__load_dynamically(skel->progs.prog4, 0);
-> +	ASSERT_ERR(err, "load_dynamically_after_override");
-
-[ ... ]
-
-> +	/* reloading prog3 must fail as it was unloaded as a regular program */
-> +	err = bpf_program__load_dynamically(skel->progs.prog3, 0);
-> +	ASSERT_ERR(err, "load_dynamically_after_regular_unload");
-
-Does this assertion test the rule the comment describes? Looking at
-bpf_program__load_dynamically() in libbpf.c (d8626c4dc022c), it only
-rejects three things: obj->state < OBJ_LOADED, prog_is_subprog(), and
-prog->load_type != DYNAMIC. After line 175's bpf_program__unload(),
-obj->state is still OBJ_LOADED and prog3->load_type is still DYNAMIC,
-so both gates pass.
-
-bpf_program__unload() (libbpf.c:799) doesn't touch prog->load_type:
-
-    void bpf_program__unload(struct bpf_program *prog)
-    {
-        if (!prog)
-            return;
-
-        zclose(prog->fd);
-
-        zfree(&prog->func_info);
-        zfree(&prog->line_info);
-        zfree(&prog->subprogs);
-    }
-
-The reload only fails because zfree() NULLs prog->func_info but leaves
-prog->func_info_cnt non-zero. bpf_object_load_prog() then copies that
-inconsistent pair into the load attrs:
-
-    if (obj->btf && btf__fd(obj->btf) >= 0 && kernel_supports(obj, FEAT_BTF_FUNC)) {
-        load_attr.prog_btf_fd = btf__fd(obj->btf);
-        load_attr.func_info = prog->func_info;      /* NULL */
-        load_attr.func_info_rec_size = prog->func_info_rec_size;
-        load_attr.func_info_cnt = prog->func_info_cnt;  /* still 1 */
-
-and BPF_PROG_LOAD fails with -EFAULT in check_btf_func()'s
-copy_from_user(). So the test is really asserting that the kernel
-rejects NULL func_info with non-zero func_info_cnt, not that a
-regularly-unloaded program cannot be dynamically reloaded.
-
-Two consequences: (1) the assertion is environment-dependent. The
-func_info block above is conditional on obj->btf having a valid kernel
-fd and FEAT_BTF_FUNC being supported, and prog->func_info_cnt is only
-set when obj->btf_ext exists. If BTF fails to load or .BTF.ext is
-absent, func_info_cnt is 0, the reload succeeds, and ASSERT_ERR()
-fails. The test then reports a kernel regression that doesn't exist.
-(2) Zeroing func_info_cnt/line_info_cnt in bpf_program__unload() is
-the natural fix for the NULL-pointer/non-zero-count inconsistency;
-doing so makes this reload succeed and breaks the test.
-
-Should the series implement the rule the comment describes, perhaps by
-having bpf_program__unload() reset prog->load_type, or by adding an
-explicit 'unloaded, data released' state that
-bpf_program__load_dynamically() checks? Otherwise this assertion and
-comment should be dropped.
-
+> +		return 1;
+> +	}
 > +
-> +	/* run prog4 (declaratively tagged) through the same dynamic
-> +	 * load/attach/trigger/detach/unload cycle as prog3
-> +	 */
-> +	err = bpf_program__load_dynamically(skel->progs.prog4, 0);
-> +	if (!ASSERT_OK(err, "prog4_load_dynamically"))
-> +		goto cleanup;
-> +
-> +	link = bpf_program__attach(skel->progs.prog4);
-> +	if (!ASSERT_OK_PTR(link, "prog4_attach"))
-> +		goto cleanup;
-> +
-> +	usleep(1);
-> +
-> +	if (!ASSERT_TRUE(skel->bss->prog4_called, "prog4_called"))
-> +		goto cleanup;
-> +
-> +	err = bpf_link__destroy(link);
-> +	if (!ASSERT_OK(err, "prog4_link_destroy"))
-> +		goto cleanup;
-> +
-> +	err = bpf_program__unload_dynamically(skel->progs.prog4);
-> +	ASSERT_OK(err, "prog4_unload_dynamically");
-> +
-> +	test_dynamicload__destroy(skel);
-> +
-> +	/* separate scenario: imperative override of the declarative tag */
-> +	dynamicload_verify_override();
-> +	return;
-> +
-> +cleanup:
-> +	test_dynamicload__destroy(skel);
+> +	return 0;
 > +}
-
-dynamicload_verify_override() only runs on the fully-successful path.
-test_dynamicload() has 21 'goto cleanup' exits (lines 59, 61, 74, 78,
-91, 96, 101, 106, 121, 126, 131, 136, 150, 155, 160, 165, 170, 195,
-199, 204, 208), and every one jumps past dynamicload_verify_override()
-to the cleanup label. So any single failure anywhere in the prog3
-lifecycle silently removes coverage for the declarative-tag override
-behaviour that commit 5bddcc170b310 introduced, the scenario the
-comment itself calls "separate".
-
-The two scenarios are independent: dynamicload_verify_override() opens
-its own skeleton and shares no state with the caller. Would
-test__start_subtest() let each scenario have its own pass/fail line in
-the test_progs output instead of hiding one behind the other's success?
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/load_type.c b/tools/testing/selftests/bpf/prog_tests/load_type.c
-> new file mode 100644
-> index 0000000000000..fc91f6666c506
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/load_type.c
+> +
+>  static struct {
+>  	enum bpf_prog_type prog_type;
+>  	const char *ctx_name;
 
 [ ... ]
 
-> +	/* leaving DYNAMIC for AUTO must restore autoattach (regression test for
-> +	 * the autoattach residue bug: set_dynamicload() clears autoattach, and
-> +	 * nothing used to restore it on exit)
-> +	 */
-> +	err = bpf_program__set_load_type(skel->progs.prog3, BPF_PROG_LOAD_TYPE_AUTO);
-> +	if (!ASSERT_OK(err, "set_load_type_auto"))
-> +		goto cleanup;
+> @@ -8467,6 +8516,22 @@ static int bpf_object_init_progs(struct bpf_object *obj, const struct bpf_object
+>  			return err;
+>  		}
+>  	}
 > +
-> +	if (!ASSERT_EQ(bpf_program__load_type(skel->progs.prog3), BPF_PROG_LOAD_TYPE_AUTO,
-> +		       "prog3_load_type_auto"))
-> +		goto cleanup;
+> +	if (prog_is_subprog(obj, prog))
+> +		continue;
 > +
-> +	if (!ASSERT_TRUE(bpf_program__autoattach(skel->progs.prog3), "prog3_autoattach_restored"))
-> +		goto cleanup;
-> +
-> +	/* the same residue can relay through DISABLED and resurface on a later
-> +	 * DISABLED -> AUTO transition, so the fix must cover both exit edges
-> +	 */
-> +	err = bpf_program__set_load_type(skel->progs.prog3, BPF_PROG_LOAD_TYPE_DYNAMIC);
+> +	err = prog_has_dynload_tag(obj, prog);
+> +	if (err < 0)
+> +		return err;
+> +	if (err > 0) {
+> +		err = bpf_program__set_load_type(prog, BPF_PROG_LOAD_TYPE_DYNAMIC);
+> +		if (err) {
+> +			pr_warn("prog '%s': failed to apply " DYNLOAD_DECL_TAG
+> +				" decl tag: %s\n",
+> +				prog->name, errstr(err));
+> +			return err;
+> +		}
+> +	}
+>  }
+>
+>  return 0;
 
-Does this comment match the code? The implementation in 677f95c8adc52
-restores autoattach with a single guard keyed off the source state:
+Can the gen_loader incompatibility check reach __load_dynamic programs?
+Looking at the control flow, bpf_object_init_progs() runs inside
+bpf_object_open() before the object is returned to the caller, but
+bpf_object__gen_loader() is a public API that can only be called after
+open returns. This means obj->gen_loader is structurally guaranteed to
+be NULL when prog_has_dynload_tag() routes through
+bpf_program__set_load_type() -> bpf_program__set_dynamicload().
 
-    case BPF_PROG_LOAD_TYPE_AUTO:
-    case BPF_PROG_LOAD_TYPE_DISABLED:
-        if (prog->load_type == BPF_PROG_LOAD_TYPE_DYNAMIC)
-            prog->autoattach = true;
+The guard in bpf_program__set_dynamicload() checks:
 
-So the DYNAMIC -> DISABLED step already clears the residue; there is
-nothing left to "relay through DISABLED", and the subsequent DISABLED ->
-AUTO step cannot "resurface" it because prog->load_type is no longer
-DYNAMIC. There is also no second "exit edge" for the fix to cover: AUTO
-and DISABLED share one fall-through arm.
+    if (obj->gen_loader)
+            return libbpf_err(-ENOTSUP);
 
-Without the fix, the assertion at line 102 would fail for the same
-single reason as line 84 (autoattach never restored on leaving DYNAMIC),
-not because of a distinct DISABLED->AUTO path. Does the comment claim
-coverage of a code path that doesn't exist?
+Both in-tree gen_loader users call bpf_object__open_file() first, then
+bpf_object__gen_loader(), then bpf_object__load():
 
-[ ... ]
+tools/bpf/bpftool/prog.c:
+    obj = bpf_object__open_file(file, &open_opts);
+    ...
+    err = bpf_object__gen_loader(obj, &gen_opts);
+    ...
+    err = bpf_object__load(obj);
 
-> +	err = bpf_program__load_dynamically(skel->progs.prog3, 0);
-> +	if (!ASSERT_OK(err, "load_dynamically_1"))
-> +		goto cleanup;
-> +
-> +	err = bpf_program__load_dynamically(skel->progs.prog3, 0);
-> +	if (!ASSERT_OK(err, "load_dynamically_2"))
-> +		goto cleanup;
+tools/bpf/bpftool/gen.c:
+    err = bpf_object__gen_loader(obj, &gen_opts);
+    ...
+    err = bpf_object__load(obj);
 
-The test calls bpf_program__load_dynamically(prog3, 0) twice in a row
-with no intervening bpf_program__unload_dynamically() and asserts both
-calls succeed, but there is no comment saying what the second call is
-meant to prove.
+So running 'bpftool gen skeleton -L' on an object containing a
+__load_dynamic program accepts the combination that the code declares
+unsupported. The imperative bpf_program__set_dynamicload() call path
+after open would correctly reject it, but the declarative path during
+open cannot.
 
-In libbpf (d8626c4dc022c) bpf_program__load_dynamically() unconditionally
-calls bpf_object_load_prog(obj, prog, ..., &prog->fd), and
-bpf_object_load_prog() ends with a bare *prog_fd = ret; -- it never
-inspects or closes an existing prog->fd. So the second call creates a
-second kernel BPF program and overwrites prog->fd, leaking the first fd
-and pinning the first program instance in the kernel for the remaining
-lifetime of the test_progs process. bpf_object__close() only closes the
-current prog->fd.
+bpf_object__load_progs() then skips the program because load_type is
+DYNAMIC, so bpf_gen__prog_load() is never emitted for it and
+gen->nr_progs undercounts. The bpf_gen__finish() check only errors on
+undercounts in the other direction, so the fd-writeback loop copies
+prog_fd[i] into descriptor slot i for i < gen->nr_progs while bpftool
+emits one struct bpf_prog_desc per program in object order. When the
+dynamic program is not last, every following program's fd lands in the
+wrong skel->progs.* slot.
 
-Peer test prog_tests/dynamicload.c does the reload case correctly
-(unload_dynamically() then load_dynamically(), lines 148-155), which
-makes the unqualified double load here look like a copy/paste rather
-than intentional coverage. Does the second call need to be preceded by
-bpf_program__unload_dynamically(), or should it be expected to fail? If
-the assertion is intentional, it codifies "reload without unload silently
-leaks the previous program" as expected API behaviour.
+Does this need an obj->gen_loader check in bpf_object_init_progs() after
+prog_has_dynload_tag() returns 1, or should bpf_object__gen_loader() walk
+the programs and error if it finds any with load_type == DYNAMIC?
 
-[ ... ]
-
-Andrii Nakryiko raised fundamental concerns in v1 about the complexity
-of adding a third autoload state (dynamic) to libbpf. From the review
-at https://lore.kernel.org/bpf/CAEf4BzYWe0KCzA4-qwAGp5n_ydJ0_zyLSO=Crr_vewFHzZ0t6Q@mail.gmail.com/:
-
-  "I don't want to complicate bpf_object internals with this third
-  autoload state, as this creates tons of non-obvious gotchas that
-  have to constantly be checked whenever any new feature is added to
-  bpf_object (or even during refactorings)."
-
-He proposed alternative approaches: (1) splitting BPF objects with map
-sharing, or (2) a new bpf_object__prepare() API to split load into
-prepare/load steps. The patch series proceeded with the dynamic loading
-approach without addressing these architectural concerns. Are the
-alternative approaches not viable for the use case, or is there a plan
-to revisit the design?
+> @@ -15248,10 +15313,9 @@ static int bpf_program__set_dynamicload(struct bpf_program *prog)
+>  	 * to gen_loader. For this reason, prevent calling
+>  	 * bpf_program__set_dynamicload when gen_loader was used to
+>  	 * generate a BPF object loader.
+> -	 * A gen_loader implementation is being called for autoloaded
+> -	 * programs and defines its own model for loading BPF programs.
+> -	 * To pass a BPF program to gen_loader, set the program's load type
+> -	 * to LD_AUTOLOAD.
+> +	 * A gen_loader implementation is being called for programs with
+> +	 * load type BPF_PROG_LOAD_TYPE_AUTO and defines its own model for
+> +	 * loading BPF programs.
+>  	 */
+>  	if (obj->gen_loader)
+>  		return libbpf_err(-ENOTSUP);
 
 
 ---
@@ -306,4 +216,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33000627295
---===============9001334394806845660==--
+--===============6681129137149194261==--
