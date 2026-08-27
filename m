@@ -1,212 +1,192 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715A743B3E5;
-	Thu, 27 Aug 2026 09:59:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10B0841D637
+	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 10:02:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787824753; cv=none; b=saCdKYkjDCodmg6OWZkniJj/sG7YBcHLig8nwJCfjOHZbr++muehI4TfFVPyFnq3eXyEyeykIgjEDrTgc0Y576IaE66wGIXa/R7DOfSQm0I7fk6aLOYk8zKJ/Ro4F9Uw8Hq7bD9oUmdBmlsTj1zBCHKjEWgheof/uZxV1iTjzsw=
+	t=1787824976; cv=none; b=pP+j5tSJqxQwjnDh+XMtFIClD7E1Peg+H8F9oxevk5j7n49t5afidZWfXcELw2mdF+I2eTRmz6kzTjb+WE1W35EOwcZ4xXQcP8XpxphiZ/2x/7BmS1KnOKavUn+0+mR3VyP6zi0aBmo4BTIGDXXeM3ORSwFOb4tJZPRWaNBk4d4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787824753; c=relaxed/simple;
-	bh=9zWHX1koS7Y08c8z6OqdIcI8jre+mu/ZH79BynCwR7I=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NLZIeLbXxukBb+fAoSjHin54Pg2huw7PtsJU9ySpieLi98MZE5nxX4VhKnD/lblCx3cVUw1vCqFUiKNoi5lty8Bnk1/81Z4wfIzBcCKa8Sn7y9RZY/vL/Mf43PThhea+WO/a0YXz48K/XP4PpENZH8XH4NUH8U2638nFRgoHWks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=rJVdl54x; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1787824976; c=relaxed/simple;
+	bh=+JsS/wv7XR6N9uh4uo2a/6K05J5MWW3eChLg/XiaPkY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=IEGJOYnERsJ+LaVMJ+no1fJ1zx/rXX9JKd07h+N5FMBB7KmkSU7yUay+M67EDN2TwQ0VsyVX3wn2coBzwhaX/WBDxPRJqXS/zU8FShV/rhk9uVUSw8Gztzeywmm1gIMK81yLtxvhPlWSv2xXXhGeBRbAiBwL9EtABV31EQVuw0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VKJazyJe; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=CA2iTlBt; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="rJVdl54x"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1787824749; x=1819360749;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=9zWHX1koS7Y08c8z6OqdIcI8jre+mu/ZH79BynCwR7I=;
-  b=rJVdl54xWdwPmieXltYO74HZpuuMhkTad9vsCKiZ17eJgpe/hkTO12PZ
-   iSl3DxQJ8skr15WeMwWfvKjDGMPPxX4olxvJ5ve9bSxAITfwnJNXnQp9p
-   niB7e/njPB8NaOuSspZrEkqHFbU5cnGR79tu6T8f1ZCCXBvc1ftb2nDmn
-   LxZQ6U5JyRC7o2CcxxvySCCapgRQa+jw23ppGZl1VLd5Dfv0YAeoV7a+W
-   W72AeWh/XanVhzpjbqg4IpMqyy6cOLQbIxT81tTjGL1d0i9j7a8vkrSAe
-   T3P/JDL88VJukgmMYlcIdEM8nZYWTsQj2uG93TDa+AwarUSsqiQLz+4x6
-   g==;
-X-CSE-ConnectionGUID: TKd9ukl7SMmUnG5Q+MYsKQ==
-X-CSE-MsgGUID: Wh+SSoq1RgyeT1qOVKnEPA==
-X-IronPort-AV: E=Sophos;i="6.25,246,1779174000"; 
-   d="scan'208";a="294132463"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Aug 2026 02:59:02 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Thu, 27 Aug 2026 02:59:01 -0700
-Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Thu, 27 Aug 2026 02:58:57 -0700
-Date: Thu, 27 Aug 2026 11:58:57 +0200
-From: Daniel Machon <daniel.machon@microchip.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
-	<pabeni@redhat.com>, Horatiu Vultur <horatiu.vultur@microchip.com>, "Steen
- Hegelund" <steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, "Herve
- Codina" <herve.codina@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>, Mohsin Bashir
-	<mohsin.bashr@gmail.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH net-next v5 09/13] net: lan966x: add PCIe FDMA support
-Message-ID: <20260827095857.nt2zngzhoq777qou@DEN-DL-M70577.microsemi.net>
-References: <20260520-lan966x-pci-fdma-v5-0-ca56197ae05b@microchip.com>
- <20260520-lan966x-pci-fdma-v5-9-ca56197ae05b@microchip.com>
- <20260522185637.1fe72213@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VKJazyJe";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="CA2iTlBt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1787824964;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=H/c72MQdWufExTh7+4DDW9MBVDxBOFoBAW+G3h8roBs=;
+	b=VKJazyJeCATiaVmy30gCgbTw2yrAYQ0JSvDYBmGw+ndlX6SNxeOfBHair0LecUovoAUrY7
+	okT47+RVFvV9rF9znYz5CTrzP11ivWgJvoDVigyLi5+eEIiloeN5U941C8SNfbdVakqEhH
+	MrQWMzb9mdPfTLG7HJPFKh6iFyzW8UQ=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-484-5vm8jaTPNLe9J-1w6r5erA-1; Thu, 27 Aug 2026 06:02:43 -0400
+X-MC-Unique: 5vm8jaTPNLe9J-1w6r5erA-1
+X-Mimecast-MFC-AGG-ID: 5vm8jaTPNLe9J-1w6r5erA_1787824962
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-482e729ead9so119523f8f.0
+        for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 03:02:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1787824962; x=1788429762; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=H/c72MQdWufExTh7+4DDW9MBVDxBOFoBAW+G3h8roBs=;
+        b=CA2iTlBtExxXX3hFj0AliRg+l0/fakevO7M6hS7zeA5nzurut4VCfbkmeHwHuHy2mw
+         1J+X77bhVnhIXcqrDkKJ5/srQSAVTqiVogX/tv4gPdzEijRpEMEWml2Awvh2DExoRKLz
+         SG2Pi8S0RlSkM+9pOfYd/I7aEYYJP0QI0ZqMtoCRK/bbWlQkMh8Wat3dJFLwBR2lHhIW
+         42mTy1eYp5YoOWZShGPT0vEvDKeCSnpaUcoUEN0ms1ya9SR/NGI4yt1cOqE2GDXKCdY5
+         JG5nkQGjyzOo89iyiMvSyWLAu8KqwGemx1vvYrG0LozSqimtDdwrNYPSnSYuS9EsGGJV
+         1Ofg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787824962; x=1788429762;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=H/c72MQdWufExTh7+4DDW9MBVDxBOFoBAW+G3h8roBs=;
+        b=eKoIh5bT+aYVF9ZYEmwur2BbP8+QNZD8sDa30Fj7ipkkQSELSOxlWeV7DOClm8tc1d
+         3YJtipSPam+51nern03gl8GoHfO8ErjY2lkescmsCciveSdGIaBNz1SF0ciIQVOxSIV+
+         FiqmI4U39sI06xZj+PnWv/HIkX5Au7SZgpR3GBKWRXXkJywK4sKgrzioqARSvMoyvong
+         oYZG+st0kSoyb9pbbX2HXbOOS0PX7JYWShGLweUYeHPeUe5Kl33JOWYYOJRq0owJU5gJ
+         BANRHV7WzVOcPUqdGcgATw9QolxdNjkYxx5cIjdd72nq58KQ10xOCusLr25OArdCimA8
+         B27Q==
+X-Gm-Message-State: AFuF++loUxG5r3/5IGmLD/OG7O67ydfXVzRLW2a7Ss0wDNCsxU48IN9x
+	O+s5bgo4FBUa3CkcBUDrscirZuqVZDCgGCieDDrv0is68vCzThWWa+44koLC9CPkF/0LHC9qIdg
+	jhr3lLxPi4JnaZ2djUTWK1REsnuGOZptbDbLX97uYzuTS9vrdI+Oz/A==
+X-Gm-Gg: AR+sD12e5D1mWRdvoh2dBQl+xxcLdsGd5U5y7UWqZltAqxBjMORUOl8x6cwz9445/id
+	t2X0QjEjbR7ldN/9woohkuBP9u7rFY+4xiRLTJm32fV89XAvbeMSYsVdX7mZ9kN1D+RG0zM0Wq1
+	J1x05KgfRrLvVNAupRIxmK7HOlTpZgQW7kmo8RG4gEWyZFBx4+HzBsPwv2Xer8/dK+QwJjVjL/3
+	A7ibi7l7S1ZdmNSSqH2XnzS49T1sDEm1ZcoRMZ+LGPNXaLTj5J5OZ5u4G4GxELIebe+JE+2m41V
+	0gNX2/ClhVr4W3bcZhcIT0qF8/Pp8xEehCQl0Vr4I6Xrp1DmCLKyuIo/K2R0j6rJmqXhX8Hla3F
+	iYJQ+CCf+KXB7xcwRs2RoV6AVieI=
+X-Received: by 2002:a05:6000:27d1:b0:481:4f2a:bdb0 with SMTP id ffacd0b85a97d-482e2703aa9mr14038220f8f.18.1787824961709;
+        Thu, 27 Aug 2026 03:02:41 -0700 (PDT)
+X-Received: by 2002:a05:6000:27d1:b0:481:4f2a:bdb0 with SMTP id ffacd0b85a97d-482e2703aa9mr14038128f8f.18.1787824961295;
+        Thu, 27 Aug 2026 03:02:41 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-482e279ecaesm8160863f8f.6.2026.08.27.03.02.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Aug 2026 03:02:40 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 8E1E7979E20; Thu, 27 Aug 2026 12:02:39 +0200 (CEST)
+From: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Toke Hoiland-Jorgensen <toke@redhat.com>
+Cc: bpf@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf-next 1/2] libbpf: Move XDP frags flag to prog_flags
+Date: Thu, 27 Aug 2026 12:02:11 +0200
+Message-ID: <20260827100214.169215-1-toke@redhat.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260522185637.1fe72213@kernel.org>
 
-> On Wed, 20 May 2026 10:12:21 +0200 Daniel Machon wrote:
-> > Add PCIe FDMA support for lan966x. The PCIe FDMA path uses contiguous
-> > DMA buffers mapped through the endpoint's ATU, with memcpy-based frame
-> > transfer instead of per-page DMA mappings.
-> >
-> > With PCIe FDMA, throughput increases from ~33 Mbps (register-based I/O)
-> > to ~620 Mbps on an Intel x86 host with a lan966x PCIe card.
-> 
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/Makefile b/drivers/net/ethernet/microchip/lan966x/Makefile
-> > index 4cdbe263502c..ac0beceb2a0d 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/Makefile
-> > +++ b/drivers/net/ethernet/microchip/lan966x/Makefile
-> > @@ -18,6 +18,10 @@ lan966x-switch-objs  := lan966x_main.o lan966x_phylink.o lan966x_port.o \
-> >  lan966x-switch-$(CONFIG_LAN966X_DCB) += lan966x_dcb.o
-> >  lan966x-switch-$(CONFIG_DEBUG_FS) += lan966x_vcap_debugfs.o
-> >
-> > +ifdef CONFIG_MCHP_LAN966X_PCI
-> 
-> ifeq ()
-> 
-> would be more common in a Makefile?
+The libbpf section definition for XDP frags support stores the flags bit
+in the private section definition cookie from object open to load time.
+This has the unfortunate consequence that API consumers cannot see (or
+manipulate) the flag between object open and program load.
 
-Switching to ifneq ($(CONFIG_MCHP_LAN966X_PCI),) in v6.
+In particular, libxdp has special handling of frags-enabled programs to
+make them compatible with the dispatcher. This doesn't work on XDP
+programs that enable frags through the 'xdp.frags' section definition
+because the flag is not visible through bpf_program__flags()[0].
 
-> 
-> > +lan966x-switch-y += lan966x_fdma_pci.o
-> > +endif
-> > +
-> 
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> > index cc3c7b6c65ae..7036b1d937d5 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> > @@ -7,6 +7,7 @@
-> >  #include <linux/ip.h>
-> >  #include <linux/of.h>
-> >  #include <linux/of_net.h>
-> > +#include <linux/pci.h>
-> >  #include <linux/phy/phy.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/reset.h>
-> > @@ -49,6 +50,9 @@ struct lan966x_main_io_resource {
-> >  static const struct lan966x_main_io_resource lan966x_main_iomap[] =  {
-> >       { TARGET_CPU,                   0xc0000, 0 }, /* 0xe00c0000 */
-> >       { TARGET_FDMA,                  0xc0400, 0 }, /* 0xe00c0400 */
-> > +#if IS_ENABLED(CONFIG_MCHP_LAN966X_PCI)
-> 
-> why config option being enabled changes the targets?
-> Can someone with a non-PCI device enable that option too
-> (sure it would be useless but given that/if they can guarding
-> with an #if seems like a waste of LoC)
-> 
+Fix this by changing how libbpf loads the 'xdp.frags' section: instead
+of using the private section definition cookie, add a setup function to
+the section definition that stores the flag in the prog_flags field of
+struct bpf_program.
 
-Rationale was to only map in the PCIE_DBI target if actually needed. Sure, can
-drop the conditional in v6.
+[0] https://github.com/xdp-project/xdp-tools/issues/587
 
-> > +     { TARGET_PCIE_DBI,             0x400000, 0 }, /* 0xe0400000 */
-> > +#endif
-> >       { TARGET_ORG,                         0, 1 }, /* 0xe2000000 */
-> >       { TARGET_GCB,                    0x4000, 1 }, /* 0xe2004000 */
-> >       { TARGET_QS,                     0x8000, 1 }, /* 0xe2008000 */
-> > @@ -1100,6 +1104,13 @@ static int lan966x_reset_switch(struct lan966x *lan966x)
-> >
-> >  static const struct lan966x_fdma_ops *lan966x_get_fdma_ops(struct device *dev)
-> >  {
-> > +#if IS_ENABLED(CONFIG_MCHP_LAN966X_PCI)
-> > +     for (struct device *p = dev->parent; p; p = p->parent) {
-> > +             if (dev_is_pci(p))
-> 
-> If the PCIe devices also use an intermediate platform device for
-> probing, can't they explicitly have some flag / state to indicate
-> they are PCIe? The device walk in such a constrained env seems
-> like an overkill
-> 
+Fixes: 082c4bfba4f7 ("libbpf: Add SEC name for xdp frags programs")
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+ tools/lib/bpf/libbpf.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-I think it could be possible to pass some state between lan966x_pci and the
-switch driver, however that seems like a much more complex solution than this.
-The parent bus node already implies the same — the switch device only ever sits
-under a PCI-created bus in the PCIe case, so an explicit flag/state would just
-restate what the topology already tells us. The walk itself is deliberate, v1
-checked dev->parent->parent directly, and I opened it up to a walk so PCIe
-detection keeps working if the overlay's DT topology gains or loses an
-intermediate bus node. I'd like to keep as it.
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index b749c01742ee..7d6f0fe518d9 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -420,10 +420,8 @@ enum sec_def_flags {
+ 	SEC_ATTACH_BTF = 4,
+ 	/* BPF program type allows sleeping/blocking in kernel */
+ 	SEC_SLEEPABLE = 8,
+-	/* BPF program support non-linear XDP buffer */
+-	SEC_XDP_FRAGS = 16,
+ 	/* Setup proper attach type for usdt probes. */
+-	SEC_USDT = 32,
++	SEC_USDT = 16,
+ };
+ 
+ struct bpf_sec_def {
+@@ -7879,6 +7877,12 @@ static int tracing_multi_mod_fd(struct bpf_program *prog, int *btf_obj_fd)
+ 	return 0;
+ }
+ 
++static int setup_xdp_frags(struct bpf_program *prog, long cookie)
++{
++	prog->prog_flags |= BPF_F_XDP_HAS_FRAGS;
++	return 0;
++}
++
+ /* this is called as prog->sec_def->prog_prepare_load_fn for libbpf-supported sec_defs */
+ static int libbpf_prepare_prog_load(struct bpf_program *prog,
+ 				    struct bpf_prog_load_opts *opts, long cookie)
+@@ -7892,9 +7896,6 @@ static int libbpf_prepare_prog_load(struct bpf_program *prog,
+ 	if (def & SEC_SLEEPABLE)
+ 		opts->prog_flags |= BPF_F_SLEEPABLE;
+ 
+-	if (prog->type == BPF_PROG_TYPE_XDP && (def & SEC_XDP_FRAGS))
+-		opts->prog_flags |= BPF_F_XDP_HAS_FRAGS;
+-
+ 	/* special check for usdt to use uprobe_multi link */
+ 	if ((def & SEC_USDT) && kernel_supports(prog->obj, FEAT_UPROBE_MULTI_LINK)) {
+ 		/* for BPF_TRACE_UPROBE_MULTI, user might want to query expected_attach_type
+@@ -10182,11 +10183,11 @@ static const struct bpf_sec_def section_defs[] = {
+ 	SEC_DEF("iter+",		TRACING, BPF_TRACE_ITER, SEC_ATTACH_BTF, attach_iter),
+ 	SEC_DEF("iter.s+",		TRACING, BPF_TRACE_ITER, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_iter),
+ 	SEC_DEF("syscall",		SYSCALL, 0, SEC_SLEEPABLE),
+-	SEC_DEF("xdp.frags/devmap",	XDP, BPF_XDP_DEVMAP, SEC_XDP_FRAGS),
++	SEC_DEF("xdp.frags/devmap",	XDP, BPF_XDP_DEVMAP, SEC_NONE, .prog_setup_fn = setup_xdp_frags),
+ 	SEC_DEF("xdp/devmap",		XDP, BPF_XDP_DEVMAP, SEC_ATTACHABLE),
+-	SEC_DEF("xdp.frags/cpumap",	XDP, BPF_XDP_CPUMAP, SEC_XDP_FRAGS),
++	SEC_DEF("xdp.frags/cpumap",	XDP, BPF_XDP_CPUMAP, SEC_NONE, .prog_setup_fn = setup_xdp_frags),
+ 	SEC_DEF("xdp/cpumap",		XDP, BPF_XDP_CPUMAP, SEC_ATTACHABLE),
+-	SEC_DEF("xdp.frags",		XDP, BPF_XDP, SEC_XDP_FRAGS),
++	SEC_DEF("xdp.frags",		XDP, BPF_XDP, SEC_NONE, .prog_setup_fn = setup_xdp_frags),
+ 	SEC_DEF("xdp",			XDP, BPF_XDP, SEC_ATTACHABLE_OPT),
+ 	SEC_DEF("perf_event",		PERF_EVENT, 0, SEC_NONE),
+ 	SEC_DEF("lwt_in",		LWT_IN, 0, SEC_NONE),
+-- 
+2.55.0
 
-> > +                     return &lan966x_fdma_pci_ops;
-> > +     }
-> > +#endif
-> > +
-> >       return &lan966x_fdma_ops;
-> >  }
-> >
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-> > index 5f4dbeda17cd..e7fdd4447fb6 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-> > @@ -17,6 +17,9 @@
-> >  #include <net/xdp.h>
-> >
-> >  #include <fdma_api.h>
-> > +#if IS_ENABLED(CONFIG_MCHP_LAN966X_PCI)
-> > +#include <fdma_pci.h>
-> > +#endif
-> 
-> Conditional #includes make build testing harder, better to avoid them
-> 
-
-Ack.
-
-> >  #include <vcap_api.h>
-> >  #include <vcap_api_client.h>
-> >
-> > @@ -288,6 +291,10 @@ struct lan966x {
-> >
-> >       void __iomem *regs[NUM_TARGETS];
-> >
-> > +#if IS_ENABLED(CONFIG_MCHP_LAN966X_PCI)
-> > +     struct fdma_pci_atu atu;
-> > +#endif
-> > +
-> >       int shared_queue_sz;
-> >
-> >       u8 base_mac[ETH_ALEN];
-> > @@ -586,6 +593,10 @@ void lan966x_fdma_wakeup_netdev(struct lan966x *lan966x);
-> >  int lan966x_fdma_get_max_frame(struct lan966x *lan966x);
-> >  int lan966x_qsys_sw_status(struct lan966x *lan966x);
-> >
-> > +#if IS_ENABLED(CONFIG_MCHP_LAN966X_PCI)
-> > +extern const struct lan966x_fdma_ops lan966x_fdma_pci_ops;
-> > +#endif
-> 
-> There should be no need to wrap extern in an #if
-
-Ack.
-
-
-/Daniel
