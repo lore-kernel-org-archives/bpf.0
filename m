@@ -1,21 +1,21 @@
 Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5B1733A70A
-	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 06:11:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8176342538
+	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 06:11:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787811102; cv=none; b=RJnuGe8lJuKuVc6FgQ2pbhoFw/WdwhJLOob387A3D7JzPBC4ys3WdzKO/aZHcjJMf0JiRlPM9TB1tkgGA/SrkK7XdNmoutWJR/Y6udDluezu+PB9bQ9THHzACgtPUAiXHDbvWXtPUc2D7ycyyV3ebvkyUJCTNoJQ5VwnFkyZyAw=
+	t=1787811108; cv=none; b=qICfmurTyOhFzf7JjAXeypQy95LWbz41xKYrbPtGsALrauQuzUqjMGILfw+DJKSnfw9D1CV/QM0tdM7fukIt6xLE2WEdw3Dki2CHMU830KJWlDFFrVm18zskuFCy6AkpDhhJi/RF7wpoPvvH4mHF+RRCNlaf7Nmvt53z9TpjL/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787811102; c=relaxed/simple;
-	bh=xe8xDCAUtyCQtDMiklh5VM56ovjEpThGhV4FlmpSvBc=;
+	s=arc-20240116; t=1787811108; c=relaxed/simple;
+	bh=wnNHWUMbe8Sgg/Rv2Y3fEp7L5IehVUXgANDCY9Cr4wg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aKAWOov0/N2ShnUVOcrDSlXM1yv7ZI1MRJQgxxbSIFcWSeCebNlXpFsPdFFIVK3ozrqAgofS4ARqvVA0DnKGQE5wn9viTU0C+b2h0/tG8Ec2nUF4vU0/QyOcA3PQKtD4+SrrA52Fj4fZA0r/SI4w6Kcf3u2PambwuGsemV2ILas=
+	 MIME-Version; b=r/Gw/Uy+xoHg7a5tKiCKN3S1auBDtIdD++twVn+x0W/+wp7Nj64x8ClnbcQopWYDKyKsnjayVA8hhmOoTZhleyypsmU5wMggTmbdvi2LEDXbqa0qv3oKLu/WOLotjH7iHe7Y99lB2rhQwF4I0loCz6smCxtmhaNTa/IYT4Ifp9s=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 299D626CDE2CE7; Wed, 26 Aug 2026 23:11:30 -0700 (PDT)
+	id 4591A26CDE2D1D; Wed, 26 Aug 2026 23:11:35 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v3 03/11] bpf: Add btf_type_is_arena_ptr()
-Date: Wed, 26 Aug 2026 23:11:30 -0700
-Message-ID: <20260827061130.2516323-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v3 04/11] bpf: Let the by-value struct walk take the kinds of member it accepts
+Date: Wed, 26 Aug 2026 23:11:35 -0700
+Message-ID: <20260827061135.2516614-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260827061114.2514603-1-yonghong.song@linux.dev>
 References: <20260827061114.2514603-1-yonghong.song@linux.dev>
@@ -37,154 +37,148 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Add btf_type_is_arena_ptr() to test whether a BTF type is a pointer
-carrying the "arena" type tag, and use it to simplify both
-btf_scan_type_tags() and btf_validate_return_type(). The helper has
-external linkage because a later patch calls it from verifier.c to
-decide whether a struct member returned by value may be an arena
-pointer.
+btf_scalar_struct_walk() hardcodes that every member of a struct returned
+by value must be a scalar. A later patch needs the same walk to also
+accept arena pointers, so give it a mask of the member kinds it allows.
 
-btf_scan_type_tags() drove btf_type_tag_walk() with a one-entry match
-table, so the "multiple type tags" error it checked for could never
-fire: btf_type_tag_walk() only fails when the walk sets more than one
-flag. Dropping that error path, and with it the int return, is
-therefore no functional change.
+There is no functional change: btf_member_kind_allowed() is exactly
+btf_type_is_scalar() when the mask is BTF_MEMBER_SCALAR alone, and the
+shared check is the last statement of the loop body, so dropping the arra=
+y
+branch's continue neither skips a member nor checks one twice.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/btf.h |  1 +
- kernel/bpf/btf.c    | 62 ++++++++++++++++-----------------------------
- 2 files changed, 23 insertions(+), 40 deletions(-)
+ include/linux/bpf_verifier.h | 11 ++++++++--
+ kernel/bpf/btf.c             |  2 +-
+ kernel/bpf/verifier.c        | 40 ++++++++++++++++++++++++++----------
+ 3 files changed, 39 insertions(+), 14 deletions(-)
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 89d5a5c4f117..ddd0f4f32d24 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -235,6 +235,7 @@ struct btf_record *btf_parse_fields(const struct btf =
-*btf, const struct btf_type
- 				    u32 field_mask, u32 value_size);
- int btf_check_and_fixup_fields(const struct btf *btf, struct btf_record =
-*rec);
- bool btf_type_is_void(const struct btf_type *t);
-+bool btf_type_is_arena_ptr(const struct btf *btf, const struct btf_type =
-*t);
- s32 btf_find_by_name_kind(const struct btf *btf, const char *name, u8 ki=
-nd);
- s32 bpf_find_btf_id(const char *name, u32 kind, struct btf **btf_p);
- struct btf *btf_get_module_btf(const struct module *module);
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 3eb61edc8c5e..ae9f606539f4 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -1488,8 +1488,15 @@ int bpf_jmp_offset(struct bpf_insn *insn);
+ struct bpf_iarray *bpf_insn_successors(struct bpf_verifier_env *env, u32=
+ idx);
+ void bpf_fmt_stack_mask(char *buf, ssize_t buf_sz, u64 stack_mask);
+ bool bpf_subprog_is_global(const struct bpf_verifier_env *env, int subpr=
+og);
+-bool btf_type_is_scalar_struct(struct bpf_verifier_env *env, const struc=
+t btf *btf,
+-			       const struct btf_type *t);
++
++/* Kinds of member a by-value struct or union may be composed of. */
++enum btf_member_kind {
++	BTF_MEMBER_SCALAR	=3D BIT(0), /* an int or an enum */
++	BTF_MEMBER_ARENA_PTR	=3D BIT(1), /* a pointer carrying the "arena" type=
+ tag */
++};
++
++bool btf_struct_is_composed_of(struct bpf_verifier_env *env, const struc=
+t btf *btf,
++			       const struct btf_type *t, u32 member_kinds);
+=20
+ int bpf_find_subprog(struct bpf_verifier_env *env, int off);
+ bool bpf_is_throw_kfunc(struct bpf_insn *insn);
 diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 47d43eb983a5..280530d25886 100644
+index 280530d25886..b1f4ef614d4c 100644
 --- a/kernel/bpf/btf.c
 +++ b/kernel/bpf/btf.c
-@@ -3523,6 +3523,22 @@ static int btf_type_tag_walk(const struct btf *btf=
-,
- 	return 0;
+@@ -7979,7 +7979,7 @@ static int btf_validate_return_type(struct bpf_veri=
+fier_env *env, struct btf *bt
+ 		 */
+ 		bool local_func =3D subprog && !is_global;
+=20
+-		if (local_func || btf_type_is_scalar_struct(env, btf, t))
++		if (local_func || btf_struct_is_composed_of(env, btf, t, BTF_MEMBER_SC=
+ALAR))
+ 			return 0;
+ 	}
+=20
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index bc3053e81500..90139f1b78d1 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11646,9 +11646,23 @@ static bool is_kfunc_arg_implicit(const struct b=
+pf_call_arg_meta *meta, u32 arg_
+ 	return argn <=3D arg_idx;
  }
 =20
-+bool btf_type_is_arena_ptr(const struct btf *btf, const struct btf_type =
-*t)
+-/* Returns true if struct is composed of scalars, 4 levels of nesting al=
+lowed */
+-static bool btf_scalar_struct_walk(struct bpf_verifier_env *env, const s=
+truct btf *btf,
+-				   const struct btf_type *t, int rec)
++static bool btf_member_kind_allowed(const struct btf *btf, const struct =
+btf_type *t,
++				    u32 member_kinds)
 +{
-+	if (!btf_type_is_ptr(t))
-+		return false;
-+
-+	for (t =3D btf_type_by_id(btf, t->type); btf_type_is_modifier(t);
-+	     t =3D btf_type_by_id(btf, t->type)) {
-+		if (!btf_type_is_type_tag(t) || btf_type_kflag(t))
-+			continue;
-+		if (!strcmp(__btf_name_by_offset(btf, t->name_off), "arena"))
-+			return true;
-+	}
-+
++	if ((member_kinds & BTF_MEMBER_SCALAR) && btf_type_is_scalar(t))
++		return true;
++	if ((member_kinds & BTF_MEMBER_ARENA_PTR) && btf_type_is_arena_ptr(btf,=
+ t))
++		return true;
 +	return false;
 +}
 +
- static int btf_find_kptr(const struct btf *btf, const struct btf_type *t=
-,
- 			 u32 off, int sz, struct btf_field_info *info, u32 field_mask)
++/*
++ * Returns true if every member of struct @t is of a kind listed in
++ * @member_kinds, 4 levels of nesting allowed. An array member counts as=
+ its
++ * element type.
++ */
++static bool btf_struct_member_walk(struct bpf_verifier_env *env, const s=
+truct btf *btf,
++				   const struct btf_type *t, u32 member_kinds, int rec)
  {
-@@ -7927,51 +7943,19 @@ static int btf_scan_decl_tags(struct bpf_verifier=
-_env *env,
- 	return 0;
+ 	const struct btf_type *member_type;
+ 	const struct btf_member *member;
+@@ -11666,7 +11680,7 @@ static bool btf_scalar_struct_walk(struct bpf_ver=
+ifier_env *env, const struct bt
+ 				verbose(env, "max struct nesting depth exceeded\n");
+ 				return false;
+ 			}
+-			if (!btf_scalar_struct_walk(env, btf, member_type, rec + 1))
++			if (!btf_struct_member_walk(env, btf, member_type, member_kinds, rec =
++ 1))
+ 				return false;
+ 			continue;
+ 		}
+@@ -11675,21 +11689,25 @@ static bool btf_scalar_struct_walk(struct bpf_v=
+erifier_env *env, const struct bt
+ 			if (!array->nelems)
+ 				return false;
+ 			member_type =3D btf_type_skip_modifiers(btf, array->type, NULL);
+-			if (!btf_type_is_scalar(member_type))
+-				return false;
+-			continue;
+ 		}
+-		if (!btf_type_is_scalar(member_type))
++		if (!btf_member_kind_allowed(btf, member_type, member_kinds))
+ 			return false;
+ 	}
+ 	return true;
  }
 =20
--static int btf_scan_type_tags(struct bpf_verifier_env *env,
--			      const struct btf *btf, u32 type_id,
--			      u32 *tags)
-+static void btf_scan_type_tags(const struct btf *btf, u32 type_id, u32 *=
-tags)
+-bool btf_type_is_scalar_struct(struct bpf_verifier_env *env,
++bool btf_struct_is_composed_of(struct bpf_verifier_env *env,
+ 			       const struct btf *btf,
+-			       const struct btf_type *t)
++			       const struct btf_type *t, u32 member_kinds)
++{
++	return btf_struct_member_walk(env, btf, t, member_kinds, 0);
++}
++
++static bool btf_type_is_scalar_struct(struct bpf_verifier_env *env,
++				      const struct btf *btf,
++				      const struct btf_type *t)
  {
--	static const struct btf_type_tag_match func_type_tags[] =3D {
--		{ "arena", ARG_TAG_ARENA },
--	};
--	struct btf_type_tag_walk_ctx ctx;
--	const struct btf_type *t;
--	int err;
--
- 	/* Find the first pointer type in the chain. */
--	t =3D btf_type_skip_modifiers(btf, type_id, NULL);
-+	const struct btf_type *t =3D btf_type_skip_modifiers(btf, type_id, NULL=
-);
-=20
--	/*
--	 * We currently reject type tags on non-pointer types,
--	 * which neither LLVM nor GCC support anyway.
--	 */
--	if (!t || !btf_type_is_ptr(t))
--		return 0;
--
--	ctx.t =3D t;
--	err =3D btf_type_tag_walk(btf, &ctx, func_type_tags,
--				ARRAY_SIZE(func_type_tags));
--	if (err) {
--		bpf_log(&env->log,
--			"function signature member has multiple type tags\n");
--		return err;
--	}
--	*tags |=3D ctx.res;
--
--	return 0;
-+	if (btf_type_is_arena_ptr(btf, t))
-+		*tags |=3D ARG_TAG_ARENA;
+-	return btf_scalar_struct_walk(env, btf, t, 0);
++	return btf_struct_is_composed_of(env, btf, t, BTF_MEMBER_SCALAR);
  }
 =20
- /* Check whether the type is a valid return type. */
- static int btf_validate_return_type(struct bpf_verifier_env *env, struct=
- btf *btf,
- 		const struct btf_type *t, int subprog, bool is_global)
- {
--	u32 tags =3D 0;
--	int err;
--
--	err =3D btf_scan_type_tags(env, btf, t->type, &tags);
--	if (err)
--		return err;
--
- 	t =3D btf_type_skip_modifiers(btf, t->type, NULL);
-=20
- 	/*
-@@ -7979,7 +7963,7 @@ static int btf_validate_return_type(struct bpf_veri=
-fier_env *env, struct btf *bt
- 	 * General arena variables are not allowed, since it makes no sense to =
-return by value
- 	 * a variable that's on the heap in the first place.
- 	 */
--	if (subprog && (tags & ARG_TAG_ARENA) && btf_type_is_ptr(t))
-+	if (subprog && btf_type_is_arena_ptr(btf, t))
- 		return 0;
-=20
- 	/* We always accept void or scalars. */
-@@ -8106,9 +8090,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
-env, int subprog)
- 		if (err)
- 			return err;
-=20
--		err =3D btf_scan_type_tags(env, btf, args[i].type, &tags);
--		if (err)
--			return err;
-+		btf_scan_type_tags(btf, args[i].type, &tags);
-=20
- 		t =3D btf_type_by_id(btf, args[i].type);
- 		while (btf_type_is_modifier(t))
+ enum kfunc_ptr_arg_type {
 --=20
 2.53.0-Meta
 
