@@ -1,206 +1,190 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1988F3DC4AF
-	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 14:56:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787842587; cv=pass; b=u5eotfPuvpSZzexOthIkdRznIq0R2KwDjRGHbiYQfi/8gB91+Gs0tEIS45sASnRvYbe5hD8oEyeagBZbYMalIluzUEjdiO31mtJtTCqpHC6DzpLC3NzwBqVXLtpFCkHdeh9QZlkV4swJlHl56jpbw9YpoaxBBt5kBYbaMA8NQSI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787842587; c=relaxed/simple;
-	bh=0mstDLpNE5HqJ37WPV2/6GB6JwYfKQBjPJNFkn1B/H0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hGmggxZGSCQQBaVnm3WUOFY3YntxQMuwNQC8s5tgg27e23n17TlAYxk7vXxwa/h9dXRbJNOujB4fmbvEcaReT2SAXK8P8bp/Bpg7wcbzxiR3Auzch7UbXrd2114MbmERfBqgGOJLu1EqP1XxMj4qqf1a0QmbXrMD/kfg0Fyi55M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZqejJpi7; arc=pass smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 985FC447814
+	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 15:29:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787844593; cv=none; b=t8bcx6vvb6leaEYVnMY7IuVjsERYhKR0JMUjG/+NUvRPJJmUzAnchI3pX7Yi5J9MIzwy7dwYcVrCBuX4OvyOn3KwsOmPZXVOWyZPrqp+tC0Nhu3CY0JO6OyFJvJhftpTkmoS8imPpM8RW3BczTLR204eFWNseIS60LlGx199hI0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787844593; c=relaxed/simple;
+	bh=R/Ui01qgIRjN7bDjKXgC7dfbkCtMdnPJD5VkqvscjH8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=oawzLRLn8ohFGBqYNd9/upPwrhf8vH0vkPjUyKi1Twu1ur6iB8yecOjZYYHJxM+aazBpchIPTnwyVimeKAnIOK2sCRuNidBlpXCEB0iM3yJqz2AQskTLUGOnWBJKeaWUgRfx1OCOp5TnK1DWfceL+GzwBr0+E55N1N5gCtnvqHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PfruOJQa; arc=none smtp.client-ip=209.85.210.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZqejJpi7"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-84e04df8c46so2777449b3a.2
-        for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 07:56:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787842585; cv=none;
-        d=google.com; s=arc-20260327;
-        b=K7dfdUhlkhXEdeuBEoyj9Jlucna9bKK3uArG01Z+1GSJuJkFaK8SBdGC9MtcD+5/Vo
-         sBc1WFgK+Q/D8/v1qvztia3Fr5MS4XsSZKA6uCG+9dwcyOzDi0yeHBUkUybKkCa+V3CR
-         k2lVw/A9KI8FeeHX3qwyrVx+kjgbuWwLkYdorZ6rTzbI1Objs7TUFBl9ANZONKvabU2d
-         OeZfCGjtUm+j8/STJTPTEGByxllbR/+LyWsouxuTHxob6OFH9CKa6toLTB0KIvg4D4C1
-         33lQsokcAyAmjeAiJm9FiJjzyeRkmzJUyzRotMCJv8fyZUYHWViyJHfUlJONyiYtVAMt
-         SRhQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=n2MTw88jVLBTmyVxQrGtyl4vuDsvFs0qyxjhjgsnHbI=;
-        fh=qnBrIGg4A01ES7SU/UktmWK8a2XMKJeE7aqua04qaG4=;
-        b=j73kvGmNKe2cf+BqbMQVR/Vp3ttZyXW+Z5oyYpPXME/B1TShJAjsP8kv4IPI3Ts/m7
-         +M7sSdlypQWJ2CZdSHKp9bbOrq+K7DhtA1QguMaPfmE2niNW9jJHsw31NBEI9NgH04cq
-         vSiE77/ZLA3Z81ec9rxWUDzCZWYlo9ak5NyB9cg7MfXY53ZX5JJtmCA9+Kj5W0QbzLbz
-         c1rylflK1RaJMctE5+8lQCS7ZSYxvafXmEnwo6+mjuW7CweNkQzNMX6+dDs3DBBCHt8Z
-         k94tQRweblk9WnNYLpmx1Fk51LyihD4BpBORYaeluhV8UDYjH1aweGW/mDkozB5zRNAh
-         IHEg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PfruOJQa"
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-7eb6573bd52so960639a34.3
+        for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 08:29:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787842585; x=1788447385; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=n2MTw88jVLBTmyVxQrGtyl4vuDsvFs0qyxjhjgsnHbI=;
-        b=ZqejJpi72YkEooyXZ/y46qcvpKhrepGfPp2G8lrP2ejv2GCOgguXBmpkvVQVzKWuzB
-         2YePS/6hypACVMQ6odCH7XZ5eh/ZS/C1VN04tIdHiX0/6GErV8xxEWMNdMARIyalYlXV
-         t7hVzBy7jt6DGd5kqIInJd0C5v8UUEmohfTrXThbUYH5SKCxAqnJQRa5mB0p9XzH0wSo
-         IeuQUCNwP2Uhft1iF/30b7oMOeAU8b8CCcxapCZbuJpfrfIRwptegSPS3GJef+XxsKYT
-         lOvw+Z6e6wHnI2FNbjMnNQ2BpBkInCqrvnGwDllt+RGu6unZ/JZbNQLZogQ9zH4awfbb
-         soqQ==
+        d=gmail.com; s=20251104; t=1787844590; x=1788449390; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=gbyhTAsM0ylOswgJ8ydy4xAK0p3Y0RBuTrl0mjOMCNE=;
+        b=PfruOJQaA9bbJoZG/N+ybhjPINgIoAu1xT6ANA/bdXccyR07HNAhoxBP1NlB2+yL39
+         YOT789Cr1GLtye+RO25qDqJt0xNzswJqnJAdXCW5HR+6MdFI9kEf0k4nYGP2/L2K0Ve3
+         prDg7sD05QtdXRJnyWzN2WJJRw1jRe/n17oXblJ0g1Qxaw8uBxlsUjM1cLUU4lV9mqWp
+         6BbqgCs/34EACOocFL7eElDoNakUlbzmLeYkg0U0p6LkiAa6fi2REJehFmjTTqVRiSjB
+         lITRw2WrJI6HTstKSJVGIcZAg8lTDram+i+3ZW8HoPveMULQshbHBKA5d7oyYKGlVDRq
+         vdFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787842585; x=1788447385;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=n2MTw88jVLBTmyVxQrGtyl4vuDsvFs0qyxjhjgsnHbI=;
-        b=bt7q1/cC7H4ejinZ+BpVJ8VuCAZjCv0OLB3R2e2RdexnghpZ4d+83ANuviEClltmI+
-         at/BthgWuaDTPi4qN8oF2rmRdmJbYvzpw3oJRdTV0/D4VcmkwReTmdK2Pa4ntrHVuLJj
-         Y2Q2upjbNoAbKV8ION8Gk7IstRc143JoIyten/QS4Ddqg6mDcnYaXTaocpZdXxD1BPlA
-         wwG29RY6doVEi2e1cxB71B3n2H52OwK8BCqI5QMi+zQzhDdPbGWjMkpn8Pd1bphQvNaP
-         klZrliLXRFLrcY8wsHr+POh5OcmQqDIrDuplh0xyzdW3eoX8PVIArY+2+QIaX4RciGIk
-         kfvA==
-X-Forwarded-Encrypted: i=1; AHgh+RofyYtP202uC2e6eiIZmVpBmN28Kze4e0wYhxGgoRd4+9gRjUw9wHD0AeE2bC2BYblqZz4=@vger.kernel.org
-X-Gm-Message-State: AFuF++lvP3sWIiKcPYdzdPfD5wbb2XpB9dR3bO3z+wfDdIMdmFOtQr3R
-	5w+dGUBY9ljsxeKk6UZGYjSnAUgb5RkFgiLaLIoDhCrrXxO5pa7aAiwcOshsgKDSQlsOgI+WV9J
-	t0LWgu/NfSE9LgddlyQvU7BSB5XaXAro=
-X-Gm-Gg: AR+sD12/STbW44+5IMabE2R2QVCwzxlqLzLY5MicF2g52ZZHZX6RAlpuGreVuO1Kx1Q
-	jE0g1AaL2aX12EY3XVui1eIq/hK9UZTG0aQBnt9L31iUqJCgJzvVYxNUp4hAFj+lslZja1LesEm
-	WM2SqhvF+P/g4iDbc+wNTHkXXogqVMA1A3Bsy9DSUjiMIiga/7UDEj5ofmWLLEt75qF2qucS1wt
-	Gmzk/3ojPRmVQGupJ8KJqvvl3XZKS1khpAIL3Kp1VAdw+LOOqdatKyesnDCB0PEvKtKkCaDWES+
-	q3NBCTgzPTOFZJ6+lQK1YWEqMMrilFywGo+lsd2BofQUTkMgwIXdP5ZEpwgk0ILOYTnJ2DB7Swa
-	6aPgw26n16kME3JePJj+g3sh0PqNhjZkCg+Qi
-X-Received: by 2002:a05:6a00:3984:b0:84f:dfce:966b with SMTP id
- d2e1a72fcca58-85373bb8dc8mr26253345b3a.8.1787842585290; Thu, 27 Aug 2026
- 07:56:25 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1787844590; x=1788449390;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=gbyhTAsM0ylOswgJ8ydy4xAK0p3Y0RBuTrl0mjOMCNE=;
+        b=MlSRTNTbCnEfigvPK1C4yR8hUi2OnsHdtKHrl3Sv773Q4eWLaaEeGlxz6ipYt7hGf1
+         TDF1RkqULvNd/EC+ke+hofO+DlT33dhI7AN2WPIt7aNEAWwblg8Oj42ayTnR+aJgBpCO
+         nr5pRx75/3YLpiG86DIjM/s/HBnnfNLdPgzX2P6GAY6PNW5ihcdGfM7iaRkOno10MVkj
+         H69R02tLq6FZoZcsSV3nVcWHqO+vDn1mC3IHFRVN6ZDCD+jo9yEsY379BpMiUpWge80v
+         zEh89Aw7B7tJfwqC8lvg16b3r/Lp3JDMNQJKiFykhcg6aRsus9ahjxEy7qYRonJw5b/z
+         fgNA==
+X-Gm-Message-State: AFuF++kR232hXZI44IcQf9WxYAYv964o7LUZ6FnmQZ1yezMJlfEmKTtm
+	b+AH0vCyp32DVmx3sK9FpnIIhmF0gj4DAkZ2uksKIJ6XfA0UB2qliSh/V6EqgFRr
+X-Gm-Gg: AR+sD12keWwD/jYAsv9T8xIa9L4dAY+LOd8AUSSL1CXaod1rK1AUfOTs2DqFp+rmvDc
+	cpvZI9/WmUjqG3vqH1p99s5AEHHKu/8W1ySLVaza5Yoj02mOUc3p71y+dsAyGjtF34xAsf+N+ai
+	Aql02Xq6Antfd8YmGXagh80dya2z+OtDmuwysebkzm6F53MKtIGDhNTd/B4nOdVznf+7xPbVjrA
+	OGM/Dv+MRSSndbYHx7CGyJY3oYbK6dFAA3QPjwDuV7FqAVod1lTLGhJI+nJcHV+L4qa5sVLH9H6
+	7FN51kCyGrjNIldCZ0FuTkSzaqiOSGjRydtVPFGtqV6uJAiqGLJgqk7/zhy786VfH5j28B8lFtL
+	QeRL914TznnlfGCPHihwV/gwbX1qhnRlQ5EN2OlZvEsR+8N+vIVDZejrFb28Cskq9Z6dcjTAt6K
+	u0E+EbLvI8JfUWD7ug9BbsCuRLZYghgKYGrxc1Y6zfxT2WNqeTJTRmsVC/VY47
+X-Received: by 2002:a05:6830:7007:b0:7f4:daae:401d with SMTP id 46e09a7af769-7f4f2314c08mr47106a34.8.1787844590176;
+        Thu, 27 Aug 2026 08:29:50 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:8::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f4f11f8c34sm172141a34.8.2026.08.27.08.29.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Aug 2026 08:29:49 -0700 (PDT)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Date: Thu, 27 Aug 2026 08:29:44 -0700
+Subject: [PATCH bpf-next] bpftool: Print average cycles per program run in
+ profiler
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260822225444.2774461-1-simon@swine.de> <20260822225444.2774461-2-simon@swine.de>
- <DKYHBHNAMR03.B8SKDLC9FQ94@gmail.com>
-In-Reply-To: <DKYHBHNAMR03.B8SKDLC9FQ94@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 27 Aug 2026 07:56:13 -0700
-X-Gm-Features: AcwNN1WJoNUFqCJjOSLU7Hm184I3k4u300g0JamTEyCvcDlP-yF2LMrAI2A8EVc
-Message-ID: <CAEf4Bzb0YOku2mgpASY_e-tMHfFtEzz4S01ZviH5QBsgzQmx_g@mail.gmail.com>
-Subject: Re: [PATCH bpf v3 1/2] bpf: disable private stack for sleepable programs
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Christian Simon <simon@swine.de>, bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, martin.lau@kernel.org, tj@kernel.org, 
-	yonghong.song@linux.dev, stable@vger.kernel.org, olsajiri@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260827-bpftool_cyles_per_run-v1-1-77d7bfc3c065@meta.com>
+X-B4-Tracking: v=1; b=H4sIAOdXkGoC/x3M4QqDIBQG0Fe5fL8TzKCWrzKGpLtuQqhc2yiid
+ x/sPMA50VgSN1g6IfxNLZUMS31HCO8lv1ilJyzBaDPqm5mUr3ErZXXhWLm5yuLkk9U89OMcgx+
+ 0n9ARqnBM+/+9w9eoMu8bHtf1A8DAHu9xAAAA
+X-Change-ID: 20260827-bpftool_cyles_per_run-93169fcb30b7
+To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+ daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com, 
+ memxor@gmail.com, qmo@kernel.org
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1787844587; l=3756;
+ i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
+ bh=koiJp5sJ/hAp3PZH2YgCwq2buD/QWSdRQQwh7KcHtZY=;
+ b=TDjZYguD+tSqSxp9uSDgA90cEjDAeLplPN+I6dcCCcpYgWVxN9ZjDxBgO1RC2WWVSzGa8aJSk
+ GlnoBz8jxCICjBu7vt2H4laNw5GVpeOrAhqzHhxZalxkfZLBESuRU+p
+X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
+ pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
-On Tue, Aug 25, 2026 at 6:20=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Sat Aug 22, 2026 at 3:54 PM PDT, Christian Simon wrote:
-> > A JITed BPF program can use one private stack per program and CPU.
-> > Sleepable programs can be preempted, allowing another task to run the
-> > same program on the same CPU. The second invocation then reuses and can
-> > overwrite the first invocation's private stack.
->
-> I'm confused by this. sleepable progs go through __bpf_prog_enter_sleepab=
-le_recur()
-> which has per-prog recurison counter. So preemption of the prog
-> doesn't break private stack.
-> If the same prog attemps to execute on the same cpu it will be skipped.
->
-> syscall prog types go via bpf_prog_run_array_sleepable()
-> that have per prog recursions counter.
->
-> Looks like we're not doing it for bpf_prog_run_array_uprobe().
-> I'm not sure what the right trade off here.
-> I feel universally checking for recursion is better
-> then selectively disabling private stack for uprobe.
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
-I'd really like to avoid adding this "recursion protection" to uprobe.
-With uprobes, there is no recursion, it's called from well defined
-context in the kernel and you can't have recursive uprobe BPF
-programs.
+Total cycle counts are difficult to compare across workloads with
+different run counts. Report cycles per run to expose the per-invocation
+cost directly.
 
-All you can have is a very valid and possible sleepable uprobe
-interleaving, which the user cannot prevent or work around, they have
-no control over this and it's just a fact of life.
+Example:
+sudo ./bpftool prog profile name mprog duration 15 cycles instructions
 
- E.g., a simple scenario, we attach one bpf program (let's call it U)
-to some USDT. BPF program U is sleepable and actually can sleep due to
-page faults (e.g., unwinding Python stack trace requires sleepable
-mode for reliably getting filename strings from Python runtime, which
-are not always paged in).
+            423256 run_cnt
+         947413975 cycles              #  2238.39 cycles per run
+         333965846 instructions        #     0.35 insns per cycle
 
-In such a case, you can have thread A and thread B both hitting the
-same USDT (e.g., somewhere in memory allocator or whatnot). Let's say
-thread A hits it first on CPU X, BPF program U starts executing and
-unwinding Python stack, does bpf_copy_from_user() for string contents
-and causes page fault, is taken off CPU X. Meanwhile thread B hits
-USDT on the same CPU X, kernel runs program U, and it is supposed to
-work completely independently and concurrently (no shared state or
-whatever) from U's execution in thread A.
+Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+---
+ tools/bpf/bpftool/Documentation/bpftool-prog.rst |  6 ++++--
+ tools/bpf/bpftool/prog.c                         | 18 +++++++++++-------
+ 2 files changed, 15 insertions(+), 9 deletions(-)
 
-Yet, if we add this per-CPU "recursion check", we'll just skip U's
-execution for thread B. This is data loss, and it's very bad in
-practice because it frequently just invalidates the entire data
-collection trustworthiness.
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+index 90fa2a48cc26..2280dc4492c0 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+@@ -217,7 +217,9 @@ bpftool prog run *PROG* data_in *FILE* [data_out *FILE* [data_size_out *L*]] [ct
+ bpftool prog profile *PROG* [duration *DURATION*] *METRICs*
+     Profile *METRICs* for bpf program *PROG* for *DURATION* seconds or until
+     user hits <Ctrl+C>. *DURATION* is optional. If *DURATION* is not specified,
+-    the profiling will run up to **UINT_MAX** seconds.
++    the profiling will run up to **UINT_MAX** seconds. When **cycles** is
++    selected, plain output also reports the average number of cycles per
++    program run.
+ 
+ bpftool prog help
+     Print short help message.
+@@ -360,7 +362,7 @@ EXAMPLES
+ ::
+ 
+          51397 run_cnt
+-      40176203 cycles                                                 (83.05%)
++      40176203 cycles          # 781.68 cycles per run                (83.05%)
+       42518139 instructions    #   1.06 insns per cycle               (83.39%)
+            123 llc_misses      #   2.89 LLC misses per million insns  (83.15%)
+ 
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index a9f730d407a9..8935508f955b 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -2069,9 +2069,9 @@ struct profile_metric {
+ 	bool selected;
+ 
+ 	/* calculate ratios like instructions per cycle */
+-	const int ratio_metric; /* 0 for N/A, 1 for index 0 (cycles) */
++	const int ratio_metric; /* 0 for run_cnt, 1 for index 0 (cycles) */
+ 	const char *ratio_desc;
+-	const float ratio_mul;
++	const double ratio_mul;
+ } metrics[] = {
+ 	{
+ 		.name = "cycles",
+@@ -2080,6 +2080,9 @@ struct profile_metric {
+ 			.config = PERF_COUNT_HW_CPU_CYCLES,
+ 			.exclude_user = 1,
+ 		},
++		.ratio_metric = 0,
++		.ratio_desc = "cycles per run",
++		.ratio_mul = 1.0,
+ 	},
+ 	{
+ 		.name = "instructions",
+@@ -2256,17 +2259,18 @@ static void profile_print_readings_plain(void)
+ 	for (m = 0; m < ARRAY_SIZE(metrics); m++) {
+ 		struct bpf_perf_event_value *val = &metrics[m].val;
+ 		int r;
++		__u64 ratio;
+ 
+ 		if (!metrics[m].selected)
+ 			continue;
+ 		printf("%18llu %-20s", val->counter, metrics[m].name);
+ 
+-		r = metrics[m].ratio_metric - 1;
+-		if (r >= 0 && metrics[r].selected &&
+-		    metrics[r].val.counter > 0) {
++		r = metrics[m].ratio_metric;
++		/* r == 0 is a special case for run_cnt */
++		ratio = r ? metrics[r - 1].val.counter : profile_total_count;
++		if (metrics[m].ratio_desc && ratio) {
+ 			printf("# %8.2f %-30s",
+-			       val->counter * metrics[m].ratio_mul /
+-			       metrics[r].val.counter,
++			       val->counter * metrics[m].ratio_mul / ratio,
+ 			       metrics[m].ratio_desc);
+ 		} else {
+ 			printf("%-41s", "");
 
-So I think we should disable private stack for uprobes (sleepable or
-not) instead. I'm not sure private stack buys us anything for uprobe
-cases.
+---
+base-commit: 23ff631b3b8b1452dfe933ee21f96321a9c5e209
+change-id: 20260827-bpftool_cyles_per_run-93169fcb30b7
 
-As Jiri mentioned, at verification/jitting time we can't tell kprobe
-from uprobe, though, so that's a bit of a problem, but it's a separate
-discussion we should have. Perhaps having an extra expected attach
-type, or type, or some program flag to designate uprobe program as
-such would be appropriate, not sure. Let's discuss that.
+Best regards,
+--  
+Mykyta Yatsenko <yatsenko@meta.com>
 
-But please, let's not make uprobes unreliable for no good reason.
-
->
-> > Disable private stack for sleepable programs so they use the regular ke=
-rnel
-> > stack, which handles preemption correctly. This change is intentionally
-> > limited to programs marked sleepable; preemptible non-sleepable dispatc=
-h
-> > paths require separate protection.
-> >
-> > Fixes: 7d1cd70d4b16 ("bpf, x86: Support private stack in jit")
-> > Fixes: 6c17a882d380 ("bpf, arm64: JIT support for private stack")
-> > Fixes: 156d985123b6 ("powerpc64/bpf: Implement JIT support for private =
-stack")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Christian Simon <simon@swine.de>
-> > ---
-> >  kernel/bpf/verifier.c | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> >
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 5e37ca75e5c4..038753ef07a9 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -5237,6 +5237,15 @@ static enum priv_stack_mode bpf_enable_priv_stac=
-k(struct bpf_prog *prog)
-> >       if (!bpf_jit_supports_private_stack())
-> >               return NO_PRIV_STACK;
-> >
-> > +     /*
-> > +      * Sleepable programs can be preempted, allowing another task to =
-run
-> > +      * the same program on the same CPU. Since private stack is per-C=
-PU
-> > +      * and per-program, the second invocation would corrupt the first=
-'s
-> > +      * stack. Disable private stack for sleepable programs.
-> > +      */
-> > +     if (prog->sleepable)
-> > +             return NO_PRIV_STACK;
->
-> This is not true in genreal. sleepable progs can use priv stack.
->
-> pw-bot: cr
