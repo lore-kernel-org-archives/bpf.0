@@ -1,95 +1,89 @@
-Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B4B3364044
-	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 23:50:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191EC3DB64B
+	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 23:55:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787874644; cv=none; b=dm2EYxtdD1fT1xXWsljsnfOB8+ox3ENQGtDWGbqbya30QNfjbFzqJRExBdhvyHb2L48Z3EYWM1/Md+slW2+l/ZxLu8/x4W4nkGDt+B5lWRrj09lw7R/60JgfMhbPrZAuc3zRnIGBwvR1FpOmp4szUBm/jM+4leRx+o1tWKBS0K8=
+	t=1787874915; cv=none; b=lgsxWFXQYuYx7/8t0ZD8AMLIjFRyhCGlGGSCsBOwV5XN1h1Uo1wNvf0UuQSiBx5xg5mG3D1qG9FklrA94mVLm4W9SfBwY01lVN/r8MPTjGc82cB+PgCAfxcB8Q8IqF70R3ftiaOB0LYLqUBqyMyqXUlLnSs8/7jaN7x7lUC5tf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787874644; c=relaxed/simple;
-	bh=I0w28eDwn55wNUcSFkFqUL0WZNi+JsnEzbOiyxoDOZA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=T1SC4LLYvfbaV/XqcHsHmZCy6BOW7DZOR9sTX23t3AhXb92agkxP8cTODcWlXiZJ68fcPlDtkp03xXVmkQL+siVZxkumx37UL1iwxlbRdm8cMprDWpLy4378Yd1dkFs9EjMjEAdphGsr0Fe2/Bd2rYTSFMJ7K4CcqknyUA1RPLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i2m3tXfu; arc=none smtp.client-ip=74.125.224.51
+	s=arc-20240116; t=1787874915; c=relaxed/simple;
+	bh=h27YVKK/TYuusXE6taFKqIAn5VyxSn/kotJtG8PpEoM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GzoyD0s6LgvXIXaGMhDFvjQ0gGtoSD0EdVbrg23qPGVttunG4q9jCjFA0bJ/env1mQ9W6gINNUf6kJtzRGFVMaO9tsvnBe13Bbz6iZfssrNDKlQrDUdZHmDLF8Ns7a8joDwFtZpE3OVZhCYU7mEFlOMm5FuzNO1OFBkBj480E7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kLQV9XvF; arc=none smtp.client-ip=209.85.128.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i2m3tXfu"
-Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-66d1442b24eso831075d50.1
-        for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 16:50:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kLQV9XvF"
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-85a50f6a7f7so3086367b3.2
+        for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 16:55:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787874642; x=1788479442; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=oDf2cFz2MJ91PpGfYzlKTBbzHYxayWBZgz3Ltr8pzsg=;
-        b=i2m3tXfuxbRtRkKd+HwICRWj6nH3W+zCDHcVezGriGsdAlrvO1A1fJ6YTqI1o2yxrM
-         C16GJDvzrUcQMaZlGLLnIZfnSYibk/aH8hgXPLe9BlozfkuXFEMqwdt08THg5fJEtHbL
-         hNlULDQ+pMNzCzO/jiJEHASN5qQu5oRA+BnooZTrRwSenGFbxV/Vs1mKuWEcxXYnKUw9
-         TFhKJCIkdTD6IOn6MD92GvwehV9sioXVgOO4NFXq5/Ef3pNStymKNwx8zvb2qteAzD4z
-         z5R0snxAVUeRzJaRJs8JRw9ko5HvkjTO3sVovTOhbj7FD7ogq+Bodnsouh2deSv39PmZ
-         0ZFg==
+        d=gmail.com; s=20251104; t=1787874913; x=1788479713; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=oCfWHkIpmLvJEZNt0kO4ZWyCArHHxMdSOeCJ5Kkvn7k=;
+        b=kLQV9XvFAFdSVgqCBBMav4u7yyVUl9B106WF7pEaIjoaVjR36RWCvJOyFkKOYLwSYC
+         XeTjjTaHxmqjDWR9V3NPoLvqLmtt6Z43dU/wjEfOtshfAXQrZ0acatlEscg6uy2h714x
+         d7uiB1SffbO0UaJvTFWYOFBPnyVgYBphj5pkPEBwhX/fFUGSzugmKjvacgX+ztmQvtuD
+         5kPA4sjnGAaHD9jPPMTaJ80IMryuuWysV95/8WfYDlQusgtTTyXCjA9yWJOkeI3A/v8h
+         rPXPUvsw2q0lK1W8YWFvsCKJspoHf5e1LYwy3zt/R37idJBkGJfnZ+Id4DHjwD2a/gK+
+         yCIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787874642; x=1788479442;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=oDf2cFz2MJ91PpGfYzlKTBbzHYxayWBZgz3Ltr8pzsg=;
-        b=cQ+kb+soRHbj9hSaHm2k/A0SwgcfMPfKR8NIxwEVNCid0sjaYu5pSTVQx1gfzJtPJL
-         vaUiVTMm2c645ss519TSuMinA2HArp5pcF04+JJ8w+bhyh0K/mKEEMpl0BCftJlaF5AS
-         a3vkpbWTyUqK6WOVe4wZb5/Aa+B4tvjI4hzlXXoPVJ2iaI/wxn7H9cBDmkxJ7oKHAKXu
-         oSq2UhMuGwQwbvL07YywVw3JhNPMHn5vnfueUDCOEMNiwwfdzHIyp/yRq9rVVbc4d6a+
-         29bfG5wPAUUgt90Q8y7in0Jv02Xj4MMB9goOxrfZwtB7o4sfx68fATti8Ufkj8lJLM9Q
-         IoZQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrLE6cmZvt6c2VDskMMlu4UGIBc42dRZpw6Qu9rG/Sj/9yGmBAsr+1qv3ZUtsJ2PIZQdk8=@vger.kernel.org
-X-Gm-Message-State: AFuF++nsQIAdLZMDCB1VGaQISHD515OtLwMlo4cmahWidwOkvUybQqBL
-	+7V1EWED2/dgyPyhH3GiPelSSvyS+JCAHY6Kun1tgzEbozCf4WyuDqkK
-X-Gm-Gg: AR+sD11zXCwCAQPv7djqVjmgHWQwkGlGoWfgc5Bzyx9EUQA84C6W8NDg0Pe88ho6FXS
-	d1Iwg//fWcQouQJP0ac/qk08VFwMC6sYRcpYc613MsUyHTxKGvSukkRYaxNwxpGVvnReX+ppgaD
-	3htwTnA7O6zLTBaEKZBnDCq3Lb00jjg48WPTeqD4oHpMqRe+GOuKahA2IekXgrjJbz2fgKkh6a9
-	rnsXB0Nh8Wbdr5tM97akiDrBxqhrVJonB87kuwxNAWR963a5WK+1q+4DiqocR+wpmvGwUsPGPog
-	CkKPpoi4xzGGp8+h2rxkCSKIuBfeccfn9SHjPIbK9i7ZUs/MsmVG7fdf1R/t6BRsvqHXfn5nXoJ
-	cZ40eT3PgEy6CPxeLGd6fhgHXckXedka4RennH0HGjvH8gzW7Tlne/1vP9q2AkScB0822LUlvnW
-	OIKW1zgCN+7pzDUxCQZgNr8sJYHbUNfobqa4ohH2nQagYcDvYG3yABzitnylNNgvt1W4ZV2mvOf
-	5WOFA==
-X-Received: by 2002:a53:bb4f:0:b0:668:43a3:9db2 with SMTP id 956f58d0204a3-66e4c522f11mr741772d50.32.1787874642003;
-        Thu, 27 Aug 2026 16:50:42 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1787874913; x=1788479713;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=oCfWHkIpmLvJEZNt0kO4ZWyCArHHxMdSOeCJ5Kkvn7k=;
+        b=gZKCD0A9a0Q9RJYLcgn2WEGegmb1UGBnIHccFykTnzsx0wWxtbWZdb4iO4bn39tkMV
+         Un2NkepioFg/FR8XjDvjgLvtSa2kLZQHzoe/R8I92sIf6ACBOa7kH5pgpXnnpTWs5Gq8
+         l4b15TEDTqhPyhKvbcWJOEJaZq/YB/djtFjTbzdtASc8Dd3gAxCKepAO9FsJ1IQ//d48
+         ulrsgSkZh8D47mTdhwi68AnyGvx6+LRrVcIJ6KpUKq6kMa6QjCXbhT3XIJR1NDLh8xrA
+         EIjeM4feoRGVIpwG2cSwNQ8KgwSOQtyA+zC4xJkh060D8kx+MhjWFLMS9Dbkl/IsLW78
+         4cyg==
+X-Forwarded-Encrypted: i=1; AHgh+RonVxRhHQxPkvV3SohNYreUhKypYUDQPzK8AvtI9cT4gDAlkwDDG27X6+RmMX/rq3RLTMQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++kpJWK9U17T/1LtHEa1EjIdIijkcPXNrrWY3q1/IydLBGdoAdx5
+	rbdvCIUlTUURJc7pGy57egTUqnXtzMzimP5pjB/FLP1YQVMySE7peoTA
+X-Gm-Gg: AR+sD10by3saFaxwMA/Qrioxi9YKaw5SBqYAZyOL9JyjQHSLbEq7CMaY+7+2YHsRir4
+	QT2PAKSAVhBWq4pS3DA5u3VOVTSv3lE+1YD1yIlVa3VDvvwouNs2Z20WGyORg6ZyqXvzZWVgxSq
+	V2R0D/WRWidJkCRbZE4ruCMh8OVTHWZuTQoSvPU/DgWFDNrP98dCgLatHbmMmWRFq7fPbJ3HrTw
+	cvuquA8TlZ1WwmpasfBi0FmaetgYm1iV9C6WxJIG94cgazRBYo6a+QL4cNdKY8M3Ovx8oGK5uuC
+	j+xHE3bSuRiDsNkW757xodZ5cHyp/mXeIEac+CMovmqZSeeELxmF/a8C0TwB0w1kBZZ3P1/ZT0F
+	J+9zFXosjYdQIB2I2hwEa1A0dTe54SGCZ3rL9XoD9bZPoIlb18HbWGC9G8U8Wt0KezYZqg/3/WO
+	FMUa7Yua7s7HRlqB9osuVBLG3nmEgLBs/S7bBpkjC8hLZKPgEdoAV86LfI4PP66UwUi6o=
+X-Received: by 2002:a05:690e:428b:10b0:66c:d353:948a with SMTP id 956f58d0204a3-66e4c7645d8mr742101d50.39.1787874913018;
+        Thu, 27 Aug 2026 16:55:13 -0700 (PDT)
 Received: from mac.lan ([136.55.173.105])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-66e4eb3de54sm51533d50.1.2026.08.27.16.50.41
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-66e4eb3dcdbsm55704d50.4.2026.08.27.16.55.12
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 27 Aug 2026 16:50:41 -0700 (PDT)
+        Thu, 27 Aug 2026 16:55:12 -0700 (PDT)
 From: "Cen Zhang (Microsoft)" <blbllhy@gmail.com>
-To: matttbe@kernel.org
-Cc: AutonomousCodeSecurity@microsoft.com,
+To: edumazet@google.com,
+	ncardwell@google.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com
+Cc: kuniyu@google.com,
+	horms@kernel.org,
+	matttbe@kernel.org,
+	martineau@kernel.org,
+	geliang@kernel.org,
+	yhs@fb.com,
+	kafai@fb.com,
 	andriin@fb.com,
 	ast@kernel.org,
-	blbllhy@gmail.com,
-	bpf@vger.kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	geliang@kernel.org,
-	horms@kernel.org,
-	kafai@fb.com,
-	kuba@kernel.org,
-	kuniyu@google.com,
-	kys@microsoft.com,
-	linux-kernel@vger.kernel.org,
-	martineau@kernel.org,
-	mptcp@lists.linux.dev,
-	ncardwell@google.com,
 	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	stable@vger.kernel.org,
-	tgopinath@linux.microsoft.com,
+	mptcp@lists.linux.dev,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	AutonomousCodeSecurity@microsoft.com,
 	xmei5@asu.edu,
-	yhs@fb.com
-Subject: Re: [PATCH net v2 1/2] tcp: fix use-after-free in do_tcp_getsockopt(TCP_CONGESTION)
-Date: Thu, 27 Aug 2026 19:50:39 -0400
-Message-ID: <20260827235039.82217-1-blbllhy@gmail.com>
+	tgopinath@linux.microsoft.com,
+	kys@microsoft.com,
+	blbllhy@gmail.com
+Subject: [PATCH net v3 0/2] tcp: fix use-after-free in do_tcp_getsockopt()
+Date: Thu, 27 Aug 2026 19:55:09 -0400
+Message-ID: <cover.1787870710.git.blbllhy@gmail.com>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <1db6cf46-c3cf-49e2-ad97-752afdd78c00@kernel.org>
-References: <1db6cf46-c3cf-49e2-ad97-752afdd78c00@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -98,24 +92,49 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 27, 2026 at 12:38:36PM +0200, Matthieu Baerts wrote:
-> It looks like you (or your assistant) forgot to declare ca_ops:
->
->   const struct tcp_congestion_ops *ca_ops;
->
-> Also, I *guess* a 'rcu_read_lock' is needed in mptcp_ca_reset() from
-> net/mptcp/protocol.c, above the modification you did, to get the name, no?
+From: "Cen Zhang (Microsoft Security FORGE Labs)" <blbllhy@gmail.com>
 
-Thanks for catching this. I messed up the local version and missed the
-undeclared ca_ops. I will fix it in v3.
+do_tcp_getsockopt() has two lockless reads of icsk_ca_ops. Since BPF
+struct_ops congestion control made icsk_ca_ops point to dynamically
+allocated memory, a concurrent setsockopt(TCP_CONGESTION) can replace
+the pointer and free the old object while either reader is using it.
 
-I also checked mptcp_ca_reset(). It is only called before the socket is
-published (mptcp_init_sock) or with the socket lock held
-(mptcp_disconnect). The ca_ops->name copy sits between
-tcp_assign_congestion_control() and tcp_cleanup_congestion_control(), so
-the ops object stays referenced and that read is already safe. The v2
-WRITE_ONCE() on the subsequent NULL store is on the MPTCP meta socket,
-not the TCP sockets these two UAFs race with, so I will drop it in v3.
+Patch 1 fixes the TCP_CONGESTION path by copying ca_ops->name to a
+stack buffer while holding rcu_read_lock(). It also uses READ_ONCE()
+for the lockless load and annotates the relevant icsk_ca_ops stores
+with WRITE_ONCE().
 
-Thanks,
-Cen
+Patch 2 fixes the TCP_CC_INFO path by keeping the READ_ONCE() load,
+ca_ops->get_info lookup, and call inside an RCU read-side critical
+section.
+
+Changes since v2 [1]:
+- Fix the TCP_CONGESTION build failure by loading icsk_ca_ops inline.
+- Drop the unrelated WRITE_ONCE() conversion in mptcp_ca_reset().
+- Add READ_ONCE() to dctcp_get_info()'s icsk_ca_ops comparison.
+
+Changes in v2 [2]:
+- Add READ_ONCE() to both lockless icsk_ca_ops loads.
+- Add WRITE_ONCE() to all six explicit icsk_ca_ops stores.
+- Include the data-race annotations in the UAF series as requested
+  by Eric Dumazet [3].
+
+[1] https://lore.kernel.org/all/20260826171344.4133-1-blbllhy@gmail.com/
+[2] https://lore.kernel.org/all/20260821182449.79785-1-blbllhy@gmail.com/
+[3] https://lore.kernel.org/all/CANn89iKr1ypEFeL+7te3xWoNaK5AFyYQmr+pDh2zSZAxfgNKjw@mail.gmail.com/
+
+Cen Zhang (Microsoft Security FORGE Labs) (2):
+  tcp: fix use-after-free in do_tcp_getsockopt(TCP_CONGESTION)
+  tcp: fix use-after-free in do_tcp_getsockopt(TCP_CC_INFO)
+
+ net/ipv4/tcp.c           | 18 ++++++++++++++----
+ net/ipv4/tcp_cong.c      |  4 ++--
+ net/ipv4/tcp_dctcp.c     |  4 ++--
+ net/ipv4/tcp_minisocks.c |  2 +-
+ net/ipv4/tcp_output.c    |  2 +-
+ 5 files changed, 20 insertions(+), 10 deletions(-)
+
+
+base-commit: a3dee9bb902ee4357fa02e49b415d7724ee0140a
+-- 
+2.43.0
