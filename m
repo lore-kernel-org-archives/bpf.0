@@ -1,184 +1,297 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 689AB4749D1;
-	Thu, 27 Aug 2026 14:19:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.16
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787840379; cv=fail; b=WtMumZ1yT6lviBAtAqEjF8II7s9pphbnfaYMdhcA4v7vP0L4ATwCEBYa5HI55i3mJJ7Q1GRZTrTDtjG8+8qTMNQcUYcqRo5F2zzn6LgEnZ2RTw3yTAcUfajszsVc2vpwh8cO+/j5ih0OcH7f087mIQ7cG11+wdxPWqTpDwYNDtA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787840379; c=relaxed/simple;
-	bh=QQ8oEK/QCHK6wjoD8+anzSBUDaV7voAMkqTcqdrGkgk=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=dBGdMhILtLhYh6VxmQPtmoN6LMXIMPfPwUdqOAdRny86qaqJjiI3421ePhw2lH4Qw7r4wD5WEFTbW5EF6qog1CNjW+gHc4xLCcMsirscIxNXOat95nV0sg5vHMKnh2mqJE/LEU4H0foSDfVSiOXtcsQ1W3tE/lAgJnMn4zfGHdw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HJuXQ18+; arc=fail smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HJuXQ18+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787840375; x=1819376375;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=QQ8oEK/QCHK6wjoD8+anzSBUDaV7voAMkqTcqdrGkgk=;
-  b=HJuXQ18+UuiJOd4WaPOKts1co1bBP7tFyvMC+/cnBkGXYW/QGZhv235O
-   Ocb6iJsMgIuwNjSwxhNjZH8Wh229ewmXz4R+D4pSBARG8COcu91ZOXZLI
-   S1N/KDqYQvz8EMwHjVV9jZatAScICjrpPgGirt0IYBKLwgLcOAJwot+cH
-   g7NIDa7ReqB66DT+Mb5VeG1CC7eODzQaHIjmMWzdJ5FUZaHPl4nD+YXEY
-   Mb+jDT+ha3I95lZQScgQwjzwhQX8gyqceR/czmfMq55v+Yx2Fwp46ECBz
-   O4IwPzj2AhxsjYICmcy/Dir0m7JNd72iqA0GYTV7xqPpiqjovc+t+67Xe
-   g==;
-X-CSE-ConnectionGUID: bKh6C24ISqaW+Pa5ZRLFbA==
-X-CSE-MsgGUID: Xjm4L9fLQfisfw71fgSloA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11887"; a="88546435"
-X-IronPort-AV: E=Sophos;i="6.25,246,1779174000"; 
-   d="scan'208";a="88546435"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2026 07:19:32 -0700
-X-CSE-ConnectionGUID: LIuKzvc/ScScQM9/esS8pg==
-X-CSE-MsgGUID: nnzz37gMTJKitKTdjA83NQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,246,1779174000"; 
-   d="scan'208";a="269830797"
-Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
-  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2026 07:19:32 -0700
-Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
- fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.46; Thu, 27 Aug 2026 07:19:32 -0700
-Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
- FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.46 via Frontend Transport; Thu, 27 Aug 2026 07:19:32 -0700
-Received: from PH8PR06CU001.outbound.protection.outlook.com (40.107.209.71) by
- edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.46; Thu, 27 Aug 2026 07:19:31 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bDpYIziH2kmqlcai/nyNXgC3VMlRqb/s4ja8q3H7p6LejsOOqfsZ/sTyaKMIOY0a7mgcV75NuaGkli4Jhpo/7l0rIy4M+PoSLGH2ppnc2u+z01BwHr42VUMCwERwbncF2+u9w1jpxV7v34m2o7ps/DQpImzJqLmlvEUqCX8114Ht7yAbEuFRQ61GjvQduexR7iHxR02vi3qzxZRzsEft6oscxHcn1VU007+OuqqjasAPomNz7YaIEkcfSga9lHE2PezOd8X+Lm2x+t3ym+EhWseUwmeFg8GLbzhheYcQ/mSrgv57hTm3Ua6iPOTzDa1M4eiKwUDYzj6+ibvHZouEhg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LT4fTxYMJcsaC0zthdt8fNN9stGDGVl6l2h6OJV/ATc=;
- b=Komug04gjT+olSfsZNXBa37qQ8Irf54SuwxsoETpanHC15eEvLV4F6VJq+yF+opzEq96fFTgO3njemtczqxWxe/jKP+dzge/zrYd6gaw8pt18jZEqEH7gZs6jN3N2wa1EbNh42K8ZkLDSDH827uTwvk7OEN/Vv7dVCmNGU4O5JEsMFz5GY6U2u9n5Wlaa205pTeT8xTSFgjBsrdYlbwEsIuQMcajztOBQgwv3SpigVB0STjzsdEn9F6bVjEwAFLPSc8nkHoFyEInvacuK5Pvrq/H5n4h5w16E+lfyW5tDExU3gG0MvB5pSxJb3zo5L2xrmpqFgZefXi7EOsRu/FHCg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
- BY1PR11MB8031.namprd11.prod.outlook.com (2603:10b6:a03:529::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.8; Thu, 27 Aug
- 2026 14:19:22 +0000
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::d9b3:e942:2686:3cdd%6]) with mapi id 15.21.0360.008; Thu, 27 Aug 2026
- 14:19:21 +0000
-Date: Thu, 27 Aug 2026 16:19:10 +0200
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: Paolo Abeni <pabeni@redhat.com>, Tushar Vyavahare
-	<tushar.vyavahare@intel.com>, <netdev@vger.kernel.org>,
-	<magnus.karlsson@intel.com>, <stfomichev@gmail.com>,
-	<kernelxing@tencent.com>, <davem@davemloft.net>, <ast@kernel.org>,
-	<daniel@iogearbox.net>, <tirthendu.sarkar@intel.com>, <andrii@kernel.org>,
-	<bpf@vger.kernel.org>, <bjorn@kernel.org>
-Subject: Re: [PATCH net-next v3 0/4] selftests/xsk: improve shared-UMEM
- coverage
-Message-ID: <apBHXkxgq3XNEEy4@boxer>
-References: <20260819024443.781764-1-tushar.vyavahare@intel.com>
- <a602a1f6-e279-4c7c-86df-1bd0ef244fd0@redhat.com>
- <20260820104419.050cbc44@kernel.org>
- <aoc+/OW8Gy4ZOx+w@boxer>
- <20260820142920.6c96ec67@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20260820142920.6c96ec67@kernel.org>
-X-ClientProxiedBy: AM8P190CA0010.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:20b:219::15) To DM4PR11MB6117.namprd11.prod.outlook.com
- (2603:10b6:8:b3::19)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6FA1443AB4;
+	Thu, 27 Aug 2026 14:40:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787841647; cv=none; b=Jnic5noxRCiRPK0eKhlidG+Itt3TCx6aIse1UAr6gSSMVp89PKt3wIDpv3qDKxWtImkusu608ucaIt5K3UGGlM3CLRIGkmajOOuAcigJKb70vyGhPCKUI94cGJm/m53iGsqmlnSLTlOkxOQZHD1GNiBDIJqtA27+FGZjOZ9wK30=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787841647; c=relaxed/simple;
+	bh=du2dm+O7fk4813XO0SlLM/t5tohs+rAaaOtnt23XOs0=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=J6UFrXNpnrCUx/Z0N71XcrKMbiaeN6B2dQTm00ZeLlGZjoFQ5YkKxcE1Y3DFBnBVoE77/8xOJu1wyzoO5E22jtfy9JtWOTnoAEn/Ge52yU7TzpSm+BYtUmUZ/7hZiuxUDO1+NyXBdNG5exuBujcW2d5P4hKK+NMIupJlO9aStwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hW41D3BLVzYQv0V;
+	Thu, 27 Aug 2026 22:40:00 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id 646A340596;
+	Thu, 27 Aug 2026 22:40:31 +0800 (CST)
+Received: from [10.174.176.103] (unknown [10.174.176.103])
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgDXxURbTJBqF693Dw--.14428S2;
+	Thu, 27 Aug 2026 22:40:31 +0800 (CST)
+Subject: Re: [PATCH bpf v2] bpf: Fix UAF due to concurrent consumption of
+ waiting_for_gp_ttrace
+To: bot+bpf-ci@kernel.org, pulehui@huaweicloud.com, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
+ yonghong.song@linux.dev, song@kernel.org, jolsa@kernel.org,
+ emil@etsalapatis.com, ihor.solodrai@linux.dev, pulehui@huawei.com,
+ martin.lau@kernel.org, clm@meta.com
+References: <20260827084013.1062816-1-pulehui@huaweicloud.com>
+ <497836f1914121810fa01a9a601342ad32a7fc76d62efebb02121d7b9f2e96e4@mail.kernel.org>
+From: Hou Tao <houtao@huaweicloud.com>
+Message-ID: <e9558ab7-3ab0-c93f-0d29-fb9ebb08e4ad@huaweicloud.com>
+Date: Thu, 27 Aug 2026 22:40:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|BY1PR11MB8031:EE_
-X-MS-Office365-Filtering-Correlation-Id: 87c1d75f-a7f2-4f35-4c29-08df0446303e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024|23010399003|10067099003|56012099006|4143699003|6133799003|11063799006|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info: AOwFfZSo0JOpD35x8wp8JgbIy4/ybr5d/G6xFyceZ3o1tL+2l+RUAuDMijopQ7BLeo61OvlZKF7GjIal8Fg3ONjFU6vpWRo/2rNONPgMMTNxaoot+j0fIaWdjSjtzhYF8523QIaXxEO40J25t+AJR1SL+/s8rCVbCCmIBwM2Q3suE+FSUBquovOwHe7g5Md313IqTIBOUqVQqqcd4lnoyD0Kbn4M4AT/eJ2ejGhx/6d/B0JK/YN6b7CNJ/Ym81nHAx2VOUv/drr/ioAMFHoMQGGtvs5fO4kgjLvOMiYupeG7tR5lWkvqnfY9GjyYn0Vufp4XSHKIaH06cCTKQWwuOQfAYm5QfBym0JzrqMi+yI3ZmPlLQSF/t8+DvE9BYGWPMmC5Kn059HczugNsFLpqWZzG73kMh12e4pmUxUqLRlnJyfQS9gDjOSEDDm442cJmY3Ryj5LXD/lTTiNHDnl6A9NKrAkoUaZV0VaNNFGspDIAQyMa2TKkS1JC825NqaA2KbGErhEBuuwgA1RycxTYFcQYnYWwT2pvm4KWeiVN1AgsnhlmRO48XMOZtKr4Rc8LAkz9BdiMjyNrG0BFyPwQIrFKaTmttXQd6Xnr7/itCdmn29hhuh29bC3mVPF1aCiXxoyJcgNJ++Q6J/l8Q5oWmGMIeldck+N+qfcSd7cXxv4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(23010399003)(10067099003)(56012099006)(4143699003)(6133799003)(11063799006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qx86e30FpsET7cTnBuwfNfXHPOdEB1HYb2JrKMeOVQWPIaFSnaPETVz0N7TL?=
- =?us-ascii?Q?iGXeRKWTRzapjlSiX/Uf41jblWKA0L25RwZG+MTIq5yFwZULYENm7T0lFaWU?=
- =?us-ascii?Q?0sXxqguJfeclmIbVRyHR9GWqfVHE4pRBYrD15Z7rN+dDFuoKrx8/qwx2CsJx?=
- =?us-ascii?Q?uPLZR1PKI6q5aCA7mSqnD4gg9fGG8y2IeAWpnYCwsJG3ls8RswE3Y4ifU84G?=
- =?us-ascii?Q?eIo3DP4la/zaTPoxd6kTFoTed+ZuutnITJzs7an+PUpGV26/OYNwJY+uWC4a?=
- =?us-ascii?Q?36oU7Mm4z4czxzHweqXwITLJv1+c7HfayXDI3Tat9pSjADo7d7PUqIPuQLZs?=
- =?us-ascii?Q?fUfDVZbO7GhqIUyxyWkDVVjtcGAAi1TlXQa34GL9hoahXAIEFuy1Jkm0CIHr?=
- =?us-ascii?Q?W/6K4FM6VLDAFgje2TjXyBYAvjeJyt8hifGe0uEo5gj9T6fY7VAOi+8+Cmmp?=
- =?us-ascii?Q?pK+b/9t2gPGRSkw4pq5IxP3eb/xhxm8VbbNamoNzo1iexej8EL/8Povbjhi4?=
- =?us-ascii?Q?2FSZWPZhlaaox1CvzqCo+cgvowzdCVg/pnyw2pj6kgFLoBXQxQA8uNmh0RIZ?=
- =?us-ascii?Q?bDjnZuWjOOwxzVdgiDLGjniLiu2ybbmgNAcwBy6uzvGyLNz3jgVX1ELnswHa?=
- =?us-ascii?Q?XFpY51IPJ+vsFE6QNFmgJHSG1bv5X6MAUShSal437BgZ5GuXGCu7fpgQ494Y?=
- =?us-ascii?Q?hVP/aQOv8CpCH/dDGFKDEGUeKb7ghZn7e9Fs2+gDrziiABJYnqJ4aTk4QzUg?=
- =?us-ascii?Q?3DHE11EX+E73CP7MhW0C/MgpHLsGujpDbK9u8hwqUqM+20AInA3ShxnnXEtv?=
- =?us-ascii?Q?w8FHk9WcR2f2HcHMe9MDikzfJ4Qm6OAoVO6nvmT6vFC7J15fJ8vRtxB5wums?=
- =?us-ascii?Q?I9oEaC5UuY0P+KF9QcTzCTrLuwZjkP3iPvcSSI/5gzhwxdjsUUowBT9a4OJi?=
- =?us-ascii?Q?4t0gP2mfzjXQdLmMXmOQCyfECzGYThD8uzhJVVKDXwqhAJ0KoZfL3Tcnk98k?=
- =?us-ascii?Q?xe24hHjqAHPQj2jnIgarkQ1oIMC6jMOtgTVrxNbzz5LnhFyG1VBN07K4II8w?=
- =?us-ascii?Q?bDM5Yri/rw3+f2cPj7v40vOSgYpET35OWP9m1rs/OkrFWER73v7NWxNBLKdj?=
- =?us-ascii?Q?L9WIDUBbf2Wa9yaA3L4VPCgQsoBNvceOW5Fd0JeE4EcBcwgVuxA5s5j/O5Iy?=
- =?us-ascii?Q?6o6a9ontGgxPj6J/oAOnJGRv1ACm+2BtU7KLP6PzJGKKhfSwQfB6uB/Mn6vK?=
- =?us-ascii?Q?mS/t+lxyPA2qAcXk7vWo6i6ANJ3pWrQqr4rPOqAZ5up9KPAs7MOe4ESPktX5?=
- =?us-ascii?Q?wIkLa+LVwpgJwwl3sMS90ELE6RZc/VJbypWsZDQddrkbpWy4/abwNs93KZ80?=
- =?us-ascii?Q?/SVyGlOEadHOaesWILAM3Umb0VJtASTpWIlN6aVvzEidBcy4v0+qg32EIkik?=
- =?us-ascii?Q?zXW5SAZs1Iw16aY2Boz0fU8lgoUc3pmhK5HlvgmCUd2aZycz6Y61YGrb9ZEi?=
- =?us-ascii?Q?AH6HN1WwT+e4nTxxsPPecXQVDG2koAUOhhwD7EqY02T2WnHYiQCUlOry05v0?=
- =?us-ascii?Q?voFJdUmU953sX9iWwf5ZkO+0qVcW19w/NtIxocR+4BP6FwXW67NV4DUp9U0w?=
- =?us-ascii?Q?cTu/L5bNJpuQovDABuyVhNXxefwnENzDhIsi/SNpX2pepGpgPkXDSuFoPrhn?=
- =?us-ascii?Q?89/clNEFmfKRdd+CIjszP+TcokT7hnZjCV17PXQBzAxCjTRjhpOU1PJKEbkF?=
- =?us-ascii?Q?CZyQpBt8JrMMZfDiId4Z+eF43EzDwH4=3D?=
-X-Exchange-RoutingPolicyChecked: a6kZIpsgBYvX/ZKLN++Cu2D+vGBF8UIBCU9twTKZXkdds9uFZE98c3ACN9nbX+hemTnRNVAf6kvXFbcKgLFwvFD2oy6kLFzwuF5qK+Z28pse98nlTpO2b9DqcHWN69ht4v/j7iZ7k/MS8kGus8kkjzyTMQJY61OlYIiUj9X0blwQvX76u9YoO9aW5dXpW9X+U0znd56+mjDtQu1lInh/JhPSCO1v9oL3AGQz5c5CtJ5WA8Kh9W8OhE1uBeAw95w90YyS9YPt1+yoXFluSkMnf116W/egdfU1btQwq0T0Sp2tb0qM7x4sS0ScC1+atSBV3eQzPYUw1O6MVyaxiSU0/Q==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87c1d75f-a7f2-4f35-4c29-08df0446303e
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2026 14:19:21.4944
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3JJHjjhXjmxof/AzyKX/cRgR8Z53/GMlC0iglMYQJOx9pevoyFuE2aODOkfIJfanAbPwku+EpXLKr/vU3x3YpFzN3BzTxINjAFDwwsDjORM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY1PR11MB8031
-X-OriginatorOrg: intel.com
+In-Reply-To: <497836f1914121810fa01a9a601342ad32a7fc76d62efebb02121d7b9f2e96e4@mail.kernel.org>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID:_Ch0CgDXxURbTJBqF693Dw--.14428S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3uw13CF43ZFyrJw1DXr15XFb_yoWDuw1kpF
+	WfWryUGr98AFWIyw1Iqr48Gr97Zw40qa43GayUWFyayr15Zwn0qrWS9ryY9Fy3Aw4kA343
+	tr1q9r97ur4UZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBY14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+	c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r4a6rW5MxAIw28IcxkI7V
+	AKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
+	r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6x
+	IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAI
+	w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+	0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7sRidbbtUUUUU==
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-On Thu, Aug 20, 2026 at 02:29:20PM -0700, Jakub Kicinski wrote:
-> On Thu, 20 Aug 2026 19:53:00 +0200 Maciej Fijalkowski wrote:
-> > On Thu, Aug 20, 2026 at 10:44:19AM -0700, Jakub Kicinski wrote:
-> > > On Thu, 20 Aug 2026 11:35:53 +0200 Paolo Abeni wrote:  
-> > > > ## Form letter - net-next-closed  
-> > > 
-> > > these are bpf patches. Tushar, tools/testing/selftests/bpf is BPF  
-> > 
-> > But AF_XDP is now net target since some time. Should we move the test
-> > suite out of bpf directory then?
-> 
-> True.. but until the move happens it feels a little awkward
-> taking pure ksft/bpf patches via net-next?
 
-CC: Bjorn
 
-We had a talk about potential next steps and what would take to get this
-test suite executed against HW tests. tl;dr version is that some of the
-work is needed to adjust it from infrastructure POV as currently
-xskxceiver runs as a single process with two separate threads and what
-Bjorn was saying we will rather be needing two standalone processes that
-could be used on DUT and packet generator.
+On 8/27/2026 5:24 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
+>> index e9662db7198f..58296e92a4fe 100644
+>> --- a/kernel/bpf/memalloc.c
+>> +++ b/kernel/bpf/memalloc.c
+> [ ... ]
+>
+>> @@ -297,6 +307,7 @@ static void enque_to_free(struct bpf_mem_cache *c, void *obj)
+>>  static void do_call_rcu_ttrace(struct bpf_mem_cache *c)
+>>  {
+>>  	struct llist_node *llnode, *t;
+>> +	unsigned long flags;
+>>
+>>  	if (atomic_xchg(&c->call_rcu_ttrace_in_progress, 1)) {
+>>  		if (unlikely(READ_ONCE(c->draining))) {
+>> @@ -307,8 +318,10 @@ static void do_call_rcu_ttrace(struct bpf_mem_cache *c)
+>>  	}
+>>
+>>  	WARN_ON_ONCE(!llist_empty(&c->waiting_for_gp_ttrace));
+>> +	raw_spin_lock_irqsave(&c->lock, flags);
+>>  	llist_for_each_safe(llnode, t, llist_del_all(&c->free_by_rcu_ttrace))
+>> -		llist_add(llnode, &c->waiting_for_gp_ttrace);
+>> +		__llist_add(llnode, &c->waiting_for_gp_ttrace);
+>> +	raw_spin_unlock_irqrestore(&c->lock, flags);
+> Can this loop iteration count be bounded? The critical section covers
+> the whole free_by_rcu_ttrace -> waiting_for_gp_ttrace transfer, so
+> c->lock is held with IRQs disabled for a number of iterations that has
+> no upper bound.
+>
+> free_by_rcu_ttrace is filled from enque_to_free() by free_bulk() and,
+> more significantly, by the batch append in __free_by_rcu():
+>
+> kernel/bpf/memalloc.c:__free_by_rcu() {
+>     llist_add_batch(llnode, c->waiting_for_gp_tail,
+>                     &tgt->free_by_rcu_ttrace);
+> }
+>
+> That batch is the whole c->waiting_for_gp chain, which builds from
+> every bpf_mem_free_rcu()/unit_free_rcu() that happened while
+> call_rcu_in_progress was set, proportional to the object-free rate
+> without any watermark. While call_rcu_ttrace_in_progress is set,
+> successive __free_by_rcu() invocations keep appending without anything
+> draining it, so batches accumulate across rounds.
+>
+> Compare the other new critical sections in the patch, which are all
+> O(1): __llist_del_all in __free_rcu and drain_mem_cache, or bounded by
+> c->batch in alloc_bulk (roughly 48 iterations max). Only this one is
+> unbounded, and raw_spinlock_t + irqsave means it is non-preemptible
+> even on PREEMPT_RT, where do_call_rcu_ttrace() is reached from the
+> rcuc/rcuop kthread via __free_by_rcu().
+>
+> The lock is only needed for the destination list. llist_del_all() on
+> free_by_rcu_ttrace is an xchg and is already safe against concurrent
+> llist_add() producers without a lock. Could the chain be re-linked (or
+> its tail found) outside the lock and spliced into waiting_for_gp_ttrace
+> with a single __llist_add_batch() under the lock, keeping the IRQ-off
+> window O(1)?
 
-Overall we want the xskxceiver's data path logic be reused. LMK if I
-missed something.
+I think it is a good suggestion to reduce the lock scope of the
+irq-disabled raw-spinlock.
+>
+> [ ... ]
+>
+>> @@ -620,6 +634,8 @@ int bpf_mem_alloc_percpu_unit_init(struct bpf_mem_alloc *ma, int size)
+>>  static void drain_mem_cache(struct bpf_mem_cache *c)
+>>  {
+>>  	bool percpu = !!c->percpu_size;
+>> +	struct llist_node *llnode;
+>> +	unsigned long flags;
+>>
+>>  	/* No progs are using this bpf_mem_cache, but htab_map_free() called
+>>  	 * bpf_mem_cache_free() for all remaining elements and they can be in
+>> @@ -629,7 +645,10 @@ static void drain_mem_cache(struct bpf_mem_cache *c)
+>>  	 * on these lists, so it is safe to use __llist_del_all().
+>>  	 */
+>>  	free_all(c, llist_del_all(&c->free_by_rcu_ttrace), percpu);
+>> -	free_all(c, llist_del_all(&c->waiting_for_gp_ttrace), percpu);
+>> +	raw_spin_lock_irqsave(&c->lock, flags);
+>> +	llnode = __llist_del_all(&c->waiting_for_gp_ttrace);
+>> +	raw_spin_unlock_irqrestore(&c->lock, flags);
+>> +	free_all(c, llnode, percpu);
+> Does the comment above need updating? It says "Except for
+> waiting_for_gp_ttrace list, there are no concurrent operations on these
+> lists, so it is safe to use __llist_del_all()."
+>
+> Before the patch the comment matched the code: waiting_for_gp_ttrace
+> was the one list drained with the atomic llist_del_all(), and the
+> comment named it as the exception to "safe to use __llist_del_all()".
+>
+> After the patch waiting_for_gp_ttrace is the list that does use
+> __llist_del_all() (now serialised by c->lock), while free_by_rcu_ttrace
+> and waiting_for_gp still use the atomic llist_del_all(). The sentence
+> now points at the opposite list from the code, and no longer explains
+> why the new lock is needed here.
+>
+> A reader trying to work out which lists still need atomic accessors
+> after this change gets the wrong answer from the comment. Should the
+> comment say that concurrent consumption of waiting_for_gp_ttrace is now
+> excluded by c->lock, so plain __llist_del_all() is safe, while
+> free_by_rcu_ttrace / waiting_for_gp still need the atomic variants?
+
+Good point.
+>
+> [ ... ]
+>
+> commit 03e0a12c3be3d11fe9a3b87582070b2158a7bb74
+> Author: Pu Lehui <pulehui@huawei.com>
+>
+>>     bpf: Fix UAF due to concurrent consumption of waiting_for_gp_ttrace
+>>
+>>     Syzkaller repeatedly triggered UAF splats related to nodes in
+>>     waiting_for_gp_ttrace within the bpf memalloc:
+> [ ... ]
+>
+>>     This is expected because, as noted in commit 57b23c0f612d ("bpf: Retire
+>>     rcu_trace_implies_rcu_gp()"), an RCU Tasks Trace GP currently implies
+>>     (and will continue to imply in the future) a normal RCU GP. Since
+>>     alloc_bulk() runs in an RCU read-side CS (!PREEMPT_RT runs in IRQ
+>>     context, PREEMPT_RT runs with guard(rcu)), an RCU Tasks Trace GP cannot
+>>     complete while alloc_bulk() is accessing the list. Thus, the callback
+>>     __free_rcu cannot run concurrently, ruling out missing RCU read-side
+>>     locks as the cause. And same for free_by_rcu_ttrace list.
+> Is the statement "Thus, the callback __free_rcu cannot run concurrently"
+> accurate as written?
+
+I think it just means multiple __free_rcu() can not run concurrently.
+>
+> Looking at the race diagram three paragraphs later, it shows exactly
+> that scenario: __free_rcu on CPU1 executing in the middle of
+> alloc_bulk's llist_del_first on CPU0. What the RCU argument actually
+> establishes is narrower: the GP cannot complete during the particular
+> read-side CS it is waiting on, so RCU read-side protection is not what
+> is missing.
+>
+> Nothing prevents a new alloc_bulk() from starting after the GP has
+> completed and running concurrently with the callback. __free_rcu runs
+> from the rcu_tasks_trace kthread (process context, no irqs disabled, any
+> CPU) while alloc_bulk runs from irq_work on the cache's own CPU; on
+> PREEMPT_RT alloc_bulk is even preemptible, so same-CPU interleaving is
+> possible too.
+>
+> A reviewer reading this sentence literally would conclude the race in
+> the diagram is impossible. Could the paragraph say "RCU read-side
+> protection is not what is missing; what is missing is mutual exclusion
+> between the two llist consumers"?
+>
+>>     Note that free_by_rcu_ttrace does not suffer from this issue as it only
+>>     has a single active consumer during normal operation.
+> Is this premise correct? free_by_rcu_ttrace has two distinct consumers,
+> and they are not confined to one CPU:
+>
+>   - alloc_bulk() memalloc.c:225 (still outside c->lock):
+>
+>     obj = llist_del_first(&c->free_by_rcu_ttrace);
+>
+>   - do_call_rcu_ttrace() memalloc.c:322, and drain_mem_cache()
+>     memalloc.c:647:
+>
+>     llist_del_all(&c->free_by_rcu_ttrace)
+>
+> do_call_rcu_ttrace() is called as do_call_rcu_ttrace(tgt) with
+> tgt = c->tgt from free_bulk() (memalloc.c:341, 364) and __free_by_rcu()
+> (memalloc.c:370, 383). c->tgt is set to the cache that allocated the
+> object, potentially another CPU's cache:
+>
+> kernel/bpf/memalloc.c:unit_free() {
+>     c->tgt = *(struct bpf_mem_cache **)llnode;
+> }
+>
+> So llist_del_all(&tgt->free_by_rcu_ttrace) on CPU1 can run concurrently
+> with llist_del_first(&tgt->free_by_rcu_ttrace) in alloc_bulk(tgt) on
+> tgt's own CPU. The file's own comment at memalloc.c:220-224 says as
+> much: "Other CPUs might llist_add() and llist_del_all() in parallel."
+>
+> What actually keeps that pair harmless in the common case is the RCU
+> deferral the changelog describes earlier, not single-consumer-ness: the
+> nodes taken by llist_del_all() are moved to waiting_for_gp_ttrace and
+> only freed by __free_rcu() after an RCU tasks trace GP, which cannot
+> elapse while alloc_bulk() is inside its RCU read-side section. That
+> argument does not cover the two draining paths, which free immediately
+> while still only being ordered against alloc_bulk() by
+> WRITE_ONCE(c->draining, true) / irq_work_sync().
+
+Er, It seems the UAF problem is still possible for free_by_rcu_ttrace
+under PREEMPT_RT. The possible race is shown below:
+
+// CPU=0
+// irq work is still busy (e.g., on PREEMPT_RT)
+alloc_bulk()
+  llist_del_first(&c->free_by_rcu_ttrace)
+                                           
+            // CPU=1
+            bpf_mem_alloc_destroy
+                WRITE_ONCE(c->draining, true)
+                // wait for CPU 0
+                irq_work_sync()
+
+                // CPU=2 (due to cross-cpu free)
+                do_call_rcu_ttrace()
+                    llist_del_all(&c->free_by_rcu_ttrace)
+                    // due to c->draining is True
+                    free_all()
+
+The problem is that alloc_bulk may still be running in the irq work
+kthread under PREEMPT_RT when unit_alloc() doesn't have any caller any more.
+>
+> Since the changelog is what a reviewer will use to decide the fix is
+> complete, should the sentence be corrected to state the real reason (RCU
+> deferral) or should the residual draining-path window be acknowledged?
+>
+> Leon Hwang suggested in the v2 review that scoped_guard() could be used
+> instead of explicit raw_spin_lock_irqsave/raw_spin_unlock_irqrestore to
+> simplify the code and avoid needing the flags variable. This is a code
+> style improvement that would make the locking more idiomatic. The
+> suggestion applies to multiple locations: alloc_bulk(), __free_rcu(),
+> do_call_rcu_ttrace(), and drain_mem_cache(). Is this something worth
+> addressing before merge?
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33055527430
+
