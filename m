@@ -1,161 +1,215 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744B843BDB3;
-	Thu, 27 Aug 2026 10:26:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787826382; cv=none; b=lOkVZSfiiTjoY+Mz11pchuMIRvSSMYgflsqSKGrbcIcMqO2tC26uCcfocEklTpDc/4GscQXnnrFLyuW6ZkS43uvHdDhHwJSQ6CjF1g+u4XDobAY4Ga0INZtLsyJNtyvRhCvdyhxUCXymmS+2GS9RqGUEzEO99ckov9FUNBotFLE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787826382; c=relaxed/simple;
-	bh=O+ov01TpciTmuTfq9eOd/e42inwGfydWCRjNfl0F3ZU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fKP0TTpSZN8y7b5sTkuWrFxIm3n4pmYlRcxEDGe6eaWeih+c0vhkgytO9Jp4f7geLXRJ4gIHvK0eUl/A7mP8RTZ6H79/R7V/FcWMHsq/zu169eyfG5wYL69V73pUYWXFXBsimWvRvWB18rCYIU7Ix+Zg5VyFuerpHuuXf+jUJKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UUgQcPHw; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A963EB0F4
+	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 10:33:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787826825; cv=pass; b=arGs2ipiz5YvMrm5F55ZMtHVCaHGAQon4CTvozr/JClRzxINrvSxQq7EXAW1gxEmQgBEOv2oprqBmck6iYta0UO6/zFGUJaTwKX7jknsTymn6X/fxo8ViFlXeUcxrwIJmTG400nThFg4Nl+S5Hy6MfnTZ4APf48HrapETSzEP9s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787826825; c=relaxed/simple;
+	bh=KGhnaUEwIzXBqIWGQ/6ZDCdDoFWPzxMEPr1HCeR4y58=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GHa+SWcF5cC/OWbm79uDlL/H/lQcBFqbo+HPBOeIpJ/n8JRZNJC6kzzb/RgZZxMGT207guBogb3fDfbrreHmG3xkvDPywX2GNtKIS1VwOw04Z4X2iBYE6vmhNqrj5itVg0qZ9IfmRHQkwsjNQBHOCKuRvnHLY6W9+MSG3LS7oLs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rtNIAL92; arc=pass smtp.client-ip=209.85.167.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UUgQcPHw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF4121F00A3A;
-	Thu, 27 Aug 2026 10:26:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787826367;
-	bh=8Yqh3iS16BKHB91PJME2pWLwTOseAJGffrM+2MMe64M=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=UUgQcPHwUg95r09B5/yuhUxugChiVBP/REvP3e2FwOCMwPPg7bVM78uuwd+AhzxM/
-	 L7FU/02FEUhA01lPm/UIFZHGZaayYg5vp6eYDd/vCivN5UzPDgX2cV+ktPdOM20p9n
-	 GPj2mD7oIqnO/7Mfxvz0YpP1XY4xuHhr3a/dooijeMOwExEboM9MXGN1GFe/uTqokX
-	 wCm0SRbf//ozJ0xPQ7oKz5/kjHCDSMTjDe4ilvRR+WzVvcLFvrDWtYGA0H57WHamOM
-	 JKq7vWe5Gkv9eiqjdUCsF3+7JMUq9oFPgNSyjVXbwowbobEL2pKxS96LimTxpKdeYs
-	 fbpHonZJcUw1w==
-Message-ID: <8823867c-9d3c-4a01-a213-75f6ae0755b4@kernel.org>
-Date: Thu, 27 Aug 2026 12:26:00 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rtNIAL92"
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-4a475409044so1148818b6e.1
+        for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 03:33:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787826822; cv=none;
+        d=google.com; s=arc-20260327;
+        b=rwGVR7K4bIB9v6HJbkAXg6qb1Cg59CD/w9SS2Hm2SZ5gN4NnRpUQzFqB93I/I/TrVo
+         yyS8moha3+Wl8AdV4kmXd9Rso71a8GUvTNwWjNtwZ2vTlg4N7BQBR4VTyZk2Rq2j7nDq
+         sRx7gHrdxknblyl99CueDz+IWgu6ayDRT2uePEP6/QaTAunhRU3EMTtsmRhWOTsjJpCq
+         3KW//W+6aKejUeZe6++/L67JsIukpkRxdzM7OTBsxsLAa+lxDzqDOfxNemp30OyCffVX
+         gQ6qZgKnCRKf4cXjODLMCxdEBuK38pXYNOamUfVV/2giUaI2T/S3udpkp6JEsRzqdrpD
+         2wVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=/J4+zWslzd7v8Hb8+D1FNou+n4APw0wKKRPrdHi8DTo=;
+        fh=cxPxur7mv34NR1eQbZTWZLe20AogUUVAJSmML7DR9s8=;
+        b=jXOJrgq43b47dXhlYbICi+mQsh0i0B5CmotfxNsxNfF5Hxfuyn0cWziMQc5UT5kXj+
+         oAMz9heLOTraYTWwYsxc5AT56vzMhyDSI/qdPHiO751kfVk1pfD4yEMuc//ijOWTYFE/
+         uwcrA1u3JsDbk8D8uksEq2SYKjlQBV5ZL9acwMjhHG0G24CfcmSkFnElbKe9YM57NZdf
+         +7jgAo+3jP4if7hyNwm7UFBMPQDRte43PHLDhA5bk7rLBrbZ8DV8ctCESJFwLY+eQ8Rt
+         NpeB2IF5XE0MJBj1pZQ+JR50KUCCNaijbZcjYf3O0zCLAo2vTHILDjZNP1mJM3CWxTux
+         tdIA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787826822; x=1788431622; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=/J4+zWslzd7v8Hb8+D1FNou+n4APw0wKKRPrdHi8DTo=;
+        b=rtNIAL92RKNaoNyj4j+PnbqwuwegrbQAPWMx1Jjf0jCQQHtpB8/bm32gA56vgpTGw+
+         sW7MgjA5oTQJdov87ahIbJnBZhN85NIht1fYtBmYpaT0xLodSTE+xA3bIKW5hzur1gKW
+         5V8VureJGC96y7zfqynqKXHbsMs0fSL1mwkyuto0vsu5OASRsHMfXzaU4+gH5aDk2d+X
+         Qb5Druuh3H8SFhQiBGmap3VLPET3spfmJ+aYBmR7eMGBfwKWkB55hzYR1ylPjW+/SRxu
+         7bRaBa5OvdtLS+4tiYHzJ6aEKUya+7WiWYKLeuzgU+v7fN4iwdI0zN/xUf7b/dVrnx+x
+         8TgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787826822; x=1788431622;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=/J4+zWslzd7v8Hb8+D1FNou+n4APw0wKKRPrdHi8DTo=;
+        b=b4VOWvqMguGtKhD22DuaSSJmz9lchVY4Jk4Sp+YyCQWpIPXWtxWUMEGdb5fac5hGAB
+         Mh3P5eTMNYh1x3q/SrL53heDzrL8+QjHCx1MCeYmCNldWQIKoMjrdZ8kySWki/X0JTL6
+         D5wYkrnMUPr5u9CVooqUm0EghDU+OhsHBwuF8GiHqhlUpINQBqTRGDLsD1vUzDWa+rWt
+         PRzWR8kTq6d3mbgr96qfvtfd6SuF7qsN3zOuGL/Ub7LS9NWK+umc1xQhiT1mkGwhKZFw
+         YvuPuAro90u2Urfb/Zk7Gatooe5tISqjmrymc5FITdsTQx8QKu2CYptXN85fat3lEIZO
+         DgbQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrVObhly7S7zpU5swZNwv2eAmu1GCTlZy3an2I3/rOubaaqsRXsP0TuVwAuIagMdl84+SU=@vger.kernel.org
+X-Gm-Message-State: AFuF++n3Jl0YqF1ax74DjvZfTO5h/AE4ESYla0+Yz0zetMWlAfGuB6Yg
+	4faO9J0O9wIEmz8i8Jv7J8cmJzcjpkYELuFGr734cNt0tQOB588YDnsDdErnMGXlNtBY5yb4Vlz
+	H8WNOs5jW1PSeCIEnYr2UoNo1BOjx1XQ=
+X-Gm-Gg: AR+sD116ZFmhUl42xdZd77XzilG+RU6XmWVkQ6NDwI46DXXzf0J5uRTXgwnunt5kgab
+	pBRzDzZo6jAZQ+FfU3mZxrldz0uJPVaaBePXWqU2OBmdysEXYKXNaywxaEXhgrimuNTU7O6TEvW
+	t/0B8IYHnRa3YxHTziYgi91APz5uXRg29J4uF69JHyccrNMzl7/R3/Kjv5yZP2TqYWdsO+JCO/j
+	zbdjFa2lRSuk12XKYz5lftpY5GWR6C7IBLp7MQR86DEdopaUnYKkPTPuyLBhf2a76t+WR9OvGIa
+	IJVeZMna0EuRfKc7G9+g5l9aiGi4Rdu1aMA4DJiiraws
+X-Received: by 2002:a05:6808:c235:b0:479:f7e7:4a81 with SMTP id
+ 5614622812f47-4b36635caadmr13710332b6e.0.1787826821869; Thu, 27 Aug 2026
+ 03:33:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] mm/secretmem: properly account locked pages
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Daehyeon Ko <4ncienth@gmail.com>, stable@vger.kernel.org,
- "Mike Rapoport (Microsoft)" <rppt@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Hagen Paul Pfeifer <hagen@jauu.net>,
- James Bottomley <James.Bottomley@HansenPartnership.com>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260826-secretmem-accounting-v3-1-94cb04399510@kernel.org>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260826-secretmem-accounting-v3-1-94cb04399510@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260827051859.45511-1-blbllhy@gmail.com> <20260827053814.E0FFC1F000E9@smtp.kernel.org>
+In-Reply-To: <20260827053814.E0FFC1F000E9@smtp.kernel.org>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Thu, 27 Aug 2026 03:33:30 -0700
+X-Gm-Features: AcwNN1U6O7n56pozCKPz0ZzPS2sbkmywmMLVd2N2WSupAdPYymth3eZVW_zVk7c
+Message-ID: <CAMB2axPQ1LVXNybsPY7RNa+12+7mtLaahvr0vFL-xHf8sbJK8A@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: Fix NULL pointer dereference in __bpf_sk_storage_map_seq_show
+To: sashiko-reviews@lists.linux.dev
+Cc: "Cen Zhang (Microsoft Security FORGE Labs)" <blbllhy@gmail.com>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 8/26/26 18:30, Lorenzo Stoakes (ARM) wrote:
-> secretmem accounts folios by treating memory as if it were mlock()'d and
-> thus limited by the RLIMIT_MEMLOCK limit.
-> 
-> However the folios are unevictable and remain so until the inode is
-> evicted, eliminating usual mlock() semantics - mapping folios then
-> unmapping them does not clear their unevictable state, since it depends on
-> AS_UNEVICTABLE, not PG_mlocked.
-> 
-> A user can therefore easily work around the RLIMIT_MEMLOCK limit - simply
-> map then unmap and VmLck no longer counts the secretmem range. Worse,
-> folios are not accounted in the process's RSS, meaning the OOM killer won't
-> know to kill the process.
-> 
-> Repeatedly mapping/unmapping (or forking) can then result in the
-> consumption of all available system memory with unevictable folios and
-> cause system instability.
-> 
-> A secretmem fd can be passed between processes and over fork so a
-> per-process limit simply does not make sense, so follow the precedent set
-> by io_uring, perf, skbuff, iommufd and xdp by tracking the number of locked
-> pages in user_struct->locked_vm.
-> 
-> Since the scope tracked is actually inode lifetime, the RLIMIT_MEMLOCK
-> applies per-user not per-process, so it doesn't make sense to bypass for
-> users with CAP_IPC_LOCK, therefore remove this bypass.
-> 
-> There is simply no reason to carry on marking the mapping as mlock()'d
-> since it's misleading and the lifecycle is now correctly handled, so remove
-> this too.
-> 
-> Note that secretmem does not support any form of truncation (including hole
-> punching) and the folios are unreclaimable, so the folios need only be
-> accounted on fault and unaccounted on inode destruction.
-> 
-> __secretmem_account_pages() is more or less a duplicate of the code that
-> io_uring etc. use, but since this is a bug fix that needs backporting,
-> defer any de-duplication efforts to a follow-up.
-> 
-> test_mlock_limit() asserts mlock_future_ok() on mmap(), however this has
-> been removed, so remove the test altogether for the fix. A new test will be
-> sent separately for upstream.
-> 
-> Reported-by: Daehyeon Ko <4ncienth@gmail.com>
-> Closes: https://lore.kernel.org/linux-mm/20260813225328.2010303-1-4ncienth@gmail.com/
-> Fixes: 1507f51255c9 ("mm: introduce memfd_secret system call to create "secret" memory areas")
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> ---
+On Wed, Aug 26, 2026 at 10:38=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 2 potential issu=
+e(s) to consider:
+>
+> Pre-existing issues:
+> - [High] Socket local storage elements are removed from the RCU-protected=
+ BPF map inside the socket's destruction path (`__sk_destruct`), violating =
+RCU-001 rules and causing a use-after-free of the socket because the socket=
+ can be freed while a BPF iterator is still using it.
+> - [High] `bpf_selem_unlink_nofail()` concurrently sets `SDATA(selem)->sma=
+p` and `selem->local_storage` to NULL, causing guaranteed NULL pointer dere=
+ferences in concurrent `bpf_selem_unlink()` and `bpf_selem_unlink_map()` pa=
+ths.
+> --
+>
+> commit cabffb2f3787054c5c6ba2a413eaf5dc639ba23d
+> Author: Cen Zhang (Microsoft Security FORGE Labs) <blbllhy@gmail.com>
+> bpf: Fix NULL pointer dereference in __bpf_sk_storage_map_seq_show
+>
+> This commit addresses a NULL pointer dereference in
+> __bpf_sk_storage_map_seq_show() during concurrent socket closure. It adds=
+ a
+> NULL check after re-reading selem->local_storage to prevent dereferencing=
+ a
+> cleared pointer.
+>
+> > diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+> > index 1d295a8769fad..7228520aa2b6e 100644
+> > --- a/net/core/bpf_sk_storage.c
+> > +++ b/net/core/bpf_sk_storage.c
+> > @@ -806,6 +806,8 @@ static int __bpf_sk_storage_map_seq_show(struct seq=
+_file *seq,
+> >               ctx.map =3D info->map;
+> >               if (selem) {
+> >                       sk_storage =3D rcu_dereference(selem->local_stora=
+ge);
+> > +                     if (!sk_storage)
+> > +                             return 0;
+> >                       ctx.sk =3D sk_storage->owner;
+>
+> [Severity: High]
+> This is a pre-existing issue, but does this patch fully address the
+> underlying TOCTOU race?
+>
+> If a socket without SOCK_RCU_FREE (e.g., AF_UNIX) is closed, __sk_destruc=
+t()
+> in net/core/sock.c calls bpf_sk_storage_free(), which unlinks the storage
+> from the BPF map.
 
-LGTM thanks
+It looks like a valid issue that should be addressed in another patch.
+Probably need to defer free in sk_destruct if local storage is used:
 
--- 
-Cheers,
+#ifdef CONFIG_BPF_SYSCALL
+      if (rcu_access_pointer(sk->sk_bpf_storage))
+              use_call_rcu =3D true;
+#endif
 
-David
+>
+> Couldn't a concurrent BPF iterator in __bpf_sk_storage_map_seq_show()
+> operating under rcu_read_lock() find the storage element before it is
+> unlinked, and read ctx.sk =3D sk_storage->owner? The socket is then
+> synchronously freed by __sk_destruct() without waiting for an RCU grace
+> period, leaving the iterator to pass a dangling pointer to the BPF progra=
+m
+> via bpf_iter_run_prog(prog, &ctx).
+>
+> This appears to violate the remove-before-reclaim ordering (RCU-001) sinc=
+e
+> the socket is removed from the RCU-protected BPF map inside the socket's
+> destruction path.
+>
+> [Severity: High]
+> This is a pre-existing issue, but might this only fix a downstream sympto=
+m
+> in the iterator path while leaving other concurrent map operations
+> vulnerable?
+>
+> When a socket goes away, bpf_selem_unlink_nofail() in
+> kernel/bpf/bpf_local_storage.c sets SDATA(selem)->smap to NULL without
+> holding local_storage->lock.
+>
+> If a concurrent map deletion calls bpf_selem_unlink(), it acquires
+> local_storage->lock first, sees selem->snode is still hashed, and calls
+> bpf_selem_unlink_map(). Could bpf_selem_unlink_map() then unconditionally
+> dereference the now-NULL SDATA(selem)->smap, crashing inside
+> select_bucket()?
+
+Callers of bpf_selem_unlink_nofail() (i.e., map_free and destroy) do
+not race with bpf_selem_unlink() so this should be a false positive.
+
+>
+> kernel/bpf/bpf_local_storage.c:bpf_selem_unlink_map() {
+>     ...
+>     smap =3D rcu_dereference_check(SDATA(selem)->smap,
+>                                  bpf_rcu_lock_held());
+>     b =3D select_bucket(smap, local_storage);
+>     ...
+> }
+>
+> Similarly, it looks like bpf_selem_unlink() could use a potentially NULL
+> local_storage for lock acquisition:
+>
+> kernel/bpf/bpf_local_storage.c:bpf_selem_unlink() {
+>     ...
+>     local_storage =3D rcu_dereference_check(selem->local_storage,
+>                                           bpf_rcu_lock_held());
+>     err =3D raw_res_spin_lock_irqsave(&local_storage->lock, flags);
+>     ...
+> }
+>
+> >                       ctx.value =3D SDATA(selem)->data;
+> >               }
+> >               ret =3D bpf_iter_run_prog(prog, &ctx);
+>
+> --
+> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260827051859.45=
+511-1-blbllhy@gmail.com?part=3D1
+>
