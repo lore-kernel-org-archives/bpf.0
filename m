@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C2913777E
-	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 06:33:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B392472AF
+	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 06:55:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787812436; cv=none; b=AtD+KPXcK3d6tNEG5yQI9UVlt24qfkLpK9vA3aBdbEenAhYwiahMo2WjaSYJFpxLHpH+W0dZYl2SP2Az3B2rVHQsoW4M3QPVvE9NqKhhgulZcabxWe8UlRlkmdGBZKmzLNGbAS5yDY8JRKD1+p0KJYYoUpHjvX3hp8FWM2e+Nu4=
+	t=1787813760; cv=none; b=Lbq2RnpfsbaNjr5rkUejUABjXmtRGjKcRw1ouAzHOAyW+cmqmtOi2Znj9MVc3JD8a/89cxgXYp6BVzJ36d0cKbe6tmZ1EOl6UELF4YYqwYQ/7kjiWE5vUQBAWPSt7DGb+4yfPg8dHrcngaxUFifbcaykUqXbWegxVgxWNVLI/Yo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787812436; c=relaxed/simple;
-	bh=PNY/wwv4AqGfOnaHo9t0NG2Hfd6/A89n/DMopZeTbzE=;
+	s=arc-20240116; t=1787813760; c=relaxed/simple;
+	bh=8hVjcoE58iN1UrTaL5fymoZ6PmbryInRE1jDSn6eGq4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=GnYe1HfK9wMtQtlzXkY1yYjTL25e3m73R00QkpOuiTFU8yLeKnASgZDYn22k6A65qO6DxlJFBR0nFqQtRQKtsr7Jfr8epjCEqU6X9CTTSUQl/8lknYzYGhBs+awRk04Qf8AzLKbs5zuQA0iEiaikIL8+9qhlO/xE5TaTYl2sh1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nsQi+Atk; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=DC8uBJ6s2wnApUjDJI5L1Un6y0ZmoVGKA/ZPCCTAEasBlrE82oUPUNHh8C2zkMhoCrzNMsNd7XfWbKIyjUx3QoceJpYstalznHAPdbwUkigxlRtMacKeQklMbzoNVzvyjfIWqwtbtX7uL/E3j9cImoxp9DvQG/SfT+xmqXu7DDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mT1xBL5R; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nsQi+Atk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D50501F000E9;
-	Thu, 27 Aug 2026 06:33:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mT1xBL5R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C91891F000E9;
+	Thu, 27 Aug 2026 06:55:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787812435;
-	bh=nQZgQuRP6D81mjWXD+4ztm5u4R8uIidDqmddn7T3OPM=;
+	s=k20260515; t=1787813759;
+	bh=n7HJ0fplpDCZadPjTD7tydhImbBObr9dssh1OGKl22Y=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=nsQi+Atkxkosv96NpN515N5g+ebQVivzFXy/5ZzEsmv2v5oflItoLILHbDkUlZH+r
-	 AgwHQ342Njn8c2USBsHABpJKT42f8SIzBMfNTxkCUE6xX8ZwX3XKtlUcydAKZPICli
-	 yHYTJrczCOg8n6tTQvFypc9y0OJ6UsZu1MGdkYwDQTIhPnKUJJ2dtkzJAin9XU3+00
-	 Hdz7Nt4VKgrXVU7R2qvAjIAxjghFZfkxuDON5E/JVaqDWA32aBJjY5kwNqpusJcedh
-	 rq76cBkqG9Xvv2DO8oXQyDqV/plJiMnVONv0m6DFmWdEz+leAjL5rc6yWWaHOcJoj6
-	 ieXgV6I8ULp6w==
+	b=mT1xBL5RaTrPsbzlAGC22WwtOncXkVLB4mrmEhXRe21PUY7jrS15r/gNKN8GidWVB
+	 wjMXeiq8ifZVU64/vsZYeGP6+ydkMgUyI/zXJo05CopWmYolIn7qdWKLRdMH0vIR1N
+	 MbLzhjcF3hcfy6C/SWoTITSeZ0Lrq3SlNO5S06FoEw1okB1QE61yN2GULHCTQyvRqs
+	 wAYWBLWx6OETp+1QNlCElLPUIOnoRHwxZIsoXLxNQOtaS5mt7dhIl8/vHizUk3uDz4
+	 S/zl1pJdF6Up9WV5LJ5Vz3qAuz7m8Q4LfqWgjcS5vhizQ+6pfFrsSXpO2Cgt7wdlfU
+	 fnyeEaH7Eqnhw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 06/11] bpf: Allow a global function to
- return arena pointers by value
+Subject: Re: [PATCH bpf-next v3 07/11] bpf: Allow arena pointers in a
+ by-value kfunc return
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260827061145.2517714-1-yonghong.song@linux.dev>
+In-Reply-To: <20260827061150.2518572-1-yonghong.song@linux.dev>
 References: <20260827061114.2514603-1-yonghong.song@linux.dev>
- <20260827061145.2517714-1-yonghong.song@linux.dev>
+ <20260827061150.2518572-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 27 Aug 2026 06:33:54 +0000
-Message-Id: <20260827063354.D50501F000E9@smtp.kernel.org>
+Date: Thu, 27 Aug 2026 06:55:58 +0000
+Message-Id: <20260827065558.C91891F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,77 +47,75 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] The verifier error message for unsupported return types incorrectly=
- claims that arena pointers are supported for the main BPF program, when th=
-ey are actually rejected.
+
+Pre-existing issues:
+- [High] Kfuncs returning structs by value can leak uninitialized kernel st=
+ack memory via struct padding.
 --
 
-commit 518fd93d71684c317540966a4f0aa467d524c25b
+commit a43266e4517bac02a4bb85149655178eefda72ad
 Author: Yonghong Song <yonghong.song@linux.dev>
 
-bpf: Allow a global function to return arena pointers by value
+bpf: Allow arena pointers in a by-value kfunc return
 
-This patch allows global functions to return a struct by value that contains
-arena pointers. It updates btf_validate_return_type() to allow arena pointe=
-rs
-and adjusts the corresponding error message in btf_prepare_func_args().
+This commit allows by-value struct returns from kfuncs to contain arena
+pointers, in addition to scalars. An arena pointer has no provenance to lose
+and can be cast by the program, so returning it as a scalar is safe.
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index b1f4ef614d4c4..f6d82a8fd617b 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -7973,13 +7973,22 @@ static int btf_validate_return_type(struct bpf_ve=
-rifier_env *env, struct btf *bt
->  	if (btf_type_is_struct(t) && t->size <=3D 16) {
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 967ad010b3222..9a36808136c9a 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -14119,13 +14119,17 @@ static int check_kfunc_call(struct bpf_verifier=
+_env *env, struct bpf_insn *insn,
+> =20
 >  		/*
->  		 * A global function's caller models the return as an opaque
-[ ... ]
-> +		u32 member_kinds =3D BTF_MEMBER_SCALAR;
-> =20
-> -		if (local_func || btf_struct_is_composed_of(env, btf, t, BTF_MEMBER_SC=
-ALAR))
-> +		if (subprog)
-> +			member_kinds |=3D BTF_MEMBER_ARENA_PTR;
-> +
-> +		if (local_func || btf_struct_is_composed_of(env, btf, t, member_kinds))
->  			return 0;
->  	}
-> =20
-> @@ -8075,7 +8084,8 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
-env, int subprog)
->  		if (is_global) {
->  			bpf_log(log,
->  				"Global function %s() has unsupported return type. "
-> -				"Only void, scalar, or a scalar-only struct/union up to 16 bytes is =
-supported.\n",
-> +				"Only void, a scalar, an arena pointer, or a struct/union of "
-> +				"scalars and arena pointers up to 16 bytes is supported.\n",
->  				tname);
->  		}
->  		return err;
+>  		 * The returned struct comes back as raw register bits modeled
+> -		 * as an unknown scalar, so it must contain only scalars:
+> -		 * otherwise a pointer field would be laundered into a scalar
+> -		 * and escape provenance and reference tracking.
+> +		 * as an unknown scalar, so a pointer member would be laundered
+> +		 * into a scalar and escape provenance and reference tracking.
+> +		 * Only scalars and arena pointers are allowed: an arena pointer
+> +		 * has no provenance to lose, since a program may already derive
+> +		 * one from any scalar with addr_space_cast(), which confines the
+> +		 * result to the arena.
+>  		 */
+> -		if (!btf_struct_member_walk(env, desc_btf, t, BTF_MEMBER_SCALAR, 0, &p=
+ath)) {
+> +		if (!btf_struct_member_walk(env, desc_btf, t,
+> +					    BTF_MEMBER_SCALAR | BTF_MEMBER_ARENA_PTR, 0, &path)) {
 
-[Severity: Low]
-Does this new error message in btf_prepare_func_args() incorrectly claim th=
-at
-arena pointers are supported for the main BPF program?
+[Severity: High]
+This is a pre-existing issue, but does returning structs by value from kfun=
+cs
+leak uninitialized kernel stack memory via struct padding?
 
-In btf_validate_return_type(), arena pointers are only added to member_kinds
-if subprog is non-zero:
+When a BPF program calls a kfunc that returns a struct by value (up to 16
+bytes) containing padding bytes, the C compiler leaves the padding bytes
+uninitialized in the return registers (e.g., RAX/RDX on x86-64).
 
-    if (subprog)
-        member_kinds |=3D BTF_MEMBER_ARENA_PTR;
+The verifier's check_kfunc_call() processes this using btf_struct_member_wa=
+lk()
+which ignores padding. The code then calls mark_kfunc_ret_regs() which
+unconditionally marks the entire return registers as fully initialized
+scalar values:
 
-However, if a user attempts to load a main BPF program (subprog =3D=3D 0) w=
-ith a
-global linkage (like BPF_PROG_TYPE_EXT) that returns a struct containing an
-arena pointer, it will be rejected by btf_validate_return_type() but then p=
-rint
-this error message incorrectly implying that arena pointers are supported.
+kernel/bpf/verifier.c:mark_kfunc_ret_regs() {
+    ...
+    mark_reg_unknown(env, regs, ret_regs[0]);
+    if (nregs =3D=3D 1)
+        return nregs;
 
-Should the error message be adjusted, or should the subprog check be change=
-d so
-they match?
+    for (i =3D 1; i < nregs; i++) {
+        mark_reg_unknown(env, regs, ret_regs[i]);
+    }
+    ...
+}
+
+Can a BPF program then read these registers and exfiltrate the uninitialized
+padding bytes (e.g., via BPF maps)?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260827061114.2514=
-603-1-yonghong.song@linux.dev?part=3D6
+603-1-yonghong.song@linux.dev?part=3D7
