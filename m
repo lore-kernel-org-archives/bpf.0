@@ -1,169 +1,336 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11012015.outbound.protection.outlook.com [40.107.75.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B18C24EA90
-	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 02:56:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 137CD222599
+	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 03:26:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.15
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787799381; cv=pass; b=Kzvu8RyjpLvDATtybajhKdMa9Ykfi/dYPvwd8E/LI49TFDKzsIDQKZ2TbDDXeA++8Ew4g4wufmjwSfcDcuoAbDe6AoWVXRG/JElpWSesgxMjcoaJQBZtZllzhVJDgolx1+OFcmA8hTIn22Z9voxgtCsxzY6WuPY3MlRYCu29dL8=
+	t=1787801170; cv=fail; b=lhReJXo8dUcg3DuN9qUug7qyR6vuGUziImnTbR+Jwv2M6JZNQo2RoGSeiXu9Cdqx5ruFPm75Z1TIpx8MOpScqBIYimab/wImUzFvQc035pjvrn+Z82aDMgFM8W8MjC0lP48AiilCVPaYcpbUaLHnmyumM+UOce83ctJNELpfbys=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787799381; c=relaxed/simple;
-	bh=ZBhdSdl5+abIXlYKkjPbRcE9Y6VKqGLQ1FdukDJLIWM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OnjzOfzzgFHad+WCl3oioYtfMfBJ8JrBuQBZvsz+AAjKcoWJaI+kvB0VEAkfA4aKExVJodVgapvRLaQuDg61lF5U2ZzRt+TlGH1IzqpPij9Pw5AyQ019mjLjxV54l2xnqWEG+eouaIpk7lP3YyQuwnB0mjlDmiAMmbtiopsgTAE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=clepdlZW; arc=pass smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787801170; c=relaxed/simple;
+	bh=plpkCYPycCZ3pSet/bh8zXrfPGLYIdOBFySAxG5iBYk=;
+	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=gHrRkTbfPeQFO7AcrbHD06qQJzJRp255/GCH+AzGar9ENnOQ1L24sSK/dViqT7grvLnNz5Fjo69kYoi95514OLrrQOjWCbqoD8V1ORpejBexTfeRCMQl9+d5jZUOGQxMLRnr7pVD1BXLa24bFZy6FKKegO2jEt8LtnZxsgty2Sw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=RbQULQfs; arc=fail smtp.client-ip=40.107.75.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="clepdlZW"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-38ea87caafeso1742249a91.3
-        for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 19:56:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787799376; cv=none;
-        d=google.com; s=arc-20260327;
-        b=pXbWsnFPCvQjbm12R3mnIoAEjuumIVVPdDhb+VFY0xcwLhSByZ7O92FmZgSn0TJMr+
-         4sGxcCJNEm7uBf4SsWP23jgTn26fDV7Xjk6KV0kXCGaNDl6yUrNbIgHX00nFSSvuzLIM
-         xJyV48iEgS4xYDyTFz9fnrhOW10LjelUJjy4TwjNRxLHknt2V7EqFYh8MJ+JW680/ob2
-         m4uvlcs2rwV51s5p1hetbYvRtvUEflaqXjuVf3J2D7alAcN3n6TLhHlMGW06bfYbfBkc
-         h/PBuHIUy9IVwwJ7DGf3Ro9t6zIgE60o+se8uFJhsAAkHgu7MYneFclx+j30uUV4sN6J
-         d28A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=BmocDsS7jcJjPt0AiPmcdXHK/Zgi5+SmiQPLaVUgJ6o=;
-        fh=aDHwORZafV5EghjaAGcsO4U8q640TEdYqiyZuljn03Q=;
-        b=OWWi//GrmH9F5FeA+SztdqtR7NpugwkSfyPEw+5MiUwMQnfpGyc9mWob/E4W81wSyc
-         +8l56wgy4hawxGbtQmhcM7MSiYPQNgvBpHgzMHhJQZ6t40QOLb3PZ4OGkBbItbpFDEiy
-         fDYz/5jbZ4+theerpzbdtVpeki2FIUeiFM1l5b/sGat0QXnzWmQB6IxjEwSmiHlWHqED
-         Jzs63dIHKhT46C4oux4gQN4D74QzhJHIfxB8GZasCY9lwl7xY55YCrWHQOAg/A+/Suzw
-         RAY86TyJ26g886iYDvjiPGiVbQib33Si38QC/dmrJd+ZU8PbJeHCg65W+Wa1G0K8pFSO
-         8/uw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787799376; x=1788404176; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=BmocDsS7jcJjPt0AiPmcdXHK/Zgi5+SmiQPLaVUgJ6o=;
-        b=clepdlZWFH6yUAK33IQV7uPiXXs4OCCXfwqckBMWAhY7krwit5hbgX9y6B1Lq7DAJG
-         9FnxSvQbpU7VRrbAdjhUSeYtgvbZH27cp0M0TZ1kvK5E6T102Id+E1ZWY5ho69wntGqs
-         8s0DNGiEmaaYS4yezCMAs4jqQuaMaA4q9adYWQo4x5xdHkrBmHGRxgQxqDFwsNqE79Fh
-         TmWK+dDw+m6+tVcifnz6hmiWc0DYI/KAwxOGfpfkF28sJq+aJtgnBbl18XrEshwM3alB
-         modW6vXChhKVN1Xe9b223j00DCy8zEKM0zvGErGXJWLAm/TS4WZQwIcQiXXWn07qENIr
-         a7Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787799376; x=1788404176;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=BmocDsS7jcJjPt0AiPmcdXHK/Zgi5+SmiQPLaVUgJ6o=;
-        b=AKpKjvhAldn+OuIos6i7y6UDKB8+1ASujNRl1t8BjjJElor/Wx1Rf6LtJHLbpuXf0P
-         T91pSiN/unLlb+9wDuYjKgxlm1gD9cSmqntMQqO0PtXtL6zspT33VGwnOzExvWAibKKP
-         jBOOusAH9IiKhHLRs8u6oIZ+kUTVmbA5RATPn0fdUBSi8YPMpRy4/6bvxAeP857pj8oW
-         QJ1Opyc/iipRe+x2aykXwZ74lLtowZ8x+iaXzSKzZBe3nU4fTy0umv39fCHyGy4xfLdG
-         rFb7s7FtKX4D5jqEjzexAwm9etyYtiEadeIKuKjJwIEdgm/CQQo48p1ZNQpVsMLt0s/S
-         nz3A==
-X-Gm-Message-State: AFuF++mpIczUuUaU1yd2Bdn1oIvlr8O+nlYxW490RQ2zjF00KwXuTNAW
-	9dbCkzG/B5SU6F8S8EtivmGLcziY1yQZu01WsV6qPmyxgjspCGO+pGM1thUjNObQPU+dPdgioX4
-	0u8prtHpzYEdjSyU69VQa59IYVO0x5wg=
-X-Gm-Gg: AR+sD13U1n/Lof/8z9thJI3W9anrUb88lBPeAEZgbodIdGUToStdohkNdes9OEDS6fA
-	kTZkYZPHE5dBTIRH7pCxijU0fmc5YmqV1pedS1RC2Bvy9+H0XDAWC9eWFARDT62mJWKJ+4oRHaf
-	sKYyQfAD7Hr6cCDIuNxT9ga+fM3DGiBEdt/vaiQOsX23tz/2j0cx5MllF4ekI6dmaigVhqqI7kC
-	CMN8NxqdLRirEYIrRwrnuLdQ1T0zOlO1bCag3HY6Hu4xYTQ8SjzKZ2JFAzipqNtYeLPLfeJ7jH7
-	c/AIk2tVEi5l9BFiIeLcsr7WuKD8KZhg56lvIfATMcbrYY8EN1syPLaft5qJ6s3hEawlO0jxIPP
-	wAcyTJuDIAfThZ6O7vFiuowUIvzfpDoJ36tiqIltC+8pG9WRP2l2isMLNzH99/nw=
-X-Received: by 2002:a17:90b:2604:b0:38e:ad9d:1151 with SMTP id
- 98e67ed59e1d1-3966d18ec9dmr24486491a91.4.1787799376080; Wed, 26 Aug 2026
- 19:56:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="RbQULQfs"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=sjeYbc+X965blCoUXawZd/QLThw1f9Xsxt9K8xvofdxyXnDvuBIcgHCAanNAMgGZyYpdVwNEQxIXw/6DDPHETdrPV2yrarVEpxxS84tHZYA7ibdbldI4z00xS3+fNLAuovdrVWPGGBTBqWwmapUe+9uI+Zz6QoA/0WVOWBWTxJRzPaBbyNzMLBOgq+yCakriSkbVe0PISMZcQsLcyU6OullQiNUUO18Hlkkw5FWUy289COkNZrepHTh9PqUAYKxh4qFrDPXxLRHp/HfJ0x1wxJ8Losncx7MFODj3B+UtF2LZ3JMVHo/JZNSPJhtN8VSR7XrYyHBPBFvX/KWRuKifdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=whWsEaPH/Abk8/fb02L9lQkwrrpV8tpmSQE3meT7MEU=;
+ b=AoNPXt6BWkmyBgbtxITDrjfWvgeHdcHHlJrpQ+by1Zv2PdmLh+WZCnefI7V7AIdzy9QeBIND+ujO2Yrinlhup9PQQnEo6FgdYeXvLMDPo7M9L+HBCItqDhobn7+afAJ5MUgc8HlYKBqE8Zd7CkRiwzoYdgix7Hj/6nUrYZmvdMYpRjk2w+HmfpJcthRy8QPzw+C/Po76eb0JDCviE3KS0avFdZUtVoCi0Q2jGLDUAoRomjFV1GWrVeLoFN47haL7W9uZYK1CDDe9SAXMGFUue7fsOeJ77y565TpQ3sIDHHTJxVmjwuy9qon6iSANCLg/Q0f+pnAP1W1WArRL6SBnMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=whWsEaPH/Abk8/fb02L9lQkwrrpV8tpmSQE3meT7MEU=;
+ b=RbQULQfs1Km3c77uctiQEqNYnW9zX+XHPKdKqTIPKqNrEy+rhuXG2Rr9St6NffwymmVqPeeXpLv/8MUdtTKYJn/b4kq2/t+b3X10hmyH/McR6VWQEB+4nksbxcK0r6THPnoMxsN9cwkkhzp3mlGw6S6foYaEcHFx6fVaLtzVhd3BbTfpixK1v1mXbWDZQzfQhmR3ccr93PqrfrlYcN76JaTnwPZIc7sW9uIZLlsLYUtGql2zUSFdMvNcg8hJSu8d+poDlkbDjVyvsder0tbY/RhPk3U/oDgNMsGjVKvndSwKuN7ylCoFf4wY3kxCWlKb4ZSGh8q7hO7Wpyk03fHtsA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from PUZPR06MB4742.apcprd06.prod.outlook.com (2603:1096:301:b5::13)
+ by OSQPR06MB7184.apcprd06.prod.outlook.com (2603:1096:604:293::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.10; Thu, 27 Aug
+ 2026 03:26:05 +0000
+Received: from PUZPR06MB4742.apcprd06.prod.outlook.com
+ ([fe80::206c:c661:9838:5571]) by PUZPR06MB4742.apcprd06.prod.outlook.com
+ ([fe80::206c:c661:9838:5571%6]) with mapi id 15.21.0360.008; Thu, 27 Aug 2026
+ 03:26:04 +0000
+Message-ID: <fd301b2f-4333-4868-8a77-c2c06362cb75@vivo.com>
+Date: Thu, 27 Aug 2026 11:26:01 +0800
+User-Agent: Mozilla Thunderbird
+From: Fuyu Zhao <zhaofuyu@vivo.com>
+Subject: Re: [PATCH bpf-next v5 1/2] libbpf: support selective kernel module
+ BTF loading via bpf_object_open_opts
+To: bot+bpf-ci@kernel.org, eddyz87@gmail.com, andrii.nakryiko@gmail.com,
+ alan.maguire@oracle.com
+Cc: bpf@vger.kernel.org
+References: <20260826131428.302-2-zhaofuyu@vivo.com>
+ <70202a9e53b06c7d44cd83b2824fc43fab79a2ac24d0e0c71bb95759eca5508c@mail.kernel.org>
+In-Reply-To: <70202a9e53b06c7d44cd83b2824fc43fab79a2ac24d0e0c71bb95759eca5508c@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SG2PR04CA0208.apcprd04.prod.outlook.com
+ (2603:1096:4:187::10) To PUZPR06MB4742.apcprd06.prod.outlook.com
+ (2603:1096:301:b5::13)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260824134016.2006188-1-chenyuan_fl@163.com> <20260824134016.2006188-3-chenyuan_fl@163.com>
-In-Reply-To: <20260824134016.2006188-3-chenyuan_fl@163.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 26 Aug 2026 19:56:04 -0700
-X-Gm-Features: AcwNN1Xf4GjnowAicFWJ8kHVsUKvNkOD5IQBzS8D5CTI9OTkylntSJQVxRx7ZVA
-Message-ID: <CAADnVQKPSWBzaEc7QBT39C_N_32Gu5_P5Cob9G0rxcDgiSQg6g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 2/3] bpf, arena: fix range_tree_set
- inconsistency on kmalloc_nolock failure
-To: Yuan Chen <chenyuan_fl@163.com>
-Cc: bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Yuan Chen <chenyuan@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PUZPR06MB4742:EE_|OSQPR06MB7184:EE_
+X-MS-Office365-Filtering-Correlation-Id: fa04725c-3d13-4dab-7448-08df03eaecea
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|1800799024|23010399003|366016|13003099007|6133799003|4133799003|56012099006|10067099003|11063799006|4143699003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	GSjq6ZG/8bMcb+u4GgxcjSt8qdtPPzsylONWD5yX1QCie237PgSb/HNCy5Ny/3uf1oLiJ77nIaWnfiyNXjtw/2dTtVzXS0Hkbme3HdS+BdsKtxLPd7PWzbmBankgdH8bT+yn6xLj/cVAMElvB4vTMHIloM0uihKSWmCWxGvxY/fZrrC1d4rCbTuhK+uo7QTw0hT4RoW9kyO/8OFHJHyW+RnskhMBTZS/PuR4g0N/Q3rDHpUBVzCOUT03v1UkTtZZJxOB8fD1DhkT98+hfDwMEMEyUzk5JV5B73bslfWYPC6pDd7OK0lawin4Gt1uqZkhy9L6kDpjiNUUAz0mzjU483UUT8xAdZPKErzW7Gv0xlLNB9YkZh41nXoQ6x7+diGea4kl7m/T6sDlGadjDrG41Yn201EfDv8J7DboGM/KoFjRt8h7DpnJ7S2L5YbrvnmQgP5VyaSlttrNTGnB6uXpq/CBSdrCwQdPgtMXxx6KqmKFABK+t4zOdlwxJMS+Dx3D3H8CplSUU2VmyM7bEskPfrHQPquw/OEnKkPWsYljbfiI3S7g2ZkDWuUHcigZxk0c/7d3FfOpNAcOg25yvCU7CXgSoNd2EwR/hRgtNZ4ZMh6aVJoypmcdLvFCq1EBrME8
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB4742.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(23010399003)(366016)(13003099007)(6133799003)(4133799003)(56012099006)(10067099003)(11063799006)(4143699003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?QzM4RWhETnhFNExrbzJzck8xYS9Db2pVNXVKY05ucTIvc3hoQ0hjM1VEbytU?=
+ =?utf-8?B?Z29Dd1MzUFg5VDE0ZEE5WjZWU2h6Y3V3cWxmU2tjWUZSZ3c3VDZlbUNYNktu?=
+ =?utf-8?B?a1Jla0FWRkVZMm1PNjM3MlhFNnRFMXptUnQrRlk0dHhPMERoSUdhcUVZckpD?=
+ =?utf-8?B?TkNZMWtQMTZ1Z040cE1oMGloVlBpS0lxeEdlM291L3ZacnliQTJ1Q1p3QXVn?=
+ =?utf-8?B?dnd0ckNERGVDeDlVNGtEMDhQRHdDRDNQWVVoYTJpdkRoNjVkdm9VU1U3WkUz?=
+ =?utf-8?B?bFNjUDZnV01hZWtlMEJ5S1BqNGJ4cjNBR2M4UG1neEE4UnlqZXNQSGwrR1Fz?=
+ =?utf-8?B?WVZaMW11WFZHMm02WkRZcklUeUI0WVdEUWVhQTlicDUxcm5tdVdIdEZ6bnZ4?=
+ =?utf-8?B?V2JNbk9CSmNsWVJ1b3lMVS9mN2NRbi9SWDFZeW9RZVpIazNScDRDRjNnRjla?=
+ =?utf-8?B?ZE4wUm5yMVA0eU1rNDYrNW1pb01EQ0VwNEhTa1lEN2tHaEJMTisrbmVuM0Y2?=
+ =?utf-8?B?Vmt4ZThseGpFVDRVakhFM243QmRvWGMxRjV6QlZmSzc0MzluWXBBMXFCZUFa?=
+ =?utf-8?B?WGo4N1pabHBLYm5RRnhKVndxNTJtM1Z4UGVlbU4yMDRLSEVCYVdJUEIvUUVN?=
+ =?utf-8?B?TjUzRlg1OGVwb016MndncWd5Nk04dUZFTkZPc0pMekQ5SExQT09hUWorSFRO?=
+ =?utf-8?B?ZWsvTlpyRkZ0bmdlaE1xU2ZWQThiQUI0dmV4eHFualdOWE9sbmdMaFljeFla?=
+ =?utf-8?B?SVMvckx5cUY2cHJlYkMzdC9WWFZzWXlMZmtWTnlqRnR0K0x4Um9JanE4K2E2?=
+ =?utf-8?B?YStiWHNvd2xJNGxpdnR3bVJ5L3Z0Y1lkRllXQ0pHMnBwT2FreVdGTThWWHFR?=
+ =?utf-8?B?SVJNN3pHc1FkNE5GeHZvMFZ1NmZ3d2RQWU5yOVl5UTdDSEs4RzloMitSSVBQ?=
+ =?utf-8?B?bjhieHF4NU8yQ0RDc1VHTUVUTGEwdVBUM0xKcGowNzgvRURtaDhZdVNhTlhu?=
+ =?utf-8?B?Yjh6b0dtWXMzd3R1clJ4dEFwZFkzeUttVWgvZytiSzFnclF4TWk5SmxSZFUz?=
+ =?utf-8?B?SU1VNE16ZXU2Q3pLQU1NRmdCTXJHaFJmTmthVnRIV0ljVkFoTCs1MVphdTkz?=
+ =?utf-8?B?dStCVjZnWVhINktOWmFqWXVJOCtOZXBOVC9KbmZ5bWhCZENSOGs3S281SW9a?=
+ =?utf-8?B?QmFCUFVnbDFFUnUxUzdQK1dDNDdRaElhQUxnT2JhV3pVUGhyNE5vY1l0ZmRU?=
+ =?utf-8?B?OWZLNmpqRklxeGpVeWw5S3NicGpaRTRITUZsVExmVFVNYm5LaTFpVGFiL0FS?=
+ =?utf-8?B?MVorejFLT0ViYTJ6NzkzZ3FrN2V6VEh3dmcyYmRKWmZBdXl1VCt3SXlxcFFP?=
+ =?utf-8?B?KytsRVNoRHBwTUNLdWhuZjc3ejZnNTd5d1A3VlpOVDZPemJlaklXc01OS3gv?=
+ =?utf-8?B?WVpXbDhQQkcyWTdENE9OMWFqOTJwd3I2Rm1hUkU5RkdGSUJWaktVeXM0TXNr?=
+ =?utf-8?B?eUdxalZETDFyR2dsM0tCbHEzcWJXcnRGOUJFZzU1dTdUdlhZajdHTWhGYldx?=
+ =?utf-8?B?MmF3OXVIaThVbFRZOUlUTFF6UmUwWm5HV2VCVGhidnRuSERuMjZmWlQzMEcx?=
+ =?utf-8?B?VDJReVFhSzIybjRYeEw0MUVtSnhTeWVCc2ozRk82YzhsVzdTcmJ1a05XWVNT?=
+ =?utf-8?B?MzRoQ1VHRHhrcmtaMVluYnk4b1liOFQxVWFLYkJETDVPa21PaG1zZkp0SHh5?=
+ =?utf-8?B?dmZSTDBjanpqVSsrdkVHOE9BRFF6RlhPcnRiSUZ5YVZHNnZqeEdNSXhKcmwr?=
+ =?utf-8?B?Q0Y4MkY0UkoyT2JiNVhlaGUxUnJHNUNLUmszTmtDZUhlcU9YQ3lEU3ZzL0RO?=
+ =?utf-8?B?bjViN284K1VFbjZoZUZpS3p6VjZsdW5xOUZhQXp2ajFkLytMbUErN1pvanJW?=
+ =?utf-8?B?dlJwazZISGRKM2RPNTFaSkljdUpvUUM0SjArUFNVcUZXY2hDamRmT2srTHZz?=
+ =?utf-8?B?Wk1kRGRDMlpHZHArWExIMHVhT2o4alNuYnI2RGhnSnZTQkhDTGt3UWRIT29Y?=
+ =?utf-8?B?NlpRUjBjUXRZNFo0cy9xSzRMTTlncTdLNThpbFBKSDFpY2YycktWTkxLeG1Q?=
+ =?utf-8?B?WElra1pxYzFydmdTbkxYdkFXUWxtMTduaVVIVXpNMzRUUTA5TEltbXdFY1gx?=
+ =?utf-8?B?NzN3TEpGcklPSlZWRTNLWWFOZDFTenZzaXlvb0lnUUYwY2JiTmg2VG9UbDFm?=
+ =?utf-8?B?UlNwT2FQZTQ4NUxKQ1VkUzk1WEE0cWpETXNDZ09FMm5jeW01b2V2Qmd5dGdn?=
+ =?utf-8?B?bnpXblJvZ1JiRjRyNG1pd3Q3aDBuL0FSbkw2QU9wSGYwTTQxVjFFQT09?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fa04725c-3d13-4dab-7448-08df03eaecea
+X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB4742.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2026 03:26:04.5222
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MFXdGFnz9wsr82BGVumIUqXBGY9A2uQerxdYGWVx0YLr0ORTvTd5WvS25/Vdy9VIQFA81NXPien5/nwyrl8++g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSQPR06MB7184
 
-On Mon, Aug 24, 2026 at 6:40=E2=80=AFAM <chenyuan_fl@163.com> wrote:
->
-> From: Yuan Chen <chenyuan@kylinos.cn>
->
-> range_tree_set() pre-allocates the node needed for a brand-new range
-> before calling range_tree_clear(), so an allocation failure returns
-> -ENOMEM without having modified the tree (previously the overlapping
-> nodes were already removed by range_tree_clear() before the allocation
-> was attempted, permanently losing the cleared sub-ranges).
->
-> Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+
+
+On 8/26/2026 10:13 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+>> index b749c01742ee0..a466aabf35e1c 100644
+>> --- a/tools/lib/bpf/libbpf.c
+>> +++ b/tools/lib/bpf/libbpf.c
+> 
+> [ ... ]
+> 
+>> @@ -5851,6 +5854,99 @@ int bpf_core_add_cands(struct bpf_core_cand *local_cand,
+>>  	return 0;
+>>  }
+>>
+>> +static void bpf_object_free_btf_module_names(struct bpf_object *obj)
+>> +{
+> 
+> Andrii Nakryiko raised a concern in v3 about the naming convention used
+> here. Internal helper functions should not use double underscore naming, as
+> that convention is reserved for extern method-like APIs. Would
+> bpf_object_free_module_names and bpf_object_init_module_names be more
+> appropriate, following the single underscore pattern for internal helpers?
+> 
+> Reference: https://lore.kernel.org/bpf/CAEf4BzbbdjeSW88EEk2xRvAxq-HWUJ7qTw4BYnL3kLH0f0uhwg@mail.gmail.com/
+> 
+
+Am I missing something here, or did the bot miss something?
+The helper functions are already using the single-underscore
+naming convention in the current version. I also think
+`btf_module_names` is more appropriate than `module_names`, as it
+makes it explicit that these module names are specifically used
+for BTF-related handling.
+
+>> +	size_t i;
+>> +
+>> +	if (!obj->btf_module_names)
+>> +		return;
+>> +
+>> +	for (i = 0; i < obj->nr_btf_module_names; i++)
+>> +		zfree(&obj->btf_module_names[i]);
+>> +	zfree(&obj->btf_module_names);
+>> +	obj->nr_btf_module_names = 0;
+>> +}
+>> +
+>> +static int bpf_object_init_btf_module_names(struct bpf_object *obj,
+>> +					    const struct bpf_object_open_opts *opts)
+>> +{
+>> +	const char **names;
+>> +	size_t i, j, cnt;
+>> +	int err;
+>> +
+>> +	names = OPTS_GET(opts, btf_module_names, NULL);
+>> +	if (!names)
+>> +		return 0;
+>> +
+>> +	cnt = OPTS_GET(opts, nr_btf_module_names, 0);
+>> +
+>> +	/*
+>> +	 * Allocate one entry for an empty list to distinguish it from the
+>> +	 * default behavior.
+>> +	 */
+>> +	obj->btf_module_names = calloc(cnt ?: 1,
+>> +				       sizeof(*obj->btf_module_names));
+>> +	if (!obj->btf_module_names)
+>> +		return -ENOMEM;
+>> +
+>> +	for (i = 0; i < cnt; i++) {
+>> +		if (!names[i] || !names[i][0]) {
+>> +			pr_warn("invalid kernel module BTF name at index %zu\n", i);
+>> +			err = -EINVAL;
+>> +			goto err_out;
+>> +		}
+>> +
+>> +		for (j = 0; j < i; j++) {
+>> +			if (strcmp(obj->btf_module_names[j], names[i]) == 0) {
+>> +				pr_warn("duplicate kernel module BTF name '%s'\n",
+>> +					names[i]);
+>> +				err = -EINVAL;
+>> +				goto err_out;
+>> +			}
+>> +		}
+> 
+> Andrii Nakryiko suggested in v3 that the module name list should be sorted
+> and duplicates detected in a single pass rather than using the O(n^2)
+> nested loop approach. The suggestion was to error out with -EINVAL if
+> duplicates are found after sorting. Would this optimization be worth
+> implementing?
+> 
+> Reference: https://lore.kernel.org/bpf/CAEf4BzbbdjeSW88EEk2xRvAxq-HWUJ7qTw4BYnL3kLH0f0uhwg@mail.gmail.com/
+> 
+
+I think the O(n²) duplicate check should be fine here, as
+`nr_btf_module_names` is expected to be very small in practice.
+Sorting the list just for duplicate detection would add complexity
+without providing a meaningful benefit for the expected use case.
+
+Hi Andrii, hi Eduard,
+
+what do you think? Is it OK to keep the nested loop here?
+
+>> +
+>> +		obj->btf_module_names[i] = strdup(names[i]);
+>> +		if (!obj->btf_module_names[i]) {
+>> +			err = -ENOMEM;
+>> +			goto err_out;
+>> +		}
+>> +
+>> +		obj->nr_btf_module_names++;
+>> +	}
+>> +	return 0;
+>> +
+>> +err_out:
+>> +	bpf_object_free_btf_module_names(obj);
+>> +	return err;
+>> +}
+> 
+> [ ... ]
+> 
+>> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+>> index b965ad5715403..b8c1d98d69d85 100644
+>> --- a/tools/lib/bpf/libbpf.h
+>> +++ b/tools/lib/bpf/libbpf.h
+>> @@ -224,10 +224,32 @@ struct bpf_object_open_opts {
+>>  	 * point (/sys/fs/bpf), in case this default behavior is undesirable.
+>>  	 */
+>>  	const char *bpf_token_path;
+>> +	/*
+>> +	 * Optional list of kernel module names whose BTFs should be loaded.
+>> +	 * nr_btf_module_names specifies the number of entries in
+>> +	 * btf_module_names.
+>> +	 *
+>> +	 * With btf_module_names:
+>> +	 * - when provided, only the BTFs of the specified modules are loaded;
+>> +	 * - when an empty list is provided, no module BTFs are loaded;
+>> +	 * - when NULL, all module BTFs are loaded as before.
+>> +	 *
+>> +	 * The list must not contain duplicate entries; otherwise -EINVAL is
+>> +	 * returned.
+>> +	 *
+>> +	 * This affects:
+>> +	 * - BPF CO-RE relocations against types defined in modules;
+>> +	 * - BTF-based resolution of function attach targets for
+>> +	 *   fentry/fexit/fmod_ret/freplace/LSM programs;
+>> +	 * - struct_ops kernel type resolution;
+>> +	 * - extern (ksym) resolution for kernel symbols defined in modules.
+>> +	 */
+> 
+> Looking at the 'This affects:' list and the -EINVAL contract, are there two
+> things missing?
+> 
+> First, load_module_btfs() has four callers in libbpf.c, but the list above
+> covers only three: bpf_core_find_cands (CO-RE relocations), find_kernel_btf_id
+> (fentry/fexit/etc), and find_ksym_btf_id (extern resolution). The fourth
+> caller is find_attach_module(), which is reached from tracing_multi_mod_fd()
+> and collect_func_ids_by_glob() for 'module:glob' attach patterns:
+> 
+>     mod = find_attach_module(obj, pattern);
+>     if (!mod) {
+>         err = -EINVAL;
+>         goto cleanup;
+>     }
+> 
+> So a user who sets btf_module_names and then attaches a tracing-multi
+> program with 'mymod:foo*' gets -EINVAL if mymod is not in the list, but the
+> documented behavior above doesn't hint that this option affects multi-attach
+> module resolution.
+> 
+
+I think the `fentry`/`fexit` entry in the documentation already
+covers the multi-attach case mentioned here. However, `fsession`
+could be added as well.
+
+> Second, the -EINVAL contract mentions only duplicates, but
+> bpf_object_init_btf_module_names() also rejects NULL and empty-string
+> entries:
+> 
+>     if (!names[i] || !names[i][0]) {
+>         pr_warn("invalid kernel module BTF name at index %zu\n", i);
+>         err = -EINVAL;
+> 
+> Would it be worth clarifying both of these in the documentation?
+> 
+
+I don't think this needs to be documented, as this check is just
+input validation when `cnt > 0`. It prevents NULL or empty strings
+from being included in the provided list, rather than being part
+of the API semantics.
+
+Thanks,
+Fuyu
+
+>> +	const char **btf_module_names;
+>> +	size_t nr_btf_module_names;
+>>
+>>  	size_t :0;
+>>  };
+>> -#define bpf_object_open_opts__last_field bpf_token_path
+>> +#define bpf_object_open_opts__last_field nr_btf_module_names
+> 
+> 
 > ---
->  kernel/bpf/range_tree.c | 45 +++++++++++++++++++++++++++++++----------
->  1 file changed, 34 insertions(+), 11 deletions(-)
->
-> diff --git a/kernel/bpf/range_tree.c b/kernel/bpf/range_tree.c
-> index 15b588377a76..54055b1fe541 100644
-> --- a/kernel/bpf/range_tree.c
-> +++ b/kernel/bpf/range_tree.c
-> @@ -199,6 +199,7 @@ int is_range_tree_set(struct range_tree *rt, u32 star=
-t, u32 len)
->  int range_tree_set(struct range_tree *rt, u32 start, u32 len)
->  {
->         u32 last =3D start + len - 1;
-> +       struct range_node *new_rn =3D NULL;
->         struct range_node *right;
->         struct range_node *left;
->         int err;
-> @@ -208,20 +209,40 @@ int range_tree_set(struct range_tree *rt, u32 start=
-, u32 len)
->         if (left && left->rn_start <=3D start && left->rn_last >=3D last)
->                 return 0;
->
-> +       /*
-> +        * A new node is needed only when the range has no adjacent free
-> +        * range on either side.  This is known before clearing: any rang=
-e
-> +        * covering start - 1 or last + 1 survives the clear as an adjace=
-nt
-> +        * piece.
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32974547426
 
-If this is true, why do a 2nd call to left =3D range_it_iter_first() ?
-
-
->  Allocate only in that case, before modifying the tree, so
-> +        * a failure leaves the range tree unmodified
-> +        */
-> +       left =3D range_it_iter_first(rt, start - 1, start - 1);
-> +       right =3D range_it_iter_first(rt, last + 1, last + 1);
-> +       if (!left && !right) {
-> +               new_rn =3D kmalloc_nolock(sizeof(struct range_node),
-> +                                       __GFP_ACCOUNT, NUMA_NO_NODE);
-> +               if (!new_rn)
-> +                       return -ENOMEM;
-> +       }
-> +
->         /* Clear out everything in the range we want to set. */
->         err =3D range_tree_clear(rt, start, len);
->         if (err)
-> -               return err;
-> +               goto out_free_new;
->
->         /* Do we have a left-adjacent range ? */
->         left =3D range_it_iter_first(rt, start - 1, start - 1);
-
-pw-bot: cr
