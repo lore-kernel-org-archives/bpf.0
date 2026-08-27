@@ -1,199 +1,189 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E5114908AA
-	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 16:40:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 020354908DA
+	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 16:44:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.175
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787848847; cv=pass; b=YprUk9pB8hJKHF0pXbD9Tm9h+1puJSuBXTQ0f3SvrruXWdl/CBmFcf5nJn7K40nZizfAnl1rhXrmzRs71eKftO8CrFQASZeOfQ9IL4NRrZuPJUeO7QcO2nYF0gntu8xUtHOuH69FaMgKisDZgG869uLrqsXtQFAy4u+W+NbnnnY=
+	t=1787849091; cv=pass; b=uXk1LOXmTAZk5/Kds0SmkXnT4UpDIINoh/5oWpQI2/En990/e8ijP/X2uEG7YD8xVu1ei9a7+fDV+gEVDtZldyWTVistfPbp2CQEXtRAwQpkoDgue49Qj2U4skQO7AN3a1WrupU3OEo6p2sa8D9fBeLDEL3csypneOWWyY8DPks=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787848847; c=relaxed/simple;
-	bh=Bc0mcS9QdnOZe2cDfaVrB6IpLXbgGTbtMuygd7Xdd14=;
+	s=arc-20240116; t=1787849091; c=relaxed/simple;
+	bh=v7IQgN97nNU6kWAssSMaVVvwbCRHdAYIf+fc+BRypo4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hfcjWP3Y4EG4IXA+d3sqCO8RYZBClzYK5EB9mI2I1eOs3nMPoK9R9y3u2OW5VmArEuRmTg6XssKq2M0gm2CvSFf3qpNU8XUYOXeEsryKhaItJhqtD9XwVy0mivjnvlP02mF4pNW3Vzz7o5nSIrGnvuR3eXJ2SaSu6JhIjBz8Qys=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LF8GJn1T; arc=pass smtp.client-ip=209.85.210.179
+	 To:Cc:Content-Type; b=U4l2v9Zd7xyrRW4wdoa/q0XSudFib6qBI4/3K9RQ8exQJcvB8dMWPhRf63yoRSA4AXNbjhroaeZwC2eO7OHqvpvzK/oAkOEWeoswVFkABk74jEk7yNMyCnVRllWHztXT1wMyl5PezdgWfCqyvqhMowqYL33nLcxMd+tPteL0aOU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nphfjp3y; arc=pass smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LF8GJn1T"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-84830c774a0so200187b3a.1
-        for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 09:40:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787848845; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nphfjp3y"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-848643382fcso183888b3a.1
+        for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 09:44:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787849088; cv=none;
         d=google.com; s=arc-20260327;
-        b=ek7lo81YbFh8Auf+sIaK2bzuGwkODn54TY3vkSAuK3gARb9dd0fyjCfUQJDNcbP/sH
-         RpKR46OWpbyesFJYvrVryejck8Ld5d6QX6S2BJpm1f41UpZo9gCmmfy3Z3BYzu8hPcwI
-         pcVpuDYkhWtZmgv+TyGof45dQ4UrlFgQv4jo7FSjFkVQ7JirwWbY1WkEAzrqAw7KoDDC
-         vMiQqysfHrjCANu6+jXJop7XN5v0dSiLzAz5tf+KoJ8Z0p6KbUnT6E8E4ZazYsYyfxMb
-         Y4EjmFhLbberrADeFeJ+1NStbiGdw+lv3R9pdOuEg4QU7dc+9AxNSDzbSVAHdKKbafLj
-         1G+g==
+        b=bH/7WWJQbYjJ8gOKGk92YCMUopavSWw/5hNDwcsg9/aApKuTcYa8h28/hZxWGdIfYw
+         8opJef3iDFTlOteMPRbS+7tEdLW9Wz3B/DZgJRLxK+9IYZC6J/EUNSeu0arn6IwR0FPa
+         1X1IfNNjsh6Gw6iZuXyzGNK0MOovu+p6xrPaAxpZnS8D3QM48C1SEns8ZhMEFFbgZpp6
+         DFD7sIyO1qJ0cLPDV/qX3KvLwed+k2eXRlw+NmMbw8UW+w3iFbDS7KAkj4Pso+IIHsWz
+         qPSme2w2hBBymsCBHDcjmuh8KSi/hEBlk6IDEkE5VQzrFRrT9TxhFZS9qtO8B7hOCMrn
+         jUXQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=HlMQ+RZs5fbBVG8fjD67Z6x1PNKB08HCYfn3H6xQ8Ng=;
-        fh=5n7sejDvTVK5lU33iBcbkuUwXIBvg2M7E7UOUA3VIBo=;
-        b=mFRNWUXo2427yXco1UT+H8lKDb3RBUwqBrtqUaJGc/3Ch2WsJ462VN+4mEipTmVSjz
-         SaPzRlvKorUMcSDJc/TPXCLqZb5lQpCFLTTgp3ZNbEzUh7bJSNcFaazTBDY4nBaa053M
-         8UCdmPG10ScyWWr0duqiGbMakRDCzSMzHgcA5/a5Rdx3+qmjSbNkgOWlAlmvtWfaIrpT
-         UzSDOtD/13EFBOwMhEd6/wLPqJiDvCT55kJmp+jC1KGWIHabtsGP7ouAFZ15hT+w0ovH
-         ITQI7PeDfdv/VokRzcv27+7sk//hyyEWScjVqWMr+RurPoV1fRMF6WmnMaEMgWgIymEN
-         Kybg==;
+        bh=v7IQgN97nNU6kWAssSMaVVvwbCRHdAYIf+fc+BRypo4=;
+        fh=6FP1SYjMRhlYo4mAwA4IiC1JbgNhMwCsbRQN3oOBv7U=;
+        b=Xjwhm0J99EHbgRvpbrsa2YXsTriJflwEgSqnZwvWr1Gx25lyruXpYLpTFtu2I8dm/s
+         TN2xazlgUur/YE1gHWDXUT6tvWrKNE2NINynGJEfQwkEvPC5MjiszTtHt8qgDHUgZo5A
+         bnwCA0bCbDaNLs3ydARt/cq7sRQXsuqIWx3yAJuBlqikIGuC5N2DiFl9sDHhmNCvL6VX
+         v4ysGbZcl8zjpTbXR0PmEJDTyJN6+SvRn7hfbM2hk0auH/Os8eEb5mw5VY42YP583LIP
+         y81xFIh27+5Q0zg2VI3fZ4cNgXhatunQBqTGKVraQv0UbkVtvzW4eJI3it+/1yJ9d0P3
+         K43w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787848845; x=1788453645; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787849088; x=1788453888; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=HlMQ+RZs5fbBVG8fjD67Z6x1PNKB08HCYfn3H6xQ8Ng=;
-        b=LF8GJn1Twz3yqKNF6PlXKT46d+JdkWh58kV7S5zAWVcUooJvFtjC/8kg2pMpN/dgEh
-         /oGTpwHZKuHWRtJ9wNnMnpHSOy+oQdDnyAbSJQdVbU8EQ/C82N3LuLUYqSekIJspw4/k
-         KpiL9a7MP0yBj68pXRujbby4r2j8FEYpYhFEzLzyqVSM+ji5wtR+0hLFHIluBGkdWqJi
-         +S33MjxyDAwlDRH6I7CdULXo5pcTn8+Y1+NuXWQJik9KDITxuB9W9agtAX/rrtkA7t4v
-         Sljf/8AqchxT402cbcfEQGOzv12JJtSLcnOoLlzyt98h8AQkvVAsOgvVSmla6ktta5bf
-         z7Zg==
+        bh=v7IQgN97nNU6kWAssSMaVVvwbCRHdAYIf+fc+BRypo4=;
+        b=Nphfjp3ye4B8Xe7Ggq3mS3z8FVe6NelfabzfvszHK2g635RLdkxksOs73geL6Bms9h
+         41ir4mPhcvKps2p3EllMQBKuIoUhBgNB350VEc3/TmSl/Vw/TAk2yERkbgg4TKB03LRm
+         iQqk2d7BNCjVSseA253lgsbnqFWmTzrbZXdEQUYhzowEGanay7N33PpGLsLsWo1CdoT6
+         hOKjZlm6IFpLn9b7TpbRwjgKtCdE2cdJZ4YTFyZ9x14hCNBaC5CI0su4yypNFX+ucbbJ
+         DbZPPaefdJC29H4D6tVzXy0KqtMSzae+dtMqov/Rp7wZVVzyQCTQCT70dqidkPI/9fQz
+         NqnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787848845; x=1788453645;
+        d=1e100.net; s=20251104; t=1787849088; x=1788453888;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=HlMQ+RZs5fbBVG8fjD67Z6x1PNKB08HCYfn3H6xQ8Ng=;
-        b=Sr5o6LIL698/r8ukPcXaPqCSN+620IJnl8uawCJ7L70ypD/Kw1s4q9XqeGMFIq+2pM
-         Q8CuFDC4z9cLVglBNQFLPp3dOQ9ovmontB+8kOWn+duVvxodhy/oxwjJk4BxAIGzfoaY
-         8h+LM9o3aTAInOlcnl0yzNg0Mss5jhRG9C0q9tumm25sJaoXXYktFiph/QdXGtsmpPsJ
-         CfmiQFo+mIqRz1s2rhC2GiTS74ET12a/JrtAr6HG4ZmuffDu0FKIuc0qa3b4uhWitt9a
-         6DsAzzlds54bvg5SKcU5gXPFzOco+cIY3aPaZ6fnLNhnY3lrq+0NEAlj46dXPiybAth9
-         3Upg==
-X-Forwarded-Encrypted: i=1; AHgh+RoCSwlCbHdQbRu1PYbQ2U2WKb6r5VUE7ZlP/S7CP/jDhXsxZCAHRp4PxjHWgMAEbYIaBLY=@vger.kernel.org
-X-Gm-Message-State: AFuF++l1gVbjms3R1nYhimRwRWBKgJr/xqFh/OMUe6lDgq4oZ7tPfsQ/
-	/t3ySEH96lv4uv4VsT3Gx5ZY9PeNroPNCK1t3OwzcAd3Z3vw2iTQk3esf32BSk2yFlZ60ccY9mz
-	m9NjR2A1yKAHC1NRYDxl1uzBkfWFoaEM=
-X-Gm-Gg: AR+sD11QG5W7bDAvca4jQMMH3Ia9gXsXI8Ds0U3jD+g7NKL9PJ4wb1AFpd0TO8fpccW
-	GQqH81N2MSZZLXwQWlJHPrG9brrgirkpAln2ylqMFKIazc5Bhn1KQY78zKno//8EZPQFHqKghKF
-	YNjLPYoWjQnTZd7DwHwpn4yzIDbVIUDCVfO37wh6IONrPWWFgXKbUWvsChy5RgXkCmLNjVPPCZF
-	voF5jDXb2owJYxEEENiwiXKjz675uv/VlDFC5T+SKRLsSJ9u64LJU4PG2r5vl3bl64bWIzLSy4k
-	qHt1LlnhW9Vm19jrFLM6vjzlwKccHWEre3XrwG/J+DeQT/0XgqHaf7EsB8mm5+DKcYi8JwGjT7G
-	B4V7ItZrhkzjLxt6JxWzkvHhg3g==
-X-Received: by 2002:a05:6a00:e0e:b0:84c:1cd2:142b with SMTP id
- d2e1a72fcca58-85629a252femr834755b3a.9.1787848845094; Thu, 27 Aug 2026
- 09:40:45 -0700 (PDT)
+        bh=v7IQgN97nNU6kWAssSMaVVvwbCRHdAYIf+fc+BRypo4=;
+        b=c01hC5TzixZBkvj933ufi1yu5yr0wY4tOs2fEoA3ouGBJvyvJQpT6jxQ/2DrenFttF
+         L6u0VtMiNeTp6eRlR89u3e5K6+1aV4c1irgMx8uHay5Eq1k/3K326fA9d4nVpRIY/bbe
+         knQThp6XK7UAqlkejxC1aDv4EaMqlefyj3mFRFoY0Z4PsOZh+XCPPcvYraswGilHTGTF
+         J75H7RIyuXJxNZUwsxnxPRUjJM3wb1ANacKFxRny5X4X4k776rBQ96CEz8AO0iPszN/R
+         wb8ZcMe06QHpUVsbig63Yma8gtl4mHgHGH355zJcPcIEgRGsu+hC7qiNTsKfUxjAynQc
+         33xg==
+X-Forwarded-Encrypted: i=1; AHgh+RrW6mlQYskyu7+CYGR2SDXohn/duWc9zFbB8RHXU8nRky9wnl71w9blHIxnWpYACeSR0Mw=@vger.kernel.org
+X-Gm-Message-State: AFuF++ku7EHaiXdACKoZyOgpRs6zaWd2HfBjcZFMxH9ff3OtSqo3KP34
+	f0tC20GThZoy0q2BXfLbWCcb86MR+2eJXKTo7lK+I6t/V/jTkr4vyUr1+RUJBHeol9XEsaiGad+
+	REyVXQttgyVRyEKXyoxjxEeFlYk+eoM9i2Q==
+X-Gm-Gg: AR+sD13VYLrchef6BSm6OIviQ18HA3Pemt73ZjdbGS5cMMbRJyYo1DdXxXjpCvGbVPo
+	HkLtJh0UVZTEoys0V2U3TNmXTRL+pDuuQYw4U64JCXDWHzOUHVWYWL2ZL+wykDU50cMRi7xslNK
+	LXpu41BjzXASBpSJKNJQPueNzuuI8Y1FpPdtORxXjR0UscCDR42tlQ250b6W5ExsxqTEwoq8Jix
+	PSyrQ97KRN/iPW5T4P5WldaBcrE8MwAY1Nf8S4XS9WuNE9hwx3qD86jCDWY6QjisAJ02SXwKDdC
+	Jf5Pf3BmcEDlEm55G/or0oaK4My7dtRDCqM45f/m6+237YJZo7uNb+Ci0EUyi9Pch8S1Kqcakz+
+	+8+yAuN15ofDzijT9nG7KYRBmV3ct9Km9owD7
+X-Received: by 2002:a05:6a00:194b:b0:848:63c9:ee39 with SMTP id
+ d2e1a72fcca58-8562a7d9953mr954998b3a.12.1787849088008; Thu, 27 Aug 2026
+ 09:44:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260822225444.2774461-1-simon@swine.de> <20260822225444.2774461-2-simon@swine.de>
- <DKYHBHNAMR03.B8SKDLC9FQ94@gmail.com> <CAEf4Bzb0YOku2mgpASY_e-tMHfFtEzz4S01ZviH5QBsgzQmx_g@mail.gmail.com>
- <CAADnVQKD1eOG7cnDHvFwfJOEGZ0g8wZKEzMri27en7uoA-MT5A@mail.gmail.com>
-In-Reply-To: <CAADnVQKD1eOG7cnDHvFwfJOEGZ0g8wZKEzMri27en7uoA-MT5A@mail.gmail.com>
+References: <20260822054620.452262-1-ming.jvle@gmail.com> <aosT4H14zcowzU_7@redhat.com>
+ <CABbwK50esft7xj6cPWXN7iHnqW6E30w1Cg5FMmE97gJ34SqtfA@mail.gmail.com>
+ <aotM6tRUHI9Bo7gW@redhat.com> <CABbwK50istUW_xnFsjCA+MMgFCuBbY-Zs3QmJU=Fg7heqKdF6A@mail.gmail.com>
+ <aoxp3Rcbp3fUuqS8@redhat.com> <CAEf4BzbUQWAB0JuEdXu32v4S_zMuv4de+kYv0mcY4tDPu8CA2Q@mail.gmail.com>
+ <ao2KDQuBMNtONu0K@redhat.com> <CAEf4Bza0Hy_a4BpFBrsP2F5wvEDOyL6n2jK5FK8r-QyRFwvBPw@mail.gmail.com>
+ <CAEf4BzZGQ50=B4S2NBZnqWN29YBgthMX8LsYGLq5rOsdGzpS3w@mail.gmail.com> <ao7Sr0zqFoiKgaRM@redhat.com>
+In-Reply-To: <ao7Sr0zqFoiKgaRM@redhat.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 27 Aug 2026 09:40:32 -0700
-X-Gm-Features: AcwNN1V67P0UflL_EMJPFTW5TTaVWrGa_WjK1k3E8xVwR46Ne80Fz1eP7Tks3Zc
-Message-ID: <CAEf4BzaB+EDyf2exV8XGq_x4TvhTii7gJnWU0nq3380guaWF7Q@mail.gmail.com>
-Subject: Re: [PATCH bpf v3 1/2] bpf: disable private stack for sleepable programs
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Christian Simon <simon@swine.de>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, stable <stable@vger.kernel.org>, 
-	Jiri Olsa <olsajiri@gmail.com>
+Date: Thu, 27 Aug 2026 09:44:35 -0700
+X-Gm-Features: AcwNN1VwKE6dNPobT74Ama0YIkZp7TzSNXhg7LUnXQN4SlYoNfZY0TE8WRNlOWY
+Message-ID: <CAEf4BzYXCpm3wok2AOn5hErvoFSRGax5seRgr6j1LdFscDfA6w@mail.gmail.com>
+Subject: Re: SIGILL and uretprobes, WAS: [PATCH] uprobes: Free utask on
+ dup_return_instance() failure
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Keke Ming <ming.jvle@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	open list <linux-kernel@vger.kernel.org>, 
+	Linux trace kernel <linux-trace-kernel@vger.kernel.org>, 
+	"linux-perf-use." <linux-perf-users@vger.kernel.org>, bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 27, 2026 at 9:35=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Wed, Aug 26, 2026 at 4:49=E2=80=AFAM Oleg Nesterov <oleg@redhat.com> wro=
+te:
 >
-> On Thu, Aug 27, 2026 at 7:56=E2=80=AFAM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
+> On 08/25, Andrii Nakryiko wrote:
 > >
-> > On Tue, Aug 25, 2026 at 6:20=E2=80=AFPM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
+> > On Tue, Aug 25, 2026 at 9:38=E2=80=AFAM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
 > > >
-> > > On Sat Aug 22, 2026 at 3:54 PM PDT, Christian Simon wrote:
-> > > > A JITed BPF program can use one private stack per program and CPU.
-> > > > Sleepable programs can be preempted, allowing another task to run t=
-he
-> > > > same program on the same CPU. The second invocation then reuses and=
- can
-> > > > overwrite the first invocation's private stack.
+> > > On Tue, Aug 25, 2026 at 5:27=E2=80=AFAM Oleg Nesterov <oleg@redhat.co=
+m> wrote:
+> > > >
+> > > > On 08/24, Andrii Nakryiko wrote:
+> > > > >
+> > > > > On Mon, Aug 24, 2026 at 8:57=E2=80=AFAM Oleg Nesterov <oleg@redha=
+t.com> wrote:
+> > > > > >
+> > > > > > force_exit_sig(SIGILL) can't be ignored too. But I am fine eith=
+er way.
+> > > > >
+> > > > > Current SIGILL sending is already pretty bad behavior that bites =
+us
+> > > > > periodically, instead of doubling down on killing the user space
+> > > > > process because something about installing uprobe goes wrong, let=
+'s
+> > > > > think about a bit less destructive way to do this. Mark uprobe fo=
+r a
+> > > > > particular process as defunct or "detaching it", or something alo=
+ng
+> > > > > those lines. But not just kill innocent processes.
+> > > >
+> > > > Well. Yes, SIGILL sending acts as BUG_ON(), this is not nice and
 > > >
-> > > I'm confused by this. sleepable progs go through __bpf_prog_enter_sle=
-epable_recur()
-> > > which has per-prog recurison counter. So preemption of the prog
-> > > doesn't break private stack.
-> > > If the same prog attemps to execute on the same cpu it will be skippe=
-d.
+> > > The problem is that this is actually not a bug but a very real and
+> > > expected behavior with user-space using fibers or coroutines. Any
+> > > suggestions how we can make this less violent, as it's actually quite
+> > > dangerous and kills production applications when someone (unknowingly=
+)
+> > > tries to uretprobe trace them...
 > > >
-> > > syscall prog types go via bpf_prog_run_array_sleepable()
-> > > that have per prog recursions counter.
-> > >
-> > > Looks like we're not doing it for bpf_prog_run_array_uprobe().
-> > > I'm not sure what the right trade off here.
-> > > I feel universally checking for recursion is better
-> > > then selectively disabling private stack for uprobe.
 > >
-> > I'd really like to avoid adding this "recursion protection" to uprobe.
-> > With uprobes, there is no recursion, it's called from well defined
-> > context in the kernel and you can't have recursive uprobe BPF
-> > programs.
-> >
-> > All you can have is a very valid and possible sleepable uprobe
-> > interleaving, which the user cannot prevent or work around, they have
-> > no control over this and it's just a fact of life.
-> >
-> >  E.g., a simple scenario, we attach one bpf program (let's call it U)
-> > to some USDT. BPF program U is sleepable and actually can sleep due to
-> > page faults (e.g., unwinding Python stack trace requires sleepable
-> > mode for reliably getting filename strings from Python runtime, which
-> > are not always paged in).
-> >
-> > In such a case, you can have thread A and thread B both hitting the
-> > same USDT (e.g., somewhere in memory allocator or whatnot). Let's say
-> > thread A hits it first on CPU X, BPF program U starts executing and
-> > unwinding Python stack, does bpf_copy_from_user() for string contents
-> > and causes page fault, is taken off CPU X. Meanwhile thread B hits
-> > USDT on the same CPU X, kernel runs program U, and it is supposed to
-> > work completely independently and concurrently (no shared state or
-> > whatever) from U's execution in thread A.
-> >
-> > Yet, if we add this per-CPU "recursion check", we'll just skip U's
-> > execution for thread B. This is data loss, and it's very bad in
-> > practice because it frequently just invalidates the entire data
-> > collection trustworthiness.
+> > IIUC, this SIGILL and coroutines/fibers issue is due to
+> > uprobe_handle_trampoline not finding utrask->return_instances, because
+> > a bit earlier we threw out pending uretprobes due to
+> > arch_uretprobe_is_alive() returned false due to that `regs->sp <=3D
+> > ret->stack` check (for x86-64).
 >
-> ok. fair
+> Well, unless I am totally confused this is another thing...
+>
+> Yes, arch_uretprobe_is_alive() sucks, it assumes the single stack.
+>
+> And I do not know how to fix this problem... uprobe_handle_trampoline()
+> must fix regs->ip correctly somehow, otherwise it is pointless to contunu=
+e.
 >
 
-great, thanks!
+Argh, I completely forgot about regs->ip fix up, sorry.
 
-> > So I think we should disable private stack for uprobes (sleepable or
-> > not) instead. I'm not sure private stack buys us anything for uprobe
-> > cases.
+> Note also that the current instruction_pointer_set(ri->orig_ret_vaddr)
+> can be wrong if the probed task switches its stack.
 >
-> why disable priv stack for non-sleepable uprobes?
-> While non-sleepable bpf prog is executing the same or different
-> uprobe cannot execute on the same cpu.
-> So bpf prog can be preempted by kernel execution,
-> but a user task cannot start preempt bpf prog,
-> so 2nd uprobe cannot start running,
-> no?
-
-I think that changes on preemptible kernels, this was called out in
-discussions on previous versions of this patch. So only for that
-reason.
-
-For non-preemptible kernels yes, it's only sleepable that is a problem.
-
+> And we have the same problems with sigaltstack().
 >
-> > As Jiri mentioned, at verification/jitting time we can't tell kprobe
-> > from uprobe, though, so that's a bit of a problem, but it's a separate
-> > discussion we should have. Perhaps having an extra expected attach
-> > type, or type, or some program flag to designate uprobe program as
-> > such would be appropriate, not sure. Let's discuss that.
+> ATM, I don't see any solution, and I don't really understand what do
+> you propose...
 >
-> we don't have sleepable kprobes.
-> So disable sleepable && [ku]probe type is enough. no?
 
-Yes, unless we want to also safeguard preemptible kernels. But we can
-do that as an extra #ifdef CONFIG_PREEMPT_RT or something?
+Well, conceptually, I'd like us to try to find correct return_instance
+instead of assuming the last one in the list is the one we want.
+Whether that's technically sound, is a good question, I haven't done a
+very thorough home work on this, sorry.
+
+But we do have all pending return instances, and they record original
+stack pointer, maybe we can do something with that? On user function
+return, stack pointer should match what we had when we installed
+return_instance, isn't that right? So in normal/happy case we'll do
+what we do today, but if we find our that return_instance is "not
+valid", we keep searching across all pending return instances. That's
+going to be slower for sure, but at least it a) won't kill the app and
+b) will be immensely useful.
+
+> Oleg.
+>
