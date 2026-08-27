@@ -1,163 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DB2244062D;
-	Thu, 27 Aug 2026 11:37:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 892593AF656
+	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 11:45:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787830677; cv=none; b=KInT9ZmK887pYpSMdyv5pozM5x/7XvnaYH8r6HFi3jv4kzpl+AmlSMM7TXyxCu1l3wEYBduXU/BWfzw5pUAJPK9RAAhdWM0sIjX8Xv9CA3rZ/gduJUPmuGIsvMqgQw3VxPV/FTbUjIW4oQDMD/iFajbWmtIpSk5iwDdESsgI33k=
+	t=1787831117; cv=none; b=dqytXfJ/GidoaoF5HPij+t4E3RHc7A7Z4P31jceGE/4ob2KMkFo1DNF9NP0q4ubeZTgAE7QOmse9Xiy2FYc7pnkS4NtBJpCr1gp5fb2gxuHVyF3LPcDZxQqVRRz4AyAbFFZjYgyA0S50xXo9cC80Qp5/RLd87AolCw2j5vxc9gI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787830677; c=relaxed/simple;
-	bh=aECcC3gzgPCmUFC37KnXxUL+ASmvA2eLAUPJl4Y8whw=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=M/FYRBQrx49WDcHwJlT5SIqpNEFIyc3CTSShkbq1KD7EgEAVv16RxfN6mtQ1wkNIsGvVbV8FtNF2jBvvArhN6ks9UA7OhyrkCjYjJZaCU91aLzX0lxwBjfi+Hw+dbf3WlXs02VOHTu+Dt/imo01ZQRUvAPpVEALtYhxHAtjoSF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VzNuv0DX; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VzNuv0DX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 691341F00A3A;
-	Thu, 27 Aug 2026 11:37:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787830675;
-	bh=q3ywZN8bdBnVFQ78mtRW6DYA4krBtKE/BGQc0bJoxdY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=VzNuv0DXTALl+ro/Z5WmFFyK5GI+zLD63Uv4qBj8ALg/lbrssRK9yB7qQQ6EYpK2b
-	 Jjaa+l3a4xC2YZlPP6TWA/uVglqJloVCfL8dgNoit8LZq3Uy1/QHtvqW+JB7b3kD6E
-	 zhYQR9JT3RIR5Cs2p1hP4vOljzifxNnliPeo3hfzMG1WkI75mMujwg4AlJGI9AvrdX
-	 L1MDopuK20STnHnTi1HOZBFT35x2FnNbekcVRy5UGoAYCED3HsxJEO3hTMwh/0KcV7
-	 wraz0R3uHsA5TvtMsdB+lDYYWY1OD+dnEGbHdPKcDDZbiX94T6aD3/Qg6hwCjAQA4k
-	 EdWUMFyR9PFuQ==
-Content-Type: multipart/mixed; boundary="===============1642768360297098272=="
+	s=arc-20240116; t=1787831117; c=relaxed/simple;
+	bh=cXPp8pKkXgP0gQxOjb/WfC7X59/smhaiCLkEXz7eNTA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VHQLIgzm9MQ9I2HR++nx8MGFNI3mjQpjaOrJPyX1gy5ccIIZuJUFy9nFm521qt5iULsdLE7LXSoZOBJx86z6c/QEh5cAgB/VVFxKNf4qt+FRBqjYyvnQrkIDTp029RLBt96Zn/khNpw5pmlSIxHgm36UOunzyPiBPG3dJCJ9Mq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hW06b0QxBzKHMMd
+	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 19:44:23 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id 35FF440911
+	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 19:45:05 +0800 (CST)
+Received: from [10.67.110.68] (unknown [10.67.110.68])
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgD35UQ_I5Bqvq1oDw--.56879S2;
+	Thu, 27 Aug 2026 19:45:05 +0800 (CST)
+Message-ID: <f17ac4ba-3276-4fef-b9e5-5423956b68fa@huaweicloud.com>
+Date: Thu, 27 Aug 2026 19:45:03 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <32fbad9bf062c3b987defaa53cb5f3bf48bbdb87c35013fe7a0923b1caf3927b@mail.kernel.org>
-In-Reply-To: <eec9160b702fd6d65631a34f0945230e0845d12b.1787826402.git.zhuhui@kylinos.cn>
-References: <eec9160b702fd6d65631a34f0945230e0845d12b.1787826402.git.zhuhui@kylinos.cn>
-Subject: Re: [PATCH bpf-next v5 2/2] selftests/bpf: Add memcg async reclaim test
-From: bot+bpf-ci@kernel.org
-To: hui.zhu@linux.dev,roman.gushchin@linux.dev,inwardvessel@gmail.com,shakeel.butt@linux.dev,akpm@linux-foundation.org,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,baohua@kernel.org,geliang@kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-mm@kvack.org,linux-kselftest@vger.kernel.org
-Cc: zhuhui@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 27 Aug 2026 11:37:55 +0000 (UTC)
-
---===============1642768360297098272==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v2] bpf: Fix UAF due to concurrent consumption of
+ waiting_for_gp_ttrace
+Content-Language: en-US
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org, Hou Tao <houtao@huaweicloud.com>
+References: <20260827084013.1062816-1-pulehui@huaweicloud.com>
+ <20260827084756.EC4271F000E9@smtp.kernel.org>
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <20260827084756.EC4271F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c b/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
-> new file mode 100644
-> index 0000000000000..1270d73c9116e
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
-
-[ ... ]
-
-> +	wait_ret = waitpid(low_pid, &status, 0);
-> +	if (!ASSERT_GT(wait_ret, 0, "low waitpid"))
-> +		goto cleanup;
-> +	/*
-> +	 * The child has been reaped and its PID can already be reused,
-> +	 * so mark it to keep cleanup from signaling an unrelated process.
-> +	 */
-> +	low_pid = -1;
-> +	if (!ASSERT_TRUE(WIFEXITED(status), "low exited"))
-> +		goto cleanup;
-> +	if (WEXITSTATUS(status) != CHILD_EXIT_OK) {
-> +		PRINT_FAIL("low child failed at: %s (exit status %d)",
-> +			   child_exit_str(WEXITSTATUS(status)),
-> +			   WEXITSTATUS(status));
-> +		goto cleanup;
-> +	}
-> +
-> +	wait_ret = waitpid(high_pid, &status, 0);
-> +	if (!ASSERT_GT(wait_ret, 0, "high waitpid"))
-> +		goto cleanup;
-> +	/* Same as above: the reaped PID must not be signaled again. */
-> +	high_pid = -1;
-> +	if (!ASSERT_TRUE(WIFEXITED(status), "high exited"))
-> +		goto cleanup;
-> +	if (WEXITSTATUS(status) != CHILD_EXIT_OK) {
-> +		PRINT_FAIL("high child failed at: %s (exit status %d)",
-> +			   child_exit_str(WEXITSTATUS(status)),
-> +			   WEXITSTATUS(status));
-> +		goto cleanup;
-> +	}
-
-The three PRINT_FAIL() calls in run_high_low_workload() omit the trailing
-newline, so the failure messages run into whatever is logged next.
-PRINT_FAIL() in test_progs.h does not append a newline:
-
-#define PRINT_FAIL(format...)                                                  \
-	({                                                                     \
-		test__fail();                                                  \
-		fprintf(stdout, "%s:FAIL:%d ", __func__, __LINE__);            \
-		fprintf(stdout, ##format);                                     \
-	})
-
-Since test_progs hijacks stdout into an open_memstream() buffer that is
-dumped verbatim, the missing newline concatenates these lines with the
-following log output. The dominant convention in prog_tests/ is to
-terminate the format string (33 of the ~44 PRINT_FAIL() call sites end
-in "\n").
-
-Should these three PRINT_FAIL() calls (the two shown above and the one
-after the high_time/low_time comparison) end with "\n"?
-
-> diff --git a/tools/testing/selftests/bpf/progs/memcg_async_reclaim.c b/tools/testing/selftests/bpf/progs/memcg_async_reclaim.c
-> new file mode 100644
-> index 0000000000000..b2ca5185150fe
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/memcg_async_reclaim.c
-
-[ ... ]
-
-> +static int reclaim_cgroup(u64 cgroup_id)
-> +{
-> +	struct cgroup_memcg cm;
-> +	int i;
-> +
-> +	if (get_cgroup_memcg_from_id(cgroup_id, &cm))
-> +		return 0;
-> +
-> +	reclaim_calls++;
-> +	for (i = 0; i < RECLAIM_MAX_ITER; i++) {
-> +		u64 nr = bpf_proactive_reclaim(cm.memcg, RECLAIM_SIZE);
-> +
-> +		if (!nr)
-> +			break;
-> +		reclaimed_bytes += nr;
-> +	}
-> +
-> +	put_cgroup_memcg(&cm);
-> +
-> +	return 0;
-> +}
-
-This isn't a bug, but reclaim_cgroup() is declared to return int but
-returns 0 on every path, including the lookup-failure path, and its only
-caller discards the value:
-
-reclaim_work_fn() {
-	...
-	if (should_reclaim_cgroup(...)) {
-		reclaim_cgroup(wq_low_cgroup_id);
-		bpf_wq_start(&elem->work, 0);
-	}
-	...
-}
-
-The failure to obtain the memcg is therefore indistinguishable from
-success. The file already uses void where a helper has no result
-(put_cgroup_memcg), so would it make sense to make reclaim_cgroup() void,
-or to return -1 on the lookup failure and react to it?
+X-CM-TRANSID:_Ch0CgD35UQ_I5Bqvq1oDw--.56879S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuryDZw13KFWrZr43WFW8Xrb_yoW5ZFW5pF
+	Z3Gry5Ars8ZFWS93Wqqw48CFWfAa1xW347GayUWrySkry3Zw1jgF4IkrWUZF98Cr4vk347
+	tryq9wn7Ar1UZFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUyS14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCF
+	x2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14
+	v26r106r1rMI8E67AF67kF1VAFwI0_Jrv_JF1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY
+	67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2
+	IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUywZ7UUUUU=
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+On 2026/8/27 16:47, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> 
+> Pre-existing issues:
+> - [High] The patch fixes concurrent consumption for `waiting_for_gp_ttrace` but incorrectly claims `free_by_rcu_ttrace` is safe. A race condition during cache destruction leads to a Use-After-Free on `free_by_rcu_ttrace`.
+> --
+> 
+> commit ed5f43858e59ce799a585eeedfe466c5543df6aa
+> Author: Pu Lehui <pulehui@huawei.com>
+> Subject: bpf: Fix UAF due to concurrent consumption of waiting_for_gp_ttrace
+> 
+> This commit fixes a use-after-free caused by concurrent consumption of
+> waiting_for_gp_ttrace nodes by alloc_bulk() and __free_rcu(). It introduces
+> a raw spinlock to synchronize operations on this list.
+> 
+> The commit message notes:
+>> Note that free_by_rcu_ttrace does not suffer from this issue as it only
+>> has a single active consumer during normal operation.
+> 
+>> diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
+>> index e9662db7198fe..58296e92a4fed 100644
+>> --- a/kernel/bpf/memalloc.c
+>> +++ b/kernel/bpf/memalloc.c
+> [ ... ]
+>> @@ -297,6 +307,7 @@ static void enque_to_free(struct bpf_mem_cache *c, void *obj)
+>>   static void do_call_rcu_ttrace(struct bpf_mem_cache *c)
+>>   {
+>>   	struct llist_node *llnode, *t;
+>> +	unsigned long flags;
+>>   
+>>   	if (atomic_xchg(&c->call_rcu_ttrace_in_progress, 1)) {
+>>   		if (unlikely(READ_ONCE(c->draining))) {
+>>   			llnode = llist_del_all(&c->free_by_rcu_ttrace);
+>>   			free_all(c, llnode, !!c->percpu_size);
+>>   		}
+> 
+> [Severity: High]
+> This is a pre-existing issue, but does free_by_rcu_ttrace actually suffer
+> from a similar race condition during cache destruction?
+> 
+> If userspace triggers destruction of a BPF memory allocator via
+> bpf_mem_alloc_destroy(), CPU 0 sets c->draining = true and synchronizes
+> the irq_work:
+> 
+> CPU 0: bpf_mem_alloc_destroy()
+>      WRITE_ONCE(c->draining, true);
+>      irq_work_sync(&c->refill_work);
+> 
+> Meanwhile, CPU 1 could be executing alloc_bulk() inside the refill work,
+> consuming from free_by_rcu_ttrace:
+> 
+> CPU 1: alloc_bulk()
+>      obj = llist_del_first(&c->free_by_rcu_ttrace);
+> 
+> If CPU 1 reads the head pointer in llist_del_first() but is delayed before
+> READ_ONCE(entry->next), and concurrently an RCU callback on CPU 2 calls
+> do_call_rcu_ttrace(), CPU 2 will observe draining == true here and
+> immediately free the nodes.
+> 
+> When CPU 1 resumes and executes READ_ONCE(entry->next), won't this result
+> in a use-after-free on the node that was just freed to the slab allocator?
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33064477499
---===============1642768360297098272==--
+Quoting what Hou Tao said earlier [0]:
+```
+The only possible way when there is concurrent llist_del_all()
+and llist_del_first() is during bpf_mem_alloc_destroy().
+bpf_mem_alloc_destroy() will set draining as true and do_call_rcu_ttrace
+will invoke free_all in advance. But right then, the caller of
+bpf_mem_alloc_destroy() will ensure there is no active allocation and
+there will be no invocation of llist_del_first().
+```
+
+[0] 
+https://lore.kernel.org/bpf/05446fdb-2e94-47b0-91fb-b4f84b6baaa3@huawei.com/T/#m7b523472481ed192f4004517a6f877dc72d02370
+
