@@ -1,62 +1,64 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81A7B37B02A
-	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 22:48:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF1D37B02A
+	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 22:48:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787870924; cv=none; b=qgQA7+wdghOf7vwFG7iUohR9Fb7yh3yfMgfQPC1NJmtzBYLqGN3CWDVhi/EGcpsymNso0IhR4u4ZhEimC9z5Yin6CIbuDhwcLJ2Qg3GYbWF+VJGuTg/+rSWENL1nYjn+HE3h0wi5MsWv9f8+/wWH8s8ad0HLxTqRdXWeQAo2aE0=
+	t=1787870926; cv=none; b=tQyFzd2Ota9PmyuZQl0WkhhpDo15+p0wFuaLq/Lp0dQu+7SsesR263kKJ6jS0uEu11ncamUVCOwc6VoMS4kY1tAIsi1XiSrZLZEmU7vp+7kEfYZwid6vP6x7qT3QJ9cxlHIX16tb/nIWv2wWrLW8V1E/4a95UC313dpRgDfB/bI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787870924; c=relaxed/simple;
-	bh=CjrZu0jsOrCHCLlSVibxz5e2SsNtE9ys4tqUk444mr8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=rqcCorgR9uis0AugKsNc8E2WTduE8rce/DL6otL7SIsmawuGNix/xlT9CFioTHcl6dR08tZ4PxfAcy/GPT/W5rk+g47CWnRNQ5sdKQ7RHbn8/0FUw8H8M2mRuBj0Sn2QACDYBXc+GJ9czxkcxur8tzVg2Wn8SWByy87VRziCvTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UKOOeog/; arc=none smtp.client-ip=209.85.215.171
+	s=arc-20240116; t=1787870926; c=relaxed/simple;
+	bh=v1R0MN2zW5QroyRc9bYQ87UmJyvUO0tiLR41KgtS62Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Yip13iEgjcrHVymUzVgZx/2PLpMyQwGn1egkNko8pC78Q9g+xQO4cWaWSHc1tUZsIF5bvqp/WqKcDYBP6TXSJlHELunOaT/Wbbk24NZDFSw6UNptIebYarBRNrB2FqNCqrpY95RKsghndI5KMWZ2SaJg8C3s0IpUkRkwKofyWic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EC2uUT+e; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UKOOeog/"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-ca80d708489so237675a12.1
-        for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 15:48:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EC2uUT+e"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2cfbbdfa60bso4523565ad.3
+        for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 15:48:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787870923; x=1788475723; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=MbudqUO3CFsHR7tDvtHcNVt6/7GtacfGbRMK2uBgFUw=;
-        b=UKOOeog/mpIc+LQZ36pGlgQFo68MhMy+6YCz/nQSjCqSmoC4kf7CCw1z8uQveaW0p8
-         G8a8EBEuabgnX3nq5sGipibe04yXyFhK8j+4obKUi1eHhywRaMIGUGMYIRZpGuEGKSqm
-         ocw2xWKaD8lihEt4lFeDm6nkk5ihrb4+4JyIf/XLIdePX7Bih454/tEzs74cDuEx+LYE
-         HJ84GAb6U4SgIYiQond9q38vnJ4qXandVhk+3Pn/gGc6pZdCR3YvbHhb5H3EpTcuuKUL
-         HcaJ3rJwxNmGdnAq5s8KPdqO8XKNV5IYKGYFJlAtmMRN7AScGpVbjOkay8f6K03vFNSG
-         wXxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787870923; x=1788475723;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1787870925; x=1788475725; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=MbudqUO3CFsHR7tDvtHcNVt6/7GtacfGbRMK2uBgFUw=;
-        b=BnCKnTTFmYiVujBgsFPDMXeDvXxD1kJFBHXL3kd3/BNaMI730rm8bu0cLBcDyT2B8J
-         PecIG0ALB1LfPUylFK6bIE33BgigzkztGPdIiZyugNQzsn9tYlPykyAiTPfeKnOXqX/L
-         /dUQ6l1toCoTYve3poFMqdrWHbsEApePWR7BshrmdH1efpfk5T88/KVFZBaWg5xW/syZ
-         yHXBxKd97wiwKqerdq8gsoIIFI+OqJejVQdTVM29x4CD6dnmlGdymBbo5g5biM7eXuNZ
-         Q7gIXe4SJXkc5RUUwT7D3/DCrlld2gcmcwyuF+HHm0ftlcC6GyS9bYkvreEzjbVfTZ03
-         WQ2w==
-X-Gm-Message-State: AFuF++m33NqO3KGRVWSyTbLKSUpAJCwZSAbBe8fMZnAz5nzj09mV84PR
-	8AC+P+JjGDUhJnP+SksLfTJN0ZsVWovjVY7C2i8mZELcmpqoZAs8PvFV6yvSIuM2VZI=
-X-Gm-Gg: AR+sD10iMPJlQtwl5bzHq7uFqpp1hf5lQ5N8yfq62gRhTIS0lJAaWL3Nm9efF+IpkEi
-	n+hEeGeRDt/PYMJsnGV4IpiFU+TygpdSHyX2B5xhKLCbalM3G5oxnlB5/h7QBR8M+coh1Afiyo6
-	01z1JIeTfeV9sBt/syRBVyjduOj/Tt1Ykd27XG8LpMN1JqtQ/+PMyomVnHw9hYpEDtbIn8vsvu1
-	XygwDMdQ/WHQ4j2edVCHXrbESQYvOw//BLr+NbH1n1vOyK5ZQLj4ByT1IIeDPEXrCeW1efuCOWz
-	bPBjcVttFRKGUzLXchSbdnXUCLsmJCDXYZYBwO6bul99xX1lFNkA/pdgEbMTSfrZ+excRFItQ2Z
-	AulHL7a3LXisZxyk587++zZzwjdfXF1Ig7qz4AR1YvxzKPREeIASGK1K4Y+y0+rQvCZ8PS2LGau
-	g0K+mw1kknyjTp12gAdbJZXaByeuw5ipoRm1xK3CKzy7ZTLNg6CPY9PKYsl+Tpsg0QREwK1i9sk
-	uNbnHIIN+Njyf/PRAwZwkS9+vt09fYAmGtHq9rV9QEv
-X-Received: by 2002:a05:6a20:4388:b0:3b2:8674:9830 with SMTP id adf61e73a8af0-3d0f6d2abaemr12574123637.14.1787870922754;
-        Thu, 27 Aug 2026 15:48:42 -0700 (PDT)
+        bh=x1DiYniZa7WzM3xIMhCGI8o8zkf9iFI9f25d+J+lmXY=;
+        b=EC2uUT+e7kuBCKUeVxPmT8gaqfPZgDCBvSm1ZP7hI/xUByCqLRBe3ffbyjlQgEINyA
+         mamjouQoeaUJwjIQNV+o2GmnxwvzhAcxwoaJb435MPF58n8HJG8s7nh1HKSWnvFJcRot
+         gB0cFTexr6s9kc+xt29s1Km07KYyF0sDuwtE9SwpcfIHj1NzheU5VTGzm0PXH1A3DrXp
+         FJbvTe097eewKWp2dWND2B3DsNSl2Tup6XjZcPhMp70OZutmvhIE6CS085+PEQfTlwwV
+         vNIg7UTOmZAzjQ/GXR+fvm/+pQKVms9xUue84UOGk50/HgkMHtixKXxbQ9I3xji7F6WQ
+         vtxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787870925; x=1788475725;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=x1DiYniZa7WzM3xIMhCGI8o8zkf9iFI9f25d+J+lmXY=;
+        b=qxrn77KGN5Y0WsLUabk/FZQW030F88FkabL6NEMJQIPwlW7vgGQUybB9P4q86bq8ye
+         xpVJbH2Iw1ym/CLoXrf7P2qdjIbngtNWxUajNPhPRGhg/sfQx97VlfW+PqQq7sNljdTy
+         pFfPDyio6rJUnurTXZpJ7Kt23Eunr/VJSQ++Q6chnGStDqLZxDrhus5GL6urG+cxK2AK
+         GJL4LjW0xwm06iCaPHqQqhvv7nFy8ddi3qd1MuT+fqhVsCbqxlEJWxF4eX/136MQxz46
+         KsFrN1HmJG9+d9yjlGMCJGFBrBJF+98Pwmw2ayTe/RF8dc93HWTBW1XKgAmsRGpFfZbd
+         gBIA==
+X-Gm-Message-State: AFuF++mEJGyF0aTd8d4+lwWcGKHByHMl4dSGknCkXQSkA7xayQWLJrVB
+	UqQmv5nBvhBJD0Ea8PC1x+Ov4hhKtPBVoYJZgCp5s+yzCAnY9JxPHqriDMKRxPzTa4A=
+X-Gm-Gg: AR+sD11YoGMzCLrLlAXW5HuVoKVIQ8czfIPoQ+fBuv8bBkgnAy+UlT9HyJLxSd+VPtI
+	VocunJOUJUlfvhSzpgN640LUFncwdyZYUUqvFKfH7V+L2r0Vy8IE/yx3XKqvnWUqhlLMcoNqHBt
+	S260JGad8cuP9VcXXqLZIYr4PYY08cPL4LwVitYEJ52S+mGeitAgwfWNR1CMsiw7OdFqbkOaKQg
+	n1xyicZ4PuIAFo4ObCfpA0XLF0rwk7d7PDhbGQW3LhQBgKt0agScvXffj5JpxWaZTBeT9NE0XoU
+	H5jV/336oFhjQzo5BsJ9+nM5Vh+lLXt5jWb4n17mHDMmFCts354ZgBjkvulyjc2vf6Orpk9s/hU
+	Q1gYGFUTv9f3iEJufAa57f+cxCQk/0r7ZPhzC+zef0yTOybQAsMsk9X2+feygBy41IpPkbDfWed
+	zff/gZdUpk3WXe1WtBrfM6ImFjj5t/o/BTUMhRR+YfK7f/vELKRYtxszMb1AZCRcZkaqGOfQqzm
+	oZqoj7pyeJ5T2zbH3v6SYb50Rx+JkTeTaifRndh4OTB
+X-Received: by 2002:a17:902:ebcb:b0:2c9:e846:a57e with SMTP id d9443c01a7336-2d74cfcdb1emr54106455ad.0.1787870924760;
+        Thu, 27 Aug 2026 15:48:44 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J.thefacebook.com ([2620:10d:c090:500::6:e049])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3283d7303a2sm22504228eec.10.2026.08.27.15.48.41
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3283d7303a2sm22504228eec.10.2026.08.27.15.48.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Aug 2026 15:48:42 -0700 (PDT)
+        Thu, 27 Aug 2026 15:48:44 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -68,10 +70,12 @@ Cc: daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	npc@anthropic.com
-Subject: [PATCH bpf 1/2] bpf: don't downgrade half-dead scalar zero spills to STACK_ZERO
-Date: Thu, 27 Aug 2026 15:48:23 -0700
-Message-ID: <20260827-bug-011-cleanfunc-stack-zero-simple-v1-v1-1-c0e996589a52@gmail.com>
+Subject: [PATCH bpf 2/2] selftests/bpf: half-dead scalar zero stack spill test
+Date: Thu, 27 Aug 2026 15:48:24 -0700
+Message-ID: <20260827-bug-011-cleanfunc-stack-zero-simple-v1-v1-2-c0e996589a52@gmail.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260827-bug-011-cleanfunc-stack-zero-simple-v1-v1-1-c0e996589a52@gmail.com>
+References: <20260827-bug-011-cleanfunc-stack-zero-simple-v1-v1-1-c0e996589a52@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,67 +85,66 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-states.c:__clean_func_state() can downgrade scalar zero spill to
-STACK_ZERO in the following case:
+A test case demonstrating unsafe pruning when spill of a scalar zero
+spilled on a first pass in replaced by STACK_ZERO in the
+__clean_func_state().
 
-  *(u64 *)(r10 - 8) = 0;
-  ... checkpoint ...
-  r1 = *(u32 *)(r10 - 4);
-  ... no reads from r10-8 ...
-
-Here 4 bytes at r10-8 are dead and verifier changes scalar spill to a
-combination: 0000pppp (p stands for poison). Such a change breaks
-precision propagation chains. All places that produce STACK_ZERO
-should call bpf_mark_chain_precision() for the zero source.
-
-This patch fixes the bug in a simplest way possible:
-avoids converting stack spills of zero to STACK_ZERO.
-Two smarter approaches are possible:
-- do bpf_mark_chain_precision() from __clean_func_state()
-- check slot liveness information in check_stack_write_fixed_off()
-
-I investigated both and the changes required are a bit tricky,
-hence go with a simple fix for the time being.
-
-Fixes: be23266b4a08 ("bpf: 4-byte precise clean_verifier_state")
-Reported-by: Nicholas Carlini <npc@anthropic.com>
-Suggested-by: Nicholas Carlini <npc@anthropic.com>
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/states.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ .../selftests/bpf/progs/verifier_spill_fill.c      | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index 4e6aafad33bd..66fb11b6c6a7 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -445,22 +445,19 @@ static void __clean_func_state(struct bpf_verifier_env *env,
- 				struct bpf_reg_state *spill = &st->stack[i].spilled_ptr;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+index 8b166c42c4e0..39a1766dae3f 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
++++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+@@ -1403,6 +1403,46 @@ __naked void partial_fill_from_cleaned_pointer_spill(void)
+ 		      ::: __clobber_all);
+ }
  
- 				if (lo_live && stype == STACK_SPILL) {
--					u8 val = STACK_MISC;
--
- 					if (spill->type != SCALAR_VALUE)
- 						continue;
--
- 					/*
--					 * 8 byte spill of scalar 0 where half slot is dead
--					 * should become STACK_ZERO in lo 4 bytes.
-+					 * Can't replace with STACK_ZERO, because
-+					 * that requires bpf_mark_chain_precision().
- 					 */
- 					if (bpf_register_is_null(spill))
--						val = STACK_ZERO;
-+						continue;
- 					for (j = 0; j < 4; j++) {
- 						u8 *t = &st->stack[i].slot_type[j];
- 
- 						if (*t == STACK_SPILL)
--							*t = val;
-+							*t = STACK_MISC;
- 					}
- 				}
- 				bpf_mark_reg_not_init(env, spill);
++SEC("raw_tp")
++__failure
++__msg("access may be outside object bounds")
++__flag(BPF_F_TEST_STATE_FREQ)
++__naked void imprecise_scalar_spill_half_dead(void)
++{
++	asm volatile (
++	/*
++	 * Fork two paths: the one explored first spills an imprecise zero,
++	 * the one explored second, an imprecise non-zero scalar.
++	 */
++	"call %[bpf_get_prandom_u32];"
++	"if r0 > 42 goto 1f;"
++	"r6 = 0;"
++	"goto 2f;"
++"1:"
++	/* causes out of bounds access on a second path. */
++	"r6 = 100500;"
++"2:"
++	/* Force a checkpoint before the spill. */
++	"goto +0;"
++	"*(u64 *)(r10 - 8) = r6;"
++	/*
++	 * Force stack cleanup, only the low half of the spill is alive,
++	 * so the dead high half is degraded to raw stack bytes.
++	 * Buggy verifier converted it to STACK_ZERO w/o proper precision propagation.
++	 */
++	"goto +0;"
++	"r7 = *(u32 *)(r10 - 4);"
++	/* Use r7 as an offset into a one-byte buffer. */
++	"r1 = %[single_byte_buf] ll;"
++	"r1 += r7;"
++	"r0 = *(u8 *)(r1 + 0);"
++	"exit;"
++:
++: __imm(bpf_get_prandom_u32),
++  __imm_addr(single_byte_buf)
++: __clobber_all);
++}
++
+ /* check valid spill/fill, ptr to tp buffer */
+ SEC("raw_tracepoint.w")
+ __success
 
 -- 
 2.55.0
