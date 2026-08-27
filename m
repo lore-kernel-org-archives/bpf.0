@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 174DA42E435;
-	Thu, 27 Aug 2026 19:19:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F9FC42E435;
+	Thu, 27 Aug 2026 19:19:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787858388; cv=none; b=KtRVlPEUMlSY4PobA6JIc/bYH65E3qAvyatEm7ALTZ+HCWnRchNzcrM0Q9BYz4xYpXEqNrZcQlnKGpMAd62XvvvwQf8PzMEV4CJieTNe9BsPWWRbGUQLfXgCdvAsQ2OuUinMAaV0Q4xpjqfXQvDxymiNVSjdjvXsHZmaqz+GUGk=
+	t=1787858392; cv=none; b=dhjbmGgpdYBvOy6/cdr244kJYuE9PUiOzJoMNIP6nFz1EbVXaDjR/SC1EeXnGuHOgAaM6kWGnxDr90M4qwUWBFFuC2N8V8NYiOJxr7NPEmh3VnSEd+IAlNT+viT5huIIrYpjgypMdUyo6aCFdyBEFUB7069PdqKkEhsfcE9cL5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787858388; c=relaxed/simple;
-	bh=NQ5aDbI68dfVIprQJGaOPpQjMfOiPb/kMhr2+W2vzGU=;
+	s=arc-20240116; t=1787858392; c=relaxed/simple;
+	bh=rLGsBlyHFqJgMnY6x6sqSDrwb7eyBlIKFHSnVpGOYCg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sI2qowv4FgReqje/HpJAdLjKdVQ0o892xl0pqwt54alRX+B8FOIm96DGLSAI9IyC8Pc3odRmZjvhmxQ4qHJb5qNQpwwxxvyfIlPA1T6qMMsmzLe+o+sOM2i7s48FilQxU5Ts9d1M7fCqj1gKfaMBXoz4iil4KOqUnxXG2UFM8OI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V/Bs3Saf; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=CB/+3HB49ts/SWJ79x7UiwZyJyTPIsSy6GthKGbzaeH/PYs9IIiJ0oCn3p7WktQ4XnegKgoAH5F5yJ19bFyRDdMAbyw4QyL3QLZ+7na/7PCn6JIc2pZc2xf2er3onG99SCgKIK6LOEljenVx/XKCPz7/4wi1zpJbEOvuWhvDSWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b9d3wjCc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V/Bs3Saf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C51F91F000E9;
-	Thu, 27 Aug 2026 19:19:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b9d3wjCc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FDEC1F000E9;
+	Thu, 27 Aug 2026 19:19:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787858386;
-	bh=FDSlhYpZ7SK0VWnxLFVVVQi00Pd+n+HLWSAlwciDTdI=;
+	s=k20260515; t=1787858391;
+	bh=BjNabrfEquVWKaCHfvPeXL5yetMhzyRSgkqbwCF3qgE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=V/Bs3Safp1L8PscctK/tMZ2L3zg+eetFGpnefO1L1aK+Jl2u2Gz8O5a2viljUu68b
-	 4OvzhBuzJbNJDvkqYhYKCkn8txyNsIBu2HarLlTNu9/SDgmDpZ/HEv/MbQB+/nTRlL
-	 8P1SeZzKwcj5uumJDOpp9WjfvYduKeLMvnR7jcJGzd41h5gXVgApF4/eVpLVgNJhFY
-	 EVswFaVZFWe++EC4nWOs/3TqxQUXW/mSUABJKTrnmEf9Yg4wc1P/IMS77XQ64fzXFP
-	 ixyrVcs9kiSnwIP2RU3eg7DhSVndSE6IYAzEA3+fZFPxv0OSQCOX0CDfba/4fu7T4Y
-	 TPpHTHiAwMitg==
+	b=b9d3wjCcrdTDi1HtOgCyHrdSi1C6/Oir0Ipzalc+EWR1oH5I9gYjulKd7M6Fx4swC
+	 P+aleYchvmfrK94b/yqZmPNAgqUqr0RoHIjgEQEQb+LqEQVeOdjNoc66mtDJt+5AN9
+	 UC0H3ntHGFl5YuXIhEcM9fm5qSjyehtXhwurKOYsIJS0kXoNIO67Fi34rNvS3VzzJB
+	 weCf2nTQPZ5qeUHKBqF33aJ2wMpqEfIrLykRGnm02eASByEk+X1G5hsMgYIBJPbtaS
+	 nLGPhpVRgiotED3vkFZKgSVktopmKpbPSzyPFLx+LCenbuoZUCNw2WENhl7gdt7GSk
+	 bcLqJF6YzWZig==
 From: Jakub Kicinski <kuba@kernel.org>
 To: jiayuan.chen@linux.dev
 Cc: Jakub Kicinski <kuba@kernel.org>,
@@ -60,12 +60,12 @@ Cc: Jakub Kicinski <kuba@kernel.org>,
 	lorenzo.bianconi@oss.qualcomm.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf v2 1/2] bpf, veth: xdp: fix page_pool page leak on skb-backed XDP
-Date: Thu, 27 Aug 2026 12:19:43 -0700
-Message-ID: <20260827191943.4007831-1-kuba@kernel.org>
+Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: add xdp_shrink_frags
+Date: Thu, 27 Aug 2026 12:19:46 -0700
+Message-ID: <20260827191946.4007873-1-kuba@kernel.org>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260824030705.266049-1-jiayuan.chen@linux.dev>
-References: <20260824030705.266049-1-jiayuan.chen@linux.dev>
+In-Reply-To: <20260824030705.266049-2-jiayuan.chen@linux.dev>
+References: <20260824030705.266049-2-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -77,186 +77,166 @@ Content-Transfer-Encoding: 8bit
 This is an AI-generated review of your patch. The human sending this
 email has considered the AI review valid, or at least plausible.
 ---
-bpf, veth: xdp: fix page_pool page leak on skb-backed XDP
+selftests/bpf: add xdp_shrink_frags
 
-This adds a new xdp_buff flag, XDP_FLAGS_FRAGS_PAGE_POOL, which the two
-skb-cow sites (generic XDP and veth) set when a non-linear skb has been
-cow'd into page_pool memory.  bpf_xdp_shrink_data() then frees a released
-frag to the page_pool instead of using xdp->rxq->mem.type.
+Adds a new test_progs test with two subtests (tun and veth) that attach an
+xdp.frags program shrinking the tail by 3000 bytes so a whole frag is
+released.  The intent is to reproduce a page_pool frag being freed with the
+wrong memory type on skb-backed XDP paths.
 
-Closes: https://syzkaller.appspot.com/bug?extid=237bbeed8dfe0699b7f5
+Two questions below about what the test actually observes.
 
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index 6ed3ee81153fb..0afa0661ada16 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -775,6 +775,11 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
->  	if (skb_shinfo(skb)->nr_frags) {
->  		skb_shinfo(skb)->xdp_frags_size = skb->data_len;
->  		xdp_buff_set_frags_flag(xdp);
-> +		/* A nonlinear skb was cow'd into rq->page_pool above, so the
-> +		 * frags must be freed to that pool, not via the rxq's
-> +		 * MEM_TYPE_PAGE_SHARED.
-> +		 */
-> +		xdp_buff_set_frag_pp(xdp);
->  	} else {
->  		xdp_buff_clear_frags_flag(xdp);
->  	}
-
-[Severity: Critical]
-Does this flag survive past the point where veth deliberately drops the
-page_pool association?
-
-In veth_xdp_rcv_skb(), the XDP_TX and XDP_REDIRECT arms do:
-
-	case XDP_TX:
-		veth_xdp_get(xdp);
-		consume_skb(skb);
-		xdp->rxq->mem = rq->xdp_mem;
-
-veth_xdp_get() takes a plain get_page() on each frag, then consume_skb()
--> skb_release_data() -> napi_pp_put_page() finds page_ref_count() != 1,
-so page_pool_return_netmem() -> page_pool_clear_pp_info() sets
-netmem->pp = NULL.  veth then resets rxq->mem to MEM_TYPE_PAGE_SHARED,
-which matches the now plain pages, but XDP_FLAGS_FRAGS_PAGE_POOL is never
-cleared.
-
-The flag then leaves the buff:
-
-include/net/xdp.h:xdp_update_frame_from_buff() {
-	...
-	xdp_frame->flags = xdp->flags;
-}
-
-include/net/xdp.h:xdp_convert_frame_to_buff() {
-	...
-	xdp->flags = frame->flags;
-}
-
-so a second-stage consumer that rebuilds a buff from the frame and runs a
-program inherits it.  veth_xdp_rcv_one() does exactly that, with no
-xdp_init_buff() to reset flags:
-
-drivers/net/veth.c:veth_xdp_rcv_one() {
-	...
-	xdp_convert_frame_to_buff(frame, xdp);
-	xdp->rxq = &rq->xdp_rxq;
-	vxbuf.skb = NULL;
-
-	act = bpf_prog_run_xdp(xdp_prog, xdp);
-}
-
-cpu_map_bpf_prog_run_xdp() and dev_map_bpf_prog_run() inherit frame->flags
-the same way.
-
-If that peer program calls bpf_xdp_adjust_tail() with a negative offset
-that consumes a whole frag, bpf_xdp_shrink_data() takes the new branch and
-forces mem_type = MEM_TYPE_PAGE_POOL for a page that is no longer a
-page_pool page.  __xdp_return() skips the netmem_is_pp() check for that
-type:
-
-net/core/xdp.c:__xdp_return() {
-	...
-		/* No need to check netmem_is_pp() as mem->type knows this a
-		 * page_pool page
-		 */
-		page_pool_put_full_netmem(netmem_get_pp(netmem), netmem,
-					  napi_direct);
-}
-
-netmem_get_pp() is NULL here, so page_pool_put_unrefed_netmem() reads
-pool->cpuid in page_pool_napi_local() (or pool->dma_sync on PREEMPT_RT)
-off a NULL pool in softirq context.  Since pp_ref_count is still 1 for a
-frag that owns a whole page, is this deterministic rather than
-refcount-dependent?  A veth pair with an xdp.frags program on both sides
-looks sufficient to reach it.
-
-Would clearing the flag in the XDP_TX / XDP_REDIRECT arms next to
-xdp->rxq->mem = rq->xdp_mem, or masking it out in
-xdp_update_frame_from_buff(), be the right fix?
-
-Related to this, the commit message says:
-
-    So record it in the xdp_buff. Add a XDP_FLAGS_FRAGS_PAGE_POOL flag; the two
-    skb-cow sites set it, and bpf_xdp_shrink_data() frees the frag to the
-    page_pool when it is set, otherwise it keeps falling back to
-    xdp->rxq->mem.type unchanged. No other path changes behaviour.
-
-Given that xdp_frame->flags carries the bit into frame-based paths, is "No
-other path changes behaviour" accurate?
-
-> diff --git a/include/net/xdp.h b/include/net/xdp.h
-> index aa742f413c358..b389dc527adce 100644
-> --- a/include/net/xdp.h
-> +++ b/include/net/xdp.h
-> @@ -81,6 +81,10 @@ enum xdp_buff_flags {
->  	 * XDP program is not attached.
->  	 */
->  	XDP_FLAGS_FRAGS_UNREADABLE	= BIT(2),
-> +	/* frags are page_pool memory even though rxq->mem.type is not: a
-> +	 * skb-backed XDP buff (generic XDP, veth) is cow'd into a page_pool.
-> +	 */
-> +	XDP_FLAGS_FRAGS_PAGE_POOL	= BIT(3),
->  };
-
-[Severity: Medium]
-This comment documents a general ownership rule for frags, but is the rule
-only implemented in bpf_xdp_shrink_data()?
-
-The other frag release paths still key exclusively on rxq->mem.type or
-xdpf->mem_type and never consult xdp_buff_is_frag_pp():
-
-net/core/xdp.c:xdp_return_frag() {
-	__xdp_return(netmem, xdp->rxq->mem.type, true, NULL);
-}
-
-net/core/xdp.c:xdp_return_buff() {
-	...
-	for (u32 i = 0; i < sinfo->nr_frags; i++)
-		__xdp_return(skb_frag_netmem(&sinfo->frags[i]),
-			     xdp->rxq->mem.type, true, xdp);
-}
-
-plus the frame-side loops used by xdp_return_frame(),
-xdp_return_frame_rx_napi() and xdp_return_frame_bulk(), which use
-xdpf->mem_type.
-
-xdp_convert_buff_to_frame() also stores two independent descriptions of the
-same memory in one frame:
-
-include/net/xdp.h:xdp_convert_buff_to_frame() {
-	...
-	if (unlikely(xdp_update_frame_from_buff(xdp, xdp_frame) < 0))
-		return NULL;
-
-	/* rxq only valid until napi_schedule ends, convert to xdp_mem_type */
-	xdp_frame->mem_type = xdp->rxq->mem.type;
-}
-
-so xdp_frame->flags can say page_pool while xdp_frame->mem_type says
-MEM_TYPE_PAGE_SHARED.  I could not construct a live caller that frees a
-flagged buff through the generic helpers today, but should the contract be
-made consistent (either honour the flag in the generic release helpers, or
-scope the comment to the shrink path only) so a future caller does not
-silently reintroduce the same "Bad page state ... page_pool leak"?
-
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 61940e7535523..d34ba56d79d8f 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -4378,6 +4378,13 @@ static bool bpf_xdp_shrink_data(struct xdp_buff *xdp, skb_frag_t *frag,
->  	if (mem_type == MEM_TYPE_XSK_BUFF_POOL) {
->  		netmem = 0;
->  		zc_frag = bpf_xdp_shrink_data_zc(xdp, shrink, tail, release);
-> +	} else if (xdp_buff_is_frag_pp(xdp)) {
-> +		/*
-> +		 * Skb-backed XDP (generic XDP, veth) cow's the frags into a
-> +		 * page_pool while the rxq stays MEM_TYPE_PAGE_SHARED, so free
-> +		 * the frag to the pool, not via page_frag_free().
-> +		 */
-> +		mem_type = MEM_TYPE_PAGE_POOL;
->  	}
->  
->  	if (release) {
+> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c b/tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c
+> new file mode 100644
+> index 0000000000000..f3d8a84a6dc9c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c
+> @@ -0,0 +1,163 @@
 
 [ ... ]
+
+> +/*
+> + * Similar to flow_dissector.c: writev() an IFF_NAPI_FRAGS tap to build a
+> + * nonlinear skb (sized for 4K pages, like xdp_adjust_tail.c) that tun runs
+> + * through do_xdp_generic().
+> + */
+> +static void test_tun(struct xdp_shrink_frags *skel)
+> +{
+> +	__u8 head[74], frag1[2048], frag2[2048];
+
+[Severity: Medium]
+Is the 74 + 2048 + 2048 byte frame guaranteed to still be nonlinear when the
+program runs on kernels with PAGE_SIZE larger than 4096?
+
+skb_pp_cow_data() in net/core/skbuff.c bounds the linear head by the page
+size:
+
+	max_head_size = SKB_WITH_OVERHEAD(PAGE_SIZE - headroom);
+	...
+	size = min_t(u32, skb->len, max_head_size);
+	...
+	for (i = 0; i < MAX_SKB_FRAGS && off < skb->len; i++) {
+
+With PAGE_SIZE 16384 or 65536 the whole 4170-byte frame fits in the head, so
+the frag loop body never runs and the xdp_buff has no frags.
+
+tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c handles this by
+branching on getpagesize():
+
+	int page_size = getpagesize();
+	...
+		if (page_size == 65536)
+			test_xdp_adjust_frags_tail_grow_64k();
+
+Would a getpagesize() branch or skip be appropriate here too, given that
+config.aarch64 is shipped in the bpf selftests?
+
+[ ... ]
+
+> +	n = writev(tap_fd, iov, ARRAY_SIZE(iov));
+> +	ASSERT_EQ(n, sizeof(head) + sizeof(frag1) + sizeof(frag2), "writev");
+> +
+> +	usleep(100 * 1000);
+> +	ASSERT_GT(skel->bss->shrink_ran, 0, "xdp_prog_ran");
+
+[Severity: Medium]
+Can this subtest distinguish a buggy kernel from a fixed one?
+
+The failure mode the commit message names ("Bad page state ... page_pool
+leak") is produced by bad_page() in mm/page_alloc.c, with the reason string
+set in page_bad_reason():
+
+	if (unlikely(page_pool_page_is_pp(page)))
+		bad_reason = "page_pool leak";
+
+bad_page() is a static void that only emits pr_alert()/dump_page()/
+dump_stack() and then:
+
+	add_taint(TAINT_BAD_PAGE, LOCKDEP_NOW_UNRELIABLE);
+
+No error is propagated back to bpf_xdp_adjust_tail(), writev() or ping, and
+the test does not read /proc/sys/kernel/tainted, scan kmsg, or look at
+page_pool inflight statistics.
+
+So the assertions here (bpf_xdp_attach, the writev length, and shrink_ran)
+all succeed identically on a kernel with and without the fix.  Would it make
+sense to add an observable oracle (taint bit, kmsg scan, or page_pool
+stats), or alternatively to state in the commit message that this is a splat
+generator requiring manual dmesg inspection?
+
+[ ... ]
+
+> +static void test_veth(struct xdp_shrink_frags *skel)
+> +{
+
+[ ... ]
+
+> +	SYS_NOFAIL("ip netns exec " VETH_NETNS
+> +		   " ping -q -s 5000 -c 3 -W 1 " VETH_LOCAL_IP);
+> +
+> +	ASSERT_GT(skel->bss->shrink_ran, 0, "xdp_prog_ran");
+
+[Severity: Medium]
+The same two concerns apply here.  The ping runs under SYS_NOFAIL and the
+only assertion is shrink_ran > 0, so nothing observes whether the released
+frag went back to its page_pool.
+
+Additionally, the frag layout of a ~5 KB ping through an 8000-MTU veth is
+decided by the sender's SG/GRO behaviour rather than by the test.  If the
+skb ends up with a single frag larger than 3000 bytes, the shrink happens in
+place and no page is released at all.
+
+On large-PAGE_SIZE kernels veth_convert_skb_to_xdp_buff() takes the other
+branch after the COW leaves no frags:
+
+	if (skb_shinfo(skb)->nr_frags) {
+		...
+		xdp_buff_set_frag_pp(xdp);
+	} else {
+		xdp_buff_clear_frags_flag(xdp);
+	}
+
+which bypasses the frag-release code entirely.
+
+> diff --git a/tools/testing/selftests/bpf/progs/xdp_shrink_frags.c b/tools/testing/selftests/bpf/progs/xdp_shrink_frags.c
+> new file mode 100644
+> index 0000000000000..62e3791ac81d9
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/xdp_shrink_frags.c
+> @@ -0,0 +1,23 @@
+
+[ ... ]
+
+> +	/*
+> +	 * The program is loaded with BPF_F_XDP_HAS_FRAGS (xdp.frags), so a
+> +	 * nonlinear skb entering generic XDP is cow'd into page_pool memory
+> +	 * before we run. Shrinking the tail far enough releases at least one
+> +	 * whole frag, which must be returned to its page_pool. Count only a
+> +	 * successful shrink so a too-small frame (e.g. ARP) does not satisfy
+> +	 * the test.
+> +	 */
+> +	if (bpf_xdp_adjust_tail(ctx, -3000) == 0)
+> +		__sync_fetch_and_add(&shrink_ran, 1);
+
+[Severity: Medium]
+Does a return value of 0 here really imply a frag was released?
+
+bpf_xdp_adjust_tail() in net/core/filter.c only enters the frag path when
+the buffer is nonlinear:
+
+	if (unlikely(xdp_buff_has_frags(xdp))) { /* non-linear xdp buff */
+		if (offset < 0)
+			return bpf_xdp_frags_shrink_tail(xdp, -offset);
+	...
+	xdp->data_end = data_end;
+
+	return 0;
+
+A purely linear buffer takes the bottom path and also returns 0, so
+shrink_ran gets incremented without bpf_xdp_shrink_data() ever running.
+That seems to contradict the comment's claim that only a genuine
+frag-releasing shrink is counted.
+
+Would asserting somewhere that the buffer actually had frags (for example
+comparing ctx->data_end - ctx->data against the total frame length) make the
+counter mean what the comment says?
