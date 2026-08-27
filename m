@@ -1,97 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31087296BA9
-	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 07:04:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A451BA34
+	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 07:17:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787814286; cv=none; b=CXf2WvCZWHZnYIqvUF9j73HmXkO+5Ob2rOKKFdFPNo3y3qDFtWcWc+Q82uzns6GoCF2IriAfkQVdAKxUe1DkP/0s2ukr0BhxretMtV+rJGy3wxfTzjRhMz/nk5odCXiDFpJVtrv2l9fwoxVgU3G3DrVKjesjJk/ZvcRiba8oSn8=
+	t=1787815048; cv=none; b=BFYLrd48e17ecIBWZhPBKIDe7cNeqnh04/EFQrgIT1MSYul6H+5MgwcABEWWVHtmvhyoEE3Cq+moii1SRQ7j2P6hVutXDs4eUByc3Q0vSUUX7ryZVuJ0RntYYy0KPYT2YZiSLSqmBeibsvcvzvVtb1pHvwntN7HvwSa8t0kYiBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787814286; c=relaxed/simple;
-	bh=0ZMgFY8klDrqqFDCJfxao1CbcgaYPiBbXE+zW1Sg7z8=;
+	s=arc-20240116; t=1787815048; c=relaxed/simple;
+	bh=uVLdXQHwwdWiBAz28ayPkIx3n4yyX8EziSbNz0KjnlA=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=IJx9B0zjHvowpQBOdGAAcxFBdlVRNi3/jnsMN5jtCdJVE+RExAPmOb3xXuWLBa+GPZSPPohow6fs6xW4Y9Tg/BP8tXU27BH82/MZk+PFo2a9VT9X0E8/WITg22M/wPKqFGV63NTLLBwh7OVzQ4MZMhSDUxO9vSEFy0/NvcGP4zQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g5YUAeuC; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=flkiM8zO3z3WqJE9k/hdoFYx09W8VEJ7zRp6Symf8q0Os1Q71x+VVd9vRr6VMZoU27dz2MMHsTSMxzMJxlRPceXPiiPB8w2REF2GtdXEhQJDelJQmLdkIDh+ezzxtUwBdLCF0mYD8BUvTGdOlUaEuxKgaw4/azmTuH4tjlXY8uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PN24v70S; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g5YUAeuC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDE5E1F000E9;
-	Thu, 27 Aug 2026 07:04:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PN24v70S"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 077921F000E9;
+	Thu, 27 Aug 2026 07:17:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787814285;
-	bh=AN+TtmU4OkdmuFE/WAm4VJloWALcT3qmAsALvyCSKqw=;
+	s=k20260515; t=1787815047;
+	bh=nLPoeEnYeyuPbpF24iGq/eC9awauKXPa1+sDqor/qpM=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=g5YUAeuCFGLQJsdbbhoAdqIGemRYfxiJW1U2zxnU0kAfOUyFeiQwOZAVjQOawKIDP
-	 bIEW6aJ7G37xSukV59M6c07i8vqIG8G/SFz+rcqF80en09FYCYB11TebY2IqT3GEcI
-	 ogryfVLIlHYJWRHzfZzrkUs3SYPXjkd3zqALCFk/Llduh7DKNtukIqg/kNPzGkq8tr
-	 SVBSKniv90CMfBu/YvguGoZSgJnseW12vwY3UfszCTmin2gAaTGTAneuiTMvFXqIzo
-	 SUhh45cO9YijO6spT/LRRSJT+/xEQOlvW02CF4FzYiUufAVQy4NVQq162wqC8655hq
-	 aDyct5ExDUkuQ==
-Content-Type: multipart/mixed; boundary="===============5972862711128503810=="
+	b=PN24v70SrvWDuq3YCYc4E2OWi9zgp8BOm2FBSHmcUvhgxVHQi4c47P9TvB6oMvU9T
+	 xFlYa0/QKWO+/1yVbKsNxJ7guUrXTPMruTwwpgiaEcsz/uiLfVgNZtEIXF198dhFtO
+	 sL5rBG6qN7XIVwvP8EImRqtIf11sriqAaOfq0HGQUmjiodLsWUU22x/hSlHf7RjdC/
+	 dX1/urOJiNLRZo3aMW/Jo2ajEKZx6646cbCkw3pgXmBnzt0RpUAtMDeYyefrr0vIB4
+	 1agdnXUGZjqQC/htUOSlbSn5sj6vvePZcFCwXjF0cp0nK4ByLuEvIYa6bAptKyLyOA
+	 4J9jNTyh/rQ2A==
+Content-Type: multipart/mixed; boundary="===============3730331125176712387=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0c9dfc8370742b9ab97d7d248fb9698574ff6ca3074f761c400232d20ec7695f@mail.kernel.org>
-In-Reply-To: <20260827061200.2519335-1-yonghong.song@linux.dev>
-References: <20260827061200.2519335-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v3 09/11] selftests/bpf: Test global functions returning arena pointers by value
+Message-Id: <465f8ac0b4ab71a0d3939e6bded8e52a1a1e54e7c6d57ef7447b1dad571ce9ae@mail.kernel.org>
+In-Reply-To: <20260827061206.2520351-1-yonghong.song@linux.dev>
+References: <20260827061206.2520351-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v3 10/11] selftests/bpf: Test kfuncs returning arena pointers by value
 From: bot+bpf-ci@kernel.org
 To: yonghong.song@linux.dev,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 27 Aug 2026 07:04:44 +0000 (UTC)
+Date: Thu, 27 Aug 2026 07:17:27 +0000 (UTC)
 
---===============5972862711128503810==
+--===============3730331125176712387==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> Cover the by-value struct returns a global function may now make: two
-> arena pointers filling R0:R2, an arena pointer beside a scalar, an array
-> of them, and an eight byte struct returned in R0 alone. The existing
-> cases for a struct and a union carrying a plain pointer stay rejected.
-
-This isn't a bug, but would it be worth adding the new union-of-arena-
-pointer case to the enumeration? The patch adds union arena_upair /
-global_ret_arena_union() / aggregate_ret_global_arena_union() as a
-sixteen-byte union of an arena pointer and a __u64[2]. Since the next
-sentence says "cases for a struct and a union carrying a plain pointer
-stay rejected", a reader might think the only union touched is a rejected
-one, when the patch actually adds a newly-accepted union case as well.
-
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
-> index 815f342eb4b05..672a3aadd9cb2 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-> @@ -734,4 +734,52 @@ int check_arena_arg_ret(void *ctx)
->  	return 0;
->  }
->
+> diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc_arena.c b/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc_arena.c
+> new file mode 100644
+> index 0000000000000..94c35e1b547cd
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc_arena.c
+> @@ -0,0 +1,129 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+> +#include <vmlinux.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf_arena_common.h>
+> +#include "bpf_misc.h"
+> +#include "../test_kmods/bpf_testmod_kfunc.h"
+> +
 > +#if defined(__clang_major__) && __clang_major__ >= 23
 > +
-> +struct arena_page_pair {
-> +	u32 __arena *first;
-> +	u32 __arena *second;
-> +};
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_ARENA);
+> +	__uint(map_flags, BPF_F_MMAPABLE);
+> +	__uint(max_entries, 2);
+> +} arena SEC(".maps");
 > +
-> +__weak struct arena_page_pair split_arena_page(u32 __arena *page)
+> +/*
+> + * A returned member carries the arena type tag but not the address space
+> + * qualifier, so the program casts it into the arena address space itself
+> + * rather than the compiler doing it.
+> + */
+> +#define arena_ptr(p) ((u32 volatile __arena *)(p))
+
+This isn't a bug, but could the cast be spelled out at each use site, or
+the macro named after the type it produces (e.g. arena_u32p())? The name
+arena_ptr() reads as a generic address-space cast, but it hardcodes 'u32
+volatile', which matters for the load/store widths the test checks. Other
+arena selftest programs write the cast inline with the type visible at the
+use site (for example '(char __arena *)ptr' in progs/arena_mem_usage.c).
+
+> +
+> +SEC("syscall")
+> +__arch_x86_64 __arch_arm64
+> +__load_if_JITed()
+> +__success __retval(0)
+> +int aggregate_ret_kfunc_arena(void *ctx)
 > +{
-> +	struct arena_page_pair pair;
+> +	u32 volatile __arena *page = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
+> +	u32 volatile __arena *a, *b;
+> +	struct prog_test_ret_arena r;
 > +
-> +	pair.first = page;
-> +	pair.second = page + 1;
+> +	if (!page)
+> +		return 1;
 > +
-> +	return pair;
+> +	/* Both halves come back in R0:R2, pointing at page and page + 4. */
+> +	r = bpf_kfunc_call_test_ret_arena((u64)page);
+> +	if (!r.a || !r.b)
+> +		return 2;
+> +
+> +	a = arena_ptr(r.a);
+> +	b = arena_ptr(r.b);
+> +	*a = 1;
+> +	*b = 2;
+> +	if (*a != 1)
+> +		return 3;
+> +	if (*b != 2)
+> +		return 4;
+> +
+> +	/* The halves are the first two slots of the page the program allocated. */
+> +	page[0] = 7;
+> +	if (*a != 7)
+> +		return 5;
+> +	page[1] = 9;
+> +	if (*b != 9)
+> +		return 6;
+> +
+> +	return 0;
 > +}
 
-This isn't a bug, but since the returned pointers are the first two u32
-slots of a single page rather than two halves of it (page and page + 1
-are offsets 0 and 4 within a single 4096-byte allocation), would a name
-like arena_word_pair() / struct arena_word_pair describe the helper more
-directly? The neighbouring arena return tests in the same file name
-themselves after what they exercise rather than after an imagined data
-layout (check_arena_arg_ret, check_arena_arg_quals1/2).
+[ ... ]
 
 
 ---
@@ -99,4 +130,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33045482525
---===============5972862711128503810==--
+--===============3730331125176712387==--
