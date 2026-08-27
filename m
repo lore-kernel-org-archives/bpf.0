@@ -1,129 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76FF23F787E
-	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 10:46:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D16E843CE6F;
+	Thu, 27 Aug 2026 10:50:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787827607; cv=none; b=qU/NdNvi4OUBEbcgZ6uBJKQnkiCVy0YpvV9TCWJJgW4LMpKikYW+Qtsghxxf3dCxdHgtakrYglZED6H4mZ2bo67+LpouAQ9V4X3u7BwdbQMhClzIz228kD/Ejo9zCo5mZXHn9vPT5SnXQ2DJbCazTanACE1GQqhIxBueyb6mYjI=
+	t=1787827814; cv=none; b=DlL8/SBCGStbyguaCD5N2dAZhEcR8klidaOPuFB7h+oXcaq0UEsqE2qCFm8yWnmODyZldx6D3UaYZblik+0uq2vxpl6nCmx4VWyUENmO34KEkHnUR9fKFN1QtJGsOVHQf8mMjLd2EEEX9GlPc2lOA1kwLsU8JVqv1ALQ8p/CsKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787827607; c=relaxed/simple;
-	bh=Z6bebr2uE6P4tOMWx2oHNlHX/7P1jkwN8Ziu4WdHAe8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=iGZ9my+fPLhdvTHu/XCdN/fWFEGyJkx/KnnlDZUXXDB36RnNxrOoJy0mbihf54um7bvr1QNeaiG6jZNUzrTUKoW9siRJNAVKcoNxHgud0s2AlasmNT/52hO0NQ5wnZmbIgufMtQjMUEJqQRNcWgoCTWVFLIaE8xxe+EEV8LkSYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vu+nRD1j; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787827814; c=relaxed/simple;
+	bh=WKikv7UDh0swUxIskP5m5gbLAwHhjW6fwJWJtfX2mOM=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=emlZdCu0XayxkUTixlZFsAKvLlSsOrWq8TYCkIJvS/0iRS64OrYzr0mJVrhhdJ39Z1Tlk4BGUoWn2Bo7C2mLeiYgJfeOKEbkGDNlpJpyJpmTovcjz2XQpk5vSaIZNbJGt6dIz8qCejFX5u9xK24GP96oroyIKAZ9sYl+9iCQ90E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=AsHVFGSQ; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vu+nRD1j"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8F951F000E9;
-	Thu, 27 Aug 2026 10:46:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787827603;
-	bh=DKhLejkRg1ftIc9mF3Tvq4m2Yt7cyWPPey2JEdIcoSs=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Vu+nRD1jOj46y5cVopX5kqQiZ3RPosUjtYl2gxWMfKqixCQN7WUy/g6JMjmH7cjDM
-	 rNX04Rdko27WMNS+ZBrr0ptiHHtK8neEPA2DGBoGbvbphFHxghr0KBqhwThJpPgoT7
-	 7romRGJWpKa3ZZTYkD2xUq5XfhNeROBjsINe7ivTRdtnSf3H8veqI/LveuDVhKuWFF
-	 WnUk/I80VdQidThQcCjXyZ+7d8GIewvGfVuUQbHtZHltfj//Mb93xtpdcZi9Z8nSCF
-	 leYNuzExgFU+TW2a3mmGWSGtVvEAAOopD8rQoTwanuKZWBtV6GMBtz4k/FcLj2n+3v
-	 9nFEoYfQu0KQA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v5 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Hui Zhu" <hui.zhu@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <5dfdc7800469eac4e9a240f2422ba65d4ef4c4ba.1787826402.git.zhuhui@kylinos.cn>
-References: <cover.1787826402.git.zhuhui@kylinos.cn>
- <5dfdc7800469eac4e9a240f2422ba65d4ef4c4ba.1787826402.git.zhuhui@kylinos.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 27 Aug 2026 10:46:42 +0000
-Message-Id: <20260827104642.D8F951F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="AsHVFGSQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1787827816; x=1819363816;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WKikv7UDh0swUxIskP5m5gbLAwHhjW6fwJWJtfX2mOM=;
+  b=AsHVFGSQjxdIhNPh73Z/ArgCYdJEkYW0CGc4IQlayZtxxgwDoltAEqZ7
+   1nhy2RdMSVTSmrZ/Du2hFYn+kHiSHzcQpLL0uS8D1dXAMuvj07PalYo39
+   nGHKDu0jPpp0Mw1PINom6jOCzkh2+WMUHa8QT29AbtLReRs/+qcdwmT1d
+   hOMwROVWY2QjahYY/lg5sDVfGKlvoJEXUAlpb9p0Y5azwqBJSB7xinxQw
+   LwUCxVB2WHXvwqbtTX2xmXyscOJ4pyH7cedRg5MeVNRVtEWDPgAIkyz10
+   YE4R8dD1b1BbyqwIfkHj6ilk2gjWMxBeGeDs6FAiPhoExCPHDOQgAm7+6
+   Q==;
+X-CSE-ConnectionGUID: On+VD9zvSDyogEdmr1ElXg==
+X-CSE-MsgGUID: oJikmRcNRw6C4o8l2jsrCA==
+X-IronPort-AV: E=Sophos;i="6.25,246,1779174000"; 
+   d="scan'208";a="61843423"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2026 03:50:15 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.87.151) by
+ chn-vm-ex4.mchp-main.com (10.10.87.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.45; Thu, 27 Aug 2026 03:50:11 -0700
+Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Thu, 27 Aug 2026 03:50:07 -0700
+Date: Thu, 27 Aug 2026 12:50:07 +0200
+From: Daniel Machon <daniel.machon@microchip.com>
+To: Jakub Kicinski <kuba@kernel.org>
+CC: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+	<pabeni@redhat.com>, Horatiu Vultur <horatiu.vultur@microchip.com>, "Steen
+ Hegelund" <steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, "Herve
+ Codina" <herve.codina@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, Mohsin Bashir
+	<mohsin.bashr@gmail.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH net-next v5 11/13] net: lan966x: add PCIe FDMA XDP support
+Message-ID: <20260827105007.ghfhbfhko3dkr37n@DEN-DL-M70577.microsemi.net>
+References: <20260520-lan966x-pci-fdma-v5-0-ca56197ae05b@microchip.com>
+ <20260520-lan966x-pci-fdma-v5-11-ca56197ae05b@microchip.com>
+ <20260522190126.0f2d6587@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20260522190126.0f2d6587@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] BPF kfunc `bpf_proactive_reclaim` can cause kernel deadlocks by tr=
-iggering memory reclaim with `GFP_KERNEL` from sleepable contexts where fil=
-esystem or IO locks may be held.
-- [Medium] Integer overflow in calculating the returned reclaimed bytes on =
-32-bit architectures.
---
+> On Wed, 20 May 2026 10:12:23 +0200 Daniel Machon wrote:
+> >  #if IS_ENABLED(CONFIG_MCHP_LAN966X_PCI)
+> >  extern const struct lan966x_fdma_ops lan966x_fdma_pci_ops;
+> > +
+> > +static inline bool lan966x_is_pci(struct lan966x *lan966x)
+> > +{
+> > +     return lan966x->ops == &lan966x_fdma_pci_ops;
+> 
+>         return IS_ENABLED(CONFIG_MCHP_LAN966X_PCI) &&
+>                 lan966x->ops == &lan966x_fdma_pci_ops;
+> 
+> compiler will eliminate the reference to the ops as dead code
+> and linker will not complain that its object is missing.
 
-commit ef066c78e33635cc7e9aa0fc78438725da7dc30b
-Author: Hui Zhu <zhuhui@kylinos.cn>
+Ack. Will change in v6.
 
-mm/bpf: Add bpf_proactive_reclaim kfunc
+> 
+> > +}
+> > +#else
+> > +static inline bool lan966x_is_pci(struct lan966x *lan966x)
+> > +{
+> > +     return false;
+> > +}
+> >  #endif
+> >
+> >  int lan966x_lag_port_join(struct lan966x_port *port,
+> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
+> > index 9ee61db8690b..b470f731e25c 100644
+> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
+> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
+> > @@ -24,6 +24,16 @@ static int lan966x_xdp_setup(struct net_device *dev, struct netdev_bpf *xdp)
+> >       old_prog = xchg(&port->xdp_prog, xdp->prog);
+> >       new_xdp = lan966x_xdp_present(lan966x);
+> >
+> > +     /* PCIe FDMA uses contiguous buffers, so no page_pool reload
+> > +      * is needed. Drain NAPI before freeing the old program so
+> > +      * no in-flight poll holds a stale pointer.
+> > +      */
+> 
+> Not sure what this does. BPF programs are under RCU, they are not
+> immediately freed (if that's that you mean..)
+> 
 
-This commit adds a sleepable kfunc bpf_proactive_reclaim() which performs
-one proactive reclaim pass on a given memory cgroup. It refuses to reclaim
-if the calling task is already in a reclaim context to avoid corrupting the
-outer reclaim state.
+It was added to stop NAPI from reading a NULL xdp_prog during a concurrent
+program swap, however that issue was closed using READ_ONCE in an earlier
+version. napi_synchronize() and the comment will be dropped in v6.
 
-> diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
-> index 716df49d76477..297ff7f050427 100644
-> --- a/mm/bpf_memcontrol.c
-> +++ b/mm/bpf_memcontrol.c
+> > +     if (lan966x_is_pci(lan966x)) {
+> > +             if (old_prog)
+> > +                     napi_synchronize(&lan966x->napi);
+> > +             goto out;
+> > +     }
 
-[ ... ]
-
-> @@ -159,6 +160,49 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct m=
-em_cgroup *memcg)
->  	mem_cgroup_flush_stats(memcg);
->  }
-
-[ ... ]
-
-> +__bpf_kfunc unsigned long bpf_proactive_reclaim(struct mem_cgroup *memcg,
-> +						unsigned long size)
-> +{
-> +	unsigned long nr_reclaimed;
-> +
-> +	if (size < PAGE_SIZE || unlikely(bpf_in_reclaim_context()))
-> +		return 0;
-> +
-> +	nr_reclaimed =3D try_to_free_mem_cgroup_pages(memcg, size / PAGE_SIZE,
-> +						    GFP_KERNEL,
-
-[Severity: High]
-Can this cause a kernel deadlock when called from sleepable contexts where
-filesystem or IO locks may be held?
-
-Since GFP_KERNEL includes __GFP_FS and __GFP_IO, the direct reclaim path is
-allowed to invoke filesystem shrinkers. If a shrinker attempts to acquire a
-lock already held by the task (e.g., if a sleepable BPF program attached to
-an LSM hook like inode_rmdir or security_file_open calls
-bpf_proactive_reclaim), a self-deadlock could occur.
-
-Would it be safer to wrap the reclaim call in memalloc_nofs_save() and
-memalloc_nofs_restore() to guarantee safety, as the verifier cannot
-statically enforce that no filesystem locks are held?
-
-> +						    MEMCG_RECLAIM_MAY_SWAP |
-> +						    MEMCG_RECLAIM_PROACTIVE,
-> +						    NULL);
-> +
-> +	return nr_reclaimed * PAGE_SIZE;
-
-[Severity: Medium]
-Does this calculation overflow the 32-bit boundary before returning to the
-caller?
-
-On 32-bit architectures, unsigned long is 32 bits, making ULONG_MAX
-approximately 4GB. If a user requests a reclaim pass with size close to
-ULONG_MAX, the target pages will be close to 1,048,575.
-
-try_to_free_mem_cgroup_pages() reclaims in batches and can easily overshoot
-the target.
-
-If nr_reclaimed exceeds 1,048,575 pages, multiplying it by PAGE_SIZE (4096)
-will wrap around the 32-bit limit, yielding a severely truncated result.
-
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1787826402.gi=
-t.zhuhui@kylinos.cn?part=3D1
+/Daniel
