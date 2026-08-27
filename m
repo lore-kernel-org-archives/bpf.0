@@ -1,162 +1,238 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from bg-bec.cloudflare-smtp.org (bg-bec.cloudflare-smtp.org [104.30.16.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058554207A
-	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 12:30:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0661F40B111
+	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 12:43:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=104.30.16.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787833814; cv=none; b=JtSFZc6F0Jp6OO5oy8jTqfWkKugXAiMXnxYb+0b+qdke93DTUtkjcSQQj9ULEwkU5R59nxEBhn9JwWoJeB66AWyengwLlqXCqsSx3MIdCgeKOb1IiUqTvUEJ0XojxFqh960vCTJDjoXhN71Ril2vKRdPURJmQ8czFZzFqZkV9AA=
+	t=1787834600; cv=none; b=B6XRDkAnpq6ygt9jVsA0YIK+M1KhuKy+Dq9n0iU8P9GKQbh8qKIrzEb69Mr/AsbuLelTcRQBPGtNBAHEC2bj+WQHTqTKGKVkFLREOWjl3inyWFPFuftjW2816zHMXc0M2vKO6FRKwBUHPd20ZM7FEWvhkv2ngFCEgLcnF8/AJRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787833814; c=relaxed/simple;
-	bh=KICwhkIlmqTTCC3V8YCRz3Yamy/kNQUTm125zo79z5g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qYtSi3KMP/qNy63Q2w8XnhhvpdeRyR1m6R2LTYU5lGTCh8PIagMa2V2ez+9ut28yeT/GpOsRVH2j1REyKipKjlDpbr9RE/XjTb5Q4lueKPTrfVWti2WFnyAych50f/RhsqT/VxnSJutDTsueYVCVXeNxyq3wxDibyY1J7AmNOoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n60J08TF; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787834600; c=relaxed/simple;
+	bh=MRSnGejNdcct+4F9BQgiS4v8hDQnk5+Q9r8jg9KUXa8=;
+	h=From:Message-ID:Date:Subject:To:MIME-Version:Content-Type; b=ArzLH50N0M286J+d0axblmfhi4UEdA7t0bjimRMGLnmmh4jK/WH081+ZEeCyIXiKJlmPiz/mt7+xfXD1AYl5YqePwlyBB8STrWHb3Y3p+u/e+ta2OR2MPwBxxJUWtFA/C8USpAwhSldTDo7neKHsF2FW/FX7Ra4V3lCX95GDYNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bugs.sh; spf=pass smtp.mailfrom=cf-bounce.bugs.sh; dkim=pass (2048-bit key) header.d=cloudflare-smtp.org header.i=@cloudflare-smtp.org header.b=Jol0Bv6s; dkim=pass (2048-bit key) header.d=bugs.sh header.i=@bugs.sh header.b=ESqal6fj; arc=none smtp.client-ip=104.30.16.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bugs.sh
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cf-bounce.bugs.sh
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n60J08TF"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-c252c7270faso254750866b.3
-        for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 05:30:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787833810; x=1788438610; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=15LHDzQZCLwjrAwYA0HhaS7ea9AMExN/a2BoPBHIgUw=;
-        b=n60J08TFz1qFuYpr2zOgq0cbhlxycb8SajKkend/O/XbUiogI6ahNUQprwU/MrV+K8
-         +0q6e8xaDt1gr/7miSiHt76yjbHyyBPbP9cmyYYXHolActa36WVJ3AMw/M9PCGiOUDXv
-         M7yQjCWn6wBFIcWztWZT8Ueocc/HdEtxVVMO4Kynhm864Sfl6/ihBsWYauqWlNVHsCjG
-         dtfpCXJqcTR2l2+i0ihos/iQYuOLMvUzVOjmXRGr2l249RIRcjdMPCYxx8YBOGJ5LXwL
-         z4qr+PQGO0owuZRv9V3rLz+4ZYkfdrumgrYIxfoQb1wsBeTX3wHvPQMDDj1SIdoHvvME
-         ZCuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787833810; x=1788438610;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=15LHDzQZCLwjrAwYA0HhaS7ea9AMExN/a2BoPBHIgUw=;
-        b=OhQzVnUHrooZClmxD68eQ0tTVOqpykGbqrV250nkRigQRwyqL3F8ttT+mPP96aOxTx
-         aNVZyEWoUaiItKnMzlwl0EPXWJhzu35sBKSdg5QdAz/ylg5AXHVCoG1qvd9R5UJUzZcz
-         L51l5TfFDVlMZlFqtxpaC5Y2YalfRN4fXdVE1qFsyx76IoEczQk3j8aSlHJW+osJq6Ss
-         0kXBRcMV1UY5YY/MPMjzNSDQEyMeeaFVSs5yny3S6r+F7OUHDP0WCG+isjujH75n+z1Y
-         7IM1K2gSQ0ubFHrmg+bCJggJRrBVfBVxyOHYIpP0cheL/mpbynec49HiFCRHLsiIT4AG
-         Fg5g==
-X-Forwarded-Encrypted: i=1; AHgh+RrJzzkFrgOwdwTz5a//vYJfWDWL0nJOkc2vH/mezVaYBKtmPnnhCIWVUCRJhk7jSi54v3s=@vger.kernel.org
-X-Gm-Message-State: AFuF++mvHAcCQd5B/ZXZkZ8vp510SylFF6DDHA7bpx9oNYlqgLa0BNM1
-	yctCaeogVw6oDY8uXNTw78mOEs1A5MCOA+OEId7MU4TKkrGQJSswcLIm
-X-Gm-Gg: AR+sD10Xab9DjawinmY/pKWB4DfrnQNSJeIks29Z2VPQ1IEEaQ1OJjUojnSoWPGzFLr
-	GpPOl1sZEw1OqqD2W+q5pU5IZdsNIExuRXnHRVrWNtb2Txu9VUj+FZQmaiUzjb/vY1EhUc2W+qi
-	u60VI8dZSOPXUjhT866+sh5xshMjVTouirZ5U2TiZevqdScVG/comlFZXGCzfocA1yIE51BZXtj
-	qwa6u+ipzauql9KkU9fNjnPqpZ+W2Nv8JKEqwROpzBV2BF+d/S1IFMnncRrcR2BEmucnJWJq2XC
-	UxMml+jJtIhYPkHvKfV06xSsVPa83FhpYrEu5taHJU2r+ccC8yJ7DWjpu4r8Nu4STyyfbUN6P+8
-	Ta4RSAW9j8HgTYykonyEEQYes8chLk+p21BU8O370BeKpE5VdNuW4BaP8jJj+dWsNQfTxZ+HfJ4
-	IoJBvv21ic8vw6Jv7lIYmdfiOBZfsSS93+rTYI9k7CGgaJxNOvUv/wj24NbbULPZrl2NutQk0oY
-	Ddx4E5lpE6z17Gzoz7kaVWbOW4IOUX2h6Cx6xrKOZqDpZ5v6kl0rE47tdh3Xygr2f0HweYJqoxt
-	kpLL3+iw1rypagW2UQsekUmGdecYB1UiGoLlGVUjwGcUv8s+SurvHRZ2DXRVlBUn
-X-Received: by 2002:a17:907:e008:10b0:c20:2165:d74f with SMTP id a640c23a62f3a-c250c2e53f5mr544467866b.22.1787833809642;
-        Thu, 27 Aug 2026 05:30:09 -0700 (PDT)
-Received: from fedora.internal.pxprod (77-162-219-136.fixed.kpn.net. [77.162.219.136])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c250a88a928sm785380466b.33.2026.08.27.05.30.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Aug 2026 05:30:08 -0700 (PDT)
-From: Bruno Xavier <bfxavier@gmail.com>
-To: netdev@vger.kernel.org
-Cc: kuba@kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	davem@davemloft.net,
-	lorenzo@kernel.org,
-	hawk@kernel.org,
-	ilias.apalodimas@linaro.org,
-	bpf@vger.kernel.org,
-	Bruno Xavier <bfxavier@gmail.com>
-Subject: [PATCH] net: skbuff: keep the page_pool fragment offset aligned in skb_pp_cow_data()
-Date: Thu, 27 Aug 2026 14:29:17 +0200
-Message-ID: <20260827122926.31123-1-bfxavier@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=cloudflare-smtp.org header.i=@cloudflare-smtp.org header.b="Jol0Bv6s";
+	dkim=pass (2048-bit key) header.d=bugs.sh header.i=@bugs.sh header.b="ESqal6fj"
+DKIM-Signature: v=1; a=rsa-sha256; s=cf2024-1; d=cloudflare-smtp.org; c=relaxed/relaxed;
+	h=To:Subject:Date:From:Feedback-ID:from:reply-to:cc:resent-date
+	:resent-from:resent-to:resent-cc:in-reply-to:references:list-id:list-help
+	:list-unsubscribe:list-unsubscribe-post:list-subscribe:list-post
+	:list-owner:list-archive; t=1787834591; x=1788439391; bh=W4fm0u3HZdhfMBbhRO
+	VOx1cU3LnYi3RVandcTDjcu3E=; b=Jol0Bv6sUhvBU4ktFdEyl++yy/5n7vz8myBOXeaSGkpdU
+	akOVqqo3hijnL0hMi8QtguPpTFma7zNo4z2vdcF0NgUeU06sBKSVuXWEG+aCoTO/uRQVoWNBy7v
+	X3WhtrowcirdfyKmZRkKgt5qGjODCAcz4SSXFo77oYTfCmGJ7Tirb082ZqTAcH4CSG4+vDKzhhE
+	rFMEhC+XWrxpV8DnEskPj+A/728QblsMq6Pjh7L68UNola0z97/VPnrOreSQyZzHch6B2K16VBI
+	Tq6ivTDx0JwC3+G03/qVKsoAd5HIsj1U+AFeY7iibweuQHiPWKTy3hQMsv9ey9vFSTw0GDyg==;
+DKIM-Signature: v=1; a=rsa-sha256; s=cf-bounce; d=bugs.sh; c=relaxed/relaxed;
+	h=To:Subject:Date:From:Feedback-ID:from:reply-to:cc:resent-date
+	:resent-from:resent-to:resent-cc:in-reply-to:references:list-id:list-help
+	:list-unsubscribe:list-unsubscribe-post:list-subscribe:list-post
+	:list-owner:list-archive; t=1787834591; x=1788439391; bh=W4fm0u3HZdhfMBbhRO
+	VOx1cU3LnYi3RVandcTDjcu3E=; b=ESqal6fjBRjl8zZIKAHrenPh8B8gjgx145Azm1F9SeqrX
+	pZbHXvIBwiPX3BRmuwiThX7NFl2sJH3m95dMZ2CoWHwg+ulfGAR4YWykddkA7V0ZUrEJj8fKLvI
+	xX+J6jWoNFJh3MEv+27CuPVq3VpFhK/lpMQ+5QuvN/AvX2Wu7t3YFxRdDLfdViy89NEAZhBQejx
+	N9AsoSPUhKcED21KLXhEiJvM9eiat6X3VmjJYWEMu1zN8wuzNf4hWR2ynHkw186wcHpxnbnTqy1
+	bOYWVUM/ijX2o7ZpVjy+KFWc3KamhG4vp33w1jIkvTF6IQFvkVMnIjCtQ6sF7VChDcEd9y9w==;
+Feedback-ID: bugs.sh:5:6:Cloudflare
+From: co <co+6155a794e60d2ebf@bugs.sh>
+Message-ID: <BC0kQFzqFlua7hmRFXYJxLDaLlY5VAVsVW2p@bugs.sh>
+Date: Thu, 27 Aug 2026 12:43:03 +0000
+Subject: [BUG] net/core: use-after-free in sock_def_readable()
+To: netdev@vger.kernel.org, bpf@vger.kernel.org, "John Fastabend" <john.fastabend@gmail.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Sabrina Dubroca" <sd@queasysnail.net>, "David
+ S. Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Paolo
+ Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-skb_pp_cow_data() takes two kinds of memory from the same page_pool. The
-head buffer goes to napi_build_skb() and becomes skb->head, so
-skb_shinfo() lands at skb->head + skb->end and has to be aligned. The
-payload fragments in the loop below are plain data, and they are requested
-with the raw remaining packet length.
+We found a bug reachable in:
 
-page_pool_alloc_frag_netmem() advances pool->frag_offset by
+    path    net/core
+    crash   use-after-free in sock_def_readable()
+    commit  4e15e89faac9 ("net: bnxt: ring the doorbell when SW USO exits e=
+arly")
 
-	ALIGN(size, dma_get_cache_alignment())
+Config, environment, the sanitizer report and a C reproducer follow.
 
-and dma_get_cache_alignment() returns 1 wherever ARCH_HAS_DMA_MINALIGN is
-undefined, x86 included. An unaligned fragment request therefore leaves
-pool->frag_offset unaligned, and every later head allocation from that
-pool comes back unaligned. skb->head is then misaligned and
-refcount_inc(&skb_shinfo(skb)->dataref) in skb_clone() is an unaligned
-lock incl. Where that 4-byte access crosses a cache line it is a split
-lock, and on a CPU with split lock detection the kernel dies in softirq:
+=3D=3D Notes =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+    If you patch the bug based on our artifacts, a tag would be
+    appreciated:
 
-  Kernel panic - not syncing: Fatal exception in interrupt
-  RIP: 0010:skb_clone+0x159/0x1e0
+Reported-by: co+6155a794e60d2ebf@bugs.sh
 
-This hit four times in three days on a Core Ultra 7 258V running a generic
-XDP program on lo with a raw IPv4 socket open, so raw_v4_input() cloned
-every matching skb. Observed skb->head misalignments were 5, 6, 10, 11 and
-13 bytes. Without split lock detection the unaligned atomic just runs, a
-few microseconds each time, and nothing is logged.
+    Everything in this mail is validated by the reproducer below.
 
-Align the fragment request so the pool's fragment offset stays usable for
-the head allocations this function also makes.
+    We also hold an LLM-generated root-cause analysis and a candidate
+    patch. The patch passes an A/B test: the same reproducer panics the
+    unpatched kernel and runs clean on the patched one. Neither has had
+    human review, so both still require validation before you send or
+    apply them. Available on:
 
-Fixes: e6d5dbdd20aa ("xdp: add multi-buff support for xdp running in generic mode")
-Signed-off-by: Bruno Xavier <bfxavier@gmail.com>
+        patch.diff  https://bugs.sh/b/6155a794e60d2ebf/patch.diff
+        report.md   https://bugs.sh/b/6155a794e60d2ebf/report.md
+
+    This is an open science project. The code and the full set of PoCs
+    are not public at this moment, as we intend to disclose our findings
+    in an ethical way.
+
+    Happy to test patches. Complaints and suggestions about our work
+    are welcome at:
+
+        cedalion@bugs.sh
+
+=3D=3D Environment =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+    Reproduced on  4e15e89faac9 ("net: bnxt: ring the doorbell when SW USO =
+exits early")
+    VM setup       https://bugs.sh/b/6155a794e60d2ebf/run.sh
+    config         https://bugs.sh/b/6155a794e60d2ebf/config.gz
+    poc            https://bugs.sh/b/6155a794e60d2ebf/repro.c
+
+=3D=3D Sanitizer Report =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+BUG: KASAN: slab-use-after-free in sock_def_readable+0x294/0x2d0
+Read of size 8 at addr ffff888100477188 by task exploit/149
+CPU: 1 UID: 0 PID: 149 Comm: exploit Tainted: G        W           7.0.0+ #=
+131 PREEMPT(lazy)
+Call Trace:
+<IRQ>
+dump_stack_lvl+0xb8/0xf0
+print_report+0xd0/0x630
+kasan_report+0xca/0x100
+sock_def_readable+0x294/0x2d0
+tcp_data_ready+0x115/0x580
+tcp_data_queue+0x2569/0x4c30
+tcp_rcv_established+0xa0f/0x37e0
+tcp_v4_do_rcv+0x56c/0xb10
+tcp_v4_rcv+0x2808/0x3f00
+ip_protocol_deliver_rcu+0x6f/0x420
+ip_local_deliver_finish+0x3bb/0x560
+ip_local_deliver+0x2a7/0x300
+ip_rcv+0x37e/0x400
+__netif_receive_skb_one_core+0x19c/0x1f0
+process_backlog+0x263/0x900
+__napi_poll+0xba/0x6c0
+net_rx_action+0x482/0xc90
+handle_softirqs+0x1db/0x6a0
+do_softirq.part.0+0x70/0x90
+</IRQ>
+__local_bh_enable_ip+0x7c/0x80
+__dev_queue_xmit+0x99e/0x39a0
+ip_finish_output2+0xf93/0x1860
+__ip_finish_output+0x271/0x4a0
+ip_finish_output+0x78/0x3d0
+ip_output+0x19b/0x310
+ip_local_out+0xd6/0x110
+__ip_queue_xmit+0x905/0x1950
+__tcp_transmit_skb+0x3918/0x4ca0
+tcp_write_xmit+0xef3/0x78e0
+__tcp_push_pending_frames+0xb0/0x340
+tcp_push+0x48e/0x720
+tcp_sendmsg_locked+0x1851/0x43a0
+tcp_sendmsg+0x2f/0x50
+inet_sendmsg+0xba/0x140
+__sys_sendto+0x454/0x500
+__x64_sys_sendto+0xe1/0x1c0
+do_syscall_64+0x12f/0xc00
+entry_SYSCALL_64_after_hwframe+0x76/0x7e
+RIP: 0033:0x425e1a
+Allocated by task 149:
+kasan_save_stack+0x2f/0x50
+kasan_save_track+0x10/0x30
+__kasan_slab_alloc+0x6a/0x70
+kmem_cache_alloc_lru_noprof+0x1d1/0x580
+sock_alloc_inode+0x27/0x290
+alloc_inode+0x65/0x240
+sock_alloc+0x43/0x240
+__sock_create+0xc1/0x520
+__sys_socket+0x14e/0x260
+__x64_sys_socket+0x73/0xb0
+do_syscall_64+0x12f/0xc00
+entry_SYSCALL_64_after_hwframe+0x76/0x7e
+Freed by task 0:
+kasan_save_stack+0x2f/0x50
+kasan_save_track+0x10/0x30
+kasan_save_free_info+0x37/0x60
+__kasan_slab_free+0x3f/0x60
+kmem_cache_free+0xfe/0x4d0
+i_callback+0x47/0x70
+rcu_core+0x8dc/0x1110
+handle_softirqs+0x1db/0x6a0
+__irq_exit_rcu+0x146/0x240
+sysvec_apic_timer_interrupt+0x9d/0xc0
+asm_sysvec_apic_timer_interrupt+0x16/0x20
+Last potentially related work creation:
+kasan_save_stack+0x2f/0x50
+kasan_record_aux_stack+0x88/0xa0
+__call_rcu_common.constprop.0+0x76/0x8e0
+destroy_inode+0x131/0x1b0
+evict+0x54b/0x850
+iput+0x5ca/0x7b0
+dentry_unlink_inode+0x2ad/0x490
+__dentry_kill+0x1d8/0x600
+finish_dput+0x4b/0x260
+dput.part.0+0x2d1/0x3f0
+dput+0x20/0x30
+__fput+0x51c/0xb90
+fput_close_sync+0x119/0x250
+__x64_sys_close+0x8c/0x120
+do_syscall_64+0x12f/0xc00
+entry_SYSCALL_64_after_hwframe+0x76/0x7e
+The buggy address belongs to the object at ffff888100477100
+which belongs to the cache sock_inode_cache of size 768
+The buggy address is located 136 bytes inside of
+freed 768-byte region [ffff888100477100, ffff888100477400)
+The buggy address belongs to the physical page:
+page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x100474
+head: order:2 mapcount:0 entire_mapcount:0 nr_pages_mapped:0 pincount:0
+flags: 0x100000000000040(head|node=3D0|zone=3D2)
+page_type: f5(slab)
+raw: 0100000000000040 ffff888100b1a280 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000800120012 00000000f5000000 0000000000000000
+head: 0100000000000040 ffff888100b1a280 dead000000000122 0000000000000000
+head: 0000000000000000 0000000800120012 00000000f5000000 0000000000000000
+head: 0100000000000002 ffffffffffffff01 00000000ffffffff 00000000ffffffff
+head: ffffffffffffffff 0000000000000000 00000000ffffffff 0000000000000004
+page dumped because: kasan: bad access detected
+Memory state around the buggy address:
+ffff888100477080: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ffff888100477100: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff888100477180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+^
+ffff888100477200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ffff888100477280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+Kernel panic - not syncing: Attempted to kill init! exitcode=3D0x00000000
+
+
 ---
+The report format is based on syzbot bug report.
 
-Notes:
-    Tested on a Core Ultra 7 258V, Fedora 44 userspace, with netbird attaching a
-    generic XDP program to lo and holding a raw IPv4 socket, so raw_v4_input()
-    clones matching skbs. A bpftrace kprobe on napi_build_skb() and
-    __build_skb_around() counting misaligned data pointers, plus a kprobe on
-    skb_pp_cow_data() as a positive control:
-    
-      unpatched 7.1.9, 7m22s : 16884 calls, 72 misaligned builds, 10 misaligned clones
-      patched   7.2.0, 7m    : 30479 calls,  0 misaligned builds,  0 misaligned clones
-    
-    Misalignments seen before the patch were 1, 2, 3, 5, 6, 9, 10, 11, 12 and 14
-    bytes, so not even 2-byte alignment held. A kretprobe on
-    page_pool_alloc_frag_netmem() watching pool->frag_offset independently showed
-    zero misaligned offsets after the patch.
-    
-    The alternative is to have the page_pool frag allocator guarantee a minimum
-    alignment itself:
-    
-    	-	size = ALIGN(size, dma_get_cache_alignment());
-    	+	size = ALIGN(size, max_t(unsigned int, dma_get_cache_alignment(),
-    	+				 __alignof__(long)));
-    
-    That covers every caller of page_pool_dev_alloc*() instead of just this one,
-    but it changes a generic allocator and would carry a 2021 Fixes tag, so I kept
-    the fix in the caller. Happy to send that version instead if you prefer it.
+This report is generated by a bot. It may contain errors.
+See https://github.com/n132/cedalion for more information.
 
- net/core/skbuff.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+For any issue with this report, reach out to cedalion@bugs.sh
 
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index cbbd60455abb..7f8953b48026 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -985,7 +985,7 @@ int skb_pp_cow_data(struct page_pool *pool, struct sk_buff **pskb,
- 		u32 page_off;
- 
- 		size = min_t(u32, len, PAGE_SIZE);
--		truesize = size;
-+		truesize = ALIGN(size, sizeof(long));
- 
- 		page = page_pool_dev_alloc(pool, &page_off, &truesize);
- 		if (!page) {
--- 
-2.55.0
+If the report is already addressed, let us know by replying with:
+#co fix: <commit hash>
+
+If the report is a duplicate of another one, reply with:
+#co dup: <lore link>
+
+If you want to undo deduplication, reply with:
+#co undup
+
 
