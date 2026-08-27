@@ -1,21 +1,21 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5CA03126B0
-	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 06:11:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BDFC312807
+	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 06:11:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787811091; cv=none; b=XBx7MqRntkKm33d9Uzrqc5YaaV2VtGawFaXAHWnygrD1OuMtlIO8LwLeQZvAc7oQc54JEqyuqml0g/9oMO2nYwjB/GMbpBI69qRpjH9leLLKWubiutHWt8qdgYtAlVs7BKy1dvN5YzBNkEprF9qqwbHPe4WqVO0rbZV5/BjmyWU=
+	t=1787811093; cv=none; b=TKJ5xZnWUo3mn7JwruDva/85XCiOV+IEeGC0MMsyxobAZOmVLM+pAIx9H6oZRk4XWaMBK8nnPSZ8cHURlhICYL7lsjLbO1I+7mfdv8G7KrYopklQSo0zxzDvJTfgkBPg/Q/z8raIy+DHlE6TnW/01cpx+kNOUcQgDyHnsMmizjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787811091; c=relaxed/simple;
-	bh=4UXEtdtWE99TvIdvCNmu90Y+sAVsRymsv6H0ui4eKbo=;
+	s=arc-20240116; t=1787811093; c=relaxed/simple;
+	bh=M84Hq8zhwg5WHfRzEi7feMHEy+8pxt5JH7Dc5ofQ4Q0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ReDu2hvyW2J/7Mlmqqq/nwbB52JNY7KueoEQkgl66m/Md6DAFtUTvhIEFSv1b4Yke0gVyiv93y4u5MTTtxffq1gLnHA+qHztUWgmeJOsEwMQPrsQ6TFRMqLDial4Pexm28Kh4fPPcUTNPzFcH3cNxL/oCmP1PTPSD+bXx9coyls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
+	 MIME-Version; b=jgTjP0zXNVjhpF80fEzsv12+K896H12BhMVCNKSgd4BJmHvky8POn9WccS6BkDSJcSQ37gFYMUE0ZdeDsSSy/ucuIlECetq7LZilSg3ry9aBbTADatZfTccholpZxWFQIf310jWDDXGFnKV2M9mNwsosXULnK1gRcSAOPJOmrCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 0E78126CDE2CD4; Wed, 26 Aug 2026 23:11:25 -0700 (PDT)
+	id E7E6326CDE2CA1; Wed, 26 Aug 2026 23:11:19 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v3 02/11] bpf: Drop the recursion depth argument of btf_type_is_scalar_struct()
-Date: Wed, 26 Aug 2026 23:11:25 -0700
-Message-ID: <20260827061125.2516013-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v3 01/11] bpf: Record each half of a paired return value in verifier diagnostics
+Date: Wed, 26 Aug 2026 23:11:19 -0700
+Message-ID: <20260827061119.2515071-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260827061114.2514603-1-yonghong.song@linux.dev>
 References: <20260827061114.2514603-1-yonghong.song@linux.dev>
@@ -37,151 +37,156 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-btf_type_is_scalar_struct() recurses into nested struct members and
-carries the nesting depth in a @rec argument, so every caller has to
-spell out the 0 that starts the walk.
+A subprogram returning more than 8 bytes comes back in the R0:R2 register
+pair. There are three places, check_func_call(), prepare_func_exit() and
+check_kfunc_call(), where only R0 is tracked by the diagnostic
+modification scope and R2 is missed.
 
-Move the recursion into a static helper that keeps @rec and leave
-btf_type_is_scalar_struct() as a thin wrapper over it, so callers only
-name the type they are asking about.
+Fix it by opening a diagnostic modification scope for each return registe=
+r.
+This way, both return registers are recorded.
 
-No functional change.
-
+Fixes: 0630ad00d96d ("bpf: Add verifier support for 16-byte returns in R0=
+: R2")
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/bpf_verifier.h |  2 +-
- kernel/bpf/btf.c             |  2 +-
- kernel/bpf/verifier.c        | 24 +++++++++++++++---------
- 3 files changed, 17 insertions(+), 11 deletions(-)
+ kernel/bpf/verifier.c | 56 ++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 42 insertions(+), 14 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 004b06785521..3eb61edc8c5e 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1489,7 +1489,7 @@ struct bpf_iarray *bpf_insn_successors(struct bpf_v=
-erifier_env *env, u32 idx);
- void bpf_fmt_stack_mask(char *buf, ssize_t buf_sz, u64 stack_mask);
- bool bpf_subprog_is_global(const struct bpf_verifier_env *env, int subpr=
-og);
- bool btf_type_is_scalar_struct(struct bpf_verifier_env *env, const struc=
-t btf *btf,
--			       const struct btf_type *t, int rec);
-+			       const struct btf_type *t);
-=20
- int bpf_find_subprog(struct bpf_verifier_env *env, int off);
- bool bpf_is_throw_kfunc(struct bpf_insn *insn);
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 91b8ce77f699..47d43eb983a5 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -7995,7 +7995,7 @@ static int btf_validate_return_type(struct bpf_veri=
-fier_env *env, struct btf *bt
- 		 */
- 		bool local_func =3D subprog && !is_global;
-=20
--		if (local_func || btf_type_is_scalar_struct(env, btf, t, 0))
-+		if (local_func || btf_type_is_scalar_struct(env, btf, t))
- 			return 0;
- 	}
-=20
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 5d8162e13c20..bc3053e81500 100644
+index e036ae20bf6b..5d8162e13c20 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -11647,9 +11647,8 @@ static bool is_kfunc_arg_implicit(const struct bp=
-f_call_arg_meta *meta, u32 arg_
- }
-=20
- /* Returns true if struct is composed of scalars, 4 levels of nesting al=
-lowed */
--bool btf_type_is_scalar_struct(struct bpf_verifier_env *env,
--			       const struct btf *btf,
--			       const struct btf_type *t, int rec)
-+static bool btf_scalar_struct_walk(struct bpf_verifier_env *env, const s=
-truct btf *btf,
-+				   const struct btf_type *t, int rec)
- {
- 	const struct btf_type *member_type;
- 	const struct btf_member *member;
-@@ -11667,7 +11666,7 @@ bool btf_type_is_scalar_struct(struct bpf_verifie=
-r_env *env,
- 				verbose(env, "max struct nesting depth exceeded\n");
- 				return false;
- 			}
--			if (!btf_type_is_scalar_struct(env, btf, member_type, rec + 1))
-+			if (!btf_scalar_struct_walk(env, btf, member_type, rec + 1))
- 				return false;
- 			continue;
+@@ -9995,9 +9995,14 @@ static int check_func_call(struct bpf_verifier_env=
+ *env, struct bpf_insn *insn,
+ 		 */
+ 		if (!returns_void) {
+ 			nregs =3D bpf_ret_reg_pair(env, subprog) ? 2 : 1;
+-			for (i =3D 0; i < nregs; i++)
+-				mark_reg_unknown(env, caller->regs, ret_regs[i]);
++			mark_reg_unknown(env, caller->regs, ret_regs[0]);
+ 			bpf_diag_mod_end(env);
++			for (i =3D 1; i < nregs; i++) {
++				bpf_diag_mod_begin(env, &caller->regs[ret_regs[i]], NULL,
++						   BPF_DIAG_MOD_WRITE);
++				mark_reg_unknown(env, caller->regs, ret_regs[i]);
++				bpf_diag_mod_end(env);
++			}
  		}
-@@ -11686,6 +11685,13 @@ bool btf_type_is_scalar_struct(struct bpf_verifi=
-er_env *env,
- 	return true;
+=20
+ 		if (env->subprog_info[subprog].might_throw) {
+@@ -10403,10 +10408,14 @@ static int prepare_func_exit(struct bpf_verifie=
+r_env *env, int *insn_idx)
+ 		 * return to the caller whatever the callee had in the
+ 		 * return register(s)
+ 		 */
+-		bpf_diag_mod_begin(env, &caller->regs[BPF_REG_0], r0, BPF_DIAG_MOD_WRI=
+TE);
+-		for (i =3D 0; i < nregs; i++)
+-			caller->regs[ret_regs[i]] =3D callee->regs[ret_regs[i]];
+-		bpf_diag_mod_end(env);
++		for (i =3D 0; i < nregs; i++) {
++			u32 regno =3D ret_regs[i];
++
++			bpf_diag_mod_begin(env, &caller->regs[regno], &callee->regs[regno],
++					   BPF_DIAG_MOD_WRITE);
++			caller->regs[regno] =3D callee->regs[regno];
++			bpf_diag_mod_end(env);
++		}
+ 	}
+=20
+ 	/* for callbacks like bpf_loop or bpf_for_each_map_elem go back to call=
+site,
+@@ -11342,15 +11351,33 @@ static int check_helper_call(struct bpf_verifie=
+r_env *env, struct bpf_insn *insn
+=20
+ /*
+  * Mark the register(s) holding a @size byte kfunc return value as unkno=
+wn
+- * scalars. Both halves of a register pair are treated the same way.
++ * scalars and return how many registers that took. Both halves of a reg=
+ister
++ * pair are treated the same way.
++ *
++ * R0 is written in the diagnostic modification scope the caller opened =
+before
++ * the caller-saved scrub, since R0 gets no scrub record of its own and =
+that
++ * scope is what carries its pre-call value into the history. A scope tr=
+acks a
++ * single register and does not nest, so close it before recording the r=
+est of
++ * the return value. A value that fits in R0 leaves the caller's scope o=
+pen for
++ * the caller to close, so a later write to R0 still lands in it.
+  */
+-static void mark_kfunc_ret_regs(struct bpf_verifier_env *env,
+-				struct bpf_reg_state *regs, u32 size)
++static u32 mark_kfunc_ret_regs(struct bpf_verifier_env *env,
++			       struct bpf_reg_state *regs, u32 size)
+ {
+ 	u32 i, nregs =3D ret_regs_cnt(size);
+=20
+-	for (i =3D 0; i < nregs; i++)
++	mark_reg_unknown(env, regs, ret_regs[0]);
++	if (nregs =3D=3D 1)
++		return nregs;
++
++	bpf_diag_mod_end(env);
++	for (i =3D 1; i < nregs; i++) {
++		bpf_diag_mod_begin(env, &regs[ret_regs[i]], NULL, BPF_DIAG_MOD_WRITE);
+ 		mark_reg_unknown(env, regs, ret_regs[i]);
++		bpf_diag_mod_end(env);
++	}
++
++	return nregs;
  }
 =20
-+bool btf_type_is_scalar_struct(struct bpf_verifier_env *env,
-+			       const struct btf *btf,
-+			       const struct btf_type *t)
-+{
-+	return btf_scalar_struct_walk(env, btf, t, 0);
-+}
-+
- enum kfunc_ptr_arg_type {
- 	KF_ARG_CONST_MEM_SIZE,
- 	KF_ARG_MEM_SIZE,
-@@ -12066,7 +12072,7 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, =
-struct bpf_call_arg_meta *meta,
- 		 (is_kfunc_arg_mem_size(meta->btf, &args[arg + 1]) ||
- 		  is_kfunc_arg_const_mem_size(meta->btf, &args[arg + 1]))) {
- 		if (!btf_type_is_void(ref_t) && !btf_type_is_scalar(ref_t) &&
--		    !btf_type_is_scalar_struct(env, meta->btf, ref_t, 0)) {
-+		    !btf_type_is_scalar_struct(env, meta->btf, ref_t)) {
- 			verbose(env, "%s pointer type %s %s must point to void, scalar, or st=
-ruct with scalar\n",
- 				reg_arg_name(env, argno), btf_type_str(ref_t), ref_tname);
- 			return -EINVAL;
-@@ -12082,7 +12088,7 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, =
-struct bpf_call_arg_meta *meta,
- 		 * scalars. The access size is derived from the pointed-to BTF type.
- 		 */
- 		if (!btf_type_is_scalar(ref_t) &&
--		    !btf_type_is_scalar_struct(env, meta->btf, ref_t, 0)) {
-+		    !btf_type_is_scalar_struct(env, meta->btf, ref_t)) {
- 			verbose(env, "%s pointer type %s %s must point to scalar, or struct w=
-ith scalar\n",
- 				reg_arg_name(env, argno), btf_type_str(ref_t), ref_tname);
- 			return -EINVAL;
-@@ -13138,7 +13144,7 @@ static int check_kfunc_args(struct bpf_verifier_e=
-nv *env, struct bpf_call_arg_me
- 				break;
- 			}
-=20
--			if (!btf_type_is_scalar_struct(env, meta->btf, ref_t, 0)) {
-+			if (!btf_type_is_scalar_struct(env, meta->btf, ref_t)) {
- 				enum bpf_reg_type reg2btf_type =3D lookup_reg2btf_ids(ref_id);
- 				const char *expected_type;
-=20
-@@ -13680,7 +13686,7 @@ static int check_special_kfunc(struct bpf_verifie=
-r_env *env, struct bpf_call_arg
-=20
- 		struct_meta =3D btf_find_struct_meta(ret_btf, ret_btf_id);
- 		if (is_bpf_percpu_obj_new_kfunc(meta->func_id)) {
--			if (!btf_type_is_scalar_struct(env, ret_btf, ret_t, 0)) {
-+			if (!btf_type_is_scalar_struct(env, ret_btf, ret_t)) {
- 				verbose(env, "bpf_percpu_obj_new type ID argument must be of a struc=
-t of scalars\n");
- 				return -EINVAL;
- 			}
-@@ -14059,7 +14065,7 @@ static int check_kfunc_call(struct bpf_verifier_e=
+ static bool is_kfunc_acquire(struct bpf_call_arg_meta *meta)
+@@ -13767,7 +13794,7 @@ static int check_kfunc_call(struct bpf_verifier_e=
 nv *env, struct bpf_insn *insn,
- 		 * otherwise a pointer field would be laundered into a scalar
- 		 * and escape provenance and reference tracking.
- 		 */
--		if (!btf_type_is_scalar_struct(env, desc_btf, t, 0)) {
-+		if (!btf_type_is_scalar_struct(env, desc_btf, t)) {
- 			verbose(env,
- 				"kernel function %s returns %s %s that is not composed of scalars\n"=
-,
- 				func_name, btf_type_str(t),
+ 	struct bpf_insn_aux_data *insn_aux;
+ 	const char *operation;
+ 	int err, insn_idx =3D *insn_idx_p;
+-	u32 i, nargs, ptr_type_id;
++	u32 i, nargs, ptr_type_id, ret_nregs =3D 1;
+ 	struct bpf_kfunc_desc *desc;
+ 	struct btf *desc_btf;
+ 	int id;
+@@ -14021,7 +14048,7 @@ static int check_kfunc_call(struct bpf_verifier_e=
+nv *env, struct bpf_insn *insn,
+ 	}
+=20
+ 	if (btf_type_is_scalar(t)) {
+-		mark_kfunc_ret_regs(env, regs, t->size);
++		ret_nregs =3D mark_kfunc_ret_regs(env, regs, t->size);
+ 		if (meta.btf =3D=3D btf_vmlinux && (meta.func_id =3D=3D special_kfunc_=
+list[KF_bpf_res_spin_lock] ||
+ 		    meta.func_id =3D=3D special_kfunc_list[KF_bpf_res_spin_lock_irqsav=
+e]))
+ 			__mark_reg_const_zero(env, &regs[BPF_REG_0]);
+@@ -14039,7 +14066,7 @@ static int check_kfunc_call(struct bpf_verifier_e=
+nv *env, struct bpf_insn *insn,
+ 				btf_name_by_offset(desc_btf, t->name_off));
+ 			return -EINVAL;
+ 		}
+-		mark_kfunc_ret_regs(env, regs, t->size);
++		ret_nregs =3D mark_kfunc_ret_regs(env, regs, t->size);
+ 	} else if (btf_type_is_ptr(t)) {
+ 		ptr_type =3D btf_type_skip_modifiers(desc_btf, t->type, &ptr_type_id);
+ 		err =3D check_special_kfunc(env, &meta, regs, insn_aux, ptr_type, desc=
+_btf);
+@@ -14170,7 +14197,8 @@ static int check_kfunc_call(struct bpf_verifier_e=
+nv *env, struct bpf_insn *insn,
+ 	 * Record R0 before process_iter_next_call() snapshots the alternate
+ 	 * iterator path's diagnostic position.
+ 	 */
+-	bpf_diag_mod_end(env);
++	if (ret_nregs =3D=3D 1)
++		bpf_diag_mod_end(env);
+=20
+ 	if (bpf_is_iter_next_kfunc(&meta)) {
+ 		err =3D process_iter_next_call(env, insn_idx, &meta);
 --=20
 2.53.0-Meta
 
