@@ -1,132 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6387C31DDBF;
-	Wed, 26 Aug 2026 23:20:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE48122FDE6
+	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 00:10:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787786402; cv=none; b=SZM2FLv2ufDEbcULABuCY5IqoWmWQ3ScenhAsW5Tzrmln6vXLIq6HblQVqK6+G/8sicakYsVXOQcM0cHj4rYg2TM6/9/Lh9T0f1+oL7MSH/lHH8gJHZj8LDhr2KdR72DZpgQAt1RG0gDv9YWHE4j9MxHuSWaLyMPuJw/3cbORgU=
+	t=1787789414; cv=none; b=Nqmaw69VXj3Xv5MLTiWvp81/NZ/IaIGeXSabifMgS1F2yUj+2SoRcwr+KZJYLD5UTSjl0+WJPf4sw916RTSIsw3ceP0x48+bOQJ4KWfh1TFk6FkJSUzmuk2WqRah65j+xllPZuqlWGiD9slo0UDrDciuOO9ZD/dpNa93JC6eoaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787786402; c=relaxed/simple;
-	bh=Gi+veHaIdJkcoJ2ky7AoluO6xEQmdmLdq2CNhla9eHM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AZoSahCGAgYjx5N4fAC0NHLi+NZeOjG7laN7S73jigYlM6r3kZpiqUDgXJN9LxuRbxjl4WoCQhEbf4Cmey1yWMlP5Kx/GJ0spezGfXIjRqETh0iQpRsT8WqUV+KyS8pIbisRayfwHNDagZyTrIjli2Lhaepow2ZcH5MMv915FVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jI99VHBf; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787789414; c=relaxed/simple;
+	bh=zPgomEzK2VVzx6dp/i8c/qse7X25KeUa2rzT9/eRgRc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lFnPyHZKmIW2lQXgYh+FgEmBKxKXavowukSKVgf80aXCMZ9bQMLoOD1bKH3nJOIOt9V181W+/mODEOpjQG0CEGkQt4mLdxxlIzmwdQ4zwnwcIhzEJ6CrG04pfzl7QeCk6vHYD9xvYVimuBFGZwSnskgIDw1MbS3KFr4Q39LyoKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jMaWAry6; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jI99VHBf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C5AB1F000E9;
-	Wed, 26 Aug 2026 23:19:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787786401;
-	bh=sk1vPTGMkM7XXXwYGPRGhOvlPkcmKpLv375upyKHUvA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=jI99VHBfWGV6Uh3hIKTpChCRqY/yhMfQ+qFYpwPXWB6frAjkVUGvmgIx9fpd7SAPl
-	 cf9iEL2DLIBOAK3gm/sW1zf73TEQHEpcSnB8UAhHj5xS46rFd4c2Xm1od8Te57Lqzg
-	 HDxcyNdvmfK3tF9i2adzHeYL0qy26OmGMvBB+6ZKJhhoL2tJSa2VSaMlQXJt66CkQU
-	 ABWrjygq8XIjGexdgCLKCkit3ZRgbI4s+eSDRfbpjppldy1lhG1t361Erleov9Sm8Q
-	 qI3SGjRIMNjOWBo7NL4XrIIG/TACwxKyt7q8L01lpOc6Ut9fYAtU1Kw1m4mR08+qQ5
-	 kgPZvoAqENRWw==
-Date: Wed, 26 Aug 2026 16:19:57 -0700
-From: Namhyung Kim <namhyung@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Ian Rogers <irogers@google.com>, Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	James Clark <james.clark@linaro.org>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Mike Leach <mike.leach@arm.com>, Leo Yan <leo.yan@arm.com>,
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Dapeng Mi <dapeng1.mi@linux.intel.com>,
-	Ravi Bangoria <ravi.bangoria@amd.com>,
-	Swapnil Sapkal <swapnil.sapkal@amd.com>,
-	Thomas Falcon <thomas.falcon@intel.com>,
-	Thomas Richter <tmricht@linux.ibm.com>,
-	Dmitrii Dolgov <9erthalion6@gmail.com>,
-	Eric Biggers <ebiggers@kernel.org>, Zecheng Li <zli94@ncsu.edu>,
-	Gabriel Marin <gmx@google.com>,
-	Tengda Wu <wutengda@huaweicloud.com>,
-	Derek Foreman <derek.foreman@collabora.com>,
-	Tanushree Shah <tshah@linux.ibm.com>,
-	Ankur Arora <ankur.a.arora@oracle.com>,
-	Aaron Tomlin <atomlin@atomlin.com>, tanze <tanze@kylinos.cn>,
-	Rui Qi <qirui.001@bytedance.com>,
-	Howard Chu <howardchu95@gmail.com>, Chuck Lever <cel@kernel.org>,
-	Shimin Guo <shimin.guo@skydio.com>,
-	Alessio Podda <aleph.pi.gh@gmail.com>, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [RFC PATCH v1 0/8] perf/core, perf/tools: Add
- PERF_SAMPLE_BUILD_ID_OFFSET support
-Message-ID: <ao90ncOA2Ce8ezIc@google.com>
-References: <20260807071818.718751-1-irogers@google.com>
- <20260807111818.GN687043@noisy.programming.kicks-ass.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jMaWAry6"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2caea3f742bso2376295ad.0
+        for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 17:10:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787789412; x=1788394212; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ikKdJgcx2GZkYBvuOXkFl4OImejLWVOyFyJZbV0374o=;
+        b=jMaWAry6xZa5jgwzbzWU8wp3HB+gibOZMwZclmzdFDFZCOG70a/ZCDcw7tZJnWTMh0
+         hujk2ttJSWULY8Y7UtJxVVtU59x3mUebfXDseOAIh76lMjPKzixhp0JgGfbHOO0vCcYq
+         OAOhGxNw3uSSQVjli0+HMkWWoHDkd9Ybb+nHzlaS/ozt8nXVPBrlJEZj9BcIS0x8QF3w
+         XO2v4rjhD5Dw+hjDjPjbiA9uZzDPF64Ac3MSCahzZLrkr2fAlPMeMoQgmpYVaEBnvJXe
+         FyiyMhGjq9yjIMNUpng++83LxORKklDl6mslxRc1AWo6v/+IEuYBymWueFxRKVwG6zzU
+         Ynzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787789412; x=1788394212;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ikKdJgcx2GZkYBvuOXkFl4OImejLWVOyFyJZbV0374o=;
+        b=KHiML7eL/duY19870xBV8U4m4LeYA1TV/GiMfKPBAuRszPvWTkM/l03Evm45bCpXkX
+         6ZcUtmrVRrE+Tllrhg+iDDvLPn1nKuzW5GTd3DcAM5WXgTd7AXjRXyo65Tvbwh6rFUav
+         fFRT5AYL7kfSOYfH0Vlkx97vJKFQ1u9ozeGrrTzhNSofBanX02VgkS/yJH7MBz0+0ByX
+         ATVnuoDpXbE49j7VQ0lgNptVyysF9w1G/Ntgkf7VznIvu2tDB/smFraEfuje0AGoeUe9
+         i3gQr1om1TVuDBVguPTMZNoArFAF5Qx6nDDNpmsK/k+xOvlq4vWQIpKHHyACYO+7NOtW
+         E69w==
+X-Gm-Message-State: AFuF++mIdldWH21AZjZoUouS4x33TJgDo5KsfYpTfWj/9o3LIgxOmuyg
+	oEFEagzx1tVqvSnF6TW/LyUVs+IkQXogP2ct2rmP6OsXlKqvmLmIn7QbPCnhYtvd
+X-Gm-Gg: AR+sD100L7oXj89ZbJV5IeKnw6Sxx2jNWYWCpC9JzHVX3VVAnFCNB3JoQpdkRQ/UCJ7
+	ZatFIXNCalRt96gIJvEtHf6DPL682IDDAQsHF/p1P5D/692tj9zHTVw7wnYEoadMFKrcDNwGrT2
+	SJ6mQVHBTxOmtnh3deYlL/Jq+pYpYKRNCn+brG4e3R0l7ZqVsiyIihUGKlCE1XIM+hFeFDwquWQ
+	k3BWh52Mk4HoEJAhFQ52iWuucLRGaUW49aFh3zrqIKpp089kWv/POG7bvLk0s7EGEMHf3D5+uwY
+	ZlP+YKJa442BZvtUP+/nRkGl8rPuAzB898lVTfxq1L3ESt4D8pKA79nRSBAeQsc8L0NPVkbLsoF
+	mvcBZDIT4ciLjSM5JeEhIqZHlMYXWhdaDtnhci2g8wIUKZunQ2z6sQzP5yegHXJmgy5pYx3ZXjD
+	tWzsI6yR0oya1WA1CGSiw6I91wylANnPJKwrOs0s05YznEeM2qPq3yO/yFr/BbFtw=
+X-Received: by 2002:a17:902:ebcb:b0:2d6:3c2f:6a5 with SMTP id d9443c01a7336-2d707b9cc29mr211244245ad.14.1787789412007;
+        Wed, 26 Aug 2026 17:10:12 -0700 (PDT)
+Received: from void ([114.86.104.221])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d70498b7a6sm11929065ad.25.2026.08.26.17.10.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Aug 2026 17:10:11 -0700 (PDT)
+From: Tw <tw19881113@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Tw <tw19881113@gmail.com>
+Subject: [PATCH v2] libpf: Fix for the potential undefined behavior due to shifting
+Date: Thu, 27 Aug 2026 08:08:53 +0800
+Message-ID: <20260827001007.1420507-1-tw19881113@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260807111818.GN687043@noisy.programming.kicks-ass.net>
+Content-Transfer-Encoding: 8bit
 
-Hello,
+When compiling libbpf with sanitation, ubsan will report the following:
+```
+left shift of 1 by 31 places cannot be represented in type 'int'
+```
+This may lead to undefined behavior according to the compiler implementation,
+let's fix it by casting to unsigned counterpart before shifting.
 
-On Fri, Aug 07, 2026 at 01:18:18PM +0200, Peter Zijlstra wrote:
-> On Fri, Aug 07, 2026 at 12:18:10AM -0700, Ian Rogers wrote:
-> > This patch series introduces PERF_SAMPLE_BUILD_ID_OFFSET to the
-> > perf_event UAPI and implements full support across both the kernel
-> > and perf tools.
-> > 
-> > Background & Motivation:
-> > 
-> > In order for perf to translate virtual addresses of samples into
-> > symbols a file and offset within the file are needed. During event
-> > synthesis perf will create mmap events to facilitate the translation
-> > of a virtual address to a file and offset by modelling the address
-> > space of a process. By directly recording in a sample the Build ID of
-> > a file and the offset within it, no synthesis is necessary. The Build
-> > ID and offset as a pair are much larger than a virtual address, so
-> > there is a trade-off between synthesis cost and extra size for
-> > samples. These changes just facilitate Build ID and offset as a choice
-> > for perf samples and the user can have the choice to use it when they
-> > believe it is advantageous.
-> > 
-> > In practice perf still needs to map a build ID to a file, so by
-> > default this change keeps synthesis to allow this. It is expected a
-> > user that knows their build IDs, say through debuginfod, will disable
-> > this option with say --synth=no.
-> > 
-> > The kernel support uses the existing build ID and offset support used
-> > by BPF stack traces.
-> 
-> That is still a giant stinking mess that needs to cleaned up.
+Signed-off-by: Tan Wei <tw19881113@gmail.com>
+---
+v2:
+ - Fix two more cases found by AI.
+ - Refine the commit message a bit.
 
-Then we can discuss how we want to handle that as well. :)
+ tools/lib/bpf/libbpf.c          | 2 +-
+ tools/lib/bpf/libbpf_internal.h | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I think this work would be useful on large systems with lots of tasks.
-I've got reports it took too long on synthesis and timed out.  Also it's
-racy and easy to miss new tasks..
-
-So I think it's a good option to explore and maybe we can make default
-once it turns out working great.  But I'm afraid it may need some kind
-of optimization to handle multiple addresses like in callchains/LBRs.
-
-Thanks,
-Namhyung
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index b749c0174..f09cbfd8e 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -11738,7 +11738,7 @@ static int perf_event_open_probe(bool uprobe, bool retprobe, const char *name,
+ 				errstr(bit));
+ 			return bit;
+ 		}
+-		attr.config |= 1 << bit;
++		attr.config |= 1ULL << bit;
+ 	}
+ 	attr.size = attr_sz;
+ 	attr.type = type;
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index 4c46d34fc..2df1df3f3 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -77,7 +77,7 @@
+ #define JUMPTABLES_SEC ".jumptables"
+ 
+ #define BTF_INFO_ENC(kind, kind_flag, vlen) \
+-	((!!(kind_flag) << 31) | ((kind) << 24) | ((vlen) & BTF_MAX_VLEN))
++	((!!((__u32)kind_flag) << 31) | ((kind) << 24) | ((vlen) & BTF_MAX_VLEN))
+ #define BTF_TYPE_ENC(name, info, size_or_type) (name), (info), (size_or_type)
+ #define BTF_INT_ENC(encoding, bits_offset, nr_bits) \
+ 	((encoding) << 24 | (bits_offset) << 16 | (nr_bits))
+@@ -259,7 +259,7 @@ static inline enum btf_func_linkage btf_func_linkage(const struct btf_type *t)
+ 
+ static inline __u32 btf_type_info(int kind, int vlen, int kflag)
+ {
+-	return (kflag << 31) | (kind << 24) | vlen;
++	return ((__u32)kflag << 31) | (kind << 24) | vlen;
+ }
+ 
+ enum map_def_parts {
+-- 
+2.54.0
 
