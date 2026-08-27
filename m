@@ -1,132 +1,166 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715D948B38C
-	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 16:22:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787847726; cv=none; b=GkyHOD9RwBfjDb6DVsbqhnKZWbpdkBvlWEdnv716UOl9LxeSqirnASbc+4jqRZ7GJN+POBvrPQCrXc8ZuLZZGnOR75Hd8Jr4jjxK7l1aR9EOws7D0Ob33ItolmPLMrRPTAaujyd60YPeyEDlHFGjd2jb+Q3IrS3dCU0R3kMm2po=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787847726; c=relaxed/simple;
-	bh=CKGxt3OPdMdCnaR2HbpvM0eU0tyVBZ0f5j0Nf/sQCzI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=KrO8KyWOIsbw9tFBXmvjpdO602yQBIx3xrZfracvCPiRLQoGwXQAjJk5kMu0rX/7uYKEn7EOQEIMwqwphBrZCkm5HoXKxvcH0TdwEuOvfIIEmh1IkDFSFAvl0E1pmgrYpr8aIf0LuW5YjD3Yw6UE2RgmecnCDyGoKfCPNQBBvMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L2YiRXEo; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41AE533D6
+	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 16:27:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.181
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787848041; cv=pass; b=bzFccyqHSLcKXarukshiu4fg7zcDYwAgSHEGi3BUIDmm63nRtD41e9B+itlbPCLn+o0d0bXXAwDK+Yd4bEssw1eP/K2A3C+4UQDm52RjGe2DlWyVmbUUMUMlsO85W2XE4+JE37jfXjbMY9+0WYzjJUo2OBE6YMFYPBWMDzrBR1M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787848041; c=relaxed/simple;
+	bh=scHt+iyBMWOylqgViJ5vWUnmhF3RxYRWmtqm5Y6wxgE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Radgyp4ugBpafXrYTJx9jq5gmPZHe7bpIdKBLCNMZU92YrZGWgukSEI/Am89US73tQk5quDDbdlU0xpyuRV5GWeiclkR8eZ1BgqN2BQ3qKjmPf0ll0fYV7sH1KV16Xus2j6zPZY4+XhUZjnbCFXTzbHaGKDU7SndN7rqT577c+8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ohb0qiN/; arc=pass smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L2YiRXEo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B53A11F00A3A;
-	Thu, 27 Aug 2026 16:22:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787847725;
-	bh=oaILIj/zvQCXMNRvPOmQ7ivRxhAhiFB+MgTu10f1CQQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=L2YiRXEoF4vLLiIsWYdtkCKENdw/ewq3nsCm633oFblf2JrjrUCqllHm0iPoK+wQJ
-	 5qY3A18dyQrVKR5yqr4Flhsdg7UdGFkUnUoF72otstxTFiXA4fQ/h/IgNZ7SnbGFEG
-	 Dautr9HUSArjJ8SFuh5UNlk2e+V+wjV/yfjzAlsGgbhKoWibdrCTxqCWhd4woC3uPA
-	 r70w69NKvzfK7OQ+Lr7uJ24k6NR08n9WTqmTYlyvJAHxkQlWRYKQjpK4nV9BI/bbFJ
-	 tLSaxZIXt/oBSn5zTecfY71T/eNgGDbUtSfyg2Qjl/ZBPphkPilFKbkL7IkrzMlGpT
-	 M/DDr/hyMOF9Q==
-Content-Type: multipart/mixed; boundary="===============8788896728043931912=="
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ohb0qiN/"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2caea3f742bso771115ad.0
+        for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 09:27:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787848039; cv=none;
+        d=google.com; s=arc-20260327;
+        b=UnmhX4+oK0bEA9XW+XjEKQQ7G8lVESe/Q2MrgjREU8dMzuU0VGGXTUZfQ/UDDeOc4t
+         ccfZBAkWC4JfObZJtL/DqhWgXXdhzzvo57rkq4iDnKGkQupId6SAbQ+q4S+70pSVuRue
+         cfy4/qa8G5c77F18am1FP4++P3j20A9tMbehxKWhbazQ3mLAVt/dXaObn9r371HPpYum
+         dWDY5mJBSR3h6YjxzDqY5Fu7zZjkHnTAem/0i2WDfZavuILQLbS9/MK5OadD7rcXgPYH
+         B1OLXFY0E6nQgJk3MN3EujzZk4tIi8WExvl7CCmjD641NIsrHEJHaeev4t8M8G0RcjVl
+         9QVw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=UbwPgsLbQuTsRud2Crpt7fzATm/uz+C7nDTDVjlvWGE=;
+        fh=7JGPwTaHYJOPhwCj57Vwl9Dk2HxAesV3CtGtA45ldvM=;
+        b=J4wycWLl/+zo6zEjHdCKtMUiU6EGrJH6WeBIzjmD5qXObJcc8inQGvdaw7UmdtZOMc
+         Ml7++vqJLDQE4xeRD3dJIFvy+bSjgv/q6hml/NVsQ87D/7BJSqCaYd3CEbUXOqVd+O16
+         VetiS4W3LjGXNyOLk2zWLWTVUbX0++FbmIl+Xz9LevUG8SFYwHSJd0oH7I4azuwYheOO
+         +VEHkxFLUPR9U0p5ESqm24Xt3F5+BqG9jN4yAEC06s0xuke7iQ4FvidSK3AA2FNpl98C
+         VRrj2gqNPV+sQ42I7x29+NQnkmy5aDWP3BvRxLjJ/wcSld9V3bP5GqADoIaZZwWKEvB4
+         oQQQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1787848039; x=1788452839; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=UbwPgsLbQuTsRud2Crpt7fzATm/uz+C7nDTDVjlvWGE=;
+        b=Ohb0qiN/o9MPjWTxdhYEPdUKbMjegC1R6w8c1yEUzH+3AEVpw7v9mnjOE5I4ssvBwR
+         gbGYzn/NNzvWTNUyhjmJJZ9wGY33PrB3H23hX09TUj8BBeWQOYEBbQRlqB90VdVzjh5z
+         6Z2E+6ehJv377Yp+lKZ5xMRm2x+KlOnU5YqoGPm4kao1b6KLY+a/pkuAWjPVjWJBlf4r
+         LY95nHIGm7oNTYVQJ1QWxLxUtzOIRrWWmfSFgw+n7+V4TD5qUrGs+CP75reU+sGrSRZC
+         Y5/1UQLe7i8C+s3H+mjPxGcGVRT4/fhifK1VKfnKMdlyCDlyzCwqU1k1AH/E8wGhtOk9
+         loJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787848039; x=1788452839;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=UbwPgsLbQuTsRud2Crpt7fzATm/uz+C7nDTDVjlvWGE=;
+        b=a5dJdEkqexZy1T9ywz7IMNsJcAKzwUvSIRnf99wWxE08ix28KozOWrNcuIdBIIR8ri
+         9Dcl3ZZ8EjvCNCmweJd9WXEhdTVZVQxqS9g0wushne3c0tP+6HvldO4Y/Pi83mQ2mCSo
+         4Ot+b86nC18lAiCZAnMZnB16xHSp8Q8Lx8QM/oVK2/ACRVwX6wEfqGbcdxQP5p4B+hNv
+         7niHrFH8UnvapLEqrz0VvfCysKdxtambZxp2SOtkwxuApaHg7ROeAlPmG4ddSFmSvvFT
+         UM8mzUmixdM9BpZXsd7WWB8v/kBZ1VNU798PTk9FYT5TfOmLbi1ha6ChynE0nkiGPYbh
+         fDUg==
+X-Forwarded-Encrypted: i=1; AHgh+RqUKWjaLMxrXg6DWTywE19VfsQS1beSWut2mEaCtlNUEujf9R7DFgg5VdapxYJ7uqm5lbA=@vger.kernel.org
+X-Gm-Message-State: AFuF++mL4C4lCZ7vvjZNpyn2WRuQPjJTgeunSTzUiY+u/f7Y8vAOe230
+	gth/8Hq1M2hSrsPJhh4RrjcO15EtpC3oSTseEGMlgY7pbVxILDKti/M0UDcMrpmBlpYAKbDqXha
+	yGLunbLJy1VfEZG4Vs74qhqJsxP3mlx/ZUbzwt4SO
+X-Gm-Gg: AR+sD13hfwhdRThZ+B9fe4QW/LBmDnvj1sE+ZHdT5yM6jtpuFu1k4YSxOiru1ApDQ1Z
+	eDCiHVTafxsb74hwBDArJx3AR083xVHbTmkyx3o7R6xI0vsF6A9T8kiYg7OIXnqDpFMun9tNaO4
+	/cCe7gWvuhYbDuRBt4YAldbL1/jpItBm2Itnxhsy5/Qr3JR69PdqbXvB96UI9JqLHuWL9bV9Fq/
+	GZ2t33/8jwE2pdKKIg07n2EFrF8WEgLjAHa0Wg1f6gyrdnv3CdzCsniP+XE3Lq0EOM3M4xqBVlf
+	p0FlJ2cnmlUMGHyFvUETdrwHYFt56tjbMEZXHy7Le24O1f+clKPd2VgTqVxPNVbULiyUlpMfJ+7
+	d49GQXmcjzxjylCpyMD++bMj5wb3MxzggW5XHa9lgYaCpczvlBXkZ2IC+b9xA8vegWpm1/swGuJ
+	sE9LrDy/0+rkBvbg==
+X-Received: by 2002:a17:90b:5905:b0:381:a766:efcb with SMTP id
+ 98e67ed59e1d1-396d0d7b94bmr843184a91.4.1787848038204; Thu, 27 Aug 2026
+ 09:27:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d4cd665a96c2543d11722e696e0227446be409b6dcf35f258d28b338c5e44e64@mail.kernel.org>
-In-Reply-To: <20260827-bpftool_cyles_per_run-v1-1-77d7bfc3c065@meta.com>
-References: <20260827-bpftool_cyles_per_run-v1-1-77d7bfc3c065@meta.com>
-Subject: Re: [PATCH bpf-next] bpftool: Print average cycles per program run in profiler
-From: bot+bpf-ci@kernel.org
-To: mykyta.yatsenko5@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,kernel-team@meta.com,eddyz87@gmail.com,memxor@gmail.com,qmo@kernel.org
-Cc: yatsenko@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 27 Aug 2026 16:22:04 +0000 (UTC)
+References: <20260827132133.439890-1-maciej.fijalkowski@intel.com>
+In-Reply-To: <20260827132133.439890-1-maciej.fijalkowski@intel.com>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Thu, 27 Aug 2026 09:27:06 -0700
+X-Gm-Features: AcwNN1X4yW5ISKKrAOkksq3luyXi7C-3OgDl_XVbJ7UICT5kfCRGrl2-Pqz4EZs
+Message-ID: <CAAVpQUC3w4b5KG+YGrK7bDNoaL-RPpmEu3FVJiyzWPewoJt2=g@mail.gmail.com>
+Subject: Re: [PATCH net] ipvlan: unregister upper devices outside pnodes_lock
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, magnus.karlsson@intel.com, 
+	sdf@fomichev.me, bpf@vger.kernel.org, 
+	syzbot+aa48b5fe7bfda62d1682@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============8788896728043931912==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> index 90fa2a48cc26a..2280dc4492c06 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-
-[ ... ]
-
-> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-> index a9f730d407a92..8935508f955b1 100644
-> --- a/tools/bpf/bpftool/prog.c
-> +++ b/tools/bpf/bpftool/prog.c
-> @@ -2069,9 +2069,9 @@ struct profile_metric {
->  	bool selected;
+On Thu, Aug 27, 2026 at 6:21=E2=80=AFAM Maciej Fijalkowski
+<maciej.fijalkowski@intel.com> wrote:
 >
->  	/* calculate ratios like instructions per cycle */
-> -	const int ratio_metric; /* 0 for N/A, 1 for index 0 (cycles) */
-> +	const int ratio_metric; /* 0 for run_cnt, 1 for index 0 (cycles) */
->  	const char *ratio_desc;
-> -	const float ratio_mul;
-> +	const double ratio_mul;
->  } metrics[] = {
-
-This isn't a bug, but could the comment also mention that a NULL
-ratio_desc means no ratio is printed? The l1d_loads entry now depends on
-that rather than on ratio_metric == 0.
-
->  	{
->  		.name = "cycles",
-> @@ -2080,6 +2080,9 @@ struct profile_metric {
->  			.config = PERF_COUNT_HW_CPU_CYCLES,
->  			.exclude_user = 1,
->  		},
-> +		.ratio_metric = 0,
-> +		.ratio_desc = "cycles per run",
-> +		.ratio_mul = 1.0,
->  	},
-
-[ ... ]
-
-> @@ -2256,17 +2259,18 @@ static void profile_print_readings_plain(void)
->  	for (m = 0; m < ARRAY_SIZE(metrics); m++) {
->  		struct bpf_perf_event_value *val = &metrics[m].val;
->  		int r;
-> +		__u64 ratio;
+> syzbot reported the following circular locking dependency:
 >
->  		if (!metrics[m].selected)
->  			continue;
->  		printf("%18llu %-20s", val->counter, metrics[m].name);
+>   xs->mutex -> netdev lock -> pnodes_lock -> net->xdp.lock -> xs->mutex
 >
-> -		r = metrics[m].ratio_metric - 1;
-> -		if (r >= 0 && metrics[r].selected &&
-> -		    metrics[r].val.counter > 0) {
-> +		r = metrics[m].ratio_metric;
-> +		/* r == 0 is a special case for run_cnt */
-> +		ratio = r ? metrics[r - 1].val.counter : profile_total_count;
-> +		if (metrics[m].ratio_desc && ratio) {
->  			printf("# %8.2f %-30s",
-> -			       val->counter * metrics[m].ratio_mul /
-> -			       metrics[r].val.counter,
-> +			       val->counter * metrics[m].ratio_mul / ratio,
->  			       metrics[m].ratio_desc);
+> The pnodes_lock -> net->xdp.lock edge is recorded when
+> ipvlan_device_event(NETDEV_UNREGISTER) calls unregister_netdevice_many()
+> while holding pnodes_lock.  A nested NETDEV_UNREGISTER notification for
+> an IPvlan device enters xsk_notifier(), which acquires net->xdp.lock.
+>
+> Keep pnodes_lock only while marking the upper devices as dying, removing
+> them from port->ipvlans, and queueing them for unregistration.  Once the
+> devices have been detached from the protected list, release pnodes_lock
+> before unregister_netdevice_many() invokes notifier callbacks.
+>
+> The port remains alive across unregistration because
+> ipvlan_device_event() holds the reference acquired by ipvlan_port_get().
+> The dying flag prevents a concurrent ->dellink() callback from deleting a
+> queued device again.
+>
+> Fixes: 35add1093e2f ("ipvlan: Protect ipvl_port.ipvlans with mutex.")
+> Reported-by: syzbot+aa48b5fe7bfda62d1682@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=3Daa48b5fe7bfda62d1682
+> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> ---
+>  drivers/net/ipvlan/ipvlan_main.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/ipvlan/ipvlan_main.c b/drivers/net/ipvlan/ipvlan=
+_main.c
+> index ee46a55f73d1..2730581e0a56 100644
+> --- a/drivers/net/ipvlan/ipvlan_main.c
+> +++ b/drivers/net/ipvlan/ipvlan_main.c
+> @@ -846,7 +846,6 @@ static int ipvlan_device_event(struct notifier_block =
+*unused,
+>                                 __ipvlan_link_delete(net, ipvlan->dev, &l=
+st_kill);
+>                 }
+>
+> -               unregister_netdevice_many(&lst_kill);
+>                 break;
+>         }
+>         case NETDEV_FEAT_CHANGE:
+> @@ -895,6 +894,10 @@ static int ipvlan_device_event(struct notifier_block=
+ *unused,
+>
+>         mutex_unlock(&port->pnodes_lock);
+>
+> +       /* Avoid invoking nested netdevice notifiers under pnodes_lock. *=
+/
+> +       if (!list_empty(&lst_kill))
 
-This isn't a bug, but would a name like 'divisor' or 'denom' read more
-naturally here? The variable holds the denominator rather than the
-computed ratio, which makes the expression 'val->counter * ... / ratio'
-read as if dividing a ratio by a ratio.
-
-The commit message explains the new cycles-per-run output but not the
-encoding change that makes it work. This isn't a bug, but would it be
-worth a sentence noting that ratio_metric == 0 now means run_cnt (and
-that ratio_desc is what gates printing)? Currently readers have to derive
-the new encoding from the diff.
-
-The unrelated widening of ratio_mul from float to double is also
-unmentioned in the changelog.
+nit: unregister_netdevice_many() takes care of this.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33089436017
---===============8788896728043931912==--
+> +               unregister_netdevice_many(&lst_kill);
+> +
+>         ipvlan_port_put(port);
+>
+>         return ret;
+> --
+> 2.43.0
+>
