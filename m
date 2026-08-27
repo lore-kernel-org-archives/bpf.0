@@ -1,134 +1,142 @@
-Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 499F43033EB
-	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 05:19:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D0E4363C64
+	for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 05:38:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787807944; cv=none; b=qUwScFnSA1eqQL9mfRdRlC6ptyoDXy53vdExMSnL5rYjpwUrsc4ybkBzQFHzm/XSAAbcsobQ9Ty0hxjWEGufqTKFiu7kv+iY2hschkY34kxWDoniAGV6VmUvrpyu67DANkoCbBtehyawpClzuk+7UHXsupXw0/KSiyvGbt+//b8=
+	t=1787809096; cv=none; b=OjueMaSth9t7s86eW0aweLN0yipgg2lyHdrGz0YlxqdgXvDn6zOLL1h1isJLBLlanJfUwIF1jvjwYF3ZU1a/RUpeu7JsBhXFvy7gf034O3+0EvLNAUVJTucwbdqaG8JUQwqOE3mUz5Jogdyw6sdtt2R/Jn+x7xSkLgD0xkhf9ts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787807944; c=relaxed/simple;
-	bh=ySnq1R/ZDNIdGAG/P1y4Pm9WQpGs2XBLLe8CXCbhTBY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ADn9W98hsveNmyxoBCjR+X7GRhKclWNV+Jhu2/VBgBgnbL2FjcFGtssO9cATyFiVr1RCTdWKvXjdT8pyqgIsgw2wom23+OGdqTui5gt9ZpaIBKYjHzXDGHqCtufwR2sdk07DiPHFzmxoFUkQ1Aq5zdpuM+WpclaTYYV0haWAMhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SD5Vk8hB; arc=none smtp.client-ip=74.125.224.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787809096; c=relaxed/simple;
+	bh=dVLM/6fRZ126cg8vajy54E0eP9DoIRXx/kbY0tkThrw=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=GxHLiugmD+TxWPUDrnYrosUD+02/sJ6RTTOGhiANO/LvXOdOrkqOrReU+rY+anPrjsqMjyU49j7XQlNVTjL9MwfIIwQoe8txyGLTFqOE3y6ZVM/WCvQWOPfYP7ToG4NLZAV2jWgL4bUZnbL7Ru3LZw1mYq0V8OTVr1g4qrd4PbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hDganFdl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SD5Vk8hB"
-Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-66d2b3092c1so1982917d50.3
-        for <bpf@vger.kernel.org>; Wed, 26 Aug 2026 22:19:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787807942; x=1788412742; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=NfC3jFJ+7i7b9tWDvNXtk6nuIhDZjOEEiQ4o3HnSEUY=;
-        b=SD5Vk8hBEY2zBOnl/IBAt2fXeF//33Rw/4FDXbDDmKAB9S7EtQgaYocJHNR6ek3SGf
-         j/nPYStQVhmpNciKnPnpL4M/e0sNY9jUUO3GXM5P76d1AQJ21i0dRrTt34nslf1yPogM
-         YjsZuReTdBDBQy4iw4Eitf9w48Hz7RTMShKAvewyJN7FfOSHUMHBZyLQQnlL8LkZNjRH
-         02VoKP6cWHKG+DtMFxaUSpLYr4zVJxXWnRODcNywA9kVRBgUPvZoCoI9lu9B94tLahrD
-         mym9peiuuGYYKy/22VQW5KoPUu12S9aJGQ0nL1R5GTkKFpjIHwXT+YOD/dkJtFpCvoZs
-         WnQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787807942; x=1788412742;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=NfC3jFJ+7i7b9tWDvNXtk6nuIhDZjOEEiQ4o3HnSEUY=;
-        b=o58YX0YwaT8JIJb6QwUIBNo5pTisJ0PPINaGImniMNmPBBPhDK5TSCOTbx2E4alD+q
-         eWrTWvbYiL8VP4AdmLFxEQ8o0d1DWpvbG36qlDl/5qJEiOCm1Q7QTN7aZN0R7msY5BhR
-         OTU0VpHKcV6VJ78IKmrkvfn76SoRK4Sp9nGK/JNqv30gFISXu7Y8ueHwRiZoPyuuRpOe
-         JV7y9Kks5pk35HnkIo+jCevusRH1CBHYvAXwhc8KrbYA+gf8mxiQDds0jnSNEyvGSAac
-         QcElcQnhRQgiaF/pXkTiJB5e6FtVbwjZN3zGKMrb+/20IkEkEmPH4v0XZ2TCyDEFBlwe
-         OQmA==
-X-Forwarded-Encrypted: i=1; AHgh+RrM9H29CWHZpJ0nGZaveUt/YahZli+EYYowKWQRMUawr/mkjAhNsfzenu/zlyxkNaXFOJ4=@vger.kernel.org
-X-Gm-Message-State: AFuF++nx1k8OqWsDao/qm/pkzNYL27hCddbtbug9/i3JfNTyT9WvQxT9
-	GKruFSqexRhk06qB8yoO6AD4MZ4r7OCGYVJe81kiL/mvdhuKEDoECjiH
-X-Gm-Gg: AR+sD13N8arXtcyBUUTqZMJQtbmOZpcZQQ6cT/ZTJxXjW4gwERT1huSbj67c9gaAXhk
-	HQCOZOjtLGg367RrJVl9Lm2VI1AAWJp0kXJg/epEKsUtTIlp3m3CCI1EGpdr7cbFW/z4KXPAvPu
-	gWtZN9k1iU1XEjfob2VZxrwwkP1MUhgVjTPC27Kk1GRFrHTxROpEk13TZiXGIIAHowYfjyChEYG
-	gcYpPvXAnkWACYk5Aq/EnzaZY4Q5IHmLECL/TMDK46dEy+RC+x2Fccn0Ncro5qAB4pvWNuwMp6Z
-	n64NpCTel82fej7hAMdbPvQtb2NWF/rChg38naGkWk/cCW+AWDj+Nl4PrwsIhBhAZJaLWxjt4uL
-	bSbGhXYSPZy4f4TJXSMOO2/HqTViY9lnYuJ484dgKY+BNJxEaqXRLD6wKUKBW6aVLylMHbwBY92
-	XIQWaCBSyLENO8klbg5cWURIwRnIkDx/2THZWV0lC5jg00a+t0d7YOmNmi6+zsZZw/U9YW
-X-Received: by 2002:a05:690c:dc9:b0:85b:7fb9:22fa with SMTP id 00721157ae682-85b7fb923admr7057897b3.10.1787807942117;
-        Wed, 26 Aug 2026 22:19:02 -0700 (PDT)
-Received: from mac.lan ([136.55.173.105])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-85b5bc34f86sm4466367b3.8.2026.08.26.22.19.01
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 26 Aug 2026 22:19:01 -0700 (PDT)
-From: "Cen Zhang (Microsoft Security FORGE Labs)" <blbllhy@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@kernel.org
-Cc: ameryhung@gmail.com,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	wangfushuai@baidu.com,
-	bestswngs@gmail.com,
-	mattbobrowski@google.com,
-	kees@kernel.org,
-	menglong8.dong@gmail.com,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	AutonomousCodeSecurity@microsoft.com,
-	xmei5@asu.edu,
-	tgopinath@linux.microsoft.com,
-	kys@microsoft.com,
-	blbllhy@gmail.com
-Subject: [PATCH bpf] bpf: Fix NULL pointer dereference in __bpf_sk_storage_map_seq_show
-Date: Thu, 27 Aug 2026 01:18:59 -0400
-Message-ID: <20260827051859.45511-1-blbllhy@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hDganFdl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0FFC1F000E9;
+	Thu, 27 Aug 2026 05:38:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787809095;
+	bh=+0/JOYbBYBpafWlVYjlHlLfVVH8tfsI5N1VPypyKqPA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=hDganFdlwGr5difWnRxw98dXlVnDpMNHd2TfVwNKi9jmKOKcUGBR92ISR+acodbhv
+	 mVe1DjVw41NkTiLL1RpWEVX4173pJbcVjSjlooh1nRDdiIILRq3FBN5egVLQRrtY2D
+	 vdfmq1J7gc0AqwkIWGBKoFJOUgLUBuHqJ6EPHp0rt6//MoYh+KmI2ScYqKkEhDb3cd
+	 X9RdvsbS37Nv5WWQt1NCz8cQq83bXSmcOvJCV0DNbx/yQtlvfc6TzlloaqQFCAEJXk
+	 JPtElHagWm5lidHAq9v8YtK8kYPfHttBU0AYN7nV44OJTxWRp09UAnr5FeQ1BpZu4T
+	 ammYuRfBRW+vA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf] bpf: Fix NULL pointer dereference in
+ __bpf_sk_storage_map_seq_show
+Reply-To: sashiko-reviews@lists.linux.dev
+To: =?utf-8?b?Q2VuIFpoYW5nIChNaWNyb3NvZnQgU2VjdXJpdHkgRk9SR0UgTGFicyk=?= <blbllhy@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260827051859.45511-1-blbllhy@gmail.com>
+References: <20260827051859.45511-1-blbllhy@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 27 Aug 2026 05:38:14 +0000
+Message-Id: <20260827053814.E0FFC1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Iterating a sk_storage map is two stages:
-bpf_sk_storage_map_seq_find_next()
-returns a selem, then __bpf_sk_storage_map_seq_show() uses that selem.
-__bpf_sk_storage_map_seq_show() re-reads selem->local_storage via
-rcu_dereference() with no NULL check. A concurrent close() can run
-bpf_selem_unlink_nofail() in between and set that field to NULL, causing
-a NULL dereference of sk_storage->owner.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-Oops: general protection fault, probably for non-canonical 
-   address 0xdffffc0000000011
-  net/core/bpf_sk_storage.c:809 __bpf_sk_storage_map_seq_show()
-  bpf_seq_read+0x366/0x1120
-  vfs_read+0x174/0xa50
-  ksys_read+0xfc/0x1d0
+Pre-existing issues:
+- [High] Socket local storage elements are removed from the RCU-protected B=
+PF map inside the socket's destruction path (`__sk_destruct`), violating RC=
+U-001 rules and causing a use-after-free of the socket because the socket c=
+an be freed while a BPF iterator is still using it.
+- [High] `bpf_selem_unlink_nofail()` concurrently sets `SDATA(selem)->smap`=
+ and `selem->local_storage` to NULL, causing guaranteed NULL pointer derefe=
+rences in concurrent `bpf_selem_unlink()` and `bpf_selem_unlink_map()` path=
+s.
+--
 
-Return if the re-read yields NULL.
+commit cabffb2f3787054c5c6ba2a413eaf5dc639ba23d
+Author: Cen Zhang (Microsoft Security FORGE Labs) <blbllhy@gmail.com>
+bpf: Fix NULL pointer dereference in __bpf_sk_storage_map_seq_show
 
-Fixes: 5d800f87d0a5 ("bpf: Support lockless unlink when freeing map or local storage")
-Reported-by: Xiang Mei (Microsoft) <xmei5@asu.edu>
-Cc: AutonomousCodeSecurity@microsoft.com
-Assisted-by: Copilot (Grok 4.6)
-Signed-off-by: Cen Zhang (Microsoft Security FORGE Labs) <blbllhy@gmail.com>
----
- net/core/bpf_sk_storage.c | 2 ++
- 1 file changed, 2 insertions(+)
+This commit addresses a NULL pointer dereference in
+__bpf_sk_storage_map_seq_show() during concurrent socket closure. It adds a
+NULL check after re-reading selem->local_storage to prevent dereferencing a
+cleared pointer.
 
-diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-index 1d295a8769fa..7228520aa2b6 100644
---- a/net/core/bpf_sk_storage.c
-+++ b/net/core/bpf_sk_storage.c
-@@ -806,6 +806,8 @@ static int __bpf_sk_storage_map_seq_show(struct seq_file *seq,
- 		ctx.map = info->map;
- 		if (selem) {
- 			sk_storage = rcu_dereference(selem->local_storage);
-+			if (!sk_storage)
-+				return 0;
- 			ctx.sk = sk_storage->owner;
- 			ctx.value = SDATA(selem)->data;
- 		}
--- 
-2.55.0
+> diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+> index 1d295a8769fad..7228520aa2b6e 100644
+> --- a/net/core/bpf_sk_storage.c
+> +++ b/net/core/bpf_sk_storage.c
+> @@ -806,6 +806,8 @@ static int __bpf_sk_storage_map_seq_show(struct seq_f=
+ile *seq,
+>  		ctx.map =3D info->map;
+>  		if (selem) {
+>  			sk_storage =3D rcu_dereference(selem->local_storage);
+> +			if (!sk_storage)
+> +				return 0;
+>  			ctx.sk =3D sk_storage->owner;
+
+[Severity: High]
+This is a pre-existing issue, but does this patch fully address the
+underlying TOCTOU race?
+
+If a socket without SOCK_RCU_FREE (e.g., AF_UNIX) is closed, __sk_destruct()
+in net/core/sock.c calls bpf_sk_storage_free(), which unlinks the storage
+from the BPF map.
+
+Couldn't a concurrent BPF iterator in __bpf_sk_storage_map_seq_show()
+operating under rcu_read_lock() find the storage element before it is
+unlinked, and read ctx.sk =3D sk_storage->owner? The socket is then
+synchronously freed by __sk_destruct() without waiting for an RCU grace
+period, leaving the iterator to pass a dangling pointer to the BPF program
+via bpf_iter_run_prog(prog, &ctx).
+
+This appears to violate the remove-before-reclaim ordering (RCU-001) since
+the socket is removed from the RCU-protected BPF map inside the socket's
+destruction path.
+
+[Severity: High]
+This is a pre-existing issue, but might this only fix a downstream symptom
+in the iterator path while leaving other concurrent map operations
+vulnerable?
+
+When a socket goes away, bpf_selem_unlink_nofail() in
+kernel/bpf/bpf_local_storage.c sets SDATA(selem)->smap to NULL without
+holding local_storage->lock.
+
+If a concurrent map deletion calls bpf_selem_unlink(), it acquires
+local_storage->lock first, sees selem->snode is still hashed, and calls
+bpf_selem_unlink_map(). Could bpf_selem_unlink_map() then unconditionally
+dereference the now-NULL SDATA(selem)->smap, crashing inside
+select_bucket()?
+
+kernel/bpf/bpf_local_storage.c:bpf_selem_unlink_map() {
+    ...
+    smap =3D rcu_dereference_check(SDATA(selem)->smap,
+                                 bpf_rcu_lock_held());
+    b =3D select_bucket(smap, local_storage);
+    ...
+}
+
+Similarly, it looks like bpf_selem_unlink() could use a potentially NULL
+local_storage for lock acquisition:
+
+kernel/bpf/bpf_local_storage.c:bpf_selem_unlink() {
+    ...
+    local_storage =3D rcu_dereference_check(selem->local_storage,
+                                          bpf_rcu_lock_held());
+    err =3D raw_res_spin_lock_irqsave(&local_storage->lock, flags);
+    ...
+}
+
+>  			ctx.value =3D SDATA(selem)->data;
+>  		}
+>  		ret =3D bpf_iter_run_prog(prog, &ctx);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260827051859.4551=
+1-1-blbllhy@gmail.com?part=3D1
