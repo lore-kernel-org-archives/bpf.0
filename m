@@ -1,33 +1,33 @@
-Received: from mta1.migadu.com (out-127.mta1.migadu.com [95.215.58.127])
+Received: from mta0.migadu.com (out-126.mta0.migadu.com [91.218.175.126])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6123C322B9F
-	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 21:52:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.127
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA44D346766
+	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 21:52:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.126
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787953948; cv=none; b=YYc4Axu04U+1MYkD5DAmxEHuFxmwIUpVT5aRxMqy6GLg6YS7oKvkwlTahJn4KiSxS23o/uUN60bDspxvq7FmrSJvvdIhfZDiyoEYFk96jy6LFH0eAQwPoaOBdSsGX/S88eagRiciE/Rb5LwDTPiO+M/sDRJPkyjzCqsftcK2PJU=
+	t=1787953949; cv=none; b=Vm7jINeJjQaR/R3Bs+Tv+RIamgna6UDfzrhX3dJcQzgjGb3elIpJDhWY37FDIvwzw4xD/LjOyE0f910NDNmBhX5vsamt6BvzxSwD+9FZvdJuR8WggdClsYBvZAcDN29VKYtfLjwhjutzjDht5ZFWMz7RvJF8+tUfehR9UMtPHYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787953948; c=relaxed/simple;
-	bh=RLvhD2IQRPjrjot38S6Da7Em+gHjxODDcLmCwL9GRCA=;
+	s=arc-20240116; t=1787953949; c=relaxed/simple;
+	bh=xxySGoKLfAI6RpBk5D+eMWwbrDo9d6NVjU1xBQH4SWQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Gn5KNf++W9jHa/uRDgTDjsy973TQvCbFYV3fcBcmVwN2oEnH35qt9RPO/2CLY0ZFgAdrQy+mYtvOsXrfiXpagPKlIJtrPH5MJL2Pcf2wv1/lMwgxDQi4SbCk805+Oo8bDVmEcHGRGkUwRMnjb4f5t1VkEnVHHgTFZmiHEIj+gMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Fv9eBTyY; arc=none smtp.client-ip=95.215.58.127
+	 MIME-Version; b=S9Ume0znzuk59Qi6sbA0zQEd1GWpn/YHmmxnN91It7LfXV8gw7IydGFUwaWhbykYC8y+LZoYmLMkkRwqKmthfISniWn5tfsdciEkGXyGHRHKQ1tyrxCy3MO4rCVs40PUh3BJqoVDCgNRhFbYcz6vwg4Moed1CXz2HKlJG6/1AxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Sz6rAQ5b; arc=none smtp.client-ip=91.218.175.126
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Fv9eBTyY"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Sz6rAQ5b"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=RLvhD2IQRPjrjot38S6Da7Em+gHjxODDcLmCwL9GRCA=;
+DKIM-Signature: a=rsa-sha256; bh=xxySGoKLfAI6RpBk5D+eMWwbrDo9d6NVjU1xBQH4SWQ=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787953943; v=1; x=1788558743;
- b=Fv9eBTyYAyISpvsOuS3v0pYxair+G7JB3B1kpcZbw1LvlRzf+wDSwLoax6g1rNXoppRN9dwz
- xdk8cG+2Fc76ryZYNBDcFrDW5x/OhYy3DUHx/9M2o8b1ajCJfrSCbWGyKKfjHNLOpVx85NyEXdp
- gKtZ7yB1gRbiTHsgHbw7sXIw=
+ t=1787953945; v=1; x=1788558745;
+ b=Sz6rAQ5bBUo1i5kUGK2hHuVslAajtGOXG8Rq5slHSXNzynMGMWHNGtIc76mFN6NgnKduuLxe
+ Z9f6sQBD2ATzT9lARUfK7LwswJROZWwLz/wwWlIL5B++u1ZWSrsXJBv/aJZ+J5sQNHexkfuBLjL
+ 3ybi1mK8Z4sg+7FgwpCf88hY=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id 0b8b57ec76cd66e5;
-	Fri, 28 Aug 2026 21:52:23 +0000
-X-Mizu-Trace-ID: 0b8b57ec76cd66e5
+Received: by mta11.migadu.com with ESMTPS id 38af564fdd1b06de;
+	Fri, 28 Aug 2026 21:52:25 +0000
+X-Mizu-Trace-ID: 38af564fdd1b06de
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -37,9 +37,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Quentin Monnet <qmo@kernel.org>
 Cc: bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 1/6] selftests/bpf: Add compare_text_to_expected() helper
-Date: Fri, 28 Aug 2026 14:52:02 -0700
-Message-ID: <20260828215207.3105313-2-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v2 2/6] selftests/bpf: Modernize btf_dump test scaffolding
+Date: Fri, 28 Aug 2026 14:52:03 -0700
+Message-ID: <20260828215207.3105313-3-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260828215207.3105313-1-ihor.solodrai@linux.dev>
 References: <20260828215207.3105313-1-ihor.solodrai@linux.dev>
@@ -51,123 +51,75 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Some selftests generate text (such as BTF dump) and check it against
-an expectation committed nearby.
-
-There is no shared way to do that. prog_tests/btf_dump.c assembles an
-"awk ... | diff -u" pipeline and hands it to system(). Any other test
-wanting the same behaviour needs to reproduce both the comparison and
-the reporting of a mismatch.
-
-test_progs captures per-subtest output by pointing the stdout and
-stderr FILE * globals at a memstream. But a child process inherits
-descriptors, not the globals. So the "| diff -u" goes to the console
-instead of the subtest log and is absent from the failure report.
-
-Add a helper that compares two strings and runs diff(1) on mismatch,
-properly relaying the output to stdout. Add tests for the helper.
+Refactor test_btf_dump_case() in order to:
+  * use newer ASSERT_* macros instead of CHECK
+  * drop the file-scope "duration" variable CHECK required
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- .../bpf/prog_tests/prog_tests_framework.c     | 23 ++++++++++
- tools/testing/selftests/bpf/testing_helpers.c | 43 +++++++++++++++++++
- tools/testing/selftests/bpf/testing_helpers.h |  3 ++
- 3 files changed, 69 insertions(+)
+ .../selftests/bpf/prog_tests/btf_dump.c       | 19 ++++++++-----------
+ 1 file changed, 8 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c b/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c
-index 7607cfc2408c..d111fe105447 100644
---- a/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c
-+++ b/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c
-@@ -179,3 +179,26 @@ void test_prog_tests_framework_expected_msgs(void)
- 		}
- 	}
- }
-+
-+void test_prog_tests_framework_compare_text(void)
-+{
-+	int err;
-+
-+	if (test__start_subtest("compare_text_match")) {
-+		err = compare_text_to_expected("same\n", "same\n");
-+		ASSERT_EQ(err, 0, "match_rc");
-+		test__end_subtest();
-+	}
-+
-+	if (test__start_subtest("compare_text_mismatch")) {
-+		err = compare_text_to_expected("line two\n", "line one\n");
-+		fflush(stdout);
-+
-+		ASSERT_EQ(err, -1, "mismatch_rc");
-+		ASSERT_HAS_SUBSTR(env.subtest_state->log_buf, "-line one",
-+				  "diff_has_expected");
-+		ASSERT_HAS_SUBSTR(env.subtest_state->log_buf, "+line two",
-+				  "diff_has_actual");
-+		test__end_subtest();
-+	}
-+}
-diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
-index c970e7793dfc..3f037949e978 100644
---- a/tools/testing/selftests/bpf/testing_helpers.c
-+++ b/tools/testing/selftests/bpf/testing_helpers.c
-@@ -534,3 +534,46 @@ int stack_mprotect(void)
- 		       PROT_READ | PROT_WRITE | PROT_EXEC);
- 	return ret;
- }
-+
-+int compare_text_to_expected(const char *actual, const char *expected)
-+{
-+	char exp_path[] = "/tmp/selftest_expected.XXXXXX";
-+	char act_path[] = "/tmp/selftest_actual.XXXXXX";
-+	char buf[512], cmd[128];
-+	int exp_fd, act_fd;
-+	FILE *p;
-+
-+	if (!strcmp(actual, expected))
-+		return 0;
-+
-+	exp_fd = mkstemp(exp_path);
-+	act_fd = mkstemp(act_path);
-+	if (exp_fd < 0 || act_fd < 0) {
-+		fprintf(stdout, "output differs, no temp file for a diff\n");
-+		goto out;
-+	}
-+
-+	dprintf(exp_fd, "%s", expected);
-+	dprintf(act_fd, "%s", actual);
-+
-+	snprintf(cmd, sizeof(cmd), "diff -u '%s' '%s'", exp_path, act_path);
-+	p = popen(cmd, "r");
-+	if (!p) {
-+		fprintf(stdout, "output differs, '%s' did not run\n", cmd);
-+		goto out;
-+	}
-+	while (fgets(buf, sizeof(buf), p))
-+		fputs(buf, stdout);
-+	pclose(p);
-+
-+out:
-+	if (exp_fd >= 0) {
-+		close(exp_fd);
-+		unlink(exp_path);
-+	}
-+	if (act_fd >= 0) {
-+		close(act_fd);
-+		unlink(act_path);
-+	}
-+	return -1;
-+}
-diff --git a/tools/testing/selftests/bpf/testing_helpers.h b/tools/testing/selftests/bpf/testing_helpers.h
-index 2edc6fb7fc52..1c58a2f08b64 100644
---- a/tools/testing/selftests/bpf/testing_helpers.h
-+++ b/tools/testing/selftests/bpf/testing_helpers.h
-@@ -61,4 +61,7 @@ int testing_prog_flags(void);
- bool is_jit_enabled(void);
- int stack_mprotect(void);
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+index 9f1b50e07a29..e9d2d4c26509 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+@@ -2,8 +2,6 @@
+ #include <test_progs.h>
+ #include <bpf/btf.h>
  
-+/* Runs diff(1) on mismatch */
-+int compare_text_to_expected(const char *actual, const char *expected);
+-static int duration = 0;
+-
+ void btf_dump_printf(void *ctx, const char *fmt, va_list args)
+ {
+ 	vfprintf(ctx, fmt, args);
+@@ -69,8 +67,9 @@ static int test_btf_dump_case(int n, struct btf_dump_test_case *t)
+ 	if (!t->known_ptr_sz) {
+ 		btf__set_pointer_size(btf, 8);
+ 	} else {
+-		CHECK(btf__pointer_size(btf) != 8, "ptr_sz", "exp %d, got %zu\n",
+-		      8, btf__pointer_size(btf));
++		size_t ptr_sz = btf__pointer_size(btf);
 +
- #endif /* __TESTING_HELPERS_H */
++		ASSERT_EQ(ptr_sz, (size_t)8, "ptr_sz");
+ 	}
+ 
+ 	snprintf(out_file, sizeof(out_file), "/tmp/%s.output.XXXXXX", t->file);
+@@ -80,8 +79,7 @@ static int test_btf_dump_case(int n, struct btf_dump_test_case *t)
+ 		goto done;
+ 	}
+ 	f = fdopen(fd, "w");
+-	if (CHECK(f == NULL, "open_tmp",  "failed to open file: %s(%d)\n",
+-		  strerror(errno), errno)) {
++	if (!ASSERT_OK_PTR(f, "open_tmp")) {
+ 		close(fd);
+ 		goto done;
+ 	}
+@@ -89,9 +87,8 @@ static int test_btf_dump_case(int n, struct btf_dump_test_case *t)
+ 	err = btf_dump_all_types(btf, f);
+ 	fclose(f);
+ 	close(fd);
+-	if (CHECK(err, "btf_dump", "failure during C dumping: %d\n", err)) {
++	if (!ASSERT_OK(err, "btf_dump"))
+ 		goto done;
+-	}
+ 
+ 	snprintf(test_file, sizeof(test_file), "progs/%s.c", t->file);
+ 	if (access(test_file, R_OK) == -1)
+@@ -114,10 +111,10 @@ static int test_btf_dump_case(int n, struct btf_dump_test_case *t)
+ 		 "out {sub(/^[ \\t]*\\*/, \"\"); print}' '%s' | diff -u - '%s'",
+ 		 test_file, out_file);
+ 	err = system(diff_cmd);
+-	if (CHECK(err, "diff",
+-		  "differing test output, output=%s, err=%d, diff cmd:\n%s\n",
+-		  out_file, err, diff_cmd))
++	if (!ASSERT_OK(err, "diff")) {
++		fprintf(stdout, "output=%s, diff cmd:\n%s\n", out_file, diff_cmd);
+ 		goto done;
++	}
+ 
+ 	remove(out_file);
+ 
 -- 
 2.55.0
 
