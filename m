@@ -1,299 +1,128 @@
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F25DC3AC0CE
-	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 09:33:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.181
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787909602; cv=pass; b=CB8J4KRblVe/E93G5zltwkkEBY6fmNiyqUmz6V06JfITVe98XWVrVETngjF/32IxuY0akagprHvLQZUxBxVCatcOsoI87zw+kFBqqyp+qopfANtix5HLTz060Fl8OQJkzNGIqDD4C1RgRn0TQe5CBDuUthlZZAIVkn4/WOtgq0E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787909602; c=relaxed/simple;
-	bh=U80lg0O+GKLW7T+8XqZuXYkvnHWV1/kc8n8D7UOROWc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=T7EFp98bLuOb31xTyPYP68uiRSeM/JeNzPhGNcO0JTeo4lZ0ZmOzCuUUQb4bpG5Qj24UherMDUUbncFTTb1P14tF3PRJEX1Pfq80ZHYRlOH0SXlkb/NwWVmzH9MoVr33cQWrT1z1l8Fqo46clygJVyZSqYSJwaZqeyv+FzCDCvI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QNe8JZl4; arc=pass smtp.client-ip=209.85.128.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D85DC3B38B0;
+	Fri, 28 Aug 2026 09:41:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787910118; cv=none; b=CqIj9VO0tnExY3IizoRxwhDumJRz6UskKN1P6jNEXm7UQ9a1RXPyccm27T7mHZ87sePe0JuL4BYuK4d0/4hmCCEilnw8I49lurULfrspVjh6VqmRt/Qoe3Fnq9EBJazH32/2J9aTJkdzRlrm3eSKqabSz6qDF6dZrrQ/9TSYJBQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787910118; c=relaxed/simple;
+	bh=3OEuy4BD1dsHy197xzLSBLtBnyzQJ4BNrMV6jDbgf8g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MrtASGPu0i2jeWxvt2XpgCjcyOXvJcqN82JQE09ZCvgz+DoYPUth3MOML01pJJz41YFilrvHLwjca4RDqFi48vj8x3RnNoSIYpX7Zj9Q7qkWMasd4FtFeZy7YUD+Osq6nvLiHQUyGBy+gxVSmfX2AUo6iZTp95vqDxowC5VwP1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iQipGGLc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QNe8JZl4"
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-81f36179d72so10056517b3.2
-        for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 02:33:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787909596; cv=none;
-        d=google.com; s=arc-20260327;
-        b=NvKonLNW6FsM9ccrHDZFmbEzbMoINf1h9qB/HU6WMUn8v+ush6vjuMo7DADEg8I0ml
-         ULlkcsfg5K0s0byHyATB29YS/59wMQZ/b9djALID1u29YiJ8MiWkfG6jQhHt3QMLYhUd
-         UXCG2be9RnyguBeEG7VI7GDNgxhnmaFHt41UOyPoKwFI+pfRn6H7n1U8zY9kyAkqymWv
-         pi4iroD+wviAXLGMqpY37mkVPyOyeo/WxWY9UZbZNK4ZL44FhoQTfKwFIxvETtqoX+6S
-         dmHpOM+6xzvrql5gf0qua9y1jXscvOsGgkFUdcCjIa2/W7UsYRh+BZ6SzATza+jU4Dkv
-         8INw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=VyKgfgA2jHgvHBfi6CU+LzxVcYLnQWijvxyS1/jFemY=;
-        fh=Yj8Zxlt0m+3IRIX/4+SoGeYOVveev4YJknR2sgs0Mzw=;
-        b=Klido7qTELVWMP6HyXQXOzrWG18e/0YAYVDMiv8VYHBFUC5i62KhWQfbLUOzYmxUvu
-         FiYx5YSmnxSYzhxv6LUMP5HSy9Q6a+hlEz8n5//lE+oN8VtqmQ8yszDQheQVGKS8laUW
-         C/JWQUOUSI9y+EWIzBq594C0cx3k/OfE4rL0x94vedc/ZQpKpnY8HbLpETowX5aMNK3I
-         wgFzLByPwBJZ7HRmeqZd1SUvKzUeG2AmpyPdAj3my91RUetDw/LuA7sdTLxhylSmbKzE
-         9cESykfhYrRw4shC/LOs0RMlGCcnn5nc5iyYFewBTu9oi2koqZ0pf5s5Ke+fG+0kxfsb
-         U+mQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787909596; x=1788514396; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=VyKgfgA2jHgvHBfi6CU+LzxVcYLnQWijvxyS1/jFemY=;
-        b=QNe8JZl4vgKDTuJWNKn22/Hpirurd+JootYRCU+9j9DI5OC8qC/pYftEKbaluadheI
-         V57PHkNO68QJbarV+vmeriaZfi5PZb2JJmbjcLQA557h7mcMvXVL1grWKSADSI9NTmnm
-         jP+FvwKUfLXq/eHHXa818ot6yGxsjVfcvhlQGCshLZHBZxybmcIGA+3BPLwpcMUA1Rr1
-         WiL6V9QZC0640kWXHbs8Iv/2luIAnZvAhy+vyPsn3dTtdVn7sc8+orEWWyHj88WiRWtk
-         doazttorfMJ2v/fjNZrklOtdupzNd5E2CtUZPmtZ0hUg8A7aGanvzBBGsqur8RWfuWrV
-         i+7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787909596; x=1788514396;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=VyKgfgA2jHgvHBfi6CU+LzxVcYLnQWijvxyS1/jFemY=;
-        b=aBRpJfM3X7RA8TAIqMR0Z0U5tTJsvVlt2bVVJ2Cb7WiHDMin9V8bYGsugBEdV23CaO
-         H+34EnK6SdBz785ujaUe7io6a1tZH8onzgnDDkeWsIwCmQcThN5sgrhq27RUvAdoOTo8
-         FbPSPjG+MWZXo4wz2+HskSdZAfxLxyruM50q9s4IjHQ2nBnHVpWp/oyKdXtGX9F045Hy
-         DDtEQmVDd9BQVKHHEAQg6+dja6AnDCPZMN1SfE8mcLWObp55svtA3puY5jnUEONDzbeh
-         XY7FOS176fhVbGe2epy5EEYx07n0zT2PeC8EBsXVRgVUSMEEqjGuhV5xuUTATtyM8SYy
-         N0rw==
-X-Forwarded-Encrypted: i=1; AHgh+Rq0wPw9EOTx0D4WlltnNtobcYkYOmpk7+qB7bCETvkFPddap2xZ8BbFgHtWh+mrXZ7OU24=@vger.kernel.org
-X-Gm-Message-State: AFuF++nlB3RHh72dRi0rJDGb8MsaCDp2y6jclnvEJsu8CYx5LiM+eq9G
-	WRLLXODRXf/zRbD8MwwOBPMZzt4teomvTrcgAfN9ssizruIDxbA/ly/mz9/TeE56jfw9lSn1Gjt
-	g+s/uKFg289X/GQgzZwsMYfz0Qmk/bO8=
-X-Gm-Gg: AR+sD13Mlg3572CLWurmrPCCnza6ZOMVp/2vWcu+OfGN6N/4ynbwk9W95WUCtyujwmE
-	QMxzoC6q0ly3JIG8Llf7z2c/brBZp5GFQlCx7Qi8uYN6W3ZJgVoImLsHGsJoEVu9yXoyubnKngL
-	K0D9Aor+lwIVTdaws4sisAhSM9r8SIrYvjvCS0KEz9p1hVyswFD3bL5XWdA74JmzgbUiY/gOvHi
-	5Yu1Ealzv/Qok/cqKDwXQdInk/Ia0CUoTKxDEVdKnqmy0zxlrXxLLiMX4X7jO7+PtUABjQNxamR
-	+/gtCSlSkz9KiGAf9BkoEoJh4dwnt6SB/Vb6Kysrxvfe
-X-Received: by 2002:a05:690c:e3cd:b0:80b:9f4e:a73 with SMTP id
- 00721157ae682-85d684bf30amr28089127b3.13.1787909595588; Fri, 28 Aug 2026
- 02:33:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iQipGGLc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E19981F000E9;
+	Fri, 28 Aug 2026 09:41:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787910117;
+	bh=LPr7Cgdghm1Kz2vcUzEZZn5UouwztW/+50mQHoKvomA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=iQipGGLc7zqwEKjY4rWswUBu1HBNTwly6FGF0zyFghS2j+cgmvVf6hgdZIcboHM//
+	 EPtlXIV6dfyElr0U3yvBij0FoZtl5eluuNA283pXk/WKV9IxQccyKpMhFX3qlTFr3O
+	 uzVsbth6cw+h/Q4e/oF/Hf7NfJH0nNZkPKT1wPvwPhXpI828SzOmIns5LDvxtgLeuc
+	 ZLe4M/lvIGhc018PEbDw4V87Ti/Edzp3i/qJhvJm2UAGSRbkwqCA5rg/witGBk1ja+
+	 cmzTj/ZeFArBwDg1qSkbFQaq+S8oT/XYGCmKerfeZb6Q0n+P2oDlZBLl063F0lhA5F
+	 XvvifETVZg9Yw==
+Message-ID: <d5eac10c-48f1-4c09-b871-b946c6417399@kernel.org>
+Date: Fri, 28 Aug 2026 11:41:49 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260812-xdp-dut-process-lifecycle-gmail-v2-1-b03ef2aa1b97@gmail.com>
- <d4be160e-703e-46bb-9509-d3d90f6bc34b@iogearbox.net> <DKX99ZAP7GZ8.23U5EOSFB4VPU@bootlin.com>
- <CAHKNYVXN0DAUzv2Lwm=oQ_K=zhi2iNyTO2e99s5F4M+Kr7u5tQ@mail.gmail.com> <CAHKNYVV8gn-L_unjsxUZV=E+Rx4ouDBJX613_n4hevXP1rivyg@mail.gmail.com>
-In-Reply-To: <CAHKNYVV8gn-L_unjsxUZV=E+Rx4ouDBJX613_n4hevXP1rivyg@mail.gmail.com>
-From: Bochao Cao <bochaolucky@gmail.com>
-Date: Fri, 28 Aug 2026 17:32:38 +0800
-X-Gm-Features: AcwNN1VW9XpqQ20Ki6rCBhf_uOiVcBbpYWAjy12V6TApwKjNoVUxIva86Xc9n18
-Message-ID: <CAHKNYVX_r_yS+NjkTx=gn7zGfcHF11azQbFWHJ+naqXO3aTpJw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Track test_xdp_features DUT processes
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Jiayuan Chen <jiayuan.chen@linux.dev>, 
-	Alexei Starovoitov <ast@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net v3 1/2] tcp: fix use-after-free in
+ do_tcp_getsockopt(TCP_CONGESTION)
+Content-Language: fr
+To: "Cen Zhang (Microsoft)" <blbllhy@gmail.com>, edumazet@google.com,
+ ncardwell@google.com, davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com
+Cc: kuniyu@google.com, horms@kernel.org, martineau@kernel.org,
+ geliang@kernel.org, yhs@fb.com, kafai@fb.com, andriin@fb.com,
+ ast@kernel.org, netdev@vger.kernel.org, mptcp@lists.linux.dev,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ AutonomousCodeSecurity@microsoft.com, xmei5@asu.edu,
+ tgopinath@linux.microsoft.com, kys@microsoft.com, stable@vger.kernel.org
+References: <cover.1787870710.git.blbllhy@gmail.com>
+ <d3f97f1acbf0010898148be6e6406e4b8b4a5c84.1787870710.git.blbllhy@gmail.com>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <d3f97f1acbf0010898148be6e6406e4b8b4a5c84.1787870710.git.blbllhy@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
- Resending as plain text because my previous reply was rejected by the
-vger mailing lists. Sorry for the duplicate.
- Thanks Daniel and Alexis.
+On 28/08/2026 01:55, Cen Zhang (Microsoft) wrote:
+> From: "Cen Zhang (Microsoft Security FORGE Labs)" <blbllhy@gmail.com>
+> 
+> do_tcp_getsockopt() reads icsk->icsk_ca_ops->name without holding
+> rcu_read_lock(). Since commit 0baf26b0fcd7 ("bpf: tcp: Support
+> tcp_congestion_ops in bpf"), icsk_ca_ops can point to dynamically
+> allocated BPF struct_ops memory that may be freed concurrently via
+> setsockopt(TCP_CONGESTION), leading to a use-after-free.
+> 
+>   BUG: KASAN: slab-use-after-free in _copy_to_user+0x37/0x60
+>   Read of size 16 at addr ffff888013505260 by task exploit/149
+>    _copy_to_user+0x37/0x60
+>    do_tcp_getsockopt+0x158a/0x2460 (net/ipv4/tcp.c:4585)
+>    tcp_getsockopt+0x91/0xf0
+>    __sys_getsockopt+0xf7/0x170
+> 
+> Fix this by holding rcu_read_lock() around the ca_ops->name access,
+> using READ_ONCE() to load icsk_ca_ops, and copying the name to a
+> stack buffer before releasing the lock. Also annotate the relevant
+> icsk_ca_ops stores with WRITE_ONCE() to fix the accompanying KCSAN
+> data-race issue.
 
-  Dropping the procps dependency is not the primary motivation for
-  this change. I agree that Debian can remove the dependency independently.
-  The issue addressed by this patch is process isolation in the standalone
-  test. The current readiness check may observe an unrelated
-  concurrent xdp_features process, while cleanup may terminate every
-xdp_features
-  process on the host. In addition, a DUT which exits before listening
-can leave the test waiting indefinitely.
+Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
-  Although this script is not currently run by the BPF CI, it remains
-useful  for testing real hardware,
-  so these process lifecycle issues can still  affect users running
-the test manually.
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
 
-  Would it be acceptable to fix these issues in the script's current locati=
-on?
-  If the preferred direction is to move it under
-tools/testing/selftests/drivers/net/hw/,
-  should the move be submitted first, with this fix rebased on top?
-
-  I can send a v3 that drops the Debian Closes tag and focuses
-  the commit message solely on the process isolation, timeout,
-  and cleanup fixes once the preferred location is clear.
-
-  Thanks,
-  Bochao
-
-
-Bochao Cao <bochaolucky@gmail.com> =E4=BA=8E2026=E5=B9=B48=E6=9C=8828=E6=97=
-=A5=E5=91=A8=E4=BA=94 14:10=E5=86=99=E9=81=93=EF=BC=9A
->
->  Thanks Daniel and Alexis.
->
->   Dropping the procps dependency is not the primary motivation for
->   this change. I agree that Debian can remove the dependency independentl=
-y.
->   The issue addressed by this patch is process isolation in the standalon=
-e
->   test. The current readiness check may observe an unrelated
->   concurrent xdp_features process, while cleanup may terminate every xdp_=
-features
->   process on the host. In addition, a DUT which exits before listening ca=
-n leave the test waiting indefinitely.
->
->   Although this script is not currently run by the BPF CI, it remains use=
-ful  for testing real hardware,
->   so these process lifecycle issues can still  affect users running the t=
-est manually.
->
->   Would it be acceptable to fix these issues in the script's current loca=
-tion?
->   If the preferred direction is to move it under tools/testing/selftests/=
-drivers/net/hw/,
->   should the move be submitted first, with this fix rebased on top?
->
->   I can send a v3 that drops the Debian Closes tag and focuses
->   the commit message solely on the process isolation, timeout,
->   and cleanup fixes once the preferred location is clear.
->
->   Thanks,
->   Bochao
->
-> Bochao Cao <bochaolucky@gmail.com> =E4=BA=8E2026=E5=B9=B48=E6=9C=8825=E6=
-=97=A5=E5=91=A8=E4=BA=8C 21:01=E5=86=99=E9=81=93=EF=BC=9A
-> >
-> >   Thanks Daniel and Alexis.
-> >
-> >   Dropping the procps dependency is not the primary motivation for
-> >   this change. I agree that Debian can remove the dependency independen=
-tly.
-> >   The issue addressed by this patch is process isolation in the standal=
-one
-> >   test. The current readiness check may observe an unrelated
-> >   concurrent xdp_features process, while cleanup may terminate every xd=
-p_features
-> >   process on the host. In addition, a DUT which exits before listening =
-can leave the test waiting indefinitely.
-> >
-> >   Although this script is not currently run by the BPF CI, it remains u=
-seful  for testing real hardware,
-> >   so these process lifecycle issues can still  affect users running the=
- test manually.
-> >
-> >   Would it be acceptable to fix these issues in the script's current lo=
-cation?
-> >   If the preferred direction is to move it under tools/testing/selftest=
-s/drivers/net/hw/,
-> >   should the move be submitted first, with this fix rebased on top?
-> >
-> >   I can send a v3 that drops the Debian Closes tag and focuses
-> >   the commit message solely on the process isolation, timeout,
-> >   and cleanup fixes once the preferred location is clear.
-> >
-> >   Thanks,
-> >   Bochao
-> >
-> > Alexis Lothor=C3=A9 <alexis.lothore@bootlin.com> =E4=BA=8E2026=E5=B9=B4=
-8=E6=9C=8824=E6=97=A5=E5=91=A8=E4=B8=80 22:49=E5=86=99=E9=81=93=EF=BC=9A
-> >>
-> >> Hi Daniel, thanks for the notification
-> >>
-> >> On Mon Aug 24, 2026 at 1:31 PM CEST, Daniel Borkmann wrote:
-> >> > [ Trimming the excessive Cc list, and adding Alexis ]
-> >> >
-> >> > On 8/12/26 10:28 AM, Bochao Cao via B4 Relay wrote:
-> >> >> From: Bochao Cao <bochaolucky@gmail.com>
-> >> >>
-> >> >> test_xdp_features.sh waits for any xdp_features listener to appear =
-and
-> >> >> uses pidof during cleanup. A concurrent test can therefore make ano=
-ther
-> >> >> test proceed before its own DUT is ready, and cleanup kills every
-> >> >> xdp_features process on the host. The readiness loop also has no ti=
-meout,
-> >> >> so a DUT that exits before listening leaves the test hung indefinit=
-ely.
-> >> >>
-> >> >> Track one active DUT at a time, wait for ss to report that exact PI=
-D with
-> >> >> a bounded retry loop, and reap it after each test. Consult the shel=
-l job
-> >> >> table before signaling the DUT so a stale PID cannot target an unre=
-lated
-> >> >> process. On failure, terminate the shell job with SIGKILL and reap =
-it so
-> >> >> blocked I/O cannot hang cleanup. Install an EXIT trap and signal ha=
-ndlers
-> >> >> so failure paths also remove network setup.
-> >> >>
-> >> >> Fixes: 4dba3e7852b7 ("selftests/bpf: introduce XDP compliance test =
-tool")
-> >> >> Closes: https://bugs.debian.org/1136522
-> >> >> Signed-off-by: Bochao Cao <bochaolucky@gmail.com>
-> >> >> ---
-> >> >> Tests:
-> >> >> - bash -n tools/testing/selftests/bpf/test_xdp_features.sh
-> >> >> - make -C tools/testing/selftests/bpf xdp_features
-> >> >> - sudo tools/testing/selftests/bpf/test_xdp_features.sh
-> >> >> - verified cleanup terminates a blocked DUT without affecting an un=
-related process
-> >> >> ---
-> >> >> Changes in v2:
-> >> >> - Clarify that avoiding name-wide process matching, rather than dro=
-pping a dependency, is the motivation.
-> >> >> - Track and reap one active DUT at a time instead of retaining hist=
-orical PIDs.
-> >> >> - Address PID reuse by signaling only the current Bash job during c=
-leanup.
-> >> >> - Use SIGKILL on failure cleanup so blocked DUT I/O cannot hang wai=
-t indefinitely.
-> >> >> - Link to v1: https://patch.msgid.link/20260805-xdp-dut-process-lif=
-ecycle-gmail-v1-1-45984df8d295@gmail.com
-> >> >> ---
-> >> >>   tools/testing/selftests/bpf/test_xdp_features.sh | 82 +++++++++++=
-+++++++------
-> >> >>   1 file changed, 62 insertions(+), 20 deletions(-)
-> >> >
-> >> > Sorry for the late reply. With regards to https://bugs.debian.org/11=
-36522, src:linux deb
-> >> > does not have to depend on this at all, so the src:linux can just ge=
-t rid of procps in
-> >> > any case if this is indeed the last dependency. I'm not seeing the t=
-est being run in our
-> >> > BPF CI. I've Cc'ed Alexis as he's in the process of migrating and/or=
- removing tests from
-> >> > tools/testing/selftests/bpf/ depending on how they fit into test_pro=
-gs framework. I'll
-> >> > let him comment if there is already work in progress. It feels like =
-this script could be
-> >> > reworked into tools/testing/selftests/drivers/net/hw/ tests and remo=
-ved altogether from
-> >> > the tools/testing/selftests/bpf/ dir.
-> >>
-> >> There has been an attempt to fully convert and get rid of
-> >> test_xdp_features.sh, but discussions around the corresponding series
-> >> highlighted the need for the script to remain available for testing on
-> >> real hardware.  Features covered by the test_xdp_features.sh that were
-> >> not covered yet by test_progs have been added to test_progs (in
-> >> xdp_cpumap_attach), see [1]. So there's currently no active effort on
-> >> this one on my side.
-> >>
-> >> Alexis
-> >>
-> >> [1] https://lore.kernel.org/bpf/20241009-convert_xdp_tests-v3-0-51cea9=
-13710c@bootlin.com/
-> >>
-> >> --
-> >> Alexis Lothor=C3=A9, Bootlin
-> >> Embedded Linux and Kernel engineering
-> >> https://bootlin.com
-> >>
