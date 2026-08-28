@@ -1,52 +1,32 @@
-Received: from mail-43171.protonmail.ch (mail-43171.protonmail.ch [185.70.43.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C49A92472A2;
-	Fri, 28 Aug 2026 06:08:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.171
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE3A134CFC7;
+	Fri, 28 Aug 2026 07:51:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787897320; cv=none; b=h1WzQrDI3XKNS8l29llzc3TTvC2bpYStchCG88FO2p9jCoUzkpIp4c5I/49eL67FKijRhKG/9nGBZtSMY6eTLvgVlaSieQCba2Siny3J2TKahFs+XhizBWoWYhzLUimFzgWLaDpnuKnjsychnGcQsMWjAFXQPkQUnVaslA78a78=
+	t=1787903468; cv=none; b=M2/lEsu4bvKk7KshUYUl6BSkHxLN2EmOapPt5uB6wXgOR6YEH2r/2ECXX20UVdbdo3JfppwzSiI9dmmMv0p2bKtWUwVgYsoUzUoggtkOo2lyLQcTYVtO0xNTgX+K1TmrEPdyrO/LKmyJM5AReqtHjLiB0RYh/cugDWMEHuSTj68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787897320; c=relaxed/simple;
-	bh=Pt8iG8FRmUsyMAl7DKYsLkgXlyGJTxab3ZqlzdP7+Vw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nuJ38wNqPWbCh/hZiQJWC/m5TEHx5/9xP+NEWsVvdtXfGLhj3U7LCKl6Foqo0AcSEmRYQLDR8K6W17eKxz0sA1BSQAoAMahVF4adpX9GF5xL8lF3GUAlSYGvYJ/nsiYrI2Dv7X5z3IerCYN/7FirgaUqCiwvH25SI7G9Z3kCWCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=schauer.to; spf=pass smtp.mailfrom=schauer.to; dkim=pass (2048-bit key) header.d=schauer.to header.i=@schauer.to header.b=nCb7NtYU; arc=none smtp.client-ip=185.70.43.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=schauer.to
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=schauer.to
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=schauer.to header.i=@schauer.to header.b="nCb7NtYU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=schauer.to;
-	s=protonmail3; t=1787897306; x=1788156506;
-	bh=RdmktDHYrNA4Xpiuvts8V3ojy0sMIivuhS/SjIYmfcE=;
-	h=From:To:Cc:Subject:Date:Message-ID:From:To:Cc:Date:Subject:
-	 Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=nCb7NtYULsaqgsDNMVEbG6SioQ8t+tan/JPUIx8SQmp0QsaxDeOvh8XT8//goK12r
-	 yPiENg/rsWaQT9Rk3FugYV4cop6PhBCxSW9y+UaJQnX5vdSXOdN1tte/etTQriFHo3
-	 D50rKdQL4fNP2UQjx1J/SDIPGD8TTtvjoGuMr8XAh/ITOGwJ6jSmfe/Vv5zKtnIMO0
-	 HB5g9D+GKQfTptxJzwzNBT7Bbc96Ftc5cVA9WGRO9NeZhJPndHgmKMo3T5W7o1DQLF
-	 qzXHQDU83UQdXwOqXoIDDE3pEcQfzPewelaSe0emBgd2+pNHVZEAy/gMuUjfdTFgs3
-	 Hx6Jj+ze19YRw==
-X-Pm-Submission-Id: 4hWScS1FP2z2Schl
-From: Florian Schauer <florian@schauer.to>
-To: hawk@kernel.org,
-	ilias.apalodimas@linaro.org
-Cc: netdev@vger.kernel.org,
+	s=arc-20240116; t=1787903468; c=relaxed/simple;
+	bh=1OjkvvAZOnGlCuXH2KuSAvAMmthp6CXtjH/L+oEPLe4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qjFxVFgL/aQB0+UyoTQZ3DA4/O1eVpp67SqQ8+2M5P63xAv4neuv6uAZfmC1Z1LdQAEtK+gkr9ESFVCsS5klNRmDkHvAfs0mEdaELk9IZ4/WG1b25CBe6niN2hABBTN7j16Gac7Lnxr45ngmqHI7KV0TORa4GEBflF6fd7zzTEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8BxLtPnPZFqlQcGAA--.16997S3;
+	Fri, 28 Aug 2026 15:51:04 +0800 (CST)
+Received: from linux.localdomain (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJAxmM3lPZFq5D0VAA--.41531S2;
+	Fri, 28 Aug 2026 15:51:02 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: loongarch@lists.linux.dev,
 	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	linyunsheng@huawei.com
-Subject: [PATCH net v2] page_pool: keep frag_offset aligned for odd-sized requests
-Date: Fri, 28 Aug 2026 08:08:22 +0200
-Message-ID: <20260828060822.2628276-1-florian@schauer.to>
-X-Mailer: git-send-email 2.47.3
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1] LoongArch: BPF: Fix off-by-one error for insn_is_cast_user
+Date: Fri, 28 Aug 2026 15:51:00 +0800
+Message-ID: <20260828075100.24776-1-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,134 +34,60 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJAxmM3lPZFq5D0VAA--.41531S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7Zr1kur4DtFyrJF1xtFyDCFX_yoW8WF1rpr
+	ZxCws8KFWUWry3ua4DJayIvF1ftFs3Wr43WF12y3yFy3sIqryFqFyrK3sIkFnYkw48Zr1F
+	qr9Ykw1Yva4DZacCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUU9Yb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y
+	6r17McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+	vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_
+	Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+	AY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
+	cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
+	IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIev
+	Ja73UjIFyTuYvjxU2L05UUUUU
 
-page_pool_alloc_frag_netmem() rounds the requested fragment size with
+Fix a severe off-by-one error in the branch offset calculation for the
+user pointer cast helper insn_is_cast_user() inside build_insn().
 
-	size = ALIGN(size, dma_get_cache_alignment());
+In the current code, an offset of 1 causes the "beq" to target the next
+"or" instruction, which means the "or" instruction is always executed,
+even if the pointer is NULL. Thus, a native NULL pointer is incorrectly
+combined with the arena base address and turns into a non-zero address,
+breaking nullable safety guards and causing silent memory corruption.
 
-dma_get_cache_alignment() returns 1 unless the architecture defines
-ARCH_DMA_MINALIGN, which DMA-coherent architectures such as x86 do not.
-There the ALIGN() is a no-op and pool->frag_offset advances by the raw,
-unrounded size.
+Fix this by changing the branch offset from 1 to 2, which properly skips
+the "or" instruction and jumps directly to the "move_reg" instruction if
+the pointer is NULL, ensuring the destination register is safely cleared
+to 0.
 
-A single caller asking for an odd size then leaves frag_offset misaligned
-for every fragment carved out of that page afterwards.  The pool is shared,
-so the damage is not confined to the caller that caused it.
-
-The per-cpu system_page_pool used by generic XDP hits this.
-skb_pp_cow_data() allocates its fragments with the raw packet length:
-
-	size = min_t(u32, len, PAGE_SIZE);
-	truesize = size;
-	page = page_pool_dev_alloc(pool, &page_off, &truesize);
-
-leaving frag_offset odd for whatever is carved out of that page next.  Its
-own head allocation is already aligned -- SKB_HEAD_ALIGN(size) plus the
-XDP_PACKET_HEADROOM its callers pass -- so it is a later user of the shared
-pool that pays: page_pool_dev_alloc_va() returns a misaligned buffer,
-napi_build_skb() installs it as skb->head, and skb_shinfo(skb) ==
-skb->head + skb->end is misaligned with it.
-
-skb_shinfo()->dataref is a 4-byte atomic_t at offset 0x20, so the
-atomic_inc() in __skb_clone() straddles a cache line.  On x86 with split
-lock detection -- fatal for kernel split locks by default -- this panics
-the machine:
-
-  Oops: Split lock detected
-  RIP: 0010:skb_clone+0x154/0x1e0
-  Call Trace:
-   <IRQ>
-   raw_local_deliver+0x1ed/0x2c0
-   ip_protocol_deliver_rcu+0x54/0x1c0
-   ip_local_deliver_finish+0x85/0x100
-   ip_local_deliver+0x67/0x100
-   __netif_receive_skb_one_core+0x85/0xa0
-   process_backlog+0x87/0x130
-
-Reproduced by attaching any generic-mode XDP program to loopback and
-opening a RAW IPPROTO_UDP socket, which makes raw_local_deliver() clone
-every locally delivered UDP packet; ordinary DNS traffic then triggers it,
-roughly once per 2500 clones.  Observed on 6.12.101 and 7.1.8.
-
-Tracing page_pool_alloc_frag_netmem() over one such run shows the
-amplification -- two odd-sized requests, nine misaligned offsets:
-
-  requested size & 7:   0: 17035    5: 1    7: 1
-  frag_offset & 7:      0: 17028    3: 1    4: 1    5: 1    6: 1    7: 5
-
-and skb_pp_cow_data() returning heads that were aligned on entry:
-
-  head 0xffff8f4c86aeac00 -> 0xffff8f4c53a9a9c4 (&7=4)
-  head 0xffff8f4d6a8a42c0 -> 0xffff8f4c4f7b7a45 (&7=5)
-
-Round the fragment size up to at least the alignment struct skb_shared_info
-requires, so fragments are always suitably aligned for the objects callers
-build on them.  Architectures needing a larger DMA alignment keep it.
-
-This also makes the remainder computed in page_pool_alloc_netmem(),
-
-	*size = max_size - *offset;
-
-aligned, since max_size is a power of two -- which fixes the matching
-misalignment of skb->end.
-
-Verified with a controlled A/B under QEMU/KVM: same tree, same config,
-same compiler, same rootfs and identical traffic, differing only by this
-patch.  A SEC("xdp.frags") XDP_PASS program on lo plus UDP datagrams
-larger than max_head_size drives skb_pp_cow_data()'s fragment loop, which
-passes raw packet lengths to the pool.  Measured at the return of
-skb_pp_cow_data():
-
-                          unpatched   patched
-  skb_pp_cow_data calls       40800     40800
-  misaligned skb->head         1120         0
-  dataref at line offset >60     80         0
-
-The last row counts the accesses that actually fault:
-skb_shinfo()->dataref sits at head+end+0x20 and is a 4-byte atomic, so
-`lock incl` splits a 64-byte cache line only when that address lands at
-offset 61..63.  All 80 occurrences were at offset 61; the panic reported
-above was at offset 62.  Eliminating the misalignment removes every one
-of them.
-
-Same class of bug as commit 3bed3cc4156e ("net: Do not allocate page
-fragments that are not skb aligned"), which fixed the older
-netdev_alloc_frag()/napi_alloc_frag() allocators.
-
-Fixes: 53e0961da1c7 ("page_pool: add frag page recycling support in page pool")
+Fixes: 4fdb5dd8aeba ("LoongArch: BPF: Implement bpf_addr_space_cast instruction")
 Cc: stable@vger.kernel.org
-Signed-off-by: Florian Schauer <florian@schauer.to>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
-v2:
-  - express the minimum alignment as __alignof__(struct skb_shared_info)
-    instead of sizeof(long), and drop the explanatory comment the previous
-    version carried, since the expression now states the requirement
-    directly (Eric Dumazet)
-  - no functional change vs v1 on 64-bit: the emitted code is identical
-  - Cc the maintainers and the blamed author that v1 missed
-  - correct two statements in the commit message: dataref is at offset 0x20
-    in struct skb_shared_info, not its first member, and skb_pp_cow_data()
-    allocates its head before the fragment loop, so the misaligned head
-    comes from an earlier user of the shared pool
-v1: https://lore.kernel.org/netdev/20260826135252.3091193-1-florian@schauer.to/
+ arch/loongarch/net/bpf_jit.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- net/core/page_pool.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index 8f8956fb0..08d7f35cf 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -1073,7 +1073,8 @@ netmem_ref page_pool_alloc_frag_netmem(struct page_pool *pool,
- 	if (WARN_ON(size > max_size))
- 		return 0;
- 
--	size = ALIGN(size, dma_get_cache_alignment());
-+	size = ALIGN(size, max_t(unsigned int, dma_get_cache_alignment(),
-+				 __alignof__(struct skb_shared_info)));
- 	*offset = pool->frag_offset;
- 
- 	if (netmem && *offset + size > max_size) {
+diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+index 1eb588e443c9..4da278900938 100644
+--- a/arch/loongarch/net/bpf_jit.c
++++ b/arch/loongarch/net/bpf_jit.c
+@@ -717,7 +717,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 			move_reg(ctx, t1, src);
+ 			emit_zext_32(ctx, t1, true);
+ 			move_imm(ctx, dst, (ctx->user_vm_start >> 32) << 32, false);
+-			emit_insn(ctx, beq, t1, LOONGARCH_GPR_ZERO, 1);
++			emit_insn(ctx, beq, t1, LOONGARCH_GPR_ZERO, 2);
+ 			emit_insn(ctx, or, t1, dst, t1);
+ 			move_reg(ctx, dst, t1);
+ 			break;
 -- 
-2.47.3
+2.42.0
 
