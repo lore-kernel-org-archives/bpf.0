@@ -1,193 +1,265 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB3135C190
-	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 17:05:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDBAB37D123
+	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 17:11:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787936749; cv=none; b=RuM7uqR9cWUpseMhFf6T/NeJMOoTWeYnSQs5o6ygleySPoWZBntMQ13oSnVIVUgJjzjHrHmeK9/V9jsTaxWleWirivBwosytpOKYJCVNy/b6B1OHTExE6lhLYzwTxph8Q5iHek9Nc/XpHSyX/UlsqYhQCJ8/+/3lH8Q5G+oVsvc=
+	t=1787937073; cv=none; b=W0zpo1Mi+GV/RvSyU6Latf4QSYmOt2/BNJclC7j1udINNn20cXRTpUcjnzDduO8a5GmroK8SsEfSHH/Zih5GLA3Kp1cwNszya+pUTyNmFDou6b9uKqV3vw7+iAyq2QGYX9uZvn+J/Cxes3AyVacyPiyqyaP1eSQGJsCxJZJK4cY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787936749; c=relaxed/simple;
-	bh=z3+S8AHTHvafiJCNyUTT6RSyhRdT4fC3GhyC1nr2N8A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=l+6urZHLJYQbUfvYWSM82ZAqlLXHolnAH3v4Yni0eeCvPD44aZOGIlJpCST3CAFqCR2ZINo2kJQZBjQXK3JB3505JHxOXezhBD9YQ5aUcyzBA26QPAHKJRxQ/9ytnKuSFHVDnrF204MPUupoISI44l2STc+NhAskSrfHeaHYXtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id E2AA0271D5A548; Fri, 28 Aug 2026 10:05:34 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	kernel-team@fb.com
-Subject: [PATCH] selftests/bpf: Bound the offset accumulator in __tld_fetch_key()
-Date: Fri, 28 Aug 2026 10:05:34 -0700
-Message-ID: <20260828170534.1011183-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.53.0
+	s=arc-20240116; t=1787937073; c=relaxed/simple;
+	bh=+XM8NrZpV9frpppAHR/b7+OTztkRtZdDDQmmWYtg2/k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DeQb7c1SoMnsGFyCVME2TNzBV6j5hrFh9f1xlViNCu3glLkZhGTbK9Oxb9dV31k81P8HQipEJ4yK0KvSlzZ5EEORwrAbDCxZsq/q+yTigMWdFOwYUsIUkK6wu83w+RDLmknR/p7YwFTfNT8//x1hsK3nrthpoiME0lY2jt4uSOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AZeSgMFm; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AZeSgMFm"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-49b8eeb3ff2so8663595e9.2
+        for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 10:11:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787937070; x=1788541870; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ITCoSjkSluFM54y7ZRq5rJAeJWtnIZBAl+KFdusW1eg=;
+        b=AZeSgMFmhgsEQ7+MaunqcaWIK6PAqPNIOhE58IKxMRyAI6kOhcaxT3eoS3pxizzXql
+         9UPIBlRAdLpyI9t3/HlOWVsZMuIYbhyNn/G+4FwSsyI4Ku0+zcDOeM8fiTefGmW4i5KV
+         TZUqF6TBXnuSauvySZ1Iz6s86lzHeoNyowuEryccX7w2RV+W+nULQEecZIXHG7DVJJED
+         MQRUSQZh17lFuL6gvYyGdL+srWVyaIKVVf00yYLS8+SXiWlPhGyksBCRB+r/oCy9RsW4
+         qPhSRBSDwgbdak3SrkkBpuPmAWajMRagKZtDg1GIb0+4orw6AiHGkyQFFOXNWhcIAkT3
+         d/8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787937070; x=1788541870;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ITCoSjkSluFM54y7ZRq5rJAeJWtnIZBAl+KFdusW1eg=;
+        b=PChWN8tPBsOEe1GnBtWk3DsraEtSSrauAikmP+LQY5sunZih+XBj7OTbHC3C3UyC2h
+         nMojJB7rX8N2k7P01DhoXFbChrBMufTcKR1owAUr5CXCPr4yhQIW93X2t1J6Md5Jgb03
+         W3q1GXEqP24ulD43Ah4tUlqA806OsXuJBJ4w0hQEl922RNn0RY7HJm82xRFGkRPXNPNN
+         XRjak0gplHvK61r6XDdjoQfZmW5zu9KX0W9FdxW5375NXO9pBhoeaGfDA+UCF5Ba8V4M
+         OhBaXuyn2SSreNnAYG/uBNHjkThDwUtbq9LZx+v+zFFL9MZOAqY+AgRx4btIyyrehmrK
+         puNg==
+X-Gm-Message-State: AFuF++kVsMEbBGlUzIJ4Ole226o/dfUvcQzKV2/XXE02oFR6Mrf4x+El
+	32RMTpD7XhsumVcU4vJxAfLaNXqB0ww9l/QBNoThw02IKN+8TxLnTxoB
+X-Gm-Gg: AR+sD13LHT5NTQgXvVgzVdnFFFGvsqo418Rx5LJXzg0fyflyCShkTvJQ7CpwBA5NZ8u
+	qbweEocU+Qoyt1tJwAN/ytMutqNmzUb0GFNvDVqlR/KKwVzDoE+EaYIVmzIq7bPOhF0MOr5OqiT
+	xRPLOFVh+fAoLoBMepB1xq7OykQQIiGLni2+qy0rzEHl6rxBBp1o9ikMFza1hfu/lSkiZkGRRaR
+	2gznB981sHj5KXQYsS/zmapjCv9LRVkcgUL5agPeefPoJOEATOeUO7qhgwDtLm5p4oOpRbP12Ag
+	t+n/z7LJ1tP/AgXzOeTTlPoX2Zr10f73p4HVDDq9IwJqXP26oy9ZdTfQepaJSUNDnhdpF4vByia
+	yKU+fhVXBX4cmcNiV4Vrmnbao/zhqUfi/Guz/Fb6Z53FM57/D+wXVPMmkupcP917EdpZm3Dnr2Q
+	z0+GL4mLlbTqaHnspAyleAvYxx+9/WDTQCYxi2w7cgFUNvvKvEJVkglsL/uSoKG33ao/kpyrKXF
+	oXkpDOpY7wtR3++DPdpo45wFXciut83AkRM8O0A/mR1GCId
+X-Received: by 2002:a05:600c:3549:b0:496:bffb:fb7b with SMTP id 5b1f17b1804b1-49b91c57464mr115588315e9.10.1787937069530;
+        Fri, 28 Aug 2026 10:11:09 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49b9500c7cfsm70168135e9.11.2026.08.28.10.11.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Aug 2026 10:11:09 -0700 (PDT)
+Message-ID: <02dd6f0b-b4fa-496a-a6b2-ab9d103021c7@gmail.com>
+Date: Fri, 28 Aug 2026 18:11:06 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next] bpftool: Print average cycles per program run in
+ profiler
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com,
+ memxor@gmail.com, qmo@kernel.org, Mykyta Yatsenko <yatsenko@meta.com>
+References: <20260827-bpftool_cyles_per_run-v1-1-77d7bfc3c065@meta.com>
+ <CAEf4BzaKFk9yu10P9bXOE9i=hD8SO+_XfvPbnEBU7cd+eLDVCw@mail.gmail.com>
+ <6e864df5-4fd0-4ae5-a8c6-d2abb9f818d7@gmail.com>
+ <CAEf4BzamFa3MebxgsBMN4pfgMnwj_Wz21cJpfE2couTVpDUj6A@mail.gmail.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <CAEf4BzamFa3MebxgsBMN4pfgMnwj_Wz21cJpfE2couTVpDUj6A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-The LLVM commit c7f4a76da024 [1]
-  "[InstCombine] fold ((x - 1) | (2^k - 1)) + 1 to (x + (2^k - 1)) & -(2^=
-k)"
-caused test_task_local_data.bpf.o to fail verification:
 
-  The sequence of 8193 jumps is too complex.
-  processed 188770 insns (limit 1000000) max_states_per_insn 34
-  total_states 8238 peak_states 12330 mark_read 0
 
-TLD_ROUND_UP(x, 8) expands to ((((x) - 1) | 7) + 1), exactly the pattern
-that [1] rewrites, so the accumulation in __tld_fetch_key()
+On 8/28/26 5:33 PM, Andrii Nakryiko wrote:
+> On Fri, Aug 28, 2026 at 4:01 AM Mykyta Yatsenko
+> <mykyta.yatsenko5@gmail.com> wrote:
+>>
+>>
+>>
+>> On 8/28/26 1:30 AM, Andrii Nakryiko wrote:
+>>> On Thu, Aug 27, 2026 at 8:29 AM Mykyta Yatsenko
+>>> <mykyta.yatsenko5@gmail.com> wrote:
+>>>>
+>>>> From: Mykyta Yatsenko <yatsenko@meta.com>
+>>>>
+>>>> Total cycle counts are difficult to compare across workloads with
+>>>> different run counts. Report cycles per run to expose the per-invocation
+>>>> cost directly.
+>>>>
+>>>> Example:
+>>>> sudo ./bpftool prog profile name mprog duration 15 cycles instructions
+>>>>
+>>>>             423256 run_cnt
+>>>>          947413975 cycles              #  2238.39 cycles per run
+>>>>          333965846 instructions        #     0.35 insns per cycle
+>>>>
+>>>> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+>>>> ---
+>>>>  tools/bpf/bpftool/Documentation/bpftool-prog.rst |  6 ++++--
+>>>>  tools/bpf/bpftool/prog.c                         | 18 +++++++++++-------
+>>>>  2 files changed, 15 insertions(+), 9 deletions(-)
+>>>>
+>>>> diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+>>>> index 90fa2a48cc26..2280dc4492c0 100644
+>>>> --- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+>>>> +++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+>>>> @@ -217,7 +217,9 @@ bpftool prog run *PROG* data_in *FILE* [data_out *FILE* [data_size_out *L*]] [ct
+>>>>  bpftool prog profile *PROG* [duration *DURATION*] *METRICs*
+>>>>      Profile *METRICs* for bpf program *PROG* for *DURATION* seconds or until
+>>>>      user hits <Ctrl+C>. *DURATION* is optional. If *DURATION* is not specified,
+>>>> -    the profiling will run up to **UINT_MAX** seconds.
+>>>> +    the profiling will run up to **UINT_MAX** seconds. When **cycles** is
+>>>> +    selected, plain output also reports the average number of cycles per
+>>>> +    program run.
+>>>>
+>>>>  bpftool prog help
+>>>>      Print short help message.
+>>>> @@ -360,7 +362,7 @@ EXAMPLES
+>>>>  ::
+>>>>
+>>>>           51397 run_cnt
+>>>> -      40176203 cycles                                                 (83.05%)
+>>>> +      40176203 cycles          # 781.68 cycles per run                (83.05%)
+>>>>        42518139 instructions    #   1.06 insns per cycle               (83.39%)
+>>>>             123 llc_misses      #   2.89 LLC misses per million insns  (83.15%)
+>>>>
+>>>> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+>>>> index a9f730d407a9..8935508f955b 100644
+>>>> --- a/tools/bpf/bpftool/prog.c
+>>>> +++ b/tools/bpf/bpftool/prog.c
+>>>> @@ -2069,9 +2069,9 @@ struct profile_metric {
+>>>>         bool selected;
+>>>>
+>>>>         /* calculate ratios like instructions per cycle */
+>>>> -       const int ratio_metric; /* 0 for N/A, 1 for index 0 (cycles) */
+>>>> +       const int ratio_metric; /* 0 for run_cnt, 1 for index 0 (cycles) */
+>>>>         const char *ratio_desc;
+>>>> -       const float ratio_mul;
+>>>> +       const double ratio_mul;
+>>>>  } metrics[] = {
+>>>>         {
+>>>>                 .name = "cycles",
+>>>> @@ -2080,6 +2080,9 @@ struct profile_metric {
+>>>>                         .config = PERF_COUNT_HW_CPU_CYCLES,
+>>>>                         .exclude_user = 1,
+>>>>                 },
+>>>> +               .ratio_metric = 0,
+>>>> +               .ratio_desc = "cycles per run",
+>>>> +               .ratio_mul = 1.0,
+>>>>         },
+>>>>         {
+>>>>                 .name = "instructions",
+>>>> @@ -2256,17 +2259,18 @@ static void profile_print_readings_plain(void)
+>>>>         for (m = 0; m < ARRAY_SIZE(metrics); m++) {
+>>>>                 struct bpf_perf_event_value *val = &metrics[m].val;
+>>>>                 int r;
+>>>> +               __u64 ratio;
+>>>>
+>>>>                 if (!metrics[m].selected)
+>>>>                         continue;
+>>>>                 printf("%18llu %-20s", val->counter, metrics[m].name);
+>>>>
+>>>> -               r = metrics[m].ratio_metric - 1;
+>>>> -               if (r >= 0 && metrics[r].selected &&
+>>>> -                   metrics[r].val.counter > 0) {
+>>>> +               r = metrics[m].ratio_metric;
+>>>> +               /* r == 0 is a special case for run_cnt */
+>>>> +               ratio = r ? metrics[r - 1].val.counter : profile_total_count;
+>>>> +               if (metrics[m].ratio_desc && ratio) {
+>>>
+>>> this ratio_desc-based thing looks suspect. We used to check .selected,
+>>> why did you change this?
+>>
+>> We checked .selected on the metrics[r] (denominator metric), with run_cnt,
+>> it does not exist.
+>> Checking ratio for zero, merges 2 checks into onet:
+>>  - verify no division by zero
+>>  - if ratio is not zero, that metric[r] has to have .selected == true,
+>> otherwise how did we bump it.
+> 
+> ok, makes sense, thanks for explaining!
+> 
+>>>
+>>> And tbh, this whole ratio_metric would be much better done with enum,
+>>> where you can have -1 as "NO_METRIC", -2 as "RUN_CNT", 0 - cycles, 1 -
+>>> instructions, and so on.
+>>
+>> That'll do. But feels a bit awkward:
+>> metrics[] = {
+>>   ...
+>>   {
+>>     ...
+>>     .ratio_metric = 1, /* But really mean METRIC_CYCLES which is index 0 */
+>>   },
+>>   {
+>>     .ratio_metric = -1 /* But really mean METRIC_RUN_CNT which is -2 */
+>>   }
+>> }
+>> The core difficulty here is that .ratio_metric default initializes with 0 and
+>> stands for NO_METRIC, then all indexes in .ratio_metric are shifted by one.
+>> Alternatively we can explicitly set .ratio_metric for every element, but
+>> that makes default initialized not safe (.ratio_metric == 0 means cycles, but
+>> .ratio_desc is NULL).
+> 
+> I personally think that explicit .ratio_metric = METRIC_NO_METRIC or
+> something like that is just fine to do and not a problem.
+> 
+> But if that's a problem, I'd still do enum, just make zero a "NO
+> METRIC", and shift everything else by one. So basically what we have
+> today, but explicitly named (and with small comment next to enum we
+> can explain that shift-by-one convention).
+> 
+> Your choice, my point is that plain numbers make it hard to follow
+> what's going on, and really here we have a limited set of explicitly
+> connected things, so enum is the way, IMO.
+> 
 
-	off +=3D TLD_ROUND_UP(metadata[i].size, 8);
-
-is now compiled as (x + 7) & -8 instead of ((x - 1) | 7) + 1. Both are
-correct, but they leave the verifier in very different states. Note that
-'off' is marked as precise.
-
-Without [1], "size - 1" wraps at zero (size is a __u16), so
-the verifier loses all bounds on the increment:
-
-  211: (69) r1 =3D *(u16 *)(r1 +62)  ; R1=3Dscalar(...,umax32=3D0xffff,va=
-r_off=3D(0x0; 0xffff))
-  212: (04) w1 +=3D -1               ; R1=3Dscalar(smin=3D0,smax=3Dumax=3D=
-0xffffffff,smin32=3D-1,smax32=3D0xfffe,var_off=3D(0x0; 0xffffffff))
-  213: (44) w1 |=3D 7                ; R1=3Dscalar(smin=3Dumin=3Dumin32=3D=
-7,smax=3Dumax=3D0xffffffff,var_off=3D(0x7; 0xfffffff8))
-  214: (0c) w6 +=3D w1               ; R6=3Dscalar(smin=3Dumin=3Dumin32=3D=
-7,smax=3Dumax=3D0xffffffff,var_off=3D(0x7; 0xfffffff8))
-  215: (04) w6 +=3D 1                ; R6=3Dscalar(smin=3D0,smax=3Dumax=3D=
-umax32=3D0xfffffff8,var_off=3D(0x0; 0xfffffff8))
-
-Note that 'w6' will be used in the next iteration. In the next iteration
-after insn 215, the R6 range will be the same as previous iteration.
-The iterator loop converges at depth 2.
-
-With [1] the increment stays precisely bounded at [0, 0x10006]:
-
-  211: (69) r9 =3D *(u16 *)(r1 +62)  ; R9=3Dscalar(...,umax32=3D0xffff,va=
-r_off=3D(0x0; 0xffff))
-  212: (04) w9 +=3D 7                ; R9=3Dscalar(...,umax32=3D0x10006,v=
-ar_off=3D(0x0; 0x1ffff))
-  213: (54) w9 &=3D 131064           ; R9=3Dscalar(...,umax32=3D0x10006,v=
-ar_off=3D(0x0; 0x1fff8))
-  214: (0c) w9 +=3D w6               ; R9=3Dscalar(...,umax32=3D0x10006,v=
-ar_off=3D(0x0; 0x1fff8))
-  215: (bf) r1 =3D r10
-  216: (07) r1 +=3D -8
-  217: (85) call bpf_iter_num_next
-  218: (bc) w6 =3D w9
-
-In the next iteration, we will have
-  211: (69) r9 =3D *(u16 *)(r1 +62)       ; R9=3Dscalar(...,umax32=3D0xff=
-ff,var_off=3D(0x0; 0xffff))
-  212: (04) w9 +=3D 7                     ; R9=3Dscalar(...,umax32=3D0x10=
-006,var_off=3D(0x0; 0x1ffff))
-  213: (54) w9 &=3D 131064                ; R9=3Dscalar(...,umax32=3D0x10=
-006,var_off=3D(0x0; 0x1fff8))
-  214: (0c) w9 +=3D w6                    ; R9=3Dscalar(...,umax32=3D0x20=
-00c,var_off=3D(0x0; 0x3fff8))
-  ...
-
-so 'off' umax grows by 0x10006 on every iteration and the loop-head
-state never repeats:
-
-  218: (bc) w6 =3D w9  ; R6=3Dscalar(...,umax32=3D0x10006,var_off=3D(0x0;=
- 0x1fff8))
-  218: (bc) w6 =3D w9  ; R6=3Dscalar(...,umax32=3D0x2000c,var_off=3D(0x0;=
- 0x3fff8))
-  218: (bc) w6 =3D w9  ; R6=3Dscalar(...,umax32=3D0x30012,var_off=3D(0x0;=
- 0x3fff8))
-  ...
-  218: (bc) w6 =3D w9  ; R6=3Dscalar(...,umax32=3D0xff95fd6,var_off=3D(0x=
-0; 0xffffff8))
-
-That last one is iterator depth 4090. Saturating umax would take ~65531
-iterations; the verifier gives up long before that.
-
-Note the loop does not diverge from the start. widen_imprecise_scalars()
-blows 'off' up to an unbounded scalar while it is still imprecise, and th=
-at
-alone converges the first three passes through the loop at depth 4.
-Once mark_chain_precision() reaches the loop body, maybe_widen_reg() star=
-ts
-skipping the register, and no widening ever happens again. In the failing
-log widening fires exactly 6 times out of 4098 arrivals at the iter_next(=
-)
-checkpoint, all of them before the umax starts accumulating.
-
-With [1] and this fix, here is one full trip through the loop body,
-entered with 'off' (R6) already clamped by the previous iteration:
-
-  208: frame1: R6=3Dscalar(...,umax32=3D4088,var_off=3D(0x0; 0xff8))
-  208: (67) r7 <<=3D 6                ; R7=3Dscalar(...,umax32=3D3968,var=
-_off=3D(0x0; 0xfc0))
-  209: (bf) r1 =3D r9                 ; R1=3Dmem(id=3D54,sz=3D4036,imm=3D=
-4)
-  210: (0f) r1 +=3D r7
-  211: (69) r1 =3D *(u16 *)(r1 +62)   ; R1=3Dscalar(...,umax32=3D0xffff,v=
-ar_off=3D(0x0; 0xffff))
-  212: (04) w1 +=3D 7                 ; R1=3Dscalar(...,umax32=3D0x10006,=
-var_off=3D(0x0; 0x1ffff))
-  213: (54) w1 &=3D 131064            ; R1=3Dscalar(...,umax32=3D0x10006,=
-var_off=3D(0x0; 0x1fff8))
-  214: (0c) w1 +=3D w6                ; R1=3Dscalar(...,umax32=3D0x10ffe,=
-var_off=3D(0x0; 0x1fff8))
-                                      R6=3Dscalar(...,umax32=3D4088,var_o=
-ff=3D(0x0; 0xff8))
-  215: (bc) w6 =3D w1                 ; R6=3Dscalar(...,umax32=3D0x10ffe,=
-var_off=3D(0x0; 0x1fff8))
-  216: (26) if w1 > 0xff8 goto pc+1 ; R6=3Dscalar(...,umax32=3D4088,var_o=
-ff=3D(0x0; 0xff8))
-  217: (05) goto pc-27
-
-This makes the loop body a fixpoint. 'off' (w6) enters at 208 as [0, 4088=
-] with
-var_off=3D(0x0; 0xff8); the increment computed at 212/213 is [0, 0x10006]=
-, so
-214/215 leave it at [0, 0x10ffe]; then 216 truncates it straight back to
-[0, 4088]/(0x0; 0xff8), and only then is the back edge at 217 taken.
-Convergence no longer depends on the widening window above. Verification =
-converges
-at iterator depth 3.
-
-  [1] https://github.com/llvm/llvm-project/pull/216436
-
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- tools/testing/selftests/bpf/progs/task_local_data.bpf.h | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/task_local_data.bpf.h b/to=
-ols/testing/selftests/bpf/progs/task_local_data.bpf.h
-index 0df8a12fd61e..a31a399870be 100644
---- a/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
-+++ b/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
-@@ -61,6 +61,7 @@
- #define TLD_ROUND_UP(x, y) ((((x) - 1) | TLD_ROUND_MASK(x, y)) + 1)
-=20
- #define TLD_MAX_DATA_CNT (__PAGE_SIZE / sizeof(struct tld_metadata) - 1)
-+#define TLD_DATA_SIZE (__PAGE_SIZE - sizeof(__u64))
-=20
- #ifndef TLD_NAME_LEN
- #define TLD_NAME_LEN 62
-@@ -189,6 +190,8 @@ static int __tld_fetch_key(struct tld_object *tld_obj=
-, const char *name, int i_s
- 			return start + off;
-=20
- 		off +=3D TLD_ROUND_UP(metadata[i].size, 8);
-+		if (off > TLD_DATA_SIZE)
-+			break;
- 	}
-=20
- 	return -cnt;
---=20
-2.53.0-Meta
+I'll respin with enum, thanks to taking a look.
+> 
+>>>
+>>> then in definition of metrics array you can use explicit
+>>>
+>>> [METRIC_CYCLES] = { .name = "cycles", ... },
+>>> [METRIC_INSNS] = { .name = "instructions", ..., .ratio_metric = METRIC_CYCLES }
+>>>
+>>>
+>>> makes everything consistent, explicit, easier to follow, wdyt?
+>>>
+>>> pw-bot: cr
+>>>
+>>>
+>>>>                         printf("# %8.2f %-30s",
+>>>> -                              val->counter * metrics[m].ratio_mul /
+>>>> -                              metrics[r].val.counter,
+>>>> +                              val->counter * metrics[m].ratio_mul / ratio,
+>>>>                                metrics[m].ratio_desc);
+>>>>                 } else {
+>>>>                         printf("%-41s", "");
+>>>>
+>>>> ---
+>>>> base-commit: 23ff631b3b8b1452dfe933ee21f96321a9c5e209
+>>>> change-id: 20260827-bpftool_cyles_per_run-93169fcb30b7
+>>>>
+>>>> Best regards,
+>>>> --
+>>>> Mykyta Yatsenko <yatsenko@meta.com>
+>>>>
+>>
 
