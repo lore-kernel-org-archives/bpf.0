@@ -1,35 +1,55 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C4903AE6F7
-	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 17:51:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E66C7381EB9;
+	Fri, 28 Aug 2026 17:52:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787939463; cv=none; b=Gnm1MkYD0FP3N50O/ZD+tCxQ/dMFjt1CfHQyKkGjQup2MDdZxjpJA7AmzHg5dR5RndTFCX13zUq2odrQYbNQkDHJWq16ZN2Ma+4Nqr16JbuWCgNRpseN1ZWT03cMWzpAa4+Ti2CjXgId3688UXlfNs+0dOHdT0Do2r1D125TW58=
+	t=1787939558; cv=none; b=qFX9XDxfrIjarqu6icCIxwLv+ibc4oD8k+xI4Ea6R3VTpGdE2wlWp5i524hD+4WYZcit/dunhO2XD3Uyc02qKwxp1zPFCOcWfG7/YliXAL0DgERPTqrURZetN/FfW/Y/G+b8+Jguw+t4tbVDB86e5WaYWpM/3BAKE1NPmXz/GVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787939463; c=relaxed/simple;
-	bh=8/6oK4kiB7VyEoRMCGmT8c3AYiR28TT1Uz5hYfeqXfk=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=ZadhCNEsisM84Y0Yx+sLKRj68ub4hYnyCfH9omKBlkJl0ZLyj2EaPjtujAv8p+Fxzw5xgNnqVOANytWI+xjtBCYNMJvSnirpXVp3Ja2gsLr11nSgjOPH2RRcrMUOiG9d1pCLqqQ974x/OniHg8MCUw23JAfULyvnRrYpTKjJdEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F9mW3JuV; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787939558; c=relaxed/simple;
+	bh=5GZWTRj7yplohetEmsgkZZyftn52XJ69moZ1IMxtf5Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=MQ/K5OHcze/WmiIKo/j1FumNhuNQZY9lzUjr/nC7yCjQonqEOWSbeNN/GQDdPml/6CiAAGOtDGx9NXOT6eSKc6eVxmNvbjSfVVcZ3PUwbht0naWO9AW5Pp9ud1o6e2Jo+WUAzLW64KXuULtoJlpUDVj9mWN1xFynVg3flpYfvW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=ptq8wGC9; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F9mW3JuV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E3F91F000E9;
-	Fri, 28 Aug 2026 17:51:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787939462;
-	bh=DnNgoIAlJcNsgoRlt1J8QxWmRKSi++0nX4Mc9KTzWtQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=F9mW3JuV8XJNyuays4N4jLYBN0WmCciEM7idZ2+nMs9v3XzvCtEh48olmaFmTmahs
-	 dvEqlr80d/XoMjrK2W9Q+LOsiqfzzb66CO4/8ux7dTjUPPuaWV4Ajm4xe/zQer4N/2
-	 LHPR8Yw7WacMlEKJLeIX9if9SblKFbU8QxVx1DUU0R1BRBviFZkqLA5uxGYELn9VmU
-	 dhkBAVv0HmqVOv9nMIUArocn1kxgqRRLCuSoV9pRR7TwQvonGa5lamYZLREKWOcbxG
-	 0EdgH5J5j31n3a7NU9MII7AxvecuQMqH1WDfnYurVT4WZ9La8s1opMtU5BmaA8T8Cm
-	 aGLYTNTFffe4A==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 56922380AA67;
-	Fri, 28 Aug 2026 17:50:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="ptq8wGC9"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=giaGPwAFTktmgiR7kYIsQwUaOPVHTJFYj2+LWiXvA5o=; b=ptq8wGC9pRemA8c3mDb6DaEvOv
+	HGAl9OCuJUX7FhxF34tRlyERTVnbyGFz8WZKZIxwr97/FztgODONSgxvIl9JkAkD1gOI7huoqaJ3K
+	TRPqXtq6hNOKZIjUmHHOLziO4M+iDtdQ3/rq8Q8TKk5H6OL7rIC9TVyeaUsIGTUx3IFHSCeXKKc6s
+	96D0ZdwAECL71cS3qAOnbOaDtzIQh4S0SiXRMad3l2iqDQeWbryxdqBfoz0Uakv0iP8DjfLJk0JsY
+	3GwaCLv2OSlRtSgflI/p/JYxUPhSfSUeRMjHeM6YmSjRwImgimrZtg+kDBjXOguYRpRoHNo4NbYjU
+	GQsFkzsQ==;
+Received: from localhost ([127.0.0.1])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1x00kj-0000bA-2B;
+	Fri, 28 Aug 2026 19:52:33 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: memxor@gmail.com
+Cc: brauner@kernel.org,
+	kpsingh@kernel.org,
+	ast@kernel.org,
+	john.fastabend@gmail.com,
+	a.s.protopopov@gmail.com,
+	bpf@vger.kernel.org,
+	dhowells@redhat.com,
+	jarkko@kernel.org,
+	keyrings@vger.kernel.org
+Subject: [PATCH bpf-next v4 06/11] selftests/bpf: Rebuild signed lskels when signing key changes
+Date: Fri, 28 Aug 2026 19:52:22 +0200
+Message-ID: <20260828175227.1537793-7-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260828175227.1537793-1-daniel@iogearbox.net>
+References: <20260828175227.1537793-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,47 +57,31 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf 1/2] bpf: don't downgrade half-dead scalar zero spills
- to
- STACK_ZERO
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178793940689.2709471.3309560614561309281.git-patchwork-notify@kernel.org>
-Date: Fri, 28 Aug 2026 17:50:06 +0000
-References: 
- <20260827-bug-011-cleanfunc-stack-zero-simple-v1-v1-1-c0e996589a52@gmail.com>
-In-Reply-To: 
- <20260827-bug-011-cleanfunc-stack-zero-simple-v1-v1-1-c0e996589a52@gmail.com>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com,
- yonghong.song@linux.dev, memxor@gmail.com, npc@anthropic.com
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28106/Fri Aug 28 08:27:08 2026)
 
-Hello:
+The signing key is regenerated whenever verify_sig_setup.sh changes,
+but the signed light skeletons only depend on the BPF object and on
+bpftool, not on the key they are signed with. Thus, add the certificate
+as a prereq so a new key forces the skeletons to be signed again.
 
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ tools/testing/selftests/bpf/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu, 27 Aug 2026 15:48:23 -0700 you wrote:
-> states.c:__clean_func_state() can downgrade scalar zero spill to
-> STACK_ZERO in the following case:
-> 
->   *(u64 *)(r10 - 8) = 0;
->   ... checkpoint ...
->   r1 = *(u32 *)(r10 - 4);
->   ... no reads from r10-8 ...
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf,1/2] bpf: don't downgrade half-dead scalar zero spills to STACK_ZERO
-    https://git.kernel.org/bpf/bpf/c/2f3536bff882
-  - [bpf,2/2] selftests/bpf: half-dead scalar zero stack spill test
-    https://git.kernel.org/bpf/bpf/c/c6ff14f1cd9e
-
-You are awesome, thank you!
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 5f1a3bfc0569..05b3ee64290f 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -663,7 +663,7 @@ $(TRUNNER_BPF_LSKELS): %.lskel.h: %.bpf.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
+ 	}) && \
+ 	rm -f $$(<:.o=.llinked1.o) $$(<:.o=.llinked2.o) $$(<:.o=.llinked3.o)
+ 
+-$(TRUNNER_BPF_LSKELS_SIGNED): %.lskel.h: %.bpf.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
++$(TRUNNER_BPF_LSKELS_SIGNED): %.lskel.h: %.bpf.o $(BPFTOOL) $(VERIFICATION_CERT) | $(TRUNNER_OUTPUT)
+ 	$(Q)$(if $(PERMISSIVE),if [ ! -f $$< ]; then			\
+ 		$$(RM) $$@;						\
+ 		printf '  %-12s %s\n' 'SKIP-SKEL' '$$(notdir $$@)' 1>&2; \
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.0
 
