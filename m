@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-154.mta0.migadu.com [91.218.175.154])
+Received: from mta0.migadu.com (out-244.mta0.migadu.com [91.218.175.244])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6930137EFF4
-	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 18:10:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBBEB3B71D1
+	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 18:21:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.244
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787940619; cv=none; b=h9U8AVUottglQzLAtLG235zqP4I/mrds5kB58aASd1tqCq2lFOOpvtSgM43MXLLrcCcl3dGwMER/ygMVlRYE1qkdfeHsTA5G3frbwkkADu80IBNnTmypGoFrmmB9DVHS/MFqD+3Rtdvv509FSd6exdxUk3EQev7HceHC/QUntbA=
+	t=1787941279; cv=none; b=CDre4rctnquRRxYg6W76EN2KQxO7Ayl+YHLZjQuuT0bA5TbL3IMGRSinQEiM2z2uzT+6+5g8pktsGQ1/56ufXS+v8zUIIw0xGi5DS/A9r5cchhBn8Qbu+T9K0t/BW/VQq1cmBZ/ZZmZnoaBgHP2nQSXTS9qxOEBfp25mq6e0FEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787940619; c=relaxed/simple;
-	bh=0jAntp/k5frMlwWOXtwiJhAaoLyOUrRRAzcIFD6dJfU=;
+	s=arc-20240116; t=1787941279; c=relaxed/simple;
+	bh=nBH3qiBd4ZDhbHEDSGRL9W0vIATCIRGCA9kijbwtm4s=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UpoumCXxbOUO9OCn0+NrGM33IaM2ojfqzGw6gPDX6OZF7KHI06cYIeDkGF6wxO4brld2eFo/HiI+kc8CjxSF1AewEFXqZfOi3bdTOIB9PVHUY1+jlsJaOEPEZjfWYqfgZTdDx7tKXaZwnkSrE10p5BdV93WbH9GH+bY6Cao4m7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZnSESBlt; arc=none smtp.client-ip=91.218.175.154
+	 In-Reply-To:Content-Type; b=jXCQQn5TIgDdJlMyGkHpvUQho/IOu3BqKeD4GRAFcEYvS2Xo9ILuaZEL0HK5EZwgtDsmgO6aCVOI4jDqBKnlIu+GozGxcgDhiAsMyziWilfCFJ+WtBNhkloisctZX1EiWWuLYuH3NKpHzoH2KZiSssnzCF/wrGi5uwsbNgbMElM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ssm90vHe; arc=none smtp.client-ip=91.218.175.244
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZnSESBlt"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ssm90vHe"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=0jAntp/k5frMlwWOXtwiJhAaoLyOUrRRAzcIFD6dJfU=;
+DKIM-Signature: a=rsa-sha256; bh=nBH3qiBd4ZDhbHEDSGRL9W0vIATCIRGCA9kijbwtm4s=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787940615; v=1; x=1788545415;
- b=ZnSESBltoXNRd/l1zOp3s8gpPsJYvW1Wub4Zv8/fGBhhPkA0KVUNutGEKx1k0KzU0XagoSBH
- etaLi62vFrmWwaicm8R84lqPrylKOxmC4eIlaEkIgcjMn8ex6OUwXcdF676787XDIwybygrAR//
- hsCXGmqpnObBUVIuabiE4Knw=
+ t=1787941274; v=1; x=1788546074;
+ b=ssm90vHeS/jBMxRcBZO8KeZ6O+yu2mELQU1wFBd0d9nSNDM2LkAUThC0VUJyyOIha2snUKny
+ mlRuLzZ53ThnRxGN4GXsqlPEo2uiVwQxwsMXXAjbUJ2EFs+qxb6XKWiMbTG+4ZLnG5PzZnENR15
+ Vq1ZlQbC0F/0N60MoAOlQ0Ec=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 6a2f8667b8884629;
-	Fri, 28 Aug 2026 18:10:15 +0000
-X-Mizu-Trace-ID: 6a2f8667b8884629
+Received: by smtp.migadu.com with ESMTPS id 8d71022c6d759fc0;
+	Fri, 28 Aug 2026 18:21:04 +0000
+X-Mizu-Trace-ID: 8d71022c6d759fc0
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <47573fc4-be5c-44bf-b307-b1528eae196c@linux.dev>
-Date: Fri, 28 Aug 2026 11:10:10 -0700
+Message-ID: <30814c10-1db6-45f1-8a22-5adb7af78a58@linux.dev>
+Date: Fri, 28 Aug 2026 11:20:56 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,88 +38,102 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 07/11] bpf: Allow arena pointers in a by-value
- kfunc return
+Subject: Re: [PATCH bpf-next v3 08/11] selftests/bpf: Check the member named
+ for an unsupported kfunc return type
 Content-Language: en-GB
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260827061114.2514603-1-yonghong.song@linux.dev>
- <20260827061150.2518572-1-yonghong.song@linux.dev>
- <20260827065558.C91891F000E9@smtp.kernel.org>
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org, clm@meta.com,
+ ihor.solodrai@linux.dev
+References: <20260827061155.2518937-1-yonghong.song@linux.dev>
+ <a029d698010cf5a0306af0758d0b2d9454903521e299f0c84bc0c26864618168@mail.kernel.org>
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260827065558.C91891F000E9@smtp.kernel.org>
+In-Reply-To: <a029d698010cf5a0306af0758d0b2d9454903521e299f0c84bc0c26864618168@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 8/26/26 11:55 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+On 8/27/26 12:04 AM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c b/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c
+>> index f10e5cf6fd890..e9c82df8efb26 100644
+>> --- a/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c
+>> +++ b/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c
+> [ ... ]
 >
-> Pre-existing issues:
-> - [High] Kfuncs returning structs by value can leak uninitialized kernel stack memory via struct padding.
-> --
+>> @@ -72,6 +74,7 @@ __naked int aggregate_ret_kfunc_fastcall_fail(void)
+>>   SEC("tc")
+>>   __arch_x86_64 __arch_arm64
+>>   __failure __msg("is not composed of scalars or arena pointers")
+>> +__msg("member 'p' has type PTR")
+>>   __naked int aggregate_ret_kfunc_ptr_fail(void)
+> [ ... ]
 >
-> commit a43266e4517bac02a4bb85149655178eefda72ad
-> Author: Yonghong Song <yonghong.song@linux.dev>
+>> @@ -84,6 +87,37 @@ __naked int aggregate_ret_kfunc_ptr_fail(void)
+>>   	: __clobber_all);
+>>   }
+>>
+>> +SEC("tc")
+>> +__arch_x86_64 __arch_arm64
+>> +__failure __msg("is not composed of scalars or arena pointers")
+>> +__msg("member 'in.p' has type PTR")
+>> +__naked int aggregate_ret_kfunc_nested_ptr_fail(void)
+> [ ... ]
 >
-> bpf: Allow arena pointers in a by-value kfunc return
+>> +SEC("tc")
+>> +__arch_x86_64 __arch_arm64
+>> +__failure __msg("max struct nesting depth exceeded")
+>> +__naked int aggregate_ret_kfunc_too_deep_fail(void)
+>> +{
+>> +	asm volatile (
+>> +	"r1 = 0;"
+>> +	"call %[bpf_kfunc_call_test_ret_deep];"
+>> +	"r0 = 0;"
+>> +	"exit;"
+>> +	:
+>> +	: __imm(bpf_kfunc_call_test_ret_deep)
+>> +	: __clobber_all);
+>> +}
+> A subsystem pattern flags this as potentially concerning: the commit
+> message states the third case covers "a type nested deeper than the
+> walk descends, which has no single member to blame and reports the
+> depth instead." But the test's only assertion, __msg("max struct
+> nesting depth exceeded"), pins a string that predates the series.
 >
-> This commit allows by-value struct returns from kfuncs to contain arena
-> pointers, in addition to scalars. An arena pointer has no provenance to lose
-> and can be cast by the program, so returning it as a scalar is safe.
+> Looking at the verifier code, the depth report text ' It nests structs
+> more than %d levels deep.' was added by commit b99471ca9c385, and
+> unlike the member case there is no verbose() counterpart for it - it
+> is only emitted through bpf_diag_program_structure(). This diagnostic
+> output is reachable to __msg since libbpf retries a failed load at
+> log_level 1.
 >
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 967ad010b3222..9a36808136c9a 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -14119,13 +14119,17 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->>   
->>   		/*
->>   		 * The returned struct comes back as raw register bits modeled
->> -		 * as an unknown scalar, so it must contain only scalars:
->> -		 * otherwise a pointer field would be laundered into a scalar
->> -		 * and escape provenance and reference tracking.
->> +		 * as an unknown scalar, so a pointer member would be laundered
->> +		 * into a scalar and escape provenance and reference tracking.
->> +		 * Only scalars and arena pointers are allowed: an arena pointer
->> +		 * has no provenance to lose, since a program may already derive
->> +		 * one from any scalar with addr_space_cast(), which confines the
->> +		 * result to the arena.
->>   		 */
->> -		if (!btf_struct_member_walk(env, desc_btf, t, BTF_MEMBER_SCALAR, 0, &path)) {
->> +		if (!btf_struct_member_walk(env, desc_btf, t,
->> +					    BTF_MEMBER_SCALAR | BTF_MEMBER_ARENA_PTR, 0, &path)) {
-> [Severity: High]
-> This is a pre-existing issue, but does returning structs by value from kfuncs
-> leak uninitialized kernel stack memory via struct padding?
+> If the new path->too_deep assignment and the entire 'if (path.too_deep)'
+> branch were deleted, path.depth would still be 0 (the too-deep return
+> bypasses the bad_member/bad_path labels), member_note would stay "",
+> and nothing else would change in the log. The test would still pass even
+> though the new behavior was not present.
 >
-> When a BPF program calls a kfunc that returns a struct by value (up to 16
-> bytes) containing padding bytes, the C compiler leaves the padding bytes
-> uninitialized in the return registers (e.g., RAX/RDX on x86-64).
+> The two sibling tests don't have this problem - 'member 'p' has type
+> PTR' and 'member 'in.p' has type PTR' are both new strings from
+> b99471ca9c385 and directly verify that the kernel names the member
+> correctly. The too_deep test also omits the __msg("is not composed of
+> scalars or arena pointers") anchor that both siblings carry, so it does
+> not even pin that the failure came from the kfunc-return path.
 >
-> The verifier's check_kfunc_call() processes this using btf_struct_member_walk()
-> which ignores padding. The code then calls mark_kfunc_ret_regs() which
-> unconditionally marks the entire return registers as fully initialized
-> scalar values:
->
-> kernel/bpf/verifier.c:mark_kfunc_ret_regs() {
->      ...
->      mark_reg_unknown(env, regs, ret_regs[0]);
->      if (nregs == 1)
->          return nregs;
->
->      for (i = 1; i < nregs; i++) {
->          mark_reg_unknown(env, regs, ret_regs[i]);
->      }
->      ...
-> }
->
-> Can a BPF program then read these registers and exfiltrate the uninitialized
-> padding bytes (e.g., via BPF maps)?
+> Would adding an assertion on the depth diagnostic text plus the anchor
+> message make the case more discriminating?
 
-We should be okay. Based on type, the return register will do proper narrowing
-e.g., zeroing out the upper 32bit value, etc.
+I would like to keep it as is. For path.too_deep, we do not need to
+have member names. The user only needs to take a look at the top
+struct which is already available.
 
 >
+> [ ... ]
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33045482525
 
