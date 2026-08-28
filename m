@@ -1,240 +1,174 @@
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 882061C69D;
-	Fri, 28 Aug 2026 04:27:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF0DE3914E5
+	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 04:33:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787891251; cv=none; b=EtP+CLEJFyTNjq4O/BHKJqJdQmGl9vuJVqFH6iWZdGnI4AuVZbSssTy72b0bkSlHDuehilohznRh2YEMWT/2+iVxnglgx80pvdMVbj6MUBvEyB5TgKitVpKo5vPaa5Oz+nU8lYun91abqFn2zD42hHCbfStPYDdtLBwWPL7vWZo=
+	t=1787891611; cv=none; b=G4Zeyf7+G+/IZ6ib2as49MNd5Iw/MsZiCPyGHFlbdDVIxGbGDefxBao9yQufyBh9uPE64mTcyjnL/Uy5czJJ+jnlRmlWMy2k468aPVBZkmpdnulnuAYGJqqFSXSKi8S0510BOi3r8Z7gQPNGa3RFCLoqHKJDxenihSBufpks3fE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787891251; c=relaxed/simple;
-	bh=ack64tm/a65e5S9d7si+oM3iJIytD5JYoRJG2M1VUnE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=O9VhssaWnZuxkiYfOJm4VhrHNCuPEmOlVZrNkQHmxfjQu9ukP7Hrn+13uPENVZVm9E7yYJfK2Qm6TPBKbGxJYXRPuPcVIwntt1dlKYMCVwnD3tOWI+VSLNLXskYFNSyzRSFeOnHEUf3xOa3v6qw1j0aGVIM/eyBAoQzDBi5Nc58=
+	s=arc-20240116; t=1787891611; c=relaxed/simple;
+	bh=h7NHupRRHcBXgS1u09CDaObGl1zCdCGlz0WmHK2DQro=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=Y1d5DZgCL6v6YAJNWxTSe83cCR1i9QXWWs4597HDXDpiNCapnEqbkjGl04ZgT9zMqQYw3z5lw+xkBsxtqqceWju3u/LR7WUx4/6jY9GkziPDkhtFqKUhov7+w9h7MFdWenn77Uw/7VLkpoHZ1oXCihfhMI75fDuCi6CDgoZ/DLY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
 Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8Cxf9MoDpFqLPoFAA--.16790S3;
-	Fri, 28 Aug 2026 12:27:20 +0800 (CST)
-Received: from linux.localdomain (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJDxTs8kDpFq2hgVAA--.42199S2;
-	Fri, 28 Aug 2026 12:27:17 +0800 (CST)
+	by gateway (Coremail) with SMTP id _____8BxbdKWD5FqgvoFAA--.17108S3;
+	Fri, 28 Aug 2026 12:33:26 +0800 (CST)
+Received: from [10.130.40.83] (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJCx9cyUD5FqDRoVAA--.14463S2;
+	Fri, 28 Aug 2026 12:33:25 +0800 (CST)
+Subject: Re: [PATCH bpf-next v1 07/14] bpf, loongarch: Fix stack arguments for
+ indirect trampolines
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Huacai Chen <chenhuacai@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Eduard Zingerman <eddyz87@gmail.com>, Emil Tsalapatis
+ <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ kkd@meta.com, kernel-team@meta.com, loongarch@lists.linux.dev,
+ Hengqi Chen <hengqi.chen@gmail.com>
+References: <20260821233516.3426127-1-memxor@gmail.com>
+ <20260821233516.3426127-8-memxor@gmail.com>
 From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: loongarch@lists.linux.dev,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v1] selftests/bpf: Add test for indirect struct_ops trampoline
-Date: Fri, 28 Aug 2026 12:27:15 +0800
-Message-ID: <20260828042715.16546-1-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
+Message-ID: <a5d4c26c-6735-8af1-1d3f-fe7f1898b285@loongson.cn>
+Date: Fri, 28 Aug 2026 12:33:24 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <20260821233516.3426127-8-memxor@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJDxTs8kDpFq2hgVAA--.42199S2
+X-CM-TRANSID:qMiowJCx9cyUD5FqDRoVAA--.14463S2
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW3Gw43Ww43XFy8uFW5tF4kKrX_yoWxWryfpa
-	y8Aw1YyF48JrWDWFyxXa1UZF4Sgws3Z3yUGFWDG3s5ua4fX34DJF18tFySyr95W39Yvr13
-	A3ZYkr98ua1xZ3cCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+X-Coremail-Antispam: 1Uk129KBj93XoWxXw15Jw43uFy3XFW7KFWDWrX_yoWrWw4rpF
+	4v9Fs3CF48JrW8K3Z7uayUuFySvFs3Z3y3Gr4DJFyrCas8ury8GF1rK3ZI9F98GrnYvw1x
+	ZrsYvws0vFWUA3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
 	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
 	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
-	twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
-	8JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
-	6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
-	AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
-	0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
-	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AK
-	xVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcpBTUUUUU
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+	xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q
+	6rW5McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
+	1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxG
+	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14
+	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4U
+	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jr9NsUUU
+	UU=
 
-Add a test case to verify that arguments passed on the stack are correctly
-read by indirect struct_ops trampoline. This test ensures the correctness
-of stack offsets on architectures like LoongArch and RISC-V.
+Cc: loongarch@lists.linux.dev
+Cc: Hengqi Chen <hengqi.chen@gmail.com>
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
-This is to test the following two patches:
+On 2026/8/22 上午7:35, Kumar Kartikeya Dwivedi wrote:
+> LoongArch passes arguments beyond a0-a7 at the caller stack pointer. The
+> trampoline store_args() helper always reads those arguments at FP + 16,
+> which is correct for an fentry trampoline: its prologue leaves FP 16 bytes
+> below the stack pointer at trampoline entry after accounting for the saved
+> parent and traced-function frames.
+> 
+> A struct_ops indirect trampoline is entered through a function pointer and
+> only saves its own RA and FP before setting FP to the entry stack pointer.
+> Its stack arguments therefore start at FP, not FP + 16. As a result, every
+> stack-passed struct_ops argument is currently read two slots late.
+> 
+> Select the source offset based on whether the trampoline is indirect. This
+> also prepares the stack-passed arena argument path to consume the actual
+> pointer slot.
+> 
+> Fixes: c9ebe2016de9 ("LoongArch: BPF: Support up to 12 function arguments for trampoline")
+> Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
+> Cc: Huacai Chen <chenhuacai@kernel.org>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
+>   arch/loongarch/net/bpf_jit.c | 9 +++++----
+>   1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+> index 29c281bef28e..d193293a0fd2 100644
+> --- a/arch/loongarch/net/bpf_jit.c
+> +++ b/arch/loongarch/net/bpf_jit.c
+> @@ -1662,17 +1662,18 @@ int bpf_arch_text_invalidate(void *dst, size_t len)
+>   	return ret;
+>   }
+>   
+> -static void store_args(struct jit_ctx *ctx, int nr_arg_slots, int args_off)
+> +static void store_args(struct jit_ctx *ctx, int nr_arg_slots, int args_off, bool is_struct_ops)
+>   {
+> +	int stack_args_off = is_struct_ops ? 0 : 16;
+>   	int i;
+>   
+>   	for (i = 0; i < nr_arg_slots; i++) {
+>   		if (i < LOONGARCH_MAX_REG_ARGS)
+>   			emit_insn(ctx, std, LOONGARCH_GPR_A0 + i, LOONGARCH_GPR_FP, -args_off);
+>   		else {
+> -			/* Skip slots for T0 and FP of traced function */
+> +			/* Skip the saved T0 and FP slots for a traced function. */
+>   			emit_insn(ctx, ldd, LOONGARCH_GPR_T1, LOONGARCH_GPR_FP,
+> -				  16 + (i - LOONGARCH_MAX_REG_ARGS) * 8);
+> +				  stack_args_off + (i - LOONGARCH_MAX_REG_ARGS) * 8);
+>   			emit_insn(ctx, std, LOONGARCH_GPR_T1, LOONGARCH_GPR_FP, -args_off);
+>   		}
+>   		args_off -= 8;
+> @@ -1995,7 +1996,7 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
+>   	func_meta = nr_arg_slots;
+>   	emit_store_stack_imm64(ctx, LOONGARCH_GPR_T1, -func_meta_off, func_meta);
+>   
+> -	store_args(ctx, nr_arg_slots, args_off);
+> +	store_args(ctx, nr_arg_slots, args_off, is_struct_ops);
+>   
+>   	if (bpf_fsession_cnt(tnodes)) {
+>   		/* clear all session cookies' value */
 
-bpf, riscv: Fix stack-passed arguments for indirect trampolines
-https://lore.kernel.org/bpf/20260821233516.3426127-3-memxor@gmail.com/
+According to the suggestion from bot+bpf-ci, adding the following
+comment before "int stack_args_off = is_struct_ops ? 0 : 16;" and
+removing the pre-existing comment inside the else branch would be
+much better:
 
-bpf, loongarch: Fix stack arguments for indirect trampolines
-https://lore.kernel.org/bpf/20260821233516.3426127-8-memxor@gmail.com/
+/*
+  * Regular fentry trampolines need to skip the 16-byte saved T0 and FP
+  * slots of the traced function. Indirect struct_ops trampolines place
+  * incoming stack arguments directly at FP.
+  */
 
- .../prog_tests/test_struct_ops_trampoline.c   | 41 +++++++++++++++++++
- .../bpf/progs/struct_ops_trampoline.c         | 24 +++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    | 18 ++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.h    |  5 +++
- 4 files changed, 88 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/test_struct_ops_trampoline.c
- create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_trampoline.c
+This clarifies both frame layouts without causing any ambiguity
+inside the loop.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_trampoline.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_trampoline.c
-new file mode 100644
-index 000000000000..5a21aedd02fc
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_trampoline.c
-@@ -0,0 +1,41 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include "struct_ops_trampoline.skel.h"
-+
-+#if defined(__loongarch__) || defined(__riscv)
-+static void run_struct_ops_trampoline(void)
-+{
-+	struct struct_ops_trampoline *skel;
-+	struct bpf_link *link;
-+	int err;
-+
-+	skel = struct_ops_trampoline__open();
-+	if (!ASSERT_OK_PTR(skel, "struct_ops_trampoline__open"))
-+		return;
-+
-+	err = struct_ops_trampoline__load(skel);
-+	if (!ASSERT_OK(err, "struct_ops_trampoline__load"))
-+		goto cleanup;
-+
-+	link = bpf_map__attach_struct_ops(skel->maps.testmod_trampoline);
-+	if (!ASSERT_OK_PTR(link, "attach_struct_ops"))
-+		goto cleanup;
-+
-+	ASSERT_OK(trigger_module_test_read(256), "trigger_read");
-+
-+	ASSERT_EQ(skel->bss->got_arg9, 9999, "check_stack_passed_arg9");
-+
-+	bpf_link__destroy(link);
-+cleanup:
-+	struct_ops_trampoline__destroy(skel);
-+}
-+#endif
-+
-+void test_struct_ops_trampoline(void)
-+{
-+#if defined(__loongarch__) || defined(__riscv)
-+	run_struct_ops_trampoline();
-+#else
-+	test__skip();
-+#endif
-+}
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_trampoline.c b/tools/testing/selftests/bpf/progs/struct_ops_trampoline.c
-new file mode 100644
-index 000000000000..b0fc19a2a0c5
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_trampoline.c
-@@ -0,0 +1,24 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <vmlinux.h>
-+#include <bpf/bpf_tracing.h>
-+#include "../test_kmods/bpf_testmod.h"
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+__u64 got_arg9 = 0;
-+
-+SEC("struct_ops/test_trampoline")
-+int BPF_PROG(test_trampoline, int arg1, int arg2, int arg3,
-+			      int arg4, int arg5, int arg6,
-+			      int arg7, int arg8, int arg9)
-+{
-+	got_arg9 = arg9;
-+
-+	return 0;
-+}
-+
-+SEC(".struct_ops.link")
-+struct bpf_testmod_ops testmod_trampoline = {
-+	.test_trampoline = (void *)test_trampoline,
-+};
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 850cf4f830c4..be96bbc1b7c0 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -589,6 +589,9 @@ noinline int bpf_testmod_trampoline_count_test(void)
- 	return 0;
- }
+Other than that, the code looks good to me:
+
+Acked-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+
+By the way, I wrote a selftest for this patch:
+
+   selftests/bpf: Add test for indirect struct_ops trampoline
  
-+struct bpf_testmod_ops;
-+static struct bpf_testmod_ops *st_ops_trampoline;
-+
- noinline ssize_t
- bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 		      const struct bin_attribute *bin_attr,
-@@ -637,6 +640,9 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 
- 	bpf_testmod_test_struct_ops3();
- 
-+	if (st_ops_trampoline && st_ops_trampoline->test_trampoline)
-+		st_ops_trampoline->test_trampoline(1, 2, 3, 4, 5, 6, 7, 8, 9999);
-+
- 	struct_arg3 = kmalloc((sizeof(struct bpf_testmod_struct_arg_3) +
- 				sizeof(int)), GFP_KERNEL);
- 	if (struct_arg3 != NULL) {
-@@ -1619,6 +1625,10 @@ static int bpf_testmod_ops_init_member(const struct btf_type *t,
- 		((struct bpf_testmod_ops *)kdata)->data = ((struct bpf_testmod_ops *)udata)->data;
- 		return 1;
- 	}
-+
-+	if (member->offset == offsetof(struct bpf_testmod_ops, test_trampoline) * 8)
-+		st_ops_trampoline = (struct bpf_testmod_ops *)kdata;
-+
- 	return 0;
- }
- 
-@@ -1694,6 +1704,13 @@ bpf_testmod_ops__test_return_ref_kptr(int dummy, struct task_struct *task__ref,
- 	return NULL;
- }
- 
-+static int bpf_testmod_ops__test_trampoline(int arg1, int arg2, int arg3,
-+					    int arg4, int arg5, int arg6,
-+					    int arg7, int arg8, int arg9)
-+{
-+	return arg9;
-+}
-+
- static struct bpf_testmod_ops __bpf_testmod_ops = {
- 	.test_1 = bpf_testmod_test_1,
- 	.test_2 = bpf_testmod_test_2,
-@@ -1701,6 +1718,7 @@ static struct bpf_testmod_ops __bpf_testmod_ops = {
- 	.test_refcounted = bpf_testmod_ops__test_refcounted,
- 	.test_refcounted_multi = bpf_testmod_ops__test_refcounted_multi,
- 	.test_return_ref_kptr = bpf_testmod_ops__test_return_ref_kptr,
-+	.test_trampoline = bpf_testmod_ops__test_trampoline,
- };
- 
- struct bpf_struct_ops bpf_bpf_testmod_ops = {
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
-index 210b919290cc..a5349d09ce55 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
-@@ -46,6 +46,11 @@ struct bpf_testmod_ops {
- 	struct task_struct *(*test_return_ref_kptr)(int dummy, struct task_struct *task,
- 						    struct cgroup *cgrp);
- 
-+	/* Used to test indirect struct_ops trampolines stack-passed arguments (>8 args). */
-+	int (*test_trampoline)(int arg1, int arg2, int arg3,
-+			       int arg4, int arg5, int arg6,
-+			       int arg7, int arg8, int arg9);
-+
- 	/* The following fields are used to test shadow copies. */
- 	char onebyte;
- 	struct {
--- 
-2.42.0
+https://lore.kernel.org/bpf/20260828042715.16546-1-yangtiezhu@loongson.cn/
+
+Without this patch:
+
+   $ sudo ./test_progs -t struct_ops_trampoline
+   ...
+   run_struct_ops_trampoline:FAIL:check_stack_passed_arg9 unexpected 
+check_stack_passed_arg9: actual 69570864 != expected 9999
+   #471     struct_ops_trampoline:FAIL
+   Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
+
+With this patch:
+
+   $ sudo ./test_progs -t struct_ops_trampoline
+   #471     struct_ops_trampoline:OK
+   Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+
+Tested-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+
+Thanks,
+Tiezhu
 
