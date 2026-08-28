@@ -1,42 +1,42 @@
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 849BC2222D0;
-	Fri, 28 Aug 2026 09:21:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0248D38A71F;
+	Fri, 28 Aug 2026 09:21:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787908902; cv=none; b=u1R777+G11cobaIy7WvXIgyuEhrGuJm56PJQQK9IAjN/Xwje7yHPkHorU8dxPMh4Bj6D4KHtV5pefHhK5o02/KAhexayUY6KEtX/9DRarNLZKUFqYABRGXpnymocgm095nfnt18upoUn3Y4Va+JnFjMupO8AW2jG9VfUGM7ocQQ=
+	t=1787908905; cv=none; b=XgnbDaAKphU8y0sZbV2GBdp4snKOSl1EE/T1X0YpwAcpy2U91WAYWGw08bM9f29VxFUyUDQMYU0rUlsuYi+sW9Hqk/QqEnsZ24HVuJZ6Q7SIxAtI1fAo3tfXmyKG18S/D5I03yv1HD/+VyBr4FYv/DBSvpwpt9zzmW8FukvPIiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787908902; c=relaxed/simple;
-	bh=SDvaatbfmEA+vfyHK4YcbtonP+OlhZ1Hh2EBVjlAfnk=;
+	s=arc-20240116; t=1787908905; c=relaxed/simple;
+	bh=jSjqnEjEvuQnQwX7yweb6DtlKEx0KFxAn86uhGRYxsI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=JBJLrUItesfuUFf2Lv4+YaR3ygDk1eZ/lvDqHdMLzyFgwR+JbNlcxg01fb9iy6jX1dZcL2QN/YaioXoJLUBbIEoJ7aMaQw2Zpcrr6e9eZqE7cv95IYg7+Pr/wphXnByw5R6QPiNSZiNHv5bqAP4Wxck5BpwNiglENl5IucOuHL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=VJj8cvTf; arc=none smtp.client-ip=185.246.84.56
+	 In-Reply-To:To:Cc; b=WQPL3GJGs9D1HPp7QkA8XrVc//mGcT28HeSvgM3zZeDz4yTrmjf16Yy+UvdbzkOKIvueoBTvhgm/iZVZdtdyK2CKRgkT4sxAtIf3hAZXtPEtxLhrqcz3Z0jI4dFIZ7oVPFh7qhFBb/n3bJ0JX+oMUov59vmkHVcs3xASH2DCpgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OP3nHJ2E; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="VJj8cvTf"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OP3nHJ2E"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 1BA0F1A189D;
-	Fri, 28 Aug 2026 09:21:39 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 7E6621A189E;
+	Fri, 28 Aug 2026 09:21:42 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id E2F4260537;
-	Fri, 28 Aug 2026 09:21:38 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id EA27011C78028;
-	Fri, 28 Aug 2026 11:21:33 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 5098C60537;
+	Fri, 28 Aug 2026 09:21:42 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9137A11C780F2;
+	Fri, 28 Aug 2026 11:21:37 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1787908897; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1787908900; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=WxeXPzFv/YBLi+eYLUJvJ0rhe5kb0FsKi0VdfTKstTA=;
-	b=VJj8cvTfNG9QgkrFPtWFdQ3VOc9rL//ZE9+JCzIQImHrwtXRb4iVS2hU6s81JIqdXh41AI
-	yENn/MJSqfU10/LxT+faP9yL0z+S0eVAK3DPxs7v3DzztYZ9GejmgiKpxFgKZ0VaYj7FbU
-	BSehSVCooQHHJHHrA9dwF1v+Tew1HZKVTMTTiT2kbAA7me9V/9XxDQo2/lvHS+C5qZxWEB
-	A3W0gRb5if4zIIiyebqWT1q+rdZgRTl4OvNALE9VWMrLO8bHTfEySkl345eBrglmFWwT4a
-	KOM65osgLZRVGHMFZjxFjbOex0MZuVoS/aL2WWyPvAkT7PKc9EHUIsFQn+/WJg==
+	bh=Z47DVY5KVWDEsqbpMvVS2kqV12oBsCbbDYaTACaYdRo=;
+	b=OP3nHJ2EdJvVvF+7MkVFmPshKwVbRQiZqzz6xiZrCJB7mP4rEwW41RS7Z2KvUjmJCdBOkp
+	cfoeq1epbyNDzyWFocmOdDKX9Msqi4mUpCtYwZ3Pta97nmvJr0dHqjdUlSbTiF8HMfT85W
+	9EwV3I2uOV8vvdy1/ogy/W8zx5HHgwyCDuwLqpWCmSvENt1jKfDbZhngqQZB0+XiH6jQCr
+	h5iraXW0KRg6KwlomEcHYfwZOFKd78ZxytVEczd7izh5UcQmsMi3xjVDuIbzcwXIu9xq4H
+	4mJyXx1hfBdqVMkE7DqEk5aeLzI9cyDehA4M1RAXPyKyPJx3sd6UjngJzdOHjg==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Fri, 28 Aug 2026 11:21:10 +0200
-Subject: [PATCH bpf-next v8 2/8] bpf: add BPF_JIT_KASAN for KASAN
- instrumentation of JITed programs
+Date: Fri, 28 Aug 2026 11:21:11 +0200
+Subject: [PATCH bpf-next v8 3/8] bpf, x86: refactor BPF_ST management in
+ do_jit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260828-kasan-v8-2-7c1c0fdb9d7f@bootlin.com>
+Message-Id: <20260828-kasan-v8-3-7c1c0fdb9d7f@bootlin.com>
 References: <20260828-kasan-v8-0-7c1c0fdb9d7f@bootlin.com>
 In-Reply-To: <20260828-kasan-v8-0-7c1c0fdb9d7f@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -70,69 +70,146 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.15.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-Add a new Kconfig option CONFIG_BPF_JIT_KASAN that automatically enables
-generic KASAN (Kernel Address SANitizer) memory access checks for
-JIT-compiled BPF programs as well, when both KASAN (and more
-specifically, generic KASAN with KASAN_VMALLOC) and JIT compiler are
-enabled. This new Kconfig is not a user selectable one: it is
-automatically enabled if KASAN is enabled on a compatible platform. When
-enabled, the JIT compiler will emit shadow memory checks before memory
-loads and stores to detect use-after-free or out-of-bounds accesses at
-runtime. The option is gated behind HAVE_EBPF_JIT_KASAN, as it needs
-proper arch-specific implementation.
+In order to prepare for KASAN checks insertion before every
+memory-related load or store, group all BPF_ST instructions that indeed
+access memory in a single helper to allow instrumenting those in one
+call, rather than having to instrument all cases individually.
 
-Acked-by: Andrey Konovalov <andreyknvl@gmail.com>
 Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
-Changes in v6:
-- fix commit msg
-- get rid of "if KASAN" when setting default value, already implied by
-  KASAN_GENERIC
+Changes in v7:
+- align dst_reg type with same type as other emit helpers
+- fix line wrapping
+- add missing doc on top of new helper
+- remove unneeded cast
 
-Changes in v4:
-- reorganize dependencies (Andrey)
-- drop VMAP_STACK dependency
-
-Changes in v2:
-- add dependency on kasan for vmalloc and vmalloc'ed stack
+Changes in v3:
+- new patch
 ---
- kernel/bpf/Kconfig | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ arch/x86/net/bpf_jit_comp.c | 98 +++++++++++++++++++++++++++------------------
+ 1 file changed, 59 insertions(+), 39 deletions(-)
 
-diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
-index eb3de35734f0..d7d25477ef48 100644
---- a/kernel/bpf/Kconfig
-+++ b/kernel/bpf/Kconfig
-@@ -17,6 +17,10 @@ config HAVE_CBPF_JIT
- config HAVE_EBPF_JIT
- 	bool
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 48429fae0641..13ba3232993a 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -1315,6 +1315,63 @@ static void emit_st_index(u8 **pprog, u32 size, u32 dst_reg, u32 index_reg, int
+ 	*pprog = prog;
+ }
  
-+# KASAN support for JIT compiler
-+config HAVE_EBPF_JIT_KASAN
-+	bool
++/* ST: *(u8*)(dst_reg + off) = imm */
++static void emit_st(u8 **pprog, struct bpf_insn *insn, u32 dst_reg,
++		    s32 outgoing_arg_base, u16 outgoing_rsp)
++{
++	s32 imm32 = insn->imm;
++	u8 *prog = *pprog;
++	s32 insn_off;
 +
- # Used by archs to tell that they want the BPF JIT compiler enabled by
- # default for kernels that were compiled with BPF JIT support.
- config ARCH_WANT_DEFAULT_BPF_JIT
-@@ -101,4 +105,17 @@ config BPF_LSM
- 
- 	  If you are unsure how to answer this question, answer N.
- 
-+config BPF_JIT_KASAN
-+	bool
-+	depends on HAVE_EBPF_JIT_KASAN
-+	depends on KASAN_GENERIC
-+	depends on KASAN_VMALLOC
-+	depends on BPF_JIT
-+	default y
-+	help
-+	  Makes JIT compiler insert generic outline KASAN checks in BPF
-+	  programs when they are inserted in the kernel. This feature is
-+	  automatically enabled if the needed set of KASAN and BPF
-+	  configuration options is enabled.
++	switch (BPF_SIZE(insn->code)) {
++	case BPF_B:
++		if (is_ereg(dst_reg))
++			EMIT2(0x41, 0xC6);
++		else
++			EMIT1(0xC6);
++		break;
++	case BPF_H:
++		if (is_ereg(dst_reg))
++			EMIT3(0x66, 0x41, 0xC7);
++		else
++			EMIT2(0x66, 0xC7);
++		break;
++	case BPF_W:
++		if (is_ereg(dst_reg))
++			EMIT2(0x41, 0xC7);
++		else
++			EMIT1(0xC7);
++		break;
++	case BPF_DW:
++		if (dst_reg == BPF_REG_PARAMS && insn->off == -8) {
++			/* Arg 6: store immediate in r9 register */
++			emit_mov_imm64(&prog, X86_REG_R9, imm32 >> 31, imm32);
++			*pprog = prog;
++			return;
++		}
++		EMIT2(add_1mod(0x48, dst_reg), 0xC7);
++		break;
++	}
 +
- endmenu # "BPF subsystem"
++	insn_off = insn->off;
++	if (dst_reg == BPF_REG_PARAMS) {
++		/*
++		 * Args 7+: reverse BPF negative offsets to
++		 * x86 positive rsp offsets.
++		 * BPF off=-16 → [rsp+0], off=-24 → [rsp+8], ...
++		 */
++		insn_off = outgoing_arg_base - outgoing_rsp - insn_off - 16;
++		dst_reg = BPF_REG_FP;
++	}
++	if (is_imm8(insn_off))
++		EMIT2(add_1reg(0x40, dst_reg), insn_off);
++	else
++		EMIT1_off32(add_1reg(0x80, dst_reg), insn_off);
++
++	EMIT(imm32, bpf_size_to_x86_bytes(BPF_SIZE(insn->code)));
++	*pprog = prog;
++}
++
+ static void emit_st_r12(u8 **pprog, u32 size, u32 dst_reg, int off, int imm)
+ {
+ 	emit_st_index(pprog, size, dst_reg, X86_REG_R12, off, imm);
+@@ -2250,49 +2307,12 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+ 			EMIT_LFENCE();
+ 			break;
+ 
+-			/* ST: *(u8*)(dst_reg + off) = imm */
+ 		case BPF_ST | BPF_MEM | BPF_B:
+-			if (is_ereg(dst_reg))
+-				EMIT2(0x41, 0xC6);
+-			else
+-				EMIT1(0xC6);
+-			goto st;
+ 		case BPF_ST | BPF_MEM | BPF_H:
+-			if (is_ereg(dst_reg))
+-				EMIT3(0x66, 0x41, 0xC7);
+-			else
+-				EMIT2(0x66, 0xC7);
+-			goto st;
+ 		case BPF_ST | BPF_MEM | BPF_W:
+-			if (is_ereg(dst_reg))
+-				EMIT2(0x41, 0xC7);
+-			else
+-				EMIT1(0xC7);
+-			goto st;
+ 		case BPF_ST | BPF_MEM | BPF_DW:
+-			if (dst_reg == BPF_REG_PARAMS && insn->off == -8) {
+-				/* Arg 6: store immediate in r9 register */
+-				emit_mov_imm64(&prog, X86_REG_R9, imm32 >> 31, (u32)imm32);
+-				break;
+-			}
+-			EMIT2(add_1mod(0x48, dst_reg), 0xC7);
+-
+-st:			insn_off = insn->off;
+-			if (dst_reg == BPF_REG_PARAMS) {
+-				/*
+-				 * Args 7+: reverse BPF negative offsets to
+-				 * x86 positive rsp offsets.
+-				 * BPF off=-16 → [rsp+0], off=-24 → [rsp+8], ...
+-				 */
+-				insn_off = outgoing_arg_base - outgoing_rsp - insn_off - 16;
+-				dst_reg = BPF_REG_FP;
+-			}
+-			if (is_imm8(insn_off))
+-				EMIT2(add_1reg(0x40, dst_reg), insn_off);
+-			else
+-				EMIT1_off32(add_1reg(0x80, dst_reg), insn_off);
+-
+-			EMIT(imm32, bpf_size_to_x86_bytes(BPF_SIZE(insn->code)));
++			emit_st(&prog, insn, dst_reg, outgoing_arg_base,
++				outgoing_rsp);
+ 			break;
+ 
+ 			/* STX: *(u8*)(dst_reg + off) = src_reg */
 
 -- 
 2.55.0
