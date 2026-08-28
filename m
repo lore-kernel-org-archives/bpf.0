@@ -1,202 +1,284 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F7D2F7F14;
-	Fri, 28 Aug 2026 10:17:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8B223F1048;
+	Fri, 28 Aug 2026 10:30:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787912259; cv=none; b=UQbb26nO+NkiRCSXB3XnBYtTNkUpC5T8OetAHe3LI6imdu2jGwu/VvQhBKAU2caaGDaclhJ558kRdTl/qtj8uHQkZspESmSx/yBqQe0Am5AI2hQXIzaPjgPKW8w2LylgL8E6loWUW1jjr5kIUo49AuNvew8F65SFowv8wRoC1rw=
+	t=1787913035; cv=none; b=nqw6fVyixa6CCUUpFIjeGIH2GEZ9T7DeCVK6PS6uNJndxkqDYd77Xx0gU4NW7FML56QngMmQ93f+9CjS5eqzrqrRwCJXNa1C2Y+Bm2yU3nzGfDgZFTlEjcysT+OdciNHuEwdqi1pt+LfroW3rxNk80FAGmvxcmQ+3HerDcsQuuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787912259; c=relaxed/simple;
-	bh=FUz9qI4QA7NVnVb09W6JnVtOxrKl1kV43wQRKQ/gPpE=;
+	s=arc-20240116; t=1787913035; c=relaxed/simple;
+	bh=Wlt+2CO99ZmXhyR+lCIewkmzP6HA+pE7Y3qrqbEPgXk=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=rQgnx5Z/35jqslDhtsxK0zFvwR5pJktxhaNx/M1Sf1eK3gnS89DJaEs/+Nd9MLu5XtIoK0jsqAwJKB5CfrDPIu4m4HsWiYH69DJwQ9qWMiw/1S/mo/d9PiWTQHgECaBkj+08jODyJ5bRTPwb8gizfCYiCaXBCOdEh/raryHwRFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TgSMR+Ly; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=ag5KyU3+GSpmCHti9P0G4boEuOYePxQjXHozSYC3QRssihS1ubNoCBDBTxYNAihTpDURCv7JTZcUFkLGclTyGSMTbzb422oCRXIpR0k4ggJZngNPKd/+L8oULQYwsCwsTYsL2nJi+lgrbA06z/1fh0g9u0fdBWv98tHcE7HDBes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kjtdcSO0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TgSMR+Ly"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E3041F000E9;
-	Fri, 28 Aug 2026 10:17:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kjtdcSO0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C52D31F000E9;
+	Fri, 28 Aug 2026 10:30:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787912257;
-	bh=/jaJov8w0VZZHNFMIEwScO1SDzSxdnaOoSHGPvPT/SU=;
+	s=k20260515; t=1787913033;
+	bh=RmJoucMctLRMuSUCsTwyUyIfYdguA9J4mgZCdQkjssE=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=TgSMR+LyVmGApETjSmznJ8EbqHcGygCfbOINSxm3pJgc31+tjOkYyBq7vciWKNDEy
-	 M63n2M90Adoet1BkiTEbB/hnfo83cbUGKK0hTS4sHrtnFkBO5pYx9vw1xs2yr3u6jj
-	 /47lSN7D00sTFMzGqG2OKMvOhPKagex/q5P1BL2mFxZ61ZfSP5Uo4iZ7hQ+u7B7gsg
-	 hP8g/xkHpWQNDzA3ftX8uRA++A/rSYhtvHc3ToZFBgIqnNVLuyiS1nOe/Hgasj+hfT
-	 /VOxP/ZXvdpCrappQ7+8c8vD71V7lZ0xqy/muSZSxfVao/0sPzOKfYECz3Xzx8aJEt
-	 e8i63SEw6Z5Xg==
-Content-Type: multipart/mixed; boundary="===============7473488389980377832=="
+	b=kjtdcSO0eP3Ok+JpjhQBBk2wSSquCcZM1MorQKfp71kYqmIu4yy90QSGbCweHX6np
+	 wIJ9vL2irQndar13q7VvRzJ6S/tgl3O1iPQ6OL2vCb0mu15URfUAb2cJOu/oeM1OpY
+	 mPapHns22xSDbyd6flFln6YxBGla+QWEChfXjVUj7w5jMLCi5SOgK2a/aGMt6d/cec
+	 v8XhM2N8gOSPS24h+YjBpkqSCOtla9KL5RV2tuV+XOMDLlPenN8zk3cHwu5INk4dDP
+	 3TD9qN8mDBpf83SnTa98tOQWY4Zs6y9GqMP5ZOtk2FSXduT3STRjoZ5LwncC6JHqxT
+	 BenLbKFH3L+gg==
+Content-Type: multipart/mixed; boundary="===============4366746843011688961=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <8705b5a092f5086b25a31ee0cb9d2a7a46105a013c003eed257950207463b210@mail.kernel.org>
-In-Reply-To: <20260828093142.179856-2-jiayuan.chen@linux.dev>
-References: <20260828093142.179856-2-jiayuan.chen@linux.dev>
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: Add test for key-less BTF hash map
+Message-Id: <25c4fc03d83c879c13ac1df190046881f7f969ffa532b904597ca9947c750d53@mail.kernel.org>
+In-Reply-To: <20260828-kasan-v8-4-7c1c0fdb9d7f@bootlin.com>
+References: <20260828-kasan-v8-4-7c1c0fdb9d7f@bootlin.com>
+Subject: Re: [PATCH bpf-next v8 4/8] bpf, x86: emit KASAN checks in x86 JITed programs
 From: bot+bpf-ci@kernel.org
-To: jiayuan.chen@linux.dev,bpf@vger.kernel.org
-Cc: jiayuan.chen@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,yatsenko@meta.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 28 Aug 2026 10:17:37 +0000 (UTC)
+To: alexis.lothore@bootlin.com,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,tglx@kernel.org,bp@alien8.de,dave.hansen@linux.intel.com,x86@kernel.org,hpa@zytor.com,shuah@kernel.org,mingo@redhat.com,andreyknvl@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,laoar.shao@gmail.com
+Cc: ebpf@linuxfoundation.org,bastien.curutchet@bootlin.com,thomas.petazzoni@bootlin.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,alexis.lothore@bootlin.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 28 Aug 2026 10:30:32 +0000 (UTC)
 
---===============7473488389980377832==
+--===============4366746843011688961==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_map_keyless.c b/tools/testing/selftests/bpf/prog_tests/btf_map_keyless.c
-> new file mode 100644
-> index 000000000000..6e1496cbd8bf
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_map_keyless.c
-> @@ -0,0 +1,69 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#define _GNU_SOURCE
-> +#include <test_progs.h>
-> +#include <bpf/btf.h>
-
-This isn't a bug, but tools/testing/selftests/bpf/prog_tests/btf.c already
-has a table-driven harness for map-creation-rejection cases. do_test_raw()
-(around btf.c:4519-4530) does:
-
-    opts.btf_key_type_id = test->key_type_id;
-    opts.btf_value_type_id = test->value_type_id;
-    map_fd = bpf_map_create(test->map_type, test->map_name, ...);
-    err = ((map_fd < 0) != test->map_create_err);
-
-and struct btf_raw_test already carries .map_type, .key_size, .value_size,
-.max_entries, .key_type_id, .value_type_id and .map_create_err, with six
-existing .map_create_err = true entries already in that table. A key-less
-hash/rhash case could be two more rows in that table rather than a new file.
-Is there a reason to create a new file instead of adding cases to the
-existing test?
-
-> +
-> +/*
-> + * A key-less BTF (btf_key_type_id == 0) is only meant for array maps. A hash
-> + * map with one used to NULL-deref in btf_type_show() when dumped via bpffs.
-> + * A fixed kernel rejects such a map at creation; on an unfixed kernel the
-> + * pin-and-read below deliberately walks that bpffs dump path, so running this
-> + * test on an unfixed kernel panics it.
-> + */
-> +static void check_keyless(int map_type, __u32 map_flags, int btf_fd, int val_id)
-> +{
-> +	const char *path = "/sys/fs/bpf/keyless_map";
-> +	LIBBPF_OPTS(bpf_map_create_opts, opts);
-> +	__u32 key = 1, val = 0x41424344;
-> +	char buf[256];
-> +	int map_fd;
-> +	FILE *f;
-> +
-> +	opts.map_flags = map_flags;
-> +	opts.btf_fd = btf_fd;
-> +	opts.btf_key_type_id = 0;
-> +	opts.btf_value_type_id = val_id;
-> +	map_fd = bpf_map_create(map_type, "keyless_map", 4, 4, 8, &opts);
-> +
-> +	if (map_fd >= 0) {
-> +		/* Unfixed kernel: reproduce the oops via the bpffs dump path. */
-> +		(void)bpf_map_update_elem(map_fd, &key, &val, 0);
-> +		if (bpf_obj_pin(map_fd, path) == 0) {
-> +			f = fopen(path, "r");
-> +			if (f) {
-> +				while (fgets(buf, sizeof(buf), f))
-> +					;
-> +				fclose(f);
-> +			}
-> +			unlink(path);
-> +		}
-> +		close(map_fd);
-> +	}
-
-Does this block execute the kernel NULL-deref before the assertion can fail?
-
-On any kernel lacking the companion fix f763f12b26fc ("bpf: Fix
-NULL-ptr-deref when dumping a key-less BTF hash map") -- every kernel before
-this series, any tree bisected between patch 1 and patch 2, and any backport
-that takes the selftest without the kernel hunk -- bpf_map_create() succeeds,
-so map_fd >= 0 and the block runs. It inserts an element, pins the map into
-bpffs, and then reads the pin, which walks exactly the path quoted in the
-fix's own splat:
-
-  seq_read -> map_seq_show (kernel/bpf/inode.c)
-           -> htab_map_seq_show_elem (kernel/bpf/hashtab.c)
-           -> btf_type_seq_show
-           -> btf_type_show (kernel/bpf/btf.c:8229)
-
-with map->btf_key_type_id == 0, where btf_type_by_id() yields &btf_void and
-kind_ops[BTF_KIND_UNKN] is NULL, so btf_type_ops(t)->show is a
-NULL-pointer read.
-
-That is an in-kernel oops in process context: the reading task (the
-test_progs process, or one of its -j workers) is killed, so ASSERT_EQ()
-below never executes and the harness reports a dead process rather than a
-clean subtest failure. On any host booted with panic_on_oops (the norm for
-BPF CI / syzkaller configs; tools/testing/selftests/bpf/config.ppc64el
-already sets panic_on_warn=1 in CONFIG_CMDLINE) the machine panics and the
-remainder of the test_progs run is lost.
-
-ASSERT_EQ(map_fd, -EINVAL, ...) below already fails on an unfixed kernel,
-because an unfixed kernel returns a valid fd instead of -EINVAL. On a fixed
-kernel this block is unreachable. A selftest should detect the regression,
-not trigger it; should the pin-and-read block be dropped (or at most gated
-behind an explicit opt-in)?
-
-> +
-> +	ASSERT_EQ(map_fd, -EINVAL, "key-less create is rejected");
-
-Does this assertion pass for the right reason?
-
--EINVAL is the generic BPF_MAP_CREATE rejection code, so this passes for
-many reasons that have nothing to do with the key-less BTF check being
-present.
-
-Concretely for the "rhash" subtest: on any kernel that does not know
-BPF_MAP_TYPE_RHASH (the map type is new in this tree; the selftest is built
-from tools/include/uapi/linux/bpf.h, not from the running kernel's),
-find_and_alloc_map() returns ERR_PTR(-EINVAL) because bpf_map_types[type] is
-NULL or type is out of range. The subtest then passes without ever reaching
-rhtab_map_check_btf().
-
-Likewise, rhtab_map_alloc_check() returns -EINVAL for a missing
-BPF_F_NO_PREALLOC / bad map_extra, and map_check_btf() returns -EINVAL if
-the value type size ever stops matching value_size (4). Any of these makes
-the subtest a green tick that pins nothing.
-
-Is there a positive control? The test never asserts that the same
-bpf_map_create() call succeeds when btf_key_type_id is set to a real type
-id. Adding that (or checking for the create-time BTF log / distinguishing
-the failure source) is what separates "the kernel rejected a key-less hash
-map" from "the kernel rejected this map for some unrelated reason."
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index 13ba3232993ac..adb62216dd204 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
 
 [ ... ]
 
-The commit message states:
+> @@ -1110,6 +1121,92 @@ static void maybe_emit_1mod(u8 **pprog, u32 reg, bool is64)
+>  	*pprog = prog;
+>  }
+>
+> +static int emit_kasan_check(struct bpf_verifier_env *env, u8 **pprog,
+> +			    u32 addr_reg, struct bpf_insn *insn, u8 *ip,
+> +			    bool is_write)
+> +{
+> +#ifdef CONFIG_BPF_JIT_KASAN
+> +	u32 bpf_size = BPF_SIZE(insn->code);
+> +	s32 off = insn->off;
 
-> Create a hash and an rhash map with btf_key_type_id == 0 and expect
-> bpf_map_create() to fail with -EINVAL. On an unfixed kernel the map is
-> created; the test then pins and reads it back to walk the bpffs dump path,
-> which reproduces the btf_type_show() NULL-deref - so running this test on
-> an unfixed kernel panics it.
+Does emit_kasan_check need to re-read insn->off here rather than taking
+the effective displacement as a parameter? At the BPF_STX | BPF_MEM site
+(line 2458), do_jit() remaps the offset for stack arguments:
 
-Is "panics" accurate? What the traced path actually produces is an oops (a
-NULL function-pointer read in btf_type_show() reached from seq_read() in
-process context), which makes the reading task dead; the box only panics if
-it was booted with panic_on_oops. More importantly, the message presents the
-deliberate crash as the intended behaviour of the test rather than
-justifying why the reproducer is kept in-tree when ASSERT_EQ(map_fd,
--EINVAL) alone already detects the regression. The commit also carries no
-Fixes: tag, which is consistent with it being the selftest half of the
-series, but a reviewer reading it in isolation gets no signal that the test
-will take down a kernel that lacks the companion patch.
+    insn_off = insn->off;
+    if (dst_reg == BPF_REG_PARAMS) {
+        insn_off = outgoing_arg_base - outgoing_rsp - insn_off - 16;
+        dst_reg = BPF_REG_FP;
+    }
+    ...
+    emit_kasan_check(env, &prog, dst_reg, insn, ip, true);
+    emit_stx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn_off);
+
+The check receives the remapped dst_reg (BPF_REG_FP) but re-derives the
+offset from insn->off, so the check validates 'rbp + insn->off' while
+emit_stx() writes to 'rbp + insn_off'.
+
+The BPF_ST | BPF_MEM case (line 2432) has a second issue: the check
+runs before any register remapping, so it is given the raw dst_reg:
+
+    if (!accesses_stack_only) {
+        err = emit_kasan_check(env, &prog, dst_reg, insn, ip, true);
+        ...
+    }
+    emit_st(&prog, insn, dst_reg, outgoing_arg_base, outgoing_rsp);
+
+When dst_reg == BPF_REG_PARAMS (MAX_BPF_REG == 11), emit_st() remaps
+both the register and offset internally, but emit_kasan_check() receives
+the raw value. reg2hex[] has no entry for index 11, so reg2hex[11] == 0
+and EMIT_mov(BPF_REG_1, BPF_REG_PARAMS) encodes 'mov rdi, rax'. The
+check then validates 'rax + insn->off' - RAX being BPF R0, an arbitrary
+program value - while the store goes to the outgoing-argument slot.
+
+In the BPF_DW / insn->off == -8 sub-case of BPF_ST, emit_st() performs
+no memory access at all (the value is materialized into R9), yet a full
+__asan_store8 check is still emitted.
+
+The BPF_LDX path (line 2645) handles this correctly: it remaps to
+BPF_REG_FP before calling emit_kasan_check(), and the incoming-arg case
+skips the check entirely.
+
+Would passing the effective displacement to emit_kasan_check() as an
+explicit parameter fix both the BPF_STX offset mismatch and let the
+BPF_ST path perform the remap before the check?
+
+> +	u8 *prog = *pprog;
+> +	void *kasan_func;
+> +
+> +	if (!env)
+> +		return 0;
+
+[ ... ]
+
+> @@ -1911,10 +2026,12 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+>  		const s32 imm32 = insn->imm;
+>  		u32 dst_reg = insn->dst_reg;
+>  		u32 src_reg = insn->src_reg;
+> +		bool accesses_stack_only;
+>  		u8 b2 = 0, b3 = 0;
+>  		u8 *start_of_ldx;
+>  		s64 jmp_offset;
+>  		s32 insn_off;
+> +		int insn_idx;
+>  		u8 jmp_cond;
+>  		u8 *func;
+>  		int nops;
+> @@ -1931,6 +2048,10 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+>  			EMIT_ENDBR();
+>
+>  		ip = image + addrs[i - 1] + (prog - temp);
+> +		insn_idx = i - 1 + bpf_prog->aux->subprog_start;
+> +		accesses_stack_only =
+> +			env ? !env->insn_aux_data[insn_idx].non_stack_access :
+> +			      false;
+
+This isn't a bug, but when env == NULL, accesses_stack_only is set to
+false ('not stack-only, do instrument'), yet every call site then
+enters emit_kasan_check() which only no-ops because of its own 'if
+(!env) return 0;' guard. Would 'env ? ... : true' make the fail-safe
+default self-evident and avoid depending on emit_kasan_check()'s
+internal guard for correctness?
+
+Also, the '!env' test plus 'insn_idx += aux->subprog_start' is already
+encapsulated by bpf_insn_is_indirect_target() (kernel/bpf/core.c:1646-
+1652). Would a small helper like bpf_insn_accesses_non_stack(env, prog,
+i - 1) keep the arch-independent invariant in one place and let other
+JITs reuse it when they gain KASAN support?
+
+> +
+>  		switch (insn->code) {
+>  			/* ALU */
+
+[ ... ]
+
+> @@ -2311,6 +2432,13 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+>  		case BPF_ST | BPF_MEM | BPF_H:
+>  		case BPF_ST | BPF_MEM | BPF_W:
+>  		case BPF_ST | BPF_MEM | BPF_DW:
+> +			if (!accesses_stack_only) {
+> +				err = emit_kasan_check(env, &prog, dst_reg,
+> +						       insn, ip, true);
+> +				if (err)
+> +					return err;
+> +			}
+> +
+>  			emit_st(&prog, insn, dst_reg, outgoing_arg_base,
+>  				outgoing_rsp);
+>  			break;
+> @@ -2330,6 +2458,12 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+>  				insn_off = outgoing_arg_base - outgoing_rsp - insn_off - 16;
+>  				dst_reg = BPF_REG_FP;
+>  			}
+> +			if (!accesses_stack_only) {
+> +				err = emit_kasan_check(env, &prog, dst_reg,
+> +						       insn, ip, true);
+> +				if (err)
+> +					return err;
+> +			}
+>  			emit_stx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn_off);
+>  			break;
+>
+
+[ ... ]
+
+> @@ -2572,28 +2711,42 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+>  			}
+>  			fallthrough;
+>  		case BPF_STX | BPF_ATOMIC | BPF_W:
+> -		case BPF_STX | BPF_ATOMIC | BPF_DW:
+> -			if (insn->imm == (BPF_AND | BPF_FETCH) ||
+> -			    insn->imm == (BPF_OR | BPF_FETCH) ||
+> -			    insn->imm == (BPF_XOR | BPF_FETCH)) {
+> -				bool is64 = BPF_SIZE(insn->code) == BPF_DW;
+> -				u32 real_src_reg = src_reg;
+> -				u32 real_dst_reg = dst_reg;
+> -				u8 *branch_target;
+> -
+> +		case BPF_STX | BPF_ATOMIC | BPF_DW: {
+> +			bool is64 = BPF_SIZE(insn->code) == BPF_DW;
+> +			u32 real_src_reg = src_reg;
+> +			u32 real_dst_reg = dst_reg;
+> +			u8 *branch_target;
+> +			u8 *pprog;
+> +			bool is_atomic_fetch =
+> +				(insn->imm == (BPF_AND | BPF_FETCH) ||
+> +				 insn->imm == (BPF_OR | BPF_FETCH) ||
+> +				 insn->imm == (BPF_XOR | BPF_FETCH));
+> +			if (is_atomic_fetch) {
+>  				/*
+>  				 * Can't be implemented with a single x86 insn.
+>  				 * Need to do a CMPXCHG loop.
+>  				 */
+>
+>  				/* Will need RAX as a CMPXCHG operand so save R0 */
+> +				pprog = prog;
+>  				emit_mov_reg(&prog, true, BPF_REG_AX, BPF_REG_0);
+>  				if (src_reg == BPF_REG_0)
+>  					real_src_reg = BPF_REG_AX;
+>  				if (dst_reg == BPF_REG_0)
+>  					real_dst_reg = BPF_REG_AX;
+> -
+> +				ip += (prog - pprog);
+> +			}
+> +			if (!bpf_atomic_is_load_store(insn)) {
+> +				if (!accesses_stack_only) {
+> +					err = emit_kasan_check(env, &prog,
+> +							       real_dst_reg,
+> +							       insn, ip, true);
+> +					if (err)
+> +						return err;
+> +				}
+>  				branch_target = prog;
+> +			}
+> +			if (is_atomic_fetch) {
+>  				/* Load old value */
+>  				emit_ldx(&prog, BPF_SIZE(insn->code),
+>  					 BPF_REG_0, real_dst_reg, insn->off);
+
+This isn't a bug, but does the restructured atomic case now make
+branch_target a dead store on the non-fetch paths? branch_target is
+written for every non-load/store atomic (plain BPF_ADD, BPF_XCHG,
+BPF_CMPXCHG without BPF_FETCH) but only read under 'if
+(is_atomic_fetch)'. Would moving 'branch_target = prog;' into the
+following 'if (is_atomic_fetch)' block keep the KASAN check outside the
+retry loop while restoring the definition-next-to-use property?
+
+Also, the new local 'u8 *pprog;' shadows the file-wide convention where
+pprog is the u8 ** out-parameter of every emit_* helper.
+
+> @@ -2625,15 +2778,16 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+>  			}
+>
+>  			if (bpf_atomic_is_load_store(insn))
+> -				err = emit_atomic_ld_st(&prog, insn->imm, dst_reg, src_reg,
+> -							insn->off, BPF_SIZE(insn->code));
+> +				err = emit_atomic_ld_st(env, &prog, insn, ip,
+> +							dst_reg, src_reg,
+> +							accesses_stack_only);
+>  			else
+>  				err = emit_atomic_rmw(&prog, insn->imm, dst_reg, src_reg,
+>  						      insn->off, BPF_SIZE(insn->code));
+>  			if (err)
+>  				return err;
+>  			break;
+> -
+> +		}
+
+[ ... ]
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33161022932
---===============7473488389980377832==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33160000533
+--===============4366746843011688961==--
