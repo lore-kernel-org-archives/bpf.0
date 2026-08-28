@@ -1,218 +1,235 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 006F03F1047
-	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 00:21:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB6EE3F1055
+	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 00:30:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.176
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787876470; cv=pass; b=APs+IiPMT38ItwGzvfXvxdSSHDOuU3T2kiGz+lj9YyHf48KM3kUczJNMMhGGCg+McvxkZSYG9MYvfk0i0VjzJh3pGA9DbnprgtH9aqp0tcWWDagVFc4AYm1+WL3H+3LiaQUX+gGaSi9YDKJLNFLLtnBciRleG11oypak1A85yz0=
+	t=1787877026; cv=pass; b=ApY7SoIqjcgtKl4P4dih4nDeKNbIRlsHtC/fN5QzCLix1Y1aSPLyA7L7+hirfqyrlEaAA2rBascsx1rV4NiKSHZezUe1x3vcvT3Rl+dDY6+RMoD3efQBUx4Nah7UCC+qTdBEwoB7aziwdsS+f9f9gCJQrwycYXT45JvoyRFymOU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787876470; c=relaxed/simple;
-	bh=bjf5Hsz9QIzLA6lvdSDKXAYUwc5cxHnM5lKA+KBX+WQ=;
+	s=arc-20240116; t=1787877026; c=relaxed/simple;
+	bh=E5+XAiyX7pBlr2RwKkPtnwVrgYWfDy7M2WCj45Asnvw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ll4KdIN2hnDNpGrl9has/jR9yW1uRciFsUZPw3XjughL3XAddml1hsCSkgOpPqyxH9hQOz26YrcLsbiQNsIHbk8EStssChLrLEHrJsAd3W9sWSshZr/pEznObZrRrAeQ0KC4FJIn/jTXOdvjmRgEFy3majhE29EphKsrH4u4Ytk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oq/z2bXT; arc=pass smtp.client-ip=209.85.215.179
+	 To:Cc:Content-Type; b=gZ8hhwaKwp7avY/unIlYuBr4fTbXcCV2QaecprbS2oxJvCiVsLyA7nNXUqjNcgMTCydYkPPo8Ihb95yQa/tP7a+A6jW7g5WxVdPe/Cb9NaZr16VdfwK8JTrLzTr5vCvlPALzw7jFib6dxjqY+SBxDYwTXqWlTtqvqfk2RSJSpnw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NMgojzph; arc=pass smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oq/z2bXT"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-cc1c7364550so545566a12.1
-        for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 17:21:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787876468; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NMgojzph"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-8525efa7274so453137b3a.2
+        for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 17:30:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787877024; cv=none;
         d=google.com; s=arc-20260327;
-        b=C7ElGEtOf0TkKwMBBIPKcSwBogFpbRnA6w8ozD0dPGKv4YQWwBRKx+ft0WGL+A7ujU
-         xzyoCbKyEJU5SvEVob+sWSW2SAUsBj/MPpYT5u1JSLc2mgLH335liNsRftRZUwDkB53v
-         9BdeDpmuJtL6zRw5oKBMXIJho9l4j3Wv/w4SFlD59FAsuH5c0SCWgJF1ghMleLc3yfq7
-         xTTT4mn6T8WpVNdCrjUZNJsBCzOyI7OkifBFfbsxnKY76NXg0ZJ7Zgs35ozc1XEV73ut
-         cvXlBMLlfod78vH+2Cpw2tnXazhUqDxLzLTrr80e1qeAjNa1rz268ipwvDAP3y82bJP1
-         ecUg==
+        b=kGEZz7yNx+/Re9z9zNT26wEfvm/TAnprJrhsA7Wf8oUJg1s3/3U0sD0bYk6dZQGKqG
+         3VnAVz5rzHQgOruTjKa6FvoPXTgLQwGkzCyYIZsga2A35DAC7SYMsiZUykvNiOKBPoUD
+         TTB+Z5Sc6kR/oQda32G45tGUPYJvXaidd+0HXsk+W7V1ggeviWHosET3UgXL42Xua2rr
+         M6UUiEq8ybbFC8JnkmEu9Rfw51zbnYaxrU38AGbXn2DcPu1k7Bu4LA44KE9LC9b3xd7y
+         /6snqWZiRSqFENx4da0VgfFVkZZf2ZczAtQ6ekehcRpBc3y+kam/dwVllh2uf9KQZWQN
+         OJWQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=5/M3iuB7vkG6CWTTtd49jF8rSL19O1YOSXS3GGtvJSA=;
-        fh=NFTkP+cRLv4fJhfIHZ+mII7UHhYVOJOhZOM1I9rvRx0=;
-        b=QBT0jnsNG4cOb81F1RrZx2CzUMPzxtCGx+JRHvl1l2fknKscOr+V6GnTSk54i7oQMr
-         DWMxQoogfG7H5drO/myBkQTDsuHrLc6lqkWrVqNprGxbkRZC3s227K6MRVWhX4sts1IS
-         L220kgstHzXaRPyKdA6+vbxj0oNrph45hPSX0LP4ChyXNL66JNx1XuCvhCbS4MOmOpi2
-         o4jQoGvE4Ne6zq+4KodfQjYKsb9bs12T96uZlSV9otTDymOY/k4+ixnnZOIta+OF6VsQ
-         2KdlNZpW5gnu7CDJ1hMLdc4dQmFtz1g8GGsYZ6N4o3oP9tDjWpWvjF+VSTvdPLnh5gXJ
-         REEQ==;
+        bh=xCFhGFwObZD+rpnTFTAWHr3psSvSoRO8scBW6mG+2DQ=;
+        fh=IhN3luBD9UgyHzLP1M9ci3veL00rEY3LMquC5lVUaeY=;
+        b=LtxYlFvO7wwDMVJJe9XCI68cPXAhAO4+4zNKPLfUYTM0IuXLoXzt7Fc8KDsie0/HsQ
+         pxDA5qA/DCI4EO9VuZduo/wvIZ9j1jYPm9KVd1Bd1z3lhHFVPgWieAHeQ2r9LSmkYf/X
+         EjIeND9UqOZJ8/QTxKxK7Z+r7M85cb733CTzs0TFgz/qe5zi6BlCdT+dSbbLqjuwvEGw
+         pBaYNCmpt565/EbwI42gCpYCcrwNXZTnqxZXjydK4E6sNPjp/1YdNNzZFONKcMCoXxzT
+         gW+g+55H7S/P5J+gGGSSKg97t59jHhuPKUvrubDUd27RmFwRMeYI6X2+MO1j5wf/WB2p
+         cB/w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787876468; x=1788481268; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787877024; x=1788481824; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=5/M3iuB7vkG6CWTTtd49jF8rSL19O1YOSXS3GGtvJSA=;
-        b=oq/z2bXTNGFDYjGU5xk33bsrAja1VXKdhrICrNw9fAQcJDmPO+CO6nozUlCmNqFexd
-         1rW6vmH8+t4zItFSlhyZ5/1CmSkz5rfAIMoayZh6nJOYk4sf0DwUEyUi8OlALjWt53D2
-         fuXv9TI7RSDG46ah2JuuAcf1JldT/8SHplRB0jRR7NNQQfLMvvBFy22X/3H247AaKcvR
-         Zm+7v7yVV5xzrrtxXo89sIAS8Ym7nNHjwj2QukVif+nc9KatrvrPm2PqAPWHnSbmmgSQ
-         Pxzl2Zf+65o2s4zuFF44kEYOBSpbpDGJjSOwWQYxUFNG4VJN5d766Rr+C0ddLUlLpX5d
-         xXuw==
+        bh=xCFhGFwObZD+rpnTFTAWHr3psSvSoRO8scBW6mG+2DQ=;
+        b=NMgojzphNLxlb8BDhKFrl0PoL10rtYvuFbc7TlU33j/8Iu4E5b/sIh1mgEzVFstvLv
+         6jCo+s2VoWOm3kVnwPuoYeAkgYrBorwyNH13Jy9q2NoxJO+iJubB0YBHwc5McZ87lKr9
+         uSo8dXHvASxRkIm8mY7MygGXk2YKijI4lEn2Jf/c55MIjxaL4qEkgbfnLgIV3SgaTjG7
+         cbDc6g2YZgYow524pyhJsJpclbJ0IwehhVtXdFKBKis3kQLVbUuKx0j09ImXzZu1Y8Oo
+         zgP0X0cD5sBTx/Khqp+YW+ewpu3VJpKFInW+qp4ZL1HtWhogmbliEtjOz2fizVFQF8Th
+         keww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787876468; x=1788481268;
+        d=1e100.net; s=20251104; t=1787877024; x=1788481824;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=5/M3iuB7vkG6CWTTtd49jF8rSL19O1YOSXS3GGtvJSA=;
-        b=PtpqeEKdk0uI5uupwkcdBknnTqvLTWQdwkpQJieLZFrsDRua/bigvwRr4ya8LKwij5
-         AU1yWZoteXdBrOYTjx2TqNK7iuQJcenm7/FODDULgWfEpBjLAgTx4OpTRWmBUwjprLR5
-         3fMESpKkNKZwEpOzXlUf9FPs9FoOZElLhdQENvsSDsVMVD3uEcMbCxZkNNHjBiOIK2KZ
-         9SY2l/x9UXgauWUqCp1BUa4PMy7tAHUbJWTiJIIbKlEjNHHEMrtsu7NLDsB2HhuSphcH
-         1z3BJWMMtbZr15qcrZ8mlNPFlIK54T1nHJxps7tLOuyv2nUQizOMtbupHKKjplmXwPJl
-         Y2JQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqtcQvCZdPUwQY8+itrP4mbgpNnco01Ke+PcqVHERJxbQSNI7IMfZcv1zPnYgn5TYuSkSo=@vger.kernel.org
-X-Gm-Message-State: AFuF++l1rSj+oDT16g+33IN00Pp4iVGXDWUO00S/uXZ9RF1jV6m32Pzg
-	/x9Tb9lw2xbsVhBisFplb8ERQeTvAuqB+0xDgWQM4h8D4vz0h7j2//A6o8zI8yDuaavb+QfFy7G
-	AZ8mU+SsZAjGuUsqlkztIedekBkJDMro=
-X-Gm-Gg: AR+sD107nz0Y27BIxioQutnxGYGWKwc3XSJuGW2+eUr2NOsw+klwoLjyJhis0/joTdj
-	OP+pPKx6xBpz6q6vvZ4V7jyJQzfE+TGMjWBHQgpd/NB+CSA9Xk3vPT7Q2scCy2gX59P1NnYYs8M
-	rjiWxxm6EOivoxGhYmFh+3HPkaWsmusxeZ7ZiX6E8BW3ohmUEktaYkrnCvMiq/lbbWMtZFINf7+
-	lZNCEQbYot+2muSvNX6+lbb/o8yo0P6SJPLM/XiM8yhzM6epIUtpN4OtL6tP/o/CfJo8S1EcJNY
-	91fC7tjqDZDEvL/yZV1tfT+jfolLg07hEy/4frfOU4ktW2+vOB4If+Aq7sMbo8HGYP+mngbbGLk
-	asHt1HAM8rmumU7r28fuB2ozvag==
-X-Received: by 2002:a05:6a20:258a:b0:3cd:67e9:8565 with SMTP id
- adf61e73a8af0-3d2686a9058mr4249511637.9.1787876468214; Thu, 27 Aug 2026
- 17:21:08 -0700 (PDT)
+        bh=xCFhGFwObZD+rpnTFTAWHr3psSvSoRO8scBW6mG+2DQ=;
+        b=n06Hzus8t+fYSs2OX0qL6aKnlAR5rtyAYUtuMfyyyjoVLneRQUSbCNdijiBG9VXHos
+         YgEKpJzaCw1dc/al5+iyDuOLs3igOK23mr6lX8ghJzfdGFR+J7EOLGyks+09BkseNv2w
+         yNfxWPh+ACmcHW9+7yxmlqyPzTmaiZ1nO4JWq1+MHWP4XTdyDT+E/ik7phZ5W9n5v/35
+         6FoU1OLdBETqeZbzhT5jqn4a4s1nHcpzWxnGRVoVafWpHKsyAamAdo9D1xnwh2EnX5gT
+         BeI+i5Bzc+U8RVx44ppHh85EyNIF2Tm8arRxH3G2sduMFjGXSGg1yNjTKhmEYmsTJmP2
+         sWnw==
+X-Gm-Message-State: AFuF++mu05V8T1XU6NLXPBlv2GULpMG1xq+lEOFQ/i9cCEaJx5HdQvXq
+	Bg5ALTAVnHjd5x7lPw2ziDacOeeMH+C9F7cjRsmYFPjcpE9zHKFlq4bY4LONYGU38t6TAP8s7PC
+	OTA/vDzmSFM7+DRGjeZMc9tiiaAJy57w=
+X-Gm-Gg: AR+sD10xFdOgo4pd9wOPRqCZPIMBgN77MHkvljOJVe9FdEP4yIoXM4TuJ5Kx3WOeLM8
+	+e3DQfaHn669bctJGtbTPsL8yGlbsoG8qGG0bIrNDciNu2vH8MnsZfIJxXA8ZoSrEY41K0J8JQH
+	hcabT4Q4ZxM71J1y/PYsZF5GLC26+9Vy8/r818f6AozWAfwvuV80r9MrxAp0a0nzlt8I4ugdIbx
+	cIT2VfHGPtr0ekWz9KQ1w7YNvbo+ZMq9pvMokxefbGW1ryAdZ4AXvoFm5xdfQqBseUPJ8ZDpQOa
+	th92HWK8egJi0YiaW5LA+WBE9tI2uYO252dL7ZvSTQMYpYyNWy3RcrZLx1Hka1Q+ahbjcZTLhDA
+	2zfwOiNwmBT0vIbwIZFSJeZkpYg==
+X-Received: by 2002:a05:6a00:2888:b0:847:9315:fb8b with SMTP id
+ d2e1a72fcca58-856281ac5dbmr5461316b3a.6.1787877023992; Thu, 27 Aug 2026
+ 17:30:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260827100214.169215-1-toke@redhat.com> <f8413c983b5bbf569125bfa9d12a81f2293adc9905f89d746cc51276c21459ea@mail.kernel.org>
- <87cxv34rsi.fsf@toke.dk>
-In-Reply-To: <87cxv34rsi.fsf@toke.dk>
+References: <20260827-bpftool_cyles_per_run-v1-1-77d7bfc3c065@meta.com>
+In-Reply-To: <20260827-bpftool_cyles_per_run-v1-1-77d7bfc3c065@meta.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 27 Aug 2026 17:20:55 -0700
-X-Gm-Features: AcwNN1UthGpVkmYrvAH5z2HeAW139K55ZeLEO1miPfjporsm5eaIOOJ6W6eK0Ao
-Message-ID: <CAEf4BzaupNE1_svo_zjOB+ccfZWUrAm7s5kJDCMOnMKaZ4Odww@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] libbpf: Move XDP frags flag to prog_flags
-To: =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, 
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
-	emil@etsalapatis.com, ihor.solodrai@linux.dev, davem@davemloft.net, 
-	kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me, 
-	lorenzo@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	martin.lau@kernel.org, clm@meta.com
+Date: Thu, 27 Aug 2026 17:30:11 -0700
+X-Gm-Features: AcwNN1VJRRJUP3ZDoMp1AckvAr1TTjgkpsLFu57Sa4lxQ91tCQroLio_8X0HjCY
+Message-ID: <CAEf4BzaKFk9yu10P9bXOE9i=hD8SO+_XfvPbnEBU7cd+eLDVCw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpftool: Print average cycles per program run in profiler
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com, 
+	memxor@gmail.com, qmo@kernel.org, Mykyta Yatsenko <yatsenko@meta.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 27, 2026 at 6:27=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgensen <t=
-oke@redhat.com> wrote:
+On Thu, Aug 27, 2026 at 8:29=E2=80=AFAM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
 >
-> bot+bpf-ci@kernel.org writes:
+> From: Mykyta Yatsenko <yatsenko@meta.com>
 >
-> >> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> >> index b749c01742ee0..7d6f0fe518d99 100644
-> >> --- a/tools/lib/bpf/libbpf.c
-> >> +++ b/tools/lib/bpf/libbpf.c
-> >
-> > [ ... ]
-> >
-> >> @@ -7879,6 +7877,12 @@ static int tracing_multi_mod_fd(struct bpf_prog=
-ram *prog, int *btf_obj_fd)
-> >>      return 0;
-> >>  }
-> >>
-> >> +static int setup_xdp_frags(struct bpf_program *prog, long cookie)
-> >> +{
-> >> +    prog->prog_flags |=3D BPF_F_XDP_HAS_FRAGS;
-> >> +    return 0;
-> >> +}
-> >
-> > Does storing BPF_F_XDP_HAS_FRAGS in prog->prog_flags here break callers
-> > that use bpf_program__set_flags()?
-> >
-> > bpf_program__set_flags() overwrites rather than OR-ing:
-> >
-> >     int bpf_program__set_flags(struct bpf_program *prog, __u32 flags)
-> >     {
-> >             ...
-> >             prog->prog_flags =3D flags;
-> >     }
-> >
-> > Previously the flag was OR'd into the load-time opts by
-> > libbpf_prepare_prog_load(), so it survived any user manipulation of
-> > prog_flags between open and load. The new code latches it into
-> > prog->prog_flags at open time, so it's lost whenever a caller assigns
-> > prog_flags instead of OR-ing.
+> Total cycle counts are difficult to compare across workloads with
+> different run counts. Report cycles per run to expose the per-invocation
+> cost directly.
 >
-> Making it possible to manipulate the flag after loading is the whole
-> point of the patch, so this is expected. As for users like:
+> Example:
+> sudo ./bpftool prog profile name mprog duration 15 cycles instructions
 >
-> > bpf_object_load_prog() passes prog->prog_flags straight to the kernel:
-> >
-> >     load_attr.prog_flags =3D prog->prog_flags;
-> >
-> > Two in-tree callers do exactly that on SEC("xdp.frags") programs.
-> >
-> > bpftool (tools/bpf/bpftool/prog.c), i.e. 'bpftool prog load FILE PIN
-> > xdpmeta_dev DEV':
-> >
-> >     if (prog_type =3D=3D BPF_PROG_TYPE_XDP && xdpmeta_ifindex) {
-> >             bpf_program__set_flags(pos, BPF_F_XDP_DEV_BOUND_ONLY);
-> >             bpf_program__set_ifindex(pos, xdpmeta_ifindex);
+>             423256 run_cnt
+>          947413975 cycles              #  2238.39 cycles per run
+>          333965846 instructions        #     0.35 insns per cycle
 >
-> ...doing a set_flags without preserving the existing flags will lead to
-> clobbering, that's what's implied by the API? So any users doing that
-> are buggy, I'd argue.
+> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> ---
+>  tools/bpf/bpftool/Documentation/bpftool-prog.rst |  6 ++++--
+>  tools/bpf/bpftool/prog.c                         | 18 +++++++++++-------
+>  2 files changed, 15 insertions(+), 9 deletions(-)
 >
-> > Keeping the load-time 'opts->prog_flags
-> > |=3D BPF_F_XDP_HAS_FRAGS' in addition to the new prog_flags initialisat=
-ion,
-> > or having bpf_program__set_flags() preserve section-implied bits, would=
- give
-> > visibility without breaking existing callers.
+> diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf=
+/bpftool/Documentation/bpftool-prog.rst
+> index 90fa2a48cc26..2280dc4492c0 100644
+> --- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+> +++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+> @@ -217,7 +217,9 @@ bpftool prog run *PROG* data_in *FILE* [data_out *FIL=
+E* [data_size_out *L*]] [ct
+>  bpftool prog profile *PROG* [duration *DURATION*] *METRICs*
+>      Profile *METRICs* for bpf program *PROG* for *DURATION* seconds or u=
+ntil
+>      user hits <Ctrl+C>. *DURATION* is optional. If *DURATION* is not spe=
+cified,
+> -    the profiling will run up to **UINT_MAX** seconds.
+> +    the profiling will run up to **UINT_MAX** seconds. When **cycles** i=
+s
+> +    selected, plain output also reports the average number of cycles per
+> +    program run.
 >
-> Both of these options will still make it impossible to turn off the
-> frags bit after loading the object. I guess we could do the "preserve
-> section-implied bits" part and add an explicit
-> bpf_program__clear_flags() to remove everything. What do others think?
+>  bpftool prog help
+>      Print short help message.
+> @@ -360,7 +362,7 @@ EXAMPLES
+>  ::
 >
-> >>  /* this is called as prog->sec_def->prog_prepare_load_fn for libbpf-s=
-upported sec_defs */
-> >>  static int libbpf_prepare_prog_load(struct bpf_program *prog,
-> >>                                  struct bpf_prog_load_opts *opts, long=
- cookie)
-> >>  @@ -7892,9 +7896,6 @@ static int libbpf_prepare_prog_load(struct bpf_=
-program *prog,
-> >>      if (def & SEC_SLEEPABLE)
-> >>              opts->prog_flags |=3D BPF_F_SLEEPABLE;
-> >>
-> >> -    if (prog->type =3D=3D BPF_PROG_TYPE_XDP && (def & SEC_XDP_FRAGS))
-> >> -            opts->prog_flags |=3D BPF_F_XDP_HAS_FRAGS;
-> >> -
-> >
-> > Should setup_xdp_frags() keep a program type guard?
+>           51397 run_cnt
+> -      40176203 cycles                                                 (8=
+3.05%)
+> +      40176203 cycles          # 781.68 cycles per run                (8=
+3.05%)
+>        42518139 instructions    #   1.06 insns per cycle               (8=
+3.39%)
+>             123 llc_misses      #   2.89 LLC misses per million insns  (8=
+3.15%)
 >
-> No, the setup callback callback is called too early for this to make
-> sense. However:
+> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+> index a9f730d407a9..8935508f955b 100644
+> --- a/tools/bpf/bpftool/prog.c
+> +++ b/tools/bpf/bpftool/prog.c
+> @@ -2069,9 +2069,9 @@ struct profile_metric {
+>         bool selected;
 >
-> > The trigger requires a deliberate retype, but the guard removal is a
-> > behaviour change that the changelog does not mention. If the flag is me=
-ant
-> > to be XDP-only, should setup_xdp_frags() keep the type test or should
-> > bpf_program__set_type() drop the bit when moving away from
-> > BPF_PROG_TYPE_XDP?
+>         /* calculate ratios like instructions per cycle */
+> -       const int ratio_metric; /* 0 for N/A, 1 for index 0 (cycles) */
+> +       const int ratio_metric; /* 0 for run_cnt, 1 for index 0 (cycles) =
+*/
+>         const char *ratio_desc;
+> -       const float ratio_mul;
+> +       const double ratio_mul;
+>  } metrics[] =3D {
+>         {
+>                 .name =3D "cycles",
+> @@ -2080,6 +2080,9 @@ struct profile_metric {
+>                         .config =3D PERF_COUNT_HW_CPU_CYCLES,
+>                         .exclude_user =3D 1,
+>                 },
+> +               .ratio_metric =3D 0,
+> +               .ratio_desc =3D "cycles per run",
+> +               .ratio_mul =3D 1.0,
+>         },
+>         {
+>                 .name =3D "instructions",
+> @@ -2256,17 +2259,18 @@ static void profile_print_readings_plain(void)
+>         for (m =3D 0; m < ARRAY_SIZE(metrics); m++) {
+>                 struct bpf_perf_event_value *val =3D &metrics[m].val;
+>                 int r;
+> +               __u64 ratio;
 >
-> Clearing the type-specific flags on type change could make sense. I can
-> add that in v2 if others agree?
+>                 if (!metrics[m].selected)
+>                         continue;
+>                 printf("%18llu %-20s", val->counter, metrics[m].name);
+>
+> -               r =3D metrics[m].ratio_metric - 1;
+> -               if (r >=3D 0 && metrics[r].selected &&
+> -                   metrics[r].val.counter > 0) {
+> +               r =3D metrics[m].ratio_metric;
+> +               /* r =3D=3D 0 is a special case for run_cnt */
+> +               ratio =3D r ? metrics[r - 1].val.counter : profile_total_=
+count;
+> +               if (metrics[m].ratio_desc && ratio) {
 
-no, let's not.
+this ratio_desc-based thing looks suspect. We used to check .selected,
+why did you change this?
 
-But instead of making this XDP-specific custom callback, let's have a
-generic default libbpf setup callback that will do the same for
-BPF_F_SLEEPABLE, seems a fair game (and technically will allow to
-dynamically downgrade sleepable to non-sleepable, if there is ever any
-good reason to do that)
+And tbh, this whole ratio_metric would be much better done with enum,
+where you can have -1 as "NO_METRIC", -2 as "RUN_CNT", 0 - cycles, 1 -
+instructions, and so on.
+
+then in definition of metrics array you can use explicit
+
+[METRIC_CYCLES] =3D { .name =3D "cycles", ... },
+[METRIC_INSNS] =3D { .name =3D "instructions", ..., .ratio_metric =3D METRI=
+C_CYCLES }
+
+
+makes everything consistent, explicit, easier to follow, wdyt?
 
 pw-bot: cr
 
+
+>                         printf("# %8.2f %-30s",
+> -                              val->counter * metrics[m].ratio_mul /
+> -                              metrics[r].val.counter,
+> +                              val->counter * metrics[m].ratio_mul / rati=
+o,
+>                                metrics[m].ratio_desc);
+>                 } else {
+>                         printf("%-41s", "");
 >
-> -Toke
+> ---
+> base-commit: 23ff631b3b8b1452dfe933ee21f96321a9c5e209
+> change-id: 20260827-bpftool_cyles_per_run-93169fcb30b7
+>
+> Best regards,
+> --
+> Mykyta Yatsenko <yatsenko@meta.com>
 >
