@@ -1,110 +1,194 @@
-Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 652F8233939
-	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 13:02:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAFE6135A53
+	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 13:49:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787922136; cv=none; b=mGs+KOenzCuO89LqBjve0aQOJ/5JwRnQeAyXC8jHh5U0K+lGxSVoYsSEljQE+ih2sNk5kADDBe5BsadvFvVeCmELJT4P1CfffPRBemq8eOrh1Jw1MkmHX9JN2lr25BJ7tvUi9ibr55f2YAmtVmBNTgsKBWehfP7KuhwPoeSwPR8=
+	t=1787924981; cv=none; b=LQnpagxRGQsU2O3TJ5+VzmzB7vQq9sXWWqReTwLPtZ0GDZzIXA2hCrWHNze2dVkdbRUFurezngW76WE8jy11m9CSCOAlIo8JwRLIYwqbWmJz+7Y72WT3G0Pa69K47xqjEzwdGbQBaheGrkm61XxYttjpRsiEyuBgsm5x3neu0C0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787922136; c=relaxed/simple;
-	bh=QqzBBu7p8nODo/RmFJm1kAQ41J+L+8YvaBuNF7HBWYk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Z0CEHacp5ZOLiw0Dq37ccDMSnmY17383OAh5Kn6hUgi2xmyMWCwd9yAvuofqLhG1ML1pzZxdJJvbON+szgJG2R3qjt3EEPgf0bRYrsuZ6osyM/NnoMxPrTGA/RrC1cWtP3js2kzhdJWHx23P1/qbffYEkHDHeWPj2IzfO2At2ds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MKsP1TlU; arc=none smtp.client-ip=74.125.224.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787924981; c=relaxed/simple;
+	bh=yM4daaz5EGYsnOT02SS39XlhFRk0UH5e4rF7tLOYAqQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Subject:Cc:From:
+	 References:In-Reply-To; b=OP7SvoaYpluFMeQojUts71UCKgU1u6sFw2zVopc70jQWegbsN6jHBjgabsnuHSFQnPLnxlFgD+amIHrlWdzFFjb7DKZk/IGjmEcopWnpdeANp71er9UEmOauKtni3t/cugb6xvVw/aphIbHtRW5AFYqGhlnj4bhNvB8PXSJmN2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=luToD1c7; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MKsP1TlU"
-Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-66c70f69d3fso1385416d50.1
-        for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 06:02:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787922134; x=1788526934; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=QqzBBu7p8nODo/RmFJm1kAQ41J+L+8YvaBuNF7HBWYk=;
-        b=MKsP1TlUYUeUNOdu8V1C9pJvBi81lkXLkE4S1OivElINshuP9DPCx7gJEDVul60aHQ
-         O6B8RkCPTl/CJXugP8mwR1OJ1p9m7ehYskD57AhN2ZDz4e3nRDERritZPgjVEu15LVRy
-         nBSSaGRzdLC6jxTKqV4u0vJrtDSn3xph1F3hUgPdoFYxF7vkLRnykoDYMNBik2gI0Hdo
-         lf2KGngS4ZsxTN9ChjAxBffVjb+DNyb+QTNJN9V28T1YjgIyqb3CULf4ziTeNelTNhBK
-         xFeJxN+/grPnN1+fjaQDj8OD7TNyOnM0mfJ4naf1cgSoxicUCvnF8EEiZIsnEijpR/0v
-         RPfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787922134; x=1788526934;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=QqzBBu7p8nODo/RmFJm1kAQ41J+L+8YvaBuNF7HBWYk=;
-        b=GJF08k3Kx2l8T0t5jZgGuVGq2PnwoFvVosekoJkr7SRw/6izS1b8kXtUXtEoZ8NeH4
-         XYyNp6lJrGD8znzy52mx0yFZf6V9Y2bfffIyyn/EiWIERcBlidDXUYxe8up2LD3JuDqJ
-         NpH0CfVDYmA732mZY/dNEX+4NLPV+xD4ql0KqDvLhfwc6xz3Nu3zjJpfZhaR+vffrqF8
-         m7DO+7kCO5GUr7pSAJxz4nWE3e0YYFqf0mbQmmiDlb9O036uMC2Re9PuJLW2bU30vX+9
-         K6md1+0yMl8dbEOJX9flMDrn5wJyXF+HReKHjf+dFYdg4gkj0KU8ny6eveHt7EsL84xY
-         DTXg==
-X-Forwarded-Encrypted: i=1; AKwUvBy7+F+wBxIYB1s4PffH7tnVg1dOyIo7wZzhTL0YM8rt7z4b5AMy3dYnp2sf6GM8jWnqljg=@vger.kernel.org
-X-Gm-Message-State: AFuF++k5d4zOvgoxIbOxGukQAlVVH+xSgFUQOPOAXxsep3eiQa76GfYX
-	cpDPke1jW58ps/jsceVVouXwuiImrghQmcUC7em3rlYBeOACLwFiTlsS
-X-Gm-Gg: AYBFou2rQCcUAGaBFtGNzujFOLgVKWSF2f/t3rb+9kp/8qZOIXDeebg0ZbBIdhVa25W
-	sN7GIn/4peiFmM0jW23WIwU0thVr4qtXkPUoERCxJkPGqP8/phhOWJyFVPqM0za4vOMIUozs9K8
-	NtUrvIGj2FM975qCcEy+w++bAawss9O0SXAVS18ogdGvmyllP6vgMx+P7Esa4GvPuuNgVbRGxtY
-	ZTsxne9WZ2UNbLrm0KtjSkBTxva1mgWaLc43dR6rUntCY0vfVOlgN39Q3q3SMgATnnxiBu2t5Zj
-	FtiE/Km8+CB9YWWyrNU6QdXv1DO4pWFFaoEy6jMcEM7O5lOHD6Vr+eGF7DtN5VsvpFEOve7cMQc
-	NMWoSfDbqXlNSh49rGnXky75GVnpgyUcrg8KKWYOLmA4wmk2MDSCaAdwb4xBitDFhv2SyvE+MoP
-	L5IZULuPQ54pGIpBHxXlBRcDz1/6MVAZjg6hAIcNu48CY2+LQ4XJmY6OciLcGSfey35xCNsqk4i
-	d2Tdg==
-X-Received: by 2002:a53:c550:0:b0:66d:264e:88f2 with SMTP id 956f58d0204a3-66e4c6eb8f4mr1512029d50.16.1787922134170;
-        Fri, 28 Aug 2026 06:02:14 -0700 (PDT)
-Received: from mac.lan ([136.55.173.105])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-66e4ed39d4csm770568d50.21.2026.08.28.06.02.13
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 28 Aug 2026 06:02:13 -0700 (PDT)
-From: "Cen Zhang (Microsoft)" <blbllhy@gmail.com>
-To: leitao@debian.org
-Cc: AutonomousCodeSecurity@microsoft.com,
-	andriin@fb.com,
-	ast@kernel.org,
-	blbllhy@gmail.com,
-	bpf@vger.kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	geliang@kernel.org,
-	horms@kernel.org,
-	kafai@fb.com,
-	kuba@kernel.org,
-	kuniyu@google.com,
-	kys@microsoft.com,
-	linux-kernel@vger.kernel.org,
-	martineau@kernel.org,
-	matttbe@kernel.org,
-	mptcp@lists.linux.dev,
-	ncardwell@google.com,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	stable@vger.kernel.org,
-	tgopinath@linux.microsoft.com,
-	xmei5@asu.edu,
-	yhs@fb.com
-Subject: Re: [PATCH net v3 1/2] tcp: fix use-after-free in do_tcp_getsockopt(TCP_CONGESTION)
-Date: Fri, 28 Aug 2026 09:02:12 -0400
-Message-ID: <20260828130212.32968-1-blbllhy@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <apGBE3XHKeNohHF1@gmail.com>
-References: <apGBE3XHKeNohHF1@gmail.com>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="luToD1c7"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id EB41E1A18A3;
+	Fri, 28 Aug 2026 13:49:36 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id A551060537;
+	Fri, 28 Aug 2026 13:49:36 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2D41411C78212;
+	Fri, 28 Aug 2026 15:49:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1787924974; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=69exiOAVHdIVW9goACtvVSF9zJavgJQ+ojNwMsZPEro=;
+	b=luToD1c7hijfLRa8kWHEBKEP9XRU6yMf3qwN/ks0Y+O1kI/mG9dU+fBjddu0sif0laqLAi
+	Dt0zw4vbvBQZ2t7n1c8WGxiV4J6cQkKG58dnz+kMJgJcZ+5Aafg0Pue7kHz/a08snAVLRP
+	UiAsZRy2CDCpDjUPQwM2XB5zddnTBZdXvBynO66FTeeFcc/XS9mTZKaSj4LLmMvbVOGkXm
+	/8kK68hmA1j2GMe42cuiPneYKhI9sRLQ36hQ4GJW41jcDqP5//SnFrhY8e7VTlHCtcG8cp
+	HVJWSFwKHXp7DKyGGvfDdZv7Vs3UEK0IkBHs0eGjPN6hO2CQmyqyOILKu4FPzw==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 28 Aug 2026 15:49:24 +0200
+Message-Id: <DL0MI5O31J44.1W5BV6GJMJTT7@bootlin.com>
+To: <bot+bpf-ci@kernel.org>, <alexis.lothore@bootlin.com>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <andrii@kernel.org>,
+ <martin.lau@linux.dev>, <eddyz87@gmail.com>, <memxor@gmail.com>,
+ <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
+ <tglx@kernel.org>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
+ <x86@kernel.org>, <hpa@zytor.com>, <shuah@kernel.org>, <mingo@redhat.com>,
+ <andreyknvl@gmail.com>, <emil@etsalapatis.com>, <ihor.solodrai@linux.dev>,
+ <laoar.shao@gmail.com>
+Subject: Re: [PATCH bpf-next v8 8/8] selftests/bpf: add tests to validate
+ KASAN on JIT programs
+Cc: <ebpf@linuxfoundation.org>, <bastien.curutchet@bootlin.com>,
+ <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <martin.lau@kernel.org>, <clm@meta.com>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260828-kasan-v8-8-7c1c0fdb9d7f@bootlin.com>
+ <45923d9ec2441312cfd8f12fd02a19d717dad306fd636614c83d02c864340ebe@mail.kernel.org>
+In-Reply-To: <45923d9ec2441312cfd8f12fd02a19d717dad306fd636614c83d02c864340ebe@mail.kernel.org>
+X-Last-TLS-Session-Version: TLSv1.3
 
-> nit: Do you need to zero this string? It will be safely overwritten
-> below, no?
+On Fri Aug 28, 2026 at 12:30 PM CEST, bot+bpf-ci wrote:
+>> diff --git a/tools/testing/selftests/bpf/progs/kasan.c b/tools/testing/s=
+elftests/bpf/progs/kasan.c
+>> new file mode 100644
+>> index 0000000000000..fe8e0dd228a09
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/progs/kasan.c
+>
+> [ ... ]
+>
+>> +SEC("tcx/ingress")
+>> +int simple_atomic_fetch_on_stack(struct __sk_buff *skb)
+>> +{
+>> +	struct kasan_test_val val;
+>> +
+>> +	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_test_val));
+>> +	__sync_fetch_and_or(&val.data_8, 8);
+>> +	bpf_kfunc_kasan_unpoison(&val, sizeof(struct kasan_test_val));
+>> +	return 0;
+>> +}
+>> +
+>> +SEC("tcx/ingress")
+>> +int simple_atomic_fetch_not_on_stack(struct __sk_buff *skb)
+>> +{
+>> +	struct kasan_test_val *val;
+>> +	__u32 key =3D 0;
+>> +
+>> +	val =3D bpf_map_lookup_elem(&test_map, &key);
+>> +	if (!val)
+>> +		return 0;
+>> +
+>> +	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_test_val));
+>> +	__sync_fetch_and_or(&val->data_8, 8);
+>> +	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_test_val));
+>> +	return 0;
+>> +}
+>
+> Can these two programs build with the no_alu32 flavor? Looking at
+> Documentation/bpf/clang-notes.rst, __sync_fetch_and_or() needs -mcpu=3Dv3
+> for the BPF_OR atomic instruction, but the no_alu32 build uses plain
+> -mcpu=3Dv2 (tools/testing/selftests/bpf/Makefile:497-501). Clang at v2 ca=
+n
+> only generate BPF_ADD atomics without BPF_FETCH, so BPF_OR should be an
+> instruction-selection error.
+>
+> The sibling programs simple_atomic_on_stack and simple_atomic_not_on_stac=
+k
+> use __sync_fetch_and_add(), which lowers to BPF_ADD without BPF_FETCH whe=
+n
+> the return value is unused, so those build fine. Every other prog in
+> selftests/bpf/progs/ that uses a non-ADD or fetching atomic guards it wit=
+h
+> #ifdef ENABLE_ATOMICS_TESTS (progs/atomics.c, progs/arena_atomics.c,
+> progs/atomic_bounds.c, progs/tcp_ca_write_sk_pacing.c), and
+> -DENABLE_ATOMICS_TESTS is only passed to the default and cpuv4 runners, n=
+ot
+> to no_alu32.
+>
+> Would it make sense to guard both simple_atomic_fetch functions with
+> #ifdef ENABLE_ATOMICS_TESTS, or to verify whether test_progs-no_alu32
+> actually builds?
+>
+> Also, since the return value of __sync_fetch_and_or() is discarded here,
+> does clang emit BPF_ATOMIC | BPF_OR without the BPF_FETCH flag? That woul=
+d
+> make these identical to simple_atomic_*, just with OR instead of ADD, and
+> the JIT path for is_atomic_fetch (the CMPXCHG loop in
+> arch/x86/net/bpf_jit_comp.c added by bc9fb0ddd5f3b, where the KASAN check
+> is emitted before branch_target assignment) would not be exercised by
+> kasan/simple_atomic_fetch_on_stack or kasan/simple_atomic_fetch_not_on_st=
+ack.
+>
+> The commit message shows #175/29 and #175/30 as :OK, but
+> progs/atomics.c:or64 uses or64_result =3D __sync_fetch_and_or(...) to for=
+ce
+> the fetch variant (checked in prog_tests/atomics.c:98), and keeps a
+> separate or_noreturn_value program for the discarded-result form. Would
+> consuming the result here test the intended path?
 
-Thanks for catching this. That initialization is unnecessary. Would
-you prefer a new version for this, or are you okay with keeping it
-as-is? I may need a few days before I can send a new version due to an
-ongoing email account approval process.
+Even for no_alu32, the __sync_fetch_and_or is properly generated:
 
-Cen
+  $ llvm-objdump --disassemble-symbols=3Dsimple_atomic_fetch_on_stack tools=
+/testing/selftests/bpf/no_alu32/kasan.bpf.o
+ =20
+  tools/testing/selftests/bpf/no_alu32/kasan.bpf.o:       file format elf64=
+-bpf
+ =20
+  Disassembly of section tcx/ingress:
+ =20
+  00000000000006d0 <simple_atomic_fetch_on_stack>:
+       218:       bf a6 00 00 00 00 00 00 r6 =3D r10
+       219:       07 06 00 00 f0 ff ff ff r6 +=3D -0x10
+       220:       bf 61 00 00 00 00 00 00 r1 =3D r6
+       221:       b7 02 00 00 10 00 00 00 r2 =3D 0x10
+       222:       85 10 00 00 ff ff ff ff call -0x1
+       223:       b7 01 00 00 08 00 00 00 r1 =3D 0x8
+       224:       db 1a f8 ff 41 00 00 00 r1 =3D atomic_fetch_or((u64 *)(r1=
+0 - 0x8), r1)
+       225:       bf 61 00 00 00 00 00 00 r1 =3D r6
+       226:       b7 02 00 00 10 00 00 00 r2 =3D 0x10
+       227:       85 10 00 00 ff ff ff ff call -0x1
+       228:       b7 00 00 00 00 00 00 00 r0 =3D 0x0
+       229:       95 00 00 00 00 00 00 00 exit
+
+
+My understanding is that _32 bits_ atomics aren't available with
+-mcpu=3Dv2, but 64 bits atomic fetch operations are, so that's why I stuck
+with a DW operation for the simple_atomic_fetch(_not)_on_stack tests.
+
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/331600=
+00533
+
+
+
+
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
