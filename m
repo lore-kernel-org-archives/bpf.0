@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-134.mta0.migadu.com [91.218.175.134])
+Received: from mta1.migadu.com (out-140.mta1.migadu.com [95.215.58.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0EF6356749
-	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 21:52:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B226356749
+	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 21:52:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787953961; cv=none; b=sbGG4rxML+f3WVOQyvkpvHT3ykmhZ/oMpSNvsSzVfo28MMg8N8wzPcBuJw4vlHEEbn7TOj22EhP63Tnsf/OZt3Dds0yXzPg4Jv9dmyvUN88dz/bN9DvRp0kBVhKnU4wLhPh7Dsj4Rj4t4DsjYNN3jS1AdqG5XyhdLdmb70XWIP4=
+	t=1787953964; cv=none; b=lf/DZItdYsUathn0Qji+i2LBV3artFfEOc/T+GIstt59a5PK8gtyiDM0IeW2FKviImGcMFc62eBX/I+N4rlP7mSXpkoA/FhPR7MgJPbOu/9k4YFXczwsWv9b8Tokhw3soyqq+940L4NYzlzdOs/HHw5MScAtJFeKRJv+ywtJvl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787953961; c=relaxed/simple;
-	bh=4hQGUWM9+LQj6N6no/2zH+6F1T5EcVnp8KmwOP+5GUw=;
+	s=arc-20240116; t=1787953964; c=relaxed/simple;
+	bh=MSpDN8pe4okCg2foTKhI5xVkwd0rojRu2kUZTYgPnts=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gUJwhE/w7XVYEe/7i9KoRjTEeps/ECZNMeN+2hLS4um9s1VVMTEn+jie3oEDzjFtDPBUPqbzkR5BbSjG7qpizOLO2Rlo+PIUvYqqSHVuOUV6i91tply0bX6jBrqyiT2R9o1PRDpaWLSO6adTzrnLUrTlCAXL/2RXgNFmLrWdPb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wBX2LPWK; arc=none smtp.client-ip=91.218.175.134
+	 MIME-Version; b=neOmqB+CCwQp3n5UwuzGhAJR71bb0vkMUwnXZpZWTd6bXRQ7Dp4MTkrNDGBhluXRwRdL1/t3eHY8WnMloyYQ4uyg2BKzHo43wspst2iVte2zlDDylqxHUMf6tPbBnFkWcXQZq2tJtdiCXMD1FhCOtIB0uAQVdr9KIggCWEKrWOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rHteMdge; arc=none smtp.client-ip=95.215.58.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wBX2LPWK"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rHteMdge"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=4hQGUWM9+LQj6N6no/2zH+6F1T5EcVnp8KmwOP+5GUw=;
+DKIM-Signature: a=rsa-sha256; bh=MSpDN8pe4okCg2foTKhI5xVkwd0rojRu2kUZTYgPnts=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787953957; v=1; x=1788558757;
- b=wBX2LPWKO/HpVTQQ+AixVecqEC/ylZN/bRrcEVWAVlWPczDBBx4oAvxPcaXsQaFmSNVuNQBM
- hXTQAd/T1NrgsApIeXMGd/a1ofPQWqQAEhrz+7vs7dMsctswA5VBl4aSO6dkZMPss75rQLWODKD
- jyBCLGhsgyC+FtgJ6hmnzra8=
+ t=1787953960; v=1; x=1788558760;
+ b=rHteMdge1tYHhhSvJ1jqtF39GWAFFrdAHLDZATcwIXP7vLgD7hhUhp7yHrWVABnIxKr8k7g4
+ oRyAcLFExhYL/jIHUI1xQiGrsTB8Fw7I+vi10N2qxGzttnwfSCkBiASsp8TUI/qlAbdIn/gPgpR
+ is/wb/RyV/d5xFARbuS7g8EE=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id 19ea9f99db1fed69;
-	Fri, 28 Aug 2026 21:52:37 +0000
-X-Mizu-Trace-ID: 19ea9f99db1fed69
+Received: by mta11.migadu.com with ESMTPS id e2c8c195ece31b63;
+	Fri, 28 Aug 2026 21:52:40 +0000
+X-Mizu-Trace-ID: e2c8c195ece31b63
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -37,9 +37,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Quentin Monnet <qmo@kernel.org>
 Cc: bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 5/6] selftests/bpf: Add tests for bpftool btf dump format c
-Date: Fri, 28 Aug 2026 14:52:06 -0700
-Message-ID: <20260828215207.3105313-6-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v2 6/6] bpftool: Don't drop a type in the sorted C dump
+Date: Fri, 28 Aug 2026 14:52:07 -0700
+Message-ID: <20260828215207.3105313-7-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260828215207.3105313-1-ihor.solodrai@linux.dev>
 References: <20260828215207.3105313-1-ihor.solodrai@linux.dev>
@@ -51,350 +51,59 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-"bpftool btf dump format c" generates the vmlinux.h that BPF programs
-are built against, and it has no test coverage at all. The only
-in-tree consumers are build systems.
+The C dump sorts types by default, so that generated headers are
+diffable. The sorted dump emits one type fewer than the unsorted dump
+of the same BTF.
 
-Building against the header only catches what a compiler rejects,
-which is insufficient.
+dump_btf_c() starts its loop at index 1 to skip the void type at BTF
+type ID 0. That holds for the unsorted dump, where the array index is
+the type ID, but not after qsort(): position 0 is then the lowest
+ranked type, and btf_type_rank() ranks an anonymous enum 0 while void
+takes the default rank of 10. So the enum is skipped, and void is
+emitted instead as a no-op.
 
-Introduce a bpftool_btf_dump selftest. Dump a small hand-built BTF and
-compare the output against committed expectations.
-
-The BTF is assembled with btf__add_*() rather than compiled from BPF C
-because the fixture needs a 4-byte "long int". That is what makes
-bpftool render the hole in struct holey as a pair of "long: 32;"
-bitfields. A BPF target is always 64-bit, so a compiled fixture could
-not supply it.
-
-Comparing the whole dump makes every change to a generated header show
-up in a patch.
-
+Fixes: 94133cf24bb3 ("bpftool: Introduce btf c dump sorting")
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- tools/testing/selftests/bpf/Makefile          |   8 +-
- .../bpf/bpftool_btf_dump_sorted.expected      |  44 +++++
- .../bpf/bpftool_btf_dump_unsorted.expected    |  48 +++++
- .../bpf/prog_tests/bpftool_btf_dump.c         | 178 ++++++++++++++++++
- 4 files changed, 276 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected
- create mode 100644 tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
+ tools/bpf/bpftool/btf.c                                     | 6 +++++-
+ .../testing/selftests/bpf/bpftool_btf_dump_sorted.expected  | 4 ++++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 5f1a3bfc0569..d99581257e54 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -119,7 +119,9 @@ TEST_GEN_PROGS += test_progs-cpuv4
- TEST_INST_SUBDIRS += cpuv4
- endif
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index c9589026da8d..bca0a3982f09 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -805,9 +805,13 @@ static int dump_btf_c(const struct btf *btf,
  
--TEST_FILES = xsk_prereqs.sh $(wildcard progs/btf_dump_test_case_*.c)
-+TEST_FILES = xsk_prereqs.sh $(wildcard progs/btf_dump_test_case_*.c)	\
-+	     bpftool_btf_dump_sorted.expected					\
-+	     bpftool_btf_dump_unsorted.expected
+ 		if (sort_dump)
+ 			datums = sort_btf_c(btf);
+-		for (i = 1; i < cnt; i++) {
++		for (i = 0; i < cnt; i++) {
+ 			int idx = datums ? datums[i].index : i;
  
- # Order correspond to 'make run_tests' order
- TEST_PROGS := test_kmod.sh \
-@@ -887,7 +889,9 @@ TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read				\
- 		       ima_setup.sh 					\
- 		       $(VERIFY_SIG_SETUP)				\
- 		       $(wildcard progs/btf_dump_test_case_*.c)		\
--		       $(wildcard progs/*.bpf.o)
-+		       $(wildcard progs/*.bpf.o)			\
-+		       bpftool_btf_dump_sorted.expected			\
-+		       bpftool_btf_dump_unsorted.expected
- TRUNNER_BPF_BUILD_RULE := CLANG_BPF_BUILD_RULE
- TRUNNER_BPF_CFLAGS := $(BPF_CFLAGS) $(CLANG_CFLAGS) -DENABLE_ATOMICS_TESTS
- $(eval $(call DEFINE_TEST_RUNNER,test_progs))
++			/* type ID 0 is void, skip it */
++			if (idx == 0)
++				continue;
++
+ 			err = btf_dump__dump_type(d, idx);
+ 			if (err)
+ 				goto done;
 diff --git a/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected b/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected
-new file mode 100644
-index 000000000000..a9c6b688ffd7
---- /dev/null
+index a9c6b688ffd7..5470b2b43229 100644
+--- a/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected
 +++ b/tools/testing/selftests/bpf/bpftool_btf_dump_sorted.expected
-@@ -0,0 +1,44 @@
-+#ifndef __VMLINUX_H__
-+#define __VMLINUX_H__
-+
-+#ifndef BPF_NO_PRESERVE_ACCESS_INDEX
-+#pragma clang attribute push (__attribute__((preserve_access_index)), apply_to = record)
-+#endif
-+
-+#ifndef __ksym
-+#define __ksym __attribute__((section(".ksyms")))
-+#endif
-+
-+#ifndef __weak
-+#define __weak __attribute__((weak))
-+#endif
-+
-+#ifndef __bpf_fastcall
-+#if __has_attribute(bpf_fastcall)
-+#define __bpf_fastcall __attribute__((bpf_fastcall))
-+#else
-+#define __bpf_fastcall
-+#endif
-+#endif
-+
-+struct holey {
-+	int c;
-+	long: 32;
-+	long: 32;
-+	int tail;
-+};
-+
-+struct s {
-+	int f;
-+};
-+
-+
-+/* BPF kfuncs */
-+#ifndef BPF_NO_KFUNC_PROTOTYPES
-+#endif
-+
-+#ifndef BPF_NO_PRESERVE_ACCESS_INDEX
-+#pragma clang attribute pop
-+#endif
-+
-+#endif /* __VMLINUX_H__ */
-diff --git a/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected b/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected
-new file mode 100644
-index 000000000000..4310adc2ed51
---- /dev/null
-+++ b/tools/testing/selftests/bpf/bpftool_btf_dump_unsorted.expected
-@@ -0,0 +1,48 @@
-+#ifndef __VMLINUX_H__
-+#define __VMLINUX_H__
-+
-+#ifndef BPF_NO_PRESERVE_ACCESS_INDEX
-+#pragma clang attribute push (__attribute__((preserve_access_index)), apply_to = record)
-+#endif
-+
-+#ifndef __ksym
-+#define __ksym __attribute__((section(".ksyms")))
-+#endif
-+
-+#ifndef __weak
-+#define __weak __attribute__((weak))
-+#endif
-+
-+#ifndef __bpf_fastcall
-+#if __has_attribute(bpf_fastcall)
-+#define __bpf_fastcall __attribute__((bpf_fastcall))
-+#else
-+#define __bpf_fastcall
-+#endif
-+#endif
-+
-+struct holey {
-+	int c;
-+	long: 32;
-+	long: 32;
-+	int tail;
-+};
-+
+@@ -21,6 +21,10 @@
+ #endif
+ #endif
+ 
 +enum {
 +	E0 = 1,
 +};
 +
-+struct s {
-+	int f;
-+};
-+
-+
-+/* BPF kfuncs */
-+#ifndef BPF_NO_KFUNC_PROTOTYPES
-+#endif
-+
-+#ifndef BPF_NO_PRESERVE_ACCESS_INDEX
-+#pragma clang attribute pop
-+#endif
-+
-+#endif /* __VMLINUX_H__ */
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c b/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
-new file mode 100644
-index 000000000000..d5b25302b0c8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
-@@ -0,0 +1,178 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include <bpftool_helpers.h>
-+#include <bpf/btf.h>
-+#include <limits.h>
-+#include <unistd.h>
-+#include "btf_helpers.h"
-+#include "testing_helpers.h"
-+
-+#define DUMP_BUF_SZ		(16 * 1024)
-+
-+#define EXPECTED_SORTED		"bpftool_btf_dump_sorted.expected"
-+#define EXPECTED_UNSORTED	"bpftool_btf_dump_unsorted.expected"
-+
-+/*
-+ *	struct holey {
-+ *		int c;
-+ *		<64-bit hole>
-+ *		int tail;
-+ *	};
-+ *	enum { E0 = 1 };
-+ *	struct s { int f; };
-+ */
-+static struct btf *mk_btf(void)
-+{
-+	struct btf *btf;
-+
-+	btf = btf__new_empty();
-+	if (!ASSERT_OK_PTR(btf, "new_empty"))
-+		return NULL;
-+
-+	btf__add_int(btf, "int", 4, BTF_INT_SIGNED);
-+	btf__add_int(btf, "long int", 4, BTF_INT_SIGNED);
-+
-+	btf__add_struct(btf, "holey", 16);
-+	btf__add_field(btf, "c", 1, 0, 0);
-+	btf__add_field(btf, "tail", 1, 96, 0);
-+
-+	btf__add_enum(btf, NULL, 4);
-+	btf__add_enum_value(btf, "E0", 1);
-+
-+	btf__add_struct(btf, "s", 4);
-+	btf__add_field(btf, "f", 1, 0, 0);
-+
-+	VALIDATE_RAW_BTF(
-+		btf,
-+		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-+		"[2] INT 'long int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-+		"[3] STRUCT 'holey' size=16 vlen=2\n"
-+		"\t'c' type_id=1 bits_offset=0\n"
-+		"\t'tail' type_id=1 bits_offset=96",
-+		"[4] ENUM '(anon)' encoding=UNSIGNED size=4 vlen=1\n"
-+		"\t'E0' val=1",
-+		"[5] STRUCT 's' size=4 vlen=1\n"
-+		"\t'f' type_id=1 bits_offset=0");
-+
-+	return btf;
-+}
-+
-+static int btf_to_tmpfile(const struct btf *btf, char *path)
-+{
-+	ssize_t written;
-+	const void *raw;
-+	__u32 sz;
-+	int fd;
-+
-+	raw = btf__raw_data(btf, &sz);
-+	if (!ASSERT_OK_PTR(raw, "raw_data"))
-+		return -1;
-+
-+	snprintf(path, PATH_MAX, "/tmp/bpftool_btf_dump.XXXXXX");
-+	fd = mkstemp(path);
-+	if (!ASSERT_OK_FD(fd, "mkstemp_btf"))
-+		return -1;
-+
-+	written = write(fd, raw, sz);
-+	close(fd);
-+	if (!ASSERT_EQ(written, sz, "write_btf")) {
-+		unlink(path);
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+static char *dump_c(const char *btf_path, bool sorted)
-+{
-+	char args[MAX_BPFTOOL_CMD_LEN];
-+	char *buf;
-+	int err;
-+
-+	buf = malloc(DUMP_BUF_SZ);
-+	if (!ASSERT_OK_PTR(buf, "alloc_dump"))
-+		return NULL;
-+
-+	snprintf(args, sizeof(args), "btf dump file %s format c%s",
-+		 btf_path, sorted ? "" : " unsorted");
-+
-+	err = get_bpftool_command_output(args, buf, DUMP_BUF_SZ);
-+	if (!ASSERT_OK(err, "btf_dump_format_c")) {
-+		free(buf);
-+		return NULL;
-+	}
-+
-+	return buf;
-+}
-+
-+static char *read_expected(const char *path)
-+{
-+	char *buf = NULL;
-+	size_t cap = 0;
-+	FILE *f;
-+	int err;
-+
-+	f = fopen(path, "r");
-+	if (!f) {
-+		err = errno;
-+		PRINT_FAIL("can't open expected output '%s': errno %d\n", path, err);
-+		return NULL;
-+	}
-+
-+	/* no NUL in a generated header, so this reads to the end */
-+	if (getdelim(&buf, &cap, '\0', f) < 0) {
-+		err = errno;
-+		PRINT_FAIL("can't read expected output '%s': errno %d\n", path, err);
-+		free(buf);
-+		buf = NULL;
-+	}
-+
-+	fclose(f);
-+	return buf;
-+}
-+
-+static void test_dump(const char *btf_path, bool sorted)
-+{
-+	const char *exp_path;
-+	char *dump, *exp;
-+	int err;
-+
-+	exp_path = sorted ? EXPECTED_SORTED : EXPECTED_UNSORTED;
-+
-+	dump = dump_c(btf_path, sorted);
-+	if (!dump)
-+		return;
-+
-+	exp = read_expected(exp_path);
-+	if (!exp)
-+		goto out_dump;
-+
-+	err = compare_text_to_expected(dump, exp);
-+	ASSERT_OK(err, sorted ? "cmp_sorted" : "cmp_unsorted");
-+
-+	free(exp);
-+out_dump:
-+	free(dump);
-+}
-+
-+void test_bpftool_btf_dump(void)
-+{
-+	char path[PATH_MAX];
-+	struct btf *btf;
-+
-+	btf = mk_btf();
-+	if (!btf)
-+		return;
-+
-+	if (btf_to_tmpfile(btf, path))
-+		goto out_btf;
-+
-+	if (test__start_subtest("c_sorted"))
-+		test_dump(path, true);
-+	if (test__start_subtest("c_unsorted"))
-+		test_dump(path, false);
-+
-+	unlink(path);
-+out_btf:
-+	btf__free(btf);
-+}
+ struct holey {
+ 	int c;
+ 	long: 32;
 -- 
 2.55.0
 
