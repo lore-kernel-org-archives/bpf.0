@@ -1,142 +1,272 @@
-Received: from mta0.migadu.com (out-40.mta0.migadu.com [91.218.175.40])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7189B380FE5
-	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 18:28:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E53486341;
+	Fri, 28 Aug 2026 18:34:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787941734; cv=none; b=CjIvF62RflEZZMxKF64Pv6AZjMAqm0gBPrOhYKIO/a+eUZI0QwpNDnsC2gXgkJp0A2S+y9FcrCuO6D/pwF3E+LFGFs2WxfhpAR1TG/rvjHN79e2w6JFR1rIaEIw3HCGlhbqyzn72VAfTlLfqOpiTEDfCO2ff0rR5vNTyggkK7GM=
+	t=1787942081; cv=none; b=WuRl580aYHq3hKaD91ySwCv1i2A9Fv3jr+GxXiynZVFXUOKDqhrF+vhhWNIqPR+hgdrG5lsAqES9IILxRnAc8s5KzFZ+o9Dm86fJU0TFHZWqmokFQCTASlv9EJPdOEYQHhmd4ANIQfF7CeH6uwGbxqoptDh9am0OGpZOUXy95uk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787941734; c=relaxed/simple;
-	bh=ZICLzh87EjorNKSIaHujZnImUhu5UtVzMZzsPK0tvyw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qlqMH7vy4/loKT3CX/lr62Wyzxw8soWWlYEkPnLmLu13tZKdty0/mSPNsi2DOVeqTy3Zb1kpBuF6NSmyt5BR3K8WZFbuftdlZO72636lW3yLtdsXrydEuFeLByDJpVvUIuWLyR5k+8dpC+q3KrRmhfyMR/Upyir7m7YTQX+XWfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Hlypu5sb; arc=none smtp.client-ip=91.218.175.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787942081; c=relaxed/simple;
+	bh=vIPjKAdwMfSUiKAjp4C+U1M0lh8YoHSMDCUmTVcWsXI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=A8emFIK+p16iOorZDDXMG0D9ZNay8HyqyUsAHWY9BGKSOFQbil67+QUl9asxGVnD9ec7fnyZ0jgRcx1UaFmNzH+tHEL0+eH6H08HFuqvZQe1C/ajBpTx/FhZ/If7Hv/e4V4tJF/vnmfii8FaWlKQO/vRu9UIFeRFWGHphmzJ2yU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=GOrlcXWi; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Hlypu5sb"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ZICLzh87EjorNKSIaHujZnImUhu5UtVzMZzsPK0tvyw=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787941730; v=1; x=1788546530;
- b=Hlypu5sb3+D4kXPrkBHkv3HlUqbVMnKwGlxawCzB1nTx1PjoBcolN/AZyzrqpQqk+/uGKS0c
- o8f9oBX/bDFjhLh8IjBfPi4c70siICSkGmLm8U5FobsHpLj3XrVNn91LIFtFYuCVfSPigjW2p2L
- 1YwS/TkG6b64Csyf7ITHcDMU=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id de368c8952d94c27;
-	Fri, 28 Aug 2026 18:28:49 +0000
-X-Mizu-Trace-ID: de368c8952d94c27
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <42faf6da-b782-44f1-ab0b-767c703dd523@linux.dev>
-Date: Fri, 28 Aug 2026 11:28:42 -0700
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="GOrlcXWi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=6n
+	J1MLUy6GQPMfnh+/K+cFYlShYGwMlsA1Nyhiw2HIs=; b=GOrlcXWiFgPcowwNCe
+	WXFf6Jcba4E1dLUwFEDFV20vKDFw+hTXEapuhEcHWdnSImyUpqcAvUlj6dkTagsi
+	XeQICrYgUnzlmDt7S0BTY1usvMvCGOxXkQjIk1wpIvVanTGKDuCNonQSxr9Evtxx
+	pXT4mB3yrngKO3L+jdzkYjq9c=
+Received: from localhost (unknown [])
+	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wBHGv181JFq5gKAQA--.3230S2;
+	Sat, 29 Aug 2026 02:33:33 +0800 (CST)
+From: Hui Su <sh_def@163.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	shuah@kernel.org,
+	yatsenko@meta.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf 2/2] selftests/bpf: add RHASH iteration stress test
+Date: Sat, 29 Aug 2026 02:33:26 +0800
+Message-ID: <20260828183326.3330530-2-sh_def@163.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260828183326.3330530-1-sh_def@163.com>
+References: <20260828183326.3330530-1-sh_def@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 10/11] selftests/bpf: Test kfuncs returning
- arena pointers by value
-Content-Language: en-GB
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org, clm@meta.com,
- ihor.solodrai@linux.dev
-References: <20260827061206.2520351-1-yonghong.song@linux.dev>
- <465f8ac0b4ab71a0d3939e6bded8e52a1a1e54e7c6d57ef7447b1dad571ce9ae@mail.kernel.org>
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <465f8ac0b4ab71a0d3939e6bded8e52a1a1e54e7c6d57ef7447b1dad571ce9ae@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wBHGv181JFq5gKAQA--.3230S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxtF1UCrWkCrWfGw1ktry7Jrb_yoW7KF4rpF
+	W0v342kr4rXF47Jw4xG3yjgrZ8Krs5Zw15GrWkK3yayw17Kwn2qr1xKF48tFn3ZrZ8Zrya
+	9w43KrWrCrWrZrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UI2NNUUUUU=
+X-CM-SenderInfo: xvkbvvri6rljoofrz/xtbCwh1TsmqR1H1zhAAA3b
 
+Add a stress test for bpf_for_each_map_elem() on
+BPF_MAP_TYPE_RHASH. Update and delete entries from two threads while
+repeatedly running the BPF callback, and record the maximum number of
+callback invocations in one walk.
 
+Concurrent rehashing may cause duplicate visits, which are permitted by
+RHASH's best-effort iteration semantics. Verify that
+bpf_for_each_map_elem() nevertheless limits one walk to at most
+map->max_entries callback invocations.
 
-On 8/27/26 12:17 AM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc_arena.c b/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc_arena.c
->> new file mode 100644
->> index 0000000000000..94c35e1b547cd
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc_arena.c
->> @@ -0,0 +1,129 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
->> +#include <vmlinux.h>
->> +#include <bpf/bpf_helpers.h>
->> +#include <bpf_arena_common.h>
->> +#include "bpf_misc.h"
->> +#include "../test_kmods/bpf_testmod_kfunc.h"
->> +
->> +#if defined(__clang_major__) && __clang_major__ >= 23
->> +
->> +struct {
->> +	__uint(type, BPF_MAP_TYPE_ARENA);
->> +	__uint(map_flags, BPF_F_MMAPABLE);
->> +	__uint(max_entries, 2);
->> +} arena SEC(".maps");
->> +
->> +/*
->> + * A returned member carries the arena type tag but not the address space
->> + * qualifier, so the program casts it into the arena address space itself
->> + * rather than the compiler doing it.
->> + */
->> +#define arena_ptr(p) ((u32 volatile __arena *)(p))
-> This isn't a bug, but could the cast be spelled out at each use site, or
-> the macro named after the type it produces (e.g. arena_u32p())? The name
-> arena_ptr() reads as a generic address-space cast, but it hardcodes 'u32
-> volatile', which matters for the load/store widths the test checks. Other
-> arena selftest programs write the cast inline with the type visible at the
-> use site (for example '(char __arena *)ptr' in progs/arena_mem_usage.c).
+Signed-off-by: Hui Su <sh_def@163.com>
+---
+ .../testing/selftests/bpf/prog_tests/rhash.c  | 97 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/rhash.c     | 36 +++++++
+ 2 files changed, 133 insertions(+)
 
-Okay, let us inline arena_ptr(p) directly in the code.
-
->
->> +
->> +SEC("syscall")
->> +__arch_x86_64 __arch_arm64
->> +__load_if_JITed()
->> +__success __retval(0)
->> +int aggregate_ret_kfunc_arena(void *ctx)
->> +{
->> +	u32 volatile __arena *page = bpf_arena_alloc_pages(&arena, NULL, 1, NUMA_NO_NODE, 0);
->> +	u32 volatile __arena *a, *b;
->> +	struct prog_test_ret_arena r;
->> +
->> +	if (!page)
->> +		return 1;
->> +
->> +	/* Both halves come back in R0:R2, pointing at page and page + 4. */
->> +	r = bpf_kfunc_call_test_ret_arena((u64)page);
->> +	if (!r.a || !r.b)
->> +		return 2;
->> +
->> +	a = arena_ptr(r.a);
->> +	b = arena_ptr(r.b);
->> +	*a = 1;
->> +	*b = 2;
->> +	if (*a != 1)
->> +		return 3;
->> +	if (*b != 2)
->> +		return 4;
->> +
->> +	/* The halves are the first two slots of the page the program allocated. */
->> +	page[0] = 7;
->> +	if (*a != 7)
->> +		return 5;
->> +	page[1] = 9;
->> +	if (*b != 9)
->> +		return 6;
->> +
->> +	return 0;
->> +}
-> [ ... ]
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33045482525
+diff --git a/tools/testing/selftests/bpf/prog_tests/rhash.c b/tools/testing/selftests/bpf/prog_tests/rhash.c
+index 98bb66907b7f..a2ecd7e7905f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/rhash.c
++++ b/tools/testing/selftests/bpf/prog_tests/rhash.c
+@@ -3,12 +3,17 @@
+ #include <test_progs.h>
+ #include <string.h>
+ #include <stdio.h>
++#include <pthread.h>
++#include <stdatomic.h>
+ #include "rhash.skel.h"
+ #include "bpf_iter_bpf_rhash_map.skel.h"
+ #include <linux/bpf.h>
+ #include <linux/perf_event.h>
+ #include <sys/syscall.h>
+ 
++#define RHASH_STRESS_KEYS		4096
++#define RHASH_STRESS_DURATION_NS	(3ULL * 1000000000ULL)
++
+ static void rhash_run(const char *prog_name)
+ {
+ 	struct rhash *skel;
+@@ -53,6 +58,94 @@ static int rhash_map_create(__u32 max_entries, __u64 map_extra)
+ 			      sizeof(__u32), sizeof(__u64), max_entries, &opts);
+ }
+ 
++struct rhash_stress_arg {
++	int map_fd;
++	atomic_bool *stop;
++	__u32 seed;
++};
++
++static void *rhash_stress_update(void *data)
++{
++	struct rhash_stress_arg *arg = data;
++	__u64 value = 0;
++	__u32 key;
++	int i;
++
++	while (!atomic_load(arg->stop)) {
++		for (i = 0; i < RHASH_STRESS_KEYS && !atomic_load(arg->stop); i++) {
++			key = ((__u32)i * 2654435761U + arg->seed) % RHASH_STRESS_KEYS;
++			bpf_map_update_elem(arg->map_fd, &key, &value, BPF_ANY);
++		}
++		for (i = 0; i < RHASH_STRESS_KEYS && !atomic_load(arg->stop); i++) {
++			key = ((__u32)i * 2654435761U + arg->seed) % RHASH_STRESS_KEYS;
++			bpf_map_delete_elem(arg->map_fd, &key);
++		}
++	}
++
++	return NULL;
++}
++
++static void rhash_iter_stress(void)
++{
++	struct rhash *skel = NULL;
++	struct rhash_stress_arg args[2];
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	atomic_bool stop = false;
++	__u64 start;
++	__u32 max_entries;
++	pthread_t threads[2];
++	bool created[2] = {};
++	struct bpf_program *prog;
++	int map_fd, err, i;
++
++	skel = rhash__open();
++	if (!ASSERT_OK_PTR(skel, "rhash__open stress"))
++		return;
++
++	prog = bpf_object__find_program_by_name(skel->obj,
++						"test_rhash_iter_stress");
++	if (!ASSERT_OK_PTR(prog, "find stress program"))
++		goto cleanup;
++	bpf_program__set_autoload(prog, true);
++
++	err = rhash__load(skel);
++	if (!ASSERT_OK(err, "stress skel_load"))
++		goto cleanup;
++
++	map_fd = bpf_map__fd(skel->maps.stress_rhmap);
++	max_entries = bpf_map__max_entries(skel->maps.stress_rhmap);
++	for (i = 0; i < ARRAY_SIZE(threads); i++) {
++		args[i].map_fd = map_fd;
++		args[i].stop = &stop;
++		args[i].seed = i * 977;
++		err = pthread_create(&threads[i], NULL, rhash_stress_update,
++				     &args[i]);
++		if (!ASSERT_OK(err, "pthread_create"))
++			goto stop_threads;
++		created[i] = true;
++	}
++
++	start = get_time_ns();
++	while (get_time_ns() - start < RHASH_STRESS_DURATION_NS) {
++		err = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
++		if (!ASSERT_OK(err, "stress prog run"))
++			break;
++	}
++
++stop_threads:
++	atomic_store(&stop, true);
++	for (i = 0; i < ARRAY_SIZE(threads); i++)
++		if (created[i])
++			pthread_join(threads[i], NULL);
++
++	ASSERT_GT(skel->bss->stress_max_visits, 0, "stress callback visits");
++	ASSERT_EQ(skel->bss->stress_overruns, 0, "stress callback bound");
++	printf("stress max callback visits: %llu (limit %u)\n",
++	       (unsigned long long)skel->bss->stress_max_visits, max_entries);
++cleanup:
++	rhash__destroy(skel);
++}
++
+ static void rhash_map_extra_presize(void)
+ {
+ 	const __u32 max_entries = 1024;
+@@ -180,4 +273,8 @@ void test_rhash(void)
+ 
+ 	if (test__start_subtest("test_rhash_iter"))
+ 		rhash_iter_test();
++
++	if (test__start_subtest("test_rhash_iter_stress"))
++		rhash_iter_stress();
++
+ }
+diff --git a/tools/testing/selftests/bpf/progs/rhash.c b/tools/testing/selftests/bpf/progs/rhash.c
+index fc2dac3a719e..eca428db1fbc 100644
+--- a/tools/testing/selftests/bpf/progs/rhash.c
++++ b/tools/testing/selftests/bpf/progs/rhash.c
+@@ -9,11 +9,15 @@
+ 
+ #define ENOENT 2
+ #define EEXIST 17
++#define RHASH_STRESS_MAX_ENTRIES 4096
+ 
+ char _license[] SEC("license") = "GPL";
+ 
+ int err;
+ 
++volatile __u64 stress_max_visits;
++volatile __u64 stress_overruns;
++
+ struct elem {
+ 	char arr[128];
+ 	int val;
+@@ -27,6 +31,20 @@ struct {
+ 	__type(value, struct elem);
+ } rhmap SEC(".maps");
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_RHASH);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__uint(max_entries, RHASH_STRESS_MAX_ENTRIES);
++	__type(key, __u32);
++	__type(value, __u64);
++} stress_rhmap SEC(".maps");
++
++static __u64 stress_iter_cb(struct bpf_map *map, __u32 *key, __u64 *val,
++			    void *ctx)
++{
++	return 0;
++}
++
+ SEC("syscall")
+ int test_rhash_lookup_update(void *ctx)
+ {
+@@ -246,3 +264,21 @@ int test_rhash_delete_nonexistent(void *ctx)
+ 	err = 0;
+ 	return 0;
+ }
++
++SEC("syscall")
++int test_rhash_iter_stress(void *ctx)
++{
++	/*
++	 * Concurrent rehash may produce duplicate visits. Check that the
++	 * helper still gives one walk a finite callback bound; no snapshot
++	 * or unique-visit guarantee is expected here.
++	 */
++	long visits;
++
++	visits = bpf_for_each_map_elem(&stress_rhmap, stress_iter_cb, NULL, 0);
++	if (visits > stress_max_visits)
++		stress_max_visits = visits;
++	if (visits > RHASH_STRESS_MAX_ENTRIES)
++		stress_overruns++;
++	return 0;
++}
+-- 
+2.54.0
 
