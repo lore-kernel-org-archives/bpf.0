@@ -1,42 +1,42 @@
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD29939C006;
-	Fri, 28 Aug 2026 09:21:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E637039CD01
+	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 09:22:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787908921; cv=none; b=ulo8tqGtjk/8C5ytRabqTs0GqwIAPOMD3CiSOpjaCc6val5LJeikEbrzili1vLVgSSHS5JqEIpT8n96GhM4W+FqbRXsssp6EbSUDS3ukJ0I/sNIJFlM+XZBSGmKfsXv+UX7dvUw0M2+MMX6Yrz6TszeJCcJABGNmWkNzhrT9FJc=
+	t=1787908925; cv=none; b=D317qWoAEUJhhOFZHARgNXHqvr726b8nyHhq9wWvx8khnOfpUfQic6D1iUbsHEeUpYzlZql9WZE7QWz6Z9aW/RWtSz0ixWCd3YVAgz9B/YM6Y6e3DyYpU8wfFZpyGd1UMGYiu+pedMBOs3sHHRJ9zzcyOj5KspATTQYYG6xJt5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787908921; c=relaxed/simple;
-	bh=CT/Gjo2eneEjO2Ue0I4TGs9z+iX8TPRLUGz0u+8Gko4=;
+	s=arc-20240116; t=1787908925; c=relaxed/simple;
+	bh=HXi7NSRQhhf/igJ8sIZ5qhIpTU8wkcQ6VOAutXrLPIU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=CCJXCDgTa8uvXRavxb1/dJlbjoK6IpBD/BsKDMkkwI/cnJi5Ryrz4EFdbIECnrfoULS+LuM/hO97FcmLk5crLcvMpmf/8wNdYBc7N9xvhGUs+YLOB38kXx++7q5n17Mj3SkViRfmHNr15desrJAuCSQv0WGxciGa2fxQovN6D3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=oPijqEY7; arc=none smtp.client-ip=185.246.84.56
+	 In-Reply-To:To:Cc; b=qAOPApagSvHRDrATv0xPieyZV8WzYwIucO7U+fxMoAhgo4thGHFwckp5VhXt2//L94H0jy2sRv8MXzaN6XW4o9TGdpjXeuraB+ReaV+Y4O47W2kX57udZGLKfEw5ZhBFeIyREDKogj5XC4JzGwYW2tw/fJG1g9viIDB644dErXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jYIowAHy; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="oPijqEY7"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jYIowAHy"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 019881A189C;
-	Fri, 28 Aug 2026 09:21:58 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 33C941A189D;
+	Fri, 28 Aug 2026 09:22:02 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id C1D2160537;
-	Fri, 28 Aug 2026 09:21:57 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E19E111C780ED;
-	Fri, 28 Aug 2026 11:21:48 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 066AD60537;
+	Fri, 28 Aug 2026 09:22:02 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9DE6A11C78028;
+	Fri, 28 Aug 2026 11:21:56 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1787908912; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1787908920; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=0kQP0GmtHe4QERJ/pQao5qjnFU1LNd7sa5g7wyCFZaQ=;
-	b=oPijqEY78j0NlYA+1xlUOVtcE3a4M/uJiPZ4h4CBhyfoHKUuVDok7hopdikldhoUKkKydI
-	0/KQxDOfMR+rQeGWOliSYDJw4CxuwBy64N6uMe60soW/mlOJALmrFju8MCP981qfgP1Pqu
-	Ku3FXN1NhMu4Z1wmwOq+NdsrXkJhpRDpUA9reE6jb/+gOeVh4Eaq0jtlnjcldyDc8AHbD0
-	/+XvxZ/mc5Y3Y2JoGZ/MHvh8olN9yOfLVND9TjWqyA6osooJ7ua5qDguHBuL9koQ3Qs7gs
-	uBivihPZYmZxX7ufqjJql8Wab4QakYYIffkdHfwDx1RBpa5qnwhCvnlDd4NxnA==
+	bh=YURpgYjUK0qnr6W3P7guU1YJ7lGdHWmKu6Gc7x/q/ZU=;
+	b=jYIowAHy0qpZesVC+B4Z+HjMB01j2iPWKWApCXnZJLJRmuvcRZ+zROBBuvg/kEKV/6aYWW
+	0IXTJV0Vlsgz67J/0ZR4GYyIEwCVLixMXrEzsfqH9dphQcYbVrwF+vM5Y1x8wckPscFySL
+	yJDNiMCQFrEUu8sxijOps3OKdhZ78bnpeSQRE2VFJKZrZdeHweH/lT3d7064oN7hGp0AI9
+	9lCkbwSe2o1PSawA0i6oisxCpiMm3iUVNHaj2qerV/peEOpAMa5dEC4sAlEmVO4OZNaLRM
+	4tU2+ypYCUxF0WMrjreyWYAi5R9uxzd9+7Ec9Kr50U9MffYNC7+Um1sLd7AWsw==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Fri, 28 Aug 2026 11:21:13 +0200
-Subject: [PATCH bpf-next v8 5/8] bpf, x86: enable KASAN for JITed programs
- on x86
+Date: Fri, 28 Aug 2026 11:21:14 +0200
+Subject: [PATCH bpf-next v8 6/8] selftests/bpf: make cmdline_contains
+ stricter
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260828-kasan-v8-5-7c1c0fdb9d7f@bootlin.com>
+Message-Id: <20260828-kasan-v8-6-7c1c0fdb9d7f@bootlin.com>
 References: <20260828-kasan-v8-0-7c1c0fdb9d7f@bootlin.com>
 In-Reply-To: <20260828-kasan-v8-0-7c1c0fdb9d7f@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -70,28 +70,61 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.15.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-Mark x86 as supporting KASAN checks in JITed programs so that the
-corresponding JIT compiler inserts checks on the translated
-instructions.
+cmdline_contains is used by BPF selftests to check the presence of
+specific kernel commandline parameters, but it currently suffers from
+two issues:
+- the read commandline isn't NULL terminated right after the read data
+  but only at the end of the buffer, leaving uninitialized bytes that
+  are then possibly tokenized
+- the comparison of found tokens is done based on the size of found
+  token. This could lead to too-short-but-matching tokens to wrongly
+  match the search pattern.
 
-Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+Enforce stricter checks in cmdline_contains to avoid accidental matches.
+
+Fixes: 399f6185a1c0 ("selftests/bpf: Fix selftests broken by mitigations=off")
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
- arch/x86/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Changes in v7:
+- add missing Fixes tag
+- drop unneeded size check, already done by strcmp
+---
+ tools/testing/selftests/bpf/unpriv_helpers.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 48ccc3e6059d..745890d91e99 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -234,6 +234,7 @@ config X86
- 	select HAVE_SAMPLE_FTRACE_DIRECT	if X86_64
- 	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI	if X86_64
- 	select HAVE_EBPF_JIT
-+	select HAVE_EBPF_JIT_KASAN		if X86_64
- 	select HAVE_EFFICIENT_UNALIGNED_ACCESS
- 	select HAVE_EISA			if X86_32
- 	select HAVE_EXIT_THREAD
+diff --git a/tools/testing/selftests/bpf/unpriv_helpers.c b/tools/testing/selftests/bpf/unpriv_helpers.c
+index f997d7ec8fd0..9dadcacaef0c 100644
+--- a/tools/testing/selftests/bpf/unpriv_helpers.c
++++ b/tools/testing/selftests/bpf/unpriv_helpers.c
+@@ -72,8 +72,8 @@ static int config_contains(const char *pat)
+ 
+ static bool cmdline_contains(const char *pat)
+ {
++	int fd, cnt, ret = false;
+ 	char cmdline[4096], *c;
+-	int fd, ret = false;
+ 
+ 	fd = open("/proc/cmdline", O_RDONLY);
+ 	if (fd < 0) {
+@@ -81,14 +81,15 @@ static bool cmdline_contains(const char *pat)
+ 		return false;
+ 	}
+ 
+-	if (read(fd, cmdline, sizeof(cmdline) - 1) < 0) {
++	cnt = read(fd, cmdline, sizeof(cmdline) - 1);
++	if (cnt < 0) {
+ 		perror("read /proc/cmdline");
+ 		goto out;
+ 	}
+ 
+-	cmdline[sizeof(cmdline) - 1] = '\0';
++	cmdline[cnt] = '\0';
+ 	for (c = strtok(cmdline, " \n"); c; c = strtok(NULL, " \n")) {
+-		if (strncmp(c, pat, strlen(c)))
++		if (strcmp(c, pat))
+ 			continue;
+ 		ret = true;
+ 		break;
 
 -- 
 2.55.0
