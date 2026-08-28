@@ -1,94 +1,98 @@
-Received: from mta1.migadu.com (out-107.mta1.migadu.com [95.215.58.107])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B1852C21F1
-	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 03:27:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B4B439A071
+	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 03:50:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787887627; cv=none; b=QP1gj6P+E7Ux/qf+0R9BgBifeZ532tcaSTG03m3xKgspb+DQU/ulW4z1EmWiN6aF25CogRLRElxX/67T84JhgW2ZW/XawH51zWVAHGLR4o1DJqZCVAxPvykgSsPeQMmHzZV91WK1MjW2trrXzidIH3RnmwgFtGQCkKEbLqZ83X0=
+	t=1787889058; cv=none; b=VHoQlpAb4pMT4z6QZX587Y+rK6160gazTUMEFLKiM0Ui7j0XQLwgcmNEfGlYZzW6ODG7HqAjyMXroDyqu2gNOENprnXqs0n1FGbvT6lHmuMCHn8sIzAb3jWsCM5bkTJGg9tqnPkgKyaTqwgFLAmVyTi00UsnOjQrdFrMpxy3rBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787887627; c=relaxed/simple;
-	bh=Ts1xVkuWbeJd1rXe3DJ7aP7vZaIUXkgyACVVNVNZJZY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OdT/GPc+QW9HhNaFxDPlDfMB5bEGcmIFZ6XClxUzsvpvaKwl7XBhnYb1ir8jWnP0J0Td4MYi9k7PcuAsZexdMxyfgBY/preBCswIUAa9WZ8weBskmrh0ZQHMDgqLcuHWloKJGbb1KqRwzICqy5T6PN4k9/hXccokC6yvenONFpM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=p7PYntHp; arc=none smtp.client-ip=95.215.58.107
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787889058; c=relaxed/simple;
+	bh=qxXuDSETb1QGvICRb6JF6QpQpSR+Hex0aJPS9wGqpCo=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=fM8PKyQpdOQcnDCQGZjnibeE6n9JHfVhDIVQwPBzKkOgwjE+kJbzfhG4GKVpmr1G6Lu8CCUfESdJjli2hvNuxXXYx7tSdv7p8fUHvqjEySZXkkSMt9o5JU2Z5jgrta+qHuvWH6/guNotW3yfw6qZNK17tRGtH6M2n7a9eFy+0o8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Iu0MssnI; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="p7PYntHp"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Ts1xVkuWbeJd1rXe3DJ7aP7vZaIUXkgyACVVNVNZJZY=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787887623; v=1; x=1788492423;
- b=p7PYntHpdYNNzfsaw1FiqRejYWnOnBFksl3igtLgw9R9ufmVN1/AWomEvcb7ON3NWulRQSzi
- RkbKGbTGAC+/ZIutbi/MX0qC6YhJYYzD+pfd9k7aNqASH70eNr9VxlHc5WUakL1k947KlK96SN1
- sVVu4isU3dEc8fYt4p2p2+XI=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id c5a619796e3bf126;
-	Fri, 28 Aug 2026 03:27:02 +0000
-X-Mizu-Trace-ID: c5a619796e3bf126
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <749b6e89-edf8-4478-a003-f10324d60d1b@linux.dev>
-Date: Fri, 28 Aug 2026 11:26:53 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Iu0MssnI"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-cbedd5aece4so1386977a12.0
+        for <bpf@vger.kernel.org>; Thu, 27 Aug 2026 20:50:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787889053; x=1788493853; darn=vger.kernel.org;
+        h=message-id:date:references:in-reply-to:cc:to:from:subject
+         :content-transfer-encoding:content-type:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=x4Wo3AFVWJoN6NjZ+CjXyOXScjwk81QQP/wB9zVSLpE=;
+        b=Iu0MssnIdYs5oBK61RGMgLHv6pbQmm0G6nj+OX53oQc2QIqBIWgKGMStsPhVAIZXCZ
+         6KIXJtU1ggJmTlrObkqAuCwZn5yEFW5irkp2NNYE2E3fib97Y+lIbq35w47CbNm9LQNH
+         1Pplh4AsO8hmM6kJsbIPymf1lYDt+de/jqC+BFGVjCAnzWzped3LlncDTU27kLDQSRqT
+         6189Df9kTOUSqqMjLd3TU9N7vd8l5YdhqVTr/qJQ5EPDza1KH1h/GBp++7QTeUrcSBhS
+         TVgjBixy9VNwEKh5VZ/5DOayOPA26D8vPLHLIBqZoH4yolHFkjNhhuuJqAk2P7qJumAo
+         zfRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787889053; x=1788493853;
+        h=message-id:date:references:in-reply-to:cc:to:from:subject
+         :content-transfer-encoding:content-type:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=x4Wo3AFVWJoN6NjZ+CjXyOXScjwk81QQP/wB9zVSLpE=;
+        b=e6Ekbr60rBqIBF00eJefwszi6PrgqjObK+77J+xleGTg6dZix/rhDAvoHUe4SGSo+z
+         1mjOOnk1U4casQFlG+U+s5G4zGBvYvXIcQ7LI3ma2ik5fM4oZibuDpF7efVxVR0LGWFs
+         dQWjCYxgKTIxmaCLBpsEfUg/cpbkRWfvIC8PfiKDdapzLOGfSGvcl1vEkCERcAzptMZC
+         B80XupMLzdbHlMPyG4K+aWZ0+7vu2JNaS5ggqn6o7Ttsk0D0h8MA6VL7sd6DCsgfw/nD
+         aBOHZXfUOL84F/3BnoIWIDEbSzxeOA+APzzj65fZyXl/A7yDiUxhnymnf3u9TubK1vV4
+         jMnw==
+X-Forwarded-Encrypted: i=1; AHgh+Ro6EhMxVE+v3joBsW6ezFGEtyJNwJWexHtwDHUh4Wu/V4jMUMbfDrTuVvPg4tsJlUffG4c=@vger.kernel.org
+X-Gm-Message-State: AFuF++lnGLthK5GJoiUggZBBH1GZwLBzi4SEtPUTfBphEgvImAJLYp0r
+	SNLpw4oX8/IpJev55hNeTez/NOf/ClqxHlxtl8p0QyD5yuN6u6nnf6Vn
+X-Gm-Gg: AR+sD12lC53drf2G+PLSfhMnwTuy7k3bHd2AoQnDhLlDCDSmMzaOJ4Z4kCLwgo3SR5P
+	FNWqbkhfR8SuHfzOIuhJx0oeFPjXRWKsLQrxbLX7pi0gBI9g1iNh4a2vCP2eK3tPGshipBGfSen
+	4D1qzeykLhdCRTPbPZxLG9MQzYtwBvyad941vTFVeA6nqxzNg9jbL7+iuc0dYJRU4ZVBMH8PAK8
+	bn09SBZn5zTFBj4iE+giQpVlX93dWKroR3g6v3+zgLFPMbJpHT1CzsB02l+yA3bLR90t/cgJAdp
+	ATjknF/gxiwC9dX/BItQ7azwQRCKEdsWeukfc4ExeLA2dg87Eqk8tdi95QdMvHxaoi3haUHu1HS
+	KPTSz9ObS4dfMYfMNdQXQ0esWQPzSlKW5h+9VIBVPAN/N1g1+L6fhQA/KcmegrUvrk9n3EVc+J7
+	DrmrqLYFN1Q2H1zz4GQQgQDLZVeUtFx6pvxR5llFygPnxdGk0QD1Au65hTXwwMS5/c4Q==
+X-Received: by 2002:a17:90b:5484:b0:36b:de66:92c3 with SMTP id 98e67ed59e1d1-3969bc0223emr15330087a91.10.1787889053319;
+        Thu, 27 Aug 2026 20:50:53 -0700 (PDT)
+Received: from [127.0.0.2] ([73.222.46.22])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-142e0e0e67dsm1659184c88.15.2026.08.27.20.50.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Aug 2026 20:50:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v3 1/2] tcp: fix use-after-free in
- do_tcp_getsockopt(TCP_CONGESTION)
-To: "Cen Zhang (Microsoft)" <blbllhy@gmail.com>, edumazet@google.com,
- ncardwell@google.com, davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com
-Cc: kuniyu@google.com, horms@kernel.org, matttbe@kernel.org,
- martineau@kernel.org, geliang@kernel.org, yhs@fb.com, kafai@fb.com,
- andriin@fb.com, ast@kernel.org, netdev@vger.kernel.org,
- mptcp@lists.linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- AutonomousCodeSecurity@microsoft.com, xmei5@asu.edu,
- tgopinath@linux.microsoft.com, kys@microsoft.com, stable@vger.kernel.org
-References: <cover.1787870710.git.blbllhy@gmail.com>
- <d3f97f1acbf0010898148be6e6406e4b8b4a5c84.1787870710.git.blbllhy@gmail.com>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <d3f97f1acbf0010898148be6e6406e4b8b4a5c84.1787870710.git.blbllhy@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 0/3] binfmt_misc: only let punctuation delimit a
+ register string
+From: Farid Zakaria <farid.m.zakaria@gmail.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Jan Kara <jack@suse.cz>, Kees Cook <kees@kernel.org>, linux-mm@kvack.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Farid Zakaria <farid.m.zakaria@gmail.com>
+In-Reply-To: <20260826-work-binfmt_misc-delim-v1-0-43618adf8599@kernel.org>
+References: <20260826-work-binfmt_misc-delim-v1-0-43618adf8599@kernel.org>
+Date: Thu, 27 Aug 2026 20:50:28 -0700
+Message-Id: <178788902858.3236768.15019506644956689303.b4-review@b4>
+X-Mailer: b4 0.15.2
 
+On Wed, 26 Aug 2026 17:55:45 +0200, Christian Brauner <brauner@kernel.org> wrote:
+> [...]
+>  tools/testing/selftests/exec/Makefile            |   4 +
+>  tools/testing/selftests/exec/binfmt_misc_delim.c | 127 +++++++++++++++++++++++
+>  4 files changed, 143 insertions(+), 3 deletions(-)
+> ---
+> base-commit: 66498c75b4f8017f62d720d9b59675bdf3abce91
+> change-id: 20260810-work-binfmt_misc-delim-83f62cbcfe23
 
-on 8/28/26 7:55 AM, Cen Zhang (Microsoft) wrote:
-> From: "Cen Zhang (Microsoft Security FORGE Labs)" <blbllhy@gmail.com>
->
-> do_tcp_getsockopt() reads icsk->icsk_ca_ops->name without holding
-> rcu_read_lock(). Since commit 0baf26b0fcd7 ("bpf: tcp: Support
-> tcp_congestion_ops in bpf"), icsk_ca_ops can point to dynamically
-> allocated BPF struct_ops memory that may be freed concurrently via
-> setsockopt(TCP_CONGESTION), leading to a use-after-free.
->
->    BUG: KASAN: slab-use-after-free in _copy_to_user+0x37/0x60
->    Read of size 16 at addr ffff888013505260 by task exploit/149
->     _copy_to_user+0x37/0x60
->     do_tcp_getsockopt+0x158a/0x2460 (net/ipv4/tcp.c:4585)
->     tcp_getsockopt+0x91/0xf0
->     __sys_getsockopt+0xf7/0x170
->
-> Fix this by holding rcu_read_lock() around the ca_ops->name access,
-> using READ_ONCE() to load icsk_ca_ops, and copying the name to a
-> stack buffer before releasing the lock. Also annotate the relevant
-> icsk_ca_ops stores with WRITE_ONCE() to fix the accompanying KCSAN
-> data-race issue.
->
-> Fixes: 0baf26b0fcd7 ("bpf: tcp: Support tcp_congestion_ops in bpf")
-> Suggested-by: Eric Dumazet <edumazet@google.com>
-> Reported-by: Xiang Mei (Microsoft) <xmei5@asu.edu>
-> Link: https://lore.kernel.org/all/20260821182449.79785-2-blbllhy@gmail.com/
-> Cc: AutonomousCodeSecurity@microsoft.com
-> Cc: stable@vger.kernel.org
-> Assisted-by: GitHub-Copilot:claude-opus-4.6
-> Reviewed-by: Eric Dumazet <edumazet@google.com>
-> Signed-off-by: Cen Zhang (Microsoft Security FORGE Labs) <blbllhy@gmail.com>
+Makes sense.
+I think it's still pretty accepting when you consider all the
+punctuation characeters even allowed :)
 
-
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-
-
+-- 
+Farid Zakaria <farid.m.zakaria@gmail.com>
