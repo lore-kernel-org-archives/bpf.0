@@ -1,96 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-154.mta0.migadu.com [91.218.175.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE4D2DB79C
-	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 18:02:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6930137EFF4
+	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 18:10:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787940158; cv=none; b=VnMncaLzVKFey4qtzXPIv1aL92e/1EUSdZ4e2vw+jq3m3Kejb5cfdwk3zaDKhYCKKrVxsHmybC05vU7XDrcZILHQ/l5vPZLYlXU1I9/9YvqfzV7KY+HrlZiDKz7gZq464VWAdHfcgTu6n4tJChxDk8NDfRwk4yrLpEb3U9WJdDc=
+	t=1787940619; cv=none; b=h9U8AVUottglQzLAtLG235zqP4I/mrds5kB58aASd1tqCq2lFOOpvtSgM43MXLLrcCcl3dGwMER/ygMVlRYE1qkdfeHsTA5G3frbwkkADu80IBNnTmypGoFrmmB9DVHS/MFqD+3Rtdvv509FSd6exdxUk3EQev7HceHC/QUntbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787940158; c=relaxed/simple;
-	bh=rkeDuYmelt0qo8TWXWt1/MsnPILLcuVkly8d/zILlq8=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=B/w1SMipc+4qdYzBQczmUNVciauOpaAa8hPdpk/49GyWV9qHybTqoTwJYlc0zT6jmHclD9Gw4MPL9AimUJNcNiv3KZdRokvMQ3nheMmtuc9JwSMtb750OnuLSoL070rDizIqsJKJarGZnXE2hpzaUEtfUmqx3j/Nt3YUQn+DkAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WHQvh1es; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787940619; c=relaxed/simple;
+	bh=0jAntp/k5frMlwWOXtwiJhAaoLyOUrRRAzcIFD6dJfU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UpoumCXxbOUO9OCn0+NrGM33IaM2ojfqzGw6gPDX6OZF7KHI06cYIeDkGF6wxO4brld2eFo/HiI+kc8CjxSF1AewEFXqZfOi3bdTOIB9PVHUY1+jlsJaOEPEZjfWYqfgZTdDx7tKXaZwnkSrE10p5BdV93WbH9GH+bY6Cao4m7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZnSESBlt; arc=none smtp.client-ip=91.218.175.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WHQvh1es"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4B1D1F000E9;
-	Fri, 28 Aug 2026 18:02:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787940156;
-	bh=1efuzne4f1Ld2NPkUYhsg6j5eoP0gWovCSNmjFUrTKM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=WHQvh1es5tpjQb2L/HDl4pJxERgczSJIVh+O3rHQQE2b4ul8Wcr6nYR0rPViNseQT
-	 1yu1Aw1rkePtm9yiBsDDr6Y+iT6xjULXz8sFmYSMzdIUpMs0NUv9T39R3vQnLkQt07
-	 f1zOvQ6llyCFHvsV7LYjWzR/2RR7d/7TXYiAyhoCzGcc3giv13QNmb+Et+D+vG4wWf
-	 sTcrUVzUt46+xTLnvd3WGRSyPbK8ZnYtxSVQluwgkcxM7LOA+G/97sRkRah43yEOS+
-	 w/qQ/XAg6Tl0oKAN4UwWAHKB6YxgKK+DlbDD1YC6fhfIsU3bdbEGaVaGRwnYiSLRp6
-	 w1na1+93ARbQQ==
-Content-Type: multipart/mixed; boundary="===============7287632020056444692=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZnSESBlt"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=0jAntp/k5frMlwWOXtwiJhAaoLyOUrRRAzcIFD6dJfU=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787940615; v=1; x=1788545415;
+ b=ZnSESBltoXNRd/l1zOp3s8gpPsJYvW1Wub4Zv8/fGBhhPkA0KVUNutGEKx1k0KzU0XagoSBH
+ etaLi62vFrmWwaicm8R84lqPrylKOxmC4eIlaEkIgcjMn8ex6OUwXcdF676787XDIwybygrAR//
+ hsCXGmqpnObBUVIuabiE4Knw=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 6a2f8667b8884629;
+	Fri, 28 Aug 2026 18:10:15 +0000
+X-Mizu-Trace-ID: 6a2f8667b8884629
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <47573fc4-be5c-44bf-b307-b1528eae196c@linux.dev>
+Date: Fri, 28 Aug 2026 11:10:10 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <cf27d7b3ae9842061b2291e98b9620683234d10d6955205d9ba0da41617311db@mail.kernel.org>
-In-Reply-To: <20260828170534.1011183-1-yonghong.song@linux.dev>
-References: <20260828170534.1011183-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH] selftests/bpf: Bound the offset accumulator in __tld_fetch_key()
-From: bot+bpf-ci@kernel.org
-To: yonghong.song@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 28 Aug 2026 18:02:35 +0000 (UTC)
-
---===============7287632020056444692==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 07/11] bpf: Allow arena pointers in a by-value
+ kfunc return
+Content-Language: en-GB
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260827061114.2514603-1-yonghong.song@linux.dev>
+ <20260827061150.2518572-1-yonghong.song@linux.dev>
+ <20260827065558.C91891F000E9@smtp.kernel.org>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260827065558.C91891F000E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/progs/task_local_data.bpf.h b/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
-> index 0df8a12fd61e2..a31a399870bef 100644
-> --- a/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
-> +++ b/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
-> @@ -61,6 +61,7 @@
->  #define TLD_ROUND_UP(x, y) ((((x) - 1) | TLD_ROUND_MASK(x, y)) + 1)
+
+
+On 8/26/26 11:55 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
 >
->  #define TLD_MAX_DATA_CNT (__PAGE_SIZE / sizeof(struct tld_metadata) - 1)
-> +#define TLD_DATA_SIZE (__PAGE_SIZE - sizeof(__u64))
+> Pre-existing issues:
+> - [High] Kfuncs returning structs by value can leak uninitialized kernel stack memory via struct padding.
+> --
 >
->  #ifndef TLD_NAME_LEN
->  #define TLD_NAME_LEN 62
-
-This isn't a bug, but struct tld_data_u at line 91 spells out the same
-expression for its data[] bound:
-
-    char data[__PAGE_SIZE - sizeof(__u64)] __attribute__((aligned(8)));
-
-Since TLD_DATA_SIZE is exactly that bound, would it be worth using the new
-macro there too so the two cannot drift?
-
-> @@ -189,6 +190,8 @@ static int __tld_fetch_key(struct tld_object *tld_obj, const char *name, int i_s
->  			return start + off;
+> commit a43266e4517bac02a4bb85149655178eefda72ad
+> Author: Yonghong Song <yonghong.song@linux.dev>
 >
->  		off += TLD_ROUND_UP(metadata[i].size, 8);
-> +		if (off > TLD_DATA_SIZE)
-> +			break;
->  	}
+> bpf: Allow arena pointers in a by-value kfunc return
 >
->  	return -cnt;
+> This commit allows by-value struct returns from kfuncs to contain arena
+> pointers, in addition to scalars. An arena pointer has no provenance to lose
+> and can be cast by the program, so returning it as a scalar is safe.
+>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 967ad010b3222..9a36808136c9a 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -14119,13 +14119,17 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>>   
+>>   		/*
+>>   		 * The returned struct comes back as raw register bits modeled
+>> -		 * as an unknown scalar, so it must contain only scalars:
+>> -		 * otherwise a pointer field would be laundered into a scalar
+>> -		 * and escape provenance and reference tracking.
+>> +		 * as an unknown scalar, so a pointer member would be laundered
+>> +		 * into a scalar and escape provenance and reference tracking.
+>> +		 * Only scalars and arena pointers are allowed: an arena pointer
+>> +		 * has no provenance to lose, since a program may already derive
+>> +		 * one from any scalar with addr_space_cast(), which confines the
+>> +		 * result to the arena.
+>>   		 */
+>> -		if (!btf_struct_member_walk(env, desc_btf, t, BTF_MEMBER_SCALAR, 0, &path)) {
+>> +		if (!btf_struct_member_walk(env, desc_btf, t,
+>> +					    BTF_MEMBER_SCALAR | BTF_MEMBER_ARENA_PTR, 0, &path)) {
+> [Severity: High]
+> This is a pre-existing issue, but does returning structs by value from kfuncs
+> leak uninitialized kernel stack memory via struct padding?
+>
+> When a BPF program calls a kfunc that returns a struct by value (up to 16
+> bytes) containing padding bytes, the C compiler leaves the padding bytes
+> uninitialized in the return registers (e.g., RAX/RDX on x86-64).
+>
+> The verifier's check_kfunc_call() processes this using btf_struct_member_walk()
+> which ignores padding. The code then calls mark_kfunc_ret_regs() which
+> unconditionally marks the entire return registers as fully initialized
+> scalar values:
+>
+> kernel/bpf/verifier.c:mark_kfunc_ret_regs() {
+>      ...
+>      mark_reg_unknown(env, regs, ret_regs[0]);
+>      if (nregs == 1)
+>          return nregs;
+>
+>      for (i = 1; i < nregs; i++) {
+>          mark_reg_unknown(env, regs, ret_regs[i]);
+>      }
+>      ...
+> }
+>
+> Can a BPF program then read these registers and exfiltrate the uninitialized
+> padding bytes (e.g., via BPF maps)?
 
-This isn't a bug, but would a short comment here help? The check is
-unreachable for any metadata the library can publish (per the -E2BIG
-guards in __tld_create_key), so it exists to keep 'off' a loop-invariant
-range for the verifier rather than to catch a reachable overflow. The file
-already annotates its other non-obvious workarounds inline (the
-tld_uptr_dummy_t member carries a comment explaining it only exists to
-force BTF emission), so a one-line note here would match the local
-convention.
+We should be okay. Based on type, the return register will do proper narrowing
+e.g., zeroing out the upper 32bit value, etc.
 
+>
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33193637868
---===============7287632020056444692==--
