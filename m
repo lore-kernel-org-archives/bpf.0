@@ -1,294 +1,226 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A86D325B08D
-	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 16:33:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C40C4370ADB;
+	Fri, 28 Aug 2026 16:41:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.16
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787934823; cv=pass; b=mEfa0uYocJfJ7j62tUQHggYTEK+LbEMIAFK9qZs8/t9csIPure+/XhAWZpwDtjxs5E+ZEmbQ017RjWVMTUc9qQkfFjRxX4aQQ1zwPvAey4pic6iV7wssN+0t4hkqB3Z+F9UeGBi8HZoh6WCFdd81IcjyM/wtyRn1VGhYHo3z9GY=
+	t=1787935270; cv=fail; b=sWAaHK4xnqnY1slt+Aq21BMPGImw+GqjAmzL5CUJeFXjv5EeIuijeXAZujdUPdLR7x1egyR9ojjhQsMCozQF6K76wUcQoywPwLJvxsw1UdmH/Q+s2rR5h0Y+jhjv/NQehM1Vo7kAV6ZcFZDxT9FwaCSQUlnbguTB96LSlBkpv2U=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787934823; c=relaxed/simple;
-	bh=uXJEGZ7C2nTWwCdZbKtvn+qXAEOS28piw43PGwcEo44=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XPC4KquiQfhFctOUZDzZZ/jvBlYZO+1rZ1zgOStjHWANspDXzRiJ941dhyzDHQkU01UPgSwNb7LH1cl1kuqQ5v+aslwoYRh3f755R7Mweob7bA1p4Euwrut32xmUFqoe9+/K7h1uoBH9j6nPP+ScN+ljptvH1r6owgU8MYcfq7A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UbmK8F0u; arc=pass smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787935270; c=relaxed/simple;
+	bh=HDaJb1m25a/d3xfRA4wQUlw8sWQoJcFwSfGJwk4XUzY=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=u4V8Etjtg44653kBoGmuAd0DQxECiXLi9CZ08UJLu2B/4plAdNSXb7uOFwi7emFsmYnSZyqNrBOWTSWqoPHDyxTARj5sWVaKZnf8EzY4YesNME91roLW0AqwUXeHLXPWsHq6bVHTZYFyj+etPNkTsiXWjN+lx/GZKN2UPBTGrWc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ekn4NoAp; arc=fail smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UbmK8F0u"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-cc1d57602e8so1024136a12.3
-        for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 09:33:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787934821; cv=none;
-        d=google.com; s=arc-20260327;
-        b=b+WYwF0fLipmpZkVP8kUaNkeDSTaVcTzp+Kzxx8PNV+eDwzVZiESf5uuwMGRQYnftX
-         OtOdjbM3bhQ7Gbxcc70iTA93uqR34Kv+uxTWkKsMeYm+BNYgzlWDGULfyXNP8Mozth1a
-         l38qTvECQgjk+XfYs2E1xKzc0hKsor2mTqtSK3/dt0HtX2DjBSsFbgA4Wen8q8bKQE9h
-         5tyrFeSINHJr9r8Eyp+17aNNR7iHMLK3vCcWWrcgwgjUhIJ56oXh3VHd4frjN+xNsc9y
-         mlbeecbiEfHXToPUXf/FzKM39HxwC9DbBc+CNX2xJmqPpskG4qukTpZ5nVIe0XnH0bcw
-         FfZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=nPVPSGSGzhshVuR+BI/uVZuAl34n42L0WhViu78Iw1w=;
-        fh=IhN3luBD9UgyHzLP1M9ci3veL00rEY3LMquC5lVUaeY=;
-        b=NyA/x7KGdjzMeoLf6Pc6BWlkTr7JHGdvMF9E0m5FCawKNucO+jBsnFEa8ZJmky6VFO
-         PYfFsHMKmWxi2m8LHF55yw1QE3z8OgZ2gDl0yDU0EBfuj4Mye1e24NRnmcSUxO3lKHiz
-         wTvdn44ZWrKm/zK7QufD/YYcWM5qZIroY46UNBK9aDI+G8DRjoWoz0KAvXTNUyIUGfTg
-         Z1BWcrdqwHOFxNbVyY6meMfFaHQvXs3SN0SZ8ducMUN4QIh9qjCjs+Nifps/G+Tr9CyZ
-         z3A739gSw4UGMwNf0XIuI0cwpiUziEBO/mHSF/HPo581qX27AgE/tJOWMwKtlio/8vIQ
-         fXjw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787934821; x=1788539621; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=nPVPSGSGzhshVuR+BI/uVZuAl34n42L0WhViu78Iw1w=;
-        b=UbmK8F0uQ3D5VSDMT2U4jnP0Z4dPetV9MpFuSlmNTIzpTpwbIVf54CCnXB4s3waZue
-         gIta1wIGwZHi/V+NvWVos58dddasJAU8ewBXxquU4SUzpnMt1CKOS4e1QVITuy2w342p
-         J5IrVKyboTGb/+ra0YznAT12tugsEnyieIKdgpL1VxLg+d0rB5QDGHF6rN55OF7c1Mwd
-         rOcyLkAVhu4Dyd6lyuwofXUlT5/88OlQMFOAAFY4F90UYOswRmp3RNSTDAOJlMWypEeW
-         IgtUTENQVJ0BcrJytPdClf4Qf6HfmnCsUbeeGVHqERvdBR9sZ7ahnO5UKWBoG8Ksiwho
-         f5RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787934821; x=1788539621;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=nPVPSGSGzhshVuR+BI/uVZuAl34n42L0WhViu78Iw1w=;
-        b=YU6bJ2Y4L1CDAw7Wo3+3arTYcIP+WqW9nC4ayWBy6g8gM5kN0gAXLntefuIjdsyX58
-         t3ZjBPm8UEd8LX5K4pwOpNkoBA9Dcmi57Jj3UfJki8I3VeJyiHqveOCPu5kELnqusnYf
-         jisT3kiq1WhnY3/NK8sWT+z49EEYdhUatR+tY313iAlbwU3K/ZAU5BaDMyggsMJhbESq
-         M733Q0gLP2h4S3Oa9YZBSKfQaP/siob108jbMWI5uVM7nk2WzRtdRPV2EX0ddvAzO5sF
-         pZ8JtKb+2Ox5/778psoZUMjAwwqTp3tTmcR2Ucv0mgLwvpd4Pnfak3jBeJ8tbnl6XiTs
-         XjmQ==
-X-Gm-Message-State: AFuF++nb74N6OQCC6uD+j2OjdWAarQdUJTAmJFQvoTqatNfwkDxSuKOM
-	AhBCKU52+86WyJWyC076v5ygySsmiiIqvXTDXAOm/9XeUBI/72goTzmFdA6Pkj/cAoqRZnp0He7
-	/x0Wye+PjeMCSq7zlos4B6xcQXxEamQc=
-X-Gm-Gg: AR+sD134aEk0+FNP7UNk5H9un6teHnfq68i5axK+k/l6goKgyqRhM1wN8Ww+wsZpP0D
-	6iCezZA8otMCpKQQnKsVQGN5ToRE9NBD+XrNNzKY5QnZeUr1bk6R44FiTrLLVP7Vg/1vV4+lKfJ
-	8wc0HphoGaWkQXTm+FmkUXAvz+bJh6iynD8Gc2Qs9yUmVhPN4K6MPjd/WsuQOAvfhaHXo6K0lB4
-	ES+UPo3o6VZ1XdCQo0UPsMl3x9ISziU72BtWOZ9tbQ1UsPMQzS8GzjGRr3y7xFrCildXzcc731n
-	W+VT7d0EImmzmRrwiC92IecLEW8e6rVC7J3NnFbenjh1+hCXdfzhFft9odZL28jfrd3tbTv236o
-	6m0qhLGsl6ejb5b39wdiOYF8SiAK4HjC5w5QsXlXTlg==
-X-Received: by 2002:a05:6a21:594:b0:3bf:49c8:f7b with SMTP id
- adf61e73a8af0-3d2681a3f3cmr18039190637.13.1787934820819; Fri, 28 Aug 2026
- 09:33:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ekn4NoAp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1787935269; x=1819471269;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=HDaJb1m25a/d3xfRA4wQUlw8sWQoJcFwSfGJwk4XUzY=;
+  b=ekn4NoApKHcF2GicaM78/kuZ3uDux72UMmqfp+LTPy6nQqPIJdqBpgtg
+   SiAfKtifjDiSOJMW3X1pxlWjNG2+G7E3LxreWOQFnrN9e2hBAIMiyCJrc
+   YK++cAUu0W4SZB0eLfaeneh7kSaZXUvMhRCIDrHK2mK6d4puITe2nIxXS
+   c3osAKL3kFdi/GouPESwE21Q0fGah1rT5H5plwm7NuKSamUHf6b+NJWTi
+   LKMYT47owOGr7ORMMrXGiPLxrl8KnA2QqptAqGZ67Xb3zpY0IZs9lKB+2
+   Q49oczV+5XHjHFfPrtoeglgEKUZULKjFvuZFTfqwFSuOlPdarm9cRPqp1
+   Q==;
+X-CSE-ConnectionGUID: NcZNoxq2SXiZeWei1b+msg==
+X-CSE-MsgGUID: wjOED3pNQUifiT3MnMR+1Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11889"; a="75993111"
+X-IronPort-AV: E=Sophos;i="6.25,248,1779174000"; 
+   d="scan'208";a="75993111"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2026 09:41:08 -0700
+X-CSE-ConnectionGUID: fhK2NxsRSe+dwk0KhtHq/A==
+X-CSE-MsgGUID: NF7LhHy4RkueDZcVi0B7pg==
+X-ExtLoop1: 1
+Received: from fmsmsx901.amr.corp.intel.com ([10.18.126.90])
+  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2026 09:41:08 -0700
+Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.46; Fri, 28 Aug 2026 09:41:06 -0700
+Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
+ FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.46 via Frontend Transport; Fri, 28 Aug 2026 09:41:06 -0700
+Received: from DM5PR21CU001.outbound.protection.outlook.com (52.101.62.46) by
+ edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.46; Fri, 28 Aug 2026 09:41:06 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=cg0F3PI1sWwRvX1I2eJutWJqEiHcJZNGRr10WEmqdVmf2at3Mra3o+hDobBwdhSrToOtYo3AeRPiAmUSZGiNGEoDGPiofHgE5jVZNj8vM0VMdZLA+lsUU7ErzzQO2cKeEhK/W4R0T1j4hjL3k7JhrWxtYTPpEHBDkZOSLrHQ8QnxKSR476SZ6K/AIiU8Epy30QJxI8MG9vD79KQ/LaPfDueWOoC8W3JrSs552auO7wXvNKY2RGA9NZ2Jq7VZuu9Hq0sMjmVFwzrda78naFf68EqvYATMXrKDo23A3zoW/OmwIG3icjnAfuXOpkhjHru3T9hRG/l3gaIWGKjtSAvDtw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZEtHApf00HDzzdbGONy9QJxR40bkAXWT1X27JAiQbjY=;
+ b=d0u0zwU05QRWPteyPKVOEynBqYuE70feShAYZdXaBXFbjlR9OS/YOKdXrCq5KChsED5bl44Bf/wt7Uf+uIuwK3fy/GsjM4+Q6eBwssNOfySzSe+6IhrjVPCVzToHqyyJujPaoYNLHHNy6DYPTDrcEgQ07cJOIS+fG0XUtarjdyDGkE3WMDVDQJwNt3RikcRhZ0u+lxno7uDgrc8AsLPhft++fE8N20pt5TToMFEMVS/Cjb8WHhd43nSRrEDVtpjKec3BY/gLG4tVO7fjSE2NkDH0TuFD/PKW63LUnClx56YcWBEzB+TDBu4IF+ANtLr7lVVVE7PiDEPc+deqQyL1ag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ DS6PR11MB400772.namprd11.prod.outlook.com (2603:10b6:8:528::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.10; Fri, 28 Aug
+ 2026 16:41:05 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd%6]) with mapi id 15.21.0360.008; Fri, 28 Aug 2026
+ 16:41:05 +0000
+Date: Fri, 28 Aug 2026 18:40:59 +0200
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: Kuniyuki Iwashima <kuniyu@google.com>
+CC: <netdev@vger.kernel.org>, <andrew+netdev@lunn.ch>, <edumazet@google.com>,
+	<kuba@kernel.org>, <pabeni@redhat.com>, <magnus.karlsson@intel.com>,
+	<sdf@fomichev.me>, <bpf@vger.kernel.org>,
+	<syzbot+aa48b5fe7bfda62d1682@syzkaller.appspotmail.com>
+Subject: Re: [PATCH net] ipvlan: unregister upper devices outside pnodes_lock
+Message-ID: <apG6GyB1uzXpmCiO@boxer>
+References: <20260827132133.439890-1-maciej.fijalkowski@intel.com>
+ <CAAVpQUC3w4b5KG+YGrK7bDNoaL-RPpmEu3FVJiyzWPewoJt2=g@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAVpQUC3w4b5KG+YGrK7bDNoaL-RPpmEu3FVJiyzWPewoJt2=g@mail.gmail.com>
+X-ClientProxiedBy: AM8P190CA0024.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:20b:219::29) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260827-bpftool_cyles_per_run-v1-1-77d7bfc3c065@meta.com>
- <CAEf4BzaKFk9yu10P9bXOE9i=hD8SO+_XfvPbnEBU7cd+eLDVCw@mail.gmail.com> <6e864df5-4fd0-4ae5-a8c6-d2abb9f818d7@gmail.com>
-In-Reply-To: <6e864df5-4fd0-4ae5-a8c6-d2abb9f818d7@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 28 Aug 2026 09:33:27 -0700
-X-Gm-Features: AcwNN1Wrjn05h7J7qUE_JOP0Qq6Q4UFGuLfI8nuOOMvhksEQT-eWsyaIfTeHxdo
-Message-ID: <CAEf4BzamFa3MebxgsBMN4pfgMnwj_Wz21cJpfE2couTVpDUj6A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpftool: Print average cycles per program run in profiler
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com, 
-	memxor@gmail.com, qmo@kernel.org, Mykyta Yatsenko <yatsenko@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|DS6PR11MB400772:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4df8e264-b69b-4a92-a3f9-08df0523271f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|23010399003|366016|1800799024|376014|10067099003|6133799003|22082099003|18002099003|5023799004|4143699003|56012099006|11063799006;
+X-Microsoft-Antispam-Message-Info: 4pZ6WCBa6BOCNUQJqsf9OyBNaLobHmIx/VMSJQVcnvTKWO7mVjtf/h6ijIyvdhBJxoh97DyX1CpUpZBy+LsYtORLj8RhhlDae2iOHu861pVMwPo9cE70oqoKKm32qHqQGgI+D0Eee6mv25SFmvn2KYJfHJqaFRkEXmH7e6iTwb37J5uJrGZnTi0dD3AsAljCf1yMT0aKNZ/YCCIvaUAKLZzRkrtHyQW+IRIUO8J7sLteQZmtQDXvHUpUWoadP2I76BTip7SnoMCwihMmxGN2YvHDEWowVmHH4VesouzaNMBgi9TDpiGLB8x+tLbQrPrTwR26nW3K2VoIzQPghzXwXWcHmreOuNS6//bvETnJRegDvGyV1S/+7DuIhAv+tmZnl3+KmuXbvsQqXMBPc4xPfxX4aYCdSTlrsKvl2+sSs3FTZRLG85XeeMGMuVER0onkdTKAgmND6azQMiEZP/Ec5q1tuYM2g/edEgDjPcSJTd+7z6KmlUmdptA6cHsVelev0rG6ACIA3JUYWgWaAIfTwEkXfPqSCAvT0C2psVN/pKoKAxvgbdJDICpoVICzY17sYC49qEcyY9H3iVO6LbihemQNCu5O+hRjCHNbdvFmVfgN7o7a9EcYjmr0eK3NI0Ev
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(376014)(10067099003)(6133799003)(22082099003)(18002099003)(5023799004)(4143699003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cHdOKzUzaVF0UlNuMWNiSjJOMEFoMkEyeS9obFJJNnNuVkNBUm1IeGtnYjhX?=
+ =?utf-8?B?RTlhL0xVVXdkc2FCZkFwRzcxRzdvUC81MVMvN0M0Kyt6K2RlNmw1TjVoVHhv?=
+ =?utf-8?B?dGNKQUJhT1YyREJiUTcwSmU2TDkxZVgxN0VOaG5YdmlXdjNTNzU4YTJOSncz?=
+ =?utf-8?B?SVpqWFhDYmZCZ3o2bWxHUHgwL3gyQ2ExTGFtQytJRi9iNkhuNkVTbitxS1dG?=
+ =?utf-8?B?OEpMc0U2elE0ZWc4UjFjOVVlZkJZTnRTOGdEeUpJRlJNMnk0L2VvbDNRUFVy?=
+ =?utf-8?B?a29taHhhWHRqOGwrZUNHTXpXVi8wdm92NVc5Vm1jRk90b3drY0ZjNjh1bjlO?=
+ =?utf-8?B?SVZEYkUyTFNxYm95TzMzbTcrOTMyWEtxdlFmOHZob0JWTDA4RjROdmkzU2Vv?=
+ =?utf-8?B?OXo5UU9VWjl6VGJpUGRnaVVwU1JoRytpN1h6Z1hXRStKQ3U4REZXOTlvNm44?=
+ =?utf-8?B?cFV1UlZzWnd1YjdCUDB2R2h1VGFtWmg3UmVlRld6QUFoTWE4WHMwUi9DeVFJ?=
+ =?utf-8?B?WnZHczRjQk54czE1SmFaS1YzejF2M0xJTEdTc0hSNjV0M1FxRW9jOWhwOC9T?=
+ =?utf-8?B?R3FmWmtwRkRlcitjR2E5UjloNUtYUnJQSldhTlhEa3NIMlNOUkJLNUdLL09I?=
+ =?utf-8?B?b0hVZFBQdUNVS01KREhpWGpWVjBaR0dtZ3JZNVFpL1BMa0lpMXdYOUhmUnNh?=
+ =?utf-8?B?WDQ5S1orb3BvUFlJb0hTSlpTMXdXaGt2U3RtOHhNNWlTN0dISnFWU0UxSTRX?=
+ =?utf-8?B?MmZlUDZHbHdNdG12TlZUOTA1ZFFwR2NCSEdVYnpIV3dvN3ZUZ2psM0ZJZnVL?=
+ =?utf-8?B?WnhKQjJLdnc5bVh2L0NPdFIyY0REZHBsL25IYjIvdUQwWUErSUwxYmNiNnpG?=
+ =?utf-8?B?WmsrK3NhSXB6YUQrU3I1Y2xTcmpjQ2lXR2F0QnBDNjJZMEdHeHZRaTF2eEVh?=
+ =?utf-8?B?V3RqVnM0eFFZVUVBRGYzRkdMV0pYU3RwRndSczNMdVdpT3VjajYzYnhpTHJG?=
+ =?utf-8?B?V2tOR0xJOEg4UWQzU01hYmUyRkpPUVoxOGdkU2pVTnhBVXlORXRqTlhBT1I1?=
+ =?utf-8?B?cWdSUlR2d1Y4clFlL2hGeE5UZEZkMStYa1psYWcwNVRES0ZXVStnZy8zUkNh?=
+ =?utf-8?B?bW1wd1oyQWRmVXlOVDJQQ1BWSkc1SFVLcGV0b1F4YXgzcjZIbGNqOWNzWm9a?=
+ =?utf-8?B?U2RtSnpZVDE0L24vMWw3d3ZGcDAxUFFIaG95eWtVTDR6WDBRd3k2SFhhQVhK?=
+ =?utf-8?B?SGZtYk81T3lRTEdYbnptem10UHJieGUxUm0ra0dkN1hKaDhhNVpCa1JqQzVB?=
+ =?utf-8?B?MVpNZitBRTlpVlU2ZGJZM1ZGaVZPcHJCYmZNdGZzUEZOYXE5ZzRrMjZzV2Np?=
+ =?utf-8?B?TyswUXN0SGFPTVZQMVliRXM0dll4VDVlMmkxYlZqUG0zSXZOcEJvWDhlK1NK?=
+ =?utf-8?B?YlVzS0N6TWxBYXFmdUhsMmFtN251eWh3NEVRTlVDZmZGN1d4VnBtbDBFa2lp?=
+ =?utf-8?B?M3hkRWNuN0xFRTlYcllFMjNuNlo1bERhNlNKSHZsZDlwK1ZoTEx6OG4rRk5T?=
+ =?utf-8?B?SEJ3SEgvVDgvMDlsRmJBVWhwWk5VZ2t2RUlBa0hCdFExVDFCalBZVDN3NEQy?=
+ =?utf-8?B?cGlyVFYzVHIvWVZrUjdYeEx2TCtzMFNZSnc0Rml4OElGQTNKVmlsS25COXRn?=
+ =?utf-8?B?LzFxVDZvWURlcXpPMWhyckdINzJvNnpxTmg0c3dDdmtUYzN1andpWENLajUv?=
+ =?utf-8?B?R3B0cldzdG9zNVpKM2ZqL3k5Ri9GQW5mUlRUSHMxOGdpT1hXV0JDZldYVUFp?=
+ =?utf-8?B?VnVlbUg0VUhucDlyNERJOFJWMkF2Sy94bW5oRTdTRHBVTEdVNkNxbUVrNml3?=
+ =?utf-8?B?K1cycjI3N2VEV0dtZWtwWGVhN0U3ZFU3OFZ0MmxsYjJib0J5UHN6dmdYY3J0?=
+ =?utf-8?B?ci9mQktQejFBZlllN0tEQ1J5K0Zvelk0Q0Q1M09haTNDckFvOXZtb3Q3RGY0?=
+ =?utf-8?B?c0ROWEwvQnhYMXRJcHVLTkpSbWNyeFpzcVVEQXBQZkdCMmlMUFdWRjg1MjZU?=
+ =?utf-8?B?bHF0L1FMS29OTVFkeEd3ZEZvQ0xFWUlrQWo3TndQOUxVcXRDQ2YrdkY5SVk1?=
+ =?utf-8?B?YUxJSGV2elZ1bVBZdm81bGxweHYzMWZ0aE1sbkdTSjJzWkZGMzljcGV1VUdD?=
+ =?utf-8?B?Q1hVQTNNSTcrR0laeWcwL2RZNlQrYnBHRkpObnpaUjhoSEZXQWR2ZUlXdGIw?=
+ =?utf-8?B?S1dpeUhMOHY3ZVVwbUYvUnpMOW90MnVxODRrMldjODN5MEFkSTJNZkk0SnJs?=
+ =?utf-8?B?dmxxZW9qQXFUbDR3aDJlU3QrenF4MDR4WXloRWphamFOZnV4andyYmVFRWhJ?=
+ =?utf-8?Q?Yx5AOzkZ7TGu8fX0=3D?=
+X-Exchange-RoutingPolicyChecked: JP4Bo2M77MDF4v6NFbBHL5Gc6jQ0wxVeIUHoVyJdAb8DGaxdkjsppHHQSUX8/TgEtZIR82de2o/X7vmpQeE1vfCPBeZLZ6VNzseo4S+B8w5iw9FMS/fcULvIdN0VJmxZtVGvVSW/giH9vp4vm4TgZJzMAa/M51glVf6ltFQKQAC1vbR4kiBvBUEzhhO0hn4dIsc39X2Oz11o/EpW+hccejkzbmbmaB9uAiQLLVdRMqa9GZbmaPjtPsy1RrR8vvp9aMw4nNko6NIfdFmA/xRj3LixKse0WOP7HYxLq0GExcXkep2+lE8fwYl+jfQN2FHaEvhyUkdUFOJnjBudzoGCkA==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4df8e264-b69b-4a92-a3f9-08df0523271f
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2026 16:41:04.9504
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: st6nP1Hkzqe816PIBB1EYLSciyviIvcD7PwIr71k8MpOG88pmPR8PGiMSET/oCBwMCdTaWgrvJ5uhNJGlG454Cmv/SZID0tjt5EyuoMxeEk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS6PR11MB400772
+X-OriginatorOrg: intel.com
 
-On Fri, Aug 28, 2026 at 4:01=E2=80=AFAM Mykyta Yatsenko
-<mykyta.yatsenko5@gmail.com> wrote:
->
->
->
-> On 8/28/26 1:30 AM, Andrii Nakryiko wrote:
-> > On Thu, Aug 27, 2026 at 8:29=E2=80=AFAM Mykyta Yatsenko
-> > <mykyta.yatsenko5@gmail.com> wrote:
-> >>
-> >> From: Mykyta Yatsenko <yatsenko@meta.com>
-> >>
-> >> Total cycle counts are difficult to compare across workloads with
-> >> different run counts. Report cycles per run to expose the per-invocati=
-on
-> >> cost directly.
-> >>
-> >> Example:
-> >> sudo ./bpftool prog profile name mprog duration 15 cycles instructions
-> >>
-> >>             423256 run_cnt
-> >>          947413975 cycles              #  2238.39 cycles per run
-> >>          333965846 instructions        #     0.35 insns per cycle
-> >>
-> >> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-> >> ---
-> >>  tools/bpf/bpftool/Documentation/bpftool-prog.rst |  6 ++++--
-> >>  tools/bpf/bpftool/prog.c                         | 18 +++++++++++----=
----
-> >>  2 files changed, 15 insertions(+), 9 deletions(-)
-> >>
-> >> diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/=
-bpf/bpftool/Documentation/bpftool-prog.rst
-> >> index 90fa2a48cc26..2280dc4492c0 100644
-> >> --- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> >> +++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-> >> @@ -217,7 +217,9 @@ bpftool prog run *PROG* data_in *FILE* [data_out *=
-FILE* [data_size_out *L*]] [ct
-> >>  bpftool prog profile *PROG* [duration *DURATION*] *METRICs*
-> >>      Profile *METRICs* for bpf program *PROG* for *DURATION* seconds o=
-r until
-> >>      user hits <Ctrl+C>. *DURATION* is optional. If *DURATION* is not =
-specified,
-> >> -    the profiling will run up to **UINT_MAX** seconds.
-> >> +    the profiling will run up to **UINT_MAX** seconds. When **cycles*=
-* is
-> >> +    selected, plain output also reports the average number of cycles =
-per
-> >> +    program run.
-> >>
-> >>  bpftool prog help
-> >>      Print short help message.
-> >> @@ -360,7 +362,7 @@ EXAMPLES
-> >>  ::
-> >>
-> >>           51397 run_cnt
-> >> -      40176203 cycles                                                =
- (83.05%)
-> >> +      40176203 cycles          # 781.68 cycles per run               =
- (83.05%)
-> >>        42518139 instructions    #   1.06 insns per cycle              =
- (83.39%)
-> >>             123 llc_misses      #   2.89 LLC misses per million insns =
- (83.15%)
-> >>
-> >> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-> >> index a9f730d407a9..8935508f955b 100644
-> >> --- a/tools/bpf/bpftool/prog.c
-> >> +++ b/tools/bpf/bpftool/prog.c
-> >> @@ -2069,9 +2069,9 @@ struct profile_metric {
-> >>         bool selected;
-> >>
-> >>         /* calculate ratios like instructions per cycle */
-> >> -       const int ratio_metric; /* 0 for N/A, 1 for index 0 (cycles) *=
-/
-> >> +       const int ratio_metric; /* 0 for run_cnt, 1 for index 0 (cycle=
-s) */
-> >>         const char *ratio_desc;
-> >> -       const float ratio_mul;
-> >> +       const double ratio_mul;
-> >>  } metrics[] =3D {
-> >>         {
-> >>                 .name =3D "cycles",
-> >> @@ -2080,6 +2080,9 @@ struct profile_metric {
-> >>                         .config =3D PERF_COUNT_HW_CPU_CYCLES,
-> >>                         .exclude_user =3D 1,
-> >>                 },
-> >> +               .ratio_metric =3D 0,
-> >> +               .ratio_desc =3D "cycles per run",
-> >> +               .ratio_mul =3D 1.0,
-> >>         },
-> >>         {
-> >>                 .name =3D "instructions",
-> >> @@ -2256,17 +2259,18 @@ static void profile_print_readings_plain(void)
-> >>         for (m =3D 0; m < ARRAY_SIZE(metrics); m++) {
-> >>                 struct bpf_perf_event_value *val =3D &metrics[m].val;
-> >>                 int r;
-> >> +               __u64 ratio;
-> >>
-> >>                 if (!metrics[m].selected)
-> >>                         continue;
-> >>                 printf("%18llu %-20s", val->counter, metrics[m].name);
-> >>
-> >> -               r =3D metrics[m].ratio_metric - 1;
-> >> -               if (r >=3D 0 && metrics[r].selected &&
-> >> -                   metrics[r].val.counter > 0) {
-> >> +               r =3D metrics[m].ratio_metric;
-> >> +               /* r =3D=3D 0 is a special case for run_cnt */
-> >> +               ratio =3D r ? metrics[r - 1].val.counter : profile_tot=
-al_count;
-> >> +               if (metrics[m].ratio_desc && ratio) {
+On Thu, Aug 27, 2026 at 09:27:06AM -0700, Kuniyuki Iwashima wrote:
+> On Thu, Aug 27, 2026 at 6:21 AM Maciej Fijalkowski
+> <maciej.fijalkowski@intel.com> wrote:
 > >
-> > this ratio_desc-based thing looks suspect. We used to check .selected,
-> > why did you change this?
->
-> We checked .selected on the metrics[r] (denominator metric), with run_cnt=
-,
-> it does not exist.
-> Checking ratio for zero, merges 2 checks into onet:
->  - verify no division by zero
->  - if ratio is not zero, that metric[r] has to have .selected =3D=3D true=
-,
-> otherwise how did we bump it.
+> > syzbot reported the following circular locking dependency:
+> >
+> >   xs->mutex -> netdev lock -> pnodes_lock -> net->xdp.lock -> xs->mutex
+> >
+> > The pnodes_lock -> net->xdp.lock edge is recorded when
+> > ipvlan_device_event(NETDEV_UNREGISTER) calls unregister_netdevice_many()
+> > while holding pnodes_lock.  A nested NETDEV_UNREGISTER notification for
+> > an IPvlan device enters xsk_notifier(), which acquires net->xdp.lock.
+> >
+> > Keep pnodes_lock only while marking the upper devices as dying, removing
+> > them from port->ipvlans, and queueing them for unregistration.  Once the
+> > devices have been detached from the protected list, release pnodes_lock
+> > before unregister_netdevice_many() invokes notifier callbacks.
+> >
+> > The port remains alive across unregistration because
+> > ipvlan_device_event() holds the reference acquired by ipvlan_port_get().
+> > The dying flag prevents a concurrent ->dellink() callback from deleting a
+> > queued device again.
+> >
+> > Fixes: 35add1093e2f ("ipvlan: Protect ipvl_port.ipvlans with mutex.")
+> > Reported-by: syzbot+aa48b5fe7bfda62d1682@syzkaller.appspotmail.com
+> > Closes: https://syzkaller.appspot.com/bug?extid=aa48b5fe7bfda62d1682
+> > Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> > ---
+> >  drivers/net/ipvlan/ipvlan_main.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/net/ipvlan/ipvlan_main.c b/drivers/net/ipvlan/ipvlan_main.c
+> > index ee46a55f73d1..2730581e0a56 100644
+> > --- a/drivers/net/ipvlan/ipvlan_main.c
+> > +++ b/drivers/net/ipvlan/ipvlan_main.c
+> > @@ -846,7 +846,6 @@ static int ipvlan_device_event(struct notifier_block *unused,
+> >                                 __ipvlan_link_delete(net, ipvlan->dev, &lst_kill);
+> >                 }
+> >
+> > -               unregister_netdevice_many(&lst_kill);
+> >                 break;
+> >         }
+> >         case NETDEV_FEAT_CHANGE:
+> > @@ -895,6 +894,10 @@ static int ipvlan_device_event(struct notifier_block *unused,
+> >
+> >         mutex_unlock(&port->pnodes_lock);
+> >
+> > +       /* Avoid invoking nested netdevice notifiers under pnodes_lock. */
+> > +       if (!list_empty(&lst_kill))
+> 
+> nit: unregister_netdevice_many() takes care of this.
 
-ok, makes sense, thanks for explaining!
+...right. I'll send v2 without it. Thanks!
 
+> 
+> 
+> > +               unregister_netdevice_many(&lst_kill);
+> > +
+> >         ipvlan_port_put(port);
 > >
-> > And tbh, this whole ratio_metric would be much better done with enum,
-> > where you can have -1 as "NO_METRIC", -2 as "RUN_CNT", 0 - cycles, 1 -
-> > instructions, and so on.
->
-> That'll do. But feels a bit awkward:
-> metrics[] =3D {
->   ...
->   {
->     ...
->     .ratio_metric =3D 1, /* But really mean METRIC_CYCLES which is index =
-0 */
->   },
->   {
->     .ratio_metric =3D -1 /* But really mean METRIC_RUN_CNT which is -2 */
->   }
-> }
-> The core difficulty here is that .ratio_metric default initializes with 0=
- and
-> stands for NO_METRIC, then all indexes in .ratio_metric are shifted by on=
-e.
-> Alternatively we can explicitly set .ratio_metric for every element, but
-> that makes default initialized not safe (.ratio_metric =3D=3D 0 means cyc=
-les, but
-> .ratio_desc is NULL).
-
-I personally think that explicit .ratio_metric =3D METRIC_NO_METRIC or
-something like that is just fine to do and not a problem.
-
-But if that's a problem, I'd still do enum, just make zero a "NO
-METRIC", and shift everything else by one. So basically what we have
-today, but explicitly named (and with small comment next to enum we
-can explain that shift-by-one convention).
-
-Your choice, my point is that plain numbers make it hard to follow
-what's going on, and really here we have a limited set of explicitly
-connected things, so enum is the way, IMO.
-
-
+> >         return ret;
+> > --
+> > 2.43.0
 > >
-> > then in definition of metrics array you can use explicit
-> >
-> > [METRIC_CYCLES] =3D { .name =3D "cycles", ... },
-> > [METRIC_INSNS] =3D { .name =3D "instructions", ..., .ratio_metric =3D M=
-ETRIC_CYCLES }
-> >
-> >
-> > makes everything consistent, explicit, easier to follow, wdyt?
-> >
-> > pw-bot: cr
-> >
-> >
-> >>                         printf("# %8.2f %-30s",
-> >> -                              val->counter * metrics[m].ratio_mul /
-> >> -                              metrics[r].val.counter,
-> >> +                              val->counter * metrics[m].ratio_mul / r=
-atio,
-> >>                                metrics[m].ratio_desc);
-> >>                 } else {
-> >>                         printf("%-41s", "");
-> >>
-> >> ---
-> >> base-commit: 23ff631b3b8b1452dfe933ee21f96321a9c5e209
-> >> change-id: 20260827-bpftool_cyles_per_run-93169fcb30b7
-> >>
-> >> Best regards,
-> >> --
-> >> Mykyta Yatsenko <yatsenko@meta.com>
-> >>
->
