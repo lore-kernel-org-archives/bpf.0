@@ -1,107 +1,88 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D38F43E51CC
-	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 08:19:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DA89E54B;
+	Fri, 28 Aug 2026 08:40:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787905166; cv=none; b=XBLodDF0y+Bch3pqVUO6u92VsWR59M4ahGmV58cdQbszb4mrvF1gncO8/utw4m0JBBkw2OD8SXExDDZ645Kd/Yqew4C0NdvLPFJOQjNQ6fIXKmAqiuESkbxn6wPDRhYsJmb4+N9TzH43d202k78d0vxWmZzPeF4EJ1D5bVpfCsU=
+	t=1787906438; cv=none; b=Be6vGWEDTI9eIHYxiE3DIHqGwKjj0Za7sGp0S8L2juZ/ZLPXYDstT796IL1obLePvoXXbI3iemsePvrfhUZvrA/1Yd29s6AY6FT2yN9lUs1xHe0k9oDsqKV1xM18lNVAT+HOfoym/M1nwzUTCTl3YmXekhpm1R1zFiersOe+MaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787905166; c=relaxed/simple;
-	bh=sAAOf9l2yen40I/84kDEWjMAPALrtQfcjP/trd6bySA=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=i0CotLrJsX4GIUZisje0WIbtbn+QrFG6y/kQPO46pDqWWflQ621PPPd7AJiTGeJH/j79R7YWqPhh9dOT+HpgQILBAcEy2nm0d37StbJtjaAD378KAxu6cSqny7VfD4ebzrE1r/+aAtvdQmoKd5aW8I3yzxxncAXCEpHxkYH/Glk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8DxTNKJRJFqNwkGAA--.16935S3;
-	Fri, 28 Aug 2026 16:19:21 +0800 (CST)
-Received: from [10.130.40.83] (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJBx5cyGRJFqEEQVAA--.15044S2;
-	Fri, 28 Aug 2026 16:19:19 +0800 (CST)
-Subject: Re: [PATCH bpf-next v1 07/14] bpf, loongarch: Fix stack arguments for
- indirect trampolines
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Huacai Chen <chenhuacai@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Eduard Zingerman <eddyz87@gmail.com>, Emil Tsalapatis
- <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
- kkd@meta.com, kernel-team@meta.com, loongarch@lists.linux.dev,
- Hengqi Chen <hengqi.chen@gmail.com>
-References: <20260821233516.3426127-1-memxor@gmail.com>
- <20260821233516.3426127-8-memxor@gmail.com>
- <a5d4c26c-6735-8af1-1d3f-fe7f1898b285@loongson.cn>
- <DL0B54EEQXAL.FL6Z0UXMR3SX@gmail.com>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <2bc45d20-d08f-e5c1-9da3-699d22959f98@loongson.cn>
-Date: Fri, 28 Aug 2026 16:19:17 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1787906438; c=relaxed/simple;
+	bh=RYt9CD0bNuwrJEjTzWptarntoMZiZMxev4LZozd3enw=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=ufRDnvki5za4LKG24vwETJvB3j4KeeL6Muwia+TzGvTm8UxrEY+pyqmzQq7xXy2tJjnb2ukcN2MhuJ0M6Gw0cQd7oDX/UdoDnf+PROe6kjtrJ4kJESNzELLE60K3dS9CedXC72sK/BjTh/aeKVtXWEfQREX3Nmf+aKAhKxxN59U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b6HuyzJk; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b6HuyzJk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9730C1F000E9;
+	Fri, 28 Aug 2026 08:40:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787906436;
+	bh=RYt9CD0bNuwrJEjTzWptarntoMZiZMxev4LZozd3enw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=b6HuyzJkC9FOOj911f6lk5unLlKgNOr+tUgxRsWAIK+0LIIUj4r/tZuJ2CZGlUydH
+	 BJ8dmJvC0H2PF5hCFUae6IYLjOiPED321OlmljtGYL2FQ/qXf4NGLFbOeeIp6hmaaO
+	 /LqDALQwAUazgnEe4N7xmobbTl93pRbzF1O4xNqDRg5om9bzyKy1wFerhCmAA5gM1f
+	 6zZgNo5YWVrEMs0uRYmSiTjU8g0obtuXoa0wb58JaHGVELUB7ZzocucmwO7knIl6ZP
+	 h138ZoD9CLP7qnBaZbyyMsRJrc8JJLT4YPyctcKcYZkOpwGIdHU5GxJoebLSUk3Amf
+	 ToGOOXJ9IuBcw==
+Content-Type: multipart/mixed; boundary="===============7184032113322305347=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <DL0B54EEQXAL.FL6Z0UXMR3SX@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJBx5cyGRJFqEEQVAA--.15044S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7CFW7XFWfGFWkCr1rKF15GFX_yoW8JF4kpF
-	40va1YkF48JF4UZaykG34vqF10qry3CrZYganxtryFkrn8Xw1akr4IgF4qgF95Wa1FkF1F
-	vw10yayrJFy5J3gCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-	AVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-	8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
-	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67
-	AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
-	rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
-	v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
-	JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4SoGDU
-	UUU
+Message-Id: <18fb7827c1b98f6edeb6d702eba20dded3bb0168fb5939a69ed0eb9a1eade968@mail.kernel.org>
+In-Reply-To: <20260828075100.24776-1-yangtiezhu@loongson.cn>
+References: <20260828075100.24776-1-yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v1] LoongArch: BPF: Fix off-by-one error for insn_is_cast_user
+From: bot+bpf-ci@kernel.org
+To: yangtiezhu@loongson.cn,chenhuacai@kernel.org,memxor@gmail.com
+Cc: loongarch@lists.linux.dev,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 28 Aug 2026 08:40:36 +0000 (UTC)
 
-On 2026/8/28 下午12:55, Kumar Kartikeya Dwivedi wrote:
-> On Fri Aug 28, 2026 at 6:33 AM CEST, Tiezhu Yang wrote:
+--===============7184032113322305347==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-...
+> LoongArch: BPF: Fix off-by-one error for insn_is_cast_user
+>
+> Fix a severe off-by-one error in the branch offset calculation for the
+> user pointer cast helper insn_is_cast_user() inside build_insn().
+>
+> In the current code, an offset of 1 causes the "beq" to target the next
+> "or" instruction, which means the "or" instruction is always executed,
+> even if the pointer is NULL. Thus, a native NULL pointer is incorrectly
+> combined with the arena base address and turns into a non-zero address,
+> breaking nullable safety guards and causing silent memory corruption.
+>
+> Fix this by changing the branch offset from 1 to 2, which properly skips
+> the "or" instruction and jumps directly to the "move_reg" instruction if
+> the pointer is NULL, ensuring the destination register is safely cleared
+> to 0.
+>
+> Fixes: 4fdb5dd8aeba ("LoongArch: BPF: Implement bpf_addr_space_cast instruction")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 
->> With this patch:
->>
->>     $ sudo ./test_progs -t struct_ops_trampoline
->>     #471     struct_ops_trampoline:OK
->>     Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
->>
->> Tested-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> 
-> Thanks a lot for the test. Please also take a look at the argument rebase
-> patches once you folks have more cycles. Will definitely need your help and
-> reviews since they are mostly vibe coded.
+This isn't a bug, but would it read more precisely to say the cast_user
+JIT arm in build_insn() rather than "the user pointer cast helper
+insn_is_cast_user()"?
 
-Hi Kumar,
+insn_is_cast_user() in include/linux/filter.h is only the predicate that
+recognises BPF_ALU64|BPF_MOV|BPF_X with off == BPF_ADDR_SPACE_CAST and
+imm == 1U << 16; the cast itself is emitted by the JIT arm in build_insn().
 
-I have sent a standalone prerequisite fix for the pre-existing
-issue:
+Also, would describing the effect as "a zero arena offset no longer casts
+to NULL" capture the same facts more concisely than "breaking nullable
+safety guards and causing silent memory corruption"?
 
-LoongArch: BPF: Fix off-by-one error for insn_is_cast_user
-https://lore.kernel.org/loongarch/20260828075100.24776-1-yangtiezhu@loongson.cn/
 
-IMO, when you respin, please rebase your patches 07, 08, and 09
-on top of this fix for your v2 series.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Additionally, please send the v2 as a standalone series to the
-loongarch mailing list loongarch@lists.linux.dev and the reviewer
-Hengqi Chen <hengqi.chen@gmail.com> too, as the LoongArch BPF JIT
-patches are typically routed through the loongarch-next tree.
-
-https://lore.kernel.org/loongarch/CAAhV-H55YcyXRewC+0YzTHXb1jab0GkAV13EF9nFbTx=UkX4ww@mail.gmail.com/
-
-Thanks,
-Tiezhu
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33153668098
+--===============7184032113322305347==--
