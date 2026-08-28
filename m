@@ -1,114 +1,194 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F71B231A23
-	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 09:54:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787910857; cv=none; b=fWpVrnBQW2UddlpUrSNEP/0RTIr/JB7gmBAZG+z7ApSQhhMVRfdYhN2CXuv3M3LzIhPX6KUa6/MCHTz4EEAZ0BoLrBASI8+Tbvw1CRr4NuWeMCWVaO1T4OKPPoxJVFL9N7/0/rocZGDOwI15bRkDro96hVluhvaXRb4xiAaej9I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787910857; c=relaxed/simple;
-	bh=OHgtyH4zHxxrWEG+z/nNEa+EdBd04lCBj/Txj9JVMeE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Cdl+ql/3dJwen2wQ+CYZpHU0NmIcoSjGqjSWwEsSVcjwZ3CA1MInL2CZ+WlTM/3xql3sB7kOBTdFnO0bpa1vgIcBAW3dTdQZuko8MCQjF4PCxxmrBhJFEcSCZsMich2hvkSTIxe6kqLFZOroF6ZnuxGeTsVgLwr5PaF1NoDFewE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=If+pvFXp; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8108D40BCBB
+	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 10:16:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787912192; cv=pass; b=BVlASwyizwrBUMt1N/k+ApkT/jQ3di6SaD2sjM87pSGiR2Y/IyeOM2XNIpnhFIe8tYzbhBfdjbF15alr0qJtFpxvYCEfUtiz/sbGm8OOUN2QZKkSL2bhssmXu2ZDvVPf+HRby9tk61K1trJJjwdYke5cdZ+49ow+JkXMN2aAFH0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787912192; c=relaxed/simple;
+	bh=9nPb6ofpYX8RiPQ7x2iuJEPkGK91/1J8FKtfNZIcC5A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HV09VSq8hXott3hWYZUiqatRtcBGuIv8U6i7EoQDIi8hhlU/4FH8TYZO91KVvglqbtMzQNP7XFc52tA4FuQq3QBwIwlk3dhJkQPMKtGbITE0qnsn9EiogOKYPp0L2NBoi3vVgvBQv7a4ctBl7fG+ZZSgLPaePOH303rQEO9lAgE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=anyfinetworks.com; spf=none smtp.mailfrom=anyfinetworks.com; dkim=pass (2048-bit key) header.d=anyfinetworks-com.20251104.gappssmtp.com header.i=@anyfinetworks-com.20251104.gappssmtp.com header.b=eDi1EAHE; arc=pass smtp.client-ip=209.85.221.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=anyfinetworks.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=anyfinetworks.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="If+pvFXp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50FE61F000E9;
-	Fri, 28 Aug 2026 09:54:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787910856;
-	bh=48mGfdD5i3Gh8wEAZvxinJB60L16RN3H92eq8vHoz/E=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=If+pvFXpTGm3g9DjqyrEyGX9jDftf0xdz/fERZiXMC5lFZGyraNAzQi4L5XSvBxW6
-	 OJU0T8z0zYM7hBF1zSmEvL5Eaig5QvI3oL/mQNFVS/scaCyE60oS0vpNV/3M4byIqP
-	 Zy/CYkfwxH8pzSdMRyKTmSmknMiBf9Q9r+NyDpMMijak5dT5vzdIwqxlaL7y1QuST6
-	 POvcCf1dyfNOuKxCqK8RCUWEXHhKyUJay+mhrWjkzzCNhWQ0WMkz23zCt/J6/9g/x0
-	 tUIXfbiKKXgd48q+sph0vCoiq5S8oMnWj/V+dYdgFdawciD/D0epF7QREQNBLdl4tO
-	 xt3rpWIR2wzOg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 1/2] bpf: Fix NULL-ptr-deref when dumping a key-less
- BTF hash map
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260828093142.179856-1-jiayuan.chen@linux.dev>
-References: <20260828093142.179856-1-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 28 Aug 2026 09:54:15 +0000
-Message-Id: <20260828095416.50FE61F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=anyfinetworks-com.20251104.gappssmtp.com header.i=@anyfinetworks-com.20251104.gappssmtp.com header.b="eDi1EAHE"
+Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-5bf8e1edc3aso647676e0c.0
+        for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 03:16:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787912189; cv=none;
+        d=google.com; s=arc-20260327;
+        b=U8VooJFx/vEwFPyg8UkeI4bImRokMnqbXsAsp3BfbJJlfwtAfTv2i38jd7sR+F/SFe
+         TGy+GjVa3t6zbSdEqra4L6j6a/lf7LEXxBSr4N3lwxpIYxWgLCAQ2XiQOLy36FyDjhYD
+         bGCP/i634QXUGQlLIXL4RhWel0WvmzWJwrhxUCjqaQFn6PkmQPBQE6kFZBvla/sP3IiF
+         kqZr/NboQQkg1HTONj7l7nmfctccXdnDAMUh0kLTKaKYC6eztPUYknVhZLRX+2qqAO5i
+         RldIJQe8o5lxkmZagg6DeXJWLIXvmvI6QmXfhYklo03gzNKAZ5kmJsz+nPT8cSUFueQd
+         oLZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=6GcVt68ylb4fqLmficxbeoWwxWTUsNtsQKfhwJMCoe4=;
+        fh=Y/2ixQEA5nj61iCWVRnP72RLAsq/xXGTLp1+9E5wm9E=;
+        b=HUQE2BMoHIlTGGDPsApbIgFEwZiMe3mLTIGJVfE7vGZQO8wXWazgVKTmnq+kP/J3ty
+         EGkIhCRj172FZ9dsfMA+5YeH/yGG4FeyzZLg05rvktTCM5dFeQr6TZnlXOPgxOy6mPJa
+         oMbtjDANWfxIUUat+w9hEH7uBfP2w+jfjQWRnWYlM3N4tq+6DYKvd8xIaStaic8oEp5q
+         lXW2DYwMXQxEGaiC+VCYWniV5W+2aqa3MTf4A1lX4Irn5++ePiPOIVfV1D/8aKy1GJHN
+         6jD+JkuudEc+U6n9a0gXLwQML9oi66xEeCPMDjxKro3duw8Wh8sYB8ZXYwpVkcSZ91xV
+         NzYg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=anyfinetworks-com.20251104.gappssmtp.com; s=20251104; t=1787912189; x=1788516989; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=6GcVt68ylb4fqLmficxbeoWwxWTUsNtsQKfhwJMCoe4=;
+        b=eDi1EAHEZnV8UO/NrhF4uzDO53/ZiBqe/Kv6LlPMTl1AifjnJFoy3N7vl8W54G2rrA
+         2xGtcLViQ6E6TajV3LATlqLSrIK4+DtympTvOkkbRVZHCDB6RacvwJ7CPPDE/wW6YeTX
+         uxrK98gVIaDpR9GKb/hPnm7ODAtM3r4KvfBlgB+Aug+U+k7whdR2Uk3otkCkkG2RdjhJ
+         nmF7fSrrOry1e4Pw+qwkM/VDMvXTfwBkp1Vbp8rgAT1II2Ot4WBQQuwaeJJJdvgtIyHA
+         O+WwqciUVopEQTvIDGa450fP5ZMTIxqTR/P7LYQuYSlteI3ge31ORyszsMnD/HsiSfya
+         g/OA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787912189; x=1788516989;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=6GcVt68ylb4fqLmficxbeoWwxWTUsNtsQKfhwJMCoe4=;
+        b=lBaqwaNWbH5ng56E2pkuY8QD5QlrWqnGiFNxTr9dRg8fy1Om5M0nBXqIkXGgqvnG3u
+         3T4NTcfZ2lTzhjOBVzFNeyVzgZ2W5G/G6JA5/XIZk0HZgNAla3436HyCpl2qA/67G038
+         8sZeDldKeBxxHFvhEjjEQdahdvXThgViz1CQljHzvo4Uje/9nkqZM4I/KM0bRWd1nT+y
+         GgfBb8L3i9gerTOlTWcjFCNLAPS1BA9qE2SZLLtv2ybfaUmGS8f6KuxXk8ZsCzrhrdfE
+         C7wKpt2zzg9g8FW1ed+SU3TZoeG0uuhEEU49Kyo87o7KbPoTX3d6HOB7/gS/+HiCgq12
+         +IFw==
+X-Gm-Message-State: AFuF++kHoazR1juKbRpcF6ehjHGwm3PBtFha8VzsCSAU13+m88myn3Kz
+	J9lutuKG/zqv6THEMvhVRnmA1AmgzjlbZzArkewjRRW1ndRgJG0YyjrhqUPHa9MhTr9zz5QPayA
+	765wtXDghiJWlCUwkQYzE8Og4ztHzPgV3i5bxJlTaZw==
+X-Gm-Gg: AR+sD12ATKoTjJXDeXGeySfal16OGZ013KzwkoAELlRwuXmMXNi1po45Cozw+OT2RHE
+	zWjOkhZa4Y8LLYrkwodCtrAyw9S+3+JtzThSTe3ptG11QjLywqm0vT8g4cQhGkiQ3h94TVBMf5D
+	wHLD+YS741H51Xc0tO0QImeOtBqDqHzgRH7fHPIMNNSssvXtoGxbM8RVyTzL1swC57VTqGUzrFC
+	YdZH2jj1T+eLZsaCPlYSLuJ/LolSkr6R6fl9Hx+AhfjBMQw3RMIIHSPHRrDxJ+jyz5UjkS7CKPK
+	nk3iTONhJE01EFaX2wciuTZbGNcLUU7dQodrNMp9GY19
+X-Received: by 2002:a05:6122:88a:b0:5bd:8c84:59aa with SMTP id
+ 71dfb90a1353d-5c681777357mr2723173e0c.8.1787912188834; Fri, 28 Aug 2026
+ 03:16:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260819010523.1057789-1-main.kalliope@gmail.com> <20260819010523.1057789-3-main.kalliope@gmail.com>
+In-Reply-To: <20260819010523.1057789-3-main.kalliope@gmail.com>
+From: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Date: Fri, 28 Aug 2026 12:16:17 +0200
+X-Gm-Features: AcwNN1UufzODx6ajZ2Cvlnuoud8Jym1z7VvkRIkj38LXxzb7tykFlkvxDcgn1Wc
+Message-ID: <CAM1=_QTDhirxjCmXUqvPqTqXMY=uVVcPXE0H=qHH_B+7XFrnpQ@mail.gmail.com>
+Subject: Re: [RFC bpf-next 2/2] bpf, mips: Add support for BPF_MOVSX in the JITs
+To: Nicholas Dudar <main.kalliope@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, 
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
+	emil@etsalapatis.com, ihor.solodrai@linux.dev, paulburton@kernel.org, 
+	tsbogend@alpha.franken.de, linux-mips@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+Hi Nicholas,
 
-Pre-existing issues:
-- [High] btf_modifier_show dereferences NULL when a modifier resolves to a =
-void type.
---
+The MOV/MOVSX structure looks good in general. Some remarks on the
+implementation of individual emittor functions.
 
-commit 36dc7c26f56375bd142801da1fcbc83e4a765c35
-Author: Jiayuan Chen <jiayuan.chen@linux.dev>
-
-bpf: Fix NULL-ptr-deref when dumping a key-less BTF hash map
-   =20
-This patch fixes a NULL pointer dereference in btf_type_show() that occurs
-when dumping a key-less BTF hash map. It restores previous behavior by
-rejecting key-less BTF in hash map check callbacks, and adds a NULL check
-for void types in btf_type_show() to gracefully handle any other paths.
-
-Reported-by: syzbot+37b56485bbbf90ad8489@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/all/6a8f4e88.27659fcc.2ceef7.0008.GAE@googl=
-e.com/T/
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index da36d4b9d31ab..c32265dc4ae7e 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -8229,6 +8229,10 @@ static void btf_type_show(const struct btf *btf, u=
-32 type_id, void *obj,
->  	memset(&show->state, 0, sizeof(show->state));
->  	memset(&show->obj, 0, sizeof(show->obj));
-> =20
-> +	/* A void type (e.g. type_id 0) has no show op, don't deref NULL. */
-> +	if (!t || !btf_type_ops(t))
-> +		return;
-> +
->  	btf_type_ops(t)->show(btf, t, type_id, obj, 0, show);
+> +/* Register move operation (32-bit), optionally with sign extension */
+>  static void emit_mov_r32(struct jit_context *ctx, const u8 dst[],
+> -                        const u8 src[])
+> +                        const u8 src[], s16 off)
+>  {
+> -       emit_mov_r(ctx, lo(dst), lo(src));
+> +       switch (off) {
+> +       case 8:
+> +               emit(ctx, sll, lo(dst), lo(src), 24);
+> +               emit(ctx, sra, lo(dst), lo(dst), 24);
+> +               clobber_reg(ctx, lo(dst));
+> +               break;
+> +       case 16:
+> +               emit(ctx, sll, lo(dst), lo(src), 16);
+> +               emit(ctx, sra, lo(dst), lo(dst), 16);
+> +               clobber_reg(ctx, lo(dst));
+> +               break;
+> +       default:
+> +               emit_mov_r(ctx, lo(dst), lo(src));
+> +               break;
+> +       }
+>         emit_zext_ver(ctx, dst);
 >  }
 
-[Severity: High]
-This is a pre-existing issue, but does this fix need to be extended to
-btf_modifier_show() as well?
+I would move the clobber marker to the end to reduce code duplication.
+That is the pattern used in other places in the jit. Also consider
+collapsing the cases off=8 and off=16 into one, with the shift
+argument computed as 32 - off. That would parameterize the shift logic
+instead of duplicating it.
 
-If a user with BPF tracing privileges invokes the bpf_snprintf_btf() helper
-with a btf_id of a modifier that points to void (e.g., const void),
-btf_type_show() will see the modifier type and pass this check since
-modifier_ops is not NULL.
+The above applies to all four variants of the mov emittor.
 
-Execution would then proceed to btf_modifier_show(), which strips the modif=
-ier
-and resolves the underlying type to btf_void:
+> +/* Register move operation (64-bit), optionally with sign extension */
+>  static void emit_mov_r64(struct jit_context *ctx, const u8 dst[],
+> -                        const u8 src[])
+> +                        const u8 src[], s16 off)
+>  {
+> -       emit_mov_r(ctx, lo(dst), lo(src));
+> -       emit_mov_r(ctx, hi(dst), hi(src));
+> +       switch (off) {
+> +       case 8:
+> +               emit(ctx, sll, lo(dst), lo(src), 24);
+> +               emit(ctx, sra, lo(dst), lo(dst), 24);
+> +               break;
+> +       case 16:
+> +               emit(ctx, sll, lo(dst), lo(src), 16);
+> +               emit(ctx, sra, lo(dst), lo(dst), 16);
+> +               break;
+> +       case 32:
+> +               emit(ctx, move, lo(dst), lo(src));
+> +               break;
+> +       default:
+> +               emit_mov_r(ctx, lo(dst), lo(src));
+> +               emit_mov_r(ctx, hi(dst), hi(src));
+> +               return;
+> +       }
+> +       clobber_reg(ctx, lo(dst));
+> +       emit(ctx, sra, hi(dst), lo(dst), 31);
+> +       clobber_reg(ctx, hi(dst));
+>  }
 
-kernel/bpf/btf.c:btf_modifier_show() {
-	if (btf->resolved_ids)
-		t =3D btf_type_id_resolve(btf, &type_id);
-	else
-		t =3D btf_type_skip_modifiers(btf, type_id, NULL);
+I have tried to avoid returns in the middle like this. If you combine
+cases 8 and 16 as suggested, you can put the sra sign extension into
+cases 8/16 and 32, and get rid of the return in the default case.
 
-	btf_type_ops(t)->show(btf, t, type_id, data, bits_offset, show);
-}
+> -static void emit_mov_r64(struct jit_context *ctx, u8 dst, u8 src)
+> +/* Register move operation (64-bit), optionally with sign extension */
+> +static void emit_mov_r64(struct jit_context *ctx, u8 dst, u8 src, s16 off)
+>  {
+> -       emit_mov_r(ctx, dst, src);
+> +       switch (off) {
+> +       case 8:
+> +               emit(ctx, dsll32, dst, src, 24);
+> +               emit(ctx, dsra32, dst, dst, 24);
+> +               break;
+> +       case 16:
+> +               emit(ctx, dsll32, dst, src, 16);
+> +               emit(ctx, dsra32, dst, dst, 16);
+> +               break;
+> +       case 32:
+> +               emit(ctx, sll, dst, src, 0);
+> +               break;
+> +       default:
+> +               emit_mov_r(ctx, dst, src);
+> +               return;
 
-Since btf_type_ops(t) for btf_void is NULL, wouldn't this unconditional call
-result in an immediate NULL pointer dereference, bypassing the check added
-here?
+This return is not needed. Replace with break. Consider using the
+emit_sext helper instead of raw sll to b better convey intent.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260828093142.1798=
-56-1-jiayuan.chen@linux.dev?part=3D1
+Thanks,
+Johan
