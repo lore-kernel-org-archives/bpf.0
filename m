@@ -1,315 +1,260 @@
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B61D39768C
-	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 09:18:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787908698; cv=pass; b=paV1qFmf/OJrtTI23vwDo2uKexizcm0Mf5u23UUkr25qLaNQ3ZbP3VTJTiRhoLf4/qbtktTAUWF5bzJFz7PUctKKUD0a6SQhYVIG7Qn6qouBo8rtW3vMiLQd6jeSmYy1CKNSKUCre7YvEcNNyNrTJx+cTD2YNiweKEHVHL2xMfQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787908698; c=relaxed/simple;
-	bh=CKNvhZhTHShX0NS9xBImUHIABjidvgSWuC6+VkrGfek=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=krD9AdU0ktpOq3DM3aKeIkcL2rypywXjsoCQ0PAmPPVYt5ySdhUhuAaKspSi9kbNTQDMQXdG8p5k45h0JsQUnPw8zjgt+b0ODm/yPKnH2i8jpngKRc0KcHwsrgNdw5+yWtjbBAInJh71z5WxSE+gAkb7Y8I+WUvyLcnIkE8juaU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fxO2V9In; arc=pass smtp.client-ip=209.85.160.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083A93845A7;
+	Fri, 28 Aug 2026 09:21:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787908895; cv=none; b=JUOEJAr5Lyx1D4YR23T8HwfW+opALH7uv9LlpoR/8ggnALSWVybW5H4F9mWvjSzL4WfZNHS5yMJ982xjs9dyDrPqhOQlqLL7zYpHYEM83imGFTimag/DqsUnHuMaKO6SbLmb64sPebF8kSYxTl/mB3Xhtu3P3BXwwIi2NiTT0Aw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787908895; c=relaxed/simple;
+	bh=HBAYSLFUD/x0+fUQiUnIMzEUyDHPvGNgEGWpDdGEptE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Zmr08n+pXe33uY7dXy9/XbTds3RM6ejTSRRQcM8cWKxm72mvPZLfwn525qKvKKy8L9psx+ECCFhf69B5fGejjRW1p6NQ7q5sjKe/883yZM3z5/Mx6yQuHUYkgUlVtxNz+DgTWQu8EQbQ+pP+Clpe+k1lo94Gj1D47lSYpIB6hgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=vTsqurki; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fxO2V9In"
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-4563ac048f4so999320fac.0
-        for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 02:18:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787908689; cv=none;
-        d=google.com; s=arc-20260327;
-        b=IlImm2EN+kDHn5ejBdOUHn1uakK2BzN0xJJ5XLPaXG2AV8MT/cIQnLmGlNwuYucHEg
-         FebDqm+uJMhoyJ4My4t1PLRUnsK3OTGr3G3i23pa2vsz/ixzVXcAUIlO9x3d/UgTOzqN
-         cXIh7Ha1fvC3aofGYDHvU237N3F4Jzw+QCNaKpI3oLBkdhnRTr84LaGdjVxRtuV1DCNd
-         4o83SNM+RxEkA3quXEFuaZMCuYp1ZKpJgiawoTbKhwbIJlOyPI6bMf3UFS3KxlyiI8ml
-         K82bNr8/ZBZRaFrDUhFceXSZxBTBRinfM0qZoqP2pdq4GuyUz8+sFKdisvPKq+pXkyEY
-         42FQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=y7bd2jvc/X03ECvfw453wTu5iFVuotqJ65ih+x9VWuY=;
-        fh=34UiwQxnVfWDIG5RezE2n654k/hUlpWv3CTaiWKCn54=;
-        b=dVbtcslF/XKV7H4CK7o3e1lYLkjEkfQL9SwC1VC77Gxw9pUIUuKx29tcQYu7BPNAV8
-         Mx/mbqhJ0ZNk4KfKZdMcmfDBI75AFhx3H0OK7Q95oPaSKALZt6v/wg8eDfpeNqgRpFi1
-         t10IzctaJYmIjdrbhrrrdNz97ehqDQENqj0ScOWtkrm0X0IECPBccf49JLGozvbngDgv
-         SPTQw8mOEjI9yhDEhfQih5qe9K7PeO3QYCqF/PixH9OBgZEcqZyxHsvYwz+Dx1Fj7D14
-         TYsgzv68SheZerItzteAA+hO3oV3nH+Q4EmQjnU1H119iMe9Qz9zr5PAD9txBwMqqRwb
-         ToCQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787908689; x=1788513489; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=y7bd2jvc/X03ECvfw453wTu5iFVuotqJ65ih+x9VWuY=;
-        b=fxO2V9In41Ae5hTNi3YN4so6ZNOWZwF1C56jcbKyxEj30VYSd590HfTGP3VN3ez9g5
-         ykn7ldFXxaGEcijbI7CZR4U2uU9Z8dhDRRAUq9b5zrHPKOED+XYz9pRYIjQu5cIB0dMU
-         6nV33G38dX1fkWT2vyoK06fXmQ/v5AXf3lgd4ZVFaiz/06vy/3lIYDQvlm8+NbIwYSc8
-         zOD4dkxaOzgIZ470k1bdwOuKZ9XL1NQwLssMbtnVFoEKoybITRWtuzz4wSJmLD/4Kw9f
-         ftBn0IGWOyYUA9MYkMulygeQyLE5l8PjFY2ZCRO0tMextj4CvcCSz9AZ/RlMe2kGZvt6
-         msDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787908689; x=1788513489;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=y7bd2jvc/X03ECvfw453wTu5iFVuotqJ65ih+x9VWuY=;
-        b=ht/AaPrdrlBUF+xiPrmFkgHR1rmOs1lylk/6IdUenSLdiVSPf6qDCXpEDUpQqEwBIt
-         bwNXCuERHZjNqE+WV8VZ6RV2626Cn2ya+/tSITvxvNV/9vm+KKlKM3tmh1je5hStJCdC
-         xtmt5CfuwY9u6eJIkB15YpFkpPWW1YSQ+xVmUOXoQkyIqe+OMi6wDql/OmlO/DfhxSBo
-         PJC9k79Xg5/8LD00bcwn7EQ1u3VqH6JIC5nfEY2js7qBM6wN/SBncx9rEc8Y6qx7unbx
-         5Rx2BsVlGnuPpSQy1mvRQX49IWXiisN03q+fPA5jntWYDW7J3fepCZ05Dc2o5I52SgjN
-         0b/A==
-X-Gm-Message-State: AFuF++mGdOjilnGEXoCCdj4fxaXiKNFJd8Iw9NI+TLy6FAOotIW+0HZh
-	ORbBI+GhHyOnAT84MZuBmhSkbsRgeaWmzdK9NPlBgiRJgWZ1cf+65f3TAaRMBJA49l2GrcFb69u
-	UiRoj9iwoVPWFbOZsmNClSj4VLqE4o4jaQrHw9XGYtg==
-X-Gm-Gg: AR+sD12sI+1fCzdM8cZGQ6ZqD2Ex4Sb+3BIhYnsqFmGsFp4pR7dgT0Devf4ZXwhj+7S
-	jsEJoRGH0QOVkpv8hxAr06cnG0cUKBxsYw4MLT9AxaSsXCrGKp2xr47M9ohG6NkT515/DBBQPEd
-	+CcX1YStm7hRJ1TuA5YWcBBZ8HzmYkofe+mwKWP0FKSc8+MNtADcz4sGLXMTDp8TnorNw+TgzuN
-	CbdVZItczaDoITG94M2HXw9Fmf3p6eyvk+Qk3IG8OBdF3460Zjmh4HhNs2fukDO+fVD5OVV6S0C
-	kqcY1hh21gsaVZ+s5P9SQMjtevNI2YVeGnhtckNcmuA=
-X-Received: by 2002:a05:6870:9a8f:b0:452:2f:49b0 with SMTP id
- 586e51a60fabf-4683590276fmr6985514fac.4.1787908688740; Fri, 28 Aug 2026
- 02:18:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="vTsqurki"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 6120E1A189C;
+	Fri, 28 Aug 2026 09:21:31 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 3267860537;
+	Fri, 28 Aug 2026 09:21:31 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 222D311C78150;
+	Fri, 28 Aug 2026 11:21:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1787908885; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=c8rWtSSNXzBAgJ0rbL27DwT0MgRJGXhRo4QQcY0zPA0=;
+	b=vTsqurkiUnMLjisAMJ787LWmdjmemixZNfmaWYBFdX4m9CBPb/Stp45+iertgA7HnjnDRT
+	ZKfSzHCurO9WlMy771Xmg4DBkRr1cinBo72AdjZuS9RQtkx7d8EGtkpK9WNNBEGBe7FS0r
+	kqwND0PCZX0YNE0MMWh/UmuSQrYECCcAGjLxkry12lNdm+O+94JhG1EnI1fee540jJhZJb
+	3tpfKi4u960AqAXoC2kL3+zxU1kD7NZmI9e7fEHDPtfNGT3aIAasy9drZ6VDXY5jEOQVch
+	OLGk9HXLl49slRzjJvmPCreIPlyuudO4k3jLup4mgYV4q1dFqrlw+D2e7No9hA==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Subject: [PATCH bpf-next v8 0/8] bpf: add support for KASAN checks in JITed
+ programs
+Date: Fri, 28 Aug 2026 11:21:08 +0200
+Message-Id: <20260828-kasan-v8-0-7c1c0fdb9d7f@bootlin.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Hiker Cl <clhiker365@gmail.com>
-Date: Fri, 28 Aug 2026 17:17:56 +0800
-X-Gm-Features: AcwNN1UGtBBVGu8caWRkJZEO9OAsDKP6Wx1xp9iYIYgZmDNYHI3nNDN1BnpBu5A
-Message-ID: <CAGM=xGDG8BxGPdRvs8rL=0e=_MPQAck-LbnMdttNptZXLKf5eA@mail.gmail.com>
-Subject: WARNING in bpf_mark_chain_precision - backtracking misuse on bpf_loop
- callback with uninitialized r1
-To: bpf@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/23QzU7DMAwH8FeZciYocRMn4cR7IA75cFgEtFNbV
+ ZumvvtCRdWicrTs39+y72ygvtDAXk531tNUhtK1tbBPJxbPvv0gXlKtGQhAIQH5px98y3NMaDO
+ qmExgdfbSUy7XJeeNhUvmLV1H9l475zKMXX9bFkxy6S9ZSja/WZPkgkuvbSOhERbka+i68au0z
+ 7H7XjIm2FyVq4PqokAkBJOTt0fXbM4IubqmupCEC8EpSBaPTu2dXZ2qLukojfHBApij03vnVqd
+ /7ouofLakSNLR4ebsdh9Wp5WjbJXOyv3zF7NzAKsz1TnnMxFSrp/56+Z5fgAFAJp+9gEAAA==
+X-Change-ID: 20260126-kasan-fcd68f64cd7b
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+ "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, 
+ Ingo Molnar <mingo@redhat.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Yafang Shao <laoar.shao@gmail.com>
+Cc: ebpf@linuxfoundation.org, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.15.2
+X-Last-TLS-Session-Version: TLSv1.3
+
+Hello,
+this is v8 of the series aiming to bring basic support for KASAN checks
+to BPF JITed programs. Among the fixes following the comments on v7,
+this version should have passing selftests, as Ihor merged the small PR
+in vmtest ignoring the KASAN selftests splats.
+
+Original cover letter:
+
+"Traditional" KASAN allows to spot memory management mistakes by
+reserving a fraction of memory as "shadow memory" that will map to the
+rest of the memory and allow its monitoring. Each memory-accessing
+instruction is then instrumented at build time to call some ASAN check
+function, that will analyze the corresponding bits in shadow memory, and
+if it detects the access as invalid, trigger a detailed report. The goal
+of this series is to replicate this mechanism for BPF programs when they
+are being JITed into native instructions: that's then the JIT compiler
+that is in charge of inserting calls to the corresponding kasan checks,
+when a program is being loaded into the kernel. This task involves:
+- identifying at program load time the instructions performing memory
+  accesses
+- identifying those accesses properties (size ? read or write ?) to
+  define the relevant kasan check function to call
+- just before the identified instructions:
+  - perform the basic context saving (ie: saving registers)
+  - inserting a call to the relevant kasan check function
+  - restore context
+- whenever the instrumented program executes, if it performs an invalid
+  access, it triggers a kasan report identical to those instrumented on
+  kernel side at build time.
+
+The series comes with new selftests programs that generate a wide
+variety of kasan reports: those need the kernel to be running with
+kasan_multi_shot enabled.
+
+As discussed in [1], this series is based on some choices and
+assumptions:
+- it focuses on x86_64 for now, and so only on KASAN_GENERIC
+- not all memory accessing BPF instructions are being instrumented:
+  - it discards instructions accessing BPF program stack (already
+    monitored by page guards)
+  - it discards possibly faulting instructions, like BPF_PROBE_MEM or
+    BPF_PROBE_ATOMIC insns
+
+---
+Changes in v8:
+- Make sure that test programs involving STX are not turned into ST on
+  cpuv4
+- Execute ST tests only when compiler can emit ST (ie: cpuv4)
+- make sure to test the reg type before the verifier can alter it (eg an
+  on_stack access with dst_reg = src_reg)
+- Add new test for the case mentioned above, ensuring that a pure stack
+  access with dst_reg == src_reg is not instrumented
+- add back save/restore logic for r10 and r11 in emit_kasan_check
+- make the new kasan test serial to avoid side effects due to
+  bpf_jit_harden being toggled
+- dropped the set_bpf_jit_harden helper, as there is already a
+  sysctl_set helper
+- Link to v7: https://patch.msgid.link/20260822-kasan-v7-0-99afee6ef7fd@bootlin.com
+
+Changes in v7:
+- Rebase series on top of current bpf-next_base, fixed conflict with
+  7ce090afbf72 ("bpf: Infer zext_dst based on static register liveness
+  analysis")
+- Link to v6: https://patch.msgid.link/20260804-kasan-v6-0-549ef845f491@bootlin.com
+
+Changes in v6:
+- dropped instruction original offset tracking
+- when patching instructions, track former non_stack_access flag by
+  passing original insn to adjust_insn_aux_data
+- drop unecessary dep on CONFIG_KASAN in Kconfig
+- fold patch adding the emit_kasan_helper into the patch actually
+  calling it, to avoid an unused static function warning
+- move stack access check out of emit_kasan_check
+- replace hardcoded ip value by a computed value
+- add OoB testing
+- add fix commit to make cmdline_contains stricter
+
+- Link to v5: https://patch.msgid.link/20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com
+
+Changes in v5:
+- fixed a few instruction offset for generated fixups
+- fix insn marking for single insn patches
+- enforce more checks in tests
+- skip tests if kasan_multi_shot isn't enabled
+- Link to v4: https://patch.msgid.link/20260708-kasan-v4-0-d5c177ab8227@bootlin.com
+
+Changes in v4:
+- fix insn_offs_in_patch leakage in bpf_convert_ctx_access
+- handle BPF_ATOMIC in is_mem_insn
+- correctly mark fixup instructions if a single insn is generated
+- clarify new kconfig (Andrey) and drop VMAP_STACK dep
+- refactor BPF_FETCH atomic handling in JIT loop
+- make kernel log reading resilient to unrelated, interleaved logs in
+  the selftests
+- make new test kfuncs depend on BPF_JIT_KASAN rather than KASAN_GENERIC
+- Link to v3: https://patch.msgid.link/20260701-kasan-v3-0-bd09bb942d86@bootlin.com
+
+Changes in v3:
+- Do not insert KASAN instrumentation when dealing with cBPF
+- Fix stack-accessing insn tracking for verifier patches, as original
+  instruction location in the generated patch may vary
+- drop cBPF support for stack-accessing insn marking
+- make sure to flag correctly memory access if different verifier states
+  involve different memory types (eg: stack in one path, non-stack in
+  another path)
+- refactor BPF_ST handling in x86 JIT compiler
+- improve tests coverage (cover instrumentation for a few patches
+  emitted by the verifier)
+- Link to v2: https://patch.msgid.link/20260604-kasan-v2-0-c066e627fda8@bootlin.com
+
+Changes in v2:
+- declare asan functions as extern in JIT compiler rather than exposing
+  them in kasan header
+- invert stack-accessing instructions marking to make sure not to skip
+  instructions that could end up accessing to-be-checked memory
+- fix stack accesses marking when verifier patches instructions
+- add best effort marking for cBPF
+- add missing call depth accounting in jited instrumentation
+- skip unused registers in kasan instrumentation save/restore
+- remove faulty stack align in kasan instrumentation
+- drop commit skipping some jit-related tests
+- cover missing instructions: BPF_ST and atomics
+- completely rework tests: directly tune shadow memory, increase
+  coverage, do not consume kernel logs
+- Link to v1: https://patch.msgid.link/20260413-kasan-v1-0-1a5831230821@bootlin.com
+
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: John Fastabend <john.fastabend@gmail.com>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Thomas Gleixner <tglx@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
+To: Dave Hansen <dave.hansen@linux.intel.com>
+To: x86@kernel.org
+To: "H. Peter Anvin" <hpa@zytor.com>
+To: Shuah Khan <shuah@kernel.org>
+To: Ingo Molnar <mingo@redhat.com>
+To: Andrey Konovalov <andreyknvl@gmail.com>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: ebpf@linuxfoundation.org
+Cc: Bastien Curutchet <bastien.curutchet@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: bpf@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
-Content-Type: multipart/mixed; boundary="000000000000489f19065a17eea8"
+Cc: linux-kselftest@vger.kernel.org
 
---000000000000489f19065a17eea8
-Content-Type: text/plain; charset="UTF-8"
+---
+Alexis Lothoré (eBPF Foundation) (8):
+      bpf: mark instructions accessing program stack
+      bpf: add BPF_JIT_KASAN for KASAN instrumentation of JITed programs
+      bpf, x86: refactor BPF_ST management in do_jit
+      bpf, x86: emit KASAN checks in x86 JITed programs
+      bpf, x86: enable KASAN for JITed programs on x86
+      selftests/bpf: make cmdline_contains stricter
+      selftests/bpf: add helpers for KASAN in JIT testing
+      selftests/bpf: add tests to validate KASAN on JIT programs
 
-Hi BPF maintainers,
+ arch/x86/Kconfig                                   |   1 +
+ arch/x86/net/bpf_jit_comp.c                        | 282 +++++++++---
+ include/linux/bpf_verifier.h                       |   2 +
+ kernel/bpf/Kconfig                                 |  17 +
+ kernel/bpf/fixups.c                                |  45 +-
+ kernel/bpf/verifier.c                              |  10 +
+ tools/testing/selftests/bpf/prog_tests/kasan.c     | 479 ++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/kasan.c          | 502 +++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/kasan_harden.c   |  52 +++
+ .../testing/selftests/bpf/test_kmods/bpf_testmod.c |  55 +++
+ tools/testing/selftests/bpf/unpriv_helpers.c       |  19 +-
+ tools/testing/selftests/bpf/unpriv_helpers.h       |   2 +
+ 12 files changed, 1405 insertions(+), 61 deletions(-)
+---
+base-commit: 490912167ead6e5c64b7a7e960766b3ccdd8fdda
+change-id: 20260126-kasan-fcd68f64cd7b
 
-I'm reporting a kernel WARNING (verifier internal-invariant violation) I
-encountered on the BPF subsystem, reproducible on Linux 7.2.0-rc6
-(bpf-next f79066c78) and 7.2.0-rc7 (mainline 15ef2f78c).
+Best regards,
+--  
+Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 
-### Summary
-A 21-instruction SOCKET_FILTER program that calls bpf_loop() from a subprog
-with the nr_loops register (r1 at the call site) left uninitialized
-triggers:
-
-    verifier bug: backtracking misuse
-    WARNING: kernel/bpf/backtrack.c:819 at
-bpf_mark_chain_precision+0x2f61/0x50d0
-
-The program has an uninitialized register (r1 at the bpf_loop call site)
-and should be rejected with the normal "R1 !read_ok" error. Instead, on
-the callback pre-verification path, precision backtracking walks across
-frames, hits a non-SCALAR register (NOT_INIT) in the caller frame, and
-fails the defensive sanity check in bpf_mark_chain_precision() -- a
-verifier_bug() that must never be reachable from user input.
-
-### Steps to Reproduce (raw instruction sequence)
-A complete standalone reproducer (pure syscall, no libbpf; embeds the
-minimal BTF blob and func_info needed for the BPF_PSEUDO_FUNC callback)
-is attached (poc_backtrack1.c). Build with `gcc -O2 -o poc_backtrack1
-poc_backtrack1.c`, run as root (CAP_BPF); the trigger is printed from the
-verifier log on every run.
-
-    main (0-3):
-     0  r6 = 4
-     1  call subprog          /* pseudo call -> insn 4 */
-     2  r0 = 0
-     3  exit
-
-    subprog (4-13):
-     4  r7 = 2
-     5-6  r2 = callback       /* LD_IMM64, BPF_PSEUDO_FUNC -> insn 14 */
-     7  r3 = r10
-     8  r3 += -8
-     9  *(u64 *)(r10 - 8) = 0
-    10  r4 = 1
-    11  r0 = bpf_loop(181)    /* (*) r1 (nr_loops) never set in this frame */
-    12  r0 = 1
-    13  exit
-
-    callback (14-20):
-    14  r2 = r1               /* index */
-    15  if r2 == 1 goto +3
-    16  r2 += 1
-    17  r2 &= 7
-    18  *(u64 *)(r10 - 16) = r2
-    19  r0 = 1
-    20  exit
-
-Full bug report (with kernel log) is filed on Bugzilla:
-
-https://bugzilla.kernel.org/show_bug.cgi?id=221899
-
-### Notes
-This message ("backtracking misuse", backtrack.c:819) is distinct from
-the syzbot reports "WARNING in __mark_chain_precision": those fire inside
-backtrack_insn() with message "verifier backtracking bug", while ours is
-the entry-point guard in bpf_mark_chain_precision()
-(reg->type != SCALAR_VALUE) reached across frames via the bpf_loop
-callback pre-verification path.
-
-Please let me know if you need more information or if I can help test a
-patch. The poc is in the attachment.
-
---000000000000489f19065a17eea8
-Content-Type: text/plain; charset="US-ASCII"; name="poc_backtrack1.c"
-Content-Disposition: attachment; filename="poc_backtrack1.c"
-Content-Transfer-Encoding: base64
-Content-ID: <f_mtcqliif0>
-X-Attachment-Id: f_mtcqliif0
-
-Ly8gUG9jIGZvcjogV0FSTklORyBpbiBrZXJuZWwvYnBmL2JhY2t0cmFjay5jOjgxOSAodmVyaWZp
-ZXJfYnVnDQovLyAiYmFja3RyYWNraW5nIG1pc3VzZSIpIC0tIGJwZl9sb29wIGNhbGxiYWNrIHBy
-ZS12ZXJpZmljYXRpb24gaGl0cyBhbg0KLy8gdW5pbml0aWFsaXplZCByZWdpc3RlciAoTk9UX0lO
-SVQpIGFjcm9zcyBmcmFtZXMgZHVyaW5nIHByZWNpc2lvbg0KLy8gYmFja3RyYWNraW5nLg0KLy8N
-Ci8vIEJ1aWxkOiBnY2MgLU8yIC1vIHBvY19iYWNrdHJhY2sxIHBvY19iYWNrdHJhY2sxLmMNCi8v
-IFJ1biAoYXMgcHJpdmlsZWdlZCB1c2VyLCBDQVBfQlBGIHJlcXVpcmVkKToNCi8vICAgLi9wb2Nf
-YmFja3RyYWNrMQ0KLy8NCi8vIERldGVybWluaXN0aWMgdHJpZ2dlciAodmVyaWZpZWQgNC80KTog
-bWFpbiAtPiBzdWJwcm9nIC0+IGJwZl9sb29wDQovLyBjYWxsYmFjaywgd2l0aCB0aGUgYnBmX2xv
-b3AgY2FsbCBzaXRlJ3MgcjEgKG5yX2xvb3BzKSBsZWZ0DQovLyB1bmluaXRpYWxpemVkIGluIHRo
-ZSBzdWJwcm9nIGZyYW1lLiBUaGUgcHJvZ3JhbSBzaG91bGQgYmUgY2xlYW5seQ0KLy8gcmVqZWN0
-ZWQgd2l0aCAiUjEgIXJlYWRfb2siOyBpbnN0ZWFkLCBwYXJ0IG9mIHRoZSB2ZXJpZmljYXRpb24g
-cGF0aA0KLy8gZmlyZXMgdmVyaWZpZXJfYnVnKCJiYWNrdHJhY2tpbmcgbWlzdXNlIikgYXQgYmFj
-a3RyYWNrLmM6ODE5Lg0KLy8NCi8vIFRoZSBrZXJuZWwgcHJpbnRzIChkbWVzZywgZmlyc3Qgb2Nj
-dXJyZW5jZSBwZXIgYm9vdCk6DQovLyAgIHZlcmlmaWVyIGJ1ZzogYmFja3RyYWNraW5nIG1pc3Vz
-ZQ0KLy8gICBXQVJOSU5HOiBDUFU6IC4uLiBhdCBrZXJuZWwvYnBmL2JhY2t0cmFjay5jOjgxOQ0K
-Ly8gICAgICAgICAgICBicGZfbWFya19jaGFpbl9wcmVjaXNpb24rMHguLi4vLi4uIA0KLy8gYW5k
-IHRoZSB2ZXJpZmllciBsb2cgKGxvZ19sZXZlbD0yKSBjb250YWlucyB0aGUgc2FtZSAiYmFja3Ry
-YWNraW5nDQovLyBtaXN1c2UiIGxpbmUgb24gZXZlcnkgb2NjdXJyZW5jZS4gVGhpcyBwb2MgcHJp
-bnRzIHRoZSB2ZXJpZmllciBsb2cNCi8vIHRhaWwgc28gdGhlIHRyaWdnZXIgaXMgb2JzZXJ2YWJs
-ZSBldmVuIGFmdGVyIFdBUk5fT05DRSBpcyBjb25zdW1lZC4NCiNpbmNsdWRlIDxlcnJuby5oPg0K
-I2luY2x1ZGUgPGxpbnV4L2JwZi5oPg0KI2luY2x1ZGUgPHN0ZGludC5oPg0KI2luY2x1ZGUgPHN0
-ZGlvLmg+DQojaW5jbHVkZSA8c3RyaW5nLmg+DQojaW5jbHVkZSA8c3lzL3N5c2NhbGwuaD4NCiNp
-bmNsdWRlIDx1bmlzdGQuaD4NCg0KI2lmbmRlZiBfX05SX2JwZg0KI2RlZmluZSBfX05SX2JwZiAz
-MjENCiNlbmRpZg0KDQovKiB1YXBpIGNvbnN0YW50cyB0aGF0IG1heSBiZSBtaXNzaW5nIGZyb20g
-b2xkZXIgbGliYyBoZWFkZXJzICovDQojaWZuZGVmIEJQRl9QU0VVRE9fQ0FMTA0KI2RlZmluZSBC
-UEZfUFNFVURPX0NBTEwgMQ0KI2VuZGlmDQojaWZuZGVmIEJQRl9QU0VVRE9fRlVOQw0KI2RlZmlu
-ZSBCUEZfUFNFVURPX0ZVTkMgNA0KI2VuZGlmDQojZGVmaW5lIEJQRl9GVU5DX2xvb3AgMTgxDQoN
-CnN0YXRpYyBpbnQgc3lzX2JwZihlbnVtIGJwZl9jbWQgY21kLCB1bmlvbiBicGZfYXR0ciAqYXR0
-cikNCnsNCglyZXR1cm4gc3lzY2FsbChfX05SX2JwZiwgY21kLCBhdHRyLCBzaXplb2YoKmF0dHIp
-KTsNCn0NCg0KLyogLS0tLSBpbnN0cnVjdGlvbiBidWlsZGVycyAocHVyZSBzeXNjYWxsLCBubyBs
-aWJicGYpIC0tLS0gKi8NCiNkZWZpbmUgQlBGX1JBV19JTlNOKENPREUsIERTVCwgU1JDLCBPRkYs
-IElNTSkgXA0KCSgoc3RydWN0IGJwZl9pbnNuKXsgLmNvZGUgPSBDT0RFLCAuZHN0X3JlZyA9IERT
-VCwgLnNyY19yZWcgPSBTUkMsIFwNCgkJCSAgICAub2ZmID0gT0ZGLCAuaW1tID0gSU1NIH0pDQoj
-ZGVmaW5lIEJQRl9NT1Y2NF9JTU0oRFNULCBJTU0pIEJQRl9SQVdfSU5TTihCUEZfQUxVNjQgfCBC
-UEZfTU9WIHwgQlBGX0ssIERTVCwgMCwgMCwgSU1NKQ0KI2RlZmluZSBCUEZfTU9WNjRfUkVHKERT
-VCwgU1JDKSBCUEZfUkFXX0lOU04oQlBGX0FMVTY0IHwgQlBGX01PViB8IEJQRl9YLCBEU1QsIFNS
-QywgMCwgMCkNCiNkZWZpbmUgQlBGX0FMVTY0X0lNTShPUCwgRFNULCBJTU0pIEJQRl9SQVdfSU5T
-TihCUEZfQUxVNjQgfCBCUEZfT1AoT1ApIHwgQlBGX0ssIERTVCwgMCwgMCwgSU1NKQ0KI2RlZmlu
-ZSBCUEZfU1RfTUVNKFNJWkUsIERTVCwgT0ZGLCBJTU0pIEJQRl9SQVdfSU5TTihCUEZfU1QgfCBC
-UEZfU0laRShTSVpFKSB8IEJQRl9NRU0sIERTVCwgMCwgT0ZGLCBJTU0pDQojZGVmaW5lIEJQRl9T
-VFhfTUVNKFNJWkUsIERTVCwgU1JDLCBPRkYpIEJQRl9SQVdfSU5TTihCUEZfU1RYIHwgQlBGX1NJ
-WkUoU0laRSkgfCBCUEZfTUVNLCBEU1QsIFNSQywgT0ZGLCAwKQ0KI2RlZmluZSBCUEZfSk1QX0lN
-TShPUCwgRFNULCBJTU0sIE9GRikgQlBGX1JBV19JTlNOKEJQRl9KTVAgfCBCUEZfT1AoT1ApIHwg
-QlBGX0ssIERTVCwgMCwgT0ZGLCBJTU0pDQojZGVmaW5lIEJQRl9DQUxMX1JFTChPRkYpIEJQRl9S
-QVdfSU5TTihCUEZfSk1QIHwgQlBGX0NBTEwsIDAsIEJQRl9QU0VVRE9fQ0FMTCwgMCwgT0ZGKQ0K
-I2RlZmluZSBCUEZfQ0FMTF9GVU5DKElEKSBCUEZfUkFXX0lOU04oQlBGX0pNUCB8IEJQRl9DQUxM
-LCAwLCAwLCAwLCBJRCkNCiNkZWZpbmUgQlBGX0VYSVRfSU5TTigpIEJQRl9SQVdfSU5TTihCUEZf
-Sk1QIHwgQlBGX0VYSVQsIDAsIDAsIDAsIDApDQojZGVmaW5lIEJQRl9MRF9JTU02NF9SQVcoRFNU
-LCBTUkMsIElNTSkgXA0KCUJQRl9SQVdfSU5TTihCUEZfTEQgfCBCUEZfRFcgfCBCUEZfSU1NLCBE
-U1QsIFNSQywgMCwgSU1NKSwgXA0KCUJQRl9SQVdfSU5TTigwLCAwLCAwLCAwLCAwKQ0KI2RlZmlu
-ZSBCUEZfTERfUFNFVURPX0ZVTkMoRFNULCBSRUwpIEJQRl9MRF9JTU02NF9SQVcoRFNULCBCUEZf
-UFNFVURPX0ZVTkMsIFJFTCkNCg0KLyogLS0tLSBtaW5pbWFsIEJURiBibG9iICh2MiwgMTE5IGJ5
-dGVzKTogSU5UICsgUFRSICsgRlVOQ19QUk9UTyhyZXQ9aW50LA0KICogdmxlbj0yLCBhcmdzIFBU
-UikgKyBGVU5DICdjYWxsYmFja19mbicgc3RhdGljLiBTYW1lIGxheW91dCBhcyB1c2VkIGJ5DQog
-KiB0aGUgZnJhbWV3b3JrIGV4ZWN1dG9yOyBwaW5uZWQgaW4ga2VybmVsIEVCVEYgZXhwZWN0YXRp
-b25zOg0KICogICB0eXBlIDEgPSBJTlQgKHNpemUgNCwgYml0cyAzMikNCiAqICAgdHlwZSAyID0g
-UFRSDQogKiAgIHR5cGUgMyA9IEZVTkNfUFJPVE8gKHJldCBpbnQsIDIgUFRSIHBhcmFtcykNCiAq
-ICAgdHlwZSA0ID0gRlVOQyAnY2FsbGJhY2tfZm4nIChsaW5rYWdlIFNUQVRJQywgdmxlbiAwKQ0K
-ICogRlVOQyB0eXBlIGlkIHVzZWQgZm9yIGZ1bmNfaW5mbyByZWNvcmRzIGlzIDQuIC0tLS0gKi8N
-CnN0YXRpYyBjb25zdCB1bnNpZ25lZCBjaGFyIGJ0Zl9ibG9iX21pbltdID0gew0KCTB4OWYsIDB4
-ZWIsIDB4MDEsIDB4MDAsIDB4MTgsIDB4MDAsIDB4MDAsIDB4MDAsIDB4MDAsIDB4MDAsIDB4MDAs
-IDB4MDAsDQoJMHg0NCwgMHgwMCwgMHgwMCwgMHgwMCwgMHg0NCwgMHgwMCwgMHgwMCwgMHgwMCwg
-MHgxYiwgMHgwMCwgMHgwMCwgMHgwMCwNCgkweDAxLCAweDAwLCAweDAwLCAweDAwLCAweDAwLCAw
-eDAwLCAweDAwLCAweDAxLCAweDA0LCAweDAwLCAweDAwLCAweDAwLA0KCTB4MjAsIDB4MDAsIDB4
-MDAsIDB4MDAsIDB4MDAsIDB4MDAsIDB4MDAsIDB4MDAsIDB4MDAsIDB4MDAsIDB4MDAsIDB4MDIs
-DQoJMHgwMSwgMHgwMCwgMHgwMCwgMHgwMCwgMHgwMCwgMHgwMCwgMHgwMCwgMHgwMCwgMHgwMiwg
-MHgwMCwgMHgwMCwgMHgwZCwNCgkweDAxLCAweDAwLCAweDAwLCAweDAwLCAweDExLCAweDAwLCAw
-eDAwLCAweDAwLCAweDAyLCAweDAwLCAweDAwLCAweDAwLA0KCTB4MTYsIDB4MDAsIDB4MDAsIDB4
-MDAsIDB4MDIsIDB4MDAsIDB4MDAsIDB4MDAsIDB4MDUsIDB4MDAsIDB4MDAsIDB4MDAsDQoJMHgw
-MCwgMHgwMCwgMHgwMCwgMHgwYywgMHgwMywgMHgwMCwgMHgwMCwgMHgwMCwgMHgwMCwgMHg2OSwg
-MHg2ZSwgMHg3NCwNCgkweDAwLCAweDYzLCAweDYxLCAweDZjLCAweDZjLCAweDYyLCAweDYxLCAw
-eDYzLCAweDZiLCAweDVmLCAweDY2LCAweDZlLA0KCTB4MDAsIDB4NjEsIDB4NzIsIDB4NjcsIDB4
-MzAsIDB4MDAsIDB4NjEsIDB4NzIsIDB4NjcsIDB4MzEsIDB4MDAsDQp9Ow0KI2RlZmluZSBCVEZf
-VFlQRV9GVU5DX0NBTExCQUNLIDQNCg0KLyogZnVuY19pbmZvIHJlY29yZHM6IGVudHJ5IChpbnNu
-IDApICsgc3VicHJvZyAoaW5zbiA0KSArIGNhbGxiYWNrIChpbnNuIDE0KS4NCiAqIGluc25fb2Zm
-IGlzIGluIElOU1RSVUNUSU9OIElOREVYIHVuaXRzIChtYXRjaGVzIHN1YnByb2dfaW5mb1tpXS5z
-dGFydA0KICogaW4gdGhlIGtlcm5lbCdzIGNoZWNrX2J0Zl9mdW5jIG9uIHRoaXMga2VybmVsKS4g
-Ki8NCnN0YXRpYyBzdHJ1Y3QgYnBmX2Z1bmNfaW5mbyBmdW5jX2luZm9bXSA9IHsNCgl7IC5pbnNu
-X29mZiA9IDAsICAudHlwZV9pZCA9IEJURl9UWVBFX0ZVTkNfQ0FMTEJBQ0sgfSwNCgl7IC5pbnNu
-X29mZiA9IDQsICAudHlwZV9pZCA9IEJURl9UWVBFX0ZVTkNfQ0FMTEJBQ0sgfSwNCgl7IC5pbnNu
-X29mZiA9IDE0LCAudHlwZV9pZCA9IEJURl9UWVBFX0ZVTkNfQ0FMTEJBQ0sgfSwNCn07DQoNCiNk
-ZWZpbmUgTE9HX1NJWkUgKDY0ICogMTAyNCkNCnN0YXRpYyBjaGFyIHZsb2dbTE9HX1NJWkVdOw0K
-DQppbnQgbWFpbih2b2lkKQ0Kew0KCS8qIDEuIGxvYWQgbWluaW1hbCBCVEYgKi8NCgl1bmlvbiBi
-cGZfYXR0ciBiID0ge307DQoJYi5idGYgPSAodWludDY0X3QpKHVpbnRwdHJfdClidGZfYmxvYl9t
-aW47DQoJYi5idGZfc2l6ZSA9IHNpemVvZihidGZfYmxvYl9taW4pOw0KCWludCBidGZfZmQgPSBz
-eXNfYnBmKEJQRl9CVEZfTE9BRCwgJmIpOw0KCWlmIChidGZfZmQgPCAwKSB7DQoJCXByaW50Zigi
-QlBGX0JURl9MT0FEIGZhaWxlZDogZXJybm89JWQgKCVzKVxuIiwgZXJybm8sIHN0cmVycm9yKGVy
-cm5vKSk7DQoJCXJldHVybiAxOw0KCX0NCg0KCS8qIDIuIHByb2dyYW06IG1haW4gLT4gc3VicHJv
-ZyAtPiBicGZfbG9vcCBjYWxsYmFjay4NCgkgKiBUaGUgc3VicHJvZyBmcmFtZSBjYWxscyBicGZf
-bG9vcCB3aXRoIHIxIChucl9sb29wcykgbmV2ZXIgc2V0LiAqLw0KCXN0cnVjdCBicGZfaW5zbiBp
-bnNuc1tdID0gew0KCQkvKiBtYWluICgwLTMpOiBjYWxsIHN1YnByb2cgKHBzZXVkbyBjYWxsLCBy
-ZWwgKzIgLT4gaW5zbiA0KSAqLw0KCQlCUEZfTU9WNjRfSU1NKEJQRl9SRUdfNiwgNCksICAgICAg
-ICAgICAgICAvKiAwOiByNiA9IDQgKi8NCgkJQlBGX0NBTExfUkVMKDIpLCAgICAgICAgICAgICAg
-ICAgICAgICAgICAgLyogMTogY2FsbCBzdWJwcm9nIChpbnNuIDQpICovDQoJCUJQRl9NT1Y2NF9J
-TU0oQlBGX1JFR18wLCAwKSwgICAgICAgICAgICAgIC8qIDI6IHIwID0gMCAqLw0KCQlCUEZfRVhJ
-VF9JTlNOKCksICAgICAgICAgICAgICAgICAgICAgICAgICAvKiAzOiBleGl0ICovDQoNCgkJLyog
-c3VicHJvZyAoNC0xMyk6IGJwZl9sb29wIHdpdGggdW5pbml0aWFsaXplZCByMSAqLw0KCQlCUEZf
-TU9WNjRfSU1NKEJQRl9SRUdfNywgMiksICAgICAgICAgICAgICAvKiA0OiByNyA9IDIgKi8NCgkJ
-QlBGX0xEX1BTRVVET19GVU5DKEJQRl9SRUdfMiwgOCksICAgICAgICAgLyogNS02OiByMiA9IGNh
-bGxiYWNrIChpbnNuIDE0KSAqLw0KCQlCUEZfTU9WNjRfUkVHKEJQRl9SRUdfMywgQlBGX1JFR18x
-MCksICAgICAvKiA3OiByMyA9IHIxMCAqLw0KCQlCUEZfQUxVNjRfSU1NKEJQRl9BREQsIEJQRl9S
-RUdfMywgLTgpLCAgICAvKiA4OiByMyArPSAtOCAqLw0KCQlCUEZfU1RfTUVNKEJQRl9EVywgQlBG
-X1JFR18xMCwgLTgsIDApLCAgICAvKiA5OiAqKHU2NCopKHIxMC04KSA9IDAgKi8NCgkJQlBGX01P
-VjY0X0lNTShCUEZfUkVHXzQsIDEpLCAgICAgICAgICAgICAgLyogMTA6IHI0ID0gMSAoZmxhZ3Mp
-ICovDQoJCUJQRl9DQUxMX0ZVTkMoQlBGX0ZVTkNfbG9vcCksICAgICAgICAgICAgIC8qIDExOiBy
-MCA9IGJwZl9sb29wKC4uLikgKi8NCgkJQlBGX01PVjY0X0lNTShCUEZfUkVHXzAsIDEpLCAgICAg
-ICAgICAgICAgLyogMTI6IHIwID0gMSAqLw0KCQlCUEZfRVhJVF9JTlNOKCksICAgICAgICAgICAg
-ICAgICAgICAgICAgICAvKiAxMzogZXhpdCAqLw0KDQoJCS8qIGNhbGxiYWNrICgxNC0yMCk6IHBy
-ZWNpc2lvbiBjaGFpbiAqLw0KCQlCUEZfTU9WNjRfUkVHKEJQRl9SRUdfMiwgQlBGX1JFR18xKSwg
-ICAgICAvKiAxNDogcjIgPSByMSAoaW5kZXgpICovDQoJCUJQRl9KTVBfSU1NKEJQRl9KRVEsIEJQ
-Rl9SRUdfMiwgMSwgMyksICAgIC8qIDE1OiBpZiByMiA9PSAxIGdvdG8gKzMgKi8NCgkJQlBGX0FM
-VTY0X0lNTShCUEZfQURELCBCUEZfUkVHXzIsIDEpLCAgICAgLyogMTY6IHIyICs9IDEgKi8NCgkJ
-QlBGX0FMVTY0X0lNTShCUEZfQU5ELCBCUEZfUkVHXzIsIDcpLCAgICAgLyogMTc6IHIyICY9IDcg
-Ki8NCgkJQlBGX1NUWF9NRU0oQlBGX0RXLCBCUEZfUkVHXzEwLCBCUEZfUkVHXzIsIC0xNiksIC8q
-IDE4OiAqKHU2NCopKHIxMC0xNikgPSByMiAqLw0KCQlCUEZfTU9WNjRfSU1NKEJQRl9SRUdfMCwg
-MSksICAgICAgICAgICAgICAvKiAxOTogcjAgPSAxICovDQoJCUJQRl9FWElUX0lOU04oKSwgICAg
-ICAgICAgICAgICAgICAgICAgICAgIC8qIDIwOiBleGl0ICovDQoJfTsNCg0KCS8qIDMuIGxvYWQg
-d2l0aCBmdW5jX2luZm8gKyB2ZXJpZmllciBsb2cgKGxldmVsIDIpICovDQoJdW5pb24gYnBmX2F0
-dHIgYSA9IHt9Ow0KCWEucHJvZ190eXBlID0gQlBGX1BST0dfVFlQRV9TT0NLRVRfRklMVEVSOw0K
-CWEuaW5zbl9jbnQgPSBzaXplb2YoaW5zbnMpIC8gc2l6ZW9mKGluc25zWzBdKTsNCglhLmluc25z
-ID0gKHVpbnQ2NF90KSh1aW50cHRyX3QpaW5zbnM7DQoJYS5saWNlbnNlID0gKHVpbnQ2NF90KSh1
-aW50cHRyX3QpIkdQTCI7DQoJYS5wcm9nX2J0Zl9mZCA9IGJ0Zl9mZDsNCglhLmZ1bmNfaW5mb19y
-ZWNfc2l6ZSA9IHNpemVvZihzdHJ1Y3QgYnBmX2Z1bmNfaW5mbyk7DQoJYS5mdW5jX2luZm9fY250
-ID0gc2l6ZW9mKGZ1bmNfaW5mbykgLyBzaXplb2YoZnVuY19pbmZvWzBdKTsNCglhLmZ1bmNfaW5m
-byA9ICh1aW50NjRfdCkodWludHB0cl90KWZ1bmNfaW5mbzsNCglhLmxvZ19sZXZlbCA9IDI7DQoJ
-YS5sb2dfc2l6ZSA9IExPR19TSVpFOw0KCWEubG9nX2J1ZiA9ICh1aW50NjRfdCkodWludHB0cl90
-KXZsb2c7DQoJdmxvZ1swXSA9IDA7DQoNCglpbnQgZmQgPSBzeXNfYnBmKEJQRl9QUk9HX0xPQUQs
-ICZhKTsNCglwcmludGYoIkJQRl9QUk9HX0xPQUQgcmM9JWQgZXJybm89JWQgKCVzKVxuIiwgZmQs
-IGZkIDwgMCA/IGVycm5vIDogMCwNCgkgICAgICAgZmQgPCAwID8gc3RyZXJyb3IoZXJybm8pIDog
-IiIpOw0KDQoJLyogNC4gcmVwb3J0IGRldGVjdGlvbjogImJhY2t0cmFja2luZyBtaXN1c2UiIGlu
-IHZlcmlmaWVyIGxvZyAqLw0KCXZsb2dbTE9HX1NJWkUgLSAxXSA9IDA7DQoJaW50IGhpdCA9IHN0
-cnN0cih2bG9nLCAiYmFja3RyYWNraW5nIG1pc3VzZSIpICE9IE5VTEw7DQoJcHJpbnRmKCJ2ZXJp
-ZmllciBsb2cgaGFzICdiYWNrdHJhY2tpbmcgbWlzdXNlJzogJXNcbiIsDQoJICAgICAgIGhpdCA/
-ICJZRVMgKHRyaWdnZXJlZCkiIDogIm5vIik7DQoJaWYgKGhpdCkgew0KCQkvKiBwcmludCB0aGUg
-bG9nIHJlZ2lvbiBhcm91bmQgdGhlIG1hcmtlciAqLw0KCQljb25zdCBjaGFyICpwID0gc3Ryc3Ry
-KHZsb2csICJiYWNrdHJhY2tpbmcgbWlzdXNlIik7DQoJCWxvbmcgc3RhcnQgPSBwIC0gdmxvZzsN
-CgkJbG9uZyBmcm9tID0gc3RhcnQgPiA0MDAgPyBzdGFydCAtIDQwMCA6IDA7DQoJCXByaW50Zigi
-LS0tIHZlcmlmaWVyIGxvZyB0YWlsIGFyb3VuZCB0cmlnZ2VyIC0tLVxuIik7DQoJCXByaW50Zigi
-JXNcbiIsIHZsb2cgKyBmcm9tKTsNCgl9IGVsc2Ugew0KCQkvKiBwcmludCBsYXN0IDEuNUtCIHNv
-IGZhaWx1cmVzIGFyZSBkaWFnbm9zYWJsZSAqLw0KCQlsb25nIGxlbiA9IHN0cmxlbih2bG9nKTsN
-CgkJbG9uZyBmcm9tID0gbGVuID4gMTUzNiA/IGxlbiAtIDE1MzYgOiAwOw0KCQlwcmludGYoIi0t
-LSB2ZXJpZmllciBsb2cgdGFpbCAobGFzdCAxNTM2IGJ5dGVzKSAtLS1cbiIpOw0KCQlwcmludGYo
-IiVzXG4iLCB2bG9nICsgZnJvbSk7DQoJfQ0KCXByaW50ZigiY2hlY2sgZG1lc2cgZm9yOiBXQVJO
-SU5HOiAuLi4ga2VybmVsL2JwZi9iYWNrdHJhY2suYzo4MTlcbiIpOw0KCWNsb3NlKGJ0Zl9mZCk7
-DQoJaWYgKGZkID49IDApDQoJCWNsb3NlKGZkKTsNCglyZXR1cm4gaGl0ID8gMCA6IDI7DQp9
---000000000000489f19065a17eea8--
