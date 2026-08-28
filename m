@@ -1,115 +1,251 @@
-Received: from mta1.migadu.com (out-109.mta1.migadu.com [95.215.58.109])
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5C5D360EED
-	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 18:26:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.109
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3980B383993
+	for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 18:28:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787941586; cv=none; b=YzmjTjGd6/rSCbFgo5tkd2iTN0+36bmlXzpyNAu2itWI4AjDP1SuHU4PGmf4KJbE3GHg8CmIsYpbFdmsQ9m3CfcJ5th0ez6vSGEDCp8FmvWIna13SHl67p6p9V/OsNDb3xsrxka/wo2Wg3ahlaQs/8PjMVzzjA9mwJp66MKArmg=
+	t=1787941719; cv=none; b=reoGC+R0YYimPeCXJ6RBqr2zSdPrnXupwci44lo7elKS+STESg//SDfBlq9TEWJhmxLcTmY46fH6Z1hXynOgZWtB6DqwKlfYS1Y3q9ZdF2l3ueXhNf8f62zI/ALJJFamzbLmb6xSlimuL8YOB557o1q1YeDNFsKNh4s0vAtwONE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787941586; c=relaxed/simple;
-	bh=OHQYE/oIXiEsFNvdZzf6AhBGQ5Ru2IfyTHDAKmcD3z8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p0c/H9+sNW88Ts5OqoBxLIzhVrhwkoCSzR+uG449EnMZwXNTytMYmyRyGLj7Q4x7s9S/4rlBx/qOpJFpnZWLwq16E1vOD+iiLmm74YkRths2bl+UZ5BIcWWV5bc23QpZ2SfYcq3Dk1q3/jScaOFlsP7cKbcyL9ojEk9XoJuq0yI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oC3aSEt5; arc=none smtp.client-ip=95.215.58.109
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787941719; c=relaxed/simple;
+	bh=aIJ3XedisAPbkx/BHNvcS+HFrCoktU7SSApXHopa3VY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ctQRSnLdMh/K7ylTcTCdoePjwKQjGTQS7tB+bMjGfkpQqPv4gbIQEgfMOQvbxYcqBwIRFrh3M5s4f9ax3L2zwAO9/AZLDTTjl0Pxlebup3/fLYgu8ltjNzhnrLr+8yU7PkajYHlDC5Kqgby9mlSYse5xV5aSsNFZ7Hq4t93Q60I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G3AF+sDv; arc=none smtp.client-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oC3aSEt5"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=OHQYE/oIXiEsFNvdZzf6AhBGQ5Ru2IfyTHDAKmcD3z8=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787941580; v=1; x=1788546380;
- b=oC3aSEt5enFHNkbtm4jZUmYoIxQpBN6+iczK+hBBjlz1nVF1diQsTlyMjuGBc/+fct8rhHLo
- nmHevy1Mat1wCZQriIjaeS/1xGPFLGErVYmDn+LzRk0MoMrU7QstvkT9Xwb5c/CwTpwLjFHgyQB
- iCoWOAUbIIRvbW9Hevb0d4Ao=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 98e9a8112d5e48bf;
-	Fri, 28 Aug 2026 18:26:20 +0000
-X-Mizu-Trace-ID: 98e9a8112d5e48bf
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <eef81f76-b208-4549-8b01-5e9cfa8bea86@linux.dev>
-Date: Fri, 28 Aug 2026 11:26:16 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G3AF+sDv"
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-85a50f6a7f7so14885077b3.2
+        for <bpf@vger.kernel.org>; Fri, 28 Aug 2026 11:28:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787941717; x=1788546517; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=00XcgwP2TaQwLmCHa5/Xf0oEUUJDtZf0rSmRiAN3I7M=;
+        b=G3AF+sDvPKLPPpVkB20tD2xb8lHDW26GUhPmxpOW1y3N+zE4qZCBDizoQ3ywuCfbSo
+         Tk1NsFTj/RBtb7fuFNciVvckX17teu7a9rlNKaz/sEqZyWQWCNnexCSkVlxfT1RiQwSU
+         atsfFkR8gldbxlOKsuhEy58wW8coxErI+y9LRl5WkGiZd7EKYuthDVE6MajqIxsjzgAK
+         lfNwAbWWt/QMHU+8LDLneKmGBqZD9KfJdVpO7dXa7hM0/d9otWpO/v6i+LRNhDKJVDSF
+         4Q9julHqumQPxn+DpfHWKD2ZyYIbLb+CQBbdsw7TG/BwM23c1cK+Tfqo4pv6OjKfbjM4
+         hITQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787941717; x=1788546517;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=00XcgwP2TaQwLmCHa5/Xf0oEUUJDtZf0rSmRiAN3I7M=;
+        b=BL4nxVKwIajBUfeSShPNl1WV0qEl/vCdqNovq47bUnzBMJCREzxCINSCx7TwZ1gbl+
+         bmg9q0xA1pH9I9MhDoxASmJxzYslQIbPpR3vbzQVQxhf/uLxVGSsLTHZ1RD19Wg7XnK3
+         LEBB5REAgN0HGPjYmj20vM6GUHyDuuqQxAGYjwGLaiqj+2rbwi94Ugv+Gq7db4c4Ei8N
+         5Evm9/S7npkHlBmZpL1BvODkrV39h0wl94NVVzRpRSHtYgP5jllYwslPAOJfZrdpW0Hw
+         J3fYLcZaOVO+2mMnlTf6rN31oEYyWxLkIA27BWTSN/x2vWyByyZxw07lKRTqDzeBx4D/
+         V1yQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzWc0B2hlGOdHpLK6rJIsU128UREEbzq16VTZ+509Bunk7vAfxy8pigY4xbfTC4YYk8Kww=@vger.kernel.org
+X-Gm-Message-State: AFuF++k5nnqF0Gokq4vx0w4BbqAh8aGvRFUUJ1kPDM4zKO0LiW2B6h9P
+	Ipl85BhRHXnA3TSTMtC+Hpir9PFTt01yp4yk4KAjAJrlIdPvdhGSRYFn
+X-Gm-Gg: AYBFou31whlYoojgIY1qptj8pZykrp7hDwq9mDiZmyYkfwJSlGwgLxRgDfogjgmJpEr
+	6B2fjqMtxPVmQF4nm7st/g5/DrN70EQKQTw30UNRX5jYJK6Gzcnphl2+mWI9kYmZfyo/yDXZaHv
+	3a5jdg96Aar/vEo03zr6Cwbbl05LVYfk1w7Pr0am+ZnZoPpT2lDMoK9YNigDnCZEU5ClHjcRIJs
+	LYrFcOqx43SivceizzhW1/zAWK53hNlIFmmtEVfbC01GF2VG2RLmNTq32jfY0TUhfPcXvnVM+jT
+	uxGh4KAtmrNTtOhj7gBsTGLMts1JNV/xHHzhUk1eyDONIpcn+KI5tthM2h8N3m3kGc3cbGn/I1r
+	zheP2xygTaxZ0tJhQW1hSpnUuzUmFuLkpZD0nf2P19gSxmta2hTAyMxecTymkshB9lTImSn2xjj
+	G8vW8Eun2zbPCXq0Rl/Pa4XXNck/YCgvg4kriFgUK4p9XkUN+s0iE55EF7Bk798XAnaK5OCjWrf
+	alhBKHBHtmSstrohcze3OE=
+X-Received: by 2002:a05:690c:e313:b0:857:f33:6f1d with SMTP id 00721157ae682-85d660d961fmr32735737b3.6.1787941717079;
+        Fri, 28 Aug 2026 11:28:37 -0700 (PDT)
+Received: from zenbox ([2600:1700:18fb:6011:a21d:f263:629b:a8f0])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-85e668ce7ecsm10420247b3.34.2026.08.28.11.28.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Aug 2026 11:28:36 -0700 (PDT)
+Date: Fri, 28 Aug 2026 14:28:35 -0400
+From: Justin Suess <utilityemal77@gmail.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	kpsingh@kernel.org, mic@digikod.net, viro@zeniv.linux.org.uk, brauner@kernel.org, 
+	kees@kernel.org, gnoack@google.com, jack@suse.cz, song@kernel.org, 
+	yonghong.song@linux.dev, martin.lau@linux.dev, m@maowtm.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 00/13] BPF interface for applying Landlock
+ rulesets
+Message-ID: <apHN2WNQWeM9lzHc@zenbox>
+References: <20260731022047.189137-1-utilityemal77@gmail.com>
+ <CAHC9VhSSzNBCSvy4cQHh6OOM4-EvHF+bmrB9=V1y=Lj53RvxQQ@mail.gmail.com>
+ <anOnaGmBTlBW9xwj@zenbox>
+ <CAHC9VhRBYMaNBPfnV=TK8g-M7H_qsBu=CsVVOwnAzTPAkpAZaA@mail.gmail.com>
+ <anPAbFzuLOizAhm-@zenbox>
+ <CAHC9VhSJ1q59RUtEEMAmiZLLLi92=XO1tkd9z0fr5T7vuhoy8Q@mail.gmail.com>
+ <anZIGtlHvTaidOEC@zenbox>
+ <CAHC9VhQcysVLosHhuz_FTh+LUH7KSw1hJWmwucmV1G-seSbHHg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 09/11] selftests/bpf: Test global functions
- returning arena pointers by value
-Content-Language: en-GB
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org, clm@meta.com,
- ihor.solodrai@linux.dev
-References: <20260827061200.2519335-1-yonghong.song@linux.dev>
- <0c9dfc8370742b9ab97d7d248fb9698574ff6ca3074f761c400232d20ec7695f@mail.kernel.org>
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <0c9dfc8370742b9ab97d7d248fb9698574ff6ca3074f761c400232d20ec7695f@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHC9VhQcysVLosHhuz_FTh+LUH7KSw1hJWmwucmV1G-seSbHHg@mail.gmail.com>
 
-
-
-On 8/27/26 12:04 AM, bot+bpf-ci@kernel.org wrote:
->> Cover the by-value struct returns a global function may now make: two
->> arena pointers filling R0:R2, an arena pointer beside a scalar, an array
->> of them, and an eight byte struct returned in R0 alone. The existing
->> cases for a struct and a union carrying a plain pointer stay rejected.
-> This isn't a bug, but would it be worth adding the new union-of-arena-
-> pointer case to the enumeration? The patch adds union arena_upair /
-> global_ret_arena_union() / aggregate_ret_global_arena_union() as a
-> sixteen-byte union of an arena pointer and a __u64[2]. Since the next
-> sentence says "cases for a struct and a union carrying a plain pointer
-> stay rejected", a reader might think the only union touched is a rejected
-> one, when the patch actually adds a newly-accepted union case as well.
-
-There is no need to have too many union cases. The existing one
-should be enough.
-
+On Sun, Aug 09, 2026 at 03:18:21PM -0400, Paul Moore wrote:
+> On Fri, Aug 7, 2026 at 6:00 PM Justin Suess <utilityemal77@gmail.com> wrote:
+> > On Fri, Aug 07, 2026 at 04:36:20PM -0400, Paul Moore wrote:
+> > > On Wed, Aug 5, 2026 at 8:32 PM Justin Suess <utilityemal77@gmail.com> wrote:
+> > > > On Wed, Aug 05, 2026 at 06:51:56PM -0400, Paul Moore wrote:
+> > > > > On Wed, Aug 5, 2026 at 5:37 PM Justin Suess <utilityemal77@gmail.com> wrote:
+> > > > > > On Fri, Jul 31, 2026 at 04:30:39PM -0400, Paul Moore wrote:
+> > > > > > > On Thu, Jul 30, 2026 at 10:21 PM Justin Suess <utilityemal77@gmail.com> wrote:
+> > > > > > > [...]
+> > > > > > > As you may, or may not have seen, there is currently an ongoing debate
+> > > > > > > regarding the location of LSM kfuncs that will impact this patchset.
+> > > > > > > Sadly, we don't appear to be approaching an agreement on this issue
+> > > > > > > which introduces some additional risk to this patchset.  We'll have to
+> > > > > > > see how that ends up, but I just wanted you to be aware of the
+> > > > > > > situation.
+> > > > > >
+> > > > > > Quick aside question: Would security/bpf/ be a better place for these
+> > > > > > type of kfuncs?
+> > > > > >
+> > > > > > security/bpf/bpf_lsm_kfuncs.c could be for LSM framework kfuncs,
+> > > > > > and each LSM could maintain their own security/bpf/<lsm>_kfuncs.c
+> > > > > > for kfuncs dealing with lsm-specific types.
+> > > > >
+> > > > > This gets back to the other issue in the patchset that we've
+> > > > > discussed: general LSM interfaces vs Landlock specific interfaces.
+> > > > > There are plenty of reasons why we don't support the kernel calling
+> > > > > directly into individual LSMs, and from my perspective this is another
+> > > >
+> > > > I'm 100% on board with the no calling directly into individual LSMs part.
+> > > >
+> > > > > instance of that.  Here it just happens to be that the kernel caller
+> > > > > was written in BPF and not C (or Rust for that matter).
+> > > >
+> > > > The intention is the opposite. The point of the separate directory is
+> > > > that the kfuncs can never call into an individual LSM, they only get
+> > > > the LSM framework API in <linux/security.h>.
+> > > >
+> > > > Every kfunc is a thin wrapper over the generic policy kptr hooks:
+> > > >
+> > > >     bpf_landlock_get_ruleset_from_fd()
+> > > >       -> security_policy_kptr_from_fd(LSM_ID_LANDLOCK, ...)
+> > > >         -> Landlock's hook implementation
+> > > >
+> > > > So kfunc -> generic lsm hook -> individual LSM, same as any other
+> > > > caller in the kernel.
+> > >
+> > > Not exactly.  That "bpf_*landlock*_XXX" kfuncs are a move away from an
+> > > LSM agnostic API and not something we currently do in the kernel.
+> > > Some will, and have, argued that this is more akin to the Landlock
+> > > syscalls, but I see (at least) two problems with that comparison: the
+> > > kfuncs being presented aren't syscalls, they are cross-subsystem
+> > > kernel function calls; the Landlock syscalls were created in a
+> > I see the argument for normal in-tree kernel interfaces.
+> >
+> > Unlike normal kernel interfaces, kfuncs:
+> >
+> > 1. Can exist without in-tree callers.
+> 
+> Yes, although I'm not sure how relevant that is to our discussion.  I
+> can say that it isn't relevant to my decisions.
+> 
+> > 2. Are explicitly allowed to change or be removed at any time [1].
+> 
+> FWIW, the LSM hooks can be changed or removed at any time as well.
+> For obvious reasons we try to avoid churn where possible, but there
+> are plenty of cases where hooks have been modified, removed,
+> relocated, etc. (some without our explicit permission, but that's
+> another issue for another time).
+> 
+> > 3. Can't break builds or other in-tree subsystems when they do.
+> 
+> Of course.  Rule #1 of any kernel subsystem is don't break the build :)
+> 
+> > This isn't hypothetical: the entire KF_KPTR_GET class
+> > (bpf_task_kptr_get(), bpf_cgroup_kptr_get(), the flag itself) was
+> > removed and replaced with a better abstraction within about a year
+> > of introduction.
+> >
+> > If Landlock (or any LSM) dies, there's zero uapi/in-tree cost to
+> > removing the kfuncs, unlike syscalls which are burned into the uapi
+> > forever, or ones with in-tree callers where we can break builds.
+> >
+> > I argue that the transient, low-commitment nature of kfuncs mitigates
+> > maintainability issues that arise from lsm-specific interfaces with
+> > in-tree callers. (which we are both opposed to).
+> 
+> Sadly, the current situation between the BPF and LSM devs is not good,
+> which means any discussion around LSM kfuncs has a good chance of
+> turning ugly and something that should be relatively easy to maintain
+> is likely to turn into a significant headache.  To be clear, this
+> doesn't mean I'm opposed to LSM kfuncs, I just don't agree that they
+> are "low-commitment" at this point in time or in the foreseeable
+> future.
+> 
+> > To avoid strawman style arguments, I ask what you would see as
+> > an alternative interface?
+> 
+> As I've mentioned a couple of times now, you need to grant me the time
+> to properly review your existing patches before I can comment in
+> detail on the interface.  You've been quick to post with new thoughts,
+> ideas, arguments, etc., which is fine, but replying to them steals my
+> time away from the very patchset you want me to review ;)
+> 
+> It's up to you how you want to handle things, but my suggestion would
+> be to pause some of these thoughts until I've had a chance to review
+> your patchset in detail; then we can have a better discussion.
 >
->> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
->> index 815f342eb4b05..672a3aadd9cb2 100644
->> --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
->> +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
->> @@ -734,4 +734,52 @@ int check_arena_arg_ret(void *ctx)
->>   	return 0;
->>   }
->>
->> +#if defined(__clang_major__) && __clang_major__ >= 23
->> +
->> +struct arena_page_pair {
->> +	u32 __arena *first;
->> +	u32 __arena *second;
->> +};
->> +
->> +__weak struct arena_page_pair split_arena_page(u32 __arena *page)
->> +{
->> +	struct arena_page_pair pair;
->> +
->> +	pair.first = page;
->> +	pair.second = page + 1;
->> +
->> +	return pair;
->> +}
-> This isn't a bug, but since the returned pointers are the first two u32
-> slots of a single page rather than two halves of it (page and page + 1
-> are offsets 0 and 4 within a single 4096-byte allocation), would a name
-> like arena_word_pair() / struct arena_word_pair describe the helper more
-> directly? The neighbouring arena return tests in the same file name
-> themselves after what they exercise rather than after an imagined data
-> layout (check_arena_arg_ret, check_arena_arg_quals1/2).
+Hi Paul,
 
-Okay, I will use arena_work_pair() then.
+Gonna admit I was wrong on this one. It is entirely possible to make
+a generic kfunc interface for this, without it turning into an ioctl
+style multiplexer either. Honestly I think it's the better design anyway.
+Just took a month of staring at the code before the realization
+hit me.
 
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33045482525
+Since it's been about a month since the original submission, my plan is
+to send a revised version based on generic kfuncs in
+security/bpf_lsm_kfuncs.c, which expose no LSM-specific interface:
 
+  bpf_lsm_policy_from_fd(fd, flags)                                   KF_ACQUIRE | KF_RET_NULL | KF_SLEEPABLE
+  bpf_lsm_policy_acquire(struct lsm_policy_object *)                  KF_ACQUIRE | KF_RCU | KF_RET_NULL
+  bpf_lsm_policy_release(struct lsm_policy_object *)                  KF_RELEASE
+  bpf_lsm_policy_apply_bprm(struct lsm_policy_object *, bprm, flags)  KF_SLEEPABLE
+
+  struct lsm_policy_object {  /* initialized in LSM object structs */
+          u64 lsmid;
+          u32 type;
+  };
+
+I know I said I'd hold off on revisions until your review, so if
+you're already reviewing the current set (or still plan to), just
+say so and I'll sit on it. Otherwise I'd rather send the new version
+than have you waste time on a stale patchset, or on making a point
+you've already convinced me of.
+
+This generic design is better, and I've already experimented with
+implementing the same hooks/kfuncs for AppArmor / SELinux exec-time
+transitions (possible future patchsets?). This would allow writing
+LSM-agnostic BPF programs (like liblsm).
+
+Thank you so much for your feedback Paul.
+
+Mickäel,
+
+I think this should address your concerns about the multiplexer
+design, this avoids it handily by making the rulesets/"policy object"
+self-identifying so there's no need for an opcode/lsmid parameter.
+There's a small lsm_policy_struct that gets embedded in the ruleset
+with the lsmid already initialized, and then the original ruleset
+is retrieved via container_of.
+
+Otherwise, the semantics of the API, the flags, and implementation
+are identical to this set, with the exception that ruleset
+references can be taken under RCU.
+
+Thank you for both your time and feedback,
+Justin
+> -- 
+> paul-moore.com
