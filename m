@@ -1,128 +1,178 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-54.mta1.migadu.com [95.215.58.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD1433F1047;
-	Fri, 28 Aug 2026 23:55:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26A563ACA6E
+	for <bpf@vger.kernel.org>; Sat, 29 Aug 2026 01:04:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787961321; cv=none; b=G+RDRJneOhIjSJFG1VYS3tfP8Kp13vBfQye2gnsSwkjV3YpdPP1AqPja/Krf/T8Ls/nz0pYpHSMlfb4//hv5e7vhZshBnmcPJJrM0IV3chPnKyuYl1WDazMKtuf2RYzA/gsYo2OZNnwWvXpE40lE4o7REaWoPmgVdMh80hzdiNw=
+	t=1787965484; cv=none; b=kHy+WVJoUlUpNfYRERY1TVRw7uWQrlaMtS2tJN1Sy4BhF1DDRZ2ENSGI6n0i2xksIZ5hh2MjE+MINw1eUnuCaMV6WyDuxfsldd0INfCWbi8T1hOabuuRCBMYBnbNDd42jYIVhVlLggJkxbi+zof4FhKzfLjYxVrWHI6H6cl5H0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787961321; c=relaxed/simple;
-	bh=NJThH3EjYMUijdCxzUrekDYRd2bDguzSPLL+/WhIPLQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=PJ/X07n3sDdaNNj/7NA+YWxl98d4hC7BddUQSPx348nhwB9OPUOKXS9dDYxWvJnmIbdtA7EFMIQAJBKj2CRyG1gNOP7GeP+uYeOmSfGpl/mjScT4p3EjLVCZdyIne5T9KrnimGY2O0iykstNjc/eDRf0Q2Ss5ArTFDUqMvarFGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EL+ENEYQ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787965484; c=relaxed/simple;
+	bh=kFVnj/RCyVGdhv/GrLJjxqmvHwAXJnYM9xkltOMPrqc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ps6Qt8vJ3CnM2dPuQBLrKSW6isllExIb+3PKJV5ke5N5xjcKryrES2OrNB1IwQnC4ioNrB3RHyZm57ufMS7NuwQdrxfZSh3Xa70qz/F3gWJx7zKsiHaPQ7dEo5hsBVgvNuYUmZyPWAix7g/uN9OQu5YZjJHMNWVd60iNgsLCIfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TTcxGMFW; arc=none smtp.client-ip=95.215.58.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EL+ENEYQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FC1B1F000E9;
-	Fri, 28 Aug 2026 23:55:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787961319;
-	bh=s+Z28pWap+J0/DcFF7PQXh9tMY0c2jRlQj+pNlU/oIE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=EL+ENEYQVqmJcci5xLVJ0d2eCR0f9N0Sr14u3QZEuQNvWA4Ur0pVLnndNrg/s7Vis
-	 EUfktrhBtY4WPZEvLqf9RqlR0ND34h4jzmjW4ciFOeMpOpLL1O3rN20wJLA1r3k54n
-	 rV+h7aFE1Y/rrzBoMOXvMWRxoi10I5wISxLIuqtWEb8G6gkS64XA8jGObpFn/+kUoY
-	 Q8I9XoxKLJ6GnIqVn1NIr3hD/+f5ZFNYIyEH5x1hOPtQbv8LH8bI/ErPnFsb706+iw
-	 3HvmHO9W0quIMxEY9Xip2ZtR4tcO28VpnlKpaYLGIf9YfzDAdgwWTy31Hf9eu3KbxC
-	 LZg6GQIqukATw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v3 1/2] tcp: fix use-after-free in
- do_tcp_getsockopt(TCP_CONGESTION)
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?Q2VuIFpoYW5nIChNaWNyb3NvZnQp?= <blbllhy@gmail.com>
-Cc: mptcp@lists.linux.dev, bpf@vger.kernel.org
-In-Reply-To: <d3f97f1acbf0010898148be6e6406e4b8b4a5c84.1787870710.git.blbllhy@gmail.com>
-References: <cover.1787870710.git.blbllhy@gmail.com>
- <d3f97f1acbf0010898148be6e6406e4b8b4a5c84.1787870710.git.blbllhy@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 28 Aug 2026 23:55:18 +0000
-Message-Id: <20260828235519.3FC1B1F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TTcxGMFW"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=kFVnj/RCyVGdhv/GrLJjxqmvHwAXJnYM9xkltOMPrqc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787965478; v=1; x=1788570278;
+ b=TTcxGMFWoEsBiY1ov6+AULkzfP5/X/1wHWOBMu8dlEFvJ5REThzhY3wALQRrUmkBF1BaAZeH
+ 4cFaHcLmcV5NtG6hOqpxz4Om++qEdMBzHwwhtSvu/uCiFDCT6m5IDy5YqTU17QlK/H1rxYWSSyC
+ 1MCLwCoqV6lrgKNGEbY62zvs=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 171c61ff73f22124;
+	Sat, 29 Aug 2026 01:04:38 +0000
+X-Mizu-Trace-ID: 171c61ff73f22124
+X-Migadu-Flow: FLOW_OUT
+Date: Fri, 28 Aug 2026 18:04:37 -0700
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Joe Damato <joe@dama.to>
+Cc: linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>, 
+	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	cgroups@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org
+Subject: Re: [PATCH] mm: memcontrol: raise MEMCG_MAX for charges that fail
+ without reclaiming
+Message-ID: <apIvUej_7wvcDUjg@linux.dev>
+References: <20260827233119.411152-1-joe@dama.to>
+ <apDPJzlJ4gS9YUDX@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <apDPJzlJ4gS9YUDX@linux.dev>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On Thu, Aug 27, 2026 at 05:13:44PM -0700, Shakeel Butt wrote:
+> On Thu, Aug 27, 2026 at 04:31:18PM -0700, Joe Damato wrote:
+> > Charges that exceed memory.max and return through the nomem label can
+> > raise no event and simply return -ENOMEM.
+> > 
+> > A non-blocking charge can hit the limit, get rejected, but is not
+> > visible in memory.events.
+> > 
+> > This was noticed in a production setting where bpf_mem_alloc() attempted
+> > to refill its per-cpu freelists, which triggered a non-blocking charge
+> > while at the limit.
+> > 
+> > Move the event so that it is raised as soon as the charge is known not
+> > to fit.
+> > 
+> > Suggested-by: Shakeel Butt <shakeel.butt@linux.dev>
+> > Signed-off-by: Joe Damato <joe@dama.to>
+> > ---
+> >  mm/memcontrol.c | 15 +++++----------
+> >  1 file changed, 5 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> > index 1271d390b617..3904fe9a7b2e 100644
+> > --- a/mm/memcontrol.c
+> > +++ b/mm/memcontrol.c
+> > @@ -2683,6 +2683,11 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+> >  		goto retry;
+> >  	}
+> >  
+> > +	if (!raised_max_event) {
+> > +		__memcg_memory_event(mem_over_limit, MEMCG_MAX, allow_spinning);
+> > +		raised_max_event = true;
+> > +	}
+> > +
+> >  	/*
+> >  	 * Prevent unbounded recursion when reclaim operations need to
+> >  	 * allocate memory. This might exceed the limits temporarily,
+> > @@ -2711,9 +2716,6 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+> >  	    mm_flags_test(MMF_OOM_SKIP, current->signal->oom_mm))
+> >  		goto nomem;
+> >  
+> > -	__memcg_memory_event(mem_over_limit, MEMCG_MAX, allow_spinning);
+> > -	raised_max_event = true;
+> 
+> I just noticed that this will change the current behavior where we keep
+> increasing MAX counter while charge request loops through reclaim and retry.
+> Though we have not documented that behavior, so not sure if it is worth
+> preserving. It does help identify cases where a request keep looping in the
+> charge/reclaim/retry path.
+> 
+> Let's see what others say. Keeping the behavior should not be that hard if we
+> decide to keep it. Something like below (untested):
+> 
 
-Pre-existing issues:
-- [High] BPF getsockopt helper can race with user-space getsockopt(TCP_SAVE=
-D_SYN) causing a use-after-free on tp->saved_syn.
---
+Hi Joe, let's go with the following patch. No need to change the semantics. Also
+I think we should Cc stable as getting ENOMEM/allocation-failures without the
+corresponding counter i.e. MAX getting increased is clearly a bug and unexpected
+to the users and will make debugging/monitoring harder.
 
-commit aaf314b305f9bf7c88d6539be45ea64300819450
-Author: Cen Zhang (Microsoft Security FORGE Labs) <blbllhy@gmail.com>
-
-tcp: fix use-after-free in do_tcp_getsockopt(TCP_CONGESTION)
-
-This commit fixes a use-after-free in do_tcp_getsockopt() for TCP_CONGESTION
-by holding rcu_read_lock() while reading the congestion control name. It al=
-so
-annotates icsk_ca_ops updates with WRITE_ONCE() to address KCSAN data-races.
-
-Link: https://lore.kernel.org/all/20260821182449.79785-2-blbllhy@gmail.com/
-
-> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> index 455441f1b6949..55ca74f6029fa 100644
-> --- a/net/ipv4/tcp.c
-> +++ b/net/ipv4/tcp.c
-> @@ -4576,16 +4576,24 @@ int do_tcp_getsockopt(struct sock *sk, int level,
->  		val =3D !inet_csk_in_pingpong_mode(sk);
->  		break;
-> =20
-> -	case TCP_CONGESTION:
-> +	case TCP_CONGESTION: {
-> +		char ca_name[TCP_CA_NAME_MAX] =3D {};
-> +
->  		if (copy_from_sockptr(&len, optlen, sizeof(int)))
->  			return -EFAULT;
->  		len =3D min_t(unsigned int, len, TCP_CA_NAME_MAX);
->  		if (copy_to_sockptr(optlen, &len, sizeof(int)))
->  			return -EFAULT;
-> -		if (copy_to_sockptr(optval, icsk->icsk_ca_ops->name, len))
-> +
-> +		rcu_read_lock();
-> +		memcpy(ca_name, READ_ONCE(icsk->icsk_ca_ops)->name,
-> +		       sizeof(ca_name));
-> +		rcu_read_unlock();
-> +
-> +		if (copy_to_sockptr(optval, ca_name, len))
->  			return -EFAULT;
->  		return 0;
-> -
+> 
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 1271d390b617..6bfa4ad30b24 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -2656,10 +2656,11 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+>  	bool raised_max_event = false;
+>  	unsigned long pflags;
+>  	bool allow_spinning = gfpflags_allow_spinning(gfp_mask);
+> +	int ret = 0;
+>  
+>  retry:
+>  	if (consume_stock(memcg, nr_pages))
+> -		return 0;
+> +		return ret;
+>  
+>  	if (!allow_spinning)
+>  		/* Avoid the refill and flush of the older stock */
+> @@ -2770,16 +2771,11 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+>  	 * put the burden of reclaim on regular allocation requests
+>  	 * and let these go through as privileged allocations.
+>  	 */
+> -	if (!(gfp_mask & (__GFP_NOFAIL | __GFP_HIGH)))
+> -		return -ENOMEM;
+> +	if (!(gfp_mask & (__GFP_NOFAIL | __GFP_HIGH))) {
+> +		ret = -ENOMEM;
+> +		goto out;
 > +	}
->  	case TCP_ULP:
->  		if (copy_from_sockptr(&len, optlen, sizeof(int)))
->  			return -EFAULT;
-
-[Severity: High]
-This is a pre-existing issue, but while reviewing this TCP getsockopt
-fix, I noticed another potential use-after-free regression in the BPF
-getsockopt helper.
-
-In net/core/filter.c:sol_tcp_sockopt():
-
-	if (getopt) {
-		if (optname =3D=3D TCP_SAVED_SYN) {
-			struct tcp_sock *tp =3D tcp_sk(sk);
-
-			if (!tp->saved_syn ||
-			    *optlen > tcp_saved_syn_len(tp->saved_syn))
-				return -EINVAL;
-			memcpy(optval, tp->saved_syn->data, *optlen);
-
-Since BPF iterators run without holding the socket lock, can this
-locklessly read tp->saved_syn and call memcpy() on its data?
-
-If a concurrent user-space thread calls getsockopt(TCP_SAVED_SYN) on the
-same socket, it acquires sockopt_lock_sock(sk) and frees the memory via
-kfree(tp->saved_syn) inside tcp_saved_syn_free().
-
-Will the BPF program's memcpy() then dereference the freed memory?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1787870710.gi=
-t.blbllhy@gmail.com?part=3D1
+>  force:
+> -	/*
+> -	 * If the allocation has to be enforced, don't forget to raise
+> -	 * a MEMCG_MAX event.
+> -	 */
+> -	if (!raised_max_event)
+> -		__memcg_memory_event(mem_over_limit, MEMCG_MAX, allow_spinning);
+> -
+>  	/*
+>  	 * The allocation either can't fail or will lead to more memory
+>  	 * being freed very soon.  Allow memory usage go over the limit
+> @@ -2789,7 +2785,15 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+>  	if (do_memsw_account())
+>  		page_counter_charge(&memcg->memsw, nr_pages);
+>  
+> -	return 0;
+> +out:
+> +	/*
+> +	 * Don't forget to raise a MEMCG_MAX event for forced or rejected requests.
+> +	 */
+> +	if (!raised_max_event)
+> +		__memcg_memory_event(mem_over_limit, MEMCG_MAX, allow_spinning);
+> +
+> +	return ret;
+>  
+>  done_restock:
+>  	if (batch > nr_pages)
+> @@ -2848,7 +2852,7 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+>  	    !(current->flags & PF_MEMALLOC) &&
+>  	    gfpflags_allow_blocking(gfp_mask))
+>  		__mem_cgroup_handle_over_high(gfp_mask);
+> -	return 0;
+> +	return ret;
+>  }
+>  
+>  static inline int try_charge(struct mem_cgroup *memcg, gfp_t gfp_mask,
+>  
+> 
