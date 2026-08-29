@@ -1,21 +1,21 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAA711D4606
-	for <bpf@vger.kernel.org>; Sat, 29 Aug 2026 06:16:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37DD337B02A
+	for <bpf@vger.kernel.org>; Sat, 29 Aug 2026 06:16:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787984171; cv=none; b=IxMR12zATk4Xl0fGAphY6UM5kDCxdZG5osD7ndMLQ9OgyIoehgy0a6F+9uWMhYC7R9JrarKK7Hrh0lPFyFqBSZxnjghHXsyc9WDVIlWxw23nZ+8EdGQc+ir2E5V7EH7iNzDwP1T/RkvVbyBNYBaGsKNjsFjt1AOwKIX2s9RDrQo=
+	t=1787984182; cv=none; b=kMpVA6UHime/u+uGrPlswXoJOp0B8VSJXOL66m+DYXXGS/0ODse8FI+S1wIqlW3O2i3JLhqrsL2VRVC7zhhfuAlJYF14TAMY3YkD5ZUt47NGSEEGNi8sixHtXlTq84yxOL0lVvyBDyDvsLqveTL+0DKGsoIHiS8OMDaTRYGL8ZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787984171; c=relaxed/simple;
-	bh=3mNXNQjRgWYMVs8kxZk8GpsP4ueiVjqvjGes0d06tJM=;
+	s=arc-20240116; t=1787984182; c=relaxed/simple;
+	bh=S2J/2BOu+akWWayHGirBFj/myFcZ7oova4hYdXniWpo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ORC/ruxPNLn6u3nznO47P365pfD2s+FZbNwKFYgb1qD9Sb9qCuVpw4a55jOW8vP5dEimxD+rfb61A8KiBrAS7WDFynZDx8RMOEZYm16Dua6kXVZhE9DycIoPt5VHgSPQnWq/PBmLjy6qZ1zlxB1+9eS3NsX8WmFwOwg+s6oaTaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+	 MIME-Version; b=Y/hioqIRv9bNTOOv5p5xnIXZg073Y2IflqIwyNLBaCOo7Gzicval8/W+hggFqlupjZeNLn+dWnWx/CwT4c4Xca0LqJQDAxDyZCVe8WZAXyhVRrn9ntWELWmLwjZijw+3AHmNkw63m34/u3vtwindF97sXdpmpMO4DP7gWPyGIcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 5694E273BA2FFF; Fri, 28 Aug 2026 23:16:00 -0700 (PDT)
+	id A83B6273BA36F7; Fri, 28 Aug 2026 23:16:15 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v4 09/12] selftests/bpf: Check the member named for an unsupported kfunc return type
-Date: Fri, 28 Aug 2026 23:16:00 -0700
-Message-ID: <20260829061600.1697800-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v4 12/12] docs/bpf: Document arena pointers in a by-value return
+Date: Fri, 28 Aug 2026 23:16:15 -0700
+Message-ID: <20260829061615.1700421-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260829061514.1690730-1-yonghong.song@linux.dev>
 References: <20260829061514.1690730-1-yonghong.song@linux.dev>
@@ -37,263 +37,115 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Add tests to cover cases where a kfunc return type is rejected with
-proper messages including member names and array types.
+Section 2.9 describes the by-value return contract as scalars only, which
+no longer holds: a kfunc and a global subprogram may now return a struct
+or union whose members are scalars or arena pointers. Update it.
+
+Note that an arena pointer member is handed back as a scalar like every
+other member. That costs nothing: the program has to cast_kern() the valu=
+e
+before it can be used, and the verifier allows that cast on any scalar, s=
+o
+the member gives the program no reach it did not already have.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../selftests/bpf/progs/aggregate_ret_kfunc.c | 82 +++++++++++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    | 40 +++++++++
- .../bpf/test_kmods/bpf_testmod_kfunc.h        | 42 ++++++++++
- 3 files changed, 164 insertions(+)
+ Documentation/bpf/kfuncs.rst | 39 ++++++++++++++++++++++--------------
+ 1 file changed, 24 insertions(+), 15 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c b/to=
-ols/testing/selftests/bpf/progs/aggregate_ret_kfunc.c
-index f10e5cf6fd89..0361a7b42c9b 100644
---- a/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c
-+++ b/tools/testing/selftests/bpf/progs/aggregate_ret_kfunc.c
-@@ -19,6 +19,11 @@ void __kfunc_btf_root(void)
- 	  "r"(&bpf_kfunc_call_test_ret_fastcall),
- 	  "r"(&bpf_kfunc_call_test_ret_ptr),
- 	  "r"(&bpf_kfunc_call_test_ret_ii),
-+	  "r"(&bpf_kfunc_call_test_ret_nested),
-+	  "r"(&bpf_kfunc_call_test_ret_ptr_arr),
-+	  "r"(&bpf_kfunc_call_test_ret_deep),
-+	  "r"(&bpf_kfunc_call_test_ret_arr_struct),
-+	  "r"(&bpf_kfunc_call_test_ret_arr2d),
- 	  "r"(&bpf_kfunc_call_test_ret_big));
- }
+diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+index 89dea6b0b024..ebe37c1fe9d2 100644
+--- a/Documentation/bpf/kfuncs.rst
++++ b/Documentation/bpf/kfuncs.rst
+@@ -581,20 +581,29 @@ against the arena. Larger accesses must verify the =
+range explicitly.
+ A kfunc may return a scalar, a pointer, or a small struct or union by
+ value. A scalar or pointer of up to 8 bytes is returned in R0, as usual.
 =20
-@@ -72,6 +77,7 @@ __naked int aggregate_ret_kfunc_fastcall_fail(void)
- SEC("tc")
- __arch_x86_64 __arch_arm64
- __failure __msg("is not composed of scalars or arena pointers")
-+__msg("member 'p' has type PTR")
- __naked int aggregate_ret_kfunc_ptr_fail(void)
- {
- 	asm volatile (
-@@ -84,6 +90,82 @@ __naked int aggregate_ret_kfunc_ptr_fail(void)
- 	: __clobber_all);
- }
+-A struct or union returned by value must be composed only of scalars
+-(recursively), where a scalar is an integer or an enum; arrays of scalar=
+s are
+-allowed as members. Its bytes are handed back to the program as the raw
+-contents of R0 (and R2), so a pointer field would be laundered into a sc=
+alar
+-and escape the verifier's pointer provenance and reference tracking. A s=
+truct
+-or union with a pointer member is therefore rejected at load time, and s=
+o is
+-one with a floating-point member, which the ABI may not return in R0:R2 =
+at
++A struct or union returned by value must be composed only of scalars and=
+ arena
++pointers, where a scalar is an integer or an enum and an arena pointer i=
+s one
++carrying the ``btf_type_tag("arena")`` attribute. Those may be nested in
++structs and unions and in arrays of any number of dimensions, in any
++combination, as long as what the nesting bottoms out in is a scalar or a=
+n arena
++pointer. Its bytes are handed back to the program as the raw contents of=
+ R0
++(and R2), so a member of any other pointer type would be laundered into =
+a
++scalar and escape the verifier's pointer provenance and reference tracki=
+ng. A
++struct or union with such a member is therefore rejected at load time, a=
+nd so
++is one with a floating-point member, which the ABI may not return in R0:=
+R2 at
+ all.
 =20
-+SEC("tc")
-+__arch_x86_64 __arch_arm64
-+__failure __msg("is not composed of scalars or arena pointers")
-+__msg("member 'in.p' has type PTR")
-+__naked int aggregate_ret_kfunc_nested_ptr_fail(void)
-+{
-+	asm volatile (
-+	"r1 =3D 0;"
-+	"call %[bpf_kfunc_call_test_ret_nested];"
-+	"r0 =3D 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_kfunc_call_test_ret_nested)
-+	: __clobber_all);
-+}
++An arena pointer member is handed back as a scalar too, but nothing is l=
+ost by
++that. The program must ``cast_kern()`` the value before it can be used, =
+and the
++verifier allows that cast on any scalar, so a laundered arena address gi=
+ves the
++program no reach it did not already have. The result is confined to the
++program's arena in either case.
 +
-+SEC("tc")
-+__arch_x86_64 __arch_arm64
-+__failure __msg("is not composed of scalars or arena pointers")
-+__msg("member 'p[]' has type PTR")
-+__naked int aggregate_ret_kfunc_ptr_arr_fail(void)
-+{
-+	asm volatile (
-+	"call %[bpf_kfunc_call_test_ret_ptr_arr];"
-+	"r0 =3D 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_kfunc_call_test_ret_ptr_arr)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__arch_x86_64 __arch_arm64
-+__failure __msg("is not composed of scalars or arena pointers")
-+__msg("member 'in1[].in2.p' has type PTR")
-+__naked int aggregate_ret_kfunc_arr_struct_fail(void)
-+{
-+	asm volatile (
-+	"call %[bpf_kfunc_call_test_ret_arr_struct];"
-+	"r0 =3D 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_kfunc_call_test_ret_arr_struct)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__arch_x86_64 __arch_arm64
-+__failure __msg("is not composed of scalars or arena pointers")
-+__msg("member 'a[].p' has type PTR")
-+__naked int aggregate_ret_kfunc_arr2d_fail(void)
-+{
-+	asm volatile (
-+	"call %[bpf_kfunc_call_test_ret_arr2d];"
-+	"r0 =3D 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_kfunc_call_test_ret_arr2d)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__arch_x86_64 __arch_arm64
-+__failure __msg("max struct nesting depth exceeded")
-+__naked int aggregate_ret_kfunc_too_deep_fail(void)
-+{
-+	asm volatile (
-+	"r1 =3D 0;"
-+	"call %[bpf_kfunc_call_test_ret_deep];"
-+	"r0 =3D 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_kfunc_call_test_ret_deep)
-+	: __clobber_all);
-+}
-+
- SEC("tc")
- __arch_x86_64 __arch_arm64
- __failure __msg("R2 !read_ok")
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
-/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 850cf4f830c4..dff1ad6f491f 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -981,6 +981,41 @@ __bpf_kfunc struct prog_test_ret_ptr bpf_kfunc_call_=
-test_ret_ptr(u64 tag)
- 	return r;
- }
+ A kfunc may also return a value larger than 8 bytes and up to 16 bytes -=
+- a
+-scalar-only struct or union, or an ``__int128``. Such a value is returne=
+d
+-in the register pair R0:R2, matching the convention LLVM uses for the BP=
+F
+-target: the first 8 bytes in R0 and the second 8 bytes in R2. A struct o=
+r
+-union of 8 bytes or less is returned in R0 alone.
++struct or union of scalars and arena pointers, or an ``__int128``. Such =
+a
++value is returned in the register pair R0:R2, matching the convention LL=
+VM
++uses for the BPF target: the first 8 bytes in R0 and the second 8 bytes =
+in R2.
++A struct or union of 8 bytes or less is returned in R0 alone.
 =20
-+__bpf_kfunc struct prog_test_ret_nested bpf_kfunc_call_test_ret_nested(u=
-64 tag)
-+{
-+	struct prog_test_ret_nested r =3D { .in =3D { .p =3D NULL }, .tag =3D t=
-ag };
-+
-+	return r;
-+}
-+
-+__bpf_kfunc struct prog_test_ret_ptr_arr bpf_kfunc_call_test_ret_ptr_arr=
-(void)
-+{
-+	struct prog_test_ret_ptr_arr r =3D { .p =3D { NULL, NULL } };
-+
-+	return r;
-+}
-+
-+__bpf_kfunc struct prog_test_ret_arr_struct bpf_kfunc_call_test_ret_arr_=
-struct(void)
-+{
-+	struct prog_test_ret_arr_struct r =3D {};
-+
-+	return r;
-+}
-+
-+__bpf_kfunc struct prog_test_ret_arr2d bpf_kfunc_call_test_ret_arr2d(voi=
-d)
-+{
-+	struct prog_test_ret_arr2d r =3D {};
-+
-+	return r;
-+}
-+
-+__bpf_kfunc struct prog_test_ret_deep bpf_kfunc_call_test_ret_deep(u64 v=
-)
-+{
-+	struct prog_test_ret_deep r =3D { .l1 =3D { .l2 =3D { .l3 =3D { .l4 =3D=
- { .v =3D v } } } } };
-+
-+	return r;
-+}
-+
- __bpf_kfunc struct prog_test_ret_ii bpf_kfunc_call_test_ret_ii(int a, in=
-t b)
- {
- 	struct prog_test_ret_ii r =3D { .a =3D a, .b =3D b };
-@@ -1539,6 +1574,11 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_pair)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_fastcall, KF_FASTCALL)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_ptr)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_nested)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_ptr_arr)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_arr_struct)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_arr2d)
-+BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_deep)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_ii)
- #endif
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_big)
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b=
-/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-index 65e693ada736..9202c31ba6c9 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-@@ -70,6 +70,43 @@ struct prog_test_ret_ptr {	/* 16 bytes: contains a poi=
-nter */
- 	__u64 tag;
- };
+ ::
 =20
-+struct prog_test_ret_nested {	/* 16 bytes: the pointer hides one level d=
-own */
-+	struct {
-+		void *p;
-+	} in;
-+	__u64 tag;
-+};
-+
-+struct prog_test_ret_ptr_arr {	/* 16 bytes: an array of pointers */
-+	void *p[2];
-+};
-+
-+struct prog_test_ret_arr_struct {	/* 16 bytes: the pointer is under an a=
-rray of structs */
-+	struct {
-+		struct {
-+			void *p;
-+		} in2;
-+	} in1[2];
-+};
-+
-+struct prog_test_ret_arr2d {	/* 16 bytes: a two dimensional array of str=
-ucts */
-+	struct {
-+		void *p;
-+	} a[1][2];
-+};
-+
-+struct prog_test_ret_deep {	/* 8 bytes, but nested past the 4-level walk=
- limit */
-+	struct {
-+		struct {
-+			struct {
-+				struct {
-+					__u64 v;
-+				} l4;
-+			} l3;
-+		} l2;
-+	} l1;
-+};
-+
- struct prog_test_ret_big {	/* 24 bytes: too large for R0:R2 */
- 	__u64 a;
- 	__u64 b;
-@@ -159,6 +196,11 @@ struct prog_test_ret_pair bpf_kfunc_call_test_ret_pa=
-ir(__u64 a, __u64 b) __ksym;
- struct prog_test_ret_pair bpf_kfunc_call_test_ret_fastcall(__u64 a, __u6=
-4 b) __ksym;
- struct prog_test_ret_ii bpf_kfunc_call_test_ret_ii(int a, int b) __ksym;
- struct prog_test_ret_ptr bpf_kfunc_call_test_ret_ptr(__u64 tag) __ksym;
-+struct prog_test_ret_nested bpf_kfunc_call_test_ret_nested(__u64 tag) __=
-ksym;
-+struct prog_test_ret_ptr_arr bpf_kfunc_call_test_ret_ptr_arr(void) __ksy=
-m;
-+struct prog_test_ret_arr_struct bpf_kfunc_call_test_ret_arr_struct(void)=
- __ksym;
-+struct prog_test_ret_arr2d bpf_kfunc_call_test_ret_arr2d(void) __ksym;
-+struct prog_test_ret_deep bpf_kfunc_call_test_ret_deep(__u64 v) __ksym;
- struct prog_test_ret_big bpf_kfunc_call_test_ret_big(void) __ksym;
- __u64 bpf_kfunc_call_stack_arg(__u64 a, __u64 b, __u64 c, __u64 d,
- 			       __u64 e, __u64 f, __u64 g, __u64 h,
+@@ -620,10 +629,10 @@ used when the program is JITed, since the interpret=
+er propagates only R0 out of
+ a subprogram: without a JIT the return value stays in R0 alone, and a ca=
+ller
+ reading R2 is rejected for reading an uninitialized register. A global
+ subprogram is verified in isolation, so its by-value struct or union ret=
+urn is
+-restricted to scalars just like a kfunc's; a static subprogram is verifi=
+ed
+-inline and has no such restriction. The main program is not covered: its=
+ return
+-value is the program's exit code, read out of R0 alone, so a declared up=
+per
+-half is never looked at.
++restricted to scalars and arena pointers just like a kfunc's; a static
++subprogram is verified inline and has no such restriction. The main prog=
+ram is
++not covered: its return value is the program's exit code, read out of R0
++alone, so a declared upper half is never looked at.
+=20
+ A global subprogram must leave a scalar in *every* register of the pair,=
+ so
+ both halves of the returned value have to be assigned. Leaving the upper=
+ half
 --=20
 2.53.0-Meta
 
