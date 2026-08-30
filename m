@@ -1,61 +1,63 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D6D10F2
-	for <bpf@vger.kernel.org>; Sun, 30 Aug 2026 07:31:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D87541DF748
+	for <bpf@vger.kernel.org>; Sun, 30 Aug 2026 07:31:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788075088; cv=none; b=d3DQ8fofnQP/lADdUx6phvU7XmQeKnYEs2veWVcJQuYvKBMiL0YQZSJ87ThNHOmJp3Vb++Cy4k3ptAFJeUGMo5tKoKpa9PKwHaR/EQZ4+kQFRfnCljEjp6qSFr+YKL1DW/+7pNH25dRK6G7vyiggifKTglu74YL8pzy/VQFhpCY=
+	t=1788075089; cv=none; b=D9o7sgH2ttxe/vwFcUylgqCvhZ9TTFT4fnQdBur01KriU6iulppAfaiKRYjMhYOjiH6p15eszwYpi0NG6NOo+SyBabWvNAF3lSCzaGZBTxTRhZs91pH1iR4EEVgQqHo6WKxA3gmBzbgSwPyeZbVvMUWxK5OE2GhK9XHVURrcFUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788075088; c=relaxed/simple;
-	bh=KmAvwVd/YKF/pvyky3p5rtiGBEVXKiBRbkWtkfV6GZg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=F1T8prDtpqKwVAgFpzGsTR/kCZ17J8ENFPEWdBqrlybGA9GVFg7gA49aVlTqXH5z9kQnTQ8mwGIcPvprTpI2Lm/fyesajv9Zz+PGDycvy1ID78ZuLp+4nE0a5LRDGZ07pTg6UxGXQFS/SqK87VhtBKzZS9Vfis8iY50DtXkhHE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SL6DtdFJ; arc=none smtp.client-ip=209.85.214.178
+	s=arc-20240116; t=1788075089; c=relaxed/simple;
+	bh=6FEyrZBIuVHZXVa/Wty2A5DfY3a/3p+vm66ecYG7lRE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lJwJfV1dVSe7vvDmEhITwMVaffm7oxRFoAmwzgiL7CipMvrpzKJtbm8ib0msCaq3MLw4C07TJP++5DYgBIg4Z2DAxq/9PUGylDhDCHkHszK7vI2vSX7Zwl07mAontxysGVGAnBT9lV9XC/Y2a+PsmpjCs9LIlUykM8l9JBCR1XA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bzzPYlix; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SL6DtdFJ"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2d91518a63fso1285965ad.0
-        for <bpf@vger.kernel.org>; Sun, 30 Aug 2026 00:31:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bzzPYlix"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2d53197d8b5so19522765ad.3
+        for <bpf@vger.kernel.org>; Sun, 30 Aug 2026 00:31:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788075086; x=1788679886; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=+djeb4iHolqgq+uyN+y7uAKpB7up1MJUl31TM40iiTI=;
-        b=SL6DtdFJ+uraS+DKgEzuJ/OQa2lsEtdVoBdl3dQnRWsR/fEBSjjRNBBJmG3f6DJtZV
-         LSJ4o+OweuDir5ZBIy7zODZYOncoLSVwDk9G0IWrgXbuRYHWqTL7YO/Lez3PnQB4IK1q
-         50a3ylv6bHbYKyuLHIY25qDwHNrHhBqkBeyIRQcqL5+e40Sr7jduUj/ZJBHYcstVC2TF
-         8GYaZoFFAiP9mbwX49EZTdfYtU6ndKiaRahhJTUyFLBc6pBf32vHVYPw4oqCXu4Nkq4o
-         XFoYYhNhqBWD08shTYrvsLbbtS/a8BbnQOfjnLKLWED/XNovPVkzQRuz9J2GdsoEHH8t
-         YlYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788075086; x=1788679886;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1788075087; x=1788679887; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=+djeb4iHolqgq+uyN+y7uAKpB7up1MJUl31TM40iiTI=;
-        b=CqVuEtHSdE5VbQOOjmjsBKttC5ycyM1/dU5Eyok/JVPb5OTyWBqeVXCps8Bf879Ktf
-         WPWkjqVqslu861fj65h6mNVpqipBSqTX5xbOOvOnsF9IPK7cBGROAGMq6My0R0ZPl26d
-         aZEAbZUx+Kg4/5Y6hdd9dJhMAtJq3949GzPGKLN+ASkxL4cn3uS82gw7pvlrSVNHCUBi
-         2KtG52vked3FzSJEcuhUzw86jtPfuuxZcqEjhetR9/XsA3ngZ+HhDP0/Hg+hg3AoDLgw
-         SORvSt4CUuDCyGtddj31+yCUkyM8WxR/iCqUB7Y1SoIiQR2uezNz+ap7jO1O4OFk99Jk
-         8Naw==
-X-Gm-Message-State: AFuF++msVqGs7qepX1fNnEJZjyeG6zXK5AggoE5VZHthZxsOnstXtGEM
-	822bnAD1NzAVrD9IBBQCtLTiWZ45g0y/TmO/N1ayDekwEHqhCue7Nfv0u8OBPuli
-X-Gm-Gg: AYBFou3nTD8x2Gf7i911D5K8eXjrpe04UOF+mZcBNq8TIB/0Ap8QETMfMYSY5Uet4nK
-	PgUVzYbQLYUNbBjGm3yu+EuIFS97eJZvLMAqVC3ARkgvqTBuXOhPBFzE2puuWfJL6jwRgSJWeT9
-	5Glku3tnxKvKLsXqVDcrNjp2zb+kX2yWVHPrIiSWUhjg4Mp7NwoKC2H8ak3PtZFabatKV7GeHeJ
-	tytrTn7AED9+4GHPIjI/ifsxklhwAAjxr5fjx7E0gG5aYLhrZojTi/X8M7JVV5uA+e5fHdJ+HrQ
-	NhMexVQtF1ky/nHB5fObt2j0Mtloq8BGw6WL2PLw4u2aAz/f1105Mga7mzskr7zCGS/F14lmyrX
-	B/oK/eU7z7YhIzhed0txc4xaqC5N+Noj8ipc9eT+HFivzhOeKokmaT2BNHLW/hjc4HbyNs1761G
-	NfJCeTE+B31wK9CjpKIsGOe0P0w166SF1NzLWvik22HfVE4ZqE8BBgciZzN6baWFFnDcBGyW2HD
-	yYekOu14z6a5TrMeT0rp2ip5t8EXYXug0Tf65sHED2gRvPbB5hPHy8uOB6jRrO2WK+BQBFWx2P9
-	bTeKM7n9OKm7nnSb2DdaUv2tKRFj7YqW1tPzs1mvNUfzF96OZ4B9ZLvE/de/uEe3uNNdhbScT/0
-	=
-X-Received: by 2002:a17:90b:538e:b0:38e:c232:9d3f with SMTP id 98e67ed59e1d1-396d0e20f00mr31196518a91.5.1788075086474;
-        Sun, 30 Aug 2026 00:31:26 -0700 (PDT)
+        bh=W/v9tcQvggZcMvbz4eSzuyF8rA/Hv+diNOSutqEXrUg=;
+        b=bzzPYlixTZKs4BwaiJfAWObYJov6H1zpzx+7OzW2sY5zLR9WIyNNVZbHznYirhnwrJ
+         faOkCF0q4HDGCdPm6hkiApc0/9n1k5HLyDv9KdwuEdBCpMNG3EXaM+jYAvGPeyD9poci
+         G8at7NlCmGe/spwyZy6Q9y37skrCGJjYrf6uDZj3JUl6fQ93Z89uLqbIrNjVyfUtbMxm
+         y15nu16DflFP/iIto0AkRHhapgTHUC035JDuUlDgLzq9+cQKO3XoMRLby1TBE1Qb8Gik
+         p+sFstItUbpi/JJ+ezKRHIP4GHtkVDrZRIv8p7MoOu88wEfWDAXgGCEvl1hsyuxrke5n
+         +Vrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788075087; x=1788679887;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=W/v9tcQvggZcMvbz4eSzuyF8rA/Hv+diNOSutqEXrUg=;
+        b=DCdRTezbcIs1HMTEedzyUilK5iveMPTHQ1cFmG2DZh/AsE/rS7m63M7F3EV3FjoJRe
+         OS4OfGFWmDTtt3HlmA5GxiXH8WFFFCP3khKYRlfIkZFQx56/FaTWpCUm++NCJiNhz/m2
+         c07e51NK/+5YpVZsQQgOrmgcPr31SrzjyPRmcNZkGw3I9IMAcKphVB19gWtWGm7CWkJT
+         AjUi9wDk2GdyY6Qj07bjJ4OAyoFwggypVumtIfQr4kX3qFY44dLkgM5VvWLuhncdgqHZ
+         V7hXqH/GQcRGOLMtkvhjgnU3DZ0C22FXSAf00xotB3xenqVCTjHb6w02P5QolonPDTZp
+         XMFQ==
+X-Gm-Message-State: AFuF++kR5nhRF3Xk6FyBGAHhVmMN8re3fpBd/t7qVkUs5cz5BMsHQBOn
+	yLZG4wrPr7AF/ivwbBO5na+cR9r2CX+Iqm/TszDKl6v1YzInvRltlhxmzb4Tf43K
+X-Gm-Gg: AYBFou0uY2WXGp6+r3/F04TXbrHljuT8m03wVodXngio3/OVQ5bsvWEgTW/GiWrusuA
+	9ucASpzJn2VEncwewNe9eYRsDGF3tCOxEtkUtQ02t4Ls/UTlYWC7SGw62oY2AkGNPv9VQMAA0Vv
+	VM2j67WxR0kbk9MfzlINgCfHCXtIuNKFNuy8gt73sGVR8eVmNhmum/smOJwn0EctP0xwxuu62vH
+	f3+kyndOLYoKFCiE75D2x3mscqt7BiWOmpcLYW66MPA+Gq/D79OMLd1Wu6PEnIVjqfGlYmDbU/8
+	mazRm27cLUFwHJ0w6B0D9QOXFGdkYfj6+V4VU8VnEHePVEZGJN6VvNESGdEF15UF1HZoajW3TxR
+	X+PEdMvzsBw9MiLLnXPWKk2sPydHUJour7TEfXgiGuk4m/1xjZ03IMHgLuI/2ogv2acbqH7tk6K
+	OO4N+gJa4mQsqDjlnny8cijq7ue0NdDvaRCv3KGafc3jvM4/qDP/tJ9b2DAUHYBd76h5b6Qd9qC
+	33TkRgtVWO+AKNvpfxVyz0IUbDfQbOqrW0NKy/NraZ9gzn5QYv5G7UThJDKhd+HYe3eADdCw8ov
+	LMoTBnMt0HouJQzZp7Y6soMLx7G+12Fv3zY3q0Z2x4g0ZqshVT5DIZ08xXsUW0xDiu0nNtHPaOi
+	T
+X-Received: by 2002:a17:90b:1dcb:b0:38f:57f0:1f5d with SMTP id 98e67ed59e1d1-396d0f3df80mr32189338a91.15.1788075087268;
+        Sun, 30 Aug 2026 00:31:27 -0700 (PDT)
 Received: from sid-dev-env.cgrhrlrrq2nuffriizdlnb1x4b.xx.internal.cloudapp.net ([4.155.54.158])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-396ddc0c703sm10327082a91.9.2026.08.30.00.31.25
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-396ddc0c703sm10327082a91.9.2026.08.30.00.31.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 30 Aug 2026 00:31:26 -0700 (PDT)
 From: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
@@ -78,10 +80,12 @@ Cc: Siddharth Chintamaneni <sidchintamaneni@gmail.com>,
 	rachelmenge@gmail.com,
 	hargar@microsoft.com,
 	apais@microsoft.com
-Subject: [PATCH bpf-next v1 1/2] bpf: allow terminal gotox instructions
-Date: Sun, 30 Aug 2026 07:31:24 +0000
-Message-ID: <20260830073125.360934-1-sidchintamaneni@gmail.com>
+Subject: [PATCH bpf-next v1 2/2] selftests/bpf: Add compiler-layout terminal gotox test
+Date: Sun, 30 Aug 2026 07:31:25 +0000
+Message-ID: <20260830073125.360934-2-sidchintamaneni@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260830073125.360934-1-sidchintamaneni@gmail.com>
+References: <20260830073125.360934-1-sidchintamaneni@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -90,45 +94,107 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-check_subprogs() treats gotox as a direct jump and validates its reserved
-zero offset. When gotox is the final instruction, this produces a
-synthetic successor one instruction past the end of the subprogram and
-rejects an otherwise valid program.
+Add coverage for the instruction layout emitted by LLVM for a computed
+goto. The jump-table targets precede the dispatch block and gotox is the
+final instruction in the subprogram.
 
-Skip direct-offset validation for gotox and accept it as a
-non-fallthrough terminal instruction. Its actual targets remain validated
-from the instruction-array jump table during CFG construction.
+An equivalent unoptimized C source is:
+
+    int bpf_prog_trigger_syscall_prog(void *ctx)
+    {
+            __label__ l1, l2;
+            void *tgt;
+            int ret = 0;
+
+            if (ctx)
+                    tgt = &&l1;
+            else
+                    tgt = &&l2;
+            goto *tgt;
+    l1:
+            ret += 1;
+    l2:
+            ret += 2;
+            return 0;
+    }
+
+Tested:
+
+    #646/5 verifier_gotox/jump_table_compiler_layout:OK
+    #646 verifier_gotox:OK
+    Summary: 1/28 PASSED, 0 SKIPPED, 0/0 FAILED
 
 Signed-off-by: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
 ---
- kernel/bpf/verifier.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ .../selftests/bpf/progs/verifier_gotox.c      | 55 +++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e036ae20bf6b..44195ec1445d 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3087,6 +3087,8 @@ static int check_subprogs(struct bpf_verifier_env *env)
- 			subprog[cur_subprog].exit_idx = i;
- 			goto next;
- 		}
-+		if (insn_is_gotox(&insn[i]))
-+			goto next;
- 		off = i + bpf_jmp_offset(&insn[i]) + 1;
- 		if (off < subprog_start || off >= subprog_end) {
- 			verbose(env, "jump out of range from insn %d to %d\n", i, off);
-@@ -3106,7 +3108,8 @@ static int check_subprogs(struct bpf_verifier_env *env)
- 			 */
- 			if (code != (BPF_JMP | BPF_EXIT) &&
- 			    code != (BPF_JMP32 | BPF_JA) &&
--			    code != (BPF_JMP | BPF_JA)) {
-+			    code != (BPF_JMP | BPF_JA) &&
-+			    !insn_is_gotox(&insn[i])) {
- 				verbose(env, "last insn is not an exit or jmp\n");
- 				bpf_diag_program_structure(
- 					env, i, "subprogram can fall through",
-
-base-commit: cd35e1b10182c42b4ae31ee49119463b17d8ba7f
+diff --git a/tools/testing/selftests/bpf/progs/verifier_gotox.c b/tools/testing/selftests/bpf/progs/verifier_gotox.c
+index 5b18c9a27717..0ea445287175 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_gotox.c
++++ b/tools/testing/selftests/bpf/progs/verifier_gotox.c
+@@ -47,6 +47,61 @@ DEFINE_SIMPLE_JUMP_TABLE_PROG(reserved_field_src_reg,      BPF_REG_1, 0, 0, __fa
+ DEFINE_SIMPLE_JUMP_TABLE_PROG(reserved_field_non_zero_off, BPF_REG_0, 1, 0, __failure __msg("BPF_JA|BPF_X uses reserved fields"))
+ DEFINE_SIMPLE_JUMP_TABLE_PROG(reserved_field_non_zero_imm, BPF_REG_0, 0, 1, __failure __msg("BPF_JA|BPF_X uses reserved fields"))
+ 
++SEC("socket")
++__success __retval(0)
++__naked void jump_table_compiler_layout(void)
++{
++	asm volatile ("						        \
++	.pushsection .jumptables,\"\",@progbits;			\
++jt_l1_%=:								\
++	.quad l1_%= - socket;						\
++	.size jt_l1_%=, 8;						\
++	.global jt_l1_%=;						\
++jt_l2_%=:								\
++	.quad l2_%= - socket;						\
++	.size jt_l2_%=, 8;						\
++	.global jt_l2_%=;						\
++	.popsection;							\
++									\
++	*(u64 *)(r10 - 8) = r1;						\
++	*(u32 *)(r10 - 20) = 0;						\
++	r1 = *(u64 *)(r10 - 8);						\
++	if r1 == 0 goto select_l2_%=;					\
++	goto select_l1_%=;						\
++select_l1_%=:								\
++	r1 = jt_l1_%= ll;						\
++	r1 = *(u64 *)(r1 + 0);						\
++	*(u64 *)(r10 - 16) = r1;					\
++	goto selected_%=;						\
++select_l2_%=:								\
++	r1 = jt_l2_%= ll;						\
++	r1 = *(u64 *)(r1 + 0);						\
++	*(u64 *)(r10 - 16) = r1;					\
++	goto selected_%=;						\
++selected_%=:								\
++	r1 = *(u64 *)(r10 - 16);					\
++	*(u64 *)(r10 - 32) = r1;					\
++	goto dispatch_%=;						\
++l1_%=:									\
++	w1 = *(u32 *)(r10 - 20);					\
++	w1 += 1;							\
++	*(u32 *)(r10 - 20) = w1;					\
++	goto l2_%=;							\
++l2_%=:									\
++	w1 = *(u32 *)(r10 - 20);					\
++	w1 += 2;							\
++	*(u32 *)(r10 - 20) = w1;					\
++	w0 = 0;								\
++	exit;								\
++dispatch_%=:								\
++	r1 = *(u64 *)(r10 - 32);					\
++	.8byte %[gotox_r1];						\
++"	:
++	: __imm_insn(gotox_r1, BPF_RAW_INSN(BPF_JMP | BPF_JA | BPF_X,
++					    BPF_REG_1, 0, 0, 0))
++	: __clobber_all);
++}
++
+ /*
+  * Gotox is forbidden when there is no jump table loaded
+  * which points to the sub-function where the gotox is used
 -- 
 2.43.0
 
