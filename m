@@ -1,65 +1,66 @@
-Received: from mail-oi2-f4.google.com (mail-oi2-f4.google.com [74.125.231.196])
+Received: from mail-wr2-f10.google.com (mail-wr2-f10.google.com [74.125.225.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8D9234994
-	for <bpf@vger.kernel.org>; Sun, 30 Aug 2026 01:34:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BBAC8635D
+	for <bpf@vger.kernel.org>; Sun, 30 Aug 2026 01:46:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788053642; cv=none; b=MvoqHw1IxcflfbDmlW/20mLouS/tkhM7iKa2SRGH2n/GufSdLsqCmpCLxrAwjz1LyxoBMGJxrnHQMFu6+Z5JkkwCNln1PBp4lkMgM03U0WUlPxPLC7Q8mKvpho1pqiijTaLo5GEKL4mGTHK0x+RxDY06pSYv9GAuovhoJsAJchY=
+	t=1788054411; cv=none; b=E9jGTzEU+IOHXyiRW/ozVRzCtxTgaF03Ux99Pk2HqJv/U9r73Rq8rKIhYj+Iu/lgZpXyR25v7o5iCfVrsWRQTI56tDAvHlidQbISRTP6iud8GTrXGk0Pggfo7clU13+GgyBKDgdW8rNJAGSVMpguSiRXS+cxJr6JW257NKF0NuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788053642; c=relaxed/simple;
-	bh=fJKEUxrz2DawVVxQpxx3RZExDceTVOaUwMjDq2fLUl4=;
+	s=arc-20240116; t=1788054411; c=relaxed/simple;
+	bh=QM2jxYJvxilDMTefmjax2O9VyCgr0nOIsZolvMYW2C0=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=P73Q0BaW09hpFdENkezN5y2RYdCU6RMdAdHN711kWAKRUNS0Wz2tQ8gvku0yVqpl2t5HT1RbZZpObefy/8mFkgUhWzZudhv+1mf+Kxt2oeTV4+QyGPZnsBW/9dHNSQXHfXxxa14vYTRuO/9dAEYnKHX0UY5OeIjR9Qg1EXgOrdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sDTJdAht; arc=none smtp.client-ip=74.125.231.196
+	 References:In-Reply-To; b=imGYU6F1+qjGJTYe0LCqi7pkJrIY01xuu94BdktvjkDEC3WoKRvE27SicNJ9cEtjNL2zk//EhY1Kx62V9jd6jiDKHGx4J51jyROMJ78apeSboJq3mKxutpcLLmdxTde0wwDP1fkITic/kP5N+Ult3y8rbCl/EFpkdnJ1wP3YBq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=leVRcA5J; arc=none smtp.client-ip=74.125.225.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sDTJdAht"
-Received: by mail-oi2-f4.google.com with SMTP id 5614622812f47-4ab2d72ff13so937001b6e.0
-        for <bpf@vger.kernel.org>; Sat, 29 Aug 2026 18:34:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="leVRcA5J"
+Received: by mail-wr2-f10.google.com with SMTP id ffacd0b85a97d-484372811e5so35616f8f.0
+        for <bpf@vger.kernel.org>; Sat, 29 Aug 2026 18:46:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788053639; x=1788658439; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788054408; x=1788659208; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=EjNsh4/6AAxQa92o+EZyYasRh19DxHWkIhMpXDG9Pm8=;
-        b=sDTJdAhtl8YkHksFHjafOYNBjd5v1Rm0uAbPvEnihbCtMt6yTzZNE7iSkyq4yWBZfO
-         Rr+agxkTpji3kcARArxXCsqhuqxc6LyphScguHge5ULijKHWczqLeFMNhkGET7zPbgt9
-         yzIQclwguy0dSf/ep7pgMzO6IRYzqpAcKPOvAOcCEl6Hh8mP1udcFFJtiVoAAC4dadgt
-         qPdlSz9BCKyUqCVLVgtCF1jW4QMmgqBDSlVx0wKmVLS1mwWgHkkvLBf+RsP4Pdi+Lwsc
-         lgN3N5GLDOujwzB9XpuTR1V3LlCOxg8ZMISyceCk8BM84qw6UbGS1o3T/Uh7JxnxTFLu
-         Ix6g==
+        bh=CtUZUG5479myEUIwKmrKmHPQvtvtyLa9hp4A2ascPYs=;
+        b=leVRcA5J0it3SRC0hOSQdDYWC69ln6sDQHj+JooKQBrbhRNuFiX/a0pDNmQ4yA0ORe
+         9I68bufR76Q19zNds1lyUCaSL7PQHODGiZADwrJdlK9tQYRyWywSYPO7zUBw5laDjObN
+         E21GdrDOe9zIbt49tUYHUcs86BLujQEytXm6PZP42skURGoSPi+OQ8HmpBVGwZOoLMbF
+         PYEzXe1sBNd7dMoBq1MLRQ/0Qyy74IdPfxn/rTGzBt306ja+BNu3vVhA3zbe+AiCsmxd
+         NXFLXxGeEronnS8yj+jJH820J/lH55zcdypOKvZUyCRmV1PM2i7vZ05dNaXqNbYvk5b9
+         /j+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788053639; x=1788658439;
+        d=1e100.net; s=20251104; t=1788054408; x=1788659208;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=EjNsh4/6AAxQa92o+EZyYasRh19DxHWkIhMpXDG9Pm8=;
-        b=MXn30fmz3i8T0Y+E1GlLE0E7lkziwJJwjQtqfE2/kFRUhe9/kl4FQZNsLWeaIUBBru
-         06LFD4baZz1TgvN1gibaKQgOZS4gkFglTfuajocc22nARovdwlFpfqIhqthdxCXX1zld
-         Y5SP2VrrYdsIH3pN4xMyU98cvWafSUOUlWSh0d/pITbU1ZIoJn8WHXx+lCakeP0Tp9/s
-         OOWODGtr/gOhyIeweuzcOMGoyRD8VrPNxJxVaF40r95p7HjGL/PBRa8CSy2dafEl9gHK
-         mX0DujcRGutosWTzS/3LhGWmynttmVQ4rFKos5B5/wy3wt3vdbBZoc0t9X3iKRJ+82dw
-         VQLA==
-X-Forwarded-Encrypted: i=1; AHgh+RoQrsx5OOAH+42qut5mJbTMNFrDzFqX+i98VjI9UmDSf3s11lLhoKiZtlrYOqQRmYTIe4g=@vger.kernel.org
-X-Gm-Message-State: AFuF++nf6ZBx30wlpjVj19p/tgpo9Rucqhdvbi2m2P7xjEIlwf6vumei
-	pEybm5wWLBEFg8uxj2jFvpnRxOrZo0KL39AVP+YId0Seyb8KHU2STEVpHIKoLWPf3Ik=
-X-Gm-Gg: AR+sD10Zcq0Z4WhqyxAIuCUPiDqbSFUl76ZZYhn5SN2JiLNAGt1Zp+13OPAOQPGeHc5
-	8sTELt4llpCwka62R6XqzS/xPZNPBg0RmurPTSXNMTk89yz+6QSxDyHrmQSFU9WtJeueXwEynLd
-	ywQSUVCkDAktQvn9dr0c8YT9qhrLz0DLteA5o0Dlrg+4ziu347bIy4ZKaEW/kC7XrZhjirrLvrj
-	ElUalCHkNtBFcqOzmq2kLl/Fn1ovvEkni2f8c9uxHvh8HeAE73G1Herg+0OH91avkBByjApGuXV
-	yCmEiWrd30c4PiYOGi5u6pgrjDYpQJ5/1QNZ+FeGbjETBBaaROeAAt6C0jidoy3ajhhfGdPAqfG
-	tviWQOGEgux7TX6wcATlURq5HciBv+Gjc3K0nja4ipYNqjsNEafi2SUmh54j1Q8qoTOxfaHmk8Q
-	51tBb41iTAJv4oKXx2GAyAoxKLBC/siuhlLUQqzpwnO//Dly3KtStQimvZ59w2+NIpIB1PpW0OY
-	nrfKKf4hLSUmHQSQljeV4jNKNqSbBcCFqUU1nTVZ22nJuezXkP+4s22/Noku2f19KPqTWk=
-X-Received: by 2002:a05:6808:c295:b0:496:1ca:e437 with SMTP id 5614622812f47-4b3981215ddmr21595763b6e.12.1788053639515;
-        Sat, 29 Aug 2026 18:33:59 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:53::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b3a19e693fsm4999080b6e.13.2026.08.29.18.33.56
+        bh=CtUZUG5479myEUIwKmrKmHPQvtvtyLa9hp4A2ascPYs=;
+        b=LZFch16sQZGOru1muFw6zLmqWKP0XG4TiLxiqlNbZDzuWgmr/5l55OEoKov1us0l+1
+         0L6PvIAFoEqxiC+ivaFyNhPNvwclDEUPLidbNBYF4pDOAlhKD3gdxyOPFqSgD8PRLZX3
+         RYQyNX8Mt+iHtOpmhGBVNhDs4laD6xKUWzNO4mg1MMWg6dq2SDH9I0/a6zVR2qudwqn6
+         73iKnkXXaZ8oC2dNC/kavCfVWa6sJB3C7BNMne3v3KujAtMoVTbmEee6z7FLOV9iVcrw
+         CpQ4bW0WTl7jT5a5tYZdAffsk1aE6HmgClinA6S9xTEfGn+PQsLVPGilguHhomcsT/5O
+         dZ3Q==
+X-Forwarded-Encrypted: i=1; AKwUvBycRuXsG0CaxO1BHWpMUyly7LuU3m4nKB/rUegh7rKh1kphoLOOQBDgj1eltS40bOO5jpE=@vger.kernel.org
+X-Gm-Message-State: AFuF++mU1CIhYmBn6jvBNHS+UnWGC98Z0AqmfL3Rnj9SELNW0sLI7v1h
+	QGCgxnH1kpSrNlddqaaKsW875eN+Vp9KDnyqf3lJq9n0gh80NYz3OAiS
+X-Gm-Gg: AYBFou0vtZP9vcnrPHzHXJr/c4p9xehaBtMIIyE52TD9QpzEUar2iHbCLBjaYiaIOur
+	v12J2h0wlc9FVsHmwgTL0g4j5UdKDJlHgh3Yz/6gOuOiNnA8sMURX2szJjV7h1SrWZTYVmk6/Uf
+	HzPtQjkDi2f3fOMSFNcwBIB5dXQ/T3nNs2UHDoA6dcA0xu+ZqXV5s/OdqIVTyoo0K1wAAoBxze0
+	OyzGKC66h9sBxG2WFwgzhOjAR9hmXm3dDkMwSC5RGl9GBpf2wl5Fd/ual5TPZNsfPFul9Lg/FiX
+	tu0z8dk8fyvmeZFVD3Jl7GW5U4cTYaBNRRzp4Wh0bA+RcErt6rdx5FsVekiRmxttSI1FnaI0M9S
+	UiI2/akFHg+jSXUK5iH6wSPEpKJCiBFIWFFpAw5eo9d4Bj1NLsTtMMvDa3TLcIG3mxpvULAdI3F
+	+jYTuBqAmwA9dHH8LqGepfxnn8oX5uQJfuejHcfS+wjurYPk5tYMggoGkiJ/FTE4CZmiFzMuPPx
+	WJNpIOUjoAwqDa/GXv1b9loQddSUVeBHCvyGUAPWQWdahU4JlndxPwQLfWQvXNexefcr4iOwwRG
+	1BszEpZTpppwctC+dqRxcgX3Z/lIK7yYlQDWLw==
+X-Received: by 2002:a05:6000:2287:b0:484:3310:f399 with SMTP id ffacd0b85a97d-4843310f41cmr6549348f8f.26.1788054407564;
+        Sat, 29 Aug 2026 18:46:47 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-482fbb2794dsm13697009f8f.25.2026.08.29.18.46.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Aug 2026 18:33:58 -0700 (PDT)
+        Sat, 29 Aug 2026 18:46:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,105 +69,71 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Sun, 30 Aug 2026 03:33:56 +0200
-Message-Id: <DL1W44NTIQ1U.1BH6B0V44EFSA@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Eduard
- Zingerman" <eddyz87@gmail.com>, <kernel-team@fb.com>
-Subject: Re: [PATCH bpf-next v4 12/12] docs/bpf: Document arena pointers in
- a by-value return
+Date: Sun, 30 Aug 2026 03:46:46 +0200
+Message-Id: <DL1WDYI57AAF.Q8T6RDYE04J2@gmail.com>
+Cc: "Huacai Chen" <chenhuacai@kernel.org>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, <kkd@meta.com>, <kernel-team@meta.com>,
+ <loongarch@lists.linux.dev>, "Hengqi Chen" <hengqi.chen@gmail.com>
+Subject: Re: [PATCH bpf-next v1 07/14] bpf, loongarch: Fix stack arguments
+ for indirect trampolines
 From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.22.0
-References: <20260829061514.1690730-1-yonghong.song@linux.dev>
- <20260829061615.1700421-1-yonghong.song@linux.dev>
-In-Reply-To: <20260829061615.1700421-1-yonghong.song@linux.dev>
+To: "Tiezhu Yang" <yangtiezhu@loongson.cn>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0
+References: <20260821233516.3426127-1-memxor@gmail.com>
+ <20260821233516.3426127-8-memxor@gmail.com>
+ <a5d4c26c-6735-8af1-1d3f-fe7f1898b285@loongson.cn>
+ <DL0B54EEQXAL.FL6Z0UXMR3SX@gmail.com>
+ <2bc45d20-d08f-e5c1-9da3-699d22959f98@loongson.cn>
+In-Reply-To: <2bc45d20-d08f-e5c1-9da3-699d22959f98@loongson.cn>
 
-On Sat Aug 29, 2026 at 8:16 AM CEST, Yonghong Song wrote:
-> Section 2.9 describes the by-value return contract as scalars only, which
-> no longer holds: a kfunc and a global subprogram may now return a struct
-> or union whose members are scalars or arena pointers. Update it.
+On Fri Aug 28, 2026 at 10:19 AM CEST, Tiezhu Yang wrote:
+> On 2026/8/28 =E4=B8=8B=E5=8D=8812:55, Kumar Kartikeya Dwivedi wrote:
+>> On Fri Aug 28, 2026 at 6:33 AM CEST, Tiezhu Yang wrote:
 >
-> Note that an arena pointer member is handed back as a scalar like every
-> other member. That costs nothing: the program has to cast_kern() the valu=
+> ...
+>
+>>> With this patch:
+>>>
+>>>     $ sudo ./test_progs -t struct_ops_trampoline
+>>>     #471     struct_ops_trampoline:OK
+>>>     Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+>>>
+>>> Tested-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>>
+>> Thanks a lot for the test. Please also take a look at the argument rebas=
 e
-> before it can be used, and the verifier allows that cast on any scalar, s=
-o
-> the member gives the program no reach it did not already have.
+>> patches once you folks have more cycles. Will definitely need your help =
+and
+>> reviews since they are mostly vibe coded.
 >
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
->  Documentation/bpf/kfuncs.rst | 39 ++++++++++++++++++++++--------------
->  1 file changed, 24 insertions(+), 15 deletions(-)
+> Hi Kumar,
 >
-> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-> index 89dea6b0b024..ebe37c1fe9d2 100644
-> --- a/Documentation/bpf/kfuncs.rst
-> +++ b/Documentation/bpf/kfuncs.rst
-> @@ -581,20 +581,29 @@ against the arena. Larger accesses must verify the =
-range explicitly.
->  A kfunc may return a scalar, a pointer, or a small struct or union by
->  value. A scalar or pointer of up to 8 bytes is returned in R0, as usual.
+> I have sent a standalone prerequisite fix for the pre-existing
+> issue:
 >
-> -A struct or union returned by value must be composed only of scalars
-> -(recursively), where a scalar is an integer or an enum; arrays of scalar=
-s are
-> -allowed as members. Its bytes are handed back to the program as the raw
-> -contents of R0 (and R2), so a pointer field would be laundered into a sc=
-alar
-> -and escape the verifier's pointer provenance and reference tracking. A s=
-truct
-> -or union with a pointer member is therefore rejected at load time, and s=
-o is
-> -one with a floating-point member, which the ABI may not return in R0:R2 =
-at
-> +A struct or union returned by value must be composed only of scalars and=
- arena
-> +pointers, where a scalar is an integer or an enum and an arena pointer i=
-s one
-> +carrying the ``btf_type_tag("arena")`` attribute. Those may be nested in
-> +structs and unions and in arrays of any number of dimensions, in any
-> +combination, as long as what the nesting bottoms out in is a scalar or a=
-n arena
-> +pointer. Its bytes are handed back to the program as the raw contents of=
- R0
-> +(and R2), so a member of any other pointer type would be laundered into =
-a
-> +scalar and escape the verifier's pointer provenance and reference tracki=
-ng. A
-> +struct or union with such a member is therefore rejected at load time, a=
-nd so
-> +is one with a floating-point member, which the ABI may not return in R0:=
-R2 at
->  all.
+> LoongArch: BPF: Fix off-by-one error for insn_is_cast_user
+> https://lore.kernel.org/loongarch/20260828075100.24776-1-yangtiezhu@loong=
+son.cn/
 >
-> +An arena pointer member is handed back as a scalar too, but nothing is l=
-ost by
-> +that. The program must ``cast_kern()`` the value before it can be used, =
-and the
-> +verifier allows that cast on any scalar, so a laundered arena address gi=
-ves the
-> +program no reach it did not already have. The result is confined to the
-> +program's arena in either case.
-> +
+> IMO, when you respin, please rebase your patches 07, 08, and 09
+> on top of this fix for your v2 series.
+>
+> Additionally, please send the v2 as a standalone series to the
+> loongarch mailing list loongarch@lists.linux.dev and the reviewer
+> Hengqi Chen <hengqi.chen@gmail.com> too, as the LoongArch BPF JIT
+> patches are typically routed through the loongarch-next tree.
+>
+> https://lore.kernel.org/loongarch/CAAhV-H55YcyXRewC+0YzTHXb1jab0GkAV13EF9=
+nFbTx=3DUkX4ww@mail.gmail.com/
+>
 
-I think it would make more sense to support translation for returned arena
-pointers as well, i.e. KF_ARENA_RET + the case you describe above. Like, an=
-yone
-who would use this tag in a struct being returned to the user would probabl=
-y we
-working with the kernel pointer into the arena.
+Ok, I will send v2 without loongarch changes and then split out and send th=
+em
+separately later on (or let me know if you'd like to commandeer them, I'm h=
+appy
+to do it either way).
 
-I think permitting them in the verifier is a good first step, but it isn't =
-all
-that useful unless the translation is supported as well. Otherwise, the kfu=
-nc
-has to do it manually, which is a bit of a pain, esp. without access to the
-program's arena's base addresses, which isn't always easily possible across
-various program types.
-
-I can look into doing this in case you don't have cycles, but overall shoul=
-d be
-fairly simple to plumb support.
-
-> [...]
+Thanks
