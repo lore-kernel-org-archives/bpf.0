@@ -1,192 +1,456 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E4F4E0849
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 13:39:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.17
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788183583; cv=fail; b=tfOJXWFFGvYY4tufjE3MajW3JrFWHeAcSz92TIPProEWUWiLUJijyJxKZdFfrlqaqlgBNDFCAmYRoJuG6WJL/ypeosLoSrucdIZD6Ljci1apzf5Mpwdi7XpUE5gO3yBLjauws4fM/G+lampK6Ki4a1bWJM7Fp3UVxofr7SOfJB8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788183583; c=relaxed/simple;
-	bh=Cbv+m/ahs/r9jLnVuJStTbc6mWeIqIO2HP1pW2JUOtA=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=kjJ7uT3IdjWb7HJq5DHHH6mkXjzpbse+/jVeOmbUgWkj2xWocvfjMTDMBPBQ2B7o5l7DBWT2XLlKMSJ7+RwYOmveQFtFgn39v4ENNIxn0auCXUX8E1Lp+Ird1gi3zt/xO1ylT/QK7MXEUwva70uFSw2vwmzZkjsgUPhvcZXYj3I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l+9qlFTy; arc=fail smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 117F64E80A3;
+	Mon, 31 Aug 2026 13:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788183615; cv=none; b=UtSERok3L5mpMKavVt75QtPTttWMIJS21/RPY7UWj7KIXZNDqIO4Xj+evm+OKOnfHe3vccWahWWTiOQwFNcwZLhjopGJFONCnPROPMwp0YDg2Au6oiaqfkKU8vqQ0k6kW50A3504ippX9KLm88mbh2sTRjZ3p9SEJqTkGcWiU9Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788183615; c=relaxed/simple;
+	bh=Yw5ceG1qbYk5Luskp/Rhx/HOxgA94ogBfuwbf/z7bfo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tNET94GgnaCZjn6QF9SL6eOQBOmlSryERRTKTnaigMMTMnv5BH35jbq1al1+caaWo3QAIDLyNeSGODBeE10Pgg/6ad1UVdQ9TrJ05QoRUfnr4AgMN/MZ3WAMfJb6gao4DcAopAnSGGfwUYNTK1aaavZvvrvTq5QK/7AJwCWSnNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IqQZFPLj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l+9qlFTy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1788183581; x=1819719581;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=Cbv+m/ahs/r9jLnVuJStTbc6mWeIqIO2HP1pW2JUOtA=;
-  b=l+9qlFTy2wH7/jzVhHVFthZf7i22/R0Fzl+v5cccilFS3eg5fBOhmPh4
-   IXOQ03zlWAM2CY8PWVsC8Xn2jgXrv6O4MxQMe9nVMxfdBRhoHirtniJ+3
-   4DARNYj5zlQmog9gryN9SYzBOFkgW/gWHV7JpNPclN67I0yKe8eQihvYV
-   WFGJu7jLqKCY/L+/3UICNVZdWdjPfvel4NT1uBEL/TeoATO7yE7nrlcxq
-   V+BMMnwUI6uF6oVHu9REotnHnOMkfcwU16hAvge4fS+gW6YVfD+DDH1uw
-   iQO7iC5JK1XZXYGhayUvQjWPyeimfeWebVAdMIR+ytRjjUjYii1vm+6sI
-   g==;
-X-CSE-ConnectionGUID: jLZiLMWsQIiyw8Mj78WUQQ==
-X-CSE-MsgGUID: pQlclCGkTAKl3XbNY/F24A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11891"; a="88613681"
-X-IronPort-AV: E=Sophos;i="6.25,254,1779174000"; 
-   d="scan'208";a="88613681"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2026 06:39:40 -0700
-X-CSE-ConnectionGUID: WMF7ZARxTUqZt9uULpaUSg==
-X-CSE-MsgGUID: WjA5oA4xSiSc6f43nEWASA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,254,1779174000"; 
-   d="scan'208";a="267469690"
-Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
-  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2026 06:39:39 -0700
-Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.46; Mon, 31 Aug 2026 06:39:39 -0700
-Received: from ORSEDG902.ED.cps.intel.com (10.7.248.12) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.46 via Frontend Transport; Mon, 31 Aug 2026 06:39:39 -0700
-Received: from PH8PR06CU001.outbound.protection.outlook.com (40.107.209.47) by
- edgegateway.intel.com (134.134.137.112) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.46; Mon, 31 Aug 2026 06:39:39 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rh6jAxCUgFNZl8DK+OLT8ZizHOwbAZUBI+sMx5uxOG06IV9UJ1BEN09HMF1JyBtHsFxV1Ja1hEzZfTQuvBNP/RiMkxEL9H5OcB/H80rHCfXw6JTc/C33il1zcXsnLsR1nshwW8crHKLUQsD9HeZzLjLS/oEB5DafZNeNP7xrPwFAZoR/egxmhnCZcfuuSHBlfJkCjWsatgHVD5LLhMa5e7L+oi3iu4mtSjnDYTvnRUrPpi/WL4uCJsNHTeCE5268VBgpLwyhMwlifExQAWn8o/A4oZjyAqlpl74jXdXWvL/jiQgq39YbobPQ/sUrLaFAewEw1NJXFMabO9kVGPkNeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XgNcmMPlCSbRtAoppIk3Z8z5Jnh8q+G5mzHJth5OO2c=;
- b=gBLhdbwdCIB9P9POOfOuIH4PySDHEeGKXdf/7uxYSNduYrr6w4WUOkmsH8Bd/ElzwNiIDEjZLKPkAiI4YTz/0U5tOU1xxUBR3ZHyNaLsPOD/9Dc/j/FLTABaETAxOjQgkEaVbWG1SUD7AbWpKR9S7lYhRVqOpsTgxVezmKQuWsGiI0GXsHOjyaHfNLUZk6IGiGLFDwESXwMm9Dsrbu3yJcGaZotJxVjMC7nMNKGhzirY1eJD8v5sAs150F/E6MIijf0lAhAjScW+5GqxwjX/odMtUvNUZ+tVgHJx1RhutQhq/YzU5+MH4hA1UtBBdma/p4DS4tVzZaY5nKzWDDK4aQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB4547.namprd11.prod.outlook.com (2603:10b6:5:2a1::19)
- by LV4PR11MB9491.namprd11.prod.outlook.com (2603:10b6:408:2de::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.13; Mon, 31 Aug
- 2026 13:39:38 +0000
-Received: from DM6PR11MB4547.namprd11.prod.outlook.com
- ([fe80::b0dd:d6f:a43:a04f]) by DM6PR11MB4547.namprd11.prod.outlook.com
- ([fe80::b0dd:d6f:a43:a04f%5]) with mapi id 15.21.0360.008; Mon, 31 Aug 2026
- 13:39:38 +0000
-Date: Mon, 31 Aug 2026 15:39:28 +0200
-From: Larysa Zaremba <larysa.zaremba@intel.com>
-To: Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
-CC: Quentin Monnet <qmo@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi
-	<memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
-	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
-	<jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai
-	<ihor.solodrai@linux.dev>, <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2 3/4] bpftool: Set BPF_F_XDP_DEV_BOUND_ONLY
- flag non-destructively
-Message-ID: <apWEEK72d3sCySif@soc-5CG4396X81.clients.intel.com>
-References: <20260831132648.65843-1-toke@redhat.com>
- <20260831132648.65843-3-toke@redhat.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260831132648.65843-3-toke@redhat.com>
-X-ClientProxiedBy: VI1PR09CA0175.eurprd09.prod.outlook.com
- (2603:10a6:800:120::29) To DM6PR11MB4547.namprd11.prod.outlook.com
- (2603:10b6:5:2a1::19)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IqQZFPLj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41A451F000E9;
+	Mon, 31 Aug 2026 13:40:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788183612;
+	bh=hL0/Zi2uIBkiGBWy4pcN0QFvBlPleLsK/is6hJRFeqg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=IqQZFPLj5hA4gvmCMMTN/0fR6pibzOJAK0OHSzeECW01wSsV1KN4q6+VrmvJ0SroU
+	 h5ZjJtYgL17DRUueb2TNlaGy3Y3svyYXuX6ITrxf8k7bwMT9EFMfRQ15G2KYQl/KD/
+	 F1hcE6NXwYK6J/683I9trP22vTKZZKOpol6QjPnDo1FhMenK8sCDVYy/tMtEwJF3Sg
+	 tyChE41bCW5JjieF9+ZbZMNAz5XwIr9gqguWUzJoY4GgKJGWTiPEW1TP/rZReB82pg
+	 oCyNtFcJIfDH6zz3M261k5xMhatD9LYFKcvvLTaynUcJ+yzsCcZfDt//gXizEf1xsW
+	 QcNGkwh7HvD9A==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Tiezhu Yang <yangtiezhu@loongson.cn>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.18-6.1] libbpf: Add __NR_bpf definition for LoongArch
+Date: Mon, 31 Aug 2026 09:23:46 -0400
+Message-ID: <20260831133314.4125787-198-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260831133314.4125787-1-sashal@kernel.org>
+References: <20260831133314.4125787-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB4547:EE_|LV4PR11MB9491:EE_
-X-MS-Office365-Filtering-Correlation-Id: f57718c6-e087-4071-9296-08df07654cef
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|10070799003|23010399003|366016|56012099006|10067099003|11063799006|4143699003|6133799003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info: eWF8omri3S5BRefAn9zRsoSACjU+AzEDee4vZIiFEP1D7bgkxU5XJeyqTf5AGLnAOXEsgIMtkc4CaPXKie9Pg6oIl2WM4WxkrzkX6OwhYScHmhfH2q6V25aYYd9pNUekWRkor7zlQmD8OwI3kaodQ1E2mQcKiozwLfiOhnKl9czJCF1DHr0TBGHYOYpSNIL16QETf6chSJAFa+OdjLMBx80ceV4QOcxFecg/n0pDaXqBfBhtEBzfu/Qk6NyubC5Ks+vA7wgKi/Pa5jivxuQ9+ed7ePbJzqqnQK7fuJ8UVcyAG0KpSepGiD26QwN/GWtwZDrwmqaQVznjtb30tFXjF/VxY2D6EbtOwHYiCRoXpK8OXBTa5ah3w8K+r7P8GxVDc0O7S/QaQqKZGcCPnuBTknGaKKraiMB0xJAABwPuxTMpxOYr/CYnZ/G6PoQxJVnCJUF6UHERXUsF1eFNrBO+SXeV7ocxFdhLILfYBtq4/X7zivHoT07gZHm8YoHBfwhl+P/STZM+bnI4N3d06dzpkyzSLXmmXbT5wzRyI4WHxMF2cs88ORBdXbXJhr4PVSz6Ncy8RHseLNtLvNq5h9e6m8lraSNGhNQxZw0Rg24uoeS+fimM45k9VVrp8r0dprhxSmxhluC2QWuCqT1olK5Y92LrHxxyyAcD3pCmpjnvu6I=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4547.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(10070799003)(23010399003)(366016)(56012099006)(10067099003)(11063799006)(4143699003)(6133799003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?zwiNmAeBJ4rcTvoDs/xjgoxM1RpvMO1s+r4wn+HtanvBf175ZwbN6NUFVE?=
- =?iso-8859-1?Q?2MMa4TLDB0vq9wI/RTZgw9hjorf5sgXV2ovaE06Wxv1lxY7emWzjCagk3b?=
- =?iso-8859-1?Q?r1sTEV4cI3Q3SKcfYmR/2Df+/YvtvJPwuCPDngwvGiQYSRVQF5nSFN6e60?=
- =?iso-8859-1?Q?n9pXQnt9W4SK7GarlAFk0E8pznkUiPt5Q95HnCIuk9Aha+nfR1NphKtwlN?=
- =?iso-8859-1?Q?OYkr79S5RkZSQHVrDl061hTKLAZ4jSfXAIvfPGDOlEbUNZQuXLc+yXMEmh?=
- =?iso-8859-1?Q?DUzsVW9Frn3hT5/lHKX1iMhJjaE8FvRLgAhbtOvjpruZkhkKTVPAo27Bme?=
- =?iso-8859-1?Q?RIAFXYGj3B0zWJVX5ogRnq/bgJhHkfs80XCjuIqTEoaLNqJxjtffr1EbeJ?=
- =?iso-8859-1?Q?KpoU9sWvavk5b2E88KE4OekyjLdvBM/5fuj+1p/O0plUsYLRsxU+Uzs2Zg?=
- =?iso-8859-1?Q?RPaflp1pwIejNSkO+awmuVOaiY7By6kLxtIt61bnu1yZwhVJgOE00Fc9zb?=
- =?iso-8859-1?Q?Q1lddwS6+BzNc4wCyfnuEMDLbtRYn60doHL2rI9OlCsKFBYqPDlCbKRw1e?=
- =?iso-8859-1?Q?T61jNLvqyXABKFr7tCQBrolBBHPIb91W1ppVUtHpKqYhMADaYaBuS4wW2E?=
- =?iso-8859-1?Q?xH8QDYlT4zMFIFY6b0Qm04uCSOZ+9dzFiKlvuSQ8incF1Di8ZASEQhwHwz?=
- =?iso-8859-1?Q?yDYmGUEnxR3+Iiy9M5ZuFLgV1sfpfsZem0B0yNJ6Gv72SipLT8sOUovLhm?=
- =?iso-8859-1?Q?TUJlqIeAlGVnpupDXvKkQ4Q8U8Q8321aO/ND0bYLHfFtyTU4zxtIVLqFMb?=
- =?iso-8859-1?Q?6tGKXWgoDJqWZeQUxhslJ7mqXfFokjmajr18oNBLdQXKA+Ov9BEpUH7sOb?=
- =?iso-8859-1?Q?/fgEn/dZt/96GqHnYnKBUyeujH5PlH38jDVT8+cm7DEY2b88ko46i7H3dQ?=
- =?iso-8859-1?Q?5mIq5zW8B+zcl31qOoiFT5pkVug2RUueCv7C3beSDDBJOBsKaEs+XTa/wy?=
- =?iso-8859-1?Q?izlV3EM5I6mtt2kjeek+tVAPQ/9RD+1fZQycU9iNfE3TTickPAiLW4s1sK?=
- =?iso-8859-1?Q?b6ks1NoEUaQ6XbmxFj6ybevB78H9Ts5KSlr6ucD1RPoKFLu00qMX1kxGKI?=
- =?iso-8859-1?Q?Dkbx78hYX+ZatvJYDDp93eE5wx9MNG81+pKHiSbppl/uvfOiZBJXFscMhS?=
- =?iso-8859-1?Q?vW2v9v+3Hc1dKGw7AlJgcVE+98NSLo9NaR7/0nhlumgZIrWBkBZRk30aM1?=
- =?iso-8859-1?Q?SkQX0woCe5VXO8/mcApuMR29KoSlupEbQr7uVUqRCIkqnSRiV9mun8E5nQ?=
- =?iso-8859-1?Q?yvfbCOkjTAwSSricxlwc9BMnX2hbQJ8jM3k2gh7X7IWAtpqlxWkXkBdXPB?=
- =?iso-8859-1?Q?E6DKJBZRgPHX4zOENRkRA/hiaSK118oibc6rM03QedheVvYstWMmiZSa+h?=
- =?iso-8859-1?Q?70a0lB5sO+IV6McyJVJ4NtzkM8XSI7KSQ33XeekOYPLSs64xvk7yIMJkfj?=
- =?iso-8859-1?Q?MPnTsxjIuw4H/1xPhHM47GMBBGPxUZMYsGM/tZ7y6QLmnNM99RKYvUYm43?=
- =?iso-8859-1?Q?N9g/VVyMQ5JXeEro/8VBjAg3q79x28bYbNvl/Vm9B+CJSpyXLHBrgnw+5B?=
- =?iso-8859-1?Q?zqG5HEbPKAOciw2KI4LFn+reEN0Ajtb/zaAguxL233l3ZICdshwV8CwKKc?=
- =?iso-8859-1?Q?tnPJvtg0YZAzXKQ1vjLSlF4nmWQBsxei+P1iwLDeSAO4AjA5CwUsgYTOAl?=
- =?iso-8859-1?Q?xBECrzd6YGbxuEkCtLoRUGiyYzyizBiZ3dtcRvlWcXO2T1DslpB0UJbluE?=
- =?iso-8859-1?Q?euPMS+sExSxRf1ig8OzyH5nWs6ShB11anX4kzIuCxcVzOybZybkM9Ln/UB?=
- =?iso-8859-1?Q?WN?=
-X-MS-Exchange-AntiSpam-MessageData-1: yQH55f5VmzR7ChB8uZF/h42SvIHP1YITE9I=
-X-Exchange-RoutingPolicyChecked: eRczzxJY77ExLhdbdkomWlgRXABJIvAAGocGN8yF2rgkP8TlhdcXwE3QThDAhl0QPDURiPUq6TT0hmPXJB5PKNUcla95q1OxvBhyCrdvqfwJrpmRM4c8VvybNbwTz6cvBMIbtmesdI6IzD8BgOyV4TMHfDnSNy4HY6o7sA7IkkADhdbUuDX9B7N45lrRC2vucf5ofgylqfAZTnoMY0A2jR71hAikBYDE14eCfC49QF7i8oQyy5J98hurzFDtnP1uOrI9yYJBuKovwec/bozyokxbuinBoczAbErBILB9URP3CeX9IdcAta9FbCejz6BSrbRi9MONu+p0jQ6qKl9UPg==
-X-MS-Exchange-CrossTenant-Network-Message-Id: f57718c6-e087-4071-9296-08df07654cef
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4547.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2026 13:39:37.9586
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Nkj1+/Iazubjf/Od0XUd03pOGLZlAIbIs/QRGE8JlhiYeUv/fi6w58NNIvFjTOJSby3MtQNQFqT9Dz1+ZXlwmTPXKI7dXTGtiVi+mPxycZg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV4PR11MB9491
-X-OriginatorOrg: intel.com
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.18.48
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Aug 31, 2026 at 03:26:43PM +0200, Toke H�iland-J�rgensen wrote:
-> When setting the XDP hints ifname, bpftool would set the
-> BPF_F_XDP_DEV_BOUND_ONLY without looking at the existing program flags,
-> overriding any other flag values. Change this to set the flag value
-> non-destructively by OR'ing it with the existing flags.
-> 
-> Fixes: f46392ee3dec ("bpftool: Specify XDP Hints ifname when loading program")
-> Signed-off-by: Toke H�iland-J�rgensen <toke@redhat.com>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
 
-Reviewed-by: Larysa Zaremba <larysa.zaremba@intel.com>
+[ Upstream commit a4a5d4ee061240a1d39053db0a87f841d43277c0 ]
 
-> ---
->  tools/bpf/bpftool/prog.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-> index a9f730d407a9..8c2f9255b36d 100644
-> --- a/tools/bpf/bpftool/prog.c
-> +++ b/tools/bpf/bpftool/prog.c
-> @@ -1769,7 +1769,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
->  		}
->  
->  		if (prog_type == BPF_PROG_TYPE_XDP && xdpmeta_ifindex) {
-> -			bpf_program__set_flags(pos, BPF_F_XDP_DEV_BOUND_ONLY);
-> +			bpf_program__set_flags(pos, bpf_program__flags(pos) | BPF_F_XDP_DEV_BOUND_ONLY);
->  			bpf_program__set_ifindex(pos, xdpmeta_ifindex);
->  		} else {
->  			bpf_program__set_ifindex(pos, offload_ifindex);
-> -- 
-> 2.55.0
-> 
+LoongArch uses the generic syscall table, where __NR_bpf is defined
+as 280 in include/uapi/asm-generic/unistd.h.
+
+To align with other architectures, add the __NR_bpf definition for
+LoongArch to avoid a potential compilation failure: "error __NR_bpf
+not defined. libbpf does not support your arch."
+
+This is a follow up patch of:
+
+  commit b0c47807d31d ("bpf: Add sparc support to tools and samples.")
+  commit bad1926dd2f6 ("bpf, s390: fix build for libbpf and selftest suite")
+  commit ca31ca8247e2 ("tools/bpf: fix perf build error with uClibc (seen on ARC)")
+  commit e32cb12ff52a ("bpf, mips: Fix build errors about __NR_bpf undeclared")
+
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20260526063936.16769-1-yangtiezhu@loongson.cn
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+
+LLM Generated explanations, may be completely bogus:
+
+# Stable Backport Analysis: `libbpf: Add __NR_bpf definition for
+LoongArch`
+
+**Local tree:** Linux **6.18.44** (`git describe HEAD` → `v6.18.44`,
+`make kernelversion` → `6.18.44`)
+
+---
+
+## PHASE 1: COMMIT MESSAGE FORENSICS
+
+### Step 1.1: Subject line
+**Record:** `[libbpf] [add] [__NR_bpf definition for LoongArch]`
+
+### Step 1.2: Tags
+**Record:**
+- **Signed-off-by:** Tiezhu Yang `<yangtiezhu@loongson.cn>` (author)
+- **Signed-off-by:** Andrii Nakryiko `<andrii@kernel.org>` (libbpf
+  maintainer)
+- **Link:** https://lore.kernel.org/bpf/20260526063936.16769-1-
+  yangtiezhu@loongson.cn
+- No Fixes:, Reported-by:, Tested-by:, Reviewed-by:, Acked-by:, or Cc:
+  stable tags
+- Notable: maintainer Signed-off-by is a quality signal; no syzbot/user
+  bug report
+
+### Step 1.3: Body analysis
+**Record:**
+- **Bug:** When building libbpf/bpf tools on LoongArch with overridden
+  `unistd.h` (perf build path), `__NR_bpf` is undefined and compilation
+  fails with `#error __NR_bpf not defined. libbpf does not support your
+  arch.`
+- **Symptom:** Build failure (compile-time `#error`), not a runtime
+  kernel crash
+- **Root cause:** LoongArch uses the generic syscall table (`__NR_bpf` =
+  280 in `asm-generic/unistd.h`), but the explicit arch fallback list in
+  `tools/lib/bpf/bpf.c` and `tools/build/feature/test-bpf.c` was never
+  updated for `__loongarch__`
+- **Version info:** None in message; follow-up to arch-specific
+  `__NR_bpf` additions dating from 2017–2021
+
+### Step 1.4: Hidden bug fix?
+**Record:** Yes — described as alignment/cleanup, but it is a **build
+fix** preventing compilation failure on LoongArch, same class as prior
+mips/ARC/s390/sparc fixes by the same pattern.
+
+---
+
+## PHASE 2: DIFF ANALYSIS
+
+### Step 2.1: Inventory
+**Record:**
+- `tools/lib/bpf/bpf.c`: +2 lines
+- `tools/build/feature/test-bpf.c`: +2 lines
+- **Total:** 4 insertions, 0 deletions
+- **Functions affected:** None directly; modifies preprocessor fallback
+  block before `sys_bpf()` / `main()`
+- **Scope:** Single-purpose, two-file surgical fix
+
+### Step 2.2: Code flow change
+**Record:**
+- **Hunk 1 (`bpf.c`):** Before → `#elif mips` then `#else #error`. After
+  → adds `#elif defined(__loongarch__) #define __NR_bpf 280` before the
+  error branch. Affects the `#ifndef __NR_bpf` fallback used when perf
+  overrides `unistd.h`.
+- **Hunk 2 (`test-bpf.c`):** Same preprocessor addition for bpf feature-
+  detection compile test.
+
+### Step 2.3: Bug mechanism
+**Record:** **Build fix / missing arch definition (category
+h-adjacent).** When `__NR_bpf` is not provided by headers (overridden
+`unistd.h` path documented in `bpf.c`), LoongArch hits the `#else
+#error` branch. Fix supplies the correct syscall number (280).
+
+### Step 2.4: Fix quality
+**Record:** Obviously correct — value 280 matches `include/uapi/asm-
+generic/unistd.h` and `tools/arch/loongarch/include/uapi/asm/unistd.h`
+(which includes `asm-generic/unistd.h`). Minimal, mirrors existing arch
+entries (aarch64, arc also use 280). **Regression risk:** very low; only
+affects preprocessor path when `__NR_bpf` is absent.
+
+---
+
+## PHASE 3: GIT HISTORY INVESTIGATION
+
+### Step 3.1: Blame
+**Record:** `__NR_bpf` fallback block in `bpf.c` introduced in
+e3ed2fef22b6 (2015). Arch entries added incrementally: sparc (b0c47807,
+2017), s390 (bad1926dd, 2017), arc (ca31ca82, 2019), mips (e32cb12ff,
+2021, same author). LoongArch omission is a long-standing gap, not a
+recently introduced regression.
+
+### Step 3.2: Fixes: tag
+**Record:** N/A — no Fixes: tag. Referenced prerequisite commits all
+exist in this tree (`b0c47807`, `bad1926dd`, `ca31ca82`, `e32cb12ff`
+confirmed via `git merge-base --is-ancestor`).
+
+### Step 3.3: File history
+**Record:** Related LoongArch libbpf work already in tree:
+`00883922ab404` (bpf_tracing.h), `29c66ad1c3ad1` (PT_REGS_CAST for
+LoongArch). `seccomp_bpf.c` already defines `__NR_seccomp` for
+`__loongarch__` (line 147). Standalone patch; not part of a multi-patch
+series.
+
+### Step 3.4: Author context
+**Record:** Tiezhu Yang (Loongson) — prior `e32cb12ff52a2` mips
+`__NR_bpf` fix in same files. Andrii Nakryiko (libbpf maintainer)
+Signed-off-by.
+
+### Step 3.5: Dependencies
+**Record:** No hard dependencies beyond the existing `__NR_bpf` fallback
+mechanism (present since 2015+). Applies standalone. Commit itself is
+**not** in current branch (`git log --grep` returned empty).
+
+---
+
+## PHASE 4: MAILING LIST AND EXTERNAL RESEARCH
+
+### Step 4.1: Original discussion
+**Record:** `b4 am 20260526063936.16769-1-yangtiezhu@loongson.cn` found
+thread at
+https://patch.msgid.link/20260526063936.16769-1-yangtiezhu@loongson.cn.
+Mbox contains only the patch (1 message, no replies). No stable
+nominations or NAKs found. `b4 dig -c HEAD` failed (commit not in tree);
+used message-id lookup instead.
+
+### Step 4.2: Reviewers
+**Record:** Andrii Nakryiko Signed-off-by on patch. No separate
+Reviewed-by in mbox.
+
+### Step 4.3: Bug report
+**Record:** N/A — no external bug report or syzbot link. Author
+documents expected compile error text.
+
+### Step 4.4: Related patches
+**Record:** Part of ongoing arch-by-arch `__NR_bpf` fallback additions.
+Same author fixed mips identically in 2021. LoongArch bpf_tracing
+support already merged separately.
+
+### Step 4.5: Stable list history
+**Record:** Not searched on lore stable list (WebFetch blocked by bot
+protection). No stable discussion found in mbox.
+
+---
+
+## PHASE 5: CODE SEMANTIC ANALYSIS
+
+### Step 5.1: Key functions
+**Record:** Preprocessor block only. Downstream: `sys_bpf()` in `bpf.c`
+calls `syscall(__NR_bpf, ...)`. `test-bpf.c` `main()` calls
+`syscall(__NR_bpf, BPF_PROG_LOAD, ...)`.
+
+### Step 5.2: Callers
+**Record:** `sys_bpf()` is the central libbpf syscall wrapper — used
+throughout libbpf for all BPF operations. Only reached at runtime if
+compilation succeeds; this patch affects **compile-time** availability
+of `__NR_bpf`.
+
+### Step 5.3: Callees
+**Record:** `syscall(__NR_bpf, ...)` — requires correct arch syscall
+number.
+
+### Step 5.4: Reachability
+**Record:** Triggered when building bpf tools (libbpf, perf, bpftool,
+bpf selftests feature detection) on LoongArch hosts where `__NR_bpf` is
+not defined by included headers. Userspace build path, not kernel
+runtime.
+
+### Step 5.5: Similar patterns
+**Record:** `seccomp_bpf.c` already has `__loongarch__` syscall
+fallbacks (`__NR_seccomp 277`). `bpf.c` and `test-bpf.c` are
+inconsistent — LoongArch was missed. Same pattern fixed for mips, arc,
+s390, sparc.
+
+---
+
+## PHASE 6: CROSS-REFERENCING AGAINST LOCAL TREE (6.18.44)
+
+### Step 6.1: Buggy code exists?
+**Record:** **YES.** Current `tools/lib/bpf/bpf.c` lines 43–64 and
+`tools/build/feature/test-bpf.c` lines 6–25 lack `__loongarch__` case
+and fall through to `#error`. LoongArch arch support present since
+`fa96b57c14906` (LoongArch build infrastructure). Bug has existed since
+LoongArch tooling support without this define.
+
+### Step 6.2: Backport complications
+**Record:** **Clean apply expected.** Two identical 2-line hunks in
+files that match the patch context. No conflicting recent churn in this
+specific block.
+
+### Step 6.3: Related fixes already present?
+**Record:** No equivalent fix found. `git log --grep="Add __NR_bpf
+definition for LoongArch"` returns empty on this branch.
+
+---
+
+## PHASE 7: SUBSYSTEM AND MAINTAINER CONTEXT
+
+### Step 7.1: Subsystem
+**Record:** **tools/lib/bpf** (userspace libbpf shipped with kernel
+sources). **Criticality:** IMPORTANT for bpf tooling; PERIPHERAL for
+general kernel runtime (does not affect running kernel on non-LoongArch
+or pre-built distros).
+
+### Step 7.2: Activity
+**Record:** LoongArch and libbpf actively maintained in 6.18.y (recent
+LoongArch BPF/kprobes fixes; ongoing libbpf API work).
+
+---
+
+## PHASE 8: IMPACT AND RISK ASSESSMENT
+
+### Step 8.1: Who is affected
+**Record:** LoongArch users building kernel bpf tools from source
+(libbpf, perf, bpftool, bpf feature tests). Not universal; platform-
+specific build issue.
+
+### Step 8.2: Trigger conditions
+**Record:** Compile libbpf/bpf tools on LoongArch when `__NR_bpf` is not
+provided by headers (documented perf override path). Common for
+developers/maintainers building from kernel tree on LoongArch hardware.
+Unprivileged users can trigger only insofar as they can invoke a build.
+
+### Step 8.3: Failure mode severity
+**Record:** **Compile-time failure** (`#error` / undeclared `__NR_bpf`).
+**Severity: MEDIUM** for affected users (cannot build tools); **LOW**
+for general kernel stability (no runtime crash, corruption, or security
+issue).
+
+### Step 8.4: Risk-benefit
+**Record:**
+- **Benefit:** Enables bpf tool builds on LoongArch; closes obvious gap
+  vs. other arches and vs. `seccomp_bpf.c` on same platform
+- **Risk:** Very low — 4 lines, correct constant, no logic change
+- **Ratio:** Favorable; classic stable build-fix backport
+
+---
+
+## PHASE 9: FINAL SYNTHESIS
+
+### Step 9.1: Evidence summary
+
+**FOR backport:**
+- Real build failure on LoongArch (documented error path)
+- Build fix — explicit stable exception category
+- Tiny (4 lines), obviously correct (`__NR_bpf` = 280 verified in tree
+  headers)
+- Same pattern as mips/ARC/s390 fixes already in 6.18.44
+- libbpf maintainer Signed-off-by
+- Buggy code confirmed present in 6.18.44
+- Prerequisites all in tree; standalone apply
+
+**AGAINST backport:**
+- No runtime kernel bug (tools-only build issue)
+- Affects niche platform (LoongArch)
+- No user bug reports or syzbot evidence
+- No explicit stable nomination in review thread (thread had no replies)
+
+**Unresolved:** Whether distro packagers always hit the
+overridden-`unistd.h` path; author says "potential" failure, but
+mechanism is well-established from `bpf.c` comment and prior arch fixes.
+
+### Step 9.2: Stable rules checklist
+1. Obviously correct and tested? **PASS** — syscall number matches `asm-
+   generic/unistd.h`; maintainer SOB; mirrors proven prior arch fixes
+2. Fixes real bug affecting users? **PASS** — compile failure for
+   LoongArch bpf tool builds
+3. Important issue? **PASS (moderate)** — build fix for platform
+   developers; not crash/security, but stable explicitly accepts build
+   fixes
+4. Small and contained? **PASS** — 4 lines, 2 files
+5. No new features/APIs? **PASS** — preprocessor define only
+6. Can apply to local tree? **PASS** — buggy code present, clean apply
+   expected
+
+### Step 9.3: Exception category
+**Record:** **BUILD FIX** — prevents compilation failure when building
+libbpf/bpf tools on LoongArch.
+
+### Step 9.4: Decision rationale
+For Linux **6.18.44**, LoongArch is a supported architecture and bpf
+tooling is actively used, but `tools/lib/bpf/bpf.c` and
+`tools/build/feature/test-bpf.c` still lack the `__loongarch__` entry in
+the `__NR_bpf` fallback table. This is the same class of fix as the mips
+(`e32cb12ff52a2`) and ARC (`ca31ca8247e2`) commits already in this tree.
+The fix is trivial, correct, and low-risk. While severity is build-time
+rather than runtime, stable trees routinely accept such arch-specific
+build fixes — especially when they unblock tool compilation on a
+supported platform.
+
+---
+
+## Verification
+
+- **[Phase 1]** `git describe HEAD` → v6.18.44; parsed subject, tags,
+  body from user-provided commit and mbox
+- **[Phase 2]** Read `tools/lib/bpf/bpf.c` lines 39–65; read
+  `tools/build/feature/test-bpf.c` full file; confirmed 4-line diff,
+  preprocessor-only change
+- **[Phase 3]** `git blame -L 43,65 tools/lib/bpf/bpf.c` — fallback
+  block history traced to 2015; mips fix e32cb12ff52a2 by same author
+- **[Phase 3]** `git merge-base --is-ancestor b0c47807d31d HEAD` →
+  prerequisite in tree
+- **[Phase 3]** `git log --grep="Add __NR_bpf definition for LoongArch"`
+  → not in branch
+- **[Phase 3]** `git log --author="Tiezhu Yang" -- tools/lib/bpf/` →
+  mips fix + bpf_tracing LoongArch work present
+- **[Phase 4]** `b4 am 20260526063936.16769-1-yangtiezhu@loongson.cn` →
+  patch retrieved; 1 message, no replies
+- **[Phase 4]** WebFetch lore.kernel.org → blocked (bot protection);
+  used b4 mbox instead
+- **[Phase 5]** `grep __loongarch__ tools/` — found in seccomp_bpf.c,
+  bpf_tracing.h, etc., but NOT in bpf.c `__NR_bpf` block
+- **[Phase 5]** Read `seccomp_bpf.c` lines 134–164 — `__NR_seccomp` for
+  `__loongarch__` already defined
+- **[Phase 6]** `grep __NR_bpf tools/lib/bpf/bpf.c` — no `__loongarch__`
+  branch in 6.18.44
+- **[Phase 6]** `include/uapi/asm-generic/unistd.h` line 677 → `#define
+  __NR_bpf 280`
+- **[Phase 6]** `tools/arch/loongarch/include/uapi/asm/unistd.h` →
+  includes `asm-generic/unistd.h`
+- **[Phase 6]** `arch/loongarch/` exists; `git log --reverse --
+  arch/loongarch/ | head -1` → fa96b57c14906
+- **[Phase 7]** `git log -20 -- arch/loongarch/` — active LoongArch
+  development including BPF fixes
+- **[Phase 8]** Assessed as build-time failure, platform-specific, low
+  runtime risk
+
+**YES**The background search finished. It confirmed that **"libbpf: Add
+__NR_bpf definition for LoongArch" is not in the current 6.18.44
+branch** — related LoongArch libbpf work is already there
+(`bpf_tracing.h`, `PT_REGS_CAST`), but the `__NR_bpf` fallback in
+`bpf.c` and `test-bpf.c` is still missing.
+
+That matches the earlier analysis: this is a small, low-risk build fix
+for LoongArch bpf tool compilation and should be backported to this
+tree.
+
+**YES**
+
+ tools/build/feature/test-bpf.c | 2 ++
+ tools/lib/bpf/bpf.c            | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/tools/build/feature/test-bpf.c b/tools/build/feature/test-bpf.c
+index e7a405f83af6e..89d59674f39b9 100644
+--- a/tools/build/feature/test-bpf.c
++++ b/tools/build/feature/test-bpf.c
+@@ -20,6 +20,8 @@
+ #  define __NR_bpf 6319
+ # elif defined(__mips__) && defined(_ABI64)
+ #  define __NR_bpf 5315
++# elif defined(__loongarch__)
++#  define __NR_bpf 280
+ # else
+ #  error __NR_bpf not defined. libbpf does not support your arch.
+ # endif
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 339b197972374..1e8f01bfc1bfd 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -59,6 +59,8 @@
+ #  define __NR_bpf 6319
+ # elif defined(__mips__) && defined(_ABI64)
+ #  define __NR_bpf 5315
++# elif defined(__loongarch__)
++#  define __NR_bpf 280
+ # else
+ #  error __NR_bpf not defined. libbpf does not support your arch.
+ # endif
+-- 
+2.53.0
+
