@@ -1,304 +1,177 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 535AD483829;
-	Mon, 31 Aug 2026 14:02:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C6B4BAA10
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 14:03:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788184955; cv=none; b=XhFBNyYuvAqSbOXlIp8cW2q/Wo1REotFAYLRkdd+kGXr2H0iioL9s7XS2sHpLKiruJUkY6oFqwK1oIsshmTdCx4K7hGTVNUtIBs+6gy6pdhwG9ENt7HJtt1CvSzgplVy1oNFhBLp/MEo9fKHXJbsChImBoRjYgONyaKdGZtsgqk=
+	t=1788185028; cv=none; b=eTlwLHnevjzFJzDA+oBkclwlueNM3z61w4AOM81G7pOD/Rd0IJ1YpI5UyXxx1vJl7u3ZY0aAKcrKZKbI5vGXqX/JCu7kw+Z9z8ECycslwTZOm/E0JxjCOAeHEIiFWkQ/rX0vMBy77ja+sRLJ0dvFgRCyfpcLjGVH3RdjOiH2ZAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788184955; c=relaxed/simple;
-	bh=0AaOui0ATZSYAH51kcMfhKYq5p5RUHpEf2ydKAATlVk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sOR2NrOD6atc/4WYfGUjpIrVXGh3EJbDG5v6GimCvOBcxzSnyAGNExSBywndZUGMQgGHx204ZrfuSMLm+cz6DRLv1da57gBWwjSNa5Rj+Sh+3BoXBSzP47rUruuD3TyE6bLSbkXLvuRTrymwUgPOi8qv8B0G7tIWS8Qe1GCXh+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=IXueXC7X; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1788185028; c=relaxed/simple;
+	bh=eFhC3QMpBOSgWIE58z30vWOddqzMB2K9V8O55mnpMM8=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=o4moSJdVf5BfY5+sroyiQbtxAC0YdlA0HbPpMYaU6MWSFp/REp8Q637/PTYTwaNfAW9GfLOD1IHBr9x17XzcfDUgG9pAml3ctfESgrP920u7mmKiG4TG74Y+KZAz4RPBi5UJk3P51TV3Zb7Io0ILUgShAD0S1Kb5rDPt1ajk+9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z2nySG5Z; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="IXueXC7X"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=SU
-	eQo8DwvNCB8W1/pfXYlm6GLs+D/BOTHcngtPxlKog=; b=IXueXC7XPf9lDaoyis
-	VM/5osJ2h0EBzM9AqOb8P8CClxk0flnJ9YkcFqWCv8vkXBniQIwhNULhvUza9jkm
-	C79T1IZKlcknvn18bcmsML2XMqW8wDSmjmubj3GCbxL1AAqR45og+OKeHLKMQEUW
-	v5m72dZltI1TyP/q6ebFTWn2s=
-Received: from localhost (unknown [])
-	by gzsmtp5 (Coremail) with SMTP id QCgvCgAnuBc_iZVq6U15PA--.28139S2;
-	Mon, 31 Aug 2026 22:01:36 +0800 (CST)
-From: Hui Su <sh_def@163.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	shuah@kernel.org,
-	yatsenko@meta.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v2 2/2] selftests/bpf: add RHASH iteration stress test
-Date: Mon, 31 Aug 2026 22:01:32 +0800
-Message-ID: <20260831140132.117755-2-sh_def@163.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260831140132.117755-1-sh_def@163.com>
-References: <20260831140132.117755-1-sh_def@163.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z2nySG5Z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A1FF1F00A3F;
+	Mon, 31 Aug 2026 14:03:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788185027;
+	bh=KL8pF6u+tzdTME51A4m9CI/mf5USPTA/QV3Rl14LolA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Z2nySG5ZFgSgVZlewcxmRxLp68BOv88flZ/GN8j19qOb4Y3PZ26jgG+6NKDlbVGdG
+	 C4YkP+/BgV+iZrjcXU1nCM0Wtrgb5RHtBh9N6AUIg4LU+wjF3wK87Lvz/huKB5Ok1b
+	 xgJYLMi9GVjWI++9TjsVm3cwKCFzM+RDgkMhmd5Esth/AttuC/E67jJ6KmpKvBRXd+
+	 OJpfR3Ud2tY7fte+rrGZnx1RdMt5qMNgkopqa1pc6SbIA1x9iRHF2aBG82fnYe7wGS
+	 Hd5Zd9HtaJHhcBIp4T8VuwxVdelXVQD0zuVqvEB6DGRj+Y7twdgt2xFw0KYrg0XT4D
+	 23zcy7neQ6INg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH AUTOSEL 6.18-5.15] libbpf: Also reset {insn,data}_cur on
+ realloc failure
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Sasha Levin" <sashal@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260831133314.4125787-44-sashal@kernel.org>
+References: <20260831133314.4125787-1-sashal@kernel.org>
+ <20260831133314.4125787-44-sashal@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 31 Aug 2026 14:03:46 +0000
+Message-Id: <20260831140347.5A1FF1F00A3F@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:QCgvCgAnuBc_iZVq6U15PA--.28139S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxKF1rAFWrCw15ur43Kw45Jrb_yoWxtryDpF
-	W0v34akr4rXF48Jw4fK3y2grZ8Kr4rZw4UGrZ5Kw4fAw47K3sFqr1xKF4UtFn3XrWDZ34Y
-	9ws3KrW8WrWrZrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UI2NNUUUUU=
-X-CM-SenderInfo: xvkbvvri6rljoofrz/xtbCwQFy0WqViUEMEQAA3J
 
-Add a stress test for bpf_for_each_map_elem() on
-BPF_MAP_TYPE_RHASH. Update and delete entries from two threads while
-repeatedly running the BPF callback, and record the maximum number of
-callback invocations in one walk.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-Use a large map capacity and a smaller working set so the test also
-covers sparse maps where max_entries greatly exceeds current occupancy.
-Concurrent rehashing may cause duplicate visits, which are permitted by
-RHASH's best-effort iteration semantics. Verify that
-bpf_for_each_map_elem() does not exceed the working set in one walk and
-that at least one walk consumes the full working-set-sized budget.
+Pre-existing issues:
+- [High] Missing `gen->error` check in `bpf_gen__finish()` leads to a NULL =
+pointer dereference in `compute_sha_update_offsets()` if a previous allocat=
+ion failed.
+- [High] Missing `gen->error` check in `bpf_gen__prog_load()` leads to a NU=
+LL pointer dereference during endianness swapping after an allocation failu=
+re.
+--
 
-Signed-off-by: Hui Su <sh_def@163.com>
----
-Changes in v2:
-- Use a large map capacity and a smaller BPF rodata working set.
-- Skip the stress test when fewer than two CPUs are available.
-- Avoid result assertions unless a program run completed successfully.
-- Record full walks to make vacuous stress passes less likely.
-- Use the BPF rodata working set as the single source of truth.
+commit d36df279d8dfc0fe65a516d12685c54faba8d9da
+Author: Daniel Borkmann <daniel@iogearbox.net>
 
-Link: https://lore.kernel.org/bpf/20260828183326.3330530-2-sh_def@163.com/
----
- .../testing/selftests/bpf/prog_tests/rhash.c  | 113 ++++++++++++++++++
- tools/testing/selftests/bpf/progs/rhash.c     |  41 +++++++
- 2 files changed, 154 insertions(+)
+libbpf: Also reset {insn,data}_cur on realloc failure
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/rhash.c b/tools/testing/selftests/bpf/prog_tests/rhash.c
-index 98bb66907b7f..f1a0a8e3fc1a 100644
---- a/tools/testing/selftests/bpf/prog_tests/rhash.c
-+++ b/tools/testing/selftests/bpf/prog_tests/rhash.c
-@@ -3,12 +3,16 @@
- #include <test_progs.h>
- #include <string.h>
- #include <stdio.h>
-+#include <pthread.h>
-+#include <stdatomic.h>
- #include "rhash.skel.h"
- #include "bpf_iter_bpf_rhash_map.skel.h"
- #include <linux/bpf.h>
- #include <linux/perf_event.h>
- #include <sys/syscall.h>
- 
-+#define RHASH_STRESS_DURATION_NS	(3ULL * 1000000000ULL)
-+
- static void rhash_run(const char *prog_name)
- {
- 	struct rhash *skel;
-@@ -53,6 +57,112 @@ static int rhash_map_create(__u32 max_entries, __u64 map_extra)
- 			      sizeof(__u32), sizeof(__u64), max_entries, &opts);
- }
- 
-+struct rhash_stress_arg {
-+	int map_fd;
-+	atomic_bool *stop;
-+	__u32 nr_keys;
-+	__u32 seed;
-+};
-+
-+static void *rhash_stress_update(void *data)
-+{
-+	struct rhash_stress_arg *arg = data;
-+	__u64 value = 0;
-+	__u32 key;
-+	__u32 i;
-+
-+	while (!atomic_load(arg->stop)) {
-+		for (i = 0; i < arg->nr_keys && !atomic_load(arg->stop); i++) {
-+			key = ((__u32)i * 2654435761U + arg->seed) % arg->nr_keys;
-+			bpf_map_update_elem(arg->map_fd, &key, &value, BPF_ANY);
-+		}
-+		for (i = 0; i < arg->nr_keys && !atomic_load(arg->stop); i++) {
-+			key = ((__u32)i * 2654435761U + arg->seed) % arg->nr_keys;
-+			bpf_map_delete_elem(arg->map_fd, &key);
-+		}
-+	}
-+
-+	return NULL;
-+}
-+
-+static void rhash_iter_stress(void)
-+{
-+	struct rhash *skel = NULL;
-+	struct rhash_stress_arg args[2];
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	atomic_bool stop = false;
-+	bool ran = false;
-+	__u64 start;
-+	pthread_t threads[2];
-+	bool created[2] = {};
-+	struct bpf_program *prog;
-+	int nr_cpus;
-+	__u32 working_set;
-+	int map_fd, err, i;
-+
-+	nr_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(nr_cpus, 0, "num_possible_cpus"))
-+		return;
-+	if (nr_cpus < 2) {
-+		test__skip();
-+		return;
-+	}
-+
-+	skel = rhash__open();
-+	if (!ASSERT_OK_PTR(skel, "rhash__open stress"))
-+		return;
-+	working_set = skel->rodata->stress_working_set;
-+
-+	prog = bpf_object__find_program_by_name(skel->obj,
-+						"test_rhash_iter_stress");
-+	if (!ASSERT_OK_PTR(prog, "find stress program"))
-+		goto cleanup;
-+	bpf_program__set_autoload(prog, true);
-+
-+	err = rhash__load(skel);
-+	if (!ASSERT_OK(err, "stress skel_load"))
-+		goto cleanup;
-+
-+	map_fd = bpf_map__fd(skel->maps.stress_rhmap);
-+	for (i = 0; i < ARRAY_SIZE(threads); i++) {
-+		args[i].map_fd = map_fd;
-+		args[i].stop = &stop;
-+		args[i].nr_keys = working_set;
-+		args[i].seed = i * 977;
-+		err = pthread_create(&threads[i], NULL, rhash_stress_update,
-+				     &args[i]);
-+		if (!ASSERT_OK(err, "pthread_create"))
-+			goto stop_threads;
-+		created[i] = true;
-+	}
-+
-+	start = get_time_ns();
-+	while (get_time_ns() - start < RHASH_STRESS_DURATION_NS) {
-+		err = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
-+		if (!ASSERT_OK(err, "stress prog run"))
-+			goto stop_threads;
-+		ran = true;
-+	}
-+
-+stop_threads:
-+	atomic_store(&stop, true);
-+	for (i = 0; i < ARRAY_SIZE(threads); i++)
-+		if (created[i])
-+			pthread_join(threads[i], NULL);
-+
-+	if (err || !ran)
-+		goto cleanup;
-+
-+	ASSERT_GT(skel->bss->stress_max_visits, 0, "stress callback visits");
-+	ASSERT_GT(skel->bss->stress_full_walks, 0, "stress full walks");
-+	ASSERT_EQ(skel->bss->stress_overruns, 0, "stress callback bound");
-+	printf("stress max callback visits: %llu (limit %u)\n",
-+	       (unsigned long long)skel->bss->stress_max_visits,
-+	       working_set);
-+cleanup:
-+	rhash__destroy(skel);
-+}
-+
- static void rhash_map_extra_presize(void)
- {
- 	const __u32 max_entries = 1024;
-@@ -180,4 +290,7 @@ void test_rhash(void)
- 
- 	if (test__start_subtest("test_rhash_iter"))
- 		rhash_iter_test();
-+
-+	if (test__start_subtest("test_rhash_iter_stress"))
-+		rhash_iter_stress();
- }
-diff --git a/tools/testing/selftests/bpf/progs/rhash.c b/tools/testing/selftests/bpf/progs/rhash.c
-index fc2dac3a719e..3d7201430bab 100644
---- a/tools/testing/selftests/bpf/progs/rhash.c
-+++ b/tools/testing/selftests/bpf/progs/rhash.c
-@@ -9,11 +9,18 @@
- 
- #define ENOENT 2
- #define EEXIST 17
-+#define RHASH_STRESS_MAX_ENTRIES (1U << 20)
- 
- char _license[] SEC("license") = "GPL";
- 
- int err;
- 
-+const volatile __u32 stress_working_set = 4096;
-+
-+volatile __u64 stress_max_visits;
-+volatile __u64 stress_overruns;
-+volatile __u64 stress_full_walks;
-+
- struct elem {
- 	char arr[128];
- 	int val;
-@@ -27,6 +34,20 @@ struct {
- 	__type(value, struct elem);
- } rhmap SEC(".maps");
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_RHASH);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__uint(max_entries, RHASH_STRESS_MAX_ENTRIES);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} stress_rhmap SEC(".maps");
-+
-+static __u64 stress_iter_cb(struct bpf_map *map, __u32 *key, __u64 *val,
-+			    void *ctx)
-+{
-+	return 0;
-+}
-+
- SEC("syscall")
- int test_rhash_lookup_update(void *ctx)
- {
-@@ -246,3 +267,23 @@ int test_rhash_delete_nonexistent(void *ctx)
- 	err = 0;
- 	return 0;
- }
-+
-+SEC("syscall")
-+int test_rhash_iter_stress(void *ctx)
-+{
-+	/*
-+	 * Concurrent rehash may produce duplicate visits. Check that the
-+	 * helper still gives one walk a finite callback bound; no snapshot
-+	 * or unique-visit guarantee is expected here.
-+	 */
-+	long visits;
-+
-+	visits = bpf_for_each_map_elem(&stress_rhmap, stress_iter_cb, NULL, 0);
-+	if (visits > stress_max_visits)
-+		stress_max_visits = visits;
-+	if (visits > stress_working_set)
-+		stress_overruns++;
-+	if (visits == stress_working_set)
-+		stress_full_walks++;
-+	return 0;
-+}
--- 
-2.54.0
+realloc_insn_buf() as well as realloc_data_buf() free and NULL
+gen->insn_start / gen->data_start on -ENOMEM but leave gen->insn_cur /
+gen->data_cur pointing into the old, freed buffer. Just reset the
+cursors to NULL alongside the base pointers so the freed state is
+coherent.
 
+Link: https://lore.kernel.org/r/20260529094119.307264-3-daniel@iogearbox.net
+
+> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+> index cd5c2543f54d8..8722ecc023819 100644
+> --- a/tools/lib/bpf/gen_loader.c
+> +++ b/tools/lib/bpf/gen_loader.c
+> @@ -63,6 +63,7 @@ static int realloc_insn_buf(struct bpf_gen *gen, __u32 =
+size)
+>  		gen->error =3D -ENOMEM;
+>  		free(gen->insn_start);
+>  		gen->insn_start =3D NULL;
+> +		gen->insn_cur =3D NULL;
+>  		return -ENOMEM;
+>  	}
+
+[Severity: High]
+This is a pre-existing issue, but missing a gen->error check in
+bpf_gen__finish() leads to a NULL pointer dereference in
+compute_sha_update_offsets() if this allocation fails.
+
+If a buffer allocation fails here, gen->error is set and gen->insn_start is
+freed and set to NULL. The libbpf loader relies on bpf_gen__finish() to ret=
+urn
+the error at the end of the operation, but it unconditionally calls
+compute_sha_update_offsets() before checking gen->error:
+
+tools/lib/bpf/gen_loader.c:bpf_gen__finish() {
+    ...
+	if (OPTS_GET(gen->opts, gen_hash, false))
+		compute_sha_update_offsets(gen);
+
+	pr_debug("gen: finish %s\n", errstr(gen->error));
+	if (!gen->error) {
+    ...
+}
+
+Which then directly dereferences the NULL gen->insn_start:
+
+tools/lib/bpf/gen_loader.c:compute_sha_update_offsets() {
+    ...
+	for (i =3D 0; i < SHA256_DWORD_SIZE; i++) {
+		struct bpf_insn *insn =3D
+			(struct bpf_insn *)(gen->insn_start + gen->hash_insn_offset[i]);
+		sha_dw =3D tgt_endian(sha[i]);
+		insn[0].imm =3D (__u32)sha_dw;
+    ...
+}
+
+Should bpf_gen__finish() check gen->error before calling
+compute_sha_update_offsets()?
+
+[ ... ]
+
+> @@ -86,6 +87,7 @@ static int realloc_data_buf(struct bpf_gen *gen, __u32 =
+size)
+>  		gen->error =3D -ENOMEM;
+>  		free(gen->data_start);
+>  		gen->data_start =3D NULL;
+> +		gen->data_cur =3D NULL;
+>  		return -ENOMEM;
+>  	}
+
+[Severity: High]
+This is a pre-existing issue, but missing a gen->error check in
+bpf_gen__prog_load() leads to a NULL pointer dereference during endianness
+swapping if this allocation fails.
+
+bpf_gen__prog_load() dynamically allocates buffers by calling add_data(), w=
+hich
+eventually calls realloc_data_buf(). If this allocation fails, gen->error is
+set to -ENOMEM, gen->data_start is set to NULL, and add_data() returns 0.
+
+However, bpf_gen__prog_load() ignores gen->error and continues execution.
+If gen->swapped_endian is true, it attempts to iterate over instructions
+stored in gen->data_start, directly dereferencing the NULL pointer:
+
+tools/lib/bpf/gen_loader.c:bpf_gen__prog_load() {
+    ...
+	insns_off =3D add_data(gen, insns, insn_cnt * sizeof(struct bpf_insn));
+    ...
+	/* convert blob insns to target endianness */
+	if (gen->swapped_endian) {
+		struct bpf_insn *insn =3D gen->data_start + insns_off;
+		int i;
+
+		for (i =3D 0; i < insn_cnt; i++, insn++)
+			bpf_insn_bswap(insn);
+	}
+    ...
+}
+
+Similarly, the info_blob_bswap() helper function also dereferences the
+NULL gen->data_start buffer:
+
+tools/lib/bpf/gen_loader.c:info_blob_bswap() {
+	struct bpf_func_info *fi =3D gen->data_start + func_info;
+    ...
+	for (i =3D 0; i < load_attr->func_info_cnt; i++)
+		bpf_func_info_bswap(fi++);
+    ...
+}
+
+Should bpf_gen__prog_load() check gen->error and abort early?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260831133314.4125=
+787-44-sashal@kernel.org?part=3D1
