@@ -1,68 +1,70 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F97439659A;
-	Mon, 31 Aug 2026 20:23:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FAB93845A9;
+	Mon, 31 Aug 2026 20:23:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788207827; cv=fail; b=UAU+TOXfy3PgBFcycK+y0FSa7wg40VspkzlqA30muk3FAPCuYwtILuOVfPO4BmGFPY7Fz+2RZXtO56VZMd/1PGWfJONf/GzaW9tkb/KLbr8F4URwLWIDPijsRG+Z79g6YgynEEMyEspRnTxGEDTmZUkCukiCRBZ9Dpmmd2fohk8=
+	t=1788207829; cv=fail; b=ZsIWe/uDwmjwsOWnszSgfBIxSkNeCZVNHUpz/SuqcQqykBQ0RwEw/ppTYuXBJNZZPp1X6xNNS4Lwb///F2h2P3VDcHTOXzwx3EVUWTdceb4nBv2hUVglmf+GjUT4An6xa3lilpBlJz2vCozR9vfX+hp2KAtoUXohJzuAF7e88Zc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788207827; c=relaxed/simple;
-	bh=IIH10hLaepDyN8P9wYR5SFQibE+MigzxdSErvd6Dr0E=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=hVxoYpWtQWNBAmIo1sVOcG+PnQzxnAZ8F9vpJK42BlX/+SFv1GjYz4bQwoZ/LVBgA4fFMuuHcTBZ2fdk5UED/eg7fihg7Lmt0ZovKqL3o/BdPj8rwR5IF3aOuwel5sAuOtenDR8+0dDIO0f2V9KPTF0ONRFkCJ0LnbvXKxyVOiY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=On0sWgz9; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=poFxukDa; arc=fail smtp.client-ip=205.220.165.32
+	s=arc-20240116; t=1788207829; c=relaxed/simple;
+	bh=ojN6rotIbIAfJKlO1MyqmeOi1zWc2jY+tGVwNQ7lr28=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=lCgnAm1eaSPAgRE6KQOBB67CUssX3vSBl8pp0OW1xOYf73Kt2NIdMenKmtCNUi/P/cWYvas7KF3Vo3DxJpgnIQDg//4m8gcFlisEuqRvsz9QJ+6pwUVrW/eeoAf53uaCyxJEaJ0T8sPd8GqD8CTSJlzH/00DdHGK4JtEZKS4YRw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=mhFdWEE3; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=hursHWJs; arc=fail smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="On0sWgz9";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="poFxukDa"
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67VGBijC2165149;
-	Mon, 31 Aug 2026 20:23:02 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="mhFdWEE3";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="hursHWJs"
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67VGBsIX1775888;
+	Mon, 31 Aug 2026 20:23:21 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=corp-2025-04-25; bh=EUjundtly4xbe8sf
-	LxNgPFYa9tnzAVQeduVLpTT9phA=; b=On0sWgz95Fmt7HWPSJwG+TBXsn3ZcnHZ
-	M8r1z/GwU+4XIJ178Xvd6/PFwk3X0k8ZhnXSkcHDsNkF9L6T6u4C6svjk1xrkv6e
-	h4/JBalxvalcZeE5CRXpntW1LbBrNgjBZqPDzw/0TQXgwD1w+B9kMLEwxk1t0Hmq
-	I64TFKA6X4GdT48Ui8pDDu6/OhUqAI7VjOZGLvhBDuC2WlCuDyCW89F+rm651iuo
-	pYFiyGk67KSyRUyNLtcscey1Gzb8TsnlvQYnJ1dHFJUBbetFJ0Kf4FzslKfwRB8Q
-	owcEGOK2BGfb+PZoDRTqmSOCS11LMxvbufXT/6yQVFiXZ3uB4uPSdA==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gbqa7kbk1-1
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=S20dGHKKS4wRGthBkiO1JlrzyRBsuGiJ35trtoHHkDY=; b=
+	mhFdWEE3n+vMVEi3GLEK6Bk0PAjfBJUKoP74MAcLX3U4+el9AEO+3so+JFGlGnCC
+	zbpLMRRjshIedFSKPe/r5hBje9vDGLvNC0t0FO/xJQOdedsw4whzlFIiwDQer+z9
+	5BSk8GvRPYZusbyP3gpii1UVRPAsTHDPe64IdWGZ6xxTqN1hT4raOKN1YGiiALFE
+	RLS5McBguEeJ9MWcgWKRDn0kwRI+d6wFzTQkrk8Kgo7dAx7EYlErMH7PfjZllTyk
+	dKrMSnQc+RlpV2sC+O/oHlQOJ5NW7mEuoxmKr1r6uXOBTLrHHQ3Nb/qXlhQxA/ko
+	1+NSC+3XytG4d622m5xHBA==
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gbp72bbj9-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 31 Aug 2026 20:23:01 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 67VKK8ct038776;
-	Mon, 31 Aug 2026 20:23:01 GMT
-Received: from bl2pr02cu003.outbound.protection.outlook.com (mail-eastusazon11011020.outbound.protection.outlook.com [52.101.52.20])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4gbnvdgjj4-1
+	Mon, 31 Aug 2026 20:23:21 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 67VKFg78032987;
+	Mon, 31 Aug 2026 20:23:20 GMT
+Received: from sn4pr0501cu005.outbound.protection.outlook.com (mail-southcentralusazon11011051.outbound.protection.outlook.com [40.93.194.51])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gbnvpqtth-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 31 Aug 2026 20:23:00 +0000 (GMT)
+	Mon, 31 Aug 2026 20:23:20 +0000 (GMT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XmkEXwXVQtFfqs8/Ib5WOLbXBWDF2p2A54+M00ZXFkDvbqYUqPC2IfxM2Sx9XgnVyrVWfR5xxX7kf0/dHnm17KGC5j2Ua8mjIOqACuJqJjNUTkENE0hom5nZpMw8QGmbnWGT5/iXmDs1u4G/oaEJOTjIJekwblxdVM7Pan/NNGF9awPz5i8CzfPzjpbr7XFaa4NovlQhQgm11HWf6GPHpSWCeHRMg4VUH94CF9GBzkADyr6oCH7NI6qFNDdKvZJigGRKniqzUVbQTzXdIKwPDr6yW9DbnFiTqNXffkqRjhjWE56beICzKEftsDMM4rhXVKElnMmW38t4usznjmTyUg==
+ b=K8tVffNgKANasgEoapzGt9R3EWEZ4xjqjJUwQcAzM8QwACfba2ew7Ko7tl0SnSutsi0p2EinAL/HCTfnK71GNQOxX6tQ2gYIn7iITx9kbWhcC6sW09ziOvnBPzYUJ4Jge85U6b+G1g+TkC0+3sJZdlLKOEhI/yjneXz9QUbVIb/VtgWnm0466wSbmJ4yW51/3t7lbqHnQ3QT8THz4GKKb2We3sl43ga3kbBSC9nt5SfmHYEH8D6spSIbCgLq7xASxrquSCPVR2XpPgQsMb7We9RaPTLrFdBuIB/TqRk9Tx2NSteGCrwIXv8EhYAUkS4gtn0fKBYMgoslIUIKJgzJ0A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EUjundtly4xbe8sfLxNgPFYa9tnzAVQeduVLpTT9phA=;
- b=j4FN5mFnc+EhV6XZAoRjjn378GPsh0wUC4OSkDfhUyk4LnaJNfTnUyL7L97UYTMKGwbglBjUibMvFOwr9cQHQ3rEDZ1RBuOgzBOTLF4bIT4vy1NU39wvW6nV7/cY2ZU7uHN2tPgnMhYphaNXBYuMWlXL7UE47VwVk9O1qVXAqXWNBmfOtxB25L8mMEDfn/4yWcQ/yHKJzQc0BiI7Bv7uB9BBx6uxKptlyPcb1b6I9uD/WZDCxarGPymerMLg2U/Xmd7/HfrGJa2eIV8txta8x7iQZ7bRhcZgjQN6Le1s3XsGVsHvtT4TBE33qJLD3VwR8URP/76YEUERPEzSbjA5vQ==
+ bh=S20dGHKKS4wRGthBkiO1JlrzyRBsuGiJ35trtoHHkDY=;
+ b=iFCkugXa6YA4fQsCprolfeTFpM38bAPGAHzzs3uVoJkR1NdHuX+PvjYF1nCK2XHAQ+k4dOTaWJx8nnVZApovWyzevj72rhhgFL2G6olbbjhuwiaYu7G3BY4xK2t4MgObjmNL5EYLlFgdwz9kgjtXcvqRgRV75YtuYB1xqkyhc1QbPn0e7VKiZq1296XoylLi7W08hZ/niihufqUndcPNWoT4+80b8zJTOtot88HkWfnm/qGpie1J0gjLGMNEue6dgRtbBgo/khS7iK0Fsm17f7V9bHKPtQWXJVPjvPdE27wCrqxYzI4/VOBAIq+CYtrVQOWFLj5hLFXT79hbHFosSg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EUjundtly4xbe8sfLxNgPFYa9tnzAVQeduVLpTT9phA=;
- b=poFxukDar9SW/9zjsMK2mhZ05/O85kpXUg7CcDyGoFXl5+cg7wyr6zUOyZ8GbMGHZWIj7iaCEsHPUDb6/bZz6eeHma6fIvlvKzgrhjUIRG6vYDlVVojg1NFJ28PujGPTpMfCY4TQtzwLg5S3WssWN9QcfHEUQWlt8GQxEnrtCUA=
+ bh=S20dGHKKS4wRGthBkiO1JlrzyRBsuGiJ35trtoHHkDY=;
+ b=hursHWJsWlVNW7DcNxhX+5BGy0mj92d0SJXIQjXwC+QojHPxPkEwIfUwNMQ08dc9bp0yvSQE4TFXJ0Nknu3OBHXTA85jLCZABifaeRfk9u/2M+Sghs9vRi++59bK3poBOcBAJ9ED++wmP2Lnb8akjys7DmT6+5STkHJPCQ3wR64=
 Received: from CO6PR10MB5409.namprd10.prod.outlook.com (2603:10b6:5:357::14)
- by CH2PR10MB4263.namprd10.prod.outlook.com (2603:10b6:610:a6::23) with
+ by PH7PR10MB6179.namprd10.prod.outlook.com (2603:10b6:510:1f1::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.382.10; Mon, 31 Aug
- 2026 20:22:53 +0000
+ 2026 20:23:16 +0000
 Received: from CO6PR10MB5409.namprd10.prod.outlook.com
  ([fe80::3c92:21f3:96a:b574]) by CO6PR10MB5409.namprd10.prod.outlook.com
  ([fe80::3c92:21f3:96a:b574%6]) with mapi id 15.21.0382.007; Mon, 31 Aug 2026
- 20:22:53 +0000
+ 20:23:14 +0000
 From: Ankur Arora <ankur.a.arora@oracle.com>
 To: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
@@ -75,15 +77,18 @@ Cc: arnd@arndb.de, catalin.marinas@arm.com, will@kernel.org,
         david.laight.linux@gmail.com, broonie@kernel.org,
         joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
         konrad.wilk@oracle.com, ashok.bhat@arm.com,
-        Ankur Arora <ankur.a.arora@oracle.com>
-Subject: [PATCH v15 00/16] barrier: Add smp_cond_load_{relaxed,acquire}_timeout()
-Date: Mon, 31 Aug 2026 13:22:35 -0700
-Message-Id: <20260831202251.305046-1-ankur.a.arora@oracle.com>
+        Ankur Arora <ankur.a.arora@oracle.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: [PATCH v15 08/16] locking/atomic: scripts: build atomic_long_cond_read_*_timeout()
+Date: Mon, 31 Aug 2026 13:22:43 -0700
+Message-Id: <20260831202251.305046-9-ankur.a.arora@oracle.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20260831202251.305046-1-ankur.a.arora@oracle.com>
+References: <20260831202251.305046-1-ankur.a.arora@oracle.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: MW4PR03CA0107.namprd03.prod.outlook.com
- (2603:10b6:303:b7::22) To CO6PR10MB5409.namprd10.prod.outlook.com
+X-ClientProxiedBy: YT4PR01CA0160.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:ac::24) To CO6PR10MB5409.namprd10.prod.outlook.com
  (2603:10b6:5:357::14)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -92,466 +97,170 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR10MB5409:EE_|CH2PR10MB4263:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6a8ed07f-b47d-4e21-6d83-08df079da29a
+X-MS-TrafficTypeDiagnostic: CO6PR10MB5409:EE_|PH7PR10MB6179:EE_
+X-MS-Office365-Filtering-Correlation-Id: 750f7ef7-e699-4832-22a1-08df079daf57
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|376014|23010399003|366016|13003099007|6133799003|3023799007|10067099003|56012099006|18002099003;
+	BCL:0;ARA:13230040|23010399003|366016|7416014|376014|1800799024|56012099006|10067099003|22082099003|18002099003;
 X-Microsoft-Antispam-Message-Info:
-	5O/OzU7YWskqulxq3qVsWP4a7yLLGDIZzQyIRfdDsIVBvh3Bh74GC+J009ScfaHJLdhWiDF3DMjeKQWqa0p5+VLrs5aQaJYm5lkF64Ht/06e2Dhl3iM9bqf61wgcnLBSGOoeX4BMrSjjp3RPq8rH9oxm0x8IIsjRzDHYsPKWlIZjglyLF64AB4SlRmsklvnekal8IWX3neIzwGsKa8HYML2/yxcAz9AjCK44qkivTtwSaQprK8Z2wkMl99A6DIsE5/gOgEsKeqWZ/riYQgYQ3BrenaOHMiSrwAXB12SxJusBTUOY9QASEdOJ2BrrKhEqfnTYqSPgCKTfxsUz/rbO1GHl2swmXqM4Sqvww2/XpDA3vHNAfhCiDU+9tmJeKaUXvbYxLVg6YSa/jv0Rp6XMDm90RGSYyM76n5iowOHdI7qpvgU+Lx9QStB488Xjn8fRWHnRUUAaWNb+EfnbfbeR7/nSlmaf2cF6yzWb6GfxGdVMsNK5AbXnLlFr2wa2LTxjkvd+Lw0kVaVYuLuac/aCQCaaYY+MrTQIOAa+QJaQvCkLmSvg+laNtlwZakd7o7/UkNWNfp/iolW3LA0yQxWN1sBK1jKk6+HOQzliyPYZSUcObfXldeZW17WkkuL4JL2C
+	BUmqseN4hGBccqeA8cHXGeJ9FFOVRE+FlxQ/sNCzMbE00i7qhnGSVxTSoidb/Ln1VH3jYOEUeHjwuaXi3EhllIJnilbSs4lWrKnDu/1d/iSPs1tmmTzc6f+sYKR0Zn60xNV7CozJaMOPZf759ty7d46QXmkZSAP2bb35cCm9MJQBbPUfrIkma8gLMsmHfSw4Bxu+nBpXbOFYLXLWq5mgZkTwI9FAMqXvggTpbIEw5VXWGY0YOWwskFytJ0U8ZGShC0tocRtS9IfSOwjekz5gqa/fiR2xB4V9imva+kiMO/t4GEl6lJ7gfHRiaOHDSjAezyRu7Opll4069gN2v5I77vt+iaJ5k2LgpwOTQIBRc8J7T7NNhCIzouTdn+3lwrgBzS8kSj4BJpm5bP9VJ5yAtstiL1r5UCC3wHkA7QaShn+Zhn7ZFZXTDHqXvABPBe0PCxlk1U0SPHgiYoH78KH9uCu6PiBC3xC0P70yNkYCOod9dJ4Vq6B+g+uzhuSccBxmdRi2nJ1HHqJhicCy8DueYqF2uKVK6VJXsVJwAZLbIOw37ldXOU/Zfh0TQELppVZjE8m9yvaB2bMA3kJUp5xKWgvAP2qdlOOyRweT+UKbcU87JvqL1nKaQekqDiC4WO1FKG9K/PenZr+7bqy8hRx/pAmLx9VIaJbdh4gHzvoKwh0=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR10MB5409.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(23010399003)(366016)(13003099007)(6133799003)(3023799007)(10067099003)(56012099006)(18002099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR10MB5409.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(7416014)(376014)(1800799024)(56012099006)(10067099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?1hvGPy14IkSCseS8zS4ZS6DuCT1l/C+t5eq3ABLnWBitMGoJ6BJW4TEqtaXb?=
- =?us-ascii?Q?1MWk+VJbecGebies/VUkqtKEemmEPZMraYmVhtwUuQcmVlIJcGBI0JHJjrEQ?=
- =?us-ascii?Q?ct4smBDHl1yMvwM31JGlY+KFTQJp4Iv9ro76eic1OGUOYL8ifmXbW8yMq6kv?=
- =?us-ascii?Q?cq7BI5h0REANk3PwawAEjD8uuNgsFevGNOoKIcKJICw1Em1X6Q88hlQ0KoOB?=
- =?us-ascii?Q?rA+Xwv/BYZD6L6LUvtpg24WUryr5+vXqIHNeoSuTR/jITLOUF/wNpuIfWTHy?=
- =?us-ascii?Q?/nphIxgmtuRNCZQW2ZZYdzxwm9D3Ary7exBH8CxRp6hTuV9z3tHaW58jO9Ma?=
- =?us-ascii?Q?InCMUUR+VxKtctlWjP99Nlgflw7XcNUWdbg4VUe1j8d4kDpR4KWae6B7YXrD?=
- =?us-ascii?Q?0dKQ6TOf5ysynii0d0z5r8YMfAq/6GLyCs0lo6a6rKmB+tVraxZ+PUiPcofF?=
- =?us-ascii?Q?v9l9dCdgugHXe7RGwSRuAYxJiJ5jFd0tyM1BQEo5Bf9ntX4O7HC6aPehND2m?=
- =?us-ascii?Q?5ox0UkwEV6dn4/UM9Tp83bIrOq6DJ1v9pPLoK655AnRp+htf5sFg0k7aiqcI?=
- =?us-ascii?Q?UzTFAz9aatradeyTj/aa8HN6kLjwvHQ/X+NJgtVhtVwr+ccIg7fGHjEHKpfw?=
- =?us-ascii?Q?KLARsUHSs/Vlkm9ui8F6u0yxajkYwAYA61nvDQqPap1RyVjA67FiHEsMkjF+?=
- =?us-ascii?Q?TCPW0iPqighTSWPW4SuET2WU0gP8s7QCPPgtl8HIRwkYsXkX1VrQkqD4Gyf/?=
- =?us-ascii?Q?8qXjDjT1Hd1Ci8uyJRqzTpGyGhJew8DbYp/4X2nfzAPDBBjJKUi3BUDpRZIJ?=
- =?us-ascii?Q?k/lqCWb990eGz4R8I9kuvMM/stgsIy4mRMzmnScCLKmjK4jHA613zHDPscy6?=
- =?us-ascii?Q?Q2BsLpiJmOs8kLMMJzGauWccL6QPPZXrDBR0UM1FUEde7dz+cQPLk33DucHh?=
- =?us-ascii?Q?XXvbAsZW7ATzzcb5na0FxX3YfMy4Ol1yXvKNL88W3pqyfd75xb/dPUOTedXJ?=
- =?us-ascii?Q?KLCf32IxDi7DqAmVmaj3OD8TF0us25QxV6Hsl2QyjSoOKxXDOlZnr+x9/a93?=
- =?us-ascii?Q?HAxd5FDDVI44FKgqC1BPFvVgVRaO7K9WOObBVhykkaMEjmTnyMWwf5P0zPmc?=
- =?us-ascii?Q?9ZIrQi9x9KEWNsBm6IKMKfsa5ni7F9cfhtS0o1RiBb9+1OfYXiyUDb41tvYt?=
- =?us-ascii?Q?uTHZbNnjpNMZRP/V+Fp9h7ccqma6kwOkgKrJ4OfHAd7qAFUOh72cJI/iTkPn?=
- =?us-ascii?Q?B0WJu0TQ2QTkv71k582b0D0QxDuZTvyM9O6CaIuem8NPYuI0XlRfpf8zwOoJ?=
- =?us-ascii?Q?6VnlA68cMAvqxrr+DuOVLNBMUgYlthcvJq71Q7Cs4GJ+tYLrWN18vB0ngh4a?=
- =?us-ascii?Q?8ABVw4xoq93iFK1l64BFkdDEKbulPQ0xkzQpv5nZLTix8k5r4pdcHazGerVM?=
- =?us-ascii?Q?Olno9BPOBVgVRYXkhFnVejexTqguwr7ZXQtpVRAoGmyAPDkxOdQ4VucKQ1gd?=
- =?us-ascii?Q?7AzSOe85tOVoa3q09GWJFYNhV818NPOFPslT1vIJCandtCBLzZ+lgceLul2O?=
- =?us-ascii?Q?Q9A2rmltZV8VxdHLZjcO2AIC5G1ixr6+peYCmH+p6Om2aK8VEg8p7vJNGYTx?=
- =?us-ascii?Q?LwluV08nqmIbVf+aF4nEqIMAF75fT24GEqJ4nXa9MgM5vQHFq+RtF6RbY8h6?=
- =?us-ascii?Q?cN1duBuMvcU6Z2DF2WobzycfT8/OP6QRiOWmEQE6FoHCjDc8O7UcROpZ2mpx?=
- =?us-ascii?Q?bvGL+rfZ9LQuY03HMMoK3lEp56SgS6U=3D?=
+	=?us-ascii?Q?EUXJg6NeohRvujTHyCL12yuSjrF549sVSfAgtwncuYOOiZZlhOpJ5N3MTLze?=
+ =?us-ascii?Q?607JWw2/zCBQTnZ4hoqMboGGxR5wOO4Ys23d1ujDwr15czE9khugQQY6eWn/?=
+ =?us-ascii?Q?+3SmvJ5mffTzjolxW6GqYFOVUHHBlQuZsZNhDC/xf1uw5rPgErXdcpOzY/UT?=
+ =?us-ascii?Q?yIZxUOv0+gfttebI+6hZtwpXm3x6bv/I8VExHblQYs95FtoDtvkkmBNZJcS8?=
+ =?us-ascii?Q?F6/b49/5cHgF2VfO7iGQ3w0OSDznrumEqT8KEf1kOGeO8kCVzdGZHC5kPfsu?=
+ =?us-ascii?Q?kEfowFUdDpG/H32pymZG+X2BZCk3Aebbtr8jnOP6YRgBpzfYVeMac8ctKwGp?=
+ =?us-ascii?Q?SiUt0MTAkeyOCcu9KBgxJlvyuEztXjjmUSlXH0TpqJi7OWkBi2zXVejHoJM3?=
+ =?us-ascii?Q?4xU/PPwz/Jr/4qnVJZdrExI4bRQ+OZp4zDF9PfoF3YeDbqmSAylojd8S1umx?=
+ =?us-ascii?Q?/SRHM+/4hZtq8An1MB9CC+iOP/cZBQTHz9wpxanpenKvm0uZ+M51dUxLO4Bf?=
+ =?us-ascii?Q?kIwk3+Rj1maPHv3hGO6goP/75/G/K3fH3FZieAj0cUhDHYL57dbrsC2lOzGu?=
+ =?us-ascii?Q?zbnKEVgmQCa3lH4rFFWElM5vwA6FUEbDAAv3z39GM7wZ4hLl1Cbqd31tFFYm?=
+ =?us-ascii?Q?1dieE3qCM95xGaaLaAm4/1JZLiQss3yJxni0Rlx5YFgKsNkpeM6GnVigI2wk?=
+ =?us-ascii?Q?vVPvas+0AdWE4i+6qZUAsoLIBuwZNUeyx6sV8UiSKhsmlkAEYC04tO9uV8oK?=
+ =?us-ascii?Q?0AIwmbNPm9JbjD6AwpYowH++X2SEa586nV6FOeIfbqpXhr5ymmFa7SJmpatQ?=
+ =?us-ascii?Q?XWKsTJ9lx+ZUiVqic8X+uRb09FX4ZC5+JKKh9Yz/AcIn1mHKDZEygSCsFBDT?=
+ =?us-ascii?Q?HHEvhtaHoMa1g4nOrs1zMGoylVjna/bhidgypXJCxLNNYF7g6E0dokO3Y3On?=
+ =?us-ascii?Q?LBdNZ9pUl8yBfkQkQTkW63L0qcyXcjFm/vGvhf+NvozRt5tNJhXXnbzFS7zf?=
+ =?us-ascii?Q?i6MLP3vyC+NMd7siblnksrt0ieT+wvH3Xdl2g4Shi+CePrdZES9Mjkvl4iA2?=
+ =?us-ascii?Q?GjvezER+yZzjy0tyb7qXH2e2H4/eLTkwsek06Nb5fpej69W9YMAmceUgzalN?=
+ =?us-ascii?Q?qn6C2S6Cr4feRJ8qZxzASAqnODjR6YIsrS5iTmVL8rBIKheRMU1SHHxoeh7j?=
+ =?us-ascii?Q?7SS/kLz7UuIwREhrQMaOrOkXx9CQwqyPEbxStPNofoxu9zlIa7brpkcK9SEH?=
+ =?us-ascii?Q?cAO2GrO1ePdCiBa+bN9m+oiuIFcg1tyV+1BkqfeIQOjDJeq9mtrT7OmaP4rB?=
+ =?us-ascii?Q?ildfyyqvwVv1ntWk1wXPSAKouCHoF6dwE2XF1x3TzIy5DFG1Tho3NtpWV+6F?=
+ =?us-ascii?Q?KKeU6e+MiMeAkk79lc76iJMTIPA9gcHhVKYXFyVZ6P8BBiqBbvSQ4RDi/hCk?=
+ =?us-ascii?Q?JS9P0N+jBq8vGtIcWeQ1egtZEjjKB8NbU/duaq4L9H45X9p2UPgykqpSQbcU?=
+ =?us-ascii?Q?b6nmb09fSEkVwBCpNZLCQKXeEt5mlAanG1CcJqSJGEkC0xaoC6r6AhDtVamq?=
+ =?us-ascii?Q?eRdIAJUouzvpScv7OwcAv/cJHXr5b/N9QFlPO/pVGCIzBzkLjlvRoOGKeywv?=
+ =?us-ascii?Q?CU4lx5gPL3kPLC6f2xpjGeIllM8WI+t0mGGHFuystSMxxPAxE1My51hblB5y?=
+ =?us-ascii?Q?/IC9NMwymA2rxDOM83qyr3QfyOG771oofO1l/ApWvXSZy6BTU5sFNGZo9L/W?=
+ =?us-ascii?Q?o5F29rqFHz8scR/3bZ8PH/6VMvw5yiQ=3D?=
 X-Exchange-RoutingPolicyChecked:
-	YhEvt9lWQBZVFuZY7zxq8SczL01NBJtXvku/zBcNVU5gtrjBYDEgQsE0E2z6R7HrP9CqnQqFj0ZtyZZ7luuHbiP2qlB5ukpIm+1/Y6+1N5BQr6oOWfJrbSwUygruiXB7uL2iThrcI/qei5SEODVRwQ+tTSyQ8xyJqNlsLMwjnU+QiWmLdSNvpIaJe6QdhGzE7FpJEHodAUG6sZ6rKfe5h9Ptd6HwocUBLwGJoUvqALFAyY8EUJXyAUq1zjQIqoYv6ZyTapzlD7t2Du67ivFau16DIrdA/skdfRMswYZaat22T1OxkG6tPvl9quHPo+IEG0LPJrCZH1nZn1B5FZYVzg==
+	r8V+1Ur9QLhH5xJrodUqgz7SeQTP3SBdWPZYS5dVUIfgmCp6Klh/wuuD0mForMMt+dR6b3t3Fwz9Th7UKODu+lWUsM+KJF73tX7nTlLD69v24M7WR7tYs2rfLd/9FeIt6+IiDaU7JCFEdi8wu5KI/fZEYmBHCMwPVQdabUmry/rvKzoqzbe6lMZ3uCBwUlOoCfaUciUkjAIElM/WFplRNzK1wMQTixcGGZRWFSpbz0SyO8gVyOxQe59KufTMaAibNkKLG785yQzdQf7Blv7PQ3EWdXg4RCqLzFg3XZMYv3aCGeGDaTseu2rIfDyXPdKfOgCQBZ2pS1iL+c62woT5Ng==
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	1m+Uczx8SC0oh8b7h/AazqPLxejj9xFKL0t/pHQeDwXWFJB8SkXrO+OoU/omHSbb3mjDiflz+WfGZWwTiK22c9xTDJDj43dwaew15jCSW23qflTHzRoOuMt7f2qEFW/oeh0HnGYwV5skbqweFtdwvuo+R2474beq8V0M8ZSFDT+ZONd1axXhHgpv2W8Dac9X6zSjfuGgGCkhcBhCx3oCtmg/3FJX/H+hULcgLCZGgvgp6Ba8A+hEfQnbKZq9fO/eYnaCWldT5H5MXYrl4aWCjfA55lWGxltO2g9KcX8YJAtoCgTsk+UGiCUKFTIwCD4xim7yRoqyvMpczdYli3rDHkWVLMS8XNEpZ7d8Oh/vrnz1WPvxEzxZZGiKdja0lawSTGsY9dfvMaADvpjiUYXNi5KIMGMScwDYMxXKPANzuYnHWYPSxtpc6zll839PKJf8dj6ybVPEjpB+jycwTYT+3dXVEkPc8gr1rY/s4tYo7KxzYKWF1+OOC9r4TSm8089iHTwlkgkLmVIvid3fc+szKSuixxN7zlpgzy+UUSRYlN3DLAfshN4HifDZRKM3nzzJoF+5CFNwZ4uOn4bO6DXejGp0X/QWqO6lVqXTI2ET9J0=
+	M6cfWqYSlTy7V5bmBG+35ObzHjUbN0Cha0BsrodX8JRfHJIsSAS8MpOLsUxf9czcSj3rLkENoJ7hjldz5PXcFDnL2fL019RM/KHuiOgOEaxx29GNLcs9QEUkGJrb4yNSVPwcjzymQyQjRd1T8ESXJECP5gxdqIpeLY+kRx3mIMEZWCyEmWCxSw1t3bjBjYZA5/HJvpzV4IxS85ffxbRWYurE+fyqwDg7LiWlhFQOA6HFByOQXdz7oMxSnihe7/Y06lW4xieuHJFAgM6wjuihA7SLrn2qy7eVn+OIF/WBBrjiaJgC2wY+cjr/IZuCY+XDhRi/2OkhH0y9IcLh+7EXjJ2WvepVcrg4W3iDtXcy6f8WSzTr/IrUY+AWVus5nNxixYFa5JqinnMd29IE0P5pdwkrUkhbjOdNoDsMki3FPsaF8jBM4t05siAptBw4vnukzme06gHffaRkoCcss4UNzcwDFxltqLeatgFZa6jc1AerSgPp8wWT0zZxfjjOVCnLUd8d2VWUMeVpuNQUd6xZDLbnWBWzv8Mvl5o4BI61OV9q/IihXcV8F8XSCUwI135es8YaSlDIysLID9iYw0/0Js2rLn3Ay5s+wGkPwMiPc9Y=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6a8ed07f-b47d-4e21-6d83-08df079da29a
+X-MS-Exchange-CrossTenant-Network-Message-Id: 750f7ef7-e699-4832-22a1-08df079daf57
 X-MS-Exchange-CrossTenant-AuthSource: CO6PR10MB5409.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2026 20:22:53.0510
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2026 20:23:14.4352
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sUDAffDS2s0Pav0JeMMqrEDYN1G0544wLDSYpD+qNLg/flqU4FzDI2Z8tVJOKhvzjPYqyHYpuF+gkp3Oqh9GyOkElmt3GQPCIV5j6fB8sn0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB4263
+X-MS-Exchange-CrossTenant-UserPrincipalName: 87F8WtEzyvlHDJDlGer1xGYR7bn1lSgBUrBbtsVzb2Wp4wZkdVtK16Lw7N85u3oEPNDNbDfgtxyg3GcFR7/QmoHJ4XLxUq/F8Dj5EY7wd00=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6179
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-08-31_06,2026-08-31_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999
- mlxscore=0 lowpriorityscore=0 suspectscore=0 adultscore=0 bulkscore=0
- malwarescore=0 spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2606160000 definitions=main-2608310176
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODMxMDE3NiBTYWx0ZWRfX0fwAc+1gpymT
- sizEGfodKpq3Q3UNwmv3w+zHj0C53WoJVZQrUJaXHV080J4HOVVbbM+3/gC/d+UgMN33Dz5+jsH
- OroOp2bctF85lO+m+9LjcUC7VjN/hJMqDXfS90XdG4Wy78YL/t4w
-X-Proofpoint-GUID: arr9hMOknZ7Pn9Y7rsLJG64qhDXJ8BM0
-X-Authority-Analysis: v=2.4 cv=DPu/JSNb c=1 sm=1 tr=0 ts=6a95e2a5 cx=c_pps
- a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
+ bulkscore=0 mlxlogscore=999 lowpriorityscore=0 suspectscore=0 malwarescore=0
+ spamscore=0 phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2606160000 definitions=main-2608310175
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODMxMDE3NiBTYWx0ZWRfXx27kVLs+hOpw
+ /ovWkXlUF8Fz92FXQDfxcZPlbUALoxSe8VEf6/9w5lNlkGa2Nj2FsrxViDbJSF+afCOLGa0XYCG
+ Vhl4Cuvo8uaq+JlX5fDC6Dub+srxTva7nn+olhcL2y5omgRdznLu
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODMxMDE3NiBTYWx0ZWRfX6tdFocUIwdb8
+ Ny7EsyKEL+Z3ihhUpUliG+0PE209y3btoZw1BaBHQCcUtoyzWLBYuYZy+cVHkG/BVDBxmB+wNr5
+ ejOsZW/Cx5EpK+DwgENh3F4zLp3129DBiTGxBu31mSYYDUNTqrSzPUJ+6igxKYuQPOccT4b5MG0
+ ErsSteJ9Etjzh7B2B72r2GwaCyYV5EPdO7FO2MEs2O3cMfyBuOZWmlVDNW541xqzAEmXUPr4MdP
+ ktMoHdwCWPtkMXjPJc73BMKQO8Vpb0hl7lzdm38df8uoK/kWWvf/WawnI5TziTnEaV5xBYxFOQ3
+ hJBQ2pezAD/59Ne35b6wssqpQNb9vArbXylPpzDpp8NV8YG7m6C0rXaECuHmJuSkbFwxWy8DB1T
+ X5bBNYMfO8BZPBtw145wCLIDfNXNWMW6/oILrX4nClZEUT2HVFfwnjJ5AlIiJkVBeEOPmi1tvZw
+ bTWloREM7m+HcG2QZt/TlE2Ygh3PgXJsan2v+LMM=
+X-Authority-Analysis: v=2.4 cv=G7os1dk5 c=1 sm=1 tr=0 ts=6a95e2b9 b=1 cx=c_pps
+ a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
  a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
  a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=Sv0fKeRqtYgA:10
  a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=EIcjfB9IiI4px24ztqRk:22 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8 a=vggBfdFIAAAA:8
- a=WsHKUha7AAAA:8 a=7CQSdrXTAAAA:8 a=JfrnYn6hAAAA:8 a=KKAkSRfTAAAA:8
- a=pGLkceISAAAA:8 a=Z4Rwk6OoAAAA:8 a=moej7z2YPE_O563F8YEA:9
- a=H4LAKuo8djmI0KOkngUh:22 a=a-qgeE7W1pNrGK8U0ZQC:22 a=1CNFftbPRP8L7MoqJWF3:22
- a=cvBusfyB2V15izCimMoJ:22 a=HkZW87K1Qel5hWWM3VKY:22
-X-Proofpoint-ORIG-GUID: arr9hMOknZ7Pn9Y7rsLJG64qhDXJ8BM0
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODMxMDE3NiBTYWx0ZWRfX1FH8ERRyo+mb
- ya8uIkOPAUh/q7oZkD6WUd4xvq8uyk72wUh1uEkLC1wmmCYU2TcoNOHd2f1AOlgYcA4ThEquWlm
- HbCAwkG4QuxdHMsb92lIDCrkStRDWmn2giVEoex53wei3JZLOCVm2K+Fajn507+piOI/kyeJvLp
- 03N0yHTzws/pY8qpu0eGqqLup3QJr/6/zSErwuHbMf2LvdkNnPb84XOp4wiBa9OmUMXArhA/L2L
- wBTmLDYUiFwhfLL/wNVOWaOED/FxF/+tQYeFOzvqfJHJGkhA+glxL42+7rBE8TsRN/D8x8FuOIs
- It9HsNE7FhGCm2FO7h5YVZjxA5SzAiYVC1hpqbvmnxb+HyHdT7n5+krJYojIUJRCRJAjvyb94cI
- EGRADvMhqE3VumJG5kVQuDymCUzpu68KX0ADpo2ioiEVL9b/ChqYcILa4rrKcyBBCGSCZLR6H/E
- vvffajkLha2Px0cb8kQ==
+ a=o5oIOnhZENCTenyL_yNV:22 a=VwQbUJbxAAAA:8 a=JfrnYn6hAAAA:8 a=pGLkceISAAAA:8
+ a=7CQSdrXTAAAA:8 a=yPCof4ZbAAAA:8 a=LKnZA62imwlViN-40TMA:9
+ a=1CNFftbPRP8L7MoqJWF3:22 a=a-qgeE7W1pNrGK8U0ZQC:22 a=5yU3S35YU4bGjq-dph-N:22
+ a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:13521
+X-Proofpoint-GUID: R4VJBAxKaYccmmAcz4l6QkILg-DiStit
+X-Proofpoint-ORIG-GUID: R4VJBAxKaYccmmAcz4l6QkILg-DiStit
+
+Add the atomic long wrappers for the cond-load timeout interfaces.
 
-Hi,
-
-Changes in this version address sashiko comments [16]. Major changes
-are:
-
-  - patch-1, "asm-generic: barrier: Add smp_cond_load_relaxed_timeout()"
-   - deferred time-check is now limited to a single usec.
-
-   - smp_cond_load_relaxed_timeout() now enforces that the timeout_ns value
-     does fit in s64.
-
-   - SMP_TIMEOUT_POLL_COUNT is explicitly defined to 1 if the
-     architecture provides a waiting implementation of cpu_poll_relax()
-     (defines CPU_POLL_RELAX_WAITS).
-
-  - patch-3, "arm64/delay: move, fixup usecs_to_cycles()"
-    - convert the 32-bit arithmetic to use mul_u64_u64_shr() to avoid
-      truncating large delay values.
-
-    - make usecs_to_cycles(), nsecs_to_cycles() static inlines.
-
-  - patch-6, "asm-generic: barrier: Add smp_cond_load_acquire_timeout()"
-    - provide full acquire semantics (via smp_load_acquire()) in the
-      failure path.
-
-  - patch-16, "barrier: timeout validity checks for smp_cond_load_acquire_timeout()"
-    - add some tests for clocks that can fail (rqspinlock like
-      semantics)
-
-The core kernel often uses smp_cond_load_{relaxed,acquire}() to spin
-on condition variables with architectural primitives used to avoid
-hammering the relevant cachelines.
-
-(This primitive can vary greatly across architectures: on x86 it's a
-cpu_relax() to slow down the pipeline. On arm64, this is a __cmpwait()
-which waits for a cacheline to change state in a time limited fashion.)
-
-Regardless of architectural details, typical smp_cond_load*() usage
-does not allow for termination until the condition change occurs.
-
-Beyond the core kernel, there are cases where it is useful to additionally
-terminate on a timeout. Two cases:
-
-  - cpuidle poll_idle(): wait for need-resched until the cpuidle polling
-    duration expires.
-
-  - rqspinlock: nested qspinlock acquisition that terminates on timeout
-    or deadlock.
-
-Accordingly add two interfaces (with their generic and arm64 specific
-implementations):
-
-   smp_cond_load_relaxed_timeout(ptr, cond_expr, time_expr, timeout)
-   smp_cond_load_acquire_timeout(ptr, cond_expr, time_expr, timeout)
-
-Also add tif_need_resched_relaxed_wait() which wraps the polling
-pattern and its scheduler specific details in poll_idle().
-In addition add atomic_cond_read_*_timeout(),
-atomic64_cond_read_*_timeout(), and atomic_long wrappers.
-
-Structurally, both the smp_cond_load_*_timeout() interfaces are similar
-to smp_cond_load*(), with the addition of a rate-limited time-check.
-
-Usage
-==
-
-These interfaces drop straight-forwardly into the rqspinlock logic
-since qspinlock already uses smp_cond_load*(), and the time-check
-extension can now be used for timeout and deadlock handling.
-
-Using tif_need_resched_relaxed_wait() in poll_idle() removes any
-architectural details allowing arm64 to straight-forwardly support
-that path.
-(However, for efficiency reasons cpuidle/poll_state.c continues to
-depend on ARCH_HAS_CPU_RELAX since that is defined on architectures
-with an optimized architectural primitive.)
-
-
-Performance
-==
-
-Apart from simplifications due to this change, supporting polling in
-cpuidle on arm64 helps improve wakeup latency (needs a few cpuidle/acpi
-patches):
-
-
-  # perf stat -r 5 --cpu 4,5 -e task-clock,cycles,instructions,sched:sched_wake_idle_without_ipi \
-  perf bench sched pipe -l 1000000 -c 4
-
-  # No haltpoll (and, no TIF_POLLING_NRFLAG):
-
-  Performance counter stats for 'CPU(s) 4,5' (5 runs):
-
-         25,229.57 msec task-clock                       #    2.000 CPUs utilized               ( +-  7.75% )
-    45,821,250,284      cycles                           #    1.816 GHz                         ( +- 10.07% )
-    26,557,496,665      instructions                     #    0.58  insn per cycle              ( +-  0.21% )
-                 0      sched:sched_wake_idle_without_ipi #    0.000 /sec
-
-       12.615 +- 0.977 seconds time elapsed  ( +-  7.75% )
-
-
-  # Haltpoll:
-
-  Performance counter stats for 'CPU(s) 4,5' (5 runs):
-
-         15,131.58 msec task-clock                       #    2.000 CPUs utilized               ( +- 10.00% )
-    34,158,188,839      cycles                           #    2.257 GHz                         ( +-  6.91% )
-    20,824,950,916      instructions                     #    0.61  insn per cycle              ( +-  0.09% )
-         1,983,822      sched:sched_wake_idle_without_ipi #  131.105 K/sec                       ( +-  0.78% )
-
-        7.566 +- 0.756 seconds time elapsed  ( +- 10.00% )
-
-  We get improved latency because we don't switch in and out of a
-  deeper sleep state or from the hypervisor. This also causes us to
-  execute ~20% fewer instructions.
-
-
-Haris Okanovic also saw improvement in real workloads due to the
-cpuidle changes: "observed 4-6% improvements in memcahed, cassandra,
-mysql, and postgresql under certain loads. Other applications likely
-benefit too." [12]
-
-
-Changelog:
-
-  v14 [16] (as listed above):
-    - patch-1, "asm-generic: barrier: Add smp_cond_load_relaxed_timeout()"
-     - deferred time-check is now limited to a single usec.
-
-     - smp_cond_load_relaxed_timeout() now enforces that the timeout_ns value
-       does fit in s64.
-
-     - SMP_TIMEOUT_POLL_COUNT is explicitly defined to 1 if the
-       architecture provides a waiting implementation of cpu_poll_relax()
-       (defines CPU_POLL_RELAX_WAITS).
-
-    - patch-3, "arm64/delay: move, fixup usecs_to_cycles()"
-      - convert the 32-bit arithmetic to use mul_u64_u64_shr() to avoid
-        truncating large delay values.
-
-      - make usecs_to_cycles(), nsecs_to_cycles() static inlines.
-
-    - patch-6, "asm-generic: barrier: Add smp_cond_load_acquire_timeout()"
-      - provide full acquire semantics (via smp_load_acquire()) in the
-        failure path.
-
-    - patch-16, "barrier: timeout validity checks for smp_cond_load_acquire_timeout()"
-      - add some tests for clocks that can fail (rqspinlock like
-       semantics)
-
-  v13 [15]:
-    - rename kconfig entry for the barrier kunit test to follow
-      the kunit style guide
-      (s/BARRIER_TIMEOUT_TEST/BARRIER_TIMEOUT_KUNIT_TEST)
-
-    - make the kunit test be visible only if CONFIG_KUNIT_ALL_TESTS
-      is not enabled.
-
-    Both comments from Julian Braha.
-
-  v12 [14]:
-    - smp_cond_load_acquire_timeout() now only has acquire semantics in
-      the success (non-timeout) case.
-
-    - arm64 now does not define ARCH_HAS_CPU_RELAX as without also
-      defining TIF_POLLING_NRFLAG, in some cases we end up with a
-      degenerate version of poll_idle().
-
-    - kunit: removed the test case for timeout=-1 (not supported)
-      Also add test cases for timeout=0, timeout=1.
-
-    (All of these address review comments from sashiko/bpf-bot.)
-
-  v11 [13]:
-    - addressed some review comments from sashiko (see commit notes)
-      - The one notable change is to the implementation of
-        smp_cond_load_acquire_timeout() where there was a missed
-        control dependency in the timeout case.
-      All the others are minor.
-    - fixed a low probability race in the kunit test added in v11.
-    - added a bunch of kunit tests validating the implementation's
-      use of the clock.
-
-  v10 [10]:
-   - add a comment mentioning that smp_cond_load_relaxed_timeout() might
-     be using architectural primitives that don't support MMIO.
-     (David Laight, Catalin Marinas)
-   - added a kunit test for smp_cond_load_relaxed_timeout() (Andrew
-     Morton.)
-
-  v9 [9]:
-   - s/@cond/@cond_expr/ (Randy Dunlap)
-   - Clarify that SMP_TIMEOUT_POLL_COUNT is only around memory
-     addresses. (David Laight)
-   - Add the missing config ARCH_HAS_CPU_RELAX in arch/arm64/Kconfig.
-     (Catalin Marinas).
-   - Switch to arch_counter_get_cntvct_stable() (via __delay_cycles())
-     in the cmpwait path instead of using arch_timer_read_counter().
-     (Catalin Marinas)
-
-  v8 [0]:
-   - Defer evaluation of @time_expr_ns to when we hit the slowpath.
-      (comment from Alexei Starovoitov).
-
-   - Mention that cpu_poll_relax() is better than raw CPU polling
-     only where ARCH_HAS_CPU_RELAX is defined.
-     - also define ARCH_HAS_CPU_RELAX for arm64.
-      (Came out of a discussion with Will Deacon.)
-
-   - Split out WFET and WFE handling. I was doing both of these
-     in a common handler.
-     (From Will Deacon and in an earlier revision by Catalin Marinas.)
-
-   - Add mentions of atomic_cond_read_{relaxed,acquire}(),
-     atomic_cond_read_{relaxed,acquire}_timeout() in
-     Documentation/atomic_t.txt.
-
-   - Use the BIT() macro to do the checking in tif_bitset_relaxed_wait().
-
-   - Cleanup unnecessary assignments, casts etc in poll_idle().
-     (From Rafael Wysocki.)
-
-   - Fixup warnings from kernel build robot
-
-
-  v7 [1]:
-   - change the interface to separately provide the timeout. This is
-     useful for supporting WFET and similar primitives which can do
-     timed waiting (suggested by Arnd Bergmann).
-
-   - Adapting rqspinlock code to this changed interface also
-     necessitated allowing time_expr to fail.
-   - rqspinlock changes to adapt to the new smp_cond_load_acquire_timeout().
-
-   - add WFET support (suggested by Arnd Bergmann).
-   - add support for atomic-long wrappers.
-   - add a new scheduler interface tif_need_resched_relaxed_wait() which
-     encapsulates the polling logic used by poll_idle().
-     - interface suggested by (Rafael J. Wysocki).
-
-
-  v6 [2]:
-   - fixup missing timeout parameters in atomic64_cond_read_*_timeout()
-   - remove a race between setting of TIF_NEED_RESCHED and the call to
-     smp_cond_load_relaxed_timeout(). This would mean that dev->poll_time_limit
-     would be set even if we hadn't spent any time waiting.
-     (The original check compared against local_clock(), which would have been
-     fine, but I was instead using a cheaper check against _TIF_NEED_RESCHED.)
-   (Both from meta-CI bot)
-
-
-  v5 [3]:
-   - use cpu_poll_relax() instead of cpu_relax().
-   - instead of defining an arm64 specific
-     smp_cond_load_relaxed_timeout(), just define the appropriate
-     cpu_poll_relax().
-   - re-read the target pointer when we exit due to the time-check.
-   - s/SMP_TIMEOUT_SPIN_COUNT/SMP_TIMEOUT_POLL_COUNT/
-   (Suggested by Will Deacon)
-
-   - add atomic_cond_read_*_timeout() and atomic64_cond_read_*_timeout()
-     interfaces.
-   - rqspinlock: use atomic_cond_read_acquire_timeout().
-   - cpuidle: use smp_cond_load_relaxed_tiemout() for polling.
-   (Suggested by Catalin Marinas)
-
-   - rqspinlock: define SMP_TIMEOUT_POLL_COUNT to be 16k for non arm64
-
-
-  v4 [4]:
-    - naming change 's/timewait/timeout/'
-    - resilient spinlocks: get rid of res_smp_cond_load_acquire_waiting()
-      and fixup use of RES_CHECK_TIMEOUT().
-    (Both suggested by Catalin Marinas)
-
-  v3 [5]:
-    - further interface simplifications (suggested by Catalin Marinas)
-
-  v2 [6]:
-    - simplified the interface (suggested by Catalin Marinas)
-       - get rid of wait_policy, and a multitude of constants
-       - adds a slack parameter
-      This helped remove a fair amount of duplicated code duplication and in
-      hindsight unnecessary constants.
-
-  v1 [7]:
-     - add wait_policy (coarse and fine)
-     - derive spin-count etc at runtime instead of using arbitrary
-       constants.
-
-Haris Okanovic tested v4 of this series with poll_idle()/haltpoll patches. [8]
-
-Comments appreciated!
-
-Thanks
-Ankur
-
- [0] https://lore.kernel.org/lkml/20251215044919.460086-1-ankur.a.arora@oracle.com/
- [1] https://lore.kernel.org/lkml/20251028053136.692462-1-ankur.a.arora@oracle.com/
- [2] https://lore.kernel.org/lkml/20250911034655.3916002-1-ankur.a.arora@oracle.com/
- [3] https://lore.kernel.org/lkml/20250911034655.3916002-1-ankur.a.arora@oracle.com/
- [4] https://lore.kernel.org/lkml/20250829080735.3598416-1-ankur.a.arora@oracle.com/
- [5] https://lore.kernel.org/lkml/20250627044805.945491-1-ankur.a.arora@oracle.com/
- [6] https://lore.kernel.org/lkml/20250502085223.1316925-1-ankur.a.arora@oracle.com/
- [7] https://lore.kernel.org/lkml/20250203214911.898276-1-ankur.a.arora@oracle.com/
- [8] https://lore.kernel.org/lkml/2cecbf7fb23ee83a4ce027e1be3f46f97efd585c.camel@amazon.com/
- [9] https://lore.kernel.org/lkml/20260209023153.2661784-1-ankur.a.arora@oracle.com/
- [10] https://lore.kernel.org/lkml/20260316013651.3225328-1-ankur.a.arora@oracle.com/
- [11] https://lore.kernel.org/lkml/20230809134837.GM212435@hirez.programming.kicks-ass.net/
- [12] https://lore.kernel.org/lkml/c6f3c8d3f1f2e89a9dc7ae22482973b5a51b08cb.camel@amazon.com/
- [13] https://lore.kernel.org/all/20260408122538.3610871-1-ankur.a.arora@oracle.com/#r
- [14] https://lore.kernel.org/all/20260608080440.127491-1-ankur.a.arora@oracle.com/
- [15] https://lore.kernel.org/all/20260702013334.140905-1-ankur.a.arora@oracle.com/
- [16] https://lore.kernel.org/all/20260714073041.40250-1-ankur.a.arora@oracle.com/
-
-Cc: Arnd Bergmann <arnd@arndb.de>
 Cc: Will Deacon <will@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: bpf@vger.kernel.org
-Cc: linux-arch@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-pm@vger.kernel.org
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+---
+ include/linux/atomic/atomic-long.h | 18 +++++++++++-------
+ scripts/atomic/gen-atomic-long.sh  | 16 ++++++++++------
+ 2 files changed, 21 insertions(+), 13 deletions(-)
 
-Ankur Arora (16):
-  asm-generic: barrier: Add smp_cond_load_relaxed_timeout()
-  arm64: barrier: Support smp_cond_load_relaxed_timeout()
-  arm64/delay: move, fixup usecs_to_cycles()
-  arm64: support WFET in smp_cond_load_relaxed_timeout()
-  arm64: rqspinlock: Remove private copy of
-    smp_cond_load_acquire_timewait()
-  asm-generic: barrier: Add smp_cond_load_acquire_timeout()
-  atomic: Add atomic_cond_read_*_timeout()
-  locking/atomic: scripts: build atomic_long_cond_read_*_timeout()
-  bpf/rqspinlock: switch check_timeout() to a clock interface
-  bpf/rqspinlock: Use smp_cond_load_acquire_timeout()
-  sched: add need-resched timed wait interface
-  cpuidle/poll_state: Wait for need-resched via
-    tif_need_resched_relaxed_wait()
-  arm64/delay: enable testing smp_cond_load_relaxed_timeout()
-  barrier: add tests for smp_cond_load_*_timeout()
-  barrier: timeout validity checks for smp_cond_load_relaxed_timeout()
-  barrier: timeout validity checks for smp_cond_load_acquire_timeout()
-
- Documentation/atomic_t.txt           |  14 +-
- arch/arm64/include/asm/barrier.h     |  22 +++
- arch/arm64/include/asm/cmpxchg.h     |  62 +++++--
- arch/arm64/include/asm/delay-const.h |  35 ++++
- arch/arm64/include/asm/rqspinlock.h  |  85 ---------
- arch/arm64/lib/delay.c               |  19 +-
- drivers/clocksource/arm_arch_timer.c |   2 +
- drivers/cpuidle/poll_state.c         |  21 +--
- drivers/soc/qcom/rpmh-rsc.c          |   8 +-
- include/asm-generic/barrier.h        | 154 ++++++++++++++++
- include/linux/atomic.h               |  10 ++
- include/linux/atomic/atomic-long.h   |  18 +-
- include/linux/sched/idle.h           |  29 +++
- kernel/bpf/rqspinlock.c              |  78 +++++---
- lib/Kconfig.debug                    |  10 ++
- lib/tests/Makefile                   |   1 +
- lib/tests/barrier-timeout-test.c     | 258 +++++++++++++++++++++++++++
- scripts/atomic/gen-atomic-long.sh    |  16 +-
- 18 files changed, 663 insertions(+), 179 deletions(-)
- create mode 100644 arch/arm64/include/asm/delay-const.h
- create mode 100644 lib/tests/barrier-timeout-test.c
-
+diff --git a/include/linux/atomic/atomic-long.h b/include/linux/atomic/atomic-long.h
+index 6a4e47d2db35..553b6b0e0258 100644
+--- a/include/linux/atomic/atomic-long.h
++++ b/include/linux/atomic/atomic-long.h
+@@ -11,14 +11,18 @@
+ 
+ #ifdef CONFIG_64BIT
+ typedef atomic64_t atomic_long_t;
+-#define ATOMIC_LONG_INIT(i)		ATOMIC64_INIT(i)
+-#define atomic_long_cond_read_acquire	atomic64_cond_read_acquire
+-#define atomic_long_cond_read_relaxed	atomic64_cond_read_relaxed
++#define ATOMIC_LONG_INIT(i)			ATOMIC64_INIT(i)
++#define atomic_long_cond_read_acquire		atomic64_cond_read_acquire
++#define atomic_long_cond_read_relaxed		atomic64_cond_read_relaxed
++#define atomic_long_cond_read_acquire_timeout	atomic64_cond_read_acquire_timeout
++#define atomic_long_cond_read_relaxed_timeout	atomic64_cond_read_relaxed_timeout
+ #else
+ typedef atomic_t atomic_long_t;
+-#define ATOMIC_LONG_INIT(i)		ATOMIC_INIT(i)
+-#define atomic_long_cond_read_acquire	atomic_cond_read_acquire
+-#define atomic_long_cond_read_relaxed	atomic_cond_read_relaxed
++#define ATOMIC_LONG_INIT(i)			ATOMIC_INIT(i)
++#define atomic_long_cond_read_acquire		atomic_cond_read_acquire
++#define atomic_long_cond_read_relaxed		atomic_cond_read_relaxed
++#define atomic_long_cond_read_acquire_timeout	atomic_cond_read_acquire_timeout
++#define atomic_long_cond_read_relaxed_timeout	atomic_cond_read_relaxed_timeout
+ #endif
+ 
+ /**
+@@ -1809,4 +1813,4 @@ raw_atomic_long_dec_if_positive(atomic_long_t *v)
+ }
+ 
+ #endif /* _LINUX_ATOMIC_LONG_H */
+-// 4b882bf19018602c10816c52f8b4ae280adc887b
++// 79c1f4acb5774376ceed559843d5d9ed1348df99
+diff --git a/scripts/atomic/gen-atomic-long.sh b/scripts/atomic/gen-atomic-long.sh
+index 9826be3ba986..874643dc74bd 100755
+--- a/scripts/atomic/gen-atomic-long.sh
++++ b/scripts/atomic/gen-atomic-long.sh
+@@ -79,14 +79,18 @@ cat << EOF
+ 
+ #ifdef CONFIG_64BIT
+ typedef atomic64_t atomic_long_t;
+-#define ATOMIC_LONG_INIT(i)		ATOMIC64_INIT(i)
+-#define atomic_long_cond_read_acquire	atomic64_cond_read_acquire
+-#define atomic_long_cond_read_relaxed	atomic64_cond_read_relaxed
++#define ATOMIC_LONG_INIT(i)			ATOMIC64_INIT(i)
++#define atomic_long_cond_read_acquire		atomic64_cond_read_acquire
++#define atomic_long_cond_read_relaxed		atomic64_cond_read_relaxed
++#define atomic_long_cond_read_acquire_timeout	atomic64_cond_read_acquire_timeout
++#define atomic_long_cond_read_relaxed_timeout	atomic64_cond_read_relaxed_timeout
+ #else
+ typedef atomic_t atomic_long_t;
+-#define ATOMIC_LONG_INIT(i)		ATOMIC_INIT(i)
+-#define atomic_long_cond_read_acquire	atomic_cond_read_acquire
+-#define atomic_long_cond_read_relaxed	atomic_cond_read_relaxed
++#define ATOMIC_LONG_INIT(i)			ATOMIC_INIT(i)
++#define atomic_long_cond_read_acquire		atomic_cond_read_acquire
++#define atomic_long_cond_read_relaxed		atomic_cond_read_relaxed
++#define atomic_long_cond_read_acquire_timeout	atomic_cond_read_acquire_timeout
++#define atomic_long_cond_read_relaxed_timeout	atomic_cond_read_relaxed_timeout
+ #endif
+ 
+ EOF
 -- 
 2.43.7
 
