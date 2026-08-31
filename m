@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C3343E3D86
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 09:08:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BBA03E4510
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 09:08:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788167304; cv=none; b=SVBrGHRif18RLAig3FdLkOLgzr0mJkxreSoUPYqK4wvBb7lDISUkkokrBVyoE2w+7lPk3kHaaYqaerUIOgKkSe13v4XpbXY0DPevHeQmGAWJlCm+aW/IqyQLym5voTHDl+6TjkounsrFUPcSMyBepWMbraMs7T/pKRK4kWDxkWY=
+	t=1788167306; cv=none; b=c3HZRYOCSHas+2sqBCozHaR4QA9mf9N5ob2QRYuVw5MhvY0aQtpP/i9PA/uZr/fvpjE/U//LziqETmz6HTaoT4N+3QxYtk7LduS1a1iJHOHb6OQHGefacw5WnFmzw+qbVNnKe5V+xueqSkxQvVtqztxeziBjuHtaQwi87tUP4UY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788167304; c=relaxed/simple;
-	bh=oeem+Ud3nm5ioBpJp2KL8Nu2qrfTVVl1ppFm5CYlXxc=;
+	s=arc-20240116; t=1788167306; c=relaxed/simple;
+	bh=07G9mbWUZANCVxFbifnelQ/MS9URdMr6lWuIx/p3RwA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oWo+Cy++OR28P/cVXHamIOyDk4cqC7KVu7FBXTN0xXrDe6Y4zkZS8rWNxOiceEChQL+GK506MFhHhncDPugiTcWEj5MFGjQ8djhfF1sF4nuTJjMa/GMjzqTi107kdJH7u9+CX+yTsC3AdXC7YX87LNXbyGTW/6fvEnkET7czeOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EClISDcD; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=BQCnhQy3IXqJ78qlftTyhKrcvcU38m3dWO0lfUgeFkHRaHqkQpWbawWFXCD36eb+s2ASIJLp+lf0s4RUjD04/iPD+zHlLJSFMTAA8BM8rt7Xn96hNLgOVLBjL+5EathtHWGTm05Gco2Hr/wGU7L459RFTLd2WWZ/kMsIDRcSSxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=R0gq5rXC; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EClISDcD"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="R0gq5rXC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1788167300;
+	s=mimecast20190719; t=1788167303;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=aOLKnqkN3lriGbQvo7O/1UtI9sEeayBnWBcR41PD8ek=;
-	b=EClISDcDZk4yNhqJi4Gntk9YQg4a6k1Mpouxm+kZ2uwWEhtCtfHpUIm53gpxc3VF2rW7s/
-	OS+rpFNVaIWPOvFc8wWxicSa3/e8ivg3B+uKNooBZ+1Dm4kDYw1y2ouAKFd/6WfnHGKRvu
-	PHFJVz1X8jR5xkm3UqlztiwPRFfPcpY=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+	bh=HZqEJDnBRZEwxmWnx5FvxUNAzxzmaxFYz8vRpvX4T0E=;
+	b=R0gq5rXCgKmw93NLtQYMiTL7CT4HO3XKUPMWY08aHel4cc/7NaJ/16kxPPpRv5weKAan3d
+	XHUEMT6F9xHCqe3y/thZhj/Gr6Fs39XChiwYQMT0KDJXoy/JPDn7xBY/K7PRzGYs7/7D7J
+	IZUEPdyvBmBM0SqsG0P2cCT2ABy9GD0=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-62-GGUQI_VxN0Kx0I7vfJHHgw-1; Mon,
- 31 Aug 2026 05:08:16 -0400
-X-MC-Unique: GGUQI_VxN0Kx0I7vfJHHgw-1
-X-Mimecast-MFC-AGG-ID: GGUQI_VxN0Kx0I7vfJHHgw_1788167295
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-240-mnOYfhuoMCa0Prfhzlo2Hw-1; Mon,
+ 31 Aug 2026 05:08:21 -0400
+X-MC-Unique: mnOYfhuoMCa0Prfhzlo2Hw-1
+X-Mimecast-MFC-AGG-ID: mnOYfhuoMCa0Prfhzlo2Hw_1788167300
 Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7C473195411C;
-	Mon, 31 Aug 2026 09:08:15 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 29C491944D41;
+	Mon, 31 Aug 2026 09:08:20 +0000 (UTC)
 Received: from gmonaco-thinkpadt14gen3.redhat.corp (headnet05.pony-001.prod.iad2.dc.redhat.com [10.2.32.117])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A365118005BB;
-	Mon, 31 Aug 2026 09:08:12 +0000 (UTC)
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 298B2180034F;
+	Mon, 31 Aug 2026 09:08:16 +0000 (UTC)
 From: Gabriele Monaco <gmonaco@redhat.com>
 To: linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
@@ -52,9 +52,9 @@ Cc: Nam Cao <namcao@linutronix.de>,
 	Wen Yang <wen.yang@linux.dev>,
 	Tobias Schaffner <tobias.schaffner@siemens.com>,
 	Viktor Malik <vmalik@redhat.com>
-Subject: [RFC PATCH 19/20] tools/rv: Add selftest for rv bpf
-Date: Mon, 31 Aug 2026 11:05:23 +0200
-Message-ID: <20260831090524.106845-20-gmonaco@redhat.com>
+Subject: [RFC PATCH 20/20] verification/rvgen: Add selftest for rvgen -b
+Date: Mon, 31 Aug 2026 11:05:24 +0200
+Message-ID: <20260831090524.106845-21-gmonaco@redhat.com>
 In-Reply-To: <20260831090524.106845-1-gmonaco@redhat.com>
 References: <20260831090524.106845-1-gmonaco@redhat.com>
 Precedence: bulk
@@ -66,126 +66,255 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-Add selftest cases for the rv userspace tool BPF commands and monitors,
-test BPF monitors registration, unregistration and functionality,
-including traces and reactors.
+Add selftest cases for BPF monitors generation.
 
 Signed-off-by: Gabriele Monaco <gmonaco@redhat.com>
 ---
- tools/verification/rv/tests/rv_bpf.t | 104 +++++++++++++++++++++++++++
- 1 file changed, 104 insertions(+)
- create mode 100644 tools/verification/rv/tests/rv_bpf.t
+ .../tests/golden/da_bpf_cpu/da_bpf_cpu.c      | 40 ++++++++++++++
+ .../tests/golden/da_bpf_cpu/da_bpf_cpu.h      | 47 ++++++++++++++++
+ .../tests/golden/da_bpf_obj/da_bpf_obj.c      | 54 +++++++++++++++++++
+ .../tests/golden/da_bpf_obj/da_bpf_obj.h      | 47 ++++++++++++++++
+ .../verification/rvgen/tests/rvgen_monitor.t  | 11 ++++
+ 5 files changed, 199 insertions(+)
+ create mode 100644 tools/verification/rvgen/tests/golden/da_bpf_cpu/da_bpf_cpu.c
+ create mode 100644 tools/verification/rvgen/tests/golden/da_bpf_cpu/da_bpf_cpu.h
+ create mode 100644 tools/verification/rvgen/tests/golden/da_bpf_obj/da_bpf_obj.c
+ create mode 100644 tools/verification/rvgen/tests/golden/da_bpf_obj/da_bpf_obj.h
 
-diff --git a/tools/verification/rv/tests/rv_bpf.t b/tools/verification/rv/tests/rv_bpf.t
+diff --git a/tools/verification/rvgen/tests/golden/da_bpf_cpu/da_bpf_cpu.c b/tools/verification/rvgen/tests/golden/da_bpf_cpu/da_bpf_cpu.c
 new file mode 100644
-index 000000000000..902343f0d3f1
+index 000000000000..37659b2ebce2
 --- /dev/null
-+++ b/tools/verification/rv/tests/rv_bpf.t
-@@ -0,0 +1,104 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+source ../tests/engine.sh
-+test_begin
++++ b/tools/verification/rvgen/tests/golden/da_bpf_cpu/da_bpf_cpu.c
+@@ -0,0 +1,40 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+set_timeout 30s
++#include "vmlinux.h"
 +
-+RVDIR=/sys/kernel/tracing/rv
++#define RV_MON_TYPE RV_MON_PER_CPU
++#include "da_bpf_cpu.h"
++#include <rv/da_monitor.h>
 +
-+check "verify bpf subcommand help" \
-+	"$RV bpf --help" 0 "manage BPF monitor registration"
++/*
++ * This is the instrumentation part of the monitor.
++ *
++ * This is the section where manual work is required. Here the kernel events
++ * are translated into model's event.
++ */
++SEC(/* XXX: tracepoint or other probe */)
++int BPF_PROG(handle_event_1, /* XXX: fill header */)
++{
++	da_handle_event(event_1_da_bpf_cpu);
++	return 0;
++}
 +
-+if $RV bpf unregister 2>&1 | grep -q "kernel does not support BPF monitors"; then
-+	test_end
-+	exit 0
-+fi
++SEC(/* XXX: tracepoint or other probe */)
++int BPF_PROG(handle_event_2, /* XXX: fill header */)
++{
++	/* XXX: validate that this event always leads to the initial state */
++	da_handle_start_event(event_2_da_bpf_cpu);
++	return 0;
++}
 +
-+if ! mount | grep -q /sys/fs/bpf; then
-+	mount -t bpf bpf /sys/fs/bpf
-+fi
++SEC(".struct_ops.link")
++struct rv_monitor rv_da_bpf_cpu_kern = {
++	.name = "da_bpf_cpu",
++	.description = "auto-generated",
++	.enable = da_monitor_enable_bpf,
++	.disable = da_monitor_disable_bpf,
++	.reset = da_monitor_reset_bpf,
++	.enabled = 0,
++};
 +
-+check "nohz does not exist before register" \
-+	"$RV mon nohz" 1 "monitor nohz does not exist"
++char LICENSE[] SEC("license") = "GPL";
+diff --git a/tools/verification/rvgen/tests/golden/da_bpf_cpu/da_bpf_cpu.h b/tools/verification/rvgen/tests/golden/da_bpf_cpu/da_bpf_cpu.h
+new file mode 100644
+index 000000000000..fd8125118d81
+--- /dev/null
++++ b/tools/verification/rvgen/tests/golden/da_bpf_cpu/da_bpf_cpu.h
+@@ -0,0 +1,47 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Automatically generated C representation of da_bpf_cpu automaton
++ * For further information about this format, see kernel documentation:
++ *   Documentation/trace/rv/deterministic_automata.rst
++ */
 +
-+check "tqueue does not exist before register" \
-+	"$RV mon tqueue" 1 "monitor tqueue does not exist"
++#define MONITOR_NAME da_bpf_cpu
 +
-+check "register BPF monitors" \
-+	"$RV bpf register" 0 "registered [0-9]\+ BPF monitor(s)"
++enum states_da_bpf_cpu {
++	state_a_da_bpf_cpu,
++	state_b_da_bpf_cpu,
++	state_max_da_bpf_cpu,
++};
 +
-+set_expected_timeout 2s
++#define INVALID_STATE state_max_da_bpf_cpu
 +
-+header="^[[:space:]]\+\(\([][A-Z_x<>-]\+\||\)[[:space:]]*\)\+$"
-+type="\(event\|error\)[[:space:]]\+"
-+genpid="[0-9]\+[[:space:]]\+"
-+selfpid="\$pid[[:space:]]\+"
-+cpu="\[[0-9]\{3\}\][[:space:]]\+"
-+state="[a-z_]\+ "
-+trace_task="${genpid}${cpu}${type}${genpid}${state}"
-+trace_task_self="${genpid}${cpu}${type}${selfpid}${state}"
-+trace_cpu="${genpid}${cpu}${type}${state}"
-+trace_cpu_self="${selfpid}${cpu}${type}${state}"
++enum events_da_bpf_cpu {
++	event_1_da_bpf_cpu,
++	event_2_da_bpf_cpu,
++	event_max_da_bpf_cpu,
++};
 +
-+check_if_exists "run a BPF monitor without parameters" \
-+	"$RV mon nohz" "$RVDIR/monitors/nohz" "" "."
++struct automaton_da_bpf_cpu {
++	char state_names[state_max_da_bpf_cpu][32];
++	char event_names[event_max_da_bpf_cpu][32];
++	unsigned char function[state_max_da_bpf_cpu][event_max_da_bpf_cpu];
++	unsigned char initial_state;
++	bool final_states[state_max_da_bpf_cpu];
++};
 +
-+check_if_exists "run a per-task BPF monitor without parameters" \
-+	"$RV mon tqueue" "$RVDIR/monitors/tqueue" "" "."
++static const struct automaton_da_bpf_cpu automaton_da_bpf_cpu = {
++	.state_names = {
++		"state_a",
++		"state_b",
++	},
++	.event_names = {
++		"event_1",
++		"event_2",
++	},
++	.function = {
++		{       state_b_da_bpf_cpu,       state_a_da_bpf_cpu },
++		{            INVALID_STATE,       state_a_da_bpf_cpu },
++	},
++	.initial_state = state_a_da_bpf_cpu,
++	.final_states = { 1, 0 },
++};
+diff --git a/tools/verification/rvgen/tests/golden/da_bpf_obj/da_bpf_obj.c b/tools/verification/rvgen/tests/golden/da_bpf_obj/da_bpf_obj.c
+new file mode 100644
+index 000000000000..bbd46615a1a5
+--- /dev/null
++++ b/tools/verification/rvgen/tests/golden/da_bpf_obj/da_bpf_obj.c
+@@ -0,0 +1,54 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+check_if_exists "run per-task BPF monitor with tracing" \
-+	"$RV mon tqueue -t" "$RVDIR/monitors/tqueue" \
-+	"$header" "$trace_task_self" "\($header\|$trace_task\)"
++#include "vmlinux.h"
 +
-+check_if_exists "run per-task BPF monitor tracing also self" \
-+	"$RV mon tqueue -t -s" "$RVDIR/monitors/tqueue" \
-+	"$trace_task_self" "" "\($header\|$trace_task\)"
++#define RV_MON_TYPE RV_MON_PER_OBJ
++typedef /* XXX: define the target type */ *monitor_target_bpf;
++#include "da_bpf_obj.h"
++#include <rv/da_monitor.h>
 +
-+check_if_exists "run per-cpu BPF monitor with tracing" \
-+	"$RV mon nohz -t" "$RVDIR/monitors/nohz" \
-+	"$header" "$trace_cpu_self" "\($header\|$trace_cpu\)"
++/*
++ * This is the instrumentation part of the monitor.
++ *
++ * This is the section where manual work is required. Here the kernel events
++ * are translated into model's event.
++ */
++SEC(/* XXX: tracepoint or other probe */)
++int BPF_PROG(handle_event_1, /* XXX: fill header */)
++{
++	int id = /* XXX: how do I get the id? */;
++	monitor_target_bpf t = /* XXX: how do I get t? */;
++	da_handle_event(id, t, event_1_da_bpf_obj);
++	return 0;
++}
 +
-+# This is unstable, we may never see events from self
-+#check_if_exists "run per-cpu BPF monitor tracing also self" \
-+#	"$RV mon nohz -t -s" "$RVDIR/monitors/nohz" \
-+#	"$trace_cpu_self" "" "\($header\|$trace_cpu\)"
++SEC(/* XXX: tracepoint or other probe */)
++int BPF_PROG(handle_event_2, /* XXX: fill header */)
++{
++	/* XXX: validate that this event always leads to the initial state */
++	int id = /* XXX: how do I get the id? */;
++	monitor_target_bpf t = /* XXX: how do I get t? */;
++	da_handle_start_event(id, t, event_2_da_bpf_obj);
++	return 0;
++}
 +
-+lines_before=$(($(dmesg | wc -l) + 1))
-+check_if_exists "run a BPF monitor with a reactor" \
-+	"$RV mon nohz -r printk && dmesg | tail -n +$lines_before" "$RVDIR/monitors/nohz" \
-+	"rv: monitor nohz does not allow event"
++/* XXX: obj is being destroyed, remove if not required (e.g. obj is static) */
++SEC(/* XXX: tracepoint or other probe */)
++int BPF_PROG(handle_obj_cleanup, /* XXX: fill header */)
++{
++	int id = /* XXX: how do I get the id? */;
++	da_destroy_storage(id);
++	return 0;
++}
 +
-+set_timeout 30s
++SEC(".struct_ops.link")
++struct rv_monitor rv_da_bpf_obj_kern = {
++	.name = "da_bpf_obj",
++	.description = "auto-generated",
++	.enable = da_monitor_enable_bpf,
++	.disable = da_monitor_disable_bpf,
++	.reset = da_monitor_reset_bpf,
++	.enabled = 0,
++};
 +
-+check "already enabled monitor returns error" \
-+	"echo 1 > $RVDIR/monitors/nohz/enable; $RV mon nohz" 1 \
-+	"monitor nohz (BPF) is already enabled"
-+[ -n "$TEST_COUNT" ] && echo 0 > $RVDIR/monitors/nohz/enable
++char LICENSE[] SEC("license") = "GPL";
+diff --git a/tools/verification/rvgen/tests/golden/da_bpf_obj/da_bpf_obj.h b/tools/verification/rvgen/tests/golden/da_bpf_obj/da_bpf_obj.h
+new file mode 100644
+index 000000000000..385006098049
+--- /dev/null
++++ b/tools/verification/rvgen/tests/golden/da_bpf_obj/da_bpf_obj.h
+@@ -0,0 +1,47 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Automatically generated C representation of da_bpf_obj automaton
++ * For further information about this format, see kernel documentation:
++ *   Documentation/trace/rv/deterministic_automata.rst
++ */
 +
-+check "already enabled monitor prevents unregistration" \
-+	"echo 1 > $RVDIR/monitors/nohz/enable; $RV bpf unregister" 1 \
-+	"monitor nohz is enabled, cannot unregister" \
-+	"unregistered [0-9]\+ BPF monitor(s)"
-+[ -n "$TEST_COUNT" ] && echo 0 > $RVDIR/monitors/nohz/enable
++#define MONITOR_NAME da_bpf_obj
 +
-+check "unregister BPF monitors" \
-+	"$RV bpf unregister" 0 "unregistered [0-9]\+ BPF monitor(s)"
++enum states_da_bpf_obj {
++	state_a_da_bpf_obj,
++	state_b_da_bpf_obj,
++	state_max_da_bpf_obj,
++};
 +
-+check "nohz does not exist after unregister" \
-+	"$RV mon nohz" 1 "monitor nohz does not exist"
++#define INVALID_STATE state_max_da_bpf_obj
 +
-+check "tqueue does not exist after unregister" \
-+	"$RV mon tqueue" 1 "monitor tqueue does not exist"
++enum events_da_bpf_obj {
++	event_1_da_bpf_obj,
++	event_2_da_bpf_obj,
++	event_max_da_bpf_obj,
++};
 +
-+check "nothing left to unregister" \
-+	"$RV bpf unregister" 0 "unregistered 0 BPF monitor(s)"
++struct automaton_da_bpf_obj {
++	char state_names[state_max_da_bpf_obj][32];
++	char event_names[event_max_da_bpf_obj][32];
++	unsigned char function[state_max_da_bpf_obj][event_max_da_bpf_obj];
++	unsigned char initial_state;
++	bool final_states[state_max_da_bpf_obj];
++};
 +
-+# Error handling tests
-+check "bpf without subcommand" \
-+	"$RV bpf" 1 "usage: rv bpf"
++static const struct automaton_da_bpf_obj automaton_da_bpf_obj = {
++	.state_names = {
++		"state_a",
++		"state_b",
++	},
++	.event_names = {
++		"event_1",
++		"event_2",
++	},
++	.function = {
++		{       state_b_da_bpf_obj,       state_a_da_bpf_obj },
++		{            INVALID_STATE,       state_a_da_bpf_obj },
++	},
++	.initial_state = state_a_da_bpf_obj,
++	.final_states = { 1, 0 },
++};
+diff --git a/tools/verification/rvgen/tests/rvgen_monitor.t b/tools/verification/rvgen/tests/rvgen_monitor.t
+index 5f2562600bad..3d71685a7ad5 100644
+--- a/tools/verification/rvgen/tests/rvgen_monitor.t
++++ b/tools/verification/rvgen/tests/rvgen_monitor.t
+@@ -47,6 +47,17 @@ check_and_compare_folder "LTL per_task with parent and description (default name
+ 	"$RVGEN monitor -c ltl -s tests/specs/test_ltl.ltl -t per_task -p ltl_parent -D 'Simple description'" \
+ 	"test_ltl" "LTL_MON_EVENTS_ID"
+ 
++# BPF monitor test
++check_and_compare_folder "DA BPF per_cpu" \
++	"$RVGEN monitor -b -c da -s tests/specs/test_da.dot -t per_cpu -n da_bpf_cpu" \
++	"da_bpf_cpu" "Edit the da_bpf_cpu/da_bpf_cpu.c to add the instrumentation" \
++	"Edit kernel/trace/rv/Makefile"
 +
-+check "invalid bpf subcommand" \
-+	"$RV bpf invalid" 1 "usage: rv bpf"
++check_and_compare_folder "DA BPF per_obj" \
++	"$RVGEN monitor -b -c da -s tests/specs/test_da.dot -t per_obj -n da_bpf_obj" \
++	"da_bpf_obj" "Edit the da_bpf_obj/da_bpf_obj.c to add the instrumentation" \
++	"Edit kernel/trace/rv/Kconfig"
 +
-+test_end
+ # Error handling tests
+ check "missing required spec argument" \
+ 	"$RVGEN monitor -c da -t per_cpu" 2 \
 -- 
 2.55.0
 
