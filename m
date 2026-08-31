@@ -1,191 +1,207 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D183D667F;
-	Mon, 31 Aug 2026 09:00:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B353B3BB128
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 09:06:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788166813; cv=none; b=sLuVLJ8iiZI0OgHmPhK43V6KTTSJbxLre/6Qoix5+ERuEuofwMjCRjbuLttAmqCGJP9Z9aaCbjTc6+oOmqpmzfAbUrCTxx7iTX9v3TGagLv6zyD2yCw9adhqmgiOBY/mHl66NIXID2w6LL3HItgp9CxwblBK8Ry86ieFa9OrYJQ=
+	t=1788167171; cv=none; b=NFBQqsjhkWpgT462l7qL/GLoqa014qHztOdqIkJmnu5HI2iPqrHtpNWyMM7aHa2rAACjGofXbdUq8ohuNXNDiUynginITs1TwApMjs/Ml9JoQc+JHv/JGwAHEj/GZ6xQm48fITbDlrISP7KrIO0CLbd+x3Bc9Dsz+EAOfWB+PVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788166813; c=relaxed/simple;
-	bh=bO4QqOOkYtcqxtmXnzXLiG88iM1bk1BhGu3NaERD5H0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kCWq/wwhXMEldrrz+Z30oE1e7gQKBkzhb+5paIGBNRYu3IjXS3xXGlngZFjjMJdMVacbknQS34PqKbPfhYuOeHxNmiSfWDGSGkfPpId2A9tpTdzIFYIonWT/d1LIND6cX5sqAt3D4epaKYCKVH9tVD3aqCdj9+LvFRPQTDFuQyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YkZDhChP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788167171; c=relaxed/simple;
+	bh=TSjQv2kv33mQ7oT7q5/VS3eIH77VGTQ7EdvXU/w9ZL4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=n/JUcI4O1vrsqNffY11/ZtyCsmCg2aGaVC+TWZrjhCznD7bVfN41cSH52zu3LEsD924UY5MbeKgmyhZ0KTKY5IcFZubsYP/fywJhaoiu3kJh3PKhV/UAA71O9EK7N/QgsuO0E+Tc/64x0vzgPrb7D16m1vY7xB3CA2VKbpm3IwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Sl/g3bLQ; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YkZDhChP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37DFB1F000E9;
-	Mon, 31 Aug 2026 09:00:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788166810;
-	bh=LXOCjeN/czsMupSRW8p+erDIOXzY4m9iU1fz8tbYeI4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=YkZDhChPm6So6Rc3TWcjOsLI51gc3n9liJ8g7iVVhapP7IQsoV9QsW9r8RN0kCQ/y
-	 m+ZK+N8kedI7ezw6LepHoGh9S53O928OYbM4hVS4mVgO30eTCn6w3aeJlI+nPWQpBD
-	 Hd283Hy7YUBkxKrX7fuFlvNginf47ciY3GXZLm/Zz5gKCW6l5RVvSSQSD4GAXpnfHR
-	 JS5m3CZ6hrMRRp4/eCYlFqyJcUOnJtU51Mm/yc65Lc7wkHQIpbtBJYPde/jbvXKl+m
-	 YZBNE0obQ4+r2pVVQD0kaiLCcqbX+F5pBBH1Jw0tMgf6MCcNyMef8sbk3+wR3G6zrA
-	 FRDdiMo+4vi6w==
-Message-ID: <8c7f834e-5701-4748-9a9a-fed78aa50198@kernel.org>
-Date: Mon, 31 Aug 2026 11:00:05 +0200
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Sl/g3bLQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1788167168;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=1pOcDoAHlIQ/T7N5WMkupgAQ1iNS60H7SPvWRp7UHsI=;
+	b=Sl/g3bLQMH3OX0t/N5bKCwH6iWIGL48CrxqO34sp+VBGucSAyEdcVifsGvk2GkSuTWrKZr
+	I5IYjMbmR8iNXqbzq2ba7tUEnFLhnnadQ0O8wnWYhJj1/ALVdiLEu5Y+SYcsbseIVSAL5H
+	YbnA78mzJcl7WUlau2BkxbGYcTAwEks=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-588-U00ojmBnNUqIPfA02WZ_3A-1; Mon,
+ 31 Aug 2026 05:06:04 -0400
+X-MC-Unique: U00ojmBnNUqIPfA02WZ_3A-1
+X-Mimecast-MFC-AGG-ID: U00ojmBnNUqIPfA02WZ_3A_1788167163
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C1073185CE87;
+	Mon, 31 Aug 2026 09:06:02 +0000 (UTC)
+Received: from gmonaco-thinkpadt14gen3.redhat.corp (headnet05.pony-001.prod.iad2.dc.redhat.com [10.2.32.117])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 761E018005BD;
+	Mon, 31 Aug 2026 09:05:59 +0000 (UTC)
+From: Gabriele Monaco <gmonaco@redhat.com>
+To: linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: Gabriele Monaco <gmonaco@redhat.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Nam Cao <namcao@linutronix.de>,
+	Wen Yang <wen.yang@linux.dev>,
+	Tobias Schaffner <tobias.schaffner@siemens.com>,
+	Viktor Malik <vmalik@redhat.com>
+Subject: [RFC PATCH 00/20] rv: Add support for BPF monitors
+Date: Mon, 31 Aug 2026 11:05:04 +0200
+Message-ID: <20260831090524.106845-1-gmonaco@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v2] page_pool: keep frag_offset aligned for odd-sized
- requests
-To: Florian Schauer <florian@schauer.to>, ilias.apalodimas@linaro.org
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me,
- linyunsheng@huawei.com, Mina Almasry <almasrymina@google.com>
-References: <20260828060822.2628276-1-florian@schauer.to>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <20260828060822.2628276-1-florian@schauer.to>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+
+Extend the rv userspace tool to load BPF monitors, those can be found in
+specific locations (e.g. /usr/share/rv/bpf_monitors/) and are plain
+object files including BTF data.
+
+This type of BPF monitors can be generated from rvgen using the -b flag
+just like in-kernel monitors and, after manual adaptation, can be built
+and run transparently by the rv userspace tool.
+
+Only DA monitors are supported (as they are the only class the rv tool
+currenly supports) and the tool aims to work in the same way for both
+in-kernel and BPF monitors.
+
+The da_monitor header is adapted to be included directly in BPF programs
+and share as much logic as possible.
+
+BPF monitors are implemented using the struct_ops framework to integrate
+as much as possible with in-kernel monitor. After registering, they
+look like standard monitors in the tracefs, although to properly enable
+them we need to load handlers from userspace and this is done by the rv
+tool. BPF monitors cannot generate tracepoints so the rv -t for those
+monitors is reading events from a ringbuffer.
+
+Selftests (make -C tools/verification/rv check) are present to validate
+and demonstrate the usage, which boils down to:
+
+  rv bpf register          # load struct_ops and maps for all monitors
+  rv list                  # unmodified, list BPF monitors transparently
+  rv mon -t <mon>          # run the monitor with tracing (ringbuffer)
+  rv mon -r printk <mon>   # run the monitor with a reactor
+  rv bpf unregister        # remove all BPF monitors
+
+Patch 1 adds tracepoints required in a later monitor example.
+Patch 2 improves the rv tool selftest reporting.
+Patches 3-9 prepare and add support for BPF monitors in the kernel.
+Patch 10 adds a feature check for tools/build
+Patch 11-14 prepare and add support for BPF monitors in the rv tool.
+Patch 15-17 prepare and include BPF monitors examples
+Patch 18 adds support for generating BPF monitors in rvgen
+Patch 19-20 adds BPF selftests (make check) for the rv and rvgen tools
+
+To: linux-trace-kernel@vger.kernel.org
+To: bpf@vger.kernel.org
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Nam Cao <namcao@linutronix.de>
+Cc: Wen Yang <wen.yang@linux.dev>
+Cc: Tobias Schaffner <tobias.schaffner@siemens.com>
+Cc: Viktor Malik <vmalik@redhat.com>
+
+Gabriele Monaco (19):
+  tools/rv: Skip empty pid error in selftest if command failed
+  rv: Refactor da_trace() functions to get strings internally
+  rv: Use static arrays for rv_monitor name and description
+  rv: Add in-kernel support for BPF monitors
+  rv: Add rv_get_monitor_by_name()
+  rv: Add reactors support to BPF monitors
+  rv: Cast result of model_get_*_name()
+  rv: Handle unregistered monitors safely in tracefs
+  tools/build: Add a feature test for bpftool-btf
+  tools/rv: Move argument parsing from in_kernel to utils
+  tools/rv: Export functionality for in_kernel monitors
+  tools/rv: Implement BPF monitor loading and tracing
+  tools/rv: Implement BPF monitor registration logic
+  tools/rv: Copy stripped bpf_atomic.h from libarena
+  tools/rv: Add BPF monitors
+  tools/rv: Define CONFIG_X86_64 statically for BPF monitors
+  verification/rvgen: Add support for BPF monitors
+  tools/rv: Add selftest for rv bpf
+  verification/rvgen: Add selftest for rvgen -b
+
+Nam Cao (1):
+  sched: Add task enqueue/dequeue trace points
+
+ include/linux/rv.h                            |    9 +-
+ include/rv/automata.h                         |    4 +-
+ include/rv/da_monitor.h                       |   67 +-
+ include/trace/events/sched.h                  |    8 +
+ kernel/sched/core.c                           |   12 +-
+ kernel/sched/sched.h                          |    2 +
+ kernel/trace/rv/Kconfig                       |   10 +
+ kernel/trace/rv/Makefile                      |    1 +
+ kernel/trace/rv/rv.c                          |   68 +-
+ kernel/trace/rv/rv.h                          |    5 +-
+ kernel/trace/rv/rv_bpf.c                      |  174 +++
+ kernel/trace/rv/rv_reactors.c                 |    6 +
+ tools/build/Makefile.feature                  |    1 +
+ tools/build/feature/Makefile                  |    7 +-
+ tools/verification/models/nohz.dot            |   16 +
+ tools/verification/models/tqueue.dot          |   15 +
+ tools/verification/rv/Makefile                |   51 +-
+ tools/verification/rv/Makefile.config         |   49 +
+ tools/verification/rv/Makefile.rv             |    5 +
+ tools/verification/rv/bpf_monitors/.gitignore |    2 +
+ .../verification/rv/bpf_monitors/bpf_atomic.h |  105 ++
+ .../rv/bpf_monitors/da_monitor_bpf.h          |  400 +++++++
+ tools/verification/rv/bpf_monitors/nohz.c     |   47 +
+ tools/verification/rv/bpf_monitors/nohz.h     |   49 +
+ tools/verification/rv/bpf_monitors/tqueue.c   |   35 +
+ tools/verification/rv/bpf_monitors/tqueue.h   |   47 +
+ tools/verification/rv/include/bpf_monitor.h   |   21 +
+ tools/verification/rv/include/in_kernel.h     |    5 +
+ tools/verification/rv/include/utils.h         |   17 +-
+ tools/verification/rv/src/Build               |    5 +
+ tools/verification/rv/src/bpf_monitor.c       | 1025 +++++++++++++++++
+ tools/verification/rv/src/in_kernel.c         |  205 ++--
+ tools/verification/rv/src/rv.c                |   10 +-
+ tools/verification/rv/src/utils.c             |   95 +-
+ tools/verification/rv/tests/rv_bpf.t          |  104 ++
+ tools/verification/rvgen/__main__.py          |   15 +-
+ tools/verification/rvgen/rvgen/dot2c.py       |   15 +-
+ tools/verification/rvgen/rvgen/dot2k.py       |   22 +-
+ tools/verification/rvgen/rvgen/generator.py   |   26 +-
+ .../rvgen/rvgen/templates/dot2k/main_bpf.c    |   26 +
+ .../tests/golden/da_bpf_cpu/da_bpf_cpu.c      |   40 +
+ .../tests/golden/da_bpf_cpu/da_bpf_cpu.h      |   47 +
+ .../tests/golden/da_bpf_obj/da_bpf_obj.c      |   54 +
+ .../tests/golden/da_bpf_obj/da_bpf_obj.h      |   47 +
+ .../verification/rvgen/tests/rvgen_monitor.t  |   11 +
+ tools/verification/tests/engine.sh            |    5 +-
+ 46 files changed, 2770 insertions(+), 220 deletions(-)
+ create mode 100644 kernel/trace/rv/rv_bpf.c
+ create mode 100644 tools/verification/models/nohz.dot
+ create mode 100644 tools/verification/models/tqueue.dot
+ create mode 100644 tools/verification/rv/bpf_monitors/.gitignore
+ create mode 100644 tools/verification/rv/bpf_monitors/bpf_atomic.h
+ create mode 100644 tools/verification/rv/bpf_monitors/da_monitor_bpf.h
+ create mode 100644 tools/verification/rv/bpf_monitors/nohz.c
+ create mode 100644 tools/verification/rv/bpf_monitors/nohz.h
+ create mode 100644 tools/verification/rv/bpf_monitors/tqueue.c
+ create mode 100644 tools/verification/rv/bpf_monitors/tqueue.h
+ create mode 100644 tools/verification/rv/include/bpf_monitor.h
+ create mode 100644 tools/verification/rv/src/bpf_monitor.c
+ create mode 100644 tools/verification/rv/tests/rv_bpf.t
+ create mode 100644 tools/verification/rvgen/rvgen/templates/dot2k/main_bpf.c
+ create mode 100644 tools/verification/rvgen/tests/golden/da_bpf_cpu/da_bpf_cpu.c
+ create mode 100644 tools/verification/rvgen/tests/golden/da_bpf_cpu/da_bpf_cpu.h
+ create mode 100644 tools/verification/rvgen/tests/golden/da_bpf_obj/da_bpf_obj.c
+ create mode 100644 tools/verification/rvgen/tests/golden/da_bpf_obj/da_bpf_obj.h
 
 
-
-On 28/08/2026 08.08, Florian Schauer wrote:
-> page_pool_alloc_frag_netmem() rounds the requested fragment size with
-> 
-> 	size = ALIGN(size, dma_get_cache_alignment());
-> 
-> dma_get_cache_alignment() returns 1 unless the architecture defines
-> ARCH_DMA_MINALIGN, which DMA-coherent architectures such as x86 do not.
-> There the ALIGN() is a no-op and pool->frag_offset advances by the raw,
-> unrounded size.
-> 
-> A single caller asking for an odd size then leaves frag_offset misaligned
-> for every fragment carved out of that page afterwards.  The pool is shared,
-> so the damage is not confined to the caller that caused it.
-> 
-> The per-cpu system_page_pool used by generic XDP hits this.
-> skb_pp_cow_data() allocates its fragments with the raw packet length:
-> 
-> 	size = min_t(u32, len, PAGE_SIZE);
-> 	truesize = size;
-> 	page = page_pool_dev_alloc(pool, &page_off, &truesize);
-> 
-> leaving frag_offset odd for whatever is carved out of that page next.  Its
-> own head allocation is already aligned -- SKB_HEAD_ALIGN(size) plus the
-> XDP_PACKET_HEADROOM its callers pass -- so it is a later user of the shared
-> pool that pays: page_pool_dev_alloc_va() returns a misaligned buffer,
-> napi_build_skb() installs it as skb->head, and skb_shinfo(skb) ==
-> skb->head + skb->end is misaligned with it.
-> 
-> skb_shinfo()->dataref is a 4-byte atomic_t at offset 0x20, so the
-> atomic_inc() in __skb_clone() straddles a cache line.  On x86 with split
-> lock detection -- fatal for kernel split locks by default -- this panics
-> the machine:
-> 
->    Oops: Split lock detected
->    RIP: 0010:skb_clone+0x154/0x1e0
->    Call Trace:
->     <IRQ>
->     raw_local_deliver+0x1ed/0x2c0
->     ip_protocol_deliver_rcu+0x54/0x1c0
->     ip_local_deliver_finish+0x85/0x100
->     ip_local_deliver+0x67/0x100
->     __netif_receive_skb_one_core+0x85/0xa0
->     process_backlog+0x87/0x130
-> 
-> Reproduced by attaching any generic-mode XDP program to loopback and
-> opening a RAW IPPROTO_UDP socket, which makes raw_local_deliver() clone
-> every locally delivered UDP packet; ordinary DNS traffic then triggers it,
-> roughly once per 2500 clones.  Observed on 6.12.101 and 7.1.8.
-> 
-> Tracing page_pool_alloc_frag_netmem() over one such run shows the
-> amplification -- two odd-sized requests, nine misaligned offsets:
-> 
->    requested size & 7:   0: 17035    5: 1    7: 1
->    frag_offset & 7:      0: 17028    3: 1    4: 1    5: 1    6: 1    7: 5
-> 
-> and skb_pp_cow_data() returning heads that were aligned on entry:
-> 
->    head 0xffff8f4c86aeac00 -> 0xffff8f4c53a9a9c4 (&7=4)
->    head 0xffff8f4d6a8a42c0 -> 0xffff8f4c4f7b7a45 (&7=5)
-> 
-> Round the fragment size up to at least the alignment struct skb_shared_info
-> requires, so fragments are always suitably aligned for the objects callers
-> build on them.  Architectures needing a larger DMA alignment keep it.
-> 
-> This also makes the remainder computed in page_pool_alloc_netmem(),
-> 
-> 	*size = max_size - *offset;
-> 
-> aligned, since max_size is a power of two -- which fixes the matching
-> misalignment of skb->end.
-> 
-> Verified with a controlled A/B under QEMU/KVM: same tree, same config,
-> same compiler, same rootfs and identical traffic, differing only by this
-> patch.  A SEC("xdp.frags") XDP_PASS program on lo plus UDP datagrams
-> larger than max_head_size drives skb_pp_cow_data()'s fragment loop, which
-> passes raw packet lengths to the pool.  Measured at the return of
-> skb_pp_cow_data():
-> 
->                            unpatched   patched
->    skb_pp_cow_data calls       40800     40800
->    misaligned skb->head         1120         0
->    dataref at line offset >60     80         0
-> 
-> The last row counts the accesses that actually fault:
-> skb_shinfo()->dataref sits at head+end+0x20 and is a 4-byte atomic, so
-> `lock incl` splits a 64-byte cache line only when that address lands at
-> offset 61..63.  All 80 occurrences were at offset 61; the panic reported
-> above was at offset 62.  Eliminating the misalignment removes every one
-> of them.
-> 
-> Same class of bug as commit 3bed3cc4156e ("net: Do not allocate page
-> fragments that are not skb aligned"), which fixed the older
-> netdev_alloc_frag()/napi_alloc_frag() allocators.
-> 
-> Fixes: 53e0961da1c7 ("page_pool: add frag page recycling support in page pool")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Florian Schauer <florian@schauer.to>
-> ---
-> v2:
->    - express the minimum alignment as __alignof__(struct skb_shared_info)
->      instead of sizeof(long), and drop the explanatory comment the previous
->      version carried, since the expression now states the requirement
->      directly (Eric Dumazet)
->    - no functional change vs v1 on 64-bit: the emitted code is identical
->    - Cc the maintainers and the blamed author that v1 missed
->    - correct two statements in the commit message: dataref is at offset 0x20
->      in struct skb_shared_info, not its first member, and skb_pp_cow_data()
->      allocates its head before the fragment loop, so the misaligned head
->      comes from an earlier user of the shared pool
-> v1: https://lore.kernel.org/netdev/20260826135252.3091193-1-florian@schauer.to/
-> 
->   net/core/page_pool.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-> index 8f8956fb0..08d7f35cf 100644
-> --- a/net/core/page_pool.c
-> +++ b/net/core/page_pool.c
-> @@ -1073,7 +1073,8 @@ netmem_ref page_pool_alloc_frag_netmem(struct page_pool *pool,
->   	if (WARN_ON(size > max_size))
->   		return 0;
->   
-> -	size = ALIGN(size, dma_get_cache_alignment());
-> +	size = ALIGN(size, max_t(unsigned int, dma_get_cache_alignment(),
-> +				 __alignof__(struct skb_shared_info)));
->   	*offset = pool->frag_offset;
->   
->   	if (netmem && *offset + size > max_size) {
-
-On x86_64 __alignof__(struct skb_shared_info) returns 8. So, this should 
-work, to avoid getting the lock in skb_shared_info split across cache-lines.
-
-Acked-by: Jesper Dangaard Brouer <hawk@kernel.org>
-
-Thanks for finding and fixing this bug!
---Jesper
+base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
+-- 
+2.55.0
 
