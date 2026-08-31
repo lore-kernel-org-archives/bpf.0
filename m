@@ -1,189 +1,147 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93F639A7F4
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 22:18:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC4D383C7B
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 22:19:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788214739; cv=none; b=o7CHq2ZsNK+rHagynRprTdFnTI7IQ8QNnn3LFhSEo798EvktPwH2pAL5IuCXV/C0kSe/FVfAAXzrXtYG9LxXXBq147wHCn99W+TUoHym4Yu8DMxq3TPugMCTmQxqJ0qRgkshIy8YuOYOaMNPj+TNBGrUbIoSKDsLKHZFVe+2ISU=
+	t=1788214780; cv=none; b=UdYCBcWQekG5ynFcq2mHc/zwgdu62TvQrkWZubcXGf4DCLVyXypTqgexD7ZRvlSjrpJbTt/L1SoV/48u5u1cj9CApdh53Mul0O3K/CqLYfX9yJg89PHVpinrhXZEqnQH5u+8NM9EfvaBSKNtboKim+ZK0hrDA32Zqo8Gj1KSUZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788214739; c=relaxed/simple;
-	bh=WWEEZMNW23VgeiLrA0jkBRh+FqlaOZaIbG6KQNC9i3o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T9NSihrS7Uyfm9j7MyDxT6rNwPXyK98xKfh9JiIHFi9TbKcVuB/x5S0ehAS6o/QA3u5LZowxSOG+xVJYBGkOM57umrMS35cDM1t4h8x0sgSZ/uDci1+lBjkOLUiNGnB1BuakUiGDD3uGW4JOci8hBLD+VusOje9vDIT+z8ASAQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=igDopN9B; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788214780; c=relaxed/simple;
+	bh=Bhimj3y2UTTjoNjDUzsy5GOSmUFDpPfHXNAyLaboJSA=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=hN8daUmB8hqbRINt5hxP619pkc7pVahLhbV+LZhh19Rhn4yLqlXsIWaxyUcioJUtR6Q0vJtLOxwP4lONF6AB/u9Wq3/gXDAyVNnqY46b8pv8DNyEZhXObrAlYPEYKODgFnsZqX2vqHfFofM7bMZP087T2qxq3LaJzcVrYYgFWAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kcf+Sb+6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="igDopN9B"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-ca7c1176317so3464762a12.1
-        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 15:18:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788214737; x=1788819537; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=XnNt0hP8YJjLsvezbznRGz62Lklpiz7+58ZQDmGUihY=;
-        b=igDopN9BmO44WcL5KkB8EZkn1sMNYaTnfHKrQb5ClcSjiKU+qvpp/e0WVnmyKPErgC
-         ZV7YDSwqMYlEFtW+YjjiaFCaBhSDWs28zcATvuKDagLJ7/SPylY8KK9Muf/vFiVHQpJs
-         ksLGmmidV0pdy1a2i5KulmdIwpPnl5Dzr8PCD+pyfx08cyLKUMeAoEmE9X5nQyYeXebS
-         dwNXxdFroYZK3c+uRxveZa4m2pXmPDzL5mYPdwtedGDG0KgqUor2eIMIADPQWthRbsEE
-         umG+SHdkdWb2ATMYWWUK3fajbLL1ciQTt3uPPcVbzzDB4ReOrU+qnSG2CsAzEmAr40Tg
-         zHVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788214737; x=1788819537;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=XnNt0hP8YJjLsvezbznRGz62Lklpiz7+58ZQDmGUihY=;
-        b=k4CYp4PIqcqFOb5CPwe9PZCTqpHCRALcnsljmXtm6t069tAfEHSzeFjK3skrzBV3UF
-         vaSxzZUddTKcSKMOYPNQgJy6lB+MUtr4QDLFbvg61u6EAvfn16E3oJvJcjSfwTnryM7U
-         AHzhZOwPeZ35yLmkygegv4nfDJMjGmG6JFSHw7xj83KujM7fsLE8BEm0tJD+6kdPiDuu
-         i0kbIb7ifXazfo/IIOKOaiCW7toxQRTs3GkRhNrU5ZPAnfJotKcm0ClsBeG0j3hYRVrb
-         KWqvmghnT1dJcFx1nhJfznRpeoDSdkTMrWlPFzXbrz5PbgDfk2xJalgf6PFbqrxFCiql
-         Y1JQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoPYF/qUbqCKBfWs+8t51gomVQ5CyaEYO/dWRrmWKQKaLSErPmwnxALGQLAOxfBttSUCac=@vger.kernel.org
-X-Gm-Message-State: AFuF++lt/ww2VeAWYQYEdJ9ObGUPK7gF+cs9GWKX8V7kCz08xB596iRv
-	Sdhz59DrBz2DuJLNgacIF512XcxEis07Im45K4j+Ii26H5XPPJKAQ0BG
-X-Gm-Gg: AR+sD13OoqX/BZxsU2O3+Ei1XUMvKsSEMzZ7FD+DTXrbiJ+krc8Gz0FUdek9QavFZ/a
-	YQiM2WKQhpRuJPU0/rFaAMAME9VdLO5AFlR6HWTquETWFCt+xsdPKpuHyUL9OkQP2W+i/qMii4y
-	rg6NWharZGsDXCb0NjAjk6x/XVoBwZyNVcS6foXXzKVFn9US8/uzabvWFj0B3Aw5Vk1aVQpePsM
-	JAQc+0ADSFZ+t/nVBjZIir36uzWmUPLa1JPQQEc+zBmnJ/hV9mSVVPUut8vbGI6oR4lu6aIxzFL
-	veL3OYIGpMwR06Sj+2b6fIXvvDkRpNokaAUXjqucjnJsTxURGz8bJc5ve9Xm0x3+52RsWzoc2Ov
-	KfObNi318Z3UHosyudu5cxB6nR0d19YhlO7451eo5a3M0JeycWgOdamOxFmcIijwLmEly6UPkJq
-	9v1clfwoqdytiMxOeSIl50ofH3t7Tje6hiE/0z7Bhf4X3ODNVEBV/HG+ujCn9J1D4gLJhoMz4VS
-	vtYGRTX
-X-Received: by 2002:a05:6a20:2586:b0:3d3:b02a:7252 with SMTP id adf61e73a8af0-3d3b02a76a6mr29131323637.28.1788214736859;
-        Mon, 31 Aug 2026 15:18:56 -0700 (PDT)
-Received: from devvm16600.scu0.facebook.com ([2a03:2880:9ff:44::])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3286f7be607sm33073832eec.10.2026.08.31.15.18.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2026 15:18:56 -0700 (PDT)
-Date: Mon, 31 Aug 2026 15:18:53 -0700
-From: Ziyang Men <ziyang.meme@gmail.com>
-To: Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Cc: Viktor Malik <vmalik@redhat.com>, Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Mykola Lysenko <mykolal@meta.com>,
-	Nathan Chancellor <nathan@kernel.org>, kernel-team@meta.com,
-	linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-input@vger.kernel.org, sched-ext@lists.linux.dev,
-	linux-mm@kvack.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] selftests: shared lib.bpf.mk for building BPF
- progs and skeletons
-Message-ID: <apX9zb+3awc99Pfh@devvm16600.scu0.facebook.com>
-References: <20260814075054.507089-1-ziyang.meme@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kcf+Sb+6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E0DF1F000E9;
+	Mon, 31 Aug 2026 22:19:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788214779;
+	bh=aDXzdmD6W1xZAligiaTDiHakgRF6+zyw8mYKek1b6zY=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=kcf+Sb+6yZQ4MLbEnebFsBroNHSLJHGkKc1NsZMwrdGdAFKx3u1F3sNF8PKYYNfd0
+	 BfWRsbC7+sjZQzJmdIuF0bunu5J0vVjMGS+NKIJ7E4bfiavrk5DK7ptlf5SQ26RQRQ
+	 K7G18jDUu97paua4VtSLgkikCsSsEeTIF75RccMAHVU0nAu9efzLCeMfn1BISbD7+y
+	 ey0C2VNG29uHhSDaCYw1CAZrHb/ro4c/SiXXqeoNkqlLhfdI1mFMsnxmmjpOR2SJpR
+	 2+c2aWLOe+D85n+g8T0uBqEJCsTMHi5T2selp10RoE4dHUox0VTQT0XTpz6CQYLigV
+	 VQVwnWOf0tbIA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v15 04/16] arm64: support WFET in
+ smp_cond_load_relaxed_timeout()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ankur Arora" <ankur.a.arora@oracle.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260831202251.305046-5-ankur.a.arora@oracle.com>
+References: <20260831202251.305046-1-ankur.a.arora@oracle.com>
+ <20260831202251.305046-5-ankur.a.arora@oracle.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 31 Aug 2026 22:19:38 +0000
+Message-Id: <20260831221939.0E0DF1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20260814075054.507089-1-ziyang.meme@gmail.com>
 
-Hi Reviewers,
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] WFET can miss wakeups and cause large latency spikes if the event =
+stream is disabled, because cpu_poll_relax() bypasses the event stream chec=
+k.
+- [Medium] Missing EXPORT_SYMBOL for __delay_cycles breaks loadable modules=
+ using smp_cond_load_relaxed_timeout().
+--
 
-Just want to follow-up on this patch series. Please let me know the possible
-issues and I will fix them.
+commit df5daf2c3238cb4af3e080baa4e7cbf435ca18c7
+Author: Ankur Arora <ankur.a.arora@oracle.com>
 
-Thanks very much!
+arm64: support WFET in smp_cond_load_relaxed_timeout()
 
-Best,
-Ziyang
+This commit introduces support for using the WFET instruction when a timeout
+is provided to smp_cond_load_relaxed_timeout(). It achieves this by adding a
+new __cmpwait_relaxed_timeout() helper and underlying
+__cmpwait_case_timeout_##sz macros.
 
-On Fri, Aug 14, 2026 at 12:50:50AM -0700, Ziyang Men wrote:
->This series re-factors the bpf-related toolchain for selftests, which
->currently duplicated across selftests/{bpf,sched_ext,hid}/. Unify them
->into a single includable fragment, the tools/testing/selftests/lib.bpf.mk,
->and wires up three consumers. We believe this will simplify the work for
->configuring selftests with the bpf, for both the existing and future ones.
->
->Patch 1 adds lib.bpf.mk mentioned above.
->
->Patch 2 adds a new selftest, selftests/cgroup/test_memcg_stat_cross_cpu,
->which checks the cgroup flush happens correctly by comparing the bpf
->read value matches the file reading. Existing test
->bpf/cgroup_iter_memcg only ensures whether the number is non-zero, which
->is trivial in some cases.
->
->Patches 3 and 4 replace the duplicated parts in selftests/{hid,
->sched_ext} with the lib.bpf.mk
->
->===
->Changes since v2:
->For shared Makefile:
->- The lib.bpf.mk now use the USERCFLAGS (and USERLDFLAGS) to extend the
->  CFLAGS and LDFLAGS.
->- OPT_FLAGS/RELEASE and EXTRA_CFLAGS now reach the libbpf and bpftool
->  sub-makes as well.
->- One rule per BPF source instead of a vpath, which is global and also
->  applied to the caller's own %.c rules.
->- HOSTCC/HOSTLD come from lib.mk instead of including Makefile.include,
->  which also rewrote the caller's AR, LD and CFLAGS.
->- A missing vmlinux is reported by the recipe rather than at parse time,
->  so "make clean" still works without BTF.
->
->For cgroup selftest:
->- Only one cgroup tree is created, one flush is performed, follows by
->  bpf read and file read.
->- More common cgroup functions e.g., cg_read_key_long() and
->  value_close(), are used in the selftests.
->- Use cpu_set_t rather than manually allocated cpu lists.
->- Use test_memcontrol.c's anon allocator and moving it into cgroup_util.
->- Other suggestion from the review.
->
->Others:
->- Bot reviews are fixed.
->
->===
->Changes since v1:
->  - Generalized lib.bpf.mk (source layout/suffix, extra hdrs/cflags,
->    skeleton suffix, subskeletons, configurable output dirs) so it can
->    serve hid and sched_ext, not just cgroup.
->  - Added patch 3 (hid) and patch 4 (sched_ext), converting those folders
->    to the shared fragment.
->
->Ziyang Men (4):
->  selftests: add shared lib.bpf.mk to build BPF progs and skeletons
->  selftests/cgroup: add memcg_stat_cross_cpu correctness test for flush
->  selftests/hid: build the BPF program via the shared lib.bpf.mk
->  selftests/sched_ext: build BPF schedulers via the shared lib.bpf.mk
->
-> tools/testing/selftests/cgroup/.gitignore     |   8 +
-> tools/testing/selftests/cgroup/Makefile       |  52 ++
-> tools/testing/selftests/cgroup/config         |   5 +
-> .../selftests/cgroup/lib/cgroup_util.c        |  83 +++
-> .../cgroup/lib/include/cgroup_util.h          |   3 +
-> .../cgroup/memcg_stat_cross_cpu.bpf.c         |  86 +++
-> .../selftests/cgroup/memcg_stat_cross_cpu.h   |  21 +
-> .../cgroup/test_memcg_stat_cross_cpu.c        | 596 ++++++++++++++++++
-> .../selftests/cgroup/test_memcontrol.c        |  29 +-
-> tools/testing/selftests/hid/.gitignore        |   1 +
-> tools/testing/selftests/hid/Makefile          | 180 +-----
-> tools/testing/selftests/lib.bpf.mk            | 296 +++++++++
-> tools/testing/selftests/sched_ext/Makefile    | 146 +----
-> 13 files changed, 1204 insertions(+), 302 deletions(-)
-> create mode 100644 tools/testing/selftests/cgroup/memcg_stat_cross_cpu.bpf.c
-> create mode 100644 tools/testing/selftests/cgroup/memcg_stat_cross_cpu.h
-> create mode 100644 tools/testing/selftests/cgroup/test_memcg_stat_cross_cpu.c
-> create mode 100644 tools/testing/selftests/lib.bpf.mk
->
->-- 
->2.53.0-Meta
->
+> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/ba=
+rrier.h
+> index d186a45587766..d1f4f571adaa8 100644
+> --- a/arch/arm64/include/asm/barrier.h
+> +++ b/arch/arm64/include/asm/barrier.h
+
+[ ... ]
+
+> @@ -233,7 +233,9 @@ extern bool arch_timer_evtstrm_available(void);
+>  #define CPU_POLL_RELAX_WAITS
+> =20
+>  #define cpu_poll_relax(ptr, val, timeout_ns) do {			\
+> -	if (arch_timer_evtstrm_available())				\
+> +	if (alternative_has_cap_unlikely(ARM64_HAS_WFXT))		\
+> +		__cmpwait_relaxed_timeout(ptr, val, timeout_ns);	\
+> +	else if (arch_timer_evtstrm_available())			\
+
+[Severity: High]
+Does bypassing the arch_timer_evtstrm_available() check for WFET risk missed
+wakeups and large latency spikes if the event stream is disabled?
+
+If a task executes ldxr in __cmpwait_case_timeout_##sz(), is preempted
+by an interrupt that clears the exclusive monitor, and then another task
+executes WFE (clearing the Event register), the original task resuming and
+executing WFET could sleep for the entire timeout duration.
+
+Since the monitor is Open (cleared), a store to the lock word by another CPU
+would not generate an event. The arch_timer_evtstrm_available() check helps
+prevent this exact issue by providing periodic wakeups.
+
+>  		__cmpwait_relaxed(ptr, val);				\
+>  	else								\
+>  		cpu_relax();						\
+
+> diff --git a/arch/arm64/include/asm/cmpxchg.h b/arch/arm64/include/asm/cm=
+pxchg.h
+> index 6cf3cd6873f5f..7985ae5ceb0f9 100644
+> --- a/arch/arm64/include/asm/cmpxchg.h
+> +++ b/arch/arm64/include/asm/cmpxchg.h
+
+[ ... ]
+
+> @@ -235,20 +237,52 @@ __CMPWAIT_CASE( ,  , 64);
+> =20
+>  #undef __CMPWAIT_CASE
+> =20
+> -#define __CMPWAIT_GEN(sfx)						\
+> -static __always_inline void __cmpwait##sfx(volatile void *ptr,		\
+> -				  unsigned long val,			\
+> -				  int size)				\
+> +#define __CMPWAIT_TIMEOUT_CASE(w, sfx, sz)				\
+> +static inline void __cmpwait_case_timeout_##sz(volatile void *ptr,	\
+> +					       unsigned long val,	\
+> +					       u64 timeout_ns)		\
+> +{									\
+> +	unsigned long tmp;						\
+> +	u64 ecycles =3D __delay_cycles() +				\
+> +			nsecs_to_cycles(timeout_ns);			\
+
+[Severity: Medium]
+Will this break the build for loadable modules using this API?
+
+Since __delay_cycles() lacks an EXPORT_SYMBOL() declaration, any loadable
+module calling smp_cond_load_relaxed_timeout() will expand this inline
+function and encounter linker errors.
+
+> +	asm volatile(							\
+> +	"	sevl\n"							\
+> +	"	wfe\n"							\
+> +	"	ldxr" #sfx "\t%" #w "[tmp], %[v]\n"			\
+> +	"	eor	%" #w "[tmp], %" #w "[tmp], %" #w "[val]\n"	\
+> +	"	cbnz	%" #w "[tmp], 2f\n"				\
+> +	"	msr s0_3_c1_c0_0, %[ecycles]\n"				\
+> +	"2:"								\
+> +	: [tmp] "=3D&r" (tmp), [v] "+Q" (*(u##sz *)ptr)			\
+> +	: [val] "r" (val), [ecycles] "r" (ecycles));			\
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260831202251.3050=
+46-1-ankur.a.arora@oracle.com?part=3D4
