@@ -1,320 +1,162 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 443B430ACF2
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 13:02:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B56D3314A1;
+	Mon, 31 Aug 2026 13:11:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788181349; cv=none; b=DdH3SM1qWw4N3I4aMBhJ7kXb+nckZP8+dy0N6SPUrdGWqH5nYp0AVHqBZtPHNdzDCUNoohz237sZM21g60dfL0Vq2b3ux8fnUvqXs927br0fK6Uia7MtjWeQieP1qG0nm2KxiF6dFLYBoUNXAtV05R5lhYOCrMGwo7grFG4GTD4=
+	t=1788181867; cv=none; b=fLJLlwuLQNsd/qe3gJsvpYJrRe3Z2ODTijbWDVe8DZbQvW/d3Kw5EGJmg856X+5mJstMzeZzAGp+gEq79rzquDx90R0nMUJiSl+5RyHCgTWyePYPdVRQxdP3hTWvJpLpdexnJybag9cX1AaXxLSRKMY1zojCF/uX1Tj0bI7uwYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788181349; c=relaxed/simple;
-	bh=4MzFpB92+r6GjKD2EwoM/N6cFMnzAa+A98TJWhM+Cfw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eReWmGbAcyTOQtcq0GbU404VnhqzqHoIe6QhcqFINvMhXbhfeciJyC5vWLb3ZIRQTMhb6RGQn83k3XZOdt3UgzED51qi558due7TQhIFUodUpauaGhLxFQOwZNoYTVrv9Jl2qN8j15j8TdUmjEFG6aPgQTggPKhBnrmHZUurBiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B7L7LZax; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788181867; c=relaxed/simple;
+	bh=L263YCRQbRJuwPI85uN2CwZGOEKPOQYE86PpU/uWoG4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=l8XeLi+55LfZHqhOZdAjmMpSPMZgJDYUkASn0RajxdN2sbbKaGtf8Kx9nFCfY6LJwGJSmcPgbu6KxepZpld5FhYNGXxHDAaC4U32/d7bZvHiKovtjs3+iDAonfemA2GefP4fLcBUKCguDaH7RWqf0l4/bHQ91YZGdIwU47WOcZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=MQ3Sy/bG; arc=none smtp.client-ip=67.231.148.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B7L7LZax"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-49cd77e0f95so10439915e9.3
-        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 06:02:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788181345; x=1788786145; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Lc6fZ5ApNTaGOQbfLE7LYuWoAcCW5N4eU/s6enIqDFs=;
-        b=B7L7LZaxND12h8sO+cO4HtgbZUbUCAjJGpiGfHL/guV+ARjQ2nvZ54K080NzKWOxtM
-         X8nbUlGR8pfGaSbs6aZ04ALDN7mTHKw2TvBfxcBEbnkJtnaQsPHn4Rpp5/m5aeMlOypP
-         0rM+S24xbawFSrNIOpkul9J6GyARfiitTbu8P2ithUfb6Ov26Dkg1BtQJ7HM5eUEZXan
-         tFv7mvqgHQACdnWlZ/v50KOpDUon7QsQDxfdbM0cZuwkXM5ANli55SqA7A1/Cnh6h83N
-         8ck6VM9JdoT71gesWvCr62AGx/CPQzy+1tnMz7P4T8BdnuxMzwCF+DvbjOGh5mcMylP9
-         rP1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788181345; x=1788786145;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Lc6fZ5ApNTaGOQbfLE7LYuWoAcCW5N4eU/s6enIqDFs=;
-        b=Yvr4kbCHW9k63cKmluRNZWDmGAMTrYgk4ona27T2yF+YXoB6IQH2R1YqfpqpJ6s/l8
-         +duUMsrZisIVmJ/Wg1lOtmudE+IMYapwRwcWbzLLUI7vD5vyfr6sgJPduZkPqHCtiWyn
-         5Au4bP217VSLn1imJ3ZnHBXbslYKocaGWvuA4wo+LKYU9euhbrJS/JlKPosD7CR+sLZi
-         xkKCTDLyqB1efpbK/8vHoBQAnlNUniWIHmfwzela9cZOzQFRb/tJ/4pdN8wuPWm7SOH0
-         5Z+D6eplkw+bUDE7yeRfJn6Z4BLQjjzyIGup8gUFHY95sFy/m/ejCGe2zyoJDGYsDLpg
-         us2g==
-X-Gm-Message-State: AFuF++lOU6HIKrQomao6HVZme+RXJm1mDt4Jy5kzmgnNyiGzuQ9PhsFK
-	IJW+ltsEYxXCfp64fNObSo5d3qUEhmFDVykaq3W4zU17hKoBTi9+Aqtg
-X-Gm-Gg: AR+sD12qgpYA0EzhwpIvGUNfgcWPTHq+4VkKkOL0pAcliVWsrZaWFw3SceXf3bLS3QS
-	OItl4PBl7pzr2aFCpr613Okls2vKcp4Ge1ay4xBGzu3KfoEMaM6ZdlyCn1VhHaAFzTpv/Stj8bE
-	ExOe6845QyvWpxWUQgcfRaM1Aax25yQPrBAW+2dFdDqzpA5HzjXEy7WlOEebK3Qyqsy23yxGmqc
-	n6l6He4LOG9F/DqvBL+mwL/IZjHFO8s7n+YfveC41S+nuOACI3X3VnhdZCKgM/ib9q0vz7fOn2f
-	XEubPopZmLRmhNyVGpKKwnW3k/u2/0DkRrOExa+PIsZCF5cR1VPkTx4MZvjDtJPi1GO8hfrKSJX
-	hUThnDNkJq+i05mi9AxQwEJcFTErjCmbiWq92lifXHc15v790RsOh42/TW0C1EGs0kGN/obuTs3
-	qQcNGZ/2uyg9x/3wTFpqNdbNov8AZdPMVfLLCk1Q9xIRnC0WPYUHhtdIJuNHE5Czge/wkm4Rm+m
-	+DV1w8=
-X-Received: by 2002:a05:600c:37c9:b0:49c:cedd:65b9 with SMTP id 5b1f17b1804b1-49ccedd661cmr246187435e9.16.1788181336856;
-        Mon, 31 Aug 2026 06:02:16 -0700 (PDT)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49b91c510c9sm186078785e9.0.2026.08.31.06.02.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2026 06:02:15 -0700 (PDT)
-Date: Mon, 31 Aug 2026 13:12:56 +0000
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-	netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
-	kpsingh@kernel.org, matt@bobrowski.net, john.fastabend@gmail.com,
-	brauner@kernel.org, paul@paul-moore.com,
-	torvalds@linux-foundation.org, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, martin.lau@kernel.org, yonghong.song@linux.dev,
-	mason@kernel.org, ihor.solodrai@linux.dev
-Subject: Re: [PATCH bpf-next 7/7] selftests/bpf: Add tests for BPF ethtool
- hooks
-Message-ID: <apV92LbSbDrxukKy@mail.gmail.com>
-References: <20260831110934.241898-8-a.s.protopopov@gmail.com>
- <8d30ab031e47894c8309a8f6d8c054ead8123f9228ce6f983fb3c951e46bade9@mail.kernel.org>
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="MQ3Sy/bG"
+Received: from pps.filterd (m0431384.ppops.net [127.0.0.1])
+	by mx0a-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67VBBjNY536782;
+	Mon, 31 Aug 2026 06:10:33 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pfpt0220; bh=XbQdqAX54r/8rX0BrtKTbsz
+	NuH2BR4o+T1l2B2ynFo0=; b=MQ3Sy/bGkANYP1+TrJF9tSow4tXJ0CXyvElFS8I
+	VYRtQq0ET0PC8RNZKcGlgCZqFNXXWW2+tiuJUgBc7XxlXqU8sn3bufYoo/uk/pHZ
+	Mt/y/0ARLvh3T6b4ykLaJsYBLQpwpzpSzK5gv+FPa73vOkzv2Y8f5W6elWd+AA25
+	K2Gx+m2ayQdTgPGcI0DJV7biWjZ4naqRLk9dOl/0gDCuJm3VdD7s/1ZBd3NbZBZN
+	CWycQaFiw14en6AUbg/GGGHc3e9MxHfToTvZsJJMK4dRFrhGKf6NOfOXytEqSnPn
+	plWRjCK7PKbG3s6pH7CV+5sjS8mb02KOu2JY6MB5+1DigDg==
+Received: from dc5-exch05.marvell.com ([199.233.59.128])
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4gckp8jep7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 31 Aug 2026 06:10:32 -0700 (PDT)
+Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
+ DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Mon, 31 Aug 2026 06:10:31 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
+ (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
+ Transport; Mon, 31 Aug 2026 06:10:31 -0700
+Received: from rkannoth-OptiPlex-7090.. (unknown [10.28.36.165])
+	by maili.marvell.com (Postfix) with ESMTP id 6329B3F7089;
+	Mon, 31 Aug 2026 06:10:26 -0700 (PDT)
+From: Ratheesh Kannoth <rkannoth@marvell.com>
+To: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+CC: <andrew+netdev@lunn.ch>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <davem@davemloft.net>, <edumazet@google.com>, <hawk@kernel.org>,
+        <horms@kernel.org>, <jhs@mojatatu.com>, <jiri@resnulli.us>,
+        <john.fastabend@gmail.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <sdf@fomichev.me>, <sgoutham@marvell.com>,
+        Ratheesh Kannoth
+	<rkannoth@marvell.com>
+Subject: [PATCH v10 net-next 0/2] octeontx2-pf: mqprio bandwidth offload for NIX TX schedulers
+Date: Mon, 31 Aug 2026 18:40:11 +0530
+Message-ID: <20260831131014.2639581-1-rkannoth@marvell.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8d30ab031e47894c8309a8f6d8c054ead8123f9228ce6f983fb3c951e46bade9@mail.kernel.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODMxMDExNCBTYWx0ZWRfX9BJdfqNMBfTe
+ sW4UXE5MafOldMj/QfirMsJgtppHuE1xR4IjOqtBDOfpzswL0Twj4fPlg2t6k3alujW/CdolTzg
+ JdH/b51cf2ymOxNoAxL7ArVPg+K+A7cgQ9GPsjF7ZkBm9Xr9YKDac33+TOYEA+9U2LhtoTBxD2k
+ rghG4srzqMeXKfZM/xXbmyIHEN9vCctfxxYX5UwP3Yypqluwai++Pl4yYQqfx2ctyywfhVKu8T/
+ dv9HZRNAcs6DQKFhiDTqegMgrBqlS9T1IJ4aTCLtPwJFlQpEXF0AbI6m2IhWhkUccuaAtnFQrtE
+ 8YUIijmAFx9to3r9djtXk+nW2JEIYv4dQMC8xQ/dESoYLiuKI207Dwh+yJ3E9qM/vVkrksZ4oQS
+ 3eY/Jz5nl0izYY8UN8altJWyyDdTqlWHqC+MLcdlrTfBZU11e8G/oP22afIVK55t2lMN4ShlSmc
+ wX8ESjJgyHEAHuyZZmQ==
+X-Proofpoint-GUID: JP7GND6UNhSNZWUfISyE5TXLaT5uGLmw
+X-Proofpoint-ORIG-GUID: JP7GND6UNhSNZWUfISyE5TXLaT5uGLmw
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODMxMDExNCBTYWx0ZWRfX3NliO13DpWmu
+ z4VPERy2PcTZnPUCAC4uEmISxi9mZpXb6V5NOKGr2RPg3r3sRbCf7XcP6DnCQSmtPVUnLuRLt5m
+ HaxalccJqN5Yj6Abwdjqh3yjRtM6jRs=
+X-Authority-Analysis: v=2.4 cv=GLk41ONK c=1 sm=1 tr=0 ts=6a957d48 cx=c_pps
+ a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17
+ a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=l0iWHRpgs5sLHlkKQ1IR:22
+ a=TtqV-g6YmW1Jfm2GSLaY:22 a=c92rfblmAAAA:8 a=M5GUcnROAAAA:8 a=VwQbUJbxAAAA:8
+ a=C2uUxsRbeo5h9OizJ8YA:9 a=GvGzcOZaWPEFPQC_NcjD:22 a=OBjm3rFKGHvpk9ecZwUJ:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-08-31_04,2026-08-27_02,2025-10-01_01
 
-On 26/08/31 12:07PM, bot+bpf-ci@kernel.org wrote:
-> >     This is how the list off sub-tests maps to call sites:
-> >
-> >       linkstate_get_doit:    netlink.c (ethnl_default_doit)
-> >       linkstate_get_dump:    netlink.c (ethnl_default_dump_one)
-> >       cable_test_act:        cabletest.c (ethnl_act_cable_test)
-> >       cable_test_tdr_act:    cabletest.c (ethnl_act_cable_test_tdr)
-> >       features_set:          features.c (ethnl_set_features)
-> >       module_fw_flash_act:   module.c (ethnl_act_module_fw_flash)
-> >       tunnel_info_get_doit:  tunnels.c (ethnl_tunnel_info_doit)
-> >       tunnel_info_get_dump:  tunnels.c (ethnl_tunnel_info_dumpit)
-> >       tsinfo_get_dump:       tsinfo.c (ethnl_tsinfo_dump_one_netdev)
-> >       rss_get_dump:          rss.c (ethnl_rss_dumpit)
-> >       channels_set_doit:     netlink.c (ethnl_default_set_doit)
-> >       ioctl:                 ioctl.c (ethtool_bpf_ioctl_hook)
-> >       ioctl_sub_cmd:         ioctl.c (ethtool_bpf_ioctl_hook)
-> >       no tests:             rss.c (ethnl_rss_{create,delete}_doit)
-> 
-> The changelog's sub-tests table does not match the sub-tests the patch
-> adds. The code registers 15 sub-tests, including cable_test_phy_index
-> (check_doit with TEST_PHY_INDEX, exercising the phy_index argument of
-> the doit hook) and strset_get_phy_index_dump (check_dump with
-> TEST_PHY_INDEX, exercising the phy_index argument of the dump hook),
-> neither of which appears in the 13-row table.
-> 
-> These are the only two sub-tests that cover the phy_index parameter at
-> all, i.e. the least obvious part of the new hook ABI, so their absence
-> from the mapping is the part a reviewer is most likely to want
-> documented.
-> 
-> Two smaller inconsistencies in the same block: the prose names
-> ethnl_tsinfo_dump_one_phydev() as unreachable via netdevsim, but the
-> 'no tests' row lists only rss.c (ethnl_rss_{create,delete}_doit); and
-> 'the list off sub-tests' should read 'the list of sub-tests'.
+This series adds hardware offload for channel-mode mqprio with
+TC_MQPRIO_SHAPER_BW_RATE on Marvell octeontx2 PF devices. Each
+non-QoS transmit queue is shaped by programming MDQ CIR/PIR on the NIX TX
+scheduler. When bandwidth offload is enabled, the driver allocates one
+SMQ per queue, parents every MDQ under TL4[0], and applies each traffic
+class min/max rate to the queue(s) in that class. The TX scheduler
+hierarchy is reprogrammed through ndo_stop()/ndo_open() on every mqprio
+add, replace, or delete.
 
-Yes, thanks, I haven't updated the commit message after the last changes.
+Patch 1 is required for patch 2. The octeontx2 driver tracks committed
+mqprio configuration in snapshots keyed by the owning qdisc handle. That
+handle is needed to implement two behaviours that patch 2 relies on:
 
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/ethtool_lsm.c b/tools/testing/selftests/bpf/prog_tests/ethtool_lsm.c
-> > new file mode 100644
-> > index 0000000000000..f4662fb1ae3ce
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/prog_tests/ethtool_lsm.c
-> > @@ -0,0 +1,330 @@
-> 
-> [ ... ]
-> 
-> > +static int ethnl_request(int fd, __u16 family_id, __u8 cmd, __u16 hdr_attr,
-> > +			 __u16 extra_nest, __u32 ifindex, __u32 phy_index, bool dump)
-> > +{
-> > +	static __u32 sequence = 10;
-> > +	struct genl_req req = {};
-> > +	__u32 seq = sequence++;
-> > +	struct rtattr *nest;
-> > +	int err;
-> > +
-> > +	req.nlh.nlmsg_len = NLMSG_LENGTH(GENL_HDRLEN);
-> > +	req.nlh.nlmsg_type = family_id;
-> > +	req.nlh.nlmsg_flags = NLM_F_REQUEST | (dump ? NLM_F_DUMP : 0);
-> > +	req.nlh.nlmsg_seq = seq;
-> > +	req.genl.cmd = cmd;
-> > +	req.genl.version = ETHTOOL_GENL_VERSION;
-> > +
-> > +	nest = addattr_nest(&req.nlh, sizeof(req), hdr_attr | NLA_F_NESTED);
-> > +	if (ifindex && addattr32(&req.nlh, sizeof(req), ETHTOOL_A_HEADER_DEV_INDEX, ifindex))
-> > +		return -EMSGSIZE;
-> > +	if (phy_index && addattr32(&req.nlh, sizeof(req), ETHTOOL_A_HEADER_PHY_INDEX, phy_index))
-> > +		return -EMSGSIZE;
-> > +	if (addattr32(&req.nlh, sizeof(req), ETHTOOL_A_HEADER_FLAGS, ETHTOOL_FLAG_COMPACT_BITSETS))
-> > +		return -EMSGSIZE;
-> > +	addattr_nest_end(&req.nlh, nest);
-> > +
-> > +	if (extra_nest) {
-> > +		nest = addattr_nest(&req.nlh, sizeof(req), extra_nest | NLA_F_NESTED);
-> > +		addattr_nest_end(&req.nlh, nest);
-> > +	}
-> > +
-> > +	err = genl_send(fd, &req.nlh);
-> > +	if (err)
-> > +		return err;
-> > +
-> > +	return genl_recv(fd, seq, family_id, dump);
-> > +}
-> 
-> ethnl_request() never sets NLM_F_ACK, so a doit request that succeeds
-> without producing a reply message gets no netlink response at all:
-> netlink_rcv_skb() only calls netlink_ack() when
-> 'nlh->nlmsg_flags & NLM_F_ACK || err'.
-> 
-> This is exactly what happens in the allow arm of the channels_set_doit
-> subtest. ETHTOOL_MSG_CHANNELS_SET is dispatched through
-> ethnl_default_set_doit(); ethnl_set_channels_validate() returns 1 on
-> netdevsim (both get_channels and set_channels are implemented), so the
-> hook is reached and the deny arm works, but the request carries only
-> the header nest, so ethnl_set_channels() takes 'if (!mod) return 0;'
-> and the SET handler produces neither a reply nor an error.
-> 
-> genl_recv() then blocks until the SO_RCVTIMEO set in genl_open()
-> (struct timeval { .tv_sec = 1 }) expires and returns -EAGAIN.
-> Consequences: (a) 'if (!ASSERT_NEQ(err, -TEST_ERRNO, "doit (allow)"))'
-> passes vacuously - -EAGAIN would also be returned if the kernel had
-> wrongly dropped the request, so the allow arm of this subtest pins
-> nothing; (b) the subtest silently costs a full second of wall time, and
-> would grow with each additional SET-style subtest added later.
-> 
-> Setting NLM_F_ACK in nlmsg_flags (rtnl_talk() in netlink_helpers.c
-> does this itself when no answer is requested) makes the kernel ack the
-> successful set, so the allow arm returns 0 immediately and actually
-> distinguishes success from 'nothing came back'.
+  * tc qdisc replace installs the new mqprio and runs its offload setup
+    before tearing down the replaced instance. Without the handle, the
+    driver cannot tell a stale disable callback from the replaced qdisc
+    apart from teardown of the active configuration, and may clear
+    hardware shapers or netdev TC state while the new mqprio is being
+    committed.
 
-Yes, thanks.
+  * When replace fails after partial programming, the driver rolls back
+    from the previous snapshot. Matching setup and teardown callbacks to
+    the same qdisc instance requires the handle passed through the core
+    mqprio offload path.
 
-> [ ... ]
-> 
-> > diff --git a/tools/testing/selftests/bpf/progs/ethtool_lsm.c b/tools/testing/selftests/bpf/progs/ethtool_lsm.c
-> > new file mode 100644
-> > index 0000000000000..c6b21aeed6fec
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/progs/ethtool_lsm.c
-> > @@ -0,0 +1,168 @@
-> 
-> [ ... ]
-> 
-> > +/*
-> > + * This test is used for all hooks, just checks that it is ours,
-> > + * and allows/denies based on the "allow" global variable
-> > + */
-> > +static int test_policy(const struct net_device *dev, __u32 cmd, __u32 sub_cmd, __u32 phy_index)
-> > +{
-> > +	__u32 pid;
-> > +
-> > +	pid = bpf_get_current_pid_tgid() >> 32;
-> > +	if (pid != monitored_pid)
-> > +		return 0;
-> > +
-> > +	if (!dev || (target_ifindex && dev->ifindex != target_ifindex))
-> > +		return 0;
-> > +
-> > +	if (target_cmd && cmd != target_cmd)
-> > +		return 0;
-> > +
-> > +	if (target_sub_cmd && sub_cmd != target_sub_cmd)
-> > +		return 0;
-> > +
-> > +	if (phy_index != target_phy_index)
-> > +		return -EDOTDOT;
-> > +
-> > +	return allow ? 0 : -EDOTDOT; /* unlikely to see this errno outside this test */
-> > +}
-> 
-> The comment on test_policy() says the helper 'just checks that it is
-> ours, and allows/denies based on the "allow" global variable', but the
-> function has a third behaviour the comment does not mention: the
-> phy_index test returns -EDOTDOT unconditionally, i.e. it denies
-> regardless of the value of allow.
-> 
-> That is not a cosmetic difference: it is the only place where the deny
-> errno is produced independently of allow, and it is precisely the
-> mechanism the phy_index sub-tests (cable_test_phy_index,
-> strset_get_phy_index_dump in prog_tests/ethtool_lsm.c) rely on - a
-> mismatched phy_index makes the allow phase return -EDOTDOT and
-> therefore fail ASSERT_NEQ(err, -TEST_ERRNO, "doit (allow)").
-> 
-> Note also that every other filter in the function bails out with
-> 'return 0' (allow) when the request does not match, while this one
-> bails out with a denial, so the asymmetry is easy to misread as a
-> copy/paste slip.
-> 
-> A reader who trusts the comment will assume allow == true always means
-> 'permit', and a later change to the phy_index handling can silently
-> turn the phy_index sub-tests into no-ops. Suggest documenting that the
-> phy_index comparison is an assertion that the hook argument was
-> propagated correctly (or gating it on target_phy_index like the other
-> filters and asserting the value from user space instead).
+Patch 1 extends struct tc_mqprio_qopt_offload with that handle and fills
+it from mqprio_enable_offload() and mqprio_disable_offload(). Patch 2
+consumes it in the octeontx2 PF mqprio offload path.
 
-Yes, thanks. I haven't updated the comment.
-I will see what looks better, to refactor code or comment.
+The driver rejects offload unless the interface is running and the
+device supports CIR+PIR shaping. Per-TC rates are rejected when a
+traffic class spans more than one queue, and concurrent PFC, XDP, or SDP
+rep use is blocked. Ethtool channel count changes are blocked while mqprio
+bandwidth offload is active.
 
-> [ ... ]
-> 
-> > +/*
-> > + * CVE-2025-21701 is an example of a bug which must be mitigated under a lock,
-> > + * as access to dev->reg_state must be protected.
-> > + */
-> > +SEC("lsm/ethtool_netlink_doit")
-> > +int BPF_PROG(cve_2025_21701, const struct net_device *dev, __u32 cmd, __u32 phy_index, int ret)
-> > +{
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	if (!dev)
-> > +		return 0;
-> > +
-> > +	return dev->reg_state >= NETREG_UNREGISTERING ?  -ENODEV : 0;
-> > +}
-> 
-> The example policy for CVE-2025-21701 installs only an
-> lsm/ethtool_netlink_doit program, but the hook-adding commit in this
-> same series (36bc9190590e4) classifies CVE-2025-21701 under 'more than
-> one hook required', in contrast to CVE-2024-46834 which is given both
-> an ioctl and a doit program a few lines below.
-> 
-> The upstream fix for that CVE (12e070eb6964b, 'net: avoid race between
-> device unregistration and ethnl ops') widened the test in
-> ethnl_ops_begin() to 'dev->reg_state >= NETREG_UNREGISTERING', and
-> ethnl_ops_begin() is reached from the dump path as well as from doit:
-> 
-> net/ethtool/netlink.c:ethnl_default_dump_one()
->   -> ctx->ops->prepare_data()
->     -> net/ethtool/channels.c:35 / net/ethtool/rss.c:158
->       -> ethnl_ops_begin()
-> 
-> A doit-only program therefore leaves the dump entry into the same
-> window unpoliced, so as an 'illustration of how an actual policy might
-> look' it is incomplete for the CVE it names. Either add the matching
-> lsm/ethtool_netlink_dump program (as done for cve_2024_46834_*), or
-> state in the comment that only the doit half is shown and why.
+Ratheesh Kannoth (2):
+  net/sched: mqprio: pass qdisc handle to offload drivers
+  octeontx2-pf: add mqprio bandwidth offload for NIX TX schedulers
 
-The actual CVE wasn't reached in .dump, only .doit. However, the commit
-you've listed makes sense, as there can be similar CVEs reachable via both paths.
+ .../ethernet/marvell/octeontx2/af/rvu_nix.c   |   6 +-
+ .../marvell/octeontx2/nic/otx2_common.c       | 145 +++-
+ .../marvell/octeontx2/nic/otx2_common.h       |  27 +
+ .../marvell/octeontx2/nic/otx2_dcbnl.c        |   6 +
+ .../marvell/octeontx2/nic/otx2_ethtool.c      |   8 +
+ .../ethernet/marvell/octeontx2/nic/otx2_pf.c  |  13 +
+ .../ethernet/marvell/octeontx2/nic/otx2_tc.c  | 696 ++++++++++++++++++
+ .../net/ethernet/marvell/octeontx2/nic/qos.c  |   3 +
+ include/net/pkt_sched.h                       |   1 +
+ net/sched/sch_mqprio.c                        |   5 +-
+ 10 files changed, 907 insertions(+), 3 deletions(-)
 
-> Secondary nit on the same line: '?  -ENODEV' contains a doubled space
-> after the '?'.
+---
 
-yes thanks
+v9 -> v10: Addressed sashiko/jacub comments.
+	https://sashiko.dev/#/message/20260817032747.1765883-1-rkannoth%40marvell.com
 
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33386073074
+v8 -> v9: Addressed Sashiko comments
+	https://lore.kernel.org/netdev/aoJ6FhtWue0FHDQV@rkannoth-OptiPlex-7090/
+v7 -> v8: Addressed Sashiko comments
+	https://sashiko.dev/#/patchset/20260811085050.3212280-1-rkannoth%40marvell.com
+v6 -> v7: Addressed Sashiko comments
+	https://sashiko.dev/#/message/20260810034738.1786029-1-rkannoth%40marvell.com
+v5 -> v6: Addressed Sashiko comments
+	https://lore.kernel.org/netdev/20260806095434.1144397-1-rkannoth@marvell.com/
+v4 -> v5: Addressed sashiko comments
+	https://sashiko.dev/#/patchset/20260803042724.3380209-1-rkannoth%40marvell.com
+v3 -> v4: Addressed sashiko comments
+	https://lore.kernel.org/netdev/20260729105139.2302908-1-rkannoth@marvell.com/
+v2 -> v3: Addressed sashiko comments
+	https://lore.kernel.org/netdev/amnYX866mYx02cBe@rkannoth-OptiPlex-7090/T/#m67310cbec48b21c7720858ab3a1ea083a0f8dc10
+v1 -> v2: Addressed sashiko comments
+	https://lore.kernel.org/netdev/20260724075010.2665758-1-rkannoth@marvell.com/
 
+--
+2.43.0
