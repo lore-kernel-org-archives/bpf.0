@@ -1,147 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC4D383C7B
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 22:19:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BBB13B3894
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 22:33:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788214780; cv=none; b=UdYCBcWQekG5ynFcq2mHc/zwgdu62TvQrkWZubcXGf4DCLVyXypTqgexD7ZRvlSjrpJbTt/L1SoV/48u5u1cj9CApdh53Mul0O3K/CqLYfX9yJg89PHVpinrhXZEqnQH5u+8NM9EfvaBSKNtboKim+ZK0hrDA32Zqo8Gj1KSUZ4=
+	t=1788215599; cv=none; b=tjE+azP719dp6W2KDleITHSyVdcdcy4DqdpfnlUpRrwld/tKnRrFqFlklclbfjgzfSs/kN8dFIYfVMlo8kiMWZQZcNx84CQSWkW9DRme+D/F7JSvlNAMqGuN4o+RFa5bndde2rbbLVnEtOpl4qJwTQkxFn+9e2zgMdkoIXLeQ58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788214780; c=relaxed/simple;
-	bh=Bhimj3y2UTTjoNjDUzsy5GOSmUFDpPfHXNAyLaboJSA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hN8daUmB8hqbRINt5hxP619pkc7pVahLhbV+LZhh19Rhn4yLqlXsIWaxyUcioJUtR6Q0vJtLOxwP4lONF6AB/u9Wq3/gXDAyVNnqY46b8pv8DNyEZhXObrAlYPEYKODgFnsZqX2vqHfFofM7bMZP087T2qxq3LaJzcVrYYgFWAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kcf+Sb+6; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788215599; c=relaxed/simple;
+	bh=1AnJ9PNrT633okRZZHbsfUob+hUkyuKUfJ+x+QaIIqI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TsC7yfqC7eDCKFfm8KYUeFLMFklmNxCsL3WGg4Ucebb41zufz/RAJ77rVm9sWllHTc2HYifD3fFdHnOawmX1APX01zPiMN5sELr84GXUc3nwzFFEArhO94sRtzWleroV5B++CU/gQYu/yGor8t/3U4PAjTShoNCpzmI1scdXffI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IkahWEvF; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kcf+Sb+6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E0DF1F000E9;
-	Mon, 31 Aug 2026 22:19:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788214779;
-	bh=aDXzdmD6W1xZAligiaTDiHakgRF6+zyw8mYKek1b6zY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kcf+Sb+6yZQ4MLbEnebFsBroNHSLJHGkKc1NsZMwrdGdAFKx3u1F3sNF8PKYYNfd0
-	 BfWRsbC7+sjZQzJmdIuF0bunu5J0vVjMGS+NKIJ7E4bfiavrk5DK7ptlf5SQ26RQRQ
-	 K7G18jDUu97paua4VtSLgkikCsSsEeTIF75RccMAHVU0nAu9efzLCeMfn1BISbD7+y
-	 ey0C2VNG29uHhSDaCYw1CAZrHb/ro4c/SiXXqeoNkqlLhfdI1mFMsnxmmjpOR2SJpR
-	 2+c2aWLOe+D85n+g8T0uBqEJCsTMHi5T2selp10RoE4dHUox0VTQT0XTpz6CQYLigV
-	 VQVwnWOf0tbIA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v15 04/16] arm64: support WFET in
- smp_cond_load_relaxed_timeout()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ankur Arora" <ankur.a.arora@oracle.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260831202251.305046-5-ankur.a.arora@oracle.com>
-References: <20260831202251.305046-1-ankur.a.arora@oracle.com>
- <20260831202251.305046-5-ankur.a.arora@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 31 Aug 2026 22:19:38 +0000
-Message-Id: <20260831221939.0E0DF1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IkahWEvF"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8534d507f59so4463645b3a.0
+        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 15:33:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788215597; x=1788820397; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=FhLq11kRV4Uf786rNKyx4nCecX+BX2O4IlyTwAzgdeE=;
+        b=IkahWEvF9oOWSxCIaBOwjpDCy52K0gSC+jHpmIp4dTEMrd4M2Z4oCXzPGxyEG5IIZj
+         sPutxtT2++qFy8LXW1eUjssgGC/wFWzlRtREKXQDnriVAK5atzsyAsEJxL5p5bio27wI
+         R4oQE6pMLh+sXMcPi7Q3qgN4VSgSefiX2ZIqRib/meJ9vskmbzjbIsX49W2wUkcvcG1e
+         5S63pQclUPewaiqWFI1RJcW2dkktQcvyVAnl0mYkzGalcQcXCoLMV9bIJz+Fq3hdZdnb
+         RjVo6N5pHR8ZKaOjorQi0eO1JSdIE3yHGaZKdsWwURQa+QWSGuHPFY5bBelO3em+m3oO
+         4Z1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788215597; x=1788820397;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=FhLq11kRV4Uf786rNKyx4nCecX+BX2O4IlyTwAzgdeE=;
+        b=TgwqMeKjJ65NGVJBphAYE1RmoO5YM9af3ny6UJayz9XArAznGBN5wTAvIAOQXP3Sv8
+         ewOF6m0JFxlUU1C77Kt5Nr/O+qmhSmBvUIMp1JbPfRi5EHvPjF6FOFOZ+3ytRKkF+a1g
+         ME17KTbW/OXZg90vy20j+d6lKE02W9fIhsmBDMN53alCd9gmxULL798nCQk2SzQrSoSd
+         khWz8t9QLtZeLFooLUBVpHKTEgGpzmZBbFoEPFBuxPCh0r/Z01LxyjedPXg63NLjxp9q
+         mbSrkIWJ2R26/LZqJeP9V3sgn/eNM2hahF11TWm6Na8hFCYfc6DISbEXaKrOyGzENxVZ
+         WVXg==
+X-Gm-Message-State: AFuF++kS7HzGjjwaFGe/IEJxbdXDjjOFPAUz9lBfMbuS6BR/x/cfY9/g
+	vTaD8gweV3gr5t1yJPxeCoFG8gOCou8lr4gMPMm3139JDTpVlyKzV3r3XzRgLw==
+X-Gm-Gg: AR+sD106bJ202b2T2fCzhTCnu6twcRaqZZuDNoY4SObJkyVqA98yIuKpIA+dsuh/SHf
+	hIlQqjx3mYpcG0goMkMf44a32ll3rgtmwL3T3OlCP9QW58bcTevyq1TxRsN13ZpqpzsDHZBkPrJ
+	0E3kJt51B28lsIVBcegeMKS+C0+bfKxTRFT/HVQx6jDAN90Eov8krCO/qWZ7wlHaqR4K3NSZdbi
+	ilWjfbO4CzDT/X8UyeJ8XMWhZdHZegXZD7v124x6lsJ91JyXAnlx/a8OXxWbHg4xvtMGeWGb8Qi
+	qSUSRDBnz3XzBGMgkfVHpHIvi+55/kxMpunmD/qtQ8EwZibLs26Mj8F/9dGosUUeLeweivBNKrp
+	1vi73QAl2K/ZELDWuQSeJoQnQDz3VCyTm6gkaCAh4ywojLGDlW0aZzz76ti8MFp4mgl+3rmFKbB
+	SLrYtpCrjPojw+V0KgkJvXEVoqQD9DGWVS77b55Lqu8MvjyLXhylNmkIZgniKuh6Xp+xeYb+d9E
+	vb+Kho5FswyqfgIyH9ttITsporkp7cWbqgn9eLyH3Pyn1OoTUSeOPMfYfKCnF5IBdazto744cLY
+	5OGMzZhvFL13LWJV+mLxz5fM9Rwwawor3OLgmWT0puxzhKbVEPBcF4Xi8s4c2ruwz5V7NA8nI/Y
+	=
+X-Received: by 2002:a05:6a00:1ca5:b0:841:dca1:8b69 with SMTP id d2e1a72fcca58-856274eefeamr47709752b3a.5.1788215597275;
+        Mon, 31 Aug 2026 15:33:17 -0700 (PDT)
+Received: from sid-dev-env.cgrhrlrrq2nuffriizdlnb1x4b.xx.internal.cloudapp.net ([4.155.54.158])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc1f36ee01asm4795243a12.28.2026.08.31.15.33.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Aug 2026 15:33:16 -0700 (PDT)
+From: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Siddharth Chintamaneni <sidchintamaneni@gmail.com>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	rlmenge@gmail.com,
+	hargar@microsoft.com,
+	apais@microsoft.com
+Subject: [PATCH bpf-next v2 1/2] bpf: allow terminal gotox instructions
+Date: Mon, 31 Aug 2026 22:33:13 +0000
+Message-ID: <20260831223314.89787-1-sidchintamaneni@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] WFET can miss wakeups and cause large latency spikes if the event =
-stream is disabled, because cpu_poll_relax() bypasses the event stream chec=
-k.
-- [Medium] Missing EXPORT_SYMBOL for __delay_cycles breaks loadable modules=
- using smp_cond_load_relaxed_timeout().
---
+check_subprogs() treats gotox as a direct jump and validates its reserved
+zero offset. When gotox is the final instruction, this produces a
+synthetic successor one instruction past the end of the subprogram and
+rejects an otherwise valid program.
 
-commit df5daf2c3238cb4af3e080baa4e7cbf435ca18c7
-Author: Ankur Arora <ankur.a.arora@oracle.com>
+Skip direct-offset validation for gotox and accept it as a
+non-fallthrough terminal instruction. Its actual targets remain validated
+from the instruction-array jump table during CFG construction.
 
-arm64: support WFET in smp_cond_load_relaxed_timeout()
+Fixes: 493d9e0d6083 ("bpf, x86: add support for indirect jumps")
+Signed-off-by: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
+Reviewed-by: Anton Protopopov <a.s.protopopov@gmail.com>
+---
+ kernel/bpf/verifier.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-This commit introduces support for using the WFET instruction when a timeout
-is provided to smp_cond_load_relaxed_timeout(). It achieves this by adding a
-new __cmpwait_relaxed_timeout() helper and underlying
-__cmpwait_case_timeout_##sz macros.
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e036ae20bf6b..44195ec1445d 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3087,6 +3087,8 @@ static int check_subprogs(struct bpf_verifier_env *env)
+ 			subprog[cur_subprog].exit_idx = i;
+ 			goto next;
+ 		}
++		if (insn_is_gotox(&insn[i]))
++			goto next;
+ 		off = i + bpf_jmp_offset(&insn[i]) + 1;
+ 		if (off < subprog_start || off >= subprog_end) {
+ 			verbose(env, "jump out of range from insn %d to %d\n", i, off);
+@@ -3106,7 +3108,8 @@ static int check_subprogs(struct bpf_verifier_env *env)
+ 			 */
+ 			if (code != (BPF_JMP | BPF_EXIT) &&
+ 			    code != (BPF_JMP32 | BPF_JA) &&
+-			    code != (BPF_JMP | BPF_JA)) {
++			    code != (BPF_JMP | BPF_JA) &&
++			    !insn_is_gotox(&insn[i])) {
+ 				verbose(env, "last insn is not an exit or jmp\n");
+ 				bpf_diag_program_structure(
+ 					env, i, "subprogram can fall through",
 
-> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/ba=
-rrier.h
-> index d186a45587766..d1f4f571adaa8 100644
-> --- a/arch/arm64/include/asm/barrier.h
-> +++ b/arch/arm64/include/asm/barrier.h
+base-commit: cd35e1b10182c42b4ae31ee49119463b17d8ba7f
+-- 
+2.43.0
 
-[ ... ]
-
-> @@ -233,7 +233,9 @@ extern bool arch_timer_evtstrm_available(void);
->  #define CPU_POLL_RELAX_WAITS
-> =20
->  #define cpu_poll_relax(ptr, val, timeout_ns) do {			\
-> -	if (arch_timer_evtstrm_available())				\
-> +	if (alternative_has_cap_unlikely(ARM64_HAS_WFXT))		\
-> +		__cmpwait_relaxed_timeout(ptr, val, timeout_ns);	\
-> +	else if (arch_timer_evtstrm_available())			\
-
-[Severity: High]
-Does bypassing the arch_timer_evtstrm_available() check for WFET risk missed
-wakeups and large latency spikes if the event stream is disabled?
-
-If a task executes ldxr in __cmpwait_case_timeout_##sz(), is preempted
-by an interrupt that clears the exclusive monitor, and then another task
-executes WFE (clearing the Event register), the original task resuming and
-executing WFET could sleep for the entire timeout duration.
-
-Since the monitor is Open (cleared), a store to the lock word by another CPU
-would not generate an event. The arch_timer_evtstrm_available() check helps
-prevent this exact issue by providing periodic wakeups.
-
->  		__cmpwait_relaxed(ptr, val);				\
->  	else								\
->  		cpu_relax();						\
-
-> diff --git a/arch/arm64/include/asm/cmpxchg.h b/arch/arm64/include/asm/cm=
-pxchg.h
-> index 6cf3cd6873f5f..7985ae5ceb0f9 100644
-> --- a/arch/arm64/include/asm/cmpxchg.h
-> +++ b/arch/arm64/include/asm/cmpxchg.h
-
-[ ... ]
-
-> @@ -235,20 +237,52 @@ __CMPWAIT_CASE( ,  , 64);
-> =20
->  #undef __CMPWAIT_CASE
-> =20
-> -#define __CMPWAIT_GEN(sfx)						\
-> -static __always_inline void __cmpwait##sfx(volatile void *ptr,		\
-> -				  unsigned long val,			\
-> -				  int size)				\
-> +#define __CMPWAIT_TIMEOUT_CASE(w, sfx, sz)				\
-> +static inline void __cmpwait_case_timeout_##sz(volatile void *ptr,	\
-> +					       unsigned long val,	\
-> +					       u64 timeout_ns)		\
-> +{									\
-> +	unsigned long tmp;						\
-> +	u64 ecycles =3D __delay_cycles() +				\
-> +			nsecs_to_cycles(timeout_ns);			\
-
-[Severity: Medium]
-Will this break the build for loadable modules using this API?
-
-Since __delay_cycles() lacks an EXPORT_SYMBOL() declaration, any loadable
-module calling smp_cond_load_relaxed_timeout() will expand this inline
-function and encounter linker errors.
-
-> +	asm volatile(							\
-> +	"	sevl\n"							\
-> +	"	wfe\n"							\
-> +	"	ldxr" #sfx "\t%" #w "[tmp], %[v]\n"			\
-> +	"	eor	%" #w "[tmp], %" #w "[tmp], %" #w "[val]\n"	\
-> +	"	cbnz	%" #w "[tmp], 2f\n"				\
-> +	"	msr s0_3_c1_c0_0, %[ecycles]\n"				\
-> +	"2:"								\
-> +	: [tmp] "=3D&r" (tmp), [v] "+Q" (*(u##sz *)ptr)			\
-> +	: [val] "r" (val), [ecycles] "r" (ecycles));			\
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260831202251.3050=
-46-1-ankur.a.arora@oracle.com?part=3D4
