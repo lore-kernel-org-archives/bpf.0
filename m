@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DD843B42EB;
-	Mon, 31 Aug 2026 09:38:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F25953DDB1D;
+	Mon, 31 Aug 2026 09:40:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788169133; cv=none; b=lZtsevxk9gRxvODpaOXD1BCc54h0eqiZVAslkvvb/d5tY27Fu7nil6V3DIx+E7viGGpb8pDRy+OAeA3IhtjniAcGLAyeZ6ceNKGjiwKi9lYANomN6XaT/ra3J1dZ7rcsWt/6I+E+XdXrcK6nvZTd6HfwUjL8zP+2jVAuoYPcP64=
+	t=1788169240; cv=none; b=qwblOjDL0RXT8G9ZVv/RSn049eG8kIez+sBHc16sKZIbHOJDqLs9zuIduJ52zmAETj2WUKzGcGFHh1j5wSzfBFZM/W5TSgL/TgG4YTAVMjKG6gNMmQfBXecrXnhktchlTxAcO45hMs0iC83Gv4eeYkjTQvbWCZjJ8y8kWVOkInw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788169133; c=relaxed/simple;
-	bh=wAa3IvOHsnHEgsWCDikMyBbhcgdh4M6ot9GIHvpGZek=;
+	s=arc-20240116; t=1788169240; c=relaxed/simple;
+	bh=PP6J6gEXfB2zgSpUiOtpgtkCxYNTusLi+Z0X9f4YtEU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=CG2Tl3tHJrsnAV2OuSlsEsJwKzdz6sGHv7d9zeVv2vnIUCV5aMw5oyuM9KU8bazffl87SjBsGCh4wzTUQX9LA++K6h8lmzxhsuiFmW+kLPC0+rF4HyG/mKytVrYEI01F8QLrOExQr2buxsmR+ycf+v8GoKH2M92DWAhjDazwPto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eNKhtE8W; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=tkMw/vQOTk9SEezIR0w33hKH8OC52kredNrwW5fbPK3DQGM/ntYLyN1/qsNtTDpsvs9orRWj3yO9yVX6TwCVP6N19WoQfzCE6N/7Dw5PDUlDf+WNu7inkfeT3kyBWyzkefpIFvto7FeI7kgONMNKlkW/SpNCiTk55Ek2/4k2mz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NLmq6C/1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eNKhtE8W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC9D51F000E9;
-	Mon, 31 Aug 2026 09:38:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NLmq6C/1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71EA01F000E9;
+	Mon, 31 Aug 2026 09:40:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788169132;
-	bh=OFphn4x5PlgB7JyIPyj4yiTxpOVVPS0uVDVsQpDG1dA=;
+	s=k20260515; t=1788169238;
+	bh=Jxm2dIqV+KcoPcQhXodbPQjhG7Cs37TXWNsTjgEA7wU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=eNKhtE8WTrPsNR93RD/6l1dQsjANrp4xjKj94jWCH2UDU090XiMy/rta2H5x9TGyX
-	 L4XR9nMR8WtPrzXF0NNbjn+7+yEwttk2/mS5jiDOWOOZMdRUAAQdpS5a+sWgdQQh+0
-	 k1W09TSFdSsR665bORSFQMCqtU01v219psQDxW1eiAJ6wlDYqcI8YafQ0GsN+IB4Hi
-	 UCC7nN5rmaRbTfRNxr16dzSZi2NtKzT0HrPV+dM9r3Q/KgEoW9CrWgNZoLc5SrjyP2
-	 Rqc1AMJ0QeQUcdfZg/7VgDnx6CgvnAvk80CVIIHImT3UyYGAqDZybMIX9+As74Pbr9
-	 GAQL+thzFEOnQ==
+	b=NLmq6C/1fiFOo6lt4fwv/Ny0ao+vySVPWQ8GYO0PSmpEYmfaLAdd1+hts+uN2R1Jr
+	 V5AXvt06VC2utGWuKdDQnAGTLr/6iLxEs5eMj4haWUbN7klzTxwCjMGb3cQ82mqTmf
+	 Q/k0aqO/dUUllL0MpB4/0r5d2zPQ+UaAbyium2wbqYQXkRw6F7uCIWGf/H/bNHnlTb
+	 2TSI8aBZD8Pm21CVGlRbkU/2UrjrZhNFVsXehDNwQIYgnmsXuCuI0zIyMPsQ8qKNP8
+	 /KQ5DFrC/rTzoVvHAkrgCardWG3rW3Pzi1rvJj5//s+3hh2zGVb3I2toa2Mcai6fjz
+	 qz6h325zczsQA==
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH 15/20] tools/rv: Copy stripped bpf_atomic.h from
- libarena
+Subject: Re: [RFC PATCH 16/20] tools/rv: Add BPF monitors
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Gabriele Monaco" <gmonaco@redhat.com>
-Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-In-Reply-To: <20260831090524.106845-16-gmonaco@redhat.com>
+Cc: linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20260831090524.106845-17-gmonaco@redhat.com>
 References: <20260831090524.106845-1-gmonaco@redhat.com>
- <20260831090524.106845-16-gmonaco@redhat.com>
+ <20260831090524.106845-17-gmonaco@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 31 Aug 2026 09:38:51 +0000
-Message-Id: <20260831093851.BC9D51F000E9@smtp.kernel.org>
+Date: Mon, 31 Aug 2026 09:40:38 +0000
+Message-Id: <20260831094038.71EA01F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,50 +46,65 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The `smp_mb()` macro performs an atomic read-modify-write on an =
-uninitialized local stack variable `__val`, which will be rejected by the B=
-PF verifier on non-x86 architectures, breaking the tool completely.
+- [Medium] tqueue monitor causes false positive invalid state transitions f=
+or tasks scheduling during do_exit().
 --
 
-commit 8906134488c74fb8663c6c7d837a2ee2c7d3ebb4
+commit 22065a19b365cd05306cad5f1def6f25a73bdc87
 Author: Gabriele Monaco <gmonaco@redhat.com>
 
-tools/rv: Copy stripped bpf_atomic.h from libarena
+tools/rv: Add BPF monitors
 
-This commit adds bpf_atomic.h to tools/verification/rv/bpf_monitors,
-providing atomic read/write macros like READ_ONCE() and try_cmpxchg(). It
-is a stripped down copy of the version currently present in
-selftests/bpf/libarena.
+This commit adds the code for 2 initial BPF monitors, both DA (the only
+currently supported type): queue and nohz. It also integrates BPF monitor
+building into the main rv Makefile.
 
-> diff --git a/tools/verification/rv/bpf_monitors/bpf_atomic.h b/tools/veri=
-fication/rv/bpf_monitors/bpf_atomic.h
+> diff --git a/tools/verification/rv/bpf_monitors/tqueue.c b/tools/verifica=
+tion/rv/bpf_monitors/tqueue.c
 > new file mode 100644
-> index 0000000000000..f834ea91c9d34
+> index 0000000000000..c7516da01b65c
 > --- /dev/null
-> +++ b/tools/verification/rv/bpf_monitors/bpf_atomic.h
-> @@ -0,0 +1,105 @@
+> +++ b/tools/verification/rv/bpf_monitors/tqueue.c
+> @@ -0,0 +1,35 @@
 
 [ ... ]
 
-> +#define smp_mb()                                 \
-> +	({                                       \
-> +		volatile unsigned long __val;    \
-> +		__sync_fetch_and_add(&__val, 0); \
-> +	})
+> +SEC("tp_btf/sched_dequeue_tp")
+> +int BPF_PROG(handle_sched_dequeue, struct task_struct *tsk, int cpu)
+> +{
+> +	if (!(tsk->flags & PF_EXITING))
+> +		da_handle_start_event(tsk, sched_dequeue_tqueue);
 
 [Severity: Medium]
-Will this macro cause the BPF verifier to reject the program on non-x86
-architectures?
+Does skipping the dequeue event for exiting tasks here cause false positive
+state transitions when the task is later enqueued?
 
-Because __val is an uninitialized local stack variable, the
-__sync_fetch_and_add() instruction performs a read-modify-write on
-uninitialized memory. The BPF verifier strictly enforces that memory read
-by atomic instructions is initialized.
+If a task calls do_exit() (which sets PF_EXITING) and is preempted or sleeps
+before reaching trace_sched_process_exit(), this logic skips the
+sched_dequeue event. The state machine then incorrectly remains in the
+"enqueued" state.
 
-Since the variable evaluates as STACK_INVALID, the verifier will block the
-monitor program with an invalid read from stack error. Should __val be
-initialized to zero before the atomic fetch-and-add?
+> +	return 0;
+> +}
+> +
+> +SEC("tp_btf/sched_enqueue_tp")
+> +int BPF_PROG(handle_sched_enqueue, struct task_struct *tsk, int cpu)
+> +{
+> +	da_handle_event(tsk, sched_enqueue_tqueue);
+
+[Severity: Medium]
+When the exiting task is rescheduled, handle_sched_enqueue() unconditionally
+processes the sched_enqueue event.
+
+Since the corresponding dequeue event was skipped above, won't this un-pair=
+ed
+enqueue cause the monitor to transition to an invalid state, breaking the
+intended functionality and flooding the trace logs with false positive
+violations?
+
+> +	return 0;
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260831090524.1068=
-45-1-gmonaco@redhat.com?part=3D15
+45-1-gmonaco@redhat.com?part=3D16
