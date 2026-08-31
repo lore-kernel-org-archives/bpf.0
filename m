@@ -1,267 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-206.mta0.migadu.com [91.218.175.206])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C770F1F3BA2;
-	Mon, 31 Aug 2026 20:29:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 137A936E47E
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 20:43:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788208145; cv=none; b=hJLLLHCKsUer7kvYTV03yc278kFX4pfJee5/J/EqZ5jagTa1Z61xRQVmciIxBuwAbGCjQ1rJoYL5bvRFfgCjYnMfc8kbVWCYwzs1LWUTy0nmG0l2nB0xr5CHW3ADH3UahMklb/7wI+GsS7VqqwZp80DR0ATGCbCIPGE7zLTIDCw=
+	t=1788209035; cv=none; b=qlLcpDuHTsalj+UkMlQcLeHDTIBVESYTnH7lhjRy5p3hgPuXXdNCB+JiFXsmANxYxB2BXpLqgsrEfllEG1mn+mQoH7xWdA6gQ0f8/VHfvALQspo/t4qYlHRGgBfH6bqxMe6zM+hdVa5kkICHlKmkTrbKY2gJ157p7xL+02pzdI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788208145; c=relaxed/simple;
-	bh=a+GIM92rmgJeACBp1RoLsF/SPCU68ZuoZrXn/Nz71x8=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=VAAvzS7lD89qh+e+ExMLBGCHjXrfxsiZNVabhci0RgMD5ZStTMvjp9eJDxNa6eHruTzp8zjrgE+s3+6ZGRok9wXETFNNsyzaQ9Xq22VhFotER2AIyOp+UI3k3TsW9rHuZWCl6LubHuJ1Z5oBXRbpjUwyDzvkO+rh0Syk2orDlgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hxPE8hRo; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788209035; c=relaxed/simple;
+	bh=wwKpRyXVbXYSGen/QQh+EayThGG0Aiexvg75pCVSLzY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=FZ9wmKBAHlJ3Ja1Lef+zQNCUwGuAjppCAbOpaNkq4IsK4lk9m1DVtEjc56qiWIUJUnDWmTlEniPwhe7LS4XEmgM9nzDDimWKrbbtorTWvFN7+z7lgOEvtnV9ZhyfRSSxBp/uvdCwlBwA4uA7VvNh5WtEWdIn99maSckBQD5inZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mENqxQMX; arc=none smtp.client-ip=91.218.175.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hxPE8hRo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A23FD1F000E9;
-	Mon, 31 Aug 2026 20:29:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788208143;
-	bh=wW/xUMPshJh+BjnoH/KxQ2ctdTr8ercnNXnopyZGx30=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=hxPE8hRoJ2HsM/zvd6zs/2yhix+aWMoxDNTSsSp25NZkGy9/HMxeC26BsZNQrui1r
-	 k+78JSwPuFeUVHQzDbu3pAZX1GAkQQta+Wdrh1lVVCNa7OOmDdCe15vw8EbCw9vTxW
-	 +tuN362zr1n8ebVGC+0NL9/HxfUQt/gMikudy/TddVxSRq0Fh+86Tzu1IZrTL4kDyE
-	 QPtG3NTkMCs1TT+aGjEWOyVjihHPGFcsedBwesLEP1vIuuIrafaOl5xTizJD1zHYAf
-	 0AQLgrZwZn47JRAQcTQaVdPHcNLz/osnS3lGGU7eE0cBhYlahWw3qjqNz7YzMKtihg
-	 2aXZ4lD3NyuVg==
-Content-Type: multipart/mixed; boundary="===============1722735103380655568=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mENqxQMX"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=wwKpRyXVbXYSGen/QQh+EayThGG0Aiexvg75pCVSLzY=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788209030; v=1; x=1788813830;
+ b=mENqxQMX7SwajIXCabQWXDr4L+q/iuOVY2NpyjNTGd6Sp2H+h9/sWpL643Jy5J0xf8m5ZMjX
+ TC7X+iat5NK3CqDZkjZXNm0kIvfXu7XviRI5DtiyDURRSNeyZooyaz0P+CS/PNehNQQYl2FtueC
+ i6TDswMnV8j8il7yPXxOayVY=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 3fedfae76e00b1b5;
+	Mon, 31 Aug 2026 20:43:40 +0000
+X-Mizu-Trace-ID: 3fedfae76e00b1b5
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <f829962635d9d46dc01bea9d7777a8099af30f79068d978e8e8bb5cd85f014f1@mail.kernel.org>
-In-Reply-To: <20260831192139.94895-1-ebiggers@kernel.org>
-References: <20260831192139.94895-1-ebiggers@kernel.org>
-Subject: Re: [PATCH bpf-next] bpf: crypto: Use AES-CBC and AES-ECB libraries
-From: bot+bpf-ci@kernel.org
-To: ebiggers@kernel.org,bpf@vger.kernel.org,vadim.fedorenko@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
-Cc: linux-crypto@vger.kernel.org,linux-kernel@vger.kernel.org,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,kmehltretter@gmail.com,ebiggers@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 31 Aug 2026 20:29:02 +0000 (UTC)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 31 Aug 2026 20:43:39 +0000
+Message-Id: <DL3F6YTBCK35.3I96GFRVMKE2P@linux.dev>
+Cc: <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song
+ Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "KP
+ Singh" <kpsingh@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>,
+ "John Fastabend" <john.fastabend@gmail.com>, "Paul E. McKenney"
+ <paulmck@kernel.org>, "Jose Fernandez" <jose.fernandez@linux.dev>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf] bpf: Keep progs alive until the trampoline image
+ calling them is freed
+From: "Florent Revest" <florent.revest@linux.dev>
+To: "Jiri Olsa" <olsajiri@gmail.com>
+X-Mailer: aerc 0.17.0
+References: <20260819122252.1782790-1-florent.revest@linux.dev>
+ <apWuYPCVCvBeaCKr@krava>
+In-Reply-To: <apWuYPCVCvBeaCKr@krava>
 
---===============1722735103380655568==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> BPF crypto was implemented using the lskcipher API, which doesn't seem
-> to be going anywhere.  lskcipher supports only "arc4", "cbc(aes)",
-> "ecb(aes)", and only with unoptimized implementations.
-
-The claim that lskcipher supports only these three specific algorithm
-names is not accurate. The cbc and ecb templates in crypto/cbc.c and
-crypto/ecb.c instantiate lskcipher interfaces for any plain cipher
-algorithm, not just AES:
-
-crypto/cbc.c:crypto_cbc_create() calls lskcipher_alloc_instance_simple()
-crypto/ecb.c:crypto_ecb_create() calls lskcipher_alloc_instance_simple()
-
-So cbc(<any-cipher>) and ecb(<any-cipher>) are valid lskcipher
-algorithms. The kernel includes about 14 plain cipher algorithms besides
-AES, including sm4, des, des3_ede, camellia, twofish, aria, blowfish,
-cast5, cast6, serpent, seed, khazad, anubis, tea, and xtea.
-
-The pre-patch code passed params->algo directly to
-crypto_alloc_lskcipher() with no whitelist, so a BPF program could use
-cbc(sm4), cbc(des3_ede), ecb(camellia), or ecb(twofish).
-
-After this patch, bpf_crypto_find_algo() only matches the two-entry
-table with cbc(aes) and ecb(aes), so all non-AES cbc/ecb modes now fail.
-
-The changelog justifies dropping ARC4 but does not mention that this
-also drops support for all non-AES block ciphers. Should the commit
-message explicitly state that non-AES cbc()/ecb() support is being
-removed, or should the characterization of lskcipher's scope be
-corrected?
-
-Additionally, the error code for an unsupported algorithm changes from
--EOPNOTSUPP (old has_algo failure path) to -ENOENT (new
-bpf_crypto_find_algo() path), which is a visible behavior change for
-existing BPF programs that inspect errno.
-
-[ ... ]
-
-> diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
-> index eb3de35734f09..822599b42be2e 100644
-> --- a/kernel/bpf/Kconfig
-> +++ b/kernel/bpf/Kconfig
-> @@ -87,6 +87,15 @@ config BPF_UNPRIV_DEFAULT_OFF
+On Mon Aug 31, 2026 at 4:40 PM UTC, Jiri Olsa wrote:
+> On Wed, Aug 19, 2026 at 12:22:50PM +0000, Florent Revest (Anthropic) wrot=
+e:
+> > bpf_tramp_image_put() makes sure a trampoline image is not freed while
+> > a task may still be running in it (call_rcu_tasks() + im->pcref), but
+> > nothing similar is done for the progs called by that image. Since
+> > commit e21aa341785c ("bpf: Fix fexit trampoline."), detach patches the
+> > return path so that a task still in the original function skips the
+> > fexit progs when it comes back, and counts on the prog's own RCU flavor
+> > to cover a task that is inside a prog. On that basis the last prog
+> > reference is dropped right away and the prog is freed after a single
+> > RCU / RCU tasks trace grace period.
+> >=20
+> > That leaves out a task in the trampoline glue itself: between two
+> > progs, or already past the patched jump but not yet in the first fexit
+> > prog's enter helper. On !PREEMPT kernels this is a few instructions
+> > that cannot be preempted, so it did not matter. With CONFIG_PREEMPTION
+> > a task can sit there, in no RCU read section of any flavor and holding
+> > only im->pcref, for longer than it takes to free the prog it is about
+> > to call:
+> >=20
+> >   CPU 0                               CPU 1
+> >   in image I, orig_call() returned
+> >   [preempted before lsm.s prog A]
+> >                                       bpf_tracing_link_release()
+> >                                        -> bpf_tramp_image_put(I)
+> >                                       bpf_link_dealloc()
+> >                                        bpf_prog_put(A), last ref
+> >                                       tasks trace GP, A's text freed
+> >   __bpf_prog_enter_sleepable(A)
+> >   call A->bpf_func
 >
->  	  If you are unsure how to answer this question, answer Y.
->
-> +config BPF_CRYPTO
-> +	def_bool y
-> +	depends on BPF_SYSCALL
-> +	select CRYPTO_LIB_AES_CBC
-> +	select CRYPTO_LIB_AES_ECB
-> +	help
-> +	  Provide the kfuncs needed for BPF programs to encrypt and decrypt
-> +	  data. The supported algorithms are AES-CBC and AES-ECB.
-> +
+> hi,
+> do you have a selftest or another reproducer for this?
 
-The def_bool y makes BPF_CRYPTO invisible and unconditionally enabled
-whenever CONFIG_BPF_SYSCALL=y, so the AES library code is always linked
-with no opt-out.
+I originally only reproduced that with a stress test (an attach/detach
+loop during an exec storm).
 
-Before this patch, kernel/bpf/Makefile gated crypto.o on:
-
-  ifneq ($(CONFIG_CRYPTO),)
-  obj-$(CONFIG_BPF_SYSCALL) += crypto.o
-  endif
-
-so a CONFIG_BPF_SYSCALL=y, CONFIG_CRYPTO=n kernel previously built
-neither the BPF crypto kfuncs nor any AES code. Now the AES
-key-schedule, CBC, and ECB library code is unconditionally present.
-
-This is particularly notable given that the commit message says AES-ECB
-"isn't appropriate in new systems and should be dropped" yet it is now
-unconditionally linked into every BPF_SYSCALL kernel.
-
-Should this be a user-selectable option with a prompt like "bool 'BPF
-crypto kfuncs'" so it can be disabled, or is the intent really to make
-it always-on?
-
-[ ... ]
-
-> diff --git a/crypto/bpf_crypto_skcipher.c b/crypto/bpf_crypto_skcipher.c
-> deleted file mode 100644
-> index a88798d3e8c87..0000000000000
-> --- a/crypto/bpf_crypto_skcipher.c
-> +++ /dev/null
-> @@ -1,83 +0,0 @@
-[ ... ]
-> -static void *bpf_crypto_lskcipher_alloc_tfm(const char *algo)
-> -{
-> -	return crypto_alloc_lskcipher(algo, 0, 0);
-> -}
-
-Deleting this file removes the last in-tree caller of
-crypto_alloc_lskcipher(). After this patch, the symbol only exists at
-its definition and export in crypto/lskcipher.c, with no remaining
-callers anywhere in the tree.
-
-Given the premise that the lskcipher API "doesn't seem to be going
-anywhere," should crypto_alloc_lskcipher() be removed in a follow-up, or
-left as an exported API with zero users?
-
-[ ... ]
-
-> diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
-> index 51f89cecefb4d..8cdc16f9b374a 100644
-> --- a/kernel/bpf/crypto.c
-> +++ b/kernel/bpf/crypto.c
-[ ... ]
-> @@ -146,7 +99,6 @@ __bpf_kfunc struct bpf_crypto_ctx *
->  bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
->  		      int *err)
->  {
-> -	const struct bpf_crypto_type *type;
->  	struct bpf_crypto_ctx *ctx;
->
->  	if (!params || params->reserved[0] || params->reserved[1] ||
-> @@ -155,69 +107,40 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
->  		return NULL;
->  	}
->
-[ ... ]
-> +	ctx = kzalloc_obj(*ctx);
-> +	if (!ctx) {
-> +		*err = -ENOMEM;
-> +		return NULL;
-> +	}
-> +
-> +	if (!bpf_crypto_find_algo(params, &ctx->algo)) {
-> +		*err = -ENOENT;
-> +		goto out;
-> +	}
-> +
-> +	switch (ctx->algo) {
-> +	case BPF_ALGO_AES_CBC:
-> +	case BPF_ALGO_AES_ECB:
-> +		if (params->authsize)
-> +			*err = -EOPNOTSUPP;
-> +		else
-> +			*err = aes_preparekey(&ctx->key.aes, params->key,
-> +					      params->key_len);
-> +		break;
-> +	default:
-> +		WARN_ON(1);
-> +		*err = -ENOENT;
-> +		break;
-> +	}
-> +
-> +out:
-> +	if (*err) {
-> +		kfree_sensitive(ctx);
-> +		return NULL;
-> +	}
-> +
->  	refcount_set(&ctx->usage, 1);
-> -
->  	return ctx;
->  }
-
-Does this code have a double-fetch issue? The function now uses the
-caller-supplied 'int *err' out-parameter as its own internal success
-flag: every failure path stores into *err, then the 'if (*err)' at the
-'out:' label re-reads it to decide whether to free ctx and fail.
-
-The 'err' parameter is classified by the verifier as KF_ARG_PTR_TO_MEM,
-so a BPF program can legally pass a pointer into a shared map value
-rather than its own stack. That makes the store followed by the reload a
-double fetch of concurrently-writable memory.
-
-The pre-patch version never read *err - it used distinct error labels
-and returned NULL unconditionally on error, so the failure decision
-could not be influenced by the caller.
-
-If the reload observes 0 because another CPU zeroed the map value
-between the store and the load, the function takes the success path for
-a create that actually failed. For instance, if aes_preparekey() returns
--EINVAL from aes_check_keylen() before assigning enc_key->len and
-enc_key->nrounds, the kzalloc'ed key stays all-zero with nrounds == 0.
-
-A later bpf_crypto_encrypt()/bpf_crypto_decrypt() on that ctx reaches
-aes_encrypt_generic()/aes_decrypt_generic(), which compute 'int n =
-nrounds - 1' (= -1) and then run 'do { ... } while (--n);', reading 16
-bytes past the round-key pointer per iteration for roughly 2^32
-iterations - an unbounded out-of-bounds read and unrecoverable soft
-lockup.
-
-The reload can also mis-handle the -ENOENT path from
-bpf_crypto_find_algo(), returning a ctx whose algo is uninitialized
-(BPF_ALGO_AES_CBC == 0) with no key.
-
-Could this be fixed by using a local 'int ret' for the internal flow and
-assigning '*err = ret' exactly once?
-
-[ ... ]
-
-> @@ -86,23 +83,17 @@ struct bpf_crypto_ctx {
->   * As crypto API functions use GFP_KERNEL allocations, this function can
->   * only be used in sleepable BPF programs.
-
-The kernel-doc for bpf_crypto_ctx_create() still justifies the
-KF_SLEEPABLE requirement with "As crypto API functions use GFP_KERNEL
-allocations."
-
-This patch removes every crypto API call from the function
-(crypto_alloc_lskcipher()/crypto_lskcipher_setkey() are gone). The body
-now only does kzalloc_obj(), bpf_crypto_find_algo(), and
-aes_preparekey(), and the AES library is documented as usable in "Any
-context".
-
-The conclusion still holds because kzalloc_obj() uses GFP_KERNEL, not
-because of the crypto API. Could the comment be updated to reflect the
-actual reason for the sleepable restriction after this refactoring?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33431341694
---===============1722735103380655568==--
+But actually, preemption isn't needed! If a task sleeps in a sleepable
+prog and the prog that runs after it in the same image gets detached,
+it calls the freed prog when it wakes up. That case could be made
+deterministic with userfaultfd so I could write a selftest for it.
+I'll include it in v2. :)
