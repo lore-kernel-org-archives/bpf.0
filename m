@@ -1,215 +1,398 @@
-Received: from mta0.migadu.com (out-53.mta0.migadu.com [91.218.175.53])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BDAD3932E4
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 14:51:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA8233122A
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 14:59:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788187870; cv=none; b=qZ/770PIcAuWgaGAfzIMUe/hI3No16FBSMicMJbGJOwAl/LJkFiBHB5s763kfvTmoZfrdgwWoBweYoH88XfkMreI9Ur7dSKYl2cojtdwHYWxfcao2LZ79UBeBIDgICmS3yEDhsNcc7oMUOnTGi5OMv4mxWzc6ka0c4w+/nXLXkE=
+	t=1788188381; cv=none; b=TrOxrVV30TxJhJC5N1bRXrUoo4RUW83xbi3qsSbRfMW5/IPjHddIgAsrmodhNp0bBvD2awFfoq+0KM6703nGfRJdmXiQTEd1WqrKXWFP2O16SW37K2cilS/NaWzgTM9RzZJ/1C6i8O2aAyc3hx1yvZxzCYQp9OysGPaDWgOvUEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788187870; c=relaxed/simple;
-	bh=MP66j0Lj+vPv+9cNySgh/2g4Hk6Zg/qh+664HpT8ajw=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=KHsK2wRJmXVI/cy4SOW7UDudi4phxGJ4yoeSD366R3bKhd224Hs+7IUf7jLv7/D/8DGKFCis8Q23fHQSx3X/q0BODL0vyY+bbP6tlirdnSQXpKuBd2bRdu5IHNNrqUXJwqoL10uiJ+L7IEe0AAM6AnsGXHH3fHU4/dW9HtKg+9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BTr1ZMg+; arc=none smtp.client-ip=91.218.175.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788188381; c=relaxed/simple;
+	bh=sR+NCrb4jveihqzu/NPXu/su4Ho1Q7I0xS25+c5rX08=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=l38G/IMU8pKAf+7+c9TgzRVgEI62jrp5UoWbQmoMLajKSKwtxaza/wm2kuy0ShGhGYgEx09wdp9I42Y2NtQK61+rEGIEs2n+d5ugw8cLXH1dslYvMFTmmtmb6vysdUjMcnpqTes3ejZ+XWk0sV8UMsOREUtp8YXKEd/mt4qvUEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mFmlf+Y1; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BTr1ZMg+"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=MP66j0Lj+vPv+9cNySgh/2g4Hk6Zg/qh+664HpT8ajw=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788187866; v=1; x=1788792666;
- b=BTr1ZMg+O9IVbjHMeR45LNWyEI+I7K2Q3yF5rNuhxkcF4FT+BpviIsVnYf1nE6qR83stN8qY
- XbFvrAiIT0bPP6uCuMahJTZetFMfAZi4UiGu38fOB44e9h1r6m2la3ubqofXWnjtkZ3IPgypEcS
- upl/4CDQAdrDxDfvze2RZ/7U=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id beb5f4ff7dae3ab5;
-	Mon, 31 Aug 2026 14:50:56 +0000
-X-Mizu-Trace-ID: beb5f4ff7dae3ab5
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <425e1052-5c0b-4c0b-8f99-03d90c096ba5@linux.dev>
-Date: Mon, 31 Aug 2026 22:50:48 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mFmlf+Y1"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-855c26cf490so24475267b3.0
+        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 07:59:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788188378; x=1788793178; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=EQRvH3cICJjq9Ao/BggTFlq5eCfk3kLbx4u3cmiu6to=;
+        b=mFmlf+Y1SYbeZf9P7P3HeJ1/Jn9n6cVnNTlrFTn8bKGjewmc9WKFSYP10W5eb9WPgE
+         EK/fe+szUn/A9Rm2FLz3dKJEIYSU9QIMLbsC8ZvvFLkEyB1H/BztD0MDNGUizfmBCCe5
+         q3Bb4WdvgFc7aQKGn9P+vwumFvdpBBmfwCbfQg+NJMTt6Nrf2/yAc0CDrSbweN6Lx1AF
+         +XA5SrLKa9DpUo8IY5meqd/xpgUThco8JcZLSXW5N2VNWz168777+RLamzpWrqJvrCgZ
+         d8sP+o1OeFcw8FBT5Hg/KApUb/uq7VHN2nT9xQNn13q4o/3W37y3cRWd2gdCjVi34IFa
+         5lNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788188378; x=1788793178;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=EQRvH3cICJjq9Ao/BggTFlq5eCfk3kLbx4u3cmiu6to=;
+        b=lZw73TQXYkAmlVe3PRoD3+q3qmTwScKnLyRE4w7GgSSjfNfyRpa6QKkGLXiJms3VqE
+         tnLjplxD9dxM/QmiYnJ8IqvNR6pyesl3LHd4D6eUnrO5n1LxHaYmIu6dGLiXANAjBSGJ
+         dC6TmVZSw+fJsLPJCn6wikmRMHT5GOVU/h9/ixszbZE6ga83k4acUBk0T6V7TjTnXqBz
+         TuLjhrBcUXXkGfYtWbLyU3T2ik4y49CCDPrW0TA864EC0jiAebrY0rADezlXjkWIUIS/
+         GBc3cPfajbn9RUEDqozHMXHONRYxa5ZyhzqTTESP0538YhiV4Z1ksCnEss5TG3w2XyCu
+         047w==
+X-Forwarded-Encrypted: i=1; AKwUvBzucvhYwbzTSQWX+cKCdrPfbUsJgEdfw3yE+8YIJW1l3CjHbT0j3MpR4gyz6YKYcD0PBQ4=@vger.kernel.org
+X-Gm-Message-State: AFuF++kcKgti42tgTbxlon2hVZalAYYKwZp99+U1pUiIRWwlgIyAhgCH
+	QemjGTwcIc58ADdAHle6k5mH6vFsZ+P97K6BOK8O79Xhlq1MtdgE9TVE
+X-Gm-Gg: AYBFou34nFvlcO1lge5Oye78nCs9AKbhFP9SwthsPMQI42KXGOIV6Hv4QCqNRVdCTcl
+	5ozMXdgAofIxjypEnPpGdKuYozvO8ncSUdCYtWXds9ZDt0vOgyNogKbdZ+4QTdALwJnT/QBhVox
+	jbW9ycQNKqCvpme/ntaEZ9P/+7HSD84KL5TLu7bZDKenqQK1qxtl1mNslJfZ3e0WFBD5J9/3yAR
+	8dYB6Z1DNzidyrjlqxjKSwjnAtewJzEdiWb0zpLxFAijG6v5ijpL1EMamS+rSzPU1fyIKkspO2v
+	LjYCYhC/RgN2zhzdR6P5xnqDqsYfOG3qewz0RVzU3YFRu702yGNz5rQq2NrEok75izGajZ+fvFy
+	baY3SaS+JhUHMKqTLM0tdgnapCnvGKVFY5d+Ssiu/iQQwXW5y8EV0j4vOXucJq3ZpHuH1dlLDTw
+	q3cbDDOnHsSMcD0fOrHYfvmUGSNPCdhO7srfGuRmYuELQLs/0Mn/CAFVvgrvsa/H4VQQ60+3Fdp
+	QNodvhnYb+urmUJRZkQno1a3YSORZKfEQ==
+X-Received: by 2002:a05:690c:5808:b0:7fd:a7b6:8d87 with SMTP id 00721157ae682-85d6e149eb8mr70738057b3.25.1788188378372;
+        Mon, 31 Aug 2026 07:59:38 -0700 (PDT)
+Received: from zenbox ([2600:1700:18fb:6011:f6fc:b424:b1bb:6ff0])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-85e58666e15sm53903827b3.0.2026.08.31.07.59.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Aug 2026 07:59:37 -0700 (PDT)
+From: Justin Suess <utilityemal77@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	kpsingh@kernel.org,
+	paul@paul-moore.com,
+	mic@digikod.net,
+	viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	kees@kernel.org
+Cc: gnoack@google.com,
+	jack@suse.cz,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	martin.lau@linux.dev,
+	m@maowtm.org,
+	bpf@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Justin Suess <utilityemal77@gmail.com>
+Subject: [PATCH v2 00/15] BPF interface for applying Landlock rulesets
+Date: Mon, 31 Aug 2026 10:58:42 -0400
+Message-ID: <20260831145858.3869191-1-utilityemal77@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Leon Hwang <leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next v4 2/2] selftests/bpf: Cover attach type checks
- in link update
-To: Sanghyun Park <sanghyun.park.cnu@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: John Fastabend <john.fastabend@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Pu Lehui <pulehui@huawei.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260831023918.1857658-1-sanghyun.park.cnu@gmail.com>
- <20260831023918.1857658-2-sanghyun.park.cnu@gmail.com>
-Content-Language: en-US
-In-Reply-To: <20260831023918.1857658-2-sanghyun.park.cnu@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2026/8/31 10:39, Sanghyun Park wrote:
-> Add regression coverage for link update compatibility. Verify that a UDP6
-> sock_addr program cannot replace a UDP4 program and that an LSM_MAC
-> program cannot replace an LSM_CGROUP program.
-> 
-> Also verify that CGROUP_SKB attachment still requires CAP_NET_ADMIN, while
-> an existing link can be updated after dropping CAP_NET_ADMIN and
-> CAP_SYS_ADMIN.
-> 
-> Signed-off-by: Sanghyun Park <sanghyun.park.cnu@gmail.com>
-> ---
->  .../selftests/bpf/prog_tests/cgroup_link.c    | 51 +++++++++++++++++++
->  .../selftests/bpf/prog_tests/lsm_cgroup.c     | 10 ++++
->  .../testing/selftests/bpf/progs/lsm_cgroup.c  |  6 +++
->  .../selftests/bpf/progs/test_cgroup_link.c    | 14 ++++-
->  4 files changed, 80 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-> index 15093a69510e..b3219314596e 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-> @@ -1,6 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
->  
->  #include <test_progs.h>
-> +#include "cap_helpers.h"
->  #include "cgroup_helpers.h"
->  #include "testing_helpers.h"
->  #include "test_cgroup_link.skel.h"
-> @@ -24,6 +25,55 @@ int ping_and_check(int exp_calls, int exp_alt_calls)
->  	return 0;
->  }
->  
-> +static void test_cgroup_link_update(int cg_fd)
-> +{
-> +	const __u64 caps = (1ULL << CAP_NET_ADMIN) | (1ULL << CAP_SYS_ADMIN);
-> +	struct bpf_link *link = NULL;
-> +	__u64 saved_caps = 0;
-> +	int err;
-> +
-> +	link = bpf_program__attach_cgroup(skel->progs.sendmsg4, cg_fd);
-> +	if (!ASSERT_OK_PTR(link, "attach_sendmsg4"))
-> +		goto cleanup;
-> +
-> +	err = bpf_link__update_program(link, skel->progs.sendmsg6);
-> +	ASSERT_EQ(err, -EINVAL, "reject_sendmsg6_update");
-> +	bpf_link__destroy(link);
-> +	link = NULL;
-> +
-> +	err = cap_disable_effective(caps, &saved_caps);
-> +	if (!ASSERT_OK(err, "drop_caps_for_attach"))
-> +		goto cleanup;
-> +
-> +	link = bpf_program__attach_cgroup(skel->progs.egress, cg_fd);
-> +	if (!ASSERT_ERR_PTR(link, "attach_without_net_admin"))
-> +		goto cleanup;
-> +	err = libbpf_get_error(link);
-> +	link = NULL;
-> +	if (!ASSERT_EQ(err, -EPERM, "attach_err"))
-> +		goto cleanup;
-> +
-> +	err = cap_enable_effective(saved_caps & caps, NULL);
-> +	if (!ASSERT_OK(err, "restore_caps_for_attach"))
-> +		goto cleanup;
-> +
-> +	link = bpf_program__attach_cgroup(skel->progs.egress, cg_fd);
-> +	if (!ASSERT_OK_PTR(link, "attach_egress"))
-> +		goto cleanup;
-> +
-> +	err = cap_disable_effective(caps, &saved_caps);
-> +	if (!ASSERT_OK(err, "drop_caps"))
-> +		goto cleanup;
-> +
-> +	err = bpf_link__update_program(link, skel->progs.egress_alt);
-> +	ASSERT_OK(err, "update_without_net_admin");
-> +
-> +cleanup:
-> +	err = cap_enable_effective(saved_caps & caps, NULL);
-> +	ASSERT_OK(err, "restore_caps");
-> +	bpf_link__destroy(link);
-> +}
-> +
->  void serial_test_cgroup_link(void)
->  {
->  	struct {
-> @@ -61,6 +111,7 @@ void serial_test_cgroup_link(void)
->  	err = join_cgroup(cgs[last_cg].path);
->  	if (CHECK(err, "cg_join", "fail: %d\n", err))
->  		goto cleanup;
-> +	test_cgroup_link_update(cgs[last_cg].fd);
+Howdy,
 
-imo, it is not a good idea to embed test_cgroup_link_update() here.
+This series lets BPF programs apply an existing, userspace-created
+Landlock ruleset to a program during exec.  The goal is unchanged
+from the RFC [1] and v1 [2]: BPF does not create, inspect, or mutate
+Landlock policy, it only decides whether a ruleset that was already
+created and validated through Landlock's existing userspace API
+should be applied, based on runtime exec context.  The policy is in
+place before the first instruction of the new program runs, closing
+the race a userspace supervisor cannot.
 
-Better to add it as a subtest with its own env setup/cleanup:
+The bottom line change in v2: the kfunc interface is now fully
+LSM-generic.
 
-static void test_cgroup_link_attach(void)
-{
-	/* previous serial_test_cgroup_link() function body */
-}
+The bpf_landlock_* kfuncs have been dropped in favor of
+bpf_lsm_policy_* kfuncs that carry no LSM-specific details: no kfunc
+argument names an LSM anywhere in the interface.  This is done
+without turning the kfuncs into an ioctl-like multiplexer; see the
+usage example for the ergonomics.
 
-static void test_cgroup_link_update(void)
-{
-	/* setup its own skel and cg env */
+This design choice was based on feedback from Paul Moore [3] and
+Mickaël Salaün [4].  There was some discussion of whether LSMs should
+expose LSM-specific interfaces, and concern that a generic interface
+would have poor ergonomics / become an ioctl-like multiplexer.
 
-	/* test link_update */
+While initially I argued against a generic interface, ultimately I
+believe I've found a design that is LSM-generic without the cons /
+poor ergonomics of an ioctl-like interface.
 
-	/* cleanup the skel and cg env */
-}
+The key is a new struct lsm_policy_object, internal to the LSM
+framework:
 
-void serial_test_cgroup_link(void)
-{
-	if (test__start_subtest("attach"))
-		test_cgroup_link_attach();
-	if (test__start_subtest("update"))
-		test_cgroup_link_update();
-}
+  struct lsm_policy_object {
+          u64 lsmid; /* routes the object to the LSM that owns it */
+          u32 type;  /* LSM-private tag for its own object types */
+  };
 
->  
->  	for (i = 0; i < cg_nr; i++) {
->  		links[i] = bpf_program__attach_cgroup(skel->progs.egress,
-> diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-> index 41e867467f6c..85b0af4f486a 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-> @@ -74,6 +74,7 @@ static void test_lsm_cgroup_functional(void)
->  	int bind_prog_fd = -1;
->  	int bind_link_fd = -1;
->  	int clone_prog_fd = -1;
-> +	int mac_prog_fd;
->  	int err, fd, prio;
->  	socklen_t socklen;
->  
-> @@ -156,6 +157,15 @@ static void test_lsm_cgroup_functional(void)
->  	ASSERT_EQ(query_prog_cnt(cgroup_fd, "bpf_lsm_socket_bind"), 1, "prog count");
->  	ASSERT_EQ(query_prog_cnt(cgroup_fd, NULL), 4, "total prog count");
->  
-> +	fd = bpf_link_create(bpf_program__fd(skel->progs.socket_first),
-> +			     cgroup_fd, BPF_LSM_CGROUP, NULL);
-> +	if (!ASSERT_GE(fd, 0, "link create socket_first"))
-> +		goto detach_cgroup;
-> +	mac_prog_fd = bpf_program__fd(skel->progs.socket_create_lsm);
-> +	err = bpf_link_update(fd, mac_prog_fd, NULL);
+The owning LSM embeds this struct in its own policy structure (here,
+the Landlock ruleset), and a pointer to it is the BPF-facing kptr.
 
-Rewrite to bpf_link_update(fd,
-bpf_program__fd(skel->progs.socket_create_lsm), NULL).
+The kfuncs dispatch an lsm_policy_object pointer to the owning LSM
+based on the lsmid.  The LSM checks the type tag (Landlock has only
+LANDLOCK_POLICY_TYPE_RULESET) and recovers its own object with:
 
-Then, the 'mac_prog_fd' can be dropped.
+   container_of(object, struct landlock_ruleset, policy_object);
 
-Thanks,
-Leon
+The fd translation is the one call with no object to dispatch on,
+and it needs no LSM_ID_* argument either: a policy object fd refers
+to a file associated with the owning LSM's own userspace interface,
+so the fd is identified by its fops pointer.  The kfunc passes the
+fd to each policy_object_from_fd implementation; an LSM claims its
+own fds and declines anyone else's with -EOPNOTSUPP, so the fd
+reaches exactly the LSM that created it.  A program that expects a
+policy of one specific LSM can still assert its intent by reading
+the lsmid off the returned kptr.
 
-> +	ASSERT_EQ(err, -EINVAL, "reject lsm_mac link update");> +	close(fd);
-> [...]
+One benefit of this: since all LSMs share the one kptr type, objects
+from multiple LSMs can be stored in the same map, allowing users to
+create LSM-agnostic programs.
+
+The interface
+===
+
+Effectively, the kfuncs are security hooks called by a BPF program.
+
+The kfuncs operate on the generic struct lsm_policy_object (the
+struct any LSM policy object must embed), rather than an
+LSM-specific type:
+
+  bpf_lsm_policy_from_fd(fd, flags)         KF_ACQUIRE | KF_RET_NULL | KF_SLEEPABLE
+  bpf_lsm_policy_acquire(object)            KF_ACQUIRE | KF_RCU | KF_RET_NULL
+  bpf_lsm_policy_release(object)            KF_RELEASE
+  bpf_lsm_policy_apply_bprm(object, bprm, flags)  KF_SLEEPABLE
+
+The interface is owned by the LSM framework in
+security/bpf_lsm_kfuncs.c.  An LSM participates by implementing four
+ordinary hooks:
+
+  policy_object_from_fd(fd, &object)
+  policy_object_get(object)
+  policy_object_put(object)
+  bprm_apply_policy_object(bprm, object, flags)
+
+These hooks are unlike any other in the kernel: they have no
+security_*() wrappers in security.c because they have no in-kernel
+callers.  Their only entry point is BPF, and the BPF entry point is
+the kfunc, so the kfuncs in security/bpf_lsm_kfuncs.c play the role
+the security_*() wrappers play for other hooks, dispatching the
+static call to the LSM matching the object's lsmid.
+
+As they implement LSM-dispatch logic like any other hook, they cannot
+be placed outside security/ without exposing LSM internals in an
+undesirable way.
+
+Usage TL;DR
+===
+
+A syscall program, run in the supervisor's context, translates a
+ruleset fd and parks the reference in a map; a sleepable LSM program
+on bprm_creds_for_exec()/bprm_creds_from_file() applies it:
+
+  /* setup (BPF_PROG_TYPE_SYSCALL, supervisor's task context) */
+  obj = bpf_lsm_policy_from_fd(ruleset_fd, 0);
+  old = bpf_kptr_xchg(&map_val->policy, obj);
+
+  /* enforcement (sleepable BPF_PROG_TYPE_LSM on a bprm hook) */
+  bpf_rcu_read_lock();
+  obj = bpf_lsm_policy_acquire(map_val->policy);
+  bpf_rcu_read_unlock();
+  if (obj) {
+          bpf_lsm_policy_apply_bprm(obj, bprm, 0);
+          bpf_lsm_policy_release(obj);
+  }
+
+Notice that no LSM is named anywhere in this process: the LSM
+information is carried entirely by the fd and the lsm_policy_object.
+The caller need not pass an LSM ID or LSM-specific opcode at all.
+The same program could apply a policy object from LSM A and LSM B
+by simply changing the fd, with zero code changes.
+
+(A caller that needs LSM-specific logic still has the option of
+reading lsm_policy_object->lsmid.)
+
+The acquire kfunc is what lets concurrent executions share the one
+reference stored in the map: each program execution takes a
+reference of its own under an RCU read lock, instead of taking
+exclusive ownership of the stored one with bpf_kptr_xchg() (which
+would prevent concurrent application).  Both the acquire path and
+the hook backing it are new in v2.
+
+The lifetime contract for embedding lsm_policy_object
+===
+
+Collapsing every provider into one BTF type makes the lifetime rules
+part of the interface rather than a per-LSM agreement.  Any
+LSM-specific policy structure embedding lsm_policy_object must
+provide the following semantics:
+
+  - The type field of lsm_policy_object must be nonzero.
+  - The object must be reference counted.
+  - The object must be RCU protected, and freed only after an RCU
+    grace period.
+  - get acquires with inc-not-zero semantics and may fail against a
+    concurrent last put.  Implementing policy_object_get is
+    optional.
+  - put must be callable from contexts that cannot sleep: map
+    teardown drops map-held references through the registered kptr
+    destructor.  Implementing policy_object_put is mandatory, even
+    if policy_object_get is not implemented.
+
+This contract was picked to be implementable by other LSMs in the
+future, and closely mirrors the contract backing the task_struct,
+cgroup, and bpf_crypto_ctx kptrs.
+
+Whether to implement policy_object_get is up to the individual LSM,
+and the choice selects between shared and unique pointers:
+implementing it (as Landlock does here) lets programs acquire
+additional references to the object under RCU, while leaving it out
+yields an object whose pointer cannot be copied after creation, only
+atomically exchanged with bpf_kptr_xchg().  Both models fit the same
+interface.
+
+Landlock specifics
+===
+
+The bprm hook accepts the landlock_restrict_self(2) flags with their
+usual semantics except LANDLOCK_RESTRICT_SELF_TSYNC (rejected: it
+targets the calling threads, not the execution).
+LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS is honored atomically with the
+restriction: both are staged on the bprm credentials and applied past
+the exec point of no return, so the executed task starts no_new_privs
+if and only if it starts confined, and a failed execution leaves the
+calling task untouched.
+
+Enforcement through BPF is as observable as the syscall: committing
+a staged restriction emits the same landlock_enforce_domain trace
+event, and the create/free domain events stay balanced on every
+path, including executions aborted before the point of no return.
+
+Notably, rulesets are now RCU protected, which is what allows
+enforcement to share the stored kptr instead of xchg-ing it in and
+out of the map.
+
+Changes since v1
+===
+
+- The interface is fully generic: the per-LSM kptr type
+  (struct bpf_landlock_ruleset), the erasure to void *, and the
+  security_kfunc_*() shims dispatching on an explicit LSM_ID_*
+  argument are gone.  struct lsm_policy_object (lsmid + LSM-private
+  type tag) is embedded in the LSM's own object and resolved with
+  container_of(), so no LSM type crosses the LSM boundary in either
+  direction.
+- The per-LSM kfuncs (bpf_landlock_*) are replaced by the four
+  LSM-agnostic bpf_lsm_policy_* kfuncs above; they moved from
+  kernel/bpf/bpf_lsm.c to security/bpf_lsm_kfuncs.c as the LSM
+  framework's own BPF interface.  kernel/bpf explicitly would
+  not make sense here because the kfuncs themselves implement
+  LSM dispatch logic, an LSM-internal functionality.
+- New shared-acquisition model: the policy_object_get hook and the
+  bpf_lsm_policy_acquire() kfunc (KF_RCU, backed by
+  refcount_inc_not_zero()) let concurrent executions share one map
+  slot.  Landlock frees rulesets after an RCU grace period to back
+  it, and struct lsm_policy_object is registered in the verifier's
+  rcu_protected_types.
+- The lifetime rules above are now the documented interface
+  contract, not per-kfunc notes.
+- LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS, whose series [5] has been
+  picked up by the Landlock tree since v1 was posted, is honored on
+  the exec path with the same atomicity as the syscall.
+- The staged enforcement emits landlock_enforce_domain at the exec
+  point of no return, with a selftest attached to the tracepoint.
+- The selftests are split in two: the properties of the interface
+  itself (the verifier-side filter rules, reference leak rejection,
+  RCU acquisition, and the from_fd error contract) are tested with no
+  LSM dependency alongside the kfuncs, while the end-to-end
+  enforcement tests sit with the Landlock provider.
+- Still no new UAPI: no map type, no new flag, no ABI bump; the type
+  tag and its enum are kernel-internal.
+
+This series is based on the Landlock tree's next branch [6]: it
+depends on the ruleset/domain split, the tracepoint series, and the
+LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS flag.  The BPF CI bot will
+therefore fail to apply this series onto bpf-next.  To cover CI, the
+full branch has been submitted manually to BPF CI on GitHub
+Actions [7].
+
+The series is structured with LSM framework patches first: patches 1-2
+add the hooks, 3 is trivial macro motion, 4-7 the kfuncs, 8 the interface
+documentation, and 9 its LSM-independent selftests.
+
+The Landlock provider follows: patches 10-13 add it, 14 its selftests,
+and 15 its documentation.
+
+[1] https://lore.kernel.org/linux-security-module/20260407200157.3874806-1-utilityemal77@gmail.com/
+[2] https://lore.kernel.org/bpf/20260731022047.189137-1-utilityemal77@gmail.com/
+[3] https://lore.kernel.org/linux-security-module/CAHC9VhSSzNBCSvy4cQHh6OOM4-EvHF+bmrB9=V1y=Lj53RvxQQ@mail.gmail.com/
+[4] https://lore.kernel.org/linux-security-module/20260702.ierahzaiLub3@digikod.net/
+[5] https://lore.kernel.org/linux-security-module/20260717220320.1030123-1-utilityemal77@gmail.com/
+[6] https://git.kernel.org/pub/scm/linux/kernel/git/mic/linux.git/log/?h=next
+[7] https://github.com/kernel-patches/bpf/pull/13522
+
+Justin Suess (15):
+  lsm: Add the LSM policy object lifetime hooks
+  lsm: Add the bprm_apply_policy_object LSM hook
+  lsm: Move the lsm_for_each_hook() macro to security/lsm.h
+  lsm: Add the bpf_lsm_policy_release kfunc and policy object destructor
+  lsm: Add the bpf_lsm_policy_from_fd kfunc
+  lsm: Add the bpf_lsm_policy_acquire kfunc
+  lsm: Add the bpf_lsm_policy_apply_bprm kfunc
+  lsm: Document the LSM policy object interface
+  selftests/bpf: Add tests for the LSM policy object kfuncs
+  landlock: Expose the ruleset fd lookup to the rest of Landlock
+  landlock: Factor the credential restriction out of
+    landlock_restrict_self()
+  landlock: Free rulesets after an RCU grace period
+  landlock: Implement the LSM policy object hooks
+  selftests/bpf: Test the LSM policy object kfuncs with Landlock
+  landlock: Document the BPF policy interface
+
+ Documentation/security/landlock.rst           |  38 ++
+ Documentation/security/lsm-development.rst    |  49 ++
+ Documentation/trace/events-landlock.rst       |   5 +-
+ MAINTAINERS                                   |   1 +
+ include/linux/lsm_hook_defs.h                 |   6 +
+ include/linux/security.h                      |  11 +
+ include/trace/events/landlock.h               |  15 +-
+ kernel/bpf/bpf_lsm.c                          |   4 +
+ kernel/bpf/verifier.c                         |   3 +
+ security/Makefile                             |   2 +-
+ security/bpf_lsm_kfuncs.c                     | 251 +++++++++
+ security/landlock/Makefile                    |   2 +
+ security/landlock/bpf.c                       | 152 +++++
+ security/landlock/bpf.h                       |  21 +
+ security/landlock/cred.c                      | 148 ++++-
+ security/landlock/cred.h                      |  47 ++
+ security/landlock/limits.h                    |   4 +
+ security/landlock/ruleset.c                   |  30 +-
+ security/landlock/ruleset.h                   |  75 ++-
+ security/landlock/setup.c                     |   2 +
+ security/landlock/syscalls.c                  | 105 +---
+ security/lsm.h                                |   6 +
+ security/security.c                           |   5 -
+ tools/testing/selftests/bpf/config            |   1 +
+ tools/testing/selftests/bpf/config.x86_64     |   2 +-
+ .../bpf/prog_tests/lsm_policy_kfuncs.c        |  54 ++
+ .../bpf/prog_tests/lsm_policy_landlock.c      | 522 ++++++++++++++++++
+ .../selftests/bpf/progs/lsm_policy_kfuncs.c   |  52 ++
+ .../bpf/progs/lsm_policy_kfuncs_failure.c     | 154 ++++++
+ .../selftests/bpf/progs/lsm_policy_landlock.c | 142 +++++
+ 30 files changed, 1786 insertions(+), 123 deletions(-)
+ create mode 100644 security/bpf_lsm_kfuncs.c
+ create mode 100644 security/landlock/bpf.c
+ create mode 100644 security/landlock/bpf.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/lsm_policy_kfuncs.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/lsm_policy_landlock.c
+ create mode 100644 tools/testing/selftests/bpf/progs/lsm_policy_kfuncs.c
+ create mode 100644 tools/testing/selftests/bpf/progs/lsm_policy_kfuncs_failure.c
+ create mode 100644 tools/testing/selftests/bpf/progs/lsm_policy_landlock.c
+
+
+base-commit: 172b6a6d8463562b0cbebfd66f770b078f81966b
+-- 
+2.55.0
 
