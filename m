@@ -1,119 +1,168 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5950D3E6386;
-	Mon, 31 Aug 2026 11:48:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF8B3E51E4;
+	Mon, 31 Aug 2026 11:50:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788176900; cv=none; b=UvlvSp6L8gsEODeG/N6qL6j63obRRaQgWnsnEHahhgO373vopMM/CamAZMMTq8WePAeF0cjn+NXQhzvKZTGQvaHtnCUN1y6MCWAGP0lJK1ZAP88u6jZxMSr2OPWj5l6OPlVPO2SZ7TVPl/WiO5GlVeFPIu9gGlFNMz4L4w9tU0E=
+	t=1788177039; cv=none; b=EcM7pY/UriqaqIR/aG9zd3c1qiuIJJW5Ke4tyobZjhCAbv16CCiN7triqZXe/8ez5xGBkf4BVutd69iM3zefN526k2mRZwFJszftWL5KWS5tz+KbguKcGb+vSkENT4uUTaZMRtUp8PfXVumnnFVhsog7f7QomB5mStZPSfox3jk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788176900; c=relaxed/simple;
-	bh=+V6Y3Pde6gHn13ADn8LysRRNptw4kQRoDwJzDVXLhVk=;
+	s=arc-20240116; t=1788177039; c=relaxed/simple;
+	bh=cfWBcOASOzKuRqammOALbQZ2Ne8/rzaU7Fz5ETt1BMc=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=furK2IXJoN84LQiJdwb03viqyDIp1DwXVyhVrma+uAu4igxhyKM3MkBZkmCOok9KJBeFv9R6N3moYWnd5MhdEk4zysZVMCfGkNQtwdz7oxf7OGp2XAsZwklRD5jpACWb8Lcs6GEQr2fTIkrEvW02fjmRWSWzEXUToeYZTf2vS7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TljHMCJ4; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=YObAZFNOTZzvPqhDgw/C+ZxoxKlHDcK3bGupaMk7m/tzgJb+XnSjh0xrCfbAx0p0tiPsEPxGHHBWcC/Ym/xuGeYXrzkeb+Atcj9l9af7/gEjbf8osyiE/4hW6WMir1uy/CM2OsWiA8dE0DEALbjghhKFjSnXeRL5VgW488NpoYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=exXUEbYM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TljHMCJ4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D41CF1F00A3D;
-	Mon, 31 Aug 2026 11:48:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="exXUEbYM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA2271F000E9;
+	Mon, 31 Aug 2026 11:50:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788176898;
-	bh=FlOuQOjntk+7Xr3dFLIMLBklGLrkdVUsybJY/VDn/tc=;
+	s=k20260515; t=1788177036;
+	bh=/qki8Ak/UpGyTQ0kiXEyNF6XoCNkLdUSr1yKapMlqxs=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=TljHMCJ43nazG3yQ8pyGjgMAbgtYwTFL5YmOOqJxPSQUOVWNmf6ILHVBTUF/TACO9
-	 rAfcGVbwKVO17/uhFapOCUaapDWpA2GTCaar/JRVPErxyzVgWnDi4JdMfQLAOX26Yi
-	 F0DqDBElHAUtBZuUWfj6KX6DqSXLaWFKYu5dU0Enm9SsCKPfJq9wXfJO+5a3EthayL
-	 duxtapP1wpY5hBBbokrSAO4YLnN9FvJPIZ/omwUQ2bUjc29cv+tAE4G+dh6Rj+dWMG
-	 sTOBsnTic+qWMsmrZXrDI4/mMGx7GeLL6UvCxts3X7wtJ0qJ8mdS4X+TZh09pn6RBq
-	 4AijaTnFhcfeA==
-Content-Type: multipart/mixed; boundary="===============2702627393202367961=="
+	b=exXUEbYMQXVA3wnlJs96Gq0o9ZhiDmGCMXGWSmVe6vBpdqgMxoNvIJtBKpikb7q1P
+	 x+82n/19h3EtGt/Mq8qDaJhxnzLNHnt6SLJrhAeF98sHTSRB6N7RUWKRNkdo99HIV/
+	 5aDtkmtc4GdANcbNQiLNFrp7ZviNXe+3hXKtiYy1/koN1dLzwBoAutIN4kCXjEPR5a
+	 HU0HjMTxvdmHaOocG/sUhJ9Q0mxrHrovsGrxuYJCv5GdlNaH02Lavz4/OgNMTgmuJ8
+	 Qgz++OCg/EwQZ32zgg6fnraiaeSypRdtKK+fEyEDiB8DmeR2YXBBuu/pXsMAiDYim4
+	 /1Qd3eyOlgsYw==
+Content-Type: multipart/mixed; boundary="===============5687862971082144044=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <116308d606e3bff21d07c01feb8741702547d1c32b1eafaad6f3628a776828fc@mail.kernel.org>
-In-Reply-To: <20260831110314.150870-3-jiayuan.chen@linux.dev>
-References: <20260831110314.150870-3-jiayuan.chen@linux.dev>
-Subject: Re: [PATCH bpf v3 2/5] bpf: Fix NULL-ptr-deref when showing a void BTF type
+Message-Id: <32309c5bdc0ed0566f6c7f8d133b4cbf781236c0d4fa76bdd43d0805224f89eb@mail.kernel.org>
+In-Reply-To: <20260831110934.241898-2-a.s.protopopov@gmail.com>
+References: <20260831110934.241898-2-a.s.protopopov@gmail.com>
+Subject: Re: [PATCH bpf-next 1/7] bpf: Allow BPF LSM programs to attach to more hooks
 From: bot+bpf-ci@kernel.org
-To: jiayuan.chen@linux.dev,bpf@vger.kernel.org
-Cc: jiayuan.chen@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,yatsenko@meta.com,alan.maguire@oracle.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 31 Aug 2026 11:48:17 +0000 (UTC)
+To: a.s.protopopov@gmail.com,bpf@vger.kernel.org,linux-security-module@vger.kernel.org,netdev@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,kpsingh@kernel.org,matt@bobrowski.net,john.fastabend@gmail.com,brauner@kernel.org,paul@paul-moore.com,torvalds@linux-foundation.org,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com
+Cc: a.s.protopopov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 31 Aug 2026 11:50:35 +0000 (UTC)
 
---===============2702627393202367961==
+--===============5687862971082144044==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Fix NULL-ptr-deref when showing a void BTF type
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 460cb72688450..d01dd1f096fc1 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -5035,6 +5035,7 @@ L:	bpf@vger.kernel.org
+>  S:	Maintained
+>  F:	Documentation/bpf/prog_lsm.rst
+>  F:	include/linux/bpf_lsm.h
+> +F:	include/linux/bpf_lsm_hook_defs.h
+>  F:	kernel/bpf/bpf_lsm.c
+>  F:	kernel/bpf/bpf_lsm_proto.c
+>  F:	kernel/trace/bpf_trace.c
+
+[ ... ]
+
+> diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
+> index dda272d78f013..1e54c7cca27ad 100644
+> --- a/include/linux/bpf_lsm.h
+> +++ b/include/linux/bpf_lsm.h
+> @@ -16,9 +16,19 @@
 >
-> btf_modifier_show() resolves the modifier and then calls
-> btf_type_ops(t)->show() unconditionally. For the void type (type_id 0,
-> BTF_KIND_UNKN) kind_ops[] has no entry, so ->show is NULL.
+>  extern bool bpf_lsm_initialized __ro_after_init;
 >
-> The map dump path cannot reach a void type (a map key/value must have a
-> size and void has none), but bpf_snprintf_btf() takes a type_id straight
-> from the BPF program, and a "const void" (a modifier that resolves to
-> void, present in the vmlinux BTF) NULL-derefs there:
+> +/*
+> + * Technically, checking bpf_lsm_initialized is not necessary.
+> + * But if it is off, then this means that all security_* calls
+> + * do not call BPF, and it doesn't look reasonable to enable
+> + * only "non-LSM" bpf hooks...
+> + */
+> +#define bpf_lsm_hook(NAME, ...) \
+> +	(bpf_lsm_initialized ? bpf_lsm_##NAME(__VA_ARGS__) : 0)
 
-Is this statement about the map dump path accurate? Looking at
-map_check_btf() in kernel/bpf/syscall.c, a map key isn't required to
-have a size:
+Does the new bpf_lsm_hook() macro constrain what hook declarations
+can appear in bpf_lsm_hook_defs.h? The macro hardcodes 0 as the return
+value in two places:
 
-	/* Some maps allow key to be unspecified. */
-	if (btf_key_id) {
-		key_type = btf_type_id_size(btf, &btf_key_id, &key_size);
-		if (!key_type || key_size != map->key_size)
-			return -EINVAL;
-	} else {
-		key_type = btf_type_by_id(btf, 0);
-		if (!map->ops->map_check_btf)
-			return -EINVAL;
-	}
+1. When bpf_lsm_initialized is false, the ternary returns 0, but when
+   it is true with no program attached, the __weak nop returns the hook's
+   declared DEFAULT. This means LSM_HOOK(int, 0, ...) behaves consistently,
+   but LSM_HOOK(int, -EOPNOTSUPP, ...) would return different values
+   depending on whether 'bpf' appears in lsm= - 0 before initialization,
+   -EOPNOTSUPP after.
 
-When btf_key_id is 0, key_type is set to the void type, and
-map->btf_key_type_id is stored as 0. array_map_check_btf() even has a
-dedicated keyless exception ("One exception for keyless BTF:
-.bss/.data/.rodata/.percpu map").
+2. Because of the ternary, LSM_HOOK(void, ...) cannot compile at call
+   sites, since the expression `cond ? void_expr : 0` is invalid.
 
-The preceding patch in this series, commit 55f5ad8f45a5 ("bpf: Reject
-key-less BTF for hash maps"), documents a syzbot NULL-ptr-deref where a
-void key reached the map dump path through htab_map_seq_show_elem() ->
-btf_type_seq_show_flags() -> btf_type_show() -> kind_ops[BTF_KIND_UNKN]
-== NULL. That patch closed the path by adding btf_type_is_void(key_type)
-rejections in htab_map_check_btf() and rhtab_map_check_btf().
+3. The CONFIG_BPF_LSM=n stub at line 128:
 
-Would it be more accurate to say the map dump path is closed by the
-preceding patch and by existing btf_key_type_id guards, rather than by
-a size requirement?
+   #define bpf_lsm_hook(NAME, ...) 0
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -2911,7 +2911,15 @@ static void btf_modifier_show(const struct btf *btf,
->  	else
->  		t = btf_type_skip_modifiers(btf, type_id, NULL);
->
-> -	btf_type_ops(t)->show(btf, t, type_id, data, bits_offset, show);
-> +	/*
-> +	 * A modifier can resolve to the void type (e.g. "const void"), which
-> +	 * has no show op (kind_ops[BTF_KIND_UNKN] is NULL). Print a placeholder
-> +	 * instead of dereferencing NULL.
-> +	 */
-> +	if (!btf_type_ops(t))
-> +		btf_df_show(btf, t, type_id, data, bits_offset, show);
-> +	else
-> +		btf_type_ops(t)->show(btf, t, type_id, data, bits_offset, show);
+   discards its arguments entirely, so call-site argument checking only
+   happens on =y builds. Does this create a risk that =n configurations
+   would fail to catch type mismatches or side-effect issues?
+
+>  #define LSM_HOOK(RET, DEFAULT, NAME, ...) \
+>  	RET bpf_lsm_##NAME(__VA_ARGS__);
+>  #include <linux/lsm_hook_defs.h>
+> +#include <linux/bpf_lsm_hook_defs.h>
+>  #undef LSM_HOOK
+
+[ ... ]
+
+> diff --git a/include/linux/bpf_lsm_hook_defs.h b/include/linux/bpf_lsm_hook_defs.h
+> new file mode 100644
+> index 0000000000000..29bc0b514d168
+> --- /dev/null
+> +++ b/include/linux/bpf_lsm_hook_defs.h
+> @@ -0,0 +1,6 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +/*
+> + * This is a set of BPF LSM hooks, which are _not_ fully implemented
+> + * as LSM hooks. Thus, they only can be used by BPF LSM programs.
+> + */
+> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+> index 82c5988417a0c..add344ea26914 100644
+> --- a/kernel/bpf/bpf_lsm.c
+> +++ b/kernel/bpf/bpf_lsm.c
+> @@ -28,11 +28,13 @@ __weak noinline RET bpf_lsm_##NAME(__VA_ARGS__)	\
 >  }
 >
->  static void btf_var_show(const struct btf *btf, const struct btf_type *t,
+>  #include <linux/lsm_hook_defs.h>
+> +#include <linux/bpf_lsm_hook_defs.h>
+>  #undef LSM_HOOK
+>
+>  #define LSM_HOOK(RET, DEFAULT, NAME, ...) BTF_ID(func, bpf_lsm_##NAME)
+>  BTF_SET_START(bpf_lsm_hooks)
+>  #include <linux/lsm_hook_defs.h>
+> +#include <linux/bpf_lsm_hook_defs.h>
+>  #undef LSM_HOOK
+>  BTF_SET_END(bpf_lsm_hooks)
+
+The patch adds bpf_lsm_hook_defs.h to three of the four BPF-owned
+LSM_HOOK expansion sites, but not the fourth. Does this need updating?
+
+Updated:
+  include/linux/bpf_lsm.h (prototypes, lines 30-31)
+  kernel/bpf/bpf_lsm.c (__weak nop definitions, lines 30-31)
+  kernel/bpf/bpf_lsm.c (bpf_lsm_hooks BTF set, lines 36-37)
+
+Not updated:
+  kernel/bpf/bpf_lsm.c (void_lsm_hooks BTF set, further down in the file)
+
+The void_lsm_hooks set is consumed by bpf_lsm_hook_returns_errno() in
+bpf_lsm.c, which feeds cgroup_lsm_atype[i].returns_errno. If a hook
+declared as LSM_HOOK(void, ...) appeared in the new header, wouldn't it
+be omitted from void_lsm_hooks and incorrectly reported as errno-returning?
+
+This is latent today because the four hooks added later in the series all
+return int, but is there a reason the fourth site shouldn't include the
+new header, or should the header document that it only supports int hooks?
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33385673160
---===============2702627393202367961==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33386073074
+--===============5687862971082144044==--
