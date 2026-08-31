@@ -1,125 +1,67 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BCEA446074;
-	Mon, 31 Aug 2026 14:18:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE15446074;
+	Mon, 31 Aug 2026 14:18:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788185901; cv=none; b=pL25oWrVTQ4N1MYp7ip9vTdI8k8zNGF9NgLsijTQUJQG9Vx5kAyaDm578h2q5EMeyj4oy4Mxb8A2vpEFxwL+wdInTxqpIZkY+Qv1QEGD3nI65GywFEjdS6IRXv6h4cJes9HdCeeYmWbfze0enGKR/63qqtgYaWAnYfY/5rCDxn0=
+	t=1788185904; cv=none; b=Qfh9SQBI9esbDZu6weKfKirN2qpJWIAWJIzDcSO685gT++z3TRCRgsFIU0sm0Hbc2EgDsYWx0XLsG7b5q7Ie/oH6ECj7RhaflGdZ5Q4Tr6x8ncj8BIUWjjpXu8icuyhLCAi0bM5eZYYwWG/3AxMJyvShJ3ALC3vdtjgDiXqVZdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788185901; c=relaxed/simple;
-	bh=yNoY4liRgzd9KXi9rUxAoCcymTkrUneo9msAvAtoZqU=;
+	s=arc-20240116; t=1788185904; c=relaxed/simple;
+	bh=pnNhEZtfzy7FU5AjKwxKTGn8vSdyNwrrXOGlsVcBEuo=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=eAyyfQ2K/EuTO9iz0k6M70mfd0dO67+GJVJVMvVNcJZ6PEFUHFw4j8RexmZFbJfAIPzSehBxMVJW/Ij84bw5OcOSOXpa46BLlZIIBMqnp3SVzSpPAGMjToRpAH1N+xwFEYUOQaQdW39U1a+B9QijMiltOGK1E9qD1sd6s1oj7jc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Aw5FMecp; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=AiJko6n5eu9Zr4lfwajD/Ypn/zPaB+6nw//JPbeHVeoQeApZDvrH7C/OFjZLZYueY0+s6E6tc2EtsWAHFq6te3yA3yTLeHOo3Z50ssWtnEfOdkrh/sqKUJxNXjvOXO+QjI5yWCzVLdtFj00+28k6hMrOAsyPn8A5uMxC95DvL5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pec58PIw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Aw5FMecp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E5311F000E9;
-	Mon, 31 Aug 2026 14:18:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pec58PIw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84C641F00A3D;
+	Mon, 31 Aug 2026 14:18:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788185900;
-	bh=yNoY4liRgzd9KXi9rUxAoCcymTkrUneo9msAvAtoZqU=;
+	s=k20260515; t=1788185902;
+	bh=pnNhEZtfzy7FU5AjKwxKTGn8vSdyNwrrXOGlsVcBEuo=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Aw5FMecp5g6dD/V34m1fivUlpYCBA82JbuHf2xBoerS9bxsWAygxnvFdwhwuLKSsR
-	 X+G7kG/6bR9zHypqXkzObTSkCEQ+Qzvh3C5JWRWjnOS3DVV2XLreMyi3Z3nLZobnqn
-	 rcCB+dL8LVXr03r/+2KxkASdypvvr2qsEfrrah0ym4SNceIn5OvOSBu+WehBUgIonc
-	 +av60IMGahjIAd/ZEt66VbSXtrIHwLxRYEtMJG6YJ93xTgAcp+mgUi0u7bl8QuyF+P
-	 8AZI/NcaQXzv+CRPwc9xu8PdGFvf0rnKR58ewCZdmtASmihPH8UU1QhR2I4qGUMlKQ
-	 B38mELc/AKFjg==
-Content-Type: multipart/mixed; boundary="===============1965030739623056785=="
+	b=Pec58PIwvVrF94R0DjRChEtV9nY1tsQ0I0n4ppIiLSfrd5l+Ijk4NQjz4GLVHBYIe
+	 TbKjiPjAd/xqyOHER9mX0t5YkIUkPwLyJVG/7HuXq2wUcnuu7CwBqXbcXWwHBot33n
+	 Q5ASRor1jciGLLFmMumdTaEKP06S11CwR08cK+V+XyChQ0k+hSx9fs0uiW4OpqgzbA
+	 IZOn31ERUhKe0EU9nfbvZUNK6ESwUgRlfDCVO47bgO1yWzaKUE9M5LEILkZMr6NJBU
+	 5UYP7mfPOX512Ykr9SJ++9I28Fwvdglsnkjr/+9GoUwMkDabA4KioECE9RmdyLOC1y
+	 dqksxdDf1UvuA==
+Content-Type: multipart/mixed; boundary="===============4942061954748237564=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <596f7d7b908b3cbb2dfba0ee0aa601d098d054930baecd485adcb5af5ce28a13@mail.kernel.org>
-In-Reply-To: <20260831132648.65843-4-toke@redhat.com>
-References: <20260831132648.65843-4-toke@redhat.com>
-Subject: Re: [PATCH bpf-next v2 4/4] selftests/bpf: Set BPF program flags non-destructively
+Message-Id: <b256533a30204621a9d7963031e0033d87a88f0858ce6c6286a2fc054dd6ca11@mail.kernel.org>
+In-Reply-To: <20260831132648.65843-2-toke@redhat.com>
+References: <20260831132648.65843-2-toke@redhat.com>
+Subject: Re: [PATCH bpf-next v2 2/4] bpf: selftests: Check for flag presence in bpf_program__flags()
 From: bot+bpf-ci@kernel.org
-To: toke@redhat.com,ast@kernel.org,daniel@iogearbox.net,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com
-Cc: toke@redhat.com,shuah@kernel.org,bpf@vger.kernel.org,netdev@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 31 Aug 2026 14:18:19 +0000 (UTC)
+To: toke@redhat.com,ast@kernel.org,daniel@iogearbox.net,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me
+Cc: toke@redhat.com,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,bpf@vger.kernel.org,netdev@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 31 Aug 2026 14:18:21 +0000 (UTC)
 
---===============1965030739623056785==
-Content-Type: text/plain; charset="utf-8"
+--===============4942061954748237564==
+Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
 
-PiAgICAgc2VsZnRlc3RzL2JwZjogU2V0IEJQRiBwcm9ncmFtIGZsYWdzIG5vbi1kZXN0cnVjdGl2
-ZWx5Cj4KPiAgICAgQSBjb3VwbGUgb2YgdGhlIEJQRiBzZWxmdGVzdHMgd291bGQgc2V0IHRoZSBw
-cm9ncmFtIGZsYWdzIHdpdGhvdXQKPiAgICAgbG9va2luZyBhdCB0aGUgZXhpc3RpbmcgcHJvZ3Jh
-bSBmbGFncywgb3ZlcnJpZGluZyBhbnkgb3RoZXIgZmxhZyB2YWx1ZXMuCj4gICAgIENoYW5nZSB0
-aGlzIHRvIGFsd2F5cyBzZXQgdGhlIGZsYWcgdmFsdWUgbm9uLWRlc3RydWN0aXZlbHkgYnkgT1In
-aW5nIGl0Cj4gICAgIHdpdGggdGhlIGV4aXN0aW5nIGZsYWdzLgo+Cj4gICAgIFNpZ25lZC1vZmYt
-Ynk6IFRva2UgSMO4aWxhbmQtSsO4cmdlbnNlbiA8dG9rZUByZWRoYXQuY29tPgoKVGhpcyBjb21t
-aXQgY29tZXMgYWZ0ZXIgcGF0Y2ggMSBpbiB0aGUgc2VyaWVzICgyNDYyN2Y2MDAyNmJkLCAibGli
-YnBmOgpNb3ZlIHNlY3Rpb24tZGVmaW5lZCBwcm9ncmFtIGZsYWdzIHRvIHByb2dfZmxhZ3MiKS4g
-QXQgdGhhdCBlYXJsaWVyCmNvbW1pdCwgcHJvZ19mbGFncyBhbHJlYWR5IGNhcnJpZXMgdGhlIHNl
-Y3Rpb24tZGVyaXZlZCBmbGFncyBhbmQKbGliYnBmX3ByZXBhcmVfcHJvZ19sb2FkKCkgbm8gbG9u
-Z2VyIE9SJ3MgdGhlbSBpbiBhdCBsb2FkIHRpbWUuIFRoZQp4ZHBfaHdfbWV0YWRhdGEuYyBjaGFu
-Z2UgYmVsb3cgc2V0cyBmbGFncyBvbiBhIFNFQygieGRwLmZyYWdzIikgcHJvZ3JhbToKCj4gZGlm
-ZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi94ZHBfaHdfbWV0YWRhdGEuYyBi
-L3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi94ZHBfaHdfbWV0YWRhdGEuYwo+IGluZGV4IDZk
-YjNiNTU1NWEyMmUuLmM1NTAxYjNmZGY0OGYgMTAwNjQ0Cj4gLS0tIGEvdG9vbHMvdGVzdGluZy9z
-ZWxmdGVzdHMvYnBmL3hkcF9od19tZXRhZGF0YS5jCj4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxm
-dGVzdHMvYnBmL3hkcF9od19tZXRhZGF0YS5jCj4gQEAgLTg0NSw3ICs4NDUsNyBAQCBpbnQgbWFp
-bihpbnQgYXJnYywgY2hhciAqYXJndltdKQo+Cj4gIAlwcm9nID0gYnBmX29iamVjdF9fZmluZF9w
-cm9ncmFtX2J5X25hbWUoYnBmX29iai0+b2JqLCAicngiKTsKPiAgCWJwZl9wcm9ncmFtX19zZXRf
-aWZpbmRleChwcm9nLCBpZmluZGV4KTsKPiAtCWJwZl9wcm9ncmFtX19zZXRfZmxhZ3MocHJvZywg
-QlBGX0ZfWERQX0RFVl9CT1VORF9PTkxZKTsKPiArCWJwZl9wcm9ncmFtX19zZXRfZmxhZ3MocHJv
-ZywgYnBmX3Byb2dyYW1fX2ZsYWdzKHByb2cpIHwgQlBGX0ZfWERQX0RFVl9CT1VORF9PTkxZKTsK
-CkF0IGNvbW1pdCAyNDYyN2Y2MDAyNmJkLCB0aGUgYXNzaWdubWVudCBvbiB0aGUgb2xkIGxpbmUg
-b3ZlcndyaXRlcyB0aGUKQlBGX0ZfWERQX0hBU19GUkFHUyBiaXQgYW5kIHRoZSBwcm9ncmFtIGlz
-IGxvYWRlZCB3aXRob3V0IG11bHRpLWJ1ZmZlcgpzdXBwb3J0LiBQYXRjaCA0ICh0aGlzIGNvbW1p
-dCkgdW5kb2VzIHRoYXQgYmVoYXZpb3VyIGNoYW5nZS4gVGhlIHNhbWUKYXBwbGllcyB0byBicGZ0
-b29sIGFuZCB4ZHAuZnJhZ3MgcHJvZ3JhbXMgYmV0d2VlbiBwYXRjaCAxIGFuZCBwYXRjaCAzLgoK
-VGhlIGZpeHVwcyBhcmUgbm8tb3BzIGJlZm9yZSBwYXRjaCAxIHNpbmNlIHByb2dfZmxhZ3MgaXMg
-MCB0aGVyZSwgc28KbW92aW5nIHBhdGNoZXMgMyBhbmQgNCBhaGVhZCBvZiB0aGUgbGliYnBmIGNo
-YW5nZSB3b3VsZCBrZWVwIGV2ZXJ5CmNvbW1pdCBpbiB0aGUgc2VyaWVzIGJlaGF2aW91ci1wcmVz
-ZXJ2aW5nLiBTaG91bGQgdGhlIGNvbW1pdCBtZXNzYWdlIG9yCnNlcmllcyBub3RlIHRoaXMgZGVw
-ZW5kZW5jeT8gVGhlIGNvbW1pdCBhcyB3cml0dGVuIHJlYWRzIGFzIGFuCmluZGVwZW5kZW50IGNs
-ZWFudXAgd2l0aCBubyBpbmRpY2F0aW9uIHRoYXQgaXQgaXMgcmVxdWlyZWQgdG8ga2VlcAp4ZHBf
-aHdfbWV0YWRhdGEgd29ya2luZyBhZnRlciB0aGUgbGliYnBmIGNoYW5nZS4KClsgLi4uIF0KClBh
-dGNoIDEgb2YgdGhpcyBzZXJpZXMgc3RhdGVzICJBIHN1YnNlcXVlbnQgcGF0Y2ggZml4ZXMgdXAg
-YWxsIGluLXRyZWUKdXNlcnMgb2YgdGhlIEFQSSIsIGFuZCB0aGlzIGNvbW1pdCBpcyB0aGF0IHBh
-dGNoLiBIb3dldmVyLApjaGVja19sb2FkKCkgaW4gcHJvZ190ZXN0cy9icGZfdmVyaWZfc2NhbGUu
-YyBzdGlsbCBhc3NpZ25zIGZsYWdzCmRlc3RydWN0aXZlbHk6CgoJYnBmX3Byb2dyYW1fX3NldF9m
-bGFncyhwcm9nLCB0ZXN0aW5nX3Byb2dfZmxhZ3MoKSk7CgpBbiBleGhhdXN0aXZlIGVudW1lcmF0
-aW9uIG9mIHRoZSB0cmVlIGFmdGVyIHRoaXMgY29tbWl0IGxlYXZlcyBleGFjdGx5Cm9uZSBkZXN0
-cnVjdGl2ZSBjYWxsZXI6CgogIHRvb2xzL2JwZi9icGZ0b29sL3Byb2cuYzoxNzcyCiAgICAtPiBP
-UidkIChwYXRjaCAzKQoKICB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvdGVzdGluZ19oZWxw
-ZXJzLmM6MzExCiAgICAtPiBhbHJlYWR5IE9SJ3M6IGJwZl9wcm9ncmFtX19mbGFncyhwcm9nKSB8
-IHRlc3RpbmdfcHJvZ19mbGFncygpCgogIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi90ZXN0
-X2xvYWRlci5jOjc2OS03NzAKICAgIC0+IGFscmVhZHkgT1InczogcHJvZ19mbGFncyA9IGJwZl9w
-cm9ncmFtX19mbGFncyhwcm9nKQoKICB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvdmVyaXN0
-YXQuYzoxNzI1LDE3MjcKICAgIC0+IGFscmVhZHkgT1IncwoKICB0aGUgZm91ciBzaXRlcyBmaXhl
-ZCBieSB0aGlzIGNvbW1pdAoKICB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0
-cy9icGZfdmVyaWZfc2NhbGUuYzozOAogICAgLT4gTk9UIGNvbnZlcnRlZAoKQWZ0ZXIgcGF0Y2gg
-MSwgbGliYnBmX3NldHVwX3Byb2dfZmxhZ3MoKSBzdG9yZXMgc2VjdGlvbi1kZXJpdmVkCkJQRl9G
-X1NMRUVQQUJMRSBvciBCUEZfRl9YRFBfSEFTX0ZSQUdTIGludG8gcHJvZy0+cHJvZ19mbGFncyBh
-dApicGZfb2JqZWN0X2luaXRfcHJvZ3MoKSB0aW1lLCBhbmQgbGliYnBmX3ByZXBhcmVfcHJvZ19s
-b2FkKCkgbm8gbG9uZ2VyCnJlLWFkZHMgdGhlbSBhdCBsb2FkIHRpbWUuIEEgZGVzdHJ1Y3RpdmUg
-c2V0X2ZsYWdzKCkgdGhlcmVmb3JlIG5vdwpzaWxlbnRseSBkcm9wcyB0aGVtLgoKVGhlIGlkZW50
-aWNhbCBmaXggdXNlZCBldmVyeXdoZXJlIGVsc2UgYXBwbGllczoKCglicGZfcHJvZ3JhbV9fc2V0
-X2ZsYWdzKHByb2csIGJwZl9wcm9ncmFtX19mbGFncyhwcm9nKSB8IHRlc3RpbmdfcHJvZ19mbGFn
-cygpKQoKTm90ZSB0aGF0IHRlc3RpbmdfaGVscGVycy5jOjMxMSBhbHJlYWR5IHNwZWxscyBpdCBl
-eGFjdGx5IHRoYXQgd2F5IGZvcgp0aGUgc2FtZSB0ZXN0aW5nX3Byb2dfZmxhZ3MoKSB2YWx1ZS4K
-CkltcGFjdCB0b2RheSBpcyBsYXRlbnQsIG5vdCBvYnNlcnZhYmxlOiBldmVyeSBvYmplY3QgbG9h
-ZGVkIGJ5CmJwZl92ZXJpZl9zY2FsZSAodGVzdF92ZXJpZl9zY2FsZSosIHB5cGVyZiosIGxvb3Aq
-LCBzdHJvYmVtZXRhKiwKdGVzdF9zeXNjdGxfbG9vcCosIHRlc3RfeGRwX2xvb3AsIHRlc3Rfc2Vn
-Nl9sb29wLCB0d2Z3KSBoYXMgYSBmaXJzdApwcm9ncmFtIGluIGEgcGxhaW4gU0VDKCJ4ZHAiKSwg
-U0VDKCJyYXdfdHJhY2Vwb2ludC8uLi4iKSwKU0VDKCJrcHJvYmUvLi4uIiksIFNFQygiY2xhc3Np
-ZmllciIpLCBTRUMoInRjIiksIG9yIFNFQygiY2dyb3VwLy4uLiIpCnNlY3Rpb24sIG5vbmUgb2Yg
-d2hpY2ggY29udHJpYnV0ZXMgZmxhZ3MuIEl0IGJlY29tZXMgYSBzaWxlbnQgYmVoYXZpb3VyCmNo
-YW5nZSB0aGUgbW9tZW50IGEgc2NhbGUtdGVzdCBwcm9ncmFtIGlzIHdyaXR0ZW4gd2l0aCBTRUMo
-InhkcC5mcmFncyIpCm9yIGEgc2xlZXBhYmxlIHNlY3Rpb24uCgpTaG91bGQgdGhlIGJwZl92ZXJp
-Zl9zY2FsZS5jIHNpdGUgYmUgY29udmVydGVkIGFzIHdlbGwsIG9yIGRvZXMgImFsbAppbi10cmVl
-IHVzZXJzIiBleGNsdWRlIGl0IGZvciBzb21lIHJlYXNvbj8KCgotLS0KQUkgcmV2aWV3ZWQgeW91
-ciBwYXRjaC4gUGxlYXNlIGZpeCB0aGUgYnVnIG9yIGVtYWlsIHJlcGx5IHdoeSBpdCdzIG5vdCBh
-IGJ1Zy4KU2VlOiBodHRwczovL2dpdGh1Yi5jb20va2VybmVsLXBhdGNoZXMvdm10ZXN0L2Jsb2Iv
-bWFzdGVyL2NpL2NsYXVkZS9SRUFETUUubWQKCkNJIHJ1biBzdW1tYXJ5OiBodHRwczovL2dpdGh1
-Yi5jb20va2VybmVsLXBhdGNoZXMvYnBmL2FjdGlvbnMvcnVucy8zMzM5ODE1ODA5MQ==
+> bpf: selftests: Check for flag presence in bpf_program__flags()
 
---===============1965030739623056785==--
+This isn't a bug, but would it be worth using the same 'selftests/bpf:'
+prefix here as in the later patch of this series, so the whole series
+reads consistently?
+
+The sibling patch in this series that also touches
+tools/testing/selftests/bpf uses 'selftests/bpf:' as its prefix, and
+mixing 'bpf: selftests:' and 'selftests/bpf:' for the same directory
+within one series makes it harder to scan in git log --oneline.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33398158091
+--===============4942061954748237564==--
