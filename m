@@ -1,85 +1,85 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9596A417340
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 13:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC4741A508
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 13:27:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788182834; cv=none; b=RzZi8g/bXy48d7Fki4Su2KPNHSvC486DyqKPdhjp6lmDEsqw7oiPjLUo/7LXJMvnuG0uhVT8nyTrRGei6mGGHkib0yJKAdCAmAeUExnD5/D4caevHxguWyYqiygWrEuEvhJlZgZXrYDjbyloox+LmNRI6RAnG1oSepQpwPtLdOk=
+	t=1788182836; cv=none; b=MqzPwe0o3NBq/PBoR4RMRQKl2B5cfx0WO9zR5XpuRM49ej+Y6np2z74Ys4g7QVGbhNTOa8FEaTa1fCVBvZuAXOG0ud38kYl9MI8IZ3i3y9ZLWCaFKbLs/JLoSfE1U3F3lveIJT9eT5pJh7aqCdcR6f8UNyF87vlh14PCMk2F6qE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788182834; c=relaxed/simple;
-	bh=OIbi3ceGQZ/QjbSWzXjim1yzwnJvjTsZFCloIxWPYhU=;
+	s=arc-20240116; t=1788182836; c=relaxed/simple;
+	bh=LLDgZ0FAh8RhlBoJq35Cs3mJhKUfNkTUqgFTjMLY/tU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jqjEXR3Cf+TdsefqHAlO/IH6shBOYyfv+aqFP3Sh/qb1RvbKaunC49ms1DFMuLOY1xZlApnphSciIMrvKB5gLG+5tP3VuQJbNj8MzjUQGxMQ4sYUKdb14dtbx60CNash9jnPkMZgonXrOSDzwcmPkTksRcrOCFwF1xOi7xz7lHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LTz4jJWt; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=F8wZwrTj; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version:Content-Type; b=bpYbz3dns2ebEjbTzhGgFlHBDlmzsMeTP5s5qQlPMJ2j15KGgkGEHfldjWCtgRXLA8jnjswB/qsNQutxMoCvSoTTGrUmMwlMF9Le0/q1UAfoZ2Scvx6A7a9Nmyuhvfh4AP7zQPQKF6uD+m9UDR38cso7u8meDwaAoWX/U83OHtg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=R14VFcPp; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=n7NBIEsj; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LTz4jJWt";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="F8wZwrTj"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="R14VFcPp";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="n7NBIEsj"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1788182831;
+	s=mimecast20190719; t=1788182832;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+KvrdHLkoHirj2epQVtvhrFYMOrEgGC1u8Odq3InD4Y=;
-	b=LTz4jJWtcNYHxE000Ic09Jvk4lIuX0gOhEfkXjN0uWcVvidOx5tcGNxu9IYRfK0iLYCAwp
-	+p8Yn55PFdqmd9Jtd2uFzNpTipa3/jJ7GzJJo4Gs29gjFTge8Gw8mxQg+mGBoMzmQBjPIh
-	Zg2u7T8Q5GBvVz3yT0RefduI0XqP6RA=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=E5w3fw8FlazpW0rraJWBP8El+DWfQ3Z4q3hoOZ2MLYk=;
+	b=R14VFcPpn0QInW1CnGNQqre/a//96LnRJ6md1jckvHUqWurZC/w7CeWRB3po20NWJ/ujNt
+	vBgEbpG+ol1a0Na/fd+7szcGyEDtrV20QvHq3yLT2eFC8LhPm9kdViu+0ttQfNCZAfTZv3
+	P7PmQQT9DXBYGT/+K8/DL1N/LHi8z7s=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-340-HNr6zCSOMw-uMAOyg79I8A-1; Mon, 31 Aug 2026 09:27:09 -0400
-X-MC-Unique: HNr6zCSOMw-uMAOyg79I8A-1
-X-Mimecast-MFC-AGG-ID: HNr6zCSOMw-uMAOyg79I8A_1788182828
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4997b060af8so20829965e9.1
-        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 06:27:08 -0700 (PDT)
+ us-mta-494-JtxPjWQ1OXuD2_A9ePcNJQ-1; Mon, 31 Aug 2026 09:27:11 -0400
+X-MC-Unique: JtxPjWQ1OXuD2_A9ePcNJQ-1
+X-Mimecast-MFC-AGG-ID: JtxPjWQ1OXuD2_A9ePcNJQ_1788182830
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-49b8c651ac0so34795535e9.2
+        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 06:27:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1788182828; x=1788787628; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1788182830; x=1788787630; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=+KvrdHLkoHirj2epQVtvhrFYMOrEgGC1u8Odq3InD4Y=;
-        b=F8wZwrTj27r+Mb0/4H6deu6DbomZBPp+TcSOR4ho2WMnN53Egrs99YJ+fAfo9sWx9/
-         I0xeqGW2ZKQCeRFpLHdHwqga0jyD9YrenSRfADRKRJbAo4ahy+izdZfxntXFmObrpR7F
-         khOl5VP9MTwmhGMNF8UaI8Wv9dfgl/AM8uwz+0OKdRbVlHkW/Cr0CPoyJqeKYXyG2LcD
-         mKG9rmEwyOaAOPFpyyS7ka1eOMniRvGneO3NTJuC7c2jDJTN/0QKNCkUvG6zvPfmuH+N
-         HcM1qdrQMGmQ+hlVU2rQ/u56DCi7w1WbdiPQA8boW94wtU3dZQJioxTAxT0OeTosoPB/
-         6L3A==
+        bh=E5w3fw8FlazpW0rraJWBP8El+DWfQ3Z4q3hoOZ2MLYk=;
+        b=n7NBIEsj7srkxQFgOzBv1MtQH9pH4SpR3hYOphf377HAD2vFNJolR9DsQWrGt6Y73s
+         gUDGDG5FW9pmeLKP274/uMo6FDK62j3v7mWNXm79tfT1wVpPcAK7CjbljfTOZiLk05Y0
+         fwJJ++ZZoBWU5pliluZg9hcQHIupqh/Ca9jZwNVpVcIFi74c96ViUjczD3+XMSgo++gB
+         nasoZ0XBjrb+H7DouzlmQbUI5HJWY820apejsOpXl7+ExzUdtXFnCaZFcJjTW+bc2vUb
+         lEYB2BCK5FVV/ZHb+sGGgvEDanM+qijyKCl4oK+g9yr2gUg4/t7CygiA/pKlO/Y9yDcw
+         TtAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788182828; x=1788787628;
+        d=1e100.net; s=20251104; t=1788182830; x=1788787630;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=+KvrdHLkoHirj2epQVtvhrFYMOrEgGC1u8Odq3InD4Y=;
-        b=cvU6G4h52xW3E1HNLlcxL4UySnkaCzY6tm6V7BOyTaqowUF24w0WpaL80fmmhO9wrW
-         2W+To3Ymn6gxT9/syDEklcfEi6qpmWLnvSTYiCtYbLPuvXd71/M8eUtdSgdsIkwuNBAa
-         HaK1OPLUUTCIeMD1zocGJLNI18rY6jmbscASJOdubHswBlIIQArKQjjnmQGBoMWOnt1n
-         UAOmJDoGPNEmjOjQY4t8je2v1YpLENieKFg3K6x4k2yYTWH03fcjn6wpPzJz2zOpRnPs
-         M4q3jtKZPCnbakupgEJ6kBpECpCZRYoVpOSAKWugidwixjPhMjxH3yiU/nyMECUTFbYU
-         NCsg==
-X-Forwarded-Encrypted: i=1; AKwUvBy7uATh6KRclw0IedYI+HNQeRaG1/yJi4Q7+LOt/yys/niVEkQlj4F/lPqcNsHO/1J7UT8=@vger.kernel.org
-X-Gm-Message-State: AFuF++nLFSBN2xtInPN6Y/4q67l9EG52Maf8F9hukrh1bd2mIrh90I9X
-	qxbMtR+YuKq8kbb8TCorjbzZDys1FEHYWEbDnNuRpfjojiE70bKUiE/Cqhrj9znXXSa1q+19OTI
-	p9FTJYto52RXzUHpjKaN19hbzdLOfrawrVwlHUkgedlhaxnZpBrrRnQ==
-X-Gm-Gg: AYBFou2j8IcMKVcuHjB2ZedSk5O/poGAqTxtKWncY2+cOFq8/haQPZr4uO8RWTOjzLS
-	RjTEupaoXXcAGOtDcBdXZe2PH9NbHbl3m4/vFEsn4xZczdfwg5VRBc7wTJQxCVddNQnhsdZRPX4
-	SMy5UuqGycFCuV3FEMHbNF8UXHyBzlbN9N2RA+4sNQzjoropotoF8eywta1svowQgUWIbNU1E/o
-	PUuSEre/Uo0OeGuhCeuVNkpr7fil7NwehKtooc7DdStj+fIx24ll+KjWEEybortU45co4Ux9GSm
-	dPCVqecIY6akX35cwcWfPXwPZlz0wiakaC0zWMnTTDSYK21A2bm3P+xTZFnZJbNtvsXKsr0Rsil
-	501s0aInZUlghuY0v2PPphMQ1
-X-Received: by 2002:a05:6000:2288:b0:47f:e377:8d61 with SMTP id ffacd0b85a97d-482f79c9511mr39217373f8f.11.1788182827935;
-        Mon, 31 Aug 2026 06:27:07 -0700 (PDT)
-X-Received: by 2002:a05:6000:2288:b0:47f:e377:8d61 with SMTP id ffacd0b85a97d-482f79c9511mr39217230f8f.11.1788182827310;
-        Mon, 31 Aug 2026 06:27:07 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-482fbb32d30sm23633940f8f.34.2026.08.31.06.27.06
+        bh=E5w3fw8FlazpW0rraJWBP8El+DWfQ3Z4q3hoOZ2MLYk=;
+        b=LoZ811o3PSRuDjrU2p+FeLyWZ7xgGEbtGggVdKg/O8SnDD5CgJWAbGG8QiMrBZSkqg
+         Ht3t5YuHxTP7e8FPC/z3/OSDnd5rrCvAM+NHiShhc4DqILlORWabskEzDfaMz4lbxANy
+         RJL4ACpA+BkgpENM7oXjiJJ9jvQANbzci2LyDzJFTfHF+AzwnuA0bAao7GCNsttTeGtb
+         6/D8LwEBJf7KMPw7C4cvzNSQYTcFZI4Gj7yZg03i/AtaF7qX0IwV2ZqVOOKVIt/cqouU
+         QdvG3OdmFupWu35JQPJRe5o2sFiu5hCL7iCefTUWC4K6eMOTHcSF1NyiFi32A/wQdUZP
+         QW/A==
+X-Forwarded-Encrypted: i=1; AHgh+RpbdemSy++LDCxTbSTrOWu47J4zVrGqlDCRSwfNTREq3T70qSQnsbGp5BdVn2yUtaBUH5k=@vger.kernel.org
+X-Gm-Message-State: AFuF++nPmXg6roKb4SlOiKl2p6m5WxFO77ODqUC4/4wngbMHmEQv7J3q
+	IXkbqfCUuwUW6FYYEKFUxCga+eMGxboSG9JQJC9ygTNf02LXVcrdrlGtCPjTpZjSQTb1E9KFM6v
+	4afe4LwXzJyX9Jh9n4g3HYQdf4GT1cfVofiksB0JXMOoX932Hxomdig==
+X-Gm-Gg: AR+sD10DFIKw52p+slS3mlhc/D/uzLSNrYnBMuasfpZC81FZRSgPzUUVwEeA+40e6jq
+	Guv0NPyb6bU4UAt4K5Efpt50+yId7Y5bX8DtEew5wGILRks/QpD0owfrMTJUzHSuMrNsbASFfJ6
+	16KMR/vM2c144kpPGkwwEQdwC0/2DzSpKpgPZqP0RHEa3wZ8kAk9g+4uMT90pulZp6N1mBvZu2M
+	i2hEUU1/hDWT4y8WBJPc6u8oUDhTiPRGo2O1QM+CMaWtPdvcuANjYh7OTnFOu3XcWDcGrgrQ7Mw
+	VrTysphO68D8R3Y3TLwwtFP30hDkv/s82VP3LyXlGVjldSwEV46sD1ic0aS+2JSkiQq1NFrw0sW
+	+RJM5Xx3Pp8HW84OtSusfSh00zbk=
+X-Received: by 2002:a05:600c:8b6b:b0:49b:c8e:8e6 with SMTP id 5b1f17b1804b1-49b91bd99b7mr437179945e9.0.1788182829719;
+        Mon, 31 Aug 2026 06:27:09 -0700 (PDT)
+X-Received: by 2002:a05:600c:8b6b:b0:49b:c8e:8e6 with SMTP id 5b1f17b1804b1-49b91bd99b7mr437179215e9.0.1788182829334;
+        Mon, 31 Aug 2026 06:27:09 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49b4c321184sm442371225e9.11.2026.08.31.06.27.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2026 06:27:06 -0700 (PDT)
+        Mon, 31 Aug 2026 06:27:08 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 385CF97C44E; Mon, 31 Aug 2026 15:27:06 +0200 (CEST)
+	id 16AA697C452; Mon, 31 Aug 2026 15:27:08 +0200 (CEST)
 From: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -87,8 +87,7 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>
-Cc: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
@@ -97,13 +96,14 @@ Cc: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Cc: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
 	Shuah Khan <shuah@kernel.org>,
 	bpf@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/4] bpf: selftests: Check for flag presence in bpf_program__flags()
-Date: Mon, 31 Aug 2026 15:26:42 +0200
-Message-ID: <20260831132648.65843-2-toke@redhat.com>
+Subject: [PATCH bpf-next v2 4/4] selftests/bpf: Set BPF program flags non-destructively
+Date: Mon, 31 Aug 2026 15:26:44 +0200
+Message-ID: <20260831132648.65843-4-toke@redhat.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260831132648.65843-1-toke@redhat.com>
 References: <20260831132648.65843-1-toke@redhat.com>
@@ -116,61 +116,83 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add a check that the BPF_F_XDP_HAS_FRAGS and BPF_F_SLEEPABLE flags show
-up in bpf_program__flags() when opening a BPF program with the flag
-definitions in their section definitions.
+A couple of the BPF selftests would set the program flags without
+looking at the existing program flags, overriding any other flag values.
+Change this to always set the flag value non-destructively by OR'ing it
+with the existing flags.
 
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- tools/testing/selftests/bpf/prog_tests/kernel_flag.c       | 3 +++
- tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c  | 3 +++
- tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c | 5 +++++
- 3 files changed, 11 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/attach_probe.c      | 6 ++++--
+ tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c | 2 +-
+ tools/testing/selftests/bpf/prog_tests/xdp_metadata.c      | 4 ++--
+ tools/testing/selftests/bpf/xdp_hw_metadata.c              | 2 +-
+ 4 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kernel_flag.c b/tools/testing/selftests/bpf/prog_tests/kernel_flag.c
-index 97b00c7efe94..25eb59f460ab 100644
---- a/tools/testing/selftests/bpf/prog_tests/kernel_flag.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kernel_flag.c
-@@ -16,6 +16,9 @@ void test_kernel_flag(void)
- 	if (!ASSERT_OK_PTR(lsm_skel, "lsm_skel"))
+diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+index e8c1a619e330..7dadb90e7b68 100644
+--- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
++++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+@@ -543,8 +543,10 @@ static void test_kprobe_sleepable(void)
  		return;
  
-+	ASSERT_EQ(bpf_program__flags(lsm_skel->progs.bpf) & BPF_F_SLEEPABLE,
-+		  BPF_F_SLEEPABLE, "sleepable in program flags");
-+
- 	lsm_skel->bss->monitored_tid = sys_gettid();
+ 	/* sleepable kprobe test case needs flags set before loading */
+-	if (!ASSERT_OK(bpf_program__set_flags(skel->progs.handle_kprobe_sleepable,
+-		BPF_F_SLEEPABLE), "kprobe_sleepable_flags"))
++	if (!ASSERT_OK(bpf_program__set_flags(
++			       skel->progs.handle_kprobe_sleepable,
++			       bpf_program__flags(skel->progs.handle_kprobe_sleepable) | BPF_F_SLEEPABLE),
++		       "kprobe_sleepable_flags"))
+ 		goto cleanup;
  
- 	ret = test_kernel_flag__attach(lsm_skel);
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c
-index fce203640f8c..a894b1ab46f4 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c
-@@ -18,6 +18,9 @@ static void test_xdp_update_frags(void)
- 		return;
+ 	if (!ASSERT_OK(test_attach_kprobe_sleepable__load(skel),
+diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+index 2e0ddef77ba5..ed3fd0a88dab 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
++++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+@@ -362,7 +362,7 @@ static void test_attach_api_fails(void)
+ 	sl_skel->bss->user_ptr = sl_skel;
  
- 	prog = bpf_object__next_program(obj, NULL);
-+	ASSERT_EQ(bpf_program__flags(prog) & BPF_F_XDP_HAS_FRAGS,
-+		  BPF_F_XDP_HAS_FRAGS, "frags in program flags");
-+
- 	if (bpf_object__load(obj))
- 		return;
+ 	err = bpf_program__set_flags(sl_skel->progs.handle_kprobe_multi_sleepable,
+-				     BPF_F_SLEEPABLE);
++				     bpf_program__flags(sl_skel->progs.handle_kprobe_multi_sleepable) | BPF_F_SLEEPABLE);
+ 	if (!ASSERT_OK(err, "sleep_skel_set_flags"))
+ 		goto cleanup;
  
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
-index a8ab05216c38..dff6b3e7266e 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
-@@ -146,6 +146,11 @@ static void test_xdp_with_devmap_frags_helpers(void)
- 	if (!ASSERT_OK_PTR(skel, "test_xdp_with_devmap_helpers__open_and_load"))
- 		return;
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+index 5c31054ad4a4..047dfdc322a2 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
+@@ -408,14 +408,14 @@ void test_xdp_metadata(void)
  
-+	ASSERT_EQ(bpf_program__flags(skel->progs.xdp_dummy_dm_frags) & BPF_F_XDP_HAS_FRAGS,
-+		  BPF_F_XDP_HAS_FRAGS, "frags in program flags");
-+	ASSERT_EQ(bpf_program__flags(skel->progs.xdp_dummy_dm) & BPF_F_XDP_HAS_FRAGS,
-+		  0, "frags not in program flags");
-+
- 	dm_fd_frags = bpf_program__fd(skel->progs.xdp_dummy_dm_frags);
- 	map_fd = bpf_map__fd(skel->maps.dm_ports);
- 	err = bpf_prog_get_info_by_fd(dm_fd_frags, &info, &len);
+ 	prog = bpf_object__find_program_by_name(bpf_obj->obj, "rx");
+ 	bpf_program__set_ifindex(prog, rx_ifindex);
+-	bpf_program__set_flags(prog, BPF_F_XDP_DEV_BOUND_ONLY);
++	bpf_program__set_flags(prog, bpf_program__flags(prog) | BPF_F_XDP_DEV_BOUND_ONLY);
+ 
+ 	/* Make sure we can load a dev-bound program that performs
+ 	 * XDP_REDIRECT into a devmap.
+ 	 */
+ 	new_prog = bpf_object__find_program_by_name(bpf_obj->obj, "redirect");
+ 	bpf_program__set_ifindex(new_prog, rx_ifindex);
+-	bpf_program__set_flags(new_prog, BPF_F_XDP_DEV_BOUND_ONLY);
++	bpf_program__set_flags(new_prog, bpf_program__flags(new_prog) | BPF_F_XDP_DEV_BOUND_ONLY);
+ 
+ 	if (!ASSERT_OK(xdp_metadata__load(bpf_obj), "load skeleton"))
+ 		goto out;
+diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+index 6db3b5555a22..c5501b3fdf48 100644
+--- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
++++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+@@ -845,7 +845,7 @@ int main(int argc, char *argv[])
+ 
+ 	prog = bpf_object__find_program_by_name(bpf_obj->obj, "rx");
+ 	bpf_program__set_ifindex(prog, ifindex);
+-	bpf_program__set_flags(prog, BPF_F_XDP_DEV_BOUND_ONLY);
++	bpf_program__set_flags(prog, bpf_program__flags(prog) | BPF_F_XDP_DEV_BOUND_ONLY);
+ 
+ 	printf("load bpf program...\n");
+ 	ret = xdp_hw_metadata__load(bpf_obj);
 -- 
 2.55.0
 
