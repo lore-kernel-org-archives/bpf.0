@@ -1,94 +1,92 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E71E3ACF1C
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 22:16:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93F639A7F4
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 22:18:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788214577; cv=none; b=QCSrGwGSNU2vody/D/HF/Ekpkepxgz/0T87D7Ce47jLT9E91SnMo6L5cwmsYDZTaje8cf36D32MPBdQwTO/gOA6hiSt/MOKVpaU1/V8HE4RSMkQAi4f6XHQubeGiCr08KD8DCHp1vpdlMhPqZs2WG9XeTLNwOc/uqCmplI+MUww=
+	t=1788214739; cv=none; b=o7CHq2ZsNK+rHagynRprTdFnTI7IQ8QNnn3LFhSEo798EvktPwH2pAL5IuCXV/C0kSe/FVfAAXzrXtYG9LxXXBq147wHCn99W+TUoHym4Yu8DMxq3TPugMCTmQxqJ0qRgkshIy8YuOYOaMNPj+TNBGrUbIoSKDsLKHZFVe+2ISU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788214577; c=relaxed/simple;
-	bh=n0uh/N7eWZUb0RjMv828tkY0P84MX7NtYM9Lx3Rv6Ps=;
+	s=arc-20240116; t=1788214739; c=relaxed/simple;
+	bh=WWEEZMNW23VgeiLrA0jkBRh+FqlaOZaIbG6KQNC9i3o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KF/z66KJ/2I+3StZMsRvuAyeEDzUYUvW/duSRBjo508909kz8ueYVYQqMPcissq402ErQXr2GQA73umnTUqhjRDoGK05YYQ6HpxW4ImzZleUNfmrHJ2AUbbHiA6CRTiXnUeWNnBBekDFbiSmTV8hgFIf8oJYr3NTtJDahtcBPtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=da5qnH1W; arc=none smtp.client-ip=209.85.214.171
+	 Content-Type:Content-Disposition:In-Reply-To; b=T9NSihrS7Uyfm9j7MyDxT6rNwPXyK98xKfh9JiIHFi9TbKcVuB/x5S0ehAS6o/QA3u5LZowxSOG+xVJYBGkOM57umrMS35cDM1t4h8x0sgSZ/uDci1+lBjkOLUiNGnB1BuakUiGDD3uGW4JOci8hBLD+VusOje9vDIT+z8ASAQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=igDopN9B; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="da5qnH1W"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2d944747d41so12665055ad.0
-        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 15:16:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="igDopN9B"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-ca7c1176317so3464762a12.1
+        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 15:18:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788214574; x=1788819374; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788214737; x=1788819537; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=itoTfTA7PQdk1phHOoJqHytihyiYJY8mf5sirqQA+ig=;
-        b=da5qnH1WO56PfoGb2YbHDEb0pb4p2F0mwlMUXEouj9MY1ri/8D0/oxECfIvORCgy3v
-         45WN2K23zpku7GSLctlp/Q6FncpT3etJy8QeuUXtImhVFj3QTE89qbvhZE+TTe1yVcWl
-         XP39Ow5SRV56Khrql82EO4TH0OCvshoCb8aHSmhchz/Jf7anD8mb/HPkrWJMubH3zppg
-         vUpz38TudVh5DPP46ZR94Rlr0G9qB7oAh2nz4DbqDRVEAfnkumubUSfxljy2DXEty2MW
-         8OZWPlFk3CWizA4mSZm+GxOCzUnvaKwZfm7rUdyz/OqsN3vwRu3NtiNZcuNWJGiHAB0l
-         bYfw==
+        bh=XnNt0hP8YJjLsvezbznRGz62Lklpiz7+58ZQDmGUihY=;
+        b=igDopN9BmO44WcL5KkB8EZkn1sMNYaTnfHKrQb5ClcSjiKU+qvpp/e0WVnmyKPErgC
+         ZV7YDSwqMYlEFtW+YjjiaFCaBhSDWs28zcATvuKDagLJ7/SPylY8KK9Muf/vFiVHQpJs
+         ksLGmmidV0pdy1a2i5KulmdIwpPnl5Dzr8PCD+pyfx08cyLKUMeAoEmE9X5nQyYeXebS
+         dwNXxdFroYZK3c+uRxveZa4m2pXmPDzL5mYPdwtedGDG0KgqUor2eIMIADPQWthRbsEE
+         umG+SHdkdWb2ATMYWWUK3fajbLL1ciQTt3uPPcVbzzDB4ReOrU+qnSG2CsAzEmAr40Tg
+         zHVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788214574; x=1788819374;
+        d=1e100.net; s=20251104; t=1788214737; x=1788819537;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=itoTfTA7PQdk1phHOoJqHytihyiYJY8mf5sirqQA+ig=;
-        b=jhCZ3PcYBYDgYL22yz7TF3YHJUVDxWhSYcXRSAJAP9+IouAxJjPk0/tF4rZc2YLCyZ
-         EVudhbby3joBkYbVwTY7C25TGCzdLIWYm2RBJYJC3Ws55v5MZYJOexMdTvSLkc25bUxI
-         LT2h4RpWj6euv+E1LAs3VD73pTI2oJTN8lxXoyRNEO3gAbXB+9ROnW9RG+1W5+6Nte8+
-         pSstzaXvFWO3Sm4xRgjlCBpOZZ8KUiL9CsFXFIIiONjxS1UNxzS9xLRu7s4SCQfunhSu
-         mB6PBtbWx0e45cY1yCeVQFZfrhK7TD9kA8LYYWaa6xQXS2UDKJaofNlmmTl/JmSKH/bJ
-         sNEw==
-X-Forwarded-Encrypted: i=1; AKwUvByNz7HkDTC4S/8v9yA7vSFyAuXSbb+Ao7IBIU693ORiWXuknNN32iYvDNX1iPb6yISiEgU=@vger.kernel.org
-X-Gm-Message-State: AFuF++n7KwKKthqvyguEQrc7FJz8HTpxDT1C+NRem/yZUb+hq62I8xrA
-	Q+6bworvz3K1A+Sixw30XU6O2d9GRAtgSDFGhcH4LPfGJSc0s/pL31GJ
-X-Gm-Gg: AYBFou2WQ9FTC0Rd3zIT9TldgoacjT1RP15ko3F5QjlRckocMoLIHuR81LsTqZZzPJe
-	rqLpnq86hNQrXAsZ5uo7lEty/aaxNVXlEvtmT/SZA8ig/vPlA67KmjfvGiRcLsslTjWj9YT+qk6
-	KcRghLMdWT7XJA2sKWbFTtrNOQKBzFZNzJ9t3ZXDt65P0eUag/651cf2wiH00fxObJM3NqE8uOu
-	per9sz//mBfrG6dye4PQxNtGUv6eG2dTY/VtIv8YpyKIMpWwLjdnuLN27LKoBc2zyA0KEAGKxLc
-	TqQhpSzPLgeBMzspkUPx01kx+7PgHQOsx6hBGE/XZjdpVPLVCytzdehflqVp8RAvaCtRFNs1B29
-	lIRCJaEhRxGs4W7vW2r6ZQqpOLBfcQ5rrfann4rEOfKvYDSNF2xug3OMfL/QTE/xENon3KQrCCV
-	FSLPmeq4usDKqJPR+EWMMMWIsaS+kV8s9qCLkdC3htOVXbNOxcLGIv22CgAnT6zWyrsR0AohvwE
-	8V8cXAfTw==
-X-Received: by 2002:a17:903:1850:b0:2d5:e3ce:3988 with SMTP id d9443c01a7336-2d74dddceebmr476446215ad.11.1788214573604;
-        Mon, 31 Aug 2026 15:16:13 -0700 (PDT)
-Received: from devvm16600.scu0.facebook.com ([2a03:2880:9ff:6f::])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3286f995e60sm33397369eec.22.2026.08.31.15.16.11
+        bh=XnNt0hP8YJjLsvezbznRGz62Lklpiz7+58ZQDmGUihY=;
+        b=k4CYp4PIqcqFOb5CPwe9PZCTqpHCRALcnsljmXtm6t069tAfEHSzeFjK3skrzBV3UF
+         vaSxzZUddTKcSKMOYPNQgJy6lB+MUtr4QDLFbvg61u6EAvfn16E3oJvJcjSfwTnryM7U
+         AHzhZOwPeZ35yLmkygegv4nfDJMjGmG6JFSHw7xj83KujM7fsLE8BEm0tJD+6kdPiDuu
+         i0kbIb7ifXazfo/IIOKOaiCW7toxQRTs3GkRhNrU5ZPAnfJotKcm0ClsBeG0j3hYRVrb
+         KWqvmghnT1dJcFx1nhJfznRpeoDSdkTMrWlPFzXbrz5PbgDfk2xJalgf6PFbqrxFCiql
+         Y1JQ==
+X-Forwarded-Encrypted: i=1; AHgh+RoPYF/qUbqCKBfWs+8t51gomVQ5CyaEYO/dWRrmWKQKaLSErPmwnxALGQLAOxfBttSUCac=@vger.kernel.org
+X-Gm-Message-State: AFuF++lt/ww2VeAWYQYEdJ9ObGUPK7gF+cs9GWKX8V7kCz08xB596iRv
+	Sdhz59DrBz2DuJLNgacIF512XcxEis07Im45K4j+Ii26H5XPPJKAQ0BG
+X-Gm-Gg: AR+sD13OoqX/BZxsU2O3+Ei1XUMvKsSEMzZ7FD+DTXrbiJ+krc8Gz0FUdek9QavFZ/a
+	YQiM2WKQhpRuJPU0/rFaAMAME9VdLO5AFlR6HWTquETWFCt+xsdPKpuHyUL9OkQP2W+i/qMii4y
+	rg6NWharZGsDXCb0NjAjk6x/XVoBwZyNVcS6foXXzKVFn9US8/uzabvWFj0B3Aw5Vk1aVQpePsM
+	JAQc+0ADSFZ+t/nVBjZIir36uzWmUPLa1JPQQEc+zBmnJ/hV9mSVVPUut8vbGI6oR4lu6aIxzFL
+	veL3OYIGpMwR06Sj+2b6fIXvvDkRpNokaAUXjqucjnJsTxURGz8bJc5ve9Xm0x3+52RsWzoc2Ov
+	KfObNi318Z3UHosyudu5cxB6nR0d19YhlO7451eo5a3M0JeycWgOdamOxFmcIijwLmEly6UPkJq
+	9v1clfwoqdytiMxOeSIl50ofH3t7Tje6hiE/0z7Bhf4X3ODNVEBV/HG+ujCn9J1D4gLJhoMz4VS
+	vtYGRTX
+X-Received: by 2002:a05:6a20:2586:b0:3d3:b02a:7252 with SMTP id adf61e73a8af0-3d3b02a76a6mr29131323637.28.1788214736859;
+        Mon, 31 Aug 2026 15:18:56 -0700 (PDT)
+Received: from devvm16600.scu0.facebook.com ([2a03:2880:9ff:44::])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3286f7be607sm33073832eec.10.2026.08.31.15.18.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2026 15:16:12 -0700 (PDT)
-Date: Mon, 31 Aug 2026 15:16:10 -0700
+        Mon, 31 Aug 2026 15:18:56 -0700 (PDT)
+Date: Mon, 31 Aug 2026 15:18:53 -0700
 From: Ziyang Men <ziyang.meme@gmail.com>
-To: kernel-team@meta.com, Jens Axboe <axboe@kernel.dk>,
-	Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+To: Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
 	Johannes Weiner <hannes@cmpxchg.org>,
 	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Ben Segall <bsegall@google.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: Viktor Malik <vmalik@redhat.com>, Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>,
+	Michal Hocko <mhocko@kernel.org>,
 	Roman Gushchin <roman.gushchin@linux.dev>,
 	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
 	JP Kobryn <inwardvessel@gmail.com>,
-	Mykola Lysenko <mykolal@meta.com>, linux-block@vger.kernel.org,
-	bpf@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] cgroup: expose cpu.stat and io.stat to BPF
-Message-ID: <apX9KtGrmfA7u0zV@devvm16600.scu0.facebook.com>
-References: <20260820211758.3393984-1-ziyang.meme@gmail.com>
+	Mykola Lysenko <mykolal@meta.com>,
+	Nathan Chancellor <nathan@kernel.org>, kernel-team@meta.com,
+	linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
+	linux-input@vger.kernel.org, sched-ext@lists.linux.dev,
+	linux-mm@kvack.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] selftests: shared lib.bpf.mk for building BPF
+ progs and skeletons
+Message-ID: <apX9zb+3awc99Pfh@devvm16600.scu0.facebook.com>
+References: <20260814075054.507089-1-ziyang.meme@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -97,88 +95,95 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20260820211758.3393984-1-ziyang.meme@gmail.com>
+In-Reply-To: <20260814075054.507089-1-ziyang.meme@gmail.com>
 
-Hi Reviewers, 
+Hi Reviewers,
 
 Just want to follow-up on this patch series. Please let me know the possible
-issues and I will fix them. 
+issues and I will fix them.
 
 Thanks very much!
 
 Best,
 Ziyang
 
-On Thu, Aug 20, 2026 at 02:17:54PM -0700, Ziyang Men wrote:
->Collecting cgroup statistics is expensive: the existing method is to
->open and parse a cgroup file for every cgroup of interest. The memory
->controller already has an efficient alternative through BPF; this series
->extends that model to the CPU and block I/O controllers.
+On Fri, Aug 14, 2026 at 12:50:50AM -0700, Ziyang Men wrote:
+>This series re-factors the bpf-related toolchain for selftests, which
+>currently duplicated across selftests/{bpf,sched_ext,hid}/. Unify them
+>into a single includable fragment, the tools/testing/selftests/lib.bpf.mk,
+>and wires up three consumers. We believe this will simplify the work for
+>configuring selftests with the bpf, for both the existing and future ones.
 >
->Patch 1 adds the CPU kfuncs, and patch 2 adds their selftest. Patch 3
->adds the blkcg kfuncs, and patch 4 adds their selftest.
+>Patch 1 adds lib.bpf.mk mentioned above.
 >
->This v3 combines the two previously posted v2 series:
->CPU v2: https://lore.kernel.org/all/20260818002450.3071325-1-ziyang.meme@gmail.com/
->blkcg v2: https://lore.kernel.org/all/20260817214205.723267-1-ziyang.meme@gmail.com/
+>Patch 2 adds a new selftest, selftests/cgroup/test_memcg_stat_cross_cpu,
+>which checks the cgroup flush happens correctly by comparing the bpf
+>read value matches the file reading. Existing test
+>bpf/cgroup_iter_memcg only ensures whether the number is non-zero, which
+>is trivial in some cases.
 >
->===
->Changes since CPU v2:
->- Rename bpf_cpu.c to bpf_cgroup.c and use unlikely() and container_of()
->  for the task_group conversion.
->- Remove bpf_css_flush_rstat() and register the existing
->  css_rstat_flush() in the common kfunc set.
->- Remove the SLEEPABLE mark bpf_cgroup_base_stat().
->
->Changes since blkcg v2:
->- Add bpf_cgroup_css() and bpf_css_release() to keep a controller css
->  alive across the sleepable rstat flush.
->- Add an RCU-protected checked css-to-blkcg conversion and make the blkg
->  iterator take the typed blkcg pointer.
->- Use the existing css_rstat_flush() and remove bpf_blkcg_flush_stats().
->- Do not expose root io.stat values.
+>Patches 3 and 4 replace the duplicated parts in selftests/{hid,
+>sched_ext} with the lib.bpf.mk
 >
 >===
->Changes since CPU v1:
->- Make the rstat flush generic, move it to rstat.c, and make it take a css.
->- Expose cgroup_base_stat directly instead of repacking its CPU times.
->- Replace the throttled-time aggregation kfunc with a checked RCU cast in
->  the CPU cgroup BPF code. The cast preserves the verifier type needed for
->  the BPF program to perform the per-CPU sum itself.
->- Remove the scheduler changes.
+>Changes since v2:
+>For shared Makefile:
+>- The lib.bpf.mk now use the USERCFLAGS (and USERLDFLAGS) to extend the
+>  CFLAGS and LDFLAGS.
+>- OPT_FLAGS/RELEASE and EXTRA_CFLAGS now reach the libbpf and bpftool
+>  sub-makes as well.
+>- One rule per BPF source instead of a vpath, which is global and also
+>  applied to the caller's own %.c rules.
+>- HOSTCC/HOSTLD come from lib.mk instead of including Makefile.include,
+>  which also rewrote the caller's AR, LD and CFLAGS.
+>- A missing vmlinux is reported by the recipe rather than at parse time,
+>  so "make clean" still works without BTF.
 >
->Built with LLVM. Pass test on v7.2-rc5.
+>For cgroup selftest:
+>- Only one cgroup tree is created, one flush is performed, follows by
+>  bpf read and file read.
+>- More common cgroup functions e.g., cg_read_key_long() and
+>  value_close(), are used in the selftests.
+>- Use cpu_set_t rather than manually allocated cpu lists.
+>- Use test_memcontrol.c's anon allocator and moving it into cgroup_util.
+>- Other suggestion from the review.
+>
+>Others:
+>- Bot reviews are fixed.
+>
+>===
+>Changes since v1:
+>  - Generalized lib.bpf.mk (source layout/suffix, extra hdrs/cflags,
+>    skeleton suffix, subskeletons, configurable output dirs) so it can
+>    serve hid and sched_ext, not just cgroup.
+>  - Added patch 3 (hid) and patch 4 (sched_ext), converting those folders
+>    to the shared fragment.
 >
 >Ziyang Men (4):
->  cgroup: add BPF kfuncs to read a cpu cgroup's stats
->  selftests/bpf: add cgroup_iter_cpu test for cpu cgroup kfuncs
->  block: add BPF kfuncs to read blkcg io.stat
->  selftests/bpf: add test for blkcg io.stat BPF kfuncs
+>  selftests: add shared lib.bpf.mk to build BPF progs and skeletons
+>  selftests/cgroup: add memcg_stat_cross_cpu correctness test for flush
+>  selftests/hid: build the BPF program via the shared lib.bpf.mk
+>  selftests/sched_ext: build BPF schedulers via the shared lib.bpf.mk
 >
-> MAINTAINERS                                   |   1 +
-> block/Makefile                                |   3 +
-> block/bpf_blkcg.c                             | 138 ++++++++++
-> kernel/cgroup/Makefile                        |   2 +
-> kernel/cgroup/bpf_cgroup.c                    | 100 +++++++
-> kernel/cgroup/rstat.c                         |  54 +++-
-> tools/testing/selftests/bpf/cgroup_iter_cpu.h |  22 ++
-> tools/testing/selftests/bpf/cgroup_iter_io.h  |  17 ++
-> tools/testing/selftests/bpf/config            |   4 +
-> .../bpf/prog_tests/cgroup_iter_cpu.c          | 259 ++++++++++++++++++
-> .../selftests/bpf/prog_tests/cgroup_iter_io.c | 254 +++++++++++++++++
-> .../selftests/bpf/progs/cgroup_iter_cpu.c     | 113 ++++++++
-> .../selftests/bpf/progs/cgroup_iter_io.c      |  74 +++++
-> 13 files changed, 1037 insertions(+), 4 deletions(-)
-> create mode 100644 block/bpf_blkcg.c
-> create mode 100644 kernel/cgroup/bpf_cgroup.c
-> create mode 100644 tools/testing/selftests/bpf/cgroup_iter_cpu.h
-> create mode 100644 tools/testing/selftests/bpf/cgroup_iter_io.h
-> create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter_cpu.c
-> create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter_io.c
-> create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter_cpu.c
-> create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter_io.c
+> tools/testing/selftests/cgroup/.gitignore     |   8 +
+> tools/testing/selftests/cgroup/Makefile       |  52 ++
+> tools/testing/selftests/cgroup/config         |   5 +
+> .../selftests/cgroup/lib/cgroup_util.c        |  83 +++
+> .../cgroup/lib/include/cgroup_util.h          |   3 +
+> .../cgroup/memcg_stat_cross_cpu.bpf.c         |  86 +++
+> .../selftests/cgroup/memcg_stat_cross_cpu.h   |  21 +
+> .../cgroup/test_memcg_stat_cross_cpu.c        | 596 ++++++++++++++++++
+> .../selftests/cgroup/test_memcontrol.c        |  29 +-
+> tools/testing/selftests/hid/.gitignore        |   1 +
+> tools/testing/selftests/hid/Makefile          | 180 +-----
+> tools/testing/selftests/lib.bpf.mk            | 296 +++++++++
+> tools/testing/selftests/sched_ext/Makefile    | 146 +----
+> 13 files changed, 1204 insertions(+), 302 deletions(-)
+> create mode 100644 tools/testing/selftests/cgroup/memcg_stat_cross_cpu.bpf.c
+> create mode 100644 tools/testing/selftests/cgroup/memcg_stat_cross_cpu.h
+> create mode 100644 tools/testing/selftests/cgroup/test_memcg_stat_cross_cpu.c
+> create mode 100644 tools/testing/selftests/lib.bpf.mk
 >
->
->base-commit: 3b5f4b83c4abc0c9b0a7b9e2b44e816611b7f2ec
 >-- 
 >2.53.0-Meta
+>
