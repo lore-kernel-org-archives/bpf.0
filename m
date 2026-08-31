@@ -1,120 +1,141 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA9313E7621
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 23:20:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5538B3E959C
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 23:26:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788218405; cv=none; b=spArVC+RvNyrjWUg58msrTZCZY051tR5Qa+UKSF/ziEd0us7Iyo0aihYt4Uj7T9zTjZEAQyrp7RHGLo7oMZ0GMBEXtENiDMZBYJvSRHY8PUrV2ZDC8a0ks1hQ4emFeomm5EdsO+5Y2iuzg8dABe62hiPxvBa/s65DY6a7lPZHH0=
+	t=1788218773; cv=none; b=n4tYjeWyj4KxqgO8X/PJcP5gmI2eGFOcETz1mKI14ctrsu/ZAl7FiGhO/1gEIM57MzTjBqiEF9jrbjHz+S+N4pmGj/cB8ySBU3zG2FJp0p2DPdldLbtC7BqbkGqTyRgjMV7csRAP3M56l60+3oZ8/vzgl5jiazeuSRFDZu4WX/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788218405; c=relaxed/simple;
-	bh=o/jJ6rSP8XzE9XGO5mnAi30LWAOvHE4Bhx/wS7KM9K0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=sTyNgSLNUlEOE1ItXyMYrsXC69cip44ZQBRpb58Mt5w27bp36HRhazHOM5+y5QfvtiIz0riaVd63sSzt2IRT+2xwAM15R8XLNBtV5yLO9b7Gab86O8FbU7BzIByERC++AAcoQJVBUlhizRs32hdcLweHrpShf1MIkh3di+WHXco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R6pu2V1N; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788218773; c=relaxed/simple;
+	bh=NfUr8IwNYev2wBGhmJwdF298Adel71EtCymeXaRGmPo=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=tCB0MzIlx1klqrftlmNCin3O74d1bxS1ZgWE+9+e6L4aLWa7fyPJ2FHqUSQVzE+f9Gx32fpPPXIAtz1DtWRxPd8apRR1+3WiTQRWeTucW6nVaYP0+yQLamz7Ld8AG073UqQE+Cw8vCNGBGXoaEafeXIIkNnVbfgxa/0r3ie2iIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N3gNZw72; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R6pu2V1N"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C9101F000E9;
-	Mon, 31 Aug 2026 23:20:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N3gNZw72"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 870F31F000E9;
+	Mon, 31 Aug 2026 23:26:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788218403;
-	bh=HcIbu3rcfjqCSX9vMTBozll8Sha3Toz0HB4EtuJshPs=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=R6pu2V1NkQSQbiQjEYJsp3nKd/k+HFh4IqYjhv9StFZvpznPWr2ALKktDKkDbPZpY
-	 rCdMUWZ3wYJ4PcohlSdVKghYC/RhO1gaubfUka/qUCVp1/AYqevWGhdmnDTaTuYlGf
-	 vmZs8KrMpd0InK1W4dWK21NUHg/zW5I9tUlVzJNq5shUDlj4Zox6XheWg11itVUl7L
-	 aucf4fdyTOwTRKPznDpYM5/hR4bo9vHT/3L17rlGFZH/AzSBoMdLZnJSZAJ70nmAT4
-	 WYthDYnYEq7yT4K9Yd3hN87maVOtvrUs7fhTHBxuksQdbWoyG4u8thAtLu4rYvGzFs
-	 6tcnivvPgarLQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v15 12/16] cpuidle/poll_state: Wait for need-resched via
- tif_need_resched_relaxed_wait()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ankur Arora" <ankur.a.arora@oracle.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260831202251.305046-13-ankur.a.arora@oracle.com>
-References: <20260831202251.305046-1-ankur.a.arora@oracle.com>
- <20260831202251.305046-13-ankur.a.arora@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 31 Aug 2026 23:20:03 +0000
-Message-Id: <20260831232003.7C9101F000E9@smtp.kernel.org>
+	s=k20260515; t=1788218771;
+	bh=XeWedXMyOTO7WEABne4ZSCFMOKQsiv1yalq157uO57I=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=N3gNZw72Zje19iH5yIl1rucbDKL2EFbEIldJierZxTNP46QLPHUMVJsIjOr/+c55n
+	 2pLMTRedbY0/yio9wVIF/XZhowxrLE45VVNjZh5cwm2OmxM1ohvu8CBtcXO1+fFcaN
+	 KT/9+q96nMzULo3NmNWoe10oVC0OEEt48z+XabsWaggEGlhWRs5mUZH394eVbURBXi
+	 Px/N1xJwYuKyvd+hJ2ycmDOfFKL2qISV46HAeDhnfgVmJjCAufcRtcdxkc44zVkttC
+	 emYzoRlD84mH8pwAp6UZO+8fJHncACOcIQJ6+6Tpjd/1TMNbyBgJ5cP2HImP9qkQVR
+	 2E82N8ABe0Fgw==
+Content-Type: multipart/mixed; boundary="===============0407461669275565627=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <882f92965fedba779d677b2b8600682bb0ea33673121e42b81a430d3a3636745@mail.kernel.org>
+In-Reply-To: <20260831223314.89787-2-sidchintamaneni@gmail.com>
+References: <20260831223314.89787-2-sidchintamaneni@gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Test terminal gotox instructions
+From: bot+bpf-ci@kernel.org
+To: sidchintamaneni@gmail.com,bpf@vger.kernel.org
+Cc: sidchintamaneni@gmail.com,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,a.s.protopopov@gmail.com,puranjay@kernel.org,rlmenge@gmail.com,hargar@microsoft.com,apais@microsoft.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 31 Aug 2026 23:26:10 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The timeout for the idle polling loop is erroneously extended be=
-cause the generic wait macro calculates the timeout start time only after t=
-he first 200 spin iterations. Additionally, the commit relies on an archite=
-cture-specific optimization that does not actually exist on the target plat=
-form.
---
+--===============0407461669275565627==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 9b952e08004e7de674a695400c7ab21ff69df4db
-Author: Ankur Arora <ankur.a.arora@oracle.com>
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_gotox.c b/tools/testing/selftests/bpf/progs/verifier_gotox.c
+> index 5b18c9a27717b..89067ab7baaa4 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_gotox.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_gotox.c
+> @@ -47,6 +47,67 @@ DEFINE_SIMPLE_JUMP_TABLE_PROG(reserved_field_src_reg,      BPF_REG_1, 0, 0, __fa
+>  DEFINE_SIMPLE_JUMP_TABLE_PROG(reserved_field_non_zero_off, BPF_REG_0, 1, 0, __failure __msg("BPF_JA|BPF_X uses reserved fields"))
+>  DEFINE_SIMPLE_JUMP_TABLE_PROG(reserved_field_non_zero_imm, BPF_REG_0, 0, 1, __failure __msg("BPF_JA|BPF_X uses reserved fields"))
+>
+> +SEC("socket")
+> +__success __retval(0)
+> +__naked void jump_table_terminal_gotox(void)
+> +{
+> +	asm volatile ("						\
+> +	.pushsection .jumptables,\"\",@progbits;		\
+> +jt0_%=:							\
+> +	.quad ret0_%= - socket;					\
+> +	.size jt0_%=, 8;					\
+> +	.global jt0_%=;						\
+> +	.popsection;						\
+> +								\
+> +	r0 = jt0_%= ll;						\
+> +	r0 = *(u64 *)(r0 + 0);					\
+> +	goto end_%=;						\
+> +ret0_%=:							\
+> +	r0 = 0;							\
+> +	exit;							\
+> +end_%=:							\
+> +	.8byte %[gotox_r0];					\
+> +"	:
+> +	: __imm_insn(gotox_r0, BPF_RAW_INSN(BPF_JMP | BPF_JA | BPF_X,
+> +					    BPF_REG_0, 0, 0, 0))
+> +	: __clobber_all);
+> +}
+> +
+> +static __naked __noinline __used
+> +void terminal_gotox_subprog(void)
+> +{
+> +	asm volatile ("						\
+> +	.pushsection .jumptables,\"\",@progbits;		\
+> +jt0_%=:							\
+> +	.quad ret0_%= - .text;					\
+> +	.size jt0_%=, 8;					\
+> +	.global jt0_%=;						\
+> +	.popsection;						\
+> +								\
+> +	r0 = jt0_%= ll;						\
+> +	r0 = *(u64 *)(r0 + 0);					\
+> +	goto end_%=;						\
+> +ret0_%=:							\
+> +	r0 = 0;							\
+> +	exit;							\
+> +end_%=:							\
+> +	.8byte %[gotox_r0];					\
+> +"	:
+> +	: __imm_insn(gotox_r0, BPF_RAW_INSN(BPF_JMP | BPF_JA | BPF_X,
+> +					    BPF_REG_0, 0, 0, 0))
+> +	: __clobber_all);
+> +}
 
-cpuidle/poll_state: Wait for need-resched via tif_need_resched_relaxed_wait=
-()
+This isn't a bug, but terminal_gotox_subprog() differs from
+jump_table_terminal_gotox() above only in the jump-table base symbol
+(- .text vs - socket). The file elsewhere factors similar shapes into
+macros (DEFINE_SIMPLE_JUMP_TABLE_PROG, DEFINE_INVALID_SIZE_PROG,
+DEFINE_JUMP_TABLE_USE_REG). Would a small macro parameterised on the
+base read better here?
 
-This commit replaces the manual polling loop in poll_idle() with a call to
-tif_need_resched_relaxed_wait() to optimize idle power consumption.
+Also, since libbpf appends the only called subprogram last, this
+subprogram's gotox ends up as the final instruction of the whole loaded
+program. Would adding a further subprogram after it give coverage of the
+fall-through-into-the-next-subprog case that the relaxed check in
+check_subprogs() guards?
 
-> diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll_state.c
-> index c7524e4c522a2..7443b3e971baf 100644
-> --- a/drivers/cpuidle/poll_state.c
-> +++ b/drivers/cpuidle/poll_state.c
+> +
+> +SEC("socket")
+> +__success __retval(0)
+> +__naked void jump_table_terminal_gotox_subprog(void)
+> +{
+> +	asm volatile ("						\
+> +	call terminal_gotox_subprog;				\
+> +	exit;							\
+> +"	::: __clobber_all);
+> +}
+
 [ ... ]
-> @@ -21,15 +20,7 @@ static int __cpuidle poll_idle(struct cpuidle_device *=
-dev,
->  		u64 limit;
-> =20
->  		limit =3D cpuidle_poll_time(drv, dev);
-> =20
-> -		while (!need_resched()) {
-> -			cpu_relax();
-> -			if (loop_count++ < POLL_IDLE_RELAX_COUNT)
-> -				continue;
-> -
-> -			loop_count =3D 0;
-> -			if (local_clock_noinstr() - time_start > limit) {
-> -				dev->poll_time_limit =3D true;
-> -				break;
-> -			}
-> -		}
-> +		dev->poll_time_limit =3D !tif_need_resched_relaxed_wait(limit);
 
-[Severity: Medium]
-Does this unintentionally extend the polling timeout?
 
-When tif_need_resched_relaxed_wait() uses the generic
-__smp_cond_load_relaxed_timeout() macro, it first spins for 200 iterations
-before capturing the start time for the timeout:
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-include/asm-generic/barrier.h:__smp_cond_load_relaxed_timeout() {
-    ...
-    cpu_poll_relax(__PTR, VAL, (u64)__scl_timeout); \
-    if (++__scl_count < __scl_spin)                 \
-            continue;                               \
-    __scl_time_now =3D (s64)(time_expr_ns);           \
-    if (unlikely(__scl_time_end =3D=3D 0)) {            \
-            __scl_timeout =3D (s64)(timeout_ns);      \
-            __scl_time_end =3D __scl_time_now + __scl_timeout; \
-    ...
-}
-
-Since the timeout calculation is deferred until after the initial spin loop,
-the total wait time becomes the requested limit plus the duration of those
-first 200 iterations.
-
-On platforms where 200 cpu_relax() iterations can take a significant amount
-of time (e.g. ~14 microseconds on modern x86), could this effectively delay
-entry into deeper C-states and cause a power regression for short polling
-intervals?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260831202251.3050=
-46-1-ankur.a.arora@oracle.com?part=3D12
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33447655511
+--===============0407461669275565627==--
