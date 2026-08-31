@@ -1,102 +1,114 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E81A43AAF5F;
-	Mon, 31 Aug 2026 11:48:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5950D3E6386;
+	Mon, 31 Aug 2026 11:48:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788176898; cv=none; b=BSscMLI4vXf+od8KnQ0kk1fVQNxAFc5yBWe+6mrtzmUP3PoBUNktw7nuCfg7+BGn3QpAoJ16VBkOD5r5tUFEGHUEXDFHF+zh9WAP2O+u/HhXIsNsV43jMRaFB418R0/TkNCyMLu4qgRCdGyJMIrhRPMOX8w9IlXHcEfhmMDIC88=
+	t=1788176900; cv=none; b=UvlvSp6L8gsEODeG/N6qL6j63obRRaQgWnsnEHahhgO373vopMM/CamAZMMTq8WePAeF0cjn+NXQhzvKZTGQvaHtnCUN1y6MCWAGP0lJK1ZAP88u6jZxMSr2OPWj5l6OPlVPO2SZ7TVPl/WiO5GlVeFPIu9gGlFNMz4L4w9tU0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788176898; c=relaxed/simple;
-	bh=nAsKj7RDFagUb9c54TOrB72tNP37+TItHxmHnwLjhwA=;
+	s=arc-20240116; t=1788176900; c=relaxed/simple;
+	bh=+V6Y3Pde6gHn13ADn8LysRRNptw4kQRoDwJzDVXLhVk=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=scGGVt7roWEEoSyS8zREezOCF09sFdMD4uNUrqVkGVaH4E+orOkeM2++84iOF+eoV0JkhUZ9gZA2mFT0Qv+rcZ238kHEAMYCUcLtzd7oRWfZ2467Z8UH7MQnXfr3tPAHP2C3UGXLJOCMbUHZGIM2HdxaRlINEVzIMEMhWxO5UQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mIx1QBU0; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=furK2IXJoN84LQiJdwb03viqyDIp1DwXVyhVrma+uAu4igxhyKM3MkBZkmCOok9KJBeFv9R6N3moYWnd5MhdEk4zysZVMCfGkNQtwdz7oxf7OGp2XAsZwklRD5jpACWb8Lcs6GEQr2fTIkrEvW02fjmRWSWzEXUToeYZTf2vS7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TljHMCJ4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mIx1QBU0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 654881F000E9;
-	Mon, 31 Aug 2026 11:48:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TljHMCJ4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D41CF1F00A3D;
+	Mon, 31 Aug 2026 11:48:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788176896;
-	bh=8cPGrdC5iQSukZPvGkaUA/Tt//q9nwqGNfvO10ofzmg=;
+	s=k20260515; t=1788176898;
+	bh=FlOuQOjntk+7Xr3dFLIMLBklGLrkdVUsybJY/VDn/tc=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=mIx1QBU0cgDpz6lJ7dfTz3V0gK2HllBGDnwiO4OoelgjZqJQm8xDuXtxtK7BRU68D
-	 szUt/noLW8PFa1rmFoXns7Nn0cr69wJ3xWwLeExutoykzAXaXbTIjK57c1FPBbfFKe
-	 DvUvZksKzYoYHVPz8rxBTbFug3w/xVElJ6zSwWTm7wCskX2AvNniEBKVBf293wVSqt
-	 Q+C54k4ma1Lh3pSg8ineI5Yo9SblZ2Gxj4FZSwS3m/QZVS/lHoLPbwbo/UQsqdFf8X
-	 JpDf8EJwLsIRAcyG0h0aJj7+MwRC4ZgClj7luzQfJ9Phc4nV+BsE9Y3iADujmnry69
-	 /ojE0UesOOFwQ==
-Content-Type: multipart/mixed; boundary="===============2535200794614647358=="
+	b=TljHMCJ43nazG3yQ8pyGjgMAbgtYwTFL5YmOOqJxPSQUOVWNmf6ILHVBTUF/TACO9
+	 rAfcGVbwKVO17/uhFapOCUaapDWpA2GTCaar/JRVPErxyzVgWnDi4JdMfQLAOX26Yi
+	 F0DqDBElHAUtBZuUWfj6KX6DqSXLaWFKYu5dU0Enm9SsCKPfJq9wXfJO+5a3EthayL
+	 duxtapP1wpY5hBBbokrSAO4YLnN9FvJPIZ/omwUQ2bUjc29cv+tAE4G+dh6Rj+dWMG
+	 sTOBsnTic+qWMsmrZXrDI4/mMGx7GeLL6UvCxts3X7wtJ0qJ8mdS4X+TZh09pn6RBq
+	 4AijaTnFhcfeA==
+Content-Type: multipart/mixed; boundary="===============2702627393202367961=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <8b93223f148b0771b79336d636e7b6ddff030ffd2b3ffb264a51af6082149c01@mail.kernel.org>
-In-Reply-To: <20260831110314.150870-5-jiayuan.chen@linux.dev>
-References: <20260831110314.150870-5-jiayuan.chen@linux.dev>
-Subject: Re: [PATCH bpf v3 4/5] selftests/bpf: Add test for key-less BTF hash map
+Message-Id: <116308d606e3bff21d07c01feb8741702547d1c32b1eafaad6f3628a776828fc@mail.kernel.org>
+In-Reply-To: <20260831110314.150870-3-jiayuan.chen@linux.dev>
+References: <20260831110314.150870-3-jiayuan.chen@linux.dev>
+Subject: Re: [PATCH bpf v3 2/5] bpf: Fix NULL-ptr-deref when showing a void BTF type
 From: bot+bpf-ci@kernel.org
 To: jiayuan.chen@linux.dev,bpf@vger.kernel.org
 Cc: jiayuan.chen@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,yatsenko@meta.com,alan.maguire@oracle.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 31 Aug 2026 11:48:15 +0000 (UTC)
+Date: Mon, 31 Aug 2026 11:48:17 +0000 (UTC)
 
---===============2535200794614647358==
+--===============2702627393202367961==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_map_keyless.c b/tools/testing/selftests/bpf/prog_tests/btf_map_keyless.c
-> new file mode 100644
-> index 0000000000000..a7d037f57a7ef
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_map_keyless.c
-> @@ -0,0 +1,82 @@
+> bpf: Fix NULL-ptr-deref when showing a void BTF type
+>
+> btf_modifier_show() resolves the modifier and then calls
+> btf_type_ops(t)->show() unconditionally. For the void type (type_id 0,
+> BTF_KIND_UNKN) kind_ops[] has no entry, so ->show is NULL.
+>
+> The map dump path cannot reach a void type (a map key/value must have a
+> size and void has none), but bpf_snprintf_btf() takes a type_id straight
+> from the BPF program, and a "const void" (a modifier that resolves to
+> void, present in the vmlinux BTF) NULL-derefs there:
 
-[ ... ]
+Is this statement about the map dump path accurate? Looking at
+map_check_btf() in kernel/bpf/syscall.c, a map key isn't required to
+have a size:
 
+	/* Some maps allow key to be unspecified. */
+	if (btf_key_id) {
+		key_type = btf_type_id_size(btf, &btf_key_id, &key_size);
+		if (!key_type || key_size != map->key_size)
+			return -EINVAL;
+	} else {
+		key_type = btf_type_by_id(btf, 0);
+		if (!map->ops->map_check_btf)
+			return -EINVAL;
+	}
+
+When btf_key_id is 0, key_type is set to the void type, and
+map->btf_key_type_id is stored as 0. array_map_check_btf() even has a
+dedicated keyless exception ("One exception for keyless BTF:
+.bss/.data/.rodata/.percpu map").
+
+The preceding patch in this series, commit 55f5ad8f45a5 ("bpf: Reject
+key-less BTF for hash maps"), documents a syzbot NULL-ptr-deref where a
+void key reached the map dump path through htab_map_seq_show_elem() ->
+btf_type_seq_show_flags() -> btf_type_show() -> kind_ops[BTF_KIND_UNKN]
+== NULL. That patch closed the path by adding btf_type_is_void(key_type)
+rejections in htab_map_check_btf() and rhtab_map_check_btf().
+
+Would it be more accurate to say the map dump path is closed by the
+preceding patch and by existing btf_key_type_id guards, rather than by
+a size requirement?
+
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -2911,7 +2911,15 @@ static void btf_modifier_show(const struct btf *btf,
+>  	else
+>  		t = btf_type_skip_modifiers(btf, type_id, NULL);
+>
+> -	btf_type_ops(t)->show(btf, t, type_id, data, bits_offset, show);
 > +	/*
-> +	 * Positive control: the same map with a real key type must be accepted,
-> +	 * so the -EINVAL below is about the key-less BTF and not some unrelated
-> +	 * rejection (e.g. an unknown map type).
+> +	 * A modifier can resolve to the void type (e.g. "const void"), which
+> +	 * has no show op (kind_ops[BTF_KIND_UNKN] is NULL). Print a placeholder
+> +	 * instead of dereferencing NULL.
 > +	 */
-> +	opts.btf_key_type_id = val_id;
-> +	map_fd = bpf_map_create(map_type, "keyed_map", 4, 4, 8, &opts);
-> +	if (!ASSERT_GE(map_fd, 0, "keyed create is accepted"))
-> +		return;
-> +	close(map_fd);
-
-A subsystem pattern flags this as potentially concerning: the positive
-control turns "this kernel does not implement the map type" into a hard test
-failure instead of a skip.
-
-BPF_MAP_TYPE_RHASH (used by the rhash subtest) is new; on any kernel that
-lacks it, map_create() rejects the unknown map type and this ASSERT_GE fails,
-reporting a red btf_map_keyless/rhash that has nothing to do with the
-behaviour under test.
-
-libbpf already provides the probe for this: libbpf_probe_bpf_map_type()
-handles BPF_MAP_TYPE_RHASH explicitly (tools/lib/bpf/libbpf_probes.c:312,
-including the BPF_F_NO_PREALLOC requirement), so the subtest could probe
-and test__skip() with a reason instead.
-
-Two arguments in the patch's favour: (a) an unknown map type is rejected with
--EINVAL, not EOPNOTSUPP/ENOSYS, so the errno match isn't literal; (b) the
-comment on lines 26-30 shows the failure is deliberate - the author wants an
-unrelated rejection to surface as a failed positive control rather than be
-silently swallowed by the -EINVAL assertion below.
-
-Both arguments are about the choice of signal, not about whether an absent map
-type is a capability-absent condition, which it is. Does the current approach
-fit the test's intent better than probing and skipping?
-
-[ ... ]
-
-> +	if (test__start_subtest("hash"))
-> +		check_keyless(BPF_MAP_TYPE_HASH, 0, btf_fd, val_id);
-> +	if (test__start_subtest("rhash"))
-> +		check_keyless(BPF_MAP_TYPE_RHASH, BPF_F_NO_PREALLOC, btf_fd, val_id);
+> +	if (!btf_type_ops(t))
+> +		btf_df_show(btf, t, type_id, data, bits_offset, show);
+> +	else
+> +		btf_type_ops(t)->show(btf, t, type_id, data, bits_offset, show);
+>  }
+>
+>  static void btf_var_show(const struct btf *btf, const struct btf_type *t,
 
 
 ---
@@ -104,4 +116,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33385673160
---===============2535200794614647358==--
+--===============2702627393202367961==--
