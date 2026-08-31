@@ -1,272 +1,191 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8FF93D4127;
-	Mon, 31 Aug 2026 08:57:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D183D667F;
+	Mon, 31 Aug 2026 09:00:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788166638; cv=none; b=CVGXXeT8E9ihMttQ1woL6aUClT11BAoStNmNnC+RxrNkK4dyyfLHVlOggkvt12aEZKRxSjs5FxgngJh3bBopD822nqfPWn4f1naIsJuFWY5AP3oU4fkPqCEiI6ScpDYSXlyjKlUK6fSlYbNTWDRzeq/llwHU5+6WnSQyXZNvELs=
+	t=1788166813; cv=none; b=sLuVLJ8iiZI0OgHmPhK43V6KTTSJbxLre/6Qoix5+ERuEuofwMjCRjbuLttAmqCGJP9Z9aaCbjTc6+oOmqpmzfAbUrCTxx7iTX9v3TGagLv6zyD2yCw9adhqmgiOBY/mHl66NIXID2w6LL3HItgp9CxwblBK8Ry86ieFa9OrYJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788166638; c=relaxed/simple;
-	bh=DSj3s4wELAzEUrJo4A5JdVkD8AM004a/Xh1kam1XWwQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kAbThOx46iPBjIXTq1BKlbJP6yFyzGb3mcvu1bSkjByaXRpOg7ti5oatwEDsG5Q/XTk9hW1qm6tS4yii7p/RAUwRb7JIZozJQQH+YSkSVFqdy8sqSciXxVbDfnl0Z8AOnhxAkqVkFvYh6KrE+Z9gJ0qlg9x4Ue870km2/XYJdGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8CxPNLpQZVqzNgGAA--.18957S3;
-	Mon, 31 Aug 2026 16:57:13 +0800 (CST)
-Received: from linux.localdomain (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJDxTs_iQZVq3SoYAA--.50979S2;
-	Mon, 31 Aug 2026 16:57:07 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: loongarch@lists.linux.dev,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2] selftests/bpf: Add test for indirect struct_ops trampoline
-Date: Mon, 31 Aug 2026 16:57:05 +0800
-Message-ID: <20260831085705.13747-1-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
+	s=arc-20240116; t=1788166813; c=relaxed/simple;
+	bh=bO4QqOOkYtcqxtmXnzXLiG88iM1bk1BhGu3NaERD5H0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kCWq/wwhXMEldrrz+Z30oE1e7gQKBkzhb+5paIGBNRYu3IjXS3xXGlngZFjjMJdMVacbknQS34PqKbPfhYuOeHxNmiSfWDGSGkfPpId2A9tpTdzIFYIonWT/d1LIND6cX5sqAt3D4epaKYCKVH9tVD3aqCdj9+LvFRPQTDFuQyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YkZDhChP; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YkZDhChP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37DFB1F000E9;
+	Mon, 31 Aug 2026 09:00:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788166810;
+	bh=LXOCjeN/czsMupSRW8p+erDIOXzY4m9iU1fz8tbYeI4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=YkZDhChPm6So6Rc3TWcjOsLI51gc3n9liJ8g7iVVhapP7IQsoV9QsW9r8RN0kCQ/y
+	 m+ZK+N8kedI7ezw6LepHoGh9S53O928OYbM4hVS4mVgO30eTCn6w3aeJlI+nPWQpBD
+	 Hd283Hy7YUBkxKrX7fuFlvNginf47ciY3GXZLm/Zz5gKCW6l5RVvSSQSD4GAXpnfHR
+	 JS5m3CZ6hrMRRp4/eCYlFqyJcUOnJtU51Mm/yc65Lc7wkHQIpbtBJYPde/jbvXKl+m
+	 YZBNE0obQ4+r2pVVQD0kaiLCcqbX+F5pBBH1Jw0tMgf6MCcNyMef8sbk3+wR3G6zrA
+	 FRDdiMo+4vi6w==
+Message-ID: <8c7f834e-5701-4748-9a9a-fed78aa50198@kernel.org>
+Date: Mon, 31 Aug 2026 11:00:05 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJDxTs_iQZVq3SoYAA--.50979S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW3Gw4kXr15JFWftw1fCFyxtFc_yoW3Ww4rpF
-	W8Jw1YyFnYvrWDXF18Xa1UZF4Sgrs3Z3yUCFWkG3s5uF93X34DJF18tFyIyr95GrZ5Zw13
-	A3ZY9r98uayUZ3cCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUBIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-	AVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
-	AKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
-	6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
-	jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw2
-	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-	67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8qXdUUUUUU==
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v2] page_pool: keep frag_offset aligned for odd-sized
+ requests
+To: Florian Schauer <florian@schauer.to>, ilias.apalodimas@linaro.org
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me,
+ linyunsheng@huawei.com, Mina Almasry <almasrymina@google.com>
+References: <20260828060822.2628276-1-florian@schauer.to>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <20260828060822.2628276-1-florian@schauer.to>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add a test case to verify that arguments passed on the stack are correctly
-read by an indirect struct_ops trampoline.
 
-This test ensures the correctness of stack offsets on architectures like
-LoongArch and RISC-V where arguments beyond the first 8 slots are passed
-via the stack.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
-This is to test the following two patches:
+On 28/08/2026 08.08, Florian Schauer wrote:
+> page_pool_alloc_frag_netmem() rounds the requested fragment size with
+> 
+> 	size = ALIGN(size, dma_get_cache_alignment());
+> 
+> dma_get_cache_alignment() returns 1 unless the architecture defines
+> ARCH_DMA_MINALIGN, which DMA-coherent architectures such as x86 do not.
+> There the ALIGN() is a no-op and pool->frag_offset advances by the raw,
+> unrounded size.
+> 
+> A single caller asking for an odd size then leaves frag_offset misaligned
+> for every fragment carved out of that page afterwards.  The pool is shared,
+> so the damage is not confined to the caller that caused it.
+> 
+> The per-cpu system_page_pool used by generic XDP hits this.
+> skb_pp_cow_data() allocates its fragments with the raw packet length:
+> 
+> 	size = min_t(u32, len, PAGE_SIZE);
+> 	truesize = size;
+> 	page = page_pool_dev_alloc(pool, &page_off, &truesize);
+> 
+> leaving frag_offset odd for whatever is carved out of that page next.  Its
+> own head allocation is already aligned -- SKB_HEAD_ALIGN(size) plus the
+> XDP_PACKET_HEADROOM its callers pass -- so it is a later user of the shared
+> pool that pays: page_pool_dev_alloc_va() returns a misaligned buffer,
+> napi_build_skb() installs it as skb->head, and skb_shinfo(skb) ==
+> skb->head + skb->end is misaligned with it.
+> 
+> skb_shinfo()->dataref is a 4-byte atomic_t at offset 0x20, so the
+> atomic_inc() in __skb_clone() straddles a cache line.  On x86 with split
+> lock detection -- fatal for kernel split locks by default -- this panics
+> the machine:
+> 
+>    Oops: Split lock detected
+>    RIP: 0010:skb_clone+0x154/0x1e0
+>    Call Trace:
+>     <IRQ>
+>     raw_local_deliver+0x1ed/0x2c0
+>     ip_protocol_deliver_rcu+0x54/0x1c0
+>     ip_local_deliver_finish+0x85/0x100
+>     ip_local_deliver+0x67/0x100
+>     __netif_receive_skb_one_core+0x85/0xa0
+>     process_backlog+0x87/0x130
+> 
+> Reproduced by attaching any generic-mode XDP program to loopback and
+> opening a RAW IPPROTO_UDP socket, which makes raw_local_deliver() clone
+> every locally delivered UDP packet; ordinary DNS traffic then triggers it,
+> roughly once per 2500 clones.  Observed on 6.12.101 and 7.1.8.
+> 
+> Tracing page_pool_alloc_frag_netmem() over one such run shows the
+> amplification -- two odd-sized requests, nine misaligned offsets:
+> 
+>    requested size & 7:   0: 17035    5: 1    7: 1
+>    frag_offset & 7:      0: 17028    3: 1    4: 1    5: 1    6: 1    7: 5
+> 
+> and skb_pp_cow_data() returning heads that were aligned on entry:
+> 
+>    head 0xffff8f4c86aeac00 -> 0xffff8f4c53a9a9c4 (&7=4)
+>    head 0xffff8f4d6a8a42c0 -> 0xffff8f4c4f7b7a45 (&7=5)
+> 
+> Round the fragment size up to at least the alignment struct skb_shared_info
+> requires, so fragments are always suitably aligned for the objects callers
+> build on them.  Architectures needing a larger DMA alignment keep it.
+> 
+> This also makes the remainder computed in page_pool_alloc_netmem(),
+> 
+> 	*size = max_size - *offset;
+> 
+> aligned, since max_size is a power of two -- which fixes the matching
+> misalignment of skb->end.
+> 
+> Verified with a controlled A/B under QEMU/KVM: same tree, same config,
+> same compiler, same rootfs and identical traffic, differing only by this
+> patch.  A SEC("xdp.frags") XDP_PASS program on lo plus UDP datagrams
+> larger than max_head_size drives skb_pp_cow_data()'s fragment loop, which
+> passes raw packet lengths to the pool.  Measured at the return of
+> skb_pp_cow_data():
+> 
+>                            unpatched   patched
+>    skb_pp_cow_data calls       40800     40800
+>    misaligned skb->head         1120         0
+>    dataref at line offset >60     80         0
+> 
+> The last row counts the accesses that actually fault:
+> skb_shinfo()->dataref sits at head+end+0x20 and is a 4-byte atomic, so
+> `lock incl` splits a 64-byte cache line only when that address lands at
+> offset 61..63.  All 80 occurrences were at offset 61; the panic reported
+> above was at offset 62.  Eliminating the misalignment removes every one
+> of them.
+> 
+> Same class of bug as commit 3bed3cc4156e ("net: Do not allocate page
+> fragments that are not skb aligned"), which fixed the older
+> netdev_alloc_frag()/napi_alloc_frag() allocators.
+> 
+> Fixes: 53e0961da1c7 ("page_pool: add frag page recycling support in page pool")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Florian Schauer <florian@schauer.to>
+> ---
+> v2:
+>    - express the minimum alignment as __alignof__(struct skb_shared_info)
+>      instead of sizeof(long), and drop the explanatory comment the previous
+>      version carried, since the expression now states the requirement
+>      directly (Eric Dumazet)
+>    - no functional change vs v1 on 64-bit: the emitted code is identical
+>    - Cc the maintainers and the blamed author that v1 missed
+>    - correct two statements in the commit message: dataref is at offset 0x20
+>      in struct skb_shared_info, not its first member, and skb_pp_cow_data()
+>      allocates its head before the fragment loop, so the misaligned head
+>      comes from an earlier user of the shared pool
+> v1: https://lore.kernel.org/netdev/20260826135252.3091193-1-florian@schauer.to/
+> 
+>   net/core/page_pool.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+> index 8f8956fb0..08d7f35cf 100644
+> --- a/net/core/page_pool.c
+> +++ b/net/core/page_pool.c
+> @@ -1073,7 +1073,8 @@ netmem_ref page_pool_alloc_frag_netmem(struct page_pool *pool,
+>   	if (WARN_ON(size > max_size))
+>   		return 0;
+>   
+> -	size = ALIGN(size, dma_get_cache_alignment());
+> +	size = ALIGN(size, max_t(unsigned int, dma_get_cache_alignment(),
+> +				 __alignof__(struct skb_shared_info)));
+>   	*offset = pool->frag_offset;
+>   
+>   	if (netmem && *offset + size > max_size) {
 
-bpf, riscv: Fix stack-passed arguments for indirect trampolines
-https://lore.kernel.org/bpf/20260821233516.3426127-3-memxor@gmail.com/
+On x86_64 __alignof__(struct skb_shared_info) returns 8. So, this should 
+work, to avoid getting the lock in skb_shared_info split across cache-lines.
 
-bpf, loongarch: Fix stack arguments for indirect trampolines
-https://lore.kernel.org/bpf/20260821233516.3426127-8-memxor@gmail.com/
+Acked-by: Jesper Dangaard Brouer <hawk@kernel.org>
 
-v2:
-  -- Fix use-after-free and race conditions
-  -- Modify current files to avoid new binary
-
- .../prog_tests/test_struct_ops_multi_args.c   | 49 ++++++++++++++++++-
- .../bpf/progs/struct_ops_multi_args.c         | 13 +++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    | 32 ++++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.h    |  5 ++
- 4 files changed, 98 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_multi_args.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_multi_args.c
-index 0f321e889862..7f6f9d61c9e0 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_multi_args.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_multi_args.c
-@@ -3,7 +3,54 @@
- #include <test_progs.h>
- #include "struct_ops_multi_args.skel.h"
- 
-+static void test_refcounted_multi(void)
-+{
-+	struct struct_ops_multi_args *skel;
-+	int err;
-+
-+	skel = struct_ops_multi_args__open();
-+	if (!ASSERT_OK_PTR(skel, "struct_ops_multi_args__open"))
-+		return;
-+
-+	err = struct_ops_multi_args__load(skel);
-+	ASSERT_EQ(err, -EINVAL, "struct_ops_multi_args__load");
-+
-+	struct_ops_multi_args__destroy(skel);
-+}
-+
-+static void test_trampoline_stack_args(void)
-+{
-+	struct struct_ops_multi_args *skel;
-+	struct bpf_link *link = NULL;
-+	int err;
-+
-+	skel = struct_ops_multi_args__open();
-+	if (!ASSERT_OK_PTR(skel, "struct_ops_multi_args__open"))
-+		return;
-+
-+	bpf_program__set_autoload(skel->progs.test_refcounted_multi, false);
-+	skel->struct_ops.testmod_ref_acquire->test_refcounted_multi = NULL;
-+
-+	err = struct_ops_multi_args__load(skel);
-+	if (!ASSERT_OK(err, "struct_ops_multi_args__load"))
-+		goto out;
-+
-+	link = bpf_map__attach_struct_ops(skel->maps.testmod_ref_acquire);
-+	if (!ASSERT_OK_PTR(link, "bpf_map__attach_struct_ops"))
-+		goto out;
-+
-+	ASSERT_EQ(skel->bss->got_arg9, 9999, "check_stack_passed_arg9");
-+
-+out:
-+	bpf_link__destroy(link);
-+	struct_ops_multi_args__destroy(skel);
-+}
-+
- void test_struct_ops_multi_args(void)
- {
--	RUN_TESTS(struct_ops_multi_args);
-+	if (test__start_subtest("test_refcounted_multi"))
-+		test_refcounted_multi();
-+
-+	if (test__start_subtest("test_trampoline_stack_args"))
-+		test_trampoline_stack_args();
- }
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_multi_args.c b/tools/testing/selftests/bpf/progs/struct_ops_multi_args.c
-index c62be15757f0..f0f47676b099 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_multi_args.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_multi_args.c
-@@ -29,7 +29,20 @@ int test_refcounted_multi(unsigned long long *ctx)
- 	return 0;
- }
- 
-+__u64 got_arg9 = 0;
-+
-+SEC("struct_ops/test_trampoline_stack_args")
-+int BPF_PROG(test_trampoline_stack_args, int arg1, int arg2, int arg3,
-+					 int arg4, int arg5, int arg6,
-+					 int arg7, int arg8, int arg9)
-+{
-+	got_arg9 = arg9;
-+
-+	return 0;
-+}
-+
- SEC(".struct_ops.link")
- struct bpf_testmod_ops testmod_ref_acquire = {
- 	.test_refcounted_multi = (void *)test_refcounted_multi,
-+	.test_trampoline_stack_args = (void *)test_trampoline_stack_args,
- };
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 2380b6cbdead..8f0744e6075b 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -1678,6 +1678,9 @@ static bool bpf_testmod_ops_is_valid_access(int off, int size,
- 	return bpf_tracing_btf_ctx_access(off, size, type, prog, info);
- }
- 
-+static DEFINE_MUTEX(st_ops_trampoline_mutex);
-+static struct bpf_testmod_ops *st_ops_trampoline;
-+
- static int bpf_testmod_ops_init_member(const struct btf_type *t,
- 				       const struct btf_member *member,
- 				       void *kdata, const void *udata)
-@@ -1691,6 +1694,18 @@ static int bpf_testmod_ops_init_member(const struct btf_type *t,
- 		((struct bpf_testmod_ops *)kdata)->data = ((struct bpf_testmod_ops *)udata)->data;
- 		return 1;
- 	}
-+
-+	if (member->offset == offsetof(struct bpf_testmod_ops, test_trampoline_stack_args) * 8) {
-+		mutex_lock(&st_ops_trampoline_mutex);
-+		if (st_ops_trampoline) {
-+			pr_err("st_ops_trampoline has already been registered\n");
-+			mutex_unlock(&st_ops_trampoline_mutex);
-+			return -EEXIST;
-+		}
-+		st_ops_trampoline = (struct bpf_testmod_ops *)kdata;
-+		mutex_unlock(&st_ops_trampoline_mutex);
-+	}
-+
- 	return 0;
- }
- 
-@@ -1720,11 +1735,20 @@ static int bpf_dummy_reg(void *kdata, struct bpf_link *link)
- 	if (ops->test_2)
- 		ops->test_2(4, ops->data);
- 
-+	mutex_lock(&st_ops_trampoline_mutex);
-+	if (st_ops_trampoline && st_ops_trampoline->test_trampoline_stack_args)
-+		st_ops_trampoline->test_trampoline_stack_args(1, 2, 3, 4, 5, 6, 7, 8, 9999);
-+	mutex_unlock(&st_ops_trampoline_mutex);
-+
- 	return 0;
- }
- 
- static void bpf_dummy_unreg(void *kdata, struct bpf_link *link)
- {
-+	mutex_lock(&st_ops_trampoline_mutex);
-+	if (st_ops_trampoline == (struct bpf_testmod_ops *)kdata)
-+		st_ops_trampoline = NULL;
-+	mutex_unlock(&st_ops_trampoline_mutex);
- }
- 
- static int bpf_testmod_test_1(void)
-@@ -1766,6 +1790,13 @@ bpf_testmod_ops__test_return_ref_kptr(int dummy, struct task_struct *task__ref,
- 	return NULL;
- }
- 
-+static int bpf_testmod_ops__test_trampoline_stack_args(int arg1, int arg2, int arg3,
-+						       int arg4, int arg5, int arg6,
-+						       int arg7, int arg8, int arg9)
-+{
-+	return arg9;
-+}
-+
- static struct bpf_testmod_ops __bpf_testmod_ops = {
- 	.test_1 = bpf_testmod_test_1,
- 	.test_2 = bpf_testmod_test_2,
-@@ -1773,6 +1804,7 @@ static struct bpf_testmod_ops __bpf_testmod_ops = {
- 	.test_refcounted = bpf_testmod_ops__test_refcounted,
- 	.test_refcounted_multi = bpf_testmod_ops__test_refcounted_multi,
- 	.test_return_ref_kptr = bpf_testmod_ops__test_return_ref_kptr,
-+	.test_trampoline_stack_args = bpf_testmod_ops__test_trampoline_stack_args,
- };
- 
- struct bpf_struct_ops bpf_bpf_testmod_ops = {
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
-index 210b919290cc..42257ae89fd5 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.h
-@@ -46,6 +46,11 @@ struct bpf_testmod_ops {
- 	struct task_struct *(*test_return_ref_kptr)(int dummy, struct task_struct *task,
- 						    struct cgroup *cgrp);
- 
-+	/* Used to test indirect struct_ops trampolines stack-passed arguments (>8 args). */
-+	int (*test_trampoline_stack_args)(int arg1, int arg2, int arg3,
-+					  int arg4, int arg5, int arg6,
-+					  int arg7, int arg8, int arg9);
-+
- 	/* The following fields are used to test shadow copies. */
- 	char onebyte;
- 	struct {
--- 
-2.42.0
+Thanks for finding and fixing this bug!
+--Jesper
 
