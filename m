@@ -1,253 +1,195 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BFE7411A0A
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 13:11:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 237494137A2
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 13:27:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788181904; cv=none; b=Jc/GWMsWBe/d/pkdo4tKs5ZLF+H7AZss/QupJOnXihR7bUobZhsOY49OdGvj4HRUO3cN6mU2400RXteLyl5uCy8SdsKyx4CGP8ievM+HDzDgG+nz/DDHEorKu4eQh4Q3DW0fjAIql/AHzFrP51eIv6MHGDPQv7iqjrTn14Mj9LU=
+	t=1788182832; cv=none; b=h3KOBwz1it9IFKKA2UyA4gGwDFLA0NRyE5+DQL4h+69T/xxcb3BDhseo6awcFqS77tTVEsHEbNrZQYlGYy7Qx2jVRzSm4QJrEKhLxhijfAPjSJmZfAjnfCh04UwvvQJ8FZ988x9PA9j2jXtSSptROMEoRNBo3xSTjEMrdNBf6hU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788181904; c=relaxed/simple;
-	bh=TxLbYFIeG32Cm5fP74PpnM0fvn+2ffrjC1dTaoyrSPc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pVLSp65XkTn0U5k/hbT4kzIiYxRTCgJ7Hd/ZaUzAMhf40uUjOwjH5vQpIOmRjub31cidaZJK44xWdjJUZODPjCwcGQ5XUxgX/Ak1lb6XvzSbn0regEjUdT9xYibsTEKlkpujsUKrgAlLvIVJw92ElWvuM0yLboTc9VB131qU058=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hr5etj9c; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788182832; c=relaxed/simple;
+	bh=YgO1TA2tC1JeAml1vHpe8422wxLZ300rZQ8VSHUADNA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dfw+DDwhw+PQszcUotUr29HSMUkuSNZYqJyyWnZIGZaCuIFiN/CI8m9axuzI4LVhBRTHEpPX3waBLWbQ3RAE3+R4Ghud6/xjcHX7BxMoaaC6O0eqzWaj+bPlzvdbxtkjJLuAkFICdo+6H/vYCncx08WFECf3WiDZ4sI18+QWmoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f162S1Zu; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=YfuyWL4h; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hr5etj9c"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-48433fad54aso972902f8f.1
-        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 06:11:42 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f162S1Zu";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="YfuyWL4h"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1788182830;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Py6OFfoOKlM8NbLLcVAPnrT66pPlw+lxtIko4RUMq0c=;
+	b=f162S1ZuH6tCh6IdbKrVgOTTQVud8lsmzwCB8EGUm2SEV4w0ahGlUQDa/Ii6KiSxhediWP
+	5Fc5/f2zbA5dmr4DfQ61r+Ui3VpkqmK/rw2JrvlmPUBeuaCZrHtohkCn4RqI+0S4o/EXuy
+	u9+oG01OzCRxGN7+ZtzWAG//y0BMr40=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-298-imXQEmyVPSmt6S60d7qX_Q-1; Mon, 31 Aug 2026 09:27:08 -0400
+X-MC-Unique: imXQEmyVPSmt6S60d7qX_Q-1
+X-Mimecast-MFC-AGG-ID: imXQEmyVPSmt6S60d7qX_Q_1788182827
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-49cd83ca361so10685365e9.1
+        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 06:27:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788181901; x=1788786701; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=nCrwd5lomZyvZDnWJBN6PQm4ecAtoB1KVxGo2UFaw+g=;
-        b=hr5etj9cW5WosO66fkanOTAmSn6gsZaKx2FCvBJFyxcAF71RdbS0xPvTyxYFEFCUxg
-         9LBbFdV6rObp7M7TwmVhg7RJ158uxcCXGB3rgPSX8YwvxnH4An96degqjItQ2ONRAaHA
-         yzsdK58pfkXUUJUZoEFHHlgSP1D4rALya1jJeDSYnYoeHgrvtk64SHtGWfLLMTP/sSJc
-         8pq+7z0yxdRTxbpNhBG1YllxPrpstX81b3DiAmd6NKxcOXiqzN3abUFOBronIAnBCFl0
-         asHqJgkUjLUQ8tVpJNKRuJE3iq481xqvSzQUmfgGCkpeV2pRQo/3L8opqUPKxyKR2q1j
-         q/0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788181901; x=1788786701;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=redhat.com; s=google; t=1788182827; x=1788787627; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=nCrwd5lomZyvZDnWJBN6PQm4ecAtoB1KVxGo2UFaw+g=;
-        b=oHOOFtKPv3/jMTpGgrztY91LlbcO2Yo7/FSkydcXljcAHCGQpB3qtegcKOIzuzwdVZ
-         Ro13TiehtptbwHsJzE+QrR0VxraSPriYjXzzP5550Mdkr4DiSoETvtynEiD3K/D4Y5Wx
-         iffvLMX2Dcuhb19iR/9Po/n9+ynsYHdjJFLJGV4fSGq24YgJPqj4VBsyqkIUNJOhnbNa
-         xraOmke3HyZ4WO7aggkw8dX4Abr3gEizOB17DjL20Vc0RZoSXwzBUPlDBmmANjKUb5Jd
-         /U+47jNIdcJNXxId/GoEwoGqsB2pl8iqMCaiiI4KZTPEn5wX/N6DU6QB2VcKsEwe8lvp
-         x8pg==
-X-Gm-Message-State: AFuF++mzxV0uMOfc2ECjY8vuNFU7XG0pnetool9v1jKdsrR+bKTLSLLN
-	Zh1hN1vdABFjGwepa3BX7hEUOi20f55H4UF8RYcptMG2IVIWT4xtq0nI
-X-Gm-Gg: AYBFou3XG+nWtXV3oOlOF1o4DkRzN3xJyWTEidBNIISh7KVgAED+HeyY7zy6sSc1C6A
-	oHt6Ob6kZ6Qe3S2TofknmyQJLM4+DGONpyQDzWu9jZ/9ilGTVfnxa1WdzoSB3tqkYgqWrNGJbW6
-	E9SR3NT+cWVjroYA5a5F0Ou7flkQ9omIBt+gzSO8vouS8FXDRPLycADWPWpsnuRWgoGEo1n2sWp
-	MSfE5G16DQn61W95uJtuqt+t9XQoiLRpjfGuEIT2KKKMSbGEYQOQhoQPP1r6ROsvsVg+cCjN0RQ
-	CxADsVfWELxMDJSJwiuqABr9QjWkopvjnsxIRxwzHEbUCibCzG2XgE3YNadirNw93ngjETMQxRo
-	zemCfbk/f44iDmhHP+fUpXG2BKPMv3YPbSPuBR4mhtfjsMbXO9U7qpGsqJgQQCJTYec1GzXzRvQ
-	mjkupM5d5i2ujw1Y5yEjrG9ZE+DxAtT3bfBKLode/aXbBLdpWBLnMLMO2UnhDf815l7UyE
-X-Received: by 2002:adf:e00c:0:10b0:47f:9096:3ef1 with SMTP id ffacd0b85a97d-48440fc78ebmr1222844f8f.9.1788181900425;
-        Mon, 31 Aug 2026 06:11:40 -0700 (PDT)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4843ce8b015sm5697604f8f.13.2026.08.31.06.11.39
+        bh=Py6OFfoOKlM8NbLLcVAPnrT66pPlw+lxtIko4RUMq0c=;
+        b=YfuyWL4hYDTHKb4AjzVwhksRfnw+zYKNBM3AnkEPzVvPemdIMvlmfHMtGqQ9/7nnyk
+         RRBHZ14BY1SrQfrS2+iHbZEeCncVqXurwfZLLAugoe3/6tttJKgmwas5ALx4ih591TlP
+         1/nbhi+8rvacuuX+oNiHpi/KmAGgUN9ChuagUWJ5ca5Fxv6uO8h/nSys9t1c1pz4nPD3
+         C/s8zdFfa7wR3UnzlMCV7neXY/D2IGhN8R4pIGcAa1LdGYwbyJKinWgi97b8e+Kn+MFz
+         KlQx/sqpWC8H/xqw8X0Il779CwzwFQCK3IGc7Do9zqiFmCpjC9DkADSiRfV0CLtUUnyH
+         OjMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788182827; x=1788787627;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Py6OFfoOKlM8NbLLcVAPnrT66pPlw+lxtIko4RUMq0c=;
+        b=KeyHTe7aJIJfAEmTKkuRB5rfd5sEOVFQjX9m4Uc67KaurZde61chZq0UF9K8gterij
+         UV1w2QOncE8Yp59kXM74Ad92Xui12XTZgXklWA2h8sLvXV7LmcV34KhEKXuT4gv9viG5
+         5S+A9MN7AQFkC3djK96Xh78rrvk0y02LYL4dwWZvYz7n5lzLCgJpMLlUOo0I6/tRwU39
+         0wOq1uuUV6nLNxmOHJToEMypYVE6LU8U4nCHJzjgkOteHsN7eQqFHThD/5es9nUm6I8I
+         E/GIEp9n0FOSDYo/Ks926gESN8zpt87CnkRjw0UX/lhQx6vmuY4Nap4xnunuBcN8pk3m
+         dAAg==
+X-Forwarded-Encrypted: i=1; AHgh+RovksPoUclES0HPW2irmHLDQm0SGD3E1y5Y70YK9By4yGHRjd7sJMXENTtKDu3IzrHREuc=@vger.kernel.org
+X-Gm-Message-State: AFuF++lvXcD+XRA5Og3W6Jz3WP0DwPsSFOmOMASrTDjwoJAj/LXA7qB8
+	LaOFP3qUIteWJN36CePNMrAPwdYwAU8gcUTv3uDDXVtyl7UEF2a3BbVJsyawbkbM5CS6az3bFor
+	NRnj2Hy0OxnpvTOMj6KeEll6qai9unVa2qoCF8q4aDXBTzN/o9EWq2A==
+X-Gm-Gg: AR+sD10C0CyQ83G9DIXljMQp24EiYQZIgbRBgTvSN0HONA6be3+ZRRlPyrpwvfP7cCE
+	EVwhXlrtS9J/95twzmYoe8yTpP0A03G4EpmrnweBt8VKWZOel+waob0Frjgg2SAOkj58dcecArH
+	njbaAzF9TNW+uq/uHjuRu+MT28xOg9Pbs3l+fWkgoHRuq92Cqx5ZDIHuowuBD6+GGV/G/u0yFZZ
+	7gO0oo8ajF7YB2HxUD1WhtK93WXgWR7ik7Es4O74WNWZCBInXQcu6GZ8SKUtsp7y/4Vt6ZRr1Kj
+	nI2lA/NGJ9dpElpm7HzsV0ZyjnYdII4kSXujz9bm1oUMBtZQvYToif0Y6v16kIb8/juMyTjGBqL
+	zXMFGQmqYFY+a3zyLRDv0NrPn
+X-Received: by 2002:a05:600c:8b86:b0:499:8ff5:8ecc with SMTP id 5b1f17b1804b1-49b91c5446emr398325425e9.15.1788182827067;
+        Mon, 31 Aug 2026 06:27:07 -0700 (PDT)
+X-Received: by 2002:a05:600c:8b86:b0:499:8ff5:8ecc with SMTP id 5b1f17b1804b1-49b91c5446emr398324345e9.15.1788182826619;
+        Mon, 31 Aug 2026 06:27:06 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49b94dd2517sm290839185e9.7.2026.08.31.06.27.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2026 06:11:39 -0700 (PDT)
-Date: Mon, 31 Aug 2026 13:22:20 +0000
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-	netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
-	kpsingh@kernel.org, matt@bobrowski.net, john.fastabend@gmail.com,
-	brauner@kernel.org, paul@paul-moore.com,
-	torvalds@linux-foundation.org, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, martin.lau@kernel.org, yonghong.song@linux.dev,
-	mason@kernel.org, ihor.solodrai@linux.dev
-Subject: Re: [PATCH bpf-next 2/7] net, bpf: Add a generic netlink hook on
- msg_rcv
-Message-ID: <apWADDwqx4r2xEZU@mail.gmail.com>
-References: <20260831110934.241898-3-a.s.protopopov@gmail.com>
- <7396552568004928dc8c7d43c5a8b3de699e698f37f6fc555ea49312a5116a9f@mail.kernel.org>
+        Mon, 31 Aug 2026 06:27:06 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 345C997C44C; Mon, 31 Aug 2026 15:27:05 +0200 (CEST)
+From: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>
+Cc: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf-next v2 1/4] libbpf: Move section-defined program flags to prog_flags
+Date: Mon, 31 Aug 2026 15:26:41 +0200
+Message-ID: <20260831132648.65843-1-toke@redhat.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7396552568004928dc8c7d43c5a8b3de699e698f37f6fc555ea49312a5116a9f@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 26/08/31 12:07PM, bot+bpf-ci@kernel.org wrote:
-> > commit 18faf289d6ccb694a2ce1ae68f5c3cf881de2fd4
-> > Author: Anton Protopopov <a.s.protopopov@gmail.com>
-> >
-> >     net, bpf: Add a generic netlink hook on msg_rcv
-> >
-> >     Add a new bpf_lsm_genl_family_rcv_msg() BPF hook called from within
-> >     the genl_family_rcv_msg() function. The hook sees the genl family,
-> >     net, cmd, and nlmsg_flags.  As the hook receives all the information
-> >     pre-parsed, it is not put into the sleepable list.
-> >
-> >     There is already an existing LSM hook sitting right at netlink_send,
-> >     however, it looks to be too coarse-grained to be used directly. The
-> >     netlink_send hook sees the struct sock and struct skb, and thus must
-> >     duplicate all the parsing inside BPF. The messages can actually contain
-> >     multiple netlink datagrams, dynamic info (see e.g., selinux_nlmsg_lookup()
-> >     in context of generic netlink), etc.
-> >
-> >     The purpose of this hook is to mitigate, in a coarse-grained way,
-> >     CVEs reachable via the corresponding control path: genl recvmsg.
-> >     While looking at the recent CVEs, robots found ~300 CVEs reachable
-> >     via the genl_rcv. We can roughly split them as follows:
-> >
-> >       * Around 100 are ethtool-related. For more detailed information,
-> >         see the following commit which adds even more finer-grained
-> >         ethtool hooks.
-> >
-> >       * Around 100 of the remaining are fully dominated by the new hook.
-> >
-> >       * Around 100 remaining aren't fully mitigatable, as other control
-> >         paths, besides the genl, lead to the buggy code.
-> >
-> >     To be more precise, the following CVEs are properly mitigated by the
-> >     new hook:
-> >
-> >       * CVE-2021-47518 CVE-2021-47594 CVE-2021-47612 CVE-2022-48687
-> >         CVE-2022-49060 CVE-2022-49085 CVE-2022-49300 CVE-2022-49862
-> >         CVE-2022-49959 CVE-2022-50656 CVE-2022-50834 CVE-2022-50854
-> >         CVE-2023-52698 CVE-2023-52702 CVE-2023-52977 CVE-2023-53113
-> >         CVE-2023-53298 CVE-2023-53686 CVE-2023-53843 CVE-2024-26608
-> >         CVE-2024-26663 CVE-2024-26754 CVE-2024-26811 CVE-2024-26950
-> >         CVE-2024-27025 CVE-2024-27410 CVE-2024-36941 CVE-2024-38562
-> >         CVE-2024-43912 CVE-2024-45010 CVE-2024-46711 CVE-2024-49937
-> >         CVE-2024-50085 CVE-2025-21706 CVE-2025-21787 CVE-2025-21862
-> >         CVE-2025-21875 CVE-2025-21947 CVE-2025-22024 CVE-2025-38184
-> >         CVE-2025-38443 CVE-2025-40084 CVE-2025-68263 CVE-2025-68366
-> >         CVE-2026-23297 CVE-2026-23436 CVE-2026-43252 CVE-2026-43394
-> >         CVE-2026-53128 CVE-2026-53227 CVE-2026-53233 CVE-2026-53238
-> >         CVE-2026-53257
-> >
-> >     The following are mitigated as well, but, theoretically, could
-> >     benefit from a finer-grained hook, running after a deeper
-> >     parsing/taking locks (this is however out of scope for now to
-> >     add finer-grained hooks for each involved subsystems, as, unlike
-> >     ethtool, they are more-or-less evenly distributed):
-> >
-> >       * CVE-2021-47250 CVE-2021-47257 CVE-2021-47554 CVE-2022-48915
-> >         CVE-2022-49374 CVE-2022-49505 CVE-2022-50042 CVE-2022-50678
-> >         CVE-2023-52845 CVE-2023-53141 CVE-2023-53543 CVE-2023-53652
-> >         CVE-2023-54031 CVE-2024-26725 CVE-2024-26951 CVE-2024-42073
-> >         CVE-2024-42154 CVE-2024-46676 CVE-2024-47687 CVE-2024-50028
-> >         CVE-2025-21973 CVE-2025-38020 CVE-2025-38628 CVE-2025-40254
-> >         CVE-2025-40321 CVE-2025-68785 CVE-2025-71091 CVE-2025-71297
-> >         CVE-2026-23321 CVE-2026-31707 CVE-2026-31744 CVE-2026-43012
-> >         CVE-2026-43467 CVE-2026-43481 CVE-2026-45840 CVE-2026-52978
-> >         CVE-2026-52979 CVE-2023-53570 CVE-2024-42114 CVE-2024-53189
-> >         CVE-2024-56663 CVE-2025-21909 CVE-2026-53182
-> >
-> >     Policies for selected CVEs are added in the corresponding
-> >     selftests patch.
-> >
-> >     Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
-> 
-> This isn't a bug, but would it be worth trimming the two CVE enumerations
-> or pointing at where the classification lives so the coarse-grained-vs-
-> netlink_send rationale is not outnumbered roughly 3:1 by bare IDs?
-> 
-> The selftests patch is already referenced for the policies. The tail of
-> the second CVE list also breaks the ascending order it starts with
-> (CVE-2026-52979 is followed by CVE-2023-53570).
+The libbpf section definition modifiers for XDP frags support and
+sleepable programs stores the flags bits only in the private section
+definition cookie from object open to load time. This has the
+unfortunate consequence that API consumers cannot see (or manipulate)
+the flag between object open and program load.
 
-Yeah, thanks, I will consider this.
+In particular, libxdp has special handling of frags-enabled programs to
+make them compatible with the dispatcher. This doesn't work on XDP
+programs that enable frags through the 'xdp.frags' section definition
+because the flag is not visible through bpf_program__flags()[0].
 
-> 
-> > diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
-> > index 1e54c7cca27ad..452b9d1d7c494 100644
-> > --- a/include/linux/bpf_lsm.h
-> > +++ b/include/linux/bpf_lsm.h
-> > @@ -12,6 +12,8 @@
-> >  #include <linux/bpf_verifier.h>
-> >  #include <linux/lsm_hooks.h>
-> >
-> > +struct genl_family; /* for the bpf_lsm_genl_family_rcv_msg hook */
-> > +
-> >  #ifdef CONFIG_BPF_LSM
-> >
-> >  extern bool bpf_lsm_initialized __ro_after_init;
-> > diff --git a/include/linux/bpf_lsm_hook_defs.h b/include/linux/bpf_lsm_hook_defs.h
-> > index 29bc0b514d168..3f57022744a31 100644
-> > --- a/include/linux/bpf_lsm_hook_defs.h
-> > +++ b/include/linux/bpf_lsm_hook_defs.h
-> > @@ -4,3 +4,10 @@
-> >   * This is a set of BPF LSM hooks, which are _not_ fully implemented
-> >   * as LSM hooks. Thus, they only can be used by BPF LSM programs.
-> >   */
-> > +
-> > +#ifdef CONFIG_NET
-> > +
-> > +LSM_HOOK(int, 0, genl_family_rcv_msg, const struct genl_family *family,
-> > +	 const struct net *net, u32 cmd, u16 nlmsg_flags)
-> > +
-> > +#endif /* CONFIG_NET */
-> > diff --git a/net/netlink/genetlink.c b/net/netlink/genetlink.c
-> > index 0da39eaed255f..12b4f49c72534 100644
-> > --- a/net/netlink/genetlink.c
-> > +++ b/net/netlink/genetlink.c
-> > @@ -17,6 +17,7 @@
-> >  #include <linux/skbuff.h>
-> >  #include <linux/mutex.h>
-> >  #include <linux/bitmap.h>
-> > +#include <linux/bpf_lsm.h>
-> >  #include <linux/rwsem.h>
-> >  #include <linux/idr.h>
-> >  #include <net/sock.h>
-> > @@ -1161,6 +1162,7 @@ static int genl_family_rcv_msg(const struct genl_family *family,
-> >  	struct genlmsghdr *hdr = nlmsg_data(nlh);
-> >  	struct genl_split_ops op;
-> >  	int hdrlen;
-> > +	int err;
-> >  	u8 flags;
-> 
-> This isn't a bug, but would int err sit better after u8 flags so the
-> declaration block stays longest-to-shortest, per the reverse xmas tree
-> ordering in Documentation/process/maintainer-netdev.rst?
+Fix this by changing how libbpf loads the program flags from section
+definitions: instead of using the private section definition cookie, add
+a setup function to the default section definitions that stores the
+flags for sleepable and XDP frags programs in the prog_flags field of
+struct bpf_program.
 
-yes
+Exposing the flags this way means that any use of
+bpf_program__set_flags() will override the flags unless the caller takes
+care of updating flags in a non-destructive way. This is unavoidable
+with the set-only API, and any user setting flags unconditionally is
+already broken in the sense that they will also override any other
+current and future flags. A subsequent patch fixes up all in-tree users
+of the API.
 
-> 
-> [ ... ]
-> 
-> > @@ -1187,6 +1189,10 @@ static int genl_family_rcv_msg(const struct genl_family *family,
-> >  	    !netlink_ns_capable(skb, net->user_ns, CAP_NET_ADMIN))
-> >  		return -EPERM;
-> >
-> > +	err = bpf_lsm_hook(genl_family_rcv_msg, family, net, hdr->cmd, nlh->nlmsg_flags);
-> > +	if (err)
-> > +		return err;
-> > +
-> 
-> This isn't a bug, but could the bpf_lsm_hook() call be wrapped the way
-> the genl_family_rcv_msg_dumpit() / _doit() calls just below it are, so
-> it stays under 80 columns like the rest of the file?
+[0] https://github.com/xdp-project/xdp-tools/issues/587
 
-ok
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+v2:
+  - Use a generic section setup function that also applies to BPF_F_SLEEPABLE
 
-> 
-> >  	if (flags & GENL_CMD_CAP_DUMP)
-> >  		return genl_family_rcv_msg_dumpit(family, skb, nlh, extack,
-> >  						  &op, hdrlen, net);
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33386073074
+ tools/lib/bpf/libbpf.c | 20 ++++++++++++++------
+ 1 file changed, 14 insertions(+), 6 deletions(-)
+
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index b749c01742ee..27779b4cddd0 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -7879,6 +7879,19 @@ static int tracing_multi_mod_fd(struct bpf_program *prog, int *btf_obj_fd)
+ 	return 0;
+ }
+ 
++static int libbpf_setup_prog_flags(struct bpf_program *prog, long cookie)
++{
++	enum sec_def_flags def = cookie;
++
++	if (def & SEC_SLEEPABLE)
++		prog->prog_flags |= BPF_F_SLEEPABLE;
++
++	if (def & SEC_XDP_FRAGS)
++		prog->prog_flags |= BPF_F_XDP_HAS_FRAGS;
++
++	return 0;
++}
++
+ /* this is called as prog->sec_def->prog_prepare_load_fn for libbpf-supported sec_defs */
+ static int libbpf_prepare_prog_load(struct bpf_program *prog,
+ 				    struct bpf_prog_load_opts *opts, long cookie)
+@@ -7889,12 +7902,6 @@ static int libbpf_prepare_prog_load(struct bpf_program *prog,
+ 	if ((def & SEC_EXP_ATTACH_OPT) && !kernel_supports(prog->obj, FEAT_EXP_ATTACH_TYPE))
+ 		opts->expected_attach_type = 0;
+ 
+-	if (def & SEC_SLEEPABLE)
+-		opts->prog_flags |= BPF_F_SLEEPABLE;
+-
+-	if (prog->type == BPF_PROG_TYPE_XDP && (def & SEC_XDP_FRAGS))
+-		opts->prog_flags |= BPF_F_XDP_HAS_FRAGS;
+-
+ 	/* special check for usdt to use uprobe_multi link */
+ 	if ((def & SEC_USDT) && kernel_supports(prog->obj, FEAT_UPROBE_MULTI_LINK)) {
+ 		/* for BPF_TRACE_UPROBE_MULTI, user might want to query expected_attach_type
+@@ -10099,6 +10106,7 @@ int bpf_program__clone(struct bpf_program *prog, const struct bpf_prog_load_opts
+ 	.prog_type = BPF_PROG_TYPE_##ptype,				    \
+ 	.expected_attach_type = atype,					    \
+ 	.cookie = (long)(flags),					    \
++	.prog_setup_fn = libbpf_setup_prog_flags,			    \
+ 	.prog_prepare_load_fn = libbpf_prepare_prog_load,		    \
+ 	__VA_ARGS__							    \
+ }
+-- 
+2.55.0
 
