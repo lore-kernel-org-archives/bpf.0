@@ -1,104 +1,109 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A33431F9A8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9596A417340
 	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 13:27:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788182834; cv=none; b=M+Yfz7nmiRKA7ZfLTvzZq8q+0YcpMpY4EOMRbSr55+IPqpSg8D/C3cq/3BGpgQZ2fVoB25FCzQbQ0mzQV+8Bw9CAXXS/f5K4GjnA1p3bJHtVdXd3DJLqfg5qB51/nVUAzKCiH6+L5vaoAPqXb5llkC403m0EIm8iJN3SNcPdKs8=
+	t=1788182834; cv=none; b=RzZi8g/bXy48d7Fki4Su2KPNHSvC486DyqKPdhjp6lmDEsqw7oiPjLUo/7LXJMvnuG0uhVT8nyTrRGei6mGGHkib0yJKAdCAmAeUExnD5/D4caevHxguWyYqiygWrEuEvhJlZgZXrYDjbyloox+LmNRI6RAnG1oSepQpwPtLdOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1788182834; c=relaxed/simple;
-	bh=/iu4J5gTiWt6jJGDEbidJwCkskeaIh9qKvI83kH7F+s=;
+	bh=OIbi3ceGQZ/QjbSWzXjim1yzwnJvjTsZFCloIxWPYhU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=STtuPhtU1wrh4sqhv+IQ+5PPF+jGoC1gYqcC4BbCyMaEOktzjrtb4qG9B6Vkhl3OexdgnD9sUxeRoBWcqkg+y+/a9r45X8gdNSW7IQwlZiOrT/6XgpFOUpjs7cItNy99iLqpzKdyjGEYQDLBRmOMqd0bhZ8kkOIVyt+Ff6eC0Ws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WTq/HcQ3; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=T1f8A1tt; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version:Content-Type; b=jqjEXR3Cf+TdsefqHAlO/IH6shBOYyfv+aqFP3Sh/qb1RvbKaunC49ms1DFMuLOY1xZlApnphSciIMrvKB5gLG+5tP3VuQJbNj8MzjUQGxMQ4sYUKdb14dtbx60CNash9jnPkMZgonXrOSDzwcmPkTksRcrOCFwF1xOi7xz7lHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LTz4jJWt; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=F8wZwrTj; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WTq/HcQ3";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="T1f8A1tt"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LTz4jJWt";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="F8wZwrTj"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
 	s=mimecast20190719; t=1788182831;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=L64we0eRRFvyD/p0uOHrFhoOGsuyfMzum+CXMl6CQFE=;
-	b=WTq/HcQ34ve3aCNAzm0S+dBQ0adJJ9qyvoeuo8u6BHbny7WR5nW99jnAbq9DMO9DikeHN9
-	0AITHaqVI/0/E3OaNFiDFCwTvcYl0JwqSreTNxzpyespOFfX/nx1Ny/j8jxHjv54Dv8+Qh
-	Z0KX3cF8vYuxQ3ko2whE//SFir2bVZ0=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=+KvrdHLkoHirj2epQVtvhrFYMOrEgGC1u8Odq3InD4Y=;
+	b=LTz4jJWtcNYHxE000Ic09Jvk4lIuX0gOhEfkXjN0uWcVvidOx5tcGNxu9IYRfK0iLYCAwp
+	+p8Yn55PFdqmd9Jtd2uFzNpTipa3/jJ7GzJJo4Gs29gjFTge8Gw8mxQg+mGBoMzmQBjPIh
+	Zg2u7T8Q5GBvVz3yT0RefduI0XqP6RA=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-653-0kV6rIDBOzuuCraUuQlbgw-1; Mon, 31 Aug 2026 09:27:10 -0400
-X-MC-Unique: 0kV6rIDBOzuuCraUuQlbgw-1
-X-Mimecast-MFC-AGG-ID: 0kV6rIDBOzuuCraUuQlbgw_1788182829
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-49cc954a3edso18181675e9.2
-        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 06:27:10 -0700 (PDT)
+ us-mta-340-HNr6zCSOMw-uMAOyg79I8A-1; Mon, 31 Aug 2026 09:27:09 -0400
+X-MC-Unique: HNr6zCSOMw-uMAOyg79I8A-1
+X-Mimecast-MFC-AGG-ID: HNr6zCSOMw-uMAOyg79I8A_1788182828
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4997b060af8so20829965e9.1
+        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 06:27:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1788182829; x=1788787629; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1788182828; x=1788787628; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=L64we0eRRFvyD/p0uOHrFhoOGsuyfMzum+CXMl6CQFE=;
-        b=T1f8A1ttrLlDZmVVQGZN13GrqvyY7Gu8wLlI1Pud1v4Rof35HqMUE+7HcD+rZuFYby
-         AqOFLXGgAUmPBIOrGKCsXCOhtYTVGIYc/HjZ0HiEEOCaXXQ1LyNhuFVgqDvZocpPSBR9
-         XPNMDaW4JwpNXj89dQf2XS/MoJmwayVkzcwFebVEsMBvLgKmUgXOOPi90fE9U4CflFmH
-         TFxaRbvbpMPf++QkFjTJz8Rwh87503+AGo+Dyyb0AjdJ54nbcD9XBVN5cCgejYXfpqUV
-         2+/qCPTV8TG2bH5SWN3kt9C8yAAohkvSa0RoF5b0Qf6hkfpxYeroBatN1Tp6inNRmddL
-         tliQ==
+        bh=+KvrdHLkoHirj2epQVtvhrFYMOrEgGC1u8Odq3InD4Y=;
+        b=F8wZwrTj27r+Mb0/4H6deu6DbomZBPp+TcSOR4ho2WMnN53Egrs99YJ+fAfo9sWx9/
+         I0xeqGW2ZKQCeRFpLHdHwqga0jyD9YrenSRfADRKRJbAo4ahy+izdZfxntXFmObrpR7F
+         khOl5VP9MTwmhGMNF8UaI8Wv9dfgl/AM8uwz+0OKdRbVlHkW/Cr0CPoyJqeKYXyG2LcD
+         mKG9rmEwyOaAOPFpyyS7ka1eOMniRvGneO3NTJuC7c2jDJTN/0QKNCkUvG6zvPfmuH+N
+         HcM1qdrQMGmQ+hlVU2rQ/u56DCi7w1WbdiPQA8boW94wtU3dZQJioxTAxT0OeTosoPB/
+         6L3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788182829; x=1788787629;
+        d=1e100.net; s=20251104; t=1788182828; x=1788787628;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=L64we0eRRFvyD/p0uOHrFhoOGsuyfMzum+CXMl6CQFE=;
-        b=LJhtGto4Wx2m6tBe/2ZuHMeLnJN22iQ4uxorexHNLST2JkoGz9bhkbfCUXCgje6utb
-         PtaCv2WjIXs42VonYelTSXczvpCO6lUbkzxvGQY4HhLHxRpp13HWFi3oDWyF1971mudl
-         MpjZOkKG1ur0vwMh722s5rYVV+gwyYPi4JXZ4gqFkqqEDvFt99jC5CBCAZ+UsMaJUVcw
-         cTGIvqoMJxkbjCwxoabwFBGpf6kXdpm0U5OjSEZPbW0J/9Hb1ZMa6DIdy6aJCWMYGj7+
-         ZiLCQHd2+gfIpQbtdyuMvn2Lv8yjVWI87GbVYhyc28sx0RC+dd+cCLdNeG4Hhj2gpIc9
-         8B1Q==
-X-Forwarded-Encrypted: i=1; AHgh+RoVFmu/hu0Sse+G11ioSZWLzIwrOtBsP6NIWyKv4oHsoF/IrI48C4924YmDZTVyldng2sQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++mHsDy68UQrh1ZvvP4+5p6xsZ8L0onIGNjPiJQhVyXwTDX4JMgD
-	/X0sYB4gelYBhsIQydfrFW21yGihIXMU46HC0GNnMx47pq1v3bAuR/wFVooxtwmb6VUiGvO5ocG
-	COgCcj/d7ZpAca1oVXzKw3OmoZfvNz2sHFe2m34B6qp34yTDH5vupTA==
-X-Gm-Gg: AR+sD12R+QmbmhkE9h4q66fC+xBFFoKWZWccXZ8Xjt32rdx5bPE+kVX4e2JhI/VdBXD
-	IYbK2+b64/hBOT9FnH5fifG8wE2UR7/y/h86rlVAvshiTg1eovrmaxh/LxxcVnSLu6vynIvv9SE
-	Oj9ydpwxO+P2+N2DOIoI78Tts7d+0sZIfrpS0nLPLgCs0d0wpQ/9c6SwgYw/jBCMDpOtMJ2Bp8W
-	ebUzK+aEifUrJoKWXV/ET4GbT1KViIa4HnIhXBeULATirMk/youCB1c9hy9Jgn6b9hvDG0J18qk
-	WUUqSsiLbwKSjaihLyoeTs5NSxukDejvZWf5LXv+0yFjVeJJSxWuuyuwt6uIm6o/pXQVMERiugr
-	RXOxZL6VtliufERHu2jKu+siG
-X-Received: by 2002:a05:600c:609a:b0:49b:9032:9c94 with SMTP id 5b1f17b1804b1-49b91bd41eemr421859895e9.0.1788182828588;
-        Mon, 31 Aug 2026 06:27:08 -0700 (PDT)
-X-Received: by 2002:a05:600c:609a:b0:49b:9032:9c94 with SMTP id 5b1f17b1804b1-49b91bd41eemr421859125e9.0.1788182828211;
-        Mon, 31 Aug 2026 06:27:08 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49b961939ddsm133906685e9.4.2026.08.31.06.27.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        bh=+KvrdHLkoHirj2epQVtvhrFYMOrEgGC1u8Odq3InD4Y=;
+        b=cvU6G4h52xW3E1HNLlcxL4UySnkaCzY6tm6V7BOyTaqowUF24w0WpaL80fmmhO9wrW
+         2W+To3Ymn6gxT9/syDEklcfEi6qpmWLnvSTYiCtYbLPuvXd71/M8eUtdSgdsIkwuNBAa
+         HaK1OPLUUTCIeMD1zocGJLNI18rY6jmbscASJOdubHswBlIIQArKQjjnmQGBoMWOnt1n
+         UAOmJDoGPNEmjOjQY4t8je2v1YpLENieKFg3K6x4k2yYTWH03fcjn6wpPzJz2zOpRnPs
+         M4q3jtKZPCnbakupgEJ6kBpECpCZRYoVpOSAKWugidwixjPhMjxH3yiU/nyMECUTFbYU
+         NCsg==
+X-Forwarded-Encrypted: i=1; AKwUvBy7uATh6KRclw0IedYI+HNQeRaG1/yJi4Q7+LOt/yys/niVEkQlj4F/lPqcNsHO/1J7UT8=@vger.kernel.org
+X-Gm-Message-State: AFuF++nLFSBN2xtInPN6Y/4q67l9EG52Maf8F9hukrh1bd2mIrh90I9X
+	qxbMtR+YuKq8kbb8TCorjbzZDys1FEHYWEbDnNuRpfjojiE70bKUiE/Cqhrj9znXXSa1q+19OTI
+	p9FTJYto52RXzUHpjKaN19hbzdLOfrawrVwlHUkgedlhaxnZpBrrRnQ==
+X-Gm-Gg: AYBFou2j8IcMKVcuHjB2ZedSk5O/poGAqTxtKWncY2+cOFq8/haQPZr4uO8RWTOjzLS
+	RjTEupaoXXcAGOtDcBdXZe2PH9NbHbl3m4/vFEsn4xZczdfwg5VRBc7wTJQxCVddNQnhsdZRPX4
+	SMy5UuqGycFCuV3FEMHbNF8UXHyBzlbN9N2RA+4sNQzjoropotoF8eywta1svowQgUWIbNU1E/o
+	PUuSEre/Uo0OeGuhCeuVNkpr7fil7NwehKtooc7DdStj+fIx24ll+KjWEEybortU45co4Ux9GSm
+	dPCVqecIY6akX35cwcWfPXwPZlz0wiakaC0zWMnTTDSYK21A2bm3P+xTZFnZJbNtvsXKsr0Rsil
+	501s0aInZUlghuY0v2PPphMQ1
+X-Received: by 2002:a05:6000:2288:b0:47f:e377:8d61 with SMTP id ffacd0b85a97d-482f79c9511mr39217373f8f.11.1788182827935;
         Mon, 31 Aug 2026 06:27:07 -0700 (PDT)
+X-Received: by 2002:a05:6000:2288:b0:47f:e377:8d61 with SMTP id ffacd0b85a97d-482f79c9511mr39217230f8f.11.1788182827310;
+        Mon, 31 Aug 2026 06:27:07 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-482fbb32d30sm23633940f8f.34.2026.08.31.06.27.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Aug 2026 06:27:06 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id D2A3397C450; Mon, 31 Aug 2026 15:27:06 +0200 (CEST)
+	id 385CF97C44E; Mon, 31 Aug 2026 15:27:06 +0200 (CEST)
 From: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Quentin Monnet <qmo@kernel.org>,
-	Larysa Zaremba <larysa.zaremba@intel.com>,
-	Daniel Borkmann <daniel@iogearbox.net>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>
 Cc: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 3/4] bpftool: Set BPF_F_XDP_DEV_BOUND_ONLY flag non-destructively
-Date: Mon, 31 Aug 2026 15:26:43 +0200
-Message-ID: <20260831132648.65843-3-toke@redhat.com>
+	Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf-next v2 2/4] bpf: selftests: Check for flag presence in bpf_program__flags()
+Date: Mon, 31 Aug 2026 15:26:42 +0200
+Message-ID: <20260831132648.65843-2-toke@redhat.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260831132648.65843-1-toke@redhat.com>
 References: <20260831132648.65843-1-toke@redhat.com>
@@ -111,30 +116,61 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-When setting the XDP hints ifname, bpftool would set the
-BPF_F_XDP_DEV_BOUND_ONLY without looking at the existing program flags,
-overriding any other flag values. Change this to set the flag value
-non-destructively by OR'ing it with the existing flags.
+Add a check that the BPF_F_XDP_HAS_FRAGS and BPF_F_SLEEPABLE flags show
+up in bpf_program__flags() when opening a BPF program with the flag
+definitions in their section definitions.
 
-Fixes: f46392ee3dec ("bpftool: Specify XDP Hints ifname when loading program")
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- tools/bpf/bpftool/prog.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/prog_tests/kernel_flag.c       | 3 +++
+ tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c  | 3 +++
+ tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c | 5 +++++
+ 3 files changed, 11 insertions(+)
 
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index a9f730d407a9..8c2f9255b36d 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -1769,7 +1769,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
- 		}
+diff --git a/tools/testing/selftests/bpf/prog_tests/kernel_flag.c b/tools/testing/selftests/bpf/prog_tests/kernel_flag.c
+index 97b00c7efe94..25eb59f460ab 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kernel_flag.c
++++ b/tools/testing/selftests/bpf/prog_tests/kernel_flag.c
+@@ -16,6 +16,9 @@ void test_kernel_flag(void)
+ 	if (!ASSERT_OK_PTR(lsm_skel, "lsm_skel"))
+ 		return;
  
- 		if (prog_type == BPF_PROG_TYPE_XDP && xdpmeta_ifindex) {
--			bpf_program__set_flags(pos, BPF_F_XDP_DEV_BOUND_ONLY);
-+			bpf_program__set_flags(pos, bpf_program__flags(pos) | BPF_F_XDP_DEV_BOUND_ONLY);
- 			bpf_program__set_ifindex(pos, xdpmeta_ifindex);
- 		} else {
- 			bpf_program__set_ifindex(pos, offload_ifindex);
++	ASSERT_EQ(bpf_program__flags(lsm_skel->progs.bpf) & BPF_F_SLEEPABLE,
++		  BPF_F_SLEEPABLE, "sleepable in program flags");
++
+ 	lsm_skel->bss->monitored_tid = sys_gettid();
+ 
+ 	ret = test_kernel_flag__attach(lsm_skel);
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c
+index fce203640f8c..a894b1ab46f4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c
+@@ -18,6 +18,9 @@ static void test_xdp_update_frags(void)
+ 		return;
+ 
+ 	prog = bpf_object__next_program(obj, NULL);
++	ASSERT_EQ(bpf_program__flags(prog) & BPF_F_XDP_HAS_FRAGS,
++		  BPF_F_XDP_HAS_FRAGS, "frags in program flags");
++
+ 	if (bpf_object__load(obj))
+ 		return;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+index a8ab05216c38..dff6b3e7266e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+@@ -146,6 +146,11 @@ static void test_xdp_with_devmap_frags_helpers(void)
+ 	if (!ASSERT_OK_PTR(skel, "test_xdp_with_devmap_helpers__open_and_load"))
+ 		return;
+ 
++	ASSERT_EQ(bpf_program__flags(skel->progs.xdp_dummy_dm_frags) & BPF_F_XDP_HAS_FRAGS,
++		  BPF_F_XDP_HAS_FRAGS, "frags in program flags");
++	ASSERT_EQ(bpf_program__flags(skel->progs.xdp_dummy_dm) & BPF_F_XDP_HAS_FRAGS,
++		  0, "frags not in program flags");
++
+ 	dm_fd_frags = bpf_program__fd(skel->progs.xdp_dummy_dm_frags);
+ 	map_fd = bpf_map__fd(skel->maps.dm_ports);
+ 	err = bpf_prog_get_info_by_fd(dm_fd_frags, &info, &len);
 -- 
 2.55.0
 
