@@ -1,112 +1,198 @@
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71D03477980
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 17:41:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B46442FCA3
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 17:48:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788198095; cv=none; b=S2jYJj8fnkgUFxqK9kAl5R3hEuvLSyrPMc7hZ9Re3OiiULzgk6eUa+TCUa+1kJNy2m/5sZC4APU6C3FWYfptmGXLp+TN5oNO74YI9KQHCtw2my8CgZKajZg55jWTRPFbLm21jsthxqgcOvVXJzlUwI2Hhnkp7F0Ko6iCB86siRo=
+	t=1788198539; cv=none; b=XlXJG2lFb5VqtDsfg0HBPMdEXo8eEuHpmAg+CQgHGa7GwIvCvyjuZrB4GEh6cMFYpQ+w+XekBBUkcvVFs0XQJd37NMxsjU+yjg/DK887V3iQ5UT5omHNsOgw5kdrTn80R80ECoIY3tMukIwYPDDD5RueGpb2qttPLjWEqt49yc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788198095; c=relaxed/simple;
-	bh=C/Rz9qm1AS7WcIJwDp7Kv3cwkoR6F2w0jDkOHOcFIFI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pGtb8a3bgLKDRPtbEE/o6/xbmyOwO4wyR/mFXSX8QGnnTlVmryd7tYZHi4gkwCJcQh0QqICVQSOtO2arUO8MFzhv/7lvqAdiTv2vbM1IrJCunqYqRTMV5M8hSuy4cBokmiL5oczKgSA81E5ntjUFAzFexPg2sWIgKeJ13DBibWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H/3gY3aJ; arc=none smtp.client-ip=209.85.219.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788198539; c=relaxed/simple;
+	bh=tcb54Qnt2GyKPrrk5QtRoEjYtXqxoV0Zul100yL4uUU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=c20f/SenEh5qnIqlYnxC/tr+N+MjV+2A8CzhPQjCgfTvDzXNT276jt996sDTEAXL+MDn8r7pcHhwXCL+aZuS1Wy90Esc31l7g+5t/G09P9vpPi/SxkByCY8MyRmRqq5yDWh8u11OoL3LezCTZ3eCCkUYLqTpCtG7vcUe5ay9Rgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=qeY5HF7s; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H/3gY3aJ"
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-90c4e297a01so33156916d6.3
-        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 10:41:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="qeY5HF7s"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-38a0c7e841fso51125a91.2
+        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 10:48:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788198092; x=1788802892; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Gve2pugT7l3BMYWVMzhugMxNXpv/Y4BKioJOYqJB6Is=;
-        b=H/3gY3aJZjb/853Y0ygGssCvXexBNV7ijQaHpGAfUzoEZkuCUQHwyTuqBigVIvUjz3
-         jU5zRsdLKMa5OpLORvfvdNuUFCuLG55mu2A2/YEugk0Jf7UCtqvE7IRNH6O5sLLlfIrn
-         P+nVPPvGujofLsCvBLJd4YJy1BES4qnyjspmgsOrVhO25rrG9ThK2wxo/6pa+nHc3AWc
-         4+U8AyqJ0AcYf8Q/+P33Fa8yHo8EAU3Fsw0WiR65EHWE5NNysHzIz/LpRIm/9j8zQyzF
-         9n7Y/wJibiwY5oGUPAR4EsAeJgWf4gpfIkhiHnJFsRyHcATed2A1N8Loq5OsjVtshyuk
-         /0vA==
+        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1788198536; x=1788803336; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=vU3022IZTIrb8u3t2YTCnTCe+NuA1eT/LdRMgAStZmk=;
+        b=qeY5HF7sPN44DqHyjo9hb6XrePRfPGhYb9ab9rlbWj4ntt1aLxZZ4Iczm7WVQoO7LL
+         ZRNQk247JwVLFjzHEEZMRleHvL7l1CWF/MrgYn8I6mbSd8TO4r1ul4zO+OyL3NZECVXa
+         W8FZSwd7CXLr1sgLzW10sit2rVI2E8fdmNgMOn0Ia0Ow67LNZnHY57qQE6A77TI4lErs
+         gNhJ9AivKD4QHER91YRkPyqE/ZBNXPageMaOMWSTZ47wFXZvipCZX5Hmub4eFJjNQ2hB
+         S7aYnKIGYRBnCNHI6s9x7oJjS5cA7R1haR7fOsTH5cb1IhAijKFij4YJefl+pRr1K3Nv
+         T9kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788198092; x=1788802892;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Gve2pugT7l3BMYWVMzhugMxNXpv/Y4BKioJOYqJB6Is=;
-        b=OezAsJPRa9VMWzv6b14A0yiohwX/anaIVfuYyGMV0p3te5a2iBjSxkYeTksXk5NroT
-         OyWShHziOVCOuqlkC6tDt8cQ5AyaTBjcB9fUrAGlTnah6s0tLEu6J8FWt5l1nMJTZ1Mi
-         04ISByvyDXiOgix3OJAW/gKJj7XltPMj7/04XoS7KRbWOIG/gwa5bZxkl4TsodEc+wzG
-         zDcA5d9Ck/jCIfJvTaCVyIQqxr8Gip+7T8xzoEX+r5tF2xE3AxFT0iBcs7S1LX973/hB
-         h9+UwmAQ4J5ghqnAd6OaoDLMvMCoTsy/pbi4C2MiXUKVoijD0e+iXU8pKZhi/p9iOKA1
-         hZ1Q==
-X-Forwarded-Encrypted: i=1; AHgh+RrSiCjmeHpzyOHdTxhLahCV6fPwRlXrTBc60HHZPVSejqyNTsyk1vLMQTTXTd993eV4PAo=@vger.kernel.org
-X-Gm-Message-State: AFuF++n9MhkLyrbVizju5+Y1ygZXuP0042Jd/U7wqrMYM5QWIlXEzLRF
-	myXQ4JJBjxEjtvH8xw5vu4a3UQNeyIwDi3qNkLv/+7B6UHasbi99SFLu
-X-Gm-Gg: AR+sD12ydkMHQzpdMN4VLkbwob0RuCASE0u4s3HXpJwO3gN5WhS9Wclj9t3J4oQnD5Q
-	D10n724scImX5Am+lmvYqTZ2hgyplzeoavBKaLr5TJWRinxBrxa8p8YkeAdvHbgvPo98c2tceu8
-	XY1qIpA1p6AeLgMTB8Upc/XcaVx4U+NL017KPDSXt5YvoHKNrh0YcnFM3xeBRZIUl0n0tbjIsL7
-	9K6eReRDOI82qwvXgemhjRjuBSwZsHo/aEtzEVcbD83iszt9+YPEAcr2/VoD3UEKCaqFeY+6da0
-	SRm+MwU8+IwIOpUx7XHnY4qztn0XSefZFWoXWf9Q+sM107RHTOHVFvdVec0VNZRCDwqgt7XHJus
-	21WGkRk/TQoOMz55WpeDhvaIy/JbKb6fSbW8cspT3U7wE9TA7/I/lwccFfIJbV6Ms1xvJDzZGaU
-	UHbtoEGFiPI89KQEaHXaCwLtswT5vkP2LRIwNlbTb5NjOBe05fOzO5fPTmDj5VHUOZ4q3LQi5k/
-	zvJLjm0hgRrFnNEkz9Yg/A/ggUFZoamdg==
-X-Received: by 2002:a05:620a:27c7:b0:930:a635:a782 with SMTP id af79cd13be357-9391380cd2dmr3621041185a.11.1788198092300;
-        Mon, 31 Aug 2026 10:41:32 -0700 (PDT)
-Received: from zenbox ([2600:1700:18fb:6011:f6fc:b424:b1bb:6ff0])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-90ce444e76asm89697106d6.2.2026.08.31.10.41.30
+        d=1e100.net; s=20251104; t=1788198536; x=1788803336;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=vU3022IZTIrb8u3t2YTCnTCe+NuA1eT/LdRMgAStZmk=;
+        b=l0EAyx9K4DIwAPu8w1CaMNl9HWqje2ib9j5I2dKEcWuZRiI1ZQGyNrj9rffEIcDDYD
+         aeAnaRhqdzWFIJjo1gjwBbqeSfGK0M9wYvHmBFVrEbgOniyxxvR47ADVs5jx/brBx7Yn
+         AJb8uPgKEhLyD45tLQnyF4qD5QF8YeAebfSJzbYf0kJ7/5a01sHihDkVMAPLyTWjoc0N
+         wbmVsCw5JD01Q23Ao3W1utQ7YcV0gsZWRKpeYrZumIcqYmy79J3QrEHEN7GjResyXXHc
+         ds5rqa48wdqDmyQlt045u88toZQpnymYm1fviQ5IZ5lh/Ut+H1OYKDvWwsiZkxH2510k
+         i14Q==
+X-Forwarded-Encrypted: i=1; AKwUvBydkzZ66fPlMQeENSlXM+4DRchvOdPAj0AdLLpeXu0u9vJhd9ZlG5MLgKr4+gPWaRo1498=@vger.kernel.org
+X-Gm-Message-State: AFuF++kI46BUTZJHHp2iOtF+5DeHNXj2sMPkkKNtl//Kh+M/GOktrLMm
+	nO5uSfWuLwTO/2Lw+JLtMVJ3ez3IpJW4llLZ80044ORTOn6x+82FySSJv6e4wWN5yp8=
+X-Gm-Gg: AYBFou2QzP7GjDpVwp2BvpVX315lUUtd2M6DjFCKS1fnP/ru6gPyBTPGxr+rpLrGuUx
+	ra2dP1Zvm9OwqNIy0eOoLEeYg6Jakb2Qg0ST150lyp+hTOJWnRNxGgv96aepb6Qwd4RdJ8t2EA5
+	Y6PWh8gve+F7pYgBSBpu+plBiK/Ooq6aJE4EmwGSxmfCcp0/sYN99ipNtvUcbEMKFf0X/d7O7vy
+	4XTryRik5hoi0u37LMKXqAkP3WT45nkLuGKx8qBYdzcLK5V6nq8nM2JkzKEP5xvT6TAPKghklVu
+	6Na61ouexBCCr7V55tyFB6QaevwiFgiJKw/4sTwGTY58ru4SianVtTP1UEPmCVywE4RokjdmF/L
+	RdzTci16kHTJLLMK5gD4X6jvrr0yUMq61d6qv9E5MexaXVarmPZMngJ+zrT3p8abJgK3MIrsVFq
+	v2jfCUJDgiZWWpAbDqhaz/yFhuK3qbhQ8e8eJapN3zAMGOrGaBf/yV
+X-Received: by 2002:a17:90b:6c7:b0:396:6344:3b63 with SMTP id 98e67ed59e1d1-396d0e25905mr43315795a91.2.1788198536190;
+        Mon, 31 Aug 2026 10:48:56 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:54::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3990c40d0c9sm731964a91.7.2026.08.31.10.48.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2026 10:41:31 -0700 (PDT)
-Date: Mon, 31 Aug 2026 13:41:29 -0400
-From: Justin Suess <utilityemal77@gmail.com>
-To: Casey Schaufler <casey@schaufler-ca.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	kpsingh@kernel.org, paul@paul-moore.com, mic@digikod.net, viro@zeniv.linux.org.uk, 
-	brauner@kernel.org, kees@kernel.org, gnoack@google.com, jack@suse.cz, 
-	song@kernel.org, yonghong.song@linux.dev, martin.lau@linux.dev, m@maowtm.org, 
-	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 01/15] lsm: Add the LSM policy object lifetime hooks
-Message-ID: <apW7yi06EutRfCBO@zenbox>
-References: <20260831145858.3869191-1-utilityemal77@gmail.com>
- <20260831145858.3869191-2-utilityemal77@gmail.com>
- <fb9ee5e1-dfc1-460a-85db-1f31f2f6ed17@schaufler-ca.com>
+        Mon, 31 Aug 2026 10:48:55 -0700 (PDT)
+From: Joe Damato <joe@dama.to>
+To: linux-kernel@vger.kernel.org,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: Joe Damato <joe@dama.to>,
+	stable@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	linux-mm@kvack.org,
+	bpf@vger.kernel.org
+Subject: [PATCH v2] mm: memcontrol: raise MEMCG_MAX for charges that fail without reclaiming
+Date: Mon, 31 Aug 2026 10:48:35 -0700
+Message-ID: <20260831174836.3102406-1-joe@dama.to>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fb9ee5e1-dfc1-460a-85db-1f31f2f6ed17@schaufler-ca.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Aug 31, 2026 at 10:17:43AM -0700, Casey Schaufler wrote:
-> On 8/31/2026 7:58 AM, Justin Suess wrote:
-> > Add struct lsm_policy_object, the identity an LSM embeds in a policy
-> > object it shares with BPF programs, and the three hooks managing such
-> > an object's lifetime:
-> 
-> I am not seeing the cover letter for this patch set. Are you sending
-> it to the LSM list? Without that I do not have sufficient context to
-> comment on the patches (1,2,3 and 8) that you have sent.
-> 
-> What I do see has me quite concerned. It's possible the cover letter
-> will addresses my issues. If nothing else, I assume it describes what
-> a "policy object" is, and what it's for.
->
-Indeed it did get sent to linux-security-module, it's up on lore as
-such.
+Charges that exceed memory.max and return through the nomem label can
+raise no event and simply return -ENOMEM.
 
-https://lore.kernel.org/linux-security-module/20260831145858.3869191-1-utilityemal77@gmail.com/
+A non-blocking charge can hit the limit, get rejected, but is not
+visible in memory.events.
 
-Possibly got caught in your spam filter?
+This was noticed in a production setting where bpf_mem_alloc() attempted
+to refill its per-cpu freelists, which triggered a non-blocking charge
+while at the limit.
 
-Indeed it does provide important context about lsm_policy_object.
+Commit d6e103a757fa ("mm: memcontrol: do not miss MEMCG_MAX events for
+enforced allocations") added raised_max_event to cover charges that are
+force charged without ever reaching reclaim, but charges that are
+rejected outright were left out. Getting an allocation failure without
+the corresponding MEMCG_MAX event is unexpected and makes debugging and
+monitoring harder.
 
-Thanks,
-Justin
+Raise the event on the way out for rejected charges as well, by routing
+the -ENOMEM return through the same exit path that already covers forced
+charges. The existing behavior of raising a MEMCG_MAX event on every
+charge/reclaim/retry iteration is left unchanged.
+
+Tested with a module that performs accounted GFP_NOWAIT page allocations
+from a task in a cgroup at its memory.max, and measures the resulting
+memory.events:max delta. Without this patch the rejected charges raise
+no event at all; with it the delta matches the number of rejected charges
+exactly. A GFP_KERNEL|__GFP_NORETRY control, which reaches reclaim, raises
+the same two events per failed charge before and after, confirming the
+existing charge/reclaim/retry accounting is unchanged.
+
+Fixes: d6e103a757fa ("mm: memcontrol: do not miss MEMCG_MAX events for enforced allocations")
+Cc: stable@vger.kernel.org
+Suggested-by: Shakeel Butt <shakeel.butt@linux.dev>
+Signed-off-by: Joe Damato <joe@dama.to>
+---
+v2:
+  - v1 raised MEMCG_MAX once, as soon as the charge was known not to fit, which
+    collapsed the existing per-iteration events raised while a charge loops
+    through reclaim and retry. Instead leave that event where it is and route
+    the -ENOMEM return through the same exit path that already covers forced
+    charges, so only the rejected-charge case changes, as suggested by Shakeel.
+  - Add Fixes tag and CC stable, as suggested by Shakeel.
+
+v1: https://lore.kernel.org/cgroups/20260827233119.411152-1-joe@dama.to/
+
+ mm/memcontrol.c | 28 ++++++++++++++++------------
+ 1 file changed, 16 insertions(+), 12 deletions(-)
+
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 1271d390b617..158b0562e8df 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -2656,10 +2656,11 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+ 	bool raised_max_event = false;
+ 	unsigned long pflags;
+ 	bool allow_spinning = gfpflags_allow_spinning(gfp_mask);
++	int ret = 0;
+ 
+ retry:
+ 	if (consume_stock(memcg, nr_pages))
+-		return 0;
++		return ret;
+ 
+ 	if (!allow_spinning)
+ 		/* Avoid the refill and flush of the older stock */
+@@ -2770,16 +2771,11 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+ 	 * put the burden of reclaim on regular allocation requests
+ 	 * and let these go through as privileged allocations.
+ 	 */
+-	if (!(gfp_mask & (__GFP_NOFAIL | __GFP_HIGH)))
+-		return -ENOMEM;
++	if (!(gfp_mask & (__GFP_NOFAIL | __GFP_HIGH))) {
++		ret = -ENOMEM;
++		goto out;
++	}
+ force:
+-	/*
+-	 * If the allocation has to be enforced, don't forget to raise
+-	 * a MEMCG_MAX event.
+-	 */
+-	if (!raised_max_event)
+-		__memcg_memory_event(mem_over_limit, MEMCG_MAX, allow_spinning);
+-
+ 	/*
+ 	 * The allocation either can't fail or will lead to more memory
+ 	 * being freed very soon.  Allow memory usage go over the limit
+@@ -2789,7 +2785,15 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+ 	if (do_memsw_account())
+ 		page_counter_charge(&memcg->memsw, nr_pages);
+ 
+-	return 0;
++out:
++	/*
++	 * Don't forget to raise a MEMCG_MAX event for forced or rejected
++	 * requests.
++	 */
++	if (!raised_max_event)
++		__memcg_memory_event(mem_over_limit, MEMCG_MAX, allow_spinning);
++
++	return ret;
+ 
+ done_restock:
+ 	if (batch > nr_pages)
+@@ -2848,7 +2852,7 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
+ 	    !(current->flags & PF_MEMALLOC) &&
+ 	    gfpflags_allow_blocking(gfp_mask))
+ 		__mem_cgroup_handle_over_high(gfp_mask);
+-	return 0;
++	return ret;
+ }
+ 
+ static inline int try_charge(struct mem_cgroup *memcg, gfp_t gfp_mask,
+-- 
+2.53.0-Meta
 
