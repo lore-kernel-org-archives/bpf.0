@@ -1,65 +1,65 @@
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B83D4A8407
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 15:00:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB994A8438
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 15:00:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788188436; cv=none; b=q3SV5fWoSS/5zZC/Tsnv7nrs+XtcGLeHeiikmY+BV/cTMGs7nhf6dH+eKBpId9TLywU4Tc5kstwxJ/XVOkoOAJws1BbVk0E0sySzxwtegERdEcRyknQAHc3lFnktVsqQBfFTSXPfiFlJNsaXAJVErgAxQumXwofxKzlM1oFQNJs=
+	t=1788188441; cv=none; b=oDkrx6RZ9CvF7KkW0JNMCVf/Pf5M63tL4hRl33fo8URW9hAY9rxfEAEDc/GYjJLnwcfGVV+m6qTVrJe3OUZX6Z3Zrv5HdF3It6QVWkeDT4X9ZMXfst8tNIxiV8vyT9cNGenZ6GflETdvaEdHF9T8aWibMlzrp3d4XWM3hcmW+qU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788188436; c=relaxed/simple;
-	bh=ggkEpSln1XdPPecX8WAdnU8H+3V7doqITlU0A4IOYnk=;
+	s=arc-20240116; t=1788188441; c=relaxed/simple;
+	bh=9K/6PJaguZoiDf+6wZGGUbNkFvvbD+lozD8PmC2yt9M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JUA6gqcpaoAMP9QiNBcN/X2HZsCAifYTNTcepoijIWJsbTfrqj+2Uy3lCIm0Z852K/5WnSB0teAXRuTHdPRlVaN8jbD9iz77l+62WkbD++ZQaOxpuQB8crEkeMz8qXTh7YNVKyZhuyXQU7buyyPr/jASLDJDXhj/fsCOMs5UPJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EAgEYSjc; arc=none smtp.client-ip=209.85.128.170
+	 MIME-Version:Content-Type; b=giEY7Hl32gCP/uoLMWa0hsuEdBYxJdwL+g7XhSkWecvY7BBBFv4R32E51L7Wh24m7JWfV8F7urmT6eIioTMEmDSpueX2aOMS5K4xYBtVkZhhPtpTdH9w/ftuvSnRAgvx8MtyyniRRxWooVSPnhq5fstCIMZwba9v69aG70jN5ug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RqEu4qbu; arc=none smtp.client-ip=74.125.224.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EAgEYSjc"
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-8623b1e7cb2so15378747b3.1
-        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 08:00:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RqEu4qbu"
+Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-66c82b32121so4081006d50.1
+        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 08:00:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788188434; x=1788793234; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788188439; x=1788793239; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=37FOvEpP7fLV8sjizV5fXkE6iW+/lc3VdHmJ4Pl4zDM=;
-        b=EAgEYSjc1NkxvfltXvWKtiJ0cbxgAVEkB1HPcve4EKuDPHykku/eq7I77n6Rk8yP5X
-         Zvtz/k7znuEkgaxoiPM1bNPolUV0aAGlm/rSDJaDOTVDToU4A8IiLzeVhFl1VRtXKWv4
-         yIWNBq+eQ+GtgqUJsrGbQ9UFa2QW44rQSmWm2Xzf1eh3P5/yJ9geAq3QJN89G04+VbT5
-         lF9XCboLSCNN+kBi0KKhSkiHmhTRrkwHTZ1YD43JCsGTsg72+F0GNBertKQVrxlrtAOV
-         CpKfIAY404F+gRgY+aWDGhrBvYWHFldnjAC0iDsnDasD7yVmgj64okYQm/wYJVMlPm5f
-         2FjA==
+        bh=HDGtPCx5xovkSN4f72iXHLyepfibwkWfrygjFuBGvns=;
+        b=RqEu4qbuUxIWQUo6AUoEiJHxOsfHVpT0UJaRiltMiLwaPIXp+I2B9ODBSxep0nZMXq
+         Onh0evcehQ59jb8+vmhkP4tq+1OQte0e8V67QDnhP6pE6DIZJMUB76+XF+EQF6FBSjKO
+         uF8zYBSQLEYmXsh4v4N6tFnMcw3AlT9tc4isdMyyuX4Oq4o4Lt3ApLsj0eKMW1yvDXWG
+         N33L9VulW0YdVO2FyVx4xzbJRb5clMAocVLqpnxOepzw75ohF0C4biWJ7RX+mRB2Oadc
+         EvuhcrU3WiR1kxw0tRPmGSm5z6ytdMNYTtwYfq6v51+kSM6/w9cr6tblQrFCxwaJauJV
+         7uaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788188434; x=1788793234;
+        d=1e100.net; s=20251104; t=1788188439; x=1788793239;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=37FOvEpP7fLV8sjizV5fXkE6iW+/lc3VdHmJ4Pl4zDM=;
-        b=MHNfMhbJGGQrVzMid9uMQd/W+Gj2Q55ivDoADz+PWYm0nMONeA/l/nvGGQKbcNoNoH
-         pUwCU0UhqrxI4nBmABo9QiNNZ2RSNxFU089sVLBDhOIO/A0TEGDdjZ4ujG7h157M5tRV
-         /fAZZdBnEJDpI8eFXfkgcq/HK0aff3oefW9dAVe70sIqZGoqdOXp1tVnQC8eisLA+t6e
-         2LFicrN1ipSSgWFXPi2dhaXDXuj36hGEx+JwFHNzL3RRC4Nni55JMPQzRr5HqmnPGl5c
-         20WdC+jJE2d8QbWj4PhB1oXVxX7a08UfJlLpW8U5Z3v86B2cPPROltUW1Jue+HT0TQhB
-         31MQ==
-X-Forwarded-Encrypted: i=1; AKwUvBycCiSvcWntgNFM8gC9preP9uis/hoS7Pz5DdD21VhN9QiYZNQ98q7+mZjJNwweDtWtIbw=@vger.kernel.org
-X-Gm-Message-State: AFuF++lkK5XNlFmWBiygxyZXLQd6pkr9MLisyLK82Iqmh6M2U+dztC1s
-	uod6GS70r+RePuEQvJCjzZ6FkGIPxjJCfitCUdVSJes1JFURZ60Y2fAF
-X-Gm-Gg: AYBFou3aQ0XB9iTZXAklQJ/rMzM4zqJqDw5UslWF7tK+qWAcIcG8ujhNqjoB8M+Nivo
-	FqQbNRDgVB+4+tk4ZRrg13qCJ+NvFxSIl0wh4Es8hkPGsotcjRhMn++foJzA2YPt9c3vw1Q/04E
-	QOafvPpuxltfnPUk31Uv7N/2YnwZozS4LcoN3KaXN2FVKcIBhlCe0GRoJbq4gV1R3RHo3O2+yNV
-	gNkmoJrDU2WeE4mUFVw9NANC6C8jT0MkfFfEA2vPN5ItdzBUBiphYY6JzNK4Gw7HxVtsLyRPbW7
-	NWqHYK4f1Vh508ncRzEtwQFCzMlOFPW/3u+kcg0Qt3b8FDxlVm8/uhdQYsPzkTTHnD1qgVvtWE0
-	+Nc3NSB8JjFrQoRNCa7wngrKrLCsheciBCvTkrjTvE3a2BbY3IpqDhuu+AMrWoaovCX8Wq9+v7v
-	7QgLKff3mso2SN7jRqDTshNmRCUohBu7Kfh3/cNkV6I62ZcLkkXcrplns1RKE7tTm9Uy/VLkY54
-	5B9oQ0TJIluRwHFAxl17PE=
-X-Received: by 2002:a05:690c:6311:b0:862:cd8e:78fb with SMTP id 00721157ae682-862cd8e9648mr42595017b3.2.1788188433555;
-        Mon, 31 Aug 2026 08:00:33 -0700 (PDT)
+        bh=HDGtPCx5xovkSN4f72iXHLyepfibwkWfrygjFuBGvns=;
+        b=WXulBaAIfLQLmeKf4JojNeg5HadcjMGyc3s1Au3787zzzIoZSBsJA1bOHO0zzZw79e
+         zqTxmlKIQHQyyqmhA3QXhRmLm8r00Tu3fQPV/Ixr+d0llzT0xDT2f6CRF2eNx9826wQM
+         GyHgsfa83Udj+jArRKyOSL8hKL2/IZLOBLA5Hw9459ZSwI8RCy5Sgce6+B6LJwQDZQaZ
+         uy6Uy98uvuSWAzAkoNAQYwQGjY+3WLVuQj/ZQVY3M+oUqdovLWXzbN0VI8WNCNoimrSL
+         oWOJwv6oApZo2doCZiNY5QnCVmv7Az/3bNhgqJX1hAd5B6C3AHwHRUQThXd85X4SHXQc
+         H3zg==
+X-Forwarded-Encrypted: i=1; AKwUvBzu1aZGWgOLDYGEdIZ2GcwwmmrVbrEpQ6KMf4FfYpZZu2WVwcFGqqMP8RBiYeoe+bRGOL4=@vger.kernel.org
+X-Gm-Message-State: AFuF++nsRz/Ocx0tYFPxjIth03gpPQcXeNJPlPgG8jew0HOxr22RM0ga
+	iP7sNisp78d2NTMSYU+ar2WeUTmIf20QDMoEdYEwjpF+gLVt3gbgOAln
+X-Gm-Gg: AYBFou2e4kUzxx855jMdVYhDRGzrL7/kp0zEpo/20Zy8+dE8IJgR7xYrGqiAFIK3clm
+	0lqzaGYiqnc27cXwfkkqDhjKqglnTboCiiBJpwI/TeppIL5C7nihdtSAjEpB2kilFjEJV5rk5Tv
+	3BBnAamQUIdMZAQnirtAb5nWnNQR3kFXOx5ABIY7wDinxyheDmMm6gi1p/VqCj4HwBn5hKRR8Uq
+	HJk+j0ERMMAh/9B/fxPS8tOghSP5VqVJqAajYZVQ+hFXDwvg3+94+PiuBpTXS8P/LZiC7Jo0vxq
+	/TOXU0bqA+Wt8JSUWMYYCY14VJutxoJTexMDPYQbSuoIOccxgpmH8+uRY3Y2hTCs57nbfxhmQOb
+	exiDr2UpnXsNu7/d2+duKnhZy7Gi6hKrUT8vZ5Iu4eP/RMXxeXGl5ICgf09N5LVG3ikyLmr70nu
+	tkFrex6gux72yAg6dfEAWOl5EMhDOryUQaoMdIF2gsLwLFlkAvsHO2n7czLlk1qbO8NvKJtjqN0
+	RClC/PvWTTbD2jvp4sOhrw=
+X-Received: by 2002:a53:d045:0:20b0:66c:c683:5bdb with SMTP id 956f58d0204a3-66e4c78b3b5mr6500975d50.49.1788188438576;
+        Mon, 31 Aug 2026 08:00:38 -0700 (PDT)
 Received: from zenbox ([2600:1700:18fb:6011:f6fc:b424:b1bb:6ff0])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-85e58666e15sm53903827b3.0.2026.08.31.08.00.32
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-85e58666e15sm53903827b3.0.2026.08.31.08.00.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2026 08:00:33 -0700 (PDT)
+        Mon, 31 Aug 2026 08:00:38 -0700 (PDT)
 From: Justin Suess <utilityemal77@gmail.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -80,9 +80,9 @@ Cc: gnoack@google.com,
 	linux-security-module@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Justin Suess <utilityemal77@gmail.com>
-Subject: [PATCH v2 11/15] landlock: Factor the credential restriction out of landlock_restrict_self()
-Date: Mon, 31 Aug 2026 10:58:53 -0400
-Message-ID: <20260831145858.3869191-12-utilityemal77@gmail.com>
+Subject: [PATCH v2 12/15] landlock: Free rulesets after an RCU grace period
+Date: Mon, 31 Aug 2026 10:58:54 -0400
+Message-ID: <20260831145858.3869191-13-utilityemal77@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260831145858.3869191-1-utilityemal77@gmail.com>
 References: <20260831145858.3869191-1-utilityemal77@gmail.com>
@@ -95,400 +95,162 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Split the core of landlock_restrict_self() into two credential
-helpers:
+Defer every ruleset free behind an RCU grace period, and keep the
+fields that stay readable while a free is pending out of the union
+that overlays the deferred-free work item.
 
-  landlock_prepare_restriction() - translate the
-      landlock_restrict_self(2) flags, merge the ruleset with the
-      credentials' domain, and configure the new domain's log state,
-      producing a struct landlock_restriction: the complete new state
-      that the enforcement gives to a credential.
+The policy_object_get LSM hook lets a caller holding only an
+RCU-protected pointer to a ruleset (e.g. loaded from a BPF map kptr
+field under rcu_read_lock()) race a refcount_inc_not_zero() against
+the drop of the last reference.  For that to be sound, the ruleset's
+memory, and its reference count in particular, must remain valid
+until every RCU reader that could still observe the pointer is done:
+free the ruleset through queue_rcu_work(), which waits for a grace
+period before running the free work.
 
-  landlock_apply_restriction() - enforce a computed restriction on
-      credentials exclusively owned by the caller.  This step cannot
-      fail, so a caller may run it past its last point of failure.
+The work item is overlaid with the fields that no one may touch once
+@usage reaches zero: @lock, @quiet_masks and @handled_masks.  @usage
+itself stays outside the union so a racing reader observes zero
+instead of the work item's bytes, and the tracing fields @version and
+@id stay outside too because the landlock_free_ruleset trace event
+reads them when the queued work finally runs.
 
-The merge runs under @ruleset->lock and the landlock_create_domain
-trace event is emitted before the lock is released, exactly as in the
-syscall before this change: the event still observes the ruleset
-snapshot that was merged, and it still fires before any thread-sync
-wait.  Committing the hierarchy out of LANDLOCK_LOG_UNCOMMITTED moves
-along with it, so every domain computed by
-landlock_prepare_restriction() has its create/free trace events
-balanced, whether or not it ends up enforced.
-
-The syscall behaves exactly as before: prepare and apply run back to
-back on the prepared credentials.  The no_new_privs/CAP_SYS_ADMIN
-precheck, the flag mask check, the TSYNC handling, and the
-landlock_enforce_domain trace event are syscall policy and stay in
-place.
-
-The point of the split is that application is decoupled from
-computation: a following commit restricts an execution from a BPF
-kfunc by staging a prepared restriction in the binprm credentials and
-applying it at the exec point of no return, with the flag
-translation, domain merge, and log configuration in one shared place.
-
-The restriction records the flags it was computed with instead of
-translating them into per-flag fields: consumers read the staged
-flags at application time, so a future flag that must be honored at
-enforcement travels with the restriction automatically, with no
-per-flag plumbing in the callers.
+Since queueing the work never sleeps, the might_sleep() annotation
+is dropped: a following commit releases ruleset references from
+BPF object destructors that cannot sleep.
 
 Cc: Mickaël Salaün <mic@digikod.net>
 Signed-off-by: Justin Suess <utilityemal77@gmail.com>
 ---
- security/landlock/cred.c     | 132 +++++++++++++++++++++++++++++++++++
- security/landlock/cred.h     |  31 ++++++++
- security/landlock/syscalls.c |  96 ++++---------------------
- 3 files changed, 178 insertions(+), 81 deletions(-)
+ security/landlock/ruleset.c | 24 ++++++++++++++---
+ security/landlock/ruleset.h | 54 ++++++++++++++++++++++++-------------
+ 2 files changed, 57 insertions(+), 21 deletions(-)
 
-diff --git a/security/landlock/cred.c b/security/landlock/cred.c
-index 03449c26247e..f02706f12c7d 100644
---- a/security/landlock/cred.c
-+++ b/security/landlock/cred.c
-@@ -8,14 +8,146 @@
-  */
- 
- #include <linux/binfmts.h>
-+#include <linux/bits.h>
- #include <linux/cred.h>
-+#include <linux/err.h>
-+#include <linux/errno.h>
- #include <linux/lsm_hooks.h>
-+#include <linux/mutex.h>
-+#include <uapi/linux/landlock.h>
- 
- #include "common.h"
- #include "cred.h"
-+#include "domain.h"
- #include "ruleset.h"
- #include "setup.h"
- 
-+#include <trace/events/landlock.h>
-+
-+/**
-+ * landlock_prepare_restriction - Compute a credential restriction
-+ *
-+ * @llcred: Landlock credentials to restrict: provides the parent domain and
-+ *          the previous log configuration.  Not modified.
-+ * @ruleset: Ruleset to enforce, or NULL for a log-configuration-only change.
-+ * @flags: landlock_restrict_self(2) flags.  The caller is responsible for
-+ *         validating them against the set of flags it supports.
-+ * @restriction: Computed restriction.  On success, holds a reference on
-+ *               @restriction->domain (if any), which
-+ *               landlock_apply_restriction() transfers to the restricted
-+ *               credentials.
-+ *
-+ * The restriction builds on @llcred's current state: the caller must apply
-+ * it to (or stage it for) these same credentials.
-+ *
-+ * Return: 0 on success, -errno on failure.
-+ */
-+int landlock_prepare_restriction(
-+	const struct landlock_cred_security *const llcred,
-+	struct landlock_ruleset *const ruleset, const u32 flags,
-+	struct landlock_restriction *const restriction)
-+{
-+	struct landlock_domain *new_dom;
-+#ifdef CONFIG_SECURITY_LANDLOCK_LOG
-+	/* Translates "off" and "on" flags to booleans. */
-+	const bool log_same_exec =
-+		!(flags & LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF);
-+	const bool log_new_exec =
-+		!!(flags & LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON);
-+	const bool prev_log_subdomains = !llcred->log_subdomains_off;
-+#endif /* CONFIG_SECURITY_LANDLOCK_LOG */
-+
-+	*restriction = (struct landlock_restriction){
-+		.flags = flags,
-+	};
-+
-+	if (!ruleset)
-+		return 0;
-+
-+	mutex_lock(&ruleset->lock);
-+	new_dom = landlock_merge_ruleset(llcred->domain, ruleset);
-+	if (IS_ERR(new_dom)) {
-+		mutex_unlock(&ruleset->lock);
-+		return PTR_ERR(new_dom);
-+	}
-+	/*
-+	 * Emits the domain-creation event while @ruleset->lock is still
-+	 * held, right after the merge, so an eBPF program attached to
-+	 * the tracepoint reads the exact ruleset that was merged into
-+	 * the domain: a consistent snapshot that a concurrent
-+	 * landlock_add_rule() (which holds the same lock) cannot
-+	 * modify.
-+	 *
-+	 * This must not be delayed past the return of this function.
-+	 * Holding @ruleset->lock across
-+	 * landlock_restrict_sibling_threads() would hang: a sibling
-+	 * thread blocked in landlock_add_rule() on the same
-+	 * @ruleset->lock cannot run the task_work that thread-sync
-+	 * waits for (the lock wait is uninterruptible).  Emitting here
-+	 * keeps the lock off the thread-sync path.
-+	 *
-+	 * The trade-off is that the event fires for a domain that may
-+	 * never be enforced: a later (rare) thread-sync failure or an
-+	 * aborted execution drops it.  Those paths free the domain,
-+	 * which emits the matching free_domain event so the create/free
-+	 * pair stays balanced.
-+	 */
-+	trace_landlock_create_domain(new_dom, ruleset);
-+	mutex_unlock(&ruleset->lock);
-+
-+#ifdef CONFIG_SECURITY_LANDLOCK_LOG
-+	new_dom->hierarchy->log_same_exec = log_same_exec;
-+	new_dom->hierarchy->log_new_exec = log_new_exec;
-+	/*
-+	 * The creation event fired above, so move the domain out of
-+	 * LANDLOCK_LOG_UNCOMMITTED: its free_domain event must fire
-+	 * too, even if the domain is dropped before being enforced.
-+	 * Audit logging may still be disabled (DISABLED); tracing
-+	 * observes it anyway.
-+	 */
-+	if ((!log_same_exec && !log_new_exec) || !prev_log_subdomains)
-+		new_dom->hierarchy->log_status = LANDLOCK_LOG_DISABLED;
-+	else
-+		new_dom->hierarchy->log_status = LANDLOCK_LOG_PENDING;
-+#endif /* CONFIG_SECURITY_LANDLOCK_LOG */
-+
-+	restriction->domain = new_dom;
-+	return 0;
-+}
-+
-+/**
-+ * landlock_apply_restriction - Enforce a computed restriction on credentials
-+ *
-+ * @llcred: Landlock credentials to restrict, exclusively owned by the caller
-+ *          (prepared and not yet committed).
-+ * @restriction: Restriction computed by landlock_prepare_restriction()
-+ *               against the same credential state; its domain reference is
-+ *               transferred to @llcred.
-+ *
-+ * Cannot fail, so that a caller may apply a restriction past its last point
-+ * of failure, e.g. an exec point of no return.
-+ */
-+void landlock_apply_restriction(struct landlock_cred_security *const llcred,
-+				struct landlock_restriction *const restriction)
-+{
-+#ifdef CONFIG_SECURITY_LANDLOCK_LOG
-+	if (restriction->flags & LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF)
-+		llcred->log_subdomains_off = true;
-+#endif /* CONFIG_SECURITY_LANDLOCK_LOG */
-+
-+	if (!restriction->domain)
-+		return;
-+
-+	/* Replaces the old domain. */
-+	landlock_put_domain(llcred->domain);
-+	llcred->domain = restriction->domain;
-+	restriction->domain = NULL;
-+
-+#ifdef CONFIG_SECURITY_LANDLOCK_LOG
-+	llcred->domain_exec |= BIT(llcred->domain->num_layers - 1);
-+#endif /* CONFIG_SECURITY_LANDLOCK_LOG */
-+}
-+
- static void hook_cred_transfer(struct cred *const new,
- 			       const struct cred *const old)
- {
-diff --git a/security/landlock/cred.h b/security/landlock/cred.h
-index a5ff9957949a..88fa97fc3bd2 100644
---- a/security/landlock/cred.h
-+++ b/security/landlock/cred.h
-@@ -21,6 +21,29 @@
- #include "ruleset.h"
- #include "setup.h"
- 
-+/**
-+ * struct landlock_restriction - Computed credential restriction
-+ *
-+ * The result of landlock_prepare_restriction(): the new state that
-+ * enforcing a ruleset with a set of landlock_restrict_self(2) flags
-+ * gives to a credential, decoupled from its application.  It is
-+ * enforced with landlock_apply_restriction(), either right away
-+ * (landlock_restrict_self(2)) or after a staging period (restriction
-+ * of an execution).
-+ */
-+struct landlock_restriction {
-+	/**
-+	 * @domain: New domain to enforce, owning a reference.  NULL if the
-+	 * restriction only carries a log configuration change.
-+	 */
-+	struct landlock_domain *domain;
-+	/**
-+	 * @flags: landlock_restrict_self(2) flags the restriction was
-+	 * computed with, validated by the caller.
-+	 */
-+	u32 flags;
-+};
-+
- /**
-  * struct landlock_cred_security - Credential security blob
-  *
-@@ -152,6 +175,14 @@ landlock_get_applicable_subject(const struct cred *const cred,
- 	return NULL;
- }
- 
-+int landlock_prepare_restriction(
-+	const struct landlock_cred_security *const llcred,
-+	struct landlock_ruleset *const ruleset, const u32 flags,
-+	struct landlock_restriction *const restriction);
-+
-+void landlock_apply_restriction(struct landlock_cred_security *const llcred,
-+				struct landlock_restriction *const restriction);
-+
- __init void landlock_add_cred_hooks(void);
- 
- #endif /* _SECURITY_LANDLOCK_CRED_H */
-diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
-index cb294a3582ae..9451376ccf50 100644
---- a/security/landlock/syscalls.c
-+++ b/security/landlock/syscalls.c
-@@ -9,7 +9,6 @@
- 
- #include <asm/current.h>
- #include <linux/anon_inodes.h>
--#include <linux/bitops.h>
- #include <linux/build_bug.h>
- #include <linux/capability.h>
- #include <linux/cleanup.h>
-@@ -31,7 +30,6 @@
+diff --git a/security/landlock/ruleset.c b/security/landlock/ruleset.c
+index 0d07707523cd..00a6b9938fd1 100644
+--- a/security/landlock/ruleset.c
++++ b/security/landlock/ruleset.c
+@@ -21,6 +21,7 @@
+ #include <linux/refcount.h>
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
++#include <linux/workqueue.h>
  #include <uapi/linux/landlock.h>
  
- #include "cred.h"
--#include "domain.h"
- #include "fs.h"
- #include "limits.h"
- #include "net.h"
-@@ -546,10 +544,9 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
- 	struct landlock_ruleset *ruleset __free(landlock_put_ruleset) = NULL;
- 	struct landlock_domain *new_dom = NULL;
- 	struct cred *new_cred;
--	struct landlock_cred_security *new_llcred;
-+	struct landlock_restriction restriction;
- 	bool process_wide;
--	bool __maybe_unused log_same_exec, log_new_exec, log_subdomains,
--		prev_log_subdomains;
-+	int err;
+ #include "access.h"
+@@ -346,9 +347,26 @@ static void free_ruleset(struct landlock_ruleset *const ruleset)
+ 	kfree(ruleset);
+ }
  
- 	if (!is_initialized())
- 		return -EOPNOTSUPP;
-@@ -568,13 +565,6 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
- 	    !ns_capable_noaudit(current_user_ns(), CAP_SYS_ADMIN))
- 		return -EPERM;
- 
--	/* Translates "off" flag to boolean. */
--	log_same_exec = !(flags & LANDLOCK_RESTRICT_SELF_LOG_SAME_EXEC_OFF);
--	/* Translates "on" flag to boolean. */
--	log_new_exec = !!(flags & LANDLOCK_RESTRICT_SELF_LOG_NEW_EXEC_ON);
--	/* Translates "off" flag to boolean. */
--	log_subdomains = !(flags & LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF);
--
- 	/*
- 	 * It is allowed to set LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF with
- 	 * -1 as ruleset_fd, optionally combined with
-@@ -596,85 +586,29 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
- 	if (!new_cred)
- 		return -ENOMEM;
- 
--	new_llcred = landlock_cred(new_cred);
--
--#ifdef CONFIG_SECURITY_LANDLOCK_LOG
--	prev_log_subdomains = !new_llcred->log_subdomains_off;
--	new_llcred->log_subdomains_off = !prev_log_subdomains ||
--					 !log_subdomains;
--#endif /* CONFIG_SECURITY_LANDLOCK_LOG */
--
- 	/*
- 	 * The only case when a ruleset may not be set is if
- 	 * LANDLOCK_RESTRICT_SELF_LOG_SUBDOMAINS_OFF is set (optionally with
- 	 * LANDLOCK_RESTRICT_SELF_TSYNC) and ruleset_fd is -1.  We could
- 	 * optimize this case by not calling commit_creds() if this flag was
- 	 * already set, but it is not worth the complexity.
-+	 *
-+	 * There is no possible race condition while copying and manipulating
-+	 * the current credentials because they are dedicated per thread.
- 	 */
--	if (ruleset) {
--		/*
--		 * There is no possible race condition while copying and
--		 * manipulating the current credentials because they are
--		 * dedicated per thread.
--		 */
--		mutex_lock(&ruleset->lock);
--		new_dom = landlock_merge_ruleset(new_llcred->domain, ruleset);
--		if (IS_ERR(new_dom)) {
--			mutex_unlock(&ruleset->lock);
--			abort_creds(new_cred);
--			return PTR_ERR(new_dom);
--		}
--		/*
--		 * Emits the domain-creation event while @ruleset->lock is still
--		 * held, right after the merge, so an eBPF program attached to
--		 * the tracepoint reads the exact ruleset that was merged into
--		 * the domain: a consistent snapshot that a concurrent
--		 * landlock_add_rule() (which holds the same lock) cannot
--		 * modify.
--		 *
--		 * This must come before the thread-sync wait below.  Holding
--		 * @ruleset->lock across landlock_restrict_sibling_threads()
--		 * would hang: a sibling thread blocked in landlock_add_rule()
--		 * on the same @ruleset->lock cannot run the task_work that
--		 * thread-sync waits for (the lock wait is uninterruptible).
--		 * Emitting here keeps the lock off the thread-sync path.
--		 *
--		 * The trade-off is that the event fires for a domain that a
--		 * later (rare) thread-sync failure aborts.  That path emits the
--		 * matching free_domain event so the create/free pair stays
--		 * balanced (see the thread-sync error path below).
--		 */
--		trace_landlock_create_domain(new_dom, ruleset);
--		mutex_unlock(&ruleset->lock);
--
--#ifdef CONFIG_SECURITY_LANDLOCK_LOG
--		new_dom->hierarchy->log_same_exec = log_same_exec;
--		new_dom->hierarchy->log_new_exec = log_new_exec;
--		/*
--		 * The creation event fired above, so move the domain out of
--		 * LANDLOCK_LOG_UNCOMMITTED: its free_domain event must fire
--		 * too, even if a thread-sync failure aborts it below.  Audit
--		 * logging may still be disabled (DISABLED); tracing observes it
--		 * anyway.
--		 */
--		if ((!log_same_exec && !log_new_exec) || !prev_log_subdomains)
--			new_dom->hierarchy->log_status = LANDLOCK_LOG_DISABLED;
--		else
--			new_dom->hierarchy->log_status = LANDLOCK_LOG_PENDING;
--#endif /* CONFIG_SECURITY_LANDLOCK_LOG */
--
--		/* Replaces the old (prepared) domain. */
--		landlock_put_domain(new_llcred->domain);
--		new_llcred->domain = new_dom;
--
--#ifdef CONFIG_SECURITY_LANDLOCK_LOG
--		new_llcred->domain_exec |= BIT(new_dom->num_layers - 1);
--#endif /* CONFIG_SECURITY_LANDLOCK_LOG */
-+	err = landlock_prepare_restriction(landlock_cred(new_cred), ruleset,
-+					   flags, &restriction);
-+	if (err) {
-+		abort_creds(new_cred);
-+		return err;
- 	}
- 
-+	new_dom = restriction.domain;
-+	landlock_apply_restriction(landlock_cred(new_cred), &restriction);
++static void free_ruleset_work(struct work_struct *const work)
++{
++	struct landlock_ruleset *ruleset;
 +
- 	if (flags & LANDLOCK_RESTRICT_SELF_TSYNC) {
--		const int err = landlock_restrict_sibling_threads(
--			current_cred(), new_cred, flags);
-+		err = landlock_restrict_sibling_threads(current_cred(), new_cred,
-+							flags);
- 		if (err) {
- 			/*
- 			 * Thread-sync failed (rare), so the new domain is
++	ruleset = container_of(to_rcu_work(work), struct landlock_ruleset,
++			       work_free);
++	free_ruleset(ruleset);
++}
++
++/*
++ * RCU readers (cf. the policy_object_get LSM hook) may call
++ * refcount_inc_not_zero() on a ruleset they hold no reference to: the memory
++ * must survive a grace period after the last put.  Queueing the free also
++ * makes this callable from contexts that cannot sleep (cf. the
++ * policy_object_put LSM hook).
++ */
+ void landlock_put_ruleset(struct landlock_ruleset *const ruleset)
+ {
+-	might_sleep();
+-	if (ruleset && refcount_dec_and_test(&ruleset->usage))
+-		free_ruleset(ruleset);
++	if (ruleset && refcount_dec_and_test(&ruleset->usage)) {
++		INIT_RCU_WORK(&ruleset->work_free, free_ruleset_work);
++		queue_rcu_work(system_dfl_wq, &ruleset->work_free);
++	}
+ }
+diff --git a/security/landlock/ruleset.h b/security/landlock/ruleset.h
+index b58e3d9846af..1465f8a5c464 100644
+--- a/security/landlock/ruleset.h
++++ b/security/landlock/ruleset.h
+@@ -15,6 +15,7 @@
+ #include <linux/mutex.h>
+ #include <linux/rbtree.h>
+ #include <linux/refcount.h>
++#include <linux/workqueue.h>
+ 
+ #include "access.h"
+ #include "limits.h"
+@@ -157,12 +158,10 @@ struct landlock_ruleset {
+ 	 */
+ 	struct landlock_rules rules;
+ 	/**
+-	 * @lock: Protects against concurrent modifications of @rules, if @usage
+-	 * is greater than zero.
+-	 */
+-	struct mutex lock;
+-	/**
+-	 * @usage: Number of file descriptors referencing this ruleset.
++	 * @usage: Number of file descriptors referencing this ruleset.  Kept
++	 * outside the union with @work_free: RCU readers may still call
++	 * refcount_inc_not_zero() while a queued free waits out the grace
++	 * period.
+ 	 */
+ 	refcount_t usage;
+ 
+@@ -175,22 +174,41 @@ struct landlock_ruleset {
+ 	 */
+ 	u32 version;
+ 	/**
+-	 * @id: Unique identifier for this ruleset, used for tracing.
++	 * @id: Unique identifier for this ruleset, used for tracing.  Kept
++	 * outside the union with @work_free: the free_ruleset trace event
++	 * reads it after the free has been queued.
+ 	 */
+ 	u64 id;
+ #endif /* CONFIG_TRACEPOINTS */
+ 
+-	/**
+-	 * @quiet_masks: Stores the quiet flags for an unmerged ruleset.  For a
+-	 * merged domain, this is stored in each layer's struct
+-	 * landlock_hierarchy instead.
+-	 */
+-	struct access_masks quiet_masks;
+-	/**
+-	 * @handled_masks: Contains the subset of filesystem and network actions
+-	 * that are handled by this ruleset.
+-	 */
+-	struct access_masks handled_masks;
++	union {
++		/**
++		 * @work_free: Enables to free a ruleset after an RCU grace
++		 * period, within a lockless section.  This is queued by
++		 * landlock_put_ruleset() when @usage reaches zero.  The
++		 * fields @lock, @quiet_masks and @handled_masks are then
++		 * unused.
++		 */
++		struct rcu_work work_free;
++		struct {
++			/**
++			 * @lock: Protects against concurrent modifications of
++			 * @rules, if @usage is greater than zero.
++			 */
++			struct mutex lock;
++			/**
++			 * @quiet_masks: Stores the quiet flags for an unmerged
++			 * ruleset.  For a merged domain, this is stored in each
++			 * layer's struct landlock_hierarchy instead.
++			 */
++			struct access_masks quiet_masks;
++			/**
++			 * @handled_masks: Contains the subset of filesystem and
++			 * network actions that are handled by this ruleset.
++			 */
++			struct access_masks handled_masks;
++		};
++	};
+ };
+ 
+ struct landlock_ruleset *
 -- 
 2.55.0
 
