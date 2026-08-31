@@ -1,116 +1,91 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7286025228D
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 11:35:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A21334104E
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 11:46:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788176108; cv=none; b=ZrSRtFlQlozieo0pgPAoGVGCPqseRaI2GuLM0ZcBeE1t26y305jDJGuSs/LX9GwOaB2mcWuxJPoCUbvhUYygQkOxJFfPwLO1wkcNsbkyR1RCrUwayPV3nO4ZbdQP5BgpOHFNwghwAr/DawJfnZZQUID1h/tBQ05R5gYvSk45KtM=
+	t=1788176781; cv=none; b=bqlD3IyAl0/pyfrMxfvXW2DvqEKpc8It5ojdDlPA4r4l3cjkpI1rVCfBvVqCpKF86MWfN6U3IDaZhv0zyUy+V/9sBFkGyk0XhibR1lC771sJQ5SrlC7Ts99gG7/nmLMSR3EvCfNA6bo8frK9L1tmENKVWwFLWLv1M95chc3HW34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788176108; c=relaxed/simple;
-	bh=movMFHi8Wa3n3IR5x5En6DZoiIvKy25Mj3w+ACbuxS4=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=d5UfxLMbn5TeBnmo2eMIcxtqWugKkkoWS3yrevSgB4LqGF5rVJcQtYghf3aiSNDslHyahEhXQDO25V1Nh/0PzMDWgCOeFsOrMJslef31rjceTUh9k3lL5iAsQQN6uLZ5iIyQj0TsWH5X9QXAG9FWXf1HuYuSFHKlCUf4+UAN4y0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h3ZUfXaD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788176781; c=relaxed/simple;
+	bh=Wantihy7kBtRItPmWja+nw9sRtnBLqYqIP+NryRzGt8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IH3+DkG7HzbUzmlhrjq/01yPbK80s+C/sbacZ6FNZ1pe2u9QPa1+O3krnoMXdBJpuDQiARxnDGdnubDePsODF4pRH8OPDOICCeY5UG2tUabrrdJUBPHxuLUjHF+tvPsi7DyL+jZ5teF8sb1Bx73nyJEhUWXVaANWqwUGDVDEo1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Idk3B8sf; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h3ZUfXaD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1C561F000E9;
-	Mon, 31 Aug 2026 11:35:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Idk3B8sf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 640DD1F000E9;
+	Mon, 31 Aug 2026 11:46:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788176107;
-	bh=0dq4qqCWTn69kgoNt9Xsn5BHcC5yf1R69wnnPHDaHbE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=h3ZUfXaDe9IoH9GffYUC29XbJ3m2aD2vx4q/OGxD0Bwc+5OEMXdhdt5l3Bb590fh/
-	 hZ0uGLJGi3XgKCbacLhbyJ9nZDrvibSDN/7+LugDM4RNzc6AeWGhgrbaymVeAYSWj4
-	 BNq36x4+FCR1Pmvnst7UW+4LnMAvT+jcRWlFMBx6mKcaeSk+MwLgxAKL7ivQc1TX/Z
-	 UtLgB+U2u/rweFssZpvRo5PSO06qEbfDkH69Hb5aRmcFOJdfLmb+3NUAnI97kg3G/W
-	 HYQJm7Jh8bfi95Y78087OfIme8PDUpZRbfr28VipCwYc35V/waVolvGbqJC8dgVHuG
-	 KOkD411xhz8NQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v3 2/5] bpf: Fix NULL-ptr-deref when showing a void
- BTF type
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260831110314.150870-3-jiayuan.chen@linux.dev>
-References: <20260831110314.150870-1-jiayuan.chen@linux.dev>
- <20260831110314.150870-3-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 31 Aug 2026 11:35:06 +0000
-Message-Id: <20260831113506.D1C561F000E9@smtp.kernel.org>
+	s=k20260515; t=1788176779;
+	bh=+Up/p4BkQ5QfGVGLrLdElq6kBl1CACZkQT06Hh1qqy0=;
+	h=From:To:Cc:Subject:Date;
+	b=Idk3B8sfFbCa7WJwjqt3KqFooxdUQIMocbPuSkqX82n6UDZJu6tpnJuyHXNbtc5SY
+	 b0QNAxVtwMZb+IMymCkGGTC3kNAF4tvKiFKzARCYpUTCM7U+MVcWY80d0Z3Xwn6Z3v
+	 sNQX+6Bds7lmb5839y3o6is/K+cK5d+UPrHS3nqUlrgGv49bpkj/FcLSfTxi7iKvhi
+	 LuOZHjHyejmmlBjk12Um6+SA9s4x0+bSMIxBfJ82G1LoocTaWJHNK8yEV/DXYEfE1s
+	 gn/zKnGFyayTumMWZPbQ3LJKKIXHzE/a/thWRVUXY7FYCkwSSNW3Cn+/7xxOU0VKXY
+	 r/gTDGTTQyotA==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Mike Rapoport <rppt@kernel.org>
+Subject: [PATCH bpf-next 0/3] bpf, x86: Add jit dry run mode
+Date: Mon, 31 Aug 2026 13:46:11 +0200
+Message-ID: <20260831114614.157277-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+hi,
+we recently hit performance issue in arch_bpf_trampoline_size,
+that Mike fixed in [1].
 
-Pre-existing issues:
-- [High] btf_var_show() unconditionally dereferences btf_type_ops(t) which =
-can be NULL if a VAR resolves to the void type.
---
+I wondered we could go completely without emitting jit code for
+getting just the trampoline size as we do on arm and it turned
+out it actually makes the tracing_multi attachment benchmark
+much faster.
 
-commit e40701f4e16b364aff9e3327fa4cdff79bc39336
-Author: Jiayuan Chen <jiayuan.chen@linux.dev>
+With current code:
 
-bpf: Fix NULL-ptr-deref when showing a void BTF type
+  # ./test_progs -t tracing_multi_bench_attach -v
+  ...
+  serial_test_tracing_multi_bench_attach: found 55227 functions
+  serial_test_tracing_multi_bench_attach: attached in   1.563s
+  serial_test_tracing_multi_bench_attach: detached in   0.256s
 
-btf_modifier_show() resolves the modifier and then calls
-btf_type_ops(t)->show() unconditionally. For the void type (type_id 0,
-BTF_KIND_UNKN) kind_ops[] has no entry, so ->show is NULL.
+With the fix:
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index da36d4b9d31ab..81506cbb9f9ae 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -2911,7 +2911,15 @@ static void btf_modifier_show(const struct btf *bt=
-f,
->  	else
->  		t =3D btf_type_skip_modifiers(btf, type_id, NULL);
-> =20
-> -	btf_type_ops(t)->show(btf, t, type_id, data, bits_offset, show);
-> +	/*
-> +	 * A modifier can resolve to the void type (e.g. "const void"), which
-> +	 * has no show op (kind_ops[BTF_KIND_UNKN] is NULL). Print a placeholder
-> +	 * instead of dereferencing NULL.
-> +	 */
-> +	if (!btf_type_ops(t))
-> +		btf_df_show(btf, t, type_id, data, bits_offset, show);
-> +	else
-> +		btf_type_ops(t)->show(btf, t, type_id, data, bits_offset, show);
->  }
-> =20
->  static void btf_var_show(const struct btf *btf, const struct btf_type *t,
+  # ./test_progs -t tracing_multi_bench_attach -v
+  ...
+  serial_test_tracing_multi_bench_attach: found 55235 functions
+  serial_test_tracing_multi_bench_attach: attached in   0.798s
+  serial_test_tracing_multi_bench_attach: detached in   0.258s
 
-[Severity: High]
-This isn't a bug introduced by this patch, but does btf_var_show() have the
-same problem where btf_type_ops(t) can be NULL if a VAR resolves to the void
-type?
+thanks,
+jirka
 
-Looking at btf_var_show() in kernel/bpf/btf.c, it also unconditionally
-dereferences btf_type_ops(t):
 
-kernel/bpf/btf.c:btf_var_show() {
-	...
-	t =3D btf_type_id_resolve(btf, &type_id);
+[1] https://lore.kernel.org/bpf/20260818130510.3110054-1-rppt@kernel.org/
+---
+Jiri Olsa (3):
+      bpf, x86: Split x86_call_depth_emit_accounting in two functions
+      bpf, x86: Introduce JIT emission context
+      bpf, x86: Add support for jit dry run
 
-	btf_type_ops(t)->show(btf, t, type_id, data, bits_offset, show);
-}
-
-If a BPF program calls the bpf_snprintf_btf helper with the type ID of a
-BTF_KIND_VAR that resolves to void (e.g., __nosave_begin in vmlinux, which =
-is
-declared as extern const void), could this result in a NULL pointer
-dereference?
-
-While later patches in this series address a different NULL pointer
-dereference involving btf->resolved_ids within btf_var_show(), it appears
-they miss adding this same if (!btf_type_ops(t)) safeguard that was added
-here to btf_modifier_show().
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260831110314.1508=
-70-1-jiayuan.chen@linux.dev?part=3D2
+ arch/x86/include/asm/alternative.h   |   4 +-
+ arch/x86/include/asm/text-patching.h |   2 +
+ arch/x86/kernel/alternative.c        |   2 -
+ arch/x86/kernel/callthunks.c         |   7 +-
+ arch/x86/net/bpf_jit_comp.c          | 864 ++++++++++++++++++++++++++++++++++++++++---------------------------------------------------
+ 5 files changed, 381 insertions(+), 498 deletions(-)
