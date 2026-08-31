@@ -1,156 +1,78 @@
-Received: from mta1.migadu.com (out-77.mta1.migadu.com [95.215.58.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9386839A4A0
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 21:12:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AF1C38E10C;
+	Mon, 31 Aug 2026 21:16:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788210776; cv=none; b=UrZzBRghwevlMNZV35dWTE7wD/S5wWr5BhkxVQtefe9Uf43hILgmzG+BWS2XyJRZuD/5X06Am/myZ+qZ/t9yzuZ3hOinrSKZW2kK/T6WIkwhwATJHC6ExgzQyIcdF60OtJknBSgFVzXK99bJ55qlK38HhbVoCNu9pWoJOBPrh2A=
+	t=1788211010; cv=none; b=PwbPv0R8QefXvGHCmBejAE6G829ynHygKfOI19y9ilDI6b5Uw4oSyY398kOfxJUHurL+/LVsFOaKWP57bijXsuIr9UbuN6Bat2b5SpZAIsP/QrdW8GyMObVdTrVj8kSzeLVRyoHdvfT61PCZOGCHSgwgmAqxDu2N5EbbHU//9ZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788210776; c=relaxed/simple;
-	bh=DqVyQybPlXg+s2kQKu0tCcmbPDkd24Q8nMn47uMGMhY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ohWdrVXXM3HlvWQGAGpp38g5K1GpUG41M4Y5zmyuOprAra19Yvi0hqoHZJu/Jq+PHh1GFrOYBUz9OXarBWNMTGTgR9XAwXrxJRUigD8XTXIoOAA4ipPGCalA86UKn1MomwjMVLAaTB+KTkDTzzl0cfRqDSeFQXd7qA+ApogTHmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BK5hAmQk; arc=none smtp.client-ip=95.215.58.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788211010; c=relaxed/simple;
+	bh=oz2iYW11PJCarVGxxvigdGDmNXonQff7obHjaFc1C2Q=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=LHs8ERpz8p/2noV4VlfnSqEJF05CTp8tBSOP+m9OmYvC6SmY7WGyaM6OPnDowJO8B7ciGyZSxoK3Z0/lfaQQpz8yhmdtiDSXpyYFGXYdq+p+L5MwPVqXRhEkEE87hayfd+IfL3elYmwppSuolazetcWofKIM75AsAdkLsIaGUZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZNFtUoIk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BK5hAmQk"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=DqVyQybPlXg+s2kQKu0tCcmbPDkd24Q8nMn47uMGMhY=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788210772; v=1; x=1788815572;
- b=BK5hAmQkwqXU8WrJ3u4/4aVKHmrO77U/qcCnQR9RiS+oPTbSMiv9YMq3HGiw/bzo8BVI7sS7
- oUXs5oIH/BNwyAhc+g+NxANtDNKy04bG1S0I+J0tVAX5eiWKc50IG20b9P7OsH513qFTqw8UU6M
- i/BXGAe+FdUX1KabiKELbm8A=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id df5b3ac7151158ec;
-	Mon, 31 Aug 2026 21:12:42 +0000
-X-Mizu-Trace-ID: df5b3ac7151158ec
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <ec3306be-29d3-49e6-8653-0579007774db@linux.dev>
-Date: Mon, 31 Aug 2026 14:12:36 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZNFtUoIk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B30521F000E9;
+	Mon, 31 Aug 2026 21:16:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788211009;
+	bh=oz2iYW11PJCarVGxxvigdGDmNXonQff7obHjaFc1C2Q=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=ZNFtUoIkaJG9P6nVESZEqo0cw8CCz5EJVPRvJs8ZVXNKdKz4IJjg1camWm197RZlz
+	 MDR7hlatcAzYrTWAvZrWX2yCuCTAZwSoxDPbLDSBfcz3q8oIeJLVEsttZTKtP46CB6
+	 pRqT/Av541c2nbRGp0TfQRdCWSslD3K6TXhzBIDFq47Mg7VpP2HgKLzrjsi0P9r7ps
+	 1nQO0jBWSQ3zxKCO8OmwCisJDJirzVb5DDtbDD5omEK+CgsDZsYJeCkqcElO08XB/P
+	 bICqL3GGTmPdvi1Zm9dhVN3pPoDw/UbQ/B4pZsEg8UVAQC6FzHavrz/9kDSOoN3SFY
+	 E/FLiLwVknf7w==
+Content-Type: multipart/mixed; boundary="===============7237600942549384120=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v3 4/5] selftests/bpf: Add test for key-less BTF hash
- map
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
- Mykyta Yatsenko <yatsenko@meta.com>, Alan Maguire <alan.maguire@oracle.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260831110314.150870-1-jiayuan.chen@linux.dev>
- <20260831110314.150870-5-jiayuan.chen@linux.dev>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260831110314.150870-5-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8
+Message-Id: <91b81ddb118dbeab295077ade10f2fdc9a6d4f09e5c5b07aff05a086215c7f90@mail.kernel.org>
+In-Reply-To: <20260831202251.305046-8-ankur.a.arora@oracle.com>
+References: <20260831202251.305046-8-ankur.a.arora@oracle.com>
+Subject: Re: [PATCH v15 07/16] atomic: Add atomic_cond_read_*_timeout()
+From: bot+bpf-ci@kernel.org
+To: ankur.a.arora@oracle.com,linux-kernel@vger.kernel.org,linux-arch@vger.kernel.org,linux-arm-kernel@lists.infradead.org,linux-pm@vger.kernel.org,bpf@vger.kernel.org
+Cc: arnd@arndb.de,catalin.marinas@arm.com,will@kernel.org,peterz@infradead.org,akpm@linux-foundation.org,mark.rutland@arm.com,harisokn@amazon.com,cl@gentwo.org,ast@kernel.org,rafael@kernel.org,daniel.lezcano@linaro.org,memxor@gmail.com,zhenglifeng1@huawei.com,xueshuai@linux.alibaba.com,rdunlap@infradead.org,david.laight.linux@gmail.com,broonie@kernel.org,joao.m.martins@oracle.com,boris.ostrovsky@oracle.com,konrad.wilk@oracle.com,ashok.bhat@arm.com,ankur.a.arora@oracle.com,boqun.feng@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 31 Aug 2026 21:16:47 +0000 (UTC)
+
+--===============7237600942549384120==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On 8/31/26 4:01 AM, Jiayuan Chen wrote:
-> Create a hash and an rhash map with btf_key_type_id == 0 and expect
-> bpf_map_create() to fail with -EINVAL; a positive control with a real
-> key type confirms the rejection is about the key-less BTF. On an unfixed
-> kernel the map is created, and the test pins and reads it back to walk
-> the bpffs dump path, which reproduces the btf_type_show() NULL-deref - so
-> running it on an unfixed kernel oopses the reading task (and panics it
-> under panic_on_oops).
-> 
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> ---
->  .../bpf/prog_tests/btf_map_keyless.c          | 82 +++++++++++++++++++
->  1 file changed, 82 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_map_keyless.c
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_map_keyless.c b/tools/testing/selftests/bpf/prog_tests/btf_map_keyless.c
-> new file mode 100644
-> index 000000000000..a7d037f57a7e
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_map_keyless.c
-> @@ -0,0 +1,82 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <test_progs.h>
-> +#include <bpf/btf.h>
-> +
-> +/*
-> + * A hash map with a key-less BTF (btf_key_type_id == 0) used to NULL-deref in
-> + * btf_type_show() when dumped via bpffs.
-> + * A fixed kernel rejects such a map at creation; on an unfixed kernel the
-> + * pin-and-read below deliberately walks that bpffs dump path, so it doubles
-> + * as a reproducer: it oopses an unfixed kernel (and panics it under
-> + * panic_on_oops).
-> + */
-> +static void check_keyless(int map_type, __u32 map_flags, int btf_fd, int val_id)
-> +{
-> +	LIBBPF_OPTS(bpf_map_create_opts, opts);
-> +	const char *path = "/sys/fs/bpf/keyless_map";
-> +	__u32 key = 1, val = 0x41424344;
-> +	char buf[256];
-> +	int map_fd;
-> +	FILE *f;
-> +
-> +	opts.map_flags = map_flags;
-> +	opts.btf_fd = btf_fd;
-> +	opts.btf_value_type_id = val_id;
-> +
-> +	/*
-> +	 * Positive control: the same map with a real key type must be accepted,
-> +	 * so the -EINVAL below is about the key-less BTF and not some unrelated
-> +	 * rejection (e.g. an unknown map type).
-> +	 */
-> +	opts.btf_key_type_id = val_id;
-> +	map_fd = bpf_map_create(map_type, "keyed_map", 4, 4, 8, &opts);
-> +	if (!ASSERT_GE(map_fd, 0, "keyed create is accepted"))
-> +		return;
-> +	close(map_fd);
-> +
-> +	/* A key-less BTF must be rejected. */
-> +	opts.btf_key_type_id = 0;
-> +	map_fd = bpf_map_create(map_type, "keyless_map", 4, 4, 8, &opts);
-> +
-> +	if (map_fd >= 0) {
-> +		/* Unfixed kernel: reproduce the oops via the bpffs dump path. */
-> +		(void)bpf_map_update_elem(map_fd, &key, &val, 0);
-> +		if (bpf_obj_pin(map_fd, path) == 0) {
-> +			f = fopen(path, "r");
-> +			if (f) {
-> +				while (fgets(buf, sizeof(buf), f))
-> +					;
-> +				fclose(f);
-> +			}
-> +			unlink(path);
-> +		}
-> +		close(map_fd);
-> +	}
+> atomic: Add atomic_cond_read_*_timeout()
+>
+> Add atomic load wrappers, atomic_cond_read_*_timeout() and
+> atomic64_cond_read_*_timeout() for the cond-load timeout interfaces.
+>
+> Also add a short description for the atomic_cond_read_{relaxed,acquire}(),
+> and the atomic_cond_read_{relaxed,acquire}_timeout() interfaces.
 
-The whole `if (map_fd >= 0) { ... }` block can be dropped.
+The changelog states it will "add a short description" for these interfaces,
+but looking at the actual changes, the documentation hunks only list the
+function names under a new heading and insert the words "or conditional" into
+an existing sentence.
 
-If the map has been accepted (0 instead of -EINVAL), it already catches the bug.
-It's unnecessary to reproduce the NULL ptr splat.
+Nothing in the patch explains what these operations do (spin-wait on a pointer
+until a condition is true), what the timeout parameters mean, that the timeout
+variants can return with the condition still false, or what ordering guarantees
+the _relaxed vs _acquire variants provide.
 
-pw-bot: cr
+Should the changelog be updated to say it lists the new operations in the API
+section, or should a description matching what the changelog promises be added
+to the SEMANTICS section of Documentation/atomic_t.txt?
 
-Also, I think it would be useful to refactor and extend existing
-selftests that were added for the features (for example an old
-prog_tests/snprintf_btf.c), instead of adding a new test program for
-every regression case. Not a blocker, but an effort in that direction
-would be much appreciated.
 
-Thanks!
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-> +
-> +	ASSERT_EQ(map_fd, -EINVAL, "key-less create is rejected");
-> +}
-> +
-> [...]
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33438155296
+--===============7237600942549384120==--
