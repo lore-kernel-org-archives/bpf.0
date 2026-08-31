@@ -1,211 +1,208 @@
-Received: from mail-wm2-f11.google.com (mail-wm2-f11.google.com [74.125.225.139])
+Received: from mta0.migadu.com (out-12.mta0.migadu.com [91.218.175.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 690B73ACF10
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 02:43:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D13E35B63D
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 03:40:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788144239; cv=none; b=XhOF997j6eAeUvCm6C8C633GA0Df5hH0apSPTKypa6mwFCl1Qrlr3oUxiU7V58XLu4o2GCJ6Qs6vVGDrIwqRc4wGX/XYBKuJHno90Dm/JbHX4FGkJq2lqh6XopK+bkHaJ/yVPC7neLhRQ80tt3V7rkF5dg49dspkONlSXNrxZvw=
+	t=1788147653; cv=none; b=o+0v7tyyVCBIZunPBAdctk/abXJ9RydRCBMbhflR5ONjusJQ81sR54C0M8fbxF90mTq6qX1jjAvCLitVigBNOejOZ9TCLvt1I+pngYCNrER+fN6flbIGh4kG5N+Frmz1x2guF4puFDRaZQXz/EfOxHzPs+vnb0wRSXrY1/GoVoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788144239; c=relaxed/simple;
-	bh=MsdmLVRegQiwqggtnxMkuCIHzVN4jOC7xy523DaRM50=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=fBWuynb2/2BRxiJEa6K7PL76x+6Br1wjOjr0eTVKxvi+kk+x92kZOqwUiUMZpmLDUlEqKvliB6NRdiBHni0J8PawxQE8XsRWFcwI7OBEXEDjyFNMqSAbOsYEZhLBRyFsvNProjLvT7pdHX3O5Yzfg7Rv7FScbzGGw5v0gxd/F4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gxzG66uV; arc=none smtp.client-ip=74.125.225.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788147653; c=relaxed/simple;
+	bh=gLAr7Pe0VEX9SNWbehByhJulMPcZMibvGXTHc1gWcNU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=I1Px1X7dUF5r8ORXriWWWCwdsTPjGOEP8dFJ7DfU9uNTMfE/p5ul4lArEtX2nRG77B4UH8xyziOSPEUsi4YfIcWyExtOaKObPDbIuOF1LOMNlqIRQnqAIj9ZfGW+l8YqcEP96hZ8nYzB/31kd0DuO3NlUhptxYzUBhro6jVaGBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SHdCcPn+; arc=none smtp.client-ip=91.218.175.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gxzG66uV"
-Received: by mail-wm2-f11.google.com with SMTP id 5b1f17b1804b1-49ccea58fe3so6808815e9.1
-        for <bpf@vger.kernel.org>; Sun, 30 Aug 2026 19:43:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788144232; x=1788749032; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Ymc/NdJXhMPL+BOqGNmfc6XPTw7UulT/4bPOKgW49BQ=;
-        b=gxzG66uVpaYteYedDIeU58PpYVxZZI1lUxYXTvk2b6mn/5peyBi19S5WaIKkXytpcP
-         IhLBL2p1Qt2v5CMPNiiBoG6WHV5AE7m40yybsaR479Urku7fr+lA12Tdgq/yEDmfwbUR
-         Ft9tUzvl/HDFbxvFuiBbsHp74S0l0E7wg5u3DDObPArypuhYtIpNYB6gIMEMdv3iJ3d0
-         JILPYFgF3KmInQVDrau3I4VPjJrahmifiSA+n8y/C2ksK6uze0V5kOnqaSkEDyR20YLA
-         rMliR92uXe2AmCIYTGzIqILvMp4U7BhQkSPRY/fjGGX7WKBxqSIhXksbNHhMFHfEsvT+
-         We9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788144232; x=1788749032;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Ymc/NdJXhMPL+BOqGNmfc6XPTw7UulT/4bPOKgW49BQ=;
-        b=bJO2qYvPI71NaSihuVFoteVorN/a7sT0SXOj9XwVoE4U7/mv9uhBu6r8Av9YKkDV4u
-         ys0a1JMacxUIORZpeHMEYKnNfNkRoon5tdhtxByYyVdxKWQf+YT7jDpIU4TQel+YNp7a
-         CLhD59JQKHfr+S+D8sFXF0DLsLptoLJb6KPUBG37nEQb9fyEnDvKf2u7/tt/Q61vZxZZ
-         4T9ez4LXipYcv7ig+YIkTTkJO21Hu/4echgCL7Gmi2MFjF8+rSq8A72azWfVYObyEeg/
-         8OA6CT4ZaBZxm6mmEOb+iJlHd//MR+6jrjhaJGDqH0PH63TY7JeCeEUmcA+xnd/aCLkR
-         8RFg==
-X-Forwarded-Encrypted: i=1; AHgh+RoM0E6gWyfmV9J7KilU6HVcTmfElfyKTGeP76kMRivslLjGLLelnTDcrbTKHzvLjt0dRqw=@vger.kernel.org
-X-Gm-Message-State: AFuF++kpyBNIj5rQESoSvkcnwy3fZVvoJdXGhlLNoLVsauqqOP4V/Mw7
-	vMvpZ1x3erFL7bcV6JbA4SH6PA/7AD0n+QO4hQpFh1kv8L84wfXNO1OK
-X-Gm-Gg: AR+sD11J/RzcDvok3waeyeAx5TOGeB2Y75FQ1qpi4VSdk0gBDs/Wt48HU8CU63xD52x
-	b1nsAMI7tZ8Oqh459Ccb3HzfNDMeVLFKI3BhcQa2FHISXeumIA3LX5Vy3Z4gTRAZBEONHESWqrO
-	i2jlV6LKciQIkn80iu/MIIHPxwxuh5Q+gAnSt7Rf6r3j/lI8FrnG9LEaxijvbiSRCKKi6kYKuzC
-	R2wGu/BXhKCdOZcLpfa4c/dQAW3X74VuVz6LJLcXQOaX9TjdPueABsVo3/D+Mdkxjy8fp89x5In
-	nqAGcprxXjt4NllZOJ5sKa1PblLM7TzdPcLqsekV3Dwyp5nwjxpyV7MFvyfYNt1wP9jnPFKUTH6
-	6rNLIAdN2PkjdIGMFJHNsAoQhcBT565XHZ4/6UhEMozIEy0rFmRxrJ6Yp4Lof2l4/9t39CUoFUh
-	txcPCap7mq0Hb/18yvutSmLfGV5UhuZ1U1lWrT8kb91z6TREmS8N8l2JIIPTFHJHl99skkhY9PW
-	WzSJKA8fDmkF+sBMO2n8Occ51/YeJ1574iMvHzlfqMKDzzfahgeMaaMJoXZ4Z+/z87y/2wnoavI
-	AVY1nm/RpHkj0ZOZqXNJOE65aig=
-X-Received: by 2002:a05:600c:8b27:b0:49c:d27f:ed81 with SMTP id 5b1f17b1804b1-49cd27fee09mr141280485e9.11.1788144231971;
-        Sun, 30 Aug 2026 19:43:51 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cd8b9a2efsm13744795e9.3.2026.08.30.19.43.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 30 Aug 2026 19:43:51 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SHdCcPn+"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=gLAr7Pe0VEX9SNWbehByhJulMPcZMibvGXTHc1gWcNU=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788147630; v=1; x=1788752430;
+ b=SHdCcPn+mlO+wggvcAyFuTNfmJWP7EIgEm73W1+iuYuGmtlTv1kIgn2s43tYIIeBXr/K3SyR
+ w3Je6e80Q7BlPzvyRwXjKbdbWHuPfIcDw0tKSKj7ehAkyELQSt2SRmSnisnSrlydnXWcbWRVwxV
+ /6JN0NrLkGwaamZSHj8u1Nhw=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 30af03aeaf876221;
+	Mon, 31 Aug 2026 03:40:20 +0000
+X-Mizu-Trace-ID: 30af03aeaf876221
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <a3314523-7ab6-4f1d-b411-be980b964079@linux.dev>
+Date: Sun, 30 Aug 2026 20:40:16 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 31 Aug 2026 04:43:50 +0200
-Message-Id: <DL2S878KSOI5.1SZMLIAWMCNUJ@gmail.com>
-Cc: "Florent Revest (Anthropic)" <florent.revest@linux.dev>, "bpf"
- <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "KP Singh"
- <kpsingh@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "John
- Fastabend" <john.fastabend@gmail.com>, "Paul E. McKenney"
- <paulmck@kernel.org>, "Jose Fernandez" <jose.fernandez@linux.dev>, "LKML"
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf] bpf: Keep progs alive until the trampoline image
- calling them is freed
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260819122252.1782790-1-florent.revest@linux.dev>
- <DL27QZ6SEZKT.1CV2HAX4A3WI4@gmail.com>
- <CAADnVQLxi-R1KDUXJJjpq69SpV8UcNJVqBi7uicO=V0WhAvyQA@mail.gmail.com>
-In-Reply-To: <CAADnVQLxi-R1KDUXJJjpq69SpV8UcNJVqBi7uicO=V0WhAvyQA@mail.gmail.com>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: bpf: Is the nmi_uaccess_okay() check needed for
+ bpf_send_signal_task()?
+Content-Language: en-GB
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+ Aditya Sharma <adi.sharma@zohomail.in>
+Cc: bpf@vger.kernel.org, song@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, puranjay@kernel.org,
+ jolsa@kernel.org
+References: <20260819124324.43162-1-adi.sharma@zohomail.in>
+ <CAEf4BzZY6uWdobXVyS1WrdtmRw_SLJsodm7d_c+Bhsw=chpJ+A@mail.gmail.com>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CAEf4BzZY6uWdobXVyS1WrdtmRw_SLJsodm7d_c+Bhsw=chpJ+A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Sun Aug 30, 2026 at 3:21 PM CEST, Alexei Starovoitov wrote:
-> On Sun, Aug 30, 2026 at 3:41=E2=80=AFAM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
+
+
+On 8/21/26 11:21 AM, Andrii Nakryiko wrote:
+> On Wed, Aug 19, 2026 at 5:44 AM Aditya Sharma <adi.sharma@zohomail.in> wrote:
+>> Hi,
 >>
->> On Wed Aug 19, 2026 at 2:22 PM CEST, Florent Revest (Anthropic) wrote:
->> > bpf_tramp_image_put() makes sure a trampoline image is not freed while
->> > a task may still be running in it (call_rcu_tasks() + im->pcref), but
->> > nothing similar is done for the progs called by that image. Since
->> > commit e21aa341785c ("bpf: Fix fexit trampoline."), detach patches the
->> > return path so that a task still in the original function skips the
->> > fexit progs when it comes back, and counts on the prog's own RCU flavo=
-r
->> > to cover a task that is inside a prog. On that basis the last prog
->> > reference is dropped right away and the prog is freed after a single
->> > RCU / RCU tasks trace grace period.
->> >
->> > That leaves out a task in the trampoline glue itself: between two
->> > progs, or already past the patched jump but not yet in the first fexit
->> > prog's enter helper. On !PREEMPT kernels this is a few instructions
->> > that cannot be preempted, so it did not matter. With CONFIG_PREEMPTION
+>> I hit this from a bpf_timer callback that signals a userspace task: the
+>> signal was not delivered some of the time. It turned out that
+>> bpf_send_signal_task() was returning -EPERM depending on which task the
+>> softirq happened to interrupt, and the source is this check in
+>> bpf_send_signal_common():
 >>
->> I guess it would make sense to highlight why it may not have mattered. I=
- think
->> the real reason was that on !PREEMPT kernels, the execution in the tramp=
-oline
->> image counted as (implicit) RCU read section which caused program free p=
-ath to
->> wait for someone executing the trampoline image? For non-sleepable progs=
-, they
->> wait for RCU grace period already, for sleepable, RCU tasks trace has im=
-plicit
->> RCU grace period wait as well, hence this never showed up on !PREEMPT.
+>> bpf_trace.c:872:        if (unlikely(task->flags & (PF_KTHREAD | PF_EXITING)))
+>> bpf_trace.c:873:                return -EPERM;
+>> bpf_trace.c:874:        if (unlikely(!nmi_uaccess_okay()))
+>> bpf_trace.c:875:                return -EPERM;
 >>
->> > a task can sit there, in no RCU read section of any flavor and holding
->> > only im->pcref, for longer than it takes to free the prog it is about
->> > to call:
->> >
->> >   CPU 0                               CPU 1
->> >   in image I, orig_call() returned
->> >   [preempted before lsm.s prog A]
->> >                                       bpf_tracing_link_release()
->> >                                        -> bpf_tramp_image_put(I)
->> >                                       bpf_link_dealloc()
->> >                                        bpf_prog_put(A), last ref
->> >                                       tasks trace GP, A's text freed
->> >   __bpf_prog_enter_sleepable(A)
->> >   call A->bpf_func
->> >
->> > On x86 this is an int3 in poisoned bpf_prog_pack memory:
->> >
->> >   Oops: int3: 0000 [#1] SMP NOPTI
->> >   CPU: 18 UID: 0 PID: 94573 Comm: x169 Not tainted 6.18.44 #1 PREEMPT(=
-lazy)
->> >   RIP: 0010:0xffffffffc0601d8d
->> >   Call Trace:
->> >    <TASK>
->> >    ? bpf_trampoline_6442515411+0x1a4/0x21b
->> >    bpf_lsm_bprm_committed_creds+0x5/0x10
->> >    security_bprm_committed_creds+0x5f/0x70
->> >    begin_new_exec+0x2d6/0x410
->> >    ...
->> >
->> > We hit this in production on preemptible kernels when progs attached
->> > through trampolines got detached while their hooks were busy. Adding
->> > grace periods before the prog free would not help with sleepable progs=
-:
->> > neither RCU tasks nor RCU tasks trace waits for a task that slept in a
->> > prog and then got preempted in the gap after it.
->> >
->> > Fix it by having the image take a reference on every prog it calls, in
->> > bpf_tramp_image_alloc(), and drop them in bpf_tramp_image_free(). A
->> > detached prog now stays loaded until the old image is gone, which
->> > reverts a deliberate choice of commit e21aa341785c ("bpf: Fix fexit
->> > trampoline."). Detached fexit progs still stop being called right away
->> > since the return path is patched.
->> >
->> > Fixes: e21aa341785c ("bpf: Fix fexit trampoline.")
->> > Assisted-by: Claude:unspecified
->> > Signed-off-by: Florent Revest (Anthropic) <florent.revest@linux.dev>
->> > ---
+>> Is the nmi_uaccess_okay() check necessary in the bpf_send_signal_task()
+>> case?
 >>
->> Overall, looks good to me. Thanks for the fix!
->>
->> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
->>
->> Note for whoever applies this: please add Reported-by: tag for Sechang a=
-s well.
->> Optionally, wordsmith the commit log with the suggestion above.
+>> When commit 6280cf7 ("bpf: Implement bpf_send_signal_task() kfunc")
+>> made the function take a task, the PF_KTHREAD and is_global_init()
+>> started testing task, while nmi_uaccess_okay() kept testing current.
+> Yeah, this is weird, at the very least it should be checking it for
+> the provided task. But I also am not sure why we have to check this...
 >
-> Hold on. I don't think we can proceed with this fix.
-> It defeats the point of fexit jmp patching and keeps progs
-> pinned until a sleepable kernel function that were attached to
-> will return. Which means that the tracing prog attached to "unlucky" kern=
-el
-> function that sleeps for an hour will stay pinned for an hour.
-> Let's think of a different way of fixing the race.
+> Yonghong, do you remember why this was necessary? Can we just drop this?
 
-I don't have background on the original commit being fixed, but is that rea=
-lly
-realistic? Or worrisome even if it happens in practice, since worst case th=
-e
-program refcounts remains raised for that duration?
+I went through the history.
+In 5.3: we have bpf_send_signal() helper:
 
-We have similar worst case for programs too (e.g. using bpf_copy_from_user =
-on
-user controlled buffer in, say, LSM progs). At least here we won't be exten=
-ding
-any RCU flavored GP.
+BPF_CALL_1(bpf_send_signal, u32, sig)
+{
+	...
+         /* Similar to bpf_probe_write_user, task needs to be
+          * in a sound condition and kernel memory access be
+          * permitted in order to send signal to the current
+          * task.
+          */
+         if (unlikely(current->flags & (PF_KTHREAD | PF_EXITING)))
+                 return -EPERM;
+         if (unlikely(uaccess_kernel()))
+                 return -EPERM;
+         if (unlikely(!nmi_uaccess_okay()))
+                 return -EPERM;
+	...
+}
 
-That said I will think about alternative fixes in the meantime, if we accep=
-t the
-premise that we don't want to pin program references in the image and keep =
-their
-lifetimes decoupled.
+nmi_uaccess_okay() is needed for *current* task.
+
+In 5.6, bpf_send_signal_thread() is added, but still for the same task,
+so we still have:
+
+static int bpf_send_signal_common(u32 sig, enum pid_type type)
+{
+	...
+         /* Similar to bpf_probe_write_user, task needs to be
+          * in a sound condition and kernel memory access be
+          * permitted in order to send signal to the current
+          * task.
+          */
+         if (unlikely(current->flags & (PF_KTHREAD | PF_EXITING)))
+                 return -EPERM;
+         if (unlikely(uaccess_kernel()))
+                 return -EPERM;
+         if (unlikely(!nmi_uaccess_okay()))
+                 return -EPERM;
+	...
+}
+
+In the current master:
+
+__bpf_kfunc int bpf_send_signal_task(struct task_struct *task, int sig, enum pid_type type,
+                                      u64 value)
+{
+         if (type != PIDTYPE_PID && type != PIDTYPE_TGID)
+                 return -EINVAL;
+
+         return bpf_send_signal_common(sig, type, task, value);
+}
+
+static int bpf_send_signal_common(u32 sig, enum pid_type type, struct task_struct *task, u64 value)
+{
+	...
+         /* Similar to bpf_probe_write_user, task needs to be
+          * in a sound condition and kernel memory access be
+          * permitted in order to send signal to the current
+          * task.
+          */
+         if (unlikely(task->flags & (PF_KTHREAD | PF_EXITING)))
+                 return -EPERM;
+         if (unlikely(!nmi_uaccess_okay()))
+                 return -EPERM;
+         /* Task should not be pid=1 to avoid kernel panic. */
+         if (unlikely(is_global_init(task)))
+                 return -EPERM;
+	...
+}
+
+We probably cannot remove
+         if (unlikely(!nmi_uaccess_okay()))
+                 return -EPERM;
+unconditionally. The above 'if' statement should be guarded
+with *current* task if it is different from parameter "task"
+since nmi_uaccess_okay() is only for the *current* task.
 
 >
-> pw-bot: cr
+>> As far as I can tell the path here does no user memory access, so
+>> there is nothing for the check to guard.
+>>
+>> Also, it compiles to true outside x86 (include/asm-generic/tlb.h:26),
+>> so if it were necessary here the kfunc would be broken on every other
+>> architecture.
+>>
+>> Thus, whether a signal can be sent depends on the caller's context,
+>> rather than the task it is to be sent to. And at the bpf_timer callback,
+>> we never know deterministically whether the signal would go through,
+>> or it would get rejected here.
+>>
+>> A quick reproducibility test by Claude Opus 5 (the issue I was facing
+>> from the timer callback context was not reproducible deterministically):
+>>
+>> SEC("tp_btf/workqueue_execute_start")   /* current is a kworker   */
+>> SEC("tp_btf/sys_enter")                 /* current is a user task */
+>>
+>> static __always_inline int probe(void)
+>> {
+>> struct task_struct *t;
+>> int ret;
+>>
+>> t = bpf_task_from_pid(target_pid);
+>> if (!t)
+>>    return -ESRCH;
+>> /* sig == 0: permission check only, nothing is delivered */
+>> ret = bpf_send_signal_task(t, 0, PIDTYPE_TGID, 0);
+>> bpf_task_release(t);
+>> return ret;
+>> }
+>>
+>> On bpf-next commit f79066c7 (selftests/bpf: Add tests for a store
+>> on a fault prone qdisc pointer), x86_64 under qemu:
+>>
+>> bpf_send_signal_task() from kworker context : -1  (-EPERM)
+>> bpf_send_signal_task() from syscall context :  0
+>>
+>> Same result on v6.18.29, x86_64, bare metal.
+>>
+>> I may be missing the reason for it to be there as well. If this check
+>> is intentional, what is it protecting in the _task case?
+>>
+>> Thanks,
+>> Aditya Sharma
 
