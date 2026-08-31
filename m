@@ -1,43 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DDC03DAAB1;
-	Mon, 31 Aug 2026 09:44:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005933E1D1A
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 10:01:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788169442; cv=none; b=kCw8taG0yapsa5xRgr/625fMv3SOGAmzEVQE/lcLLGRCNKN6tpGTMgNjNn5JJPHG6ROW9aam/AzNBzD9Z/4oA80hyDwRywnhu0XstlrdKj8hDAMx/AeUCoHvQKjyPOm7np+JXHjCOR4CyQJu/RhyCxDVwsGH3U+eAkdc1yiUV4c=
+	t=1788170515; cv=none; b=f10g0ZzrAomaIJwmLMsNL3iOfmD5qTHZLQ99+7lDPaKX3yfRJXC5v/jDkLvEmIendcBWucrfodb1DJy882+8+/OxAcBqKNQNYqZidV3bhUX7ZLiqoUANxcDEOvLsQFTGPlaXbDFaldcSq3U3GAfVtb+Uy0f79QaBbnjfr/7hlII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788169442; c=relaxed/simple;
-	bh=vRuIoghT0mruPhZScNVjR6AqsdQgjGXTidnqjZtE4tI=;
+	s=arc-20240116; t=1788170515; c=relaxed/simple;
+	bh=Uz30qR7eDU/YylRTBNhnOZS7YPd8NhUHTff5cwlLYCA=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=evd3kJP3lNXGytfnldHa5Ij4/1UqKXqW0sodMkFa0uV8c82DfnpD6hDqO/oNlpzzazQD/isf7qGci7/PS6kjVjunebFf2CwtGmaFeugbxIugdb5j/FBlNi+H6T/+NgwgYbG37/fEmYbKBW6Lmr13/q2O9QGL+RvrmnQmtJgCr2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ExIXGdAo; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=CNJteE6nXuKh4O38E13BdgkWO60px8AVcGCMhAmoGB0P2pgh0f1Iozfv0HiPEuA+PR3YeUtkhBt/cATqUscvq/88R2UaVB489VPmsVp/LQIM8M9lGedkvO4pWjLsJ1uwhi+jiQO7bmq623n7NA4xe2KTo+u43hD9pd6orypQ7CY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GXxWAmR2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ExIXGdAo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1DD51F000E9;
-	Mon, 31 Aug 2026 09:44:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GXxWAmR2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60EF21F000E9;
+	Mon, 31 Aug 2026 10:01:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788169441;
-	bh=KamKTf6SLaH3ogkny6EVPx1QTF2YUhFtZl7AUyal9Mk=;
+	s=k20260515; t=1788170513;
+	bh=dP+W8az+GAGNJ5KuW59jjizCDEwnzYCovZUzzWVSjd4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ExIXGdAokcHEeBjSVaHv0mwyhlOuUpTyado/cApYk+XjJJf5GjTitIVLZpMn+8ejr
-	 AHr9aOro6gXvjB97vLtrKpgEI9ZGhXv74MEK02rGLo6w/c/1MD3Gq3NN7I/bil7+Sz
-	 rUKW/FplNb+RWjc7fjWQbQBfyp3+a6lr7CFQl2xXfuB9LL9IHLJnvTtGvdrWIT8qBB
-	 PKDWs9dRj1XpVkgyvp3gGoNKg8nRI9TOEGpNa1tnRaA4oR8CseqV9WDn0FyJNbyOrp
-	 GYxd0i3DS3bgVJ1tdqJn5IBtBIhXPfsxXuo2+syorSMeewmhQaZMOZ5xPBe5tJRlmZ
-	 0B7P8unZ7R/eA==
+	b=GXxWAmR2IluIDjeDXJ6hOEK4ywB7llmd83gV5s57S0pt2BN4w2AcfFdF+HPClnhCa
+	 W+QLu+0wHQnmk6qSGob7lRuB35CvRnltNGw0GHIUph172pPINBiDYcKhxIRe2VNtSF
+	 cQkuw77ypsr64YToQIHld/ni+siPuyfw76ukCIar1duwURLbjHmCvGKKTuuErpVzZ5
+	 2btumM1aTPl8dFVuffm9Q2SAz83HXr7VmAUtoL+paOw+Jl24zBsHgIKCMo8HUwqMH5
+	 uVScSJlqAE6s4URs7c5Ecfzzbag1okUN4YtuHTWx4rAEkpQZd2szwme/tL8FrLX1LD
+	 w7k/o7b+3lzwA==
 From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH 19/20] tools/rv: Add selftest for rv bpf
+Subject: Re: [PATCH bpf-next v3 2/7] bpf: Add user memory access kfuncs for
+ mm_struct
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Gabriele Monaco" <gmonaco@redhat.com>
-Cc: linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260831090524.106845-20-gmonaco@redhat.com>
-References: <20260831090524.106845-1-gmonaco@redhat.com>
- <20260831090524.106845-20-gmonaco@redhat.com>
+To: "Anastasios Papagiannis" <tasos.papagiannnis@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260831092305.42062-3-tasos.papagiannnis@gmail.com>
+References: <20260831092305.42062-1-tasos.papagiannnis@gmail.com>
+ <20260831092305.42062-3-tasos.papagiannnis@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 31 Aug 2026 09:44:00 +0000
-Message-Id: <20260831094400.D1DD51F000E9@smtp.kernel.org>
+Date: Mon, 31 Aug 2026 10:01:52 +0000
+Message-Id: <20260831100153.60EF21F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,70 +47,69 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] ABA vulnerability in tracefs UAF mitigation due to pointer reuse.
+- [Low] The `dst` arguments in `bpf_copy_from_user_mm` and `bpf_copy_from_u=
+ser_mm_str` lack the `__uninit` suffix, causing the verifier to reject unin=
+itialized stack memory and forcing unnecessary zero-initialization.
 --
 
-commit d6f30a79c0307745af03ca13f0fdeb754d0c04a9
-Author: Gabriele Monaco <gmonaco@redhat.com>
+commit 064bec09b54d9a7638a0865baa943bd0e6467f30
+Author: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
 
-tools/rv: Add selftest for rv bpf
-   =20
-Add selftest cases for the rv userspace tool BPF commands and monitors,
-test BPF monitors registration, unregistration and functionality,
-including traces and reactors.
+bpf: Add user memory access kfuncs for mm_struct
 
-> diff --git a/tools/verification/rv/tests/rv_bpf.t b/tools/verification/rv=
-/tests/rv_bpf.t
-> new file mode 100644
-> index 0000000000000..902343f0d3f10
-> --- /dev/null
-> +++ b/tools/verification/rv/tests/rv_bpf.t
+This commit adds bpf_copy_from_user_mm() and bpf_copy_from_user_mm_str()
+kfuncs to allow BPF programs to access trusted address spaces not associated
+with a task_struct. It also updates existing task-based user memory access
+helpers to use these new functions.
+
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index b3cc5c8fc8756..19c01aa734ae1 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+
 [ ... ]
-> +check "already enabled monitor returns error" \
-> +	"echo 1 > $RVDIR/monitors/nohz/enable; $RV mon nohz" 1 \
-> +	"monitor nohz (BPF) is already enabled"
-> +[ -n "$TEST_COUNT" ] && echo 0 > $RVDIR/monitors/nohz/enable
+
+> +__bpf_kfunc int bpf_copy_from_user_mm(void *dst, u32 dst__sz,
+> +				      const void __user *unsafe_ptr__ign,
+> +				      struct mm_struct *mm, u64 flags)
+> +{
+
+[Severity: Low]
+Should the dst parameter be named dst__uninit here?
+
+Without the __uninit suffix, the BPF verifier natively treats void pointer
+kfunc parameters as ARG_PTR_TO_MEM. This forces BPF programs to redundantly
+zero-initialize their buffers before calling these sleepable kfuncs, degrad=
+ing
+usability and performance compared to the older bpf_copy_from_user_task hel=
+per.
+
+> +	int ret;
 > +
-> +check "already enabled monitor prevents unregistration" \
-> +	"echo 1 > $RVDIR/monitors/nohz/enable; $RV bpf unregister" 1 \
-> +	"monitor nohz is enabled, cannot unregister" \
-> +	"unregistered [0-9]\+ BPF monitor(s)"
-> +[ -n "$TEST_COUNT" ] && echo 0 > $RVDIR/monitors/nohz/enable
-> +
-> +check "unregister BPF monitors" \
-> +	"$RV bpf unregister" 0 "unregistered [0-9]\+ BPF monitor(s)"
+> +	if (unlikely(flags))
+> +		return -EINVAL;
 
-[Severity: Medium]
-Could this sequence of registration and unregistration expose an ABA
-vulnerability in the tracefs use-after-free mitigation?
+[Severity: Low]
+If the __uninit suffix is added, the verifier will assume the buffer is
+initialized upon return. Without clearing the buffer on this early path,
+could this allow a BPF program to read uninitialized kernel stack memory?
 
-When a monitor is unregistered here, its struct rv_monitor inside the
-bpf_struct_ops map can be freed. If a user still holds a tracefs file
-(such as enable or reactors) open for this monitor, filp->private_data
-becomes a dangling pointer.
+[ ... ]
 
-If a new monitor is then loaded and allocated at the exact same memory
-address, the pointer check in monitor_enable_write_data() might pass
-incorrectly:
+> +__bpf_kfunc int bpf_copy_from_user_mm_str(void *dst, u32 dst__sz,
+> +					  const void __user *unsafe_ptr__ign,
+> +					  struct mm_struct *mm, u64 flags)
+>  {
+>  	int ret;
 
-kernel/trace/rv/rv.c:monitor_enable_write_data() {
-	...
-	guard(mutex)(&rv_interface_lock);
+[Severity: Low]
+Similar to bpf_copy_from_user_mm above, does this dst parameter also need t=
+he
+__uninit suffix to avoid forcing BPF programs to pre-initialize the memory?
 
-	if (!rv_is_monitor_registered(mon))
-		return -ENODEV;
-
-	if (val)
-		retval =3D rv_enable_monitor(mon);
-	...
-}
-
-Since rv_is_monitor_registered() simply checks if the raw pointer mon
-exists in rv_monitors_list, it would return true for the new monitor.
-This would allow a privileged user to accidentally or intentionally
-alter the state of the newly registered monitor using the old file
-descriptor.
+If it does, the early flags check in this function would also need to zero
+the buffer before returning -EINVAL to avoid leaking uninitialized memory.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260831090524.1068=
-45-1-gmonaco@redhat.com?part=3D19
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260831092305.4206=
+2-1-tasos.papagiannnis@gmail.com?part=3D2
