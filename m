@@ -1,121 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 378113E1222;
-	Mon, 31 Aug 2026 09:24:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23E8E3DCD83
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 09:26:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788168270; cv=none; b=OY5s1zhfl+yllMjmaMTy6XxwjE78sJ/+6+7U8MN0FVL+PiF9+3wosSpGt5JRiYoSnp+FIHteyA/Oxj5zGkwyf58uhoKub9vMmqducfFI/9MRARzQb8PvjQqXC4eCKAFLqWLt5fLK1tA9+88aJXssAppdm/vjYm+UuqYIwEN4Xyw=
+	t=1788168374; cv=none; b=tZfcqMabq9HbgbKkPVIY/T9T+GzbWvLSV7WqR53HP6dRirJUVVv34KGY4ienNMIEKrqJ1mLF+VFnox5uo7fa1zw0Ln3WdjAQGSlIR13qBz6FY393XBe/ZaSp1jh5imTiI6igmdMO9RZHLL0NbgY0NXNcN//pWHYa2c45BjHk5m0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788168270; c=relaxed/simple;
-	bh=Rz/DTEMhmqQ5Ky4PtHkLLsNtAPyHlxzNB8nf//Des3c=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=S3X5hpsBZKzIHRw0G2G/CArbIMHWRxZDLP50frhV9+lHHlBF0cIsQG5w9yxPnu239AwPW/U7I8GrdwOSVR+8QNyAeCitGY62GUKD74DF0o4TpAI3fIClR6E1zhtF9aaIq6w38otXsi2gJ7C9qrbawWXxa2FeTTcvtrK1TYZNRi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ip2lDVRv; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788168374; c=relaxed/simple;
+	bh=ttK06hi5jQ+IygEkiO3ryeZPLThCrdKZVEsLhx+wvL8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Tij3gEK6cQVg5lRDxIdhxBHOSqFKRDjMjkKmhX6vUNSMHufZ19b5CFyhWagHea34AW0nuIv/AvADTs5V/1498+bk7N+n+apSphWPyP/9bgN3mDd0ipL6mT3VC0QGUB0p6OE9perZFb7NH3SXR4axkRsGoJvQ55ZS+BdYrjXiWdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VANmq/b5; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ip2lDVRv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 554A41F000E9;
-	Mon, 31 Aug 2026 09:24:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788168266;
-	bh=HMEVd3HS03tvlS1R/R4wiU2kb/z6XAmK8k07VW4f2Gw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ip2lDVRvH44B1xQWkS7mZKtPTf2Nos4bFyCRyLLyhKMhbt6395Dq9NeVMgP0xZC5W
-	 lcv0RbWvLpmggTbR0QFaC8Bd4eKbPmof3aLoTTOtH2HeL9cFosiJE0lvs7zB5DomHU
-	 YNP/CRfOZbV91jLynHMjOECiOhYXPvxs/XJsEGwPnI/TCyhDfBFXLo9j4BiOll568h
-	 YEHx3Ehu9PRQW8CFf6Sj+hpRrOa76tAq7RLyJiyGiRr6WceQJSvUBAV5tocL/zDk+S
-	 /jN88G9gCUwk2OtVyunl+O0Wt2ruPa48UuBb7cERtMz/JrSOU6ulst0zns596Vmr3w
-	 TeAJ53lq7ad9g==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH 09/20] rv: Handle unregistered monitors safely in
- tracefs
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Gabriele Monaco" <gmonaco@redhat.com>
-Cc: linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260831090524.106845-10-gmonaco@redhat.com>
-References: <20260831090524.106845-1-gmonaco@redhat.com>
- <20260831090524.106845-10-gmonaco@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 31 Aug 2026 09:24:25 +0000
-Message-Id: <20260831092426.554A41F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VANmq/b5"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-499ae1c6471so23175175e9.3
+        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 02:26:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788168370; x=1788773170; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ttK06hi5jQ+IygEkiO3ryeZPLThCrdKZVEsLhx+wvL8=;
+        b=VANmq/b5SPFwmhLEUOe5BJMyaWJRU1OJXE1jypWJCJkwYnvewQv79TVHhBqaMnOy6q
+         VqHHyn9qrMVEdQSrnH7ielKq1sXdg8SRdlDN7zxs5hKTc9Ikq8frg53gEKQggkT6oVia
+         mxU0a6IgAjQu0I+sjhvvoUHOOtLPVQfUie9HnBT3r3UmQqe2wHvP7200YhhHMBWI8Ty5
+         e2WmQeSAyHHbunu2GGdTcVbSy4TnOVGRXFr0nCI63CPw13uT2qXTUfcmPdj/iPmZI3PW
+         rX67T1e5+WqQPTxxeh2qG1q3gTaNYXeXTC0y0BGmb+9vwbbr/ziodoFU5LNbKdzI5aa/
+         7FdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788168370; x=1788773170;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ttK06hi5jQ+IygEkiO3ryeZPLThCrdKZVEsLhx+wvL8=;
+        b=UsOQeq3m+fi9vxtOb8sw7HjtRQthgTrvZiFbwnIA8jONixgvFTEnFPLf8lfaSG0XA7
+         Gb43lR/C58nECdMCZsmGRa2vGXqdhIuNrCoqsgpIpVcNYQmvCcHnr0bZIldqnafsap/Y
+         yKSzZueD0MQftEr6FiPwkXqPawW27Yf+w4GqqVtStLbD+159muJ57j/sGT0+M7S+TcUM
+         um4heszjfJgSM/LiFTxXz8SWTBqRwJI+G1u5eI1EGt2SLKd9gNeP3qIcaz4Wd87E5/Cv
+         U2MId1jzT0uSOEoJaeqMIVFjVkslBEt/cWk9wmIgII1/tyKSee6PZQUoaUFGigRIos0v
+         8+mQ==
+X-Forwarded-Encrypted: i=1; AHgh+Ro6Ma0L3yi4PvWot8kPuaqD8OVqYINTUeqk3ZvtOko2SS+btALAagmYJuA8UToImbm8z5M=@vger.kernel.org
+X-Gm-Message-State: AFuF++nvTX+TvZM5pOgmxXHtrg9nv8Z0whz5T1DeasqTbWNrpUaPfRFJ
+	AJZMflKSQhuI5+qvtoKwK9620p5R0MLQyYkxweWL0KKW/JR7wqouEyw/
+X-Gm-Gg: AR+sD112QL50DNJhLM5A8dQxVXn7/ta4sd+r7VvewFoe7UY9C+tf8W1P3XbScOoiN7B
+	WhwixuBB2s7/oqtDU6t7xOoiW9/Ku+a/E/bKTYkg0iPX35AxequrzuZJHFqI81ns3M7TZRN1NE6
+	xzP5NVzNsNfBk6MMXJ7YnfYSb8JX85aqRfEXeGIUVJEcZdECM/IcHXgM6aKtkToQvWgnuglSOR2
+	7vBrVs4gYXVQNwiKofBVbYD5ngZ0igVMN4oWrvDQjjNhk/xCa0p0jUaa3Ovx5o6tMfKy7iEBH6T
+	oX+V8m/10TDVzpa+DgEKgdocMNk9o39sXutFJocOicaRdRigaxAcRkfs2f4mcRlf1aym785El/D
+	AuWWOkRYElxMsjYBhGDADp8v+NBjPSOHtZfNwKOzPYDH2zJb6uDtIO6044FUoimK8mhP2QDyP+m
+	QKqH+gNJh+UDoMHxj+lAFhJ7tNkCswRQ2NkeDGyOU12/FKwz9FaAzsqAnVGv0U657aucXkACh/9
+	Q==
+X-Received: by 2002:a05:600c:8b35:b0:499:cd34:f7c with SMTP id 5b1f17b1804b1-49cd9421bfcmr29162715e9.5.1788168370027;
+        Mon, 31 Aug 2026 02:26:10 -0700 (PDT)
+Received: from dell-desktop ([2a02:587:4b5f:900:ef25:2f4:1792:4e6f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49c5a903eebsm171374105e9.4.2026.08.31.02.26.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Aug 2026 02:26:09 -0700 (PDT)
+From: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
+To: andrii.nakryiko@gmail.com
+Cc: akpm@linux-foundation.org,
+	andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	brauner@kernel.org,
+	daniel@iogearbox.net,
+	david@kernel.org,
+	eddyz87@gmail.com,
+	kpsingh@kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	matt@bobrowski.net,
+	memxor@gmail.com,
+	song@kernel.org,
+	tasos.papagiannnis@gmail.com,
+	utilityemal77@gmail.com,
+	viro@zeniv.linux.org.uk
+Subject: Re: [PATCH bpf-next 2/3] bpf: Add user memory access kfuncs for linux_binprm
+Date: Mon, 31 Aug 2026 12:25:47 +0300
+Message-ID: <20260831092548.42348-1-tasos.papagiannnis@gmail.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <CAEf4Bzb9szFTDo5uUxLgUVD3qA1XF-5A7GZGxJjX6d1MYLhbFQ@mail.gmail.com>
+References: <CAEf4Bzb9szFTDo5uUxLgUVD3qA1XF-5A7GZGxJjX6d1MYLhbFQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The validation check `rv_is_monitor_registered` is vulnerable to=
- the ABA problem, allowing operations on a stale file descriptor to imprope=
-rly manipulate a newly registered monitor.
---
+> this is probably ok, but also we might want to look into having
+> verifier still allow to dereference trusted ptr-or-null into untrusted
+> ptr_to_btf_id to help with smooth transitions like this.
 
-commit abab0e30c495cd011906fb219545b8b62d268a11
-Author: Gabriele Monaco <gmonaco@redhat.com>
+> Not sure how complicated that would be in the verifier, but that would
+> be a nice backwards compat preserving behavior.
 
-rv: Handle unregistered monitors safely in tracefs
+I have just submitted an updated version of this series that also allows
+to dereference trusted ptr-or-null into untrusted ptr_to_btf_id in
+https://lore.kernel.org/bpf/20260831092305.42062-1-tasos.papagiannnis@gmail.com/T/#t.
 
-This patch adds checks to ensure that a tracefs file descriptor's private_d=
-ata
-still points to a registered monitor before allowing read or write operatio=
-ns.
-It aims to prevent use-after-free scenarios when pluggable BPF monitors are
-dynamically unregistered while their files are still open.
+> But to keep things simple today, I'd just mark that bprm->mm pointer
+> as TRUSTED_OR_NULL.
 
-> diff --git a/kernel/trace/rv/rv.c b/kernel/trace/rv/rv.c
-> index 33919c5fbd6ad..6ddd3b92da1db 100644
-> --- a/kernel/trace/rv/rv.c
-> +++ b/kernel/trace/rv/rv.c
-> @@ -245,13 +245,31 @@ struct rv_monitor *rv_get_monitor_by_name(const cha=
-r *name)
->  /*
->   * This section collects the monitor/ files and folders.
->   */
-> +
-> +bool rv_is_monitor_registered(struct rv_monitor *mon)
-> +{
-> +	struct rv_monitor *m;
-> +
-> +	list_for_each_entry_rcu(m, &rv_monitors_list, list,
-> +				lockdep_is_held(&rv_interface_lock)) {
-> +		if (m =3D=3D mon)
-> +			return true;
+If you think v3 is too complicated, or that the trusted-or-null
+dereference support should be split into a separate series, please let
+me know. In that case, I will simply mark the bprm->mm pointer as
+TRUSTED_OR_NULL.
 
-[Severity: Medium]
-Is it possible for a newly registered monitor to be allocated at the exact
-same memory address as a previously unregistered monitor?
-
-If a privileged user opens a monitor's tracefs file, the monitor is then=20
-unloaded (freeing its memory), and a subsequently loaded BPF monitor happens
-to be allocated at that exact same memory address, it appears this pointer=
-=20
-equality check would incorrectly evaluate to true for the stale file descri=
-ptor.
-
-> +	}
-> +	return false;
-> +}
-
-[ ... ]
-
-> @@ -384,6 +402,9 @@ static ssize_t monitor_enable_write_data(struct file =
-*filp, const char __user *u
-> =20
->  	guard(mutex)(&rv_interface_lock);
-> =20
-> +	if (!rv_is_monitor_registered(mon))
-> +		return -ENODEV;
-> +
->  	if (val)
->  		retval =3D rv_enable_monitor(mon);
-
-[Severity: Medium]
-If the registration check passes due to the reallocation scenario described
-above, could a write to a stale file descriptor improperly enable or disable
-the newly registered, unrelated monitor?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260831090524.1068=
-45-1-gmonaco@redhat.com?part=3D9
+Thanks,
+Anastasios
