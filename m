@@ -1,268 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D17DE3F23C9;
-	Mon, 31 Aug 2026 12:07:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8650A3E0C47
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 12:10:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788178039; cv=none; b=aMv/cUG2rtKVUNOc8VTf3jHtVwIoraod85uvA3PuzKRfKIenpta/9go1wO5Z2moakpoUEZhAH5JfXWY6YiDf8/0BCKqhcDUkeay3asrQFH2x1waNQqw1+tPAl5iWVoojVlOU4b1q5jZJSXyigCdCaFAhENIdYc6BweQ7rbNIkV4=
+	t=1788178248; cv=none; b=XSjkk+BAvvWlT++LjDBQnvfn6KX/VH31N/tm2XSLeZs+w7il5RjY6jXZDryq9PwDHV8BOCfrDIm1BKTlUd9wA7UXZAyaDsyIb5r15NhHjDkTbDchP+KsnAlix1ktJcYD+67VgeRH44EH67p3yU/USqiWmMd7ohAN40W4LW/siZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788178039; c=relaxed/simple;
-	bh=psZy7dbAzXBstHDfITN0TvFphDtTgH1CjONmrutXaFs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WsjDe7YhNFg83aIv9SXqoRdUSVjs0T6QrojEtiJsUqRMXR92mE45EPrDXEiW7PKQvcNY2KpqlEIluip1Fo17XIS4ZzIn8xraj9VyVAUC2s/O9dgLki2f/v/muq3Q/cLx7CGL83TWw13gOodabix2K2trlFc7gWJFyClDWJSNzUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ecPradol; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788178248; c=relaxed/simple;
+	bh=p2Uu1nMgVMYKLDH4fRq1B7AXh5w3WUSQ7LF0tE+17PE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CWvD0qaPjTpi5oOc1zBJ4B0jjU3nSqli85SvHTKk0wkjGXXGQByTYA2O0jkLbvLmzrdvtH3XwVlAxjLRwSLYhnjjq/ZW5qtnshXvlOuHkSvuC02DPfDDXjRcvjzvTLrmqrNv8eaK/UJGeFIqjdb7PbGmaFqiKwqU6PLBUYvTVJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ozKGpdpz; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ecPradol"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20E7E1F000E9;
-	Mon, 31 Aug 2026 12:07:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788178037;
-	bh=sxITRdGiF8nNWQ9sU3tcJFxWc59k0x7Qgm3VdJgoXxA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ecPradolzv9wv9ndrTlxPeCPt2bWWCqktsFBC2ZGksVrWIwjMZOHEV41eWGNywmJo
-	 b6RksXhkLVnfiSQiZo1aAtiwrcEGp9S3UNqUOOsPUnt54AcDJcQ83sRHf52wesAgk6
-	 tSxLLAVW3qTK0APPOJdIE28beWgNd/gRnh4vvwEzwci5k4LzA4mAwdgwUDwl31zTNl
-	 pOSbn2Yu42V8zooVF8AXt7ySmy4dzLESDAd9eVFryq0NpkyqvyEANsnd94FJaOnhKE
-	 iE7/VvpYnAhwEIuQVIcI5cTeh5osaEJxtr/0GpiFGeRwDNs3zyt6+zWEwl7S5ZZmBs
-	 9D554fXAKcg8g==
-Content-Type: multipart/mixed; boundary="===============6103159406767288039=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ozKGpdpz"
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-69c600f76ccso4320260a12.0
+        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 05:10:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788178244; x=1788783044; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=AjfRvBDgN8YljIPenyb3yj/VMKwNxmnnBipoaD0U950=;
+        b=ozKGpdpzIiZofXMtdoZkqoFqyHsHB9fIInAytIIJuLx9qiiRq+Ak/J+18mZHldqK/a
+         KmMtW14CzEAMCz4adnIj06XUVo7zDF9DzJhTymoaB7qUxoE8EBDbkqUFebry5AH15I5E
+         sbOqU13xCDZAIj8CxSDEtxoz5WQu9bfCrdavBGW2vrDvGn7oeX7gp1TviSgd4IDORw7+
+         K/3DuzkcyAUH6BalJG0g1UXoZ1iVtcsL4p4MQYZVtZiDiAz49iGtGUYkQQ3zOrn7N28p
+         y25FCnGj18/2X9NAclGQ7DKO7+Xd3XntWnAlfnifJeWJuCb0Tnl3lGd5+aOd68/rNo6B
+         hNKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788178244; x=1788783044;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=AjfRvBDgN8YljIPenyb3yj/VMKwNxmnnBipoaD0U950=;
+        b=Ws8oQWsXzQ+ligWVeLOkNL91PfbZQVeozPH//ClvIzZ4AQzS2ukixk95PzT65/yC3Z
+         TElWMdpr8cwUsm+/+vKXfNiFb9OJ+U8IjFl8GuI+UCCglZagrKRTtbC7kox7mvOh2KcR
+         oRdGSEF1FWuW+IlnkZ3MmBzwIXjlv1ZxezP3rr9JD36p/1ZHCLc9gxQtG8EEXwdArbG7
+         VpP2GGN7+dA8z+aHcyMNX5ER1P0a8Sia5m684EgHGjxOTlZocAOZvNkb/R3CMMTG0PN6
+         eoUFNLY+XCfTiHI3oikeMlz/odrmY1tepFMQIIRL1PLmDsNLzgluoS0x6VnqZCYOxa1o
+         tDFg==
+X-Gm-Message-State: AFuF++nVcBHXGWcuVu8neqGsuLrIZ/xTDaERHAL9EQV0xY5CkXVrFHUa
+	bJkNZvrT1P7rUAE3mq4fwaH4D+CQSwSXmACca1WY3Rgcgfv3gkSjFfow
+X-Gm-Gg: AYBFou3u+0WWJoK28k/tA4qvmCRzAhkkbQkxnnBoS2uph3b60H9gCzkaWvZhUGYtLRY
+	PgosEoDDgSKXwUMp+/WLPI0nmvoZJVdrrlz7FRpQ+XNfy7rYu2t/KV9tpoMMrpPnKEWUCG6VGUl
+	/2Qke8sA83YT011ct9FlbqKx2kaB14/l3xDCMRqUrLrMhJ2H2WIhANBkJZqoRRdRLU9u0Df6848
+	rgBJaD61cOAf5VOi3hOGEpCeRfHNSgkQ2NzDjibjAYbN4UdUzbrT7jFO7jwzlVRr0kpPWoR9zYU
+	sbCIqRBEM4nAd531TPHP1i2iWKOktqMeKWf5fKgubfHY9MzBDOakZtVIHfRlk+NPSonai6jSxdX
+	a5VMV406/fEJtyMKNZ/Gwdn3ykTr1dp7lgW0eXsTpRGoVi/OMplnU90CKnsKqWhmGVDgPLHKdS9
+	+1WbVLwXen1IVazEg+exZuHzWzftnJvs8KyDZiPDVQcE6W1Roaa1qwh2DaDn0XLexArSqN
+X-Received: by 2002:a05:6402:378b:b0:6a6:32fa:1e9e with SMTP id 4fb4d7f45d1cf-6a632fa1f4emr7274569a12.22.1788178244220;
+        Mon, 31 Aug 2026 05:10:44 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a611c64f9fsm3557069a12.27.2026.08.31.05.10.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Aug 2026 05:10:43 -0700 (PDT)
+Date: Mon, 31 Aug 2026 12:21:24 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Puranjay Mohan <puranjay@kernel.org>, rachelmenge@gmail.com,
+	hargar@microsoft.com, apais@microsoft.com
+Subject: Re: [PATCH bpf-next v1 1/2] bpf: allow terminal gotox instructions
+Message-ID: <apVxxDcvCSzlw2FG@mail.gmail.com>
+References: <20260830073125.360934-1-sidchintamaneni@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <8d30ab031e47894c8309a8f6d8c054ead8123f9228ce6f983fb3c951e46bade9@mail.kernel.org>
-In-Reply-To: <20260831110934.241898-8-a.s.protopopov@gmail.com>
-References: <20260831110934.241898-8-a.s.protopopov@gmail.com>
-Subject: Re: [PATCH bpf-next 7/7] selftests/bpf: Add tests for BPF ethtool hooks
-From: bot+bpf-ci@kernel.org
-To: a.s.protopopov@gmail.com,bpf@vger.kernel.org,linux-security-module@vger.kernel.org,netdev@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,kpsingh@kernel.org,matt@bobrowski.net,john.fastabend@gmail.com,brauner@kernel.org,paul@paul-moore.com,torvalds@linux-foundation.org,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com
-Cc: a.s.protopopov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 31 Aug 2026 12:07:16 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260830073125.360934-1-sidchintamaneni@gmail.com>
 
---===============6103159406767288039==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On 26/08/30 07:31AM, Siddharth Chintamaneni wrote:
+> check_subprogs() treats gotox as a direct jump and validates its reserved
+> zero offset. When gotox is the final instruction, this produces a
+> synthetic successor one instruction past the end of the subprogram and
+> rejects an otherwise valid program.
+> 
+> Skip direct-offset validation for gotox and accept it as a
+> non-fallthrough terminal instruction. Its actual targets remain validated
+> from the instruction-array jump table during CFG construction.
 
->     This is how the list off sub-tests maps to call sites:
->
->       linkstate_get_doit:    netlink.c (ethnl_default_doit)
->       linkstate_get_dump:    netlink.c (ethnl_default_dump_one)
->       cable_test_act:        cabletest.c (ethnl_act_cable_test)
->       cable_test_tdr_act:    cabletest.c (ethnl_act_cable_test_tdr)
->       features_set:          features.c (ethnl_set_features)
->       module_fw_flash_act:   module.c (ethnl_act_module_fw_flash)
->       tunnel_info_get_doit:  tunnels.c (ethnl_tunnel_info_doit)
->       tunnel_info_get_dump:  tunnels.c (ethnl_tunnel_info_dumpit)
->       tsinfo_get_dump:       tsinfo.c (ethnl_tsinfo_dump_one_netdev)
->       rss_get_dump:          rss.c (ethnl_rss_dumpit)
->       channels_set_doit:     netlink.c (ethnl_default_set_doit)
->       ioctl:                 ioctl.c (ethtool_bpf_ioctl_hook)
->       ioctl_sub_cmd:         ioctl.c (ethtool_bpf_ioctl_hook)
->       no tests:             rss.c (ethnl_rss_{create,delete}_doit)
+Thanks, the fix looks correct.
 
-The changelog's sub-tests table does not match the sub-tests the patch
-adds. The code registers 15 sub-tests, including cable_test_phy_index
-(check_doit with TEST_PHY_INDEX, exercising the phy_index argument of
-the doit hook) and strset_get_phy_index_dump (check_dump with
-TEST_PHY_INDEX, exercising the phy_index argument of the dump hook),
-neither of which appears in the 13-row table.
+I have comments to the selftest, so expecting v2. When you resend it,
+please capitalize "allow" in this commit's title.
 
-These are the only two sub-tests that cover the phy_index parameter at
-all, i.e. the least obvious part of the new hook ABI, so their absence
-from the mapping is the part a reviewer is most likely to want
-documented.
+Reviewed-by: Anton Protopopov <a.s.protopopov@gmail.com>
 
-Two smaller inconsistencies in the same block: the prose names
-ethnl_tsinfo_dump_one_phydev() as unreachable via netdevsim, but the
-'no tests' row lists only rss.c (ethnl_rss_{create,delete}_doit); and
-'the list off sub-tests' should read 'the list of sub-tests'.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/ethtool_lsm.c b/tools/testing/selftests/bpf/prog_tests/ethtool_lsm.c
-> new file mode 100644
-> index 0000000000000..f4662fb1ae3ce
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/ethtool_lsm.c
-> @@ -0,0 +1,330 @@
-
-[ ... ]
-
-> +static int ethnl_request(int fd, __u16 family_id, __u8 cmd, __u16 hdr_attr,
-> +			 __u16 extra_nest, __u32 ifindex, __u32 phy_index, bool dump)
-> +{
-> +	static __u32 sequence = 10;
-> +	struct genl_req req = {};
-> +	__u32 seq = sequence++;
-> +	struct rtattr *nest;
-> +	int err;
-> +
-> +	req.nlh.nlmsg_len = NLMSG_LENGTH(GENL_HDRLEN);
-> +	req.nlh.nlmsg_type = family_id;
-> +	req.nlh.nlmsg_flags = NLM_F_REQUEST | (dump ? NLM_F_DUMP : 0);
-> +	req.nlh.nlmsg_seq = seq;
-> +	req.genl.cmd = cmd;
-> +	req.genl.version = ETHTOOL_GENL_VERSION;
-> +
-> +	nest = addattr_nest(&req.nlh, sizeof(req), hdr_attr | NLA_F_NESTED);
-> +	if (ifindex && addattr32(&req.nlh, sizeof(req), ETHTOOL_A_HEADER_DEV_INDEX, ifindex))
-> +		return -EMSGSIZE;
-> +	if (phy_index && addattr32(&req.nlh, sizeof(req), ETHTOOL_A_HEADER_PHY_INDEX, phy_index))
-> +		return -EMSGSIZE;
-> +	if (addattr32(&req.nlh, sizeof(req), ETHTOOL_A_HEADER_FLAGS, ETHTOOL_FLAG_COMPACT_BITSETS))
-> +		return -EMSGSIZE;
-> +	addattr_nest_end(&req.nlh, nest);
-> +
-> +	if (extra_nest) {
-> +		nest = addattr_nest(&req.nlh, sizeof(req), extra_nest | NLA_F_NESTED);
-> +		addattr_nest_end(&req.nlh, nest);
-> +	}
-> +
-> +	err = genl_send(fd, &req.nlh);
-> +	if (err)
-> +		return err;
-> +
-> +	return genl_recv(fd, seq, family_id, dump);
-> +}
-
-ethnl_request() never sets NLM_F_ACK, so a doit request that succeeds
-without producing a reply message gets no netlink response at all:
-netlink_rcv_skb() only calls netlink_ack() when
-'nlh->nlmsg_flags & NLM_F_ACK || err'.
-
-This is exactly what happens in the allow arm of the channels_set_doit
-subtest. ETHTOOL_MSG_CHANNELS_SET is dispatched through
-ethnl_default_set_doit(); ethnl_set_channels_validate() returns 1 on
-netdevsim (both get_channels and set_channels are implemented), so the
-hook is reached and the deny arm works, but the request carries only
-the header nest, so ethnl_set_channels() takes 'if (!mod) return 0;'
-and the SET handler produces neither a reply nor an error.
-
-genl_recv() then blocks until the SO_RCVTIMEO set in genl_open()
-(struct timeval { .tv_sec = 1 }) expires and returns -EAGAIN.
-Consequences: (a) 'if (!ASSERT_NEQ(err, -TEST_ERRNO, "doit (allow)"))'
-passes vacuously - -EAGAIN would also be returned if the kernel had
-wrongly dropped the request, so the allow arm of this subtest pins
-nothing; (b) the subtest silently costs a full second of wall time, and
-would grow with each additional SET-style subtest added later.
-
-Setting NLM_F_ACK in nlmsg_flags (rtnl_talk() in netlink_helpers.c
-does this itself when no answer is requested) makes the kernel ack the
-successful set, so the allow arm returns 0 immediately and actually
-distinguishes success from 'nothing came back'.
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/progs/ethtool_lsm.c b/tools/testing/selftests/bpf/progs/ethtool_lsm.c
-> new file mode 100644
-> index 0000000000000..c6b21aeed6fec
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/ethtool_lsm.c
-> @@ -0,0 +1,168 @@
-
-[ ... ]
-
-> +/*
-> + * This test is used for all hooks, just checks that it is ours,
-> + * and allows/denies based on the "allow" global variable
-> + */
-> +static int test_policy(const struct net_device *dev, __u32 cmd, __u32 sub_cmd, __u32 phy_index)
-> +{
-> +	__u32 pid;
-> +
-> +	pid = bpf_get_current_pid_tgid() >> 32;
-> +	if (pid != monitored_pid)
-> +		return 0;
-> +
-> +	if (!dev || (target_ifindex && dev->ifindex != target_ifindex))
-> +		return 0;
-> +
-> +	if (target_cmd && cmd != target_cmd)
-> +		return 0;
-> +
-> +	if (target_sub_cmd && sub_cmd != target_sub_cmd)
-> +		return 0;
-> +
-> +	if (phy_index != target_phy_index)
-> +		return -EDOTDOT;
-> +
-> +	return allow ? 0 : -EDOTDOT; /* unlikely to see this errno outside this test */
-> +}
-
-The comment on test_policy() says the helper 'just checks that it is
-ours, and allows/denies based on the "allow" global variable', but the
-function has a third behaviour the comment does not mention: the
-phy_index test returns -EDOTDOT unconditionally, i.e. it denies
-regardless of the value of allow.
-
-That is not a cosmetic difference: it is the only place where the deny
-errno is produced independently of allow, and it is precisely the
-mechanism the phy_index sub-tests (cable_test_phy_index,
-strset_get_phy_index_dump in prog_tests/ethtool_lsm.c) rely on - a
-mismatched phy_index makes the allow phase return -EDOTDOT and
-therefore fail ASSERT_NEQ(err, -TEST_ERRNO, "doit (allow)").
-
-Note also that every other filter in the function bails out with
-'return 0' (allow) when the request does not match, while this one
-bails out with a denial, so the asymmetry is easy to misread as a
-copy/paste slip.
-
-A reader who trusts the comment will assume allow == true always means
-'permit', and a later change to the phy_index handling can silently
-turn the phy_index sub-tests into no-ops. Suggest documenting that the
-phy_index comparison is an assertion that the hook argument was
-propagated correctly (or gating it on target_phy_index like the other
-filters and asserting the value from user space instead).
-
-[ ... ]
-
-> +/*
-> + * CVE-2025-21701 is an example of a bug which must be mitigated under a lock,
-> + * as access to dev->reg_state must be protected.
-> + */
-> +SEC("lsm/ethtool_netlink_doit")
-> +int BPF_PROG(cve_2025_21701, const struct net_device *dev, __u32 cmd, __u32 phy_index, int ret)
-> +{
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (!dev)
-> +		return 0;
-> +
-> +	return dev->reg_state >= NETREG_UNREGISTERING ?  -ENODEV : 0;
-> +}
-
-The example policy for CVE-2025-21701 installs only an
-lsm/ethtool_netlink_doit program, but the hook-adding commit in this
-same series (36bc9190590e4) classifies CVE-2025-21701 under 'more than
-one hook required', in contrast to CVE-2024-46834 which is given both
-an ioctl and a doit program a few lines below.
-
-The upstream fix for that CVE (12e070eb6964b, 'net: avoid race between
-device unregistration and ethnl ops') widened the test in
-ethnl_ops_begin() to 'dev->reg_state >= NETREG_UNREGISTERING', and
-ethnl_ops_begin() is reached from the dump path as well as from doit:
-
-net/ethtool/netlink.c:ethnl_default_dump_one()
-  -> ctx->ops->prepare_data()
-    -> net/ethtool/channels.c:35 / net/ethtool/rss.c:158
-      -> ethnl_ops_begin()
-
-A doit-only program therefore leaves the dump entry into the same
-window unpoliced, so as an 'illustration of how an actual policy might
-look' it is incomplete for the CVE it names. Either add the matching
-lsm/ethtool_netlink_dump program (as done for cve_2024_46834_*), or
-state in the comment that only the doit half is shown and why.
-
-Secondary nit on the same line: '?  -ENODEV' contains a doubled space
-after the '?'.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33386073074
---===============6103159406767288039==--
+> Signed-off-by: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
+> ---
+>  kernel/bpf/verifier.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index e036ae20bf6b..44195ec1445d 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -3087,6 +3087,8 @@ static int check_subprogs(struct bpf_verifier_env *env)
+>  			subprog[cur_subprog].exit_idx = i;
+>  			goto next;
+>  		}
+> +		if (insn_is_gotox(&insn[i]))
+> +			goto next;
+>  		off = i + bpf_jmp_offset(&insn[i]) + 1;
+>  		if (off < subprog_start || off >= subprog_end) {
+>  			verbose(env, "jump out of range from insn %d to %d\n", i, off);
+> @@ -3106,7 +3108,8 @@ static int check_subprogs(struct bpf_verifier_env *env)
+>  			 */
+>  			if (code != (BPF_JMP | BPF_EXIT) &&
+>  			    code != (BPF_JMP32 | BPF_JA) &&
+> -			    code != (BPF_JMP | BPF_JA)) {
+> +			    code != (BPF_JMP | BPF_JA) &&
+> +			    !insn_is_gotox(&insn[i])) {
+>  				verbose(env, "last insn is not an exit or jmp\n");
+>  				bpf_diag_program_structure(
+>  					env, i, "subprogram can fall through",
+> 
+> base-commit: cd35e1b10182c42b4ae31ee49119463b17d8ba7f
+> -- 
+> 2.43.0
+> 
