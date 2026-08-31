@@ -1,288 +1,152 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D877234CFC2
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 10:40:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C76642D781B;
+	Mon, 31 Aug 2026 10:43:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788172859; cv=none; b=bT9sTWS710l94yVQtUZC0t18jcVWxFM4Guq2mE7ROyDePaySFKIxYJOFowyJF/rnijzlynfXHktaYI7yi6Kalw/PP98xovnpJoXj/CoorX1+aeDe3zNGK+5KjGI7pFB9atNj/gy+ZH4dH3iczEfCEIL4cKBqOGGCZLcrwMw54HA=
+	t=1788172997; cv=none; b=D0yaDZxsieOIrmdIcnEo0nFmY4dCacyAGiiO4tQxR0lOUz5B9soAf81sVMfpGataNz5mlEQUWAIgcpSGkpQojU5soAjTKYF+o2EnXm0Wx7BafT4p6RECt4bRWMzV3EqaLYxRdNg3lO1w1atk2YOStpaRwRPmAWARpMmhNyjRwTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788172859; c=relaxed/simple;
-	bh=H/qisQv/xH78yLgb1nRbzW8PNsF3r6Zv2D3mkxFKRXo=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=OZnMD7k6JC7G8p7WertdlfwmBTnLmtGIB+u0EsSXogpAosTiO0I50rYkfPhDAbXBCnLtdFuPfPuHsWC4u9N20lfZKP4Uvn2mhbgLtlBTL0ozAKaGM+COtmGDZoqQhPm7Wxon4Elo25Z/1BDjGsyFhHTJI9pTpaUkpNmkzjsVgFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8Axj9E1WpVqUuEGAA--.19264S3;
-	Mon, 31 Aug 2026 18:40:53 +0800 (CST)
-Received: from [10.130.40.83] (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJDxTs8yWpVq5TwYAA--.51136S2;
-	Mon, 31 Aug 2026 18:40:51 +0800 (CST)
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Add test for indirect
- struct_ops trampoline
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260831085705.13747-1-yangtiezhu@loongson.cn>
- <20260831090820.298AC1F000E9@smtp.kernel.org>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <3d549674-0e91-8d93-16e8-d6178fe79296@loongson.cn>
-Date: Mon, 31 Aug 2026 18:40:50 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1788172997; c=relaxed/simple;
+	bh=lW+liWO8qmv4ZSh1ff1E2l311S9sZ5fYoySavkW1RJo=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=pXsbquLXk5TT8HQIbPaxsS53bSH9wI7YdPc4KhVdIkRYx+iImmaWm6JCPwpw6ghMjpu6Vctl+k0lTBuANzUS68wXEPGxDBj0hPQqidZV5P1sxnD+EX5J8EAzGfXytlwpHOd/aJDrXnlD+xN2ayyCaOX8r+pyGJUxHxIOb3OrFPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g9qx3Oy+; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g9qx3Oy+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D7AF1F000E9;
+	Mon, 31 Aug 2026 10:43:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788172995;
+	bh=1zRiZoEe+cziUvxkvj8KRKsW5kQ9BPFWyKQ48V5U48c=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=g9qx3Oy+sEirhBlaPWlATBQb6Wt+QnUbSr1uatSFzBcPbN+Hzm5139c6BIVUd405B
+	 hQgDp6gBYQzjJPyxjPW6yEQLBcgIwAI9BY3Dp8HDsSgg9aG/aeiiqzvqU6dgypNN0v
+	 +0qsyKBQb5pkem5mHcAPoDc3q0UlDA6jVm92NA5HUjdPbbzcZrvA5oANPXIsfpP18o
+	 fRW99ndcB67wuop3tQ+nicsSUvSQxjPUVMk5Ba07fL3XD+iyGVelFq3vA4NJxBEasn
+	 Y41838p1p4M4dXkpTI2b+G2zVHOpawy4qFAOrvvqtK8oUFmfeYnLWbU0/6TDjwhKnZ
+	 aHrG2wtbCUAwQ==
+Content-Type: multipart/mixed; boundary="===============6575441848940488516=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20260831090820.298AC1F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJDxTs8yWpVq5TwYAA--.51136S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxuw4xuFy5uw1xKw47Jw1fAFc_yoWfJrWDpF
-	y8J3WYyFs5Zr4DXF18Xa1UXF4Fgrs7Z34jkrW8G3s5CF93X3srJF18KFWfCr95GrZ5Zr1a
-	y3savr15Aa1UZ3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-	1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv
-	67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
-	AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-	F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jrv_JF
-	1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
-	xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
-	4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07Ui
-	iSdUUUUU=
+Message-Id: <2163fb3e4198f7feac29b37aa7c659535eb5d11248f681bb25c3bc97838aa1b0@mail.kernel.org>
+In-Reply-To: <20260831092305.42062-7-tasos.papagiannnis@gmail.com>
+References: <20260831092305.42062-7-tasos.papagiannnis@gmail.com>
+Subject: Re: [PATCH bpf-next v3 6/7] bpf: Mark linux_binprm->mm as trusted-or-null
+From: bot+bpf-ci@kernel.org
+To: tasos.papagiannnis@gmail.com,bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,linux-mm@kvack.org,linux-fsdevel@vger.kernel.org,viro@zeniv.linux.org.uk,brauner@kernel.org,akpm@linux-foundation.org,david@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,kpsingh@kernel.org,matt@bobrowski.net,song@kernel.org,utilityemal77@gmail.com,tasos.papagiannnis@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 31 Aug 2026 10:43:14 +0000 (UTC)
 
-On 2026/8/31 下午5:08, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [High] The introduction of global state (`st_ops_trampoline` and its mutex) in `bpf_testmod` causes parallel test breakages, permanent DoS, and Use-After-Free (UAF).
-> - [Medium] Removal of `RUN_TESTS` drops declarative verifier failure message matching, masking verifier bugs.
-> --
-> 
-> commit 932e6a2ea3847d584c9e377639c762f03a9fe713
-> Author: Tiezhu Yang <yangtiezhu@loongson.cn>
-> 
-> selftests/bpf: Add test for indirect struct_ops trampoline
-> 
-> Add a test case to verify that arguments passed on the stack are correctly
-> read by an indirect struct_ops trampoline.
-> 
->> diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_multi_args.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_multi_args.c
->> index 0f321e8898620..7f6f9d61c9e07 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_multi_args.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_multi_args.c
->> @@ -3,7 +3,54 @@
->>   #include <test_progs.h>
->>   #include "struct_ops_multi_args.skel.h"
->>   
->> +static void test_refcounted_multi(void)
->> +{
->> +	struct struct_ops_multi_args *skel;
->> +	int err;
->> +
->> +	skel = struct_ops_multi_args__open();
->> +	if (!ASSERT_OK_PTR(skel, "struct_ops_multi_args__open"))
->> +		return;
->> +
->> +	err = struct_ops_multi_args__load(skel);
->> +	ASSERT_EQ(err, -EINVAL, "struct_ops_multi_args__load");
-> 
-> [Severity: Medium]
-> Does this replace the test_loader's verifier log parsing with a manual
-> assertion?
-> 
-> By dropping RUN_TESTS in test_struct_ops_multi_args(), the test now silently
-> passes on any verifier error (such as invalid BTF or a missing map) returning
-> -EINVAL rather than validating the exact failure condition. This masks
-> potential verifier bugs.
+--===============6575441848940488516==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-I will manually use bpf_program__set_log_buf() to capture and verify
-the log "program with __ref argument cannot tail call", like this:
+> bpf: Mark linux_binprm->mm as trusted-or-null
+>
+> Mark linux_binprm->mm as a trusted-or-null nested pointer so BPF programs
+> can pass it to kfuncs after a NULL check. The linux_binprm owns this mm
+> throughout the bprm_check_security hook and clears the pointer only after
+> exec_mmap() installs the new address space.
 
-```
-diff --git 
-a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_multi_args.c 
-b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_multi_args.c
-index 7f6f9d61c9e0..c77601d4836c 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_multi_args.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_multi_args.c
-@@ -6,15 +6,23 @@
-  static void test_refcounted_multi(void)
+Is the changelog's description of when bprm->mm is cleared accurate?
+
+Enumerating every write to bprm->mm in the tree shows three places where
+the pointer is cleared, not just "after exec_mmap()":
+
+  fs/exec.c:bprm_mm_init()
+      bprm->mm = mm = mm_alloc();          /* assign */
+      ...
+      bprm->mm = NULL;                     /* error path, before mmdrop */
+
+  fs/exec.c:begin_new_exec()
+      bprm->mm = NULL;                     /* after successful exec_mmap() */
+
+  fs/exec.c:free_bprm()
+      bprm->mm = NULL;                     /* before mmput() */
+
+Two of these three are not accounted for by the changelog. The
+bprm_mm_init() error path clears the pointer before mmdrop(), and
+free_bprm() clears it before mmput(). The free_bprm() case is actually
+load-bearing: it's what commit d3633d366b08f ("exec: Clear bprm->mm
+before dropping its reference") in this same series was added for, and
+that commit's changelog says it's "required for eBPF kfuncs where
+bprm->mm is either NULL or points to a live mm_struct."
+
+The real invariant this verifier change depends on is "bprm->mm is
+always either NULL or a live mm," established across all of fs/exec.c.
+The changelog instead asserts a narrower property that doesn't hold.
+
+This matters because the marking isn't scoped to bprm_check_security.
+Any BPF program with a trusted linux_binprm pointer (all five bprm_*
+LSM hooks in include/linux/lsm_hook_defs.h, plus fentry/fexit/tp_btf on
+any kernel function taking a linux_binprm) now gets a trusted mm.
+Justifying it from one hook leaves a reviewer unable to check the other
+attach points.
+
+Could the changelog drop "only" and state the actual invariant, perhaps
+something like: "bprm->mm is either NULL or points to a live mm_struct
+at every point a BPF program can observe a linux_binprm: exec_mmap()
+transfers ownership and begin_new_exec() then clears the field, and
+free_bprm() clears it before dropping the reference (see the preceding
+patch)"?
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 386401fe051d4..584c79326b9c7 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -6012,6 +6016,7 @@ static bool type_is_trusted_or_null(struct bpf_verifier_env *env,
+>  {
+>  	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct socket));
+>  	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct dentry));
+> +	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct linux_binprm));
+                 ^^^^
+>  	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct vm_area_struct));
+>
+>  	return btf_nested_type_is_trusted(&env->log, reg, field_name, btf_id,
+
+Does the patch ordering break bisect here?
+
+The preceding commit in the series, 146a2bd992c3d ("selftests/bpf: Cover
+trusted-or-null BTF pointer reads"), adds a test in
+tools/testing/selftests/bpf/progs/verifier_lsm.c that expects this
+marking to exist:
+
+  SEC("lsm.s/bprm_check_security")
+  __description("store through trusted-or-null bprm->mm is rejected")
+  __failure
+  __msg("R{{[0-9]+}} invalid mem access 'trusted_ptr_or_null_'")
+  int BPF_PROG(store_through_trusted_or_null_bprm_mm,
+               struct linux_binprm *bprm)
   {
-         struct struct_ops_multi_args *skel;
-+       char log_buf[4096] = {};
-         int err;
-
-         skel = struct_ops_multi_args__open();
-         if (!ASSERT_OK_PTR(skel, "struct_ops_multi_args__open"))
-                 return;
-
-+       bpf_program__set_log_buf(skel->progs.test_refcounted_multi, 
-log_buf, sizeof(log_buf));
-+
-         err = struct_ops_multi_args__load(skel);
--       ASSERT_EQ(err, -EINVAL, "struct_ops_multi_args__load");
-+       if (!ASSERT_EQ(err, -EINVAL, "struct_ops_multi_args__load"))
-+               goto out;
-
-+       ASSERT_OK_PTR(strstr(log_buf, "program with __ref argument 
-cannot tail call"),
-+                     "check_verifier_log_message");
-+
-+out:
-         struct_ops_multi_args__destroy(skel);
+          bprm->mm->task_size = 0;
+          return 0;
   }
 
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_multi_args.c 
-b/tools/testing/selftests/bpf/progs/struct_ops_multi_args.c
-index f0f47676b099..3176f5bd7798 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_multi_args.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_multi_args.c
-@@ -17,7 +17,6 @@ struct {
-  } prog_array SEC(".maps");
+At commit 146a2bd992c3d, walking bprm->mm in a sleepable LSM program
+takes the final else arm of check_ptr_to_btf_access() (flag =
+PTR_UNTRUSTED) because in_rcu_cs() is false. The subsequent store fails
+at the 'if (atype != BPF_READ && bpf_may_fault_on_deref(reg->type))'
+check with "only read is supported" rather than "invalid mem access
+'trusted_ptr_or_null_'". The __msg() assertion doesn't match and
+'test_progs -t verifier_lsm' fails at that intermediate commit.
 
-  SEC("struct_ops/test_refcounted_multi")
--__failure __msg("program with __ref argument cannot tail call")
-  int test_refcounted_multi(unsigned long long *ctx)
-  {
-         /* ctx[2] is used because the refcounted variable is the third 
-argument */
-```
+Swapping the order makes every commit in the series independently
+testable. The ordering issue is present in the posted series as well
+(lore message-ids 20260831092305.42062-6 and -7).
 
-> [ ... ]
-> 
->> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
->> index 2380b6cbdeadc..8f0744e6075b3 100644
->> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
->> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> [ ... ]
->> @@ -1691,6 +1694,18 @@ static int bpf_testmod_ops_init_member(const struct btf_type *t,
->>   		((struct bpf_testmod_ops *)kdata)->data = ((struct bpf_testmod_ops *)udata)->data;
->>   		return 1;
->>   	}
->> +
->> +	if (member->offset == offsetof(struct bpf_testmod_ops, test_trampoline_stack_args) * 8) {
->> +		mutex_lock(&st_ops_trampoline_mutex);
->> +		if (st_ops_trampoline) {
->> +			pr_err("st_ops_trampoline has already been registered\n");
->> +			mutex_unlock(&st_ops_trampoline_mutex);
->> +			return -EEXIST;
->> +		}
->> +		st_ops_trampoline = (struct bpf_testmod_ops *)kdata;
-> 
-> [Severity: High]
-> Can this cause a permanent denial of service in the test module?
-> 
-> This assigns the global pointer st_ops_trampoline to map-owned memory (kdata)
-> in bpf_testmod_ops_init_member() without establishing a teardown hook to clear
-> it if map registration fails after this point. If a failure occurs, the
-> pointer remains dangling, causing permanent -EEXIST failures for all
-> subsequent tests.
-> 
-> Additionally, this logic actively rejects concurrent map updates across all
-> parallel test executions.
-> 
->> +		mutex_unlock(&st_ops_trampoline_mutex);
->> +	}
->> +
->>   	return 0;
->>   }
->>   
->> @@ -1720,11 +1735,20 @@ static int bpf_dummy_reg(void *kdata, struct bpf_link *link)
->>   	if (ops->test_2)
->>   		ops->test_2(4, ops->data);
->>   
->> +	mutex_lock(&st_ops_trampoline_mutex);
->> +	if (st_ops_trampoline && st_ops_trampoline->test_trampoline_stack_args)
->> +		st_ops_trampoline->test_trampoline_stack_args(1, 2, 3, 4, 5, 6, 7, 8, 9999);
-> 
-> [Severity: High]
-> Could this lead to a use-after-free?
-> 
-> This dereferences the global st_ops_trampoline which may point to freed memory
-> if a previous map update failed or if a map was concurrently detached. Since
-> the local ops pointer (kdata) is already passed directly to bpf_dummy_reg(),
-> is there any reason not to use ops directly here instead of relying on the
-> global state?
 
-I will drop global state and mutex, just use the original kdata
-in bpf_dummy_reg(), like this:
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-```
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c 
-b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 8f0744e6075b..bb800bf2b0fd 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -1678,9 +1678,6 @@ static bool bpf_testmod_ops_is_valid_access(int 
-off, int size,
-         return bpf_tracing_btf_ctx_access(off, size, type, prog, info);
-  }
-
--static DEFINE_MUTEX(st_ops_trampoline_mutex);
--static struct bpf_testmod_ops *st_ops_trampoline;
--
-  static int bpf_testmod_ops_init_member(const struct btf_type *t,
-                                        const struct btf_member *member,
-                                        void *kdata, const void *udata)
-@@ -1695,17 +1692,6 @@ static int bpf_testmod_ops_init_member(const 
-struct btf_type *t,
-                 return 1;
-         }
-
--       if (member->offset == offsetof(struct bpf_testmod_ops, 
-test_trampoline_stack_args) * 8) {
--               mutex_lock(&st_ops_trampoline_mutex);
--               if (st_ops_trampoline) {
--                       pr_err("st_ops_trampoline has already been 
-registered\n");
--                       mutex_unlock(&st_ops_trampoline_mutex);
--                       return -EEXIST;
--               }
--               st_ops_trampoline = (struct bpf_testmod_ops *)kdata;
--               mutex_unlock(&st_ops_trampoline_mutex);
--       }
--
-         return 0;
-  }
-
-@@ -1735,20 +1721,14 @@ static int bpf_dummy_reg(void *kdata, struct 
-bpf_link *link)
-         if (ops->test_2)
-                 ops->test_2(4, ops->data);
-
--       mutex_lock(&st_ops_trampoline_mutex);
--       if (st_ops_trampoline && 
-st_ops_trampoline->test_trampoline_stack_args)
--               st_ops_trampoline->test_trampoline_stack_args(1, 2, 3, 
-4, 5, 6, 7, 8, 9999);
--       mutex_unlock(&st_ops_trampoline_mutex);
-+       if (ops->test_trampoline_stack_args)
-+               ops->test_trampoline_stack_args(1, 2, 3, 4, 5, 6, 7, 8, 
-9999);
-
-         return 0;
-  }
-
-  static void bpf_dummy_unreg(void *kdata, struct bpf_link *link)
-  {
--       mutex_lock(&st_ops_trampoline_mutex);
--       if (st_ops_trampoline == (struct bpf_testmod_ops *)kdata)
--               st_ops_trampoline = NULL;
--       mutex_unlock(&st_ops_trampoline_mutex);
-  }
-
-  static int bpf_testmod_test_1(void)
-```
-
-I will send out the v3 next week if no more comments.
-
-Thanks,
-Tiezhu
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33379004067
+--===============6575441848940488516==--
