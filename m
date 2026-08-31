@@ -1,104 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01B363AD522;
-	Mon, 31 Aug 2026 03:49:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDB323AE71C;
+	Mon, 31 Aug 2026 06:33:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788148191; cv=none; b=YYTjNoWoblbLM66VL03BEGyIUU3fVU4V56iFzmvv18RFerJlB7BR7gXS+FLLL+LVWM7aNYcfoNm7f3xTcbpnHbbe5btgGFBQHiI6aH/gmGMU6GIR83ura5AW7UcFGgjZx7Waj4tfsI8xLyfmpiLpuHck4gt9OpDQ4CBlfR8DuR8=
+	t=1788157998; cv=none; b=McwSjgaZsIt1P37trAH1pAQ3Ilnhv2zB/RnifLjdVLBygtezc1fA/KRQEsouIW5lJzjZ4qxczD3P3MCytT3QpU160BdroNGi6D6WK2pSO8lbeSVO+Md14RWRqVTe0zl1EX3pplhzDMFS75NZr+zNtCXJTjdrHy40FygLNb19hwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788148191; c=relaxed/simple;
-	bh=dSI1f+qb9WlgtIP4vofeY3OI6d2/fGGZliOCmqxzilo=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=PxTzX6iTfsKMWCR86t/0M3HRqoWRw9qObHYh4xnVPmIACjviOzLFsF6hHWp00Cku2GxS0DpcSuCRJlIR+huu0k7ZMAmYw2G8INz9E62nNM5zLmksVwbuNP4qhkhPqWwC0Bkxdb/A7CLyW4L4pjchjKFRIbQMlz9YCv+eyUlYsM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J/B8iM0L; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788157998; c=relaxed/simple;
+	bh=vFBIUud4P2Tvxm2pxpYsRumvEk7MnI0MItsv+VdQ+MM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=buJxJ5C3ZcmzJ8Ge0xmxmb0XzUZzRhUOKS4xf/m8RaRuRaSztNqwVw7On4jNB+lgZ7nA7kYxrUuHrDYF5UpkiQWMY+bnD9NyvYcmx+CKYJsIA4+21rRANNB/cXAYc9Y+ubuxaB+RfbgF45ihcTbk5qsTn3yB0hk/xmZond060xo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=agY+tXrB; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J/B8iM0L"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 701CD1F000E9;
-	Mon, 31 Aug 2026 03:49:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788148187;
-	bh=LJVEYJxFNZl+MXa6igNb+/braYQwf8ICpENEMAuFMyI=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=J/B8iM0LGO4531gdtvthtLgx97MHWM+RklNTh+eQueSuJxYYQ7DEzbSPRDUVzuUoV
-	 hQjH/TOELV94LjU5uDPKGueXOAERM+W9EuVFqcdn/DKSCLl1TDEts/At3me11qwRhN
-	 Ju/0XZ6CWWb53U7zZM6jDTh5LxolYUlSFoXyaNvvSI/jNEKhIH0h0jIy86yASBvyCe
-	 Hz7kdvY+UUzJYE2JjHwGw2WXGeEvIVd3gpZ89Qy5RwsDajBDTH/OXQzegOQu1Y4kdu
-	 gOM3NiykIpIdskJxoE3TQENu1KMs/tqLlUd/r6kM1roWziqxw40vdHRd4M9VgAPHUi
-	 oXZlGFTTADt+w==
-Content-Type: multipart/mixed; boundary="===============5769949916082378003=="
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="agY+tXrB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=8k
+	fqIVRa33E8P4BoQKZrY5KmL+nKyxpdY1wHBO9sKtA=; b=agY+tXrBygvoZKcoBt
+	XLa5Oo0pvPxLAFKnXLnrzVxBxMKVYWN7E4N49cx/I182Cd/GAuun63bo9Aas7iwo
+	QIrWZMNqR4QrMCwgTohv+4KTSxCM9ZcdpZrTqcTGkwAuNAjJ1uPcxBwilEgGsHIo
+	2ivR9+5nyiPLjWomApy+5Av98=
+Received: from nec8-i7 (unknown [])
+	by gzsmtp1 (Coremail) with SMTP id PCgvCgBHMGIDIJVqTbDjMw--.5247S3;
+	Mon, 31 Aug 2026 14:32:39 +0800 (CST)
+From: chenyuan_fl@163.com
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Yuan Chen <chenyuan@kylinos.cn>,
+	stable@vger.kernel.org
+Subject: [PATCH bpf v5 1/2] bpf: Fix queue/stack map u32 index overflow
+Date: Mon, 31 Aug 2026 14:32:25 +0800
+Message-ID: <20260831063226.621309-2-chenyuan_fl@163.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260831063226.621309-1-chenyuan_fl@163.com>
+References: <CAEf4BzYLUTO+6bcp8X8M_wbc=JaxZMo4PZCgS0e-t=8zMO9tSQ@mail.gmail.com>
+ <20260831063226.621309-1-chenyuan_fl@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <a3283f27b2a2d9d0d70cd58a8a7e03fc69efe460129a1aa0de1704ab0846496d@mail.kernel.org>
-In-Reply-To: <20260831023918.1857658-2-sanghyun.park.cnu@gmail.com>
-References: <20260831023918.1857658-2-sanghyun.park.cnu@gmail.com>
-Subject: Re: [PATCH bpf-next v4 2/2] selftests/bpf: Cover attach type checks in link update
-From: bot+bpf-ci@kernel.org
-To: sanghyun.park.cnu@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,bpf@vger.kernel.org
-Cc: sanghyun.park.cnu@gmail.com,leon.hwang@linux.dev,john.fastabend@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,sdf@fomichev.me,pulehui@huawei.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 31 Aug 2026 03:49:46 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PCgvCgBHMGIDIJVqTbDjMw--.5247S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7KFy5XFW8WF1kKrykGrW8Crg_yoW8ur1fpa
+	n5JF43Jw1vqr47t34kJw1UXF97WwsYgr9xKFykKry8ArnxWr1xW34xt3WaqF93Ar1kJ3WY
+	qFnFgrZ8C3yjya7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jjJPiUUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5ggKx2qVIAjjowAA30
 
---===============5769949916082378003==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From: Yuan Chen <chenyuan@kylinos.cn>
 
-> Add regression coverage for link update compatibility. Verify that a UDP6
-> sock_addr program cannot replace a UDP4 program and that an LSM_MAC
-> program cannot replace an LSM_CGROUP program.
-> Also verify that CGROUP_SKB attachment still requires CAP_NET_ADMIN, while
-> an existing link can be updated after dropping CAP_NET_ADMIN and
-> CAP_SYS_ADMIN.
+The queue/stack map addresses elements[] with the product of a u32
+head/tail index and value_size, but the storage itself is allocated in
+64-bit arithmetic.  When max_entries * value_size reaches or exceeds
+U32_MAX, the product wraps and push/peek/pop operate on the wrong
+element, corrupting map data and leaking stale values to user space.
+max_entries == U32_MAX would also make the u32 capacity counter
+qs->size (max_entries + 1) wrap to 0 and permanently break the map.
 
-This isn't a bug, but could the changelog say why this coverage is needed,
-rather than restating what each assertion does? The tests appear to pin
-down attach-type validation in link update (which didn't exist before the
-companion patch) and the permission-check split for CGROUP_SKB (capability
-at LINK_CREATE but not LINK_UPDATE).
+The original bound check was removed by commit a37fb7ef24a4 ("bpf:
+Eliminate rlimit-based memory accounting for queue_stack_maps maps"),
+which deleted the bpf_map_charge_init() call and with it the
+U32_MAX - PAGE_SIZE check that had earlier been moved into
+bpf_map_charge_init() by c85d69135a91.  Oversized queue/stack maps can
+therefore be created again.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-> index 41e867467f6c6..85b0af4f486af 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-> @@ -74,6 +74,7 @@ static void test_lsm_cgroup_functional(void)
->  	int bind_prog_fd = -1;
->  	int bind_link_fd = -1;
->  	int clone_prog_fd = -1;
-> +	int mac_prog_fd;
->  	int err, fd, prio;
->  	socklen_t socklen;
->
-> @@ -156,6 +157,15 @@ static void test_lsm_cgroup_functional(void)
->  	ASSERT_EQ(query_prog_cnt(cgroup_fd, "bpf_lsm_socket_bind"), 1, "prog count");
->  	ASSERT_EQ(query_prog_cnt(cgroup_fd, NULL), 4, "total prog count");
->
-> +	fd = bpf_link_create(bpf_program__fd(skel->progs.socket_first),
-> +			     cgroup_fd, BPF_LSM_CGROUP, NULL);
-> +	if (!ASSERT_GE(fd, 0, "link create socket_first"))
-> +		goto detach_cgroup;
-> +	mac_prog_fd = bpf_program__fd(skel->progs.socket_create_lsm);
-> +	err = bpf_link_update(fd, mac_prog_fd, NULL);
-> +	ASSERT_EQ(err, -EINVAL, "reject lsm_mac link update");
-> +	close(fd);
-> +
+Restore the bound in queue_stack_map_alloc_check() with a single
+comparison that rejects any max_entries/value_size combination whose
+element storage would reach or exceed U32_MAX bytes, keeping the u32
+index multiplication overflow-free and the capacity counter valid.
 
-This isn't a bug, but would it read more consistently to inline
-bpf_program__fd(skel->progs.socket_create_lsm) into the bpf_link_update()
-call? Every other '*_prog_fd' local in this function's declaration block is
-initialised to -1, while mac_prog_fd is uninitialised and used exactly once
-on the line after assignment; the bpf_link_create() call twelve lines above
-already inlines the equivalent expression. Also, the new link fd is held in
-the generic 'fd' variable, whereas the link created earlier uses the
-descriptive 'bind_link_fd'.
-
-
+Fixes: a37fb7ef24a4 ("bpf: Eliminate rlimit-based memory accounting for queue_stack_maps maps")
+Cc: stable@vger.kernel.org
+Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+v5: drop the explanatory comment, as suggested by Andrii Nakryiko
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33352119890
---===============5769949916082378003==--
+v4: simplify the bound to a single division-based comparison as
+    suggested by Andrii Nakryiko; this also rejects max_entries == U32_MAX
+
+ kernel/bpf/queue_stack_maps.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/kernel/bpf/queue_stack_maps.c b/kernel/bpf/queue_stack_maps.c
+index c1c9dee4dcdd..b5628e414981 100644
+--- a/kernel/bpf/queue_stack_maps.c
++++ b/kernel/bpf/queue_stack_maps.c
+@@ -59,6 +59,9 @@ static int queue_stack_map_alloc_check(union bpf_attr *attr)
+ 		 */
+ 		return -E2BIG;
+ 
++	if (attr->max_entries >= U32_MAX / attr->value_size)
++		return -E2BIG;
++
+ 	return 0;
+ }
+ 
+-- 
+2.43.0
+
