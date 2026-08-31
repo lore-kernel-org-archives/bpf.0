@@ -1,64 +1,64 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4CC3C5837
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 12:37:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F514078E6
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 12:44:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788179857; cv=none; b=RHB5QF0C2Q6AlMFYvSKokliYo2/rQyF/s+Ld5mzRHZXrd5jHKMJfEk4pL/xD0Uud21600OjZn3nzIJrBVG2y7FyvgJKqYlueTywFyKg8aYQZgPOnzIwFPwUSwgLrr3TZQrpmUCYNCqGyAQtn69esVEMxwOm7YsLSn8Ymjj/nkIk=
+	t=1788180293; cv=none; b=ciLOxVFPIswdyf2Cq+UdW4XcgHukV9U/raW56NwoHvootqEtgIWzLTLbVn+fPuqNJ7NSN1RVl8R6x0/N3SZj1plAPugon0SYy71TCTYSvYmFTIBLkLSFEqdQWdhiOR+pOLGxzHJdpIxw412YAuGpqpc9YudqPDt8dHIJGDcGULQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788179857; c=relaxed/simple;
-	bh=/CD1S0tF75VV8Pt22jOV3o6nDewczq6yzpsKNLL2F8o=;
+	s=arc-20240116; t=1788180293; c=relaxed/simple;
+	bh=Y+GcS7MKcJ9WAWTld827Ee0hYnv+7LO8P4Co49AR2Oc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gaGw6jomr9Lm4EPuOMe3j7+FYkevtKv96sZmyNWXVdyQkDsb6yDsuWiKcLUaWp/ZCGVKhO2f4uMGOSBmRTvqaIyfcLSODTNGFZHgnArbFbIG7IOqoCOa3wcGYylKWGtbSWTaT6q6lFpmAFUYqrEz7WcA2oa6t7EFCOSUTlpPzqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ObTTcWzK; arc=none smtp.client-ip=209.85.128.44
+	 Content-Type:Content-Disposition:In-Reply-To; b=dEfiXXCHWR3yROWxcyVVrB2AHk6gTpXi8jippV1UE18GGwiu9eCmnBlq0qA4zXXXbBIXL9XncgZrF/OmJ2SnvRWfxEGVvfS0yR6SYXS0viVE+zF3Iw2i1a/ygNe6pZBYhxSC6uq2PX0sd0YRPnut0Bb1PGEjO7kYNQ/KGScpbJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dqae6pdY; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ObTTcWzK"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-49b0eab380eso35586965e9.0
-        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 05:37:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dqae6pdY"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c20e70a0962so442425866b.2
+        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 05:44:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788179853; x=1788784653; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788180285; x=1788785085; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=ldCU727hj6i4HvipMvvooQ4fYosNMSgvpRhElZfgoAI=;
-        b=ObTTcWzKSGzrNSQmsqdyt4qJE9+FFa5SNljA1lzc6iInBJ89B8355lGqicWZXB/RuY
-         XC/DUuZdIxrN0OUS/WxPlASfNzTB8hdorZe3MsG0lPyJyied2swxOr1NCbTbhBz1IuQV
-         A9DdQUOM/p2hXrluHcd0RUjSQ+GeZ4dvEXKyBYGohBZc1RZmCkmOfOTjTOZkzujEXaHs
-         eCMDVGP5lI9c/XBsvRYHp6EyPLQHfU64yufH3ef6HhxcOi29Y8cbdsGcX+bmHfTO4wfC
-         IqN+qWUypkDAn2T41/x2GwNFfbGvLdmdZJ6jP80azpO74pdUYSzL22yLHvvlW55W5IEF
-         qsMw==
+        bh=+l/jYcEEQatfIkpil8/A0aHb7dyDh4iAxN5e3uvmv9w=;
+        b=Dqae6pdYS2n/1ija5OQhFQ2C+HJnd1GYvzGu2seIYGoD1As2C40jXggHi1KYWdxhs7
+         /up588NDSvIxZOzQhDbokQmSjLOxs3MHfqLyOmpRPzcf+G0bJKXJjdrV5/WWGksgsuvH
+         5OlioJrRYZtnOedrsPW4m/i/EKps6lZVsnZKdMHHLyZL8/QxD3HXEeM0GIl1q0anVHnO
+         RgUUfWT3E49PoL2S+A5onL4eekUSG2WBx4aBSz9J7k8r2CsQ45hu2+3DIPHC8180frrv
+         +NCd2n5mAcoSVSR01jfDVmWa2kY+wKiWxEPHm5YxmeB1NL1Uj6HPnOpGh4/Byd0JVHHJ
+         XEdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788179853; x=1788784653;
+        d=1e100.net; s=20251104; t=1788180285; x=1788785085;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ldCU727hj6i4HvipMvvooQ4fYosNMSgvpRhElZfgoAI=;
-        b=ObTnmTpkRhhz/q0AC2klbc+EMPnskUYLFzd1/eStVwX7tfB+olQzGWNvSeNn+5Jq3D
-         UHWu488A0Q6+uj9plkyF+FFX1gCDZRz+0pXhoqNlw0lbQ4kyGxIZguH4NZXRFtKlHlRg
-         kvS9MXJfNm65xX/cldmyxRn/Hl/2KSG59Qkd9edlOuTsrdRWOGGg3DDzVuv9DJtCCnlb
-         md8InXd442qfZhgG6xW6QT2+5f3ZJH9/WERR5L3xfENs2mhl7latjdqNCBYHcLRq1y79
-         FLmOERG7mBirDmTPugj0k4JWnXzTTnlkmA1Ic4mp623hOclCvlPhPBJn6XhrIqBmwVXU
-         5Umw==
-X-Gm-Message-State: AFuF++norz7K4LFGykpdz0+hCUfs8zs81r0bxn9TshAhwU2QC+PPMlij
-	iPTyCgisVBivXXxBcRs0LhQzAbJs/rs7zE+aPMDcdH8K4xjcblLQaQsL
-X-Gm-Gg: AR+sD12zB5LA2yai+E3/GfC9Daq2TCIHy9QAkTi4qvJfzyUyo5iHQPzd4vVmApBfIzu
-	YQmx5g3DktQX38ID6RgcPCphwlgbai1R8x++4xSWQM5imaRkuSoVcV6hk/xvLJFhj4wPIZmjpZQ
-	LJyI/IdP+blDiv08fg40pUgdS5pLudED0rS8OfeAdKlDR9LFBHEDeaYVq9ypATn89bpvMCBEZ0E
-	2LL5o2ekJXM0xeucnSQJxgC0HoYaHw9dQybK7MQBHMG24jgisEWvbmErm/+/StCjuBcBxy+em0V
-	em7s0uFmaESOR9p3dsXGLxYqgiqhNpD0kkv0lKR4cnFwaJ96po0IzQNuiSmvXOB0nGXaxemIitu
-	XlnW/4YMjVBslwK4lwJXqtGx1rCxYIigq1L0Md4+8fL+erV3AQ4dtQFjraaw/Pbq+4509dfmWo+
-	pvGfK19Rke8J9j3ZV/nlk2jSCkpXDf5aEgZIGbpdfgeNfpE/VoCo/p8WFmIz2sIoJ8XJTn
-X-Received: by 2002:a05:600c:1d02:b0:49b:e22:4ee4 with SMTP id 5b1f17b1804b1-49cd538b513mr145172565e9.4.1788179853332;
-        Mon, 31 Aug 2026 05:37:33 -0700 (PDT)
+        bh=+l/jYcEEQatfIkpil8/A0aHb7dyDh4iAxN5e3uvmv9w=;
+        b=lfYhqPY39t9Oj15wUZoqZpMtPHG7rpg4x6Dorxu3BFlXerZIYxTl8UyS/vI+zyiF5s
+         f6RjDigrHRYGTGQGcClVlx2khmrlhtUabJgDc4h7pKMOccYAxWZb11YKFRXE5nIcbyls
+         Y429pd9OkqXtAHIy4CimguR0GT3j8oDk+x84KvqXw/JBafqV8nI6peFYfLAnzBLk6CMp
+         bw7vmGTNGg74pbVEq2OoaPNBW78ZoWrgg/oSkuCZp8qUrvO+Kmb6nBlrJi6csBDNcEQT
+         Bi0HX2/eJhULKfUSo2pVqurXprc1t/8pI+yGcNn9aXB/bw3R2juM3WBVi+41ahMmx0Yy
+         JtXw==
+X-Gm-Message-State: AFuF++mgI66OKnPcjngAdleP1oTCeXCtSDc4iIJ45osygFS75HhNT3U1
+	Z3vXAR4+n8F2ls0fMmBotyOANqPE8BdxYzrjgYOCfo08CLSR08wrl6Pw
+X-Gm-Gg: AR+sD13nOuVrFdrbGPH5qjQ5NOn6C+lyYxK48bNOvVpLqwBNv2axtFPw2Ksk38AOf7H
+	llE9bvrQvmK+ApH2NyzoJ+MjNvKHm8aPqbzbrOXfCnAOVJsGccHYFhqWt23/oAv9Nc3b3rbEkel
+	LkJFzjK3+tr5yUxXvFbzTs6JW5f5zAUqdEsGU1hY4sqlnAdVrZwQQDVDHq1XBll77RDON5rCgQb
+	mrdBgKYxX7iDPci2/A4yD3wakJYHQARfprQQ0shzfHlhS0Lyls7cMdC9VRHYm4Jp4n12cBkJ0RX
+	vtEp1Y3tYXyItNSEdLGr0PUo/YMplzjtF/NP7gEm3W/GeNBL8pKy5lhydS1LMq+uxwGBJA+YZN1
+	Paq5HMhKPCBzGTxKBqcWalHeDOP7Jo6M63EpYQM+LzqtzkgUOSKOhSQbVAFal2tSqB4xOM/u8d+
+	wjkHBYcWgdOiClOzTBhSjXV4DaMbnz4jK/yV73Bio/B6UFGh9Ssc1wQeYecDnWFX9xcqUE
+X-Received: by 2002:a17:907:9345:b0:c15:e8c8:340 with SMTP id a640c23a62f3a-c25b3df5160mr9312866b.23.1788180285109;
+        Mon, 31 Aug 2026 05:44:45 -0700 (PDT)
 Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49b4942298fsm383050235e9.1.2026.08.31.05.37.31
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c255ee288afsm424015266b.23.2026.08.31.05.44.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2026 05:37:32 -0700 (PDT)
-Date: Mon, 31 Aug 2026 12:48:13 +0000
+        Mon, 31 Aug 2026 05:44:44 -0700 (PDT)
+Date: Mon, 31 Aug 2026 12:55:25 +0000
 From: Anton Protopopov <a.s.protopopov@gmail.com>
 To: bot+bpf-ci@kernel.org
 Cc: bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
@@ -69,11 +69,10 @@ Cc: bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
 	torvalds@linux-foundation.org, edumazet@google.com, kuba@kernel.org,
 	pabeni@redhat.com, martin.lau@kernel.org, yonghong.song@linux.dev,
 	mason@kernel.org, ihor.solodrai@linux.dev
-Subject: Re: [PATCH bpf-next 1/7] bpf: Allow BPF LSM programs to attach to
- more hooks
-Message-ID: <apV4DddDiWqLyldA@mail.gmail.com>
-References: <20260831110934.241898-2-a.s.protopopov@gmail.com>
- <32309c5bdc0ed0566f6c7f8d133b4cbf781236c0d4fa76bdd43d0805224f89eb@mail.kernel.org>
+Subject: Re: [PATCH bpf-next 5/7] selftests/bpf: Add netdevsim helper library
+Message-ID: <apV5ve1dvk5KUkCm@mail.gmail.com>
+References: <20260831110934.241898-6-a.s.protopopov@gmail.com>
+ <e2e1c4e876bd26ab17b88d70f0eb96cb56b81ed16358f3ef529a3b224324634f@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,129 +81,253 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <32309c5bdc0ed0566f6c7f8d133b4cbf781236c0d4fa76bdd43d0805224f89eb@mail.kernel.org>
+In-Reply-To: <e2e1c4e876bd26ab17b88d70f0eb96cb56b81ed16358f3ef529a3b224324634f@mail.kernel.org>
 
-On 26/08/31 11:50AM, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 460cb72688450..d01dd1f096fc1 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -5035,6 +5035,7 @@ L:	bpf@vger.kernel.org
-> >  S:	Maintained
-> >  F:	Documentation/bpf/prog_lsm.rst
-> >  F:	include/linux/bpf_lsm.h
-> > +F:	include/linux/bpf_lsm_hook_defs.h
-> >  F:	kernel/bpf/bpf_lsm.c
-> >  F:	kernel/bpf/bpf_lsm_proto.c
-> >  F:	kernel/trace/bpf_trace.c
-> 
-> [ ... ]
-> 
-> > diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
-> > index dda272d78f013..1e54c7cca27ad 100644
-> > --- a/include/linux/bpf_lsm.h
-> > +++ b/include/linux/bpf_lsm.h
-> > @@ -16,9 +16,19 @@
-> >
-> >  extern bool bpf_lsm_initialized __ro_after_init;
-> >
-> > +/*
-> > + * Technically, checking bpf_lsm_initialized is not necessary.
-> > + * But if it is off, then this means that all security_* calls
-> > + * do not call BPF, and it doesn't look reasonable to enable
-> > + * only "non-LSM" bpf hooks...
-> > + */
-> > +#define bpf_lsm_hook(NAME, ...) \
-> > +	(bpf_lsm_initialized ? bpf_lsm_##NAME(__VA_ARGS__) : 0)
-> 
-> Does the new bpf_lsm_hook() macro constrain what hook declarations
-> can appear in bpf_lsm_hook_defs.h? The macro hardcodes 0 as the return
-> value in two places:
-> 
-> 1. When bpf_lsm_initialized is false, the ternary returns 0, but when
->    it is true with no program attached, the __weak nop returns the hook's
->    declared DEFAULT. This means LSM_HOOK(int, 0, ...) behaves consistently,
->    but LSM_HOOK(int, -EOPNOTSUPP, ...) would return different values
->    depending on whether 'bpf' appears in lsm= - 0 before initialization,
->    -EOPNOTSUPP after.
-> 
-> 2. Because of the ternary, LSM_HOOK(void, ...) cannot compile at call
->    sites, since the expression `cond ? void_expr : 0` is invalid.
-> 
-> 3. The CONFIG_BPF_LSM=n stub at line 128:
-> 
->    #define bpf_lsm_hook(NAME, ...) 0
-> 
->    discards its arguments entirely, so call-site argument checking only
->    happens on =y builds. Does this create a risk that =n configurations
->    would fail to catch type mismatches or side-effect issues?
-
-Yes, it does (intentionally). For new hooks, which aim to be attach
-points for BPF programs, there is no real reason to return anything,
-but 0 or error. If they are called from a funciton returning a pointer,
-the calling funciton should covert the return value appropriately.
-(Also, new void hooks do not make sense.)
-
-> >  #define LSM_HOOK(RET, DEFAULT, NAME, ...) \
-> >  	RET bpf_lsm_##NAME(__VA_ARGS__);
-> >  #include <linux/lsm_hook_defs.h>
-> > +#include <linux/bpf_lsm_hook_defs.h>
-> >  #undef LSM_HOOK
-> 
-> [ ... ]
-> 
-> > diff --git a/include/linux/bpf_lsm_hook_defs.h b/include/linux/bpf_lsm_hook_defs.h
+On 26/08/31 12:07PM, bot+bpf-ci@kernel.org wrote:
+> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> > index b481b867f372e..c21f89dbe70c0 100644
+> > --- a/tools/testing/selftests/bpf/Makefile
+> > +++ b/tools/testing/selftests/bpf/Makefile
+> > @@ -862,6 +862,7 @@ TRUNNER_EXTRA_SOURCES := test_progs.c		\
+> >  			 unpriv_helpers.c 	\
+> >  			 sysctl_helpers.c	\
+> >  			 netlink_helpers.c	\
+> > +			 netdevsim_helpers.c	\
+> >  			 jit_disasm_helpers.c	\
+> >  			 io_helpers.c		\
+> >  			 test_loader.c		\
+> > diff --git a/tools/testing/selftests/bpf/netdevsim_helpers.c b/tools/testing/selftests/bpf/netdevsim_helpers.c
 > > new file mode 100644
-> > index 0000000000000..29bc0b514d168
+> > index 0000000000000..fbed7442b2e8d
 > > --- /dev/null
-> > +++ b/include/linux/bpf_lsm_hook_defs.h
-> > @@ -0,0 +1,6 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +++ b/tools/testing/selftests/bpf/netdevsim_helpers.c
+> > @@ -0,0 +1,176 @@
+> > +// SPDX-License-Identifier: GPL-2.0
 > > +
-> > +/*
-> > + * This is a set of BPF LSM hooks, which are _not_ fully implemented
-> > + * as LSM hooks. Thus, they only can be used by BPF LSM programs.
-> > + */
-> > diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-> > index 82c5988417a0c..add344ea26914 100644
-> > --- a/kernel/bpf/bpf_lsm.c
-> > +++ b/kernel/bpf/bpf_lsm.c
-> > @@ -28,11 +28,13 @@ __weak noinline RET bpf_lsm_##NAME(__VA_ARGS__)	\
-> >  }
-> >
-> >  #include <linux/lsm_hook_defs.h>
-> > +#include <linux/bpf_lsm_hook_defs.h>
-> >  #undef LSM_HOOK
-> >
-> >  #define LSM_HOOK(RET, DEFAULT, NAME, ...) BTF_ID(func, bpf_lsm_##NAME)
-> >  BTF_SET_START(bpf_lsm_hooks)
-> >  #include <linux/lsm_hook_defs.h>
-> > +#include <linux/bpf_lsm_hook_defs.h>
-> >  #undef LSM_HOOK
-> >  BTF_SET_END(bpf_lsm_hooks)
+> > +#include <errno.h>
+> > +#include <fcntl.h>
+> > +#include <linux/rtnetlink.h>
+> > +#include <poll.h>
+> > +#include <stdarg.h>
+> > +#include <stdio.h>
+> > +#include <string.h>
+> > +#include <sys/socket.h>
+> > +#include <time.h>
+> > +#include <unistd.h>
+> > +
+> > +#include "netdevsim_helpers.h"
+> > +
+> > +static int echo(const char *path, const char *fmt, ...)
+> > +{
+> > +	char buf[64];
+> > +	va_list ap;
+> > +	int fd, len, err = 0;
+> > +
+> > +	va_start(ap, fmt);
+> > +	len = vsnprintf(buf, sizeof(buf), fmt, ap);
+> > +	va_end(ap);
+> > +
+> > +	fd = open(path, O_WRONLY);
+> > +	if (fd < 0)
+> > +		return -errno;
+> > +	if (write(fd, buf, len) != len)
+> > +		err = -errno;
+> > +	close(fd);
+> > +
+> > +	return err;
+> > +}
 > 
-> The patch adds bpf_lsm_hook_defs.h to three of the four BPF-owned
-> LSM_HOOK expansion sites, but not the fourth. Does this need updating?
+> A subsystem pattern flags this as potentially concerning: the guide
+> directs reporting when a test hand-rolls sysfs/file I/O instead of using
+> existing utilities that the subsystem already provides.
 > 
-> Updated:
->   include/linux/bpf_lsm.h (prototypes, lines 30-31)
->   kernel/bpf/bpf_lsm.c (__weak nop definitions, lines 30-31)
->   kernel/bpf/bpf_lsm.c (bpf_lsm_hooks BTF set, lines 36-37)
-> 
-> Not updated:
->   kernel/bpf/bpf_lsm.c (void_lsm_hooks BTF set, further down in the file)
-> 
-> The void_lsm_hooks set is consumed by bpf_lsm_hook_returns_errno() in
-> bpf_lsm.c, which feeds cgroup_lsm_atype[i].returns_errno. If a hook
-> declared as LSM_HOOK(void, ...) appeared in the new header, wouldn't it
-> be omitted from void_lsm_hooks and incorrectly reported as errno-returning?
-> 
-> This is latent today because the four hooks added later in the series all
-> return int, but is there a reason the fourth site shouldn't include the
-> new header, or should the header document that it only supports int hooks?
+> Looking at echo(), it implements the open(O_WRONLY)/write()/close()
+> sequence that write_sysctl() in test_progs.c already performs for BPF
+> selftests. Could this reuse that existing helper?
 
-Yes, there is no intent to add new void hooks.
+Thanks robot, all comments here and below make sense.
+I will simplify this in v2.
 
+> > +
+> > +void netdevsim_destroy(unsigned int id)
+> > +{
+> > +	echo("/sys/bus/netdevsim/del_device", "%u", id);
+> > +}
+> > +
+> > +static int create_new_device(void)
+> > +{
+> > +	unsigned int id;
+> > +	int err;
+> > +
+> > +	/* if 10K is not enough, then something is clearly not right */
+> > +	for (id = 0; id < 10000; id++) {
+> > +		err = echo("/sys/bus/netdevsim/new_device", "%u", id);
+> > +		if (!err)
+> > +			return id;
+> > +		if (err != -ENOSPC)
+> > +			return err;
+> > +	}
+> > +
+> > +	return -ENOSPC;
+> > +}
+> > +
+> > +static int open_link_socket(void)
+> > +{
+> > +	struct sockaddr_nl addr = {
+> > +		.nl_family = AF_NETLINK,
+> > +		.nl_groups = RTMGRP_LINK,
+> > +	};
+> > +	int fd;
+> > +
+> > +	fd = socket(AF_NETLINK, SOCK_RAW | SOCK_CLOEXEC, NETLINK_ROUTE);
+> > +	if (fd < 0)
+> > +		return -errno;
+> > +	if (bind(fd, (struct sockaddr *)&addr, sizeof(addr))) {
+> > +		int err = -errno;
+> > +
+> > +		close(fd);
+> > +		return err;
+> > +	}
+> > +
+> > +	return fd;
+> > +}
+> 
+> The subsystem guide also flags this pattern: open_link_socket() appears
+> to duplicate rtnl_open(&rth, RTMGRP_LINK) from netlink_helpers.c, which
+> does the same socket(AF_NETLINK, SOCK_RAW | SOCK_CLOEXEC, NETLINK_ROUTE)
+> plus bind() with nl_groups set to the subscriptions parameter.
+> 
+> In particular, it looks structurally similar to genl_open() in
+> netlink_helpers.c, which the immediately preceding commit in this series
+> (a1205972510b7 "selftests/bpf: Extract some helpers from tests to the
+> netlink library") added explicitly for sharing netlink plumbing.
+> 
+> The re-implementation also appears to omit the SO_RCVBUF = 1024 * 1024
+> setting that rtnl_open_byproto() sets in netlink_helpers.c, so the new
+> socket runs on the default net.core.rmem_default receive buffer.
+> 
+> Similarly, the receive/poll loop in recv_device_ifindex() appears to
+> hand-roll what rtnl_recvmsg()/__rtnl_recvmsg() in netlink_helpers.c
+> already do. Notably, those use MSG_PEEK | MSG_TRUNC to size the receive
+> buffer, whereas the new loop uses a fixed 16 KiB buffer with a plain
+> recv(fd, buf, sizeof(buf), 0) and no MSG_TRUNC check. Additionally,
+> __rtnl_recvmsg() retries on EINTR/EAGAIN where the implementation below
+> returns -errno.
+> 
+> The agent notes that functionally these hand-rolled versions are correct
+> for their specific use case, and this is selftest-only code. However,
+> could the new helpers reuse the existing netlink infrastructure?
+> 
+> > +
+> > +static int remaining_timeout_ms(const struct timespec *deadline)
+> > +{
+> > +	struct timespec now;
+> > +	long long remaining;
+> > +
+> > +	if (clock_gettime(CLOCK_MONOTONIC, &now))
+> > +		return -errno;
+> > +
+> > +	remaining = (deadline->tv_sec - now.tv_sec) * 1000 +
+> > +		    (deadline->tv_nsec - now.tv_nsec) / 1000000;
+> > +
+> > +	return remaining > 0 ? remaining : 0;
+> > +}
+> 
+> This isn't a bug, but since clock_gettime(CLOCK_MONOTONIC, ...) on a
+> valid stack timespec can't really fail, would it be simpler to have
+> remaining_timeout_ms() just return milliseconds? That way the timeout
+> check at the end of recv_device_ifindex() (which currently needs
+> `return timeout < 0 ? timeout : -ETIMEDOUT;` to forward the
+> clock_gettime error) could be a plain `return -ETIMEDOUT;`.
+> 
+> > +
+> > +static int recv_device_ifindex(int fd, unsigned int id, unsigned int *ifindex)
+> > +{
+> > +	char parent_name[32], buf[16 * 1024];
+> > +	struct pollfd pfd = {
+> > +		.fd = fd,
+> > +		.events = POLLIN,
+> > +	};
+> > +	struct timespec deadline;
+> > +	struct nlmsghdr *nlh;
+> > +	int len, ret, timeout;
+> > +
+> > +	snprintf(parent_name, sizeof(parent_name), "netdevsim%u", id);
+> > +	if (clock_gettime(CLOCK_MONOTONIC, &deadline))
+> > +		return -errno;
+> > +	deadline.tv_sec += 5;
+> > +
+> > +	for (timeout = remaining_timeout_ms(&deadline); timeout > 0;
+> > +	     timeout = remaining_timeout_ms(&deadline)) {
+> > +		ret = poll(&pfd, 1, timeout);
+> > +		if (ret < 0) {
+> > +			if (errno == EINTR)
+> > +				continue;
+> > +			return -errno;
+> > +		}
+> > +		if (!ret)
+> > +			return -ETIMEDOUT;
+> > +		if (!(pfd.revents & POLLIN))
+> > +			return -EIO;
+> > +
+> > +		len = recv(fd, buf, sizeof(buf), 0);
+> > +		if (len < 0)
+> > +			return -errno;
+> > +
+> > +		for (nlh = (struct nlmsghdr *)buf; NLMSG_OK(nlh, len);
+> > +		     nlh = NLMSG_NEXT(nlh, len)) {
+> > +			struct ifinfomsg *ifm;
+> > +			struct rtattr *attr;
+> > +			int attr_len;
+> > +
+> > +			if (nlh->nlmsg_type != RTM_NEWLINK)
+> > +				continue;
+> > +
+> > +			ifm = NLMSG_DATA(nlh);
+> > +			attr = IFLA_RTA(ifm);
+> > +			attr_len = IFLA_PAYLOAD(nlh);
+> > +			for (; RTA_OK(attr, attr_len);
+> > +			     attr = RTA_NEXT(attr, attr_len)) {
+> > +				if (attr->rta_type != IFLA_PARENT_DEV_NAME)
+> > +					continue;
+> > +				if (strcmp(RTA_DATA(attr), parent_name))
+> > +					continue;
+> > +
+> > +				*ifindex = ifm->ifi_index;
+> > +				return 0;
+> > +			}
+> > +		}
+> > +	}
+> > +
+> > +	return timeout < 0 ? timeout : -ETIMEDOUT;
+> > +}
+> > +
+> > +int netdevsim_create(unsigned int *ifindex)
+> > +{
+> > +	int fd, id, err;
+> > +
+> > +	fd = open_link_socket();
+> > +	if (fd < 0)
+> > +		return fd;
+> > +
+> > +	id = create_new_device();
+> > +	if (id < 0) {
+> > +		close(fd);
+> > +		return id;
+> > +	}
+> > +
+> > +	err = recv_device_ifindex(fd, id, ifindex);
+> > +	close(fd);
+> > +	if (err) {
+> > +		netdevsim_destroy(id);
+> > +		return err;
+> > +	}
+> > +
+> > +	return id;
+> > +}
+> 
+> [ ... ]
+> 
 > 
 > ---
 > AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
