@@ -1,161 +1,196 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55C4139CD05;
-	Mon, 31 Aug 2026 21:17:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FBEB39A054
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 21:25:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788211027; cv=none; b=FQckjBj6WOoTwkKid2xh6h7kSo9+jS860Srgd6f86btB/J7yS//7+18KXrH/ITTnKETL72HafKOzysZFex0eu20c8b0e8I4Y44hFGqp7oonPlczD6T2KllDFEym9mD8at77Cgz0k1vph9J6vloBSh1Nzeljiapb3sHh3Q4dEZhI=
+	t=1788211561; cv=none; b=gyPhr8xgzk3eMUVaY8aj3WqypzRKEAxc7N2jKTA85UjudwAovNKzPxPL0h5jLNxBtxwJrchuD2BU7lMfaHEBO2nOG9Or59ekut6fiYFx57Wb5RPaEs6RyusC+jDe7IbCF6ggSwaO8J26drpSPeHbzjwyo59GEhmh9qdACfL/a0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788211027; c=relaxed/simple;
-	bh=a85KVon7CsKywryGey5VQrAomWHtJnt7kBqWgORftCQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=K60bBmOW6AtmER32WLQSGmacLoiSDv+xnNMM1ngIYjk3YtfXV2B9CBC7XNW2cNZk6eUS6bCv+T4GgQaY1j725SPgf5IWBrtfQHl0za3UlZGSqY+gKyvIDvlbhFUHRITtGCV8FIg82qctyqcTkxN57F9mX7Gm12Vk56JfcifKEZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eGCEE2Rk; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788211561; c=relaxed/simple;
+	bh=AHPZLv7p/XIZVyL7GiDuruMmiBMwRW9aqTeppmZw4/0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n4MmsyXk5F+meRnqKckLDlJraORzId0EMMwMNc4cOX7KtoFBceUHS+PHlMzHrwXgeKclOPZbl/GHpsPXhgUNXLRTsTr/hMG02rxYLhPDuByHS0xz5OEFme2BvoLN9irnv7R49ABaUh7xzUHpCYokW7j9a87QeZq+zRZVHs3IfnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kBiPPQUp; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eGCEE2Rk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93E4A1F000E9;
-	Mon, 31 Aug 2026 21:17:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788211026;
-	bh=Gf5UfaqraRajzUlSqAbExhi7YqgCg+VWMqoQKEm7Za4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=eGCEE2RkxAWzElnprzbSiS3AjtuxX6BqSVep+Y1nes+FzY2VHHCHh98jhfeP9juKi
-	 HZuQkUqF8vhU/XxguwTd7UHvowB7Aqe4HSQeGC7sFSV31mG/rlLLkpD3NS1AXjyVDH
-	 NDX/0AxXslSrMTsC566hYNrzaf/c1UTGlhiKvhgR+1bVWHIJSitRfLecpkKn8wWygQ
-	 zIy7FlszZNGuplKd9lcN43JjYnVgIDFW5P/GtXn8SIs9c+TsSfUCiYa4L5LjhueX3H
-	 s8OJFaRpd8dvjTdrAdhln9kazvcRImdBtjfcyA5QGD8kYoMtTp5lL3qckgMVGkAWQg
-	 Fy3h5CV1kVPBg==
-Content-Type: multipart/mixed; boundary="===============8970126971584631980=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kBiPPQUp"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-49b0eab380eso3795075e9.0
+        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 14:25:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788211558; x=1788816358; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=aQbmJ5UzEspAlrZUDfvA8sbZNSNeRRfdUoE9eJ3Cyhg=;
+        b=kBiPPQUpgchrBiieKHClvTK9AZkXnS6hfuQSbd5F0rdtL9NWPRFEuVFIa7VYj3366W
+         bRaLyQPRb2iWw1b7rfxpJd6ay6WUZTS6XFodCcKPGJP+HgDeGLMvW6Zes2CBCYDCNXKq
+         RQgdYH9/snScRw6sHRPIT/5yimbKsBXEHbTgqK4V7aHMC9Ek+PoknKTPLTwFiqTfXSo8
+         s6bEfYPed0vbNm+nEO/Gn3qtG+cgYXC9A/0m1CXv15Z1McTuikN53U+xFhA4ipzEF8cz
+         NIoWV/h1ET8SICZgIRRvB/FkhkrvpDDas+fb/v6AjbLMRCEq+2KfYG37boofi9Ygbz1r
+         DsHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788211558; x=1788816358;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=aQbmJ5UzEspAlrZUDfvA8sbZNSNeRRfdUoE9eJ3Cyhg=;
+        b=kZZwrS+6b4SHqF1VmLHVA/NdxAy8ei7NJYgOu39a9gLJ8kmFJhunmJYuORs0QeoxsN
+         9i47Afk/HJ2pDu2pJMx+e9Bl+2Jm2DNdux2hQqGu41SzwAUsjZ+oAqEAMiHACaJZAe9j
+         1ogZZIqi58uDknzL6E7mOWFnaMEC7uvIdQiRJ4YqEEsFhMzhDhl3X3r2NfXyv8hqvRGw
+         V6YQ808GmfYq4Rj5aly0eUOR8N3+YezYkadQBUjuUHFvI8YQbap28Oily/V2qh2MYzgT
+         hqdmiCQvmuHnUiqVi5RkYfbQPyuROQJRw31vX6lchYJUFk493fRVwuA4pUU2YUhuUFpo
+         16Cw==
+X-Gm-Message-State: AFuF++lUgjnTmYxt7pBOo8jHiUX0YtN88fwZvVsYumdFUx1aB/7XtZs0
+	u4EjcMGRXeydSFC1XhJgeOb0qYAI+q9gUVSm+irq8wiNUzrzJpyI6gceHn/Eebwg
+X-Gm-Gg: AR+sD11z7gSp68//oqGwgI00ZcQOexegbsFuATvsVqmp54o/6WqRR2QgTfAvYik3aD7
+	Qk1yED3dy/QNpI+gz3e9n9JJ+SJdZUcEhBxZ8AkA58tbW54q3o/3RPvjPxNxg6o+qoKsBJGrsAL
+	qebedROHLvl2AOCjGGIRIuUJLuCFeCmVXzSLOjr47jr3GU+5Emij7Wd3HcBjVcUf790xSWwnYZz
+	GB9+eGbxBaV6qbfzIHSH/qCupnNDcVszlGoj5IdkU3184ug7Ln8dJ966yBEDdU/y7RKICEZsR+a
+	yDtrbTqRHAL6etwKF+O7qsSXw+MoZKVferi/iCtaWMrCdpfrJOp/zhcFEpqYkXctWYnkM91xjaR
+	C4tugrMoZYJjouanWcMVf/EwVYJeunFTOmq/nQpyOFb4nZxpig89t1J3Pl6jDxc3rNnsFFejfXz
+	wuZetxVmdhJ1feQYUztq95Q7+XVwkQ7Neneck4TtwFlG7ygmV+2aO80rICHLLb3YoCU17lufOBP
+	/PuodnDvclZ7Uny8pBdDe/opuSqRcPTbdtSUcx5UhLS1D12jLOSkjXoNA4cxqjlUJBYY/dKpu9R
+	+cuKf1F/YHlt12+s4FvJNEYRZwddeSblvJeJLCTX1j26d73ps3QFpWrA7DRhf03Bm1Md
+X-Received: by 2002:a05:600c:4e4c:b0:49b:e22:4ee4 with SMTP id 5b1f17b1804b1-49cdd416ef1mr14239365e9.4.1788211557306;
+        Mon, 31 Aug 2026 14:25:57 -0700 (PDT)
+Received: from unknown748F3CBA5068 (dynamic-2a02-3100-acb9-0201-68d0-34d2-ad1a-175a.310.pool.telefonica.de. [2a02:3100:acb9:201:68d0:34d2:ad1a:175a])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cdce44ea9sm18308105e9.14.2026.08.31.14.25.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Aug 2026 14:25:56 -0700 (PDT)
+Date: Mon, 31 Aug 2026 23:25:54 +0200
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: bpf@vger.kernel.org, Vadim Fedorenko <vadim.fedorenko@linux.dev>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: crypto: Use AES-CBC and AES-ECB libraries
+Message-ID: <apXwXLRpBUIWQuC5@gmail.com>
+References: <20260831192139.94895-1-ebiggers@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d98e7c48eb83be367357f40747d9489ac50c85c184979866a37359998548dbc2@mail.kernel.org>
-In-Reply-To: <20260831202251.305046-7-ankur.a.arora@oracle.com>
-References: <20260831202251.305046-7-ankur.a.arora@oracle.com>
-Subject: Re: [PATCH v15 06/16] asm-generic: barrier: Add smp_cond_load_acquire_timeout()
-From: bot+bpf-ci@kernel.org
-To: ankur.a.arora@oracle.com,linux-kernel@vger.kernel.org,linux-arch@vger.kernel.org,linux-arm-kernel@lists.infradead.org,linux-pm@vger.kernel.org,bpf@vger.kernel.org
-Cc: arnd@arndb.de,catalin.marinas@arm.com,will@kernel.org,peterz@infradead.org,akpm@linux-foundation.org,mark.rutland@arm.com,harisokn@amazon.com,cl@gentwo.org,ast@kernel.org,rafael@kernel.org,daniel.lezcano@linaro.org,memxor@gmail.com,zhenglifeng1@huawei.com,xueshuai@linux.alibaba.com,rdunlap@infradead.org,david.laight.linux@gmail.com,broonie@kernel.org,joao.m.martins@oracle.com,boris.ostrovsky@oracle.com,konrad.wilk@oracle.com,ashok.bhat@arm.com,ankur.a.arora@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 31 Aug 2026 21:17:04 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260831192139.94895-1-ebiggers@kernel.org>
 
---===============8970126971584631980==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Mon, Aug 31, 2026 at 12:21:39PM +0100, Eric Biggers wrote:
+> There are library APIs for both of these now, which are much easier to
+> use and more efficient.  Reimplement BPF crypto on top of them, greatly
+> simplifying the code.  As part of this, the bpf_crypto_type abstraction
+> layer is removed, as it's not useful.
+> 
 
-> diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-> index 8c37de192944..8b166acfba12 100644
-> --- a/include/asm-generic/barrier.h
-> +++ b/include/asm-generic/barrier.h
-> @@ -379,6 +379,54 @@ do {									\
->  })
->  #endif
->
-> +/**
-> + * smp_cond_load_acquire_timeout() - (Spin) wait for cond with ACQUIRE ordering
-> + * until a timeout expires.
-> + * @ptr: pointer to the variable to wait on.
-> + * @cond_expr: boolean expression to wait for.
-> + * @time_expr_ns: monotonic expression that evaluates to time in ns or,
-> + *  on failure, returns a negative value.
+This relates to my recent patch fixing state preservation in lskcipher's
+unaligned path, which exercised ARC4 through BPF:
 
-The documentation says @time_expr_ns "on failure, returns a negative value",
-but the implementation in __smp_cond_load_relaxed_timeout() exits when
-__scl_time_now <= 0, treating zero as a failure too. Should the
-documentation say "zero or a negative value" to match what
-smp_cond_load_relaxed_timeout() documents (barrier.h:317-318)?
+https://lore.kernel.org/r/20260829194314.42685-1-kmehltretter@gmail.com
 
-> + * @timeout_ns: timeout value in ns
-> + * (Both of the above are assumed to be compatible with s64.)
-> + *
-> + * Equivalent to using smp_cond_load_acquire() on the condition variable with
-> + * a timeout.
-> + */
-> +#ifndef smp_cond_load_acquire_timeout
-> +#define smp_cond_load_acquire_timeout(ptr, cond_expr,			\
-> +				      time_expr_ns, timeout_ns)		\
-> +({									\
-> +	__unqual_scalar_typeof(*(ptr)) VAL;				\
-> +	VAL = smp_cond_load_relaxed_timeout(ptr, cond_expr,		\
-> +					     time_expr_ns,		\
-> +					     timeout_ns);		\
-> +	/*								\
-> +	 * We arrive here once the loop condition is hit, on timeout,	\
-> +	 * or, if we hit both the timeout and the loop condition.	\
-> +	 *								\
-> +	 * For the first case, we come here having already evaluated	\
-> +	 * the control dependency.					\
-> +	 * In the last case -- low probability, possible in the last	\
-> +	 * iteration, especially on architectures with waiting		\
-> +	 * cpu_poll_relax() -- the control dependency has not been	\
-> +	 * evaluated.							\
-> +	 *								\
-> +	 * So, force it to be re-evaluated before			\
-> +	 * smp_acquire__after_ctrl_dep() to provide ACQUIRE ordering	\
-> +	 * for both.							\
-> +	 *								\
-> +	 * The other case is of pure timeout, where again we don't have \
-> +	 * the advantage of having the control dependency. Given that	\
-> +	 * this is the slowpath, we go with a full smp_load_acquire().	\
-> +	 */								\
-> +	if (cond_expr)							\
-> +		smp_acquire__after_ctrl_dep();				\
-> +	else								\
-> +		VAL = smp_load_acquire(ptr);				\
+While looking at your patch, I tested the actual BPF-visible algorithm
+surface. The ECB and CBC templates allow considerably more than AES.
 
-The macro evaluates cond_expr one extra time here, after the
-smp_cond_load_relaxed_timeout() call has already returned. This means
-cond_expr is silently required to be side-effect free and a pure function
-of VAL.
+I compared:
 
-The kernel-doc says the macro is "Equivalent to using
-smp_cond_load_acquire() on the condition variable with a timeout"
-(barrier.h:392-393), but in smp_cond_load_acquire() cond_expr is only
-evaluated immediately after a fresh READ_ONCE inside the loop. If cond_expr
-also depends on state other than VAL, or has side effects, the two
-evaluations can disagree:
+  A: cee9395acd80 (v7.3-rc1)
+  B: cee9395acd80 plus this patch
 
-  VAL = smp_cond_load_relaxed_timeout(ptr, cond_expr, ...);  /* succeeded, cond was true */
-  if (cond_expr)                                             /* now false */
-          smp_acquire__after_ctrl_dep();
-  else
-          VAL = smp_load_acquire(ptr);                       /* successful result discarded */
+both used the same arm64 QEMU configuration and the same BPF/userspace
+test artifacts. Each request was exactly one cipher block.
 
-When that happens the successful wait's value is thrown away and replaced
-by a fresh read, and any side effects inside cond_expr run one extra time.
+"OK" means context creation plus BPF encrypt/decrypt round-trip succeeded.
 
-This pattern is not hypothetical for the smp_cond_load_acquire() family.
-In-tree conditions that are not pure functions of VAL include:
+Algorithm                     Bytes  A          B
+--------------------------------------------------------
+ecb(aes)                         16  OK         OK
+cbc(aes)                         16  OK         OK
+ecb(aes-lib)                     16  OK         -ENOENT
+cbc(aes-lib)                     16  OK         -ENOENT
+ecb(anubis)                      16  OK         -ENOENT
+cbc(anubis)                      16  OK         -ENOENT
+ecb(anubis-generic)              16  OK         -ENOENT
+cbc(anubis-generic)              16  OK         -ENOENT
+ecb(aria)                        16  OK         -ENOENT
+cbc(aria)                        16  OK         -ENOENT
+ecb(aria-generic)                16  OK         -ENOENT
+cbc(aria-generic)                16  OK         -ENOENT
+ecb(blowfish)                     8  OK         -ENOENT
+cbc(blowfish)                     8  OK         -ENOENT
+ecb(blowfish-generic)             8  OK         -ENOENT
+cbc(blowfish-generic)             8  OK         -ENOENT
+ecb(camellia)                    16  OK         -ENOENT
+cbc(camellia)                    16  OK         -ENOENT
+ecb(camellia-generic)            16  OK         -ENOENT
+cbc(camellia-generic)            16  OK         -ENOENT
+ecb(cast5)                        8  OK         -ENOENT
+cbc(cast5)                        8  OK         -ENOENT
+ecb(cast5-generic)                8  OK         -ENOENT
+cbc(cast5-generic)                8  OK         -ENOENT
+ecb(cast6)                       16  OK         -ENOENT
+cbc(cast6)                       16  OK         -ENOENT
+ecb(cast6-generic)               16  OK         -ENOENT
+cbc(cast6-generic)               16  OK         -ENOENT
+ecb(des)                          8  OK         -ENOENT
+cbc(des)                          8  OK         -ENOENT
+ecb(des-generic)                  8  OK         -ENOENT
+cbc(des-generic)                  8  OK         -ENOENT
+ecb(des3_ede)                     8  OK         -ENOENT
+cbc(des3_ede)                     8  OK         -ENOENT
+ecb(des3_ede-generic)             8  OK         -ENOENT
+cbc(des3_ede-generic)             8  OK         -ENOENT
+ecb(khazad)                       8  OK         -ENOENT
+cbc(khazad)                       8  OK         -ENOENT
+ecb(khazad-generic)               8  OK         -ENOENT
+cbc(khazad-generic)               8  OK         -ENOENT
+ecb(seed)                        16  OK         -ENOENT
+cbc(seed)                        16  OK         -ENOENT
+ecb(seed-generic)                16  OK         -ENOENT
+cbc(seed-generic)                16  OK         -ENOENT
+ecb(serpent)                     16  OK         -ENOENT
+cbc(serpent)                     16  OK         -ENOENT
+ecb(serpent-generic)             16  OK         -ENOENT
+cbc(serpent-generic)             16  OK         -ENOENT
+ecb(sm4)                         16  OK         -ENOENT
+cbc(sm4)                         16  OK         -ENOENT
+ecb(sm4-generic)                 16  OK         -ENOENT
+cbc(sm4-generic)                 16  OK         -ENOENT
+ecb(tea)                          8  OK         -ENOENT
+cbc(tea)                          8  OK         -ENOENT
+ecb(tea-generic)                  8  OK         -ENOENT
+cbc(tea-generic)                  8  OK         -ENOENT
+ecb(xtea)                         8  OK         -ENOENT
+cbc(xtea)                         8  OK         -ENOENT
+ecb(xtea-generic)                 8  OK         -ENOENT
+cbc(xtea-generic)                 8  OK         -ENOENT
+ecb(xeta)                         8  OK         -ENOENT
+cbc(xeta)                         8  OK         -ENOENT
+ecb(xeta-generic)                 8  OK         -ENOENT
+cbc(xeta-generic)                 8  OK         -ENOENT
+ecb(twofish)                     16  OK         -ENOENT
+cbc(twofish)                     16  OK         -ENOENT
+ecb(twofish-generic)             16  OK         -ENOENT
+cbc(twofish-generic)             16  OK         -ENOENT
+arc4                              1  OK         -ENOENT
+arc4-generic                      1  OK         -ENOENT
+ecb(arc4)                         1  OK         -ENOENT
+ecb(arc4-generic)                 1  OK         -ENOENT
 
-  arch/arm64/mm/mmu.c:
-    smp_cond_load_acquire(&idmap_kpti_bbml3_flag, VAL == num_online_cpus());
+This leaves only 2 of the 72 tested algorithm names: the other 70,
+covering AES aliases, non-AES block ciphers, and ARC4, now return
+-ENOENT.
 
-  include/asm-generic/ticket_spinlock.h:
-    atomic_cond_read_acquire(&lock->val, ticket == (u16)VAL);
+This table describes the BPF-visible support removed by this patch. That
+may well be worthwhile cleanup, but it is still the removal of existing,
+likely only theoretical, support.
 
-  kernel/bpf/rqspinlock.c:
-    res_smp_cond_load_acquire(&lock->locked, !VAL || RES_CHECK_TIMEOUT(ts, ret, _Q_LOCKED_MASK));
-
-No current caller in the series is broken by this - every new user passes
-a condition that is a pure function of VAL. But should the requirement be
-documented, or should the equivalence claim in the kernel-doc be weakened?
-
-> +	(typeof(*(ptr)))VAL;						\
-> +})
-> +#endif
-> +
->  /*
->   * pmem_wmb() ensures that all stores for which the modification
->   * are written to persistent storage by preceding instructions have
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33438155296
---===============8970126971584631980==--
+Thanks,
+Karl
