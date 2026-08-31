@@ -1,90 +1,44 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2323B31A55B
-	for <bpf@vger.kernel.org>; Sun, 30 Aug 2026 22:11:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+Received: from ustc.edu.cn (smtp.ustc.edu.cn [202.38.64.46])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83D5E5474F;
+	Mon, 31 Aug 2026 00:15:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.38.64.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788127890; cv=none; b=FbROqbhuZc/hS1iySjVCUvFYyxyXfZNprXDQ6irjkbaUOqrhdUHaub8pajUN73WflgFUt2HHPzpJLG5MxvH0ZjGnZ+CEjEOzEPzn7CelNaqnD5/te9XWh3VqjfMQjK42RmJh8Pg5JlBEB36QGsAk6Y1UbkxHYxViE+q8zXxSRpE=
+	t=1788135358; cv=none; b=mWcBbpq6GnyXOEsO5h1eufPpnkILWIS7lF4cHjJD0qFmxfoPzqpmTW3Y5WgdRUt2ohvCa0BbMnZ1pTnTrCxd6SvD7AFb0UVmoX4kf4la74wHA5+40jpLb5+M/QKJcNs8mLJmV6ZmtJ3dTWTONzJrlKlUeGyvRA5pjMtXOvcChgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788127890; c=relaxed/simple;
-	bh=Y6yLX+OH+OYRFjbkV2SAEGuyDJWmPr67ZnqS5SQ9Jmc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=L4uagbpfm6ZGEKF1rLLgf8TUZrY6gxnDNrQaySflzEXiAyeRKk/CmrOZMoxMjzh3XDKgJoE2hDtK6FTTttBgETVHzVfPEgj8lS0pHIoFzE8SXiYYpzzlZXuj4QxYqPx0U+nl9Cz4LiuC3wbT/j2owYw+KShjgJqDNRDSpkNTW+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NInALk7k; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788135358; c=relaxed/simple;
+	bh=MXxSIduaxbuHW0xd67+p12yKd+GfCg3iF7VdreuaYB4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TFWKfT6brfjIOpGAeXbubVdpbI5yM3NUcY0gHteYntVY37/xV0HFZjLzBoJFE87dIDIwN0OUksoFVLaaiRtvQY/by5UyRxC/aFdiCI63NUbj6ynu45DdHSgZhYpcmXBRTwNFwVMG5fW9hZTWZLM+g7Nl9a432Kebgd30l6Yt5As=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn; spf=pass smtp.mailfrom=mail.ustc.edu.cn; dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b=gZ2ggx2U; arc=none smtp.client-ip=202.38.64.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.ustc.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NInALk7k"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-c250c6a6a9aso459175866b.1
-        for <bpf@vger.kernel.org>; Sun, 30 Aug 2026 15:11:28 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b="gZ2ggx2U"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788127887; x=1788732687; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ke7q6OPG+H0JyMbKGhae9IDTSIoPnu+4UA6wm856/Ak=;
-        b=NInALk7kf6ZL/GWMT0IDNzoUpg3FQ3U66LKvBviHAZpXq4k7xzVRl7ECa7NADTdAZg
-         fjXxGyeoyHFYmf9HQ8tb+xsvwXQgBOhw5TEzh6M6aG5R4ZzbuKy5PWbmr/MIEqj8UJ38
-         VuJw5WtCZSTVEOhnLqoNH9bPA/qeoLv8g05LAMTIRJrywr1HygbEQupRBIcLUs80JunZ
-         d7VNKS1tboG4uFee0Bl2j84KHorv4uS603fGkbTT/Tb6EqvT971XDG9GNWb52Q5trP74
-         vVu2+QVlvBkVz6UbABrXmRUuS4WGroHg2RlcnDILcvEycEqYxjV56bKUfIi6uL8aiK2D
-         6pgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788127887; x=1788732687;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ke7q6OPG+H0JyMbKGhae9IDTSIoPnu+4UA6wm856/Ak=;
-        b=NXAdO76j1dgyzR/H2usVQfamlCsVh3aWtX3zksao/saaEsxso9+quPGfV64BK7SN6T
-         moqe0WQEYFyDc9chH1NCq2Yh+HsROBJ5/PPN7YB93W5+DaaRAj/W8r32Tw/v0ioUls00
-         lEdKFEtuOk3QDygwjyCOZLt+9HtHlQ2GUTlvHaLOf21qy00Ci6XPoVJkvtQs2YpJlLMd
-         IJd+6NpLENWchsTfHq1MMbkTL66rlLR8WYIB4ad4YvZvbxqfNKDvVilqZEQCuojmLYB4
-         zT5b9RrDaT1FnEQpq2/iShOXCaFbC8TFqoMTi33peVvg8x05DLzFtkToAw+IFYm8FmiM
-         F9rA==
-X-Forwarded-Encrypted: i=1; AHgh+RpKv3IhXXl56OHYbLNi79Sr7JqjBEsD0tgCxDIUTYcyas2Qx6z3jWjS/XAdOhJGIEBgbx8=@vger.kernel.org
-X-Gm-Message-State: AFuF++kozZ1zVyutRRVWtfamHaug5nAwvPMABq9Ndr2UJqHvxh3z7Xib
-	sXndCkYHqdgVqkDNADaA7RCJXF669SRemxM3kIyrfgSjOrzjbTwzAbHb
-X-Gm-Gg: AR+sD10NtddEpJgh0IDQZ0AzfD24w8MoeZh/FFnMOLQdMNfykoZKk1zSjw6pmSYEZt3
-	5pkUI6rkxZYf16pXHxpfgrPM2Sj/eH6Z8u50E3M9Y0rIty7raXC1J3Q1bHgaf0M+Nv8wwbqz0Xy
-	p2ETKC1kOz8heZpyRuZnyyAGp95ztpfZTiBIXCtVYKTWPwsx7W8nwS+E/adEJKG7D25/RKE7Dfo
-	Iux8dGKAMfF0guzbrDCrZSFCKvsga1HsUB1g43GKVrXnLa2Zt1/dGVo0LxRTz6MYj4TNL3mCdp/
-	CIJnMyKa75BLKIwp0Y/Il1rMg/3z64JCFWi3DJ/tUUm1JFAd9vdArOM4TU3ekTic+aGXX0PAaRj
-	QqZXZo//CLsunwwG+X9+kzIB/RL5pPBBYWe7lIgErEolJetUkk/3d6HDCCCjpAk7IgtZ7kRTlhH
-	pIz1H6VQNNe6Aze35ht15L9EWOf9T9jkCqK2iONSq0dTTjecOyMWNm9N75NC30MCHg+KK5WojRm
-	YuTb49I3rcktE44wFn0z20H1Gab6LPokJl8cTlfMo/dlzLwB7a94s1PFGf6LNmcOKlgqjbcTy4t
-	v0cxyYVMnDSby7APWLgbbIJmsH2P1hfXo+Omf1uSAQCGnNBaF1tI4XsV
-X-Received: by 2002:a17:906:6a20:b0:c25:6c9a:88bc with SMTP id a640c23a62f3a-c25a69498f9mr10903066b.19.1788127887214;
-        Sun, 30 Aug 2026 15:11:27 -0700 (PDT)
-Received: from fedora.home.arpa (77-162-219-136.fixed.kpn.net. [77.162.219.136])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c255eacf6bbsm340084166b.0.2026.08.30.15.11.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Aug 2026 15:11:25 -0700 (PDT)
-From: Bruno Xavier <bfxavier@gmail.com>
-To: florian@schauer.to,
-	hawk@kernel.org,
-	ilias.apalodimas@linaro.org
-Cc: fabriciogava@gmail.com,
-	netdev@vger.kernel.org,
+	d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+	Message-ID:MIME-Version:Content-Transfer-Encoding; bh=6pPk1RKU7b
+	lzgrDpApXfta6xf+H6BptHxsrQAtahHPI=; b=gZ2ggx2UmHbFy7A6BaUviVj2dP
+	2Ty2+J5jfzy0BrbrHxwFzOosIFwBFcgpmlaaa3AOJHG3lB8UfmKeo6pwSmjlzVb7
+	Can0qwZ5i5BaXa1f3AWRxmjB9gqatrMGUqCrXWjNvkUvPxgayjPqo2EE2f9oWOV5
+	Bi6Vvgvn/c1/K0gJM=
+Received: from localhost (unknown [222.195.81.60])
+	by mailimap2024 (Coremail) with SMTP id 3pYKCgBXSyKhx5RqMKe+AA--.2552S2;
+	Mon, 31 Aug 2026 08:15:29 +0800 (CST)
+From: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
+To: stable@vger.kernel.org
+Cc: gregkh@linuxfoundation.org,
 	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
 	ast@kernel.org,
 	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	linyunsheng@huawei.com,
-	Bruno Xavier <bfxavier@gmail.com>
-Subject: Re: [PATCH net v2] page_pool: keep frag_offset aligned for odd-sized requests
-Date: Mon, 31 Aug 2026 00:11:24 +0200
-Message-ID: <20260830221124.1238312-1-bfxavier@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260828060822.2628276-1-florian@schauer.to>
-References: <20260828060822.2628276-1-florian@schauer.to>
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	martin.lau@linux.dev,
+	ameryhung@gmail.com,
+	joannelkoong@gmail.com,
+	sashal@kernel.org
+Subject: [PATCH 6.6.y v3 0/3] bpf: fix dynptr release handling
+Date: Mon, 31 Aug 2026 08:15:21 +0800
+Message-ID: <20260831001524.3223134-1-xyx2021@mail.ustc.edu.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -92,43 +46,101 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:3pYKCgBXSyKhx5RqMKe+AA--.2552S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCFyfGF1UGw48uw1rGFyxAFb_yoWrJw4kpF
+	WFk3yYqF1kJr1UCrs7AF4xXFyFkrs3X3y5KFyrK34fZ3Z8JryUurWYgFyUXFZ8KFyfA3yj
+	qw4Yq3ZxCa1UZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBGb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
+	C2z280aVCY1x0267AKxVWxJr0_GcWlnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8I
+	j28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr
+	4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxG
+	rwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCY02Avz4vE14v_tw
+	CF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j
+	6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64
+	vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+	Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0x
+	vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07bF3kNUUUUU=
+X-CM-SenderInfo: h010jiysr6zt1loo32lwfovvfxof0/
 
-On Fri, Aug 28, 2026 at 08:08:22AM +0200, Florian Schauer wrote:
-> Round the fragment size up to at least the alignment struct skb_shared_info
-> requires, so fragments are always suitably aligned for the objects callers
-> build on them.
+Upstream commit 308c7a0ae885 ("bpf: Refactor object relationship
+tracking and fix dynptr UAF bug") fixes these lifetime bugs as part of
+an 11-file parent_id refactor. That refactor cannot be applied to
+6.6.y, which still represents the relationships with dynptr_id and
+ref_obj_id.
 
-I sent a caller-side fix for the same defect a day after your v1, without
-having seen it:
+This series supplies three stable-sized equivalents using the existing
+6.6.y representation. Patch 1 invalidates slice registers with the
+released dynptr_id. Patch 2 propagates a referenced-dynptr release
+error instead of turning a callback rejection into a kernel warning.
+Patch 3 scans every active call frame when invalidating cloned dynptr
+stack slots. They are split because the bugs have different
+introducing commits and independently testable effects.
 
-  net: skbuff: keep the page_pool fragment offset aligned in skb_pp_cow_data()
-  https://lore.kernel.org/netdev/20260827122926.31123-1-bfxavier@gmail.com/
+These patches are stable-specific implementations authored for the old
+verifier, not cherry-picks of Amery Hung's upstream diff. Each commit
+keeps 308c7a0ae885 as the upstream provenance for the equivalent fix
+and documents how its implementation differs.
 
-Fabricio connected the threads. xdp_copy_frags_from_zc() at
-net/core/xdp.c:700 passes a raw length to the same per-cpu pool, so the
-caller-side fix is not enough. Yours is the right one and I have asked for
-mine to be dropped.
+Changes in v3:
 
-skb_pp_cow_data() is also called from veth, drivers/net/veth.c:762, so the
-fragment loop runs outside generic XDP mode as well. Good to flag that in
-the changelog.
+- make Xu Yunxiang the author of all three stable-specific
+  implementations;
+- remove the authorship, sign-off, and ack trailers copied from
+  308c7a0ae885 because those developers did not write or review these
+  rewritten stable patches;
+- remove the backporter notes and retain the upstream commit only as
+  provenance for the equivalent fixes;
+- leave all code and tests byte-for-byte unchanged from v2.
 
-The skbs that actually panic are small and linear, not the large packets
-that leave frag_offset odd. skb->end was 114 to 178 on my traces against
-384 to 955 in ordinary traffic, because the tail fragment of a page is the
-one that gets an arbitrary size, page_pool_alloc_netmem() setting
-*size = max_size - *offset. Your patch aligns that remainder too, and it
-is the case that actually reaches cache-line offset 61 to 63.
+v2: https://lore.kernel.org/r/20260829102618.105116-1-xyx2021@mail.ustc.edu.cn
 
-Another configuration for the record. ThinkPad T14 Gen 6, Fedora 44,
-7.1.9-200.fc44, netbird attaching a generic XDP program to lo and holding
-a raw IPv4 socket. Four panics, all skb_clone+0x159, split-lock detection
-in the sld_warn state that still dies on kernel split locks. Tracing
-napi_build_skb() on the same box puts the misaligned heads on
-skb_pp_cow_data() <- netif_receive_generic_xdp <- do_xdp_generic, and the
-clones that hit them on raw_v4_input().
+Changes in v2:
 
-Building your v2 here now, Tested-by to follow.
+- check that a register has base type PTR_TO_MEM before reading its
+  dynptr_id union member, while retaining DYNPTR_TYPE_* flags;
+- add a bpf_dynptr_slice() use-after-submit regression that reaches the
+  dynptr_id-only slice path on the target stable verifier;
+- add a separate patch that propagates release_reference() errors from
+  referenced dynptr release and a callback regression test. This avoids
+  the verifier WARN, and the panic it causes with panic_on_warn=1, when a
+  callback tries to release its caller's dynptr;
+- make the cross-frame clone regression use bpf_dynptr_data() after the
+  callee releases a clone, so it uniquely tests caller-slot invalidation
+  instead of a repeated release already rejected by patch 2;
+- check STACK_DYNPTR before reading dynptr metadata while scanning call
+  frames, so a partially overwritten ordinary spill with stale metadata
+  is ignored, and add a success regression test;
+- investigate the separately reported slice escape through a returned
+  subprogram frame. A minimal reproducer is also accepted by current
+  mainline after 308c7a0ae885, so that issue is not folded into this
+  stable-only series and needs a separate mainline fix.
 
-Thanks,
-Bruno
+The code and tests are unchanged from v2. The following results were
+obtained on that identical code tree with Linux 6.6.155 and
+panic_on_warn=1:
+
+- test_progs -t dynptr -v --workers=1: 2/92 passed, 0 failed;
+- the slice-after-submit and cross-frame stale-use programs were
+  rejected, while their control programs loaded successfully;
+- the callback-release reproducer was rejected without a verifier
+  warning;
+- the independent submit/discard, stale-spill, and cross-frame
+  reproducers produced the expected results.
+
+Xu Yunxiang (3):
+  bpf: Invalidate dynptr slices by dynptr_id on release
+  bpf: Propagate referenced dynptr release errors
+  bpf: Invalidate dynptr clones in every call frame on release
+
+ kernel/bpf/verifier.c                         | 55 +++++++++----
+ .../testing/selftests/bpf/progs/dynptr_fail.c | 79 +++++++++++++++++++
+ 2 files changed, 119 insertions(+), 15 deletions(-)
+
+
+base-commit: a4a971135a2ff64382ae4235b3ae60503bb1036a
+-- 
+2.43.0
+
