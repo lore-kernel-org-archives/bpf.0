@@ -1,196 +1,159 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FBEB39A054
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 21:25:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E440385539;
+	Mon, 31 Aug 2026 21:31:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788211561; cv=none; b=gyPhr8xgzk3eMUVaY8aj3WqypzRKEAxc7N2jKTA85UjudwAovNKzPxPL0h5jLNxBtxwJrchuD2BU7lMfaHEBO2nOG9Or59ekut6fiYFx57Wb5RPaEs6RyusC+jDe7IbCF6ggSwaO8J26drpSPeHbzjwyo59GEhmh9qdACfL/a0Y=
+	t=1788211907; cv=none; b=hk8rLjRX30JySylEoi0UNNyreSClcj9ZwSLWwfIwIzzFEe9mpHCLY6QwR2+eGT6eJ+xGA1+ctsItmeQGR20Rw6F4f305NhY9+Xo20p9ZtwNMXt7NZY5zkW2MNQnAJms8zjndX73kruh3XihuwRaUT9upr3obdhhx8jaxX5iDgyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788211561; c=relaxed/simple;
-	bh=AHPZLv7p/XIZVyL7GiDuruMmiBMwRW9aqTeppmZw4/0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n4MmsyXk5F+meRnqKckLDlJraORzId0EMMwMNc4cOX7KtoFBceUHS+PHlMzHrwXgeKclOPZbl/GHpsPXhgUNXLRTsTr/hMG02rxYLhPDuByHS0xz5OEFme2BvoLN9irnv7R49ABaUh7xzUHpCYokW7j9a87QeZq+zRZVHs3IfnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kBiPPQUp; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788211907; c=relaxed/simple;
+	bh=ZE4RQgArKc8SQwnA1HD4OD1RFHfbeEcEZ9iqk04zcPY=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=J3BW7cAa7plSPrKpS65AtCo0WpV2KjmXW+qlmk8DV/sVA8Gwr57iU4SfxTImopKacJ1iy9S/YrrSX4atWNCcc3EBUULp5blu0ah/q59dDs2dGWOXPKB8c/EdzlNJLVjIao/yRKCvhWtBPeMlG2RXF2/dVI+U60fhjn3Nf0uwgt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EK7N2jzC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kBiPPQUp"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-49b0eab380eso3795075e9.0
-        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 14:25:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788211558; x=1788816358; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=aQbmJ5UzEspAlrZUDfvA8sbZNSNeRRfdUoE9eJ3Cyhg=;
-        b=kBiPPQUpgchrBiieKHClvTK9AZkXnS6hfuQSbd5F0rdtL9NWPRFEuVFIa7VYj3366W
-         bRaLyQPRb2iWw1b7rfxpJd6ay6WUZTS6XFodCcKPGJP+HgDeGLMvW6Zes2CBCYDCNXKq
-         RQgdYH9/snScRw6sHRPIT/5yimbKsBXEHbTgqK4V7aHMC9Ek+PoknKTPLTwFiqTfXSo8
-         s6bEfYPed0vbNm+nEO/Gn3qtG+cgYXC9A/0m1CXv15Z1McTuikN53U+xFhA4ipzEF8cz
-         NIoWV/h1ET8SICZgIRRvB/FkhkrvpDDas+fb/v6AjbLMRCEq+2KfYG37boofi9Ygbz1r
-         DsHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788211558; x=1788816358;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=aQbmJ5UzEspAlrZUDfvA8sbZNSNeRRfdUoE9eJ3Cyhg=;
-        b=kZZwrS+6b4SHqF1VmLHVA/NdxAy8ei7NJYgOu39a9gLJ8kmFJhunmJYuORs0QeoxsN
-         9i47Afk/HJ2pDu2pJMx+e9Bl+2Jm2DNdux2hQqGu41SzwAUsjZ+oAqEAMiHACaJZAe9j
-         1ogZZIqi58uDknzL6E7mOWFnaMEC7uvIdQiRJ4YqEEsFhMzhDhl3X3r2NfXyv8hqvRGw
-         V6YQ808GmfYq4Rj5aly0eUOR8N3+YezYkadQBUjuUHFvI8YQbap28Oily/V2qh2MYzgT
-         hqdmiCQvmuHnUiqVi5RkYfbQPyuROQJRw31vX6lchYJUFk493fRVwuA4pUU2YUhuUFpo
-         16Cw==
-X-Gm-Message-State: AFuF++lUgjnTmYxt7pBOo8jHiUX0YtN88fwZvVsYumdFUx1aB/7XtZs0
-	u4EjcMGRXeydSFC1XhJgeOb0qYAI+q9gUVSm+irq8wiNUzrzJpyI6gceHn/Eebwg
-X-Gm-Gg: AR+sD11z7gSp68//oqGwgI00ZcQOexegbsFuATvsVqmp54o/6WqRR2QgTfAvYik3aD7
-	Qk1yED3dy/QNpI+gz3e9n9JJ+SJdZUcEhBxZ8AkA58tbW54q3o/3RPvjPxNxg6o+qoKsBJGrsAL
-	qebedROHLvl2AOCjGGIRIuUJLuCFeCmVXzSLOjr47jr3GU+5Emij7Wd3HcBjVcUf790xSWwnYZz
-	GB9+eGbxBaV6qbfzIHSH/qCupnNDcVszlGoj5IdkU3184ug7Ln8dJ966yBEDdU/y7RKICEZsR+a
-	yDtrbTqRHAL6etwKF+O7qsSXw+MoZKVferi/iCtaWMrCdpfrJOp/zhcFEpqYkXctWYnkM91xjaR
-	C4tugrMoZYJjouanWcMVf/EwVYJeunFTOmq/nQpyOFb4nZxpig89t1J3Pl6jDxc3rNnsFFejfXz
-	wuZetxVmdhJ1feQYUztq95Q7+XVwkQ7Neneck4TtwFlG7ygmV+2aO80rICHLLb3YoCU17lufOBP
-	/PuodnDvclZ7Uny8pBdDe/opuSqRcPTbdtSUcx5UhLS1D12jLOSkjXoNA4cxqjlUJBYY/dKpu9R
-	+cuKf1F/YHlt12+s4FvJNEYRZwddeSblvJeJLCTX1j26d73ps3QFpWrA7DRhf03Bm1Md
-X-Received: by 2002:a05:600c:4e4c:b0:49b:e22:4ee4 with SMTP id 5b1f17b1804b1-49cdd416ef1mr14239365e9.4.1788211557306;
-        Mon, 31 Aug 2026 14:25:57 -0700 (PDT)
-Received: from unknown748F3CBA5068 (dynamic-2a02-3100-acb9-0201-68d0-34d2-ad1a-175a.310.pool.telefonica.de. [2a02:3100:acb9:201:68d0:34d2:ad1a:175a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cdce44ea9sm18308105e9.14.2026.08.31.14.25.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2026 14:25:56 -0700 (PDT)
-Date: Mon, 31 Aug 2026 23:25:54 +0200
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: bpf@vger.kernel.org, Vadim Fedorenko <vadim.fedorenko@linux.dev>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: crypto: Use AES-CBC and AES-ECB libraries
-Message-ID: <apXwXLRpBUIWQuC5@gmail.com>
-References: <20260831192139.94895-1-ebiggers@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EK7N2jzC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E2851F000E9;
+	Mon, 31 Aug 2026 21:31:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788211906;
+	bh=oMQj1CO7FeLw5Q/x4SXoEK72/eOkUjphrW+XFi+9DSo=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=EK7N2jzCrtLimig81ZkOt9TOso8+dgSC8Jo2f1XZdJs3mOsKmqnAGtOAJ9ExpWYfC
+	 Lq6YCVhVJ0iOXApkzPVqDuOYp81AZsoziox5jbT0U/mSsnLoc7e5x/PPJ++FjyJyec
+	 vj78sOBp1JoyOdERiIebGytxXPmkMwndGrQ/yWaJRoD9QqYzU0gKf0Qvvs7SaTpDZs
+	 1fqkQjjkWIwM9sjkwLehB1QHJJ1zsFOf39rRX26Uh9Sp71kPZsgbgHZkTCAZyMvvgv
+	 EseCEwjVpUnYVeXEcpD8W3F91ukdGV2+cozl7sGqTR03gXL+EkjYKAEql5aiayVvb5
+	 oKLCRrNRiDbUQ==
+Content-Type: multipart/mixed; boundary="===============4967962990189229906=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260831192139.94895-1-ebiggers@kernel.org>
+Message-Id: <c09ae02e72c39f6b963a9a2e6f28597abecf5e9a57a7cdf4c8a531843e9503e6@mail.kernel.org>
+In-Reply-To: <20260831202251.305046-11-ankur.a.arora@oracle.com>
+References: <20260831202251.305046-11-ankur.a.arora@oracle.com>
+Subject: Re: [PATCH v15 10/16] bpf/rqspinlock: Use smp_cond_load_acquire_timeout()
+From: bot+bpf-ci@kernel.org
+To: ankur.a.arora@oracle.com,linux-kernel@vger.kernel.org,linux-arch@vger.kernel.org,linux-arm-kernel@lists.infradead.org,linux-pm@vger.kernel.org,bpf@vger.kernel.org
+Cc: arnd@arndb.de,catalin.marinas@arm.com,will@kernel.org,peterz@infradead.org,akpm@linux-foundation.org,mark.rutland@arm.com,harisokn@amazon.com,cl@gentwo.org,ast@kernel.org,rafael@kernel.org,daniel.lezcano@linaro.org,memxor@gmail.com,zhenglifeng1@huawei.com,xueshuai@linux.alibaba.com,rdunlap@infradead.org,david.laight.linux@gmail.com,broonie@kernel.org,joao.m.martins@oracle.com,boris.ostrovsky@oracle.com,konrad.wilk@oracle.com,ashok.bhat@arm.com,ankur.a.arora@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 31 Aug 2026 21:31:45 +0000 (UTC)
 
-On Mon, Aug 31, 2026 at 12:21:39PM +0100, Eric Biggers wrote:
-> There are library APIs for both of these now, which are much easier to
-> use and more efficient.  Reimplement BPF crypto on top of them, greatly
-> simplifying the code.  As part of this, the bpf_crypto_type abstraction
-> layer is removed, as it's not useful.
-> 
+--===============4967962990189229906==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-This relates to my recent patch fixing state preservation in lskcipher's
-unaligned path, which exercised ARC4 through BPF:
+> diff --git a/kernel/bpf/rqspinlock.c b/kernel/bpf/rqspinlock.c
+> index 1b249c6f0674..9e8f19afd7b0 100644
+> --- a/kernel/bpf/rqspinlock.c
+> +++ b/kernel/bpf/rqspinlock.c
 
-https://lore.kernel.org/r/20260829194314.42685-1-kmehltretter@gmail.com
+[ ... ]
 
-While looking at your patch, I tested the actual BPF-visible algorithm
-surface. The ECB and CBC templates allow considerably more than AES.
+> @@ -269,6 +267,18 @@ static noinline s64 clock_deadlock(rqspinlock_t *lock, u32 mask,
+>   */
+>  #define RES_RESET_TIMEOUT(ts, _duration) ({ (ts).timeout_end = 0; (ts).duration = _duration; })
+>
+> +/*
+> + * Limit how often we invoke clock_deadlock() while spin-waiting in
+> + * smp_cond_load_acquire_timeout() or atomic_cond_read_acquire_timeout().
+> + *
+> + * We only override the default value for architectures without a waiting
+> + * implementation.
+> + */
+> +#ifndef CPU_POLL_RELAX_WAITS
+> +#undef SMP_TIMEOUT_POLL_COUNT
+> +#define SMP_TIMEOUT_POLL_COUNT	(16*1024)
+> +#endif
+> +
 
-I compared:
+Does this CPU_POLL_RELAX_WAITS check correctly detect the waiting
+implementation at runtime for arm64?
 
-  A: cee9395acd80 (v7.3-rc1)
-  B: cee9395acd80 plus this patch
+On arm64, CPU_POLL_RELAX_WAITS is defined unconditionally at
+arch/arm64/include/asm/barrier.h:233, but cpu_poll_relax() picks its
+implementation at runtime:
 
-both used the same arm64 QEMU configuration and the same BPF/userspace
-test artifacts. Each request was exactly one cipher block.
+  #define cpu_poll_relax(ptr, val, timeout_ns) do {                  \
+          if (alternative_has_cap_unlikely(ARM64_HAS_WFXT))          \
+                  __cmpwait_relaxed_timeout(ptr, val, timeout_ns);   \
+          else if (arch_timer_evtstrm_available())                   \
+                  __cmpwait_relaxed(ptr, val);                       \
+          else                                                       \
+                  cpu_relax();                                       \
+  } while (0)
 
-"OK" means context creation plus BPF encrypt/decrypt round-trip succeeded.
+So on every arm64 build SMP_TIMEOUT_POLL_COUNT stays at 1 ('Wait mode. No
+need to poll.' per include/asm-generic/barrier.h:280-281) and the 16k
+override is skipped. On arm64 hardware that has neither FEAT_WFXT nor an
+available arch-timer event stream, cpu_poll_relax() degrades to a bare
+cpu_relax(), and __smp_cond_load_relaxed_timeout() then evaluates
+time_expr_ns on every loop iteration:
 
-Algorithm                     Bytes  A          B
---------------------------------------------------------
-ecb(aes)                         16  OK         OK
-cbc(aes)                         16  OK         OK
-ecb(aes-lib)                     16  OK         -ENOENT
-cbc(aes-lib)                     16  OK         -ENOENT
-ecb(anubis)                      16  OK         -ENOENT
-cbc(anubis)                      16  OK         -ENOENT
-ecb(anubis-generic)              16  OK         -ENOENT
-cbc(anubis-generic)              16  OK         -ENOENT
-ecb(aria)                        16  OK         -ENOENT
-cbc(aria)                        16  OK         -ENOENT
-ecb(aria-generic)                16  OK         -ENOENT
-cbc(aria-generic)                16  OK         -ENOENT
-ecb(blowfish)                     8  OK         -ENOENT
-cbc(blowfish)                     8  OK         -ENOENT
-ecb(blowfish-generic)             8  OK         -ENOENT
-cbc(blowfish-generic)             8  OK         -ENOENT
-ecb(camellia)                    16  OK         -ENOENT
-cbc(camellia)                    16  OK         -ENOENT
-ecb(camellia-generic)            16  OK         -ENOENT
-cbc(camellia-generic)            16  OK         -ENOENT
-ecb(cast5)                        8  OK         -ENOENT
-cbc(cast5)                        8  OK         -ENOENT
-ecb(cast5-generic)                8  OK         -ENOENT
-cbc(cast5-generic)                8  OK         -ENOENT
-ecb(cast6)                       16  OK         -ENOENT
-cbc(cast6)                       16  OK         -ENOENT
-ecb(cast6-generic)               16  OK         -ENOENT
-cbc(cast6-generic)               16  OK         -ENOENT
-ecb(des)                          8  OK         -ENOENT
-cbc(des)                          8  OK         -ENOENT
-ecb(des-generic)                  8  OK         -ENOENT
-cbc(des-generic)                  8  OK         -ENOENT
-ecb(des3_ede)                     8  OK         -ENOENT
-cbc(des3_ede)                     8  OK         -ENOENT
-ecb(des3_ede-generic)             8  OK         -ENOENT
-cbc(des3_ede-generic)             8  OK         -ENOENT
-ecb(khazad)                       8  OK         -ENOENT
-cbc(khazad)                       8  OK         -ENOENT
-ecb(khazad-generic)               8  OK         -ENOENT
-cbc(khazad-generic)               8  OK         -ENOENT
-ecb(seed)                        16  OK         -ENOENT
-cbc(seed)                        16  OK         -ENOENT
-ecb(seed-generic)                16  OK         -ENOENT
-cbc(seed-generic)                16  OK         -ENOENT
-ecb(serpent)                     16  OK         -ENOENT
-cbc(serpent)                     16  OK         -ENOENT
-ecb(serpent-generic)             16  OK         -ENOENT
-cbc(serpent-generic)             16  OK         -ENOENT
-ecb(sm4)                         16  OK         -ENOENT
-cbc(sm4)                         16  OK         -ENOENT
-ecb(sm4-generic)                 16  OK         -ENOENT
-cbc(sm4-generic)                 16  OK         -ENOENT
-ecb(tea)                          8  OK         -ENOENT
-cbc(tea)                          8  OK         -ENOENT
-ecb(tea-generic)                  8  OK         -ENOENT
-cbc(tea-generic)                  8  OK         -ENOENT
-ecb(xtea)                         8  OK         -ENOENT
-cbc(xtea)                         8  OK         -ENOENT
-ecb(xtea-generic)                 8  OK         -ENOENT
-cbc(xtea-generic)                 8  OK         -ENOENT
-ecb(xeta)                         8  OK         -ENOENT
-cbc(xeta)                         8  OK         -ENOENT
-ecb(xeta-generic)                 8  OK         -ENOENT
-cbc(xeta-generic)                 8  OK         -ENOENT
-ecb(twofish)                     16  OK         -ENOENT
-cbc(twofish)                     16  OK         -ENOENT
-ecb(twofish-generic)             16  OK         -ENOENT
-cbc(twofish-generic)             16  OK         -ENOENT
-arc4                              1  OK         -ENOENT
-arc4-generic                      1  OK         -ENOENT
-ecb(arc4)                         1  OK         -ENOENT
-ecb(arc4-generic)                 1  OK         -ENOENT
+    cpu_poll_relax(__PTR, VAL, (u64)__scl_timeout);      /* == cpu_relax() */
+    if (++__scl_count < __scl_spin)                      /* __scl_spin == 1 */
+            continue;
+    __scl_time_now = (s64)(time_expr_ns);                /* clock_deadlock() */
 
-This leaves only 2 of the 72 tested algorithm names: the other 70,
-covering AES aliases, non-AES block ciphers, and ARC4, now return
--ENOENT.
+That means one noinline clock_deadlock() call with ktime_get_mono_fast_ns()
+per cpu_relax() for the whole 250 ms / 500 ms wait, in both rqspinlock wait
+loops (rqspinlock.c:427 and :590). Before this patch the same platform
+amortized the clock read 1-in-65536 (the u16 'spin' wrap in the amortized
+RES_CHECK_TIMEOUT), and the arm64 private copy removed earlier in the
+series (f90a6cd43b71) amortized it 1-in-200 with a dedicated
+non-event-stream path, whose comment called this case out explicitly: 'it
+will not happen when event stream support is unavailable, time_expr check
+is amortized.'
 
-This table describes the BPF-visible support removed by this patch. That
-may well be worthwhile cleanup, but it is still the removal of existing,
-likely only theoretical, support.
+The commit message asserts 'We only do this for architectures lacking a
+waiting implementation of cpu_poll_relax()', which is true at compile time
+but not at run time for arm64 without WFXT/evtstrm. Gating on something
+that reflects the runtime choice (or clamping __scl_spin when the waiting
+path is not taken) would restore the amortization.
 
-Thanks,
-Karl
+[ ... ]
+
+>      Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+>      Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+>
+>      Note:
+>        - when overriding the SMP_TIMEOUT_POLL_COUNT value check for
+>          CPU_POLL_RELAX_WAITS instead of directly checking for CONFIG_ARM64.
+
+The commit message states:
+
+>      Finally, redefine SMP_TIMEOUT_POLL_COUNT to be 16k to be similar to
+>      the spin-count used in the amortized version.
+
+Is the 16k value correct? The amortized version's spin count is 64k, not
+16k. RES_CHECK_TIMEOUT_AMORTIZED gates on 'if (!(ts).spin++)'
+(kernel/bpf/rqspinlock.c:244) and 'spin' is 'u16' (struct
+rqspinlock_timeout, rqspinlock.c:80-85), so clock_deadlock() ran once per
+65536 evaluations. The new SMP_TIMEOUT_POLL_COUNT of 16*1024 therefore
+samples the clock 4x more often than the code it is said to match.
+
+The direction is harmless, but the stated justification for the constant is
+off by 4x, and it is the only rationale a reviewer has for the value.
+
+Also, the macro excerpt quoted in the changelog does not match the tree:
+
+        __time_now = (time_expr_ns);
+        if (__time_now <= 0 || __time_now >= __time_end) {
+
+The actual code (include/asm-generic/barrier.h:351-357) uses
+__scl_-prefixed names and tests '__scl_timeout <= 0' after recomputing
+'__scl_timeout = __scl_time_end - __scl_time_now'. It is equivalent, but
+quoting code that is not in the tree makes the equality argument harder to
+check.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33438155296
+--===============4967962990189229906==--
