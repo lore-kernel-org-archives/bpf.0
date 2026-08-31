@@ -1,90 +1,33 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29156356754
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 02:19:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 717D038DC66;
+	Mon, 31 Aug 2026 02:31:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788142782; cv=none; b=s/aiLoQC2OQJWpAvEqCNvvQGmlN+m+WBht9V6+5c6VMhQTyT78AjlYpCtPnHYKoOh7jtvLSeSetcjfz6XZ86/F682urI9Jb174xB1wgQ8vkgN0f09AaK+/OnYC39mTA50F8cNVVtT2suJbdFYCiBFdM26SNdGFt+WX6CJqQSo1U=
+	t=1788143500; cv=none; b=J6AkTbcRibLFAp6OnyZ5vfAceed6Ydnz4xn+KIjJQVAzB065+qhngdJkgJo56WYTGM5bGSictz/cku6bVZY2XrDZ4a19JCx3bTqJwlTfM4V8y58XEbGldIoARRIdYrVvjqolKy2aFrGMxGxb+QV2dUikk4iPb0unV7atEX1qjRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788142782; c=relaxed/simple;
-	bh=PKmDdjoSExMTA2FB/aqE86Yhv4zjpHd1fB/tpmI84qA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rboSCyk0zvxbfOMDZMCoo9yi4cKysZUjWk/dO1zQTQhI8nqRuGeuoJ6TU2WoFKQ+/vWCW30k5QmagpMNprwdYKcsCTf0g5Qoyu3HSgpNweaQ1ZGlOG7EDcJSIG+cGYyI1F/sYFBHc3AYoGknOiuLtcmuQ+W0FrjNAMhiMr02G6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YPlKjySe; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YPlKjySe"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-84f38f3b36eso2502072b3a.1
-        for <bpf@vger.kernel.org>; Sun, 30 Aug 2026 19:19:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788142780; x=1788747580; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=PKmDdjoSExMTA2FB/aqE86Yhv4zjpHd1fB/tpmI84qA=;
-        b=YPlKjySenmiqHGA6mCHWN7bNtkY0S5XJtfroui13n/a/9rmxM+mGwo6EmveF7OE3Pu
-         CJGr0NNe/EaMmm/yIlVt4mL7saAre4xvTBVhRq1LXyZ7UZrsy7vgk1NPaXHyMHdiy1iK
-         Y94zTawtih2RZSMtlEri2ts/qV88dNtXSWnOPcmImAq8JlsAzNsIBIHgo69tbZzC2+88
-         VXjH0Wb1cFloWges32k23ZThNO3IWj32E2gnAkP59CeokAxp2PhdirH1vUneWS4Mutcb
-         QDb39STkpzdqXvb0RLpgnX3idKUjsORVPVlhfF8eJ5bGXAYKEaLaHJUrTdjyftHFTStM
-         M+2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788142780; x=1788747580;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=PKmDdjoSExMTA2FB/aqE86Yhv4zjpHd1fB/tpmI84qA=;
-        b=i8tnA2K2mFOi86S+XyfNLNI4n0YbXmkSCik8k0V0JwTBG8NI3+8hFZFRI6xVzQb3LK
-         tmsyku87Xy4z7Lavv+7+88C5YKit9+IsVUB3cuiSC6YNhvYIxQVZTsEwxUEEsaxPA/ni
-         fVoCuTDL9XhJm2gPbmKMxcOYV3DlwaWG6uP1DQLPfFZL5szZFfotz282qrwpN2s8qf+F
-         VgHJrdh/R92Jt5io93dkg880mmGBFEz7iCF95lXFohGtuueZRBePJfe3hu/lyvGny7qU
-         q5sRHzdfCyDF/y8B6RcyEnaRw1Q/KSvZF/APZfoubhl+gUianC2zGUeZW4dnrAPilNyV
-         KtgQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpIjQt/yCkLC1Xb5j3R0+qmquAKJ1mVEW5qzrrjn5ZDn2tba1/MdulFrtEO95rePwkZNoM=@vger.kernel.org
-X-Gm-Message-State: AFuF++mXjdzEVwKHgTVLCWSgs86lXJCgAOW9MhubO+m2NgOvm4TOMdnT
-	JaCj7kSmkzqbG2KhouNygDkxa2O7/FOUzMCqjq5nj07kGg9BP4lDI8DV
-X-Gm-Gg: AR+sD13hlf2PWx/ZL5a97unJe3j8tGu0sl3Lf0sg+PVgfRAPvvKd80laj6Vtv7ndt8F
-	t68Y4Fvntia46yU+q422RUqm5aZEULwkXt8Tn5kIwZsxk39f+24RD8fv8zcEf/FRrW5OLjfnd7T
-	gOarLyuiO4rAGTYVN7CgTc7YAVN34ZeUtUVxkL48ET3gAXpASniym1qEg97XvmqX9ktCq1IyCC6
-	e0mhfM+ZLQ0FkZ4s6bnLCevr7P+EBEM/AZ9gXhPShDZrjnzjd8yKasHAZIbebllgK78Og6bQeA9
-	1RnD3R/5P4jzNLOCSucKgkoO/B7y+4vD9O4t4xe3AMQW24C+4ZHvrmK+0xFzTVfp23JipZe7m5O
-	FEVjo90hDO1GXyk3NnLzpt9pOnXf2a6GjXYlBa6HKCgneF8Bhcx7gHe/O1PQREIDbIfRtwvvXBM
-	gxQiW3PvS84phlfxVSzWD1w4fqK+3Y4DNziFlKPTzPadjMVy0prlMWjteF/ka8RH+hUeyaDpnPZ
-	IMIVwZZvl733Aj8D1uEU9WTkDynGrPY4Yr52cv5Z1V0RfdCMYZzTQ==
-X-Received: by 2002:a05:6a00:ab0a:b0:84e:4d6:78fe with SMTP id d2e1a72fcca58-8562972fe25mr38688046b3a.3.1788142780409;
-        Sun, 30 Aug 2026 19:19:40 -0700 (PDT)
-Received: from secrnd-cstp.tailb7f510.ts.net ([125.131.91.97])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8569fa7d8desm2941001b3a.13.2026.08.30.19.19.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Aug 2026 19:19:39 -0700 (PDT)
-From: Sanghyun Park <sanghyun.park.cnu@gmail.com>
-To: Leon Hwang <leon.hwang@linux.dev>,
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Sanghyun Park <sanghyun.park.cnu@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
+	s=arc-20240116; t=1788143500; c=relaxed/simple;
+	bh=bjSZ1iWs4Dn/zALF7NO1b+tiRY0+8b5Uko7srttrhU8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=I20MzgLwGvIhUGJPJCxtCw3SyS5GP4q4Qvi4DrFWuSSpuwULenQ/5l99UKZi/cQEJVnFd/N1RCPGht1Pi0XdP1IV9qvrGx7U+gKYUF772JYzO+uBC4C2aexF5lVCjTk1haN9qmX0CALS2oHrzG24TumR6S+V4JZjHtjBZOG1IBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8DxTNJx55RqSL4GAA--.18791S3;
+	Mon, 31 Aug 2026 10:31:13 +0800 (CST)
+Received: from linux.localdomain (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJCxtMxr55Rqh_gXAA--.23244S2;
+	Mon, 31 Aug 2026 10:31:08 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Pu Lehui <pulehui@huawei.com>,
+	Hengqi Chen <hengqi.chen@gmail.com>
+Cc: loongarch@lists.linux.dev,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3] bpf: Fix stack out-of-bounds write in cgroup link update
-Date: Mon, 31 Aug 2026 11:19:09 +0900
-Message-ID: <20260831021910.1835461-2-sanghyun.park.cnu@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <22d83e2e-e732-4549-9bfa-fee38f7c6143@linux.dev>
-References: 
+Subject: [PATCH v2] LoongArch: BPF: Fix off-by-one error for insn_is_cast_user
+Date: Mon, 31 Aug 2026 10:31:06 +0800
+Message-ID: <20260831023106.3279-1-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -92,7 +35,62 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCxtMxr55Rqh_gXAA--.23244S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7KrWkuF1kWF1fJw43Ar15KFX_yoW8Aryfpr
+	ZrAws8GFW8WrWru3WkJFWvvF1akFsxWr47GF42y3yFy3s0qr1FqFyfK390kFnYyw40vF1S
+	qr9Ykw17Za4DZ3cCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
+	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7V
+	AKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
+	r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6x
+	IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAI
+	w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+	0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU25EfUUUUU
 
-Thank you Andrii and Leon for the reviews.
+In the LoongArch BPF JIT code, the branch offset represents the number
+of instructions. An offset of 1 means the target of the "beq" is the
+current PC plus 1 instruction (PC + 4 bytes). This matches the exact
+same path as the sequential non-branch execution, the "or" instruction
+is always executed for the cast_user JIT arm in build_insn().
 
-Let me introduce v4 addressing the comments soon.
+If the pointer is not NULL, there is no side effect. But if the pointer
+is NULL, it is incorrectly combined with the base address and turns into
+a non-zero address, meaning a zero arena offset no longer casts to NULL.
+
+Fix this by changing the branch offset from 1 to 2, which properly skips
+the "or" instruction and jumps directly to the "move_reg" instruction if
+the pointer is NULL, ensuring the destination register is safely cleared
+to 0.
+
+Fixes: 4fdb5dd8aeba ("LoongArch: BPF: Implement bpf_addr_space_cast instruction")
+Cc: stable@vger.kernel.org
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+v2: Update the commit message, no code changes.
+
+ arch/loongarch/net/bpf_jit.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+index 1eb588e443c9..4da278900938 100644
+--- a/arch/loongarch/net/bpf_jit.c
++++ b/arch/loongarch/net/bpf_jit.c
+@@ -717,7 +717,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
+ 			move_reg(ctx, t1, src);
+ 			emit_zext_32(ctx, t1, true);
+ 			move_imm(ctx, dst, (ctx->user_vm_start >> 32) << 32, false);
+-			emit_insn(ctx, beq, t1, LOONGARCH_GPR_ZERO, 1);
++			emit_insn(ctx, beq, t1, LOONGARCH_GPR_ZERO, 2);
+ 			emit_insn(ctx, or, t1, dst, t1);
+ 			move_reg(ctx, dst, t1);
+ 			break;
+-- 
+2.42.0
+
