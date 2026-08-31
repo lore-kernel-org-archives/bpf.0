@@ -1,128 +1,134 @@
-Received: from mta1.migadu.com (out-24.mta1.migadu.com [95.215.58.24])
+Received: from mta0.migadu.com (out-167.mta0.migadu.com [91.218.175.167])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F1E538888C
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 21:06:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D6DA37B014
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 21:07:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.167
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788210413; cv=none; b=eyXlo1Dx6/l/nayXTSvwJc9RhDi2ZUTttNhhu7fkHYzrOufsrhQ8z6hY4UCu4Bnz2CrEGvuZqcnDQV3pGMaSGQzbCpPBFACsI8qdpK4dwS4QZagkJa4s9kICHNRIyvWJcOJUfc6V/RZ/PxA928os/MUqcjHyxTgBddUDB/EdkQg=
+	t=1788210429; cv=none; b=mL3T6CLnK1COpGrPdceEn+y18Brco/RI2N64jfpWBZ1nNK4IeDdWvhSOfK/VEyVT2YYtCEVqAUPWDvAA2uyZZBIqKb4F1O2GyVuizEvIWd+Yq5GImn8lKfNGr+J+dzLpxzgKpTMQSpUl89WbWiap8QcN5UQBhJpjHQ4LxNg0laA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788210413; c=relaxed/simple;
-	bh=wNd8QboWKht0yztSP4Sbpt6U2NkJV8XlHDJXK515WTg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i8xxqgaEetn3DTiSKpILZovaVT/4HZdAlyGjhYI9WLaQ2Z2+I+l72IsyA7WP75uUdK9GusfxQ8q5RASSnrpATYvgfUFVZVzqUPG3wbQAQlGhaw2BCXA/VyCOHKOh5ruQbSFNttsj+ulzOLOg/RQI6dVnsBSUYuAK8ap5b4vtH80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NjVGE9Xc; arc=none smtp.client-ip=95.215.58.24
+	s=arc-20240116; t=1788210429; c=relaxed/simple;
+	bh=uCN0Bv49tEpsDwtHVqN/ZeTuCSUIaYXefe+4PzDgkXw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=nQBkiltiGfYPbkR05/9TkGQb45xEYQcwUeXcj12f42219p2/KiK5x9SYpROgFn9J6eeKa1eQa+EuMz4SrFwhq/V9We2/1iyJBEh+WJG+wUlXSxhHuy20KNhh6zUde3OpxTZy9DJVqVFu26aC9CAvjoJAFahDCz5u1idQwehjnxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=q2E2dZ79; arc=none smtp.client-ip=91.218.175.167
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NjVGE9Xc"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="q2E2dZ79"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=wNd8QboWKht0yztSP4Sbpt6U2NkJV8XlHDJXK515WTg=;
+DKIM-Signature: a=rsa-sha256; bh=uCN0Bv49tEpsDwtHVqN/ZeTuCSUIaYXefe+4PzDgkXw=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788210409; v=1; x=1788815209;
- b=NjVGE9XceHDTA32GvIHNSjEPQ3yJtaopNo0M97Lm6a0S5j3/RsmyTtIcOL0y4ZVrjQjon6At
- ykYl6kXJKCOGIewQXZ02j8/ICnGdZ/MqaWBduWw44SL1+GHvuX7j7NWd5GIt4Gfr+Gn2zcyo+Z2
- Izv/GOqGdtcsI+n7k8OqBInc=
+ t=1788210425; v=1; x=1788815225;
+ b=q2E2dZ79nKF37EohtHcsw5bA4Svf7Y/I1Pvh7FbhnQCnrgCe9Ojfjno6NhY+4uc8LMtm2nHC
+ AhzdEHWnc5/gQhb2nr9bVW9vP5wGTH+ubHk/QigGb+gTvN89CVXt/DeTOfQGVdrUereWMJRgMtI
+ ifQXWQxeeQZMfl3HTxQI/5UE=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 4daa89fecb40d3f3;
-	Mon, 31 Aug 2026 21:06:49 +0000
-X-Mizu-Trace-ID: 4daa89fecb40d3f3
+Received: by smtp.migadu.com with ESMTPS id 27bc9bbab941bf81;
+	Mon, 31 Aug 2026 21:07:05 +0000
+X-Mizu-Trace-ID: 27bc9bbab941bf81
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <99f0921c-0cf9-48a8-a84f-3b888988eb33@linux.dev>
-Date: Mon, 31 Aug 2026 14:06:40 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v3 2/5] bpf: Fix NULL-ptr-deref when showing a void
- BTF type
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
- Mykyta Yatsenko <yatsenko@meta.com>, Alan Maguire <alan.maguire@oracle.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260831110314.150870-1-jiayuan.chen@linux.dev>
- <20260831110314.150870-3-jiayuan.chen@linux.dev>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260831110314.150870-3-jiayuan.chen@linux.dev>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Date: Mon, 31 Aug 2026 21:07:04 +0000
+Message-Id: <DL3FOW820JBZ.3W4I50CXVBTI8@linux.dev>
+Cc: <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song
+ Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
+ Olsa" <jolsa@kernel.org>, "KP Singh" <kpsingh@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Paul E. McKenney" <paulmck@kernel.org>, "Jose
+ Fernandez" <jose.fernandez@linux.dev>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf] bpf: Keep progs alive until the trampoline image
+ calling them is freed
+From: "Florent Revest" <florent.revest@linux.dev>
+To: "Junseo Lim" <zirajs7@gmail.com>
+X-Mailer: aerc 0.17.0
+References: <20260819122252.1782790-1-florent.revest@linux.dev>
+ <aocadTp5OaOybxzT@omen-arch>
+ <bc0edb11e07e0f6147e9c552805d0029c7aec7fc@linux.dev>
+ <aogAKH0PEmuOa--X@omen-arch>
+In-Reply-To: <aogAKH0PEmuOa--X@omen-arch>
 
-On 8/31/26 4:01 AM, Jiayuan Chen wrote:
-> btf_modifier_show() resolves the modifier and then calls
-> btf_type_ops(t)->show() unconditionally. For the void type (type_id 0,
-> BTF_KIND_UNKN) kind_ops[] has no entry, so ->show is NULL.
-> 
-> The map dump path cannot reach a void type (a map key/value must have a
-> size and void has none), but bpf_snprintf_btf() takes a type_id straight
-> from the BPF program, and a "const void" (a modifier that resolves to
-> void, present in the vmlinux BTF) NULL-derefs there:
-> 
-> KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
-> RIP: 0010:btf_modifier_show (kernel/bpf/btf.c:2914)
-> Call Trace:
->  <TASK>
->  btf_type_show (kernel/bpf/btf.c:8251)
->  btf_type_snprintf_show (kernel/bpf/btf.c:8321)
->  bpf_snprintf_btf (kernel/trace/bpf_trace.c:1047)
->  bpf_prog_test_run_raw_tp (net/bpf/test_run.c:829)
->  __sys_bpf (kernel/bpf/syscall.c:4804)
->  do_syscall_64 (arch/x86/entry/syscall_64.c:94)
->  entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:121)
->  </TASK>
-> 
-> void has no size, so there is nothing to render - not even a byte length
-> to fall back to dumping as raw hex. btf_df_show() is already the ->show
-> for the other kinds that carry no value to print - FWD, FUNC, FUNC_PROTO,
-> FLOAT and DECL_TAG - and emits an "<unsupported kind:N>" placeholder;
-> void belongs to the same group and only lacks a show op because it has
-> no kind_ops[] entry at all. Fall back to btf_df_show() in
-> btf_modifier_show() when the resolved type has no show op, so a void type
-> prints that placeholder instead of crashing; bpf_snprintf_btf() then
-> returns the length as usual.
+On Fri Aug 21, 2026 at 7:58 AM UTC, Junseo Lim wrote:
+> On Thu, Aug 20, 2026 at 04:06:30PM +0000, florent.revest@linux.dev wrote:
+> > 20 ao=C3=BBt 2026 =C3=A0 17:26 "Junseo Lim" <zirajs7@gmail.com mailto:z=
+irajs7@gmail.com?to=3D%22Junseo%20Lim%22%20%3Czirajs7%40gmail.com%3E > a =
+=C3=A9crit:
+> >=20
+> > >=20
+> > > On Wed, Aug 19, 2026 at 12:22:50PM +0000, Florent Revest (Anthropic) =
+wrote:
+> > >=20
+> > > >=20
+> > > > bpf_tramp_image_put() makes sure a trampoline image is not freed wh=
+ile
+> > > >  a task may still be running in it (call_rcu_tasks() + im->pcref), =
+but
+> > > >  nothing similar is done for the progs called by that image. Since
+> > > >  commit e21aa341785c ("bpf: Fix fexit trampoline."), detach patches=
+ the
+> > > >  return path so that a task still in the original function skips th=
+e
+> > > >  fexit progs when it comes back, and counts on the prog's own RCU f=
+lavor
+> > > >  to cover a task that is inside a prog. On that basis the last prog
+> > > >  reference is dropped right away and the prog is freed after a sing=
+le
+> > > >  RCU / RCU tasks trace grace period.
+> > > >=20
+> > > >  [...]=20
+> > > > =20
+> > > >  Fix it by having the image take a reference on every prog it calls=
+, in
+> > > >  bpf_tramp_image_alloc(), and drop them in bpf_tramp_image_free(). =
+A
+> > > >  detached prog now stays loaded until the old image is gone, which
+> > > >  reverts a deliberate choice of commit e21aa341785c ("bpf: Fix fexi=
+t
+> > > >  trampoline."). Detached fexit progs still stop being called right =
+away
+> > > >  since the return path is patched.
+> > > >=20
+> > > This appears to be the same issue addressed by my earlier patch [1].
+> > >=20
+> > > I think the flexible-array approach here is cleaner, so I'm fine with=
+ this
+> > > version going forward. Could you please carry the original Reported-b=
+y tag?
+> > >=20
+> > > Reported-by: Sechang Lim <rhkrqnwk98@gmail.com>
+> > >=20
+> > > [1] https://lore.kernel.org/bpf/20260815071927.147049-1-zirajs7@gmail=
+.com/T/
+> > >=20
+> > Oh wow, sorry, I had no idea we raced on this!
+> >=20
+> > I also like the idea of guarding this with CONFIG_PREEMPTION and of
+> > course=C2=A0I don't mind adding your Reported-by tag in a v2. I'll give=
+ a bit
+> > of=C2=A0time for others to chime in first.
+>
+> Just in case it helps with the CONFIG_PREEMPTION angle: Sashiko pointed o=
+ut
+> on my patch that a CONFIG_PREEMPTION guard would leave the unlink/update
+> failure path uncovered on CONFIG_PREEMPTION=3Dn.
+>
+> So your unconditional version looks right to me.
 
-nit: The explanation is a bit too verbose, I'd try simplifying. And the
-comment in the code as well.
+Actually, the #ifdef CONFIG_PREEMPT guard wouldn't have been enough
+anyway. :/ Preemption was one easy way to cause that bug but if a task
+sleeps in a sleepable prog and the prog that runs after it in the same
+image is detached and freed, the same problem would happen. That could
+also happen on PREEMPT_NONE.
 
-> 
-> Fixes: c4d0bfb45068 ("bpf: Add bpf_snprintf_btf helper")
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> ---
->  kernel/bpf/btf.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 91b8ce77f699..6e267c4c4e1f 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -2911,7 +2911,15 @@ static void btf_modifier_show(const struct btf *btf,
->  	else
->  		t = btf_type_skip_modifiers(btf, type_id, NULL);
->  
-> -	btf_type_ops(t)->show(btf, t, type_id, data, bits_offset, show);
-> +	/*
-> +	 * A modifier can resolve to the void type (e.g. "const void"), which
-> +	 * has no show op (kind_ops[BTF_KIND_UNKN] is NULL). Print a placeholder
-> +	 * instead of dereferencing NULL.
-> +	 */
-> +	if (!btf_type_ops(t))
-> +		btf_df_show(btf, t, type_id, data, bits_offset, show);
-> +	else
-> +		btf_type_ops(t)->show(btf, t, type_id, data, bits_offset, show);
-
-Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-
->  }
->  
->  static void btf_var_show(const struct btf *btf, const struct btf_type *t,
-
+But I'll keep your Reported-by in a v2 yep!
