@@ -1,85 +1,111 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9499139794B
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 23:26:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B514B3D813A
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 23:28:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788218782; cv=none; b=WhoTi08q1wOLzCduu0BocxMpD+gtZ9pdV4MXDtfMmYnmFjw5XN2h6vgw6F0feYbjBmeVpjKWZ9q0+KKZ+44XHtAf5tiKalwLahHwYLG8yTojHOYJVxTtCeFtuEA7R3RvovrEXMnR6gUWOds3rxpwq74FRMwfqxraDhy0kl7H5CY=
+	t=1788218934; cv=none; b=fq1yKtQJCeQVk90h2b5WTnn+eFGZMaNu2v1v6ZvN+wesFpfxdeLXBMCMQq9wpr420GKv/AS35lzIR9wksca+8a5tDXYu6N3K1mytth+YDLFsTsMu825JOOHUqslPmbP9O3WE+xhs4z5aIw3gM2VQowcnDC1ApbB06lpEXwlXHP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788218782; c=relaxed/simple;
-	bh=kj5v3dja33NhVhu0BfZ62HBqtjuJxIA+6drchRbO5d4=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=B5Fuv2tUXdTEGOvscfcwjzw0I/CvLf+/RvZab2M+PErKW88i3BBKEf9yBDcnTmCToCXWIh5qx4WyKJ+MI7Osj4HWKa7J4GstzUn6osmotM2+r4jKtOMRmXrPBZey9e+Aj8dnqBRYIvV0nhThlQouHeR8aiIOm2hqrMHsfxXHczA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HRku09uf; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788218934; c=relaxed/simple;
+	bh=87FUE1SxhRk2wj/WTCe2r3HlhKy1p1TzWEBDeBH2IAw=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=UusYw7PlU4lxb1xw/m4XRPPLUJnHzgJhUheUc92+WxfSLSNPKrhVj8pfaQuWGz74wKe06fnELscb9D395xg8FDnH97Jel9CMRjg54IqYGlUfywRgnbqv/PX0RWxHC1J7UBCa6Rf2sox4J9JlL36TnEaeYX+374Vqgn++xQHsHqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N012S1mG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HRku09uf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 299991F000E9;
-	Mon, 31 Aug 2026 23:26:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N012S1mG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24ECF1F000E9;
+	Mon, 31 Aug 2026 23:28:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788218781;
-	bh=CkR08r07So36LQGJ60BWTMTOOigRu9Mwez3kt2VOpC0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=HRku09ufPZCRdb9KmpfO3tt8+EjhixmyjfpzaprrDhewZT4ZoPdaQXI8fbX66ZLMI
-	 Z0Fka4ndixXsAG1SBjP41W+ij8j0Jh9kfPzdVUHk2V00VYV4BkWL244w02I7xnbeqZ
-	 lGygfP2PNkHHQgtDt66BXOUGcQ8myD8cq7nJvhcY7JDEg/XcbBDuHsmB5yh3RTXein
-	 o5N/m3GOyHdadNvkuyPf0wXULDECWFxIQrzHJ7ZSre3WqUANz+ZGL2+qyFiSDPaYNW
-	 sSl0lftA0En194A0DI0/c5wXq+hN7ympHNNk8bZY9Ykkv392jFX1eFDfq/NCu1Z0hZ
-	 GUruEc65piVxg==
-Content-Type: multipart/mixed; boundary="===============6750772419974576802=="
+	s=k20260515; t=1788218933;
+	bh=5UvCkfFMjiAFYGwKiRxX+keeF/kB8qwoPVjsvMfHz4g=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=N012S1mGN3U3vl+Grc77yLoC+x4IFjawUvPSCNdAxiFNhFqbrc/tdzHWcEpnFSd9y
+	 TXyUR8czvJdTDd4MUsssV7Yu/qhYIPvO8PaVY3mvDbsd8ZaTXHecI59WZBanfGuJyW
+	 rKAMwh/QmBldbRL2dN+DrPFPECxPlqWBJdgIN2rE9gW1GQY1mG8qEBEZwj4iTRz6zx
+	 ZvZgv3wpqS7wWaSNuQjtiieO4hwRBkJuSm9moNNGEhJ4VMTG9jzaNzhFtLqXXv+rNz
+	 JOanNHv+RwKSSKtBhqNJveug0E8PULjED95A2vLr5nUxFpcW4P96pSWmbcFpCQf77t
+	 LD2WR/jYhYx3g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v15 13/16] arm64/delay: enable testing
+ smp_cond_load_relaxed_timeout()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ankur Arora" <ankur.a.arora@oracle.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260831202251.305046-14-ankur.a.arora@oracle.com>
+References: <20260831202251.305046-1-ankur.a.arora@oracle.com>
+ <20260831202251.305046-14-ankur.a.arora@oracle.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 31 Aug 2026 23:28:52 +0000
+Message-Id: <20260831232853.24ECF1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <08bc375fdf3ed6ec599f4f9a8b220f46d8d485a2c8420531f081797b33cf1296@mail.kernel.org>
-In-Reply-To: <20260831223314.89787-1-sidchintamaneni@gmail.com>
-References: <20260831223314.89787-1-sidchintamaneni@gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: allow terminal gotox instructions
-From: bot+bpf-ci@kernel.org
-To: sidchintamaneni@gmail.com,bpf@vger.kernel.org
-Cc: sidchintamaneni@gmail.com,a.s.protopopov@gmail.com,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,puranjay@kernel.org,rlmenge@gmail.com,hargar@microsoft.com,apais@microsoft.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 31 Aug 2026 23:26:20 +0000 (UTC)
 
---===============6750772419974576802==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] Conditional export of symbols used by generic inline macros brea=
+ks standard module usage.
+--
 
-> bpf: allow terminal gotox instructions
+commit 062222b285463a87a0b87a1f19a5112a409a0599
+Author: Ankur Arora <ankur.a.arora@oracle.com>
 
-This isn't a bug, but Anton Protopopov requested capitalizing "allow" in
-the commit title when he provided his Reviewed-by tag. Should this be
-"bpf: Allow terminal gotox instructions"?
+arm64/delay: enable testing smp_cond_load_relaxed_timeout()
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 8f585ceb2cd51..483473df7746c 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+This enables the barrier tests to be built as a module by exporting the=20
+internal delay and timer functions for KUnit.
+
+> diff --git a/arch/arm64/lib/delay.c b/arch/arm64/lib/delay.c
+> index f08eacef2f0a4..20bc2894b65b9 100644
+> --- a/arch/arm64/lib/delay.c
+> +++ b/arch/arm64/lib/delay.c
 
 [ ... ]
 
-> @@ -3107,7 +3109,8 @@ static int check_subprogs(struct bpf_verifier_env *env)
->  		if (i == subprog_end - 1) {
->  			/* to avoid fall-through from one subprog into another
->  			 * the last insn of the subprog should be either exit
->  			 * or unconditional jump back or bpf_throw call
->  			 */
->  			if (code != (BPF_JMP | BPF_EXIT) &&
->  			    code != (BPF_JMP32 | BPF_JA) &&
-> -			    code != (BPF_JMP | BPF_JA)) {
-> +			    code != (BPF_JMP | BPF_JA) &&
-> +			    !insn_is_gotox(&insn[i])) {
+> @@ -30,6 +31,7 @@ u64 notrace __delay_cycles(void)
+>  	guard(preempt_notrace)();
+>  	return __arch_counter_get_cntvct_stable();
+>  }
+> +EXPORT_SYMBOL_IF_KUNIT(__delay_cycles);
 
-This isn't a bug, but would it be worth extending the comment above this
-condition to mention gotox, since the accepted-terminator list right
-below it now has a fourth entry?
+[Severity: Medium]
+Since smp_cond_load_relaxed_timeout() is an inline macro that expands to ca=
+ll
+cpu_poll_relax() and __cmpwait_relaxed_timeout(), and those rely on
+__delay_cycles(), does restricting this export to KUnit builds break standa=
+rd
+loadable modules?
 
+If a standard kernel module (built without CONFIG_KUNIT) tries to use the
+generic smp_cond_load_relaxed_timeout() API, it seems it will fail to link
+with a modpost error because this mandatory symbol isn't exported. Would a
+standard EXPORT_SYMBOL_GPL() be more appropriate here to ensure the generic
+barrier API remains usable by all modules?
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/a=
+rm_arch_timer.c
+> index 4adf756423de9..91ab8552ead83 100644
+> --- a/drivers/clocksource/arm_arch_timer.c
+> +++ b/drivers/clocksource/arm_arch_timer.c
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33447655511
---===============6750772419974576802==--
+[ ... ]
+
+> @@ -897,6 +898,7 @@ bool arch_timer_evtstrm_available(void)
+>  	 */
+>  	return cpumask_test_cpu(raw_smp_processor_id(), &evtstrm_available);
+>  }
+> +EXPORT_SYMBOL_IF_KUNIT(arch_timer_evtstrm_available);
+
+[Severity: Medium]
+Similar to __delay_cycles() above, arch_timer_evtstrm_available() is called
+by the inline expansion of smp_cond_load_relaxed_timeout(). Does this
+conditional export render the generic synchronization API unusable for
+non-KUnit modules that might want to use it?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260831202251.3050=
+46-1-ankur.a.arora@oracle.com?part=3D13
