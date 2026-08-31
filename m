@@ -1,129 +1,184 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60BA8390987
-	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 22:06:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E71E3ACF1C
+	for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 22:16:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788213983; cv=none; b=Ji3PBXxkvU3fambs3elanHXGHzC4s4HaAmayi4g9ZXPgnGIAl+8eznehl1Z/Jsjp7Vj1GtFsBdqP1Il8ggOWqEsPow2XGh1hLdv5lr7kZFmImXYRvO1TxlQHylw0LeZQG5WoB7svPR0/k3/USsj6AD2E3z0x88+82X3/Md7+9NE=
+	t=1788214577; cv=none; b=QCSrGwGSNU2vody/D/HF/Ekpkepxgz/0T87D7Ce47jLT9E91SnMo6L5cwmsYDZTaje8cf36D32MPBdQwTO/gOA6hiSt/MOKVpaU1/V8HE4RSMkQAi4f6XHQubeGiCr08KD8DCHp1vpdlMhPqZs2WG9XeTLNwOc/uqCmplI+MUww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788213983; c=relaxed/simple;
-	bh=Vz17DqeorHQrzI0/rmeUXX8+dAK9MQoSczAGvuUxSek=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=sLbENONNhU0QH8otvKfigmMbBUc+UxawVnoCmq2H/7wXznyDPcLxNn/Yd+a61NyUZzXmrMgnvngqk4x+usDUV2HculpkbA0t7k7P4WO26ZJixjU+Z0oXk2UWe1WeEnqN1RQi5MvXxOa5jQzkaAXpRquXb+btwJHYCDeSwYj8CEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lGtLt9+c; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788214577; c=relaxed/simple;
+	bh=n0uh/N7eWZUb0RjMv828tkY0P84MX7NtYM9Lx3Rv6Ps=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KF/z66KJ/2I+3StZMsRvuAyeEDzUYUvW/duSRBjo508909kz8ueYVYQqMPcissq402ErQXr2GQA73umnTUqhjRDoGK05YYQ6HpxW4ImzZleUNfmrHJ2AUbbHiA6CRTiXnUeWNnBBekDFbiSmTV8hgFIf8oJYr3NTtJDahtcBPtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=da5qnH1W; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lGtLt9+c"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6DA61F000E9;
-	Mon, 31 Aug 2026 22:06:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788213982;
-	bh=NdXID5yQRnpXd5yrL1JU831qNGmJUUC4feKPewXfaQA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lGtLt9+c8z0X8UbKAeGLM4fJrhrEeO/WhLdjDyDVClmY9sm6Gh+Js9e+Tw8xH/rmC
-	 WUHJI5UVkOwZ6W0YpZ1qqHPV5y2zbebAd685hd3eRy2ejKrEvOpQMVPPNImeL+XChI
-	 ZpOFHXhvF3R3me0I8bb3M4d9q+FeyViYnCzPCh6AXztDtK77ciI2Ewa6Kvu2ZYCjWJ
-	 StLY+lVT5yJgD5IzaI/vSeUmDSjgIPks/sAnlmIT3FaMRe9sGdOcI2XGR9jZLr9GzK
-	 FkjXBjzCAiH4dduqMEa9Fb7Fn1sC2ZPHNgCpA6t0prSrjUV6HsIm8N480Qaq/k2ev9
-	 1m1DOoYvTX+pQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v15 03/16] arm64/delay: move, fixup usecs_to_cycles()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ankur Arora" <ankur.a.arora@oracle.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260831202251.305046-4-ankur.a.arora@oracle.com>
-References: <20260831202251.305046-1-ankur.a.arora@oracle.com>
- <20260831202251.305046-4-ankur.a.arora@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 31 Aug 2026 22:06:21 +0000
-Message-Id: <20260831220621.D6DA61F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="da5qnH1W"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2d944747d41so12665055ad.0
+        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 15:16:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788214574; x=1788819374; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=itoTfTA7PQdk1phHOoJqHytihyiYJY8mf5sirqQA+ig=;
+        b=da5qnH1WO56PfoGb2YbHDEb0pb4p2F0mwlMUXEouj9MY1ri/8D0/oxECfIvORCgy3v
+         45WN2K23zpku7GSLctlp/Q6FncpT3etJy8QeuUXtImhVFj3QTE89qbvhZE+TTe1yVcWl
+         XP39Ow5SRV56Khrql82EO4TH0OCvshoCb8aHSmhchz/Jf7anD8mb/HPkrWJMubH3zppg
+         vUpz38TudVh5DPP46ZR94Rlr0G9qB7oAh2nz4DbqDRVEAfnkumubUSfxljy2DXEty2MW
+         8OZWPlFk3CWizA4mSZm+GxOCzUnvaKwZfm7rUdyz/OqsN3vwRu3NtiNZcuNWJGiHAB0l
+         bYfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788214574; x=1788819374;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=itoTfTA7PQdk1phHOoJqHytihyiYJY8mf5sirqQA+ig=;
+        b=jhCZ3PcYBYDgYL22yz7TF3YHJUVDxWhSYcXRSAJAP9+IouAxJjPk0/tF4rZc2YLCyZ
+         EVudhbby3joBkYbVwTY7C25TGCzdLIWYm2RBJYJC3Ws55v5MZYJOexMdTvSLkc25bUxI
+         LT2h4RpWj6euv+E1LAs3VD73pTI2oJTN8lxXoyRNEO3gAbXB+9ROnW9RG+1W5+6Nte8+
+         pSstzaXvFWO3Sm4xRgjlCBpOZZ8KUiL9CsFXFIIiONjxS1UNxzS9xLRu7s4SCQfunhSu
+         mB6PBtbWx0e45cY1yCeVQFZfrhK7TD9kA8LYYWaa6xQXS2UDKJaofNlmmTl/JmSKH/bJ
+         sNEw==
+X-Forwarded-Encrypted: i=1; AKwUvByNz7HkDTC4S/8v9yA7vSFyAuXSbb+Ao7IBIU693ORiWXuknNN32iYvDNX1iPb6yISiEgU=@vger.kernel.org
+X-Gm-Message-State: AFuF++n7KwKKthqvyguEQrc7FJz8HTpxDT1C+NRem/yZUb+hq62I8xrA
+	Q+6bworvz3K1A+Sixw30XU6O2d9GRAtgSDFGhcH4LPfGJSc0s/pL31GJ
+X-Gm-Gg: AYBFou2WQ9FTC0Rd3zIT9TldgoacjT1RP15ko3F5QjlRckocMoLIHuR81LsTqZZzPJe
+	rqLpnq86hNQrXAsZ5uo7lEty/aaxNVXlEvtmT/SZA8ig/vPlA67KmjfvGiRcLsslTjWj9YT+qk6
+	KcRghLMdWT7XJA2sKWbFTtrNOQKBzFZNzJ9t3ZXDt65P0eUag/651cf2wiH00fxObJM3NqE8uOu
+	per9sz//mBfrG6dye4PQxNtGUv6eG2dTY/VtIv8YpyKIMpWwLjdnuLN27LKoBc2zyA0KEAGKxLc
+	TqQhpSzPLgeBMzspkUPx01kx+7PgHQOsx6hBGE/XZjdpVPLVCytzdehflqVp8RAvaCtRFNs1B29
+	lIRCJaEhRxGs4W7vW2r6ZQqpOLBfcQ5rrfann4rEOfKvYDSNF2xug3OMfL/QTE/xENon3KQrCCV
+	FSLPmeq4usDKqJPR+EWMMMWIsaS+kV8s9qCLkdC3htOVXbNOxcLGIv22CgAnT6zWyrsR0AohvwE
+	8V8cXAfTw==
+X-Received: by 2002:a17:903:1850:b0:2d5:e3ce:3988 with SMTP id d9443c01a7336-2d74dddceebmr476446215ad.11.1788214573604;
+        Mon, 31 Aug 2026 15:16:13 -0700 (PDT)
+Received: from devvm16600.scu0.facebook.com ([2a03:2880:9ff:6f::])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3286f995e60sm33397369eec.22.2026.08.31.15.16.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Aug 2026 15:16:12 -0700 (PDT)
+Date: Mon, 31 Aug 2026 15:16:10 -0700
+From: Ziyang Men <ziyang.meme@gmail.com>
+To: kernel-team@meta.com, Jens Axboe <axboe@kernel.dk>,
+	Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Ben Segall <bsegall@google.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Mykola Lysenko <mykolal@meta.com>, linux-block@vger.kernel.org,
+	bpf@vger.kernel.org, cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] cgroup: expose cpu.stat and io.stat to BPF
+Message-ID: <apX9KtGrmfA7u0zV@devvm16600.scu0.facebook.com>
+References: <20260820211758.3393984-1-ziyang.meme@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20260820211758.3393984-1-ziyang.meme@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+Hi Reviewers, 
 
-Pre-existing issues:
-- [High] This problem wasn't introduced by this patch, but the patch fixes =
-a 64-bit integer overflow bug in arm64 delay calculations while deliberatel=
-y leaving the exact same arithmetic bug unfixed in the duplicated code in `=
-qcom/rpmh-rsc.c`, which causes hardware wakeup times to be incorrectly prog=
-rammed for sleep durations exceeding ~224 seconds.
---
+Just want to follow-up on this patch series. Please let me know the possible
+issues and I will fix them. 
 
-commit d104dae593c77167ffada79f1a496fa20b5c86dd
-Author: Ankur Arora <ankur.a.arora@oracle.com>
+Thanks very much!
 
-arm64/delay: move, fixup usecs_to_cycles()
+Best,
+Ziyang
 
-This patch updates xloops_to_cycles() to use mul_u64_u64_shr() instead of
-32-bit fixed point arithmetic to avoid truncation for delay values larger
-than ~10s. It also moves cycles computation out to a new header, makes=20
-__delay_cycles() available outside delay.c, and renames some colliding=20
-namespaces in qcom/rpmh-rsc.c.
-
-> diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
-> index c6f7d5c9c493d..ad5ec5c0de0a3 100644
-> --- a/drivers/soc/qcom/rpmh-rsc.c
-> +++ b/drivers/soc/qcom/rpmh-rsc.c
-[ ... ]
-> @@ -146,10 +146,10 @@ enum {
->   *  +---------------------------------------------------+
->   */
-> =20
-> -#define USECS_TO_CYCLES(time_usecs)			\
-> -	xloops_to_cycles((time_usecs) * 0x10C7UL)
-> +#define RPMH_USECS_TO_CYCLES(time_usecs)		\
-> +	rpmh_xloops_to_cycles((time_usecs) * 0x10C7UL)
-> =20
-> -static inline unsigned long xloops_to_cycles(u64 xloops)
-> +static inline unsigned long rpmh_xloops_to_cycles(u64 xloops)
->  {
->  	return (xloops * loops_per_jiffy * HZ) >> 32;
->  }
-
-[Severity: High]
-This isn't a bug introduced by this patch, but while renaming this function=
-=20
-and macro to avoid a namespace collision, does it make sense to also apply=
-=20
-the 128-bit math fix (mul_u64_u64_shr) here?=20
-
-The 64-bit arithmetic in rpmh_xloops_to_cycles() still wraps around the=20
-maximum limit for large xloops values, which appears to be the exact same=20
-integer overflow bug this patch successfully resolves in arch/arm64/lib/del=
-ay.c.
-
-[ ... ]
-> @@ -819,7 +819,7 @@ void rpmh_rsc_write_next_wakeup(struct rsc_drv *drv)
->  	wakeup_us =3D ktime_to_us(wakeup);
-> =20
->  	/* Convert the wakeup to arch timer scale */
-> -	wakeup_cycles =3D USECS_TO_CYCLES(wakeup_us);
-> +	wakeup_cycles =3D RPMH_USECS_TO_CYCLES(wakeup_us);
->  	wakeup_cycles +=3D arch_timer_read_counter();
-> =20
->  exit:
-
-[Severity: High]
-This is also a pre-existing issue, but this seems to be the path where the=
-=20
-overflow described above causes problems for device power management.
-
-During system suspend, rpmh_rsc_write_next_wakeup() queries the next=20
-hrtimer. If the timer is roughly more than 224 seconds away (or if no=20
-timer exists, returning KTIME_MAX), wakeup_us can exceed the 64-bit=20
-mathematical limit of the inline calculation.
-
-Does this cause an overflow of the u64 intermediate product, resulting=20
-in a corrupted, wrapped wakeup time being programmed into the hardware TCS,=
-=20
-and leading to premature wakeups from deep sleep?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260831202251.3050=
-46-1-ankur.a.arora@oracle.com?part=3D3
+On Thu, Aug 20, 2026 at 02:17:54PM -0700, Ziyang Men wrote:
+>Collecting cgroup statistics is expensive: the existing method is to
+>open and parse a cgroup file for every cgroup of interest. The memory
+>controller already has an efficient alternative through BPF; this series
+>extends that model to the CPU and block I/O controllers.
+>
+>Patch 1 adds the CPU kfuncs, and patch 2 adds their selftest. Patch 3
+>adds the blkcg kfuncs, and patch 4 adds their selftest.
+>
+>This v3 combines the two previously posted v2 series:
+>CPU v2: https://lore.kernel.org/all/20260818002450.3071325-1-ziyang.meme@gmail.com/
+>blkcg v2: https://lore.kernel.org/all/20260817214205.723267-1-ziyang.meme@gmail.com/
+>
+>===
+>Changes since CPU v2:
+>- Rename bpf_cpu.c to bpf_cgroup.c and use unlikely() and container_of()
+>  for the task_group conversion.
+>- Remove bpf_css_flush_rstat() and register the existing
+>  css_rstat_flush() in the common kfunc set.
+>- Remove the SLEEPABLE mark bpf_cgroup_base_stat().
+>
+>Changes since blkcg v2:
+>- Add bpf_cgroup_css() and bpf_css_release() to keep a controller css
+>  alive across the sleepable rstat flush.
+>- Add an RCU-protected checked css-to-blkcg conversion and make the blkg
+>  iterator take the typed blkcg pointer.
+>- Use the existing css_rstat_flush() and remove bpf_blkcg_flush_stats().
+>- Do not expose root io.stat values.
+>
+>===
+>Changes since CPU v1:
+>- Make the rstat flush generic, move it to rstat.c, and make it take a css.
+>- Expose cgroup_base_stat directly instead of repacking its CPU times.
+>- Replace the throttled-time aggregation kfunc with a checked RCU cast in
+>  the CPU cgroup BPF code. The cast preserves the verifier type needed for
+>  the BPF program to perform the per-CPU sum itself.
+>- Remove the scheduler changes.
+>
+>Built with LLVM. Pass test on v7.2-rc5.
+>
+>Ziyang Men (4):
+>  cgroup: add BPF kfuncs to read a cpu cgroup's stats
+>  selftests/bpf: add cgroup_iter_cpu test for cpu cgroup kfuncs
+>  block: add BPF kfuncs to read blkcg io.stat
+>  selftests/bpf: add test for blkcg io.stat BPF kfuncs
+>
+> MAINTAINERS                                   |   1 +
+> block/Makefile                                |   3 +
+> block/bpf_blkcg.c                             | 138 ++++++++++
+> kernel/cgroup/Makefile                        |   2 +
+> kernel/cgroup/bpf_cgroup.c                    | 100 +++++++
+> kernel/cgroup/rstat.c                         |  54 +++-
+> tools/testing/selftests/bpf/cgroup_iter_cpu.h |  22 ++
+> tools/testing/selftests/bpf/cgroup_iter_io.h  |  17 ++
+> tools/testing/selftests/bpf/config            |   4 +
+> .../bpf/prog_tests/cgroup_iter_cpu.c          | 259 ++++++++++++++++++
+> .../selftests/bpf/prog_tests/cgroup_iter_io.c | 254 +++++++++++++++++
+> .../selftests/bpf/progs/cgroup_iter_cpu.c     | 113 ++++++++
+> .../selftests/bpf/progs/cgroup_iter_io.c      |  74 +++++
+> 13 files changed, 1037 insertions(+), 4 deletions(-)
+> create mode 100644 block/bpf_blkcg.c
+> create mode 100644 kernel/cgroup/bpf_cgroup.c
+> create mode 100644 tools/testing/selftests/bpf/cgroup_iter_cpu.h
+> create mode 100644 tools/testing/selftests/bpf/cgroup_iter_io.h
+> create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter_cpu.c
+> create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter_io.c
+> create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter_cpu.c
+> create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter_io.c
+>
+>
+>base-commit: 3b5f4b83c4abc0c9b0a7b9e2b44e816611b7f2ec
+>-- 
+>2.53.0-Meta
