@@ -1,112 +1,118 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 636F3489867;
-	Tue,  1 Sep 2026 17:16:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79FBD488766;
+	Tue,  1 Sep 2026 17:16:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788282962; cv=none; b=Xtn3aTbfig6c80iRCuO28lQqgR9yWOEFKdJ0uauvw7IkQ8ns1inh/nGDFR5aSMVT1TWMJbmhiHODPHYlMawzadHgu++zfRDLCTTgD7O19Npx8V1O7i2zSmIu6dHDsDkpNLJgLrnWdQ53VXREHQLyyGBEo2m+1TgMY4/cXhKDN6o=
+	t=1788282978; cv=none; b=bTR4M8SGqU7Bqgs0WBASM0QOb838JmLawMvBUYSVi7jw3LkWrwG6MVUwo6HFh9GQe9jKMe/xRORmuUU5CJGBEDazJAFogawPI1ASOvUq7cfk4uSpbOCNkL48xbUn9ACYHe6I24yXymTlv1Wm+E4GZnQ4ESEIfj/g6NXD9XJu59U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788282962; c=relaxed/simple;
-	bh=toMJjZ6G4VmVzYjBjjNb4/0QMXdFW9z6P894zbv/+xo=;
+	s=arc-20240116; t=1788282978; c=relaxed/simple;
+	bh=Ko9p1FEqHmkkh/icu+YVEDf1Jxq2ljs5DXmNdSgFPiI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=js99Lt0+tCHW10vHfosBrT4PO3KaxTtSDf7LY4U4uGSVYSFQgnzRDUAtCjtpCW0+hpxsxupQXHv+GcQxTtxrSATLnWoq8WpzCvHcwFIPugjy4YeSQ3URQlyoQ5A1DabzKDcy7A4lj/8Myd9q8b8j48LrOdo1EDB/WVi7iuZ9Rvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K6q/QQ7V; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=OBFG7+Qa5I+TWWvzqBjkfEd27W0MKe3GV9UeONr+DiztRoioid8pfiyy9MgY8zJ7Yv+ayT/FaWgvkphTWgTtxpb9vSiFHu0wSv+ecZFQ896AT7LJ49mYzFK9jT46K6PkMFO2lZYOOIsyFwL0GlDj/5HVH9jfYCiWdQes46E2CPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=huTOKOit; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K6q/QQ7V"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 091581F000E9;
-	Tue,  1 Sep 2026 17:16:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="huTOKOit"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC2CA1F000E9;
+	Tue,  1 Sep 2026 17:16:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788282961;
-	bh=MlYUo7e+6JHQBeyEuCBNbPrU410UL26fmjqc5fZtZZ4=;
+	s=k20260515; t=1788282977;
+	bh=O+5Z+4hfqSGpvaCL++Zy3UdHiEjGohPUsan/S63OTHo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=K6q/QQ7ViFM+6E3Nnev2JJKEUS44dDNW8I/Vyl1jxX3UpGchalAF235DgNeQTSPH+
-	 A6mbQg05Of8v4OuJ60fFy9aTcU6DJSPhIGdi+iBwfxnu90iZMInBd7KbrSlhIGojKW
-	 i6RuyBv4FofBMGWV771hbKlMFKDuu9hUOW1Q3LbQ4pkYdX1wuab4RuyXjkqBnpH55C
-	 DTLFTHUifi7DJ3nqhUqd14h1dTHOms6RXYXDATBlKNl01LXjxLw2QLvnO+aCVu1EAm
-	 TMm2xWXVIzP0VwjhR9lWAt50f2w/aU2tQLOC7DwvQ8qacZjaIgiqTOc0V+Dnl0rOiY
-	 76BB6Yrwzovbw==
+	b=huTOKOitl/WDbStJzaVd54ztz/dZ9VRRLOX8Fo1anf1lFhnEsbClxybSUnLTvzFb9
+	 wLzOA2hr/OWSv1OIpv5aWLKHYIbHkiK7xS1qZJVAuyM+zbmU+zF4K1QgTzhf7SBIZL
+	 eaVcZ++3ls3KXOGKKM3qSYPRZbfYTsOhkz9RtKWIxkDPWEEs4ANFRzFpwpaHYHN8IT
+	 Ax8BueEEzD7zj/qwP8nwhB3lgsbXuGNUzQxN14mfDtYHvAYGWV0FF2R+qof4s1DkL1
+	 Y/IX5ASs00uuH6o2nGaXphwfpQFPPs3kCGavVv1Peef+dkKceVrR6+LSwUW612Awd5
+	 Wi8aQXtx2GT+w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 bpf-next 08/18] selftests/bpf: Validate that
- btf__permute transfer works
+Subject: Re: [PATCH v2 bpf-next 11/18] bpftool: Add ability to dump
+ LOC_PARAM, LOC_PROTO and LOCSEC
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alan Maguire" <alan.maguire@oracle.com>
 Cc: bpf@vger.kernel.org, linux-modules@vger.kernel.org
-In-Reply-To: <20260901165757.801449-9-alan.maguire@oracle.com>
+In-Reply-To: <20260901165757.801449-12-alan.maguire@oracle.com>
 References: <20260901165757.801449-1-alan.maguire@oracle.com>
- <20260901165757.801449-9-alan.maguire@oracle.com>
+ <20260901165757.801449-12-alan.maguire@oracle.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 01 Sep 2026 17:16:00 +0000
-Message-Id: <20260901171601.091581F000E9@smtp.kernel.org>
+Date: Tue, 01 Sep 2026 17:16:16 +0000
+Message-Id: <20260901171616.DC2CA1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] Missing NULL check on btf__raw_data() return value leads to segf=
-ault and uninitialized size usage in btf__new().
+- [Medium] The `vlen` for BTF_KIND_LOC_PROTO is incorrectly cast to `__u16`=
+, causing implicit truncation for large vlen values.
+- [Medium] The `BTF_LOC_PARAM_SIGNED` flag is ignored when printing values =
+for `BTF_KIND_LOC_PARAM`, causing negative signed values to be printed as u=
+nsigned.
 --
 
-commit 843335a53af929d0f8f7676cbbf1cb2a7296aacb
+commit 979370a25e9a748392e761a4d7cd6d5cda14a0ed
 Author: Alan Maguire <alan.maguire@oracle.com>
 
-selftests/bpf: Validate that btf__permute transfer works
+bpftool: Add ability to dump LOC_PARAM, LOC_PROTO and LOCSEC
+   =20
+This commit updates bpftool to support dumping the new BTF kinds
+BTF_KIND_LOC_PARAM, BTF_KIND_LOC_PROTO, and BTF_KIND_LOCSEC. It adds raw and
+JSON formatting support for these new types.
 
-This patch adds test coverage for the btf__permute() transfer mode. It
-verifies type-ID remapping, LOCSEC record ordering in split BTF, and string
-handling and deduplication.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_permute.c b/tools=
-/testing/selftests/bpf/prog_tests/btf_permute.c
-> index 04ade5ad77aca..ef75fd71df96e 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/btf_permute.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_permute.c
-
+> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+> index bca0a3982f09b..4d8991c99b484 100644
+> --- a/tools/bpf/bpftool/btf.c
+> +++ b/tools/bpf/bpftool/btf.c
 [ ... ]
-
-> +/* Permuting BTF with a layout section must keep section offsets in sync=
-. */
-> +static void test_permute_layout(void)
-> +{
-> +	LIBBPF_OPTS(btf_new_opts, opts, .add_layout =3D true);
-> +	LIBBPF_OPTS(btf_permute_opts, permute_opts);
-> +	struct btf *btf, *parsed, *transfer_btf =3D NULL;
-> +	const void *raw;
-> +	__u32 raw_sz;
-> +	__u32 permute_ids[] =3D { 0, 1, BTF_PERMUTE_ID_TRANSFER | 2 };
-> +	int err;
-> +
-> +	btf =3D btf__new_empty_opts(&opts);
-> +	if (!ASSERT_OK_PTR(btf, "empty_layout_btf"))
-> +		return;
-> +
-> +	btf__add_int(btf, "int", 4, BTF_INT_SIGNED);
-> +	btf__add_ptr(btf, 1);
-> +	permute_opts.transfer_btf =3D &transfer_btf;
-> +	err =3D btf__permute(btf, permute_ids, ARRAY_SIZE(permute_ids), &permut=
-e_opts);
-> +	if (!ASSERT_OK(err, "btf__permute_layout"))
-> +		goto cleanup;
-> +
-> +	raw =3D btf__raw_data(btf, &raw_sz);
+> @@ -415,6 +418,88 @@ static int dump_btf_type(const struct btf *btf, __u3=
+2 id,
+[ ... ]
+> +	case BTF_KIND_LOC_PARAM: {
+> +		const struct btf_loc_param *p =3D btf_loc_param(t);
+> +		__u32 *v =3D (__u32 *)(p + 1);
+> +		__u32 i, vlen =3D btf_vlen(t);
+[ ... ]
+> +		for (i =3D 0; i < vlen; i++, v++) {
+> +			if (json_output) {
+> +				jsonw_start_object(w);
+> +				jsonw_uint_field(w, "value", *v);
 
 [Severity: Medium]
-Could this missing return check lead to passing a NULL pointer and
-uninitialized size to btf__new() if btf__raw_data() fails?
+Since the BTF_LOC_PARAM_SIGNED flag can be set in p->flags, will this
+jsonw_uint_field() unconditionally format negative signed values as large
+unsigned integers?
 
-> +	parsed =3D btf__new(raw, raw_sz);
-> +	if (!ASSERT_OK_PTR(parsed, "parse_permuted_layout"))
-> +		goto cleanup;
-> +	btf__free(parsed);
-> +cleanup:
-> +	btf__free(transfer_btf);
-> +	btf__free(btf);
-> +}
+> +				jsonw_end_object(w);
+> +			} else {
+> +				printf("\n\t value=3D%u", *v);
+
+[Severity: Medium]
+Similarly for the plain-text output, does this ignore the BTF_LOC_PARAM_SIG=
+NED
+flag and print signed negative values as large unsigned integers?
+
+> +			}
+> +		}
+> +		if (json_output)
+> +			jsonw_end_array(w);
+> +		break;
+> +	}
+> +	case BTF_KIND_LOC_PROTO: {
+> +		__u32 *params =3D btf_loc_proto_params(t);
+> +		__u16 vlen =3D btf_vlen(t);
+
+[Severity: Medium]
+The vlen field in BTF types uses 24 bits. Does explicitly casting it to __u=
+16
+here silently drop the upper 8 bits?
+
+For a BTF_KIND_LOC_PROTO type with a vlen greater than 65535, this could
+truncate the output and display an incorrect number of parameters.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260901165757.8014=
-49-1-alan.maguire@oracle.com?part=3D8
+49-1-alan.maguire@oracle.com?part=3D11
