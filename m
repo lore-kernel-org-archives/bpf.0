@@ -1,158 +1,202 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02341468C38;
-	Tue,  1 Sep 2026 21:18:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788297492; cv=none; b=Pw5TggjBIHe5dZ+wENhff/2JG/NiYVu4oZLxXBUttLn4oyD8lS7vRcoxTKizNqHDXXL8nvNUqry2MBjqFbiKlTTi0P5YuDMh4+dTxCzFv1czQ+xZ4Hpi85ca1BYk/lEx5FfqI/1ILwXIgkwOVjf34T8uZI7d4KWydofbPbEV3OM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788297492; c=relaxed/simple;
-	bh=ogGcDOG1SVS9gY0603tIYZGDKfXpYnc+f7C9UbaeK20=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sjySxIJcqLbBbEbp65k9gr5n2+Hv0j0jrtDd2h8ONC4mpQfR8OLcFP4WVa8nrNI1oeKjj0jwVn45t0AXG4JYtFV3PqAVphT4wzgGVjW4N44mIRYQdkARtx0t4OvUU6IxGbTPbHnue8yel9ETHzcEkpl5zaWJ/GoJcAOmN0cdHhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J9DsOHWk; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDCAC340A6A
+	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 22:16:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.172
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788300967; cv=pass; b=RL0k3qjvssxC2TZiwU536pkqrxHHUB7JkzMndJfJtZ0/zbnCqUBT5ZEppxJLsu8aM3NRXrRZgTwwPZuN9jD6LMlvRb5asxrL25UwH5g2mHEmqEXXYLpotExRX+2EUoA4Oq3Pa0HghoGOkPxIqixjtD7dSUL1aDu0idLTrzvNZR0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788300967; c=relaxed/simple;
+	bh=mKdTmKx+z6mwUGqcorW8iH+bPrZTGVyvSXc8efMHImI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=M/XH7UiYLED6AzBmbeYn8OtBhC/gXLNRxiHf2t9BJzc7C5Ur9TKeTVnmIns4cyJF+0qvqwlKlnNmGD+p87HqiSD9SkiZDNu2sUbOVlyrK5zJNGg43RT8AlTRY0+hCAnk3CuTVAs1ZWqVd9DgONgf8oHU/ZsW0LOr21Kh9qyYPDs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=eqHh81s+; arc=pass smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J9DsOHWk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1788297492; x=1819833492;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ogGcDOG1SVS9gY0603tIYZGDKfXpYnc+f7C9UbaeK20=;
-  b=J9DsOHWkoQebG5fqWNESGpdi3+htvqDr742i+uux576NS3grD54fskR1
-   zKr1mrUssnRR5FpZjYNT8BJMXHTxqN8fCDmmst0q1Oe2AgaP6JMk8mUbf
-   t59oAP42Sb+slLtlcHF6ugqzAQWTET6yYV1XC+sAdPZTJz3Rrx9Gl/Fif
-   +Z6nvPcAJLcjbGBsX2JjmTDcIN1IeksUJKRNI86eXQSKzSCKwH5JLtKn6
-   97JgJiWsWlaeYyfupJS5J/oLpE0Sn36hvF9m2RqfXN0moY9X1GVqzDdpU
-   CTOdA8uXv8/04MYL4ixUIlft+3Vpz3ycfX1Rv6jK/7Z/c0UrS+AJgNdb8
-   A==;
-X-CSE-ConnectionGUID: 8IkhdlCrSxSUUR0s1pkJBA==
-X-CSE-MsgGUID: wNFDFTzFQzCuq7xn62jXGQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11893"; a="88670384"
-X-IronPort-AV: E=Sophos;i="6.25,256,1779174000"; 
-   d="scan'208";a="88670384"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2026 14:18:06 -0700
-X-CSE-ConnectionGUID: Wj5JgWVkQCCABWFmythlyQ==
-X-CSE-MsgGUID: ZNXUneT+SM2AUKNM+bvBAw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,256,1779174000"; 
-   d="scan'208";a="267439760"
-Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by orviesa006.jf.intel.com with ESMTP; 01 Sep 2026 14:18:05 -0700
-From: Tony Nguyen <anthony.l.nguyen@intel.com>
-To: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	andrew+netdev@lunn.ch,
-	netdev@vger.kernel.org
-Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
-	anthony.l.nguyen@intel.com,
-	kohei.enju@gmail.com,
-	enjuk@amazon.com,
-	przemyslaw.kitszel@intel.com,
-	blair.steven@alliedtelesis.co.nz,
-	carl.smith@alliedtelesis.co.nz,
-	horms@kernel.org,
-	maciej.fijalkowski@intel.com,
-	magnus.karlsson@intel.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	bpf@vger.kernel.org,
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
-	Rinitha S <sx.rinitha@intel.com>
-Subject: [PATCH net-next 4/4] i40e: Avoid repeating RX filter warning
-Date: Tue,  1 Sep 2026 14:17:50 -0700
-Message-ID: <20260901211752.1922993-5-anthony.l.nguyen@intel.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20260901211752.1922993-1-anthony.l.nguyen@intel.com>
-References: <20260901211752.1922993-1-anthony.l.nguyen@intel.com>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="eqHh81s+"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2caced6038eso3661745ad.0
+        for <bpf@vger.kernel.org>; Tue, 01 Sep 2026 15:16:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788300962; cv=none;
+        d=google.com; s=arc-20260327;
+        b=WBPv+Gd6jTC5fc9ihFT1eq/Z3jl1GchbJ5XadRzxTzth3p8yP5YOfQVAc3P5gLb7NO
+         fmthm2FUEEnvu+4cO2DOTCBRQGAGckHvAcz2CpA7QBy4CFUytXA1vCuWu28I5XkgxyMS
+         fq9CjP2IYQfZMNdgF+Mh6NdcZJfXOx19ynH4As/IMV2t77bhCvrIGFdTnIaLHTfunzR3
+         7dEuzkJvPqtGHkNHE+CjqfGvgPj7Lsz8ucsD1bCYzcRt72qNRpQTEpwr+MU62szI27q2
+         1Rm0+7+TEP2MeTnQF92qzzyXlY/rU2yEZeXekIYAxC7QIBLTjos44PMhM8aJ2UHyh914
+         RkGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=1ATcm8apudD2vfrozzvIh0C6UKnA5qihRpZDqTJ19B8=;
+        fh=zZgm+55jvLHwN908yMwEUUGRupBb+3+nawYljEcwKVk=;
+        b=cSQ8Lv6O7crovHcnPWRxoo/2AticU5ANP5OFi3mOXrava2n2Iw3x06jVFjNbs3Ssw6
+         7FiqSLc57s/iqLUSayO2gwax4UQMnvVeQLmdJWu3jYxWWCgRLckxwoZM3qmjeoMu0Fg1
+         YPP0Rh74gOeCKCYzKOzxDuZm7rcP4N74xvB7HOxswuOwRvNUnCKQR0zNndU+96HpKru3
+         qC27mBO7RMYFLCTYW6eZRpVBHCBuBMdHLjpx+JvBCVJmk7SZhy1c9XaBDFxp+kd+C47d
+         Va2hkZD1kWntD17tnQG/MXSTkcCrsr4Ulaxvcl2CiSCaxpaF17E8i5hDL980FIKHgzxv
+         DQmg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1788300962; x=1788905762; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=1ATcm8apudD2vfrozzvIh0C6UKnA5qihRpZDqTJ19B8=;
+        b=eqHh81s+7tojPHBWGAv5Z71iklqC1frwXCy5DQz86f05QiXQaT0WK1ayrOxB4tvX6w
+         9NP4C53JDCak/Lsv2Lr74xcFbCdQCssDxn8y1jzTU8uezehh5OxhJQuQ3tVdovDu1G5S
+         Dx1gpayTpCB6fRm/3vIjzMM/Rcs0cUzvZ+/aH8PRHNoDAyplBfdwfniUhdMONtJGO6Px
+         doLJ9pBtEZfOEO9M/oiURYUS5ZQ/6ACZcWCBi7g8OQnYWYxfGGr5/9+sO9twEA1SsdE4
+         O0Zm175JagvCH8VKyYXt5pleEW9b/88f1NX6YFreDqbNy4IMGIl/6+2ZN7FQzgTCikwG
+         HIxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788300962; x=1788905762;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=1ATcm8apudD2vfrozzvIh0C6UKnA5qihRpZDqTJ19B8=;
+        b=SynOYojKYLnSntTMhRTVV3iWucmDZeqjzKihcit38jZ2uamEIg5cpe1lx546UVSa/k
+         EIBSeLCi86w2No+o7bv17y6euOSCdITrI/5PqirfUg/m9BMerTT01ostbb5hgcr37K79
+         vSc5mlkLCZ+1TF5APq7n1MT6di6Y0UsQx95iUr9OL6M6kHbSBP0zkiBZ5C+eMmOzkSED
+         WVDpAttFoj0+2mBMT+d41CySX/ncq8XvlXmcbMaxzqo3H6hJADfZfnxSI7Qp/AHDHiel
+         U4FRcAyBB9gOD3tgGw9/oDca6WNha04hWAHantkAYsAaVcxzjHn2tHe+dZ5qdZWPu/d0
+         GCfA==
+X-Gm-Message-State: AFuF++lz+vZk7+Qd1zEk9twX2OlwJREb8xukSplBzbNg99erGEF8qvXS
+	HInIDjnE+HiPG3Q+R/e+vhgQk5nMT6M+YPzz2oGEiynaEIgGhflLOsVIFhuBmgwSmZnWbqM76qx
+	zW7FOY5fPl2jpb6UMj7YcvmFnDktq87tZbisX0Vp6
+X-Gm-Gg: AYBFou2UOstttPaeCeoyo0I3IaFcWP0DoEWAOooQfrh4QoPUtThJtHtSo299t6krlyp
+	qrPScYW3ag0u+xgWiPmT9g5XKgpuW1mZWYld8vBQa4MQdp1vZ9gfrjyQiOBwAoXG1+NTPQv0uS7
+	BLfhhWE8TIo+TA/yA1f+hcCjJOsPTGKJflHGrFRQjSRt6gWXD7U1UN4ON1Atn61qgg/A3FUCzau
+	mMJE2wrAc6jUgXkcvU72WOotoLLvtXkUdp8Cxotxl7XNgVHehv8WOn7Nz8WtysN7kPbFRpTZqMj
+	2+7yff4oNGKyKCoR74hzsXXgSBInonrazSIdTOP0vt1R
+X-Received: by 2002:a17:903:2410:b0:2d9:2b1b:878a with SMTP id
+ d9443c01a7336-2d9526c2cdfmr80572575ad.10.1788300961608; Tue, 01 Sep 2026
+ 15:16:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260831110934.241898-1-a.s.protopopov@gmail.com>
+ <20260831110934.241898-2-a.s.protopopov@gmail.com> <CAHC9VhT7=wMsB9mERWoiM6pF+_T1=2tyAsSrxMphhtdE2NPHMw@mail.gmail.com>
+ <apbU8-fpioNIwUA8@mail.gmail.com>
+In-Reply-To: <apbU8-fpioNIwUA8@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 1 Sep 2026 18:15:49 -0400
+X-Gm-Features: AcwNN1W7aLRefGcheWJ-uymO40RrLBDpF_-JUw-mmYcnuhgB-KD2OI0728rejLU
+Message-ID: <CAHC9VhQbWPqEz5g1rVcMyJgrzzd4cQuwi7cddgJQK1H3ugMz7A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/7] bpf: Allow BPF LSM programs to attach to
+ more hooks
+To: Anton Protopopov <a.s.protopopov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, lsm <linux-security-module@vger.kernel.org>, 
+	netdev <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Matt Bobrowski <matt@bobrowski.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Christian Brauner <brauner@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+On Tue, Sep 1, 2026 at 9:26=E2=80=AFAM Anton Protopopov
+<a.s.protopopov@gmail.com> wrote:
+> On 26/08/31 06:42PM, Paul Moore wrote:
+> > On Mon, Aug 31, 2026 at 6:59=E2=80=AFAM Anton Protopopov
+> > <a.s.protopopov@gmail.com> wrote:
+> > >
+> > > The BPF LSM programs are allowed to attach to LSM hooks, all of which
+> > > are defined in the <lsm_hook_defs.h> header file.  From BPF's point
+> > > of view the set of attachment points is defined in the bpf_lsm_hooks
+> > > BTF set. By analogy with existing code, add a new header file
+> > > <bpf_lsm_hook_defs.h> which will also be included in the bpf_lsm_hook=
+s
+> > > BTF set.
+> > >
+> > > This change allows attaching BPF LSM programs to more functions.
+> > > The actual hooks are added in subsequent commits.
+> > >
+> > > Each BPF hook calls a [__weak] noinline function each time a hook is
+> > > reached. This may be too expensive for hot paths if a BPF program is
+> > > not attached. A future commit will optimize this by adding a per-hook
+> > > static key and inc/dec it on attach/detach. This way disabled hooks
+> > > will be bypassed efficiently.
+> > >
+> > > Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
+> > > ---
+> > >  MAINTAINERS                       |  1 +
+> > >  include/linux/bpf_lsm.h           | 12 ++++++++++++
+> > >  include/linux/bpf_lsm_hook_defs.h |  6 ++++++
+> > >  kernel/bpf/bpf_lsm.c              |  2 ++
+> > >  4 files changed, 21 insertions(+)
+> > >  create mode 100644 include/linux/bpf_lsm_hook_defs.h
+> >
+> > Adding new BPF hooks in the kernel is one thing, but adding new BPF
+> > LSM hooks outside of the LSM framework is likely to be problematic as
+> > these new hooks operate disconnected from the LSM framework (callback
+> > and LSM kernel object state management).  We've seen bugs in the past
+> > caused by the BPF LSM trying to operate independently of the LSM
+> > framework, something like this will only make that worse.
+>
+> Could you please point me to some of the bugs you mention, such that
+> I understand exactly what you mean?
 
-When the i40e runs out of space for RX filters the driver switches to
-promiscuous mode and warns that it has done so. In scenarios with a
-large number of these filters this can generate a lot of warnings. For
-example:
+The latest that I'm aware of was a few months ago:
 
-  $ dmesg -c > /dev/null
-  $ ip link add dev br0 type bridge vlan_filtering 1 vlan_default_pvid 1
-  $ ip link set dev eth7 master br0
-  $ bridge vlan add vid 1 dev eth7 pvid untagged self
-  $ bridge vlan add vid 2-4094 dev eth7 tagged
-  $ dmesg
-  [   25.601705] i40e 0000:01:00.1: Error LIBIE_AQ_RC_ENOSPC, forcing overflow promiscuous on PF
-  [   25.601833] i40e 0000:01:00.1: Error LIBIE_AQ_RC_ENOSPC, forcing overflow promiscuous on PF
-  [   25.601961] i40e 0000:01:00.1: Error LIBIE_AQ_RC_ENOSPC, forcing overflow promiscuous on PF
-  [   25.602088] i40e 0000:01:00.1: Error LIBIE_AQ_RC_ENOSPC, forcing overflow promiscuous on PF
-  [   25.602216] i40e 0000:01:00.1: Error LIBIE_AQ_RC_ENOSPC, forcing overflow promiscuous on PF
-  [   25.602344] i40e 0000:01:00.1: Error LIBIE_AQ_RC_ENOSPC, forcing overflow promiscuous on PF
-  ...
+https://lore.kernel.org/bpf/20260628201103.3624525-1-mattbobrowski@google.c=
+om
 
-Use test_and_set_bit() so that the warning is only issued when the
-driver enables promiscuous mode and not on the addition of subsequent RX
-filters.
+> I am not really seeing how the
+> real LSM hooks differ from the ones added here (from BPF point of
+> view, and the objects it can access via kfuncs/maps).
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Reviewed-by: Simon Horman <horms@kernel.org>
-Tested-by: Rinitha S <sx.rinitha@intel.com> (A Contingent worker at Intel)
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
----
- drivers/net/ethernet/intel/i40e/i40e_main.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+The existing LSM hooks, LSM security blobs (the 'void *security'
+fields present in many kernel objects), and individual LSM callbacks
+are managed by the LSM framework whereas the functions you are
+proposing are not.  This is important because the LSM framework
+enables/disables individual LSMs at boot time which impacts both the
+executed LSM callbacks and the security blob allocations.
+Implementing "hooks" that operate outside the LSM framework can cause
+unexpected user behavior and potentially destabilize the kernel,
+leading to a system crash.
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
-index 719f45b5cb40..abbc71e815ae 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -2412,10 +2412,12 @@ void i40e_aqc_add_filters(struct i40e_vsi *vsi, const char *vsi_name,
- 
- 	if (fcnt != num_add) {
- 		if (vsi->type == I40E_VSI_MAIN) {
--			set_bit(__I40E_VSI_OVERFLOW_PROMISC, vsi->state);
--			dev_warn(&vsi->back->pdev->dev,
--				 "Error %s adding RX filters on %s, promiscuous mode forced on\n",
--				 libie_aq_str(aq_status), vsi_name);
-+			if (!test_and_set_bit(__I40E_VSI_OVERFLOW_PROMISC,
-+					      vsi->state)) {
-+				dev_warn(&vsi->back->pdev->dev,
-+					 "Error %s adding RX filters on %s, promiscuous mode forced on\n",
-+					 libie_aq_str(aq_status), vsi_name);
-+			}
- 		} else if (vsi->type == I40E_VSI_SRIOV ||
- 			   vsi->type == I40E_VSI_VMDQ1 ||
- 			   vsi->type == I40E_VSI_VMDQ2) {
-@@ -2465,10 +2467,11 @@ i40e_aqc_broadcast_filter(struct i40e_vsi *vsi, const char *vsi_name,
- 	}
- 
- 	if (aq_ret) {
--		set_bit(__I40E_VSI_OVERFLOW_PROMISC, vsi->state);
--		dev_warn(&vsi->back->pdev->dev,
--			 "Error %s, forcing overflow promiscuous on %s\n",
--			 libie_aq_str(hw->aq.asq_last_status), vsi_name);
-+		if (!test_and_set_bit(__I40E_VSI_OVERFLOW_PROMISC, vsi->state)) {
-+			dev_warn(&vsi->back->pdev->dev,
-+				 "Error %s, forcing overflow promiscuous on %s\n",
-+				 libie_aq_str(hw->aq.asq_last_status), vsi_name);
-+		}
- 	}
- 
- 	return aq_ret;
--- 
-2.47.1
+We require all LSMs (Landlock, Smack, AppArmor, SELinux, etc.) to go
+through the LSM framework, the BPF LSM is no exception to this rule.
+If you want to add additional BPF program call sites beyond what the
+LSM framework provides, please implement them outside of the BPF LSM;
+there is plenty of precendence for that already.
 
+> The main reason (for now) to specifically create a new list of BPF-only L=
+SM
+> hooks is (pcmoore/lsm.git/tree/README.md):
+>
+>   """New LSM hooks must demonstrate their usefulness by providing a meani=
+ngful
+>   implementation for at least one in-kernel LSM.  The goal is to demonstr=
+ate the
+>   purpose and expected semantics of the hooks.  Out of tree kernel code, =
+and pass
+>   through implementations, such as the BPF LSM, are not eligible for LSM =
+hook
+>   reference implementations."""
+>
+> And for the hooks added in this series
+>
+>   a) BPF satisfies our needs, as we can precisely analyse what the
+>      calls are trying to do with good granularity
+>
+>   b) I am not sure how to actually express this in any in-tree LSMs
+>
+> Can't BPF be considered enough to demonstrate usefulness?
+
+The core issue has little to do with BPF, it has everything to do with
+in-tree vs out-of-tree code.  The BPF LSM is explicitly mentioned as a
+"pass through" because some have argued that the BPF LSM is in-tree,
+and while the basic BPF enablement is in-tree, the actual LSM code
+that is executed has thus far always been out-of-tree.
+
+--=20
+paul-moore.com
