@@ -1,234 +1,155 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80A9B46A5EC
-	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 08:30:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C2E32E7F20
+	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 08:33:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788251460; cv=none; b=Xp4Hnu4FF+cnEhd/hRzgAGWBGUJ6R6llUqHIe6wlyHw5X4np2KQ82v1eT7nvDHqggTbtDdDnjpV6/oWOlE1JeVep4bqzizi0Wn11qxozdWJEBZUmJIQpasbDTYW72rZCre+GSrU9Wi9UBMwJDhbhH/nGqbV/76bGZLIhmvETzKk=
+	t=1788251616; cv=none; b=b9DCLojAo1YM1yWqJZxoS1dS6jqCOItYpB8afCnotfMGw07fTb4HfwyhF2JBYWDw1BAzT5v+SIZ1sHDBG55BKfVWokhAhDx23oje+a0HsYutXLrmmSFVDcDhkY+q4JRRnVx++LkfL/6P0/iIrqpZveg+XHomJM3cxIe9cY96IGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788251460; c=relaxed/simple;
-	bh=6Y/65abMp5Nohg7N8G1qV3p/3sJQdmZOJabLlnpjX9w=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=ny9MPnc0TD6qDUdB900al/UYf2Gxq9E3ohRaVQbWPTqOO2+2pt7vDk6U9qlhRzYRd97m5dEm9rojwMIc5HQ235+ZZtDtnI23ngk4nfCs0cNq7ATMvTO8DAXibqesKiW2SmQ/EJ9ZtHdK+E8dqaWNtFfidq59XwOT+bwPwVE1gHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NOvJp7gQ; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=tLVY9wqB; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1788251616; c=relaxed/simple;
+	bh=7KCYYPGqpmRxNWWjzwtBvJRWE67e0WRdOEM93VIEuxM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GC+MMi3NqSjCRX4cmzXPpmCgHJKasOIM7cmC0/7c53JE8DJd3xjZAlXgGJLJnUrwxOvlcKNr9/uFMVM41zJqKD167Sms3uAhhAx+uzh5tV594BqhAcQrJzTVVvYQRgDFbbLvWfUzmUKqSqpb1UG6xcF9EuCQFLcmc757dRRw1Ss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i4c/caT2; arc=none smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NOvJp7gQ";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="tLVY9wqB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1788251457;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PeGtCK6VOxSgm6lDDeYDwNNguoRKasdMBXEHsdlLzAo=;
-	b=NOvJp7gQmZnYE1Wpvpy2Tv7nJN85VnYQP0Uzh2TYRBVXBU4nW5eOCDzTufwgSjVl/t0EVs
-	EkG3tHmxyK/kIY3wuAvUom/yyicWKn4M1hUYnDsK583MKLMtTYAAxxoAe4eCJtxFlSVcp7
-	01CwAIgBTvoCR1lYE9PWft1i7WyqkUk=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-482-RYxLvVlyN_WRW7oZ_UB-pw-1; Tue, 01 Sept 2026 04:30:56 -0400
-X-MC-Unique: RYxLvVlyN_WRW7oZ_UB-pw-1
-X-Mimecast-MFC-AGG-ID: RYxLvVlyN_WRW7oZ_UB-pw_1788251455
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4997b060af8so4746275e9.1
-        for <bpf@vger.kernel.org>; Tue, 01 Sep 2026 01:30:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i4c/caT2"
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-cc1ceadbd16so4917765a12.2
+        for <bpf@vger.kernel.org>; Tue, 01 Sep 2026 01:33:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1788251455; x=1788856255; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=PeGtCK6VOxSgm6lDDeYDwNNguoRKasdMBXEHsdlLzAo=;
-        b=tLVY9wqBSbkKV2lX27oQbzdtvEsPYT+uv57pH+JWCAHboou/JWCfrWhP66O7oTmnLg
-         xxcc0sT5lY/X0FwlAwWXnmPzVAuO7vuBRfRgQNRmGrEKRkYb0K9DxMoXOQ20CgADaZUL
-         OjlXCcMQBhQmQqTCPDQrdXLr8hPO7TWKsQvdq4kfjpr/oRjTRP2HiAiHQJ41Ceh2qVGL
-         Vfs9ScGzALhRdd7g86v1s2+fc7PUcbUAdDDKUvMf7HAKaIMUFVCet6Lo5XSgi0+AMxMq
-         lSJKQ6TQsnuptmYdWDcOgtFS4VaFNqPYiuEa3vj9q2gSK7ppD0qWQG4hQZOpdWLVGeSW
-         sLzA==
+        d=gmail.com; s=20251104; t=1788251614; x=1788856414; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=RiEALvjPEuEOIdvB+bOx1YYVXmJ76RxpCYaG+WNrEhY=;
+        b=i4c/caT2K76RYYa7eZrrFF9ML6TNI4T6HsJXHyR5bvnQ98ts0x91T4hmL9mByrHVuF
+         O0V67Vw0suxmq3fRmfD9SGju8QiSZ9K1BHCwFRht7z/2lpufpm+VophS/n5L4vDPAyq6
+         jeJ9MadyFRJ5tfWKAJnsISr6y5m6T+TF1zV6hi/XD4Wfzqm4KgmUZKnGxds+RT9SVJ6m
+         PJ1WFr8rgaf6bMOWW11I6P77w/LRqEDzRzgMTPLMJYemzP6PuDwQPs3A32+TtruWVsfB
+         foG820/5cUavaU6Vy8r+YBUZ/yoLsRQUg5zjxUOksStyTx3DeSZhrhJaO91OIRloHmId
+         uxAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788251455; x=1788856255;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :references:in-reply-to:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=PeGtCK6VOxSgm6lDDeYDwNNguoRKasdMBXEHsdlLzAo=;
-        b=JdswOSx8QrcxK1k7r1CZqSw/ZbtE6EAYSzinQRxAXtm14k241Fves8nD01RSoYVzqe
-         sxakG3KnveqQij5OdzcGlx3+dyqpLdzkitw1F5gTYNkDypn7s7cLQi/8X5LB/q8ONaB0
-         AL4P70uJINlpCDiinEWUpjjvPvbaWYklZwUAPWLLrIxlC2Nb161iTzEqfdmX4D1+Rj/c
-         dTZH1E+AltAp+lpjFxgZ0G3Ex/k6XFK5zeop740saDec/+rbuKsp4/Ezl21mdFnBkpUm
-         z4Wx0ZR3TKvRtLAmnqt1kqdI7bihiF/4oFQaI4oRNwhFe+aG5vwsLqXq/TK+lUx0i0HT
-         7/Dg==
-X-Gm-Message-State: AFuF++nLfbwVv8Y/EZjAGiV146I3HTLMZ5SFSFxbkTOyQ3noJDKIjwl8
-	wAsbqUBY+Alybwepl8U+U+NKefeqITDIf6trzn58R69ccg5m2Gz0Fz9p7h4DJ/KdmIilaWF8SAC
-	8CmMYrv8bgK8ssKCKpFMvmltVX0eXG9UL6aPW1L5p7SVf+QRy7TZR7A==
-X-Gm-Gg: AR+sD10FRDLB2B4Mm+o5nIGqywA7NO6beXWHxrLPMYtkZDCfNOZVfht8JgUbC5iG5aa
-	miBcVjzrEtNSNWIdk7OTLrmqRx73jRL03GCv+FVFDUXD1rxZLVrN+1zwIGLT7F+pu23dPEz+nK1
-	ETyMPrtP9DhBHOCJ19j1oHO706T4S1yl0BpO3nSSSqOyjWdZ1rZ5A6OnatuovscEzkF8XJJ9Nrt
-	WGiJLW5x7SfFHeUHO7N4ZQ/dxRZe/BVmYnq9ecDU7M5gsIZxigJ1nekEyHes0sprvJG6aaRCNS7
-	t/c43YHT0NLdepwVZZ7UStmiA0HEVZG+jP3xqtRqAzmUdqRxqjbx6QWMBrqiSlr5W8uk+sj5Gp/
-	DHRI6WzXqqBl7O38X+a99CSIK5KA=
-X-Received: by 2002:a05:600c:870c:b0:499:dc34:bdc with SMTP id 5b1f17b1804b1-49b91c1c401mr576242225e9.1.1788251444447;
-        Tue, 01 Sep 2026 01:30:44 -0700 (PDT)
-X-Received: by 2002:a05:600c:870c:b0:499:dc34:bdc with SMTP id 5b1f17b1804b1-49b91c1c401mr576219485e9.1.1788251433471;
-        Tue, 01 Sep 2026 01:30:33 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cdce08b8esm46512175e9.3.2026.09.01.01.30.32
+        d=1e100.net; s=20251104; t=1788251614; x=1788856414;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=RiEALvjPEuEOIdvB+bOx1YYVXmJ76RxpCYaG+WNrEhY=;
+        b=gveSxGpg8a7u6hA4grUNZxCTtY62j3nASh7GdozU2IwOrZ3JSwa1jw4e7Z7+7S/TT1
+         6foQSmfGOpoR3G2B38a3pp62rw2R8BhdmYPs7c0jZlT48R7//9P45AZraPV9FSV7VAk2
+         +bPcuHHQzTzrqZeYLzp2uYn/bF0QmgsZb/IndIwexNlHemBUI6zsW/eGOO7RZmmCKe/O
+         SFO/8/534a/qOma1cZkwWyVfKsnMz7FHkTB8JoGggGnKExyadFwi2KTFXvo5fZFujmbK
+         Lang9dI1SxJwU4975sBTn6MIfxVb/6I5h5YAQpchYMRMGUHqcfFcSZ4plWWtZskw4yKY
+         Q72w==
+X-Gm-Message-State: AFuF++kesDMisSo6jpA8DSf3y6wprxy9hXhwCCZWlDyVhvirtosbWIoC
+	wky2XzALUxY//kbHrdM3h08+74C9xMyrYt72d8hXAvuB+cizzM9m9cxF
+X-Gm-Gg: AYBFou1c0TOviDW+JESlWabHqt+0SaPla5UaOa9FqWQP2K8zCXaexORQn0OE0eTxwV9
+	D3jJvuHgvxiUWwNO6srSF6SPcSs6sYtloOBHBSHy/x9ZSdmf2Rc2YZiahhw/GP/FKCXqXwHq5WB
+	6tjojDLdinvI9UIPchdbhdIGJPuUzVe8Wz0QisDuOw5QwA54olaQAZyWKQMckpHhmiYjNNjJbc/
+	GG1XATMXEP77D9j4vOlqAt3zN5kq5qFwaRg+h8gHg5A4PM5vpezjP39wFJEO8z7awlV+lilknG2
+	3cGq3SbG6fdOeazBYo6UQDjikcsXVXCNniVy8LZjGMRlWXVr8ih7L8cPOzJEbGNgZRTUoZ6GYVg
+	I093H/0dNpFug+kBtV9Zu2h6ShdBpi9zwAcrXi6OQDaQwGYIn1aCh82y5zM3B6Zte9CgGoe6LA4
+	Pf+i515gPuYAaWDX7wfaCjkgIHbWoLQXiAREO3Reki1rxsLYuSOLMP10gEmMDVKU2/dM2Wx3OcH
+	UXrMOeja5vGha1AGN1jwITAB+sWeD2U3b6HUis9Nk0McZEuYX9W+WkogP4ZY8jcZ/y/mJhbfaWS
+	HmBUudWhd/9zHBdNwc/1dC9UE7w6geComW4VRrVkQiG5NCeIHA==
+X-Received: by 2002:a17:90b:530c:b0:381:1c96:829b with SMTP id 98e67ed59e1d1-396d0d4c43amr50193467a91.3.1788251614426;
+        Tue, 01 Sep 2026 01:33:34 -0700 (PDT)
+Received: from KERNELXING-MB0.tencent.com ([43.132.141.20])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3990d49e9e0sm4656501a91.11.2026.09.01.01.33.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2026 01:30:32 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 2FDCA97C514; Tue, 01 Sep 2026 10:30:31 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, ast@kernel.org,
- andrii@kernel.org, daniel@iogearbox.net, martin.lau@kernel.org,
- eddyz87@gmail.com, yonghong.song@linux.dev, mason@kernel.org,
- ihor.solodrai@linux.dev
-Subject: Re: [PATCH bpf-next v2 1/4] libbpf: Move section-defined program
- flags to prog_flags
-In-Reply-To: <9b25ba2abfe778871d07bfa7d08dbf4809a6a865dabf0b88e6818d21f54d9189@mail.kernel.org>
-References: <20260831132648.65843-1-toke@redhat.com>
- <9b25ba2abfe778871d07bfa7d08dbf4809a6a865dabf0b88e6818d21f54d9189@mail.kernel.org>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Tue, 01 Sep 2026 10:30:31 +0200
-Message-ID: <87jyp5v0ew.fsf@toke.dk>
+        Tue, 01 Sep 2026 01:33:33 -0700 (PDT)
+From: Jason Xing <kerneljasonxing@gmail.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	bjorn@kernel.org,
+	magnus.karlsson@intel.com,
+	maciej.fijalkowski@intel.com,
+	jonathan.lemon@gmail.com,
+	sdf@fomichev.me,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	aleksander.lobakin@intel.com
+Cc: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	syzbot+f16c1b285c9f63994eec@syzkaller.appspotmail.com
+Subject: [PATCH net v2] xsk: set network header on skb at generic transmit
+Date: Tue,  1 Sep 2026 16:33:25 +0800
+Message-Id: <20260901083325.3445-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-bot+bpf-ci@kernel.org writes:
+When constructing an skb in the XSK generic transmit path, neither
+xsk_build_skb() nor xsk_build_skb_zerocopy() calls
+skb_reset_network_header(). After __finalize_skb_around(), the
+network_header offset defaults to 0 (pointing to skb->head). The
+subsequent skb_reserve(skb, hr) moves skb->data forward by hr bytes,
+but leaves network_header still at 0. This makes skb_network_offset()
+return a negative value (-hr).
 
->> commit 24627f60026bd2b231e09d4373e14ca1975a2d96
->> Author: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
->> Date:   Mon Aug 31 15:26:41 2026 +0200
->>
->>     libbpf: Move section-defined program flags to prog_flags
->>
->>     The libbpf section definition modifiers for XDP frags support and
->>     sleepable programs stores the flags bits only in the private section
->>     definition cookie from object open to load time. This has the
->>     unfortunate consequence that API consumers cannot see (or manipulate)
->>     the flag between object open and program load.
->>
->>     In particular, libxdp has special handling of frags-enabled programs=
- to
->>     make them compatible with the dispatcher. This doesn't work on XDP
->>     programs that enable frags through the 'xdp.frags' section definition
->>     because the flag is not visible through bpf_program__flags()[0].
->>
->>     Fix this by changing how libbpf loads the program flags from section
->>     definitions: instead of using the private section definition cookie,=
- add
->>     a setup function to the default section definitions that stores the
->>     flags for sleepable and XDP frags programs in the prog_flags field of
->>     struct bpf_program.
->>
->>     Exposing the flags this way means that any use of
->>     bpf_program__set_flags() will override the flags unless the caller t=
-akes
->>     care of updating flags in a non-destructive way. This is unavoidable
->>     with the set-only API, and any user setting flags unconditionally is
->>     already broken in the sense that they will also override any other
->>     current and future flags. A subsequent patch fixes up all in-tree us=
-ers
->>     of the API.
->
-> This looks like a bug fix for SEC(\"xdp.frags\") flag visibility. Should
-> this include:
->
->   Fixes: 082c4bfba4f7 ("libbpf: Add SEC name for xdp frags programs")
+When such an skb reaches a tunnel driver like ipgre_xmit(), the call
+chain pskb_inet_may_pull() -> pskb_network_may_pull_reason() computes:
 
-Sure, why not?
+    pskb_may_pull_reason(skb, skb_network_offset(skb) + nhlen)
 
-> The commit message states "A subsequent patch fixes up all in-tree users
-> of the API." Is this statement accurate?
->
-> Looking at the end of the series (645bdf199b3cb), there is one destructive
-> bpf_program__set_flags() call site that remains unconverted:
->
->     tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c:38
->         bpf_program__set_flags(prog, testing_prog_flags());
+The negative int from skb_network_offset() is implicitly promoted to
+unsigned int, wrapping around to a huge value. This triggers the
+DEBUG_NET_WARN_ON_ONCE(len > INT_MAX) in pskb_may_pull_reason().
 
-As I replied to the other bot (why are there so many bots?), I missed
-this one. Will add and respin.
+Call trace from syzkaller:
+  ipgre_xmit+0x958/0xcd0 net/ipv4/ip_gre.c:658
+  __netdev_start_xmit include/linux/netdevice.h:5400
+  netdev_start_xmit include/linux/netdevice.h:5409
+  __dev_direct_xmit+0x4b6/0x730 net/core/dev.c:4942
+  __xsk_generic_xmit net/xdp/xsk.c:1079
+  xsk_generic_xmit+0x277a/0x40a0 net/xdp/xsk.c:1120
 
-[...]
+Reset the network header so skb_network_offset() is valid (0). Note this
+anchors it at the start of the frame (L2 for an ethernet device), which
+is the same convention AF_PACKET uses on TX. Unlike AF_PACKET, AF_XDP
+does not need to locate the real L2/L3 boundary or probe the transport
+header: an AF_XDP frame is always a complete, opaque L2 blob from
+userspace. AF_PACKET only cares about the boundary because it can cook an
+L2 header itself (SOCK_DGRAM) and supports GSO/checksum offload; none of
+that applies here, where the frame is sent as-is via __dev_direct_xmit().
+So resetting the network header is enough to restore the invariant and
+avoid the crash.
 
-> Is keeping the flags across a type change intended? If so, that seems wor=
-th
-> noting in the changelog. If not, should the type check be kept or should
-> bpf_program__set_type() clear the SEC-derived bits?
+Fixes: 3914d88f7608 ("xsk: Respect device's headroom and tailroom on generic xmit path")
+Reported-by: syzbot+f16c1b285c9f63994eec@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=f16c1b285c9f63994eec
+Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
+---
+V2
+Link: https://lore.kernel.org/all/20260826012052.51028-1-kerneljasonxing@gmail.com/
+1. add more clarification about why we don't probe the header like packet at
+the end of the commit message (Jakub)
+---
+ net/xdp/xsk.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Sure, will note this in the patch description.
-
-[...]
-
-> Should the in-tree user fix-ups land before (or be folded into) this comm=
-it
-> to avoid the bisection hazard? The usual kernel ordering is to fix the
-> users first so that no intermediate commit regresses.
-
-Sure, why not? Will reorder in the next version.
-
->> @@ -10099,6 +10106,7 @@ int bpf_program__clone(struct bpf_program *prog,=
- const struct bpf_prog_load_opts
->>  	.prog_type =3D BPF_PROG_TYPE_##ptype,				    \
->>  	.expected_attach_type =3D atype,					    \
->>  	.cookie =3D (long)(flags),					    \
->> +	.prog_setup_fn =3D libbpf_setup_prog_flags,			    \
->>  	.prog_prepare_load_fn =3D libbpf_prepare_load_fn,		    \
->>  	__VA_ARGS__							    \
->>  }
->
-> Does bpf_program__clone() lose the SEC()-derived flags whenever the caller
-> supplies a non-zero opts->prog_flags?
->
-> Before this patch, bpf_program__clone() got the SEC flags back from the
-> sec_def callback it invokes:
->
->     if (prog->sec_def && prog->sec_def->prog_prepare_load_fn)
->         err =3D prog->sec_def->prog_prepare_load_fn(prog, &attr,
->                                                    prog->sec_def->cookie);
->
-> which used to do opts->prog_flags |=3D BPF_F_SLEEPABLE / |=3D BPF_F_XDP_H=
-AS_FRAGS.
-> So even when the caller passed its own prog_flags, a SEC("fentry.s/...") =
-or
-> SEC("xdp.frags") program was still cloned with the right bit set.
->
-> After this patch libbpf_prepare_prog_load() no longer touches
-> opts->prog_flags, so this line in bpf_program__clone():
->
->     attr.prog_flags =3D OPTS_GET(opts, prog_flags, 0) ?: prog->prog_flags;
->
-> discards prog->prog_flags entirely as soon as the caller sets any flag of
-> its own. Cloning a sleepable program with, say, opts.prog_flags =3D
-> BPF_F_TEST_STATE_FREQ now loads it without BPF_F_SLEEPABLE, which
-> kernel/bpf/verifier.c:20602-20610 rejects for BPF_PROG_TYPE_SYSCALL and f=
-or
-> sleepable-only LSM/tracing attach points (-EINVAL).
->
-> No in-tree caller triggers this today: the only opts-passing caller,
-> process_prog() in tools/testing/selftests/bpf/veristat.c:1730-1737, leaves
-> opts.prog_flags at 0, and none of the follow-up commits in this series add
-> such a caller. Would it be safer to OR the caller's flags into
-> prog->prog_flags, or is the all-or-nothing fallback intended to let calle=
-rs
-> override SEC-derived flags explicitly?
-
-Yes, giving the caller control over the flags is the point of this
-patch, so this is expected.
-
--Toke
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 33475b180ea6..2077bb6299ca 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -947,6 +947,8 @@ static int xsk_skb_init_misc(struct sk_buff *skb, struct xdp_sock *xs,
+ {
+ 	int err;
+ 
++	skb_reset_network_header(skb);
++
+ 	err = xsk_skb_destructor_set_addr(skb, addr);
+ 	if (unlikely(err))
+ 		return err;
+-- 
+2.43.5
 
