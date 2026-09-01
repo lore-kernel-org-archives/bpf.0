@@ -1,167 +1,180 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC5E48BD35
-	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 17:45:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF390381E86;
+	Tue,  1 Sep 2026 17:55:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788284708; cv=none; b=iiRMm0xMJEf7YySQ5QvzOJSG1EJjiJHz+1yzzr7QBN+Zld/XIe52EszutG1v3J1mH1Py8Z3xs+74A6EQf0Hkrr7vPY0D9mT+3BLSunlmHF7+9cebXULZTVf4vQM7w2mi+9QmV+UEPZOLOaHZuOb8GXkLdPgB9eQucT8w+C27+5c=
+	t=1788285334; cv=none; b=Snx3QpmhCMm93u9AwchxJPTlt1TzA0jEYnCl1OUSiI/k5z9nrffLQHUwal6LX3MTBgFwZ4D8146vFKk1+TN69qH945kRaoN7MhvpP2b6zhFV5apQgwt3KiVdvsWNWm3jzvjphI1KqWM2h9NYFisqgZpUFOYXzFn5izDI1Pnb8fE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788284708; c=relaxed/simple;
-	bh=2RPguVjzX0PbmFhvrdRvikWG7cIhyIluUuL8QilRH4E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CHkuWWQ8/UZ4Ct+Ti0jH66/LBi/mMqDN8Sdq35Vm9OEZCXD8+pJDa+7byd/hvgRznXEBX2QpZh5wPZJ7Y97Vl2syYfY86wSHm3NcShcswdDuTU1+0wwxhSCgk+kLM9NRQK92WpT8SxSYILCD7JaXZWYcHkqO40eLH5FH8b4NBXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a53YAxPj; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788285334; c=relaxed/simple;
+	bh=YASXxzuwk3jc+RybNf3xt04Vg4coME2BmXX1HYU1q6Q=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=WEZ7iz35S0KkJUtCNZo6nHdzCgO81EAtfM2l0mrzE9ttp8tSpOyb1a28Gg5uFz0DOM0aPGbOPF6Lb5VsObDFce2x6kdSlaKbAZpmN+zR8+w/fhYMiJEfbTWkmwk7OrXp4e1ZWWxXktiW9DcmtMVcL6thKkvbZDPOqfCjDTQZULQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d0dYf45o; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a53YAxPj"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4957eefd361so373985e9.1
-        for <bpf@vger.kernel.org>; Tue, 01 Sep 2026 10:45:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788284705; x=1788889505; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=zjdVWaNDFXESZ/X0MaSoDgYCbBInkM3rLuyj2vU/t6c=;
-        b=a53YAxPjC7kXYMx/gb2mMR3sCRnfLh9ebUdboXLOiemoiXDbVMIF5NFsR6vDCdImV9
-         SEpUqLAuKyP/uEEuUztiAKVVjcsBapjQdxa+e80DtBL+It8ZLJZ+JG6bMtIaHw3xttUZ
-         nlE4nnc9h5wHg4uo8iTfNIIsUKPo+qGQEaysBc2Zg194EfEJyMlukfmjP5rHyn4dPhFd
-         YY1aEIW/dkoHqSmmf64nd24nez0qq4Ip54D9hbp70izdyzv/TKYJl5pXvtdXGrXrRrLk
-         nrIb05mbhKH22ao90mh2KnMbNlit4RZlCaLwjHmgvNqlksR9yQ4DleBXOP6lFgyXZj2Y
-         fXoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788284705; x=1788889505;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=zjdVWaNDFXESZ/X0MaSoDgYCbBInkM3rLuyj2vU/t6c=;
-        b=UpI6O7TIy31Vkp36VyFqHzBrpZOGAwba59xbwDwyiw5Ca1NMU4hsjWqCL2+bZmXU5K
-         IHxR25+ZNrYAzQkfybhcSehuAdxda/n6hZIcjKaLGzsb547AXezO1dSe7L73JOcbmidK
-         N+D/XXrwXukTQKZBXq3PslRIZ76N3gnjsqiOyYy3vP4lhH+4VSV5sElltIyWxTmaVKVQ
-         DLKA4ItXJNX5HzsqI/h/UXIjC/4vXAB3i5jQKxWZVaaxGj8RsBHcdABF5ZyP6ywMqjE9
-         yf05wvIkWFGvnmCqDzrJf0v4ByvnbZso+PDTpPa14HhmhyTttvRizIgwliWn0zFweENW
-         SkEA==
-X-Gm-Message-State: AFuF++nC1uBeg4EN87NzcNolcEvso874VizWu5VyXDBXve5yMmpJaPwK
-	Z8GJ3ukOrrd7Aprch9EcQ1NwXai9BovorVuUodNggjAJKqbvdoCGWGBf
-X-Gm-Gg: AR+sD12Y1Bq1j9bVy70a/+DXsWLZS/5MeRY44UStHkhnV5RT03UY2OjwEidLO+/CWOc
-	eSW0Npxmye4wPHZX+Ey3ZP/Hmcjj0qqcLWqvtLhsYjJk8xLRCHdFv4S0Ib25tE4Ul2j7DxCl80q
-	79NKiqpYLQzn1oy8BUA6rBoxUK/d944uuWULXIzCtWypgs5umynp0UCBDCXzQk0Jz/DJBJd/2ta
-	GA/ZMaeoU09sDimxmKcs+cW9sDh7D0ZdJYRsWQQaRSw+eyC4orVbWbWJOqPCkKJ8+dPlYXG4Vml
-	D+mdBSR9+XOHiwOPEfsAn4q9XkLO0X1TP5hEfXvap2tHuRehFJlcdrSrmmgxYRejMoq+QexEaB7
-	f39tw5lavPkU8egdQspVspZPnZ3Hxx98NXeGjvj7rUW8+JsrqZwp7EF/EX2seVHsoCOBPMRF1ge
-	Qej0BQz8TtkJQBrwgBfFEWp50S5Z+epL+j+0LyEgPpzTQ/0YI5esyFBvN9S/o0dly8Y8Dy
-X-Received: by 2002:a05:600c:5288:b0:499:84fe:5f3e with SMTP id 5b1f17b1804b1-49b91c41014mr638261545e9.9.1788284704384;
-        Tue, 01 Sep 2026 10:45:04 -0700 (PDT)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ce4776131sm3126445e9.11.2026.09.01.10.45.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2026 10:45:03 -0700 (PDT)
-Date: Tue, 1 Sep 2026 17:55:41 +0000
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Puranjay Mohan <puranjay@kernel.org>, rlmenge@gmail.com,
-	hargar@linux.microsoft.com, apais@microsoft.com
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Test terminal gotox
- instructions
-Message-ID: <apcRnSj7dVW1Dlsr@mail.gmail.com>
-References: <20260901170144.70453-1-sidchintamaneni@gmail.com>
- <20260901170144.70453-2-sidchintamaneni@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d0dYf45o"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15D541F00A3A;
+	Tue,  1 Sep 2026 17:55:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788285332;
+	bh=2bniolO/aINAsdJH6ksIVa7PNFaLmVjDb7J4V9QZpXc=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=d0dYf45oTHTgjyrPX7CotDknK6yg0X+J3G8RIoIqQaTRqGHQmq8qO6o/FEbovwqt3
+	 FCCVF/OnFlzYkdnNeCHkft0ybFmxiwPNfBFNNXOP1yeaUR3KKo/pVD6cEKVuykUKcX
+	 pyiD40RfJ1iutAQRyaBqs9KQyECMU9+ume6+m0LQxQeRE+k2ziiU7ERhJLLpPygrmY
+	 6ww4CcNOaDmUCBq8VXNI7C6tydA7odZWAodRKJhEin8tamr2qhOEX9yaDnStmcdhIs
+	 Lvgv6c4gMG6viyNAJ/xEaM0syWi2YK4vcLhd4WjRHtPobJfJI1T5+MqpasVuDn6sHD
+	 93bK4sIMYC88A==
+Content-Type: multipart/mixed; boundary="===============7559018127272805319=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260901170144.70453-2-sidchintamaneni@gmail.com>
+Message-Id: <658365121007638105983f9612ad2372e23f2df39580d90d72239813cf8fa104@mail.kernel.org>
+In-Reply-To: <20260901165757.801449-8-alan.maguire@oracle.com>
+References: <20260901165757.801449-8-alan.maguire@oracle.com>
+Subject: Re: [PATCH v2 bpf-next 07/18] selftests/bpf: BTF distill tests to ensure LOC[_PARAM|_PROTO] add to split BTF
+From: bot+bpf-ci@kernel.org
+To: alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org
+Cc: daniel@iogearbox.net,eddyz87@gmail.com,jolsa@kernel.org,ihor.solodrai@linux.dev,yonghong.song@linux.dev,song@kernel.org,qmo@kernel.org,martin.lau@linux.dev,memxor@gmail.com,emil@etsalapatis.com,mcgrof@kernel.org,petr.pavlu@suse.com,tj@kernel.org,kees@kernel.org,bpf@vger.kernel.org,nathan@kernel.org,nsc@kernel.org,arnd@arndb.de,puranjay@kernel.org,yatsenko@meta.com,atenart@kernel.org,ojeda@kernel.org,linux-modules@vger.kernel.org,alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue,  1 Sep 2026 17:55:31 +0000 (UTC)
 
-On 26/09/01 05:01PM, Siddharth Chintamaneni wrote:
-> Add tests that place gotox at the end of the main program and a
-> subprogram, with each jump-table target preceding the gotox instruction.
-> This tests gotox as a valid non-fallthrough terminal instruction.
-> 
-> Signed-off-by: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
-> ---
->  .../selftests/bpf/progs/verifier_gotox.c      | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_gotox.c b/tools/testing/selftests/bpf/progs/verifier_gotox.c
-> index 5b18c9a27717..cfb5b648891f 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_gotox.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_gotox.c
-> @@ -47,6 +47,48 @@ DEFINE_SIMPLE_JUMP_TABLE_PROG(reserved_field_src_reg,      BPF_REG_1, 0, 0, __fa
->  DEFINE_SIMPLE_JUMP_TABLE_PROG(reserved_field_non_zero_off, BPF_REG_0, 1, 0, __failure __msg("BPF_JA|BPF_X uses reserved fields"))
->  DEFINE_SIMPLE_JUMP_TABLE_PROG(reserved_field_non_zero_imm, BPF_REG_0, 0, 1, __failure __msg("BPF_JA|BPF_X uses reserved fields"))
->  
-> +#define DEFINE_TERMINAL_GOTOX_PROG(NAME, BASE)			\
-> +	__naked void NAME(void)					\
-> +	{							\
-> +	asm volatile ("						\
-> +	.pushsection .jumptables,\"\",@progbits;		\
-> +jt0_%=:							\
-> +	.quad ret0_%= - " BASE ";				\
-> +	.size jt0_%=, 8;					\
-> +	.global jt0_%=;						\
-> +	.popsection;						\
-> +								\
-> +	r0 = jt0_%= ll;						\
-> +	r0 = *(u64 *)(r0 + 0);					\
-> +	goto end_%=;						\
-> +ret0_%=:							\
-> +	r0 = 0;							\
-> +	exit;							\
-> +end_%=:							\
-> +	.8byte %[gotox_r0];					\
-> +"	:							\
-> +	: __imm_insn(gotox_r0, BPF_RAW_INSN(BPF_JMP | BPF_JA | BPF_X,	\
-> +					    BPF_REG_0, 0, 0, 0))	\
-> +	: __clobber_all);					\
-> +	}
-> +
-> +SEC("socket")
-> +__success __retval(0)
-> +DEFINE_TERMINAL_GOTOX_PROG(jump_table_terminal_gotox, "socket")
-> +
-> +static __noinline __used
-> +DEFINE_TERMINAL_GOTOX_PROG(terminal_gotox_subprog, ".text")
-> +
-> +SEC("socket")
-> +__success __retval(0)
-> +__naked void jump_table_terminal_gotox_subprog(void)
+--===============7559018127272805319==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_distill.c b/tools/testing/selftests/bpf/prog_tests/btf_distill.c
+> index fb67ae195a73..f433b29ffce9 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/btf_distill.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/btf_distill.c
+> @@ -671,6 +671,80 @@ static void test_distilled_base_embedded_err(void)
+>  	btf__free(btf1);
+>  }
+>
+> +/* LOC_PARAM, LOC_PROTO should be added to split BTF. */
+> +static void test_distilled_loc(void)
 > +{
-> +	asm volatile ("						\
-> +	call terminal_gotox_subprog;				\
+> +	struct btf *btf1 = NULL, *btf2 = NULL, *btf3 = NULL, *btf4 = NULL;
+> +
+> +	btf1 = btf__new_empty();
+> +	if (!ASSERT_OK_PTR(btf1, "empty_main_btf"))
+> +		return;
+> +
+> +	btf__add_int(btf1, "int", 4, BTF_INT_SIGNED);	/* [1] int */
+> +	btf__add_func_proto(btf1, 1);                   /* [2] int (*)(int); */
+> +	btf__add_func_param(btf1, "p1", 1);
+> +	btf__add_func(btf1, "foo", BTF_FUNC_STATIC, 2);	/* [3] int foo(int); */
+> +	btf__add_loc_param(btf1, 4, BTF_LOC_PARAM_SIGNED | BTF_LOC_PARAM_CONST);
+> +	btf__add_loc_param_value(btf1, -1);		/* [4] loc value */
+> +
+> +	VALIDATE_RAW_BTF(
+> +		btf1,
+> +		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
+> +		"[2] FUNC_PROTO '(anon)' ret_type_id=1 vlen=1\n"
+> +		"\t'p1' type_id=1",
+> +		"[3] FUNC 'foo' type_id=2 linkage=static",
+> +		"[4] LOC_PARAM '(anon)' size=4 flags=0x3 vlen=1\n"
+> +		"\tvalue=-1");
+> +
+> +	btf2 = btf__new_empty_split(btf1);
+> +	if (!ASSERT_OK_PTR(btf2, "empty_split_btf"))
+> +		goto cleanup;
+> +
+> +	btf__add_loc_proto(btf2);			/* [5] loc proto */
+> +	btf__add_loc_proto_param(btf2, 4);		/*  param value */
+> +
+> +	btf__add_locsec(btf2, ".locs");			/* [6] locsec */
+> +	btf__add_locsec_loc(btf2, 3, 5, 256);		/* "foo" offset 256 */
 
-I wonder if robot will reply the same as for v2.
+Does this test actually cover the LOC_PROTO relocation case? Looking at
+btf__distill_base() in tools/lib/bpf/btf.c, the LOC_PROTO here is created
+in the split BTF (btf2, id [5]), not in the base BTF.
 
-The suggestion was to do
+When btf_add_distilled_type_ids() runs, the only reference to that
+LOC_PROTO is the LOCSEC's loc_proto=5. Since split_start_id equals
+btf__type_cnt(btf1) which is 5, the condition:
 
-    call terminal_gotox_subprog1
-    call terminal_gotox_subprog2
+  if (*id >= dist->split_start_id)
+      continue;
 
-such that subprog1 is not the last piece of loaded prog...
+means id_map is only populated for ids 1 (INT), 2 (FUNC_PROTO), 3 (FUNC)
+and 4 (LOC_PARAM). The BTF_KIND_LOC_PROTO case in btf_add_distilled_types()
+is never reached.
 
-> +	exit;							\
-> +"	::: __clobber_all);
+The LOC_PROTO that appears in the expected btf4 dump is just the split
+type copied verbatim by the unconditional "First add all split types" loop,
+so it would be produced even if the LOC_PROTO handling in
+btf_add_distilled_types() were missing.
+
+The realistic case this series addresses is a module LOCSEC in split BTF
+referring to a LOC_PROTO that dedup mapped into the vmlinux base BTF.
+Wouldn't putting the LOC_PROTO (and its LOC_PARAM) in btf1 and only the
+LOCSEC in btf2 test that scenario?
+
+> +	VALIDATE_RAW_BTF(
+> +		btf2,
+> +		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
+> +		"[2] FUNC_PROTO '(anon)' ret_type_id=1 vlen=1\n"
+> +		"\t'p1' type_id=1",
+> +		"[3] FUNC 'foo' type_id=2 linkage=static",
+> +		"[4] LOC_PARAM '(anon)' size=4 flags=0x3 vlen=1\n"
+> +		"\tvalue=-1",
+> +		"[5] LOC_PROTO '(anon)' vlen=1\n"
+> +		"\ttype_id=4",
+> +		"[6] LOCSEC '.locs' vlen=1\n"
+> +		"\tfunc_type_id=3 loc_proto_type_id=5 offset=256");
+> +
+> +	if (!ASSERT_EQ(0, btf__distill_base(btf2, &btf3, &btf4),
+> +		       "distilled_base") ||
+> +	    !ASSERT_OK_PTR(btf3, "distilled_base") ||
+> +	    !ASSERT_OK_PTR(btf4, "distilled_split") ||
+> +	    !ASSERT_EQ(2, btf__type_cnt(btf3), "distilled_base_type_cnt"))
+> +		goto cleanup;
+> +
+> +	VALIDATE_RAW_BTF(
+> +		btf4,
+> +		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
+> +		/* remainder is split BTF */
+> +		"[2] LOC_PROTO '(anon)' vlen=1\n"
+> +		"\ttype_id=6",
+> +		"[3] LOCSEC '.locs' vlen=1\n"
+> +		"\tfunc_type_id=5 loc_proto_type_id=2 offset=256",
+> +		"[4] FUNC_PROTO '(anon)' ret_type_id=1 vlen=1\n"
+> +		"\t'p1' type_id=1",
+> +		"[5] FUNC 'foo' type_id=4 linkage=static",
+> +		"[6] LOC_PARAM '(anon)' size=4 flags=0x3 vlen=1\n"
+> +		"\tvalue=-1");
+
+Also, six of the eight sibling tests in this file finish with a
+btf__relocate() step plus a re-validation. Should this test similarly
+round-trip the id fixups through relocation?
+
+> +cleanup:
+> +	btf__free(btf4);
+> +	btf__free(btf3);
+> +	btf__free(btf2);
+> +	btf__free(btf1);
 > +}
 > +
->  /*
->   * Gotox is forbidden when there is no jump table loaded
->   * which points to the sub-function where the gotox is used
-> -- 
-> 2.43.0
-> 
+>  void test_btf_distill(void)
+>  {
+>  	if (test__start_subtest("distilled_base"))
+> @@ -689,4 +763,6 @@ void test_btf_distill(void)
+>  		test_distilled_base_vmlinux();
+>  	if (test__start_subtest("distilled_endianness"))
+>  		test_distilled_endianness();
+> +	if (test__start_subtest("distilled_loc"))
+> +		test_distilled_loc();
+>  }
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33537080133
+--===============7559018127272805319==--
