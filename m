@@ -1,138 +1,176 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013060.outbound.protection.outlook.com [40.107.201.60])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AE943AFCFF;
-	Tue,  1 Sep 2026 07:02:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788246165; cv=none; b=bppFkW/1Mz/SD91fxJk8t6u18MLWUeOM0cizHaehuxL+KnbrIm0PXpyzs4VuyxKx9pWHtjcZ81DCNecM2RUZtg3Efc1Rbjz/UK/DnePo+mPtTrw/txTLZC0t5sH3Tm2YhqhEi5PjNC7FBoYlx6ZCfoFhGaVoN9gIr5ZTHbdM/oo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788246165; c=relaxed/simple;
-	bh=qJJBDCacdUAZFU2Dcce9ybJITAteO7mvwnJeT8NKy/o=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=uhXUm2Xgkcowlpdp3iBuFJmGpiUK64g4NpDNNsADyjoLkMM28O6pgtVuFbhPB70z/jGrLr5IAEuWGa4eqN3iltmsJyFv7ABRgE1cD2fA35Y436/NFEHIepwDyaFm144Ms/2cGPPWV6jS3DFIK+hB5aCMk64h6T+ptbATHygOOEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=MzwJhCAX; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 406C845D1A8;
+	Tue,  1 Sep 2026 07:26:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.60
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788247581; cv=fail; b=tMRLILeqyHh+uMau7hlohts86e4cx6iBdqV+X/pEyb+LXN1pfp0YHYTCHG4WRvpkCsC4D40KGOXd25ffieO0sEWi1HaSD4lkiAFalPoWtsZTjxJA+JNrwUrzKlbCJ7lfCwvRZki+1s+dP7dAp3J2SBqqe1+ETRbufUYxdrY5xqg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788247581; c=relaxed/simple;
+	bh=NOnK3M+Iy1e4zyql5BkHhV7ho+98Ux4ToPeogJVxbC0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=usUnCyIqPVlp7pBpWLG7e3pT8kk9p1owlOw4d/HLJ70o3dT2gzKPxv/v/NOpHOFfIakYZmFpqDyIPZK54lLgRtbh3YxO5/bRgGGBKcJw3jymySsu9RpUsl1wGweJcVD1nSVcdZ29pfGbKx0zXK9pcie/purodFBTsJcTZUXF+dU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=nTwmVr7p; arc=fail smtp.client-ip=40.107.201.60
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="MzwJhCAX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=qJJBDCacdUAZFU2Dcce9ybJITAteO7mvwnJeT8NKy/o=; b=M
-	zwJhCAXjpGUn4yzBlkBP36h9xzkyNU/RyD66czEZfjwdEKgCE0BWYXKcVjjw/y/W
-	senlcza3CREUuSvol4rUlN3R1sv0w1rHJxt/MImk29QD4wwuxG99+iueAAbfMaYi
-	OVqohofuCmTLU6LcI51mqmh1gAenLh8wqX/jA0hlH8=
-Received: from chenyuan_fl$163.com ( [116.128.244.171] ) by
- ajax-webmail-wmsvr-40-109 (Coremail) ; Tue, 1 Sep 2026 15:01:39 +0800 (CST)
-Date: Tue, 1 Sep 2026 15:01:39 +0800 (CST)
-From: chenyuan  <chenyuan_fl@163.com>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-	"Alexei Starovoitov" <ast@kernel.org>,
-	"Daniel Borkmann" <daniel@iogearbox.net>,
-	"Andrii Nakryiko" <andrii@kernel.org>,
-	"Eduard Zingerman" <eddyz87@gmail.com>,
-	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
-	"Martin KaFai Lau" <martin.lau@linux.dev>,
-	"Song Liu" <song@kernel.org>,
-	"Yonghong Song" <yonghong.song@linux.dev>,
-	"Jiri Olsa" <jolsa@kernel.org>,
-	"Emil Tsalapatis" <emil@etsalapatis.com>,
-	"Ihor Solodrai" <ihor.solodrai@linux.dev>,
-	"Yuan Chen" <chenyuan@kylinos.cn>
-Subject: Re:Re: [PATCH bpf-next v4 2/3] bpf, arena: fix range_tree_set
- inconsistency on kmalloc_nolock failure
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
- 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
-In-Reply-To: <CAADnVQKPSWBzaEc7QBT39C_N_32Gu5_P5Cob9G0rxcDgiSQg6g@mail.gmail.com>
-References: <20260824134016.2006188-1-chenyuan_fl@163.com>
- <20260824134016.2006188-3-chenyuan_fl@163.com>
- <CAADnVQKPSWBzaEc7QBT39C_N_32Gu5_P5Cob9G0rxcDgiSQg6g@mail.gmail.com>
-X-NTES-SC: AL_Qu2TCv6fuUgi7yKQZOkcnEsah+8/XMC0vvsm1YdRc+IEgR/pyjw7Xn19IXTk2eWJMAOIsAiJUBZp6MlkZK9Z5KQ90QDX0kXcxaO5edhMFw==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="nTwmVr7p"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=pO2RPrPIy7ILdweHPu9uJtlhj0g+5ubs7a19G5n/fRPzRCsAe0id8SGmrCap/rxixtes+8mgh+MWzi5s1k5HVbQ219ewXw5p2z70fQwl753vf0dIU1dVeceT0eLBh49/SHVW4uySyTCLvgW7mkFuYwg0EFRIaU6iLTuD95Lld7HOMSvTxQajYRqs3SIyZB9OP9yHaWRBNx+HDRneDE06MwAB77RfFNWb7w+Q4uQLPR6SmyM6XDeA7S8+pl0GA7jAwvol16cxYKYO66OgLd+lWBAmup1wB5Ir3V7UffvZyOiktOwb/rn8YIITNR+RwTRyT4jJHitVLNIcPaf2jNlRxw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Jd/9LaxDKAn5uxug7kqxMcr9cItQ1AI1hhuWqoy2icw=;
+ b=h1OY1z6SgRovrTP39GxlVttF1m9zOk//NOeYleiNbHQKrYEvPs2MhrS4zRzFTDXF/uxl1VkGSVXysS7hkONoQALsZqv+VjnUaFjqUg8C33uiPQ42EPPirQqn9VtSbH4upOOStraUxGbl2N5UuoD7xqG8S0s7A71A4OW0xS6geRXlqaw5sZdIl/cFzwU/0WH/p5UPhoGORRBSsbR4uSzjyQZYFFVRuPaqsqru8bxRR5vBVhnxqAq3PNcxz5OCoVC39q6lgYmmneYxH0K1q4AUx7WrEm1niCj3ZomfMNfSkiYRj3RoLeCAh4A6yaz9k3HKIkwAZ+VLMED2UnSjARFUqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Jd/9LaxDKAn5uxug7kqxMcr9cItQ1AI1hhuWqoy2icw=;
+ b=nTwmVr7pfN9jKzJK8aSyQVzy1oDgkh3V1MXT+ZZpXXT9tSIX8knKhK9U6RrysWhuJY1VCMdztOTx4ceZGGNaeY4pRXbm9f4rgy/ylcOKmCsAPAQzsFnQ0AXrdcnnYTlyjslObO8900oMnO/eClK/8rXOxqL1Ixt+JoMhzzRi2XlD/fa8evAKcFlnteRpsV4rxuipsr49uoofsz7CD7VmDG2oNBlwm8ye2gPGLg7tDY3r/qxKhnCbhFBTH5OEesqXMwZC2+cDcdUHOvAH+WoLEd4RNyn0lB1WPsL8XYnotVauXYpIedh6xsS5+mWj26D6DVIUfNIFUFN6KoE2PMxY4w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM6PR12MB4827.namprd12.prod.outlook.com (2603:10b6:5:1d6::14)
+ by SJ2PR12MB8739.namprd12.prod.outlook.com (2603:10b6:a03:549::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.9; Tue, 1 Sep 2026
+ 07:26:12 +0000
+Received: from DM6PR12MB4827.namprd12.prod.outlook.com
+ ([fe80::6261:3040:864b:159c]) by DM6PR12MB4827.namprd12.prod.outlook.com
+ ([fe80::6261:3040:864b:159c%5]) with mapi id 15.21.0360.008; Tue, 1 Sep 2026
+ 07:26:11 +0000
+Date: Tue, 1 Sep 2026 09:25:59 +0200
+From: Andrea Righi <arighi@nvidia.com>
+To: Tao Cui <cui.tao@linux.dev>
+Cc: tj@kernel.org, void@manifault.com, changwoo@igalia.com,
+	michalblk@google.com, sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	Tao Cui <cuitao@kylinos.cn>
+Subject: Re: [PATCH] sched_ext: don't deliver duplicate ops.cgroup_set_idle()
+ for same value
+Message-ID: <apZ-B__OiVcZW46Z@gpd4>
+References: <20260901031101.731943-1-cui.tao@linux.dev>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260901031101.731943-1-cui.tao@linux.dev>
+X-ClientProxiedBy: MI3PEPF00004E9C.ITAP293.PROD.OUTLOOK.COM
+ (2603:10a6:298:1::458) To DM6PR12MB4827.namprd12.prod.outlook.com
+ (2603:10b6:5:1d6::14)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <704850b0.58d3.1a05bc6055a.Coremail.chenyuan_fl@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:bSgvCgD3_0tUeJZq2Ps8AA--.7543W
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5hRzMWqWeFT+fQAA3j
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4827:EE_|SJ2PR12MB8739:EE_
+X-MS-Office365-Filtering-Correlation-Id: 83c5308c-bdf7-4dda-9aa7-08df07fa4c61
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|376014|366016|1800799024|6133799003|10067099003|11063799006|5023799004|22082099003|18002099003|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	y3OpbovqfUEx4EolwsMsulPiEtQNE525Yfkh5mK58NGBoOAjMMoKD7vfFeHssLzWLgiOG850AB4YyFj7zXtjjlqW04RjrBbEQm+0Lzq8Y7efMeRfOp2q8eueY7l5KW43b++3WGEfuTUUKidr6tFMur4ocyuaKQI64HMZr5N9Xk9Sx/yqV8fjK3fbE1WWnQ7XUo7p1CZ93isONwXJYiTlr55+RJeRX70EFbcsHlWjqS62ldn0PqRWl943ftEM/E8suheFgYmEAcRjawYfMj6DMXZ5pT9Hu5mE7qbOtNU42wFXBQ8nBZyExI/uxbm4WNg4+6EyLnX5icwH9iyzB8sBtLRR9gbscE9x4RcS58KkXavBsfXABHBVOxPMW4NfusuwTbMJcjBntdv19CR72s6lLbsj7wohB7LGUkRuBf/HfbUwwhT80ABgWp7iuGjsFyaHEsTU5wYr4F7v5EdvxYXBielLmF/RjKcljMWAwCzQTx3A2z+CllGh83SlU5FuBy0DhfNyUWHqfZgJvI/NVV8Uz5JxYWIC3LZBu2jJwlnRjL7Cp1U8SxTVUJi2/6JdhtoVvPOSqvpgHjIY87noZt4x6ige1If9KfF19Hz66cBCXRmkaxFMr8UJE6G3PiipOj+a4K3807RrMqkEYWdEJlFUydaXu+NPi9eHzGkYGJya9Kk=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4827.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(366016)(1800799024)(6133799003)(10067099003)(11063799006)(5023799004)(22082099003)(18002099003)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?obeUsOTYfOqAt5CVTNDszIqTiGPklYIAifG9Zo+5U0jMMKBabkNtd/3ejbt6?=
+ =?us-ascii?Q?Hhso2MR9rZK+DHIL82QcB/ImS83RLy91F6ahaWrBV8jixmcQAmiGcsTzkmjO?=
+ =?us-ascii?Q?nh8lCx1KhARcMGOSkyvGb8pkkXd5lvx4+8Fc95JZfxXBT7+bMmGcCUME9MCo?=
+ =?us-ascii?Q?kpO7w/rkmzC3qU9+37qw+NvmPFIG4UH4SnC2aMgFeGCM03V+NHTgGs7+uti7?=
+ =?us-ascii?Q?lwf//b8lImCGwU89McR5aokD/C2p5phLWPiOJhzuTp7ueg9cl8WJk2+bD9vo?=
+ =?us-ascii?Q?YpfK988ltuQRhiaET8UiDonpqyIxI46n8ptGAihcQUc8gbq/7RcRSJAkqpmZ?=
+ =?us-ascii?Q?4xADcyJNekm2EczORBCqx6AiIW4khkUy2BWo94onp4S/Zm0+wk8qgYK/Tipf?=
+ =?us-ascii?Q?CA+mbWMEEtIhp4KjIUCS7ivygTJYnB4CC4idX2sSV0K6aJt+5AivMcpWPBDq?=
+ =?us-ascii?Q?bE6Fnwlvq/ZDcIdiYufH497Rclf+kqRQkpod71RZuunQoxpOOfDcdN+2p/Hn?=
+ =?us-ascii?Q?6RH5DEBLvL5EpjgnJIiTQp9Xdi5PJ0uUx9irS33H77StetNfCjI25L9BYXVD?=
+ =?us-ascii?Q?WeWED7FwiKTPPH1BkFNgCDqn09jaiV5OfNOOkci5NK27kN/WEcdSmoHXuvrr?=
+ =?us-ascii?Q?icNIJdooAFAorm100xP194wD3VtGj8eDyM9Qu5GqoagjAxFwo586FpVvNnQm?=
+ =?us-ascii?Q?8dnuaaEcUcMTUprM4DYy45GpjrIGk75OGlGacunibOlx2vsg1tnafc++bNoq?=
+ =?us-ascii?Q?lC/ZUVUjfeNr8JFHm4G83eT9x0P+cjPV2GadLGj5ESzGtzqJFf8br40/VpAC?=
+ =?us-ascii?Q?r19ArYI8h9U/Fwnkl95PecVGjg9WIuRO5BpLOUEGp5m/ZnPcqqiCu1RlxrgG?=
+ =?us-ascii?Q?YClIFrERp1owSDOrsJ8Qa1Fk065V3G5RfNm7ewiQEPipYjK1NSwcMk+7q43X?=
+ =?us-ascii?Q?1iF0n8clWR+EQJzoDTDZgz6nbNt4MAdKX3DSo+0tRAW++fw+Yhs/oyJ9GAqH?=
+ =?us-ascii?Q?ij6tbZzfNAi/1XWeJhFU5sO9Ye9PtpXwhDDz5am2EAjmU5B3EToUXt8LfNVV?=
+ =?us-ascii?Q?0TTtOzgp/GyL/Jghptx2eOfgIXhAVSaJvAK5264dFj3/n05BlBQT1KXHI7bu?=
+ =?us-ascii?Q?ywXNLCJthY3gwVR7dOo1f572XSmGRaQxzxRBXY/eYwxo635TjWh/W4Uuh79I?=
+ =?us-ascii?Q?0b/u04rz0eDLdfuC346GVbFKntkbylng1fZ//scx/3s3kt51a89LptUR5IlX?=
+ =?us-ascii?Q?h49M7LVitO+RjkFpWEcJbFd39zzo6rYBhCJkQoRvqkpZQ+Q7SEyLuyO8/GCg?=
+ =?us-ascii?Q?So5E7sjG9lhvy0HC6+pkGaQjiMS6t9TLs6Bdq0U+690vM6U0KE0CBzhkhsj3?=
+ =?us-ascii?Q?oNvNtedOhoMqY93iX1wTBM1iTiyVLybIHCQFmd3IZ9ThBSikX1f4rj291r95?=
+ =?us-ascii?Q?oamO38h3cYcN/IfkU+IiHTm/mAUqp6ZsaiJljyosSm03d0r+wzdx9FocY5D5?=
+ =?us-ascii?Q?QXi18FsAAA/X1KEZjxtiBUG8wWgiDVnvRXdpdJYv3TbTrfBD8368QmuUJhlG?=
+ =?us-ascii?Q?7QnPXQJ0J85L97z0iwiSFiY1c9/9la7BKkBFyXDkwdfj9CsOdKZu03bXpvJ3?=
+ =?us-ascii?Q?lt7GCZdkbzQwSbKHw84NKJ43Y6PRfddonUT9YmOLLoCfmW2DPRFM9KCESIV/?=
+ =?us-ascii?Q?BjSbzQQlqFJ4MDrNRekU5g2SRxqY3FC6qg3n2Vi+bmZ3sVujHSbdjrjIFd+Q?=
+ =?us-ascii?Q?n2+qimP+OQ=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 83c5308c-bdf7-4dda-9aa7-08df07fa4c61
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4827.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2026 07:26:11.6518
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SQHxPrtIU/W8lQqKfyBt7kL2frHzwSDN512qCwtPSOtcmjMHW5k9nuRN9RjgChFxFHZUiLtYz+HIt1un7eZcug==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8739
 
-ClRoZSB0d28gbG9va3VwcyBhbnN3ZXIgZGlmZmVyZW50IHF1ZXN0aW9ucywgc28gdGhlIHNlY29u
-ZCBvbmUgaXMKbm90IHJlZHVuZGFudDoKCi0gVGhlIHByZS1jbGVhciBsb29rdXAgb25seSBjb25z
-dW1lcyB0aGUgYm9vbGVhbiByZXN1bHQuICBOb2RlcyBhcmUKICBkaXNqb2ludCwgYW5kIGEgbm9k
-ZSBjb3ZlcmluZyBib3RoIHN0YXJ0IC0gMSBhbmQgbGFzdCArIDEgd291bGQKICBmdWxseSBjb3Zl
-ciBbc3RhcnQsIGxhc3RdLCB3aGljaCBpcyByZWplY3RlZCBieSB0aGUgZWFybHkgcmV0dXJuCiAg
-YWJvdmUuICBIZW5jZSByYW5nZV90cmVlX2NsZWFyKCkgY2FuIG9ubHkgcmVtb3ZlIG9yIHRydW5j
-YXRlIG5vZGVzCiAgb3ZlcmxhcHBpbmcgW3N0YXJ0LCBsYXN0XTogYSBub2RlIGNvdmVyaW5nIHN0
-YXJ0IC0gMSBlaXRoZXIgZW5kcwogIHRoZXJlICh1bnRvdWNoZWQpIG9yIHN0cmFkZGxlcyBzdGFy
-dCBhbmQgaXMgdHJ1bmNhdGVkIHRvCiAgW3JuX3N0YXJ0LCBzdGFydCAtIDFdLiAgQWRqYWNlbmN5
-IG9uIGVpdGhlciBzaWRlIGlzIHRoZXJlZm9yZQogIGludmFyaWFudCBhY3Jvc3MgdGhlIGNsZWFy
-LCBhbmQgIm5vIGFkamFjZW50IG5vZGUgb24gZWl0aGVyIHNpZGUiCiAgYmVmb3JlIHRoZSBjbGVh
-ciBpcyBleGFjdGx5IHRoZSBjb25kaXRpb24gZm9yIHRoZSBlbHNlLWJyYW5jaCAtLQogIHRoZSBv
-bmx5IGNhc2UgbmVlZGluZyBhIGZyZXNoIG5vZGUuICBJdCBtdXN0IGJlIGV2YWx1YXRlZCBiZWZv
-cmUKICBhbnkgdHJlZSBtb2RpZmljYXRpb24gdG8ga2VlcCB0aGUgLUVOT01FTSBwYXRoIHNpZGUt
-ZWZmZWN0IGZyZWUuCgotIFRoZSBwb3N0LWNsZWFyIGxvb2t1cCBmZXRjaGVzIHRoZSBub2RlIGhh
-bmRsZXMgdXNlZCBieSB0aGUKICBtZXJnZS9leHRlbmQgYnJhbmNoZXMuICBUaGUgcHJlLWNsZWFy
-IGhhbmRsZXMgY2Fubm90IGJlIHJldXNlZDoKICBhbiBhZGphY2VudCBub2RlIG1heSBzdHJhZGRs
-ZSB0aGUgcmFuZ2UgYW5kIGdldCB0cnVuY2F0ZWQgKGUuZy4KICBbc3RhcnQgLSAxLCBzdGFydCAr
-IDNdIGJlY29tZXMgW3N0YXJ0IC0gMSwgc3RhcnQgLSAxXSksIHNvIGJvdGgKICBpdHMgYm91bmRz
-IGFuZCBpdHMgcG9zaXRpb24gaW4gdGhlIHRyZWUgY2hhbmdlLiAgUmUtbG9va2luZyBpdCB1cAog
-IGtlZXBzIHJhbmdlX3RyZWVfc2V0KCkgaW5kZXBlbmRlbnQgb2YgaG93IHJhbmdlX3RyZWVfY2xl
-YXIoKQogIGltcGxlbWVudHMgdHJ1bmNhdGlvbiwgYW5kIGxlYXZlcyB0aGUgLUVGQVVMVCBjaGVj
-a3MgYmVsb3cgYXMgYQogIHNhbml0eSBjaGVjayBvZiB0aGUgY2xlYXIgaXRzZWxmLgogClRoZSBj
-b21tZW50IGluZGVlZCBmYWlscyB0byBzcGVsbCB0aGlzIG91dCAoYW5kICJhZGphY2VudCBmcmVl
-CnJhbmdlIiBpcyBiYWNrd2FyZHMpOyBJJ2xsIHJld29yZCBpdCBpbiB2NS4KCgpBdCAyMDI2LTA4
-LTI3IDEwOjU2OjA0LCAiQWxleGVpIFN0YXJvdm9pdG92IiA8YWxleGVpLnN0YXJvdm9pdG92QGdt
-YWlsLmNvbT4gd3JvdGU6Cj5PbiBNb24sIEF1ZyAyNCwgMjAyNiBhdCA2OjQw4oCvQU0gPGNoZW55
-dWFuX2ZsQDE2My5jb20+IHdyb3RlOgo+Pgo+PiBGcm9tOiBZdWFuIENoZW4gPGNoZW55dWFuQGt5
-bGlub3MuY24+Cj4+Cj4+IHJhbmdlX3RyZWVfc2V0KCkgcHJlLWFsbG9jYXRlcyB0aGUgbm9kZSBu
-ZWVkZWQgZm9yIGEgYnJhbmQtbmV3IHJhbmdlCj4+IGJlZm9yZSBjYWxsaW5nIHJhbmdlX3RyZWVf
-Y2xlYXIoKSwgc28gYW4gYWxsb2NhdGlvbiBmYWlsdXJlIHJldHVybnMKPj4gLUVOT01FTSB3aXRo
-b3V0IGhhdmluZyBtb2RpZmllZCB0aGUgdHJlZSAocHJldmlvdXNseSB0aGUgb3ZlcmxhcHBpbmcK
-Pj4gbm9kZXMgd2VyZSBhbHJlYWR5IHJlbW92ZWQgYnkgcmFuZ2VfdHJlZV9jbGVhcigpIGJlZm9y
-ZSB0aGUgYWxsb2NhdGlvbgo+PiB3YXMgYXR0ZW1wdGVkLCBwZXJtYW5lbnRseSBsb3NpbmcgdGhl
-IGNsZWFyZWQgc3ViLXJhbmdlcykuCj4+Cj4+IFNpZ25lZC1vZmYtYnk6IFl1YW4gQ2hlbiA8Y2hl
-bnl1YW5Aa3lsaW5vcy5jbj4KPj4gLS0tCj4+ICBrZXJuZWwvYnBmL3JhbmdlX3RyZWUuYyB8IDQ1
-ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKystLS0tLS0tLS0tCj4+ICAxIGZpbGUgY2hh
-bmdlZCwgMzQgaW5zZXJ0aW9ucygrKSwgMTEgZGVsZXRpb25zKC0pCj4+Cj4+IGRpZmYgLS1naXQg
-YS9rZXJuZWwvYnBmL3JhbmdlX3RyZWUuYyBiL2tlcm5lbC9icGYvcmFuZ2VfdHJlZS5jCj4+IGlu
-ZGV4IDE1YjU4ODM3N2E3Ni4uNTQwNTViMWZlNTQxIDEwMDY0NAo+PiAtLS0gYS9rZXJuZWwvYnBm
-L3JhbmdlX3RyZWUuYwo+PiArKysgYi9rZXJuZWwvYnBmL3JhbmdlX3RyZWUuYwo+PiBAQCAtMTk5
-LDYgKzE5OSw3IEBAIGludCBpc19yYW5nZV90cmVlX3NldChzdHJ1Y3QgcmFuZ2VfdHJlZSAqcnQs
-IHUzMiBzdGFydCwgdTMyIGxlbikKPj4gIGludCByYW5nZV90cmVlX3NldChzdHJ1Y3QgcmFuZ2Vf
-dHJlZSAqcnQsIHUzMiBzdGFydCwgdTMyIGxlbikKPj4gIHsKPj4gICAgICAgICB1MzIgbGFzdCA9
-IHN0YXJ0ICsgbGVuIC0gMTsKPj4gKyAgICAgICBzdHJ1Y3QgcmFuZ2Vfbm9kZSAqbmV3X3JuID0g
-TlVMTDsKPj4gICAgICAgICBzdHJ1Y3QgcmFuZ2Vfbm9kZSAqcmlnaHQ7Cj4+ICAgICAgICAgc3Ry
-dWN0IHJhbmdlX25vZGUgKmxlZnQ7Cj4+ICAgICAgICAgaW50IGVycjsKPj4gQEAgLTIwOCwyMCAr
-MjA5LDQwIEBAIGludCByYW5nZV90cmVlX3NldChzdHJ1Y3QgcmFuZ2VfdHJlZSAqcnQsIHUzMiBz
-dGFydCwgdTMyIGxlbikKPj4gICAgICAgICBpZiAobGVmdCAmJiBsZWZ0LT5ybl9zdGFydCA8PSBz
-dGFydCAmJiBsZWZ0LT5ybl9sYXN0ID49IGxhc3QpCj4+ICAgICAgICAgICAgICAgICByZXR1cm4g
-MDsKPj4KPj4gKyAgICAgICAvKgo+PiArICAgICAgICAqIEEgbmV3IG5vZGUgaXMgbmVlZGVkIG9u
-bHkgd2hlbiB0aGUgcmFuZ2UgaGFzIG5vIGFkamFjZW50IGZyZWUKPj4gKyAgICAgICAgKiByYW5n
-ZSBvbiBlaXRoZXIgc2lkZS4gIFRoaXMgaXMga25vd24gYmVmb3JlIGNsZWFyaW5nOiBhbnkgcmFu
-Z2UKPj4gKyAgICAgICAgKiBjb3ZlcmluZyBzdGFydCAtIDEgb3IgbGFzdCArIDEgc3Vydml2ZXMg
-dGhlIGNsZWFyIGFzIGFuIGFkamFjZW50Cj4+ICsgICAgICAgICogcGllY2UuCj4KPklmIHRoaXMg
-aXMgdHJ1ZSwgd2h5IGRvIGEgMm5kIGNhbGwgdG8gbGVmdCA9IHJhbmdlX2l0X2l0ZXJfZmlyc3Qo
-KSA/Cj4KPgo+PiAgQWxsb2NhdGUgb25seSBpbiB0aGF0IGNhc2UsIGJlZm9yZSBtb2RpZnlpbmcg
-dGhlIHRyZWUsIHNvCj4+ICsgICAgICAgICogYSBmYWlsdXJlIGxlYXZlcyB0aGUgcmFuZ2UgdHJl
-ZSB1bm1vZGlmaWVkCj4+ICsgICAgICAgICovCj4+ICsgICAgICAgbGVmdCA9IHJhbmdlX2l0X2l0
-ZXJfZmlyc3QocnQsIHN0YXJ0IC0gMSwgc3RhcnQgLSAxKTsKPj4gKyAgICAgICByaWdodCA9IHJh
-bmdlX2l0X2l0ZXJfZmlyc3QocnQsIGxhc3QgKyAxLCBsYXN0ICsgMSk7Cj4+ICsgICAgICAgaWYg
-KCFsZWZ0ICYmICFyaWdodCkgewo+PiArICAgICAgICAgICAgICAgbmV3X3JuID0ga21hbGxvY19u
-b2xvY2soc2l6ZW9mKHN0cnVjdCByYW5nZV9ub2RlKSwKPj4gKyAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgIF9fR0ZQX0FDQ09VTlQsIE5VTUFfTk9fTk9ERSk7Cj4+ICsgICAg
-ICAgICAgICAgICBpZiAoIW5ld19ybikKPj4gKyAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJu
-IC1FTk9NRU07Cj4+ICsgICAgICAgfQo+PiArCj4+ICAgICAgICAgLyogQ2xlYXIgb3V0IGV2ZXJ5
-dGhpbmcgaW4gdGhlIHJhbmdlIHdlIHdhbnQgdG8gc2V0LiAqLwo+PiAgICAgICAgIGVyciA9IHJh
-bmdlX3RyZWVfY2xlYXIocnQsIHN0YXJ0LCBsZW4pOwo+PiAgICAgICAgIGlmIChlcnIpCj4+IC0g
-ICAgICAgICAgICAgICByZXR1cm4gZXJyOwo+PiArICAgICAgICAgICAgICAgZ290byBvdXRfZnJl
-ZV9uZXc7Cj4+Cj4+ICAgICAgICAgLyogRG8gd2UgaGF2ZSBhIGxlZnQtYWRqYWNlbnQgcmFuZ2Ug
-PyAqLwo+PiAgICAgICAgIGxlZnQgPSByYW5nZV9pdF9pdGVyX2ZpcnN0KHJ0LCBzdGFydCAtIDEs
-IHN0YXJ0IC0gMSk7Cj4KPnB3LWJvdDogY3IK
+Hi Tao,
+
+On Tue, Sep 01, 2026 at 11:11:01AM +0800, Tao Cui wrote:
+> From: Tao Cui <cuitao@kylinos.cn>
+> 
+> ops.cgroup_set_idle() is documented to be invoked when a cgroup
+> transitions between idle and non-idle states, and scx_group_set_weight()
+> already skips value-preserving writes. scx_group_set_idle() delivers
+> every write unconditionally, so rewriting an already-correct cpu.idle
+> value feeds the BPF scheduler a transition callback each time, which
+> toggle- or accounting-based schedulers miscount. Mirror the weight
+> guard and only deliver on an actual change.
+> 
+> Verified with a probe scheduler printing each callback: rewriting
+> cpu.idle=1 twice on an already-idle cgroup delivered two callbacks
+> before and none after.
+> 
+> Fixes: 347ed2d566da ("sched/ext: Implement cgroup_set_idle() callback")
+> Link: https://lore.kernel.org/r/b53c61a1-4d7d-4232-941f-d48b0563d4ed
+
+This link seems broken, I think the right one is:
+
+Link: https://lore.kernel.org/r/b53c61a1-4d7d-4232-941f-d48b0563d4ed@linux.dev
+
+> Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+
+Other than that looks good to me.
+
+Reviewed-by: Andrea Righi <arighi@nvidia.com>
+
+Thanks,
+-Andrea
+
+> ---
+>  kernel/sched/ext/ext.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
+> index 8041c87a3562..8b3625107b72 100644
+> --- a/kernel/sched/ext/ext.c
+> +++ b/kernel/sched/ext/ext.c
+> @@ -4933,7 +4933,8 @@ void scx_group_set_idle(struct task_group *tg, bool idle)
+>  	percpu_down_read(&scx_cgroup_ops_rwsem);
+>  	sch = scx_tg_knob_sched(tg);
+>  
+> -	if (scx_cgroup_enabled && sch && SCX_HAS_OP(sch, cgroup_set_idle))
+> +	if (scx_cgroup_enabled && sch && SCX_HAS_OP(sch, cgroup_set_idle) &&
+> +	    tg->scx.sched_idle != idle)
+>  		SCX_CALL_OP(sch, cgroup_set_idle, NULL, tg_cgrp(tg), idle);
+>  
+>  	/* Update the task group's idle state */
+> -- 
+> 2.43.0
+> 
