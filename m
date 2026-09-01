@@ -1,131 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D226F36B91D
-	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 12:11:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469E84756DA
+	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 12:18:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788264719; cv=none; b=Wel1HjEE3dAr+L45Tz2WR8Oat4RkI0yGUxLAP1zD1Iwq4ljkHHeooYxONc+8Ip+t/d3TGCI48B64GPeWKq49hMe4qxLSrlUvU59QC4WpwJDf/Z1S4WLyWdPh2Oi9Bf3F7r5mhGXzffl/KO31+nuD+zBxKKtcm3XL3W0HKtavMcc=
+	t=1788265124; cv=none; b=tAO7u9v4kKIJwSHsDOXFnoZQmoPfFEoHJ7bpMfDBEr1H4A96oAoNiK2bwlr4mQ70qmJMnbawnFaAViIYcpTWxyb/tbdYLu+mwS0nMiwl5bjT+JhMDkNrEkoH7WjViQdusk+yUKyOhx+ojBgrUg5iyU4z+v8VKmj8mIdwUkfJkEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788264719; c=relaxed/simple;
-	bh=54lLC0nW7YN4Du79Mp1Pyaz8KB0k/ah/+PNNjIc0dlQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=j/1jgVJRObk+ZoYg+jwXT3C5M9enXT6hSibuaDzvdmdvZ+s4Fta53ns4SbRWpY43nvJvYHjW78lwBFdUcBA5z5pcHS48ks5AKzj1fIqrgHHjg624aNPGpzNYJnDZOPbLaXky0jGgGYaZSlf3U/bVryCpWt5bGXOnFCVnuF7Z1QE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fPWIUqjD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788265124; c=relaxed/simple;
+	bh=qW1HlWkiOh12WtBJNB4SoIzKTvcqx/5szKKI3A5OMMg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iN701rQMh7QR2vFqoE891oerJGZAe5ZkPaJcwG/p7p+cLFJ6d/ven6I2KFH7eGPvt/kj/DKPiqNnfaHZ8Pu1Vi6DYXGhl4fTKs8iD5SzqoxHgyz5r4mwO0T9noPPCalKx854QGcA8Erl/fI7QgO3CdtJi6oYKyYMtFHM6FTd4Z0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CmMov3ZT; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fPWIUqjD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 109EA1F000E9;
-	Tue,  1 Sep 2026 12:11:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788264717;
-	bh=kLM/sNVO8SMQ4yj7CKLV++8mTmLYGMuXWndhCJP/6lQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=fPWIUqjDdiG5NLYvbMLgHOY1NdugSvxNcEYU96/PigUSFToL/RNkoErTIb1Y4kOXa
-	 5SrEQ7y01pZY/xSs6Og5mjdblQXCAQo+TTS4NHVEpc+ZK6nU0h/nveCs/2II+4+gZw
-	 QWMuPq+peu/4BDuUMxsTEEXh3ZtGAdvM+0SHqPOyzeTy14KMcdN/yIwHNMDUFFdFqR
-	 +yDkJWsy/EEciXyGOq/JQIf+P8k0XpdnRJN6434yyJ9hDqSxQdPRNj9kswAseMFXVg
-	 H0bGaNIOdVwXlXKJs9+BPcU1fE6Y1g1cuKPAvEV0xxP3J6h1GCeE9yAFnNnQMiG5CX
-	 XQQSYSYAHctog==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next] bpf, riscv: Register extable entries at probe
- insn call sites
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Chen Pei" <cp0613@linux.alibaba.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260901120013.16104-1-cp0613@linux.alibaba.com>
-References: <20260901120013.16104-1-cp0613@linux.alibaba.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 01 Sep 2026 12:11:56 +0000
-Message-Id: <20260901121157.109EA1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CmMov3ZT"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-49cca4ffdcfso5904875e9.0
+        for <bpf@vger.kernel.org>; Tue, 01 Sep 2026 05:18:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788265121; x=1788869921; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=07yu7OM3o+Uy1/uNfXCagmF0K1rKdP2PBdLVsuiyQAY=;
+        b=CmMov3ZTjRs97mVGVc9iquLr4HNrjx62amAkHwHQV7dJvCAL3IUwU14rWEW0b3FM6p
+         PPzcTBm74kCLQkdGkcqDbhfHOA4ZaW27gOATjmSOoHrbhEWJe9bEVIHG43tbbiguF/+B
+         PATEzEXyziJrhinG/67UvjERQRn5rB70uAfQ4eyR66VbJupCGnVqz0qFazdIcvGUX94Q
+         U8yKBQobV4BAmX1ASPyptemY9plmMGc+V531bDh3/N0FGHMbY8ZS9pdPH1NhW5kdV0a9
+         3c8lKHc2NYa4BOMir8gQRh+mXASx9W5ImpaPfmJjVvwSZ0/zZV+536criacceJ48g43Z
+         RPGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788265121; x=1788869921;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=07yu7OM3o+Uy1/uNfXCagmF0K1rKdP2PBdLVsuiyQAY=;
+        b=s2lATbWCNFyX+OJ8D0kSYyyqQI1eAdmsyLjxRr84viBAEISrI+t/IIv6NOdrNJ5wSV
+         7TOb1JI6Tfdmt3KRHl7wwcunoy9tUtmeY1tS/vEiwe4sIxf7p5M8Eu5Z2aQkYIygFqvf
+         wItdQzdJsQqi2eTXQgDySe5KUBsY4+RGeU4yF13QSU4kK0ud/G2GJrfA4DfiJ3tq2qKs
+         Ml4jIMiHl5Ug6ZSKXgurGX9nLdB+pzVrvEQ1cGsF+xk9OFP4wAhDWWl1BoItBHdYBRJP
+         3mqIluXuyy+A272SAu7I57tRlVqZ9iLFN3waOML1ji3fy0kJba8hy4f7oET8bbtXkRZ0
+         u+5w==
+X-Gm-Message-State: AFuF++m0j4T4yrAfAyv4qHm3sKTV7Oq5DpHC1mvDST45h/4P33SSYW+9
+	6gqdGg7n7D1BUnE0dQZI3T9droqvu2kqKZOqm0wNXPj2eEj09X0ybjEP
+X-Gm-Gg: AR+sD11ugmZ+XhxAsIgGNaQKXvkVrvmgnfMG/z04Lzw8tYwce8W7IV/KTL44F+MFMo1
+	2+ZtAxZfdNpP5wZk9ACeYp1LG6IH+hfveZUOWw+KQUyCKa4rMBIigJNShaY32LN5nbMvFjcj5Vh
+	PfZ8htkDmb5w4jhnzE3yQjadQ/M73rATO6J+ys9kqULQQkdDS6fm2lryAo6TeO19S54aV81odBf
+	r0AZ262RQQz/3kJojGcKIZJJrHWB2Dh2GwJw5vMq/EDSCi1mPn7gPhMgrCwCYnZMLkpTZ3tJZHc
+	6Vj4U6EK7ybj0ucoh5SX+JyJbt2+y6PeOu5YGP7NE5mBt6bXPRbPZ3wKfSMgkMJ8JWkzfGk//IW
+	h7hQdRpX1sNauOAe0LTva4+gTaQSToFcs2cOtU/4wvqJcd+6JcQBlbskI6BmjkX80X+DupRrlwh
+	E7HL046gfKJTC+oft+kTqQH3Hs2rXwZEpH7gV8OSSDx29Y8LZNewxYcODDhdI7VYwl3WX/
+X-Received: by 2002:a05:600c:a00d:b0:49c:e1ed:26b1 with SMTP id 5b1f17b1804b1-49ce1ed26eamr30445615e9.16.1788265118063;
+        Tue, 01 Sep 2026 05:18:38 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cdce44ea9sm60262685e9.14.2026.09.01.05.18.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2026 05:18:37 -0700 (PDT)
+Date: Tue, 1 Sep 2026 12:29:15 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: bpf <bpf@vger.kernel.org>, lsm <linux-security-module@vger.kernel.org>,
+	netdev <netdev@vger.kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Matt Bobrowski <matt@bobrowski.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Paul Moore <paul@paul-moore.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH bpf-next 0/7] Add new way to add BPF LSM hooks
+Message-ID: <apbFG4WKaZNsURo8@mail.gmail.com>
+References: <20260831110934.241898-1-a.s.protopopov@gmail.com>
+ <20260831153456.5a7d6937@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260831153456.5a7d6937@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On 26/08/31 03:34PM, Jakub Kicinski wrote:
+> On Mon, 31 Aug 2026 11:09:25 +0000 Anton Protopopov wrote:
+> > The BPF LSM programs are allowed to attach to LSM hooks. This enables
+> > operators to mitigate known bugs without a need to reboot or livepatch
+> > machines.  BPF has shown very useful to create such runtime policies.
+> > However, many APIs and parts of kernel aren't covered by existing LSM
+> > hooks and this would be beneficial to extend the coverage.
+> 
+> Dunno. Do you have any reason to believe that any of the CVEs your LLM
+> gathered for you here are actually getting exploited? Spot checking 
+> a few they seem to be mostly driver bugs. What security model do you
+> have in mind? Untrusted/malicious users with physical NIC access?
 
-Pre-existing issues:
-- [High] BPF_PROBE_ATOMIC cmpxchg on RISC-V without ZACAS lacks exception t=
-able entries, leading to an unhandled page fault and kernel panic for unmap=
-ped arena accesses.
---
+For the untrusted part, here are some existing examples:
 
-commit 77ab37f77b219155ec1dc7c551ef131f6c642039
-Author: Chen Pei <cp0613@linux.alibaba.com>
-bpf, riscv: Register extable entries at probe insn call sites
+  * old untrusted bugs: CVE-2022-50651, CVE-2025-40255
+  * "namespace CAP_NET_ADMIN" bugs: CVE-2024-43836, CVE-2025-21921
 
-This commit removes the mode gate from add_exception_handler() and explicit=
-ly
-registers exception handlers only at probe instruction call sites. It aims
-to prevent collisions between probe mode values and legitimate instruction
-encodings.
+Also, the recent copy-fail is a stronger example (though not generic
+netlink-related).
 
-> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_com=
-p64.c
-> index e7378be171a9f..726c0169fc60f 100644
-> --- a/arch/riscv/net/bpf_jit_comp64.c
-> +++ b/arch/riscv/net/bpf_jit_comp64.c
-[ ... ]
-> @@ -2001,7 +2007,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, =
-struct rv_jit_context *ctx,
->  			ret =3D emit_atomic_rmw(rd, rs, insn, ctx);
-> =20
->  		/* ret can be 1 (skip-zext); extable entry still needs to be added */
-> -		if (ret >=3D 0) {
-> +		if (ret >=3D 0 && BPF_MODE(insn->code) =3D=3D BPF_PROBE_ATOMIC) {
->  			/*
->  			 * A load-acquire reads into dst_reg, and a read-modify-write
->  			 * carrying BPF_FETCH reads the old value into src_reg, or into
-> @@ -2010,7 +2016,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, =
-struct rv_jit_context *ctx,
->  			 */
->  			int load_reg =3D bpf_atomic_load_reg(insn);
-> =20
-> -			ret =3D add_exception_handler(insn, load_reg < 0 ?
-> +			ret =3D add_exception_handler(load_reg < 0 ?
->  					REG_DONT_CLEAR_MARKER : regmap[load_reg],
->  					ctx) ?: ret;
->  		}
+The general idea is that we gate the common de-multiplexors such that
+not only known bugs, but mainly those which will appear in future are
+covered. Rough numbers for coverage: around 5% of known cves are
+covered with existing LSM hooks. Another ~5-7% can be covered if we
+add netlink-related hooks [this series + net/sched, nftables,
+rtnetlink, others smaller]. So, statistically, we know where
+bugs had appeared in the past, so we can "predict" where new
+will appear. Some of them might be severe, so this would be
+good to have hooks in place to be able to "mitigate" them.
 
-[Severity: High]
-This isn't a bug introduced by this patch, but does emit_cmpxchg() correctly
-establish an exception handler boundary when ZACAS is not enabled?
-
-If a BPF program uses BPF_PROBE_ATOMIC with BPF_CMPXCHG on an unmapped memo=
-ry
-address on a RISC-V CPU without the ZACAS extension, emit_cmpxchg() falls
-back to a load-reserved/store-conditional loop:
-
-arch/riscv/net/bpf_jit.h:emit_cmpxchg() {
-    ...
-	if (rv_ext_enabled(ZACAS)) {
-		ctx->ex_insn_off =3D ctx->ninsns;
-		emit(is64 ? rvzacas_amocas_d(r0, rs, rd, 1, 1) :
-		     rvzacas_amocas_w(r0, rs, rd, 1, 1), ctx);
-		ctx->ex_jmp_off =3D ctx->ninsns;
-        ...
-		return;
-	}
-
-	if (is64)
-		emit_mv(RV_REG_T2, r0, ctx);
-	else
-		emit_addiw(RV_REG_T2, r0, 0, ctx);
-	emit(is64 ? rv_lr_d(r0, 0, rd, 0, 0) :
-	     rv_lr_w(r0, 0, rd, 0, 0), ctx);
-    ...
-}
-
-In the non-ZACAS path, ctx->ex_insn_off and ctx->ex_jmp_off are not updated
-before emitting the faulting load-reserved instruction.
-
-When add_exception_handler() is subsequently called here in
-bpf_jit_emit_insn(), it will use stale offsets. Can this cause an unhandled
-page fault and a kernel panic when accessing unmapped arena memory?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260901120013.1610=
-4-1-cp0613@linux.alibaba.com?part=3D1
+Just in case, to test this patch locally, I've found around 10 new
+ethtool-related bug candidates. I've sent a fix to one, d09c98a6da21
+("virtio_net: Fix resize of the RX ring"), which was easy to
+reproduce in a VM. Others require specific hardware, though popular,
+so I can try to reproduce some, and was planning to do this later.
+Of those findings one is unprivileged, it triggers a OOB read.
