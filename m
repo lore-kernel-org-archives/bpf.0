@@ -1,129 +1,115 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE7BB380FD7
-	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 08:11:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ABD342E42F
+	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 08:12:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788250305; cv=none; b=P9hhma4z4dwtTS/pnb7zzKV2L7U5PCIaAcmPrKR71DDFKi2lHY94yOx+E2B0TQWF1/DWHgkF4Arq44/UR0liEwIr555UIm7Dl42jsLrqpw/IR6Mcq6hQsXDxbIuScV6M3/BtRLxH/VD3OKHMHvYj8t57ndtJJqPdtiHjGCNI9no=
+	t=1788250327; cv=none; b=iDSnc9hEMPxaxvB4+/Gn0Jd3XvxlEWl+vw4vxdSDR1/mdqphi04s/2Vk9iJzb3fO0mw3D/+PCTjs4wOSJBpwMG2R3S/A665rkpVKu7bV/A/JkN1PRjNhUbw54CPDn0ytHTiYuCZq7UJKdEES13UOYOfq41pccq+M+bYVy2Szz+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788250305; c=relaxed/simple;
-	bh=K4UZF6ThbeKC5oc671xPMUh/DHFlqpd5c7dTJ8pzq5w=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hbpHGeWrNFGrSdClnjojAz5mJlNZA63TdW++KfDDrYgX/QM5+E0ob8EVgM3/bC4ACpECvHiqcWiO2G+aULj2IP4eu/R2VxhocKrJsPkg/Hah7yKKjkbRWjm9TKY7hMEvorYi1ypUNVvEjiPi2/zWbXUIuSBaE5qW/hhuzza57eo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HoZEqm6V; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788250327; c=relaxed/simple;
+	bh=1dh+aJ1CoN3cT6hGQVMDw1h+UM0jBg3T/yt3Q5vyv9E=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=JhtF88jY2saAGuBK5vgprvXerRKrUyIOBLIXclnT4a1BNvXJ9aSf5hDl61WbmC7zrY7pfeaReHpjuwrvXN24SyHl8hS7rbx6ESrja4tkwgAbYwfgbEGHKU1MgD4cVKgbNpgpIB18GgJHS7ottFTTUHxJ6YbzFNibEhd9fToLVbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RZltaNi5; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=D8pxMk0w; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HoZEqm6V"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-495437bb891so6252005e9.1
-        for <bpf@vger.kernel.org>; Tue, 01 Sep 2026 01:11:43 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RZltaNi5";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="D8pxMk0w"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1788250324;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1dh+aJ1CoN3cT6hGQVMDw1h+UM0jBg3T/yt3Q5vyv9E=;
+	b=RZltaNi5R+Nh05vrqKJn4or6HQoaZ8zzO0qTYm1k6/4SdkYsVDpaBE04biS68Z83H36JZy
+	6PNovb5FTvkP+biC1sQUkZnTseMQHr8EFrveS/zmbcwWQoFKFnsF71qGzRnnq0Yko7qaSu
+	nsnhoSdSHzuItRtF6/Ne8e4q3BY90a4=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-330-QbTGWzOOOeGwRxCG8eK7bA-1; Tue, 01 Sept 2026 04:12:03 -0400
+X-MC-Unique: QbTGWzOOOeGwRxCG8eK7bA-1
+X-Mimecast-MFC-AGG-ID: QbTGWzOOOeGwRxCG8eK7bA_1788250322
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-49b0d7a07acso6057845e9.3
+        for <bpf@vger.kernel.org>; Tue, 01 Sep 2026 01:12:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788250302; x=1788855102; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=q1wsWo0+bHbeVA+4aZjel/63TQcKF5t0tkxqh6Apz00=;
-        b=HoZEqm6VGMkijOiIsK8XqlK202NqxTL9E4+lal5Tdp58K9KfZNh4ykEtX4AiPMvl6L
-         xJAHw+kq4C9jxyzJdB0kMk3d0jGK2ngV7ynnXpfjo77IcXD/m1zzqAlhOvyk+soSfBep
-         MB9Bx/S91+7NGcZHHyfi0pN74ABcxBn6t2xKfOlu0AXLaa3wIhcXs+8GSGwUTmmlfXxT
-         GkiLbhlprp8A7SRy6v2Q4yT/lVBm74PaltOXvjxE7v2I16F/kgA61JLamdIB2UfLFCtw
-         3zQhi0AWhxmuHcXhe8JGyjRgOLye67HxIzXAa3uiXlmhf/UuSucX4ZAg7XAO2OcLjtF1
-         6kwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788250302; x=1788855102;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=redhat.com; s=google; t=1788250322; x=1788855122; darn=vger.kernel.org;
+        h=content-type:mime-version:message-id:date:references:in-reply-to
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=q1wsWo0+bHbeVA+4aZjel/63TQcKF5t0tkxqh6Apz00=;
-        b=rOJoZFro7nVs7+3ocNFPbmUlRxx8iFTSTKyqLR8HtCE0c9mn/LiPxvVV05vAG6BG/z
-         Ena196f03U7zJDKLSfRALohzSBZp8u/DYZCJPCK7X1s93bQjuJ6YBZBJ8Yw31N2X5eiL
-         o1+UEM9wF90HrbE2G1HNYm2t8SMrYuVplUJH2R2Cg2gdTz+IugPwWaWALyMaA7HzTHyZ
-         5Sd6hR3zmqtsyc0rGJNRXD0EvkYo5yOwdcJHT8WhPOxb8bSKwfEIPVnizqxblXp+OT15
-         U6loCv6OVlApeY6DDNnQB3Y0paLxnI+YfeHP8wT6PxwyMltX5KhKsy3gs2fGkUlTrsS3
-         AMCg==
-X-Forwarded-Encrypted: i=1; AHgh+Ro4u9uRTNeFrfUmoGtiW/Izsjpu7QG6XCsPDEFkLIqf8oCCLSfLEi8OC2SKGYMS7c+9fpU=@vger.kernel.org
-X-Gm-Message-State: AFuF++ngSt3x9SEgc2o0jI06sySWm2mRm0lFIDdn6OikuS+CixFbpadI
-	1gZhw23CWVAJXvi5855rVuWnVRcSkILZY4kO7Zt0I3FxGbL+GTWAekXv
-X-Gm-Gg: AR+sD12GJDmR3sIPZY29wxzkY8D3sh+hb8m2cJLdmf4maCzFxLa6ukym67kwnH+FCqO
-	9ZnzQzKujg2a+KgLQbpuykbcwXdlK1RP1I4N2tEGIYhhZAadFqbRfMJ5189XtLZR321dvLa9XA4
-	tkQvUbons3U0/kn1lh72+SEUSv9GX1q00X30XyW2uawMWmSoiPtYk1f3EhYjh6vPocKlDnXFFJ4
-	7etJWilLlDnsgjT20Qi5Pj4AKqhc5gtu+IS9mkc6K41VjpQtr5yivUvUjFcg1MH3yuuinbx7W7L
-	45lKBYxRxD5PfhL7De47zwgOxuKN69lKaMQaBHxL4UZbwosFkI1u6ZFEEn4YcHeOlNUFAeUwArT
-	2fP3aSVSF4QYYGfqQZQAqs3uaJT+JYBOhcD9ZOiT/tnWites1Aj0sI8ZFv2mNLb/Wtcf5BKR9Bl
-	/3cj+e9ishfjsiNvjXTh3soC4RNQ+q+T+/Aj+llu5VpEn1qQ8R
-X-Received: by 2002:a05:600c:705:b0:49c:d8f1:ec60 with SMTP id 5b1f17b1804b1-49cdd735316mr38936415e9.8.1788250301787;
-        Tue, 01 Sep 2026 01:11:41 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48442d78444sm3643306f8f.25.2026.09.01.01.11.40
+        bh=1dh+aJ1CoN3cT6hGQVMDw1h+UM0jBg3T/yt3Q5vyv9E=;
+        b=D8pxMk0wKU0PkrPBbkhjlzsjl7ru3tvxxEquTvmCMMo3iX0kCSchdVXZJfjncPr/GA
+         u0aXEDGoSuKQBDK4oB61r48pBbPyoWEqeQzDusISBnILjirgHTBeArS/dXFt4aAjL/K0
+         BgGSjqG9j1MoRUKMTCWq0Yhg1lBH9Hgroq7kGpOT6yT8cDiT7FW9r325oc0xqwZdIsoE
+         Y2S4Cxgkl/TqKW1U9fseCuCVKJdVZwJA6MX4PfUe5Tn8S9sSyOYFCx34yyPeWK7kScbj
+         2Xa7ShistFYLanAhUcs49ADM1xV3v8k9yXqoXbpDQfSMzSMlReCQkgllYp4fxafOXK1l
+         FX7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788250322; x=1788855122;
+        h=content-type:mime-version:message-id:date:references:in-reply-to
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=1dh+aJ1CoN3cT6hGQVMDw1h+UM0jBg3T/yt3Q5vyv9E=;
+        b=CukCatkW3UusAMeslBL6sx9DcqJ5v+TaK1lIo458o2EE25Pa608Tnb5cxnnOn2ZnlG
+         Xnsw6Gs3f4ckhXn5u+j8Y6+OFrwP1NcSdfOa5YLJPfHWnL1IMT6llbJjE+Kf9P8QVMvZ
+         TUEDwXYQjBYbNAU31ltBDb+5VUYBqElFx/T+VqNKO4jThgU+nTrEH77LT7n7KQrN6/NH
+         eQZpOAGejPX6lbmVGuPtZMFquGgChIIc7J/PEUS0LBVthygQBiicPBwWzCrLgviozUR6
+         3nEYp2MQgMd8YIKphWiLuRajtE6mua2JaxUunsgWit081LkyfY/b+LOoybsrtcQ8LZ6j
+         LFHQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpY4dj7igyDjK7YBavdbUIHboycOJy0OQZTgHFImuJrrxeacugv90u7KjGze1lSytQojEA=@vger.kernel.org
+X-Gm-Message-State: AFuF++mCYkmPX+9t9tI3VQq1YAW4FCtgihQdyaMUUkFBwjEEQbTsomJJ
+	EqVH8ImlvdRQY+L+3OcBDh30ispSX85+D9oqoPDp8EDtfdKCQ3ML6PjhPhV/UsR7KPb9UBhG0GK
+	pnaqOUqksJYwT8Pcdl6TVbqbnvLyUfdc3y8gJmEI2boeoemNDYQeilw==
+X-Gm-Gg: AR+sD1190t5LFCa1H8KuDHMhWBvohej8/1oq+nZWVKSM2dB7zrgbTTQMXusvI9MPBCZ
+	dj1BmmkjahrC6/BH8vFnH3hTyQUlfe98S9+jtUoN54SXt+5wQFvR3JEHSVlJw7l2HXxe9L9AEiZ
+	RsIQwIWo7VuqKSCeoUewkm0zZ3hauTTZopO5cuNvxGZ4ali3yAMiWO07zLZgi/45EhE6A1RBTnB
+	+s8v4r2l/ACo2JuGqtNQtTV5VucL2yPKgaP9RFu8ChUVCZXLefOnesMXIdl8vMpR8MyCDHaFvl8
+	Wgl1y3yInhednXE+47RPojsbh20VeratoMku2XHxxGMdnPeRByVavyXXTjjdi/2V79Kj0hTcDuL
+	wUgHh560Dn+ODUqf55E5RiUb1
+X-Received: by 2002:a05:600c:c0cf:b0:499:726b:7375 with SMTP id 5b1f17b1804b1-49b91c51e62mr449676545e9.14.1788250321899;
+        Tue, 01 Sep 2026 01:12:01 -0700 (PDT)
+X-Received: by 2002:a05:600c:c0cf:b0:499:726b:7375 with SMTP id 5b1f17b1804b1-49b91c51e62mr449675545e9.14.1788250321506;
+        Tue, 01 Sep 2026 01:12:01 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cdce4a804sm57396675e9.15.2026.09.01.01.12.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2026 01:11:41 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 1 Sep 2026 10:11:39 +0200
-To: bot+bpf-ci@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	bpf@vger.kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
-	song@kernel.org, yonghong.song@linux.dev, rppt@kernel.org,
-	martin.lau@kernel.org, mason@kernel.org, ihor.solodrai@linux.dev
-Subject: Re: [PATCH bpf-next 2/3] bpf, x86: Introduce JIT emission context
-Message-ID: <apaIuxCD3HyZeiDN@krava>
-References: <20260831114614.157277-3-jolsa@kernel.org>
- <d3b30565c015a75c09b1b79b4684bf3399f8db42f0aad1d5faaf3267ba817f0d@mail.kernel.org>
+        Tue, 01 Sep 2026 01:12:00 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id B56A597C4AF; Tue, 01 Sep 2026 10:11:59 +0200 (CEST)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, andrii@kernel.org,
+ eddyz87@gmail.com, ihor.solodrai@linux.dev, memxor@gmail.com,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com
+Cc: shuah@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ martin.lau@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev,
+ mason@kernel.org, ihor.solodrai@linux.dev
+Subject: Re: [PATCH bpf-next v2 4/4] selftests/bpf: Set BPF program flags
+ non-destructively
+In-Reply-To: <596f7d7b908b3cbb2dfba0ee0aa601d098d054930baecd485adcb5af5ce28a13@mail.kernel.org>
+References: <20260831132648.65843-4-toke@redhat.com>
+ <596f7d7b908b3cbb2dfba0ee0aa601d098d054930baecd485adcb5af5ce28a13@mail.kernel.org>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Tue, 01 Sep 2026 10:11:59 +0200
+Message-ID: <87pkyxv19s.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d3b30565c015a75c09b1b79b4684bf3399f8db42f0aad1d5faaf3267ba817f0d@mail.kernel.org>
+Content-Type: text/plain
 
-On Mon, Aug 31, 2026 at 12:54:35PM +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> > index 5922bb4728aad..eff0523161c3e 100644
-> > --- a/arch/x86/net/bpf_jit_comp.c
-> > +++ b/arch/x86/net/bpf_jit_comp.c
-> 
-> [ ... ]
-> 
-> > @@ -947,10 +898,9 @@ static void bpf_tail_call_direct_fixup(struct bpf_prog *prog)
-> >  	}
-> >  }
-> >
-> > -static void emit_mov_imm32(u8 **pprog, bool sign_propagate,
-> > +static void emit_mov_imm32(struct jit_emit_context *jit, bool sign_propagate,
-> >  			   u32 dst_reg, const u32 imm32)
-> >  {
-> > -	u8 *prog = *pprog;
-> >  	u8 b1, b2, b3;
-> >
-> >  	/*
-> > @@ -984,14 +934,12 @@ static void emit_mov_imm32(u8 **pprog, bool sign_propagate,
-> >  		EMIT1(add_1mod(0x40, dst_reg));
-> >  	EMIT1_off32(add_1reg(0xB8, dst_reg), imm32);
-> >  done:
-> > -	*pprog = prog;
-> >  }
-> 
-> Does this break the build? Removing the trailing '*pprog = prog;' leaves
-> the 'done:' label as the last thing in the function body, with no statement
-> after it. C11 and C17 require a labeled-statement to be 'identifier ':'
-> statement', where a closing brace is not a statement. Labels at the end of
-> a compound statement were only legalized in C23 (N2508). The kernel builds
-> with '-std=gnu11' (per the top-level Makefile), so GCC will reject this with
-> 'error: label at end of compound statement' and Clang with 'error: expected
-> statement' when using any currently supported minimum toolchain. Only GCC
-> >= 11 silently accepts it (downgrading to a pedwarn that's off without
-> -Wpedantic), which is why the breakage can hide on a modern build host.
-> 
-> The function has two 'goto done;' statements earlier (the sign-propagate
-> path and the imm32 == 0 path), so the label cannot simply be dropped. Could
-> the label be given a statement, such as 'done:\n\treturn;' or 'done:\n\t;',
-> or could the two gotos be replaced with 'return;' and the label removed?
 
-yea, I overlooked that, we can simple replace goto with return
+> Should the bpf_verif_scale.c site be converted as well, or does "all
+> in-tree users" exclude it for some reason?
 
-jirka
+No, I missed this one - will add it and repost.
+
+-Toke
+
