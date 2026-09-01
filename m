@@ -1,163 +1,167 @@
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50F52483BF6
-	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 17:42:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788284542; cv=pass; b=Jb7zdN44sKQpF3ij/ju/eKkPQ0z1/+5lr26K8nUsDWVq3r+/D9LVf9CmRX3qO09SdB2Yb9sTYFyBUMWyd7e8+cE0B3eBTa9xWqSBFoaH5pYIpr/FvwidaXLe7ywsZNkfn+osMwGWvo/Tllo0ktL9L0QQ7l0Tjx3IP4MpMLu7RdE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788284542; c=relaxed/simple;
-	bh=p1uQsN9T7xX3H3/reDzJNofZ+Td1vmF68o1s3Y6e9RU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bLTRl5mGz+2E+C84Appu8srXCS7/FJBxIJ1VfKco1cRaDOtX2/9tdX6aBubt5F0WwsX9AGqytMhOECewCgmZiKCB/377l+lXxr6NrCHkGqqrQ8rnrf9SJn1vApQamhmFbCu1fQ2fRR1KBKV9Igi9IuMGO7NP9JgUebzdDRCQUlI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nl+S9szz; arc=pass smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC5E48BD35
+	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 17:45:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788284708; cv=none; b=iiRMm0xMJEf7YySQ5QvzOJSG1EJjiJHz+1yzzr7QBN+Zld/XIe52EszutG1v3J1mH1Py8Z3xs+74A6EQf0Hkrr7vPY0D9mT+3BLSunlmHF7+9cebXULZTVf4vQM7w2mi+9QmV+UEPZOLOaHZuOb8GXkLdPgB9eQucT8w+C27+5c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788284708; c=relaxed/simple;
+	bh=2RPguVjzX0PbmFhvrdRvikWG7cIhyIluUuL8QilRH4E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CHkuWWQ8/UZ4Ct+Ti0jH66/LBi/mMqDN8Sdq35Vm9OEZCXD8+pJDa+7byd/hvgRznXEBX2QpZh5wPZJ7Y97Vl2syYfY86wSHm3NcShcswdDuTU1+0wwxhSCgk+kLM9NRQK92WpT8SxSYILCD7JaXZWYcHkqO40eLH5FH8b4NBXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a53YAxPj; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nl+S9szz"
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-857ff9fef54so2563487b3.1
-        for <bpf@vger.kernel.org>; Tue, 01 Sep 2026 10:42:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788284540; cv=none;
-        d=google.com; s=arc-20260327;
-        b=omfR4j1NoG4htvlYqgw9KOVHLsvjyKhnkcxySJpuX5PTZnI1WAdK8ngDncY64ry4o1
-         C5Oh3VpPfpcF7G2tbAN5t3wetWlY+ZMHxxSERMD0xPIey6Urt5+vh91fQqwY5mL9doAS
-         bSKx/qFJE3/aFZDkAmfz2vdns3CP4enJCZ4FO8bGoqoAXBoXC+cL/qBK1q99dLvainy1
-         +ltkR6AfjmiDBVIg7vAI0wp2X4TjyNvCrG8z/ynkljdO//jCD1Mch0ZkpcT9Rh4ohWx0
-         zL6h69nKBvoNu4f3e/YTT9QwHxleA43ov4bZdiD8/NOuV6xe7L3R8idHp+xkYXOahiwf
-         Bztw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=p1uQsN9T7xX3H3/reDzJNofZ+Td1vmF68o1s3Y6e9RU=;
-        fh=AWeuiN7VmU2cIO/BWYfrjTRwjTocBhsivqF3rcWnO00=;
-        b=JuC1lRRTJ/qN1GqcNaxrcFLDnAmK64UtdEarMhAVK2X3gGMUmT2+xDFO4L4qTngn6R
-         dgw6FCxBRIARW1AECujmJpr4gdwYsAd6jDEu7ctVsBTu6Fd80DfmJFjiFJlZotddJTGi
-         332StpMBAEKyih66HYNo/W7wgOqYBcio+rvTNQNKfOwK8A+VdJQmPMEvZY9eEL/3VIXa
-         SRWPdsQDQbR9+NPGzbkWdQMdkrXh8cXaaz9e5IBmwJ7Qg6ATSuQTlh5Paq1/iTrE9zHF
-         cDIjTthOhaPErFoAI3CNBh0VRJySU8fIf2yok8CTFzVp5LBe5//PA+OkpFnTG0OQmRbG
-         hqvw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a53YAxPj"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4957eefd361so373985e9.1
+        for <bpf@vger.kernel.org>; Tue, 01 Sep 2026 10:45:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788284540; x=1788889340; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1788284705; x=1788889505; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=p1uQsN9T7xX3H3/reDzJNofZ+Td1vmF68o1s3Y6e9RU=;
-        b=Nl+S9szzBfeQyOuqeKeWpMguE4V6e3VtkK2YJgpzhLMZY+eVfAJLKmOeLLIHYUgJdA
-         DYL3ePtveP99SnZTgrMdrE6W2FtxFGiQBvVXCPaK4BexzlqWmIT0hvr14ERjzklCFyEB
-         fe/UNUq+5k3tWo2jWEB9hvn5Rc+qc1I2sDlkQm4aKWCzgXSLyZ3Tau54o8c3VwZCOiMd
-         H/V/s9eG7WAi3/5JmBE+dk/9gRI45ODoMKkGpVaoHz3kb7AXGPfL+iWEfKuniChRjnEQ
-         Uw5joEosc4RikECE0xj0fcCldI/klQvyCTTgdSZ2nfMshuJae6oIsySKxYk9n8A2jIEJ
-         1xEA==
+        bh=zjdVWaNDFXESZ/X0MaSoDgYCbBInkM3rLuyj2vU/t6c=;
+        b=a53YAxPjC7kXYMx/gb2mMR3sCRnfLh9ebUdboXLOiemoiXDbVMIF5NFsR6vDCdImV9
+         SEpUqLAuKyP/uEEuUztiAKVVjcsBapjQdxa+e80DtBL+It8ZLJZ+JG6bMtIaHw3xttUZ
+         nlE4nnc9h5wHg4uo8iTfNIIsUKPo+qGQEaysBc2Zg194EfEJyMlukfmjP5rHyn4dPhFd
+         YY1aEIW/dkoHqSmmf64nd24nez0qq4Ip54D9hbp70izdyzv/TKYJl5pXvtdXGrXrRrLk
+         nrIb05mbhKH22ao90mh2KnMbNlit4RZlCaLwjHmgvNqlksR9yQ4DleBXOP6lFgyXZj2Y
+         fXoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788284540; x=1788889340;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1788284705; x=1788889505;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=p1uQsN9T7xX3H3/reDzJNofZ+Td1vmF68o1s3Y6e9RU=;
-        b=T7Zyo8SuKyQ5SG6k6UQ479LnVUetX4z+2P7/BsUTneN5027Ouyt2c4WBNovNQFOFNH
-         0nsqPBWIpXz7atSnLHpllv/VHyKmwXFK3EeRHXltAjvITYHTiVqsdPi306Lpdf+0gHTx
-         n8jZFWoLDLMzsGZq86sQrkCYPTZFDL52a1bNftlbiBDtrFFqvT15NbEF9ldschLsmoKh
-         M2EuefR1vT9kIJdD+aKu0771RT5FOAz/xUHce3MjQJGN/6EWBQdxm6q+mI9XSB9IJUm6
-         CP0ElaWecDNGT9SaMn9uL6Ix9mFPIKgsAivEx4xJpKdPkcW2qWS1u56KBShBUenqclJO
-         xZSg==
-X-Forwarded-Encrypted: i=1; AKwUvBw4+AD6LK3gImX0YH8yVVNDY9hNnwcYtRQsGmURaHzLeRHmp7wEPjai4SNe881IRN7WhJU=@vger.kernel.org
-X-Gm-Message-State: AFuF++n1n4eg9vc22y1hr4dekzjZxrSkxtBwmO/SgZ2ahLDpSxt3dHg7
-	23Z3E++uDpKY7ReyvzMxLeztmx5VXpY3Q/W9AmjvGLMsJEkvCPF2ByKe9v6s/m9XT+/xGJ0qGQb
-	JtMEXtG60FIpjqOcc8U0HJ/HBSLYl7A0=
-X-Gm-Gg: AYBFou3Jzzou15Ts09J78oVvVktAOHFkM4TTGH3ZEDJuFuxLW37zg0zb8IhbKcJ00J0
-	mWyZFgGy8gUCCtku6sHbVNmmj3Ei/h10yr2yZJ+9nNOrQV+jgH/rcylL4/ez7ipjCGRwLeFY6QM
-	jbhtw0ZI3D6A3j3Giv7WQAyRtDDpYETRx/u71hD8003njwjvs0wY6C/KyTUupZsL0xzsCbE2MT/
-	u+cwMYOPl4CzqzAcUTEmRtHPAT+XjB591OBv2gm/GdnVbmJ/ZIHen2K2FGBn9OzxgP4ANBrPf4r
-	TRvYFEUoGHjMuMTb1B/DBrMHGFaTUth8n3HLJ8QMu1REG+sexWFTBqhlhCdWU9QodCHwwytpR5p
-	rOsQTRD95MJPOCQsgJEZCS7I2vEtP7yvN9tXZtfUn39pidtRUmtaprMuqpMnW6D4l8UHmtZIa4y
-	cTAuGFSs8H8rel
-X-Received: by 2002:a05:690c:e159:20b0:855:37f6:a73f with SMTP id
- 00721157ae682-85d69f00d89mr107947447b3.13.1788284540080; Tue, 01 Sep 2026
- 10:42:20 -0700 (PDT)
+        bh=zjdVWaNDFXESZ/X0MaSoDgYCbBInkM3rLuyj2vU/t6c=;
+        b=UpI6O7TIy31Vkp36VyFqHzBrpZOGAwba59xbwDwyiw5Ca1NMU4hsjWqCL2+bZmXU5K
+         IHxR25+ZNrYAzQkfybhcSehuAdxda/n6hZIcjKaLGzsb547AXezO1dSe7L73JOcbmidK
+         N+D/XXrwXukTQKZBXq3PslRIZ76N3gnjsqiOyYy3vP4lhH+4VSV5sElltIyWxTmaVKVQ
+         DLKA4ItXJNX5HzsqI/h/UXIjC/4vXAB3i5jQKxWZVaaxGj8RsBHcdABF5ZyP6ywMqjE9
+         yf05wvIkWFGvnmCqDzrJf0v4ByvnbZso+PDTpPa14HhmhyTttvRizIgwliWn0zFweENW
+         SkEA==
+X-Gm-Message-State: AFuF++nC1uBeg4EN87NzcNolcEvso874VizWu5VyXDBXve5yMmpJaPwK
+	Z8GJ3ukOrrd7Aprch9EcQ1NwXai9BovorVuUodNggjAJKqbvdoCGWGBf
+X-Gm-Gg: AR+sD12Y1Bq1j9bVy70a/+DXsWLZS/5MeRY44UStHkhnV5RT03UY2OjwEidLO+/CWOc
+	eSW0Npxmye4wPHZX+Ey3ZP/Hmcjj0qqcLWqvtLhsYjJk8xLRCHdFv4S0Ib25tE4Ul2j7DxCl80q
+	79NKiqpYLQzn1oy8BUA6rBoxUK/d944uuWULXIzCtWypgs5umynp0UCBDCXzQk0Jz/DJBJd/2ta
+	GA/ZMaeoU09sDimxmKcs+cW9sDh7D0ZdJYRsWQQaRSw+eyC4orVbWbWJOqPCkKJ8+dPlYXG4Vml
+	D+mdBSR9+XOHiwOPEfsAn4q9XkLO0X1TP5hEfXvap2tHuRehFJlcdrSrmmgxYRejMoq+QexEaB7
+	f39tw5lavPkU8egdQspVspZPnZ3Hxx98NXeGjvj7rUW8+JsrqZwp7EF/EX2seVHsoCOBPMRF1ge
+	Qej0BQz8TtkJQBrwgBfFEWp50S5Z+epL+j+0LyEgPpzTQ/0YI5esyFBvN9S/o0dly8Y8Dy
+X-Received: by 2002:a05:600c:5288:b0:499:84fe:5f3e with SMTP id 5b1f17b1804b1-49b91c41014mr638261545e9.9.1788284704384;
+        Tue, 01 Sep 2026 10:45:04 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ce4776131sm3126445e9.11.2026.09.01.10.45.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2026 10:45:03 -0700 (PDT)
+Date: Tue, 1 Sep 2026 17:55:41 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Puranjay Mohan <puranjay@kernel.org>, rlmenge@gmail.com,
+	hargar@linux.microsoft.com, apais@microsoft.com
+Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Test terminal gotox
+ instructions
+Message-ID: <apcRnSj7dVW1Dlsr@mail.gmail.com>
+References: <20260901170144.70453-1-sidchintamaneni@gmail.com>
+ <20260901170144.70453-2-sidchintamaneni@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260824213158.3755932-2-Jeremy.Jean@oss.cyber.gouv.fr>
- <DKYH3KM93BDY.1MR4WLZSWGEU8@gmail.com> <CAE5sdEiGA+chRkkNGOWL89AFDNXor1RKHMEmouCNoCXVd4fc-g@mail.gmail.com>
- <d4e2ae332a9505cc2cee5a236ff86efb@oss.cyber.gouv.fr>
-In-Reply-To: <d4e2ae332a9505cc2cee5a236ff86efb@oss.cyber.gouv.fr>
-From: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
-Date: Tue, 1 Sep 2026 10:42:08 -0700
-X-Gm-Features: AcwNN1Uea0qvxpbJnC7W6Ed8TeX-njpcgs2h1B6X2fQu1FbWfEcGHVsgCajGxzs
-Message-ID: <CAE5sdEg1eMs1Rip2mbCV570p0==2gj7ZtH8CttPfsqcM2CrB0Q@mail.gmail.com>
-Subject: Re: [BUG] bpf: x86 timed may_goto corrupts private-stack JIT state
-To: =?UTF-8?B?SsOpcsOpbXkgSmVhbg==?= <jeremy.jean@oss.cyber.gouv.fr>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, linux-kernel@vger.kernel.org, 
-	rlmenge@gmail.com, hargar@microsoft.com, apais@microsoft.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260901170144.70453-2-sidchintamaneni@gmail.com>
 
-On Tue, 1 Sept 2026 at 00:11, J=C3=A9r=C3=A9my Jean <jeremy.jean@oss.cyber.=
-gouv.fr> wrote:
->
-> On 2026-09-01 00:57, Siddharth Chintamaneni wrote:
-> > On Tue, 25 Aug 2026 at 18:10, Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> >>
-> >> On Mon Aug 24, 2026 at 2:31 PM PDT, J=C3=A9r=C3=A9my Jean wrote:
-> >> > Hello,
-> >> >
-> >> > With the help of AI models, I found a bug in the x86 timed may_goto =
-path that
-> >> > leads to a verifier/JIT state mismatch on private-stack programs.
-> >> >
-> >> > The root cause is that timed may_goto fixups pass a stack offset in =
-BPF_REG_AX
-> >> > and the x86 trampoline reconstructs the counter pointer from native =
-%rbp. That
-> >> > is incorrect once private-stack JIT mode is enabled: ordinary BPF fr=
-ame pointer
-> >> > accesses are remapped from %rbp to %r9, but arch_bpf_timed_may_goto(=
-) still
-> >> > uses %rbp and ends up reading and writing the native JIT frame inste=
-ad of the
-> >> > private BPF stack.
-> >> >
-> >> > The bug was introduced by 2fb761823ead ("bpf, x86: Add x86 JIT suppo=
-rt for timed
-> >> > may_goto"). I reproduced it on a KASAN-enabled x86_64 kernel based o=
-n v7.2,
-> >> > however KASAN does not trigger because the bad write stays inside th=
-e native
-> >> > JIT frame. Yet, the saved-register corruption is observable.
-> >> >
-> >> > I have not included a patch here because the fix seems subtle to me =
-and would
-> >> > likely touch many files for different arch.
-> >> >
-> >> > I can share the minimal reproducer and other details privately with =
-maintainers
-> >> > if useful.
-> >>
-> >> Just send a fix and a selftest to the list.
-> >>
-> >
-> > Jeremy,
-> >
-> > I just wanted to check whether you're working on a patch for this. if
-> > not, I'd be happy to take a look.
->
-> Hello,
->
-> No, not at the moment.
-> Feel free to ask if I can be of some help
->
+On 26/09/01 05:01PM, Siddharth Chintamaneni wrote:
+> Add tests that place gotox at the end of the main program and a
+> subprogram, with each jump-table target preceding the gotox instruction.
+> This tests gotox as a valid non-fallthrough terminal instruction.
+> 
+> Signed-off-by: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
+> ---
+>  .../selftests/bpf/progs/verifier_gotox.c      | 42 +++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_gotox.c b/tools/testing/selftests/bpf/progs/verifier_gotox.c
+> index 5b18c9a27717..cfb5b648891f 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_gotox.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_gotox.c
+> @@ -47,6 +47,48 @@ DEFINE_SIMPLE_JUMP_TABLE_PROG(reserved_field_src_reg,      BPF_REG_1, 0, 0, __fa
+>  DEFINE_SIMPLE_JUMP_TABLE_PROG(reserved_field_non_zero_off, BPF_REG_0, 1, 0, __failure __msg("BPF_JA|BPF_X uses reserved fields"))
+>  DEFINE_SIMPLE_JUMP_TABLE_PROG(reserved_field_non_zero_imm, BPF_REG_0, 0, 1, __failure __msg("BPF_JA|BPF_X uses reserved fields"))
+>  
+> +#define DEFINE_TERMINAL_GOTOX_PROG(NAME, BASE)			\
+> +	__naked void NAME(void)					\
+> +	{							\
+> +	asm volatile ("						\
+> +	.pushsection .jumptables,\"\",@progbits;		\
+> +jt0_%=:							\
+> +	.quad ret0_%= - " BASE ";				\
+> +	.size jt0_%=, 8;					\
+> +	.global jt0_%=;						\
+> +	.popsection;						\
+> +								\
+> +	r0 = jt0_%= ll;						\
+> +	r0 = *(u64 *)(r0 + 0);					\
+> +	goto end_%=;						\
+> +ret0_%=:							\
+> +	r0 = 0;							\
+> +	exit;							\
+> +end_%=:							\
+> +	.8byte %[gotox_r0];					\
+> +"	:							\
+> +	: __imm_insn(gotox_r0, BPF_RAW_INSN(BPF_JMP | BPF_JA | BPF_X,	\
+> +					    BPF_REG_0, 0, 0, 0))	\
+> +	: __clobber_all);					\
+> +	}
+> +
+> +SEC("socket")
+> +__success __retval(0)
+> +DEFINE_TERMINAL_GOTOX_PROG(jump_table_terminal_gotox, "socket")
+> +
+> +static __noinline __used
+> +DEFINE_TERMINAL_GOTOX_PROG(terminal_gotox_subprog, ".text")
+> +
+> +SEC("socket")
+> +__success __retval(0)
+> +__naked void jump_table_terminal_gotox_subprog(void)
+> +{
+> +	asm volatile ("						\
+> +	call terminal_gotox_subprog;				\
 
-Let me playaorund with it. I'll let you know if I have more questions. Than=
-ks!
+I wonder if robot will reply the same as for v2.
 
-> Regards,
-> J=C3=A9r=C3=A9my
+The suggestion was to do
+
+    call terminal_gotox_subprog1
+    call terminal_gotox_subprog2
+
+such that subprog1 is not the last piece of loaded prog...
+
+> +	exit;							\
+> +"	::: __clobber_all);
+> +}
+> +
+>  /*
+>   * Gotox is forbidden when there is no jump table loaded
+>   * which points to the sub-function where the gotox is used
+> -- 
+> 2.43.0
+> 
