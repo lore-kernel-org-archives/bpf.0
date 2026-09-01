@@ -1,127 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-67.mta0.migadu.com [91.218.175.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C89613F9F44
-	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 02:14:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 570E02367DF
+	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 02:21:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788228874; cv=none; b=rGpB1vOnjeYfx4Zd7et3x2wgkrlZ7TS0e1DWNyxnjFXW+3grXVv/OQzNFUD8yPjoUxTd/BPqqaWRsSXIH2Nqm8v+ARcWS1MMDUulL+mUMGiLkPBMa9zh1KEOjPsf/oX5V+uaIbiJScjoscszegA4B6Pyu7+V1J1AhxSwPYnrYW4=
+	t=1788229306; cv=none; b=H42BgzCvY8lygrRgSZ2EuFzmG+8j68d/g8Oc3F3QrlTPr85jQ2qKy2BVgSMzlHsTwKHrLq9GZcS/tsclTBuXK9mPSy4GpEy6hoBUeX1bZ0q47wiAsO8qnFBs15klGmYn4BHf04m7T02UIHkJFc6Pa9xPJBPDo6MS/Fzc5bq8vv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788228874; c=relaxed/simple;
-	bh=ImdXiOhMpkiY6I2lRKAuIk2CnP/Ha16PhrRMPrZ+m4g=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=HJneRlQBw2C4SjMPfhvcFI9ATJbAjK9TtisDe6CpDkL7FvlX80TTbpdMNm4UytJbjRbW7nnSJ6FlejakU+WrUFaLAAZ7wCi2PNhGlK/JQ6gLw9QBPZ/HV0MhRZCsCgM7I2NOKkCsv6k6QDrXOE7Oej1cCvideYidHiDTnLO0N4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W02bij3d; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788229306; c=relaxed/simple;
+	bh=7uPbtr2WBHUVzXJjAHM0J1bBu+jQncq3WQCDdhThYVo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FcLficybyfouBBMfVfd1UXUYw9NQ+ToB8kBQEGqEc9KG0YzB2veqqfmo9u3b2JQA4B1FzUzYzI8kWqN8LztoCdWE+qgw7v/zTrzFUcsCkt3AIZ8ahEQ87/YkiUPaFDqJ48xWKLI3CtZ6QXuj25JXX3oq8bcrTy54dsWCIyL4uyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=P1TnX+9E; arc=none smtp.client-ip=91.218.175.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W02bij3d"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94D101F000E9;
-	Tue,  1 Sep 2026 02:14:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788228848;
-	bh=8YP3rko65syoeGNZ7xscLywxT+GiLnVXWLudWyqFHEM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=W02bij3d5TQRYv8lUJXb0dI2NjZPdFkvYe2wxVRh+JlUtIV/UkbWL5tRnifGdndE4
-	 S4XZmCvPrB6CZROXew5xkdH+A93vUgWXdBNKo0aKED6p34ZTomAT3iXRPXLHyqtbHZ
-	 UyKQDpqNGKZa0Lp3zi0AA8/h5pUcqwfzW1iRzmtaCssZo2eC8AY7w+2ViR17/lQCdl
-	 PPRNGg4mgPQudwVUOIeIiaQeTas65IA1yhEK5FntwJ0biAy7pdyFqLUHaRbnlNtLdk
-	 mFSOkvA5KSOCCAeOgzayHpSOOBbIJlm/ZsGfL0Dc1o0NahqjwFXB2Juo+YYwR/Teve
-	 Bw2At856DwgTw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf] bpf: Fix program BTF use-after-free in sleepable
- programs
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Sanghyun Park" <sanghyun.park.cnu@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260901014829.3504342-2-sanghyun.park.cnu@gmail.com>
-References: <20260901014829.3504342-2-sanghyun.park.cnu@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 01 Sep 2026 02:14:08 +0000
-Message-Id: <20260901021408.94D101F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="P1TnX+9E"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=7uPbtr2WBHUVzXJjAHM0J1bBu+jQncq3WQCDdhThYVo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788229302; v=1; x=1788834102;
+ b=P1TnX+9EVvR12ORR43x+qcpOqYUD2nmqnr+KjWeoHBK/Mfg7V+sWin6bWVuQ3tJIYWtw7Mrs
+ Iet6e771XlBGhAMmiaOg27rkns1urEIW5Ye40wQKUk0kcmPm/pETH0Yb9RR0Ai4RLx5PXplKKyw
+ mxGi38v1cVcQe+0VTCt/Xsy8=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 2e88f73ed0aea6f1;
+	Tue, 01 Sep 2026 02:21:42 +0000
+X-Mizu-Trace-ID: 2e88f73ed0aea6f1
+X-Migadu-Flow: FLOW_OUT
+From: "Hui Zhu" <hui.zhu@linux.dev>
+To: Roman Gushchin <roman.gushchin@linux.dev>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Barry Song <baohua@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+Subject: [PATCH bpf-next v6 0/2] bpf: BPF-driven proactive memcg reclaim
+Date: Tue,  1 Sep 2026 10:21:09 +0800
+Message-ID: <cover.1788228773.git.zhuhui@kylinos.cn>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-Pre-existing issues:
-- [High] Use-After-Free in bpf_prog_get_file_line() due to synchronous free=
-ing of line info metadata.
-- [High] Premature execution of module_put() allows module unloading while =
-sleepable BPF programs are still executing.
---
+BPF programs can observe memory pressure on a cgroup (e.g. refault
+stats via bpf_mem_cgroup_page_state()), but cannot act on it:
+triggering reclaim on a chosen cgroup requires writing to
+memory.reclaim, which BPF cannot do. This series adds
+bpf_proactive_reclaim(), a sleepable kfunc performing one proactive
+reclaim pass on a target memcg, so when and how hard to reclaim is
+BPF policy rather than hard-coded thresholds.
 
-commit 0ec9f868c2de818dd01ad433f26d1fe0d8574ac5
-Author: Sanghyun Park <sanghyun.park.cnu@gmail.com>
+The kfunc is restricted to BPF_PROG_TYPE_SYSCALL so that reclaim
+always runs in a clean process context: generic sleepable programs
+may execute with filesystem locks held or in NOFS/NOIO contexts,
+where the reclaim path could deadlock in filesystem shrinkers. The
+bpf_wq and task_work callbacks of a SYSCALL program keep its program
+type and run in process context, so reclaim work can still be queued
+asynchronously through them, as the selftest does with bpf_wq.
 
-bpf: Fix program BTF use-after-free in sleepable programs
+The use case we are looking at is protecting high-priority workloads:
+a BPF program monitors the state of a high-priority cgroup and, when
+it degrades (e.g. PSI rises or refaults increase, as in the
+selftest), asynchronously reclaims memory from low-priority cgroups
+via bpf_wq and bpf_proactive_reclaim(), giving the pressured cgroup
+more free pages.
 
-Object kfunc calls embed metadata owned by the program BTF. A sleepable
-program can remain active under Tasks Trace RCU after its last reference is
-dropped, while program teardown releases the BTF through ordinary RCU. The
-invocation can then dereference freed metadata in bpf_obj_new(). Move
-btf_put() into __bpf_prog_put_rcu() to resolve this.
+Another use case: several vendor-maintained kernels carry private
+implementations that trigger asynchronous reclaim when a memcg enters
+a certain state. These exist for historical and partly psychological
+reasons, but the underlying demand is real. We expect BPF-driven
+proactive reclaim, combined with the BPF hooks for the memory
+controller currently under discussion and development, to serve these
+needs in mainline, reducing kernel fragmentation and improving kernel
+maintainability.
 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 6874ba1424af0..26b05b454f18d 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -2451,7 +2452,6 @@ static void __bpf_prog_put_rcu(struct rcu_head *rcu)
->  static void __bpf_prog_put_noref(struct bpf_prog *prog, bool deferred)
->  {
->  	bpf_prog_kallsyms_del_all(prog);
-> -	btf_put(prog->aux->btf);
->  	module_put(prog->aux->mod);
+Hui Zhu (2):
+  mm/bpf: Add bpf_proactive_reclaim kfunc
+  selftests/bpf: Add memcg async reclaim test
 
-[Severity: High]
-This is a pre-existing issue, but does leaving module_put() here allow the
-module to be unloaded while sleepable BPF programs are still executing?
+ mm/bpf_memcontrol.c                           |  76 ++-
+ .../bpf/prog_tests/memcg_async_reclaim.c      | 480 ++++++++++++++++++
+ .../selftests/bpf/progs/memcg_async_reclaim.c | 181 +++++++
+ 3 files changed, 735 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
+ create mode 100644 tools/testing/selftests/bpf/progs/memcg_async_reclaim.c
 
-When a sleepable BPF program is attached to a function in a loadable kernel
-module and its reference count drops to zero, __bpf_prog_put_noref()
-synchronously executes module_put().
+-- 
+2.53.0
 
-The BPF program itself may still be executing or sleeping, protected by the
-Tasks Trace RCU grace period.
-
-Dropping the module reference allows a concurrent rmmod to unload the target
-module. Because module unloading uses synchronize_rcu() rather than
-synchronize_rcu_tasks_trace(), it frees the module memory without waiting
-for the sleepable BPF program to finish.
-
-Can this lead to a kernel crash if the program attempts to return to the fr=
-eed
-module function?
-
->  	kvfree(prog->aux->jited_linfo);
->  	kvfree(prog->aux->linfo);
-
-[Severity: High]
-This is also a pre-existing issue, but can this synchronous freeing of the =
-line
-info metadata cause a use-after-free during a concurrent stack dump?
-
-If CPU 0 executes a BPF program and triggers a stack dump, obtaining the
-prog pointer via bpf_prog_ksym_find(), and CPU 1 concurrently unloads the
-program, it will call __bpf_prog_put_noref(). CPU 1 then synchronously
-executes kvfree(prog->aux->jited_linfo) and kvfree(prog->aux->linfo).
-
-CPU 0 could then proceed to call bpf_prog_get_file_line() in
-kernel/bpf/core.c using the found prog, dereferencing the prematurely freed
-pointers:
-
-kernel/bpf/core.c:bpf_prog_get_file_line() {
-    ...
-    linfo =3D &prog->aux->linfo[prog->aux->linfo_idx];
-    jited_linfo =3D &prog->aux->jited_linfo[prog->aux->linfo_idx];
-    ...
-}
-
-Should these frees also be deferred to the RCU callback?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260901014829.3504=
-342-2-sanghyun.park.cnu@gmail.com?part=3D1
