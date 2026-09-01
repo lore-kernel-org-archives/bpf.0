@@ -1,161 +1,276 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C38F0437455
-	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 17:01:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA2AB367B73
+	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 17:04:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788282111; cv=none; b=ZWjDWtsQb6BfgLSPJBzEpRpjltokQWBOuUkcWZOKm+yxPnE6sHGz8I0EHkBbCEKtEy4/xrB2+gEF2b0hEKOHJZwPtMXYuN6nnGdxUWVe8z96zuVQ44a4k3pPGTFYqijhaU7x7nlUTjq0nnGAf9gR++V3aQSV4yeJR6hXjYXqZuA=
+	t=1788282246; cv=none; b=f4sBLHWVskPplfpnPkh+JegvhdAtyk8d8famupqqFhykLnyqN2PekE0waP7k4nwBur8eG022BOXpArnNhaFtMLTHp5K/CHckD34a2I96x4x5tAQ5Y09+edBXooj6XkNVkGSZ8PrtJ2ly/AJwf7KFtS3DvyhieZuzuJwwAGrPH0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788282111; c=relaxed/simple;
-	bh=+ggo3QAN93DG5nVraoyxPm3BXiTzTCVut93rqdHvQCU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KAljbh9w4fG0z1BZxeUseaTm2IweQ0IqMtNSHV9rNyadJxIT60ggrzLfet7OznpGFKmzpSIU/HDuibXagKngCqKeI0++JPYUeNbJkz8A8tg96Qp7A/vfjX9Yqd99GTMNxUGP85ter3bP+Ji6DvTyHVlcG8ht9aOSkr4rLnXXc8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C9nbVaf+; arc=none smtp.client-ip=209.85.215.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788282246; c=relaxed/simple;
+	bh=iXhO00asyFTTm+Zk2u8wH4kk+nyMNDg1cVyvfu1WssE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=sNjWwTzFwTlbnAfnM8WuAMOgCL/lHNA6YsOugkn/wTffdkNJwZtoOMIxXx8iOsce3CIa7S98qusGGAmW8wM7RFadIdzyXLSdzB9nvLenO5RY6HQnUk15SwmQWIQZUQgob0934SzDApBSBuVScAnRDxPL8VlEojfU8sN694oQOBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=leVSWIkb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C9nbVaf+"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-cc1c7364550so109823a12.1
-        for <bpf@vger.kernel.org>; Tue, 01 Sep 2026 10:01:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788282109; x=1788886909; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=S/HGfpZQkZJuO3OIYZGy+BLzb1UNMZK0dva+xfwCYNg=;
-        b=C9nbVaf+Nw4uJ6LvVnQn6tzjWAatsV7gr4t9b3cG4Eoleo49xn3GGZlzepwJW1pnC9
-         ZPFmPGMaZjgioDFuqsp94kG0mEmmvC0J6ANz6Szg5KiU8gFTQLIOgzkz58RdmJ2W5VSU
-         E2IcM3N8fSFfPN97kGnVEQwQNvJGdnCzC81I9KKcsNX6sL9mLyp+x2i/IYgFFgfvUGrV
-         VQudwy6hRYQVgBU6k218oJPQVmjuBCYI+rar959WnvhgExHkdDjf46eVrnVwymi5Fskw
-         p0IIw8JXW7aNlO/5g7+7Xk72n1KySoP+ECYDnNy3wTdt2d8ETu3CdolkRlqYj3zLvcgA
-         Jukg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788282109; x=1788886909;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=S/HGfpZQkZJuO3OIYZGy+BLzb1UNMZK0dva+xfwCYNg=;
-        b=dnEz6F34pgjl9B1Q+21QPC53wfrqeQkkQyq0QbSwdBVHMa2oKkSZccL/fYV2pzDvwF
-         sL3vs9Uu2dmBVgrSb2iVFcW+iojWplFfzHIVJJJVCI5jQxkq+x/EnlKh7GYRhN0EcMA0
-         FhxQHUmPdB7vx7e/JehF0FiR3hQJt3jsOZybivg+WhKcQBKYJ7x5dGquP5LjkpZOcvNm
-         9tyNKAtiVu7HMegzLapC7TtlLseRaaj1BvbCy/TVaMpL/3YvvuHOcsbYjcXNSDp/d+7C
-         0p0Uq0FU0U8GkjFOHNh6B6y2aR4UiB9hJnOs/OQokqnuNMSnGyOvvlzfptLpMNXV5+a8
-         UCWw==
-X-Gm-Message-State: AFuF++m+GEJ0DGWuJNBEV6cEKSCVJrqx7OitdT1Lh3M9jg5g2j/ZLhHn
-	cWZu4QTIiP+9Fkylx9IZGG9DWroOCNb1Nn9MbAaYVb/m3tIhXzh2NPVZL/BsRge2
-X-Gm-Gg: AYBFou0b0K4oa0dF3VG2hLFo3RAFqFIHQjsVbqjd6QpWbNJRyBEldFErt1GIazsZfRt
-	dutfYwZFmkAUgBjOWQLiLJZJLGjAeqOGRvFtSE/T7tq/Tf5xF5+dpRuvzYjRAHzDZ2cwE1S2yW8
-	XFoYDPGMBvTj5LYntDNg1vqUh8Bop5W34EziJ6xGr00NLM7ksYc+wk6UOXtifOI596t3o0nqiNG
-	PVwraO+DYV4W60My6OdafBhWflqC1lQ1JPC8ZL8SOuYjommU1uO22lyZdOkATMCJ3a0pkwNmLia
-	4d+GosWdq3yN/RtBXjPlFK1J++o5UAj6+OYndwiPmayU9lQGFwgXUVPY63Dp56MAEkpctNFpZwe
-	mgjs4wVgVPQrRh25gTxWsCTcoqn4VeN4LGt1W+OWXulWTvj8q5vHzTokLHsWA4Qg8GI+qdIKIwH
-	ljJF6A0Eq6b6KWq4tTV0SpNAyYMKY+l/PpG1FupGUqS8OjXv9KdWKWTtmZrd/VW3Q/OmUeh9Oz9
-	IqlV//wRUtqj8FZ0mcYhZFhJbRxGEQ6xXWOOzMfviAYKkCNxSbgBtjyTdm9o2h/a27pAKFu2WKm
-	PQT9kSI/cdHqcNWZA9yU/A6xHKwVacwgKqFGS11ty0iZXFsjOs3JyrtYJ7Qz3e1FmzEFeqc5pXQ
-	=
-X-Received: by 2002:a17:90b:4a42:b0:38e:4114:d8c7 with SMTP id 98e67ed59e1d1-3990723f576mr13759918a91.0.1788282108659;
-        Tue, 01 Sep 2026 10:01:48 -0700 (PDT)
-Received: from sid-dev-env.cgrhrlrrq2nuffriizdlnb1x4b.xx.internal.cloudapp.net ([4.155.54.158])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3990bd1b395sm7602073a91.1.2026.09.01.10.01.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2026 10:01:48 -0700 (PDT)
-From: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Siddharth Chintamaneni <sidchintamaneni@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Anton Protopopov <a.s.protopopov@gmail.com>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	rlmenge@gmail.com,
-	hargar@linux.microsoft.com,
-	apais@microsoft.com
-Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Test terminal gotox instructions
-Date: Tue,  1 Sep 2026 17:01:44 +0000
-Message-ID: <20260901170144.70453-2-sidchintamaneni@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260901170144.70453-1-sidchintamaneni@gmail.com>
-References: <20260901170144.70453-1-sidchintamaneni@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="leVSWIkb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D7371F00A3A;
+	Tue,  1 Sep 2026 17:04:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788282244;
+	bh=uKYHe5qFPEmjFyofuoleaoyjMtAzfb/elwMbRfbjV7Y=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=leVSWIkbARDleUWotvxAf9UGOLv53jM8d1xP5ypBi5/pS7nCBHSN6ubkBDyjbGW7G
+	 0ZcreR0r8b9Joaft9tgdh2cozhAoZQd/8ln9UnqR9P5y1IhKFIQPlUmMM1OEebhKhq
+	 +S1ofSvUDeqTLXPBPYSSXXD8va1k6tqQbiXsWczSvWksIJPTwNJUsUI/sU/3OCy6Rr
+	 SP4I3OtVwk031MChBu5lqU1lY9w5I56iZFoWebWga3zD6MHag/wk9JsiNDNqLw7t31
+	 l57grjGOl06nM70V6G0KOf/rkuRqMkZOOTgXTmgVpIzOD8YFyq+g6LxEGB8oMTGgYn
+	 xvWplQc2ositA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCHv5 net-next] tcp: Add TCP ROCCET congestion control
+ module.
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tim Fuechsel" <t.fuechsel@gmx.de>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <apWz9rPcGMgYCKOR@volt-roccet-vm>
+References: <apWz9rPcGMgYCKOR@volt-roccet-vm>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 01 Sep 2026 17:04:04 +0000
+Message-Id: <20260901170404.8D7371F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add tests that place gotox at the end of the main program and a
-subprogram, with each jump-table target preceding the gotox instruction.
-This tests gotox as a valid non-fallthrough terminal instruction.
+Thank you for your contribution! Sashiko AI review found 7 potential issue(=
+s) to consider:
+- [Critical] Concurrent socket initialization mutates global configuration =
+parameters without synchronization, leading to severe data races and corrup=
+tion of `cube_factor`.
+- [Critical] The `curr_rtt` field is implicitly initialized to 0, which per=
+manently corrupts the `curr_min_rtt` calculation if evaluated before a vali=
+d RTT sample is received.
+- [High] The `.ssthresh` callback erroneously returns the unmodified thresh=
+old, bypassing TCP's standard Retransmission Timeout (RTO) backoff and caus=
+ing congestion floods.
+- [High] ROCCET completely fails to reduce its congestion window upon recei=
+ving Explicit Congestion Notification (ECN) CE marks, violating RFC 3168.
+- [High] ROCCET bypasses and breaks TCP's Proportional Rate Reduction (PRR)=
+ fast recovery by blindly overriding `cwnd` assignments during `TCP_CA_Reco=
+very`.
+- [High] Fast convergence logic incorrectly calculates `last_max_cwnd` usin=
+g the artificially slashed probe window instead of the true network capacit=
+y.
+- [Medium] Integer truncation of the acknowledged packet count allows attac=
+kers to spoof a low ACK rate and bypass congestion control.
+--
 
-Signed-off-by: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
----
- .../selftests/bpf/progs/verifier_gotox.c      | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
+commit 8c2a501e71c2cbc59259d9d2e53dda94d869cfdb
+Author: Tim Fuechsel <t.fuechsel@gmx.de>
+Subject: tcp: Add TCP ROCCET congestion control module.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_gotox.c b/tools/testing/selftests/bpf/progs/verifier_gotox.c
-index 5b18c9a27717..cfb5b648891f 100644
---- a/tools/testing/selftests/bpf/progs/verifier_gotox.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_gotox.c
-@@ -47,6 +47,48 @@ DEFINE_SIMPLE_JUMP_TABLE_PROG(reserved_field_src_reg,      BPF_REG_1, 0, 0, __fa
- DEFINE_SIMPLE_JUMP_TABLE_PROG(reserved_field_non_zero_off, BPF_REG_0, 1, 0, __failure __msg("BPF_JA|BPF_X uses reserved fields"))
- DEFINE_SIMPLE_JUMP_TABLE_PROG(reserved_field_non_zero_imm, BPF_REG_0, 0, 1, __failure __msg("BPF_JA|BPF_X uses reserved fields"))
- 
-+#define DEFINE_TERMINAL_GOTOX_PROG(NAME, BASE)			\
-+	__naked void NAME(void)					\
-+	{							\
-+	asm volatile ("						\
-+	.pushsection .jumptables,\"\",@progbits;		\
-+jt0_%=:							\
-+	.quad ret0_%= - " BASE ";				\
-+	.size jt0_%=, 8;					\
-+	.global jt0_%=;						\
-+	.popsection;						\
-+								\
-+	r0 = jt0_%= ll;						\
-+	r0 = *(u64 *)(r0 + 0);					\
-+	goto end_%=;						\
-+ret0_%=:							\
-+	r0 = 0;							\
-+	exit;							\
-+end_%=:							\
-+	.8byte %[gotox_r0];					\
-+"	:							\
-+	: __imm_insn(gotox_r0, BPF_RAW_INSN(BPF_JMP | BPF_JA | BPF_X,	\
-+					    BPF_REG_0, 0, 0, 0))	\
-+	: __clobber_all);					\
-+	}
-+
-+SEC("socket")
-+__success __retval(0)
-+DEFINE_TERMINAL_GOTOX_PROG(jump_table_terminal_gotox, "socket")
-+
-+static __noinline __used
-+DEFINE_TERMINAL_GOTOX_PROG(terminal_gotox_subprog, ".text")
-+
-+SEC("socket")
-+__success __retval(0)
-+__naked void jump_table_terminal_gotox_subprog(void)
-+{
-+	asm volatile ("						\
-+	call terminal_gotox_subprog;				\
-+	exit;							\
-+"	::: __clobber_all);
-+}
-+
- /*
-  * Gotox is forbidden when there is no jump table loaded
-  * which points to the sub-function where the gotox is used
--- 
-2.43.0
+This commit adds TCP ROCCET, a new congestion control algorithm based
+on TCP CUBIC. It aims to improve overall performance and reduce bufferbloat
+in cellular networks by utilizing srRTT and acknowledgment arrival rates.
 
+Link: https://doi.org/10.1109/VTC2023-Fall60731.2023.10333357
+Link: https://doi.org/10.1109/WMNC.2016.7543932
+Link: https://doi.org/10.23919/WONS68803.2026.11501781
+Link: http://go.lu-h.de/roccet-2026-07-21
+
+> diff --git a/net/ipv4/tcp_roccet.c b/net/ipv4/tcp_roccet.c
+> new file mode 100644
+> --- /dev/null
+> +++ b/net/ipv4/tcp_roccet.c
+[ ... ]
+> +static void roccettcp_reset(struct roccettcp *ca)
+> +{
+> +	memset(ca, 0, sizeof(struct roccettcp));
+> +	ca->next_srrtt_check =3D 0;
+> +	ca->curr_min_rtt =3D ~0U;
+[ ... ]
+> +	ca->initial_round_completed =3D false;
+> +}
+> +
+> +static void update_min_rtt(struct sock *sk)
+> +{
+> +	struct roccettcp *ca =3D inet_csk_ca(sk);
+> +
+> +	/* Check if new lower min RTT was found. If so, set it directly */
+> +	if (ca->curr_rtt < ca->curr_min_rtt) {
+> +		ca->curr_min_rtt =3D max(ca->curr_rtt, 1);
+
+[Severity: Critical]
+Does this initialization logic safely handle early ACKs without valid RTT
+samples?
+
+roccettcp_reset() initializes the struct with zeroes, making curr_rtt =3D 0
+and curr_min_rtt =3D ~0U. If an early ACK lacks a valid RTT sample (for
+example, a pure duplicate ACK where sample->rtt_us < 0), curr_rtt remains
+0. The comparison 0 < ~0U will succeed in update_min_rtt(), locking
+curr_min_rtt to 1. Future valid RTTs will never be smaller than 1.
+
+[ ... ]
+> +	} else {
+> +		ca->ack_rate_last_rate_time =3D now;
+> +		ca->ack_rate_last_rate =3D ca->ack_rate_curr_rate;
+> +		ca->ack_rate_curr_rate =3D ca->ack_rate_cnt;
+> +		ca->ack_rate_cnt =3D
+> +			acked; // start counting for the new interval
+> +	}
+
+[Severity: Medium]
+Could this direct assignment truncate the 32-bit acked parameter?
+
+The struct definition restricts ack_rate_cnt to only 16 bits. Without a
+bounding check like min_t(u32, acked, U16_MAX) here, a malicious receiver
+utilizing large windows or LRO/GRO aggregation could acknowledge more than
+65535 packets at once. This would cause the counter to silently wrap
+around and spoof a low ACK rate.
+
+[ ... ]
+> +static void roccet_min_rtt_probe(struct sock *sk, u32 now)
+> +{
+[ ... ]
+> +	} else if (before(now, ca->refill_until)) {
+> +		/* Reset cwnd and refill the pipe. */
+> +		if (ca->state !=3D RTT_PROBE_REFILL) {
+> +			tcp_snd_cwnd_set(tp, ca->cwnd_before_min_rtt_probe);
+> +			tcp_sk(sk)->snd_ssthresh =3D tcp_snd_cwnd(tp);
+> +			ca->state =3D RTT_PROBE_REFILL;
+> +		}
+
+[Severity: High]
+What happens if this min_rtt probe timer expires while the connection is
+mid-recovery?
+
+Abruptly inflating the cwnd back to the pre-probe value during fast
+recovery would bypass the PRR pacing mechanism and inflate the window.
+
+[ ... ]
+> +static void param_precompute(void)
+> +{
+[ ... ]
+> +	/* divide by bic_scale and by constant Srtt (100ms) */
+> +	do_div(cube_factor, bic_scale * 10);
+> +}
+> +
+> +static void roccettcp_init(struct sock *sk)
+> +{
+> +	/* Check & precompute on `init` in order to use the newest
+> +	 * available params.
+> +	 */
+> +	param_check(true);
+> +	param_precompute();
+
+[Severity: Critical]
+Does calling param_precompute() per socket initialization create a data
+race on the global cube_factor variable?
+
+Since roccettcp_init() is invoked dynamically for every newly created
+socket, the unprotected in-place division do_div(cube_factor, ...) mutates
+shared global state. If concurrent sockets are created, threads will
+subject the variable to multiple divisions, resulting in a miscalculation
+of the cwnd target in bictcp_update().
+
+[ ... ]
+> +static u32 roccettcp_ssthresh(struct sock *sk)
+> +{
+> +	return tcp_sk(sk)->snd_ssthresh;
+> +}
+
+[Severity: High]
+Does returning the unmodified snd_ssthresh bypass TCP's required threshold
+reductions?
+
+When a severe congestion event like an RTO timeout occurs, or during an
+ECN CE-mark response in TCP_CA_CWR, the core stack queries the .ssthresh
+callback to shrink the slow-start threshold. Returning the current
+threshold unmodified prevents PRR from pacing properly and allows the
+window to exponentially grow back to massive sizes.
+
+[ ... ]
+> +static u32 roccettcp_recalc_ssthresh(struct sock *sk)
+> +{
+[ ... ]
+> +	if (ca->state =3D=3D RTT_PROBE) {
+> +		/* Handle ECN as cubic congestion event in min
+> +		 * RTT probe.
+> +		 */
+> +		ca->ece_received =3D false;
+> +
+> +		ca->epoch_start =3D 0; /* end of epoch */
+> +
+> +		/* Wmax and fast convergence */
+> +		if (cwnd < ca->last_max_cwnd && fast_convergence)
+> +			ca->last_max_cwnd =3D
+> +				(cwnd * (BICTCP_BETA_SCALE + beta)) /
+> +				(2 * BICTCP_BETA_SCALE);
+> +		else
+> +			ca->last_max_cwnd =3D cwnd;
+> +
+> +		cwnd =3D ca->cwnd_before_min_rtt_probe;
+
+[Severity: High]
+Is this fast convergence calculation using the correct window size?
+
+The active cwnd is artificially halved during the min_rtt probe. By
+calculating the new last_max_cwnd using this slashed probe window before
+restoring the true cwnd, the historical maximum window (which anchors the
+CUBIC curve origin) would become permanently understated.
+
+[ ... ]
+> +	/* Handle ECN as ROCCET congestion event. */
+> +	if (ca->ece_received) {
+> +		ca->ece_received =3D false;
+> +		roccet_congestion_event(sk, jiffies_to_usecs(tcp_jiffies32));
+> +		return tcp_snd_cwnd(tp);
+> +	}
+
+[Severity: High]
+Is this ECN handling code unreachable?
+
+This intended ECN handling code sits inside roccettcp_recalc_ssthresh(),
+which appears to only be invoked by roccettcp_state() during
+TCP_CA_Recovery. Since ECN marks normally trigger TCP_CA_CWR (which
+roccettcp_state() ignores), this logic will never execute during actual
+ECN events, violating protocol requirements.
+
+[ ... ]
+> +static void roccettcp_state(struct sock *sk, u8 new_state)
+> +{
+> +	struct roccettcp *ca =3D inet_csk_ca(sk);
+> +	struct tcp_sock *tp =3D tcp_sk(sk);
+> +
+> +	ca->is_in_recovery =3D false;
+> +
+> +	if (new_state =3D=3D TCP_CA_Loss) {
+> +		roccettcp_reset(ca);
+> +	} else if (new_state =3D=3D TCP_CA_Recovery) {
+> +		ca->is_in_recovery =3D true;
+> +
+> +		/* Here we set the cwnd and ssthresh to the same value so
+> +		 * the TCP state machine knows we are in cong. avoid and
+> +		 * not in slow start.
+> +		 */
+> +		tcp_sk(sk)->snd_ssthresh =3D roccettcp_recalc_ssthresh(sk);
+> +		tcp_snd_cwnd_set(tp, tcp_sk(sk)->snd_ssthresh);
+> +	}
+> +}
+
+[Severity: High]
+Does instantly setting the cwnd here bypass TCP's Proportional Rate
+Reduction (PRR) fast recovery?
+
+Blindly overriding the cwnd assignment upon entering TCP_CA_Recovery
+instantly shrinks the window and destroys the core stack's PRR pacing
+mechanism, which leads to retransmission bursts.
+
+Additionally, the TCP_CA_Loss branch misses the manual ssthresh reduction
+applied to Recovery, cementing the RTO backoff bypass.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/apWz9rPcGMgYCKOR@vo=
+lt-roccet-vm?part=3D1
