@@ -1,193 +1,131 @@
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A6783AB272;
-	Tue,  1 Sep 2026 12:00:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.119
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D226F36B91D
+	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 12:11:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788264026; cv=none; b=eXYRsB8oysl9OcREeEOCvg4oRUkwAJMr7kqoYS/StqlOptY2PQ3duzlfjUrFGjAMJomId/bb7ZQNncRgUjPDHZq0ld1bIyy8epSZeSlFoJc+Px+BwaXGyePMZ5woXhrACUKrwV1B6kGA7AtPlry+884rZ4ZBRqWOECMtOI7B41Q=
+	t=1788264719; cv=none; b=Wel1HjEE3dAr+L45Tz2WR8Oat4RkI0yGUxLAP1zD1Iwq4ljkHHeooYxONc+8Ip+t/d3TGCI48B64GPeWKq49hMe4qxLSrlUvU59QC4WpwJDf/Z1S4WLyWdPh2Oi9Bf3F7r5mhGXzffl/KO31+nuD+zBxKKtcm3XL3W0HKtavMcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788264026; c=relaxed/simple;
-	bh=cUlET6psf7BIbfBdek5vbRlDBPnYp6oUXtNM0GJuQA0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HriVd6PeIKgfNvPf/pN8mezsIhhKZe0RN6ZBahTcCjtzMYRgtOzX47iU9i/ImLR5Ez+q/6NLadYbT99bImh0rSKtlg2clSLQP9EJ8I2WVyeNha5uZl7du+EGPOObfYf/ZZ7PhpUvmEHkSemh12qFd99mCQTw38BvWhKyhf9bNms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=MYy8vwNo; arc=none smtp.client-ip=115.124.30.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1788264719; c=relaxed/simple;
+	bh=54lLC0nW7YN4Du79Mp1Pyaz8KB0k/ah/+PNNjIc0dlQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=j/1jgVJRObk+ZoYg+jwXT3C5M9enXT6hSibuaDzvdmdvZ+s4Fta53ns4SbRWpY43nvJvYHjW78lwBFdUcBA5z5pcHS48ks5AKzj1fIqrgHHjg624aNPGpzNYJnDZOPbLaXky0jGgGYaZSlf3U/bVryCpWt5bGXOnFCVnuF7Z1QE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fPWIUqjD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="MYy8vwNo"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1788264020; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=1dN/5IHaSDbgKWn7C0l1t6XTBlAsWfAhnXn6F5BTEbg=;
-	b=MYy8vwNoZ8rmhg118KS+4FaMPKdinxQTI2uP1jBL5ISYDNL4tXIZwmPm+V32WDU8Mzx/v0gZeiQMqLoS1LJhR/SKhM19nlubI0v0kasN6tgFHBh/rT9AzYRMvoOWvjflpPb8ydM4LcsZYDAZ2Il8VcHEne/JICMAMHrd+wzROzg=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R401e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0XA8S00n_1788264015;
-Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XA8S00n_1788264015 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 01 Sep 2026 20:00:19 +0800
-From: Chen Pei <cp0613@linux.alibaba.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	memxor@gmail.com,
-	bjorn@kernel.org,
-	puranjay@kernel.org
-Cc: ihor.solodrai@linux.dev,
-	eddyz87@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	pulehui@huawei.com,
-	pjw@kernel.org,
-	palmer@dabbelt.com,
-	shuah@kernel.org,
-	guoren@kernel.org,
-	bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next] bpf, riscv: Register extable entries at probe insn call sites
-Date: Tue,  1 Sep 2026 20:00:13 +0800
-Message-ID: <20260901120013.16104-1-cp0613@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fPWIUqjD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 109EA1F000E9;
+	Tue,  1 Sep 2026 12:11:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788264717;
+	bh=kLM/sNVO8SMQ4yj7CKLV++8mTmLYGMuXWndhCJP/6lQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=fPWIUqjDdiG5NLYvbMLgHOY1NdugSvxNcEYU96/PigUSFToL/RNkoErTIb1Y4kOXa
+	 5SrEQ7y01pZY/xSs6Og5mjdblQXCAQo+TTS4NHVEpc+ZK6nU0h/nveCs/2II+4+gZw
+	 QWMuPq+peu/4BDuUMxsTEEXh3ZtGAdvM+0SHqPOyzeTy14KMcdN/yIwHNMDUFFdFqR
+	 +yDkJWsy/EEciXyGOq/JQIf+P8k0XpdnRJN6434yyJ9hDqSxQdPRNj9kswAseMFXVg
+	 H0bGaNIOdVwXlXKJs9+BPcU1fE6Y1g1cuKPAvEV0xxP3J6h1GCeE9yAFnNnQMiG5CX
+	 XQQSYSYAHctog==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next] bpf, riscv: Register extable entries at probe
+ insn call sites
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Chen Pei" <cp0613@linux.alibaba.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260901120013.16104-1-cp0613@linux.alibaba.com>
+References: <20260901120013.16104-1-cp0613@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 01 Sep 2026 12:11:56 +0000
+Message-Id: <20260901121157.109EA1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-add_exception_handler() filters insns by matching BPF_MODE() against
-the probe mode values. These values occupy unused opcode slots and
-collide with legitimate encodings: BPF_PROBE_MEM32SX (0xc0) shares
-its mode value with BPF_ATOMIC. Relying on the mode alone therefore
-risks registering exception table entries for the wrong instructions,
-as would happen for plain atomics without the LDX class check.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-Make the decision explicit at the call sites instead: register an
-entry only when emitting a probe load, a PROBE_MEM32 store, or a
-PROBE_ATOMIC atomic, and drop the fragile mode gate from
-add_exception_handler() along with the now unused insn argument. No
-functional change intended.
+Pre-existing issues:
+- [High] BPF_PROBE_ATOMIC cmpxchg on RISC-V without ZACAS lacks exception t=
+able entries, leading to an unhandled page fault and kernel panic for unmap=
+ped arena accesses.
+--
 
-Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
----
-base-commit: d761934c9483ecde93fe99d8705282f716dfee50
+commit 77ab37f77b219155ec1dc7c551ef131f6c642039
+Author: Chen Pei <cp0613@linux.alibaba.com>
+bpf, riscv: Register extable entries at probe insn call sites
 
- arch/riscv/net/bpf_jit_comp64.c | 50 ++++++++++++++++++---------------
- 1 file changed, 28 insertions(+), 22 deletions(-)
+This commit removes the mode gate from add_exception_handler() and explicit=
+ly
+registers exception handlers only at probe instruction call sites. It aims
+to prevent collisions between probe mode values and legitimate instruction
+encodings.
 
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index e7378be171a9..726c0169fc60 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -731,9 +731,8 @@ bool ex_handler_bpf(const struct exception_table_entry *ex,
- 	return true;
- }
- 
--/* For accesses to BTF pointers, add an entry to the exception table */
--static int add_exception_handler(const struct bpf_insn *insn, int dst_reg,
--				 struct rv_jit_context *ctx)
-+/* Add an entry to the exception table for a faulting probe insn */
-+static int add_exception_handler(int dst_reg, struct rv_jit_context *ctx)
- {
- 	struct exception_table_entry *ex;
- 	unsigned long pc;
-@@ -744,14 +743,6 @@ static int add_exception_handler(const struct bpf_insn *insn, int dst_reg,
- 	    ctx->ex_insn_off <= 0 || ctx->ex_jmp_off <= 0)
- 		return 0;
- 
--	if (BPF_MODE(insn->code) != BPF_PROBE_MEM &&
--	    BPF_MODE(insn->code) != BPF_PROBE_MEMSX &&
--	    BPF_MODE(insn->code) != BPF_PROBE_MEM32 &&
--	    !(BPF_MODE(insn->code) == BPF_PROBE_MEM32SX &&
--	      BPF_CLASS(insn->code) == BPF_LDX) &&
--	    BPF_MODE(insn->code) != BPF_PROBE_ATOMIC)
--		return 0;
--
- 	if (WARN_ON_ONCE(ctx->nexentries >= ctx->prog->aux->num_exentries))
- 		return -EINVAL;
- 
-@@ -1360,6 +1351,15 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *ro_image,
- 	return ret < 0 ? ret : size;
- }
- 
-+/* Probe loads fault on unmapped memory and need an exception table entry */
-+static bool insn_is_probe_ldx(const struct bpf_insn *insn)
-+{
-+	return BPF_MODE(insn->code) == BPF_PROBE_MEM ||
-+	       BPF_MODE(insn->code) == BPF_PROBE_MEMSX ||
-+	       BPF_MODE(insn->code) == BPF_PROBE_MEM32 ||
-+	       BPF_MODE(insn->code) == BPF_PROBE_MEM32SX;
-+}
-+
- int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		      bool extra_pass)
- {
-@@ -1929,9 +1929,11 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 
- 		emit_ldx(rd, off, rs, BPF_SIZE(code), sign_ext, ctx);
- 
--		ret = add_exception_handler(insn, rd, ctx);
--		if (ret)
--			return ret;
-+		if (insn_is_probe_ldx(insn)) {
-+			ret = add_exception_handler(rd, ctx);
-+			if (ret)
-+				return ret;
-+		}
- 
- 		if (BPF_SIZE(code) != BPF_DW && insn_is_zext(&insn[1]))
- 			return 1;
-@@ -1959,9 +1961,11 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 
- 		emit_st(rd, off, imm, BPF_SIZE(code), ctx);
- 
--		ret = add_exception_handler(insn, REG_DONT_CLEAR_MARKER, ctx);
--		if (ret)
--			return ret;
-+		if (BPF_MODE(insn->code) == BPF_PROBE_MEM32) {
-+			ret = add_exception_handler(REG_DONT_CLEAR_MARKER, ctx);
-+			if (ret)
-+				return ret;
-+		}
- 		break;
- 
- 	/* STX: *(size *)(dst + off) = src */
-@@ -1981,9 +1985,11 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 
- 		emit_stx(rd, off, rs, BPF_SIZE(code), ctx);
- 
--		ret = add_exception_handler(insn, REG_DONT_CLEAR_MARKER, ctx);
--		if (ret)
--			return ret;
-+		if (BPF_MODE(insn->code) == BPF_PROBE_MEM32) {
-+			ret = add_exception_handler(REG_DONT_CLEAR_MARKER, ctx);
-+			if (ret)
-+				return ret;
-+		}
- 		break;
- 
- 	/* Atomics */
-@@ -2001,7 +2007,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			ret = emit_atomic_rmw(rd, rs, insn, ctx);
- 
- 		/* ret can be 1 (skip-zext); extable entry still needs to be added */
--		if (ret >= 0) {
-+		if (ret >= 0 && BPF_MODE(insn->code) == BPF_PROBE_ATOMIC) {
- 			/*
- 			 * A load-acquire reads into dst_reg, and a read-modify-write
- 			 * carrying BPF_FETCH reads the old value into src_reg, or into
-@@ -2010,7 +2016,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			 */
- 			int load_reg = bpf_atomic_load_reg(insn);
- 
--			ret = add_exception_handler(insn, load_reg < 0 ?
-+			ret = add_exception_handler(load_reg < 0 ?
- 					REG_DONT_CLEAR_MARKER : regmap[load_reg],
- 					ctx) ?: ret;
- 		}
--- 
-2.50.1
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_com=
+p64.c
+> index e7378be171a9f..726c0169fc60f 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
+[ ... ]
+> @@ -2001,7 +2007,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, =
+struct rv_jit_context *ctx,
+>  			ret =3D emit_atomic_rmw(rd, rs, insn, ctx);
+> =20
+>  		/* ret can be 1 (skip-zext); extable entry still needs to be added */
+> -		if (ret >=3D 0) {
+> +		if (ret >=3D 0 && BPF_MODE(insn->code) =3D=3D BPF_PROBE_ATOMIC) {
+>  			/*
+>  			 * A load-acquire reads into dst_reg, and a read-modify-write
+>  			 * carrying BPF_FETCH reads the old value into src_reg, or into
+> @@ -2010,7 +2016,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, =
+struct rv_jit_context *ctx,
+>  			 */
+>  			int load_reg =3D bpf_atomic_load_reg(insn);
+> =20
+> -			ret =3D add_exception_handler(insn, load_reg < 0 ?
+> +			ret =3D add_exception_handler(load_reg < 0 ?
+>  					REG_DONT_CLEAR_MARKER : regmap[load_reg],
+>  					ctx) ?: ret;
+>  		}
 
+[Severity: High]
+This isn't a bug introduced by this patch, but does emit_cmpxchg() correctly
+establish an exception handler boundary when ZACAS is not enabled?
+
+If a BPF program uses BPF_PROBE_ATOMIC with BPF_CMPXCHG on an unmapped memo=
+ry
+address on a RISC-V CPU without the ZACAS extension, emit_cmpxchg() falls
+back to a load-reserved/store-conditional loop:
+
+arch/riscv/net/bpf_jit.h:emit_cmpxchg() {
+    ...
+	if (rv_ext_enabled(ZACAS)) {
+		ctx->ex_insn_off =3D ctx->ninsns;
+		emit(is64 ? rvzacas_amocas_d(r0, rs, rd, 1, 1) :
+		     rvzacas_amocas_w(r0, rs, rd, 1, 1), ctx);
+		ctx->ex_jmp_off =3D ctx->ninsns;
+        ...
+		return;
+	}
+
+	if (is64)
+		emit_mv(RV_REG_T2, r0, ctx);
+	else
+		emit_addiw(RV_REG_T2, r0, 0, ctx);
+	emit(is64 ? rv_lr_d(r0, 0, rd, 0, 0) :
+	     rv_lr_w(r0, 0, rd, 0, 0), ctx);
+    ...
+}
+
+In the non-ZACAS path, ctx->ex_insn_off and ctx->ex_jmp_off are not updated
+before emitting the faulting load-reserved instruction.
+
+When add_exception_handler() is subsequently called here in
+bpf_jit_emit_insn(), it will use stale offsets. Can this cause an unhandled
+page fault and a kernel panic when accessing unmapped arena memory?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260901120013.1610=
+4-1-cp0613@linux.alibaba.com?part=3D1
