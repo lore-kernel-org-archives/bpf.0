@@ -1,208 +1,279 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43733483821
-	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 16:57:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3CF848383E;
+	Tue,  1 Sep 2026 16:58:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788281848; cv=none; b=ccP7UVLtfC2TETEsc7ukKGbJRMLV5yX+ZEGxPI9lvV2ClJoPATxi+Wrvlw03U/h4goXtkN/q0oe1tRr9A/a2z5yBQW9DfLL6sLPep8jUyGun1O5L5FlPYXnFYwhJbWJEZnY4QN69UQCnbTE3UudNFN0mBGVepEPVxOpb+6CqAT8=
+	t=1788281913; cv=none; b=VDr8au8tzWnVchXu0dqSxeb7522QkXTx1l/CDipVDhvNgwVefZyE5bisrajCvY5Bd/qtgcV2gk7ZkOVr9CiEpJtzR1a3yuHQYv9W/EBwj2YmfH9J4BPOQQiycpVIHkeusJJpefNmwAw4DPGpa3c34oXmxAOqij6IPzUvCdBpYhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788281848; c=relaxed/simple;
-	bh=lgwdoTrlO0HEFS94P4RArG+h9VAkaKbGLxswo5sqNXI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TMf6k2goSaQljemdKat8/9HyWCM/cvPsSNdCIYtHMHxMzqeusBx9+At34g7UXcYjBbyHh0PHeDRs8sbazperTk22s1TcDJLlrQosS+DxTt42jDQlelCksWii5t51iyb3JwYkrs/zG7E699m+cOsyLZw6xiEuV7rayTwG+W7/Dnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bHbYyok9; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788281913; c=relaxed/simple;
+	bh=dUvvnKblGXcu4zabABfH+AUKezeg+WAag4l9+8AASTo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NlKAhCGAFr151YGlHPiQbCmpaC9QxFzFwwdwqjW/1cNac6yL3kr/MJ9twgpPgs74v4RBnPCcEGHgk3dEppvu4vhAjLs+JFYJaOzDkhs5nloS4WwC3V0s9ClXqZ/2YEoIjqH5ljoYLZgTU3RM9zr0cxKmLN539BqFlZ9UW7GDHao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=jgteeqn7; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bHbYyok9"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-49b8be0409fso9380245e9.2
-        for <bpf@vger.kernel.org>; Tue, 01 Sep 2026 09:57:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788281844; x=1788886644; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=bwW47ioONs/Vqr3qlve/7uLurw9nuu4muvuRMdEX4tA=;
-        b=bHbYyok97xbWPZzyU/6milPuBdpCPAsQ2et42/SA+T9yhFsZ1PfuFgVON2SnEe4/mO
-         HoJZJoE1sWcFRptxieUF/D1OmrLXF8dIDxAJo6nlJCCQICE5qySrex6LZlpFf+2lmAz2
-         pxzMx5uLkT1OGx8xa2Sqgye/8V6YsI9c6YNNBawVqjuBxyAAYBntNZHZtD4+/pXY2MbC
-         Dy2ftV2vxaQAAyFfWdail9+oGy1iauxkhjVlViT2a2mObXUUx9vBRy1Kr0HZ/VS5LS3k
-         59Wjy6WierUI9jZb+R0rpR/jAWKHSd0cixECOuobKOaezb8po8YjBVwoH/rL3vAn3FM+
-         grBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788281844; x=1788886644;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=bwW47ioONs/Vqr3qlve/7uLurw9nuu4muvuRMdEX4tA=;
-        b=QayqEt7E3nVQQtyv9fL/Zd1QVpmGv8Gy2txuG9tVhDd1Zype5XNG7U6sndwnv4unWl
-         O9uyNMQJ5Z0IjZ9BDpjYhKD3/PUtcGhJWqQF+/QUjkC0pEnhd+dLse9db3yrMybvzNYj
-         ncicB+Ns3EBhsgHUBLfuMKJiXGR8eC7c+N3GQlewnjgkPq/9MDEFOnw0z8ecbYADIw++
-         pJb+/s63c7SE/YC3hKBY6yQWAM78Vuhf1DBiMrqHQvVp9ONKxhq3NaddfEKw2VS7vOa5
-         0PZSM+tNWL0GYWvB8qL3Zv4qufk/1ST4wqy0kEuFZLDUEh0hewMzNrOkIr2j3W0/SrvA
-         J8Nw==
-X-Forwarded-Encrypted: i=1; AHgh+RrXuTc2OWwu0jxRUVoUmjuq/3L5NHyghgnvbONTPttu+gyUlY8vWow7S+vTK82WeETNktM=@vger.kernel.org
-X-Gm-Message-State: AFuF++ngqYe4/s7j/M5mVsohhOfUyYf+MopBrzMxhdJJTn9RKCQmgGJ6
-	u72v/jkpftYTKII1b7NBGp3B1WEuIbbzStB9F4dyWHR1t/zbuXROJ50o
-X-Gm-Gg: AR+sD13FbZ1Co+LbWfTuR4E3uGsV8heZTnZdrso4KJYSTU1NnuiLb2MBkSL+3TL5aRT
-	QUv/k2nzGdxCRSwqehHQnIXkuvyKZc102pc/9nRBxLHlQ1XmgXj4B8qrGrrE3y3VGFj2VBdT98m
-	TKNHJvHz1y+AwJfvVRDGTD3UYory6uMwFqP+RFQk1hIFM017Az8eXlNZksp5oH99jDTaAH1T4t3
-	aBlFDnBAEXwPmdk2lZzEAjKh3oa3XEibzF2Iz2RODofOAfslwKg5EIqKfdsFLrBUEmbUiwvTbQZ
-	cZV3YdxLvvJwpbof/5kq4aIGI5207Or1J8fSBLF647vSSE5j2TL0EWrD/EGvaOThtIhUo+jROfX
-	ebbxgeca/ZgJWpq5RIXBvsOy+6nx13cnTnLaKG3hqany2krleM+UVNimARbliib4gAdv7Q+Lc3k
-	rL27cN378m7VPSkvO9DaJ+cKIa20Vx2v6Rkr7nfBYH4jcPQflCqfN+MhdZD0bfKUG/gyiYo3zhO
-	pi74RjbAnn0nCcdBraqwcBu2w==
-X-Received: by 2002:a05:600c:3511:b0:499:adb4:a922 with SMTP id 5b1f17b1804b1-49b91c4bab5mr413374315e9.12.1788281844013;
-        Tue, 01 Sep 2026 09:57:24 -0700 (PDT)
-Received: from ?IPV6:2a03:83e0:1126:4:f403:a537:85fc:d569? ([2620:10d:c092:500::6:3965])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48448e72c28sm362209f8f.6.2026.09.01.09.57.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Sep 2026 09:57:23 -0700 (PDT)
-Message-ID: <6727850f-7d94-4e01-bc42-bd630f7e6e26@gmail.com>
-Date: Tue, 1 Sep 2026 17:57:22 +0100
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="jgteeqn7"
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 681EQBjN231357;
+	Tue, 1 Sep 2026 16:58:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=corp-2025-04-25; bh=Fa+mDCnAg8L+K3s8
+	8eIiUveGn+rg4KrlWBXzi0f63gI=; b=jgteeqn7XgOVP/Gtnl+9Xw70gU2iv0ea
+	irAr6T0vMlhf+4psNJ8OEsr+zP3XZvcsIItGqlWt4aH0Uygeehls/2Ti7RSK9b+H
+	r0dKTXZfVB/FFjCjqaV1QVwdzSqkSd6H+AW9dyalzuUh1MIHkf2qX8peWrm7Rwa+
+	r6YCtJk4b1V2WiNT5SxdKkqudwNwMs2WDJJZ1IDmfuUJK3DA41LvpoB4fcI2Oumj
+	wqZ/MONjqd9v/4sHD+sB/MlphFpZn7xd+QlT6JzllqDTpn0nioUZmJ+RzU7vjiQZ
+	/WhJa0GOU6VoIPmu4EGAtbPoP5zqGjZPsuGS2CJZRk4Oh76x++TyEQ==
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gbqa7n3sh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 01 Sep 2026 16:58:03 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 681GjSMu001822;
+	Tue, 1 Sep 2026 16:58:02 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gdymtg8gp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 01 Sep 2026 16:58:01 +0000 (GMT)
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 681Gw1Vp011129;
+	Tue, 1 Sep 2026 16:58:01 GMT
+Received: from bpf.uk.oracle.com (dhcp-10-154-52-250.vpn.oracle.com [10.154.52.250])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4gdymtg8f6-1;
+	Tue, 01 Sep 2026 16:58:00 +0000 (GMT)
+From: Alan Maguire <alan.maguire@oracle.com>
+To: ast@kernel.org, andrii@kernel.org
+Cc: daniel@iogearbox.net, eddyz87@gmail.com, jolsa@kernel.org,
+        ihor.solodrai@linux.dev, yonghong.song@linux.dev, song@kernel.org,
+        qmo@kernel.org, martin.lau@linux.dev, memxor@gmail.com,
+        emil@etsalapatis.com, mcgrof@kernel.org, petr.pavlu@suse.com,
+        tj@kernel.org, kees@kernel.org, bpf@vger.kernel.org, nathan@kernel.org,
+        nsc@kernel.org, arnd@arndb.de, puranjay@kernel.org, yatsenko@meta.com,
+        atenart@kernel.org, ojeda@kernel.org, linux-modules@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v2 bpf-next 00/18] Support inline functions in BTF
+Date: Tue,  1 Sep 2026 17:57:39 +0100
+Message-ID: <20260901165757.801449-1-alan.maguire@oracle.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 1/4] bpf: Cancel special fields in resizable
- hashtab on recycle
-To: chenyuan_fl@163.com, bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
- Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>, Yuan Chen <chenyuan@kylinos.cn>
-References: <0560a24d-2cf9-4e5b-aa61-580af1e56de1@gmail.com>
- <20260901062845.1379760-1-chenyuan_fl@163.com>
- <20260901062845.1379760-2-chenyuan_fl@163.com>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260901062845.1379760-2-chenyuan_fl@163.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-01_04,2026-09-01_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
+ adultscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
+ bulkscore=0 mlxlogscore=999 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2606160000 definitions=main-2609010148
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTAxMDE1MCBTYWx0ZWRfX2YgDjWSJ1VU+
+ F8c9mIJQ5Kffi24UV+gBt4TpUkQBkcuSvLGG1NTQz+r8k239xGg/z53xNkniND+0U5vqy7ZmuCN
+ ssODt1cb5+qajl3RWXOy8LPW9YlpTzV5ZWUrDHbOp5yBJMdmi2Rc
+X-Proofpoint-GUID: 378WsFYuB7aQkSfYUKEIiM_QA8mL-WnB
+X-Authority-Analysis: v=2.4 cv=DPu/JSNb c=1 sm=1 tr=0 ts=6a97041b b=1 cx=c_pps
+ a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
+ a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=EIcjfB9IiI4px24ztqRk:22 a=07d9gI8wAAAA:8
+ a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8 a=QPHJuCtNaKxP3Rz0Ko8A:9
+ a=QEXdDO2ut3YA:10 a=e2CUPOnPG4QKp8I52DXD:22 a=5yU3S35YU4bGjq-dph-N:22
+ a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:13521
+X-Proofpoint-ORIG-GUID: 378WsFYuB7aQkSfYUKEIiM_QA8mL-WnB
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTAxMDE1MCBTYWx0ZWRfXw5nFDC6DvFCu
+ w6SWU8TDMbugOF6uiz9UZ8By0yAcBf5Yoqz+isVTxnkFWh0qmmMEK0WngouJFtTIxb1KncICE3q
+ Gfu/6LlLaCMgovkV9l+iP0mRiOizaf3GFMH6HAmEY894+v1ATbJ5ny365WfwO42z6L1cF37sMKO
+ NJwJKhfOL/2HUTh14SbvBQb2BTZrQwZkMfkenxLBwqa3d08yO3AOUUq0vxIfw9hBsAyM57bFE6K
+ w8t5xafOhIms5G6rtzgkRaLvLw5nLMsyIHMh/AlqWyxu09S8u5p6M89HppmDQQ+5tF2gzWSaCVZ
+ F5sI71MmtCdN77+WHVd+F1lZ5xuIw7AcTRgL/pboPh52btXtANIvD+90kalsVjMIZt2gTFoswRN
+ ickkR1sV8q2k7BQDVduT6kPI/4IHgGpykqVx0X8MIOiJaXMnGfxN2ktd6bOKTJZZcEkJn4HU7p/
+ M3zGx2sDc05EYTCPsdE//mpGCUEE+BNchL5QcKf0=
 
+This series adds support to facilitate tracing of inline function
+sites using BPF Type Format (BTF) information. An excellent overview
+of the problem and proposed solution presented at LSF/MM/BPF is
+available at [1].
 
+The aim is to produce a compact representation providing sufficient
+information to a tracer wishing to instrument an inline site via a
+kprobe.  The challenge to solve is compact representation - my
+local bpf-next builds show nearly 600,000 inline sites for approximately
+100,000 functions.  Any BTF representation should utilize deduplication
+where possible to minimize overheads.
 
-On 9/1/26 7:28 AM, chenyuan_fl@163.com wrote:
-> From: Yuan Chen <chenyuan@kylinos.cn>
-> 
-> rhtab_delete_elem() and rhtab_map_update_existing() eagerly call
-> bpf_obj_free_fields() when an element is deleted or its value is
-> replaced. This runs kptr destructors in the caller's execution
-> context, which is unsafe for BPF programs running in NMI context
-> (e.g. perf_event programs attached to hardware PMU overflows):
-> referenced kptr destructors may take locks or otherwise cannot run
-> in NMI.
-> 
-> Commit a3a81d247651 ("bpf: Cancel special fields on map value
-> recycle") switched the hash map and array recycle paths to
-> bpf_obj_cancel_fields(), which only cancels NMI-safe fields (timer,
-> workqueue, task_work), but it missed the resizable hashtab.
-> rhtab_map_update_existing() even documents the intended "cancel"
-> semantics while still calling bpf_obj_free_fields().
-> 
-> Fix the resizable hashtab the same way: call bpf_obj_cancel_fields()
-> on delete and in-place update, matching htab. Referenced kptrs stay
-> attached to the recycled element and are destroyed by rhtab_mem_dtor()
-> once the element is eventually freed, keeping the reference accounting
-> balanced. No special-field initialization is added to the element
-> alloc path: fresh elements come zeroed from the bpf mem allocator,
-> recycled elements already had their timer/workqueue/task_work slots
-> reset by bpf_obj_cancel_fields(), and check_and_init_map_value() would
-> zero the kptr slot of a recycled element, dropping the reference
-> without releasing it.
-> 
-> Verified with a selftest: a perf_event (NMI) program overwrites a
-> rhtab element that holds a referenced task kptr, and a second phase
-> deletes and re-inserts the element to exercise the recycle path.
-> Before the patch the NMI update eagerly released the kptr and the
-> recycle path zeroed the inherited slot; after the patch the kptr is
-> inherited on both paths and the probe observes it non-NULL.
-> 
-> Fixes: a3a81d247651 ("bpf: Cancel special fields on map value recycle")
-> Suggested-by: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-> Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
-> ---
->  kernel/bpf/hashtab.c | 32 ++++++++++++++++----------------
->  1 file changed, 16 insertions(+), 16 deletions(-)
-> 
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index d40cb5dd446c..aaedda3730f3 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-> @@ -2864,16 +2864,6 @@ static int rhtab_map_alloc_check(union bpf_attr *attr)
->  	return htab_map_alloc_check(attr);
->  }
->  
-> -static void rhtab_check_and_free_fields(struct bpf_rhtab *rhtab,
-> -					struct rhtab_elem *elem)
-> -{
-> -	if (IS_ERR_OR_NULL(rhtab->map.record))
-> -		return;
-> -
-> -	bpf_obj_free_fields(rhtab->map.record,
-> -			    rhtab_elem_value(elem, rhtab->map.key_size));
-> -}
-> -
->  static void rhtab_mem_dtor(void *obj, void *ctx)
->  {
->  	struct htab_btf_record *hrec = ctx;
-> @@ -2963,8 +2953,9 @@ static int rhtab_delete_elem(struct bpf_rhtab *rhtab, struct rhtab_elem *elem, v
->  		rhtab_read_elem_value(&rhtab->map, copy, elem, flags);
->  		check_and_init_map_value(&rhtab->map, copy);
->  	}
-> -	/* Release internal structs: kptr, bpf_timer, task_work, wq */
-> -	rhtab_check_and_free_fields(rhtab, elem);
-> +	/* Cancel NMI-safe fields; full destruction happens in rhtab_mem_dtor */
-> +	bpf_obj_cancel_fields(&rhtab->map,
-> +			      rhtab_elem_value(elem, rhtab->map.key_size));
->  	bpf_mem_cache_free_rcu(&rhtab->ma, elem);
->  	return 0;
->  }
-> @@ -3022,10 +3013,12 @@ static long rhtab_map_update_existing(struct bpf_map *map, struct rhtab_elem *el
->  	 * BPF_F_LOCK, matching arraymap semantics.
->  	 *
->  	 * copy_map_value() skips special-field offsets, so old timers/
-> -	 * kptrs/etc. still sit in the slot. Cancel them after the copy
-> -	 * to match arraymap's update semantics.
-> +	 * kptrs/etc. still sit in the slot. Cancel the NMI-safe ones after
-> +	 * the copy to match arraymap's update semantics; referenced kptrs
-> +	 * stay attached and are destroyed by rhtab_mem_dtor().
->  	 */
-> -	rhtab_check_and_free_fields(rhtab, elem);
-> +	bpf_obj_cancel_fields(&rhtab->map,
-> +			      rhtab_elem_value(elem, rhtab->map.key_size));
->  	return 0;
->  }
->  
-> @@ -3066,7 +3059,14 @@ static long rhtab_map_update_elem(struct bpf_map *map, void *key, void *value, u
->  
->  	memcpy(elem->data, key, map->key_size);
->  	copy_map_value(map, rhtab_elem_value(elem, map->key_size), value);
-> -	check_and_init_map_value(map, rhtab_elem_value(elem, map->key_size));
-> +	/*
-> +	 * No explicit special-field initialization, matching the hash map's
-> +	 * non-prealloc path: fresh elements come zeroed from the bpf mem
-> +	 * allocator, and recycled elements had their timer/workqueue/task_work
-> +	 * slots reset by bpf_obj_cancel_fields() on delete. kptr slots are
-> +	 * left untouched so a recycled element keeps owning its reference
-> +	 * until rhtab_mem_dtor() releases it.
-> +	 */
+The approach used here is to encode a series of inline sites in
+a BTF DATASEC-like LOCSEC named for the associated section (like
+".text", where each entry consists of a
 
-I'm not sure this comment is useful, we don't comment on why we are not zeroing
-special fields in htab, so why here.
-Please address the finding of the bot regarding the old_val variable and for the
-next respin send the patch series independently, not as a response to an old thread.
->  
->  	/* Prevent deadlock for NMI programs attempting to take bucket lock */
->  	bpf_disable_instrumentation();
+<function type id, location prototype id, offset from base address>
+
+triple. The function type id is the BTF_KIND_FUNC that was inlined,
+the location prototype is a BTF_KIND_LOC_PROTO which tells us
+for each function parameter how it is represented at the site.
+It is a collection of either type id 0 (parameter not available)
+or BTF_KIND_LOC_PARAM ids, the latter encoding a register number,
+a dereference, a constant etc.  Finally the offset is relative to
+the base address, so in the case of the kernel this allows for
+kASLR, and modules addresses are relative to module base address.
+
+Full location parameter information is available for ~78% of
+inlined functions; in other words all function parameters are
+expressed via BTF_KIND_LOC_PARAM and can be retrieved.  Those
+remaining have more complex multi-expression encoding or are
+not available at all.
+
+For a vmlinux with 6Mb of BTF in /sys/kernel/btf/vmlinux, I
+see 10.8Mb of inline information.  When delivered as a compressed
+module, the module size is 3.5Mb (via CONFIG_DEBUG_INFO_BTF_INLINE=m).
+In this module-delivered mode, /sys/kernel/btf/vmlinux.inline will
+be zero-sized until it is opened, at which point the module is
+requested so the user experience is identical to when inline info
+is derived from vmlinux itself, but we save the allocation associated
+with live inline representation.
+
+This series is rather large, and ideally we would split it into
+basic inline support in kernel/libbpf/bpftool and associated tests
+(patches 1-11) and delivery of inline info (patches 12-18).
+
+This would allow us to land the pahole support once the libbpf
+interfaces become available, though it will work in its absence.
+The pahole code is still being tested but is available at [2].
+
+Patch 1 consists of the UAPI changes and associated basic support
+for KIND_LOC[SEC|PARAM|PROTO].
+
+Patch 2 wires in libbpf support to handle these, including in dedup,
+field iteration and so on.  LOCSEC does not dedup since each entry
+has a unique offset, but LOC_PARAM and LOC_PROTO do.
+
+Patch 3 widens BTF permutation to support a transfer mode which
+allows us to move a subset of types to a newly-created split BTF.
+This will allow resolve_btfids to take a pahole-generated BTF
+object (consisting of usual BTF plus inline info) and separate
+out the inline-relevant components into a new .BTF.inline section.
+This is an approach in line with other resolve_btfids changes which
+prepare more generic BTF for the needs of the kernel.
+
+Patches 4-8 provide tests for all of this.
+
+Patches 9-11 add bpftool support to handle multi-split BTF for
+inline info and to display location info.
+
+Patch 12 adds resolve_btfids support to split out inline info
+with the aim that any functions that are exclusively needed for
+inline sites wind up in the inline BTF; this is a good test to
+see if a function is likely fully inlined.  Similarly any LOCSEC
+references < start BTF id of the inline BTF suggest partially
+inlined functions.  See the patch for the nuances.  resolve_btfids
+takes as input BTF consisting of the usual vmlinux BTF objects
+and inline-related ones; its role is to create a split BTF
+where we move the inline-related pieces out so that
+/sys/kernel/btf/vmlinux (or module equivalent) is the same
+as before and does not pay the cost of inline representations.
+This approach is different to how it was done in the RFC because
+the model of applying kernel customizations in resolve_btfids
+did not exist to the same degree then.  In the RFC approach,
+pahole delivered already-split BTF and we relocated it, but
+since the base BTF it is built on now is transformed significantly
+(added/changed types, sorting, dedup) it is not feasible to
+track id changes across all of these operations.  As such
+we view splitting the inline info out as another kernel-specific
+customization.
+
+Patches 13-16 add support to the kbuild infrastructure and
+/sys/kernel/btf representations for inline data.  We can choose
+to deliver vmlinux inline info via a module (since it is ~10Mb
+that makes sense) but there are some issues in getting that
+module to load when /sys/kernel/btf/vmlinux.inline is accessed
+that are described in patch 15).  Patch 16 handles relocation
+of distilled base BTF for out-of-tree modules, ensuring that
+relocation works across module and module inline info.  The
+painful part here is that we need to relocate ids in the
+inline info, which requires multi-split BTF support.  Happily
+that is not a big change.
+
+Finally tests in patches 17, 18 cover sysfs representation
+and we introduce an inline site to bpf_testmod and ensure
+its representation makes sense.
+
+Changes since RFC [3]:
+
+- Support for distilled base BTF
+- Support for BTF_INLINE=m on-demand loading
+- Reworked inline support to handle new resolve_btfids model
+- .BTF.inline sections host FUNCs/FUNC_PROTOs/strings that are
+  needed for inline info only, avoiding polluting standard
+  vmlinux/module BTFs
+
+[1] https://lwn.net/Articles/1083985/
+[2] https://github.com/alan-maguire/dwarves/tree/pahole-next-btf-inline-v2-testing
+[3] https://lore.kernel.org/bpf/20251008173512.731801-1-alan.maguire@oracle.com/
+
+Alan Maguire (18):
+  btf: Extend UAPI to support BTF location (inline site) info
+  libbpf: Add support for BTF kinds LOC[_PARAM|_PROTO|SEC]
+  libbpf: Support moving permuted BTF types into split BTF
+  selftests/bpf: Test helper support for BTF_KIND_LOC[_PARAM|_PROTO|SEC]
+  selftests/bpf: Add LOC_PARAM, LOC_PROTO, LOCSEC to field iter tests
+  selftests/bpf: Add LOC_PARAM, LOC_PROTO, LOCSEC to dedup split tests
+  selftests/bpf: BTF distill tests to ensure LOC[_PARAM|_PROTO] add to
+    split BTF
+  selftests/bpf: Validate that btf__permute transfer works
+  bpftool: Handle multi-split BTF by supporting multiple base BTFs
+  bpftool: Document support for multi-split BTF
+  bpftool: Add ability to dump LOC_PARAM, LOC_PROTO and LOCSEC
+  resolve_btfids: Extract inline BTF
+  kbuild: Add support for BTF inline information
+  btf: Make vmlinux, module inline info available in /sys/kernel/btf
+  btf: Support CONFIG_DEBUG_INFO_BTF_INLINE=m
+  btf: Relocate inline BTF for modules with distilled base BTF
+  selftests/bpf: Test BTF sysfs inline representations
+  selftests/bpf: Add a test verifying inline information
+
+ Makefile                                      |   1 +
+ include/asm-generic/vmlinux.lds.h             |  11 +
+ include/linux/btf.h                           |  23 +-
+ include/linux/module.h                        |   4 +
+ include/uapi/linux/btf.h                      |  65 +-
+ kernel/bpf/Makefile                           |   1 +
+ kernel/bpf/btf.c                              | 686 ++++++++++++++++--
+ kernel/bpf/btf_vmlinux_inline.c               |  37 +
+ kernel/module/main.c                          |   4 +
+ lib/Kconfig.debug                             |  18 +
+ scripts/Makefile.btf                          |   7 +
+ scripts/gen-btf.sh                            |  33 +-
+ .../bpf/bpftool/Documentation/bpftool-btf.rst |   7 +-
+ tools/bpf/bpftool/btf.c                       |  85 +++
+ tools/bpf/bpftool/main.c                      |   3 +-
+ tools/bpf/resolve_btfids/main.c               | 336 ++++++++-
+ tools/include/uapi/linux/btf.h                |  65 +-
+ tools/lib/bpf/btf.c                           | 659 ++++++++++++++++-
+ tools/lib/bpf/btf.h                           |  66 +-
+ tools/lib/bpf/btf_dump.c                      |   9 +
+ tools/lib/bpf/btf_iter.c                      |  22 +
+ tools/lib/bpf/btf_relocate.c                  |   7 +-
+ tools/lib/bpf/libbpf.map                      |   6 +
+ tools/lib/bpf/libbpf_internal.h               |   5 +-
+ tools/testing/selftests/bpf/btf_helpers.c     |  36 +-
+ .../bpf/prog_tests/btf_dedup_split.c          | 109 +++
+ .../selftests/bpf/prog_tests/btf_distill.c    |  76 ++
+ .../selftests/bpf/prog_tests/btf_field_iter.c |  31 +-
+ .../selftests/bpf/prog_tests/btf_inline.c     | 110 +++
+ .../selftests/bpf/prog_tests/btf_permute.c    | 128 ++++
+ .../selftests/bpf/prog_tests/btf_sysfs.c      |  74 ++
+ tools/testing/selftests/bpf/test_btf.h        |  16 +
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |   2 +-
+ tools/testing/selftests/bpf/trace_helpers.c   |  20 +
+ tools/testing/selftests/bpf/trace_helpers.h   |   1 +
+ 35 files changed, 2636 insertions(+), 127 deletions(-)
+ create mode 100644 kernel/bpf/btf_vmlinux_inline.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_inline.c
+
+-- 
+2.43.5
 
