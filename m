@@ -1,217 +1,208 @@
-Received: from mta1.migadu.com (out-32.mta1.migadu.com [95.215.58.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7203432A3E5
-	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 13:00:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9C338552C
+	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 13:11:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788267637; cv=none; b=p0H1wTd6LRKZbwyjD0FZJSzmIGb4L+wx4pBNAB0XzinQOYjarccd400yMTcfRBtbJkDe+MTsNZXY09HpSpBU+gqb1OQIejRR/LUHGZl2BZLU06B07bSKfPF9MPfoG39/LaYpPTWzUknX16YHSPcje2xeXCIawAQqrG36zJVHx2Q=
+	t=1788268286; cv=none; b=tXNkI6lgBTeKiURmKHSSNuG41qKHSxve3AKWCLwbJBKrQQpLWYC0s3MCuvVLrg3HOc7aHjg8q/VTNDkPgqZ5KjS4cOM4AIuiD3JaJHdP6DXWpjZprWWEdnQjdo6P9J0DdVpod/yTQEvi1rLKqSEichAQlaa/y7BBnOpTiVRVKkg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788267637; c=relaxed/simple;
-	bh=xdjfVhalLoy5JT5Aiv2C+7xPblN/B0sRyEn65UjqdNU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sUR99GwEOnPWjnrg+WkrZRE3aKT01Jkqsc2f+jdyYmM4st0BFaiUDxFSec/6ulsCj3BsM50R1OHuiLmAqYyz+O1cVqpzy89mR9VdMYdP6MTBihaIi4a4EcapNDKFm6tpTsMMAMruoI32CPFGL6zNxdRqVV+LwiVENThnxSW9Cfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rL3DvukH; arc=none smtp.client-ip=95.215.58.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788268286; c=relaxed/simple;
+	bh=Gd2bpJk1wJf+OkTxQ+bj3nV97uII/AZ+Q9XOB9fExp0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=dXnGagof2WXzeWT0srikf9q68Q6Jp/heFyhiSWhoUckO4lxQklTYC4vl0t6IrQ8BqYekzRebpb5jCXczAnCYUHGVeahjSp0POaKqguSSQbwAr9rNCVbg27avl3PCWlkjQ5fVNzdo7KfJjsequx/g3M/qUUegix4tZBYM9vDz82E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hGsyg2uX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rL3DvukH"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=xdjfVhalLoy5JT5Aiv2C+7xPblN/B0sRyEn65UjqdNU=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788267632; v=1; x=1788872432;
- b=rL3DvukHibtugbNqanZdIDaGLvo4qn27hnrtwUNwnvLFIF89f4lyxPyVgMUOOG1v0v6xTfnL
- JB/w9VYiGt2sq7fy9owAdoLVS+IsnVV1DfQTUEwJIJB+VnPpvBZgSjlU0o5yBRxKmTH/r/HT3wa
- QowayiHcUt8uxmUHXaMqaC9c=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id ab401a24851f2d6f;
-	Tue, 01 Sep 2026 13:00:32 +0000
-X-Mizu-Trace-ID: ab401a24851f2d6f
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <8d1e416d-202f-4fcb-85f6-aa380645216f@linux.dev>
-Date: Tue, 1 Sep 2026 21:00:27 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hGsyg2uX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 626A71F00ADB;
+	Tue,  1 Sep 2026 13:11:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788268284;
+	bh=lbV36oYiPadjYvftPDnbbVUSXODy5Gm1OSShgSh9nJc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=hGsyg2uX9TZ/AA6AR8CzjwDr6fxEsWm0I7mFR20N3KNknOlF4+H1HwLbZ0sg/uHy/
+	 mYGUU8OGu+Wsn8ZCvW3z3IF/FnBt6Sx2eVGgHLXeg5JFpBaTwqFvl6rSfKgtx09Px6
+	 oitdtY2/vGpP/wgJ9kgQ4F0u4nmDcudXUQ37Zpzolmi3SNSIcN8wdXKML7jIVXLhuh
+	 hRDT0P+TjiSkO6c06C61kd5i4LF2aqKGY0kqckXQSkmOYN3+xsDHPdWZRnuWeSXHkg
+	 61mfKc/cQOkYd/jXlrCgOBCQUk4f8MBUCSc+ses+qC3xjC+HXaJG3MsSMBrQVXYFwt
+	 kdi6L6vD0Brhg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v10 net-next 2/2] octeontx2-pf: add mqprio bandwidth
+ offload for NIX TX schedulers
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ratheesh Kannoth" <rkannoth@marvell.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260831131014.2639581-3-rkannoth@marvell.com>
+References: <20260831131014.2639581-1-rkannoth@marvell.com>
+ <20260831131014.2639581-3-rkannoth@marvell.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 01 Sep 2026 13:11:23 +0000
+Message-Id: <20260901131124.626A71F00ADB@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] bpf, sockmap: Fix self-redirect copied_seq
- double-counting
-To: Jakub Sitnicki <jakub@cloudflare.com>, Geliang Tang <geliang@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Geliang Tang
- <tanggeliang@kylinos.cn>, netdev@vger.kernel.org, bpf@vger.kernel.org
-References: <b840c35fdfdf36e9fddedfa645b12699bc51aa34.1787968065.git.tanggeliang@kylinos.cn>
- <87wlt52od6.fsf@cloudflare.com>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <87wlt52od6.fsf@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
+s) to consider:
+- [High] otx2_nix_tm_set_queue_shaper and otx2_nix_tm_clear_queue_shaper se=
+t the mailbox level to NIX_TXSCH_LVL_MDQ while using SMQ indices, leading t=
+o guaranteed AF driver validation failures.
+- [High] A failure during initial mqprio setup bypasses hardware error clea=
+nup, leaving the device in an inconsistent state.
+- [High] A successful `tc qdisc replace` with an identical handle is mistak=
+enly identified as a failure rollback, reverting the hardware configuration.
+- [Medium] Failed mqprio replace permanently disables bandwidth offload bec=
+ause the rollback path fails to restore `pfvf->mqprio.rate_limit`.
+- [Medium] Memory allocation failure during qdisc deletion aborts teardown,=
+ leaking active hardware shapers.
+--
 
-on 9/1/26 7:38 PM, Jakub Sitnicki wrote:
-> On Sat, Aug 29, 2026 at 10:00 AM +08, Geliang Tang wrote:
->> From: Geliang Tang <tanggeliang@kylinos.cn>
->>
->> When a BPF stream_verdict program redirects an skb back to the same
->> socket (self-redirect with BPF_F_INGRESS), sk_psock_verdict_apply()
->> calls tcp_eat_skb() which advances tcp_sk->copied_seq. However, the
->> skb is then delivered to the socket's psock ingress queue and later
->> read by tcp_bpf_recvmsg_parser(), which also advances copied_seq via
+commit 3ab815bb73b8a877ec97fa639742f0ab5d81b757
+Author: Ratheesh Kannoth <rkannoth@marvell.com>
 
-Hi Geliang,
+octeontx2-pf: add mqprio bandwidth offload for NIX TX schedulers
 
-tcp_eat_skb() will test 'skb_bpf_strparser(skb)' then skip the 
-calculation of copied_seq.
+This commit adds TC_SETUP_QDISC_MQPRIO handling for channel-mode mqprio with
+TC_MQPRIO_SHAPER_BW_RATE. It enables shaping each non-QoS transmit queue by
+programming MDQ CIR/PIR on hw.non_qos_queues.
 
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/d=
+rivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> @@ -615,6 +615,142 @@ void otx2_get_mac_from_af(struct net_device *netdev)
+>  }
+>  EXPORT_SYMBOL(otx2_get_mac_from_af);
+> =20
+> +static int
+> +otx2_nix_tmq_reg_write(struct otx2_nic *pfvf, int cnt,
+> +		       u64 reg_addr[MAX_REGS_PER_MBOX_MSG],
+> +		       u64 reg_val[MAX_REGS_PER_MBOX_MSG])
+> +{
+> +	struct mbox *mbox =3D &pfvf->mbox;
+> +	struct nix_txschq_config *req;
+> +	int i, err;
+> +
+> +	mutex_lock(&mbox->lock);
+> +	req =3D otx2_mbox_alloc_msg_nix_txschq_cfg(mbox);
+> +	if (!req) {
+> +		mutex_unlock(&mbox->lock);
+> +		return -ENOMEM;
+> +	}
+> +
+> +	req->lvl =3D NIX_TXSCH_LVL_MDQ;
 
+[Severity: High]
+Will this cause the AF driver to reject the configuration mailbox messages?
 
->> the copied_from_self accounting path. This double-counting causes
->> copied_seq to advance by 2x the actual data length, triggering:
->>
->>    TCP recvmsg seq # bug 2: copied BF2E806, seq BF2E7FD, \
->> 			   rcvnxt BF2E806, fl 0
->>    WARNING: net/ipv4/tcp.c:2745 at tcp_recvmsg_locked+0x72b/0x2640
->>    Call Trace:
->>     tcp_recvmsg+0x10a/0x500
->>     sock_recvmsg+0x168/0x1d0
->>     __sys_recvfrom+0x19a/0x2a0
->>     __x64_sys_recvfrom+0xe4/0x1f0
->>     do_syscall_64+0xf7/0x530
->>     entry_SYSCALL_64_after_hwframe+0x77/0x7f
->>
->>    cleanup rbuf bug: copied BF2E806 seq BF2E806 rcvnxt BF2E806
->>    WARNING: net/ipv4/tcp.c:1609 at tcp_cleanup_rbuf+0xf2/0x1c0
->>    Call Trace:
->>     tcp_recvmsg_locked+0x8d1/0x2640
->>     tcp_recvmsg+0x10a/0x500
->>     sock_recvmsg+0x168/0x1d0
->>     __sys_recvfrom+0x19a/0x2a0
->>     __x64_sys_recvfrom+0xe4/0x1f0
->>     do_syscall_64+0xf7/0x530
->>     entry_SYSCALL_64_after_hwframe+0x77/0x7f
->>
->> Fix this by checking if the redirect destination is the same socket.
->> For self-redirect (dst == psock->sk), skip tcp_eat_skb() since the
->> copied_seq will be advanced when the data is actually read from the
->> ingress queue. For cross-socket redirects, tcp_eat_skb() is still
->> needed to account for data leaving the source socket.
->>
->> Fixes: e5c6de5fa025 ("bpf, sockmap: Incorrectly handling copied_seq")
->> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
->> ---
->> Hi,
->>
->> I encountered this while adding MPTCP BPF sockmap support. The existing
->> TCP sockmap selftests don't cover self-redirect, but the MPTCP tests do,
->> exposing this latent issue.
->>
->> With this fix, both TCP and MPTCP tests pass, validating self-redirect
->> functionality.
->> ---
->>   net/core/skmsg.c | 8 ++++++--
->>   1 file changed, 6 insertions(+), 2 deletions(-)
->>
->> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
->> index 2521b643fa05..5fa7b9639eef 100644
->> --- a/net/core/skmsg.c
->> +++ b/net/core/skmsg.c
->> @@ -1039,10 +1039,14 @@ static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
->>   				goto out_free;
->>   		}
->>   		break;
->> -	case __SK_REDIRECT:
->> -		tcp_eat_skb(psock->sk, skb);
->> +	case __SK_REDIRECT: {
->> +		struct sock *dst = skb_bpf_redirect_fetch(skb);
->> +
->> +		if (dst != psock->sk)
->> +			tcp_eat_skb(psock->sk, skb);
->>   		err = sk_psock_skb_redirect(psock, skb);
->>   		break;
->> +	}
->>   	case __SK_DROP:
->>   	default:
->>   out_free:
-> Isn't the source of problem on the read-side (tcp_bpf_recvmsg_parser)?
+In otx2_nix_tm_set_queue_shaper(), the MDQ register addresses are computed
+using the SMQ index. The AF driver's validation function extracts the
+index from the register address and validates it against the bounds of the
+NIX_TXSCH_LVL_MDQ pool, which has a different size than the SMQ pool.
 
+[ ... ]
+> +int otx2_nix_tm_set_queue_shaper(struct otx2_nic *pfvf,
+> +				 int txq, u64 minrate, u64 maxrate)
+> +{
+[ ... ]
+> +	req->lvl =3D NIX_TXSCH_LVL_MDQ;
 
-Right, I think I already fixed the parser side.
+[Severity: High]
+Similar to the concern above, setting the mailbox level to NIX_TXSCH_LVL_MDQ
+inline here while relying on SMQ indices appears to guarantee AF driver
+validation failures during any qdisc add operation.
 
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drive=
+rs/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+[ ... ]
+> +static int otx2_mqprio_restore_old(struct otx2_nic *pfvf)
+> +{
+[ ... ]
+> +	if (otx2_mqprio_mdq_allocated(pfvf)) {
+> +		err =3D otx2_nix_tm_clear_queue_shaper(pfvf);
+> +		if (err)
+> +			return err;
+> +	}
+> +
+> +	err =3D otx2_mqprio_up(pfvf);
+> +	if (err)
+> +		return err;
 
-> We should be advancing copied_seq only for skbs that we received from
-> the tcp stack. That's why we have the copied_from_self detection in
-> tcp_bpf_recvmsg_parser.
->
-> I think the problem is that we set msg->sk when we call
-> sk_psock_skb_ingress_self from sk_psock_skb_ingress, so on SK_REDIRECT
-> path, not the SK_PASS path.
+[Severity: Medium]
+Does this rollback path permanently disable bandwidth offload?
 
+If an ndo_open() failure occurs during tc qdisc replace,
+otx2_mqprio_restart_netdev() explicitly clears pfvf->mqprio.rate_limit to
+false. Here in otx2_mqprio_restore_old(), the rate_limit flag is not set
+back to true before calling otx2_mqprio_up(). As a result, otx2_mqprio_up()
+will exit early without configuring the hardware shapers.
 
-I sucessfully use this selftest to reproduce the splat:
+[ ... ]
+> +static int otx2_teardown_tc_mqprio(struct otx2_nic *pfvf,
+> +				   struct tc_mqprio_qopt_offload *mqprio)
+> +{
+> +	bool had_mqprio =3D pfvf->mqprio.rate_limit;
+> +	struct tc_mqprio_qopt *qopt =3D &mqprio->qopt;
+> +	struct net_device *netdev =3D pfvf->netdev;
+> +	bool if_up =3D netif_running(netdev);
+> +	bool rollback;
+> +	int err;
+> +
+> +	qopt->hw =3D 0;
+> +
+> +	/* tc qdisc replace runs setup on the new mqprio before destroying the
+> +	 * old one. Ignore teardown from the replaced instance once the new
+> +	 * handle is committed in otx2_setup_tc_mqprio().
+> +	 */
+> +	if (mqprio->handle && mqprio->handle !=3D pfvf->mqprio.handle) {
+> +		if (pfvf->cur_mq_snap)
+> +			otx2_mqprio_snap_commit(pfvf);
+> +		return 0;
+> +	}
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c 
-b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 1fef6ec2ba7a..58a90f2e3602 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -1173,6 +1173,15 @@ static void test_sockmap_copied_seq(bool strp)
-         if (!ASSERT_OK(err, "bpf_map_update_elem(p1)"))
-                 goto end;
+[Severity: High]
+If a fresh qdisc add fails halfway through (for example, during
+otx2_nix_tm_set_queue_shaper), could this bypass hardware cleanup?
 
-+       /* self redirect: data sent by c1 is redirected back to p1 itself */
-+       sent = xsend(c1, buf, sizeof(buf), 0);
-+       if (!ASSERT_EQ(sent, sizeof(buf), "xsend(c1), self"))
-+               goto end;
-+
-+       recvd = recv_timeout(p1, rcv, sizeof(buf), MSG_DONTWAIT, 1);
-+       if (!ASSERT_EQ(recvd, sent, "recv_timeout(p1), self"))
-+               goto end;
-+
-         /* just trigger sockamp: data sent by c0 will be received by p1 */
-         sent = xsend(c0, buf, sizeof(buf), 0);
-         if (!ASSERT_EQ(sent, sizeof(buf), "xsend(c0), bpf"))
-@@ -1364,6 +1373,8 @@ static void test_sockmap_no_verdict_fionread(void)
+During a failed initial setup, pfvf->mqprio.handle would still be 0, while
+the incoming mqprio->handle from the generic TC layer is non-zero. This
+condition would evaluate to true, treating the failure as a post-replace
+teardown and returning 0 without performing the actual cleanup.
 
-  void test_sockmap_basic(void)
-  {
-+       test_sockmap_copied_seq(false);
-+       return;
-         if (test__start_subtest("sockmap create_update_free"))
-test_sockmap_create_update_free(BPF_MAP_TYPE_SOCKMAP);
-         if (test__start_subtest("sockhash create_update_free"))
+> +
+> +	if (mqprio->handle && mqprio->handle =3D=3D pfvf->mqprio.handle &&
+> +	    pfvf->old_mq_snap) {
+> +		rollback =3D pfvf->cur_mq_snap;
+> +
+> +		err =3D otx2_mqprio_restore_old(pfvf);
+> +		if (err)
+> +			return err;
 
+[Severity: High]
+Could this inadvertently trigger a rollback during a successful tc qdisc
+replace?=20
 
+If the user issues a replace command utilizing the exact same handle as the
+existing qdisc, this condition evaluates to true and appears to call
+otx2_mqprio_restore_old(), overriding the newly installed configuration with
+the old one.
 
+[Severity: Medium]
+If memory allocation fails during a qdisc deletion, will this leak the acti=
+ve
+hardware shapers?
 
-> REDIRECT-to-self should really be a PASS, see [1]. My suggestion - fixup
-> the verdict:
->
->          if (verdict == __SK_REDIRECT && skb->sk == psock->sk)
->                  verdict = __SK_PASS;
+When deleting a qdisc, the code falls into this block because the handles
+match and old_mq_snap exists. It then calls otx2_mqprio_restore_old(), which
+uses devm_kcalloc(). If that allocation fails, the function returns early
+here, completely bypassing the actual hardware teardown in otx2_mqprio_down=
+().
 
-
-Agree. It's simple and clear.
-
-
-+        if (verdict == __SK_REDIRECT && skb_bpf_ingress(skb) &&
-
-+            skb_bpf_redirect_fetch(skb) == psock->sk)
-+                verdict = __SK_PASS;
-
-         switch (verdict) {
-
-
-> Then we can remove the sk_psock_skb_ingress_self call from
-> sk_psock_skb_ingress, and kill take_ref param in
-> sk_psock_skb_ingress_enqueue.
->
-> John, Jiayuan, thoughts?
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2443ca66676d50a4eb3305c236bccd84a9828ce2
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260831131014.2639=
+581-1-rkannoth@marvell.com?part=3D2
