@@ -1,94 +1,167 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3564447254E
-	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 08:56:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788252966; cv=none; b=ciW/slGlDlQf0yl3CZkk/MZhVkxiypeVPuDbKChzFNSd6jVYu7r6yQYce/nBJslr32UxAO7aoWevQxE+2bQVdUyXFxUN1j+nuMxnWffZzw79/Y2X8+r7m1Rzyga1aZhy1G1FVr1KUTB4pG8wRQ5b9DFeX/hedEtrzzr1I5d+sTM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788252966; c=relaxed/simple;
-	bh=oqElCxMgfCFVBOuEbq8gOvFtkB6FIDBaYC0wyUm7aQg=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=du0/lf/X4nV0LGeHUnRAUKzyyWUmNm5gVuqzbP+ETpR2+PiAAjB65vrvcxZxglyfVgil+WCcnXzS85za7LxK4Usl9OqWYmTL0bcDwSgd6mR4mHBRnTrGInA9Pz+fuO7cSoBVye456oGzf7YUg+Ae0ckr+QdpzpbkVj3K8bTNGvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kBoz/o+c; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4C8647426F
+	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 08:56:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788252985; cv=pass; b=CAdUKqTvn/H3jVbI9ESICQXQnXX3BeK9DIpLdaSv6r3d75VxW457vOgsnpspyrUX+vEdWnj4rWg057ICFvcDtCo1K2Q3cCExatV4s8AeEDYeoPuCyn3tI1qISxEZKybDl+sc7PVjILiEUA9r0197dbtHPgAyUhggeVTAvYRayIA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788252985; c=relaxed/simple;
+	bh=LletibnuH2tAiJ9V8HhgrPH5FkIQeE7tJMeW2gZ4zSg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Xq1zBEUbrLqR1osnh5zIoX3E7OBlG0F2BEQSvFubQ6ak3UQzvOUBwcpRMPbuNbES57ki63t0AQduBdmyl4fxpwP2fqLHQeCdw10C7OfX4fENBdAIWsrB/QEtwtA4y1M22evPQ75vAWXohjbXGnFx4lgCGfidQjDiLTncSmGr4HM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FPpbl+q4; arc=pass smtp.client-ip=74.125.224.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kBoz/o+c"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0076E1F000E9;
-	Tue,  1 Sep 2026 08:56:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788252964;
-	bh=ehHoIcIuv4tVCrCcHUmbJ3P0f1UHhP66mqt4wo5kjuA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=kBoz/o+czy95aEyPyGSedYBApA7B9hDcR+FC3EBu6Ao9vL09ZbBlssc9vJnbvnSkd
-	 rPhL/GxGnctouseMXyrxfOMnL/l9e03wGfaJ3PJA1h0C+BSTFFBHVNX5JtvlxFtyma
-	 eBoJR69p5CfiT0zP+W7OyRqjeDSdp94TiOF5ndDU46XzbXHf5wa0xrrt7eEeLxOuzL
-	 BbyjNFZxWo/SarI3DrLMKslq27B1jXztEIarcjyQhOZtL5vAFwggFJ2HyDvVHOIbUJ
-	 LV6WWW8XEGiNOfSNJLLt2a1Y1bni+IdbThHgOHCTVJEk63v2rIwyF6Rfxu4lBQZzzr
-	 DjIkftD28QUeA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 4/4] selftests/bpf: Check for flag presence
- in bpf_program__flags()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260901-libbpf-frags-flags-v3-4-4eb6f14968b0@redhat.com>
-References: <20260901-libbpf-frags-flags-v3-0-4eb6f14968b0@redhat.com>
- <20260901-libbpf-frags-flags-v3-4-4eb6f14968b0@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 01 Sep 2026 08:56:03 +0000
-Message-Id: <20260901085604.0076E1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FPpbl+q4"
+Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-66c7e3a2332so760529d50.2
+        for <bpf@vger.kernel.org>; Tue, 01 Sep 2026 01:56:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788252982; cv=none;
+        d=google.com; s=arc-20260327;
+        b=K1JCgeZLykVOB1eIffkb97bZhUZ1+CM604rQ45mwzTU6PdaIxJ9RCbtqbS+3zRVG+G
+         fDRKEjn7/BOC6J9fYEwemQ/+yvbLUDrWZLx+bzxUWjczQL5glFBNf+H/Z5vRJmR62BBP
+         PZglivKQ/uOvHVYC6iQSNOnULTiQKiHEVQfsLp/znKwSFpwDHxJLB1MEfJnLvQSXDtD2
+         RajLEEuQE9KtSYHeUelviCyivv5y2s6Ema+PMtqhqBiNrLAy+D/9xQ3sctEh6WngyXws
+         8JRyWFiFiBnJB9KcFs/1KN5x9b4arTNbknsOMXxDhMW3MNRxBBiO3gjYKVyfid2OUwMt
+         0Zow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=b0cVoKLvyKRi4arSpTI3Loc6vRV6gV/RZyzB2+ewkXs=;
+        fh=WV/XN5X1oEf527+V7W8SMtugzL9N6qpwP4JTepq8Hy0=;
+        b=QUM9BhP7s8lE5Vv5C+wRFlR1yALr3Aj3hgeaUJSWxzW/yX/RKB7OA6nWRe6lfcvmPE
+         51F3gIbeZuHuh+E57Y6cdrP449xcPskTJ9w30lNTpbuovxdVMmJSkegLVCBR1mOgHxfR
+         6qNGZXbUfmx7vHhmqAJ3Lnvji9JaVfdFf93Dx2NcJRKIQ5+2/m7AN2iuE4DNiUQhT+jy
+         ECTneHj+82MJceSDphY7Onb5NVnNGPsyHTzoEb8GaW3s8CgwRQFzhaQCm60nSQ4SinUL
+         IC/fcGnB5QHegXPwYngEttHF0162AiHQx8quZBYWqSIHcDoFPk87GRhnKfWHYqLHe022
+         AAlQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788252982; x=1788857782; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=b0cVoKLvyKRi4arSpTI3Loc6vRV6gV/RZyzB2+ewkXs=;
+        b=FPpbl+q4x6/SIOBPYNFuv2Z3YRe+EwR3/LFV+mvFBaMSnB3CiMLbQUa0KuMcTBm8H0
+         l6XzsGWn0N+jwNm0PsmZ0U2YeWdhOb6DYmFVWYZvcU+NNUZrkfqi+97Y8ay/1aYLSFKf
+         rLgNF/v8VNc8IorSh66O7Mq4LPMETRnl/SGnmJiCMOtJ87NZOzrVcG1YnECfs0l1V+VO
+         cRt7RiI/YAn44U9hsNmNlkGQ5UtgVcZF78Wu3Pui0tl+i8eeBOAD4YE/svrqti5mx4IM
+         k3eWn+zCKXC0rJ9duqg7q4Eah+mdvn/3DW6MTyYzTFBn83A2vVYo1QuL2tmd84ZqJb/f
+         6uzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788252982; x=1788857782;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=b0cVoKLvyKRi4arSpTI3Loc6vRV6gV/RZyzB2+ewkXs=;
+        b=mulMICde8r1P8ZGI6yFqxLJIqKI9e16nn0WIWvqh/RjG6fBNH/gJy7b1UDiAtiERo1
+         1is9Za61FZxUd5r7tC7+NSBrpS4MNg8tyLOdhRdGOwTQYyzhdVMprvJ1Y+QenxTXuZKs
+         Ep5ogOFYP5VzOtYppOp5bQwjUVxBqbYYcR/pzBNRsMEvNQ9FU6mZpgrqMIJDOsNRY5Zl
+         iPx2++xzeTfmVwn25ZYqtH+xKa4K2p/dkNKWGON0OSRE6mWDiSrYE4BJ6XlJRVahavGu
+         R7udnit/1erUloxZapg+adDLNXWK3NKsTrNPNeRlhles1ghlHmvvdigZKlcxpE90NjvM
+         Chxw==
+X-Gm-Message-State: AFuF++mg2Q0CJbqrKbDcopN/EfNAkpDEOXhkH65z7f5a60bpOSqs07vc
+	5sfHK9J1DjE0XJpwjUXQYeQUivnjn30HiFppSK3MYbYbHnql59TWB84fWxNaWTBEfiWoydbmkiQ
+	hz6OxgjHkPQZblIv6lNngw5NzCw7zHP8=
+X-Gm-Gg: AYBFou2i9ryvQVUBR9UhTczrQpbBYnqzKAs0KnA0khFEz++fTKDQ66sojxmVXQm5NuM
+	Ga3sX/ViMN6IdsxluGJXtCbqX+q4nKJzmKdX7MDtsutTkNLxcbFmcCTXVMclwRlrgMwkj8nRpVT
+	MBGso+N9HqFXFkPyrcRABgPnViM6lTDt8RgfKovuMiRUcub4m0dC340dqhE1cdLYpBeVBDYeCnV
+	6hw0E/TZEPZ8rJCraH+2fNmC5okc6IvpSEGjemx2XMqED7ErFKiC1bSyp2R5j5KlbPzvLUoQ2nY
+	k9HfLgUaVqOQ2iX0cqoeYhsA+0e2tBzMkG0v4o57a7Eq+5Xa2ECeJh12J6LmyGCYPEG+J+wuAoY
+	56l2z/zJ7y6hvgTsRM2cAofQ=
+X-Received: by 2002:a53:d7c1:0:b0:66c:85e3:7f28 with SMTP id
+ 956f58d0204a3-66e4c7cb058mr7321594d50.48.1788252982426; Tue, 01 Sep 2026
+ 01:56:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260831092305.42062-1-tasos.papagiannnis@gmail.com> <20260831092305.42062-4-tasos.papagiannnis@gmail.com>
+In-Reply-To: <20260831092305.42062-4-tasos.papagiannnis@gmail.com>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Tue, 1 Sep 2026 16:56:17 +0800
+X-Gm-Features: AcwNN1XIzpApr53ZwDAkoriLyAfCiPBC9rJXu6HlLdHYqQbCNPiAd7kuMexr5Xk
+Message-ID: <CABFUUZHEJ0Bbu9QvT3AVkxAY=kgFzSA6fDj0hOwgQJ==bEaA=Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 3/7] exec: Clear bprm->mm before dropping its reference
+To: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org, 
+	akpm@linux-foundation.org, david@kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
+	kpsingh@kernel.org, matt@bobrowski.net, song@kernel.org, 
+	utilityemal77@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Missing NULL check for `prog` before calling `bpf_program__flags=
-()`.
---
-
-commit 05df19ea2fe700cefa5c96da6572795ffbe95855
-Author: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-Date:   Tue Sep 1 08:46:57 2026 +0000
-
-selftests/bpf: Check for flag presence in bpf_program__flags()
-
-This commit adds assertions to verify that the BPF_F_XDP_HAS_FRAGS and
-BPF_F_SLEEPABLE flags are present in bpf_program__flags() when opening BPF
-programs that have these flags in their section definitions.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c b/=
-tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c
-> index fce203640f8cf..a894b1ab46f4e 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c
-> @@ -18,6 +18,9 @@ static void test_xdp_update_frags(void)
->  		return;
-> =20
->  	prog =3D bpf_object__next_program(obj, NULL);
-> +	ASSERT_EQ(bpf_program__flags(prog) & BPF_F_XDP_HAS_FRAGS,
-> +		  BPF_F_XDP_HAS_FRAGS, "frags in program flags");
+On Mon, Aug 31, 2026 at 5:52=E2=80=AFPM Anastasios Papagiannis
+<tasos.papagiannnis@gmail.com> wrote:
+>
+> Once mmput() drops the final reference to bprm->mm, the pointer must no
+> longer remain accessible through struct linux_binprm.
+>
+> The successful exec path and the bprm initialization error path already
+> clear bprm->mm when ownership is transferred or released. Do the same in
+> free_bprm() before calling mmput().
+>
+> This is required for eBPF kfuncs where bprm->mm is either NULL or points
+> to a live mm_struct to ensure safe access.
+>
+> Signed-off-by: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
+> ---
+>  fs/exec.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/fs/exec.c b/fs/exec.c
+> index a14f28b15607..4b4d8f0627a7 100644
+> --- a/fs/exec.c
+> +++ b/fs/exec.c
+> @@ -1453,9 +1453,12 @@ void bprm_drop_loader(struct linux_binprm *bprm)
+>
+>  static void free_bprm(struct linux_binprm *bprm)
+>  {
+> -       if (bprm->mm) {
+> +       struct mm_struct *mm =3D bprm->mm;
 > +
+> +       if (mm) {
+>                 acct_arg_size(bprm, 0);
+> -               mmput(bprm->mm);
+> +               bprm->mm =3D NULL;
+> +               mmput(mm);
+>         }
+>         if (bprm->user_ns)
+>                 put_user_ns(bprm->user_ns);
+> --
+> 2.55.0
+>
+>
 
-[Severity: Medium]
-Is a NULL check needed for prog here?
+An automated review by Sashiko [1] reported a potential UAF involving
+bprm->file. The report identifies a real but narrower lifetime issue.
 
-If the BPF object file test_xdp_update_frags.bpf.o is valid but contains no
-programs (for instance, due to a build issue or a stripped ELF),
-bpf_object__next_program() will return NULL. The prog pointer is then passed
-directly to bpf_program__flags(), which will unconditionally dereference it
-and cause a segmentation fault in the test suite.
+The specific PF_KTHREAD/delayed-fput scenario is not reachable through
+the current in-tree path: kernel_execve() rejects PF_KTHREAD before
+alloc_bprm(), and usermode helpers use user_mode_thread(). In
+addition, bpf_get_file_xattr() is not available to TRACING/fentry
+programs.
 
-Prior to this patch, prog was safely passed down to bpf_program__fd(), which
-gracefully handled the NULL by returning -EINVAL and failing the test clean=
-ly.
-Would it be safer to check prog with ASSERT_OK_PTR() before attempting to
-verify its flags?
+However, free_bprm() still drops the reference held by bprm->file
+before calling bprm_drop_loader(), which is instrumentable.
+linux_binprm->file is marked BTF_TYPE_SAFE_TRUSTED, so a tracing
+program attached to bprm_drop_loader() can pass it to the common
+bpf_dynptr_from_file() kfunc. Once the reference has been dropped,
+bprm->file is an unowned raw pointer; the dynptr retains that pointer
+without acquiring a file reference, and later reads dereference
+file->f_mapping.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260901-libbpf-fra=
-gs-flags-v3-0-4eb6f14968b0@redhat.com?part=3D4
+This is independent of the bprm->mm change in this patch. I plan to
+send a separate fs/exec patch against the current bpf-next tree for
+this issue.
+
+[1] https://sashiko.dev/#/patchset/20260831092305.42062-1-tasos.papagiannni=
+s@gmail.com?part=3D3
