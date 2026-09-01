@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52027488211;
-	Tue,  1 Sep 2026 17:22:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58BF648A8A4;
+	Tue,  1 Sep 2026 17:23:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788283341; cv=none; b=Fxn6UL84cbNnbX9bI58VOz4mos7eWOtNUnbGv6PlWs2ZEuYNq9fsMiL/isEr23FFW4NjFqppb16dqNaGg9yJrXHR+YDNS8pL5njMK7cMfqy2O8x9SqeApG+7+BjIzmcH8K7RWxyioRpoYeeXEEj6FSfNSxig2XAa/ETIvoLpdFQ=
+	t=1788283383; cv=none; b=A/bok89/kqCFmqhDW+AkU3QWCoskS0/Y7bIbpBbR9CrIQeOZS+hVfjyUQv/KBd//YctJISrE2go66aBqizscXBEHQOz1D0u6ZjapiGAAEuigkXRYNl0W6nxggeJoTDj1PGRrbzdrwfoJkRUzuuBsZJCWK8uAZaEzDHwuhlkat1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788283341; c=relaxed/simple;
-	bh=wvMJR/pVvmvUQB9or3iSeQpdUXx8+3V1Bm+JelxSuZU=;
+	s=arc-20240116; t=1788283383; c=relaxed/simple;
+	bh=UYr4FgrOKQQU7IopkP5lwLpnKQYJ6WQWgBhcCpIh12I=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=L8moiWu7xlmMwgEnx/vYxNZvti5HUplg6UvsTKPMjfX02n3gRV+qcmpHHe1Y93UkoNJNPQYV+UdJKopWhdYzru3EkEMelVPj6DVe/+5mvUsI0db8LXzwNDOT3UvHH9mpuX95XxJSsy7NOgYd1UHOEcx25wkPur07KrGmpPSAQiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gMQRZmc3; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=gQtz1uSSfVBRPsrzLH2bonDsjskoRFneRen1b+qkZqqXlrDWpW5EM0hYjlI+siXUldVwZhXk9sn39qbEASHVpRC9/QawsrWGwCP/dPd2QyfylWp1Odu+ZtYCLUOzwHGbnNjQqhHuMEJExD2pRDn4ONGs9y1ud7m1SfKddi8XCgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hAyOOvS5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gMQRZmc3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F4E1F00A3A;
-	Tue,  1 Sep 2026 17:22:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hAyOOvS5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBEBC1F000E9;
+	Tue,  1 Sep 2026 17:23:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788283340;
-	bh=N+bu/zQ8qcaMGTKhcUpjVMJUs3r4r4ts/+kJZ0QpGSs=;
+	s=k20260515; t=1788283382;
+	bh=JL7hv6FEcf/sPTbzBqgzfpTUF8CpqaPYsWtSrHC4WSY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=gMQRZmc3GsDqC6X++/5ZwbGY3af4W0G2EvO8UbAwc5rbjo5XlqjC7oYifJx63GQ1D
-	 MoWtOiG7hgACIx5/YexqfsZmGKvYxJBivoxtLVbfdJWb2ivOqihp7Pp6JK0nDyUBfl
-	 66GbNXWKuiK9jnDlTiuU7tPtvg/Ku2ribeRUQgi2Us5Ve0G3pOE46NwWuN0e/Mz3eZ
-	 0yzprzS46qbrtDM4qgVWMmKsmbSEF1va7l8yONjZjwZuEBbyEwvQZ9O9rblrvCGQ5a
-	 lXndrNnaomZpiaotv7ai3z65z4GPnAM3aMnGeNuxC8ORZ98GbuL7IQvA4NePylUnFU
-	 etaDINieyn6Kw==
+	b=hAyOOvS5Xk5d/du/dhqcSe/Ez3wuULFEKyGBCFbDabEZBmi3YW2JI+EjnGgQ0LeSi
+	 7NNzh4hMqQwIoxnI1e2+cSoRA/8/QcqEFGM5CTq170YF712JD/cmFYSyOCBNn/PPFR
+	 VsN0euibl7lOPEfcyfDPlKyj/fnZJxaZYB76HDe61ZcrQ1Q51EMs86McZ5dNNsxlYM
+	 oNycmPAfHvGqfD4hkXLNjddA3KcvelFmdxomEk/qJdZnLQFbLOKRMcycG2c4saOobZ
+	 ZLWmwkanRbKxvw11gasOp7T2Almw/lr6nzLNsT8b1RRpRqEb88usOYq3LhD9NBE1GF
+	 EiRe8zWp+wPcA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 bpf-next 17/18] selftests/bpf: Test BTF sysfs inline
- representations
+Subject: Re: [PATCH v2 bpf-next 12/18] resolve_btfids: Extract inline BTF
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alan Maguire" <alan.maguire@oracle.com>
-Cc: bpf@vger.kernel.org, linux-modules@vger.kernel.org
-In-Reply-To: <20260901165757.801449-18-alan.maguire@oracle.com>
+Cc: linux-modules@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20260901165757.801449-13-alan.maguire@oracle.com>
 References: <20260901165757.801449-1-alan.maguire@oracle.com>
- <20260901165757.801449-18-alan.maguire@oracle.com>
+ <20260901165757.801449-13-alan.maguire@oracle.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 01 Sep 2026 17:22:19 +0000
-Message-Id: <20260901172219.B6F4E1F00A3A@smtp.kernel.org>
+Date: Tue, 01 Sep 2026 17:23:01 +0000
+Message-Id: <20260901172301.CBEBC1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,67 +46,58 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] Memory leak of `module_btf` when a module does not have a corres=
-ponding `.inline` sysfs file.
+- [Medium] Division by zero when parsing ELF symbol table sections if `sh_e=
+ntsize` is maliciously or erroneously set to 0.
 --
 
-commit ae17979b11eeb1a7bef7bec7a8817be3cb2cd64a
+commit df03e392d8f5364e6eef1e60fcadca00e2b031f8
 Author: Alan Maguire <alan.maguire@oracle.com>
 
-selftests/bpf: Test BTF sysfs inline representations
+    resolve_btfids: Extract inline BTF
+   =20
+This commit adds an --inline option to extract LOC_PARAM, LOC_PROTO and
+LOCSEC types to a new inline split .BTF.inline while sorting BTF.
 
-This commit adds a selftest to validate BTF sysfs inline representations for
-the kernel and modules. It parses the base BTF, module BTF, and inline BTF=
-=20
-files to ensure proper loading and relocation across different scenarios.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_sysfs.c b/tools/t=
-esting/selftests/bpf/prog_tests/btf_sysfs.c
-> index 3923e64c4c1d0..97eccfd7c1344 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/btf_sysfs.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_sysfs.c
+> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/m=
+ain.c
+> index 37d7e7224207d..20b228c4d6789 100644
+> --- a/tools/bpf/resolve_btfids/main.c
+> +++ b/tools/bpf/resolve_btfids/main.c
 [ ... ]
-> +static void test_btf_inline_sysfs_all(void)
+> @@ -572,6 +578,58 @@ static const char *find_name_by_addr(struct object *=
+obj, Elf64_Addr addr)
+[ ... ]
+> +static int collect_func_symbols(struct object *obj)
 > +{
-[ ... ]
-> +	while ((dentry =3D readdir(dir)) !=3D NULL) {
-[ ... ]
-> +		if (!base_btf) {
-> +			module_btf =3D btf__parse_split(btf_path, vmlinux_btf);
-> +			err =3D libbpf_get_error(module_btf);
-> +			if (err) {
-> +				/* A module can be unloaded while its sysfs entry is iterated. */
-> +				if (err =3D=3D -ENOENT)
-> +					continue;
-> +				ASSERT_OK(err, "parse_module_btf");
-> +				continue;
-> +			}
-> +			base_btf =3D module_btf;
-> +		}
-> +		if (stat(inline_path, &st)) {
-> +			err =3D errno;
-> +			if (err =3D=3D ENOENT)
-> +				continue;
+> +	Elf_Scn *scn;
+> +	GElf_Shdr sh;
+> +	int n, i;
+> +
+> +	if (obj->efile.symbols_shndx =3D=3D -1)
+> +		return 0;
+> +
+> +	scn =3D elf_getscn(obj->efile.elf, obj->efile.symbols_shndx);
+> +	if (!scn || gelf_getshdr(scn, &sh) !=3D &sh)
+> +		return -EINVAL;
+> +	n =3D sh.sh_size / sh.sh_entsize;
 
 [Severity: Medium]
-Does this code leak module_btf?
+Could this result in a division by zero if a malformed ELF object is
+provided to the build system?=20
 
-In test_btf_inline_sysfs_all(), when a module is parsed successfully but
-lacks a corresponding .inline sysfs file, stat() fails with ENOENT and this
-path calls continue. Since this ends the loop iteration early, the
-btf__free(module_btf) at the bottom of the loop is bypassed.
+If sh.sh_entsize is 0, this will trigger a SIGFPE and crash the resolve_btf=
+ids
+tool. While this vulnerable pattern already exists in symbols_collect(), it
+appears to be newly introduced here in collect_func_symbols(). Should there=
+ be
+a check to ensure sh.sh_entsize is non-zero before performing the division?
 
-> +			ASSERT_OK(err, "stat_inline_btf");
-> +		}
-> +		inline_btf =3D btf__parse_split(inline_path, base_btf);
-> +		err =3D libbpf_get_error(inline_btf);
-> +		if (!err)
-> +			btf__free(inline_btf);
-> +		ASSERT_OK(err, "parse_inline_btf");
-> +		btf__free(module_btf);
-> +	}
-> +	closedir(dir);
+> +
+> +	for (i =3D 0; i < n; i++) {
+> +		GElf_Sym sym;
+> +		const char *name;
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260901165757.8014=
-49-1-alan.maguire@oracle.com?part=3D17
+49-1-alan.maguire@oracle.com?part=3D12
