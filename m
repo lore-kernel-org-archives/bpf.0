@@ -1,167 +1,134 @@
-Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
+Received: from mta0.migadu.com (out-67.mta0.migadu.com [91.218.175.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4C8647426F
-	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 08:56:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788252985; cv=pass; b=CAdUKqTvn/H3jVbI9ESICQXQnXX3BeK9DIpLdaSv6r3d75VxW457vOgsnpspyrUX+vEdWnj4rWg057ICFvcDtCo1K2Q3cCExatV4s8AeEDYeoPuCyn3tI1qISxEZKybDl+sc7PVjILiEUA9r0197dbtHPgAyUhggeVTAvYRayIA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788252985; c=relaxed/simple;
-	bh=LletibnuH2tAiJ9V8HhgrPH5FkIQeE7tJMeW2gZ4zSg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Xq1zBEUbrLqR1osnh5zIoX3E7OBlG0F2BEQSvFubQ6ak3UQzvOUBwcpRMPbuNbES57ki63t0AQduBdmyl4fxpwP2fqLHQeCdw10C7OfX4fENBdAIWsrB/QEtwtA4y1M22evPQ75vAWXohjbXGnFx4lgCGfidQjDiLTncSmGr4HM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FPpbl+q4; arc=pass smtp.client-ip=74.125.224.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93FE7286D56
+	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 09:44:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.67
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788255885; cv=none; b=YsCRBkxUOkpYenF6enVARSGZqghbo9Tvfk/Lprlg17T6joRgyp7T/2qWE+C+fmJaqU8xEvN22fL4Wps4NzJFDUsCuDSnotSBuGe1xB9Quq/h3qB897pWW2eoakJF9WamkYkz8N1jMgMQYfWxl6ppNnBpbu7GRKrK7BwMwkS77z8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788255885; c=relaxed/simple;
+	bh=U+tcZw15K68mlanjAK2UomlTuTP3P1oMlvmlSPrqeWc=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=omj7wvkaECp5eRgoeN3c6nQ71FiWv56iHfJoLqB4oIqua74ljohFl6D+AP0gZp556OUn5AfmcZs2ECxBcsN4e1fOWGeXvRll4v7YHSbjlHxcZ2w7170c5fY4dKEiIfk6bYBXqMLNs5Ymjo8859V5an91Rjr3Rq5nfTOYZScWbM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oWIWW9PC; arc=none smtp.client-ip=91.218.175.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FPpbl+q4"
-Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-66c7e3a2332so760529d50.2
-        for <bpf@vger.kernel.org>; Tue, 01 Sep 2026 01:56:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788252982; cv=none;
-        d=google.com; s=arc-20260327;
-        b=K1JCgeZLykVOB1eIffkb97bZhUZ1+CM604rQ45mwzTU6PdaIxJ9RCbtqbS+3zRVG+G
-         fDRKEjn7/BOC6J9fYEwemQ/+yvbLUDrWZLx+bzxUWjczQL5glFBNf+H/Z5vRJmR62BBP
-         PZglivKQ/uOvHVYC6iQSNOnULTiQKiHEVQfsLp/znKwSFpwDHxJLB1MEfJnLvQSXDtD2
-         RajLEEuQE9KtSYHeUelviCyivv5y2s6Ema+PMtqhqBiNrLAy+D/9xQ3sctEh6WngyXws
-         8JRyWFiFiBnJB9KcFs/1KN5x9b4arTNbknsOMXxDhMW3MNRxBBiO3gjYKVyfid2OUwMt
-         0Zow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=b0cVoKLvyKRi4arSpTI3Loc6vRV6gV/RZyzB2+ewkXs=;
-        fh=WV/XN5X1oEf527+V7W8SMtugzL9N6qpwP4JTepq8Hy0=;
-        b=QUM9BhP7s8lE5Vv5C+wRFlR1yALr3Aj3hgeaUJSWxzW/yX/RKB7OA6nWRe6lfcvmPE
-         51F3gIbeZuHuh+E57Y6cdrP449xcPskTJ9w30lNTpbuovxdVMmJSkegLVCBR1mOgHxfR
-         6qNGZXbUfmx7vHhmqAJ3Lnvji9JaVfdFf93Dx2NcJRKIQ5+2/m7AN2iuE4DNiUQhT+jy
-         ECTneHj+82MJceSDphY7Onb5NVnNGPsyHTzoEb8GaW3s8CgwRQFzhaQCm60nSQ4SinUL
-         IC/fcGnB5QHegXPwYngEttHF0162AiHQx8quZBYWqSIHcDoFPk87GRhnKfWHYqLHe022
-         AAlQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788252982; x=1788857782; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=b0cVoKLvyKRi4arSpTI3Loc6vRV6gV/RZyzB2+ewkXs=;
-        b=FPpbl+q4x6/SIOBPYNFuv2Z3YRe+EwR3/LFV+mvFBaMSnB3CiMLbQUa0KuMcTBm8H0
-         l6XzsGWn0N+jwNm0PsmZ0U2YeWdhOb6DYmFVWYZvcU+NNUZrkfqi+97Y8ay/1aYLSFKf
-         rLgNF/v8VNc8IorSh66O7Mq4LPMETRnl/SGnmJiCMOtJ87NZOzrVcG1YnECfs0l1V+VO
-         cRt7RiI/YAn44U9hsNmNlkGQ5UtgVcZF78Wu3Pui0tl+i8eeBOAD4YE/svrqti5mx4IM
-         k3eWn+zCKXC0rJ9duqg7q4Eah+mdvn/3DW6MTyYzTFBn83A2vVYo1QuL2tmd84ZqJb/f
-         6uzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788252982; x=1788857782;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=b0cVoKLvyKRi4arSpTI3Loc6vRV6gV/RZyzB2+ewkXs=;
-        b=mulMICde8r1P8ZGI6yFqxLJIqKI9e16nn0WIWvqh/RjG6fBNH/gJy7b1UDiAtiERo1
-         1is9Za61FZxUd5r7tC7+NSBrpS4MNg8tyLOdhRdGOwTQYyzhdVMprvJ1Y+QenxTXuZKs
-         Ep5ogOFYP5VzOtYppOp5bQwjUVxBqbYYcR/pzBNRsMEvNQ9FU6mZpgrqMIJDOsNRY5Zl
-         iPx2++xzeTfmVwn25ZYqtH+xKa4K2p/dkNKWGON0OSRE6mWDiSrYE4BJ6XlJRVahavGu
-         R7udnit/1erUloxZapg+adDLNXWK3NKsTrNPNeRlhles1ghlHmvvdigZKlcxpE90NjvM
-         Chxw==
-X-Gm-Message-State: AFuF++mg2Q0CJbqrKbDcopN/EfNAkpDEOXhkH65z7f5a60bpOSqs07vc
-	5sfHK9J1DjE0XJpwjUXQYeQUivnjn30HiFppSK3MYbYbHnql59TWB84fWxNaWTBEfiWoydbmkiQ
-	hz6OxgjHkPQZblIv6lNngw5NzCw7zHP8=
-X-Gm-Gg: AYBFou2i9ryvQVUBR9UhTczrQpbBYnqzKAs0KnA0khFEz++fTKDQ66sojxmVXQm5NuM
-	Ga3sX/ViMN6IdsxluGJXtCbqX+q4nKJzmKdX7MDtsutTkNLxcbFmcCTXVMclwRlrgMwkj8nRpVT
-	MBGso+N9HqFXFkPyrcRABgPnViM6lTDt8RgfKovuMiRUcub4m0dC340dqhE1cdLYpBeVBDYeCnV
-	6hw0E/TZEPZ8rJCraH+2fNmC5okc6IvpSEGjemx2XMqED7ErFKiC1bSyp2R5j5KlbPzvLUoQ2nY
-	k9HfLgUaVqOQ2iX0cqoeYhsA+0e2tBzMkG0v4o57a7Eq+5Xa2ECeJh12J6LmyGCYPEG+J+wuAoY
-	56l2z/zJ7y6hvgTsRM2cAofQ=
-X-Received: by 2002:a53:d7c1:0:b0:66c:85e3:7f28 with SMTP id
- 956f58d0204a3-66e4c7cb058mr7321594d50.48.1788252982426; Tue, 01 Sep 2026
- 01:56:22 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oWIWW9PC"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=U+tcZw15K68mlanjAK2UomlTuTP3P1oMlvmlSPrqeWc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788255879; v=1; x=1788860679;
+ b=oWIWW9PCmW0CL63T+bQYiIuVZzYQVXfduq6nRxjRNKreWJPn5zCr5NOQcf1mj0yTFm9JYka+
+ MHA/FhDp/WoQUKVYmtiTk7QsMgthPFYxDalhzDh52SCC++cZpm8vz3vwR+v0rPxAC/9321IYy0Z
+ 7HMnn46nscdo8N9uuqF12Y4U=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id c7013bc8d2cf59a0;
+	Tue, 01 Sep 2026 09:44:29 +0000
+X-Mizu-Trace-ID: c7013bc8d2cf59a0
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <d8665587-a825-48d8-afb2-53fe10af0546@linux.dev>
+Date: Tue, 1 Sep 2026 17:44:19 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260831092305.42062-1-tasos.papagiannnis@gmail.com> <20260831092305.42062-4-tasos.papagiannnis@gmail.com>
-In-Reply-To: <20260831092305.42062-4-tasos.papagiannnis@gmail.com>
-From: sun jian <sun.jian.kdev@gmail.com>
-Date: Tue, 1 Sep 2026 16:56:17 +0800
-X-Gm-Features: AcwNN1XIzpApr53ZwDAkoriLyAfCiPBC9rJXu6HlLdHYqQbCNPiAd7kuMexr5Xk
-Message-ID: <CABFUUZHEJ0Bbu9QvT3AVkxAY=kgFzSA6fDj0hOwgQJ==bEaA=Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 3/7] exec: Clear bprm->mm before dropping its reference
-To: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org, 
-	akpm@linux-foundation.org, david@kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
-	kpsingh@kernel.org, matt@bobrowski.net, song@kernel.org, 
-	utilityemal77@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Cc: cui.tao@linux.dev, tj@kernel.org, void@manifault.com,
+ changwoo@igalia.com, michalblk@google.com, liwanwu@kylinos.cn,
+ sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, Tao Cui <cuitao@kylinos.cn>
+Subject: Re: [PATCH 1/2] sched_ext: fix vtime priority queue inversion on wide
+ vtime spread
+To: Andrea Righi <arighi@nvidia.com>
+References: <20260901024038.730424-1-cui.tao@linux.dev>
+ <20260901024038.730424-2-cui.tao@linux.dev> <apZ06G_-oC5cTprM@gpd4>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <apZ06G_-oC5cTprM@gpd4>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Aug 31, 2026 at 5:52=E2=80=AFPM Anastasios Papagiannis
-<tasos.papagiannnis@gmail.com> wrote:
->
-> Once mmput() drops the final reference to bprm->mm, the pointer must no
-> longer remain accessible through struct linux_binprm.
->
-> The successful exec path and the bprm initialization error path already
-> clear bprm->mm when ownership is transferred or released. Do the same in
-> free_bprm() before calling mmput().
->
-> This is required for eBPF kfuncs where bprm->mm is either NULL or points
-> to a live mm_struct to ensure safe access.
->
-> Signed-off-by: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
-> ---
->  fs/exec.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
->
-> diff --git a/fs/exec.c b/fs/exec.c
-> index a14f28b15607..4b4d8f0627a7 100644
-> --- a/fs/exec.c
-> +++ b/fs/exec.c
-> @@ -1453,9 +1453,12 @@ void bprm_drop_loader(struct linux_binprm *bprm)
->
->  static void free_bprm(struct linux_binprm *bprm)
->  {
-> -       if (bprm->mm) {
-> +       struct mm_struct *mm =3D bprm->mm;
-> +
-> +       if (mm) {
->                 acct_arg_size(bprm, 0);
-> -               mmput(bprm->mm);
-> +               bprm->mm =3D NULL;
-> +               mmput(mm);
->         }
->         if (bprm->user_ns)
->                 put_user_ns(bprm->user_ns);
-> --
-> 2.55.0
->
->
+Hello, Andrea, Tejun.
 
-An automated review by Sashiko [1] reported a potential UAF involving
-bprm->file. The report identifies a real but narrower lifetime issue.
+在 2026/9/1 14:47, Andrea Righi 写道:
+> Hi Tao,
+> 
+> On Tue, Sep 01, 2026 at 10:40:37AM +0800, Tao Cui wrote:
+>> From: Tao Cui <cuitao@kylinos.cn>
+>>
+>> scx_dsq_priq_less() compares dsq_vtime with time_before64(), a cyclic
+>> comparison that is only valid when the values in the queue are less
+>> than 2^63 apart. Unlike CFS, which enforces that invariant with
+>> min_vruntime clamping, sched_ext takes dsq_vtime directly from the BPF
+>> scheduler and cannot bound the spread. A scheduler that inserts tasks
+>> with vtimes wider than 2^63 apart into one DSQ gets the order inverted:
+>> the tasks it placed last run first and the rest starve. Reproduced with
+>> a probe scheduler assigning half its tasks vtimes near 0 and the other
+>> half vtimes above 2^63 -- four of eight busy tasks monopolized the CPU
+>> while the other four starved.
+>>
+>> Compare with plain u64 < instead, which is a total order and always
+>> honors the order the scheduler asked for. The transient misordering
+>> around the natural 2^64 wrap is the same class of anomaly the cyclic
+>> comparison trades it for, but bounded.
+> 
+> I don't think switching to plain u64 ordering is safe here.
+> 
+> The current scx_bpf_dsq_insert_vtime() documentation explicitly defines the
+> ordering in terms of time_before64(), including wraparound. For example:
+> 
+>   a = U64_MAX - 5
+>   b = 3
+> 
+> a is earlier than b in cyclic vtime ordering. time_before64(a, b) correctly
+> returns true, while plain a < b would place b first.
+> 
+> Moreover, this is not a short transient. If post-wrap tasks continue to be
+> reinserted with small vtimes, a can remain behind them until their vtime
+> traverses almost the entire u64 range, resulting in effective starvation.
+> 
+> Can we preserve time_before64() and document or enforce the half-range
+> requirement instead?
+> 
 
-The specific PF_KTHREAD/delayed-fput scenario is not reachable through
-the current in-tree path: kernel_execve() rejects PF_KTHREAD before
-alloc_bprm(), and usermode helpers use user_mode_thread(). In
-addition, bpf_get_file_xattr() is not available to TRACING/fentry
-programs.
+You're both right, patch 1/2 was wrong. My probe fed values that
+violate the rolling-cursor assumption, and the "inversion" was the
+API behaving as documented. Dropping 1/2.
 
-However, free_bprm() still drops the reference held by bprm->file
-before calling bprm_drop_loader(), which is instrumentable.
-linux_binprm->file is marked BTF_TYPE_SAFE_TRUSTED, so a tracing
-program attached to bprm_drop_loader() can pass it to the common
-bpf_dynptr_from_file() kfunc. Once the reference has been dropped,
-bprm->file is an unowned raw pointer; the dynptr retains that pointer
-without acquiring a file reference, and later reads dereference
-file->f_mapping.
+I'll send the documentation patch Tejun suggested.
 
-This is independent of the bprm->mm change in this patch. I plan to
-send a separate fs/exec patch against the current bpf-next tree for
-this issue.
+Thanks,
+Tao
 
-[1] https://sashiko.dev/#/patchset/20260831092305.42062-1-tasos.papagiannni=
-s@gmail.com?part=3D3
+> Thanks,
+> -Andrea
+> 
+>>
+>> Fixes: 06e51be3d5e7 ("sched_ext: Add vtime-ordered priority queue to dispatch_q's")
+>> Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+>> ---
+>>  kernel/sched/ext/ext.c | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
+>> index 8041c87a3562..dd0ce01370d1 100644
+>> --- a/kernel/sched/ext/ext.c
+>> +++ b/kernel/sched/ext/ext.c
+>> @@ -1417,7 +1417,8 @@ static bool scx_dsq_priq_less(struct rb_node *node_a,
+>>  	const struct task_struct *b =
+>>  		container_of(node_b, struct task_struct, scx.dsq_priq);
+>>  
+>> -	return time_before64(a->scx.dsq_vtime, b->scx.dsq_vtime);
+>> +	/* dsq_vtime is arbitrary BPF input: keep a total order */
+>> +	return a->scx.dsq_vtime < b->scx.dsq_vtime;
+>>  }
+>>  
+>>  static void dsq_inc_nr(struct scx_dispatch_q *dsq, struct task_struct *p, u64 enq_flags)
+>> -- 
+>> 2.43.0
+>>
+
