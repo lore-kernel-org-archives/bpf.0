@@ -1,156 +1,129 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9C6472082
-	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 08:09:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE7BB380FD7
+	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 08:11:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788250145; cv=none; b=iGmP5m+ed8967XOl45WQlogKO/gfIcFvv0cpnyYqm/we0aSaeoWVFwrnCesoNzlCQ8J5VPpSd46a2RxYb7gHSdDHk/Pnj2/bXyGncKGcsIEqBHCo0/FHT8MN0opi1R/zS/aaZMRG8C7Xt7Xnw0ukVDGf3Zg8lqBxR/PXm/9usiA=
+	t=1788250305; cv=none; b=P9hhma4z4dwtTS/pnb7zzKV2L7U5PCIaAcmPrKR71DDFKi2lHY94yOx+E2B0TQWF1/DWHgkF4Arq44/UR0liEwIr555UIm7Dl42jsLrqpw/IR6Mcq6hQsXDxbIuScV6M3/BtRLxH/VD3OKHMHvYj8t57ndtJJqPdtiHjGCNI9no=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788250145; c=relaxed/simple;
-	bh=e24LupsMA64t+dWKS/tFJ47bkn/CtfBkx6KSXCb9d3o=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=lMbMQYDmLgrDkgSJ/Kq3l9wBrbQYNL10kK3WLgsboCr0TAdsu0GsPpdKS3yZYRBXNE/GcSohXZO9pUqj5HMeABNsCkH7GNLUt8S5X/DPN+OwGCaxEERRdaO9EJ1iX7uKtOqNw2qogqNKgcZckU0JOnCZNXdHqJdwsKk50P17ZnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=K4Hk+SM3; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=UndXa1Kw; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1788250305; c=relaxed/simple;
+	bh=K4UZF6ThbeKC5oc671xPMUh/DHFlqpd5c7dTJ8pzq5w=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hbpHGeWrNFGrSdClnjojAz5mJlNZA63TdW++KfDDrYgX/QM5+E0ob8EVgM3/bC4ACpECvHiqcWiO2G+aULj2IP4eu/R2VxhocKrJsPkg/Hah7yKKjkbRWjm9TKY7hMEvorYi1ypUNVvEjiPi2/zWbXUIuSBaE5qW/hhuzza57eo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HoZEqm6V; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="K4Hk+SM3";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="UndXa1Kw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1788250142;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XdL8zzc8V9JkK2rUeyT0WO94d4yIRGolbKfwcYc2drU=;
-	b=K4Hk+SM3T79ARiWO0VlI5JzpgFJBNf2aUrIzZ8jqguLBXIvje4HOc6Ys74cqHOFcUL7mPR
-	kOtrPOqsyZymMdDEmRRo19d2x+ofc6240yMk4cfH986tl7m1yUmHHu9igNPa6PeRO6HUtZ
-	ShePO5rB2QWoqjq0ZcZKoU2YVdjDK5A=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-663-JHK-_1T_NSSFKoP8KO8tFQ-1; Tue, 01 Sept 2026 04:09:01 -0400
-X-MC-Unique: JHK-_1T_NSSFKoP8KO8tFQ-1
-X-Mimecast-MFC-AGG-ID: JHK-_1T_NSSFKoP8KO8tFQ_1788250140
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-482a5e9400eso4239147f8f.2
-        for <bpf@vger.kernel.org>; Tue, 01 Sep 2026 01:09:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HoZEqm6V"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-495437bb891so6252005e9.1
+        for <bpf@vger.kernel.org>; Tue, 01 Sep 2026 01:11:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1788250140; x=1788854940; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=XdL8zzc8V9JkK2rUeyT0WO94d4yIRGolbKfwcYc2drU=;
-        b=UndXa1KwsSXmtdRExe0WfBAFSE/P0/FqlNM+Ltf6hFwpWyeteYdHriWHNOQs4Mp2B4
-         i6Kp8WZuFrSnwsqT0v8rUEsIXqant7y9NWvC51Vl7g6P282Qi/rVBUeNdxMnrDm8rS9l
-         c1Y4LaRb2rZlny/Hq7m0mj04+wC16tJRQ9BQjC6wqu9vH7xsUoVtYisIaSiGxiGpeHGs
-         MvDni+8Y+A/K9FrSJzXLHd8LwYCu900lbzTGBbhWCTXr0n5fVvgTJa+NRry9ewhta9Em
-         MuGLJsJxOXGFbcLbgrzhfjn4V7as5e5HYyEAJNo9rRIazcT/lGlrbdYhZMzhGfmZ2gYB
-         eClw==
+        d=gmail.com; s=20251104; t=1788250302; x=1788855102; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=q1wsWo0+bHbeVA+4aZjel/63TQcKF5t0tkxqh6Apz00=;
+        b=HoZEqm6VGMkijOiIsK8XqlK202NqxTL9E4+lal5Tdp58K9KfZNh4ykEtX4AiPMvl6L
+         xJAHw+kq4C9jxyzJdB0kMk3d0jGK2ngV7ynnXpfjo77IcXD/m1zzqAlhOvyk+soSfBep
+         MB9Bx/S91+7NGcZHHyfi0pN74ABcxBn6t2xKfOlu0AXLaa3wIhcXs+8GSGwUTmmlfXxT
+         GkiLbhlprp8A7SRy6v2Q4yT/lVBm74PaltOXvjxE7v2I16F/kgA61JLamdIB2UfLFCtw
+         3zQhi0AWhxmuHcXhe8JGyjRgOLye67HxIzXAa3uiXlmhf/UuSucX4ZAg7XAO2OcLjtF1
+         6kwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788250140; x=1788854940;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :references:in-reply-to:subject:cc:to:from:x-gm-gg
+        d=1e100.net; s=20251104; t=1788250302; x=1788855102;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=XdL8zzc8V9JkK2rUeyT0WO94d4yIRGolbKfwcYc2drU=;
-        b=HvsHvnWArCeZqA793YiEX6oUcWi6z3SKvY0S9qsoEkw0v3lhtUZV8UmUE5HYhVheWK
-         ZUUV/zEuNXJDlUeuSvIwsReVjzsCnk0WpimzlV9NROub767+gVlW51PmW09yfpE9YY5N
-         VPY1tSLft9z4giq8qFWdUtfsj9mJIeHFEg90ZNvz9hCkygVG/Jktm/yVJVYgR3qT5ImP
-         TEZaebnwnKAzy9dsgSPWxrE2BSLH4HTDtX163O4VjxIWDE9ZxCHsvYJyt/KO09pCR5E3
-         veOa2jp1IqNlsEhi9kdtVSDpENJQzKmuPSKO7m2J34uM6iyp/O8kHccd/plYqF8gXYQj
-         1OdQ==
-X-Gm-Message-State: AFuF++kcjxRM75LkVFyRowKOQcBa5dgWj47HKFZP4SepzV7T+92wVcb5
-	ZNOlYz5kKj/ung9H5tD5XuRluQNq3D/oTs97svx5B0ESUwHAWQxbHV1EVLnJYIh5L2NdPmVGDmO
-	V6r/VRcWUbYDKEkx9oNbZ/Z6VHyV9/ncxlROTq01Pq8NAmM2PseZhPFTGCBqVrg==
-X-Gm-Gg: AR+sD13xRr+78Nt2FKcQLdUKqcUDzmww7jcbjLno4k0RP7AujHaNa0xrs+Xzd3ZlFz0
-	/0xRoltpTgP+XlA2VtoeW3tyhxAdM6hNlOesjUxR2QhdJYqLYq5U+bla5s0gZWnfmOw81FGIK/d
-	CjGRUYXTDlcKgHBkEzILfkQgqsVuSKPr3hxoUSb69pg9orE32Kbh4YPKbFdoJL237PIrku24JUa
-	1dpQBRom7tHE1arz105K60EbEXA3BLTN+yB0TcVcRmBrc8JPtnmX7VTpiXKNAp3l6oE+gp+V6gF
-	RFqMc7cIwYzYki7L2PkA7w+TbqpPijxOHrZlKtnvuadTP7CeMoxE8y90atPcK69ymdRWcWAQoSK
-	2XWY7PtHs7v41OFBtdxh1fBKbW5E=
-X-Received: by 2002:a05:600c:a418:b0:499:b65e:49c9 with SMTP id 5b1f17b1804b1-49cdc558513mr105413775e9.10.1788250140336;
-        Tue, 01 Sep 2026 01:09:00 -0700 (PDT)
-X-Received: by 2002:a05:600c:a418:b0:499:b65e:49c9 with SMTP id 5b1f17b1804b1-49cdc558513mr105413065e9.10.1788250139923;
-        Tue, 01 Sep 2026 01:08:59 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cd8148fbdsm74332025e9.3.2026.09.01.01.08.58
+        bh=q1wsWo0+bHbeVA+4aZjel/63TQcKF5t0tkxqh6Apz00=;
+        b=rOJoZFro7nVs7+3ocNFPbmUlRxx8iFTSTKyqLR8HtCE0c9mn/LiPxvVV05vAG6BG/z
+         Ena196f03U7zJDKLSfRALohzSBZp8u/DYZCJPCK7X1s93bQjuJ6YBZBJ8Yw31N2X5eiL
+         o1+UEM9wF90HrbE2G1HNYm2t8SMrYuVplUJH2R2Cg2gdTz+IugPwWaWALyMaA7HzTHyZ
+         5Sd6hR3zmqtsyc0rGJNRXD0EvkYo5yOwdcJHT8WhPOxb8bSKwfEIPVnizqxblXp+OT15
+         U6loCv6OVlApeY6DDNnQB3Y0paLxnI+YfeHP8wT6PxwyMltX5KhKsy3gs2fGkUlTrsS3
+         AMCg==
+X-Forwarded-Encrypted: i=1; AHgh+Ro4u9uRTNeFrfUmoGtiW/Izsjpu7QG6XCsPDEFkLIqf8oCCLSfLEi8OC2SKGYMS7c+9fpU=@vger.kernel.org
+X-Gm-Message-State: AFuF++ngSt3x9SEgc2o0jI06sySWm2mRm0lFIDdn6OikuS+CixFbpadI
+	1gZhw23CWVAJXvi5855rVuWnVRcSkILZY4kO7Zt0I3FxGbL+GTWAekXv
+X-Gm-Gg: AR+sD12GJDmR3sIPZY29wxzkY8D3sh+hb8m2cJLdmf4maCzFxLa6ukym67kwnH+FCqO
+	9ZnzQzKujg2a+KgLQbpuykbcwXdlK1RP1I4N2tEGIYhhZAadFqbRfMJ5189XtLZR321dvLa9XA4
+	tkQvUbons3U0/kn1lh72+SEUSv9GX1q00X30XyW2uawMWmSoiPtYk1f3EhYjh6vPocKlDnXFFJ4
+	7etJWilLlDnsgjT20Qi5Pj4AKqhc5gtu+IS9mkc6K41VjpQtr5yivUvUjFcg1MH3yuuinbx7W7L
+	45lKBYxRxD5PfhL7De47zwgOxuKN69lKaMQaBHxL4UZbwosFkI1u6ZFEEn4YcHeOlNUFAeUwArT
+	2fP3aSVSF4QYYGfqQZQAqs3uaJT+JYBOhcD9ZOiT/tnWites1Aj0sI8ZFv2mNLb/Wtcf5BKR9Bl
+	/3cj+e9ishfjsiNvjXTh3soC4RNQ+q+T+/Aj+llu5VpEn1qQ8R
+X-Received: by 2002:a05:600c:705:b0:49c:d8f1:ec60 with SMTP id 5b1f17b1804b1-49cdd735316mr38936415e9.8.1788250301787;
+        Tue, 01 Sep 2026 01:11:41 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48442d78444sm3643306f8f.25.2026.09.01.01.11.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2026 01:08:58 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id EA00497C4A1; Tue, 01 Sep 2026 10:02:59 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 2/4] bpf: selftests: Check for flag presence
- in bpf_program__flags()
-In-Reply-To: <20260831134450.680941F000E9@smtp.kernel.org>
-References: <20260831132648.65843-1-toke@redhat.com>
- <20260831132648.65843-2-toke@redhat.com>
- <20260831134450.680941F000E9@smtp.kernel.org>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Tue, 01 Sep 2026 10:02:59 +0200
-Message-ID: <87y0dlv1os.fsf@toke.dk>
+        Tue, 01 Sep 2026 01:11:41 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Tue, 1 Sep 2026 10:11:39 +0200
+To: bot+bpf-ci@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	bpf@vger.kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+	song@kernel.org, yonghong.song@linux.dev, rppt@kernel.org,
+	martin.lau@kernel.org, mason@kernel.org, ihor.solodrai@linux.dev
+Subject: Re: [PATCH bpf-next 2/3] bpf, x86: Introduce JIT emission context
+Message-ID: <apaIuxCD3HyZeiDN@krava>
+References: <20260831114614.157277-3-jolsa@kernel.org>
+ <d3b30565c015a75c09b1b79b4684bf3399f8db42f0aad1d5faaf3267ba817f0d@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d3b30565c015a75c09b1b79b4684bf3399f8db42f0aad1d5faaf3267ba817f0d@mail.kernel.org>
 
-sashiko-bot@kernel.org writes:
+On Mon, Aug 31, 2026 at 12:54:35PM +0000, bot+bpf-ci@kernel.org wrote:
+> > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> > index 5922bb4728aad..eff0523161c3e 100644
+> > --- a/arch/x86/net/bpf_jit_comp.c
+> > +++ b/arch/x86/net/bpf_jit_comp.c
+> 
+> [ ... ]
+> 
+> > @@ -947,10 +898,9 @@ static void bpf_tail_call_direct_fixup(struct bpf_prog *prog)
+> >  	}
+> >  }
+> >
+> > -static void emit_mov_imm32(u8 **pprog, bool sign_propagate,
+> > +static void emit_mov_imm32(struct jit_emit_context *jit, bool sign_propagate,
+> >  			   u32 dst_reg, const u32 imm32)
+> >  {
+> > -	u8 *prog = *pprog;
+> >  	u8 b1, b2, b3;
+> >
+> >  	/*
+> > @@ -984,14 +934,12 @@ static void emit_mov_imm32(u8 **pprog, bool sign_propagate,
+> >  		EMIT1(add_1mod(0x40, dst_reg));
+> >  	EMIT1_off32(add_1reg(0xB8, dst_reg), imm32);
+> >  done:
+> > -	*pprog = prog;
+> >  }
+> 
+> Does this break the build? Removing the trailing '*pprog = prog;' leaves
+> the 'done:' label as the last thing in the function body, with no statement
+> after it. C11 and C17 require a labeled-statement to be 'identifier ':'
+> statement', where a closing brace is not a statement. Labels at the end of
+> a compound statement were only legalized in C23 (N2508). The kernel builds
+> with '-std=gnu11' (per the top-level Makefile), so GCC will reject this with
+> 'error: label at end of compound statement' and Clang with 'error: expected
+> statement' when using any currently supported minimum toolchain. Only GCC
+> >= 11 silently accepts it (downgrading to a pedwarn that's off without
+> -Wpedantic), which is why the breakage can hide on a modern build host.
+> 
+> The function has two 'goto done;' statements earlier (the sign-propagate
+> path and the imm32 == 0 path), so the label cannot simply be dropped. Could
+> the label be given a statement, such as 'done:\n\treturn;' or 'done:\n\t;',
+> or could the two gotos be replaced with 'return;' and the label removed?
 
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [Medium] Missing NULL pointer check on the result of bpf_object__next_p=
-rogram() causes a potential test crash.
-> --
->
-> commit 357b58adee859a9375d4063d6f64aa4a923e7790
-> Author: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
->
-> bpf: selftests: Check for flag presence in bpf_program__flags()
->
-> This commit adds checks to verify that the BPF_F_XDP_HAS_FRAGS and
-> BPF_F_SLEEPABLE flags are correctly exposed by bpf_program__flags(). It
-> introduces assertions in multiple selftests immediately after retrieving
-> the BPF program structures.
->
->> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c b=
-/tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c
->> index fce203640f8cf..a894b1ab46f4e 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c
->> @@ -18,6 +18,9 @@ static void test_xdp_update_frags(void)
->>  		return;
->>=20=20
->>  	prog =3D bpf_object__next_program(obj, NULL);
->> +	ASSERT_EQ(bpf_program__flags(prog) & BPF_F_XDP_HAS_FRAGS,
->> +		  BPF_F_XDP_HAS_FRAGS, "frags in program flags");
->> +
->
-> [Severity: Medium]
-> What happens if bpf_object__next_program() returns a NULL pointer here?
->
-> The prog pointer is passed directly to bpf_program__flags(), which
-> unconditionally dereferences it. While the object file is expected to con=
-tain
-> programs during normal builds, if it does not, could this cause the test =
-suite
-> to hard crash with a segmentation fault instead of failing gracefully?
->
-> Prior to this patch, a NULL prog would be handled more safely, as the lat=
-er
-> call to bpf_program__fd() explicitly checks for NULL and returns an error
-> code.=20
->
-> Does it make sense to add a check like ASSERT_OK_PTR(prog, "prog") before
-> accessing its flags?
+yea, I overlooked that, we can simple replace goto with return
 
-No. This won't happen, and existing code already use the pointer without
-checking it.
-
--Toke
-
+jirka
