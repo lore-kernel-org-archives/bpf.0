@@ -1,293 +1,158 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7B94490BFE;
-	Tue,  1 Sep 2026 17:59:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE5941D5AC2;
+	Tue,  1 Sep 2026 18:14:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788285558; cv=none; b=uvq5pVkU5tnh6qyhtEKhxUSgwqCQUWloF/mKXc0+EeqjLhCMi6FIY/G9qi/lwO50OYOBcYwE3UaVp7zyivArftCEeQpSBFI0/Vh/oUKHzhJZME0x/OrqPi8QXVL6oXa4fEJjxxC6d+myaof4vhFgEMWLahn184f76xwq93R5yOU=
+	t=1788286490; cv=none; b=DFnhzfxXCzOxp8Fpoomm/jydd5bYzlYNFFongn1BFn+jAQgITjyDChW7zzPVUo3Ttyp+ih6dxYxSRhdbai8qkcIqCsq7jjsKr7+amgipqt0rMFW6B7IYXk/MbdLTeUVSFDjnq4ZX2x1vpPC9d/0+BeWiIm3Jj7VdeI/TBklVEZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788285558; c=relaxed/simple;
-	bh=roF+e+hdaiMHtH92MP23h6CasbLm+AugGgJns+zy0lk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
-	 References:In-Reply-To; b=Hv07eQ1SJ5wBkzqZBlCaYsok1Mr5NWteqksfUs/RJvDSPvzKsEz+Il5xTUr/KNpGrFn/OE4nUiKS1qM6Ik0zLbpmTdAKeSlSVqZWqysUFIHSi1CczWYOObG+vg6xmKjVI5LO9tBWWB4ChcBd/ndAIt19QBOQQ81Vc33Wly6dAuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=0g1dp5U/; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1788286490; c=relaxed/simple;
+	bh=Q74fB3VP015f3XiZ5T08A7hxIUGZpJNs0FI3LHR2+Qw=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=s/Z4A5fvKJBXWYZ1rD6W+Zapn59opPit3O55dJ9FWgVy3dOS9j4Zg+6BayEpeZb4rWxiqczcAY3HX2fjJZxWA/uTBUt0oSpkZwJRsdopR1tWlS0LObcb3f3Vxj3Pgt3rVkH1pYQyTXZBzlfv8c6q3wDS6lOKg+UV7Tu/lZakmZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=br+7cjr0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="0g1dp5U/"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id F242A4E414A2;
-	Tue,  1 Sep 2026 17:59:12 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id B929B6053C;
-	Tue,  1 Sep 2026 17:59:12 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 632ED11C7929D;
-	Tue,  1 Sep 2026 19:58:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1788285547; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=ZGg5+0PXOpr2qKFOyZDL1NQc/onpOdowko845pW6LhU=;
-	b=0g1dp5U/kpCeWZ3Kju2KhkhNfbtl7+eM4Xd4Z7HN49CZcsYmL8fpofuUOdsjuZL4vEhbau
-	aJ/qPMmP9MnguFUszlo5wYPE4PPdCM+GtS6P04ferWkCIkZHkrLeCsKL62Xxl5q909tY/N
-	rpnippCjBV5hoxpPAp+emdkvPdKi3rToq7iQfoG7IfAxX6C0ZC0zqjLCghdf2w9UQVgSUm
-	E/ReHcV2JVIP3dVIVVj+oE1nBAO+dveI0EiL3AvdI+HZaPOUL7rQIcvLdvBIThavWmHFNA
-	IVxSOODQqsXRWyfe7tat/v0TTZbzNVd191jCtm3QGmsu+qQBJ+myZQCRtioN5g==
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="br+7cjr0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D746D1F000E9;
+	Tue,  1 Sep 2026 18:14:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788286489;
+	bh=85diNgB1gjiA7HzQx1oMNsSRACXwQ1XQDvGbX5zvKLE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=br+7cjr0B2OFjdHaCWu7v3l/e5UWE2dOdkKjvDPs849Ve4H+W+HPKS9kYa2bRy8sN
+	 IR86RXalttvte6CJ64T/8XHSzkMKMb8Ac8gv5mB47agdbksyXA1W5zmE3DeE6l1N+q
+	 W81IKMDBySaeonePHyjYl9qikgUuPqTF+LAsOh8yNeyuZ0oXzVFQbXsQdtgeu0R6Mu
+	 GY7IL0gPqhqPYF0kcKHBMAgy1JhF8UFDg4S7rvVopvZptBoQWW93NMfe7HYBjvlj2E
+	 7aQpXSKXFgfwU/jaRSKLo69NF3Gs0akzEX8yOJxYllbaBhl8/f5ZOubHJOGe2Q1Nrq
+	 eI2zQYKLMQSCw==
+Content-Type: multipart/mixed; boundary="===============5834501064021467908=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 01 Sep 2026 19:58:54 +0200
-Message-Id: <DL46BD4OVWZ2.6X01VIKUVCA5@bootlin.com>
-Subject: Re: [PATCH bpf-next v8 4/8] bpf, x86: emit KASAN checks in x86
- JITed programs
-Cc: <ebpf@linuxfoundation.org>, <bastien.curutchet@bootlin.com>,
- <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <martin.lau@kernel.org>, <clm@meta.com>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: <bot+bpf-ci@kernel.org>, <alexis.lothore@bootlin.com>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <andrii@kernel.org>,
- <martin.lau@linux.dev>, <eddyz87@gmail.com>, <memxor@gmail.com>,
- <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
- <tglx@kernel.org>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
- <x86@kernel.org>, <hpa@zytor.com>, <shuah@kernel.org>, <mingo@redhat.com>,
- <andreyknvl@gmail.com>, <emil@etsalapatis.com>, <ihor.solodrai@linux.dev>,
- <laoar.shao@gmail.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260828-kasan-v8-4-7c1c0fdb9d7f@bootlin.com>
- <25c4fc03d83c879c13ac1df190046881f7f969ffa532b904597ca9947c750d53@mail.kernel.org>
-In-Reply-To: <25c4fc03d83c879c13ac1df190046881f7f969ffa532b904597ca9947c750d53@mail.kernel.org>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Message-Id: <797b06b4ecde0e90165b2164c65560decf5869c6b9b6f0d4b6376cb49726459b@mail.kernel.org>
+In-Reply-To: <20260901165757.801449-4-alan.maguire@oracle.com>
+References: <20260901165757.801449-4-alan.maguire@oracle.com>
+Subject: Re: [PATCH v2 bpf-next 03/18] libbpf: Support moving permuted BTF types into split BTF
+From: bot+bpf-ci@kernel.org
+To: alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org
+Cc: daniel@iogearbox.net,eddyz87@gmail.com,jolsa@kernel.org,ihor.solodrai@linux.dev,yonghong.song@linux.dev,song@kernel.org,qmo@kernel.org,martin.lau@linux.dev,memxor@gmail.com,emil@etsalapatis.com,mcgrof@kernel.org,petr.pavlu@suse.com,tj@kernel.org,kees@kernel.org,bpf@vger.kernel.org,nathan@kernel.org,nsc@kernel.org,arnd@arndb.de,puranjay@kernel.org,yatsenko@meta.com,atenart@kernel.org,ojeda@kernel.org,linux-modules@vger.kernel.org,alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue,  1 Sep 2026 18:14:47 +0000 (UTC)
 
-On Fri Aug 28, 2026 at 12:30 PM CEST, bot+bpf-ci wrote:
->> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
->> index 13ba3232993ac..adb62216dd204 100644
->> --- a/arch/x86/net/bpf_jit_comp.c
->> +++ b/arch/x86/net/bpf_jit_comp.c
+--===============5834501064021467908==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> index 9449f6f50f18..30f8c426d145 100644
+> --- a/tools/lib/bpf/btf.c
+> +++ b/tools/lib/bpf/btf.c
+> @@ -2147,16 +2147,9 @@ int btf__find_str(struct btf *btf, const char *s)
+>   *   - > 0 offset into string section, on success;
+>   *   - < 0, on error.
+>   */
+> -int btf__add_str(struct btf *btf, const char *s)
+> +static int btf_add_local_str(struct btf *btf, const char *s)
+>  {
+> -	int off;
+> -	int err;
+> -
+> -	if (btf->base_btf) {
+> -		off = btf__find_str(btf->base_btf, s);
+> -		if (off != -ENOENT)
+> -			return off;
+> -	}
+> +	int off, err;
 >
-> [ ... ]
+>  	err = btf_ensure_modifiable(btf);
+>  	if (err)
+> @@ -2167,10 +2160,24 @@ int btf__add_str(struct btf *btf, const char *s)
+>  		return libbpf_err(off);
 >
->> @@ -1110,6 +1121,92 @@ static void maybe_emit_1mod(u8 **pprog, u32 reg, =
-bool is64)
->>  	*pprog =3D prog;
->>  }
->>
->> +static int emit_kasan_check(struct bpf_verifier_env *env, u8 **pprog,
->> +			    u32 addr_reg, struct bpf_insn *insn, u8 *ip,
->> +			    bool is_write)
->> +{
->> +#ifdef CONFIG_BPF_JIT_KASAN
->> +	u32 bpf_size =3D BPF_SIZE(insn->code);
->> +	s32 off =3D insn->off;
+>  	btf->hdr.str_len = strset__data_size(btf->strs_set);
+> +	btf->strs_deduped = false;
+
+The refactoring left the API doc comment attached to the new static
+helper btf_add_local_str(), so the public btf__add_str() (btf.c:2168) now
+has no documentation at all, and its declaration at tools/lib/bpf/btf.h:202
+is bare without doxygen. The comment is also no longer descriptive of what
+it now documents: the distinguishing property of btf_add_local_str() versus
+btf__add_str() is that it always adds to this BTF's own string section and
+never reuses a string already present in base_btf, which is exactly what
+makes the new transfer mode able to keep split-only strings out of the base.
+
+Should the comment be moved back onto btf__add_str() and btf_add_local_str()
+given a one-liner about bypassing the base string table?
+
+The new btf->strs_deduped = false sits in btf_add_local_str(), which is on
+the path of every public btf__add_str() call (and therefore of btf__add_int,
+btf__add_var, btf__add_field, btf__add_enum_value, btf__add_func_param,
+btf__add_datasec, btf__add_locsec, btf_add_composite, btf_add_decl_tag,
+btf_add_ref_kind, btf_add_enum_common, and more), not just the new transfer
+path.
+
+Before this commit nothing in tools/lib/bpf ever cleared strs_deduped. The
+complete set of writers post-commit is: btf_ensure_modifiable() sets it true
+when hdr.str_len == 0 or when !base_btf && str_len == 1, end of
+btf_dedup_strings() sets it true, plus the two new clears here and in
+btf_compact_strings().
+
+For BTF built from scratch, btf__new_empty() (str_len == 1) and
+btf__new_empty_split() (str_len == 0) both make btf_ensure_modifiable() set
+strs_deduped = true, so pre-commit btf_dedup_strings() returned 0 at its
+early-return check and the string table was never rebuilt. Post-commit the
+first added string clears the flag, so btf__dedup() now always rebuilds the
+string table for such BTF: strings are reordered and unreferenced strings
+are dropped. Any offset a caller previously obtained from the public
+btf__add_str() and stashed outside a BTF type's name field is therefore
+silently invalidated across btf__dedup().
+
+This is not needed by the commit: both btf_compact_strings() call sites
+already force btf->strs_deduped = false themselves at btf.c:4536, so the
+transfer path does not depend on btf_add_local_str() clearing it.
+
+All in-tree consumers were checked and are safe: bpf_linker's
+finalize_btf() (tools/lib/bpf/linker.c:2860) runs finalize_btf_ext() first
+and then passes opts.btf_ext = linker->btf_ext to btf__dedup(), so the
+offsets produced at linker.c:1968, 2697, 2703, 2740 and 2952 all get
+remapped; bpftool merge_btf_files() (tools/bpf/bpftool/btf.c:880) and
+resolve_btfids finalize_btf() (tools/bpf/resolve_btfids/main.c:1578) hold no
+external string offsets. So there is no in-tree breakage, but this is an
+unadvertised behaviour change to a public API plus a full string-table
+rebuild on every static link, and the commit message does not mention
+btf__add_str() or strs_deduped at all.
+
+Is the clearing of strs_deduped here intentional for non-transfer use of
+btf__add_str(), or should it only be cleared in btf_compact_strings() where
+the transfer path already sets it?
+
 >
-> Does emit_kasan_check need to re-read insn->off here rather than taking
-> the effective displacement as a parameter? At the BPF_STX | BPF_MEM site
-> (line 2458), do_jit() remaps the offset for stack arguments:
+>  	return btf->start_str_off + off;
+>  }
 >
->     insn_off =3D insn->off;
->     if (dst_reg =3D=3D BPF_REG_PARAMS) {
->         insn_off =3D outgoing_arg_base - outgoing_rsp - insn_off - 16;
->         dst_reg =3D BPF_REG_FP;
->     }
->     ...
->     emit_kasan_check(env, &prog, dst_reg, insn, ip, true);
->     emit_stx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn_off);
->
-> The check receives the remapped dst_reg (BPF_REG_FP) but re-derives the
-> offset from insn->off, so the check validates 'rbp + insn->off' while
-> emit_stx() writes to 'rbp + insn_off'.
+> +int btf__add_str(struct btf *btf, const char *s)
+> +{
+> +	int off;
+> +
+> +	if (btf->base_btf) {
+> +		off = btf__find_str(btf->base_btf, s);
+> +		if (off != -ENOENT)
+> +			return off;
+> +	}
+> +
+> +	return btf_add_local_str(btf, s);
+> +}
 
-This one is right, I managed to reproduce it with a sample program
-similar to those for the args on stack selftests, JIT hardening
-enabled and cpuv4:
-- arg pushed on stack with cpuv4: BPF_ST|BPF_MEM|BPF_DW with dst_reg =3D
-  BPF_REG_PARAMS
-- hardening + ST on constant: constant pushed on stack is blinded,
-  program is patched with MOV + XOR + STX, the last one is marked as
-  non-stack accessing, per commit 1/8
-- JIT compiler enters the branch mentioned above and uses wrong offset
-  for the KASAN check, so we insert an unwanted stack access check AND
-  we check it at the wrong offset.
+[ ... ]
 
-This made me realize that the series did not have this specific issues,
-as args-on-stack feature has been merged quite recently. Rather than
-adjusting the offset for a check that isn't really wanted (this is still
-a stack access), I plan to just skip the KASAN check insertion if
-dst_reg =3D=3D BPF_REG_PARAMS (or src_reg =3D=3D BPF_REG_PARAMS, for LDX).
 
-> The BPF_ST | BPF_MEM case (line 2432) has a second issue: the check
-> runs before any register remapping, so it is given the raw dst_reg:
->
->     if (!accesses_stack_only) {
->         err =3D emit_kasan_check(env, &prog, dst_reg, insn, ip, true);
->         ...
->     }
->     emit_st(&prog, insn, dst_reg, outgoing_arg_base, outgoing_rsp);
->
-> When dst_reg =3D=3D BPF_REG_PARAMS (MAX_BPF_REG =3D=3D 11), emit_st() rem=
-aps
-> both the register and offset internally, but emit_kasan_check() receives
-> the raw value. reg2hex[] has no entry for index 11, so reg2hex[11] =3D=3D=
- 0
-> and EMIT_mov(BPF_REG_1, BPF_REG_PARAMS) encodes 'mov rdi, rax'. The
-> check then validates 'rax + insn->off' - RAX being BPF R0, an arbitrary
-> program value - while the store goes to the outgoing-argument slot.
->
-> In the BPF_DW / insn->off =3D=3D -8 sub-case of BPF_ST, emit_st() perform=
-s
-> no memory access at all (the value is materialized into R9), yet a full
-> __asan_store8 check is still emitted.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Will be fixed the same way: skipping kasan check if dst_reg =3D=3D
-BPF_REG_PARAMS.
-
-> The BPF_LDX path (line 2645) handles this correctly: it remaps to
-> BPF_REG_FP before calling emit_kasan_check(), and the incoming-arg case
-> skips the check entirely.
-
-And I'll make sure to skip the KASAN check in the LDX path as well.
->
-> Would passing the effective displacement to emit_kasan_check() as an
-> explicit parameter fix both the BPF_STX offset mismatch and let the
-> BPF_ST path perform the remap before the check?
->
->> +	u8 *prog =3D *pprog;
->> +	void *kasan_func;
->> +
->> +	if (!env)
->> +		return 0;
->
-> [ ... ]
->
->> @@ -1911,10 +2026,12 @@ static int do_jit(struct bpf_verifier_env *env, =
-struct bpf_prog *bpf_prog, int *
->>  		const s32 imm32 =3D insn->imm;
->>  		u32 dst_reg =3D insn->dst_reg;
->>  		u32 src_reg =3D insn->src_reg;
->> +		bool accesses_stack_only;
->>  		u8 b2 =3D 0, b3 =3D 0;
->>  		u8 *start_of_ldx;
->>  		s64 jmp_offset;
->>  		s32 insn_off;
->> +		int insn_idx;
->>  		u8 jmp_cond;
->>  		u8 *func;
->>  		int nops;
->> @@ -1931,6 +2048,10 @@ static int do_jit(struct bpf_verifier_env *env, s=
-truct bpf_prog *bpf_prog, int *
->>  			EMIT_ENDBR();
->>
->>  		ip =3D image + addrs[i - 1] + (prog - temp);
->> +		insn_idx =3D i - 1 + bpf_prog->aux->subprog_start;
->> +		accesses_stack_only =3D
->> +			env ? !env->insn_aux_data[insn_idx].non_stack_access :
->> +			      false;
->
-> This isn't a bug, but when env =3D=3D NULL, accesses_stack_only is set to
-> false ('not stack-only, do instrument'), yet every call site then
-> enters emit_kasan_check() which only no-ops because of its own 'if
-> (!env) return 0;' guard. Would 'env ? ... : true' make the fail-safe
-> default self-evident and avoid depending on emit_kasan_check()'s
-> internal guard for correctness?
-
-I'm not really convinced it would make things better. Having 'env ? ...
-: true' would also require to rename the variable to something likely
-mouthful, as accesses_something_else_other_than_stack (yes, I'm
-exaggerating a bit, but not so much), and as discussed in previous
-reviews, the emit_kasan_checks calls will stay anyway, even in the no-op
-case.
-
-> Also, the '!env' test plus 'insn_idx +=3D aux->subprog_start' is already
-> encapsulated by bpf_insn_is_indirect_target() (kernel/bpf/core.c:1646-
-> 1652). Would a small helper like bpf_insn_accesses_non_stack(env, prog,
-> i - 1) keep the arch-independent invariant in one place and let other
-> JITs reuse it when they gain KASAN support?
-
-There's a clear intent _not_ to bring KASAN support to other JIT
-compilers, so there's no much value in a dedicated helper just to check
-this flag. If that ever changes, I'll happily reconsider.
-
-[...]
-
->> @@ -2572,28 +2711,42 @@ static int do_jit(struct bpf_verifier_env *env, =
-struct bpf_prog *bpf_prog, int *
->>  			}
->>  			fallthrough;
->>  		case BPF_STX | BPF_ATOMIC | BPF_W:
->> -		case BPF_STX | BPF_ATOMIC | BPF_DW:
->> -			if (insn->imm =3D=3D (BPF_AND | BPF_FETCH) ||
->> -			    insn->imm =3D=3D (BPF_OR | BPF_FETCH) ||
->> -			    insn->imm =3D=3D (BPF_XOR | BPF_FETCH)) {
->> -				bool is64 =3D BPF_SIZE(insn->code) =3D=3D BPF_DW;
->> -				u32 real_src_reg =3D src_reg;
->> -				u32 real_dst_reg =3D dst_reg;
->> -				u8 *branch_target;
->> -
->> +		case BPF_STX | BPF_ATOMIC | BPF_DW: {
->> +			bool is64 =3D BPF_SIZE(insn->code) =3D=3D BPF_DW;
->> +			u32 real_src_reg =3D src_reg;
->> +			u32 real_dst_reg =3D dst_reg;
->> +			u8 *branch_target;
->> +			u8 *pprog;
->> +			bool is_atomic_fetch =3D
->> +				(insn->imm =3D=3D (BPF_AND | BPF_FETCH) ||
->> +				 insn->imm =3D=3D (BPF_OR | BPF_FETCH) ||
->> +				 insn->imm =3D=3D (BPF_XOR | BPF_FETCH));
->> +			if (is_atomic_fetch) {
->>  				/*
->>  				 * Can't be implemented with a single x86 insn.
->>  				 * Need to do a CMPXCHG loop.
->>  				 */
->>
->>  				/* Will need RAX as a CMPXCHG operand so save R0 */
->> +				pprog =3D prog;
->>  				emit_mov_reg(&prog, true, BPF_REG_AX, BPF_REG_0);
->>  				if (src_reg =3D=3D BPF_REG_0)
->>  					real_src_reg =3D BPF_REG_AX;
->>  				if (dst_reg =3D=3D BPF_REG_0)
->>  					real_dst_reg =3D BPF_REG_AX;
->> -
->> +				ip +=3D (prog - pprog);
->> +			}
->> +			if (!bpf_atomic_is_load_store(insn)) {
->> +				if (!accesses_stack_only) {
->> +					err =3D emit_kasan_check(env, &prog,
->> +							       real_dst_reg,
->> +							       insn, ip, true);
->> +					if (err)
->> +						return err;
->> +				}
->>  				branch_target =3D prog;
->> +			}
->> +			if (is_atomic_fetch) {
->>  				/* Load old value */
->>  				emit_ldx(&prog, BPF_SIZE(insn->code),
->>  					 BPF_REG_0, real_dst_reg, insn->off);
->
-> This isn't a bug, but does the restructured atomic case now make
-> branch_target a dead store on the non-fetch paths? branch_target is
-> written for every non-load/store atomic (plain BPF_ADD, BPF_XCHG,
-> BPF_CMPXCHG without BPF_FETCH) but only read under 'if
-> (is_atomic_fetch)'. Would moving 'branch_target =3D prog;' into the
-> following 'if (is_atomic_fetch)' block keep the KASAN check outside the
-> retry loop while restoring the definition-next-to-use property?
-
-Indeed, I'll bring it back under the relevant if branch.
-
-> Also, the new local 'u8 *pprog;' shadows the file-wide convention where
-> pprog is the u8 ** out-parameter of every emit_* helper.
-
-True, I'll rename it.
-
-Alexis
-
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33537080133
+--===============5834501064021467908==--
