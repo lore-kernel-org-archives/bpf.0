@@ -1,51 +1,51 @@
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F98483BD7;
-	Tue,  1 Sep 2026 16:58:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 232D1483BF2;
+	Tue,  1 Sep 2026 16:58:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788281921; cv=none; b=sYI3V2yhGkoZuDygCdzJRC2Dp1AtlzOgbef9ntvJ2FkWxUfwViEC51d6+Q2Jjc8BtKX7WfWpHxubceySuSoeNj00DDvOE/U9/RfHeMS1zp7J7sMmkWwaPcPKxO1trZeKe4Kb1Xktn1iCMb1YsAzIcQIc9hjIbBAbhVA2wDDYqKw=
+	t=1788281923; cv=none; b=bxebCtgCkfUc2RYo401SyQvMhdQ1SdWpuagOoL3j1xfx83EOPHsIix8mJje2vMN25g5oP6gRkraYcTAL5eZ6//uL/QfdLAjO1dPqOon4DEKHnk/x4vtQcqKjNoR6UpKHUkivNo3o+tPIXqb/VoqqhfE1RFKgbZ+Ktg8QzV9Cums=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788281921; c=relaxed/simple;
-	bh=EPd6AzRqOdLc9BAdssR1HCwYo4u0e+wJl6nCxEVNzVo=;
+	s=arc-20240116; t=1788281923; c=relaxed/simple;
+	bh=NCnsbIou2POk+NFVQ8DihrYK1qr1MDqopQxzAI/j6sw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Wl7smJ7971zJXVMG43lExdxbPKNkodSe8P/+J6ydsesL4/Xc2oTUd2ZXiNVOVjujnBBdJUc00Znn6SGvehBWahJg+Ep+BUXmPaYcxFTur65iZoUt5q6RWs21T4aVr7eNLQVdoEYLJhL3ldItrgiJmuIwtZx8J5M71buYoxfUk+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=osfHrhiK; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version; b=dtx5On6rvvS0UTuq3o7l4kNGGOy9DCKhGU3rl3+QUiurKxSIBEl6j7BzJse9wuB7SOUAC6Hban1/MNrQAfzXQWbkjbbwuDWTkJ8kUvSVSGTflT9zpC6hetfWlnrItSYEFARl7yHIaRA22ry2xG8UWpT3ZYcqsJ9RyKZxxo5DAhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Ih+trUJH; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="osfHrhiK"
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 681ERRjM396205;
-	Tue, 1 Sep 2026 16:58:11 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Ih+trUJH"
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 681EQBhB231367;
+	Tue, 1 Sep 2026 16:58:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=RIu6s
-	GvTI6b6Lxf71zEWryW10C7+hJROQZhoEHvdSG8=; b=osfHrhiKhC0zC8fRkww8N
-	7wN3N/lX88axoskzsviCLoi5W/SVRmjyRyW9vDe1fzqWTjT2lsB3O+ZkqDZoBdt2
-	WOfWfUd0zChZcZFugMNZBKTdzxHiTkco/itktvsq/1wxXJw2v+IHTwg74+pt8UxO
-	alyXiuctAZLANyCcUKg5BfN9Spc7o7j/lvc7aABkUuP2moMKWUfpRyg+IUrOzs3o
-	Y5nhKrcMfPrz1oAF585uzYusndbtjDZcdMvQFAhhTWhcBKhwx8mlzDYz6UpjowMa
-	yRALxMoU6q9ApfGRQiF81U/Kp3YgelzdV9wRoDj1Ako0fkPoLy7iRTkR1t7yDgYc
-	g==
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=rt5py
+	FdV9cLZ4mJR9D45Vtjd0vvRd5strb48kc4O9Dw=; b=Ih+trUJH3RfR1iXVVqRAy
+	WQUiGhZS3rlXaB8uovNKS6bFxV69o9k87XpKQV1f1y/Q2gxoF5Nt6o24Eg3AQvjb
+	nKh3l+1zCjKhBVbGKTf/NyoMWY79xM2wIQp38znLdvfMipIZgMRQ+C96FSUyf5ju
+	RNozzzlnEdcikWldF2iuA3kaDvRwhY7IeE37YKfZTowsRrAxgjdxd5pll3WsEyob
+	vqy4BJCknAPMS8lE4Co5fwAmyQVsjrKYaPkwXuEo3YdFMDRFl9fJom476n8UCCx7
+	vapXJLXhMbcXGkxYO0iX5aawQu5AqU/oo184B27WGNumJnJh77817FNhT1l8prq8
+	Q==
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gbpbaw6nv-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gbqa7n3t4-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 01 Sep 2026 16:58:10 +0000 (GMT)
+	Tue, 01 Sep 2026 16:58:14 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 681GjSFW001835;
-	Tue, 1 Sep 2026 16:58:09 GMT
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 681GjWHP001976;
+	Tue, 1 Sep 2026 16:58:13 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gdymtg8mc-1
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gdymtg8pa-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 01 Sep 2026 16:58:09 +0000 (GMT)
+	Tue, 01 Sep 2026 16:58:12 +0000 (GMT)
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 681Gw1Vt011129;
-	Tue, 1 Sep 2026 16:58:08 GMT
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 681Gw1Vv011129;
+	Tue, 1 Sep 2026 16:58:12 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-52-250.vpn.oracle.com [10.154.52.250])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4gdymtg8f6-3;
-	Tue, 01 Sep 2026 16:58:08 +0000 (GMT)
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4gdymtg8f6-4;
+	Tue, 01 Sep 2026 16:58:12 +0000 (GMT)
 From: Alan Maguire <alan.maguire@oracle.com>
 To: ast@kernel.org, andrii@kernel.org
 Cc: daniel@iogearbox.net, eddyz87@gmail.com, jolsa@kernel.org,
@@ -56,9 +56,9 @@ Cc: daniel@iogearbox.net, eddyz87@gmail.com, jolsa@kernel.org,
         nsc@kernel.org, arnd@arndb.de, puranjay@kernel.org, yatsenko@meta.com,
         atenart@kernel.org, ojeda@kernel.org, linux-modules@vger.kernel.org,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v2 bpf-next 02/18] libbpf: Add support for BTF kinds LOC[_PARAM|_PROTO|SEC]
-Date: Tue,  1 Sep 2026 17:57:41 +0100
-Message-ID: <20260901165757.801449-3-alan.maguire@oracle.com>
+Subject: [PATCH v2 bpf-next 03/18] libbpf: Support moving permuted BTF types into split BTF
+Date: Tue,  1 Sep 2026 17:57:42 +0100
+Message-ID: <20260901165757.801449-4-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20260901165757.801449-1-alan.maguire@oracle.com>
 References: <20260901165757.801449-1-alan.maguire@oracle.com>
@@ -76,751 +76,503 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
  adultscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
  bulkscore=0 mlxlogscore=999 mlxscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.19.0-2606160000 definitions=main-2609010148
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTAxMDE1MCBTYWx0ZWRfX6X02ycsTOF2I
- Urtvav6O+UdhOc2cosGph5kAOmJgvoAZuynyt7X+FfPZmnyERAiVkMqkO1I0f4tQlNYfTIDA/N7
- Vz9K9vcVgAy2saRmoKScutJDdisEE7RitnSayCBgERqzbMquuLT4
-X-Proofpoint-ORIG-GUID: Z4N1ZvxCXURG0GsywLuZB7iesNyBIp9A
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTAxMDE1MCBTYWx0ZWRfXxGwrko57rJ1P
- A8xIhdBWblKvYwmAAeNmxKYXk3JmwPmBBj61SYa/82uq2oc6gb5DhgvR3R1LHtxR2UySDKCKrXk
- kfiiyFGMtohHLVYa/qC0J0jmk977cnI6N0fAAz5yFKXispSD+DdJJ0UHJwAapGn1JPQlC0Rfir2
- Yl7E8ZodjwT8yufKQq200iPM/821IvvHlzp/qkRwwkpGI/3z8K7orFMov/3ITK4NteB8DfKvhP9
- 4rONWolWTjTzdyrxIe1yoU3D9I0GdkCqgZiQJcxsanE+ktkJPsMOcJnvPH3OG5NiH8n0OkjV9eH
- BrgKM4Q2nuKOUy/hLBIQtaENhD9bOFAu3f2yDmJqFI7eKKuCpm2s1btU2TC+4SdU8uJ0duc4xyX
- 9o+/x/0pBPYREwe30xwc0fC3bSGILC53wJ1YHP3gchjK88/PV94h/26EssZ8GPJ/6YpyNXzfP7Y
- 3Ho3MtwA18F+j6BoRstBY5Vlu6GgsaN/Gm2PZous=
-X-Authority-Analysis: v=2.4 cv=DMi/JSNb c=1 sm=1 tr=0 ts=6a970422 b=1 cx=c_pps
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTAxMDE1MCBTYWx0ZWRfXyCeu2MrqC+SA
+ CbYWus/Ht4A0V4TIqzzYhM8suGG3jECwTYvYDs4ygSgk2f1cdPX72BhIwh3XqdwsMRTQiO+G0vP
+ NLRpRNcgHBIhWrCnzLxnUrpC2HttFwh8Gf9HC6QNkOqvvM66v9n7
+X-Proofpoint-GUID: EZsr0VWFuU1oAIOaRqa_Dv0WRhDElTT7
+X-Authority-Analysis: v=2.4 cv=DPu/JSNb c=1 sm=1 tr=0 ts=6a970426 b=1 cx=c_pps
  a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
  a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=x0eKOSpe3m1H3M0S9YoZ:22 a=yPCof4ZbAAAA:8 a=r3duO8M3fcnYQWKYDvQA:9
+ a=EIcjfB9IiI4px24ztqRk:22 a=yPCof4ZbAAAA:8 a=juHUTOYQj8kbW7eh5z0A:9
  a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:13521
-X-Proofpoint-GUID: Z4N1ZvxCXURG0GsywLuZB7iesNyBIp9A
+X-Proofpoint-ORIG-GUID: EZsr0VWFuU1oAIOaRqa_Dv0WRhDElTT7
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTAxMDE1MCBTYWx0ZWRfX7bdWiCFM0Kqb
+ wYqMW7GPaPmnCYtqOiEawRhLZaA2RgEEvyxZ/9j4O2Hkymxh8JY6lyyeWGDhzWb6Ay4cVMZasgZ
+ TK0q42LBFY1lqjfcmw8s+W7MSm6ZD2eRSvzSh4dIMrCuu34kW5Z2tUqxhBS+c+zNuYm/SCR9Zxf
+ q476x190miZv/2O5fujXBgO9fhuKSeuFXR56LEgL8FK9CKcHWPveTCONeO5wMUlnFvMtXcOwUtY
+ XBvPYSgKnxO5vaXn42GLSyy4wBPLfYmxtrv1/14ePBsepEP7AtJQ1rE5T1f5cdp5HJz/X5yMOA/
+ DfAFBIFHYBJG5lPFLx/W0YD9BbVpWBAcCgJVoTHQOPt7J9habL2NYS71R7C3K66nO94+5+5czfb
+ 2lZSZqE6UTamdmiv7pGkZbpmF0HqA1D1RljFoSguFAZ7xd5TyK/ExodbgAW8l+DmLvTSGarmUs+
+ UFpRKxB6qhcp3MoMWn8dsAN/o+5INBlyXVIYSfVw=
 
-Add support for new kinds to libbpf.  BTF_KIND_LOC_PARAM and
-BTF_KIND_LOC_PROTO are dedup-able so add support for their
-deduplication, whereas since BTF_KIND_LOCSEC contains a unique
-offset it is not.  LOC_PARAM is considered a primary type
-since it contains no external references; LOC_PROTO is a
-reference type consisting of LOC_PARAM references so they
-are handled in the primary and reference dedup phases
-respectively.
+Extend btf__permute() with an optional transfer mode.  Type-map entries
+marked with BTF_PERMUTE_ID_TRANSFER are removed from the input BTF and
+copied into a newly-created split BTF returned through
+btf_permute_opts.transfer_btf.
 
-For BTF field iteration, BTF_KIND_LOCSEC needs 2 m_offs[] values
-for the associated KIND_FUNC and KIND_LOC_PROTO type ids in
-each LOCSEC entry.
+While moving types, remap type IDs for both retained and transferred
+types, preserving split-BTF references to the parent BTF where needed.
 
-Add APIs to add location param, location prototypes and location
-sections and btf_is_* tests, data accessors for each.
+String handling has to be done carefully as we do not want to have
+strings that only exist in the split BTF to impose a cost on the base.
+Copy referenced strings locally first, compact the parent string table
+after the moved types are gone, rebase split-string offsets, and compact
+the split string table.  This leaves strings exclusively needed by moved
+types in the split BTF while retaining shared strings in the parent.
+This will be important later for function names of inline-only functions;
+these should not take up space in base BTF but should have strings in
+inline BTF only.
 
-For BTF distillation we add location info to split BTF.
+This all provides the support needed to place inline-only BTF
+in a separate BTF section, which resolve_btfids will use later.
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+Assisted-by: Codex (GPT-5)
 ---
- tools/lib/bpf/btf.c             | 372 +++++++++++++++++++++++++++++++-
- tools/lib/bpf/btf.h             |  50 +++++
- tools/lib/bpf/btf_dump.c        |   9 +
- tools/lib/bpf/btf_iter.c        |  22 ++
- tools/lib/bpf/libbpf.map        |   6 +
- tools/lib/bpf/libbpf_internal.h |   2 +-
- 6 files changed, 457 insertions(+), 4 deletions(-)
+ tools/lib/bpf/btf.c | 285 +++++++++++++++++++++++++++++++++++++++-----
+ tools/lib/bpf/btf.h |  16 ++-
+ 2 files changed, 271 insertions(+), 30 deletions(-)
 
 diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index c783359977b4..9449f6f50f18 100644
+index 9449f6f50f18..30f8c426d145 100644
 --- a/tools/lib/bpf/btf.c
 +++ b/tools/lib/bpf/btf.c
-@@ -57,6 +57,9 @@ static struct btf_layout layouts[NR_BTF_KINDS] = {
- [BTF_KIND_DECL_TAG] =	{	sizeof(struct btf_decl_tag),	0,				0 },
- [BTF_KIND_TYPE_TAG] =	{	0,				0,				0 },
- [BTF_KIND_ENUM64] =	{	0,				sizeof(struct btf_enum64),	0 },
-+[BTF_KIND_LOC_PARAM] =	{	sizeof(struct btf_loc_param),	sizeof(__u32),			0 },
-+[BTF_KIND_LOC_PROTO] =	{	0,				sizeof(__u32),			0 },
-+[BTF_KIND_LOCSEC] =	{	0,				sizeof(struct btf_loc),		0 },
+@@ -2147,16 +2147,9 @@ int btf__find_str(struct btf *btf, const char *s)
+  *   - > 0 offset into string section, on success;
+  *   - < 0, on error.
+  */
+-int btf__add_str(struct btf *btf, const char *s)
++static int btf_add_local_str(struct btf *btf, const char *s)
+ {
+-	int off;
+-	int err;
+-
+-	if (btf->base_btf) {
+-		off = btf__find_str(btf->base_btf, s);
+-		if (off != -ENOENT)
+-			return off;
+-	}
++	int off, err;
+ 
+ 	err = btf_ensure_modifiable(btf);
+ 	if (err)
+@@ -2167,10 +2160,24 @@ int btf__add_str(struct btf *btf, const char *s)
+ 		return libbpf_err(off);
+ 
+ 	btf->hdr.str_len = strset__data_size(btf->strs_set);
++	btf->strs_deduped = false;
+ 
+ 	return btf->start_str_off + off;
+ }
+ 
++int btf__add_str(struct btf *btf, const char *s)
++{
++	int off;
++
++	if (btf->base_btf) {
++		off = btf__find_str(btf->base_btf, s);
++		if (off != -ENOENT)
++			return off;
++	}
++
++	return btf_add_local_str(btf, s);
++}
++
+ static void *btf_add_type_mem(struct btf *btf, size_t add_sz)
+ {
+ 	return libbpf_add_mem(&btf->types_data, &btf->types_data_cap, 1,
+@@ -2218,6 +2225,7 @@ struct btf_pipe {
+ 	const struct btf *src;
+ 	struct btf *dst;
+ 	struct hashmap *str_off_map; /* map string offsets from src to dst */
++	bool force_local_strs;
  };
  
- struct btf {
-@@ -486,6 +489,12 @@ static int btf_type_size(const struct btf *btf, const struct btf_type *t)
- 		return base_size + vlen * sizeof(struct btf_var_secinfo);
- 	case BTF_KIND_DECL_TAG:
- 		return base_size + sizeof(struct btf_decl_tag);
-+	case BTF_KIND_LOC_PARAM:
-+		return base_size + sizeof(struct btf_loc_param) + vlen * sizeof(__u32);
-+	case BTF_KIND_LOC_PROTO:
-+		return base_size + vlen * sizeof(__u32);
-+	case BTF_KIND_LOCSEC:
-+		return base_size + vlen * sizeof(struct btf_loc);
- 	default:
- 		return btf_type_size_unknown(btf, t);
- 	}
-@@ -501,12 +510,15 @@ static void btf_bswap_type_base(struct btf_type *t)
- static int btf_bswap_type_rest(struct btf_type *t)
- {
- 	struct btf_var_secinfo *v;
-+	struct btf_loc_param *lp;
- 	struct btf_enum64 *e64;
- 	struct btf_member *m;
- 	struct btf_array *a;
- 	struct btf_param *p;
- 	struct btf_enum *e;
-+	struct btf_loc *l;
- 	__u32 vlen = btf_vlen(t);
-+	__u32 *d;
- 	int i;
- 
- 	switch (btf_kind(t)) {
-@@ -569,6 +581,23 @@ static int btf_bswap_type_rest(struct btf_type *t)
- 	case BTF_KIND_DECL_TAG:
- 		btf_decl_tag(t)->component_idx = bswap_32(btf_decl_tag(t)->component_idx);
+ static int btf_rewrite_str(struct btf_pipe *p, __u32 *str_off)
+@@ -2234,7 +2242,10 @@ static int btf_rewrite_str(struct btf_pipe *p, __u32 *str_off)
  		return 0;
-+	case BTF_KIND_LOC_PARAM:
-+		lp = btf_loc_param(t);
-+		lp->flags = bswap_32(lp->flags);
-+		for (i = 0, d = (__u32 *)(lp + 1); i < vlen; i++, d++)
-+			*d = bswap_32(*d);
-+		return 0;
-+	case BTF_KIND_LOC_PROTO:
-+		for (i = 0, d = btf_loc_proto_params(t); i < vlen; i++, d++)
-+			*d = bswap_32(*d);
-+		return 0;
-+	case BTF_KIND_LOCSEC:
-+		for (i = 0, l = btf_locsec_locs(t); i < vlen; i++, l++) {
-+			l->func = bswap_32(l->func);
-+			l->loc_proto = bswap_32(l->loc_proto);
-+			l->offset = bswap_32(l->offset);
-+		}
-+		return 0;
- 	default:
- 		pr_debug("Unsupported BTF_KIND:%u\n", btf_kind(t));
- 		return -EINVAL;
-@@ -745,6 +774,33 @@ static int btf_validate_type(const struct btf *btf, const struct btf_type *t, __
- 		}
- 		break;
  	}
-+	case BTF_KIND_LOC_PARAM:
-+		break;
-+	case BTF_KIND_LOC_PROTO: {
-+		__u32 *p = btf_loc_proto_params(t);
-+
-+		n = btf_vlen(t);
-+		for (i = 0; i < n; i++, p++) {
-+			err = btf_validate_id(btf, *p, id);
-+			if (err)
-+				return err;
-+		}
-+		break;
-+	}
-+	case BTF_KIND_LOCSEC: {
-+		const struct btf_loc *l = btf_locsec_locs(t);
-+
-+		n = btf_vlen(t);
-+		for (i = 0; i < n; i++, l++) {
-+			if (!err)
-+				err = btf_validate_id(btf, l->func, id);
-+			if (!err)
-+				err = btf_validate_id(btf, l->loc_proto, id);
-+			if (err)
-+				return err;
-+		}
-+		break;
-+	}
- 	default:
- 		/* Kind may be represented in kind layout information. */
- 		if (btf_type_size_unknown(btf, t) < 0) {
-@@ -3344,6 +3400,208 @@ int btf__add_decl_attr(struct btf *btf, const char *value, int ref_type_id,
- 	return btf_add_decl_tag(btf, value, ref_type_id, component_idx, 1);
+ 
+-	off = btf__add_str(p->dst, btf__str_by_offset(p->src, *str_off));
++	if (p->force_local_strs)
++		off = btf_add_local_str(p->dst, btf__str_by_offset(p->src, *str_off));
++	else
++		off = btf__add_str(p->dst, btf__str_by_offset(p->src, *str_off));
+ 	if (off < 0)
+ 		return off;
+ 
+@@ -4513,6 +4524,19 @@ static int btf_dedup_strings(struct btf_dedup *d)
+ 	return err;
  }
  
-+/*
-+ * Append new BTF_KIND_LOC_PARAM with specified size and flags.  Values are
-+ * added via btf__add_loc_param_value().
-+ *
-+ * Returns:
-+ *   -  >0, type ID of newly added BTF type;
-+ *   - <0, on error.
-+ */
-+int btf__add_loc_param(struct btf *btf, __u32 size, __u32 flags)
++/* Compact strings after a type-only transformation such as btf__permute(). */
++static int btf_compact_strings(struct btf *btf, struct btf_ext *btf_ext)
 +{
-+	struct btf_loc_param *p;
-+	struct btf_type *t;
-+	int sz, err;
++	struct btf_dedup d = {
++		.btf = btf,
++		.btf_ext = btf_ext,
++	};
 +
-+	err = btf_ensure_modifiable(btf);
-+	if (err)
-+		return libbpf_err(err);
-+
-+	sz = sizeof(struct btf_type) + sizeof(*p);
-+	t = btf_add_type_mem(btf, sz);
-+	if (!t)
-+		return libbpf_err(-ENOMEM);
-+
-+	t->name_off = 0;
-+	t->info = btf_type_info(BTF_KIND_LOC_PARAM, 0, 0);
-+	t->size = size;
-+
-+	p = btf_loc_param(t);
-+	p->flags = flags;
-+
-+	return btf_commit_type(btf, sz);
-+}
-+
-+int btf__add_loc_param_value(struct btf *btf, __u32 value)
-+{
-+	struct btf_type *t;
-+	int sz, err;
-+	__u32 *v;
-+
-+	/* last type should be BTF_KIND_LOC_PARAM */
-+	if (btf->nr_types == 0)
-+		return libbpf_err(-EINVAL);
-+	t = btf_last_type(btf);
-+	if (!btf_is_loc_param(t))
-+		return libbpf_err(-EINVAL);
-+
-+	/* decompose and invalidate raw data */
-+	err = btf_ensure_modifiable(btf);
-+	if (err)
-+		return libbpf_err(err);
-+
-+	sz = sizeof(value);
-+	v = btf_add_type_mem(btf, sz);
-+	if (!v)
-+		return libbpf_err(-ENOMEM);
-+	*v = value;
-+
-+	/* update parent type's vlen */
-+	t = btf_last_type(btf);
-+	err = btf_type_inc_vlen(t);
-+	if (err)
-+		return libbpf_err(err);
-+
-+	btf_hdr_update_type_len(btf, btf->hdr.type_len + sz);
-+	return 0;
-+}
-+
-+/*
-+ * Append new BTF_KIND_LOC_PROTO
-+ *
-+ * The prototype is then populated with 0 or more BTF_KIND_LOC_PARAMs via
-+ * btf__add_loc_proto_param(); similar to how btf__add_func_param() adds
-+ * parameters to a FUNC_PROTO.
-+ *
-+ * Returns:
-+ *   -  >0, type ID of newly added BTF type;
-+ *   - <0, on error.
-+ */
-+int btf__add_loc_proto(struct btf *btf)
-+{
-+	struct btf_type *t;
-+	int err;
-+
-+	err = btf_ensure_modifiable(btf);
-+	if (err)
-+		return libbpf_err(err);
-+
-+	t = btf_add_type_mem(btf, sizeof(struct btf_type));
-+	if (!t)
-+		return libbpf_err(-ENOMEM);
-+
-+	t->name_off = 0;
-+	t->info = btf_type_info(BTF_KIND_LOC_PROTO, 0, 0);
-+	t->size = 0;
-+
-+	return btf_commit_type(btf, sizeof(struct btf_type));
-+}
-+
-+int btf__add_loc_proto_param(struct btf *btf, __u32 id)
-+{
-+	struct btf_type *t;
-+	int sz, err;
-+	__u32 *p;
-+
-+	if (validate_type_id(id))
-+		return libbpf_err(-EINVAL);
-+
-+	/* last type should be BTF_KIND_LOC_PROTO */
-+	if (btf->nr_types == 0)
-+		return libbpf_err(-EINVAL);
-+	t = btf_last_type(btf);
-+	if (!btf_is_loc_proto(t))
-+		return libbpf_err(-EINVAL);
-+
-+	/* decompose and invalidate raw data */
-+	err = btf_ensure_modifiable(btf);
-+	if (err)
-+		return libbpf_err(err);
-+
-+	sz = sizeof(__u32);
-+	p = btf_add_type_mem(btf, sz);
-+	if (!p)
-+		return libbpf_err(-ENOMEM);
-+	*p = id;
-+
-+	/* update parent type's vlen */
-+	t = btf_last_type(btf);
-+	err = btf_type_inc_vlen(t);
-+	if (err)
-+		return libbpf_err(err);
-+
-+	btf_hdr_update_type_len(btf, btf->hdr.type_len + sz);
-+	return 0;
-+}
-+
-+int btf__add_locsec(struct btf *btf, const char *name)
-+{
-+	struct btf_type *t;
-+	int name_off = 0;
-+	int err;
-+
-+	err = btf_ensure_modifiable(btf);
-+	if (err)
-+		return libbpf_err(err);
-+
-+	t = btf_add_type_mem(btf, sizeof(struct btf_type));
-+	if (!t)
-+		return libbpf_err(-ENOMEM);
-+
-+	if (!str_is_empty(name)) {
-+		name_off = btf__add_str(btf, name);
-+		if (name_off < 0)
-+			return name_off;
-+	}
-+	t->name_off = name_off;
-+	t->info = btf_type_info(BTF_KIND_LOCSEC, 0, 0);
-+	t->size = 0;
-+
-+	return btf_commit_type(btf, sizeof(struct btf_type));
-+}
-+
-+int btf__add_locsec_loc(struct btf *btf, __u32 func, __u32 loc_proto,
-+			__u32 offset)
-+{
-+	struct btf_type *t;
-+	struct btf_loc *l;
-+	int sz, err;
-+
-+	if (validate_type_id(func) || validate_type_id(loc_proto))
-+		return libbpf_err(-EINVAL);
-+
-+	/* last type should be BTF_KIND_LOCSEC */
-+	if (btf->nr_types == 0)
-+		return libbpf_err(-EINVAL);
-+	t = btf_last_type(btf);
-+	if (!btf_is_locsec(t))
-+		return libbpf_err(-EINVAL);
-+
-+	/* decompose and invalidate raw data */
-+	err = btf_ensure_modifiable(btf);
-+	if (err)
-+		return libbpf_err(err);
-+
-+	sz = sizeof(*l);
-+	l = btf_add_type_mem(btf, sz);
-+	if (!l)
-+		return libbpf_err(-ENOMEM);
-+
-+	l->func = func;
-+	l->loc_proto = loc_proto;
-+	l->offset = offset;
-+
-+	/* update parent type's vlen */
-+	t = btf_last_type(btf);
-+	err = btf_type_inc_vlen(t);
-+	if (err)
-+		return libbpf_err(err);
-+
-+	btf_hdr_update_type_len(btf, btf->hdr.type_len + sz);
-+	return 0;
-+}
-+
- struct btf_ext_sec_info_param {
- 	__u32 off;
- 	__u32 len;
-@@ -4114,8 +4372,8 @@ static struct btf_dedup *btf_dedup_new(struct btf *btf, const struct btf_dedup_o
- 	for (i = 1; i < type_cnt; i++) {
- 		struct btf_type *t = btf_type_by_id(d->btf, i);
- 
--		/* VAR and DATASEC are never deduped and are self-canonical */
--		if (btf_is_var(t) || btf_is_datasec(t))
-+		/* VAR, DATASEC and LOCSEC are never deduped and are self-canonical */
-+		if (btf_is_var(t) || btf_is_datasec(t) || btf_is_locsec(t))
- 			d->map[i] = i;
- 		else
- 			d->map[i] = BTF_UNPROCESSED_ID;
-@@ -4395,6 +4653,45 @@ static bool btf_compat_enum(struct btf_type *t1, struct btf_type *t2)
- 	       btf_is_any_enum(t1) && btf_is_any_enum(t2);
- }
- 
-+static long btf_hash_loc_param(struct btf_type *t)
-+{
-+	long h = btf_hash_common(t);
-+	__u32 *v = (__u32 *)btf_loc_param(t);
-+	int i, vlen = btf_vlen(t);
-+
-+	for (i = 0; i <= vlen; i++, v++)
-+		h = hash_combine(h, *v);
-+	return h;
-+}
-+
-+static long btf_hash_loc_proto(struct btf_type *t)
-+{
-+	__u32 *p = btf_loc_proto_params(t);
-+	long h = btf_hash_common(t);
-+	int i, vlen = btf_vlen(t);
-+
-+	for (i = 0; i < vlen; i++, p++)
-+		h = hash_combine(h, *p);
-+	return h;
-+}
-+
-+static bool btf_equal_loc_param(struct btf_type *t1, struct btf_type *t2)
-+{
-+	struct btf_loc_param *p1 = btf_loc_param(t1);
-+	struct btf_loc_param *p2 = btf_loc_param(t2);
-+	__u32 *v1 = (__u32 *)(p1 + 1);
-+	__u32 *v2 = (__u32 *)(p2 + 1);
-+	int i, vlen = btf_vlen(t1);
-+
-+	if (!btf_equal_common(t1, t2))
-+		return false;
-+	for (i = 0; i < vlen; i++, v1++, v2++) {
-+		if (*v1 != *v2)
-+			return false;
-+	}
-+	return true;
++	/* Types may have been removed since the last string compaction. */
++	btf->strs_deduped = false;
++	return btf_dedup_strings(&d);
 +}
 +
  /*
-  * Calculate type signature hash of STRUCT/UNION, ignoring referenced type IDs,
+  * Calculate type signature hash of TYPEDEF, ignoring referenced type IDs,
   * as referenced type IDs equivalence is established separately during type
-@@ -4622,6 +4919,12 @@ static int btf_dedup_prep(struct btf_dedup *d)
- 		case BTF_KIND_FUNC_PROTO:
- 			h = btf_hash_fnproto(t);
- 			break;
-+		case BTF_KIND_LOC_PARAM:
-+			h = btf_hash_loc_param(t);
-+			break;
-+		case BTF_KIND_LOC_PROTO:
-+			h = btf_hash_loc_proto(t);
-+			break;
- 		default:
- 			pr_debug("unknown kind %d for type [%d]\n", btf_kind(t), type_id);
- 			return -EINVAL;
-@@ -4664,6 +4967,8 @@ static int btf_dedup_prim_type(struct btf_dedup *d, __u32 type_id)
- 	case BTF_KIND_DATASEC:
- 	case BTF_KIND_DECL_TAG:
- 	case BTF_KIND_TYPE_TAG:
-+	case BTF_KIND_LOC_PROTO:
-+	case BTF_KIND_LOCSEC:
- 		return 0;
- 
- 	case BTF_KIND_INT:
-@@ -4713,6 +5018,18 @@ static int btf_dedup_prim_type(struct btf_dedup *d, __u32 type_id)
- 		}
- 		break;
- 
-+	case BTF_KIND_LOC_PARAM:
-+		h = btf_hash_loc_param(t);
-+		for_each_dedup_cand(d, hash_entry, h) {
-+			cand_id = hash_entry->value;
-+			cand = btf_type_by_id(d->btf, cand_id);
-+			if (btf_equal_loc_param(t, cand)) {
-+				new_id = cand_id;
-+				break;
-+			}
-+		}
-+		break;
-+
- 	default:
- 		return -EINVAL;
- 	}
-@@ -5145,6 +5462,13 @@ static int btf_dedup_is_equiv(struct btf_dedup *d, __u32 cand_id,
- 		return 1;
- 	}
- 
-+	case BTF_KIND_LOC_PARAM:
-+		return btf_equal_loc_param(cand_type, canon_type);
-+
-+	case BTF_KIND_LOC_PROTO:
-+	case BTF_KIND_LOCSEC:
-+		return 0;
-+
- 	default:
- 		return -EINVAL;
- 	}
-@@ -5489,6 +5813,41 @@ static int btf_dedup_ref_type(struct btf_dedup *d, __u32 type_id)
- 		break;
- 	}
- 
-+	case BTF_KIND_LOC_PROTO: {
-+		__u32 *p1, *p2;
-+		__u32 i, vlen;
-+
-+		p1 = btf_loc_proto_params(t);
-+		vlen = btf_vlen(t);
-+
-+		for (i = 0; i < vlen; i++, p1++) {
-+			ref_type_id = btf_dedup_ref_type(d, *p1);
-+			if (ref_type_id < 0)
-+				return ref_type_id;
-+			*p1 = ref_type_id;
-+		}
-+
-+		h = btf_hash_loc_proto(t);
-+		for_each_dedup_cand(d, hash_entry, h) {
-+			cand_id = hash_entry->value;
-+			cand = btf_type_by_id(d->btf, cand_id);
-+			if (!btf_equal_common(t, cand))
-+				continue;
-+			vlen = btf_vlen(cand);
-+			p1 = btf_loc_proto_params(t);
-+			p2 = btf_loc_proto_params(cand);
-+			if (vlen == 0) {
-+				new_id = cand_id;
-+				break;
-+			}
-+			if (memcmp(p1, p2, vlen * sizeof(__u32)) == 0) {
-+				new_id = cand_id;
-+				break;
-+			}
-+		}
-+		break;
-+	}
-+
- 	default:
- 		return -EINVAL;
- 	}
-@@ -5970,8 +6329,11 @@ static int btf_add_distilled_type_ids(struct btf_distill *dist, __u32 i)
- 		case BTF_KIND_CONST:
- 		case BTF_KIND_RESTRICT:
- 		case BTF_KIND_VOLATILE:
-+		case BTF_KIND_FUNC:
- 		case BTF_KIND_FUNC_PROTO:
- 		case BTF_KIND_TYPE_TAG:
-+		case BTF_KIND_LOC_PARAM:
-+		case BTF_KIND_LOC_PROTO:
- 			dist->id_map[*id] = *id;
- 			break;
- 		default:
-@@ -5997,7 +6359,7 @@ static int btf_add_distilled_type_ids(struct btf_distill *dist, __u32 i)
- 
- static int btf_add_distilled_types(struct btf_distill *dist)
- {
--	bool adding_to_base = dist->pipe.dst->start_id == 1;
-+	bool adding_to_base = dist->pipe.dst->base_btf == NULL;
- 	int id = btf__type_cnt(dist->pipe.dst);
- 	struct btf_type *t;
- 	int i, err = 0;
-@@ -6065,8 +6427,12 @@ static int btf_add_distilled_types(struct btf_distill *dist)
- 		case BTF_KIND_CONST:
- 		case BTF_KIND_RESTRICT:
- 		case BTF_KIND_VOLATILE:
-+		case BTF_KIND_FUNC:
- 		case BTF_KIND_FUNC_PROTO:
- 		case BTF_KIND_TYPE_TAG:
-+		case BTF_KIND_LOC_PARAM:
-+		case BTF_KIND_LOC_PROTO:
-+		case BTF_KIND_LOCSEC:
- 			/* All other types are added to split BTF. */
- 			if (adding_to_base)
- 				continue;
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index 587172c0de08..57f12630c5d1 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -274,6 +274,20 @@ LIBBPF_API int btf__add_decl_tag(struct btf *btf, const char *value, int ref_typ
- LIBBPF_API int btf__add_decl_attr(struct btf *btf, const char *value, int ref_type_id,
- 				  int component_idx);
- 
-+/* location construction APIs */
-+LIBBPF_API int btf__add_loc_param(struct btf *btf, __u32 size, __u32 flags);
-+
-+LIBBPF_API int btf__add_loc_param_value(struct btf *btf, __u32 value);
-+
-+LIBBPF_API int btf__add_loc_proto(struct btf *btf);
-+
-+LIBBPF_API int btf__add_loc_proto_param(struct btf *btf, __u32 id);
-+
-+LIBBPF_API int btf__add_locsec(struct btf *btf, const char *name);
-+
-+LIBBPF_API int btf__add_locsec_loc(struct btf *btf, __u32 func, __u32 loc_proto,
-+				   __u32 offset);
-+
- struct btf_dedup_opts {
- 	size_t sz;
- 	/* optional .BTF.ext info to dedup along the main BTF info */
-@@ -431,6 +445,12 @@ btf_dump__dump_type_data(struct btf_dump *d, __u32 id,
- #define BTF_KIND_DECL_TAG	17	/* Decl Tag */
- #define BTF_KIND_TYPE_TAG	18	/* Type Tag */
- #define BTF_KIND_ENUM64		19	/* Enum for up-to 64bit values */
-+#define BTF_KIND_LOC_PARAM	20	/* Parameter at location */
-+#define BTF_KIND_LOC_PROTO	21	/* Parameter set at location */
-+#define BTF_KIND_LOCSEC		22	/* Section containing location info */
-+
-+struct btf_loc_param;
-+struct btf_loc;
- 
- static inline __u16 btf_kind(const struct btf_type *t)
- {
-@@ -569,6 +589,21 @@ static inline bool btf_is_any_enum(const struct btf_type *t)
- 	return btf_is_enum(t) || btf_is_enum64(t);
- }
- 
-+static inline bool btf_is_loc_param(const struct btf_type *t)
-+{
-+	return btf_kind(t) == BTF_KIND_LOC_PARAM;
-+}
-+
-+static inline bool btf_is_loc_proto(const struct btf_type *t)
-+{
-+	return btf_kind(t) == BTF_KIND_LOC_PROTO;
-+}
-+
-+static inline bool btf_is_locsec(const struct btf_type *t)
-+{
-+	return btf_kind(t) == BTF_KIND_LOCSEC;
-+}
-+
- static inline bool btf_kind_core_compat(const struct btf_type *t1,
- 					const struct btf_type *t2)
- {
-@@ -683,6 +718,21 @@ static inline struct btf_decl_tag *btf_decl_tag(const struct btf_type *t)
- 	return (struct btf_decl_tag *)(t + 1);
- }
- 
-+static inline struct btf_loc_param *btf_loc_param(const struct btf_type *t)
-+{
-+	return (struct btf_loc_param *)(t + 1);
-+}
-+
-+static inline __u32 *btf_loc_proto_params(const struct btf_type *t)
-+{
-+	return (__u32 *)(t + 1);
-+}
-+
-+static inline struct btf_loc *btf_locsec_locs(const struct btf_type *t)
-+{
-+	return (struct btf_loc *)(t + 1);
-+}
-+
- #ifdef __cplusplus
- } /* extern "C" */
- #endif
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index 123c448f20c7..fa995c02a170 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -328,6 +328,9 @@ static int btf_dump_mark_referenced(struct btf_dump *d)
- 		case BTF_KIND_ENUM64:
- 		case BTF_KIND_FWD:
- 		case BTF_KIND_FLOAT:
-+		case BTF_KIND_LOC_PARAM:
-+		case BTF_KIND_LOC_PROTO:
-+		case BTF_KIND_LOCSEC:
- 			break;
- 
- 		case BTF_KIND_VOLATILE:
-@@ -609,6 +612,9 @@ static int btf_dump_order_type(struct btf_dump *d, __u32 id, bool through_ptr)
- 	case BTF_KIND_VAR:
- 	case BTF_KIND_DATASEC:
- 	case BTF_KIND_DECL_TAG:
-+	case BTF_KIND_LOC_PARAM:
-+	case BTF_KIND_LOC_PROTO:
-+	case BTF_KIND_LOCSEC:
- 		d->type_states[id].order_state = ORDERED;
- 		return 0;
- 
-@@ -2525,6 +2531,9 @@ static int btf_dump_dump_type_data(struct btf_dump *d,
- 	case BTF_KIND_FUNC:
- 	case BTF_KIND_FUNC_PROTO:
- 	case BTF_KIND_DECL_TAG:
-+	case BTF_KIND_LOC_PARAM:
-+	case BTF_KIND_LOC_PROTO:
-+	case BTF_KIND_LOCSEC:
- 		err = btf_dump_unsupported_data(d, t, id);
- 		break;
- 	case BTF_KIND_INT:
-diff --git a/tools/lib/bpf/btf_iter.c b/tools/lib/bpf/btf_iter.c
-index 9a6c822c2294..54428e422ec3 100644
---- a/tools/lib/bpf/btf_iter.c
-+++ b/tools/lib/bpf/btf_iter.c
-@@ -29,6 +29,7 @@ int btf_field_iter_init(struct btf_field_iter *it, struct btf_type *t,
- 		case BTF_KIND_FLOAT:
- 		case BTF_KIND_ENUM:
- 		case BTF_KIND_ENUM64:
-+		case BTF_KIND_LOC_PARAM:
- 			it->desc = (struct btf_field_desc) {};
- 			break;
- 		case BTF_KIND_FWD:
-@@ -71,6 +72,20 @@ int btf_field_iter_init(struct btf_field_iter *it, struct btf_type *t,
- 				1, {offsetof(struct btf_var_secinfo, type)}
- 			};
- 			break;
-+		case BTF_KIND_LOC_PROTO:
-+			it->desc = (struct btf_field_desc) {
-+				0, {},
-+				sizeof(__u32),
-+				1, {0}};
-+			break;
-+		case BTF_KIND_LOCSEC:
-+			it->desc = (struct btf_field_desc) {
-+				0, {},
-+				sizeof(struct btf_loc),
-+				2, {offsetof(struct btf_loc, func),
-+				    offsetof(struct btf_loc, loc_proto)}};
-+			break;
-+
- 		default:
- 			return -EINVAL;
- 		}
-@@ -94,6 +109,8 @@ int btf_field_iter_init(struct btf_field_iter *it, struct btf_type *t,
- 		case BTF_KIND_DECL_TAG:
- 		case BTF_KIND_TYPE_TAG:
- 		case BTF_KIND_DATASEC:
-+		case BTF_KIND_LOC_PARAM:
-+		case BTF_KIND_LOC_PROTO:
- 			it->desc = (struct btf_field_desc) {
- 				1, {offsetof(struct btf_type, name_off)}
- 			};
-@@ -127,6 +144,11 @@ int btf_field_iter_init(struct btf_field_iter *it, struct btf_type *t,
- 				1, {offsetof(struct btf_param, name_off)}
- 			};
- 			break;
-+		case BTF_KIND_LOCSEC:
-+			it->desc = (struct btf_field_desc) {
-+				1, {offsetof(struct btf_type, name_off)}
-+			};
-+			break;
- 		default:
- 			return -EINVAL;
- 		}
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 08ab2ea881fb..7f51783df129 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -460,6 +460,12 @@ LIBBPF_1.8.0 {
- 	global:
- 		bpf_program__attach_tracing_multi;
- 		bpf_program__clone;
-+		btf__add_loc_param;
-+		btf__add_loc_param_value;
-+		btf__add_loc_proto;
-+		btf__add_loc_proto_param;
-+		btf__add_locsec;
-+		btf__add_locsec_loc;
- 		btf__find_by_name_kind_own;
- 		btf__new_empty_opts;
- } LIBBPF_1.7.0;
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index cb4d96233844..ebac8db1ccfd 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -580,7 +580,7 @@ struct btf_field_desc {
- 	/* member struct size, or zero, if no members */
- 	int m_sz;
- 	/* repeated per-member offsets */
--	int m_off_cnt, m_offs[1];
-+	int m_off_cnt, m_offs[22];
+@@ -6617,8 +6641,15 @@ struct btf_permute {
+ 	struct btf *btf;
+ 	__u32 *id_map;
+ 	__u32 start_offs;
++	__u32 transfer_start_id;
++	bool reject_transfer;
  };
  
- struct btf_field_iter {
++static bool btf_permute_id_is_transfer(__u32 id)
++{
++	return id & BTF_PERMUTE_ID_TRANSFER;
++}
++
+ /* Callback function to remap individual type ID references */
+ static int btf_permute_remap_type_id(__u32 *type_id, void *ctx)
+ {
+@@ -6633,18 +6664,54 @@ static int btf_permute_remap_type_id(__u32 *type_id, void *ctx)
+ 		return -EINVAL;
+ 
+ 	*type_id = p->id_map[new_id - p->btf->start_id + p->start_offs];
++	if (p->reject_transfer && *type_id >= p->transfer_start_id)
++		return -EINVAL;
++	return 0;
++}
++
++/*
++ * String offsets in a split BTF are absolute.  If its parent string table is
++ * compacted after the split was populated, move its local string offsets to
++ * start at the parent's new end.
++ */
++static int btf_permute_rebase_split_strs(struct btf *split_btf, __u32 old_start_str_off)
++{
++	__s64 delta = split_btf->base_btf->start_str_off + split_btf->base_btf->hdr.str_len -
++		      old_start_str_off;
++	int i;
++
++	for (i = 0; i < split_btf->nr_types; i++) {
++		struct btf_field_iter it;
++		struct btf_type *t = btf_type_by_id(split_btf,
++						    split_btf->start_id + i);
++		__u32 *str_off;
++		int err;
++
++		err = btf_field_iter_init(&it, t, BTF_FIELD_ITER_STRS);
++		if (err)
++			return err;
++		while ((str_off = btf_field_iter_next(&it))) {
++			if (*str_off >= old_start_str_off)
++				*str_off += delta;
++		}
++	}
++
++	btf_set_base_btf(split_btf, split_btf->base_btf);
+ 	return 0;
+ }
+ 
+ int btf__permute(struct btf *btf, __u32 *id_map, __u32 id_map_cnt,
+ 		 const struct btf_permute_opts *opts)
+ {
+-	struct btf_permute p;
+-	struct btf_ext *btf_ext;
++	__u32 n, start_offs = 0, nr_transfer = 0, nr_base_types;
++	__u32 next_base_id, next_transfer_id, old_str_off = 0;
++	struct btf **transfer_btfp, *transfer_btf = NULL;
++	__u32 *new_id_map = NULL, *order_map = NULL;
+ 	void *nt, *new_types = NULL;
+-	__u32 *order_map = NULL;
++	struct btf_ext *btf_ext;
++	bool committed = false;
++	struct btf_permute p;
+ 	int err = 0, i;
+-	__u32 n, id, start_offs = 0;
+ 
+ 	if (!OPTS_VALID(opts, btf_permute_opts))
+ 		return libbpf_err(-EINVAL);
+@@ -6661,7 +6728,21 @@ int btf__permute(struct btf *btf, __u32 *id_map, __u32 id_map_cnt,
+ 	if (id_map_cnt != n)
+ 		return libbpf_err(-EINVAL);
+ 
+-	/* record the sequence of types */
++	transfer_btfp = OPTS_GET(opts, transfer_btf, NULL);
++	if (transfer_btfp)
++		*transfer_btfp = NULL;
++
++	/*
++	 * Make a working copy of the id map; it will be modified (such as
++	 * removing transfer flags) unlike the caller-passed original.
++	 */
++	new_id_map = calloc(id_map_cnt, sizeof(*new_id_map));
++	if (!new_id_map) {
++		err = -ENOMEM;
++		goto done;
++	}
++	memcpy(new_id_map, id_map, id_map_cnt * sizeof(*new_id_map));
++
+ 	order_map = calloc(id_map_cnt, sizeof(*id_map));
+ 	if (!order_map) {
+ 		err = -ENOMEM;
+@@ -6678,33 +6759,82 @@ int btf__permute(struct btf *btf, __u32 *id_map, __u32 id_map_cnt,
+ 	if (err)
+ 		goto done;
+ 
++	/*
++	 * Build the inverse map: for each requested destination ID, record the
++	 * original type ID that will occupy it. order_map is indexed by the
++	 * destination ID relative to the first ID represented by id_map. The
++	 * caller id_map maps old IDs to requested destinations, but BTF types
++	 * must be emitted in destination-ID order; the inverse map supplies the
++	 * old type to copy for each output slot without repeatedly searching
++         * id_map.
++         */
+ 	for (i = start_offs; i < id_map_cnt; i++) {
+-		id = id_map[i];
+-		if (id < btf->start_id || id >= btf__type_cnt(btf)) {
++		__u32 requested_id = new_id_map[i];
++		__u32 order_idx;
++
++		if (btf_permute_id_is_transfer(requested_id)) {
++			if (!transfer_btfp) {
++				err = -EINVAL;
++				goto done;
++			}
++			requested_id &= ~BTF_PERMUTE_ID_TRANSFER;
++			nr_transfer++;
++		}
++		if (requested_id < btf->start_id || requested_id >= btf__type_cnt(btf)) {
+ 			err = -EINVAL;
+ 			goto done;
+ 		}
+-		id -= btf->start_id - start_offs;
++		order_idx = requested_id - btf->start_id + start_offs;
+ 		/* cannot be mapped to the same ID */
+-		if (order_map[id]) {
++		if (order_map[order_idx]) {
+ 			err = -EINVAL;
+ 			goto done;
+ 		}
+-		order_map[id] = i + btf->start_id - start_offs;
++		order_map[order_idx] = i + btf->start_id - start_offs;
++	}
++
++	/*
++	 * Turn requested destination IDs into final IDs. Retained types
++	 * occupy the compacted parent BTF first; transferred types immediately
++	 * follow them, which is where they will start in returned split BTF.
++	 */
++	nr_base_types = n - nr_transfer - start_offs;
++	next_base_id = btf->start_id;
++	next_transfer_id = btf->start_id + nr_base_types;
++	for (i = start_offs; i < id_map_cnt; i++) {
++		__u32 old_id = order_map[i];
++		__u32 old_id_idx = old_id - btf->start_id + start_offs;
++
++		if (btf_permute_id_is_transfer(new_id_map[old_id_idx]))
++			new_id_map[old_id_idx] = next_transfer_id++;
++		else
++			new_id_map[old_id_idx] = next_base_id++;
+ 	}
+ 
++	/*
++	 * Copy retained types and reject references into the split (transfer)
++	 * BTF from the original BTF.
++	 */
+ 	p.btf = btf;
+-	p.id_map = id_map;
++	p.id_map = new_id_map;
+ 	p.start_offs = start_offs;
++	p.transfer_start_id = btf->start_id + nr_base_types;
++	p.reject_transfer = true;
+ 	nt = new_types;
+ 	for (i = start_offs; i < id_map_cnt; i++) {
+ 		struct btf_field_iter it;
+ 		const struct btf_type *t;
+ 		__u32 *type_id;
++		__u32 old_id;
++		__u32 old_id_idx;
+ 		int type_size;
+ 
+-		id = order_map[i];
+-		t = btf__type_by_id(btf, id);
++		old_id = order_map[i];
++		old_id_idx = old_id - btf->start_id + start_offs;
++
++		if (new_id_map[old_id_idx] >= btf->start_id + nr_base_types)
++			continue;
++		t = btf__type_by_id(btf, old_id);
+ 		type_size = btf_type_size(btf, t);
+ 		memcpy(nt, t, type_size);
+ 
+@@ -6714,14 +6844,71 @@ int btf__permute(struct btf *btf, __u32 *id_map, __u32 id_map_cnt,
+ 			goto done;
+ 		while ((type_id = btf_field_iter_next(&it))) {
+ 			err = btf_permute_remap_type_id(type_id, &p);
+-			if (err)
++			if (err < 0)
+ 				goto done;
+ 		}
+ 
+ 		nt += type_size;
+ 	}
+ 
+-	/* fix up referenced IDs for btf_ext */
++	/*
++	 * Copy transferred types into a split BTF. They can reference both
++	 * retained parent types and other transferred types, so do not reject
++	 * final IDs in the split-ID range while rewriting their references.
++	 */
++	if (nr_transfer) {
++		struct btf_permute transfer_p;
++
++		transfer_btf = btf__new_empty_split(btf);
++		if (!transfer_btf) {
++			err = -errno;
++			goto done;
++		}
++		old_str_off = transfer_btf->start_str_off;
++
++		transfer_p = p;
++		/* Split transfer types may refer to other split types */
++		transfer_p.reject_transfer = false;
++		for (i = start_offs; i < id_map_cnt; i++) {
++			struct btf_field_iter it;
++			struct btf_pipe pipe = {
++				.src = btf,
++				.dst = transfer_btf,
++				.force_local_strs = true,
++			};
++			const struct btf_type *t;
++			struct btf_type *new_t;
++			__u32 *type_id;
++			__u32 old_id;
++			__u32 old_id_idx;
++			int new_id;
++
++			old_id = order_map[i];
++			old_id_idx = old_id - btf->start_id + start_offs;
++
++			if (!btf_permute_id_is_transfer(id_map[old_id_idx]))
++				continue;
++			t = btf__type_by_id(btf, old_id);
++			new_id = btf_add_type(&pipe, t);
++			if (new_id < 0) {
++				err = new_id;
++				goto done;
++			}
++			new_t = btf_type_by_id(transfer_btf, new_id);
++			err = btf_field_iter_init(&it, new_t, BTF_FIELD_ITER_IDS);
++			if (!err) {
++				while ((type_id = btf_field_iter_next(&it))) {
++					err = btf_permute_remap_type_id(type_id, &transfer_p);
++					if (err)
++						break;
++				}
++			}
++			if (err < 0)
++				goto done;
++		}
++	}
++
++	/* Rewrite optional .BTF.ext references to retained type IDs. */
+ 	btf_ext = OPTS_GET(opts, btf_ext, NULL);
+ 	if (btf_ext) {
+ 		err = btf_ext_visit_type_ids(btf_ext, btf_permute_remap_type_id, &p);
+@@ -6729,18 +6916,58 @@ int btf__permute(struct btf *btf, __u32 *id_map, __u32 id_map_cnt,
+ 			goto done;
+ 	}
+ 
+-	for (nt = new_types, i = 0; i < id_map_cnt - start_offs; i++) {
++	/* Install the compacted parent types and rebuild their index. */
++	for (nt = new_types, i = 0; i < nr_base_types; i++) {
+ 		btf->type_offs[i] = nt - new_types;
+ 		nt += btf_type_size(btf, nt);
+ 	}
+-
+-	free(order_map);
+ 	free(btf->types_data);
+ 	btf->types_data = new_types;
++	committed = true;
++	btf_hdr_update_type_len(btf, nt - new_types);
++	btf->nr_types = nr_base_types;
++
++	/*
++	 * An important goal is to also transfer strings to the transfer
++	 * BTF where they do not have duplicates in BTF. This is important
++	 * for cases like inline BTF where inline function names could
++	 * comprise a significant portion of the string table. The approach
++	 * is to first compact the set of strings in the base now transfer
++	 * is complete; this will remove unreferenced strings. Then
++	 * local references in the transfer BTF have to be moved downwards
++	 * based upon that compaction. Finally also compact transfer BTF
++	 * references so that we replace duplicate references in split with
++	 * base references where present.
++	 *
++	 * Once all this is done, we end up with transfer-only strings in
++	 * transfer split BTF and shared strings in BTF. The result is
++	 * a transfer BTF with a lot of transfer-only strings will not
++	 * pollute the string table of the non-transfer BTF.
++	 */
++	if (transfer_btf) {
++		err = btf_compact_strings(btf, btf_ext);
++		if (err)
++			goto done;
++		err = btf_permute_rebase_split_strs(transfer_btf, old_str_off);
++		if (err)
++			goto done;
++		err = btf_compact_strings(transfer_btf, NULL);
++		if (err)
++			goto done;
++		*transfer_btfp = transfer_btf;
++	}
++
++	/* On success return the final old-to-new type-ID map to the caller. */
++	memcpy(id_map, new_id_map, id_map_cnt * sizeof(*id_map));
++	free(new_id_map);
++	free(order_map);
+ 	return 0;
+ 
+ done:
++	free(new_id_map);
+ 	free(order_map);
+-	free(new_types);
++	if (!committed)
++		free(new_types);
++	btf__free(transfer_btf);
+ 	return libbpf_err(err);
+ }
+diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+index 57f12630c5d1..8ce569755773 100644
+--- a/tools/lib/bpf/btf.h
++++ b/tools/lib/bpf/btf.h
+@@ -321,9 +321,17 @@ struct btf_permute_opts {
+ 	size_t sz;
+ 	/* optional .BTF.ext info along the main BTF info */
+ 	struct btf_ext *btf_ext;
++	/*
++	 * If set, types whose map entry has BTF_PERMUTE_ID_TRANSFER set are
++	 * removed from @btf and returned in a new split BTF based on @btf.
++	 */
++	struct btf **transfer_btf;
+ 	size_t :0;
+ };
+-#define btf_permute_opts__last_field btf_ext
++#define btf_permute_opts__last_field transfer_btf
++
++/* Mark an id_map entry as a type to be moved to .transfer_btf. */
++#define BTF_PERMUTE_ID_TRANSFER (1U << 31)
+ 
+ /**
+  * @brief **btf__permute()** rearranges BTF types in-place according to a specified ID mapping
+@@ -349,6 +357,12 @@ struct btf_permute_opts {
+  * - Mapping is defined as `id_map[original_id - start_id] = new_id`
+  * - `start_id` equals `btf__type_cnt(btf__base_btf(btf))`
+  *
++ * An @id_map entry can be ORed with BTF_PERMUTE_ID_TRANSFER to move that
++ * type to a newly-created split BTF returned through @opts->transfer_btf.
++ * The low bits still specify the type's position in the requested ordering.
++ * The id map is updated to contain the final IDs in the base and returned
++ * split BTF.
++ *
+  * After permutation, all type references within the BTF data and optional
+  * BTF extension (if provided via @opts) are updated automatically.
+  *
 -- 
 2.43.5
 
