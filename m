@@ -1,49 +1,51 @@
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3CF848383E;
-	Tue,  1 Sep 2026 16:58:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D8F6485518;
+	Tue,  1 Sep 2026 16:58:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788281913; cv=none; b=VDr8au8tzWnVchXu0dqSxeb7522QkXTx1l/CDipVDhvNgwVefZyE5bisrajCvY5Bd/qtgcV2gk7ZkOVr9CiEpJtzR1a3yuHQYv9W/EBwj2YmfH9J4BPOQQiycpVIHkeusJJpefNmwAw4DPGpa3c34oXmxAOqij6IPzUvCdBpYhk=
+	t=1788281916; cv=none; b=OHORjr9wUYXd8vskSx6Kw+bd3O9E3ijrBAs2yKdoRZ5AN4Yk0keH2G5CJDGT2maiWTnO2IPeLWaXQZ+GHPSNqW6UX7VXMamlwDaAwJampt3JogbDyHhmfvJzi1hqWxd06zlXwEIl7jJ4UtLfboemUGRNRBOIIyOhWDawccMAY60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788281913; c=relaxed/simple;
-	bh=dUvvnKblGXcu4zabABfH+AUKezeg+WAag4l9+8AASTo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NlKAhCGAFr151YGlHPiQbCmpaC9QxFzFwwdwqjW/1cNac6yL3kr/MJ9twgpPgs74v4RBnPCcEGHgk3dEppvu4vhAjLs+JFYJaOzDkhs5nloS4WwC3V0s9ClXqZ/2YEoIjqH5ljoYLZgTU3RM9zr0cxKmLN539BqFlZ9UW7GDHao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=jgteeqn7; arc=none smtp.client-ip=205.220.165.32
+	s=arc-20240116; t=1788281916; c=relaxed/simple;
+	bh=vg1v1G5xjWH7DNwhi0RPTPhw23RopTMQaaVRUDVwh5s=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Pfeoy+gX2Nl60sWiImLdnykNm69qLgBaiWB6krxl0w90ELqkszLbwsqvmqHTj97f4EQVpZXWAsC/OBSe9xDENGJvG4+tI8LyQi0zA2vttho7XxlunwgBBofv5tjCqyynLSojmzKw3wiQLipnCZ5av5UH+lN2gl80NC91kLD114Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=TMJWvmBX; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="jgteeqn7"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="TMJWvmBX"
 Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 681EQBjN231357;
-	Tue, 1 Sep 2026 16:58:03 GMT
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 681EPwcR230962;
+	Tue, 1 Sep 2026 16:58:07 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=corp-2025-04-25; bh=Fa+mDCnAg8L+K3s8
-	8eIiUveGn+rg4KrlWBXzi0f63gI=; b=jgteeqn7XgOVP/Gtnl+9Xw70gU2iv0ea
-	irAr6T0vMlhf+4psNJ8OEsr+zP3XZvcsIItGqlWt4aH0Uygeehls/2Ti7RSK9b+H
-	r0dKTXZfVB/FFjCjqaV1QVwdzSqkSd6H+AW9dyalzuUh1MIHkf2qX8peWrm7Rwa+
-	r6YCtJk4b1V2WiNT5SxdKkqudwNwMs2WDJJZ1IDmfuUJK3DA41LvpoB4fcI2Oumj
-	wqZ/MONjqd9v/4sHD+sB/MlphFpZn7xd+QlT6JzllqDTpn0nioUZmJ+RzU7vjiQZ
-	/WhJa0GOU6VoIPmu4EGAtbPoP5zqGjZPsuGS2CJZRk4Oh76x++TyEQ==
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=corp-2025-04-25; bh=fEXxT
+	ABBlX6HJh3UcSW8VetQPlOCERPdeW36uG9gjT4=; b=TMJWvmBXSdI+sik43ffTR
+	v0jRfGwJgN2pvifFhpdZLBnNZvVzPpxtgr7h/Kby2O5Euco4VC6PlABwaL72wmUh
+	z3eZxc6b+foPe1wD1ctG5KmprTX62wbX/FMJ5w2AJz6hGVbBioXvVfRhoGwlP6su
+	nGLLkWPm8HgQOozTkBibfVZOP4eViTDBycIYjSWzES4vzmQIAOunVGbg76x2wYpG
+	V6+itJ6LD5W3YI3ZKzSSwsdsO4gexXJJ1JpYNd/9vaJ7A4GbYytZ/qXEdZz3Nb1i
+	uo2ML9Fmuz3Aaufvl5iOc2e9EW8fsJVEcLPc6hSZxN0jkUa1w0ZPtmoqc3nUVYBM
+	w==
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gbqa7n3sh-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gbqa7n3sq-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 01 Sep 2026 16:58:03 +0000 (GMT)
+	Tue, 01 Sep 2026 16:58:06 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 681GjSMu001822;
-	Tue, 1 Sep 2026 16:58:02 GMT
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 681GjSMw001822;
+	Tue, 1 Sep 2026 16:58:05 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gdymtg8gp-1
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gdymtg8jk-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 01 Sep 2026 16:58:01 +0000 (GMT)
+	Tue, 01 Sep 2026 16:58:05 +0000 (GMT)
 Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 681Gw1Vp011129;
-	Tue, 1 Sep 2026 16:58:01 GMT
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 681Gw1Vr011129;
+	Tue, 1 Sep 2026 16:58:04 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-154-52-250.vpn.oracle.com [10.154.52.250])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4gdymtg8f6-1;
-	Tue, 01 Sep 2026 16:58:00 +0000 (GMT)
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4gdymtg8f6-2;
+	Tue, 01 Sep 2026 16:58:04 +0000 (GMT)
 From: Alan Maguire <alan.maguire@oracle.com>
 To: ast@kernel.org, andrii@kernel.org
 Cc: daniel@iogearbox.net, eddyz87@gmail.com, jolsa@kernel.org,
@@ -54,17 +56,18 @@ Cc: daniel@iogearbox.net, eddyz87@gmail.com, jolsa@kernel.org,
         nsc@kernel.org, arnd@arndb.de, puranjay@kernel.org, yatsenko@meta.com,
         atenart@kernel.org, ojeda@kernel.org, linux-modules@vger.kernel.org,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v2 bpf-next 00/18] Support inline functions in BTF
-Date: Tue,  1 Sep 2026 17:57:39 +0100
-Message-ID: <20260901165757.801449-1-alan.maguire@oracle.com>
+Subject: [PATCH v2 bpf-next 01/18] btf: Extend UAPI to support BTF location (inline site) info
+Date: Tue,  1 Sep 2026 17:57:40 +0100
+Message-ID: <20260901165757.801449-2-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20260901165757.801449-1-alan.maguire@oracle.com>
+References: <20260901165757.801449-1-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
@@ -73,207 +76,549 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
  adultscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
  bulkscore=0 mlxlogscore=999 mlxscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.19.0-2606160000 definitions=main-2609010148
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTAxMDE1MCBTYWx0ZWRfX2YgDjWSJ1VU+
- F8c9mIJQ5Kffi24UV+gBt4TpUkQBkcuSvLGG1NTQz+r8k239xGg/z53xNkniND+0U5vqy7ZmuCN
- ssODt1cb5+qajl3RWXOy8LPW9YlpTzV5ZWUrDHbOp5yBJMdmi2Rc
-X-Proofpoint-GUID: 378WsFYuB7aQkSfYUKEIiM_QA8mL-WnB
-X-Authority-Analysis: v=2.4 cv=DPu/JSNb c=1 sm=1 tr=0 ts=6a97041b b=1 cx=c_pps
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTAxMDE1MCBTYWx0ZWRfX//crL0M/V56R
+ RD+uHFXMHhlzzkM3KqlMidVQmxBkSloFfXPVbP4nUYHj9lNAMd0QOhG/e3dSQEG2c3SewxsizKL
+ e0t6yXaMLFUnefrGkldU93ZcLFSlWO3fH/bueymJOYivBpm2q303
+X-Proofpoint-GUID: KGA1EyvyHOwWQqpcL3kRGrOth_i-yZIH
+X-Authority-Analysis: v=2.4 cv=DPu/JSNb c=1 sm=1 tr=0 ts=6a97041f b=1 cx=c_pps
  a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
- a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=EIcjfB9IiI4px24ztqRk:22 a=07d9gI8wAAAA:8
- a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8 a=QPHJuCtNaKxP3Rz0Ko8A:9
- a=QEXdDO2ut3YA:10 a=e2CUPOnPG4QKp8I52DXD:22 a=5yU3S35YU4bGjq-dph-N:22
- a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:13521
-X-Proofpoint-ORIG-GUID: 378WsFYuB7aQkSfYUKEIiM_QA8mL-WnB
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTAxMDE1MCBTYWx0ZWRfXw5nFDC6DvFCu
- w6SWU8TDMbugOF6uiz9UZ8By0yAcBf5Yoqz+isVTxnkFWh0qmmMEK0WngouJFtTIxb1KncICE3q
- Gfu/6LlLaCMgovkV9l+iP0mRiOizaf3GFMH6HAmEY894+v1ATbJ5ny365WfwO42z6L1cF37sMKO
- NJwJKhfOL/2HUTh14SbvBQb2BTZrQwZkMfkenxLBwqa3d08yO3AOUUq0vxIfw9hBsAyM57bFE6K
- w8t5xafOhIms5G6rtzgkRaLvLw5nLMsyIHMh/AlqWyxu09S8u5p6M89HppmDQQ+5tF2gzWSaCVZ
- F5sI71MmtCdN77+WHVd+F1lZ5xuIw7AcTRgL/pboPh52btXtANIvD+90kalsVjMIZt2gTFoswRN
- ickkR1sV8q2k7BQDVduT6kPI/4IHgGpykqVx0X8MIOiJaXMnGfxN2ktd6bOKTJZZcEkJn4HU7p/
- M3zGx2sDc05EYTCPsdE//mpGCUEE+BNchL5QcKf0=
+ a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
+ a=EIcjfB9IiI4px24ztqRk:22 a=yPCof4ZbAAAA:8 a=ThJMnvK8IdcDtQXm2XoA:9
+ a=O8hF6Hzn-FEA:10 a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf
+ awl=host:13521
+X-Proofpoint-ORIG-GUID: KGA1EyvyHOwWQqpcL3kRGrOth_i-yZIH
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTAxMDE1MCBTYWx0ZWRfX0lgnfQdO8l2a
+ evDUkwScwhTLPt+koih5oAa2zsug8QiiRMZan/+/AhhUcxJnk/vcsfkED9fOKG657nslJOUQGOJ
+ nxrwx5oEf89V/jXz77p+UZpfVRQ/rAjFdFcLW4sXUdF97dDN+mOt8rDZDBEvxThYcoqfiMOVNL3
+ uUi5qWA70ESMIFr644oO9gde/bjDqEoA14HBJ1OAIe54Ev+5HYNEe8qD6r069fXNE2cxxTK7N57
+ WIOGefcP7lUVpLZ9St5Cs07FeJXzo81ojeJw7zhPqvdr0yEitG4RnbBYHC2ERtbVwjUQTXQM5Nn
+ kpzW8exUFD0yZPE3hBruwpvBzbFf5QJVjMDAHONcI2BiTC2lHDIKW+6VgoNrlAhph71hzhgdSDz
+ ybSDSDlYro8O2rak3EsjFxMFlyBTskpzcmUUZRFZ9Wk5IgtvAJyeSar27UGt1k7WwQiVwjjODxG
+ Z1E/VaJKziunNmTWkKdBNiflQcs53nYaD2YG2xU0=
 
-This series adds support to facilitate tracing of inline function
-sites using BPF Type Format (BTF) information. An excellent overview
-of the problem and proposed solution presented at LSF/MM/BPF is
-available at [1].
+Add BTF_KIND_LOC_PARAM, BTF_KIND_LOC_PROTO and BTF_KIND_LOCSEC
+to help represent location information for functions.
 
-The aim is to produce a compact representation providing sufficient
-information to a tracer wishing to instrument an inline site via a
-kprobe.  The challenge to solve is compact representation - my
-local bpf-next builds show nearly 600,000 inline sites for approximately
-100,000 functions.  Any BTF representation should utilize deduplication
-where possible to minimize overheads.
+BTF_KIND_LOC_PARAM is used to represent how we retrieve data at a
+location; either via register(s), or register+offset, a dereference
+of a register+offset or a constant value.
 
-The approach used here is to encode a series of inline sites in
-a BTF DATASEC-like LOCSEC named for the associated section (like
-".text", where each entry consists of a
+BTF_KIND_LOC_PROTO represents location information about a location
+with multiple BTF_KIND_LOC_PARAMs.
 
-<function type id, location prototype id, offset from base address>
+And finally BTF_KIND_LOCSEC is a set of location sites, each
+of which has
 
-triple. The function type id is the BTF_KIND_FUNC that was inlined,
-the location prototype is a BTF_KIND_LOC_PROTO which tells us
-for each function parameter how it is represented at the site.
-It is a collection of either type id 0 (parameter not available)
-or BTF_KIND_LOC_PARAM ids, the latter encoding a register number,
-a dereference, a constant etc.  Finally the offset is relative to
-the base address, so in the case of the kernel this allows for
-kASLR, and modules addresses are relative to module base address.
+- a BTF_KIND_FUNC function associated with the inline site
+- a location prototype specifying where to find the function
+  parameters
+- an address offset relative to the kernel base address
 
-Full location parameter information is available for ~78% of
-inlined functions; in other words all function parameters are
-expressed via BTF_KIND_LOC_PARAM and can be retrieved.  Those
-remaining have more complex multi-expression encoding or are
-not available at all.
+This can be used to support representing
 
-For a vmlinux with 6Mb of BTF in /sys/kernel/btf/vmlinux, I
-see 10.8Mb of inline information.  When delivered as a compressed
-module, the module size is 3.5Mb (via CONFIG_DEBUG_INFO_BTF_INLINE=m).
-In this module-delivered mode, /sys/kernel/btf/vmlinux.inline will
-be zero-sized until it is opened, at which point the module is
-requested so the user experience is identical to when inline info
-is derived from vmlinux itself, but we save the allocation associated
-with live inline representation.
+- a fully-inlined function at potentially multiple inline sites
+  with potentially different parameter availability
+- a partially-inlined function where some _LOC_PROTOs represent
+  inlined sites as above and others have normal _FUNC representations
 
-This series is rather large, and ideally we would split it into
-basic inline support in kernel/libbpf/bpftool and associated tests
-(patches 1-11) and delivery of inline info (patches 12-18).
+Also BTF_KIND_LOCSEC struct btf_loc will have two type id
+references; one for the associated func, the other for the loc_proto.
+Accordingly increase the number of m_offs references in btf_field_desc
+to 2.
 
-This would allow us to land the pahole support once the libbpf
-interfaces become available, though it will work in its absence.
-The pahole code is still being tested but is available at [2].
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ include/linux/btf.h            |  17 ++-
+ include/uapi/linux/btf.h       |  65 ++++++++-
+ kernel/bpf/btf.c               | 238 ++++++++++++++++++++++++++++++++-
+ tools/include/uapi/linux/btf.h |  65 ++++++++-
+ 4 files changed, 379 insertions(+), 6 deletions(-)
 
-Patch 1 consists of the UAPI changes and associated basic support
-for KIND_LOC[SEC|PARAM|PROTO].
-
-Patch 2 wires in libbpf support to handle these, including in dedup,
-field iteration and so on.  LOCSEC does not dedup since each entry
-has a unique offset, but LOC_PARAM and LOC_PROTO do.
-
-Patch 3 widens BTF permutation to support a transfer mode which
-allows us to move a subset of types to a newly-created split BTF.
-This will allow resolve_btfids to take a pahole-generated BTF
-object (consisting of usual BTF plus inline info) and separate
-out the inline-relevant components into a new .BTF.inline section.
-This is an approach in line with other resolve_btfids changes which
-prepare more generic BTF for the needs of the kernel.
-
-Patches 4-8 provide tests for all of this.
-
-Patches 9-11 add bpftool support to handle multi-split BTF for
-inline info and to display location info.
-
-Patch 12 adds resolve_btfids support to split out inline info
-with the aim that any functions that are exclusively needed for
-inline sites wind up in the inline BTF; this is a good test to
-see if a function is likely fully inlined.  Similarly any LOCSEC
-references < start BTF id of the inline BTF suggest partially
-inlined functions.  See the patch for the nuances.  resolve_btfids
-takes as input BTF consisting of the usual vmlinux BTF objects
-and inline-related ones; its role is to create a split BTF
-where we move the inline-related pieces out so that
-/sys/kernel/btf/vmlinux (or module equivalent) is the same
-as before and does not pay the cost of inline representations.
-This approach is different to how it was done in the RFC because
-the model of applying kernel customizations in resolve_btfids
-did not exist to the same degree then.  In the RFC approach,
-pahole delivered already-split BTF and we relocated it, but
-since the base BTF it is built on now is transformed significantly
-(added/changed types, sorting, dedup) it is not feasible to
-track id changes across all of these operations.  As such
-we view splitting the inline info out as another kernel-specific
-customization.
-
-Patches 13-16 add support to the kbuild infrastructure and
-/sys/kernel/btf representations for inline data.  We can choose
-to deliver vmlinux inline info via a module (since it is ~10Mb
-that makes sense) but there are some issues in getting that
-module to load when /sys/kernel/btf/vmlinux.inline is accessed
-that are described in patch 15).  Patch 16 handles relocation
-of distilled base BTF for out-of-tree modules, ensuring that
-relocation works across module and module inline info.  The
-painful part here is that we need to relocate ids in the
-inline info, which requires multi-split BTF support.  Happily
-that is not a big change.
-
-Finally tests in patches 17, 18 cover sysfs representation
-and we introduce an inline site to bpf_testmod and ensure
-its representation makes sense.
-
-Changes since RFC [3]:
-
-- Support for distilled base BTF
-- Support for BTF_INLINE=m on-demand loading
-- Reworked inline support to handle new resolve_btfids model
-- .BTF.inline sections host FUNCs/FUNC_PROTOs/strings that are
-  needed for inline info only, avoiding polluting standard
-  vmlinux/module BTFs
-
-[1] https://lwn.net/Articles/1083985/
-[2] https://github.com/alan-maguire/dwarves/tree/pahole-next-btf-inline-v2-testing
-[3] https://lore.kernel.org/bpf/20251008173512.731801-1-alan.maguire@oracle.com/
-
-Alan Maguire (18):
-  btf: Extend UAPI to support BTF location (inline site) info
-  libbpf: Add support for BTF kinds LOC[_PARAM|_PROTO|SEC]
-  libbpf: Support moving permuted BTF types into split BTF
-  selftests/bpf: Test helper support for BTF_KIND_LOC[_PARAM|_PROTO|SEC]
-  selftests/bpf: Add LOC_PARAM, LOC_PROTO, LOCSEC to field iter tests
-  selftests/bpf: Add LOC_PARAM, LOC_PROTO, LOCSEC to dedup split tests
-  selftests/bpf: BTF distill tests to ensure LOC[_PARAM|_PROTO] add to
-    split BTF
-  selftests/bpf: Validate that btf__permute transfer works
-  bpftool: Handle multi-split BTF by supporting multiple base BTFs
-  bpftool: Document support for multi-split BTF
-  bpftool: Add ability to dump LOC_PARAM, LOC_PROTO and LOCSEC
-  resolve_btfids: Extract inline BTF
-  kbuild: Add support for BTF inline information
-  btf: Make vmlinux, module inline info available in /sys/kernel/btf
-  btf: Support CONFIG_DEBUG_INFO_BTF_INLINE=m
-  btf: Relocate inline BTF for modules with distilled base BTF
-  selftests/bpf: Test BTF sysfs inline representations
-  selftests/bpf: Add a test verifying inline information
-
- Makefile                                      |   1 +
- include/asm-generic/vmlinux.lds.h             |  11 +
- include/linux/btf.h                           |  23 +-
- include/linux/module.h                        |   4 +
- include/uapi/linux/btf.h                      |  65 +-
- kernel/bpf/Makefile                           |   1 +
- kernel/bpf/btf.c                              | 686 ++++++++++++++++--
- kernel/bpf/btf_vmlinux_inline.c               |  37 +
- kernel/module/main.c                          |   4 +
- lib/Kconfig.debug                             |  18 +
- scripts/Makefile.btf                          |   7 +
- scripts/gen-btf.sh                            |  33 +-
- .../bpf/bpftool/Documentation/bpftool-btf.rst |   7 +-
- tools/bpf/bpftool/btf.c                       |  85 +++
- tools/bpf/bpftool/main.c                      |   3 +-
- tools/bpf/resolve_btfids/main.c               | 336 ++++++++-
- tools/include/uapi/linux/btf.h                |  65 +-
- tools/lib/bpf/btf.c                           | 659 ++++++++++++++++-
- tools/lib/bpf/btf.h                           |  66 +-
- tools/lib/bpf/btf_dump.c                      |   9 +
- tools/lib/bpf/btf_iter.c                      |  22 +
- tools/lib/bpf/btf_relocate.c                  |   7 +-
- tools/lib/bpf/libbpf.map                      |   6 +
- tools/lib/bpf/libbpf_internal.h               |   5 +-
- tools/testing/selftests/bpf/btf_helpers.c     |  36 +-
- .../bpf/prog_tests/btf_dedup_split.c          | 109 +++
- .../selftests/bpf/prog_tests/btf_distill.c    |  76 ++
- .../selftests/bpf/prog_tests/btf_field_iter.c |  31 +-
- .../selftests/bpf/prog_tests/btf_inline.c     | 110 +++
- .../selftests/bpf/prog_tests/btf_permute.c    | 128 ++++
- .../selftests/bpf/prog_tests/btf_sysfs.c      |  74 ++
- tools/testing/selftests/bpf/test_btf.h        |  16 +
- .../selftests/bpf/test_kmods/bpf_testmod.c    |   2 +-
- tools/testing/selftests/bpf/trace_helpers.c   |  20 +
- tools/testing/selftests/bpf/trace_helpers.h   |   1 +
- 35 files changed, 2636 insertions(+), 127 deletions(-)
- create mode 100644 kernel/bpf/btf_vmlinux_inline.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_inline.c
-
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index ddd0f4f32d24..a4412bc16688 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -329,6 +329,21 @@ static inline u64 btf_enum64_value(const struct btf_enum64 *e)
+ 	return ((u64)e->val_hi32 << 32) | e->val_lo32;
+ }
+ 
++static inline struct btf_loc_param *btf_loc_param(const struct btf_type *t)
++{
++	return (struct btf_loc_param *)(t + 1);
++}
++
++static inline __u32 *btf_loc_params(const struct btf_type *t)
++{
++	return (__u32 *)(t + 1);
++}
++
++static inline struct btf_loc *btf_type_loc_secinfo(const struct btf_type *t)
++{
++	return (struct btf_loc *)(t + 1);
++}
++
+ static inline bool btf_is_composite(const struct btf_type *t)
+ {
+ 	u16 kind = btf_kind(t);
+@@ -559,7 +574,7 @@ struct btf_field_desc {
+ 	/* member struct size, or zero, if no members */
+ 	int m_sz;
+ 	/* repeated per-member offsets */
+-	int m_off_cnt, m_offs[1];
++	int m_off_cnt, m_offs[2];
+ };
+ 
+ struct btf_field_iter {
+diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
+index 618167cab4e6..6062c9958034 100644
+--- a/include/uapi/linux/btf.h
++++ b/include/uapi/linux/btf.h
+@@ -92,7 +92,9 @@ enum {
+ 	BTF_KIND_DECL_TAG	= 17,	/* Decl Tag */
+ 	BTF_KIND_TYPE_TAG	= 18,	/* Type Tag */
+ 	BTF_KIND_ENUM64		= 19,	/* Enumeration up to 64-bit values */
+-
++	BTF_KIND_LOC_PARAM	= 20,	/* Location parameter information */
++	BTF_KIND_LOC_PROTO	= 21,	/* Location prototype for site */
++	BTF_KIND_LOCSEC		= 22,	/* Location section */
+ 	NR_BTF_KINDS,
+ 	BTF_KIND_MAX		= NR_BTF_KINDS - 1,
+ };
+@@ -212,4 +214,65 @@ struct btf_enum64 {
+ 	__u32	val_hi32;
+ };
+ 
++/*
++ * BTF_KIND_LOC_PARAM is followed by a single "struct btf_loc_param"
++ * that contains flags specifying the contents of the vlen-specified
++ * number of 4-byte values that follow.
++ */
++struct btf_loc_param {
++	__u32 flags;
++};
++
++/*
++ * The combination of size, vlen and flags gives us the means to interpret
++ * the following vlen-specified set of 4-byte values:
++ *
++ * - a BTF_LOC_PARAM_CONST is a constant value; combination
++ *   of size, vlen and _SIGNED flag determines it. If the value requires
++ *   64 bits it is stored in {lo,hi} order.
++ * - a BTF_LOC_PARAM_ADDR is an address that will be normalized with
++ *   respect to kernel base address.
++ * - a BTF_LOC_PARAM_REG with vlen 1 is a simple register number;
++ *   with vlen 2 it is a multi-register parameter.
++ * - a _REG | DEREF with vlen 1 dereferences the value in the register
++ *   number specified.
++ * - a REG | DEREF | OFFSET with vlen specifies the register value in
++ *   the first 4-byte value and the offset in the remainder.
++ * - binary logical operators operate on a combination of register
++ *   number and constant value, aside from _NOT which operates on
++ *   a register
++ */
++enum btf_loc_param_flags {
++	BTF_LOC_PARAM_SIGNED		=	0x1,
++	BTF_LOC_PARAM_CONST		=	0x2,
++	BTF_LOC_PARAM_ADDR		=	0x4,
++	BTF_LOC_PARAM_REG		=	0x8,
++	BTF_LOC_PARAM_DEREF		=	0x10,
++	BTF_LOC_PARAM_OFFSET		=	0x20,
++};
++
++/*
++ * BTF_KIND_LOC_PROTO specifies location prototypes; i.e. how locations relate
++ * to parameters; a struct btf_type of BTF_KIND_LOC_PROTO is followed by a
++ * a vlen-specified number of __u32 BTF type ids which specify the associated
++ * BTF_KIND_LOC_PARAM for each function parameter associated with the
++ * location.  The type should either be 0 (no location info) or point at
++ * a BTF_KIND_LOC_PARAM.
++ */
++
++/*
++ * BTF_KIND_LOCSEC consists of vlen-specified number of "struct btf_loc"
++ * containing location site-specific information;
++ *
++ * - function (func)
++ * - location prototype type id (loc_proto)
++ * - address offset (offset) relative to kernel base address
++ */
++
++struct btf_loc {
++	__u32 func;
++	__u32 loc_proto;
++	__u32 offset;
++};
++
+ #endif /* _UAPI__LINUX_BTF_H__ */
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 9c2cab08bb79..d74c8668aa3f 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -345,6 +345,9 @@ static const char * const btf_kind_str[NR_BTF_KINDS] = {
+ 	[BTF_KIND_DECL_TAG]	= "DECL_TAG",
+ 	[BTF_KIND_TYPE_TAG]	= "TYPE_TAG",
+ 	[BTF_KIND_ENUM64]	= "ENUM64",
++	[BTF_KIND_LOC_PARAM]	= "LOC_PARAM",
++	[BTF_KIND_LOC_PROTO]	= "LOC_PROTO",
++	[BTF_KIND_LOCSEC]	= "LOCSEC",
+ };
+ 
+ const char *btf_type_str(const struct btf_type *t)
+@@ -517,11 +520,27 @@ static bool btf_type_is_decl_tag(const struct btf_type *t)
+ 	return BTF_INFO_KIND(t->info) == BTF_KIND_DECL_TAG;
+ }
+ 
++static bool btf_type_is_loc_param(const struct btf_type *t)
++{
++	return BTF_INFO_KIND(t->info) == BTF_KIND_LOC_PARAM;
++}
++
++static bool btf_type_is_loc_proto(const struct btf_type *t)
++{
++	return BTF_INFO_KIND(t->info) == BTF_KIND_LOC_PROTO;
++}
++
++static bool btf_type_is_locsec(const struct btf_type *t)
++{
++	return BTF_INFO_KIND(t->info) == BTF_KIND_LOCSEC;
++}
++
+ static bool btf_type_nosize(const struct btf_type *t)
+ {
+ 	return btf_type_is_void(t) || btf_type_is_fwd(t) ||
+ 	       btf_type_is_func(t) || btf_type_is_func_proto(t) ||
+-	       btf_type_is_decl_tag(t);
++	       btf_type_is_decl_tag(t) || btf_type_is_loc_param(t) ||
++	       btf_type_is_loc_proto(t) || btf_type_is_locsec(t);
+ }
+ 
+ static bool btf_type_nosize_or_null(const struct btf_type *t)
+@@ -796,7 +815,9 @@ static bool btf_type_needs_resolve(const struct btf_type *t)
+ 	       btf_type_is_var(t) ||
+ 	       btf_type_is_func(t) ||
+ 	       btf_type_is_decl_tag(t) ||
+-	       btf_type_is_datasec(t);
++	       btf_type_is_datasec(t) ||
++	       btf_type_is_loc_proto(t) ||
++	       btf_type_is_locsec(t);
+ }
+ 
+ /* t->size can be used */
+@@ -4714,6 +4735,213 @@ static const struct btf_kind_operations enum64_ops = {
+ 	.show = btf_enum64_show,
+ };
+ 
++static s32 btf_loc_param_check_meta(struct btf_verifier_env *env,
++				    const struct btf_type *t,
++				    u32 meta_left)
++{
++	const struct btf_loc_param *p = btf_loc_param(t);
++	u32 meta_needed;
++	u32 size;
++
++	meta_needed = sizeof(*p) + sizeof(__u32) * btf_vlen(t);
++	if (meta_left < meta_needed) {
++		btf_verifier_log_basic(env, t,
++				       "meta_left:%u meta_needed:%u",
++				      meta_left, meta_needed);
++		return -EINVAL;
++	}
++
++	if (t->name_off) {
++		btf_verifier_log_type(env, t, "Invalid name");
++		return -EINVAL;
++	}
++	size = t->size;
++	if (size > 16 || !is_power_of_2(size)) {
++		btf_verifier_log_type(env, t, "Unexpected size");
++		return -EINVAL;
++	}
++
++	return meta_needed;
++}
++
++static void btf_loc_param_log(struct btf_verifier_env *env,
++			 const struct btf_type *t)
++{
++	const struct btf_loc_param *p = btf_loc_param(t);
++	u32 *d = (u32 *)(p + 1);
++	u32 i, vlen = btf_vlen(t);
++
++	btf_verifier_log(env, "size=%u flags=0x%x param_data(", t->size, p->flags);
++	for (i = 0; i < vlen; i++, d++)
++		btf_verifier_log(env, "%u%s", *d,
++				 i + 1 == vlen ? ")" : ", ");
++}
++
++static const struct btf_kind_operations loc_param_ops = {
++	.check_meta = btf_loc_param_check_meta,
++	.resolve = btf_df_resolve,
++	.check_member = btf_df_check_member,
++	.check_kflag_member = btf_df_check_kflag_member,
++	.log_details = btf_loc_param_log,
++	.show = btf_df_show,
++};
++
++static s32 btf_loc_proto_check_meta(struct btf_verifier_env *env,
++				    const struct btf_type *t,
++				    u32 meta_left)
++{
++	u32 meta_needed;
++
++	meta_needed = sizeof(__u32) * btf_type_vlen(t);
++
++	if (meta_left < meta_needed) {
++		btf_verifier_log_basic(env, t,
++				       "meta_left:%u meta_needed:%u",
++				      meta_left, meta_needed);
++		return -EINVAL;
++	}
++
++	if (t->name_off) {
++		btf_verifier_log_type(env, t, "Invalid name");
++		return -EINVAL;
++	}
++	return meta_needed;
++}
++
++static void btf_loc_proto_log(struct btf_verifier_env *env,
++			      const struct btf_type *t)
++{
++	const __u32 *params = btf_loc_params(t);
++	u32 nr_params = btf_type_vlen(t), i;
++
++	btf_verifier_log(env, "loc_proto locs=(");
++	for (i = 0; i < nr_params; i++, params++) {
++		btf_verifier_log(env, "type=%u%s", *params,
++				 i + 1 == nr_params ? ")" : ", ");
++	}
++}
++
++static int btf_loc_proto_resolve(struct btf_verifier_env *env,
++				 const struct resolve_vertex *v)
++{
++	const __u32 *params = btf_loc_params(v->t);
++	u32 i, nr_params = btf_type_vlen(v->t);
++	struct btf *btf = env->btf;
++
++	for (i = 0; i < nr_params; i++) {
++		const struct btf_type *param_type;
++		u32 param_type_id = params[i];
++
++		if (!param_type_id)
++			continue;
++
++		param_type = btf_type_by_id(btf, param_type_id);
++		if (!param_type || !btf_type_is_loc_param(param_type)) {
++			btf_verifier_log_type(env, v->t,
++					      "Invalid loc_param#%u", i + 1);
++			return -EINVAL;
++		}
++	}
++
++	env_stack_pop_resolved(env, 0, 0);
++	return 0;
++}
++
++static const struct btf_kind_operations loc_proto_ops = {
++	.check_meta = btf_loc_proto_check_meta,
++	.resolve = btf_loc_proto_resolve,
++	.check_member = btf_df_check_member,
++	.check_kflag_member = btf_df_check_kflag_member,
++	.log_details = btf_loc_proto_log,
++	.show = btf_df_show,
++};
++
++static s32 btf_locsec_check_meta(struct btf_verifier_env *env,
++				 const struct btf_type *t,
++				 u32 meta_left)
++{
++	u32 meta_needed;
++
++	meta_needed = sizeof(struct btf_loc) * btf_type_vlen(t);
++
++	if (meta_left < meta_needed) {
++		btf_verifier_log_basic(env, t,
++				       "meta_left:%u meta_needed:%u",
++				       meta_left, meta_needed);
++		return -EINVAL;
++	}
++	return meta_needed;
++}
++
++static void btf_locsec_log(struct btf_verifier_env *env,
++			   const struct btf_type *t)
++{
++	const struct btf_loc *loc = btf_type_loc_secinfo(t);
++	u32 nr_locs = btf_type_vlen(t), i;
++	const struct btf *btf = env->btf;
++
++	btf_verifier_log(env, "locsec %s locs=(",
++			 __btf_name_by_offset(btf, t->name_off));
++	for (i = 0; i < nr_locs; i++, loc++) {
++		btf_verifier_log(env, "\n\tfunc %u loc_proto %u offset 0x%x%s",
++				 loc->func, loc->loc_proto, loc->offset,
++				 i + 1 == nr_locs ? ")" : ", ");
++	}
++}
++
++static int btf_locsec_resolve(struct btf_verifier_env *env,
++			      const struct resolve_vertex *v)
++{
++	const struct btf_loc *loc;
++	struct btf *btf = env->btf;
++	u32 i;
++
++	env->resolve_mode = RESOLVE_TBD;
++	for (i = v->next_member, loc = btf_type_loc_secinfo(v->t) + i;
++	     i < btf_type_vlen(v->t); i++, loc++) {
++		const struct btf_type *func_type, *loc_proto_type;
++		u32 func_type_id = loc->func;
++		u32 loc_proto_type_id = loc->loc_proto;
++
++		func_type = btf_type_by_id(btf, func_type_id);
++		if (!func_type || !btf_type_is_func(func_type)) {
++			btf_verifier_log_type(env, v->t,
++					      "Invalid func#%u", i + 1);
++			return -EINVAL;
++		}
++
++		if (!env_type_is_resolved(env, func_type_id)) {
++			env_stack_set_next_member(env, i);
++			return env_stack_push(env, func_type, func_type_id);
++		}
++
++		loc_proto_type = btf_type_by_id(btf, loc_proto_type_id);
++		if (!loc_proto_type || !btf_type_is_loc_proto(loc_proto_type)) {
++			btf_verifier_log_type(env, v->t,
++					      "Invalid loc_proto#%u", i + 1);
++			return -EINVAL;
++		}
++
++		if (!env_type_is_resolved(env, loc_proto_type_id)) {
++			env_stack_set_next_member(env, i + 1);
++			return env_stack_push(env, loc_proto_type,
++					      loc_proto_type_id);
++		}
++	}
++
++	env_stack_pop_resolved(env, 0, 0);
++	return 0;
++}
++
++static const struct btf_kind_operations locsec_ops = {
++	.check_meta = btf_locsec_check_meta,
++	.resolve = btf_locsec_resolve,
++	.check_member = btf_df_check_member,
++	.check_kflag_member = btf_df_check_kflag_member,
++	.log_details = btf_locsec_log,
++	.show = btf_df_show,
++};
++
+ static s32 btf_func_proto_check_meta(struct btf_verifier_env *env,
+ 				     const struct btf_type *t,
+ 				     u32 meta_left)
+@@ -5383,6 +5611,9 @@ static const struct btf_kind_operations * const kind_ops[NR_BTF_KINDS] = {
+ 	[BTF_KIND_DECL_TAG] = &decl_tag_ops,
+ 	[BTF_KIND_TYPE_TAG] = &modifier_ops,
+ 	[BTF_KIND_ENUM64] = &enum64_ops,
++	[BTF_KIND_LOC_PARAM] = &loc_param_ops,
++	[BTF_KIND_LOC_PROTO] = &loc_proto_ops,
++	[BTF_KIND_LOCSEC] = &locsec_ops,
+ };
+ 
+ static s32 btf_check_meta(struct btf_verifier_env *env,
+@@ -5457,7 +5688,8 @@ static bool btf_resolve_valid(struct btf_verifier_env *env,
+ 	if (!env_type_is_resolved(env, type_id))
+ 		return false;
+ 
+-	if (btf_type_is_struct(t) || btf_type_is_datasec(t))
++	if (btf_type_is_struct(t) || btf_type_is_datasec(t) ||
++	    btf_type_is_loc_proto(t) || btf_type_is_locsec(t))
+ 		return !btf_resolved_type_id(btf, type_id) &&
+ 		       !btf_resolved_type_size(btf, type_id);
+ 
+diff --git a/tools/include/uapi/linux/btf.h b/tools/include/uapi/linux/btf.h
+index 618167cab4e6..6062c9958034 100644
+--- a/tools/include/uapi/linux/btf.h
++++ b/tools/include/uapi/linux/btf.h
+@@ -92,7 +92,9 @@ enum {
+ 	BTF_KIND_DECL_TAG	= 17,	/* Decl Tag */
+ 	BTF_KIND_TYPE_TAG	= 18,	/* Type Tag */
+ 	BTF_KIND_ENUM64		= 19,	/* Enumeration up to 64-bit values */
+-
++	BTF_KIND_LOC_PARAM	= 20,	/* Location parameter information */
++	BTF_KIND_LOC_PROTO	= 21,	/* Location prototype for site */
++	BTF_KIND_LOCSEC		= 22,	/* Location section */
+ 	NR_BTF_KINDS,
+ 	BTF_KIND_MAX		= NR_BTF_KINDS - 1,
+ };
+@@ -212,4 +214,65 @@ struct btf_enum64 {
+ 	__u32	val_hi32;
+ };
+ 
++/*
++ * BTF_KIND_LOC_PARAM is followed by a single "struct btf_loc_param"
++ * that contains flags specifying the contents of the vlen-specified
++ * number of 4-byte values that follow.
++ */
++struct btf_loc_param {
++	__u32 flags;
++};
++
++/*
++ * The combination of size, vlen and flags gives us the means to interpret
++ * the following vlen-specified set of 4-byte values:
++ *
++ * - a BTF_LOC_PARAM_CONST is a constant value; combination
++ *   of size, vlen and _SIGNED flag determines it. If the value requires
++ *   64 bits it is stored in {lo,hi} order.
++ * - a BTF_LOC_PARAM_ADDR is an address that will be normalized with
++ *   respect to kernel base address.
++ * - a BTF_LOC_PARAM_REG with vlen 1 is a simple register number;
++ *   with vlen 2 it is a multi-register parameter.
++ * - a _REG | DEREF with vlen 1 dereferences the value in the register
++ *   number specified.
++ * - a REG | DEREF | OFFSET with vlen specifies the register value in
++ *   the first 4-byte value and the offset in the remainder.
++ * - binary logical operators operate on a combination of register
++ *   number and constant value, aside from _NOT which operates on
++ *   a register
++ */
++enum btf_loc_param_flags {
++	BTF_LOC_PARAM_SIGNED		=	0x1,
++	BTF_LOC_PARAM_CONST		=	0x2,
++	BTF_LOC_PARAM_ADDR		=	0x4,
++	BTF_LOC_PARAM_REG		=	0x8,
++	BTF_LOC_PARAM_DEREF		=	0x10,
++	BTF_LOC_PARAM_OFFSET		=	0x20,
++};
++
++/*
++ * BTF_KIND_LOC_PROTO specifies location prototypes; i.e. how locations relate
++ * to parameters; a struct btf_type of BTF_KIND_LOC_PROTO is followed by a
++ * a vlen-specified number of __u32 BTF type ids which specify the associated
++ * BTF_KIND_LOC_PARAM for each function parameter associated with the
++ * location.  The type should either be 0 (no location info) or point at
++ * a BTF_KIND_LOC_PARAM.
++ */
++
++/*
++ * BTF_KIND_LOCSEC consists of vlen-specified number of "struct btf_loc"
++ * containing location site-specific information;
++ *
++ * - function (func)
++ * - location prototype type id (loc_proto)
++ * - address offset (offset) relative to kernel base address
++ */
++
++struct btf_loc {
++	__u32 func;
++	__u32 loc_proto;
++	__u32 offset;
++};
++
+ #endif /* _UAPI__LINUX_BTF_H__ */
 -- 
 2.43.5
 
