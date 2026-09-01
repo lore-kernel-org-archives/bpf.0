@@ -1,153 +1,162 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 086EF411FBF;
-	Tue,  1 Sep 2026 15:34:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1BCE43F8D9;
+	Tue,  1 Sep 2026 15:55:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788276888; cv=none; b=SSfc8yN3jCXm/uuixAtntq25lf3T7GxsQXFqRIMtN56AaLqJBYXyIDJVD10xfOCQBEo2Z2Hu1SrMFRBvjc01/yVSUTWviyOVQD0T1EEWq0kdLthM004IQClOYRYZUJWKRT/vzO7updOsqDKHw+KPunYZvI2gja/UELzzaYvJPno=
+	t=1788278110; cv=none; b=vAAxos47xjOlUC3agxfegDp1fLnnuKRSXcV5TRRCfK6KrRL+VR3saA8By8fUpYO4R9s74BD76qrFzPQUTOftPFViJlD55vipQPnZLs72TBGzNF+iYgx8D63diCu/JBBWg7SqIjDlEspK1gj2+gLhXD+bWFJI4T10ktq9EsIgwYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788276888; c=relaxed/simple;
-	bh=XLuK/PZ58lDhZmg6xDRQ9In2m+ureWTnrZMeNLfg+vQ=;
+	s=arc-20240116; t=1788278110; c=relaxed/simple;
+	bh=+cvSvCkkqP662yS/AR9AoUHdBIsRRO9+2MZ/BbHAYcI=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=J2uF3XCerp269UwdVEYeDH0HtDDlUSTsiDp+x1fTBfI9yQ9m4N1DQDZXWGD9MR2izg05aGtsGQMqKjMjCNJnh8U7PA8u6ShihlOslI3TiUDx9Jl4uKh3d1MOm+hl73AigX9gyNCb8LDMKJIV12NzySGLTFpcyk84UAQx1dAaSrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oC1nNhPC; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=goz7/Jaf4ISmsYsuMcfHf7Eo9DZbVZ3OKRvRhswQR7qPuxZk02iWj5LF2tDV5ZSbQPFuITodo6+NHu/YWf8lJmg7IEYPPRj5S1Pfzk1wdMQJGE+Go2WLBAUsdXFIg5QY6cbmENFWrn/2KvAbvURB+U7kHHRAmoD0KtpmXJO6LHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EgXYorBu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oC1nNhPC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F48F1F000E9;
-	Tue,  1 Sep 2026 15:34:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EgXYorBu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 886DF1F000E9;
+	Tue,  1 Sep 2026 15:55:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788276886;
-	bh=sXDKWyKAaYd6V/9rFYp5krd/4rh/b9keSzpuKc3ug44=;
+	s=k20260515; t=1788278108;
+	bh=ftA9g+WU49btnuuvO1W5pBrsNdslwndWDFpC3e4w3L8=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=oC1nNhPC8CSLvJ7DmoQa5fClWUYEKBBK8TqAd5V2p0PDokhn2XA0bHuiDnm9H9Em1
-	 6YZljdShXLM7ndMP4NO8e7P4eaAmBM/HIBB7uSOPUu9C6CWSGcYFUqIzmmunUD4QDS
-	 y4ekkUeYhkf3SbhBUrbPAaTLA7Q1V1oaVHszAuSksd7tlhYgScqKDP6jOaOs2dPoFJ
-	 ZA+7WXtFNXR8orl5LxZY/0sjxrtUZYlZF1VjfytHrLk36rpEffDEx1vOhmjuAUHCtc
-	 bW1ZDJcvTVpAcixdjZyH1nXB90TfEKyOJUSWPppPJLGSPHndcXZ3gD37WiSIZFDFAB
-	 pl5P7wRY+pWCg==
-Content-Type: multipart/mixed; boundary="===============4761417725018966106=="
+	b=EgXYorBuQ5dXGLh1vd/XRPC3pwjmYclfmhgAiGCi1Lp/NctgkZF+fdovvhiui3EIT
+	 vl4lC/DO6f72hbfwYAh+cPUZpVnUkla/8oOZz/US/foIgUfDtKCvKR8eqb8p7SuLI0
+	 Zv747y6/5aBKzTraUuTWrfQOpVuWOuc5jedNDJKhm5KXZ2ikl25yREI2Uiwv29hBKl
+	 rJOix2RhEZLxoSPczzOaoPd+ZDmXxObOLa/BksMUwYNd3hDmBPCWnM3eJsORYpFeVg
+	 xAIT81bPmUWC4wrjhqqknZ04S+umWOslllW+0mOG18vsWeDuUi8Ri9NuXWqlz1xHKM
+	 +AB+koY2XiGfQ==
+Content-Type: multipart/mixed; boundary="===============6160038322550667007=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f987bc5dcd678e13cd661ba9830f30d43cf612f3ee8548020491c791c35308fc@mail.kernel.org>
-In-Reply-To: <20260901141954.29449-1-suchitkarunakaran@gmail.com>
-References: <20260901141954.29449-1-suchitkarunakaran@gmail.com>
-Subject: Re: [PATCH] selftests/bpf: Fix map_lookup_percpu_elem on sparse CPU IDs
+Message-Id: <c846615ea25cf371f04302e136ce4b4dc50224fed1df1b1063afc94ecfc711db@mail.kernel.org>
+In-Reply-To: <20260901150307.3474349-1-pulehui@huaweicloud.com>
+References: <20260901150307.3474349-1-pulehui@huaweicloud.com>
+Subject: Re: [PATCH bpf v3] bpf: Fix UAF due to concurrent consumption of ttrace lists in alloc_bulk
 From: bot+bpf-ci@kernel.org
-To: suchitkarunakaran@gmail.com,andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,shuah@kernel.org
-Cc: emil@etsalapatis.com,ihor.solodrai@linux.dev,jolsa@kernel.org,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,zhoufeng.zf@bytedance.com,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,suchitkarunakaran@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue,  1 Sep 2026 15:34:45 +0000 (UTC)
+To: pulehui@huaweicloud.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,houtao@huaweicloud.com,leon.hwang@linux.dev
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,yonghong.song@linux.dev,song@kernel.org,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,pulehui@huawei.com,pulehui@huaweicloud.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue,  1 Sep 2026 15:55:07 +0000 (UTC)
 
---===============4761417725018966106==
+--===============6160038322550667007==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
-> index bfb1bf3fd427b..849f33259c003 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
-> @@ -2,29 +2,45 @@
->  /* Copyright (c) 2022 Bytedance */
->
->  #include <test_progs.h>
-> +#include "bpf/libbpf_internal.h"
->  #include "test_map_lookup_percpu_elem.skel.h"
->
->  void test_map_lookup_percpu_elem(void)
->  {
->  	struct test_map_lookup_percpu_elem *skel;
-> -	__u64 key = 0, sum;
-> -	int ret, i, nr_cpus = libbpf_num_possible_cpus();
-> +	bool *possible = NULL;
-> +	__u64 key = 0, sum = 0;
-> +	int cpu, nr_cpu_ids, nr_cpus, ret, slot = 0;
->  	__u64 *buf;
->
-> -	buf = malloc(nr_cpus*sizeof(__u64));
-> -	if (!ASSERT_OK_PTR(buf, "malloc"))
-> +	ret = parse_cpu_mask_file("/sys/devices/system/cpu/possible", &possible,
-> +				  &nr_cpu_ids);
-> +	if (!ASSERT_OK(ret, "parse possible CPU mask"))
->  		return;
->
-> -	for (i = 0; i < nr_cpus; i++)
-> -		buf[i] = i;
-> -	sum = (nr_cpus - 1) * nr_cpus / 2;
-> +	nr_cpus = libbpf_num_possible_cpus();
-> +	if (!ASSERT_GT(nr_cpus, 0, "libbpf_num_possible_cpus"))
-> +		goto free_mask;
-> +
-> +	buf = malloc(nr_cpus * sizeof(*buf));
-> +	if (!ASSERT_OK_PTR(buf, "malloc"))
-> +		goto free_mask;
-> +
-> +	for (cpu = 0; cpu < nr_cpu_ids; cpu++) {
-> +		if (!possible[cpu])
-> +			continue;
-> +		buf[slot++] = cpu;
-> +		sum += cpu;
-> +	}
+> This is expected because, as noted in commit 57b23c0f612d ("bpf: Retire
+> rcu_trace_implies_rcu_gp()"), an RCU Tasks Trace GP currently implies
+> (and will continue to imply in the future) a normal RCU GP. Since
+> alloc_bulk() runs in an RCU read-side CS (!PREEMPT_RT runs in IRQ
+> context, PREEMPT_RT runs with guard(rcu)), an RCU Tasks Trace GP cannot
+> complete while alloc_bulk() is accessing the list.
 
-Does this buffer layout match how the kernel expects it?
+Is this claim about the RCU Tasks Trace GP accurate? Looking at the SRCU
+implementation, synchronize_rcu() sits in the middle of the SRCU scan
+(kernel/rcu/srcutree.c srcu_readers_active_idx_check()), not at the end.
 
-The userspace side fills buf[] with one entry per possible CPU, storing
-the logical CPU ID at packed index 'slot' (0, 1, 2, ...). For a mask
-like 0,2-3, this creates buf = {0, 2, 3} with 3 entries total.
+An RCU GP is only required to wait for read-side critical sections that
+were already in progress when the GP started. Once a CPU reports its
+quiescent state, a new hardirq handler on that CPU does not delay the GP.
+So an alloc_bulk() that starts after the synchronize_rcu() call cannot
+hold off the RCU Tasks Trace GP at all.
 
-Looking at the kernel's update path, both percpu array and hash maps
-index the user buffer by logical CPU ID:
+Even if the GP could not complete during alloc_bulk(), that would not
+prevent the callback from running during alloc_bulk(). Callbacks are
+invoked asynchronously after the GP ends (srcu_invoke_callbacks workqueue
+in current kernels, or rcu_tasks_invoke_cbs in the 6.6 kernel that
+produced the splat).
 
-kernel/bpf/arraymap.c:469 bpf_percpu_array_update()
-    for_each_possible_cpu(cpu) {
-            ptr = per_cpu_ptr(pptr, cpu);
-            val = (map_flags & BPF_F_ALL_CPUS) ? value : value + size * cpu;
+The race diagram three paragraphs later shows __free_rcu executing
+concurrently with alloc_bulk's llist_del_first, which would not be
+possible if the statement above were true.
 
-kernel/bpf/hashtab.c:1038 pcpu_copy_value()
-    for_each_possible_cpu(cpu) {
-            ...
-            copy_map_value_long(&htab->map, per_cpu_ptr(pptrs, cpu),
-                    value + off + size * cpu);
+Would it be more accurate to say that RCU read-side protection is not the
+missing ingredient here, but rather mutual exclusion between the two
+llist consumers?
 
-With the mask 0,2-3 (num_possible_cpus() = 3, nr_cpu_ids = 4), the
-update walks possible CPUs {0, 2, 3} and indexes the buffer as:
-
-  cpu 0:  *(value + 0)  = buf[0] = 0   (intended)
-  cpu 2:  *(value + 16) = buf[2] = 3   (expects 2, gets 3)
-  cpu 3:  *(value + 24)             (past the 24-byte buffer end)
-
-The userspace layout is packed (3 entries), but the kernel accesses it
-as sparse (indexed by CPU ID). The test sized the buffer for
-num_possible_cpus() bytes, but the kernel's 'size * cpu' indexing can
-exceed that when the possible mask has holes.
-
-Should the userspace buffer either be laid out by CPU ID (sized for
-nr_cpu_ids, with holes at non-possible indices), or should the kernel's
-update path use packed indexing like the lookup direction does?
-
-> +	if (!ASSERT_EQ(slot, nr_cpus, "possible CPU mask weight"))
-> +		goto exit;
->
->  	skel = test_map_lookup_percpu_elem__open();
->  	if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open"))
->  		goto exit;
->
->  	skel->rodata->my_pid = getpid();
-> -	skel->rodata->nr_cpus = nr_cpus;
-> +	skel->rodata->nr_cpu_ids = nr_cpu_ids;
->
->  	ret = test_map_lookup_percpu_elem__load(skel);
+> diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
+> index e9662db7198f..5927943c765a 100644
+> --- a/kernel/bpf/memalloc.c
+> +++ b/kernel/bpf/memalloc.c
 
 [ ... ]
+
+> @@ -214,25 +215,25 @@ static void alloc_bulk(struct bpf_mem_cache *c, int cnt, int node, bool atomic)
+>  	gfp = __GFP_NOWARN | __GFP_ACCOUNT;
+>  	gfp |= atomic ? GFP_NOWAIT : GFP_KERNEL;
+>
+> -	for (i = 0; i < cnt; i++) {
+> -		/*
+> -		 * For every 'c' llist_del_first(&c->free_by_rcu_ttrace); is
+> -		 * done only by one CPU == current CPU. Other CPUs might
+> -		 * llist_add() and llist_del_all() in parallel.
+> -		 */
+> -		obj = llist_del_first(&c->free_by_rcu_ttrace);
+> -		if (!obj)
+> -			break;
+> -		add_obj_to_free_list(c, obj);
+> -	}
+> -	if (i >= cnt)
+> -		return;
+> +	scoped_guard(raw_spinlock_irqsave, &c->lock) {
+> +		for (i = 0; i < cnt; i++) {
+> +			/*
+> +			 * For every 'c' llist_del_first(&c->free_by_rcu_ttrace); is
+> +			 * done only by one CPU == current CPU. Other CPUs might
+> +			 * llist_add() and llist_del_all() in parallel.
+> +			 */
+> +			obj = llist_del_first(&c->free_by_rcu_ttrace);
+> +			if (!obj)
+> +				break;
+> +			add_obj_to_free_list(c, obj);
+> +		}
+>
+> -	for (; i < cnt; i++) {
+> -		obj = llist_del_first(&c->waiting_for_gp_ttrace);
+> -		if (!obj)
+> -			break;
+> -		add_obj_to_free_list(c, obj);
+> +		for (; i < cnt; i++) {
+> +			obj = llist_del_first(&c->waiting_for_gp_ttrace);
+> +			if (!obj)
+> +				break;
+> +			add_obj_to_free_list(c, obj);
+> +		}
+>  	}
+>  	if (i >= cnt)
+>  		return;
+
+The comment moved inside the new critical section still states the
+lockless rationale:
+
+    /*
+     * For every 'c' llist_del_first(&c->free_by_rcu_ttrace); is
+     * done only by one CPU == current CPU. Other CPUs might
+     * llist_add() and llist_del_all() in parallel.
+     */
+
+The last sentence asserts that concurrent llist_del_all() is fine.
+According to include/linux/llist.h, the del_first x del_all combination
+requires a lock, and the commit message's first race diagram shows exactly
+this combination producing the KASAN splat.
+
+Should this comment be updated to reflect that c->lock now serializes
+against __free_rcu() and the draining branch of do_call_rcu_ttrace(),
+rather than asserting that lockless operation is safe?
+
+The related comments in enque_to_free() ("Nothing races to add to
+free_by_rcu_ttrace list.") and drain_mem_cache() ("Except for
+waiting_for_gp_ttrace list, there are no concurrent operations on these
+lists") may also need updates, though they are outside this diff.
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33521264909
---===============4761417725018966106==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33525009657
+--===============6160038322550667007==--
