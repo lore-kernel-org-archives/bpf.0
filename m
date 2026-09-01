@@ -1,376 +1,138 @@
-Received: from mail-pg1-f227.google.com (mail-pg1-f227.google.com [209.85.215.227])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C9C7367B9F
-	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 06:53:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.227
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AE943AFCFF;
+	Tue,  1 Sep 2026 07:02:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788245634; cv=none; b=M9ASJLq60LxFLVSiSGVFORKeN47wkRd+GH4RnuVXyfnrxKYYHBqo5K1xRkQVV2CvPNAXzgmgFaRb4Qiy2peiQSGrSrk9EAT1T+UHT3iFDXI7yM3uU7bbD0PCDa7epqTKG0st+QGJI/WRb6O++OFlYvHal+AIZKXAEzftHWQUjPo=
+	t=1788246165; cv=none; b=bppFkW/1Mz/SD91fxJk8t6u18MLWUeOM0cizHaehuxL+KnbrIm0PXpyzs4VuyxKx9pWHtjcZ81DCNecM2RUZtg3Efc1Rbjz/UK/DnePo+mPtTrw/txTLZC0t5sH3Tm2YhqhEi5PjNC7FBoYlx6ZCfoFhGaVoN9gIr5ZTHbdM/oo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788245634; c=relaxed/simple;
-	bh=EAN73CwP5GYNU4Aef57VO4fpEGSppas2T3CEp9oChiE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GLot7RNiiPbF3hIT/dV5SCF93vEvk4Eou/Is53Q9IOi/od4ANS92Dywzn9ejazpv7cUFbb5sJ7NfQ8hUc1V/iTqLDvERwiSVlSMcRjWUfzCDW76+RSldIfIDIh6hddupAUTN4RCvrk7e8pIdl+dnpqxaKSbmVvtMFbTRUWFvgk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=dNueY37O; arc=none smtp.client-ip=209.85.215.227
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	s=arc-20240116; t=1788246165; c=relaxed/simple;
+	bh=qJJBDCacdUAZFU2Dcce9ybJITAteO7mvwnJeT8NKy/o=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=uhXUm2Xgkcowlpdp3iBuFJmGpiUK64g4NpDNNsADyjoLkMM28O6pgtVuFbhPB70z/jGrLr5IAEuWGa4eqN3iltmsJyFv7ABRgE1cD2fA35Y436/NFEHIepwDyaFm144Ms/2cGPPWV6jS3DFIK+hB5aCMk64h6T+ptbATHygOOEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=MzwJhCAX; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="dNueY37O"
-Received: by mail-pg1-f227.google.com with SMTP id 41be03b00d2f7-c96c92c0980so422060a12.3
-        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 23:53:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788245632; x=1788850432;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=pqodk9eZGUbM+q/R0T+xK36vWMF9pQz22svUZwiNjm8=;
-        b=psO4hTHdedOpAlxOCE7vO8hGiNSLS/fML2US2fTyT6PTHNRu9AAqWnsr6YnbTtlKpH
-         aWdnxcj5bowwroRQ1XTKbz7dStFCrAWTJGS9XcfTAetZLN436DMsYKXRQQCt6/XORlhY
-         RK2QdNnNAsoryQQAT7BIKhpM/EVeAtBNU+K7OF46ljq/Bo4qtxS+nkywohrlcwfZfALx
-         qi0pqpQjOvre41UZdRE2HitBr1/o55BqmqgvvHnTJ/z3CPiohixMaSb6QhUmF350ZaGs
-         RJnkezX5seOk8VjOrPQJQTQOILYx1PdQCqRa3g87lXFPyxrm06Qa+dyIZw2t263RH0D/
-         T1kg==
-X-Forwarded-Encrypted: i=1; AKwUvBywnJvlDjiyBEt6k7YWbvqVAxpZVvI2gVYovtaVwOml6+dEERFfYFjNpsJZ4TrxoGlCccY=@vger.kernel.org
-X-Gm-Message-State: AFuF++n0Z0hTI00uu8W6fcNM6lxlErWxd/4Gjs4WcPVwQUTDy0WDffN6
-	BIzQmcw4U0n+9OJgXZU56MIFtXOvBoP/IFDOQU2rQXrZOW/FWQ6DvpK1KLrwCuMdKbKX5xTLk6Z
-	17bFoHFcEHfc4Mga0i+pCeP2J7IYrGe5o54mIDn8k7UZV/tz/yEzTqVD/80CCnqkK0ft5aexkfe
-	w4DBsSzX2KzqXh0CrhAkWVnrZbgjZUM/RlGlFhDFV+L3MyU2BNNQTcRKTh0NUmO1CHe4mP6wVAx
-	ezdpSg=
-X-Gm-Gg: AYBFou37LetKqZxlrs+E0T9Wabo7pZBsyY8wsodXgwdNOnJP6vuREwHwtI+ourna3fs
-	A55iLjVjrqT5KD1yM+ZIOEl0c/SYLyxrjjqP/Hg3W3UmAWCKD6oKVonekUxyfIkjQDL8f5LMoN8
-	sdpBBvg4MHqUUiz0DRiyAzshgiry0ZJeyT3Op5LZ4MV5EoHPWXsqK13L2fywkcp99Kv/Hu2XYd7
-	12c9CEFDyWlwHYNFmuSjTs35DnO5FkI51g+Tx3a+0LNVBZaNqzlQ09Y2GKOQKCoB2a/cYXgMLUh
-	hi3KHx9EuJwDM1rzRocYsXG5w+PiVVnwRQMmkldbGc1qH6Slljjd4caJ7Qz1XYLoHIX7wGm71bf
-	RSdwDSjTzztRgJgQIr88hr/JaYVaqErGCAUcQnFk9TWNp62xlFX2sxZ4jv/2njRUQvPO9+2ymEo
-	M3yPNZ2aAub2BC64DI3XWvA+OD12mEv0wX
-X-Received: by 2002:a17:90b:4acf:b0:398:b17b:3bd2 with SMTP id 98e67ed59e1d1-398b17b3dd4mr27797034a91.4.1788245631483;
-        Mon, 31 Aug 2026 23:53:51 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-23.dlp.protect.broadcom.com. [144.49.247.23])
-        by smtp-relay.gmail.com with ESMTPS id 98e67ed59e1d1-3990d501280sm709161a91.11.2026.08.31.23.53.51
-        for <bpf@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 31 Aug 2026 23:53:51 -0700 (PDT)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-90cc934fe9eso9795996d6.3
-        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 23:53:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1788245630; x=1788850430; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=pqodk9eZGUbM+q/R0T+xK36vWMF9pQz22svUZwiNjm8=;
-        b=dNueY37O4XAYAyXyiA4s5gxlQdntu/ArT23AV6sgelCcOSEMceHEvQcQC9LbfUj6rL
-         P0ZDy4BDc4X/nb4zvsxptrHMslreJ1Uf4MAIcd/uOgTvZiyJvcyDDkLY1JdmjW0B0+0G
-         dYrNfT7styGm9JleJuImX0ksxGTu/VIT3bviE=
-X-Forwarded-Encrypted: i=1; AKwUvBwvVwG1uyEB4h5KH/GkKs9zpreSu7gX/DEt/JaPmFPLjcVXkusci9YyFI/EGdDO14sPJLE=@vger.kernel.org
-X-Received: by 2002:a05:6214:3f87:b0:90e:9a16:aad9 with SMTP id 6a1803df08f44-90e9a16ab8emr7413586d6.22.1788245630097;
-        Mon, 31 Aug 2026 23:53:50 -0700 (PDT)
-X-Received: by 2002:a05:6214:3f87:b0:90e:9a16:aad9 with SMTP id 6a1803df08f44-90e9a16ab8emr7413246d6.22.1788245629647;
-        Mon, 31 Aug 2026 23:53:49 -0700 (PDT)
-Received: from photon-dev-haas ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-90ce8769b76sm93125576d6.13.2026.08.31.23.53.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2026 23:53:49 -0700 (PDT)
-From: Ajay Kaher <ajay.kaher@broadcom.com>
-To: stable@vger.kernel.org,
-	gregkh@linuxfoundation.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	ajay.kaher@broadcom.com,
-	alexey.makhalov@broadcom.com,
-	vamsi-krishna.brahmajosyula@broadcom.com,
-	yin.ding@broadcom.com,
-	tapas.kundu@broadcom.com,
-	Anton Protopopov <a.s.protopopov@gmail.com>
-Subject: [PATCH v6.12] bpf: fix the return value of push_stack
-Date: Tue,  1 Sep 2026 06:23:57 +0000
-Message-ID: <20260901062357.1150988-1-ajay.kaher@broadcom.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="MzwJhCAX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=qJJBDCacdUAZFU2Dcce9ybJITAteO7mvwnJeT8NKy/o=; b=M
+	zwJhCAXjpGUn4yzBlkBP36h9xzkyNU/RyD66czEZfjwdEKgCE0BWYXKcVjjw/y/W
+	senlcza3CREUuSvol4rUlN3R1sv0w1rHJxt/MImk29QD4wwuxG99+iueAAbfMaYi
+	OVqohofuCmTLU6LcI51mqmh1gAenLh8wqX/jA0hlH8=
+Received: from chenyuan_fl$163.com ( [116.128.244.171] ) by
+ ajax-webmail-wmsvr-40-109 (Coremail) ; Tue, 1 Sep 2026 15:01:39 +0800 (CST)
+Date: Tue, 1 Sep 2026 15:01:39 +0800 (CST)
+From: chenyuan  <chenyuan_fl@163.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+	"Alexei Starovoitov" <ast@kernel.org>,
+	"Daniel Borkmann" <daniel@iogearbox.net>,
+	"Andrii Nakryiko" <andrii@kernel.org>,
+	"Eduard Zingerman" <eddyz87@gmail.com>,
+	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+	"Martin KaFai Lau" <martin.lau@linux.dev>,
+	"Song Liu" <song@kernel.org>,
+	"Yonghong Song" <yonghong.song@linux.dev>,
+	"Jiri Olsa" <jolsa@kernel.org>,
+	"Emil Tsalapatis" <emil@etsalapatis.com>,
+	"Ihor Solodrai" <ihor.solodrai@linux.dev>,
+	"Yuan Chen" <chenyuan@kylinos.cn>
+Subject: Re:Re: [PATCH bpf-next v4 2/3] bpf, arena: fix range_tree_set
+ inconsistency on kmalloc_nolock failure
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
+ 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
+In-Reply-To: <CAADnVQKPSWBzaEc7QBT39C_N_32Gu5_P5Cob9G0rxcDgiSQg6g@mail.gmail.com>
+References: <20260824134016.2006188-1-chenyuan_fl@163.com>
+ <20260824134016.2006188-3-chenyuan_fl@163.com>
+ <CAADnVQKPSWBzaEc7QBT39C_N_32Gu5_P5Cob9G0rxcDgiSQg6g@mail.gmail.com>
+X-NTES-SC: AL_Qu2TCv6fuUgi7yKQZOkcnEsah+8/XMC0vvsm1YdRc+IEgR/pyjw7Xn19IXTk2eWJMAOIsAiJUBZp6MlkZK9Z5KQ90QDX0kXcxaO5edhMFw==
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
+Message-ID: <704850b0.58d3.1a05bc6055a.Coremail.chenyuan_fl@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:bSgvCgD3_0tUeJZq2Ps8AA--.7543W
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5hRzMWqWeFT+fQAA3j
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-
-commit 6ea5fc92a0fc1cde976cb701db2c1dba4dcab7cf upstream.
-
-In [1] Eduard mentioned that on push_stack failure verifier code
-should return -ENOMEM instead of -EFAULT. After checking with the
-other call sites I've found that code randomly returns either -ENOMEM
-or -EFAULT. This patch unifies the return values for the push_stack
-(and similar push_async_cb) functions such that error codes are
-always assigned properly.
-
-  [1] https://lore.kernel.org/bpf/20250615085943.3871208-1-a.s.protopopov@gmail.com
-
-Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Link: https://lore.kernel.org/r/20251019202145.3944697-2-a.s.protopopov@gmail.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-[ Ajay: Modified to apply on v6.12. The check_kfunc_call hunk for a failed lock
-  acquisition was dropped: that code path does not exist in v6.12. ]
-Signed-off-by: Ajay Kaher <ajay.kaher@broadcom.com>
----
- kernel/bpf/verifier.c | 88 +++++++++++++++++++++++++++++----------------------
- 1 file changed, 50 insertions(+), 38 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 64a6ec8eb847..4c439ab978a7 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1700,8 +1700,10 @@ static struct bpf_verifier_state *push_stack(struct bpf_verifier_env *env,
- 	int err;
- 
- 	elem = kzalloc(sizeof(struct bpf_verifier_stack_elem), GFP_KERNEL);
--	if (!elem)
-+	if (!elem) {
-+		err = -ENOMEM;
- 		goto err;
-+	}
- 
- 	elem->insn_idx = insn_idx;
- 	elem->prev_insn_idx = prev_insn_idx;
-@@ -1710,12 +1712,15 @@ static struct bpf_verifier_state *push_stack(struct bpf_verifier_env *env,
- 	env->head = elem;
- 	env->stack_size++;
- 	err = copy_verifier_state(&elem->st, cur);
--	if (err)
-+	if (err) {
-+		err = -ENOMEM;
- 		goto err;
-+	}
- 	elem->st.speculative |= speculative;
- 	if (env->stack_size > BPF_COMPLEXITY_LIMIT_JMP_SEQ) {
- 		verbose(env, "The sequence of %d jumps is too complex.\n",
- 			env->stack_size);
-+		err = -E2BIG;
- 		goto err;
- 	}
- 	if (elem->st.parent) {
-@@ -1736,7 +1741,7 @@ static struct bpf_verifier_state *push_stack(struct bpf_verifier_env *env,
- 	env->cur_state = NULL;
- 	/* pop all elements and return */
- 	while (!pop_stack(env, NULL, NULL, false));
--	return NULL;
-+	return ERR_PTR(err);
- }
- 
- #define CALLER_SAVED_REGS 6
-@@ -2542,10 +2547,13 @@ static struct bpf_verifier_state *push_async_cb(struct bpf_verifier_env *env,
- {
- 	struct bpf_verifier_stack_elem *elem;
- 	struct bpf_func_state *frame;
-+	int err;
- 
- 	elem = kzalloc(sizeof(struct bpf_verifier_stack_elem), GFP_KERNEL);
--	if (!elem)
-+	if (!elem) {
-+		err = -ENOMEM;
- 		goto err;
-+	}
- 
- 	elem->insn_idx = insn_idx;
- 	elem->prev_insn_idx = prev_insn_idx;
-@@ -2557,6 +2565,7 @@ static struct bpf_verifier_state *push_async_cb(struct bpf_verifier_env *env,
- 		verbose(env,
- 			"The sequence of %d jumps is too complex for async cb.\n",
- 			env->stack_size);
-+		err = -E2BIG;
- 		goto err;
- 	}
- 	/* Unlike push_stack() do not copy_verifier_state().
-@@ -2572,8 +2581,10 @@ static struct bpf_verifier_state *push_async_cb(struct bpf_verifier_env *env,
- 	elem->st.insn_hist_start = env->cur_state->insn_hist_end;
- 	elem->st.insn_hist_end = elem->st.insn_hist_start;
- 	frame = kzalloc(sizeof(*frame), GFP_KERNEL);
--	if (!frame)
-+	if (!frame) {
-+		err = -ENOMEM;
- 		goto err;
-+	}
- 	init_func_state(env, frame,
- 			BPF_MAIN_FUNC /* callsite */,
- 			0 /* frameno within this callchain */,
-@@ -2585,7 +2596,7 @@ static struct bpf_verifier_state *push_async_cb(struct bpf_verifier_env *env,
- 	env->cur_state = NULL;
- 	/* pop all elements and return */
- 	while (!pop_stack(env, NULL, NULL, false));
--	return NULL;
-+	return ERR_PTR(err);
- }
- 
- 
-@@ -8471,8 +8482,8 @@ static int process_iter_next_call(struct bpf_verifier_env *env, int insn_idx,
- 		prev_st = find_prev_entry(env, cur_st->parent, insn_idx);
- 		/* branch out active iter state */
- 		queued_st = push_stack(env, insn_idx + 1, insn_idx, false);
--		if (!queued_st)
--			return -ENOMEM;
-+		if (IS_ERR(queued_st))
-+			return PTR_ERR(queued_st);
- 
- 		queued_iter = get_iter_from_state(queued_st, meta);
- 		queued_iter->iter.state = BPF_ITER_STATE_ACTIVE;
-@@ -9947,8 +9958,8 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
- 		async_cb = push_async_cb(env, env->subprog_info[subprog].start,
- 					 insn_idx, subprog,
- 					 is_bpf_wq_set_callback_impl_kfunc(insn->imm));
--		if (!async_cb)
--			return -EFAULT;
-+		if (IS_ERR(async_cb))
-+			return PTR_ERR(async_cb);
- 		callee = async_cb->frame[0];
- 		callee->async_entry_cnt = caller->async_entry_cnt + 1;
- 
-@@ -9964,8 +9975,8 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
- 	 * proceed with next instruction within current frame.
- 	 */
- 	callback_state = push_stack(env, env->subprog_info[subprog].start, insn_idx, false);
--	if (!callback_state)
--		return -ENOMEM;
-+	if (IS_ERR(callback_state))
-+		return PTR_ERR(callback_state);
- 
- 	err = setup_func_entry(env, subprog, insn_idx, set_callee_state_cb,
- 			       callback_state);
-@@ -13246,16 +13257,15 @@ struct bpf_sanitize_info {
- 	bool mask_to_left;
- };
- 
--static struct bpf_verifier_state *
--sanitize_speculative_path(struct bpf_verifier_env *env,
--			  const struct bpf_insn *insn,
--			  u32 next_idx, u32 curr_idx)
-+static int sanitize_speculative_path(struct bpf_verifier_env *env,
-+				     const struct bpf_insn *insn,
-+				     u32 next_idx, u32 curr_idx)
- {
- 	struct bpf_verifier_state *branch;
- 	struct bpf_reg_state *regs;
- 
- 	branch = push_stack(env, next_idx, curr_idx, true);
--	if (branch && insn) {
-+	if (!IS_ERR(branch) && insn) {
- 		regs = branch->frame[branch->curframe]->regs;
- 		if (BPF_SRC(insn->code) == BPF_K) {
- 			mark_reg_unknown(env, regs, insn->dst_reg);
-@@ -13264,7 +13274,7 @@ sanitize_speculative_path(struct bpf_verifier_env *env,
- 			mark_reg_unknown(env, regs, insn->src_reg);
- 		}
- 	}
--	return branch;
-+	return PTR_ERR_OR_ZERO(branch);
- }
- 
- static int sanitize_ptr_alu(struct bpf_verifier_env *env,
-@@ -13283,7 +13293,6 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
- 	u8 opcode = BPF_OP(insn->code);
- 	u32 alu_state, alu_limit;
- 	struct bpf_reg_state tmp;
--	bool ret;
- 	int err;
- 
- 	if (can_skip_alu_sanitation(env, insn))
-@@ -13356,11 +13365,12 @@ static int sanitize_ptr_alu(struct bpf_verifier_env *env,
- 		tmp = *dst_reg;
- 		copy_register_state(dst_reg, ptr_reg);
- 	}
--	ret = sanitize_speculative_path(env, NULL, env->insn_idx + 1,
--					env->insn_idx);
--	if (!ptr_is_dst_reg && ret)
-+	err = sanitize_speculative_path(env, NULL, env->insn_idx + 1, env->insn_idx);
-+	if (err < 0)
-+		return REASON_STACK;
-+	if (!ptr_is_dst_reg)
- 		*dst_reg = tmp;
--	return !ret ? REASON_STACK : 0;
-+	return 0;
- }
- 
- static void sanitize_mark_insn_seen(struct bpf_verifier_env *env)
-@@ -15672,8 +15682,8 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 
- 		/* branch out 'fallthrough' insn as a new state to explore */
- 		queued_st = push_stack(env, idx + 1, idx, false);
--		if (!queued_st)
--			return -ENOMEM;
-+		if (IS_ERR(queued_st))
-+			return PTR_ERR(queued_st);
- 
- 		queued_st->may_goto_depth++;
- 		if (prev_st)
-@@ -15751,10 +15761,11 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 		 * the fall-through branch for simulation under speculative
- 		 * execution.
- 		 */
--		if (!env->bypass_spec_v1 &&
--		    !sanitize_speculative_path(env, insn, *insn_idx + 1,
--					       *insn_idx))
--			return -EFAULT;
-+		if (!env->bypass_spec_v1) {
-+			err = sanitize_speculative_path(env, insn, *insn_idx + 1, *insn_idx);
-+			if (err < 0)
-+				return err;
-+		}
- 		if (env->log.level & BPF_LOG_LEVEL)
- 			print_insn_state(env, this_branch->frame[this_branch->curframe]);
- 		*insn_idx += insn->off;
-@@ -15764,11 +15775,12 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 		 * program will go. If needed, push the goto branch for
- 		 * simulation under speculative execution.
- 		 */
--		if (!env->bypass_spec_v1 &&
--		    !sanitize_speculative_path(env, insn,
--					       *insn_idx + insn->off + 1,
--					       *insn_idx))
--			return -EFAULT;
-+		if (!env->bypass_spec_v1) {
-+			err = sanitize_speculative_path(env, insn, *insn_idx + insn->off + 1,
-+							*insn_idx);
-+			if (err < 0)
-+				return err;
-+		}
- 		if (env->log.level & BPF_LOG_LEVEL)
- 			print_insn_state(env, this_branch->frame[this_branch->curframe]);
- 		return 0;
-@@ -15791,8 +15803,8 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 
- 	other_branch = push_stack(env, *insn_idx + insn->off + 1, *insn_idx,
- 				  false);
--	if (!other_branch)
--		return -EFAULT;
-+	if (IS_ERR(other_branch))
-+		return PTR_ERR(other_branch);
- 	other_branch_regs = other_branch->frame[other_branch->curframe]->regs;
- 
- 	if (BPF_SRC(insn->code) == BPF_X) {
-@@ -16129,8 +16141,8 @@ static int check_ld_abs(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 
- 		mark_reg_scratched(env, BPF_REG_0);
- 		branch = push_stack(env, env->insn_idx + 1, env->insn_idx, false);
--		if (!branch)
--			return -EFAULT;
-+		if (IS_ERR(branch))
-+			return PTR_ERR(branch);
- 		mark_reg_known_zero(env, regs, BPF_REG_0);
- 		err = prepare_func_exit(env, &env->insn_idx);
- 		if (err)
--- 
-2.53.0
-
+ClRoZSB0d28gbG9va3VwcyBhbnN3ZXIgZGlmZmVyZW50IHF1ZXN0aW9ucywgc28gdGhlIHNlY29u
+ZCBvbmUgaXMKbm90IHJlZHVuZGFudDoKCi0gVGhlIHByZS1jbGVhciBsb29rdXAgb25seSBjb25z
+dW1lcyB0aGUgYm9vbGVhbiByZXN1bHQuICBOb2RlcyBhcmUKICBkaXNqb2ludCwgYW5kIGEgbm9k
+ZSBjb3ZlcmluZyBib3RoIHN0YXJ0IC0gMSBhbmQgbGFzdCArIDEgd291bGQKICBmdWxseSBjb3Zl
+ciBbc3RhcnQsIGxhc3RdLCB3aGljaCBpcyByZWplY3RlZCBieSB0aGUgZWFybHkgcmV0dXJuCiAg
+YWJvdmUuICBIZW5jZSByYW5nZV90cmVlX2NsZWFyKCkgY2FuIG9ubHkgcmVtb3ZlIG9yIHRydW5j
+YXRlIG5vZGVzCiAgb3ZlcmxhcHBpbmcgW3N0YXJ0LCBsYXN0XTogYSBub2RlIGNvdmVyaW5nIHN0
+YXJ0IC0gMSBlaXRoZXIgZW5kcwogIHRoZXJlICh1bnRvdWNoZWQpIG9yIHN0cmFkZGxlcyBzdGFy
+dCBhbmQgaXMgdHJ1bmNhdGVkIHRvCiAgW3JuX3N0YXJ0LCBzdGFydCAtIDFdLiAgQWRqYWNlbmN5
+IG9uIGVpdGhlciBzaWRlIGlzIHRoZXJlZm9yZQogIGludmFyaWFudCBhY3Jvc3MgdGhlIGNsZWFy
+LCBhbmQgIm5vIGFkamFjZW50IG5vZGUgb24gZWl0aGVyIHNpZGUiCiAgYmVmb3JlIHRoZSBjbGVh
+ciBpcyBleGFjdGx5IHRoZSBjb25kaXRpb24gZm9yIHRoZSBlbHNlLWJyYW5jaCAtLQogIHRoZSBv
+bmx5IGNhc2UgbmVlZGluZyBhIGZyZXNoIG5vZGUuICBJdCBtdXN0IGJlIGV2YWx1YXRlZCBiZWZv
+cmUKICBhbnkgdHJlZSBtb2RpZmljYXRpb24gdG8ga2VlcCB0aGUgLUVOT01FTSBwYXRoIHNpZGUt
+ZWZmZWN0IGZyZWUuCgotIFRoZSBwb3N0LWNsZWFyIGxvb2t1cCBmZXRjaGVzIHRoZSBub2RlIGhh
+bmRsZXMgdXNlZCBieSB0aGUKICBtZXJnZS9leHRlbmQgYnJhbmNoZXMuICBUaGUgcHJlLWNsZWFy
+IGhhbmRsZXMgY2Fubm90IGJlIHJldXNlZDoKICBhbiBhZGphY2VudCBub2RlIG1heSBzdHJhZGRs
+ZSB0aGUgcmFuZ2UgYW5kIGdldCB0cnVuY2F0ZWQgKGUuZy4KICBbc3RhcnQgLSAxLCBzdGFydCAr
+IDNdIGJlY29tZXMgW3N0YXJ0IC0gMSwgc3RhcnQgLSAxXSksIHNvIGJvdGgKICBpdHMgYm91bmRz
+IGFuZCBpdHMgcG9zaXRpb24gaW4gdGhlIHRyZWUgY2hhbmdlLiAgUmUtbG9va2luZyBpdCB1cAog
+IGtlZXBzIHJhbmdlX3RyZWVfc2V0KCkgaW5kZXBlbmRlbnQgb2YgaG93IHJhbmdlX3RyZWVfY2xl
+YXIoKQogIGltcGxlbWVudHMgdHJ1bmNhdGlvbiwgYW5kIGxlYXZlcyB0aGUgLUVGQVVMVCBjaGVj
+a3MgYmVsb3cgYXMgYQogIHNhbml0eSBjaGVjayBvZiB0aGUgY2xlYXIgaXRzZWxmLgogClRoZSBj
+b21tZW50IGluZGVlZCBmYWlscyB0byBzcGVsbCB0aGlzIG91dCAoYW5kICJhZGphY2VudCBmcmVl
+CnJhbmdlIiBpcyBiYWNrd2FyZHMpOyBJJ2xsIHJld29yZCBpdCBpbiB2NS4KCgpBdCAyMDI2LTA4
+LTI3IDEwOjU2OjA0LCAiQWxleGVpIFN0YXJvdm9pdG92IiA8YWxleGVpLnN0YXJvdm9pdG92QGdt
+YWlsLmNvbT4gd3JvdGU6Cj5PbiBNb24sIEF1ZyAyNCwgMjAyNiBhdCA2OjQw4oCvQU0gPGNoZW55
+dWFuX2ZsQDE2My5jb20+IHdyb3RlOgo+Pgo+PiBGcm9tOiBZdWFuIENoZW4gPGNoZW55dWFuQGt5
+bGlub3MuY24+Cj4+Cj4+IHJhbmdlX3RyZWVfc2V0KCkgcHJlLWFsbG9jYXRlcyB0aGUgbm9kZSBu
+ZWVkZWQgZm9yIGEgYnJhbmQtbmV3IHJhbmdlCj4+IGJlZm9yZSBjYWxsaW5nIHJhbmdlX3RyZWVf
+Y2xlYXIoKSwgc28gYW4gYWxsb2NhdGlvbiBmYWlsdXJlIHJldHVybnMKPj4gLUVOT01FTSB3aXRo
+b3V0IGhhdmluZyBtb2RpZmllZCB0aGUgdHJlZSAocHJldmlvdXNseSB0aGUgb3ZlcmxhcHBpbmcK
+Pj4gbm9kZXMgd2VyZSBhbHJlYWR5IHJlbW92ZWQgYnkgcmFuZ2VfdHJlZV9jbGVhcigpIGJlZm9y
+ZSB0aGUgYWxsb2NhdGlvbgo+PiB3YXMgYXR0ZW1wdGVkLCBwZXJtYW5lbnRseSBsb3NpbmcgdGhl
+IGNsZWFyZWQgc3ViLXJhbmdlcykuCj4+Cj4+IFNpZ25lZC1vZmYtYnk6IFl1YW4gQ2hlbiA8Y2hl
+bnl1YW5Aa3lsaW5vcy5jbj4KPj4gLS0tCj4+ICBrZXJuZWwvYnBmL3JhbmdlX3RyZWUuYyB8IDQ1
+ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKystLS0tLS0tLS0tCj4+ICAxIGZpbGUgY2hh
+bmdlZCwgMzQgaW5zZXJ0aW9ucygrKSwgMTEgZGVsZXRpb25zKC0pCj4+Cj4+IGRpZmYgLS1naXQg
+YS9rZXJuZWwvYnBmL3JhbmdlX3RyZWUuYyBiL2tlcm5lbC9icGYvcmFuZ2VfdHJlZS5jCj4+IGlu
+ZGV4IDE1YjU4ODM3N2E3Ni4uNTQwNTViMWZlNTQxIDEwMDY0NAo+PiAtLS0gYS9rZXJuZWwvYnBm
+L3JhbmdlX3RyZWUuYwo+PiArKysgYi9rZXJuZWwvYnBmL3JhbmdlX3RyZWUuYwo+PiBAQCAtMTk5
+LDYgKzE5OSw3IEBAIGludCBpc19yYW5nZV90cmVlX3NldChzdHJ1Y3QgcmFuZ2VfdHJlZSAqcnQs
+IHUzMiBzdGFydCwgdTMyIGxlbikKPj4gIGludCByYW5nZV90cmVlX3NldChzdHJ1Y3QgcmFuZ2Vf
+dHJlZSAqcnQsIHUzMiBzdGFydCwgdTMyIGxlbikKPj4gIHsKPj4gICAgICAgICB1MzIgbGFzdCA9
+IHN0YXJ0ICsgbGVuIC0gMTsKPj4gKyAgICAgICBzdHJ1Y3QgcmFuZ2Vfbm9kZSAqbmV3X3JuID0g
+TlVMTDsKPj4gICAgICAgICBzdHJ1Y3QgcmFuZ2Vfbm9kZSAqcmlnaHQ7Cj4+ICAgICAgICAgc3Ry
+dWN0IHJhbmdlX25vZGUgKmxlZnQ7Cj4+ICAgICAgICAgaW50IGVycjsKPj4gQEAgLTIwOCwyMCAr
+MjA5LDQwIEBAIGludCByYW5nZV90cmVlX3NldChzdHJ1Y3QgcmFuZ2VfdHJlZSAqcnQsIHUzMiBz
+dGFydCwgdTMyIGxlbikKPj4gICAgICAgICBpZiAobGVmdCAmJiBsZWZ0LT5ybl9zdGFydCA8PSBz
+dGFydCAmJiBsZWZ0LT5ybl9sYXN0ID49IGxhc3QpCj4+ICAgICAgICAgICAgICAgICByZXR1cm4g
+MDsKPj4KPj4gKyAgICAgICAvKgo+PiArICAgICAgICAqIEEgbmV3IG5vZGUgaXMgbmVlZGVkIG9u
+bHkgd2hlbiB0aGUgcmFuZ2UgaGFzIG5vIGFkamFjZW50IGZyZWUKPj4gKyAgICAgICAgKiByYW5n
+ZSBvbiBlaXRoZXIgc2lkZS4gIFRoaXMgaXMga25vd24gYmVmb3JlIGNsZWFyaW5nOiBhbnkgcmFu
+Z2UKPj4gKyAgICAgICAgKiBjb3ZlcmluZyBzdGFydCAtIDEgb3IgbGFzdCArIDEgc3Vydml2ZXMg
+dGhlIGNsZWFyIGFzIGFuIGFkamFjZW50Cj4+ICsgICAgICAgICogcGllY2UuCj4KPklmIHRoaXMg
+aXMgdHJ1ZSwgd2h5IGRvIGEgMm5kIGNhbGwgdG8gbGVmdCA9IHJhbmdlX2l0X2l0ZXJfZmlyc3Qo
+KSA/Cj4KPgo+PiAgQWxsb2NhdGUgb25seSBpbiB0aGF0IGNhc2UsIGJlZm9yZSBtb2RpZnlpbmcg
+dGhlIHRyZWUsIHNvCj4+ICsgICAgICAgICogYSBmYWlsdXJlIGxlYXZlcyB0aGUgcmFuZ2UgdHJl
+ZSB1bm1vZGlmaWVkCj4+ICsgICAgICAgICovCj4+ICsgICAgICAgbGVmdCA9IHJhbmdlX2l0X2l0
+ZXJfZmlyc3QocnQsIHN0YXJ0IC0gMSwgc3RhcnQgLSAxKTsKPj4gKyAgICAgICByaWdodCA9IHJh
+bmdlX2l0X2l0ZXJfZmlyc3QocnQsIGxhc3QgKyAxLCBsYXN0ICsgMSk7Cj4+ICsgICAgICAgaWYg
+KCFsZWZ0ICYmICFyaWdodCkgewo+PiArICAgICAgICAgICAgICAgbmV3X3JuID0ga21hbGxvY19u
+b2xvY2soc2l6ZW9mKHN0cnVjdCByYW5nZV9ub2RlKSwKPj4gKyAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIF9fR0ZQX0FDQ09VTlQsIE5VTUFfTk9fTk9ERSk7Cj4+ICsgICAg
+ICAgICAgICAgICBpZiAoIW5ld19ybikKPj4gKyAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJu
+IC1FTk9NRU07Cj4+ICsgICAgICAgfQo+PiArCj4+ICAgICAgICAgLyogQ2xlYXIgb3V0IGV2ZXJ5
+dGhpbmcgaW4gdGhlIHJhbmdlIHdlIHdhbnQgdG8gc2V0LiAqLwo+PiAgICAgICAgIGVyciA9IHJh
+bmdlX3RyZWVfY2xlYXIocnQsIHN0YXJ0LCBsZW4pOwo+PiAgICAgICAgIGlmIChlcnIpCj4+IC0g
+ICAgICAgICAgICAgICByZXR1cm4gZXJyOwo+PiArICAgICAgICAgICAgICAgZ290byBvdXRfZnJl
+ZV9uZXc7Cj4+Cj4+ICAgICAgICAgLyogRG8gd2UgaGF2ZSBhIGxlZnQtYWRqYWNlbnQgcmFuZ2Ug
+PyAqLwo+PiAgICAgICAgIGxlZnQgPSByYW5nZV9pdF9pdGVyX2ZpcnN0KHJ0LCBzdGFydCAtIDEs
+IHN0YXJ0IC0gMSk7Cj4KPnB3LWJvdDogY3IK
