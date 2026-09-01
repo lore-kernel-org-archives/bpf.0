@@ -1,185 +1,293 @@
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C451481FCF
-	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 17:56:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.181
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788285372; cv=pass; b=m5CRfiZcod4mKzmJfdpPBXrMYam5zxs7Ts4SYMsT1QBBrvjKxUfytzwj1oGcX4c97PHmf/dLgBBSOL9VXsqYaaft9tVhmv09OhVpLQfcJn1MTxu3Pt/iaYx255x47Wy4p+QGVR0r+I1wTopbDjXSLV+v69vYTOuqc6YB+OFpeow=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788285372; c=relaxed/simple;
-	bh=67sOcTV81JkApNbqX2hOH9VuBpJBwGJvqocSdcu1+PQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=i2GrD9hpPVswYvxhR+fwfMfWAzPDm+MuC33KnUcuwBq9qrITIgtryi6d10KgttmD+ncT34K+MkhqD/3OhuejKL0B7f17QqvEoxonZIGGe0jeZB+LxY+l5YF74YeBdpDfx1t2tTu4nqTUIIYAZKbwIAp5XYIZDNqSwLZ22vstK7U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JdMs/s5r; arc=pass smtp.client-ip=209.85.128.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7B94490BFE;
+	Tue,  1 Sep 2026 17:59:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788285558; cv=none; b=uvq5pVkU5tnh6qyhtEKhxUSgwqCQUWloF/mKXc0+EeqjLhCMi6FIY/G9qi/lwO50OYOBcYwE3UaVp7zyivArftCEeQpSBFI0/Vh/oUKHzhJZME0x/OrqPi8QXVL6oXa4fEJjxxC6d+myaof4vhFgEMWLahn184f76xwq93R5yOU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788285558; c=relaxed/simple;
+	bh=roF+e+hdaiMHtH92MP23h6CasbLm+AugGgJns+zy0lk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
+	 References:In-Reply-To; b=Hv07eQ1SJ5wBkzqZBlCaYsok1Mr5NWteqksfUs/RJvDSPvzKsEz+Il5xTUr/KNpGrFn/OE4nUiKS1qM6Ik0zLbpmTdAKeSlSVqZWqysUFIHSi1CczWYOObG+vg6xmKjVI5LO9tBWWB4ChcBd/ndAIt19QBOQQ81Vc33Wly6dAuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=0g1dp5U/; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JdMs/s5r"
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-855de2d0d4dso2091227b3.0
-        for <bpf@vger.kernel.org>; Tue, 01 Sep 2026 10:56:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788285370; cv=none;
-        d=google.com; s=arc-20260327;
-        b=qHNsZatqW0/Qc6SmwV4BQYBqGAEr2Vroid3WtOdTISqI2mSSrHrGykUJ2FAN/9cjhX
-         og5+pnGDiX0OxdHCcovIi1oDx5FTAunBE1JTBmB7p9rEpByl4f5P4vJNCuh7J3VrjwVm
-         GQmjAurE9nlqR4t6l2RL5wHWOfidaEattJUg1gLGlktae9XVhNFeckl2NKHMkMnDGax5
-         ArklpUF/l4noHzIio1pU6gf7mwpdwVtbktM2iIDO0REDK+zy2Fq8YT3UbXfQ87BXAKT9
-         B8KBaDomSn4A4pwfti2h11JT1BwLTdn2ZJm8118TgGqSzOZUWG/RA4kd5WRyUBUFMn5/
-         1X3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=RK13kFiX7PMi7gWJ/iJTKlNdEr1DypWw7v5RoTmQuwU=;
-        fh=rORxYEv5MRHYqTd4UzC7yFcfKOHEyqQiCdJSoJdB0Q8=;
-        b=gIkemZ8zRuADOVQQTdu6npLQIsi6ZrsPSjkwUdXrSPXE6FBiTyhXix9uzzai1daSKa
-         5kGGsHhwTKZTTGMpMuAnW1A/nKgKVsh0R1BIJVaIyJ4YmymnvhTOWKTQHDU21n47ZPJ7
-         2ZhQblUNHt354yAqnsBdyZusST+OquA1puZCAKYv1xnIWrW+dAmnEaYilnHKeB/w8/6E
-         cZJ3SwaCXuzZtZG+rF1KJ1lBhxm7crvMMwtRdECVxyVtZf1uxMBcup7ffd70By+AM3kt
-         9R/fZ6xI7I4Gj59kG9Pca/yccbUAWVTuYAKeizkLpFJBVlIcdwRoAu6zWKTpQAAcFj2r
-         Wihg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788285370; x=1788890170; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=RK13kFiX7PMi7gWJ/iJTKlNdEr1DypWw7v5RoTmQuwU=;
-        b=JdMs/s5rO5vrVn1wsI84kXvvZWj0zfi1tbpoO2gSKXZ/X8AzR2DMEniQ5ytsXqmOGB
-         BpWkpQEnL21LP2nIXYqF1UMDdXL0yUaq32tveRdfRQxZThQon0UfdOkcdcd9vl+BAJRO
-         7H84d67oukxoKSdeNIxozJRvjuY6uV8TJwPVPH3Z72BZIhaXNrLpm29W+WYKSWJ/K3Ap
-         zbP5AWVsuVcK9QQGs11X85e8U0srH3g/hhsEpmkI96NT+tUYKWvdGPB2wQltzWZii0au
-         EXxsZrp0stzNngd+tD/O0KGQKD8o98McCJGOeZwqOa703sNF/sHIqcRD5q1luDitgM2z
-         NejQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788285370; x=1788890170;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=RK13kFiX7PMi7gWJ/iJTKlNdEr1DypWw7v5RoTmQuwU=;
-        b=VqK2Bs4ZoYylySV/tRxg1WtkuNICXYdrvtwzpnDQUBmy3clbbfjjY9OA2yYBwXXu1J
-         QhhmfHqBxZkOUZW6uwrv9qClr0nl9rGmLxFUMOSLRQ3Nrsr2Ln8HQgNI6tJdrbIRJLkr
-         toTrPWdHTic+TwC1RjQVlvEOPAu2XW0bIPta6CRfEcZH2t0Sem57zIDeKU6vyBdEz/4n
-         lt+3Vdisvb+teJ9mFPILV9YDnGb8jhDZ8UTP9u1INTLGIkBwAzlRMVGbD/T7LW8cwBD5
-         5NMrnzmbwCslOfLbVxh120ZqqTc1buxIX95Lddu2gprkhMYK0hUkTn3wgxnqMTMAaeX7
-         FNug==
-X-Gm-Message-State: AFuF++lTTFPrAr/ecKUmbSOfnflmEWjLMC8lww7tIETtmqDmaFvogSp7
-	swgMdEHcFJpdYZ4Gh8Qc8BdVCltIPAHqbn3gmc6mxOtI2nC5L/IR+WoW8iH435dgBuvGa45gkKI
-	8DYe2JF1yMR5EnF2MiWjFRBXoBPrIgPk=
-X-Gm-Gg: AYBFou1k1dp3D6x+sUj0rOo1d8HdSyi2QestB/P9CU0HjT3LVegqh/aqRp6hm2EMt0m
-	zEanSXznA/6M+f95d6r6XZwe4tdQYYhsLGMIyLQiMSiVZgWta3HO4jPydODEXDjCz/+hs2H712P
-	qZEyfjCWu2riLh0VZhju/YrQ91T9wxxD7mSFI5OVxCRs9v0xbkSEBUNlxQe2BbWVgxc2qMWXFVN
-	762vjRPHDW0Q2t2JxdLU5vxwc9N1WQIk/HAGbXznCtA0p5mEey7Jr56s3rhlQCOFXdv+rc5sN/+
-	jA7o8ne3QvBBT/TvF2MX64HSWdDeC6wvFixO7OHrspmOEYGjhYtrPZXPvb/rPeVVlU1CH5Ub2lY
-	SPVMaHLaqwQZYqeqM+C0VGsGlffuXIiQOuvhk4LdUb4lJAnbludd2RdCSV0AvH2JjvRuLswsMuZ
-	axGRtuEwVIHj9E
-X-Received: by 2002:a05:690c:e294:b0:81e:b78d:688b with SMTP id
- 00721157ae682-8694c44cfbcmr26753987b3.12.1788285370161; Tue, 01 Sep 2026
- 10:56:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="0g1dp5U/"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id F242A4E414A2;
+	Tue,  1 Sep 2026 17:59:12 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id B929B6053C;
+	Tue,  1 Sep 2026 17:59:12 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 632ED11C7929D;
+	Tue,  1 Sep 2026 19:58:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1788285547; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=ZGg5+0PXOpr2qKFOyZDL1NQc/onpOdowko845pW6LhU=;
+	b=0g1dp5U/kpCeWZ3Kju2KhkhNfbtl7+eM4Xd4Z7HN49CZcsYmL8fpofuUOdsjuZL4vEhbau
+	aJ/qPMmP9MnguFUszlo5wYPE4PPdCM+GtS6P04ferWkCIkZHkrLeCsKL62Xxl5q909tY/N
+	rpnippCjBV5hoxpPAp+emdkvPdKi3rToq7iQfoG7IfAxX6C0ZC0zqjLCghdf2w9UQVgSUm
+	E/ReHcV2JVIP3dVIVVj+oE1nBAO+dveI0EiL3AvdI+HZaPOUL7rQIcvLdvBIThavWmHFNA
+	IVxSOODQqsXRWyfe7tat/v0TTZbzNVd191jCtm3QGmsu+qQBJ+myZQCRtioN5g==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260901170144.70453-1-sidchintamaneni@gmail.com>
- <20260901170144.70453-2-sidchintamaneni@gmail.com> <apcRnSj7dVW1Dlsr@mail.gmail.com>
-In-Reply-To: <apcRnSj7dVW1Dlsr@mail.gmail.com>
-From: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
-Date: Tue, 1 Sep 2026 10:55:59 -0700
-X-Gm-Features: AcwNN1XUxT6E63XNwqnj8eULpwdcWDTD-Sc6Xg6BKN5m6SQ_j_7c65Ms_cHzrXU
-Message-ID: <CAE5sdEgXd3AcJyRO6zdNEtFs-bwXRWzbA_qMR=Xdi9qA_NZvJQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Test terminal gotox instructions
-To: Anton Protopopov <a.s.protopopov@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Puranjay Mohan <puranjay@kernel.org>, rlmenge@gmail.com, hargar@linux.microsoft.com, 
-	apais@microsoft.com
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 01 Sep 2026 19:58:54 +0200
+Message-Id: <DL46BD4OVWZ2.6X01VIKUVCA5@bootlin.com>
+Subject: Re: [PATCH bpf-next v8 4/8] bpf, x86: emit KASAN checks in x86
+ JITed programs
+Cc: <ebpf@linuxfoundation.org>, <bastien.curutchet@bootlin.com>,
+ <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <martin.lau@kernel.org>, <clm@meta.com>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: <bot+bpf-ci@kernel.org>, <alexis.lothore@bootlin.com>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <andrii@kernel.org>,
+ <martin.lau@linux.dev>, <eddyz87@gmail.com>, <memxor@gmail.com>,
+ <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
+ <tglx@kernel.org>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
+ <x86@kernel.org>, <hpa@zytor.com>, <shuah@kernel.org>, <mingo@redhat.com>,
+ <andreyknvl@gmail.com>, <emil@etsalapatis.com>, <ihor.solodrai@linux.dev>,
+ <laoar.shao@gmail.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260828-kasan-v8-4-7c1c0fdb9d7f@bootlin.com>
+ <25c4fc03d83c879c13ac1df190046881f7f969ffa532b904597ca9947c750d53@mail.kernel.org>
+In-Reply-To: <25c4fc03d83c879c13ac1df190046881f7f969ffa532b904597ca9947c750d53@mail.kernel.org>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Tue, 1 Sept 2026 at 10:45, Anton Protopopov <a.s.protopopov@gmail.com> wrote:
+On Fri Aug 28, 2026 at 12:30 PM CEST, bot+bpf-ci wrote:
+>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+>> index 13ba3232993ac..adb62216dd204 100644
+>> --- a/arch/x86/net/bpf_jit_comp.c
+>> +++ b/arch/x86/net/bpf_jit_comp.c
 >
-> On 26/09/01 05:01PM, Siddharth Chintamaneni wrote:
-> > Add tests that place gotox at the end of the main program and a
-> > subprogram, with each jump-table target preceding the gotox instruction.
-> > This tests gotox as a valid non-fallthrough terminal instruction.
-> >
-> > Signed-off-by: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
-> > ---
-> >  .../selftests/bpf/progs/verifier_gotox.c      | 42 +++++++++++++++++++
-> >  1 file changed, 42 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/bpf/progs/verifier_gotox.c b/tools/testing/selftests/bpf/progs/verifier_gotox.c
-> > index 5b18c9a27717..cfb5b648891f 100644
-> > --- a/tools/testing/selftests/bpf/progs/verifier_gotox.c
-> > +++ b/tools/testing/selftests/bpf/progs/verifier_gotox.c
-> > @@ -47,6 +47,48 @@ DEFINE_SIMPLE_JUMP_TABLE_PROG(reserved_field_src_reg,      BPF_REG_1, 0, 0, __fa
-> >  DEFINE_SIMPLE_JUMP_TABLE_PROG(reserved_field_non_zero_off, BPF_REG_0, 1, 0, __failure __msg("BPF_JA|BPF_X uses reserved fields"))
-> >  DEFINE_SIMPLE_JUMP_TABLE_PROG(reserved_field_non_zero_imm, BPF_REG_0, 0, 1, __failure __msg("BPF_JA|BPF_X uses reserved fields"))
-> >
-> > +#define DEFINE_TERMINAL_GOTOX_PROG(NAME, BASE)                       \
-> > +     __naked void NAME(void)                                 \
-> > +     {                                                       \
-> > +     asm volatile ("                                         \
-> > +     .pushsection .jumptables,\"\",@progbits;                \
-> > +jt0_%=:                                                      \
-> > +     .quad ret0_%= - " BASE ";                               \
-> > +     .size jt0_%=, 8;                                        \
-> > +     .global jt0_%=;                                         \
-> > +     .popsection;                                            \
-> > +                                                             \
-> > +     r0 = jt0_%= ll;                                         \
-> > +     r0 = *(u64 *)(r0 + 0);                                  \
-> > +     goto end_%=;                                            \
-> > +ret0_%=:                                                     \
-> > +     r0 = 0;                                                 \
-> > +     exit;                                                   \
-> > +end_%=:                                                      \
-> > +     .8byte %[gotox_r0];                                     \
-> > +"    :                                                       \
-> > +     : __imm_insn(gotox_r0, BPF_RAW_INSN(BPF_JMP | BPF_JA | BPF_X,   \
-> > +                                         BPF_REG_0, 0, 0, 0))        \
-> > +     : __clobber_all);                                       \
-> > +     }
-> > +
-> > +SEC("socket")
-> > +__success __retval(0)
-> > +DEFINE_TERMINAL_GOTOX_PROG(jump_table_terminal_gotox, "socket")
-> > +
-> > +static __noinline __used
-> > +DEFINE_TERMINAL_GOTOX_PROG(terminal_gotox_subprog, ".text")
-> > +
-> > +SEC("socket")
-> > +__success __retval(0)
-> > +__naked void jump_table_terminal_gotox_subprog(void)
-> > +{
-> > +     asm volatile ("                                         \
-> > +     call terminal_gotox_subprog;                            \
+> [ ... ]
 >
-> I wonder if robot will reply the same as for v2.
+>> @@ -1110,6 +1121,92 @@ static void maybe_emit_1mod(u8 **pprog, u32 reg, =
+bool is64)
+>>  	*pprog =3D prog;
+>>  }
+>>
+>> +static int emit_kasan_check(struct bpf_verifier_env *env, u8 **pprog,
+>> +			    u32 addr_reg, struct bpf_insn *insn, u8 *ip,
+>> +			    bool is_write)
+>> +{
+>> +#ifdef CONFIG_BPF_JIT_KASAN
+>> +	u32 bpf_size =3D BPF_SIZE(insn->code);
+>> +	s32 off =3D insn->off;
 >
-> The suggestion was to do
+> Does emit_kasan_check need to re-read insn->off here rather than taking
+> the effective displacement as a parameter? At the BPF_STX | BPF_MEM site
+> (line 2458), do_jit() remaps the offset for stack arguments:
 >
->     call terminal_gotox_subprog1
->     call terminal_gotox_subprog2
+>     insn_off =3D insn->off;
+>     if (dst_reg =3D=3D BPF_REG_PARAMS) {
+>         insn_off =3D outgoing_arg_base - outgoing_rsp - insn_off - 16;
+>         dst_reg =3D BPF_REG_FP;
+>     }
+>     ...
+>     emit_kasan_check(env, &prog, dst_reg, insn, ip, true);
+>     emit_stx(&prog, BPF_SIZE(insn->code), dst_reg, src_reg, insn_off);
 >
-> such that subprog1 is not the last piece of loaded prog...
->
+> The check receives the remapped dst_reg (BPF_REG_FP) but re-derives the
+> offset from insn->off, so the check validates 'rbp + insn->off' while
+> emit_stx() writes to 'rbp + insn_off'.
 
-I missed this part! Can I reply the diff to this thread? or does it
-require a new revision?
+This one is right, I managed to reproduce it with a sample program
+similar to those for the args on stack selftests, JIT hardening
+enabled and cpuv4:
+- arg pushed on stack with cpuv4: BPF_ST|BPF_MEM|BPF_DW with dst_reg =3D
+  BPF_REG_PARAMS
+- hardening + ST on constant: constant pushed on stack is blinded,
+  program is patched with MOV + XOR + STX, the last one is marked as
+  non-stack accessing, per commit 1/8
+- JIT compiler enters the branch mentioned above and uses wrong offset
+  for the KASAN check, so we insert an unwanted stack access check AND
+  we check it at the wrong offset.
 
-> > +     exit;                                                   \
-> > +"    ::: __clobber_all);
-> > +}
-> > +
-> >  /*
-> >   * Gotox is forbidden when there is no jump table loaded
-> >   * which points to the sub-function where the gotox is used
-> > --
-> > 2.43.0
-> >
+This made me realize that the series did not have this specific issues,
+as args-on-stack feature has been merged quite recently. Rather than
+adjusting the offset for a check that isn't really wanted (this is still
+a stack access), I plan to just skip the KASAN check insertion if
+dst_reg =3D=3D BPF_REG_PARAMS (or src_reg =3D=3D BPF_REG_PARAMS, for LDX).
+
+> The BPF_ST | BPF_MEM case (line 2432) has a second issue: the check
+> runs before any register remapping, so it is given the raw dst_reg:
+>
+>     if (!accesses_stack_only) {
+>         err =3D emit_kasan_check(env, &prog, dst_reg, insn, ip, true);
+>         ...
+>     }
+>     emit_st(&prog, insn, dst_reg, outgoing_arg_base, outgoing_rsp);
+>
+> When dst_reg =3D=3D BPF_REG_PARAMS (MAX_BPF_REG =3D=3D 11), emit_st() rem=
+aps
+> both the register and offset internally, but emit_kasan_check() receives
+> the raw value. reg2hex[] has no entry for index 11, so reg2hex[11] =3D=3D=
+ 0
+> and EMIT_mov(BPF_REG_1, BPF_REG_PARAMS) encodes 'mov rdi, rax'. The
+> check then validates 'rax + insn->off' - RAX being BPF R0, an arbitrary
+> program value - while the store goes to the outgoing-argument slot.
+>
+> In the BPF_DW / insn->off =3D=3D -8 sub-case of BPF_ST, emit_st() perform=
+s
+> no memory access at all (the value is materialized into R9), yet a full
+> __asan_store8 check is still emitted.
+
+Will be fixed the same way: skipping kasan check if dst_reg =3D=3D
+BPF_REG_PARAMS.
+
+> The BPF_LDX path (line 2645) handles this correctly: it remaps to
+> BPF_REG_FP before calling emit_kasan_check(), and the incoming-arg case
+> skips the check entirely.
+
+And I'll make sure to skip the KASAN check in the LDX path as well.
+>
+> Would passing the effective displacement to emit_kasan_check() as an
+> explicit parameter fix both the BPF_STX offset mismatch and let the
+> BPF_ST path perform the remap before the check?
+>
+>> +	u8 *prog =3D *pprog;
+>> +	void *kasan_func;
+>> +
+>> +	if (!env)
+>> +		return 0;
+>
+> [ ... ]
+>
+>> @@ -1911,10 +2026,12 @@ static int do_jit(struct bpf_verifier_env *env, =
+struct bpf_prog *bpf_prog, int *
+>>  		const s32 imm32 =3D insn->imm;
+>>  		u32 dst_reg =3D insn->dst_reg;
+>>  		u32 src_reg =3D insn->src_reg;
+>> +		bool accesses_stack_only;
+>>  		u8 b2 =3D 0, b3 =3D 0;
+>>  		u8 *start_of_ldx;
+>>  		s64 jmp_offset;
+>>  		s32 insn_off;
+>> +		int insn_idx;
+>>  		u8 jmp_cond;
+>>  		u8 *func;
+>>  		int nops;
+>> @@ -1931,6 +2048,10 @@ static int do_jit(struct bpf_verifier_env *env, s=
+truct bpf_prog *bpf_prog, int *
+>>  			EMIT_ENDBR();
+>>
+>>  		ip =3D image + addrs[i - 1] + (prog - temp);
+>> +		insn_idx =3D i - 1 + bpf_prog->aux->subprog_start;
+>> +		accesses_stack_only =3D
+>> +			env ? !env->insn_aux_data[insn_idx].non_stack_access :
+>> +			      false;
+>
+> This isn't a bug, but when env =3D=3D NULL, accesses_stack_only is set to
+> false ('not stack-only, do instrument'), yet every call site then
+> enters emit_kasan_check() which only no-ops because of its own 'if
+> (!env) return 0;' guard. Would 'env ? ... : true' make the fail-safe
+> default self-evident and avoid depending on emit_kasan_check()'s
+> internal guard for correctness?
+
+I'm not really convinced it would make things better. Having 'env ? ...
+: true' would also require to rename the variable to something likely
+mouthful, as accesses_something_else_other_than_stack (yes, I'm
+exaggerating a bit, but not so much), and as discussed in previous
+reviews, the emit_kasan_checks calls will stay anyway, even in the no-op
+case.
+
+> Also, the '!env' test plus 'insn_idx +=3D aux->subprog_start' is already
+> encapsulated by bpf_insn_is_indirect_target() (kernel/bpf/core.c:1646-
+> 1652). Would a small helper like bpf_insn_accesses_non_stack(env, prog,
+> i - 1) keep the arch-independent invariant in one place and let other
+> JITs reuse it when they gain KASAN support?
+
+There's a clear intent _not_ to bring KASAN support to other JIT
+compilers, so there's no much value in a dedicated helper just to check
+this flag. If that ever changes, I'll happily reconsider.
+
+[...]
+
+>> @@ -2572,28 +2711,42 @@ static int do_jit(struct bpf_verifier_env *env, =
+struct bpf_prog *bpf_prog, int *
+>>  			}
+>>  			fallthrough;
+>>  		case BPF_STX | BPF_ATOMIC | BPF_W:
+>> -		case BPF_STX | BPF_ATOMIC | BPF_DW:
+>> -			if (insn->imm =3D=3D (BPF_AND | BPF_FETCH) ||
+>> -			    insn->imm =3D=3D (BPF_OR | BPF_FETCH) ||
+>> -			    insn->imm =3D=3D (BPF_XOR | BPF_FETCH)) {
+>> -				bool is64 =3D BPF_SIZE(insn->code) =3D=3D BPF_DW;
+>> -				u32 real_src_reg =3D src_reg;
+>> -				u32 real_dst_reg =3D dst_reg;
+>> -				u8 *branch_target;
+>> -
+>> +		case BPF_STX | BPF_ATOMIC | BPF_DW: {
+>> +			bool is64 =3D BPF_SIZE(insn->code) =3D=3D BPF_DW;
+>> +			u32 real_src_reg =3D src_reg;
+>> +			u32 real_dst_reg =3D dst_reg;
+>> +			u8 *branch_target;
+>> +			u8 *pprog;
+>> +			bool is_atomic_fetch =3D
+>> +				(insn->imm =3D=3D (BPF_AND | BPF_FETCH) ||
+>> +				 insn->imm =3D=3D (BPF_OR | BPF_FETCH) ||
+>> +				 insn->imm =3D=3D (BPF_XOR | BPF_FETCH));
+>> +			if (is_atomic_fetch) {
+>>  				/*
+>>  				 * Can't be implemented with a single x86 insn.
+>>  				 * Need to do a CMPXCHG loop.
+>>  				 */
+>>
+>>  				/* Will need RAX as a CMPXCHG operand so save R0 */
+>> +				pprog =3D prog;
+>>  				emit_mov_reg(&prog, true, BPF_REG_AX, BPF_REG_0);
+>>  				if (src_reg =3D=3D BPF_REG_0)
+>>  					real_src_reg =3D BPF_REG_AX;
+>>  				if (dst_reg =3D=3D BPF_REG_0)
+>>  					real_dst_reg =3D BPF_REG_AX;
+>> -
+>> +				ip +=3D (prog - pprog);
+>> +			}
+>> +			if (!bpf_atomic_is_load_store(insn)) {
+>> +				if (!accesses_stack_only) {
+>> +					err =3D emit_kasan_check(env, &prog,
+>> +							       real_dst_reg,
+>> +							       insn, ip, true);
+>> +					if (err)
+>> +						return err;
+>> +				}
+>>  				branch_target =3D prog;
+>> +			}
+>> +			if (is_atomic_fetch) {
+>>  				/* Load old value */
+>>  				emit_ldx(&prog, BPF_SIZE(insn->code),
+>>  					 BPF_REG_0, real_dst_reg, insn->off);
+>
+> This isn't a bug, but does the restructured atomic case now make
+> branch_target a dead store on the non-fetch paths? branch_target is
+> written for every non-load/store atomic (plain BPF_ADD, BPF_XCHG,
+> BPF_CMPXCHG without BPF_FETCH) but only read under 'if
+> (is_atomic_fetch)'. Would moving 'branch_target =3D prog;' into the
+> following 'if (is_atomic_fetch)' block keep the KASAN check outside the
+> retry loop while restoring the definition-next-to-use property?
+
+Indeed, I'll bring it back under the relevant if branch.
+
+> Also, the new local 'u8 *pprog;' shadows the file-wide convention where
+> pprog is the u8 ** out-parameter of every emit_* helper.
+
+True, I'll rename it.
+
+Alexis
+
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
