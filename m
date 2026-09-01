@@ -1,62 +1,69 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F0C71F3B87;
-	Tue,  1 Sep 2026 00:02:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC02926738C;
+	Tue,  1 Sep 2026 00:46:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788220964; cv=none; b=SyxwPtG8pyCp1gbIHXePNtwONnpyl5vlXXzuO+FT6+VLHLdK8Q487tZ2JU1tOeWgvr1Lxri1rFGFlbj7pn0xryquMPIlRrdmurMCLofqYHJEMRtAeWmLi1NHYOw9/An6y94cNMHYYmNIcODspyRk+JCZ7Jg+ailazlzIgcQpGuE=
+	t=1788223568; cv=none; b=fy0cOgk7Sv2VTBmOCCop1Pv+5A4WKv/bvwXfy7UCokgwX8zPGrlxFfArxee6BmPJ6OiHJtOdPjQVkZqJPrVQaFiIT8jW1KKQZZY7Z95Lr6orw9PJ1qEJHJ3T45JkvUSORFD4o0mP8U9A+X96fE43DFqxzUaNq/4t2sCwiEtSnYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788220964; c=relaxed/simple;
-	bh=1GtKzM6qFHLf7HmMqIjTxlSn1WlimaOcx44Jj0JLnb8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jp1bEaa3oF76jWSp2nvE2oHdej9odXTJzCtYWKWUCGS8ybRFX+Qe4C9uxujViU2ou74+wD8FX1hhbCn3tIHQjWa6DqDJKQ6YwY+5dNhZN6s010S9meYoDQu0P6f+DWiwGJPQjInUTr/d/a2tN4EDOVQhqIou5cvE/Pd87FABnF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AEg9Cb8A; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788223568; c=relaxed/simple;
+	bh=d+fwOcwzgoPY3iYiDpoERorpIcEI2FlvPaYKLnA04ik=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=kv000PrDjEXgtiJiBYOP/zZAnFdwgOQLOggPCCvuZYrEzfzPR7vJJIXR4scl+XEdfEB79XEtvegXCtX571kmtbp+hfj3Fff/+MBARxEzcQrdYrj+bbyAIfo62/4xbIHM0H54ZAs61prQYnFTYmAqxVxpUfw+e74ls4DsQv7FEQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Hq5cMU1S; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AEg9Cb8A"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD8A71F000E9;
-	Tue,  1 Sep 2026 00:02:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788220963;
-	bh=YnzbNAseVqr204CF4Z+LlJ/iqoanfz70mhWy+yE/JjA=;
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Hq5cMU1S"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 973F31F000E9;
+	Tue,  1 Sep 2026 00:46:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1788223566;
+	bh=wfI4nJW4NZXTURLLniIaQtBfHGjWmn+gqY78i2JXq1g=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=AEg9Cb8AF36/9DSl9SXHjdq+05r0oEFQTFJTnpBR9Ako6QxDYdSxmBQIXoO1czHxn
-	 rK5cW3p5x4p5Us5xICh0N/hOnXefRrk71H41PWZzp9r4FLO27X44MZeY9W/7PP6Rq3
-	 WRtN0CJs3/xhKYiJ+UrZtj4tGjrPiAxuNsKUyjAoZdESUlv8JGpqFEWPp3x/vlqrFJ
-	 vi/gHeFakNQ50oU586KPieC27ev2z/JAtSpVTbTFWiEtmoStAp6bz9g7hzRB6Yrx8R
-	 weesyaGqf+t3qNkf+teL/CUjOkZNSHoOXB6bJG/SPH9Y0ayaAyZoOTcrXLqy2NXBCB
-	 +lXsMLzCq1mVQ==
-Date: Mon, 31 Aug 2026 17:02:41 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Jason Xing <kerneljasonxing@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
- bjorn@kernel.org, magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
- sdf@fomichev.me, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, horms@kernel.org, andrew+netdev@lunn.ch,
- bpf@vger.kernel.org, netdev@vger.kernel.org,
- syzbot+f16c1b285c9f63994eec@syzkaller.appspotmail.com
-Subject: Re: [PATCH net] xsk: set network header on skb at generic transmit
-Message-ID: <20260831170241.42be3376@kernel.org>
-In-Reply-To: <20260826012052.51028-1-kerneljasonxing@gmail.com>
-References: <20260826012052.51028-1-kerneljasonxing@gmail.com>
+	b=Hq5cMU1S8uQbYuvCrodD6jKmSm+wxowLUmyrGzsBsHCmq4D3xzPMTIi4Q/BnBxm80
+	 JtL7GP8is89pIBLJGtMFrDDaxmAKdnDP8dQo/uLQhHxF+1yhsoB/wUgdYfuthBFmjk
+	 tppIR+WsAf7ommFZeRL6lw0jdWpBKDxTpsuvCxks=
+Date: Mon, 31 Aug 2026 17:46:05 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Ziyang Men <ziyang.meme@gmail.com>
+Cc: Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>, Johannes
+ Weiner <hannes@cmpxchg.org>, Michal =?ISO-8859-1?Q?Koutn=FD?=
+ <mkoutny@suse.com>, Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires
+ <bentiss@kernel.org>, David Vernet <void@manifault.com>, Eduard Zingerman
+ <eddyz87@gmail.com>, Viktor Malik <vmalik@redhat.com>, Andrea Righi
+ <arighi@nvidia.com>, Changwoo Min <changwoo@igalia.com>, Michal Hocko
+ <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, Shakeel
+ Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, JP
+ Kobryn <inwardvessel@gmail.com>, Mykola Lysenko <mykolal@meta.com>, Nathan
+ Chancellor <nathan@kernel.org>, kernel-team@meta.com,
+ linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
+ linux-input@vger.kernel.org, sched-ext@lists.linux.dev, linux-mm@kvack.org,
+ bpf@vger.kernel.org, llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] selftests: shared lib.bpf.mk for building BPF
+ progs and skeletons
+Message-Id: <20260831174605.4f76fe0a643fac90fce740b5@linux-foundation.org>
+In-Reply-To: <apX9zb+3awc99Pfh@devvm16600.scu0.facebook.com>
+References: <20260814075054.507089-1-ziyang.meme@gmail.com>
+	<apX9zb+3awc99Pfh@devvm16600.scu0.facebook.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Wed, 26 Aug 2026 09:20:52 +0800 Jason Xing wrote:
-> Fix this by calling skb_reset_network_header() in the common path to
-> cover both the copy and the zerocopy cases, so that network_header
-> points at skb->data and skb_network_offset() returns 0.
+On Mon, 31 Aug 2026 15:18:53 -0700 Ziyang Men <ziyang.meme@gmail.com> wrote:
 
-But you're setting it to start of the frame so most likely L2.
-AF_PACKET seems to probe to find the true network header.
-IDK. At the very least the commit message should be explaining
-why the fix is right instead of the slop explaining the path
-that triggers the crash.
--- 
-pw-bot: cr
+> Just want to follow-up on this patch series. Please let me know the possible
+> issues and I will fix them.
+
+It was sent two weeks ago, during the merge window and bpfbot said lots
+of things and Sashiko said more:
+
+	https://sashiko.dev/#/patchset/20260814075054.507089-1-ziyang.meme@gmail.com
+
+Under these circumstances I expect most reviewers would choose to await
+the next iteration!
