@@ -1,203 +1,225 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47AAA48EBF1;
-	Tue,  1 Sep 2026 17:55:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A8424908BE;
+	Tue,  1 Sep 2026 17:55:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788285353; cv=none; b=RHGEkjSXbjpUjBdf5W6mzz5mKHkSfDhQI+/0STJuEpMCtm0JyLy65N7PLERm/1rlhJuS6ieG18aOgy+7ZXKt04V1wCJ46axZeDf2cVxpf9pWBjplVS+MqI8giUSDLZfhs90ho4DePzh40L1PBBOx9o8YxneHVe+DIOKtBHrOnU8=
+	t=1788285356; cv=none; b=M2UdY3rWJkQYlpRXYU5WKu6PPC67sAiGMOI8qGJuQSPWVmZC/TZQLxLxWTtZAf5RoJEL7O86HwXS6ItIvY+ln48ftCVSGbqiTuZ2XuOdMtjXmwdEBdGLMbwhj+Y9ZtE8PsUsjdavGXjxD753SxHb4zxob5IT3lGtKJCcpwS4J6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788285353; c=relaxed/simple;
-	bh=EDz70nD0Qshxj1kwNiDaCZ9r8e+FhcrKLk4Dovzh48w=;
+	s=arc-20240116; t=1788285356; c=relaxed/simple;
+	bh=XHd6HJWq3ys/utuUshD4ZRaW9IQGVGvzlYo3Kc9ecbY=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=dM5RHiZMyH7OTAoZuW9MNpofjR741bdooVxGyjTgwTVf61Vw4CQQmn0fJcCVqUp+xm8mvM4m3z+4msPk5uPie4NhPrmWyZuOdF1gnikrn+SQPdUwQyhKB14NzOIlUYeOYfToFbe3J/cNJ4ogGZw4+FhZSQyWNQpOfURfnUafD4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kvi92i9N; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=M3xgI3nC2vuaowbivQtCuQ1WLcz0E/pCOwkIyAwwlYeN1Kz2exwWJISyYPKezoBMkkieedWE0cqj+8nrPqRCx3UhxJ18juyJcSbNVTDe4UY/Xskeb7J+VmY3Rog1R1FNgcb9ABQ/T/9tyrtv27mlNFXJdF751FVhTGUW1L6HY1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QObf9jSQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kvi92i9N"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C930C1F00A3A;
-	Tue,  1 Sep 2026 17:55:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QObf9jSQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8045C1F000E9;
+	Tue,  1 Sep 2026 17:55:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788285352;
-	bh=Qbo9xnFHa5xWJc3QM00uTi90JSoIFD7Q+LFx2CgWL9A=;
+	s=k20260515; t=1788285354;
+	bh=k67nwCXmygGrlR9rsNPedRLOqFL+om388FJIIpdaczo=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=kvi92i9NqBaDMSte2mDZBrVD2N+B41Ntw3S/BomMvi12GO/wASf7ksNEN8Yhdid1t
-	 EGBa/La3JX4vGVNbYMZoqg5Q3o7VLlaKawfzzGANpPIyttalG4waYo3QM7d2ym2yqh
-	 gQ1x/2v4EGH5vx+i7GqHpbQmah4ReGHEVAjex//bsmyqtQC+wCOku3w/6vsZyWxAf5
-	 yC02BZ2ROkqrab4ofujoJF6SgORh+IoS5cScpdswiBL2rT1HQrZnIPpKTuxgzcg4+F
-	 U6kiTbbsAEZD3yOMG9wOJkXAsDRr5O+a4P4dI/Hgu8YZS6F170qS2mraocgpY1JL5Q
-	 Mb3v0WWNaZUag==
-Content-Type: multipart/mixed; boundary="===============8310105665022421972=="
+	b=QObf9jSQfxK3h0qIrIm7nWCx5xopev3yTjYm/uAWbSRnOVF/uz+450Ep8KgFlql8N
+	 tNTgiuylpmwTRpIx3wZ6GovIhpY9yO9QLu+pue3Vs61DGoYS5NHMvjiwx5Td1U0L/a
+	 DSbSDhBEbr9zEtTlIMBsKX7JpXNvBLMiQTeLxrYIvCEhfvBJQV89dC8RA+8E+jIjY8
+	 yNRAcR29UyTGpPsufqmtQwm2CAGkDqiNW12oJi689zJ9eTVIva0vfe22rFrP/U18Ag
+	 mfkyH+274zoh8Ezu33zGFyLvplqZmP+BTQ+i+Bv500wrQC8rd399CuV2dx4IIA82oJ
+	 sqkjI7C7Ps23g==
+Content-Type: multipart/mixed; boundary="===============7407090014249990527=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <af8e4dfcad947bcf2b4cb4022503de3440343726bbb225289cfadcde54859f9c@mail.kernel.org>
-In-Reply-To: <20260901165757.801449-2-alan.maguire@oracle.com>
-References: <20260901165757.801449-2-alan.maguire@oracle.com>
-Subject: Re: [PATCH v2 bpf-next 01/18] btf: Extend UAPI to support BTF location (inline site) info
+Message-Id: <718a4dc33d7b2b529bb8d5749581bb2c132314e6c69a9dcab7ae2a84ea7623d5@mail.kernel.org>
+In-Reply-To: <20260901165757.801449-17-alan.maguire@oracle.com>
+References: <20260901165757.801449-17-alan.maguire@oracle.com>
+Subject: Re: [PATCH v2 bpf-next 16/18] btf: Relocate inline BTF for modules with distilled base BTF
 From: bot+bpf-ci@kernel.org
 To: alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org
 Cc: daniel@iogearbox.net,eddyz87@gmail.com,jolsa@kernel.org,ihor.solodrai@linux.dev,yonghong.song@linux.dev,song@kernel.org,qmo@kernel.org,martin.lau@linux.dev,memxor@gmail.com,emil@etsalapatis.com,mcgrof@kernel.org,petr.pavlu@suse.com,tj@kernel.org,kees@kernel.org,bpf@vger.kernel.org,nathan@kernel.org,nsc@kernel.org,arnd@arndb.de,puranjay@kernel.org,yatsenko@meta.com,atenart@kernel.org,ojeda@kernel.org,linux-modules@vger.kernel.org,alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue,  1 Sep 2026 17:55:50 +0000 (UTC)
+Date: Tue,  1 Sep 2026 17:55:53 +0000 (UTC)
 
---===============8310105665022421972==
+--===============7407090014249990527==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/include/linux/btf.h b/include/linux/btf.h
-> index ddd0f4f32d24..a4412bc16688 100644
-> --- a/include/linux/btf.h
-> +++ b/include/linux/btf.h
-> @@ -559,7 +574,7 @@ struct btf_field_desc {
->  	/* member struct size, or zero, if no members */
->  	int m_sz;
->  	/* repeated per-member offsets */
-> -	int m_off_cnt, m_offs[1];
-> +	int m_off_cnt, m_offs[2];
->  };
-
-Eduard Zingerman noted in the RFC v1 review that this change to m_offs[2]
-should be moved to patch #2, since that patch's commit message explains
-why it is needed. The change was acknowledged but not addressed in v2.
-
-See: https://lore.kernel.org/bpf/531305ee76a5ef186b1204dc8281ebc7ebb2b1c0.camel@gmail.com/
-
-> diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
-> index 618167cab4e6..6062c9958034 100644
-> --- a/include/uapi/linux/btf.h
-> +++ b/include/uapi/linux/btf.h
-
-[ ... ]
-
-> +/*
-> + * The combination of size, vlen and flags gives us the means to interpret
-> + * the following vlen-specified set of 4-byte values:
-> + *
-> + * - a BTF_LOC_PARAM_CONST is a constant value; combination
-> + *   of size, vlen and _SIGNED flag determines it. If the value requires
-> + *   64 bits it is stored in {lo,hi} order.
-> + * - a BTF_LOC_PARAM_ADDR is an address that will be normalized with
-> + *   respect to kernel base address.
-> + * - a BTF_LOC_PARAM_REG with vlen 1 is a simple register number;
-> + *   with vlen 2 it is a multi-register parameter.
-> + * - a _REG | DEREF with vlen 1 dereferences the value in the register
-> + *   number specified.
-> + * - a REG | DEREF | OFFSET with vlen specifies the register value in
-> + *   the first 4-byte value and the offset in the remainder.
-> + * - binary logical operators operate on a combination of register
-> + *   number and constant value, aside from _NOT which operates on
-> + *   a register
-> + */
-> +enum btf_loc_param_flags {
-> +	BTF_LOC_PARAM_SIGNED		=	0x1,
-> +	BTF_LOC_PARAM_CONST		=	0x2,
-> +	BTF_LOC_PARAM_ADDR		=	0x4,
-> +	BTF_LOC_PARAM_REG		=	0x8,
-> +	BTF_LOC_PARAM_DEREF		=	0x10,
-> +	BTF_LOC_PARAM_OFFSET		=	0x20,
-> +};
-
-Does the comment above the enum match the actual flags? The text mentions
-"binary logical operators" and "_NOT which operates on a register," but
-the enum defines only SIGNED, CONST, ADDR, REG, DEREF and OFFSET. Where
-is BTF_LOC_PARAM_NOT and where are the logical operator flags?
-
-This same mismatch appears in tools/include/uapi/linux/btf.h as well.
-
-> +/*
-> + * BTF_KIND_LOC_PROTO specifies location prototypes; i.e. how locations relate
-> + * to parameters; a struct btf_type of BTF_KIND_LOC_PROTO is followed by a
-> + * a vlen-specified number of __u32 BTF type ids which specify the associated
-> + * BTF_KIND_LOC_PARAM for each function parameter associated with the
-> + * location.  The type should either be 0 (no location info) or point at
-> + * a BTF_KIND_LOC_PARAM.
-> + */
-
-This isn't a bug, but there's a duplicated word: "followed by a / a
-vlen-specified number". The same duplication appears in the tools copy at
-tools/include/uapi/linux/btf.h.
-
 > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 9c2cab08bb79..d74c8668aa3f 100644
+> index 2ac1f1d39660..2f3e8cea7dfc 100644
 > --- a/kernel/bpf/btf.c
 > +++ b/kernel/bpf/btf.c
 
 [ ... ]
 
-> +static s32 btf_loc_param_check_meta(struct btf_verifier_env *env,
-> +				    const struct btf_type *t,
-> +				    u32 meta_left)
+> @@ -6727,15 +6727,140 @@ __u32 btf_relocate_id(const struct btf *btf, __u32 id)
+>
+>  #ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+>
+> +static struct btf *btf_parse_split(struct btf_verifier_env *env, const char *name,
+> +				   const void *data, unsigned int data_size,
+> +				   struct btf *base_btf)
 > +{
-> +	const struct btf_loc_param *p = btf_loc_param(t);
-> +	u32 meta_needed;
-> +	u32 size;
+> +	struct btf *btf;
+> +	int err;
 > +
-> +	meta_needed = sizeof(*p) + sizeof(__u32) * btf_vlen(t);
-> +	if (meta_left < meta_needed) {
-> +		btf_verifier_log_basic(env, t,
-> +				       "meta_left:%u meta_needed:%u",
-> +				      meta_left, meta_needed);
-> +		return -EINVAL;
-> +	}
+> +	btf = kzalloc_obj(*btf, GFP_KERNEL | __GFP_NOWARN);
+> +	if (!btf)
+> +		return ERR_PTR(-ENOMEM);
+> +	env->btf = btf;
 > +
-> +	if (t->name_off) {
-> +		btf_verifier_log_type(env, t, "Invalid name");
-> +		return -EINVAL;
-> +	}
-> +	size = t->size;
-> +	if (size > 16 || !is_power_of_2(size)) {
-> +		btf_verifier_log_type(env, t, "Unexpected size");
-> +		return -EINVAL;
-> +	}
+> +	btf_set_base_btf(btf, base_btf);
+> +	btf->kernel_btf = true;
+> +	btf->named_start_id = 0;
+> +	strscpy(btf->name, name);
 > +
-> +	return meta_needed;
+> +	btf->data = kvmemdup(data, data_size, GFP_KERNEL | __GFP_NOWARN);
+> +	if (!btf->data) {
+> +		err = -ENOMEM;
+> +		goto errout;
+> +	}
+> +	btf->data_size = data_size;
+> +
+> +	err = btf_parse_hdr(env);
+> +	if (err)
+> +		goto errout;
+> +
+> +	btf->nohdr_data = btf->data + btf->hdr.hdr_len;
+> +
+> +	err = btf_parse_str_sec(env);
+> +	if (err)
+> +		goto errout;
+> +
+> +	err = btf_check_all_metas(env);
+> +	if (err)
+> +		goto errout;
+> +
+> +	err = btf_check_modifier_chain_length(env, btf, btf_nr_types(base_btf));
+> +	if (err)
+> +		goto errout;
+> +
+> +	return btf;
+> +
+> +errout:
+> +	btf_free(btf);
+> +	return ERR_PTR(err);
 > +}
 
-Does this handler miss the trailing btf_verifier_log_type(env, t, NULL)
-call before returning successfully? Looking at __btf_verifier_log_type()
-in this file, the comment states: "btf verifier prints all types it is
-processing via btf_verifier_log_type(..., fmt = NULL)". Every other
-check_meta handler in kernel/bpf/btf.c ends with that call on the
-success path (int, ptr, array, struct, enum, enum64, fwd, typedef,
-func_proto, func, var, datasec, decl_tag, float), but
-btf_loc_param_check_meta, btf_loc_proto_check_meta, and
-btf_locsec_check_meta all return successfully without it.
+[ ... ]
 
-When userspace passes a log buffer to BPF_BTF_LOAD, wouldn't the per-type
-"[id] KIND name ..." trace skip every LOC_PARAM/LOC_PROTO/LOCSEC type,
-creating gaps in the [id] sequence? Since env->log_type_id advances
-inside btf_verifier_log_type() and not on the successful path here, could
-later error messages for subsequent types be attributed to the wrong id?
+> @@ -6759,67 +6884,75 @@ static struct btf *btf_parse_module(const char *module_name, const void *data,
+>  				    unsigned int data_size, void *base_data,
+> -				    unsigned int base_data_size)
+> +				    unsigned int base_data_size, const void *inline_data,
+> +				    unsigned int inline_data_size, bool vmlinux_inline,
+> +				    void **relocated_inline_data)
+>  {
+> -	struct btf *btf = NULL, *vmlinux_btf, *base_btf = NULL;
+> +	struct btf *btf = NULL, *inline_btf = NULL, *vmlinux_btf, *base_btf = NULL;
+> +	struct btf *inline_base_btf;
+>  	struct btf_verifier_env *env = NULL;
+>  	struct bpf_verifier_log *log;
+> +	u32 old_module_type_cnt;
+> +	u32 *module_str_map = NULL;
+>  	int err = 0;
 
-> +static void btf_locsec_log(struct btf_verifier_env *env,
-> +			   const struct btf_type *t)
-> +{
-> +	const struct btf_loc *loc = btf_type_loc_secinfo(t);
-> +	u32 nr_locs = btf_type_vlen(t), i;
-> +	const struct btf *btf = env->btf;
-> +
-> +	btf_verifier_log(env, "locsec %s locs=(",
-> +			 __btf_name_by_offset(btf, t->name_off));
-> +	for (i = 0; i < nr_locs; i++, loc++) {
-> +		btf_verifier_log(env, "\n\tfunc %u loc_proto %u offset 0x%x%s",
-> +				 loc->func, loc->loc_proto, loc->offset,
-> +				 i + 1 == nr_locs ? ")" : ", ");
+[ ... ]
+
+> -	btf = kzalloc_obj(*btf, GFP_KERNEL | __GFP_NOWARN);
+> -	if (!btf) {
+> -		err = -ENOMEM;
+> +	btf = btf_parse_split(env, module_name, data, data_size, base_btf);
+> +	if (IS_ERR(btf)) {
+> +		err = PTR_ERR(btf);
+> +		btf = NULL;
+>  		goto errout;
+>  	}
+
+[ ... ]
+
+> +	if (inline_data_size) {
+> +		/*
+> +		 * Ordinary module inline BTF is split relative to the module BTF.
+> +		 * The btf_vmlinux_inline delivery module instead carries BTF split
+> +		 * directly relative to vmlinux.
+> +		 */
+> +		inline_base_btf = vmlinux_inline ? vmlinux_btf : btf;
+> +		inline_btf = btf_parse_split(env, module_name, inline_data,
+> +					     inline_data_size, inline_base_btf);
+> +		if (IS_ERR(inline_btf)) {
+> +			pr_warn("failed to validate module [%s] inline BTF: %ld\n",
+> +				module_name, PTR_ERR(inline_btf));
+> +			inline_btf = NULL;
+> +		}
 > +	}
-> +}
 
-A subsystem pattern flags this as potentially concerning: the log_details
-callback re-prints the kind and name that __btf_verifier_log_type() has
-already emitted, so the output would read "[7] LOCSEC name locsec name
-locs=(...)". Every other log_details handler (btf_datasec_log,
-btf_struct_log, etc.) prints only the kind-specific tail.
+[ ... ]
 
-Also, if vlen is zero, does the loop body that would print the closing
-parenthesis ever run? A zero-vlen LOCSEC would pass check_meta and leave
-a dangling "(" in the log. The same pattern appears in btf_loc_proto_log
-and btf_loc_param_log.
+>  errout:
+> +	kvfree(module_str_map);
+>  	btf_verifier_env_free(env);
+> +	btf_free(inline_btf);
+>  	if (!IS_ERR(base_btf) && base_btf != vmlinux_btf)
+>  		btf_free(base_btf);
+> -	if (btf) {
+> -		kvfree(btf->data);
+> -		kvfree(btf->types);
+> -		kfree(btf);
+> -	}
+> +	btf_free(btf);
+>  	return ERR_PTR(err);
+>  }
+
+Can btf_free() handle NULL pointers safely? Both inline_btf and btf are
+initialized to NULL and can remain NULL on several error paths:
+
+btf_parse_module() {
+    struct btf *btf = NULL, *inline_btf = NULL, ...
+
+If btf_parse_split() fails for the module BTF at the call site above,
+the code sets btf = NULL and jumps to errout, which then calls:
+
+errout:
+    btf_free(inline_btf);  /* NULL */
+    ...
+    btf_free(btf);         /* NULL */
+
+Looking at btf_free(), its first statement is
+btf_free_struct_meta_tab(btf), which dereferences btf->struct_meta_tab
+without a NULL check. Similarly, inline_btf is only assigned inside the
+if (inline_data_size) block, so it remains NULL on modules without inline
+BTF or when inline parsing fails.
+
+The pre-patch code guarded the btf free with:
+
+    if (btf) {
+        kvfree(btf->data);
+        kvfree(btf->types);
+        kfree(btf);
+    }
+
+while this patch replaces it with bare btf_free() calls. btf_parse() in
+this same file still uses the guarded pattern: if (btf) btf_free(btf).
+
+Three paths that can trigger this:
+
+1. btf_parse_split() fails for the module BTF due to -ENOMEM from
+kvmemdup, bad BTF magic/version in btf_parse_hdr(), malformed type
+metadata in btf_check_all_metas(), or -ELOOP from
+btf_check_modifier_chain_length(). Both btf and inline_btf are NULL at
+errout.
+
+2. btf_parse_base(".BTF.base", ...) fails for an out-of-tree module.
+Both btf and inline_btf are still NULL.
+
+3. btf_relocate() fails on a module with no .BTF.inline section, or whose
+inline parse already set inline_btf = NULL. btf_free(NULL) at errout.
+
+CONFIG_MODULE_ALLOW_BTF_MISMATCH exists so BTF validation failure
+degrades gracefully instead of failing module load, but with this patch
+the errout path would crash first.
 
 
 ---
@@ -205,4 +227,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33537080133
---===============8310105665022421972==--
+--===============7407090014249990527==--
