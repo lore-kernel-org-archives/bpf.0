@@ -1,182 +1,853 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1FC03655F0
-	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 06:20:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DC673750DB;
+	Tue,  1 Sep 2026 06:30:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788243653; cv=none; b=ED5KD0eQLBRMQzDt5T5FI7AazD2gmehNcd5xvpVcUUf1uFrSPRsfuEGmm5Waavo4WsiqflzS9xXiOsq1SPVB8VLyQ+rMkIAvybQZvhNUdZTTSBxiIYry62qIHqtUzTNy542qp285ofjet6TlkDYCKc6regntNgQ3WVu+Wu0Ywg8=
+	t=1788244221; cv=none; b=WAeaGG56YpUw/qf+qF22v+fI0P2zp1EfgiMV3jLniiIu/kjWhdDGCPhJS+wVXEqr/hc+F7YYCczASenguMNcs64qhOdR5WYPpUYgAnOQI/Fn9/Z+V9X+gc7j20JORFWFfhRrBnzidfMsoQDFRbqxwbbjv0Kfi0lOlvmoDHWogSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788243653; c=relaxed/simple;
-	bh=tpUUoLIM2aOLsxab7fNWMAQM6jLls8itSrAR07dXwoc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=WpKKUSl+N3dKFCyBRWWEABE4/X1qHBZO/OnzHaN8W2zhD2kGGvq7A6uPhYLnx5IYSQQWfBpSKr+5yZH7LUieMDsS6k+xTJfVzLvbwmGjlfwcEucm4Sb+HLIvX2SnBGmcSgTkEK8QvCDuOIQrhOLLDdXSWh4xGGuIBj/yjB9SHxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LV35OiIb; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788244221; c=relaxed/simple;
+	bh=awYWRwZTpc803kJeb1VD2Jniuc1ElIjgAZiHBIqFLss=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Xmmj+B8H8LhcAmKMVKjCI7JVdnnfKyVJMujD4BHojQsKxGT4zeoak15a1vovHuQicJZpkaF59xuUJIJO85BT2vJB7OUuMCwihFYWZbLDcirL68pOQByncVPA3da6PqCl5a1FF6iSVLXUcrqrv+ah1wGo6Go9yqy7P9Wf8278040=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=mJw7WJfc; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LV35OiIb"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2d9520b9155so5196885ad.3
-        for <bpf@vger.kernel.org>; Mon, 31 Aug 2026 23:20:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788243652; x=1788848452; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=8xO2I2T/Ef2MvjHky4J+U6USqxNuR9jyMN845Mg68AY=;
-        b=LV35OiIbDAiW9j5iPaL4Mu3jSn4AbXyPxc8IZbrOjONWuXmO1kO/72mdoE3YQ8S+uY
-         TTCleqpRXVlYHdKp1xU03ZWDiTo9ob6taNPa79RpzHTN8shsRfrlEv4Z/WPHK6htndNk
-         px+NfCBksO6s5RulRxLtqBAUqoDR+8HxUlF7NTENqS2K/9vwctg2scoseNiXwcrIsdaT
-         45rfeD1/keoqAu6rv2dfz5mSKPRL8lSLnFp7wQ6o16KuT5jtLMnG97qtE0no5w8SaZOm
-         eKOAY6gFsqSEwLvDv8Al86IO+Aj1FMo5Ulqge2BEA2eQ4v0vlIWJNls9IVrFA4QH05Ab
-         A3xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788243652; x=1788848452;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=8xO2I2T/Ef2MvjHky4J+U6USqxNuR9jyMN845Mg68AY=;
-        b=nJWR0Aw2IzR2Uilop9itTPrHPxVvZpX4u8AQc0uwpMDsBuU30U8HjDuY+09s1thcWi
-         Mt0Jp1AunKxoT7uWYgQ4DAkOa7Sl5pRy+re+gP9YClJQ60HWgdbVtcoVkDEjSH+IzEGj
-         bm2I1PJ0+RHODwsK2K48AgXYVVJuJVwuky95SN20NWxncoJoZ5v52k0RpzoimvaXigHf
-         isRtmEzLJW7ZTw9kwYGWjfB5tpNBQKn8sx8dUNcXu3Ah+Z3XYQKjOW8K2b118iUcJQeY
-         02YrR7nLYORj3leEVHrwsY0JGKN9qsZX7fsPfTlS0o/xFetgtKSFX+Vp/HEP26K1grKH
-         nUsA==
-X-Gm-Message-State: AFuF++myFVGg88w0SNLDm49xe2U0XAUfu5D+G5p8+UgEfSe60PqLhrCq
-	BVXEYYfC3MOVSUEBYyXD4hgQO0Y7TEA50rRhOMjjDRpf+3Mg/WvTFpoz
-X-Gm-Gg: AYBFou2sDTty0qazL9eFgLgNGvJ4dNZeSv0XpCGB2clY2m5zA48W3zX2rOYLCellgeU
-	CQCzJ9aLjp3cL68iRjyXHCInHiRt7V/ZpjX210mSxJ7851ioMcf5mcWFjRCtZXAlcAK0drS8aoW
-	sWR6Sq4RF4x6yLAVSRFh3l/rJ1cPIWO8wkR6vWlXSDtR6IzaIu6aEOSgzJOuuJ6mjaN6aE/oNdV
-	O+uSQS5BIcr3iF0HkQRnEKRwABCBMIKsyzTRGOL+K2IGKZeBUJZOxdl14zd3q8SyL/7v3BD8OQ/
-	/FKoQByH6RFAh7MDvq17lF8wc1FzUjGOfddvRnkgL4/tkb0VO1SoCyv3cnYiFyPoTYn0Rq6kOGQ
-	QvMh+EI13C/qEI3gMoV7VwSUqVBCPERf7RfzWWIeS92tZdKI+akRsOLUJBxxob8Eg/YOrdM8ori
-	4Q8fDY52xfk3x+0eAkmB0tLkI7W+HxYe6OMizfNNXRiBF3kBLS2xiWbu3YS3a0AuDf9zfg83ghT
-	5ngBH1GI1d5fJuR
-X-Received: by 2002:a17:903:8d0:b0:2d7:4cd4:5a7f with SMTP id d9443c01a7336-2d74def6351mr536747175ad.12.1788243651842;
-        Mon, 31 Aug 2026 23:20:51 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d7598b0455sm46798205ad.69.2026.08.31.23.20.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2026 23:20:51 -0700 (PDT)
-Message-ID: <836e4262927db41e736a461c45cd74c106525d1c.camel@gmail.com>
-Subject: Re: [PATCH bpf 1/2] bpf: backtracking shouldn't clear outer frame
- R1-R5 for callbacks
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Date: Mon, 31 Aug 2026 23:20:48 -0700
-In-Reply-To: <20260901020211.6F4871F000E9@smtp.kernel.org>
-References: 
-	<20260831-bug-015-backtrack-cb-args-precise-v1-1-68a8e2a821e0@gmail.com>
-	 <20260901020211.6F4871F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10+b1 
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="mJw7WJfc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=A0
+	wRnOe1OptnJji3/EBk4wcEzLHeWJp2ZtxElyEj4Xk=; b=mJw7WJfc3hZcdE2IfG
+	QZhv6tMuoiLriEEtRlX3UGdJIgwjUghqWvyAwxBzaupaSNdO3NtQvPwHCuzZdHDF
+	rWgw38/+Azc55h26xLzaaLGqSBOLTmcLVh/9NZVJSG/2OD+BzFCq1qMjTHEbKQXi
+	2LfjyL5WI/BgHrbYSGLzn9Xdw=
+Received: from nec8-i7 (unknown [])
+	by gzsmtp1 (Coremail) with SMTP id PCgvCgD3n5+mcJZqA6mBNA--.25535S6;
+	Tue, 01 Sep 2026 14:29:04 +0800 (CST)
+From: chenyuan_fl@163.com
+To: bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>,
+	Yuan Chen <chenyuan@kylinos.cn>
+Subject: [PATCH bpf-next v3 4/4] selftests/bpf: Test rhtab special-field combinations
+Date: Tue,  1 Sep 2026 14:28:45 +0800
+Message-ID: <20260901062845.1379760-5-chenyuan_fl@163.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260901062845.1379760-1-chenyuan_fl@163.com>
+References: <0560a24d-2cf9-4e5b-aa61-580af1e56de1@gmail.com>
+ <20260901062845.1379760-1-chenyuan_fl@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PCgvCgD3n5+mcJZqA6mBNA--.25535S6
+X-Coremail-Antispam: 1Uf129KBjvAXoWfCFWDZFyktFyruFy8tF4Utwb_yoW8tFW8to
+	Z3Ww45Za18GryvgFyvgFyvkF1rWayvg3srXF1Yg3y7Xa40kFy5ur9rCw47Xw17u3W09rWU
+	ua4jq34fZF1fJFWrn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUFeHqDUUUU
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDARCIRmqWcLB2YwAA32
 
-On Tue, 2026-09-01 at 02:02 +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [High] Flawed heuristic for distinguishing subprog exits from callback =
-exits causes the verifier to erroneously reject safe programs that call a s=
-ubprog immediately before a looping callback.
-> --
->=20
-> commit 09e9430ffafbb3bf72d2c301a4d20da098050142
-> Author: Eduard Zingerman <eddyz87@gmail.com>
->=20
-> bpf: backtracking shouldn't clear outer frame R1-R5 for callbacks
->=20
-> This commit fixes precision propagation for R1 during a second iteration =
-of
-> bpf_loop(). It removes the logic in backtrack_insn() that previously clea=
-red
-> R1-R5 when backtracking through a callback's BPF_EXIT, ensuring precision
-> marks are not incorrectly reset.
->=20
-> > diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
-> > index a2b18a9f1694c..4fe9065106739 100644
-> > --- a/kernel/bpf/backtrack.c
-> > +++ b/kernel/bpf/backtrack.c
-> > @@ -520,37 +520,34 @@ static int backtrack_insn(struct bpf_verifier_env=
- *env, int idx, int subseq_idx,
-> [ ... ]
-> > =C2=A0		} else if (opcode =3D=3D BPF_EXIT) {
-> > -			bool r0_precise;
-> > +			bool from_subprog_call, r0_precise;
-> > +
-> > +			/* BPF_EXIT in subprog or callback always returns
-> > +			 * right after the call instruction, so by checking
-> > +			 * whether the instruction at subseq_idx-1 is subprog
-> > +			 * call or not we can distinguish actual exit from
-> > +			 * *subprog* from exit from *callback*. In the former
-> > +			 * case, we need to propagate r0 precision, if
-> > +			 * necessary. In the former we never do that.
-> > +			 */
-> > +			from_subprog_call =3D subseq_idx - 1 >=3D 0 &&
-> > +					=C2=A0=C2=A0=C2=A0 bpf_pseudo_call(&env->prog->insnsi[subseq_idx =
-- 1]);
->=20
-> [Severity: High]
-> Can this heuristic misclassify a callback exit as a subprog exit?
->=20
-> If a program calls a subprog immediately followed by an iterating callbac=
-k
-> helper (like bpf_loop()), and we backtrack from the callback's BPF_EXIT,
-> subseq_idx equals the index of bpf_loop(). Checking subseq_idx - 1 evalua=
-tes
-> the instruction before bpf_loop(), which happens to be the subprog call.
->=20
-> This makes from_subprog_call incorrectly evaluate to true for the callbac=
-k.
+From: Yuan Chen <chenyuan@kylinos.cn>
 
-But that can't really happen. If the code looks like this:
+BPF_MAP_TYPE_RHASH allows spin locks, timers, workqueues, task_work,
+kptrs (referenced, untrusted, per-cpu) and refcounts in map values.
+The recycle fix only changes kptr slot handling, so verify each field
+combination end to end:
 
-  foo(...);
-  bpf_loop(...);
+  * lock_kptr: bpf_spin_lock + referenced kptr + plain data in one
+    value. BPF_F_LOCK syscall updates/lookups must work before and
+    after many delete/re-insert recycle cycles, the referenced kptr
+    must be inherited on recycled elements (zeroing it would leak the
+    reference), and the plain bytes must round-trip every iteration.
+  * timer: arm a bpf_timer and verify it fires, delete the element and
+    verify the timer is cancelled, then re-insert (possibly recycling
+    the freed element) and arm a fresh timer again.
+  * kptr_untrusted: the untrusted kptr must survive the recycle like a
+    referenced one.
+  * kptr_percpu: the per-cpu kptr reference must survive the recycle
+    (zeroing it would leak the reference).
 
-There should be r1-r4 setup for bpf_loop() call, because foo()
-invalidates those.
+On the unfixed kernel the three kptr subtests fail at the recycle
+assertions while the lock and timer paths still pass, isolating the
+behavior change to kptr slots only.
 
-> > +
-> > +			r0_precise =3D from_subprog_call && bt_is_reg_set(bt, BPF_REG_0);
-> > =C2=A0
-> > =C2=A0			/* Backtracking to a nested function call, 'idx' is a part of
-> > =C2=A0			 * the inner frame 'subseq_idx' is a part of the outer frame.
-> > =C2=A0			 * In case of a regular function call, instructions giving
-> > =C2=A0			 * precision to registers R1-R5 should have been found already=
-.
-> > -			 * In case of a callback, it is ok to have R1-R5 marked for
-> > -			 * backtracking, as these registers are set by the function
-> > -			 * invoking callback.
-> > +			 * In case of a callback from bpf_loop(), R{1,4} in the calling
-> > +			 * frame would be set as precise and that is correct.
-> > =C2=A0			 */
-> > -			if (subseq_idx >=3D 0 && bpf_calls_callback(env, subseq_idx))
-> > -				for (i =3D BPF_REG_1; i <=3D BPF_REG_5; i++)
-> > -					bt_clear_reg(bt, i);
-> > -			if (bt_reg_mask(bt) & BPF_REGMASK_ARGS) {
-> > +			if (from_subprog_call && (bt_reg_mask(bt) & BPF_REGMASK_ARGS)) {
-> > =C2=A0				verifier_bug(env, "backtracking exit unexpected regs %x",
-> > =C2=A0					=C2=A0=C2=A0=C2=A0=C2=A0 bt_reg_mask(bt));
-> > =C2=A0				return -EFAULT;
-> > =C2=A0			}
->=20
-> [Severity: High]
-> Will this incorrectly trigger the verifier bug check for callbacks?
->=20
-> Because bpf_loop() requests R1 precision (which falls under BPF_REGMASK_A=
-RGS),
-> the misclassified from_subprog_call causes this safety check to evaluate =
-to
-> true. Could this prematurely abort verification with -EFAULT and falsely =
-reject
-> perfectly safe BPF programs?
+Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+---
+ .../selftests/bpf/prog_tests/rhtab_fields.c   | 337 ++++++++++++++++
+ .../selftests/bpf/progs/rhtab_fields.c        | 378 ++++++++++++++++++
+ .../selftests/bpf/rhtab_fields_common.h       |  19 +
+ 3 files changed, 734 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/rhtab_fields.c
+ create mode 100644 tools/testing/selftests/bpf/progs/rhtab_fields.c
+ create mode 100644 tools/testing/selftests/bpf/rhtab_fields_common.h
 
-See above.
+diff --git a/tools/testing/selftests/bpf/prog_tests/rhtab_fields.c b/tools/testing/selftests/bpf/prog_tests/rhtab_fields.c
+new file mode 100644
+index 000000000000..93e8cbacca65
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/rhtab_fields.c
+@@ -0,0 +1,337 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 KylinSoft Co., Ltd. */
++
++#include <stddef.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <test_progs.h>
++#include "rhtab_fields.skel.h"
++#include "rhtab_fields_common.h"
++
++#define RECYCLE_LOOPS 2000
++
++/* Userspace view of the lkmap value. The BPF side owns the real layout;
++ * the spin lock and the kptr are special fields that value copies skip,
++ * so only the plain bytes actually matter here.
++ */
++struct lock_kptr_val_user {
++	__u32 lock;
++	__u32 pad;
++	__u64 tsk;
++	__u32 magic;
++	__u32 pad2;
++};
++
++_Static_assert(sizeof(struct lock_kptr_val_user) == 24, "lkmap layout drift");
++_Static_assert(offsetof(struct lock_kptr_val_user, magic) == 16,
++	       "lkmap magic offset drift");
++
++/*
++ * Zeroed value buffer shared by every create/update issued from userspace.
++ * The update syscall copies map->value_size bytes from this buffer (special
++ * fields among them), so a short stack variable would be read past its end;
++ * BSS is zero-filled and 64 bytes cover every map in the skeleton. Each
++ * caller re-checks the size to keep that true as maps are added.
++ */
++static __u8 zero_val[64];
++
++/* Cached CPU count and scratch buffer for percpu counter summation. */
++static __u64 *cpu_vals;
++static int ncpu;
++
++static __u64 read_counter(struct rhtab_fields *skel, __u32 idx)
++{
++	__u64 sum = 0;
++	int i, err;
++
++	err = bpf_map_lookup_elem(bpf_map__fd(skel->maps.counters), &idx,
++				  cpu_vals);
++	if (!ASSERT_OK(err, "lookup_counter"))
++		return 0;
++	for (i = 0; i < ncpu; i++)
++		sum += cpu_vals[i];
++	return sum;
++}
++
++/*
++ * Run @name through BPF_PROG_TEST_RUN. Returns 0 on success and reports the
++ * program retval through @retval, so callers can tell a syscall failure,
++ * a prog that exited nonzero, and a prog that exited 0 apart.
++ */
++static int run_prog(struct rhtab_fields *skel, const char *name, int *retval)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++	struct bpf_program *prog;
++	int err;
++
++	prog = bpf_object__find_program_by_name(skel->obj, name);
++	if (!ASSERT_OK_PTR(prog, name))
++		return -1;
++	err = bpf_prog_test_run_opts(bpf_program__fd(prog), &topts);
++	if (!ASSERT_OK(err, name))
++		return -1;
++	if (retval)
++		*retval = topts.retval;
++	return 0;
++}
++
++/* run_prog() plus the assertion that the program exited 0. */
++static int run_prog_ok(struct rhtab_fields *skel, const char *name)
++{
++	int retval = -1;
++
++	if (!ASSERT_OK(run_prog(skel, name, &retval), name))
++		return -1;
++	if (!ASSERT_EQ(retval, 0, name))
++		return -1;
++	return 0;
++}
++
++/* Create one element filled with zero_val in @map. */
++static int create_zero_elem(struct bpf_map *map, const char *name)
++{
++	__u32 key = 0;
++	int fd;
++
++	if (!ASSERT_LE(bpf_map__value_size(map), sizeof(zero_val),
++		       "value_size_fits"))
++		return -1;
++	fd = bpf_map__fd(map);
++	return bpf_map_update_elem(fd, &key, zero_val, BPF_ANY);
++}
++
++static void recycle_loop(struct rhtab_fields *skel, int map_fd,
++			 const char *init, const char *del,
++			 const char *upd, const char *probe,
++			 int *retries)
++{
++	__u32 key = 0;
++	int i;
++
++	for (i = 0; i < RECYCLE_LOOPS; i++) {
++		if (run_prog_ok(skel, init) != 0) {
++			/* init fails only if the element is missing, which
++			 * must not happen in this single-threaded loop. Count
++			 * it so a rhtab bug cannot be absorbed silently; the
++			 * caller asserts the count is zero.
++			 */
++			(*retries)++;
++			if (!ASSERT_OK(bpf_map_update_elem(map_fd, &key,
++							   zero_val, BPF_ANY),
++				       "recreate_elem"))
++				return;
++			if (run_prog_ok(skel, init) != 0)
++				return;
++		}
++		if (run_prog_ok(skel, del) != 0)
++			return;
++		if (run_prog_ok(skel, upd) != 0)
++			return;
++		if (run_prog_ok(skel, probe) != 0)
++			return;
++	}
++}
++
++static void subtest_lock_kptr(struct rhtab_fields *skel)
++{
++	struct lock_kptr_val_user val = {};
++	struct lock_kptr_val_user out = {};
++	__u64 nonnull_before, total;
++	int map_fd, retries = 0;
++	__u32 key = 0;
++
++	map_fd = bpf_map__fd(skel->maps.lkmap);
++
++	if (!ASSERT_OK(create_zero_elem(skel->maps.lkmap, "create_elem"),
++		       "create_elem"))
++		return;
++
++	/* The spin lock must be usable from the syscall path (BPF_F_LOCK). */
++	val.magic = LK_MAGIC;
++	if (!ASSERT_OK(bpf_map_update_elem(map_fd, &key, &val, BPF_F_LOCK),
++		       "locked_update"))
++		return;
++	if (!ASSERT_OK(bpf_map_lookup_elem_flags(map_fd, &key, &out, BPF_F_LOCK),
++		       "locked_lookup"))
++		return;
++	ASSERT_EQ(out.magic, LK_MAGIC, "locked_lookup_magic");
++
++	/*
++	 * Delete/re-insert recycle cycles: the referenced kptr must be
++	 * inherited on recycled elements (zeroing it would leak the
++	 * reference) and the plain magic bytes must round-trip every time.
++	 * Every iteration runs exactly one probe, so the two probe counters
++	 * must add up to the loop count; the magic check must hold on every
++	 * single probe.
++	 */
++	nonnull_before = read_counter(skel, 1);
++	recycle_loop(skel, map_fd, "lk_init", "lk_del", "lk_upd", "lk_probe",
++		     &retries);
++	ASSERT_EQ(retries, 0, "no_unexpected_recreate");
++	ASSERT_EQ(read_counter(skel, 0), RECYCLE_LOOPS, "lk_init_count");
++	total = read_counter(skel, 1) + read_counter(skel, 2);
++	ASSERT_EQ(total, RECYCLE_LOOPS, "lk_probe_count");
++	ASSERT_EQ(read_counter(skel, 3), RECYCLE_LOOPS,
++		  "recycle_magic_roundtrip");
++	ASSERT_GT(read_counter(skel, 1), nonnull_before,
++		  "recycle_xchg_non_null");
++
++	/* The spin lock must still work after many recycles. */
++	val.magic = LK_MAGIC + 1;
++	if (!ASSERT_OK(bpf_map_update_elem(map_fd, &key, &val, BPF_F_LOCK),
++		       "post_recycle_locked_update"))
++		return;
++	memset(&out, 0, sizeof(out));
++	if (!ASSERT_OK(bpf_map_lookup_elem_flags(map_fd, &key, &out, BPF_F_LOCK),
++		       "post_recycle_locked_lookup"))
++		return;
++	ASSERT_EQ(out.magic, LK_MAGIC + 1, "post_recycle_locked_magic");
++}
++
++static void subtest_timer(struct rhtab_fields *skel)
++{
++	int fired, map_fd;
++	__u32 key = 0;
++
++	map_fd = bpf_map__fd(skel->maps.tmap);
++
++	if (!ASSERT_OK(create_zero_elem(skel->maps.tmap, "create_elem"),
++		       "create_elem"))
++		return;
++
++	/* 1. A short-delay timer must fire. */
++	skel->data->timer_delay_ns = 50000;
++	if (run_prog_ok(skel, "arm_timer") != 0)
++		return;
++	usleep(300000);
++	if (!ASSERT_GT(skel->bss->timer_fired, 0, "timer_fired_first"))
++		return;
++
++	/*
++	 * 2. The real cancellation test: arm a long-delay timer on a freshly
++	 * recycled element and delete the element while the timer is still
++	 * pending. If the delete failed to cancel it, the callback would run
++	 * before the sleep below ends. The element must be deleted and
++	 * recreated between arms: bpf_timer_init() returns -EBUSY on an
++	 * element whose timer has not been cancelled and freed yet.
++	 */
++	fired = skel->bss->timer_fired;
++	if (!ASSERT_OK(bpf_map_delete_elem(map_fd, &key),
++		       "delete_before_rearm"))
++		return;
++	if (!ASSERT_OK(create_zero_elem(skel->maps.tmap, "recreate_elem"),
++		       "recreate_before_rearm"))
++		return;
++	skel->data->timer_delay_ns = 200000000;
++	if (run_prog_ok(skel, "arm_timer") != 0)
++		return;
++	if (!ASSERT_OK(bpf_map_delete_elem(map_fd, &key),
++		       "delete_cancels_timer"))
++		return;
++	usleep(300000);
++	ASSERT_EQ(skel->bss->timer_fired, fired, "timer_cancelled_after_delete");
++
++	/* 3. A recycled element can arm and fire a fresh timer again. */
++	skel->data->timer_delay_ns = 50000;
++	if (!ASSERT_OK(create_zero_elem(skel->maps.tmap, "recreate_elem"),
++		       "recreate_second"))
++		return;
++	if (run_prog_ok(skel, "arm_timer") != 0)
++		return;
++	usleep(300000);
++	ASSERT_GT(skel->bss->timer_fired, fired, "timer_fired_second");
++}
++
++struct kptr_recycle_case {
++	const char *name;
++	struct bpf_map **map;
++	const char *init;
++	const char *del;
++	const char *upd;
++	const char *probe;
++	__u32 init_idx;    /* counter bumped on every successful init */
++	__u32 nonnull_idx; /* counter bumped when the kptr was inherited */
++	__u32 null_idx;    /* counter bumped when the kptr was not inherited */
++	__u32 marker_idx;  /* percpu data roundtrip counter, 0 if none */
++};
++
++static void subtest_kptr_recycle(struct rhtab_fields *skel,
++				 const struct kptr_recycle_case *c)
++{
++	__u64 nonnull_before, total;
++	struct bpf_map *map;
++	int map_fd, retries = 0;
++
++	map = *c->map;
++	map_fd = bpf_map__fd(map);
++
++	if (!ASSERT_OK(create_zero_elem(map, "create_elem"), "create_elem"))
++		return;
++
++	/* The kptr must survive the recycle without leaking its reference,
++	 * exactly like the referenced kptr in the lkmap subtest.
++	 */
++	nonnull_before = read_counter(skel, c->nonnull_idx);
++	recycle_loop(skel, map_fd, c->init, c->del, c->upd, c->probe,
++		     &retries);
++	ASSERT_EQ(retries, 0, "no_unexpected_recreate");
++	ASSERT_EQ(read_counter(skel, c->init_idx), RECYCLE_LOOPS,
++		  "init_count");
++	total = read_counter(skel, c->nonnull_idx) +
++		read_counter(skel, c->null_idx);
++	ASSERT_EQ(total, RECYCLE_LOOPS, "probe_count");
++	ASSERT_GT(read_counter(skel, c->nonnull_idx), nonnull_before,
++		  "recycle_non_null");
++	/* The marker read is CPU-local, so assert at least one hit. */
++	if (c->marker_idx)
++		ASSERT_GT(read_counter(skel, c->marker_idx), 0,
++			  "recycle_data_roundtrip");
++}
++
++static void subtest_kptr_recycles(struct rhtab_fields *skel)
++{
++	const struct kptr_recycle_case cases[] = {
++		{ .name = "kptr_untrusted", .map = &skel->maps.umap,
++		  .init = "u_init", .del = "u_del", .upd = "u_upd",
++		  .probe = "u_probe", .init_idx = 4, .nonnull_idx = 5,
++		  .null_idx = 6 },
++		{ .name = "kptr_percpu", .map = &skel->maps.pcmap,
++		  .init = "pc_init", .del = "pc_del", .upd = "pc_upd",
++		  .probe = "pc_probe", .init_idx = 7, .nonnull_idx = 8,
++		  .null_idx = 9, .marker_idx = 10 },
++	};
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(cases); i++) {
++		if (test__start_subtest(cases[i].name))
++			subtest_kptr_recycle(skel, &cases[i]);
++	}
++}
++
++void test_rhtab_fields(void)
++{
++	struct rhtab_fields *skel;
++
++	ncpu = libbpf_num_possible_cpus();
++	if (!ASSERT_GT(ncpu, 0, "num_possible_cpus"))
++		return;
++	cpu_vals = calloc(ncpu, sizeof(*cpu_vals));
++	if (!ASSERT_OK_PTR(cpu_vals, "calloc_cpu_vals"))
++		return;
++
++	skel = rhtab_fields__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load")) {
++		free(cpu_vals);
++		return;
++	}
++
++	if (test__start_subtest("lock_kptr"))
++		subtest_lock_kptr(skel);
++	if (test__start_subtest("timer"))
++		subtest_timer(skel);
++	subtest_kptr_recycles(skel);
++
++	rhtab_fields__destroy(skel);
++	free(cpu_vals);
++}
+diff --git a/tools/testing/selftests/bpf/progs/rhtab_fields.c b/tools/testing/selftests/bpf/progs/rhtab_fields.c
+new file mode 100644
+index 000000000000..f8bcd88b7f34
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/rhtab_fields.c
+@@ -0,0 +1,378 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 KylinSoft Co., Ltd. */
++
++/*
++ * Combined special-field tests for BPF_MAP_TYPE_RHASH. Each map carries a
++ * different field combination and is exercised through delete/re-insert
++ * cycles so the bpf memory allocator recycles element memory:
++ *
++ *  1. lkmap: bpf_spin_lock + referenced kptr + plain data in one value.
++ *     After every recycle the spin lock must still be usable (initialized by
++ *     the alloc path), the referenced kptr must be inherited instead of
++ *     zeroed (zeroing would leak the reference), and the plain bytes must
++ *     round-trip.
++ *  2. tmap: bpf_timer. The delete path must cancel a timer that is still
++ *     pending (the delay is tunable through timer_delay_ns so userspace can
++ *     arm a long timer and delete the element before it fires), and a
++ *     recycled element must be able to arm a fresh timer again.
++ *  3. umap: untrusted (unreferenced) kptr. The inherited pointer must be
++ *     preserved on recycle, matching hash map behavior.
++ *  4. pcmap: per-cpu kptr. Like the referenced kptr, the per-cpu reference
++ *     must not be dropped on recycle, and the object's contents must
++ *     survive the recycle round-trip.
++ *
++ * The delete programs check that the element really disappeared, otherwise
++ * the following update would be an in-place update whose value copy skips
++ * the special fields, and the surviving kptr would prove nothing about the
++ * recycle path.
++ */
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_experimental.h"
++#include "rhtab_fields_common.h"
++
++char LICENSE[] SEC("license") = "GPL";
++
++struct lock_kptr_val {
++	struct bpf_spin_lock lock;
++	struct task_struct __kptr *tsk;
++	__u32 magic;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_RHASH);
++	__uint(max_entries, 16);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__type(key, __u32);
++	__type(value, struct lock_kptr_val);
++} lkmap SEC(".maps");
++
++struct timer_val {
++	struct bpf_timer timer;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_RHASH);
++	__uint(max_entries, 16);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__type(key, __u32);
++	__type(value, struct timer_val);
++} tmap SEC(".maps");
++
++struct unref_val {
++	struct task_struct __kptr_untrusted *tsk;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_RHASH);
++	__uint(max_entries, 16);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__type(key, __u32);
++	__type(value, struct unref_val);
++} umap SEC(".maps");
++
++struct pcval {
++	__u64 v;
++};
++
++struct pcpu_val {
++	struct pcval __percpu_kptr *pc;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_RHASH);
++	__uint(max_entries, 16);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__type(key, __u32);
++	__type(value, struct pcpu_val);
++} pcmap SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
++	__uint(max_entries, 11);
++	__type(key, __u32);
++	__type(value, __u64);
++} counters SEC(".maps");
++
++/*  0: lk init ok,       1: lk probe xchg non-NULL,  2: lk probe xchg NULL,
++ *  3: lk probe magic ok,
++ *  4: u init ok,        5: u probe ptr non-NULL,    6: u probe ptr NULL,
++ *  7: pc init ok,       8: pc probe xchg non-NULL,  9: pc probe xchg NULL,
++ * 10: pc probe data roundtrip
++ */
++static __always_inline void bump(u32 idx)
++{
++	u64 *v = bpf_map_lookup_elem(&counters, &idx);
++
++	if (v)
++		(*v)++;
++}
++
++extern struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
++extern void bpf_task_release(struct task_struct *p) __ksym;
++extern void bpf_rcu_read_lock(void) __ksym;
++extern void bpf_rcu_read_unlock(void) __ksym;
++
++/* Tunable from userspace (an initialized global lands in .data, so the
++ * driver writes it through skel->data, not skel->bss).
++ */
++int timer_delay_ns = 50000;
++int timer_fired;
++
++/* Map 1: spin lock + referenced kptr + plain data. */
++
++SEC("syscall")
++int lk_init(void *ctx)
++{
++	struct lock_kptr_val *val;
++	struct task_struct *task, *old;
++	u32 key = 0;
++
++	val = bpf_map_lookup_elem(&lkmap, &key);
++	if (!val)
++		return 1;
++	task = bpf_task_acquire(bpf_get_current_task_btf());
++	if (!task)
++		return 2;
++	old = bpf_kptr_xchg(&val->tsk, task);
++	if (old)
++		bpf_task_release(old);
++	bump(0);
++	return 0;
++}
++
++SEC("syscall")
++int lk_del(void *ctx)
++{
++	u32 key = 0;
++
++	if (bpf_map_delete_elem(&lkmap, &key))
++		return 1;
++	/* The element must really be gone: otherwise the following lk_upd()
++	 * is an in-place update on the surviving element and the kptr that
++	 * lk_probe() then observes never went through a recycle.
++	 */
++	if (bpf_map_lookup_elem(&lkmap, &key))
++		return 2;
++	return 0;
++}
++
++SEC("syscall")
++int lk_upd(void *ctx)
++{
++	struct lock_kptr_val val = { .magic = LK_MAGIC };
++	u32 key = 0;
++
++	/* BPF_ANY is safe even though the value holds a spin lock: value
++	 * copies skip special fields, so the lock word is never written and
++	 * the prog side does not need to take the lock for an update.
++	 */
++	bpf_map_update_elem(&lkmap, &key, &val, BPF_ANY);
++	return 0;
++}
++
++SEC("syscall")
++int lk_probe(void *ctx)
++{
++	struct lock_kptr_val *val;
++	struct task_struct *old;
++	__u32 magic;
++	u32 key = 0;
++
++	val = bpf_map_lookup_elem(&lkmap, &key);
++	if (!val)
++		return 1;
++	/* Take the lock directly: a recycled element that came back with a
++	 * corrupted lock word deadlocks here instead of passing. Helpers are
++	 * forbidden while the lock is held, so the xchg stays outside.
++	 */
++	bpf_spin_lock(&val->lock);
++	magic = val->magic;
++	bpf_spin_unlock(&val->lock);
++	old = bpf_kptr_xchg(&val->tsk, NULL);
++	if (old) {
++		bpf_task_release(old);
++		bump(1);
++	} else {
++		bump(2);
++	}
++	if (magic == LK_MAGIC)
++		bump(3);
++	return 0;
++}
++
++/* Map 2: bpf_timer. */
++
++static int timer_cb(void *map, void *key, struct timer_val *value)
++{
++	timer_fired++;
++	return 0;
++}
++
++SEC("syscall")
++int arm_timer(void *ctx)
++{
++	struct timer_val *val;
++	u32 key = 0;
++
++	val = bpf_map_lookup_elem(&tmap, &key);
++	if (!val)
++		return 1;
++	/* 1 == CLOCK_MONOTONIC */
++	if (bpf_timer_init(&val->timer, &tmap, 1))
++		return 2;
++	bpf_timer_set_callback(&val->timer, timer_cb);
++	if (bpf_timer_start(&val->timer, timer_delay_ns, 0))
++		return 3;
++	return 0;
++}
++
++/* Map 3: untrusted kptr. */
++
++SEC("syscall")
++int u_init(void *ctx)
++{
++	struct unref_val *val;
++	u32 key = 0;
++
++	val = bpf_map_lookup_elem(&umap, &key);
++	if (!val)
++		return 1;
++	val->tsk = bpf_get_current_task_btf();
++	bump(4);
++	return 0;
++}
++
++SEC("syscall")
++int u_del(void *ctx)
++{
++	u32 key = 0;
++
++	if (bpf_map_delete_elem(&umap, &key))
++		return 1;
++	if (bpf_map_lookup_elem(&umap, &key))
++		return 2;
++	return 0;
++}
++
++SEC("syscall")
++int u_upd(void *ctx)
++{
++	struct unref_val val = {};
++	u32 key = 0;
++
++	bpf_map_update_elem(&umap, &key, &val, BPF_ANY);
++	return 0;
++}
++
++SEC("syscall")
++int u_probe(void *ctx)
++{
++	struct unref_val *val;
++	u32 key = 0;
++
++	val = bpf_map_lookup_elem(&umap, &key);
++	if (!val)
++		return 1;
++	if (val->tsk)
++		bump(5);
++	else
++		bump(6);
++	val->tsk = NULL;
++	return 0;
++}
++
++/* Map 4: per-cpu kptr. */
++
++SEC("syscall")
++int pc_init(void *ctx)
++{
++	struct pcpu_val *val;
++	struct pcval *p, *cp, *q, *old;
++	u32 key = 0;
++
++	val = bpf_map_lookup_elem(&pcmap, &key);
++	if (!val)
++		return 1;
++	p = bpf_percpu_obj_new(struct pcval);
++	if (!p)
++		return 2;
++	old = bpf_kptr_xchg(&val->pc, p);
++	if (old)
++		bpf_percpu_obj_drop(old);
++	/* After the xchg the slot holds p, so q aliases p. Syscall progs are
++	 * sleepable, so the kptr field load only yields a trusted per-cpu
++	 * view under an explicit RCU read lock.
++	 */
++	bpf_rcu_read_lock();
++	q = val->pc;
++	if (q) {
++		cp = bpf_this_cpu_ptr(q);
++		cp->v = PC_MAGIC;
++	}
++	bpf_rcu_read_unlock();
++	bump(7);
++	return 0;
++}
++
++SEC("syscall")
++int pc_del(void *ctx)
++{
++	u32 key = 0;
++
++	if (bpf_map_delete_elem(&pcmap, &key))
++		return 1;
++	if (bpf_map_lookup_elem(&pcmap, &key))
++		return 2;
++	return 0;
++}
++
++SEC("syscall")
++int pc_upd(void *ctx)
++{
++	struct pcpu_val val = {};
++	u32 key = 0;
++
++	bpf_map_update_elem(&pcmap, &key, &val, BPF_ANY);
++	return 0;
++}
++
++SEC("syscall")
++int pc_probe(void *ctx)
++{
++	struct pcpu_val *val;
++	struct pcval *cp, *q, *old;
++	u32 key = 0;
++	int marker = 0;
++
++	val = bpf_map_lookup_elem(&pcmap, &key);
++	if (!val)
++		return 1;
++	/* The object was freshly allocated and marked by pc_init() within
++	 * the same iteration, so an inherited object must still carry the
++	 * marker; q aliases old until the drop. Read the marker under the
++	 * RCU read lock (which makes the field load trusted) and before the
++	 * xchg NULLs the field. The read is CPU-local and the loop may
++	 * migrate between CPUs, so userspace only asserts that this fired
++	 * at least once.
++	 */
++	bpf_rcu_read_lock();
++	q = val->pc;
++	if (q) {
++		cp = bpf_this_cpu_ptr(q);
++		if (cp->v == PC_MAGIC)
++			marker = 1;
++	}
++	bpf_rcu_read_unlock();
++	old = bpf_kptr_xchg(&val->pc, NULL);
++	if (old) {
++		if (marker)
++			bump(10);
++		bpf_percpu_obj_drop(old);
++		bump(8);
++	} else {
++		bump(9);
++	}
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/rhtab_fields_common.h b/tools/testing/selftests/bpf/rhtab_fields_common.h
+new file mode 100644
+index 000000000000..b52fb5e62807
+--- /dev/null
++++ b/tools/testing/selftests/bpf/rhtab_fields_common.h
+@@ -0,0 +1,19 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (c) 2026 KylinSoft Co., Ltd. */
++#pragma once
++
++/*
++ * Constants shared between the rhtab_fields BPF program (progs/) and its
++ * userspace driver (prog_tests/) so the two sides cannot drift apart
++ * silently.
++ */
++
++/* Magic value stored in the plain bytes of lkmap values ("RHAB"). */
++#define LK_MAGIC 0x52484142
++
++/*
++ * Marker written into freshly allocated per-cpu objects of pcmap. Distinct
++ * from LK_MAGIC on purpose: a hit proves the data came from our own
++ * pc_init(), not from anything else.
++ */
++#define PC_MAGIC 0x43504d47
+-- 
+2.54.0
+
