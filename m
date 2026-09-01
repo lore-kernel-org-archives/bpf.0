@@ -1,101 +1,177 @@
-Received: from mta1.migadu.com (out-60.mta1.migadu.com [95.215.58.60])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C7D31B833
-	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 02:41:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.60
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 462C93AC0CB;
+	Tue,  1 Sep 2026 02:50:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788230470; cv=none; b=MDG3UdNbJqEEoaFYH+BSgGPSGhOjoyuVdmOa8PDKWW0b7pK4ZpTu6QHL0KFKta3yCCgrn3lCSwXdEn21vh3v0XDll9O1HgmTn4/m4/9ildHNvXRTzKAjL5bu6iw73tHY67UJS9/8cBOg7dMxYk+Hud92hNfrWUJsu7fsGr2vJTE=
+	t=1788231048; cv=none; b=u9KI+ACL4DwP8YkYtNJCA9adbWVBcbnLZYdOHeZDTTje565Hra+lFMSQ+P9L85FMJg7rS+arM6PZJYBqnQCW8q6N2QLLK1x1c1rBgKLsuyRR/HQJopNxE4WM2zGspPeJY+uiDZEIIxW4mumO1nP+K9iynTHstbAv7wk5VGxcBe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788230470; c=relaxed/simple;
-	bh=+g8JFj6bSuPhOwWMaBi1S77p3N0JoJc+KMCCgtIXAqg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hV8GD+c9HB8hkNKli0/+oMcXmJ6BXM9/PpyJjvoNde8L33hY+8/E+mPfBzj8z2EZ/7+Z9tJOYi2pgPK6gTGqYqVYnYtH6rH9C11xlZuqWwOHvhZa59j/MN9eqn3sJPbLWAghViHhK/vIsDyJ2rSfnW7Yli6uFjrpJHk1CMkrQr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LfvTh0FN; arc=none smtp.client-ip=95.215.58.60
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788231048; c=relaxed/simple;
+	bh=0oTlVcg/slOeyxwlhmb2CPyyqZc8h0C/OfXA/4iz7A8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=aN/qIqfxfoPXm0DsBBg2b38Uv6k/4WIZ2Xt4ly08BZUTuDMxetzO41gcb7sVpDhIBJbS7iHZ3OgMhmZzEJ0zvb+xKGIbmutBv4CYPteSL4q07Fih+wbnI9OpmknlAcxen22q4EkJCN595L8TgGXg4KMrgVwGYdFWzy7A0lyGGn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g3sqZ5wm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LfvTh0FN"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=+g8JFj6bSuPhOwWMaBi1S77p3N0JoJc+KMCCgtIXAqg=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788230461; v=1; x=1788835261;
- b=LfvTh0FN43rOVOo09URUo19lOKDNohwxrxEfLNJFn9kiQccjQ5VNlklzE17m9oT7hi85bIIp
- GWqEiFVhoa792eTXaz+4iHRjsXY8hbCC+G0rxSdqzJSrnIQjxgCA0JG60LTTATrj7FdN7NTTrSC
- jKzvBVuGxQM9RbBmAzDmnBMw=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 04d6f9c65dfb2da7;
-	Tue, 01 Sep 2026 02:41:01 +0000
-X-Mizu-Trace-ID: 04d6f9c65dfb2da7
-X-Migadu-Flow: FLOW_OUT
-From: Tao Cui <cui.tao@linux.dev>
-To: tj@kernel.org,
-	void@manifault.com
-Cc: arighi@nvidia.com,
-	changwoo@igalia.com,
-	michalblk@google.com,
-	liwanwu@kylinos.cn,
-	sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	cui.tao@linux.dev,
-	Tao Cui <cuitao@kylinos.cn>,
-	Sashiko <sashiko-bot@kernel.org>
-Subject: [PATCH 2/2] sched_ext/scx_flatcg: make cgv_node_less() wraparound-safe
-Date: Tue,  1 Sep 2026 10:40:38 +0800
-Message-ID: <20260901024038.730424-3-cui.tao@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260901024038.730424-1-cui.tao@linux.dev>
-References: <20260901024038.730424-1-cui.tao@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g3sqZ5wm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7BE31F000E9;
+	Tue,  1 Sep 2026 02:50:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788231045;
+	bh=B31WDxXmWvC78nyAEw77XkUldK8/MmelFrCkkwtq8rI=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=g3sqZ5wm8g/fvbN6uAhsgnXNhMVdmrI+blpZJVmntANy60KKpozLY8YraHztL9/0M
+	 zAl9IZtBzpzGTtrfBVWP64hVmKFloLr/luHeh6AhtDuWIoqVwlFFHffY6Yz7jCrhyJ
+	 30OCooU6CLwiatLoTiO6gOBd2BRzm+dzt6yw+oK3DOXWjYfZTPXnyfWqawNhVzlt5X
+	 eRQv0HMUauyAs0St/ZLjwXZKDnh3BN5tEuy2YJ04MLPtsMctb7q4tu50z0iCGeo27v
+	 rhQMtujth3MM3rGQ6nPsTehXceFGxitmOeWh8eeYwqdmiwqcCXyCkjp/8oTTy70EAG
+	 1WLC6M1ht1t0A==
+Content-Type: multipart/mixed; boundary="===============8556434494740287810=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <114d1ed8b1f7d95d56efdf5fa8ee09eee9ef8ced7d27c123b00479f163dbef00@mail.kernel.org>
+In-Reply-To: <20260901014713.3502900-4-sanghyun.park.cnu@gmail.com>
+References: <20260901014713.3502900-4-sanghyun.park.cnu@gmail.com>
+Subject: Re: [PATCH bpf-next v5 2/2] selftests/bpf: Cover attach type checks in link update
+From: bot+bpf-ci@kernel.org
+To: sanghyun.park.cnu@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,bpf@vger.kernel.org
+Cc: sanghyun.park.cnu@gmail.com,leon.hwang@linux.dev,john.fastabend@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,sdf@fomichev.me,pulehui@huawei.com,suchitkarunakaran@gmail.com,xukuohai@huawei.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue,  1 Sep 2026 02:50:43 +0000 (UTC)
 
-From: Tao Cui <cuitao@kylinos.cn>
+--===============8556434494740287810==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-cgv_node_less() compares cvtimes with a plain <, which breaks once
-cvtime wraps. A weight-1 cgroup in a hierarchy summing to 10000
-advances cvtime at up to 10000x wall time, so 2^64 ns of cvtime is
-weeks of continuous saturation away -- unlikely but reachable on a
-long-running host. At the wrap instant the plain comparison puts the
-wrapped node behind everything else permanently.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
+> index 15093a69510eb..3b43c34917ccc 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
+> @@ -1,6 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>
+>  #include <test_progs.h>
+> +#include "cap_helpers.h"
+>  #include "cgroup_helpers.h"
+>  #include "testing_helpers.h"
+>  #include "test_cgroup_link.skel.h"
 
-Compare with (s64)(a - b) < 0 instead, as CFS does for vruntime. A
-cyclic comparison is valid as an rbtree comparator only because
-cgrp_cap_budget() clamps every node to within max_budget behind
-cvtime_now, so any two nodes are far less than 2^63 apart and the
-cyclic order agrees with the true order.
+[ ... ]
 
-Compile-tested and smoke-tested in a VM: weight distribution and
-dispatch unaffected.
+> +static void test_cgroup_link_update(void)
+> +{
+> +	const __u64 caps = (1ULL << CAP_NET_ADMIN) | (1ULL << CAP_SYS_ADMIN);
+> +	struct bpf_link *link = NULL;
+> +	__u64 saved_caps = 0;
+> +	int cg_fd = -1, err;
+> +
+> +	skel = test_cgroup_link__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "skel_open_load"))
+> +		return;
 
-Fixes: 7b742aa2c2c9 ("sched_ext: Add a cgroup scheduler which uses flattened hierarchy")
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Link: https://lore.kernel.org/r/3f1ce004-e259-4e72-a5f7-14a5050053bd@linux.dev
-Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+This isn't a bug, but since this subtest never goes through
+ping_and_check(), would a local `struct test_cgroup_link *skel` work
+here instead of the file-scope global (which would also make the
+trailing `skel = NULL;` unnecessary)?
+
+> +
+> +	err = setup_cgroup_environment();
+> +	if (!ASSERT_OK(err, "cg_init"))
+> +		goto cleanup;
+> +
+> +	cg_fd = create_and_get_cgroup("/cgroup_link_update");
+> +	if (!ASSERT_GE(cg_fd, 0, "cg_create"))
+> +		goto cleanup;
+> +
+> +	err = join_cgroup("/cgroup_link_update");
+> +	if (!ASSERT_OK(err, "cg_join"))
+> +		goto cleanup;
+
+A subsystem pattern flags this as potentially concerning: the three-call
+sequence setup_cgroup_environment() + create_and_get_cgroup(path) +
+join_cgroup(path) is exactly what test__join_cgroup(path) provides in
+test_progs.c. Using the shared helper would collapse these three blocks
+(and their three separate ASSERT/goto arms) into one call plus one
+ASSERT_GE(cg_fd, 0, ...). The harness also sets env.test->
+need_cgroup_cleanup so teardown happens even if the subtest exits early.
+
+The hand-rolled sequence is functionally equivalent - the three calls
+are in the same order, all return values are checked, and the single
+cleanup label reaches cleanup_cgroup_environment() on every failure
+path. There's also a consistency argument for writing it out:
+test_cgroup_link_attach() in this file hand-rolls the same sequence
+because it needs four cgroups and cannot use a single-cgroup helper.
+Does the test__join_cgroup() approach make sense for this subtest, or is
+the hand-rolled version preferred for consistency with the sibling test?
+
+> +
+> +	link = bpf_program__attach_cgroup(skel->progs.sendmsg4, cg_fd);
+> +	if (!ASSERT_OK_PTR(link, "attach_sendmsg4"))
+> +		goto cleanup;
+> +
+> +	err = bpf_link__update_program(link, skel->progs.sendmsg6);
+> +	ASSERT_EQ(err, -EINVAL, "reject_sendmsg6_update");
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/lsm_cgroup.c b/tools/testing/selftests/bpf/progs/lsm_cgroup.c
+> index 3bfa479104be8..30727945cecc3 100644
+> --- a/tools/testing/selftests/bpf/progs/lsm_cgroup.c
+> +++ b/tools/testing/selftests/bpf/progs/lsm_cgroup.c
+> @@ -213,6 +213,12 @@ int BPF_PROG(socket_first, int family, int type, int protocol, int kern)
+>  	return 0;
+>  }
+>
+> +SEC("lsm/socket_create")
+> +int BPF_PROG(socket_create_lsm, int family, int type, int protocol, int kern)
+> +{
+> +	return 0;
+> +}
+> +
+>  SEC("lsm_cgroup/socket_create")
+>  int BPF_PROG(socket_second, int family, int type, int protocol, int kern)
+>  {
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/test_cgroup_link.c b/tools/testing/selftests/bpf/progs/test_cgroup_link.c
+> index 4faba88e45a5a..a987744d129cd 100644
+> --- a/tools/testing/selftests/bpf/progs/test_cgroup_link.c
+> +++ b/tools/testing/selftests/bpf/progs/test_cgroup_link.c
+> @@ -20,5 +20,17 @@ int egress_alt(struct __sk_buff *skb)
+>  	return 1;
+>  }
+>
+> -char _license[] SEC("license") = "GPL";
+> +SEC("cgroup/sendmsg4")
+> +int sendmsg4(struct bpf_sock_addr *ctx)
+> +{
+> +	return 1;
+> +}
+>
+> +SEC("cgroup/sendmsg6")
+> +int sendmsg6(struct bpf_sock_addr *ctx)
+> +{
+> +	ctx->msg_src_ip6[2] = 0;
+> +	return 1;
+> +}
+
+This isn't a bug, but is the ctx->msg_src_ip6[2] store here load-bearing
+for the -EINVAL assertion, or is it standing in for the out-of-bounds
+write the companion patch prevents? A short comment (or making sendmsg6
+as minimal as sendmsg4) would make the asymmetry between the two new
+programs clearer.
+
+> +
+> +char _license[] SEC("license") = "GPL";
+
 ---
- tools/sched_ext/scx_flatcg.bpf.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/sched_ext/scx_flatcg.bpf.c b/tools/sched_ext/scx_flatcg.bpf.c
-index 454ebb820c5e..be03b409db5e 100644
---- a/tools/sched_ext/scx_flatcg.bpf.c
-+++ b/tools/sched_ext/scx_flatcg.bpf.c
-@@ -144,7 +144,8 @@ static bool cgv_node_less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
- 	cgc_a = container_of(a, struct cgv_node, rb_node);
- 	cgc_b = container_of(b, struct cgv_node, rb_node);
- 
--	return cgc_a->cvtime < cgc_b->cvtime;
-+	/* wrap-safe: cap_budget keeps nodes within 2^63 of each other */
-+	return (s64)(cgc_a->cvtime - cgc_b->cvtime) < 0;
- }
- 
- static struct fcg_cpu_ctx *find_cpu_ctx(void)
--- 
-2.43.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33461362664
+--===============8556434494740287810==--
