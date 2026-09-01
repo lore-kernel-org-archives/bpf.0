@@ -1,103 +1,217 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58BF648A8A4;
-	Tue,  1 Sep 2026 17:23:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EDD3488748;
+	Tue,  1 Sep 2026 17:24:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788283383; cv=none; b=A/bok89/kqCFmqhDW+AkU3QWCoskS0/Y7bIbpBbR9CrIQeOZS+hVfjyUQv/KBd//YctJISrE2go66aBqizscXBEHQOz1D0u6ZjapiGAAEuigkXRYNl0W6nxggeJoTDj1PGRrbzdrwfoJkRUzuuBsZJCWK8uAZaEzDHwuhlkat1I=
+	t=1788283495; cv=none; b=CFnbTyJibAviYi3ZPS9mfNu6T6ZZwyLWB2LE1l78mkpJ8ROWFHUImKXoargTRWrrRhBSG/Ol3dXigb3t1IijJfqwrk8D+zRMcFGy2lOkUqx+r0rjX9E/Hxazq40d4fPKLB89XR2+UXq6+WmZzV7SLHrBDVIc6eLJ03Us/QvH170=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788283383; c=relaxed/simple;
-	bh=UYr4FgrOKQQU7IopkP5lwLpnKQYJ6WQWgBhcCpIh12I=;
+	s=arc-20240116; t=1788283495; c=relaxed/simple;
+	bh=GU67VSfBNMggnQM/n+nO3RghpdMKKYMApESbIVWskkI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gQtz1uSSfVBRPsrzLH2bonDsjskoRFneRen1b+qkZqqXlrDWpW5EM0hYjlI+siXUldVwZhXk9sn39qbEASHVpRC9/QawsrWGwCP/dPd2QyfylWp1Odu+ZtYCLUOzwHGbnNjQqhHuMEJExD2pRDn4ONGs9y1ud7m1SfKddi8XCgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hAyOOvS5; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=QtlgSFemOYxthnrUAOu49ekdClQiYUSu0f/rTbwCyox7CiYh9ky0Wmq/ViTtn1smeDs15cmTjFJI41c78Nujfe2A5LKeGuMrg5ab/avzncoEgMjWXIs6+dey9wBx3jvtcwJyD8xudzSb8vMasySG4I9ms8QWutqvaOMrJfMdwfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CoBGn52l; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hAyOOvS5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBEBC1F000E9;
-	Tue,  1 Sep 2026 17:23:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CoBGn52l"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9DF01F000E9;
+	Tue,  1 Sep 2026 17:24:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788283382;
-	bh=JL7hv6FEcf/sPTbzBqgzfpTUF8CpqaPYsWtSrHC4WSY=;
+	s=k20260515; t=1788283493;
+	bh=PneaKwYmvSis+ERzA3fmasCeV+E0lJ5vEVfHPVNVaIo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hAyOOvS5Xk5d/du/dhqcSe/Ez3wuULFEKyGBCFbDabEZBmi3YW2JI+EjnGgQ0LeSi
-	 7NNzh4hMqQwIoxnI1e2+cSoRA/8/QcqEFGM5CTq170YF712JD/cmFYSyOCBNn/PPFR
-	 VsN0euibl7lOPEfcyfDPlKyj/fnZJxaZYB76HDe61ZcrQ1Q51EMs86McZ5dNNsxlYM
-	 oNycmPAfHvGqfD4hkXLNjddA3KcvelFmdxomEk/qJdZnLQFbLOKRMcycG2c4saOobZ
-	 ZLWmwkanRbKxvw11gasOp7T2Almw/lr6nzLNsT8b1RRpRqEb88usOYq3LhD9NBE1GF
-	 EiRe8zWp+wPcA==
+	b=CoBGn52l8iMEVUf0WxgKUCISTSVoMwpVej3bGCr5PcBR2qKp689sFiK3x7br52F+j
+	 Ash30JErB6nnUcZ0uaiPijJD9GaAyhzXBnnmetoLKamslL1QKeuoDNkpd/R+rXXAe6
+	 fMUkGvYh088MuMVuCAPPUQcMjQFNYaftJc4eX0rkka7hNsUaRO7KhlB/XCPXLWnqNU
+	 rFpJWdZoPdHIwNore+1DRM6kqHsTV1Yy/4gDv7rMqv7x7s3aa0BQYdalazTxr/5tUY
+	 OhOdGKyCJnMUBcGTXNo5HKEb97W7jdzJndknx4cphh4MIRoPKRHoWL1RG/PXs4huoq
+	 RyMRmX/qvxFmg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 bpf-next 12/18] resolve_btfids: Extract inline BTF
+Subject: Re: [PATCH v2 bpf-next 15/18] btf: Support
+ CONFIG_DEBUG_INFO_BTF_INLINE=m
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alan Maguire" <alan.maguire@oracle.com>
 Cc: linux-modules@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260901165757.801449-13-alan.maguire@oracle.com>
+In-Reply-To: <20260901165757.801449-16-alan.maguire@oracle.com>
 References: <20260901165757.801449-1-alan.maguire@oracle.com>
- <20260901165757.801449-13-alan.maguire@oracle.com>
+ <20260901165757.801449-16-alan.maguire@oracle.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 01 Sep 2026 17:23:01 +0000
-Message-Id: <20260901172301.CBEBC1F000E9@smtp.kernel.org>
+Date: Tue, 01 Sep 2026 17:24:53 +0000
+Message-Id: <20260901172453.A9DF01F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
 s) to consider:
-- [Medium] Division by zero when parsing ELF symbol table sections if `sh_e=
-ntsize` is maliciously or erroneously set to 0.
+- [High] Unsafe lockless call to i_size_write() causes seqcount corruption =
+on 32-bit SMP systems.
+- [High] TOCTOU race in sysfs_btf_kernfs_read allows out-of-bounds kernel m=
+emory read on module reload.
+- [Medium] Reloading the btf_vmlinux_inline module permanently leaks the pr=
+eviously allocated BTF inline data.
+- [Medium] Unconditional dereference of btf_kobj->sd can lead to a boot-tim=
+e kernel panic.
 --
 
-commit df03e392d8f5364e6eef1e60fcadca00e2b031f8
+commit 79f9afc658508547f1298b89f81b2e99fe704e3c
 Author: Alan Maguire <alan.maguire@oracle.com>
 
-    resolve_btfids: Extract inline BTF
+btf: Support CONFIG_DEBUG_INFO_BTF_INLINE=3Dm
    =20
-This commit adds an --inline option to extract LOC_PARAM, LOC_PROTO and
-LOCSEC types to a new inline split .BTF.inline while sorting BTF.
+Allow vmlinux BTF inline info to be delivered via a loadable
+module btf_vmlinux_inline.ko; this reduces the vmlinux binary size.
+A kernfs representation is created for vmlinux.inline which loads
+the module on demand.
 
-> diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/m=
-ain.c
-> index 37d7e7224207d..20b228c4d6789 100644
-> --- a/tools/bpf/resolve_btfids/main.c
-> +++ b/tools/bpf/resolve_btfids/main.c
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 3e5890aed2dba..2ac1f1d396608 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
 [ ... ]
-> @@ -572,6 +578,58 @@ static const char *find_name_by_addr(struct object *=
-obj, Elf64_Addr addr)
+> @@ -8736,10 +8738,82 @@ enum {
+>  };
+> =20
+>  #if IS_ENABLED(CONFIG_SYSFS)
+> +#if IS_ENABLED(CONFIG_DEBUG_INFO_BTF_INLINE)
+> +static struct bin_attribute *vmlinux_inline_attr;
+> +#endif
 [ ... ]
-> +static int collect_func_symbols(struct object *obj)
+> +static int sysfs_btf_kernfs_open(struct kernfs_open_file *of)
 > +{
-> +	Elf_Scn *scn;
-> +	GElf_Shdr sh;
-> +	int n, i;
+> +	struct bin_attribute *attr =3D of->kn->priv;
+> +	size_t data_size;
+> +	int err;
+[ ... ]
+> +	if (of->file) {
+> +		struct inode *inode =3D file_inode(of->file);
 > +
-> +	if (obj->efile.symbols_shndx =3D=3D -1)
+> +		if (inode)
+> +			i_size_write(inode, data_size);
+
+[Severity: High]
+Does this code call i_size_write() locklessly?
+
+On 32-bit SMP systems, calling i_size_write() without holding inode_lock(in=
+ode)
+can cause seqcount corruption. This can lead to infinite loops in i_size_re=
+ad()
+and a potential denial of service when unprivileged users concurrently open=
+ the
+sysfs file.
+
+> +	}
+> +	return 0;
+> +}
+> +
+> +static ssize_t sysfs_btf_kernfs_read(struct kernfs_open_file *of, char *=
+buf,
+> +				     size_t bytes_requested, loff_t offset)
+> +{
+> +	struct bin_attribute *attr =3D of->kn->priv;
+> +	void *data;
+> +	size_t data_size;
+> +
+> +	data_size =3D smp_load_acquire(&attr->size);
+> +	if (offset >=3D data_size)
 > +		return 0;
+> +	if (offset + bytes_requested > data_size)
+> +		bytes_requested =3D data_size - offset;
+> +	data =3D READ_ONCE(attr->private);
+> +	memcpy(buf, data + offset, bytes_requested);
+
+[Severity: High]
+Can this TOCTOU race lead to an out-of-bounds read?
+
+If a module reload triggers sysfs_btf_update() between the smp_load_acquire=
+()
+of attr->size and the READ_ONCE() of attr->private, the new data pointer co=
+uld
+be read while still using the old, potentially larger data_size. This might
+allow a local user to extract out-of-bounds kernel memory via the memcpy().
+
 > +
-> +	scn =3D elf_getscn(obj->efile.elf, obj->efile.symbols_shndx);
-> +	if (!scn || gelf_getshdr(scn, &sh) !=3D &sh)
-> +		return -EINVAL;
-> +	n =3D sh.sh_size / sh.sh_entsize;
+> +	return bytes_requested;
+> +}
+[ ... ]
+> @@ -8755,7 +8829,18 @@ struct bin_attribute *sysfs_btf_add(const char *na=
+me, void *data, size_t data_si
+>  		err =3D -ENOMEM;
+>  		goto err_free;
+>  	}
+> -	err =3D sysfs_create_bin_file(btf_kobj, attr);
+> +	if (data_size > 0) {
+> +		err =3D sysfs_create_bin_file(btf_kobj, attr);
+> +	} else {
+> +		struct kernfs_node *node;
+> +
+> +		node =3D __kernfs_create_file(btf_kobj->sd, attr->attr.name,
 
 [Severity: Medium]
-Could this result in a division by zero if a malformed ELF object is
-provided to the build system?=20
+Is it possible for btf_kobj to be NULL here?
 
-If sh.sh_entsize is 0, this will trigger a SIGFPE and crash the resolve_btf=
-ids
-tool. While this vulnerable pattern already exists in symbols_collect(), it
-appears to be newly introduced here in collect_func_symbols(). Should there=
- be
-a check to ensure sh.sh_entsize is non-zero before performing the division?
+If btf_kobj failed to allocate during btf_sysfs_init() and sysfs_btf_add() =
+is
+called with data_size =3D=3D 0 for vmlinux.inline, this unconditional deref=
+erence
+of btf_kobj->sd could lead to a boot-time kernel panic.
 
-> +
-> +	for (i =3D 0; i < n; i++) {
-> +		GElf_Sym sym;
-> +		const char *name;
+> +					    attr->attr.mode, GLOBAL_ROOT_UID,
+> +					    GLOBAL_ROOT_GID, data_size,
+> +					    &sysfs_btf_kernfs_ops, attr, NULL, NULL);
+> +		if (IS_ERR(node))
+> +			err =3D PTR_ERR(node);
+> +	}
 [ ... ]
+> @@ -8775,6 +8860,17 @@ struct bin_attribute *sysfs_btf_add(const char *na=
+me, void *data, size_t data_si
+>  }
+>  #endif
+> =20
+> +#if IS_ENABLED(CONFIG_DEBUG_INFO_BTF_INLINE)
+> +static void sysfs_btf_update(struct bin_attribute *attr, void *data, siz=
+e_t data_size)
+> +{
+> +	if (!attr)
+> +		return;
+> +	WRITE_ONCE(attr->private, data);
+
+[Severity: Medium]
+Does this overwrite attr->private without freeing the previous allocation?
+
+When the btf_vmlinux_inline module is reloaded, this appears to permanently
+leak the previously allocated BTF inline data pointer.
+
+> +	/* Publish data before its non-zero size makes it readable. */
+> +	smp_store_release(&attr->size, data_size);
+> +}
+> +#endif
+[ ... ]
+> @@ -8872,6 +8968,14 @@ static int btf_module_notify(struct notifier_block=
+ *nb, unsigned long op,
+>  				err =3D 0;
+>  				goto out;
+>  			}
+> +			if (strcmp(mod->name, "btf_vmlinux_inline") =3D=3D 0) {
+> +				if (vmlinux_inline_attr)
+> +					sysfs_btf_update(vmlinux_inline_attr, data,
+> +							 mod->btf_inline_data_size);
+
+[Severity: Medium]
+Does this bypass assigning the data pointer to the module's tracking struct?
+
+Because btf_mod->btf_inline_data is left NULL in this branch, the newly
+allocated data won't be cleaned up when the module is unloaded, further
+contributing to the memory leak on module reload.
+
+> +				else
+> +					kvfree(data);
+> +				break;
+> +			}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260901165757.8014=
-49-1-alan.maguire@oracle.com?part=3D12
+49-1-alan.maguire@oracle.com?part=3D15
