@@ -1,148 +1,113 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6B9748167D;
-	Tue,  1 Sep 2026 17:17:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52027488211;
+	Tue,  1 Sep 2026 17:22:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788283079; cv=none; b=vCCe2jKPxmzxFp73hafkxYCr0z/DHTCL+ByBSFEDvcgxPoVGHk5Qb9o3uP3ee8GIkzwLkOsbEokumZ9KCxGcDPVLC8/ogRErg5WqStBMWmn2+T6aSmqhNBtIjmUWy4y6L1UmO1T7Wz53bWKwcak1FA2+G72TbokK7tMYqMcYnZY=
+	t=1788283341; cv=none; b=Fxn6UL84cbNnbX9bI58VOz4mos7eWOtNUnbGv6PlWs2ZEuYNq9fsMiL/isEr23FFW4NjFqppb16dqNaGg9yJrXHR+YDNS8pL5njMK7cMfqy2O8x9SqeApG+7+BjIzmcH8K7RWxyioRpoYeeXEEj6FSfNSxig2XAa/ETIvoLpdFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788283079; c=relaxed/simple;
-	bh=25dzEcM6sfYpNQ+q3BM2c6h07Nms9iINY1mR2LtHhuE=;
+	s=arc-20240116; t=1788283341; c=relaxed/simple;
+	bh=wvMJR/pVvmvUQB9or3iSeQpdUXx8+3V1Bm+JelxSuZU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=A20WSszCjCe4EHobgwIwBHPatL3dT9m6XjuJfUbdIFxJk7OTvAvc2xH7jTAnqpIs4jmfaurGfW583PZv9Rm3TbqFyCOWaBrt0ghC6AZoNdtFsWVIqeUpJ6vAd9sI4DfpG2JlQx6MG+JBr7kmmBCcJcBhMNoaug/oNRguYVhCO7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dOMEuHnq; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=L8moiWu7xlmMwgEnx/vYxNZvti5HUplg6UvsTKPMjfX02n3gRV+qcmpHHe1Y93UkoNJNPQYV+UdJKopWhdYzru3EkEMelVPj6DVe/+5mvUsI0db8LXzwNDOT3UvHH9mpuX95XxJSsy7NOgYd1UHOEcx25wkPur07KrGmpPSAQiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gMQRZmc3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dOMEuHnq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A506A1F000E9;
-	Tue,  1 Sep 2026 17:17:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gMQRZmc3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F4E1F00A3A;
+	Tue,  1 Sep 2026 17:22:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788283077;
-	bh=ml2n993/fmOiP2U6C107RSAMi+O/vowBfqBODL+bvGY=;
+	s=k20260515; t=1788283340;
+	bh=N+bu/zQ8qcaMGTKhcUpjVMJUs3r4r4ts/+kJZ0QpGSs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=dOMEuHnqIMxERl1y3BhBJ+h1MA/SxbcyyV9bmlq0Et+1C4QboZkJhkRhAq7ckMvHW
-	 j0d3a72xtOBAIV8pT87YahqrLkwGDSovT3/Ob8TQJNS6vllxgxYMaki1W8F/LYvH/C
-	 ICxBZf4/QZemLjkX0KkIqF0dF1fMDQod91GP8UWmEKjF6mi+B7aTm+dB/FmoYH/X9z
-	 uGgH2A+g1FYD3BIw8Tmhs9kLmpZ8ZAXkDuc39QUjsANALMklZr9YY5mWLPFEmDEXp1
-	 U8tx3e2rlrMfb+6V8RLgUs5CXi60raFLYvuMTYeAHgkSYjNm208pB7B0YXTYMwKuLs
-	 TRYMxw9FplcmQ==
+	b=gMQRZmc3GsDqC6X++/5ZwbGY3af4W0G2EvO8UbAwc5rbjo5XlqjC7oYifJx63GQ1D
+	 MoWtOiG7hgACIx5/YexqfsZmGKvYxJBivoxtLVbfdJWb2ivOqihp7Pp6JK0nDyUBfl
+	 66GbNXWKuiK9jnDlTiuU7tPtvg/Ku2ribeRUQgi2Us5Ve0G3pOE46NwWuN0e/Mz3eZ
+	 0yzprzS46qbrtDM4qgVWMmKsmbSEF1va7l8yONjZjwZuEBbyEwvQZ9O9rblrvCGQ5a
+	 lXndrNnaomZpiaotv7ai3z65z4GPnAM3aMnGeNuxC8ORZ98GbuL7IQvA4NePylUnFU
+	 etaDINieyn6Kw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 bpf-next 01/18] btf: Extend UAPI to support BTF
- location (inline site) info
+Subject: Re: [PATCH v2 bpf-next 17/18] selftests/bpf: Test BTF sysfs inline
+ representations
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alan Maguire" <alan.maguire@oracle.com>
 Cc: bpf@vger.kernel.org, linux-modules@vger.kernel.org
-In-Reply-To: <20260901165757.801449-2-alan.maguire@oracle.com>
+In-Reply-To: <20260901165757.801449-18-alan.maguire@oracle.com>
 References: <20260901165757.801449-1-alan.maguire@oracle.com>
- <20260901165757.801449-2-alan.maguire@oracle.com>
+ <20260901165757.801449-18-alan.maguire@oracle.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 01 Sep 2026 17:17:57 +0000
-Message-Id: <20260901171757.A506A1F000E9@smtp.kernel.org>
+Date: Tue, 01 Sep 2026 17:22:19 +0000
+Message-Id: <20260901172219.B6F4E1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] btf_loc_proto_resolve fails to validate the return type location p=
-arameter (t->type).
-- [Medium] Missing strict validation of unused fields and flags in check_me=
-ta callbacks for new BTF kinds.
+- [Medium] Memory leak of `module_btf` when a module does not have a corres=
+ponding `.inline` sysfs file.
 --
 
-commit 32008454060b92e68c858ee6b661e8885cb28034
+commit ae17979b11eeb1a7bef7bec7a8817be3cb2cd64a
 Author: Alan Maguire <alan.maguire@oracle.com>
 
-btf: Extend UAPI to support BTF location (inline site) info
+selftests/bpf: Test BTF sysfs inline representations
 
-This commit adds BTF_KIND_LOC_PARAM, BTF_KIND_LOC_PROTO, and
-BTF_KIND_LOCSEC to help represent location information for functions.
-It enables representing fully or partially inlined functions at
-potentially multiple inline sites.
+This commit adds a selftest to validate BTF sysfs inline representations for
+the kernel and modules. It parses the base BTF, module BTF, and inline BTF=
+=20
+files to ensure proper loading and relocation across different scenarios.
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 9c2cab08bb794..d74c8668aa3f6 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_sysfs.c b/tools/t=
+esting/selftests/bpf/prog_tests/btf_sysfs.c
+> index 3923e64c4c1d0..97eccfd7c1344 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/btf_sysfs.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/btf_sysfs.c
 [ ... ]
-> +static s32 btf_loc_param_check_meta(struct btf_verifier_env *env,
-> +				    const struct btf_type *t,
-> +				    u32 meta_left)
+> +static void test_btf_inline_sysfs_all(void)
 > +{
-> +	const struct btf_loc_param *p =3D btf_loc_param(t);
-> +	u32 meta_needed;
-> +	u32 size;
-> +
-> +	meta_needed =3D sizeof(*p) + sizeof(__u32) * btf_vlen(t);
+[ ... ]
+> +	while ((dentry =3D readdir(dir)) !=3D NULL) {
+[ ... ]
+> +		if (!base_btf) {
+> +			module_btf =3D btf__parse_split(btf_path, vmlinux_btf);
+> +			err =3D libbpf_get_error(module_btf);
+> +			if (err) {
+> +				/* A module can be unloaded while its sysfs entry is iterated. */
+> +				if (err =3D=3D -ENOENT)
+> +					continue;
+> +				ASSERT_OK(err, "parse_module_btf");
+> +				continue;
+> +			}
+> +			base_btf =3D module_btf;
+> +		}
+> +		if (stat(inline_path, &st)) {
+> +			err =3D errno;
+> +			if (err =3D=3D ENOENT)
+> +				continue;
 
 [Severity: Medium]
-Should this function strictly validate that p->flags only contains valid
-enum bits, and check that btf_type_kflag(t) is 0?=20
+Does this code leak module_btf?
 
-The BTF verifier typically rejects non-zero unused fields and unknown flags
-to ensure forward compatibility. If malformed BTF objects with arbitrary
-garbage in these fields are accepted, they might silently alter behavior
-or break if these bits are repurposed in the future.
+In test_btf_inline_sysfs_all(), when a module is parsed successfully but
+lacks a corresponding .inline sysfs file, stat() fails with ENOENT and this
+path calls continue. Since this ends the loop iteration early, the
+btf__free(module_btf) at the bottom of the loop is bypassed.
 
-> +	if (meta_left < meta_needed) {
-> +		btf_verifier_log_basic(env, t,
-> +				       "meta_left:%u meta_needed:%u",
-> +				      meta_left, meta_needed);
-> +		return -EINVAL;
+> +			ASSERT_OK(err, "stat_inline_btf");
+> +		}
+> +		inline_btf =3D btf__parse_split(inline_path, base_btf);
+> +		err =3D libbpf_get_error(inline_btf);
+> +		if (!err)
+> +			btf__free(inline_btf);
+> +		ASSERT_OK(err, "parse_inline_btf");
+> +		btf__free(module_btf);
 > +	}
-[ ... ]
-> +static int btf_loc_proto_resolve(struct btf_verifier_env *env,
-> +				 const struct resolve_vertex *v)
-> +{
-> +	const __u32 *params =3D btf_loc_params(v->t);
-> +	u32 i, nr_params =3D btf_type_vlen(v->t);
-> +	struct btf *btf =3D env->btf;
-> +
-> +	for (i =3D 0; i < nr_params; i++) {
-
-[Severity: High]
-Does this function need to validate the return type location parameter
-encoded in v->t->type?=20
-
-It appears to validate the vlen parameters (params[i]) but entirely skips
-verifying v->t->type. If a malformed BTF object specifies an out-of-bounds
-type ID or an incorrect BTF kind in the t->type field, could it result in
-type confusion or out-of-bounds memory accesses when subsequent code trusts
-this field?
-
-> +		const struct btf_type *param_type;
-> +		u32 param_type_id =3D params[i];
-> +
-> +		if (!param_type_id)
-> +			continue;
-[ ... ]
-> +static s32 btf_locsec_check_meta(struct btf_verifier_env *env,
-> +				 const struct btf_type *t,
-> +				 u32 meta_left)
-> +{
-> +	u32 meta_needed;
-> +
-> +	meta_needed =3D sizeof(struct btf_loc) * btf_type_vlen(t);
-
-[Severity: Medium]
-Similar to the location parameter check, should this callback enforce that
-the unused t->size/t->type union and the kflag are 0? Without these
-checks, the verifier might accept garbage data in these unused fields which
-violates the strict validation design pattern.
-
-> +
-> +	if (meta_left < meta_needed) {
-> +		btf_verifier_log_basic(env, t,
-> +				       "meta_left:%u meta_needed:%u",
-> +				       meta_left, meta_needed);
-> +		return -EINVAL;
-> +	}
-> +	return meta_needed;
-> +}
+> +	closedir(dir);
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260901165757.8014=
-49-1-alan.maguire@oracle.com?part=3D1
+49-1-alan.maguire@oracle.com?part=3D17
