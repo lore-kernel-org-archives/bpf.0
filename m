@@ -1,134 +1,100 @@
-Received: from mta0.migadu.com (out-67.mta0.migadu.com [91.218.175.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93FE7286D56
-	for <bpf@vger.kernel.org>; Tue,  1 Sep 2026 09:44:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 900463A9DA3;
+	Tue,  1 Sep 2026 09:54:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788255885; cv=none; b=YsCRBkxUOkpYenF6enVARSGZqghbo9Tvfk/Lprlg17T6joRgyp7T/2qWE+C+fmJaqU8xEvN22fL4Wps4NzJFDUsCuDSnotSBuGe1xB9Quq/h3qB897pWW2eoakJF9WamkYkz8N1jMgMQYfWxl6ppNnBpbu7GRKrK7BwMwkS77z8=
+	t=1788256456; cv=none; b=sHEJnjd/V9/DKGr59Fvt4XrES+kimZ0dVZxS0GsnWBOWVbciBontEy8A2/zqmS1BKLcrBLv7oguKI9oDB044oPpv3KDjPnrTdkGMh0YPcWlq7U7hRWanXiXIehATDSSzOWDgjDO7nGaJm7aqMQYTERwjdbLUpRe7t/LikOVtXbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788255885; c=relaxed/simple;
-	bh=U+tcZw15K68mlanjAK2UomlTuTP3P1oMlvmlSPrqeWc=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=omj7wvkaECp5eRgoeN3c6nQ71FiWv56iHfJoLqB4oIqua74ljohFl6D+AP0gZp556OUn5AfmcZs2ECxBcsN4e1fOWGeXvRll4v7YHSbjlHxcZ2w7170c5fY4dKEiIfk6bYBXqMLNs5Ymjo8859V5an91Rjr3Rq5nfTOYZScWbM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oWIWW9PC; arc=none smtp.client-ip=91.218.175.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788256456; c=relaxed/simple;
+	bh=z9EicMUOaM3rG+OWnmtcrvc3BRTPXZG1G9KroAoYslY=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=NupvsLscueM3T9BcQp7wPHfavOa8ZnydfxrZ8LOLvgxEiBB+cuzhhmgWFwn1sNdfRJZYcabN21NzOLz6/Eq9HialmsIPZ13etT3KOWSCXg9fAOkNhOnVnDCt9/sYkNoa5EpM2chF6In9LWyM+qvl20cwliMJ82DeTnrKcr2CQsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NUttv6/A; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oWIWW9PC"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=U+tcZw15K68mlanjAK2UomlTuTP3P1oMlvmlSPrqeWc=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788255879; v=1; x=1788860679;
- b=oWIWW9PCmW0CL63T+bQYiIuVZzYQVXfduq6nRxjRNKreWJPn5zCr5NOQcf1mj0yTFm9JYka+
- MHA/FhDp/WoQUKVYmtiTk7QsMgthPFYxDalhzDh52SCC++cZpm8vz3vwR+v0rPxAC/9321IYy0Z
- 7HMnn46nscdo8N9uuqF12Y4U=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id c7013bc8d2cf59a0;
-	Tue, 01 Sep 2026 09:44:29 +0000
-X-Mizu-Trace-ID: c7013bc8d2cf59a0
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <d8665587-a825-48d8-afb2-53fe10af0546@linux.dev>
-Date: Tue, 1 Sep 2026 17:44:19 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NUttv6/A"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 988D91F000E9;
+	Tue,  1 Sep 2026 09:54:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788256454;
+	bh=LCH2ISJTlcWYHeY0eL7rdA0nk83xdfl2ZZrDBciLubw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=NUttv6/AQLctgoMt0WD7hQebMJr4hHnDqCOPjFk5XHsVz6UZsRMuTZp8/55YAbhG8
+	 8+ArYI00aLFhMx5IoWXB/n2dC4Yk8cDCYZzlyY6ZHQD09rx2daexHTidhEGyS1zHar
+	 yC7kp+XcWkm0sl+wYlZ2YPS5Vdgimfk7kzZSUcp9lrWBlewBc8zYpRSt54O+E/1LUB
+	 A9rAj5ZPDu/kXyzTKbvGgUmdalJDn8XJCyOk0QZtgiqdZiZgh3gkQiTao8QGoqHlk2
+	 rN8W4MfxgpR8DYSs7pc9m7Kxwh2jbty2RwxxuPaSrfQ1UFGrZISb77h34+Z+GHrDNn
+	 DWdWu2CNeoD3A==
+Content-Type: multipart/mixed; boundary="===============2756755987579157109=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, tj@kernel.org, void@manifault.com,
- changwoo@igalia.com, michalblk@google.com, liwanwu@kylinos.cn,
- sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, Tao Cui <cuitao@kylinos.cn>
-Subject: Re: [PATCH 1/2] sched_ext: fix vtime priority queue inversion on wide
- vtime spread
-To: Andrea Righi <arighi@nvidia.com>
-References: <20260901024038.730424-1-cui.tao@linux.dev>
- <20260901024038.730424-2-cui.tao@linux.dev> <apZ06G_-oC5cTprM@gpd4>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <apZ06G_-oC5cTprM@gpd4>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Message-Id: <486e478d8eeaec63726c1284ce5f60ddd3a1f7c24fa467317b77979ad38bd306@mail.kernel.org>
+In-Reply-To: <20260901-libbpf-frags-flags-v3-2-4eb6f14968b0@redhat.com>
+References: <20260901-libbpf-frags-flags-v3-2-4eb6f14968b0@redhat.com>
+Subject: Re: [PATCH bpf-next v3 2/4] selftests/bpf: Set BPF program flags non-destructively
+From: bot+bpf-ci@kernel.org
+To: toke@redhat.com,qmo@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,larysa.zaremba@intel.com,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me,lorenzo@kernel.org
+Cc: bpf@vger.kernel.org,netdev@vger.kernel.org,toke@redhat.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue,  1 Sep 2026 09:54:13 +0000 (UTC)
 
-Hello, Andrea, Tejun.
+--===============2756755987579157109==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-在 2026/9/1 14:47, Andrea Righi 写道:
-> Hi Tao,
-> 
-> On Tue, Sep 01, 2026 at 10:40:37AM +0800, Tao Cui wrote:
->> From: Tao Cui <cuitao@kylinos.cn>
->>
->> scx_dsq_priq_less() compares dsq_vtime with time_before64(), a cyclic
->> comparison that is only valid when the values in the queue are less
->> than 2^63 apart. Unlike CFS, which enforces that invariant with
->> min_vruntime clamping, sched_ext takes dsq_vtime directly from the BPF
->> scheduler and cannot bound the spread. A scheduler that inserts tasks
->> with vtimes wider than 2^63 apart into one DSQ gets the order inverted:
->> the tasks it placed last run first and the rest starve. Reproduced with
->> a probe scheduler assigning half its tasks vtimes near 0 and the other
->> half vtimes above 2^63 -- four of eight busy tasks monopolized the CPU
->> while the other four starved.
->>
->> Compare with plain u64 < instead, which is a total order and always
->> honors the order the scheduler asked for. The transient misordering
->> around the natural 2^64 wrap is the same class of anomaly the cyclic
->> comparison trades it for, but bounded.
-> 
-> I don't think switching to plain u64 ordering is safe here.
-> 
-> The current scx_bpf_dsq_insert_vtime() documentation explicitly defines the
-> ordering in terms of time_before64(), including wraparound. For example:
-> 
->   a = U64_MAX - 5
->   b = 3
-> 
-> a is earlier than b in cyclic vtime ordering. time_before64(a, b) correctly
-> returns true, while plain a < b would place b first.
-> 
-> Moreover, this is not a short transient. If post-wrap tasks continue to be
-> reinserted with small vtimes, a can remain behind them until their vtime
-> traverses almost the entire u64 range, resulting in effective starvation.
-> 
-> Can we preserve time_before64() and document or enforce the half-range
-> requirement instead?
-> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+> index e8c1a619e330e..7dadb90e7b689 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+> @@ -543,8 +543,10 @@ static void test_kprobe_sleepable(void)
+>  		return;
+>
+>  	/* sleepable kprobe test case needs flags set before loading */
+> -	if (!ASSERT_OK(bpf_program__set_flags(skel->progs.handle_kprobe_sleepable,
+> -		BPF_F_SLEEPABLE), "kprobe_sleepable_flags"))
+> +	if (!ASSERT_OK(bpf_program__set_flags(
+> +			       skel->progs.handle_kprobe_sleepable,
+> +			       bpf_program__flags(skel->progs.handle_kprobe_sleepable) | BPF_F_SLEEPABLE),
+> +		       "kprobe_sleepable_flags"))
+>  		goto cleanup;
 
-You're both right, patch 1/2 was wrong. My probe fed values that
-violate the rolling-cursor assumption, and the "inversion" was the
-API behaving as documented. Dropping 1/2.
+This isn't a bug, but would a local like
+`struct bpf_program *prog = skel->progs.handle_kprobe_sleepable;` let
+this keep the original one-line ASSERT_OK() shape? The read-modify-write
+now names the skeleton field twice in one expression, pushing the line
+to 106 columns. The other sites in this patch (bpf_verif_scale.c,
+xdp_metadata.c, xdp_hw_metadata.c) already have a short prog local and
+read as one clean line.
 
-I'll send the documentation patch Tejun suggested.
+[ ... ]
 
-Thanks,
-Tao
+> diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> index 2e0ddef77ba51..ed3fd0a88dab6 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> @@ -362,7 +362,7 @@ static void test_attach_api_fails(void)
+>  	sl_skel->bss->user_ptr = sl_skel;
+>
+>  	err = bpf_program__set_flags(sl_skel->progs.handle_kprobe_multi_sleepable,
+> -				     BPF_F_SLEEPABLE);
+> +				     bpf_program__flags(sl_skel->progs.handle_kprobe_multi_sleepable) | BPF_F_SLEEPABLE);
+>  	if (!ASSERT_OK(err, "sleep_skel_set_flags"))
+>  		goto cleanup;
 
-> Thanks,
-> -Andrea
-> 
->>
->> Fixes: 06e51be3d5e7 ("sched_ext: Add vtime-ordered priority queue to dispatch_q's")
->> Signed-off-by: Tao Cui <cuitao@kylinos.cn>
->> ---
->>  kernel/sched/ext/ext.c | 3 ++-
->>  1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
->> index 8041c87a3562..dd0ce01370d1 100644
->> --- a/kernel/sched/ext/ext.c
->> +++ b/kernel/sched/ext/ext.c
->> @@ -1417,7 +1417,8 @@ static bool scx_dsq_priq_less(struct rb_node *node_a,
->>  	const struct task_struct *b =
->>  		container_of(node_b, struct task_struct, scx.dsq_priq);
->>  
->> -	return time_before64(a->scx.dsq_vtime, b->scx.dsq_vtime);
->> +	/* dsq_vtime is arbitrary BPF input: keep a total order */
->> +	return a->scx.dsq_vtime < b->scx.dsq_vtime;
->>  }
->>  
->>  static void dsq_inc_nr(struct scx_dispatch_q *dsq, struct task_struct *p, u64 enq_flags)
->> -- 
->> 2.43.0
->>
+This isn't a bug, but could the program pointer be pulled into a local
+here so the flags update stays inside the 100-column limit? Repeating
+the 44-character skeleton field name inside its own argument list pushes
+this line to 121 columns.
 
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33489985893
+--===============2756755987579157109==--
