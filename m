@@ -1,147 +1,207 @@
-Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37AE9481253
-	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 12:24:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E65AF31E84B
+	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 13:05:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788351866; cv=none; b=ZHzl2Y+7KPAwbLPwbfaBu0+yTJC+D6O7de9DzFYXmt4Gx9D4pw58dWFK+qSobrQOcy2ObLb4rzK/nK0pIkN1pkWxKqkViZ5FutUBgC268li1MPe8CWotFqPyaz397oNJrCMnaJDLALDpyetORdHMljBD6wHIMP0+WJLjx/cl+jM=
+	t=1788354308; cv=none; b=D/drTUoExMdA+mjejKade9VY21WhAZbeT3FYJa/Djp3e8fy/9E/jVzIcY9txGJhOgyIV4+UWo8C8WjhxFJcmIP7F8Bg4b5fzaM33f0NHnuUpSLiEyhGyBdySbP+zibNRwO+ZILrcylDOUPD53RyB6O0GZzIAKVjrJVKaOG1vlWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788351866; c=relaxed/simple;
-	bh=oTS+YDDaFxN0Q1LeraRZY2cqh7z1qPcDOqRuWiPId8c=;
+	s=arc-20240116; t=1788354308; c=relaxed/simple;
+	bh=tXPS8UNC1v9DuiaMuucFPopWOOVVCFMSW8Cp05LqM9U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WhmGo67nYOEODKqS3J6ixTYZ+E0L9/SWdDW8gOLwuwZjBmiPhLVh39hiZnOH0HhN1UhShRHZAEB51IYrwTzCECQm0gNl2ExdpxWqBu4lvnDMj0b3RSjlNpIp8tG8MPp9gIuNowKZvnkqk1OP7HehyCERpO4JKT7dzqYruDabTyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i1npwNWd; arc=none smtp.client-ip=74.125.224.45
+	 Content-Type:Content-Disposition:In-Reply-To; b=lG+1WggA3wKFXXzyxidMxc3gsDQv6XJjtSIAINzRxLrbJ5hs11oR01fAJ2VWvD0drbT7nYEIjzDT4MnLPoFDzVhWRi2RSLqa7STpVNCb5TF0LyEbS9KfI3rSWy2eXMwM7BHoQWu19+YTRO5/fGm5db+OYO7em1lS8OaUZx5ty9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eOagKBvH; arc=none smtp.client-ip=209.85.219.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i1npwNWd"
-Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-66f984b263cso638319d50.1
-        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 05:24:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eOagKBvH"
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-90e9ad1a373so14681046d6.0
+        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 06:05:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788351864; x=1788956664; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=RArsbmdfySTb2QuEZZ7/chE2iY/l9of1tF9d4mgeG4M=;
-        b=i1npwNWdvZF4/I5c+zZI5K67z+RM+Lp3cgwEwKCj3BgMGBas0ycNS3CJBb4aKO4a+T
-         GrGiYCT8yNkaWnOqRaHPpGn0ksP6kwQXthNLrY/Xmwd0uBNDV8rRR4qnxkaXY/ra0jkd
-         kgFDAkOyaOWTQMiy1Re+kKDknchky683AhHs97ZjUrxcWttoGGFsp9moja/6HF0GQmnR
-         fWsvbjSzcGMACARrBmIlt2jLQ7hKruCxznTNk1U+waQGjWIn2DDxCnIovrX5cUIxKduM
-         M6e+iIEQ0Uh2hT7aVb/x7CDdd7cvUzyvD/GLUTzS+rWQBveOzYTVsOSTsaeQe5004Hw1
-         SZ+A==
+        d=gmail.com; s=20251104; t=1788354306; x=1788959106; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=5mfL9J76Lwd5/7wRAvKdCeJfAtdDB4Im8NEaXbTZIxw=;
+        b=eOagKBvHy0cclBYONDE3LGTtd+vdB8AwKE3s9NxdR+/EQMuK0x6NrTu3wszdVu1Bol
+         zbe5JEnZy5AgBBD5Hb8rCiaaDPPgiAVLL5SNwtQmGXn1xwyMsnG2tNUHR2C6oeI6cUW9
+         XcyPb6nnrDKWenRtmyQw7WK+YNbeiYJHRhIGCnrViDQ6GrbT2eylP5CyhofwKTl1xsjS
+         P2VTWtf+vJIzVi0sYa2hsePyb/4T4Ko/e7OLbi0spr0GFw5I/52uJoY0owhwvcKNZwHD
+         /oSSoa/Ch2B90fkHjPQ/OVYkk+QEJAplJEF3dQFuAMf6FjFgwXWs+fiFQpzo1Ri6Y/Gu
+         9AIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788351864; x=1788956664;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=RArsbmdfySTb2QuEZZ7/chE2iY/l9of1tF9d4mgeG4M=;
-        b=n1H92m0P5cKBkQBu6ge0xbUq6dOxxbcunpXmcCrI19xKb3Pbc4FFAc88kc/L2THWE/
-         ZlICUDPnMMFN4LFUyzi/Ofw48lcNqNEjCnjRzpZkj5fw7O0eY+BykqhWfZvGnM6bwKxm
-         vjU7vpHV3WxppPxx5hcdokAgtlxv57qINPtHP6gDYtU9qBnKQRqKbxm+BK4uJkkqGQoj
-         wYvpXxjb+s4cU0gQ6r7n+a9O53dkyBAXuMR6ZBvFosTDbukAZYGkWNTCAPsCypPm9lUs
-         P89lhy6Q3slouDklSe1a4RKiEG1WQekzh3eFyr2e6iRknpMhiUQIkEk8p2VR5x/0G3bM
-         jDmQ==
-X-Gm-Message-State: AFuF++l2Q0zdKTiV4oNwhjAWmtR0DY403o4Lrk0u6eYo+3SFNW/VL6Tn
-	zQyOCAjB7x1rV2Z1Q1d4Ah3Ay1OGNtTRzCY1SMhcPzHa24Bu6heJCEX4xGLdcJsP
-X-Gm-Gg: AYBFou0jWo6RR8cJLUNZmS/6mOMw4lYevcXL6gJ4X1W5tkPJHmdkIrTUtfxtiFgy3QB
-	u/fh+kT1H6GDiW9VJKxPotEkAB9S8GxtGpUvN2eTA31CFeSQbNas8vx9Uh+yMKSrfLUpAkDA7v6
-	BkkNlJ7CTpnqkjR8K7J/2VgXVzlBXLhKmD9ix0frVTH2Q1ZltQbvfWqgahcmf/z8ozwGb5L8WYp
-	QtSLc1NR5F7OHYGrLMZhTgYUJT2THX6leGI6HPJh1xPS3QhlXUmMtcI/BtQYa5Z54SnvHDWBup/
-	CAeMjnAO7UtwXu8rKSDN6r+8hrdBVUU22Lu15Ah6lQHXwHjVIIy5UrEdPGEQVrx0mu2m6CNFHep
-	b2sQU/nFqYM3DAosGCzXys8TwoXR8nLjQiTeYxeGoTZDNhtA8kdfqLDGcSiiO1puAawPmDnRPto
-	B3Owdxb7azQ6fqab36ZRq7FF3XSjRFOzplW532qGYbG8DODnHrZwtuWYsvSob7s6ncmvUduObZd
-	h3k2i7pYKQ4Dl3qQjdzWQ==
-X-Received: by 2002:a05:690e:b83:b0:668:180c:bf6a with SMTP id 956f58d0204a3-66f9bc3fc3dmr1314531d50.37.1788351863969;
-        Wed, 02 Sep 2026 05:24:23 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1788354306; x=1788959106;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5mfL9J76Lwd5/7wRAvKdCeJfAtdDB4Im8NEaXbTZIxw=;
+        b=aohKyzsOP6fdNZVKxc74f6ctUWmsJ5MAhmbyiwd22V4UTu0lBzbawJSxxJZT6vsFYr
+         kEs6px9pThK4/GDLZHzXKAD96FEm1JRkmk65fBxWFJxsSoRzB2gDxGpl2IKw3E4auZY4
+         6JliEcFwTIStYPwkwRK+09DjRk+slKxVBlVuWPXsNQ6xvG6rSv78GoOk3zS2awpbmvnO
+         ocxpiL4H8MwCspTovldwRlJyKu8xwVH0EgSIwHKq2Xz5BdZaBemHeFMKvN/APt5ZS9V+
+         pwJSVmAArPFRURLHonW5/o4Nx5A6wSsE71RVhqCJwxNepn9uXscxNP250u9aMo8h1bAC
+         xuTA==
+X-Forwarded-Encrypted: i=1; AKwUvByubsOj6IzeJ55zM4b7qUbd+ToyvS43a009OOn5J1iVgSfv1SR9HE5QVCLAzfIAXZcdSbA=@vger.kernel.org
+X-Gm-Message-State: AFuF++kwQmylBA1ufhBdyb4b45m1lBSwyYONYUjWIS4wpJbBIkHl3Caj
+	MrpTIfY4geQdAbYWvbmrmLa6VCoe8awq7mUkqPRr+oM82crJtoQDAnt8
+X-Gm-Gg: AYBFou3xC5IlOOtU/KglLwMOl07DcSf1OlljiPqb1HomYXZ0tIaIsjSVqq+ZJBxT10i
+	rpqQD9uv9s+o7w3VFBkAKmnYCBk0WpH/ReVJJuJjvWL2UjFGWWrzvV0MmMNkOUihtYiaw5M7VS3
+	FpCzvqH5S6juTqbeFpn2Zt9i60YKbm6a+N7aygmvZ9qdjxPvRF8vGrz3shKX5yuCaOXjHF2V8/k
+	X5DUb0aZEwM601Wa3iydeGUfvRYm8t41UMJd6Vsp3u31vVdrKx811fjjA4NC9MsHtFWFoGFPKY4
+	Zc82SIUYuLeDkrNRGkehRxAhLG9kcYQAsKpUD9YHmkJbn8ppbUK6eqEG1+W0sWGA3d5VNo9+v6o
+	mOsU1XIHCUQwFQOgQHoUNcV769PegAxThBWYCv9oq0i46ZgeRB/31msy1Ye22jcu3dhai2diPPW
+	68nlrn27qNnd5qnDjBIm80viLUweND2bfO3zNOD6EYXu68JUXlWp7Z41XngJtwpxfH14rMz5E+Y
+	hZRJT4Ot9wf2Fm5zUNv0w==
+X-Received: by 2002:ad4:5962:0:b0:8fe:57d4:69cd with SMTP id 6a1803df08f44-9102eabaebamr26390076d6.14.1788354305529;
+        Wed, 02 Sep 2026 06:05:05 -0700 (PDT)
 Received: from zenbox ([2600:1700:18fb:6011:f78:4c8c:a6cc:a58e])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-66f98697fbasm1721817d50.18.2026.09.02.05.24.23
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-90e9ee3bc37sm18005506d6.20.2026.09.02.06.05.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Sep 2026 05:24:23 -0700 (PDT)
-Date: Wed, 2 Sep 2026 08:24:23 -0400
+        Wed, 02 Sep 2026 06:05:05 -0700 (PDT)
+Date: Wed, 2 Sep 2026 09:05:03 -0400
 From: Justin Suess <utilityemal77@gmail.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 14/15] selftests/bpf: Test the LSM policy object
- kfuncs with Landlock
-Message-ID: <apgTQKnhwMyFdQcr@zenbox>
+To: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	kpsingh@kernel.org, paul@paul-moore.com, mic@digikod.net, viro@zeniv.linux.org.uk, 
+	brauner@kernel.org, kees@kernel.org
+Cc: gnoack@google.com, jack@suse.cz, song@kernel.org, 
+	yonghong.song@linux.dev, martin.lau@linux.dev, m@maowtm.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Casey Schaufler <casey@schaufler-ca.com>
+Subject: Re: [PATCH v2 01/15] lsm: Add the LSM policy object lifetime hooks
+Message-ID: <apgX1HKQ7b973YV-@zenbox>
 References: <20260831145858.3869191-1-utilityemal77@gmail.com>
- <20260831145858.3869191-15-utilityemal77@gmail.com>
- <20260831195327.1282C1F000E9@smtp.kernel.org>
+ <20260831145858.3869191-2-utilityemal77@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260831195327.1282C1F000E9@smtp.kernel.org>
+In-Reply-To: <20260831145858.3869191-2-utilityemal77@gmail.com>
 
-On Mon, Aug 31, 2026 at 07:53:26PM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Low] File descriptors leak on the error path in test_restrict_binprm_discard().
-> --
+On Mon, Aug 31, 2026 at 10:58:43AM -0400, Justin Suess wrote:
+> Add struct lsm_policy_object, the identity an LSM embeds in a policy
+> object it shares with BPF programs, and the three hooks managing such
+> an object's lifetime:
 > 
-> commit 7fa3010dd885254cc82b6aa2f6f254ee83a13717
-> Author: Justin Suess <utilityemal77@gmail.com>
+>   policy_object_from_fd(fd, &object)
+>   policy_object_get(object)
+>   policy_object_put(object)
 > 
-> selftests/bpf: Test the LSM policy object kfuncs with Landlock
+> The object records the owning LSM's LSM_ID_* value.  The BPF kfuncs
+> built on these hooks dispatch each call on an object to the one LSM
+> matching its lsmid, which resolves the containing object with
+> container_of(); the framework never interprets an object beyond its
+> lsmid.  The type field discriminates between the owning LSM's own
+> policy object kinds and is private to it, with 0 reserved as "unset"
+> so a zeroed, untagged object fails every type check.
 > 
-> This commit adds tests for LSM policy object kfuncs interacting with Landlock.
-> It tests execution confinement, audit log flags, and concurrent application
-> using a syscall program and BPF RCU lock management.
+> from_fd has no object to route by: the fd refers to a file set up
+> through the owning LSM's own userspace interface, so the fd itself
+> identifies its LSM.  The framework offers the fd to every
+> implementation in turn; an LSM declines a fd that is not one of its
+> policy objects with -EOPNOTSUPP, and any other error is a definitive
+> translation failure.
 > 
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_policy_landlock.c b/tools/testing/selftests/bpf/prog_tests/lsm_policy_landlock.c
-> > new file mode 100644
-> > index 0000000000000..9270b39f5e3a7
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/prog_tests/lsm_policy_landlock.c
-> [ ... ]
-> > +static void test_restrict_binprm_discard(void)
-> > +{
-> > +	struct policy_test_env env;
-> > +	char garbage_path[] = "/tmp/lsm_policy_garbage_XXXXXX";
-> > +	int garbage_fd, pipe_fds[2];
-> > +	char buf = 0;
-> > +	pid_t pid;
-> > +
-> > +	if (setup_env(&env))
-> > +		goto out;
-> [ ... ]
-> > +	if (!ASSERT_OK(pipe(pipe_fds), "pipe"))
-> > +		goto out_unlink;
-> > +
-> > +	/*
-> > +	 * Cannot use spawn_exec_child(): the same process must test its
-> > +	 * write access after the failed exec.
-> > +	 */
-> > +	pid = fork();
-> > +	if (!ASSERT_GE(pid, 0, "fork"))
-> > +		goto out_unlink;
+> The hooks back referenced BPF kptrs, which imposes the same lifetime
+> contract on every implementation: from_fd returns a reference on a
+> live object, get acquires with inc-not-zero semantics and fails with
+> -ENOENT once the count dropped to zero, put may be called from
+> contexts that cannot sleep (BPF drives it from map destructors), and
+> the containing object is freed only after an RCU grace period, as
+> programs load policy object kptrs from maps under RCU and may examine
+> an object concurrently with its last put.
 > 
-> [Severity: Low]
-> Does this code leak the file descriptors created by pipe() if fork() fails? 
+> The hooks are excluded from the "bpf" LSM's attachment points.  The
+> object-routed hooks are unreachable there, as LSM_ID_BPF policy
+> objects cannot exist; for from_fd, whose walk visits every
+> implementation, a BPF program cannot fill the object out parameter,
+> so an attachment returning 0 would hand the caller an uninitialized
+> pointer.
 > 
-> If fork() fails here, the code jumps directly to the out_unlink label, and it 
-> appears neither pipe_fds[0] nor pipe_fds[1] are closed before exiting the
-> function. 
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: Casey Schaufler <casey@schaufler-ca.com>
+> Signed-off-by: Justin Suess <utilityemal77@gmail.com>
+> ---
+>  include/linux/lsm_hook_defs.h |  4 ++++
+>  include/linux/security.h      | 11 +++++++++++
+>  kernel/bpf/bpf_lsm.c          |  3 +++
+>  3 files changed, 18 insertions(+)
 > 
-> The spawn_exec_child() helper function introduced in this same commit properly 
-> closes both descriptors on fork failure. Should similar cleanup be added here?
->
-Will fix.
+> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+> index 65c9609ec207..d7684407737a 100644
+> --- a/include/linux/lsm_hook_defs.h
+> +++ b/include/linux/lsm_hook_defs.h
+> @@ -452,6 +452,10 @@ LSM_HOOK(int, 0, bpf_token_create, struct bpf_token *token, union bpf_attr *attr
+>  LSM_HOOK(void, LSM_RET_VOID, bpf_token_free, struct bpf_token *token)
+>  LSM_HOOK(int, 0, bpf_token_cmd, const struct bpf_token *token, enum bpf_cmd cmd)
+>  LSM_HOOK(int, 0, bpf_token_capable, const struct bpf_token *token, int cap)
+> +LSM_HOOK(int, -EOPNOTSUPP, policy_object_from_fd, int fd,
+> +	 struct lsm_policy_object **object)
+> +LSM_HOOK(int, -EOPNOTSUPP, policy_object_get, struct lsm_policy_object *object)
+> +LSM_HOOK(void, LSM_RET_VOID, policy_object_put, struct lsm_policy_object *object)
+>  #endif /* CONFIG_BPF_SYSCALL */
+>  
+>  LSM_HOOK(int, 0, locked_down, enum lockdown_reason what)
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 153e9043058f..5e423bea080e 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -168,6 +168,17 @@ struct lsm_prop {
+>  	struct lsm_prop_bpf bpf;
+>  };
+>  
+> +/*
+> + * Identity of a policy object an LSM shares with BPF programs,
+> + * embedded in the LSM's own object.  @lsmid identifies the owning
+> + * LSM; @type discriminates that LSM's policy object types, with 0
+> + * reserved as "unset".
+> + */
+> +struct lsm_policy_object {
+> +	u64 lsmid;
+> +	u32 type;
+> +};
+For some clarity:
 
-I think that's sashiko's only nit for this patchset.
+lsm_policy_object is just a handle to a refcounted lsm-private struct.
 
-https://sashiko.dev/#/patchset/20260831145858.3869191-1-utilityemal77@gmail.com
+It can't be forged / created manually because it's a trusted kernel
+pointer, so the only way to get it is through policy_object_from_fd.
+And you cannot mutate any part of it from BPF.
 
-The BPF CI AI review bot didn't run on this since the patchset can't
-based on a bpf tree until it catches up to the recent Landlock changes.
+But it's what enables the generic model. Calling it a "policy object"
+may be short sighted though, that term is heavily overloaded in the LSM
+space. I don't want to prescribe any restrictions on what an LSM can use
+it for, after all some LSM have no notion of "policy" at all or have a
+different meaning for it.
+
+For SELinux, this "lsm_policy_object" could be an sid, for AppArmor an aa_label,
+for Smack a label, etc. The intention was to allow writing programs that
+don't care about any details of a particular LSM.
 
 Justin
+> +
+>  extern const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1];
+>  
+>  /* These functions are in security/commoncap.c */
+> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+> index 1433809bb166..d06744d72e04 100644
+> --- a/kernel/bpf/bpf_lsm.c
+> +++ b/kernel/bpf/bpf_lsm.c
+> @@ -56,6 +56,9 @@ BTF_ID(func, bpf_lsm_xfrm_decode_session)
+>  #endif
+>  BTF_ID(func, bpf_lsm_ismaclabel)
+>  BTF_ID(func, bpf_lsm_file_alloc_security)
+> +BTF_ID(func, bpf_lsm_policy_object_from_fd)
+> +BTF_ID(func, bpf_lsm_policy_object_get)
+> +BTF_ID(func, bpf_lsm_policy_object_put)
+>  BTF_SET_END(bpf_lsm_disabled_hooks)
+>  
+>  /* List of LSM hooks that should operate on 'current' cgroup regardless
 > -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20260831145858.3869191-1-utilityemal77@gmail.com?part=14
+> 2.55.0
+> 
