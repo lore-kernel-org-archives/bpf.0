@@ -1,162 +1,159 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 022DE1E98E3;
-	Wed,  2 Sep 2026 03:13:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788318803; cv=none; b=CUavuTtX85YKovcov5NW9XWTeL+ZjbnyXNCVVdYZ8lLL1BHG+8dN6/pQbPCnSSvyBDtb/o+DRqOr0S8lX73QcBZpPRV1SATFif8d+9AtZ5iFTlXBpMK0fipqaOoTxm0ePGjdv6a+ICMQ95qxeq1mSF29AFzZLKE1lUpIhQ9K1WY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788318803; c=relaxed/simple;
-	bh=C+Uo2kt5ZOqlw8/33V+ZcOjMsJv6LTfRgew/gLDOF+s=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=jwOlzWFZKXHG8c2EQN9tCq6OK3PC44bDxRApuoRLwZZI9iFYVoQefkql9IMQF1BmtvDpYwcg1+o25rgSiLtlp81lg/85Ly8pM8nKtmvb/TONzwIdmQo4TTULUi05K8VGlobOnHd47MbgugXJJnI7Rnjftf/2Jaj1K1+y8r3rLQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [123.138.236.242])
-	by gateway (Coremail) with SMTP id _____8CxPtMMjZdqhZsHAA--.21507S3;
-	Wed, 02 Sep 2026 10:42:20 +0800 (CST)
-Received: from [10.130.40.83] (unknown [123.138.236.242])
-	by front1 (Coremail) with SMTP id qMiowJAx3c4JjZdq3EcZAA--.53851S2;
-	Wed, 02 Sep 2026 10:42:18 +0800 (CST)
-Subject: Re: [PATCH bpf v1 RESEND] bpf: Fix timer_lockup deadlock using
- atomic_fetch_inc()
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: loongarch@lists.linux.dev, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260902005106.22187-1-yangtiezhu@loongson.cn>
- <DL4FK2P8LMEQ.216J5ZMX9B7VC@gmail.com>
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <7d0bd14f-d13e-6735-92f3-68f474c66a73@loongson.cn>
-Date: Wed, 2 Sep 2026 10:42:17 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF3CE3382CB
+	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 03:36:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788320178; cv=pass; b=OsBAJMHoxQEi250fZmsbhSfJajP1I+jZJdjVqFNAwoyRvwBe6l98+ltVD0c2fP3WA1agRcG2HBBCP3fXUB8AaVg9kDVs+OLhYsjvP1zQLtamHRS+5rkwNkb7S5rdWDju4SXc4HquxoeVA6Yv6GooqadYOpX/jU+/U5nYObtXshc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788320178; c=relaxed/simple;
+	bh=76NXQShZ73vzhWxjJQ0j7zqbp54gjiB/2hR4sJHXnRk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nWLJbx0kqAludZmRrKsSGg7/RX7J8s5nzIvu1LROXTm5RBtO3R+GjhEPGkmxwYDSpBlwD2inLBWE0D6XONj83NpQ+z7ctwzMIIdsXchhZXz89LnbqJpfBmyH6nbmlNrKVu4/HgFR1hV67PBS1S+OwB06HEq48kWoCooErPpWy/M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KkeglZ/Z; arc=pass smtp.client-ip=209.85.160.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KkeglZ/Z"
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-52fac937235so79301cf.1
+        for <bpf@vger.kernel.org>; Tue, 01 Sep 2026 20:36:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788320175; cv=none;
+        d=google.com; s=arc-20260327;
+        b=eX6n6nn+WSxR5EsvW5sc4spXalzmWWpJ5028fWMrG1uAdPHKPHFFNhg+6huzYxT8J/
+         KZDkgzFwLfbPHLXNpqdaQm4bt5aza8V9txbKFf9+J67Bzb8eYPpVhEbEz5ZYw5ilx/oR
+         8KElF30UHvF1E+g9X2DB+fu95eC+yQSVoz3j8GBLjTTi3gBr4uBVJvmlMFRLZgUwaIsz
+         LV+3qqfYV9SvlARSddqghmFn3klQwoBkPMiLs8e2qZ/D+TS5zl13w5WwlHFaiwlDBKUI
+         +rKQ0ZPdrqWyNmWPrKk2a4W4qZQV7WuZLDNO/WZXVp8BtVfgbajwg1uucbYMXxRW5hff
+         pX/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=76NXQShZ73vzhWxjJQ0j7zqbp54gjiB/2hR4sJHXnRk=;
+        fh=de6QzoG4w2GVPXpFrEFy74uuJGx+QWPfS8b04waC4sQ=;
+        b=EJYbVcM7qcvcCS1xNwl1qOKUoCA4zw/vTC64goAoP+oFe/S0Wz/pSLWh48eb7KrlZB
+         NXBIGLkdhqgi5sm7i2jM2I8/BBLHoA/E+DyZHUvTL9XaE8VmXqRhx1HjkWnqLdMA7tTx
+         hW3n063YyObITVrlD9uU7AbSUetVwWi/1U41nYnFDXOS+Rzl8EVjpXpucJr7GyUO8tJH
+         deLZ4favbKpI3kov7HEadxkgVOiiE3vyVWnPaXJNZRRSuFGP5HyjTrf+O1S9ICLn/Xwx
+         KSyRvVEmZFhAW88otMxGzilpQ5J3fOQgtDg3dHoLMvEgbp7tFyfXwnj/sSLedphax10t
+         mJIg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1788320175; x=1788924975; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=76NXQShZ73vzhWxjJQ0j7zqbp54gjiB/2hR4sJHXnRk=;
+        b=KkeglZ/ZTSO1YaQfEfX1Foq0beIc4AqiL15dpbfgw3vejcWeupvEQAhjGXoe9fZHCd
+         FwTwL8cebNrVllETNERZTuYX/rUwk6IfRfrBODBiELrwFtuOwYX9VmoMr6Wt2wSW40Vb
+         /RbXfhnYAcjO6ttXgPtYeAVxVCTMAYtJKuXIJh3BA1kHGdj6hxTfyUoTq+gsMNuOG5OR
+         4eCH7cEhiw9kzoYY7HiN0ZDZziYOitn5KRxG25mm6ftEVCn8zX5rRA15IL81DccZZHjz
+         DjIG1uQ2y6U9wbspCH/BwFP3ZjXr+QBisbvT7zYJS01yMbg/R/LTGL32h8Xz708nsOvw
+         pQSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788320175; x=1788924975;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=76NXQShZ73vzhWxjJQ0j7zqbp54gjiB/2hR4sJHXnRk=;
+        b=iMVUPBZE5LJH9Mg+WyBIPzSlZ78Ssn/oSF9eZNmWgSQ2DXYPfAnS4ID6QiW25wWiED
+         1pu5nxmlzEp4nKTgN7S7/45OaRDgj4GEaYQ9Z7i28TfPLYIKqCbwE1TuXLDTqororoRT
+         9ZO1mzmHjONAJJGEv0iY76VXEY8txz1W0rD6JOqnj5JqI36ojspD7p6R88MVtVDd9oCE
+         IqZwbJ8vq1M464HmCDtciAlcU8W1jnBPzGJFwoFdOq9i2K9j33aZfJkzfvArX+LCtU9D
+         GEhVLM8wcsUmhKUCtcgGOi5zGTn2ByQjF4WF4YRK2A37Ty3uzT4HDQficKbMPltklocg
+         LR2w==
+X-Forwarded-Encrypted: i=1; AHgh+Rr0z6tumyoCRA5+KnIy0tKTvaN8mbAh3wYCpIDqa9A1Wl9+MFPgEpXD9D3BkmqJvQm6WDc=@vger.kernel.org
+X-Gm-Message-State: AFuF++kXQ6ptgEqlpIt2uJFq82ho/MRf54ldGZNDFdTrz124i8eeA9Js
+	jiRY3nWNT6Cs1ZVygYKNyg1AHwYnHF1aSfTjh6vVaCWkM7fAnAVm0XnXdWbUwn0S53MZ2cy/xXf
+	jHF9v6PyNi7eWzqrry5e+XkpCcM5EHFSNmb4OfMq4
+X-Gm-Gg: AR+sD11kwOG4bty/KxvNEJ6f2iyTwyw2vatbVKcMW/+G4GNPg4maUyjcJTH2+noKXNH
+	LnagwfobyW45PWfQYwKL+PIL29LPHVdiIXyrSGSO4XO5Gzxp3w2E4nXgvtpuvzvBvgW9AJL1fF7
+	WIt11Wte+c9EfFFmbPNo59I9Fc6NryePAQNh3GWY/Egl5Eqz/6b/Qm+swhyuWseBJZSHaJYJnpZ
+	r4hydH6eyZngSwXEs+fp7XyLX524MPVEfHvXNWLW6Zt+bqIhwlYqMhBlv9vvU+s82GNbC7CQXNh
+	yNVhBse5+FychP8MbWu9P1OF0wo2e07zI4NY5t5Pj1yDZAWWYOkizD1wnLnwOjiT2U9RVFIS8Pn
+	S4avISmJji8H2HfRbNSatvQOmNzF9
+X-Received: by 2002:a05:622a:1b21:b0:50f:b69a:f4a8 with SMTP id
+ d75a77b69052e-53035b635edmr5765381cf.7.1788320174962; Tue, 01 Sep 2026
+ 20:36:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <DL4FK2P8LMEQ.216J5ZMX9B7VC@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJAx3c4JjZdq3EcZAA--.53851S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxAF4DZF18GrWkXw4kAw1xXrc_yoWrZr4kpr
-	WxCF47Kr4kXr48Xw1kJa1UuF1F939Yka43Jr4rGr1Uu3W5Kr1YyF409r43WFy5Cws8Jry2
-	yry0q3sagFn8JagCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
-	twAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
-	k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l
-	4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxV
-	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
-	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-	4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI
-	42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcApnDUUUU
+References: <20260813002618.3755631-1-tweek@google.com> <39f53732-dc89-43b6-bf50-2ba5c64adf38@iogearbox.net>
+In-Reply-To: <39f53732-dc89-43b6-bf50-2ba5c64adf38@iogearbox.net>
+From: =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>
+Date: Wed, 2 Sep 2026 13:35:56 +1000
+X-Gm-Features: AcwNN1UK8iToxVRYZbB0QJOeCKOrbeItGVVek4Zgwjy2T1K6oHlYjRUdS1Q2Ww8
+Message-ID: <CA+zpnLeAag+YBtD1Pe=8UPc4Veq4k1yGkwtaJacz+vB4mwbFqw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/5] bpf: Introduce LOADER_LOAD_FD
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Jeffrey Vander Stoep <jeffv@google.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Eric Suen <ericsu@linux.microsoft.com>, 
+	Blaise Boscaccy <bboscaccy@linux.microsoft.com>, Sid Nayyar <sidnayyar@google.com>, 
+	Neill Kapron <nkapron@google.com>, Eric Biggers <ebiggers@google.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org, 
+	selinux@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026/9/2 上午9:13, Kumar Kartikeya Dwivedi wrote:
-> On Wed Sep 2, 2026 at 2:51 AM CEST, Tiezhu Yang wrote:
->> When testing the BPF selftest "sudo ./test_progs -t timer_lockup", there
->> is a kernel lockup and panic on LoongArch:
->>
->>    watchdog: BUG: soft lockup - CPU#1 stuck for 8s! [test_progs:39601]
->>    Kernel panic - not syncing: softlockup: hung tasks
->>    ...
->>    Call Trace:
->>    ...
->>    [<9000000000c40e98>] panic+0x44/0x48
->>    [<9000000000e8b000>] watchdog_timer_fn+0x500/0x520
->>    [<9000000000dfd9a4>] __hrtimer_run_queues+0xc4/0x530
->>    [<9000000000dffe90>] hrtimer_interrupt+0x140/0x320
->>    ...
->>    [<9000000002ad9e4c>] _raw_spin_unlock_irqrestore+0x8c/0xc0
->>    [<9000000000dfe9e0>] hrtimer_try_to_cancel.part.0+0x70/0x350
->>    [<9000000000dfed58>] hrtimer_cancel+0x38/0x80
->>    [<9000000000f6d944>] bpf_timer_cancel+0x94/0x1e0
->>    [<ffff80000200fad0>] bpf_prog_108ab87b32f22e44_timer_cb1+0xb0/0xfc
->>    [<9000000000f6b838>] bpf_timer_cb+0x98/0x170
->>    [<9000000000dfdaac>] __hrtimer_run_queues+0x1cc/0x530
->>    [<9000000000dfde94>] hrtimer_run_softirq+0x84/0xd0
->>    ...
->>    [<900000000271d9e0>] bpf_test_run+0x1c0/0x5c0
->>    [<900000000271f548>] bpf_prog_test_run_skb+0x6e8/0xe20
->>    [<9000000000f39940>] __sys_bpf+0x1690/0x2c50
->>    [<9000000000f3af28>] sys_bpf+0x28/0x40
->>    [<9000000002ac2d68>] do_syscall+0x108/0x5e0
->>    [<9000000000c6a850>] handle_syscall+0xd0/0x170
->>
->> In bpf_timer_cancel() of kernel/bpf/helpers.c, it explicitly notes that
->> "Need full barrier after relaxed atomic_inc" to ensure global visibility
->> of the cancelling state before performing the lockless dependency checks.
->>
->> However, on weakly-ordered architectures such as LoongArch, the current
->> combination of a relaxed atomic_inc() followed by smp_mb__after_atomic()
->> fails to guarantee the physical store-load ordering because the latter
->> currently expands to an empty compiler barrier rather than a hardware
->> data barrier on LoongArch.
->>
->> This allows a subsequent read to bypass the prior write due to store-load
->> reordering, enabling concurrent CPUs to simultaneously bypass the software
->> deadlock detection, enter hrtimer_cancel(), and then trigger a severe ABBA
->> deadlock in the hrtimer core.
->>
->> Instead of relying on arch-specific macro implementations which may vary
->> in strictness, fix this issue directly in the BPF core helper by replacing
->> atomic_inc() and smp_mb__after_atomic() with a single atomic_fetch_inc()
->> to provide full ordering natively.
-> 
-> This paragraph is completely bogus. LoongArch's smp_mb__after_atomic() had a
-> bug. The specification in LKMM for smp_mb__after_atomic() is that it should be a
-> full barrier, which can be relaxed if the prior atomic operation already
-> provides the necessary ordering.
-> 
-> As I already said, there is no point in changing or "optimizing" this atomic
-> inc. Just let it be. You will see no measurable difference for this function.
-> 
-> Just accept that it was a bug, and fix the lowering for your arch. Plenty of
-> other logic in the kernel uses this primitive, so I think you folks were just
-> lucky this wasn't hit before by something else.
+On Tue, Aug 18, 2026 at 2:11=E2=80=AFAM Daniel Borkmann <daniel@iogearbox.n=
+et> wrote:
+>
+> On 8/13/26 2:26 AM, Thi=C3=A9baud Weksteen wrote:
+> > The bpf subsystem supports a signed-bpf infrastructure to guarantee the
+> > authenticity of programs [1, 2]. While this infrastructure is ideal for
+> > dynamic environments or enterprise deployments where untrusted binaries
+> > are loaded post-boot, it introduces unnecessary complexity for static
+> > platform use cases.
+> >
+> > In the Android ecosystem, platform BPF programs reside exclusively on
+> > read-only partitions that are strictly verified at the block level via
+> > dm-verity. Because the kernel has already guaranteed the authenticity o=
+f
+> > the underlying file, parsing and validating a secondary signature insid=
+e
+> > the BPF subsystem is redundant, complex (because it requires X509 and
+> > PKCS#7 parsing) and necessitates introducing additional signing flows
+> > during build.
+>
+> Note that the BPF subsys doesn't implement any X.509 or PKCS#7 parsing,
+> rather we reuse the same mechanism as the module loader has been using.
+>
+> > Furthermore, relying on signatures forces the kernel to manage a
+> > dedicated public key keyring. In a decentralized ecosystem comprising
+> > various OEMs and SoC vendors, managing these keys specifically for
+> > infrastructure BPF programs presents an operational hurdle.
+>
+> There is no dedicated BPF keyring.. an OEM key built into a kernel image
+> has no additional runtime key management.
+>
+> > Thanks to light skeletons, it is possible to embed the loading steps
+> > within a wrapping BPF program (also known as loader). In turns, the
+> > loading of the loader only requires a limited, well-defined number of
+> > steps. This series introduces the bpf command LOADER_LOAD_FD for the
+> > kernel to directly load an ELF file which contains a loader with its
+> > data. By moving the loading within the kernel, the authenticity of the
+> > loader and its content can be guaranteed by existing kernel mechanisms.
+>
+> Same issue still holds as described in [0]. Also, this sounds more like
+> convenience for Android offloaded to the kernel.. (you stated redundant
+> given the signature validation and complexity wrt keyring.. so what?
+> don't you have the latter anyway for vendor kernel modules?)
 
-Thanks for your feedback.
+Thanks for the feedback Daniel.
 
-I looked into tools/memory-model/Documentation/ordering.txt,
-as it explicitly clarifies, atomic_inc() does not guarantee
-full ordering on weakly-ordered architectures, therefore
-smp_mb__after_atomic() must emit a hardware data barrier to
-comply with the LKMM specification, rather than expanding to
-a plain compiler barrier.
+Vendor kernel modules are verified as described in the 'precedent'
+section: there are no signatures per module. Instead the combination
+of dm-verity and SELinux policy ensures the modules' authenticity.
 
-I also noticed there are hundreds of smp_mb__after_atomic()
-call sites across the core kernel (kernel/, drivers/, mm/,
-net/, fs/) that currently lack necessary hardware data barriers
-on LoongArch, which have potential risks.
+> We're not
+> adding yet another scheme/alternative for addressing signed BPF via
+> separate loader mechanism.
 
-So please disregard this bpf patch, I will send a v2 patch to
-remove the definition of __smp_mb__{before,after}_atomic() in
-arch/loongarch/include/asm/barrier.h, so that these two macros
-can automatically fall back to the generic definition in
-include/asm-generic/barrier.h:
-
-#ifndef __smp_mb__before_atomic
-#define __smp_mb__before_atomic()	__smp_mb()
-#endif
-
-#ifndef __smp_mb__after_atomic
-#define __smp_mb__after_atomic()	__smp_mb()
-#endif
-
-Thanks,
-Tiezhu
-
+I understand your position. Thanks for taking the time to reply.
