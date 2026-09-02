@@ -1,95 +1,165 @@
-Received: from mta0.migadu.com (out-213.mta0.migadu.com [91.218.175.213])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE7E22571A0
-	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 02:48:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.213
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22BF527473
+	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 02:52:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788317319; cv=none; b=Kbe6BxffH3GtqSqvReagF2+PZV1O/vuWe2eWbKj3MI0JnStpHXAyp+Myd/0+F7waHdAvdD8vwNX38n3z2NhsnVHqKqsEzIQwLGQsmfSFHBTy1uCj2Wosqlw0XRYixFei7Oori0FfofN4eXaW+NlTnu1IBZTnm/R+C58rIz48YCU=
+	t=1788317534; cv=none; b=mf3PlB9DdHxxtoY3kPDTuhsQ2UEbl1XKqgV13pmRhnLp0VZUNUsORYvvQfd+fyXarnhy36SwluwKAOojN8L0LviHkXlkOfMnO32s6485NVGesHGKTYw0sd04nIeXTOMI2k+gUuWCH7V9YFUELL+xJoc1J8bOq51E/RcpsfEPmQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788317319; c=relaxed/simple;
-	bh=7s1kUEuoRVkEalRuRbIfe8z8RfYoAvUaeXzHVf0DdbE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aoK59cvhOW/DQwcHuEOqCOFJfhxTzBpRNNw7alD0ofGoXZPNYtETPvnTot06+eqIhU+HNDqTnIqgLWQ33tZUSrPBjfAkvH9WngOCOFAc3nHIl7T6alBfru2VK24JzaCaYBEq4gnO/DRBgkfdPMUKDKwkF6u03hwpoNmbjLLgarE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=esQOwMBT; arc=none smtp.client-ip=91.218.175.213
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788317534; c=relaxed/simple;
+	bh=AQlXUioNWpcIL61bgLPVUILw8x8325m0z3eAVBUWCVQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=HdoZlecJp/DEQedIUeU8FfDoipFtIv0L6mb9v3kX/18eHETav043We3RB7WrA2r6jFFWN6CrNPyHi+lvtxmgonUBKhgGV3Xc3dp+Ep5LlHzz0eqgmnaMGF3UdIXZ9zAnxfW8Eomc6nxny7Q12ZyASuK5Fz1MfzFwlWz2x9EOOo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OjXFfbLd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="esQOwMBT"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=7s1kUEuoRVkEalRuRbIfe8z8RfYoAvUaeXzHVf0DdbE=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788317315; v=1; x=1788922115;
- b=esQOwMBTh7qjWJGSjnTuwP9bQNyCk25/njVg+vJr+8/yjhIurscV60+KSNJTRsdk3nf8B9z+
- 7SrNRVumNCFvF26t3Mhh+faWg8gsJOJyrcyf4zk+uFt3ghri9krz4EhC/T9EAzCRx/1B6Gwe7hY
- knOy6Dn8BvwU2xzzJOoR2to0=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id f1d819361e354e7d;
-	Wed, 02 Sep 2026 02:48:35 +0000
-X-Mizu-Trace-ID: f1d819361e354e7d
-X-Migadu-Flow: FLOW_OUT
-From: Tao Cui <cui.tao@linux.dev>
-To: tj@kernel.org
-Cc: void@manifault.com,
-	arighi@nvidia.com,
-	changwoo@igalia.com,
-	michalblk@google.com,
-	liwanwu@kylinos.cn,
-	sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	cui.tao@linux.dev,
-	Tao Cui <cuitao@kylinos.cn>,
-	Sashiko <sashiko-bot@kernel.org>
-Subject: [PATCH v3 2/2] sched_ext/scx_flatcg: make cgv_node_less() wraparound-safe
-Date: Wed,  2 Sep 2026 10:48:12 +0800
-Message-ID: <20260902024812.794879-3-cui.tao@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260902024812.794879-1-cui.tao@linux.dev>
-References: <20260902024812.794879-1-cui.tao@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OjXFfbLd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 779E11F000E9;
+	Wed,  2 Sep 2026 02:52:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788317532;
+	bh=AtW5Wcu6SqNRfM8lyINcboFvcgW5k4K9xiInpS13lao=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=OjXFfbLdScYjg2MKaA/ZQZ2sj2Ouv6VexOhr/LF5aig18vY/faTruv6Astq+iaIl5
+	 wZFAhy1B2g08mLUMNL2pt/uYvi+PSR9Qi6jxnrLn5ZkIJLEW+8zbJHeMZE5RDxI+gD
+	 NVsk/4/iu8O9Z8XKxfofvHTYnZXQebhutTakV47LUBZq/hNpYX8Gu2v90VHIBBtOEn
+	 24cF+gmnkGYttZYRzA/VT6yIo5sOWLT7CKPOvnYECcjTQS25bTGzWIyTtd5B1xYRiM
+	 Ki7UNi14PjofNwg/2GZiGbK8YfQe+/2yn3dkujcI8O2RTmMxEHk0nOUIzz9ztZw6rA
+	 a/4FtrGEBh4ZQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next, v3] net/mlx5: Use dma_wmb() for completion
+ queue doorbell updates
+Reply-To: sashiko-reviews@lists.linux.dev
+To: lirongqing <lirongqing@baidu.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260902023429.1717-1-lirongqing@baidu.com>
+References: <20260902023429.1717-1-lirongqing@baidu.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 02 Sep 2026 02:52:12 +0000
+Message-Id: <20260902025212.779E11F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Tao Cui <cuitao@kylinos.cn>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Replacing wmb() with dma_wmb() breaks ordering between DMA doorbel=
+l writes and normal memory updates, leading to potential CQ overruns.
+--
 
-cgv_node_less() compares cvtimes with a plain <, which misorders once
-cvtime wraps: the wrapped node lands at the front of the tree while
-the unwrapped ones get stuck behind it. Each CPU picking a cgroup
-charges it a full slice, making wrap occur earlier than a naive
-estimate might suggest.
+commit 3bd90cae934d1db51177852241805820453b9c02
+Author: Li RongQing <lirongqing@baidu.com>
 
-Use time_before() instead. cgrp_cap_budget() bounds the lag behind
-cvtime_now, while the lead is bounded by the slice charge plus pending
-cvtime_delta on re-insertion, so the cyclic ordering assumptions of
-time_before() hold.
+net/mlx5: Use dma_wmb() for completion queue doorbell updates
 
-Fixes: a4103eacc2ab ("sched_ext: Add a cgroup scheduler which uses flattened hierarchy")
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Link: https://lore.kernel.org/r/3f1ce004-e259-4e72-a5f7-14a5050053bd@linux.dev
-Signed-off-by: Tao Cui <cuitao@kylinos.cn>
----
- tools/sched_ext/scx_flatcg.bpf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This commit replaces wmb() with dma_wmb() in various mlx5 completion queue
+polling routines. The goal is to improve performance by using a lighter
+barrier where only DMA coherent memory accesses are involved.
 
-diff --git a/tools/sched_ext/scx_flatcg.bpf.c b/tools/sched_ext/scx_flatcg.bpf.c
-index 454ebb820c5e..5e6abd0bccb3 100644
---- a/tools/sched_ext/scx_flatcg.bpf.c
-+++ b/tools/sched_ext/scx_flatcg.bpf.c
-@@ -144,7 +144,7 @@ static bool cgv_node_less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
- 	cgc_a = container_of(a, struct cgv_node, rb_node);
- 	cgc_b = container_of(b, struct cgv_node, rb_node);
- 
--	return cgc_a->cvtime < cgc_b->cvtime;
-+	return time_before(cgc_a->cvtime, cgc_b->cvtime);
- }
- 
- static struct fcg_cpu_ctx *find_cpu_ctx(void)
--- 
-2.43.0
+>     Since only DMA coherent memory accesses are involved (no MMIO accesses
+>     follow), we can safely use dma_wmb() instead of wmb().
 
+Does this accurately describe the code following the barrier?
+
+While there might not be MMIO accesses, there are normal memory accesses
+that follow, such as updates to consumer indices like sq->cc or pushing to
+a freelist.
+
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c b/drivers/n=
+et/ethernet/mellanox/mlx5/core/en/ptp.c
+> index 723f66a6bd634..17084d76209e8 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
+> @@ -259,7 +259,7 @@ static bool mlx5e_ptp_poll_ts_cq(struct mlx5e_cq *cq,=
+ int napi_budget)
+>  	mlx5_cqwq_update_db_record(cqwq);
+> =20
+>  	/* ensure cq space is freed before enabling more cqes */
+> -	wmb();
+> +	dma_wmb();
+> =20
+>  	while (metadata_buff_sz > 0)
+>  		mlx5e_ptp_metadata_fifo_push(&ptpsq->metadata_freelist,
+
+[Severity: High]
+Is the DMA write to the CQ doorbell ordered before pushing to the
+metadata_freelist in normal memory?
+
+If dma_wmb() only guarantees ordering between two DMA memory accesses,
+can the CPU reorder the normal memory write to execute before the wq->db
+write?
+
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/n=
+et/ethernet/mellanox/mlx5/core/en/xdp.c
+> index 77ea51bfbaae5..ee0986bd5c18d 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+> @@ -817,7 +817,7 @@ bool mlx5e_poll_xdpsq_cq(struct mlx5e_cq *cq)
+>  	mlx5_cqwq_update_db_record(&cq->wq);
+> =20
+>  	/* ensure cq space is freed before enabling more cqes */
+> -	wmb();
+> +	dma_wmb();
+> =20
+>  	sq->cc =3D sqcc;
+
+[Severity: High]
+Does dma_wmb() guarantee that the DMA write to the CQ doorbell is ordered
+before the normal memory write to sq->cc?
+
+If it does not, this could lead to a CQ overrun where the transmitting CPU
+observes the updated sq->cc, posts new WQEs, and rings the SQ doorbell
+before the device observes the CQ space update. This could cause the device
+to think the CQ is full, leading to dropped completions, leaked SKBs, or TX
+timeouts.
+
+[ ... ]
+
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c b/drivers/ne=
+t/ethernet/mellanox/mlx5/core/en_tx.c
+> index 0b5e600e4a6a9..14479da98f427 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
+> @@ -849,7 +849,7 @@ bool mlx5e_poll_tx_cq(struct mlx5e_cq *cq, int napi_b=
+udget)
+>  	mlx5_cqwq_update_db_record(&cq->wq);
+> =20
+>  	/* ensure cq space is freed before enabling more cqes */
+> -	wmb();
+> +	dma_wmb();
+> =20
+>  	sq->dma_fifo_cc =3D dma_fifo_cc;
+>  	sq->cc =3D sqcc;
+
+[Severity: High]
+Will the normal memory write to sq->cc be properly ordered after the DMA
+write to the CQ doorbell with only dma_wmb()?
+
+[ ... ]
+
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c b/drivers/=
+net/ethernet/mellanox/mlx5/core/lib/aso.c
+> index 614cd57a40d74..8f7a89ae4ad8c 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c
+> @@ -421,7 +421,7 @@ int mlx5_aso_poll_cq(struct mlx5_aso *aso, bool with_=
+data)
+>  	mlx5_cqwq_update_db_record(&cq->wq);
+> =20
+>  	/* ensure cq space is freed before enabling more cqes */
+> -	wmb();
+> +	dma_wmb();
+> =20
+>  	if (with_data)
+>  		aso->cc +=3D MLX5_ASO_WQEBBS_DATA;
+
+[Severity: High]
+Could the normal memory write to aso->cc execute before the DMA write to
+the CQ doorbell due to the relaxed guarantees of dma_wmb()?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260902023429.1717=
+-1-lirongqing@baidu.com?part=3D1
