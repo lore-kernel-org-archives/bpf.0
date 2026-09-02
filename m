@@ -1,159 +1,92 @@
-Received: from mta0.migadu.com (out-213.mta0.migadu.com [91.218.175.213])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629CB3126D6
-	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 07:47:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.213
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF694CCDC3
+	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 08:01:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788335265; cv=none; b=g+OdWQAw9ZiF+h9iMK+u2OzBm6wQOva0UGyJx+d19c/DmUXhuHnUKFZ74L+gyY1G0euaMT4G/Ai5+bVRH+MpQ6dyJpAUtYL6yWiPT/nDgXy6ZQvgSq8VRddbvYwYe/qC0EJJXC6lYcJM840zGKaxBCukTbnjvJ8E6YJtRJjnQ0k=
+	t=1788336093; cv=none; b=sYncnm7R4NPHS06HWu0pstlh0qy93r0gbPHldh5SYxjiX3ClHAeMfrpMQ9fU/x1pCOlMyIxGMCGISG7W/Gy0U82+KA5MmDRApShbhXC6mNhSp1VISo8749nXohLh6KPKWJEk7MWHoZ3fpTik/ZyN+RXvP+uVCE5rRkGlNpjzQ8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788335265; c=relaxed/simple;
-	bh=5T0DDY/LO7po3l5L3kH5jryIHusgdlLonq8DYkyJU0E=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FC6MzSTVU3SHVek4GAUfgvaWt0e4DDylSZap0Zk66bydbOU9V/YGVaRN7DxYm//ZNviAxWx4C0H5ZvttOKzSRtoV7URoB/Tjyt9xLPeLRZRAAn5F41cm1ncYrAyiPp6IZRVkVTaDL+cnQoqYtBIO/prfgfPcnER1VF1W+3qEOxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CkYnsW7f; arc=none smtp.client-ip=91.218.175.213
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788336093; c=relaxed/simple;
+	bh=z5ctThaO7p6yP3cNtlXCIzXvkbvUaddzTfdhAE9MlVU=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=OHp4UvJVnC6yW2ngLSkEinA6ugh8oglzOnxuyXLi1KpNbkMiD/T5BKO8JGY0G3lse2jrdUgN0LM/G9JETo9MbtbJnkB+q17w92xFCw5MlPoq13xAVYDHVpiHT5kI4+GdPEg9j5uESINJonyMbXGS0ny8ekZmgqifhl5i0/xVFV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NzXseR1N; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CkYnsW7f"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=5T0DDY/LO7po3l5L3kH5jryIHusgdlLonq8DYkyJU0E=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788335261; v=1; x=1788940061;
- b=CkYnsW7f5TbjWgzcsB6L7S8wnN6OCo37WKSFlwuzUaJr8n+mqNRPmlZLE2KvYNUQziyyw/8i
- VZKCQa46b9PBjNqCLIKUgBtXVmcGLts99TW/PVgd+0LfIZsg0FIAMKwKms8JZ2CPHhmkMCWJjQ7
- m9JcDzzSWTsTgodswvfSDNyY=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id cb1a297f78c77415;
-	Wed, 02 Sep 2026 07:47:41 +0000
-X-Mizu-Trace-ID: cb1a297f78c77415
-X-Migadu-Flow: FLOW_OUT
-Date: Wed, 2 Sep 2026 15:47:37 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: bpf@vger.kernel.org, mptcp@lists.linux.dev
-Subject: Re: [PATCH mptcp-next 1/2] selftests: mptcp: convert iptables to
- nftables for mptcp_sockopt.sh
-Message-ID: <apfUmU4cEE0uxrSs@fedora>
-References: <20260902-mptcp_nft-v1-0-559caa16f410@kylinos.cn>
- <20260902-mptcp_nft-v1-1-559caa16f410@kylinos.cn>
- <20260902070232.4F4851F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NzXseR1N"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB0D71F000E9;
+	Wed,  2 Sep 2026 08:01:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788336092;
+	bh=XAjDpDR2dqsmK4b/OzNKpDRCWmbvKWlhljDvY2pE1kQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=NzXseR1Nm9DmZQG7VQfPAhie9dn4jxk2LPtvXkEDBgyG12Iii96KcwxjVS1fDAey0
+	 CYFyZ1EfEtREztz7Y7Tk/y5kTl5cl9V8qjNZkz/CJ3UFaediGgl0pxO7nF2cQab9+Y
+	 7H2lNzPqY60pmbAZtk3QDD5QpdkJiHK6itliFlyDaeiC6WxoFJHqxLE4kkTFxF39B+
+	 cOPoZ4ka7lE+3xPLC+7/R0km3Oxn+jNDt9kbwZb2+nL3kiLDW19UcS/PkhyEfswVbF
+	 lIoohu7H4E0ktPzGoxXJGSHCCWwCz53X5HfPHW8wLokhlCC0Y7Rxz34tmlX6Qdaoy3
+	 McdKXi6U4RWrg==
+Content-Type: multipart/mixed; boundary="===============5011965900040782750=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260902070232.4F4851F000E9@smtp.kernel.org>
+Message-Id: <76acf36a3de9493456b04c50491ea5b7751b9d86fb6e6bbadc0043c59a391ec3@mail.kernel.org>
+In-Reply-To: <20260902070239.16968-2-emil@etsalapatis.com>
+References: <20260902070239.16968-2-emil@etsalapatis.com>
+Subject: Re: [PATCH bpf-next 1/5] bpf: Update is_range_tree_set to work for consecutive ranges
+From: bot+bpf-ci@kernel.org
+To: emil@etsalapatis.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,memxor@gmail.com,daniel@iogearbox.net,eddyz87@gmail.com,nickolay.lysenko@gmail.com,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed,  2 Sep 2026 08:01:31 +0000 (UTC)
 
-On Wed, Sep 02, 2026 at 07:02:31AM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
-> - [Medium] Replacing iptables TCP flag matching with nftables exact matching (`tcp flags rst` and `tcp flags syn`) fails to match packets with multiple flags set, causing spurious test failures.
-> - [Medium] An empty `$drop` variable causes a Bash syntax error during numeric evaluation, which evaluates to false and silently masks test failures.
-> - [Low] Typo in string interpolation for the error message (`IPv{$af}` instead of `IPv${af}`).
-> --
-> 
-> commit af165781f3fb777bc40bc4de19c7d79cd01f51cc
-> Author: Hangbin Liu <liuhangbin@kylinos.cn>
-> 
-> selftests: mptcp: convert iptables to nftables for mptcp_sockopt.sh
-> 
-> This patch converts the mptcp_sockopt.sh selftest to use nftables instead of
-> iptables. It replaces per-address-family iptables mark rules with an inet
-> table containing drop counting rules for IPv4 and IPv6.
-> 
-> > diff --git a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
-> > index e850a87429b61..4d0af2bf94840 100755
-> > --- a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
-> > +++ b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
-> 
-> [ ... ]
-> 
-> > @@ -49,17 +47,23 @@ add_mark_rules()
-> >  	local ns=$1
-> >  	local m=$2
-> >  
-> > -	local t
-> > -	for t in ${iptables} ${ip6tables}; do
-> > -		# just to debug: check we have multiple subflows connection requests
-> > -		ip netns exec $ns $t -A OUTPUT -p tcp --syn -m mark --mark $m -j ACCEPT
-> > -
-> > -		# RST packets might be handled by a internal dummy socket
-> > -		ip netns exec $ns $t -A OUTPUT -p tcp --tcp-flags RST RST -m mark --mark 0 -j ACCEPT
-> 
-> [ ... ]
-> 
-> > +	# just to debug: check we have multiple subflows connection requests
-> > +	ip netns exec "$ns" nft add rule inet msock_table output \
-> > +		 meta mark "$m" tcp flags syn accept
-> > +	# RST packets might be handled by a internal dummy socket
-> > +	ip netns exec "$ns" nft add rule inet msock_table output \
-> > +		meta mark 0 tcp flags rst accept
-> 
-> [Severity: Medium]
-> In add_mark_rules(), the original iptables rules --tcp-flags RST RST and
-> --syn used bitmasks to allow additional flags like ACK for RST or ECN for
-> SYN. The new nftables rules tcp flags rst and tcp flags syn enforce an
-> exact match on the entire TCP flags byte.
-> 
-> Will these exact matches reject packets with multiple flags set, such as
-> RST+ACK or SYN+ECN, causing them to fall through to the drop rule and fail the
-> test?
+--===============5011965900040782750==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Thanks, I just find a tool iptables-translate and I will recheck each
-translation.
+> diff --git a/kernel/bpf/range_tree.c b/kernel/bpf/range_tree.c
+> index 2f28886f3ff75..6f6ba718887c4 100644
+> --- a/kernel/bpf/range_tree.c
+> +++ b/kernel/bpf/range_tree.c
+> @@ -180,12 +180,21 @@ int range_tree_clear(struct range_tree *rt, u32 start, u32 len)
+>  int is_range_tree_set(struct range_tree *rt, u32 start, u32 len)
+>  {
+>  	u32 last = start + len - 1;
+> -	struct range_node *left;
+> +	struct range_node *rn;
+>
+> -	/* Is this whole range set ? */
+> -	left = range_it_iter_first(rt, start, last);
+> -	if (left && left->rn_start <= start && left->rn_last >= last)
+> -		return 0;
+> +	while ((rn = range_it_iter_first(rt, start, last))) {
+> +		/* Make sure the range covers the start */
+> +		if (rn->rn_start > start)
+> +			return -ESRCH;
+> +
+> +		/* If it covers the entire range we're done. */
+> +		if (rn->rn_last >= last)
+> +			return 0;
+> +
+> +		start = rn->rn_last + 1;
+> +	}
+> +
+> +	/* No range to cover [start, last] */
+>  	return -ESRCH;
+>  }
 
-> 
-> [ ... ]
-> 
-> > @@ -105,33 +109,23 @@ cleanup()
-> >  
-> >  mptcp_lib_check_mptcp
-> >  mptcp_lib_check_kallsyms
-> > -mptcp_lib_check_tools ip "${iptables}" "${ip6tables}"
-> > +mptcp_lib_check_tools ip nft
-> >  
-> >  check_mark()
-> >  {
-> >  	local ns=$1
-> >  	local af=$2
-> >  
-> > -	local tables=${iptables}
-> > +	drop=$(ip netns exec "$ns" nft list table inet msock_table | \
-> > +		grep "ipv$af.*packets.*drop" | awk '{print $(NF-3)}')
-> >  
-> > -	if [ $af -eq 6 ];then
-> > -		tables=${ip6tables}
-> > +	if [ "$drop" -ne 0 ]; then
-> 
-> [Severity: Medium]
-> If the command extraction for drop fails, or if grep finds no matches,
-> the $drop variable will be empty.
-> 
-> When bash evaluates [ "$drop" -ne 0 ] with an empty string, it triggers a
-> syntax error. This error evaluates to false and skips the failure block.
-> 
-> Does this risk silently masking test failures if the extraction logic ever
-> fails to produce a number?
+This isn't a bug, but since this loop doesn't modify the tree (unlike
+range_tree_clear() just above), would __range_it_iter_next() work here
+instead of re-descending from the root with range_it_iter_first() each
+iteration?
 
-OK, I will add a regex to check if drop is number or not.
 
-> 
-> > +		mptcp_lib_pr_fail "got $drop pkt drops in ns $ns IPv{$af} tables," \
-> 
-> [Severity: Low]
-> Is the string interpolation IPv{$af} a typo?
-> 
-> Bash interpolates the $af variable but leaves the literal braces, printing
-> IPv{4} instead of IPv4. Should this be IPv${af} or IPv$af instead?
-> 
-> > +				  "not 0 - not all expected packets marked"
-> > +		ret=${KSFT_FAIL}
-> > +		return 1
-> >  	fi
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Thanks, I will fix this.
-
-Hangbin
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33603499110
+--===============5011965900040782750==--
