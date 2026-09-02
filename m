@@ -1,223 +1,157 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F72397E85
-	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 11:56:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788350180; cv=pass; b=tbmXMhKYmfObgD4ci6jyzBiL0/WUr4FN0Lq1nuey5RUjBcRJnnwtK1ACRNXp3jtYabnAuoKAbqocqvLl+3PUT25ahYa3Binuy9pQvVh81yasuufSLtzjnLbv6qZQaL7++0J+lZ2ItEXAwwqV4Ba+MBQMr39B3q5GIOaXKaLsleE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788350180; c=relaxed/simple;
-	bh=9aTnB/VsolXmMC6foR77V4yJLHZj5i7uyuB5JvSk0e8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EQM0g7pkL3o+KK5B8sf3CWGyq6v6+vvOo8L5DRfjUXLskdMyk6OiBL9iXs8opQfnWzPuLsDrz6eoViwTbcrC2ZJJI8LxJpSTOzsi7q76U5VKLjSf00v3OZl5FqDfd+er4WE1wTMPJxdLcM8NOUKJ5iqP57d4yg33KHQl2n138Q4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DjwR2HTV; arc=pass smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CABD5468C2C
+	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 12:10:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788351042; cv=none; b=XrDj7VA3hthuBS2Iu8IaJb90T0SwNMdw2h7RGZiCuT5S5HZapdPTm3p+DA3C1i6DwG9o+WMvD1+MnM0W4XeebILzqp53DqhjNqCr47YfFhzEFRf1HrQnJH1mHaVEQ+pwL7V+pqn3tJJP2keLEDhPnyqxYZxa0cCn05Ld5jyFfh4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788351042; c=relaxed/simple;
+	bh=Y1wV/sdJ0I2tS5+afhbpaQktFXztVIMcXeD3dCZ+IQE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=c+L3RSYM/Ed9M8pD4K0HmeTl+e0L6teiKeDzrRfKG++xNy7MFTHvayGb9QAr9GL0jw+YwVrIzk6WzvY6XVAkrI4ubucJFxwAySkfwEL0ZlxIOJwuSXwgok7cyYN6+lB+ylQ5wsP8JbjWOFuYqt00UY+5BcT0BgW9m5QBU8bKxBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pYRk468b; arc=none smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DjwR2HTV"
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5b5f21afe8cso2804908e87.1
-        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 04:56:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788350163; cv=none;
-        d=google.com; s=arc-20260327;
-        b=OA9ozgWyIAJz5LyxSo6kXQ1P6fshxpGi6DLrGuZsXgl5haX0lnbUg3Xo+VOcvluJvi
-         dnt+UqPIzUA3kCOEJlgv9KcgS0g9IvB+jL2gO8fFo2lxfOmzth2UtQ8tHbWwL07BVJoR
-         neXVYUYEkHkzkhJ1XHh6f0zPTpZMjKsvQL7T7nJaIZzrNN0PMG7MeSGiJIcTuOvbIsCa
-         Fe714R5yUXbCv6MVqpIU6civC5lYY/9cbIz2+xdNS8Cyhqw4up6XalLTkdyy0r+D6A9M
-         I5dKpEoSzKy5fd7O8FIBnyBLS2EoqAnzkwRTj/w3WnJkF0euJbMpo3ZkZJJo9mR6x/3L
-         +zXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=y22TOZ6sV36PcowpSzMqJvb3Bgbt/VKIj2SdBO0JWFE=;
-        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
-        b=gQrThL0nvY3mxUqnvNA7e5rjqZX78dzdEuR3EKQcT8YI+dYay4Hdskt7dNAfIG6Qj0
-         eEz3Pd1WY4188z8Qe+EGsWZnvuoWG6ZMxDh+rEHI2YCAZwD6sws3FotyJU+kZrAPgK/l
-         ZVlfwakwY8X6ma39eXMrv3VXX6/NupTwuWW3nbRhhnjsijR40FujYveGfUOvZjDW2KJV
-         8Ydml1n6aipTsaNZ9fFMNvu3cgGcq7WTEmGIQU3Rl1+ZWdzvNa4P1Q1gHLHBB34A+S7/
-         5AJ1hFMT9mDb7GribtTlqbQ069XWzpVy+TWkE2bLjyJa72STnCNbZtAqg3iZkRUxN2hH
-         m1LA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pYRk468b"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-851cbd64814so314568b3a.1
+        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 05:10:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788350163; x=1788954963; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=y22TOZ6sV36PcowpSzMqJvb3Bgbt/VKIj2SdBO0JWFE=;
-        b=DjwR2HTVDzluvjZiAsLxJRzSlPpWKJ8EOHH53GdWK+BFeDkocxUakMrUpAXg5oeXPC
-         CD74s6QvY1coli509CXCFLlarU/42LcwBYCudERq2oQ7XJfC89IrU5GA9A5Ght2dQNT2
-         3LPIBgDXYgCHz7VSMFOwBTDTpPT+NKwQ/luy0LObllm0UuoVUiDbpsD0aQuSfpYLbOmF
-         mUxZsFunZXyw/eZ6rDPHq1xe15LR6R5aa8+VeGJLEYDHtGrmkRyU5p2MeCsSNOVHPwen
-         qyBvWGgKG3M9Pt2FZJK7I1v6AJcgTePopDCP2gZzDg8mc+P6OGKnqSJiR5t/yISKY6YG
-         O0jg==
+        d=gmail.com; s=20251104; t=1788351037; x=1788955837; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=VWQGAkWlUzQFpRysKqIStAsuXjs0d0k3Dcf5bsCh5wU=;
+        b=pYRk468bicRkTW76QtyZ6Y629st3X8z7UTacI8+akxVc2J0McuOkvOTC7C/epbCIeh
+         oEp+kPcNyC5aXQJRLBQvDeDFAoQQWt2ZWLKu+I+DeZqsVZ6mKKr5khuN833jsIgLWV+K
+         zJRU6aKuhw78FgTaTwzTicxVwlfBAr8AfH8QDt9MZuNcMSZTZQntJxtNGWYhZTy0ePfz
+         8ANLomGoVVSPwJ6Djb6Y5EIBhw7Eo/EG8mHF65/0V26KyH74o1DG+YU1p8eFphHqW5vK
+         HaZbu2cvB7ofBYT+KdLvIkr7GTo7nX/fyc355nyOizmCRFu63hd0nisBF2fcPVknu4is
+         +hvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788350163; x=1788954963;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=y22TOZ6sV36PcowpSzMqJvb3Bgbt/VKIj2SdBO0JWFE=;
-        b=no6vL6yzFkj/9/pVeIKnwiEQ2vvAzACzSM5CqqEtUx1rQydFEuwpsZgrLWFDaUaBQM
-         iDvJCYOSUrEsyiMh/ubelmAzpM/zWB1Fn9XuSfeWKCfOS11Yed2uqGBeCFDsQ+ngUXOU
-         fiolIgbYzB9YUpwJmmKEiiz6LBW33jU3cRG1blRlE2hbFQ5c6Ee9b0U3u2sFLYxuZTBf
-         VtW2nIhe5k0HTO76FC2aKAcQZfgZqifdtpQi1h1yUn0ACmvpQHxaJsyrqFbiLd6KJVKF
-         rbO/tg1zDx4hPKpwxUll3oy3Q9A0R7aVI0/NGvyrLbU56k98rRVf9thN8jzzZPZYwKwL
-         ueZw==
-X-Gm-Message-State: AFuF++n0ZUUZVlGbhXTk2QpVuYHR/q7b7eiZargdNOLtyOK6TKEBwg7q
-	zITEpOq9F/amADImMYYqh70yAU7GKBxo5NuMDAlqS0GwfKKkAaKql118PR96aUv3y8U8npmaUvm
-	OYS79QU2a89W5r4SX56WYXuduDu2R6s77JigSWBg=
-X-Gm-Gg: AYBFou16GOO2WLCouQvF6pepZG8Dg9x1wRhzKXz4oePiYZBpNydmuOPrA0IAE2nlpwm
-	ylS5fh/jCq5SY+ovN9Lf9m/NsyoyWCCoyRnkRCMtB4Vk5mW9iqBkh7SS/oxndvFIOK3brLTbJzJ
-	4t8riBFi2eLn7N2RzicyFq3wVToFVRLynxb6VMfGHwbSjXT87oYkuUWco30NwN79uBfyskv0GNN
-	NK8VF+qQbMIHB6IkzRicwPXFQ+lAzlErBErY27soTVJlSZpL5h3VHg0aplgp4lGqrnmH5pYOtoZ
-	Api5StO2GWQLWZdl+d1Tvlj5jTjdeksyVFw35LyGhrkkSRV5IuHpEzKLWteU8NzoPoH3BUN/XjF
-	OWz/gVTXZ29npJ0arUfZw1et22BqoSHLInJW1hQkd/+fsmTlH9BkeJgrhkA==
-X-Received: by 2002:a05:6512:130c:b0:5b6:421:8adb with SMTP id
- 2adb3069b0e04-5b60c31a2bdmr833645e87.16.1788350162785; Wed, 02 Sep 2026
- 04:56:02 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1788351037; x=1788955837;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=VWQGAkWlUzQFpRysKqIStAsuXjs0d0k3Dcf5bsCh5wU=;
+        b=NmNAuGn8AKRcdVKlWe0IgAP4GAPM0CkYLsukKQfWhLOMZqkQDxWgLswDGieqNBcR/p
+         NurNC5VzHNwQijUcGCv1KFJchT+Ch1W/8msrxHQAG5exFZXlAh6U/Nfmlv1e2r4ng2qR
+         SAqJ+Uq2IBDvvsYr4z+T8Lf8UBEC/9vXVD0fHwFx5M0y4fdF5yWgGDY4f/wo4K54WNJD
+         jeEpmZgxK/TakvIwcwQODa0/+dbF8xvujj2HAqnqgQ0Uv4mVA5XJUSbdU5Tpj7UayeWd
+         QoueONgw4rS/61teZ0Ny/n9HjGK2BuFQWXTvOm3JEFPZsMoae3xB3zuK58rEPa+co+5T
+         xNCw==
+X-Gm-Message-State: AFuF++mr3QNrdd3sywNbaKbVP8ckPZMWHFKb55Kqv6rpV2NVKcJLUAyq
+	uh2G94+ROLZsYjb1v0jpaMX058/4lZrGGwHOl7OsGGYulhH+DCKKuuwp
+X-Gm-Gg: AYBFou1blEUHsVk0mq4CFZ77ZXjMhAV91rjxTXw3xELDsFf3ZwfOWh9/aRTjWfHQRKP
+	hSugWbIWUHDou53+5qq4EBIN0SF0ZOz3jXcCYtnY+eUr2E+vvR6KskFpt/QtGH6V1blAD9aPrbs
+	yLJm8IwrvKS5fawFDdZFieqw1mYuHVbW/pljl8v5zBWpdeYMaGLlB/GdK8/mtdy1RDb6gF3bsQd
+	tGCxP4zm7eQ42FD59W1Ifg03qAcY7bX5zPH8VFKOPFYhK1JDsLIr56+fCHKpu4SOXO8ez19PMBC
+	hhEufuoalVJjUoFaVudtJ5+wtVWLHDdh2WC+IXT85xsL45VHyXwwjZqqAY5yQEb0521Rz2W7U1a
+	zxiMmQw6z4wGB5/ep3NQ0qym+pCvhMM4sPXbAkGno5piNYjznYCM0vv4aO8l6TaxC+zF30JwNsJ
+	oG8wUNviUZbIbHHQzENVl/B9HygELrXsaaFkr7EsOHK02b0czbLrH2qA7rOjJWiD7apg08/bjMw
+	b8US6MoE0+6q93QYjvxvHHe+5STB+pkm5MijHisLrZ1MfBw9M9oUGpLZCaiu88jpZDltz3pEEnw
+	nIR+iBLxspq2uwWht2d31kvAQDzQWkTcz0Vkn2e1/Mi1f7ww
+X-Received: by 2002:a05:6a00:4c85:b0:846:8b22:4933 with SMTP id d2e1a72fcca58-85ed94b7407mr7471210b3a.17.1788351036779;
+        Wed, 02 Sep 2026 05:10:36 -0700 (PDT)
+Received: from KERNELXING-MB0.tencent.com ([43.132.141.24])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-85da342023asm1300084b3a.0.2026.09.02.05.10.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Sep 2026 05:10:35 -0700 (PDT)
+From: Jason Xing <kerneljasonxing@gmail.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	bjorn@kernel.org,
+	magnus.karlsson@intel.com,
+	maciej.fijalkowski@intel.com,
+	jonathan.lemon@gmail.com,
+	sdf@fomichev.me,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	aleksander.lobakin@intel.com
+Cc: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	syzbot+f16c1b285c9f63994eec@syzkaller.appspotmail.com
+Subject: [PATCH net v3] xsk: set network header on skb at generic transmit
+Date: Wed,  2 Sep 2026 20:10:27 +0800
+Message-Id: <20260902121028.74092-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260901083325.3445-1-kerneljasonxing@gmail.com> <20260902083344.1D9311F00A3A@smtp.kernel.org>
-In-Reply-To: <20260902083344.1D9311F00A3A@smtp.kernel.org>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Wed, 2 Sep 2026 19:55:25 +0800
-X-Gm-Features: AcwNN1UKyixZhZk_9axNe7uo1mtPY0hJ2kYRqzyzHcRHmsAWEFEpNH_CSNhZsJQ
-Message-ID: <CAL+tcoBBqzUo5cKS1MSUSvYd9P3obf210tKZNdUEhz538KPYhA@mail.gmail.com>
-Subject: Re: [PATCH net v2] xsk: set network header on skb at generic transmit
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 2, 2026 at 4:33=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 2 potential issu=
-e(s) to consider:
->
-> New issues:
-> - [Medium] The patch incorrectly anchors the network header at the L2 bou=
-ndary (MAC header), which violates standard SKB semantics and contradicts t=
-he AF_PACKET convention it claims to follow.
->
-> Pre-existing issues:
-> - [High] Missing initialization of `skb->mac_header` in the AF_XDP generi=
-c transmit path leaves it at `~0U` (0xFFFF), causing out-of-bounds memory a=
-ccesses in network drivers that unconditionally read the MAC header.
-> --
->
-> commit 8222314e7d9b572394dd3fc2b9acb0b3706abd3e
-> Author: Jason Xing <kerneljasonxing@gmail.com>
->
-> xsk: set network header on skb at generic transmit
->
-> This commit fixes an issue in the XSK generic transmit path where the net=
-work
-> header was left uninitialized. It adds a call to skb_reset_network_header=
-(skb)
-> in xsk_skb_init_misc() to ensure the network header is correctly anchored=
- to
-> the start of the frame. This prevents a crash when the skb is handled by
-> tunnel drivers.
->
-> Closes: https://syzkaller.appspot.com/bug?extid=3Df16c1b285c9f63994eec
-> Link: https://lore.kernel.org/all/20260826012052.51028-1-kerneljasonxing@=
-gmail.com/
->
-> >     Reset the network header so skb_network_offset() is valid (0). Note=
- this
-> >     anchors it at the start of the frame (L2 for an ethernet device), w=
-hich
-> >     is the same convention AF_PACKET uses on TX.
->
-> [Severity: Medium]
-> Does anchoring the network header at the L2 boundary (MAC header) here
-> violate SKB semantics and contradict the AF_PACKET convention?
->
-> In AF_PACKET's packet_snd(), skb_reset_network_header(skb) is explicitly
-> called before skb_reserve(skb, -reserve) prepends the L2 header, correctl=
-y
-> anchoring the network header at the L3 boundary (after hard_header_len by=
-tes).
+When constructing an skb in the XSK generic transmit path, neither
+xsk_build_skb() nor xsk_build_skb_zerocopy() calls
+skb_reset_network_header(). After __finalize_skb_around(), the
+network_header offset defaults to 0 (pointing to skb->head). The
+subsequent skb_reserve(skb, hr) moves skb->data forward by hr bytes,
+but leaves network_header still at 0. This makes skb_network_offset()
+return a negative value (-hr).
 
-I will remove this in V3. I misunderstood the boundary in AF_PACKET logic.
+When such an skb reaches a tunnel driver like ipgre_xmit(), the call
+chain pskb_inet_may_pull() -> pskb_network_may_pull_reason() computes:
 
->
-> By anchoring the network header directly at skb->data (the L2 header) in
-> xsk_skb_init_misc(), won't any subsystem, offload logic, or tunneling dri=
-ver
-> that relies on skb_network_header(skb) erroneously parse the Ethernet hea=
-der
-> as an IP header?
+    pskb_may_pull_reason(skb, skb_network_offset(skb) + nhlen)
 
-No, at least until now. That's why resetting is sufficient.
+The negative int from skb_network_offset() is implicitly promoted to
+unsigned int, wrapping around to a huge value. This triggers the
+DEBUG_NET_WARN_ON_ONCE(len > INT_MAX) in pskb_may_pull_reason().
 
->
-> > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> > index 33475b180ea6f..2077bb6299ca9 100644
-> > --- a/net/xdp/xsk.c
-> > +++ b/net/xdp/xsk.c
-> > @@ -947,6 +947,8 @@ static int xsk_skb_init_misc(struct sk_buff *skb, s=
-truct xdp_sock *xs,
-> >  {
-> >       int err;
-> >
-> > +     skb_reset_network_header(skb);
-> > +
->
-> [Severity: High]
-> This isn't a bug introduced by this patch, but is it also necessary to ca=
-ll
-> skb_reset_mac_header(skb) here?
+Call trace from syzkaller:
+  ipgre_xmit+0x958/0xcd0 net/ipv4/ip_gre.c:658
+  __netdev_start_xmit include/linux/netdevice.h:5400
+  netdev_start_xmit include/linux/netdevice.h:5409
+  __dev_direct_xmit+0x4b6/0x730 net/core/dev.c:4942
+  __xsk_generic_xmit net/xdp/xsk.c:1079
+  xsk_generic_xmit+0x277a/0x40a0 net/xdp/xsk.c:1120
 
-I think it should be merged as a fix:
-https://lore.kernel.org/all/20260817153957.3177627-1-poros@redhat.com/
+Reset the network header so skb_network_offset() is valid (0). Unlike
+AF_PACKET, AF_XDP does not need to locate the real L2/L3 boundary: an
+AF_XDP frame is always a complete, opaque blob from userspace.
+AF_PACKET only cares about the boundary because it can cook an L2 header
+itself (SOCK_DGRAM) and supports GSO/checksum offload; none of that
+applies here, where the frame is sent as-is via __dev_direct_xmit().
+So resetting the network header is enough to restore the invariant and
+avoid the crash.
 
-Thanks,
-Jason
+Fixes: 3914d88f7608 ("xsk: Respect device's headroom and tailroom on generic xmit path")
+Reported-by: syzbot+f16c1b285c9f63994eec@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=f16c1b285c9f63994eec
+Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
+---
+V3
+Link: https://lore.kernel.org/all/20260901083325.3445-1-kerneljasonxing@gmail.com/
+1. remove the misleading description about af_packet
 
->
-> The AF_XDP generic TX path allocates packets via __alloc_skb(), which lea=
-ves
-> mac_header uninitialized at ~0U (0xFFFF). Because AF_XDP generic TX bypas=
-ses
-> standard egress paths (like __dev_queue_xmit()) that would normally set t=
-he
-> MAC header, the SKB is handed to __dev_direct_xmit() with an invalid
-> mac_header.
->
-> When physical NIC drivers unconditionally read eth->h_proto via
-> skb_mac_header(skb) during transmit, this evaluates to skb->head + 0xFFFF=
-.
->
-> For example, in drivers/net/ethernet/intel/ice/ice_txrx.c:ice_xmit_frame_=
-ring():
->
->         eth =3D (struct ethhdr *)skb_mac_header(skb);
->
->         if ((ice_is_switchdev_running(vsi->back) ||
->              ice_lag_is_switchdev_running(vsi->back)) &&
->             vsi->type !=3D ICE_VSI_SF)
->                 ice_eswitch_set_target_vsi(skb, &offload);
->         else if (unlikely((skb->priority =3D=3D TC_PRIO_CONTROL ||
->                            eth->h_proto =3D=3D htons(ETH_P_LLDP)) &&
->                            vsi->type =3D=3D ICE_VSI_PF &&
->                            vsi->port_info->qos_cfg.is_sw_lldp))
->
-> Dereferencing this out-of-bounds pointer crosses page boundaries and caus=
-es
-> a paging violation (kernel panic). Should skb_reset_mac_header(skb) be ad=
-ded
-> alongside the network header reset to prevent this out-of-bounds read?
->
-> >       err =3D xsk_skb_destructor_set_addr(skb, addr);
-> >       if (unlikely(err))
-> >               return err;
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260901083325.34=
-45-1-kerneljasonxing@gmail.com?part=3D1
+V2
+Link: https://lore.kernel.org/all/20260826012052.51028-1-kerneljasonxing@gmail.com/
+1. add more clarification about why we don't probe the header like packet at
+the end of the commit message (Jakub)
+---
+ net/xdp/xsk.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 33475b180ea6..2077bb6299ca 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -947,6 +947,8 @@ static int xsk_skb_init_misc(struct sk_buff *skb, struct xdp_sock *xs,
+ {
+ 	int err;
+ 
++	skb_reset_network_header(skb);
++
+ 	err = xsk_skb_destructor_set_addr(skb, addr);
+ 	if (unlikely(err))
+ 		return err;
+-- 
+2.43.5
+
