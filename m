@@ -1,63 +1,61 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1EA52E0B71
-	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 23:37:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E8A445AFC
+	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 23:37:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788392233; cv=none; b=Pp/3PZJGzoFuP4IDi3Qjg+TpAX4mWMMNCMdzobiyV2ypzQcgvIVyqbWYXNNHQQY4kzWhLs1i4uTinBLieE9MjVVYanhTJM/RAhhFS07I+ppw4DJqtDPcFTQ/udSS3SYE7Rfov2BeyWCcVTTeKN+7WkD9RkWdUEUJXz61TJsG5/w=
+	t=1788392233; cv=none; b=QtYbQtKjRus9+xIeu8R1upk7g1Iepyqq/DYdT86egB0eKYpXpgNBeMiv58Xg27el5McEPHgAT/mdIAdWlKacTAJEqfXAyRtvmQKUvmcbISrAORpmKLWdUBfJP3WUc0278HD0NUTNRTdeEaUzokFQDsPTCKaRH+k24cldfpO17/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1788392233; c=relaxed/simple;
-	bh=UyrPsxzTRystKOQjqIJaXjSc7NVFMatc55rbgL1x2ig=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PclVj6XqoGImum/261yRAa9GihML6oEBvmHIHtFFo1e5ICX1ln8oNMnqt2ZaCJG63STfq9WYvJulLYtz55Us07tB4NGY1KmyuWwc4DXxQ6yooJUWvrmgTRwAstxjv+bszDRwTwlitvqwRA//l5oNFVbAYaKtw8YPIucBO7g6CLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z0OKaLhs; arc=none smtp.client-ip=209.85.214.178
+	bh=LjwptsOM3x5ip8XRCpLt5Z7RMbuZGVBIinYvrV0Sj9c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JEx706/BfJEjjgIrZUAk4/zOFE8E3BvSageZf5VaG8wiXuOcHXISCrBAq3w17yAwxHi5lpBmKojTLbfAlz2L2nr01kE+U+5GRM/vFOl4fm7lcoJey/kSUOMvcd56G5S02ecHqepE6s/fu4V5Pma3axhGShO2LvilDZptX02l398=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=koiekotc; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z0OKaLhs"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2d5cad1a6baso16111355ad.3
-        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 16:37:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="koiekotc"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2d5335cf904so16690615ad.2
+        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 16:37:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788392230; x=1788997030; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=c2jzYBvvyBI1YbpyMbJLodew59SQxOrHAf/6mf/TImE=;
-        b=Z0OKaLhsggsPdyTnI3X6breUMXZE16uuA5vK+FHM05/OgQrdMi+D4XBaHx081vmyhp
-         WdGx/zQWHWbW3knUHEh2IIg02T2jIVmTGsbBu/jkm348KKDy6PsA1Dj2NtMINhX5cGha
-         6gs2TMQ8OU8HMv8q1AKQ4os84oz7Ox0nLrqKnZ0GmW5yBWEp6DdGLRfYW9jLnkPTQWZD
-         nih4KUPa3n8YmJI8+7hwZImsxlY68ibagAQPlC5cWGfoZcGeZtJ2sxILaisCbNxu3/fU
-         fyq4UrPusbG0ANIjJfYFkovsq2aVAs/+OS9MX1WWBwsQdGPTgnfObRXKXCPB1kxyJh0r
-         WYlA==
+        d=gmail.com; s=20251104; t=1788392228; x=1788997028; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=4l9WFdqM7tecR6VguX8j3ZK3vUuSqoqKxiim35gCM9E=;
+        b=koiekotcbo+8eunKkEq3RDcaV6dkc3Uq+KuiUR7EsFG9zmaPRw+dqGNYOdiWz1gCCA
+         l3nTun3wn24u2Ks9wmp4Ho4Hhe61Dc1G0FtfOj9v/QgIgt1CCEwsgAajI19d+/BQiUdu
+         G8sFUcaL4LAMCIvZPFm5XtwT+mv4v0vY78sCjkIB1HDoSlBKIHC0Y+3d0p3VFMqKU40s
+         PuABiooGs11RV/xH7SKGZDYTUNrYXDx5tqIzK9R/3Kj9IFVQQTrne2kvD07Eb0rc0PAl
+         G7SwisVOBRfQPAFA+GEJxyE4UtWFv4rND+QWHthn3RFusWdL9HLMCLsWNbpmfT80me/D
+         JOUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788392230; x=1788997030;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=c2jzYBvvyBI1YbpyMbJLodew59SQxOrHAf/6mf/TImE=;
-        b=qHgUy+DuD/9B0ureYCrit4QZj7BcJFAFmgz9E8erYSS5FAwa6P0NEyjUkIh7ZIAIJj
-         LQ/JPWcDk0GUf3FOgSsHklavN8E5rue3L8iowUjZRcRWxuWAmsPhRkvkAkmbKY/tR/B5
-         jqEcHNAtB5qJvKNRNlGLgk65yK23M4VWLssXkOjQ7hAIJzwHO1ypzHOWIJmKNxJmz9ZM
-         mY0Jc3PvCkxx/nP9h1ZUbxVBCDxCQqBLHuUnECxYQEf225suTJ01s5UVEgutGJXa89Sc
-         OcTkkwQPD0Ua9bYwUdcvsM/CYUGhUocEEBdZTvZ105+yDFdC10cyheGvGKK7KJ8RLg+I
-         OzTQ==
-X-Gm-Message-State: AFuF++kiomEiM/VR/ClWNv+gp4S/cjmf1qF/IfhIMKXMvMhhat5561Rs
-	V/Ep/xuw/0R0XXQAcSsCwRokcaNAOm/Udt8o7aGycuN0/FN5HxrXMXNnPXgI/mdu4Ps=
-X-Gm-Gg: AYBFou1deFy2vfNS3vXuGna2x0WvDSJU1aUK1zxSu1VLZo7qbHD83oXI6zSXuSiATBH
-	PiiROhm5YkDX9N5cQfP5QyQ41jwSgdWHT6OqPB/SMiXgAGXypPEPcMZNmZ5bkrHZGcw2Rb26U6c
-	NhECZMAayOp7fWIZ1D1zhQPIiR0Yx86+B2QvBXFYXRFCbTpmEmXn7smZxRvh2OxC7G5I1Ga5oqj
-	BmotBBGYr64E0QH3Xx8TEx2iK1tEa6dGhNcleK9ptwAeaFVoF6XmqJTeP5gkeAzy7eqFaGRxsvX
-	aJfyF98HVmTnU63ZtaIDrxlgwqr0bDKs/F3YZxQ+HB12MOb4+k5lFhfc1BQNM2Cy2A5Stsvaxn2
-	hG+BVBuEadS/1KU+HFXd6LpxOpNLoPj8CpiQhx29pztt2UNEYWSWcI/RYIg4YugZtDOi6ivvO3g
-	8qQQIrCd5g1sDayIq6jIkyllhmrPCDyiezZFXxaMxO9Ynn10r40JQ/2V+WnaDe8+JxVUKUKadLT
-	85sz8DAJAVHJwyHD7JQpIYM81YYElEmy0yIkmnnSlV/2w==
-X-Received: by 2002:a17:90b:57eb:b0:398:9be6:f995 with SMTP id 98e67ed59e1d1-39aee1110f5mr12416164a91.20.1788392229570;
-        Wed, 02 Sep 2026 16:37:09 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1788392228; x=1788997028;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=4l9WFdqM7tecR6VguX8j3ZK3vUuSqoqKxiim35gCM9E=;
+        b=PdgYIhO3ZG1dmhCvz4vZiLqMzBqZb5tM1hSwQkrlByxjgZSzhVoeSNAjqVA6ay3EMi
+         LObcRpGkLdiWX0rcfM9B8nXibrFGK23T8mdKyJanU/Ck+YZzOam9wJ7ysmoYCxfb7IXz
+         90PG1/kzb1mfHberB1YDzdnY0D/v5PdLrHIN+dY9vG59E1K0z8up+Wq/jw8Lj4EaYFX+
+         /vTtnLsLBMOk8l02OObj2DzYeqGB7hJ1xCB8iwCTmSzUtmIeaYqmSyiioIbUUf9NIvcb
+         AsM4MlWprWCBa9qyDIgepNVg05FmSLgsLk9/1sAa/jGVulqgFtu05Vyxm7JXb7A1RQiQ
+         dDfw==
+X-Gm-Message-State: AFuF++mVyX+jmYzVvAIGQJoBuQqLcQyBIEKGkb69Fb5T8tTQIMy35uPQ
+	umh4T6PnOcG4nsj2Am8O/FJF//heKHWmkG+Da41Nj/ohADx3ac/HbNcL758yze9ITCw=
+X-Gm-Gg: AYBFou2Av0EDK1KDe90Y8IQyqaw7x64iKSL/mPR2oPgbxXaD8m77KJMB0LRl8zSAIWI
+	GOl5DhdUhHnrQmylKIZ/nUt/YsEr8irH66PY+jdZ8idWEHC080W3GmjjdpXnV9KAO8KtF+eCOC8
+	HPAx0nzK79eoxjaeN7ALcBBp+pZreA55+5Kam4Eh/Eexf6vU3z79CZVAYT/zaLKcpzFDTCw5Y69
+	VSXJlnShqKBBpYjMJo9pmcWOBJQ9VfbcuY9URs/3TJReCn/G9P21pra1H2EaZX6dfmX9/G/vNdh
+	G4Qs2YRPpOL/sdvZyqk6wM+wPicTjhLq7sCWcsWHD1fEO+OIZFdFFGkHt6Iyzq22RxSCzzYjarI
+	2NWivLgDbxMUcltfrGuTAVGN2ZGz7X/CHQBckvx1ZknUnywWxTmkh0dHH1/gGKszqghedBA3CBu
+	ilRjdruOMPIN5XWF74Xs1UJsE4eXACIHIaiIYRFiTe66N+C7OTIE9mWxG2hrWElwuNcmTFpF2yy
+	rIRR4Uqpo15B+A/UWVK6C3FYLXTbfu1Wlz8NoJWr6kPWw==
+X-Received: by 2002:a17:90b:3d81:b0:398:c150:e7b3 with SMTP id 98e67ed59e1d1-39aedf5d923mr12738426a91.4.1788392228057;
+        Wed, 02 Sep 2026 16:37:08 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J.thefacebook.com ([2620:10d:c090:500::5:1238])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33253672933sm2583725eec.4.2026.09.02.16.37.08
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33253672933sm2583725eec.4.2026.09.02.16.37.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Sep 2026 16:37:09 -0700 (PDT)
+        Wed, 02 Sep 2026 16:37:07 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -69,12 +67,10 @@ Cc: daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	npc@anthropic.com
-Subject: [PATCH bpf 2/2] selftests/bpf: BPF_PSEUDO_FUNC reference to the main program
-Date: Wed,  2 Sep 2026 16:36:58 -0700
-Message-ID: <20260902233658.1186477-2-eddyz87@gmail.com>
+Subject: [PATCH bpf 1/2] bpf: reject BPF_PSEUDO_FUNC reference to the main program
+Date: Wed,  2 Sep 2026 16:36:57 -0700
+Message-ID: <20260902233658.1186477-1-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260902233658.1186477-1-eddyz87@gmail.com>
-References: <20260902233658.1186477-1-eddyz87@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -83,74 +79,54 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a test case for a BPF_PSEUDO_FUNC load instruction that references
-the entry function of the program it belongs to. W/o the previous
-patch the verifier accepts this program thus allowing a runtime call
-at a bogus address. See previous patch for detailed description.
+fixups.c:jit_subprogs() rewrites BPF_PSEUDO_FUNC loads to contain real
+function addresses. This function is invoked from bpf_jit_subprogs()
+only when env->subprog_cnt > 1. Meaning that for any program like
+below:
 
-Main function needs to be marked with BTF_FUNC_STATIC for the test to
-trigger the bug, the patch uses test_verifier harness instead of
-test_prog because libbpf has no way to convey this.
+  int main(void *ctx) {
+    void *ptr = main;
+    ...
+    bpf_timer_set_callback(..., ptr);
+    ...
+  }
 
+The 'ptr' won't be ever converted to contain an address.
+In combination with e.g. bpf_timer_set_callback() this would lead to a
+function call at a bogus address.
+
+Instead of complicating the implementation, just assume that no useful
+program needs main to be a sync or async callback and reject
+BPF_PSEUDO_FUNC loads for the main subprogram.
+
+Fixes: 69c087ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
 Reported-by: Nicholas Carlini <npc@anthropic.com>
 Suggested-by: Nicholas Carlini <npc@anthropic.com>
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- .../selftests/bpf/verifier/pseudo_func.c      | 45 +++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/verifier/pseudo_func.c
+ kernel/bpf/verifier.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/verifier/pseudo_func.c b/tools/testing/selftests/bpf/verifier/pseudo_func.c
-new file mode 100644
-index 000000000000..63c5c67d51de
---- /dev/null
-+++ b/tools/testing/selftests/bpf/verifier/pseudo_func.c
-@@ -0,0 +1,45 @@
-+/*
-+ * Buggy verifier accepted the program below while not patching BPF_PSEUDO_FUNC
-+ * load instruction to contain a real address. Which resulted in a function call
-+ * to a bogus address.
-+ */
-+{
-+	"BPF_PSEUDO_FUNC reference to the main program",
-+	.insns = {
-+	/* r6 = bpf_map_lookup_elem(&timer_map, &(int){0}); */
-+	BPF_ST_MEM(BPF_W, BPF_REG_10, -4, 0),
-+	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
-+	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -4),
-+	BPF_LD_MAP_FD(BPF_REG_1, 0),
-+	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 10),
-+	BPF_MOV64_REG(BPF_REG_6, BPF_REG_0),
-+	/* bpf_timer_init(r6, &timer_map, 0); */
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
-+	BPF_LD_MAP_FD(BPF_REG_2, 0),
-+	BPF_MOV64_IMM(BPF_REG_3, 0),
-+	BPF_EMIT_CALL(BPF_FUNC_timer_init),
-+	/* bpf_timer_set_callback(r6, <insn #0>); */
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
-+	BPF_RAW_INSN(BPF_LD | BPF_IMM | BPF_DW, BPF_REG_2, BPF_PSEUDO_FUNC, 0, -15),
-+	BPF_RAW_INSN(0, 0, 0, 0, 0),
-+	BPF_EMIT_CALL(BPF_FUNC_timer_set_callback),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
-+	.fixup_map_timer = { 3, 9 },
-+	.result = REJECT,
-+	.errstr = "callback function cannot be the main program",
-+	.func_info = { { 0, 4 /* main_prog */ } },
-+	.func_info_cnt = 1,
-+	.btf_strings = "\0int\0ctx\0main_prog",
-+	.btf_types = {
-+	/* 1: int            */ BTF_TYPE_INT_ENC(1, BTF_INT_SIGNED, 0, 32, 4),
-+	/* 2: void*          */ BTF_PTR_ENC(0),
-+	/* 3: int __(void *) */ BTF_FUNC_PROTO_ENC(1, 1),
-+				BTF_FUNC_PROTO_ARG_ENC(5, 2),
-+	/* 4: main_prog      */ BTF_FUNC_ENC(9, 3),
-+	BTF_END_RAW
-+	}
-+},
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e64035683795..7d8ddb1bee00 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -17089,6 +17089,15 @@ static int check_ld_imm(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ 			verbose(env, "callback function not static\n");
+ 			return -EINVAL;
+ 		}
++		/*
++		 * When env->subprog_cnt == 1 this instruction won't be rewritten
++		 * to hold a real function address. Assume that no usable program
++		 * combines e.g. main and timer callback and just reject here.
++		 */
++		if (subprogno == 0) {
++			verbose(env, "callback function cannot be the main program\n");
++			return -EINVAL;
++		}
+ 
+ 		dst_reg->type = PTR_TO_FUNC;
+ 		dst_reg->subprogno = subprogno;
 -- 
 2.55.0
 
