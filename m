@@ -1,129 +1,142 @@
-Received: from mta1.migadu.com (out-208.mta1.migadu.com [95.215.58.208])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D395F42EEA3
-	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 10:15:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.208
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E5163358B9;
+	Wed,  2 Sep 2026 11:39:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788344129; cv=none; b=gbg8TX4xeaGecJg1FDeiX/j+BHIcD6l0S5oZCCatRYQawBqrdNLAqzn3XEp6JsaTS7IUydYoU/d+EuuxIzJKN+Mu25evzeKRbNcT3W5YDZCKXrA+geiY4oyjBbO7DyF+th/SRu/5qxPPh6HJmilI8tSGho+AP+mOJAqbiie6654=
+	t=1788349147; cv=none; b=CBNuv/WxdGXi91EevJyExtbQdQFBYWcuWXdP4ZwJkzZ76DOXo+Z7Iqf90S1lQWc5pZaFxjth+vyx8R8CyFVQ0sR+H6vL3aVwHX5aLzcRUpnPJEdXi2v6n9WPQLBgfZgnkd8Tj0DjJmszFUTmBIYhavPGn2JBz6yVy3+C6f/XD3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788344129; c=relaxed/simple;
-	bh=04L/X7xS4hxtsBnAxJ/MGousDzROfCvyRKvzwSCrUzE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=SO5KubNT76qNgRcfDJqkXl7FAFU5tPXEl2f7pTDQ/GhYWPC+WcWyvrP9Cb6jXZbcUJ9WA5uc+fDd6mMC7FvvP13EONAEmAnb/MmVNDiGrTUwY7uXDEhahNxEGKr8K8vPyIMIcKSuAVOYmwOzBtJiURPcVxWzJEx967Vs4xXLjSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=n7Odf6lN; arc=none smtp.client-ip=95.215.58.208
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788349147; c=relaxed/simple;
+	bh=0KCh9HGa7lQUz4lwWiPgzRORWYPD86UTjPYcKtKujiE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=phbFK5LqasoZzMOHIyLyGYZzeeLEvtM3Zp9SwxESW93NtKzx7Q9lsgnywp23A/qdArXc01aMWn9MZTDeCSM9WGxCmYYBcRVkwuDohtrR4EEu866D9fzv3ZZLNjqWzwcPD4/S8ChMMLh8sBF84Nk9+BQYLsN9ktsY1z+ltlDHFTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=qYKZWfI6; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="n7Odf6lN"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=04L/X7xS4hxtsBnAxJ/MGousDzROfCvyRKvzwSCrUzE=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788344123; v=1; x=1788948923;
- b=n7Odf6lN+pLW4bWmX+QfS5XE0Em4JEKePDEyZZkBH7F1dhO0oPXFjGIViqdVrgaaomgFBOIt
- +rr53Yt8aC1EWXhFztF6JC4Bqtu9mU1gLjJbP6Awq1Ubn/sqNIL0jKt8Z6S2T2LBw5CBCcJrMzZ
- ioQhh/iS3XGqXePkZdtbPDqE=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id cec16e1254e83e61;
-	Wed, 02 Sep 2026 10:15:20 +0000
-X-Mizu-Trace-ID: cec16e1254e83e61
-X-Migadu-Flow: FLOW_OUT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="qYKZWfI6"
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 681KbNjr3963534;
+	Wed, 2 Sep 2026 11:38:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2025-04-25; bh=u7zo3n3eSPW2GkrvoV02j2/bSXhKt
+	490qA5xoHDi7Fo=; b=qYKZWfI6wHIPJQM/uvH0VyutO12xjjN/tJ095tsj7WU6j
+	MdAnobsYgjXxYAQRPMiWGmZzRXCZHJM7oc4Mj/d6o5LLKjMbeEDqp3RxjntxlKki
+	dPni1AJ1pspwAKYtd00QsNID431QYhkv9vX0LnU5gmu6tL2e4eU/CpKY73osi4AU
+	nYGLP0uC9v3MvYDLc2o5G9RJj0SAkEgMTYBd2D0VLMwk5t5d7DIEvjjCQfQHR9YM
+	VAPRhwbU4FrTmGpecknm+rq/YWgsA20KeddFBtYq5/ypXIlmtCEzSvcDAHai8wnN
+	5rSM0P6J/xDpioRxoed9JtpBrGXZ88B0m3pZ7LZlw==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gbqyrxkm1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 02 Sep 2026 11:38:35 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 682BaY3L029406;
+	Wed, 2 Sep 2026 11:38:34 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gbnvrnt4j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 02 Sep 2026 11:38:34 +0000 (GMT)
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 682BcYmY038508;
+	Wed, 2 Sep 2026 11:38:34 GMT
+Received: from bpf.uk.oracle.com (dhcp-10-154-52-253.vpn.oracle.com [10.154.52.253])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4gbnvrnt37-1;
+	Wed, 02 Sep 2026 11:38:33 +0000 (GMT)
+From: Alan Maguire <alan.maguire@oracle.com>
+To: acme@kernel.org, ast@kernel.org, andrii@kernel.org
+Cc: daniel@iogearbox.net, eddyz87@gmail.com, jolsa@kernel.org,
+        ihor.solodrai@linux.dev, yonghong.song@linux.dev, song@kernel.org,
+        qmo@kernel.org, martin.lau@linux.dev, memxor@gmail.com,
+        emil@etsalapatis.com, bpf@vger.kernel.org, dwarves@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v2 dwarves 0/6] Encoding of inline functions using BTF
+Date: Wed,  2 Sep 2026 12:38:20 +0100
+Message-ID: <20260902113829.1285407-1-alan.maguire@oracle.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 02 Sep 2026 10:15:19 +0000
-Message-Id: <DL4R2YXF9J8G.203VBANYFFSET@linux.dev>
-Cc: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "bpf"
- <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "KP Singh"
- <kpsingh@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "John
- Fastabend" <john.fastabend@gmail.com>, "Paul E. McKenney"
- <paulmck@kernel.org>, "Jose Fernandez" <jose.fernandez@linux.dev>, "LKML"
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf] bpf: Keep progs alive until the trampoline image
- calling them is freed
-From: "Florent Revest" <florent.revest@linux.dev>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-X-Mailer: aerc 0.17.0
-References: <20260819122252.1782790-1-florent.revest@linux.dev>
- <DL27QZ6SEZKT.1CV2HAX4A3WI4@gmail.com>
- <CAADnVQLxi-R1KDUXJJjpq69SpV8UcNJVqBi7uicO=V0WhAvyQA@mail.gmail.com>
- <DL2S878KSOI5.1SZMLIAWMCNUJ@gmail.com>
- <DL3FIBQNP6AU.1HO08FMI292UX@linux.dev>
- <CAADnVQLMm43qJxuiHUuuh51wAL4kH0+fRoaM7YfbZEXT7LHn0A@mail.gmail.com>
-In-Reply-To: <CAADnVQLMm43qJxuiHUuuh51wAL4kH0+fRoaM7YfbZEXT7LHn0A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-02_02,2026-09-01_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0
+ malwarescore=0 mlxlogscore=999 mlxscore=0 spamscore=0 adultscore=0
+ lowpriorityscore=0 phishscore=0 bulkscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2606160000 definitions=main-2609020103
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTAyMDEwMyBTYWx0ZWRfX6smBj0ifTwU0
+ fmjiWsAAZWn9RdKDlQ32xdXYKkt7QGSDLLNlwG9eO7obnK+Qd7i4H135Jc6J18ejERIKI8MaH2P
+ +XnBk44M2GAjazqA+SAauDtp1B/kejaE78tiM54ASPpcZhws/KrjdhnztXOl3WoyYWttfVHQwHu
+ sSZUZizB4Rfips7Nb5vb3fu7um1evfXX/Y2NSQwsigAmXrv9rlPqwi7KlKKzo3wkv58+9GEC8LU
+ pfdIU9O9m/rtmZ+8HcV7+VmvH/8i9W9jq73vWDGOJM8q2vBRG4n8ykvbir+knj1OJ4FjbEEZ+QX
+ 1w7j/Csk1psPeGBlO6FP96DSlI9A3mLPIyPx77f2mxHb2Wwwa/ci9W8qpQDKDaV8g3rmQqfieYS
+ FAyEhosxqaz2gniEkjmwXEJIJL73k7rhsnCuZi9VOY4f3aswlMMCKiJNQwwjFV372dJqMG2Mcub
+ NhBzhNfFC1pCD3MseWtJTISQ45E2qZP9rq6Fj/WA=
+X-Proofpoint-ORIG-GUID: LLLjLzKUqSK4zCCOJFWtYW6w8x9TTa7D
+X-Authority-Analysis: v=2.4 cv=fbCdDUQF c=1 sm=1 tr=0 ts=6a980abb b=1 cx=c_pps
+ a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
+ a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
+ a=7Gl3-_t3PgB9XO-mQDs3:22 a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8
+ a=OrFIkyZIpKdRzsvFrI8A:9 a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22
+ cc=ntf awl=host:12102
+X-Proofpoint-GUID: LLLjLzKUqSK4zCCOJFWtYW6w8x9TTa7D
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTAyMDEwMyBTYWx0ZWRfX2y8wpe882owB
+ h8z7ZeRfQozzYMDB6pMMea4sgEUlzUy3hn1mio5pZIijRPUR5XN0NxUvRSwjpSeISNk1rQycPM6
+ 77R8dT6c3Jdz7mmPukoLZ6+pj4iPykW9MZwoMSb2g9JH1jJ5InnD
 
-On Wed Sep 2, 2026 at 5:57 AM UTC, Alexei Starovoitov wrote:
-> On Mon, Aug 31, 2026 at 1:58=E2=80=AFPM Florent Revest <florent.revest@li=
-nux.dev> wrote:
-> >
-> > On Mon Aug 31, 2026 at 2:43 AM UTC, Kumar Kartikeya Dwivedi wrote:
-> > > On Sun Aug 30, 2026 at 3:21 PM CEST, Alexei Starovoitov wrote:
-> > > > On Sun, Aug 30, 2026 at 3:41=E2=80=AFAM Kumar Kartikeya Dwivedi
-> > > > <memxor@gmail.com> wrote:
-> > > >>
-> > > >> Overall, looks good to me. Thanks for the fix!
-> > > >>
-> > > >> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> > > >>
-> > > >> Note for whoever applies this: please add Reported-by: tag for Sec=
-hang as well.
-> > > >> Optionally, wordsmith the commit log with the suggestion above.
-> > > >
-> > > > Hold on. I don't think we can proceed with this fix.
-> > > > It defeats the point of fexit jmp patching and keeps progs
-> > > > pinned until a sleepable kernel function that were attached to
-> > > > will return. Which means that the tracing prog attached to "unlucky=
-" kernel
-> > > > function that sleeps for an hour will stay pinned for an hour.
-> > > > Let's think of a different way of fixing the race.
-> > >
-> > > I don't have background on the original commit being fixed, but is th=
-at really
-> > > realistic? Or worrisome even if it happens in practice, since worst c=
-ase the
-> > > program refcounts remains raised for that duration?
-> > >
-> > > We have similar worst case for programs too (e.g. using bpf_copy_from=
-_user on
-> > > user controlled buffer in, say, LSM progs). At least here we won't be=
- extending
-> > > any RCU flavored GP.
-> > >
-> > > That said I will think about alternative fixes in the meantime, if we=
- accept the
-> > > premise that we don't want to pin program references in the image and=
- keep their
-> > > lifetimes decoupled.
-> >
-> > How about having old trampolines skip freed programs instead of keeping
-> > them alive ?
->
-> Isn't it doing it now?
-> That was the whole point of patching nop to jmp in a trampoline.
+Support encoding information about inline functions using BTF,
+in particular the libbpf interfaces added in [1].
 
-Just to be sure we're talking about the same thing, you're referring to the
-"ip_after_call" patching done in bpf_tramp_image_put, right ?=20
+When the "inline" BTF feature keywords is added, we also process
+and encode BTF_KIND_LOC_PROTO, PARAM and LOCSEC info for inline
+functions as part of CU traversal. Patches 1-3 add dwarf_loader
+support for this; patch 4 then uses libbpf interfaces to add
+inline info to the generated BTF. Patch 5 adds support to
+the btf_loader to support recognition of inline functions in
+BTF, supporting pfunct rendering of a function as inline.
+Patch 6 verifies that encoding and display of inline functions
+succeeds.
 
-My understanding is that this only helps in the case where a task is in the
-traced function while a prog is detached. It'd make it skip all fexit progs=
-.
+Inline support is gated by presence of BTF location-related
+functions in libbpf, so the easiest path for testing is
+to install the libbpf built from the series at [1], and
+when building pahole to run
 
-But if a task is sleeping in a fexit.s prog for example, it is already past
-ip_after_call, so this patching would not prevent it from calling a second,
-freed, fexit prog lined up after it in the trampoline, no ? The same situat=
-ion
-should happen with a sleeping fentry.s prog followed by a fentry prog.
+    cmake -DLIBBPF_EMBEDDED=off ..
 
-I have a reproducer for those scenarios that crashes bpf-next. I will make =
-it a
-selftest in v2 like Jiri suggested.
+as this ensures you will run with the updated libbpf with
+those interfaces (otherwise pahole auto-detects the lack
+of the relevant interfaces). To verify all is working,
+
+    pahole --supported_btf_features
+
+should show "inline".
+
+[1] https://lore.kernel.org/bpf/20260901165757.801449-1-alan.maguire@oracle.com/
+
+Alan Maguire (6):
+  dwarf_loader: Add parameter list to inlined expansions
+  dwarf_loader: Resolve inline expansion names during recoding
+  dwarf_loader: Collect inline expansion location data
+  pahole: Support inline BTF location encoding
+  btf_loader: Add "inline" annotation for inlined functions
+  tests: Validate inline BTF encoding
+
+ btf_encoder.c       | 339 +++++++++++++++++++----
+ btf_loader.c        |  52 +++-
+ dwarf_loader.c      | 645 ++++++++++++++++++++++++++++++++------------
+ dwarves.c           |  34 +++
+ dwarves.h           |  59 ++++
+ pahole.c            |  12 +
+ tests/btf_inline.sh | 120 +++++++++
+ 7 files changed, 1041 insertions(+), 220 deletions(-)
+ create mode 100755 tests/btf_inline.sh
+
+-- 
+2.43.5
+
