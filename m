@@ -1,157 +1,147 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CABD5468C2C
-	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 12:10:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37AE9481253
+	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 12:24:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788351042; cv=none; b=XrDj7VA3hthuBS2Iu8IaJb90T0SwNMdw2h7RGZiCuT5S5HZapdPTm3p+DA3C1i6DwG9o+WMvD1+MnM0W4XeebILzqp53DqhjNqCr47YfFhzEFRf1HrQnJH1mHaVEQ+pwL7V+pqn3tJJP2keLEDhPnyqxYZxa0cCn05Ld5jyFfh4=
+	t=1788351866; cv=none; b=ZHzl2Y+7KPAwbLPwbfaBu0+yTJC+D6O7de9DzFYXmt4Gx9D4pw58dWFK+qSobrQOcy2ObLb4rzK/nK0pIkN1pkWxKqkViZ5FutUBgC268li1MPe8CWotFqPyaz397oNJrCMnaJDLALDpyetORdHMljBD6wHIMP0+WJLjx/cl+jM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788351042; c=relaxed/simple;
-	bh=Y1wV/sdJ0I2tS5+afhbpaQktFXztVIMcXeD3dCZ+IQE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=c+L3RSYM/Ed9M8pD4K0HmeTl+e0L6teiKeDzrRfKG++xNy7MFTHvayGb9QAr9GL0jw+YwVrIzk6WzvY6XVAkrI4ubucJFxwAySkfwEL0ZlxIOJwuSXwgok7cyYN6+lB+ylQ5wsP8JbjWOFuYqt00UY+5BcT0BgW9m5QBU8bKxBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pYRk468b; arc=none smtp.client-ip=209.85.210.170
+	s=arc-20240116; t=1788351866; c=relaxed/simple;
+	bh=oTS+YDDaFxN0Q1LeraRZY2cqh7z1qPcDOqRuWiPId8c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WhmGo67nYOEODKqS3J6ixTYZ+E0L9/SWdDW8gOLwuwZjBmiPhLVh39hiZnOH0HhN1UhShRHZAEB51IYrwTzCECQm0gNl2ExdpxWqBu4lvnDMj0b3RSjlNpIp8tG8MPp9gIuNowKZvnkqk1OP7HehyCERpO4JKT7dzqYruDabTyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i1npwNWd; arc=none smtp.client-ip=74.125.224.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pYRk468b"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-851cbd64814so314568b3a.1
-        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 05:10:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i1npwNWd"
+Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-66f984b263cso638319d50.1
+        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 05:24:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788351037; x=1788955837; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=VWQGAkWlUzQFpRysKqIStAsuXjs0d0k3Dcf5bsCh5wU=;
-        b=pYRk468bicRkTW76QtyZ6Y629st3X8z7UTacI8+akxVc2J0McuOkvOTC7C/epbCIeh
-         oEp+kPcNyC5aXQJRLBQvDeDFAoQQWt2ZWLKu+I+DeZqsVZ6mKKr5khuN833jsIgLWV+K
-         zJRU6aKuhw78FgTaTwzTicxVwlfBAr8AfH8QDt9MZuNcMSZTZQntJxtNGWYhZTy0ePfz
-         8ANLomGoVVSPwJ6Djb6Y5EIBhw7Eo/EG8mHF65/0V26KyH74o1DG+YU1p8eFphHqW5vK
-         HaZbu2cvB7ofBYT+KdLvIkr7GTo7nX/fyc355nyOizmCRFu63hd0nisBF2fcPVknu4is
-         +hvw==
+        d=gmail.com; s=20251104; t=1788351864; x=1788956664; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=RArsbmdfySTb2QuEZZ7/chE2iY/l9of1tF9d4mgeG4M=;
+        b=i1npwNWdvZF4/I5c+zZI5K67z+RM+Lp3cgwEwKCj3BgMGBas0ycNS3CJBb4aKO4a+T
+         GrGiYCT8yNkaWnOqRaHPpGn0ksP6kwQXthNLrY/Xmwd0uBNDV8rRR4qnxkaXY/ra0jkd
+         kgFDAkOyaOWTQMiy1Re+kKDknchky683AhHs97ZjUrxcWttoGGFsp9moja/6HF0GQmnR
+         fWsvbjSzcGMACARrBmIlt2jLQ7hKruCxznTNk1U+waQGjWIn2DDxCnIovrX5cUIxKduM
+         M6e+iIEQ0Uh2hT7aVb/x7CDdd7cvUzyvD/GLUTzS+rWQBveOzYTVsOSTsaeQe5004Hw1
+         SZ+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788351037; x=1788955837;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=VWQGAkWlUzQFpRysKqIStAsuXjs0d0k3Dcf5bsCh5wU=;
-        b=NmNAuGn8AKRcdVKlWe0IgAP4GAPM0CkYLsukKQfWhLOMZqkQDxWgLswDGieqNBcR/p
-         NurNC5VzHNwQijUcGCv1KFJchT+Ch1W/8msrxHQAG5exFZXlAh6U/Nfmlv1e2r4ng2qR
-         SAqJ+Uq2IBDvvsYr4z+T8Lf8UBEC/9vXVD0fHwFx5M0y4fdF5yWgGDY4f/wo4K54WNJD
-         jeEpmZgxK/TakvIwcwQODa0/+dbF8xvujj2HAqnqgQ0Uv4mVA5XJUSbdU5Tpj7UayeWd
-         QoueONgw4rS/61teZ0Ny/n9HjGK2BuFQWXTvOm3JEFPZsMoae3xB3zuK58rEPa+co+5T
-         xNCw==
-X-Gm-Message-State: AFuF++mr3QNrdd3sywNbaKbVP8ckPZMWHFKb55Kqv6rpV2NVKcJLUAyq
-	uh2G94+ROLZsYjb1v0jpaMX058/4lZrGGwHOl7OsGGYulhH+DCKKuuwp
-X-Gm-Gg: AYBFou1blEUHsVk0mq4CFZ77ZXjMhAV91rjxTXw3xELDsFf3ZwfOWh9/aRTjWfHQRKP
-	hSugWbIWUHDou53+5qq4EBIN0SF0ZOz3jXcCYtnY+eUr2E+vvR6KskFpt/QtGH6V1blAD9aPrbs
-	yLJm8IwrvKS5fawFDdZFieqw1mYuHVbW/pljl8v5zBWpdeYMaGLlB/GdK8/mtdy1RDb6gF3bsQd
-	tGCxP4zm7eQ42FD59W1Ifg03qAcY7bX5zPH8VFKOPFYhK1JDsLIr56+fCHKpu4SOXO8ez19PMBC
-	hhEufuoalVJjUoFaVudtJ5+wtVWLHDdh2WC+IXT85xsL45VHyXwwjZqqAY5yQEb0521Rz2W7U1a
-	zxiMmQw6z4wGB5/ep3NQ0qym+pCvhMM4sPXbAkGno5piNYjznYCM0vv4aO8l6TaxC+zF30JwNsJ
-	oG8wUNviUZbIbHHQzENVl/B9HygELrXsaaFkr7EsOHK02b0czbLrH2qA7rOjJWiD7apg08/bjMw
-	b8US6MoE0+6q93QYjvxvHHe+5STB+pkm5MijHisLrZ1MfBw9M9oUGpLZCaiu88jpZDltz3pEEnw
-	nIR+iBLxspq2uwWht2d31kvAQDzQWkTcz0Vkn2e1/Mi1f7ww
-X-Received: by 2002:a05:6a00:4c85:b0:846:8b22:4933 with SMTP id d2e1a72fcca58-85ed94b7407mr7471210b3a.17.1788351036779;
-        Wed, 02 Sep 2026 05:10:36 -0700 (PDT)
-Received: from KERNELXING-MB0.tencent.com ([43.132.141.24])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-85da342023asm1300084b3a.0.2026.09.02.05.10.32
+        d=1e100.net; s=20251104; t=1788351864; x=1788956664;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=RArsbmdfySTb2QuEZZ7/chE2iY/l9of1tF9d4mgeG4M=;
+        b=n1H92m0P5cKBkQBu6ge0xbUq6dOxxbcunpXmcCrI19xKb3Pbc4FFAc88kc/L2THWE/
+         ZlICUDPnMMFN4LFUyzi/Ofw48lcNqNEjCnjRzpZkj5fw7O0eY+BykqhWfZvGnM6bwKxm
+         vjU7vpHV3WxppPxx5hcdokAgtlxv57qINPtHP6gDYtU9qBnKQRqKbxm+BK4uJkkqGQoj
+         wYvpXxjb+s4cU0gQ6r7n+a9O53dkyBAXuMR6ZBvFosTDbukAZYGkWNTCAPsCypPm9lUs
+         P89lhy6Q3slouDklSe1a4RKiEG1WQekzh3eFyr2e6iRknpMhiUQIkEk8p2VR5x/0G3bM
+         jDmQ==
+X-Gm-Message-State: AFuF++l2Q0zdKTiV4oNwhjAWmtR0DY403o4Lrk0u6eYo+3SFNW/VL6Tn
+	zQyOCAjB7x1rV2Z1Q1d4Ah3Ay1OGNtTRzCY1SMhcPzHa24Bu6heJCEX4xGLdcJsP
+X-Gm-Gg: AYBFou0jWo6RR8cJLUNZmS/6mOMw4lYevcXL6gJ4X1W5tkPJHmdkIrTUtfxtiFgy3QB
+	u/fh+kT1H6GDiW9VJKxPotEkAB9S8GxtGpUvN2eTA31CFeSQbNas8vx9Uh+yMKSrfLUpAkDA7v6
+	BkkNlJ7CTpnqkjR8K7J/2VgXVzlBXLhKmD9ix0frVTH2Q1ZltQbvfWqgahcmf/z8ozwGb5L8WYp
+	QtSLc1NR5F7OHYGrLMZhTgYUJT2THX6leGI6HPJh1xPS3QhlXUmMtcI/BtQYa5Z54SnvHDWBup/
+	CAeMjnAO7UtwXu8rKSDN6r+8hrdBVUU22Lu15Ah6lQHXwHjVIIy5UrEdPGEQVrx0mu2m6CNFHep
+	b2sQU/nFqYM3DAosGCzXys8TwoXR8nLjQiTeYxeGoTZDNhtA8kdfqLDGcSiiO1puAawPmDnRPto
+	B3Owdxb7azQ6fqab36ZRq7FF3XSjRFOzplW532qGYbG8DODnHrZwtuWYsvSob7s6ncmvUduObZd
+	h3k2i7pYKQ4Dl3qQjdzWQ==
+X-Received: by 2002:a05:690e:b83:b0:668:180c:bf6a with SMTP id 956f58d0204a3-66f9bc3fc3dmr1314531d50.37.1788351863969;
+        Wed, 02 Sep 2026 05:24:23 -0700 (PDT)
+Received: from zenbox ([2600:1700:18fb:6011:f78:4c8c:a6cc:a58e])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-66f98697fbasm1721817d50.18.2026.09.02.05.24.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Sep 2026 05:10:35 -0700 (PDT)
-From: Jason Xing <kerneljasonxing@gmail.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	bjorn@kernel.org,
-	magnus.karlsson@intel.com,
-	maciej.fijalkowski@intel.com,
-	jonathan.lemon@gmail.com,
-	sdf@fomichev.me,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	aleksander.lobakin@intel.com
-Cc: bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	syzbot+f16c1b285c9f63994eec@syzkaller.appspotmail.com
-Subject: [PATCH net v3] xsk: set network header on skb at generic transmit
-Date: Wed,  2 Sep 2026 20:10:27 +0800
-Message-Id: <20260902121028.74092-1-kerneljasonxing@gmail.com>
-X-Mailer: git-send-email 2.33.0
+        Wed, 02 Sep 2026 05:24:23 -0700 (PDT)
+Date: Wed, 2 Sep 2026 08:24:23 -0400
+From: Justin Suess <utilityemal77@gmail.com>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 14/15] selftests/bpf: Test the LSM policy object
+ kfuncs with Landlock
+Message-ID: <apgTQKnhwMyFdQcr@zenbox>
+References: <20260831145858.3869191-1-utilityemal77@gmail.com>
+ <20260831145858.3869191-15-utilityemal77@gmail.com>
+ <20260831195327.1282C1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260831195327.1282C1F000E9@smtp.kernel.org>
 
-When constructing an skb in the XSK generic transmit path, neither
-xsk_build_skb() nor xsk_build_skb_zerocopy() calls
-skb_reset_network_header(). After __finalize_skb_around(), the
-network_header offset defaults to 0 (pointing to skb->head). The
-subsequent skb_reserve(skb, hr) moves skb->data forward by hr bytes,
-but leaves network_header still at 0. This makes skb_network_offset()
-return a negative value (-hr).
+On Mon, Aug 31, 2026 at 07:53:26PM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Low] File descriptors leak on the error path in test_restrict_binprm_discard().
+> --
+> 
+> commit 7fa3010dd885254cc82b6aa2f6f254ee83a13717
+> Author: Justin Suess <utilityemal77@gmail.com>
+> 
+> selftests/bpf: Test the LSM policy object kfuncs with Landlock
+> 
+> This commit adds tests for LSM policy object kfuncs interacting with Landlock.
+> It tests execution confinement, audit log flags, and concurrent application
+> using a syscall program and BPF RCU lock management.
+> 
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_policy_landlock.c b/tools/testing/selftests/bpf/prog_tests/lsm_policy_landlock.c
+> > new file mode 100644
+> > index 0000000000000..9270b39f5e3a7
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/prog_tests/lsm_policy_landlock.c
+> [ ... ]
+> > +static void test_restrict_binprm_discard(void)
+> > +{
+> > +	struct policy_test_env env;
+> > +	char garbage_path[] = "/tmp/lsm_policy_garbage_XXXXXX";
+> > +	int garbage_fd, pipe_fds[2];
+> > +	char buf = 0;
+> > +	pid_t pid;
+> > +
+> > +	if (setup_env(&env))
+> > +		goto out;
+> [ ... ]
+> > +	if (!ASSERT_OK(pipe(pipe_fds), "pipe"))
+> > +		goto out_unlink;
+> > +
+> > +	/*
+> > +	 * Cannot use spawn_exec_child(): the same process must test its
+> > +	 * write access after the failed exec.
+> > +	 */
+> > +	pid = fork();
+> > +	if (!ASSERT_GE(pid, 0, "fork"))
+> > +		goto out_unlink;
+> 
+> [Severity: Low]
+> Does this code leak the file descriptors created by pipe() if fork() fails? 
+> 
+> If fork() fails here, the code jumps directly to the out_unlink label, and it 
+> appears neither pipe_fds[0] nor pipe_fds[1] are closed before exiting the
+> function. 
+> 
+> The spawn_exec_child() helper function introduced in this same commit properly 
+> closes both descriptors on fork failure. Should similar cleanup be added here?
+>
+Will fix.
 
-When such an skb reaches a tunnel driver like ipgre_xmit(), the call
-chain pskb_inet_may_pull() -> pskb_network_may_pull_reason() computes:
+I think that's sashiko's only nit for this patchset.
 
-    pskb_may_pull_reason(skb, skb_network_offset(skb) + nhlen)
+https://sashiko.dev/#/patchset/20260831145858.3869191-1-utilityemal77@gmail.com
 
-The negative int from skb_network_offset() is implicitly promoted to
-unsigned int, wrapping around to a huge value. This triggers the
-DEBUG_NET_WARN_ON_ONCE(len > INT_MAX) in pskb_may_pull_reason().
+The BPF CI AI review bot didn't run on this since the patchset can't
+based on a bpf tree until it catches up to the recent Landlock changes.
 
-Call trace from syzkaller:
-  ipgre_xmit+0x958/0xcd0 net/ipv4/ip_gre.c:658
-  __netdev_start_xmit include/linux/netdevice.h:5400
-  netdev_start_xmit include/linux/netdevice.h:5409
-  __dev_direct_xmit+0x4b6/0x730 net/core/dev.c:4942
-  __xsk_generic_xmit net/xdp/xsk.c:1079
-  xsk_generic_xmit+0x277a/0x40a0 net/xdp/xsk.c:1120
-
-Reset the network header so skb_network_offset() is valid (0). Unlike
-AF_PACKET, AF_XDP does not need to locate the real L2/L3 boundary: an
-AF_XDP frame is always a complete, opaque blob from userspace.
-AF_PACKET only cares about the boundary because it can cook an L2 header
-itself (SOCK_DGRAM) and supports GSO/checksum offload; none of that
-applies here, where the frame is sent as-is via __dev_direct_xmit().
-So resetting the network header is enough to restore the invariant and
-avoid the crash.
-
-Fixes: 3914d88f7608 ("xsk: Respect device's headroom and tailroom on generic xmit path")
-Reported-by: syzbot+f16c1b285c9f63994eec@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=f16c1b285c9f63994eec
-Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
----
-V3
-Link: https://lore.kernel.org/all/20260901083325.3445-1-kerneljasonxing@gmail.com/
-1. remove the misleading description about af_packet
-
-V2
-Link: https://lore.kernel.org/all/20260826012052.51028-1-kerneljasonxing@gmail.com/
-1. add more clarification about why we don't probe the header like packet at
-the end of the commit message (Jakub)
----
- net/xdp/xsk.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 33475b180ea6..2077bb6299ca 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -947,6 +947,8 @@ static int xsk_skb_init_misc(struct sk_buff *skb, struct xdp_sock *xs,
- {
- 	int err;
- 
-+	skb_reset_network_header(skb);
-+
- 	err = xsk_skb_destructor_set_addr(skb, addr);
- 	if (unlikely(err))
- 		return err;
--- 
-2.43.5
-
+Justin
+> -- 
+> Sashiko AI review · https://sashiko.dev/#/patchset/20260831145858.3869191-1-utilityemal77@gmail.com?part=14
