@@ -1,30 +1,30 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 721FB4218B6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98559412270;
 	Wed,  2 Sep 2026 09:38:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788341919; cv=none; b=ryoh1ti1hSekrAL0RzdfhDWbXpkSL5IkuhJACyh8vKFNF8w5bC0c7LRNSKnwinbVAaQBus8auN/u6Fx9psaiJk8ntQImup6/h6t+F/SAX9MbYmrupgsbp1nbKyny6MXRTNtqPo+bBCsDwL1JCWEbXoG+xE5iEH379BPy/dB60pg=
+	t=1788341919; cv=none; b=Uh6160Fgr65AYJud0SBao+fP7OBP4FcM7U4LZqY98meQY10juo2OmoSmTCIEA1kiwUvOQcni02m2dNjpSEFrczOCf8du2LXHC34xBBH8S4AZsC7F+7FZ3GCzLOFiKTXSdytOPmqk667oj/a7BY+mI+eoOoFdL3hQKqp9JFx/VpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1788341919; c=relaxed/simple;
-	bh=8NRZLSZC/WH0iPpJIOU+E5GNNTl2iXvwpUd2oPyB8RM=;
+	bh=OmckPcNn2d43Jt4qbFjjAGMFSJuOEDinrWkQBqBea8g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I2oejMp3Flx9PBbuakOwPIXxL8Y7mrZtAH9gl2u9e0q1fsppRUQlToRt81Lh4tZU0L8QZ/VUR98H6r9vWAhBbv2MuqqLXT5tERHJ+R5/6MdZrhTMVpVg2W48j/IdNavJ4ZJQNGHWLXPrWVQ8y2cXeOn5M0kFK2ZDq4zs6M09B5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=infkKRYu; arc=none smtp.client-ip=117.135.210.3
+	 MIME-Version:Content-Type; b=KSEYgsUzLOnjku/ybsQcbIdjXSfdyITBvctAq/k779aYi7lgZOXvw7kWCDA05ZjuRa7SGM/0xVbx4W2TpLT1mG1Hj1NzzdbTgv15/ot2IfM7vSK4TJhuQlfQAM6PIZD4Enl1019pWM6d0G9v3L9JEHteDwdP2GFAt9XxA+19PzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=e6mfzPeq; arc=none smtp.client-ip=220.197.31.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="infkKRYu"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="e6mfzPeq"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=2q
-	9utxZ+9B0IUlUY+Tcgn2k/NPUl5FtceBfR+r6rKN8=; b=infkKRYuj0shgaFgMW
-	I7sh7iw22hQIqi+YiNOMcecMOS0IbZZXa8SIy0xDTDFKCWohMsU9Uvcn+A73mUif
-	6b2qk/Y5KG8hmugVSfTDTp1GqR0XGEK6MLcU6B4YXvQJS6dCRbt8BNB+Z+LaPVdz
-	9oH6YHGPzRfTtPCQIPo9mFvh8=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version:
+	Content-Type; bh=cPtOUVSgreGRfeCgKA1l8rilUJWEmMP8VYiOnBVHhxY=;
+	b=e6mfzPeqTRNLnEt7BY0s5h+kxNH0qVHOa+6qniTC0qrlOCw4fcpehMTn8RiTB5
+	NNL8BF6WUl+V2ZHF0aaw3oT2Mbe1EGt53I9GyAoIHwZricWbEwai4+vnAeQy0aZ4
+	aetKNg3Hsm3R2DbQ+XxdMK3wUtNh4nrhtHW+QQpWa4/9c=
 Received: from nec8-i7 (unknown [])
-	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wD3F7Vu7pdqogtpAA--.21222S5;
-	Wed, 02 Sep 2026 17:37:55 +0800 (CST)
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wD3F7Vu7pdqogtpAA--.21222S2;
+	Wed, 02 Sep 2026 17:37:51 +0800 (CST)
 From: chenyuan_fl@163.com
 To: bpf@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -41,256 +41,86 @@ Cc: linux-kernel@vger.kernel.org,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	Yuan Chen <chenyuan@kylinos.cn>
-Subject: [PATCH bpf-next v5 3/3] bpf, arena: handle range_tree_set failures in alloc/free paths
-Date: Wed,  2 Sep 2026 17:37:40 +0800
-Message-ID: <20260902093740.2338724-4-chenyuan_fl@163.com>
+Subject: [PATCH bpf-next v5 0/3] bpf, arena: fix range_tree consistency on allocation failure
+Date: Wed,  2 Sep 2026 17:37:37 +0800
+Message-ID: <20260902093740.2338724-1-chenyuan_fl@163.com>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260902093740.2338724-1-chenyuan_fl@163.com>
+In-Reply-To: <CAADnVQKPSWBzaEc7QBT39C_N_32Gu5_P5Cob9G0rxcDgiSQg6g@mail.gmail.com>
 References: <CAADnVQKPSWBzaEc7QBT39C_N_32Gu5_P5Cob9G0rxcDgiSQg6g@mail.gmail.com>
- <20260902093740.2338724-1-chenyuan_fl@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3F7Vu7pdqogtpAA--.21222S5
-X-Coremail-Antispam: 1Uf129KBjvJXoW3Jw43ZF1UXrWkWr15AFW7XFb_yoWfWw4fpF
-	s8G3s8trs5J3yI9r43Zr1v9r13KwsYqw4UGFWIka4rAry5Zr9IyFWxCF1UuFy5CrWkXr12
-	kr4jq34rKrWUZFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j9ku7UUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDARRZF2qX7nQNAwAA3y
+X-CM-TRANSID:_____wD3F7Vu7pdqogtpAA--.21222S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxGF47tryDtF48ur47Gr18uFg_yoW5XFy7pr
+	W5Kws8J3ykG3yxuFs3uF1xXFn5Ca1rXw4UGryagr1kZry5Gr1xtr40k3WUWr1UCFn5Xw4U
+	KF4Yq34Igr1UZFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jnb18UUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAg9XFWqX7m8OjwAA3y
 
 From: Yuan Chen <chenyuan@kylinos.cn>
 
-arena_alloc_pages(), arena_free_pages() and arena_free_worker() now
-handle range_tree_set() errors. arena_free_pages() aborts the free on
-error, and arena_free_worker() moves range_tree_set() before PTE
-clearing so that a failed tree update leaves the PTEs intact instead of
-freeing pages that the arena free tree does not track.
+The arena range tree can be left inconsistent when kmalloc_nolock()
+fails mid-operation. Patch 1 fixes range_tree_clear(), patch 2 fixes
+range_tree_set(), patch 3 makes the arena free paths handle
+range_tree_set() failures, checks the return value in
+arena_alloc_pages()'s partial-allocation error path, and makes
+arena_map_free() drain the deferred-free machinery safely now that the
+worker can requeue failed spans and queue irq_work on retry.
 
-Also check the range_tree_set() return value in arena_alloc_pages()'s
-error path, which restores the unpopulated tail of a partially
-allocated range; log a warning instead of silently leaking the virtual
-range when the tree update fails.
+Changes in v5:
+  - arena_map_free(): set a dying flag and steal orphaned spans before
+    draining, and drain with flush_work() + irq_work_sync() +
+    flush_work().  The worker retry queues arena->free_irq, which the
+    old irq_work_sync() + flush_work() order could miss: the irq_work
+    fired after the arena was freed and its callback scheduled
+    free_work on freed memory.
+  - arena_map_free(): retry the spinlock acquisition a bounded number
+    of times (-EDEADLK is not retried) and WARN with the error code,
+    instead of a bare WARN_ON_ONCE(1) and an immediate leak of the
+    arena.
+  - range_tree_set(): reword the comment describing the two lookups,
+    as suggested by Alexei Starovoitov.  The pre-clear probe only
+    decides whether a fresh node must be allocated, so that -ENOMEM
+    leaves the tree unmodified; the post-clear lookup fetches the
+    merge handles without depending on how range_tree_clear()
+    truncates overlapping nodes.
 
-range_tree_set() is failure-atomic (it pre-allocates the node before
-touching the tree), so on -ENOMEM the range stays tracked as allocated
-and the pages remain mapped and accessible. A failed free is therefore
-retryable, and arena_map_free() reclaims any retained pages at map
-destruction; aborting the free avoids clearing PTEs for pages the
-arena free tree does not track.
+Changes in v4:
+  - arena_free_worker(): keep a span whose range_tree_set() failed on
+    arena->free_spans and retry it on a later worker run, instead of
+    leaving it in the drained list where the second loop would still
+    zap user VMAs and free the span (dropping the free request), as
+    pointed out by Emil Tsalapatis.
 
-In arena_free_worker() a failed tree update used to leave the span in
-the drained list, where the second loop would still flush TLB entries,
-zap user VMAs, and free the span itself: the free request was dropped,
-user mappings were destroyed for a free that never happened, and the
-pages stayed mapped until map destruction. Keep failed spans on
-arena->free_spans instead and retry them on a later worker run; only
-spans whose PTE clearing actually ran are flushed, zapped, and
-released.
+Changes in v3:
+  - Check range_tree_set() return value in arena_alloc_pages()'s error
+    path, which restores the unpopulated tail of a partially allocated
+    range (previously ignored), as pointed out in review.
 
-The retry queues arena->free_irq while the map can concurrently be
-freed. arena_map_free() relied on irq_work_sync() + flush_work(),
-which miss an irq_work queued by the running worker between the two
-calls: the irq_work can fire after the arena is freed and its callback
-schedules free_work on freed memory. Set arena->dying under the arena
-spinlock before draining, so the worker stops requeueing, steal the
-orphaned spans (their pages are reclaimed by existing_page_cb()), and
-drain with flush_work() + irq_work_sync() + flush_work().
+Changes in v2:
+  - Fix multi-line comment style in patches 1 and 3 (opening /* on its
+    own line), as pointed out in review.
 
-Setting @dying requires the arena spinlock. raw_res_spin_lock_irqsave()
-can fail (-EDEADLK on a proven deadlock cycle, -ETIMEDOUT after a long
-hold), and proceeding without the lock would race the worker. Retry a
-bounded number of times for a long but finite hold and do not retry
--EDEADLK; on exhaustion leak the arena with a WARN carrying the error
-code rather than hang map free.
+Note: arena_vm_fault()'s two recovery paths (restoring the range to the
+free tree after allocation/mapping failure) also call range_tree_set()
+without checking the return value; that is addressed in a separate
+series.
 
-Suggested-by: Emil Tsalapatis <emil@etsalapatis.com>
-Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
----
- kernel/bpf/arena.c | 95 ++++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 87 insertions(+), 8 deletions(-)
+Yuan Chen (3):
+  bpf, arena: fix range_tree_clear inconsistency on kmalloc_nolock
+    failure
+  bpf, arena: fix range_tree_set inconsistency on kmalloc_nolock failure
+  bpf, arena: handle range_tree_set failures in alloc/free paths
 
-diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index 7b6847200b43..b0d1f0facfb2 100644
---- a/kernel/bpf/arena.c
-+++ b/kernel/bpf/arena.c
-@@ -5,6 +5,7 @@
- #include <linux/cacheflush.h>
- #include <linux/err.h>
- #include <linux/irq_work.h>
-+#include <linux/delay.h>
- #include "linux/filter.h"
- #include <linux/llist.h>
- #include <linux/btf_ids.h>
-@@ -67,6 +68,8 @@ struct bpf_arena {
- 	struct irq_work     free_irq;
- 	struct work_struct  free_work;
- 	struct llist_head   free_spans;
-+	/* set under spinlock during map free; stops the worker retry loop */
-+	bool dying;
- };
- 
- static void arena_free_worker(struct work_struct *work);
-@@ -370,6 +373,9 @@ static int existing_page_cb(pte_t *ptep, unsigned long addr, void *data)
- static void arena_map_free(struct bpf_map *map)
- {
- 	struct bpf_arena *arena = container_of(map, struct bpf_arena, map);
-+	struct llist_node *list, *pos, *t;
-+	unsigned long flags;
-+	int ret, i;
- 
- 	/*
- 	 * Check that user vma-s are not around when bpf map is freed.
-@@ -380,7 +386,40 @@ static void arena_map_free(struct bpf_map *map)
- 	if (WARN_ON_ONCE(!list_empty(&arena->vma_list)))
- 		return;
- 
--	/* Ensure no pending deferred frees */
-+	/*
-+	 * No fallback if this fails, so retry a few times for a long but
-+	 * finite hold; -EDEADLK can't be waited out. Cap the retries:
-+	 * leaking the arena is better than hanging map free.
-+	 */
-+	for (i = 0; i < 10; i++) {
-+		ret = raw_res_spin_lock_irqsave(&arena->spinlock, flags);
-+		if (!ret || ret == -EDEADLK)
-+			break;
-+		msleep(1);
-+	}
-+	if (ret) {
-+		WARN_ONCE(1, "bpf_arena: spinlock acquire failed %d\n", ret);
-+		return;
-+	}
-+	/*
-+	 * Set @dying before draining: the worker checks it under this
-+	 * spinlock before requeueing, so a failed span is either stolen
-+	 * here or dropped by the worker.
-+	 */
-+	arena->dying = true;
-+	list = llist_del_all(&arena->free_spans);
-+	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
-+
-+	llist_for_each_safe(pos, t, list)
-+		kfree_nolock(llist_entry(pos, struct arena_free_span, node));
-+
-+	/*
-+	 * flush_work() lets the running worker observe @dying so it stops
-+	 * requeueing; irq_work_sync() retires anything queued before that;
-+	 * the final flush_work() runs the instance which the retired
-+	 * irq_work's callback may have scheduled.
-+	 */
-+	flush_work(&arena->free_work);
- 	irq_work_sync(&arena->free_irq);
- 	flush_work(&arena->free_work);
- 
-@@ -766,7 +805,9 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt
- 	bpf_map_memcg_exit(old_memcg, new_memcg);
- 	return clear_lo32(arena->user_vm_start) + uaddr32;
- out:
--	range_tree_set(&arena->rt, pgoff + mapped, page_cnt - mapped);
-+	if (range_tree_set(&arena->rt, pgoff + mapped, page_cnt - mapped))
-+		pr_warn_ratelimited("bpf_arena: leak range %ld+%ld on failed alloc\n",
-+				    pgoff + mapped, page_cnt - mapped);
- 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
- 	if (mapped) {
- 		flush_vmap_cache(kern_vm_start + uaddr32, mapped << PAGE_SHIFT);
-@@ -881,7 +922,20 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt,
- 	if (ret)
- 		goto defer;
- 
--	range_tree_set(&arena->rt, pgoff, page_cnt);
-+	ret = range_tree_set(&arena->rt, pgoff, page_cnt);
-+	if (ret) {
-+		/*
-+		 * range_tree_set() is failure-atomic, so -ENOMEM leaves the
-+		 * range allocated and the pages mapped; abort the free rather
-+		 * than release pages the tree does not track. Nothing retries
-+		 * the free; the program can free the range again.
-+		 */
-+		pr_warn_ratelimited("bpf_arena: free of %lx+%ld failed\n",
-+				    uaddr, page_cnt);
-+		raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
-+		bpf_map_memcg_exit(old_memcg, new_memcg);
-+		return;
-+	}
- 
- 	init_llist_head(&free_pages);
- 	cdata.arena = arena;
-@@ -977,12 +1031,13 @@ static void arena_free_worker(struct work_struct *work)
- 	struct llist_node *list, *pos, *t;
- 	struct arena_free_span *s;
- 	u64 arena_vm_start, user_vm_start;
--	struct llist_head free_pages;
-+	struct llist_head free_pages, cleared;
- 	struct clear_range_data cdata;
- 	struct page *page;
- 	unsigned long full_uaddr;
- 	long kaddr, page_cnt, pgoff;
- 	unsigned long flags;
-+	bool retry = false;
- 
- 	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags)) {
- 		schedule_work(work);
-@@ -992,28 +1047,52 @@ static void arena_free_worker(struct work_struct *work)
- 	bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
- 
- 	init_llist_head(&free_pages);
-+	init_llist_head(&cleared);
- 	cdata.arena = arena;
- 	cdata.free_pages = &free_pages;
- 	arena_vm_start = bpf_arena_get_kern_vm_start(arena);
- 	user_vm_start = bpf_arena_get_user_vm_start(arena);
- 
- 	list = llist_del_all(&arena->free_spans);
--	llist_for_each(pos, list) {
-+	llist_for_each_safe(pos, t, list) {
- 		s = llist_entry(pos, struct arena_free_span, node);
- 		page_cnt = s->page_cnt;
- 		kaddr = arena_vm_start + s->uaddr;
- 		pgoff = compute_pgoff(arena, s->uaddr);
- 
-+		/*
-+		 * Set the range free before clearing PTEs, and requeue the
-+		 * span on failure: the PTEs stay intact and the free is
-+		 * retried later. Only spans moved to @cleared (PTE clearing
-+		 * actually ran) reach the flush/zap/release loop below.
-+		 */
-+		if (range_tree_set(&arena->rt, pgoff, page_cnt)) {
-+			if (arena->dying) {
-+				/*
-+				 * The map is being freed. PTEs stay intact
-+				 * and the pages are reclaimed by
-+				 * arena_map_free() via existing_page_cb().
-+				 */
-+				kfree_nolock(s);
-+				continue;
-+			}
-+			llist_add(&s->node, &arena->free_spans);
-+			retry = true;
-+			continue;
-+		}
-+
- 		/* clear ptes and collect pages in free_pages llist */
- 		apply_to_existing_page_range(&init_mm, kaddr, page_cnt << PAGE_SHIFT,
- 					     apply_range_clear_cb, &cdata);
--
--		range_tree_set(&arena->rt, pgoff, page_cnt);
-+		llist_add(&s->node, &cleared);
- 	}
- 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
- 
-+	if (retry)
-+		irq_work_queue(&arena->free_irq);
-+
- 	/* Iterate the list again without holding spinlock to do the tlb flush and zap_pages */
--	llist_for_each_safe(pos, t, list) {
-+	llist_for_each_safe(pos, t, cleared.first) {
- 		s = llist_entry(pos, struct arena_free_span, node);
- 		page_cnt = s->page_cnt;
- 		full_uaddr = clear_lo32(user_vm_start) + s->uaddr;
+ kernel/bpf/arena.c      | 95 ++++++++++++++++++++++++++++++++++----
+ kernel/bpf/range_tree.c | 61 +++++++++++++++++-------
+ 2 files changed, 132 insertions(+), 24 deletions(-)
+
 -- 
 2.54.0
 
