@@ -1,102 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from sender-pp-o93.zoho.in (sender-pp-o93.zoho.in [103.117.158.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F16124A49BB;
-	Wed,  2 Sep 2026 15:04:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788361449; cv=none; b=bOd5JWRLMfhGYR0Rp7KYVpRv8F6Tv5Q5/BU2o93pGBf2QBliYK6Ehbe25vT9wrIUG3egmSdhke4/eu/SWIhEptp1/u3BgAyCM7qjqj/xVeFMSVjM8Q8Z9ca1lnfZOoj0mvUuZEUUG1YA9N0JiR1fV7TuLU90y5mk2JYvLf0AHgA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788361449; c=relaxed/simple;
-	bh=SskhbyJENija44mYrxJV3LwTqeTYxYuFmxXAOLj7RCw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Q5eicXB6hCANCY1ZdJ81FjRw2roLjzJWzvdvMHCIB8x7HmMW4d7sAWdPrdhj89Ke2yw5gtbPl5wA4UoWjVdIQ1X8fIxZ68I9bB/XuyBdP4VpGrwt58n1pLdln2yOhCtqln/kr2J4hJzHrDo2EC/shAj06KvQdheVZNrFcgPqc9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mMmYBNAT; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BBB73769F0
+	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 15:05:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=103.117.158.93
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788361544; cv=pass; b=F9nrZG2uekvGNrjiw5njams55R/ERcawR2LC2tx7Lf4qQIIlyZn/CPSJlzY7L9sW3eADB4ugOGHNChWGyBn/FaRsMlEWctYF9kCG9M9qxLkXB6rrW0rYMH0VCNW0k3SP/yJBK60YXEJ4RZWNPND3Ik934+kwQbNhBorIjthMfyM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788361544; c=relaxed/simple;
+	bh=9vfrAX9QdLP02MpXYNzlfMqiNAX3CvZqO//ZbrSGtIM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cbyy7ipHFB4E7pGiCMOFl6UDEbXmAzph/5WPcakqdCbD2T317RdAHqdDoDDYbXMqr6mtOrjPOR+axqFO95innjUVBLvQ35RmpyoVZ4aZe0mAG64DbEmUZgnjfy23KSxp4XNLYygj+kA1iPq3IQ6JLoO1vDZhFEob9ZxsIgOpwE0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.in; spf=pass smtp.mailfrom=zohomail.in; dkim=pass (1024-bit key) header.d=zohomail.in header.i=adi.sharma@zohomail.in header.b=lFWMtWrv; arc=pass smtp.client-ip=103.117.158.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.in
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zohomail.in
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mMmYBNAT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A91791F00A3E;
-	Wed,  2 Sep 2026 15:04:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788361447;
-	bh=TARhqolkPcMgr0enEm0hjClchzNjo9m5okgZLVYFNlc=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=mMmYBNATE97CL7aw7TQlIPQIi4a0P47jkALAWqRe2L78wp5jJbaGTm5vwuc3AZnah
-	 n2owhWvh5hQp7cN+q2OEKt0/e7QjirwZtOeB9GNjO4yUUJcv1o7xKDOuK7XiTmymR9
-	 MibGgwTtf9EaJQnf6x/tbxh2TsIiRLGyKlOCTKVhiix6YEbXiOMn91UZpV2vXJYFPQ
-	 gMrQYUXStWBTK426DdJhaDAPMu0FFYwqFP12pZ6S3uqCSZT0tkeBhOHN8BC/o1nbr9
-	 mvfKmEdc5uPvv0eL6xbdHYFjcF4HrVckuAP+cyezZNb1Wpb1h2DgxOe5BI+aCZ/807
-	 LnTv2MxjgyX1g==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 04/13] arm64: pass pt_regs to audit_syscall_entry()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ricardo Robaina" <rrobaina@redhat.com>
-Cc: audit@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <b4ab47d2551d090520b4fa81a884b5988b9655c7.1788351089.git.rrobaina@redhat.com>
-References: <cover.1788351089.git.rrobaina@redhat.com>
- <b4ab47d2551d090520b4fa81a884b5988b9655c7.1788351089.git.rrobaina@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 02 Sep 2026 15:04:07 +0000
-Message-Id: <20260902150407.A91791F00A3E@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=zohomail.in header.i=adi.sharma@zohomail.in header.b="lFWMtWrv"
+ARC-Seal: i=1; a=rsa-sha256; t=1788361491; cv=none; 
+	d=zohomail.in; s=zohoarc; 
+	b=Q+SEHYTnfXW9s9C26rAwpgKyHSAsjp3U3W1ws026kfr3NxCutcmWvTm/mHBd5sHomb8v+3s8F6R1FsMDx+lZW0J6proHFcI4jN6K6umvavu1yQeuwjym9b3++bUBHa99wfqlrnm6+osaX1SXLKqKnoBLndNboV+GSJl5oCbASyQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+	t=1788361491; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=PZzMPScsXWSlSAae9UgIPeUp1UVPBl3vjq+5BFJ+UeY=; 
+	b=VEF4KyEO3vwen7mRn96+tFXmnIC2HA5kbVIQj/kY1AwOWtWNqAsdqUtXyKig+M3r19Kf2UFfTZQND1UPdEPE3enG4Avvo/Qfuzr9x3jo1VnHcZVdy9mbSArMT3+RjYvU25kPgDJfqJf+A4FHN6ilN2MK920d54HV4UiP7oGHqbo=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+	dkim=pass  header.i=zohomail.in;
+	spf=pass  smtp.mailfrom=adi.sharma@zohomail.in;
+	dmarc=pass header.from=<adi.sharma@zohomail.in>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1788361491;
+	s=zoho; d=zohomail.in; i=adi.sharma@zohomail.in;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
+	bh=PZzMPScsXWSlSAae9UgIPeUp1UVPBl3vjq+5BFJ+UeY=;
+	b=lFWMtWrvbTMxoZu1pqDhq3xuHNpdEI1Tf/JKy58TPx/aXILu96qhTVrNSW759/TR
+	6iv2IEDni1ksKMZsFRGWO0DNkpi59A+znmlAZF+W3KA9ZVLwxa9bwp2XJKUvAP7gVSx
+	bGnAq8V1bfNhdD+F+W3x29b5/9EJ220z2DzRBfu0=
+Received: by mx.zoho.in with SMTPS id 1788361489769715.4053413254559;
+	Wed, 2 Sep 2026 20:34:49 +0530 (IST)
+From: Aditya Sharma <adi.sharma@zohomail.in>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	yonghong.song@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
+	shuah@kernel.org,
+	puranjay@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Aditya Sharma <adi.sharma@zohomail.in>
+Subject: [PATCH bpf-next 1/2] bpf: Only check nmi_uaccess_okay() when signalling current
+Date: Wed,  2 Sep 2026 20:34:38 +0530
+Message-Id: <20260902150439.692725-1-adi.sharma@zohomail.in>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+nmi_uaccess_okay() takes no task argument and is a statement about
+current. When commit 6280cf718db0 ("bpf: Implement bpf_send_signal_task()
+kfunc") made the PF_KTHREAD/PF_EXITING and is_global_init() test the
+supplied task, nmi_uaccess_okay() was left testing current.
 
-Pre-existing issues:
-- [High] Syscall argument filtering truncates 64-bit arguments to 32 bits, =
-allowing audit filter bypass.
---
+As a result bpf_send_signal_task() returns -EPERM whenever the
+calling context happens to be a kernel thread, regardless of which task
+the signal is aimed at. The same call with the same target succeeds or
+fails depending only on what the CPU was running:
 
-commit 32fa904a92560e78e9593b4944ee636ddfb88ea9
-Author: Ricardo Robaina <rrobaina@redhat.com>
+  bpf_send_signal_task() from tp_btf/workqueue_execute_start : -EPERM
+  bpf_send_signal_task() from tp_btf/sys_enter               : 0
 
-arm64: pass pt_regs to audit_syscall_entry()
+This was originally hit from a bpf_timer callback, where the failure
+is intermittent because a softirq runs on whichever task it
+interrupted. The rejection is x86-only, as nmi_uaccess_okay() is
+defined as true in include/asm-generic/tlb.h elsewhere.
 
-This commit updates arm64 to pass a pointer to pt_regs directly to
-audit_syscall_entry(), allowing the audit subsystem to extract the
-syscall arguments itself.
+Only apply the check when the signal is sent to current, where the
+predicate is meaningful. bpf_send_signal() and bpf_send_signal_thread()
+assign task = current, so their behaviour is unchanged.
 
-> diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
-> --- a/arch/arm64/kernel/ptrace.c
-> +++ b/arch/arm64/kernel/ptrace.c
-[ ... ]
-> @@ -2476,8 +2476,7 @@ int syscall_trace_enter(struct pt_regs *regs)
->  	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
->  		trace_sys_enter(regs, regs->syscallno);
-> =20
-> -	audit_syscall_entry(regs->syscallno, regs->orig_x0, regs->regs[1],
-> -			    regs->regs[2], regs->regs[3]);
-> +	audit_syscall_entry(regs->syscallno, regs);
+Fixes: 6280cf718db0 ("bpf: Implement bpf_send_signal_task() kfunc")
+Suggested-by: Yonghong Song <yonghong.song@linux.dev>
+Link: https://lore.kernel.org/bpf/20260819124324.43162-1-adi.sharma@zohomail.in/T/#u
 
-[Severity: High]
-This is a pre-existing issue, but does the underlying audit framework trunc=
-ate
-these 64-bit syscall arguments to 32 bits during filtering?
+Signed-off-by: Aditya Sharma <adi.sharma@zohomail.in>
+---
+ kernel/trace/bpf_trace.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-When the extracted 64-bit arguments are later evaluated in
-kernel/auditsc.c:audit_filter_rules(), they are passed to
-audit_comparator():
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 29260951aa87..f7a41f222599 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -871,7 +871,10 @@ static int bpf_send_signal_common(u32 sig, enum pid_type type, struct task_struc
+ 	 */
+ 	if (unlikely(task->flags & (PF_KTHREAD | PF_EXITING)))
+ 		return -EPERM;
+-	if (unlikely(!nmi_uaccess_okay()))
++	/* Since nmi_uaccess_okay() is only for the current
++	 * task, check if task is current.
++	 */
++	if (task == current && unlikely(!nmi_uaccess_okay()))
+ 		return -EPERM;
+ 	/* Task should not be pid=1 to avoid kernel panic. */
+ 	if (unlikely(is_global_init(task)))
 
-    result =3D audit_comparator(ctx->argv[f->type-AUDIT_ARG0], f->op, f->va=
-l);
+base-commit: d761934c9483ecde93fe99d8705282f716dfee50
+-- 
+2.34.1
 
-However, looking at kernel/auditfilter.c, the signature of audit_comparator=
-()
-implicitly truncates the 64-bit argument to a u32:
-
-    int audit_comparator(u32 left, u32 op, u32 right)
-
-Can this allow an unprivileged user-space process to bypass audit filtering
-rules (such as !=3D or <) targeting 64-bit syscall arguments? By crafting
-64-bit values whose lower 32 bits evade the 32-bit rule comparison, the full
-64-bit value processed by the kernel could still execute normally while
-evading audit logging.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1788351089.gi=
-t.rrobaina@redhat.com?part=3D4
