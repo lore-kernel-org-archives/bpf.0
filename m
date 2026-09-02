@@ -1,101 +1,58 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45BF64A8430;
-	Wed,  2 Sep 2026 14:58:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03BA94A5C30;
+	Wed,  2 Sep 2026 14:58:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788361083; cv=none; b=ObHFtXNxSWITCC5VZz4GuTLoi0MOEjvxkhafoAQkTYYnJZ5ElaAa1dNq1eUg+X8j94R3VHCYKjFGQtY40O5zlSybi8OSmVLjMx7mIRQDy7DF5BUYIzw7hQoSsGXHcPKL3RurnM9JfetTgg+cCM0s6l8331ggzhMBqvE0yf7d8So=
+	t=1788361094; cv=none; b=ZHSDP1bf6RbhQv3sHsPxTZ9I8dDHgFNRhgMoHlgkFSTS8zjfbXuWLOhuyQ+ZjFzIdd8YYFgVRRbAoYR7uoCV8g2LNcwvRhAgKMRFdwZgpdAWoBwjCCt48hM4sfbMZQC5k7jwPLV8Zhp3NBGLGhQd3/aDX7UDKv7X0BHwGi8EU5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788361083; c=relaxed/simple;
-	bh=X+IIwzfTzHtNg2oU7EAvFtxWsxtbKE6lQHBVjis5M9Y=;
+	s=arc-20240116; t=1788361094; c=relaxed/simple;
+	bh=ERFBqOh23JFkD4Ywp/lwc7nWcjVw6F7GI6ncASV7x44=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pjBhgFjU4EXVdGjjjU0o+g0tUdgK/j5K9ymqcL7gve4W+4czEsn1C/YN0PNSDsnyX3M95R5+4i1zXzm8G69QiD0DPIIsCNoe2ip6dWMpE+/FQaClByU5ECmD2hzUB/oqOCS2pm2eHmnGJYhQmBKLRiuGPRPXijw8S9buYs0J/yU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OGGTWrWC; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=DG/p6DcNSRnVoTFMg2eVy3rivF63JoeSecB56nD7EwL3QWGVHB9wHJvSN+8BpsBuIrIMZLxKV6jt4pJzwPixq8GoEp1dohHz63oFz2puncMuKpTUMInrswIyZsLNpMRNJ/ac+900orBCPRQvSKXHwrK93vpflbABoVmi7CPDHDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EuBM40fH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OGGTWrWC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE8E51F000E9;
-	Wed,  2 Sep 2026 14:58:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EuBM40fH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D22F1F000E9;
+	Wed,  2 Sep 2026 14:58:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788361081;
-	bh=uk62KPgbiXhasU8jQen+kLP55W7U/siJFn8xDmIK1b4=;
+	s=k20260515; t=1788361092;
+	bh=ERFBqOh23JFkD4Ywp/lwc7nWcjVw6F7GI6ncASV7x44=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=OGGTWrWCCs7vu0VnnMYq/vfCpKZsHFMzwPmqDxFWFqJOAtVwsoqvCYEbBrOUZ4xMg
-	 zrp3rQwyVTMbQki3BMx1p+I0AUiKKbnyg45ArtDjHmbN2z80P/lAJBsiAsgkKpz0Eb
-	 nj/XRzuMuTJxVZrJnB9CFPKeJwOp0yU2foy4iAaCUDvp0Y5gRTX1I2EGB6HvSoOxuB
-	 8zpWIev+IzvfSktUOdRx7DmHv6CHupSQehLl83DAvn7lWkPy0syYW4k8yrRWCjNEHR
-	 Biic+/mEQOiBChlc+zREI/HKsRnPawV7zuoPKE7SiOCdy0b79Yls4ZsneJ8XQglnnW
-	 RnaU9C2YVpB1w==
+	b=EuBM40fH4cvOPpBxVsBkYg1+kKPZCvaa6/KmLuZrl7W1306omf/maPR13HsJBxYXf
+	 NPQ+pY+YYCSW9YeFyVGQqvrhE5P3QGUHmUerfHuOwTXI6LTKPZqwy3K0SGMLp48pm2
+	 zA1Xc1ZAKKVY1gpvVVeGwtw7oLqeyG92sWrB/Gm79sWe5/8Wl9en9SykGvT0xNpMdr
+	 hFlhiG/r2G2OBdf1pNoLo6Wdngg5Y5y5YNiAOI0cLqIE0gsdPganNkm4X+ygmIXghe
+	 m5esmeQG89VCKhMVOkFNjIKKrQ6aj2/EjBIeFBUAGQ6/iY4WIBc5DpWMakoWm1zUY+
+	 Do3VCuJOFFexA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 10/13] sh: pass pt_regs to audit_syscall_entry()
+Subject: Re: [PATCH v2 05/13] csky: pass pt_regs to audit_syscall_entry()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Ricardo Robaina" <rrobaina@redhat.com>
 Cc: bpf@vger.kernel.org, audit@vger.kernel.org
-In-Reply-To: <097bd384731da18be54fafd41f67c60e2a70e37e.1788351089.git.rrobaina@redhat.com>
+In-Reply-To: <83f97472fb90a20f84892b6686c2158027c3e06c.1788351089.git.rrobaina@redhat.com>
 References: <cover.1788351089.git.rrobaina@redhat.com>
- <097bd384731da18be54fafd41f67c60e2a70e37e.1788351089.git.rrobaina@redhat.com>
+ <83f97472fb90a20f84892b6686c2158027c3e06c.1788351089.git.rrobaina@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 02 Sep 2026 14:58:01 +0000
-Message-Id: <20260902145801.AE8E51F000E9@smtp.kernel.org>
+Date: Wed, 02 Sep 2026 14:58:12 +0000
+Message-Id: <20260902145812.7D22F1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+> audit_syscall_entry() now takes a pointer to pt_regs and extracts
+> the syscall arguments itself via syscall_get_arguments(). Drop the
+> individual argument registers from the call and pass regs instead.
+>=20
+> Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
 
-Pre-existing issues:
-- [Critical] Syscall spoofing vulnerability: trace_sys_enter() logs the use=
-r-controlled 5th argument instead of the true syscall ID.
---
-
-commit 54980eef37cc5d7ecba9111c6a7139474010c424
-Author: Ricardo Robaina <rrobaina@redhat.com>
-
-sh: pass pt_regs to audit_syscall_entry()
-
-audit_syscall_entry() now takes a pointer to pt_regs and extracts the sysca=
-ll
-arguments itself via syscall_get_arguments(). This commit drops the individ=
-ual
-argument registers from the call and passes regs instead.
-
-> diff --git a/arch/sh/kernel/ptrace_32.c b/arch/sh/kernel/ptrace_32.c
-> index 8794081483fbd..e138f529ee7ec 100644
-> --- a/arch/sh/kernel/ptrace_32.c
-> +++ b/arch/sh/kernel/ptrace_32.c
-> @@ -466,8 +466,7 @@ asmlinkage long do_syscall_trace_enter(struct pt_regs=
- *regs)
->  	if (unlikely(test_thread_flag(TIF_SYSCALL_TRACEPOINT)))
->  		trace_sys_enter(regs, regs->regs[0]);
-
-[Severity: Critical]
-This isn't a bug introduced by this patch, but it appears there is a
-critical pre-existing issue here in do_syscall_trace_enter().
-
-Could trace_sys_enter() be logging the wrong syscall ID?
-
-On SH32, the actual syscall number is in regs->regs[3], while regs->regs[0]
-contains the 5th argument, which is a user-controlled value.
-
-Because do_syscall_trace_enter() passes regs->regs[0] to trace_sys_enter(),=
- a
-user-space application might be able to invoke a malicious syscall (like
-execve) while populating the 5th argument register with a benign syscall ID.
-
-Does this mismatch allow attackers to execute one syscall while security
-monitors log another, potentially bypassing eBPF and ftrace monitors?
-
-> -	audit_syscall_entry(regs->regs[3], regs->regs[4], regs->regs[5],
-> -			    regs->regs[6], regs->regs[7]);
-> +	audit_syscall_entry(regs->regs[3], regs);
-> =20
->  	return 0;
->  }
+Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1788351089.gi=
-t.rrobaina@redhat.com?part=3D10
+t.rrobaina@redhat.com?part=3D5
+
