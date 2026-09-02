@@ -1,32 +1,33 @@
-Received: from mta1.migadu.com (out-134.mta1.migadu.com [95.215.58.134])
+Received: from mta1.migadu.com (out-138.mta1.migadu.com [95.215.58.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EDF82472B6
-	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 02:48:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAD952EEE79
+	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 02:48:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788317311; cv=none; b=NL9tWkj4L8JdaS25CAGR3wmMTQp4QYf+KBVeTih7qbbLDZMgMgQVwvHrewhipQmTE7otJ+uEdMVtic2Ly510efS81T9YQlniGJ3te9DoR/umUM4S/HEJt0om40dUHz8Xe4zN1CU4+rMRAPer8+aTabITwmykBwLFfmLekbTrLcI=
+	t=1788317315; cv=none; b=c2xDyUPQqep4ZG/Ygf/o66Y5ekUi7o6rW/4G/FGDllAR2UoPnu+brTdAZ4e4aXgJYglBK/aRXMvGx/y26/0LKkvUYztCGK/a4qAG19FoeMBiHxjRCkNCvQt+ezBEqRfNrBKbYdsXbafQFqom6gWhFpa8fi5k45jVVqc8EM0+674=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788317311; c=relaxed/simple;
-	bh=h5/u0hMLL6AyXpBPdX0qhGLluLu/ufBc1joz2ezCes4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mvl7y1rg2wD4AegVog6UCaIgIfF1xOyzYNfqWdGpL9reFEDa/rt0wk1DjgPwY1Cb47IcuYDiK0KDElUJMrANfF+wIC4jhnaphdci000Dx1wsF6sPdtUALfzo+SEBoteCiheCE72/SXLVkFBg/Qdig6g40qnfeKrL8/chsNzs0X4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BviTLvmG; arc=none smtp.client-ip=95.215.58.134
+	s=arc-20240116; t=1788317315; c=relaxed/simple;
+	bh=ST5983ll6U7hafoaFlMxWw1U9/w1gNB73r53z1PudWg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=UYdjQ5Iz9FvU0QvQnVCb1QokhqnjLcOaWZq9L2OfiMDOFHUp7hOgSSoag8a8AQhaj9D8AzKhXK4XHkTbx9dQSGKYjAp7dPugcJ7dqHnqOR92NrAvz4BtLVBEBM0sXjxLaWmD0pVH89s3xvC8nXCKGSsGmfCvS2XdfLahlS2xjA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OIFRM3D8; arc=none smtp.client-ip=95.215.58.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BviTLvmG"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OIFRM3D8"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=h5/u0hMLL6AyXpBPdX0qhGLluLu/ufBc1joz2ezCes4=;
+DKIM-Signature: a=rsa-sha256; bh=ST5983ll6U7hafoaFlMxWw1U9/w1gNB73r53z1PudWg=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788317307; v=1; x=1788922107;
- b=BviTLvmGHOoGmQmSrabRTWRcng5BCtcQrWjcPW6QyC6Y6eLOGelPBu/vT5mP/237akEp3l8G
- U4EuQm+bKaEz4wpvdqFGDcuGwx+aog3ajWdZ+4DcsNhMyc7OmeYngEpM5UP8D/K6QLxjuKbhvHm
- auSN63LiWbD/6E/+jv/Oi6cM=
+ t=1788317311; v=1; x=1788922111;
+ b=OIFRM3D8EhO/vfUMUf9rwBgvuCNOvvDmhpXupqiCpV5kOA64JkJp29FjV43fNNNdgQ+714Kh
+ KZ+erxCTVYNcqPinIpIkEsVgtdCmbKHTYK4fe2h8JeKq0ZkITI/Pf8mjPO7/vXFsDAOXaqX9P3w
+ PnT+wRldc2Ijfhe56Wz9/dzQ=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id fb65ce072225f38a;
-	Wed, 02 Sep 2026 02:48:27 +0000
-X-Mizu-Trace-ID: fb65ce072225f38a
+Received: by smtp.migadu.com with ESMTPS id 4da923a900d17674;
+	Wed, 02 Sep 2026 02:48:31 +0000
+X-Mizu-Trace-ID: 4da923a900d17674
 X-Migadu-Flow: FLOW_OUT
 From: Tao Cui <cui.tao@linux.dev>
 To: tj@kernel.org
@@ -40,10 +41,12 @@ Cc: void@manifault.com,
 	bpf@vger.kernel.org,
 	cui.tao@linux.dev,
 	Tao Cui <cuitao@kylinos.cn>
-Subject: [PATCH v3 0/2] sched_ext: document and enforce vtime ordering constraints
-Date: Wed,  2 Sep 2026 10:48:10 +0800
-Message-ID: <20260902024812.794879-1-cui.tao@linux.dev>
+Subject: [PATCH v3 1/2] sched_ext: document the rolling-cursor requirement for dsq_vtime
+Date: Wed,  2 Sep 2026 10:48:11 +0800
+Message-ID: <20260902024812.794879-2-cui.tao@linux.dev>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260902024812.794879-1-cui.tao@linux.dev>
+References: <20260902024812.794879-1-cui.tao@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,34 +57,32 @@ Content-Transfer-Encoding: 8bit
 
 From: Tao Cui <cuitao@kylinos.cn>
 
-Patch 1 documents the rolling-cursor requirement for vtime ordering in
-scx_bpf_dsq_insert_vtime(). Patch 2 fixes scx_flatcg's comparator to
-use the cyclic comparison, which is correct there because
-cgrp_cap_budget() upholds that requirement.
+scx_bpf_dsq_insert_vtime() orders tasks by time_before64(), which is
+only meaningful when the values within a given DSQ stay less than 2^63
+apart. This is implicit in how a vtime scheduler works but not spelled
+out anywhere. Document it so BPF scheduler authors know the
+constraint.
 
-Changes since v2:
-- 1/2: "less than 2^63 apart" (not "within"), folded into the paragraph
-  above
-- 2/2: use time_before() instead of open-coded comparison, drop the
-  comment, fix the wrap direction and timing, state both lag and lead
-  bounds, Fixes corrected to upstream a4103eacc2ab (Tejun)
+Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+---
+ kernel/sched/ext/ext.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Changes since v1:
-- drop 1/2 (kernel priq comparator change): the cyclic ordering is
-  the documented contract; a plain comparison causes unbounded
-  starvation at the natural wrap (Andrea, Tejun)
-- new 1/2: document the rolling-cursor requirement instead
-- 2/2 (flatcg) unchanged
-
-
-Tao Cui (2):
-  sched_ext: document the rolling-cursor requirement for dsq_vtime
-  sched_ext/scx_flatcg: make cgv_node_less() wraparound-safe
-
- kernel/sched/ext/ext.c           | 4 +++-
- tools/sched_ext/scx_flatcg.bpf.c | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
-
+diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
+index 8041c87a3562..81a506a4c8ab 100644
+--- a/kernel/sched/ext/ext.c
++++ b/kernel/sched/ext/ext.c
+@@ -8903,7 +8903,9 @@ struct scx_bpf_dsq_insert_vtime_args {
+  *
+  * @args->vtime ordering is according to time_before64() which considers
+  * wrapping. A numerically larger vtime may indicate an earlier position in the
+- * ordering and vice-versa.
++ * ordering and vice-versa. vtime is a rolling cursor and values used for
++ * ordering within a given DSQ should stay less than 2^63 apart for
++ * time_before64() ordering to remain well-defined.
+  *
+  * A DSQ can only be used as a FIFO or priority queue at any given time and this
+  * function must not be called on a DSQ which already has one or more FIFO tasks
 -- 
 2.43.0
 
