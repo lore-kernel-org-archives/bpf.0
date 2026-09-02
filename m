@@ -1,189 +1,136 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B757C4A99C9
-	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 16:06:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4290E476CE5
+	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 17:14:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788365165; cv=none; b=IRT7fA/OxvS7+0sZ88bSFG2As6qur6YHOXJYubK9Dz9uRxJohoY6+hSXJrnzKgn7IFOihlV/6+EqhIIIiOvSd8+Bh5d9nqmE3/qdP5VkkTnbzuNJnD6J1zt6b6i6JIx204R5OcEgqmvg7jUWQdxqEDjlzOi0A1/VJJTMQWj8u3M=
+	t=1788369259; cv=none; b=oP/udEsYpjZj8zo7j5qQYyNbuV7O60QtiNDNh4HPJ7AkIjdX089r2FK2ayPXZyeQKJuqPbBYgFIo+5YZW6cTfmED5+Z3ZP4PNTpKaKLnJZGvIobYeTM4skJPxj4BDpoL47x+7UuzP+cI4bx3i+Sb/aV/aReccDRg3zYNmxUt59Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788365165; c=relaxed/simple;
-	bh=i6OeUmnuMF2IwjK0QDvdcohipAXwd3mtUqdCCx1H/H0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BItklxYEkL+FN8y4lHvJyXmAuArcnuE2SAFIt5oq+RgOVS91iTue4qn7WH3j7lN8geEOPEm76YlN53rQurD6RsnbwpRcwLBxFV5ALnhvb5SskUgXqFN7rciw5sCx7MzjG4B+X8sTig02cybnmAoJ3VCSB6OU9J6HzJ9xnpP4zYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=rQwNyupC; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1788369259; c=relaxed/simple;
+	bh=+OfN5/JT4pgAUO4bZ/FAnGD2WGjGb8p+mhVokfQB5Io=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CzSgyshF+b8PzUNwqKAYayM9KmEnn5k0nZib2mX0N6vPXRZ5doAL3FYYl4/g5F0zKl9LCmd8UxkMUqmLEnaIRTelaKGCUoQk2YTw92M0HdWNX/wNlFjaAH7/x2osa4+oB3xr+qWlKgsr0fjrx6o/64M8+KDHMfUoO6WqV1E9Uu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nXWx6v4l; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="rQwNyupC"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=lD12SBt769Hy1/p+350JlxEsSEvnOOPb1BaynLX1Kbg=; b=rQwNyupCR31qhsvgCa+fy1fyyR
-	gC7Pl3RFsYyWk6+X/zRzZbXPXWsMkxgjJzrwPtns4j8salsYqOavTJ/iAFCXrQZmdVv/wkMyUjlPy
-	dUxoZll8SnaGmP0Ie8ndR9MmKcfICKMS9SVZs2yTjEaxdpxZ2+2BKm26uUDKk85Tg/6wEPIxf9237
-	b6sFGnoE92O4ss5QD8GPZ2mQ+IU+ha7vq38C59y5OtNIsDI/4vURZaTYrApa5arMQyY68WXjzochw
-	hKLBe+ely8JT5AscgFaO49ZNxyn48z9jUV+H1oQTX2sTC2oNuGMg1VW83K2K+DMt+/+s93lU1i7xp
-	ziK7XZ9g==;
-Received: from sslproxy08.your-server.de ([78.47.166.52])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1x1n9n-0001OB-07;
-	Wed, 02 Sep 2026 17:45:47 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1x1n9l-000GaA-32;
-	Wed, 02 Sep 2026 17:45:45 +0200
-Message-ID: <4d438f3a-73c2-44ec-9d72-cbf554900d27@iogearbox.net>
-Date: Wed, 2 Sep 2026 17:45:45 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nXWx6v4l"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-853e2610bb4so69364b3a.0
+        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 10:14:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788369257; x=1788974057; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=p2JTCtksdAlvf+/b7VZPB10MIgTgvt41Uu0H1zjlk1w=;
+        b=nXWx6v4lSI6DaqcPsZfZfYsfyP/vKNpGl4uutIiJX9dl7Z8VA3FdGm0rQcRM+ihhGi
+         /XF2pq13OG/YNUfDCGmIpCKJJ1YdPj/rh7Brj90zNW21i1GjIAYV61sBAyaz+3X7VAfz
+         k+QVrviyATDVLegdZE66rYqSSyOv8AhdFmjxbUlQIijfAhi+C3tJTiiH4JTl9O6ihLRl
+         wBJu9dIk1bt5eObN1LgVY4USEWnFhF1TAuCZ8IbZUSCpVj7j6iuZHH8LndNXOLgGtb4J
+         h806tiKBK6ZqQn6L7RhE+gX1gFMK3AeoGxfHJzxrwIt1aDGWM22XDM/tUoEOKn94YOT0
+         TaDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788369257; x=1788974057;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=p2JTCtksdAlvf+/b7VZPB10MIgTgvt41Uu0H1zjlk1w=;
+        b=gkhImJIpB0Yu2MQuGZo5lKFQxssuFGsJ7gH/oUWZOPQew0kyQiyf8SlHlF3lNCm8W+
+         ePHnui8Vts08xOMo67gYg52aev+afsJClYojXO46dTroN4svO45Cd+KJfYgkyttEoPVi
+         u5zpapJsGt8mwitL/36Ud+QN/lpjElgY5qMFFBa+XajC6Sqt/eHSQ9MufhjHTLtrGjHe
+         FVQSmRi6ByJf8bTFny40HbuwhW53kLdrdUfezZdrAzDnzuHwfB+vSWNIzEu4+kPG25q/
+         4dmIyLwkUX2xJygF6cnwb2rLlZa6LjlOCkLDdKmWEAznwWC5Ze44SBhaE/U4gqfZE8lB
+         ZjSQ==
+X-Gm-Message-State: AFuF++lBUE5iYXGbEOuMECM6ScnrcOijSCF2P3qo4X2mb35tMoNmhSpG
+	EAK1NjZeh3uLnd8EZyIEi0sxprEO3TIDLC9jxPAGhBJi+NEMKm/9RCj2tvDFYA==
+X-Gm-Gg: AYBFou3pMFlR+9yNt719qHQFOURtk2uqnpUhnOmav/Hi+fn9hN+pEN0I3/p/FVr4axb
+	wNqnxqbuizRdbFJBcIM/hAoLltsFFFJ2iHrHj9VETnxFVJuJLhbUNY0srfR6uK2AQIyV0VhEbwr
+	ga7/0Rc1c9LODa7NxTscuR5fRv9IN++v041pmQcyCD271UuO+xjDTGlL3hQSSHBO+ggFb42mo1B
+	1YXySloQMJRZRqwjhC/Yc9O2DbhdAGWjjMfNOb/j/X7F5UbdgCG1NIDnzDmwYeGEzFGl0E371dT
+	2tgqHhzBmEuXz7MgyRcDJnYCK/lSd6MNWWhFEZZYkwpeJCpILLaxnkSrhRLuBjJgNsCyojXVDhY
+	LPx+J7en3aT6Y/FWdd+Q4bYLZCokGljFlez6sXTexL/errPtLAP6xVnqe5/4Ms0z/Xd3NWrTFSf
+	z93C9JBIBNksnfFHchIL9cFImGhHNEMpXha9iBevaom71H3dqL1skqsT4NKn05VMUzXgfdVERzx
+	Brdv1HTFlZWGhLvYnWLcCl4QvDu7bSAg3JY/mTGllrLwSkl4FymisZYa8s64RgNvKCtaDSM8+r/
+	K9HLv6gUdpbR1dzGLH967kbayosXuQfJFk+oZ4uTe9eYf831pwBM764AaVAN7V3joB8NjTPx75E
+	=
+X-Received: by 2002:a17:90b:2b4c:b0:398:9bd3:d6d4 with SMTP id 98e67ed59e1d1-39b0865335dmr583600a91.14.1788369257327;
+        Wed, 02 Sep 2026 10:14:17 -0700 (PDT)
+Received: from sid-dev-env.cgrhrlrrq2nuffriizdlnb1x4b.xx.internal.cloudapp.net ([4.155.54.158])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b08d0d7e8sm343070a91.16.2026.09.02.10.14.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Sep 2026 10:14:16 -0700 (PDT)
+From: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Siddharth Chintamaneni <sidchintamaneni@gmail.com>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	rlmenge@gmail.com,
+	hargar@linux.microsoft.com,
+	apais@microsoft.com
+Subject: [PATCH bpf-next v4 1/2] bpf: Allow terminal gotox instructions
+Date: Wed,  2 Sep 2026 17:14:13 +0000
+Message-ID: <20260902171414.96165-1-sidchintamaneni@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Test terminal gotox
- instructions
-To: Siddharth Chintamaneni <sidchintamaneni@gmail.com>,
- Anton Protopopov <a.s.protopopov@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Puranjay Mohan
- <puranjay@kernel.org>, rlmenge@gmail.com, hargar@linux.microsoft.com,
- apais@microsoft.com
-References: <20260901170144.70453-1-sidchintamaneni@gmail.com>
- <20260901170144.70453-2-sidchintamaneni@gmail.com>
- <apcRnSj7dVW1Dlsr@mail.gmail.com>
- <CAE5sdEgXd3AcJyRO6zdNEtFs-bwXRWzbA_qMR=Xdi9qA_NZvJQ@mail.gmail.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <CAE5sdEgXd3AcJyRO6zdNEtFs-bwXRWzbA_qMR=Xdi9qA_NZvJQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28111/Wed Sep  2 08:24:01 2026)
+Content-Transfer-Encoding: 8bit
 
-On 9/1/26 7:55 PM, Siddharth Chintamaneni wrote:
-> On Tue, 1 Sept 2026 at 10:45, Anton Protopopov <a.s.protopopov@gmail.com> wrote:
->> On 26/09/01 05:01PM, Siddharth Chintamaneni wrote:
->>> Add tests that place gotox at the end of the main program and a
->>> subprogram, with each jump-table target preceding the gotox instruction.
->>> This tests gotox as a valid non-fallthrough terminal instruction.
->>>
->>> Signed-off-by: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
->>> ---
->>>   .../selftests/bpf/progs/verifier_gotox.c      | 42 +++++++++++++++++++
->>>   1 file changed, 42 insertions(+)
->>>
->>> diff --git a/tools/testing/selftests/bpf/progs/verifier_gotox.c b/tools/testing/selftests/bpf/progs/verifier_gotox.c
->>> index 5b18c9a27717..cfb5b648891f 100644
->>> --- a/tools/testing/selftests/bpf/progs/verifier_gotox.c
->>> +++ b/tools/testing/selftests/bpf/progs/verifier_gotox.c
->>> @@ -47,6 +47,48 @@ DEFINE_SIMPLE_JUMP_TABLE_PROG(reserved_field_src_reg,      BPF_REG_1, 0, 0, __fa
->>>   DEFINE_SIMPLE_JUMP_TABLE_PROG(reserved_field_non_zero_off, BPF_REG_0, 1, 0, __failure __msg("BPF_JA|BPF_X uses reserved fields"))
->>>   DEFINE_SIMPLE_JUMP_TABLE_PROG(reserved_field_non_zero_imm, BPF_REG_0, 0, 1, __failure __msg("BPF_JA|BPF_X uses reserved fields"))
->>>
->>> +#define DEFINE_TERMINAL_GOTOX_PROG(NAME, BASE)                       \
->>> +     __naked void NAME(void)                                 \
->>> +     {                                                       \
->>> +     asm volatile ("                                         \
->>> +     .pushsection .jumptables,\"\",@progbits;                \
->>> +jt0_%=:                                                      \
->>> +     .quad ret0_%= - " BASE ";                               \
->>> +     .size jt0_%=, 8;                                        \
->>> +     .global jt0_%=;                                         \
->>> +     .popsection;                                            \
->>> +                                                             \
->>> +     r0 = jt0_%= ll;                                         \
->>> +     r0 = *(u64 *)(r0 + 0);                                  \
->>> +     goto end_%=;                                            \
->>> +ret0_%=:                                                     \
->>> +     r0 = 0;                                                 \
->>> +     exit;                                                   \
->>> +end_%=:                                                      \
->>> +     .8byte %[gotox_r0];                                     \
->>> +"    :                                                       \
->>> +     : __imm_insn(gotox_r0, BPF_RAW_INSN(BPF_JMP | BPF_JA | BPF_X,   \
->>> +                                         BPF_REG_0, 0, 0, 0))        \
->>> +     : __clobber_all);                                       \
->>> +     }
->>> +
->>> +SEC("socket")
->>> +__success __retval(0)
->>> +DEFINE_TERMINAL_GOTOX_PROG(jump_table_terminal_gotox, "socket")
->>> +
->>> +static __noinline __used
->>> +DEFINE_TERMINAL_GOTOX_PROG(terminal_gotox_subprog, ".text")
->>> +
->>> +SEC("socket")
->>> +__success __retval(0)
->>> +__naked void jump_table_terminal_gotox_subprog(void)
->>> +{
->>> +     asm volatile ("                                         \
->>> +     call terminal_gotox_subprog;                            \
->>
->> I wonder if robot will reply the same as for v2.
->>
->> The suggestion was to do
->>
->>      call terminal_gotox_subprog1
->>      call terminal_gotox_subprog2
->>
->> such that subprog1 is not the last piece of loaded prog...
-> 
-> I missed this part! Can I reply the diff to this thread? or does it
-> require a new revision?
-Please send a v4 given this needs to go through BPF CI.
+check_subprogs() treats gotox as a direct jump and validates its reserved
+zero offset. When gotox is the final instruction, this produces a
+synthetic successor one instruction past the end of the subprogram and
+rejects an otherwise valid program.
+
+Skip direct-offset validation for gotox and accept it as a
+non-fallthrough terminal instruction. Its actual targets remain validated
+from the instruction-array jump table during CFG construction.
+
+Fixes: 493d9e0d6083 ("bpf, x86: add support for indirect jumps")
+Signed-off-by: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
+Reviewed-by: Anton Protopopov <a.s.protopopov@gmail.com>
+---
+ kernel/bpf/verifier.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 8f585ceb2cd5..483473df7746 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3088,6 +3088,8 @@ static int check_subprogs(struct bpf_verifier_env *env)
+ 			subprog[cur_subprog].exit_idx = i;
+ 			goto next;
+ 		}
++		if (insn_is_gotox(&insn[i]))
++			goto next;
+ 		off = i + bpf_jmp_offset(&insn[i]) + 1;
+ 		if (off < subprog_start || off >= subprog_end) {
+ 			verbose(env, "jump out of range from insn %d to %d\n", i, off);
+@@ -3107,7 +3109,8 @@ static int check_subprogs(struct bpf_verifier_env *env)
+ 			 */
+ 			if (code != (BPF_JMP | BPF_EXIT) &&
+ 			    code != (BPF_JMP32 | BPF_JA) &&
+-			    code != (BPF_JMP | BPF_JA)) {
++			    code != (BPF_JMP | BPF_JA) &&
++			    !insn_is_gotox(&insn[i])) {
+ 				verbose(env, "last insn is not an exit or jmp\n");
+ 				bpf_diag_program_structure(
+ 					env, i, "subprogram can fall through",
+
+base-commit: d761934c9483ecde93fe99d8705282f716dfee50
+-- 
+2.43.0
+
