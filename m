@@ -1,154 +1,129 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-208.mta1.migadu.com [95.215.58.208])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E46413791
-	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 10:08:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.133.124
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788343733; cv=pass; b=onx0o4uc8FLiQw650rSbSfSz1Qn0l739iTjmdb4+4bCsfazHbfcqLMrzlLeBNfgkjFyzoUZjpiKCkKOaiCZrqNv+dwRrBQOE6fJg4TSZdLUiuKCGbP6PcMZP9pyRX7fasB/1LEdSquzs8rrdRdMfXYjiHtLZO0GM9EDD5W45tXo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788343733; c=relaxed/simple;
-	bh=e22SUgGgIJ3poJkGI8HTllTE/j2hDqd/FF+MOcjqrxQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YyzTPq6D0IXmZcOZOweLXOxc0xW8TSnRDvc3Nb7dEqWpU5g8+fYehzSYIqeBgzUExuUDdd2PpKBDlgy3mR9iXH5SjfypozkqsQ9Q2nGoqdSDQj1vUbTUFGd/glHpLdEwb7qvsATtxzmNSEO8HXiWL4f2rW+61TxvQijDeYfqKMc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dfL+csT0; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=nMnUnst2; arc=pass smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D395F42EEA3
+	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 10:15:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.208
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788344129; cv=none; b=gbg8TX4xeaGecJg1FDeiX/j+BHIcD6l0S5oZCCatRYQawBqrdNLAqzn3XEp6JsaTS7IUydYoU/d+EuuxIzJKN+Mu25evzeKRbNcT3W5YDZCKXrA+geiY4oyjBbO7DyF+th/SRu/5qxPPh6HJmilI8tSGho+AP+mOJAqbiie6654=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788344129; c=relaxed/simple;
+	bh=04L/X7xS4hxtsBnAxJ/MGousDzROfCvyRKvzwSCrUzE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=SO5KubNT76qNgRcfDJqkXl7FAFU5tPXEl2f7pTDQ/GhYWPC+WcWyvrP9Cb6jXZbcUJ9WA5uc+fDd6mMC7FvvP13EONAEmAnb/MmVNDiGrTUwY7uXDEhahNxEGKr8K8vPyIMIcKSuAVOYmwOzBtJiURPcVxWzJEx967Vs4xXLjSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=n7Odf6lN; arc=none smtp.client-ip=95.215.58.208
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dfL+csT0";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="nMnUnst2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1788343730;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=e22SUgGgIJ3poJkGI8HTllTE/j2hDqd/FF+MOcjqrxQ=;
-	b=dfL+csT0Nr7xjunVMrWBZlNCiQt7UH7K6PChQBnNvuEuySRDckDlJ6slanlDe6FfbOf1WG
-	78itl4bxceY85d3W8oPm10HVAdyTciIwX6j7zoi3tgt1m2OvVDv+2/shiuKCGQ4svhYPtf
-	xh9S8YZvYeJq+V7NubwuiFxdRO1l56M=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-636-spJBDMRxOvKOPx3uYtjqHg-1; Wed, 02 Sept 2026 06:08:48 -0400
-X-MC-Unique: spJBDMRxOvKOPx3uYtjqHg-1
-X-Mimecast-MFC-AGG-ID: spJBDMRxOvKOPx3uYtjqHg_1788343727
-Received: by mail-lf1-f71.google.com with SMTP id 2adb3069b0e04-5b15484404cso555961e87.0
-        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 03:08:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788343727; cv=none;
-        d=google.com; s=arc-20260327;
-        b=j0I90zAJHVJ2JYrpbm1xAm6vOgfThToQg/kIN6RwL0qM0rUpxzmIPoKNCgrxBnoPBN
-         3fsKHEWqznMwXbyY6E15MfoWaAIyBe5JBgTTePJ9hhQm6/eF01gUT/xfkuHRtkOebzOy
-         jEB/J2bzBG4X4DOGv44gVpI+V9TinU4AwbNCpkG57yUOtlRjbDPaJJAjDUhQFFpXDSH8
-         HiJTICrTOVOLSOZ/VEPxPqcdPaRxLv8w/LcpyF/FizQr5bTpvzTFGxmwyhZ85jUf4vQI
-         5CQyRvDHCtWypMqooXwlNBRIKbpn8B2o5IlWH46hpliB1MUKNGHCr1SddDg0yPTvu9/5
-         ALiQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=e22SUgGgIJ3poJkGI8HTllTE/j2hDqd/FF+MOcjqrxQ=;
-        fh=dpTRpo1dwbHSLuV0OPRwbDh2XtCn6qtjuM2WzDunFXY=;
-        b=LK6e/ITScooijDck73S1g0c6CkUMBT78nUPxKbk+isJJVnExjn0AHcfdMiWcGcDhF9
-         IQAfnVBLlvU0JY+Z8DTRPqgxfGmrp8XCjXIW4GUBh9LZf+3VbnOZRnyWFRXijfCmn27r
-         w0mFD9ntzWmopruP2wWGAIhX1jgHHLbmHTK4NQ5nh7n3oj4bvUbAm4h8/LtNFQF6Y15W
-         1Ea45zdOPah8AnL6w6ubARc4zk+brD/TZ9D6xhoPIgbE5841RM22almeLYe0frgV3BJz
-         4rROClesDbt8q8lUsERBg0sljytsAtSagx5EqcblHVzp3Xnkbblge3N4PVn4NZGUupbk
-         aF0A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1788343727; x=1788948527; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=e22SUgGgIJ3poJkGI8HTllTE/j2hDqd/FF+MOcjqrxQ=;
-        b=nMnUnst2Yx0Msk7zIwj8FUlVvIvyw9uUohHRoadFQgmiUybQVvU7oCdIqVzEYZXI/M
-         R9PlX28mc7pvtT/9xfKJzMhgP0PTJpjgWFFOywPEKu8Wb8D1RLWLQMuylGXcXThU9cLa
-         3zMR9vPguuUufi079763jqFqQvHkCgS0lt0zKRclnvLZwruKDfQJ0Z+4SYN9kf1rH3vJ
-         fHPqbyRlbodTVHZ1FEX5+98uxyF7o6UIKWqghYBjO+vL+AbAYkwLX4grefGEwnJmWfwT
-         ufVM2IAtguMhAV95KRuQPNcoyC8LAhXss087Rf4EYTqhnLqxjE8+J+9dLI9Lei5Mzg1a
-         hO8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788343727; x=1788948527;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=e22SUgGgIJ3poJkGI8HTllTE/j2hDqd/FF+MOcjqrxQ=;
-        b=JfMHWIsaQiq12v4jLukmbDRJ+QbpA2EsO+qs302cYkbtoQm6cdnv7OHeLKnw1Lh29C
-         jU60i66K/oeNYkfGbz/YDJfk3o19cx6J3ZThTq6KA1utp4cvvMAMUjdbMm+yrvZcPJAC
-         lsI5iIOka8gjZ+aagfPPRweoSthuc16uhFwMhw5n1EuxXVWLEli8GMzX04+4tsu6nnlu
-         ZQenln2EdXScdKhhq5l3eFsjSmYyFlFz2wHdx0jxk7ndaOGqCBx7tjRflXpp7lphdFNw
-         awDDp45ozpVVBpYwgpbrln/DnIuYHOP+xt7aq8SluoN1xTZBFYPBSaTZcFuul4UHM0W2
-         Gvrg==
-X-Forwarded-Encrypted: i=1; AKwUvByyDKcAj6oaDBRbdmUQ4veM8GiRLcjKabJuVBbX2BLiAGDMM0x6qlgUSi3T0WpxTvHGB6E=@vger.kernel.org
-X-Gm-Message-State: AFuF++mD/mUhrkwlN6cNVQanwZOybjGpeiW71TkqCPcYFBJjUcPQngnz
-	JYR2HzVCTq8bzGQIViOPUbkFR2PUPxSl9fuFs53kHhXAfJJGwzVBRPfCILXOiEefO8QTau6YrlX
-	TifOBRQNcOpvHmVmRuBYDUyc2WYjbyr8O8dVv/5BQFvUBundcAKIkl6As9v5vbTTRimX3XkWhxk
-	C+8jSUxHbuc9rn7zXjREEwdwKjjSrF
-X-Gm-Gg: AYBFou13fltmHO6diLEq8bDlpVYxaT7KM6LR9K9bxfjd/pyCNiybVGI9gFMcIVIyLe/
-	wqHxIAI6MXn5myZ1ljBz39R8g5JL12OuoOhNaENKkQ8X5p7Nyte0qKvQ1TC7G8xbaUSqH6r5Hgz
-	uvjJL2EfDVV/ahWNiwkv4WV9KTLfYl7PtyYGOyhoH4mseCSivf02fjiqC1
-X-Received: by 2002:a05:6512:1252:b0:5ae:b0f0:c217 with SMTP id 2adb3069b0e04-5b60834b9bdmr1404130e87.9.1788343727425;
-        Wed, 02 Sep 2026 03:08:47 -0700 (PDT)
-X-Received: by 2002:a05:6512:1252:b0:5ae:b0f0:c217 with SMTP id
- 2adb3069b0e04-5b60834b9bdmr1404086e87.9.1788343726954; Wed, 02 Sep 2026
- 03:08:46 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="n7Odf6lN"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=04L/X7xS4hxtsBnAxJ/MGousDzROfCvyRKvzwSCrUzE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788344123; v=1; x=1788948923;
+ b=n7Odf6lN+pLW4bWmX+QfS5XE0Em4JEKePDEyZZkBH7F1dhO0oPXFjGIViqdVrgaaomgFBOIt
+ +rr53Yt8aC1EWXhFztF6JC4Bqtu9mU1gLjJbP6Awq1Ubn/sqNIL0jKt8Z6S2T2LBw5CBCcJrMzZ
+ ioQhh/iS3XGqXePkZdtbPDqE=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id cec16e1254e83e61;
+	Wed, 02 Sep 2026 10:15:20 +0000
+X-Mizu-Trace-ID: cec16e1254e83e61
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260901115021.50057-1-ihuguet@riseup.net> <3d8ef804-efc1-46c7-bbb4-f1a6c26fed8b@kernel.org>
-In-Reply-To: <3d8ef804-efc1-46c7-bbb4-f1a6c26fed8b@kernel.org>
-From: =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>
-Date: Wed, 2 Sep 2026 12:08:34 +0200
-X-Gm-Features: AcwNN1WWjJG56_BD-BZvMi7yD139IVOfUkEJ5Q53fMWfoLWzhUAroA5GHqaqbfc
-Message-ID: <CACT4oueX-g20hKft6Z1Aj3rNK2Fi7MYHZz=LdBd3RKWu+YK-0A@mail.gmail.com>
-Subject: Re: [PATCH net] net/ipv6: don't route packets with unknown source address
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@riseup.net>, 
-	David Ahern <dsahern@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Neal Cardwell <ncardwell@google.com>, Ido Schimmel <idosch@nvidia.com>, 
-	Pablo Neira Ayuso <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Simon Horman <horms@kernel.org>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Phil Sutter <phil@nwl.cc>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Fernando Fernandez Mancera <fmancera@suse.de>, Alexei Starovoitov <ast@kernel.org>, Junseo Lim <zirajs7@gmail.com>, 
-	Leon Hwang <leon.hwang@linux.dev>, Xuanqiang Luo <luoxuanqiang@kylinos.cn>, 
-	Willem de Bruijn <willemb@google.com>, Kees Cook <kees@kernel.org>, Qi Tang <tpluszz77@gmail.com>, 
-	Jeff Layton <jlayton@kernel.org>, Joe Damato <joe@dama.to>, Breno Leitao <leitao@debian.org>, 
-	Li RongQing <lirongqing@baidu.com>, "open list:VRF" <netdev@vger.kernel.org>, 
-	open list <linux-kernel@vger.kernel.org>, 
-	"open list:NETFILTER" <netfilter-devel@vger.kernel.org>, 
-	"open list:NETFILTER" <coreteam@netfilter.org>, 
-	"open list:BPF [MISC] :Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 02 Sep 2026 10:15:19 +0000
+Message-Id: <DL4R2YXF9J8G.203VBANYFFSET@linux.dev>
+Cc: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "bpf"
+ <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "KP Singh"
+ <kpsingh@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "John
+ Fastabend" <john.fastabend@gmail.com>, "Paul E. McKenney"
+ <paulmck@kernel.org>, "Jose Fernandez" <jose.fernandez@linux.dev>, "LKML"
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf] bpf: Keep progs alive until the trampoline image
+ calling them is freed
+From: "Florent Revest" <florent.revest@linux.dev>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+X-Mailer: aerc 0.17.0
+References: <20260819122252.1782790-1-florent.revest@linux.dev>
+ <DL27QZ6SEZKT.1CV2HAX4A3WI4@gmail.com>
+ <CAADnVQLxi-R1KDUXJJjpq69SpV8UcNJVqBi7uicO=V0WhAvyQA@mail.gmail.com>
+ <DL2S878KSOI5.1SZMLIAWMCNUJ@gmail.com>
+ <DL3FIBQNP6AU.1HO08FMI292UX@linux.dev>
+ <CAADnVQLMm43qJxuiHUuuh51wAL4kH0+fRoaM7YfbZEXT7LHn0A@mail.gmail.com>
+In-Reply-To: <CAADnVQLMm43qJxuiHUuuh51wAL4kH0+fRoaM7YfbZEXT7LHn0A@mail.gmail.com>
 
-On Tue, Sep 1, 2026 at 7:41=E2=80=AFPM Matthieu Baerts <matttbe@kernel.org>=
- wrote:
-> Thank you for looking at this, but I think your patch is causing
-> multiple KASAN warnings, e.g.
+On Wed Sep 2, 2026 at 5:57 AM UTC, Alexei Starovoitov wrote:
+> On Mon, Aug 31, 2026 at 1:58=E2=80=AFPM Florent Revest <florent.revest@li=
+nux.dev> wrote:
+> >
+> > On Mon Aug 31, 2026 at 2:43 AM UTC, Kumar Kartikeya Dwivedi wrote:
+> > > On Sun Aug 30, 2026 at 3:21 PM CEST, Alexei Starovoitov wrote:
+> > > > On Sun, Aug 30, 2026 at 3:41=E2=80=AFAM Kumar Kartikeya Dwivedi
+> > > > <memxor@gmail.com> wrote:
+> > > >>
+> > > >> Overall, looks good to me. Thanks for the fix!
+> > > >>
+> > > >> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> > > >>
+> > > >> Note for whoever applies this: please add Reported-by: tag for Sec=
+hang as well.
+> > > >> Optionally, wordsmith the commit log with the suggestion above.
+> > > >
+> > > > Hold on. I don't think we can proceed with this fix.
+> > > > It defeats the point of fexit jmp patching and keeps progs
+> > > > pinned until a sleepable kernel function that were attached to
+> > > > will return. Which means that the tracing prog attached to "unlucky=
+" kernel
+> > > > function that sleeps for an hour will stay pinned for an hour.
+> > > > Let's think of a different way of fixing the race.
+> > >
+> > > I don't have background on the original commit being fixed, but is th=
+at really
+> > > realistic? Or worrisome even if it happens in practice, since worst c=
+ase the
+> > > program refcounts remains raised for that duration?
+> > >
+> > > We have similar worst case for programs too (e.g. using bpf_copy_from=
+_user on
+> > > user controlled buffer in, say, LSM progs). At least here we won't be=
+ extending
+> > > any RCU flavored GP.
+> > >
+> > > That said I will think about alternative fixes in the meantime, if we=
+ accept the
+> > > premise that we don't want to pin program references in the image and=
+ keep their
+> > > lifetimes decoupled.
+> >
+> > How about having old trampolines skip freed programs instead of keeping
+> > them alive ?
 >
-> https://netdev-ctrl.bots.linux.dev/logs/vmksft/net-extra-dbg/results/8045=
-84/24-connect-deny-ipv6/stderr
->
-> And a few more, see:
->
-> https://netdev.bots.linux.dev/branch_deltas/net-next-2026-09-01--15-01.ht=
-ml
+> Isn't it doing it now?
+> That was the whole point of patching nop to jmp in a trampoline.
 
-As far as I can see all the warnings are in the tcp_v6_send_response
-function. I guess that sk may be a request socket there, so it's not
-valid to treat it as a inet_sk in all cases. I will send a v2 with the
-fix.
+Just to be sure we're talking about the same thing, you're referring to the
+"ip_after_call" patching done in bpf_tramp_image_put, right ?=20
 
-Thanks!
+My understanding is that this only helps in the case where a task is in the
+traced function while a prog is detached. It'd make it skip all fexit progs=
+.
 
+But if a task is sleeping in a fexit.s prog for example, it is already past
+ip_after_call, so this patching would not prevent it from calling a second,
+freed, fexit prog lined up after it in the trampoline, no ? The same situat=
+ion
+should happen with a sleeping fentry.s prog followed by a fentry prog.
 
---=20
-=C3=8D=C3=B1igo Huguet
-
+I have a reproducer for those scenarios that crashes bpf-next. I will make =
+it a
+selftest in v2 like Jiri suggested.
