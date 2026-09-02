@@ -1,121 +1,124 @@
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588DA442FDA;
-	Wed,  2 Sep 2026 22:59:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788389976; cv=none; b=N4kdLhYUZ49SqfYnj5tkEzvl+9cL2UoMP/SMR+OtvDiidtOUm/F6eodu5ziZlLHtK562ta9UvbbssCEqXPZLt3BUjQYJp8BIex9UyJJOnSN3afUncgC5TINJG6sJ62qaFo4h1+YJ8qXxUSDVjDLgfxcNCDw68n/ZDn/xv2xdLGE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788389976; c=relaxed/simple;
-	bh=zq4LwRn8mJ8lUvn3GMAuVXxvTafQZH2ut49yUSLd9qE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=L+/93BbcXyduJUmSsE5temKE1Hin70N9IPGLxxzQYF9mUUpj1GZM+neJ69BMzBWxAjMWErB2+h0ShYqXCVPg7KCVyOBvt6aoMgVW/7v/UqfxXHkBH2iMHGPRqlqVww3v48uwj2506mBRXooO4xL6Cv5k2c9n2CyoJxwHtu/R/1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from abreu (ip5f5af1f9.dynamic.kabel-deutschland.de [95.90.241.249])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id D61F04C2C37D69;
-	Thu, 03 Sep 2026 00:58:43 +0200 (CEST)
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Paul Menzel <pmenzel@molgen.mpg.de>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] bpf: say why a module BTF mismatch keeps the module from loading
-Date: Thu,  3 Sep 2026 00:58:26 +0200
-Message-ID: <20260902225829.131674-1-pmenzel@molgen.mpg.de>
-X-Mailer: git-send-email 2.55.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB815453A3B
+	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 22:59:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788389999; cv=pass; b=Bjn/bHIB396zNcvxrenSZLVdeaeqm+OOcl337zBBLsw854H8nHUlO19JWCL2V81tHZ3vmoqEV3x9rLGm5cCsQv8VcnxVOPTvlA20u0fAbo0Kkim/KIRtthImiRpMZy22/K4hkxCxuJ9ZX6AO6LwvBGxUgOE4aMvuHKBO3sgwNZ4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788389999; c=relaxed/simple;
+	bh=rTXpQ+CXf0UAR98GTf9ftMHYKg5bCuE1K9GVgjgylOY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XJrNh24Kkhtunfi+zxyI9jdZOSV+Fl7sY/jjFuYCNyKe+QJ4lwzi+JtRJx47IecTVZ4Pyae95MbiZ2cSzR0EryCqWmk391hZsniAHgn5q84bXE+Ee52zQpfCQ5AdVOhnQtbYtXmkpeZauf/vc4Y42pmanew4udn69Kkg+DSEr2w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jKkvv7gP; arc=pass smtp.client-ip=209.85.128.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jKkvv7gP"
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-857ff9fef54so18420587b3.1
+        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 15:59:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788389987; cv=none;
+        d=google.com; s=arc-20260327;
+        b=mOYbRLBEnzafnxjuJJcRxMrupxtv5tHf/LIYbjNaKHRn9irluWcyse38NLu0lMQtQn
+         BFPi+cj9y191cIUQ2WaRSG1IpLfLqNBGOn1dChOaRQxslM3atQlUzYF8qkfGjMmY3nV0
+         fxOtAQ3i6BMZ7pA/Si/ePQbvv9/yXt0K1IYDdCXcvKnjBT8d9Z58pDMkCAFclEN8gPQn
+         rL8/35n4xNf2lH5YA5g47uAZ/h1ZxtlKc2oURkzLZuRqZ5dDWCEJTYGu6YLlIMcug2yH
+         oS+5ZK5sRgydMne4h0Ggey5WcwGW6yogXqfOzVnEmhs/8wB2uUNmPcOC6bHeX+eGYvGZ
+         GhMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=rTXpQ+CXf0UAR98GTf9ftMHYKg5bCuE1K9GVgjgylOY=;
+        fh=nKRUHx8QsMAbCNG4RvkIkcllm3zRVQl4TB18fHVE440=;
+        b=RD3SME31094631zJcLtQdW5xeXBAZKFkVSuYb7jtXC1JBEuKw0h/4M3XMfZyUBhfAN
+         TLRRf/fn8HDYuzgUUZ9b74X/RXHREVnN39cdU96vGwzSdMnfEkrujGkslUD/oazEldUg
+         FtLRzmbDNjUMgPrbDfF8trFCGCt8hbvsHwdJZK2DNMbUhAGWPdrPMmND2dxi4yrHCN7W
+         CnpRKAAowhxTiDa1fE4n21c3bydB7juUxhSZq8gSUKQqOYSoI+Vx8CjN2Igh3DZhS1BS
+         pBa+b9Sy4xKFUs+57H9f+eiEqjURPFlc4fmCVNE/lsq/+Jyq93tHEe95T/cwV0szxTWb
+         EvuA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788389987; x=1788994787; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rTXpQ+CXf0UAR98GTf9ftMHYKg5bCuE1K9GVgjgylOY=;
+        b=jKkvv7gPav8QJXeGGqSsBXoBk7FgXG4TGuPxnkwQSHiJEOLfUiVzcFBapZkU1vzAUY
+         mtrB3CQHE1YMUI9lkYDjlXSDjTg9UmCLDga5vdIqPMdoIsLKBVB2gBO/6VaoM3eEImuL
+         A+syBtvBSL1SPttC3kiaVPhWm8fk9e30N1RXCVodv32jdsEN3gVOaRCk3ihGFjzI1N+4
+         tgGxQE1BT7X8r7n2ARURXaTUX0QJH3twr9bTb9xIDYjKkSnOzhRG+cBi/xQRgdEdkPj9
+         VU+QJ1/2n2okw7ya8tsUVwLaD96bPUEGRBlVDb4CzRCXKlx3Jf9sQ4oEbWEw5GBDIH5A
+         1mhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788389987; x=1788994787;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=rTXpQ+CXf0UAR98GTf9ftMHYKg5bCuE1K9GVgjgylOY=;
+        b=YoOBEaEwj7+bv1cjzk4djcXMXM/15a9mHlq6yOmJhhmRH1NueaKJ0dgBadtMMffbkv
+         sZ+eUvJlOPun9O+52JhxTml81MZyopOz1Lz5xlzTxLNHINNyf5ldtHUykv5NOnh4ocDO
+         t832JQGGqKTw14Ewg2j9DRiRRwpYSeycdZU7yYh9BhF5ob9ThB2PLowmzc2fmj7vMAl0
+         kjmbwI4HE6RSbJfohyGaZtKv/TCgXcKlpkN6zXcu7O2A7wvCmpOZuUkjlEOocH5B2lJs
+         UXc9bIzSw16UO/yAUte1hDBSL82zyegv7ww8MDNjfnIRhj5EzSENmD3WtzIZHl5mpVF5
+         5WWQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwN3U8xNsml8RqsMWyRZ5xiZ6o6wOAiFcYciWKR7Noa+kL1B5zksraP3P5L+w1Ih6BuXdQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++mxprWAnGZFP0p6olZsqSLzTRGIusVRtsBOAlIgDy3LgyanuZH2
+	eeaX4sDHdd77zpiiFeC9MsaipVFeGu9gwIde4qIwclBIyvVcqo/nj+fIYRGvgW8jKYUAc0gXk3j
+	Vza3xkvV0MZKN8AWO13S3iaZQ9bttPC0A0R7Z
+X-Gm-Gg: AYBFou2t6npOFKEb+z1ytDiRqcBpMcEav7e3mcwJcUNkirr9DSCntknZiU+T9qIYP9G
+	3A5/NjqY161GJTvmE7HygHO2k6XJoil9ZXnBghNYm4Ip+ZxUjCz/Eb+JGY1fFH6yLEi8yV5sFZd
+	p7zuShjOJ6MUe7lkLMHXfIUk2m1rXU0a2ftqo4Bczgep9DysBXeMSBSmhfxawdXG/Q5/s81EP9j
+	Iro95knO3l49K2o1/+kfbMT2eZ52JR2YUD/G8/T6zuqU1unMcbBFTld+eKtaj5RzghEThazDfkR
+	pkk0oFEpzOK9oFsl+z6HJn0/3vPiMkawIFm3AZiv518JsbAi1Vlss/SnplziPVwRpUBnsj902F8
+	H9L7/sXJgi5bYHOxrTi0zlK066ZcYellZcs7/0kWgCPuR0xvZbfdUlfuNFJF/P16xvBwulHHNnc
+	bevHElasGShWNba4hzB0JdBWY=
+X-Received: by 2002:a05:690c:399:b0:85b:946f:129e with SMTP id
+ 00721157ae682-86c54b1dc48mr34415577b3.33.1788389986727; Wed, 02 Sep 2026
+ 15:59:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260824213158.3755932-2-Jeremy.Jean@oss.cyber.gouv.fr>
+ <DKYH3KM93BDY.1MR4WLZSWGEU8@gmail.com> <CAE5sdEiGA+chRkkNGOWL89AFDNXor1RKHMEmouCNoCXVd4fc-g@mail.gmail.com>
+ <d4e2ae332a9505cc2cee5a236ff86efb@oss.cyber.gouv.fr> <CAE5sdEg1eMs1Rip2mbCV570p0==2gj7ZtH8CttPfsqcM2CrB0Q@mail.gmail.com>
+In-Reply-To: <CAE5sdEg1eMs1Rip2mbCV570p0==2gj7ZtH8CttPfsqcM2CrB0Q@mail.gmail.com>
+From: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
+Date: Wed, 2 Sep 2026 15:59:36 -0700
+X-Gm-Features: AcwNN1VCmzOwcWIZyaonAOUF1fh45Tj69mMYftlMVQbdIt0yPBMMErZSHvWRTbQ
+Message-ID: <CAE5sdEhfsv0FgdAjn0h0O74voyZpsKyHrjE56SZ5EeTb30-02w@mail.gmail.com>
+Subject: Re: [BUG] bpf: x86 timed may_goto corrupts private-stack JIT state
+To: =?UTF-8?B?SsOpcsOpbXkgSmVhbg==?= <jeremy.jean@oss.cyber.gouv.fr>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, linux-kernel@vger.kernel.org, 
+	rlmenge@gmail.com, hargar@microsoft.com, apais@microsoft.com
+Content-Type: text/plain; charset="UTF-8"
 
-With CONFIG_MODULE_ALLOW_BTF_MISMATCH=n – the default, and what Debian
-ships – btf_module_notify() turns a split BTF mismatch into a fatal
--EINVAL at MODULE_STATE_COMING, so the module does not load at all.
-All the user is told is:
+On Tue, 1 Sept 2026 at 10:42, Siddharth Chintamaneni
+<sidchintamaneni@gmail.com> wrote:
+>
+<SNIP>
+> > > Jeremy,
+> > >
+> > > I just wanted to check whether you're working on a patch for this. if
+> > > not, I'd be happy to take a look.
+> >
+> > Hello,
+> >
+> > No, not at the moment.
+> > Feel free to ask if I can be of some help
+> >
+>
+> Let me playaorund with it. I'll let you know if I have more questions. Thanks!
+>
 
-    typec_displayport: module verification failed: signature and/or required key missing - tainting kernel
-    BPF: [124962] TYPEDEF
-    BPF: type_id=124988
-    BPF:
-    BPF: Invalid name
-    BPF:
-    failed to validate module [typec_displayport] BTF: -22
-    BPF: [124944] ENUM (anon)
-    BPF: size=4 vlen=32
-    BPF:
-    BPF: Invalid name
-    BPF:
-    failed to validate module [usb_storage] BTF: -22
-    BPF: [125157] TYPEDEF
-    BPF: type_id=125185
-    BPF:
-    BPF: Invalid name
-    BPF:
-    failed to validate module [usbhid] BTF: -22
+I have a question for the maintainers - the fix involves changes to
+all the arch specific trampolines `arch/*/net/bpf_timed_may_goto.S`.
 
-That message names neither the consequence nor the cause. The report this
-comes from is a Dell XPS 13 9370 on Debian experimental where an apt run
-replaced /lib/modules/7.2-amd64/ underneath the running 7.2~rc7 kernel;
-experimental carries no ABI number, so the new build overwrites the tree
-of the running one. usbhid then refused to load and the keyboard and
-mouse behind a USB-C hub stayed dead, which reads as a USB regression
-rather than as stale modules. mii failing takes r8152 with it, and
-usb_storage takes USB mass storage, widening the confusion.
+Is it fine if I include all of them in a single patchset?
 
-Note, the debug info is all that is stale here: nothing about the module
-code is wrong, and dropping the BTF would have let the machine carry on.
-Say so, and point at the escape hatch.
-
-State the consequence on the per-module line, and add a once-only
-explanation naming the likely cause and CONFIG_MODULE_ALLOW_BTF_MISMATCH.
-Restrict the explanation to -EINVAL so that an -ENOMEM from
-btf_parse_module() is not blamed on stale modules. Keep it a
-pr_warn_once() because a single hotplug event produced 28 of these lines.
-
-Assisted-by: claude-opus-5 (Claude Code)
-Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
----
- kernel/bpf/btf.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index da36d4b9d31ab..720c56e8ae498 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -8525,9 +8525,11 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
- 		if (IS_ERR(btf)) {
- 			kfree(btf_mod);
- 			if (!IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH)) {
--				pr_warn("failed to validate module [%s] BTF: %ld\n",
--					mod->name, PTR_ERR(btf));
- 				err = PTR_ERR(btf);
-+				pr_warn("failed to validate module [%s] BTF: %d; refusing to load it\n",
-+					mod->name, err);
-+				if (err == -EINVAL)
-+					pr_warn_once("module BTF does not match this kernel build; the modules on disk are most likely from a different build than the running kernel (kernel package upgraded without rebooting?). Build with CONFIG_MODULE_ALLOW_BTF_MISMATCH=y to load such modules without their BTF.\n");
- 			} else {
- 				pr_warn_once("Kernel module BTF mismatch detected, BTF debug info may be unavailable for some modules\n");
- 			}
--- 
-2.54.0
-
+<SNIP>
