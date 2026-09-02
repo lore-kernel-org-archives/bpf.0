@@ -1,43 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68E9D4A499F
-	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 15:14:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B4024A5EA2
+	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 15:18:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788362085; cv=none; b=Pw83ac9PLrQk1d6gATwwspY8uwIn8+suiqBnmgeGup3FS5ba7zirLI3L1Q7SNML3oZ5UA2841SJeqXXJn1l/pyrO/MMeRlxdEqCoRh7v5bzvgfr10plysxzdepuil5eVBanetz/NboWlbypU5Ct8qBtHfV32CLV7iGR9yLwm05A=
+	t=1788362307; cv=none; b=Qc9T2i89hWAVau1JxjufT76B6hcYHivJJhSb+tbmbxqAv8+pMOxvkIfT6s8kWs9B3DrhwXYjyaKljwBu7Fiu1ScjCqbCR83BlMKxZO3tgRD6+MUoA1RVemrY4c61Jw8r4+o9QdeOG6PiLbM1eT+jDcYSlKgJ7uNaL88QZmeqZQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788362085; c=relaxed/simple;
-	bh=YPbUKIjFtB/EzsS0YUJXjt/4qoJ3D3xM3kgBBudFK9s=;
+	s=arc-20240116; t=1788362307; c=relaxed/simple;
+	bh=bSPrHn67O0OwTMUGnw4PtrISNSHgyUD9GElqOdDKFVU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=afBBfMuszJe/fqbnpAyEIlh/6a+9O50W1qHfO82pNstfe5GOLV8OuEcYeANsTZDuUo+XEeldd4+tplRgj6JQIvzkhdkLZqolQflo97o1WLpruieP6lruCqDGcyU/c21eZamPzNlBEAyjZRiwFA8WMyZLz5uixEdkz7iOzx5Rbac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JljTy/X1; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=A4M1FAGxFU+YScwZQFsgjHRpqSoj92oZfx3F2Q9OODLCarot0hloO4Z/K9LwIgPQmrmObZzV8tqtGAxhMjuZaqQljmHv6cReg297vnubsdD4KgmOxkVpq/yC2oB42eWwDUP0bbmGb4GpltNs3spCip1OvOBHLbjEWjpaczG6p6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JPoiLSEH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JljTy/X1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14BE91F000E9;
-	Wed,  2 Sep 2026 15:14:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JPoiLSEH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEE851F000E9;
+	Wed,  2 Sep 2026 15:18:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788362083;
-	bh=mMmvLLzvvEzft/7lgXaiNL7/+LhE7P9tX647IqVzt1A=;
+	s=k20260515; t=1788362305;
+	bh=VaMfaywJSm7NkTirTftE0RnTZLDwL+xy2XJms+ga15w=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=JljTy/X1Z6kbuFXMfeNILCAqZ0Wt4V4J9rUph6EkpUOqFZ1J6KRNc5fBYWCZnzDFc
-	 E9/UNzA2FGTydMpMAGyKjSXLPeKS4mYPSp/nw+lMsHUX5Mq9ck04LVedfFaLnsV5xL
-	 m7tVq/dHuPft3sp8eop2gCNEsXyHRhHgozepiXXjz+6TQdBPS2ckJSyHz3NN0Hmx4w
-	 jwqPFjOXurgirPs97BMLEunUpFahtulMyMzTU8QJWcZ/FUiDn0DO+ioraskLmGlAAQ
-	 cQZl27UZX7AY4yKNWaAWKB5AVurjBq/QkRfjUp5UHUROVwVZ0+QTm21cxIDKS/5zHl
-	 P7TnowUZRt4PA==
+	b=JPoiLSEHbPAPl1G/PtwP9a2rWHU5Kg7HGnCZhmfyqm5lkbzWnyVeNy3eewxUbIuiW
+	 yiBGraScXBdkUz3Md/TXXlDYDazdLv7pLbl4JM2tS/pt/+Q/jmqNgTNdMr66WVcQVK
+	 z3mQDF9eiOIFnYoJ3XjU5DYNLE0U121m0TqZxkkfcGTJPRzSAYUqRQ36ghAVvUt1iZ
+	 qIBbDsLTXuKCoM1+N/Mtxl4pSYVVJy/0a2ZjDXiHVB5dFH0G2JQBZwePexf3+Y5Rc7
+	 7hI0XyoFZpFGTzduBhmf7ZhAMmeWzioHt+hOL1IJP+0NxalpF+u7vgItGGIIvaRVYO
+	 qugTPXIR0T0DA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 1/2] bpf: Only check nmi_uaccess_okay() when
- signalling current
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Test bpf_send_signal_task()
+ from kernel thread context
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Aditya Sharma" <adi.sharma@zohomail.in>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260902150439.692725-1-adi.sharma@zohomail.in>
+In-Reply-To: <20260902150439.692725-2-adi.sharma@zohomail.in>
 References: <20260902150439.692725-1-adi.sharma@zohomail.in>
+ <20260902150439.692725-2-adi.sharma@zohomail.in>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 02 Sep 2026 15:14:42 +0000
-Message-Id: <20260902151443.14BE91F000E9@smtp.kernel.org>
+Date: Wed, 02 Sep 2026 15:18:24 +0000
+Message-Id: <20260902151824.EEE851F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,99 +47,124 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-
-New issues:
-- [Low] Multi-line comment does not follow BPF subsystem standards.
-
-Pre-existing issues:
-- [High] A TOCTOU data race on the per-CPU `send_signal_work` structure all=
-ows NMI reentrancy to corrupt irq_work data and leak a task_struct referenc=
-e.
+- [Medium] The newly added `send_signal_kworker` program silently runs duri=
+ng existing remote tests, sending the signal instead of the intended progra=
+ms (like perf or NMI) and invalidating their test coverage.
+- [Low] Multi-line comments do not follow the BPF subsystem style guideline=
+s.
 --
 
-commit b0fb28992ab88d35a628c6d9650cd4ab7e67c397
+commit 2bcfd3bbad998237f70d4a407001c43f11ecd4c9
 Author: Aditya Sharma <adi.sharma@zohomail.in>
+selftests/bpf: Test bpf_send_signal_task() from kernel thread context
 
-bpf: Only check nmi_uaccess_okay() when signalling current
+This commit adds a new test to verify bpf_send_signal_task() from a kernel
+thread context. It attaches a BPF program to a workqueue tracepoint to
+ensure signals can be properly sent when the caller is a kworker.
 
-nmi_uaccess_okay() takes no task argument and is a statement about current.
-This commit restricts the check to only apply when signalling the current
-task, fixing a bug where bpf_send_signal_task() returned -EPERM for kernel
-threads.
-
-Link: https://lore.kernel.org/bpf/20260819124324.43162-1-adi.sharma@zohomai=
-l.in/T/#u
-
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 29260951aa871..f7a41f2225999 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -871,7 +871,10 @@ static int bpf_send_signal_common(u32 sig, enum pid_=
-type type, struct task_struc
->  	 */
->  	if (unlikely(task->flags & (PF_KTHREAD | PF_EXITING)))
->  		return -EPERM;
-> -	if (unlikely(!nmi_uaccess_okay()))
-> +	/* Since nmi_uaccess_okay() is only for the current
-> +	 * task, check if task is current.
-> +	 */
+> diff --git a/tools/testing/selftests/bpf/prog_tests/send_signal.c b/tools=
+/testing/selftests/bpf/prog_tests/send_signal.c
+> index 7ac4d5a488aa5..f9dd23db1ef98 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/send_signal.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/send_signal.c
+[ ... ]
+> +	if (pid =3D=3D 0) {
+> +		/* install signal handler and notify parent */
+> +		sa.sa_sigaction =3D sigusr1_siginfo_handler;
+> +		sa.sa_flags =3D SA_RESTART | SA_SIGINFO;
+> +		ASSERT_NEQ(sigaction(SIGUSR1, &sa, NULL), -1, "sigaction");
+> +
+> +		close(pipe_c2p[0]); /* close read */
+> +		close(pipe_p2c[1]); /* close write */
+> +
+> +		/* notify parent signal handler is installed */
+> +		ASSERT_EQ(write(pipe_c2p[1], buf, 1), 1, "pipe_write");
+> +
+> +		/* make sure parent enabled bpf program to send_signal */
+> +		ASSERT_EQ(read(pipe_p2c[0], buf, 1), 1, "pipe_read");
+> +
+> +		/* the signal is sent from workqueue context, so nothing has
+> +		 * to be triggered from here
+> +		 */
 
 [Severity: Low]
-This isn't a bug, but does this newly added comment violate the BPF subsyst=
-em
-multi-line comment style?
+This isn't a bug, but does this multi-line comment follow the BPF subsystem
+style guidelines? The BPF subsystem mandates that multi-line comments must
+have the opening /* on its own line.
 
-The BPF subsystem strictly requires multi-line comments to have the opening
-/* on its own line, with the text starting on the next line.
+> +		while (!sigusr1_received)
+> +			sleep(1);
+> +
+> +		buf[0] =3D sigusr1_received;
+> +
+> +		ASSERT_EQ(sigusr1_received, 8, "sigusr1_received");
+> +		ASSERT_EQ(write(pipe_c2p[1], buf, 1), 1, "pipe_write");
+[ ... ]
+> diff --git a/tools/testing/selftests/bpf/progs/test_send_signal_kern.c b/=
+tools/testing/selftests/bpf/progs/test_send_signal_kern.c
+> index 176a355e30624..d1c000c308857 100644
+> --- a/tools/testing/selftests/bpf/progs/test_send_signal_kern.c
+> +++ b/tools/testing/selftests/bpf/progs/test_send_signal_kern.c
+[ ... ]
+> @@ -60,6 +60,32 @@ int send_signal_tp_sched(void *ctx)
+>  	return bpf_send_signal_test(ctx);
+>  }
+> =20
+> +/* Send a signal to a task other than current, from a context where curr=
+ent
+> + * is a kernel thread. No filtering on current is possible here, so this=
+ is
+> + * driven entirely by target_pid.
+> + */
 
-> +	if (task =3D=3D current && unlikely(!nmi_uaccess_okay()))
->  		return -EPERM;
->  	/* Task should not be pid=3D1 to avoid kernel panic. */
->  	if (unlikely(is_global_init(task)))
+[Severity: Low]
+This isn't a bug, but similar to the comment in send_signal.c, should the
+opening /* be on its own line here as well to match the BPF style
+guidelines?
 
-[Severity: High]
-This is a pre-existing issue, but is there a TOCTOU data race on the per-CPU
-send_signal_work structure later in bpf_send_signal_common()?
+> +SEC("tp_btf/workqueue_execute_start")
+> +int send_signal_kworker(void *ctx)
+> +{
+> +	struct task_struct *target_task;
+> +	int ret;
+> +
+> +	if (status !=3D 0 || target_pid =3D=3D 0)
+> +		return 0;
 
-If a BPF program executing in a context with IRQs disabled calls
-bpf_send_signal(), it evaluates irq_work_is_busy() as false. Before it
-queues the work, an NMI could fire on the same CPU and also call
-bpf_send_signal():
+[Severity: Medium]
+Could this condition cause the kworker program to silently run during other
+remote tests and invalidate their test coverage?
 
-kernel/trace/bpf_trace.c:bpf_send_signal_common() {
-        ...
-	if (preempt_count() !=3D 0 || irqs_disabled()) {
-                ...
-		work =3D this_cpu_ptr(&send_signal_work);
-		if (irq_work_is_busy(&work->irq_work))
-			return -EBUSY;
+During existing remote tests, both the pid and target_pid global variables
+are set to non-zero values. Because this program is auto-attached by
+test_send_signal_kern__attach() and only checks target_pid =3D=3D 0, it app=
+ears
+it will run and send the signal when background workqueue events occur
+during those other tests.
 
-                /* NMI fires here, calls bpf_send_signal_common(), evaluati=
-ng
-                 * irq_work_is_busy() as false since it's not queued yet.
-                 * NMI writes its data and queues the work.
-                 */
+If this program delivers the signal and sets status =3D 1, it could preempt
+the intended test programs (like send_signal_tp or send_signal_perf),
+causing the remote tests to spuriously pass without actually exercising
+their specific BPF programs.
 
-		work->task =3D get_task_struct(task);
-		work->has_siginfo =3D siginfo =3D=3D &info;
-		if (work->has_siginfo)
-			copy_siginfo(&work->info, &info);
-		work->sig =3D sig;
-		work->type =3D type;
-		irq_work_queue(&work->irq_work);
-		return 0;
-	}
-        ...
-}
+Would it make sense to also verify pid =3D=3D 0 here to guarantee this prog=
+ram
+remains inert when the other tests are running?
 
-Upon return from the NMI, the interrupted context resumes, overwrites
-work->task with a new get_task_struct(), and fails to queue the work since
-the NMI already queued it.
-
-Could this allow NMI reentrancy to corrupt irq_work data and permanently le=
-ak
-a task_struct reference?
+> +
+> +	target_task =3D bpf_task_from_pid(target_pid);
+> +	if (!target_task)
+> +		return 0;
+> +
+> +	ret =3D bpf_send_signal_task(target_task, sig, PIDTYPE_TGID, 8);
+> +	bpf_task_release(target_task);
+> +
+> +	if (ret =3D=3D 0)
+> +		status =3D 1;
+> +
+> +	return 0;
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260902150439.6927=
-25-1-adi.sharma@zohomail.in?part=3D1
+25-1-adi.sharma@zohomail.in?part=3D2
