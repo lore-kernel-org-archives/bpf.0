@@ -1,74 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9D48443AA5;
-	Wed,  2 Sep 2026 22:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588DA442FDA;
+	Wed,  2 Sep 2026 22:59:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788389555; cv=none; b=nHnNVN5BiXlReokv2COTOHfAzKdDEIJci5pWPRctEPxBr0+461ZOzEctxqHjDj7UvWw96KopN7iOddvrpfWU7mpXWq9cIJe7IE83dTzD1rG7uZh+888Vc7Nhfz0HkwtuV+5KF0lzmTsmZZAP3LIbwwm3MHmbb+U4zHLc6XCkGSI=
+	t=1788389976; cv=none; b=N4kdLhYUZ49SqfYnj5tkEzvl+9cL2UoMP/SMR+OtvDiidtOUm/F6eodu5ziZlLHtK562ta9UvbbssCEqXPZLt3BUjQYJp8BIex9UyJJOnSN3afUncgC5TINJG6sJ62qaFo4h1+YJ8qXxUSDVjDLgfxcNCDw68n/ZDn/xv2xdLGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788389555; c=relaxed/simple;
-	bh=jPy/vhRnfB9J5DrZW1+7yOkwzkCKQGz1PKr4vTz4abU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MJmN1sqbXzz5rRePcckj/3++gtBDYTVpeZeTlXrNhEiak/0Cch1GuMuw9oC5yGrnkKm96wMm2cq6/lx+SFkbaDAyMOWbnyEhgSnJplzz6z8lPUZc5uvCq4XJxaowD9ncsZgH4uH/PBZmS0MkjEkk6clACItDRUE9xt/lwijy5cU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ABT2fz0Y; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ABT2fz0Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E77C71F000E9;
-	Wed,  2 Sep 2026 22:52:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788389537;
-	bh=aesFN2OHbarFM50VtQtwNH9OJpNYeiU/N7P2t16enJQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=ABT2fz0YYmV6oRP8XGH5PsyGf2cm+MFOfBtxMC35kopb2qMQH7dEFnf3vkNsagATF
-	 1QaCueu06oRLe+UvB9dlIbBu59STycKG9dUSI398JJf6jy/u91vqR5R3VYVl2ryX7W
-	 Jh4SaA0myYHvyRn/bCjqQdQMblaG+0FHtlcyfeT1nEtjUjFTvomz1A5sZVINKyKZ+f
-	 3e6Rrojphf1QXoh7pRKQpprfcE7ijB+h9+yNlDz5IE08TODhoXIidUSI8ieUYUzLfN
-	 DXa1AyW9/sSj1FTjIWDHSC67fjE+m0O43OMj91y/t9OFhNN4f0EWPNT+Mo8R0o6X20
-	 fzDUBr6sXbHnA==
-Date: Wed, 2 Sep 2026 15:52:16 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: Michal Luczaj <mhal@rbox.co>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya
- Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
- Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
- <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, John Fastabend
- <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Willem de
- Bruijn <willemb@google.com>, Jakub Sitnicki <jakub@cloudflare.com>, Jiayuan
- Chen <jiayuan.chen@linux.dev>, Joe Stringer <joe@wand.net.nz>, Ihor
- Solodrai <ihor.solodrai@linux.dev>, Pablo Neira Ayuso
- <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>, Phil Sutter
- <phil@nwl.cc>, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
- coreteam@netfilter.org, Sashiko <sashiko-bot@kernel.org>
-Subject: Re: [PATCH bpf v3 0/2] bpf: Fix socket leaks around
- connect(AF_UNSPEC)+listen()
-Message-ID: <20260902155216.4fa23444@kernel.org>
-In-Reply-To: <CAAVpQUC==6KEBs3XgFjZ536mJ23cbHma8HuiWMu1DRc_=YYOHg@mail.gmail.com>
-References: <20260902-sockmap-lookup-tcp-leak-v3-0-b998b3d49d07@rbox.co>
-	<CAAVpQUC==6KEBs3XgFjZ536mJ23cbHma8HuiWMu1DRc_=YYOHg@mail.gmail.com>
+	s=arc-20240116; t=1788389976; c=relaxed/simple;
+	bh=zq4LwRn8mJ8lUvn3GMAuVXxvTafQZH2ut49yUSLd9qE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=L+/93BbcXyduJUmSsE5temKE1Hin70N9IPGLxxzQYF9mUUpj1GZM+neJ69BMzBWxAjMWErB2+h0ShYqXCVPg7KCVyOBvt6aoMgVW/7v/UqfxXHkBH2iMHGPRqlqVww3v48uwj2506mBRXooO4xL6Cv5k2c9n2CyoJxwHtu/R/1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from abreu (ip5f5af1f9.dynamic.kabel-deutschland.de [95.90.241.249])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id D61F04C2C37D69;
+	Thu, 03 Sep 2026 00:58:43 +0200 (CEST)
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Paul Menzel <pmenzel@molgen.mpg.de>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] bpf: say why a module BTF mismatch keeps the module from loading
+Date: Thu,  3 Sep 2026 00:58:26 +0200
+Message-ID: <20260902225829.131674-1-pmenzel@molgen.mpg.de>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, 2 Sep 2026 11:58:49 -0700 Kuniyuki Iwashima wrote:
-> > Several BPF socket helpers acquire a socket reference only when
-> > sk_is_refcounted() == true, and release it, independently, by
-> > re-evaluating sk_is_refcounted() again at the time the release runs. TCP
-> > connect(AF_UNSPEC)+listen() sets SOCK_RCU_FREE on an established socket.  
-> 
-> Due to several bug reports, we are now inclined to forbid the
-> buggy transformation.
-> https://lore.kernel.org/netdev/CANn89i+px52TtJy3S9=uHxGj3s-WueguRo1Z_4FxO=02KLmwmQ@mail.gmail.com/
+With CONFIG_MODULE_ALLOW_BTF_MISMATCH=n – the default, and what Debian
+ships – btf_module_notify() turns a split BTF mismatch into a fatal
+-EINVAL at MODULE_STATE_COMING, so the module does not load at all.
+All the user is told is:
 
-Kuniyuki, would you be willing to send a patch to do that?
-Not sure if anyone else is planning to, I wasn't..
+    typec_displayport: module verification failed: signature and/or required key missing - tainting kernel
+    BPF: [124962] TYPEDEF
+    BPF: type_id=124988
+    BPF:
+    BPF: Invalid name
+    BPF:
+    failed to validate module [typec_displayport] BTF: -22
+    BPF: [124944] ENUM (anon)
+    BPF: size=4 vlen=32
+    BPF:
+    BPF: Invalid name
+    BPF:
+    failed to validate module [usb_storage] BTF: -22
+    BPF: [125157] TYPEDEF
+    BPF: type_id=125185
+    BPF:
+    BPF: Invalid name
+    BPF:
+    failed to validate module [usbhid] BTF: -22
+
+That message names neither the consequence nor the cause. The report this
+comes from is a Dell XPS 13 9370 on Debian experimental where an apt run
+replaced /lib/modules/7.2-amd64/ underneath the running 7.2~rc7 kernel;
+experimental carries no ABI number, so the new build overwrites the tree
+of the running one. usbhid then refused to load and the keyboard and
+mouse behind a USB-C hub stayed dead, which reads as a USB regression
+rather than as stale modules. mii failing takes r8152 with it, and
+usb_storage takes USB mass storage, widening the confusion.
+
+Note, the debug info is all that is stale here: nothing about the module
+code is wrong, and dropping the BTF would have let the machine carry on.
+Say so, and point at the escape hatch.
+
+State the consequence on the per-module line, and add a once-only
+explanation naming the likely cause and CONFIG_MODULE_ALLOW_BTF_MISMATCH.
+Restrict the explanation to -EINVAL so that an -ENOMEM from
+btf_parse_module() is not blamed on stale modules. Keep it a
+pr_warn_once() because a single hotplug event produced 28 of these lines.
+
+Assisted-by: claude-opus-5 (Claude Code)
+Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+---
+ kernel/bpf/btf.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index da36d4b9d31ab..720c56e8ae498 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -8525,9 +8525,11 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
+ 		if (IS_ERR(btf)) {
+ 			kfree(btf_mod);
+ 			if (!IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH)) {
+-				pr_warn("failed to validate module [%s] BTF: %ld\n",
+-					mod->name, PTR_ERR(btf));
+ 				err = PTR_ERR(btf);
++				pr_warn("failed to validate module [%s] BTF: %d; refusing to load it\n",
++					mod->name, err);
++				if (err == -EINVAL)
++					pr_warn_once("module BTF does not match this kernel build; the modules on disk are most likely from a different build than the running kernel (kernel package upgraded without rebooting?). Build with CONFIG_MODULE_ALLOW_BTF_MISMATCH=y to load such modules without their BTF.\n");
+ 			} else {
+ 				pr_warn_once("Kernel module BTF mismatch detected, BTF debug info may be unavailable for some modules\n");
+ 			}
+-- 
+2.54.0
+
