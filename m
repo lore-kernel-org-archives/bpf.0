@@ -1,124 +1,132 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA473A7F66
-	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 19:39:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788377952; cv=none; b=P1HuYBqA9seOZ/XQoKTS8sx5rv/pvqV+8Y1+t6V0KXi4I6APB+UIGNxPN9mnN0I7WR/sk0HN4vAlKiBh5Boo/311xZMDFJpOgjU10ECbnIMxyCfJzNUV4b/WiGwF944Fun6BMRXhxzHkf87y2Tg5JwocstgBuKZ1X7HTcvgEnU0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788377952; c=relaxed/simple;
-	bh=IN7KgNnqs8D1ESaMkPXU7u0sHCNgKxudHA0yUaGKH3c=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=nFXtmyQ6VYKzR9YQ3B9x+gIN012gJCfsbc03fU46kqVuA7kSx3PyGlJRUNZzzD1nbkZRpLjFwON8KQYRM8+TO8yldco4jvYEGifNph/wFPXWKG1QrjFcULl12BKSNvaV3oDVrFTfwiwu3eLpeqrH4xePAk9SS+v8+VL3JILbi2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eEdv7W3n; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DECB93A6B65
+	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 19:43:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788378203; cv=pass; b=UNtJYeEQBk2CXpESRI2RxX4lwrUO//TPPuewdhSXZzoRiAp7isLz1gqIamOdEq6liqw6n0otsGKKBwPGZUiACuoyzMzLE1P6au/EvAO/lDn1i0ETcXY5S0cCHcwcpqHfedyut6z6vQu2xxLE1Sv1vLKnS4g8+lWUyDmtifRnpCo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788378203; c=relaxed/simple;
+	bh=v13IBvJ3Cs5k45Op8zhzzynqZs/Da4H7F6eGXP4EZOo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lpgkZK5j532E1R2nhdyfMMZaGHW4qNHLWJU/BTmCbI8hKbkdJATe7eHgIOuTC9BDZAxnJ8+ihUIxCbNE59cTDQ4s9fd+4LK4HS8CI7mhZOgeYCtP+Dk9EkGAa7hLs2F6hgJOcusQ/fwyCP5LpMj76GEeILVAyi2q4CtsQHQLeBQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=aYFA5tCO; arc=pass smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eEdv7W3n"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-49cca4ffdcfso10814415e9.0
-        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 12:39:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="aYFA5tCO"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-853c07a76adso1785582b3a.0
+        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 12:43:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788378196; cv=none;
+        d=google.com; s=arc-20260327;
+        b=go2zFof0eH4iZzIRKbqx5rqxRShEuIBPrrsTIqEwEY6kydbhhNOoOUiqhEqmTJsSrs
+         rRncRcnQq2HchgVJm3B92lkASUEA7GMLWuhDKlCLYeiN0e9cKDvPhvqFcwjgItfk4D5q
+         ON39j6b8CSbyKK0Kz4rHeZy3Rlf0T4B8N37DaB0X+Q2QvHFQfrqEYkxntlW1b4ozDcl9
+         HXJufbHZMgBpmoJsoX5yijBAiJnB0jwAdLzsQDxPvr00Ty3ZPsxCB/JhOg2cHzL0IfM+
+         9BtOT0rJAENB6o3GiAM7Vn8ZzqGonr3s1bL9UW7iBFBsnb9L0E685yJFeb/lqGj613cq
+         cH+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=HZzgWfQ/86NrxOY8y/QdFfPZVfg39pEM5TlwSWapW24=;
+        fh=zZgm+55jvLHwN908yMwEUUGRupBb+3+nawYljEcwKVk=;
+        b=VJVKBHOTwFSQlzjoUH/WNPQqAg1pesK2lBmZuc+6uBQtk4sIUPWBhX0eCEJIvKWWjK
+         pBmZpFbPSiEIR8NK1c9D8qxGJEMp5Kcq8Lpz0eYFR8GnCrPSfWXFW1EKv92TLEUwAvVB
+         EP9FT75s535RKhcmVf200DdmdL2eqa+vVmp8CBwcSTABy9IxhLMAw6f1cj0knVWLPf0N
+         TLut5M/WRCH0q86g8WLHdyUQv3T2jMO+VwKQ3NS2BSqQpB6zvYX+eVUzkvAWbksrH+OG
+         M/XCbIunbIw61QYI+CxD7QSmrpPzURThupOMTJNHDvLIqBshqFxbNKgamVXJlG+TuhHJ
+         BCcw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788377938; x=1788982738; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=qf3cTJ2gK9rwWSik6ILKIPabS+XWIpM77pAw1SCvPKM=;
-        b=eEdv7W3nyILq4p2OHNywxGRG+5XtQG2woHts9iT9TzZp1+keMP5y3pdLlzRObQOxCd
-         ggUr3NSe9r2lOEnkYHMERSjsKpifnPbzZpYrjPzfkuONGUnZWGG12HSt92li9HgtRt1g
-         4zzKucecLqf6xhZOpV43+wW+bUM4DTt1+AUt5qZicA37b0Hi3ru7w1s2hUhVCCYMg/99
-         RUHlv8zprAhaD1kkFTyCCmTCM/x7q6nap2N32Vv6hiK0Odjet5rl/NH3ehcnv8Aq8nIU
-         oBBTNr3ZRlcb99+VGpj4ilUCD1AiSf+9GmZRHq1LfzO2TmuJnA4vTme2zKRqg4S8A5Sj
-         knww==
+        d=paul-moore.com; s=google; t=1788378196; x=1788982996; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=HZzgWfQ/86NrxOY8y/QdFfPZVfg39pEM5TlwSWapW24=;
+        b=aYFA5tCOZ5UjOiabbKf+4Li2QUBDULtgqc0UtYdMcN42FuRj6wzgCLFhAKAaI60NZg
+         7u1Eli49zAV6MQy2b78QDrhXqwsAAyzcu0FxEVwk7WavXov/6rxM2LcwYoEZz+y3+VJW
+         UPE1ELzTJgWxSva8X0e2e1NXkBo3cCfyVB0GIATavl2RU2ZDH7e8KvDWAqlS6L4lRWc7
+         K6dMtF07P92DD6er/SfN4xho3HHF40di7hzQcuudBqZKdhG7XH6aiNRsVxtH3VbzeKgV
+         MtP22v903BOORWOseI5xsYPMTLbzRrrQg9QhGLpbqq1N/BcLGnPT4dTtTl6qp/VcSKPD
+         sBvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788377938; x=1788982738;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=qf3cTJ2gK9rwWSik6ILKIPabS+XWIpM77pAw1SCvPKM=;
-        b=KN8AULoTsNdi1XBKPLrhWZJ0uoRZG0guru7rgq1lCasEAnLFTbcridOB84O5qKA2v6
-         vJeChKXlT1lQ+61FALp37wNHX6dIMQ0mapa7Fa51e59TizQHZOkJGXfUVQd27nNm4yyI
-         +BQZnFuN2Q/QMmzDJSGz93WSu785FmXx+NYaLc+UkwY+Gy4BSPBSl9eIAatlWfxF/Cbl
-         HiVTdycz8KawvrkLxRHwXoye0tDxfRzVtKgXDd217UF/pPRvKQv4T5yykaW82rZbvetg
-         lQVwcSTjW8A/qf3KplFMNOnaFQ+/P9fLisok8+d+P7yXEhqVbuBhtBDhwQDibkJVMo65
-         aNKQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzpU/4FLe+Y/p22kMq3FonkprJ4ZNY4vRA7JgO+cKtgesB1VCXgbX3553MsmaLvcXYpj4k=@vger.kernel.org
-X-Gm-Message-State: AFuF++msriIJn7/RqqMCsBoqBsHy6fwJ1vv6/cUSk/wSCWngfS9J5u/F
-	borhFvRa1uoGMBYI2gADg22So8WN6tgm695JOgAT3rAMI0d34liajMXc
-X-Gm-Gg: AYBFou2pRtL73FrqoQbpiWFyCW7lPxh1RWArTlQ/u6duavhxC0iDxUEhncDzimtMrWd
-	BjkYhmOi/ocA8b/hhn/BXCG2wBPSiZRbol2i1FWzUP+l7czDlMnFpezoth2h7sI6dDMkoa+sRjL
-	hYhwOQShk0gTb66KKGmB3BAeUYaywgcCqoU+LRumfxXjNacbLNP+cck3g1/mmZr30bbP2yii9Uq
-	V6GZYa+fW0EGhbASkki32D+HU2B91ubcl3xlQLbYuUu8MPXjgrvCmqUOEZjftFZUrJ85wCuVN/2
-	j890BeT2ZADea3i5iVbpiWQpX/XPdTEem+4QM3j5ln6Htt8Qn0J2/cOwUvf1UM6DW+eFtKBkLIF
-	XEfrG1gS7sHBuLAUA8W0REyIDqP7WsvMSlR46E230zSgCFt2I/v/Mc8Fk4OYllwmhqlo9KZrbvk
-	4he5xcQRvlBkUjH7iZYifnUye0YARW9HA+Vj50/+KxZPCkHLEPKTH2CtWgQcdHs17mTF3GW1XFP
-	Kmntds=
-X-Received: by 2002:a05:600c:a402:b0:49c:ee22:364c with SMTP id 5b1f17b1804b1-49cee22422dmr34410355e9.9.1788377937983;
-        Wed, 02 Sep 2026 12:38:57 -0700 (PDT)
-Received: from christian-ThinkPad-T470.. ([2a03:4460:170d:5700:2ccc:f994:68d7:fe7])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ce554d52esm49925915e9.3.2026.09.02.12.38.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Sep 2026 12:38:57 -0700 (PDT)
-From: Christian Melendez <chrismelnu@gmail.com>
-To: "K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>,
-	Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	linux-hyperv@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Christian Melendez <chrismelnu@gmail.com>
-Subject: [PATCH] Documentation: netvsc: Remove stale "not yet supported" XDP_REDIRECT note
-Date: Wed,  2 Sep 2026 21:37:11 +0200
-Message-Id: <20260902193711.113291-1-chrismelnu@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260831200357.45390-1-chrismelnu@gmail.com>
-References: <20260831200357.45390-1-chrismelnu@gmail.com>
+        d=1e100.net; s=20251104; t=1788378196; x=1788982996;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=HZzgWfQ/86NrxOY8y/QdFfPZVfg39pEM5TlwSWapW24=;
+        b=BnGUqPSOxEws6KCqOcB+57BmKIgKMLrZr8pij37jxOopSvlAzhUYkzTOBuk6qBVcKo
+         2aN/aSm9bE2PscOHFX/DL1i2qwJU8qyItlN8XxRlOeVElI9SjnV7MJq4Rivat13Y+ri1
+         2+nyHLaxF5Nm8rvgnkMekpPaRfRJuoL7zKRXiksOSAnC2fCModWfMEb6MLJs+tdzB5s4
+         EiFckP2mILHc55Fis1eAXcxXexWvxvwhaOUX1/VPKdPpND4+I7IpMLw8Oge9EywSwR7d
+         5zJO3/6p1SV4sGlqlnXCuj7TYxQen9Kpb/0ZH7X/jYcQl1lOSqhqA4zeezJMFflRcApp
+         zHzw==
+X-Gm-Message-State: AFuF++khVp1yqRUaCfdTknCph9jzqcJEV/gUl6v/vYo8Z01YlCnYIYbB
+	2aKVll1Bp9mLLb+d+lRpnmJsqLIAS6xl65BQCaLd6Rj8dPw+wlvHQfmJUnFJyYqWkNXp1B0zW+Y
+	ZAvD9jAo6xgT0L9u7FAILWPzTRb4ZDzFrG5Gc6Ysch2GUZF3TXGRPAg==
+X-Gm-Gg: AYBFou0BGwbC+A7ekJY9aSRF25n+HHpUl19jfhM3feM3Dx18BPxnceXqICfEm3yB+ds
+	X30oY+qP7OIgUMRTgzfafPcTbsbOpdMGbrZYwBNahS/qo/2ft7F5Fa8DMk9qdDAFZPNtA91Yzbg
+	nIlLW9q43WT9C+D1OBYJQJ90YRY129mLCa+5OVGY2+H++5jpKG6yyhpPorFwgLyZcwpAunhs0tO
+	46dBNAO5CCGvsAnxe+C0SCWWurmmhhM43/fMtmv+aAOtQaAFsOOVhfsttNgGzXC2hLHl+ON87ic
+	2h6TWWHJgM1UqRDd1DRtzFQexmLzDhcAsTFoDyOBG42m
+X-Received: by 2002:a05:6a21:2d04:b0:3d1:8876:fb1e with SMTP id
+ adf61e73a8af0-3d9a9695714mr11592712637.0.1788378196405; Wed, 02 Sep 2026
+ 12:43:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260831110934.241898-1-a.s.protopopov@gmail.com>
+ <20260831110934.241898-2-a.s.protopopov@gmail.com> <CAHC9VhT7=wMsB9mERWoiM6pF+_T1=2tyAsSrxMphhtdE2NPHMw@mail.gmail.com>
+ <apbU8-fpioNIwUA8@mail.gmail.com> <CAHC9VhQbWPqEz5g1rVcMyJgrzzd4cQuwi7cddgJQK1H3ugMz7A@mail.gmail.com>
+ <aphBNqQK0JeVy5Sm@mail.gmail.com>
+In-Reply-To: <aphBNqQK0JeVy5Sm@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 2 Sep 2026 15:43:04 -0400
+X-Gm-Features: AcwNN1XYNCXydNpNM6ZU2Rnek6l8sLmm3paMheXeGevlLusJ85KkWm2it_ZUJS0
+Message-ID: <CAHC9VhREB2krVp9XkV6Psp4PWhYT14281+1TQUZL7o+GTo1cXQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/7] bpf: Allow BPF LSM programs to attach to
+ more hooks
+To: Anton Protopopov <a.s.protopopov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, lsm <linux-security-module@vger.kernel.org>, 
+	netdev <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Matt Bobrowski <matt@bobrowski.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Christian Brauner <brauner@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-netvsc_run_xdp() in drivers/net/hyperv/netvsc_bpf.c has handled
-XDP_REDIRECT since commit 1cb9d3b6185b ("hv_netvsc: Add support for
-XDP_REDIRECT"), and netvsc_drv.c advertises NETDEV_XDP_ACT_REDIRECT
-in xdp_features. Remove the stale note.
+On Wed, Sep 2, 2026 at 11:20=E2=80=AFAM Anton Protopopov
+<a.s.protopopov@gmail.com> wrote:
+> On 26/09/01 06:15PM, Paul Moore wrote:
 
-Link: https://patch.msgid.link/20260831200357.45390-1-chrismelnu@gmail.com
-Signed-off-by: Christian Melendez <chrismelnu@gmail.com>
----
- .../networking/device_drivers/ethernet/microsoft/netvsc.rst     | 2 --
- 1 file changed, 2 deletions(-)
+...
 
-diff --git a/Documentation/networking/device_drivers/ethernet/microsoft/netvsc.rst b/Documentation/networking/device_drivers/ethernet/microsoft/netvsc.rst
-index fc5acd427a5d..616f808e885b 100644
---- a/Documentation/networking/device_drivers/ethernet/microsoft/netvsc.rst
-+++ b/Documentation/networking/device_drivers/ethernet/microsoft/netvsc.rst
-@@ -116,5 +116,3 @@ XDP support
-   before running XDP::
- 
- 	ethtool -K eth0 lro off
--
--  XDP_REDIRECT action is not yet supported.
--- 
-2.34.1
+> > The core issue has little to do with BPF, it has everything to do with
+> > in-tree vs out-of-tree code.  The BPF LSM is explicitly mentioned as a
+> > "pass through" because some have argued that the BPF LSM is in-tree,
+> > and while the basic BPF enablement is in-tree, the actual LSM code
+> > that is executed has thus far always been out-of-tree.
+>
+> Yes, the actual code isn't, but all the building blocks are.
+> The BPF is just a sophisticated policy language, in which,
+> given, say, ethtool hooks are present, one can say "block
+> all ethtool ETHTOOL_TEST_CMD calls for the XXX driver" or so.
+>
+> Is there any way into turning BPF first-class citizen from LSMs
+> point of view?
 
+As I said earlier, the important part is in-tree vs out-of-tree code.
+We are not going to add new LSM hooks only for code that lives outside
+the kernel sources, regardless of whether that code is written in C,
+Rust, or BPF.
+
+--=20
+paul-moore.com
