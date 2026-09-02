@@ -1,90 +1,159 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-213.mta0.migadu.com [91.218.175.213])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6E04370ACC;
-	Wed,  2 Sep 2026 07:46:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629CB3126D6
+	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 07:47:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.213
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788335182; cv=none; b=EIyqLIx1QIZsTQRmZU9Im/Exnm+bOf7oykek3dnUcRkDl7NkgvmMASd5oLq2j2caTTRVZDLLb8OhMkYdYV5v1zWKM8HBeJMGkFHVgiKAjvw1VUYrFOy7H7YzB1zSOLAB+RVjATUClRjg078EiV+BhBEDHZ+AtJMFKcdonUnUTKs=
+	t=1788335265; cv=none; b=g+OdWQAw9ZiF+h9iMK+u2OzBm6wQOva0UGyJx+d19c/DmUXhuHnUKFZ74L+gyY1G0euaMT4G/Ai5+bVRH+MpQ6dyJpAUtYL6yWiPT/nDgXy6ZQvgSq8VRddbvYwYe/qC0EJJXC6lYcJM840zGKaxBCukTbnjvJ8E6YJtRJjnQ0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788335182; c=relaxed/simple;
-	bh=29czV3fjjxBVQbNXJgxEZMzYgZW1biCPklSbU1r9VFU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=EMrJ3SSibZwJEy69wtA2y4mdf3h0ccWbOTI21/csZoDRXPQDSkp333ixZeSTXPZjFNFasmcvKGHl8ai1rnKDTZnz6K8XXQQ4qDfbS21eSc2Sg/A10KN1DvUchTW+/PATe3/2nz3qP3V1RiZw7AYBcErW1uCwJmoMi+LkJrvSO/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Do35rUN1; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=a7XGseWt; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1788335265; c=relaxed/simple;
+	bh=5T0DDY/LO7po3l5L3kH5jryIHusgdlLonq8DYkyJU0E=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FC6MzSTVU3SHVek4GAUfgvaWt0e4DDylSZap0Zk66bydbOU9V/YGVaRN7DxYm//ZNviAxWx4C0H5ZvttOKzSRtoV7URoB/Tjyt9xLPeLRZRAAn5F41cm1ncYrAyiPp6IZRVkVTaDL+cnQoqYtBIO/prfgfPcnER1VF1W+3qEOxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CkYnsW7f; arc=none smtp.client-ip=91.218.175.213
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Do35rUN1";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="a7XGseWt"
-From: Nam Cao <namcao@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1788335178;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=29czV3fjjxBVQbNXJgxEZMzYgZW1biCPklSbU1r9VFU=;
-	b=Do35rUN1QqwaRhpAx6tTLLF9UE2JChbAdvhVfGYDAMbMcKcY6hcoZ3n08k2h5PqH6cbSTE
-	iOYaz1TQEF016iyZag5zi8yBnZzdz/fDFNVTWe+cD15T0SVXrRT8EGvvR0/LLWDwsk9YGN
-	Ag/V+ftFNkdsAxR72nv+zqFk8g2qAHgPxhEdu6FoSyVCSAt2NEhTlKnKVBdMsoqwurvJph
-	NvQGbIoWfOe55EgGxbUYbEAakDm7OAaCkzMXdh/k6+KoFFP5j2yhgFgZyX4ZNmy+SJpdRP
-	XGa8kLAPH6kIGD9UfXUV0cTUi5FDxJOQpOiz5FVH7Gh57U19czXmyfRTNirBgg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1788335178;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=29czV3fjjxBVQbNXJgxEZMzYgZW1biCPklSbU1r9VFU=;
-	b=a7XGseWtGRSYJDkNDkn2iqJSSLEAeTU7RbPPZ84zWJsrP5ylW7MHFCI8zUwh6Ym886g1ys
-	AZX52ao/WlUmHlCw==
-To: Gabriele Monaco <gmonaco@redhat.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Cc: Steven Rostedt <rostedt@goodmis.org>, Wen Yang <wen.yang@linux.dev>,
- Tobias Schaffner <tobias.schaffner@siemens.com>, Viktor Malik
- <vmalik@redhat.com>
-Subject: Re: [RFC PATCH 00/20] rv: Add support for BPF monitors
-In-Reply-To: <df6e9168cb06c35e21db7f9d17cfbca6bd87005b.camel@redhat.com>
-References: <20260831090524.106845-1-gmonaco@redhat.com>
- <87se3sakgi.fsf@yellow.woof>
- <df6e9168cb06c35e21db7f9d17cfbca6bd87005b.camel@redhat.com>
-Date: Wed, 02 Sep 2026 09:46:17 +0200
-Message-ID: <8733vsw0xi.fsf@yellow.woof>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CkYnsW7f"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=5T0DDY/LO7po3l5L3kH5jryIHusgdlLonq8DYkyJU0E=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788335261; v=1; x=1788940061;
+ b=CkYnsW7f5TbjWgzcsB6L7S8wnN6OCo37WKSFlwuzUaJr8n+mqNRPmlZLE2KvYNUQziyyw/8i
+ VZKCQa46b9PBjNqCLIKUgBtXVmcGLts99TW/PVgd+0LfIZsg0FIAMKwKms8JZ2CPHhmkMCWJjQ7
+ m9JcDzzSWTsTgodswvfSDNyY=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id cb1a297f78c77415;
+	Wed, 02 Sep 2026 07:47:41 +0000
+X-Mizu-Trace-ID: cb1a297f78c77415
+X-Migadu-Flow: FLOW_OUT
+Date: Wed, 2 Sep 2026 15:47:37 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: bpf@vger.kernel.org, mptcp@lists.linux.dev
+Subject: Re: [PATCH mptcp-next 1/2] selftests: mptcp: convert iptables to
+ nftables for mptcp_sockopt.sh
+Message-ID: <apfUmU4cEE0uxrSs@fedora>
+References: <20260902-mptcp_nft-v1-0-559caa16f410@kylinos.cn>
+ <20260902-mptcp_nft-v1-1-559caa16f410@kylinos.cn>
+ <20260902070232.4F4851F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260902070232.4F4851F000E9@smtp.kernel.org>
 
-Gabriele Monaco <gmonaco@redhat.com> writes:
-> I should definitely have included it in the cover letter.. I'm writing it
-> everywhere (will present at LPC) but forgot it here.
->
-> Essentially BPF monitors can be pluggable, folks writing their own monitors
-> won't need to submit a patch or maintain a separate tree, which is useful for
-> domain-specific models.
-> By being pluggable you also don't need to reboot to use a new/updated monitor.
->
-> Think of being able to distribute a more granular set of rules for RTapp, I
-> remember we had conversation along those lines, not all rules apply to all
-> contexts and what you send upstream has to be general, what you keep for
-> yourself doesn't.
->
-> Having monitors in BPF brings also other perks over kernel modules: a whole
-> bunch of readily available probe types (uprobes, fprobes, all unexported
-> tracepoints that are cumbersome for modules), the map infrastructure for
-> allocation is arguably easier and the code is verified when loaded against
-> common issues (NULL pointer access, unbound loops, etc.).
->
-> That said, I try to mimic as much as possible the in-kernel functionality, but
-> some things are not the same (event/error tracepoints).
->
-> These support DA only because BPF loading needs a userspace component and the RV
-> tool doesn't support LTL and HA yet, there shouldn't be any technical reason not
-> to extend to those in the future.
+On Wed, Sep 02, 2026 at 07:02:31AM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
+> - [Medium] Replacing iptables TCP flag matching with nftables exact matching (`tcp flags rst` and `tcp flags syn`) fails to match packets with multiple flags set, causing spurious test failures.
+> - [Medium] An empty `$drop` variable causes a Bash syntax error during numeric evaluation, which evaluates to false and silently masks test failures.
+> - [Low] Typo in string interpolation for the error message (`IPv{$af}` instead of `IPv${af}`).
+> --
+> 
+> commit af165781f3fb777bc40bc4de19c7d79cd01f51cc
+> Author: Hangbin Liu <liuhangbin@kylinos.cn>
+> 
+> selftests: mptcp: convert iptables to nftables for mptcp_sockopt.sh
+> 
+> This patch converts the mptcp_sockopt.sh selftest to use nftables instead of
+> iptables. It replaces per-address-family iptables mark rules with an inet
+> table containing drop counting rules for IPv4 and IPv6.
+> 
+> > diff --git a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
+> > index e850a87429b61..4d0af2bf94840 100755
+> > --- a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
+> > +++ b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
+> 
+> [ ... ]
+> 
+> > @@ -49,17 +47,23 @@ add_mark_rules()
+> >  	local ns=$1
+> >  	local m=$2
+> >  
+> > -	local t
+> > -	for t in ${iptables} ${ip6tables}; do
+> > -		# just to debug: check we have multiple subflows connection requests
+> > -		ip netns exec $ns $t -A OUTPUT -p tcp --syn -m mark --mark $m -j ACCEPT
+> > -
+> > -		# RST packets might be handled by a internal dummy socket
+> > -		ip netns exec $ns $t -A OUTPUT -p tcp --tcp-flags RST RST -m mark --mark 0 -j ACCEPT
+> 
+> [ ... ]
+> 
+> > +	# just to debug: check we have multiple subflows connection requests
+> > +	ip netns exec "$ns" nft add rule inet msock_table output \
+> > +		 meta mark "$m" tcp flags syn accept
+> > +	# RST packets might be handled by a internal dummy socket
+> > +	ip netns exec "$ns" nft add rule inet msock_table output \
+> > +		meta mark 0 tcp flags rst accept
+> 
+> [Severity: Medium]
+> In add_mark_rules(), the original iptables rules --tcp-flags RST RST and
+> --syn used bitmasks to allow additional flags like ACK for RST or ECN for
+> SYN. The new nftables rules tcp flags rst and tcp flags syn enforce an
+> exact match on the entire TCP flags byte.
+> 
+> Will these exact matches reject packets with multiple flags set, such as
+> RST+ACK or SYN+ECN, causing them to fall through to the drop rule and fail the
+> test?
 
-Cool. I also wanted to do something like this, for these exact same
-reasons. Let me look at your patches..
+Thanks, I just find a tool iptables-translate and I will recheck each
+translation.
 
-Nam
+> 
+> [ ... ]
+> 
+> > @@ -105,33 +109,23 @@ cleanup()
+> >  
+> >  mptcp_lib_check_mptcp
+> >  mptcp_lib_check_kallsyms
+> > -mptcp_lib_check_tools ip "${iptables}" "${ip6tables}"
+> > +mptcp_lib_check_tools ip nft
+> >  
+> >  check_mark()
+> >  {
+> >  	local ns=$1
+> >  	local af=$2
+> >  
+> > -	local tables=${iptables}
+> > +	drop=$(ip netns exec "$ns" nft list table inet msock_table | \
+> > +		grep "ipv$af.*packets.*drop" | awk '{print $(NF-3)}')
+> >  
+> > -	if [ $af -eq 6 ];then
+> > -		tables=${ip6tables}
+> > +	if [ "$drop" -ne 0 ]; then
+> 
+> [Severity: Medium]
+> If the command extraction for drop fails, or if grep finds no matches,
+> the $drop variable will be empty.
+> 
+> When bash evaluates [ "$drop" -ne 0 ] with an empty string, it triggers a
+> syntax error. This error evaluates to false and skips the failure block.
+> 
+> Does this risk silently masking test failures if the extraction logic ever
+> fails to produce a number?
+
+OK, I will add a regex to check if drop is number or not.
+
+> 
+> > +		mptcp_lib_pr_fail "got $drop pkt drops in ns $ns IPv{$af} tables," \
+> 
+> [Severity: Low]
+> Is the string interpolation IPv{$af} a typo?
+> 
+> Bash interpolates the $af variable but leaves the literal braces, printing
+> IPv{4} instead of IPv4. Should this be IPv${af} or IPv$af instead?
+> 
+> > +				  "not 0 - not all expected packets marked"
+> > +		ret=${KSFT_FAIL}
+> > +		return 1
+> >  	fi
+
+Thanks, I will fix this.
+
+Hangbin
