@@ -1,128 +1,148 @@
-Received: from mx0a-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 745833515EB;
-	Wed,  2 Sep 2026 01:40:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628D03612DB;
+	Wed,  2 Sep 2026 01:46:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788313209; cv=none; b=iNCks5Ko1E2RsTM3+PWbJRfsnxk6O8FqqMLaWsVDh0KNk3+pJZI2XenS22Tvs1Qk18tib6lH1vhHWrzlKLgzWWrJUzMAXssWVAcOCGLNKyatXTIXCqcBEEUYArFallvTySgGmUcIodPi5JkgReHg+qVOBk2Y4t/34rx4AjMlZhM=
+	t=1788313585; cv=none; b=uxJo+Xg7UQU3Jthh7clh7ABf238Ox/gTwj66pw8WCBpU2DFnS9o4ipTbP3nxUGz807Ve8XZGIMKZbyJMlvHkt0HGTubzKzvLhJAd/wvhAsQi1o7lvrFBb9/wQGMCNfMn6f4gH1TiQ0v8NNm+tCaS+/d04K9Stf2v/AHBlkzv+I0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788313209; c=relaxed/simple;
-	bh=tbjkzBf9v60YqlUBHhCUP11y+aKkwQG4oLuVfMjjNzc=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I2BkH/jbiPpCFR5U0QOlftttdG9FZNxI3DL9XVCj8sw8QFAEtBhNPe6jzjrCcQ0yyPRwzabZmu7vWdecPdGW2QBrzfxI1bcawWa3CFL+jq7RUlAZyEof3pIOJ80jfHCBJfjB1PXf56NIkD1TPJJObMQLxXUDjP2bGPVD1wV9hNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=G9sA1NmM; arc=none smtp.client-ip=67.231.148.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+	s=arc-20240116; t=1788313585; c=relaxed/simple;
+	bh=rhgLIydweYB3C2eCloR0SIfdz8oK13fVGGg42bd/WUo=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=o8Krf+wqjRd8i2WfKqC1wrt/0KLGS1W6YT3xA3WcGjtfRdJBHMQeQlXHVo4Dgzs4V/nTEPIOnATED9djGKBgV7BsZ2P0PR8y+4QgGJ1yQf6e+YI11tlejhv1HnvZTSOOvxgLsBfWAQfoz2rgkaFxnkm045bXhhcrhDh2fmbBMRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CLW60DQe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="G9sA1NmM"
-Received: from pps.filterd (m0431384.ppops.net [127.0.0.1])
-	by mx0a-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 681KWxKG4132527;
-	Tue, 1 Sep 2026 18:39:29 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pfpt0220; bh=BAKmL6RTJaLJE6UNg1cEhYSVp
-	G9lmPPM9QPgHyBfqa4=; b=G9sA1NmM15xmkefPgJAVOV9TytFxT6Dnpkgov20hN
-	wMh8ce7QMfeN2GG2kGF1dAQmc0ib6A27AszrESWJbyC1/erVgIZjM+0mPNdF0O1d
-	KY8Rg0XyaZY+n/LRjfF6bviogaNuqtBNJENrh9YI8kSJTV22c99azcje9XwNCwee
-	cBsfq0TtyInOMtMgOZPKVLs4mKTrLteRpKFat/mtp4ewIge5aZ6rp0Wtq3y50kOe
-	hs12QgrN1osU6fQEU6jZInmWeCkU2X9y3Iw2EZHtXXLXtgtry+sElmQRIdOpKFnv
-	QBxcfxqEYR+/yGZJ4xjW9ikWPBLCfE2qQNtYYdGx/8XNQ==
-Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
-	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4ge4ttrxvk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 01 Sep 2026 18:39:29 -0700 (PDT)
-Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
- DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Tue, 1 Sep 2026 18:39:28 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
- (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
- Transport; Tue, 1 Sep 2026 18:39:28 -0700
-Received: from rkannoth-OptiPlex-7090 (unknown [10.28.36.165])
-	by maili.marvell.com (Postfix) with SMTP id 6107C3F704D;
-	Tue,  1 Sep 2026 18:39:23 -0700 (PDT)
-Date: Wed, 2 Sep 2026 07:09:17 +0530
-From: Ratheesh Kannoth <rkannoth@marvell.com>
-To: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-CC: <andrew+netdev@lunn.ch>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <davem@davemloft.net>, <edumazet@google.com>, <hawk@kernel.org>,
-        <horms@kernel.org>, <jhs@mojatatu.com>, <jiri@resnulli.us>,
-        <john.fastabend@gmail.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <sdf@fomichev.me>, <sgoutham@marvell.com>
-Subject: Re: [PATCH v10 net-next 0/2] octeontx2-pf: mqprio bandwidth offload
- for NIX TX schedulers
-Message-ID: <apd-RdkplZBclQZw@rkannoth-OptiPlex-7090>
-References: <20260831131014.2639581-1-rkannoth@marvell.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CLW60DQe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB6BF1F000E9;
+	Wed,  2 Sep 2026 01:46:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788313573;
+	bh=C9WLwLDbKgyZLCZxRbFHIxNue4hIyGibfsJd6J+TsqU=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=CLW60DQe8J5q5ZHfZND+coyuC5Gpwb+c5R67iauv83ua5ZtnJDJlnBsJm8JX32Hj4
+	 6PsMONuprxnpxoy6F6lFfUMQy066iEuZIB2vnOzSG+54RiB8yjfE9WYht8dLHsev06
+	 lN3Vzb/iU0wumseSmDA7VGL1uj8eyv9z3MdXhD09zVNMjcpU6m2Nz5+neQ1FJLmOHd
+	 dEjmtDlV9btK/ioMXboSzg6LlTFVXPT5gcegPHT3rt7IiZJsR1lBv/ijtI+Uegj9rq
+	 anMIU+uYWDxjhnp4d8Yh+8whr+65wvUuOJy3CFEh90zR/ZsvHRkOTHTWxPkx8ADvIe
+	 hZ2qxJ+wB1sKQ==
+Content-Type: multipart/mixed; boundary="===============8589649180634845869=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Message-Id: <c3f457ea1e335eaf3c4cc867c467adc5ebf33a3481f7bd37c93c8d4d427cd40f@mail.kernel.org>
+In-Reply-To: <20260902005106.22187-1-yangtiezhu@loongson.cn>
+References: <20260902005106.22187-1-yangtiezhu@loongson.cn>
+Subject: Re: [PATCH bpf v1 RESEND] bpf: Fix timer_lockup deadlock using atomic_fetch_inc()
+From: bot+bpf-ci@kernel.org
+To: yangtiezhu@loongson.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev
+Cc: loongarch@lists.linux.dev,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed,  2 Sep 2026 01:46:12 +0000 (UTC)
+
+--===============8589649180634845869==
 Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20260831131014.2639581-1-rkannoth@marvell.com>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTAyMDAxMSBTYWx0ZWRfX3mB7UdsfU888
- fDZgrclnBjTfqb9/0K+zl7xlSmyyqenWSkH1fnrXEpbAOmP1uBkWLRrnZjUn91ghrQ9bfsbJ72x
- ZBJrMjhasrtSVJk+ajT2bPwOjtjLLvkzJ8X+y+4GL1e+4vQLA0ceHM2QcbcMBjXFSww3+wQBFec
- a3Da0qtDA17+//pTWLJVqfLFSiJzUvt6BMqMNCpb/IAJB+8zqJJ5h5FzZeU/UYdANpC66qQsmSS
- ykAN0tFHs2mqwAx0eMnsW8s4DHARSb8ddZOGP5Oe5jarnp9KKFdz3iMTNxAhpTAh0zJlfWO++Ge
- NFQ4/L6TH+suDaiHnjxm1JauEExlulu0lOXej8ge9YBLtOzFIuRySWx0Hyqw5w5bbDGk1Mofb8f
- QkGjEl1uLb2uvIVcXG620JIN+D8V9rPL267XCRls9WtXMziTDTy8vbWH/oGjCfOtSop91ipqy+I
- O7d3ZJzeE67ddP7TkZw==
-X-Authority-Analysis: v=2.4 cv=MfBcfZ/f c=1 sm=1 tr=0 ts=6a977e51 cx=c_pps
- a=gIfcoYsirJbf48DBMSPrZA==:117 a=gIfcoYsirJbf48DBMSPrZA==:17
- a=kj9zAlcOel0A:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=l0iWHRpgs5sLHlkKQ1IR:22 a=TtqV-g6YmW1Jfm2GSLaY:22 a=M5GUcnROAAAA:8
- a=yaMLrZmCnpOwXphqEKQA:9 a=CjuIK1q_8ugA:10 a=OBjm3rFKGHvpk9ecZwUJ:22
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTAyMDAxMSBTYWx0ZWRfX1YgHGKcjKWKS
- h9+tBJmewcOQPZtww55jfWL4srYCgcV7l0j7zZ3gSSp+omVPFrERdhALBUsGFET/QmQY7VQ1AoQ
- rsutvT6iP5VMUXbujwWLPA3c0vm8SIE=
-X-Proofpoint-ORIG-GUID: MSkL9hnqL6aXyqXJzU3KeluH0vSjkfRr
-X-Proofpoint-GUID: MSkL9hnqL6aXyqXJzU3KeluH0vSjkfRr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-01_06,2026-09-01_03,2025-10-01_01
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-On 2026-08-31 at 18:40:11, Ratheesh Kannoth (rkannoth@marvell.com) wrote:
-> This series adds hardware offload for channel-mode mqprio with
-> TC_MQPRIO_SHAPER_BW_RATE on Marvell octeontx2 PF devices. Each
-> non-QoS transmit queue is shaped by programming MDQ CIR/PIR on the NIX TX
-> scheduler. When bandwidth offload is enabled, the driver allocates one
-> SMQ per queue, parents every MDQ under TL4[0], and applies each traffic
-> class min/max rate to the queue(s) in that class. The TX scheduler
-> hierarchy is reprogrammed through ndo_stop()/ndo_open() on every mqprio
-> add, replace, or delete.
->
-> Patch 1 is required for patch 2. The octeontx2 driver tracks committed
-> mqprio configuration in snapshots keyed by the owning qdisc handle. That
-> handle is needed to implement two behaviours that patch 2 relies on:
->
->   * tc qdisc replace installs the new mqprio and runs its offload setup
->     before tearing down the replaced instance. Without the handle, the
->     driver cannot tell a stale disable callback from the replaced qdisc
->     apart from teardown of the active configuration, and may clear
->     hardware shapers or netdev TC state while the new mqprio is being
->     committed.
->
->   * When replace fails after partial programming, the driver rolls back
->     from the previous snapshot. Matching setup and teardown callbacks to
->     the same qdisc instance requires the handle passed through the core
->     mqprio offload path.
->
-> Patch 1 extends struct tc_mqprio_qopt_offload with that handle and fills
-> it from mqprio_enable_offload() and mqprio_disable_offload(). Patch 2
-> consumes it in the octeontx2 PF mqprio offload path.
->
-> The driver rejects offload unless the interface is running and the
-> device supports CIR+PIR shaping. Per-TC rates are rejected when a
-> traffic class spans more than one queue, and concurrent PFC, XDP, or SDP
-> rep use is blocked. Ethtool channel count changes are blocked while mqprio
-> bandwidth offload is active.
->
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index b3cc5c8fc875..7d89dc143883 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -1591,9 +1591,7 @@ BPF_CALL_1(bpf_timer_cancel, struct bpf_async_kern *, async)
+>  	 */
+>  	if (!cur_t)
+>  		goto drop;
+> -	atomic_inc(&t->cancelling);
+> -	/* Need full barrier after relaxed atomic_inc */
+> -	smp_mb__after_atomic();
+> +	atomic_fetch_inc(&t->cancelling);
+>  	inc = true;
+>  	if (atomic_read(&cur_t->cancelling)) {
+>  		/* We're cancelling timer t, while some other timer callback is
 
-Will address sashiko comments in v11.
+The commit message states:
 
-pw-bot: changes-requested
+> Instead of relying on arch-specific macro implementations which may vary
+> in strictness, fix this issue directly in the BPF core helper by replacing
+> atomic_inc() and smp_mb__after_atomic() with a single atomic_fetch_inc()
+> to provide full ordering natively.
+> ...
+> making the lockless deadlock detection logic immune to any
+> platform-level barrier interpretation variations.
+
+Is this rationale consistent with the atomic API documentation?
+Documentation/atomic_t.txt:208-216 states that atomic_fetch_inc() is
+equivalent to:
+
+    smp_mb__before_atomic();
+    atomic_fetch_add_relaxed();
+    smp_mb__after_atomic();
+
+The generic implementation in include/linux/atomic/atomic-arch-fallback.h
+shows that atomic_fetch_inc() expands to __atomic_pre_full_fence() +
+relaxed RMW + __atomic_post_full_fence(), where those fences are defined
+as smp_mb__before_atomic() and smp_mb__after_atomic() in
+include/linux/atomic.h:50-55.
+
+On architectures that only supply the *_relaxed RMW variants, the new line
+re-expands to exactly the sequence the patch deleted. The claim that this
+makes the code "immune to any platform-level barrier interpretation
+variations" and provides "full ordering natively" does not follow from the
+API contract.
+
+The patch does fix the reported LoongArch lockup, but only because
+arch/loongarch/include/asm/atomic-amo.h emits the fully-ordered fetch
+variant as amadd_db.w when CONFIG_CPU_HAS_AMO is set.
+
+The actual contract violation appears to be in the architecture.
+Documentation/atomic_t.txt:190-206 defines smp_mb__after_atomic() as a
+barrier that augments the ordering inherent to the op, with
+smp_mb__after_atomic() ordering all later accesses against the RMW op.
+arch/loongarch/include/asm/barrier.h:60-61 defines both as plain
+barrier(), while arch/loongarch/include/asm/atomic-amo.h's void-returning
+ATOMIC_OP emits am<op>.w with no _db suffix - unordered. That combination
+breaks the documented contract for every user, and there are approximately
+270 smp_mb__after_atomic() call sites under kernel/, mm/, net/, fs/, lib/
+and drivers/ that rely on it.
+
+Fixing only this one BPF helper hides the arch bug rather than fixing it.
+Should the fix go to arch/loongarch/include/asm/barrier.h instead, or does
+the commit message need to justify why the arch macro is considered
+permissibly weak?
+
+The patch also deletes the only in-code record of the ordering requirement:
+
+> -	atomic_inc(&t->cancelling);
+> -	/* Need full barrier after relaxed atomic_inc */
+> -	smp_mb__after_atomic();
+> +	atomic_fetch_inc(&t->cancelling);
+
+Nothing in the resulting code indicates that the value-returning variant
+was chosen purely for its full-ordering semantics, so the line reads as a
+plain refcount bump with a discarded return value. The store-load pairing
+is the whole mechanism: t->cancelling must be globally visible before
+cur_t->cancelling is read, otherwise two callbacks cancelling each other
+both read 0 and both enter the unbounded wait in hrtimer_cancel()
+(kernel/time/hrtimer.c hrtimer_cancel()).
+
+A discarded-return-value RMW is an obvious target for a later unused
+result cleanup back to atomic_inc(), which would silently reintroduce
+exactly the lockup this commit fixes. Discarding a fetch op's result is
+rare in core code - the only other instances are plain counters
+(drivers/gpu/drm/drm_file.c:383, drivers/accel/drm_accel.c:129), none of
+them ordering-motivated.
+
+Would it make sense to keep a one-line comment on the new statement
+explaining that atomic_fetch_inc() is used (return value ignored) for its
+full ordering against the atomic_read() of cur_t->cancelling that follows?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33578169526
+--===============8589649180634845869==--
