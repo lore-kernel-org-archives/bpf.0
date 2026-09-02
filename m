@@ -1,147 +1,89 @@
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [91.216.245.30])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-69.mta0.migadu.com [91.218.175.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB00F3AB460
-	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 06:52:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.216.245.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DDD03A6B6F
+	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 06:53:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788331978; cv=none; b=duPoswPok2XL4N+zJiZkt1JF4vBzJg7H/oqw0iRZZjv59pVhtywCQHR3/q8ayaxbeBLe1Mdu5hv04q5UP9l2d06b1vo731/KtBx11qOTla4MFrcyqi4NxpiDCNlbcMcKJAI9BuigV6YebVa5FdTRNiBa6xHNj5P/Cuz54LcT3Y8=
+	t=1788331990; cv=none; b=J+K1MrgMxjeEqSP09whX5xFSOyxpyRqm9qdFcoeYnIkxlz5KV8H0GwffyYQiHysdl4/zkzSajc2veF9hK/KJ6loTCsAl56fI5aBqVgEt1gaXTxMcNSUvc3hsMaIl4McVHTl4ljsUZhMXhAYYVwYuouqwpBDXKTa4gX0APRkX4ZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788331978; c=relaxed/simple;
-	bh=CvwpVFn+it/JXqJOYDgCL57j56cIqsobVNBARi7pnmM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CSmyikVrTsuo/bRJ+ezCJmdoCR08OaGtZCdh+KKSADVlfa0YuA3W1Ed41MtBEJHZhATQyxHdUxukCXjGEQ0IlV67AjRz011Fm66a1X2EgwpFJJSwsKr37yUpcYDBl6V4cnXziDQUFW9a8eeJqVMgStLWXdFC3iVfoXsQiaxXao4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de; spf=pass smtp.mailfrom=Chamillionaire.breakpoint.cc; arc=none smtp.client-ip=91.216.245.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=Chamillionaire.breakpoint.cc
-Received: by Chamillionaire.breakpoint.cc (Postfix, from userid 1003)
-	id 866B260405; Wed, 02 Sep 2026 08:52:40 +0200 (CEST)
-From: Florian Westphal <fw@strlen.de>
-To: bpf@vger.kernel.org
-Cc: andrii@kernel.org,
-	eddyz87@gmail.com,
-	Florian Westphal <fw@strlen.de>
-Subject: [PATCH bpf] selftests/bpf: Add tests to assert that netfilter progs cannot write to skb
-Date: Wed,  2 Sep 2026 08:52:26 +0200
-Message-ID: <20260902065226.25201-1-fw@strlen.de>
-X-Mailer: git-send-email 2.55.0
+	s=arc-20240116; t=1788331990; c=relaxed/simple;
+	bh=dySyQAn0DDi/OmRXW6V7xLYbRbFjNAUAITo75E6DfYs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=qKLO85CJELCQwaCLfPOZxr9we60FcTvXyauWVHwwKQHxLqinw8QDXT6doWA/xVPKCFrMO1FFC7zvmpzkI8PBdD67d1K+C4N890AkwRfbNaZ/ItrE0BGsr0BugCDQERzyQL2ZaN1i7nSsnxGBlXV8yK93/NpmW80QUIzOR/Mah5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gFoN28ga; arc=none smtp.client-ip=91.218.175.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gFoN28ga"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=dySyQAn0DDi/OmRXW6V7xLYbRbFjNAUAITo75E6DfYs=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788331974; v=1; x=1788936774;
+ b=gFoN28gar3N0i+QaLQGlFi0uYdXMTdWLjpTpSFOc3fYQTSYM/ESq8jmgv3sBT5TCd7k/qBw9
+ m51zegGGf8aPRuDIU2ME8WdjfFTKBvQ5tRwPC8Hlw8qimcZy1PFjH7Jk2l04WPXPy8R8hxASTEX
+ pQzkYltvDhtpNBKu19Ev2bNM=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 512cd5bb4ec76f49;
+	Wed, 02 Sep 2026 06:52:54 +0000
+X-Mizu-Trace-ID: 512cd5bb4ec76f49
+X-Migadu-Flow: FLOW_OUT
+From: Hangbin Liu <hangbin.liu@linux.dev>
+Subject: [PATCH mptcp-next 0/2] selftests: mptcp: convert iptables to
+ nftables
+Date: Wed, 02 Sep 2026 14:52:34 +0800
+Message-Id: <20260902-mptcp_nft-v1-0-559caa16f410@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MTQqAIBBA4avErBNsFtV0lYjoZ6xZZKISgnT3p
+ OWDj5chsBcOMFQZPD8S5LYlmrqC7VzswUr20oAaW00a1eXi5mZrolp7wq5HNoQExTvPRtL/GuF
+ nynKKML3vB25ENvBnAAAA
+X-Change-ID: 20260902-mptcp_nft-b892782ef929
+To: MPTCP Linux <mptcp@lists.linux.dev>, 
+ Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: Hangbin Liu <hangbin.liu@linux.dev>, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, Hangbin Liu <liuhangbin@kylinos.cn>
+X-Mailer: b4 0.14.3
 
-The netfilter framework is allergic to ip header changing after
-validation done by ip/ipv6 stack.
+iptables has been deprecated for years. The Linux kernel has included
+nftables as the successor to iptables since 2014, and every major
+distribution uses nftables as the default packet filtering framework.
+The iptables command we run on modern systems is actually iptables‑nft,
+a compatibility layer that translates iptables syntax to nftables rules
+behind the scenes.
 
-Assert that bpf netfilter program type exposes readonly access to the
-skb, either via direct packet access or via dynptr API.
+There are also some features that can be set easily with nft, while we need
+to convert to BPF code under iptables, such as MPTCP add‑addr and
+remove‑addr suboptions. To make future work easier, convert iptables usage
+in mptcp to nftables.
 
-Following additional tests are expected to be rejected by verifier:
-
-1. alter skb->len.
-2. alter skb->data.
-3. prog calls bpf_dynptr_slice_rdwr.
-4. alter location returned by dynptr API.
-
-Add following test case for bpf runtime:
-- alter skb data via bpf_dynptr_write()
-
-Test checks via __retval() that bpf_dynptr_write() returned nonzero value.
-
-Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
 ---
- .../bpf/progs/verifier_netfilter_ctx.c        | 78 +++++++++++++++++++
- 1 file changed, 78 insertions(+)
+Hangbin Liu (2):
+      selftests: mptcp: convert iptables to nftables for mptcp_sockopt.sh
+      selftests: mptcp: convert iptables to nftables for mptcp_join.sh
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_netfilter_ctx.c b/tools/testing/selftests/bpf/progs/verifier_netfilter_ctx.c
-index e2cbc5bda65e..7e304331409f 100644
---- a/tools/testing/selftests/bpf/progs/verifier_netfilter_ctx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_netfilter_ctx.c
-@@ -113,4 +113,82 @@ int with_valid_ctx_access_test6(struct bpf_nf_ctx *ctx)
- 	return th->dest == bpf_htons(22) ? NF_ACCEPT : NF_DROP;
- }
- 
-+SEC("netfilter")
-+__description("netfilter test prog with skb write access")
-+__failure __msg("only read is supported")
-+int skb_len_write(struct bpf_nf_ctx *ctx)
-+{
-+	ctx->skb->len = 1;
-+	return 1;
-+}
-+
-+SEC("netfilter")
-+__description("netfilter test prog with skb data write access")
-+__failure __msg("cannot write into rdonly_untrusted_mem")
-+int with_invalid_data_write_test4(struct bpf_nf_ctx *ctx)
-+{
-+	ctx->skb->data[0] = 0;
-+	return 1;
-+}
-+
-+SEC("netfilter")
-+__description("netfilter test prog with bpf_dynptr_write")
-+__success __failure_unpriv
-+__retval(0)
-+int with_dynptr_write(struct bpf_nf_ctx *ctx)
-+{
-+	struct __sk_buff *skb = (struct __sk_buff *)ctx->skb;
-+	struct bpf_dynptr ptr;
-+	u8 buffer[1] = {};
-+
-+	if (bpf_dynptr_from_skb(skb, 0, &ptr))
-+		return 1;
-+
-+	if (bpf_dynptr_write(&ptr, 0, buffer, sizeof(buffer), 0))
-+		return 0; /* must always fail */
-+
-+	return 1;
-+}
-+
-+SEC("netfilter")
-+__description("netfilter test prog with bpf_dynptr_slice_rdwr")
-+__failure __msg("the prog does not allow writes to packet data")
-+int with_dynptr_rdwr(struct bpf_nf_ctx *ctx)
-+{
-+	struct __sk_buff *skb = (struct __sk_buff *)ctx->skb;
-+	u8 buffer_iph[20] = {};
-+	struct bpf_dynptr ptr;
-+	struct iphdr *iph;
-+
-+	if (bpf_dynptr_from_skb(skb, 0, &ptr))
-+		return 1;
-+
-+	iph = bpf_dynptr_slice_rdwr(&ptr, 0, buffer_iph, sizeof(buffer_iph));
-+	if (!iph)
-+		return 0;
-+
-+	return 1;
-+}
-+
-+SEC("netfilter")
-+__description("netfilter test prog with bpf dynptr_slice_write + write")
-+__failure __msg("cannot write into rdonly_mem")
-+int with_dynptr_store(struct bpf_nf_ctx *ctx)
-+{
-+	struct __sk_buff *skb = (struct __sk_buff *)ctx->skb;
-+	u8 buffer_iph[20] = {};
-+	struct bpf_dynptr ptr;
-+	struct iphdr *iph;
-+
-+	if (bpf_dynptr_from_skb(skb, 0, &ptr))
-+		return 1;
-+
-+	iph = bpf_dynptr_slice(&ptr, 0, buffer_iph, sizeof(buffer_iph));
-+	if (!iph)
-+		return 0;
-+	iph->protocol = 42;
-+
-+	return 1;
-+}
-+
- char _license[] SEC("license") = "GPL";
+ tools/testing/selftests/net/mptcp/config           |   3 +
+ tools/testing/selftests/net/mptcp/mptcp_join.sh    | 136 ++++++++-------------
+ tools/testing/selftests/net/mptcp/mptcp_lib.sh     |   2 +-
+ tools/testing/selftests/net/mptcp/mptcp_sockopt.sh |  56 ++++-----
+ 4 files changed, 77 insertions(+), 120 deletions(-)
+---
+base-commit: 8dd2802091fbba563abec55e0455d0e5273c7529
+change-id: 20260902-mptcp_nft-b892782ef929
+
+Best regards,
 -- 
-2.55.0
+Hangbin Liu <liuhangbin@kylinos.cn>
 
