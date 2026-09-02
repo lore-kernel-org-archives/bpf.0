@@ -1,99 +1,181 @@
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+Received: from outbound.baidu.com (mx14.baidu.com [220.181.3.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CD233403F5;
-	Wed,  2 Sep 2026 02:26:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0311028E0;
+	Wed,  2 Sep 2026 02:36:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.181.3.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788315988; cv=none; b=MjeHcRcpNVXhT8bs7c9MsRbsKI/8gyqok/6qAkwoB/zGqKnK4UxU8n2P1Vg0ZguUxE6kBa/fCsbgBsPcQsiDrB4bnvCdhcS2qYA8J5WQxng00h++Abq766hRHOLDqZLqTDr0k5MZfJ6ALkU+gFYkHBxhgaMkTyaCYUbALjoWkuA=
+	t=1788316626; cv=none; b=DhqaeT01vwh1pLALiPz7fPJvmsEQMvbYUZF7LT0Y6gKeU76/9DxuGStIb8+PCxs+5hlP1noDFts3btMCeyAFZb1dN+w1+0hlVqhRTJC6pUHbAgQVoyq9asAP+tpkjKlVYKFyQX+6z0TQVa2gmJmk/8UNcU3wZLei6czA8rM9ecc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788315988; c=relaxed/simple;
-	bh=HNu9ObHaCBJiGnVzsvKFTrJmpoC3XCqqe9WmgMRFZcg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YH19QbX1kT5lovaXCxAPvgkNBV0/ovZAa2OjgoOkuxP5G4Funi5/HBGhde+ee+C9gxyoOOuyTnRj1OB1sHmZquEX+q5OjgPpD/HH9NFRZi22OjC5NzvgYu7J78fWNsaJxamQyz9oue+mt99t9hFo+qMBUAvzMqjbZJQwSRXMWM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=H9o7OWem; arc=none smtp.client-ip=115.124.30.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1788316626; c=relaxed/simple;
+	bh=6cbLuym+1cqRI7P7D4gMdqm+OHpINkJYcn9natJyGsk=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tF7wq0CflTfb24wNmYhffdWCGTeDzGm0DDgatMlhkiPkyw2Krqhl8o/7j0mlYPJkTsh6QwZFWRMzPwQuPLoTSxx33rmoD6I3i5cZcHGBcR4LrZm/bP6ixNPLaCgfV6RSTXsahMbNufC9oZCIsx+rcYuPrJIq/EVh7xRTV/af1gY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=baidu.com; spf=pass smtp.mailfrom=baidu.com; dkim=pass (2048-bit key) header.d=baidu.com header.i=@baidu.com header.b=RTSrWvBk; arc=none smtp.client-ip=220.181.3.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=baidu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baidu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="H9o7OWem"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1788315977; h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-	bh=V/dlReRWmcpaJacPAy+g1eVWzWtHIWi93ITfcA0HWxA=;
-	b=H9o7OWemVgfsW/cZY27+sW/xPMYrW2SFt2gqm/rnHq3VJbuWk/Jcby2RhMlXH+T3kaW/cOYKx0161Ol5U8aqp8hWyintsOTM2p0CtNFaQPQT1OIvV+HqFYsiSy/K36B/cdfcH0u+602+60YoJbMTs2PT9Rl2n2qJY8tM6bteiDw=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R261e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0XAArZhl_1788315971;
-Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XAArZhl_1788315971 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 02 Sep 2026 10:26:16 +0800
-From: Chen Pei <cp0613@linux.alibaba.com>
-To: bot+bpf-ci@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	memxor@gmail.com,
-	bjorn@kernel.org,
-	puranjay@kernel.org
-Cc: ihor.solodrai@linux.dev,
-	eddyz87@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	pulehui@huawei.com,
-	pjw@kernel.org,
-	palmer@dabbelt.com,
-	shuah@kernel.org,
-	guoren@kernel.org,
-	bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next] bpf, riscv: Register extable entries at probe insn call sites
-Date: Wed,  2 Sep 2026 10:26:08 +0800
-Message-ID: <20260902015152.16104-1-reply-cp0613@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <46b7038550e5d5ed680c36ee4e9bd96429b9bd85b600c257a254fe73b17d6e19@mail.kernel.org>
-References: <20260901120013.16104-1-cp0613@linux.alibaba.com> <46b7038550e5d5ed680c36ee4e9bd96429b9bd85b600c257a254fe73b17d6e19@mail.kernel.org>
+	dkim=pass (2048-bit key) header.d=baidu.com header.i=@baidu.com header.b="RTSrWvBk"
+X-MD-Sfrom: lirongqing@baidu.com
+X-MD-SrcIP: 172.31.50.47
+From: lirongqing <lirongqing@baidu.com>
+To: Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
+	Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>, Andrew Lunn
+	<andrew+netdev@lunn.ch>, "David S . Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
+ Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+	Boris Pismenny <borisp@nvidia.com>, Richard Cochran
+	<richardcochran@gmail.com>, Cosmin Ratiu <cratiu@nvidia.com>, Dragos Tatulea
+	<dtatulea@nvidia.com>, Carolina Jubran <cjubran@nvidia.com>, Li RongQing
+	<lirongqing@baidu.com>, Kees Cook <kees@kernel.org>, Akiva Goldberger
+	<agoldberger@nvidia.com>, Simon Horman <horms@kernel.org>,
+	<netdev@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: [PATCH net-next, v3] net/mlx5: Use dma_wmb() for completion queue doorbell updates
+Date: Wed, 2 Sep 2026 10:34:29 +0800
+Message-ID: <20260902023429.1717-1-lirongqing@baidu.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: bjkjy-exc9.internal.baidu.com (172.31.50.19) To
+ bjkjy-exc3.internal.baidu.com (172.31.50.47)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=baidu.com;
+	s=selector1; t=1788316486;
+	bh=CoCztr6XAGEBvv7TN377FtTXgA/2hXdT8SEOdZBtANs=;
+	h=From:To:Subject:Date:Message-ID:Content-Type;
+	b=RTSrWvBkT6wcxnTJbHlv8m6ygevUd/hqx5QtZwAwa1bSs6Ld881jzOcPYQ8ACKO9g
+	 yqXWZJ5rQtotBmBQKzGaTY8CyVVax3T9UYLCvm5MkXoh0i2RZvqOsMkDSzCcigzFHL
+	 KRRQLpwTMyu+z0NN2VftvO+2QqnDsQgqGo17BuD6tBMEcVKE0Be34Ruyi06pGhSRtj
+	 k/tlyRlUnnX6wXszuv5BUFZ9X+qQ+ZBSEY24pC8Qyeh6Zt5TlKSA9YLCFN/RfOmy/L
+	 jIclxKb830AkPiR0lDbejKOls+0elib26MVRzsYeFRf0h76hBtvBIPez0hnerXJV2v
+	 vj6uE/xGh85VA==
 
-> This looks like a bug fix for the fragile mode-based filtering in
-> add_exception_handler(). Should this include:
->
->   Fixes: b4757714cc63 ("bpf, riscv: Add support for signed arena loads")
+From: Li RongQing <lirongqing@baidu.com>
 
-No Fixes tag, because the mode/class collision has never been a live
-bug in any released tree. b4757714cc63 introduced both the
-BPF_PROBE_MEM32SX support and the LDX class guard in the mode gate, in
-the same commit, precisely to keep plain atomics (which share the 0xc0
-mode value) out of the exception table. Its commit message says so
-explicitly:
+dma_*() barriers are specifically for ordering writes to DMA
+coherent memory that is accessible to both the CPU and DMA capable
+devices.
 
-  "Since BPF_PROBE_MEM32SX shares its mode value (0xc0) with
-   BPF_ATOMIC, the gate accepts it only for LDX class instructions so
-   that plain atomic instructions do not register exception table
-   entries."
+The dma_wmb() barrier is lighter than wmb() on some architectures
+because it only ensures ordering for DMA writes, not for all writes
+including MMIO accesses.
 
-For context: I noticed this fragile shared-state gate while working on
-v1 of "bpf, riscv: Add support for signed arena loads", where the class
-guard was added as a preventive measure. This patch now follows up with
-the actual cleanup, making the registration decision explicit at each
-call site so future probe modes cannot silently collide with legitimate
-encodings.
+In the MLX5 driver, completion queue (CQ) doorbell records are
+allocated as DMA coherent memory via mlx5_dma_zalloc_coherent_node().
+The CQ update pattern is:
+  1. Update CQ space (device reads via DMA)
+  2. Update doorbell record (device reads via DMA)
+  3. Memory barrier
+  4. Enable more CQEs
+Since only DMA coherent memory accesses are involved (no MMIO accesses
+follow), we can safely use dma_wmb() instead of wmb().
 
-Also, regarding sashiko-bot's separate concern about BPF_PROBE_ATOMIC
-cmpxchg without ZACAS: that path is unreachable, as arena BPF_CMPXCHG
-is already gated on ZACAS by bpf_jit_supports_insn(), and
-add_exception_handler() resets its offsets after every registration,
-so stale offsets cannot be consumed. A separate fix I have prepared,
-"bpf, riscv: Make arena support depend on ZACAS", further rejects
-arena map creation on non-ZACAS systems altogether.
+This change improves performance slightly on architectures where
+dma_wmb() is lighter than wmb().
 
-Best regards,
-Pei
+Signed-off-by: Li RongQing <lirongqing@baidu.com>
+Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
+---
+V3: Kept the original wmb() barrier inside wc.c 
+
+V2: rebased.
+https://patchwork.kernel.org/project/netdevbpf/patch/20260811064750.3218024-1-tariqt@nvidia.com/
+
+V1:
+https://patchwork.kernel.org/project/netdevbpf/patch/20260402055206.2311-1-lirongqing@baidu.com/
+
+ drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c    | 2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c    | 2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en_rx.c     | 2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en_tx.c     | 2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c | 2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c   | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
+index 723f66a..17084d7 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
+@@ -259,7 +259,7 @@ static bool mlx5e_ptp_poll_ts_cq(struct mlx5e_cq *cq, int napi_budget)
+ 	mlx5_cqwq_update_db_record(cqwq);
+ 
+ 	/* ensure cq space is freed before enabling more cqes */
+-	wmb();
++	dma_wmb();
+ 
+ 	while (metadata_buff_sz > 0)
+ 		mlx5e_ptp_metadata_fifo_push(&ptpsq->metadata_freelist,
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+index 77ea51b..ee0986b 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+@@ -817,7 +817,7 @@ bool mlx5e_poll_xdpsq_cq(struct mlx5e_cq *cq)
+ 	mlx5_cqwq_update_db_record(&cq->wq);
+ 
+ 	/* ensure cq space is freed before enabling more cqes */
+-	wmb();
++	dma_wmb();
+ 
+ 	sq->cc = sqcc;
+ 	return (i == MLX5E_TX_CQ_POLL_BUDGET);
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+index 6fbc044..3c80193 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+@@ -2507,7 +2507,7 @@ int mlx5e_poll_rx_cq(struct mlx5e_cq *cq, int budget)
+ 	mlx5_cqwq_update_db_record(cqwq);
+ 
+ 	/* ensure cq space is freed before enabling more cqes */
+-	wmb();
++	dma_wmb();
+ 
+ 	return work_done;
+ }
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
+index 0b5e600..14479da 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tx.c
+@@ -849,7 +849,7 @@ bool mlx5e_poll_tx_cq(struct mlx5e_cq *cq, int napi_budget)
+ 	mlx5_cqwq_update_db_record(&cq->wq);
+ 
+ 	/* ensure cq space is freed before enabling more cqes */
+-	wmb();
++	dma_wmb();
+ 
+ 	sq->dma_fifo_cc = dma_fifo_cc;
+ 	sq->cc = sqcc;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c b/drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c
+index 1f6bde5..1341874 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c
+@@ -384,7 +384,7 @@ static inline void mlx5_fpga_conn_cqes(struct mlx5_fpga_conn *conn,
+ 
+ 	mlx5_fpga_dbg(conn->fdev, "Re-arming CQ with cc# %u\n", conn->cq.wq.cc);
+ 	/* ensure cq space is freed before enabling more cqes */
+-	wmb();
++	dma_wmb();
+ 	mlx5_fpga_conn_arm_cq(conn);
+ }
+ 
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c b/drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c
+index 614cd57..8f7a89a 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/lib/aso.c
+@@ -421,7 +421,7 @@ int mlx5_aso_poll_cq(struct mlx5_aso *aso, bool with_data)
+ 	mlx5_cqwq_update_db_record(&cq->wq);
+ 
+ 	/* ensure cq space is freed before enabling more cqes */
+-	wmb();
++	dma_wmb();
+ 
+ 	if (with_data)
+ 		aso->cc += MLX5_ASO_WQEBBS_DATA;
+-- 
+2.9.4
+
