@@ -1,149 +1,156 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DBF83AF656;
-	Wed,  2 Sep 2026 07:00:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE9B33BB669;
+	Wed,  2 Sep 2026 07:02:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788332422; cv=none; b=KQ62vhEfryrLGLkVJGeXMMkXp/Rb9xd41V9sK1TlZNu2/6sIvDdMdwcipBAiN09M1Sqvr1aY3L/b493nagEdSIgP0imhqSUDatiETa3SBVLBSCPnoKCRi6EoWiCGf3hlk6KfAQpVVk6YjRfZllJYgPBlcp/dNT50vJKelExOI+M=
+	t=1788332554; cv=none; b=fT9Wznr3Nyhz+acF5GkegvoJtohX308IVem72Bq1g0n+n1K295MlLvZacU7gD2SfY7llCb0PE0E2lZvk95csLj8qLhNG1+SRz+vZYI3DDwog37nTL7t43nSN+43+5T76xusl06aK4It33WSY4wHxBPXL7xTipXWWx1+wqCbM2N8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788332422; c=relaxed/simple;
-	bh=8bj7QNbdM6zlJ+BocDGXs3na7c4GnZFS7071sjJJMhU=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=b2qZ6qesIXdJ2RidmdnqXHXdeg+uF9cQrOv3e4Z0wKBVXndufRgPwcHJGZxY50kujJ+pCA9NdANBFYfDMhYNQPdgt8nd/xqgmpS95ZecZDemcfCdiGASu3cPTKjBH0FEGd9hQXqq9xYZaJBPEZ01KVjsG0rag0TCX9wjwzktjGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=edprlGG5; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788332554; c=relaxed/simple;
+	bh=bLE/NMQ+GjLSdimzfiXusGyJdbaLYy2NuH8+gnU22vw=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=kLGk8uk/W2TearOQsy8S9Hbdlu8ghU8A4zigRNbyDfSXonGHhLW2z+V+8yVj2HMZHvzLrTTIZI5FUvwp0dThLyh8fmNeH55OOcdwRIJIGvNyMZ16BeYIonk8osL/Luqk8orl6YbPqMrkMWAMQDJFZif9V8jKQFj17a8HLM6pXiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VqsJsIIa; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="edprlGG5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBE2C1F00A3A;
-	Wed,  2 Sep 2026 07:00:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VqsJsIIa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F4851F000E9;
+	Wed,  2 Sep 2026 07:02:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788332421;
-	bh=6GQWjWiyHMh2NyzpXqt8ZPQBafv2oClqvk7rN86jNY0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=edprlGG5rdgI2dhNAMIZridLzVabhdXyXnRUiZRQg1vo77kz7/3zA82+1F40pWTAj
-	 s4tgyizJeg9xRGuXD3/CWPs/okWeFAQ8C4kCx0u97J86dHSFvYzmbCYojYM/brpI4o
-	 GMmGG4J82I3NbaI34HrPdHSBhI07+ZLFkencpHTjEU3fUFRWNl2+QynIZ0YLW75g78
-	 4g5MhnsRPZ/gaKIYsGVFEDN5MfB3Trxm29HZYUpSDH0UjKNLTphUR2YGcNIwBFimIs
-	 uV7yi3NDcyzx4SECSrq7SJTJZN9C1zlgVQQRNfv3DpP+L9D9QGhQPWH3wfmxwxoJnE
-	 vdRaQqwNlrsrA==
-Content-Type: multipart/mixed; boundary="===============5269529957093976897=="
+	s=k20260515; t=1788332552;
+	bh=KI8KRWZe1A7+OEsjyc7wh5M8d0WkG2au2+MpQE5DFF0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=VqsJsIIaBXVed2cjgbHI7vEOJdZIprkf0Eovk8KtCv3BiWb0StPBYOAtSVzu5hc/d
+	 oQhua+1SZir4MWld0Le+evCmq92+R6F7jj1OKEf1PJ4K15B6lLD5dVAyXabwLUM5tJ
+	 G5Tc2BhDx4+pkFNy/hI4G/i+3XCY7Q88Vdrrc+dwodyprPE0N1aNh64YPBHjgjE4LN
+	 qaROI6kbJPXHyHemC790S4sVotBxggrPo7IZ+K4s6Dl3yMYpf6Ffh1/UUgmFR8tOBQ
+	 Hr/0z8sJmnpaArDnL3+VwC22KYu38CamaJjQNL5zCMInJIjok4WOY03WrqpNbtZtDr
+	 4dJmVdC0ZaBZA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH mptcp-next 1/2] selftests: mptcp: convert iptables to
+ nftables for mptcp_sockopt.sh
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Hangbin Liu" <hangbin.liu@linux.dev>
+Cc: bpf@vger.kernel.org, mptcp@lists.linux.dev
+In-Reply-To: <20260902-mptcp_nft-v1-1-559caa16f410@kylinos.cn>
+References: <20260902-mptcp_nft-v1-0-559caa16f410@kylinos.cn>
+ <20260902-mptcp_nft-v1-1-559caa16f410@kylinos.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 02 Sep 2026 07:02:31 +0000
+Message-Id: <20260902070232.4F4851F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <594ed4944926f6a7202b016eca03d879d11bfdf09a2cbaea039421ae4ab962c0@mail.kernel.org>
-In-Reply-To: <20260902061451.1416-1-cp0613@linux.alibaba.com>
-References: <20260902061451.1416-1-cp0613@linux.alibaba.com>
-Subject: Re: [PATCH bpf v2] bpf, riscv: Make arena support depend on ZACAS
-From: bot+bpf-ci@kernel.org
-To: cp0613@linux.alibaba.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,memxor@gmail.com,bjorn@kernel.org,puranjay@kernel.org
-Cc: ihor.solodrai@linux.dev,eddyz87@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,pulehui@huawei.com,pjw@kernel.org,palmer@dabbelt.com,guoren@kernel.org,bpf@vger.kernel.org,linux-riscv@lists.infradead.org,linux-kernel@vger.kernel.org,stable@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed,  2 Sep 2026 07:00:19 +0000 (UTC)
 
---===============5269529957093976897==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [Medium] Replacing iptables TCP flag matching with nftables exact matchin=
+g (`tcp flags rst` and `tcp flags syn`) fails to match packets with multipl=
+e flags set, causing spurious test failures.
+- [Medium] An empty `$drop` variable causes a Bash syntax error during nume=
+ric evaluation, which evaluates to false and silently masks test failures.
+- [Low] Typo in string interpolation for the error message (`IPv{$af}` inst=
+ead of `IPv${af}`).
+--
 
-> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-> index 74efe4b138d2..151031e97a24 100644
-> --- a/arch/riscv/net/bpf_jit_comp64.c
-> +++ b/arch/riscv/net/bpf_jit_comp64.c
-> @@ -2128,7 +2128,15 @@ bool bpf_jit_supports_ptr_xchg(void)
->
->  bool bpf_jit_supports_arena(void)
+commit af165781f3fb777bc40bc4de19c7d79cd01f51cc
+Author: Hangbin Liu <liuhangbin@kylinos.cn>
+
+selftests: mptcp: convert iptables to nftables for mptcp_sockopt.sh
+
+This patch converts the mptcp_sockopt.sh selftest to use nftables instead of
+iptables. It replaces per-address-family iptables mark rules with an inet
+table containing drop counting rules for IPv4 and IPv6.
+
+> diff --git a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh b/tools/t=
+esting/selftests/net/mptcp/mptcp_sockopt.sh
+> index e850a87429b61..4d0af2bf94840 100755
+> --- a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
+> +++ b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
+
+[ ... ]
+
+> @@ -49,17 +47,23 @@ add_mark_rules()
+>  	local ns=3D$1
+>  	local m=3D$2
+> =20
+> -	local t
+> -	for t in ${iptables} ${ip6tables}; do
+> -		# just to debug: check we have multiple subflows connection requests
+> -		ip netns exec $ns $t -A OUTPUT -p tcp --syn -m mark --mark $m -j ACCEPT
+> -
+> -		# RST packets might be handled by a internal dummy socket
+> -		ip netns exec $ns $t -A OUTPUT -p tcp --tcp-flags RST RST -m mark --ma=
+rk 0 -j ACCEPT
+
+[ ... ]
+
+> +	# just to debug: check we have multiple subflows connection requests
+> +	ip netns exec "$ns" nft add rule inet msock_table output \
+> +		 meta mark "$m" tcp flags syn accept
+> +	# RST packets might be handled by a internal dummy socket
+> +	ip netns exec "$ns" nft add rule inet msock_table output \
+> +		meta mark 0 tcp flags rst accept
+
+[Severity: Medium]
+In add_mark_rules(), the original iptables rules --tcp-flags RST RST and
+--syn used bitmasks to allow additional flags like ACK for RST or ECN for
+SYN. The new nftables rules tcp flags rst and tcp flags syn enforce an
+exact match on the entire TCP flags byte.
+
+Will these exact matches reject packets with multiple flags set, such as
+RST+ACK or SYN+ECN, causing them to fall through to the drop rule and fail =
+the
+test?
+
+[ ... ]
+
+> @@ -105,33 +109,23 @@ cleanup()
+> =20
+>  mptcp_lib_check_mptcp
+>  mptcp_lib_check_kallsyms
+> -mptcp_lib_check_tools ip "${iptables}" "${ip6tables}"
+> +mptcp_lib_check_tools ip nft
+> =20
+>  check_mark()
 >  {
-> -	return true;
-> +	/*
-> +	 * The arena range tree uses kmalloc_nolock(), which needs
-> +	 * cmpxchg128, provided by ZACAS on riscv.
-> +	 */
-> +#ifdef system_has_cmpxchg128
-> +	return system_has_cmpxchg128();
-> +#else
-> +	return false;
-> +#endif
->  }
+>  	local ns=3D$1
+>  	local af=3D$2
+> =20
+> -	local tables=3D${iptables}
+> +	drop=3D$(ip netns exec "$ns" nft list table inet msock_table | \
+> +		grep "ipv$af.*packets.*drop" | awk '{print $(NF-3)}')
+> =20
+> -	if [ $af -eq 6 ];then
+> -		tables=3D${ip6tables}
+> +	if [ "$drop" -ne 0 ]; then
 
-The constraint being checked here is a slab property (kmalloc_nolock()
-requiring cmpxchg128 support), not a JIT property. Fixing it
-per-architecture leaves the identical misleading -ENOMEM on every other
-architecture.
+[Severity: Medium]
+If the command extraction for drop fails, or if grep finds no matches,
+the $drop variable will be empty.
 
-Looking at mm/slub.c, kmalloc_nolock() rejects the request whenever
-the cache lacks __CMPXCHG_DOUBLE:
+When bash evaluates [ "$drop" -ne 0 ] with an empty string, it triggers a
+syntax error. This error evaluates to false and skips the failure block.
 
-    if (!(s->flags & __CMPXCHG_DOUBLE) && !kmem_cache_debug(s))
-            return NULL;
+Does this risk silently masking test failures if the extraction logic ever
+fails to produce a number?
 
-and __CMPXCHG_DOUBLE is __SLAB_FLAG_UNUSED (0) whenever the arch
-provides no system_has_cmpxchg128 on 64-bit (mm/slab.h).
+> +		mptcp_lib_pr_fail "got $drop pkt drops in ns $ns IPv{$af} tables," \
 
-Grepping every definition of system_has_cmpxchg128 in the tree gives:
+[Severity: Low]
+Is the string interpolation IPv{$af} a typo?
 
-    arm64        constant 1
-    s390         constant 1
-    x86_64       boot_cpu_has(X86_FEATURE_CX16)
-    loongarch    cpu_opt(LOONGARCH_CPU_SCQ)
-    riscv        this patch's ZACAS check
+Bash interpolates the $af variable but leaves the literal braces, printing
+IPv{4} instead of IPv4. Should this be IPv${af} or IPv$af instead?
 
-Yet the other bpf_jit_supports_arena() implementations are unconditional:
+> +				  "not 0 - not all expected packets marked"
+> +		ret=3D${KSFT_FAIL}
+> +		return 1
+>  	fi
 
-    arch/powerpc/net/bpf_jit_comp.c      return IS_ENABLED(CONFIG_PPC64);
-    arch/x86/net/bpf_jit_comp.c          return true;
-    arch/loongarch/net/bpf_jit.c         return true;
-
-So on ppc64 kmalloc_nolock() can never succeed for a non-debug cache,
-and arena_map_alloc() returns -ENOMEM unconditionally -- exactly the
-symptom this patch is fixing, with no ZACAS involved. The same holds
-for x86_64 CPUs without CX16 and loongarch without SCQ.
-
-Is a check in generic code (arena_map_alloc() or a slab-provided
-helper) worth considering to fix all affected architectures at once and
-avoid replicating SLUB internals knowledge into each arch JIT hook?
-
---- Commit message ---
-
-> The arena range tree allocates its nodes with kmalloc_nolock() since
-> commit f8c67d8550ee ("bpf: Use kmalloc_nolock() in range tree").
-> kmalloc_nolock() requires slab caches with cmpxchg128 support
-> (__CMPXCHG_DOUBLE); on riscv cmpxchg128 is provided by the ZACAS
-> extension. On systems without ZACAS every arena map creation fails
-> with a misleading -ENOMEM.
-
-The claim "every arena map creation fails with a misleading -ENOMEM" is
-not exhaustively accurate. Looking at mm/slub.c:
-
-    if (!(s->flags & __CMPXCHG_DOUBLE) && !kmem_cache_debug(s))
-            /*
-             * kmalloc_nolock() is not supported on architectures that
-             * don't implement cmpxchg16b and thus need slab_lock()
-             * ...
-             * kmem_cache_node->list_lock, so kmalloc_nolock() can attempt
-             * to allocate from debug caches by
-             * spin_trylock_irqsave(&n->list_lock, ...)
-             */
-            return NULL;
-
-The condition is an AND: when the cache is a debug cache (slub_debug
-boot parameter, or CONFIG_SLUB_DEBUG_ON=y), kmalloc_nolock() proceeds
-even with no cmpxchg128, so range_tree_set() and the arena.c
-kmalloc_nolock() sites succeed and arena maps can be created today on a
-non-ZACAS riscv64 system. After this change those same systems get
--EOPNOTSUPP.
-
-That narrowing is arguably desirable (BPF should not depend on a SLUB
-debug-mode escape hatch), but is the changelog accurate about the
-current behavior? Should it note the debug-cache exception, or state
-explicitly that gating on the CPU feature is deliberately stricter than
-kmalloc_nolock()'s minimum requirement?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33598715943
---===============5269529957093976897==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260902-mptcp_nft-=
+v1-0-559caa16f410@kylinos.cn?part=3D1
