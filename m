@@ -1,161 +1,108 @@
-Received: from mail-oo2-f5.google.com (mail-oo2-f5.google.com [74.125.231.133])
+Received: from mta1.migadu.com (out-199.mta1.migadu.com [95.215.58.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D3B533FE09
-	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 01:13:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC4727BF93
+	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 01:21:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788311616; cv=none; b=DdvfRUAk3KE6SPg6kIN0eFXoHwMPbZdDsohZ7ZHbAfxty/pBCgZY0QC1KaxxskUgZitLStwFJuQKl0qGdwtaVCuzu+kqHh9oLTFntd56o59i+kV9/uQ0MKtE1D1tAmIizmz5w1rvu5yIMuZrzexdoB4CLiHntTOAVEuf9pje1H8=
+	t=1788312095; cv=none; b=IWwZEnV69sLZm79+irCxTg9ZhAY4C6JEz2gSCz2ktJhhoED3dAmVUzMMnmEsAQ6bFL5/CiGPpdWvU76HHksdntSD45bzK1T9lDGpwYPeHd2zk/BSO4vghk+SsgWKLgeEqq5NGuez973PKT3tfoxGr9fwFXoEZRYIYP+gZgoluPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788311616; c=relaxed/simple;
-	bh=mthsAuvC5kxwl9HoC2silixWp9Aei1Pp/kO4Vu2EIZk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=UPdrJwwbgODhd9cMcBwc6zsVRKzdj9ykB9U3DMcl5ODvjYBKKa/DxJ3tNC+FKrc0oq7nRtLVen1S8Y8GmgjLUjZk0RlGhXL7O8+UyiXjsbBaSOdeaksSU+gSGoEfR1iWyZ0JB27642RR1MIfVT57S7Llqpyk74FX24JsPtpjNg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FHvh+gyz; arc=none smtp.client-ip=74.125.231.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788312095; c=relaxed/simple;
+	bh=cnYNJPs9LNsxHxYbfan+xf2gAuz5dcYlsIYOr8iWioY=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=n0rAmrO0bFM6iB7jwiZ8GHDkfd8eJxCRzp9tjJ6bzGdvKA3fzKBnnbuOBTjRpJy1V5ercV6pw8way2NYFhuxA4O+8/77DIPT8j4pYK9n/7ZNjjcLGURrov7yIZX7YcxYDvjr/E79P66xY1QNpPL+Si+Rz4XZ9qJB2PhAY01dkGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=I/EKpy6Y; arc=none smtp.client-ip=95.215.58.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FHvh+gyz"
-Received: by mail-oo2-f5.google.com with SMTP id 46e09a7af769-7f4e10aa28cso63677a34.0
-        for <bpf@vger.kernel.org>; Tue, 01 Sep 2026 18:13:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788311609; x=1788916409; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=mqO5MLc175YVYlL4+Bawb4s5pN8s4dKpvKfmlQW7U1I=;
-        b=FHvh+gyzwbb4MZVbfK/4AUjtIi3Az9Sp9fYyuWAJN0exymtGB8Y7OabApqI8WHpjdA
-         SnTR3GlH4z96oxHr6b1T1qyEL2jzflqehvWnIzF7bMH8VTxVOyVDX8U4KqOu6m3lt4Mr
-         Erfva5aWYlbrPw8hufbde4SwSSvQwTMV2+yGnrAsw0C21Nqt3RPDHaioQ7ubQUWlITS/
-         wA4O7dX1g9ntSP2sFkLCYc1hbNn/C13LyZjdP8MPlDMX2/Mo7DuFGSRS8nFWwOqir8x7
-         7XbtL/emtjWHluNGVSAHLcjuh0E+iE00OcXyvV54q6DIxVEuboFvhmIZWwNzde6V8NFT
-         tAkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788311609; x=1788916409;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=mqO5MLc175YVYlL4+Bawb4s5pN8s4dKpvKfmlQW7U1I=;
-        b=O/hBWe+B51pFBnoFBMIeoSUDDGbFGRKqf3hXi/y6izB5BAs+ERV8YTN96j+lHkqKCN
-         mX/FD8bLMyB0c5aNKs+5UwuMzHl6aP2C7IajeOpOyzo+qz/AjjaacYuom3HxK9WvE2qE
-         LroZsi5m90vLBANGBx2db9DwYM5Sfpnus6H/INqDlWHYURd9V+9BBE5K5jIjubdYJVLh
-         VG/JdQmjfCmpaJV3PlttKxe7CVj0vLuOP4w4bKriS7iYgyXPPA3FTJ9CAWZSETPHD9LF
-         xarCpKFq3DuvtZDWYHvHmUKZFRVK0/3PRrOmqPFQJfqemqvjN+PfGBFWxuN4ba93ddUZ
-         v+zw==
-X-Forwarded-Encrypted: i=1; AHgh+Rofbya56CFUmKwWQ83FIWSE+EnA+3S7ZAXcy2UvfpwLLepJDQMKtZUzyFyJOTQs2jaBtf8=@vger.kernel.org
-X-Gm-Message-State: AFuF++ku7oSdECbX64Rufs1skjbdOCIxCgbUInw/KqHNcZNs/BgCT6nI
-	2bWlX5Yh6hWSkoXcT8OGww5/8Jm+5e2ZoZxOH6OI7pHgFw9fp7h7/QIGPb5Cu81omro=
-X-Gm-Gg: AR+sD11m9b8p5NMi4Bn9pdtoDZQaKaW1d3TevyHccLuByHyheHOLWQfuPpeZ5ayZ7KN
-	9h9jQ/CIWdT56rXn1U82UrzvFFp2W09FYlkY6oIzNQCmicYepBxYuTU/WZParuGfEh3ZnAmnNTv
-	3YWaC8dw0gXLpd0KAVhFyQOF/gk4Ief124kx0+Un0dlbLk7eZQQ/n3i+wJh+GSVR5yfMlFuBlkM
-	FSlH7wvKGOpNVUo5+0m5hqAdL3imcwILnovo6tsgBoprp2j6P9CW/zOo2zPTEVAcPUhkl1X7P+b
-	RoIuchspV0A51jnTQl3N1rMGDeqjSctYRotSY0Z8rHky3E+WtzSiSWGoMEXoj/bIN8vAxT6cOkS
-	616ecYhMfbYfuEdjO7orNkCtvaGHjzeRSVX26LDazUK3HPT56vhPUh4dw3g64UeVz8/4ASvpUCL
-	iqsxzaSH8NKmOINHdRfMcVAiN2eP7QUlnETJKTUJK3XVO3OgP+o/cFQx3IWaB6DDXZxSDwvKzau
-	qX2xBKfYgpWKK/krOpqXGbmM08Qy8UI6QkGp9nbLO+uRNicbG3OwxuPx7BDK4bqxGc1SqNOs+lT
-	v7VJypE=
-X-Received: by 2002:a4a:ec46:0:b0:6b1:4e37:41c0 with SMTP id 006d021491bc7-6b48103a707mr855739eaf.19.1788311608778;
-        Tue, 01 Sep 2026 18:13:28 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:40::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f74f9ec644sm1036500a34.24.2026.09.01.18.13.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Sep 2026 18:13:27 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="I/EKpy6Y"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=cnYNJPs9LNsxHxYbfan+xf2gAuz5dcYlsIYOr8iWioY=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788312091; v=1; x=1788916891;
+ b=I/EKpy6YleKf2k09kllkG9SVKq6NgoGEUUc66ZHW16Q5xpJTOsEURdaGM1W19cK7n2aCwNx6
+ cx+fIWDSB5oJgqhH8iC6r9h7+mW+ykEdu8qed9ZpbtK4u+HStR29LrZ0xHuo/LWmW/VXkhQMv4W
+ rogA95RpSwiM+JIMMYgzRV8Q=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 16aaff76fb8e100b;
+	Wed, 02 Sep 2026 01:21:31 +0000
+X-Mizu-Trace-ID: 16aaff76fb8e100b
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <485268f6-52e7-4b55-88d0-56c89bf88008@linux.dev>
+Date: Wed, 2 Sep 2026 09:21:05 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc: cui.tao@linux.dev, arighi@nvidia.com, void@manifault.com,
+ changwoo@igalia.com, michalblk@google.com, liwanwu@kylinos.cn,
+ sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, Tao Cui <cuitao@kylinos.cn>,
+ Sashiko <sashiko-bot@kernel.org>
+Subject: Re: [PATCH v2 2/2] sched_ext/scx_flatcg: make cgv_node_less()
+ wraparound-safe
+To: Tejun Heo <tj@kernel.org>
+References: <20260901140343.764080-1-cui.tao@linux.dev>
+ <20260901140343.764080-3-cui.tao@linux.dev>
+ <beadefcfd5ae112a703b2514f6eebf34@kernel.org>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <beadefcfd5ae112a703b2514f6eebf34@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 02 Sep 2026 03:13:26 +0200
-Message-Id: <DL4FK2P8LMEQ.216J5ZMX9B7VC@gmail.com>
-Cc: <loongarch@lists.linux.dev>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf v1 RESEND] bpf: Fix timer_lockup deadlock using
- atomic_fetch_inc()
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Tiezhu Yang" <yangtiezhu@loongson.cn>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>
-X-Mailer: aerc 0.22.0
-References: <20260902005106.22187-1-yangtiezhu@loongson.cn>
-In-Reply-To: <20260902005106.22187-1-yangtiezhu@loongson.cn>
+Content-Transfer-Encoding: 8bit
 
-On Wed Sep 2, 2026 at 2:51 AM CEST, Tiezhu Yang wrote:
-> When testing the BPF selftest "sudo ./test_progs -t timer_lockup", there
-> is a kernel lockup and panic on LoongArch:
->
->   watchdog: BUG: soft lockup - CPU#1 stuck for 8s! [test_progs:39601]
->   Kernel panic - not syncing: softlockup: hung tasks
->   ...
->   Call Trace:
->   ...
->   [<9000000000c40e98>] panic+0x44/0x48
->   [<9000000000e8b000>] watchdog_timer_fn+0x500/0x520
->   [<9000000000dfd9a4>] __hrtimer_run_queues+0xc4/0x530
->   [<9000000000dffe90>] hrtimer_interrupt+0x140/0x320
->   ...
->   [<9000000002ad9e4c>] _raw_spin_unlock_irqrestore+0x8c/0xc0
->   [<9000000000dfe9e0>] hrtimer_try_to_cancel.part.0+0x70/0x350
->   [<9000000000dfed58>] hrtimer_cancel+0x38/0x80
->   [<9000000000f6d944>] bpf_timer_cancel+0x94/0x1e0
->   [<ffff80000200fad0>] bpf_prog_108ab87b32f22e44_timer_cb1+0xb0/0xfc
->   [<9000000000f6b838>] bpf_timer_cb+0x98/0x170
->   [<9000000000dfdaac>] __hrtimer_run_queues+0x1cc/0x530
->   [<9000000000dfde94>] hrtimer_run_softirq+0x84/0xd0
->   ...
->   [<900000000271d9e0>] bpf_test_run+0x1c0/0x5c0
->   [<900000000271f548>] bpf_prog_test_run_skb+0x6e8/0xe20
->   [<9000000000f39940>] __sys_bpf+0x1690/0x2c50
->   [<9000000000f3af28>] sys_bpf+0x28/0x40
->   [<9000000002ac2d68>] do_syscall+0x108/0x5e0
->   [<9000000000c6a850>] handle_syscall+0xd0/0x170
->
-> In bpf_timer_cancel() of kernel/bpf/helpers.c, it explicitly notes that
-> "Need full barrier after relaxed atomic_inc" to ensure global visibility
-> of the cancelling state before performing the lockless dependency checks.
->
-> However, on weakly-ordered architectures such as LoongArch, the current
-> combination of a relaxed atomic_inc() followed by smp_mb__after_atomic()
-> fails to guarantee the physical store-load ordering because the latter
-> currently expands to an empty compiler barrier rather than a hardware
-> data barrier on LoongArch.
->
-> This allows a subsequent read to bypass the prior write due to store-load
-> reordering, enabling concurrent CPUs to simultaneously bypass the softwar=
-e
-> deadlock detection, enter hrtimer_cancel(), and then trigger a severe ABB=
-A
-> deadlock in the hrtimer core.
->
-> Instead of relying on arch-specific macro implementations which may vary
-> in strictness, fix this issue directly in the BPF core helper by replacin=
-g
-> atomic_inc() and smp_mb__after_atomic() with a single atomic_fetch_inc()
-> to provide full ordering natively.
+Hello, Tejun.
 
-This paragraph is completely bogus. LoongArch's smp_mb__after_atomic() had =
-a
-bug. The specification in LKMM for smp_mb__after_atomic() is that it should=
- be a
-full barrier, which can be relaxed if the prior atomic operation already
-provides the necessary ordering.
+在 2026/9/2 04:00, Tejun Heo 写道:
+> Hello,
+> 
+> On Tue, Sep 01, 2026 at 10:03:43PM +0800, Tao Cui wrote:
+> ...
+>> long-running host. At the wrap instant the plain comparison puts the
+>> wrapped node behind everything else permanently.
+> 
+> Plain < puts the wrapped node at the front. The unwrapped ones get stuck
+> behind it. Also, each CPU picking a cgroup charges it a full slice, so the
+> wrap is closer than weeks.
+> 
+> ...
+>> cyclic comparison is valid as an rbtree comparator only because
+>> cgrp_cap_budget() clamps every node to within max_budget behind
+>> cvtime_now, so any two nodes are far less than 2^63 apart and the
+> ...
+> 
+> cgrp_cap_budget() only bounds the lag. The lead is bounded by the slice
+> charge plus pending cvtime_delta on re-insertion.
+> 
+>> Fixes: 7b742aa2c2c9 ("sched_ext: Add a cgroup scheduler which uses flattened hierarchy")
+> 
+> Not in mainline. The upstream commit is a4103eacc2ab.
+> 
+>> +	/* wrap-safe: cap_budget keeps nodes within 2^63 of each other */
+>> +	return (s64)(cgc_a->cvtime - cgc_b->cvtime) < 0;
+> 
+> Use time_before() and drop the comment.
+> 
 
-As I already said, there is no point in changing or "optimizing" this atomi=
-c
-inc. Just let it be. You will see no measurable difference for this functio=
-n.
+Thanks for both reviews, all points taken. Here's what changed:
 
-Just accept that it was a bug, and fix the lowering for your arch. Plenty o=
-f
-other logic in the kernel uses this primitive, so I think you folks were ju=
-st
-lucky this wasn't hit before by something else.
+1/2: "less than 2^63 apart", folded into the paragraph above.
 
-> [...]
+2/2: wrapped node goes to the front (not behind), wrap timing
+corrected (per-CPU slice charge), lag and lead bounds both stated,
+Fixes points at a4103eacc2ab, comparator uses time_before(), and the
+comment is dropped.
+
+I'll send v3 shortly.
+
+Thanks,
+Tao
+
+> Thanks.
+> 
+> --
+> tejun
+
