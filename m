@@ -1,103 +1,163 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3214A49BF;
-	Wed,  2 Sep 2026 14:58:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6BBB4A842F
+	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 15:00:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788361119; cv=none; b=dMor4ddl6AdR4er+FasYHW8rJltrBwluicTPuN736WTJWkBVt0jwjXWW4EqXrsVxcyqz1qW6PvAvzNCrBETf34zXp9etZ490TFFGBvmINZUGDcW+a99/Cm92GZAKaI7ag3/zs4LOFun7i7D4qHkAeXq6GCqG4DTqf02uSD2nLDc=
+	t=1788361244; cv=none; b=gp3TTQO3P8p/YkbSaKrZu6IiI8TjVb+RiUOcoL3TuaLb1hfp31tcgoMoHRurURsvJucwne0INeOFQ0DTpg5CuBKHzfjQlkT9xCyb1SiPm8J3HAQAKtRZPQ0n+TohwiRxutYjZ3+2bsBIcXIjKSPUoWFcbRXGbKNqdv6YwX+4PaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788361119; c=relaxed/simple;
-	bh=oneO2iXbN7Xf+1E6gIblHvLu6qyv5j8qx0ghPvxyWwY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=YBNxKl2jOSBz4niOhb1m9Zny+dRxIOtN0ubqSgcv9k/1pniZ6XZKunfnd066QTwz/bV7XLxwvJA4eK2cRcrMb9VIpP83z8aOlf0tRRssjxUQgqxHNdpll5Hu2TT0W6LfM+ticpvhHUJsedOxwbtdmJoY5sYuRnxhKkjG9Re1MFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S0FVULeC; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788361244; c=relaxed/simple;
+	bh=yVJj/ezX1/2qUVh10GmGox7+p4nsIGp0iDuqeVNxV9U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YBRAHCCSt6qBL39PTPbIAKiFJOmj5UnbUvq/1s5XUH0t8b7GLcQCiV/VGs70XHv207DiftuSjWqUuF65RFSMusjH2yc7vzbOIWacm5m4VdnfuOZnnffPiGIvrPyaVJ5XU3e7VZTeIVIh6dCd4TJ0lzMNNGOVknFMcuyu9IibSjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m1HXbdB6; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S0FVULeC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47A671F000E9;
-	Wed,  2 Sep 2026 14:58:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788361113;
-	bh=srQXjSuYcY6jiB1RBHtTGlzsOfxGErP7FvzngYpm6Xs=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=S0FVULeCbBvmq+igY4f7xsitvK5aYpY4HXg/2TPbbvPVn1226U0JyeWqkWkfMkVz7
-	 vAInEZGfUw2mDYafQhkR/J3dSPzg5PI4we4VPkHXUz6L8LHBxJTYTv0ehXjG/u566l
-	 tJN4f+Oxyp5jYfRMzgOuC7ohrL8vqPi/xmg+sqpfcmh98dMnk0lWtA9DbyseEGkgZJ
-	 juUOPda9bVwGVPmRc9juL2CTCaj5AmHROwOEAcZvbBuETSOsbZ6RhK13Lzknmgvj1x
-	 VmpPhioEAEalFn63kys79OU+gqx06vYS81Z4s5M7wNts4M4h01F+yUdvsnM0V1aLJV
-	 m0gqUUZHo3rBw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 03/13] arm: pass pt_regs to audit_syscall_entry()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ricardo Robaina" <rrobaina@redhat.com>
-Cc: audit@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <cae4a0a79178cf7d1b661c10ee2fa038fc6ebdea.1788351089.git.rrobaina@redhat.com>
-References: <cover.1788351089.git.rrobaina@redhat.com>
- <cae4a0a79178cf7d1b661c10ee2fa038fc6ebdea.1788351089.git.rrobaina@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 02 Sep 2026 14:58:32 +0000
-Message-Id: <20260902145833.47A671F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m1HXbdB6"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-c1712a04ddaso185320566b.2
+        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 08:00:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788361241; x=1788966041; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=cCdMXwfzfL+0pK/AJnd89dTMFr+Rd2uI7eohWuk6MzQ=;
+        b=m1HXbdB6ngLGmbxOAVFG7tSgIaFTdLN8nwpaGQfchGky5U8uw0q56V7iZ74aG99OjJ
+         4GzCp2hgnuEQZ63PWG9+CytnZ4dkjrU9gVAw1IdqcmbqpjyKlyKSvBE2xq3DxsY+MinO
+         tOT8RIxKzj5RpGr1/YzIOiBaJXbPP45mzRiNcJsRldtAtUu3/74m+A+1XdmWXor83PnO
+         d13fR/kJdjKy/w+BKrDYQOCNrgn2bfTAZk2gNLG+dr9iMtm23mesnDd6CdWRG12tc1AT
+         sZO4Dcoiu7KcPNwL+VqPkAzAy4KputzkS9A+8+ZKh+NHfG7xWKJ1OhdJrgJdKravyMLC
+         cstg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788361241; x=1788966041;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=cCdMXwfzfL+0pK/AJnd89dTMFr+Rd2uI7eohWuk6MzQ=;
+        b=gswJjPpI6iUTW09WJYk210+xzXNq/Vty8GtDZhbwGwMDy/fH0NAt3RP9MgnQw10OSX
+         ovD6sZU8aHGT9dd7MlOyPG5n3gjJAKmVDaPliA1H4QdWJoaWvCPEeENFZ7fHF8hqrkhE
+         8vKjFDZnMnQIlr/CzF1QZZ+P/G3h2x5K/ychowbk4xHp4onJfC7Ct1ZTwdnE+1nzOmjS
+         +EgdGiNyGY7gN0o8c4oAPpYULX6y89Sz0dxb55Jxrn2hZ0ec+VwrL2UE4tVtyNsiswuN
+         J9Gra7o6H7+TBRLZig1SLdLWv48WVX6TXOPuvcduXEulbQRmfJVDy9G8xjwxwR7UaNPz
+         G+/Q==
+X-Gm-Message-State: AFuF++mL0loG/aLcsFEefoh+u3mOvR1Nz0MLdon3NN87aoB4KAnx+FnK
+	fZ/xhaJBk2U82O3W7QF94SX19NX9QJ8IUTxkK7nz8psTHefVg/U5HxmT
+X-Gm-Gg: AYBFou3hM2Dmx/fc2yBqorIxxMbmxLviJ7LIcrRp/5ixygbuzov938Af4q8q0eq+Qv0
+	4NjBLMDRPgUy4+N+CYcNuuq0JAsQv9P5Y/P4b7Fp3ILXi+wLm6pfhD7R6SJpU0j7g07ErovovQh
+	hTYjfbY58ofmOItAEyBwLzeY1d9NCNa/kvZ2ISaB2By6kIqHTuw6IJ7uRxBRhsct395l+IOllNv
+	0Hi/Vei0kjhERhqKZCLnGayYx4ohRT7QMdkHwm/OoVcPLpcZA/Y/uvTp8l23Owi/+hoxsV9skyq
+	Izm6/ryyMmS7oQxLo5Wbsudl5z7B8zCubNlA2Pk48vdgtLh8cf1aF9EctwMyupYDq6YfC/gw7sJ
+	IuzJbCm/HUfDfL3FRsCq3NmKKnb3Ly9uJIDq8jEv+qsTkCCWa/l2HV83wY52UtbVPracBPLWFUm
+	Hu+L66ydtjdzlF49wvznhAHc7Tf2Of8Ds1MO7AVO82x/Jd37jHulIaQkdGf6QGSToPDiC/
+X-Received: by 2002:a17:907:6d25:b0:c1c:4e36:eec6 with SMTP id a640c23a62f3a-c25d54f1adfmr332289166b.18.1788361240672;
+        Wed, 02 Sep 2026 08:00:40 -0700 (PDT)
+Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c25d03f4e92sm152109366b.44.2026.09.02.08.00.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Sep 2026 08:00:40 -0700 (PDT)
+Date: Wed, 2 Sep 2026 15:11:14 +0000
+From: Anton Protopopov <a.s.protopopov@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: bpf <bpf@vger.kernel.org>, lsm <linux-security-module@vger.kernel.org>,
+	netdev <netdev@vger.kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Matt Bobrowski <matt@bobrowski.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Paul Moore <paul@paul-moore.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	David Fernandez Gonzalez <daferna3@isovalent.com>
+Subject: Re: [PATCH bpf-next 0/7] Add new way to add BPF LSM hooks
+Message-ID: <apg8krBwREwiByiH@mail.gmail.com>
+References: <20260831110934.241898-1-a.s.protopopov@gmail.com>
+ <20260831153456.5a7d6937@kernel.org>
+ <apbFG4WKaZNsURo8@mail.gmail.com>
+ <20260901174926.12cc95f1@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260901174926.12cc95f1@kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] The transition to using `syscall_get_arguments()` for audit loggin=
-g causes the first syscall argument to be read from `regs->ARM_ORIG_r0` ins=
-tead of `regs->ARM_r0`. This allows tracers to bypass audit logging by spoo=
-fing arguments, as the audit subsystem logs the unmodified argument while t=
-he kernel executes the modified one.
---
+On 26/09/01 05:49PM, Jakub Kicinski wrote:
+> On Tue, 1 Sep 2026 12:29:15 +0000 Anton Protopopov wrote:
+> > On 26/08/31 03:34PM, Jakub Kicinski wrote:
+> > > On Mon, 31 Aug 2026 11:09:25 +0000 Anton Protopopov wrote:  
+> > > > The BPF LSM programs are allowed to attach to LSM hooks. This enables
+> > > > operators to mitigate known bugs without a need to reboot or livepatch
+> > > > machines.  BPF has shown very useful to create such runtime policies.
+> > > > However, many APIs and parts of kernel aren't covered by existing LSM
+> > > > hooks and this would be beneficial to extend the coverage.  
+> > > 
+> > > Dunno. Do you have any reason to believe that any of the CVEs your LLM
+> > > gathered for you here are actually getting exploited? Spot checking 
+> > > a few they seem to be mostly driver bugs. What security model do you
+> > > have in mind? Untrusted/malicious users with physical NIC access?  
+> > 
+> > For the untrusted part, here are some existing examples:
+> > 
+> >   * old untrusted bugs: CVE-2022-50651, CVE-2025-40255
+> >   * "namespace CAP_NET_ADMIN" bugs: CVE-2024-43836, CVE-2025-21921
+> 
+> These span 4 years.
+> 
+> > Also, the recent copy-fail is a stronger example (though not generic
+> > netlink-related).
+> 
+> Yes, if anything it proves that serious security issues are usually
+> on the datapath for networking, not what you're covering.
 
-commit 2a794057248ff5b9ad0444e2a1b1392a156db536
-Author: Ricardo Robaina <rrobaina@redhat.com>
+I've skimmed through the kernelCTF list. The one ethtool-related CVE
+which is addressed by ethtool hooks in this series is CVE-2025-21701
+The more prominent producers there are net/sched (CVE-2026-23074,
+14 bugs from 2025), nftables (CVE-2026-23111, CVE-2026-23231,
+CVE-2026-23272, CVE-2026-23278, CVE-2026-23351, CVE-2026-23392),
+rtnetlink (CVE-2026-23209). So bugs do occur in netlink-related paths,
+and are used to capture flags.
 
-arm: pass pt_regs to audit_syscall_entry()
+The generic netlink was chosen as the first one, as the patch is only 10
+lines long, but the hook would allow to block ~200 [historical] bugs.
+End users might find the new hooks useful when they encounter
+new bugs on their systems, which will be blockable by these hooks.
+But to do this, hooks should be present before bugs occur.
 
-This commit updates syscall_trace_enter() on ARM to pass the pt_regs
-structure directly to audit_syscall_entry() instead of individual arguments.
-The audit logging subsystem now extracts the arguments itself via
-syscall_get_arguments().
+> > The general idea is that we gate the common de-multiplexors such that
+> > not only known bugs, but mainly those which will appear in future are
+> > covered. Rough numbers for coverage: around 5% of known cves are
+> > covered with existing LSM hooks. Another ~5-7% can be covered if we
+> > add netlink-related hooks [this series + net/sched, nftables,
+> > rtnetlink, others smaller]. So, statistically, we know where
+> > bugs had appeared in the past, so we can "predict" where new
+> > will appear. Some of them might be severe, so this would be
+> > good to have hooks in place to be able to "mitigate" them.
+> 
+> Easy to PoC stuff with LLMs these days. I'd like to hear from
+> an end user who would find these hooks useful, in more detail.
+> Anyone with an ounce of gray matter will run untrusted workloads
+> _at least_ in a VM today.
+>
+> > Just in case, to test this patch locally, I've found around 10 new
+> > ethtool-related bug candidates. I've sent a fix to one, d09c98a6da21
+> > ("virtio_net: Fix resize of the RX ring"), which was easy to
+> > reproduce in a VM. Others require specific hardware, though popular,
+> > so I can try to reproduce some, and was planning to do this later.
+> > Of those findings one is unprivileged, it triggers a OOB read.
+> 
+> Please send the fixes along. The hash you mention requires
+> CAP_NET_ADMIN on a real interface, not a serious security
+> issue.
 
-> diff --git a/arch/arm/kernel/ptrace.c b/arch/arm/kernel/ptrace.c
-> index ed7a2a87a6707..e103ec2661cd4 100644
-> --- a/arch/arm/kernel/ptrace.c
-> +++ b/arch/arm/kernel/ptrace.c
-> @@ -868,8 +868,7 @@ asmlinkage int syscall_trace_enter(struct pt_regs *re=
-gs)
->  	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
->  		trace_sys_enter(regs, scno);
-> =20
-> -	audit_syscall_entry(scno, regs->ARM_r0, regs->ARM_r1, regs->ARM_r2,
-> -			    regs->ARM_r3);
-> +	audit_syscall_entry(scno, regs);
-
-[Severity: High]
-Does this change allow tracers to bypass audit logging by spoofing syscall
-arguments?
-
-By delegating argument extraction to the helper, the first syscall argument
-is now extracted via syscall_get_arguments(), which reads from
-regs->ARM_ORIG_r0. The previous code directly passed regs->ARM_r0.
-
-If a user-space process intercepts the syscall at PTRACE_SYSCALL_ENTER and
-modifies the first argument via PTRACE_POKEUSR to write to regs->ARM_r0,
-the audit subsystem will log the unmodified argument from regs->ARM_ORIG_r0.
-However, the syscall dispatcher will subsequently reload r0 from
-regs->ARM_r0, causing the kernel to execute the modified argument while the
-benign one is logged.
-
-Can we ensure the audit subsystem logs the active argument that will
-actually be executed?
-
-> =20
->  	return scno;
->  }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1788351089.gi=
-t.rrobaina@redhat.com?part=3D3
+I wasn't saying it was. (It was just fun to test the patch with
+a bug which wasn't already fixed/published.)
