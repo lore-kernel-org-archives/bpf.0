@@ -1,156 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE9B33BB669;
-	Wed,  2 Sep 2026 07:02:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5643B0AE7
+	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 07:02:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788332554; cv=none; b=fT9Wznr3Nyhz+acF5GkegvoJtohX308IVem72Bq1g0n+n1K295MlLvZacU7gD2SfY7llCb0PE0E2lZvk95csLj8qLhNG1+SRz+vZYI3DDwog37nTL7t43nSN+43+5T76xusl06aK4It33WSY4wHxBPXL7xTipXWWx1+wqCbM2N8=
+	t=1788332566; cv=none; b=MWHZv/ZeaAR4gstuhdNC+ADs/XY9rJMWjlG+0SriK5nTLsPNN1qVyF8x0InpwNiyhLqPkOKilIn+41WnUrgSegq3qnfG4psCCLCCzb/ol/E2alSd3JWlTjfzHYOonhD7mijgBE5jjZamxtyLfjWE4rdnygy4hHPF8auZy7szc4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788332554; c=relaxed/simple;
-	bh=bLE/NMQ+GjLSdimzfiXusGyJdbaLYy2NuH8+gnU22vw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=kLGk8uk/W2TearOQsy8S9Hbdlu8ghU8A4zigRNbyDfSXonGHhLW2z+V+8yVj2HMZHvzLrTTIZI5FUvwp0dThLyh8fmNeH55OOcdwRIJIGvNyMZ16BeYIonk8osL/Luqk8orl6YbPqMrkMWAMQDJFZif9V8jKQFj17a8HLM6pXiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VqsJsIIa; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788332566; c=relaxed/simple;
+	bh=LdNSOqIAGBRNXF8TDlzJk+tfJUNu4nbRqmS5oZy73gI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E5Y4kvyrtlaGCRu++IimZMtqefrQvLREmG8EkvtKLpiu/el+kmC2R3YW32L72wdLaTh4HNOjM6un6BUIuGqg5ne7mL6aXs0UNbYFhclojyOV2TYtbHXgGjTesBy4IlM4mZp+gH6XUBOZWA/6OwSOCjyichkT9dEXkIgRxWSP2FM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=qgAZoOi/; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VqsJsIIa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F4851F000E9;
-	Wed,  2 Sep 2026 07:02:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788332552;
-	bh=KI8KRWZe1A7+OEsjyc7wh5M8d0WkG2au2+MpQE5DFF0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=VqsJsIIaBXVed2cjgbHI7vEOJdZIprkf0Eovk8KtCv3BiWb0StPBYOAtSVzu5hc/d
-	 oQhua+1SZir4MWld0Le+evCmq92+R6F7jj1OKEf1PJ4K15B6lLD5dVAyXabwLUM5tJ
-	 G5Tc2BhDx4+pkFNy/hI4G/i+3XCY7Q88Vdrrc+dwodyprPE0N1aNh64YPBHjgjE4LN
-	 qaROI6kbJPXHyHemC790S4sVotBxggrPo7IZ+K4s6Dl3yMYpf6Ffh1/UUgmFR8tOBQ
-	 Hr/0z8sJmnpaArDnL3+VwC22KYu38CamaJjQNL5zCMInJIjok4WOY03WrqpNbtZtDr
-	 4dJmVdC0ZaBZA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH mptcp-next 1/2] selftests: mptcp: convert iptables to
- nftables for mptcp_sockopt.sh
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Hangbin Liu" <hangbin.liu@linux.dev>
-Cc: bpf@vger.kernel.org, mptcp@lists.linux.dev
-In-Reply-To: <20260902-mptcp_nft-v1-1-559caa16f410@kylinos.cn>
-References: <20260902-mptcp_nft-v1-0-559caa16f410@kylinos.cn>
- <20260902-mptcp_nft-v1-1-559caa16f410@kylinos.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 02 Sep 2026 07:02:31 +0000
-Message-Id: <20260902070232.4F4851F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="qgAZoOi/"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-38d489b6b71so885527a91.0
+        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 00:02:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1788332562; x=1788937362; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=iKiQgwuKr/eo+sGySHSxTmiLup8GS+AC60UbE1XSTtk=;
+        b=qgAZoOi/maYcUuTndjLLD42bqEiI66MmCi+Z8wH8HcWrwkxVZ2mFq6VZ/wGbLfiZCJ
+         O1Yc4xP5zguruCcnuow4gE1c4qKtPqk2c4Z01Qmh34btiB+ceguu7vab2fgZdkCKj3hl
+         JUtBAmYktICbcm8IPFtTU1f+uqZKiy3o47mH14b8H7A5YyKR3dGgoLbyjlF+USqadCNV
+         dSz71ZJpBra6aWMghMmVUM13z5Y0ni4ngwRKuhYiqo6ESEJrEZX1FMdHbvcbtjcu/x6J
+         jxjVuCgelLLGIRaz9UVYOPiAqAwYC56gUrweXE7ifv6bc/fGnJi19PRyy2wgyQRyXAFu
+         p9jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788332562; x=1788937362;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=iKiQgwuKr/eo+sGySHSxTmiLup8GS+AC60UbE1XSTtk=;
+        b=Wlu9viqS7EH9AQ2PTyX3RoqCt0utkGAEFiTMhd3R+ZCP6SRrliPnsCaeeb17p7a47z
+         qnAJ6432hy8mSdDvdffRkPpBy5imze1HpNkZX0vdIGdxh/+5Lbkjcd9aQ9Sx17mDahNj
+         v8ghQ0ALifWstmZuGogBUOjJc6arDbNu9TUYKHOhYRNEh2lSQTBwtOVrXYjh7hxt0YWI
+         Eh+QE7U6c1bv4dSPoxp1hryuA58aeqSQIUtU3H8IYvInGc0+uTJvvQsiY8QbUYpJCUnx
+         /44u8YFjBDuy8gnEoAW1RqAmb4jmG0fPRSigvfMMD9JPdDtry2s5OsdXp95MXSl6clbX
+         yLRQ==
+X-Gm-Message-State: AFuF++kc8sCm2a5VjRujD3WjivL4uqSEwbR0NVO3qyynIongrga1t1Ev
+	xnU2yQ9cbqvpOomNCZ6roGu5RFG5O9vNuf5Sm14E1v7Nh4WrYch1gG/AFK0OxALFNUUEL3n+n71
+	omOvS
+X-Gm-Gg: AYBFou2iesgNt+HBjyNcVBX+4NQlJoVvVFygJbteBoW8JO/8PY8+roE9R9g6QtkaEGU
+	cSyxzTmNwEDnJkFKip4wSnH7YYclzN8WF599aAXUX+7SECrdEN7YAjuX/QfZYtYIA87qGGNtImF
+	EulShzA0klmKeCZIPvCZIuGIS5G3PUdWSaW38JOkcAKTmn0SkBj0LN2ksTSe6Ib6w2gPDN99Evm
+	biPR1Oht30YchbgEbr65j4ktM3lnRSYf3RQ1cIE2KK7lx2qLbwJbekvdVjD738vwa1v4OiFtv1P
+	3/5ht7O4Sy4o0TaJAyxuRJjbo8llMJwjzlPXmCpPshtH0PLTDzhutjMngGMVmA4HCKsMX3P3n9L
+	37yAd4AHDpM1Hi8tVJBzf8Xmcc/dvbeBVczFGhTWkFuCzC+5JZn+Jk2VvcTmTbTAWGioETpH9Px
+	OdpthCCuyQ77xVA5+5zyrUWa3xqk8GBJbLf8pLujqQrR7NCI+OdsU6cIdW0S4GEta5gCLVLy1s/
+	w35kcebaDadTZ2vvDUAUuDV
+X-Received: by 2002:a17:90b:524c:b0:390:8361:a532 with SMTP id 98e67ed59e1d1-39aedfb8ebcmr4194407a91.7.1788332561990;
+        Wed, 02 Sep 2026 00:02:41 -0700 (PDT)
+Received: from krios.ht.home (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39ae05e21bcsm3793352a91.0.2026.09.02.00.02.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Sep 2026 00:02:41 -0700 (PDT)
+From: Emil Tsalapatis <emil@etsalapatis.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	nickolay.lysenko@gmail.com,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH bpf-next 0/5] bpf: Fix arena memory incoherence
+Date: Wed,  2 Sep 2026 03:02:34 -0400
+Message-ID: <20260902070239.16968-1-emil@etsalapatis.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Medium] Replacing iptables TCP flag matching with nftables exact matchin=
-g (`tcp flags rst` and `tcp flags syn`) fails to match packets with multipl=
-e flags set, causing spurious test failures.
-- [Medium] An empty `$drop` variable causes a Bash syntax error during nume=
-ric evaluation, which evaluates to false and silently masks test failures.
-- [Low] Typo in string interpolation for the error message (`IPv{$af}` inst=
-ead of `IPv${af}`).
---
+Setting up arena memory for a task currently requires two operations:
+Adjusting its range tree, used for tracking which memory is allocated;
+and adjusting its page tables/flushing its TLB state. These operations
+cannot happen atomically because their critical sections do not nest.
+This lack of atomicity is the source of two bugs that can lead to
+incoherence between different users of the same arena, wherein they
+observe different pages for the same address.
 
-commit af165781f3fb777bc40bc4de19c7d79cd01f51cc
-Author: Hangbin Liu <liuhangbin@kylinos.cn>
+Address the problem by more finely tracking the state of each address.
+Expand the range tree used for address state tracking with a third
+state, used to denote whether an address range is unavailable, either
+because it is being freed or because it is being populated by a VM
+fault. Use this extra state in the arena page freeing/fault logic
+to ensure that operations on a single address properly serialize.
 
-selftests: mptcp: convert iptables to nftables for mptcp_sockopt.sh
+Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-This patch converts the mptcp_sockopt.sh selftest to use nftables instead of
-iptables. It replaces per-address-family iptables mark rules with an inet
-table containing drop counting rules for IPv4 and IPv6.
+Emil Tsalapatis (5):
+  bpf: Update is_range_tree_set to work for consecutive ranges
+  bpf: Track availability information for ranges in range tree
+  bpf: Fix arena race between page free and alloc leading to incoherency
+  bpf: Atomically update PTE and range tree in arena VM fault handler
+  selftests/bpf: Add arena allocation race tests
 
-> diff --git a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh b/tools/t=
-esting/selftests/net/mptcp/mptcp_sockopt.sh
-> index e850a87429b61..4d0af2bf94840 100755
-> --- a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
-> +++ b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
+ kernel/bpf/arena.c                            | 154 +++++++++--
+ kernel/bpf/range_tree.c                       | 211 ++++++++++++---
+ kernel/bpf/range_tree.h                       |   5 +-
+ .../selftests/bpf/prog_tests/arena_race.c     | 251 ++++++++++++++++++
+ .../testing/selftests/bpf/progs/arena_race.c  | 163 ++++++++++++
+ 5 files changed, 728 insertions(+), 56 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_race.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_race.c
 
-[ ... ]
+-- 
+2.55.0
 
-> @@ -49,17 +47,23 @@ add_mark_rules()
->  	local ns=3D$1
->  	local m=3D$2
-> =20
-> -	local t
-> -	for t in ${iptables} ${ip6tables}; do
-> -		# just to debug: check we have multiple subflows connection requests
-> -		ip netns exec $ns $t -A OUTPUT -p tcp --syn -m mark --mark $m -j ACCEPT
-> -
-> -		# RST packets might be handled by a internal dummy socket
-> -		ip netns exec $ns $t -A OUTPUT -p tcp --tcp-flags RST RST -m mark --ma=
-rk 0 -j ACCEPT
-
-[ ... ]
-
-> +	# just to debug: check we have multiple subflows connection requests
-> +	ip netns exec "$ns" nft add rule inet msock_table output \
-> +		 meta mark "$m" tcp flags syn accept
-> +	# RST packets might be handled by a internal dummy socket
-> +	ip netns exec "$ns" nft add rule inet msock_table output \
-> +		meta mark 0 tcp flags rst accept
-
-[Severity: Medium]
-In add_mark_rules(), the original iptables rules --tcp-flags RST RST and
---syn used bitmasks to allow additional flags like ACK for RST or ECN for
-SYN. The new nftables rules tcp flags rst and tcp flags syn enforce an
-exact match on the entire TCP flags byte.
-
-Will these exact matches reject packets with multiple flags set, such as
-RST+ACK or SYN+ECN, causing them to fall through to the drop rule and fail =
-the
-test?
-
-[ ... ]
-
-> @@ -105,33 +109,23 @@ cleanup()
-> =20
->  mptcp_lib_check_mptcp
->  mptcp_lib_check_kallsyms
-> -mptcp_lib_check_tools ip "${iptables}" "${ip6tables}"
-> +mptcp_lib_check_tools ip nft
-> =20
->  check_mark()
->  {
->  	local ns=3D$1
->  	local af=3D$2
-> =20
-> -	local tables=3D${iptables}
-> +	drop=3D$(ip netns exec "$ns" nft list table inet msock_table | \
-> +		grep "ipv$af.*packets.*drop" | awk '{print $(NF-3)}')
-> =20
-> -	if [ $af -eq 6 ];then
-> -		tables=3D${ip6tables}
-> +	if [ "$drop" -ne 0 ]; then
-
-[Severity: Medium]
-If the command extraction for drop fails, or if grep finds no matches,
-the $drop variable will be empty.
-
-When bash evaluates [ "$drop" -ne 0 ] with an empty string, it triggers a
-syntax error. This error evaluates to false and skips the failure block.
-
-Does this risk silently masking test failures if the extraction logic ever
-fails to produce a number?
-
-> +		mptcp_lib_pr_fail "got $drop pkt drops in ns $ns IPv{$af} tables," \
-
-[Severity: Low]
-Is the string interpolation IPv{$af} a typo?
-
-Bash interpolates the $af variable but leaves the literal braces, printing
-IPv{4} instead of IPv4. Should this be IPv${af} or IPv$af instead?
-
-> +				  "not 0 - not all expected packets marked"
-> +		ret=3D${KSFT_FAIL}
-> +		return 1
->  	fi
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260902-mptcp_nft-=
-v1-0-559caa16f410@kylinos.cn?part=3D1
