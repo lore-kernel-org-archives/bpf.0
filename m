@@ -1,128 +1,148 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7733EB7FE;
-	Wed,  2 Sep 2026 20:59:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C7BD40C5C0
+	for <bpf@vger.kernel.org>; Wed,  2 Sep 2026 21:18:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788382774; cv=none; b=XCRNO1am55U68MouMEtsukem9j8Bv6xPRZ4C4f9lEztb6bFPGf8IA7iGF4fK83DB3JA2Vd5s5R5ygIDC1aafLIdOIqRmh6IJsqyA2lxotPdapd076fbB2r9+zOosSPa70KOvtMHZoTTPP3jcdua4s7C3dbVTpA4B4tP5v3fOIMg=
+	t=1788383901; cv=none; b=VKs2yi/kPYzj4MaDm6d7Fgv3mXmdG7cr9Bzh9+OLsC3ZUBRAjAQjGRx3AHHCVFrsTgiFIOtPDQ/4PE+FojnXtVr/Y5amFnNZ3HXAtBZlVaKMPzZnulCQOAxkaqGBAv3yaYGqMKmVIgzLPjCdXmiXrGrXd76wNqvnBtE6z4wjkhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788382774; c=relaxed/simple;
-	bh=o0vhalKJxHMGi6ytMHMRK4/IopGQxUQJYHruFCaZQ7Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y5Te7YiRi0ZbO74LCMDNwAG5/nlXAS1rH3/2WdsVt2P7yXrJ6RndUuMXIkw71kaa597rxItL/cjwvtodz4uN4191J2W/3Tnj3NWQvlAicfTz5e99ZJnzIFE+fYe4hEukiy8Jd9Dv2+lUIH0y36Wluz68U6ZAR9ogA2Qio4IkJrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GUZn9Q2E; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1788383901; c=relaxed/simple;
+	bh=IWg49bi5Kh4C/wOoQIgrPbfiZ8PRpBIxPy94SooRSJQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=prkCjwWJK/VWeskzOT8GTq42Esop61Yn6j1mBNQO207v89LfxDK2dki4pP5QDIbc2L8U7+xN7gxZPgfTgOSlu9j11LysZOSrXrD2x4rTqzOo7nAbSqeyP6folo5w8BQejbJu3iISRCZRU+QMbVUA1CqcxcqSu6WnjARwVirIbAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F/CorNTS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GUZn9Q2E"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 2C7D54E414D4;
-	Wed,  2 Sep 2026 20:59:16 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id EAD7B6053C;
-	Wed,  2 Sep 2026 20:59:15 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1794411C79331;
-	Wed,  2 Sep 2026 22:59:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1788382750; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=zZ+s2XEBuZodW5KuiEYx8rkHpmMdoiYAvq8N8LYvLc4=;
-	b=GUZn9Q2E/CFdQn3IIRW01htGWPqiIf5a1pfqU/uTykLAPwY4be7vjNZjyAAwvPOnWvagGe
-	4k+SHJ1uobhodformV+POrG1zcNCQoo49bh48QStlKJqv8ixoa/IdZQBx7ogQ82YjgY90T
-	K4hg9wMOSeX+Rf4mvmxTPP2vSmAaO8YYOvXKvxsfVMtE1I2LWWhfidpuf35ioYGAJhsif8
-	UW0EyDqjXfLA8Rsbkbfw1vNuKufW/im+omwOR5X2jIN76nUa/DFBTX3dkBB9SlQ8nEao1k
-	yCyoyCp8C69XLYHPnoycuiVjo43echBMyZf5CQ3NCI2WNPbze3VmX9Cjq7St9Q==
-Message-ID: <1010cb80-d9c9-4891-a719-8d7ca31c732a@bootlin.com>
-Date: Wed, 2 Sep 2026 22:59:00 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F/CorNTS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0017C1F000E9;
+	Wed,  2 Sep 2026 21:18:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788383897;
+	bh=q0SMtKOxGxX68Q4AeFYOJMhnTnn+bHj7trredIjA8Pw=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=F/CorNTSLsr6mCcmryj+aR9O+x1+/GQdlehGC9N3G7dFfnvO1jcJ7a2ZC9ji90q7d
+	 3OU8xh1ITOagfvqdc8slFem2VAS83dOYJYxkRfep9iK4R2SnerIp5uKJOzU8TSkID0
+	 EtePaVqmBjkYmyUot1nQ4yg2q1bkdXeQLEYaM2wu9jlUkZtf92oxwgNQJj52vqf340
+	 bq9deaEhuz0c9Qx2iyYzEiIGpuQN3MqHLKEyJqSqRkZ+9koa3sB3cIfyMjVD3E4DAZ
+	 Z473Cy8VTTpz2gnaVT00BN3FdfyD/Pxkr22Jik3gTcMEEaQfQ9UlixK0XXvyiH2XV9
+	 CevBbf8AEO8dQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next 4/4] i40e: Avoid repeating RX filter warning
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tony Nguyen" <anthony.l.nguyen@intel.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260901211752.1922993-5-anthony.l.nguyen@intel.com>
+References: <20260901211752.1922993-1-anthony.l.nguyen@intel.com>
+ <20260901211752.1922993-5-anthony.l.nguyen@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 02 Sep 2026 21:18:16 +0000
+Message-Id: <20260902211817.0017C1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v3 1/4] net: stmmac: propagate PTP init failures in
- stmmac_setup_ptp()
-To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Richard Cochran <richardcochran@gmail.com>,
- Russell King <linux@armlinux.org.uk>, Jose Abreu <Jose.Abreu@synopsys.com>,
- Rayagond Kokatanur <rayagond@vayavyalabs.com>,
- Thierry Reding <treding@nvidia.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>
-Cc: netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-References: <20260902-stmmac-est-reapply-after-open-v3-0-e72a6df5a7ef@oss.qualcomm.com>
- <20260902-stmmac-est-reapply-after-open-v3-1-e72a6df5a7ef@oss.qualcomm.com>
-Content-Language: en-US
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-In-Reply-To: <20260902-stmmac-est-reapply-after-open-v3-1-e72a6df5a7ef@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
 
-Hi,
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-On 9/2/26 22:15, Lorenzo Bianconi wrote:
-> stmmac_setup_ptp() returns void and swallows both PTP setup errors:
-> the PTP reference clock enable and stmmac_init_timestamping()
-> failures are logged but never propagated. When they fail, the MAC
-> system time counter is left in its post-reset, non-running state,
-> while the driver keeps operating as if timestamping were up.
-> This matters for the upcoming taprio offload re-apply, which derives
-> the EST base time from the hardware timestamp counter: arming the
-> gate list against a non-advancing time base would leave the schedule
-> permanently stuck. Make stmmac_setup_ptp() return an error code.
-> 
-> Fixes: 92ba6888510c ("stmmac: add the support for PTP hw clock driver")
-> Fixes: 0ad2be79f254 ("net: stmmac: Balance PTP reference clock enable/disable")
-> Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+New issues:
+- [High] The fix for repeating RX filter warnings is incomplete and leaves =
+SRIOV/VMDQ VSIs vulnerable to log spam, exacerbated by unconditional state =
+clearing for untrusted VFs.
 
-nice fix, this isn't the first time we have issues because ptp init silently
-failed :(
+Pre-existing issues:
+- [High] The function `i40e_sync_vsi_filters` implements an ad-hoc sleeping=
+ spinlock using a bit flag (`__I40E_VSI_SYNCING_FILTERS`), violating subsys=
+tem locking guidelines.
+--
 
-> ---
->  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 46 ++++++++++++++++-------
->  1 file changed, 33 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> index d576059c04df..47295845371a 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> @@ -937,18 +937,27 @@ static int stmmac_init_timestamping(struct stmmac_priv *priv)
->  	return 0;
->  }
->  
-> -static void stmmac_setup_ptp(struct stmmac_priv *priv)
-> +static int stmmac_setup_ptp(struct stmmac_priv *priv)
->  {
->  	int ret;
->  
->  	ret = clk_prepare_enable(priv->plat->clk_ptp_ref);
-> -	if (ret < 0)
-> +	if (ret < 0) {
->  		netdev_warn(priv->dev,
->  			    "failed to enable PTP reference clock: %pe\n",
->  			    ERR_PTR(ret));
-> +		return ret;
-> +	}
-> +
-> +	ret = stmmac_init_timestamping(priv);
-> +	if (ret) {
-> +		clk_disable_unprepare(priv->plat->clk_ptp_ref);
-> +		return ret;
-> +	}
+commit e12ee63ee282f8dda3570d0ba1ab6d4fc31ab63e
+Author: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: i40e: Avoid repeating RX filter warning
 
-This can legitimately fail with -EOPNOTSUPP, we musn't failt the whole open
-sequence in this case.
+This patch introduces a test_and_set_bit check on the overflow promiscuous
+state flag to suppress repetitive log messages when the driver forces
+overflow promiscuous mode due to a lack of space for RX filters. It updates
+the warning logic in both i40e_aqc_add_filters and i40e_aqc_broadcast_filte=
+r.
 
-Maxime
+> diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/et=
+hernet/intel/i40e/i40e_main.c
+> index 719f45b5cb409..abbc71e815ae3 100644
+> --- a/drivers/net/ethernet/intel/i40e/i40e_main.c
+> +++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+[ ... ]
+> @@ -2412,10 +2412,12 @@ void i40e_aqc_add_filters(struct i40e_vsi *vsi, c=
+onst char *vsi_name,
+> =20
+>  	if (fcnt !=3D num_add) {
+>  		if (vsi->type =3D=3D I40E_VSI_MAIN) {
+> -			set_bit(__I40E_VSI_OVERFLOW_PROMISC, vsi->state);
+> -			dev_warn(&vsi->back->pdev->dev,
+> -				 "Error %s adding RX filters on %s, promiscuous mode forced on\n",
+> -				 libie_aq_str(aq_status), vsi_name);
+> +			if (!test_and_set_bit(__I40E_VSI_OVERFLOW_PROMISC,
+> +					      vsi->state)) {
+> +				dev_warn(&vsi->back->pdev->dev,
+> +					 "Error %s adding RX filters on %s, promiscuous mode forced on\n",
+> +					 libie_aq_str(aq_status), vsi_name);
+> +			}
+>  		} else if (vsi->type =3D=3D I40E_VSI_SRIOV ||
+>  			   vsi->type =3D=3D I40E_VSI_VMDQ1 ||
+>  			   vsi->type =3D=3D I40E_VSI_VMDQ2) {
 
+[Severity: High]
+Does this logic leave virtual function and vmdq VSIs vulnerable to log spam?
+The patch suppresses the warning for the main VSI by checking
+test_and_set_bit, but the else if branch for the other VSI types immediately
+below it does not use a state check.
+
+Should the state-based warning suppression be enforced equally across all V=
+SI
+types?
+
+This regression seems exacerbated by the unconditional state clearing for
+untrusted virtual functions in i40e_sync_vsi_filters:
+
+drivers/net/ethernet/intel/i40e/i40e_main.c:i40e_sync_vsi_filters() {
+    ...
+	/* if the VF is not trusted do not do promisc */
+	if (vsi->type =3D=3D I40E_VSI_SRIOV && pf->vf &&
+	    !pf->vf[vsi->vf_id].trusted) {
+		clear_bit(__I40E_VSI_OVERFLOW_PROMISC, vsi->state);
+		goto out;
+	}
+    ...
+}
+
+Does this unconditional state clearing destroy the warning suppression logic
+for untrusted virtual functions, potentially leading to a denial of service
+via log spam?
+
+[Severity: High]
+This is a pre-existing issue, but while reviewing the synchronization of
+these filters I noticed the following pattern in i40e_sync_vsi_filters:
+
+drivers/net/ethernet/intel/i40e/i40e_main.c:i40e_sync_vsi_filters() {
+	...
+	while (test_and_set_bit(__I40E_VSI_SYNCING_FILTERS, vsi->state))
+		usleep_range(1000, 2000);
+	...
+out:
+	...
+	clear_bit(__I40E_VSI_SYNCING_FILTERS, vsi->state);
+	return retval;
+	...
+}
+
+Does this implement an ad-hoc sleeping spinlock using a bit flag, violating
+the subsystem guidelines for synchronization?
+
+Would it be better to directly replace this custom polling loop with a
+standard mutex to ensure strict lockdep tracking and memory ordering?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260901211752.1922=
+993-1-anthony.l.nguyen@intel.com?part=3D4
