@@ -1,107 +1,156 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 141CC1DE8BB;
-	Wed,  2 Sep 2026 00:49:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 648D331282F;
+	Wed,  2 Sep 2026 00:51:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788310169; cv=none; b=nzB54mBb9SSkh5oseD0UwK0WXZ077/EiNFGILyuZkYViLCGt3PLaUiFcT8hFJHfnErqt8T5ncLLjL03X0789vnGlrADDfkmrorEsyMc42qfaV0abkBAOXuKY3f5raIK8UHYcu7Bw/eXBD/MfdmgoSeMxsA+1+TveKaCzPmdJW18=
+	t=1788310276; cv=none; b=tJorZJ4u9N4If4SloMoYhRGN8G3ZEmvcIlHYC7jHRaPlday+KWooFToAQXUw91Flc9DcGKVIS8PyeVbXWW07e1RnJBlyEJRy/w5VlI18tp85DxXF1/6uU58gupdQlYIpleAwaN1Nu+t7k9mFblhITA0SYgJWrwsTNf96YjQEoi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788310169; c=relaxed/simple;
-	bh=pXG0V5jXBLIVF9fdYnPv8sfD7dZDrtssN9xflLdKFBk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QvstI4Q//wvQ8Bwg2+EriHYtQgZtvn03AVObEdaD5ZMkFv5zI+KX8+QHIAPlME4dPiVGqn2mm3U4K2ymAmsrH/rZE38zUlX5nAn7SK+bfrmTBmeNpy96ewlqS4aXIMRQklwD1tYJbfDt326OZzahpKLDWJfbS+lzKIPIBHw9TnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V11WDYvd; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V11WDYvd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BD551F000E9;
-	Wed,  2 Sep 2026 00:49:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788310167;
-	bh=7nLgCQSaCFKCb63UhFK8QBEL2bgjau/HoDT7IXt2qnI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=V11WDYvd0mgQawzLkGXiCrh1Gbka0P+U0c2qkRCJRZslacaQG0DNwxHoLn1Qju7WQ
-	 0MzAu+NpoT3thjyrsWNg7u67A+WKgEddbnwOdrfAjgEOH0419r4CNRQcbBRrzGmQjq
-	 2ZSPSSFNKK7hv+832HVp6OXpkPLSWGVYfAFoPB81EuBd0s34N/nYrZoF7Day9GON8M
-	 SF/NDbPlTIf7CDL+JwCsiqzMroZbYj65xzREDqptE3Jl+F/8JZlbHGCao5rfK+cQtY
-	 S+GA9fnfWhjB5gZeaxQHD6S5GHKq3kZ5Fkkhu5HJekLEQIS8Epb9ebG2t2a4nZYcm/
-	 9SWVQPrbIhNUA==
-Date: Tue, 1 Sep 2026 17:49:26 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Anton Protopopov <a.s.protopopov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, lsm <linux-security-module@vger.kernel.org>,
- netdev <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya
- Dwivedi <memxor@gmail.com>, KP Singh <kpsingh@kernel.org>, Matt Bobrowski
- <matt@bobrowski.net>, John Fastabend <john.fastabend@gmail.com>, Christian
- Brauner <brauner@kernel.org>, Paul Moore <paul@paul-moore.com>, Linus
- Torvalds <torvalds@linux-foundation.org>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH bpf-next 0/7] Add new way to add BPF LSM hooks
-Message-ID: <20260901174926.12cc95f1@kernel.org>
-In-Reply-To: <apbFG4WKaZNsURo8@mail.gmail.com>
-References: <20260831110934.241898-1-a.s.protopopov@gmail.com>
-	<20260831153456.5a7d6937@kernel.org>
-	<apbFG4WKaZNsURo8@mail.gmail.com>
+	s=arc-20240116; t=1788310276; c=relaxed/simple;
+	bh=3sk8wsg7t8H/SOjzCsxK+qHeAwoNibV2wJYyuP3kWGE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MxTVtSlonEaId1FKKx7bs5BTUOjbl+/37cHJIhJ5WVdQZhLk0tApOWUMgUIIaFH9QJeO3w+cndGvDC4+E2fiWPGilGoXy6+AWt4lm+w8B004fmwnzzTMDQAXb9Bj/Ipq7scsuhf6BIryE+zkcmhaMJ7eavA8o9ZEkgycRirKDr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8Ax39L_cpdqMZQHAA--.21143S3;
+	Wed, 02 Sep 2026 08:51:11 +0800 (CST)
+Received: from linux.localdomain (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJCxtMz7cpdqMT8ZAA--.26027S2;
+	Wed, 02 Sep 2026 08:51:08 +0800 (CST)
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: loongarch@lists.linux.dev,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf v1 RESEND] bpf: Fix timer_lockup deadlock using atomic_fetch_inc()
+Date: Wed,  2 Sep 2026 08:51:06 +0800
+Message-ID: <20260902005106.22187-1-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCxtMz7cpdqMT8ZAA--.26027S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxCrW7ZF15Kw4Utr13Ww4Utrc_yoWrAr4DpF
+	W3Cr47Kr48XF48Xw1kta1Uu3Z8Z395Cay7Wr4rKryUZF15Kr12yF1jgr1agFW7Aw4kJr1a
+	va10q3yFyF1UAagCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUBjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Jr0_Gr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
+	x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1D
+	McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr4
+	1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
+	Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67
+	AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8I
+	cVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI
+	8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v2
+	6r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j5fHUUUUUU=
 
-On Tue, 1 Sep 2026 12:29:15 +0000 Anton Protopopov wrote:
-> On 26/08/31 03:34PM, Jakub Kicinski wrote:
-> > On Mon, 31 Aug 2026 11:09:25 +0000 Anton Protopopov wrote:  
-> > > The BPF LSM programs are allowed to attach to LSM hooks. This enables
-> > > operators to mitigate known bugs without a need to reboot or livepatch
-> > > machines.  BPF has shown very useful to create such runtime policies.
-> > > However, many APIs and parts of kernel aren't covered by existing LSM
-> > > hooks and this would be beneficial to extend the coverage.  
-> > 
-> > Dunno. Do you have any reason to believe that any of the CVEs your LLM
-> > gathered for you here are actually getting exploited? Spot checking 
-> > a few they seem to be mostly driver bugs. What security model do you
-> > have in mind? Untrusted/malicious users with physical NIC access?  
-> 
-> For the untrusted part, here are some existing examples:
-> 
->   * old untrusted bugs: CVE-2022-50651, CVE-2025-40255
->   * "namespace CAP_NET_ADMIN" bugs: CVE-2024-43836, CVE-2025-21921
+When testing the BPF selftest "sudo ./test_progs -t timer_lockup", there
+is a kernel lockup and panic on LoongArch:
 
-These span 4 years.
+  watchdog: BUG: soft lockup - CPU#1 stuck for 8s! [test_progs:39601]
+  Kernel panic - not syncing: softlockup: hung tasks
+  ...
+  Call Trace:
+  ...
+  [<9000000000c40e98>] panic+0x44/0x48
+  [<9000000000e8b000>] watchdog_timer_fn+0x500/0x520
+  [<9000000000dfd9a4>] __hrtimer_run_queues+0xc4/0x530
+  [<9000000000dffe90>] hrtimer_interrupt+0x140/0x320
+  ...
+  [<9000000002ad9e4c>] _raw_spin_unlock_irqrestore+0x8c/0xc0
+  [<9000000000dfe9e0>] hrtimer_try_to_cancel.part.0+0x70/0x350
+  [<9000000000dfed58>] hrtimer_cancel+0x38/0x80
+  [<9000000000f6d944>] bpf_timer_cancel+0x94/0x1e0
+  [<ffff80000200fad0>] bpf_prog_108ab87b32f22e44_timer_cb1+0xb0/0xfc
+  [<9000000000f6b838>] bpf_timer_cb+0x98/0x170
+  [<9000000000dfdaac>] __hrtimer_run_queues+0x1cc/0x530
+  [<9000000000dfde94>] hrtimer_run_softirq+0x84/0xd0
+  ...
+  [<900000000271d9e0>] bpf_test_run+0x1c0/0x5c0
+  [<900000000271f548>] bpf_prog_test_run_skb+0x6e8/0xe20
+  [<9000000000f39940>] __sys_bpf+0x1690/0x2c50
+  [<9000000000f3af28>] sys_bpf+0x28/0x40
+  [<9000000002ac2d68>] do_syscall+0x108/0x5e0
+  [<9000000000c6a850>] handle_syscall+0xd0/0x170
 
-> Also, the recent copy-fail is a stronger example (though not generic
-> netlink-related).
+In bpf_timer_cancel() of kernel/bpf/helpers.c, it explicitly notes that
+"Need full barrier after relaxed atomic_inc" to ensure global visibility
+of the cancelling state before performing the lockless dependency checks.
 
-Yes, if anything it proves that serious security issues are usually
-on the datapath for networking, not what you're covering.
+However, on weakly-ordered architectures such as LoongArch, the current
+combination of a relaxed atomic_inc() followed by smp_mb__after_atomic()
+fails to guarantee the physical store-load ordering because the latter
+currently expands to an empty compiler barrier rather than a hardware
+data barrier on LoongArch.
 
-> The general idea is that we gate the common de-multiplexors such that
-> not only known bugs, but mainly those which will appear in future are
-> covered. Rough numbers for coverage: around 5% of known cves are
-> covered with existing LSM hooks. Another ~5-7% can be covered if we
-> add netlink-related hooks [this series + net/sched, nftables,
-> rtnetlink, others smaller]. So, statistically, we know where
-> bugs had appeared in the past, so we can "predict" where new
-> will appear. Some of them might be severe, so this would be
-> good to have hooks in place to be able to "mitigate" them.
+This allows a subsequent read to bypass the prior write due to store-load
+reordering, enabling concurrent CPUs to simultaneously bypass the software
+deadlock detection, enter hrtimer_cancel(), and then trigger a severe ABBA
+deadlock in the hrtimer core.
 
-Easy to PoC stuff with LLMs these days. I'd like to hear from
-an end user who would find these hooks useful, in more detail.
-Anyone with an ounce of gray matter will run untrusted workloads
-_at least_ in a VM today.
+Instead of relying on arch-specific macro implementations which may vary
+in strictness, fix this issue directly in the BPF core helper by replacing
+atomic_inc() and smp_mb__after_atomic() with a single atomic_fetch_inc()
+to provide full ordering natively.
 
-> Just in case, to test this patch locally, I've found around 10 new
-> ethtool-related bug candidates. I've sent a fix to one, d09c98a6da21
-> ("virtio_net: Fix resize of the RX ring"), which was easy to
-> reproduce in a VM. Others require specific hardware, though popular,
-> so I can try to reproduce some, and was planning to do this later.
-> Of those findings one is unprivileged, it triggers a OOB read.
+This ensures that the BPF core satisfies its strict store-load ordering
+requirement in a self-contained manner to eliminate the deadlock under
+weak memory models, and also hardens the defensive programming in the
+BPF core, making the lockless deadlock detection logic immune to any
+platform-level barrier interpretation variations.
 
-Please send the fixes along. The hash you mention requires
-CAP_NET_ADMIN on a real interface, not a serious security
-issue.
+With this patch, the BPF timer_lockup selftest was stressed for 10000
+consecutive loops on a physical LoongArch machine without encountering
+any further lockups or warnings on LoongArch:
+
+  for i in {1..10000}; do sudo ./test_progs -t timer_lockup; done
+
+Reported-by: Vincent Li <vincent.mc.li@gmail.com>
+Closes: https://lore.kernel.org/loongarch/CAK3+h2xOSEZUHhou7N2cRL-aGrZCNSm45g+P7thObMe+fpgYCA@mail.gmail.com/
+Fixes: d4523831f07a ("bpf: Fail bpf_timer_cancel when callback is being cancelled")
+Cc: stable@vger.kernel.org
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+Resend due to
+"Can not connect to recipient's server because of unstable network or firewall filter."
+
+ kernel/bpf/helpers.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index b3cc5c8fc875..7d89dc143883 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1591,9 +1591,7 @@ BPF_CALL_1(bpf_timer_cancel, struct bpf_async_kern *, async)
+ 	 */
+ 	if (!cur_t)
+ 		goto drop;
+-	atomic_inc(&t->cancelling);
+-	/* Need full barrier after relaxed atomic_inc */
+-	smp_mb__after_atomic();
++	atomic_fetch_inc(&t->cancelling);
+ 	inc = true;
+ 	if (atomic_read(&cur_t->cancelling)) {
+ 		/* We're cancelling timer t, while some other timer callback is
+-- 
+2.42.0
+
