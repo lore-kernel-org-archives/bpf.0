@@ -1,74 +1,119 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529A3463B89;
-	Thu,  3 Sep 2026 09:05:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15E9F46C4C5;
+	Thu,  3 Sep 2026 09:10:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788426304; cv=none; b=YqaviNnjzl2+z6FDRMK57vwz0SzXzpzgpOvxL8uSaGQf7ej7KfRzelHm7+5DLuCuEHSU6FZR67dlybl7YgINyHx/oF6HM2uy6LGui0/OrJaS9CpbNougoByi2P8gd8hGkIaa4d6WWKWL0vUAKhzfI54OVuccaY3gFg0G0Bf4Jzo=
+	t=1788426653; cv=none; b=q0pia8nEJ7um7yeQtGO1sjIpSnJNDXv1HnUzPRPCmnjXaJ4M2Y/vdTiyDom/bKQiVvDBboAohtgdwh95jtszAO47i4MT+mS34i1b6fCqWQ3k/RSTG/h795XVKnqpbB1O5SQI0wADaCt9lfOjTU/DaJ8F1LRPU74BvjbLQuSMwuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788426304; c=relaxed/simple;
-	bh=fWQvRYxgTzuOtnHTkDwfIg/07uyS1ZBZGMP31jXrfws=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WXH9RwdQ9KNJbxXx2RMCDsphtyI3LRTExXDhFcLlcPVHuWYO3GFzNLZwSCa8/hxOlo99nuGpegeQlrShKAA2gf4IAnBjv+HwDZmgBC7tM66zoYbas+y/aTi+Lgj5CGNWFWSel3sPk+KdMwWTEsuogvvTBoxVIMZlzx70H1VKhUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d8vR3FBw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788426653; c=relaxed/simple;
+	bh=cx1axVRz7cdn8WI+nJ8VQQmUx0Er/eDQmSJDpr1pDiw=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=o1xjuiUPI//DCAVI2/gyEPdahGvQkEHTAHciMrj/6ULYRjYGXBRwukSJnpzu78xpGrNyJm8GQJYO8l0aA5qi44+bnP+cvDY4y+5khJuPpcyPk56UVZRzOaLZd587CW9Cnu1pwTr9H6mpHQsRP1I5gTpcfWg0amEeMRLF2sQfQNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kuhcU9kk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d8vR3FBw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 369071F00A3A;
-	Thu,  3 Sep 2026 09:05:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kuhcU9kk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84B731F000E9;
+	Thu,  3 Sep 2026 09:10:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788426302;
-	bh=zBZTsZJC18XQLL/ga2PnQld3VK5RyoYP1s/Ppon7T68=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=d8vR3FBwZlRnradDdsibi1rodNA6XoyZM6klpKIDCKmEcSGgEcxpIvyRtl/Lxgj47
-	 9NW40KQKxINn2+PDgH4opySK94aCKbijBqiG40UrbOQ6xDmtb4wF008MjstlWaciLL
-	 0wJcmeZHMOAdjcx5UUieewGIH2Kl3JfMGlIPEc26HmKB3eBuESjSYUXuFqQPzZVUWo
-	 CUR6d+Lnf5rbUIgfGRygJN5wNKOofHhQL8Bsw+x2O/9iOkqvMtmiiq/Cz4t1fkLYHQ
-	 kSsJQM9D3uKzAvmjzvZpETDqN6fVJ/QGcO+n44PokZWGhHzFeA3pgqhZAZp1Y/qlHw
-	 XLhV8znpRy/wg==
-Content-Type: multipart/mixed; boundary="===============6298812003795156340=="
+	s=k20260515; t=1788426650;
+	bh=yK8wvrGSHpZjkUMfwjPfTJBNF4H8Z42Q5sZ5A9sNFkA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=kuhcU9kkkhsCH60W93JxL+ToA4RQQEwX52TMV2pJeEiAMpq0i8WdMZHD4Sd5httfK
+	 MEi6ejHLEYN4MSl8uZWird/h36hjJ9SjOdJhDMCGO/JuLLGjtBsgIucCrh8ACWEme9
+	 tH0DvRIXpzfFx14swQguyQ9s9wDzTzN/TNcEWLgKpZfFcFeMRifVLXMmQqAZEG93kp
+	 0jVjFJXfOXf1dsyXn1aaiSTl2ipoMoasl1GWtzabaOW91pBDQbAZQqlIZcImy3iHds
+	 1CLXKBRUvKcwZi0VYn8mcrYM5NBhZvO24SZ5ZiR7eF/LdYnvfIZpUC6r/mVG7KRWW1
+	 dyubeIbrhBCXA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v2] net: mana: remove unreachable dead code in
+ mana_bpf()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Muhammad Falak R Wani" <falakreyaz@gmail.com>
+Cc: bpf@vger.kernel.org, linux-hyperv@vger.kernel.org
+In-Reply-To: <3d8b67307df6fefdc18743274cef3de4fca0e7de.1788339612.git.falakreyaz@gmail.com>
+References: <3d8b67307df6fefdc18743274cef3de4fca0e7de.1788339612.git.falakreyaz@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 03 Sep 2026 09:10:50 +0000
+Message-Id: <20260903091050.84B731F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <6b4e8b65241b0bddc6fb1179d339abf36082a529f409eda4cd0932147ec35779@mail.kernel.org>
-In-Reply-To: <20260903082616.5096-1-liujing@cmss.chinamobile.com>
-References: <20260903082616.5096-1-liujing@cmss.chinamobile.com>
-Subject: Re: [PATCH] tools libbpf: Fix signed shift UB in btf_type_info()
-From: bot+bpf-ci@kernel.org
-To: liujing@cmss.chinamobile.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: eddyz87@gmail.com,memxor@gmail.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,liujing@cmss.chinamobile.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu,  3 Sep 2026 09:05:02 +0000 (UTC)
 
---===============6298812003795156340==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-> In btf_type_info(), the expression `kflag << 31` performs a signed
-> integer shift. When kflag is 1, this sets the sign bit of a 32-bit
-> signed integer, which is undefined behavior in C.
->
-> Fix it by casting kflag to unsigned int before the shift.
->
-> Signed-off-by: Liu Jing <liujing@cmss.chinamobile.com>
+Pre-existing issues:
+- [High] Failure to restore `apc->bpf_prog` on error path causes Use-After-=
+Free.
+--
 
-This looks like a bug fix for undefined behavior that was introduced in
-an earlier commit. Should this include a Fixes: tag?
+commit 26086af444af1d715f516a007146a7dd00ce97c6
+Author: Muhammad Falak R Wani <falakreyaz@gmail.com>
 
-The signed shift undefined behavior in btf_type_info() appears to have
-been introduced by commit aea28a602fa1 ("libbpf: Mark BPF subprogs with
-hidden visibility as static for BPF verifier"). Would it be appropriate
-to add:
+net: mana: remove unreachable dead code in mana_bpf()
 
-  Fixes: aea28a602fa1 ("libbpf: Mark BPF subprogs with hidden visibility as static for BPF verifier")
+This commit cleans up mana_bpf() by removing an unreachable return statement
+after a switch statement that already unconditionally returns.
 
+Link: https://lore.kernel.org/netdev/DKWZHHOFA1F3.1EL2DMFNGMP0Y@gmail.com/
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_bpf.c b/drivers/net=
+/ethernet/microsoft/mana/mana_bpf.c
+> index 53308e139cbe9..70bb8c9dc3413 100644
+> --- a/drivers/net/ethernet/microsoft/mana/mana_bpf.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_bpf.c
+[ ... ]
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33734678501
---===============6298812003795156340==--
+This is a pre-existing issue, but while reviewing this patch I noticed a
+potential problem in the adjacent mana_xdp_set() function when it handles
+allocation failures:
+
+drivers/net/ethernet/microsoft/mana/mana_bpf.c:mana_xdp_set() {
+        ...
+        apc->bpf_prog =3D prog;
+
+        if (apc->port_is_up) {
+                ...
+                err =3D mana_pre_alloc_rxbufs(apc, ndev->mtu, apc->num_queu=
+es);
+                if (err) {
+                        NL_SET_ERR_MSG_MOD(extack,
+                                           "XDP: Insufficient memory for tx=
+/rx re-config");
+                        return err;
+                }
+        ...
+}
+
+[Severity: High]
+Does this error path leave a dangling pointer in apc->bpf_prog?
+
+It appears that if mana_pre_alloc_rxbufs() fails, the function returns
+immediately without restoring apc->bpf_prog =3D old_prog. The generic XDP c=
+aller
+will see the failure, assume the driver rejected the program, and drop its =
+BPF
+program reference.
+
+Could this leave a freed pointer in apc->bpf_prog that might be dereferenced
+when the interface is later restarted or accessed?
+
+> @@ -253,7 +253,6 @@ static int mana_xdp_set(struct net_device *ndev, stru=
+ct bpf_prog *prog,
+>  int mana_bpf(struct net_device *ndev, struct netdev_bpf *bpf)
+>  {
+>  	struct netlink_ext_ack *extack =3D bpf->extack;
+> -	int ret;
+> =20
+>  	switch (bpf->command) {
+>  	case XDP_SETUP_PROG:
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/3d8b67307df6fefdc18=
+743274cef3de4fca0e7de.1788339612.git.falakreyaz@gmail.com?part=3D1
