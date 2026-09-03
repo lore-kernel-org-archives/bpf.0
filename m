@@ -1,110 +1,156 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 153454CB8DF
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 22:15:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A58431A3C
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 22:27:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788473711; cv=none; b=NmRIyglUwJEjbRJ0tUFVLkpMSIWxHUCCJUfiHJje+eClOSwvv8GC9CA3za346qh7O+0dC9xVTfCCIpHr8RHDvdG6Hp0cjS+0nExnnh5tkU+XXLiMQ5f6r9PpdEu4Epx+w6LAKxzAKfvfqX8mdy+8oW7mmAvQg93lt08O8GFdzMk=
+	t=1788474439; cv=none; b=f8EbULFqDWGYO7y9NUQ9vWFhTBo2J1UtNRVbhTasfHKS7py6AaZKiIDBqVSmDHCJtLz9hG6DHtmzNr1N7jLiVPpcCHMHnP+LmDN6twy+v/GQGKaoqSqTT16mxpoa05rxnO8lFVn9iyncuC738Khjr/J2dJ5x+MrQtIwFspS/Yw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788473711; c=relaxed/simple;
-	bh=oe4Um/bJX7+Anuru9IS6WY46d5H5oMaKYuUK1rwpoC8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=rk4/4p7lKD/qljulm4rycUyheqK2Rl+ek4PRz0Z7pO16UFdte4CqoAT1BezBt6qGDSEhky06dcYSHPL5Xfmz0TvntF33QkFD8qtiFoavMIKxVs6lzxkwmLOYwd46/RRBYnxkx3K4aWYT64yDC1kSKcPFPX0mMsNtiXs1nfkHZao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z+nqLtv1; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788474439; c=relaxed/simple;
+	bh=IQ6ss07CJCUuEauKZIYYS9wQYR/4ZHlxK/xYA1MRFMM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=n2nThY152L0E8MqkLqM83yK9yBZ/exq6nbc+gWTB/qkxh5jNzmzE6csS8WAcNjGVC69QCuhbLIQpQPQSwOvljFtr4tcA3gv+UduSZS1TmDAn/bAbr9znOH3k/7fylfC0lTGTGuWCU2iAQsYzCoxQ25IHW/QLvbsLzJtP8IOvATc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dxsalH2n; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z+nqLtv1"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-38dfe910e9dso353809a91.3
-        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 15:15:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788473709; x=1789078509; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=oe4Um/bJX7+Anuru9IS6WY46d5H5oMaKYuUK1rwpoC8=;
-        b=Z+nqLtv1e2gVvHC9EZrQBuvgqxGeyNJikuFiX1cVh0K2L+mtV6lh7AQX94jYjsCIwN
-         zBMd7J+qzEp9Qj7tcyCVF6YNaMgTmjg01s4w7VBcJxB3jw9WS6TE2rWN6tm2+rlxDPD+
-         LsNCeZbcBpGhxnTUifzhht71f74ewa66VdOh3a3Yzpz9mLFM9r4vawNYbeddFy8nQZus
-         tQumT9xySV0kWRBfEV+/ypjOiRjTFHUnPi8QsHJGbgfl44cqYR2FGCMSBfJK/4GSFsVn
-         sQofNCdxjA4Den1VPVzdl3XEHF2kbVTufnta07t9l2Hi/wtWNIuXKQzjy/L647cdCJ4+
-         oJVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788473709; x=1789078509;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=oe4Um/bJX7+Anuru9IS6WY46d5H5oMaKYuUK1rwpoC8=;
-        b=KDJmgJpnpVLaJTfWujUW8+yMWyVeEeD2PfQ+FWQePg2O3pjDcNplSfJl1sTWLh40S8
-         RKdYdkh1SaYBQmmoCotKWS3qoRfpCHc5gHJ5aU4J+S+sk7nt0mbcaeWTj0UmbZwVrAtY
-         Nug8Q2Wdt7HK2WNw/rnBlKFWh8vGbYTLrO4NPypV8Mn+jZJv/D9syF35zCPaSIyixLMV
-         ALHdjDMTKpowk2W8f7y7YmeNkhiLNFHJ/T3kNiUdK0KLeF4cZENo7AuoXF+3jRIlXc8S
-         hxyTmqKtj6ZPvvSla3HX5x9NPF278g+uOgbU0TEHOSlywKdWAqXB6m3oX73OznKIWmeT
-         y21g==
-X-Forwarded-Encrypted: i=1; AKwUvByqAfMYSsc/EszobVEz4x91mlQBg8OmDHfm8BjBTyuVtyyF/vRIraZIDfl4rTtrswTFEfk=@vger.kernel.org
-X-Gm-Message-State: AFuF++mwWtN7O2DGt4NIBo/j9r5I6DW4QjH3prykvUgRh/yZhiTV69c4
-	3rYRTOIUZ+a3tLE4j89ZhHQ5fUnFcWkY63pe5RqOGlLXbCuY/yuGa5HO
-X-Gm-Gg: AYBFou2YhruyiHrzs+Gg8k53wRBwyl1/KkrcLo5EeOYGUDqIAPMWpDPe7mBg6/I+bTI
-	sA9k1f0aaPelHeS50TdPbGjFttXr5X8INo812VFjk68/xiaD8maID5tRyD7NOMyX4IwuLqgXltP
-	e57GxArJ0w4SeyqqfgTGTbYMKC+UmGGshuzeDi/lsFUFiU96Lm24pXyqd+AuMZFW81fuXaa8U58
-	uCKU8MYo/ead7rQbpsQcpXP5KFjXI4yaev6yUGx9QbUqeuI20LraR3qTIe8MW4AqHH9KsNk+5gB
-	IwD4JUQnpw+VWiNpBxqqSV2zC7Z8pwWWu6bBuXPWw1E+ubWpSJHv0TNRpcpobpx1NWqgtDIgoVM
-	3vj9fxCB4QVY7g5Q/YiloNBEeh4/5EKQe74SdjQVrofpTDHoZ2ECduY6RldA/e8yDXcy67n9hBZ
-	JixAlQw/TmP9aphxmNJi11ujPu4eoWn/6VbLhhsAiZ4zklSv6vro2lyiOnb+QaiUEsIh/4MmvKF
-	apFASUJlrqoqY6GywO8u25sr1fqcw8wP772i6yRGIueuQ==
-X-Received: by 2002:a17:90b:3d89:b0:398:9be8:ea69 with SMTP id 98e67ed59e1d1-39b262167e7mr2409924a91.22.1788473708901;
-        Thu, 03 Sep 2026 15:15:08 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:fe3c:fb36:dc7c:5b5? ([2620:10d:c090:500::6:dba3])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-333959d5f69sm1657910eec.0.2026.09.03.15.15.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2026 15:15:08 -0700 (PDT)
-Message-ID: <f8bce8fab45388b3145eb069bca073c71db04973.camel@gmail.com>
-Subject: Re: [PATCH bpf v1 3/8] bpf: Mark bpf_btf_find_by_name_kind() as
- sleepable
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Sashiko <sashiko-bot@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Emil Tsalapatis <emil@etsalapatis.com>,  Nicholas
- Carlini	 <npc@anthropic.com>, kkd@meta.com, kernel-team@meta.com
-Date: Thu, 03 Sep 2026 15:15:06 -0700
-In-Reply-To: <20260903214758.2727663-4-memxor@gmail.com>
-References: <20260903214758.2727663-1-memxor@gmail.com>
-	 <20260903214758.2727663-4-memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dxsalH2n"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FF6E1F000E9;
+	Thu,  3 Sep 2026 22:27:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788474437;
+	bh=v2+RR4ITAUVGS3M7Sq+0HY0tpgJAlg9EIwwnz+eZrCM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=dxsalH2nxidAE7LDBKlLXiva91QQj7JqdtkeAMpk70Ppt/m+3L4dRVlyb0w2K/6BO
+	 DmVhIl2Tg2KBso56jEZSggxhFAJ5765mZySuY0g2DNed1rXnf3HCsuSmUFh9adCFf0
+	 q5oBOtUQCNr8vB/rhfFQYT7xF4TRba09vi/d/3dNhOEqa0GrL94tNAt0yuKRMMaJQm
+	 OTT51VDcRFBvYGyFAOAZmv1b3NGnt+AY9cfaYlX161fuqi/syNgmpwYW8cMW8xCM6s
+	 ZdKz859AC9Ozg4Ms3UDa/9kVG/hk08GzO0ZaAEK1OqoOzHpo8L/2DtKAgwt72XVWMZ
+	 0isQsnZavzWNw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 6.12.y] xsk: cache csum_start/csum_offset to fix TOCTOU
+ in xsk_skb_metadata()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Suraj Jitindar Singh" <surajjs@amazon.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260903221130.27316-1-surajjs@amazon.com>
+References: <20260903221130.27316-1-surajjs@amazon.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+Date: Thu, 03 Sep 2026 22:27:16 +0000
+Message-Id: <20260903222717.3FF6E1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Thu, 2026-09-03 at 23:47 +0200, Kumar Kartikeya Dwivedi wrote:
-> When bpf_btf_find_by_name_kind() finds a type in module BTF, it
-> returns a new BTF object fd through __btf_new_fd(). This reaches
-> anon_inode_getfd(), which can sleep while allocating or expanding the
-> current task fd table.
->=20
-> The helper prototype does not set might_sleep, so the verifier allows
-> the helper in non-sleepable contexts such as BPF timer callbacks. The
-> fd allocation can then sleep in softirq context and install the fd into
-> the interrupted task.
->=20
-> Mark the helper as sleepable. This preserves calls from the main body
-> of a sleepable syscall program while rejecting calls from its
-> non-sleepable regions.
->=20
-> Fixes: 3d78417b60fb ("bpf: Add bpf_btf_find_by_name_kind() helper.")
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Link: https://lore.kernel.org/bpf/20260903155150.D57251F000E9@smtp.kernel=
-.org
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Pre-existing issues:
+- [High] Premature checksum calculation for multi-buffer AF_XDP packets.
+- [High] Incorrect error recovery on `-EOVERFLOW` leads to packet fragmenta=
+tion and garbage transmission.
+- [High] Integer overflow in `skb->csum_start` leads to negative checksum o=
+ffset and memory corruption or IOMMU faults.
+--
 
-...
+commit 82f4b9c7cad6fc646be8342f727421a308e35ec1
+Author: Jason Xing <kernelxing@tencent.com>
+
+xsk: cache csum_start/csum_offset to fix TOCTOU in xsk_skb_metadata()
+
+This commit fixes a time-of-check to time-of-use vulnerability in the AF_XDP
+transmit path by caching csum_start and csum_offset in local variables. This
+ensures userspace cannot race to overwrite these values between bounds
+validation and assignment, preventing potential memory corruption.
+
+Closes: https://lore.kernel.org/all/20260503200927.73EA1C2BCB4@smtp.kernel.=
+org/
+Link: https://patch.msgid.link/20260530042630.80626-1-kerneljasonxing@gmail=
+.com
+
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index da7e11e3bfad2..76675ce70f03d 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+[ ... ]
+> @@ -733,15 +734,17 @@ static struct sk_buff *xsk_build_skb(struct xdp_soc=
+k *xs,
+>  			}
+> =20
+>  			if (meta->flags & XDP_TXMD_FLAGS_CHECKSUM) {
+> -				if (unlikely(meta->request.csum_start +
+> -					     meta->request.csum_offset +
+> +				csum_start =3D READ_ONCE(meta->request.csum_start);
+> +				csum_offset =3D READ_ONCE(meta->request.csum_offset);
+> +
+> +				if (unlikely(csum_start + csum_offset +
+>  					     sizeof(__sum16) > len)) {
+>  					err =3D -EINVAL;
+>  					goto free_err;
+>  				}
+> =20
+> -				skb->csum_start =3D hr + meta->request.csum_start;
+> -				skb->csum_offset =3D meta->request.csum_offset;
+> +				skb->csum_start =3D hr + csum_start;
+
+[Severity: High]
+This is a pre-existing issue, but does this calculation overflow the 16-bit
+skb->csum_start field?
+
+On architectures with a 64KB page size, if userspace provides a csum_start
+value close to 65535, adding hr (headroom, e.g., 64 bytes) could exceed the
+16-bit maximum and silently wrap. Later, when skb_checksum_start_offset(skb)
+subtracts the headroom, this could result in a negative offset, causing
+out-of-bounds memory accesses into the headroom or hardware DMA faults.
+
+> +				skb->csum_offset =3D csum_offset;
+>  				skb->ip_summed =3D CHECKSUM_PARTIAL;
+> =20
+>  				if (unlikely(xs->pool->tx_sw_csum)) {
+>  					err =3D skb_checksum_help(skb);
+>  					if (err)
+>  						goto free_err;
+>  				}
+>  			}
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does this compute the
+software checksum prematurely for multi-buffer packets?
+
+When a userspace application requests XDP_TXMD_FLAGS_CHECKSUM along with
+tx_sw_csum for a multi-buffer packet, xsk_build_skb() appears to compute
+the checksum over only the first fragment by calling skb_checksum_help().
+
+Since subsequent payload fragments are added later, the final packet would
+be transmitted with an invalid checksum covering only the first fragment,
+leading to silent packet drops at the destination.
+
+[ ... ]
+>  free_err:
+>  	if (first_frag && skb)
+>  		kfree_skb(skb);
+> =20
+>  	if (err =3D=3D -EOVERFLOW) {
+>  		/* Drop the packet */
+>  		xsk_set_destructor_arg(xs->skb);
+>  		xsk_drop_skb(xs->skb);
+>  		xskq_cons_release(xs->tx);
+>  	} else {
+
+[Severity: High]
+This is a pre-existing issue, but does the error recovery path for an
+oversized multi-buffer packet desynchronize the transmission state machine?
+
+If userspace sends a multi-buffer packet exceeding MAX_SKB_FRAGS, this path
+correctly clears and drops xs->skb. However, because it doesn't signal the
+caller to skip the remaining descriptors of the dropped packet, the next
+descriptor (a middle or tail fragment) is processed with a NULL xs->skb.
+
+Will this cause the fragment to be incorrectly treated as a new packet,
+leading to raw payload fragments being transmitted as garbage?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260903221130.2731=
+6-1-surajjs@amazon.com?part=3D1
