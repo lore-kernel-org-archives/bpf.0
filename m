@@ -1,214 +1,154 @@
 Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 886D122A4EE
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 00:22:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0883B233929
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 00:22:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.171
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788394952; cv=pass; b=WNbg7lhsKjOQ+nrZfpeWW5AE6rColbnQSCldwoDNVjIUf0c6QiDJul3Uno90zY7xUiXqj1Tn22eQwr4ex1/wuqnYPrF0EhdeoBtYi6kkncJ+e744CMxAGeSF5xsQfXoAe3KRpzwEv9MZxgdzUkaDowKWASWB7TTGTyAdj1Q5DEs=
+	t=1788394955; cv=pass; b=kupPSmRtYEzvyPnbT6GhXa6Qj9alHaL6hRLSu1sOagGYQ30k2eGGc7JCECQaDrjkIHCmy1jbGlLa0pAw9D2gaMES/h/6b4azFjYBOBh1Qo2HlkC88KsfJS3THaXRZC3zeA3dg1yQGC7j9hwnBD915YBzUCRA2coLAruLyFzO5hc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788394952; c=relaxed/simple;
-	bh=HpXZGHKjm19GrKGeBKOpw8KiMZWEY3w+BaVtBt5+knU=;
+	s=arc-20240116; t=1788394955; c=relaxed/simple;
+	bh=yc/XCwDCJJaEjokK4nDQyUrIjP76wGXp/V1y57foybU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eaOzDGPWwin+4hRRt8Ng330BtzzgIivhGhyl63dWn49SdT16cAZaD+YzdpdKw2vn6G5puzgzqLAqEO2cWKtWQMXGQnlEDY00rxqCWfjslFKY8917KOKElBuGkQodBZT3jeH34hFp+i+tYbIHL6WE5e7jSWxxxIATaUfyWL/yUhk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UgqT9Ja4; arc=pass smtp.client-ip=209.85.210.171
+	 To:Cc:Content-Type; b=DvwGadpk4ZdsiIezM5Qi6Ko8BGWmOkn7uNHup0Ny+Mx6Fv/wT5+IUr0SdZr0PH3rjDFNAAHuJLvPHUowOD3C025k7MdM4q+zpRQlDgTevW+L+aBpRtlOttfthAgicuhoWbUKDflUEPAcv+sMst6LpNab9ueLy6S2PXJOsCh516o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZhlUgjh2; arc=pass smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UgqT9Ja4"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-8568e3ed034so1499433b3a.0
-        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 17:22:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788394949; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZhlUgjh2"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-84e27035206so1585058b3a.3
+        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 17:22:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788394953; cv=none;
         d=google.com; s=arc-20260327;
-        b=DZR234U+8kFROS6PvPF7xBMWi0GBnqVfVgKSE3V5xgtO7o4ATIasmkU+3PNljFpgVd
-         mXoVoyT5N3a10FYel9td9p5dWCwh5J5y3MgpslnwjkSrw7u3K5bncYhxdYSgogqR5AYl
-         ronBFlta1kA9rHAtey2ivZSmKOenJOcb+BPAqLkrOnxrD8LE1YuauuLrDTccOK0VU+Ke
-         KNm/UIgEc7m+S+bIlN7RdmfEvKi0Y9M4VLigodds8ukEpTovZ8aNyzVgsVxwKhgH7VLQ
-         jx0sp6brn+lNlVqV23XhJQuezrYHrSXeJCUvQ98wZiukg8jjn0rwmKBTZrh4tOPAfNNI
-         d6XA==
+        b=lkzPlAQblSWkKzT8/ROLkIBU4Dylc/Au2gp/WIyZ2RQrP/7pj9PSsti3y2piwWKvad
+         VjeKgSlvYH1FDwRyf4UNQuEwmZgjMVPU9kBA4lsGgIk3phltADdQZ1s7rXqhJbn/EVit
+         Ci85mmOdK5dOY9rSwwODLahyDejNNauERVxVxAOoqmpPeX8slOWTa9cmVZCFPihTLndB
+         gxeLCQncFpJJfp5sL5tWkVTGz4o3wWrKn6Cjj2LMRjP88VljL9MjV/u/CEw5ZyHIM8qK
+         1NEwjPy1a3PdaoMfWNLo91dxbGuFiQ4A/nEk1CDCOoy/SbjiOTkQOTI6hwdgI599k95k
+         NN1A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=KWsvOdETbY/9pvWuO7n+ydArZGGk0CzvZ5+doKudMVs=;
-        fh=XU5sS8e7Lpgs14+QTk++21dPha5X/ou03qclF1wWUeA=;
-        b=B5VWNfwXyBlzRYka//yUic0nFRXJe7/gixNZrBEth7d2VtoloeS87ofUngb8YAQYgu
-         AAvjYA7EX4jVAMmtZBMtZxCcBUvfimo1gcf1v8IjoVeCDXdsTSeihbvHX6Nx78py1PVh
-         PB3tVMNoFBW/P6aJpi52qg9oV/ix1UgMaQl6Y1IJYwmL9H1lAdLHIeZs24s2l3a0tA84
-         2rLQ1DFHWnhKRhiQpKaXVbCL6m0wO3Pftbpe9Kyf3u5HAAnxRsFDxg521GrblUADHnEE
-         JxzjppmFVJvzaqFUnK0jT76hKk2XzABz+ISRpT0ufUEBUBsx4+KYMiyA3w9/T7NBecls
-         orWQ==;
+        bh=HSJaIZQ1NlOzwVPE4FelKmhuI0sTnWecrED0YU+uG94=;
+        fh=HJk+pDVvE2hRGMBBrhsdgmx1k1EzkSkjd52Q14nJDXM=;
+        b=pa1NT64sVlsvETnV0C8xPtQuDF+8BGMc/cXNq08mAZ8xI0SUiloBjN9N/7FRYRN7N0
+         WNeJUb2w/Py1S0yEM2YGq3RyyEEO8MMWzIs/tSbYKX9BxDD4swlw6ScID6IUuoXq+f3q
+         X+4xCFOzICzI1AhvxqeJ3lKpLpGnQ4ePGG8GBrt8apI8P4c/CZnV6LroLSVZCOUj1P8t
+         qaT0Z8d5vstR/KzBMdzRxLyoJEqLGiJngkQy/r+zVKWMMaerAHXEEdkEdxOFUKgESq6L
+         WG8eSzsODbY7A3/Uvo6e7AofAc0cGHtzRWoeNmYY9WO4xz7cCiYCzigBZeDyK0A5TvX9
+         l6fQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788394949; x=1788999749; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788394953; x=1788999753; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=KWsvOdETbY/9pvWuO7n+ydArZGGk0CzvZ5+doKudMVs=;
-        b=UgqT9Ja4QslI+H0nJlHEo3L3FrVIzKP97lfiwc5Vg0pwxI9O4TCkmABM1cxsyUTh/o
-         bsHQmDLCVZdQ8hb+ZhE2Fixtnl5+IrZoq/014hSzMWuCmOQeOBYZkXJbILvq0ubclxhG
-         tcNG0uCx2u6KAkzPpHt4VoQfwrrovB2wzCzfCb/23UMdHd5oA5FuDI5YSxSGtnuuJIOL
-         VdfGmmuEzsDpz3KpcsR8HHBl7X4iy5EzSsCt01zBzxbCB4Jn8weZ2LFDF8jwbqIunFJb
-         ueN6xmAtGh/OG0PxUj93Fx72/f/fvMSzmcL3AwC+bmeKoFDdzy6og0hwfcLL1vaOYit8
-         lBKw==
+        bh=HSJaIZQ1NlOzwVPE4FelKmhuI0sTnWecrED0YU+uG94=;
+        b=ZhlUgjh2ARxjhBYssUX+RMHmcMDxW+zT86XxongItjLVBLTgQXgwadVJtqdvWIYZkt
+         +bjXYUDxIbwq1Bnjs+PkxzBGKSKau0m0ZOrw5XDJPCkHt6+mhFo4rmKG+GHmLDxXTwE/
+         rN9YJrx0zGatERU8GtAuDHs7pjY3ltSOtbfq+C70z1aE4Gfcq3yvV5alpC094XZqZzFo
+         DeDAmxoTJw//XO7A8yEbhw45AgxveLPeVil6dDFmWevMjrUZw7W1sTgiLDKRgWL0rL2a
+         8UbXTqlma/J6tClOSfac7gC33sov3eNko3nt04d7WoWjFiGMh8Uzq5y3vfhwyBX2cwvJ
+         IXXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788394949; x=1788999749;
+        d=1e100.net; s=20251104; t=1788394953; x=1788999753;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=KWsvOdETbY/9pvWuO7n+ydArZGGk0CzvZ5+doKudMVs=;
-        b=MklsUiVnK/EZv/DxX5ojR3Hn+hAfj1pVViTm73ZNpH1nB8lEl01leUW0Nvbn3bJk0L
-         StJcd78bCIrgd1DTc3xJU4euJpHCqjDIftCKT4HWXtwPB0vxR8tA7eIbBWjczbybF1o9
-         KmTPbWEsyqLzmf2A4Wr6LH0ILXtX1znvHESQ7opVd8bU81R/ACcE8L6M05mBfKcuekF0
-         KnvSiTxqHFWz5eYOyeS1inSKDvazWSokZ7niCPsqUHUISqtB4tkt04ovEAz8HwQSN7M8
-         j3Cdcd1EHP3xMIno6M9t0vmMTLJ/rkZvE0cDhpJ8yJhJEe4pnvvju61sJF4d32CE/Sqs
-         C+6g==
-X-Forwarded-Encrypted: i=1; AKwUvBzCmFQRp0w9a0plJ26hYywfsA4t2gdSjEPwq//tR7pJcpydC3z9BYkAFmaH5QwwTXNc4Ew=@vger.kernel.org
-X-Gm-Message-State: AFuF++mFWKGr5iBW2pHe2aerX5Xg50D9UgemJeHP6G1hXWu/D3a2DOuD
-	48jTP4lCbH+dBahcy5JcSKNcNqrQrFw24UUXQ5VHSz4X0tBjm0sFE61/6XwfO7glM3GISdaGDrU
-	f5PqhyjWJalq0ZVT5LXLEwzAMc90XBVc=
-X-Gm-Gg: AYBFou2VxNw9rVWDb5T9xTZbYvNzsQFRyrfWjGO7MK5iPwjBPSfuQg+k7g/Gl+e8kWR
-	MVDu9USdv4A5jQWIUqD+d2LK2Z7s3cLeSZTJpUc5dpC51KxkHqsstgQbNxzIJO5PIB9A/cBcztH
-	08hWIwSYwP0gKmwd+xYAagkbWhwP//AY+eu3/FBYXsyPChLjtaeYSi3VQQ13SUvT3y7dMqiC3b7
-	HO7PBhWYpna+qNquWsBwNO5OnGzlcyKolMevJns2Zq+p8JPAtO1BA71rBEY2CNijzoIIsnVR3U+
-	2yPX5Knymm6u7Lm6zL5//RHT6VbCFM5/B4fzYVkcUyGp9TlhzuSxUjKVdSqdw7cSR67w6d3+d4w
-	EunGR3+xKFO3BF/3qq/3ogqi4NwjChNDW3aWz
-X-Received: by 2002:a05:6a00:997:b0:84e:f90e:492f with SMTP id
- d2e1a72fcca58-85ed25e06efmr11217290b3a.7.1788394948796; Wed, 02 Sep 2026
- 17:22:28 -0700 (PDT)
+        bh=HSJaIZQ1NlOzwVPE4FelKmhuI0sTnWecrED0YU+uG94=;
+        b=WpqGyqNAS2Uk2F6U2nQdHubWoK7JNTX9kC4s8kCVThozxpzCjDBr3/Md23DhlvYMU+
+         XzDSj10ACUTwtuRFl37B8tZoM4si0AwRL70NVF7BxC2erlBi+0xd18fO2EnsbOERn/sC
+         vGpzf3z7MbysuLeEGru7h9txS/KRqORPdwOXdwwk6CghuDYOVud0uLUYlvfuFl9Qh2MH
+         EC61zuzP6UsVoEBfg9Nm3mLUOSCFv907UWZywNv/YMaVq6A9tmEgrA+uQqf1G1uLhqTo
+         U/XPvmFnWQ6l+YThKkX5Nm95IPHxY7O66C2aJjIvgcFruCL7X8eMguvRSNp6t+x8u7X5
+         Rqgw==
+X-Forwarded-Encrypted: i=1; AKwUvBzeuPAWLLxt2F2bX7Sd77IOlcXyzcWGuProDLZ72RIBqmrY+NrU8PPFMq7z9bkYOyd1puo=@vger.kernel.org
+X-Gm-Message-State: AFuF++mLvC/canifR6hm/6mCqS8k0pjQF2Wvt5MKSLKd9o1Am74YcOK3
+	YS2SvYzlafrGIt+aflXf5EI/O15ygEtgpAmQ5q2J0a7JBkjrRjQX48MiTiCJQW5gxadMjsrn6bE
+	lxIU5OZrlt8kJoQQFI1Gt0lXCJWWUDsk=
+X-Gm-Gg: AYBFou2nmxF9Bj3qGys6RydGGjalqwpVOywbrngGd/vUAAZqmfgHW77icLkQ8b7/VGz
+	l1bRlD3PO2YDXNp82+GCwpWjVQJzEMwCcLD/hxX6k4R3GaEcsKYKjxqzgV5+R4QpOatF7F2o8wV
+	Fhk51l6JsCvmv3z2htyc9DrNTqr5qlptSWD6yJip/OLoYXjaiSM6hWcefx+U66r2P4gPePTGOLr
+	jwNU9ujxTuMbNwV+1y3cYbJPI9Dieq2J5ebgiEx8QpFTEbc7FQy12i5OvA/vkBHnT4Iqb0qfMmV
+	SXsbxdLMqvlK9CeR4Dj5nOAK8mu5yvDSq4yMOWRDmcqT8VtpXOIDQrtlvOhS12mQKMMTI0GJipD
+	PMuCa+RdrTHjZzhvR4bEIWLK/dYZQYUYI4ukW
+X-Received: by 2002:a05:6a00:9295:b0:837:e9cc:d474 with SMTP id
+ d2e1a72fcca58-85ed1d07a02mr11562973b3a.2.1788394953119; Wed, 02 Sep 2026
+ 17:22:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260901-libbpf-frags-flags-v3-3-4eb6f14968b0@redhat.com> <140ef9fa6dc454d62eaf49b168850890f1617fba462dcc37288747f6fbc7dae8@mail.kernel.org>
-In-Reply-To: <140ef9fa6dc454d62eaf49b168850890f1617fba462dcc37288747f6fbc7dae8@mail.kernel.org>
+References: <20260901-libbpf-frags-flags-v3-0-4eb6f14968b0@redhat.com> <20260901-libbpf-frags-flags-v3-1-4eb6f14968b0@redhat.com>
+In-Reply-To: <20260901-libbpf-frags-flags-v3-1-4eb6f14968b0@redhat.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 2 Sep 2026 17:22:15 -0700
-X-Gm-Features: AcwNN1VQ1YMtD0MgL0myLt2ygnmk6dG-xiKZpsmTHuTFu9Rx8blS2RsSJlnGUVk
-Message-ID: <CAEf4Bzbvy=igxp9ihNrc9WHs8gXeY4nvfxc+Dt=0Oijmy+gyXA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 3/4] libbpf: Move section-defined program
- flags to prog_flags
-To: bot+bpf-ci@kernel.org, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: toke@redhat.com, qmo@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, 
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
-	emil@etsalapatis.com, ihor.solodrai@linux.dev, larysa.zaremba@intel.com, 
-	davem@davemloft.net, kuba@kernel.org, hawk@kernel.org, 
-	john.fastabend@gmail.com, sdf@fomichev.me, lorenzo@kernel.org, 
-	bpf@vger.kernel.org, netdev@vger.kernel.org, martin.lau@kernel.org, 
-	mason@kernel.org
+Date: Wed, 2 Sep 2026 17:22:19 -0700
+X-Gm-Features: AcwNN1Uya_EPc8em6u0NWFruh2HqV6gSZQUAP9dd4jBDCAvedMFrqePOxVJvSUM
+Message-ID: <CAEf4BzacBUMLREUObGo5544wyD+mm1=y8ZTnzd7OdDL-c==mMA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/4] bpftool: Set BPF_F_XDP_DEV_BOUND_ONLY
+ flag non-destructively
+To: =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Larysa Zaremba <larysa.zaremba@intel.com>, "David S. Miller" <davem@davemloft.net>, 
+	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Lorenzo Bianconi <lorenzo@kernel.org>, bpf@vger.kernel.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 1, 2026 at 2:54=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
+On Tue, Sep 1, 2026 at 1:47=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgensen <to=
+ke@redhat.com> wrote:
 >
-> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > index f09cbfd8e729d..c036e8a91ed88 100644
-> > --- a/tools/lib/bpf/libbpf.c
-> > +++ b/tools/lib/bpf/libbpf.c
-> > @@ -7879,6 +7879,19 @@ static int tracing_multi_mod_fd(struct bpf_progr=
-am *prog, int *btf_obj_fd)
-> >       return 0;
-> >  }
-> >
-> > +static int libbpf_setup_prog_flags(struct bpf_program *prog, long cook=
-ie)
-> > +{
-> > +     enum sec_def_flags def =3D cookie;
-> > +
-> > +     if (def & SEC_SLEEPABLE)
-> > +             prog->prog_flags |=3D BPF_F_SLEEPABLE;
-> > +
-> > +     if (def & SEC_XDP_FRAGS)
-> > +             prog->prog_flags |=3D BPF_F_XDP_HAS_FRAGS;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> >  /* this is called as prog->sec_def->prog_prepare_load_fn for libbpf-su=
-pported sec_defs */
-> >  static int libbpf_prepare_prog_load(struct bpf_program *prog,
-> >                                   struct bpf_prog_load_opts *opts, long=
- cookie)
-> > @@ -7889,12 +7902,6 @@ static int libbpf_prepare_prog_load(struct bpf_p=
-rogram *prog,
-> >       if ((def & SEC_EXP_ATTACH_OPT) && !kernel_supports(prog->obj, FEA=
-T_EXP_ATTACH_TYPE))
-> >               opts->expected_attach_type =3D 0;
-> >
-> > -     if (def & SEC_SLEEPABLE)
-> > -             opts->prog_flags |=3D BPF_F_SLEEPABLE;
-> > -
-> > -     if (prog->type =3D=3D BPF_PROG_TYPE_XDP && (def & SEC_XDP_FRAGS))
-> > -             opts->prog_flags |=3D BPF_F_XDP_HAS_FRAGS;
-> > -
+> When setting the XDP hints ifname, bpftool would set the
+> BPF_F_XDP_DEV_BOUND_ONLY without looking at the existing program flags,
+> overriding any other flag values. This was always a destructive action,
+> but after we change libbpf to carry the frags section flag in
+> prog_flags, this can impact bpftool loading of XDP frags programs.
 >
-> Does this change break bpf_program__clone() when the caller passes
-> non-zero opts.prog_flags?
+> Change the flag setting to be non-destructive by OR'ing it with the
+> existing flags.
 >
-> Before this patch, libbpf_prepare_prog_load() OR'd in the section flags
-> after the caller's override:
->
->     /* in bpf_program__clone() */
->     attr.prog_flags =3D OPTS_GET(opts, prog_flags, 0) ?: prog->prog_flags=
-;
->     ...
->     prog->sec_def->prog_prepare_load_fn(prog, &attr, ...);
->
->     /* in libbpf_prepare_prog_load() */
->     if (def & SEC_SLEEPABLE)
->         opts->prog_flags |=3D BPF_F_SLEEPABLE;
->
-> So a caller doing:
->
->     LIBBPF_OPTS(bpf_prog_load_opts, opts, .prog_flags =3D BPF_F_TEST_STAT=
-E_FREQ);
->     fd =3D bpf_program__clone(prog, &opts);
->
-> would get TEST_STATE_FREQ | SLEEPABLE for a program in SEC("fentry.s/..."=
-).
->
-> After this patch, the flags live only in prog->prog_flags, and the `?:`
-> in bpf_program__clone() discards prog->prog_flags entirely when the
-> caller passes non-zero opts.prog_flags:
->
->     attr.prog_flags =3D OPTS_GET(opts, prog_flags, 0) ?: prog->prog_flags=
-;
->                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->                       returns TEST_STATE_FREQ, prog->prog_flags is ignore=
-d
->
-> So the same caller now gets only TEST_STATE_FREQ without SLEEPABLE. For
-> sleepable-only helpers like bpf_copy_from_user, this produces a verifier
-> rejection. For BPF_PROG_TYPE_SYSCALL, which requires prog->sleepable,
-> it fails at load. For xdp.frags programs, BPF_F_XDP_HAS_FRAGS is lost.
->
-> Looking at the pattern immediately below in the same function:
->
->     if (attr.token_fd)
->         attr.prog_flags |=3D BPF_F_TOKEN_FD;
->
-> should the section flags be OR'd in unconditionally, or should the
-
-no, I don't think so. In the given example, I think BPF_F_SLEEPABLE
-flag should be provided by the caller explicitly.
-
-Mykyta, can you please check if veristat would need some adjustments
-due to these changes? Thanks!
-
-> caller-override `?:` be removed for prog_flags? The commit message
-> mentions bpf_program__set_flags() and bpf_program__set_type() as
-> affected APIs but doesn't mention bpf_program__clone().
->
->
+> Fixes: f46392ee3dec ("bpftool: Specify XDP Hints ifname when loading prog=
+ram")
+> Reviewed-by: Larysa Zaremba <larysa.zaremba@intel.com>
+> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 > ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
+>  tools/bpf/bpftool/prog.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/334899=
-85893
+> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+> index a9f730d407a9..8c2f9255b36d 100644
+> --- a/tools/bpf/bpftool/prog.c
+> +++ b/tools/bpf/bpftool/prog.c
+> @@ -1769,7 +1769,7 @@ static int load_with_options(int argc, char **argv,=
+ bool first_prog_only)
+>                 }
+>
+>                 if (prog_type =3D=3D BPF_PROG_TYPE_XDP && xdpmeta_ifindex=
+) {
+> -                       bpf_program__set_flags(pos, BPF_F_XDP_DEV_BOUND_O=
+NLY);
+> +                       bpf_program__set_flags(pos, bpf_program__flags(po=
+s) | BPF_F_XDP_DEV_BOUND_ONLY);
+
+maybe we should just add bpf_program__add_flags() and
+bpf_program__clear_flags() to make life a touch easier and code in
+selftests and bpftool a touch less verbose?
+
+
+>                         bpf_program__set_ifindex(pos, xdpmeta_ifindex);
+>                 } else {
+>                         bpf_program__set_ifindex(pos, offload_ifindex);
+>
+> --
+> 2.55.0
+>
