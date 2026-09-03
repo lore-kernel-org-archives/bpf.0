@@ -1,93 +1,90 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 875153E7BD0
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 09:24:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1E5D4052A2
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 09:24:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788427480; cv=none; b=ByW4HNjD2Z8zm8qlKLzuEkyXeUxLYhyJu8UcrSktLZCt5EWWZFTRDGEwRyGKRVpsa0XZLmQ62j8t1479KJfhhxY8zl/urdoWV/7xtlWSpgXdWttKpN31Mr7mKQnC1Y/n8OYgfGkUHBJdn3RI/kvjWB/G9E8/5oVgHOxNkfJHXZo=
+	t=1788427492; cv=none; b=YyASfxBeNKg+joUnA6l1rDJk7G8sdq1hOcr8lhRVLBZYnjqAJLxW40UhNOrM9fe+7M8DZj9lC7lfRBk37vT693kmB2f+Y3t+ZSDCeS5RFmeFlLlzGu2+lP209q0l1G+EFrz4xiyk8469sOoB+qGEY2M7n7sHkipuhpihJRq3Frg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788427480; c=relaxed/simple;
-	bh=cEf4o8+8XW9QCAFqpuj0Ej54QC4VEezbJjbC7ptT+w0=;
+	s=arc-20240116; t=1788427492; c=relaxed/simple;
+	bh=VyDh2sAfURfoDPf/8+ojtb+GDM22XkH1cDLNBgT6tNc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NnLuCxLTKnpH4DXEpdEut5yG5FZvWx+JhJSYVK6VBiT0CWsKTHChY89KSiB09/zUlVaV30WhXg+AfX3tC06KGO/3OeMRUCgCBuCtDIYfIFXStiMdu7stOtbkcLeEv+sFYWXlIDEN12eQ5bJW1JwNBV6kJL1nVEkH6yw8tUF02ko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=M9zLMDF8; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=FaJaN4fU; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version:Content-Type; b=p+QU1PifcvjusPIyDpBU8+2yCOmUEuUx3g5LkU3vYlSB4Ez556/PjfiqxRrg1PDzPmDasnmltqF8G0k30jKoEKxEW6qQdugoTL7/Dw4J1Q9aYcnhmV4AmSZpfRFkUyf5u+hF/T9hyAqidmMw8qV/FkvZ5WDN0YtLSDywh98epA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CQv06KNf; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=m/jhmzWB; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M9zLMDF8";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="FaJaN4fU"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CQv06KNf";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="m/jhmzWB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1788427477;
+	s=mimecast20190719; t=1788427483;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=4mf6kivuRMhC5ODDzH3ln2mFV2QNDJ9sbY59yurKD9w=;
-	b=M9zLMDF8frN0iuM0DX4bBlAu24FYbqjUSAHUZfP16R9ZVuF+0hcIhvEQm5BMxryFYeIEAj
-	irZBEeT2dgs95QRs14ELVo33pVH3GtXIWSatu2SI7Q8NYkb+7jU+wp0e+2nVGr/Vsv6Cvy
-	jD4aixGrPfTg0FrjOQh+cwDw4rfqz1g=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=q44l5ZscEyQ6yJKKubo7c3OoKM9HyiRVEIpzdw4juK4=;
+	b=CQv06KNfAZcB3OSt9vHvwhy2KEmQpuI9IdcwRr4xOeP37UFIDxEoT0qGkTxojoAnPJ5X3i
+	pDkc0/i6rza+QdS1u+PLqWVy1LRbBn9eTs9Vqdb9suFUhEhYrItlM7VyQOXMBbur/aiDzP
+	AGBmEqaKhO2h+oOiTCse5f3j4xN2E8c=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-483-pqAN__wePm-t-WvyweU85g-1; Thu, 03 Sep 2026 05:24:36 -0400
-X-MC-Unique: pqAN__wePm-t-WvyweU85g-1
-X-Mimecast-MFC-AGG-ID: pqAN__wePm-t-WvyweU85g_1788427475
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-499913d1a79so13227225e9.0
-        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 02:24:36 -0700 (PDT)
+ us-mta-541-H9-0hwoaNrmHwM91STNDFA-1; Thu, 03 Sep 2026 05:24:42 -0400
+X-MC-Unique: H9-0hwoaNrmHwM91STNDFA-1
+X-Mimecast-MFC-AGG-ID: H9-0hwoaNrmHwM91STNDFA_1788427476
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-49b7c1dc61eso18728435e9.3
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 02:24:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1788427475; x=1789032275; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1788427476; x=1789032276; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=4mf6kivuRMhC5ODDzH3ln2mFV2QNDJ9sbY59yurKD9w=;
-        b=FaJaN4fUIf7kIYfq9cHwRsbLKqYPKzG0PIV4OgjS2elOnIgFMP3jnS09LFzNi+ijvM
-         NXc2KYRoIa9NQFHflb2sg3CWFPCbhvYlKAiRXXVKvx2fcVyTZKh9LdIw1LlwGG6MfnSt
-         JiSgqjYkxDIXqtceRlzJwpLqckcapk7i4CiIZgSxY9TgqszSTAqcm9T3euaB0QFPzeZB
-         clpoJFxsX4nN5odukF6g1wXWAicrNvDc3MBy6mS8flsyEst3s4EjU5Bwvze8SHlMnrDo
-         mzEH7yEwrFxyCsLjwJtu2n/vZmSwhD355XsdXBnHUrNklMJIC4t6y+vXqLqrFKsdKGQA
-         LeUQ==
+        bh=q44l5ZscEyQ6yJKKubo7c3OoKM9HyiRVEIpzdw4juK4=;
+        b=m/jhmzWBdWjRiAyCwfy2FsXlSUdiP25XViwOtSqH71SHNNOkaF1MhcPzrXeOxMw0KX
+         vG79gA8T3YhADlteqUelhl53zIurNB5av36O/G8qfuxGhxgym7QHDRlfkD/gG5WXrOOc
+         eW4xeAlIIoLtQMDbsUEn1rmScgjEbma9NMHFXYu3ALZiKTbpM5pS0UTSQNBr4Xrm4+Ob
+         +N3KybUko2aTnHQNMGAe8mLvT5fcLRYpdvxac93Ij5w5WUm0TOcuUu1gVZ85BfzRcPbP
+         dv/kLDI/dZecasIAh4cPkVGDDXKzk5Uxjzo681axWVkUq4qIEn3dXQXMzvbMLYcky9QJ
+         5/nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788427475; x=1789032275;
+        d=1e100.net; s=20251104; t=1788427476; x=1789032276;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=4mf6kivuRMhC5ODDzH3ln2mFV2QNDJ9sbY59yurKD9w=;
-        b=lNG3ZPgXEI0tQjyASjTwDu10iyv+s7X2zi1ARdt7k01Z+x/W/FWHiO5o2qz0dFiIll
-         X8wgE+r1+Q9Lh9NKa0FcCSQCUYXr6YqDzqrpQY9gxs3m6FSRXUQeaQjaFPm8R5V299ep
-         S4ZwZcVFgDBA2dYtBXlFxhml8hhLlwmy3taPXZqrQtTHcVU867aspyyi1LT6i4Cgg6Xi
-         mehe+FWiJdX6sI/ve92HUsmt3bXtjkyuDxdlSV1vpwEWcjrOL+uvy4mUFsWRNCNBdFvF
-         D2VEW2msEO6oSzgEVZKUm+1omigXqGO8MBauwHdgcdaSgMKw2RUOKxjF9y4SblpI1mpF
-         0aYw==
-X-Forwarded-Encrypted: i=1; AKwUvBxNci1JxCQ3tW8YtHSZUl8jSFo9BMKyc+2RPo8rddcecRln2kLmHQqvWfEDqBDfQX1mlaw=@vger.kernel.org
-X-Gm-Message-State: AFuF++mCsOajlSYwH3FMMCr+/n4LdXf5Wa1MimqvQGKHTrqwowlYBx+7
-	oHmMzXnYNC0ztjpL6q2zyGw8QMQccZZRce8138NS9CFjy6Oh8KobhmWNU+5qrLjtVt69VJKEEPC
-	JIQlX74Iij9jA4IRIc5NfXcP92h1w2LID9HhD0A11UdTqZtkxORFNtw==
-X-Gm-Gg: AYBFou34f63BbUh+tAC7me2+EKZGmRQUp9c9Li/6MwZct/hYZ48JeSZJjqZRoE8OreB
-	ps6QkGSdZVoj/cEJnMexdomxjoykdTi6+6u33ZsZRDZ65nukqQo3vo8sHyTRds+pPj1Axf5n5Tb
-	l36r+LQv2hnlReZ7rtwEHR30fUKlgA0LHI0sOP88kYv503M2IWjOfyxn6b/Ppo4iQhPHQPCt5cS
-	1FU89uIECtFHRD8T/aIDrmpiziQeFOUHhpiNFZCtrUEPE6a/QOQktNy+b+y9uB85qngizLSGRQw
-	xyoqoN0mjcg/n2/GqOh85BQESGrJ5V0LWIU3Qth3bXzuqAS0MiV87pAUOhkzI2I/R3fqGzt/6co
-	sd2YXBI8DDiRppdFxCIilvuin
-X-Received: by 2002:a05:600c:a40f:b0:49c:edfe:d525 with SMTP id 5b1f17b1804b1-49cedfed584mr89926775e9.10.1788427475097;
-        Thu, 03 Sep 2026 02:24:35 -0700 (PDT)
-X-Received: by 2002:a05:600c:a40f:b0:49c:edfe:d525 with SMTP id 5b1f17b1804b1-49cedfed584mr89926015e9.10.1788427474733;
-        Thu, 03 Sep 2026 02:24:34 -0700 (PDT)
+        bh=q44l5ZscEyQ6yJKKubo7c3OoKM9HyiRVEIpzdw4juK4=;
+        b=X/kYbDnKe2Czx8uvSrqdFSWTJms1DgQ0TbdWYNkUU78iYknCfMrsFvxqS+DFiU/ks5
+         dTADuGH/gZEOwxHMUmjo0qhtntY9qbb9np/itJsiua8qNIVvLMiQ4fhQkGDFzvg3oIAB
+         ZfnxEpSd01HxYA8Kny4gsdEWfjwWXmjgYEtYrxu0y9xccnb933ADctM3Q+6Bsq4l9Yep
+         a4QumpcHyCyGGNVjXou6BKTRqEDaLoApCfrGJn/yfQnmyDvedFVBzSPadcX+6w8lPm7w
+         duRT8e1HDeZZgc5Wvg3dPryIRCp+QRl2wGcUAJyjUzWkKoDk+xwkgdw6u7iHo+3PbhnY
+         N2Lg==
+X-Forwarded-Encrypted: i=1; AKwUvBwLedOuudRtKMDwERdkQHlQHE4Tk+fiGeT06L9BJw/ZXTHkZ1Exw4KtR8mV7fivNskIrWY=@vger.kernel.org
+X-Gm-Message-State: AFuF++nvKUWqsXAoLjQn5QPjHwpEpXfnhPfTkWAesmS883W6KKu4bYmG
+	7Mxc1mvyNOG6EIdcsOt5n3in8xGwR/Kiru2sAD7Y74Vv8tzXIC4sUj8T6ApdegVFA6vco9Mu4XR
+	/1giwU4HCBcPDcBN+Dn1qau94d6ERBiacp6iFKq49QeNMWqLlUl2QXw==
+X-Gm-Gg: AYBFou3M4OZfKl7Mw8v7TSUy2zKYpjOxCL7dVhH6XbPGvfY4YdEbwf8MZyJr5jd7xaB
+	oxb005DVNfMcY+oHSu0124O+ABFS255jlpEWL3HwOl2OXA3DoA7kUMV0++PJUYSfW0nGY+JiCtI
+	TcEiuOw8DS9WbNeRWRS4HzhVtuReRM3fW/kbhkQiEo5PVh6g5vlyXjuf+xtngKCe1AwLkoVecQg
+	jKeqhuchyRVzyRITSZ+YlBWrUoygFyC5T6yC/tqGjeRwZoXT5uqXJBoeI58ZX4HOWKZkRUZD2JQ
+	2llSgMD70gndHSx6+qdj7vZvbyZLyt7ZMUvaSG2z0z9ldTOsY7U6k6Jl7alXBH32F8DWO6sIVpf
+	liMj2XgyeOYSGL2juETvmEAc5
+X-Received: by 2002:a05:600c:1d11:b0:49c:c0d4:53d9 with SMTP id 5b1f17b1804b1-49ce582a54amr180717175e9.14.1788427476361;
+        Thu, 03 Sep 2026 02:24:36 -0700 (PDT)
+X-Received: by 2002:a05:600c:1d11:b0:49c:c0d4:53d9 with SMTP id 5b1f17b1804b1-49ce582a54amr180716595e9.14.1788427476057;
+        Thu, 03 Sep 2026 02:24:36 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cee5d1fa6sm60749425e9.1.2026.09.03.02.24.33
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cee5d476esm64121695e9.1.2026.09.03.02.24.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2026 02:24:34 -0700 (PDT)
+        Thu, 03 Sep 2026 02:24:35 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 8B33997C7F0; Thu, 03 Sep 2026 11:24:33 +0200 (CEST)
+	id 2399C97C7F2; Thu, 03 Sep 2026 11:24:34 +0200 (CEST)
 From: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Alexei Starovoitov <ast@kernel.org>,
+To: Quentin Monnet <qmo@kernel.org>
+Cc: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
@@ -96,14 +93,11 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH bpf-next 3/4] selftests/bpf: Adopt bpf_program__add_flags() helper
-Date: Thu,  3 Sep 2026 11:24:10 +0200
-Message-ID: <20260903092416.223294-3-toke@redhat.com>
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	bpf@vger.kernel.org
+Subject: [PATCH bpf-next 4/4] bpftool: Adopt bpf_program__add_flags() helper
+Date: Thu,  3 Sep 2026 11:24:11 +0200
+Message-ID: <20260903092416.223294-4-toke@redhat.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260903092416.223294-1-toke@redhat.com>
 References: <20260903092416.223294-1-toke@redhat.com>
@@ -116,159 +110,27 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Adopt the newly added bpf_program__add_flags() helper everywhere the
-selftests non-destructively modifies program flags (which turns out to
-be every use of bpf_program__set_flags() in the tests).
+Adopt the newly added bpf_program__add_flags() helper to
+non-destructively add the BPF_F_XDP_DEV_BOUND_ONLY flag to XDP programs.
 
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- tools/testing/selftests/bpf/prog_tests/attach_probe.c      | 4 +---
- tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c   | 2 +-
- tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c | 3 +--
- tools/testing/selftests/bpf/prog_tests/xdp_metadata.c      | 4 ++--
- tools/testing/selftests/bpf/test_loader.c                  | 5 ++---
- tools/testing/selftests/bpf/testing_helpers.c              | 4 +---
- tools/testing/selftests/bpf/veristat.c                     | 4 ++--
- tools/testing/selftests/bpf/xdp_hw_metadata.c              | 2 +-
- 8 files changed, 11 insertions(+), 17 deletions(-)
+ tools/bpf/bpftool/prog.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-index 7dadb90e7b68..41136e1c7752 100644
---- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-+++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-@@ -543,9 +543,7 @@ static void test_kprobe_sleepable(void)
- 		return;
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index 8c2f9255b36d..6ab911e82155 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -1769,7 +1769,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ 		}
  
- 	/* sleepable kprobe test case needs flags set before loading */
--	if (!ASSERT_OK(bpf_program__set_flags(
--			       skel->progs.handle_kprobe_sleepable,
--			       bpf_program__flags(skel->progs.handle_kprobe_sleepable) | BPF_F_SLEEPABLE),
-+	if (!ASSERT_OK(bpf_program__add_flags(skel->progs.handle_kprobe_sleepable, BPF_F_SLEEPABLE),
- 		       "kprobe_sleepable_flags"))
- 		goto cleanup;
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-index 652307a1b22e..902a70d5afeb 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-@@ -35,7 +35,7 @@ static int check_load(const char *file, enum bpf_prog_type type)
- 	}
- 
- 	bpf_program__set_type(prog, type);
--	bpf_program__set_flags(prog, bpf_program__flags(prog) | testing_prog_flags());
-+	bpf_program__add_flags(prog, testing_prog_flags());
- 	bpf_program__set_log_level(prog, 4 | extra_prog_load_log_flags);
- 
- 	err = bpf_object__load(obj);
-diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-index ed3fd0a88dab..651123cd8602 100644
---- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-@@ -361,8 +361,7 @@ static void test_attach_api_fails(void)
- 
- 	sl_skel->bss->user_ptr = sl_skel;
- 
--	err = bpf_program__set_flags(sl_skel->progs.handle_kprobe_multi_sleepable,
--				     bpf_program__flags(sl_skel->progs.handle_kprobe_multi_sleepable) | BPF_F_SLEEPABLE);
-+	err = bpf_program__add_flags(sl_skel->progs.handle_kprobe_multi_sleepable, BPF_F_SLEEPABLE);
- 	if (!ASSERT_OK(err, "sleep_skel_set_flags"))
- 		goto cleanup;
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-index 047dfdc322a2..3ab963458903 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-@@ -408,14 +408,14 @@ void test_xdp_metadata(void)
- 
- 	prog = bpf_object__find_program_by_name(bpf_obj->obj, "rx");
- 	bpf_program__set_ifindex(prog, rx_ifindex);
--	bpf_program__set_flags(prog, bpf_program__flags(prog) | BPF_F_XDP_DEV_BOUND_ONLY);
-+	bpf_program__add_flags(prog, BPF_F_XDP_DEV_BOUND_ONLY);
- 
- 	/* Make sure we can load a dev-bound program that performs
- 	 * XDP_REDIRECT into a devmap.
- 	 */
- 	new_prog = bpf_object__find_program_by_name(bpf_obj->obj, "redirect");
- 	bpf_program__set_ifindex(new_prog, rx_ifindex);
--	bpf_program__set_flags(new_prog, bpf_program__flags(new_prog) | BPF_F_XDP_DEV_BOUND_ONLY);
-+	bpf_program__add_flags(new_prog, BPF_F_XDP_DEV_BOUND_ONLY);
- 
- 	if (!ASSERT_OK(xdp_metadata__load(bpf_obj), "load skeleton"))
- 		goto out;
-diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
-index 794a7dfb0579..28724de06322 100644
---- a/tools/testing/selftests/bpf/test_loader.c
-+++ b/tools/testing/selftests/bpf/test_loader.c
-@@ -748,7 +748,7 @@ static void prepare_case(struct test_loader *tester,
- 			 struct bpf_object *obj,
- 			 struct bpf_program *prog)
- {
--	int min_log_level = 0, prog_flags;
-+	int min_log_level = 0;
- 
- 	if (env.verbosity > VERBOSE_NONE)
- 		min_log_level = 1;
-@@ -766,8 +766,7 @@ static void prepare_case(struct test_loader *tester,
- 	else
- 		bpf_program__set_log_level(prog, spec->log_level);
- 
--	prog_flags = bpf_program__flags(prog);
--	bpf_program__set_flags(prog, prog_flags | spec->prog_flags);
-+	bpf_program__add_flags(prog, spec->prog_flags);
- 
- 	tester->log_buf[0] = '\0';
- }
-diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
-index 3f037949e978..d1d60451c5bc 100644
---- a/tools/testing/selftests/bpf/testing_helpers.c
-+++ b/tools/testing/selftests/bpf/testing_helpers.c
-@@ -292,7 +292,6 @@ int bpf_prog_test_load(const char *file, enum bpf_prog_type type,
- 	);
- 	struct bpf_object *obj;
- 	struct bpf_program *prog;
--	__u32 flags;
- 	int err;
- 
- 	obj = bpf_object__open_file(file, &opts);
-@@ -308,8 +307,7 @@ int bpf_prog_test_load(const char *file, enum bpf_prog_type type,
- 	if (type != BPF_PROG_TYPE_UNSPEC && bpf_program__type(prog) != type)
- 		bpf_program__set_type(prog, type);
- 
--	flags = bpf_program__flags(prog) | testing_prog_flags();
--	bpf_program__set_flags(prog, flags);
-+	bpf_program__add_flags(prog, testing_prog_flags());
- 
- 	err = bpf_object__load(obj);
- 	if (err)
-diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
-index e70741c6b9b7..9cfc9b4b41c1 100644
---- a/tools/testing/selftests/bpf/veristat.c
-+++ b/tools/testing/selftests/bpf/veristat.c
-@@ -1722,9 +1722,9 @@ static int process_prog(const char *filename, struct bpf_object *obj, struct bpf
- 	fixup_obj(obj, prog, base_filename);
- 
- 	if (env.force_checkpoints)
--		bpf_program__set_flags(prog, bpf_program__flags(prog) | BPF_F_TEST_STATE_FREQ);
-+		bpf_program__add_flags(prog, BPF_F_TEST_STATE_FREQ);
- 	if (env.force_reg_invariants)
--		bpf_program__set_flags(prog, bpf_program__flags(prog) | BPF_F_TEST_REG_INVARIANTS);
-+		bpf_program__add_flags(prog, BPF_F_TEST_REG_INVARIANTS);
- 
- 	opts.log_buf = buf;
- 	opts.log_size = buf_sz;
-diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-index c5501b3fdf48..ab3f5fc56e86 100644
---- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
-+++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-@@ -845,7 +845,7 @@ int main(int argc, char *argv[])
- 
- 	prog = bpf_object__find_program_by_name(bpf_obj->obj, "rx");
- 	bpf_program__set_ifindex(prog, ifindex);
--	bpf_program__set_flags(prog, bpf_program__flags(prog) | BPF_F_XDP_DEV_BOUND_ONLY);
-+	bpf_program__add_flags(prog, BPF_F_XDP_DEV_BOUND_ONLY);
- 
- 	printf("load bpf program...\n");
- 	ret = xdp_hw_metadata__load(bpf_obj);
+ 		if (prog_type == BPF_PROG_TYPE_XDP && xdpmeta_ifindex) {
+-			bpf_program__set_flags(pos, bpf_program__flags(pos) | BPF_F_XDP_DEV_BOUND_ONLY);
++			bpf_program__add_flags(pos, BPF_F_XDP_DEV_BOUND_ONLY);
+ 			bpf_program__set_ifindex(pos, xdpmeta_ifindex);
+ 		} else {
+ 			bpf_program__set_ifindex(pos, offload_ifindex);
 -- 
 2.55.0
 
