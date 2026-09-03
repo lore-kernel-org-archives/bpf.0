@@ -1,65 +1,65 @@
 Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA39B4E3EE8
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 15:36:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 686ED4E2348
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 15:36:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788449806; cv=none; b=BCXKhEmbzbGm6eV8ppRKj78gfF4loJ+PKbl91CYk0kvK6himrjzniz4lhv+q9ulbIDXuM+itV6E0/KMaQLyO4r+lKnGFvP73QpCi4Mqsl21ZD5p/cf2Ypl7K5xsBH5OIk2cttFdXQfircYaS2h1hMYin7Gs+WJ3NgicYrjd/92s=
+	t=1788449818; cv=none; b=pu/D9NiLf47yQjcVgMAuzOQH9nu9CsQLJKM0Hjq21ZEON/otBGU/g38ninpjnqLUuOzcQP2E4s7TOusVsCCviGvnLnlNxK/6SeWJqrYlNUG9Ljc690QLoQmG0S6lvgZ1TLXcAfUZEMltxN4FR1TV2LKNmqcJffRFzyte1zKctiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788449806; c=relaxed/simple;
-	bh=EMi5f4lNBmWXu6d+fPcI1KX/wIAaZ8Vd47RfWN3nins=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=khZqFhu9BGT7C1HBPMyz1c1IeJzsTe3zDtefzFQ2O0OeVt6weckS43APE6zf5CeC8mrPe2MxZwMlYIuhtd3vg3rqztj8XbWY1AB9xTzUQXVpBVKFG+8V5E0sgl/AP3p2uLiCMq6vFSU79SbRD28Gh4Ai74jpjPSTvvp0PJLsy4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ro4SPjKQ; arc=none smtp.client-ip=74.125.225.138
+	s=arc-20240116; t=1788449818; c=relaxed/simple;
+	bh=ocBgaR/p4mDc95EBHb/KEM0O7kuD3J+8uI2l8jWDVnk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=eJ+BDyuJR8SEQM2AOa33ZVYQozfeE8Fw7taPkDVaEJuvic3hXghMEQ0ysY1uJo5e4YZ38lnyoLVjaGvpL/zWihda+3whUDD6+HLTq7h5zpvWDaBAh8BhGNj3gfPXkmKhc3fUruJM0jlpwLX2Wkj38vRM4Qcv1KoGpUVqOlQ1S3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RkSz5nnk; arc=none smtp.client-ip=74.125.225.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ro4SPjKQ"
-Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-49b963f51f6so4775915e9.1
-        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 08:36:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RkSz5nnk"
+Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-49b963f51f6so4776385e9.1
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 08:36:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788449802; x=1789054602; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=gmail.com; s=20251104; t=1788449815; x=1789054615; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=d97CQnOJj0XmdozH/KAeoWsPcFgZWb7RGRKU1QNh0Po=;
-        b=ro4SPjKQy/7L/qGWXGtyK/nCp/wJP5lgXoY8MIoTLUVXB1Y/K1aKyry8DaO0l//NyF
-         P8OvspzFo43tU2NoqLfReUokt607BYBj7if0BprLwjHD32yYYkIKO4OOaXolr0KrZ1Rr
-         MPCk0C9mo8yFL/VKTLo5Sy1q7wOu4Yesz4GQ210hzoworLY2lcHpWWEG2QE3veQbPr7x
-         G9A9qh9q/pctMMmaoca6TaQoYT4glsHIM04m82W3CaKKWrnf09rR/3SxmcN4zY3h5idM
-         lhr3CfONRFO/vsHiTO+dTkXghpiEG4H/kxygRqTCce6OQPNkunAQy1VcFS8rFaI7KFZ5
-         u39g==
+        bh=twZrxZ5m5jBOiPqNd4DyLEyatwFqOt/iSKjel+SkYfo=;
+        b=RkSz5nnkEQNJySQBYoPQSx82Uga4dhCf7kmP08jIOPBXXGGUFB1owRhRFAI23Y8O+m
+         f61cTob1dul1nX0ZVJJZBYp6Yx02QTiwPL86YeRvsR5LuLeLf75BSSgsk4GlbEQIfMv6
+         na7fZT/Kv+Z756EZawaA3Ej/LdR3pkmY7coljAlUFoavwypu42VOLDHGeU15g04wvUaF
+         Kso0VWeicsOwuvko0eGEaRJNcxSV4k9auHRErJ4DnSMCJl2D+J5A8aEzXY0aS2NpViVj
+         skI8qR5R5vndZeKI+ilfAMzx+qhh3S5PgCyb8RCVgHMnQzMnPy2W6Wsp60VdiTaEANKx
+         Twdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788449802; x=1789054602;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=1e100.net; s=20251104; t=1788449815; x=1789054615;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=d97CQnOJj0XmdozH/KAeoWsPcFgZWb7RGRKU1QNh0Po=;
-        b=RwPOvZZ2AWWh37GmfAzUwFC+gemEs93F701UzQCJUCUTUiF6LripjDwA1f4rfbfl4A
-         tGgwslLqrB2QcyhYA3Z9QxdRfP+R4ZQdfKwC/ieCHgKkD+8wwAVQp4xJLwoBSBj5VI0N
-         rJzPDSN4KPyTj4fUy5Q1XSZTG85EPnVUbaX6ihJ/v1JxTIjK7yBCbGDD1VxReSzciOu+
-         E5Q4MdCs5J5D6jYXDMR2J1yJAUlfSTRBFSadNa11p2WZbb9n2nXUts/NNOGPks4Iuhmk
-         Dz3tJ+sPdXq3FHDcYuoQUpnuhWdUkQpIlG10JTVLh1fPAw5rfGXtveJa6D3SgssHJ3Me
-         3xQw==
-X-Gm-Message-State: AFuF++mWwnOci8PRj6/FagQywM8u8nQgMWApI0vpoUKMiRqpUZfPVZ1P
-	WEWoCQLPHz1lscvCYFCriceC4H8bMVUqtLuqNJky5lpkoKmYP+mAdgwu
-X-Gm-Gg: AYBFou3nRfx6LsX4i2M4xsjFpCKaUPqHkQ8j8RfhcxXKhxmaZ8k41nBcu0Gx8YUVP+f
-	qmYKcNPKuaeawTf+W22Ei99GP3NyWVl8Y7yy2wZMCS17XTDXFXktoCN0hI5M7Ms9v4ESeKc4CND
-	CAJBaKfVdxbiZbOS4KYXlK/XI34zgSlCMea138q79OxNGmlrFcIGhRUZFWdcd+diKgK2TvJayiq
-	8qg88fdwsYmZn/Dtfy5KVJrSyLsgtTCZOEBNX/F8qVEPKo7SPYLSAmpMVWQOhy/1fHzDjxBdq5U
-	bno4IHh9TzDfWDPv+YC3o48p9+mylIHEHhSK1vOTjxxEPhKV2AmYzPy6fhtf7lMVs32ZJ11pf34
-	XMpuw+YqsSFOnVJCOFWRYl1fOtmcMa2RIY455GyEHprU1oFq501INcXli5Se+u9sKvxMvWxaHJf
-	MAc7kUvSiKoKIcC6cr+Jt2YeIjGtT1YRlu6D41KQ5yLVZ2apUgea6BFFAFwJpIiiZKQLBnkjK83
-	ABi76ZAESQcxxwG9JXSL3PnTQuwSQhNtX/dMVAxUEnglq/I+6+UinY4gVN+6JmDiwxPHHxiXItb
-	c9Ern0OpI0p66fU03D0KK1DYZFU=
-X-Received: by 2002:a05:600c:470d:b0:499:9240:9a1c with SMTP id 5b1f17b1804b1-49ce58363f8mr200509115e9.15.1788449801763;
-        Thu, 03 Sep 2026 08:36:41 -0700 (PDT)
+        bh=twZrxZ5m5jBOiPqNd4DyLEyatwFqOt/iSKjel+SkYfo=;
+        b=laqYsQ8YLS+zICpFS9Dmq6/fP7JE4wkSxcFsnYVfkN9acJxH3WTdV/43xuVS85L/Kh
+         pfDi5pupJDCt2XOo1cif8juC+wbuPnnBh4Z/2uGt3Ff7DYuwBol5jt0odzz2Nw2oKuhe
+         BPphVSVsLzL4VeKKAGISnCXIoDS/Cyhz2+uM52IDM9HzookLRBfOMvwysclpgFj5Y95v
+         hOgU7vT2M3dnROpxMYHawt+9aZIE3anlvaiq70ecoCCcjqWdZC2MzHcAKSXTV+LT+tXi
+         NBWxx+nHvMF1qnRrYdxRsc9HUe/6RKckJLlozVR1Fy8PyLDaiZ9KZ2giF17pV2Pofnpn
+         PClA==
+X-Gm-Message-State: AFuF++khs1lxYTH9Bwuhjq4DK/0d6T6VLGJ6XWwUDyC9y2JluDiJrLLd
+	eI7YK9CF/vH/hlnwd3WZBtnkOrxLJI2Zl1wX7PgmtnZQPhLRVFxVIpz7
+X-Gm-Gg: AYBFou0mV9Brm7b97qGZ0KfcLYFDng+Vt89AgfLyWV1FpKTAnC0/lqZxGUwK9avSDAk
+	HqyWLz5NTq3xIchycKYD5unWxtCX1k4hJz3NMNMyhWTo3PaIZjLHPDNvskgOnkQvlgLrEpBupyW
+	ojyU24qYZy58fQgzdeCrlLJckf+yucgTLe00/hMSiG47U4DI+6I5e1qfd4dCrLL9HKOz43DEezn
+	qkWKxu5GkLm+jwdrvV2Z40/hQL/qyWME9j2EnZmQoPt9LlEiF2cIhBywnQ8quWGX5pHLD70G5E1
+	AJ9K5wPY0D2Nv7EdadPL4vo6bfSivnGqh8G06tVn6mJYWQ2L9xYDpd8exXg2BxKRPhfA9BZN/lU
+	xZK05RMPkGoNWwVzCa3qbEdhf7qm6GOmrSOBXITZ1StDB6LMZ6NdEiTW7x7AGxqr3MjNbfyCBsY
+	7PKrXvljeP89tMTrJouOWOZ1Jb8nDCDh8IbHNOTAHZR/t/mAv0PZSFc15AcdXpjuf2Hm23duBcm
+	58aZofknaKkyyyQRNxhbezbby8X9z4cn9gTR/CTvUjXUYbbXi6K9WLifflMJrvI5koAMucMtP+E
+	xGsJcciH6f4HQMaHXfRuMllMdqg=
+X-Received: by 2002:a05:600c:4e8f:b0:499:bf0e:95c8 with SMTP id 5b1f17b1804b1-49ce57f5647mr199325655e9.1.1788449815170;
+        Thu, 03 Sep 2026 08:36:55 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cee5d476esm87903355e9.1.2026.09.03.08.36.41
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cee7febb4sm84653935e9.14.2026.09.03.08.36.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Sep 2026 08:36:41 -0700 (PDT)
+        Thu, 03 Sep 2026 08:36:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,94 +68,106 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 03 Sep 2026 17:36:40 +0200
-Message-Id: <DL5SJK7Q489U.1HFUM2S4I4G71@gmail.com>
-Subject: Re: [PATCH bpf v1 05/10] bpf: Reject resilient lock operations in
- rbtree callbacks
+Date: Thu, 03 Sep 2026 17:36:54 +0200
+Message-Id: <DL5SJQEFQ56S.26JAOHTQ8JXPY@gmail.com>
+Cc: <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf v1 03/10] bpf: Reject tail calls directly from
+ callback frames
 From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 To: <sashiko-reviews@lists.linux.dev>
-Cc: <bpf@vger.kernel.org>
 X-Mailer: aerc 0.21.0
 References: <20260903144433.1716731-1-memxor@gmail.com>
- <20260903144433.1716731-6-memxor@gmail.com>
- <20260903153146.2C3A81F00A3A@smtp.kernel.org>
-In-Reply-To: <20260903153146.2C3A81F00A3A@smtp.kernel.org>
+ <20260903144433.1716731-4-memxor@gmail.com>
+ <20260903152147.C0E241F00A3A@smtp.kernel.org>
+In-Reply-To: <20260903152147.C0E241F00A3A@smtp.kernel.org>
 
-On Thu Sep 3, 2026 at 5:31 PM CEST, sashiko-bot wrote:
+On Thu Sep 3, 2026 at 5:21 PM CEST, sashiko-bot wrote:
 > Thank you for your contribution! Sashiko AI review found 1 potential issu=
 e(s) to consider:
 >
 > Pre-existing issues:
-> - [High] The restriction against calling lock operations inside rbtree ca=
-llbacks can be bypassed by nesting callbacks or calling subprograms, becaus=
-e in_rbtree_lock_required_cb() only checks the immediate top frame.
+> - [High] The patch prevents bpf_tail_call within a callback to fix the 'c=
+allback unexpected regs' verifier bug, but misses that BPF_LD_ABS and BPF_L=
+D_IND trigger the exact same bug via the same prepare_func_exit() path.
 > --
 >
-> commit c5914f67e15078bc12af13429620d2a2a4de2b11
+> commit a25ccc5cdb72d9330414949c17ecac5156595510
 > Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 >
-> bpf: Reject resilient lock operations in rbtree callbacks
+>     bpf: Reject tail calls directly from callback frames
 >
-> This patch attempts to enforce the root's lock requirement for resilient
-> locks in rbtree callbacks. It aims to prevent use-after-free conditions
-> when nodes are removed and freed by other CPUs during the in-progress tre=
-e
-> walk.
+>     A tail call from a non-zero frame is modeled as a return from that fr=
+ame,
+>     synthesizing R0 and calling prepare_func_exit() for the taken branch.
+>     When the current frame is a synchronous callback, prepare_func_exit()
+>     enforces the callback return-value contract and marks R0 precise, tri=
+ggering
+>     the "callback unexpected regs" verifier warning during precision back=
+tracking.
+>     This patch rejects a tail call made directly by a callback before
+>     constructing the inconsistent return state.
 >
 >> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index f540279ff4abb..32d31fa67036b 100644
+>> index 7d8ddb1bee00c..f540279ff4abb 100644
 >> --- a/kernel/bpf/verifier.c
 >> +++ b/kernel/bpf/verifier.c
->> @@ -13241,6 +13241,11 @@ static int check_kfunc_args(struct bpf_verifier=
-_env *env, struct bpf_call_arg_me
->>  		{
->>  			int flags =3D PROCESS_RES_LOCK;
+>> @@ -11228,6 +11228,17 @@ static int check_helper_call(struct bpf_verifie=
+r_env *env, struct bpf_insn *insn
+>>  		if (env->cur_state->curframe) {
+>>  			struct bpf_verifier_state *branch;
 >>
->> +			if (in_rbtree_lock_required_cb(env)) {
->                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>> +			/*
+>> +			 * A taken tail call is modeled as a return from the current
+>> +			 * frame. A callback frame cannot be left that way because
+>> +			 * prepare_func_exit() would apply its return contract to the
+>> +			 * unknown R0 synthesized below. Stack-depth validation rejects
+>> +			 * this construct anyway.
+>> +			 */
+>> +			if (cur_func(env)->in_callback_fn) {
+>> +				verbose(env, "cannot tail call within callback\n");
+>> +				return -EINVAL;
+>> +			}
 >
 > [Severity: High]
-> This isn't a bug introduced by this patch, but does
-> in_rbtree_lock_required_cb() fully protect against this bypass?
+> This isn't a bug introduced by this patch, but doesn't BPF_LD_ABS inside =
+a
+> subprog trigger the exact same bug via the same prepare_func_exit() path?
 >
-> Looking at in_rbtree_lock_required_cb(), it only checks the immediate top
-> frame:
+> Looking at check_ld_abs() in kernel/bpf/verifier.c:
 >
-> kernel/bpf/verifier.c:in_rbtree_lock_required_cb() {
->     ...
-> 	callee =3D state->frame[state->curframe];
+>     if (env->cur_state->curframe) {
+>         struct bpf_verifier_state *branch;
 >
-> 	if (!callee->in_callback_fn)
-> 		return false;
+>         mark_reg_scratched(env, BPF_REG_0);
+>         branch =3D push_stack(env, env->insn_idx + 1, env->insn_idx, fals=
+e);
+>         if (IS_ERR(branch))
+>             return PTR_ERR(branch);
+>         mark_reg_known_zero(env, regs, BPF_REG_0);
+>         err =3D prepare_func_exit(env, &env->insn_idx);
+>         if (err)
+>             return err;
+>         env->insn_idx--;
+>     }
 >
-> 	kfunc_btf_id =3D insn[callee->callsite].imm;
-> 	return is_rbtree_lock_required_kfunc(kfunc_btf_id);
-> }
+> If a CAP_BPF user loads a SCHED_CLS program (where BPF_LD_ABS is allowed)=
+,
+> invokes bpf_loop(), passes PTR_TO_CTX through the stack to the callback_c=
+tx
+> argument, loads the context into R6 inside the callback, and executes
+> BPF_LD_ABS, it appears check_ld_abs() will synthesize R0 and call
+> prepare_func_exit().
 >
-> If a BPF program calls a custom rbtree comparison callback, and inside th=
-at
-> callback it calls a static subprogram (or a nested callback like bpf_loop=
-()),
-> would state->curframe's in_callback_fn be false (or its kfunc_btf_id not
-> match the rbtree add kfunc)?
->
-> Could a program use this nested frame to successfully unlock the resilien=
-t
-> lock via a global map value (BPF_PSEUDO_MAP_VALUE), temporarily dropping =
-the
-> lock and allowing another CPU to concurrently remove and free the nodes b=
-eing
-> traversed by bpf_rbtree_add(), leading to a Use-After-Free?
+> Since the callback frame lacks instruction history for R0, won't precisio=
+n
+> backtracking fail and hit the exact same "callback unexpected regs" verif=
+ier
+> warning? Does check_ld_abs() need a similar rejection for callbacks?
 >
 
-Separate bug, will be separate fix. Let's still add this one.
+Has to be fixed separately.
 
->> +				verbose(env, "can't res_spin_{lock,unlock} in rbtree cb\n");
->> +				return -EACCES;
->> +			}
->> +
->>  			if (reg->type !=3D PTR_TO_MAP_VALUE && reg->type !=3D (PTR_TO_BTF_ID=
- | MEM_ALLOC)) {
->>  				verbose(env, "%s doesn't point to map value or allocated object\n",
->>  					reg_arg_name(env, argno));
+>>  			mark_reg_scratched(env, BPF_REG_0);
+>>  			branch =3D push_stack(env, env->insn_idx + 1, env->insn_idx, false);
+>>  			if (IS_ERR(branch))
 
