@@ -1,31 +1,31 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA8523F4854;
-	Thu,  3 Sep 2026 10:31:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8E6C485CE3;
+	Thu,  3 Sep 2026 10:31:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788431472; cv=none; b=nWHEyCxRigYI50pMlm9sG7s2W7XAXkEfMCY9gJ+Ewr4gxHO64VU87uaUlKfA+rggm9DhJz/jwHH0NRhzXA0EYoNgOXl9DZ7C3369Ln+4N1Qzu7amw7dP0XM90PTQM6nfpr839mies4MWg702FeJVIaW5SvUJtJxIUJMDi7gIbAQ=
+	t=1788431497; cv=none; b=T1ZQsusW++m5gleui2WAZOE8NISnYAy9wz0ChhUDId/g+dteD+Iun8tSUlcjtPFIqalnFXYpJ/2j8UZJ2MOqzihq9e5TslFg3FGMnEp5clNxtIEGAIzhSui1zD4F96pR7N5lRH4JGhJre70Qx1z3URLfTeZge+fsUHr/YmT9+A0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788431472; c=relaxed/simple;
-	bh=iZ0UxDW+PGfZPY4n2x5quNoQFlhhWYff8wQolJj8CQc=;
+	s=arc-20240116; t=1788431497; c=relaxed/simple;
+	bh=wa6kw8wVjvVd2W8nAbhMf4/QKJIqMNke43dTRJ3tbuU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Cpi4Sax1zoARl5S4keI9V4In2OTW2fFZFiH9gpjZM1NX19j/X2mY5CQHNea24B6onmA43f6tmuo5eHDhqc9k6HBy8C3MzGQBoQHTzJF2/zfQ9SCdDTKiG9QdMbFhZQIcknS0Kk6puMgMphZDkf7uIBkHUGxASfyMk1H2QZVoYzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=aEI5eI1Z; arc=none smtp.client-ip=217.140.110.172
+	 MIME-Version; b=LNmTSqc0VLJtq31jt/TeF71+H8OYWFI1+Fpg4wJDAsGzH6zQxc5uZuKf8VIIX2RnCeo0CLD5quNUIvDN7pdjpbVj6QtjzubpymKI7Pk7pnWrj1J/8f1757FWril+aSWoI5AzKMc4fM35OisBFdUO6ve5hn5imlrVQNN0AM5BSC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=QvHhv94l; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="aEI5eI1Z"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="QvHhv94l"
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 22B77165C;
-	Thu,  3 Sep 2026 03:31:02 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5CEE31F02;
+	Thu,  3 Sep 2026 03:31:21 -0700 (PDT)
 Received: from e142334-100.cambridge.arm.com (e142334-100.cambridge.arm.com [10.2.198.93])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B04F83F673;
-	Thu,  3 Sep 2026 03:30:56 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id F28AE3F673;
+	Thu,  3 Sep 2026 03:31:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1788431465; bh=iZ0UxDW+PGfZPY4n2x5quNoQFlhhWYff8wQolJj8CQc=;
+	t=1788431485; bh=wa6kw8wVjvVd2W8nAbhMf4/QKJIqMNke43dTRJ3tbuU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=aEI5eI1ZDdVq2m64EA9ImU65GZFhZiL0ZK/lLsHlinaxtNpnT2nFBXA1JkEFJ2dA5
-	 GAImWCHFC6p4QBtqqRBlk66RPeHRj2Ei0OGOPqGAPPTqssaugxDn76YWiAfBhwdKz2
-	 oxnCSs2C9wVP4R71Kj0L4+hylcBhUUG7uFZhGTMI=
+	b=QvHhv94lVGWx7TmcPQBRk7OR/PvY0hnXRhX9xVN5Y4qN+GDaWN+Xshh7VTAkVLSnY
+	 Jdi6olRL94sQmWoyHi9kc6yp4HLF2iZAObXc9xsiPZr5FAVO73li6Y/Q2PlXwZuEJi
+	 tFBQkMsde8wyKBlpx9nCFXxKYf2kd54KRIoPFYKU=
 From: Muhammad Usama Anjum <usama.anjum@arm.com>
 To: Jani Nikula <jani.nikula@linux.intel.com>,
 	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
@@ -94,9 +94,9 @@ Cc: Muhammad Usama Anjum <usama.anjum@arm.com>,
 	bpf@vger.kernel.org,
 	linux-perf-users@vger.kernel.org,
 	damon@lists.linux.dev
-Subject: [PATCH v2 2/8] mm: rename pointers to software PTE values as ptentp
-Date: Thu,  3 Sep 2026 11:29:54 +0100
-Message-ID: <20260903103002.1091859-3-usama.anjum@arm.com>
+Subject: [PATCH v2 4/8] mm: convert PTE table entries in ptep_get()
+Date: Thu,  3 Sep 2026 11:29:56 +0100
+Message-ID: <20260903103002.1091859-5-usama.anjum@arm.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260903103002.1091859-1-usama.anjum@arm.com>
 References: <20260903103002.1091859-1-usama.anjum@arm.com>
@@ -108,90 +108,52 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Some interfaces use pte_t * for a software PTE value rather than for an
-entry stored in a PTE table. These pointers must remain pte_t * when
-pointers to PTE table storage are converted to hw_pte_t *.
-
-Rename these parameters in the install_pte callback,
-write_protect_page(), and guard_install_set_pte() to ptentp. The later
-Coccinelle conversion skips pointers named ptentp, allowing it to convert
-the remaining PTE table pointers without changing these interfaces.
-
-Some functions already use ptentp for such pointers, including:
-- madvise_folio_pte_batch()
-- folio_pte_batch_flags()
-No need to rename them.
-
-This patch only renames parameters and makes no functional change.
+ptep_get() now accepts a pointer to hw_pte_t storage but must continue to
+return a software PTE value. Add __pte_from_hw for both generic hw_pte_t
+definitions. Read the hw_pte_t table element atomically before converting
+it to pte_t.
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 ---
 Changes since v1:
-- Rewrite the subject and description to distinguish software PTE
-  values from PTE table storage.
+- Use software PTE value terminology.
 
 Changes since RFC v1:
-- Update the description for the architecture opt-in conversion.
+- Define __pte_from_hw for the opted-in generic wrapper.
+- Apply READ_ONCE() to hw_pte_t before converting it to pte_t.
 ---
- include/linux/pagewalk.h | 2 +-
- mm/ksm.c                 | 4 ++--
- mm/madvise.c             | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ include/linux/pgtable.h       | 2 +-
+ include/linux/pgtable_types.h | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/pagewalk.h b/include/linux/pagewalk.h
-index b41d7265c01bc..c34d826c5e4a2 100644
---- a/include/linux/pagewalk.h
-+++ b/include/linux/pagewalk.h
-@@ -89,7 +89,7 @@ struct mm_walk_ops {
- 		       struct mm_walk *walk);
- 	void (*post_vma)(struct mm_walk *walk);
- 	int (*install_pte)(unsigned long addr, unsigned long next,
--			   pte_t *ptep, struct mm_walk *walk);
-+			   pte_t *ptentp, struct mm_walk *walk);
- 	enum page_walk_lock walk_lock;
- };
- 
-diff --git a/mm/ksm.c b/mm/ksm.c
-index 624f37975e129..2a4f19fe0f696 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -1292,7 +1292,7 @@ static u32 calc_checksum(struct page *page)
- }
- 
- static int write_protect_page(struct vm_area_struct *vma, struct folio *folio,
--			      pte_t *orig_pte)
-+			      pte_t *ptentp)
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index 19098e302b75a..41337da0d65aa 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -493,7 +493,7 @@ static inline int pudp_set_access_flags(struct vm_area_struct *vma,
+ #ifndef ptep_get
+ static inline pte_t ptep_get(hw_pte_t *ptep)
  {
- 	struct mm_struct *mm = vma->vm_mm;
- 	DEFINE_FOLIO_VMA_WALK(pvmw, folio, vma, 0, 0);
-@@ -1371,7 +1371,7 @@ static int write_protect_page(struct vm_area_struct *vma, struct folio *folio,
- 
- 		set_pte_at(mm, pvmw.address, pvmw.pte, entry);
- 	}
--	*orig_pte = entry;
-+	*ptentp = entry;
- 	err = 0;
- 
- out_unlock:
-diff --git a/mm/madvise.c b/mm/madvise.c
-index 73c2901b9adbf..dd75a673e108f 100644
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -1113,12 +1113,12 @@ static int guard_install_pte_entry(pte_t *pte, unsigned long addr,
+-	return READ_ONCE(*ptep);
++	return __pte_from_hw(READ_ONCE(*ptep));
  }
+ #endif
  
- static int guard_install_set_pte(unsigned long addr, unsigned long next,
--				 pte_t *ptep, struct mm_walk *walk)
-+				 pte_t *ptentp, struct mm_walk *walk)
- {
- 	unsigned long *nr_pages = (unsigned long *)walk->private;
+diff --git a/include/linux/pgtable_types.h b/include/linux/pgtable_types.h
+index 07da05d375c2c..d6c5a7548550b 100644
+--- a/include/linux/pgtable_types.h
++++ b/include/linux/pgtable_types.h
+@@ -8,8 +8,10 @@
  
- 	/* Simply install a PTE marker, this causes segfault on access. */
--	*ptep = make_pte_marker(PTE_MARKER_GUARD);
-+	*ptentp = make_pte_marker(PTE_MARKER_GUARD);
- 	(*nr_pages)++;
+ #ifdef CONFIG_ARCH_HAS_HW_PTE_T
+ typedef struct __hw_pte_t { pte_t __pte; } hw_pte_t;
++#define __pte_from_hw(pte)	((pte).__pte)
+ #else
+ #define hw_pte_t pte_t
++#define __pte_from_hw(pte)	(pte)
+ #endif
  
- 	return 0;
+ #endif /* !__ASSEMBLY__ */
 -- 
 2.47.3
 
