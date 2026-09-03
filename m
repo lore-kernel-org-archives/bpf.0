@@ -1,68 +1,67 @@
-Received: from mail-wr2-f8.google.com (mail-wr2-f8.google.com [74.125.225.72])
+Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBC16332EDE
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 21:48:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB67340407
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 21:48:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788472094; cv=none; b=haP01x6J70iTCRlLRJdHMs33oTjdnL1HiNDk99crjgbdvgMPNp4PDUpAb22V/0wOHnPHRDjqpTBnJlYERVarjpYZBZkGNTDTVIJqP1ViUxy4U4G3lybxnR0Yx2efaHPrshbA0JXyked/YVzp8Da05WssM9fD97Qea8pVe7ImV+A=
+	t=1788472095; cv=none; b=Yv8baeKwThVf+7GmxeUhm8ueVJtI7pSgvzn+y3MBsl1uO8bL0LGjZW2QgMRW2ETYqy7lrhXOWtzeWu0gEaNyvumJd5om8OxIpsc+8HBUErU0WTEqiV14RjpednsMOPtwf7RMqzbQAi+7NxLTGas5HdfOGO7GBsLcgljIP9w0g8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788472094; c=relaxed/simple;
-	bh=rMgKSLZ84QHes467dovB5LbAcvtpLwO5e4G7tjmrizA=;
+	s=arc-20240116; t=1788472095; c=relaxed/simple;
+	bh=hvTzlgDzrOksH+Ma2i+rBLnZ2nt87NN/dKuU9PqkU4E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fJwMvASFcgzJDybhz5INRaHeORL8krBi2JG4F2zKK2pyCAvTnySb7nW0oUiqcCOPNsC89LPDG7fjUo4kXtSLWttm6ODlcriLOXxQHitltWKYTq7cVwAteMPkAvja/96tEJtCN42j9UV8xUkcDt1UOnJIijVFEslCdPpbPJU5iRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ovq90DVD; arc=none smtp.client-ip=74.125.225.72
+	 MIME-Version; b=ocE7aiyzs/V5S9oUomgyqe3Rs3VHMQTep1ASDTyisJxyySbWB8mvNaS68mm5ZaNk0CnKSyRRlGy2EoKgIOBMEpNmC42qNlzIQY6uHlhthHGegBp3wimDMF4faCtrMN7BFzDu5NdZDmCDFJrNhOpNeaScky29pf+r3fkYZSeGo4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hD3yk1eu; arc=none smtp.client-ip=74.125.225.75
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ovq90DVD"
-Received: by mail-wr2-f8.google.com with SMTP id ffacd0b85a97d-482e1e7a4f6so153023f8f.1
-        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 14:48:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hD3yk1eu"
+Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-4843147998cso55669f8f.0
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 14:48:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788472091; x=1789076891; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788472092; x=1789076892; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=GjuWXEv9UNcmb/bnkXmfu4HeHdh/bIJwH3R0fhIIPS4=;
-        b=ovq90DVDhtFQPRvLmFNjTcnjgujXlJ3oZ6qxbZ1tXLjofMt2qf+3/xdigRaafrjQpX
-         mvy7MwLq90elJ9Xe+EOB2DaKyDeA0IsMALzDNrTzkJaxEJ0PXvj/tRbwnaeLxrjpxdy2
-         hG1lZWA9wYtzxPULT1T9jAvFKa6ml4aNiu/hePGiNILQFWtCYWmHE4ZN26v2TpmE8DFf
-         16eN0vOJigwRSXbBIQt0PjA22NALrwq+Zg904Ta5B/zWSpdJpnH0eHVTFrzp++ZgegcI
-         1oaKkpbOsMFvsaAXitlfnfXzFoaYB3xXnXoZi5KTKasmPA0n9Hm8I2YBX9QwWRqaFcrk
-         tzrQ==
+        bh=kcnH+X9kp/u/YiW0oEijrkvvvx+5cplTTtX1IHUqCyM=;
+        b=hD3yk1eu/wDHhhybqyjoK5Sh1GJF860U7U+VIiQLDsF2BdKFP3CDDB0Z5a8YM+owiK
+         DR5kUhklZcNW/5WYNRCJwhFYrL3Ks+3GHnVyx8oIKyf2f/kNmgeGqzzevbVMcz/UTKuv
+         Qx3NZHYnSnT8eHIx0uxwHumRuAYJ06g2xxCP5B4x+EOQ3CfcfzQUJc+ktyJdEpKBh2Pu
+         vBEVtAsYadjnmWrK1+lQVKODh9p1ewXi0xKtGdWDttOW8XewSwezjqFk93y+qxk4z1qM
+         fAmKkMpldEXHEukYPIm+0od0Q4+NURDpxTQoSLG9Y+lpiwXIGYGrtY1/NLpg6wpTkn0s
+         BShA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788472091; x=1789076891;
+        d=1e100.net; s=20251104; t=1788472092; x=1789076892;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=GjuWXEv9UNcmb/bnkXmfu4HeHdh/bIJwH3R0fhIIPS4=;
-        b=Y2hzh81O3mEA0wrawjprupMxL3oU4fgMwdg9LdRT9mSW1EtVMwE4GVzXFXlg+qI7fc
-         qC3fDJzEEEgze3ceIngVvXo/gz64ayqxd4HecIHP1RBKRmKw5ZOSgUwRHxKz/MJ5KAx7
-         ofottcseqdoenjWqnnuihTVu5/SMAbjKrz8Qy+aRg8ISUJJedo1jfrgl6FxDwd6T/TY/
-         ftcylybRSPaEBp51O9tF8KA5xqUwobf1N0aZQ/2AZxmXO7rVXk6UX48fDNBaTUCUhF86
-         FuKjev7IjNjZsanaZVhR2Gm/qTX1YprwBe29gHAsGhugC+TLsbrcPo3ERv4ql//ub4oQ
-         G/Qw==
-X-Gm-Message-State: AFuF++liZV1S9hdeiBKMlxuN75obCk60D8QXpJGpnvzzwspzt6nfDghR
-	PmAwlDpMTlAQoVSi0BuaUrjmR+D7wjCf1D4LbcE3mI5sPFxoBos0VO4oOeSQayPj
-X-Gm-Gg: AYBFou3szL1MBtNCT+DOysqLzAllZvUCNHAsw/eZ4tchVxXrdeWJYJqxB3+IGuZdR2n
-	htU2b6WymEG5Yw39a3ho5DXOZLXwoaSgrpsq7r5RhOSVLhLs6POPQ1s1CDiFQh569qqG1JLtjpW
-	Hgx7OfK9msxWtImWkZO4x7tW3c675anjvducMCrDljieeVM1yj57dNe8Pb1cJGCJ7xNN3/8Mwc8
-	sljlmPsMKYcjL7/Lby6+eRRquz3kOCyRFuh1Nj3mYeHz2aL2OboazjUnxDsOqfrrr60aokCXBPj
-	r/fRzY7RSTL2ugF/hpUESUAMN0fl3daglMBB2p5qWGmz4QD6OKzo52cCODfwwtruV9hqlq4ZW8Z
-	bxld0KWMM1jwTzN2GOnuRl95bsoc2syNWTqSd8bHwwTKCAUBiEmywWId7PHAgn4DJUWvC4Q38Ah
-	0AnR92CnSPQ+J3D+IUe062VqkQQHYB3uIe6YEM/E+qpG/Uw2kCn+btDWyfYV3q9LyQTOeeJ5YWm
-	tEHpOQWlG7hGsRMwOYHNZ1JeTgxdpdmIa+R2uet24Af5u2zgLdWa6/kcF/WUFLbvRBlc22ILCj1
-	RXixpM0Nl1Nwz/8MJOa8pLM+6uA=
-X-Received: by 2002:a5d:64e8:0:b0:47f:762f:32a9 with SMTP id ffacd0b85a97d-4858705ed81mr3566657f8f.12.1788472090598;
-        Thu, 03 Sep 2026 14:48:10 -0700 (PDT)
+        bh=kcnH+X9kp/u/YiW0oEijrkvvvx+5cplTTtX1IHUqCyM=;
+        b=cBc8A6qjwsoCXy5oVoVSGXy6H2Hx2OZRQTx3sioSFfJdf6ofOqaheHzA0Ih7xCYn8X
+         BNFHbyAB5kMaMSHD8Ht0GO75SDBS4z98DlS7ULp3S2H01KRBbXCMfGavrMUf4BVrTEN/
+         VCm2/jXPgaIP7+/EgZyrd7U3zXoWo8VuanFGFT8SNMpo36pcxXpWAS6c3MAZzd6/kHJP
+         B9gh7dHDheSAh4x44+4fppZ1998DYsAL1lcmEgfkVPZ4K2cKOzBmZeI/Ccx2giyWIRWs
+         cHU1FneyLcUmyRJgx28OvjH/Z6bfq8Li/+8pebp7XyAvlTJpXI0MOoEJoVCChENE9SM3
+         co5Q==
+X-Gm-Message-State: AFuF++mLDPnwJvxyuj9DAvnWxMtGbKkBwipOosKfvXlMgf3X3c3yvWSR
+	Ltu2wMhfOnL/xc/2pWTHzAqm/0ueC17MzS4Et5kI3u9MeVRqJ3QBhqAWbwXg78iz
+X-Gm-Gg: AYBFou0GblC+zIJr6zT6s3chrxHIKox7HO5FHbqg8mhmoLV+yP5vtIi/ZBKz83leXfH
+	l96Cii0+INdpaBMmm9+YM5RtKyg5Lg/5qOS4Y6bSEflrtYq0f2Z1N29oeLWzXVz8RfmPVx7k19m
+	45lHkjkVPLW6SSXVKqvurc8sjLf/D8Z9OJT4Q0tjAdOBppr/1ojiNm4lFJlO68x3u8wlthK67wv
+	86n0ml0/t+aAaalcugXWCRugY+egWoDJHsJ8bgm4uNjA0KSlrvVZFaUSTaUtq5lSd5aCXsCvYja
+	uh7wgnAxITbpZypZgzbO1xI8jr4u/gGVhjzvqEaXKA9fxsEVGY89Ye7xR7WeXZaBCLH5ORy3YaQ
+	4pGApDxFrR3eNArKwWfjpsF+YpuR4W+A3xITf2KcRshCKWnJuTNVHF4vpUeV4e4RI2BWeQOFQrP
+	Mjkwi26Jl2IexzeXEAiEielxuLG1KJ+sRrkrFdt6MQARH+LAYEC2J2HDG4EOEiO6rxmZ6k8tAZK
+	Cn9cPzJD9uV4EYi9uHz0NwZRh9561kY3aKGEfWbDKwk0W4pBa1S2tpeMEBT/kt+a/DTTY6LNSrv
+	B3ZzH5KCsC7TxXVKL11IJNZqoOA=
+X-Received: by 2002:a05:6000:61e:b0:485:86bf:654a with SMTP id ffacd0b85a97d-485892298edmr715103f8f.19.1788472092323;
+        Thu, 03 Sep 2026 14:48:12 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485883a9a67sm1331239f8f.16.2026.09.03.14.48.10
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485883a9a67sm1331360f8f.16.2026.09.03.14.48.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2026 14:48:10 -0700 (PDT)
+        Thu, 03 Sep 2026 14:48:11 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Sashiko <sashiko-bot@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -70,9 +69,9 @@ Cc: Sashiko <sashiko-bot@kernel.org>,
 	Nicholas Carlini <npc@anthropic.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf v1 7/8] bpf: Reject legacy packet loads from callbacks
-Date: Thu,  3 Sep 2026 23:47:53 +0200
-Message-ID: <20260903214758.2727663-8-memxor@gmail.com>
+Subject: [PATCH bpf v1 8/8] selftests/bpf: Reject legacy packet loads from callbacks
+Date: Thu,  3 Sep 2026 23:47:54 +0200
+Message-ID: <20260903214758.2727663-9-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260903214758.2727663-1-memxor@gmail.com>
 References: <20260903214758.2727663-1-memxor@gmail.com>
@@ -82,85 +81,137 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3317; i=memxor@gmail.com; h=from:subject; bh=rMgKSLZ84QHes467dovB5LbAcvtpLwO5e4G7tjmrizA=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvma9YLTaJh0ZuM1GVS5Oavzy94brWrsEBn46QrIjq+z QvDe2d2lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCI3jzEyvP317Gx2zHmxhZwa jI+VFVeuvGidZHhMxHmXYe/Tt2ckdzIytKVs/e92WVDxkZmIR8vpv+ELNK5PTZl4/iCLSHXgPsF DrAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3614; i=memxor@gmail.com; h=from:subject; bh=hvTzlgDzrOksH+Ma2i+rBLnZ2nt87NN/dKuU9PqkU4E=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvma7biG3MOZHJYCR6vipz1KfTM/8kyT5Mib6/b+K2f8 yRjbhtLRykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACZyXZiRYeHqxbu0LoZKnF0W apvT+Jw93dL8C/fTyINpk+dFv+roXcbIcHTpnAeTzJ74nitJDyo8yaga8Hz7iYuRUTKuS2ZbSuk 6MAEA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-check_ld_abs() models a failed BPF_LD_ABS or BPF_LD_IND in a
-subprogram as an implicit return with R0 set to zero. It calls
-prepare_func_exit() to explore this synthesized path.
+Add verifier coverage for the callback restriction on legacy packet
+loads. Exercise BPF_LD_ABS directly in a bpf_loop callback and
+BPF_LD_IND from a static subprogram called by the callback, ensuring that
+callback context follows nested static calls.
 
-When the load is reached directly from a synchronous callback,
-prepare_func_exit() enforces the callback return contract and marks R0
-precise. R0 is not derived from a real instruction on this path, so
-precision backtracking reaches the callback call with R0 still requested
-and triggers the "callback unexpected regs" verifier bug. A privileged
-program loader can therefore cause a verifier warning and an -EFAULT
-BPF_PROG_LOAD.
+Also exercise a callback which reaches BPF_LD_IND through a global
+function and its static descendant. A sibling success case calls the same
+global chain outside a callback, preserving support for ordinary global
+packet loads. Existing success cases continue to cover loads from ordinary
+static subprograms.
 
-These legacy packet-load instructions are deprecated. Reject them from
-callbacks rather than complicating their implicit-return model. Check all
-active frames before constructing the implicit return so nested static
-subprograms cannot hide the callback context.
+The failure cases expect the policy-specific rejection instead of reaching
+the implicit-return path, triggering a verifier warning, or being accepted
+through a function boundary.
 
-Global functions are verified independently with a fresh frame zero, so
-an active-frame check cannot identify a global function called from a
-callback. Also check the complete subprogram call graph during stack-depth
-validation and reject a function containing a legacy load when any caller
-is a callback. This covers global and static descendants without making
-has_ld_abs transitive, preserving its per-function BTF return-type check.
-Ordinary uses outside callbacks remain supported.
-
-Fixes: ee861486e377 ("bpf: Fix ld_{abs,ind} failure path analysis in subprogs")
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Link: https://lore.kernel.org/bpf/20260903152147.C0E241F00A3A@smtp.kernel.org
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/verifier.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ .../selftests/bpf/progs/verifier_ld_ind.c     | 96 +++++++++++++++++++
+ 1 file changed, 96 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 26139fa09f12..2cb8fba68cd1 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -5302,6 +5302,15 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
- 	if (!priv_stack_supported)
- 		subprog[idx].priv_stack_mode = NO_PRIV_STACK;
- process_func:
-+	if (subprog[idx].has_ld_abs) {
-+		for (tmp = idx; tmp >= 0; tmp = dinfo[tmp].caller) {
-+			if (subprog[tmp].is_cb) {
-+				verbose(env, "cannot use BPF_LD_[ABS|IND] within callback\n");
-+				return -EINVAL;
-+			}
-+		}
-+	}
-+
- 	/* protect against potential stack overflow that might happen when
- 	 * bpf2bpf calls get combined with tailcalls. Limit the caller's stack
- 	 * depth for such case down to 256 so that the worst case scenario
-@@ -17182,6 +17191,7 @@ static bool may_access_skb(enum bpf_prog_type type)
-  */
- static int check_ld_abs(struct bpf_verifier_env *env, struct bpf_insn *insn)
- {
-+	struct bpf_verifier_state *state = env->cur_state;
- 	struct bpf_reg_state *regs = cur_regs(env);
- 	static const int ctx_reg = BPF_REG_6;
- 	u8 mode = BPF_MODE(insn->code);
-@@ -17192,6 +17202,13 @@ static int check_ld_abs(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 		return -EINVAL;
- 	}
+diff --git a/tools/testing/selftests/bpf/progs/verifier_ld_ind.c b/tools/testing/selftests/bpf/progs/verifier_ld_ind.c
+index 09e81b99eecb..32989f981fb6 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_ld_ind.c
++++ b/tools/testing/selftests/bpf/progs/verifier_ld_ind.c
+@@ -194,6 +194,102 @@ __naked void ld_ind_subprog_both_paths_safe(void)
+ 	::: __clobber_all);
+ }
  
-+	for (i = state->curframe; i; i--) {
-+		if (state->frame[i]->in_callback_fn) {
-+			verbose(env, "cannot use BPF_LD_[ABS|IND] within callback\n");
-+			return -EINVAL;
-+		}
-+	}
++__naked __noinline __used
++static int ld_abs_callback(void)
++{
++	asm volatile (
++	"r6 = *(u64 *)(r2 + 0);"
++	".8byte %[ld_abs];"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_insn(ld_abs, BPF_LD_ABS(BPF_W, 0))
++	: __clobber_all);
++}
 +
- 	if (!env->ops->gen_ld_abs) {
- 		verifier_bug(env, "gen_ld_abs is null");
- 		return -EFAULT;
++SEC("socket")
++__description("ld_abs: reject in callback")
++__failure __msg("cannot use BPF_LD_[ABS|IND] within callback")
++int ld_abs_callback_reject(struct __sk_buff *skb)
++{
++	bpf_loop(1, ld_abs_callback, &skb, 0);
++	return 0;
++}
++
++__naked __noinline __used
++static int ld_ind_callback_subprog(void)
++{
++	asm volatile (
++	"r6 = r1;"
++	"r7 = 0;"
++	".8byte %[ld_ind];"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm_insn(ld_ind, BPF_LD_IND(BPF_W, BPF_REG_7, 0))
++	: __clobber_all);
++}
++
++__naked __noinline __used
++static int ld_ind_callback(void)
++{
++	asm volatile (
++	"r1 = *(u64 *)(r2 + 0);"
++	"call ld_ind_callback_subprog;"
++	"exit;"
++	::: __clobber_all);
++}
++
++SEC("socket")
++__description("ld_ind: reject in callback subprog")
++__failure __msg("cannot use BPF_LD_[ABS|IND] within callback")
++int ld_ind_callback_subprog_reject(struct __sk_buff *skb)
++{
++	bpf_loop(1, ld_ind_callback, &skb, 0);
++	return 0;
++}
++
++static __noinline int ld_ind_global_static(struct __sk_buff *skb)
++{
++	asm volatile (
++	"r6 = %[skb];"
++	"r7 = 0;"
++	".8byte %[ld_ind];"
++	:
++	: [skb] "r"(skb),
++	  __imm_insn(ld_ind, BPF_LD_IND(BPF_W, BPF_REG_7, 0))
++	: __clobber_common, "r6", "r7");
++	return skb->mark;
++}
++
++__noinline int ld_ind_global(struct __sk_buff *skb)
++{
++	return ld_ind_global_static(skb);
++}
++
++static int ld_ind_global_callback(__u32 index, struct __sk_buff **ctx)
++{
++	ld_ind_global(*ctx);
++	return 0;
++}
++
++SEC("socket")
++__description("ld_ind: reject in callback global subprog")
++__failure __msg("cannot use BPF_LD_[ABS|IND] within callback")
++int ld_ind_global_callback_reject(struct __sk_buff *skb)
++{
++	bpf_loop(1, ld_ind_global_callback, &skb, 0);
++	return 0;
++}
++
++SEC("socket")
++__description("ld_ind: allow in non-callback global subprog")
++__success
++int ld_ind_global_subprog_ok(struct __sk_buff *skb)
++{
++	return ld_ind_global(skb);
++}
++
+ /*
+  * ld_{abs,ind} in subprogs require scalar (int) return type in BTF.
+  * A test with void return must be rejected.
 -- 
 2.53.0
 
