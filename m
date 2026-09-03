@@ -1,152 +1,110 @@
-Received: from mta1.migadu.com (out-151.mta1.migadu.com [95.215.58.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6472247F799
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 10:09:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AA83478875
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 10:14:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788430201; cv=none; b=JgbL8DYWOSv/BKt6o6vuvL3Bv7vkaDeCKEWoIjo8UBXH363C7CgEL1SJO3gCYWL4Y74FLAIqQ8mmFTow2E6Xnhf07JOUvwUUZYQ572b4FxtEA/sa5fzW0SCMdC52Rr0uKfgwnH1NAaaXMcsnsuAtU7jXuSUxhhZCCBNi0YkwUnM=
+	t=1788430459; cv=none; b=s65/pRvmLlBTApSsdZu8Y0Q/2w7e0SvvSHeXZayvIIqzG1fzi1NdElzPEdp+ogjB7qyl2RMBzUVMgFirviN6ae8adIW6Pt/kV+xd6+sAG+07qIDVhTN5KEXxxv5bgrXwNIaO/eXMCzGIdlSeglo7bMlThR5I5uczLtpWNrW02pQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788430201; c=relaxed/simple;
-	bh=c3BKTF59VZktP3ACG4MFSbcPV9qbzIS6Z4cfOyHB/9I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jQnmaA9fr+mD1pWVaWF1wYx6Fd++wr/27Oi4yI1l6zk6JvtH2pIgxEheDlJuwUXBRbiD4eHKnla7YK9pZHJ8mpz+szJPBjwmk0KDZvLxZTx35QoiFdLL8L0AoO2RUbe/t2ieb44CyQ1i3Bm/JtwcP5GsHxUXa5/1+Mwpbxq2K4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mvY9o47k; arc=none smtp.client-ip=95.215.58.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788430459; c=relaxed/simple;
+	bh=+pWpo1/nYy4nb51iyyw/7uMbeBrawmjw48Ffnfopxc8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=mqs7mYIf/0OHlstV7KCMSxc/nMb8jfmkkOGWQce0eKdM3VTWMZNLzNLCGHOmhJK95RiS7u7jj+NrSl5bK7gsLfT71VT/VJLbCGK2cxKOwrokCa1ZUafd34WzSZ/Evtv5yNcISjK+9g/a798R73DKlX+MBno57+J1hvtapkbMzfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z3Rn2Zts; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mvY9o47k"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=c3BKTF59VZktP3ACG4MFSbcPV9qbzIS6Z4cfOyHB/9I=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788430192; v=1; x=1789034992;
- b=mvY9o47kLQ+fZBihqsiYOtxO12o9ZFoH1yMwjkfa//Kxy25zWgef2CEZoQnx656mM+Rqbyo2
- S+bhNKMRlVxd3f5EKec5la7yrTdJnbnsklIhVnggbZgI/IAbR6WZEyeuYSY7HuaL8ZMoYQ3MQlL
- p64m0TjQTERk7H9WcHbv8yJ0=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 83a0c04ce43bf8e0;
-	Thu, 03 Sep 2026 10:09:51 +0000
-X-Mizu-Trace-ID: 83a0c04ce43bf8e0
-X-Migadu-Flow: FLOW_OUT
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	VEGA <vega@nebusec.ai>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Lawrence Brakmo <brakmo@fb.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf] bpf: Fix out-of-bounds read of rtt_min in sock_ops
-Date: Thu,  3 Sep 2026 18:09:20 +0800
-Message-ID: <20260903100921.113374-1-jiayuan.chen@linux.dev>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z3Rn2Zts"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E07DA1F000E9;
+	Thu,  3 Sep 2026 10:14:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788430449;
+	bh=yQPrq9jtdx+CTMtooERupFe5B97GRzTDjfQZ0Of9M8Q=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Z3Rn2ZtsI9OeSXz8O64+1Q+Xk9wrZlhIw+vL8S77Dy5V+axvGAADSUbqCClC953y1
+	 IwBXgRadB4qYUzcD7t+Ak1ONn0Ep6s77mz8fEAMGtmYAlD41iPOEv4pFYvCdnSRK73
+	 lv8wFDjOFXnmduWzonQpvSba1CcXGaJqkj0pMERFtFnAkQjkKA+EqSSSz+pCvYIxWN
+	 MnvJ+Ts8ES3IBcTEZA2voVNMhiHde5JjW2AW523AFnPdOCAQdTo/oYOG3q7+++QXkK
+	 rSGUuSVw9p14KET5vQBII+HPsRYFPRVnTszSJTFOIj2pd/1+t4KabuWlYp5EldZZKt
+	 fg8L6v7EqhRig==
+Content-Type: multipart/mixed; boundary="===============8821386129639344299=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <a6bc48f4709cad0e5f9782ff22f927f4d24a1655b1ab6f5cbd8ee3bf1d8ed477@mail.kernel.org>
+In-Reply-To: <20260903092039.477827-2-jolsa@kernel.org>
+References: <20260903092039.477827-2-jolsa@kernel.org>
+Subject: Re: [PATCHv2 bpf-next 1/3] bpf, x86: Split x86_call_depth_emit_accounting in two functions
+From: bot+bpf-ci@kernel.org
+To: jolsa@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
+Cc: bpf@vger.kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,rppt@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu,  3 Sep 2026 10:14:08 +0000 (UTC)
 
-A sockops prog reading skops->rtt_min never checks the sk type: on the
-tcp_conn_request() path sock_ops->sk is a request_sock (non-full), and the
-ctx rewrite casts it to a tcp_sock (full) and reads rtt_min past the end of
-the request_sock, returning dirty adjacent memory.
+--===============8821386129639344299==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-	SEC("sockops")
-	int prog(struct bpf_sock_ops *skops)
-	{
-		switch (skops->op) {
-		case BPF_SOCK_OPS_RWND_INIT:
-			leak = skops->rtt_min;   /* reads the request_sock OOB */
-		...
-		}
-	}
+> diff --git a/arch/x86/include/asm/alternative.h b/arch/x86/include/asm/alternative.h
+> index 08af86ef090a8..2ef4937411860 100644
+> --- a/arch/x86/include/asm/alternative.h
+> +++ b/arch/x86/include/asm/alternative.h
+> @@ -83,7 +83,7 @@ extern void callthunks_patch_builtin_calls(void);
+>  extern void callthunks_patch_module_calls(struct callthunk_sites *sites,
+>  					  struct module *mod);
+>  extern void *callthunks_translate_call_dest(void *dest);
+> -extern int x86_call_depth_emit_accounting(u8 **pprog, void *func, void *ip);
+> +extern int x86_call_depth_emit_accounting(u8 *insn_buff, void *func, void *ip);
 
-For instance one such read returned rtt_min=0xffff8881, the high half of a
-leaked kernel pointer.
+This isn't a bug, but would it be worth adding a size parameter or a
+short comment on this prototype so callers know how large insn_buff has
+to be, given SKL_TMPL_SIZE is not visible outside callthunks.c?
 
-Guarding that cast is exactly what SOCK_OPS_GET_FIELD() does -- it checks
-is_locked_tcp_sock and returns 0 when sock_ops->sk is not a locked full
-socket. Every other tcp_sock field in sock_ops goes through it; rtt_min is
-the only one open-coded, so it skips the check.
+[ ... ]
 
-Read rtt_min through SOCK_OPS_GET_FIELD() too. rtt_min is a bit special:
-it is a struct minmax and we only want the current min, so pass
-rtt_min.s[0].v. That is equivalent to the old hand-computed offset
+> diff --git a/arch/x86/kernel/callthunks.c b/arch/x86/kernel/callthunks.c
+> index e37728f703227..15b221d06901c 100644
+> --- a/arch/x86/kernel/callthunks.c
+> +++ b/arch/x86/kernel/callthunks.c
 
-	offsetof(struct tcp_sock, rtt_min) + sizeof_field(struct minmax_sample, t)
+[ ... ]
 
-(s[0] sits at rtt_min + 0 and .v at + sizeof(.t), i.e. what minmax_get()
-returns), so the loaded field is unchanged and only the full-sock guard is
-added. The two BUILD_BUG_ON()s that protected the hand-computed offset
-are no longer needed.
+> @@ -298,10 +296,9 @@ static bool is_callthunk(void *addr)
+>  	return !bcmp(pad, insn_buff, tmpl_size);
+>  }
+>
+> -int x86_call_depth_emit_accounting(u8 **pprog, void *func, void *ip)
+> +int x86_call_depth_emit_accounting(u8 *insn_buff, void *func, void *ip)
+>  {
+>  	unsigned int tmpl_size = SKL_TMPL_SIZE;
+> -	u8 insn_buff[MAX_PATCH_LEN];
 
-Before patch:
+This isn't a bug, but now that this function only builds the thunk
+template into a caller buffer, would a name that drops 'emit' (e.g.
+x86_call_depth_accounting_insn()) read more clearly next to the new
+bpf_call_depth_emit_accounting()?
 
-	0: r1 = *(u64 *)(r1 +0)      ; r1 = skops->sk
-	1: r1 = *(u32 *)(r1 +2324)   ; ((tcp_sock *)sk)->rtt_min.s[0].v
+>
+>  	if (!thunks_initialized)
+>  		return 0;
+> @@ -313,8 +310,6 @@ int x86_call_depth_emit_accounting(u8 **pprog, void *func, void *ip)
+>  	memcpy(insn_buff, skl_call_thunk_template, tmpl_size);
+>  	text_poke_apply_relocation(insn_buff, ip, tmpl_size, skl_call_thunk_template, tmpl_size);
+>
+> -	memcpy(*pprog, insn_buff, tmpl_size);
+> -	*pprog += tmpl_size;
+>  	return tmpl_size;
+>  }
+>  #endif
 
-After patch:
+[ ... ]
 
-	0: *(u64 *)(r1 +56) = r9
-	1: r9 = *(u8 *)(r1 +50)      ; is_locked_tcp_sock
-	2: if r9 == 0 goto pc+4      ; not a locked full sock -> 0
-	3: r9 = *(u64 *)(r1 +56)
-	4: r1 = *(u64 *)(r1 +0)      ; r1 = skops->sk
-	5: r1 = *(u32 *)(r1 +2324)   ; rtt_min.s[0].v
-	6: goto pc+2
-	7: r9 = *(u64 *)(r1 +56)
-	8: r1 = 0
 
-Fixes: 44f0e43037d3 ("bpf: Add support for reading sk_state and more")
-Reported-by: VEGA <vega@nebusec.ai>
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- net/core/filter.c | 13 +------------
- 1 file changed, 1 insertion(+), 12 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 61940e753552..a043d179ff1a 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -11105,18 +11105,7 @@ static u32 sock_ops_convert_ctx_access(enum bpf_access_type type,
- 		break;
- 
- 	case offsetof(struct bpf_sock_ops, rtt_min):
--		BUILD_BUG_ON(sizeof_field(struct tcp_sock, rtt_min) !=
--			     sizeof(struct minmax));
--		BUILD_BUG_ON(sizeof(struct minmax) <
--			     sizeof(struct minmax_sample));
--
--		*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(
--						struct bpf_sock_ops_kern, sk),
--				      si->dst_reg, si->src_reg,
--				      offsetof(struct bpf_sock_ops_kern, sk));
--		*insn++ = BPF_LDX_MEM(BPF_W, si->dst_reg, si->dst_reg,
--				      offsetof(struct tcp_sock, rtt_min) +
--				      sizeof_field(struct minmax_sample, t));
-+		SOCK_OPS_GET_FIELD(rtt_min, rtt_min.s[0].v, struct tcp_sock);
- 		break;
- 
- 	case offsetof(struct bpf_sock_ops, bpf_sock_ops_cb_flags):
--- 
-2.43.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33739511576
+--===============8821386129639344299==--
