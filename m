@@ -1,90 +1,168 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-71.mta0.migadu.com [91.218.175.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD2333E929C
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 10:28:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE2547CC65
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 10:28:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788431297; cv=none; b=HWEF8nrPFDEwCXz5YcC52mjdT9Hkm6hI82eI6RGLgoGQwEJFxvM6KWl8A1htot4UYHNu+hMoOwan1ZUOkdFwciDg71TPrqxPa0YKBAaVJ6EqH5CnS1P47N2XvNDc221bdYSO9AN/20Px7SZ3FakP69sFW4W2p3SsgdB1z5LWoJc=
+	t=1788431302; cv=none; b=IpFe2hOoXVs51xhMIj1lhCvCXPm/bMHbQrtICctHJ6l+Qa9DICHG60pew9/TnPeqMUMqsxS91/Ew92z72V/yZFONafFQ9jvkJM2GvRkJLT8U4STegYG92pgakfVcJCUcGTszvzozuAu/8WxmVBHo1R7REQFF6UScCePoyWu7cIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788431297; c=relaxed/simple;
-	bh=R6QiVXyfDnZp7grBLDcfQEBndQb7JG5ApckURY+PZ80=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=TG/CUizv4enaJPDCyQSzh3Cp+AAfCO8FS0niWmm7h9azWA9pslx7EXn/Z6kvROuxSjZdrnzey1HOQ+V49HGokTniZa7bMdqKJupFSoJxV7QhGpO9M8j3R3cELCfpBEql4oA9f4rV621DF6eOoeN1yj75txNUUAGg+AXNrafeHOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RTsobjnF; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788431302; c=relaxed/simple;
+	bh=Hc/+d8JKrbF9Rll2/wvArR2Aj26r3TRoU8M0XLzmrAc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KOFpG5wGB46TlViSZHYmcbGopI+fOJ2bCjdIfdIp1cWMx+MeB4u1ramJ+j8CDVwlqGCkNzSMRYhHJYHEsMqIeWIQeLo7Fc8q8ncIqwp0DtLPE+TOySnpm1FoVY0/SN/Hu3qO+XvF68WZvhUxPAOuz1NmcjVnjxoPlALcRUwdZ6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WscFGDMV; arc=none smtp.client-ip=91.218.175.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RTsobjnF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 971021F000E9;
-	Thu,  3 Sep 2026 10:28:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788431287;
-	bh=2PnPwdV3xzo2DTBNx7Xfq6fOPv6g6tCNuhPwaZJO2Wc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=RTsobjnFkdFOVwvhk4sk8rKUSUejLytuNc+0gnF89vunOG09pNp5bjuV7ErLHAJfF
-	 US2eNJ0ztl85j3gRgMIN2e7s+EZRHMQfqidE0roMnTylisHZOa0cssSOtZm3bpxIEi
-	 b7yzRE6hxE2gmXuPeXqq6dwEuLgpa+t/AxEgRyI6WyFO/xPMQcvuptzS/QMTw71DAM
-	 TZ5QpO5O2BRVbuICqALfsuLK9GsLgcMl/qBg6NuqUomO1CxxWjN/tXPKnLArCPGFMi
-	 XJv5vEkDbJYk2tknP9dCXxmhuMeVjEGutFoe71wR+zXWXnccT+zi9LD62RwNqQHLlw
-	 +oEQ/uhYzftkw==
-Content-Type: multipart/mixed; boundary="===============3188801726045122680=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WscFGDMV"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Hc/+d8JKrbF9Rll2/wvArR2Aj26r3TRoU8M0XLzmrAc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788431280; v=1; x=1789036080;
+ b=WscFGDMV0D5RZ+4yKSYTv13zJVRmoc0NR8K8bw3qbBoe3DOTxrmtkOuRM7QNcZ1OG+dsnrtp
+ eINg7HxBX37kB0FGnHdPGGCMbRsxk1/6Q4gcoKwioackwUYLugLt+OSwirP2/67UpqX+8xLJAfw
+ XnINpuF2oOpzDoMDhoeFIEKs=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 38c6c34b8103273a;
+	Thu, 03 Sep 2026 10:28:00 +0000
+X-Mizu-Trace-ID: 38c6c34b8103273a
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <0b318536-dcf8-48e0-ba9e-ae6dddcff80c@linux.dev>
+Date: Thu, 3 Sep 2026 18:27:53 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <99c8e7294e6461d00086cdbd2ea8f7eeb93a9e36f823d65b1178e88e45b17ffe@mail.kernel.org>
-In-Reply-To: <20260903092039.477827-4-jolsa@kernel.org>
-References: <20260903092039.477827-4-jolsa@kernel.org>
-Subject: Re: [PATCHv2 bpf-next 3/3] bpf, x86: Add support for jit dry run
-From: bot+bpf-ci@kernel.org
-To: jolsa@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: bpf@vger.kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,rppt@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu,  3 Sep 2026 10:28:06 +0000 (UTC)
-
---===============3188801726045122680==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 bpf] selftests/bpf: Add tests to assert that netfilter
+ progs cannot write to skb
+To: Florian Westphal <fw@strlen.de>, bpf@vger.kernel.org
+Cc: andrii@kernel.org, eddyz87@gmail.com
+References: <20260903065845.22762-1-fw@strlen.de>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260903065845.22762-1-fw@strlen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-> bpf, x86: Add support for jit dry run
->
-> Adding support to run jit code generation in dry_run mode that won't
-> store any code and only returns the jir code size.
->
-> The dry_run is enabled when __arch_prepare_bpf_trampoline is called
-> with rw_image argument as NULL.
->
-> It's used in arch_bpf_trampoline_size where it allows to skip the
-> image allocation, that gives speed up for tracing_multi attachment.
->
-> With current code:
->
->   # ./test_progs -t tracing_multi_bench_attach -v
->   ...
->   serial_test_tracing_multi_bench_attach: found 55227 functions
->   serial_test_tracing_multi_bench_attach: attached in   1.563s
->   serial_test_tracing_multi_bench_attach: detached in   0.256s
->
-> With the fix:
->
->   # ./test_progs -t tracing_multi_bench_attach -v
->   ...
->   serial_test_tracing_multi_bench_attach: found 55235 functions
->   serial_test_tracing_multi_bench_attach: attached in   0.798s
->   serial_test_tracing_multi_bench_attach: detached in   0.258s
 
-This isn't a bug, but would it be worth expanding the changelog to note
-that the dry run intentionally skips the emit_patch() is_simm32() check
-and the trailing WARN_ON_ONCE() overflow check, and why that is safe for
-both arch_bpf_trampoline_size() callers?
-
-Also, there's a small typo: "jir code size" should be "jit code size".
+on 9/3/26 2:58 PM, Florian Westphal wrote:
+> The netfilter framework is allergic to ip header changing after
+> validation done by ip/ipv6 stack.
+>
+> Assert that bpf netfilter programs do not allow skb write access.
+>
+> Following additional tests are expected to be rejected by verifier:
+>
+> 1. alter skb->len.
+> 2. alter skb->data.
+> 3. prog calls bpf_dynptr_slice_rdwr.
+> 4. alter location returned by dynptr API.
+>
+> Add following test case for bpf runtime:
+> - alter skb data via bpf_dynptr_write()
+>
+> Test checks via __retval() that bpf_dynptr_write() returned nonzero value.
+>
+> Signed-off-by: Florian Westphal <fw@strlen.de>
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33739511576
---===============3188801726045122680==--
+
+> ---
+>   v2: follow LLM review: rename functions and clarify commit message.
+>
+>   .../bpf/progs/verifier_netfilter_ctx.c        | 78 +++++++++++++++++++
+>   1 file changed, 78 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_netfilter_ctx.c b/tools/testing/selftests/bpf/progs/verifier_netfilter_ctx.c
+> index e2cbc5bda65e..b5d7f567d0d4 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_netfilter_ctx.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_netfilter_ctx.c
+> @@ -113,4 +113,82 @@ int with_valid_ctx_access_test6(struct bpf_nf_ctx *ctx)
+>   	return th->dest == bpf_htons(22) ? NF_ACCEPT : NF_DROP;
+>   }
+>   
+> +SEC("netfilter")
+> +__description("netfilter test prog with skb write access")
+> +__failure __msg("only read is supported")
+> +int skb_len_write(struct bpf_nf_ctx *ctx)
+> +{
+> +	ctx->skb->len = 1;
+> +	return 1;
+> +}
+> +
+> +SEC("netfilter")
+> +__description("netfilter test prog with skb data write access")
+> +__failure __msg("cannot write into rdonly_untrusted_mem")
+> +int skb_data_write(struct bpf_nf_ctx *ctx)
+> +{
+> +	ctx->skb->data[0] = 0;
+> +	return 1;
+> +}
+> +
+> +SEC("netfilter")
+> +__description("netfilter test prog with bpf_dynptr_write")
+> +__success __failure_unpriv
+> +__retval(0)
+> +int with_dynptr_write(struct bpf_nf_ctx *ctx)
+> +{
+> +	struct __sk_buff *skb = (struct __sk_buff *)ctx->skb;
+> +	struct bpf_dynptr ptr;
+> +	u8 buffer[1] = {};
+> +
+> +	if (bpf_dynptr_from_skb(skb, 0, &ptr))
+> +		return 1;
+> +
+> +	if (bpf_dynptr_write(&ptr, 0, buffer, sizeof(buffer), 0))
+> +		return 0; /* must always fail */
+> +
+> +	return 1;
+> +}
+> +
+> +SEC("netfilter")
+> +__description("netfilter test prog with bpf_dynptr_slice_rdwr")
+> +__failure __msg("the prog does not allow writes to packet data")
+> +int with_dynptr_rdwr(struct bpf_nf_ctx *ctx)
+> +{
+> +	struct __sk_buff *skb = (struct __sk_buff *)ctx->skb;
+> +	u8 buffer_iph[20] = {};
+> +	struct bpf_dynptr ptr;
+> +	struct iphdr *iph;
+> +
+> +	if (bpf_dynptr_from_skb(skb, 0, &ptr))
+> +		return 1;
+> +
+> +	iph = bpf_dynptr_slice_rdwr(&ptr, 0, buffer_iph, sizeof(buffer_iph));
+> +	if (!iph)
+> +		return 0;
+> +
+> +	return 1;
+> +}
+> +
+> +SEC("netfilter")
+> +__description("netfilter test prog with bpf_dynptr_slice + write")
+> +__failure __msg("cannot write into rdonly_mem")
+> +int with_dynptr_store(struct bpf_nf_ctx *ctx)
+> +{
+> +	struct __sk_buff *skb = (struct __sk_buff *)ctx->skb;
+> +	u8 buffer_iph[20] = {};
+> +	struct bpf_dynptr ptr;
+> +	struct iphdr *iph;
+> +
+> +	if (bpf_dynptr_from_skb(skb, 0, &ptr))
+> +		return 1;
+> +
+> +	iph = bpf_dynptr_slice(&ptr, 0, buffer_iph, sizeof(buffer_iph));
+> +	if (!iph)
+> +		return 0;
+> +	iph->protocol = 42;
+> +
+> +	return 1;
+> +}
+> +
+>   char _license[] SEC("license") = "GPL";
