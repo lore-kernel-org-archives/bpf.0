@@ -1,217 +1,157 @@
-Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB67340407
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 21:48:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43D54426405
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 21:56:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788472095; cv=none; b=Yv8baeKwThVf+7GmxeUhm8ueVJtI7pSgvzn+y3MBsl1uO8bL0LGjZW2QgMRW2ETYqy7lrhXOWtzeWu0gEaNyvumJd5om8OxIpsc+8HBUErU0WTEqiV14RjpednsMOPtwf7RMqzbQAi+7NxLTGas5HdfOGO7GBsLcgljIP9w0g8A=
+	t=1788472570; cv=none; b=DJGzVE9vTY2CwJFQIh5/ZHShvkjkG1ev+idjEh5vhepWkCQ2HZN5RVR8BpsyxWuf7GTJBHGhG6NZVSUJ6oO7yYFfudS1zGT+Q/EWiRULavYD5q4Zws/Gg455koE8fixekZzM8gr6T2ETD2n0mGzYrTpUA4eqYUcxrZxm62kHfN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788472095; c=relaxed/simple;
-	bh=hvTzlgDzrOksH+Ma2i+rBLnZ2nt87NN/dKuU9PqkU4E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ocE7aiyzs/V5S9oUomgyqe3Rs3VHMQTep1ASDTyisJxyySbWB8mvNaS68mm5ZaNk0CnKSyRRlGy2EoKgIOBMEpNmC42qNlzIQY6uHlhthHGegBp3wimDMF4faCtrMN7BFzDu5NdZDmCDFJrNhOpNeaScky29pf+r3fkYZSeGo4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hD3yk1eu; arc=none smtp.client-ip=74.125.225.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788472570; c=relaxed/simple;
+	bh=ycCRjh2oGFWd4/PfMmroNoXN1U3h8x8rpRHB/fNnBcE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Uyp5UQL25U518AO1gEgIgsZ8mUcbKNkcdLA5HlDTZ6GTR+YMYOFSdzevZBu1ZWz9WX+Or3Pv+bsy4BBeuo43NZcwBM192yn+ZbsC4cFrBfJfGHUq/J8pE2JGRfzT/iH3jkMs+lt3xqFECHo51nxZkfExZbmifGOImpEUoyX5z1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OiX4N3PK; arc=none smtp.client-ip=209.85.214.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hD3yk1eu"
-Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-4843147998cso55669f8f.0
-        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 14:48:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OiX4N3PK"
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2db0a41434bso5720485ad.0
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 14:56:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788472092; x=1789076892; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=kcnH+X9kp/u/YiW0oEijrkvvvx+5cplTTtX1IHUqCyM=;
-        b=hD3yk1eu/wDHhhybqyjoK5Sh1GJF860U7U+VIiQLDsF2BdKFP3CDDB0Z5a8YM+owiK
-         DR5kUhklZcNW/5WYNRCJwhFYrL3Ks+3GHnVyx8oIKyf2f/kNmgeGqzzevbVMcz/UTKuv
-         Qx3NZHYnSnT8eHIx0uxwHumRuAYJ06g2xxCP5B4x+EOQ3CfcfzQUJc+ktyJdEpKBh2Pu
-         vBEVtAsYadjnmWrK1+lQVKODh9p1ewXi0xKtGdWDttOW8XewSwezjqFk93y+qxk4z1qM
-         fAmKkMpldEXHEukYPIm+0od0Q4+NURDpxTQoSLG9Y+lpiwXIGYGrtY1/NLpg6wpTkn0s
-         BShA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788472092; x=1789076892;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=google.com; s=20251104; t=1788472568; x=1789077368; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=kcnH+X9kp/u/YiW0oEijrkvvvx+5cplTTtX1IHUqCyM=;
-        b=cBc8A6qjwsoCXy5oVoVSGXy6H2Hx2OZRQTx3sioSFfJdf6ofOqaheHzA0Ih7xCYn8X
-         BNFHbyAB5kMaMSHD8Ht0GO75SDBS4z98DlS7ULp3S2H01KRBbXCMfGavrMUf4BVrTEN/
-         VCm2/jXPgaIP7+/EgZyrd7U3zXoWo8VuanFGFT8SNMpo36pcxXpWAS6c3MAZzd6/kHJP
-         B9gh7dHDheSAh4x44+4fppZ1998DYsAL1lcmEgfkVPZ4K2cKOzBmZeI/Ccx2giyWIRWs
-         cHU1FneyLcUmyRJgx28OvjH/Z6bfq8Li/+8pebp7XyAvlTJpXI0MOoEJoVCChENE9SM3
-         co5Q==
-X-Gm-Message-State: AFuF++mLDPnwJvxyuj9DAvnWxMtGbKkBwipOosKfvXlMgf3X3c3yvWSR
-	Ltu2wMhfOnL/xc/2pWTHzAqm/0ueC17MzS4Et5kI3u9MeVRqJ3QBhqAWbwXg78iz
-X-Gm-Gg: AYBFou0GblC+zIJr6zT6s3chrxHIKox7HO5FHbqg8mhmoLV+yP5vtIi/ZBKz83leXfH
-	l96Cii0+INdpaBMmm9+YM5RtKyg5Lg/5qOS4Y6bSEflrtYq0f2Z1N29oeLWzXVz8RfmPVx7k19m
-	45lHkjkVPLW6SSXVKqvurc8sjLf/D8Z9OJT4Q0tjAdOBppr/1ojiNm4lFJlO68x3u8wlthK67wv
-	86n0ml0/t+aAaalcugXWCRugY+egWoDJHsJ8bgm4uNjA0KSlrvVZFaUSTaUtq5lSd5aCXsCvYja
-	uh7wgnAxITbpZypZgzbO1xI8jr4u/gGVhjzvqEaXKA9fxsEVGY89Ye7xR7WeXZaBCLH5ORy3YaQ
-	4pGApDxFrR3eNArKwWfjpsF+YpuR4W+A3xITf2KcRshCKWnJuTNVHF4vpUeV4e4RI2BWeQOFQrP
-	Mjkwi26Jl2IexzeXEAiEielxuLG1KJ+sRrkrFdt6MQARH+LAYEC2J2HDG4EOEiO6rxmZ6k8tAZK
-	Cn9cPzJD9uV4EYi9uHz0NwZRh9561kY3aKGEfWbDKwk0W4pBa1S2tpeMEBT/kt+a/DTTY6LNSrv
-	B3ZzH5KCsC7TxXVKL11IJNZqoOA=
-X-Received: by 2002:a05:6000:61e:b0:485:86bf:654a with SMTP id ffacd0b85a97d-485892298edmr715103f8f.19.1788472092323;
-        Thu, 03 Sep 2026 14:48:12 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485883a9a67sm1331360f8f.16.2026.09.03.14.48.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2026 14:48:11 -0700 (PDT)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Nicholas Carlini <npc@anthropic.com>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf v1 8/8] selftests/bpf: Reject legacy packet loads from callbacks
-Date: Thu,  3 Sep 2026 23:47:54 +0200
-Message-ID: <20260903214758.2727663-9-memxor@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260903214758.2727663-1-memxor@gmail.com>
-References: <20260903214758.2727663-1-memxor@gmail.com>
+        bh=rYSTpL4/e/dJxlW8BA73mMV2ir8Kqlp+jytcJ8MussU=;
+        b=OiX4N3PKJ9ykalbFYOSJomAPePOHeTy3cp85POFD4VsOdtL5XjTYOkQzB7J8sAGTI7
+         CY39bjp9innQrPCHlPrR+nDw6DUmOGOBf69kSeV5n+4NFNT+TVI4nXfSDRdCgeXeGcoV
+         zmSAeYPCQyZa5eGrEqvslv1tuQjgCxsbdez6PkuuKsAyTkGb/RrYw5UHVH7sw3WaHSZO
+         9+hr1oqUj0e89i4bdJmGACsZSElexE+Z3a9hojGPmI0Fc4YFvBs8sRC+5yUef34hn3tf
+         rYu1lGnyjHdRja3q2sZxmKcSA6M9fF2+BhXntWDaGL9CxkNqzAn4GHPjYhNwAnh9R3xR
+         kXbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788472568; x=1789077368;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rYSTpL4/e/dJxlW8BA73mMV2ir8Kqlp+jytcJ8MussU=;
+        b=hQDmGwFUNhC/Dpa6+58yeCWVOZXELE4thKlH3Lzx+LMmg3KO07G2p4VUDIronJJ5Di
+         P6ZWQ830Zx+cQkSVIJxnA8vV4YYzOKKKkav2qDOS7zhlAz6et2WzUqe42IVc+8KM1Lid
+         U8Ckfbkp0aasVprTjzyQvrajnuLYs2vE0fM7avaMQGIf4vsKSK4lIJSks3GqPNqWyHnp
+         r9tVyF2YLZ5wzRi1NLO+sG1YaVJ964QPhfFNccCxHpk9cmGm/eGFao4PJk9XKuoeC9fC
+         X/wGtxjrM/PXN3ZjN7fXuQHI23yP0Zc8Jg8OqhdqjemNYE4uenIJRhUV3PgRuAmpdsPJ
+         k7Pg==
+X-Forwarded-Encrypted: i=1; AKwUvBxxAt9xCTN9+ER7W4ddsTDFP4+/NrHvYbgtlrBuGiUpexc/l9x7ZT4IsxKUZMAeIWekGO0=@vger.kernel.org
+X-Gm-Message-State: AFuF++nXXYOV4vVT4rJXRkWC3sjkmRQuPUGC+6XiTZmFRvda5RZU+CvQ
+	5aRPRV1JtTx09vlRGPOcqE0qMoJHVUrrzLWHHHbWYqIDpPiwFue/JOKFFxboRdEB3qD5FPj/fJn
+	djDT6bUEBoo21ixc8zYha05jpXw==
+X-Received: from pgca13-n2.prod.google.com ([2002:a05:6a02:638d:20b0:cc1:c12a:92cf])
+ (user=hramamurthy job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a20:db8e:b0:3d3:aec2:4dc9 with SMTP id adf61e73a8af0-3da3a0f6709mr2412349637.21.1788472568266;
+ Thu, 03 Sep 2026 14:56:08 -0700 (PDT)
+Date: Thu,  3 Sep 2026 21:55:54 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3614; i=memxor@gmail.com; h=from:subject; bh=hvTzlgDzrOksH+Ma2i+rBLnZ2nt87NN/dKuU9PqkU4E=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvma7biG3MOZHJYCR6vipz1KfTM/8kyT5Mib6/b+K2f8 yRjbhtLRykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACZyXZiRYeHqxbu0LoZKnF0W apvT+Jw93dL8C/fTyINpk+dFv+roXcbIcHTpnAeTzJ74nitJDyo8yaga8Hz7iYuRUTKuS2ZbSuk 6MAEA
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.55.0.979.g7e5102b832-goog
+Message-ID: <20260903215606.31633-1-hramamurthy@google.com>
+Subject: [PATCH net-next v5 00/12] gve: AdminQ mode related refactors
+From: Harshitha Ramamurthy <hramamurthy@google.com>
+To: netdev@vger.kernel.org
+Cc: joshwash@google.com, hramamurthy@google.com, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org, 
+	john.fastabend@gmail.com, sdf@fomichev.me, jordanrhee@google.com, 
+	willemb@google.com, nktgrg@google.com, maolson@google.com, thostet@google.com, 
+	jacob.e.keller@intel.com, debarghyak@google.com, kees@kernel.org, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	przemyslaw.kitszel@intel.com
+Content-Type: text/plain; charset="UTF-8"
 
-Add verifier coverage for the callback restriction on legacy packet
-loads. Exercise BPF_LD_ABS directly in a bpf_loop callback and
-BPF_LD_IND from a static subprogram called by the callback, ensuring that
-callback context follows nested static calls.
+This series is preparing the driver for the addition of a new control
+plane mode(MailboxQ) by commonizing and reusing as much code as possible.
+MailboxQ is a new control plane infrastructure which uses mailbox queues.
+This is a new control plane to communicate with the device when the driver
+is running on bare-metal instances as well as newer versions of the device.
 
-Also exercise a callback which reaches BPF_LD_IND through a global
-function and its static descendant. A sibling success case calls the same
-global chain outside a callback, preserving support for ordinary global
-packet loads. Existing success cases continue to cover loads from ordinary
-static subprograms.
+This series contains 2 main changes to the gve driver's existing control
+plane(AdminQ):
+1) refactor some initialization/teardown path methods to make it work for
+   both control planes.
+2) add gve_ctrl_ops structure to the driver for various control plane
+   operations
 
-The failure cases expect the policy-specific rejection instead of reaching
-the implicit-return path, triggering a verifier warning, or being accepted
-through a function boundary.
+The refactors are mainly around the init, reset and recover paths so that
+functionalities could be moved into the control ops like 'set_num_queues',
+'set_num_ntfy_blks' etc.
 
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- .../selftests/bpf/progs/verifier_ld_ind.c     | 96 +++++++++++++++++++
- 1 file changed, 96 insertions(+)
+This patch series only sets the control ops for AdminQ mode. This is
+intended as a preparation for adding MailboxQ mode in upcoming series
+which will add the new control plane infrastructure and then introduce
+the corresponding control ops for MailboxQ mode.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_ld_ind.c b/tools/testing/selftests/bpf/progs/verifier_ld_ind.c
-index 09e81b99eecb..32989f981fb6 100644
---- a/tools/testing/selftests/bpf/progs/verifier_ld_ind.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_ld_ind.c
-@@ -194,6 +194,102 @@ __naked void ld_ind_subprog_both_paths_safe(void)
- 	::: __clobber_all);
- }
- 
-+__naked __noinline __used
-+static int ld_abs_callback(void)
-+{
-+	asm volatile (
-+	"r6 = *(u64 *)(r2 + 0);"
-+	".8byte %[ld_abs];"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm_insn(ld_abs, BPF_LD_ABS(BPF_W, 0))
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("ld_abs: reject in callback")
-+__failure __msg("cannot use BPF_LD_[ABS|IND] within callback")
-+int ld_abs_callback_reject(struct __sk_buff *skb)
-+{
-+	bpf_loop(1, ld_abs_callback, &skb, 0);
-+	return 0;
-+}
-+
-+__naked __noinline __used
-+static int ld_ind_callback_subprog(void)
-+{
-+	asm volatile (
-+	"r6 = r1;"
-+	"r7 = 0;"
-+	".8byte %[ld_ind];"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm_insn(ld_ind, BPF_LD_IND(BPF_W, BPF_REG_7, 0))
-+	: __clobber_all);
-+}
-+
-+__naked __noinline __used
-+static int ld_ind_callback(void)
-+{
-+	asm volatile (
-+	"r1 = *(u64 *)(r2 + 0);"
-+	"call ld_ind_callback_subprog;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("ld_ind: reject in callback subprog")
-+__failure __msg("cannot use BPF_LD_[ABS|IND] within callback")
-+int ld_ind_callback_subprog_reject(struct __sk_buff *skb)
-+{
-+	bpf_loop(1, ld_ind_callback, &skb, 0);
-+	return 0;
-+}
-+
-+static __noinline int ld_ind_global_static(struct __sk_buff *skb)
-+{
-+	asm volatile (
-+	"r6 = %[skb];"
-+	"r7 = 0;"
-+	".8byte %[ld_ind];"
-+	:
-+	: [skb] "r"(skb),
-+	  __imm_insn(ld_ind, BPF_LD_IND(BPF_W, BPF_REG_7, 0))
-+	: __clobber_common, "r6", "r7");
-+	return skb->mark;
-+}
-+
-+__noinline int ld_ind_global(struct __sk_buff *skb)
-+{
-+	return ld_ind_global_static(skb);
-+}
-+
-+static int ld_ind_global_callback(__u32 index, struct __sk_buff **ctx)
-+{
-+	ld_ind_global(*ctx);
-+	return 0;
-+}
-+
-+SEC("socket")
-+__description("ld_ind: reject in callback global subprog")
-+__failure __msg("cannot use BPF_LD_[ABS|IND] within callback")
-+int ld_ind_global_callback_reject(struct __sk_buff *skb)
-+{
-+	bpf_loop(1, ld_ind_global_callback, &skb, 0);
-+	return 0;
-+}
-+
-+SEC("socket")
-+__description("ld_ind: allow in non-callback global subprog")
-+__success
-+int ld_ind_global_subprog_ok(struct __sk_buff *skb)
-+{
-+	return ld_ind_global(skb);
-+}
-+
- /*
-  * ld_{abs,ind} in subprogs require scalar (int) return type in BTF.
-  * A test with void return must be rejected.
+The entire list of future patches can be found here for reference:
+https://github.com/hramamurthy12/linux/commits/gve-mailbox-queues/
+
+Changes in v5:
+- This series contains 12 patches since 3 patches from v4 were applied
+- Picked up Przemek Kitszel's Reviewed-by tag
+- Honor device provided default no. of Qs and max rx buffer size correctly (patch 1, Sashiko)
+- drop unnecessary header files and __maybe_unused tag (patch 4, Sashiko)
+- fix workqueue disable count, destroy rings before stopping Qs, stop queues in error path
+  in gve_close, preserve ordering of gve_turndown->gve_destroy_rings->gve_queues_stop
+  during close and reset (patch 6, Sashiko)
+- drop double logging in all paths for queue creation/destruction (patch 11, Sashiko)
+- v4: https://lore.kernel.org/netdev/20260814021406.3044324-1-hramamurthy@google.com/ 
+
+Changes in v4:
+- Reduce code churn by placing new functions directly in gve_adminq.c, introducing final tab spacing
+  and using local variable (Przemek Kitszel)
+- Fix kdoc formatting and drop spurious management interrupt(patch 9)
+- Propagate release_db_resources naming change (patch 12)
+- Remove double logging in destroy queues path (patch 14)
+- v3: https://lore.kernel.org/netdev/20260803184630.3813311-1-hramamurthy@google.com/
+
+Changes in v3:
+- Fix driver compatibility verification in the reset and recovery paths (patches 2, 8).
+- Mark gve_adminq_get_device_properties() with __maybe_unused ahead of its usage (patch 7).
+- Refine error handling and resource cleanup in reset, probe, and queue creation paths (patches 8, 9, 11, 14).
+- Keep IRQ doorbell allocation/release in control plane resource helpers (patch 12).
+- Minor fixes: fix TOCTOU issue for link speed, correct kdoc comments, and remove redundant teardown calls (patches 4, 11, 15). 
+- v2: https://lore.kernel.org/netdev/20260602235900.3050782-1-hramamurthy@google.com/
+
+Changes in v2:
+- Rebased against latest net-next to resolve apply failure for patch 5
+- Fixed a few typos in commit messages of patch 9 and 14
+- Fixed a kdoc warning in patch 9
+- v1: https://lore.kernel.org/netdev/20260601175437.3767283-1-hramamurthy@google.com/
+Harshitha Ramamurthy (6):
+  gve: add struct gve_device_info to hold device properties
+  gve: introduce control plane operations structure
+  gve: introduce ctrl ops to set vectors and Qs
+  gve: introduce gve_adminq_get_device_properties()
+  gve: refactor gve_init_priv for reset path
+  gve: add ctrl ops to for queue operations
+
+Joshua Washington (6):
+  gve: simplify reset logic
+  gve: add gve_ctrl_ops for gve initialization/teardown sequences
+  gve: split up notify block allocation and setup paths
+  gve: introduce new methods to handle IRQ doorbells
+  gve: setup and teardown management interrupts
+  gve: add link status/speed ctrl ops
+
+ drivers/net/ethernet/google/gve/gve.h         |  87 +-
+ drivers/net/ethernet/google/gve/gve_adminq.c  | 380 ++++++--
+ drivers/net/ethernet/google/gve/gve_adminq.h  |  30 +-
+ drivers/net/ethernet/google/gve/gve_dqo.h     |   2 +-
+ drivers/net/ethernet/google/gve/gve_ethtool.c |   5 +-
+ .../net/ethernet/google/gve/gve_flow_rule.c   |  15 +-
+ drivers/net/ethernet/google/gve/gve_main.c    | 886 +++++++++---------
+ 7 files changed, 876 insertions(+), 529 deletions(-)
+
 -- 
-2.53.0
+2.55.0.979.g7e5102b832-goog
 
