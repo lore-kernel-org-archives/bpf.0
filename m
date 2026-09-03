@@ -1,84 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-210.mta1.migadu.com [95.215.58.210])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C251E5714
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 00:51:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1537E2F7F17
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 01:12:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788396668; cv=none; b=J2rw84CRyos1llQ4JW3TLcXixBDAOuW2f967gmUOIDIPBKqpouXy438+ubUxqA/vJHOcD4wmO4K8Cw1VXJtAtNlrdOB/ISfPohaogm+mrIxnCuSln/1qp2luVjn26Lbs/EYEKQ/nWfhC42Ah/qGZPo7r//D3zkAzHM7grUOWnzA=
+	t=1788397962; cv=none; b=XjbWF4lt0BpHEdp2DEktR8E73Orv1sQr8or6cA92vMoZhtV+gJOtrBsxOBkzThunjME4y3rgEbu2vniY9qkHNDY+kcKWLZ8G9zhJ2k7681Zjb/XWBHLWysEj3IhPm1K6BZ6mAEYBMBWQ1bD1pRchsGy4LOBtsjuKoKbxi7NxLBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788396668; c=relaxed/simple;
-	bh=USV91Y/nK9pn3AQ/1/kzF/5EyVDldgql0JnkgdUUI7o=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=UbrQeNa7Fvc9LRZG1NUliOk5Ki7/hmrEDptqMLy5St9HajB2SptC9S23TfOvRPcPVCL5Cv13PtP4OGG4dJem278oiATwruF+iOmVmSCI9AcTxS3gDaurAZEMCXC5XTE6klVtlwGGWvuIzgO2rbbBmHj5+PLTeNWCmaUq7zGa7ts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dIKf/OUK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788397962; c=relaxed/simple;
+	bh=rcSvnwdgysIYaZNX3OhjT56/9EbUy6eEYgqPG+yJFKE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=p0de0JtkrJZL5+I1m+tK+KaQssD+RgAt3svrwjFnr+4ZPbgm6t03Mn6ZtXZxzVq5nYdfdRo2N3xKyV6A0yNkTuQR1xOBbOlKiZVX8eOhgD/IXxNLh9yb/Hiix8MdZjSZuDqMEocXgY1+A2Lzdr/RZLAE3Pyxq05DNNoaWKqySnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JweijNVR; arc=none smtp.client-ip=95.215.58.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dIKf/OUK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33CC21F000E9;
-	Thu,  3 Sep 2026 00:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788396666;
-	bh=fhHDesYJPZ6Of1e+qE1Q2KEJrOrQLuW4HaY7qlajV1M=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=dIKf/OUKNUdRqU/tYmFEMPyATjJb1e1gAnl3I4cyw/d8xQOOv3aKkxE8ZAc3hvZD/
-	 K8RNhlJFuHOF2jfwxFTLOu/EPiNRR2WUAkLHE67+AMX+YLywYE4nda1/Iy1yCXtCt7
-	 iY4oPhmxkJhaiIJw0NZpds7w2FLDItuDeHJAuZlq5OT0IoTfodRQN4HTTlHSmz152h
-	 q/mcuDps7TOF7n9bHubPuSZwpitU+C1A29iM97udu2BHpFWClePZn7PjyZKw417Lni
-	 x+9UbZSgmJhM9IKKJki+ijk+JQr5ii2Joxn9+faHVQDtHBW2UwLsH/AtGHbDa4OHEQ
-	 46xHSku4WAdTg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 197F73927054;
-	Thu,  3 Sep 2026 00:50:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JweijNVR"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=rcSvnwdgysIYaZNX3OhjT56/9EbUy6eEYgqPG+yJFKE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788397956; v=1; x=1789002756;
+ b=JweijNVRuyEapt4j5eJ2uuolPk4CyoFEHSRQEQFf0mN2ACiRAR7dxSRFDvhwQ3+0NpsmRUlR
+ C5/K9Op4Q/r4YLW5xG5R/xId0qmoe2xQMuTOJhsUNpP/Lexq22bTBh1CbMSgrfwJiWTN9A1s7/V
+ FZg46uoqBP27o/vZW5EyF1lI=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 729514d5e02325d1;
+	Thu, 03 Sep 2026 01:12:36 +0000
+X-Mizu-Trace-ID: 729514d5e02325d1
+X-Migadu-Flow: FLOW_OUT
+From: Hangbin Liu <hangbin.liu@linux.dev>
+Subject: [PATCH mptcp-next v2 0/2] selftests: mptcp: convert iptables to
+ nftables
+Date: Thu, 03 Sep 2026 09:12:19 +0800
+Message-Id: <20260903-mptcp_nft-v2-0-66283e4b9c3b@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf 1/2] bpf: reject BPF_PSEUDO_FUNC reference to the main
- program
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178839660765.3021740.4286063453849532120.git-patchwork-notify@kernel.org>
-Date: Thu, 03 Sep 2026 00:50:07 +0000
-References: <20260902233658.1186477-1-eddyz87@gmail.com>
-In-Reply-To: <20260902233658.1186477-1-eddyz87@gmail.com>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com,
- yonghong.song@linux.dev, memxor@gmail.com, npc@anthropic.com
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/22NQQrCMBBFr1JmbSQZbG1ceQ8pEuPEDmpakhBaS
+ u9uyNrl4z/e3yBSYIpwaTYIlDny5AvgoQE7Gv8iwc/CgBI7qSWK75zsfPcuiUev8dwjOY0aij8
+ HcrzU1g2qJjwtCYayjRzTFNZ6k1U1/hSzElK0rbbGqM6dlLy+1w/7KR6th2Hf9x+GHWVXrwAAA
+ A==
+X-Change-ID: 20260902-mptcp_nft-b892782ef929
+To: MPTCP Linux <mptcp@lists.linux.dev>, 
+ Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: Hangbin Liu <hangbin.liu@linux.dev>, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, Hangbin Liu <liuhangbin@kylinos.cn>
+X-Mailer: b4 0.14.3
 
-Hello:
+iptables has been deprecated for years. The Linux kernel has included
+nftables as the successor to iptables since 2014, and every major
+distribution uses nftables as the default packet filtering framework.
+The iptables command we run on modern systems is actually iptables‑nft,
+a compatibility layer that translates iptables syntax to nftables rules
+behind the scenes.
 
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+There are also some features that can be set easily with nft, while we need
+to convert to BPF code under iptables, such as MPTCP add‑addr and
+remove‑addr suboptions. To make future work easier, convert iptables usage
+in mptcp to nftables.
 
-On Wed,  2 Sep 2026 16:36:57 -0700 you wrote:
-> fixups.c:jit_subprogs() rewrites BPF_PSEUDO_FUNC loads to contain real
-> function addresses. This function is invoked from bpf_jit_subprogs()
-> only when env->subprog_cnt > 1. Meaning that for any program like
-> below:
-> 
->   int main(void *ctx) {
->     void *ptr = main;
->     ...
->     bpf_timer_set_callback(..., ptr);
->     ...
->   }
-> 
-> [...]
+Tested with iptables-translate to make sure each nft conversion is the same
+with previous one. e.g. for mptcp_sockopt.sh, the ip6tables shows
 
-Here is the summary with links:
-  - [bpf,1/2] bpf: reject BPF_PSEUDO_FUNC reference to the main program
-    https://git.kernel.org/bpf/bpf/c/374b2c5561db
-  - [bpf,2/2] selftests/bpf: BPF_PSEUDO_FUNC reference to the main program
-    https://git.kernel.org/bpf/bpf/c/ac0aaef0aa99
+bash-5.3# ip6tables -L
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination
 
-You are awesome, thank you!
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination
+ACCEPT     tcp  --  anywhere             anywhere             tcp flags:FIN,SYN,RST,ACK/SYN mark match 0x1
+ACCEPT     tcp  --  anywhere             anywhere             tcp flags:RST/RST mark match 0x0
+ACCEPT     tcp  --  anywhere             anywhere             mark match 0x1
+DROP       tcp  --  anywhere             anywhere             mark match 0x0
+
+And the backend nft shows like
+
+bash-5.3# nft list tables
+table ip6 filter
+bash-5.3# nft list table ip6 filter
+table ip6 filter {
+        chain OUTPUT {
+                type filter hook output priority filter; policy accept;
+                tcp flags & (fin | syn | rst | ack) == syn meta mark 0x00000001 counter packets 0 bytes 0 accept
+                tcp flags & rst == rst meta mark 0x00000000 counter packets 0 bytes 0 accept
+                meta l4proto tcp meta mark 0x00000001 counter packets 0 bytes 0 accept
+                meta l4proto tcp meta mark 0x00000000 counter packets 0 bytes 0 drop
+        }
+}
+
+Which matches what we change in the script, except the counter.
+
+Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
+---
+Changes in v2:
+- Fix --sync and --tcp-flags RST convert not match issue (sashiko)
+- make sure drop is a number in check_mark. (sashiko)
+- Other than using one inet table, use ip/ip6 tables to retain the same
+  table and chain names used by the original iptables/ip6tables setup.
+- Link to v1: https://lore.kernel.org/r/20260902-mptcp_nft-v1-0-559caa16f410@kylinos.cn
+
+---
+Hangbin Liu (2):
+      selftests: mptcp: convert iptables to nftables for mptcp_sockopt.sh
+      selftests: mptcp: convert iptables to nftables for mptcp_join.sh
+
+ tools/testing/selftests/net/mptcp/config           |   3 +
+ tools/testing/selftests/net/mptcp/mptcp_join.sh    | 142 ++++++++-------------
+ tools/testing/selftests/net/mptcp/mptcp_lib.sh     |   2 +-
+ tools/testing/selftests/net/mptcp/mptcp_sockopt.sh |  51 ++++----
+ 4 files changed, 84 insertions(+), 114 deletions(-)
+---
+base-commit: 8dd2802091fbba563abec55e0455d0e5273c7529
+change-id: 20260902-mptcp_nft-b892782ef929
+
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Hangbin Liu <liuhangbin@kylinos.cn>
 
