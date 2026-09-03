@@ -1,153 +1,261 @@
-Received: from mail-wm2-f6.google.com (mail-wm2-f6.google.com [74.125.225.134])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09B49480DED
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 15:54:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.134
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788450878; cv=none; b=rURB8zRx3qygzAk9N4HWUW1Lrj7nqPK2pzze1oLTEJDVZUKM1yqkNeNTbUNT33D+cutJYbb11+ZSfvgqFi5G3ueC0ROeNzZyjfksGG9r7jAe55e4zzRmKyzf2fWgMd2e8E48ZPdY5wy4a+p77FiuyzsSQc7nAtdVH7fWeTXg0Ao=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788450878; c=relaxed/simple;
-	bh=SkwS1obEXFRQQvMZKWNRCoBrZa5SCh4GtHmEQeCBxC4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=C6gWeShzACe6e6hSVefw/96JAL/CDfeeRNoZoQhjcSrymdYfZTVlD5w8J2wW+x4T0hGybuu+TfXU2LzOaGinYUTiArYd2BVAfEkfmypcJoaw0a/+GyU/ZAzUQGQOyz0LuBDyjK5W2e2xlX8ZDOU44xvhuJuMAk33XhkFMhIhvFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VtSuaMVL; arc=none smtp.client-ip=74.125.225.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4FE33803C5
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 16:01:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788451320; cv=pass; b=OYkSVYomePZQ9fQW8P33dKWKr0WfMw58X50s51wfj1day9GxhRQDbbSGL6FmKMorHPVPkToYD7P4kCYYfJEO6uZkX6wADX58f3+JYLTVOrLi6ak3KJBNPukGAB1EnuEAnaWWfn9deVmPIaRiyd/A1W1hGBseGGDxMAuexrII44U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788451320; c=relaxed/simple;
+	bh=UQJOARb0hjrrxZqoI8tPjCF4BNxBhRids7cJ/ZQHpwE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pFM+8BqmpTtpz/1YhWc0CFIKWKTpFxsndpSOMWoT+RG2jDhR66h1/uzvgICecFbvcog9Kk0dErijR6wue1+OD1HvF1JiDE/liz0ZVAFihFwCPL3lX8RSme5K7G1sQpVzr8PO+8MB0tE1qwvwNqkAZtooY8d5ev2amkXE0BwlpX8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QcKO8RvH; arc=pass smtp.client-ip=209.85.216.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VtSuaMVL"
-Received: by mail-wm2-f6.google.com with SMTP id 5b1f17b1804b1-499c930cb9cso88435e9.0
-        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 08:54:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QcKO8RvH"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-398e9698a70so2501798a91.0
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 09:01:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788451318; cv=none;
+        d=google.com; s=arc-20260327;
+        b=XgX6n6QbuuWjrAuMEDnhET4+hoUdsYMEwPP1E4967VqSoORWUmH7uY6zEISu5+znMc
+         fHg1wPou3of2kB4k95yw7CboZYC4FMNAn2aMLNphs0DtYpzTAQDMedAYCQkHy9c0xwHV
+         bPuGMHTn8fqAbu1z19Vnx1y0EwoTdFlHa5K56ysbCHPzBvWd8sjjLcAGpgeDgw8emmwR
+         1plk+SeHzINVNNO+4fUurrLFGHM1GMgb6gasyUoVyTZN9Vh4UFwUsJMvcQ7VEOwUnHgS
+         Fvg9XDywFtYPxl+SPUMHpBcpYik/vBPPf54hK5A557BTgczc3VRwk2Y1YHrBhyF8Hhr8
+         bQdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ym1m2s7k69osu4j9IQLOfbeC7FHjlBRmEp9KBHwH/xs=;
+        fh=H+jiIjMO/mjS/Ttq2l0CmoW2FVxyepJehJU2TdtFoOM=;
+        b=celFVRDeDM6ggRQh2Glv8IXwFsJqT2d+5XNM6bEkpdFYrrAMN89y4dKYB5Y2nya2SS
+         D+2CIqithYwBJGVRg6+TJ/DmeJf1nLMYMdMntznntG3gM2OrLRp712EbSgIIwFKw8BMe
+         +aUM7O3tSejNMZJdLx+1jlMAhO5W/Pf5RJUWlNa9Qwdh0hiuEWguBwhqZbi69pt4kyR2
+         H/J27LcF0DbGCau7VBWL2rOvC11URK8wyu6z2YeKcUdJkP29BOkQP9Q5/+/xmZdjZOoj
+         sBsZ9MczxF3izqV7YjomU1wreEkcgINH9EorSsKaaRJsb24km4nyOAEmL26Bxy7FzwCB
+         6Vqw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788450874; x=1789055674; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=D8VbwdlqCQxfdIZO7e9acFweb5EzcAb7QaDyJJVU6kI=;
-        b=VtSuaMVLsT+uzmwqffKthFYg7e5jZXxSURe8c8eYFe6NRYnw927+Vwjm/VLvxM5+1H
-         lSXZ3PCIdfBkRA2g0nKdjyk8aOibJgwb5mhymNt9asXc9+txCmMzlatMsRWjKu11pg3t
-         kE/4HOu3SB2kP4bAVgYxzCal4U3+fOkR6ggqmTsO1G83dZQZ7slnoENCjyD31QT6b3Mq
-         iNTD5iMkenIFH/Fls8QMsraGu3PP+LlIjv4PPf9tjJUMwyz9eXNNrpPRYdboAAqacZTV
-         dWxigqfmsihsSWyU6lN2oTbWTwiJupyl1z8CLzx9mfdyibdWnJ2/Umsu9DAlbZWwckWS
-         igxg==
+        d=gmail.com; s=20251104; t=1788451318; x=1789056118; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ym1m2s7k69osu4j9IQLOfbeC7FHjlBRmEp9KBHwH/xs=;
+        b=QcKO8RvHQGNSBO4XH9NFw14lgD5LLJ9cqH9uZVbdQAsFQmxaI/jCa2U6TmEXrQ17CH
+         CzwapOwJkhuwTuM1M3K919HKi+hI2Ji4SjnvUlvnWN3bdanuxVwxMvhPnkkpIFgevkGI
+         OxUTMsbBAmM/CkpIFI8A04zMLq6z9VJkUdsq+hCG8V6eHJmwV1zCD3+7atNWI+1SjZgo
+         aFTWsavhDTZUXTfUlPNjyFTQ2QXOZ9HYWX30BbfNTgg9mErIw935Sl2ly1aK2DvZKDqv
+         8AZe2a7u5J370QeeYwuKLc5YGL71pfeflZtGW76PudJYZdG1vM7ZWOpcSNpDwxip67+W
+         hXWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788450874; x=1789055674;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1788451318; x=1789056118;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=D8VbwdlqCQxfdIZO7e9acFweb5EzcAb7QaDyJJVU6kI=;
-        b=N5cvTRW2urskmVvR0VjL38KlNe2yZkuC4fLwrk+tO51aNQrGbJfdLbpHyPMTFfLvus
-         jsoBTVQ+nsThqMxdVjhM2lUcbvHNm86iMsdh9ktR4fhQkCf0uQFN5zYdEqZZIXvEib0B
-         r0IeXhNu6atn4dKX8fA3r8wtSCrvC9R+0i7CTiwqpb5sNZI3StuCFoRIHE3fHkuUS0rK
-         xSMpa4eCyF+6S3LVYFh2va+Bb+JQgv+9BHMuHx8OUZVeqevje2MyfNyqv2JbRax5rzPG
-         2TNXZCHMF5C7sI9HKnNgqVbjST/gvE9bzY/rrCzhukTj1f9fBQ5rN37ihR8QB+kd4jZw
-         noFQ==
-X-Gm-Message-State: AFuF++k8dCOrcD7tBoDLGjqVmR8z0eEBk2Tr7eiU1AawEQKtCZ1GXy2G
-	QkK6h8GFYfRZ3KKSZjSR5b3O2hfAGGrjHtxkMOlP5VcKXPHjQuQIRm8r
-X-Gm-Gg: AYBFou0QY5hm0KjdkbYxrVNcQoF2dSmBFspHPHP/C+DJMLXmLRCwwVSEOauc4xcPVyi
-	sQgNTgVYuQsox5fQ7LYyxJgITMIvHcQAMErifCS4bDBZkPuycXzebvVQ5D/uy5DWwsxSTvN1LfG
-	HgfZffJlItBL3uwRGmTL2R2vtKruA7vJBZapNGoxT1qkmZ4J3gNGDfmqziYvSXo2O6wLTmRtbVh
-	UtPvohTOCMDHqg3Sp6yXaUvXLdoDpasbbfOLWni0ZcY+CUtq201MQwxTCZuEYuZ4Oh52r62EmX1
-	ndUxsoz4UroIOqrG2l5tEiud2r0YcY3yyNc6ooVKc+1o4C1E/8MA8lvJGIBnWE8PggbdaRqn6SJ
-	A1ErbNNw+KhWeCKF7Z/8FbyL0Dcq0JujpyZksK5DOhRZjRusXrxKxQ+y7hrR1vrG0KxL3fikyg/
-	32Jqhb87oI5TM1uqDds5tNLSqk1kWnglfXyD5JSBhVQd15vKD4IOICqlg3S8mvJ3ACkewOPX2Am
-	OA5g6u4mcY76REyB4kUYGF5EDIOvZwXHp+ocS6ftrppkHaKRkGTIOKMVxPlzPCcOlCN7GpAZFU2
-	nMWZujPZawoEPfvTF6QlaDhmCmQ=
-X-Received: by 2002:a05:600c:4692:b0:49c:de80:b833 with SMTP id 5b1f17b1804b1-49ce57f569cmr198422585e9.2.1788450874124;
-        Thu, 03 Sep 2026 08:54:34 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ce591f846sm61152355e9.1.2026.09.03.08.54.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Sep 2026 08:54:33 -0700 (PDT)
+        bh=ym1m2s7k69osu4j9IQLOfbeC7FHjlBRmEp9KBHwH/xs=;
+        b=JbEQtSxBDF1c+txaLCM4p0xo4NTeztjvjXgQYm356e4oRGWvWmt1NrBGkGlFjk3sud
+         9Dyiu9IIod3UNOD1ARLSQ+1rNvPeUrkx+y3EAyHieZAenLUIdDLHIGNX5L2dF4jbETbA
+         E78UvSV47S9p9Lyzk3F7z0tb8ifwEKkg5gR99GD08wA0cQ1J4/lUXVniDc2g3Bk+shwV
+         fI4Jw21I6TUZekBT2QYVpqDZEdy8GrqVLDOyF3Jx+Gwfz7yTD5Jg+spA4Uxp/Ox9KuiV
+         bOvJgprODAwdc3ztmKoYQ/DRUFc0MBer6VaE24Wvkx1dluEm7cMi9X5RQ7A1r/F63uWx
+         AFqQ==
+X-Forwarded-Encrypted: i=1; AKwUvByjXfAxLGM5B2dfoIqeeEHyRgBQ0jotFpaWDG65hnc6SbQovJ4BWIn+7GOHpfCWUBkH8io=@vger.kernel.org
+X-Gm-Message-State: AFuF++mEUksZ/zF68EVDk7pTHDx/NdbFwqJz+57IitOWDblwndu10zQY
+	+gjpRFTG/OV/coXJ3DsHt8VY57uW2S8KFmi/xPF1SEuNoEWWRnEHRJ/lsKPjW4YPVAfv6z5sEX0
+	asf6cei0GinAGLQXSIk5cL/TmCIGuLN8+xF+P
+X-Gm-Gg: AYBFou3CxaBOsVvNBbCqPBiSAs3fOq69nmBXOcm677as0SS/7ky+wd1w6uNLBkEqOgh
+	NjpaKF4DA7c+UxNC5k9tEZ4HFcxoLEGLeQXlvF+lCTWlGo63YrXHPgAOs/BItVHQq1YrVsT1c6c
+	0AtDwDcWx9P07jKfLbHpPyAN8hbUtUNQFs3IhKBVC+js57DI92/jItySJ4mM81h/yBJMeeOBu0e
+	3MqXlUBnimciYKhlgPZZ04I0k55pLUEG7b/PiN9Kp3tawewgMtE9iy6I/xVRG+6HhQJ184DJ/ar
+	U3aDRZowy2RW0eL2dmFp52Us5y0dYNk3sjNkByoloCfgZkkjiY7fSzYir6w4kkabCEzNDw1Bs7v
+	dd4780mmSFxKJtjqVSXDJ+cJNTRzC/N/4qxvlkV7WxA==
+X-Received: by 2002:a17:90b:2ec8:b0:398:9bd1:3216 with SMTP id
+ 98e67ed59e1d1-39b22fd5e8amr936066a91.23.1788451316207; Thu, 03 Sep 2026
+ 09:01:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260901141954.29449-1-suchitkarunakaran@gmail.com>
+ <CAEf4Bza6wQb1mSiKA_6U7FovYivcZvf3MCvU9NMdt01w-wAZPQ@mail.gmail.com> <CAO9wTFiA6BHbTtP8Y8GCNnEQqXgsOzecuibK3zsjBKfyN8Nfkw@mail.gmail.com>
+In-Reply-To: <CAO9wTFiA6BHbTtP8Y8GCNnEQqXgsOzecuibK3zsjBKfyN8Nfkw@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 3 Sep 2026 09:01:41 -0700
+X-Gm-Features: AcwNN1X-YqQqjC61b-JrUTGMCYd0EnTSl9FqXJbSPoltToJP7INN2w4pWDyVNgo
+Message-ID: <CAEf4BzYUREsJYXw7ZU9twCDcfEJ6cTpR4Ypbvf5JTABK0uGi2g@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: Fix map_lookup_percpu_elem on sparse CPU IDs
+To: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, 
+	memxor@gmail.com, shuah@kernel.org, emil@etsalapatis.com, 
+	ihor.solodrai@linux.dev, jolsa@kernel.org, martin.lau@linux.dev, 
+	song@kernel.org, yonghong.song@linux.dev, zhoufeng.zf@bytedance.com, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 03 Sep 2026 17:54:33 +0200
-Message-Id: <DL5SX8TPQZ4R.3TTGUMLHYKN4Y@gmail.com>
-Cc: <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf v1 09/10] bpf: Mark syscall helpers as sleepable
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: <sashiko-reviews@lists.linux.dev>
-X-Mailer: aerc 0.21.0
-References: <20260903144433.1716731-1-memxor@gmail.com>
- <20260903144433.1716731-10-memxor@gmail.com>
- <20260903155150.D57251F000E9@smtp.kernel.org>
-In-Reply-To: <20260903155150.D57251F000E9@smtp.kernel.org>
 
-On Thu Sep 3, 2026 at 5:51 PM CEST, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
+On Wed, Sep 2, 2026 at 10:29=E2=80=AFPM Suchit Karunakaran
+<suchitkarunakaran@gmail.com> wrote:
 >
-> Pre-existing issues:
-> - [High] bpf_btf_find_by_name_kind_proto lacks .might_sleep =3D true, all=
-owing arbitrary FD injection via softirq.
-> --
+> On Thu, 3 Sept 2026 at 06:02, Andrii Nakryiko <andrii.nakryiko@gmail.com>=
+ wrote:
+> >
+> > On Tue, Sep 1, 2026 at 7:20=E2=80=AFAM Suchit Karunakaran
+> > <suchitkarunakaran@gmail.com> wrote:
+> > >
+> > > libbpf_num_possible_cpus() returns the number of possible CPUs, which=
+ is
+> > > appropriate for sizing packed per-CPU map value buffers. It is not th=
+e
+> > > upper bound for logical CPU IDs.
+> > >
+> > > For a possible CPU mask such as 0,2-3, the test loops over CPU IDs 0
+> > > through 2. This incorrectly visits CPU 1 and misses CPU 3. It also
+> > > initializes packed per-CPU slots using their slot indexes rather than
+> > > the corresponding logical CPU IDs.
+> > >
+> > > Parse the possible CPU mask and keep the packed slot count separate
+> > > from the logical CPU ID range. Populate each dense per-CPU slot with
+> > > its logical CPU ID, calculate the corresponding expected sum, and mak=
+e
+> > > the BPF program iterate over the full CPU ID range.
+> > >
+> >
+> > Is this the issue you ran into in practice or it's just another of
+> > those found by AI reading code?
+> >
+> >
+> > > Fixes: 7aa424e02a04bba5ecc84afe9b58b16e9e0b34f8 ("selftests/bpf: Fix =
+some bugs in map_lookup_percpu_elem testcase")
+> > >
+> > > Signed-off-by: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+> > > ---
+> > >  .../bpf/prog_tests/map_lookup_percpu_elem.c   | 34 ++++++++++++++---=
+--
+> > >  .../bpf/progs/test_map_lookup_percpu_elem.c   |  8 ++---
+> > >  2 files changed, 30 insertions(+), 12 deletions(-)
+> > >
+> > > diff --git a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu=
+_elem.c b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+> > > index bfb1bf3fd427..849f33259c00 100644
+> > > --- a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+> > > +++ b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+> > > @@ -2,29 +2,45 @@
+> > >  /* Copyright (c) 2022 Bytedance */
+> > >
+> > >  #include <test_progs.h>
+> > > +#include "bpf/libbpf_internal.h"
+> > >  #include "test_map_lookup_percpu_elem.skel.h"
+> > >
+> > >  void test_map_lookup_percpu_elem(void)
+> > >  {
+> > >         struct test_map_lookup_percpu_elem *skel;
+> > > -       __u64 key =3D 0, sum;
+> > > -       int ret, i, nr_cpus =3D libbpf_num_possible_cpus();
+> > > +       bool *possible =3D NULL;
+> > > +       __u64 key =3D 0, sum =3D 0;
+> > > +       int cpu, nr_cpu_ids, nr_cpus, ret, slot =3D 0;
+> > >         __u64 *buf;
+> > >
+> > > -       buf =3D malloc(nr_cpus*sizeof(__u64));
+> > > -       if (!ASSERT_OK_PTR(buf, "malloc"))
+> > > +       ret =3D parse_cpu_mask_file("/sys/devices/system/cpu/possible=
+", &possible,
+> > > +                                 &nr_cpu_ids);
+> > > +       if (!ASSERT_OK(ret, "parse possible CPU mask"))
+> > >                 return;
+> > >
+> > > -       for (i =3D 0; i < nr_cpus; i++)
+> > > -               buf[i] =3D i;
+> > > -       sum =3D (nr_cpus - 1) * nr_cpus / 2;
+> > > +       nr_cpus =3D libbpf_num_possible_cpus();
+> > > +       if (!ASSERT_GT(nr_cpus, 0, "libbpf_num_possible_cpus"))
+> > > +               goto free_mask;
+> > > +
+> > > +       buf =3D malloc(nr_cpus * sizeof(*buf));
+> > > +       if (!ASSERT_OK_PTR(buf, "malloc"))
+> > > +               goto free_mask;
+> > > +
+> > > +       for (cpu =3D 0; cpu < nr_cpu_ids; cpu++) {
+> > > +               if (!possible[cpu])
+> > > +                       continue;
+> > > +               buf[slot++] =3D cpu;
+> > > +               sum +=3D cpu;
+> > > +       }
+> > > +       if (!ASSERT_EQ(slot, nr_cpus, "possible CPU mask weight"))
+> > > +               goto exit;
+> > >
+> > >         skel =3D test_map_lookup_percpu_elem__open();
+> > >         if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open")=
+)
+> > >                 goto exit;
+> > >
+> > >         skel->rodata->my_pid =3D getpid();
+> > > -       skel->rodata->nr_cpus =3D nr_cpus;
+> > > +       skel->rodata->nr_cpu_ids =3D nr_cpu_ids;
+> > >
+> > >         ret =3D test_map_lookup_percpu_elem__load(skel);
+> > >         if (!ASSERT_OK(ret, "test_map_lookup_percpu_elem__load"))
+> > > @@ -55,4 +71,6 @@ void test_map_lookup_percpu_elem(void)
+> > >         test_map_lookup_percpu_elem__destroy(skel);
+> > >  exit:
+> > >         free(buf);
+> > > +free_mask:
+> > > +       free(possible);
+> > >  }
+> > > diff --git a/tools/testing/selftests/bpf/progs/test_map_lookup_percpu=
+_elem.c b/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
+> > > index ca827b1092da..d8da0696b97c 100644
+> > > --- a/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
+> > > +++ b/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
+> > > @@ -7,7 +7,7 @@
+> > >  __u64 percpu_array_elem_sum =3D 0;
+> > >  __u64 percpu_hash_elem_sum =3D 0;
+> > >  __u64 percpu_lru_hash_elem_sum =3D 0;
+> > > -const volatile int nr_cpus;
+> > > +const volatile int nr_cpu_ids;
+> > >  const volatile int my_pid;
+> > >
+> > >  struct {
+> > > @@ -57,17 +57,17 @@ int sysenter_getuid(const void *ctx)
+> > >
+> > >         map_ctx.map =3D &percpu_array_map;
+> > >         map_ctx.sum =3D 0;
+> > > -       bpf_loop(nr_cpus, read_percpu_elem_callback, &map_ctx, 0);
+> > > +       bpf_loop(nr_cpu_ids, read_percpu_elem_callback, &map_ctx, 0);
+> > >         percpu_array_elem_sum =3D map_ctx.sum;
+> > >
+> > >         map_ctx.map =3D &percpu_hash_map;
+> > >         map_ctx.sum =3D 0;
+> > > -       bpf_loop(nr_cpus, read_percpu_elem_callback, &map_ctx, 0);
+> > > +       bpf_loop(nr_cpu_ids, read_percpu_elem_callback, &map_ctx, 0);
+> > >         percpu_hash_elem_sum =3D map_ctx.sum;
+> > >
+> > >         map_ctx.map =3D &percpu_lru_hash_map;
+> > >         map_ctx.sum =3D 0;
+> > > -       bpf_loop(nr_cpus, read_percpu_elem_callback, &map_ctx, 0);
+> > > +       bpf_loop(nr_cpu_ids, read_percpu_elem_callback, &map_ctx, 0);
+> > >         percpu_lru_hash_elem_sum =3D map_ctx.sum;
+> > >
+> > >         return 0;
+> > > --
+> > > 2.55.0
+> > >
 >
-> commit 1d16e876066d61c09bcc6698ca694cdf8336d52c
-> Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
->
-> bpf: Mark syscall helpers as sleepable
->
-> This commit adds the .might_sleep =3D true constraint to the bpf_sys_bpf =
-and
-> bpf_sys_close helper prototypes. This ensures the verifier rejects them f=
-rom
-> non-sleepable contexts, such as bpf_timer callbacks registered within a
-> BPF_PROG_TYPE_SYSCALL program.
->
->> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
->> index 6874ba1424af0..c7bc9ba9b331f 100644
->> --- a/kernel/bpf/syscall.c
->> +++ b/kernel/bpf/syscall.c
->> @@ -6568,6 +6568,7 @@ EXPORT_SYMBOL_NS(kern_sys_bpf, "BPF_INTERNAL");
->>  static const struct bpf_func_proto bpf_sys_bpf_proto =3D {
->>  	.func		=3D bpf_sys_bpf,
->>  	.gpl_only	=3D false,
->> +	.might_sleep	=3D true,
->>  	.ret_type	=3D RET_INTEGER,
->>  	.arg1_type	=3D ARG_ANYTHING,
->>  	.arg2_type	=3D ARG_PTR_TO_MEM | MEM_RDONLY,
->>  	.arg3_type	=3D ARG_MEM_SIZE,
->>  };
->> @@ -6593,6 +6594,7 @@ BPF_CALL_1(bpf_sys_close, u32, fd)
->>  static const struct bpf_func_proto bpf_sys_close_proto =3D {
->>  	.func		=3D bpf_sys_close,
->>  	.gpl_only	=3D false,
->> +	.might_sleep	=3D true,
->>  	.ret_type	=3D RET_INTEGER,
->>  	.arg1_type	=3D ARG_ANYTHING,
->>  };
->
-> [Severity: High]
-> This isn't a bug introduced by this patch, but does
-> bpf_btf_find_by_name_kind_proto also need to be marked as sleepable?
->
-> Looking at syscall_prog_func_proto() in kernel/bpf/syscall.c,
-> bpf_btf_find_by_name_kind is also exposed to syscall programs:
->
->     case BPF_FUNC_btf_find_by_name_kind:
->         return &bpf_btf_find_by_name_kind_proto;
->
-> Because bpf_btf_find_by_name_kind_proto in kernel/bpf/btf.c lacks the
-> .might_sleep =3D true constraint, the verifier will permit its use inside=
- a
-> non-sleepable bpf_timer callback registered by a syscall program.
->
-> When the timer fires in softirq context, bpf_btf_find_by_name_kind() call=
-s
-> __btf_new_fd(). This attempts to allocate a file descriptor with GFP_KERN=
-EL
-> and injects the new file descriptor into the current->files struct of
-> whatever arbitrary process was interrupted by the timer.
->
-> Should bpf_btf_find_by_name_kind_proto be updated as well to prevent this
-> cross-process file descriptor injection and scheduling-while-atomic issue=
-?
+> Hi Andrii, I did use AI to find this. I often go through recent
+> commits and then ask AI to check whether the related selftests have
+> been updated and that's how I found this.
 
-Yes, this also looks broken. Will fix after this set lands.
+in that case I'm inclined to leave selftest as is. This set up where
+possible cpu mask is not contiguous seems to be some fancy qemu-based
+setups so far, and frankly a bunch of other code is probably broken in
+such situations anyways. let's keep things as is for now
+
+pw-bot: cr
