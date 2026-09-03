@@ -1,194 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF61305680
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 01:55:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D3E4185B48
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 01:57:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788400555; cv=none; b=FDOe3JVeGrqVCNVa8XmKH1QWgqzsNPrJIUi6CL5a/LlErchhECrNA4Tfo18egYM1lpU/Svi2sqakWMq0Anm3gYL+hNj3rZevfSYdNLl6MDNoOjr47wO7QKnWyRTjdaB8SjH4U0YwwPNIUIq2Fa7m3kecbAMJ9jaABwtQFF7GCRM=
+	t=1788400627; cv=none; b=UUh7f3i3ZyXYSz7HGFrCUMMTXlQBfGfASugNi+J9Pk/hWj3HzyUiOWhs5i32NQYvoP1ipBP9niBdFl3ggq9FCBIkC8cbaQQDdVUb0UgTnjU1Fw5bn4GurqZ4PMwNPCesC0tpdhEeSyCH7gnNFPtGdDjddlRs1C48IxrT+4aVpwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788400555; c=relaxed/simple;
-	bh=+qkukFSgBputYoSrMxHTvZ5cBGEGGdkUQJct9BMUFQE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Ku0vZ9g0w3FERbV8qoBhhmJFMY78tMAtkWiKF+Vxqyt6uXK9hZ+HG6Kqi+WKTUVGXnl3Pi7n8DBuPEUo4QW400m4N88mvsMew9A05BL2LStEJmfaRFhUcmx4FFMw1YSBmYmrtkFYSTEatalhwrqwzae6U+H40r463X6Q7si+3yI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fb7a1OZk; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788400627; c=relaxed/simple;
+	bh=mz30dBvtDT771JV451s8UVUULvK5bR+yMsulF6N92Sc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=uqD5GQSS694Siz69JasdNGEufGvcmwajfMooPAOUpmWXV4yzRzSZQFyc5Gv1uUVdWGmyNg1YT6bN1NMtKWg2exuIMWxo6etYJBPyt35pWVoOqaNlYqP3vmgCEL9OJEit1lg3vtSECsib6ILymdbQzb8iHrZ0CKsZjwJ9H8CxDt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lLODW4Nq; arc=none smtp.client-ip=209.85.161.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fb7a1OZk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 696E01F000E9;
-	Thu,  3 Sep 2026 01:55:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788400553;
-	bh=MfnNhzONlvK9tSib4+4VjQ3TJ70PlwNrDOSBEYPIW84=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Fb7a1OZk30AuG8vf7fHUuEMBFsAOajkXMwPK3855EyIpPN8bEgp3TGuS/G4S8Ezrk
-	 3axfkS9OQbNkV0YJtxxP1u86bSjOMnPmszgAlSy+YRPRtbXdR4Ob79WtYre8zSDpae
-	 L7eMMHKJKuVGJfUddmQYwxQ2Q+KaQ1qIP32Pn8wd8HoeAqACXOVeO40ei7nZjpmQ2A
-	 Virr1Vgx/JcM9hYBfzKG4xIJyIy2NoJXTWgNaD7TlBU7O1vOssppJAvLBhoLCcPn9T
-	 33ilSkkXLloQVRNltldsqc8sGrYx5k2to2IB181xGtOugkzzeOsY3TK2X4OzwxvJRz
-	 SuikiMWKdcCwg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v11 net-next] octeontx2-pf: add mqprio bandwidth offload
- for NIX TX schedulers
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ratheesh Kannoth" <rkannoth@marvell.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260902015500.2985371-1-rkannoth@marvell.com>
-References: <20260902015500.2985371-1-rkannoth@marvell.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 03 Sep 2026 01:55:52 +0000
-Message-Id: <20260903015553.696E01F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lLODW4Nq"
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-6b1b881a8e9so740722eaf.1
+        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 18:57:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788400625; x=1789005425; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=mz30dBvtDT771JV451s8UVUULvK5bR+yMsulF6N92Sc=;
+        b=lLODW4NqgG0Qx+D8oN5I68rDbNsIbrcaz2G7Oi2yB4jvbwTngd8jNGS0kBtX8JVRhU
+         cAe7wbi+tOAxtr5563sjrzh89LxLt0IWmCmZfaOTg9UYAbXDPFRbHScojyLeEku+Dc3M
+         a326d7HXUI/5JsSZxSzu6ioWg7lBK8T2JOaOCe6FZ0GgQTjguldkTPPRVK7i99f9M+Xs
+         kwmvvxmX0ciOhXhLPWGrOxiFvqpV1hfQeG5GiGZATWCZ7vIZuhTkR6BJbQr+iaEXmRMs
+         wkKNKJsJ7nVGMpixBgYO0z2EwrN9yJmoGaT9rTP2HfIj2YNHoq2AynIIh8btyorSfnVb
+         jRcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788400625; x=1789005425;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=mz30dBvtDT771JV451s8UVUULvK5bR+yMsulF6N92Sc=;
+        b=qs6el7G4ez9VhBuJCJx9dEJWrcOhwYczRycIf4i1rpXQrMhjVFXJdj40+Z4ixAu3TL
+         zMLbsLVKI5qeB+MDlMmH2W4vfsmxY46nA/pqbVJ92cg2y23Lu9tV+NNUQXrrhYe0R2r5
+         zPc1Wh7SOKYNGJxXzVXYwt8W8JPSgMX1BuwZU+IhZwMKN2tELcAZua2FXkaM2dyYbCht
+         deo2mse0yrVT+7z/Kzi3qSbzEcl8I+0IutI6kUifi8VgYgFnw7qVLxz02MOjLtoga5Gv
+         24a+HoTo4DFyDnUJk4unnj0WOS7EB1udAUWuznvzRQbkCgbqFGhpoUGB3O/9uik5W0dl
+         IQOw==
+X-Forwarded-Encrypted: i=1; AKwUvBywm7huSLbhGO5ZAG805Jj5FxaZm95aKtzisFdef4i52W+Ldj4nHXgQDpOk6XEcNSSYLVg=@vger.kernel.org
+X-Gm-Message-State: AFuF++kh0q4k3IcoWg1OWeMNauiv0NqyZUA3zCgDTedao4rxWdnweuLM
+	aHxShiVwHo4h5OtufMAyCgxXEMqpuatwdnRU2GDikkb1t1QHXc6+dM9+50iVPQ==
+X-Gm-Gg: AYBFou204xmKGpdlqP8EWQ2ykIu/GlPfIMylZMBtl7Y+N5gMTZ26OSEvW0F5v/jvVGu
+	PxXoh8I9rpSX4eNbVg8p8+oo+kNbpdeRbIC1Bvl+fTB6c2Jz33suY0uepdL/F8Kv907FP+u2QiL
+	B+mBihwkQ4/G6ObxI/r1SzDUa2e8AoSkKLX3GdON2dNZQLyzUWXz/REE7yHluMDbdV7gqbGRYli
+	ZMBKtL/1MOSz5u3KIcbKmLVKpJT6+52BLuPgg9XKsrw9Ixv7ERjQzHQGCgZEsN7r+rBxwdq3g2Y
+	+jYa9Nplr2uhXqbI4qXmbB0ldEt7cuajuoQEd5OT/eg7/r8piJxRcMEWxl8FnGZHTC7o2kaHi9M
+	qHxmX0WvuqfAe24miBhr6nEmYFXOXZID2a3ZZGkV41CTt1PiwulW5feqT9Cw2QvZxbGaqhYfTQk
+	Ba07trUuLdUJCRHAkXDej3IRHzl/UqVo/ND0xviTqH+1umXPZggm2H/DapDDeS0SPRE0ocZ15KI
+	TCynxiMk9VP45UIZdSL0AXMk8vh7fEBbPlDByClSMOPKwlmSr38ph7xw6t6jEERHA==
+X-Received: by 2002:a05:6820:221d:b0:6b3:7d96:94c0 with SMTP id 006d021491bc7-6b47f81bf57mr6984688eaf.10.1788400624569;
+        Wed, 02 Sep 2026 18:57:04 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:55::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6b40ec2e6a8sm4061932eaf.9.2026.09.02.18.57.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Sep 2026 18:57:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 02 Sep 2026 18:57:03 -0700
+Message-Id: <DL5B40CU17WD.3KD75URQZ6RRR@gmail.com>
+Cc: "Steven Rostedt" <rostedt@goodmis.org>, "Wen Yang" <wen.yang@linux.dev>,
+ "Tobias Schaffner" <tobias.schaffner@siemens.com>, "Viktor Malik"
+ <vmalik@redhat.com>
+Subject: Re: [RFC PATCH 00/20] rv: Add support for BPF monitors
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Gabriele Monaco" <gmonaco@redhat.com>, "Nam Cao"
+ <namcao@linutronix.de>, <linux-kernel@vger.kernel.org>,
+ <linux-trace-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+X-Mailer: aerc
+References: <20260831090524.106845-1-gmonaco@redhat.com>
+ <87se3sakgi.fsf@yellow.woof>
+ <df6e9168cb06c35e21db7f9d17cfbca6bd87005b.camel@redhat.com>
+In-Reply-To: <df6e9168cb06c35e21db7f9d17cfbca6bd87005b.camel@redhat.com>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [High] Rolling back mqprio configuration after an ndo_open() failure prog=
-rams hardware shapers using invalid/freed SMQ indices (SMQ 0).
-- [Medium] Early return in otx2_teardown_tc_mqprio() on restore failure lea=
-ves stale replace state, hijacking future qdisc operations.
-- [Medium] Hardware failure during mqprio teardown abandons software state,=
- causing permanent desynchronization and feature denial.
---
+On Tue Sep 1, 2026 at 11:52 PM PDT, Gabriele Monaco wrote:
+> On Tue, 2026-09-01 at 20:35 +0200, Nam Cao wrote:
+>> Gabriele Monaco <gmonaco@redhat.com> writes:
+>> > Extend the rv userspace tool to load BPF monitors, those can be found =
+in
+>> > specific locations (e.g. /usr/share/rv/bpf_monitors/) and are plain
+>> > object files including BTF data.
+>> >=20
+>> > This type of BPF monitors can be generated from rvgen using the -b fla=
+g
+>> > just like in-kernel monitors and, after manual adaptation, can be buil=
+t
+>> > and run transparently by the rv userspace tool.
+>>=20
+>> I am not familiar with BPF. What is the benefit of BPF monitors,
+>> compared to the existing DA monitors?
+>
+> I should definitely have included it in the cover letter.. I'm writing it
+> everywhere (will present at LPC) but forgot it here.
+>
+> Essentially BPF monitors can be pluggable, folks writing their own monito=
+rs
+> won't need to submit a patch or maintain a separate tree, which is useful=
+ for
+> domain-specific models.
+> By being pluggable you also don't need to reboot to use a new/updated mon=
+itor.
+>
+> Think of being able to distribute a more granular set of rules for RTapp,=
+ I
+> remember we had conversation along those lines, not all rules apply to al=
+l
+> contexts and what you send upstream has to be general, what you keep for
+> yourself doesn't.
+>
+> Having monitors in BPF brings also other perks over kernel modules: a who=
+le
+> bunch of readily available probe types (uprobes, fprobes, all unexported
+> tracepoints that are cumbersome for modules), the map infrastructure for
+> allocation is arguably easier and the code is verified when loaded agains=
+t
+> common issues (NULL pointer access, unbound loops, etc.).
+>
+> That said, I try to mimic as much as possible the in-kernel functionality=
+, but
+> some things are not the same (event/error tracepoints).
+>
+> These support DA only because BPF loading needs a userspace component and=
+ the RV
+> tool doesn't support LTL and HA yet, there shouldn't be any technical rea=
+son not
+> to extend to those in the future.
 
-commit 6413eab5a10115c63a46dacd6bbe4921e9bd1678
-Author: Ratheesh Kannoth <rkannoth@marvell.com>
+I don't think bpf fits here. I haven't seen active use of RV and even less
+so of any request from people who want this kind of programmability.
 
-octeontx2-pf: add mqprio bandwidth offload for NIX TX schedulers
+So Nack for now. Sorry.
 
-This commit adds TC_SETUP_QDISC_MQPRIO offload for channel-mode mqprio
-with TC_MQPRIO_SHAPER_BW_RATE. It rebuilds the TX scheduler hierarchy
-by bouncing the netdev on mqprio add, replace, and delete, and includes
-rollback logic using snapshots to recover from setup failures.
-
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drive=
-rs/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-> index 039fd47ebf522..5efa0b4d27d53 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-[ ... ]
-> +static bool otx2_mqprio_mdq_allocated(struct otx2_nic *pfvf)
-> +{
-> +	return pfvf->hw.txschq_cnt[NIX_TXSCH_LVL_MDQ] !=3D 0;
-> +}
-> +
-> +static int otx2_mqprio_restore_old(struct otx2_nic *pfvf)
-> +{
-> +	struct mq_offload_snap *snap =3D pfvf->old_mq_snap;
-> +	struct net_device *netdev =3D pfvf->netdev;
-> +	u16 num_txq =3D pfvf->hw.non_qos_queues;
-> +	int tc, txq, err;
-[ ... ]
-> +	if (otx2_mqprio_mdq_allocated(pfvf)) {
-> +		err =3D otx2_nix_tm_clear_queue_shaper(pfvf);
-> +		if (err)
-> +			return err;
-> +	}
-
-[Severity: High]
-When ndo_open() fails and we fall back to otx2_mqprio_restore_old(), will
-otx2_mqprio_mdq_allocated() falsely return true here?
-
-It looks like otx2_txschq_stop() frees schedulers and zeroes txschq_list,
-but does not zero txschq_cnt. If that happens,
-otx2_nix_tm_clear_queue_shaper() will iterate over the non-zero count,
-reading smq =3D 0 from the zeroed txschq_list, and send an invalid mailbox
-command for SMQ 0. This could abort the configuration rollback or corrupt
-hardware state.
-
-[ ... ]
-> +int otx2_mqprio_down(struct otx2_nic *pfvf)
-> +{
-> +	int err =3D 0;
-> +
-> +	if (!pfvf->mqprio.rate_limit)
-> +		return 0;
-> +
-> +	if (netif_running(pfvf->netdev) &&
-> +	    otx2_mqprio_mdq_allocated(pfvf))
-> +		err =3D otx2_nix_tm_clear_queue_shaper(pfvf);
-> +
-> +	if (err) {
-> +		netdev_err(pfvf->netdev,
-> +			   "mqprio: failed to clear hardware shapers: %d; some TX queues may =
-retain bandwidth limits\n",
-> +			   err);
-> +		return err;
-> +	}
-
-[Severity: Medium]
-If clearing the hardware shapers fails (e.g. due to a transient mailbox
-timeout), this early return skips the call to otx2_mqprio_clear_sw(pfvf).
-
-Does this abandon the software state and cause a permanent desynchronizatio=
-n?
-The driver will retain pfvf->mqprio.rate_limit =3D true while the kernel has
-already deleted the qdisc, permanently blocking features like XDP or PFC.
-
-[ ... ]
-> +static int otx2_teardown_tc_mqprio(struct otx2_nic *pfvf,
-> +				   struct tc_mqprio_qopt_offload *mqprio)
-> +{
-> +	bool had_mqprio =3D pfvf->mqprio.rate_limit;
-> +	struct tc_mqprio_qopt *qopt =3D &mqprio->qopt;
-> +	struct net_device *netdev =3D pfvf->netdev;
-> +	bool if_up =3D netif_running(netdev);
-> +	int err;
-> +
-> +	qopt->hw =3D 0;
-> +
-> +	/* tc qdisc replace runs setup on the new mqprio before destroying the
-> +	 * old one. replace_setup_done and TC_ROOT_GRAFT distinguish stale
-> +	 * old-instance teardown from graft failure after setup.
-> +	 */
-> +	if (pfvf->mqprio.replace_setup_done && pfvf->cur_mq_snap) {
-> +		if (pfvf->mqprio.replace_graft_done) {
-> +			otx2_mqprio_snap_commit(pfvf);
-> +		} else {
-> +			err =3D otx2_mqprio_restore_old(pfvf);
-> +			if (err)
-> +				return err;
-
-[Severity: Medium]
-If otx2_mqprio_restore_old() returns an error (such as the SMQ 0 failure
-noted above), this early return skips clearing the replace state flags
-via otx2_mqprio_clear_replace_state().
-
-Could this leave a stale replace state that permanently hijacks future
-qdisc operations and prevents the offload from ever being cleanly torn
-down?
-
-> +		}
-> +		otx2_mqprio_clear_replace_state(pfvf);
-> +		return 0;
-> +	}
-> +
-> +	/* Skip the netdev restart when mqprio offload was not active. */
-> +	if (!had_mqprio)
-> +		return 0;
-> +
-> +	if (if_up) {
-> +		int down_err, err;
-> +
-> +		down_err =3D otx2_mqprio_down(pfvf);
-> +		err =3D otx2_mqprio_restart_netdev(netdev, false);
-> +		if (err)
-> +			return err;
-> +		return down_err;
-> +	}
-
-[Severity: Medium]
-Following up on the issue in otx2_mqprio_down() above, if that function
-fails and doesn't clear the software state, we then call
-otx2_mqprio_restart_netdev(netdev, false).
-
-Since the rate_limit flag is still true in the uncleared software state,
-won't this netdev restart accidentally restore the hardware offload that
-was just torn down by the kernel?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260902015500.2985=
-371-1-rkannoth@marvell.com?part=3D1
