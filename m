@@ -1,372 +1,137 @@
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f41.google.com (mail-yx1-f41.google.com [74.125.224.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63684582E0;
-	Thu,  3 Sep 2026 12:11:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.252.153.129
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28EE84A1E19
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 12:16:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788437512; cv=none; b=pblgWZ2SxkZgr8u4CnH8AGT3XRJiLjwRU/DNiwyO/EehKxdFtvtYqZvxs4TO3YzWl111wuMLnhj0SjEAU+6+CpPsDcc6wtfm4Ycstvx7GHRYMbwuOevTNXbLtsaPYjuyXxFGfWLiGaWQ2tv0+pjS79A04qO2xqAASRiAG6dB9D4=
+	t=1788437815; cv=none; b=EStjCz1S2mFoJ/aRo6+166RpOM5g4Eq1IUkApvyyt1j5hPrDjA4q+5fpH+X6v+3JLdgzhbbRtLo4zy7tsOLj8lhHWP+oqJ4P27UNIdzxtGrcEkVQ+bSVq3BQ2ZNmkPc373qSbWkfZSJtQNvfdPHNOHJNY85LjRsNS0Yfu3sOksA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788437512; c=relaxed/simple;
-	bh=JH/hzcAavC0H8FmWU5Q7zuUiCpVsc/LyiaarkmLyaNo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hyb8VWCJgLA4MZJEsbLkonKHdbqk9q7jsJNHqUYR10ZvQsBZBEZuNM/pbOYQJwyOzTRLcsPEuCmDpXSpKdFSpGYOgtvzuhQpxRwZQqvf8gkiXshM4sDDM0zG3Mq+jEyjILxSa7uijuv4UNPck3b/sr6BoZTGmMMSH97TBqaQdds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riseup.net; spf=pass smtp.mailfrom=riseup.net; dkim=pass (1024-bit key) header.d=riseup.net header.i=@riseup.net header.b=U1knWzrT; arc=none smtp.client-ip=198.252.153.129
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riseup.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riseup.net
+	s=arc-20240116; t=1788437815; c=relaxed/simple;
+	bh=nNkicwNC6wvB/mONAXakrfnhE2JYMGQwTgh42CBx9q0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k9kcbswX1ZiEzkeRMl9hmAjHPtLUjHYCz5MsP8sII5sMpnbdjOxHHVpi9ezX10Xiitsxvtq4rorjRACfDO8hxylUsstatCqexz6UDBjrb/K+JjuOY1rlrp7Cx36ajqrfWfb+Wogz2E8Mdusaq78h/ZI3DACZv/VrvZmT33LtSzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J9GQS6ZC; arc=none smtp.client-ip=74.125.224.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=riseup.net header.i=@riseup.net header.b="U1knWzrT"
-Received: from fews03-sea.riseup.net (fews03-sea-pn.riseup.net [10.0.1.153])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx1.riseup.net (Postfix) with ESMTPS id 4hbJNt60GczDqvK;
-	Thu,  3 Sep 2026 12:11:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=riseup.net; s=squak;
-	t=1788437503; bh=iOcJhdl6V0OT+jCZ0BRqIAXous5Y56fe107eM1JBtbU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=U1knWzrTdcsRDcMfBEcr3Lhq6NYnjV6/xTlHsw90xVhLm9EK0CItJu1/xINhpohBp
-	 mkmkIY7FK81K/UvBoE7SEtyMNUQJmcD1FJHLNWOVs4llcZZBmmqulamUpnWRsp3OPt
-	 NeXVBAoEFKNwo9VNFRaqF9yKyPBwCX7GCvVxOVrA=
-X-Riseup-User-ID: 982A598FC2EC681F239DB5A20A70FA23F9330A4D04C93A71856379E0136F96F7
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	 by fews03-sea.riseup.net (Postfix) with ESMTPSA id 4hbJNj2Hm4z1y13;
-	Thu,  3 Sep 2026 12:11:33 +0000 (UTC)
-From: =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@riseup.net>
-To: David Ahern <dsahern@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Neal Cardwell <ncardwell@google.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Pablo Neira Ayuso <pablo@netfilter.org>,
-	Florian Westphal <fw@strlen.de>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: dcaratti@redhat.com,
-	ihuguet@redhat.com,
-	=?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@riseup.net>,
-	Simon Horman <horms@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Phil Sutter <phil@nwl.cc>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Junseo Lim <zirajs7@gmail.com>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Xuanqiang Luo <luoxuanqiang@kylinos.cn>,
-	Fernando Fernandez Mancera <fmancera@suse.de>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Willem de Bruijn <willemb@google.com>,
-	Kees Cook <kees@kernel.org>,
-	Jeff Layton <jlayton@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Qi Tang <tpluszz77@gmail.com>,
-	Joe Damato <joe@dama.to>,
-	Breno Leitao <leitao@debian.org>,
-	Li RongQing <lirongqing@baidu.com>,
-	netdev@vger.kernel.org (open list:VRF),
-	linux-kernel@vger.kernel.org (open list),
-	netfilter-devel@vger.kernel.org (open list:NETFILTER),
-	coreteam@netfilter.org (open list:NETFILTER),
-	bpf@vger.kernel.org (open list:BPF [MISC]:Keyword:(?:\b|_)bpf(?:\b|_))
-Subject: [PATCH net v2] net/ipv6: don't route packets with unknown source address
-Date: Thu,  3 Sep 2026 14:10:40 +0200
-Message-ID: <20260903121057.80006-1-ihuguet@riseup.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J9GQS6ZC"
+Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-66f883abfdcso2383340d50.0
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 05:16:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788437813; x=1789042613; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=vbJAOVw8uKJwq4n1b45EMvb8ousiK+i/6Hz5ojzhM6E=;
+        b=J9GQS6ZCVDRv99cbnUmTsvgeuObPNpTkVOogyq9jcRhWElPNxT50E8jHwSxknG2wff
+         fTnsORUDUc9dWWE66FZNPl4G1fhzog/IhlrRGtMq4VH3QLn3AmvX+mZPWcHvMTbDXkCI
+         eKySyk+7ZcmYjccfjP6FjyBjn6WPRCvFhIojGdVMQDwOu76hZlCq8fL3V2Yw25yMVnxr
+         ZwmhA2sPbpLLCBwcqeyFEkaA6KF0bPcPhUnLUh7WIAo1V6JwrRNBwC7we8KJTdKQwoN2
+         pyscE3IqMqNd00EwucXzf3UF6CtMOQVSOPA5rEcAylC1LIDQjo9bdc7W3hnAKnin/Ulr
+         qIbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788437813; x=1789042613;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=vbJAOVw8uKJwq4n1b45EMvb8ousiK+i/6Hz5ojzhM6E=;
+        b=FyDnln77fx8epx1PUbBiXUeejT3Jx90gxaJeYkuXzJ6s91tVCnA9AX8VRkhJ6I9oEt
+         qIVnQ4hk4WYzIjn+BL/jlSBA1kedcIFbolMhyRLxHDjFwlC0XzoAFrJ2hG39dy/YVHdR
+         2KnrBTOwMqQdjHJ6VDhL28DUK3G1vbxZtEC8vh6RSNcn6jNQyA7M5fngVV10Wz6/KPr9
+         E1Y+KUVorKGWzqKXj0E7zcSZE1HxQMjah1Ruw+/6VPdEBNdhYqMGHPheadixdSkFcNHI
+         sR2sozAHG7j9iEl1lazj1zzYGxMj4lb5zh2+YuE9kEpEWSLiu3e1qMvI4XqlqMmFaquz
+         scIw==
+X-Forwarded-Encrypted: i=1; AKwUvBx5rL/L9/a/fcU6XPvEsXkr6jBeWQvJZ0Dwv1AmGjkjQ3OZaU18QRFn6xH5Lh5qQe3SB5g=@vger.kernel.org
+X-Gm-Message-State: AFuF++kejxH/u7sNDm1Iho3/4+eKDRykTYS9nKjqgKxQt7mqygP92y6K
+	idPTqczmuiudPQmgWhZkss+N5Zuwuqbi5SBdpzbx6ANjL1WA5Vv3WKQu
+X-Gm-Gg: AYBFou0NViyP9jcH8mtby+u6fHRQQeVPBOi+ZCb2A/ET7RGGO00JhD5znfRuNk1iTtF
+	OfrPPgIZABiKnBfmNI9UglolJLHYHfOlbggQgrTP0caswO67W4xuuvCRmK4dMBbVT9Kpnr9qZ/W
+	jN1R75dhW2uDFZCsld/eEN/cSATKKhv4tvXKZoxWJczF8YeX6pAQ38iCgWy8F/4KiksTkODKAgS
+	VspNmZ/EmCE670Lzzp6btSdCVkzw1gPsBnn2cTPSmFdtK68ZCnc+cpv/fA54U5Ocy3PEz+cjtPv
+	rHDTTY6E8gEaD9zVDGA31nCs8QqrCdlnP8gi7TCJGfppsaWIf6JHEMey66U8VYDrOZMZs8uY7sE
+	biANATB9ZV+7b93nMctlzQY57Ax/aiZizzeQIMmFZrd7ROLWugz5AwrIRjm/dFtutDvLbruTx4j
+	d6yQA/24PrROGTw/X+FhwefxwPG/2D1EunQGX9AEwVyDQxnVCHT6Z8lPwQ3BTy55+tR4pKdJnGz
+	A3GKSvkVj0s31oNMXGTzw==
+X-Received: by 2002:a53:d005:0:b0:66f:8796:a553 with SMTP id 956f58d0204a3-66f9bb61924mr4641633d50.3.1788437812747;
+        Thu, 03 Sep 2026 05:16:52 -0700 (PDT)
+Received: from zenbox ([2600:1700:18fb:6011:b12c:f7a8:92d:b215])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-86c18ac450csm38308717b3.40.2026.09.03.05.16.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Sep 2026 05:16:52 -0700 (PDT)
+Date: Thu, 3 Sep 2026 08:16:51 -0400
+From: Justin Suess <utilityemal77@gmail.com>
+To: Anton Protopopov <a.s.protopopov@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+	bpf <bpf@vger.kernel.org>, lsm <linux-security-module@vger.kernel.org>, 
+	netdev <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Matt Bobrowski <matt@bobrowski.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Christian Brauner <brauner@kernel.org>, 
+	Paul Moore <paul@paul-moore.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH bpf-next 0/7] Add new way to add BPF LSM hooks
+Message-ID: <apljnyb9nNRuN2xg@zenbox>
+References: <20260831110934.241898-1-a.s.protopopov@gmail.com>
+ <DL514LM5TA6V.IOW7P2WM70BE@gmail.com>
+ <CAGn_itxwZcMLtass5fZQ5XqgUtwTaJHfUGxg_SK7h_vqEgpmeA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGn_itxwZcMLtass5fZQ5XqgUtwTaJHfUGxg_SK7h_vqEgpmeA@mail.gmail.com>
 
-Don't allow routing packets with a source address that is not configured
-in the host. Allow it only in certain cases like when using a
-transparent socket, by setting the ANYSRC flag in flowi_flags.
+On Wed, Sep 02, 2026 at 09:31:36PM +0200, Anton Protopopov wrote:
+> On Wed, Sep 2, 2026 at 8:07 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> > On Mon Aug 31, 2026 at 4:09 AM PDT, Anton Protopopov wrote:
+> > > The BPF LSM programs are allowed to attach to LSM hooks. This enables
+> > > operators to mitigate known bugs without a need to reboot or livepatch
+> > > machines.  BPF has shown very useful to create such runtime policies.
+> > > However, many APIs and parts of kernel aren't covered by existing LSM
+> > > hooks and this would be beneficial to extend the coverage.
+> > >
+> > > To simplify the process of adding new hooks this patch series enables
+> > > BPF to attach policy programs to hooks defined outside of the
+> > > official LSM list.
+> > >
+> > > One of the reasons to add a new mechanism is that in order to add a
+> > > new LSM hook an implementation, at least one in-kernel LSM must be
+> > > added, such as SELinux or AppArmor, and BPF is specifically not
+> > > considered as a reference implementation [1].  This is, however, not
+> > > feasible for the use cases and capabilities covered by BPF LSMs,
+> > > which are not directly comparable to those of traditional LSMs.
+> >
+> > This is no go.
+> > bpf-lsm can attach to lsm hooks, but the machinery has nothing to
+> > do with LSM. bpf-lsm is exactly the same as bpf-mod-ret.
+> > So calling everything LSM is actively misleading and wrong.
+> > Patch 1 starts this misleading naming convention
+> > and then later patches add fake LSM hooks. Sorry, but no.
+> 
+> Got it, thank you.
+>
 
-Until now, it was possible to send such a packet if a route can be found
-in the routing table for it. For example:
-1. Configure an address 1:2::3:4/64 and a static route 1:2::/64
-2. Establish a TCP connection to 1:2::3:4
-3. Remove the address from the interface, but keep the route.
-4. Packets are still sent out by the TCP connection because of
-   the static route. No incoming packets are accepted, though.
+Adding to this, there was the previously proposed "killswitch" mechanism
+which may be closer to what you want. [1] Unsure of the current status of
+this work, but it's a better idea than creating BPF-only LSM hooks... 
 
-This patch prevents the outgoing packets to be sent in normal
-circumnstances.
+(like a bpf_override_return helper that doesn't care about
+ALLOW_ERROR_INJECTION? unsure what would be best here)
 
-This aligns the behaviour with the IPv4 stack. To determine the places
-where the ANYSRC needs to be set, I set the flag in the same places as
-the IPv4 stack does.
+Justin
 
-Apart from consolidating the behaviour of both stacks, there is a more
-important reason why this is needed. RFC 4862 states that "an invalid
-address MUST NOT be used as the source address of outbound packets".
-Therefore, sending packets with a source address considered "invalid",
-like an expired address, is disallowed.
+[1] https://lore.kernel.org/all/20260508195749.1885522-1-sashal@kernel.org/
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Íñigo Huguet <ihuguet@riseup.net>
 
----
-
-v2:
-- Fix a slab-out-of-bounds bug: in
-  tcp_v6_send_response we must not read the inet_flags because it may
-  not be an inet_sk, but a request socket.
-  Detected by syzbot, Sashiko and other bots.
-- Use the addr_type from saddr instead of daddr in ip6_route_me_harder.
-  Detected by Sashiko.
-- Don't overwrite flowi_flags in tcp_v6_connect when setting the
-  ANY_SPORT flag. Detected by Sashiko.
-- Fixed line length warnings.
-v1: https://lore.kernel.org/netdev/20260901115021.50057-1-ihuguet@riseup.net/
-
-Testing: tested with a manual reproducer executing the steps described
-above. Tested also with transparent sockets to ensure that the packets
-are sent in that case. Also executed the following selftests to prevent
-potential regressions: fcnal-ipv6, fib_tests, fib-onlink-tests,
-nft_nat, nft_tproxy_tcp, nft_tproxy_udp.
-
-The change in the netfilter's ip6_route_me_harder function is the one
-that I'm more unsure about. It was not clear to me the reason why it was
-done like this in the IPv4 counterpart. Please review carefully.
----
- drivers/net/vrf.c                |  1 +
- net/core/lwt_bpf.c               |  1 +
- net/ipv6/af_inet6.c              |  1 +
- net/ipv6/datagram.c              |  1 +
- net/ipv6/inet6_connection_sock.c |  2 ++
- net/ipv6/ip6_output.c            | 28 ++++++++++++++++++++++++++++
- net/ipv6/netfilter.c             | 11 +++++++++--
- net/ipv6/ping.c                  |  1 +
- net/ipv6/raw.c                   |  1 +
- net/ipv6/syncookies.c            |  1 +
- net/ipv6/tcp_ipv6.c              |  4 +++-
- net/ipv6/udp.c                   |  1 +
- net/l2tp/l2tp_ip6.c              |  2 ++
- 13 files changed, 52 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/vrf.c b/drivers/net/vrf.c
-index a0557a3a7026..6c09d5f46d6b 100644
---- a/drivers/net/vrf.c
-+++ b/drivers/net/vrf.c
-@@ -432,6 +432,7 @@ static netdev_tx_t vrf_process_v6_outbound(struct sk_buff *skb,
- 	fl6.flowlabel = ip6_flowinfo(iph);
- 	fl6.flowi6_mark = skb->mark;
- 	fl6.flowi6_proto = iph->nexthdr;
-+	fl6.flowi6_flags = FLOWI_FLAG_ANYSRC;
- 
- 	dst = ip6_dst_lookup_flow(net, NULL, &fl6, NULL);
- 	if (IS_ERR(dst) || dst == dst_null)
-diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-index da49364ec63d..e8b954282689 100644
---- a/net/core/lwt_bpf.c
-+++ b/net/core/lwt_bpf.c
-@@ -233,6 +233,7 @@ static int bpf_lwt_xmit_reroute(struct sk_buff *skb)
- 		fl6.flowi6_mark = skb->mark;
- 		fl6.flowi6_uid = sock_net_uid(net, sk);
- 		fl6.flowlabel = ip6_flowinfo(iph6);
-+		fl6.flowi6_flags = FLOWI_FLAG_ANYSRC;
- 		fl6.flowi6_proto = iph6->nexthdr;
- 		fl6.daddr = iph6->daddr;
- 		fl6.saddr = iph6->saddr;
-diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
-index 282912a11999..e55a36372ab2 100644
---- a/net/ipv6/af_inet6.c
-+++ b/net/ipv6/af_inet6.c
-@@ -820,6 +820,7 @@ int inet6_sk_rebuild_header(struct sock *sk)
- 	fl6->fl6_dport = inet->inet_dport;
- 	fl6->fl6_sport = inet->inet_sport;
- 	fl6->flowi6_uid = sk_uid(sk);
-+	fl6->flowi6_flags = inet_sk_flowi_flags(sk);
- 	security_sk_classify_flow(sk, flowi6_to_flowi_common(fl6));
- 
- 	ip6_ecmp_set_mp_hash(sock_net(sk), fl6, sk->sk_txhash);
-diff --git a/net/ipv6/datagram.c b/net/ipv6/datagram.c
-index 38d7b4845281..0773bfa0342d 100644
---- a/net/ipv6/datagram.c
-+++ b/net/ipv6/datagram.c
-@@ -52,6 +52,7 @@ static void ip6_datagram_flow_key_init(struct flowi6 *fl6,
- 	fl6->flowi6_mark = sk->sk_mark;
- 	fl6->fl6_dport = inet->inet_dport;
- 	fl6->fl6_sport = inet->inet_sport;
-+	fl6->flowi6_flags = inet_sk_flowi_flags(sk);
- 	fl6->flowlabel = ip6_make_flowinfo(np->tclass, np->flow_label);
- 	fl6->flowi6_uid = sk_uid(sk);
- 
-diff --git a/net/ipv6/inet6_connection_sock.c b/net/ipv6/inet6_connection_sock.c
-index 3e4ce8cb478e..f295f3efe243 100644
---- a/net/ipv6/inet6_connection_sock.c
-+++ b/net/ipv6/inet6_connection_sock.c
-@@ -45,6 +45,7 @@ struct dst_entry *inet6_csk_route_req(const struct sock *sk,
- 	fl6->flowi6_mark = ireq->ir_mark;
- 	fl6->fl6_dport = ireq->ir_rmt_port;
- 	fl6->fl6_sport = htons(ireq->ir_num);
-+	fl6->flowi6_flags = inet_sk_flowi_flags(sk);
- 	fl6->flowi6_uid = sk_uid(sk);
- 	security_req_classify_flow(req, flowi6_to_flowi_common(fl6));
- 
-@@ -71,6 +72,7 @@ struct dst_entry *inet6_csk_route_socket(struct sock *sk,
- 	fl6->daddr = sk->sk_v6_daddr;
- 	fl6->saddr = np->saddr;
- 	fl6->flowlabel = np->flow_label;
-+	fl6->flowi6_flags = inet_sk_flowi_flags(sk);
- 	IP6_ECN_flow_xmit(sk, fl6->flowlabel);
- 
- 	if (sk->sk_protocol == IPPROTO_TCP)
-diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
-index 8fc4766c8da9..a83ca449e308 100644
---- a/net/ipv6/ip6_output.c
-+++ b/net/ipv6/ip6_output.c
-@@ -1191,6 +1191,34 @@ static int ip6_dst_lookup_tail(struct net *net, const struct sock *sk,
- 	if (err)
- 		goto out_err_release;
- 
-+	/* Routing packets with a src addr not present in the host is not
-+	 * allowed unless the ANYSRC flag is set (i.e. with transparent socket).
-+	 * The address must be in the same L3 domain as the destination device.
-+	 */
-+	if (!ipv6_addr_any(&fl6->saddr) &&
-+	    !(fl6->flowi6_flags & FLOWI_FLAG_ANYSRC)) {
-+		struct net_device *oif_dev;
-+
-+		rcu_read_lock();
-+		/* For local routes (*dst)->dev can be 'lo', which has no l3mdev
-+		 * master, so that the L3 domain wouldn't match if the source
-+		 * address is in a VRF-enslaved device. To avoid that, check the
-+		 * outgoing interface from the flowi6 structure instead.
-+		 */
-+		if (fl6->flowi6_oif)
-+			oif_dev = dev_get_by_index_rcu(net, fl6->flowi6_oif);
-+		else
-+			oif_dev = (*dst)->dev;
-+
-+		if (!ipv6_chk_addr_and_flags(net, &fl6->saddr, oif_dev,
-+					     1, 1, IFA_F_TENTATIVE))
-+			err = -ENETUNREACH;
-+		rcu_read_unlock();
-+
-+		if (err)
-+			goto out_err_release;
-+	}
-+
- #ifdef CONFIG_IPV6_OPTIMISTIC_DAD
- 	/*
- 	 * Here if the dst entry we've looked up
-diff --git a/net/ipv6/netfilter.c b/net/ipv6/netfilter.c
-index a7025ec87035..716fc6e246de 100644
---- a/net/ipv6/netfilter.c
-+++ b/net/ipv6/netfilter.c
-@@ -29,8 +29,9 @@ int ip6_route_me_harder(struct net *net, struct sock *sk_partial, struct sk_buff
- 	struct flow_keys flkeys;
- 	unsigned int hh_len;
- 	struct dst_entry *dst;
--	int strict = (ipv6_addr_type(&iph->daddr) &
--		      (IPV6_ADDR_MULTICAST | IPV6_ADDR_LINKLOCAL));
-+	int saddr_type = ipv6_addr_type(&iph->saddr);
-+	int daddr_type = ipv6_addr_type(&iph->daddr);
-+	int strict = daddr_type & (IPV6_ADDR_MULTICAST | IPV6_ADDR_LINKLOCAL);
- 	struct flowi6 fl6 = {
- 		.flowi6_l3mdev = l3mdev_master_ifindex(dev),
- 		.flowi6_mark = skb->mark,
-@@ -41,6 +42,12 @@ int ip6_route_me_harder(struct net *net, struct sock *sk_partial, struct sk_buff
- 	};
- 	int err;
- 
-+	fl6.flowi6_flags = sk ? inet_sk_flowi_flags(sk) : 0;
-+	if (saddr_type & (IPV6_ADDR_UNICAST | IPV6_ADDR_LINKLOCAL))
-+		fl6.flowi6_flags |= FLOWI_FLAG_ANYSRC;
-+	else
-+		fl6.saddr = in6addr_any;
-+
- 	if (sk && sk->sk_bound_dev_if)
- 		fl6.flowi6_oif = sk->sk_bound_dev_if;
- 	else if (strict)
-diff --git a/net/ipv6/ping.c b/net/ipv6/ping.c
-index 6e90d0bf9f3d..d0964396c2c5 100644
---- a/net/ipv6/ping.c
-+++ b/net/ipv6/ping.c
-@@ -140,6 +140,7 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 	fl6.flowi6_proto = IPPROTO_ICMPV6;
- 	fl6.saddr = np->saddr;
- 	fl6.daddr = *daddr;
-+	fl6.flowi6_flags = inet_sk_flowi_flags(sk);
- 	fl6.flowi6_mark = ipc6.sockc.mark;
- 	fl6.flowi6_uid = sk_uid(sk);
- 	fl6.fl6_icmp_type = user_icmph.icmp6_type;
-diff --git a/net/ipv6/raw.c b/net/ipv6/raw.c
-index b965258cf9e5..ef5ddbe7ac10 100644
---- a/net/ipv6/raw.c
-+++ b/net/ipv6/raw.c
-@@ -887,6 +887,7 @@ static int rawv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 		fl6.flowi6_oif = READ_ONCE(np->ucast_oif);
- 	security_sk_classify_flow(sk, flowi6_to_flowi_common(&fl6));
- 
-+	fl6.flowi6_flags = inet_sk_flowi_flags(sk);
- 	if (hdrincl)
- 		fl6.flowi6_flags |= FLOWI_FLAG_KNOWN_NH;
- 
-diff --git a/net/ipv6/syncookies.c b/net/ipv6/syncookies.c
-index b581cb1ee2e8..3d665e93fcac 100644
---- a/net/ipv6/syncookies.c
-+++ b/net/ipv6/syncookies.c
-@@ -242,6 +242,7 @@ struct sock *cookie_v6_check(struct sock *sk, struct sk_buff *skb)
- 		fl6.flowi6_mark = ireq->ir_mark;
- 		fl6.fl6_dport = ireq->ir_rmt_port;
- 		fl6.fl6_sport = inet_sk(sk)->inet_sport;
-+		fl6.flowi6_flags = inet_sk_flowi_flags(sk);
- 		fl6.flowi6_uid = sk_uid(sk);
- 		security_req_classify_flow(req, flowi6_to_flowi_common(&fl6));
- 
-diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
-index df9c29eb5c1f..ae69e71b0859 100644
---- a/net/ipv6/tcp_ipv6.c
-+++ b/net/ipv6/tcp_ipv6.c
-@@ -268,8 +268,9 @@ static int tcp_v6_connect(struct sock *sk, struct sockaddr_unsized *uaddr,
- 	fl6->flowi6_mark = sk->sk_mark;
- 	fl6->fl6_dport = usin->sin6_port;
- 	fl6->fl6_sport = inet->inet_sport;
-+	fl6->flowi6_flags = inet_sk_flowi_flags(sk);
- 	if (IS_ENABLED(CONFIG_IP_ROUTE_MULTIPATH) && !fl6->fl6_sport)
--		fl6->flowi6_flags = FLOWI_FLAG_ANY_SPORT;
-+		fl6->flowi6_flags |= FLOWI_FLAG_ANY_SPORT;
- 	fl6->flowi6_uid = sk_uid(sk);
- 
- 	opt = rcu_dereference_protected(np->opt, lockdep_sock_is_held(sk));
-@@ -979,6 +980,7 @@ static void tcp_v6_send_response(const struct sock *sk, struct sk_buff *skb, u32
- 	fl6.fl6_dport = t1->dest;
- 	fl6.fl6_sport = t1->source;
- 	fl6.flowi6_uid = sock_net_uid(net, sk && sk_fullsock(sk) ? sk : NULL);
-+	fl6.flowi6_flags = sk && sk_fullsock(sk) ? inet_sk_flowi_flags(sk) : 0;
- 	security_skb_classify_flow(skb, flowi6_to_flowi_common(&fl6));
- 
- 	/* Pass a socket to ip6_dst_lookup either it is for RST
-diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-index 93478d1ad576..5154d445ba9c 100644
---- a/net/ipv6/udp.c
-+++ b/net/ipv6/udp.c
-@@ -1656,6 +1656,7 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 	if (ipv6_addr_any(&fl6->saddr) && !ipv6_addr_any(&np->saddr))
- 		fl6->saddr = np->saddr;
- 	fl6->fl6_sport = inet->inet_sport;
-+	fl6->flowi6_flags = inet_sk_flowi_flags(sk);
- 
- 	if (cgroup_bpf_enabled(CGROUP_UDP6_SENDMSG) && !connected) {
- 		err = BPF_CGROUP_RUN_PROG_UDP6_SENDMSG_LOCK(sk,
-diff --git a/net/l2tp/l2tp_ip6.c b/net/l2tp/l2tp_ip6.c
-index bdaae1b64d25..22ae5bc2669a 100644
---- a/net/l2tp/l2tp_ip6.c
-+++ b/net/l2tp/l2tp_ip6.c
-@@ -633,6 +633,8 @@ static int l2tp_ip6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 	else if (!fl6.flowi6_oif)
- 		fl6.flowi6_oif = READ_ONCE(np->ucast_oif);
- 
-+	fl6.flowi6_flags = inet_sk_flowi_flags(sk);
-+
- 	security_sk_classify_flow(sk, flowi6_to_flowi_common(&fl6));
- 
- 	fl6.flowlabel = ip6_make_flowinfo(ipc6.tclass, fl6.flowlabel);
--- 
-2.54.0
-
+> >
+> > pw-bot: cr
+> 
