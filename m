@@ -1,64 +1,64 @@
-Received: from mail-wm2-f6.google.com (mail-wm2-f6.google.com [74.125.225.134])
+Received: from mail-wm2-f8.google.com (mail-wm2-f8.google.com [74.125.225.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D5C6340407
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 21:48:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89251347BDC
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 21:48:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788472089; cv=none; b=sDXgKQOSzcyFkFquIlkjyUr54HFuBfdiDIHSOIqZDYCN1UKuZesfZcxTeHBW08Fqsi9KN3rfc0JX+i/5Oi/Bn4fFoirSGIjVL21cW9zLCvQ+nqAZxDDWL9l04phMgwBRoFLyfCBUP2lfJwTEjijvGkGXZ1Le+OyMWkOUJw+lK3c=
+	t=1788472091; cv=none; b=mlJOsLeJDjSk/3OX02RC97W+ciVuT+8oUm1PI/ip2XE7cC6jK+ho2jX8es3Kg+6N/W/Kh8WBkPje2XL4+4343T/MD+ycIxzyRRgP9PNUPJyU/W50vwqGSmxArbQMTcsfwwZkovFhAkoCMpWeUzHaQOxURxYfotQMoS1dug1MgWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788472089; c=relaxed/simple;
-	bh=nXF/HMVZ5fOJTxAQKxJY+Kin+NIS3LVNQkLWBPye16o=;
+	s=arc-20240116; t=1788472091; c=relaxed/simple;
+	bh=eCoblO1wa9iyl/6H9+QTh1GDpRn8Bp6BkAtxW2LCWDg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=c+PQpNOwQ0tHl9AbJA0OMfFbb3eZqSGh/6aObIdDl+TNn8M6rBhNR91WbgcHNtKtL0u/Beo6NrjKW20cWW6QNfPJ5Uw7P8EAnA7x2yr2w/AKTsFWQqGzBYDKMmVuymb6YhxKQfNHRKf8AUbEuZnNqHWngv1OziuW6MScRHZRimU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=raEyIxDZ; arc=none smtp.client-ip=74.125.225.134
+	 MIME-Version; b=gc8Kz5wXFyDeDmiUKUFLjVspxc7KJlVl/a+Ypy938bgfb9tK4Um1KDn+Htl5kaPRt0VDgndmOVezO2QbIomTfKSdAbG+enho8hydAYbw/OF3umdMYhEWvRt0rq8e6QlcjIYojwPmItbnbL71iqD1z5E5NBF/W3aerDIaePra9YE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fzVniQcY; arc=none smtp.client-ip=74.125.225.136
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="raEyIxDZ"
-Received: by mail-wm2-f6.google.com with SMTP id 5b1f17b1804b1-499aaf0a723so1016535e9.1
-        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 14:48:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fzVniQcY"
+Received: by mail-wm2-f8.google.com with SMTP id 5b1f17b1804b1-4956bc73c0eso1019885e9.1
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 14:48:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788472086; x=1789076886; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788472088; x=1789076888; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=I8XlN4EL4v/w0cnAVt//ozwnfIlsZD6l/AAx7KptJxM=;
-        b=raEyIxDZcBnRV0gLJj4J1M05ROKf5gNeIJ8DN0PEFzqeu2wD0WnpYUYGOWpwNSdJ3O
-         b3zja+bUfHMzTeZz3cYd2i8r3rubUd/EY20ILHtStxAQdhj1FjpLgPyj2VBuA8nY97o/
-         r2UzvzPFwGRCuzk66aiGLL5EBAsoHZsCZlt56vKVH4ypHQ54AJxGls2ZqD5GLrKYP/GV
-         hNB8aWTWiwIMwQk8NHMuGb1oOuNno2cdxxARtRvCZUH6zLhSLTQ81vPi3zLJJ+A6+wUy
-         BqLX+k7qvGqTB+/L5hf28P22fA14JikFAwPytFlGmfXjs8z/kzgEWQQiXBhoyVlibdIw
-         VydA==
+        bh=XhcALRh522ySN8nJme0Ri1s+5fOrKR0VvHZF7ZnRaxA=;
+        b=fzVniQcY+r8ITJPi4LJYG/F/4qLbjSJIIwKS9rwXL+SfP1A9BLN1+aJ3mPeFqI8Nl0
+         iOPSYiZb4mZKiniXINM3+inAN/d8in66qQQDdIyBg0MnfUui/8UykxbGDCv7nm3FZTQ+
+         ieU8XL923bFeNBpqrpAk/JHT1HT/SUavnszFtehAIeXSEVdDCiMgtNzgNTLE4yjFXhff
+         Iw7uBqmg2EvPbS1aVUe8ft9zD7/jXUOwc1CqBUD7cUAhhx895IezUOSeA1gq5owhceJI
+         LAyzLFdnMDxMcShctwX5IuMCQZTqebO5Ci+Tijjt2adsdHGepKACE9vJM3oK6SIpScu1
+         AtgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788472086; x=1789076886;
+        d=1e100.net; s=20251104; t=1788472088; x=1789076888;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=I8XlN4EL4v/w0cnAVt//ozwnfIlsZD6l/AAx7KptJxM=;
-        b=JheAaTVd1VXqtCj4Nu9RMdWKrAs9PdP9k+xEdF8ddoxho5sEfMSEyhgm0fg8wEEzPm
-         Jv0WPRw7wM+K+aAZP/0xQqEASMCUjU1fZO06IAPCFL8aZuChUtaIJ4e7yZBPrvyEmXw5
-         n1GozA5FFM+zKwSxUTGwUSE2BqfAr+eTtLXy1isV17598LdzHfTj7pNcfSCCymTA17tx
-         fJYUJxE7WCKkOUimGKIk3BoAnNLkBvge9NiSwDk5iX70SqTnNXr6PxshG4/58XrWUC84
-         Sx1Qe9o8b7MRXGGYkZiDWMRGoXbgcaElK5jKnLDeWzHAWuNme4U98RXrDvY73YHHX3e+
-         9JJg==
-X-Gm-Message-State: AFuF++nE7HEkK5RDyUlJVdFFWvVs9i1RFzDHprWksB81A/YtU6VmwUMs
-	rt2Hqz7KbtbR7Ga0DYq0bW/uOwqloYgpoJIIacBTbtEA4vRyZ7on6CK11MgJPlNm
-X-Gm-Gg: AYBFou1zsjNepDNBK59Ax3gEViRQuZbqRd3JkMrgady4hBLpdeNt9g68awjXSAgkRgL
-	kwc8P8+dS3b+IEZS9u0GtsWsgeAjWF3I92OS3qpO3IogWbzJMRZ7IUfttzQg5xWUZ0AlX1ejJvX
-	OC7lW0Q+0fURe+f1iyZ8oUeXTHyuvlEXod17lYmxrWzcVYpDtWjp6uZqMxn5qBD73ugnXPSQRb+
-	dn11EFGauaXuRZqyV7nwfWr2OnZfMwZuIRydH9hpMXWdjOQLe89RmtNPNHtF+h21k8XPddwzZS5
-	bcxBIZAXfMuA5/R/GYJ2abuyz90HnxzNhhsECeWXMKYZC0pRJwqyYzicWRvKcpj/ZLjAxwSFDLO
-	x3wRQ2v+Gsb7z1IU7mckXz7oUxVZ5v8YSU3exi38YMR6Wuuwf4JfPIVggdtBkmtEnMIDoozCDZj
-	uWc2LGoyPCrTZ5lGVScl+uDtW4X9TmR4vs+6PdA9UkixR6Zh6fQiIPcR8HMwUKn0HsxqEclCi/N
-	nXHMgEMfHF+sKovuNhbDwt2O8yPxNOZeHPhnFJAeQP5N6moSNxAHMipB+JpbbXx5Wyp08t8uz2u
-	dBkzuXuAlby9jY/50DHz+IcTOKYSVYYd2hVHPNmS
-X-Received: by 2002:a05:6000:460b:b0:484:46f9:7adb with SMTP id ffacd0b85a97d-4858709b1e7mr4046406f8f.26.1788472085710;
-        Thu, 03 Sep 2026 14:48:05 -0700 (PDT)
+        bh=XhcALRh522ySN8nJme0Ri1s+5fOrKR0VvHZF7ZnRaxA=;
+        b=arw96lhBeyEkFq0LZ0qpw923YtnjelUir3JAwoh+gFVstjokzr9nvO11TkKeBXeol+
+         aR0/rkIVLxanJ0bC08heI9XHMqlYq2BFzGvM/Xz/gloGnawfnGwU9gK1V77f6P+YtzgR
+         Gw3fMh6J++m8jIJ8Y+g5k6yld1ocUOqTBYl2tFTqXhiSScFdMNA8XZaFxgsOz9RheS0E
+         T9rWvlpmpxb7xOyQ68uy36zH2cjmYYEVcrWMqtIYo7MPwjjP5ENPhxe3rqWTKrNyL9BL
+         EAZQBHisHX7dUs2rW16GglOhBChEKanmygCnMAMLjDCAqh0WYOPXiOhMr0xYWzZCGiIZ
+         2rdg==
+X-Gm-Message-State: AFuF++lIQ/h8DuH06fQziKhz0YnN1K3kMqoSJjyeftZ12J11pdBFlq78
+	NWjN3fJTDEQFjCAiuzJEDXQEJrqWhWExS64UFDOjlVOYGIdsyphywqj3TzJAo7Ms
+X-Gm-Gg: AYBFou0iYblqeY8xZ8zi4IB5dfDlVH5kJdyeEgpF+IQWLxrXr98orjb4f6/FEbnkSX1
+	SvH49xQjeNmbKV5sn9JUhHOyIhwp142SrwUYHd156UEaFd+GTMJHkIWbKZucqPIbD4tbh027Ig4
+	dqxMmIraghptI+d/c+rBipit+m7c9RVJqDw4vP5cD2KlWZ2kCIWgAD2w6q4/asmCYVITD4XHf/F
+	v3rcPHDb2ui3X19EfhVOkbaNXw6LhdgulapRkp0r/+TZ4WBiLEZxy8oOsrhohgHAFD3Prs9WKDp
+	s3KEPlSYkFZ56+lTnvqUqL29cNDZaYfXhHmxJywFWfjZodvH0DE8tb6DT6zsRRyUAWMBf7F4Yjm
+	/2yj9eGzfhKTWfTGKIBcW52Wp6GhFh1YKGVq3SIxHDKsVC9EBSivehRDSGTZ8lfYQSFuyx2om4n
+	nK9yynkRUlbAiSehynSBpmRpyYjfSobHu9+aXt5sOoa9sf7a+VqqJtvki0+Hu0YyunuOxCRNDvi
+	60+YNxfRr9hJcEJk74CZEJFRtyu+lhwZWJy10GH+fZMoMs2ki+pfDGRraCZrSouV2yIh7XPKJMX
+	Bl0ZLRnDl44TTnAe/TL6ZaNXDc8=
+X-Received: by 2002:a05:600c:6090:b0:49c:e3b1:d826 with SMTP id 5b1f17b1804b1-49cf825ab42mr15600895e9.13.1788472087373;
+        Thu, 03 Sep 2026 14:48:07 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485881350b1sm1712230f8f.4.2026.09.03.14.48.05
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cf771e9absm15606825e9.9.2026.09.03.14.48.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2026 14:48:05 -0700 (PDT)
+        Thu, 03 Sep 2026 14:48:06 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -69,9 +69,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Nicholas Carlini <npc@anthropic.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf v1 4/8] selftests/bpf: Test btf lookup helper sleepability
-Date: Thu,  3 Sep 2026 23:47:50 +0200
-Message-ID: <20260903214758.2727663-5-memxor@gmail.com>
+Subject: [PATCH bpf v1 5/8] bpf: Mark faultable stack helpers as sleepable
+Date: Thu,  3 Sep 2026 23:47:51 +0200
+Message-ID: <20260903214758.2727663-6-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260903214758.2727663-1-memxor@gmail.com>
 References: <20260903214758.2727663-1-memxor@gmail.com>
@@ -81,76 +81,51 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1980; i=memxor@gmail.com; h=from:subject; bh=nXF/HMVZ5fOJTxAQKxJY+Kin+NIS3LVNQkLWBPye16o=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvma5asezN13bd9nCom1B4bsPKkwIqIPzZZATbyn7asn 3dB8wR3RykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACZSdIORYd3R6z/2Rmosu7Dh 076ax5tvcp/R29JsyvAi4n6t0bLHtWGMDNt7XDatV3KZ99Ar0X/y4/1pxdYp5+9GdW84yPhu+bQ vEUwA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1899; i=memxor@gmail.com; h=from:subject; bh=eCoblO1wa9iyl/6H9+QTh1GDpRn8Bp6BkAtxW2LCWDg=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvma1bBb23P/JbcV179+Eu1SVoCx8bTZ3M4N0+66jfl/ ZodLgaTO0pZGMS4GGTFFFlK/u9jMj5R+TvQdhk3zBxWJpAhDFycAjCRCB5Ghg1hjtbflCec3nZC /gSTXfvazJ0OAr3/ODZEmu6xjOD7foCR4W02/zOdtlKnZZJVJses05QKn07bkup6VKpAuIBRndm IHQA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Add an expected failure case which calls
-bpf_btf_find_by_name_kind() from a BPF timer callback. Without the
-helper prototype being marked sleepable, the verifier accepts the
-program and the load unexpectedly succeeds.
+The faultable variants of bpf_get_stack() and bpf_get_task_stack() pass
+may_fault=true into the common stack collection code. Resolving user-space
+build IDs may then call build_id_parse_file() and block on filesystem
+reads.
 
-Also add a positive control which calls the helper directly from a
-syscall program. This verifies that marking the helper sleepable only
-rejects it in non-sleepable regions.
+Neither helper prototype sets might_sleep. Since prototype selection uses
+the sleepability of the whole program, the verifier can still allow these
+helpers from a non-sleepable region within that program, such as an
+explicit RCU or preemption-disabled region. The task-stack helper can also
+be called from a non-sleepable timer callback of a sleepable program.
 
+Mark both faultable prototypes as sleepable. The existing helper context
+check then rejects these calls while continuing to allow them in genuinely
+sleepable contexts.
+
+Fixes: d4dd9775ec24 ("bpf: wire up sleepable bpf_get_stack() and bpf_get_task_stack() helpers")
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- .../bpf/progs/verifier_async_cb_context.c     | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ kernel/bpf/stackmap.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_async_cb_context.c b/tools/testing/selftests/bpf/progs/verifier_async_cb_context.c
-index a7c84d3fa4c7..e0926767bbd3 100644
---- a/tools/testing/selftests/bpf/progs/verifier_async_cb_context.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_async_cb_context.c
-@@ -108,6 +108,30 @@ int timer_sys_close_prog(void *ctx)
- 	return 0;
- }
- 
-+static int timer_btf_find_cb(void *map, int *key, struct bpf_timer *timer)
-+{
-+	char name[] = "task_struct";
-+
-+	bpf_btf_find_by_name_kind(name, sizeof(name), BTF_KIND_STRUCT, 0);
-+	return 0;
-+}
-+
-+SEC("syscall")
-+__failure __msg("sleepable helper bpf_btf_find_by_name_kind#{{[0-9]+}} in non-sleepable prog")
-+int timer_btf_find_prog(void *ctx)
-+{
-+	struct timer_elem *val;
-+	int key = 0;
-+
-+	val = bpf_map_lookup_elem(&timer_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_timer_init(&val->t, &timer_map, 0);
-+	bpf_timer_set_callback(&val->t, timer_btf_find_cb);
-+	return 0;
-+}
-+
- SEC("syscall")
- __success
- int syscall_sys_bpf_prog(void *ctx)
-@@ -126,6 +150,16 @@ int syscall_sys_close_prog(void *ctx)
- 	return 0;
- }
- 
-+SEC("syscall")
-+__success
-+int syscall_btf_find_prog(void *ctx)
-+{
-+	char name[] = "task_struct";
-+
-+	bpf_btf_find_by_name_kind(name, sizeof(name), BTF_KIND_STRUCT, 0);
-+	return 0;
-+}
-+
- /* Workqueue tests */
- 
- struct wq_elem {
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index a839041e0d00..d09d4c3fe547 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -875,6 +875,7 @@ BPF_CALL_4(bpf_get_stack_sleepable, struct pt_regs *, regs, void *, buf, u32, si
+ const struct bpf_func_proto bpf_get_stack_sleepable_proto = {
+ 	.func		= bpf_get_stack_sleepable,
+ 	.gpl_only	= true,
++	.might_sleep	= true,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
+@@ -928,6 +929,7 @@ BPF_CALL_4(bpf_get_task_stack_sleepable, struct task_struct *, task, void *, buf
+ const struct bpf_func_proto bpf_get_task_stack_sleepable_proto = {
+ 	.func		= bpf_get_task_stack_sleepable,
+ 	.gpl_only	= false,
++	.might_sleep	= true,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_BTF_ID,
+ 	.arg1_btf_id	= &btf_tracing_ids[BTF_TRACING_TYPE_TASK],
 -- 
 2.53.0
 
