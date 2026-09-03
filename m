@@ -1,137 +1,141 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4CC64E80BD
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 15:52:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4F584E80DC
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 15:52:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788450766; cv=none; b=Zf0rAXAx6/VmdqdqOzNMDMIag+CHFvWpypTI5avE3fdfYfFZBCdvLjArQgAgkzeyp2h5zLLymmtbSKlKBMpi689VkLKcdUNH2goGSQBGexERSqPr5G1bGcKHbQgHR8aKIHo+uJYM0JocpRkSN5tINPGkPAB1pxuJT/xwy6f21E4=
+	t=1788450768; cv=none; b=cMNf8fk+R6GhNYqcVVWwr963DmLX6oeeD+kht7eEeeOCbHGfbBtH+T7sKwptSWfBnnU5nE2AGpM1Ups8zceE3EsaCIhMcCLs44WQY7LH4cy7HCyCwqEsYwGDq4p/j6ozoDKPdm3sqicQKWXd4iUrzhaKTkkR59mWbLW+ZNGIfDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788450766; c=relaxed/simple;
-	bh=asLBsOv/91IFXogFFHgUAODBTDWMwVTnVK02Sy4SWZc=;
+	s=arc-20240116; t=1788450768; c=relaxed/simple;
+	bh=mtk47xjwbeGA5AHokxn+L4mgWvOm3RZA4Ct/9XhZ8B4=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=uf9Tn7egaXv0aROaI8z90qAlTUV22cpxh+wzoAV/yJ2EWgT/RlWTKBowqszXvv/z5XZn0o7eD7dIgUjfAZJ1GbRbnpmjbuwoe/I4tPIXw4WQ8B+T2LHQOyFNebHHswwqsADn8zVi7xa/0qiEsKk06/YV94tS7mFFAXgLBlrjHQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UuHVw1rZ; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=aoNm1XzbNuv0oJpPo2zB+fiGwoPccIp2nTh4tjZkQl0kDjhr+444Y1ldd0Aa+B46tjl2WBkr1cm9DQ8jvCbdwmDUqpDd/iGhOoXwpYG7ke+LwvdDSxTPs0Q6NVjsT2cvpevVabuJP628tLPrAYFIHqM+8n/BZjZrWMlK8OWXvJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XhJNc4Iq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UuHVw1rZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2F691F000E9;
-	Thu,  3 Sep 2026 15:52:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XhJNc4Iq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C17821F00A3D;
+	Thu,  3 Sep 2026 15:52:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788450765;
-	bh=3TeZepYkGG2Jg568JsCOLQgdDx3pmoEogGs+HNAHy3w=;
+	s=k20260515; t=1788450767;
+	bh=8BKx/FQiHhwgrfBDS2Z3mcbm6RjSkQJP3LeNno5nGp4=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=UuHVw1rZHNBiEoffKv/i/qgTeFwLpLUR0nUz6ZBRyEV4F3wee06oxzcg7Zc1hClnI
-	 GqpzLqwyBBYEsTvHT+eNgWQIC7lK3Bhof/5g3hdnzdBZ0L2Cim146aMddUWiDpcbhG
-	 mQxcRUjoDbMCX3DDnk68FeH2A/KoQ4g1JoAL1v8pYLUkYG/bwaOc09STSevHwjG/ao
-	 j5G6RY1n7/FrZh4uZvlObTGt7/UMZ3remxIAM8dizp5zCjgwd8HvrBs+ybHZD10I0R
-	 1vaSNuvkUQOWBZ/yXEou4OEdQlJFb5WS2mjyXH3e2Rn30Phpt7cZ5d7eWjP0YoyjTi
-	 Y1vnTho24hRPg==
-Content-Type: multipart/mixed; boundary="===============1760477294720756391=="
+	b=XhJNc4IqUgxhavYvTU7s9NZjBQ7YUgzPV79GqbAqOhjBCQTmUtnW8kw0d5ISMi30/
+	 k5lX/1V3ngOQBXQCLrG7UkT6zwOsX9rnIfbdBnOlT/hFmcPtGSAfnFXPtq4VusUaTh
+	 Hf+sqTk3gPoYgdrwXl8NOyb0iSUAtYD730fRuX46BR88pkC5yElB9MqCJMl/4iGVL4
+	 bbDAMl3ld/z/DOKSpMPZVGGI67uw/9nfq8eYOwmsl41E5ivNKg82gC8eDJMSXyoXcW
+	 OTr6VT1ND+cT9qntG/oDMCS0Fyoyyliv/+qyB+aDfdQ6dgx2BOHDQAZGXUORBxr2xB
+	 hac7UEU7ELIFA==
+Content-Type: multipart/mixed; boundary="===============5139105425103562218=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0fc7647498097b95fa93277a5b41cb0263c321747e7ec889a37b737dc3ab4764@mail.kernel.org>
-In-Reply-To: <20260903144433.1716731-10-memxor@gmail.com>
-References: <20260903144433.1716731-10-memxor@gmail.com>
-Subject: Re: [PATCH bpf v1 09/10] bpf: Mark syscall helpers as sleepable
+Message-Id: <dbc8b63e44e2fc3abc511f5659cb50c4b42db63d1738afc81dd007a527e436cf@mail.kernel.org>
+In-Reply-To: <20260903144433.1716731-2-memxor@gmail.com>
+References: <20260903144433.1716731-2-memxor@gmail.com>
+Subject: Re: [PATCH bpf v1 01/10] bpf: Mark signal tracepoint siginfo arguments as scalar
 From: bot+bpf-ci@kernel.org
 To: memxor@gmail.com,bpf@vger.kernel.org
 Cc: npc@anthropic.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu,  3 Sep 2026 15:52:44 +0000 (UTC)
+Date: Thu,  3 Sep 2026 15:52:46 +0000 (UTC)
 
---===============1760477294720756391==
+--===============5139105425103562218==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 6874ba1424af0..c7bc9ba9b331f 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -6568,6 +6568,7 @@ EXPORT_SYMBOL_NS(kern_sys_bpf, "BPF_INTERNAL");
->  static const struct bpf_func_proto bpf_sys_bpf_proto = {
->  	.func		= bpf_sys_bpf,
->  	.gpl_only	= false,
-> +	.might_sleep	= true,
->  	.ret_type	= RET_INTEGER,
->  	.arg1_type	= ARG_ANYTHING,
->  	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index da36d4b9d31ab..d6d243c262ea5 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -6717,6 +6717,9 @@ static const struct bpf_raw_tp_null_args raw_tp_null_args[] = {
+>  	{ "rxrpc_resend", 0x10 },
+>  	{ "rxrpc_tq", 0x10 },
+>  	{ "rxrpc_client", 0x1 },
+> +	/* signal */
+> +	{ "signal_generate", 0x20 },
+> +	{ "signal_deliver", 0x20 },
+                                   ^^^^
 
-Does bpf_btf_find_by_name_kind() need the same treatment?
+Is signal_deliver's 0x20 mask too strict for its actual call sites?
 
-syscall_prog_func_proto() hands out four helpers to BPF_PROG_TYPE_SYSCALL.
-This patch marks two of them. bpf_btf_find_by_name_kind_proto is used by
-nothing else in the tree, so marking it has no collateral effect on other
-program types.
+Looking at the two call sites for trace_signal_deliver():
 
-It can sleep on the module-BTF path:
+  kernel/signal.c (do_coredump):
+    trace_signal_deliver(SIGKILL, SEND_SIG_NOINFO,
+                         &sighand->action[SIGKILL-1]);
 
-  bpf_btf_find_by_name_kind()
-    -> bpf_find_btf_id()          /* module BTF hit */
-    -> __btf_new_fd()
-    -> anon_inode_getfd()
-       -> alloc_file_pseudo()     /* kmem_cache_zalloc(filp_cachep, GFP_KERNEL) */
-       -> get_unused_fd_flags()
-          -> alloc_fd()
-          -> expand_files()       /* kvmalloc(GFP_KERNEL_ACCOUNT) */
+  kernel/signal.c (get_signal):
+    trace_signal_deliver(signr, &ksig->info, ka);
 
-bpf_get_btf_vmlinux() additionally takes mutex_lock(&btf_vmlinux_lock)
-(that branch is unreachable at run time because bpf_check() already
-populated btf_vmlinux, so the fd-allocation path is the load-bearing one).
+SEND_SIG_PRIV is never passed to this tracepoint. SEND_SIG_NOINFO is
+zero (NULL), and &ksig->info is always a real pointer filled by
+dequeue_synchronous_signal() or dequeue_signal() just above the call.
 
-Reachability is identical to the case the changelog describes for
-bpf_sys_bpf(): a SEC("syscall") program can call bpf_timer_set_callback(),
-and the verifier checks that callback in a non-sleepable context while
-retaining the syscall helper set. Without .might_sleep on the prototype,
-the callback can invoke bpf_btf_find_by_name_kind() from hrtimer softirq
-context and trigger the same scheduling-while-atomic failure.
+SEND_SIG_PRIV == 1 only reaches trace_signal_generate() from
+kernel/signal.c:__send_signal_locked().
 
-The same issue applies to bpf_rcu_read_lock(), bpf_preempt_disable(),
-bpf_spin_lock(), and irq-disabled regions, which in_sleepable_context()
-also excludes.
+If that's the case, would 0x10 (PTR_MAYBE_NULL) be both sufficient and
+less restrictive for signal_deliver? With 0x10 the verifier would still
+force a NULL check to catch SEND_SIG_NOINFO, but after the check a
+tp_btf program could read info->si_code and other fields. With 0x20 the
+register becomes SCALAR_VALUE immediately and check_mem_access() rejects
+all dereferencing with "R1 invalid mem access 'scalar'".
 
-The fourth helper, bpf_kallsyms_lookup_name(), is genuinely non-sleeping
-(kallsyms_lookup_name() operates under RCU), so leaving that one unmarked
-is correct.
+This table supports per-argument distinctions. The existing entry:
 
-> @@ -6593,6 +6594,7 @@ BPF_CALL_1(bpf_sys_close, u32, fd)
->  static const struct bpf_func_proto bpf_sys_close_proto = {
->  	.func		= bpf_sys_close,
->  	.gpl_only	= false,
-> +	.might_sleep	= true,
->  	.ret_type	= RET_INTEGER,
->  	.arg1_type	= ARG_ANYTHING,
->  };
+  { "cachefiles_lookup", 0x1 | 0x200 }
 
-A subsystem pattern flags this as potentially concerning: freplace
-(BPF_PROG_TYPE_EXT) programs that replace a global subprog of a syscall
-program can no longer call bpf_sys_bpf() or bpf_sys_close(), where they
-could before.
+marks arg 0 nullable and arg 2 ERR_PTR rather than applying the same
+mask to both. The signal_generate justification holds (SEND_SIG_PRIV is
+nonzero so PTR_MAYBE_NULL alone doesn't work), but does the same
+reasoning apply to signal_deliver given that it never sees that
+sentinel?
 
-An EXT program is never sleepable: can_be_sleepable() does not list
-BPF_PROG_TYPE_EXT, and check_attach_btf_id() rejects 'prog->sleepable &&
-!can_be_sleepable(prog)' with 'Program of this type cannot be sleepable'.
-Consequently do_check_common() sets state->in_sleepable = false for every
-EXT program.
+> commit a481db8aa51a8682ee36d019234a31b254b3ecd5
+> Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Date:   Thu Sep 3 16:44:19 2026 +0200
+>
+>     bpf: Mark signal tracepoint siginfo arguments as scalar
+>
+>     The signal_generate and signal_deliver tracepoints declare their info
+>     argument as a struct kernel_siginfo pointer. btf_ctx_access() therefore
+>     treats it as a trusted pointer for tp_btf programs.
+>
+>     Signal delivery also uses SEND_SIG_NOINFO and SEND_SIG_PRIV as special
+>     values for this argument. Those values are zero and one respectively,
+>     and are not pointers. A tp_btf program can currently dereference either
+>     value and fault the kernel. In particular, signal_generate can run from
+>     timer interrupt context, turning the fault into a kernel panic.
+>
+>     Record both tracepoints in raw_tp_null_args[] and mark argument one as
+>     a non-pointer. This preserves scalar access to the cookie while rejecting
+>     direct and helper-mediated pointer use. Merely marking it nullable would
+>     not suffice because SEND_SIG_PRIV is nonzero.
+                                                             ^^^^^^
 
-At the same time check_attach_btf_id() sets env->ops =
-bpf_verifier_ops[tgt_prog->type] for EXT and resolve_prog_type() returns
-the saved SYSCALL type, so such an EXT program does get
-syscall_prog_func_proto() and previously loaded fine with a bpf_sys_bpf()
-call in it.
+Could this paragraph's wording be more precise about which parts are
+being preserved and which argument is being marked?
 
-After this patch that same program is rejected with 'sleepable helper
-bpf_sys_bpf#166 in non-sleepable prog', even though the replaced subprog
-only ever runs from the sleepable BPF_PROG_TEST_RUN body.
+"This preserves scalar access to the cookie" - there doesn't appear to
+be a cookie anywhere in this change. Neither signal_generate nor
+signal_deliver has a cookie argument, and this isn't related to
+bpf_get_attach_cookie(). What's actually preserved is scalar access to
+the siginfo sentinel value itself (0 for SEND_SIG_NOINFO, 1 for
+SEND_SIG_PRIV), which is what a program can still read back. The term
+"cookie" has a specific meaning in BPF context, so this might mislead
+a reader trying to understand what the patch keeps working.
 
-Mitigating context: this limitation already exists for every other
-might_sleep helper (e.g. bpf_copy_from_user), no in-tree selftest does
-freplace on a SEC("syscall") program, and rejecting is the conservative
-direction. Worth a sentence in the changelog since it is a user-visible
-loadability change?
+"mark argument one as a non-pointer" - 838a10bd2ebf documents the mask
+as "1st arg: 0x1 / 2nd arg: 0x10 / 3rd arg: 0x100", where the nibble
+position is the zero-indexed argument number. The mask 0x20 is nibble 1,
+meaning the second argument (info). Against the referenced commit's own
+wording, "argument one" could point at sig rather than info. Would
+"argument 1 (info)" or "the second argument" remove the off-by-one
+ambiguity?
 
 
 ---
@@ -139,4 +143,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33770534313
---===============1760477294720756391==--
+--===============5139105425103562218==--
