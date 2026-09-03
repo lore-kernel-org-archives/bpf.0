@@ -1,50 +1,58 @@
-Received: from cmccmta4.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 461194266A4;
-	Thu,  3 Sep 2026 08:26:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.137
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B841F43CE6D
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 08:28:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788423988; cv=none; b=TZL8gjFXufZfxHGztNYu6fQX6IJAVTqT4qfSqKodpaGBlymapQKugDS/+rG06fvzlDRykgS/ELCEdEfJv9QpLpMddJWnRQIWjsbK9Ha4PgdNyNg6RN0kM7+gYyeH/naEl4tULCRqBETJEDH14rIbdkYfO+bvUgTyI+VIgVmmUPc=
+	t=1788424123; cv=none; b=RhA5WasWS76s/nhLMpCG/8HnTt3rgviePWfbLf1j9+dZq4nxlF/WwW5J3MqAQKfqptksJXA4ZYCp6a4dzGIUL8QAJ+yVCPNK6AN51Zut4wEfSfXExhFJbICWvCn7KRxWVps863b7rcsMGY/WyqmaRuCX+Pqlt6rZO6vP4UXdcxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788423988; c=relaxed/simple;
-	bh=PT5K2ILIlBkix6vwGcMfXBl+zfIrR4BYkuVJqGyc8jg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gc7ZpCB/QIMMut6/TnbQNa4YBNHVDnlu6FD/Jp8GXdND02B24t9hNS3VwfcniWiwI6LCuC34McRUx7dvXSkV/BHK6ZSeq7/EWmuEHOR1gKC+ocjegZrqkMYiecyPt34fsX/Pmvrbfo/jn7E9/i5kljCUc/DZvRnE7vWMvGvB81s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.b=kWr4UeSk; arc=none smtp.client-ip=111.22.67.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+	s=arc-20240116; t=1788424123; c=relaxed/simple;
+	bh=LapsRDyuHDDEeVRPjufP+HuLMUW9oyH/4jZueZEUj7Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=hqfcU7JwBOUjlroDuJfCjWjSPuAXDhPfQMle110ZmcThnW4MZTIVGIA+z5rppa4gfguR3Qvg7/CmRNVpgOUIN/5NLSRCZLjN0gLsH+lnaLo7LgBr8ZhHP/fvlISOJ+cwtV6QhYnDVqcK+vYDuYlWWNSWiSnmzCQfv87alASxumk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=Q9pwMoA2; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cmss.chinamobile.com header.i=@cmss.chinamobile.com header.b="kWr4UeSk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=cmss.chinamobile.com; s=default; l=0;
-	h=from:subject:message-id:to:cc:mime-version;
-	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-	b=kWr4UeSkap7qApGIieyC9SvMRdg5JO/dMoyqT/y/3mtr+RbFwkNc0npYIfbkrQT6Z2F2CYZfai2Pf
-	 JLrO1oZ3mD9MisjJpYjbVJ2/jv8CGogSCzBMZbt/DasZq4IjXma/jiW36noB0QGn7Ofn5KUABF63Pb
-	 frzlE1LIj+YgwegQ=
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app08-12008 (RichMail) with SMTP id 2ee86a992f29add-49bfd;
-	Thu, 03 Sep 2026 16:26:18 +0800 (CST)
-X-RM-TRANSID:2ee86a992f29add-49bfd
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from localhost.localdomain (unknown[223.108.79.98])
-	by rmsmtp-syy-appsvr02-12002 (RichMail) with SMTP id 2ee26a992f28481-1a8b0;
-	Thu, 03 Sep 2026 16:26:17 +0800 (CST)
-X-RM-TRANSID:2ee26a992f28481-1a8b0
-From: liujing <liujing@cmss.chinamobile.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Liu Jing <liujing@cmss.chinamobile.com>
-Subject: [PATCH] tools libbpf: Fix signed shift UB in btf_type_info()
-Date: Thu,  3 Sep 2026 16:26:16 +0800
-Message-Id: <20260903082616.5096-1-liujing@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.27.0
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="Q9pwMoA2"
+Received: from mail01.layka.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id AAC3D88779;
+	Thu, 03 Sep 2026 10:28:38 +0200 (CEST)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lZUZkJcunvZO; Thu,  3 Sep 2026 10:28:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1788424117; bh=LapsRDyuHDDEeVRPjufP+HuLMUW9oyH/4jZueZEUj7Y=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=Q9pwMoA2UlSrTtSWKbfgXUkW8jLoytPUftSjqLX3klY4RK8GCLOHfWt14DBe0En5P
+	 m5ytYOomYjAcVxo1Ko3k4C8Yj+s69rGQPDiZnsaLa6T3QmWB2XZupJw94oxvyxk+jz
+	 SRg4Ln371eql2E9qmZ1NbxjkTtDTW0IM9HqTuRwiMfVuUOfdhaOCXrHcai9BhCw4QM
+	 AKB0+QUl/ZRLgCQkwcPrH4FA4Mh9aMy5fqHhVuZaGqsRq39uwdq1lCrmBztjKkJHCH
+	 7HhZnzH4snBZnTA0TL9NyAB+GbsK3giWuKKaxouQue5ZObMoN42lgfmIggcwdDIl5t
+	 eql6Kr4V161xw==
+From: Masoud Aghasi <maghasi@disroot.org>
+To: bpf@vger.kernel.org
+Cc: andrii@kernel.org,
+	eddyz87@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	john.fastabend@gmail.com,
+	brianvv@google.com,
+	Masoud Aghasi <maghasi@disroot.org>
+Subject: [PATCH v3] bpf: Fix u32 overflow issue in map batch operations
+Date: Thu,  3 Sep 2026 09:27:34 +0100
+Message-ID: <20260903082734.623904-1-maghasi@disroot.org>
+In-Reply-To: <20260902204439.287888-1-maghasi@disroot.org>
+References: <20260902204439.287888-1-maghasi@disroot.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,28 +61,100 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Liu Jing <liujing@cmss.chinamobile.com>
+Several map batch operation implementations such as
+generic_map_lookup_batch() use calculations in the form of
+"values + cp * map->value_size" to compute the desired userspace memory
+address for reading or writing. This can overflow the u32 type
+(the result of "cp * map->value_size") when the map size exceeds 4GB.
 
-In btf_type_info(), the expression `kflag << 31` performs a signed
-integer shift. When kflag is 1, this sets the sign bit of a 32-bit
-signed integer, which is undefined behavior in C.
+generic_map_lookup_batch() may corrupt values for some keys in
+userspace memory, and in some cases it mismatches values for some keys
+while still reporting success.
 
-Fix it by casting kflag to unsigned int before the shift.
+Other batch operations may fail to delete or update some keys,
+or the syscall may return unexpected errors.
 
-Signed-off-by: Liu Jing <liujing@cmss.chinamobile.com>
+Add size_t casts to prevent the affected offset and size calculations
+from overflowing.
+
+Fixes: cb4d03ab499d ("bpf: Add generic support for lookup batch op")
+Fixes: aa2e93b8e58e ("bpf: Add generic support for update and delete batch ops")
+Fixes: 057996380a42 ("bpf: Add batch ops to all htab bpf map")
+Signed-off-by: Masoud Aghasi <maghasi@disroot.org>
 ---
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -259,7 +259,7 @@
+v3:
+- Reword the commit message to use imperative style.
+
+v2: https://lore.kernel.org/bpf/20260902204439.287888-1-maghasi@disroot.org/
+- Fix the additional u32 overflow pointed out by Sashiko bot.
+- Simplify the commit message by removing the reproducer program.
+- Add all relevant fixes tags to the commit message.
+
+v1: https://lore.kernel.org/bpf/20260824113123.270057-1-maghasi@disroot.org/
+
+ kernel/bpf/hashtab.c |  8 ++++----
+ kernel/bpf/syscall.c | 10 +++++-----
+ 2 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index d40cb5dd446c..bd3704ed9333 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -1977,10 +1977,10 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
  
- static inline __u32 btf_type_info(int kind, int vlen, int kflag)
- {
--	return (kflag << 31) | (kind << 24) | vlen;
-+	return (((unsigned int)kflag << 31)) | (kind << 24) | vlen;
- }
+ 	rcu_read_unlock();
+ 	bpf_enable_instrumentation();
+-	if (bucket_cnt && (copy_to_user(ukeys + total * key_size, keys,
+-	    key_size * bucket_cnt) ||
+-	    copy_to_user(uvalues + total * value_size, values,
+-	    value_size * bucket_cnt))) {
++	if (bucket_cnt && (copy_to_user(ukeys + (size_t)total * key_size, keys,
++	    (size_t)key_size * bucket_cnt) ||
++	    copy_to_user(uvalues + (size_t)total * value_size, values,
++	    (size_t)value_size * bucket_cnt))) {
+ 		ret = -EFAULT;
+ 		goto after_loop;
+ 	}
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 6874ba1424af..731388ae00ad 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2036,7 +2036,7 @@ int generic_map_delete_batch(struct bpf_map *map,
  
- enum map_def_parts {
-
-
-
+ 	for (cp = 0; cp < max_count; cp++) {
+ 		err = -EFAULT;
+-		if (copy_from_user(key, keys + cp * map->key_size,
++		if (copy_from_user(key, keys + (size_t)cp * map->key_size,
+ 				   map->key_size))
+ 			break;
+ 
+@@ -2098,9 +2098,9 @@ int generic_map_update_batch(struct bpf_map *map, struct file *map_file,
+ 
+ 	for (cp = 0; cp < max_count; cp++) {
+ 		err = -EFAULT;
+-		if (copy_from_user(key, keys + cp * map->key_size,
++		if (copy_from_user(key, keys + (size_t)cp * map->key_size,
+ 		    map->key_size) ||
+-		    copy_from_user(value, values + cp * value_size, value_size))
++		    copy_from_user(value, values + (size_t)cp * value_size, value_size))
+ 			break;
+ 
+ 		err = bpf_map_update_value(map, map_file, key, value,
+@@ -2179,12 +2179,12 @@ int generic_map_lookup_batch(struct bpf_map *map,
+ 		if (err)
+ 			goto free_buf;
+ 
+-		if (copy_to_user(keys + cp * map->key_size, key,
++		if (copy_to_user(keys + (size_t)cp * map->key_size, key,
+ 				 map->key_size)) {
+ 			err = -EFAULT;
+ 			goto free_buf;
+ 		}
+-		if (copy_to_user(values + cp * value_size, value, value_size)) {
++		if (copy_to_user(values + (size_t)cp * value_size, value, value_size)) {
+ 			err = -EFAULT;
+ 			goto free_buf;
+ 		}
+-- 
+2.47.3
 
