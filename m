@@ -1,42 +1,42 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59BD34AFE23;
-	Thu,  3 Sep 2026 13:51:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC5437F739
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 13:52:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788443533; cv=none; b=jutwIABSoaQMwQ2oekN75cv8NOPcaprix61q/tz3K+MQIAQJVacAalEEN+MzPvF126xg4A7rIR90Dq+L7fIkOZ6dQkxIJBNEFWF0iALMD80s1NSLtCO1/wF8gejtjVEXJOc+WvRZVyN4LGWHiGJ1QGsINe8QF+hdXUbVbFzi2is=
+	t=1788443535; cv=none; b=O5JHXwVbvagE+0sVpBwsUCIIevfroUhQFotXkq08IBgIihWhqJMV6nY5mson/q70azuRcuC0+n1ldpRpbFlK9Pb7Pvpxgb2S7AhlccDTP7aOd8VCh1eA5eWS63gK1SMNNIQrubbbPkUTvLCC8YufneeGXWUKL4OrWhWgtrHwV+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788443533; c=relaxed/simple;
-	bh=QMt9uiQRgaN4LMJPEfxhVrCIpCu3ga1suxBwVf0h3TI=;
+	s=arc-20240116; t=1788443535; c=relaxed/simple;
+	bh=HXi7NSRQhhf/igJ8sIZ5qhIpTU8wkcQ6VOAutXrLPIU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cu+T1ZgaDSX+1ELbgl5H/aqqQ7f+sShTNJFW66oY6/EIJ5ypQrUeT/a71l0IH++puqN/Lcin6AeI37Rxr1gauZ0jnROoFfMkLq0awImzgh4WzQLW7jyNMVUNTCherzaxJADi5HzRFn1/+qpNPnzsCkErZn06mXLPUUpaDozCE8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=bpRqOfAx; arc=none smtp.client-ip=185.246.85.4
+	 In-Reply-To:To:Cc; b=BrOWcFjvZEr7+yaSTnv/LwFUsHeZ5sO7DhMmaAvnZKy0H6jC0d0MbsQvGLSANah/bb8qp+ycEEKvRv0JwiSRGo1Keyt8QeRrm0KyS8VaHWHg2QV7lw1h7BdoQ0ey9K7ustxMW4UeQ8kzS9rbpyVka/WkxuoJe4tdX3kDcAsnmsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=1anh30AX; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="bpRqOfAx"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="1anh30AX"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 6566D4E414EE;
-	Thu,  3 Sep 2026 13:51:55 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id D7B3B1A197C;
+	Thu,  3 Sep 2026 13:52:06 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 383DF602B8;
-	Thu,  3 Sep 2026 13:51:55 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 6152F11C7A03F;
-	Thu,  3 Sep 2026 15:51:50 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id A4663602B8;
+	Thu,  3 Sep 2026 13:52:06 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5FBE811C7A098;
+	Thu,  3 Sep 2026 15:52:01 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1788443513; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1788443524; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=WAqZ1gne0xepkyr6oP+31b6AAXlpdo+IG0PqvS3qpgI=;
-	b=bpRqOfAxXvVckqE+obw2s0GswSCWCs+uOGTFomlS/6PTYXFMOhlyfLhnWY6vE2nkgrFJBh
-	QWsloIvxq1p01zezSQxb+0HNbkRSoLWEIriPW1OhhVjyr36HdtDZVadD26hXPgE8vhRfVE
-	uyHpXi0OKaetLW0QRs8/x92omAFEvJNOSB9BD3HBnd819efViBZYmZziFOro0Q6Ag5wlWw
-	7qJ/+zgnt6Hovt0ug7+WHtsqNX1Ejc+Kh97rsNQXlKja0kQydtU5kDHAJu3v+1NREQyldH
-	e+UX5Bp6gfPEv8pd6tur1hanaXT8cnhfPkGTIJdgjt3NmaAOdj0QgfOhxFeA/g==
+	bh=YURpgYjUK0qnr6W3P7guU1YJ7lGdHWmKu6Gc7x/q/ZU=;
+	b=1anh30AXR4wo90RnSo3pryt0XMgJF2bMU7tv4P351kqN4knDuLi77rz9JfDxJFwxDwRPUm
+	zArWDCOnyVpuv6regcYfcz5DWK3kbhtOg/DwjCvXF1SBcLcp7Dc1kyaa8e9VilYHnHY8r8
+	KaBfXYhVspERvs3hMa1dKrgbXDSdcZvHkgVkp8R9RRyxPNWaZvlah+udpzN0C8g7q0AvXl
+	+FK/2Yty8iwePLmo8/jqn+gH/GWpG4Bk0SVTh2F4Nf1JYH0yD1MqG/ULcxlTwTNbZ7qJL9
+	OAJHzoDBV0LWH6DL3DZUg9omFs2Zt50op78uJ5kurkkE+ayRdTMKCKXfYOxvkQ==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Thu, 03 Sep 2026 15:51:32 +0200
-Subject: [PATCH bpf-next v9 3/8] bpf, x86: refactor BPF_ST management in
- do_jit
+Date: Thu, 03 Sep 2026 15:51:35 +0200
+Subject: [PATCH bpf-next v9 6/8] selftests/bpf: make cmdline_contains
+ stricter
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,7 +45,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260903-kasan-v9-3-2407fe99255a@bootlin.com>
+Message-Id: <20260903-kasan-v9-6-2407fe99255a@bootlin.com>
 References: <20260903-kasan-v9-0-2407fe99255a@bootlin.com>
 In-Reply-To: <20260903-kasan-v9-0-2407fe99255a@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -70,135 +70,61 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.15.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-In order to prepare for KASAN checks insertion before every
-memory-related load or store, group all BPF_ST instructions that indeed
-access memory in a single helper to allow instrumenting those in one
-call, rather than having to instrument all cases individually.
+cmdline_contains is used by BPF selftests to check the presence of
+specific kernel commandline parameters, but it currently suffers from
+two issues:
+- the read commandline isn't NULL terminated right after the read data
+  but only at the end of the buffer, leaving uninitialized bytes that
+  are then possibly tokenized
+- the comparison of found tokens is done based on the size of found
+  token. This could lead to too-short-but-matching tokens to wrongly
+  match the search pattern.
 
+Enforce stricter checks in cmdline_contains to avoid accidental matches.
+
+Fixes: 399f6185a1c0 ("selftests/bpf: Fix selftests broken by mitigations=off")
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
-Changes in v9:
-- update BPF_ST management to resync it with BPF_STX
-
 Changes in v7:
-- align dst_reg type with same type as other emit helpers
-- fix line wrapping
-- add missing doc on top of new helper
-- remove unneeded cast
-
-Changes in v3:
-- new patch
+- add missing Fixes tag
+- drop unneeded size check, already done by strcmp
 ---
- arch/x86/net/bpf_jit_comp.c | 73 ++++++++++++++++++++++++++++-----------------
- 1 file changed, 46 insertions(+), 27 deletions(-)
+ tools/testing/selftests/bpf/unpriv_helpers.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 48429fae0641..f907be3988b2 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -1315,6 +1315,46 @@ static void emit_st_index(u8 **pprog, u32 size, u32 dst_reg, u32 index_reg, int
- 	*pprog = prog;
- }
+diff --git a/tools/testing/selftests/bpf/unpriv_helpers.c b/tools/testing/selftests/bpf/unpriv_helpers.c
+index f997d7ec8fd0..9dadcacaef0c 100644
+--- a/tools/testing/selftests/bpf/unpriv_helpers.c
++++ b/tools/testing/selftests/bpf/unpriv_helpers.c
+@@ -72,8 +72,8 @@ static int config_contains(const char *pat)
  
-+/* ST: *(u8*)(dst_reg + off) = imm */
-+static void emit_st(u8 **pprog, struct bpf_insn *insn, u32 dst_reg,
-+		    s32 insn_off)
-+{
-+	s32 imm32 = insn->imm;
-+	u8 *prog = *pprog;
-+
-+	switch (BPF_SIZE(insn->code)) {
-+	case BPF_B:
-+		if (is_ereg(dst_reg))
-+			EMIT2(0x41, 0xC6);
-+		else
-+			EMIT1(0xC6);
-+		break;
-+	case BPF_H:
-+		if (is_ereg(dst_reg))
-+			EMIT3(0x66, 0x41, 0xC7);
-+		else
-+			EMIT2(0x66, 0xC7);
-+		break;
-+	case BPF_W:
-+		if (is_ereg(dst_reg))
-+			EMIT2(0x41, 0xC7);
-+		else
-+			EMIT1(0xC7);
-+		break;
-+	case BPF_DW:
-+		EMIT2(add_1mod(0x48, dst_reg), 0xC7);
-+		break;
-+	}
-+
-+	if (is_imm8(insn_off))
-+		EMIT2(add_1reg(0x40, dst_reg), insn_off);
-+	else
-+		EMIT1_off32(add_1reg(0x80, dst_reg), insn_off);
-+
-+	EMIT(imm32, bpf_size_to_x86_bytes(BPF_SIZE(insn->code)));
-+	*pprog = prog;
-+}
-+
- static void emit_st_r12(u8 **pprog, u32 size, u32 dst_reg, int off, int imm)
+ static bool cmdline_contains(const char *pat)
  {
- 	emit_st_index(pprog, size, dst_reg, X86_REG_R12, off, imm);
-@@ -2250,49 +2290,28 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
- 			EMIT_LFENCE();
- 			break;
++	int fd, cnt, ret = false;
+ 	char cmdline[4096], *c;
+-	int fd, ret = false;
  
--			/* ST: *(u8*)(dst_reg + off) = imm */
- 		case BPF_ST | BPF_MEM | BPF_B:
--			if (is_ereg(dst_reg))
--				EMIT2(0x41, 0xC6);
--			else
--				EMIT1(0xC6);
--			goto st;
- 		case BPF_ST | BPF_MEM | BPF_H:
--			if (is_ereg(dst_reg))
--				EMIT3(0x66, 0x41, 0xC7);
--			else
--				EMIT2(0x66, 0xC7);
--			goto st;
- 		case BPF_ST | BPF_MEM | BPF_W:
--			if (is_ereg(dst_reg))
--				EMIT2(0x41, 0xC7);
--			else
--				EMIT1(0xC7);
--			goto st;
- 		case BPF_ST | BPF_MEM | BPF_DW:
- 			if (dst_reg == BPF_REG_PARAMS && insn->off == -8) {
- 				/* Arg 6: store immediate in r9 register */
--				emit_mov_imm64(&prog, X86_REG_R9, imm32 >> 31, (u32)imm32);
-+				emit_mov_imm64(&prog, X86_REG_R9, imm32 >> 31,
-+					       imm32);
- 				break;
- 			}
--			EMIT2(add_1mod(0x48, dst_reg), 0xC7);
--
--st:			insn_off = insn->off;
-+			insn_off = insn->off;
- 			if (dst_reg == BPF_REG_PARAMS) {
- 				/*
- 				 * Args 7+: reverse BPF negative offsets to
- 				 * x86 positive rsp offsets.
- 				 * BPF off=-16 → [rsp+0], off=-24 → [rsp+8], ...
- 				 */
--				insn_off = outgoing_arg_base - outgoing_rsp - insn_off - 16;
-+				insn_off = outgoing_arg_base - outgoing_rsp -
-+					   insn_off - 16;
- 				dst_reg = BPF_REG_FP;
- 			}
--			if (is_imm8(insn_off))
--				EMIT2(add_1reg(0x40, dst_reg), insn_off);
--			else
--				EMIT1_off32(add_1reg(0x80, dst_reg), insn_off);
--
--			EMIT(imm32, bpf_size_to_x86_bytes(BPF_SIZE(insn->code)));
-+			emit_st(&prog, insn, dst_reg, insn_off);
- 			break;
+ 	fd = open("/proc/cmdline", O_RDONLY);
+ 	if (fd < 0) {
+@@ -81,14 +81,15 @@ static bool cmdline_contains(const char *pat)
+ 		return false;
+ 	}
  
- 			/* STX: *(u8*)(dst_reg + off) = src_reg */
+-	if (read(fd, cmdline, sizeof(cmdline) - 1) < 0) {
++	cnt = read(fd, cmdline, sizeof(cmdline) - 1);
++	if (cnt < 0) {
+ 		perror("read /proc/cmdline");
+ 		goto out;
+ 	}
+ 
+-	cmdline[sizeof(cmdline) - 1] = '\0';
++	cmdline[cnt] = '\0';
+ 	for (c = strtok(cmdline, " \n"); c; c = strtok(NULL, " \n")) {
+-		if (strncmp(c, pat, strlen(c)))
++		if (strcmp(c, pat))
+ 			continue;
+ 		ret = true;
+ 		break;
 
 -- 
 2.55.0
