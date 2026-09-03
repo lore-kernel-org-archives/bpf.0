@@ -1,156 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A58431A3C
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 22:27:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F11712D7DCF
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 22:33:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788474439; cv=none; b=f8EbULFqDWGYO7y9NUQ9vWFhTBo2J1UtNRVbhTasfHKS7py6AaZKiIDBqVSmDHCJtLz9hG6DHtmzNr1N7jLiVPpcCHMHnP+LmDN6twy+v/GQGKaoqSqTT16mxpoa05rxnO8lFVn9iyncuC738Khjr/J2dJ5x+MrQtIwFspS/Yw0=
+	t=1788474798; cv=none; b=NcM2/Vh6AKVp6OTc0kKzIzSfOuCsLL/bopLHSyILw90pd6wAzKcMZkp4WxqntGqA65wJ545k6WCVi3I5gzn95Z+DFWIHu8/WiGDhNB02AwpXo18yzyaphLQ7dfvNAGmjTNwP6jbxHoRvQXsZvQ8DoACFQ+02zIYePbMQBMduEJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788474439; c=relaxed/simple;
-	bh=IQ6ss07CJCUuEauKZIYYS9wQYR/4ZHlxK/xYA1MRFMM=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=n2nThY152L0E8MqkLqM83yK9yBZ/exq6nbc+gWTB/qkxh5jNzmzE6csS8WAcNjGVC69QCuhbLIQpQPQSwOvljFtr4tcA3gv+UduSZS1TmDAn/bAbr9znOH3k/7fylfC0lTGTGuWCU2iAQsYzCoxQ25IHW/QLvbsLzJtP8IOvATc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dxsalH2n; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788474798; c=relaxed/simple;
+	bh=4c3nfHzx6sq9eUFKnQag6UKfPOIkWmaO1ykpU7H4aTg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EkeXXh9iIjPfI3HUEl+GUr9a327R3FqxtHZc2liSj212zKZeOS52m78lam3SyBiz9XQQH5wHIEoxBbxeXSSj8Xlo/PKHy16TB6nc/nKjC5/YSGom8FEC4q2FTvDss3//h8FLUwtLSLBV1FI0CiXBFxCy4X6qqrwamogrAtMm5Ak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FsHvcRhC; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dxsalH2n"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FF6E1F000E9;
-	Thu,  3 Sep 2026 22:27:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788474437;
-	bh=v2+RR4ITAUVGS3M7Sq+0HY0tpgJAlg9EIwwnz+eZrCM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=dxsalH2nxidAE7LDBKlLXiva91QQj7JqdtkeAMpk70Ppt/m+3L4dRVlyb0w2K/6BO
-	 DmVhIl2Tg2KBso56jEZSggxhFAJ5765mZySuY0g2DNed1rXnf3HCsuSmUFh9adCFf0
-	 q5oBOtUQCNr8vB/rhfFQYT7xF4TRba09vi/d/3dNhOEqa0GrL94tNAt0yuKRMMaJQm
-	 OTT51VDcRFBvYGyFAOAZmv1b3NGnt+AY9cfaYlX161fuqi/syNgmpwYW8cMW8xCM6s
-	 ZdKz859AC9Ozg4Ms3UDa/9kVG/hk08GzO0ZaAEK1OqoOzHpo8L/2DtKAgwt72XVWMZ
-	 0isQsnZavzWNw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 6.12.y] xsk: cache csum_start/csum_offset to fix TOCTOU
- in xsk_skb_metadata()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Suraj Jitindar Singh" <surajjs@amazon.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260903221130.27316-1-surajjs@amazon.com>
-References: <20260903221130.27316-1-surajjs@amazon.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 03 Sep 2026 22:27:16 +0000
-Message-Id: <20260903222717.3FF6E1F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FsHvcRhC"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cc1cf287ef8so427955a12.3
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 15:33:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788474796; x=1789079596; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=fsb6fC2BuVNqBfvyOr4NyKSsD45FGtfpTAVkgi/kym4=;
+        b=FsHvcRhCU6TMl+UeBx+bnI8iEyrnBLJwSmw9MOiZMDL29XawM5rsCzPt5uvYnfeCRd
+         VxMzbh+f/Q2YjF3tjclhwcCrez5bxpwNi+ODuX9ExQ9kfWQAjhj0CKHLgW76roI2rDKl
+         +Bnot7RxzAuGXtuPcLje3DjlYwFhqyU21vWhmqRI3S/U/IXncIUAKQ0oO0cUeBL+qiYq
+         WEOHWLinVimGVZhqVOZb8E/SC1kbn7fXkpq3USuc+lG57dj32GGkVg24WpiAfAeBI069
+         PnGalnKHaQyjpmO3Y/tlrVGVWV3mWWZI36WWV2wZnjlunR2MeRT0LiWqu1ky/vfizaYL
+         ek7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788474796; x=1789079596;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=fsb6fC2BuVNqBfvyOr4NyKSsD45FGtfpTAVkgi/kym4=;
+        b=bGEqaLibVWCTWCgzzmk9gAsoNLKDElAi1br6CRlQo2zSFMWicCn8n5a2wHwDuenxtc
+         iIIhPlfTTK7H0x/o/g3pJSEul6uzf8l333bT/oIcbGGSlgtvGBOP/1Chdq+3B4Hao8jc
+         mi+9vFu9TN967NM04i9ldgDIjsQlN8AAFyFIUVc5sUjyRiV+04WvHvZ2Kv4RSRzjR8Ed
+         PsaiVz7qmztZVHrv5t4+/+KwjsrRl+kqE/+1QYKFIhqqyCZXXWU7Jum9kjsYfChX16rE
+         eTwBUTghuJlJhI7pLgSII05oVC9RChKX4ou1zkjsmOhgL+M4WPlr/hRuC62fAK3WrgZL
+         1k8g==
+X-Forwarded-Encrypted: i=1; AKwUvBzyUONa/9bf1xU7XurLbd0JfsVaUdOoQwYFGgJ+hymLsBqvxC1ThowSuNhDBAmdNI9aGxM=@vger.kernel.org
+X-Gm-Message-State: AFuF++ku+KZrnzf3VGY9oh6pK9JnlMYcNFAS6wIlmVLrtE375JitA5hP
+	TKuFkROymIQzaFB9KbcYh/Rw8It+6Zd2vDNwoXPM2jAMB7PQD5MmuMJx
+X-Gm-Gg: AYBFou2NNnh7g0nydDB+/1krYdKvZnkGIFe0ldSmJ5di6xhaK/xrBrNGKDg5KyLptpg
+	AKH1TVv6htIMYY1aMz5Ep41R8z5p6qfiqw+BDCz3pWnWpJK6pm3MtNQhRgXWXlPtnzlNBOm+IpY
+	nrmpz2t1esGnJ+YCNTFgnTav49Jq/Gq0T/PS/vM+9Fxk+HPedXQjBZ6q9WlWx7pNhhWOc5yRs+9
+	s5+VABnJsl7Xnw78xfAFr85zJNVzXV4FcoeeBWOXHjXkU7tAF1mcB6G2HosdSklOWxZbmHtuN3Y
+	B+P9yBKqhEQmuNW5Qep/4yJgDavqrjT5lF8zg+8mtwdSqqraGx+92c+xgb4SlJfRaib+P6gM0ph
+	IANak1mV5N1UHmwYAyGnUVNCNSLHd36DrPrnisMxenD2tFCr6lPFf2nDgJEytj2LEtpUwrvr4Mr
+	Pz3k7Yp7T9T666OrqkkHgbgHm/hanRRj1BWDCPBatimC2Wzs/QVOEs8Gf7ElONylzUwe9HkkQBa
+	qCclEsr
+X-Received: by 2002:a17:90b:268f:b0:398:c3a3:dbd0 with SMTP id 98e67ed59e1d1-39b2612eb96mr2849147a91.8.1788474796180;
+        Thu, 03 Sep 2026 15:33:16 -0700 (PDT)
+Received: from devvm16600.scu0.facebook.com ([2a03:2880:9ff:73::])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3339a534d25sm1797152eec.5.2026.09.03.15.33.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Sep 2026 15:33:15 -0700 (PDT)
+Date: Thu, 3 Sep 2026 15:33:12 -0700
+From: Ziyang Men <ziyang.meme@gmail.com>
+To: Shakeel Butt <shakeel.butt@linux.dev>
+Cc: kernel-team@meta.com, Jens Axboe <axboe@kernel.dk>,
+	Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Ben Segall <bsegall@google.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Mykola Lysenko <mykolal@meta.com>, linux-block@vger.kernel.org,
+	bpf@vger.kernel.org, cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] cgroup: expose cpu.stat and io.stat to BPF
+Message-ID: <apn1qN+ic4A7elHD@devvm16600.scu0.facebook.com>
+References: <20260820211758.3393984-1-ziyang.meme@gmail.com>
+ <apX9KtGrmfA7u0zV@devvm16600.scu0.facebook.com>
+ <apisezhyZe_3vp0x@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <apisezhyZe_3vp0x@linux.dev>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
+On Wed, Sep 02, 2026 at 04:10:01PM -0700, Shakeel Butt wrote:
+>On Mon, Aug 31, 2026 at 03:16:10PM -0700, Ziyang Men wrote:
+>> Hi Reviewers,
+>>
+>> Just want to follow-up on this patch series. Please let me know the possible
+>> issues and I will fix them.
+>>
+>
+>AI bots have raised real concerns. Please address those and then resubmit.
+>
 
-Pre-existing issues:
-- [High] Premature checksum calculation for multi-buffer AF_XDP packets.
-- [High] Incorrect error recovery on `-EOVERFLOW` leads to packet fragmenta=
-tion and garbage transmission.
-- [High] Integer overflow in `skb->csum_start` leads to negative checksum o=
-ffset and memory corruption or IOMMU faults.
---
+Hi Shakeel, 
 
-commit 82f4b9c7cad6fc646be8342f727421a308e35ec1
-Author: Jason Xing <kernelxing@tencent.com>
+I have reviewed the AI bots suggestions, and it seems the main issue is to
+decide whether we want some kfuncs to be NMI safe, e.g., 
 
-xsk: cache csum_start/csum_offset to fix TOCTOU in xsk_skb_metadata()
+	- The `bpf_cgroup_base_stat()`, which calls the `cputime_adjust()` and in turn
+	  acquires `raw_spin_lock_irqsave()`.
+	- The `bpf_cgroup_css()` and `bpf_css_release()` to get/put the css.
 
-This commit fixes a time-of-check to time-of-use vulnerability in the AF_XDP
-transmit path by caching csum_start and csum_offset in local variables. This
-ensures userspace cannot race to overwrite these values between bounds
-validation and assignment, preventing potential memory corruption.
+The simply solution is to mark them SLEEPABLE.
 
-Closes: https://lore.kernel.org/all/20260503200927.73EA1C2BCB4@smtp.kernel.=
-org/
-Link: https://patch.msgid.link/20260530042630.80626-1-kerneljasonxing@gmail=
-.com
+Hi Eduard, what's your idea about this? Do we want to mark them SLEEPABLE or there
+are better ways stand in the mid?
 
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index da7e11e3bfad2..76675ce70f03d 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-[ ... ]
-> @@ -733,15 +734,17 @@ static struct sk_buff *xsk_build_skb(struct xdp_soc=
-k *xs,
->  			}
-> =20
->  			if (meta->flags & XDP_TXMD_FLAGS_CHECKSUM) {
-> -				if (unlikely(meta->request.csum_start +
-> -					     meta->request.csum_offset +
-> +				csum_start =3D READ_ONCE(meta->request.csum_start);
-> +				csum_offset =3D READ_ONCE(meta->request.csum_offset);
-> +
-> +				if (unlikely(csum_start + csum_offset +
->  					     sizeof(__sum16) > len)) {
->  					err =3D -EINVAL;
->  					goto free_err;
->  				}
-> =20
-> -				skb->csum_start =3D hr + meta->request.csum_start;
-> -				skb->csum_offset =3D meta->request.csum_offset;
-> +				skb->csum_start =3D hr + csum_start;
-
-[Severity: High]
-This is a pre-existing issue, but does this calculation overflow the 16-bit
-skb->csum_start field?
-
-On architectures with a 64KB page size, if userspace provides a csum_start
-value close to 65535, adding hr (headroom, e.g., 64 bytes) could exceed the
-16-bit maximum and silently wrap. Later, when skb_checksum_start_offset(skb)
-subtracts the headroom, this could result in a negative offset, causing
-out-of-bounds memory accesses into the headroom or hardware DMA faults.
-
-> +				skb->csum_offset =3D csum_offset;
->  				skb->ip_summed =3D CHECKSUM_PARTIAL;
-> =20
->  				if (unlikely(xs->pool->tx_sw_csum)) {
->  					err =3D skb_checksum_help(skb);
->  					if (err)
->  						goto free_err;
->  				}
->  			}
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does this compute the
-software checksum prematurely for multi-buffer packets?
-
-When a userspace application requests XDP_TXMD_FLAGS_CHECKSUM along with
-tx_sw_csum for a multi-buffer packet, xsk_build_skb() appears to compute
-the checksum over only the first fragment by calling skb_checksum_help().
-
-Since subsequent payload fragments are added later, the final packet would
-be transmitted with an invalid checksum covering only the first fragment,
-leading to silent packet drops at the destination.
-
-[ ... ]
->  free_err:
->  	if (first_frag && skb)
->  		kfree_skb(skb);
-> =20
->  	if (err =3D=3D -EOVERFLOW) {
->  		/* Drop the packet */
->  		xsk_set_destructor_arg(xs->skb);
->  		xsk_drop_skb(xs->skb);
->  		xskq_cons_release(xs->tx);
->  	} else {
-
-[Severity: High]
-This is a pre-existing issue, but does the error recovery path for an
-oversized multi-buffer packet desynchronize the transmission state machine?
-
-If userspace sends a multi-buffer packet exceeding MAX_SKB_FRAGS, this path
-correctly clears and drops xs->skb. However, because it doesn't signal the
-caller to skip the remaining descriptors of the dropped packet, the next
-descriptor (a middle or tail fragment) is processed with a NULL xs->skb.
-
-Will this cause the fragment to be incorrectly treated as a new packet,
-leading to raw payload fragments being transmitted as garbage?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260903221130.2731=
-6-1-surajjs@amazon.com?part=3D1
+Thanks,
+Ziyang 
