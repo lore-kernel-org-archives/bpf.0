@@ -1,77 +1,76 @@
-Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
+Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749724BB5BF
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 14:44:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C894B66DE
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 14:44:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788446684; cv=none; b=VKhcmoi/g4a6szgfwD6wyv0cRf8FolYX+8M2Fb9uAKevJ+8wwaU9Yf8QMz5XMUgDwArwQsGfhg8dLifWZPFaVwbbBviQfsfcoxBycEoKX4WafF5bQZDFSBBN/dmHaUKzZztaHv3QCTNcyHpMcVuT/ge7+yiN0ocWcrb14VnpyLo=
+	t=1788446685; cv=none; b=mchs8sFftaUwWdckFfWyD4h9915bqS9+dxcdnI8dCPCYj9DsrcZFdV4X0346+KnkFAA4mLedQKlXU530QsblqiYGDq9snYNzGycKuv38XVPw5paZYzvEObNBKS+lkV+RW0aFRyB6lkgwt799ars/VyhzU6Be+DvYhIb7OcYosm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788446684; c=relaxed/simple;
-	bh=CLMyV4Q+xmelqsbypbkxqvm+TLdeTFKmu0iBp3AHWb4=;
+	s=arc-20240116; t=1788446685; c=relaxed/simple;
+	bh=yHsz7B5Uuw0+7sQmMpTLoNABbZIVgWLQzH0MH/Ul9pE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RHXJ84v80lc68tx1rW0rSHE2qNhBFyXLFTZOTBFum0mnPXNgeMutG7CHgsxYQtpW2eo8i8lUHMmqjeTR/l0RG1/kd/4JSX6mGdjY8FFb771rzCJWGjAllydbXUgx4MUv/2Zn7vw1ZWKqC1zc+2Gq/5VqSqZxw3tjuu/Maw1HOZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AdlWs0fg; arc=none smtp.client-ip=74.125.225.138
+	 MIME-Version; b=JB2Y9K6Vkr+wN+XD8E6w12/GQNBgncsckD2Ckl0JGJGMEjbEVGKpXp0anFOubEpxD5lCkTtIgIVwvK6rHNgLVJNJDNil7QQrcxARPAsk82IzlfTBu6uvlYTvvMcQN06dc0I4ingsCy1YfW01GXPVlwbnRgrVkzNhKVDvZ/UyuS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TJaUh1JL; arc=none smtp.client-ip=209.85.221.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AdlWs0fg"
-Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-495501e57beso7760155e9.1
-        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 07:44:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TJaUh1JL"
+Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-4843e397f74so1606268f8f.1
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 07:44:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788446680; x=1789051480; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788446682; x=1789051482; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=NdaXSpttLhygDCWQxix7LiuXex/gDXEYiHMoCaYDypg=;
-        b=AdlWs0fgEPCxMd0SJWR27EYUqNsh5roxMBIQISfUt3ThyoYUwappEIgKUDqk91BvGI
-         z+q5ch2KYT+w7ZsBJKu6SYUeOkdk9qArQ4dQOK1zDX6+H04ddYZyOH+os8bR2oiSETKv
-         EVvkz+sZC1YhTXxI68DPjnOeRas7XpcdG/EjApk/xC9u3cmHqUCwenF5tC94RJCg4B7U
-         C54HFSWAEv6eSwgoKaaTkoyB+Hh2zDvIOMxoohZcVYIX/mMyBV4Hwp15OVzAlBfCgxFr
-         3fY4JXlGrzUd39iKsLoiuUNvjEuZY57sEjv6Ddlx8EKHK9rbs5vQRxG3U3G85QthGRgS
-         l38A==
+        bh=88RRJqmeibUWQIvrVY+5aTETnD9Ncf56HIg8fRO2HEs=;
+        b=TJaUh1JLxCdoPdwpplZps7kIS15fX8768BIjo1qGMrZaBiw4BWxtZCKxPCi6tDcO0C
+         JZCtSnuKSMFVMODANFa1KpBQHlsgmxoxdsBfkeiTk87UvmzIE+Gt62+c0ioSokDbWunZ
+         cQXN2Cn/OQxpr2KFCHR+ON6VbG4jTvrZaaf3qmvsxOoMrswRS10gLKH3yQ4PxFcacCwm
+         XTfITnxQdHMkIlOEd6rbfMs548Pv0aEywSPzdGfwpUCPLLalpWXomyFqx/AQ5Q13pKFY
+         yikuhShYJ+hi/CwcnvhmLyat/hP6i7apORGuXHesa5oI8HlKoZ4tdoU0Poel3u/RFT7C
+         XdUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788446680; x=1789051480;
+        d=1e100.net; s=20251104; t=1788446682; x=1789051482;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=NdaXSpttLhygDCWQxix7LiuXex/gDXEYiHMoCaYDypg=;
-        b=FR3Eo7airOVJqLX2Zv009OzVQVxPcGza/MpDKEZmUZexaZUiime29O5FqonldOI2Vm
-         LKJjurtp8BZjWSv67lAE/PCu7O18fGpZdpVgfLo2+HuAGyFubXBlGVg3u/61MWpAD9II
-         KlSGPgI179eUEKhxGlXBagkIxrkmQB0/PgUPHSkL2Ty4r2JTF0FtekCsNYPFYc1Wzu9f
-         jCnZBeLxnYQajxRUu0CTmDNoi70mT61vvWxvunDnJPhY8RZFnZLi8DT9NqMUeAYp0bIg
-         WLGFa8E+Ar71DfX+5PLctwKpY7quQhrTdFKAuReouBqcVcN+fM0gn+/hBEgPznxjo2wX
-         148g==
-X-Gm-Message-State: AFuF++niXyIIfllZoRQx2eAEQSWciGVei3kiXTiQLdDtpFUDJQFAlaPX
-	hTUhzALTU5FzQNee85WNNRxgJg3Svz3xcRsYy2AKHqh2neq/gNvun+xsLD8NQ03d
-X-Gm-Gg: AYBFou24SQoLFFG8DB89UiYIE/tcZkTaYN1Mkw+O0dxnmBQJjajP/K15Uvma8JcLesZ
-	c2G8D3GmeSTwrDmodTe26dw9nKXFefGIleFzb7njj5fRY3NUKHCnCwNg1QC1RzPoaE1k6MpcVx+
-	IpmIswBSop7lXOZfdJSq/2BNVaVYcl61kWrvjjFFpdm/ZjnHrUIalk0uMiMHy2PtIOAUefZoz90
-	81YXZTeX8kfTF1R3KFXVzqW/mFGXMtgrx+kJ97s0bCH+ofwt5nNAx0m/HAYK0DeGOtXgoo+IRHS
-	xtfcjM4ilH+d8n+hH1ipwDp78qPyW8UY3BKEW04KfcGB1TxzPExdhgPUc50N4K7mL42q8g6kQzi
-	IHj95TXH3Ye+f4NdH+QJ1kVXLj5JlOMWQj4iKWUGt8CuFMHnai3Qd167PyZJ4iHNMfQzoq0sI3Z
-	BJ7d85RR3Mqgtoifu3LuCo1kKjpcTgiKJc3ynQig+or3RzNBenwFQ+K1cwxmi6C9oKJVC4mjPxU
-	wUXmg7i9vId54oeO9iDWcT8UVIHNM11UVgOSz6MKsNiASnVNTDU2MwG+cG8Yk0P9fLw2sJ9XtYG
-	SOw8zp95RM6iSbozpN8e86q2/jA=
-X-Received: by 2002:a05:600c:620e:b0:499:51f0:a9b2 with SMTP id 5b1f17b1804b1-49cf5b9aac4mr12334035e9.1.1788446680178;
-        Thu, 03 Sep 2026 07:44:40 -0700 (PDT)
+        bh=88RRJqmeibUWQIvrVY+5aTETnD9Ncf56HIg8fRO2HEs=;
+        b=Gh2Zol5/y5pjLV2MLvgCy905z7P+87sydq9wfJn1n4VLu8EEDipt1FqZgDwZgsUK3I
+         tRB2R2XUO4RHjEWDORC7Uko1xwA1OKXlHI76xO2s9DLoJahWfYQByC7YcvjZp2Ppydlc
+         QMkRuUo2KpEm4WQvAVa7akswfOd30pQgtXUvvfd+HPislev4kUyGZSReRvGYLeuAjXnX
+         X9rw75GkEDsH6wdbDzq/In26aQsZE+1GOTjyYZydjmxxrUY5Qoy54LMlRkZ3WH334qvx
+         UVXMQiv/MbdE0f5vRHiw1ctg+vWFqLJtsWdlDCQJIjeVj4qwaqAhxAs11vJXfEah07i/
+         NQkw==
+X-Gm-Message-State: AFuF++mY9GV8xxfPkzf3ykuavYV/Q0HxmmR+V2E01U2UqNXvsxsVngUc
+	o9QI/GR4hhZwx5WiUpyMzvPKW8tFhQyCHqr2AVPcizriVCQUmODD72+RUwSLAl6B
+X-Gm-Gg: AYBFou32/KBmNMJqTEqNSGcb1Lz3BJBBcAGyTDFsxXC8gSz2lNt6VAZ5oqiR2AIJbd3
+	akJ3a/qg7eUt8FXHr4A6phmN/yvvM1TwIU/CsHpLNybJ2Tq4JMC7vYEH0f3dwHs008L1rFeXMiu
+	2kqyr4bTt1J0O0uV4Dsw6tAMlEBEWcbLsNFwWKQdkevAi8YrwiHHhculq4iFA87zeXT+utcYb5f
+	VTngc2+3EgdRsrvbsLToxqtVY7Frc3m792WNcjpaNjIuHQ9ejFow6gzKraewGdzMJwXFheS80gv
+	iA8Wm28B/prI4kpbLXgNV+aGv6ON4TO46OrFFdU0+OzYr/CChk/V2xAo+Cszjl5DKTRlPa+cwwh
+	DNt+cNOZyEojQbBGVEYf4A/81iP5qid45FwzBZdDoXqhI1q7bwcA5Mjh1SBKajPIEr3adwoDHpJ
+	9zB2+Gl6ChNnbVefeGwW5+++0UZtzOir2aLqHGoCjURMd2/Xvf7PaKdAqBlmDd3ab5saPyjVgPE
+	l0xBBHThFvhmpm0hSPDiwAtwIxei2yKvldxcF1RKfDNRAsepfKt97pkEi8R7qVsFgXuDXqQSiQC
+	3H14rNpytmMyhSKdy9yvkKJ5YDI=
+X-Received: by 2002:a05:6000:25fb:b0:485:8226:c699 with SMTP id ffacd0b85a97d-4858226c9a7mr5416798f8f.24.1788446682085;
+        Thu, 03 Sep 2026 07:44:42 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cee5f912esm76657115e9.4.2026.09.03.07.44.39
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48448e80388sm16028761f8f.14.2026.09.03.07.44.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2026 07:44:39 -0700 (PDT)
+        Thu, 03 Sep 2026 07:44:41 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Nicholas Carlini <npc@anthropic.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf v1 03/10] bpf: Reject tail calls directly from callback frames
-Date: Thu,  3 Sep 2026 16:44:21 +0200
-Message-ID: <20260903144433.1716731-4-memxor@gmail.com>
+Subject: [PATCH bpf v1 04/10] selftests/bpf: Test direct tail calls from callbacks
+Date: Thu,  3 Sep 2026 16:44:22 +0200
+Message-ID: <20260903144433.1716731-5-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260903144433.1716731-1-memxor@gmail.com>
 References: <20260903144433.1716731-1-memxor@gmail.com>
@@ -81,57 +80,57 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2150; i=memxor@gmail.com; h=from:subject; bh=CLMyV4Q+xmelqsbypbkxqvm+TLdeTFKmu0iBp3AHWb4=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtm8wTh4xPFdY13HdZaXJdibjDxoqha/qH8Rh8Vj+rXR 7Or/+zuKGFhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwET2sjD89y1ZnivAup3r03PR jVf/zpSomC+x5Lij3rQdv3hYWdvltjD8uHf6VIrjtOUTG7n/mjgYfL3fPPFSiItC/wk1vq8Vy+L 4AA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1744; i=memxor@gmail.com; h=from:subject; bh=yHsz7B5Uuw0+7sQmMpTLoNABbZIVgWLQzH0MH/Ul9pE=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtm84Q1OwqqN56+PVfn2qToTW1bYv/VBWzjUmB6O+uq0 Gz/L48EOkpZGMS4GGTFFFlK/u9jMj5R+TvQdhk3zBxWJpAhDFycAjCR8I8Mf2Vu3Vut6m9ZOr3p RElAsLHGlE3vXujpeMYGpk5NFfoU9Zfhr/S0Ftt/pzdp8PoE83OszlnvuzO+Wnx78Hupr8d/LjC +xQUA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-A tail call from a non-zero frame is modeled as a return from that frame.
-The verifier makes R0 unknown and calls prepare_func_exit() for the taken
-branch.
+tailcall_callback tests a tail call one static subprogram below a callback.
+That reaches the later stack-depth rejection, but it does not exercise the
+tail-call helper while the current frame is itself a callback.
 
-When the current frame is a synchronous callback, prepare_func_exit()
-enforces the callback return-value contract and marks R0 precise. Since the
-tail-call path synthesized R0 rather than deriving it from an instruction,
-precision backtracking reaches the callback-calling instruction with R0
-still requested and triggers the "callback unexpected regs" verifier bug.
-A CAP_BPF task can therefore cause a WARN and an -EFAULT BPF_PROG_LOAD.
+Add a callback that calls bpf_tail_call directly and expect the existing
+"cannot tail call within callback" diagnostic. On an affected kernel, the
+load instead reaches the "callback unexpected regs" verifier bug, so the
+expected message is absent and the test fails. The existing ordinary
+subprogram case remains a success control for legitimate tail calls.
 
-Tail calls reachable from callbacks are already rejected later by
-check_max_stack_depth(). Reject a tail call made directly by a callback
-before constructing the inconsistent return state, using the existing
-diagnostic. Tail calls from ordinary subprograms keep their current
-behavior.
-
-Fixes: e3245f899043 ("bpf: properly verify tail call behavior")
-Reported-by: Nicholas Carlini <npc@anthropic.com>
-Suggested-by: Nicholas Carlini <npc@anthropic.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/verifier.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ .../selftests/bpf/progs/tailcall_callback.c      | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 7d8ddb1bee00..f540279ff4ab 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -11228,6 +11228,17 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		if (env->cur_state->curframe) {
- 			struct bpf_verifier_state *branch;
+diff --git a/tools/testing/selftests/bpf/progs/tailcall_callback.c b/tools/testing/selftests/bpf/progs/tailcall_callback.c
+index c41632cf423b..14fa7a87028e 100644
+--- a/tools/testing/selftests/bpf/progs/tailcall_callback.c
++++ b/tools/testing/selftests/bpf/progs/tailcall_callback.c
+@@ -44,6 +44,13 @@ int callback_loop(int index, void **cb_ctx)
+ 	return ret ? 1 : 0;
+ }
  
-+			/*
-+			 * A taken tail call is modeled as a return from the current
-+			 * frame. A callback frame cannot be left that way because
-+			 * prepare_func_exit() would apply its return contract to the
-+			 * unknown R0 synthesized below. Stack-depth validation rejects
-+			 * this construct anyway.
-+			 */
-+			if (cur_func(env)->in_callback_fn) {
-+				verbose(env, "cannot tail call within callback\n");
-+				return -EINVAL;
-+			}
- 			mark_reg_scratched(env, BPF_REG_0);
- 			branch = push_stack(env, env->insn_idx + 1, env->insn_idx, false);
- 			if (IS_ERR(branch))
++static __noinline
++int callback_tail(int index, void **cb_ctx)
++{
++	bpf_tail_call_static(*cb_ctx, &jmp_table, 0);
++	return 0;
++}
++
+ static __noinline
+ int callback_empty(int index, void *data)
+ {
+@@ -78,4 +85,13 @@ int tailcall_callback_2(struct __sk_buff *skb)
+ 	return 0;
+ }
+ 
++/* callback with a direct tail call is rejected without a verifier bug */
++SEC("tc")
++__failure __msg("cannot tail call within callback")
++int tailcall_callback_3(struct __sk_buff *skb)
++{
++	bpf_loop(1, callback_tail, &skb, 0);
++	return 0;
++}
++
+ char __license[] SEC("license") = "GPL";
 -- 
 2.53.0
 
