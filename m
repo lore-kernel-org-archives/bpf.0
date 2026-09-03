@@ -1,186 +1,191 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4480F37BE80
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 20:18:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE45C435501
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 20:58:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788466718; cv=none; b=Wwdh5iXcxyL1hc2+xKEf0Tzq5W0DDWPHv+p986lF1oK25km1VnuZ48EiWSdYmZFcnab4RJd+JgrdkRdHF6lEq/Xue7/j0+4u9fxfIHgTeP2ET8Au8OxC3RrC+JVvUf5uFW/JmgPDVQ0lYHueSBqfl9f0S0UIdWUGRKc7HsfVyPM=
+	t=1788469119; cv=none; b=ZiTTmtyIxeqrwoFcuxiO2ajNcuAaLR4yFTEUm0WP7SO/5FebpXFwXyF4Vh1h6UJQeCby0hGrNgjo2Tpy43FgBg+cFZE2AhhamFfC0yfHt0P4pKV0/hLMOTXzexyHtFF/aWKWCimoCU4eifu8os69aptjeBdetWcmYFY4QpH6og0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788466718; c=relaxed/simple;
-	bh=y4bzWxHG6b76ZuARi4J766aLlg3aIIx5AlErwuBgGM0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pNXIA6BRxmHjrn56iKgEhuQJakdyam61Wna4AijHfZXDa34VjPM70QXosFzrVy1aOyrmWpkoUcJv502mosoEB6D4JQrwRGssYxpF2s+9eDbsTj8EcO8SJZ8QT6XSwVMnQoh3FovcP/4PRYmnrNgrbDQMi4X46RGnMsfQO9lqFnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G8gtPOfg; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788469119; c=relaxed/simple;
+	bh=7Xphu41X/kOQdxAlYCSgWGvf5hD3yL0DovtxTWwjWAY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=T9GReL1ydFIBgtz8ONDgvAFbGhd6WXXhSDopxy9/FYgvFRSqJZ7xBWvI64N5t8RO7n1hGvJ1qhERfGrvm3dFi+EaM/ZmuO58wl8/44ch9u1Lwt+0Y7d2jcU4s1z+7O9xvKxtLozNpsDbEQojvwoHqvcFB5kmY6OS4uGTjtsILdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=s+RvXaed; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G8gtPOfg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5834A1F00A3D;
-	Thu,  3 Sep 2026 20:18:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788466706;
-	bh=75QhO10cI1+JOlBaaHdkilNnYbGoWEmUtX4ABWYL+x0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=G8gtPOfg5lJmDv8YpsrytxCH2WhLvh3stXEN7pGR02vHGoaJvqgEJDASIatU16WCe
-	 n2LXbxQa3LjAB6iQsuXEiIq/16MEQJhzwG5eGqXe7zbbAjF4Rdf7LiQRAFIyrWemBk
-	 BNoHTh5XaDmuDdnUdZ1isKn0fpa+I0BlcCJoZYcnwdDfeBwlwxTDh8R1IwejE6mNpd
-	 c7KJWK9zYCrqs3NP6vYLSJYAfeak8sFdhZYmAaNXuH1fFmNNGoxYwGG7E8N51HcoIE
-	 NXzLU4TQt0vzG1HmEe+Y902NWRzJ6ZG+wvRJMW+eg/zCFaOf/+1RU/HZ7BKdOGFEFQ
-	 OBXSjlap4PxKA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v3 4/4] net: stmmac: re-apply taprio offload in
- __stmmac_open() and stmmac_resume()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Lorenzo Bianconi" <lorenzo.bianconi@oss.qualcomm.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260902-stmmac-est-reapply-after-open-v3-4-e72a6df5a7ef@oss.qualcomm.com>
-References: <20260902-stmmac-est-reapply-after-open-v3-0-e72a6df5a7ef@oss.qualcomm.com>
- <20260902-stmmac-est-reapply-after-open-v3-4-e72a6df5a7ef@oss.qualcomm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 03 Sep 2026 20:18:25 +0000
-Message-Id: <20260903201826.5834A1F00A3D@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="s+RvXaed"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3965d3d9ab8so192852a91.3
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 13:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788469110; x=1789073910; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=rsMyDrWjLkdY3BQwnMyVLNCXejLL4InSybKjHlGj5Pw=;
+        b=s+RvXaedsBND2wM/9DPCTOeVJmxQS27OIWmxVVBsRfPPresUpT4IaTwr4hMlnuyD/X
+         LsS7y+0B/+BIKOzu64mQBodsL5NmytUJWG1UzjXtt/F9oW1ZT1/fpjQHWA+yQeSW+BEi
+         BLLm8gbmKOKbH3KeAY5+qhBYWT6mzdGs3oe1S9QSbVYK5Pu+6emOV7H7v9KSMIR7ufBS
+         6FNVeTdF9HrVFdbi+y1uFE691yKIiRRzLlXWMgbUFvYUGQEjJmS8OEYxYuKKgZ66tncu
+         SKK2NlUos+lyK25YftOdrUZhjOpZXZ3WxTcmGESNDdeRVRDkDVIZ+Uad3MVDenE3kste
+         OLiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788469110; x=1789073910;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=rsMyDrWjLkdY3BQwnMyVLNCXejLL4InSybKjHlGj5Pw=;
+        b=a/VyVyeQOI+pqC5b01kid7rjDMH1Y4GxtmCrEgA/yCnZXcWXrDkwIO/Dgc6FnA5bms
+         MYNwwGqQzwwclQJ+vwQwmkuBqET7aXxUiNO0L4GB5DIaR2V3JU4Na0sPwhYM7JqcTJ3t
+         m5FJKOv6uodPAOB7Qag6c4aovFoTLTErUBtKalisSop7tm3rMnh09c2d0VOI/N3yJDaI
+         5D3RiZ3n65Ft4HaYcH9MpnQl1Fz3o25kDGx7kLKOmCBzoTjgbaPBCDZwoIWpr09ql+E4
+         X+qZN7sF/MjIQPuYdAeBrlymYUu9bOXDk8ZkG9iepax1RqP2Jc8QCG69gmGUe4yShU3J
+         CpBw==
+X-Gm-Message-State: AFuF++ku3DqJJbvWQm+5MiJs0kzwLpfAueE4kogQCInXhbGLWM9gsDyi
+	eJ00VGQQw4G9ysmMzoRvFoyYGV7fgYlmxe2c/YVIyQecQ5hk1PFAE2JrPxNDag==
+X-Gm-Gg: AYBFou0V5DgbmvfOtrGCoTjXQiz9h3QE1vAW0jLnCV4UEVBBTxcxd/uIp3NYj2Gr/hb
+	ZCs7j/KHQbbjVLqpNYU1/9QCjZ78P49CYlwyuACxvaSZf/+yn3T5XJ/N2Sj697IyBUn20oOC69I
+	QgazGAr106zoxdBOIZcpIertlklMKkNZTGMRklyN3oQ06EB6mKA7SHKsAjY+WKamFeY20Tz/Ror
+	VVodVBI92g8IOokMuyTNGRDdBr1V/CvWLmIJawkNJVSfctu27u8jAQ1fSpMv2++D9xnVgXpMKzP
+	w00MfJyVkX2+P4Y4iwEdknkXDbGTR9lCWhIn/wtQ0ErruDhv3ia8DAFAlLSs91MQ5c+y1zGlJkY
+	xGfu5/u1KmoZJ9YAoejVXKYa2KVKXTJLwbZFSDdUs9/jY30SLFblgSSN8azIrD/eYKGEf/EfCiE
+	kpk78+5Kj9gsQIZqr43m1qY4XFmZrN0NMpCKCggn88cvJMTQu+d9sUWP4uCrImFN7yiV7mwZycj
+	XgjM0PL4IQZHacqKyu9YGz1yvEGcxwEkquJsgGstc1XAg==
+X-Received: by 2002:a17:90b:2687:b0:398:9c0c:7c71 with SMTP id 98e67ed59e1d1-39b26277b88mr1880180a91.24.1788469109690;
+        Thu, 03 Sep 2026 13:58:29 -0700 (PDT)
+Received: from ezingerman-fedora-PF4V722J.thefacebook.com ([2620:10d:c090:500::6:dba3])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-333959d5f69sm1383588eec.0.2026.09.03.13.58.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Sep 2026 13:58:29 -0700 (PDT)
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	andrii@kernel.org
+Cc: daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	kernel-team@fb.com,
+	yonghong.song@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	npc@anthropic.com
+Subject: [PATCH bpf 1/2] bpf: don't rewrite bpf_fastcall patterns entered by a jump
+Date: Thu,  3 Sep 2026 13:58:19 -0700
+Message-ID: <20260903205820.1743087-1-eddyz87@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+mark_fastcall_pattern_for_call() must ensure that matched
+"spill; call; fill" instruction series is not interrupted by a jump.
+Otherwise the rewrite applied by bpf_remove_fastcall_spills_fills()
+is not sound.
 
-Pre-existing issues:
-- [Critical] Calling `tc qdisc add dev <eth> parent root taprio ...` when t=
-he interface is down causes a system crash due to uninitialized locks and d=
-isabled hardware clocks.
---
+Record the instructions targeted by jumps in
+insn_aux_data[*].jump_target when the CFG is built and use this flag
+to stop growing a pattern at such an instruction. Jumps to the first
+spill are fine.
 
-commit f82312d096c2ce72658ffac1182f1169293623b9
-Author: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+Note that existing insn_aux_data[*].jmp_point field can't be reused,
+as it marks subprogram return instructions.
 
-net: stmmac: re-apply taprio offload in __stmmac_open() and stmmac_resume()
+Fixes: 5b5f51bff1b6 ("bpf: no_caller_saved_registers attribute for helper calls")
+Reported-by: Nicholas Carlini <npc@anthropic.com>
+Suggested-by: Nicholas Carlini <npc@anthropic.com>
+Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+---
+ include/linux/bpf_verifier.h | 12 ++++++++++++
+ kernel/bpf/cfg.c             |  3 +++
+ kernel/bpf/verifier.c        |  8 ++++++++
+ 3 files changed, 23 insertions(+)
 
-This commit re-applies the taprio offload in __stmmac_open() and=20
-stmmac_resume() after PTP is up because a core soft reset clears the=20
-MTL_EST registers. It introduces a new __stmmac_setup_est() utility=20
-routine to handle the hardware schedule configuration, updating how=20
-tc_taprio_configure() applies these settings atomically.
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 5fad59fdab0d..1339c2f028db 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -706,6 +706,8 @@ struct bpf_insn_aux_data {
+ 	 */
+ 	u32 calls_callback:1;
+ 	u32 indirect_target:1; /* if it is an indirect jump target */
++	/* true if some jump or call instruction targets this instruction */
++	u32 jump_target:1;
+ 	/*
+ 	 * CFG strongly connected component this instruction belongs to,
+ 	 * zero if it is a singleton SCC.
+@@ -1142,6 +1144,16 @@ static inline void mark_jmp_point(struct bpf_verifier_env *env, int idx)
+ 	env->insn_aux_data[idx].jmp_point = true;
+ }
+ 
++static inline void mark_jump_target(struct bpf_verifier_env *env, int idx)
++{
++	env->insn_aux_data[idx].jump_target = true;
++}
++
++static inline bool bpf_is_jump_target(struct bpf_verifier_env *env, int insn_idx)
++{
++	return env->insn_aux_data[insn_idx].jump_target;
++}
++
+ static inline struct bpf_func_state *cur_func(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_verifier_state *cur = env->cur_state;
+diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
+index 0f13c13f4133..842c7d1eabcc 100644
+--- a/kernel/bpf/cfg.c
++++ b/kernel/bpf/cfg.c
+@@ -125,6 +125,7 @@ static int push_insn(int t, int w, int e, struct bpf_verifier_env *env)
+ 		/* mark branch target for state pruning */
+ 		mark_prune_point(env, w);
+ 		mark_jmp_point(env, w);
++		mark_jump_target(env, w);
+ 	}
+ 
+ 	if (insn_state[w] == 0) {
+@@ -403,6 +404,7 @@ static int visit_gotox_insn(int t, struct bpf_verifier_env *env)
+ 		}
+ 
+ 		mark_jmp_point(env, w);
++		mark_jump_target(env, w);
+ 
+ 		/* EXPLORED || DISCOVERED */
+ 		if (insn_state[w])
+@@ -564,6 +566,7 @@ static int visit_insn(int t, struct bpf_verifier_env *env)
+ 
+ 		mark_prune_point(env, t + off + 1);
+ 		mark_jmp_point(env, t + off + 1);
++		mark_jump_target(env, t + off + 1);
+ 
+ 		return ret;
+ 
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e64035683795..fad774890953 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -17631,6 +17631,10 @@ bool bpf_get_call_summary(struct bpf_verifier_env *env, struct bpf_insn *call,
+  *   r0 = *(u64 *)(r10 - 8);             r0 += r1;
+  *   r0 += r1;                           exit;
+  *   exit;
++ *
++ * Both uses of the marks assume that a pattern is entered at its first
++ * spill and thus executes as a unit, hence a pattern is not grown past
++ * an instruction targeted by a jump.
+  */
+ static void mark_fastcall_pattern_for_call(struct bpf_verifier_env *env,
+ 					   struct bpf_subprog_info *subprog,
+@@ -17669,6 +17673,10 @@ static void mark_fastcall_pattern_for_call(struct bpf_verifier_env *env,
+ 	for (i = 1, off = lowest_off; i <= ARRAY_SIZE(caller_saved); ++i, off += BPF_REG_SIZE) {
+ 		if (insn_idx - i < 0 || insn_idx + i >= env->prog->len)
+ 			break;
++		/* stx/ldx/call must not be a jump targets, a jump to the first stx is fine */
++		if (bpf_is_jump_target(env, insn_idx - i + 1) ||
++		    bpf_is_jump_target(env, insn_idx + i))
++			break;
+ 		stx = &insns[insn_idx - i];
+ 		ldx = &insns[insn_idx + i];
+ 		/* must be a stack spill/fill pair */
+-- 
+2.55.0
 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_est.c b/drivers/n=
-et/ethernet/stmicro/stmmac/stmmac_est.c
-> index f15d4d046aa74..49edfebbc39e0 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_est.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_est.c
-
-[ ... ]
-
-> +int __stmmac_setup_est(struct stmmac_priv *priv)
-> +{
-> +	struct timespec64 current_time, time;
-> +	ktime_t current_time_ns, basetime;
-> +	u64 cycle_time;
-> +	int err;
-> +
-> +	lockdep_assert_held(&priv->est_lock);
-> +
-> +	priv->ptp_clock_ops.gettime64(&priv->ptp_clock_ops, &current_time);
-
-[Severity: Critical]
-This is a pre-existing issue, but since the hardware access is refactored
-into this helper, it highlights a crash if called when the interface is dow=
-n.
-
-If tc_taprio_configure() is called while the interface is down, it reaches
-here and invokes the gettime64() callback. The stmmac_get_time() function
-attempts to acquire priv->ptp_lock. However, rwlock_init(&priv->ptp_lock)
-only occurs in stmmac_ptp_register() during __stmmac_open().
-
-Does this code trigger a panic (e.g., on PREEMPT_RT or with PROVE_LOCKING)
-because it uses an uninitialized lock when the interface has never been
-opened?
-
-> +	current_time_ns =3D timespec64_to_ktime(current_time);
-
-[ ... ]
-
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_tc.c b/drivers/ne=
-t/ethernet/stmicro/stmmac/stmmac_tc.c
-> index be48bcabdadca..9745c9bae33c1 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_tc.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_tc.c
-
-[ ... ]
-
-> @@ -1053,51 +1067,44 @@ static int tc_taprio_configure(struct stmmac_priv=
- *priv,
->  			gates &=3D ~BIT(0);
->  			break;
->  		default:
-> -			return -EOPNOTSUPP;
-> +			ret =3D -EOPNOTSUPP;
-> +			goto free_gcl;
->  		}
-> =20
-> -		priv->est.gcl[i] =3D delta_ns | (gates << wid);
-> +		gcl[i] =3D delta_ns | (gates << wid);
->  	}
-> =20
-> -	mutex_lock(&priv->est_lock);
-> -	/* Adjust for real system time */
-> -	priv->ptp_clock_ops.gettime64(&priv->ptp_clock_ops, &current_time);
-> -	current_time_ns =3D timespec64_to_ktime(current_time);
-> -	time =3D stmmac_calc_tas_basetime(qopt->base_time, current_time_ns,
-> -					qopt->cycle_time);
-> -
-> -	priv->est.btr[0] =3D (u32)time.tv_nsec;
-> -	priv->est.btr[1] =3D (u32)time.tv_sec;
-> +	memset(&priv->est, 0, sizeof(priv->est));
-> +	memcpy(priv->est.gcl, gcl, sizeof(priv->est.gcl));
-> +	priv->est.gcl_size =3D size;
-> =20
-> -	qopt_time =3D ktime_to_timespec64(qopt->base_time);
-> -	priv->est.btr_reserve[0] =3D (u32)qopt_time.tv_nsec;
-> -	priv->est.btr_reserve[1] =3D (u32)qopt_time.tv_sec;
-> +	time =3D ktime_to_timespec64(qopt->base_time);
-> +	priv->est.btr_reserve[0] =3D (u32)time.tv_nsec;
-> +	priv->est.btr_reserve[1] =3D (u32)time.tv_sec;
-> =20
-> -	ctr =3D qopt->cycle_time;
->  	priv->est.ctr[0] =3D do_div(ctr, NSEC_PER_SEC);
->  	priv->est.ctr[1] =3D (u32)ctr;
-> =20
->  	priv->est.ter =3D qopt->cycle_time_extension;
-> -
->  	tc_taprio_map_maxsdu_txq(priv, qopt);
-> =20
-> -	ret =3D stmmac_est_configure(priv, priv, &priv->est,
-> -				   priv->plat->clk_ptp_rate, true);
-> -	mutex_unlock(&priv->est_lock);
-> -	if (ret) {
-> -		netdev_err(priv->dev, "failed to configure EST\n");
-> +	ret =3D __stmmac_setup_est(priv);
-
-[Severity: Critical]
-This isn't a bug introduced by this patch, but does tc_taprio_configure()
-need to verify netif_running() before calling this helper?
-
-When a user configures a TAPRIO qdisc via tc while the interface is down,
-the PTP reference clock (clk_ptp_ref) is still disabled. Calling
-__stmmac_setup_est() unconditionally accesses MAC PTP and EST hardware
-registers.=20
-
-Can accessing these registers without their corresponding clocks enabled
-cause a synchronous bus fault or system hang on some platforms?
-
-> +	if (ret)
->  		goto disable;
-> -	}
-> =20
->  	ret =3D stmmac_fpe_map_preemption_class(priv, priv->dev, extack,
->  					      qopt->mqprio.preemptible_tcs);
->  	if (ret)
->  		goto disable;
->
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260902-stmmac-est=
--reapply-after-open-v3-0-e72a6df5a7ef@oss.qualcomm.com?part=3D4
