@@ -1,130 +1,103 @@
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6B6C4A3F25
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 16:47:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F884F30C2
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 16:51:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788454040; cv=none; b=c824Tl/qEzUXtgrT/BIRp/of2+JlrF+x1BaVrheN9/ZOqiBWP6/9R7BNtPA2wqNM2Rdbf7Gxi3mQT/0h53xhTQuLk+yqQyjV9i3BNN4/ebDE2VH71k9OqHQ3/3JMNeToHRWgT+/qV/5q6htaiiHWu77dNe1/tJ9g20W20QGbT6Y=
+	t=1788454281; cv=none; b=OsZSmPdN57rz7Z+vRwT1G5X2KVZn/zz2UhyP+qdyAq6RT/ogi2qZyx9DNAL8/AWU22QC6PPj53eB95URZleYIKtkH+H1pzAAkuB/aT7CLmmFu/rcZNQptItAJuEu9n7CKJbjjTM8t7lnlTav3Izqg8DCGGnZUVhKngT8jk0CZdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788454040; c=relaxed/simple;
-	bh=tEQucAaZT52CWPbTQKMI2Fg6FXnrFdT4T8s8E5kE5cw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=qPBrV3oCJuTMqLfEEeK944OP7Zjx8fBm2gkKUsnNYaB4HAJO4sA+QXE0PagTf7eFFgOlw5bNM0wkhuNAClPQsH8DFBgbooVPfbgYfbUxoRDOdD5HFumutaoNwXV4R+2qAlJqv3T/arlVN0yIBAs2E7hp0H2KmMujQkpBCg+3kFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oH8n5zoW; arc=none smtp.client-ip=209.85.210.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788454281; c=relaxed/simple;
+	bh=mdRvaKFS90DcCYbF8nMAc3LvXSODydWfrY3n2DAfoj4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=AUu/yvRsUyOjukNH4eyYBYaTc3C0gsnkiNo4lX3ClKG3HZBHO1qwflG3ZGG9LOn1oEUDHLRWgVH6Ar7hFhceuGdskuU9BN/yIkYZ4T98TFxhasDZw+dIr+xZRXSVf7zLlIH8wTSLMDzPbGoCcvGkHLqxF7FWv7wPTWDSgGj5LlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TwqhxU77; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oH8n5zoW"
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7f6617c7536so15780a34.1
-        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 09:47:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788454032; x=1789058832; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=/TkXGgy+0i+5QFLCBIOyAldSnOfkS5P1f7N6u5UDczE=;
-        b=oH8n5zoWqfHM9fY5QrEn2JamG5jZIrVBbYihHlYXiTvLpn8aXolkoFfG01LXyZbaYq
-         v6xRN7v4SUBH9egK9aOIc53XQEOdwig/9G4oq8+eKejsmo4I99f7DhURIXEwyqYnEQp3
-         0LD0Qzz2Hmw1OQvbXVhKFpC+jfphyZ/mVpiXNweA0yKXo72wvbObgy8D4T+g0kL8ax0u
-         M8x07jiBS8aI6GxIQvnHeXBd1g5TzeFpG9BXA4+/PF7uBI8IKXSVjS4LMHwubDyA3DVs
-         jc6C558jclb4nAv24m9mHB+7eWy4qshpxtyxvoQvhAltX0VQEBNTTeCqtUxXavaoSEt/
-         zHgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788454032; x=1789058832;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=/TkXGgy+0i+5QFLCBIOyAldSnOfkS5P1f7N6u5UDczE=;
-        b=HeVg0Ypb/S0PWLsrDzq+uIgS+beW6ZwsIeuHFFMX9mu7CFKO5oyy4sMWSJSC0qlwwr
-         i0sduSbLSIVthJnKEDa+1qUCcm50nnXaf7a6p1gDdih36cCSxmKlOBkBnNy5soKh1XiX
-         QKaWVXq1t6kjoHIgOfXfbsOIZS1KRA27Y2W6V+Q3vhkubePln6U+9qh/cpPoDYr6rfn3
-         oBhGftmHKXvD9izxZ0Z8/gYi+4I5SJffvgOLC3AEiopBg8o16xxlJ2q1iV5x2BbbIAIG
-         hUl9wBF3UPHqIZxXBKi5sdd2pN8TKKOH3SHfBXmVEMuo/tuazOf5QIi+fwUoesfYoygD
-         5kLg==
-X-Forwarded-Encrypted: i=1; AKwUvByHvkrc77CGOYX/a0wnl9Xy3Ua5EBIf7I3tmom12/PJgYCWXRoe/+Kd1MiYSmY+4beJgUQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++lQWoQQ8R/aGfdtDAHk22EgjFJLQibxBs0F1hrpYn0H0GOwCuKE
-	YQVTLofKjh7ZIbsqlaSYvtuVnZLRGYvsinmFg191UFXb38znpwG+MLTUr/Kbvw==
-X-Gm-Gg: AYBFou0yCf4Sg+Uka85rBbeCcm2j24e+fr7CTar6725pixnLwFmy1+jShMAfFF0h6c/
-	JmVoDv3GhM4xpltfXSaJ7PMbMHMoyCNuKdQntT6uzbZDsOBK2p0biF8arAuj9EaUPqKIbEGG0nT
-	9/9unlIVOjhS7t/FLVA09RHAHayif45MEe6N7vR4+2mQOAodZ/H9lthtDKcWv4k2AiNloMLxbBo
-	l8fj9xDmDIP4lYXJ9/KraE6F4Mm1CU/4f8H6n7SFzqOBp5n5Voglbd97zqePmswr6qnpIbyh35n
-	QIWLRwfZwsfDKWgwC2nnljhGGtqafC4tLo5Gi0x9S1KX+uABhVRoOKK/7kTWFfofUQ9mDDkdZdA
-	DvFwKSNrMT17bsg7UtJH0u4yc61UkDtLoDhV4gvbu5CWHZ/oaHzUTDoSE/G3HIK+kST7k5rCgr3
-	YG2iRQI7wVroFfN/LiR1lS7mq4ypUDF/c2b0YtL0cEBZZJi6c0JfY5NlXzWBLDtl7LbF4eHppP4
-	747gRHTID94n4jO2c1KnwAuKmTlxthNWEhyBODNgVMFGnFL1h26VsY=
-X-Received: by 2002:a05:6830:838c:b0:7e9:5022:3639 with SMTP id 46e09a7af769-7f781cc26f6mr14846141a34.15.1788454031780;
-        Thu, 03 Sep 2026 09:47:11 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:54::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f9f6db9169sm356008a34.15.2026.09.03.09.47.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Sep 2026 09:47:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TwqhxU77"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 981911F000E9;
+	Thu,  3 Sep 2026 16:51:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788454279;
+	bh=vfsFuWLL8/YhDRYmiz6Z9QWGoufOz6t1D+86vNjT/Bk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=TwqhxU77lHRbQ5dFt+pdJn+y8G24ZWv4LVYG1nschD4neG2u+rbI6oa2wh9Wwb7uG
+	 5mZ5ntIT3Z6oVp4cblkq11fUqTXZeHubwVwvwek7JikaL7IhyE4/+l7w98hRVTKbap
+	 QEENA35rbEyVJcaUOQ1nCbIGxkpjHsbiPu9rkXjXRDA5yN6eZSrfst1hN1PKfIaVqh
+	 JxgwDiOYcmAFrvXxGwsBCB74dt4Vt7pzEZz9HzxF+tjfgl70+kA76oT8adiDPioSXj
+	 Bt54hYd9cBAmIZnPxg3ens65UG3H3DlUQCqPznhm5i1lfN7yP3Kgt7VYmMKaZY6w4a
+	 pdCUvfjqZP5VA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 25DAE38119D1;
+	Thu,  3 Sep 2026 16:50:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 03 Sep 2026 09:47:10 -0700
-Message-Id: <DL5U1J24X5VF.C5RA24WYQ4VO@gmail.com>
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <bot+bpf-ci@kernel.org>, <memxor@gmail.com>, <bpf@vger.kernel.org>
-Cc: <npc@anthropic.com>, <ast@kernel.org>, <andrii@kernel.org>,
- <daniel@iogearbox.net>, <eddyz87@gmail.com>, <emil@etsalapatis.com>,
- <kkd@meta.com>, <kernel-team@meta.com>, <martin.lau@kernel.org>,
- <yonghong.song@linux.dev>, <mason@kernel.org>, <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf v1 01/10] bpf: Mark signal tracepoint siginfo
- arguments as scalar
-X-Mailer: aerc
-References: <20260903144433.1716731-2-memxor@gmail.com>
- <dbc8b63e44e2fc3abc511f5659cb50c4b42db63d1738afc81dd007a527e436cf@mail.kernel.org>
-In-Reply-To: <dbc8b63e44e2fc3abc511f5659cb50c4b42db63d1738afc81dd007a527e436cf@mail.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v1 00/10] Misc bug fixes - part 1
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178845422088.3882727.10787208358798363768.git-patchwork-notify@kernel.org>
+Date: Thu, 03 Sep 2026 16:50:20 +0000
+References: <20260903144433.1716731-1-memxor@gmail.com>
+In-Reply-To: <20260903144433.1716731-1-memxor@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, emil@etsalapatis.com, kkd@meta.com,
+ kernel-team@meta.com
 
-On Thu Sep 3, 2026 at 8:52 AM PDT, bot+bpf-ci wrote:
->> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
->> index da36d4b9d31ab..d6d243c262ea5 100644
->> --- a/kernel/bpf/btf.c
->> +++ b/kernel/bpf/btf.c
->> @@ -6717,6 +6717,9 @@ static const struct bpf_raw_tp_null_args raw_tp_nu=
-ll_args[] =3D {
->>  	{ "rxrpc_resend", 0x10 },
->>  	{ "rxrpc_tq", 0x10 },
->>  	{ "rxrpc_client", 0x1 },
->> +	/* signal */
->> +	{ "signal_generate", 0x20 },
->> +	{ "signal_deliver", 0x20 },
->                                    ^^^^
->
-> Is signal_deliver's 0x20 mask too strict for its actual call sites?
->
-> Looking at the two call sites for trace_signal_deliver():
->
->   kernel/signal.c (do_coredump):
->     trace_signal_deliver(SIGKILL, SEND_SIG_NOINFO,
->                          &sighand->action[SIGKILL-1]);
->
->   kernel/signal.c (get_signal):
->     trace_signal_deliver(signr, &ksig->info, ka);
->
-> SEND_SIG_PRIV is never passed to this tracepoint. SEND_SIG_NOINFO is
-> zero (NULL), and &ksig->info is always a real pointer filled by
-> dequeue_synchronous_signal() or dequeue_signal() just above the call.
->
-> SEND_SIG_PRIV =3D=3D 1 only reaches trace_signal_generate() from
-> kernel/signal.c:__send_signal_locked().
->
-> If that's the case, would 0x10 (PTR_MAYBE_NULL) be both sufficient and
-> less restrictive for signal_deliver? With 0x10 the verifier would still
-> force a NULL check to catch SEND_SIG_NOINFO, but after the check a
-> tp_btf program could read info->si_code and other fields. With 0x20 the
-> register becomes SCALAR_VALUE immediately and check_mem_access() rejects
-> all dereferencing with "R1 invalid mem access 'scalar'".
+Hello:
 
-Though AI is correct today the callers of trace_signal_deliver() may change
-in the future without cc-ing bpf mailing list and raw_tp_null_args[]
-won't be correct anymore. It's better to be strict by default.
-Hence, I applied the series as-is.
+This series was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Thu,  3 Sep 2026 16:44:18 +0200 you wrote:
+> A set of miscellaneous fixes for bugs reported by Nicholas. These are
+> easy ones and should not require any major discussion, hence batched
+> together. See commit logs and selftests for details.
+> 
+> Kumar Kartikeya Dwivedi (10):
+>   bpf: Mark signal tracepoint siginfo arguments as scalar
+>   selftests/bpf: Cover signal tracepoint siginfo sentinels
+>   bpf: Reject tail calls directly from callback frames
+>   selftests/bpf: Test direct tail calls from callbacks
+>   bpf: Reject resilient lock operations in rbtree callbacks
+>   selftests/bpf: Reject resilient unlock in rbtree callback
+>   bpf: Mark sched_process_wait argument as nullable
+>   selftests/bpf: Test sched_process_wait nullable argument
+>   bpf: Mark syscall helpers as sleepable
+>   selftests/bpf: Check syscall helpers in timer callbacks
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf,v1,01/10] bpf: Mark signal tracepoint siginfo arguments as scalar
+    https://git.kernel.org/bpf/bpf/c/77515ab12e49
+  - [bpf,v1,02/10] selftests/bpf: Cover signal tracepoint siginfo sentinels
+    https://git.kernel.org/bpf/bpf/c/d7719a1736e6
+  - [bpf,v1,03/10] bpf: Reject tail calls directly from callback frames
+    https://git.kernel.org/bpf/bpf/c/266aa4ad0b2e
+  - [bpf,v1,04/10] selftests/bpf: Test direct tail calls from callbacks
+    https://git.kernel.org/bpf/bpf/c/d9ae3e4c7fb5
+  - [bpf,v1,05/10] bpf: Reject resilient lock operations in rbtree callbacks
+    https://git.kernel.org/bpf/bpf/c/7b7b8b596010
+  - [bpf,v1,06/10] selftests/bpf: Reject resilient unlock in rbtree callback
+    https://git.kernel.org/bpf/bpf/c/08b4dc83d981
+  - [bpf,v1,07/10] bpf: Mark sched_process_wait argument as nullable
+    https://git.kernel.org/bpf/bpf/c/a453d6e3b8e8
+  - [bpf,v1,08/10] selftests/bpf: Test sched_process_wait nullable argument
+    https://git.kernel.org/bpf/bpf/c/c1992ba73b03
+  - [bpf,v1,09/10] bpf: Mark syscall helpers as sleepable
+    https://git.kernel.org/bpf/bpf/c/d05524794240
+  - [bpf,v1,10/10] selftests/bpf: Check syscall helpers in timer callbacks
+    https://git.kernel.org/bpf/bpf/c/26a3a510cd34
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
