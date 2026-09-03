@@ -1,117 +1,118 @@
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E3D48095A;
-	Thu,  3 Sep 2026 13:01:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D844A9D70
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 13:07:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788440484; cv=none; b=fPxs44Rwk45FAlypFuWef4g2bIz3wp2e2lfvPW2thMtr+0KOaNNsC4vC5rYoIqmSYMiSuIiuDWZCEYykN+NyPRPom1pHLhB5C9DkfFmo5klWlINJbCboIcXuc1a16ciSMxE3XutCTdmUluPK6DU8ud0ydQ71ujSwfp7fHjB4MM8=
+	t=1788440868; cv=none; b=byHvGVuL/hetVgrto9XU76FN5Yjzj+GtsYA/C1VJ7KwA39SqeC3zq7rQUz2lK7Dgwy8oyrvxFsGcxCQAzqC3KNB5N8sNlasSb8fmg/dJnMROFTuxbC/IOvHhwS0v8YLbG+E5+3mKK4CSMtWKh+r8kY6aAIIReJgZjJ6O9f8tsMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788440484; c=relaxed/simple;
-	bh=iJG/s8GGXXXIrvxySAUuH638FurAcqctVoxjhxpgL6U=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=I8H+xiIrKVIivnOIYLF6mFXhgy9dMmQjPD6mQyNPfcL+ijvExqafuSFrj2LYp6TOxzGNvSeG6I8GqP8kkJtSGmNX9mqlYOoBjq1QPAvgkmhU0H4JstEA3cGcm9acfrb0Dr98+boFdw5DE6bD83eQUPVD7S6+Lsok/xBRUtPQPZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b=JRUgXQ3A; arc=none smtp.client-ip=216.40.44.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	s=arc-20240116; t=1788440868; c=relaxed/simple;
+	bh=xN7HQwxjhw2y4Tlozi3+Ur/Z3MZ0pVZkYpzq8OIIvoc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=QplNOwJwjQSjeI3xyMczvlnm776bqwtFwULr4EmkihVZU2jYXxnOGnKvbFjG5/fxfFvcUZmAL0YSDFdob27n0tdp/QG22immw/bcRqtuQ5FKhWxgFCTlI4c85dtqd6X+g+iCHB+8J1C/EJ3H6YA8Ki5p9k7OzzfKEiAN81qM6FA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PgOk3lAN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b="JRUgXQ3A"
-Received: from omf13.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay02.hostedemail.com (Postfix) with ESMTP id A86ED120426;
-	Thu,  3 Sep 2026 13:01:10 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf13.hostedemail.com (Postfix) with ESMTPA id 5DE8520012;
-	Thu,  3 Sep 2026 13:01:08 +0000 (UTC)
-Date: Thu, 3 Sep 2026 09:02:11 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Gabriele Monaco <gmonaco@redhat.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Nam Cao 
- <namcao@linutronix.de>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, Wen Yang
- <wen.yang@linux.dev>, Tobias Schaffner <tobias.schaffner@siemens.com>,
- Viktor Malik <vmalik@redhat.com>, Linus Torvalds
- <torvalds@linux-foundation.org>
-Subject: Re: [RFC PATCH 00/20] rv: Add support for BPF monitors
-Message-ID: <20260903090211.50d15220@gandalf.local.home>
-In-Reply-To: <eb3dd8158942d663ec8ad4c529eacd666c5f96d9.camel@redhat.com>
-References: <20260831090524.106845-1-gmonaco@redhat.com>
-	<87se3sakgi.fsf@yellow.woof>
-	<df6e9168cb06c35e21db7f9d17cfbca6bd87005b.camel@redhat.com>
-	<DL5B40CU17WD.3KD75URQZ6RRR@gmail.com>
-	<eb3dd8158942d663ec8ad4c529eacd666c5f96d9.camel@redhat.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PgOk3lAN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B475B1F00AC4;
+	Thu,  3 Sep 2026 13:07:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788440852;
+	bh=/WWqSvHepxZDiJYSGI97OOFl9rIAsSCFCfLGjAecYVQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=PgOk3lAN5TcbSsl21j0E2SkgAh9RjIpxJZwxfDgNSeAJFbyX+6eOHjghJNjy3+3Gh
+	 723lMjkUOJwtZUGsmxdk9zyDOc2BmhYg55r2l1ClzqIYpa/FiJOcNPTx1MYNZnzptE
+	 OCO+uk6jJM3/XEMAatHLoIpiGcOzTx2d7NKh+bJY5ggr2ShpEzSpqPseEFnyPgm0TP
+	 jI39zz0MikPG0IDRl5X0sEvjtr5w5F8F94RzluUksl0i9ta9CsZFJkZUCuF5B/p9uX
+	 enEJ8AblGxfY+TgglOvwOsgyypZz68xEtukBm1YvHQ0vaXNkZc9M1cABDbvppa+FVt
+	 0BoGy3WUc0CqQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf 2/2] selftests/bpf: Test bpf_sock_destroy() on a
+ TIME_WAIT sock
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260903125306.299943-2-jiayuan.chen@linux.dev>
+References: <20260903125306.299943-1-jiayuan.chen@linux.dev>
+ <20260903125306.299943-2-jiayuan.chen@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 03 Sep 2026 13:07:32 +0000
+Message-Id: <20260903130732.B475B1F00AC4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 5DE8520012
-X-Stat-Signature: 599b17rkjqqaboag1r5zzpsja34bpukq
-X-Rspamd-Server: rspamout07
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/hDX2tycQ0wJ6OosjSOGEEIkQow8xfsuI=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=YP1HmGaRtV48egavEcaNf/B8MIIrFxZMcAR9YqngWsc=; b=JRUgXQ3AifLYbcyEiPMjDDTlFTLfMtJCxMk4zNefD7BicPd3HHyGe1GyizkVC1OgKog0KY5+EYJIhR+cQKoDATPyZgRA5johHnmvhYqJ/B3EBeXRgsG2UcOpU9HkDEyktJrf5fnqgyBji4zBLVIjjkdepnqTRRI7+ReEbdkzqUI=
-X-HE-Tag: 1788440468-820146
-X-HE-Meta: U2FsdGVkX1+/o5eHUAvWbIq34ly2XCcD6ZRuOhKJtTqfR40wgY1VcasY9LguqEVcrXg3FitwBLUK6RK5grbvCyqQ/+rZ/B356aenQJBarJmzBpukWDMHQYXLqhqiVQEdZQsT8BN+vVy/prEzh1Q/KPpuwLf/yHKmbsWNRbzLocF+euoO4KeU1/qUOmxX1DxuPOiNgB67ktypHkWAq0eG6f1TlyA3gM0YS++ewWGVm7i/VCS+coEwrw+IcYtQR8rkAA2SDKLZt6NthK+guE4kMsxezH9XtoaQrzeR80oHGXuXiO+MTgRNpPR5SH8w2VTZAGEiFLVl6wWZJ3+owXbfb/5UDIzE6YeROitbBSothSp69KXtAhrKKJIE35+hD1YIJz0VuBjWL5U=
 
-On Thu, 03 Sep 2026 09:21:18 +0200
-Gabriele Monaco <gmonaco@redhat.com> wrote:
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] The test creates a simultaneous close race condition that will c=
+ause it to randomly fail by observing the socket in TCP_CLOSING state inste=
+ad of TCP_TIME_WAIT.
+- [Low] The multi-line comment uses the incorrect style for the BPF subsyst=
+em.
+--
 
-> On Wed, 2026-09-02 at 18:57 -0700, Alexei Starovoitov wrote:
-> > I don't think bpf fits here. I haven't seen active use of RV and even less
-> > so of any request from people who want this kind of programmability.
-> > 
-> > So Nack for now. Sorry.  
-> 
-> Thanks for your opinion, however it sounds a bit harsh to me.
-> 
-> RV is clearly not a popular tool, but I wouldn't say it doesn't have active use:
-> we're actively using it to validate the deadline scheduler/server changes and it
-> already found a number of issues (e.g. [1], [2]).
-> The RTapp monitors are used to validate if userspace real-time applications
-> interact with the kernel in the best way for predictability, as far as I'm aware
-> that's regularly used [3].
-> 
-> In my eyes, the missing piece of RV is in fact this programmability. Adding a
-> monitor now requires to write in-tree built-in kernel code.
-> 
-> There are strong use cases for domain-specific rules that aren't general enough
-> to belong in the kernel tree:
-> * stricter RTapp rules that may not apply to all use-cases
-> * verify some exotic system within Linux (e.g. a co-kernel [4])
-> * modelling for functional safety certification process (used for in-vehicle
-> OSes like RHIVOS)
-> 
-> BPF seems the natural tool for the job to me. Mind that RV monitors would be
-> simple users of BPF, requiring only modifications in the RV subsystem but using
-> standard BPF facilities.
-> 
+commit c91152edb079a3ce44e0f45e8d080efb432c5870
+Author: Jiayuan Chen <jiayuan.chen@linux.dev>
+Date:   Thu Sep 3 12:52:49 2026 +0000
 
-As RV would simply be a user of BPF and not modifying BPF infrastructure,
-I'm not so sure you have the jurisdiction to NAK it. It would be like me
-NAKing how you create a trace event.
+selftests/bpf: Test bpf_sock_destroy() on a TIME_WAIT sock
 
-RV monitors are a very good way to make sure the system is preforming
-properly. This looks exactly like a perfect use case for using BPF instead
-of having to install modules.
+This commit adds a tcp_timewait subtest to verify that bpf_sock_destroy()
+correctly handles TIME_WAIT sockets. A tcp iterator finds the timewait
+socket by its inherited cookie and destroys it.
 
-Either BPF is a tool for the kernel or it isn't. You can't judge where BPF
-gets used. You can only judge on modifications to BFP.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c b/tool=
+s/testing/selftests/bpf/prog_tests/sock_destroy.c
+> index 9c11938fe597d..6ccc7cda410bf 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
+[ ... ]
+> @@ -110,6 +110,65 @@ static void test_tcp_server(struct sock_destroy_prog=
+ *skel)
+[ ... ]
+> +	/* Active close from the client, then close the server side. Once
+> +	 * recv() sees EOF the server FIN has been processed and the client
+> +	 * sock is in TIME_WAIT. Block without timeout so a loaded CI box
+> +	 * can't race us.
+> +	 */
 
--- Steve
+[Severity: Low]
+Does this multi-line comment follow the BPF subsystem coding style? The
+guidelines prefer placing the opening /* on its own line before starting
+the comment text.
 
+> +	if (!ASSERT_OK(setsockopt(clien, SOL_SOCKET, SO_RCVTIMEO, &tv,
+> +				  sizeof(tv)), "clear rcvtimeo"))
+> +		goto cleanup;
+> +	if (!ASSERT_OK(shutdown(clien, SHUT_WR), "client shutdown"))
+> +		goto cleanup;
+> +
+> +	close(accept_serv);
+> +	accept_serv =3D -1;
+> +
+> +	/* block until return EOF */
+> +	n =3D recv(clien, buf, sizeof(buf), 0);
 
-> I'm totally open to discuss on this though.
-> 
-> Thanks,
-> Gabriele
-> 
-> [1] - https://lore.kernel.org/lkml/20260522125833.264145-1-gmonaco@redhat.com
-> [2] - https://lore.kernel.org/lkml/20260113085159.114226-3-gmonaco@redhat.com
-> [3] -
-> https://lore.kernel.org/linux-rt-users/20260826132153.2476006-1-bigeasy@linutronix.de/T/#t
-> [4] -
-> https://lore.kernel.org/lkml/20260827072400.45734-1-tobias.schaffner@siemens.com
+[Severity: Medium]
+Could this sequence create a simultaneous close race condition that leads to
+random test failures?
 
+If shutdown(clien, SHUT_WR) sends a FIN, and the test immediately calls
+close(accept_serv) on the server without waiting for the client's FIN to be
+processed, the server might send its FIN before receiving the client's FIN.
+
+If these FINs cross (simultaneous close), the client will receive the
+server's FIN, enter the TCP_CLOSING state, and wake up the blocking recv()
+call. The subsequent BPF iterator would then run while the socket is still
+in TCP_CLOSING rather than TCP_TIME_WAIT.
+
+Because the socket is in TCP_CLOSING, bpf_skc_to_tcp_timewait_sock() will
+return NULL, causing the iterator to miss the socket and the assertion
+ASSERT_EQ(skel->bss->tw_found, 1) to fail.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260903125306.2999=
+43-1-jiayuan.chen@linux.dev?part=3D2
