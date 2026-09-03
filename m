@@ -1,144 +1,110 @@
-Received: from pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.245.243.92])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED92472F82;
-	Thu,  3 Sep 2026 22:11:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.245.243.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 153454CB8DF
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 22:15:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788473497; cv=none; b=WTapX0XNC8iOle4s2SF2kkLo/ZvtfthdNm65pBAjtoMuPv3ZA90KH/c9YS9RkILwjRQ0FTen2D0NqF5/WSgGrhrupKYi5yGCXGz8KulSMIb/cxFfxmSr4YudReAAuPIcBzwvxkC1qhdCQH7ceQQfJzfgGDJPJ4FOPPTpa+wmg24=
+	t=1788473711; cv=none; b=NmRIyglUwJEjbRJ0tUFVLkpMSIWxHUCCJUfiHJje+eClOSwvv8GC9CA3za346qh7O+0dC9xVTfCCIpHr8RHDvdG6Hp0cjS+0nExnnh5tkU+XXLiMQ5f6r9PpdEu4Epx+w6LAKxzAKfvfqX8mdy+8oW7mmAvQg93lt08O8GFdzMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788473497; c=relaxed/simple;
-	bh=W4adNK9wHap67IwYHlPqYCU2ZuM/zEiJSpxe6p88pU4=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BY/lYre3889kdzF8mXiWd2749C1Whg0dgXmJWZ/lhb8WS4XVKVgIWUj8mukHS9+SadKZSMGFtQn7MrNg4C+7c9jjCfJVI91c6wycJeqYBiiQHVNIzopK8L3mlzc7bu9SNFzcRCtxlzElnfKiiEq1L/iqW2L+1bz2zYkrOOryU1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=KEuw7Wz+; arc=none smtp.client-ip=44.245.243.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	s=arc-20240116; t=1788473711; c=relaxed/simple;
+	bh=oe4Um/bJX7+Anuru9IS6WY46d5H5oMaKYuUK1rwpoC8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=rk4/4p7lKD/qljulm4rycUyheqK2Rl+ek4PRz0Z7pO16UFdte4CqoAT1BezBt6qGDSEhky06dcYSHPL5Xfmz0TvntF33QkFD8qtiFoavMIKxVs6lzxkwmLOYwd46/RRBYnxkx3K4aWYT64yDC1kSKcPFPX0mMsNtiXs1nfkHZao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z+nqLtv1; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="KEuw7Wz+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z+nqLtv1"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-38dfe910e9dso353809a91.3
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 15:15:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1788473495; x=1820009495;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=8bvVSKGyqzAbltjDl6J/8kLDZ0LjBdrpennMpgSZanY=;
-  b=KEuw7Wz+v5lCenYVBAFuT6Ceax+EMDTFv4nc4cS1vhSuFisKNrwTXh0w
-   v7hcysXJblGNYLhavva4OPlM29TRY1JFaHYKZa8JilOvTF57xvkIDG2qp
-   R29A3f4B/rg4YQ9o2njvJEF1IU6ytySNS5pEIHii3HYB+n0ZXPYjzwEs7
-   NkDtruQeajjdolTql8QJABRIT46hsnGXnVzMW61/b5Uw1GA42wm81rnnZ
-   ECEEs1MyGOANHgFT/rDTtiwwNrZdGN6TMYN7YsBwI99/q9iCxA305QjhX
-   SkaEnn78zi01G/RrXa1PZyEqgNcWIP0MFw7Ck89+uJz/lvv6vjBCNxC8W
-   w==;
-X-CSE-ConnectionGUID: noX85ADCTkuAETgCnDGBEA==
-X-CSE-MsgGUID: fwrdIkPLQqOvHY+3wrmteQ==
-X-IronPort-AV: E=Sophos;i="6.25,260,1779148800"; 
-   d="scan'208";a="27266811"
-Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
-  by internal-pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2026 22:11:35 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.234:26155]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.7.25:2525] with esmtp (Farcaster)
- id 6def88e6-3c67-48f7-8b54-f8752f10b407; Thu, 3 Sep 2026 22:11:35 +0000 (UTC)
-X-Farcaster-Flow-ID: 6def88e6-3c67-48f7-8b54-f8752f10b407
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.45;
- Thu, 3 Sep 2026 22:11:35 +0000
-Received: from dev-dsk-surajjs-2c-afd24e6d.us-west-2.amazon.com
- (10.189.247.117) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.46; Thu, 3 Sep 2026
- 22:11:34 +0000
-From: Suraj Jitindar Singh <surajjs@amazon.com>
-To: <stable@vger.kernel.org>
-CC: Bjorn Topel <bjorn@kernel.org>, Magnus Karlsson
-	<magnus.karlsson@intel.com>, Maciej Fijalkowski
-	<maciej.fijalkowski@intel.com>, <netdev@vger.kernel.org>,
-	<bpf@vger.kernel.org>, Jason Xing <kernelxing@tencent.com>, "Stanislav
- Fomichev" <sdf@fomichev.me>, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 6.12.y] xsk: cache csum_start/csum_offset to fix TOCTOU in xsk_skb_metadata()
-Date: Thu, 3 Sep 2026 22:11:30 +0000
-Message-ID: <20260903221130.27316-1-surajjs@amazon.com>
-X-Mailer: git-send-email 2.47.3
+        d=gmail.com; s=20251104; t=1788473709; x=1789078509; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=oe4Um/bJX7+Anuru9IS6WY46d5H5oMaKYuUK1rwpoC8=;
+        b=Z+nqLtv1e2gVvHC9EZrQBuvgqxGeyNJikuFiX1cVh0K2L+mtV6lh7AQX94jYjsCIwN
+         zBMd7J+qzEp9Qj7tcyCVF6YNaMgTmjg01s4w7VBcJxB3jw9WS6TE2rWN6tm2+rlxDPD+
+         LsNCeZbcBpGhxnTUifzhht71f74ewa66VdOh3a3Yzpz9mLFM9r4vawNYbeddFy8nQZus
+         tQumT9xySV0kWRBfEV+/ypjOiRjTFHUnPi8QsHJGbgfl44cqYR2FGCMSBfJK/4GSFsVn
+         sQofNCdxjA4Den1VPVzdl3XEHF2kbVTufnta07t9l2Hi/wtWNIuXKQzjy/L647cdCJ4+
+         oJVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788473709; x=1789078509;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=oe4Um/bJX7+Anuru9IS6WY46d5H5oMaKYuUK1rwpoC8=;
+        b=KDJmgJpnpVLaJTfWujUW8+yMWyVeEeD2PfQ+FWQePg2O3pjDcNplSfJl1sTWLh40S8
+         RKdYdkh1SaYBQmmoCotKWS3qoRfpCHc5gHJ5aU4J+S+sk7nt0mbcaeWTj0UmbZwVrAtY
+         Nug8Q2Wdt7HK2WNw/rnBlKFWh8vGbYTLrO4NPypV8Mn+jZJv/D9syF35zCPaSIyixLMV
+         ALHdjDMTKpowk2W8f7y7YmeNkhiLNFHJ/T3kNiUdK0KLeF4cZENo7AuoXF+3jRIlXc8S
+         hxyTmqKtj6ZPvvSla3HX5x9NPF278g+uOgbU0TEHOSlywKdWAqXB6m3oX73OznKIWmeT
+         y21g==
+X-Forwarded-Encrypted: i=1; AKwUvByqAfMYSsc/EszobVEz4x91mlQBg8OmDHfm8BjBTyuVtyyF/vRIraZIDfl4rTtrswTFEfk=@vger.kernel.org
+X-Gm-Message-State: AFuF++mwWtN7O2DGt4NIBo/j9r5I6DW4QjH3prykvUgRh/yZhiTV69c4
+	3rYRTOIUZ+a3tLE4j89ZhHQ5fUnFcWkY63pe5RqOGlLXbCuY/yuGa5HO
+X-Gm-Gg: AYBFou2YhruyiHrzs+Gg8k53wRBwyl1/KkrcLo5EeOYGUDqIAPMWpDPe7mBg6/I+bTI
+	sA9k1f0aaPelHeS50TdPbGjFttXr5X8INo812VFjk68/xiaD8maID5tRyD7NOMyX4IwuLqgXltP
+	e57GxArJ0w4SeyqqfgTGTbYMKC+UmGGshuzeDi/lsFUFiU96Lm24pXyqd+AuMZFW81fuXaa8U58
+	uCKU8MYo/ead7rQbpsQcpXP5KFjXI4yaev6yUGx9QbUqeuI20LraR3qTIe8MW4AqHH9KsNk+5gB
+	IwD4JUQnpw+VWiNpBxqqSV2zC7Z8pwWWu6bBuXPWw1E+ubWpSJHv0TNRpcpobpx1NWqgtDIgoVM
+	3vj9fxCB4QVY7g5Q/YiloNBEeh4/5EKQe74SdjQVrofpTDHoZ2ECduY6RldA/e8yDXcy67n9hBZ
+	JixAlQw/TmP9aphxmNJi11ujPu4eoWn/6VbLhhsAiZ4zklSv6vro2lyiOnb+QaiUEsIh/4MmvKF
+	apFASUJlrqoqY6GywO8u25sr1fqcw8wP772i6yRGIueuQ==
+X-Received: by 2002:a17:90b:3d89:b0:398:9be8:ea69 with SMTP id 98e67ed59e1d1-39b262167e7mr2409924a91.22.1788473708901;
+        Thu, 03 Sep 2026 15:15:08 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:fe3c:fb36:dc7c:5b5? ([2620:10d:c090:500::6:dba3])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-333959d5f69sm1657910eec.0.2026.09.03.15.15.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Sep 2026 15:15:08 -0700 (PDT)
+Message-ID: <f8bce8fab45388b3145eb069bca073c71db04973.camel@gmail.com>
+Subject: Re: [PATCH bpf v1 3/8] bpf: Mark bpf_btf_find_by_name_kind() as
+ sleepable
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Sashiko <sashiko-bot@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Emil Tsalapatis <emil@etsalapatis.com>,  Nicholas
+ Carlini	 <npc@anthropic.com>, kkd@meta.com, kernel-team@meta.com
+Date: Thu, 03 Sep 2026 15:15:06 -0700
+In-Reply-To: <20260903214758.2727663-4-memxor@gmail.com>
+References: <20260903214758.2727663-1-memxor@gmail.com>
+	 <20260903214758.2727663-4-memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D037UWC001.ant.amazon.com (10.13.139.197) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-From: Jason Xing <kernelxing@tencent.com>
+On Thu, 2026-09-03 at 23:47 +0200, Kumar Kartikeya Dwivedi wrote:
+> When bpf_btf_find_by_name_kind() finds a type in module BTF, it
+> returns a new BTF object fd through __btf_new_fd(). This reaches
+> anon_inode_getfd(), which can sleep while allocating or expanding the
+> current task fd table.
+>=20
+> The helper prototype does not set might_sleep, so the verifier allows
+> the helper in non-sleepable contexts such as BPF timer callbacks. The
+> fd allocation can then sleep in softirq context and install the fd into
+> the interrupted task.
+>=20
+> Mark the helper as sleepable. This preserves calls from the main body
+> of a sleepable syscall program while rejecting calls from its
+> non-sleepable regions.
+>=20
+> Fixes: 3d78417b60fb ("bpf: Add bpf_btf_find_by_name_kind() helper.")
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Link: https://lore.kernel.org/bpf/20260903155150.D57251F000E9@smtp.kernel=
+.org
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
 
-commit 22ba97ea9cc1f63a0d0244fae38057ed452b6ac7 upstream.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-The TX metadata area resides in the UMEM buffer which is memory-mapped
-and concurrently writable by userspace. In xsk_skb_metadata(),
-csum_start and csum_offset are read from shared memory for bounds
-validation, then read again for skb assignment. A malicious userspace
-application can race to overwrite these values between the two reads,
-bypassing the bounds check and causing out-of-bounds memory access
-during checksum computation in the transmit path.
-
-Fix this by reading csum_start and csum_offset into local variables
-once, then using the local copies for both validation and assignment.
-
-Note that other metadata fields (flags, launch_time) and the cached
-csum fields may be mutually inconsistent due to concurrent userspace
-writes, but this is benign: the only security-critical invariant is
-that each field's validated value is the same one used, which local
-caching guarantees.
-
-Closes: https://lore.kernel.org/all/20260503200927.73EA1C2BCB4@smtp.kernel.org/
-Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Signed-off-by: Jason Xing <kernelxing@tencent.com>
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
-Fixes: 48eb03dd2630 ("xsk: Add TX timestamp and TX checksum offload support")
-Link: https://patch.msgid.link/20260530042630.80626-1-kerneljasonxing@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-[ 6.12: Apply fix in xsk_build_skb() since missing patch
-	30c3055f9c0d ("xsk: wrap generic metadata handling onto separate
-	function") added in v6.18 which moves handling to separate
-	function xsk_skb_metadata(). ]
-Signed-off-by: Suraj Jitindar Singh <surajjs@amazon.com>
----
- net/xdp/xsk.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index da7e11e3bfad..76675ce70f03 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -665,6 +665,7 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
- 	struct xsk_tx_metadata *meta = NULL;
- 	struct net_device *dev = xs->dev;
- 	struct sk_buff *skb = xs->skb;
-+	u16 csum_start, csum_offset;
- 	bool first_frag = false;
- 	int err;
- 
-@@ -733,15 +734,17 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
- 			}
- 
- 			if (meta->flags & XDP_TXMD_FLAGS_CHECKSUM) {
--				if (unlikely(meta->request.csum_start +
--					     meta->request.csum_offset +
-+				csum_start = READ_ONCE(meta->request.csum_start);
-+				csum_offset = READ_ONCE(meta->request.csum_offset);
-+
-+				if (unlikely(csum_start + csum_offset +
- 					     sizeof(__sum16) > len)) {
- 					err = -EINVAL;
- 					goto free_err;
- 				}
- 
--				skb->csum_start = hr + meta->request.csum_start;
--				skb->csum_offset = meta->request.csum_offset;
-+				skb->csum_start = hr + csum_start;
-+				skb->csum_offset = csum_offset;
- 				skb->ip_summed = CHECKSUM_PARTIAL;
- 
- 				if (unlikely(xs->pool->tx_sw_csum)) {
--- 
-2.47.3
+...
