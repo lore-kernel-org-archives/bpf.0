@@ -1,97 +1,112 @@
-Received: from mta0.migadu.com (out-92.mta0.migadu.com [91.218.175.92])
+Received: from mail-wm2-f4.google.com (mail-wm2-f4.google.com [74.125.225.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB624BA9E5
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 14:35:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03A630569A
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 14:44:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788446115; cv=none; b=Mp336hMAix/fLd06WeODaR9Dn9ONUTskCrH6DEU9Itc1Izm3HXmc0Mgkn36LsmCfqSRwbMayjG+8z+vAdwl1NRpagUJMJTXwJfHW7aG8VlJF6NpWUAHaGJZCGi5f0QneCg/Fw8OCJrY0l3mrFlNrIQwu4mKD/ZHRiBpdilhOaNQ=
+	t=1788446678; cv=none; b=S0Fi+Ka0lIa8x9hjsNAKcPM334t6PvKJBlhkhbM7UpFcfKgT7bW+eVm25m/XIikmjBoq2jSkRRh7LGG0YsBt74PQfUrKOEoXDJvm8eC2RFxBAUPWyfWo/WPLsU8eXlqSJMeK0ew/09/mV8E81FdN7eI4K8QS+erFI2XuKbkYjxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788446115; c=relaxed/simple;
-	bh=inqB9us+xXArfQYHAZH6ywgaZgA5rW0/tc6FU1d61cU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gt9NoxF5afGA8ccyq7USH2ptNdvkHTVJ+1PfIMOKCMeMkr01RP7yWusYQrszf5pWGHAkaZUVh4Orjfn9C2OJdreWWlRIpcspyCtKj35BddnSwZJVGyHvm7eE1SIjQ8YTEO2n4WQ6Yj6CnJny8Be6O0Gf+VLA+kwyhbrXj49vQmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cJ1nqBmH; arc=none smtp.client-ip=91.218.175.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788446678; c=relaxed/simple;
+	bh=0ovf0EMfZx8IALVjkxahlGjGhwE774VWP1S3v3h6Kxw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MLVLsuNGVV/OlJMtG1jp0R5C4xoQv7YTA8+ttT9qEW1SgSM/M9kuFyChLwWYwO5KOqwjOiY5a3IPmUqbUp7uQIONOHKc90aAiYYp0uUWCjY8z3SZbQRFB9wV5XvEmpLIHnhP+qQk0D81RrsnLCx3pJP5fegHo8Ymarm6QT/6DVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qNlnj8ud; arc=none smtp.client-ip=74.125.225.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cJ1nqBmH"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=inqB9us+xXArfQYHAZH6ywgaZgA5rW0/tc6FU1d61cU=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788446105; v=1; x=1789050905;
- b=cJ1nqBmHMNaSdYNzK3OXaVtBwR/Z1Xlxx8ZUiyBx+vhBuj2+R6fGQ65PopnSpUGA32Elc8/r
- eowR61BTYRSg3tugnePQ+DvrBmoTwnpZnDNu9OwKSy7gHwxHoP/Ek1dArI2vdPSpHBsyo2O4D6L
- BlLIIszt9ktaDidWPELObeoo=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 98708903f2b4cbcc;
-	Thu, 03 Sep 2026 14:35:03 +0000
-X-Mizu-Trace-ID: 98708903f2b4cbcc
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <dfc2ac40-a1d8-4ec1-a8b7-fcfd85408b75@linux.dev>
-Date: Thu, 3 Sep 2026 22:34:53 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qNlnj8ud"
+Received: by mail-wm2-f4.google.com with SMTP id 5b1f17b1804b1-49cd71f9909so4218985e9.1
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 07:44:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788446675; x=1789051475; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=dIF5AygXZimj8u91l9VZHeN2d4HIKiQM1/6WsECbo4I=;
+        b=qNlnj8ud4SCyD7l5l8Ix3R24tIjFHzViAeP0t9Q3m/9Qv8ikikkjVYbm3pNzj2aAYc
+         IklQx+rtCLX0aouRfnFpY7WgNTvbAFRb6xqMyWbs2LrXom2NGe3o/prSQWqUgX+46Vs6
+         2ByqmzZ+4nDx3jo/jHqAqxgkiD1QZWfSnywZXB2nLkbn5DY66/NK+vo7xQRsA6Uowk4v
+         9SC0Y7E/K4XmCkzbA4ZbXwxP84To3idkafxrFtpotZANN8VS6w3mFrtmHRPFkcrbthEd
+         eZQ1qTQqKeT3jdLZNrWzY/iNYBL8k3t9riX823QDIshL3HDfBJpIFJ0EmMNxHpORWnDO
+         U/OA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788446675; x=1789051475;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=dIF5AygXZimj8u91l9VZHeN2d4HIKiQM1/6WsECbo4I=;
+        b=hmSTqCIWS/Ze4uXf7Gh+84I/1HhZuM+1ZNnXBcClTPDBpZHAoDgsuL9xpPwAqIWDBO
+         aG2MgF5e2CaXOL58RcS+X5C7KoOctiUdgAx41X1KP0KDNRHbJSm6crTsvIzHtb7iKCC4
+         WdDnG8RAaw47wjhHFtVpCLEL56bvW1lKLq2Ws2017f/DUmiPUAF/8WFvTt84l5r3Bn0O
+         mbl5FnFHEHlPXwIgwqbh5xcqDFVSeK059Ps7Y0s0crxB6wPWH+cCZsYdUZ09u33ok6DG
+         aRowIsqpxLaC9dMvcbd4TKLCiALKAH4fnil577OSwdT2YbaaVQMwmwM/5tTHdnOpRIRR
+         QWUA==
+X-Gm-Message-State: AFuF++l0XB5FbFZKV8pMHT+4Nx8FzHDOBQwtPRitvsTzitAUvCQQfx3r
+	VmB6i0ErgcVQnqi3Z5xAJ7TnNdYvWEc8ZqqjAiLfXDS7Ntlv/VNJT3qP1Ry9cvJI
+X-Gm-Gg: AYBFou1HFu+GO7Xa80b5DIlpqGi2mvf0AU4xIwMHPlod3QJIXBeHKjT6xlc8Msiwahl
+	VvUFp2E0rRvyUOGpYyflmepYFnEYktegJZRvjTxxIYM0XXHM+ul0k4LiWnLAXS09Jn/23r/uv+k
+	7xVAfNPEOuEFSckuhiZ3m2uNyzWlp7cIKOHU1bR1m9zTXqTxPn1JNhOcMoSG4nmCTqBTq0SNMiP
+	Vx/gXIZOk3ok9Q9HNmnbdB8m0TW1LfSpjmW/3wsKHD1p+HmrSfVJtQLBug7IBe67fGwbLGvBAH2
+	vOpf6l31pjtDpzImLnCuS2ocnIChgPqPi1k1GPMgDepTmMPxt5bBtB57ttZOTBtbDsvkHTxeVuS
+	KojDxp68ixNFbdOuV/nguez9wOndlJqYq/W9V/FYxiJjVq/xgLUF45x7MRgUkHXLSG0oEB8KF+3
+	wYgYikQ2/PZstd6VInoAcOQE0uY20fRJjX2Uun9RSizku38+dYjY4cAf1PPb5PnTyIING5kBPEv
+	VUxnlKBuY/6LhBTjXQ74T6XmT6kzTtlMVK5YFNW8LwCyDX0aUfiOWw7IIgKlVbJxM1Po4epovIG
+	OJD8s4MH37qkfckpQyJhptg7c70=
+X-Received: by 2002:a05:600c:4eca:b0:49c:e1f1:3dd5 with SMTP id 5b1f17b1804b1-49ce5816892mr196616375e9.4.1788446674685;
+        Thu, 03 Sep 2026 07:44:34 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cee5f912esm76649645e9.4.2026.09.03.07.44.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Sep 2026 07:44:34 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf v1 00/10] Misc bug fixes - part 1
+Date: Thu,  3 Sep 2026 16:44:18 +0200
+Message-ID: <20260903144433.1716731-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf 1/2] bpf: Fix out-of-bounds read of sk_protocol in
- bpf_sock_destroy()
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: xmei5@asu.edu, daniel@iogearbox.net, john.fastabend@gmail.com,
- sdf@fomichev.me, martin.lau@linux.dev, ast@kernel.org, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
- aditi.ghag@isovalent.com, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- martin.lau@kernel.org, mason@kernel.org
-References: <20260903125306.299943-1-jiayuan.chen@linux.dev>
- <88d25f82f5261c0a7f12d6e82988bda387f8180c656cd163eec959d327f48769@mail.kernel.org>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <88d25f82f5261c0a7f12d6e82988bda387f8180c656cd163eec959d327f48769@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1340; i=memxor@gmail.com; h=from:subject; bh=0ovf0EMfZx8IALVjkxahlGjGhwE774VWP1S3v3h6Kxw=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtmc7+L8OeIZxw1eY5aqjeuS34+L8RjYrf3+p2wKdkq1 WabT5V1lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCKBfgx/5e7VpsStTn12/bJ2 0+8r646v2il+I/fn9sZouY1vzSKUNjH8T0lzfbnaIEzQsnme6KUexeJ3XwycWGyPbHyx/Xic3MS XXAA=
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
+Content-Transfer-Encoding: 8bit
+
+A set of miscellaneous fixes for bugs reported by Nicholas. These are
+easy ones and should not require any major discussion, hence batched
+together. See commit logs and selftests for details.
+
+Kumar Kartikeya Dwivedi (10):
+  bpf: Mark signal tracepoint siginfo arguments as scalar
+  selftests/bpf: Cover signal tracepoint siginfo sentinels
+  bpf: Reject tail calls directly from callback frames
+  selftests/bpf: Test direct tail calls from callbacks
+  bpf: Reject resilient lock operations in rbtree callbacks
+  selftests/bpf: Reject resilient unlock in rbtree callback
+  bpf: Mark sched_process_wait argument as nullable
+  selftests/bpf: Test sched_process_wait nullable argument
+  bpf: Mark syscall helpers as sleepable
+  selftests/bpf: Check syscall helpers in timer callbacks
+
+ kernel/bpf/btf.c                              |  7 ++
+ kernel/bpf/syscall.c                          |  2 +
+ kernel/bpf/verifier.c                         | 16 +++++
+ .../selftests/bpf/progs/raw_tp_null_fail.c    | 53 +++++++++++++++
+ .../testing/selftests/bpf/progs/rbtree_fail.c | 29 +++++++++
+ .../selftests/bpf/progs/tailcall_callback.c   | 16 +++++
+ .../bpf/progs/verifier_async_cb_context.c     | 64 +++++++++++++++++++
+ 7 files changed, 187 insertions(+)
 
 
-on 9/3/26 10:01 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/net/core/filter.c b/net/core/filter.c
->> index 61940e7535523..1bbb72138ac64 100644
->> --- a/net/core/filter.c
->> +++ b/net/core/filter.c
->> @@ -12912,8 +12912,8 @@ __bpf_kfunc_start_defs();
->>    * @sock: Pointer to socket to be destroyed
->>    *
->>    * Return:
->> - * On error, may return EPROTONOSUPPORT, EINVAL.
->> - * EPROTONOSUPPORT if protocol specific destroy handler is not supported.
->> + * On error, may return EOPNOTSUPP, EINVAL.
->> + * EOPNOTSUPP if protocol specific destroy handler is not supported.
->>    * 0 otherwise
-> The EPROTONOSUPPORT -> EOPNOTSUPP correction is right, but the rewritten
-> error list is incomplete. tcp_abort() returns -ENOENT when the socket is
-> already closed (net/ipv4/tcp.c, around the sk_state == TCP_CLOSE check):
->
->      /* Avoid closing the same socket twice. */
->      if (sk->sk_state == TCP_CLOSE) {
->          if (!has_current_bpf_ctx())
->              release_sock(sk);
->          return -ENOENT;
->      }
->
-> That error propagates through sk->sk_prot->diag_destroy(sk, ECONNABORTED)
-> and is reachable from a BPF iterator (destroying a sock the iterator
-> already destroyed, or one closed concurrently). In contrast, EINVAL is only
-> reachable through the narrower tcp_abort_override() path for MPTCP listener
-> subflows.
->
-> Should ENOENT be added to the list?
-
-
-I'd like to describe it as "others" since diag_destroy may change it's 
-return value.
+base-commit: ac0aaef0aa997fcdcb2458bd584539ba8608d33e
+-- 
+2.53.0
 
