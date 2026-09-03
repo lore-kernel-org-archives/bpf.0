@@ -1,95 +1,95 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F00172618
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 00:12:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DC9772618
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 00:12:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.180
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788394376; cv=pass; b=lr3hhrvlg0AYM94aCb84U7c63oq5a6AmVzfdcuXJ0X2EuOdtNrlsTaGWslt6duSsGlMN7VCC2UJ3fzkqY68TkJtlW3C+jOasaCuE+cYoBy8lXParaLAmxaW00mROOijpF5HaVu3UQmoVtQYkVHMzJa9VpCDTlLHBkyWID8KfnBY=
+	t=1788394380; cv=pass; b=WHv0SMGFxZuBjGac/t41evwQeQuxV2VoHjiMT3J0QZPhsXjjd7DFW7D7dVy6eaOqNodkNL6D611erjZQClHPLMslBJWJNOFIYkxfkV0XQa9hMEXNusdeeB2xqA8lxWZZCzKxQa6FJHDHkaYe1Q3Z7t3S7tsh04pfmTVx4BKUpwI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788394376; c=relaxed/simple;
-	bh=YqYF7wD34Q4Q2Ohvxyox89BH2ovOPadye/gWn3mzzt0=;
+	s=arc-20240116; t=1788394380; c=relaxed/simple;
+	bh=aGFraPUJE5OYBuCFSogJVu0FWoduGczQM7Z8Zh35VLo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aa/WPwx0oefguWqITIS1eeRD6RFq0uzWlqZwuUiZs0aoX0x+YSqYTtEnv9Uu92n4kpCg1xclglufyPBpLw3CJsYeLSPHymEGmxh8uELuabs9eJT2D5WSRQg6qvqeh1WSnTPvM63AWDJTLgoIZLvS4SAyqcSV0XIsbD3kEPUEbG8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lLjsK2mb; arc=pass smtp.client-ip=209.85.210.172
+	 To:Cc:Content-Type; b=WbkyuAyY3AAu1ZJdN/EAvrH2+65vq7k2Z2HGF0VjBphBzdkZpjE2HLyF1qSztcGX1vGPQbwXLlyRlqpRtKvfJxuUESwnvQyKkj5wnLWG+Go+azrds09LG2exRa4in6TDupnL6L/9g04KkwsEWsEelLeqM9Ty5lh1x+bGQ3Bf0sw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DAxEUjp0; arc=pass smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lLjsK2mb"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-85339ed040aso1460169b3a.1
-        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 17:12:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788394375; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DAxEUjp0"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-8485b358552so1544705b3a.2
+        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 17:12:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788394378; cv=none;
         d=google.com; s=arc-20260327;
-        b=g5BUytTZgrUM3/IvolxhZKkD9sbPWTwR77LpM9hXWRy91Rb208evfmcI/S/bwdSIF0
-         qIsh+fACrSk6Sne24acC6JTq7z5e/ipnVSaqeTk6Cua5JuW6Vj7JhN6s8HpYrtQCtEYh
-         hy/t/3JNWR80mAtVyYzMx//ZB+ZFms159lb96FisIeoJyYirl6gOxa9lymAstr0VZTfZ
-         4oeVsTqKijLYv5gPxJ1wNfCZH/sx4fJyHGfiY/G2ovn7zXBqhp08q0M3xic3Ye9aBgqW
-         ID6ULqDfgBk4un/q4MIkKThKfhdYOnKINYwlPM5iCIVDvN98eEqWDtrd2QCZFwx8QKKG
-         j9OA==
+        b=lfyW28+KRUoFGmhvkGOrqFsqAmoyg89rwt3W0PfV6oce63oq5H8OqEPcpkNdimDRHo
+         QiDExViAQyBnD0i/CT11ki4UaM1OvIR/WN44dKYgeSFl+xCkJDJGDkVidZCG9yTyJBT7
+         NTxsNaIfCuPOmSuYwxxU8epVgv3dvj6cwMddDbva9wJevH7mnzxT0swAVt4kSYYIjyee
+         HIWxMelns6T81571QdXfhLw+ma69bd6hnE5iIIfSUQdZlEefA3FlqpcUcHS347oOFzFs
+         y1sA8VbpruhUJGnFumk6IyAMwA5bboZh/OVB0soOtYPNPytfUU7r8478LY+FL2572iI6
+         bzYg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=7lIJmI1MD198zzuzMPQGdugnVQpMyaCF0+VM+j0LL4w=;
+        bh=GT7O9LPIu7WQDBO5+ZEFha64lBovL8sPNnDlbrHuRwU=;
         fh=+3uXqjFiym8QWrBcH5365weH5VjWoesqAzojnmSsjIo=;
-        b=Xnm4DC8H7vr7jzM/hcHq/oaDkWzODfrVLdMm3azYZyIHnxhHGALnwoFJvEhd/ktUgM
-         aXl7YuNyHEDPUNLkF9VM0q019s6vf2r69oZsiIXBquksxuyjtvhgatJVhh7tOWbafE40
-         sjoomVHNH/YhZeEzJoOO3jNVPZuTfMTzfOxDU0jcSDbkZE1hnR4sKJeFoflaJX5+4Cc0
-         yx+CzLUAnbOSGl9aIpVgyjbH8rYxIZGQa7Er/2+ntVr8lL3cw1FBSzxaP0PZ7HVdrNvO
-         COlqGBDJuaUek+KdEWqMNuhgxyWI8HqBItFGeksHmPFnbraPi4SHthn2jMjLuZe0Syxw
-         gC2g==;
+        b=TjNykQZk4dBBzZsYDM6JK42eYHBxI6Zr78E22k3uJ6ARrKof605JGkgT1dNmR25tpP
+         3hqYn/KKW/js01XBWMPD6Rve1hsWUHZmNrywYVwdDHV+Ss2O4KxmaDZ5XuCarJ1A5T0C
+         Yks9ldROM0QM7tcUQUzd/lhRfWDymJbOYxXDtYEru4Y67LzrHkBwLuebfj2Kh/NjN33V
+         iubp+GPJ6fmH0O/JiqDQw1W3GXpxqz45HmAJkjWiLsjVL4RqxUzL6a4HgY4nydRFVJ+m
+         yByVTHi+JUHoDhKq0XlatN9si4Sdbi8WWvMGXOs21hEL6/NvBZJkPhWPqyLej+RmTFI3
+         9JNg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788394375; x=1788999175; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788394378; x=1788999178; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=7lIJmI1MD198zzuzMPQGdugnVQpMyaCF0+VM+j0LL4w=;
-        b=lLjsK2mb24T7/8/+zBuIfbYYq5+gewUODy2gx5eXA7L/LADGGrYMnvSoOD88pNUEYK
-         ca10pWGhgMSqi+tAo/0HWuQ6EM22GRxakZOD/M0Wpp45c4WndNCS9EYXno3CpjAbMcMB
-         nFEoWolxJqc8CAaiydwWSEYbK/NniPZK7GCUI6Xk+9Et+yrhIh1BlaK7elMxVRIAEq+J
-         CVutGyaiM5KBO7gwOKjQyb0XxCZqU0BJYlZwlX6AUm+lEHuFCZWasxk8ngA1Db3xv3GQ
-         9ZJwF/3G5F+GmXgsvfTPjit+3/23020CZQxXJc6XUcMNhZs8mM/U6r1emqeYducJdi1P
-         oD9g==
+        bh=GT7O9LPIu7WQDBO5+ZEFha64lBovL8sPNnDlbrHuRwU=;
+        b=DAxEUjp0FsBRTC/jUpICDnsNqIqbC/sN2/PTWn8t19kQYOURYxKClP0IPBjQgjlKBA
+         hp1eQXjRWkHh6m70Py9a+2Gz9sIErvpdbKIDNyLNGgZ6yI9Lld0r6kO02wxonRXuhejP
+         iYPCaDUl4OJHrEHHrDUSIhMKQKENwOuXve3UdBGWVR4kKbRA5od9Tezl30pVoGf0FtO9
+         G/BA/yZUdPDCOaI9BerSB27NoErJ6am2miTGYzkH0K0i7CqYX6Rtnf4f0HV0nsneq3jW
+         7QGTa6tN197+FeS+VkDTts3xPpO8EZHSylPd0jhRXcjE+lZeOy6le0JXyZrD6AElAphX
+         hI8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788394375; x=1788999175;
+        d=1e100.net; s=20251104; t=1788394378; x=1788999178;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=7lIJmI1MD198zzuzMPQGdugnVQpMyaCF0+VM+j0LL4w=;
-        b=ZdruQZ/qKD9kvkYPCB3tLFM0uiSqXEMWSvyGt+UNn7GOPqGIui4oLTABBw2LMtwYod
-         bOXuEvI+GQvFxv6dxsHWJR0BO7LY+CHCNxzV4okc4LoDRYwBTDJH87Qvxz1S2Gq/vHO2
-         v/il7+OlUTQsYZ/bpNBMZWRo4kNtYk4fR43jqZrGSibcV1GNjeYpmzPUhfnPG65060qb
-         awELz7Czar6TltBi87wiuCiLfkU6k5b4+bZ+pR3klVACDfm/3JfZbiKVTV3f5mpIE/on
-         Z50+z4qLoqJicLc/13tbS8mTbki/0vJs4HVEiDqk6d5vPyIy8hOiCZ+L50n+p1SFse4Z
-         nNqA==
-X-Gm-Message-State: AFuF++nAWGF6+OaR98Yg1P0kHlaYlstIryhDaeI2afm+i70+qn0wAVUj
-	HHfTGPhTh+QuHQ9mTUULuTAn0PyprVym227m/4PmkxB7dZ8ZkFi5c33OJrF3iBD0tw2BfD24MLt
-	U88w12d7ydrCz6gnGaKTp90DmhMAaGws=
-X-Gm-Gg: AYBFou0THXB3dsFGgPeJoB9vCaAKHf5bYxyZ0ujCKATRsYTs5tRlcjGs5MOlrBcOYSF
-	ndzrGqLKfEh3Wp6Z7vE7b529edN7wUU5xAMJnfJiy40L4Gh5LzJhp1gZF1gJGdwBGhWW/3D/saH
-	6zRkFCbyL/ZpnufCFvNTVCOhYyUvkpJ3uFyNX3UmWcLHzj1xq9FFgsZk7tMrEE9TLQc4EWW2sti
-	NchirPzNBilcYxqjlOKP8MQg4z3xpqggw2WJKCpyudXaDoYInFghbcOJ6zozLjnkcm7SU+mmJ64
-	+r4hYMnZnZlKkJrThYh2z7fEPuF3zlLueHBIpPylN/SGFGhpmiCtbrMHEpe+EzOCUqoCE/TZUwh
-	EgiLNy7BDJtR/sZ22zsNBMktm72fR8bG+5ARz
-X-Received: by 2002:a05:6a00:4094:b0:857:7384:b5fa with SMTP id
- d2e1a72fcca58-85ed4d10b5fmr12684837b3a.22.1788394374419; Wed, 02 Sep 2026
- 17:12:54 -0700 (PDT)
+        bh=GT7O9LPIu7WQDBO5+ZEFha64lBovL8sPNnDlbrHuRwU=;
+        b=It57+HXtytx6dGKBR1tYw0DPWxk/TEj6bcQtGRUpjlViFMj8L2WMTB73KYl+ME7+7Z
+         ekhs3t5FxdILF4OriiuVtZ1tiXl/5l1eDmD+5gDigQWmWzS6GXr/iHscgx4eBwGbYkiN
+         DlOItg1hmkyI02/aX33rWdsk58E9H6kAEA2oaWCymN+H+rouV5XipJFGRv6bkKqst31A
+         oNnZFHKmfLdSuQN+2AH/KPI4zvNKONowLWH094yEuPb8vqgpyRDur1mubv/qNX6KiaIL
+         7v6Aux7E4AIKefUZ2gEWn6tt+2VFtAUybXquZTzC88iiYYB5glz0EB+Yhgxu+D1XXDjt
+         VvJg==
+X-Gm-Message-State: AFuF++k0aOqeF9KBF2BgBXv2sgkM6hlHJuf5LloJLn13WbclbazdMHe0
+	1VX6vcBygqPz3uBKI8Bdtfi65ZL5YycYtxJ6ZQsARvVe0fdSm0dHQL/jvTHgKVjqAkMPKyTnv0o
+	HXJok+qbQM0PC5hoQUtXECIAgl6IjzIs=
+X-Gm-Gg: AYBFou172xl5Hy5j6Niaj3CVApBfj6zmNSOtVGEzZz9IbIdnq9qicDIbHDb4abKjS9Z
+	8jTBIPLqRLypTAMP0w3CleyQxES4oQnnC/w8it90nGdjssTa9zXZfBEXXDrfKzPm/6VyrGK10kB
+	QJRe1Pr9EVJL5kOl3GFhLP+oQuo7off5StvCWgQ5c9rPWmLQKc3G4YtKjK8Jma4Jm7JV6nfQQ6B
+	wxQmXtoWmVq72Nv8kZvku/XYVjQPOWn8F6DaAnO4+7cIJMEj3qWKexOtlSsBSC3TMU41Welk06K
+	W6rVS5zWskpDuqD29SPqyihLsLLxvf5MZXmr7pVcVqa30uRBQhN2rZ0FC1Lf7eYmuCLIqa/AET6
+	KgE6s6uI5pJMXrWfOfjS5sq/MvQ==
+X-Received: by 2002:a05:6a00:a25c:b0:855:1590:ba2b with SMTP id
+ d2e1a72fcca58-85ed1d076bamr13847122b3a.5.1788394378249; Wed, 02 Sep 2026
+ 17:12:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260831133809.1161-1-zhaofuyu@vivo.com> <20260831133809.1161-2-zhaofuyu@vivo.com>
-In-Reply-To: <20260831133809.1161-2-zhaofuyu@vivo.com>
+References: <20260831133809.1161-1-zhaofuyu@vivo.com> <20260831133809.1161-3-zhaofuyu@vivo.com>
+In-Reply-To: <20260831133809.1161-3-zhaofuyu@vivo.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 2 Sep 2026 17:12:41 -0700
-X-Gm-Features: AcwNN1WFT6CKr63RsJA9KmEokVRL_qtKBS0BnjWeRclY6YHlyIuCUdP91xYll0o
-Message-ID: <CAEf4BzaHTTEob-vmhmcRt1pmED+eBBLWnehEDUk=t7O7GUyyFg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 1/2] libbpf: support selective kernel module
- BTF loading via bpf_object_open_opts
+Date: Wed, 2 Sep 2026 17:12:45 -0700
+X-Gm-Features: AcwNN1Xh0ZBM8qa9H6dmpY3f5IHeM7XO8aDWYCpQL1SZlbp3qzCTFdwJl0PB8pM
+Message-ID: <CAEf4BzY_MJa-Eyd2iaE65B_jPVx07PU+ctCrQtLtHQK+PEzsXA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 2/2] selftests/bpf: add tests for selective
+ module BTF loading
 To: Fuyu Zhao <zhaofuyu@vivo.com>
 Cc: bpf@vger.kernel.org, eddyz87@gmail.com, alan.maguire@oracle.com
 Content-Type: text/plain; charset="UTF-8"
@@ -98,340 +98,223 @@ Content-Transfer-Encoding: quoted-printable
 On Mon, Aug 31, 2026 at 6:38=E2=80=AFAM Fuyu Zhao <zhaofuyu@vivo.com> wrote=
 :
 >
-> Add btf_module_names and nr_btf_module_names fields to
-> bpf_object_open_opts to support selective kernel module BTF loading.
+> Add selftests covering selective kernel module BTF loading through
+> bpf_object_open_opts.
 >
-> With btf_module_names:
-> - when provided, only the specified kernel module BTFs are loaded;
-> - when an empty list is provided, no module BTFs are loaded;
-> - when NULL, all module BTFs are loaded as before.
+> The tests verify that:
+> - the existing behavior is preserved when btf_module_names is not
+>   specified, and loading succeeds when the required module BTF is
+>   specified;
+> - a required module BTF is skipped when the module is not specified in
+>   btf_module_names;
+> - an empty btf_module_names list skips loading all module BTFs;
+> - invalid module BTF name lists are rejected.
 >
-> This avoids unnecessary module BTF loading and reduces BPF object
-> loading time when only a subset of kernel module BTFs is needed.
->
-> Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-
-nit: use andrii@kernel.org as my email, thanks
-
 > Signed-off-by: Fuyu Zhao <zhaofuyu@vivo.com>
 > ---
->  tools/lib/bpf/libbpf.c | 117 +++++++++++++++++++++++++++++++++++++++++
->  tools/lib/bpf/libbpf.h |  24 ++++++++-
->  2 files changed, 140 insertions(+), 1 deletion(-)
+>  .../bpf/prog_tests/btf_module_names.c         | 162 ++++++++++++++++++
+>  .../selftests/bpf/progs/btf_module_names.c    |  13 ++
+>  2 files changed, 175 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_module_nam=
+es.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/btf_module_names.c
 >
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 514e4e9daa82..e19d0afd2592 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -779,6 +779,9 @@ struct bpf_object {
->         char *token_path;
->         int token_fd;
->
-> +       char **btf_module_names;
-> +       size_t nr_btf_module_names;
-
-there is entire module related set of fields higher up, put these new
-fields close to them
-
-but also naming-wise:
-  - use blah_cnt instead of nr_blah naming
-  - we should call this "btf_module_allowlist" and
-btf_module_allowlist_cnt, a bit verbose but explains what it is and
-leaves doors open for denylist, if we ever need it. Please use these
-names internally in bpf_object and in bpf_object_open_opts
-
-overall, the code as is super verbose and doesn't feel like libbpf
-code, please try to preserve naming/styling/succinct approach as much
-as possible
-
+> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_module_names.c b/=
+tools/testing/selftests/bpf/prog_tests/btf_module_names.c
+> new file mode 100644
+> index 000000000000..68f4a8d73560
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/btf_module_names.c
+> @@ -0,0 +1,162 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <test_progs.h>
+> +#include <bpf/btf.h>
+> +#include "btf_module_names.skel.h"
 > +
->         char path[];
->  };
->
-> @@ -5803,6 +5806,103 @@ int bpf_core_add_cands(struct bpf_core_cand *loca=
-l_cand,
->         return 0;
->  }
->
-> +static void bpf_object_free_btf_module_names(struct bpf_object *obj)
+> +static void btf_module_names_load(void)
 > +{
-> +       size_t i;
+> +       struct btf_module_names *skel =3D NULL;
+> +       int ret;
+> +       const char *mod_names[] =3D { "bpf_testmod" };
 > +
-> +       if (!obj->btf_module_names)
-> +               return;
+> +       LIBBPF_OPTS(bpf_object_open_opts, opts,
+> +               .btf_module_names =3D mod_names,
+> +               .nr_btf_module_names =3D 1,
+> +       );
 > +
-
-no need for this check, count should be zero and everything works as
-is without extra guard
-
-> +       for (i =3D 0; i < obj->nr_btf_module_names; i++)
-> +               zfree(&obj->btf_module_names[i]);
-> +       zfree(&obj->btf_module_names);
-> +       obj->nr_btf_module_names =3D 0;
-
-just inline this logic in bpf_object__close()
-
-> +}
-> +
-> +static int bpf_object_init_btf_module_names(struct bpf_object *obj,
-> +                                           const struct bpf_object_open_=
-opts *opts)
-
-if you look at bpf_object_open(), all the opts processing is done
-inline , let's do the same here. we can do validation and duplicate
-detection before we even get to bpf_object__new. and alloc and strdup
-loop after obj is created
-
-pw-bot: cr
-
-> +{
-> +       const char **names;
-> +       size_t i, j, cnt;
-> +       int err;
-> +
-> +       names =3D OPTS_GET(opts, btf_module_names, NULL);
-> +       if (!names)
-> +               return 0;
-
-don't exit early, we need to validate that if allowlist is not
-specified, corresponding count is zero and vice versa
-
-> +
-> +       cnt =3D OPTS_GET(opts, nr_btf_module_names, 0);
-> +
-> +       /*
-> +        * Allocate one entry for an empty list to distinguish it from th=
-e
-> +        * default behavior.
-> +        */
-> +       obj->btf_module_names =3D calloc(cnt ?: 1,
-
-this count trick is kind of ugly... should we just set count to <0
-instead? we'll still be able to do for loop without any extra
-handling, but -1 vs 0 for count will be a sign of having no or empty
-allowlist
-
-> +                                      sizeof(*obj->btf_module_names));
-> +       if (!obj->btf_module_names)
-> +               return -ENOMEM;
-> +
-> +       for (i =3D 0; i < cnt; i++) {
-> +               if (!names[i] || !names[i][0]) {
-> +                       pr_warn("invalid kernel module BTF name at index =
-%zu\n", i);
-
-I don't think this will be some common mistake, let's drop all this
-verbosity with pt_warn and so on, just error out
-
-> +                       err =3D -EINVAL;
-> +                       goto err_out;
-> +               }
-> +
-> +               /*
-> +                * The list is expected to be small, so a simple nested s=
-can is
-> +                * sufficient for duplicate detection.
-> +                */
-
-unnecessary comment, drop it
-
-> +               for (j =3D 0; j < i; j++) {
-> +                       if (strcmp(obj->btf_module_names[j], names[i]) =
-=3D=3D 0) {
-> +                               pr_warn("duplicate kernel module BTF name=
- '%s'\n",
-> +                                       names[i]);
-
-ditto, just error out, no pr_warn()
-
-> +                               err =3D -EINVAL;
-> +                               goto err_out;
-> +                       }
-> +               }
-> +
-> +               obj->btf_module_names[i] =3D strdup(names[i]);
-> +               if (!obj->btf_module_names[i]) {
-> +                       err =3D -ENOMEM;
-> +                       goto err_out;
-> +               }
-> +
-> +               obj->nr_btf_module_names++;
-> +       }
-> +       return 0;
-> +
-> +err_out:
-> +       bpf_object_free_btf_module_names(obj);
-
-I don't think we need to clean up here, bpf_object__close() will be
-closed and will take care of this cleanup, keep the logic simple
-
-> +       return err;
-> +}
-> +
-> +static bool is_module_btf_needed(const struct bpf_object *obj, const cha=
-r *name)
-
-let's call this is_btf_mod_allowed()
-
-> +{
-> +       size_t i;
-> +
-> +       if (!obj->btf_module_names)
-> +               return true;
-> +
-> +       for (i =3D 0; i < obj->nr_btf_module_names; i++) {
-> +               if (strcmp(obj->btf_module_names[i], name) =3D=3D 0)
-> +                       return true;
-> +       }
-> +
-> +       pr_debug("skipping module BTF '%s', not in btf_module_names\n", n=
-ame);
-
-drop this pr_debug(), do you think it will be very useful? this whole
-feature feels super niche, whoever is going to use it should know what
-they are doing, so I find it unlikely that they might be surprised by
-ignoring kernel module they explicitly excluded
-
-> +       return false;
-> +}
-> +
-> +static bool no_module_btfs_needed(const struct bpf_object *obj)
-> +{
-> +       return obj->btf_module_names && !obj->nr_btf_module_names;
-> +}
-> +
-> +static bool all_needed_module_btfs_loaded(const struct bpf_object *obj)
-> +{
-> +       return obj->btf_module_names &&
-> +              obj->nr_btf_module_names =3D=3D obj->btf_module_cnt;
-> +}
-> +
-
-these two helpers are just verbosity, let's get rid of them and do
-corresponding checks inline
-
->  static int load_module_btfs(struct bpf_object *obj)
->  {
->         struct bpf_btf_info info;
-> @@ -5825,6 +5925,9 @@ static int load_module_btfs(struct bpf_object *obj)
->         if (!kernel_supports(obj, FEAT_MODULE_BTF))
->                 return 0;
->
-> +       if (no_module_btfs_needed(obj))
-> +               return 0;
-
-under new convention, it will be `if (btf_mod_allowlist_cnt =3D=3D 0) retur=
-n 0;`
-
-> +
->         while (true) {
->                 err =3D bpf_btf_get_next_id(id, &id);
->                 if (err && errno =3D=3D ENOENT)
-> @@ -5867,6 +5970,11 @@ static int load_module_btfs(struct bpf_object *obj=
-)
->                         continue;
->                 }
->
-> +               if (!is_module_btf_needed(obj, name)) {
-> +                       close(fd);
-> +                       continue;
-> +               }
-> +
->                 btf =3D btf_get_from_fd(fd, obj->btf_vmlinux);
->                 err =3D libbpf_get_error(btf);
->                 if (err) {
-> @@ -5891,6 +5999,9 @@ static int load_module_btfs(struct bpf_object *obj)
->                         break;
->                 }
->                 obj->btf_module_cnt++;
-> +
-> +               if (all_needed_module_btfs_loaded(obj))
-> +                       break;
->         }
->
->         if (err) {
-> @@ -8508,6 +8619,10 @@ static struct bpf_object *bpf_object_open(const ch=
-ar *path, const void *obj_buf,
->                 }
->         }
->
-> +       err =3D bpf_object_init_btf_module_names(obj, opts);
-> +       if (err)
+> +       /* Verify backward compatibility. */
+> +       skel =3D btf_module_names__open_opts(NULL);
+> +       if (!ASSERT_OK_PTR(skel, "btf_module_names__open_opts default"))
 > +               goto out;
 > +
->         err =3D bpf_object__elf_init(obj);
->         err =3D err ? : bpf_object__elf_collect(obj);
->         err =3D err ? : bpf_object__collect_externs(obj);
-> @@ -9629,6 +9744,8 @@ void bpf_object__close(struct bpf_object *obj)
->                 close(obj->jumptable_maps[i].fd);
->         zfree(&obj->jumptable_maps);
->
-> +       bpf_object_free_btf_module_names(obj);
+> +       ret =3D btf_module_names__load(skel);
+> +       ASSERT_OK(ret, "btf_module_names__load default");
 > +
+> +       btf_module_names__destroy(skel);
+> +       skel =3D NULL;
+> +
+> +       skel =3D btf_module_names__open_opts(&opts);
+> +       if (!ASSERT_OK_PTR(skel, "btf_module_names__open_opts"))
+> +               goto out;
+> +
+> +       ret =3D btf_module_names__load(skel);
+> +       ASSERT_OK(ret, "btf_module_names__load");
+> +out:
+> +       btf_module_names__destroy(skel);
+> +}
+> +
+> +/*
+> + * Verify that an unrequested module BTF is skipped. The BPF program
+> + * requires the BTF of bpf_testmod, but bpf_testmod is not specified in
+> + * btf_module_names, so its BTF is skipped and the BPF program fails to =
+load.
+> + */
+> +static void btf_module_names_skip(void)
+> +{
+> +       struct btf_module_names *skel =3D NULL;
+> +       int ret;
+> +       const char *mod_names[] =3D { "module_nonexist" };
+> +
+> +       LIBBPF_OPTS(bpf_object_open_opts, opts,
+> +               .btf_module_names =3D mod_names,
+> +               .nr_btf_module_names =3D 1,
+> +       );
+> +
+> +       skel =3D btf_module_names__open_opts(&opts);
+> +       if (!ASSERT_OK_PTR(skel, "btf_module_names__open_opts"))
+> +               goto out;
+> +
+> +       ret =3D btf_module_names__load(skel);
+> +       ASSERT_EQ(ret, -ESRCH, "btf_module_names__load");
+> +
+> +out:
+> +       btf_module_names__destroy(skel);
+> +}
+> +
+> +/*
+> + * Verify that an empty filter skips loading all module BTFs. The BPF
+> + * program requires bpf_testmod BTF, so it fails to load.
+> + */
+> +static void btf_module_names_empty(void)
+> +{
+> +       struct btf_module_names *skel =3D NULL;
+> +       int ret;
+> +       const char *mod_names[] =3D { NULL };
+> +
+> +       LIBBPF_OPTS(bpf_object_open_opts, opts,
+> +               /* Non-NULL pointer with zero entries represents an empty=
+ list. */
+> +               .btf_module_names =3D mod_names,
+> +               .nr_btf_module_names =3D 0,
+> +       );
+> +
+> +       skel =3D btf_module_names__open_opts(&opts);
+> +       if (!ASSERT_OK_PTR(skel, "btf_module_names__open_opts empty"))
+> +               goto out;
+> +
+> +       ret =3D btf_module_names__load(skel);
+> +       ASSERT_EQ(ret, -ESRCH, "btf_module_names__load empty");
+> +
+> +out:
+> +       btf_module_names__destroy(skel);
+> +}
+> +
+> +static void btf_module_names_invalid(void)
+> +{
+> +       struct btf_module_names *skel =3D NULL;
+> +       const char *names[] =3D { NULL };
+> +       const char *empty_names[] =3D { "" };
+> +       const char *duplicate_names[] =3D {
+> +               "bpf_testmod", "bpf_testmod",
+> +       };
+> +       LIBBPF_OPTS(bpf_object_open_opts, opts,
+> +               .btf_module_names =3D names,
+> +               .nr_btf_module_names =3D 1,
+> +       );
+> +
+> +       skel =3D btf_module_names__open_opts(&opts);
+> +       ASSERT_EQ(libbpf_get_error(skel), -EINVAL,
+> +                 "btf_module_names__open_opts null");
+> +       btf_module_names__destroy(skel);
+> +
+> +       opts.btf_module_names =3D empty_names;
+> +       skel =3D btf_module_names__open_opts(&opts);
+> +       ASSERT_EQ(libbpf_get_error(skel), -EINVAL,
 
-just inline that simple clean up logic here without helper function
+please don't use libbpf_get_error(), this is legacy and is
+discouraged. check that skell is null and then look at errno
 
->         free(obj);
->  }
->
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index b965ad571540..1cabf7e46554 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
-> @@ -224,10 +224,32 @@ struct bpf_object_open_opts {
->          * point (/sys/fs/bpf), in case this default behavior is undesira=
-ble.
->          */
->         const char *bpf_token_path;
-> +       /*
-> +        * Optional list of kernel module names whose BTFs should be load=
-ed.
-> +        * nr_btf_module_names specifies the number of entries in
-> +        * btf_module_names.
 
-not really, it's not "what should be loaded" but what is allowed to be
-loaded. quite a difference, because with "should be loaded" we should
-be failing if we don't find all those modules, but I don't think that
-was the intent, was it?
-
-> +        *
-> +        * With btf_module_names:
-> +        * - when provided, only the BTFs of the specified modules are lo=
-aded;
-> +        * - when an empty list is provided, no module BTFs are loaded;
-> +        * - when NULL, all module BTFs are loaded as before.
-> +        *
-
-also mention that count should be zero for empty or NULL list
-
-> +        * The list must contain valid, non-empty module names and must n=
-ot
-> +        * contain duplicate entries; otherwise -EINVAL is returned.
-> +        *
-> +        * This affects:
-
-just say that this allowlist affects any place where kernel module BTF
-might be needed by limiting which kernel module BTFs libbpf will
-consult. no need to enumerate all the different places where we use
-BTF, it will get out of sync too easily.
-
-> +        * - BPF CO-RE relocations against types defined in modules;
-> +        * - BTF-based resolution of attach targets;
-> +        * - module-qualified tracing multi-attach targets;
-> +        * - struct_ops kernel type resolution;
-> +        * - extern (ksym) resolution for kernel symbols defined in modul=
-es.
-> +        */
-> +       const char **btf_module_names;
-> +       size_t nr_btf_module_names;
->
->         size_t :0;
->  };
-> -#define bpf_object_open_opts__last_field bpf_token_path
-> +#define bpf_object_open_opts__last_field nr_btf_module_names
->
->  /**
->   * @brief **bpf_object__open()** creates a bpf_object by opening
+> +                 "btf_module_names__open_opts empty");
+> +       btf_module_names__destroy(skel);
+> +
+> +       opts.btf_module_names =3D duplicate_names;
+> +       opts.nr_btf_module_names =3D 2;
+> +       skel =3D btf_module_names__open_opts(&opts);
+> +       ASSERT_EQ(libbpf_get_error(skel), -EINVAL,
+> +                 "btf_module_names__open_opts duplicate name");
+> +       btf_module_names__destroy(skel);
+> +}
+> +
+> +void test_btf_module_names(void)
+> +{
+> +       struct btf *vmlinux_btf =3D NULL;
+> +       struct btf *module_btf =3D NULL;
+> +
+> +       if (!env.has_testmod) {
+> +               test__skip();
+> +               return;
+> +       }
+> +
+> +       vmlinux_btf =3D btf__load_vmlinux_btf();
+> +       if (libbpf_get_error(vmlinux_btf)) {
+> +               test__skip();
+> +               return;
+> +       }
+> +
+> +       /* Ensure bpf_testmod BTF is available. */
+> +       module_btf =3D btf__load_module_btf("bpf_testmod", vmlinux_btf);
+> +       if (libbpf_get_error(module_btf)) {
+> +               btf__free(vmlinux_btf);
+> +               test__skip();
+> +               return;
+> +       }
+> +
+> +       btf__free(module_btf);
+> +       btf__free(vmlinux_btf);
+> +
+> +       if (test__start_subtest("btf_module_names_load"))
+> +               btf_module_names_load();
+> +
+> +       if (test__start_subtest("btf_module_names_skip"))
+> +               btf_module_names_skip();
+> +
+> +       if (test__start_subtest("btf_module_names_empty"))
+> +               btf_module_names_empty();
+> +
+> +       if (test__start_subtest("btf_module_names_invalid"))
+> +               btf_module_names_invalid();
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/btf_module_names.c b/tools=
+/testing/selftests/bpf/progs/btf_module_names.c
+> new file mode 100644
+> index 000000000000..232adc0f33f6
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/btf_module_names.c
+> @@ -0,0 +1,13 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <vmlinux.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +
+> +SEC("fentry/bpf_testmod_loop_test")
+> +int BPF_PROG(test_btf_module_names)
+> +{
+> +       return 0;
+> +}
+> +
+> +char _license[] SEC("license") =3D "GPL";
 > --
 > 2.34.1
 >
