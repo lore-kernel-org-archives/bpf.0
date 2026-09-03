@@ -1,61 +1,63 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEA2D4F646E
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 17:15:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BF50431A44
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 17:15:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788455754; cv=none; b=QzNMWVbzVZBsjXncbufKOhi2B3+/AFG595OYlzF9TLE6PXBibUaulw0N4toXnIHLRnAyK3BH51Zsa6QpbWoISzCTqR8BRJD9504NAxtF4PNQXmGltCSDpu2awVJXqdqRmjkmgBOr+psQF/zjkXDjYSYqpHthheHDEfX1QbyFNbA=
+	t=1788455756; cv=none; b=meyZ0uySwoyRvjwCHM5tEpt2vTghPHPUQ+pI3uLT5/PDkRvbO8/7vvNScZZk18j6yqUr39RVf3yKs8qoubthDAn0QdTuM8JS/sVnqETJDFlKe38Qgg1fQ85Xh+IS+T4i54zXT0iL5DwanPjQ4hO2ilHeesD5/WWZtnpq81oNoQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788455754; c=relaxed/simple;
-	bh=l2CGfBNvWSEttUmlHrBqiH4KzwCS2REfQpSoO/e4jzk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EjkXU2vJFWw6CARUZ/uUbiJbv9L+QeJSKhDKSFy+6DDw3++cnTGM6iFjnaVHjCPmmBhQnpfvwO3ndsQstrYVme6oRMZMeu7d9JBkLIcU4k2Z7I5GlYlFCx6yy6pEj4wk+1jT2J0Vtc9l9GiqHW5ed5+dsniHxNThGfyG1GvUIxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m22JVwrw; arc=none smtp.client-ip=209.85.214.181
+	s=arc-20240116; t=1788455756; c=relaxed/simple;
+	bh=3p86O8U84cS0E9duKs0DsYEf54l58uZSa4x7CmKf4Kw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=FeXbBA2WSwSmIO4y09htD3W0nhQqHfwAIg5xsBTjx/lJ7H6b6fote58m0G56PW5dFOF92SM0Z5K8c3NspGF76SVTAthPsMn+EC9SxZSeNECWA4nNg4pY4HQe5WJ9IXSDq1rk1Sq3txbzQRaMt6qUQk+ObEAA3aK3g8bmxVVsQvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lRwKz8bj; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m22JVwrw"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2d6d28aa26cso377425ad.2
-        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 10:15:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lRwKz8bj"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-398b3c37877so41778a91.0
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 10:15:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788455752; x=1789060552; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BgcvHo49DDR9j8F+h02S3pkiu0IBuCDcZgsdJ3yoDuQ=;
-        b=m22JVwrwwBKfJj4xwV4t8j86Tu3mDE6Q72R3acnXV/Wf2wWhQRgEGpmnYiZS/TrGgQ
-         X0VHlVpiFRbuyZJyvNqBCSdQatph2QNnxQgd3p54RuFA52jB8p0//qXJIkQVLyoPET2r
-         ZRvvHPE9O+XxeHLTZKxbZQHX/y1WazBhDB4o4zqcQdu0KG5bUUL6uLB8SytkU3/J9H8T
-         Q+tOUkvI+nDIYYdh3Bp/epaVEGjeIGFjkKSWqW/P9w1Oq4eXzDSuzuamokiSN5og+lOz
-         4MKTaCHJDJN9AFxGFBVyFJExhGMXr+un25lLltnNW8FBacclJugDLG+ZPOSMWNvNwb4z
-         lTJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788455752; x=1789060552;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1788455754; x=1789060554; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=BgcvHo49DDR9j8F+h02S3pkiu0IBuCDcZgsdJ3yoDuQ=;
-        b=ITkmsqB2ZmDW4/IIvLZdQkxtKt7q1rOegtEWS0r7VauESYFfDBoKdJzp13oR7gtnND
-         ZbxuMwRtdABE3f1dwQNPebjD21yjcFggREfDGjzl2ZzS9CmznWuJsyaiWppoEGNpY74s
-         R24jzrOHTniPA5VVDs5iAJMHgDEkdqS3kVV0z339deXfHOE4lOSw3pNigIVVIQPPRkmM
-         4snuucpfFWptrkpxlDOlx8IPI4tdJd7YysOJXWmXWfeYii91MNDmEH9qPwrqw1+zQNmO
-         yEPwrh/FtHaXag1+G5t+udsw8kT41tZ78leT0/IkK++XdUEZBuMpSb4E0bGQL38oz2P8
-         luvA==
-X-Gm-Message-State: AFuF++mR455SlDQcUYXn/QBUexPUgYXCEwVMCr6G738944wIKvQQpjsw
-	Xb38iIPou+AHAK2zzCwOFQO3+QS5K2B1HsNHNk3Bn/ZXh90JsY1L/d/Tq2G5r1nRwBk=
-X-Gm-Gg: AYBFou2kFPS1iY4qmNEr57B7x3dKwrHheC/LpfeS5wtLtK0c3PbKOu45fMG7GwtlXAc
-	Bk5W9+eRp/TRHy5CwmhwFwk1fCfTg+LDfkKfinfzHdzia8ZUwofnfFcJ34pnFLb5Vo/MsDGgycm
-	a4ayhtXxxtYg0TjzThDW7reT6o74pZgPZFwN54HQScaADPCOYj1hms+YgfGSoXJTa57rnYuxyvH
-	H/Xv6/yMjHmbyCzJoDqK4AyKNTsx86P0ukdd69Tb+kNvkB7LB6SC2mxpvwL3MT2lGCVcF0fJprb
-	bxwisky+3ahRDWi3NNBxHG2w7OhHqRqSNu9Lkk23MyJmu31KTumPwMS3qVpH4Tk0UtCKBFdh7jb
-	K2XhUKuy8jDJrFCVOEyIYi0OWhvUPHmdw23qLdl5VjcrWPk4pibgmFuEgw+FEHl1dntC6DrJ6LN
-	MWLGgcV225zPqrxAGSJ1MxycBWO4Yc/y4SuITBwail3rqHNdn9zWsHVe7ZET29z1YIaPT+g1K9v
-	YdhMY/IE1/+t5SOIumIcKhMUKA23PmPoOdXwQSctd6vuw==
-X-Received: by 2002:a17:903:4685:b0:2ca:660:b1d with SMTP id d9443c01a7336-2db126d8c1bmr6413485ad.11.1788455752125;
-        Thu, 03 Sep 2026 10:15:52 -0700 (PDT)
+        bh=3j5UBKASEAKGY/HU/gRvW1lA7581/XMkr24NiM/6jVg=;
+        b=lRwKz8bjprHSNPbWfKtgwnGSMRpnerxRJtkmawfx7DYpitXbBS7DFCeViKlwa6EH7V
+         Yj4FA2k6eWBhjZoijDyvmLYyTi2CeNK5NRLilyxUUNxWFScDhjNfvrMmYbpcPIO/igj2
+         Zl+2BxkVAFt68l1mjE4LOzeCIPzJJ1eUa2et1+xAF8C+D9Uu/M22hkbRJHIT7j4fo6Kp
+         vswco76+4W68NC8CK2vXND5xqbywuR46cZVYHB3f2EALqe/jSWMXVUyswqaShNKVQoHs
+         4ERV28/f46WRH1SGXu1ZDHKlbV9PKRyeqB9hBgs3bBJUyxOZal7eRHMh8aEAhen6PzrW
+         1fQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788455754; x=1789060554;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=3j5UBKASEAKGY/HU/gRvW1lA7581/XMkr24NiM/6jVg=;
+        b=X9rBMeTE6VmEoargdhAZ/1htY+8mmKdi/J3sJHLBk9AuXKDFTqed02dAB3s2IZxHKo
+         w8moh+r2PdKZQ3UWpxtMOpvgABA8jTIePlTx9LQ1gqrMM1TXIz6uNBC+T8rj1OF/U+Vo
+         9t9B3I+VSphIazassjI4KVjQm1N8UJKlW6esSfM3jG3erKIsEVmuHqu0jIZux6TGox2r
+         uJXkaIEG2FWpjATePaEaA0O68s5sC9k5pEiCe+3CmBypkv6JAHJzgWGW4ccv54zrzJrv
+         wXQum/CMyicoVvcpx4ydwInZisaL9/9hj93Krh5sNtLoo6K3B4OjDkf58aRt1W8h3QsZ
+         f7OA==
+X-Gm-Message-State: AFuF++kk9MNGFLD47UKqn8ZfChxrtd5zKRC2g3s4k0vNcVTV7bxHTwZ3
+	jFmJdSg7xerhE7vJ4A+HK7IHLiY7RW9EhLTH7nxW50kLRsyJKw/bb07oFhytHQ==
+X-Gm-Gg: AYBFou0XTwxHYCG58qTQN3q4uuWE8LbFj0SMCV4cg3Xfooz17VUgOHQr8D3dfjJsc0K
+	upmuHISg6wSYhoRdbYQVm8YuDRfPgTANphFESD08Bc+Ix0CmE4H4enGhhejx6kC60fe50+BXtxQ
+	lKJaBHW9nP2gnv9Igip+IK7dNyH7OrglwlwDLe6t4hadnmVgXOXrC0G1k3FIz09BLnXDb0SHG8t
+	KBMGs2DVF9E5/6yT14/cs4PtTwlWeYrvtI4n69zdlWM+paAHDquswdP3eIjvksq+7OGgDDl1/IA
+	dV/e7eHDn4/0bVTOnW4UN2j/Y81xaguIiNgR+dLjOOO9b2ac0cpnHTT1VGuIbEVIX2w2zuyuNPl
+	VZ3O3UjtTHPOcoXCdD/h9WTLKHxOLr21sudoNrtt3/D9C4jTOzLUtasf2I8G3BbX/wsrIGQVubV
+	Iu2i0pTXeMd1hVWC87jHvBaPi9aLpCU+xPV+2LzBrAV9Le0vh2jgSRHxJsGMy4URBGMI9vZw6UA
+	iMGb3nHtPfEmT3Qx5hMbAOzmE4vG/rX5Xf2fWJuY26sdA==
+X-Received: by 2002:a17:90b:2e50:b0:398:b426:ca4b with SMTP id 98e67ed59e1d1-39aee1a9994mr22881879a91.22.1788455753677;
+        Thu, 03 Sep 2026 10:15:53 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J.thefacebook.com ([2620:10d:c090:500::6:dba3])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3339a534d25sm354893eec.5.2026.09.03.10.15.50
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3339a534d25sm354893eec.5.2026.09.03.10.15.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2026 10:15:51 -0700 (PDT)
+        Thu, 03 Sep 2026 10:15:53 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -67,10 +69,12 @@ Cc: daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	npc@anthropic.com
-Subject: [PATCH bpf 1/3] bpf: zero extend the result of an arena 32-bit cmpxchg
-Date: Thu,  3 Sep 2026 10:15:39 -0700
-Message-ID: <20260903171542.1438050-1-eddyz87@gmail.com>
+Subject: [PATCH bpf 2/3] bpf: update disasm.c to print BPF_PROBE_ATOMIC as atomics
+Date: Thu,  3 Sep 2026 10:15:40 -0700
+Message-ID: <20260903171542.1438050-2-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260903171542.1438050-1-eddyz87@gmail.com>
+References: <20260903171542.1438050-1-eddyz87@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -80,49 +84,109 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 bpf_convert_ctx_accesses() rewrites an atomic on an arena pointer from
-BPF_STX | BPF_ATOMIC to BPF_STX | BPF_PROBE_ATOMIC, and it runs before
-bpf_opt_subreg_zext_lo32_rnd_hi32().
+BPF_STX | BPF_ATOMIC to BPF_STX | BPF_PROBE_ATOMIC, this patch adjusts
+print_bpf_insn() to print such instructions as regular atomics with a
+'probe_' prefix (instead of printing them as BUG_XX).
 
-That pass emits an explicit zero extension for a 32-bit cmpxchg even
-when bpf_jit_needs_zext() is false. This is done because on some
-architectures 32-bit cmpxchg requires explicit zero extension for the
-dst register. E.g. on x86-64 'lock cmpxchg' does not change the %eax
-if comparison is successful, while BPF semantics declare that each
-operation on a 32-bit register zero extends it's upper half.
-
-is_cmpxchg_insn() matches BPF_MODE == BPF_ATOMIC only, so an arena
-cmpxchg misses said zero extension adjustment. This patch adjusts
-is_cmpxchg_insn() to match BPF_PROBE_ATOMIC alongside BPF_ATOMIC.
-
-Fixes: d503a04f8bc0 ("bpf: Add support for certain atomics in bpf_arena to x86 JIT")
-Reported-by: Nicholas Carlini <npc@anthropic.com>
-Suggested-by: Nicholas Carlini <npc@anthropic.com>
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/fixups.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ kernel/bpf/disasm.c | 47 ++++++++++++++++++++++++---------------------
+ 1 file changed, 25 insertions(+), 22 deletions(-)
 
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 65b441e4a351..52d3cec33672 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -13,10 +13,15 @@
+diff --git a/kernel/bpf/disasm.c b/kernel/bpf/disasm.c
+index b1a3fbe3fda5..3ce8d74b0e40 100644
+--- a/kernel/bpf/disasm.c
++++ b/kernel/bpf/disasm.c
+@@ -7,6 +7,9 @@
  
- #define verbose(env, fmt, args...) bpf_verifier_log_write(env, fmt, ##args)
+ #include "disasm.h"
  
-+/*
-+ * Matches BPF_PROBE_ATOMIC too: bpf_convert_ctx_accesses() rewrites arena
-+ * atomics before bpf_opt_subreg_zext_lo32_rnd_hi32() runs.
-+ */
- static bool is_cmpxchg_insn(const struct bpf_insn *insn)
- {
- 	return BPF_CLASS(insn->code) == BPF_STX &&
--	       BPF_MODE(insn->code) == BPF_ATOMIC &&
-+	       (BPF_MODE(insn->code) == BPF_ATOMIC ||
-+		BPF_MODE(insn->code) == BPF_PROBE_ATOMIC) &&
- 	       insn->imm == BPF_CMPXCHG;
- }
- 
++/* Only defined by the non-UAPI linux/filter.h, which this file cannot use. */
++#define BPF_PROBE_ATOMIC 0xe0
++
+ #define __BPF_FUNC_STR_FN(x) [BPF_FUNC_ ## x] = __stringify(bpf_ ## x)
+ static const char * const func_id_str[] = {
+ 	__BPF_FUNC_MAPPER(__BPF_FUNC_STR_FN)
+@@ -226,57 +229,57 @@ void print_bpf_insn(const struct bpf_insn_cbs *cbs,
+ 				insn->imm);
+ 		}
+ 	} else if (class == BPF_STX) {
++		const char *probe_pfx = BPF_MODE(insn->code) == BPF_PROBE_ATOMIC ? "probe " : "";
++		bool atomic = BPF_MODE(insn->code) == BPF_ATOMIC ||
++			      BPF_MODE(insn->code) == BPF_PROBE_ATOMIC;
++
+ 		if (BPF_MODE(insn->code) == BPF_MEM)
+ 			verbose(cbs->private_data, "(%02x) *(%s *)(r%d %+d) = r%d",
+ 				insn->code,
+ 				bpf_ldst_string[BPF_SIZE(insn->code) >> 3],
+ 				insn->dst_reg,
+ 				insn->off, insn->src_reg);
+-		else if (BPF_MODE(insn->code) == BPF_ATOMIC &&
++		else if (atomic &&
+ 			 (insn->imm == BPF_ADD || insn->imm == BPF_AND ||
+ 			  insn->imm == BPF_OR || insn->imm == BPF_XOR)) {
+-			verbose(cbs->private_data, "(%02x) lock *(%s *)(r%d %+d) %s r%d",
+-				insn->code,
++			verbose(cbs->private_data, "(%02x) %slock *(%s *)(r%d %+d) %s r%d",
++				insn->code, probe_pfx,
+ 				bpf_ldst_string[BPF_SIZE(insn->code) >> 3],
+ 				insn->dst_reg, insn->off,
+ 				bpf_alu_string[BPF_OP(insn->imm) >> 4],
+ 				insn->src_reg);
+-		} else if (BPF_MODE(insn->code) == BPF_ATOMIC &&
++		} else if (atomic &&
+ 			   (insn->imm == (BPF_ADD | BPF_FETCH) ||
+ 			    insn->imm == (BPF_AND | BPF_FETCH) ||
+ 			    insn->imm == (BPF_OR | BPF_FETCH) ||
+ 			    insn->imm == (BPF_XOR | BPF_FETCH))) {
+-			verbose(cbs->private_data, "(%02x) r%d = atomic%s_fetch_%s((%s *)(r%d %+d), r%d)",
+-				insn->code, insn->src_reg,
++			verbose(cbs->private_data, "(%02x) %sr%d = atomic%s_fetch_%s((%s *)(r%d %+d), r%d)",
++				insn->code, probe_pfx, insn->src_reg,
+ 				BPF_SIZE(insn->code) == BPF_DW ? "64" : "",
+ 				bpf_atomic_alu_string[BPF_OP(insn->imm) >> 4],
+ 				bpf_ldst_string[BPF_SIZE(insn->code) >> 3],
+ 				insn->dst_reg, insn->off, insn->src_reg);
+-		} else if (BPF_MODE(insn->code) == BPF_ATOMIC &&
+-			   insn->imm == BPF_CMPXCHG) {
+-			verbose(cbs->private_data, "(%02x) r0 = atomic%s_cmpxchg((%s *)(r%d %+d), r0, r%d)",
+-				insn->code,
++		} else if (atomic && insn->imm == BPF_CMPXCHG) {
++			verbose(cbs->private_data, "(%02x) %sr0 = atomic%s_cmpxchg((%s *)(r%d %+d), r0, r%d)",
++				insn->code, probe_pfx,
+ 				BPF_SIZE(insn->code) == BPF_DW ? "64" : "",
+ 				bpf_ldst_string[BPF_SIZE(insn->code) >> 3],
+ 				insn->dst_reg, insn->off,
+ 				insn->src_reg);
+-		} else if (BPF_MODE(insn->code) == BPF_ATOMIC &&
+-			   insn->imm == BPF_XCHG) {
+-			verbose(cbs->private_data, "(%02x) r%d = atomic%s_xchg((%s *)(r%d %+d), r%d)",
+-				insn->code, insn->src_reg,
++		} else if (atomic && insn->imm == BPF_XCHG) {
++			verbose(cbs->private_data, "(%02x) %sr%d = atomic%s_xchg((%s *)(r%d %+d), r%d)",
++				insn->code, probe_pfx, insn->src_reg,
+ 				BPF_SIZE(insn->code) == BPF_DW ? "64" : "",
+ 				bpf_ldst_string[BPF_SIZE(insn->code) >> 3],
+ 				insn->dst_reg, insn->off, insn->src_reg);
+-		} else if (BPF_MODE(insn->code) == BPF_ATOMIC &&
+-			   insn->imm == BPF_LOAD_ACQ) {
+-			verbose(cbs->private_data, "(%02x) r%d = load_acquire((%s *)(r%d %+d))",
+-				insn->code, insn->dst_reg,
++		} else if (atomic && insn->imm == BPF_LOAD_ACQ) {
++			verbose(cbs->private_data, "(%02x) %sr%d = load_acquire((%s *)(r%d %+d))",
++				insn->code, probe_pfx, insn->dst_reg,
+ 				bpf_ldst_string[BPF_SIZE(insn->code) >> 3],
+ 				insn->src_reg, insn->off);
+-		} else if (BPF_MODE(insn->code) == BPF_ATOMIC &&
+-			   insn->imm == BPF_STORE_REL) {
+-			verbose(cbs->private_data, "(%02x) store_release((%s *)(r%d %+d), r%d)",
+-				insn->code,
++		} else if (atomic && insn->imm == BPF_STORE_REL) {
++			verbose(cbs->private_data, "(%02x) %sstore_release((%s *)(r%d %+d), r%d)",
++				insn->code, probe_pfx,
+ 				bpf_ldst_string[BPF_SIZE(insn->code) >> 3],
+ 				insn->dst_reg, insn->off, insn->src_reg);
+ 		} else {
 -- 
 2.55.0
 
