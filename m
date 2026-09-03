@@ -1,115 +1,163 @@
-Received: from mail-yx1-f42.google.com (mail-yx1-f42.google.com [74.125.224.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 236F336B939
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 23:25:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788477942; cv=pass; b=L7YOUE1MqhfjUuKAb0sr5wNsvMwvFanGjb80EN9q+hvFQJGxRfZugds2CAszOTaPQo8fLSBqIrt7+zlq7IOQt+7bReo9FBq2hrbxfhZmGP8eEaKG2Gq/7HWW+ytBhKP5+HZuYyUMYLosDe4Lnb1+CWR2NWXhlu0pajQIIfgPduw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788477942; c=relaxed/simple;
-	bh=9Ecw7i4IFSWAiYgf4yvpHq/WIZf2MBln7vAiGJOr+Vg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ojaz45QXlAm1rN7FD39heRd7itFIPOukntk/EVM9K+g/+E/6xi98+uLjbLAItbV4C1REVHRlb4PixeIZlf0kfrVAjZKcJrg9muu7IpKSlMZbqEpReADPMHtbGV+wm8vjiw2k4O5iwCgRSbJYEkcqKQj01/gBN98ardsML486vKE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LGEz6d2D; arc=pass smtp.client-ip=74.125.224.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE0330C60D;
+	Thu,  3 Sep 2026 23:34:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788478481; cv=none; b=EH5Jg2xKvJHTDwlX9s4YjsJt1TPTP5Cfy7A8yuketyPBuaM4HoRnx/i6Q/kTIvpWxr5W95rHuzjtnWsRaIVi3sy2imV/Ogx0QmWzsZou7LC9Q1poprqv9d2cGs4LTYDUuxTdoz4y/+3lQEPa/eB2XmC3Qszi21W7Yke53KwE+uc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788478481; c=relaxed/simple;
+	bh=SMnsW9ylwnqAMzMYtzUgL1bfGkjXRrYvqC+PAnypDKI=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=nQsYijitSbhEuq/fPf2rwgTN5/tjoyEQiUeq0a0d72kC3/mWEVZsYP4qzvIqw77U7M59dmaOhY7O2fw726dzZ+v8x4A8fHmxroPAnDnFxFbN0nTgr9TuNyc6MLZEYw4QRbCDZX3Q2+MEr0N2e5DTeqH9dOG/R29LPRSDyttgM58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eahy5PNJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LGEz6d2D"
-Received: by mail-yx1-f42.google.com with SMTP id 956f58d0204a3-66f8908a887so474354d50.1
-        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 16:25:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788477940; cv=none;
-        d=google.com; s=arc-20260327;
-        b=TrktSUkUcUo4P6WIGcKzWQ2JSbEQZBYjOmrXdLys7pc0DIIYaUliLckFSIllgUjUg0
-         1LLPNQmd3MvRPAWFHwG5j5KQcTuUtEPCXf810fQAbyd/yrz+w5L1mYT5J85rPuQWuAOK
-         KMKhPM9dycRgzzhsI77jyD+nEUAGkwWG5k8Fl2//6i1R8PRn5AdFvya1Up6w+IiWwAEV
-         Az2Pvutit6Eul4gZOGDghxi9oygUyz14t8vuVQkztiEpHdp50F/bgBwljCEc/Ive8V77
-         OcKOaGOrYJVO1zcB3Lo94qQ/j1/e67Y2ArGAdjeZK5/VvXlUYUUcm/tS4Ieddsye2QIY
-         uYVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=9Ecw7i4IFSWAiYgf4yvpHq/WIZf2MBln7vAiGJOr+Vg=;
-        fh=/tbCTvxHrzrrDqGhveJIqe51r9LHTUwkt981Np+NltM=;
-        b=g/RrP/cJhy1X8F4iRI4sr2KgShIUNag5jzvWpbQyISx9q0V6vfsGe2gaBQN6jyd1xo
-         HkP5Qlp9mW3Ds2Hj3vnExHhjVTNlOZQ1HqrHrSB+geqG3gtsi095Lz/BPgRiE+ztKprf
-         ADepMe0S6UYkWC2a3hkdXVcMa7xEnuYvJ8T7qNHDnyhgihoMDh4rZJu20Eo9PZmsdcD2
-         LruOhw+aRrPdH/XIdgACIX6WDobnz67EL5w6FH9fnPd3Ghx2+RVvECkp4fWwmMXCRPlQ
-         2uai2jxJg7bXmS9gCOTubzNWpIYi20NanNregMglkuggRuRWPi6tYPPrKxltwkvHbmkw
-         40jA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788477940; x=1789082740; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=9Ecw7i4IFSWAiYgf4yvpHq/WIZf2MBln7vAiGJOr+Vg=;
-        b=LGEz6d2DHJDEY+uo0kBEqASQbtoihJPae2Uj0ZEgo6e41E601jmPYJi71IEhgTg+o2
-         5JPhPp3/pFejwoRVNfwkQtFjS8hssoe7D3y+4+xK6oloOVOLJ3/kUyhOmX3mDSFSZKTJ
-         vpSAa5pUuEAnme9Qud0H5AJQ1kPH3K35W+uw+6YuyS6zmWDwGDEYI5aF2ftPd4qonvjJ
-         +uyE8O9tO7LkPb+2J1rrlq6zexmIWbzwC9nc1woiH8bPrsrdFSgU4DhMbjJ2ATmAkuxT
-         CV72lG+v8XCFPzRaQD6aT4YVDQuMNKPRZJW2/ZlJRYo2PNvWrBS3pDyGgHIclIoODQIt
-         /Ejg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788477940; x=1789082740;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=9Ecw7i4IFSWAiYgf4yvpHq/WIZf2MBln7vAiGJOr+Vg=;
-        b=hX+KFHTVIyW38KteaIxIgCr4qYX/mCAyglYCykc568Auq0HRT0VRdoX4dO3Kj5w0O5
-         oDPd2qKQnqahE0izdI/N4xDQYkAEcyDSw8VoLEg6BE+hvbLHOJxkQJVjDrWL+Old9lOr
-         /x7XvqnM8wJak3zaMjGTV2dgaVWBcVKSeVkfUbnchqTE5AFQj4ZvRE1v61u8GBbhnQPi
-         XkkSxQ/gU2A9CAAUam3+5QnPd1KphL6F9ZEswiuBpENmLvXealinI2kB1ClCPmkeEhTc
-         mVU+lzAQpbHwn4kDfrnmyDJWg43ksX6rJCKv+ucajIBnFOB79raaQzK/aN/fOQno+9xc
-         te2Q==
-X-Gm-Message-State: AFuF++lC6WeSPYUQtU9xO5nerCgXDDuydDmBW82tAaQiePPo0ps3rkGy
-	BshxXbcUMpSsm9Eov4Rseqm8LYzto2aqVLO+trPZ8Y099+aEbNKGjSK4oeCLW6Ya04DtYmNFfSU
-	J3k4mL9WQwp21NEFU5j+PUFBj1xd7GAU=
-X-Gm-Gg: AYBFou3nbzgaIK2T+QMozLR6DySpgHFB1jsXjK0lA5tmSnj38AfoicHsnw76UAhGnfb
-	PqfhffMXVbvq93NaJYLG6FPqk2KyOyg1TdvwUeAapw1T/x1j6L8YwEwiNv3uNf8XDNFTsAnR1oh
-	x28xqI5CxzoaD6veAr8oi3AcvdGdANnbw+urdXqVJQ5IglC45INQ8JjLfPseXBOUJ4kZJyPpN7C
-	+L8jxJTKJYwyPbG/lqXnw3zWNp/JxIToePzZkWZEkoZCSrcRxWSvYP185hZaw2MUSDzZdO9fuRu
-	IfYaTK7JQxK/ym7q6O1J+IqiSlRQ0CmKpbDuMaX6IF5OmYYjAJ9+U4G9
-X-Received: by 2002:a05:690c:62c4:b0:870:96e4:6716 with SMTP id
- 00721157ae682-87127b36981mr15271717b3.28.1788477940163; Thu, 03 Sep 2026
- 16:25:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eahy5PNJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB05B1F000E9;
+	Thu,  3 Sep 2026 23:34:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788478479;
+	bh=hPiSND+W4PGmdYrqL6Txc241RmbgrgfvHcMkz0qY7o0=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=eahy5PNJo/LTskZ+hhc05aNoxuIlJLx8U89yMCi18UewmN4T2epdt9iGOOqmhHgLo
+	 44XI1HkAcBNai7k66ddWyV3czqTQdRS6uszqwOJDEVS0zZ9DX1RXp+X4lnoz6yoOrl
+	 jkuh9vuxkmEbl+6QXV4SunEjbR80bmjFWpQQxAAJdohXe33Z4VLl0siYUNs/AbQNty
+	 rPl2jyWAQLRQ40GIEomC7/BO7BKV79QqJ/wZQOiOgKpwPDkNq2ncfESDJ/ikqHcWC6
+	 QGtlYNwP4shl2LVyxS6UG8XcLQn60LZK84m8VmkIJHwibaUeFaJWOfgmzVT7dtOw8u
+	 qJRAq7Vss4sow==
+Subject: Re: [PATCH net v2] xsk: set network header on skb at generic transmit
+From: netdev-bot+sashiko@kernel.org
+To: kerneljasonxing@gmail.com
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com,
+ maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, sdf@fomichev.me,
+ ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, aleksander.lobakin@intel.com, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, syzbot+f16c1b285c9f63994eec@syzkaller.appspotmail.com
+Date: Thu, 03 Sep 2026 23:34:38 +0000
+Message-ID: <178847847848.4131868.16090144540850507396@kernel.org>
+In-Reply-To: <20260901083325.3445-1-kerneljasonxing@gmail.com>
+References: <20260901083325.3445-1-kerneljasonxing@gmail.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260819010523.1057789-1-main.kalliope@gmail.com>
- <20260819010523.1057789-3-main.kalliope@gmail.com> <CAM1=_QTDhirxjCmXUqvPqTqXMY=uVVcPXE0H=qHH_B+7XFrnpQ@mail.gmail.com>
-In-Reply-To: <CAM1=_QTDhirxjCmXUqvPqTqXMY=uVVcPXE0H=qHH_B+7XFrnpQ@mail.gmail.com>
-From: Nicholas Dudar <main.kalliope@gmail.com>
-Date: Thu, 3 Sep 2026 19:25:27 -0400
-X-Gm-Features: AcwNN1WPW79iTNDFIj6Mm2_tt4C65PnsaWbhuk-2wHJUQ72fLnU0kvZ9DHQ8yo0
-Message-ID: <CAJZwKkj_-0vkH7nUr3=oUUZSpNSk+rsqcJW8MWnqAPxMbrO44g@mail.gmail.com>
-Subject: Re: [RFC bpf-next 2/2] bpf, mips: Add support for BPF_MOVSX in the JITs
-To: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, 
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
-	emil@etsalapatis.com, ihor.solodrai@linux.dev, paulburton@kernel.org, 
-	tsbogend@alpha.franken.de, linux-mips@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 
-Hi Johan,
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider:
 
-On Fri, Aug 28, 2026 at 12:16 PM +0200, Johan Almbladh
-<johan.almbladh@anyfinetworks.com> wrote:
-> The MOV/MOVSX structure looks good in general. Some remarks on the
-> implementation of individual emittor functions.
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
 
-Thanks for the review. I incorporated the suggestions into v2: moved
-clobber bookkeeping to the common emitter tails, grouped the 8- and 16-bit
-cases using 32 - off, removed the middle returns, and used emit_sext() for
-the MIPS64 MOVSX32 case.
+- [Medium] net/xdp/xsk.c: the new skb_reset_network_header(skb) in
+  xsk_skb_init_misc() (net/xdp/xsk.c:950) anchors the *network* header…
 
-I'll send v2 shortly.
+--
 
-Thanks,
-Nicholas
+xsk: set network header on skb at generic transmit
+
+The XSK generic transmit path never reset the network header, so after
+skb_reserve(hr) the stored offset was left behind skb->data and
+skb_network_offset() returned -hr, which tripped the
+DEBUG_NET_WARN_ON_ONCE(len > INT_MAX) in pskb_may_pull_reason() when the
+skb reached a tunnel device. This adds skb_reset_network_header() in
+xsk_skb_init_misc() so the offset is 0.
+
+Closes: https://syzkaller.appspot.com/bug?extid=f16c1b285c9f63994eec
+Link: https://lore.kernel.org/all/20260826012052.51028-1-kerneljasonxing@gmail.com/
+
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 33475b180ea6f..2077bb6299ca9 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -947,6 +947,8 @@ static int xsk_skb_init_misc(struct sk_buff *skb, struct xdp_sock *xs,
+>  {
+>  	int err;
+>  
+> +	skb_reset_network_header(skb);
+> +
+
+[Severity: Medium]
+The negative offset does look closed by this: xsk_skb_init_misc() runs
+after skb_reserve(hr) in xsk_build_skb() and xsk_build_skb_zerocopy(), so
+skb_network_offset() becomes 0. Two parts of the reasoning look off
+though.
+
+First, the commit message says:
+
+  "Note this anchors it at the start of the frame (L2 for an ethernet
+   device), which is the same convention AF_PACKET uses on TX."
+
+Is that what AF_PACKET does? packet_parse_headers() anchors the MAC
+header, not the network header:
+
+net/packet/af_packet.c:packet_parse_headers() {
+	/* On TX skb->data is the L2 header; anchor it for all socket types. */
+	skb_reset_mac_header(skb);
+
+	if ((!skb->protocol || skb->protocol == htons(ETH_P_ALL)) &&
+	    sock->type == SOCK_RAW)
+		skb->protocol = dev_parse_header_protocol(skb);
+	...
+}
+
+and packet_snd() for SOCK_RAW resets network_header before moving
+skb->data back over the hard header, so network_header stays at the L3
+boundary:
+
+	skb_reset_network_header(skb);
+	...
+	} else if (reserve) {
+		skb_reserve(skb, -reserve);
+
+So after this patch an AF_XDP skb differs from an AF_PACKET one by
+hard_header_len in network_header, and mac_header is still at the unset
+sentinel left by __finalize_skb_around(), i.e. skb_mac_header_was_set()
+is false.
+
+Second, the commit message says AF_PACKET "supports GSO/checksum
+offload; none of that applies here". Does checksum offload really not
+apply? xsk_skb_metadata() in the same file does:
+
+net/xdp/xsk.c:xsk_skb_metadata() {
+		skb->csum_start = hr + csum_start;
+		skb->csum_offset = csum_offset;
+		skb->ip_summed = CHECKSUM_PARTIAL;
+
+		if (unlikely(pool->tx_sw_csum)) {
+			...
+			err = skb_checksum_help(skb);
+	...
+}
+
+The software fallback only happens when the user opted in via
+XDP_UMEM_TX_SW_CSUM, so a CHECKSUM_PARTIAL AF_XDP skb does reach the
+driver through __dev_direct_xmit(), and drivers take the L2/L3 split
+from network_header:
+
+drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:ixgbe_tx_csum() {
+	vlan_macip_lens = skb_checksum_start_offset(skb) -
+			  skb_network_offset(skb);
+no_csum:
+	/* vlan_macip_lens: MACLEN, VLAN tag */
+	vlan_macip_lens |= skb_network_offset(skb) << IXGBE_ADVTXD_MACLEN_SHIFT;
+	...
+}
+
+With skb_network_offset() now 0 on an ethernet frame, does this program
+MACLEN == 0 and an IPLEN that swallows the ethernet header, so the NIC
+inserts a checksum derived from the wrong header layout?
+
+Would it make sense to also call skb_reset_mac_header() and place
+network_header at the real L3 boundary here? Alternatively, if the
+minimal reset is the intent, could the commit message describe
+network_header as a placeholder and drop the claims about the AF_PACKET
+convention and the absence of checksum offload?
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260901083325.3445-1-kerneljasonxing%40gmail.com
