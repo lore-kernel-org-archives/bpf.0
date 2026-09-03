@@ -1,231 +1,117 @@
-Received: from mta0.migadu.com (out-176.mta0.migadu.com [91.218.175.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F5754ACC81
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 12:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E3D48095A;
+	Thu,  3 Sep 2026 13:01:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788440020; cv=none; b=VlLdx+SWaefWhTPh6npeh0bgTTsZAQe6vMUvJG4/A7uwEkyo1yhxWXkN0Qyn9cF7vFEFInD5UWmuDMuNsXuhBTu/Fg/7KgZSU5CrpXFUoR3+JHXEwmWNs/ITHuvmOdDj4ZmtTNaqboj1pw/KM4yJ2bB7bnBmGa/eAMkYzqv6AWY=
+	t=1788440484; cv=none; b=fPxs44Rwk45FAlypFuWef4g2bIz3wp2e2lfvPW2thMtr+0KOaNNsC4vC5rYoIqmSYMiSuIiuDWZCEYykN+NyPRPom1pHLhB5C9DkfFmo5klWlINJbCboIcXuc1a16ciSMxE3XutCTdmUluPK6DU8ud0ydQ71ujSwfp7fHjB4MM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788440020; c=relaxed/simple;
-	bh=JptFFqM7LLI6UiMYd4/0OPbkJU1jH/1iiyo2vP8GRPg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Pel7XkdJGi3TYIpB6FAnmKjKzoQc16XdNZvVJZNK+SN2BusXllh0uiQjxqyDhzOCgyxr90TLRF4TGi8QB9ezdWqPt/lf7GTHwzwzRouS/3Ye3zIOvsMiB51rV429JPvSwf1ZP2QzimtFQbPEoMSXe3c1p34qScBUeEn9ISbM72U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rkez+Yba; arc=none smtp.client-ip=91.218.175.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788440484; c=relaxed/simple;
+	bh=iJG/s8GGXXXIrvxySAUuH638FurAcqctVoxjhxpgL6U=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=I8H+xiIrKVIivnOIYLF6mFXhgy9dMmQjPD6mQyNPfcL+ijvExqafuSFrj2LYp6TOxzGNvSeG6I8GqP8kkJtSGmNX9mqlYOoBjq1QPAvgkmhU0H4JstEA3cGcm9acfrb0Dr98+boFdw5DE6bD83eQUPVD7S6+Lsok/xBRUtPQPZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b=JRUgXQ3A; arc=none smtp.client-ip=216.40.44.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rkez+Yba"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=JptFFqM7LLI6UiMYd4/0OPbkJU1jH/1iiyo2vP8GRPg=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788440016; v=1; x=1789044816;
- b=rkez+YbahhD5xSvXlTzgDUvR3R8aScF9yRAKzsaktW3EzyagbkZyu1VG1V+bvUfUNK3MZZQ4
- t2+/3i0XTKXhH7rvZ1GGTYeuB+h9pfMWZGDsGguRjpE4JJVf94PZU0DId7zGqweyqL3f97/I+HR
- v6dsApvy33KOrOxMh9hXz85k=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 21463ba885a2f1b1;
-	Thu, 03 Sep 2026 12:53:36 +0000
-X-Mizu-Trace-ID: 21463ba885a2f1b1
-X-Migadu-Flow: FLOW_OUT
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Aditi Ghag <aditi.ghag@isovalent.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 2/2] selftests/bpf: Test bpf_sock_destroy() on a TIME_WAIT sock
-Date: Thu,  3 Sep 2026 20:52:49 +0800
-Message-ID: <20260903125306.299943-2-jiayuan.chen@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260903125306.299943-1-jiayuan.chen@linux.dev>
-References: <20260903125306.299943-1-jiayuan.chen@linux.dev>
+	dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b="JRUgXQ3A"
+Received: from omf13.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay02.hostedemail.com (Postfix) with ESMTP id A86ED120426;
+	Thu,  3 Sep 2026 13:01:10 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf13.hostedemail.com (Postfix) with ESMTPA id 5DE8520012;
+	Thu,  3 Sep 2026 13:01:08 +0000 (UTC)
+Date: Thu, 3 Sep 2026 09:02:11 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Gabriele Monaco <gmonaco@redhat.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Nam Cao 
+ <namcao@linutronix.de>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, Wen Yang
+ <wen.yang@linux.dev>, Tobias Schaffner <tobias.schaffner@siemens.com>,
+ Viktor Malik <vmalik@redhat.com>, Linus Torvalds
+ <torvalds@linux-foundation.org>
+Subject: Re: [RFC PATCH 00/20] rv: Add support for BPF monitors
+Message-ID: <20260903090211.50d15220@gandalf.local.home>
+In-Reply-To: <eb3dd8158942d663ec8ad4c529eacd666c5f96d9.camel@redhat.com>
+References: <20260831090524.106845-1-gmonaco@redhat.com>
+	<87se3sakgi.fsf@yellow.woof>
+	<df6e9168cb06c35e21db7f9d17cfbca6bd87005b.camel@redhat.com>
+	<DL5B40CU17WD.3KD75URQZ6RRR@gmail.com>
+	<eb3dd8158942d663ec8ad4c529eacd666c5f96d9.camel@redhat.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 5DE8520012
+X-Stat-Signature: 599b17rkjqqaboag1r5zzpsja34bpukq
+X-Rspamd-Server: rspamout07
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/hDX2tycQ0wJ6OosjSOGEEIkQow8xfsuI=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=YP1HmGaRtV48egavEcaNf/B8MIIrFxZMcAR9YqngWsc=; b=JRUgXQ3AifLYbcyEiPMjDDTlFTLfMtJCxMk4zNefD7BicPd3HHyGe1GyizkVC1OgKog0KY5+EYJIhR+cQKoDATPyZgRA5johHnmvhYqJ/B3EBeXRgsG2UcOpU9HkDEyktJrf5fnqgyBji4zBLVIjjkdepnqTRRI7+ReEbdkzqUI=
+X-HE-Tag: 1788440468-820146
+X-HE-Meta: U2FsdGVkX1+/o5eHUAvWbIq34ly2XCcD6ZRuOhKJtTqfR40wgY1VcasY9LguqEVcrXg3FitwBLUK6RK5grbvCyqQ/+rZ/B356aenQJBarJmzBpukWDMHQYXLqhqiVQEdZQsT8BN+vVy/prEzh1Q/KPpuwLf/yHKmbsWNRbzLocF+euoO4KeU1/qUOmxX1DxuPOiNgB67ktypHkWAq0eG6f1TlyA3gM0YS++ewWGVm7i/VCS+coEwrw+IcYtQR8rkAA2SDKLZt6NthK+guE4kMsxezH9XtoaQrzeR80oHGXuXiO+MTgRNpPR5SH8w2VTZAGEiFLVl6wWZJ3+owXbfb/5UDIzE6YeROitbBSothSp69KXtAhrKKJIE35+hD1YIJz0VuBjWL5U=
 
-Add a tcp_timewait subtest. The client shuts down first and the server
-closes after it, so the client sock ends up in TIME_WAIT. A tcp iterator
-then finds the timewait sock by the cookie it inherited from the client
-sock and destroys it. Iterate once more to make sure it is gone.
+On Thu, 03 Sep 2026 09:21:18 +0200
+Gabriele Monaco <gmonaco@redhat.com> wrote:
 
-Without the previous fix bpf_sock_destroy() reads past the timewait sock
-and KASAN complains.
+> On Wed, 2026-09-02 at 18:57 -0700, Alexei Starovoitov wrote:
+> > I don't think bpf fits here. I haven't seen active use of RV and even less
+> > so of any request from people who want this kind of programmability.
+> > 
+> > So Nack for now. Sorry.  
+> 
+> Thanks for your opinion, however it sounds a bit harsh to me.
+> 
+> RV is clearly not a popular tool, but I wouldn't say it doesn't have active use:
+> we're actively using it to validate the deadline scheduler/server changes and it
+> already found a number of issues (e.g. [1], [2]).
+> The RTapp monitors are used to validate if userspace real-time applications
+> interact with the kernel in the best way for predictability, as far as I'm aware
+> that's regularly used [3].
+> 
+> In my eyes, the missing piece of RV is in fact this programmability. Adding a
+> monitor now requires to write in-tree built-in kernel code.
+> 
+> There are strong use cases for domain-specific rules that aren't general enough
+> to belong in the kernel tree:
+> * stricter RTapp rules that may not apply to all use-cases
+> * verify some exotic system within Linux (e.g. a co-kernel [4])
+> * modelling for functional safety certification process (used for in-vehicle
+> OSes like RHIVOS)
+> 
+> BPF seems the natural tool for the job to me. Mind that RV monitors would be
+> simple users of BPF, requiring only modifications in the RV subsystem but using
+> standard BPF facilities.
+> 
 
-  ./test_progs -a sock_destroy
+As RV would simply be a user of BPF and not modifying BPF infrastructure,
+I'm not so sure you have the jurisdiction to NAK it. It would be like me
+NAKing how you create a trace event.
 
-  #444/1   sock_destroy/tcp_client:OK
-  #444/2   sock_destroy/tcp_server:OK
-  #444/3   sock_destroy/tcp_timewait:OK
-  #444/4   sock_destroy/udp_client:OK
-  #444/5   sock_destroy/udp_server:OK
-  #444/6   sock_destroy/trace_tcp_destroy_sock:OK
-  #444     sock_destroy:OK
-  Summary: 1/6 PASSED, 0 SKIPPED, 0/0 FAILED
+RV monitors are a very good way to make sure the system is preforming
+properly. This looks exactly like a perfect use case for using BPF instead
+of having to install modules.
 
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- .../selftests/bpf/prog_tests/sock_destroy.c   | 62 ++++++++++++++++++-
- .../selftests/bpf/progs/sock_destroy_prog.c   | 30 +++++++++
- 2 files changed, 91 insertions(+), 1 deletion(-)
+Either BPF is a tool for the kernel or it isn't. You can't judge where BPF
+gets used. You can only judge on modifications to BFP.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-index 9c11938fe597..6ccc7cda410b 100644
---- a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-@@ -110,6 +110,65 @@ static void test_tcp_server(struct sock_destroy_prog *skel)
- 		close(serv);
- }
- 
-+static void test_tcp_timewait(struct sock_destroy_prog *skel)
-+{
-+	int serv = -1, clien = -1, accept_serv = -1, n;
-+	struct timeval tv = {};
-+	char buf[1];
-+
-+	serv = start_server(AF_INET6, SOCK_STREAM, NULL, 0, 0);
-+	if (!ASSERT_GE(serv, 0, "start_server"))
-+		goto cleanup;
-+
-+	clien = connect_to_fd(serv, 0);
-+	if (!ASSERT_GE(clien, 0, "connect_to_fd"))
-+		goto cleanup;
-+
-+	accept_serv = accept(serv, NULL, NULL);
-+	if (!ASSERT_GE(accept_serv, 0, "serv accept"))
-+		goto cleanup;
-+
-+	/* Active close from the client, then close the server side. Once
-+	 * recv() sees EOF the server FIN has been processed and the client
-+	 * sock is in TIME_WAIT. Block without timeout so a loaded CI box
-+	 * can't race us.
-+	 */
-+	if (!ASSERT_OK(setsockopt(clien, SOL_SOCKET, SO_RCVTIMEO, &tv,
-+				  sizeof(tv)), "clear rcvtimeo"))
-+		goto cleanup;
-+	if (!ASSERT_OK(shutdown(clien, SHUT_WR), "client shutdown"))
-+		goto cleanup;
-+
-+	close(accept_serv);
-+	accept_serv = -1;
-+
-+	/* block until return EOF */
-+	n = recv(clien, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(n, 0, "client recv EOF"))
-+		goto cleanup;
-+
-+	/* Run iterator program that destroys the timewait client sock. */
-+	skel->bss->tw_found = 0;
-+	start_iter_sockets(skel->progs.iter_tcp6_timewait);
-+	if (!ASSERT_EQ(skel->bss->tw_found, 1, "timewait sock found"))
-+		goto cleanup;
-+
-+	ASSERT_OK(skel->bss->tw_destroy_err, "destroy timewait sock");
-+
-+	/* The destroyed timewait sock must be gone. */
-+	skel->bss->tw_found = 0;
-+	start_iter_sockets(skel->progs.iter_tcp6_timewait);
-+	ASSERT_EQ(skel->bss->tw_found, 0, "timewait sock destroyed");
-+
-+cleanup:
-+	if (clien != -1)
-+		close(clien);
-+	if (accept_serv != -1)
-+		close(accept_serv);
-+	if (serv != -1)
-+		close(serv);
-+}
-+
- static void test_udp_client(struct sock_destroy_prog *skel)
- {
- 	int serv = -1, clien = -1, n = 0;
-@@ -204,11 +263,12 @@ void test_sock_destroy(void)
- 		test_tcp_client(skel);
- 	if (test__start_subtest("tcp_server"))
- 		test_tcp_server(skel);
-+	if (test__start_subtest("tcp_timewait"))
-+		test_tcp_timewait(skel);
- 	if (test__start_subtest("udp_client"))
- 		test_udp_client(skel);
- 	if (test__start_subtest("udp_server"))
- 		test_udp_server(skel);
--
- 	RUN_TESTS(sock_destroy_prog_fail);
- 
- cleanup:
-diff --git a/tools/testing/selftests/bpf/progs/sock_destroy_prog.c b/tools/testing/selftests/bpf/progs/sock_destroy_prog.c
-index 9e0bf7a54cec..0a8887543218 100644
---- a/tools/testing/selftests/bpf/progs/sock_destroy_prog.c
-+++ b/tools/testing/selftests/bpf/progs/sock_destroy_prog.c
-@@ -7,6 +7,8 @@
- #include "bpf_tracing_net.h"
- 
- __be16 serv_port = 0;
-+int tw_found = 0;
-+int tw_destroy_err = 0;
- 
- int bpf_sock_destroy(struct sock_common *sk) __ksym;
- 
-@@ -100,6 +102,34 @@ int iter_tcp6_server(struct bpf_iter__tcp *ctx)
- 	return 0;
- }
- 
-+SEC("iter/tcp")
-+int iter_tcp6_timewait(struct bpf_iter__tcp *ctx)
-+{
-+	struct sock_common *sk_common = ctx->sk_common;
-+	__u64 *val;
-+	int key = 0;
-+
-+	if (!sk_common)
-+		return 0;
-+
-+	if (sk_common->skc_family != AF_INET6)
-+		return 0;
-+
-+	if (!bpf_skc_to_tcp_timewait_sock(sk_common))
-+		return 0;
-+
-+	val = bpf_map_lookup_elem(&tcp_conn_sockets, &key);
-+	if (!val)
-+		return 0;
-+	/* The timewait sock inherits the cookie of the closed client sock. */
-+	if (bpf_get_socket_cookie(sk_common) != *val)
-+		return 0;
-+
-+	tw_found++;
-+	tw_destroy_err = bpf_sock_destroy(sk_common);
-+
-+	return 0;
-+}
- 
- SEC("iter/udp")
- int iter_udp6_client(struct bpf_iter__udp *ctx)
--- 
-2.43.0
+-- Steve
+
+
+> I'm totally open to discuss on this though.
+> 
+> Thanks,
+> Gabriele
+> 
+> [1] - https://lore.kernel.org/lkml/20260522125833.264145-1-gmonaco@redhat.com
+> [2] - https://lore.kernel.org/lkml/20260113085159.114226-3-gmonaco@redhat.com
+> [3] -
+> https://lore.kernel.org/linux-rt-users/20260826132153.2476006-1-bigeasy@linutronix.de/T/#t
+> [4] -
+> https://lore.kernel.org/lkml/20260827072400.45734-1-tobias.schaffner@siemens.com
 
