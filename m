@@ -1,76 +1,77 @@
-Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
+Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F24CF4BAA0A
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 14:44:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF0A44B66D7
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 14:44:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788446693; cv=none; b=OtuzxqG4O9JIJgW7P8pngwbw+vXya6K4RJvAQePOQmCj9P5t9XnPON5bSUurRSMOkg1vCQPnLakHCGbxaCns/iv16bQsPgxyPgF+73Z6wdi9Lg0ij1O/j7Tg1SmgIU81O3ZuuVboSGBD1z66gPiHqGQGThFw1yJE5vgRdw+IVlw=
+	t=1788446694; cv=none; b=l46sFouFVsjLI6FUotMVwU33hSqdW+4IPqJbVv/HJNnjf7H2bSEEoFAjHikPQRct84Od2jRPmB1wRAfywSdY2pzTS5ezKhUIH5YZsaSjf+X6rI3hB9geypjxcJUAKwXf6Ff0Q5/i6o+ZPHcQq/k14Ors/3s+4FNxGn6ifx9wRX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788446693; c=relaxed/simple;
-	bh=znNSuUrZpExpzNPsE2AnVH4U0e46fPjr+cGpz59xuzw=;
+	s=arc-20240116; t=1788446694; c=relaxed/simple;
+	bh=wGZ7j1GsQxDq7SlMrCBwRSw7rOhHc5D/zanySNO76mk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=s+QNCk02Z7v5fbcSugsfza+WhEH3WC6yCtsGO3sSMprTKRS6L6mqeo36Y4V5tqJGViXYESwikgTcijQsIgChFCZ0VMBg6noZB61O8L5noRvmmeQcIsrCFZsobbAXZQ7ddIf3EzhML3OPhL6namGdcDcj/Go9HWsTuGHG+VNcWmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Irep71ct; arc=none smtp.client-ip=74.125.225.75
+	 MIME-Version; b=j683Rd9oBOE3spPe1RUJYe7zsJy7Le0NdgMSeezUZy5rc84kxxtJfyPhXxJp55JXDdnhurwsRmBABgVQ65ddEGd4gLPLixAX89YCVNc+46x7/y/kTv3CHmTlmpAm9CT7WeiFIGoUztaD4niSxwHuyFXvukoo06WIm7SAEvyZWHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BuvkfLI4; arc=none smtp.client-ip=74.125.225.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Irep71ct"
-Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-482e61db882so556828f8f.0
-        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 07:44:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BuvkfLI4"
+Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-49b963f51f6so4661775e9.1
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 07:44:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788446690; x=1789051490; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788446691; x=1789051491; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=MvP/S1My067lRHfc9pJ9h8O1yHFnPqUWVKKTZsqCgz4=;
-        b=Irep71ctt8qG4uPjapswpZS2P5GQcyPojeXH2QciDXqt/7N5gbYqk3/BG5e3qbHgyB
-         LZCOtzbRw1+iOwAEpNN/i1VM1DFEELMN6v5cywrTFhhCga/d8FAT4BgDSXOznya1JIBo
-         PXV48VrUvhBJ6i0/CiSv/xMDw3OVTxqIfC3v4YrMR6S0NyA5Vh3asQZXZnIZGZlPuDAh
-         JNVIH1HTYSXI/vvNZAX1mnbMjzqmiPaXUqSARPdFRAm6ZOfg4hFf/YSO6Cht2Qi2xwAA
-         3s7t7Snr0HVlZ3kmj5l9puht8hLfxNALMy+lSahHSsg5TsPTU22YDjisRlKoS6qR4vOp
-         h5lQ==
+        bh=/GsHB+GAyFWAsQ4cGA6RNXMjmgvG2DlCXD9Wut3BYac=;
+        b=BuvkfLI4NphW6Ln0CgmPzTmOEZjO9wNinkIaMPCPe1uwvgweJVGnoz2E/DsQ9k6l5/
+         MWrXsAuEL8SVtsG0WaXcHBEPHQ456/pJ0rvQzz2c4/jGw3UznsDYwFfqBzztz/mjhBCD
+         0pF8PBYiGpJnWw+fVOFrSUFkh/4lUKWpswV9KH29vkjL0++lL3+5lHMGMPk9qElKFGxu
+         vC3BhwTAhEmc4Uzj1kqzj3aDAd9bPIPmFEkrp7Y0UVuesOTSDw9tH84lDUVBUBrqZlCu
+         HE4MZOZ3Bk9plHab0rpHo6pkJPd6as6u3pnF9lhiT7JTleq+2GkvN3peelaP4ppM7JEu
+         6HPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788446690; x=1789051490;
+        d=1e100.net; s=20251104; t=1788446691; x=1789051491;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=MvP/S1My067lRHfc9pJ9h8O1yHFnPqUWVKKTZsqCgz4=;
-        b=AKVy0hjq1fY5n1vU4lrdC9fo/QUfQGCziVKp5gA/AMvdo0lZs+7C3BVyzHUUTC0YOi
-         Vy0g1hqyR3cTKzTspbH3vYAEYycvz7T5eLa0AutfkpgVxfjgSCNVg6TH0phrp6/3NIYf
-         ziQ3kxyHzbRu9sAzI0DduzxrMlwTdGtdniL8G4+4PZ+FBU9Wgv4lPklhufhpVnOQUeHL
-         X7sYBuz+uD5ZlmO7wtXKnGkFicfeN9/Lj170NwnOOi6JdxpJ8DhCtgr0QjxHFmekdsCH
-         ghSwSUXIUCHFVtkSgCQOap9yuF4EMMaIx6lV4TdAEkbVfBMzIRjC0Yj4FV/L+F2udjCA
-         CIuA==
-X-Gm-Message-State: AFuF++k14tBAf7J0bCAhv8bmyaGq6jZOkzBT1pQzYXRwSSB+vq3NLAoP
-	kUt1k1uEQSPDNZBe87u4OvxQ7UGATMP+zvcUyKTwMtQ3z+uewAsK5sYLBKHV2fe7
-X-Gm-Gg: AYBFou3ypq3P9jWwFvcqoifTynlzBJzT7ANSgb+Ih2Be8E8uXY84oYTKMR4l7DQYQqG
-	967XYmXYzGVpsw0Daljto2t7n3n+tjTsppQR6u36hqjiqwKch0mk2vkfk2ooAZah6czXDjNWys5
-	dslE5ekFo402zk1rAw4uBMUFFQMvlwHMwKadSnTXQLiBlSyVPPZm7ONQbMaDHf4weOtjRbXzTaE
-	UYQ01MpslNMtM5vue8Kz5XzirRv1ByMOwf47+6e118iNwCEHB7r3VT9v6RmPdMhCUYJpbO6tb5i
-	mHExGrI6IFH6Gv7lFKAuIasYiNtyj4BCPIsSxZyWwGZEGJnMTyywV37F9BTrkjqz2RE1oHvve2c
-	+uEkIx2D9b1OBO64ka7m4PezAprlHVZAEY+dHoV4hhdHqVhoWpvTMh0UPk4I0lC8YrifdoprT7x
-	RqBvhLTQVgr/qkyXBTZDlLWHhB1HwXqGUk/7LmyKee7EtgQH6KjIWRTfZs9cQeMm7ny4aMcaMiq
-	lVPRlsMDewQNqjH7JIPt8roGPlQ/6dNlmJ3Yn5opj2CD/CVyPgHDBD9p7s6PHTzPApT1ONjsxih
-	6jKdsdkqbEcybCYKDQORaiDvQlNMbsX0Op01pw==
-X-Received: by 2002:a05:6000:601:b0:484:36c8:ffb9 with SMTP id ffacd0b85a97d-48586022058mr1772005f8f.4.1788446689324;
-        Thu, 03 Sep 2026 07:44:49 -0700 (PDT)
+        bh=/GsHB+GAyFWAsQ4cGA6RNXMjmgvG2DlCXD9Wut3BYac=;
+        b=Rkb0Y3ODE2xs/ATjaXZj5LJ8/YeWljJ03z+aCPTdfCSYdG3LF8HjpzlMuCgZ1Teezs
+         Kj7Fb18/TYcSsX6EkZJZJLq98tX1KCOo9/PQiA4ieVZbPLRHcSQ1zf5eGZJKM11bzKpu
+         U/4yNMIcHFoIwZ4QYoIrlJtWbGR4M3aRMmL3VpDEu7jjqfKf5lo2tTdFrrFCQ5NobVs3
+         SXO9XzQWHCSaoYS6Cx/cmLoJN90uXS4LMBi+eCN6pX6XXV/oOolEfLnUqrLARRkEwbCJ
+         JX4MOez1SwEEp+7adkD8++d+QeGRGJuRRjgiawrZQ0OssUehRMEBA+S2371wELBeqyke
+         YBzg==
+X-Gm-Message-State: AFuF++lXjCeXlr3xVot5gNXjWCBl2YG7gagxT9KDl6maBFh1DnW5qKRE
+	tL5IhQK7BmjSvy+Mmb4Y9D7gfDFZBOT1Xmt4iUyt75pQFwrcPaTvCXdwrOCoBQJ8
+X-Gm-Gg: AYBFou1v9wve7gTPa9z4fZcGfdZ+lwtETJAQts9fvks8CBOmgoudjc7qkJQwTpITTql
+	/02KXsdJ7Hg7oLHm917orXrjXw7FHzOEdG/LIOrKOZTvDt/0FZ0vFgU6CcdaBSZEfZmd5zRIUPS
+	1C5BSej1b9pg5/I1NcbfFeCr05sfm2pH9NM0JvKRi9xi64Q7bECjCDKUgwhBlvFrwoJMPlC+BYw
+	NVBXxGhlMhfnkHd/cAvHEypFkjQNyFdDkmdgV3mpl+x8BkvUCUYJhG0fMT2MNjmiORLbWOJ/he3
+	4hIRygZNQ9ede0WyInZ6F8A/hcmcvxWy7AqzuFpFcaJBwZpg+LL9bhHdf1pzd2QRa8T2ywdLJCT
+	uLSSRZ3c89CtgimSh7g8BlfzeCWhYPSoFnNFx+f4CAGFIHUwiDoshX5D24PoMny/zYSkc6XqcsM
+	DUZ7pZ0s0yd0EwqtD0G0f9ErkedDTGh5IznbaAe6l5QWLuO/Km+QzfRDmjIaO8qHxdZ/uhlpS0E
+	kpCj1Gxlk7P4oyXXLVg9uCqIsbFAaQbj9zhcLl9bAzWppcKJlv0cbNLNC0diGOthrm971IeqsY8
+	8lnRaq5iazdE2LmGDOeyNjl4w8A=
+X-Received: by 2002:a05:600c:470d:b0:499:9240:9a1c with SMTP id 5b1f17b1804b1-49ce58363f8mr193850225e9.15.1788446690830;
+        Thu, 03 Sep 2026 07:44:50 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48448ee9cf7sm15184911f8f.25.2026.09.03.07.44.48
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cee5d1fe2sm86259905e9.3.2026.09.03.07.44.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2026 07:44:48 -0700 (PDT)
+        Thu, 03 Sep 2026 07:44:50 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
+Cc: Nicholas Carlini <npc@anthropic.com>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf v1 08/10] selftests/bpf: Test sched_process_wait nullable argument
-Date: Thu,  3 Sep 2026 16:44:26 +0200
-Message-ID: <20260903144433.1716731-9-memxor@gmail.com>
+Subject: [PATCH bpf v1 09/10] bpf: Mark syscall helpers as sleepable
+Date: Thu,  3 Sep 2026 16:44:27 +0200
+Message-ID: <20260903144433.1716731-10-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260903144433.1716731-1-memxor@gmail.com>
 References: <20260903144433.1716731-1-memxor@gmail.com>
@@ -80,49 +81,58 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1616; i=memxor@gmail.com; h=from:subject; bh=znNSuUrZpExpzNPsE2AnVH4U0e46fPjr+cGpz59xuzw=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtm8ySL4CubMtr65pUxWvCurQg6p/1EcKq78cEs37O3P StfbprRUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIkUnmH4X7s8tM+u9oRulkBq 9dLPvEVH74av3axypivn7r7dJUZzGhkZZstGT09WF/Oo3rpDSbp9oavk4zbfz2ebtxfLt9/4bmf ADQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2023; i=memxor@gmail.com; h=from:subject; bh=wGZ7j1GsQxDq7SlMrCBwRSw7rOhHc5D/zanySNO76mk=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtm86S2SXs+iJjwdcwvf9pr9+iia3pBzPwZk8MjNB6ky VnpfnPuKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwETUJzP8Dzi4MG7CvcWsD7LF Nh9NPnGzk8XrfrXglLlCX275/z114wPDb5a1hf7Hw7UYP9pMP8xq88bZ1zY89Jj8I5W/xtaz28M eMQAA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Add a load-time verifier test that dereferences argument 0 of the
-sched_process_wait tp_btf program without checking it. The test expects the
-nullable-pointer diagnostic, so it is accepted unexpectedly before the fix
-and rejected as expected after it.
+bpf_sys_bpf() executes the bpf(2) syscall body, which can take mutexes,
+allocate with GFP_KERNEL, and wait for an RCU grace period.
+bpf_sys_close() reaches close_fd() and filp_close(), which can sleep as
+well.
 
-Add a successful control that checks the argument for NULL before the
-dereference. This ensures the nullable marking preserves legitimate access
-to the pid when the tracepoint supplies one.
+Both helpers are limited to BPF_PROG_TYPE_SYSCALL, whose main program is
+sleepable. That does not make every callback sleepable: a syscall program
+can register a bpf_timer callback, and the verifier checks that callback
+in a non-sleepable context while retaining the syscall helper set.
 
+Without .might_sleep on the prototypes, such a callback can invoke
+bpf_sys_bpf() from hrtimer softirq context and trigger a
+scheduling-while-atomic failure. bpf_sys_close() is exposed through the
+same missing context check.
+
+Set .might_sleep on both prototypes so the existing helper-context check
+rejects them from timer callbacks and other atomic regions. Calls from the
+sleepable main body remain valid.
+
+Fixes: 79a7f8bdb159 ("bpf: Introduce bpf_sys_bpf() helper and program type.")
+Fixes: 3abea089246f ("bpf: Add bpf_sys_close() helper.")
+Reported-by: Nicholas Carlini <npc@anthropic.com>
+Suggested-by: Nicholas Carlini <npc@anthropic.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- .../selftests/bpf/progs/raw_tp_null_fail.c      | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ kernel/bpf/syscall.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/raw_tp_null_fail.c b/tools/testing/selftests/bpf/progs/raw_tp_null_fail.c
-index 7e8842bf9000..725d73c9ffe1 100644
---- a/tools/testing/selftests/bpf/progs/raw_tp_null_fail.c
-+++ b/tools/testing/selftests/bpf/progs/raw_tp_null_fail.c
-@@ -58,3 +58,20 @@ int test_tp_btf_signal_deliver_info_no_deref(void *ctx)
- 	asm volatile("r1 = *(u64 *)(r1 +8); r1 = *(u32 *)(r1 +0);" ::: __clobber_all);
- 	return 0;
- }
-+
-+SEC("tp_btf/sched_process_wait")
-+__failure __msg("R1 invalid mem access 'trusted_ptr_or_null_'")
-+int test_raw_tp_null_sched_process_wait_arg_1(void *ctx)
-+{
-+	asm volatile("r1 = *(u64 *)(r1 +0); r1 = *(u32 *)(r1 +0);" ::: __clobber_all);
-+	return 0;
-+}
-+
-+SEC("tp_btf/sched_process_wait")
-+__success
-+int test_raw_tp_null_sched_process_wait_arg_1_checked(void *ctx)
-+{
-+	asm volatile("r1 = *(u64 *)(r1 +0); if r1 == 0 goto +1; "
-+		     "r1 = *(u32 *)(r1 +0);" ::: __clobber_all);
-+	return 0;
-+}
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 6874ba1424af..c7bc9ba9b331 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -6568,6 +6568,7 @@ EXPORT_SYMBOL_NS(kern_sys_bpf, "BPF_INTERNAL");
+ static const struct bpf_func_proto bpf_sys_bpf_proto = {
+ 	.func		= bpf_sys_bpf,
+ 	.gpl_only	= false,
++	.might_sleep	= true,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_ANYTHING,
+ 	.arg2_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+@@ -6593,6 +6594,7 @@ BPF_CALL_1(bpf_sys_close, u32, fd)
+ static const struct bpf_func_proto bpf_sys_close_proto = {
+ 	.func		= bpf_sys_close,
+ 	.gpl_only	= false,
++	.might_sleep	= true,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_ANYTHING,
+ };
 -- 
 2.53.0
 
