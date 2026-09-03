@@ -1,144 +1,89 @@
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+Received: from mta1.migadu.com (out-9.mta1.migadu.com [95.215.58.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D3E4185B48
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 01:57:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBCFC33F8DC
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 02:15:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788400627; cv=none; b=UUh7f3i3ZyXYSz7HGFrCUMMTXlQBfGfASugNi+J9Pk/hWj3HzyUiOWhs5i32NQYvoP1ipBP9niBdFl3ggq9FCBIkC8cbaQQDdVUb0UgTnjU1Fw5bn4GurqZ4PMwNPCesC0tpdhEeSyCH7gnNFPtGdDjddlRs1C48IxrT+4aVpwo=
+	t=1788401749; cv=none; b=Ma0p3T1b77/L5TOwZKLt2wqhNlz4P30W6hxLavCvywsn5dVeUkZ6kK9eG8RnQuyGRmpBuzwTiIdlgGAcoxktf3pL++IalhL900xRix4UWp2/FETPAM1Qr35faaoblSLwv5n2crJc5dilXqosJwJhNzS85/WSFlfaTotoHSZE1wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788400627; c=relaxed/simple;
-	bh=mz30dBvtDT771JV451s8UVUULvK5bR+yMsulF6N92Sc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=uqD5GQSS694Siz69JasdNGEufGvcmwajfMooPAOUpmWXV4yzRzSZQFyc5Gv1uUVdWGmyNg1YT6bN1NMtKWg2exuIMWxo6etYJBPyt35pWVoOqaNlYqP3vmgCEL9OJEit1lg3vtSECsib6ILymdbQzb8iHrZ0CKsZjwJ9H8CxDt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lLODW4Nq; arc=none smtp.client-ip=209.85.161.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788401749; c=relaxed/simple;
+	bh=G34xxgRBmUeCrrkke6/zmw55SL1tojQfi33A55TotFk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i3BaEw3oxg+kTjusLRQGiTCy+hdkcqWgTfJBf8nFmOMEEFlGQKpPhdR8KP6MB80sdFAIOnUKF+aREN8sjcAOuo8G9tQ2My7PIPoqZWpezeAdtV+RBi1G/Q7chvErHJ1VgaiFNVhKQxcVlWSX+rmxG8wk0AVYSgzsddEYZ1aOK9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NnryLoMH; arc=none smtp.client-ip=95.215.58.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lLODW4Nq"
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-6b1b881a8e9so740722eaf.1
-        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 18:57:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788400625; x=1789005425; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=mz30dBvtDT771JV451s8UVUULvK5bR+yMsulF6N92Sc=;
-        b=lLODW4NqgG0Qx+D8oN5I68rDbNsIbrcaz2G7Oi2yB4jvbwTngd8jNGS0kBtX8JVRhU
-         cAe7wbi+tOAxtr5563sjrzh89LxLt0IWmCmZfaOTg9UYAbXDPFRbHScojyLeEku+Dc3M
-         a326d7HXUI/5JsSZxSzu6ioWg7lBK8T2JOaOCe6FZ0GgQTjguldkTPPRVK7i99f9M+Xs
-         kwmvvxmX0ciOhXhLPWGrOxiFvqpV1hfQeG5GiGZATWCZ7vIZuhTkR6BJbQr+iaEXmRMs
-         wkKNKJsJ7nVGMpixBgYO0z2EwrN9yJmoGaT9rTP2HfIj2YNHoq2AynIIh8btyorSfnVb
-         jRcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788400625; x=1789005425;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=mz30dBvtDT771JV451s8UVUULvK5bR+yMsulF6N92Sc=;
-        b=qs6el7G4ez9VhBuJCJx9dEJWrcOhwYczRycIf4i1rpXQrMhjVFXJdj40+Z4ixAu3TL
-         zMLbsLVKI5qeB+MDlMmH2W4vfsmxY46nA/pqbVJ92cg2y23Lu9tV+NNUQXrrhYe0R2r5
-         zPc1Wh7SOKYNGJxXzVXYwt8W8JPSgMX1BuwZU+IhZwMKN2tELcAZua2FXkaM2dyYbCht
-         deo2mse0yrVT+7z/Kzi3qSbzEcl8I+0IutI6kUifi8VgYgFnw7qVLxz02MOjLtoga5Gv
-         24a+HoTo4DFyDnUJk4unnj0WOS7EB1udAUWuznvzRQbkCgbqFGhpoUGB3O/9uik5W0dl
-         IQOw==
-X-Forwarded-Encrypted: i=1; AKwUvBywm7huSLbhGO5ZAG805Jj5FxaZm95aKtzisFdef4i52W+Ldj4nHXgQDpOk6XEcNSSYLVg=@vger.kernel.org
-X-Gm-Message-State: AFuF++kh0q4k3IcoWg1OWeMNauiv0NqyZUA3zCgDTedao4rxWdnweuLM
-	aHxShiVwHo4h5OtufMAyCgxXEMqpuatwdnRU2GDikkb1t1QHXc6+dM9+50iVPQ==
-X-Gm-Gg: AYBFou204xmKGpdlqP8EWQ2ykIu/GlPfIMylZMBtl7Y+N5gMTZ26OSEvW0F5v/jvVGu
-	PxXoh8I9rpSX4eNbVg8p8+oo+kNbpdeRbIC1Bvl+fTB6c2Jz33suY0uepdL/F8Kv907FP+u2QiL
-	B+mBihwkQ4/G6ObxI/r1SzDUa2e8AoSkKLX3GdON2dNZQLyzUWXz/REE7yHluMDbdV7gqbGRYli
-	ZMBKtL/1MOSz5u3KIcbKmLVKpJT6+52BLuPgg9XKsrw9Ixv7ERjQzHQGCgZEsN7r+rBxwdq3g2Y
-	+jYa9Nplr2uhXqbI4qXmbB0ldEt7cuajuoQEd5OT/eg7/r8piJxRcMEWxl8FnGZHTC7o2kaHi9M
-	qHxmX0WvuqfAe24miBhr6nEmYFXOXZID2a3ZZGkV41CTt1PiwulW5feqT9Cw2QvZxbGaqhYfTQk
-	Ba07trUuLdUJCRHAkXDej3IRHzl/UqVo/ND0xviTqH+1umXPZggm2H/DapDDeS0SPRE0ocZ15KI
-	TCynxiMk9VP45UIZdSL0AXMk8vh7fEBbPlDByClSMOPKwlmSr38ph7xw6t6jEERHA==
-X-Received: by 2002:a05:6820:221d:b0:6b3:7d96:94c0 with SMTP id 006d021491bc7-6b47f81bf57mr6984688eaf.10.1788400624569;
-        Wed, 02 Sep 2026 18:57:04 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:55::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6b40ec2e6a8sm4061932eaf.9.2026.09.02.18.57.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Sep 2026 18:57:04 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NnryLoMH"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=G34xxgRBmUeCrrkke6/zmw55SL1tojQfi33A55TotFk=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788401744; v=1; x=1789006544;
+ b=NnryLoMHCH5MB5L+wdVaBc2gzN6ossRcMyqJJS575vokGkFaIwu8MObJJiYzWBuIoHJqMmB+
+ 11c7UWAyKM9cyZD75bcITWH3lKfjo1vM/kF2GkCCqpz0eYZCiBETcaFJXZJebyk7wA2Rvi5VN2s
+ CEIE7/L5uO4OPLwaI8cn/4J8=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 22d32196a450c1c8;
+	Thu, 03 Sep 2026 02:15:44 +0000
+X-Mizu-Trace-ID: 22d32196a450c1c8
+X-Migadu-Flow: FLOW_OUT
+Date: Thu, 3 Sep 2026 10:15:31 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: MPTCP Linux <mptcp@lists.linux.dev>,
+	Mat Martineau <martineau@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	Hangbin Liu <liuhangbin@kylinos.cn>
+Subject: Re: [PATCH mptcp-next 1/2] selftests: mptcp: convert iptables to
+ nftables for mptcp_sockopt.sh
+Message-ID: <apjYQ3bCkpT2Rb-X@fedora>
+References: <20260902-mptcp_nft-v1-0-559caa16f410@kylinos.cn>
+ <20260902-mptcp_nft-v1-1-559caa16f410@kylinos.cn>
+ <5b5452db-f03c-4825-b9ae-91ca28bbcf03@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 02 Sep 2026 18:57:03 -0700
-Message-Id: <DL5B40CU17WD.3KD75URQZ6RRR@gmail.com>
-Cc: "Steven Rostedt" <rostedt@goodmis.org>, "Wen Yang" <wen.yang@linux.dev>,
- "Tobias Schaffner" <tobias.schaffner@siemens.com>, "Viktor Malik"
- <vmalik@redhat.com>
-Subject: Re: [RFC PATCH 00/20] rv: Add support for BPF monitors
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Gabriele Monaco" <gmonaco@redhat.com>, "Nam Cao"
- <namcao@linutronix.de>, <linux-kernel@vger.kernel.org>,
- <linux-trace-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-X-Mailer: aerc
-References: <20260831090524.106845-1-gmonaco@redhat.com>
- <87se3sakgi.fsf@yellow.woof>
- <df6e9168cb06c35e21db7f9d17cfbca6bd87005b.camel@redhat.com>
-In-Reply-To: <df6e9168cb06c35e21db7f9d17cfbca6bd87005b.camel@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5b5452db-f03c-4825-b9ae-91ca28bbcf03@kernel.org>
 
-On Tue Sep 1, 2026 at 11:52 PM PDT, Gabriele Monaco wrote:
-> On Tue, 2026-09-01 at 20:35 +0200, Nam Cao wrote:
->> Gabriele Monaco <gmonaco@redhat.com> writes:
->> > Extend the rv userspace tool to load BPF monitors, those can be found =
-in
->> > specific locations (e.g. /usr/share/rv/bpf_monitors/) and are plain
->> > object files including BTF data.
->> >=20
->> > This type of BPF monitors can be generated from rvgen using the -b fla=
-g
->> > just like in-kernel monitors and, after manual adaptation, can be buil=
-t
->> > and run transparently by the rv userspace tool.
->>=20
->> I am not familiar with BPF. What is the benefit of BPF monitors,
->> compared to the existing DA monitors?
->
-> I should definitely have included it in the cover letter.. I'm writing it
-> everywhere (will present at LPC) but forgot it here.
->
-> Essentially BPF monitors can be pluggable, folks writing their own monito=
-rs
-> won't need to submit a patch or maintain a separate tree, which is useful=
- for
-> domain-specific models.
-> By being pluggable you also don't need to reboot to use a new/updated mon=
-itor.
->
-> Think of being able to distribute a more granular set of rules for RTapp,=
- I
-> remember we had conversation along those lines, not all rules apply to al=
-l
-> contexts and what you send upstream has to be general, what you keep for
-> yourself doesn't.
->
-> Having monitors in BPF brings also other perks over kernel modules: a who=
-le
-> bunch of readily available probe types (uprobes, fprobes, all unexported
-> tracepoints that are cumbersome for modules), the map infrastructure for
-> allocation is arguably easier and the code is verified when loaded agains=
-t
-> common issues (NULL pointer access, unbound loops, etc.).
->
-> That said, I try to mimic as much as possible the in-kernel functionality=
-, but
-> some things are not the same (event/error tracepoints).
->
-> These support DA only because BPF loading needs a userspace component and=
- the RV
-> tool doesn't support LTL and HA yet, there shouldn't be any technical rea=
-son not
-> to extend to those in the future.
+On Wed, Sep 02, 2026 at 11:17:48AM +0200, Matthieu Baerts wrote:
+> > @@ -105,33 +109,23 @@ cleanup()
+> >  
+> >  mptcp_lib_check_mptcp
+> >  mptcp_lib_check_kallsyms
+> > -mptcp_lib_check_tools ip "${iptables}" "${ip6tables}"
+> > +mptcp_lib_check_tools ip nft
+> >  
+> >  check_mark()
+> >  {
+> >  	local ns=$1
+> >  	local af=$2
+> >  
+> > -	local tables=${iptables}
+> > +	drop=$(ip netns exec "$ns" nft list table inet msock_table | \
+> > +		grep "ipv$af.*packets.*drop" | awk '{print $(NF-3)}')
+> 
+> Would it not be cleaner to use 'nft -j' and 'jq' to get all the
+> (non-zero) drop counters?
 
-I don't think bpf fits here. I haven't seen active use of RV and even less
-so of any request from people who want this kind of programmability.
+We can get with this rule:
 
-So Nack for now. Sorry.
+nft -j list table filter | jq -r '.nftables[] | select(has("rule")) |
+				.rule | select (.chain=="OUTPUT" and any(.expr[]; has("drop"))) |
+				.expr[] | select(has("counter")) |
+				.counter.packets'
 
+Thanks
+Hangbin
