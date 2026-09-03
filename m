@@ -1,320 +1,214 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DC9772618
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 00:12:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 886D122A4EE
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 00:22:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.171
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788394380; cv=pass; b=WHv0SMGFxZuBjGac/t41evwQeQuxV2VoHjiMT3J0QZPhsXjjd7DFW7D7dVy6eaOqNodkNL6D611erjZQClHPLMslBJWJNOFIYkxfkV0XQa9hMEXNusdeeB2xqA8lxWZZCzKxQa6FJHDHkaYe1Q3Z7t3S7tsh04pfmTVx4BKUpwI=
+	t=1788394952; cv=pass; b=WNbg7lhsKjOQ+nrZfpeWW5AE6rColbnQSCldwoDNVjIUf0c6QiDJul3Uno90zY7xUiXqj1Tn22eQwr4ex1/wuqnYPrF0EhdeoBtYi6kkncJ+e744CMxAGeSF5xsQfXoAe3KRpzwEv9MZxgdzUkaDowKWASWB7TTGTyAdj1Q5DEs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788394380; c=relaxed/simple;
-	bh=aGFraPUJE5OYBuCFSogJVu0FWoduGczQM7Z8Zh35VLo=;
+	s=arc-20240116; t=1788394952; c=relaxed/simple;
+	bh=HpXZGHKjm19GrKGeBKOpw8KiMZWEY3w+BaVtBt5+knU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WbkyuAyY3AAu1ZJdN/EAvrH2+65vq7k2Z2HGF0VjBphBzdkZpjE2HLyF1qSztcGX1vGPQbwXLlyRlqpRtKvfJxuUESwnvQyKkj5wnLWG+Go+azrds09LG2exRa4in6TDupnL6L/9g04KkwsEWsEelLeqM9Ty5lh1x+bGQ3Bf0sw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DAxEUjp0; arc=pass smtp.client-ip=209.85.210.180
+	 To:Cc:Content-Type; b=eaOzDGPWwin+4hRRt8Ng330BtzzgIivhGhyl63dWn49SdT16cAZaD+YzdpdKw2vn6G5puzgzqLAqEO2cWKtWQMXGQnlEDY00rxqCWfjslFKY8917KOKElBuGkQodBZT3jeH34hFp+i+tYbIHL6WE5e7jSWxxxIATaUfyWL/yUhk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UgqT9Ja4; arc=pass smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DAxEUjp0"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-8485b358552so1544705b3a.2
-        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 17:12:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788394378; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UgqT9Ja4"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-8568e3ed034so1499433b3a.0
+        for <bpf@vger.kernel.org>; Wed, 02 Sep 2026 17:22:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788394949; cv=none;
         d=google.com; s=arc-20260327;
-        b=lfyW28+KRUoFGmhvkGOrqFsqAmoyg89rwt3W0PfV6oce63oq5H8OqEPcpkNdimDRHo
-         QiDExViAQyBnD0i/CT11ki4UaM1OvIR/WN44dKYgeSFl+xCkJDJGDkVidZCG9yTyJBT7
-         NTxsNaIfCuPOmSuYwxxU8epVgv3dvj6cwMddDbva9wJevH7mnzxT0swAVt4kSYYIjyee
-         HIWxMelns6T81571QdXfhLw+ma69bd6hnE5iIIfSUQdZlEefA3FlqpcUcHS347oOFzFs
-         y1sA8VbpruhUJGnFumk6IyAMwA5bboZh/OVB0soOtYPNPytfUU7r8478LY+FL2572iI6
-         bzYg==
+        b=DZR234U+8kFROS6PvPF7xBMWi0GBnqVfVgKSE3V5xgtO7o4ATIasmkU+3PNljFpgVd
+         mXoVoyT5N3a10FYel9td9p5dWCwh5J5y3MgpslnwjkSrw7u3K5bncYhxdYSgogqR5AYl
+         ronBFlta1kA9rHAtey2ivZSmKOenJOcb+BPAqLkrOnxrD8LE1YuauuLrDTccOK0VU+Ke
+         KNm/UIgEc7m+S+bIlN7RdmfEvKi0Y9M4VLigodds8ukEpTovZ8aNyzVgsVxwKhgH7VLQ
+         jx0sp6brn+lNlVqV23XhJQuezrYHrSXeJCUvQ98wZiukg8jjn0rwmKBTZrh4tOPAfNNI
+         d6XA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=GT7O9LPIu7WQDBO5+ZEFha64lBovL8sPNnDlbrHuRwU=;
-        fh=+3uXqjFiym8QWrBcH5365weH5VjWoesqAzojnmSsjIo=;
-        b=TjNykQZk4dBBzZsYDM6JK42eYHBxI6Zr78E22k3uJ6ARrKof605JGkgT1dNmR25tpP
-         3hqYn/KKW/js01XBWMPD6Rve1hsWUHZmNrywYVwdDHV+Ss2O4KxmaDZ5XuCarJ1A5T0C
-         Yks9ldROM0QM7tcUQUzd/lhRfWDymJbOYxXDtYEru4Y67LzrHkBwLuebfj2Kh/NjN33V
-         iubp+GPJ6fmH0O/JiqDQw1W3GXpxqz45HmAJkjWiLsjVL4RqxUzL6a4HgY4nydRFVJ+m
-         yByVTHi+JUHoDhKq0XlatN9si4Sdbi8WWvMGXOs21hEL6/NvBZJkPhWPqyLej+RmTFI3
-         9JNg==;
+        bh=KWsvOdETbY/9pvWuO7n+ydArZGGk0CzvZ5+doKudMVs=;
+        fh=XU5sS8e7Lpgs14+QTk++21dPha5X/ou03qclF1wWUeA=;
+        b=B5VWNfwXyBlzRYka//yUic0nFRXJe7/gixNZrBEth7d2VtoloeS87ofUngb8YAQYgu
+         AAvjYA7EX4jVAMmtZBMtZxCcBUvfimo1gcf1v8IjoVeCDXdsTSeihbvHX6Nx78py1PVh
+         PB3tVMNoFBW/P6aJpi52qg9oV/ix1UgMaQl6Y1IJYwmL9H1lAdLHIeZs24s2l3a0tA84
+         2rLQ1DFHWnhKRhiQpKaXVbCL6m0wO3Pftbpe9Kyf3u5HAAnxRsFDxg521GrblUADHnEE
+         JxzjppmFVJvzaqFUnK0jT76hKk2XzABz+ISRpT0ufUEBUBsx4+KYMiyA3w9/T7NBecls
+         orWQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788394378; x=1788999178; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788394949; x=1788999749; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=GT7O9LPIu7WQDBO5+ZEFha64lBovL8sPNnDlbrHuRwU=;
-        b=DAxEUjp0FsBRTC/jUpICDnsNqIqbC/sN2/PTWn8t19kQYOURYxKClP0IPBjQgjlKBA
-         hp1eQXjRWkHh6m70Py9a+2Gz9sIErvpdbKIDNyLNGgZ6yI9Lld0r6kO02wxonRXuhejP
-         iYPCaDUl4OJHrEHHrDUSIhMKQKENwOuXve3UdBGWVR4kKbRA5od9Tezl30pVoGf0FtO9
-         G/BA/yZUdPDCOaI9BerSB27NoErJ6am2miTGYzkH0K0i7CqYX6Rtnf4f0HV0nsneq3jW
-         7QGTa6tN197+FeS+VkDTts3xPpO8EZHSylPd0jhRXcjE+lZeOy6le0JXyZrD6AElAphX
-         hI8w==
+        bh=KWsvOdETbY/9pvWuO7n+ydArZGGk0CzvZ5+doKudMVs=;
+        b=UgqT9Ja4QslI+H0nJlHEo3L3FrVIzKP97lfiwc5Vg0pwxI9O4TCkmABM1cxsyUTh/o
+         bsHQmDLCVZdQ8hb+ZhE2Fixtnl5+IrZoq/014hSzMWuCmOQeOBYZkXJbILvq0ubclxhG
+         tcNG0uCx2u6KAkzPpHt4VoQfwrrovB2wzCzfCb/23UMdHd5oA5FuDI5YSxSGtnuuJIOL
+         VdfGmmuEzsDpz3KpcsR8HHBl7X4iy5EzSsCt01zBzxbCB4Jn8weZ2LFDF8jwbqIunFJb
+         ueN6xmAtGh/OG0PxUj93Fx72/f/fvMSzmcL3AwC+bmeKoFDdzy6og0hwfcLL1vaOYit8
+         lBKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788394378; x=1788999178;
+        d=1e100.net; s=20251104; t=1788394949; x=1788999749;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=GT7O9LPIu7WQDBO5+ZEFha64lBovL8sPNnDlbrHuRwU=;
-        b=It57+HXtytx6dGKBR1tYw0DPWxk/TEj6bcQtGRUpjlViFMj8L2WMTB73KYl+ME7+7Z
-         ekhs3t5FxdILF4OriiuVtZ1tiXl/5l1eDmD+5gDigQWmWzS6GXr/iHscgx4eBwGbYkiN
-         DlOItg1hmkyI02/aX33rWdsk58E9H6kAEA2oaWCymN+H+rouV5XipJFGRv6bkKqst31A
-         oNnZFHKmfLdSuQN+2AH/KPI4zvNKONowLWH094yEuPb8vqgpyRDur1mubv/qNX6KiaIL
-         7v6Aux7E4AIKefUZ2gEWn6tt+2VFtAUybXquZTzC88iiYYB5glz0EB+Yhgxu+D1XXDjt
-         VvJg==
-X-Gm-Message-State: AFuF++k0aOqeF9KBF2BgBXv2sgkM6hlHJuf5LloJLn13WbclbazdMHe0
-	1VX6vcBygqPz3uBKI8Bdtfi65ZL5YycYtxJ6ZQsARvVe0fdSm0dHQL/jvTHgKVjqAkMPKyTnv0o
-	HXJok+qbQM0PC5hoQUtXECIAgl6IjzIs=
-X-Gm-Gg: AYBFou172xl5Hy5j6Niaj3CVApBfj6zmNSOtVGEzZz9IbIdnq9qicDIbHDb4abKjS9Z
-	8jTBIPLqRLypTAMP0w3CleyQxES4oQnnC/w8it90nGdjssTa9zXZfBEXXDrfKzPm/6VyrGK10kB
-	QJRe1Pr9EVJL5kOl3GFhLP+oQuo7off5StvCWgQ5c9rPWmLQKc3G4YtKjK8Jma4Jm7JV6nfQQ6B
-	wxQmXtoWmVq72Nv8kZvku/XYVjQPOWn8F6DaAnO4+7cIJMEj3qWKexOtlSsBSC3TMU41Welk06K
-	W6rVS5zWskpDuqD29SPqyihLsLLxvf5MZXmr7pVcVqa30uRBQhN2rZ0FC1Lf7eYmuCLIqa/AET6
-	KgE6s6uI5pJMXrWfOfjS5sq/MvQ==
-X-Received: by 2002:a05:6a00:a25c:b0:855:1590:ba2b with SMTP id
- d2e1a72fcca58-85ed1d076bamr13847122b3a.5.1788394378249; Wed, 02 Sep 2026
- 17:12:58 -0700 (PDT)
+        bh=KWsvOdETbY/9pvWuO7n+ydArZGGk0CzvZ5+doKudMVs=;
+        b=MklsUiVnK/EZv/DxX5ojR3Hn+hAfj1pVViTm73ZNpH1nB8lEl01leUW0Nvbn3bJk0L
+         StJcd78bCIrgd1DTc3xJU4euJpHCqjDIftCKT4HWXtwPB0vxR8tA7eIbBWjczbybF1o9
+         KmTPbWEsyqLzmf2A4Wr6LH0ILXtX1znvHESQ7opVd8bU81R/ACcE8L6M05mBfKcuekF0
+         KnvSiTxqHFWz5eYOyeS1inSKDvazWSokZ7niCPsqUHUISqtB4tkt04ovEAz8HwQSN7M8
+         j3Cdcd1EHP3xMIno6M9t0vmMTLJ/rkZvE0cDhpJ8yJhJEe4pnvvju61sJF4d32CE/Sqs
+         C+6g==
+X-Forwarded-Encrypted: i=1; AKwUvBzCmFQRp0w9a0plJ26hYywfsA4t2gdSjEPwq//tR7pJcpydC3z9BYkAFmaH5QwwTXNc4Ew=@vger.kernel.org
+X-Gm-Message-State: AFuF++mFWKGr5iBW2pHe2aerX5Xg50D9UgemJeHP6G1hXWu/D3a2DOuD
+	48jTP4lCbH+dBahcy5JcSKNcNqrQrFw24UUXQ5VHSz4X0tBjm0sFE61/6XwfO7glM3GISdaGDrU
+	f5PqhyjWJalq0ZVT5LXLEwzAMc90XBVc=
+X-Gm-Gg: AYBFou2VxNw9rVWDb5T9xTZbYvNzsQFRyrfWjGO7MK5iPwjBPSfuQg+k7g/Gl+e8kWR
+	MVDu9USdv4A5jQWIUqD+d2LK2Z7s3cLeSZTJpUc5dpC51KxkHqsstgQbNxzIJO5PIB9A/cBcztH
+	08hWIwSYwP0gKmwd+xYAagkbWhwP//AY+eu3/FBYXsyPChLjtaeYSi3VQQ13SUvT3y7dMqiC3b7
+	HO7PBhWYpna+qNquWsBwNO5OnGzlcyKolMevJns2Zq+p8JPAtO1BA71rBEY2CNijzoIIsnVR3U+
+	2yPX5Knymm6u7Lm6zL5//RHT6VbCFM5/B4fzYVkcUyGp9TlhzuSxUjKVdSqdw7cSR67w6d3+d4w
+	EunGR3+xKFO3BF/3qq/3ogqi4NwjChNDW3aWz
+X-Received: by 2002:a05:6a00:997:b0:84e:f90e:492f with SMTP id
+ d2e1a72fcca58-85ed25e06efmr11217290b3a.7.1788394948796; Wed, 02 Sep 2026
+ 17:22:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260831133809.1161-1-zhaofuyu@vivo.com> <20260831133809.1161-3-zhaofuyu@vivo.com>
-In-Reply-To: <20260831133809.1161-3-zhaofuyu@vivo.com>
+References: <20260901-libbpf-frags-flags-v3-3-4eb6f14968b0@redhat.com> <140ef9fa6dc454d62eaf49b168850890f1617fba462dcc37288747f6fbc7dae8@mail.kernel.org>
+In-Reply-To: <140ef9fa6dc454d62eaf49b168850890f1617fba462dcc37288747f6fbc7dae8@mail.kernel.org>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 2 Sep 2026 17:12:45 -0700
-X-Gm-Features: AcwNN1Xh0ZBM8qa9H6dmpY3f5IHeM7XO8aDWYCpQL1SZlbp3qzCTFdwJl0PB8pM
-Message-ID: <CAEf4BzY_MJa-Eyd2iaE65B_jPVx07PU+ctCrQtLtHQK+PEzsXA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 2/2] selftests/bpf: add tests for selective
- module BTF loading
-To: Fuyu Zhao <zhaofuyu@vivo.com>
-Cc: bpf@vger.kernel.org, eddyz87@gmail.com, alan.maguire@oracle.com
+Date: Wed, 2 Sep 2026 17:22:15 -0700
+X-Gm-Features: AcwNN1VQ1YMtD0MgL0myLt2ygnmk6dG-xiKZpsmTHuTFu9Rx8blS2RsSJlnGUVk
+Message-ID: <CAEf4Bzbvy=igxp9ihNrc9WHs8gXeY4nvfxc+Dt=0Oijmy+gyXA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 3/4] libbpf: Move section-defined program
+ flags to prog_flags
+To: bot+bpf-ci@kernel.org, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: toke@redhat.com, qmo@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, 
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
+	emil@etsalapatis.com, ihor.solodrai@linux.dev, larysa.zaremba@intel.com, 
+	davem@davemloft.net, kuba@kernel.org, hawk@kernel.org, 
+	john.fastabend@gmail.com, sdf@fomichev.me, lorenzo@kernel.org, 
+	bpf@vger.kernel.org, netdev@vger.kernel.org, martin.lau@kernel.org, 
+	mason@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 31, 2026 at 6:38=E2=80=AFAM Fuyu Zhao <zhaofuyu@vivo.com> wrote=
-:
+On Tue, Sep 1, 2026 at 2:54=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
 >
-> Add selftests covering selective kernel module BTF loading through
-> bpf_object_open_opts.
+> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > index f09cbfd8e729d..c036e8a91ed88 100644
+> > --- a/tools/lib/bpf/libbpf.c
+> > +++ b/tools/lib/bpf/libbpf.c
+> > @@ -7879,6 +7879,19 @@ static int tracing_multi_mod_fd(struct bpf_progr=
+am *prog, int *btf_obj_fd)
+> >       return 0;
+> >  }
+> >
+> > +static int libbpf_setup_prog_flags(struct bpf_program *prog, long cook=
+ie)
+> > +{
+> > +     enum sec_def_flags def =3D cookie;
+> > +
+> > +     if (def & SEC_SLEEPABLE)
+> > +             prog->prog_flags |=3D BPF_F_SLEEPABLE;
+> > +
+> > +     if (def & SEC_XDP_FRAGS)
+> > +             prog->prog_flags |=3D BPF_F_XDP_HAS_FRAGS;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  /* this is called as prog->sec_def->prog_prepare_load_fn for libbpf-su=
+pported sec_defs */
+> >  static int libbpf_prepare_prog_load(struct bpf_program *prog,
+> >                                   struct bpf_prog_load_opts *opts, long=
+ cookie)
+> > @@ -7889,12 +7902,6 @@ static int libbpf_prepare_prog_load(struct bpf_p=
+rogram *prog,
+> >       if ((def & SEC_EXP_ATTACH_OPT) && !kernel_supports(prog->obj, FEA=
+T_EXP_ATTACH_TYPE))
+> >               opts->expected_attach_type =3D 0;
+> >
+> > -     if (def & SEC_SLEEPABLE)
+> > -             opts->prog_flags |=3D BPF_F_SLEEPABLE;
+> > -
+> > -     if (prog->type =3D=3D BPF_PROG_TYPE_XDP && (def & SEC_XDP_FRAGS))
+> > -             opts->prog_flags |=3D BPF_F_XDP_HAS_FRAGS;
+> > -
 >
-> The tests verify that:
-> - the existing behavior is preserved when btf_module_names is not
->   specified, and loading succeeds when the required module BTF is
->   specified;
-> - a required module BTF is skipped when the module is not specified in
->   btf_module_names;
-> - an empty btf_module_names list skips loading all module BTFs;
-> - invalid module BTF name lists are rejected.
+> Does this change break bpf_program__clone() when the caller passes
+> non-zero opts.prog_flags?
 >
-> Signed-off-by: Fuyu Zhao <zhaofuyu@vivo.com>
+> Before this patch, libbpf_prepare_prog_load() OR'd in the section flags
+> after the caller's override:
+>
+>     /* in bpf_program__clone() */
+>     attr.prog_flags =3D OPTS_GET(opts, prog_flags, 0) ?: prog->prog_flags=
+;
+>     ...
+>     prog->sec_def->prog_prepare_load_fn(prog, &attr, ...);
+>
+>     /* in libbpf_prepare_prog_load() */
+>     if (def & SEC_SLEEPABLE)
+>         opts->prog_flags |=3D BPF_F_SLEEPABLE;
+>
+> So a caller doing:
+>
+>     LIBBPF_OPTS(bpf_prog_load_opts, opts, .prog_flags =3D BPF_F_TEST_STAT=
+E_FREQ);
+>     fd =3D bpf_program__clone(prog, &opts);
+>
+> would get TEST_STATE_FREQ | SLEEPABLE for a program in SEC("fentry.s/..."=
+).
+>
+> After this patch, the flags live only in prog->prog_flags, and the `?:`
+> in bpf_program__clone() discards prog->prog_flags entirely when the
+> caller passes non-zero opts.prog_flags:
+>
+>     attr.prog_flags =3D OPTS_GET(opts, prog_flags, 0) ?: prog->prog_flags=
+;
+>                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       returns TEST_STATE_FREQ, prog->prog_flags is ignore=
+d
+>
+> So the same caller now gets only TEST_STATE_FREQ without SLEEPABLE. For
+> sleepable-only helpers like bpf_copy_from_user, this produces a verifier
+> rejection. For BPF_PROG_TYPE_SYSCALL, which requires prog->sleepable,
+> it fails at load. For xdp.frags programs, BPF_F_XDP_HAS_FRAGS is lost.
+>
+> Looking at the pattern immediately below in the same function:
+>
+>     if (attr.token_fd)
+>         attr.prog_flags |=3D BPF_F_TOKEN_FD;
+>
+> should the section flags be OR'd in unconditionally, or should the
+
+no, I don't think so. In the given example, I think BPF_F_SLEEPABLE
+flag should be provided by the caller explicitly.
+
+Mykyta, can you please check if veristat would need some adjustments
+due to these changes? Thanks!
+
+> caller-override `?:` be removed for prog_flags? The commit message
+> mentions bpf_program__set_flags() and bpf_program__set_type() as
+> affected APIs but doesn't mention bpf_program__clone().
+>
+>
 > ---
->  .../bpf/prog_tests/btf_module_names.c         | 162 ++++++++++++++++++
->  .../selftests/bpf/progs/btf_module_names.c    |  13 ++
->  2 files changed, 175 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_module_nam=
-es.c
->  create mode 100644 tools/testing/selftests/bpf/progs/btf_module_names.c
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_module_names.c b/=
-tools/testing/selftests/bpf/prog_tests/btf_module_names.c
-> new file mode 100644
-> index 000000000000..68f4a8d73560
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_module_names.c
-> @@ -0,0 +1,162 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <test_progs.h>
-> +#include <bpf/btf.h>
-> +#include "btf_module_names.skel.h"
-> +
-> +static void btf_module_names_load(void)
-> +{
-> +       struct btf_module_names *skel =3D NULL;
-> +       int ret;
-> +       const char *mod_names[] =3D { "bpf_testmod" };
-> +
-> +       LIBBPF_OPTS(bpf_object_open_opts, opts,
-> +               .btf_module_names =3D mod_names,
-> +               .nr_btf_module_names =3D 1,
-> +       );
-> +
-> +       /* Verify backward compatibility. */
-> +       skel =3D btf_module_names__open_opts(NULL);
-> +       if (!ASSERT_OK_PTR(skel, "btf_module_names__open_opts default"))
-> +               goto out;
-> +
-> +       ret =3D btf_module_names__load(skel);
-> +       ASSERT_OK(ret, "btf_module_names__load default");
-> +
-> +       btf_module_names__destroy(skel);
-> +       skel =3D NULL;
-> +
-> +       skel =3D btf_module_names__open_opts(&opts);
-> +       if (!ASSERT_OK_PTR(skel, "btf_module_names__open_opts"))
-> +               goto out;
-> +
-> +       ret =3D btf_module_names__load(skel);
-> +       ASSERT_OK(ret, "btf_module_names__load");
-> +out:
-> +       btf_module_names__destroy(skel);
-> +}
-> +
-> +/*
-> + * Verify that an unrequested module BTF is skipped. The BPF program
-> + * requires the BTF of bpf_testmod, but bpf_testmod is not specified in
-> + * btf_module_names, so its BTF is skipped and the BPF program fails to =
-load.
-> + */
-> +static void btf_module_names_skip(void)
-> +{
-> +       struct btf_module_names *skel =3D NULL;
-> +       int ret;
-> +       const char *mod_names[] =3D { "module_nonexist" };
-> +
-> +       LIBBPF_OPTS(bpf_object_open_opts, opts,
-> +               .btf_module_names =3D mod_names,
-> +               .nr_btf_module_names =3D 1,
-> +       );
-> +
-> +       skel =3D btf_module_names__open_opts(&opts);
-> +       if (!ASSERT_OK_PTR(skel, "btf_module_names__open_opts"))
-> +               goto out;
-> +
-> +       ret =3D btf_module_names__load(skel);
-> +       ASSERT_EQ(ret, -ESRCH, "btf_module_names__load");
-> +
-> +out:
-> +       btf_module_names__destroy(skel);
-> +}
-> +
-> +/*
-> + * Verify that an empty filter skips loading all module BTFs. The BPF
-> + * program requires bpf_testmod BTF, so it fails to load.
-> + */
-> +static void btf_module_names_empty(void)
-> +{
-> +       struct btf_module_names *skel =3D NULL;
-> +       int ret;
-> +       const char *mod_names[] =3D { NULL };
-> +
-> +       LIBBPF_OPTS(bpf_object_open_opts, opts,
-> +               /* Non-NULL pointer with zero entries represents an empty=
- list. */
-> +               .btf_module_names =3D mod_names,
-> +               .nr_btf_module_names =3D 0,
-> +       );
-> +
-> +       skel =3D btf_module_names__open_opts(&opts);
-> +       if (!ASSERT_OK_PTR(skel, "btf_module_names__open_opts empty"))
-> +               goto out;
-> +
-> +       ret =3D btf_module_names__load(skel);
-> +       ASSERT_EQ(ret, -ESRCH, "btf_module_names__load empty");
-> +
-> +out:
-> +       btf_module_names__destroy(skel);
-> +}
-> +
-> +static void btf_module_names_invalid(void)
-> +{
-> +       struct btf_module_names *skel =3D NULL;
-> +       const char *names[] =3D { NULL };
-> +       const char *empty_names[] =3D { "" };
-> +       const char *duplicate_names[] =3D {
-> +               "bpf_testmod", "bpf_testmod",
-> +       };
-> +       LIBBPF_OPTS(bpf_object_open_opts, opts,
-> +               .btf_module_names =3D names,
-> +               .nr_btf_module_names =3D 1,
-> +       );
-> +
-> +       skel =3D btf_module_names__open_opts(&opts);
-> +       ASSERT_EQ(libbpf_get_error(skel), -EINVAL,
-> +                 "btf_module_names__open_opts null");
-> +       btf_module_names__destroy(skel);
-> +
-> +       opts.btf_module_names =3D empty_names;
-> +       skel =3D btf_module_names__open_opts(&opts);
-> +       ASSERT_EQ(libbpf_get_error(skel), -EINVAL,
-
-please don't use libbpf_get_error(), this is legacy and is
-discouraged. check that skell is null and then look at errno
-
-
-> +                 "btf_module_names__open_opts empty");
-> +       btf_module_names__destroy(skel);
-> +
-> +       opts.btf_module_names =3D duplicate_names;
-> +       opts.nr_btf_module_names =3D 2;
-> +       skel =3D btf_module_names__open_opts(&opts);
-> +       ASSERT_EQ(libbpf_get_error(skel), -EINVAL,
-> +                 "btf_module_names__open_opts duplicate name");
-> +       btf_module_names__destroy(skel);
-> +}
-> +
-> +void test_btf_module_names(void)
-> +{
-> +       struct btf *vmlinux_btf =3D NULL;
-> +       struct btf *module_btf =3D NULL;
-> +
-> +       if (!env.has_testmod) {
-> +               test__skip();
-> +               return;
-> +       }
-> +
-> +       vmlinux_btf =3D btf__load_vmlinux_btf();
-> +       if (libbpf_get_error(vmlinux_btf)) {
-> +               test__skip();
-> +               return;
-> +       }
-> +
-> +       /* Ensure bpf_testmod BTF is available. */
-> +       module_btf =3D btf__load_module_btf("bpf_testmod", vmlinux_btf);
-> +       if (libbpf_get_error(module_btf)) {
-> +               btf__free(vmlinux_btf);
-> +               test__skip();
-> +               return;
-> +       }
-> +
-> +       btf__free(module_btf);
-> +       btf__free(vmlinux_btf);
-> +
-> +       if (test__start_subtest("btf_module_names_load"))
-> +               btf_module_names_load();
-> +
-> +       if (test__start_subtest("btf_module_names_skip"))
-> +               btf_module_names_skip();
-> +
-> +       if (test__start_subtest("btf_module_names_empty"))
-> +               btf_module_names_empty();
-> +
-> +       if (test__start_subtest("btf_module_names_invalid"))
-> +               btf_module_names_invalid();
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/btf_module_names.c b/tools=
-/testing/selftests/bpf/progs/btf_module_names.c
-> new file mode 100644
-> index 000000000000..232adc0f33f6
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/btf_module_names.c
-> @@ -0,0 +1,13 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <vmlinux.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +
-> +SEC("fentry/bpf_testmod_loop_test")
-> +int BPF_PROG(test_btf_module_names)
-> +{
-> +       return 0;
-> +}
-> +
-> +char _license[] SEC("license") =3D "GPL";
-> --
-> 2.34.1
->
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/334899=
+85893
