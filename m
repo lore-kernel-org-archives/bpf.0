@@ -1,171 +1,167 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29FCA314B63;
-	Thu,  3 Sep 2026 19:57:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2318139DBF5
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 20:18:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788465454; cv=none; b=ZvWL/I9WKWBZNB3FNf4P75hRZThBjYg8Ezucw9tael2/o5E0MWpsSxaHu1M2RhCFeIGbdrhyo3FLBlqDDwBexPXaxsfmCz4P9NkTQhuLHmBDHepiJ8EyQZSTGe72WC0BnYatH3zkcMbG4ewB39uJonrGNKvsJE8040UzUvmkVsg=
+	t=1788466714; cv=none; b=bFoLiYJWw3GoKlcpm2HWJwF9K83YUyHAZSI9STVwl5nVigcQSrejJdclp6qnpu1tG6P7vUcZACrPTCDVB7iZPAecDGDg3qljx5b78F+RAxFuLzROQQ5Rtt0Qg1PLk87pOwz6rQRgU3iQOmpFYqx70shf+5B4+XZ1OLvbWHVXfYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788465454; c=relaxed/simple;
-	bh=fmxBut2r/MdOgNLJ7AkgWTHL/DFaVyUjRO6GdYPY9IQ=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GaIO1HmZlpQvmAWCtKUuPESxSUcOtTJfBV+TzeJR1gUCv+MWaL0ZXSugVzzSxGztz122KPzjtJn2CzbsSJO7jstk8gZpgF2dBxYhZCyAvsmgEoElaA5f3h7aEMHSe4Dp6RdHEQwOmtHmbsEAciPVE2HOvn90OhmV7H4I05K5dx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mShBYE5a; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788466714; c=relaxed/simple;
+	bh=Pf0D0igSeXL+nnNxK736IKxUY2oIry6x0hSpPh5ZcD0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=WrF+ZcYn5y/dlcgIlS6VlVuwOMQcdRpC9A0ySWihOAIUCXVzFmKpr2r1sAbW+XhSPtP8rqgqD/4c1zc8U5R1oHgOuYPXIupenlWxf3wzJzzl+97ZyfxLXeRgqZLln21BUKHPCrRokFz329kRK50QzwO+j3E1YpUa6lNoDUiTXqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c9mTVRqn; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mShBYE5a"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7649A1F000E9;
-	Thu,  3 Sep 2026 19:57:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c9mTVRqn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98F331F000E9;
+	Thu,  3 Sep 2026 20:18:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788465435;
-	bh=VzbwYl2+rL3MNbaIw+TeYvTAUnrzEvaim7JN8m2R0Gs=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=mShBYE5aJW9JG1EmqmMUmqc/UnFnoV8s8EW4POCIvmyiB2gXIEJ92JLSwDZkF3Dpp
-	 bSjtHZu5RyA/tEp5J7b2VLNStylWuV3DQObuBfN6H/R7C+v02S7fcE745BAHPg8kwu
-	 C0uRxkz4RD7rF6pOHWXi+nx9CXX+hBe0PaemqEniTfcIry6f7gkXG5W/4xUB0VVztN
-	 HvOlicmPQJs5Iyh8Ee1yJJrKosx28x5EwL7UQhHzPPs6bBDfC578p4tlzM3+S3d1Uo
-	 jIwyzSnm2tgNBU8qvUXAfIc/p/L4y7vAzt8mVsRm+OrdxkKSP2D6+mwEVXqfnoyoGp
-	 8HXGhEE2j1E1g==
-Subject:
- Re: [net-next,v9,1/2] tcp: Replace min_tso_segs() with tso_segs() CC callback
-From: netdev-bot+sashiko@kernel.org
-To: chia-yu.chang@nokia-bell-labs.com
-Cc: ihor.solodrai@linux.dev, john.fastabend@gmail.com, jakub@cloudflare.com,
- jiayuan.chen@linux.dev, netdev@vger.kernel.org, bpf@vger.kernel.org,
- ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, linux-kselftest@vger.kernel.org,
- shuah@kernel.org, horms@kernel.org, dsahern@kernel.org, pabeni@redhat.com,
- jhs@mojatatu.com, stephen@networkplumber.org, davem@davemloft.net,
- edumazet@google.com, andrew+netdev@lunn.ch, donald.hunter@gmail.com,
- kuniyu@google.com, ij@kernel.org, ncardwell@google.com,
- koen.de_schepper@nokia-bell-labs.com, g.white@cablelabs.com,
- ingemar.s.johansson@ericsson.com, mirja.kuehlewind@ericsson.com,
- cheshire@apple.com, rs.ietf@gmx.at, Jason_Livingood@comcast.com,
- vidhi_goel@apple.com, Mike_Rudolph@comcast.com, Jeff_Howe@comcast.com,
- srichard@netapp.com, kuba@kernel.org
-Date: Thu, 03 Sep 2026 19:57:13 +0000
-Message-ID: <178846543301.3394541.455246755221753943@kernel.org>
-In-Reply-To: <20260831165230.2696893-2-chia-yu.chang@nokia-bell-labs.com>
-References: <20260831165230.2696893-2-chia-yu.chang@nokia-bell-labs.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1788466705;
+	bh=Kj410esl7THuWWt5vH4S7ktmrmZ2vCeygGiPL1mZl/4=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=c9mTVRqnqjKnCO9PI9EwPrqNgip4Oh36VMZ++pFC5zfkjcPBEIzcmlEBm5pZ/yXGd
+	 Ys6sHWZgvlwIJyfvi0fQ5vOTfr4Xp6EuBcZ8c4tQR94GC8g8N1Kd7WG9U3i8LdrwjZ
+	 +6Ez1Pb9JSYIrNkWKa7i+qch5Io6KNrUrcn090ybKfnWAewqvmVwvl00IDJThai72i
+	 XcM1EqLhtyqlvLB7d+8ojZWtsCB3KMXnjZKIJpCrqpFGRU+/8hqf1X0VB5MRLUcrVd
+	 24+iKAt8Khb4sLGq4JmO4p1t8VeCYO946jlCHJqTd/PvIfZveu0HE0QrZy0YGRNR5v
+	 qOyOZV7dK7OkA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net v3 1/4] net: stmmac: propagate PTP init failures in
+ stmmac_setup_ptp()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Lorenzo Bianconi" <lorenzo.bianconi@oss.qualcomm.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260902-stmmac-est-reapply-after-open-v3-1-e72a6df5a7ef@oss.qualcomm.com>
+References: <20260902-stmmac-est-reapply-after-open-v3-0-e72a6df5a7ef@oss.qualcomm.com>
+ <20260902-stmmac-est-reapply-after-open-v3-1-e72a6df5a7ef@oss.qualcomm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 03 Sep 2026 20:18:25 +0000
+Message-Id: <20260903201825.98F331F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider:
-
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
-
-- [Medium] The patch silently removes the `bbr_min_tso_segs` BPF kfunc
-  without a deprecation window and without mentioning it in the commit…
-
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] Propagating stmmac_init_timestamping() return value causes network=
+ interface open/resume to fail on hardware without PTP support.
 --
 
-tcp: Replace min_tso_segs() with tso_segs() CC callback
+commit 9136103951651df9ef9668b2743b64e0da023618
+Author: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 
-The min_tso_segs() congestion control callback is replaced by a new
-tso_segs() callback that takes mss_now and returns the final TSO segment
-count, bypassing tcp_tso_autosize().  tcp_tso_autosize() is exported so
-modules can still do the autosizing themselves, and BBR is converted to
-the new callback.
+net: stmmac: propagate PTP init failures in stmmac_setup_ptp()
 
-> diff --git a/include/net/tcp.h b/include/net/tcp.h
+This patch modifies stmmac_setup_ptp() to return an error code instead of
+swallowing PTP setup failures. This ensures that failures like a broken
+reference clock prevent the schedule from getting stuck during taprio offlo=
+ad.
 
-[ ... ]
-
-> diff --git a/net/ipv4/tcp_bbr.c b/net/ipv4/tcp_bbr.c
-> index 82378a2bfd1e1..ecf11be46f382 100644
-> --- a/net/ipv4/tcp_bbr.c
-> +++ b/net/ipv4/tcp_bbr.c
-> @@ -297,11 +297,18 @@ static void bbr_set_pacing_rate(struct sock *sk, u32 bw, int gain)
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
+net/ethernet/stmicro/stmmac/stmmac_main.c
+> index d576059c04df9..47295845371aa 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -937,18 +937,27 @@ static int stmmac_init_timestamping(struct stmmac_p=
+riv *priv)
+>  	return 0;
 >  }
->  
->  /* override sysctl_tcp_min_tso_segs */
-> -__bpf_kfunc static u32 bbr_min_tso_segs(struct sock *sk)
-> +static u32 bbr_min_tso_segs(struct sock *sk)
+> =20
+> -static void stmmac_setup_ptp(struct stmmac_priv *priv)
+> +static int stmmac_setup_ptp(struct stmmac_priv *priv)
 >  {
->  	return READ_ONCE(sk->sk_pacing_rate) < (bbr_min_tso_rate >> 3) ? 1 : 2;
->  }
->  
-> +__bpf_kfunc static u32 bbr_tso_segs(struct sock *sk, u32 mss_now)
-> +{
-> +	if (unlikely(!mss_now))
-> +		return bbr_min_tso_segs(sk);
-> +	return tcp_tso_autosize(sk, mss_now, bbr_min_tso_segs(sk));
-> +}
+>  	int ret;
+> =20
+>  	ret =3D clk_prepare_enable(priv->plat->clk_ptp_ref);
+> -	if (ret < 0)
+> +	if (ret < 0) {
+>  		netdev_warn(priv->dev,
+>  			    "failed to enable PTP reference clock: %pe\n",
+>  			    ERR_PTR(ret));
+> +		return ret;
+> +	}
 > +
+> +	ret =3D stmmac_init_timestamping(priv);
+> +	if (ret) {
+> +		clk_disable_unprepare(priv->plat->clk_ptp_ref);
+> +		return ret;
+> +	}
+
+[Severity: High]
+Does this unexpectedly propagate a failure when the MAC hardware lacks PTP
+capabilities?
+
+In stmmac_init_timestamping(), if the hardware does not support PTP, it
+returns -EOPNOTSUPP:
+
+	if (!(priv->dma_cap.time_stamp || priv->dma_cap.atime_stamp)) {
+		netdev_info(priv->dev, "PTP not supported by HW\n");
+		return -EOPNOTSUPP;
+	}
+
+By returning this error here, will it prevent devices without PTP support
+from initializing correctly?
+
+> +
+> +	stmmac_ptp_register(priv);
+> =20
+> -	if (stmmac_init_timestamping(priv) =3D=3D 0)
+> -		stmmac_ptp_register(priv);
+> +	return 0;
+>  }
+> =20
+>  static void stmmac_release_ptp(struct stmmac_priv *priv)
+> @@ -4153,10 +4162,12 @@ static int __stmmac_open(struct net_device *dev,
+>  	ret =3D stmmac_hw_setup(dev);
+>  	if (ret < 0) {
+>  		netdev_err(priv->dev, "%s: Hw setup failed\n", __func__);
+> -		goto init_error;
+> +		return ret;
+>  	}
+> =20
+> -	stmmac_setup_ptp(priv);
+> +	ret =3D stmmac_setup_ptp(priv);
+> +	if (ret)
+> +		goto ptp_error;
+
+[Severity: High]
+Could propagating the -EOPNOTSUPP return value cause the network interface
+bring-up to fail completely?
+
+Prior to this patch, stmmac_setup_ptp() ignored the return value, allowing
+non-PTP hardware to seamlessly skip PTP setup. Since the error is now handl=
+ed,
+it seems like bringing up the interface (e.g., via ip link set up) will jump
+to ptp_error and abort the open process for hardware without PTP.
 
 [ ... ]
+> @@ -8318,13 +8330,12 @@ int stmmac_resume(struct device *dev)
+>  	ret =3D stmmac_hw_setup(ndev);
+>  	if (ret < 0) {
+>  		netdev_err(priv->dev, "%s: Hw setup failed\n", __func__);
+> -		stmmac_legacy_serdes_power_down(priv);
+> -		mutex_unlock(&priv->lock);
+> -		rtnl_unlock();
+> -		return ret;
+> +		goto error_unlock;
+>  	}
+> =20
+> -	stmmac_init_timestamping(priv);
+> +	ret =3D stmmac_init_timestamping(priv);
+> +	if (ret)
+> +		goto error_stop_dma;
 
-> @@ -1163,7 +1170,7 @@ BTF_ID_FLAGS(func, bbr_sndbuf_expand)
->  BTF_ID_FLAGS(func, bbr_undo_cwnd)
->  BTF_ID_FLAGS(func, bbr_cwnd_event_tx_start)
->  BTF_ID_FLAGS(func, bbr_ssthresh)
-> -BTF_ID_FLAGS(func, bbr_min_tso_segs)
-> +BTF_ID_FLAGS(func, bbr_tso_segs)
->  BTF_ID_FLAGS(func, bbr_set_state)
->  BTF_KFUNCS_END(tcp_bbr_check_kfunc_ids)
+[Severity: High]
+Does this introduce a similar issue during system resume?
 
-[Severity: Medium]
-Dropping the __bpf_kfunc annotation from bbr_min_tso_segs() and replacing its
-BTF_ID_FLAGS() entry with bbr_tso_segs() takes the bbr_min_tso_segs kfunc out
-of the kernel BTF kfunc set in one step.  Should this go through a
-deprecation release instead?
+If stmmac_init_timestamping() returns -EOPNOTSUPP for hardware lacking PTP,
+this looks like it will abort the resume process and leave the interface
+broken after the system wakes up.
 
-Any out-of-tree BPF congestion control containing:
-
-    extern u32 bbr_min_tso_segs(struct sock *sk) __ksym;
-
-now fails to load with "kernel function bbr_min_tso_segs not found in kernel
-BTF", and that applies to programs calling it from any callback, not only
-from the renamed one.
-
-The helper is still present and still called internally, both from
-bbr_tso_segs() and from bbr_tso_segs_goal():
-
-net/ipv4/tcp_bbr.c:bbr_tso_segs_goal() {
-    ...
-	segs = max_t(u32, bytes / tp->mss_cache, bbr_min_tso_segs(sk));
-    ...
-}
-
-so would keeping the BTF_ID_FLAGS(func, bbr_min_tso_segs, KF_DEPRECATED)
-entry for a release work here?  Documentation/bpf/kfuncs.rst says "It's
-expected that the common case will be that kfuncs will go through a
-deprecation period rather than being changed or removed without warning".
-
-The v8 changelog of this submission said "Deprecate bbr_min_tso_segs() kfunc
-instead of removing it", and v9 said "Remove deprecated flag on
-bbr_min_tso_segs()", so the deprecation flag appears to have been dropped
-again between revisions.  Was that intentional?
-
-The commit message lists the BPF struct_ops impacts as:
-
-    - The callback is renamed from min_tso_segs() to tso_segs()
-    - The signature gains an extra u32 mss_now argument
-    - The return value semantics is changed from "floor value passed into
-      tcp_tso_autosize()" to "final tso_segs value", bypassing autosizing
-
-Could the disappearance of the bbr_min_tso_segs kfunc be added to that list?
-
-On the replacement side, the follow-up commit in this series, "bpf: make
-tcp_tso_autosize() available to BPF congestion controls", marks
-tcp_tso_autosize() as __bpf_kfunc and adds it to bpf_tcp_ca_check_kfunc_ids,
-so a BPF congestion control can reproduce the old "raise the floor, keep
-autosizing" behaviour by calling tcp_tso_autosize(sk, mss_now, my_floor)
-from there on.  At this commit alone that kfunc is not yet registered, so
-bbr_tso_segs() with BBR's hardcoded 1-or-2 floor is the only substitute.
-
-In-tree users were updated in
-tools/testing/selftests/bpf/progs/tcp_ca_kfunc.c and no other in-tree
-reference to the old kfunc remains.
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260831165230.2696893-1-chia-yu.chang%40nokia-bell-labs.com
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260902-stmmac-est=
+-reapply-after-open-v3-0-e72a6df5a7ef@oss.qualcomm.com?part=3D1
