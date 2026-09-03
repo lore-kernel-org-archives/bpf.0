@@ -1,118 +1,139 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF25A37754C
-	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 22:40:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464E913E02A
+	for <bpf@vger.kernel.org>; Thu,  3 Sep 2026 22:56:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788475260; cv=none; b=O0Wc5chSY3UOk7R+2Abs+waTgeXbqYccLnV41mhSs1tQcsNJPOGcem+Wo8Z1/04M4PmRQV/oU6McIad+KcS4ZZ92mmSjTE13noCQ9PRP8JbxfP5W5CsYEe9lcj7yv3z8IegIOYRgEz03tt8IDN3t0//sws5tRWgZrZlRfbDioyo=
+	t=1788476177; cv=none; b=EbroQz9j1B6htAvaXAWwHeYTtvmj2o6Mjxrfp+nX041FfWiBJRAaHrnkLLXf1W+V0Xb33DPW426+FsDduzc3GKbp25VdVZ60LBR6lItycewBSSVfzqbhBBdQMtKIr47qyxUKOLUxRQt3Xj3B6FifKLipeYcbhP7GGxpW94h123c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788475260; c=relaxed/simple;
-	bh=hCgHfMHD19qhV/083M++23KJFQcwxpYQSHCUHKRyexo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=lX0PpQTF4NMa3BdzzRDRWBiZHESJ88IusVVzHOBGH3V7spTIykPxCgd9KR1gSu1FRBlLQ0HShzXu5C1eQxhgpEUuBby+mYm21513W/tRjHtdaetLx+jfFHzpKWdnkkunKEbYxttUIXtSE3AiFtwOM0mK+qtc0+Io97VKL6E5WnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LJy+xO7z; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788476177; c=relaxed/simple;
+	bh=F2rfcmo9Q3EBFlU2r5UAEVozq4Qzm+MsPaFQDHj2bQ4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=O2W4EXFn9dWLZVvDn88C2pxv+P3BqQQ8xnrGatEj2/3jh9S0w27B3qecfqUAO/2LDLL8EghtfaXpkKABq3n8JI8JbTCetgxbtCxgGoEC9hhY3GIjaue+EYmf/z0+ykxw6SQcRqC4QyKWQwEezTm/8SNuGgGH0OsxuQmgi/l+wfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f1IdtVRw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LJy+xO7z"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-39b24d114d4so391492a91.3
-        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 15:40:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788475258; x=1789080058; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=hCgHfMHD19qhV/083M++23KJFQcwxpYQSHCUHKRyexo=;
-        b=LJy+xO7zkJJ6qvWFVky5hFSLkYf1CkHJ+MD2SG2TAvz+u27NjueJUtceMshMxPjfo3
-         R8O3rRzAJmW1aPg2UKqltLamVZdrVra4FOd2hvH+dxEdTG3bWYSZWOeOfK1jCtZyH4eG
-         zSZuWxfEjHp8sILW74jgYO8httOed+/V6dMB0EOdfDPVMdqvv5m83/1bfSG9wG0djI4r
-         lV4RsZeETL0w3SQc+eFdzvPVCUbicKgfyzi0k8oT2h3hG7P/iV6+oAVaSa76hJqUb6vf
-         dsqWdAXj70Qf5mIwUVtmtMN0G5MAOf3VXFiQoshgfUWpnGhs6nreop5jGoTww0o8XJT2
-         K7Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788475258; x=1789080058;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=hCgHfMHD19qhV/083M++23KJFQcwxpYQSHCUHKRyexo=;
-        b=RhjEVSZfvnrHuQamC8JMi3EfUg498zxymS1lgbEi8EGprK3ji5wv3OxzacvgGUsR8K
-         XS8lcxkbY76OftYGN1Y7iWd0QB24GBUC7jrNzAKTjcaA5kcdcC1pxHaVHMEEbw4GG9fE
-         NQXmKd4qydc74mD9AZHAJx3iUUeNqesNs0lKbhFUpI2NoACno7khUtmj8j6Lngjo8WPV
-         kLZ0F2G+EMD8YTygVb24ziMx6z8yJwKD9E9ry8uznzn4FGmHV64hZCu7oMbJa+F2xX0P
-         2bGWjE2RvlCYUcfNjGMN4qSD8Cd/enmtjL8JTu+DsuK0LwJbfaMLZxUzt7OXOdratU9z
-         LLQQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwQLYFDwFtea7Nour07uEF8F7xs0KQkNDCA4FFln3ZDCpFX7wWwp/tBZO8KcWkdHBTIN2Y=@vger.kernel.org
-X-Gm-Message-State: AFuF++l0CiX+g3JDlpvjlun1YFReQHgAz2ACkyBLendXtUf/5EQyEOSk
-	GMP4gcJMVPHIfW/2VGmbZwaY/FjU6na+JiNkbQBF+u/GV7J5jMQxK+fF
-X-Gm-Gg: AYBFou1zlD7G+qGu/pMgjYtZOI44sY2Yn2aWwl8u4/4VRKSIx0jKBUDeVHbFORBvKsh
-	DCIqYWoP2dL/tuPo7iGH8hTvDEA3SDcDvkG9mn8lb0XCXP9oBXSS+aE1ZzVnG6FaIfMxcBO1oE9
-	HmJsGpuDfGn+q7Sr5WRXQxJrkOrewvpgAkLFZPd3+n/QALhkiwJFZ7Udf4XoU5xA1CLiZMrBC9+
-	MjsOTUdW0u4WbH8taPv1oaZCtn7iNIS+6PbNvMBcU2H+eLBjUmEV6A0mJdu/ocwKL5V8IBMJ4gY
-	n9aVdxcMyXcCAlBvMljEIETOb46DkNMibSI8HFno+SGPHk2QfaLGAYmoDv4UQs9hELAw1xEBO3G
-	lAkhuOCtlk4xJpWQaenD4iTqyVCHshSk2BYeg2thldPSFgQ+DxrCze+oATY1jOaJUqRJ72cGJht
-	llucriREt/YWv7AKoSN1dm7bDhTnt/+AoZvLaICDs4FAijqDD4FzVX6oGQPwXPAj4m12KYXn3ny
-	w35rUbxIOYKtFeDd0+CW/fTQxmifS4NMcUZC9/07bX6yw==
-X-Received: by 2002:a17:90b:5844:b0:398:e436:370 with SMTP id 98e67ed59e1d1-39b260ff0e9mr2960767a91.2.1788475258066;
-        Thu, 03 Sep 2026 15:40:58 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:fe3c:fb36:dc7c:5b5? ([2620:10d:c090:500::6:dba3])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3339bdf44ffsm1777722eec.28.2026.09.03.15.40.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2026 15:40:57 -0700 (PDT)
-Message-ID: <ef8616d9adae2c2dc1371c407b86a504103e9cd1.camel@gmail.com>
-Subject: Re: [PATCH bpf v1 1/8] bpf: Check ancestor frames for rbtree
- callbacks
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Nicholas Carlini <npc@anthropic.com>, Alexei Starovoitov
- <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	kkd@meta.com, kernel-team@meta.com
-Date: Thu, 03 Sep 2026 15:40:55 -0700
-In-Reply-To: <20260903214758.2727663-2-memxor@gmail.com>
-References: <20260903214758.2727663-1-memxor@gmail.com>
-	 <20260903214758.2727663-2-memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f1IdtVRw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE2DA1F000E9;
+	Thu,  3 Sep 2026 22:56:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788476175;
+	bh=h8JcrmHdJMMosXZ9+yrioHZjLQnaYvTSwmhsYffAEz8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=f1IdtVRwXcsL/zdeIuV5++KOE3ZtA+fdAVEs/BjWCkf6hfKKTOZrL8GvwPhfbyTHa
+	 LQSvUncMLO6DNsR2KMIyZDwuS1TfesputBCPx4mfkDm2DYWWI783yIoeRrdehRxWHy
+	 pJrovQ6g4IoclU1w5JtLG8FiApF31cSqhU/nk6FL2eq7ArDaD95hmzuBYFHmWbL+CE
+	 hqVXdcEseZUQtDLF3RtCvxZCH7SRsI50Fiv/Cu7NZRkh5mokPvQazpS6J2MW8AdE0u
+	 v75fzOAabzfzA0yu5gMv09/DxnPk/0XSILxxvdGVWr9iIhYP9VceXHFsXB6LpIczA1
+	 Hl7rY1To4+zTg==
+Content-Type: multipart/mixed; boundary="===============5587475080051462124=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Message-Id: <6d52649fa67e5fe668d18486a26d876020a5db065ac25f20a1033a0f1ae6d9de@mail.kernel.org>
+In-Reply-To: <20260903214758.2727663-6-memxor@gmail.com>
+References: <20260903214758.2727663-6-memxor@gmail.com>
+Subject: Re: [PATCH bpf v1 5/8] bpf: Mark faultable stack helpers as sleepable
+From: bot+bpf-ci@kernel.org
+To: memxor@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,npc@anthropic.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu,  3 Sep 2026 22:56:14 +0000 (UTC)
 
-On Thu, 2026-09-03 at 23:47 +0200, Kumar Kartikeya Dwivedi wrote:
-> bpf_rbtree_add() invokes its comparator while the caller holds the root
-> lock. The native insertion code retains raw parent and link pointers acro=
-ss
-> the callback, so the verifier prohibits unlocking, consuming tree nodes,
-> or changing RCU state from that callback.
->=20
-> in_rbtree_lock_required_cb() only checks the innermost verifier frame.
-> Static subprogram calls are permitted while holding a spin lock, and such=
- a
-> call pushes a frame without in_callback_fn set. Consequently, all callbac=
-k
-> restrictions disappear in the nested frame. The subprogram can unlock the
-> tree, remove and drop the node being compared, then relock. Native insert=
-ion
-> resumes with the stale parent pointer and links freed memory into the tre=
-e.
->=20
-> Walk all active frames for the rbtree callback instead. Benign static
-> subprograms remain permitted, while callback restrictions follow executio=
-n
-> into nested frames.
->=20
-> Fixes: a44b1334aadd ("bpf: Allow calling static subprogs while holding a =
-bpf_spin_lock")
-> Reported-by: Nicholas Carlini <npc@anthropic.com>
-> Suggested-by: Nicholas Carlini <npc@anthropic.com>
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
+--===============5587475080051462124==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+> index a839041e0d008..d09d4c3fe547c 100644
+> --- a/kernel/bpf/stackmap.c
+> +++ b/kernel/bpf/stackmap.c
+> @@ -875,6 +875,7 @@ BPF_CALL_4(bpf_get_stack_sleepable, struct pt_regs *, regs, void *, buf, u32, si
+>  const struct bpf_func_proto bpf_get_stack_sleepable_proto = {
+>  	.func		= bpf_get_stack_sleepable,
+>  	.gpl_only	= true,
+> +	.might_sleep	= true,
+>  	.ret_type	= RET_INTEGER,
+>  	.arg1_type	= ARG_PTR_TO_CTX,
+>  	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
 
-...
+Does the unconditional .might_sleep marking reject too much? The faultable
+path only sleeps when BPF_F_USER_BUILD_ID is requested. Looking at
+__bpf_get_stack() in kernel/bpf/stackmap.c, the may_fault=true argument
+flows to callchain_finalize():
+
+    if (user_build_id)
+            stack_map_get_build_id_offset(buf, trace_nr, user, may_fault);
+
+and stack_map_get_build_id_offset() only takes the blocking path when
+may_fault && has_user_ctx. With flags that do not contain BPF_F_USER_BUILD_ID,
+user_build_id is false and no sleeping callee (build_id_parse_file()) is
+reached; everything else already runs under preempt_disable().
+
+Because prototype selection is per-program (kprobe_prog_func_proto() in
+kernel/trace/bpf_trace.c and bpf_base_func_proto() in kernel/bpf/helpers.c,
+both keyed only on prog->sleepable), the new flag rejects every call from
+a non-sleepable region of a sleepable program, including calls that provably
+cannot sleep.
+
+This previously-accepted program is now rejected:
+
+    SEC("uprobe.s/...")
+    int prog(struct pt_regs *ctx) {
+            bpf_rcu_read_lock();
+            ...
+            bpf_get_stack(ctx, buf, sizeof(buf), BPF_F_USER_STACK);
+            bpf_rcu_read_unlock();
+    }
+
+The verifier sets state->in_sleepable = prog->sleepable, bpf_rcu_read_lock()
+raises active_rcu_locks, so in_sleepable_context() (kernel/bpf/verifier.c)
+returns false and the load fails with "sleepable helper bpf_get_stack#... in
+rcu_read_lock region".
+
+The follow-up selftest commit f73872d1b9dba confirms these programs loaded
+before the change ("Both programs load when the prototypes lack might_sleep").
+
+The diagnostic advice emitted ("Move the helper call outside the critical
+section, or use a non-sleepable helper") is also not actionable for the
+second half: once prog->sleepable is set there is no way for a program to
+reach bpf_get_stack_proto / bpf_get_task_stack_proto, so "use a
+non-sleepable helper" has no corresponding UAPI.
+
+The tightening itself is correct and intended, and workarounds exist (hoist
+the call, or bpf_task_acquire() the task before leaving the RCU section),
+so this is a scope observation rather than a memory-safety defect.
+
+Note that the tree already has a narrower mechanism for exactly this
+situation: insn_aux_data[insn_idx].non_sleepable (set for helpers in
+kernel/bpf/verifier.c) is used to swap bpf_dynptr_from_file /
+bpf_arena_alloc_pages / bpf_arena_free_pages for non-sleepable
+implementations at the offending call site instead of rejecting the program.
+That consumer only exists for kfuncs today; if the intent is that helper
+call sites cannot be downgraded the same way, the changelog would be a good
+place to say so, and to state explicitly that calls without
+BPF_F_USER_BUILD_ID are rejected too.
+
+> @@ -928,6 +929,7 @@ BPF_CALL_4(bpf_get_task_stack_sleepable, struct task_struct *, task, void *, buf
+>  const struct bpf_func_proto bpf_get_task_stack_sleepable_proto = {
+>  	.func		= bpf_get_task_stack_sleepable,
+>  	.gpl_only	= false,
+> +	.might_sleep	= true,
+>  	.ret_type	= RET_INTEGER,
+>  	.arg1_type	= ARG_PTR_TO_BTF_ID,
+>  	.arg1_btf_id	= &btf_tracing_ids[BTF_TRACING_TYPE_TASK],
+
+The same concern applies here: bpf_get_task_stack() in a sleepable program's
+RCU section or timer callback now rejects unconditionally, even when the
+call cannot reach build_id_parse_file().
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33811770362
+--===============5587475080051462124==--
