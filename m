@@ -1,308 +1,243 @@
-Received: from mta0.migadu.com (out-202.mta0.migadu.com [91.218.175.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ABCC3AA19B
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 02:59:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B1383B28D;
+	Fri,  4 Sep 2026 03:03:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788490744; cv=none; b=NfmD0RxfDYTdAIlZDiyUCpkeBc9Pug5ctEgBSUh6caNZOKf/pknnka48BNI5Wjhzk4rLAfYJXGigiV3P2qt7d85y/dx0z5+/rvIbBDquxmOA/U/DS4GljUrK4JOwYfBQkccY9FIChNuHgEBku890y/VIhmUE9homu3rJ+JKhbIo=
+	t=1788491004; cv=none; b=jT9I96w9f6EBGoEvEaHO+vdN8z3RHCM3ke82xxYg5qx0nt1srGH7uhpGUKqZc9dliZA5uwoSUxaocDAuWypR8CI9Ur182Y3lL+V+zXYJ6Phf8Pkc1BxHjay5dp5TBcFucce2qxH9CrtR1pfLM4BEtFAV3hEmwAPjdsVVKpxKT74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788490744; c=relaxed/simple;
-	bh=Dj/WJ7sVczHSWQazSEovDF0THqaEKKKSpFpv+TX23F8=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=oOXlyw7RBf+8+fsK48dM3rWvbeOVBMzBbg1lZh89RgGoNGltS/JnIDxTou5x/1wa3QB73Arbpdd6t1tjDcWjUCstPGF46dGWNdBTYQouf3I1JtWM3l+WNjd9lmx/4iwmZ6gHCXxqRcbRuv3GtPNblpKY+hkFP0D+wQ5gSBO8vRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=v2dFD1/5; arc=none smtp.client-ip=91.218.175.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788491004; c=relaxed/simple;
+	bh=pwiRQbyfMqVUFWm9PMMbAl+Xw5LrijKWVhj3KDC9z9M=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=I9XneeK96P+VJWsrtRfSJV154Yp0p7i3odBqQni+rF31VqHgjqAk89JlcGvTzXTY0A1eqWiOVLt6DUunjfgSa3jffw5TotyTeZ58dWKbSCgr2LS6swjtBhg1Lz5sy+9BOl2RcZnSxy+NCC4bKdyfGAovcnqDMBdptyIFIKnAZ+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RrNHg5o0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="v2dFD1/5"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Dj/WJ7sVczHSWQazSEovDF0THqaEKKKSpFpv+TX23F8=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788490740; v=1; x=1789095540;
- b=v2dFD1/5en6o8BOW0P/w0fsqIdJq75YGUlot1c53Blc3akBLfHsUdJSYg8hfaS9pUur7bRj3
- 2DY3Ch4yAt8NE3d0GWpdfbm69TqbmEzkZMW0pESrARG6sN1NL5RG8cbhUBn3ihocjAXdG05uYe9
- vEqKx4P3xKu1AHumpU35k3n8=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 745325d3d55639af;
-	Fri, 04 Sep 2026 02:58:59 +0000
-X-Mizu-Trace-ID: 745325d3d55639af
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <76ad7da7-7651-4250-b41d-bb2425a608b5@linux.dev>
-Date: Fri, 4 Sep 2026 08:28:54 +0530
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RrNHg5o0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50D241F00A3D;
+	Fri,  4 Sep 2026 03:03:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788491003;
+	bh=tYn532goAvj6zjhWikeVegY2fGNjSiT+sKqhWolhvQk=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=RrNHg5o0zeGn4I1pylAbl4AYgwJpcPRDFhAFi9GEQOEK+eUiXw88YF+vw7eSDV+E7
+	 d1+QapM2/AZlBORWEaOj6E++MGxSWEnLVxV4qcB7/YEVup1I+70lG1uY0vTgTT3geE
+	 I8XI5fH0/Sv73igMhbB/YVi3dHFuutkcBJWYN4vRwrlQqgGTqY6V/xZGGWFwzuGbnv
+	 TTDUqG6vxSRe8ed1CaZ+5EknDuMU4IsEV3UJeNWfGephaaTKTiA0cL+TNOg6AB34+h
+	 DkqygT56Spv3vIwNCPcvmLIfB/40yqDteRPEcId2UvRlICECM/W2B75j3JRDTDGxbp
+	 AgI6bbKNWAbkw==
+Subject:
+ Re: [PATCH] bpf, sockmap: Fix self-redirect copied_seq double-counting
+From: netdev-bot+sashiko@kernel.org
+To: geliang@kernel.org
+Cc: john.fastabend@gmail.com, jakub@cloudflare.com, jiayuan.chen@linux.dev,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, daniel@iogearbox.net, tanggeliang@kylinos.cn,
+ netdev@vger.kernel.org, bpf@vger.kernel.org
+Date: Fri, 04 Sep 2026 03:03:21 +0000
+Message-ID: <178849100183.4131868.10982082287561858713@kernel.org>
+In-Reply-To: =?utf-8?q?=3Cb840c35fdfdf36e9fddedfa645b12699bc51aa34=2E1787968?=
+ =?utf-8?q?065=2Egit=2Etanggeliang=40kylinos=2Ecn=3E?=
+References: =?utf-8?q?=3Cb840c35fdfdf36e9fddedfa645b12699bc51aa34=2E17879680?=
+ =?utf-8?q?65=2Egit=2Etanggeliang=40kylinos=2Ecn=3E?=
+X-sashiko-severity: High
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Subject: Re: [RFC bpf-next 2/6] bpf: move the linked-scalar flags into
- bpf_reg_state->flags [NFC]
-To: Eduard Zingerman <eddyz87@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260814231945.3884596-1-vineet.gupta@linux.dev>
- <20260814231945.3884596-3-vineet.gupta@linux.dev>
- <82363647cb12b75398e34c7d66a9f0c527940c8d.camel@gmail.com>
-Content-Language: en-US
-In-Reply-To: <82363647cb12b75398e34c7d66a9f0c527940c8d.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
-On 8/19/26 4:21 AM, Eduard Zingerman wrote:
-> On Fri, 2026-08-14 at 16:19 -0700, Vineet Gupta wrote:
->
-> +#define BPF_FLAG_ADD_CONST32	(1U << 0)
-> +#define BPF_FLAG_ADD_CONST64	(1U << 1)
-> +#define BPF_FLAG_ADD_CONST	(BPF_FLAG_ADD_CONST32 | BPF_FLAG_ADD_CONST64)
->   #define BPF_FLAG_PRECISE	(1U << 7)
-> I'd still suggest to use bitfields.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider:
 
-Done.
+Critical: 0 · High: 2 · Medium: 0 · Low: 0
 
-FWIW I've used enum bitfields which guarantees type safety for mutual 
-exclusions of 32 and 64 flags.
+- [High] net/core/skmsg.c:1042-1047 (sk_psock_verdict_apply(),
+  __SK_REDIRECT arm): the new self-redirect test compares only the…
+- [High] net/core/skmsg.c:1042-1047 (sk_psock_verdict_apply()): for a
+  self-redirect the patch drops the up-front tcp_eat_skb() and relies on…
 
->> diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
->> index f7a0314fa106..d3105b9a9965 100644
->> --- a/kernel/bpf/states.c
->> +++ b/kernel/bpf/states.c
->> @@ -370,12 +370,12 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
->>    * to cur_id=0 and pass. With temp IDs: r6 maps X->temp1, r7 tries to map
->>    * X->temp2, but X is already mapped to temp1, so the check fails correctly.
->>    *
->> - * When old_id has BPF_ADD_CONST set, the compound id (base | flag) and the
->> - * base id (flag stripped) must both map consistently. Example: old has
->> - * r2.id=A, r3.id=A|flag (r3 = r2 + delta), cur has r2.id=B, r3.id=C|flag
->> - * (r3 derived from unrelated r4). Without the base check, idmap gets two
->> - * independent entries A->B and A|flag->C|flag, missing that A->C conflicts
->> - * with A->B. The base ID cross-check catches this.
->> + * ->id is a plain identifier -- the ADD_CONST relationship lives in
->> + * ->flags -- so there is no compound (base | flag) key to unpack here.
->> + * Registers sharing a base id go through one idmap entry, which is what
->> + * catches e.g. old r2.id=A, r3.id=A (r3 = r2 + delta) against cur r2.id=B,
->> + * r3.id=C: A->B and A->C conflict. Matching ->flags and ->delta are checked
->> + * by the caller in regsafe().
-> Nit: the above paragraph can be dropped altogether now.
+--
 
-Done.
+bpf, sockmap: Fix self-redirect copied_seq double-counting
 
->>    */
->>   static bool check_scalar_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
->>   {
->> @@ -384,15 +384,7 @@ static bool check_scalar_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
->>
->>   	cur_id = cur_id ? cur_id : ++idmap->tmp_id_gen;
->>
->> -	if (!check_ids(old_id, cur_id, idmap))
->> -		return false;
->> -	if (old_id & BPF_ADD_CONST) {
->> -		old_id &= ~BPF_ADD_CONST;
->> -		cur_id &= ~BPF_ADD_CONST;
->> -		if (!check_ids(old_id, cur_id, idmap))
->> -			return false;
->> -	}
->> -	return true;
->> +	return check_ids(old_id, cur_id, idmap);
->>   }
-> I think sashiko is correct when it comments about:
->
->> Does the explore_alu_limits verification path also need a similar update?
-> Both check_scalar_ids() call sites need an update.
-> That being said, I'd say that the following case in regsafe()
->
-> 		if (env->explore_alu_limits) {
-> 			/* explore_alu_limits disables tnum_in() and range_within()
-> 			 * logic and requires everything to be strict
-> 			 */
-> 			return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 &&
-> 			       check_scalar_ids(rold->id, rcur->id, idmap);
-> 		}
->
->
-> can be replaced with `if (...) return regs_exact(rold, rcur, idmap)`,
-> parent_id should be zero for SCALAR_VALUE.
+This changes the __SK_REDIRECT arm of sk_psock_verdict_apply() so that
+tcp_eat_skb() is only called when the redirect destination differs from
+psock->sk.  The intent is to avoid advancing tcp_sk->copied_seq twice when
+a stream_verdict program redirects an skb back into the same socket's
+ingress queue.
 
-And actually this can be moved out to the NFC patch (fwiw i dropped the 
-helper link_flags_check).
+> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+> index 2521b643fa05..5fa7b9639eef 100644
+> --- a/net/core/skmsg.c
+> +++ b/net/core/skmsg.c
+> @@ -1039,10 +1039,14 @@ static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
+>  				goto out_free;
+>  		}
+>  		break;
+> -	case __SK_REDIRECT:
+> -		tcp_eat_skb(psock->sk, skb);
+> +	case __SK_REDIRECT: {
+> +		struct sock *dst = skb_bpf_redirect_fetch(skb);
+> +
+> +		if (dst != psock->sk)
+> +			tcp_eat_skb(psock->sk, skb);
 
-Re. the next instance of check_scalar_ids () call - there is no direct 
-change to that effect - the check for flags above it (existing for 
-add_const, new for  sugreg) provide the coverage.
+[Severity: High]
+The commit message describes the problem as "self-redirect with
+BPF_F_INGRESS", but this test only compares the destination socket and
+never looks at the direction.  Does the same-socket *egress* case end up
+here too?
 
-One thing that did came up out of this deliberations and closely related 
-albeit not to directly here.
+skb_bpf_redirect_fetch() in include/linux/skmsg.h masks the flag bits off:
 
-The NFC patch 1 moved the flags out but didn't update regs_exact() for 
-checking the add_const flag explicitly which was happening implicitly 
-before the series. That causes the NFC to accept the following incorrectly.
-        old {r1.id=A, r2.id=A+delta}  vs cur {r1.id=B, r2.id=B}
+  static inline struct sock *skb_bpf_redirect_fetch(struct sk_buff *skb)
+  {
+	unsigned long sk_redir = skb->_sk_redir;
 
-If regs_exact () is updated in the NFC, it fixes above but it also 
-starts rejecting (correctly) something that pre-series was not.
-        old {r2.id=A+delta32}         vs cur {r2.id=B+delta64}
+	return (struct sock *)(sk_redir & BPF_F_PTR_MASK);
+  }
 
-That's fine except it is no longer NFC.
+and bpf_sk_redirect_map() in net/core/sock_map.c stores the direction
+separately, allowing flags == 0:
 
-So what would your preference be: NFC + addon patch to introduce or 
-remove the NFC label.
-The scenario is apparently hard to hit in real life but possible 
-theoritically.
+	if (unlikely(flags & ~(BPF_F_INGRESS)))
+		return SK_DROP;
+	...
+	skb_bpf_set_redir(skb, sk, flags & BPF_F_INGRESS);
 
->>   static void __clean_func_state(struct bpf_verifier_env *env,
->> @@ -488,11 +480,32 @@ static int clean_verifier_state(struct bpf_verifier_env *env,
->>   	return 0;
->>   }
->>
->> +/*
->> + * Do rold and rcur describe the same relationship to their ->id set?
->> + *
->> + * The link flags live in ->flags, which sits past the end of every memcmp()
->> + * window used for state comparison.
-> --- 8< ----------------------------
->                                          and check_ids() only ever sees the plain
->> + * ->id. So unlike when these bits rode along in the top of ->id, they have to
->> + * be compared explicitly everywhere ->id is.
-> ---------------------------- >8 ---
->
-> Nit: let's drop this sentence.
+So a program doing bpf_sk_redirect_map(skb, &sock_map, idx, 0) where
+sock_map[idx] resolves to the source socket satisfies dst == psock->sk and
+skips tcp_eat_skb().
 
-The actual helper below is gone in v2 so this is gone too.
+For that egress case nothing later advances copied_seq.  sk_psock_backlog()
+computes:
 
->> + *
->> + * Only meaningful when rold carries an id: the flags are only ever set
->> + * together with one, so rold->id == 0 implies none of them is set.
->> + */
->> +static bool link_flags_match(const struct bpf_reg_state *rold,
->> +			     const struct bpf_reg_state *rcur)
->> +{
->> +	if (!rold->id)
->> +		return true;
->> +
->> +	return (rold->flags & BPF_FLAG_ADD_CONST) == (rcur->flags & BPF_FLAG_ADD_CONST);
->> +}
->> +
-> ...
->
->> @@ -590,17 +603,24 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
->>   		 */
->>
->>   		/*
->> -		 * ADD_CONST flags must match exactly: BPF_ADD_CONST32 and
->> -		 * BPF_ADD_CONST64 have different linking semantics in
->> +		 * ADD_CONST flags must match exactly: BPF_FLAG_ADD_CONST32 and
->> +		 * BPF_FLAG_ADD_CONST64 have different linking semantics in
->>   		 * sync_linked_regs() (alu32 zero-extends, alu64 does not),
->>   		 * so pruning across different flag types is unsafe.
->>   		 */
->> -		if (rold->id &&
->> -		    (rold->id & BPF_ADD_CONST) != (rcur->id & BPF_ADD_CONST))
->> +		if (!link_flags_match(rold, rcur))
->>   			return false;
->>
->> -		/* Both have offset linkage: offsets must match */
->> -		if ((rold->id & BPF_ADD_CONST) && rold->delta != rcur->delta)
->> +		/*
->> +		 * Both have offset linkage: offsets must match. The rold->id
->> +		 * test is redundant today -- BPF_FLAG_ADD_CONST is only ever set
->> +		 * together with an id -- but it used to be structural, because
->> +		 * the flag lived in the id itself. Keep it explicit so the
->> +		 * invariant does not rest on every ->id = 0 site remembering to
->> +		 * clear ->flags too.
->> +		 */
-> Nit: Let's shorten this comment to it's original form.
->       A comment on ->flags field saying that "->flags != 0 iff ->id != 0" should suffice.
->       Let's also drop the 'rold->id && ' part.
+		ingress = skb_bpf_ingress(skb);
 
-Done.
+which is false, so sk_psock_handle_skb() takes the transmit path:
 
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 8925749d636e..93e69116ca9e 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -1806,6 +1806,7 @@ static void __mark_reg_known(struct bpf_reg_state *reg, u64 imm)
->>   	       offsetof(struct bpf_reg_state, var_off) - sizeof(reg->type));
->>   	reg->id = 0;
->>   	reg->parent_id = 0;
->> +	reg->flags &= ~BPF_FLAG_ADD_CONST;
->>   	___mark_reg_known(reg, imm);
->>   }
->>
->> @@ -3308,6 +3309,7 @@ static void clear_scalar_id(struct bpf_reg_state *reg)
->>   {
->>   	reg->id = 0;
->>   	reg->delta = 0;
->> +	reg->flags &= ~BPF_FLAG_ADD_CONST;
->>   }
-> sashiko is correct about the following branch in the
-> check_stack_write_fixed_off():
->
-> 		if (!reg_value_fits)
-> 			state->stack[spi].spilled_ptr.id = 0;
->
-> this seem to be the only missing location, the rest deals with
-> pointers, where ->flags should already be zero.
+		return skb_send_sock(psock->sk, skb, off, len);
 
-Now clear_scalar_id(&state->stack[spi].spilled_ptr)
+and the skb is freed.  It never becomes an sk_msg with msg->sk == sk, so
+the from_self accounting in __sk_msg_recvmsg():
 
->> @@ -15950,18 +15951,19 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
->>   				: &vstate->frame[e->frameno]->stack[e->spi].spilled_ptr;
->>   		if (reg->type != SCALAR_VALUE || reg == known_reg)
->>   			continue;
->> -		if ((reg->id & ~BPF_ADD_CONST) != (known_reg->id & ~BPF_ADD_CONST))
->> +		if (reg->id != known_reg->id)
->>   			continue;
->>   		/*
->>   		 * Skip mixed 32/64-bit links: the delta relationship doesn't
->>   		 * hold across different ALU widths.
->>   		 */
->> -		if (((reg->id ^ known_reg->id) & BPF_ADD_CONST) == BPF_ADD_CONST)
->> +		if (((reg->flags ^ known_reg->flags) & BPF_FLAG_ADD_CONST) == BPF_FLAG_ADD_CONST)
->>   			continue;
->> -		if ((!(reg->id & BPF_ADD_CONST) && !(known_reg->id & BPF_ADD_CONST)) ||
->> +		if ((!(reg->flags & BPF_FLAG_ADD_CONST) && !(known_reg->flags & BPF_FLAG_ADD_CONST)) ||
->>   		    reg->delta == known_reg->delta) {
->>   			*reg = *known_reg;
->>   		} else {
->> +			u8 saved_add_const = reg->flags & BPF_FLAG_ADD_CONST;
->        ---------------------^
->>      |         	s32 saved_off = reg->delta;
->>      | 		u32 saved_id = reg->id;
->>      |
->> @@ -|5976,11 +15978,12 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
->>      | 		 */
->>      | 		reg->delta = saved_off;
->>      | 	        reg->id = saved_id;
->> +   | 		reg->flags = (reg->flags & ~BPF_FLAG_ADD_CONST) | saved_add_const;
->>      -----------------------^
->        I'm not sure we need to inherit flags from known_reg here.
->        Let's avoid that and go with just saved_flags.
+		from_self = msg_rx->sk == sk;
 
-Done.
+never runs, and neither does the copied_from_self path in
+tcp_bpf_recvmsg_parser() that the commit message relies on.
 
->> --- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
->> +++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
->> @@ -349,8 +349,9 @@ l0_%=:							\
->>   }
->>
->>   /*
->> - * Test that sync_linked_regs() checks reg->id (the linked target register)
->> - * for BPF_ADD_CONST32 rather than known_reg->id (the branch register).
->> + * Test that sync_linked_regs() consults reg->flags (the linked target
->                                     ^^^^^^^^
->                                 nit: checks
->> + * register) for BPF_FLAG_ADD_CONST32, not just known_reg->flags (the branch
->> + * register): the gate is (reg->flags | known_reg->flags).
->                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->                 nit: please drop.
+Meanwhile tcp_read_skb() already removed the bytes from the receive queue
+without touching tp->copied_seq:
 
-Fixed.
+		__skb_unlink(skb, &sk->sk_receive_queue);
 
-Thx,
--Vineet
+Can this leave tp->copied_seq permanently behind tp->rcv_nxt, so that
+SIOCINQ reports data that no longer exists, __tcp_cleanup_rbuf() and
+tcp_rcv_space_adjust() never run for those bytes, tcp_close() sees
+data_was_unread != 0 and sends an RST instead of a FIN, and a later plain
+tcp_recvmsg_locked() (after the psock is dropped) trips
+
+	WARN(before(*seq, TCP_SKB_CB(skb)->seq), "TCP recvmsg seq # bug...
+
+that is, the same copied_seq desync in the opposite direction?
+
+Worth noting that the program cited as validation,
+tools/testing/selftests/bpf/progs/mptcp_sockmap.c, uses exactly the egress
+form:
+
+	return bpf_sk_redirect_map(skb, &sock_map, redirect_idx, 0);
+
+Would adding the direction to the condition cover this, e.g.
+
+	if (dst != psock->sk || !skb_bpf_ingress(skb))
+		tcp_eat_skb(psock->sk, skb);
+
+[Severity: High]
+A second question about the same condition: the accounting is now skipped
+before the outcome of the redirect is known.  Is it guaranteed that the skb
+really reaches ingress_msg and is read by tcp_bpf_recvmsg_parser()?
+
+sk_psock_skb_redirect() has drop paths that free the skb and return -EIO
+without any copied_seq update, and for a self-redirect psock_other is this
+very same psock:
+
+  net/core/skmsg.c:sk_psock_skb_redirect() {
+	...
+	if (!psock_other || sock_flag(sk_other, SOCK_DEAD)) {
+		skb_bpf_redirect_clear(skb);
+		sock_drop(from->sk, skb);
+		return -EIO;
+	}
+	spin_lock_bh(&psock_other->ingress_lock);
+	if (!sk_psock_test_state(psock_other, SK_PSOCK_TX_ENABLED)) {
+		spin_unlock_bh(&psock_other->ingress_lock);
+		skb_bpf_redirect_clear(skb);
+		sock_drop(from->sk, skb);
+		return -EIO;
+	}
+	...
+  }
+
+SK_PSOCK_TX_ENABLED can already be clear while sk->sk_data_ready is still
+sk_psock_verdict_data_ready, because sk_psock_backlog() clears it on a hard
+transmit/ingress error:
+
+			if (ret == -EAGAIN) {
+				...
+			} else {
+				sk_psock_clear_state(psock, SK_PSOCK_TX_ENABLED);
+				...
+			}
+
+and sk_psock_stop() clears it during close/map-delete before the socket
+backlog is drained.  The __SK_PASS arm just above tests the same two states
+(SOCK_DEAD and !SK_PSOCK_TX_ENABLED), so they appear reachable at this
+point.
+
+Even after a successful skb_queue_tail(), skbs still on ingress_skb are
+purged without accounting:
+
+  net/core/skmsg.c:__sk_psock_zap_ingress() {
+	while ((skb = skb_dequeue(&psock->ingress_skb)) != NULL) {
+		skb_bpf_redirect_clear(skb);
+		sock_drop(psock->sk, skb);
+	}
+	...
+  }
+
+and __sk_psock_purge_ingress_msg() frees queued sk_msgs the same way.
+
+In all of these cases tcp_read_skb() has already unlinked the bytes from
+sk->sk_receive_queue, and tcp_eat_skb() is the only place that catches up:
+
+  net/ipv4/tcp_bpf.c:tcp_eat_skb() {
+	copied = tcp->copied_seq + skb->len;
+	WRITE_ONCE(tcp->copied_seq, copied);
+	tcp_rcv_space_adjust(sk);
+	__tcp_cleanup_rbuf(sk, skb->len);
+  }
+
+Note the sibling drop arm in this same switch keeps that contract:
+
+  out_free:
+		skb_bpf_redirect_clear(skb);
+		tcp_eat_skb(psock->sk, skb);
+		sock_drop(psock->sk, skb);
+
+Should the skipped accounting be performed on the redirect-failure and
+purge paths as well, or should tcp_eat_skb() only be skipped once the skb
+is known to have been retained for same-socket ingress consumption?
+
+>  		err = sk_psock_skb_redirect(psock, skb);
+>  		break;
+> +	}
+>  	case __SK_DROP:
+>  	default:
+>  out_free:
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/b840c35fdfdf36e9fddedfa645b12699bc51aa34.1787968065.git.tanggeliang%40kylinos.cn
