@@ -1,36 +1,36 @@
-Received: from mta1.migadu.com (out-28.mta1.migadu.com [95.215.58.28])
+Received: from mta0.migadu.com (out-202.mta0.migadu.com [91.218.175.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5982D37F75D
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 02:56:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ABCC3AA19B
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 02:59:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788490603; cv=none; b=d7FRxjxjWKoe6YDUTPOuYI64L1xWpO2bG8mWw+Ytbhx/9yPtBAKpZ5VxP7p91cieB476DTgrZqc3tI9FA394qpvOEN2/5WYLHYcUCSohP89MZlG1nYczM71WhvYqdnwGXD8hqViEAjYD1DQKC2q9Wq94QkIii7ExEM387PBr8qA=
+	t=1788490744; cv=none; b=NfmD0RxfDYTdAIlZDiyUCpkeBc9Pug5ctEgBSUh6caNZOKf/pknnka48BNI5Wjhzk4rLAfYJXGigiV3P2qt7d85y/dx0z5+/rvIbBDquxmOA/U/DS4GljUrK4JOwYfBQkccY9FIChNuHgEBku890y/VIhmUE9homu3rJ+JKhbIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788490603; c=relaxed/simple;
-	bh=nSzqfJSBCSwrKQ/jS51poE/QdTOWtDV+k/vaE+ph314=;
+	s=arc-20240116; t=1788490744; c=relaxed/simple;
+	bh=Dj/WJ7sVczHSWQazSEovDF0THqaEKKKSpFpv+TX23F8=;
 	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=iv1MUCp6WFtgfSxckaC1y/eV4iek+/4qdj29oNk0Yewt9ewHN7UIdQGzsKDFHaK/5XBKOKYA2n5l8bq7FM/Quz63hmimSU4k3RXeqL4WlXRvGTVD7SI4IbznRIBrIU4FrH5G2Jpjqf4K3fzDA6BRlcOouR56fPZCms7bj9Bs0Do=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nUgcWUHN; arc=none smtp.client-ip=95.215.58.28
+	 In-Reply-To:Content-Type; b=oOXlyw7RBf+8+fsK48dM3rWvbeOVBMzBbg1lZh89RgGoNGltS/JnIDxTou5x/1wa3QB73Arbpdd6t1tjDcWjUCstPGF46dGWNdBTYQouf3I1JtWM3l+WNjd9lmx/4iwmZ6gHCXxqRcbRuv3GtPNblpKY+hkFP0D+wQ5gSBO8vRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=v2dFD1/5; arc=none smtp.client-ip=91.218.175.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nUgcWUHN"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="v2dFD1/5"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=nSzqfJSBCSwrKQ/jS51poE/QdTOWtDV+k/vaE+ph314=;
+DKIM-Signature: a=rsa-sha256; bh=Dj/WJ7sVczHSWQazSEovDF0THqaEKKKSpFpv+TX23F8=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788490598; v=1; x=1789095398;
- b=nUgcWUHNvmxW/IzC8SpIh+Kbd/Orfg6ebbhHFa5jZijvvnnj5pKZoql9e7PyjBmhfy3r+PFI
- HNwUpWdiLVLUqIJvd6QG8lG2XKRF95nhm/3+bKWl3GcdOo9p2yYv7V8JJu/MZoY19fQsU9Vdgdm
- scjGf+f0cLbp56j77/wwxTKQ=
+ t=1788490740; v=1; x=1789095540;
+ b=v2dFD1/5en6o8BOW0P/w0fsqIdJq75YGUlot1c53Blc3akBLfHsUdJSYg8hfaS9pUur7bRj3
+ 2DY3Ch4yAt8NE3d0GWpdfbm69TqbmEzkZMW0pESrARG6sN1NL5RG8cbhUBn3ihocjAXdG05uYe9
+ vEqKx4P3xKu1AHumpU35k3n8=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 7befaa3222e40484;
-	Fri, 04 Sep 2026 02:56:37 +0000
-X-Mizu-Trace-ID: 7befaa3222e40484
+Received: by smtp.migadu.com with ESMTPS id 745325d3d55639af;
+	Fri, 04 Sep 2026 02:58:59 +0000
+X-Mizu-Trace-ID: 745325d3d55639af
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <df9fedbd-51ae-47ad-9b09-fcd7d31d0640@linux.dev>
-Date: Fri, 4 Sep 2026 08:26:33 +0530
+Message-ID: <76ad7da7-7651-4250-b41d-bb2425a608b5@linux.dev>
+Date: Fri, 4 Sep 2026 08:28:54 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -133,8 +133,8 @@ And actually this can be moved out to the NFC patch (fwiw i dropped the
 helper link_flags_check).
 
 Re. the next instance of check_scalar_ids () call - there is no direct 
-change - the check for flags above it (existing for add_const, new for  
-sugreg) provide the coverage.
+change to that effect - the check for flags above it (existing for 
+add_const, new for  sugreg) provide the coverage.
 
 One thing that did came up out of this deliberations and closely related 
 albeit not to directly here.
@@ -142,11 +142,11 @@ albeit not to directly here.
 The NFC patch 1 moved the flags out but didn't update regs_exact() for 
 checking the add_const flag explicitly which was happening implicitly 
 before the series. That causes the NFC to accept the following incorrectly.
-       old {r1.id=A, r2.id=A+delta}  vs cur {r1.id=B, r2.id=B}
+        old {r1.id=A, r2.id=A+delta}  vs cur {r1.id=B, r2.id=B}
 
 If regs_exact () is updated in the NFC, it fixes above but it also 
 starts rejecting (correctly) something that pre-series was not.
-       old {r2.id=A+delta32}         vs cur {r2.id=B+delta64}
+        old {r2.id=A+delta32}         vs cur {r2.id=B+delta64}
 
 That's fine except it is no longer NFC.
 
