@@ -1,38 +1,38 @@
-Received: from mta1.migadu.com (out-103.mta1.migadu.com [95.215.58.103])
+Received: from mta1.migadu.com (out-134.mta1.migadu.com [95.215.58.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFDEC281532
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 01:19:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.103
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05390369D5E
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 01:19:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788484756; cv=none; b=FQHXiwEDi0qHXc2XE5Gw5zXViVRjno77G+zqVyFrMmNV2PqXAWFaz4Kv3Nt9qwMypEc7jXgJYMKJ5mz+vvfp78gNCW4zgzlwLWJP1fshCfBdFnHqyZJjUnSXXqOsRGgBzvpuoWbBTch99URThUV5rAOrcWNNXGdzCLGq2ALN9XM=
+	t=1788484771; cv=none; b=M0aFSXCHE7QmAA5d2PyodkhuXLgWw6F/BVl+JLSWRjMkVPLG/BJwVayV1hyvxlhd0+XtaROdAGprhA6ILzQcW8+Q2ZbBzllhCUBcvLvOdZ2OMI+BuNZDPhYmTPUy6QY98oMyLVdlmXvSBWBEMKcH8O1iFdd5sSMsDftH3NqdAKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788484756; c=relaxed/simple;
-	bh=uVjDr7dZL7yoKSrQjhePnAihc0cTtyYDH0m68MNyVco=;
+	s=arc-20240116; t=1788484771; c=relaxed/simple;
+	bh=kOjB9EUx2W1v/7kxzVeOxthVHt+Dm43TqpI5/i1TiXQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=lZeHMJf4x7xlYC1OFo1x82GmCaH14NgAGT9JQkFXFnaS2ZB9PmP7bCSe9uEdLJmg+93UPcwLOr4G6VHvRn0XjEmCrbGKo5HX5tRqvO1JKajX/rwM71vBZfCPtnvO1iO/gv/L/BOmqQW4mgy19WvDqQ97fApqldrEFcyY+ydxy0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TCM+NeT2; arc=none smtp.client-ip=95.215.58.103
+	 In-Reply-To:To:Cc; b=E9hDCa7av1s9iwqjWHcwOETFJiHgndJkwwbwdlM5lPYNrQ8ShQB8ilbxYhz9CgghRxiK3INx/l8UacBCGyLUWpS3M2I6qfClYVJE45p575DwJPXmOc0m3qBQRExxFhFlMe0CoPPJaOK8pQIY4EoPHQGecJGnjYqst57PK4Xxhfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VXTnKNi+; arc=none smtp.client-ip=95.215.58.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TCM+NeT2"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VXTnKNi+"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=uVjDr7dZL7yoKSrQjhePnAihc0cTtyYDH0m68MNyVco=;
+DKIM-Signature: a=rsa-sha256; bh=kOjB9EUx2W1v/7kxzVeOxthVHt+Dm43TqpI5/i1TiXQ=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788484752; v=1; x=1789089552;
- b=TCM+NeT2+KyWgDd/U4By2gfp/3/qVfWDnP4DWVbRhS66XX7GA2k28Pgk1DEHru8egdLQLPU+
- 0omXg/e6u16phqDsmNLUKV8PegxjXZNq3M6OjXo/8yxFBvz+WrOhGwkBnMWpUjCvEvGi9Rplc+G
- +ICdQGlY1HecaonN+0RHIxEs=
+ t=1788484767; v=1; x=1789089567;
+ b=VXTnKNi+SJNeRM/1eXpdudn9h7lHvuvxQ6t1woolDsx+8GF64lAvFKVJ5ob9/LFf0fbK/6pz
+ WrB/Dlm9EZjwJKjOnnLhIGBme6GX8ibQbjZFySO97ec69sIQ7s82lrQrtnw7cQEYI66PYQrCbzK
+ ygHlL1FNolqdz148DEm5GysY=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id ce60cf1ee74e60ff;
-	Fri, 04 Sep 2026 01:19:12 +0000
-X-Mizu-Trace-ID: ce60cf1ee74e60ff
+Received: by smtp.migadu.com with ESMTPS id 9674486ccf1fcb7f;
+	Fri, 04 Sep 2026 01:19:26 +0000
+X-Mizu-Trace-ID: 9674486ccf1fcb7f
 X-Migadu-Flow: FLOW_OUT
 From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-Date: Fri, 04 Sep 2026 01:18:34 +0000
-Subject: [PATCH RFC 2/8] scripts/sorttable: Make the arm64 before_func
- offset configurable
+Date: Fri, 04 Sep 2026 01:18:35 +0000
+Subject: [PATCH RFC 3/8] compiler_types: Let notrace keep the function
+ prefix NOPs
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260904-b4-arm64-callops-kcfi-v1-2-ce6687739b0c@linux.dev>
+Message-Id: <20260904-b4-arm64-callops-kcfi-v1-3-ce6687739b0c@linux.dev>
 References: <20260904-b4-arm64-callops-kcfi-v1-0-ce6687739b0c@linux.dev>
 In-Reply-To: <20260904-b4-arm64-callops-kcfi-v1-0-ce6687739b0c@linux.dev>
 To: Steven Rostedt <rostedt@goodmis.org>, 
@@ -83,59 +83,39 @@ Cc: Leon Hwang <leon.hwang@linux.dev>,
  "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
 X-Mailer: b4 0.15.2
 
-sorttable hardcodes before_func to 8 bytes on arm64 (two prefix NOPs).
-Make it configurable from CONFIG_ARM64_FUNCTION_PREFIX_NOPS instead.
-kCFI kernels with CALL_OPS need three NOPs. The symbol does not exist
-yet, so no functional change.
+Let notrace keep the prefix NOPs when the architecture defines
+CC_USING_PATCHABLE_FUNCTION_PREFIX. kCFI callers check the type hash
+at a fixed offset before the entry point, so a notrace function needs
+the same prefix NOPs as any other. Record the entry in a section the
+linker drops, so ftrace never sees it. Clang 21 takes a section name
+as a third argument of the attribute. Nothing defines the macro yet,
+so no functional change.
 
 Reviewed-by: Ben Cressey <ben@cressey.dev>
 Reviewed-by: Florent Revest (Anthropic) <florent.revest@linux.dev>
 Assisted-by: LLM
 Signed-off-by: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
 ---
- scripts/Makefile    | 3 +++
- scripts/sorttable.c | 7 ++++++-
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ include/linux/compiler_types.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/scripts/Makefile b/scripts/Makefile
-index 3434a82a119f0..366c6a35141a6 100644
---- a/scripts/Makefile
-+++ b/scripts/Makefile
-@@ -51,6 +51,9 @@ endif
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index c5921f1390079..87e10920acba7 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -211,6 +211,12 @@ struct ftrace_likely_data {
  
- ifdef CONFIG_BUILDTIME_MCOUNT_SORT
- HOSTCFLAGS_sorttable.o += -DMCOUNT_SORT_ENABLED
-+ifneq ($(filter-out 0,$(CONFIG_ARM64_FUNCTION_PREFIX_NOPS)),)
-+HOSTCFLAGS_sorttable.o += -DFUNCTION_PREFIX_BYTES=$(shell expr 4 \* $(CONFIG_ARM64_FUNCTION_PREFIX_NOPS))
-+endif
- endif
- 
- # The following programs are only built on demand
-diff --git a/scripts/sorttable.c b/scripts/sorttable.c
-index d8dc2a1b7c312..925382bb23dcc 100644
---- a/scripts/sorttable.c
-+++ b/scripts/sorttable.c
-@@ -281,6 +281,11 @@ static int add_field(uint64_t addr, uint64_t size)
- /* Used for when mcount/fentry is before the function entry */
- static int before_func;
- 
-+/* How far before the function entry a patchable entry may be recorded */
-+#ifndef FUNCTION_PREFIX_BYTES
-+#define FUNCTION_PREFIX_BYTES	8
-+#endif
-+
- /* Only return match if the address lies inside the function size */
- static int cmp_func_addr(const void *K, const void *A)
- {
-@@ -899,7 +904,7 @@ static int do_file(char const *const fname, void *addr)
- 		/* fallthrough */
- 	case EM_RISCV:
- 		/* arm64 and RISC-V place patchable entries before the function. */
--		before_func = 8;
-+		before_func = FUNCTION_PREFIX_BYTES;
+ #if defined(CC_USING_HOTPATCH)
+ #define notrace			__attribute__((hotpatch(0, 0)))
++#elif defined(CC_USING_PATCHABLE_FUNCTION_PREFIX) && !defined(__BINDGEN__)
++/* bindgen generates no code and its libclang may not take the section argument. */
++#define notrace								\
++	__attribute__((patchable_function_entry(CC_USING_PATCHABLE_FUNCTION_PREFIX, \
++						 CC_USING_PATCHABLE_FUNCTION_PREFIX, \
++						 ".discard.patchable_function_entries")))
+ #elif defined(CC_USING_PATCHABLE_FUNCTION_ENTRY)
+ #define notrace			__attribute__((patchable_function_entry(0, 0)))
  #else
- 	case EM_AARCH64:
- 	case EM_RISCV:
 
 -- 
 2.52.0
