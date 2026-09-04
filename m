@@ -1,113 +1,133 @@
-Received: from mail-wr2-f10.google.com (mail-wr2-f10.google.com [74.125.225.74])
+Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 154EB36494F
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 06:36:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C973A335BBB
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 06:36:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788503815; cv=none; b=a1xMTVWQ9oL4XZWzc4ZRFL5wYpj8iQK4lnXGEFiM+uiQIMoau6PHJ/NSlnoG8M+aamWwH2EukH4RY6fTPX2++EQYWNoEpcYdY2/WHnOQes2teCrupMeoim6puvXYkhm4UFxfpaX6PfVyUL2bqcfVxRJuuWVh2xkJk+BMaUnOfNA=
+	t=1788503818; cv=none; b=igsy+10fYQbxZufsei6E2wC0AtxFgsNy8FlZ+tNMh6ZvrH69Midx1mTwosA+jaRXPuf8X8jqhgPDs2/40I0dkshDgEK965b+3kqeWsJyZRHf530GUeQh43V1qNjjgtD9sfCna5X2HmEcll5u6nbnxLRgzix8Sy/dWMjnLeb/ecM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788503815; c=relaxed/simple;
-	bh=AKY+H99Pt5E0FvPmT6Ql0leYwG9CW+UlTWYIi/NDof4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EpD2Cb/c5AKK0md3qrTGU2qklushj1HeiX1/6mcT/WV5Gu/9RRzr9fxvydZmwgkDxstfWlEbvPGFICNPeLkwjx1as9dLXHIMftpFXoMXezDTDpoRa24uFQrJ9hMxx7BkNick5P7NtZOtVgRFuL/+4avVaQDbl0tT5gDIuN9ZYTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GtXZJ4YU; arc=none smtp.client-ip=74.125.225.74
+	s=arc-20240116; t=1788503818; c=relaxed/simple;
+	bh=G+mdTUEGAA7xgXEbrkxxlO3xp4/Jk0J+MKGwOR8O2kQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Xv10gHr/JvL4eiJuZtpSCuFOxh1PnH+L2onr7zc9XjLeqo7dkoTfbHiS9LElnQgQoHZd/WAPx5j2l7I5ShH0RVjTw6xb5JbX2DgyKcRn1zqP+uYpKpX4RsnZ/Y0QO87ve+o047Lgpfaiimua5MDGzPqxGrlEjT2EobnA64MD81Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SYlyCL7R; arc=none smtp.client-ip=74.125.225.75
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GtXZJ4YU"
-Received: by mail-wr2-f10.google.com with SMTP id ffacd0b85a97d-48433107499so224522f8f.0
-        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 23:36:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SYlyCL7R"
+Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-483960225ccso170382f8f.1
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 23:36:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788503812; x=1789108612; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=pZrHNkHjYkPGX7CqsHn+BkcbXq8exU6WdaWM6xnR1F4=;
-        b=GtXZJ4YU21TS24hSxb7pVLtUjOZaqe1lPxeP7sF55kwg7uvRUjv7ke0SG3+y9JwbgV
-         9eLU8TS8AVyWeixA0tuTkjdii48wCJ5EvqfJT86AVeTRBtDY3U5aFs/ZBo/ek88XcouU
-         IAto//a7DRUnNZ/GwWLt8cJ0s1DQqeC5mR7VDlRdqQ36i4go3I7jH8NTRuFb4DysWf32
-         m7OjG6AHtqJc6bIhRF3Etkiq7SSUBIqwDnkwnxTrki8cKqUB9qCjLKVUaYQ8NRWyzbjv
-         kOvYZCV87HlPqwKgI02d4mke5qtHg8F7aIDavL7R5YRndSAf81gz/uKWjEZ4gpeNa5sP
-         RTrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788503812; x=1789108612;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1788503814; x=1789108614; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=pZrHNkHjYkPGX7CqsHn+BkcbXq8exU6WdaWM6xnR1F4=;
-        b=IFozVRuCGpubuVOLZdfcAWhFCC+u6+gg4WQTepnVQIgmkIbK9GbZ0zG430Aj7GDYS/
-         qeLqvTwibKO/zfzxdO83PRJ4xUw5vRpl/H7mKov3THYWGov4H0GhRUGSz676hX89aN6S
-         KmPn+el2OWhR4AmTgSWb3UUAtQBvYlMYMxIKSl4uzmwt0QSUt35BRYPYK1lR+4+npfBz
-         EDDPAhSuTEDJIP41yJMVbc+eh4BoMvxRIVWWPhSIagq/1JBttBYZLkrqNM4WOnIvGnmX
-         p6Z0SrWh2yUviT6hyUvIBPkbU4nerDau/89X+HifNXx1lJ0wb1llorw63yz/4rux99MU
-         OH7Q==
-X-Gm-Message-State: AFuF++kRNOYZ8Yz/aauWNggyMNq/LPcWjqPa3qzWhnGRbs6M7AJuwMX9
-	xCte4bPYG4c3MKUMW3sCMaY1xU1MRKR2o1XrIftVEcXaNmHIfAFhjPRNkKOyuOoX
-X-Gm-Gg: AYBFou2jGDDUueAv9ILxZEX3e+LaGGg29masWV3/UnCdqIeHpv1pvkZSbqPs9uYlyix
-	Yxhxeje4mRtnqnDDMOtt0Z8A+bJeenyoclvxVKMiSADC1oJarkvooxHu74+DFnaHFnjH9DJ9OIT
-	OOI30eTykKC2rQEws8JD3mv73bFrc5txQtfOl3vy/nkrnbCN0HAxxSE3fdXcyfii7rszYQKWCq9
-	3HUQfmHssY1eaUNajWxwJTAvbs7YrKhSGMYojtnl7za0h8vELVKu5UG5cwKamnqutbJx4IiYb/0
-	UywdPX4weTQcEN7NOGa8xOHw4MqalUdeBvZ0OUcIHpDCIuxP1ffaJvkgR+1URX00qKxmY7VbQh/
-	tC9Kh0s/TDMyKVh7Ix/wyAFVsYk9Zo88db4Fjg7T+JSdqFhyr9/r62FuDGMSmhOHWU2/gvuUIFo
-	7Yt/ddo1z8W/r05MoQahpObc/oi5Wd/dal3dtCAXudOIOBpJF196Rs64SPOZl2RST2wBdRXPv1I
-	yy/3tQhxsQDcM2+AkAkbKik0tbJ9yQ09lpSSVjWqrMG+qt85X5odkwP3UP9En64c3kyUJExhcWS
-	lQBaFuLC3d9IjlFHcgQL2LVCeDo=
-X-Received: by 2002:a05:6000:260d:b0:482:ea99:6166 with SMTP id ffacd0b85a97d-48587284922mr5465739f8f.7.1788503812044;
-        Thu, 03 Sep 2026 23:36:52 -0700 (PDT)
+        bh=ilTIJSDOzbohGvPfWloWUC6lqM/w4si9TaieoULKGr8=;
+        b=SYlyCL7RqkbRKaWJrjZMdKT6zw0H4AM4KJ7TtL60xeXmkhd4S/gbQAwxCX6W9deoUo
+         fwCx/rIyAuLtx/Ic32f2RvRoKv5QuE2ZE9W3CZqwv//1NEjeBBauHkhT2Zhrm1nhvYZa
+         kay/rnQahXI9+D5cspoXslhlRhqMca27hG6NVKD6kPBRRMz6LWTj8taH1ZO+5EYgN4Mq
+         opexNoFS4FI4jvtyC7DRUzJHB4wCVQBq/j2IPH6yla/ye500yLQ/F/TpoMn3sy0pkZRr
+         gVgoj555v6zMmiNGaJG2HFNBlIGpZVV3t+34+qjlF7RIsSQDz2Bz4Zc3GQyCJiVAlRZm
+         6CvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788503814; x=1789108614;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ilTIJSDOzbohGvPfWloWUC6lqM/w4si9TaieoULKGr8=;
+        b=RkcKleF6FeEkswY4y21VuJ8lYpKoqIg/RvS6+8rS52LZTgmO4ib+hLxh7qBjrgYO3t
+         m//nWNGRu8l/drGEwBIWaU+LDzKpIPZdQgbqNtBn75qNOiLB+XlCAD6Jaaz4zCdHvQy9
+         bkRfW/qRWcwLt2qr6gNZRW+E8HyYib4jk7dgv/3OukDQtMZpQ3BBuewbRxy4uypbqsaO
+         g2iguwECXkPNuk8n77BAx9rgmjtfATMEpBJzSCiklqsiaUTIpIMsxOpbAXk0I90zl9eU
+         ozwu/cp4VpIn8ZESeS1X1RLk8C2TG19zJDecJZH8IAEKFg1jHrh9RtKcsg8nqpNL8mpC
+         sWJQ==
+X-Gm-Message-State: AFuF++k6MSGHZWatmQIEWZ57GIH3BNbx8oopTOLm4Ku8e4+3AaCRoHh+
+	wA5y3iM6R2UsYyJj70OfbxbLOvqnMU4648r2j3l6DdDuVdGP09ouVtZKUI0KiL2e
+X-Gm-Gg: AYBFou1J5jJKxJLfm2hnoeyMA2KME3iWsJvN9sSAwdg2iNFMr6xTSXpNmv70A0uiVGn
+	E69i6evAB0hVgTzHGMkoTpvYE44ZJmnYaooYAJyTJ/ZGSoXFmSgxtuQ2d0MqS1efGyeeNBxG39F
+	3UXJDfLMdI3L7JtjPDkc17iyynvMVfNV0rrMIDLbrBK2gNAosFty/pxziVd/eBbNzfHMMaECCCz
+	zqyBIJ19iYs4p5OhR4ik0mscC3gp50cOCYZpVzgKiPxY+ZxGxgW7SLsqlVwyLd/Bd4YAq930TwE
+	vZqP073Emzo/M/plha3rg2gYqEZ/hbdEfoTMAeDnkzrL9dbPT/BQAnBIKip8ph9OZlr0ZWsnvKr
+	mGGM40NQaUMLrcR+fxbzhG77j0NXvENFpsR7JiobLNoJg1bNz3O+1mPBbILIX9umOMm0jNM8GQN
+	m4h/zhvo+87mGYNWO4sXVi+t9magTr1Z1yTDhcL6oBZ2FHAU3scDHN7kkIOYjIBbfkmNNLqOo0m
+	TYImHzxOk78uc0m4N9sSkMODDnGl5LaJqpXG51+JlIMmYgUL8LBd8zuoBhim0EeqUF5zdqJuXkV
+	INemK8W0uDOThpDPO13zcD4xTrU=
+X-Received: by 2002:a05:6000:993:b0:485:847f:fd7d with SMTP id ffacd0b85a97d-485872d5061mr5023436f8f.24.1788503813537;
+        Thu, 03 Sep 2026 23:36:53 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4858bc74298sm1648107f8f.6.2026.09.03.23.36.51
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48588394fa1sm4053784f8f.8.2026.09.03.23.36.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2026 23:36:51 -0700 (PDT)
+        Thu, 03 Sep 2026 23:36:53 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
+Cc: Nicholas Carlini <npc@anthropic.com>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
-	Nicholas Carlini <npc@anthropic.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf v1 0/8] Misc bug fixes - part 3
-Date: Fri,  4 Sep 2026 08:36:38 +0200
-Message-ID: <20260904063650.3877826-1-memxor@gmail.com>
+Subject: [PATCH bpf v1 1/8] bpf: Require MEM_PERCPU for percpu kptr stores
+Date: Fri,  4 Sep 2026 08:36:39 +0200
+Message-ID: <20260904063650.3877826-2-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260904063650.3877826-1-memxor@gmail.com>
+References: <20260904063650.3877826-1-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1277; i=memxor@gmail.com; h=from:subject; bh=AKY+H99Pt5E0FvPmT6Ql0leYwG9CW+UlTWYIi/NDof4=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtW2sWya0/TtSc8+fzufZuJl8HSawFNl34yX/H8XvQzt D/kzq6vHaUsDGJcDLJiiiwl//cxGZ+o/B1ou4wbZg4rE8gQBi5OAZiIfwXDf5fUY52z3gj3Bl1m 3fTLRVjns2bs5IZHSyJdZdeed6r/XMvIsEwuJ6j7pde6tMDoDXvfn5vmraR4bdVpgwT5KZHblV/ HsAMA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1954; i=memxor@gmail.com; h=from:subject; bh=G+mdTUEGAA7xgXEbrkxxlO3xp4/Jk0J+MKGwOR8O2kQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtW2kXjjKRo/8S/0ly3a/jXbyrf8MKW+/iu3Gs+JiH7G 5RZMx92lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCIVKQz/TPPX5S7JWeXCm9Ik nKNrtogpty/yjOFO7gO/Xlhl3ytoYWTY+qRC8l2z+H6ehOaSR523Wriv2l5xuc8v+FtaRds5zZ8 DAA==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-A set of miscellaneous fixes for bugs reported by Nicholas, batched
-together again. See commit logs for details. Some of this was caught and
-posted by Ning before, but AI raised some concerns, so I'm resolving
-those issues and commandeering their patches now.
+map_kptr_match_type() treats perm_flags as the set of register type flags
+that a kptr field permits. Adding MEM_PERCPU to that set for
+BPF_KPTR_PERCPU does not require the source register to carry it, however.
+The subset test consequently accepts both a plain bpf_obj_new() allocation
+and a referenced kernel pointer into a __percpu_kptr map field.
 
-Kumar Kartikeya Dwivedi (4):
-  bpf: Require MEM_PERCPU for percpu kptr stores
-  selftests/bpf: Reject non-percpu values in percpu kptr fields
-  bpf: Clear NON_OWN_REF after RCU protection ends
-  selftests/bpf: Reject graph kptr use after RCU unlock
+Loads from the field are always marked MEM_PERCPU. Consumers then treat the
+stored value as the cookie returned by bpf_percpu_obj_new(): per-CPU pointer
+helpers relocate it, and map teardown selects the per-CPU free path. A plain
+allocation can therefore provide an arbitrary kernel read/write, while a
+kernel pointer can be relocated into an invalid address or sent through a
+missing destructor.
 
-Ning Ding (4):
-  bpf: Keep refcount_acquire nullable for borrowed RCU kptrs
-  selftests/bpf: Test borrowed refcount acquisition nullability
-  bpf: Reject untrusted allocated-object pointers
-  selftests/bpf: Reject refcount acquisition after RCU unlock
+Require the source MEM_PERCPU flag to match the destination field kind.
+This preserves valid bpf_percpu_obj_new() stores and rejects both the
+program-BTF and kernel-BTF variants.
 
- include/linux/bpf_verifier.h                  |   4 +-
- kernel/bpf/verifier.c                         |  27 +++-
- .../selftests/bpf/progs/percpu_alloc_fail.c   |  59 +++++++
- .../selftests/bpf/progs/rcu_read_lock.c       |   6 +-
- .../selftests/bpf/progs/refcounted_kptr.c     |  61 ++++++++
- .../bpf/progs/refcounted_kptr_fail.c          | 148 ++++++++++++++++++
- 6 files changed, 296 insertions(+), 9 deletions(-)
+Fixes: 36d8bdf75a93 ("bpf: Add alloc/xchg/direct_access support for local percpu kptr")
+Reported-by: Nicholas Carlini <npc@anthropic.com>
+Suggested-by: Nicholas Carlini <npc@anthropic.com>
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ kernel/bpf/verifier.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-
-base-commit: 254c881fe0554c5efb16d355c273702a27a32a20
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d7dd0befbd10..68353aa61fa1 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4488,6 +4488,13 @@ static int map_kptr_match_type(struct bpf_verifier_env *env,
+ 	if (type_flag(reg->type) & ~perm_flags)
+ 		goto bad_type;
+ 
++	/*
++	 * A BPF_KPTR_PERCPU field is read back as MEM_PERCPU, so the value
++	 * stored in it must carry the same flag.
++	 */
++	if ((kptr_field->type == BPF_KPTR_PERCPU) != !!(reg->type & MEM_PERCPU))
++		goto bad_type;
++
+ 	/* We need to verify reg->type and reg->btf, before accessing reg->btf */
+ 	reg_name = btf_type_name(reg->btf, reg->btf_id);
+ 
 -- 
 2.53.0
 
