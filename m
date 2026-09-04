@@ -1,65 +1,65 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A02B3C276B
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 19:51:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD12639FCC8
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 19:51:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788551504; cv=none; b=HaJtLlaKfbgFul9jJtMY8a0Q0l8hv+ym7pigjNe0CxHERBygPKhR+fko7nCCJiMEhFwxnnA2eG6c4MmoZY/Cv/gPbrFTJ2ALBIodovyMDx1LlHgY+sblMDFrIRdZAMo9T0EXZGT+MU3Uwh3N5fwqpk39iAUcbWXGmfocbOQk9lY=
+	t=1788551506; cv=none; b=CvEI9ZzBItP5tYtkw/1EqNU38ImzVNn7E0OOxAsjhBBZ9xRQfbyUh80p3DJSkd2wRTUV7Tk/afYZDaJmv6FntCHsEWnZXASxgNycxC2FgGgcaKFC3a+gbteRLEUaTkogtsptilVu2cd5iJSsktg75zALrj8u2qSgvI2J1lNzHnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788551504; c=relaxed/simple;
-	bh=UZbyG5HwV/ItMLroTmcQJXFCJWeN9RrzvXMhN72UKYY=;
+	s=arc-20240116; t=1788551506; c=relaxed/simple;
+	bh=N6DaW9Fp0YhcldyMvN0Ck3Ujv+hbxY6t0zjeP3rCe0k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TZkeHi//sr9Ah10UxGvFZulsCoMqvbYjqh/3J0Ptkw7slZQANFZCO363yx3PNIFBRKmuUa0xGxwR1/F0UPUzUv3eiD+adAv10kLrc7n62CqO2yaLYUPA22ZpeoRAHXDbblf0GTXkIjOb63KAuh5KgwR5GdXuRfJR6PXiUp19sGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FX/HLFgC; arc=none smtp.client-ip=209.85.210.174
+	 MIME-Version; b=gDyN9nowdCf3qgyMkLhALStboV2ozoZ0CjAYtTRvlIJEIs36eBUUMTv+QguPUXsKlzhmi4QA4RApvJwseOU+ZWQ9Lu0Y2Xv85OYSMR0KkUBzqLsKZdaAygShoJ330NYCWlnuGeNo1tYRBCDVav5WsRnbbU/00moxRE/4LvcUJx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=USxSswep; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FX/HLFgC"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-86265451beeso359382b3a.0
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 12:51:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="USxSswep"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-84e84a6c4bfso1393162b3a.1
+        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 12:51:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788551498; x=1789156298; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788551500; x=1789156300; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=fvrsiIV2Lldx5aqamYQifBQ5Wmg+CQWdeLatZB+qlSs=;
-        b=FX/HLFgCMiToRE175+b7mm9v9nxn3pFQpwk3UlQlj9Tm+x5l5QYw/wlPtWfwqJqFEO
-         CNcEx7Fym091n4GXtRxY/j5p0bFc+wsJ6+bZymOi7dfsOz3hFB5qls9pa/6Dds9PVlgc
-         YruqbwbIpxB1UILlQCQF3oUgtT0s1i73arEH1/inH5/EjH9mejNpQzchMwzW6YJpPJLh
-         5nK86Fy5756tC3uFh23jTPE4zCaEkZxxl52jKv74oofFZgAf2F7Gratk7PDOdLWVyfJR
-         ntseAgKMWAe+JE8cTW4jLxbikXERhSD96HwgrP8CCnhmON2ir+aV8+GcVCZXfQvZxd7f
-         QGIw==
+        bh=sQVUWoA7x45iUD9G/BjlX2mTaB7Twjm1Fp1QyKVPw8I=;
+        b=USxSswepifRtwFepO5whC0ZBBBFpwiRKBjsXb51zcbI/5J7VOy0yZ4Hk0orohUMWkA
+         0rVAqIhcshm8DmnBSkFL49IdXSHWzAk2S4qAgYNnHKMAWN1wUX2Vetuqfz0tyDKQGjk3
+         xsrX2v/bsIP7apvCm6ECUgDrxbyLWiaY7bU5F+DSs13LAwm8ySvvFQWyqO8QL6N6ab3a
+         u5cfvvqpSEGRC4fZQRXVnDjkosi4C/2n+00eshhS9Rxp52exK297jg00fhPo/SbnSpyG
+         sm2kj2VV/MVMBl34AN2ceV6gKPO7knQEHBo7ueuZYLo14E5+nQhzWh5dzvJ1gD06IP18
+         gAOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788551498; x=1789156298;
+        d=1e100.net; s=20251104; t=1788551500; x=1789156300;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=fvrsiIV2Lldx5aqamYQifBQ5Wmg+CQWdeLatZB+qlSs=;
-        b=e7+9FmFo5W/t0QKzSq76tALS0kBjRNDVX99gpZTIZXIk6RgU/ypKK5i9QhX+wN8ePl
-         UVFATR+nDwoYPR/7ANclnDN7/hQaiBHTAptKyNCdw3QDn6cj+nhCgNlrfS2KKmzKnYDW
-         LC1StQIv8pxKQstTJf2+M47SbvcSMV+XOn6UE9gMW+b3uOr0vufMPzGBP8/NVoKsRlvd
-         EY51bcHFewIWH3rMkw+ODVcVMFS+f6nVB3U2819i8NGn+fp0YXalz/B+TQH2VFA1lxZu
-         49wqm03IHAWCTHZ/Lze5TTi2Mb+Uhy+VtlY/v1mf1RHdfL14Wob1XujZBKun/PE/EHCx
-         1d4Q==
-X-Gm-Message-State: AFuF++lOlVKEdRqEPPuV8pM9WEv3T6xCrHXHcITA0IBAxV/+aYfpQj1i
-	Op2uS+D0KzH5PyK88pFDw9iCpY+cMwQouMevtH1GTS9kPs0Je9yF+50bHAdLwg==
-X-Gm-Gg: AYBFou1wax2fmWO2ys8WrfLxAj+Ed9p5Q2yjBjVtvjkC4lEZcKWwuuqaOZK0rxlR3YZ
-	N1+V9l3nJGxfFoXsQqAc3B51NOIS1ZdXxD106cbapcgJlCMLS+S8cvQwPCVOirYGWmRUGJEnBCj
-	CFwrj9Gwelkz7s1klDXR6GdbjL/42qoh99hUCxDS8qXw0ofOoFT5J63qoZRLKAUgRcuu8ApGcX+
-	S6frYWGXfi6STPPnwG3Laa+88GEuOhzEUchaY5aNTquj6+llE3MV8IAMqS2dt7Ptn8WWpg3LRDJ
-	CZ7Ki+4+pFnXkIgzrdiiqN4ejxxSZnZuU0HN8zYNm3MvohQezo2VnCgl+tX+EXxYiT+N4YT4PPq
-	3KoJPAC9JGi0N/wr+/2/XMOWtRuxz+NJm5Nz3Pcv3mTMS8bAxCtSn+AayNZCJgpna4uj1kvc4oW
-	bzPv0dhIY+OQ7mC9atQw+4Yp0FlaqAlOmhtiPu5EMw44ZqBNhf7rmvoinRE6RlXlbXycxitE/N6
-	Dr3ZzpMwviUTOV3bPwfmhHATI5FLeT1T4M5bT+r7Ci7WfQriUxevEsj24xQIPr54goxrGpq6urq
-	88rnr17b5i3skkvO2gvXOtlolEmtIIGQBzI5YbnWFrl1XOzxrydn1Tz84ss5Tkbwo9u15I1+KLY
+        bh=sQVUWoA7x45iUD9G/BjlX2mTaB7Twjm1Fp1QyKVPw8I=;
+        b=VkzsUR3iq/O3wsib12QmizV6JdpIBXVUF3nRWoAo3mo5iNwW9F0Tx+KTVF0Xpb33bx
+         q5UKU0TBZtKIZ11Q1RPAtLW2vx61GUMvmuM1VgZ9KvdPxysvIHsuEjyNAIl4cwia5GBJ
+         sNCMmhP/BrR/zBWuBe+XO8143+UmCFkRz5O1E+Tsgb22zCrUItKwWy4dRoQmdof2sfhr
+         qvH64Qb1B/9eZAMe+NYmsaeq5fiVJm8xk4mdeNgyzY2F8MSnpz1hZS/yZB9PUMWqa653
+         iLeZM3ephwRraoSboa/a9/3zaRHQgYrvjVla77SjAzd+PxaUXXQEU+9mJw6b2aEggfYP
+         OfiA==
+X-Gm-Message-State: AFuF++kALc4OmO6DPRt077VDHmE+V8aaWlsWSZBClOc+CGFm7aZyrgwg
+	k8KSj62bvP9AAkRh/xbrIKxsdKzAhdr9ZEKvZnEdPN/7/dHatoXU4WdwVx3Kgg==
+X-Gm-Gg: AYBFou1WifzkJdcGxdwKJ3uZQKdyp/8UNSNKfwYNyJrGUDAudIsINeSi8xCLALrnDYA
+	H0p0HGcA/wraPqjdqt66HXA5hk34MITCiUsbDkiVMIv46UyIv9RK936ShWF6qkGJRpZhVZkSn+F
+	+sokMZuYwC8oExkMqeU7e7KX+OhklvPpUaW68jxxqaHnAEiOxkWLGeOwdZ9IjShwh7fyYD6JsKb
+	vBLz7BiRgojx37/+C+wyLuBHoBMTRQklA/4y96AfSbs6IU1fmoZo/qw39txv+GmZ2qxcPas1wt1
+	n2fKWRK9lgfCzGrUwhaCzQy6VFka3EGz9k8PAEwSaYZC1M7vlx2jO5c2nwv2T0Y1r7K2WvAjoW7
+	nulsCY+u6KO6f8YZ1irlQzb6zXlFknfkncm+sm24ka/j6ZnE275sRxoRx6txu3jJIhJNdexbF76
+	wKSLDkJxfpmKM5wY/Ia5xVOtQC67bAciVxFMwAlCdWnyxuR76p+iZlJapR/EL6xigugY5phUYPb
+	xN+otJN2yavsS5U7bmSRJOz/GU8oBnU0YJivjQijTaShs87qwbKX/XQr/6zJj1agwXS6A5shvZF
+	/CfKhrIJL0ulcK4bW3gqBcBsGYnPnT0+npF7sOAeXhkDcHX2jgpnafnBaYE6I2C/4mhBfYWlZxM
 	=
-X-Received: by 2002:a05:6a00:1151:b0:85d:84a5:b7bb with SMTP id d2e1a72fcca58-86168d8c2fdmr11042192b3a.18.1788551498348;
-        Fri, 04 Sep 2026 12:51:38 -0700 (PDT)
+X-Received: by 2002:a05:6a00:159a:b0:84a:65e8:137e with SMTP id d2e1a72fcca58-85ffe1099ecmr11049338b3a.17.1788551499491;
+        Fri, 04 Sep 2026 12:51:39 -0700 (PDT)
 Received: from sid-dev-env.cgrhrlrrq2nuffriizdlnb1x4b.xx.internal.cloudapp.net ([4.155.54.158])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8615404876fsm1497684b3a.59.2026.09.04.12.51.37
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8615404876fsm1497684b3a.59.2026.09.04.12.51.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2026 12:51:37 -0700 (PDT)
+        Fri, 04 Sep 2026 12:51:39 -0700 (PDT)
 From: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Siddharth Chintamaneni <sidchintamaneni@gmail.com>,
@@ -84,9 +84,9 @@ Cc: Siddharth Chintamaneni <sidchintamaneni@gmail.com>,
 	rlmenge@gmail.com,
 	hargar@linux.microsoft.com,
 	apais@microsoft.com
-Subject: [PATCH bpf-next v1 3/7] bpf, arm64: Use resolved pointer for timed may_goto
-Date: Fri,  4 Sep 2026 19:51:28 +0000
-Message-ID: <20260904195132.141068-4-sidchintamaneni@gmail.com>
+Subject: [PATCH bpf-next v1 4/7] bpf, powerpc64: Use resolved pointer for timed may_goto
+Date: Fri,  4 Sep 2026 19:51:29 +0000
+Message-ID: <20260904195132.141068-5-sidchintamaneni@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260904195132.141068-1-sidchintamaneni@gmail.com>
 References: <20260904195132.141068-1-sidchintamaneni@gmail.com>
@@ -104,38 +104,41 @@ BPF_REG_AX instead of a stack offset.
 Copy the pointer directly into the first argument register rather than
 adding it to the BPF frame pointer again.
 
-Fixes: 16175375da36 ("bpf, arm64: Add JIT support for timed may_goto")
+Fixes: b55b6b9ad76c ("powerpc64/bpf: Add powerpc64 JIT support for timed may_goto")
 Reported-by: Jeremy Jean <jeremy.jean@oss.cyber.gouv.fr>
 Link: https://lore.kernel.org/all/20260824213158.3755932-2-Jeremy.Jean@oss.cyber.gouv.fr/
 Assisted-by: Copilot:gpt-5.6-sol
 Signed-off-by: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
 ---
- arch/arm64/net/bpf_timed_may_goto.S | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ arch/powerpc/net/bpf_timed_may_goto.S | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/net/bpf_timed_may_goto.S b/arch/arm64/net/bpf_timed_may_goto.S
-index a9a802711a7f..53148c9a1c58 100644
---- a/arch/arm64/net/bpf_timed_may_goto.S
-+++ b/arch/arm64/net/bpf_timed_may_goto.S
-@@ -14,16 +14,10 @@ SYM_FUNC_START(arch_bpf_timed_may_goto)
- 	stp	x3, x4, [sp, #48]
+diff --git a/arch/powerpc/net/bpf_timed_may_goto.S b/arch/powerpc/net/bpf_timed_may_goto.S
+index 84ecf6fa7f5d..d88825dd34fe 100644
+--- a/arch/powerpc/net/bpf_timed_may_goto.S
++++ b/arch/powerpc/net/bpf_timed_may_goto.S
+@@ -8,7 +8,7 @@
+  * arch_bpf_timed_may_goto() trampoline for powerpc64
+  *
+  * Custom BPF convention (verifier/JIT):
+- *	- input:  stack offset in BPF_REG_AX (r12)
++ *	- input:  count and timestamp pointer in BPF_REG_AX (r12)
+  *	- output: updated count in BPF_REG_AX (r12)
+  *
+  * Call bpf_check_timed_may_goto(ptr) with normal powerpc64 ABI:
+@@ -32,10 +32,10 @@ SYM_FUNC_START(arch_bpf_timed_may_goto)
+ 	std     r8, 72(r1)
  
  	/*
--	 * Stack depth was passed in BPF_REG_AX (x9), add it to the BPF_FP
--	 * (x25) to get the pointer to count and timestamp and pass it as the
--	 * first argument in x0.
--	 *
--	 * Before generating the call to arch_bpf_timed_may_goto, the verifier
--	 * generates a load instruction using FP, i.e. REG_AX = *(u64 *)(FP -
--	 * stack_off_cnt), so BPF_REG_FP (x25) is always set up by the arm64
--	 * jit in this case.
-+	 * BPF_REG_AX (x9) contains the count and timestamp pointer; pass it as
-+	 * the first argument in x0.
+-	 * r3 = BPF_REG_FP + BPF_REG_AX
+-	 * BPF_REG_FP is r31; BPF_REG_AX is r12 (stack offset in bytes).
++	 * BPF_REG_AX (r12) contains the count and timestamp pointer; pass it as
++	 * the first argument in r3.
  	 */
--	add	x0, x9, x25
-+	mov	x0, x9
- 	bl	bpf_check_timed_may_goto
- 	/* BPF_REG_AX(x9) will be stored into count, so move return value to it. */
- 	mov	x9, x0
+-	add     r3, r31, r12
++	mr      r3, r12
+ 	bl      CFUNC(bpf_check_timed_may_goto)
+ 
+ 	/* Put return value back into AX */
 -- 
 2.43.0
