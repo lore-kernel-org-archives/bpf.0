@@ -1,77 +1,78 @@
-Received: from mail-wr2-f8.google.com (mail-wr2-f8.google.com [74.125.225.72])
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D803541A517
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 06:37:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A5D0396572
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 06:37:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788503825; cv=none; b=MwI54FMHbnkNpnZwRqe8ElZ1OVlmP0zc62j/i0GmbynmFAGhUJNTsv+JtZUEoMETfClxJfev6wn8zstNaK7URXfVK8TXN1eDogohMjU4FbjYpoSXJVrkpalGOwhMnektpOnpPmYlwZ3uA6Gaa+gKGgNBOdXqSNA7y9wkTab33os=
+	t=1788503826; cv=none; b=miXngMO0OzXnllOEHa1h4KuAlPLopHXr3joOtgi4HP8VBkv12D3JKCBJo+rghLEPcaDYiaQ1z+e0Em9Lys0GNoQP0a/T9nYRUJThpC+28G6SS2/HAnN+StPv0WKzs6mns8QcPsGAwaHdMl8TfxnP5SvkZxgxv3IydLIheKUd7gw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788503825; c=relaxed/simple;
-	bh=KxFFIn9/mNihatkIdIKWJSA0fU/WKLS8ovyz5z/hkhQ=;
+	s=arc-20240116; t=1788503826; c=relaxed/simple;
+	bh=DHGo+nMhwLb7jF36KxW3cOWZ2EkkCRxXubrUxi275uo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WWbUHBsphrHNPKqCZSs8bVMITltpPkhGC6K26wUAVVINAY1jJf0fLMutrwdXKE5aivDgqvpuxROmhT3esDwW8m2zSsBbjkxANN6Z1e9RFjCHNxDk6mx2Irj55sZPa1f9cd7H2NL27efO6hgcuuVBYKaB42A8NE2RoQfSBybd3uk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q9eSAtvD; arc=none smtp.client-ip=74.125.225.72
+	 MIME-Version; b=Y2uvA0chAoBdVJH6tdtJfjLGvbDNgMX/GckZJUiM8kLlwhLTudEG1zZJL/Yx9m5CQuJBY2FrGTtqK2ce1KOudO+WglhebVET8ZerXvVg9rhNx0r0YQRyAS/IRAI/5daubEfvgoQD443voIEOJ+Ez/yK3iAEY8SD4p78yImXNkHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WizLJ8QJ; arc=none smtp.client-ip=74.125.225.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q9eSAtvD"
-Received: by mail-wr2-f8.google.com with SMTP id ffacd0b85a97d-482e1e7a4f6so281622f8f.1
-        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 23:37:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WizLJ8QJ"
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49556ce3549so3653715e9.0
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 23:37:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788503822; x=1789108622; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788503823; x=1789108623; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=oYdQna79aFPiJ/kQREdasA4vle58tUpoleS0Sq/FBbI=;
-        b=Q9eSAtvDnbpy+O6bhx0h7nd71p5q7edY36h3/ODRa9XcNbl4+wCAsJLIkhKgJR5Lup
-         /Ov9Gq4Y3+XulA2XG8la6bMB9dDOmdRD90NfvSytSTqSsSSXvm0EnaOljNTJQFNr06V1
-         KJO5tIzTdDzIO3iK6Dgr04PbheLy2gDG9fShHWDGcN1w5l4ir9Rr5dzddjWNU2XkIm6N
-         KSC38sMlVaDKyKIm3oMw2CWuNCzIfpaVBzEw/SseHr+Q9hs4QjCJzDf9Vz18GLXO+iH3
-         citaAbbIlw9mQscyRnkwaqmWgW/7EwhQOmQVW9qhYXeR2/fsL3NsEUOw8l3trbXILXde
-         /rQw==
+        bh=nnl0L190XFrilVSAmY8S3ZopotWsd7P+T81I3TNIBtU=;
+        b=WizLJ8QJklp3BURBdKxR/WMMhFiCWV0wlMLhSEnHYV62+RrJqJmoL3Zd5dIrtFzK7P
+         dQdvFj30QDR7wpRmy7JeRqZKvw0pvIJJYsGAxbKuywzrnQVxN9qAWxnQ++t92BYVr1uX
+         +WMMw3HyqWJMVGAXcxRVVVbckbjwKzjk1Q5KPJ/QigQF2ZduiFhExPXkzD1G9Afc8/em
+         Qkt3gIXyEWnFpI+tq/vT8kyppBloHDKBDVW0qNVQSL8/6D+Y8U44hqf53rt2AvdcJtWn
+         qyEH3BU0PvY1QfGonh3BR3zp+O/nkikTvF2aXRBMgwN3+SS6bMPYanLbuxhn3rzWRbXi
+         qdlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788503822; x=1789108622;
+        d=1e100.net; s=20251104; t=1788503823; x=1789108623;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=oYdQna79aFPiJ/kQREdasA4vle58tUpoleS0Sq/FBbI=;
-        b=Cfm5wA9FUCvXNPGYTDm+AktOPQiGtx/m1+/IU80e0DMwQPaWLNu0UtGQbEM6N+FcAA
-         S7gTNz1GCK0lgwCWZv5hwxRjuXk+jvcRdSwedIVA5ATAPhG5VtQQq2bxgvkBugKF5UMI
-         rNtpd/lHlAZmyDjBxWpe7zqrzcz4cROUX6fh0v8UNsgi20x5wYFBpM+GXcxJEwqzepPD
-         h6+FbeWyb17QddEhYHMeUJ5uSlm03KCjDx4n0C9NYSvT9jnWL7aBDB+rmG8VCugvSPqV
-         d1nnTtSTurgXHMzaX9UMMI/4Jp1HAlK1B6sXCZ5WmUJsyD6eDk440P9LXnZ3PQYkAJJr
-         AQcg==
-X-Gm-Message-State: AFuF++ngSwq8f4BY4JfBRWrAQgKNpCXoFbnkWczJlObx2IJ/bGFhLN8y
-	ip3F2SubLdwTRdEZdamsOD4Zt+VhqKdq9AkUQQtVQ0UHemcxQATHeYdvqqTR9TIH
-X-Gm-Gg: AYBFou1mafbF52KhMGraGZGpRBPIs8bmtpaUtlE8jBZaYIjnnTuj5+Ou2Lx+jTcvwMy
-	jV42O/89gefgAxTi1cJMbvoJfrZgrMFuNeUVUpX0bbX30mhZLo6/q4jS8BHTkLmVTHxllmyKPr0
-	u2LsvNanuO8gJdphdrZu+/mciZ5xFYyH7QQrQ8q+HsvgypkiR1o2T1W5kdY5oOP/rc4DRSENVHk
-	+NFZgIhqmpglD75ZkvW4s277Hi5JrakzL+V6MWiLOmJwnu7nAhEw1SvvWIMDIFNn83rn11Cgt7F
-	FirvB87xQiANfYN9dp4/lBBGLhmGrWZlYUrlFo51JIdMmq/A6bNScdIMfl+tCExgVetb7zI8PdA
-	0F1T1VGVpUk6VvyTYKeCpv90Z+sOKppapR1fP6IAEiDepm6ym6hLMfpgqe3agrq/0Aca9TMNaUl
-	SSuMtOBJ3MkUHsmaJzhYczjbiT6Pv/zNPS5GDNzgBlI4VhqMm0N+oLkncC+gB5nHEd6XHKj5HZN
-	87LKt30byUTlr50MpH3hvnmkcSK972Rh2kOQxffRPzmutqzHiwDLUZ5X/BBeoyWRLEvdpsvYrA8
-	KScJwyrOHWyearO+J4zggo9Wwr8=
-X-Received: by 2002:a05:6000:25c2:b0:482:e2f2:19c1 with SMTP id ffacd0b85a97d-4858703f827mr6256344f8f.2.1788503821638;
-        Thu, 03 Sep 2026 23:37:01 -0700 (PDT)
+        bh=nnl0L190XFrilVSAmY8S3ZopotWsd7P+T81I3TNIBtU=;
+        b=r5ao7e0Iv21ZR7mSr9ICCxlAixRut9+pjkRX3lDVEtnKE2cq9IVjHMmN+/kZznlyhr
+         r6eCmvJdwsOvUqSW0F08Xo6wx/Q6gipkc9t0m0xJz/z2CoRd/jMwXP62uZ8T6bjEtaqk
+         QEQbadp6x5AYFpr/Ph2XmTsOS24Etx6DjXvvU3diHSNw3lXkJn7NeoloSGj/WypOItsu
+         WUkfMFNcp8gqYPnv9ZDxE4a1dMD4+7tcKTWZlfiT0VtdWNE86QI64w3za0tDLYX+ZoiO
+         T82v/SGkYwOuybKgDF75YotfC6O0c5aV+4XBduE7ZA/RnKO68SMYxj+XLscHP3i/aCEh
+         wmEQ==
+X-Gm-Message-State: AFuF++lnOZ1eRBd2MZ8nf+0i6qbrrjyOMcN4vxkVD3pGU1CXHKEl9O3P
+	fL46RIDFx1AJkUn4WpcKEP6nihGnL9imTEnHK6DfoeH0w0NSHJTjR0tF1K5CAyIT
+X-Gm-Gg: AYBFou27yVZwQsMi9yGIh8amwZVFxItazi6bdczUW2rO+NBSKRDw/tQE/nGnWwnz0oq
+	o78F/dZPSiEMYywJ9qRmj4zq7MX7RTzcX0r5ukObyIpLAmZmj5cCNM3tbBpMJdLfYwfjjMEJGQb
+	mhPP0syylsoIFgKmi1LwtDxl92/hbXisgRssXKpE/WJE5dNruUjcEYOu8Mt4LytrXqHCFLccHaI
+	x5CqNuhccMFQ9WgodUC7nvoTnk3eTZ3OFigNTtZWYkStFVpMWDrPbNmQTOjLQzWc9FWJHJYY7hU
+	LpsZDnuA3YZ/ERLd9sxAClLyfepBgF2OM92f3qDTTcX0lThVP00+855A/VK34RHt028Zc7RaYo5
+	BVimR8gubqmcec7Kl+WXwGWdm0dSGs4d3hW+ys6ooBcLsSnz+eY+5XLoQb36xhv96RPDxHMqg4Y
+	xKAPorNVCVVl3wJufxtZPpCFkOF3AKfxexL9sXaMPcHGNdplNueq6M3qUS+gom30xl0DUmWoHo1
+	Sa+wKVSCay0tMGJMecflkNJP4y9UCYv6NTdiwdlBswWNl0ghsdtkQylzwrGlwVT26FMEDgULjiY
+	ZmK+JNGjmnw4DN73Qc/4Izm+EYLOsPWEheOD/w==
+X-Received: by 2002:a05:600c:4e0e:b0:49c:fc6c:be0b with SMTP id 5b1f17b1804b1-49cfc6cc04amr9510835e9.17.1788503823217;
+        Thu, 03 Sep 2026 23:37:03 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485885bfe14sm3990171f8f.35.2026.09.03.23.37.01
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cee7fec25sm143818985e9.13.2026.09.03.23.37.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2026 23:37:01 -0700 (PDT)
+        Thu, 03 Sep 2026 23:37:02 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
+Cc: Nicholas Carlini <npc@anthropic.com>,
+	Ning Ding <dingning04@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
-	Nicholas Carlini <npc@anthropic.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf v1 6/8] selftests/bpf: Reject graph kptr use after RCU unlock
-Date: Fri,  4 Sep 2026 08:36:44 +0200
-Message-ID: <20260904063650.3877826-7-memxor@gmail.com>
+Subject: [PATCH bpf v1 7/8] bpf: Reject untrusted allocated-object pointers
+Date: Fri,  4 Sep 2026 08:36:45 +0200
+Message-ID: <20260904063650.3877826-8-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260904063650.3877826-1-memxor@gmail.com>
 References: <20260904063650.3877826-1-memxor@gmail.com>
@@ -81,156 +82,53 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4913; i=memxor@gmail.com; h=from:subject; bh=KxFFIn9/mNihatkIdIKWJSA0fU/WKLS8ovyz5z/hkhQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtW2uXXb25qfwuWXXJ6WrHWzZRD5VdTIr2XhWr4Xd8vz SvTE7+zo5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABOZMJvhf+5BvevXu19taI9h uxScbBubWrLvDq+GWNWsG/dvWh6SLGf4p7mxqKVS2s0uTFFQJ7zG65/SFJ03WpPm23fee/HhjH4 vIwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1928; i=memxor@gmail.com; h=from:subject; bh=O0xbawAqnBylYPa9BBYqUadEoCJXb0J5+JGJNj8vDJk=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtW2uWnZetvbmi1eTnh6ZKWjydXmNavumCckH/Yur7I/ eLC6U81OkpZGMS4GGTFFFlK/u9jMj5R+TvQdhk3zBxWJpAhDFycAjCRm/MZGZbs1UyZpnqrVWLv /ruV9rM7fabZnXv7OWdlX/0K0Xky5vsYGVaftph70uHLdZn5gjKqOf9+Jr1fGpy6Z+Kqn8sY+Q3 6//EBAA==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Add a sleepable verifier test that loads a graph-node local kptr in an
-explicit RCU read-side critical section, then passes its node to
-bpf_rbtree_remove() after the section ends.
+From: Ning Ding <dingning04@gmail.com>
 
-Before the verifier fix, the stale NON_OWN_REF flag makes the node look like
-a live borrowed reference and the program is accepted. After the fix, the
-pointer is demoted without NON_OWN_REF and the graph kfunc argument is
-rejected.
+When the final RCU read-side critical section ends, a local kptr is demoted
+to PTR_UNTRUSTED but retains MEM_ALLOC. The pointer may be NULL or may refer
+to an object whose lifetime is no longer protected.
 
-Also exercise a graph kptr loaded while a spin lock provides implicit RCU
-protection. The pointer must be invalidated when the lock is released, which
-guards the required ordering between non-owning-reference invalidation and
-RCU demotion.
+type_is_ptr_alloc_obj() nevertheless recognizes any PTR_TO_BTF_ID with
+MEM_ALLOC as a live allocated object. In particular, a refcount-only local
+kptr never carries NON_OWN_REF, so it still passes the
+bpf_refcount_acquire() argument check after RCU protection ends. The kfunc
+can then dereference NULL or stale memory.
 
-Update the existing fault-protected load test state description. The
-post-unlock pointer no longer carries NON_OWN_REF, but remains readable
-because the load is rewritten to use BPF_PROBE_MEM.
+Make type_is_ptr_alloc_obj() reject PTR_UNTRUSTED pointers. Since
+type_is_non_owning_ref() is based on the same predicate, graph kfunc
+arguments obey the same live-object requirement. Fault-protected reads of
+the demoted pointer remain valid: writes are already rejected, and read
+fixups use bpf_may_fault_on_deref() rather than this predicate.
 
+Fixes: 1b12171533a9 ("bpf: Mark direct ld of stashed bpf_{rb,list}_node as non-owning ref")
+Reported-by: Nicholas Carlini <npc@anthropic.com>
+Suggested-by: Nicholas Carlini <npc@anthropic.com>
+Signed-off-by: Ning Ding <dingning04@gmail.com>
+[ kkd: Rewrote commit log ]
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- .../selftests/bpf/progs/rcu_read_lock.c       |  6 +-
- .../bpf/progs/refcounted_kptr_fail.c          | 73 +++++++++++++++++++
- 2 files changed, 76 insertions(+), 3 deletions(-)
+ include/linux/bpf_verifier.h | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/rcu_read_lock.c b/tools/testing/selftests/bpf/progs/rcu_read_lock.c
-index 31d4081c3a9f..cdb255addbc3 100644
---- a/tools/testing/selftests/bpf/progs/rcu_read_lock.c
-+++ b/tools/testing/selftests/bpf/progs/rcu_read_lock.c
-@@ -592,9 +592,9 @@ int non_own_ref_untrusted_ld(void *ctx)
- 	}
- 	bpf_rcu_read_unlock();
- 	/*
--	 * The unlock leaves node as PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED
--	 * | NON_OWN_REF, and the load below has to get the BPF_PROBE_MEM
--	 * rewrite for it, otherwise a bad address panics the kernel.
-+	 * The unlock leaves node as PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED,
-+	 * and the load below has to get the BPF_PROBE_MEM rewrite for it,
-+	 * otherwise a bad address panics the kernel.
- 	 */
- 	non_own_ref_key = node->key;
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-index 7d2f8897e5ad..5abd8387d26f 100644
---- a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-@@ -28,6 +28,15 @@ struct map_value_refcount_only {
- 	struct node_refcount_only __kptr *node;
- };
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 1339c2f028db..36b65797877d 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -1381,7 +1381,9 @@ static inline bool bpf_type_has_unsafe_modifiers(u32 type)
  
-+struct rcu_graph_node {
-+	struct bpf_rb_node node;
-+	long data;
-+};
-+
-+struct map_value_rcu_graph {
-+	struct rcu_graph_node __kptr *node;
-+};
-+
- extern void bpf_rcu_read_lock(void) __ksym;
- extern void bpf_rcu_read_unlock(void) __ksym;
- 
-@@ -36,6 +45,8 @@ private(A) struct bpf_spin_lock glock;
- private(A) struct bpf_rb_root groot __contains(node_acquire, node);
- private(B) struct bpf_spin_lock lock;
- private(B) struct bpf_list_head head __contains(node_refcounted, list);
-+private(C) struct bpf_spin_lock graph_lock;
-+private(C) struct bpf_rb_root graph_root __contains(rcu_graph_node, node);
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_ARRAY);
-@@ -44,6 +55,13 @@ struct {
- 	__uint(max_entries, 1);
- } stashed_refcount_only SEC(".maps");
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__type(key, int);
-+	__type(value, struct map_value_rcu_graph);
-+	__uint(max_entries, 1);
-+} stashed_rcu_graph SEC(".maps");
-+
- static bool less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
+ static inline bool type_is_ptr_alloc_obj(u32 type)
  {
- 	struct node_acquire *node_a;
-@@ -137,6 +155,61 @@ long refcount_acquire_rcu_map_kptr_unchecked_drop(void *ctx)
- 	return 0;
+-	return base_type(type) == PTR_TO_BTF_ID && type_flag(type) & MEM_ALLOC;
++	return base_type(type) == PTR_TO_BTF_ID &&
++	       type_flag(type) & MEM_ALLOC &&
++	       !(type_flag(type) & PTR_UNTRUSTED);
  }
  
-+SEC("?syscall")
-+__failure
-+__msg("bpf_rbtree_remove can only take non-owning or refcounted "
-+      "bpf_rb_node pointer")
-+long rbtree_remove_after_rcu_unlock(void *ctx)
-+{
-+	struct map_value_rcu_graph *mapval;
-+	struct bpf_rb_node *rb_node;
-+	struct rcu_graph_node *node;
-+	int idx = 0;
-+
-+	mapval = bpf_map_lookup_elem(&stashed_rcu_graph, &idx);
-+	if (!mapval)
-+		return 0;
-+
-+	bpf_rcu_read_lock();
-+	node = mapval->node;
-+	if (!node) {
-+		bpf_rcu_read_unlock();
-+		return 0;
-+	}
-+	bpf_rcu_read_unlock();
-+
-+	bpf_spin_lock(&graph_lock);
-+	rb_node = bpf_rbtree_remove(&graph_root, &node->node);
-+	bpf_spin_unlock(&graph_lock);
-+	if (rb_node)
-+		bpf_obj_drop(container_of(rb_node, struct rcu_graph_node, node));
-+
-+	return 0;
-+}
-+
-+SEC("?syscall")
-+__failure __msg("invalid mem access 'scalar'")
-+long graph_kptr_after_spin_unlock(void *ctx)
-+{
-+	struct map_value_rcu_graph *mapval;
-+	struct rcu_graph_node *node;
-+	int idx = 0;
-+
-+	mapval = bpf_map_lookup_elem(&stashed_rcu_graph, &idx);
-+	if (!mapval)
-+		return 0;
-+
-+	bpf_spin_lock(&graph_lock);
-+	node = mapval->node;
-+	if (!node) {
-+		bpf_spin_unlock(&graph_lock);
-+		return 0;
-+	}
-+	bpf_spin_unlock(&graph_lock);
-+
-+	return node->data;
-+}
-+
- SEC("?tc")
- __failure __msg("Unreleased reference id=3 alloc_insn={{[0-9]+}}")
- long rbtree_refcounted_node_ref_escapes_owning_input(void *ctx)
+ static inline bool type_is_non_owning_ref(u32 type)
 -- 
 2.53.0
 
