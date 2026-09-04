@@ -1,95 +1,135 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 464F04FECF2;
-	Fri,  4 Sep 2026 20:27:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30BEF39A054;
+	Fri,  4 Sep 2026 20:33:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788553663; cv=none; b=hYqir7SGyOy2JYtLiuE7Z2p424NXnVo/2PC96RfkUBoIYtdecjw6mKYhtvZZs3ttlFFkeFXYMI/cO365TpaBgcTs0dPSHW1ukWWpKfvluCA60RShPhFAnl9LEAsxx+eN7//Kp+6w3aKOdHz9utEz0MES+nFm84wxBmPEpV12iHA=
+	t=1788554031; cv=none; b=WfNxuan8FGw8DhEbE9gCDvpDYNL+jXmS73XBhLQ1xVvecvCqYFtIM/NEI4erbfSDhIbXegpJtgMMsd+Sx+grf8vsr/7+8I1BfTNTcsA4l+nr7/wxzGxkrvyre37Nk3DYbwR5+KDviZw3HbuNFfcoPQlcJPZr02CHcvjkfI5plW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788553663; c=relaxed/simple;
-	bh=bVEKSvzw0dN9Fi8lwDSBwxTVPXdWFQOikJ8eH4oAuNM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bbwSx+71U8HEXenqKAnn6gHCpEmyAd158ihYjZm+xww088qZuqBkz+eU5m+XwqwQR9NwUIVQRTI/bbYnB1BQYErZal6tZb/zuqviRFH0ocCe4iVEtrpEyrTX/JX/w/MCjynxvPQNQqewgPst8c5gihV6EOcdORAJAHaqjFGbqNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: by linux.microsoft.com (Postfix, from userid 1202)
-	id F259E20B7167; Fri,  4 Sep 2026 13:26:56 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com F259E20B7167
-From: Long Li <longli@microsoft.com>
-To: Long Li <longli@microsoft.com>,
-	Konstantin Taranov <kotaranov@microsoft.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Leon Romanovsky <leon@kernel.org>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	"K . Y . Srinivasan" <kys@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>,
-	Dexuan Cui <decui@microsoft.com>,
-	shradhagupta@linux.microsoft.com,
-	Simon Horman <horms@kernel.org>,
-	ernis@linux.microsoft.com,
-	stephen@networkplumber.org,
-	shirazsaleem@microsoft.com
-Cc: netdev@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	linux-hyperv@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	sdf@fomichev.me,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	ast@kernel.org,
-	john.fastabend@gmail.com
-Subject: [PATCH net] net: mana: restore the XDP program pointer when pre-allocation fails
-Date: Fri,  4 Sep 2026 13:26:40 -0700
-Message-ID: <20260904202640.3900685-1-longli@microsoft.com>
-X-Mailer: git-send-email 2.43.7
+	s=arc-20240116; t=1788554031; c=relaxed/simple;
+	bh=nYDghPAvA92ViDBFg0PW1x7E6GcWCIn3fPqtCxCJgD8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=l0FHOl3moG3GYwasmpYpGlv8/78jAAPxRKcq3BRPZ6I09lYFeU3DTqEpaVPNDU2U31ciJijaC6OSCTTFg5kbzBxKMIAXp859vdM/p9Z6WXNyniDKEPAg2I+46mc3oamTwiDZFirdCK+hxJ0ZZGLtv1fPgo5bCF/08eS0v7iTJaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gi33ko4A; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gi33ko4A"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEF931F00A3D;
+	Fri,  4 Sep 2026 20:33:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788554023;
+	bh=S1Ltm0JPfJjiwiR8Yz5D6OIK6U9xShhvq6boNu3N5cI=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Gi33ko4AShQ6SlVBUiya7gtJr/t0DdMgfn3GBt4hcOZ1Juj+7K0TB8/GZ+XmsfFxV
+	 7EyR61Z0AGyvUfB0zJXtqpaP7Zg8Jt1ReZQSQmXB5g+JuE4pLt87zV+YT/MdGv6bJ0
+	 LJdOCDr2pi7DgNwFKVgTFOY43p8zi/TfxpIjKz3Hgw+nT+kF9VZscD5BAHZoVGA9LP
+	 BWcbOTAY7vgEKAMW0qExXqRqrnQK3nlTbXqopzRSOgwr1WCl5KFMkyomfRmA4O1a8Q
+	 rOXbyzEsCrRqETaEhgjXFo11E+HeZwoTlkAD3xp9lAtnSYVRecUqD8mZmOfWImXrAA
+	 XAGjlNU3JRZ+A==
+Content-Type: multipart/mixed; boundary="===============7579324935920484098=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <b67f406ebae81de9368fa6ef0a627548257d5db372ad1dfa2f84092086eaf745@mail.kernel.org>
+In-Reply-To: <20260904195132.141068-6-sidchintamaneni@gmail.com>
+References: <20260904195132.141068-6-sidchintamaneni@gmail.com>
+Subject: Re: [PATCH bpf-next v1 5/7] bpf, riscv: Use resolved pointer for timed may_goto
+From: bot+bpf-ci@kernel.org
+To: sidchintamaneni@gmail.com,bpf@vger.kernel.org
+Cc: sidchintamaneni@gmail.com,jeremy.jean@oss.cyber.gouv.fr,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,a.s.protopopov@gmail.com,puranjay@kernel.org,linuxppc-dev@lists.ozlabs.org,linux-s390@vger.kernel.org,linux-riscv@lists.infradead.org,rlmenge@gmail.com,hargar@linux.microsoft.com,apais@microsoft.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri,  4 Sep 2026 20:33:41 +0000 (UTC)
 
-mana_xdp_set() publishes the new program into apc->bpf_prog before it
-allocates anything, because mana_pre_alloc_rxbufs() sizes the buffers
-from it via mana_get_rxbuf_cfg(). When that allocation fails the
-function returns the error directly, skipping the err_dealloc_rxbuffs
-label which is the only place that restores the previous pointer.
+--===============7579324935920484098==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-The attach is reported as failed, so the BPF core drops the reference it
-held for the caller and the program can be freed, while apc->bpf_prog
-still points at it. The next consumer of mana_xdp_get() - typically
-mana_chn_setxdp() from mana_alloc_queues() on the following ifup, or
-after a TX timeout reset - then calls bpf_prog_add() on freed memory.
+> bpf, riscv: Use resolved pointer for timed may_goto
+>
+> The timed may_goto fixup now passes the resolved counter pointer through
+> BPF_REG_AX instead of a stack offset.
+>
+> Copy the pointer directly into the first argument register rather than
+> adding it to the BPF frame pointer again.
+>
+> Fixes: 6ef8ff20c30b ("bpf, riscv: Add support for timed may_goto")
 
-This is reachable from an ordinary "ip link set dev ethX xdp obj ..."
-whenever the per-queue RX buffer pre-allocation cannot be satisfied.
+Should the Fixes: tag point to d8319a04dafc ("bpf: Fix timed may_goto
+stack pointer for private stacks") instead? That commit changed the
+calling convention from passing a stack offset to passing a resolved
+pointer through BPF_REG_AX, which is what broke the riscv trampoline.
 
-Restore the previous program on that error path.
+The original riscv implementation (6ef8ff20c30b) worked correctly with
+the original calling convention. riscv64 cannot hit the private-stack bug
+that d8319a04dafc targeted: it does not implement
+bpf_jit_supports_private_stack(), so the __weak default in
+kernel/bpf/core.c returns false, and private stacks are gated on it in
+kernel/bpf/verifier.c. On riscv, regmap[BPF_REG_FP] = RV_REG_S5 is the
+one and only BPF frame pointer, and the pre-patch 'add a0, t0, s5'
+computed exactly the right address.
 
-Fixes: 730ff06d3f5c ("net: mana: Use page pool fragments for RX buffers instead of full pages to improve memory efficiency.")
-Signed-off-by: Long Li <longli@microsoft.com>
+What this patch actually does on riscv is adapt to the new BPF_REG_AX
+calling convention introduced by d8319a04dafc, which is patch 1 of the
+same series. If stable/AUTOSEL tooling picks this commit up on the
+strength of its Fixes: tag without also taking d8319a04dafc, BPF_REG_AX
+still holds the raw immediate from the old fixup (BPF_MOV64_IMM(BPF_REG_AX,
+stack_off_cnt), i.e. -stack_depth-16, up to -528):
+
+    mv a0, t0       /* a0 = -528, not a pointer */
+    call bpf_check_timed_may_goto
+
+bpf_check_timed_may_goto() then dereferences p->timestamp
+(kernel/bpf/core.c) at 0xfffffffffffffdf0, oopsing on every timed
+may_goto loop.
+
+Should the changelog also declare that d8319a04dafc is a prerequisite
+for this patch?
+
+Because d8319a04dafc lands first and each architecture is converted in a
+later commit, riscv64 (and arm64, powerpc64, s390) BPF timed may_goto is
+broken at every intermediate commit of the series. Does the series need to
+be structured differently to remain bisectable for those architectures?
+
+> diff --git a/arch/riscv/net/bpf_timed_may_goto.S b/arch/riscv/net/bpf_timed_may_goto.S
+> index 02c637d87420..8c03e272e0bf 100644
+> --- a/arch/riscv/net/bpf_timed_may_goto.S
+> +++ b/arch/riscv/net/bpf_timed_may_goto.S
+> @@ -6,12 +6,11 @@
+>
+>  /*
+>   * Trampoline for the BPF timed may_goto loop bound. Custom calling convention:
+> - *	- input:  stack offset in BPF_REG_AX (t0)
+> + *	- input:  count and timestamp pointer in BPF_REG_AX (t0)
+>   *	- output: updated count in BPF_REG_AX (t0)
+>   *
+> - * Calls bpf_check_timed_may_goto(ptr) with the standard RISC-V ABI, where
+> - * ptr = BPF_REG_FP (s5) + BPF_REG_AX (t0). BPF R0-R5 (a5, a0-a4) are saved
+> - * across the call; BPF_REG_FP (s5) is callee-saved and needs no saving.
+> + * Calls bpf_check_timed_may_goto(ptr) with the standard RISC-V ABI.
+> + * BPF R0-R5 (a5, a0-a4) are saved across the call.
+>   */
+>
+>  SYM_FUNC_START(arch_bpf_timed_may_goto)
+> @@ -28,7 +27,11 @@ SYM_FUNC_START(arch_bpf_timed_may_goto)
+>  	REG_S	a3, 1*SZREG(sp)
+>  	REG_S	a4, 0*SZREG(sp)
+>
+> -	add	a0, t0, s5
+> +	/*
+> +	 * BPF_REG_AX (t0) contains the count and timestamp pointer; pass it as
+> +	 * the first argument in a0.
+> +	 */
+> +	mv	a0, t0
+>  	call	bpf_check_timed_may_goto
+>  	mv	t0, a0
+>
+
 ---
- drivers/net/ethernet/microsoft/mana/mana_bpf.c | 1 +
- 1 file changed, 1 insertion(+)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/drivers/net/ethernet/microsoft/mana/mana_bpf.c b/drivers/net/ethernet/microsoft/mana/mana_bpf.c
-index 53308e139cbe917b074dd381c83546fc74d7b79f..5c9961ee9747ab7747ce2f51eb40f3e7a55510cf 100644
---- a/drivers/net/ethernet/microsoft/mana/mana_bpf.c
-+++ b/drivers/net/ethernet/microsoft/mana/mana_bpf.c
-@@ -208,6 +208,7 @@ static int mana_xdp_set(struct net_device *ndev, struct bpf_prog *prog,
- 		if (err) {
- 			NL_SET_ERR_MSG_MOD(extack,
- 					   "XDP: Insufficient memory for tx/rx re-config");
-+			apc->bpf_prog = old_prog;
- 			return err;
- 		}
- 
--- 
-2.43.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33914557238
+--===============7579324935920484098==--
