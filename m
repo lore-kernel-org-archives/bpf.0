@@ -1,77 +1,77 @@
-Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
+Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD3523CB565
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E993F660F
 	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 08:43:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788511415; cv=none; b=G8IcLiVdy2XDpb2o372dffrSE18wRXjlnCv1nRLvR3p7MjwafTGv/geIM2dL7eJd9dtXJuo/z71pb9TeCktfIpimuqmu94Ni4zSzqUwcW8o38MbQWmcCicqymKY2STpoGeg1EZNpbcSbh+L85oBid+mE5H7NspBnemoj/P2Zubg=
+	t=1788511417; cv=none; b=QZK/ssSv82W4G8AXU6CwITXmnObavfBAAhQKH6q+Z40s2LLd3GCdjIIjrFn6U+jueRemRIFj+cGhPiin3eRpYvfrJwRmm+eO69omVxMhgfVGTgIvYAgu8+uNo0PwBBumAmvDdE/FInYj3Ox17BvpSUZrzt6KumJCLX4xqygoqHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788511415; c=relaxed/simple;
-	bh=KZwM6a3VZxaj4sMHGYhUUpBrjNnVWCw2ZvQaE/7m//c=;
+	s=arc-20240116; t=1788511417; c=relaxed/simple;
+	bh=G+mdTUEGAA7xgXEbrkxxlO3xp4/Jk0J+MKGwOR8O2kQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MnQHTzOFrskbJRAHdvbsbq6P99hDTLeiJxNxDeC33Dm42UiZEar/arFYFdmlH0ddkcXVtpLiNUuZRZtJH8SdcZ3bueVHN6FsaxDHsQzP0p1pZ08/Voxle8ZSU5T5ixZRtz1bUhCrVIYCQCTfcogvp7utBgMYqMEBHBmfa9o1DbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WTbT11Kc; arc=none smtp.client-ip=74.125.225.138
+	 MIME-Version; b=NFizzwXAssY7W7K4x9mqCjdnRrwWKWhYECEVEWef3vLC/1A7i+47Ru2/gUGmbkdApl4DPmftVvULkP73Hhq9/3yXd7dsEFLvef1hX6dBsHwuDRCxMwG4DKr442gshH635nv3xf1c9ZTJNGkDs9Zn/AsytQcS2hLwlr+r3AvOfxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ozqQzF0a; arc=none smtp.client-ip=209.85.221.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WTbT11Kc"
-Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-49b46dc430fso1689805e9.0
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 01:43:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ozqQzF0a"
+Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-48586861639so500829f8f.0
+        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 01:43:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788511410; x=1789116210; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788511408; x=1789116208; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=z3WAr11vjblmaC/H/rSaD9688Zc+rMF5P2kN9YAP1h0=;
-        b=WTbT11KczNCtO7Jt49nTxHNPjjP08cDeUw9qQlkmZkZ5xqn302roCO/OpQ//6+b5ni
-         IX3lhJFdnWCZGhkpr4onSOojR78gI8xZTsDpCwzDU8xXYJMFSWuDU+dyqdk+26EQbKQb
-         pSv184f3CdymU+v3pNJNIfjKqwdAT7nsv0Bdlb3aFTzLv0IIX4doTDhZURNCd2RuzWwG
-         XwuCh6igmO/wNXbJYHjNuJiA4XDx1m6AD+Xc8bgSD1HduWnXCHsZYbpGyj1D1LZjYxyJ
-         hMNeoEaqX1+YIBWzfbN6xYBlM23HKGQWBxw3k8Kx5S9VYy/dCqpyGIdAivVAU++VF45w
-         k4wQ==
+        bh=ilTIJSDOzbohGvPfWloWUC6lqM/w4si9TaieoULKGr8=;
+        b=ozqQzF0ahlJDt3pHFYhCO1bGWr1eOG+rkZyl1OwcwdIA8tgG6O5EH9GIpOX+m2Wm+6
+         Mc9WBp9ZO35enko1VOjj19E6MfcjADlg/6XcnH0THo3LJIzyPnoMchEkqU59FYpEWoyC
+         VlcT+Lk9dkaNyF8rWxMxyVoy1OTWjuGFLm/hUmHxMFC1i67fmzk2rw2NXl9Osl0gkUkb
+         WCxbXuTdeJQVhTRL7fp6i9ZU4Od6qgCYyUgoNRA4bucVyBLHgx1uTuQbUlRQjfv3Aa/k
+         XufVwP5A8H65oYNgq1i2zrMzYkjuFu/A0vjsTuy3Sc14Y8EdzVwDg4+fHRwvQALmqCcx
+         OCDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788511410; x=1789116210;
+        d=1e100.net; s=20251104; t=1788511408; x=1789116208;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=z3WAr11vjblmaC/H/rSaD9688Zc+rMF5P2kN9YAP1h0=;
-        b=HokZr1Z7sAiG05ZbBci0KjlJnkufERDxJU1eg55P2dr9aQhywnsK+2kTEbXnl/G0ph
-         wR/p3JE+mPGUqDNeJKrsq3SkuliNb6zQnwafwiCgGT9dr863uvNBrGbR84kkBLQwym5K
-         E9lGRRpXEKug6e0tMIFQlrBt2ADavx8htI5d4S16Ks0tRCu/C6WGjSM30KJWZU4KbUHU
-         1LpqC5EbKLT06MRNgUozyziItabJJI+1qdAua5hCEI49K+RuF5bJ+J0yV5F1lIRDD0ig
-         KvwnbVwEwFJt7BvWSTzpvSZXLGv39wnkby0gyx74biP+LyRQOQiywCDB8/2eSP/t0Wwc
-         kE6g==
-X-Gm-Message-State: AFuF++nlNbKih//Wx3iui3k1N/uTZn7JJVjo/eFH6+3p4gosq9Q+0lpm
-	WZA1b21k3UWaQOVzXmhWtj3nlD2Xr/2sl4uzZIhMX0YVtQWaLACJnwLhKsMZ51mu
-X-Gm-Gg: AYBFou0QlBT7/gepshNaa382bHBl3zfMSIecnW84LnTsDFVqGcRaNZZwEnH8Bb50VK7
-	QQ1snYx5sB8pyiVy654kGomqb3eQP3oh8D9CEyzTXCxtxv1UY48BK0HB58nP/rUSHPs5EyZHgS3
-	UW7bHyxsu+ZYdovQmZSbp/RhYZT/PLLZGqYPziCy+WnwA1xIirHW4bHTTmEP6GRXnEd2RT4tGYY
-	ZTDT54umqQYeeEzWldXQsdqmwM/HCylterFyLlrT579kBgPFv8t15KNSXyMCOmMKT+272OfkhUk
-	OcXr+tAQfZj6d+8Y9lqbtdFf+BFDrn9buv6cosF3KZdk29nVgZM5lrYpkfao1ZlLWFixG8i2r5Q
-	YSOGmBWLdd2CvnppcUzXe+O3dUJ9Z3vN/y/Nz+8REDW1BFUlx90VjTCRStHn4MLnAwuwHXXmq7j
-	hROgsP7mw2Iw8rAovrEfEXzoBJBbOSDCjA2cIpjNmjyKke21571Tt22SLv62XmjSK0jVprMwLfF
-	oh0ANcVa45+wI0hGnMcOxN/1542u+78r6hsuOsxKJpOMXW8W+VW3DthR4BEm0e09eNY+tmjmwmQ
-	HlPlcAXIE0+xmvrIyzsuiReX730=
-X-Received: by 2002:a05:600c:348a:b0:49c:fa20:cc03 with SMTP id 5b1f17b1804b1-49cfa20ccedmr22032725e9.26.1788511409710;
-        Fri, 04 Sep 2026 01:43:29 -0700 (PDT)
+        bh=ilTIJSDOzbohGvPfWloWUC6lqM/w4si9TaieoULKGr8=;
+        b=eUI3P+ePqYyj7WQKm7oSa0gtTv5ElLu7Nn0jG1TmcrDIPETO1zzLjHuB4d3qw3zaRJ
+         wSODg6nWjxk6s6l4wUSuNCPXYfnkzFrBnj81H7YPrq/Q68HBIu/NShFkQ3EJZaO7TO8U
+         ZLYHmxs4TzwyXwqOyrODl5ihh/UhRvwzD6AsdffSmAvklUQLyxeKVYT6hYBSJ0Nkk8qt
+         oo0novaSWaxNX08taC7qXbJ3Xaa0attLhCDGs9uoyYmTarH7J08MueBGWopeeSSFg2zo
+         JmkvW9AEfBDsVGz0VLDZd2ykft7ITZyRaMpQXa3QpDot+OOQtEKreJVQg3Pg7dlfFi7B
+         b4hA==
+X-Gm-Message-State: AFuF++lYzTDs6GUxGpJAnyOXkTBZvTEc7ZDhavRzZxCzlXTBosQkQkYA
+	vxJjphKElrYyHelarYWEBK5Bu1aQhmxL8abBPSuK422xuvAnDu2Q/DVMZM+DWP2C
+X-Gm-Gg: AYBFou0789oR/ysZRi0E62LA1hA05nS3HlcP9ImKmdDBYFErercPpHcE6RKyRQ6cQLM
+	sJe6WbJmQt7dJpv5E8qlVPW2XO76wvpn77Z5S82+pvl1wGIoc1LM7JVUh+eg1AAn1L5763kdhOE
+	mo2yjIU8/X0DeAaPHlJy8a3pbmSyFNb+z9/TJbjezpwjdiTLqiCkdDZvIt3j5kwoJeUhjFwHuAP
+	WfGosplmm9QPdK/ecezhs44bxsIYtHH73XbntGObd5qagKeC6I1wBW3cmzeAB+WDkToPmj6iRuL
+	gJFLn4Ndzgay9sCs0Hws0CXnHHR8gp7oI10u1vgi9yiZ1l0c6ChfxwLVaD8FabQuYhIL0mXSQ7b
+	CC5fMnGJPvlWLPPH4XYq6cgq7tmpPLyOl8QxhIFeU+2wRJqchYWB9VC4hRDkyeN3KyavEWtMfSV
+	v6jBxB7Og0eL5Rb0wNJXGJ0dC1UK8i5kc1SmyqXjW4VYiK5ltWlvn4xiUcHib0vgF99LwFsvEYB
+	kxOUQ7+MiTTVRv2+Q+Mj4j9hAU2WHfnEcErD03sRb1UvYH+vbYokBT8zvZpQeJsaWvnVzC37lqf
+	LXyLO2nCaj+RSYmPayyBojEaB5k=
+X-Received: by 2002:a05:6000:992:b0:485:8413:5272 with SMTP id ffacd0b85a97d-48584135473mr8809305f8f.26.1788511408127;
+        Fri, 04 Sep 2026 01:43:28 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cee5f912esm139645425e9.4.2026.09.04.01.43.29
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4858ac2b4cdsm3238147f8f.16.2026.09.04.01.43.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2026 01:43:29 -0700 (PDT)
+        Fri, 04 Sep 2026 01:43:27 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
+Cc: Nicholas Carlini <npc@anthropic.com>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
-	Nicholas Carlini <npc@anthropic.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf v2 2/8] selftests/bpf: Reject non-percpu values in percpu kptr fields
-Date: Fri,  4 Sep 2026 10:43:15 +0200
-Message-ID: <20260904084325.52250-3-memxor@gmail.com>
+Subject: [PATCH bpf v2 1/8] bpf: Require MEM_PERCPU for percpu kptr stores
+Date: Fri,  4 Sep 2026 10:43:14 +0200
+Message-ID: <20260904084325.52250-2-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260904084325.52250-1-memxor@gmail.com>
 References: <20260904084325.52250-1-memxor@gmail.com>
@@ -81,100 +81,53 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2612; i=memxor@gmail.com; h=from:subject; bh=KZwM6a3VZxaj4sMHGYhUUpBrjNnVWCw2ZvQaE/7m//c=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtWy8T3xUGlrzIlWsMfPpJcPi/v6cSSQ2V3ROuO50wSm v5ku9jvjlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAEzkThIjwwKOS/6f0tKnHWpc suaREeexyROtjyyXPyYYf8386aYn/FUM/4O2XXgs/oFtqpkL8xf+up/3D95We/+06vjbHQ1BLuw 5ovwA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1954; i=memxor@gmail.com; h=from:subject; bh=G+mdTUEGAA7xgXEbrkxxlO3xp4/Jk0J+MKGwOR8O2kQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtWywTjjKRo/8S/0ly3a/jXbyrf8MKW+/iu3Gs+JiH7G 5RZMx92lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCIT1jH8ZuNLXls8+Yv8Vevc ekH7iolRa55/2vfD89CF489mMlV/72f4Z778sB+fiPyhQ6ILmZ+1ZW1kaV0oW/7wAcPvgM7dCxe qMAEA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Add verifier coverage for the two ways a non-percpu pointer can be stored
-in a __percpu_kptr field: a program-BTF local allocation returned by
-bpf_obj_new(), and a referenced kernel-BTF task_struct pointer.
+map_kptr_match_type() treats perm_flags as the set of register type flags
+that a kptr field permits. Adding MEM_PERCPU to that set for
+BPF_KPTR_PERCPU does not require the source register to carry it, however.
+The subset test consequently accepts both a plain bpf_obj_new() allocation
+and a referenced kernel pointer into a __percpu_kptr map field.
 
-Without the verifier fix, both programs are unexpectedly accepted and the
-negative tests fail. Requiring MEM_PERCPU makes both programs fail
-verification with the expected invalid-kptr diagnostic.
+Loads from the field are always marked MEM_PERCPU. Consumers then treat the
+stored value as the cookie returned by bpf_percpu_obj_new(): per-CPU pointer
+helpers relocate it, and map teardown selects the per-CPU free path. A plain
+allocation can therefore provide an arbitrary kernel read/write, while a
+kernel pointer can be relocated into an invalid address or sent through a
+missing destructor.
 
+Require the source MEM_PERCPU flag to match the destination field kind.
+This preserves valid bpf_percpu_obj_new() stores and rejects both the
+program-BTF and kernel-BTF variants.
+
+Fixes: 36d8bdf75a93 ("bpf: Add alloc/xchg/direct_access support for local percpu kptr")
+Reported-by: Nicholas Carlini <npc@anthropic.com>
+Suggested-by: Nicholas Carlini <npc@anthropic.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- .../selftests/bpf/progs/percpu_alloc_fail.c   | 59 +++++++++++++++++++
- 1 file changed, 59 insertions(+)
+ kernel/bpf/verifier.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c b/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c
-index 08379c3b6a03..3701f4ea58c7 100644
---- a/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c
-+++ b/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c
-@@ -33,6 +33,20 @@ struct {
- 	__type(value, struct elem);
- } array SEC(".maps");
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d7dd0befbd10..68353aa61fa1 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4488,6 +4488,13 @@ static int map_kptr_match_type(struct bpf_verifier_env *env,
+ 	if (type_flag(reg->type) & ~perm_flags)
+ 		goto bad_type;
  
-+struct kernel_percpu_elem {
-+	struct task_struct __percpu_kptr *task;
-+};
++	/*
++	 * A BPF_KPTR_PERCPU field is read back as MEM_PERCPU, so the value
++	 * stored in it must carry the same flag.
++	 */
++	if ((kptr_field->type == BPF_KPTR_PERCPU) != !!(reg->type & MEM_PERCPU))
++		goto bad_type;
 +
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, struct kernel_percpu_elem);
-+} kernel_percpu_array SEC(".maps");
-+
-+struct task_struct *bpf_task_from_pid(s32 pid) __ksym;
-+void bpf_task_release(struct task_struct *p) __ksym;
-+
- long ret;
+ 	/* We need to verify reg->type and reg->btf, before accessing reg->btf */
+ 	reg_name = btf_type_name(reg->btf, reg->btf_id);
  
- SEC("?fentry/bpf_fentry_test1")
-@@ -137,6 +151,51 @@ int BPF_PROG(test_array_map_5)
- 	return 0;
- }
- 
-+SEC("?syscall")
-+__failure __msg("invalid kptr access, R2 type=trusted_ptr_ expected=ptr_task_struct")
-+int reject_kernel_ptr_into_percpu_kptr(void *ctx)
-+{
-+	struct kernel_percpu_elem *e;
-+	struct task_struct *p, *old;
-+	int index = 0;
-+
-+	e = bpf_map_lookup_elem(&kernel_percpu_array, &index);
-+	if (!e)
-+		return 0;
-+
-+	p = bpf_task_from_pid(1);
-+	if (!p)
-+		return 0;
-+
-+	old = bpf_kptr_xchg(&e->task, p);
-+	if (old)
-+		bpf_task_release(old);
-+	return 0;
-+}
-+
-+SEC("?fentry.s/bpf_fentry_test1")
-+__failure __msg("invalid kptr access, R2 type=ptr_ expected=ptr_val_t")
-+int BPF_PROG(reject_plain_alloc_into_percpu_kptr)
-+{
-+	struct val_t __percpu_kptr *old;
-+	struct val_t *p;
-+	struct elem *e;
-+	int index = 0;
-+
-+	e = bpf_map_lookup_elem(&array, &index);
-+	if (!e)
-+		return 0;
-+
-+	p = bpf_obj_new(struct val_t);
-+	if (!p)
-+		return 0;
-+
-+	old = bpf_kptr_xchg(&e->pc, p);
-+	if (old)
-+		bpf_percpu_obj_drop(old);
-+	return 0;
-+}
-+
- SEC("?fentry.s/bpf_fentry_test1")
- __failure __msg("bpf_percpu_obj_new type ID argument must be of a struct of scalars")
- int BPF_PROG(test_array_map_6)
 -- 
 2.53.0
 
