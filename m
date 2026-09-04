@@ -1,105 +1,83 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30F5B3CDBD3;
-	Fri,  4 Sep 2026 08:09:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1505C3DE44E;
+	Fri,  4 Sep 2026 08:14:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788509379; cv=none; b=t3pN7WY3bEr7xJd4ZMg4flr8bO604P4mC6eabTyV+PMEnKvkkFIBZhq9o/XDq7GhffjoDYKclhVoF6Ii3RDMG49dDG41x1WKlGBIZTMa4HjtP6HaNsF5yxZVg06xKpgleXjTjV4pGSNzyFgfPjUz89SKvp6+YgLu3c4udlffKuI=
+	t=1788509665; cv=none; b=GMa8ZTJjVLflmGrs8kiMhC/q+XoiztQmIeO+bsXttMfMsA7pzQgyL7JYdLev34M3daQYZavbWs3OyRiS2mG+BrUrUrmWsVEJKwVY1L6s7xdtuO7/wp6XoK3exsJ1k720JOFDoLqVeIl+tGBl+KaBTJDvnfhDK92nDynXgeyaJtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788509379; c=relaxed/simple;
-	bh=eCp98AznbRU8jyrmKlzJqal4mXvo7/LIF2BFxFcNfwc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=iqSlUmmQq24jAvKRZCPEYx2lfTjfUmd7JdyR3lMXllB8Ys7r6iPtl6lFXJ5p4nK02JtXOH1rtre4cpQ7Qo13fIot2oHvIvTXg8MR+PMguXRBqRSrgiRfDH8cdRC/R3Yipfq1edICgQW7hxuLDJyKgTvgcki4tFCbeUJ84UZiB4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HKnVJEYq; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788509665; c=relaxed/simple;
+	bh=Pei3AQKbV/8mZPIhqlEsfH56hZdpkbaH3xKuasIlxdg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pBOqCI0DhmT/9Kc3G0S+OcXJnGD2D2+BWmFlD1749T6pIoC2ZNj5Qsb92oz6OLxpeBfGp1/jMrXUb+0iudPfPPgaqUzyt1uoAilh2oj2cJDVR6Db7A3VpFBUzXuyFxLWxL7tDnioxM2gXEvTcBG2yFV7E+FjXkrVdDatRWndoLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=EXddcMwH; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HKnVJEYq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45AEB1F00A3D;
-	Fri,  4 Sep 2026 08:09:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788509377;
-	bh=9LsK2MXDRjynXM+7CGVIwb6k4vRvdO+pgdIiKPk0znQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=HKnVJEYqZolyWQKkgqlul1DlzdlHmRsuzib4zRWUqfnZUjZxzo9zwHgZP+HGRXKGJ
-	 v2mmnn/FlVKEngmmef/Bx7TfCaTF0Y2tj65GT/jtcFrosLrz6vfRYqzL5EIGOiXolI
-	 ISkY7g9vuAf1cOFE6d2OhFS0nUZxvIEmRh3XwD4nNnEEMLgJmvW7vX+3xayBYf/rsy
-	 CV8t4ZOvBUmHbUoMSwt36JJZFZaDZuGBLiJasVA1fxSADyBULdx4xcbviwjkkVQRAv
-	 z34gDm7JLu+lYYBJSADKd5Fxp5mc17V8u+CU37puJ3S1KBcXGPahKEaJ+fj1PcbdV1
-	 EyZMww7tldMxw==
-Content-Type: multipart/mixed; boundary="===============7487938568132425462=="
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="EXddcMwH"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 18D7C1A1997;
+	Fri,  4 Sep 2026 08:14:21 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id DD78A6057F;
+	Fri,  4 Sep 2026 08:14:20 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7DC1411C7A463;
+	Fri,  4 Sep 2026 10:14:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1788509659; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=A/YUapB0XqTHWiFgZm2Y5luuW3ulfbFhmj5mkJkslv0=;
+	b=EXddcMwHej/eVzgfd6wa7/YXUsgWwktnpwOdzEdlUayRgZcOua1NyTFXUdNOw+x3+NGbfW
+	KQ4AynvTEzCFuIQVFb/DjgU/5Yr6poms+XC1N+sto0A5GEZgx5n6aXTIh8yFIw7O5cp/us
+	HCiXEHaDhtSKRN7dvREaC6U8jvCdoaYt9r2B2IX1f5zJ2OuKsRrMor546t2bYzLQecYhwa
+	xLt0u9pou+N6uaK0pZanHpFiyWIgOHR01aWjRgV/eufe0zggc+odZY0AEYvuVFdeV2C4Xe
+	pjIZLp4/R5PLbhULxbQrscI0l+DgIkr+pzYZ64B2BrMfsd+uOZmetlA8lvo/lw==
+Message-ID: <249f530e-fb9d-42ae-98d8-1f6190f650b6@bootlin.com>
+Date: Fri, 4 Sep 2026 10:14:15 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <6aec8f5c91db3edfd8becf6f41bcb33fda2cbea1bb894888cbcdab4579b0f086@mail.kernel.org>
-In-Reply-To: <20260904070210.4163193-3-donggeunyoo.kernel@gmail.com>
-References: <20260904070210.4163193-3-donggeunyoo.kernel@gmail.com>
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: cover the exception callback using its own BPF stack
-From: bot+bpf-ci@kernel.org
-To: donggeunyoo.kernel@gmail.com,ast@kernel.org,andrii@kernel.org,catalin.marinas@arm.com,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,ihor.solodrai@linux.dev,jolsa@kernel.org,memxor@gmail.com,mark.rutland@arm.com,martin.lau@linux.dev,puranjay@kernel.org,shuah@kernel.org,song@kernel.org,will@kernel.org,xukuohai@huaweicloud.com,yonghong.song@linux.dev
-Cc: bpf@vger.kernel.org,linux-arm-kernel@lists.infradead.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,xukuohai@huawei.com,donggeunyoo.kernel@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  4 Sep 2026 08:09:36 +0000 (UTC)
-
---===============7487938568132425462==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH][next] selftests/bpf: test_xsk: Fix spelling mistake
+ "conigure" -> "configure"
+To: Colin Ian King <colin.i.king@gmail.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260903150351.12725-1-colin.i.king@gmail.com>
+Content-Language: en-US
+From: Bastien Curutchet <bastien.curutchet@bootlin.com>
+In-Reply-To: <20260903150351.12725-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-> diff --git a/tools/testing/selftests/bpf/progs/exceptions.c b/tools/testing/selftests/bpf/progs/exceptions.c
-> index c8d716fbd4191..cac4e082139a7 100644
-> --- a/tools/testing/selftests/bpf/progs/exceptions.c
-> +++ b/tools/testing/selftests/bpf/progs/exceptions.c
-> @@ -212,6 +212,35 @@ int exception_throw_subprog(struct __sk_buff *ctx)
->  	return 0;
->  }
->
-> +__u64 exception_cb_stack_src = 0x1234;
-> +
-> +/* The address handed to the helper has to be this callback's own stack
-> + * slot, not one from a frame that is already gone.
-> + */
-> +__noinline int exception_cb_stack(u64 cookie)
-> +{
-> +	volatile __u64 val = 0xdead;
-> +
-> +	bpf_probe_read_kernel((void *)&val, sizeof(val), &exception_cb_stack_src);
-> +	return val;
-> +}
-> +
-> +/* Throws from a subprogram that has a stack of its own. */
-> +__noinline static int throwing_subprog_stack(struct __sk_buff *ctx)
-> +{
-> +	volatile __u64 pad[4] = {};
+Hi,
 
-This isn't a bug, but would 'u64' fit the surrounding declarations in this
-file a little better than '__u64' for the three new locals/globals?
-Looking at the rest of progs/exceptions.c, every other scalar declaration
-uses the short kernel spelling: 'static __noinline int static_func(u64 i)',
-'__noinline int exception_cb_mod(u64 cookie)', 'volatile u64 cookie = c;',
-and 'u64 time = bpf_ktime_get_ns();'. The new code at lines 215, 222, and
-231 is the only place in the file that switches to the '__u64' spelling,
-and it sits directly next to 'exception_cb_stack(u64 cookie)' which uses
-the other form in the same signature.
+I think your mail subject should have started with [PATCH bpf-next] (cf
+https://elixir.bootlin.com/linux/v7.2.2/source/Documentation/bpf/bpf_devel_QA.rst#L157-L166)
 
-> +
-> +	bpf_throw(pad[0]);
-> +	return 0;
-> +}
-> +
-> +SEC("tc")
-> +__exception_cb(exception_cb_stack)
-> +int exception_throw_subprog_stack_cb(struct __sk_buff *ctx)
-> +{
-> +	return throwing_subprog_stack(ctx);
-> +}
-> +
+Also other commits to this file start with selftests/xsk, but that's a 
+nit pick.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+On 9/3/26 5:03 PM, Colin Ian King wrote:
+> There is a spelling mistake in an assert message. Fix it.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Reviewed-by: Bastien Curutchet <bastien.curutchet@bootlin.com>
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33848479344
---===============7487938568132425462==--
+
+Regards,
+Bastien
