@@ -1,57 +1,65 @@
 Received: from extorris.mess.org (extorris.mess.org [92.243.27.206])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD1A0311946;
-	Fri,  4 Sep 2026 13:08:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85EB933372A;
+	Fri,  4 Sep 2026 13:08:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.243.27.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788527286; cv=none; b=QRkw4zZbgIV1/22cEXcV9d8on1DU1MYzUb73EDDN4FkrXEBZ0boLvo00P7dz4fIhyA785pSra/UVYGhUkl1zhSf9FHmGQrkHh5UyX5ByrQxUaIjodY5no/8BJFEqfiTF7GT2hcc0uEnbSatgouTV3o9n9P2U3/ApM2sd6GgSVEA=
+	t=1788527291; cv=none; b=kQIES8kzA0r59TnO7r2cCqzTHndqx3YpJxv7Zo5/OWKenoVY82Jjtd7zHKZBvJUut3vcYO7ZQfb8DoPS+iOhtD0d48V9kDe5aHf8LdlAR2Ga4EZs/xcgpysQC5K0YTPUyBq5Chv+5TmbUgnBa68YGJcCuRYlwVnwEQNmYxFxSh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788527286; c=relaxed/simple;
-	bh=0n+Qd2pw61JB2O3Z+5PQDlNMwMrmFpN2nG4Z6Yttf5E=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AGiASwvKSpaBe2xmbsy1gYmAH26S8o8/wlNwm0piBxtPUoCh6ME1JfEC6tcd64lsgc9sgPAyIakVjj0HebwKI5BtQuDLrTmqDA8U6jl5R5kSeQtbO9rWLgzi5yAK78+5AFSVtNYOAHF13iX1jCl+zhYjDvboaigweRZRxoAxMt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org; spf=pass smtp.mailfrom=mess.org; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=pGrOkn+o; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=pGrOkn+o; arc=none smtp.client-ip=92.243.27.206
+	s=arc-20240116; t=1788527291; c=relaxed/simple;
+	bh=knl9K8P7DwwSxVkOS5n9sh72AjW62Q/s0/VL+riJqKA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=uhYL/Pza3TDB5OnuIwe/WhlxQOvIqfzlrrl16OqB1SyBlimtZhJWkNyoS5amlyhrapeXr757WC2n8ox6c8IUohzLe1RcBHTbxzPTxjbbF0M9HLQQPofwfP4RoG2DG0NEz3Hu8lZUPdWgWRR3GLmQ63z+GRQkLTCBAbzRZo7aa1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org; spf=pass smtp.mailfrom=mess.org; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=Ib1VD09e; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=TwhvKyRz; arc=none smtp.client-ip=92.243.27.206
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mess.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="pGrOkn+o";
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="pGrOkn+o"
+	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="Ib1VD09e";
+	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="TwhvKyRz"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1788527276; bh=0n+Qd2pw61JB2O3Z+5PQDlNMwMrmFpN2nG4Z6Yttf5E=;
-	h=From:To:Cc:Subject:Date:From;
-	b=pGrOkn+ougvPuwGnWeiS6+nU0V3MFKHZfxdpxojdGZsBuppOh8Muaxnd6Dt5tRCz+
-	 if/ByE07kmj8iuIxWF4p/zjFYGwuXUkNE3brGJXOIAeKgvIuidPWsnhuzYXUeYiTg8
-	 dV1q5cg4m6yl6YLFXRoByYMLDqR+sLaCYfTpjl36oyEBTIgcFxiB7sfYFJG0R2edea
-	 pWQBfoK4FTdJX6Jdmj/9msGbE6lJpAhyNl3x0Y3q4ljEQA+yQmAAgsoJKkbGjm5500
-	 /NyYw6L9g+o+1U1xlR3eZ5tgFVuFvHL5qh9cHtkxf9tFms/mskLxg2cCYHQZk24/u3
-	 18hPkq91zV6Bg==
+	t=1788527282; bh=knl9K8P7DwwSxVkOS5n9sh72AjW62Q/s0/VL+riJqKA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Ib1VD09ercYh9+PzxyWmNU6sH5I9MzmcTMjj93rCtCSwT+S4McaMNd+ZdUdBHaENl
+	 EnJYPNB6JKCyROXubmzdBbCdXGqBdR1J6Y4lvfE3BO6I+vgLz9qcqSWL+AWfflDoQy
+	 /irDmkczG0+yVSybswEsFfKedHIFjUdkbqbPSGhqZPmbKnoAdveWbJLA32UtifJwdv
+	 g7NIVlOeID+8nAD4mgpVJJDE+qjLpBWfBb3kqar6cSu4dOkWqtJIEf3sOtUUdQzra/
+	 4Sp6yYufwwNJw6fAZIvDAolcwnMs1de5UhQ8BHda1F098Olp0XEuxnpHLjd7l/pzL4
+	 OOGx7FLh9IeFg==
 Received: by extorris.mess.org (Postfix, from userid 1004)
-	id DD9BD41446; Fri, 04 Sep 2026 14:07:56 +0100 (BST)
+	id 36EE541460; Fri, 04 Sep 2026 14:08:02 +0100 (BST)
 X-Spam-Level: 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1788527276; bh=0n+Qd2pw61JB2O3Z+5PQDlNMwMrmFpN2nG4Z6Yttf5E=;
-	h=From:To:Cc:Subject:Date:From;
-	b=pGrOkn+ougvPuwGnWeiS6+nU0V3MFKHZfxdpxojdGZsBuppOh8Muaxnd6Dt5tRCz+
-	 if/ByE07kmj8iuIxWF4p/zjFYGwuXUkNE3brGJXOIAeKgvIuidPWsnhuzYXUeYiTg8
-	 dV1q5cg4m6yl6YLFXRoByYMLDqR+sLaCYfTpjl36oyEBTIgcFxiB7sfYFJG0R2edea
-	 pWQBfoK4FTdJX6Jdmj/9msGbE6lJpAhyNl3x0Y3q4ljEQA+yQmAAgsoJKkbGjm5500
-	 /NyYw6L9g+o+1U1xlR3eZ5tgFVuFvHL5qh9cHtkxf9tFms/mskLxg2cCYHQZk24/u3
-	 18hPkq91zV6Bg==
+	t=1788527279; bh=knl9K8P7DwwSxVkOS5n9sh72AjW62Q/s0/VL+riJqKA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=TwhvKyRz30PHhCXK6u7vFt0FJcAh72RA1xRShtXkJ/f6Pa9Jx4BtXEylt9QcvB36+
+	 PSloOwqYRDjGn6tljbeDCNkptZV5xgsLw8TgTGYNWqyLfGs8kcI/dAxGlEEccTZyIE
+	 bGYQMpwbW2YUMuWFPcEfX/dCIsxRppGmdLgSHp9JnScXPeyCLzxqUK/1CSl9FsnYgT
+	 m/k5eegodEMT3JBs0+YpjkbVepQXTtERCqI4XHwTLnw4Cfqmnz31dj7Ofi7KXNnFyl
+	 Xevqc4ZJF5AKGb0nMnO1In84FYXyXb+q5EkyAoEEocTqf0fmqL9LVx8hUE6vRJ9emh
+	 LqjZUhTsh1+YQ==
 Received: from maru.mess.org (hephaestus.mess.org [82.68.61.198])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by extorris.mess.org (Postfix) with ESMTPSA id 0F7D74018A;
-	Fri, 04 Sep 2026 14:07:56 +0100 (BST)
+	by extorris.mess.org (Postfix) with ESMTPSA id 5B11841453;
+	Fri, 04 Sep 2026 14:07:59 +0100 (BST)
 From: Sean Young <sean@mess.org>
-To: linux-media@vger.kernel.org
-Cc: Rik van Riel <riel@surriel.com>,
+To: linux-media@vger.kernel.org,
 	Sean Young <sean@mess.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Patrice Chotard <patrice.chotard@foss.st.com>,
+	Hans Verkuil <hverkuil+cisco@kernel.org>
+Cc: Rik van Riel <riel@surriel.com>,
+	stable@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH v3 00/17] media: Fix locking issues in rc core
-Date: Fri,  4 Sep 2026 14:07:28 +0100
-Message-ID: <cover.1788526920.git.sean@mess.org>
+Subject: [PATCH v3 05/17] media: rc: Fix race between bpf(BPG_PROG_ATTACH) and device unregister
+Date: Fri,  4 Sep 2026 14:07:33 +0100
+Message-ID: <e981347f8de7e633d98bf2eacbea6cbd655331c8.1788526920.git.sean@mess.org>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <cover.1788526920.git.sean@mess.org>
+References: <cover.1788526920.git.sean@mess.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -60,57 +68,47 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fix issues found by Sashiko and claude, and other cleanups. 
+Mark the device as unregistered before tearing down raw IR/bpf
+state, so that racing bpf(BPF_PROG_{ATTACH,DETACH,QUERY}) calls
+cannot slip in between ir_raw_event_unregister() completing and
+dev->registered being cleared.
 
-Resending because Sashiko failed to check v2 and fix more issues.
+Fixes: dccc0c3ddf8f ("media: rc: fix race between unregister and urb/irq callbacks")
+Signed-off-by: Sean Young <sean@mess.org>
+Cc: stable@vger.kernel.org
+---
+ drivers/media/rc/rc-main.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Changes since v2:
- - Cosmetic changes in:  Add missing locking for keymap
- - Patch 7 to 17 are new issues found
-
-Changes since v1:
- - Fix issue where input device was still leaked
- - Add: Fix race between bpf(BPG_PROG_ATTACH) and device unregister
- - Add: Fix inconsistent locking of keylock
+diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
+index 04204559959f..924b13fff753 100644
+--- a/drivers/media/rc/rc-main.c
++++ b/drivers/media/rc/rc-main.c
+@@ -2050,18 +2050,18 @@ void rc_unregister_device(struct rc_dev *dev)
+ 	if (!dev)
+ 		return;
  
-Sean Young (17):
-  media: rc: Ensure registered is cleared in error path
-  media: rc: Ensure that rc_unregister_device() does not free input
-    device
-  media: rc: Fix ABBA deadlock by making locks more fine grained
-  media: rc: Add missing locking for keymap
-  media: rc: Fix race between bpf(BPG_PROG_ATTACH) and device unregister
-  media: rc: mce_kbd: Fix inconsistent locking of keylock
-  media: ene_ir: Ensure teardown is done in the correct order
-  media: rc: Use binary search for adding or updating a scancode
-  media: rc: imon: Bind both interfaces via usb_driver_claim_interface()
-  media: ir_toy: Remove unused struct field
-  media: nuvoton-cir: Remove unused struct field
-  media: ite-cir: Removed unused struct field
-  media: fintek-cir: Remove unused fields
-  media: mceusb: Remove unused field
-  media: serial_ir: Fix race condition where timer can be re-armed
-  media: rc: After rc_unregister_device() timers can be re-armed
-  media: rc: Validate carrier range in LIRC_SET_REC_CARRIER ioctl
-
- drivers/media/rc/ene_ir.c             |   4 +-
- drivers/media/rc/fintek-cir.c         |  13 --
- drivers/media/rc/fintek-cir.h         |  22 ----
- drivers/media/rc/imon.c               | 166 +++++++++++--------------
- drivers/media/rc/ir-mce_kbd-decoder.c |   5 +-
- drivers/media/rc/ir_toy.c             |   2 -
- drivers/media/rc/ite-cir.c            |   1 -
- drivers/media/rc/ite-cir.h            |   1 -
- drivers/media/rc/lirc_dev.c           |   2 +
- drivers/media/rc/mceusb.c             |   1 -
- drivers/media/rc/nuvoton-cir.h        |   3 -
- drivers/media/rc/rc-ir-raw.c          |  39 +++---
- drivers/media/rc/rc-loopback.c        |   5 -
- drivers/media/rc/rc-main.c            | 172 ++++++++++++++++----------
- drivers/media/rc/serial_ir.c          |  11 +-
- include/media/rc-map.h                |   2 -
- 16 files changed, 219 insertions(+), 230 deletions(-)
-
++	mutex_lock(&dev->lock);
++	dev->registered = false;
++	if (dev->users && dev->close)
++		dev->close(dev);
++	mutex_unlock(&dev->lock);
++
+ 	if (dev->driver_type == RC_DRIVER_IR_RAW)
+ 		ir_raw_event_unregister(dev);
+ 
+ 	timer_delete_sync(&dev->timer_keyup);
+ 	timer_delete_sync(&dev->timer_repeat);
+ 
+-	mutex_lock(&dev->lock);
+-	if (dev->users && dev->close)
+-		dev->close(dev);
+-	dev->registered = false;
+-	mutex_unlock(&dev->lock);
+-
+ 	rc_free_rx_device(dev);
+ 
+ 	/*
 -- 
 2.55.0
 
