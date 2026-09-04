@@ -1,165 +1,162 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE64396572
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 06:09:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B23A421247
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 06:18:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788502192; cv=none; b=mA8rpqi294N15Yjj2/9I6NXjPBKs/pmi5yFxqMa4cZErIVUsaSYH0uetCsK58Q42tQJf7wDY+BYIX1M3arJ4Sv2c5juViGWk9Q378/2GL0DVz5wRfTS1ZSP6cyTfdEeT+OWp9q5ppyMsVpTvIdzbqO1r5GYMcGMQvaCWYPEtUqU=
+	t=1788502715; cv=none; b=jCCHAU8+kWWLW63OrO+22zdaL8aQ/JXbuGaCxlIUERcpGpauI75xGR2nAAq5BWLIpxAVN5YC3/F0jn9jDV2zrGVhAa5B8eHp4hDkX4Woru/PYLGkbxNJqrmwCs49FSwGga7wl80DbFFBZTnZQ+FlvQQQSYBqyV2fIpVrb80Ukps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788502192; c=relaxed/simple;
-	bh=ca933xTIhQbIsdjBwDiqxa/nK5n57cwwFcyqrYsonC0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=gcjMiaOk5xObxcSn6pPgkgKZClTOsQ3veTNaxFWVd4jpDgcurc1ZV63LjVkEGhLdzGW/77giTSDJMLswtgJLG6iUqOSl3rIqTm2zXA3EwTi8VKt4/FLkZMXdw5TT1EmZdZ8T+chvawsqWO15lQptXJGEMwUpbhP59XLhFFCvnF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SJveRd0Y; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788502715; c=relaxed/simple;
+	bh=KStmycvbYqE2ZpA5LwirNRJZATpX6R2J5WRrOLJqOPg=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=sViepwOl0/sBplfdM3MD/xb07cLHRKqYVkw6RKbtoLuPnsj8gbiC9TMbOQ7X+Okpp7ErGRUSqeHBEW+1bWrwTBQbYMWFQAYWv0nTptGdrXf/GKkvCuHHU3byc2IvWgEfxYclelxkwjzzvm0+DmuqQcQ1obCv3ohI4oty2Y0ILjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e5zinVig; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SJveRd0Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CDD11F00A3D;
-	Fri,  4 Sep 2026 06:09:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e5zinVig"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF9751F00A3E;
+	Fri,  4 Sep 2026 06:18:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788502190;
-	bh=fxwv55WQ1qA1JesPT9/RnXReZE3XdGvSrY/dp1n6cHE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=SJveRd0Y4HXjHOaWCovjOuV5/J7FpyLG0oz567LUzcdnkezAN9zUwz7ntZlgan7id
-	 nALQlICQ9+Je5fuiN+OYlqBfkoiMNTlFybQ7LvXYREcvPChIRxld1r+lhAadDUww+S
-	 qyaqA5D6A4tspEby9yBfHuj+Yrs8J2aO2nyGcm46vJH/GywvEhyo+AZ0220N7v3XJh
-	 w2oxStpTCKnBUbRUQ5BzfiXKsznRmhsSsq/VsATz+Y+vYA8U+b8jpgskmQxAbBnSCi
-	 oFjezZEvm+Bnw1qD/JMVFaRMGmMYKYToSotrtB4ZwhubinLaMZHfx3RQXpTpRjfeeC
-	 7lo2+Ad4dxHHQ==
-Content-Type: multipart/mixed; boundary="===============4071189368778720999=="
+	s=k20260515; t=1788502714;
+	bh=o013/nvVGRijhwHp+t2EUlWSgTpkvLkRpXFjUFoiD9o=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=e5zinVigNAhODLrKpd9zIqcTihiIAYtc75petS4uLNAdj1pTbsijZnMJSY7H8oSBv
+	 lp+eS2UaGF7KZhW0Hw0z7sgncnh1nOF7wo3M7j1LN2JWjjX9rvx7Za1T8/sj+F8ZUs
+	 xGD6dtlJ+Tu6KaqRShqVTN9GnOU1MtSWlyyIc1ypRgRSYDesMHTUaTJfO1kzujiRkK
+	 VvnRxr0/PRylG7Q4O4fyvuBg8OAaGhy5kDoQpigd3Ur/AeUnGoR2z6ltq+vT1LqlYo
+	 Dtd9vxQ1ng8rOJMovGPO0rkLfaVa8FMclYQlBTw1MgvxdPfzsOVTUt6wkgDPWyOfXP
+	 ot1bgzF2kikQQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 05/12] bpf: Support by-value struct and
+ __int128 kfunc arguments
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yonghong Song" <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260904051023.3979415-1-yonghong.song@linux.dev>
+References: <20260904050957.3976119-1-yonghong.song@linux.dev>
+ <20260904051023.3979415-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 04 Sep 2026 06:18:33 +0000
+Message-Id: <20260904061833.EF9751F00A3E@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <4a489b60078c712d9d0b449170f77d5fd0e94dcacff05950684940066dc1b13e@mail.kernel.org>
-In-Reply-To: <20260904051043.3981550-1-yonghong.song@linux.dev>
-References: <20260904051043.3981550-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next 09/12] bpf, arm64: Place kfunc arguments per AAPCS64
-From: bot+bpf-ci@kernel.org
-To: yonghong.song@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  4 Sep 2026 06:09:50 +0000 (UTC)
 
---===============4071189368778720999==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [High] Incorrect buffer register resolution for memory bounds check in ch=
+eck_kfunc_args() due to confusion between BTF argument index and register s=
+lot index.
+- [High] bpf_kfunc_stack_access_bytes() incorrectly uses register slot indi=
+ces to index BTF arguments, breaking stack liveness tracking.
+- [High] bpf_get_call_summary() incorrectly uses the number of BTF argument=
+s instead of the number of argument slots for kfuncs, breaking register liv=
+eness tracking.
+--
 
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> index 3aa3ea0bc30b..f6c783d176ed 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
+commit 225a338e077323b335756911c91748fab0c8ec13
+Author: Yonghong Song <yonghong.song@linux.dev>
+
+bpf: Support by-value struct and __int128 kfunc arguments
+
+A kfunc taking a struct or union by value is rejected today, and one
+taking an __int128 is accepted but mis-counted:
+
+  Unrecognized R2 type STRUCT
+
+Give the kfunc argument walk the same slot count a BPF-to-BPF call now
+uses: one argument register per eightbyte, so a 16-byte value takes two.
+The outgoing stack argument count at the call site follows the slots for
+the same reason. Similar to BPF-to-BPF aggregate handling, a kfunc
+aggregate argument only supports tbe composed of scalars.
+
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 17e576c7b7572..030fb37c22ef1 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+[ ... ]
+> @@ -12792,29 +12904,34 @@ static int check_kfunc_args(struct bpf_verifier=
+_env *env, struct bpf_call_arg_me
+[ ... ]
+>  	/* Check that BTF function arguments match actual types that the
+>  	 * verifier sees.
+>  	 */
+> -	for (i =3D 0; i < nargs; i++) {
+> -		struct bpf_reg_state *reg =3D get_func_arg_reg(caller, regs, i);
+> +	for (i =3D 0, slots_used =3D 0; i < nargs; i++, slots_used +=3D nslots)=
+ {
+> +		struct bpf_reg_state *reg =3D get_func_arg_reg(caller, regs, slots_use=
+d);
+>  		const struct btf_type *t, *ref_t, *resolve_ret;
+>  		enum bpf_arg_type arg_type =3D ARG_DONTCARE;
+> -		argno_t argno =3D argno_from_arg(i + 1);
+> +		argno_t argno =3D argno_from_arg(slots_used + 1);
+
+[Severity: High]
+This change separates the BTF argument index (i) from the register slot
+index (slots_used), but does it leave other parts of the loop using i
+incorrectly?
+
+For instance, further down in this loop, case KF_ARG_MEM_SIZE uses i - 1
+instead of slots_used - 1 to find the buffer pointer:
+
+    case KF_ARG_MEM_SIZE:
+    {
+        struct bpf_reg_state *buff_reg =3D get_func_arg_reg(caller, regs, i=
+ - 1);
+        struct bpf_reg_state *size_reg =3D reg;
+
+Could this cause a kfunc memory bounds check to validate the size argument
+against the memory bounds of the wrong pointer register if a preceding
+argument consumed multiple slots?
 
 [ ... ]
+> @@ -14308,11 +14444,11 @@ static int check_kfunc_call(struct bpf_verifier=
+_env *env, struct bpf_insn *insn,
+>  	if (bpf_is_kfunc_pkt_changing(&meta))
+>  		clear_all_pkt_pointers(env);
+> =20
+> -	nargs =3D btf_type_vlen(meta.func_proto);
+> -	if (nargs > MAX_BPF_FUNC_REG_ARGS) {
+> +	proto_slots =3D kfunc_proto_slots(desc_btf, meta.func_proto);
+> +	if (proto_slots > MAX_BPF_FUNC_REG_ARGS) {
 
-> @@ -1256,6 +1256,93 @@ static void emit_stack_arg_store_imm(s32 imm, s16 bpf_off, const u8 tmp, struct
->  	}
->  }
->
-> +/* The kernel ABI hands the first eight eightbytes of arguments to registers. */
-> +static const u8 a64_arg_reg[8] = {
-> +	A64_R(0), A64_R(1), A64_R(2), A64_R(3),
-> +	A64_R(4), A64_R(5), A64_R(6), A64_R(7),
-> +};
-> +
-> +static int kfunc_arg_layout(const struct btf_func_model *fm, u8 *pos, int max)
-> +{
-> +	int i, k, ngrn = 0, nsaa = 0, slot = 0;
-> +
-> +	for (i = 0; i < fm->nr_args; i++) {
-> +		bool align16 = fm->arg_flags[i] & BTF_FMODEL_ALIGN16_ARG;
-> +		int n = (fm->arg_size[i] + 7) / 8;
-> +
-> +		if (slot + n > max)
-> +			return -EINVAL;
-> +		if (align16)
-> +			ngrn = round_up(ngrn, 2);
-> +		if (ngrn + n <= 8) {
-> +			for (k = 0; k < n; k++)
-> +				pos[slot++] = ngrn++;
-> +			continue;
-> +		}
-> +		/* Nothing that follows gets a register either. */
-> +		ngrn = 8;
-> +		if (align16)
-> +			nsaa = round_up(nsaa, 2);
-> +		for (k = 0; k < n; k++)
-> +			pos[slot++] = 8 + nsaa++;
-> +	}
-> +	return slot;
-> +}
-> +
-> +static u16 kfunc_arg_stack_bytes(const struct bpf_prog *prog)
-> +{
-> +	u16 slots = bpf_jit_kfunc_stack_slots(prog, 8, kfunc_arg_layout);
-> +
-> +	return round_up(slots * sizeof(u64), 16);
-> +}
-> +
-> +static void emit_arg_pos_load(u8 reg, u8 pos, struct jit_ctx *ctx)
-> +{
-> +	if (pos < 8)
-> +		emit(A64_MOV(1, reg, a64_arg_reg[pos]), ctx);
-> +	else
-> +		emit(A64_LDR64I(reg, A64_SP, (pos - 8) * sizeof(u64)), ctx);
-> +}
-> +
-> +static void emit_arg_pos_store(u8 pos, u8 reg, struct jit_ctx *ctx)
-> +{
-> +	if (pos < 8)
-> +		emit(A64_MOV(1, a64_arg_reg[pos], reg), ctx);
-> +	else
-> +		emit(A64_STR64I(reg, A64_SP, (pos - 8) * sizeof(u64)), ctx);
-> +}
+[Severity: High]
+This patch introduces multi-slot kfunc arguments, but were all places
+that map register slots to BTF arguments updated?
 
-This isn't a bug, but is the pos < 8 branch in emit_arg_pos_store()
-kept deliberately for symmetry with emit_arg_pos_load() and with the
-x86 helper, or could it be dropped?
+For example, in bpf_kfunc_stack_access_bytes(), the register slot index
+(arg) is still directly used to index the BTF argument array:
 
-Looking at emit_kfunc_args() below, emit_arg_pos_store() is only ever
-called from the pos[i] >= 8 branch:
+	args =3D btf_params(meta.func_proto);
+	nargs =3D btf_type_vlen(meta.func_proto);
+	if (arg >=3D nargs)
+		return 0;
 
-> +static int emit_kfunc_args(const struct bpf_insn *insn, struct jit_ctx *ctx)
-> +{
-> +	const u8 tmp = bpf2a64[TMP_REG_1];
-> +	const struct btf_func_model *fm;
-> +	u8 pos[MAX_BPF_FUNC_ARGS];
-> +	int i, n;
-> +
-> +	fm = bpf_jit_find_kfunc_model(ctx->prog, insn);
-> +	if (!fm)
-> +		return -EINVAL;
-> +
-> +	n = kfunc_arg_layout(fm, pos, ARRAY_SIZE(pos));
-> +	if (n < 0)
-> +		return 0;
-> +
-> +	for (i = n - 1; i >= 0; i--) {
-> +		if (pos[i] == i)
-> +			continue;
-> +		if (WARN_ON_ONCE(pos[i] < i))
-> +			return -EFAULT;
-> +		if (pos[i] < 8) {
-> +			/* into a register, read straight from the slot */
-> +			emit_arg_pos_load(a64_arg_reg[pos[i]], i, ctx);
-> +		} else {
-> +			emit_arg_pos_load(tmp, i, ctx);
-> +			emit_arg_pos_store(pos[i], tmp, ctx);
-> +		}
-> +	}
-> +	return 0;
-> +}
+	t =3D btf_type_skip_modifiers(btf, args[arg].type, NULL);
 
-so pos is always at least 8 and the register store is never emitted.
+Could this result in looking up the wrong parameter or going out of bounds
+when querying stack accesses for kfuncs with multi-slot arguments?
 
-[ ... ]
+[Severity: High]
+And similarly, does bpf_get_call_summary() also need to be updated?
 
+bool bpf_get_call_summary(...) {
+...
+	if (bpf_pseudo_kfunc_call(call)) {
+...
+		cs->num_params =3D btf_type_vlen(meta.func_proto);
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Since liveness tracking uses cs->num_params to determine the number of live
+registers, could using the BTF argument count instead of the number of
+register slots cause the verifier to treat upper registers of multi-slot
+arguments as dead?
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33840714551
---===============4071189368778720999==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260904050957.3976=
+119-1-yonghong.song@linux.dev?part=3D5
