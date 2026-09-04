@@ -1,114 +1,92 @@
-Received: from extorris.mess.org (extorris.mess.org [92.243.27.206])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85EB933372A;
-	Fri,  4 Sep 2026 13:08:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.243.27.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4070379C44
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 13:20:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788527291; cv=none; b=kQIES8kzA0r59TnO7r2cCqzTHndqx3YpJxv7Zo5/OWKenoVY82Jjtd7zHKZBvJUut3vcYO7ZQfb8DoPS+iOhtD0d48V9kDe5aHf8LdlAR2Ga4EZs/xcgpysQC5K0YTPUyBq5Chv+5TmbUgnBa68YGJcCuRYlwVnwEQNmYxFxSh4=
+	t=1788528010; cv=none; b=kNUOwSr+hJrUoM6aRDF6y9JFT35QZ/u6uEHlKyPhVQiPBB7MXMUSFnIySGbA5x3M0UwZJio00CWFR2H+tG4imXYghwRuNNOQOhBvGH9vzSnXKY1zOsXSmh9cmtmeA5clc4+qtTcQGKOOlJNSXMgPbLe6CzcLSalmti49u7UNsf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788527291; c=relaxed/simple;
-	bh=knl9K8P7DwwSxVkOS5n9sh72AjW62Q/s0/VL+riJqKA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uhYL/Pza3TDB5OnuIwe/WhlxQOvIqfzlrrl16OqB1SyBlimtZhJWkNyoS5amlyhrapeXr757WC2n8ox6c8IUohzLe1RcBHTbxzPTxjbbF0M9HLQQPofwfP4RoG2DG0NEz3Hu8lZUPdWgWRR3GLmQ63z+GRQkLTCBAbzRZo7aa1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org; spf=pass smtp.mailfrom=mess.org; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=Ib1VD09e; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=TwhvKyRz; arc=none smtp.client-ip=92.243.27.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mess.org
+	s=arc-20240116; t=1788528010; c=relaxed/simple;
+	bh=/2fUvIuu/nTZnBkb3VRz17/FqoO211tdHDuAV1Ba960=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Lw1XWTRM56ny2xgRAliS+wztMkofO3jh06G/R61UPxwIu9CyCYWzjTKEYRtQ0M+x3Q1NnyD+NngSWpS12bs5FPkqlEgv3c0+bilaQQhfAsaEJHFKg/wpw3DmbtQx6pmICtO3M3/l/saC636JetJOj2F8adx+xHUPpmvtuyv/vdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=EqpCauRR; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="Ib1VD09e";
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="TwhvKyRz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1788527282; bh=knl9K8P7DwwSxVkOS5n9sh72AjW62Q/s0/VL+riJqKA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Ib1VD09ercYh9+PzxyWmNU6sH5I9MzmcTMjj93rCtCSwT+S4McaMNd+ZdUdBHaENl
-	 EnJYPNB6JKCyROXubmzdBbCdXGqBdR1J6Y4lvfE3BO6I+vgLz9qcqSWL+AWfflDoQy
-	 /irDmkczG0+yVSybswEsFfKedHIFjUdkbqbPSGhqZPmbKnoAdveWbJLA32UtifJwdv
-	 g7NIVlOeID+8nAD4mgpVJJDE+qjLpBWfBb3kqar6cSu4dOkWqtJIEf3sOtUUdQzra/
-	 4Sp6yYufwwNJw6fAZIvDAolcwnMs1de5UhQ8BHda1F098Olp0XEuxnpHLjd7l/pzL4
-	 OOGx7FLh9IeFg==
-Received: by extorris.mess.org (Postfix, from userid 1004)
-	id 36EE541460; Fri, 04 Sep 2026 14:08:02 +0100 (BST)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1788527279; bh=knl9K8P7DwwSxVkOS5n9sh72AjW62Q/s0/VL+riJqKA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TwhvKyRz30PHhCXK6u7vFt0FJcAh72RA1xRShtXkJ/f6Pa9Jx4BtXEylt9QcvB36+
-	 PSloOwqYRDjGn6tljbeDCNkptZV5xgsLw8TgTGYNWqyLfGs8kcI/dAxGlEEccTZyIE
-	 bGYQMpwbW2YUMuWFPcEfX/dCIsxRppGmdLgSHp9JnScXPeyCLzxqUK/1CSl9FsnYgT
-	 m/k5eegodEMT3JBs0+YpjkbVepQXTtERCqI4XHwTLnw4Cfqmnz31dj7Ofi7KXNnFyl
-	 Xevqc4ZJF5AKGb0nMnO1In84FYXyXb+q5EkyAoEEocTqf0fmqL9LVx8hUE6vRJ9emh
-	 LqjZUhTsh1+YQ==
-Received: from maru.mess.org (hephaestus.mess.org [82.68.61.198])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by extorris.mess.org (Postfix) with ESMTPSA id 5B11841453;
-	Fri, 04 Sep 2026 14:07:59 +0100 (BST)
-From: Sean Young <sean@mess.org>
-To: linux-media@vger.kernel.org,
-	Sean Young <sean@mess.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Hans Verkuil <hverkuil+cisco@kernel.org>
-Cc: Rik van Riel <riel@surriel.com>,
-	stable@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH v3 05/17] media: rc: Fix race between bpf(BPG_PROG_ATTACH) and device unregister
-Date: Fri,  4 Sep 2026 14:07:33 +0100
-Message-ID: <e981347f8de7e633d98bf2eacbea6cbd655331c8.1788526920.git.sean@mess.org>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <cover.1788526920.git.sean@mess.org>
-References: <cover.1788526920.git.sean@mess.org>
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="EqpCauRR"
+Received: from mail01.layka.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id 9791488926;
+	Fri, 04 Sep 2026 15:19:56 +0200 (CEST)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uu-c0JmfhXX0; Fri,  4 Sep 2026 15:19:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1788527996; bh=/2fUvIuu/nTZnBkb3VRz17/FqoO211tdHDuAV1Ba960=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=EqpCauRRX4RoGnJaPswX/SVcW0mczm74kkRDq6tHkAJddJLobTDPiHGzvRgi+b0mU
+	 2j0Ovpermn439ZHdf9XddDF6LnArt+a4bFvIxULIWs1MOXrjEU9apVlZIKk3VrIT9t
+	 lHWA8hqiamo9Mngg7u9RPTiqGrCSJIPvSNd3eH6FacIpbvn8/eIcYmzbKa7YrDoiSv
+	 RTyuinMAxl0NfcWUfKuyn8F3DNpjFZSINJe9JSoheBsjhUL4PWXs9nKD+9VaOsemsL
+	 RWrdOwN9xv8KbBRlptQHyve8JIgJRfqzcCb1cYrVmkduTTRm4UL0s4pVUuzIvRWMNI
+	 ee0bnpWddezIg==
+Message-ID: <322400e7-c708-4da4-a317-cbaaea62848d@disroot.org>
+Date: Fri, 4 Sep 2026 14:19:50 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] bpf: Fix u32 overflow issue in map batch operations
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, Brian Vazquez <brianvv@google.com>
+References: <20260902204439.287888-1-maghasi@disroot.org>
+ <20260903082734.623904-1-maghasi@disroot.org>
+ <CAADnVQLX5bjLTPm8Ch0wNuojHrKw6R5iJDBRsMJwrWMSupVwew@mail.gmail.com>
+Content-Language: en-US
+From: Masoud Aghasi <maghasi@disroot.org>
+In-Reply-To: <CAADnVQLX5bjLTPm8Ch0wNuojHrKw6R5iJDBRsMJwrWMSupVwew@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Mark the device as unregistered before tearing down raw IR/bpf
-state, so that racing bpf(BPF_PROG_{ATTACH,DETACH,QUERY}) calls
-cannot slip in between ir_raw_event_unregister() completing and
-dev->registered being cleared.
+On 04/09/2026 05:45, Alexei Starovoitov wrote:
+> On Thu, Sep 3, 2026 at 1:28 AM Masoud Aghasi <maghasi@disroot.org> wrote:
+>>
+>> Several map batch operation implementations such as
+>> generic_map_lookup_batch() use calculations in the form of
+>> "values + cp * map->value_size" to compute the desired userspace memory
+>> address for reading or writing. This can overflow the u32 type
+>> (the result of "cp * map->value_size") when the map size exceeds 4GB.
+>>
+>> generic_map_lookup_batch() may corrupt values for some keys in
+>> userspace memory, and in some cases it mismatches values for some keys
+>> while still reporting success.
+> 
+> without selftest I have to assume that this is AI hallucination.
+> 
+> pw-bot: cr
 
-Fixes: dccc0c3ddf8f ("media: rc: fix race between unregister and urb/irq callbacks")
-Signed-off-by: Sean Young <sean@mess.org>
-Cc: stable@vger.kernel.org
----
- drivers/media/rc/rc-main.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Thanks for the review.
 
-diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
-index 04204559959f..924b13fff753 100644
---- a/drivers/media/rc/rc-main.c
-+++ b/drivers/media/rc/rc-main.c
-@@ -2050,18 +2050,18 @@ void rc_unregister_device(struct rc_dev *dev)
- 	if (!dev)
- 		return;
- 
-+	mutex_lock(&dev->lock);
-+	dev->registered = false;
-+	if (dev->users && dev->close)
-+		dev->close(dev);
-+	mutex_unlock(&dev->lock);
-+
- 	if (dev->driver_type == RC_DRIVER_IR_RAW)
- 		ir_raw_event_unregister(dev);
- 
- 	timer_delete_sync(&dev->timer_keyup);
- 	timer_delete_sync(&dev->timer_repeat);
- 
--	mutex_lock(&dev->lock);
--	if (dev->users && dev->close)
--		dev->close(dev);
--	dev->registered = false;
--	mutex_unlock(&dev->lock);
--
- 	rc_free_rx_device(dev);
- 
- 	/*
--- 
-2.55.0
+I didn't found this bug using AI. I posted the sample program that
+reproduces the issue in v1. The reason I didn't include a selftest is
+that reproducing the issue requires 8GB+ memory allocation, which I
+don't think is appropriate for the regular BPF selftest suite.
 
+Personally, I'm not sure an opt-in test would provide much value as a
+regression test, since it would not be exercised during the regular
+selftest runs. However, I'm happy to add an opt-in EXTENDED selftest in
+v4 (using TEST_GEN_PROGS_EXTENDED in Makefile), if you think retaining
+an explicit reproducer in the kernel selftests is worthwhile.
