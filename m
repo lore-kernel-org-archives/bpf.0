@@ -1,21 +1,21 @@
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0DEA412C04
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 05:11:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFC1E3F9F2F
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 05:11:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788498662; cv=none; b=qkCyf8gI8Ynz2Tr6PSSm2udoOgm1OOyLp/300ufFDQn3NBUUtn6lJN9MMxBAezilB1qUEZoV5XMG4L1vE4YKcoD0Y6QtXj3yXqNoGGShxKb2bN4YxPSQbRwcDWbcopQdN8UPk9+jCnBsL/h8qzOQoBxj0Is2/aVx5R5p6EYZn1s=
+	t=1788498667; cv=none; b=nz+vwngMb+fu1DLOGZOo0QJnk9rrsHzkgpVquPGZuTcaSRgSbortiM5pB/U8Itg10Hco7PTgboitDmPkEEgPu4qEPRnmUoT8LqWQ6VvGC/Tkre4gpEhF/g791wTHbF/ktiyI9mi6M1Zc1XKTDNrvIAuzn/LFeyw9lcRiQQy3Eq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788498662; c=relaxed/simple;
-	bh=HlRLrsim+uu2IJcWCDBRYpKbojcADfNkVa757clJsMU=;
+	s=arc-20240116; t=1788498667; c=relaxed/simple;
+	bh=1Q0EcthOAram9Mjgjv+8A85Z/4DljIYTjAYOG2DhyfY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tLu0oYXECndcB1OD65kTWKLefxzfE3fQTiLkl2oW+KbCJ1VkmbD144SsENm8NyvIUUMWTMrpGIqutIx7arFGNlCTNLilLjcJapkjjwAJadTlFZgElaLnNx3UVjc+ZQSd2UKpXi404fgImmT30XanWr8UGaL9ZRTVodS2kVp5NNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
+	 MIME-Version; b=CefZHD534FTjw84WZF/VXR43mHfgVVCt/5A3ZHE0ndKD3p4tlB6lREp9Dpl+zta8shtmGAttyJLKjzKNkh7lVwRAv754Z36NE1CRd38pVCtcKBuION2c6FA+IdgQFMM6/mWFlq+c11aKY9bFgL2+LhQoHmLm6cxQXcbg4Fq6MCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id CB6AE288148814; Thu,  3 Sep 2026 22:10:49 -0700 (PDT)
+	id E9DD728814FBB3; Thu,  3 Sep 2026 22:10:54 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next 10/12] selftests/bpf: Add C tests for by-value arguments up to 16 bytes
-Date: Thu,  3 Sep 2026 22:10:49 -0700
-Message-ID: <20260904051049.3982644-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 11/12] selftests/bpf: Add inline-asm tests for by-value arguments
+Date: Thu,  3 Sep 2026 22:10:54 -0700
+Message-ID: <20260904051054.3983495-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260904050957.3976119-1-yonghong.song@linux.dev>
 References: <20260904050957.3976119-1-yonghong.song@linux.dev>
@@ -37,207 +37,212 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Extend the by-value argument test with the aggregate cases, written in C
-so that they depend on the compiler lowering the argument into a pair of
-argument registers rather than on a hand-written register layout.
+The tests cover a struct passed in a register pair, a pointer in one half
+of it refused at the call site, a struct too large to pass by value, and
+three placements a global function cannot have: a struct split between th=
+e
+last argument register and the stack, one wholly past the registers, and
+an __int128 whose two slots push the last parameter out.
 
-The programs cover a struct and a union that fill two registers, a
-smaller struct that fills one, and two struct arguments in a row, each
-with an int argument on either side so that a wrong slot count shows up
-as a wrong value in the parameters around it, alongside the __int128
-already there. A global function taking a struct with a pointer member
-is rejected: the callee would receive the pointer as an opaque scalar.
+GCC passes an aggregate by invisible reference, so a callee it compiles
+expects a pointer where BTF says the halves of the struct are, and those
+tests are left to clang.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../selftests/bpf/progs/verifier_int128_arg.c | 164 ++++++++++++++++++
- 1 file changed, 164 insertions(+)
+ .../selftests/bpf/prog_tests/aggregate_arg.c  |   9 +
+ .../selftests/bpf/progs/aggregate_arg_func.c  | 155 ++++++++++++++++++
+ 2 files changed, 164 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/aggregate_arg.=
+c
+ create mode 100644 tools/testing/selftests/bpf/progs/aggregate_arg_func.=
+c
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_int128_arg.c b/to=
-ols/testing/selftests/bpf/progs/verifier_int128_arg.c
-index 044fc4a80055..b10fb4aeb405 100644
---- a/tools/testing/selftests/bpf/progs/verifier_int128_arg.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_int128_arg.c
-@@ -7,6 +7,131 @@
- #define MIX_A	0xdeadbeefcafef00dULL
- #define MIX_B	0x0123456789abcdefULL
-=20
+diff --git a/tools/testing/selftests/bpf/prog_tests/aggregate_arg.c b/too=
+ls/testing/selftests/bpf/prog_tests/aggregate_arg.c
+new file mode 100644
+index 000000000000..b230f3bd3b2a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/aggregate_arg.c
+@@ -0,0 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <test_progs.h>
++#include "aggregate_arg_func.skel.h"
++
++void test_aggregate_arg(void)
++{
++	RUN_TESTS(aggregate_arg_func);
++}
+diff --git a/tools/testing/selftests/bpf/progs/aggregate_arg_func.c b/too=
+ls/testing/selftests/bpf/progs/aggregate_arg_func.c
+new file mode 100644
+index 000000000000..61dd5f86c3a4
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/aggregate_arg_func.c
+@@ -0,0 +1,155 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++typedef unsigned __int128 u128;
++
 +struct pair {
 +	__u64 lo;
 +	__u64 hi;
 +};
 +
-+struct small {
-+	__u32 a;
-+	__u32 b;
++struct too_big {
++	__u64 a;
++	__u64 b;
++	__u64 c;
 +};
-+
-+union upair {
-+	__u64 halves[2];
-+	struct {
-+		__u64 lo;
-+		__u64 hi;
-+	} parts;
-+};
-+
-+struct with_ptr {
-+	void *p;
-+	__u64 x;
-+};
-+
-+static __noinline __u64 take_pair(int a, struct pair p, int c)
-+{
-+	return (__u64)a + p.lo + p.hi + c;
-+}
-+
-+SEC("tc")
-+__success __retval(0)
-+int aggregate_arg_static_struct_c_test(struct __sk_buff *skb)
-+{
-+	__u64 a =3D skb->len ^ MIX_A;
-+	__u64 b =3D skb->len ^ MIX_B;
-+	struct pair p =3D { .lo =3D a, .hi =3D b };
-+
-+	if (take_pair(1, p, 2) !=3D a + b + 3)
-+		return 1;
-+
-+	return 0;
-+}
 +
 +#if defined(__clang__)
 +
-+__noinline __u64 take_pair_global(int a, struct pair p, int c)
++__noinline __u64 global_arg_pair(int a, struct pair p, int c)
 +{
 +	return (__u64)a + p.lo + p.hi + c;
 +}
 +
 +SEC("tc")
-+__success __retval(0)
-+int aggregate_arg_global_struct_c_test(struct __sk_buff *skb)
++__success __retval(0x33)
++__naked int aggregate_arg_pair_asm(void)
 +{
-+	__u64 a =3D skb->len ^ MIX_A;
-+	__u64 b =3D skb->len ^ MIX_B;
-+	struct pair p =3D { .lo =3D a, .hi =3D b };
-+
-+	if (take_pair_global(1, p, 2) !=3D a + b + 3)
-+		return 1;
-+
-+	return 0;
-+}
-+
-+__noinline __u64 take_two_pairs_global(struct pair p, struct pair q)
-+{
-+	return p.lo + p.hi + q.lo + q.hi;
++	asm volatile (
++	"r1 =3D 1;"
++	"r2 =3D 0x10;"	/* p.lo */
++	"r3 =3D 0x20;"	/* p.hi */
++	"r4 =3D 2;"
++	"call %[global_arg_pair];"
++	"exit;"
++	:
++	: __imm(global_arg_pair)
++	: __clobber_all);
 +}
 +
 +SEC("tc")
-+__success __retval(0)
-+int aggregate_arg_two_structs_c_test(struct __sk_buff *skb)
++__failure __msg("R2 is not a scalar")
++__naked int aggregate_arg_pair_ptr_fail(void)
 +{
-+	__u64 a =3D skb->len ^ MIX_A;
-+	__u64 b =3D skb->len ^ MIX_B;
-+	struct pair p =3D { .lo =3D a, .hi =3D b };
-+	struct pair q =3D { .lo =3D b, .hi =3D a };
-+
-+	if (take_two_pairs_global(p, q) !=3D 2 * (a + b))
-+		return 1;
-+
-+	return 0;
-+}
-+
-+__noinline __u64 take_small_global(int a, struct small s, int c)
-+{
-+	return (__u64)a + s.a + s.b + c;
-+}
-+
-+SEC("tc")
-+__success __retval(0)
-+int aggregate_arg_small_struct_c_test(struct __sk_buff *skb)
-+{
-+	__u32 a =3D skb->len ^ (__u32)MIX_A;
-+	__u32 b =3D skb->len ^ (__u32)MIX_B;
-+	struct small s =3D { .a =3D a, .b =3D b };
-+
-+	if (take_small_global(1, s, 2) !=3D (__u64)a + b + 3)
-+		return 1;
-+
-+	return 0;
-+}
-+
-+__noinline __u64 take_upair_global(int a, union upair u, int c)
-+{
-+	return (__u64)a + u.parts.lo + u.parts.hi + c;
-+}
-+
-+SEC("tc")
-+__success __retval(0)
-+int aggregate_arg_union_c_test(struct __sk_buff *skb)
-+{
-+	__u64 a =3D skb->len ^ MIX_A;
-+	__u64 b =3D skb->len ^ MIX_B;
-+	union upair u;
-+
-+	u.halves[0] =3D a;
-+	u.halves[1] =3D b;
-+	if (take_upair_global(1, u, 2) !=3D a + b + 3)
-+		return 1;
-+
-+	return 0;
++	asm volatile (
++	"r1 =3D 1;"
++	"r2 =3D r10;"	/* a stack pointer where p.lo belongs */
++	"r3 =3D 0x20;"
++	"r4 =3D 2;"
++	"call %[global_arg_pair];"
++	"exit;"
++	:
++	: __imm(global_arg_pair)
++	: __clobber_all);
 +}
 +
 +#endif
 +
- typedef unsigned __int128 u128;
-=20
- __noinline __u64 take_i128_global(int a, u128 v, int c)
-@@ -28,4 +153,43 @@ int aggregate_arg_int128_c_test(struct __sk_buff *skb=
-)
- 	return 0;
- }
-=20
++__noinline __u64 global_arg_too_big(struct too_big s)
++{
++	return s.a + s.b + s.c;
++}
++
++SEC("tc")
++__failure __msg("in global_arg_too_big() has size 24, only 1 to 16 bytes=
+ can be passed by value")
++__naked int aggregate_arg_too_big_fail(void)
++{
++	asm volatile (
++	"r1 =3D 0;"
++	"r2 =3D 0;"
++	"r3 =3D 0;"
++	"call %[global_arg_too_big];"
++	"r0 =3D 0;"
++	"exit;"
++	:
++	: __imm(global_arg_too_big)
++	: __clobber_all);
++}
++
 +#if defined(__BPF_FEATURE_STACK_ARGUMENT)
 +
-+static __noinline __u64 take_spilled_pair(int a, int b, int c, int d, st=
-ruct pair p)
++__noinline __u64 global_arg_split(int a, int b, int c, int d, struct pai=
+r p)
 +{
 +	return (__u64)a + b + c + d + p.lo + p.hi;
 +}
 +
 +SEC("tc")
-+__arch_x86_64 __arch_arm64
-+__success __retval(0)
-+int aggregate_arg_spilled_struct_c_test(struct __sk_buff *skb)
++__failure __msg("global function global_arg_split() needs 6 > 5 argument=
+ slots")
++__naked int aggregate_arg_split_fail(void)
 +{
-+	__u64 a =3D skb->len ^ MIX_A;
-+	__u64 b =3D skb->len ^ MIX_B;
-+	struct pair p =3D { .lo =3D a, .hi =3D b };
-+	int n =3D skb->len;
++	asm volatile (
++	"r1 =3D 0;"
++	"r2 =3D 0;"
++	"r3 =3D 0;"
++	"r4 =3D 0;"
++	"r5 =3D 0;"
++	"call %[global_arg_split];"
++	"r0 =3D 0;"
++	"exit;"
++	:
++	: __imm(global_arg_split)
++	: __clobber_all);
++}
 +
-+	if (take_spilled_pair(n, n + 1, n + 2, n + 3, p) !=3D a + b + 4 * n + 6=
-)
-+		return 1;
++__noinline __u64 global_arg_past_regs(struct pair p, struct pair q, int =
+a, struct pair r)
++{
++	return p.lo + p.hi + q.lo + q.hi + a + r.lo + r.hi;
++}
 +
-+	return 0;
++SEC("tc")
++__failure __msg("global function global_arg_past_regs() needs 7 > 5 argu=
+ment slots")
++__naked int aggregate_arg_past_regs_fail(void)
++{
++	asm volatile (
++	"r1 =3D 0;"
++	"r2 =3D 0;"
++	"r3 =3D 0;"
++	"r4 =3D 0;"
++	"r5 =3D 0;"
++	"call %[global_arg_past_regs];"
++	"r0 =3D 0;"
++	"exit;"
++	:
++	: __imm(global_arg_past_regs)
++	: __clobber_all);
++}
++
++__noinline __u64 global_arg_i128_slots(u128 v, int a, int b, int c, int =
+d)
++{
++	return (__u64)v + a + b + c + d;
++}
++
++SEC("tc")
++__failure __msg("global function global_arg_i128_slots() needs 6 > 5 arg=
+ument slots")
++__naked int aggregate_arg_i128_slots_fail(void)
++{
++	asm volatile (
++	"r1 =3D 0;"
++	"r2 =3D 0;"
++	"r3 =3D 0;"
++	"r4 =3D 0;"
++	"r5 =3D 0;"
++	"call %[global_arg_i128_slots];"
++	"r0 =3D 0;"
++	"exit;"
++	:
++	: __imm(global_arg_i128_slots)
++	: __clobber_all);
 +}
 +
 +#endif
 +
-+__noinline __u64 take_with_ptr_global(struct with_ptr s)
-+{
-+	return s.x;
-+}
-+
-+SEC("tc")
-+__failure __msg("type STRUCT in take_with_ptr_global() is not composed o=
-f scalars")
-+int aggregate_arg_ptr_member_fail(struct __sk_buff *skb)
-+{
-+	struct with_ptr s =3D { .p =3D skb, .x =3D skb->len };
-+
-+	return take_with_ptr_global(s);
-+}
-+
- char _license[] SEC("license") =3D "GPL";
++char _license[] SEC("license") =3D "GPL";
 --=20
 2.53.0-Meta
 
