@@ -1,163 +1,188 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-40.mta1.migadu.com [95.215.58.40])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE0330C60D;
-	Thu,  3 Sep 2026 23:34:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B672361943
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 01:18:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.40
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788478481; cv=none; b=EH5Jg2xKvJHTDwlX9s4YjsJt1TPTP5Cfy7A8yuketyPBuaM4HoRnx/i6Q/kTIvpWxr5W95rHuzjtnWsRaIVi3sy2imV/Ogx0QmWzsZou7LC9Q1poprqv9d2cGs4LTYDUuxTdoz4y/+3lQEPa/eB2XmC3Qszi21W7Yke53KwE+uc=
+	t=1788484734; cv=none; b=ePpw4i5pz7vGKmlEOiDME7cTYnK0/SfLvSnWKUW026OjU4XvJfaQjS7rLDm03FV24P3MydT7CExVgBsv7WLj/+Gjg2YrGcSI62ANP1nBe8/bdQunkDrqF7nfkGST2J1V68XpDslV5bEwdAR+bMiPH2P0ggWo7Sx6xYheAixn8Nk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788478481; c=relaxed/simple;
-	bh=SMnsW9ylwnqAMzMYtzUgL1bfGkjXRrYvqC+PAnypDKI=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nQsYijitSbhEuq/fPf2rwgTN5/tjoyEQiUeq0a0d72kC3/mWEVZsYP4qzvIqw77U7M59dmaOhY7O2fw726dzZ+v8x4A8fHmxroPAnDnFxFbN0nTgr9TuNyc6MLZEYw4QRbCDZX3Q2+MEr0N2e5DTeqH9dOG/R29LPRSDyttgM58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eahy5PNJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788484734; c=relaxed/simple;
+	bh=pX4mprltnCki1qpdruO6HrE63FIOiVDHWjIkL4K12d4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=IbDPhHyrdHEf8LoCYd+kQfyXQwycqRKEJb/GGHJtZaLIdH5mxLtrCwtkQmHpr8sl5Wa74Zz3HEX+BJiYEVIKhYEHMt0LgWDRGwubxw6cLu6OgSfRqf4nA3rUGkFwhi1VjGIFP1XbsP9padGSFxfYUQY08Rd/Fb4vv4b4BGGodDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Oj5hoRhu; arc=none smtp.client-ip=95.215.58.40
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eahy5PNJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB05B1F000E9;
-	Thu,  3 Sep 2026 23:34:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788478479;
-	bh=hPiSND+W4PGmdYrqL6Txc241RmbgrgfvHcMkz0qY7o0=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=eahy5PNJo/LTskZ+hhc05aNoxuIlJLx8U89yMCi18UewmN4T2epdt9iGOOqmhHgLo
-	 44XI1HkAcBNai7k66ddWyV3czqTQdRS6uszqwOJDEVS0zZ9DX1RXp+X4lnoz6yoOrl
-	 jkuh9vuxkmEbl+6QXV4SunEjbR80bmjFWpQQxAAJdohXe33Z4VLl0siYUNs/AbQNty
-	 rPl2jyWAQLRQ40GIEomC7/BO7BKV79QqJ/wZQOiOgKpwPDkNq2ncfESDJ/ikqHcWC6
-	 QGtlYNwP4shl2LVyxS6UG8XcLQn60LZK84m8VmkIJHwibaUeFaJWOfgmzVT7dtOw8u
-	 qJRAq7Vss4sow==
-Subject: Re: [PATCH net v2] xsk: set network header on skb at generic transmit
-From: netdev-bot+sashiko@kernel.org
-To: kerneljasonxing@gmail.com
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, bjorn@kernel.org, magnus.karlsson@intel.com,
- maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, sdf@fomichev.me,
- ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, aleksander.lobakin@intel.com, bpf@vger.kernel.org,
- netdev@vger.kernel.org, syzbot+f16c1b285c9f63994eec@syzkaller.appspotmail.com
-Date: Thu, 03 Sep 2026 23:34:38 +0000
-Message-ID: <178847847848.4131868.16090144540850507396@kernel.org>
-In-Reply-To: <20260901083325.3445-1-kerneljasonxing@gmail.com>
-References: <20260901083325.3445-1-kerneljasonxing@gmail.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Oj5hoRhu"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=pX4mprltnCki1qpdruO6HrE63FIOiVDHWjIkL4K12d4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788484728; v=1; x=1789089528;
+ b=Oj5hoRhudceXSudZeFbClMbScy6qy/7ECIkZqpb0BHyOJIdv/vcpuzS//quGGiGBpxubsdIm
+ h0T2E4otEyvdlC7VMqr9KbrQR6jsKrGAgbBtNFaMVDWrfDXENWVyc/4zscjpDR8opjl6vudnPXy
+ T+oFZg5+ON8054eZ0yimUG/U=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 36c46a2b2cd0163d;
+	Fri, 04 Sep 2026 01:18:48 +0000
+X-Mizu-Trace-ID: 36c46a2b2cd0163d
+X-Migadu-Flow: FLOW_OUT
+From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+Subject: [PATCH RFC 0/8] arm64: ftrace: support CALL_OPS on kernels built
+ with kCFI
+Date: Fri, 04 Sep 2026 01:18:32 +0000
+Message-Id: <20260904-b4-arm64-callops-kcfi-v1-0-ce6687739b0c@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGgcmmoC/2WNwQrCMBBEf6Xs2aVpCQG9Cn6A1+IhSTd2NaYhU
+ RFK/92kHj3OY+bNApkSU4ZDs0CiN2eeQwndrgE76XAl5LFk6EWvxF5INBJ1eiiJVns/x4x36xi
+ lEJ0iGqUzAso2JnL82bwDnE9HuPxgfpkb2Wc11prRmdAkHexUkY+tke0G/z9gXb90wKFvrgAAA
+ A==
+X-Change-ID: 20260904-b4-arm64-callops-kcfi-40016eed4fb0
+To: Steven Rostedt <rostedt@goodmis.org>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, 
+ Ard Biesheuvel <ardb@kernel.org>, 
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
+ Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, 
+ Daniel Almeida <daniel.almeida@collabora.com>, 
+ Tamir Duberstein <tamird@kernel.org>, 
+ Alexandre Courbot <acourbot@nvidia.com>, 
+ =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+ Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>
+Cc: Leon Hwang <leon.hwang@linux.dev>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Josh Poimboeuf <jpoimboe@kernel.org>, live-patching@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
+ linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+ Ben Cressey <ben@cressey.dev>, 
+ "Florent Revest (Anthropic)" <florent.revest@linux.dev>, 
+ "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+X-Mailer: b4 0.15.2
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider:
+CALL_OPS and kCFI have been mutually exclusive on arm64 since commit
+baaf553d3bc3 ("arm64: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS").
+kCFI checks the type hash at a fixed offset before the entry point, so
+every function needs the same number of prefix NOPs. Before clang 21 the
+compiler could not emit prefix NOPs without also adding the function to
+ftrace's table. Since commit 9315e22b0c0a ("arm64: ftrace: allow
+DIRECT_CALLS without CALL_OPS") a kCFI kernel can attach BPF
+trampolines. A trampoline out of BL range is reached through
+ftrace_caller. That path costs ~10 ns more per call than on a CALL_OPS
+kernel, plus ~4 ns for every extra ftrace_ops registered. Clang 21 takes
+a section name as a third argument of -fpatchable-function-entry [1].
+This series uses it to give every function three prefix NOPs while
+keeping untraced functions out of ftrace's table, and enables CALL_OPS
+under kCFI. The per-call cost drops by ~10 ns and stops growing with the
+number of ftrace_ops registered.
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+Patch 1 lets core ftrace skip a patch site the architecture rejects,
+which patch 4 relies on. Patch 2 takes the sorttable entry offset from
+Kconfig. Patch 3 lets notrace keep the prefix NOPs. Patch 4 makes the
+arm64 prefix layout configurable and refuses patch sites that do not
+fit. Patch 5 applies the prefix count where the type hash is emitted or
+read by hand. Patch 6 adds the compiler probe and enables CALL_OPS
+under CFI. Patch 7 uses five NOPs on ThinLTO kernels with BTI. Patch 8
+gives Rust functions the same prefix NOPs.
 
-- [Medium] net/xdp/xsk.c: the new skb_reset_network_header(skb) in
-  xsk_skb_init_misc() (net/xdp/xsk.c:950) anchors the *network* header…
+The cost is text size, 4.8% of .text on a defconfig-based build with
+CFI and 7.4% with ThinLTO and BTI. CALL_OPS under CFI needs clang 21 or
+later, and Rust 1.98 or later with RUST=y. Commit d3359af21fc9e ("arm64:
+bti: Disable in-kernel BTI with recent versions of Clang") turns BTI
+off on clang 21 or later, so a mainline build has one or the other
+today. A module must be built with the same prefix count as its kernel,
+since vermagic does not carry the count.
 
---
+Numbers below are from a KVM guest on a Graviton4 host, v7.3-rc1 with
+and without this series, clang 21.1.4. Cost of a fentry program on a
+syscall, per call, the call with the program attached minus the call
+without it:
 
-xsk: set network header on skb at generic transmit
+  Kernel            | Trampoline   | Extra      || Per-call cost (ns)
+                    | vs. BL range | ftrace_ops || Median | Min  | Max
+  ==================+==============+============++========+======+======
+  kCFI, base        | out of range |          0 ||   32.9 | 32.6 | 33.4
+  kCFI, base        | out of range |         16 ||   92.6 | 92.4 | 96.3
+  kCFI, base        | in range     |          0 ||   21.3 | 21.0 | 21.8
+  ------------------+--------------+------------++--------+------+------
+  kCFI, this series | out of range |          0 ||   22.7 | 22.0 | 22.9
+  kCFI, this series | out of range |         16 ||   22.1 | 21.9 | 22.4
+  kCFI, this series | in range     |          0 ||   22.4 | 22.1 | 22.6
+  ------------------+--------------+------------++--------+------+------
 
-The XSK generic transmit path never reset the network header, so after
-skb_reserve(hr) the stored offset was left behind skb->data and
-skb_network_offset() returned -hr, which tripped the
-DEBUG_NET_WARN_ON_ONCE(len > INT_MAX) in pskb_may_pull_reason() when the
-skb reached a tunnel device. This adds skb_reset_network_header() in
-xsk_skb_init_misc() so the offset is 0.
+Mark Rutland discussed the uniform prefix with a section for untraced
+entries in 2022 [2]. His review of the DIRECT_CALLS series raised the
+cost of the ftrace_caller path [3]. Josh Poimboeuf's objtool support
+for arm64 livepatch [4] detects the prefix by the CALL_OPS layout and
+treats kCFI and CALL_OPS as never meeting, which this series changes.
 
-Closes: https://syzkaller.appspot.com/bug?extid=f16c1b285c9f63994eec
-Link: https://lore.kernel.org/all/20260826012052.51028-1-kerneljasonxing@gmail.com/
+This is an RFC because it moves the kCFI type hash relative to the entry
+point on arm64 and every function carries the prefix NOPs. We would like
+the arm64 and CFI maintainers' view on that layout.
 
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 33475b180ea6f..2077bb6299ca9 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -947,6 +947,8 @@ static int xsk_skb_init_misc(struct sk_buff *skb, struct xdp_sock *xs,
->  {
->  	int err;
->  
-> +	skb_reset_network_header(skb);
-> +
+[1] https://github.com/llvm/llvm-project/pull/131230
+[2] https://lore.kernel.org/all/Y1LBGZPMfCZ8A1bl@FVFF77S0Q05N/
+[3] https://lore.kernel.org/all/amjnf5gz0xP5PTSB@J2N7QTR9R3/
+[4] https://lore.kernel.org/all/cover.1786230311.git.jpoimboe@kernel.org/
 
-[Severity: Medium]
-The negative offset does look closed by this: xsk_skb_init_misc() runs
-after skb_reserve(hr) in xsk_build_skb() and xsk_build_skb_zerocopy(), so
-skb_network_offset() becomes 0. Two parts of the reasoning look off
-though.
+---
+Jose Fernandez (Anthropic) (8):
+      ftrace: Let ftrace_call_adjust() reject a patch site
+      scripts/sorttable: Make the arm64 before_func offset configurable
+      compiler_types: Let notrace keep the function prefix NOPs
+      arm64: ftrace: Make the CALL_OPS prefix layout configurable
+      arm64: cfi: Use CONFIG_ARM64_FUNCTION_PREFIX_NOPS for the type hash offset
+      arm64: ftrace: Support CALL_OPS on kernels built with kCFI
+      arm64: ftrace: Use five prefix NOPs on ThinLTO kernels with BTI
+      arm64: ftrace: Allow CALL_OPS on kCFI kernels built with Rust
 
-First, the commit message says:
+ arch/arm64/Kconfig                    |  27 +++++++-
+ arch/arm64/Makefile                   |  15 ++++-
+ arch/arm64/include/asm/cfi.h          |   8 +++
+ arch/arm64/include/asm/ftrace.h       |  16 +++++
+ arch/arm64/include/asm/linkage.h      |  11 ++++
+ arch/arm64/kernel/entry-ftrace.S      |  16 ++---
+ arch/arm64/kernel/ftrace.c            | 120 +++++++++++++++++++---------------
+ arch/arm64/kernel/pi/Makefile         |   2 +
+ arch/arm64/kernel/vdso/Makefile       |   2 +-
+ arch/arm64/net/bpf_jit_comp.c         |   8 ++-
+ drivers/firmware/efi/libstub/Makefile |   2 +-
+ include/linux/compiler_types.h        |   6 ++
+ kernel/trace/ftrace.c                 |   4 ++
+ rust/Makefile                         |   5 +-
+ scripts/Makefile                      |   3 +
+ scripts/sorttable.c                   |   7 +-
+ 16 files changed, 185 insertions(+), 67 deletions(-)
+---
+base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
+change-id: 20260904-b4-arm64-callops-kcfi-40016eed4fb0
 
-  "Note this anchors it at the start of the frame (L2 for an ethernet
-   device), which is the same convention AF_PACKET uses on TX."
+Best regards,
+--  
+Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
 
-Is that what AF_PACKET does? packet_parse_headers() anchors the MAC
-header, not the network header:
-
-net/packet/af_packet.c:packet_parse_headers() {
-	/* On TX skb->data is the L2 header; anchor it for all socket types. */
-	skb_reset_mac_header(skb);
-
-	if ((!skb->protocol || skb->protocol == htons(ETH_P_ALL)) &&
-	    sock->type == SOCK_RAW)
-		skb->protocol = dev_parse_header_protocol(skb);
-	...
-}
-
-and packet_snd() for SOCK_RAW resets network_header before moving
-skb->data back over the hard header, so network_header stays at the L3
-boundary:
-
-	skb_reset_network_header(skb);
-	...
-	} else if (reserve) {
-		skb_reserve(skb, -reserve);
-
-So after this patch an AF_XDP skb differs from an AF_PACKET one by
-hard_header_len in network_header, and mac_header is still at the unset
-sentinel left by __finalize_skb_around(), i.e. skb_mac_header_was_set()
-is false.
-
-Second, the commit message says AF_PACKET "supports GSO/checksum
-offload; none of that applies here". Does checksum offload really not
-apply? xsk_skb_metadata() in the same file does:
-
-net/xdp/xsk.c:xsk_skb_metadata() {
-		skb->csum_start = hr + csum_start;
-		skb->csum_offset = csum_offset;
-		skb->ip_summed = CHECKSUM_PARTIAL;
-
-		if (unlikely(pool->tx_sw_csum)) {
-			...
-			err = skb_checksum_help(skb);
-	...
-}
-
-The software fallback only happens when the user opted in via
-XDP_UMEM_TX_SW_CSUM, so a CHECKSUM_PARTIAL AF_XDP skb does reach the
-driver through __dev_direct_xmit(), and drivers take the L2/L3 split
-from network_header:
-
-drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:ixgbe_tx_csum() {
-	vlan_macip_lens = skb_checksum_start_offset(skb) -
-			  skb_network_offset(skb);
-no_csum:
-	/* vlan_macip_lens: MACLEN, VLAN tag */
-	vlan_macip_lens |= skb_network_offset(skb) << IXGBE_ADVTXD_MACLEN_SHIFT;
-	...
-}
-
-With skb_network_offset() now 0 on an ethernet frame, does this program
-MACLEN == 0 and an IPLEN that swallows the ethernet header, so the NIC
-inserts a checksum derived from the wrong header layout?
-
-Would it make sense to also call skb_reset_mac_header() and place
-network_header at the real L3 boundary here? Alternatively, if the
-minimal reset is the intent, could the commit message describe
-network_header as a placeholder and drop the claims about the AF_PACKET
-convention and the absence of checksum offload?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260901083325.3445-1-kerneljasonxing%40gmail.com
