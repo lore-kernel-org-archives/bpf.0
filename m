@@ -1,150 +1,123 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 409D03F8257;
-	Fri,  4 Sep 2026 10:22:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05EB346EF73
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 10:36:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788517333; cv=none; b=djjaBvCU+RGHxBvEDmkRDIU0Le3SU9OoRq2ZPT0b6Of1ht5Nd0F5IOodmNXE7DKvUDOluk1e6akorEZXWFEEx/jLImsydj9Ge784x93rjwiHJWuMxnddhcj7/ip9Z4n/LNW6JwH0pA0+u+3lxmA3Br60NJVOr9PpIEZnlr2FJKA=
+	t=1788518208; cv=none; b=mo+TziWN+77+en4S7/YbMBn3S1e+nlyxa2HRrL85H+3EvrTptFr5ZXB0Djik81NGoNtpOn8LmvreDKH4RLHMGv3kD/VIHtGdg0i5GRUZNLB3SowZWfZh0NfSLAHyQBMSdgBI36mifOXd1b3AUgglPwZh6sQ1zQOMnkbARoNhza8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788517333; c=relaxed/simple;
-	bh=BmOz+dUmMCLlNCERmSKkkwGqOWCoQ4fU1Camdms7s9U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Tfne1wZf4vCPfoOGultwtHa1CUEwYIlzkZ08ZdcVx1HeRAbgi8sibwG01vjkYjr/lqiNDYZSotUvk/E1E8crs3pUziJSZR0BfV65khB3bghafWUp1i9wNcPPauk2ELAMEqE405AFr+rxG2Hl7CvUCRNdE8wECOOdbDclLDp6qRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lNwSA7Dm; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788518208; c=relaxed/simple;
+	bh=xWWCXfeVUkRq+FP91OFE35aQUxmIItVcTHsmPcCn78c=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ObJ0zlhiYR6hn2PK1J6L4erFfSB9K3F5yo8IVYovz/S+Hn2rrdC5M2Bknm2z4Kucg1sjlxfPj8Ig3dkmVnPyA3hoY2/SFrSxof5y197q7ZhnGPMNu60kv4WGXcNzNrVnqpNp9OJ+YUD1NwxQ1bGwGt/A4y4ekcopejkeKE8FaBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hde4zZji; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lNwSA7Dm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11FC31F00A3D;
-	Fri,  4 Sep 2026 10:21:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hde4zZji"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4AD41F00A3E;
+	Fri,  4 Sep 2026 10:36:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788517322;
-	bh=oG2Mwepo6HLYoctiN80CCoKCdLGynO4Z+fuELH+22yY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=lNwSA7Dmcia+2TGdAqlh4p1GG9/WLwayfT8CdfOKZKOwTnTvPZqaxkL/lRnbSAOuY
-	 xU1HLQP9RHnm9+b5Ern0pVO0mqUOJxh+4ELJHN+uZz/00U7ldde6KN45hXp6tadzUl
-	 rpbaGkJMRpqAd2bmkn+aDFsnruUa51sKxq/EUfEPItTtJ1xEvGkRzsEP1ccJ6UD4uN
-	 0/SEJluzUIPRtAx1hO1cgI/2gtTuJiIsPr+PyVxlQSYD5bRoi4BG2U6WTZ1Wf1XeCC
-	 zD7DxSfL+KFgo7rd50SnA9hoIyc5hOFP5VPlsjxfd2qGwWY+KSOSV0fjS72q4qsF9h
-	 jLJ8TM/ZV70eg==
-Message-ID: <2946842d-09bb-454d-9eae-4c343c3bb0d8@kernel.org>
-Date: Fri, 4 Sep 2026 12:21:50 +0200
+	s=k20260515; t=1788518205;
+	bh=tzL7yGZEni4U22ZGTi2LAkm3XsG1ctxklVAH0IlvxhQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=hde4zZjiRsu/LkbjJbxVULm2B4ROijgawJR3KE6MY5WhGRabsP/EW5sxjXE6UGdEI
+	 MMoEgvkOgz7FZdZY+1fDn6vmEFHV3TlOPStgzCOqrKD2mXdN4eHNEer2hiMB0zv4dB
+	 gSoZhSDc/3kuT9uoROq7f5ATjP85Gy8EI/aE62eT3IfseAxfeY28b7U5n82oU9AStR
+	 Zob2JN/5XL06GsTSmbs9GpXE0e551pqS5NTKFt8dfmv2sBKF3stxeW1zKH8r4MCRD9
+	 SqMixDFTM3Y9kMnUs51dBe+RoxtjgDvrQGYDxj6iDmHU8CLcjVjcSSh89uLbhZsGov
+	 R1kMiue2xrYAg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v7 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Hui Zhu" <hui.zhu@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <7d8b77dc99ffe99a7bef874a257472fdaaf07e1c.1788516769.git.zhuhui@kylinos.cn>
+References: <cover.1788516769.git.zhuhui@kylinos.cn>
+ <7d8b77dc99ffe99a7bef874a257472fdaaf07e1c.1788516769.git.zhuhui@kylinos.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 04 Sep 2026 10:36:45 +0000
+Message-Id: <20260904103645.B4AD41F00A3E@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net v2] net/ipv6: don't route packets with unknown source
- address
-Content-Language: fr
-To: =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@riseup.net>
-Cc: Jakub Kicinski <kuba@kernel.org>, David Ahern <dsahern@kernel.org>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, Neal Cardwell <ncardwell@google.com>,
- Ido Schimmel <idosch@nvidia.com>, Pablo Neira Ayuso <pablo@netfilter.org>,
- Florian Westphal <fw@strlen.de>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, dcaratti@redhat.com,
- ihuguet@redhat.com, Simon Horman <horms@kernel.org>,
- Kuniyuki Iwashima <kuniyu@google.com>, Phil Sutter <phil@nwl.cc>,
- Daniel Borkmann <daniel@iogearbox.net>, Junseo Lim <zirajs7@gmail.com>,
- Martin KaFai Lau <martin.lau@kernel.org>,
- Xuanqiang Luo <luoxuanqiang@kylinos.cn>,
- Fernando Fernandez Mancera <fmancera@suse.de>,
- Leon Hwang <leon.hwang@linux.dev>, Willem de Bruijn <willemb@google.com>,
- Kees Cook <kees@kernel.org>, Jeff Layton <jlayton@kernel.org>,
- Christian Brauner <brauner@kernel.org>, Qi Tang <tpluszz77@gmail.com>,
- Joe Damato <joe@dama.to>, Breno Leitao <leitao@debian.org>,
- Li RongQing <lirongqing@baidu.com>, "open list:VRF"
- <netdev@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
- "open list:NETFILTER" <netfilter-devel@vger.kernel.org>,
- "open list:NETFILTER" <coreteam@netfilter.org>,
- "open list:BPF [MISC] :Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>
-References: <20260903121057.80006-1-ihuguet@riseup.net>
- <20260903153848.20b90f77@kernel.org>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- xsFNBFXj+ekBEADxVr99p2guPcqHFeI/JcFxls6KibzyZD5TQTyfuYlzEp7C7A9swoK5iCvf
- YBNdx5Xl74NLSgx6y/1NiMQGuKeu+2BmtnkiGxBNanfXcnl4L4Lzz+iXBvvbtCbynnnqDDqU
- c7SPFMpMesgpcu1xFt0F6bcxE+0ojRtSCZ5HDElKlHJNYtD1uwY4UYVGWUGCF/+cY1YLmtfb
- WdNb/SFo+Mp0HItfBC12qtDIXYvbfNUGVnA5jXeWMEyYhSNktLnpDL2gBUCsdbkov5VjiOX7
- CRTkX0UgNWRjyFZwThaZADEvAOo12M5uSBk7h07yJ97gqvBtcx45IsJwfUJE4hy8qZqsA62A
- nTRflBvp647IXAiCcwWsEgE5AXKwA3aL6dcpVR17JXJ6nwHHnslVi8WesiqzUI9sbO/hXeXw
- TDSB+YhErbNOxvHqCzZEnGAAFf6ges26fRVyuU119AzO40sjdLV0l6LE7GshddyazWZf0iac
- nEhX9NKxGnuhMu5SXmo2poIQttJuYAvTVUNwQVEx/0yY5xmiuyqvXa+XT7NKJkOZSiAPlNt6
- VffjgOP62S7M9wDShUghN3F7CPOrrRsOHWO/l6I/qJdUMW+MHSFYPfYiFXoLUZyPvNVCYSgs
- 3oQaFhHapq1f345XBtfG3fOYp1K2wTXd4ThFraTLl8PHxCn4ywARAQABzSRNYXR0aGlldSBC
- YWVydHMgPG1hdHR0YmVAa2VybmVsLm9yZz7CwZEEEwEIADsCGwMFCwkIBwIGFQoJCAsCBBYC
- AwECHgECF4AWIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZUDpDAIZAQAKCRD2t4JPQmmgcz33
- EACjROM3nj9FGclR5AlyPUbAq/txEX7E0EFQCDtdLPrjBcLAoaYJIQUV8IDCcPjZMJy2ADp7
- /zSwYba2rE2C9vRgjXZJNt21mySvKnnkPbNQGkNRl3TZAinO1Ddq3fp2c/GmYaW1NWFSfOmw
- MvB5CJaN0UK5l0/drnaA6Hxsu62V5UnpvxWgexqDuo0wfpEeP1PEqMNzyiVPvJ8bJxgM8qoC
- cpXLp1Rq/jq7pbUycY8GeYw2j+FVZJHlhL0w0Zm9CFHThHxRAm1tsIPc+oTorx7haXP+nN0J
- iqBXVAxLK2KxrHtMygim50xk2QpUotWYfZpRRv8dMygEPIB3f1Vi5JMwP4M47NZNdpqVkHrm
- jvcNuLfDgf/vqUvuXs2eA2/BkIHcOuAAbsvreX1WX1rTHmx5ud3OhsWQQRVL2rt+0p1DpROI
- 3Ob8F78W5rKr4HYvjX2Inpy3WahAm7FzUY184OyfPO/2zadKCqg8n01mWA9PXxs84bFEV2mP
- VzC5j6K8U3RNA6cb9bpE5bzXut6T2gxj6j+7TsgMQFhbyH/tZgpDjWvAiPZHb3sV29t8XaOF
- BwzqiI2AEkiWMySiHwCCMsIH9WUH7r7vpwROko89Tk+InpEbiphPjd7qAkyJ+tNIEWd1+MlX
- ZPtOaFLVHhLQ3PLFLkrU3+Yi3tXqpvLE3gO3LM7BTQRV4/npARAA5+u/Sx1n9anIqcgHpA7l
- 5SUCP1e/qF7n5DK8LiM10gYglgY0XHOBi0S7vHppH8hrtpizx+7t5DBdPJgVtR6SilyK0/mp
- 9nWHDhc9rwU3KmHYgFFsnX58eEmZxz2qsIY8juFor5r7kpcM5dRR9aB+HjlOOJJgyDxcJTwM
- 1ey4L/79P72wuXRhMibN14SX6TZzf+/XIOrM6TsULVJEIv1+NdczQbs6pBTpEK/G2apME7vf
- mjTsZU26Ezn+LDMX16lHTmIJi7Hlh7eifCGGM+g/AlDV6aWKFS+sBbwy+YoS0Zc3Yz8zrdbi
- Kzn3kbKd+99//mysSVsHaekQYyVvO0KD2KPKBs1S/ImrBb6XecqxGy/y/3HWHdngGEY2v2IP
- Qox7mAPznyKyXEfG+0rrVseZSEssKmY01IsgwwbmN9ZcqUKYNhjv67WMX7tNwiVbSrGLZoqf
- Xlgw4aAdnIMQyTW8nE6hH/Iwqay4S2str4HZtWwyWLitk7N+e+vxuK5qto4AxtB7VdimvKUs
- x6kQO5F3YWcC3vCXCgPwyV8133+fIR2L81R1L1q3swaEuh95vWj6iskxeNWSTyFAVKYYVskG
- V+OTtB71P1XCnb6AJCW9cKpC25+zxQqD2Zy0dK3u2RuKErajKBa/YWzuSaKAOkneFxG3LJIv
- Hl7iqPF+JDCjB5sAEQEAAcLBXwQYAQIACQUCVeP56QIbDAAKCRD2t4JPQmmgc5VnD/9YgbCr
- HR1FbMbm7td54UrYvZV/i7m3dIQNXK2e+Cbv5PXf19ce3XluaE+wA8D+vnIW5mbAAiojt3Mb
- 6p0WJS3QzbObzHNgAp3zy/L4lXwc6WW5vnpWAzqXFHP8D9PTpqvBALbXqL06smP47JqbyQxj
- Xf7D2rrPeIqbYmVY9da1KzMOVf3gReazYa89zZSdVkMojfWsbq05zwYU+SCWS3NiyF6QghbW
- voxbFwX1i/0xRwJiX9NNbRj1huVKQuS4W7rbWA87TrVQPXUAdkyd7FRYICNW+0gddysIwPoa
- KrLfx3Ba6Rpx0JznbrVOtXlihjl4KV8mtOPjYDY9u+8x412xXnlGl6AC4HLu2F3ECkamY4G6
- UxejX+E6vW6Xe4n7H+rEX5UFgPRdYkS1TA/X3nMen9bouxNsvIJv7C6adZmMHqu/2azX7S7I
- vrxxySzOw9GxjoVTuzWMKWpDGP8n71IFeOot8JuPZtJ8omz+DZel+WCNZMVdVNLPOd5frqOv
- mpz0VhFAlNTjU1Vy0CnuxX3AM51J8dpdNyG0S8rADh6C8AKCDOfUstpq28/6oTaQv7QZdge0
- JY6dglzGKnCi/zsmp2+1w559frz4+IC7j/igvJGX4KDDKUs0mlld8J2u2sBXv7CGxdzQoHaz
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20260903153848.20b90f77@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-Hi Íñigo,
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-On 04/09/2026 00:38, Jakub Kicinski wrote:
-> On Thu,  3 Sep 2026 14:10:40 +0200 Íñigo Huguet wrote:
->> Don't allow routing packets with a source address that is not configured
->> in the host. Allow it only in certain cases like when using a
->> transparent socket, by setting the ANYSRC flag in flowi_flags.
-> 
-> breaks a bunch of selftests, too, FWIW
-> Please make sure to mend those if you want to forge ahead as a non-fix
-> 
->   - selftests/net/xfrm_state.sh:
->       "IPv6 unreachable from IPsec gateway s2" [FAIL]
->       "IPv6 MTU exceeded from IPsec gateway s2" [FAIL]
->     (the equivalent IPv4 cases still pass)
-> 
->   - selftests/net/vrf_route_leaking.sh:
->       "VRF ICMP local IPv6" [FAIL]
->       "VRF tcp local connection IPv6" [FAIL]
->       "VRF udp local connection IPv6" [FAIL]
-> 
->   - selftests/net/srv6_encap_lookup_l3vpn_test.sh:
->       "IPv6 connectivity: rt-1 -> rt-2 (tenant 100/200)" [FAIL]
->       "IPv6 connectivity: rt-2 -> rt-1 (tenant 100/200)" [FAIL]
->     (again, the IPv4 variants of the same tests pass)
-> ...
+Pre-existing issues:
+- [High] The kfuncs `bpf_mem_cgroup_memory_events` and `bpf_mem_cgroup_vm_e=
+vents` perform out-of-bounds array reads when negative enum values are prov=
+ided.
+--
 
-Just in case, do not hesitate to look at the new countainers that might
-help you running those tests locally:
+commit d1e15e132a96633de13a710a4e0aff1aa016fbaa
+Author: Hui Zhu <zhuhui@kylinos.cn>
 
- https://lore.kernel.org/9c66a2b4-2787-4421-bc9b-627de2f708bd@kernel.org
+mm/bpf: Add bpf_proactive_reclaim kfunc
 
- https://github.com/linux-netdev/nipa/wiki/Running-Netdev-CI-tests-locally
+Add bpf_proactive_reclaim(), a sleepable kfunc which performs one
+proactive reclaim pass on a given memory cgroup, similar to a write
+to memory.reclaim but without retrying until the target is reached.
+The kfunc is restricted to BPF_PROG_TYPE_SYSCALL to ensure it runs
+in a clean process context.
 
-Cheers,
-Matt
+> diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
+> index 716df49d76477..92f35ba66309e 100644
+> --- a/mm/bpf_memcontrol.c
+> +++ b/mm/bpf_memcontrol.c
+[ ... ]
+> @@ -171,22 +240,44 @@ BTF_ID_FLAGS(func, bpf_mem_cgroup_memory_events)
+
+[Severity: High]
+This is a pre-existing issue, but do the implementations of
+bpf_mem_cgroup_memory_events() and bpf_mem_cgroup_vm_events() handle negati=
+ve
+enum values correctly?
+
+The bounds check in bpf_mem_cgroup_memory_events() does not cast to unsigne=
+d,
+so a negative index bypasses the check:
+
+mm/bpf_memcontrol.c:bpf_mem_cgroup_memory_events() {
+	if (unlikely(event >=3D MEMCG_NR_MEMORY_EVENTS))
+		return (unsigned long)-1;
+
+	return atomic_long_read(&memcg->memory_events[event]);
+}
+
+Because the BPF verifier does not validate that scalar arguments fall within
+valid enum ranges, a negative value passed from a BPF program can bypass
+this check and cause an out-of-bounds read on the memory_events array.
+This can overlap with the vmstats pointer in struct mem_cgroup, potentially
+leaking a kernel heap pointer to the BPF program.
+
+Similarly, bpf_mem_cgroup_vm_events() also appears to be affected, where
+the upper-bounds check fails to filter out negative values before calling
+memcg_events_index():
+
+mm/memcontrol.c:memcg_vm_event_item_valid() {
+	if (idx >=3D NR_VM_EVENT_ITEMS)
+		return false;
+
+	return !BAD_STAT_IDX(memcg_events_index(idx));
+}
+
+Which leads to an out-of-bounds array access using the negative index:
+
+mm/memcontrol.c:memcg_events_index() {
+	return mem_cgroup_events_index[idx];
+}
+
+Could we add proper lower bound checks or cast the index to unsigned before
+comparing against the array size in these functions?
+
+>  BTF_ID_FLAGS(func, bpf_mem_cgroup_usage)
+>  BTF_ID_FLAGS(func, bpf_mem_cgroup_page_state)
+>  BTF_ID_FLAGS(func, bpf_mem_cgroup_flush_stats, KF_SLEEPABLE)
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1788516769.gi=
+t.zhuhui@kylinos.cn?part=3D1
