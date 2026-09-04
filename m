@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE87843B4AA
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8C7243E9C4
 	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 21:56:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788558996; cv=none; b=IR6WD2EJawz+zT4/VZSDzWrdC8oQ5SnwWFOB7Pfqnoy3FVoQvZIRVCezi1gqC7V4Mp2oYpSOVe2YeIRmCKK28OtwnH002SlGGUZIuYo2yFs7pSUfj61oPjcL9HMh3QdXDewh4rTBQqfI+RuNhe8+YqDBLdY6vWOPRfmsxuZhhtA=
+	t=1788558996; cv=none; b=lbv4kOudAOjC8SZ0DYrYTppfIy7UgDnhNskKwGRmrXO079R+cVY9mHN9CNFtdqomXg1/CJEmfnXd2m9SKmdxX0eROX8OtoZNqPrbx9uqMPo9KZFAeULGY6zlWrQW3j6yY4vhhTPggxo5HQc0RL2yxeNf5p9CYnv0WKyMij4tMgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1788558996; c=relaxed/simple;
-	bh=Fj8UeaVIdFI7WHFtECoORCyCyVAzre0hN3SPsiYPm1I=;
+	bh=ntxVcBk6nHcaZ5b/wTBpysqrTzRFLn/qwib7Aq//Mk4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=JtptqRx4doj3SxUPDjxvsy31mPvOx8XS4FeLOdTY0NVgK+fsrvzqN3apzn1kqnwWOuL8AeF047FbAkJOnWwyLYoWQDxX+WQoneqj51dDDl2FNMWbs1oND4986Zvu8ikV9Sz0afLQevdGzymYJhF+IdyF2wfg7bRz8ri/ZSZBD70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g6dVFhFy; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=BjuvJXOSKQZBDN3aOFW0BG47kfyR1dijRB4QmTehBvJdm0IiSEFS1zeD7fuzcQHhzkprzx78+og5IcZwkCAoi1zbaGaPlgXlFCv//GwBAsvxLK9xmsRyb98AWFnAFpmIn11c0UV2Ie43mtDXM6oDNpD1d9cot1jkIHMz8nP1xLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FTnVF9Om; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g6dVFhFy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D98E61F00A3F;
-	Fri,  4 Sep 2026 21:56:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FTnVF9Om"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A5E31F00AC4;
+	Fri,  4 Sep 2026 21:56:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1788558993;
-	bh=ozdlqzYwjoBngWbbNXrtdIHYKWBGgWmwnCQFta8p9h8=;
+	bh=n+Z0YNXdPuitmhFKu4C+iAiD+DBo9N5cAjbZ4jEeSv8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=g6dVFhFyB7DbaP8KwZu2FuiTYfK7CK5vIWlQKbJCoguRIX8ej5fwm1oiAj0lU8n+g
-	 R7duvYitcDTR3Ek9VBQbhfCgZ7XsNz6mFnAtMztovPUtx5vo9TbgR2EcbcSljKZv8W
-	 MKoYjtCmjhbK8+nr0Cmip/+bAK42p9GsA7tkPN05E8UCV1SAYIw6gY6FGxjzXNFXw3
-	 Wj/l09/4APuN9jXHTBDBQrr+8vMYmQp4kGa2RTz7BLJaqeCbW5pqH1nWp8M+ChpG54
-	 2Oc3MY9uRCYJa9EkO9BN6x42IJPWDbpwcciSZgRdZS1tOxa27WFd4wD83A07ggXtaV
-	 HA1e6Jn0Cj0Pw==
+	b=FTnVF9OmrKOUO3tgrI9lYWPAgmDFkFuZvzhBljP697XRVHW5lSQc71JiT0zIvXd19
+	 /W5zkpqV78PmtyKQyOED5OmBF+hSDzukZJHOLm14tkVlQz32XPwNkfsv1fqdQC6ULa
+	 lKfKt9ThQPJKEd/1fBlMho22TcglZJGVtX4TVm9NknT5uS0HGFxNXDUk8pFxznPkKp
+	 033QAVWub41GqaYHo1oPlfevdxvJUwoWOz3qafNu3ZEX4FVYlexgnaYsSXV9JYjD8p
+	 Rsr6PiuGLnykBFlvI+0YfZjKT8e0uVAOfKqc0HMwi7N89lwYQz/7IB2o8AeJo5SDoM
+	 Gju6MqYH/v6JQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v5 07/12] gve: add gve_ctrl_ops for gve
- initialization/teardown sequences
+Subject: Re: [PATCH net-next v5 09/12] gve: introduce new methods to handle
+ IRQ doorbells
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Harshitha Ramamurthy" <hramamurthy@google.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260903215606.31633-8-hramamurthy@google.com>
+In-Reply-To: <20260903215606.31633-10-hramamurthy@google.com>
 References: <20260903215606.31633-1-hramamurthy@google.com>
- <20260903215606.31633-8-hramamurthy@google.com>
+ <20260903215606.31633-10-hramamurthy@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 04 Sep 2026 21:56:32 +0000
-Message-Id: <20260904215632.D98E61F00A3F@smtp.kernel.org>
+Date: Fri, 04 Sep 2026 21:56:33 +0000
+Message-Id: <20260904215633.8A5E31F00AC4@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,66 +47,81 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The ethtool callback `gve_set_rxfh` bypasses the `gve_ctrl_ops` =
-abstraction by calling `gve_adminq_configure_rss` directly.
+
+Pre-existing issues:
+- [High] Missing cancellation of stats_report_task leads to NULL pointer de=
+reference on stats_report
 --
 
-commit 10b1b0685ff2bac01a7188b6c0dc5c2a0e9dae42
+commit 2f8461aff00d2f3a048492ca3caad4204f7dac28
 Author: Joshua Washington <joshwash@google.com>
 
-gve: add gve_ctrl_ops for gve initialization/teardown sequences
+gve: introduce new methods to handle IRQ doorbells
 
-Driver initialization and teardown involve a number of control plane
-operations that need to be defined for gve_probe to operate in both
-mailbox and adminq modes.
+This commit introduces request_db_info and release_db_resources to
+struct gve_ctrl_ops. It encapsulates the configuration of device resources
+such as counter arrays and IRQ doorbell indices.
 
 > diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/eth=
 ernet/google/gve/gve_main.c
-> index acd09e9f416c1..5ad7a8f9bbddb 100644
+> index 619ef46a7b30a..a160d36f718b9 100644
 > --- a/drivers/net/ethernet/google/gve/gve_main.c
 > +++ b/drivers/net/ethernet/google/gve/gve_main.c
+
 [ ... ]
-> @@ -1815,6 +1820,7 @@ static int gve_xdp(struct net_device *dev, struct n=
-etdev_bpf *xdp)
-> =20
->  int gve_init_rss_config(struct gve_priv *priv, u16 num_queues)
->  {
-> +	const struct gve_ctrl_ops *ops =3D priv->ctrl_ops;
->  	struct gve_rss_config *rss_config =3D &priv->rss_config;
->  	struct ethtool_rxfh_param rxfh =3D {0};
->  	u16 i;
-> @@ -1830,15 +1836,17 @@ int gve_init_rss_config(struct gve_priv *priv, u1=
-6 num_queues)
-> =20
->  	rxfh.hfunc =3D ETH_RSS_HASH_TOP;
-> =20
-> -	return gve_adminq_configure_rss(priv, &rxfh);
-> +	return ops->configure_rss(priv, &rxfh);
+
+> @@ -602,7 +606,6 @@ static int gve_setup_notify_blocks(struct gve_priv *p=
+riv)
+>  	return err;
 >  }
+> =20
+> -
+>  static void gve_free_control_plane_resources(struct gve_priv *priv)
+>  {
+>  	bitmap_free(priv->xsk_pools);
+> @@ -611,9 +614,10 @@ static void gve_free_control_plane_resources(struct =
+gve_priv *priv)
+>  	kvfree(priv->ptype_lut_dqo);
+>  	priv->ptype_lut_dqo =3D NULL;
+> =20
+> -	gve_free_stats_report(priv);
+> -	gve_free_notify_blocks(priv);
+> +	gve_free_irq_db_indices(priv);
+>  	gve_free_counter_array(priv);
+> +	gve_free_notify_blocks(priv);
+> +	gve_free_stats_report(priv);
 
-[Severity: Medium]
-While this function is updated to use the new ops->configure_rss abstractio=
-n,
-does gve_set_rxfh() in drivers/net/ethernet/google/gve/gve_ethtool.c also n=
-eed
-to be updated?
+[Severity: High]
+This isn't a bug introduced by this patch, but could this lead to a NULL
+pointer dereference when the uncancelled work item executes?
 
-It appears to still call gve_adminq_configure_rss() directly:
+Looking at gve_free_stats_report(), it stops the timer and frees the
+priv->stats_report memory, but it does not cancel the stats_report_task
+work item.
 
-drivers/net/ethernet/google/gve/gve_ethtool.c:gve_set_rxfh() {
-    ...
-	if (!priv->rss_key_size || !priv->rss_lut_size)
-		return -EOPNOTSUPP;
+If the network interface is down but the report-stats feature is enabled via
+ethtool, gve_queues_stop() is never called during device removal or
+suspend. This means the work item remains pending because the only
+cancel_work_sync() for this task happens in gve_queues_stop().
 
-	err =3D gve_adminq_configure_rss(priv, rxfh);
-    ...
+When the device is later removed or suspended, the workqueue is flushed
+(or executes concurrently), which allows gve_stats_report_task() to run
+after the memory is freed. This eventually calls into
+gve_handle_report_stats(), which dereferences the NULL pointer:
+
+drivers/net/ethernet/google/gve/gve_main.c:gve_handle_report_stats() {
+	struct stats *stats =3D priv->stats_report->stats;
+	...
 }
 
-Should this also be calling ops->configure_rss() to prevent bypassing the
-abstraction and potentially causing undefined behavior when alternative con=
-trol
-plane modes are used?
+Should a call to cancel_work_sync(&priv->stats_report_task) be added to
+gve_free_stats_report() to ensure the work item cannot execute after the
+underlying memory is destroyed?
+
+>  	gve_free_rss_config_cache(priv);
+>  	gve_free_flow_rule_caches(priv);
+>  }
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260903215606.3163=
-3-1-hramamurthy@google.com?part=3D7
+3-1-hramamurthy@google.com?part=3D9
