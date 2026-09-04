@@ -1,112 +1,208 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A3BF3B19BC;
-	Fri,  4 Sep 2026 03:17:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 718413B42EF
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 03:19:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788491854; cv=none; b=VbOmNmD4aRwKm3C+ty9HI54/KcmH5eAIhbvc6UWzpxUUBBZzPK558ttJ0BpsIiuitlh56Gfo1W61gQOFdW4joHwzGIrkWnBcChDDkKzVi/AdNV9VadactO9k3QooSZFFf5g8JHNSv0fO9WzihvihwoE2wKDEuZFCZphhEpEODxU=
+	t=1788491959; cv=none; b=CcCz58SbD378qLlM5J5bYSu2fmhhUj2e/LStzUCkAQ0rtkrYf4DaFDJp8gNTV5EYjCBr3WYhTNlXS8wgHxer9jrjLHfLN0h2o8XXqJI3XTqlPiw69zn6OI4iDfYiapGs+wjzrFCDBw5lkVWXI88v4mfWZfXYnnjL2HdexxY/1f0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788491854; c=relaxed/simple;
-	bh=UuVs6G544DUiPcB+LIxKErGL1C6sWz5vsMOXhTDol8g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=u3KmRew/RbMriKOdYz04eE6Kb8TZRwiKPBV9aS8QF/WXij2Lqti5zgnO5Xex8GUk97LnYXxofrxgulj9p2mmpJLQCFU+JG/ohPXnG8IxJqwMwiaB0FqoCgRrHcei8fadJhfk9/PjQFgrreuaoN3GFSKzkY77DUoOACyc/MYxWOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=oz53q1Nm; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1788491959; c=relaxed/simple;
+	bh=fC6bLYvWi3YAW75vB3TW1SRbpe/x9g2nH3Xn4stbrlg=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=pCUNKD0E0qB3R6fjKMlNBHHHnud39zNcJGUU7Tu5xPZPIe3IekZDzdRoR2fQhR5TzN30Dfhoe/oxFBeZlbv342nBIziabB8LIHImKyZhCod1hjPTv+yC20A2mz84RN8TdaJvjES9mSFJzMNWICn4t1eG+FW95FcRpCABAwBejp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ujb4EKor; arc=none smtp.client-ip=209.85.214.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="oz53q1Nm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Uu
-	Vs6G544DUiPcB+LIxKErGL1C6sWz5vsMOXhTDol8g=; b=oz53q1NmF/PUWgQynL
-	id8zjm20GI46Y6hDp/emBeqjcuHeAVlnJfVmmvH9BLdopE/+alAqv5Z1ih4b5Mme
-	yEoVPr+e6mMI9ZTuA9WyXdUmQQrCbHPFgTQ3dBgzDS2oK/SwmFAEPkMW8KH+xdKP
-	91xx+byVCn5Adtwj4nxPz6Vgs=
-Received: from localhost (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgCnyPcVOJpqO20qOg--.45819S2;
-	Fri, 04 Sep 2026 11:16:37 +0800 (CST)
-From: Hui Su <sh_def@163.com>
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
-	bpf@vger.kernel.org
-Cc: Hui Su <sh_def@163.com>,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	shuah@kernel.org,
-	yatsenko@meta.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf v2 1/2] bpf: bound resizable hash map iteration
-Date: Fri,  4 Sep 2026 11:16:37 +0800
-Message-ID: <20260904031637.230595-1-sh_def@163.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <7c741628-c259-4ae6-8d67-d92910183526@gmail.com>
-References: <20260831140132.117755-1-sh_def@163.com> <7c741628-c259-4ae6-8d67-d92910183526@gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ujb4EKor"
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2cec4226c70so6792515ad.1
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 20:19:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1788491956; x=1789096756; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:mime-version:date:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=3+QfypsaoraMhsiZLHV6szGOoZiPKujpYHWhvNQofXQ=;
+        b=Ujb4EKorHMajyPYN0jotOPigulNcazTWZXTjxl05gJEMecLomIjX5nhcP0+td3DMpz
+         DsdXoBdyh3sHIughZdHjKuAKf2F7Ni3XR9Zat/kzrx0Y9cSai7bF9kOap39pSV1nM6Yy
+         /6jw5q/GgZrG5DEQBP7ScfyZiNBKA4XgtcGpf7W6YCavy++vci0eCgiWLgmSWbBAA1WW
+         eySLrLNfE7JzyBalf29dbPDHlyf7YJ3dvO1SE2Z48TPDo5oUPkuyUNRCh5jNVZHip/P4
+         t2hZfQN6UQKvbeobWECNztoIEeuYj7OpZiVP+/Jmq/ZSwk2Q1MmwZd6dh89roVbOK5Jp
+         RACw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788491956; x=1789096756;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:mime-version:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=3+QfypsaoraMhsiZLHV6szGOoZiPKujpYHWhvNQofXQ=;
+        b=ACC/GjiC4ssg8oTeK2A9Pb70F5hLkfrZ/Y2G4XtNQia/1cQJFDuLNEMQ+7IAoZ3FWx
+         5lCV2R5eSu6KahNRiH+G9yiR1DHO5eAQpa+JAQ5sOddpqgRXiRDQ3P2RD1I+FCsAsiAq
+         Gc4d1tsVhGHqqE8srObZVNXhPkYtA6EzlE3CWGnDiXlIsnOVw79aQiC2wqyaNAS+lkb+
+         xEO4WjnpX265AkZjixevb6FJHnXGr4a9DOFnBIJXOvf1RYDmPtLnzdjNiRGBOCkS7jQy
+         VStLw1QxyFsC8Ki8wrhjWhpagnxK08Wwok5XU4RDzLLneWLrj+5QH5m7TjPUA1OxKCIk
+         Lo0Q==
+X-Forwarded-Encrypted: i=1; AKwUvBzrQL7m13YOKSPYf3dZDmNPEpPigr1p9b6OZFEHwYC/R4FooWN66zR9k4J6X5YfXhGwq4o=@vger.kernel.org
+X-Gm-Message-State: AFuF++l3OdB0IGNkwXRzlb8yFuKV4iFYddOICTrDuDEiw+3PZ2ygm6YC
+	Qs0zsdcY2BC0Kvn/e/XeRn+VVHSuuAdGr4eWAMUCbqm6YjMdAOFB6CgtbpcArIW9eFc963HPohP
+	CZg==
+X-Received: from plrx6.prod.google.com ([2002:a17:902:b406:b0:2d6:dcd1:657d])
+ (user=tweek job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:3810:b0:2d6:3c22:99bf
+ with SMTP id d9443c01a7336-2db124afcefmr52336225ad.9.1788491955429; Thu, 03
+ Sep 2026 20:19:15 -0700 (PDT)
+Date: Fri,  4 Sep 2026 13:19:11 +1000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PSgvCgCnyPcVOJpqO20qOg--.45819S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7WFW5tr4UZFy7Cr1xCFy3urg_yoW8Cw1kpa
-	9agryktw1SyFZ7WrykuF4xW34UKFZ3Ca4UtrWUG3sYywn5GFnFqrsrK3y29FyUur4xZrn0
-	qFWxKwn8Zw4rAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRo89ZUUUUU=
-X-CM-SenderInfo: xvkbvvri6rljoofrz/xtbCwRZUs2qaOBZLmQAA38
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.55.0.979.g7e5102b832-goog
+Message-ID: <20260904031912.2133476-1-tweek@google.com>
+Subject: [PATCH bpf-next 1/2] selftests/bpf: Move verifier failure tests out
+ of test_global_percpu_data
+From: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>
+To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Leon Hwang <leon.hwang@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	"=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Sid Nayyar <sidnayyar@google.com>, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 3, 2026 at 5:43 PM, Mykyta Yatsenko wrote:
-> I'm not sure if this change fixes anything, the main issue of walking
-> concurrently modified rhashtable is not changed: you still may miss
-> elements or visit same elements multiple times.
->
-> In some scenarios this can make things worse: imagine you start
-> iterating with small map (visit_budget = 10), then 1000000 elements
-> are inserted concurrently with walk, so you'll miss at least
-> 1000000 - 10.
->
-> To me this is a trade off/taste thing, rather than bug fix. The
-> change is compact, though, I'm not against it.
+Commit 4c9241bd731a ("selftests/bpf: Add tests to verify global percpu
+data") added test_global_percpu_data.c to LSKELS_EXTRA. Later, in commit
+1ed2294b31fc ("selftests/bpf: Test verifier log for global percpu data")
+two verifier failure tests were added (verifier_strncmp and
+verifier_snprintf), both marked as non-autoload (SEC("?kprobe")).
 
-Thanks for the review.
+When bpftool generates light skeletons, non-autoloaded programs are
+skipped during loading, causing the loader program to store subsequent
+program FDs into incorrect skeleton struct fields (e.g. dump_percpu_data's
+FD was stored into verifier_strncmp's descriptor).
 
-I agree that this change does not, and is not intended to, make
-concurrent rhashtable iteration complete or duplicate-free. Missed and
-duplicate elements remain part of the existing best-effort semantics.
+Move the two verifier failure tests to a dedicated test file,
+test_global_percpu_data_failure.c, and run them via RUN_TESTS in
+global_data_init.c. This leaves test_global_percpu_data.c with only
+autoloaded programs, ensuring the light skeleton can be generated cleanly
+and correctly.
 
-The narrower issue I am trying to address is that bpf_each_rhash_elem()
-currently keeps calling rhashtable_next_key() until it returns NULL.
-The rhashtable_next_key() documentation states that a full iteration
-may not terminate under adversarial or sustained rehashing, and
-recommends that callers bound such walks externally.
+Fixes: 4c9241bd731a ("selftests/bpf: Add tests to verify global percpu data=
+")
+Fixes: 1ed2294b31fc ("selftests/bpf: Test verifier log for global percpu da=
+ta")
+Signed-off-by: Thi=C3=A9baud Weksteen <tweek@google.com>
+---
+ .../bpf/prog_tests/global_data_init.c         |  3 +-
+ .../bpf/progs/test_global_percpu_data.c       | 23 --------------
+ .../progs/test_global_percpu_data_failure.c   | 30 +++++++++++++++++++
+ 3 files changed, 32 insertions(+), 24 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_global_percpu_da=
+ta_failure.c
 
-The purpose of this change is therefore not to make the iteration
-complete, but to provide a finite upper bound on callback invocations
-under sustained rehashing.
-
-I agree that taking a snapshot of ht.nelems makes the bound insensitive
-to elements inserted after the walk starts. In the example you gave, the
-walk could stop after the initial occupancy and miss most newly inserted
-elements.
-
-Using map->max_entries would preserve more of the existing behavior
-under concurrent growth, at the cost of allowing a much longer walk for
-a sparsely populated map.
-
-Would map->max_entries be a more appropriate bound in your view?
-
-Also, if you consider adding such a bound useful but not a bug fix,
-would bpf-next be a more appropriate target for this change?
-
-Thanks,
-Hui
+diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/to=
+ols/testing/selftests/bpf/prog_tests/global_data_init.c
+index 7c539cbcf3a1..dbb7de534f7d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
++++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+@@ -3,6 +3,7 @@
+ #include "bpf/libbpf_internal.h"
+ #include "test_global_percpu_data.skel.h"
+ #include "test_global_percpu_data.lskel.h"
++#include "test_global_percpu_data_failure.skel.h"
+=20
+ void test_global_data_init(void)
+ {
+@@ -372,7 +373,7 @@ static void test_global_percpu_data_rdonly_direct_write=
+(void)
+=20
+ static void test_global_percpu_data_verifier_log(void)
+ {
+-	RUN_TESTS(test_global_percpu_data);
++	RUN_TESTS(test_global_percpu_data_failure);
+ }
+=20
+ static void test_global_percpu_data_iter(void)
+diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c b/=
+tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+index 2765cd46e9af..bc748df4a6cc 100644
+--- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
++++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+@@ -42,29 +42,6 @@ int update_percpu_data(void *ctx)
+ 	return 0;
+ }
+=20
+-static const char fmt[] SEC(".percpu.fmt") =3D "data %d\n";
+-
+-SEC("?kprobe")
+-__failure __msg("R{{[0-9]+}} points to percpu_array map which cannot be us=
+ed as const string")
+-int verifier_strncmp(void *ctx)
+-{
+-	return bpf_strncmp("test", 5, fmt);
+-}
+-
+-SEC("?kprobe")
+-__failure __msg("R{{[0-9]+}} points to percpu_array map which cannot be us=
+ed as const string")
+-int verifier_snprintf(void *ctx)
+-{
+-	u64 args[] =3D { data };
+-	char buf[128];
+-	int len;
+-
+-	len =3D bpf_snprintf(buf, sizeof(buf), fmt, args, sizeof(args));
+-	if (len > 0)
+-		bpf_printk("snprintf: %s\n", buf);
+-	return 0;
+-}
+-
+ volatile const __u32 num_cpus =3D 0;
+ volatile const int num_off;
+ volatile const int elem_sz;
+diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data_fail=
+ure.c b/tools/testing/selftests/bpf/progs/test_global_percpu_data_failure.c
+new file mode 100644
+index 000000000000..3a823acb42d7
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data_failure.c
+@@ -0,0 +1,30 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++int data SEC(".percpu") =3D -1;
++static const char fmt[] SEC(".percpu.fmt") =3D "data %d\n";
++
++SEC("?kprobe")
++__failure __msg("R{{[0-9]+}} points to percpu_array map which cannot be us=
+ed as const string")
++int verifier_strncmp(void *ctx)
++{
++	return bpf_strncmp("test", 5, fmt);
++}
++
++SEC("?kprobe")
++__failure __msg("R{{[0-9]+}} points to percpu_array map which cannot be us=
+ed as const string")
++int verifier_snprintf(void *ctx)
++{
++	u64 args[] =3D { data };
++	char buf[128];
++	int len;
++
++	len =3D bpf_snprintf(buf, sizeof(buf), fmt, args, sizeof(args));
++	if (len > 0)
++		bpf_printk("snprintf: %s\n", buf);
++	return 0;
++}
++
++char _license[] SEC("license") =3D "GPL";
+--=20
+2.55.0.979.g7e5102b832-goog
 
