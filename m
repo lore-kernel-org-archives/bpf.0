@@ -1,108 +1,102 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7237D47F77D
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 12:45:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788525932; cv=pass; b=JZc/Bk1D5bepQARRGVF2XAS0Fp4C00n5bhjZdCx4t8hmVaoPQ/sWBjuBZdt9hUPz5RyUH4nG9NOFDpRsYg20ykMvPf0QK2AjU5J7wfr9sP1yr0Dx2nG6mER9yMqN3WV0rmm/1dmnYeZJhT+90dU5/GuV3uFKby+Lo6vOTsveJcM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788525932; c=relaxed/simple;
-	bh=SzDs2yWMGbqw4SuOTjqilOjXglSn17D0yFwlVfQoGko=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VD/XVhzwzn3tsfuAENT/SxS5oNAOvHlUH4rjLJ4LrHRsfNAzH1r4YR1Xx4K854JgLi2Zo14Jc6IbpPYggP+FPZWWWQM6mLkVz8/hXeyt3CHm1bqigSTZsh7EeUaLvYI4dJLbhuRAW0nexw9PC4G+Q4ND842Wm7vHzaPGtYX/t3s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nlj2Z3NM; arc=pass smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 712C748CD5E;
+	Fri,  4 Sep 2026 12:46:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788526007; cv=none; b=Sq6LyeTfc+suyVeb7ACfia124ttEZCvvCONw1tbL0r0XuhNzrkXRbJuql3xR9IxSdcKTVrqC8TSJ0gKYZVqTnLXAN3kV97H2uYo7n3flMEcNLJ1gNs4QFJuXDS7ciq5+NfxkH5BdfFE5L3AgFecQhrt4I24BH2EdUtKNDsuj09c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788526007; c=relaxed/simple;
+	bh=As8XxMMmUVQ6vU2afjgBis2r1SCVwnUYWmZavRxoyqU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jn8X9K/O9vPg3ebeYAI/hKFJbqpJg4z2E1TcEq37m6lXcODNOoSPc/g69PdVHAPZRuT5mPqfBZ5IHZ4p/3ClIyBcsdK7OWVhfsX6MquXbZuTZnbdSsnpIZwFAsLELDEglPDl0Z5f/WL7JMtrzINA0Y34GXyDU9f4KCKJphFonIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b=NPdhDsXt; arc=none smtp.client-ip=216.40.44.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nlj2Z3NM"
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c255c58156bso178619266b.3
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 05:45:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788525930; cv=none;
-        d=google.com; s=arc-20260327;
-        b=k0BTNcSE2E7G5HYXcwv7WP/zZmE/z1IovIRCtiz4ZcsFB2o3Oi2JkzBlv3sb3Q52l/
-         vWM0h2Ps6yp3EzljXulXu8GW+V3NFrckd/htzz9ESOHEcrhHnKZCXMcrulUFl9kpYWRR
-         rijUVT+exZ2g4J92ldQB0AAmkn9IAqmLxVLFADGLWgoduq1DMOoHrWJllmAnVbrb/rGq
-         prDkhYaifNeiNZcf/jS7yCCxxqAFRE5CznZsMKsSVGULhi3J1+0+GjO4luG5ME0VdU1v
-         Wfrt8cNZTO+9xNuxKJZR/tzJ7QMAS1yDViJxzV3DLLpXr9d1HICiN056AUSstDJnnEg6
-         IqAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=SzDs2yWMGbqw4SuOTjqilOjXglSn17D0yFwlVfQoGko=;
-        fh=CNUBTTp9QRi+PvJEeelSQp5MYFx8uJg+eZC6/5vyUY4=;
-        b=q6xvcHHbyrbtV+rjkKfvoUfFJpHeMy5paJ7Ptg71xmKj4Tozfx2cs1ql20v33BlEgp
-         y5VSq1qt+Fuw12kAcUnh7TR1cBRKUScAcktNYucLOEoYHncRdUioXSJX4Fu4De0RDiBE
-         Rv0ceyUd1/xGI+GFX3mPIhcxCH4eq+boIgadtn1+VOZCSsCZWpqvNcR9oV6Uz2sjEHVX
-         lAIFIoNr6aRMxtrbbI90IuZxg7e7ChKHGROv1XqiHx2LyXwZAIGmKCGMWFvc6l/IwaPL
-         UTwaa6s/gcLqbRft2Ktsj/cMclw2KIR8yxqONJ9QtUqT6FZ4K9dmvwMHgnJB8OHISRWP
-         qCXw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788525930; x=1789130730; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=SzDs2yWMGbqw4SuOTjqilOjXglSn17D0yFwlVfQoGko=;
-        b=Nlj2Z3NMP945vYPmFS8A/T+djK5rR0QOM/Sf77FlLxxYI05mI1l0HnYr3Nuce5iSRO
-         QKeS7bHvw6LjQfqEfx7Kt12GPatAVlpUaUXz7QT3xdTOm5p7wX5k/0uI4vGuzvFVmnIi
-         Y2mH+HtMg7cSKyCxrFTiTSbSKon1wdYgt+HSH2v4ORuB8vU2Md2By3TeX21e0T/8OdAx
-         A6DaW85w3yMlHgKOSd3JoUqx8GImv1rVtR8W7FwtyaJU6YglUD2AAXO7Y4O3Y4wujYnT
-         cTAhkV3RJ3GebedisXrFdvdpCJ5VttrjAEO0NrOvFgZsri4RSE5vADGdpYTomFt5os9X
-         uMwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788525930; x=1789130730;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=SzDs2yWMGbqw4SuOTjqilOjXglSn17D0yFwlVfQoGko=;
-        b=E7wwas78Di3zDCYTu+tku/r1ILm3GTslo3KjLY6w5KA5RQcPSUmoxHNYzL84+iSloW
-         J5/Py4l4uj7d3a3wrvbKePYNubYpJ5wlRmIp3uCk7vQ9zj7n6atZ7PpeB3kAx9yUxL1p
-         bgJH1aC2uAZc8cGrUHJ6sT2w3mXqBaSpYRlYqSwrJ/C144y8Mvul3mi6ZNYbY87SCBeU
-         unE3ducY/cvf+hfCnVVxHvg7Z5DyjhuOg7XZUqbOf3Brglm3zGNYD72PogjaQMYLccKQ
-         I5foDbLTKL7/yuyjnHzQVCqsZvRe0SlXeiJsKMdSYLH/ZCbmU8cpXcYuU1F3qUH2z0ls
-         q5fg==
-X-Forwarded-Encrypted: i=1; AKwUvBxFBMs9M01kJi/wlPcDSYTpVlNl46yeivfGbBFnHY2H/78TxE7zQ3HWh6rx/8r466EL7a0=@vger.kernel.org
-X-Gm-Message-State: AFuF++kMiobETM/S6TzMkzsCriXIt0k/IEl6ej2tYPjaCQkAqtAjlSzp
-	jtDjXz9u2zFg3PK+GhGGMV+iXhpZ8Mrt4DRf/R8cCi3lbQE1A8dx+AmiHIpTaLAEWhgWv8vy277
-	n5zl/QWwYAPUIP9IHtqoYAhOo6dgh/7aK4V81tBY=
-X-Gm-Gg: AYBFou1xsHiWoSr0z16s72EZmG6JXIFXbzbtR7OTOf6ixHITGtok2WpTa4+O3eo+P0G
-	dmOOOp0vOU4cwVK90QwvfTdKkCzGbejoOjlea1Ggl1dSclPJGbMbQ2V08ck8WIy5LxCrXEVqaeA
-	rEbm74hHz2temlZcu7E8FCREooWGFXy1xWKDh/5zp1KGYujcN7zctxGUxt3zFraTdghSEu7TCnU
-	Z9FxnzLsIm4e+U0kAcjRCb3ogZY2h8Xbcjj1zHhV4vR1yUEXy45AaRInTXk4SIs6T7yfWujejvV
-	lYEhkA5jUta4jWJCz7ahkGajNCGjDgAOIFDp+OrjTft6gA==
-X-Received: by 2002:a17:906:c14e:b0:c16:2dc0:e1ef with SMTP id
- a640c23a62f3a-c260c988de0mr274506066b.14.1788525929567; Fri, 04 Sep 2026
- 05:45:29 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b="NPdhDsXt"
+Received: from omf16.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay02.hostedemail.com (Postfix) with ESMTP id EAF3C120861;
+	Fri,  4 Sep 2026 12:46:39 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf16.hostedemail.com (Postfix) with ESMTPA id 9BA072000F;
+	Fri,  4 Sep 2026 12:46:23 +0000 (UTC)
+Date: Fri, 4 Sep 2026 08:47:28 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
+ <emil@etsalapatis.com>, Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai
+ <xukuohai@huaweicloud.com>, Ard Biesheuvel <ardb@kernel.org>, Ilias
+ Apalodimas <ilias.apalodimas@linaro.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin
+ <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl
+ <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich
+ <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, Tamir
+ Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>,
+ Onur =?UTF-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Sami Tolvanen
+ <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, Leon Hwang
+ <leon.hwang@linux.dev>, Ihor Solodrai <ihor.solodrai@linux.dev>, Josh
+ Poimboeuf <jpoimboe@kernel.org>, live-patching@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
+ linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, Ben Cressey
+ <ben@cressey.dev>, "Florent Revest (Anthropic)" <florent.revest@linux.dev>
+Subject: Re: [PATCH RFC 1/8] ftrace: Let ftrace_call_adjust() reject a patch
+ site
+Message-ID: <20260904084728.6d2ebcc8@gandalf.local.home>
+In-Reply-To: <20260904-b4-arm64-callops-kcfi-v1-1-ce6687739b0c@linux.dev>
+References: <20260904-b4-arm64-callops-kcfi-v1-0-ce6687739b0c@linux.dev>
+	<20260904-b4-arm64-callops-kcfi-v1-1-ce6687739b0c@linux.dev>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260904111731.673341-2-main.kalliope@gmail.com> <e473cea93e948db9c27dc4ae0e993eb3e09011e7cbe8c8e4b305c3b12d866502@mail.kernel.org>
-In-Reply-To: <e473cea93e948db9c27dc4ae0e993eb3e09011e7cbe8c8e4b305c3b12d866502@mail.kernel.org>
-From: Nicholas Dudar <main.kalliope@gmail.com>
-Date: Fri, 4 Sep 2026 08:45:18 -0400
-X-Gm-Features: AcwNN1XHcgBQzn_feFro3WF9Vkiwio-_jIt5iIjF6wB3SyaChhdHyChwkqqr430
-Message-ID: <CAJZwKkgz6h7cjeduFqh8yFsPLZrHaaJ6jp7BYrxjV40YDgnyxQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf, mips: Factor register moves into helpers
-To: bot+bpf-ci@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, johan.almbladh@anyfinetworks.com, paulburton@kernel.org, 
-	tsbogend@alpha.franken.de, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
-	ihor.solodrai@linux.dev, bpf@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, martin.lau@kernel.org, mason@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: oo7jr9m9z6jjp57k8xucfg4kjueaxsfh
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: 9BA072000F
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX18YuV40KmwbrX6ibO0kN1K+x6irXRzKExI=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=QaHLNrSIOC0AXa1uJvhFJRMc8GEchbvlX2qvJDmaOvM=; b=NPdhDsXtjyaUMzMA7BQ1IUmN2ClbmLVpUQk/XNTBg4AXNwKSmhvpVdoCLxSbMPJUYrTQkJm8rjuBWqwtcQrN+dnpSw/MTzpEXQryjRIwuo1AHZ9Cn3hsl3hc2lsNlGJBQgi5KY0YSc6iraUWlUhcAydwjDl8WMwfUS/r3zFQnC0=
+X-HE-Tag: 1788525983-132897
+X-HE-Meta: U2FsdGVkX18t68M7ClrpuwNfMkqgpVsFcoI/sjyjLj3Rj9zo4g6cHAKPRoTEn7iqHMIvC7xF3POXtibnasp7h9/k0RFP/0yKOtn6TVOi8VVb7mGMn0zl0EWK1KLT1h+WhC3Lnd9oYxTXCNf5qKeUNR6xuyEmDQMrF/LjQa+5dSKOd9rcmfh5CFMc+u9fRYl+NOJxaDWkYH/w34kQvyOyqomLGDOtmaqrat7/jVAI/ME4n13QGxwuyrAA2GofGsXAPtDTYNKROvBOI9SKkmbe4hMKocbXXV1wASFNGLdydjcZRo3FRqartvezELQ2dl5E
 
-> Could the two be collapsed into a single sentence about why the move
-> lowering needs to live in one emitter?
+On Fri, 04 Sep 2026 01:18:33 +0000
+"Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev> wrote:
 
-The first paragraph describes the problem with adding width handling in
-build_insn(), while the second describes the refactor and the state owned
-by the helpers. I think that distinction is useful, so I prefer to keep
-the current wording.
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index f9d80c7bd9f16..394f82230e0c3 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -7676,6 +7676,10 @@ static int ftrace_process_locs(struct module *mod,
+>  		}
+>  
+>  		addr = ftrace_call_adjust(addr);
+> +		if (!addr) {
+> +			skipped++;
+> +			continue;
+> +		}
+>  
 
-Nicholas
+The above could use a comment to why addr could be zero (I didn't even
+realize some architectures do that).
+
+	/* Some architectures may return zero for mis-aligned addresses */
+
+-- Steve
