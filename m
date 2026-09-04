@@ -1,63 +1,63 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F6C3F7A9B
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 08:33:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25A13D6CA7
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 08:33:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788510822; cv=none; b=tCcS6w9mT1AH9e85r+QXoo9fJP423A+GNAn2KerL4rb8UOvnivSn+oyxoYrQuL8L3T8MWoIKHVN6saSULIjTZlr2J5jJcvVQUDRi/8EMU2TuDzudrJ1/L6DBQzNic0SISzHMYupE3PiAut7vJmxKQ55/UGkMhAoI8yTNtL/i+Wo=
+	t=1788510823; cv=none; b=qdEDrRCsmkE2+5+TJCve1jEHxV/i9LVFO1Rk8DGCRLP5T8RSGMREJWM+F9sNvY0KfqEqisJ7hRd77TWUQhqJm7eXFkyaTblaeRjKrHYSfHYS7RYT1TXvzZDDb0BPKo9aALV5aG/wupRcNrP4Pd+e9FdDWtFZ2VvtPYRvpHYn8Gs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788510822; c=relaxed/simple;
-	bh=cg3WJ8z7V1yWC4iyZ5x9R9+zXbGH03XeKIlUQgIAv1o=;
+	s=arc-20240116; t=1788510823; c=relaxed/simple;
+	bh=AWSd9MfwrBSqMvA+bM4QZlyQCDq1FXY8XbTRWNJJOhQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kNCYuuz3qxs5JYhGg1oEqv0MMXACl/bFnDoCtI43qqUm12+xBJJ3MpZ0uArTAtXMLHb6knRNRG/NtgRlXajmlPJpM8jld+8L4BRxcV1P1hXcs+TmH5T03Obm/40UxsypNjjv8oo5t1wnx6o/EkXZTLDOjgA0Oj5I30QBH539KGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FiZMQACs; arc=none smtp.client-ip=209.85.215.177
+	 MIME-Version; b=UbAtsKGqPrWnoWFxINwQ0m93bqUpjgvXZ4zyP7HyWeKiuwCKTHl6BFKKsLnIUTvU3DxFgvXS//bXbppukL2opKYBs5L5RFx4xK7+OIM7Ss8Tl0VcL9zRfmDYfX96OzfMOrbZyVuhS4laiRaBaHEQw7+mBa8SDoL0IvmNbwZvBP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gzfpd4L9; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FiZMQACs"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-cc1cf287ef8so823309a12.3
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 01:33:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gzfpd4L9"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-398c1101c1bso723205a91.1
+        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 01:33:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788510820; x=1789115620; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788510821; x=1789115621; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=WCicz6o+ujtCgcRneONqgxLEs/Xt8g6Uj/7VwMxEi3E=;
-        b=FiZMQACsaCe/Wd3+W21Gl8DvinLFH4B9SUjk/kJKnQohUde3+LQgYtHyxFbZCrHzGr
-         AopxVRiMmDYOu8AGdhXjCbZdif7pFla8c9y37EHmTqYfuGdgLOjDnvXVA48QxZEhHJOI
-         chx3NNQWeVcKhNiv5JTetmYYc8XgoeUKO2cWe1w0eAnJdEDfLoXHW4GlbKHQOiGKND1b
-         rLobmN59ulKytJ5fzC7uLqQX6NHucQkZV0E+UJU7PG5Mq6oYOzGv/vQL2EkWbOEfCyio
-         sDeMt3hKBNW7Ai716dL9+4oCYg09R/gEgUHYZxhVSVCNWctdXvq82fw4sxHAqopoB568
-         d+3w==
+        bh=QkEvV2A5e8YuhFKlaWDxO3OETdMpII+zkuLu0SBnhgQ=;
+        b=Gzfpd4L9gdA8WnTy7Eo+k4Ehj+skyk5khvVES5Nk6lWnLSPmGaizBE2TdcXWGvLXQ+
+         vi+Z+LZi9zjlTX8WTIdMOeC6tQHpkBgJpQnI4RbRSBBB++sJAxtfSLewulYCaUucSrPk
+         N1Yb+D1+5b491cOyxAlpT4zuk3bmARCgZHe/HEQZrOItsAGmOr2XyQubhkxE3/cvjGAp
+         op1nJc6/EW9OzJ6vK3fUSHjIiAlUXgVUN+Ku/Eqb+sqgwHp8UXMtvZ/w7lWcUo8nc8E6
+         u43kVh7JV0Zv4TCemchRrbL4m2xIEYUt+1VepztRLk083eHgMpTKFQuJLasUvt2CmNJR
+         FqsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788510820; x=1789115620;
+        d=1e100.net; s=20251104; t=1788510821; x=1789115621;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=WCicz6o+ujtCgcRneONqgxLEs/Xt8g6Uj/7VwMxEi3E=;
-        b=TwwhI0fYQsMq20cR9umGsKsSlwAxxOVIyt7MJ7VnjL+enC7iU9WQfCpeOlffwx5BjJ
-         SNV3VCLmVIUoXd1/JrjYU8VLXBEdAfLE1WpvwYVEaepK2Y6hDA/Xyo+U0f1dt7410YeV
-         fnPEFyIvh0UiYzacoJrKog2OxVNIqyUnwRtBzTlhCj7Iseyro+yKfNaPG8imbtg4IA0A
-         xykLAdWkcBoIsv+Ms+1dodHD8FKNGAqwtKoqjn4xD3rkisap/iQ8zlyTqY94CvsFuIGQ
-         p/E1KmTcz+tgc98EDxwoISaBoD3gDqZort2/cUyjNUwKqsvffxs04gvdQUfu84Ztlx60
-         ukjg==
-X-Gm-Message-State: AFuF++l+XmKdZR8ICxL/hYzM47LM8N/ZlUbnWd6HgruQdInO8Br4Xoig
-	ehsCJg0EiH6i4cAEtl1gVtee4umDJRvUJY8QRy5txZ8zaJFhi4A0YonGf3b/7OSS8Ms=
-X-Gm-Gg: AYBFou3uk2XSZu8j3VuSg3XmRgmFwuURUCWDcz6lzrzeM994F0GX425c3Gzdoh+Co23
-	DIdBynS5QpRcwjM2Ga00kXqDa8ThQkiutPMKztgxjjbtwmMDxNdC8WNxlvGZdYeHtmaoId7rCy0
-	7eZqERrkXnwAVKL5PzCIqhqBlH0k2myMlnRK6OnNo/AywtL5akFH4hM5ww/0tBUI2+CCa+XCDIK
-	BQ/Jud7d7POD1/Z+1mNECFZMoAih61HomzK8o1OJhMavlUl/WoBpk/7nfUqQfOsZ90Rj5CihZA3
-	okjp8vs+19sfAiScIdMrKCyvnHW1g2tkccTXhMSxMKl/wW0HegLpArVHxVjZIUi5IWVZMbjlROq
-	wTOncHwE3dbcEiTX6WXeXLYRBdP1H+80OUlgvpidqfulHeE6ULYzTMnNh4mfRRqgRxY5j7ROmoI
-	J+ObjVVEUKyV4CrLZB+rJYEtrHI5OX0cY78MYA+N5tKR3yWtpUK2Kt+rNlHwYAexif6ASVe+/WX
-	f+7s76fVHdUcrcMYOp6PbVg6tAM8EAq
-X-Received: by 2002:a17:90a:51c6:b0:39b:29ca:3d23 with SMTP id 98e67ed59e1d1-39b29ca41d5mr3422821a91.17.1788510820303;
-        Fri, 04 Sep 2026 01:33:40 -0700 (PDT)
+        bh=QkEvV2A5e8YuhFKlaWDxO3OETdMpII+zkuLu0SBnhgQ=;
+        b=DPv/+5kQMuhWWmSwoJrkQXfG3c+gdXrIynhr5rwpTGB/MJJhHBPwH96Ipmw40bwa2R
+         rI+wmpLTJNA4d9plbKnsXZN4PobQ1BsgG4HrPXaU2mPnQt4eVVqi213xmDYB6U3Rh/Jv
+         Kxt35T5moKDRoq8p+zu3QU7+lrQ51wE8lhhv0ANbAmXIbLt7pSVn0yHcW90HEyofeuwd
+         sR/nYPVI5KwOgjf4rd/z400eyUFnOl3Jj9GJtorQKGFYHvPxCyTtqnG67sUXLLHhto0I
+         9p2fcqCDF4Ke1kfrFibQd/EsVTllrtNvBs6IbkVjVxj/EIXy+P0zuj+ESSGzYb5NC50L
+         eiMQ==
+X-Gm-Message-State: AFuF++lW4uCgTL/C1JP/qdDcSAYycRPekeMb3TRUBlUpBkrBd590ApGg
+	Wwg7YW7m+2t8pS7q9JsUOjogCpnkvb5RTLctzVUaBErJ6ZSdT1JdH4JlCSKOzyKCiBU=
+X-Gm-Gg: AYBFou3TI6+iIbFFfYsDod0Z6qmbIRhmzyvDmgfOGJqvZZyMzSfKGz1A8+aLtZh479v
+	OwuHiW7oLXRAS/MaEdAijNUyRLQaxBzLewXml+aqigrPggf88uU7OF9luYmYOXnPAbbq8Mj29Ba
+	HbjwRlKwzxpZTQPt1R2eQS0ig/6gNrVaDtJNBGpYBNkxm48C9HP7YCKaX6wewjsThyJC4VmfS1S
+	Ufu4uBeeONZr5/sVo8PKKnvJqJXa/9FriG89cGD8VP/g0yZXB6HawhiPdNa8iAJs8i42KkxwGEX
+	gDePQT8ES4TZaMXZABNuwPgJ/XD+E4TMQ92GZzIfbzCbvM7cJEMFncR8qvOnXbSAnuB5+/obFHn
+	qYz7t6MNyOB3n16LM8uL13CC/AbCt1Po3dMy+1qHGQ5zF8ZTXbzveDfyS8oArYVO+tJIsSsu4mp
+	jM0GUwm8Foo6zprW/aEJwOnwVd4QoA6O0y74OcFKY5fFf1TMCjFJo3kTbdfKvoa1DXwj9s7HA+u
+	o1YehuGWF4vV2vVYyYae1TDz+3KdpNJxQUgdSziPx0=
+X-Received: by 2002:a17:90b:3b52:b0:38f:18f9:785 with SMTP id 98e67ed59e1d1-39b26101d25mr6519163a91.8.1788510821118;
+        Fri, 04 Sep 2026 01:33:41 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b083e4fafsm9628057a91.1.2026.09.04.01.33.39
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b083e4fafsm9628057a91.1.2026.09.04.01.33.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2026 01:33:39 -0700 (PDT)
+        Fri, 04 Sep 2026 01:33:40 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -69,9 +69,9 @@ Cc: daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	npc@anthropic.com
-Subject: [PATCH bpf 2/8] selftests/bpf: no non-NULL inference from unbounded offset pointers
-Date: Fri,  4 Sep 2026 01:33:19 -0700
-Message-ID: <20260904083325.2083493-2-eddyz87@gmail.com>
+Subject: [PATCH bpf 3/8] bpf: don't resurrect a scalar id dropped by collect_linked_regs()
+Date: Fri,  4 Sep 2026 01:33:20 -0700
+Message-ID: <20260904083325.2083493-3-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260904083325.2083493-1-eddyz87@gmail.com>
 References: <20260904083325.2083493-1-eddyz87@gmail.com>
@@ -83,109 +83,63 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Check that a comparison against a pointer whose offset is not bounded
-from above does not make the verifier infer that a nullable pointer is
-not NULL, and that a bounded offset still does. W/o the previous patch
-the first test is accepted.
+check_cond_jmp_op() copies the compared registers into
+env->{false,true}_reg{1,2} before collect_linked_regs() runs and copies
+those snapshots back into both branch states afterwards.
 
+collect_linked_regs() records at most LINKED_REGS_MAX members of a
+linked registers group in the jump history and calls clear_scalar_id()
+for every member that does not fit. The compared register is not exempt
+from that.
+
+As a consequence, sync_linked_regs() might adjust ranges for more
+registers than bpf_bt_sync_linked_regs() can propagate precision to.
+
+Collect the linked registers before the snapshots are taken instead.
+This might lead to some unnecessary clear_scalar_id's, but from
+previous testing situations with many linked registers are
+extremely rare.
+
+Fixes: ec1d77cb0ee9 ("bpf: Use bpf_verifier_env buffers for reg_set_min_max")
 Reported-by: Nicholas Carlini <npc@anthropic.com>
 Suggested-by: Nicholas Carlini <npc@anthropic.com>
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- .../bpf/progs/verifier_jeq_infer_not_null.c   | 80 +++++++++++++++++++
- 1 file changed, 80 insertions(+)
+ kernel/bpf/verifier.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_jeq_infer_not_null.c b/tools/testing/selftests/bpf/progs/verifier_jeq_infer_not_null.c
-index b412a542ef76..8657e4a0d601 100644
---- a/tools/testing/selftests/bpf/progs/verifier_jeq_infer_not_null.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_jeq_infer_not_null.c
-@@ -311,6 +311,86 @@ __naked void untrusted_mem_does_not_infer_map_value_non_null(void)
- 	: __clobber_all);
- }
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e53619e2210e..d16dd1fb08b6 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -16870,6 +16870,16 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+ 			return err;
+ 	}
  
-+/*
-+ * A pointer with an offset that is not bounded from above may be null at
-+ * runtime, hence it is not a witness for the pointer it is compared with.
-+ */
-+SEC("socket")
-+__failure
-+__msg("error: invalid dereference of R7 (a nullable map value pointer)")
-+__naked void unbounded_offset_does_not_infer_map_value_non_null(void)
-+{
-+	asm volatile ("					\
-+	/* r6 = bpf_map_lookup_elem(map_hash, &0); */	\
-+	*(u64 *)(r10 - 8) = 0;				\
-+	r1 = %[map_hash] ll;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	call %[bpf_map_lookup_elem];			\
-+	if r0 == 0 goto 1f;				\
-+	r6 = r0;					\
-+	/* r7 = bpf_map_lookup_elem(map_hash, &1); */	\
-+	*(u64 *)(r10 - 8) = 1;				\
-+	r1 = %[map_hash] ll;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	call %[bpf_map_lookup_elem];			\
-+	r7 = r0;					\
-+	/* pointer - pointer is an unknown scalar */	\
-+	r8 = r7;					\
-+	r8 -= r6;					\
-+	/* r8 is in [0, S64_MAX] */			\
-+	r8 <<= 1;					\
-+	r8 >>= 1;					\
-+	/* r6 may wrap to zero at runtime */		\
-+	r6 += r8;					\
-+	if r7 != r6 goto 1f;				\
-+	r0 = *(u8 *)(r7 + 0);				\
-+1:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_hash)
-+	: __clobber_all);
-+}
++	/*
++	 * Collect the linked registers before env->{true,false}_reg{1,2} setup,
++	 * otherwise ids dropped by collect_linked_regs() would be resurrected
++	 * when env->{true,false}_reg{1,2} are copied back.
++	 */
++	if (BPF_SRC(insn->code) == BPF_X && src_reg->type == SCALAR_VALUE && src_reg->id)
++		collect_linked_regs(env, this_branch, src_reg->id, &linked_regs);
++	if (dst_reg->type == SCALAR_VALUE && dst_reg->id)
++		collect_linked_regs(env, this_branch, dst_reg->id, &linked_regs);
 +
-+/* Same, but the offset is bounded, so the inference is still done. */
-+SEC("socket")
-+__success
-+__naked void bounded_offset_infers_map_value_non_null(void)
-+{
-+	asm volatile ("					\
-+	/* r6 = bpf_map_lookup_elem(map_hash, &0); */	\
-+	*(u64 *)(r10 - 8) = 0;				\
-+	r1 = %[map_hash] ll;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	call %[bpf_map_lookup_elem];			\
-+	if r0 == 0 goto 1f;				\
-+	r6 = r0;					\
-+	/* r7 = bpf_map_lookup_elem(map_hash, &1); */	\
-+	*(u64 *)(r10 - 8) = 1;				\
-+	r1 = %[map_hash] ll;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	call %[bpf_map_lookup_elem];			\
-+	r7 = r0;					\
-+	/* pointer - pointer is an unknown scalar */	\
-+	r8 = r7;					\
-+	r8 -= r6;					\
-+	/* r8 is in [0, 3] */				\
-+	r8 &= 3;					\
-+	r6 += r8;					\
-+	if r7 != r6 goto 1f;				\
-+	r0 = *(u8 *)(r7 + 0);				\
-+1:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_hash)
-+	: __clobber_all);
-+}
-+
- void kfunc_root(void)
- {
- 	bpf_rdonly_cast(0, 0);
+ 	is_jmp32 = BPF_CLASS(insn->code) == BPF_JMP32;
+ 	env->false_reg1 = *dst_reg;
+ 	env->false_reg2 = *src_reg;
+@@ -16924,10 +16934,6 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+ 	 * 'this_branch' and 'other_branch' share this history
+ 	 * if parent state is created.
+ 	 */
+-	if (BPF_SRC(insn->code) == BPF_X && src_reg->type == SCALAR_VALUE && src_reg->id)
+-		collect_linked_regs(env, this_branch, src_reg->id, &linked_regs);
+-	if (dst_reg->type == SCALAR_VALUE && dst_reg->id)
+-		collect_linked_regs(env, this_branch, dst_reg->id, &linked_regs);
+ 	if (linked_regs.cnt > 1) {
+ 		err = bpf_push_jmp_history(env, this_branch, 0, 0, 0, linked_regs_pack(&linked_regs));
+ 		if (err)
 -- 
 2.55.0
 
