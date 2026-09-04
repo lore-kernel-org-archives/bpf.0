@@ -1,21 +1,21 @@
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 118873F9F2F
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 05:10:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C683F9F2F
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 05:10:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788498614; cv=none; b=NhAduifiI1TZBCKcWFJBHJE0pcy77jDhNuprvHiHhD1UMyfTz2lyntc2f2eK29e+JI6YYM9vac6iALKe0c3G8MCcrKI4yw/PC/55iA61mBoiL5l2Ch+eOvcYwiq+9CZjuFNKD2taEwk4l8bshp5gkcYs7I37b9iFT+QCK5xIKp4=
+	t=1788498621; cv=none; b=RULjtNamkfw3g+B8mZKC11Laqs3MpQQG/un8IglFQx+tS109Zhyn2CxiAQVocV9T8z7RDcSsb4aYCk1JkvTSLHPvbygLAKWEZ+fkEhgPIuVOZSGQ9qfXmtachl8ilgzNCJJRajE8a6LCLwqXPFUAPYko4ExjLpnY8LUJWPUIPcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788498614; c=relaxed/simple;
-	bh=JgwdUWgS2mhqtkJuPJz6Xn1w3RxQM/KIK0wxrrKkWZo=;
+	s=arc-20240116; t=1788498621; c=relaxed/simple;
+	bh=5D5WSHOA5xjxq7zzW8ZjqP9GEgHQgR+QOIjHwSNa0ao=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=npDuw1xUgjE/y/itxtuk/a5ggo/hVbMyPrj8zwjyt+HeuMqDWqye6bb3XZw/SEgN2ily7zYsR8zVOqTEQFCbqAs7MQlLVaLrCsr+wvZt4ncz8FUf7Fl+b2AjRObBxTEdBeoJMtbpAyWlo8UIZk1d5PlvCQDG4pEtOHOVdDCA2Kg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
+	 MIME-Version; b=pKPjRtVJCIPfX+Al/We4I+nU0QBAo2mJ9VpY5MiITUdxbF+gHXX6DG85RpjzUGMo+aHpU5lZ5zXHOrsTQ+cGZubS1uCtPsQRV8wo1PfTGe6Us+LpkOXbui3oegeQVJ81oAs5whpLJggnwK8G3JjmX92padTqdm8rrdQsqjqQzWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id CEDE8288131679; Thu,  3 Sep 2026 22:10:02 -0700 (PDT)
+	id EABEC2881316B6; Thu,  3 Sep 2026 22:10:07 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next 01/12] selftests/bpf: Add a test for an __int128 by-value argument
-Date: Thu,  3 Sep 2026 22:10:02 -0700
-Message-ID: <20260904051002.3976850-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 02/12] bpf: Index global function arguments by argument slot
+Date: Thu,  3 Sep 2026 22:10:07 -0700
+Message-ID: <20260904051007.3977886-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260904050957.3976119-1-yonghong.song@linux.dev>
 References: <20260904050957.3976119-1-yonghong.song@linux.dev>
@@ -37,126 +37,156 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-A 128-bit integer is passed in two consecutive argument registers, but
-the verifier counts one argument register per parameter whatever its
-size. For
+btf_prepare_func_args() indexes sub->args[] by BTF parameter, so a
+parameter can only ever stand for a single argument register. Give the
+loop a second index: 'i' keeps walking the BTF parameters while
+'slots_used' walks the argument slots, and sub->arg_cnt becomes the
+number of slots, so that a later patch can give a parameter two of them.
 
-  __u64 take_i128_global(int a, u128 v, int c)
-
-the compiler passes a in R1, v in R2:R3 and c in R4, while the verifier
-marks only R1 through R3 at the entry of the global function. The callee
-then reads its own third parameter out of a register the verifier
-considers uninitialized, and the program is rejected for a register the
-source never names:
-
-  Validating take_i128_global() func#1...
-  20: R1=3Dscalar() R2=3Dscalar() R3=3Dscalar() R10=3Dfp0
-  ; __noinline __u64 take_i128_global(int a, u128 v, int c) @ verifier_in=
-t128_arg.c:12
-  20: (bf) r0 =3D r2                      ; R0=3Dscalar(id=3D4) R2=3Dscal=
-ar(id=3D4)
-  ; return (__u64)a + (__u64)(v >> 64) + (__u64)v + c; @ verifier_int128_=
-arg.c:14
-  21: (bc) w1 =3D w1                      ; R1=3Dscalar(smin=3D0,smax=3Du=
-max=3D0xffffffff,var_off=3D(0x0; 0xffffffff))
-  22: (67) r1 <<=3D 32                    ; R1=3Dscalar(smax=3D0x7fffffff=
-00000000,smin32=3D0,smax32=3Dumax32=3D0,var_off=3D(0x0; 0xffffffff0000000=
-0))
-  23: (c7) r1 s>>=3D 32                   ; R1=3Dscalar(smin=3D0xffffffff=
-80000000,smax=3D0x7fffffff)
-  24: (0f) r0 +=3D r1                     ; R0=3Dscalar() R1=3Dscalar(smi=
-n=3D0xffffffff80000000,smax=3D0x7fffffff)
-  25: (0f) r0 +=3D r3                     ; R0=3Dscalar() R3=3Dscalar()
-  26: (bc) w1 =3D w4
-  R4 !read_ok
-
-The log is from clang 23. LLVM 21/22 place the argument in the same
-registers.
-
-Add the test with the failure it produces now. A later patch will fix
-this issue so this test should succeed.
+No functional change: every parameter still takes exactly one slot.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- .../selftests/bpf/prog_tests/verifier.c       |  2 ++
- .../selftests/bpf/progs/verifier_int128_arg.c | 36 +++++++++++++++++++
- 2 files changed, 38 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_int128_arg=
-.c
+ kernel/bpf/btf.c | 40 ++++++++++++++++++++++++----------------
+ 1 file changed, 24 insertions(+), 16 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
-sting/selftests/bpf/prog_tests/verifier.c
-index f7f94ccebce2..0d68b92d6692 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -50,6 +50,7 @@
- #include "verifier_helper_packet_access.skel.h"
- #include "verifier_helper_restricted.skel.h"
- #include "verifier_helper_value_access.skel.h"
-+#include "verifier_int128_arg.skel.h"
- #include "verifier_int_ptr.skel.h"
- #include "verifier_iterating_callbacks.skel.h"
- #include "verifier_jeq_infer_not_null.skel.h"
-@@ -214,6 +215,7 @@ void test_verifier_helper_access_var_len(void) { RUN(=
-verifier_helper_access_var_
- void test_verifier_helper_packet_access(void) { RUN(verifier_helper_pack=
-et_access); }
- void test_verifier_helper_restricted(void)    { RUN(verifier_helper_rest=
-ricted); }
- void test_verifier_helper_value_access(void)  { RUN(verifier_helper_valu=
-e_access); }
-+void test_verifier_int128_arg(void)           { RUN_TESTS(verifier_int12=
-8_arg); }
- void test_verifier_int_ptr(void)              { RUN(verifier_int_ptr); }
- void test_verifier_iterating_callbacks(void)  { RUN(verifier_iterating_c=
-allbacks); }
- void test_verifier_jeq_infer_not_null(void)   { RUN(verifier_jeq_infer_n=
-ot_null); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_int128_arg.c b/to=
-ols/testing/selftests/bpf/progs/verifier_int128_arg.c
-new file mode 100644
-index 000000000000..419851f2d8d0
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_int128_arg.c
-@@ -0,0 +1,36 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 9c2cab08bb79..22828b489b77 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -8015,7 +8015,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
+env, int subprog)
+ 	const struct btf_param *args;
+ 	const struct btf_type *t, *ref_t, *fn_t;
+ 	int err;
+-	u32 i, nargs, btf_id;
++	u32 i, slots_used, nargs, btf_id;
+ 	const char *tname;
+=20
+ 	if (sub->args_cached)
+@@ -8100,8 +8100,9 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
+env, int subprog)
+ 	/* Convert BTF function arguments into verifier types.
+ 	 * Only PTR_TO_CTX and SCALAR are supported atm.
+ 	 */
+-	for (i =3D 0; i < nargs; i++) {
++	for (i =3D 0, slots_used =3D 0; i < nargs; i++) {
+ 		u32 tags =3D 0;
 +
-+#define MIX_A	0xdeadbeefcafef00dULL
-+#define MIX_B	0x0123456789abcdefULL
+ 		err =3D btf_scan_decl_tags(env, btf, fn_t, i, is_global, &tags);
+ 		if (err)
+ 			return err;
+@@ -8123,7 +8124,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
+env, int subprog)
+ 			    btf_validate_prog_ctx_type(log, btf, t, i, prog_type,
+ 						       prog->expected_attach_type))
+ 				return -EINVAL;
+-			sub->args[i].arg_type =3D ARG_PTR_TO_CTX;
++			sub->args[slots_used++].arg_type =3D ARG_PTR_TO_CTX;
+ 			continue;
+ 		}
+ 		if (btf_is_dynptr_ptr(btf, t)) {
+@@ -8131,7 +8132,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
+env, int subprog)
+ 				bpf_log(log, "arg#%d has invalid combination of tags\n", i);
+ 				return -EINVAL;
+ 			}
+-			sub->args[i].arg_type =3D ARG_PTR_TO_DYNPTR;
++			sub->args[slots_used++].arg_type =3D ARG_PTR_TO_DYNPTR;
+ 			continue;
+ 		}
+ 		if (tags & ARG_TAG_TRUSTED) {
+@@ -8146,10 +8147,11 @@ int btf_prepare_func_args(struct bpf_verifier_env=
+ *env, int subprog)
+ 			if (kern_type_id < 0)
+ 				return kern_type_id;
+=20
+-			sub->args[i].arg_type =3D ARG_PTR_TO_BTF_ID | PTR_TRUSTED;
++			sub->args[slots_used].arg_type =3D ARG_PTR_TO_BTF_ID | PTR_TRUSTED;
+ 			if (tags & ARG_TAG_NULLABLE)
+-				sub->args[i].arg_type |=3D PTR_MAYBE_NULL;
+-			sub->args[i].btf_id =3D kern_type_id;
++				sub->args[slots_used].arg_type |=3D PTR_MAYBE_NULL;
++			sub->args[slots_used].btf_id =3D kern_type_id;
++			slots_used++;
+ 			continue;
+ 		}
+ 		if (tags & ARG_TAG_UNTRUSTED) {
+@@ -8163,8 +8165,10 @@ int btf_prepare_func_args(struct bpf_verifier_env =
+*env, int subprog)
+=20
+ 			ref_t =3D btf_type_skip_modifiers(btf, t->type, NULL);
+ 			if (btf_type_is_void(ref_t) || btf_type_is_primitive(ref_t)) {
+-				sub->args[i].arg_type =3D ARG_PTR_TO_MEM | MEM_RDONLY | PTR_UNTRUSTE=
+D;
+-				sub->args[i].mem_size =3D 0;
++				sub->args[slots_used].arg_type =3D ARG_PTR_TO_MEM | MEM_RDONLY |
++								 PTR_UNTRUSTED;
++				sub->args[slots_used].mem_size =3D 0;
++				slots_used++;
+ 				continue;
+ 			}
+=20
+@@ -8180,8 +8184,9 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
+env, int subprog)
+ 					i, btf_type_str(ref_t), tname);
+ 				return -EINVAL;
+ 			}
+-			sub->args[i].arg_type =3D ARG_PTR_TO_BTF_ID | PTR_UNTRUSTED;
+-			sub->args[i].btf_id =3D kern_type_id;
++			sub->args[slots_used].arg_type =3D ARG_PTR_TO_BTF_ID | PTR_UNTRUSTED;
++			sub->args[slots_used].btf_id =3D kern_type_id;
++			slots_used++;
+ 			continue;
+ 		}
+ 		if (tags & ARG_TAG_ARENA) {
+@@ -8189,7 +8194,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
+env, int subprog)
+ 				bpf_log(log, "arg#%d arena cannot be combined with any other tags\n"=
+, i);
+ 				return -EINVAL;
+ 			}
+-			sub->args[i].arg_type =3D ARG_PTR_TO_ARENA;
++			sub->args[slots_used++].arg_type =3D ARG_PTR_TO_ARENA;
+ 			continue;
+ 		}
+ 		if (is_global) { /* generic user data pointer */
+@@ -8209,10 +8214,11 @@ int btf_prepare_func_args(struct bpf_verifier_env=
+ *env, int subprog)
+ 				return -EINVAL;
+ 			}
+=20
+-			sub->args[i].arg_type =3D ARG_PTR_TO_MEM | PTR_MAYBE_NULL;
++			sub->args[slots_used].arg_type =3D ARG_PTR_TO_MEM | PTR_MAYBE_NULL;
+ 			if (tags & ARG_TAG_NONNULL)
+-				sub->args[i].arg_type &=3D ~PTR_MAYBE_NULL;
+-			sub->args[i].mem_size =3D mem_size;
++				sub->args[slots_used].arg_type &=3D ~PTR_MAYBE_NULL;
++			sub->args[slots_used].mem_size =3D mem_size;
++			slots_used++;
+ 			continue;
+ 		}
+=20
+@@ -8222,7 +8228,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
+env, int subprog)
+ 			return -EINVAL;
+ 		}
+ 		if (btf_type_is_int(t) || btf_is_any_enum(t)) {
+-			sub->args[i].arg_type =3D ARG_ANYTHING;
++			sub->args[slots_used++].arg_type =3D ARG_ANYTHING;
+ 			continue;
+ 		}
+ 		if (!is_global)
+@@ -8232,6 +8238,8 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
+env, int subprog)
+ 		return -EINVAL;
+ 	}
+=20
++	sub->arg_cnt =3D slots_used;
 +
-+typedef unsigned __int128 u128;
-+
-+__noinline __u64 take_i128_global(int a, u128 v, int c)
-+{
-+	return (__u64)a + (__u64)(v >> 64) + (__u64)v + c;
-+}
-+
-+SEC("tc")
-+/*
-+ * The verifier counts one argument register for the __int128 and marks =
-only
-+ * R1 through R3 at the entry of take_i128_global(), while the compiler =
-passed
-+ * a in R1, v in R2:R3 and c in R4.
-+ */
-+__failure __msg("R4 !read_ok")
-+int aggregate_arg_int128_c_test(struct __sk_buff *skb)
-+{
-+	__u64 a =3D skb->len ^ MIX_A;
-+	__u64 b =3D skb->len ^ MIX_B;
-+	u128 v =3D ((u128)a << 64) | b;
-+
-+	if (take_i128_global(1, v, 2) !=3D a + b + 3)
-+		return 1;
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") =3D "GPL";
+ 	sub->args_cached =3D true;
+=20
+ 	return 0;
 --=20
 2.53.0-Meta
 
