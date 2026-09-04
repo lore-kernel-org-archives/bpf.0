@@ -1,84 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AFCF468C19;
-	Fri,  4 Sep 2026 10:50:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D1C47CA8C
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 10:57:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788519019; cv=none; b=GS4rxtahydsefpRDe033aGnwZoZsK42MCln3JvwvFFp/nf360uIpO363y8/uJrJzIRxOtSK0pNVF5ZcCxSJ7cSOh9yJHuAEGe8E5fAQ5EXi1UBHt11jl5vk60TVL399R68NBjja8PDoZL1heOYyVsF9MzqlldKe0x+JDe92ufOU=
+	t=1788519471; cv=none; b=MHbo+eiAbLoCBxSMV12hcI74X6Uc2dhiOD/yVgC2v6s3O+kUjUDrbW6NxnIiaWjdoOxaCKDaruVM3qbpaTDk3xCksuDTAhs6DtnNzjuQ8REj3vvfznpOXKP1kRuqwusH3/lfP/N42SACV/jpAxbfkbb3kHa5nJSNCWOsXAcHXe4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788519019; c=relaxed/simple;
-	bh=s9uxXFvpTCk/Y5jnAxuIOLJsohEAF1Y8vrCJuw7ayKs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=slLvrgwI8FTSXTxkS8CW7V6HCNpBubh9UAj6Cze/vhMcXcyNazjEgpMzvfmhGnzAQGR6H6JZRNWrNEOehd3V/g3UVIhF7HQYJ0KT6A62gNvKnNdmvpiJH8w3kbZhxtJPjCnRTS+/XKH9un2ez1gzryutF1WR+d5Dhwt1Mil+1FA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gvYEZbbH; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788519471; c=relaxed/simple;
+	bh=I/ptyJ/YxB171w9gZqDl4SamLak1DZrkayz6Na0f37s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=G7fxYIzwRhmHdVo5uoSO8QvCEmERcH/SWS/p5RYj9r9oP6ytB1SSb4H/5Lv7inZFmuXhnuu9xnNhORxtmyIEIX3NMOScuQRDm5nfj97I++GCUY1uuJfQmDaMyq1XP1hDfM+ZZPAf2VJTVW1iogvB/DlG2ZpyLCpn3ag3QpHoN5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Es23tAe1; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gvYEZbbH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA6351F00A3D;
-	Fri,  4 Sep 2026 10:50:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788519018;
-	bh=TAFrTDe5umwoBlyHKSIuK627CJ1GvkzYaJrFzDktHY0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=gvYEZbbH/+d5NqS2Pu1v01hlJa0gJpW0mRt6YEPf8uywcAlpBoWGHMAU2opdrftOk
-	 rrTxnadveiLckCaV0amQpQOuJyGiu2hufEfH/XbG6eHgjyQoTIntJgxk25uIcGS2dI
-	 d2zwdrSHKL3n1ImQf2i/42BZBW67F7MJVldq9oi+jPS3TJXzxhSqSwWsiBkEHUs2Sm
-	 Ns9JbCPUpRYCI78QcPtvVmz6iMJyLR2epoO5g/FSoQJOFxmS7Cwp+ewXPcRTcLyTER
-	 1PQ6Qm2S/EE/reA3gODQVg9M46IYL5JtFJ6oSeg7qcUr82AeCdkZ+AfGvfVA5KPgTF
-	 +2YGcDM4lqZtQ==
-Content-Type: multipart/mixed; boundary="===============5450880720553597705=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Es23tAe1"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2db18e5cb56so5050945ad.0
+        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 03:57:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788519469; x=1789124269; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ZSICyMswvhjSa9kIiRAEFAE0EJcTXK8dXdxSnZUf4pA=;
+        b=Es23tAe1v6uiPuZ1W2/tcdkIlsV+jHo1u531niOlAqNLXpqaUtfTK/cB6NRa+Cn6rU
+         h/QEy+AOT6vykaYdW4FZz7+e+2XVgbcQ1Y7Bq7EFCrP5aixCmVILEd691uPy2lHalEC1
+         0VtL9T5eAd545Y5BGEMIe8pfZSl/JtlOA3JhlfU25mm2vQj/tl1HLoTyoj5SmYWpQTha
+         uZK1WkIjz9OIIyyuVZ/ouGzFP31iJ7zRG7NMCos4Uriv7u3zm92bn2rIA1nAhNmEqXyM
+         sDTOFqnSAjtdRK+P6osu4s5voriAkGnIdyPFiQWrpOBkiRl96+5JFdKcHtejt4xNoi3O
+         jj6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788519469; x=1789124269;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ZSICyMswvhjSa9kIiRAEFAE0EJcTXK8dXdxSnZUf4pA=;
+        b=BwxFd2vOOfUszuJ9Hu56qLM62QQ6rGQ4HFxT/OPeoGs9OEapbmbm/x0pjXjWbl8Ucf
+         z1/JqobmU8V3gihwvrjDx58966XyYqVtPIC5l7JfBx9k9PJTCxDx+HZr1PIT5cnDeesI
+         embigiHKgTCss9xVnu7zq5MzCc69Ftn0JrVxCFdvdj6fVIOWPZ3V67QZ2iVaTYRUX6Gc
+         hGIDY5WjrTpeV9T3qdVMZO0ny8g4vT9JzX/+JBjWA44SMmb5URkJNh5IN0dDJnel/Dz2
+         BCiGdEg4edWOvqRwFRXrbotcHt6VbFaZOd75G/Nx/psaNAFyh0XZHVvNap/hKiv66a8b
+         thPA==
+X-Forwarded-Encrypted: i=1; AKwUvBwr4r/3zmHgP+YankdONn+eXIKN3Lxo5WhWsmWzV5eZL0817xU3x+6l/3KUjFcBu3721TQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++k90OF+FmRxky+MKQVfu73PjeQTSAyQyTWvkwb0h+gQO6YD9mrR
+	tdjahTCWQRcHKPR62rvFiNDVvO8ybqEsfP8PnhbH4RSbmSP2w3GzEYnl
+X-Gm-Gg: AYBFou2dljyP5cKjum4pXiu01aXJ9EkiVXF0fpY3ihSp2O0elyxxOuf6kOF/j6Le8/l
+	QAxjsUvqFY6jTpqJBGW8UfBqcTBdvEjRK5rgpdJnolJgF6sEWknugnWhk2JpNWCkUD1wTMfIkRl
+	mSEAHMCIcrFiSLsnPxuq4aVJNkZaWA79f5pcAtZdbZNxaqUELN3vJfxTcUkXJ5OstFhiNIkBSlp
+	qcr4TuP29utJLcV6lQ0pnRRFBrsByhQPr9vA3vrgtoeR1fKfS+Uz1NqB2TKKDWlMTh1Z9p0Rhb7
+	3oqiOTPKXhwWNIdEJgAlvjAVjf6ErMHY8EAqeFOA/NyINrtYHRknEKkeNOtj0Tm1CKhO4NwccDp
+	HVTRYWOAHMLKPSk4a1HK1nHN1B2rpEH+1tWA2LfHuO3PiXz+RRE/E1zm85uHNJprZLji3xFC2zs
+	GS9Z6mzQYtyduPdIYmhSwM3pDBgzJNO3Bk+XFWK0+y1Xv4+nZsbtS33VtTnrhHUbDwhv7D1Y6Mo
+	pbsQP2B3JO3CkWcQlPENlR/yWA=
+X-Received: by 2002:a17:90a:d646:b0:398:9bd5:490d with SMTP id 98e67ed59e1d1-39b26214798mr8379476a91.20.1788519467893;
+        Fri, 04 Sep 2026 03:57:47 -0700 (PDT)
+Received: from volcano9f6e-hostos.amd.com ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3339b123731sm5523091eec.18.2026.09.04.03.57.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Sep 2026 03:57:47 -0700 (PDT)
+From: Hemanth Selam <hemanth.selam@gmail.com>
+To: 
+Cc: linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH 0/7] selftests: fix typos and repeated words in comments
+Date: Fri,  4 Sep 2026 16:27:30 +0530
+Message-ID: <20260904105743.39799-1-hemanth.selam@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <6b47a60308d94d4758e016e7850c9090a412f20b1d4f99874431d9f935e54901@mail.kernel.org>
-In-Reply-To: <20260904094954.63447-2-jiayuan.chen@linux.dev>
-References: <20260904094954.63447-2-jiayuan.chen@linux.dev>
-Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Test bpf_sock_destroy() on a TIME_WAIT sock
-From: bot+bpf-ci@kernel.org
-To: jiayuan.chen@linux.dev,bpf@vger.kernel.org
-Cc: jiayuan.chen@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,sdf@fomichev.me,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,shuah@kernel.org,aditi.ghag@isovalent.com,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  4 Sep 2026 10:50:16 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============5450880720553597705==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+This corrects 7 misspellings and repeated words in comments.  Each is a
+separate patch so that any one of them can be dropped without touching
+the rest.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-> index 9c11938fe597d..b90fab7073386 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
+Nothing outside comments changes.  Every touched C file was checked by
+dropping its comments, replacing each string literal with a placeholder
+and collapsing whitespace; what remained was identical before and after,
+so the compiled code cannot differ.
 
-[ ... ]
+The mistakes were found with scripts/checkpatch.pl against the list in
+scripts/spelling.txt.  The scanning, the edits and the changelogs were
+produced with Cursor running the claude-opus-5 model, from a request to
+find and fix spelling mistakes across the tree, and every correction was
+then re-checked by the comparison described above.  Words that name an
+identifier were left alone deliberately, even when they read as typos,
+because correcting the prose would make the comment disagree with the
+code it describes.
 
-> @@ -204,11 +272,12 @@ void test_sock_destroy(void)
->  		test_tcp_client(skel);
->  	if (test__start_subtest("tcp_server"))
->  		test_tcp_server(skel);
-> +	if (test__start_subtest("tcp_timewait"))
-> +		test_tcp_timewait(skel);
->  	if (test__start_subtest("udp_client"))
->  		test_udp_client(skel);
->  	if (test__start_subtest("udp_server"))
->  		test_udp_server(skel);
-> -
->  	RUN_TESTS(sock_destroy_prog_fail);
+Tested by building x86_64 defconfig at v7.3-rc1-269-gbc35965f6940, which
+is clean.  Nothing else was built, so any patch touching code that
+x86_64 defconfig does not compile has been read but not compiled.
 
-This isn't a bug, but was dropping the blank line before RUN_TESTS()
-intended as part of this change? The deleted line had been separating the
-block of test__start_subtest() calls from RUN_TESTS(), which is a
-different kind of step. If the grouping was intentional, could that line
-stay so the diff is limited to registering the new subtest?
+Hemanth Selam (7):
+  ARM: net: fix typo "arithmatic" in comment
+  bpf: fix typos in comments
+  powerpc: net: fix typo "upto" in comments
+  selftests: bpf: fix typos in comments
+  sparc: net: fix typo "evalute" in comment
+  tools/lib: fix typos in comments
+  selftests: bpf: fix repeated words in comments
 
-[ ... ]
+ arch/arm/net/bpf_jit_32.c                                    | 2 +-
+ arch/powerpc/net/bpf_jit_comp32.c                            | 2 +-
+ arch/powerpc/net/bpf_jit_comp64.c                            | 4 ++--
+ arch/sparc/net/bpf_jit_asm_32.S                              | 2 +-
+ include/linux/filter.h                                       | 4 ++--
+ kernel/bpf/reuseport_array.c                                 | 2 +-
+ kernel/bpf/stream.c                                          | 2 +-
+ tools/lib/bpf/btf.c                                          | 4 ++--
+ tools/lib/bpf/usdt.c                                         | 2 +-
+ tools/testing/selftests/bpf/libarena/src/asan.bpf.c          | 2 +-
+ tools/testing/selftests/bpf/prog_tests/lwt_seg6local.c       | 2 +-
+ tools/testing/selftests/bpf/prog_tests/task_local_data.h     | 2 +-
+ tools/testing/selftests/bpf/progs/freplace_unreliable_prog.c | 2 +-
+ tools/testing/selftests/bpf/progs/iters.c                    | 2 +-
+ tools/testing/selftests/bpf/progs/verifier_var_off.c         | 2 +-
+ 15 files changed, 18 insertions(+), 18 deletions(-)
 
+-- 
+2.48.1
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33861180631
---===============5450880720553597705==--
