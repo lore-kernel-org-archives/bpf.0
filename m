@@ -1,63 +1,63 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25A13D6CA7
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 08:33:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D7F3F5BE4
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 08:33:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788510823; cv=none; b=qdEDrRCsmkE2+5+TJCve1jEHxV/i9LVFO1Rk8DGCRLP5T8RSGMREJWM+F9sNvY0KfqEqisJ7hRd77TWUQhqJm7eXFkyaTblaeRjKrHYSfHYS7RYT1TXvzZDDb0BPKo9aALV5aG/wupRcNrP4Pd+e9FdDWtFZ2VvtPYRvpHYn8Gs=
+	t=1788510824; cv=none; b=rOOHfUd37oxFlqog7QZpRnZihxZhCMjb+qScAOlsXUbZz3HSuNbdgOMn7NCzPQJV4pAB51CBIuQjtaGVCBjR4OKaVGISzo0lasJaSjzTGVDKOa7hyF63UCbzBtI39fs9xeaeymQdE4zyAiYaT2AYYgU6Yl0i2M1wELhJDL0x9k0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788510823; c=relaxed/simple;
-	bh=AWSd9MfwrBSqMvA+bM4QZlyQCDq1FXY8XbTRWNJJOhQ=;
+	s=arc-20240116; t=1788510824; c=relaxed/simple;
+	bh=udjHpnYYzoMFnnltQ3g3DmTv+xJsgdJYpn+JPl189us=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UbAtsKGqPrWnoWFxINwQ0m93bqUpjgvXZ4zyP7HyWeKiuwCKTHl6BFKKsLnIUTvU3DxFgvXS//bXbppukL2opKYBs5L5RFx4xK7+OIM7Ss8Tl0VcL9zRfmDYfX96OzfMOrbZyVuhS4laiRaBaHEQw7+mBa8SDoL0IvmNbwZvBP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gzfpd4L9; arc=none smtp.client-ip=209.85.216.50
+	 MIME-Version; b=CVgyCEcPcuXkUmick2//qyAw/hQe08VHkggIXCpBeR4S8wTBgvIT1sYglaw3pLv/dK7dcaCVldr6YhKKjcMZ7iV8cY+8nEhjfPR9A5ovJZ+lBDppKbdxeSckvXHwV26ykI25j6FrSAt9tOuwUfySDU6XvfD49TbMrstos5Wcpmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gJPjK/8/; arc=none smtp.client-ip=209.85.215.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gzfpd4L9"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-398c1101c1bso723205a91.1
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 01:33:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gJPjK/8/"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cc1cc1b42b5so877866a12.2
+        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 01:33:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788510821; x=1789115621; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788510822; x=1789115622; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=QkEvV2A5e8YuhFKlaWDxO3OETdMpII+zkuLu0SBnhgQ=;
-        b=Gzfpd4L9gdA8WnTy7Eo+k4Ehj+skyk5khvVES5Nk6lWnLSPmGaizBE2TdcXWGvLXQ+
-         vi+Z+LZi9zjlTX8WTIdMOeC6tQHpkBgJpQnI4RbRSBBB++sJAxtfSLewulYCaUucSrPk
-         N1Yb+D1+5b491cOyxAlpT4zuk3bmARCgZHe/HEQZrOItsAGmOr2XyQubhkxE3/cvjGAp
-         op1nJc6/EW9OzJ6vK3fUSHjIiAlUXgVUN+Ku/Eqb+sqgwHp8UXMtvZ/w7lWcUo8nc8E6
-         u43kVh7JV0Zv4TCemchRrbL4m2xIEYUt+1VepztRLk083eHgMpTKFQuJLasUvt2CmNJR
-         FqsQ==
+        bh=saWwH7+PSWtHADyWf5bONwrS8FtHJDJz9R1KvsTel+I=;
+        b=gJPjK/8/1kJkjkvoahx871GJITsAi/D/lq2VKVeGJYz2M7ByFo+u7teaEfxW2+7gxB
+         VycVdCxztiROWx3XWgsyiqnjVTwo2jnnxeLQ1vzpHPeOF9rkI3uCh3AOg9aFbo8I4WFO
+         6lzMtwyJPfFdKxOKUuet4GtDKMpUL8Bq0Owj5DSq8M/84QwWxukzRs0kfANbtVwjK69H
+         9tKWMIi6KswJqNVXDdxCiH+WDSl4hJemOXxkorpoHSpsMBKWAypK1SPpdGXAIGF93LrK
+         Lt/jqllxR6qNJLEqSbmHYn5BguIdecsj10GxuenVZvYMPA2z5vFi7bOOAZlMyJZuOnCQ
+         8YjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788510821; x=1789115621;
+        d=1e100.net; s=20251104; t=1788510822; x=1789115622;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=QkEvV2A5e8YuhFKlaWDxO3OETdMpII+zkuLu0SBnhgQ=;
-        b=DPv/+5kQMuhWWmSwoJrkQXfG3c+gdXrIynhr5rwpTGB/MJJhHBPwH96Ipmw40bwa2R
-         rI+wmpLTJNA4d9plbKnsXZN4PobQ1BsgG4HrPXaU2mPnQt4eVVqi213xmDYB6U3Rh/Jv
-         Kxt35T5moKDRoq8p+zu3QU7+lrQ51wE8lhhv0ANbAmXIbLt7pSVn0yHcW90HEyofeuwd
-         sR/nYPVI5KwOgjf4rd/z400eyUFnOl3Jj9GJtorQKGFYHvPxCyTtqnG67sUXLLHhto0I
-         9p2fcqCDF4Ke1kfrFibQd/EsVTllrtNvBs6IbkVjVxj/EIXy+P0zuj+ESSGzYb5NC50L
-         eiMQ==
-X-Gm-Message-State: AFuF++lW4uCgTL/C1JP/qdDcSAYycRPekeMb3TRUBlUpBkrBd590ApGg
-	Wwg7YW7m+2t8pS7q9JsUOjogCpnkvb5RTLctzVUaBErJ6ZSdT1JdH4JlCSKOzyKCiBU=
-X-Gm-Gg: AYBFou3TI6+iIbFFfYsDod0Z6qmbIRhmzyvDmgfOGJqvZZyMzSfKGz1A8+aLtZh479v
-	OwuHiW7oLXRAS/MaEdAijNUyRLQaxBzLewXml+aqigrPggf88uU7OF9luYmYOXnPAbbq8Mj29Ba
-	HbjwRlKwzxpZTQPt1R2eQS0ig/6gNrVaDtJNBGpYBNkxm48C9HP7YCKaX6wewjsThyJC4VmfS1S
-	Ufu4uBeeONZr5/sVo8PKKnvJqJXa/9FriG89cGD8VP/g0yZXB6HawhiPdNa8iAJs8i42KkxwGEX
-	gDePQT8ES4TZaMXZABNuwPgJ/XD+E4TMQ92GZzIfbzCbvM7cJEMFncR8qvOnXbSAnuB5+/obFHn
-	qYz7t6MNyOB3n16LM8uL13CC/AbCt1Po3dMy+1qHGQ5zF8ZTXbzveDfyS8oArYVO+tJIsSsu4mp
-	jM0GUwm8Foo6zprW/aEJwOnwVd4QoA6O0y74OcFKY5fFf1TMCjFJo3kTbdfKvoa1DXwj9s7HA+u
-	o1YehuGWF4vV2vVYyYae1TDz+3KdpNJxQUgdSziPx0=
-X-Received: by 2002:a17:90b:3b52:b0:38f:18f9:785 with SMTP id 98e67ed59e1d1-39b26101d25mr6519163a91.8.1788510821118;
-        Fri, 04 Sep 2026 01:33:41 -0700 (PDT)
+        bh=saWwH7+PSWtHADyWf5bONwrS8FtHJDJz9R1KvsTel+I=;
+        b=Rs7RLVG4g6DNCwBTE/Vu7HdoDvtmGx9SVczwn1t8MP8QvA5vU9PQQX86K92AuiieZO
+         7QReKQAwbUAGUswtI6/ksa60tmdx1VeaN/6m7vsQHhY+BDzGKGlMMi1sL2Z9qCA/6ZQj
+         z8tiJ1ankGUahai0CY8CUemar/hPSXTdTHizeeXGb6oUldGobFuUfbEGP3Zj0UjsYmkY
+         AB3369eN8fPOSoS+S431pWjsoUx/Xi727DYa9hrfCVUl85kVH7/Ffi/J8itwOVdhXHlb
+         i4VyXp88SNBiQCwCKzppPU78Fwm2E+TObjvYNaLjAKLPh/Ebc9cFw0GRvzsrK9rgS/KG
+         0f6g==
+X-Gm-Message-State: AFuF++lbu8lyhZwMQavqg6PH/Thqp19PojIvMRt67XGMn5Iwl7uUcMka
+	y7JhjKW7J3MLPb1nLc6OPZzSEIWtSZcsPGyDHuM5wHQoHFs9T+OwTSC3C2jJ/g==
+X-Gm-Gg: AYBFou0E+sjeuQP3DD5TuQmOHF3L+5JPEH9dXQHdk0vDYwuw5bqBLL7Vb1MnStKQavt
+	pnQdl5R8urMeF+08rXRreKsKFomRN2Ve31BPoLIuPNAllZIOpklYSRBLe3zCiX6SAKbnBUK84Uv
+	spTUJ5ZxjA3+raNIF9Wr+unRsayrf9wz/jx4+kKJO6vgyWkiMRl0BXo55zL8Hy0N2KyCgZmkzQ7
+	Q1AkNm8w2zksb5HZ/To6SDd0HI8N1+KmUV1e6bekWJpfVjF26M543eBWr5f4x+Dl22lTiFLuDVk
+	28WZ/nqIXjSDmFMYnIZwM3rMcCMAMTPyRhxLJFbC7ldCmN2mfTCTGdQRi9H4dS9WKoJUtaV5RZk
+	OjOfIrYl8USGzOno/yq3TIBlrZ11cKTirfCOr0R0CAUpGXP4rNgJliFQ4PyCdUcULaa4PafbQ8S
+	hIRp03X3HYi6z/BULxx/pIEyo59lndrOL/zV+P1Ffy6FzlJePZqR+eaOsK46qD0islLDq9iWuBL
+	BOSqEbufbVdMDWUlfpNsdwYRxpkPupb
+X-Received: by 2002:a17:90b:3a50:b0:38e:4cb:51f with SMTP id 98e67ed59e1d1-39b26101576mr7700491a91.11.1788510822038;
+        Fri, 04 Sep 2026 01:33:42 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b083e4fafsm9628057a91.1.2026.09.04.01.33.40
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b083e4fafsm9628057a91.1.2026.09.04.01.33.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2026 01:33:40 -0700 (PDT)
+        Fri, 04 Sep 2026 01:33:41 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -69,9 +69,9 @@ Cc: daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	npc@anthropic.com
-Subject: [PATCH bpf 3/8] bpf: don't resurrect a scalar id dropped by collect_linked_regs()
-Date: Fri,  4 Sep 2026 01:33:20 -0700
-Message-ID: <20260904083325.2083493-3-eddyz87@gmail.com>
+Subject: [PATCH bpf 4/8] selftests/bpf: check the linked regs cap for the compared register
+Date: Fri,  4 Sep 2026 01:33:21 -0700
+Message-ID: <20260904083325.2083493-4-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260904083325.2083493-1-eddyz87@gmail.com>
 References: <20260904083325.2083493-1-eddyz87@gmail.com>
@@ -83,63 +83,55 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-check_cond_jmp_op() copies the compared registers into
-env->{false,true}_reg{1,2} before collect_linked_regs() runs and copies
-those snapshots back into both branch states afterwards.
+linked_regs_too_many_regs checks that collect_linked_regs() ties at most
+LINKED_REGS_MAX registers for a single jump. Compare r5 instead of r0,
+so that the register the jump compares is itself the member that does
+not fit, and check that it comes out of the jump unlinked.
 
-collect_linked_regs() records at most LINKED_REGS_MAX members of a
-linked registers group in the jump history and calls clear_scalar_id()
-for every member that does not fit. The compared register is not exempt
-from that.
+W/o the previous patch env->{false,true}_reg{1,2} bring r5's id back and
+insn 7 is logged as "R5=scalar(id=1,...)".
 
-As a consequence, sync_linked_regs() might adjust ranges for more
-registers than bpf_bt_sync_linked_regs() can propagate precision to.
-
-Collect the linked registers before the snapshots are taken instead.
-This might lead to some unnecessary clear_scalar_id's, but from
-previous testing situations with many linked registers are
-extremely rare.
-
-Fixes: ec1d77cb0ee9 ("bpf: Use bpf_verifier_env buffers for reg_set_min_max")
 Reported-by: Nicholas Carlini <npc@anthropic.com>
 Suggested-by: Nicholas Carlini <npc@anthropic.com>
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/verifier.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ .../selftests/bpf/progs/verifier_scalar_ids.c       | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e53619e2210e..d16dd1fb08b6 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -16870,6 +16870,16 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 			return err;
- 	}
- 
-+	/*
-+	 * Collect the linked registers before env->{true,false}_reg{1,2} setup,
-+	 * otherwise ids dropped by collect_linked_regs() would be resurrected
-+	 * when env->{true,false}_reg{1,2} are copied back.
-+	 */
-+	if (BPF_SRC(insn->code) == BPF_X && src_reg->type == SCALAR_VALUE && src_reg->id)
-+		collect_linked_regs(env, this_branch, src_reg->id, &linked_regs);
-+	if (dst_reg->type == SCALAR_VALUE && dst_reg->id)
-+		collect_linked_regs(env, this_branch, dst_reg->id, &linked_regs);
-+
- 	is_jmp32 = BPF_CLASS(insn->code) == BPF_JMP32;
- 	env->false_reg1 = *dst_reg;
- 	env->false_reg2 = *src_reg;
-@@ -16924,10 +16934,6 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 	 * 'this_branch' and 'other_branch' share this history
- 	 * if parent state is created.
- 	 */
--	if (BPF_SRC(insn->code) == BPF_X && src_reg->type == SCALAR_VALUE && src_reg->id)
--		collect_linked_regs(env, this_branch, src_reg->id, &linked_regs);
--	if (dst_reg->type == SCALAR_VALUE && dst_reg->id)
--		collect_linked_regs(env, this_branch, dst_reg->id, &linked_regs);
- 	if (linked_regs.cnt > 1) {
- 		err = bpf_push_jmp_history(env, this_branch, 0, 0, 0, linked_regs_pack(&linked_regs));
- 		if (err)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c b/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
+index 663d15fc5fd2..256547048cc4 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
++++ b/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
+@@ -380,13 +380,14 @@ SEC("socket")
+ __success __log_level(2)
+ __flag(BPF_F_TEST_STATE_FREQ)
+ /*
+- * check that r0 and r5 have different IDs after 'if',
+- * collect_linked_regs() can't tie more than 5 registers for a single insn.
++ * check that r5 is unlinked after 'if', collect_linked_regs() can't tie
++ * more than 5 registers for a single insn and the register compared by
++ * the jump is not exempt from that.
+  */
+-__msg("7: (25) if r0 > 0x7 goto pc+0         ; R0=scalar(id=1")
++__msg("7: (25) if r5 > 0x7 goto pc+0         ; R5=scalar(smin=")
+ __msg("12: (bf) r5 = r5                      ; R5=scalar(id=2")
+ /* check that r{0-4} are marked precise after 'if' */
+-__msg("frame0: regs=r0 stack= before 7: (25) if r0 > 0x7 goto pc+0")
++__msg("frame0: regs=r0 stack= before 7: (25) if r5 > 0x7 goto pc+0")
+ __msg("frame0: parent state regs=r0,r1,r2,r3,r4 stack=:")
+ __naked void linked_regs_too_many_regs(void)
+ {
+@@ -400,8 +401,8 @@ __naked void linked_regs_too_many_regs(void)
+ 	"r3 = r0;"
+ 	"r4 = r0;"
+ 	"r5 = r0;"
+-	/* propagate range for r{0-5} */
+-	"if r0 > 7 goto +0;"
++	/* r{0-4} fill the record, r5 does not fit and is unlinked */
++	"if r5 > 7 goto +0;"
+ 	/* keep r{1-4} live */
+ 	"r1 = r1;"
+ 	"r2 = r2;"
 -- 
 2.55.0
 
