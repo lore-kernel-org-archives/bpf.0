@@ -1,326 +1,231 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-yx1-f42.google.com (mail-yx1-f42.google.com [74.125.224.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B23034E56D8
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 14:54:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EC2938E8A7
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 14:55:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788533684; cv=none; b=GQmL16ApUWb3MkGUjBURZHYvUBulne/GmlHSbGML3I9fRuHVcwZkQiA1p3PnjGwKLdv4y0pdlp06nTr0FGzBf1HGQpk9RJTwXbjPKebu0DWo8ssIHz+P9b+bzTjanWQ3AAG2Lpip1R7PuEKHg4wgaqFdkjbjBLFa3xsUpYR6zN4=
+	t=1788533707; cv=none; b=kwZRQxmK4mkMChUE0zVHrG8SXG3m1XvqiO0XhUYu1sSWPYeuLfFrGKF8FYFcPoyrN0pcZv1jgSBZhkEK3JGvLYgAT5b1eSXHsWRl/lwaK1ljBd+ffoGubSeT3cITO4PrqwarmKgpY9s44oY2haeNdVfoZUJ3gmg0S2klmEZuE0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788533684; c=relaxed/simple;
-	bh=nSBS+rlhEpu4GtYBRlDxNT0IMhKXrWZBlDW7Ai/0My4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bl/jvQYmqmN/9xalSpnGTuWpCTlWrOAxgH9DTWQ2wi3laVX4ySM0OloQEGe3vUxP4gOJgTvtx5nwWC1mjRJEZ6Y+prcBe4YyTnjzlW9b6Kvn5yHz6Jm4HEidMkJmqpgcRtWowE5HTjJQi2Az0bP71oR+gzvaXGqmHn1mmJa77G8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NeUnNc6q; arc=none smtp.client-ip=209.85.221.51
+	s=arc-20240116; t=1788533707; c=relaxed/simple;
+	bh=IYCHIRkcU0Y26Lh+LLhttLcA6GVmm9WCqKr3QlsZawg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=mcr0Vjg134LtgmvAbsJqa5BUZspWKRkjOPPuP4XCmokmA6/xecS9+9pUxvJbe7SDQEfhLBAdrYsn1rXpPCUHzQa6NW401xtWWH8MNRt9d8te/Nte/AEHVPvyPt+5t3qbK82VDHSHzbvfLWG9raMnEeICQJr+qmmu6v/3uBc1x1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hli5wZpD; arc=none smtp.client-ip=74.125.224.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NeUnNc6q"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-482ea739de2so738093f8f.0
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 07:54:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hli5wZpD"
+Received: by mail-yx1-f42.google.com with SMTP id 956f58d0204a3-66fa996e65bso2085344d50.0
+        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 07:55:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788533679; x=1789138479; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=6KgsraBrUcToWRNGkqj8MPFUdOM/wW4nUtZo/xB90w4=;
-        b=NeUnNc6qKrmQtnlaVQHHlJsXdpNoutZofZO7ymoqynJjVxw9q0EUOs1dMt7OA9KY9W
-         HZBkxQZENISCsfReNDrbTTlYgvWBcGN9kCl/Skxf8R3GTiw9oHr8mG8d2gk+nOmBvKRn
-         p1nunW9JTFscHG0uCf+3fZoke/JZZOKWJQaDYSQ0OIiTgi5Qq+cidP6Z/i2R/SYUtva2
-         V8lQKe0XQwOUIVAibI8KOj5cdzp9z6zXaFSzUhbk7zJRKtsFdWyj99xsNSuzoh4cU5Yn
-         1s4cgL+EBmY2IkBl8JmfVI0F4oAtAZNOo7TB4EZM1mMUPxjbLQYoAW+sPyeVrxQmT/dP
-         njfw==
+        d=gmail.com; s=20251104; t=1788533704; x=1789138504; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=OmKNC+xz46c7sTpK++7HxSk0J2ccEwkpwZib7Yoy60o=;
+        b=hli5wZpD52So5JYP7494YC1zOfZzcgclWgO3j0h9SS7RsIHVovT+AAEpXi3XPJBoWV
+         dqvqUDC0d9lMkpWm2y+16QXVbDxN2mqbQDFGmL24oarGQ7H1TTx6JcamQ9TfIoMdx67O
+         LqlhGFSTXs3kcex+6XfAOZuo7i85TcAViLeWILPCESeGkzqbM+nSgGjJRI5zjqDJKHTt
+         yw7nwkwUTFpk5+GOJO0ljRs3rqk/Km2HKTLHWgncpTR1XhefjTpoU6PHD5VfR32p6g4t
+         Y5ZroNeALKw+PFbLta3wpZhObjqlOGDEOZR/mkgUutqrj0f2NAgmN3v78zD/3BaBdMRf
+         Qhpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788533679; x=1789138479;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=6KgsraBrUcToWRNGkqj8MPFUdOM/wW4nUtZo/xB90w4=;
-        b=rjKuGLvWrczqopmD2orWXdqq7KvEHb1k+BIXFpc+yi4JDzUpsU9LD6OzXNBxl76qzF
-         Umvr95nuuTjmGfdDHwZqizivLJwyGUUntVY7ASXjgMegNt6+dW7mOoKR7nh99Dbzg1SC
-         75OzTfpmcDuPOggW8vcte1UWDfl8cIotp7mJnKSxKXDNcERokCUaQgwOC1ZW2jDfTZcI
-         Lh3jBkEpVTKHOKYQs4sCkdPzMPtt2QhsArlMqoCFUNs+8qUi1bmJBXy+g2D3phczZd7V
-         o1Y87hRhfLrV4tjS2qUAwdBz4Rzq538bHXazcXUcjXU/09p5pkbm3YAx+eI0iq3uqE66
-         l4Ww==
-X-Gm-Message-State: AFuF++nrsYxg386gEEUInRtU4X5lNVPfWdsKXnPQL9B4kPOieN4Kacla
-	H32xlZyk2mLqc9a4OUhP8oYg/H28N8PtyhbhKrQC39gn/zoQGTx49gpLQSo1kUiIhJo=
-X-Gm-Gg: AYBFou1qJYNPxkVj3BxVcYx6E/8q0WGpjovdD2lhXVnNo6ZRsMmmM5ODXb27kDASM6o
-	Kctuohq3ieq0t68LxGis0JDBaSU8XJ59QqlVO3BKptKd55gYyFFvHCw9ywVEz0csHdL1RUKS9xz
-	/zsXegab0aRVKOVngkz3pXfDGG/RdBUxntVgzWU4xrmLf7KX5l7alrWls5g5bMJ+GhG9RoR83Kh
-	4AD0R+VUJ8Lm6wNtIltQMRlYAqnl+gpk4amxRup3lhCNmK5/s2hZwaUC8wlnS2NfHOIvVPeWlJk
-	S/AO7vxC9BFCI0VZzcuMS20neWH+ONTI7zG5KFUh///tGeTAzo3qzfwoNUaeVvqrtwpaGK61RTD
-	c+P9ZNjAP6JDy7RkeFTXm99503X+mF6CLtZRoDc1PgS/WNFED70RDawDP+fmGIs2FKTgfXisPKw
-	Qo1bqFWevisHaZJmrBxs8LJiiB/M2lxfWg9XG2CULuWADsp364u8QpTnmxT4Z0L/O4CFAThnSXX
-	g==
-X-Received: by 2002:a05:6000:25fe:b0:485:8cb8:b838 with SMTP id ffacd0b85a97d-4858cb8b900mr3127211f8f.7.1788533679283;
-        Fri, 04 Sep 2026 07:54:39 -0700 (PDT)
-Received: from dell-desktop ([2a02:587:4b5f:900:ef25:2f4:1792:4e6f])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485885cb03asm6802799f8f.37.2026.09.04.07.54.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2026 07:54:38 -0700 (PDT)
-From: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
-To: bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-fsdevel@vger.kernel.org,
-	viro@zeniv.linux.org.uk,
-	brauner@kernel.org,
-	akpm@linux-foundation.org,
-	david@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	kpsingh@kernel.org,
-	matt@bobrowski.net,
-	song@kernel.org,
-	utilityemal77@gmail.com,
-	sun.jian.kdev@gmail.com,
-	tasos.papagiannnis@gmail.com
-Subject: [PATCH bpf-next v4 7/7] selftests/bpf: Test mm_struct user memory kfuncs with linux_binprm
-Date: Fri,  4 Sep 2026 17:53:40 +0300
-Message-ID: <20260904145340.40212-8-tasos.papagiannnis@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260904145340.40212-1-tasos.papagiannnis@gmail.com>
-References: <20260904145340.40212-1-tasos.papagiannnis@gmail.com>
+        d=1e100.net; s=20251104; t=1788533704; x=1789138504;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=OmKNC+xz46c7sTpK++7HxSk0J2ccEwkpwZib7Yoy60o=;
+        b=VRxIwiN3JZ2ImovXOZ36K4WwxgCDXQ3F3JCoYg/DUxDe7nm24kl12Hg3maEe50akpI
+         YNEPR6KMV9kszIUletZvkfwIOj8DI3cN3jZ/LoHLbgVSvKYOwB9U+v0xhd53jAM2c3ew
+         A+4J4PLMhZWk3R/0xd9VCcaxM1LwH0NWuChtmiHHyBetgUnZd5eI2I8sHOtNFoqY39+z
+         jOv/0IDjGvQ1TgCjgH8iApJJXCf2UTFQ5fjDi0WyyejCAWyG4NG8uMhG0IUEsqr9KzLJ
+         037HGc6xuw7DjqSj0WYB4u35Dnz9q/9eNNPSIwzTLQLDZMLRNBz/sWhouU/rQAXeHJ1h
+         i8dA==
+X-Forwarded-Encrypted: i=1; AKwUvBwUZGZJdkK66UxVKm23IQsGjb65/H7pnNcUOla/Bk5PLOURpU8rLw3q4Mu8uYdNcixjXeQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++l7Sy5Zqe4qIeKb9RTF74JXdW1jX41wAabAzgVbRqhT3pKRB4B3
+	wxzMvvHpZUHh1sGsZuJvaFtOdBfL1IRW17gR58l3ezExmQ0LWls0vyie
+X-Gm-Gg: AYBFou1inPHNgTzTdt8rKpK89Z5Om8lD1oT/pbCDZ3jR8TWfSQWgVU6qIJomLuF/DMS
+	MWOSS5njbsRlw8nFO1XdcDwIj7NXsMcjq/8uGKxOQQt1Y5YtpHcHeWfWTwuvdInPEDfx9lGcnTk
+	K1gNdYaNKjMC3q5PRj4GjGZnFMXXu5N8+ehgy8Qc1Aj8EJ0V54WDTWoLrL6VTx9MIhE+q4FcV+p
+	lRch/sQpLFOqBuDhIjuWPN1/S8ceImO/++ZYw/Qrcf8q+NAxy65o3GT7AyyM4reOhrwdANASu2q
+	pY2xrZYIWElCclCp3tBEy9rdeb/YA3exe36TVuBnENm/ZYLoh53LsxN6iq5VYbB1LB7VONfuV3J
+	p2Thzld9BCdX5Ye93Fbmw7LBxIk+rjcV9Way4riOrOf1oeLxCao4p+MyfZgDKWgD5P7pyzc0sH9
+	NeVgHs1rN/Kv2QgL5LMh0VBOj+C3vHrmRUp+2k/nt+Vg/1kmKefzWF3UacVRCXZCMqPBLwB3Nk9
+	hqACiRJ63Qz2t+UwjVd3NBY+VebzhMVIdaGDwPTrrG/z9nEhkziISY=
+X-Received: by 2002:a05:690c:a785:b0:855:f387:98c0 with SMTP id 00721157ae682-87127d27776mr32660467b3.29.1788533703978;
+        Fri, 04 Sep 2026 07:55:03 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:11::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8714ab73f23sm19428697b3.33.2026.09.04.07.55.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Sep 2026 07:55:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 04 Sep 2026 07:55:02 -0700
+Message-Id: <DL6MA7Z7QSI9.1DOEM4TWTJN5B@gmail.com>
+To: "Jiri Olsa" <olsajiri@gmail.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
+ <bpf@vger.kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "Mike Rapoport" <rppt@kernel.org>
+Subject: Re: [PATCHv2 bpf-next 3/3] bpf, x86: Add support for jit dry run
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+X-Mailer: aerc
+References: <20260903092039.477827-1-jolsa@kernel.org>
+ <20260903092039.477827-4-jolsa@kernel.org>
+ <DL697WN5AOBE.C8WRI12FLOG2@gmail.com> <app3IQUwVF97Tfq1@krava>
+In-Reply-To: <app3IQUwVF97Tfq1@krava>
 
-Add a sleepable BPF LSM program attached to bprm_check_security to test
-bpf_copy_from_user_mm() and bpf_copy_from_user_mm_str() on CONFIG_MMU
-kernels.
+On Fri Sep 4, 2026 at 12:45 AM PDT, Jiri Olsa wrote:
+> On Thu, Sep 03, 2026 at 09:40:46PM -0700, Alexei Starovoitov wrote:
+>> On Thu Sep 3, 2026 at 2:20 AM PDT, Jiri Olsa wrote:
+>> > Adding support to run jit code generation in dry_run mode that won't
+>> > store any code and only returns the jir code size.
+>> >
+>> > The dry_run is enabled when __arch_prepare_bpf_trampoline is called
+>> > with rw_image argument as NULL.
+>> >
+>> > It's used in arch_bpf_trampoline_size where it allows to skip the
+>> > image allocation, that gives speed up for tracing_multi attachment.
+>> >
+>> > With current code:
+>> >
+>> >   # ./test_progs -t tracing_multi_bench_attach -v
+>> >   ...
+>> >   serial_test_tracing_multi_bench_attach: found 55227 functions
+>> >   serial_test_tracing_multi_bench_attach: attached in   1.563s
+>> >   serial_test_tracing_multi_bench_attach: detached in   0.256s
+>> >
+>> > With the fix:
+>> >
+>> >   # ./test_progs -t tracing_multi_bench_attach -v
+>> >   ...
+>> >   serial_test_tracing_multi_bench_attach: found 55235 functions
+>> >   serial_test_tracing_multi_bench_attach: attached in   0.798s
+>> >   serial_test_tracing_multi_bench_attach: detached in   0.258s
+>> >
+>> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+>> > ---
+>> >  arch/x86/net/bpf_jit_comp.c | 42 ++++++++++++++++++------------------=
+-
+>> >  1 file changed, 20 insertions(+), 22 deletions(-)
+>> >
+>> > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+>> > index ee2ddeba3de1..d1af7dc5c5ce 100644
+>> > --- a/arch/x86/net/bpf_jit_comp.c
+>> > +++ b/arch/x86/net/bpf_jit_comp.c
+>> > @@ -25,6 +25,7 @@ static bool all_callee_regs_used[4] =3D {true, true,=
+ true, true};
+>> > =20
+>> >  struct jit_emit_context {
+>> >  	u8 *prog;
+>> > +	bool dry_run;
+>> >  };
+>> > =20
+>> >  static u8 *emit_code(u8 *ptr, u32 bytes, unsigned int len)
+>> > @@ -42,7 +43,10 @@ static u8 *emit_code(u8 *ptr, u32 bytes, unsigned i=
+nt len)
+>> > =20
+>> >  static void emit_code_jit(struct jit_emit_context *jit, u32 bytes, un=
+signed int len)
+>> >  {
+>> > -	jit->prog =3D emit_code(jit->prog, bytes, len);
+>> > +	if (jit->dry_run)
+>> > +		jit->prog +=3D len;
+>> > +	else
+>> > +		jit->prog =3D emit_code(jit->prog, bytes, len);
+>>=20
+>> Sorry, I don't believe that skipping emit makes that much
+>> of runtime difference.
+>> I suspect jit_alloc + jit_free are costly.
+>> In such case the earlier patches are not needed.
+>> Point emit logic to some scratch area and discard it.
+>> Same effect with half of the changes.
+>>=20
+>> pw-bot: cr
+>>=20
+>
+> yes, I got same speed up with the change below
 
-Starting at bprm->p, verify that bpf_copy_from_user_mm() can copy the
-contiguous NUL-separated argument and environment data. Then use
-bpf_copy_from_user_mm_str() to read each argument and environment string
-separately, advancing the offset by the length returned from each call.
+Great :)
 
-Skip the test on !CONFIG_MMU. In that configuration, exec argument and
-environment strings remain in bprm->page[] until the binary loader
-transfers them to the new process stack, so they are not accessible
-through bprm->mm at the bprm_check_security hook.
+> jirka
+>
+>
+> ---
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index 48429fae0641..1bba19a9a17f 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/filter.h>
+>  #include <linux/if_vlan.h>
+>  #include <linux/bitfield.h>
+> +#include <linux/init.h>
+>  #include <linux/bpf.h>
+>  #include <linux/bpf_verifier.h>
+>  #include <linux/memory.h>
+> @@ -23,6 +24,19 @@
+> =20
+>  static bool all_callee_regs_used[4] =3D {true, true, true, true};
+> =20
+> +/*
+> + * Reuse a writable image in the BPF execmem range for size calculation.
+> + * Its contents do not affect size calculation.
+> + */
+> +static void *trampoline_size_image;
+> +
+> +static int __init init_trampoline_size_image(void)
+> +{
+> +	trampoline_size_image =3D bpf_jit_alloc_exec_rw(PAGE_SIZE);
 
-Signed-off-by: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
----
- .../bpf/prog_tests/copy_from_user_bprm.c      |  72 ++++++++++
- .../selftests/bpf/progs/copy_from_user_bprm.c | 123 ++++++++++++++++++
- 2 files changed, 195 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/copy_from_user_bprm.c
- create mode 100644 tools/testing/selftests/bpf/progs/copy_from_user_bprm.c
+I think you could have kvmalloc()-ed that memory instead.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/copy_from_user_bprm.c b/tools/testing/selftests/bpf/prog_tests/copy_from_user_bprm.c
-new file mode 100644
-index 000000000000..b2325b193576
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/copy_from_user_bprm.c
-@@ -0,0 +1,72 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <errno.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+
-+#include <test_progs.h>
-+
-+#include "copy_from_user_bprm.skel.h"
-+
-+void test_copy_from_user_bprm(void)
-+{
-+	char arg0[] = "first";
-+	char arg1[] = "second-argument";
-+	char env0[] = "SOME_ENV=a";
-+	char env1[] = "OTHER_ENV=something";
-+	struct copy_from_user_bprm *skel;
-+	pid_t child;
-+	int status;
-+
-+	skel = copy_from_user_bprm__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	/*
-+	 * On !CONFIG_MMU, exec strings are held in bprm->page[] rather than
-+	 * being mapped in bprm->mm.
-+	 */
-+	if (!skel->kconfig->CONFIG_MMU) {
-+		printf("%s:SKIP: test requires CONFIG_MMU\n", __func__);
-+		test__skip();
-+		goto out;
-+	}
-+
-+	if (!ASSERT_OK(copy_from_user_bprm__attach(skel), "attach"))
-+		goto out;
-+
-+	child = fork();
-+	if (!ASSERT_GE(child, 0, "fork"))
-+		goto out;
-+
-+	if (!child) {
-+		char *const argv[] = { arg0, arg1, NULL };
-+		char *const envp[] = { env0, env1, NULL };
-+
-+		skel->bss->monitored_pid = getpid();
-+		execve("/bin/true", argv, envp);
-+		_exit(errno);
-+	}
-+
-+	if (!ASSERT_EQ(waitpid(child, &status, 0), child, "waitpid"))
-+		goto out;
-+
-+	if (ASSERT_TRUE(WIFEXITED(status), "child_exited"))
-+		ASSERT_EQ(WEXITSTATUS(status), EPERM, "exec_errno");
-+
-+	ASSERT_EQ(skel->bss->bprm_argc, 2, "bprm_argc");
-+	ASSERT_EQ(skel->bss->bprm_envc, 2, "bprm_envc");
-+	ASSERT_EQ(skel->bss->data_len_match, 1, "data_len_match");
-+	ASSERT_EQ(skel->bss->invalid_flags_ret, -EINVAL, "invalid_flags_ret");
-+	ASSERT_EQ(skel->bss->copy_ret, 0, "copy_ret");
-+	ASSERT_EQ(skel->bss->str_arg0_ret, sizeof(arg0), "str_arg0_ret");
-+	ASSERT_EQ(skel->bss->str_arg1_ret, sizeof(arg1), "str_arg1_ret");
-+	ASSERT_EQ(skel->bss->str_env0_ret, sizeof(env0), "str_env0_ret");
-+	ASSERT_EQ(skel->bss->str_env1_ret, sizeof(env1), "str_env1_ret");
-+	ASSERT_EQ(skel->bss->data_match, 1, "data_match");
-+	ASSERT_EQ(skel->bss->str_args_match, 1, "str_args_match");
-+	ASSERT_EQ(skel->bss->str_envs_match, 1, "str_envs_match");
-+
-+out:
-+	copy_from_user_bprm__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/copy_from_user_bprm.c b/tools/testing/selftests/bpf/progs/copy_from_user_bprm.c
-new file mode 100644
-index 000000000000..b334a157419e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/copy_from_user_bprm.c
-@@ -0,0 +1,123 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <errno.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+static const char expected_data[] = "first\0second-argument\0"
-+				    "SOME_ENV=a\0OTHER_ENV=something";
-+static const char expected_arg0[] = "first";
-+static const char expected_arg1[] = "second-argument";
-+static const char expected_env0[] = "SOME_ENV=a";
-+static const char expected_env1[] = "OTHER_ENV=something";
-+
-+int monitored_pid;
-+int bprm_argc;
-+int bprm_envc;
-+int data_len_match;
-+int invalid_flags_ret;
-+int copy_ret;
-+int str_arg0_ret;
-+int str_arg1_ret;
-+int str_env0_ret;
-+int str_env1_ret;
-+int data_match;
-+int str_args_match;
-+int str_envs_match;
-+
-+extern bool CONFIG_MMU __kconfig __weak;
-+
-+extern int bpf_copy_from_user_mm(void *dst, u32 dst__sz,
-+				 const void *unsafe_ptr__ign,
-+				 struct mm_struct *mm, u64 flags) __ksym;
-+
-+extern int bpf_copy_from_user_mm_str(void *dst, u32 dst__sz,
-+				     const void *unsafe_ptr__ign,
-+				     struct mm_struct *mm, u64 flags) __ksym;
-+
-+SEC("lsm.s/bprm_check_security")
-+int BPF_PROG(check_exec_args, struct linux_binprm *bprm)
-+{
-+	u32 pid = bpf_get_current_pid_tgid() >> 32;
-+	char data[sizeof(expected_data)] = {};
-+	struct mm_struct *mm;
-+	char arg0[32] = {};
-+	char arg1[32] = {};
-+	char env0[32] = {};
-+	char env1[32] = {};
-+	u64 offset = 0;
-+	u64 data_len;
-+
-+	if (!CONFIG_MMU)
-+		return 0;
-+
-+	if (pid != monitored_pid)
-+		return 0;
-+
-+	mm = bprm->mm;
-+	if (!mm)
-+		return 0;
-+
-+	bprm_argc = bprm->argc;
-+	bprm_envc = bprm->envc;
-+
-+	/* this is the total size of args and envs starting from bprm->p */
-+	data_len = bprm->exec - bprm->p;
-+	data_len_match = data_len == sizeof(expected_data);
-+
-+	invalid_flags_ret = bpf_copy_from_user_mm(data,
-+						  sizeof(data), (void *)bprm->p, mm, ~0ULL);
-+
-+	copy_ret = bpf_copy_from_user_mm(data, sizeof(data), (void *)bprm->p,
-+					 mm, 0);
-+	if (copy_ret)
-+		return 0;
-+
-+	data_match =
-+		!__builtin_memcmp(data, expected_data, sizeof(expected_data));
-+
-+	/* arg0 is at bprm->p */
-+	str_arg0_ret = bpf_copy_from_user_mm_str(arg0, sizeof(arg0),
-+						 (void *)(bprm->p + offset),
-+						 mm, BPF_F_PAD_ZEROS);
-+	if (str_arg0_ret != sizeof(expected_arg0))
-+		return 0;
-+	offset += str_arg0_ret;
-+
-+	/* arg1 is at bprm->p + sizeof(arg0) */
-+	str_arg1_ret = bpf_copy_from_user_mm_str(arg1, sizeof(arg1),
-+						 (void *)(bprm->p + offset),
-+						 mm, BPF_F_PAD_ZEROS);
-+	if (str_arg1_ret != sizeof(expected_arg1))
-+		return 0;
-+	offset += str_arg1_ret;
-+
-+	/* env0 is at bprm->p + sizeof(arg0) + sizeof(arg1) */
-+	str_env0_ret = bpf_copy_from_user_mm_str(env0, sizeof(env0),
-+						 (void *)(bprm->p + offset),
-+						 mm, BPF_F_PAD_ZEROS);
-+	if (str_env0_ret != sizeof(expected_env0))
-+		return 0;
-+	offset += str_env0_ret;
-+
-+	/* env1 is at bprm->p + sizeof(arg0) + sizeof(arg1) + sizeof(env0) */
-+	str_env1_ret = bpf_copy_from_user_mm_str(env1, sizeof(env1),
-+						 (void *)(bprm->p + offset),
-+						 mm, BPF_F_PAD_ZEROS);
-+	if (str_env1_ret != sizeof(expected_env1))
-+		return 0;
-+
-+	str_args_match =
-+		!__builtin_memcmp(arg0, expected_arg0, sizeof(expected_arg0)) &&
-+		!__builtin_memcmp(arg1, expected_arg1, sizeof(expected_arg1));
-+	str_envs_match =
-+		!__builtin_memcmp(env0, expected_env0, sizeof(expected_env0)) &&
-+		!__builtin_memcmp(env1, expected_env1, sizeof(expected_env1));
-+
-+	return data_match && str_args_match && str_envs_match ? -EPERM : 0;
-+}
--- 
-2.55.0
+> +	return trampoline_size_image ? 0 : -ENOMEM;
+> +}
+> +late_initcall(init_trampoline_size_image);
+> +
+>  static u8 *emit_code(u8 *ptr, u32 bytes, unsigned int len)
+>  {
+>  	if (len =3D=3D 1)
+> @@ -3819,23 +3833,14 @@ int arch_bpf_trampoline_size(const struct btf_fun=
+c_model *m, u32 flags,
+>  			     struct bpf_tramp_nodes *tnodes, void *func_addr)
+>  {
+>  	struct bpf_tramp_image im;
+> -	void *image;
+> -	int ret;
+> =20
+> -	/* Allocate a temporary buffer for __arch_prepare_bpf_trampoline().
+> -	 *
+> -	 * We cannot use kvmalloc here, because we need image to be in
+> -	 * module memory range.
+> -	 * Since it must be writable use bpf_jit_alloc_exec_rw().
+> -	 */
+> -	image =3D bpf_jit_alloc_exec_rw(PAGE_SIZE);
+> -	if (!image)
+> +	if (!trampoline_size_image)
+>  		return -ENOMEM;
+> =20
+> -	ret =3D __arch_prepare_bpf_trampoline(&im, image, image + PAGE_SIZE, im=
+age,
+> -					    m, flags, tnodes, func_addr);
+> -	bpf_jit_free_exec(image);
+> -	return ret;
+> +	return __arch_prepare_bpf_trampoline(&im, trampoline_size_image,
+> +					     trampoline_size_image + PAGE_SIZE,
+> +					     trampoline_size_image, m, flags,
+> +					     tnodes, func_addr);
+>  }
+> =20
+>  static int emit_bpf_dispatcher(u8 **pprog, int a, int b, s64 *progs, u8 =
+*image, u8 *buf)
 
