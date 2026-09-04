@@ -1,76 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680E823BD1B;
-	Fri,  4 Sep 2026 04:13:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E9CA3F86F8
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 04:40:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788495222; cv=none; b=HV+8y1K6fQuawHTN6Rtsf3hDjIsTJiP2GtnRJy5bxryQkmAzH5C+6dz+Xs8alwa5dDrq/lVlFw/8jYmUhtG3kqg/+crp94G5SV5rAtzNkkmwdFZUwUUaZLjTjD+981r5KF40ItvU0ztmsBg0koW9gC7mEC7KP/pnDJ+PKSfdpYQ=
+	t=1788496851; cv=none; b=eFBDr/Qlw/OyZzNcOV/ayfnt8BQFr8z1sJN04BJ/pLdBC7XvR14XxnXdCxQG1R3Ow893IcEKnCgeMobLtecNtbxEGMY98SZjlG0wPl8ePpeY+61eXapCXGGcTBvhAviNTY+Idj+/tW1LyEfREcEU19OrmrnkBgVL6ED2hSKSg8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788495222; c=relaxed/simple;
-	bh=Ovg+QgZFjgwPM6VxGpptzrugWCyGFgm1zCQ39i/p8W8=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=c7Y3vMeFlS8Ens47C9dSLmSmSKVq4xkuD7++6bA1FvCNHEnN97gOFDZkjXbw0Z5pOqCs6vcWwFYdLrPg1DO2oyojK5rvh7udEExo+M7sQ1lE8NKmGZlqspSI4vq+iBcrh07qbJdZw03BMo2RByIGKil6+ifHAvYH++9O0SOEi9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FlL32qaH; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788496851; c=relaxed/simple;
+	bh=EsZTtJArPdsvjtwLaxJS/36qM9/GD/zNIMERsfsY+rA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=f5heN20EeKAJzlCbdvF+qH/f3rYtf+hforM0Z+YMcGSsVmggBOHW+nNWanLThtje2Inc1XwZ1WMoGQr21kntSzA2p3o72TdSBwhPWzxIZkkPgOGh8HgphgnCyY4xh7KTigQh8PfIuTGsWPWaz6zybzuJM6ddoG8QH41R+Llb6xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sN0J4XAK; arc=none smtp.client-ip=209.85.167.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FlL32qaH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDD0C1F00A3D;
-	Fri,  4 Sep 2026 04:13:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788495219;
-	bh=Ovg+QgZFjgwPM6VxGpptzrugWCyGFgm1zCQ39i/p8W8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=FlL32qaHfcA1RJ7GJu0KbLvf+B3sB2GXkgBWqruEijyDZdcTShQzRXu8AIRQfpCmt
-	 dniEimjbRRhPR9KW1Nf9rBhvZaEBFYki6OfoyBL5HeO2Y+ovqFraVZYVGsEqWZ+4+p
-	 ojyX+Ag3lOtJg6pqvpKZKhtcnYKESXgWXt4w9PLfFOwE5506lunSRbQ8ismNre2p5y
-	 5/JF0gAI6zRr/m5NxJeITdazR6Jze3+JAAKoQ5DDUlxZcomBl8YYQSijR3jkBCFSiS
-	 WeV8LObrxWvPCZ9HBmMJAXzkKKKXCrKInGG/wefabpXUArLb/QB8j0buov1vAImPf1
-	 t/kznrsxUCkmQ==
-Content-Type: multipart/mixed; boundary="===============4158003370620922930=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sN0J4XAK"
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-4b3a61bdf22so319736b6e.3
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 21:40:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788496849; x=1789101649; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=oJ/VSFyHR9Am9gd1czkqm5wZOQgR9037YN91ECA4S08=;
+        b=sN0J4XAKlivBXBnXykbQlCZqcMlU231BB8lPZtzzelJjZFf47Rhr10s5zpBuyRhFYR
+         J76oLOVYN21NNGz2ADAbytNVn2g/6zh8pJE5V1RFVd0VSeJKDgavNRX5tHh3Kv4gA2Ef
+         o95S0VZEOKuixYoIZ4xDNPOuhOcCfdquUZd1PnXRA98OVLTyLNSNzaI5SjNmC76g5Obz
+         GHgirfBS/ViXKuRlQ7gbvbFZ1/ENLSTLMTOMKLFygKZFhbrle95IzsPWsLGZDstqLTAs
+         Gd7xYFhAUJQ8b2cRMRvQq+wd4mmihBunV3fsN0rokf9MIm25hGCa0HI7IhQiicQz4AHM
+         EWmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788496849; x=1789101649;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=oJ/VSFyHR9Am9gd1czkqm5wZOQgR9037YN91ECA4S08=;
+        b=pvB6lHQFKiy9M7+BJ4vo8WwT2cqKlpYtY0hMRgWlJ/qE+WeG8Lz1Q52XdgAHQNZKhB
+         79Tt1W3fho2YltVWHhyX5CGcHqrxr7AVCgBL3NHQY+ElZ4NvtsDcEwwDEDFAbfbwJtJG
+         h7QSnRnTNNUv6TJjCWba6GOPyfNYJznTiLHtYq4rEhtSTIZmhdMIsDm6lRX2M5uiqMZ0
+         gIOMiDy6aWOOSK7w2dMZR+xg1aq/dfUfcC765yd5A+3b4CC3yYt10a2sBzypfprDYUA2
+         F9Z850yFFOXRA18dO0BN8WjDC5wSXjjxCib7hjPdFw+hEDAo3tlDhCHiSTp9qvaWYIaD
+         MeEQ==
+X-Gm-Message-State: AFuF++kqV9HrZwXjknlpaM6/l5f36iucpCQYo5Sblys3P5S1XRoC5o8A
+	R8r/7bPEqR4GokMPe+EGgzBRm07pVtKcjodPj3Ijv0e1iaFcp69rB473
+X-Gm-Gg: AYBFou2P5+2FvHPxczGzIP66h7AGAUyprI/dSwroh8IAW/DDbceNR714APykWc8clyh
+	yOoxLW+9kY+rBEnD/ON5jOm4vF5+YBvQ9jNdPK4R2dbmcm4zfMZFwAOvBWgFkU2g2G5nGelyHlc
+	j2HFNLm0WjwtdNltBY/x5BQES9Ftpjxpz+TP4Gs/rYZsWXk3JygQTnYXRrJoIf6VEf8cPkYWlZH
+	wvkj4HuPaubUXVuL2nEFM0WoQpQ4VP2lin1OW2oK2hGEj5ICc+I99tSDQjeigAUF1WPZQbcrvSe
+	OmqGaUdwvvawZBK6165Grvo0JKEJDdRs2nYukMlSFnEH8znvCdrrWrD3g0syiD7pZxK4Z7YOTLs
+	ny7RU5BhX10vlfaUTS6dVhV82CiKl7RyxQpxcLoHXEenPEKFW+kOcSd6rz3qdXudkuim7CQFzd4
+	BYb2FZMQ5pJFm6Pb5Lsavp62GPB78jG9ZT5GVXFM/66aMoWZILtsAkJqYUzBKf0US9KTm2ZJmoX
+	O6Uc+kues5TH6sGZ4koAaZTb7jc58Syxi11Oh8s8+ll4/AEtiGX478=
+X-Received: by 2002:a05:6820:179b:b0:6b0:589e:42f4 with SMTP id 006d021491bc7-6b6fcac5a26mr2565373eaf.20.1788496849073;
+        Thu, 03 Sep 2026 21:40:49 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:5f::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6b6dbedc38bsm2253243eaf.4.2026.09.03.21.40.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Sep 2026 21:40:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <4fc647167cbe57eccef94e639af9c89c00481b0c06a23df95a8ac27dea12edc0@mail.kernel.org>
-In-Reply-To: <20260904031912.2133476-2-tweek@google.com>
-References: <20260904031912.2133476-2-tweek@google.com>
-Subject: Re: [PATCH bpf-next 2/2] bpftool: Reject non-autoload programs for light skeletons
-From: bot+bpf-ci@kernel.org
-To: tweek@google.com,qmo@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,shuah@kernel.org,leon.hwang@linux.dev,emil@etsalapatis.com,tweek@google.com
-Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,ihor.solodrai@linux.dev,sidnayyar@google.com,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  4 Sep 2026 04:13:38 +0000 (UTC)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 03 Sep 2026 21:40:46 -0700
+Message-Id: <DL697WN5AOBE.C8WRI12FLOG2@gmail.com>
+Cc: <bpf@vger.kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Mike Rapoport"
+ <rppt@kernel.org>
+Subject: Re: [PATCHv2 bpf-next 3/3] bpf, x86: Add support for jit dry run
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Jiri Olsa" <jolsa@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
+ <andrii@kernel.org>
+X-Mailer: aerc
+References: <20260903092039.477827-1-jolsa@kernel.org>
+ <20260903092039.477827-4-jolsa@kernel.org>
+In-Reply-To: <20260903092039.477827-4-jolsa@kernel.org>
 
---===============4158003370620922930==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
+On Thu Sep 3, 2026 at 2:20 AM PDT, Jiri Olsa wrote:
+> Adding support to run jit code generation in dry_run mode that won't
+> store any code and only returns the jir code size.
+>
+> The dry_run is enabled when __arch_prepare_bpf_trampoline is called
+> with rw_image argument as NULL.
+>
+> It's used in arch_bpf_trampoline_size where it allows to skip the
+> image allocation, that gives speed up for tracing_multi attachment.
+>
+> With current code:
+>
+>   # ./test_progs -t tracing_multi_bench_attach -v
+>   ...
+>   serial_test_tracing_multi_bench_attach: found 55227 functions
+>   serial_test_tracing_multi_bench_attach: attached in   1.563s
+>   serial_test_tracing_multi_bench_attach: detached in   0.256s
+>
+> With the fix:
+>
+>   # ./test_progs -t tracing_multi_bench_attach -v
+>   ...
+>   serial_test_tracing_multi_bench_attach: found 55235 functions
+>   serial_test_tracing_multi_bench_attach: attached in   0.798s
+>   serial_test_tracing_multi_bench_attach: detached in   0.258s
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  arch/x86/net/bpf_jit_comp.c | 42 ++++++++++++++++++-------------------
+>  1 file changed, 20 insertions(+), 22 deletions(-)
+>
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index ee2ddeba3de1..d1af7dc5c5ce 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -25,6 +25,7 @@ static bool all_callee_regs_used[4] =3D {true, true, tr=
+ue, true};
+> =20
+>  struct jit_emit_context {
+>  	u8 *prog;
+> +	bool dry_run;
+>  };
+> =20
+>  static u8 *emit_code(u8 *ptr, u32 bytes, unsigned int len)
+> @@ -42,7 +43,10 @@ static u8 *emit_code(u8 *ptr, u32 bytes, unsigned int =
+len)
+> =20
+>  static void emit_code_jit(struct jit_emit_context *jit, u32 bytes, unsig=
+ned int len)
+>  {
+> -	jit->prog =3D emit_code(jit->prog, bytes, len);
+> +	if (jit->dry_run)
+> +		jit->prog +=3D len;
+> +	else
+> +		jit->prog =3D emit_code(jit->prog, bytes, len);
 
-PiBjb21taXQgMmY1OWQyNTQ0MjI3M2EzZGQ0ZTQ2YmQ0YTc3Y2E0YmJmMTYzM2UzYwo+IEF1dGhv
-cjogVGhpw6liYXVkIFdla3N0ZWVuIDx0d2Vla0Bnb29nbGUuY29tPgo+IERhdGU6ICAgRnJpIFNl
-cCA0IDEzOjE5OjEyIDIwMjYgKzEwMDAKPgo+ICAgICBicGZ0b29sOiBSZWplY3Qgbm9uLWF1dG9s
-b2FkIHByb2dyYW1zIGZvciBsaWdodCBza2VsZXRvbnMKPgo+ICAgICBXaGVuIGdlbmVyYXRpbmcg
-YSBsaWdodCBza2VsZXRvbiAoYnBmdG9vbCBnZW4gc2tlbGV0b24gLUwpLCB0aGVyZSBpcyBubwo+
-ICAgICBsaWJicGYgcnVudGltZSBvYmplY3Qgb3IgYnBmX3Byb2dyYW1fX3NldF9hdXRvbG9hZCgp
-IEFQSSBhdmFpbGFibGUgdG8KPiAgICAgZW5hYmxlL2Rpc2FibGUgdGhlIGF1dG9sb2FkaW5nIG9m
-IHByb2dyYW1zLiBJZiBhIEJQRiBwcm9ncmFtIGluIHRoZQo+ICAgICBvYmplY3QgaGFzIGF1dG9s
-b2FkIGRpc2FibGVkIChlLmcuIHZpYSBTRUMoIj8uLi4iKSksIGJwZl9vYmplY3RfX2xvYWQoKQo+
-ICAgICBzaWxlbnRseSBza2lwcyBsb2FkaW5nIGl0LiBicGZ0b29sIHN0aWxsIGdlbmVyYXRlcyBz
-dHJ1Y3QgYnBmX3Byb2dfZGVzYwo+ICAgICBmaWVsZHMgYW5kIGF0dGFjaCBmdW5jdGlvbnMgaW4g
-dGhlIGxpZ2h0IHNrZWxldG9uIGhlYWRlciwgbGVhdmluZwo+ICAgICBza2VsLT5wcm9ncy48bmFt
-ZT4ucHJvZ19mZCB1bmluaXRpYWxpemVkICgwKS4KPgo+ICAgICBFeHBsaWNpdGx5IHJlamVjdCBu
-b24tYXV0b2xvYWRlZCBwcm9ncmFtcyB3aGVuIHVzZV9sb2FkZXIgaXMgdHJ1ZSB3aXRoCj4gICAg
-IGFuIGVycm9yIG1lc3NhZ2UsIHByZXZlbnRpbmcgdGhlIGdlbmVyYXRpb24gb2YgYnJva2VuIGxp
-Z2h0IHNrZWxldG9uCj4gICAgIGhlYWRlcnMuCj4KPiAgICAgU2lnbmVkLW9mZi1ieTogVGhpw6li
-YXVkIFdla3N0ZWVuIDx0d2Vla0Bnb29nbGUuY29tPgoKVGhpcyBsb29rcyBsaWtlIGEgYnVnIGZp
-eCBmb3IgbGlnaHQgc2tlbGV0b24gZ2VuZXJhdGlvbi4gU2hvdWxkIHRoaXMKaW5jbHVkZSBhIEZp
-eGVzOiB0YWc/CgogIEZpeGVzOiBkNTEwMjk2ZDMzMWEgKCJicGZ0b29sOiBVc2Ugc3lzY2FsbC9s
-b2FkZXIgcHJvZ3JhbSBpbiBcInByb2cgbG9hZFwiIGFuZCBcImdlbiBza2VsZXRvblwiIGNvbW1h
-bmQuIikKCgotLS0KQUkgcmV2aWV3ZWQgeW91ciBwYXRjaC4gUGxlYXNlIGZpeCB0aGUgYnVnIG9y
-IGVtYWlsIHJlcGx5IHdoeSBpdCdzIG5vdCBhIGJ1Zy4KU2VlOiBodHRwczovL2dpdGh1Yi5jb20v
-a2VybmVsLXBhdGNoZXMvdm10ZXN0L2Jsb2IvbWFzdGVyL2NpL2NsYXVkZS9SRUFETUUubWQKCkNJ
-IHJ1biBzdW1tYXJ5OiBodHRwczovL2dpdGh1Yi5jb20va2VybmVsLXBhdGNoZXMvYnBmL2FjdGlv
-bnMvcnVucy8zMzgzMzU2NzY3Mg==
+Sorry, I don't believe that skipping emit makes that much
+of runtime difference.
+I suspect jit_alloc + jit_free are costly.
+In such case the earlier patches are not needed.
+Point emit logic to some scratch area and discard it.
+Same effect with half of the changes.
 
---===============4158003370620922930==--
+pw-bot: cr
+
