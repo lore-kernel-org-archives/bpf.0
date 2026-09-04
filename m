@@ -1,285 +1,150 @@
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 512DE471264
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 11:17:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788520675; cv=none; b=tq0EHlit2Ziywn0qzW2Ai8jdS6rI/IOWycsZ015E3BtDzXEspnxBRRDfU2zvaIs3jqy56pkSmWsxUOAMNvQxpQx+xbaZAYAkFUXn1nSgh/crjBY55I4lBoxmFfkO0U9Eeceh4e6YATiAKUV0gFuGIZSygMGCGlBhDDbKQEmnJ8s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788520675; c=relaxed/simple;
-	bh=4DIUolQj5K7s0LXB5mQXEoJFCJfRS2EJ6t4V8xTTHv0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Lm3BNrLoCSe4fPiTiLrHv7qnEk8h+numudR6lk5sgzJBxeMK8IGZYbgPd2qCxTEsLyhy8XzmVOUrutPTzlIjfMnFh2CF/WV5wgy5mbCbzWdqlaxWrL2V18mEPFv+iqXqYAlnnSUNUMWWf5juzn/cYgM5QSl/pf5OJD8xoU/poA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MTXY7njk; arc=none smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C68241686A
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 11:23:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.133.124
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788521020; cv=pass; b=R646KZ0wQmRvILqkQ8p0dUmoHQHtuVGOyU8HT8gjxIYZEuy/smZnczs418hYBmbPMo0PIkYDUfVjbROU5593HBCHhcSmEjDTbDmu2VGVqQPIqYO6ulsj7eu8xfRx5yEU1A2IclkB61fymfsUJzuOo8bdlSSDBJnH56/HyjmaLbs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788521020; c=relaxed/simple;
+	bh=2lecvDZ/BSD8c+InIe90+zaCIL0CBuMX3DDlyXPCoFw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Yy6FIfww4gUyxPgSHXF0JAyIgXKV8oKiggbT02xg/ewIWxwHFxURFFRkW1xkIFBTYT+9S2HIHu5SULtHr3puPb5pgIZW6J4UbHXKuiC977f4gaWK8MLYnFPgBx5pTABHJr4oYCkZQlSk20SJHAuZ7IPStr/iOq+Z7/NqMvN0XeI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JpbfwTfE; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=XedHL495; arc=pass smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MTXY7njk"
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-517dc520840so12302651cf.3
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 04:17:52 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JpbfwTfE";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="XedHL495"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1788521017;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2lecvDZ/BSD8c+InIe90+zaCIL0CBuMX3DDlyXPCoFw=;
+	b=JpbfwTfEygfYIPFgeSHUW+AceD6XzXdd/UcHdZKppLUOvJh5EYXIF/Bt3TpiicItIq3FfC
+	y+Lk3d7BLC/7JqKynX/m0XTgut26/ig6NbRHox7RYs5z/GMNlhH5o0aglOTWJKCGZzxlmX
+	rKhKNShPTZP5XT+rbnhRjX1hRNGAJg8=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-428-l8jxMcwkOrmO7OBSk4Q1Rw-1; Fri, 04 Sep 2026 07:23:35 -0400
+X-MC-Unique: l8jxMcwkOrmO7OBSk4Q1Rw-1
+X-Mimecast-MFC-AGG-ID: l8jxMcwkOrmO7OBSk4Q1Rw_1788521014
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c1c232fa136so126165366b.0
+        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 04:23:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788521014; cv=none;
+        d=google.com; s=arc-20260327;
+        b=r7OixStBGVDDGPMpQT00cIxZUr8IFhlMU24CYh4l3le1S8gZt+A0dHn3oy5LTJR9q1
+         Dh12SK6HO4WmQPP2pmPuQ3UWCgCyXtoK7o54GfGeXCHLFxNtCyb0FtIUXpLzoFltwohg
+         8nhBtTmlZdI9KxMsyzZK4qZqcCOXK4gkdVXV/OcYF23IiCxCXnrISvfT673QAkNho/fU
+         IhKcwUgOSo488KNT9NIGAfPV7vQhK5lpMXKSBTyaUZEGhwE8x2HJ/NJ3XIePePtuAg5e
+         Oo4P9aX7tPsYEkjy/VlezPXh6JGUfI1OzSXzCx3r9Kdr1shSUNH/hvYAJeJKXQ7hJxRB
+         4uRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=2lecvDZ/BSD8c+InIe90+zaCIL0CBuMX3DDlyXPCoFw=;
+        fh=xaz2scWHMrzlVYufXCez+SLdm62B8InCfH0s+8Ul61I=;
+        b=RgpLd/jLKzWjMrnDi+Z6MKsz2i8oI1thBKlBSTO3bVj86JPhBVWTzg+9heQbmtilXg
+         7I1B8KNoLXUllOiIJNukKGQeu0ifO4a0L6w5Mzddaj2dZH9ljULqflkEl15CL/wwe01B
+         1hjmsxZLen54yLCv9C6m/+udd8f0coi6SoyhE6ip3pfx9HsGepVsTHaQz3eAizt22efS
+         OQUr06w+gJh/NiJ8FULZoaVUmjQQ9X6F3r3Y+G75pn84+e2Fsohu6Bk/Nm4WOT3Bt9cb
+         AUR0LlJPQaFETV46I5PVqbz6Izl7BzSYlaGpuE+lySIDra0sUrn1QKiFuGucGQKAhdcI
+         Nn+w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788520671; x=1789125471; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=a8aI67v2qHq2F9XuFlZJpkBUyR2T964WRJn0GOGoYgs=;
-        b=MTXY7njk0OvkwDvPY2MVXvq/rHzM5p9XFSgqGtmkie0CGgIwXYzH1LgBEHoe1qXniS
-         n8THd91ssV5KYCiDlSdMVLaXFcnzhFyu5zU61JL82uB+Lyv3lkEancp2/Nq1xWYcE5q+
-         HQG8P2NC5a7FhbFluIVDhLh3oSsK4B+oZwdV2fJHp/8rXZNG9fQj025ypYPATZryiMnP
-         iVHf9al8Fptpkp2rGvDNMGA4D5cq8E9yiDGu9XbbffxNXFUHo30KVQwAO4b9EW4oFpzx
-         srcB9GXYy2vjgFnGsoIebL7T9UH0MwYClOR478zY/bqft2UJypiNZPFWT94PnxkJhtbh
-         WIXg==
+        d=redhat.com; s=google; t=1788521014; x=1789125814; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=2lecvDZ/BSD8c+InIe90+zaCIL0CBuMX3DDlyXPCoFw=;
+        b=XedHL495aN1euvtg/tQbZR1o0yTOVFgVa0MHTkz68PbUZMmtVmb8RAlebWhsj12cUp
+         KJcA+sxNGORfZwlicbqQ1aMnr1Knv4bgcHTl6wO7g09Gest1ZVq8XopTR8PDvCGNAmRC
+         81g+2WnkgkzewYG3EmCiZsQyqNSKEdoWDUiiOqt0vctHcDXzZNTBbHu+iiQPUu7q8t8P
+         07Cln05gns421lQm+To/SH4XCqRA1PJWvtFrCZ9SYxRMHUO4KIElsE+LPejKABnfG9R5
+         08CHjg0qzSox1Z8g4wJwl9llwvnAJskWBGtPN8E3jUJ/a0x7pQXiMrB2EbrOkIyJpJOS
+         3jmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788520671; x=1789125471;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=a8aI67v2qHq2F9XuFlZJpkBUyR2T964WRJn0GOGoYgs=;
-        b=pF0qShmLwdm7fgaBl5bqg+UH3XsmgBsxrzZrP2ho3OsOSiLJIyJABKUrxfSiHQpDyR
-         5ylOzdlCnpBI5w4c/+VcNndZn+E82ctBxW+MDOtMzo/IBytgPCC35A7xuOKY9uDEAFP2
-         /sFEj7bPK50JyKVnMmgrmaF/rv2b2X6Pt38A95O+y3aGLuQUQvArbrCKWyTRnrjmyDHM
-         XmWUCESXSGf4Wyg3KHX7G5PX2ykk1BnaRJJnYAHy5xlpnuZaok+DuvBX6WsCGxoCp+7h
-         wCe02eoNDz8RQ+oBtsY3QQhN2l8f0mRk1r6QyZrP7CzNLgj07v64Nby/oI49Hlyhd8eP
-         M3CQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwr21QAExMKD13O9o6mVH4PZlpxUyCMcb302AE/kYiY9W/scaSkDEv+SzA9nQDxNxUseLo=@vger.kernel.org
-X-Gm-Message-State: AFuF++mdyTozUNw5pgiHAQaZ9Y2CgERFOWgIUP59Yovc8SpwGtTJcBRR
-	WdlKgKk9xzopiqE3O3A898sHjuKdAARM/vuW2EUuz45ViGjdCa33jWzZ
-X-Gm-Gg: AYBFou2hpQKz45xMnb52QU4GxYrocxuGMwNn/7VdALx2fVJ7ahn0LP9sgEeK8eSroRM
-	GHXhD8yatargdAfq4woz4AdA1d/a/gMWpDdM6wjnWRwxl5EqwVttrEgHc2aJy7cnAan3sugnR+b
-	b0LFi2EJDLf3XycngksqaaUt5GO3l8NOutfYovoQ/+NCdRLeNxj0hNcY2Uag8F9MpkE0sJ0fK7L
-	4uerQr8qcVmLzfUUiHqL1IA0OEeE30eFvYGGMzgaIimt67ZT5Ib2phM+E+NYrK29vrSPyMPpXbT
-	z8VseajbCYw/U7dS5DvUYMKCt2m6TL5/1VSFHcHp6t+NQJdeaeNGqzEGKJIHLItfwqRbvgYMUZu
-	QgYkhFvHzscRUd4cTP3/3z2meg+uGubVCbnWLWKW2Oykpb7YuGcVdAXgjO3hOUTqA/puPOYcYvA
-	DX9P3s9LKyDeY6P8hMewZFBtfBXnf+7XR7j7RG5UlPDixsqcDIWxcfBg/nE2DWi/lDc3A=
-X-Received: by 2002:ac8:6108:0:b0:530:42e4:f003 with SMTP id d75a77b69052e-530549bb544mr68480221cf.48.1788520671204;
-        Fri, 04 Sep 2026 04:17:51 -0700 (PDT)
-Received: from Turin ([187.15.144.163])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5305402a8fcsm18350171cf.1.2026.09.04.04.17.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2026 04:17:49 -0700 (PDT)
-From: Nicholas Dudar <main.kalliope@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	johan.almbladh@anyfinetworks.com,
-	paulburton@kernel.org,
-	tsbogend@alpha.franken.de
-Cc: martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	bpf@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/2] bpf, mips: Add support for BPF_MOVSX in the JITs
-Date: Fri,  4 Sep 2026 07:17:31 -0400
-Message-ID: <20260904111731.673341-3-main.kalliope@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260904111731.673341-1-main.kalliope@gmail.com>
-References: <20260904111731.673341-1-main.kalliope@gmail.com>
+        d=1e100.net; s=20251104; t=1788521014; x=1789125814;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=2lecvDZ/BSD8c+InIe90+zaCIL0CBuMX3DDlyXPCoFw=;
+        b=edRQGNouHghtcarYfbB7tgURQbP5LmG2YtPgZEDc+prV0aC/bT2cMhHhHIaG/LiFjO
+         9AEM6zxDRFUm6z/CBC/vXFPmzE87ZB6RO6Wqh5GGQefo6P6uJhZ+V3Tqr4VcS276ZHHC
+         OiBY0uYRSD0C7GzuyykDAuGWoTn81exv1+s9xEDqnp5KGVhQkpImoZ51GBZIXrbfPmI2
+         q4WbU5BaWRPHhI8c+jZOwbs5D8VtQVImb5TTXHxMpJqzvqkwRMzRuydVurA4RXJSIIuo
+         BOxsb9mlP8WBD4b9Z+91e6v19sjeeZ/SuCeuuSPwzrf20lvJnbXdCSUi38NFolmnwyjT
+         g9Tw==
+X-Forwarded-Encrypted: i=1; AKwUvBzpyYI7zdMsZB9Q25UxCpNqZzgyrNq9QnXS9e+AzzYg6wyYNPB7TbLAFnRr362bl0RnWyw=@vger.kernel.org
+X-Gm-Message-State: AFuF++kwYDLQD8PvhW7PNVmfmWfJ4ELb/lkZt69M1hIEkfTRhm4z22CQ
+	lmo1AUaA7gHr6sNvj17VpzlC4rT27UHNy/x3N72TLo/uG4Rxal54AEUAwyzE3JobCvotl//W3Ke
+	tLr7ahj7t+qfNk0jf9eXW/X/qbK3AW3pQbMmKu32ZuGOkC5s+QiGj3sB04rEsi2Y3TJRTDVZ3UN
+	+mNQGeLq97lB9lfkDdZsEzmSRfCGtl
+X-Gm-Gg: AYBFou3dK18hs8x2bRgLlPY7fwY6DQZkK4gnASEW92dEIRpbhzVvxHLpHhKuWlolzkp
+	Y1WTmY0kNKJ1dSzghBGGwfJ53u09T0CTdBkJcIiSj/DymqZRGpN6PD9WzBueBnXs1nNWdIUtGQ+
+	Dolyi1id2N4qtzCaSCPzXHQg+H4udTK+vk1VCXLVB4eSiyGBO9of3JrNNu90UYLVY2Hpsx0PPhg
+	myJ456qd1tsMzo=
+X-Received: by 2002:a17:907:c50a:b0:c25:8b1e:3750 with SMTP id a640c23a62f3a-c2610474a62mr161182866b.12.1788521014280;
+        Fri, 04 Sep 2026 04:23:34 -0700 (PDT)
+X-Received: by 2002:a17:907:c50a:b0:c25:8b1e:3750 with SMTP id
+ a640c23a62f3a-c2610474a62mr161180766b.12.1788521013862; Fri, 04 Sep 2026
+ 04:23:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260831090524.106845-1-gmonaco@redhat.com> <87se3sakgi.fsf@yellow.woof>
+ <df6e9168cb06c35e21db7f9d17cfbca6bd87005b.camel@redhat.com> <DL5B40CU17WD.3KD75URQZ6RRR@gmail.com>
+In-Reply-To: <DL5B40CU17WD.3KD75URQZ6RRR@gmail.com>
+From: Tomas Glozar <tglozar@redhat.com>
+Date: Fri, 4 Sep 2026 13:23:21 +0200
+X-Gm-Features: AcwNN1VYWiS12e-wX0_oY-0KV9RCS33pApbGhM3jUchKS91T2uscR3QBMlp3mw4
+Message-ID: <CAP4=nvSCxbFTLBSvXVFnv-smMyFd9fNFXjodJGEqah=_GEuXkA@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/20] rv: Add support for BPF monitors
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Gabriele Monaco <gmonaco@redhat.com>, Nam Cao <namcao@linutronix.de>, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>, Wen Yang <wen.yang@linux.dev>, 
+	Tobias Schaffner <tobias.schaffner@siemens.com>, Viktor Malik <vmalik@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Both MIPS JITs ignore insn->off when lowering register MOV
-instructions, so BPF_MOVSX is emitted as an ordinary move. Since
-build_insn() accepts it, affected programs are silently miscompiled
-instead of falling back to the interpreter.
+On Thu, Sep 3, 2026 at 4:03=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> I don't think bpf fits here. I haven't seen active use of RV and even les=
+s
+> so of any request from people who want this kind of programmability.
+>
+> So Nack for now. Sorry.
+>
 
-Decode insn->off in the register-move helpers and sign-extend 8- and
-16-bit ALU32 operands and 8-, 16-, and 32-bit ALU64 operands. On
-MIPS32, propagate the sign into the high word for ALU64 while
-preserving the existing ALU32 zero-extension handling.
+A major application of RV is monitoring the combined behavior of the
+kernel and an external application, see [1] [2]. Adopting RV for these
+use cases is difficult because the monitors are currently built into
+the kernel. Blocking BPF adoption because it is not widely used risks
+a deadlock: RV not getting enough users, because it cannot use BPF,
+and BPF rejecting RV because it lacks sufficient use.
 
-Use shift pairs rather than seb/seh so the lowering works on every CPU
-supported by these JITs. seb/seh would save one instruction on
-R2-or-newer CPUs but would require adding those opcodes to uasm.
+Of course, I might be entirely wrong: RV may not end up being
+interesting enough to users even with the BPF hooks in place, or it
+might grow enough with only in-kernel monitors for you to take it
+seriously. However, we cannot predict that in advance.
 
-Assisted-by: Codex:gpt-5.6-sol
-Signed-off-by: Nicholas Dudar <main.kalliope@gmail.com>
----
- arch/mips/net/bpf_jit_comp32.c | 56 ++++++++++++++++++++++++++++------
- arch/mips/net/bpf_jit_comp64.c | 54 +++++++++++++++++++++++++++-----
- 2 files changed, 93 insertions(+), 17 deletions(-)
+(Note also that the idea to use BPF in RV dates back to 2022 [3].)
 
-diff --git a/arch/mips/net/bpf_jit_comp32.c b/arch/mips/net/bpf_jit_comp32.c
-index bfe73b023983..885da0d0d74b 100644
---- a/arch/mips/net/bpf_jit_comp32.c
-+++ b/arch/mips/net/bpf_jit_comp32.c
-@@ -190,20 +190,58 @@ static void emit_zext_ver(struct jit_context *ctx, const u8 dst[])
- 	}
- }
- 
--/* Register move operation (32-bit) */
-+/* Register move operation (32-bit), optionally with sign extension */
- static void emit_mov_r32(struct jit_context *ctx, const u8 dst[],
--			 const u8 src[])
-+			 const u8 src[], s16 off)
- {
--	emit_mov_r(ctx, lo(dst), lo(src));
-+	int shift;
-+
-+	switch (off) {
-+	case 8:
-+	case 16:
-+		shift = 32 - off;
-+		emit(ctx, sll, lo(dst), lo(src), shift);
-+		emit(ctx, sra, lo(dst), lo(dst), shift);
-+		break;
-+	default:
-+		/* off == 0 is MOV; the verifier rejects other offsets. */
-+		emit_mov_r(ctx, lo(dst), lo(src));
-+		break;
-+	}
-+	clobber_reg(ctx, lo(dst));
- 	emit_zext_ver(ctx, dst);
- }
- 
--/* Register move operation (64-bit) */
-+/* Register move operation (64-bit), optionally with sign extension */
- static void emit_mov_r64(struct jit_context *ctx, const u8 dst[],
--			 const u8 src[])
-+			 const u8 src[], s16 off)
- {
--	emit_mov_r(ctx, lo(dst), lo(src));
--	emit_mov_r(ctx, hi(dst), hi(src));
-+	int shift;
-+
-+	switch (off) {
-+	case 8:
-+	case 16:
-+		shift = 32 - off;
-+		emit(ctx, sll, lo(dst), lo(src), shift);
-+		emit(ctx, sra, lo(dst), lo(dst), shift);
-+		emit(ctx, sra, hi(dst), lo(dst), 31);
-+		break;
-+	case 32:
-+		emit(ctx, move, lo(dst), lo(src));
-+		emit(ctx, sra, hi(dst), lo(dst), 31);
-+		break;
-+	default:
-+		/*
-+		 * off == 0 is ordinary MOV. The verifier rejects other
-+		 * offsets; defined exceptions require
-+		 * bpf_jit_supports_percpu_insn() or bpf_jit_supports_arena(),
-+		 * neither implemented by MIPS.
-+		 */
-+		emit_mov_r(ctx, lo(dst), lo(src));
-+		emit_mov_r(ctx, hi(dst), hi(src));
-+		break;
-+	}
-+	clobber_reg64(ctx, dst);
- }
- 
- /* Load delay slot, if ISA mandates it */
-@@ -1501,7 +1539,7 @@ int build_insn(const struct bpf_insn *insn, struct jit_context *ctx)
- 			/* Special mov32 for zext */
- 			emit_mov_i(ctx, hi(dst), 0);
- 		} else {
--			emit_mov_r32(ctx, dst, src);
-+			emit_mov_r32(ctx, dst, src, off);
- 		}
- 		break;
- 	/* dst = -dst */
-@@ -1570,7 +1608,7 @@ int build_insn(const struct bpf_insn *insn, struct jit_context *ctx)
- 		break;
- 	/* dst = src (64-bit) */
- 	case BPF_ALU64 | BPF_MOV | BPF_X:
--		emit_mov_r64(ctx, dst, src);
-+		emit_mov_r64(ctx, dst, src, off);
- 		break;
- 	/* dst = -dst (64-bit) */
- 	case BPF_ALU64 | BPF_NEG:
-diff --git a/arch/mips/net/bpf_jit_comp64.c b/arch/mips/net/bpf_jit_comp64.c
-index 45fee6f6b87e..a1dfb7492a9c 100644
---- a/arch/mips/net/bpf_jit_comp64.c
-+++ b/arch/mips/net/bpf_jit_comp64.c
-@@ -120,17 +120,55 @@ static void emit_zext_ver(struct jit_context *ctx, u8 dst)
- 		emit_zext(ctx, dst);
- }
- 
--/* Register move operation (32-bit) */
--static void emit_mov_r32(struct jit_context *ctx, u8 dst, u8 src)
-+/* Register move operation (32-bit), optionally with sign extension */
-+static void emit_mov_r32(struct jit_context *ctx, u8 dst, u8 src, s16 off)
- {
--	emit_mov_r(ctx, dst, src);
-+	int shift;
-+
-+	switch (off) {
-+	case 8:
-+	case 16:
-+		shift = 32 - off;
-+		/* dsll32 and dsra32 add 32 to the shift argument. */
-+		emit(ctx, dsll32, dst, src, shift);
-+		emit(ctx, dsra32, dst, dst, shift);
-+		break;
-+	default:
-+		/* off == 0 is MOV; the verifier rejects other offsets. */
-+		emit_mov_r(ctx, dst, src);
-+		break;
-+	}
-+	clobber_reg(ctx, dst);
- 	emit_zext_ver(ctx, dst);
- }
- 
--/* Register move operation (64-bit) */
--static void emit_mov_r64(struct jit_context *ctx, u8 dst, u8 src)
-+/* Register move operation (64-bit), optionally with sign extension */
-+static void emit_mov_r64(struct jit_context *ctx, u8 dst, u8 src, s16 off)
- {
--	emit_mov_r(ctx, dst, src);
-+	int shift;
-+
-+	switch (off) {
-+	case 8:
-+	case 16:
-+		shift = 32 - off;
-+		/* dsll32 and dsra32 add 32 to the shift argument. */
-+		emit(ctx, dsll32, dst, src, shift);
-+		emit(ctx, dsra32, dst, dst, shift);
-+		break;
-+	case 32:
-+		emit_sext(ctx, dst, src);
-+		break;
-+	default:
-+		/*
-+		 * off == 0 is ordinary MOV. The verifier rejects other
-+		 * offsets; defined exceptions require
-+		 * bpf_jit_supports_percpu_insn() or bpf_jit_supports_arena(),
-+		 * neither implemented by MIPS.
-+		 */
-+		emit_mov_r(ctx, dst, src);
-+		break;
-+	}
-+	clobber_reg(ctx, dst);
- }
- 
- /* dst = imm (64-bit) */
-@@ -669,7 +707,7 @@ int build_insn(const struct bpf_insn *insn, struct jit_context *ctx)
- 			/* Special mov32 for zext */
- 			emit_zext(ctx, dst);
- 		} else {
--			emit_mov_r32(ctx, dst, src);
-+			emit_mov_r32(ctx, dst, src, off);
- 		}
- 		break;
- 	/* dst = -dst */
-@@ -754,7 +792,7 @@ int build_insn(const struct bpf_insn *insn, struct jit_context *ctx)
- 		break;
- 	/* dst = src (64-bit) */
- 	case BPF_ALU64 | BPF_MOV | BPF_X:
--		emit_mov_r64(ctx, dst, src);
-+		emit_mov_r64(ctx, dst, src, off);
- 		break;
- 	/* dst = -dst (64-bit) */
- 	case BPF_ALU64 | BPF_NEG:
+[1] https://lore.kernel.org/linux-trace-kernel/20260827072400.45734-1-tobia=
+s.schaffner@siemens.com/T/#e8a8b21136a60ad7c8f67b07c66f71de0ec0c1075
+[2] https://docs.kernel.org/trace/rv/monitor_rtapp.html
+[3] https://gitlab.com/linux-rv-tools/dot2bpf
+
+Tomas
+
