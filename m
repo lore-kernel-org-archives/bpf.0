@@ -1,152 +1,113 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF531368D42;
-	Fri,  4 Sep 2026 01:33:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6247626159E;
+	Fri,  4 Sep 2026 01:47:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788485632; cv=none; b=R/oI7x1kfp5j3e9dFu2VMys0sLIZynGYl6+Fs1oGdxAnfZ8pIzLbJLhEbU9utre5DmG/OTbPViQ9Fe7Bb1vRQU5L7pO+9iuLR4+442un9UvGaCdtvgStQUcJIfat4dWmgaDBMyoyLjxifVcE4AH+3U92nMQ8jfRLUZB5KdYMpno=
+	t=1788486470; cv=none; b=XQwKs/KmZwZlF22am0kX1Xfkt46eiV9E3YZxAKk06CqWz6tR5T0aZyOrxBawyhzmqhksEyVhKZMEhDmkaamz/lPy0U46pfl2hBFgkVc8h777VbbDFJUWI1ErIO4E9/z6sXNd2IPG9ZRhV0mQ5UaBD5PkSDfgUeILtHpZcoUdJGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788485632; c=relaxed/simple;
-	bh=P/MrAVGM6Bp/rOzN3pa59j8NBWOPizXJZLkyhC5vnh8=;
+	s=arc-20240116; t=1788486470; c=relaxed/simple;
+	bh=JVDeMIkLAV+FTDJQW2eQo7JhGBJ6KEDiA1nqd6dgOaI=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pw/Csm+y60Rxv8K0bk+K59x6r4+CiUpsDFxq9eUeNP7StP7ZRMu3YFdGvGW7f5E91cY9OQ2Ui66Y46E2jzvgCcsJbBPy1L5r20JqRpZOcdzLXGV3c/H6+1Yn5kKexmWiSCkxtGYW4uBVbz/p2/hZR2cqt/dueJlNe7NNKF3UV4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jqd2GtwG; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=IWWdpLPgtUa0bg/8wih1cck37KK0mGVbz1q7vxCYQAxNN6fzEXrEMPeaRbATQgsgj+8AQeRTbfBwXV89QfgjV3nrSowQvaG6S0pYdwAn6NF7I4dPAKq3FmgKVCLVnNmKuB0LAAYAjY8nHh6c2Nkn4EZoRM202yI9rVTK315hcDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k0Be6oyF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jqd2GtwG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5141B1F000E9;
-	Fri,  4 Sep 2026 01:33:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k0Be6oyF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C04AA1F000E9;
+	Fri,  4 Sep 2026 01:47:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788485630;
-	bh=768etRWAKyJbvvOPCzBMrVJRNK2LxPl0STlGR/Mq4ns=;
+	s=k20260515; t=1788486469;
+	bh=RZ163bT2SBMXkLQEC+5u90c1x+gxGZEmjcnUHnCF/8A=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jqd2GtwGAga9pNvG6kpFf+UOIzedvQoqeb2g2AWa9lu4DvzIgp7sZqQVaw8FPAPvS
-	 JUSneg2MesaLQ5/gq4A+r4GABY3ELp0Lh7Yn7WU28foxhxGCHo5KqQE28cP15yhXX/
-	 6LvhRBeK4oZtpYV/621uvok6J0t9QAUtiYKDieIkRl0lIOfg5gjLQf27CST/ZvMckO
-	 AHiBwgjrNf/FOcOmcRmq7WscXAeFVyc2L+fKVj+g3XYQC4FuG2jYS6tEOfkNtpc8ph
-	 eUUXXYJp6OvxgyZpFWxH/rQ1v6GWd63PgcVgBCErnwpqYtuFtsTDs3z07HtnSrFu8q
-	 rHg+bzby3o2eA==
+	b=k0Be6oyFwDcODmK7c+iYIRQHgJYvQZcYniX9PhZkHPqT0/EnApR1/g1JcjrcSAzzA
+	 h+iVFjLyT/Pwj2p+IcGcYG3fugZbdr5BnzMYgPV/ukJ+fT26pTzKYcEitFyPRrp6fd
+	 XOBKXNolKa+U6CC3MTk0PcvwecTkWMSahnzDGK3tv+JFYXsbrzsazIO2OCBxuxZc0d
+	 BAzb7yJMpbbcvjVhdoHU2K4EJP864yVVplzS7dX9d5KBbgvRG7u1EoF/8jdDHNPph+
+	 aQfFFX73NCgNx3/8tFj6KKdFY4H1uzeUSf3sz5FV6VD3f1rIZ9KfcpWz9liizB4ZSA
+	 uSUUYFZhzoVTA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC 1/8] ftrace: Let ftrace_call_adjust() reject a patch
- site
+Subject: Re: [PATCH RFC 5/8] arm64: cfi: Use
+ CONFIG_ARM64_FUNCTION_PREFIX_NOPS for the type hash offset
 Reply-To: sashiko-reviews@lists.linux.dev
 To: =?utf-8?b?Sm9zZSBGZXJuYW5kZXogKEFudGhyb3BpYyk=?= <jose.fernandez@linux.dev>
-Cc: ojeda@kernel.org, bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-In-Reply-To: <20260904-b4-arm64-callops-kcfi-v1-1-ce6687739b0c@linux.dev>
+Cc: bpf@vger.kernel.org, ojeda@kernel.org, linux-trace-kernel@vger.kernel.org
+In-Reply-To: <20260904-b4-arm64-callops-kcfi-v1-5-ce6687739b0c@linux.dev>
 References: <20260904-b4-arm64-callops-kcfi-v1-0-ce6687739b0c@linux.dev>
- <20260904-b4-arm64-callops-kcfi-v1-1-ce6687739b0c@linux.dev>
+ <20260904-b4-arm64-callops-kcfi-v1-5-ce6687739b0c@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 04 Sep 2026 01:33:49 +0000
-Message-Id: <20260904013350.5141B1F000E9@smtp.kernel.org>
+Date: Fri, 04 Sep 2026 01:47:48 +0000
+Message-Id: <20260904014748.C04AA1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
-New issues:
-- [Medium] Permanent memory leak of ftrace page group when all tracepoints =
-in a module are rejected.
-
 Pre-existing issues:
-- [High] Lockless readers can observe uninitialized ftrace pages due to a m=
-issing write memory barrier.
+- [Medium] bpf_prog_fill_jited_linfo() calculates incorrect line info addre=
+sses because ctx.offset includes the CFI prefix size.
 --
 
-commit 47d688aa11de52022b8f09bf86665d475e816eb6
+commit 1909b8cf9ec25c69a7f49627fb1a30b3d8e545d4
 Author: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
-Subject: ftrace: Let ftrace_call_adjust() reject a patch site
+arm64: cfi: Use CONFIG_ARM64_FUNCTION_PREFIX_NOPS for the type hash offset
 
-This commit addresses an issue where ftrace_process_locs() does not skip a
-patch site when ftrace_call_adjust() returns 0. It tests the adjusted addre=
-ss
-and skips the site if it is NULL, preventing a bug_on() during ftrace_init_=
-nop
-on arm64.
+This patch modifies the CFI prefix to use CONFIG_ARM64_FUNCTION_PREFIX_NOPS
+instead of hardcoding four bytes. It adjusts cfi_get_offset(),
+SYM_TYPED_FUNC_START, and the BPF JIT to account for the dynamic number of
+NOPs required by kCFI kernels with CALL_OPS or ThinLTO and BTI.
 
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index f9d80c7bd9f16..394f82230e0c3 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -7676,6 +7676,10 @@ static int ftrace_process_locs(struct module *mod,
->  		}
+> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+> index c18e005a41dbe..7ad14d9847138 100644
+> --- a/arch/arm64/net/bpf_jit_comp.c
+> +++ b/arch/arm64/net/bpf_jit_comp.c
+[ ... ]
+> @@ -185,8 +185,12 @@ static inline void emit_bti(u32 insn, struct jit_ctx=
+ *ctx)
 > =20
->  		addr =3D ftrace_call_adjust(addr);
-> +		if (!addr) {
-> +			skipped++;
-> +			continue;
-> +		}
+>  static inline void emit_kcfi(u32 hash, struct jit_ctx *ctx)
+>  {
+> -	if (IS_ENABLED(CONFIG_CFI))
+> -		emit_u32_data(hash, ctx);
+> +	if (!IS_ENABLED(CONFIG_CFI))
+> +		return;
+> +
+> +	emit_u32_data(hash, ctx);
+> +	for (int i =3D 0; i < CONFIG_ARM64_FUNCTION_PREFIX_NOPS; i++)
+> +		emit(A64_NOP, ctx);
+>  }
 
 [Severity: Medium]
-If all tracepoints in a module are rejected and skipped here, the allocated
-start_pg retains an index of 0. When the module is later unloaded, does this
-leave the empty page permanently in the global ftrace_pages list?
+This is a pre-existing issue, but does expanding the CFI prefix length
+cause bpf_prog_fill_jited_linfo() to calculate incorrect line info addresses
+by adding the CFI prefix twice?
 
-During module unload, ftrace_release_mod() checks if the first record's ip
-is within the module:
+When loading any BPF program with line info on an arm64 kernel built with
+kCFI, ctx.offset measures from the start of the JIT buffer, which includes
+the CFI prefix emitted here.
 
-kernel/trace/ftrace.c:ftrace_release_mod() {
+However, in bpf_int_jit_compile() in arch/arm64/net/bpf_jit_comp.c, the
+offsets are passed to bpf_prog_fill_jited_linfo():
+
+arch/arm64/net/bpf_jit_comp.c:bpf_int_jit_compile() {
     ...
-	for (pg =3D ftrace_pages_start; pg; pg =3D pg->next) {
-		rec =3D &pg->records[0];
-		if (within_module(rec->ip, mod)) {
-			/*
-			 * pg->index could be zero if we only allocated
-			 * a page but did not store any records
-			 */
-            ...
-}
-
-Since the record ip is 0, within_module(0, mod) fails, and the page group
-would not be freed. Can this regression cause a memory leak of the ftrace
-page group for each incompatible module load?
-
-[Severity: High]
-This isn't a bug introduced by this patch, but while reviewing this functio=
-n,
-I noticed that the new ftrace page is published to the lockless list without
-a write memory barrier earlier in ftrace_process_locs():
-
-kernel/trace/ftrace.c:ftrace_process_locs() {
-    ...
-		if (WARN_ON(ftrace_pages->next)) {
-			/* Hmm, we have free pages? */
-			while (ftrace_pages->next)
-				ftrace_pages =3D ftrace_pages->next;
-		}
-
-		ftrace_pages->next =3D start_pg;
+    for (i =3D 0; i <=3D prog->len; i++)
+        ctx.offset[i] *=3D AARCH64_INSN_SIZE;
+    bpf_prog_fill_jited_linfo(prog, ctx.offset + 1);
     ...
 }
 
-Because the cpu can reorder the kzalloc initialization of start_pg after its
-publication to the ftrace_pages list, lockless readers like
-ftrace_location_range() iterating the list under rcu_read_lock() might read
-uninitialized data:
-
-kernel/trace/ftrace.c:lookup_rec() {
-    ...
-	for (pg =3D ftrace_pages_start; pg; pg =3D pg->next) {
-		if (pg->index =3D=3D 0 ||
-		    rec->ip < pg->records[0].ip ||
-		    rec->ip > pg->records[pg->index - 1].ip)
-			continue;
-    ...
-}
-
-Could this lead to a panic or memory corruption due to an out-of-bounds
-access or a garbage pointer dereference in bsearch() if the reader observes=
- an
-uninitialized pg->index?
-
-> =20
->  		end_offset =3D (pg->index+1) * sizeof(pg->records[0]);
->  		if (end_offset > PAGE_SIZE << pg->order) {
+Since bpf_prog_fill_jited_linfo() adds these offsets to prog->bpf_func,
+which is already shifted past the CFI prefix by cfi_get_offset(), the CFI
+prefix length ends up being added twice. The bug existed prior to this patch
+(off by 4 bytes) but this patch exacerbates it to 16 or 24 bytes depending
+on the number of NOPs.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260904-b4-arm64-c=
-allops-kcfi-v1-0-ce6687739b0c@linux.dev?part=3D1
+allops-kcfi-v1-0-ce6687739b0c@linux.dev?part=3D5
