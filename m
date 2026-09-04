@@ -1,243 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B1383B28D;
-	Fri,  4 Sep 2026 03:03:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0D6248F64;
+	Fri,  4 Sep 2026 03:13:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788491004; cv=none; b=jT9I96w9f6EBGoEvEaHO+vdN8z3RHCM3ke82xxYg5qx0nt1srGH7uhpGUKqZc9dliZA5uwoSUxaocDAuWypR8CI9Ur182Y3lL+V+zXYJ6Phf8Pkc1BxHjay5dp5TBcFucce2qxH9CrtR1pfLM4BEtFAV3hEmwAPjdsVVKpxKT74=
+	t=1788491582; cv=none; b=bWK2WAw7vbMmx6NmnRd/I0tnxYIeDKWWJ/ArSbtHkC849nTrAPfQDQui0YF257NYV7M2jEKeEoOaeLx0TgBWUKvQOlFKtvDoEO9QIOqWnBH6tNZvjXpXSlSS2emevT0hItJDgx/yqGdipqcrdrqIia/z6h7DJOlMapL0f0GCfFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788491004; c=relaxed/simple;
-	bh=pwiRQbyfMqVUFWm9PMMbAl+Xw5LrijKWVhj3KDC9z9M=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=I9XneeK96P+VJWsrtRfSJV154Yp0p7i3odBqQni+rF31VqHgjqAk89JlcGvTzXTY0A1eqWiOVLt6DUunjfgSa3jffw5TotyTeZ58dWKbSCgr2LS6swjtBhg1Lz5sy+9BOl2RcZnSxy+NCC4bKdyfGAovcnqDMBdptyIFIKnAZ+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RrNHg5o0; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788491582; c=relaxed/simple;
+	bh=dVCosq1tcEgjE/dFQV0G11RaG8J/41FPXOJOzWXwlg0=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S9VYEjkRF8KUAWREUFF5Kbnn2kc8YpYN/QKBqWFQf7WkJ+SHfiUBYsTInufHMcMEYR0GPbngrkgr9ZSXuiQW4DoiUaCWltuNbUriQoNxa83+P7IRj/eSplAYMG8Gpoed1681pMSYHbz3owWyxFuekH84ITkjlpcDQ2B2zc7BIDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=VAoxUHOJ; arc=none smtp.client-ip=67.231.156.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RrNHg5o0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50D241F00A3D;
-	Fri,  4 Sep 2026 03:03:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788491003;
-	bh=tYn532goAvj6zjhWikeVegY2fGNjSiT+sKqhWolhvQk=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=RrNHg5o0zeGn4I1pylAbl4AYgwJpcPRDFhAFi9GEQOEK+eUiXw88YF+vw7eSDV+E7
-	 d1+QapM2/AZlBORWEaOj6E++MGxSWEnLVxV4qcB7/YEVup1I+70lG1uY0vTgTT3geE
-	 I8XI5fH0/Sv73igMhbB/YVi3dHFuutkcBJWYN4vRwrlQqgGTqY6V/xZGGWFwzuGbnv
-	 TTDUqG6vxSRe8ed1CaZ+5EknDuMU4IsEV3UJeNWfGephaaTKTiA0cL+TNOg6AB34+h
-	 DkqygT56Spv3vIwNCPcvmLIfB/40yqDteRPEcId2UvRlICECM/W2B75j3JRDTDGxbp
-	 AgI6bbKNWAbkw==
-Subject:
- Re: [PATCH] bpf, sockmap: Fix self-redirect copied_seq double-counting
-From: netdev-bot+sashiko@kernel.org
-To: geliang@kernel.org
-Cc: john.fastabend@gmail.com, jakub@cloudflare.com, jiayuan.chen@linux.dev,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, daniel@iogearbox.net, tanggeliang@kylinos.cn,
- netdev@vger.kernel.org, bpf@vger.kernel.org
-Date: Fri, 04 Sep 2026 03:03:21 +0000
-Message-ID: <178849100183.4131868.10982082287561858713@kernel.org>
-In-Reply-To: =?utf-8?q?=3Cb840c35fdfdf36e9fddedfa645b12699bc51aa34=2E1787968?=
- =?utf-8?q?065=2Egit=2Etanggeliang=40kylinos=2Ecn=3E?=
-References: =?utf-8?q?=3Cb840c35fdfdf36e9fddedfa645b12699bc51aa34=2E17879680?=
- =?utf-8?q?65=2Egit=2Etanggeliang=40kylinos=2Ecn=3E?=
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="VAoxUHOJ"
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+	by mx0b-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6842poZ62476467;
+	Thu, 3 Sep 2026 20:12:20 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pfpt0220; bh=dVCosq1tcEgjE/dFQV0G11RaG
+	8J/41FPXOJOzWXwlg0=; b=VAoxUHOJ8MQl5/Rp5OD1tAW26KcBXFYp8QJKuJ9WW
+	vlbG3zL8cPQ1cAm67FuHux59QlFNPR55c53Gk5ydAFrJox6Uqv36CFOPGqcJbQ1x
+	jIZnj7HVGz7Cz1+DFs2e69c2mvXE1Xst1P7hJgd4gUgw/5b5ZMLiFxIcDAkYqUiI
+	ckt0x460oX038AnbiKZTqjvZuj/D9dphXZJ17H3pMEi42/XJb/juz3UxiOEP/xvg
+	hGnKepMX1eOIBQT7+6aXC2wd0Is4AbuJjZZUS+KrD4HsaKkh1744R/qNLZsNxMxB
+	L6EfotVmn8fTDmub8jJSFqYJgWhVA15gTZq7S7/WCZ1eQ==
+Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
+	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 4gfdwn1gsx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 03 Sep 2026 20:12:20 -0700 (PDT)
+Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
+ DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Thu, 3 Sep 2026 20:12:20 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
+ (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
+ Transport; Thu, 3 Sep 2026 20:12:20 -0700
+Received: from rkannoth-OptiPlex-7090 (unknown [10.28.36.165])
+	by maili.marvell.com (Postfix) with SMTP id DC00E3F70AA;
+	Thu,  3 Sep 2026 20:12:15 -0700 (PDT)
+Date: Fri, 4 Sep 2026 08:42:09 +0530
+From: Ratheesh Kannoth <rkannoth@marvell.com>
+To: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+CC: <andrew+netdev@lunn.ch>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <davem@davemloft.net>, <edumazet@google.com>, <hawk@kernel.org>,
+        <john.fastabend@gmail.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <sdf@fomichev.me>, <sgoutham@marvell.com>
+Subject: Re: [PATCH v12 net-next] octeontx2-pf: add mqprio bandwidth offload
+ for NIX TX schedulers
+Message-ID: <apo3CVfUw2-aXF8F@rkannoth-OptiPlex-7090>
+References: <20260903023324.3078284-1-rkannoth@marvell.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20260903023324.3078284-1-rkannoth@marvell.com>
+X-Proofpoint-ORIG-GUID: Qf-bO91l1soTFeIK7IMrwtXUEMoDajc-
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTA0MDAyNyBTYWx0ZWRfXy1MfE+QOZijj
+ 0hEqzoiStWwKg6uOJBM/U0+0ZDghOuzd38oaAu8PUMOljI2CN4a2kaWUfQHM2MWvYbtxerjoj3L
+ FJc6zc3cvBXxCyun4u1vfPMB83WlNgE=
+X-Proofpoint-GUID: Qf-bO91l1soTFeIK7IMrwtXUEMoDajc-
+X-Authority-Analysis: v=2.4 cv=ZIrnX37b c=1 sm=1 tr=0 ts=6a9a3714 cx=c_pps
+ a=gIfcoYsirJbf48DBMSPrZA==:117 a=gIfcoYsirJbf48DBMSPrZA==:17
+ a=kj9zAlcOel0A:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=l0iWHRpgs5sLHlkKQ1IR:22 a=QXcCYyLzdtTjyudCfB6f:22 a=M5GUcnROAAAA:8
+ a=LVN581Q_2Dy9vVtsR9IA:9 a=CjuIK1q_8ugA:10 a=ZXulRonScM0A:10
+ a=OBjm3rFKGHvpk9ecZwUJ:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTA0MDAyNyBTYWx0ZWRfX2slmeiWm/gzs
+ 9H8VxRLOkEoV8pNVIhyO7hvwCwm6YM1m6H4FV559u4K7D0DK4blM7iRRjNVFNYVIxhbyjzDWOYV
+ LjSKn9Mf/8ikIguBxqwUwbp+mtXxpwws1MQqkuac4IQeTmtPazoFdIitxz0H5d+kHVW2qAfwc4f
+ lmjAbvgb4PMaL3FncsRCqIzR0JoIEWuOtMEt8ODHznLNF7wFwrrqGpIV4h0CG9UFfBtapXoahnK
+ DU8MM9jCkXaP0Z1N88Yvj2v6DViComr4sTYdLOgoV51KSJmU4NfaFrSbr+8pcfJM0DJCg3h3O0y
+ JRVZOafuhvSu7RDWKdb/ztr9QPTk1PTDOfiygyE1geO3GjSJJEBOW1U9hYM6rplQYKlgNMr2LjC
+ 75bv6Ow3KlCPaR98MERFzYRHUHa8bwOLzjpM0WeAZBEar371DZ3frVifExhmYJoKcIpd+B2MW41
+ UIZyEbnkzrTsZ6WU4Zw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-04_01,2026-09-03_01,2025-10-01_01
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider:
+On 2026-09-03 at 08:03:24, Ratheesh Kannoth (rkannoth@marvell.com) wrote:
+> Add TC_SETUP_QDISC_MQPRIO offload for channel-mode mqprio with
+> TC_MQPRIO_SHAPER_BW_RATE. Program per-queue MDQ CIR/PIR through the
+> NIX TX scheduler mailbox for each non-QoS transmit queue. When offload
+> is active, allocate one SMQ per such queue, parent every MDQ under
+> TL4[0], and map each traffic class min/max rate to the queue(s) in that
+> class.
 
-Critical: 0 · High: 2 · Medium: 0 · Low: 0
+will address sashiko comments in v13
 
-- [High] net/core/skmsg.c:1042-1047 (sk_psock_verdict_apply(),
-  __SK_REDIRECT arm): the new self-redirect test compares only the…
-- [High] net/core/skmsg.c:1042-1047 (sk_psock_verdict_apply()): for a
-  self-redirect the patch drops the up-front tcp_eat_skb() and relies on…
+pw-bot: changes-requested
 
---
-
-bpf, sockmap: Fix self-redirect copied_seq double-counting
-
-This changes the __SK_REDIRECT arm of sk_psock_verdict_apply() so that
-tcp_eat_skb() is only called when the redirect destination differs from
-psock->sk.  The intent is to avoid advancing tcp_sk->copied_seq twice when
-a stream_verdict program redirects an skb back into the same socket's
-ingress queue.
-
-> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> index 2521b643fa05..5fa7b9639eef 100644
-> --- a/net/core/skmsg.c
-> +++ b/net/core/skmsg.c
-> @@ -1039,10 +1039,14 @@ static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
->  				goto out_free;
->  		}
->  		break;
-> -	case __SK_REDIRECT:
-> -		tcp_eat_skb(psock->sk, skb);
-> +	case __SK_REDIRECT: {
-> +		struct sock *dst = skb_bpf_redirect_fetch(skb);
-> +
-> +		if (dst != psock->sk)
-> +			tcp_eat_skb(psock->sk, skb);
-
-[Severity: High]
-The commit message describes the problem as "self-redirect with
-BPF_F_INGRESS", but this test only compares the destination socket and
-never looks at the direction.  Does the same-socket *egress* case end up
-here too?
-
-skb_bpf_redirect_fetch() in include/linux/skmsg.h masks the flag bits off:
-
-  static inline struct sock *skb_bpf_redirect_fetch(struct sk_buff *skb)
-  {
-	unsigned long sk_redir = skb->_sk_redir;
-
-	return (struct sock *)(sk_redir & BPF_F_PTR_MASK);
-  }
-
-and bpf_sk_redirect_map() in net/core/sock_map.c stores the direction
-separately, allowing flags == 0:
-
-	if (unlikely(flags & ~(BPF_F_INGRESS)))
-		return SK_DROP;
-	...
-	skb_bpf_set_redir(skb, sk, flags & BPF_F_INGRESS);
-
-So a program doing bpf_sk_redirect_map(skb, &sock_map, idx, 0) where
-sock_map[idx] resolves to the source socket satisfies dst == psock->sk and
-skips tcp_eat_skb().
-
-For that egress case nothing later advances copied_seq.  sk_psock_backlog()
-computes:
-
-		ingress = skb_bpf_ingress(skb);
-
-which is false, so sk_psock_handle_skb() takes the transmit path:
-
-		return skb_send_sock(psock->sk, skb, off, len);
-
-and the skb is freed.  It never becomes an sk_msg with msg->sk == sk, so
-the from_self accounting in __sk_msg_recvmsg():
-
-		from_self = msg_rx->sk == sk;
-
-never runs, and neither does the copied_from_self path in
-tcp_bpf_recvmsg_parser() that the commit message relies on.
-
-Meanwhile tcp_read_skb() already removed the bytes from the receive queue
-without touching tp->copied_seq:
-
-		__skb_unlink(skb, &sk->sk_receive_queue);
-
-Can this leave tp->copied_seq permanently behind tp->rcv_nxt, so that
-SIOCINQ reports data that no longer exists, __tcp_cleanup_rbuf() and
-tcp_rcv_space_adjust() never run for those bytes, tcp_close() sees
-data_was_unread != 0 and sends an RST instead of a FIN, and a later plain
-tcp_recvmsg_locked() (after the psock is dropped) trips
-
-	WARN(before(*seq, TCP_SKB_CB(skb)->seq), "TCP recvmsg seq # bug...
-
-that is, the same copied_seq desync in the opposite direction?
-
-Worth noting that the program cited as validation,
-tools/testing/selftests/bpf/progs/mptcp_sockmap.c, uses exactly the egress
-form:
-
-	return bpf_sk_redirect_map(skb, &sock_map, redirect_idx, 0);
-
-Would adding the direction to the condition cover this, e.g.
-
-	if (dst != psock->sk || !skb_bpf_ingress(skb))
-		tcp_eat_skb(psock->sk, skb);
-
-[Severity: High]
-A second question about the same condition: the accounting is now skipped
-before the outcome of the redirect is known.  Is it guaranteed that the skb
-really reaches ingress_msg and is read by tcp_bpf_recvmsg_parser()?
-
-sk_psock_skb_redirect() has drop paths that free the skb and return -EIO
-without any copied_seq update, and for a self-redirect psock_other is this
-very same psock:
-
-  net/core/skmsg.c:sk_psock_skb_redirect() {
-	...
-	if (!psock_other || sock_flag(sk_other, SOCK_DEAD)) {
-		skb_bpf_redirect_clear(skb);
-		sock_drop(from->sk, skb);
-		return -EIO;
-	}
-	spin_lock_bh(&psock_other->ingress_lock);
-	if (!sk_psock_test_state(psock_other, SK_PSOCK_TX_ENABLED)) {
-		spin_unlock_bh(&psock_other->ingress_lock);
-		skb_bpf_redirect_clear(skb);
-		sock_drop(from->sk, skb);
-		return -EIO;
-	}
-	...
-  }
-
-SK_PSOCK_TX_ENABLED can already be clear while sk->sk_data_ready is still
-sk_psock_verdict_data_ready, because sk_psock_backlog() clears it on a hard
-transmit/ingress error:
-
-			if (ret == -EAGAIN) {
-				...
-			} else {
-				sk_psock_clear_state(psock, SK_PSOCK_TX_ENABLED);
-				...
-			}
-
-and sk_psock_stop() clears it during close/map-delete before the socket
-backlog is drained.  The __SK_PASS arm just above tests the same two states
-(SOCK_DEAD and !SK_PSOCK_TX_ENABLED), so they appear reachable at this
-point.
-
-Even after a successful skb_queue_tail(), skbs still on ingress_skb are
-purged without accounting:
-
-  net/core/skmsg.c:__sk_psock_zap_ingress() {
-	while ((skb = skb_dequeue(&psock->ingress_skb)) != NULL) {
-		skb_bpf_redirect_clear(skb);
-		sock_drop(psock->sk, skb);
-	}
-	...
-  }
-
-and __sk_psock_purge_ingress_msg() frees queued sk_msgs the same way.
-
-In all of these cases tcp_read_skb() has already unlinked the bytes from
-sk->sk_receive_queue, and tcp_eat_skb() is the only place that catches up:
-
-  net/ipv4/tcp_bpf.c:tcp_eat_skb() {
-	copied = tcp->copied_seq + skb->len;
-	WRITE_ONCE(tcp->copied_seq, copied);
-	tcp_rcv_space_adjust(sk);
-	__tcp_cleanup_rbuf(sk, skb->len);
-  }
-
-Note the sibling drop arm in this same switch keeps that contract:
-
-  out_free:
-		skb_bpf_redirect_clear(skb);
-		tcp_eat_skb(psock->sk, skb);
-		sock_drop(psock->sk, skb);
-
-Should the skipped accounting be performed on the redirect-failure and
-purge paths as well, or should tcp_eat_skb() only be skipped once the skb
-is known to have been retained for same-socket ingress consumption?
-
->  		err = sk_psock_skb_redirect(psock, skb);
->  		break;
-> +	}
->  	case __SK_DROP:
->  	default:
->  out_free:
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/b840c35fdfdf36e9fddedfa645b12699bc51aa34.1787968065.git.tanggeliang%40kylinos.cn
+>
