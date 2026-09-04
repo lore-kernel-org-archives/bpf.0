@@ -1,147 +1,169 @@
-Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
+Received: from mail-wm2-f11.google.com (mail-wm2-f11.google.com [74.125.225.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD91A41A903
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 06:37:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A99141F5EA
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 06:40:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788503829; cv=none; b=BhVewubZTCOqxsQxXFd3QVERIqCc0ZENVGkTCrfuXI9u3DZEXxFYpATCoOkYTNQLnxRFlhtSO4Xf7Z+97cmemAo3zhELRB+e+Z22QWpixmOCL9DRXzwondIDDfnzyFaWXZmvGXUSpxgKZ274EnZtnVaZVQ/apvPLS65s1Zz6gfE=
+	t=1788504012; cv=none; b=QPBDvpfxdYPxp6pGlg9kL0u5P7m5GKnLs5dWlUI27qFo2/Lc+JxB6/y9dCz5zZWdeOeVqkkwOI1rmAW7Zc7FKHWgv1zM09ocuEX+V3ZOckYzwyl77lpJRoq8wvo7uA/+P+7I4Xt7Juir2uD/X3iqlLUM6QqqXdK4qoVo/hFVbq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788503829; c=relaxed/simple;
-	bh=V9VV1kVOwyj5UEb47NRJAjhRSDhdYMowL5m0jpbCZCI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TrLVjeo8E05Z9kqGyElevHFo20LVfOLSYtaib8g5WdKycr5Cp0hT7y1sWMqENjGe5LpeQkiGDXtA266Cr/JOuIAFS7hKK/Q+aY1i8yoSTmxzgrbb3Q/8aAbckPS+m76u795Cf8+GXZo3Q5rV/GoayxgfRBQEIXKe10B1MFZh278=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gH1XXkcj; arc=none smtp.client-ip=74.125.225.75
+	s=arc-20240116; t=1788504012; c=relaxed/simple;
+	bh=QjyFemmIozERhodCkzXtL4veL+JAmYERTTa3YaCe5bk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=cx5cIHUINDSTGcybZ4366Zt8kTdXcbalku4/fMqnBwoHuxCpAFdDNW2N4gnKgsZudBUoiut7953KBRB560mK7psiG91czjz3ThBst8TPOnYfYet1Pe1dE4MXwtSNfP4G8fuVikC2E/Q5xLkzeLXWTBIx1OxI6XxwgyQfNMuSDy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XQxOFsEs; arc=none smtp.client-ip=74.125.225.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gH1XXkcj"
-Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-48431ba6e38so20351f8f.1
-        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 23:37:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XQxOFsEs"
+Received: by mail-wm2-f11.google.com with SMTP id 5b1f17b1804b1-49cfcf2548aso489645e9.0
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 23:40:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788503825; x=1789108625; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=XzexIWlhTN/A5wBmQcOPNGGUTtI32mGihzkOS4xXL3g=;
-        b=gH1XXkcjcS3ep2rq7AO2b0PHtAIwg7dC+ksEWYz3P5Jd/4NVS7WWAUUuHtMOKi8A/f
-         nhD+A/MFeZmgTTKC/bYO7+LMQzyycq/+Tni8Lso6U/km40c9Unqv0gaqxrF9sw973H7U
-         rxBU08201uS1fTuWEwog4wCaRvse9etUxlxaWu9LYF/JLe7eicXF7tOsCcBLxpqRREa1
-         xIcrIZpL94Mu51RnrY6QZ7/9voirSv7WHNr8IFhk/Gewtd5RNFJZnPmIU8yVaT3T+V0k
-         S5wAiPWMkV975XrcO1AhpDJU2qCu5Q8kiTAOzIgMol5VzpHMlvSxJJR3vT99mqE+DVHt
-         kYvg==
+        d=gmail.com; s=20251104; t=1788504009; x=1789108809; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=nkzwoOSsNSMFNmfOP7u2WhxZBj6+UodQ8M2EJ24NymA=;
+        b=XQxOFsEs6NXZNTMjdeDL/De5nXwNQhEk5lBrcSRsLH+oG2HxfcHLrNHqUqMTPxKsRR
+         QDJ5RlhOHdKo2pWzdBW1b61IK0aHnmBzN1+WmI8hVxnQGKTViYyIwbEpMEUwFoYbSRKZ
+         8ZkfDDj8hxJtKF+GAZ+oRxcthHZ10JwBD9Utl/RWUZFp60jEZQo5aaKuUqJvcolDQmm3
+         /LGX9dB2cQ88Oa7mhr4oQPGI3hJIkrUT7BYCEpFuEHpILJ6ZATWKb+abrn2Pq450GJoG
+         eWzMHdwZNDf2neI7iRdBMKWxT+OoImsOCGMxTQWj8LrcRdMBldWebXC+OOERBdKiGg2t
+         3R4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788503825; x=1789108625;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=XzexIWlhTN/A5wBmQcOPNGGUTtI32mGihzkOS4xXL3g=;
-        b=GwILmGchi+Xeer4Ii0zNjP8np7iFuZEykosRvtClSFAXs5K8O0FyQwjZ4ao+Uhe1Bx
-         ET7WfszbamY+ctSqey1XnAF4h+NuCTcqvBEVfpTf1V8OBYbQCVjMV9bdZoRk66hRS1I7
-         wYTqm/mcAgDPvU4+jshZhYzE6z7T+OPdsppIHMXM2FtkXsrsgD/xTXV2jkREb9Y6LFtj
-         gLTOBelan+KK53x27/TUR+I6smFOVkn68nXciZn7z1w+uEXK8UXo45FaXR0imoXMuYOe
-         TezCRW94L9upjUw/T7fVO1t75CeZJ1mtcZ0vZFQfwrNzCBm60/qt9+yT19JZKEVqKhKi
-         ddIw==
-X-Gm-Message-State: AFuF++n6Bl6eIA1LTKjdrKNqpWIHIXzfSgvbok6/RsmBmneRSED+DOdb
-	ir+r5CEsdLOYPWC7GXZRfh2LxLytdEK0RKUp6XZqWRYVrZi7mAF8b5jh440tZYsv
-X-Gm-Gg: AYBFou3U7Pe5D0zVKFsBMPSKwecIzAn3Ns/vPJHs18tA1bYgZ5pjEUvtBKOA7/t4Ew1
-	fqjVLYakZ/lAyjB4LZTkvBHU6SOnc1ZQ2q5vJHKn3P3yscsdwKVi8gb1Fk4dZjXpIwjuRNAtEf3
-	sd/vw+z67U1xRCES0TMmAgB5weOcrB4y1340LzTxaNS36spT//AjGXXIdg5BsTD/ryry3EdH3HD
-	4fruHjhu/SWJcY8N1m7KXhwASZ3l0G5fzYGvkr70thBNhNIusGz+FFMnnN4Mo5H10wgan9Gx0Ew
-	CC/sZDUnjHz6q3VNCJmFIbBd9U7OY54fVt8DN3CmTd5XhPwCnsf1n7pGGeTFNXECTsr18+3/IU6
-	GDRgAIUAA2kIU3ErlBIHFqOtDX8CfVcaqGgQtwDQYN4W9HzWg/9fNnWz3UW52FnYcmcmnFrEIjU
-	rNSnGjcu8Y8h4o5msmna1Z3D1yWun9GRCafMJAzPUGO8e9LXSqoN2OwLWZKcSuTjVxhrQWm+W9v
-	/F7KoKDtoI7ULjmxuyhEqSQTzs1BPBdJzu4V+zmuamy0+i2PP4Iyq5R/uFVExuepuOfVUg33j7W
-	sk+Gdwm9OKlumZu0T1vu4MCH7MSHhqao8pyYJjdT
-X-Received: by 2002:a05:600c:c4b8:b0:49c:799a:177b with SMTP id 5b1f17b1804b1-49cf82be855mr26785815e9.2.1788503824756;
-        Thu, 03 Sep 2026 23:37:04 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1788504009; x=1789108809;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=nkzwoOSsNSMFNmfOP7u2WhxZBj6+UodQ8M2EJ24NymA=;
+        b=KWu041nXK7POSH4A95guvBKu1HkvFN9HNzk2dzAjXR2C6JD67QDQEX6oFoem0rmk4H
+         9Y8Sm6pEdJfmqp6WDjuST2H2OdocgrR7JQv2gcfhlFZSv7KY0s2P+Gd+C0sPaEq67bEv
+         kyVoATfz25c/H54/+vgjt4Bd/9HsfVj/0rwjpKyvllYoWgljbaJ/il/h7R7doQRtcjY8
+         SGOqNfv06dPtuoiHagSjFSV/ANgPW2CtZoza/2GW8Dy63UzGLYgJWNUpL6eQtFSxNR+O
+         7tX4Tpu3MlSh4Qd5g+Mo+WdDTvYRUDq1t14HkiymrD2Xr0UPOiWsTQy+Cse/rPltSX+Y
+         FIhg==
+X-Forwarded-Encrypted: i=1; AKwUvBygQT2fEcUIRD4qphxjy9WxX79RcSozpKUsZx+doRZRfCg6I+ry5XRSXVY0h3LCDIF3ndc=@vger.kernel.org
+X-Gm-Message-State: AFuF++mbgC22tdQili8Y57sGqbtoWoH3WWU8NTE9NqLMGXB5WgBVEV9X
+	W8YkyzazFVP7r8XwU8/j6iG9ZL+/62CNRW/WLHfi6+ltR8nanqF8dvason3NPjrw
+X-Gm-Gg: AYBFou3qgEuqahDjuMX9EbS11SN1XF4xF3FFbZwmuwfhJUQLNhcy5coTxRq1Dr+iwRU
+	O9rZNgZBDqzwpQUnwAS24Qc2Yu2wn7oRbjS+mEGN8GA/qLBKXbGeYCjjhA9VcyWHFDk8cjR3nvH
+	ODzuVpuIa6uc0Mqp5sf7ibtk75BGjHapy+6el7dASF4CC0QalhDjxPxJPUJUSH8hGfPH3psXUlh
+	1k79xT7s1Q44hp5AXCPvujD9//ydVCZV394aiVGF1nldOdbYWaujy/HutrECjH2JuZ4B4FOHV8R
+	CLW2V7tDUmhyuNfgIT0Z14tnfJKFKpezuvSrTUbpCgr9TB56ClrTNuUL+XHXsJG447jhE1+ka8A
+	KdumZ0Bf81sYefU09dBbCA4c/r4xLjTMM5Wb484bXXQnmPu+ZJV5HT5ylB6Rx4JM4fqOk8tHwQa
+	KOhtxjCOtrOdQOcKZJlHFPndhrOEvsoumcBqk6eWZe0CD7a0ZwxclbmkntwYfGEybeTGSExpud1
+	BgT73Zp/Qivjsl+5VvPPohvzmNpCNsHkQVbEjYrq7Ruy/G0zB1+fpxIP84AgNd0zNwENEMZ+BTo
+	yHqYTaoWj/66q7KTiQ1cK1ucSTECbE7jhPrsJdcH
+X-Received: by 2002:a05:600c:3b02:b0:49c:fa21:1c7d with SMTP id 5b1f17b1804b1-49cfa211d76mr18050155e9.18.1788504008912;
+        Thu, 03 Sep 2026 23:40:08 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ce5927b68sm180216205e9.1.2026.09.03.23.37.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2026 23:37:04 -0700 (PDT)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Ning Ding <dingning04@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Nicholas Carlini <npc@anthropic.com>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf v1 8/8] selftests/bpf: Reject refcount acquisition after RCU unlock
-Date: Fri,  4 Sep 2026 08:36:46 +0200
-Message-ID: <20260904063650.3877826-9-memxor@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260904063650.3877826-1-memxor@gmail.com>
-References: <20260904063650.3877826-1-memxor@gmail.com>
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cee5f9114sm126410025e9.5.2026.09.03.23.40.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Sep 2026 23:40:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1790; i=memxor@gmail.com; h=from:subject; bh=UFxYaQXVBNATr1x5p3orV09A2rwwzpQ5UexFnEal+Eg=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtW2pUWIYaofo7irR3bb/grb9uzNik77+WMRM5tdYoer 2+ujnjfUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgInME2H4w3fpA0exy+Uj366X LjKdku7W/Vhv5pVJH3Vn7Y/8sjpl23mGfzbrmqYL3tGYuYyR935O3PEIaRW9ZukzK2Y9njNN6ND aBH4A
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 04 Sep 2026 08:40:08 +0200
+Message-Id: <DL6BRAOHPT5T.8N108I2TRDJX@gmail.com>
+To: "Ning Ding" <dingning04@gmail.com>, <bpf@vger.kernel.org>
+Cc: <greg@kroah.com>
+Subject: Re: [PATCH bpf-next v4 0/4] bpf: Fix refcount_acquire handling for
+ borrowed kptrs
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+X-Mailer: aerc 0.21.0
+References: <20260813211533.290256-1-dingning04@gmail.com>
+In-Reply-To: <20260813211533.290256-1-dingning04@gmail.com>
 
-From: Ning Ding <dingning04@gmail.com>
+On Thu Aug 13, 2026 at 11:15 PM CEST, Ning Ding wrote:
+> Fix two verifier bugs involving bpf_refcount_acquire() and map kptrs.
+>
+> First, the verifier can mistake an RCU-loaded map kptr for an owned
+> reference and assume bpf_refcount_acquire() cannot return NULL. The kfunc
+> can return NULL after the last reference is dropped, so passing an
+> unchecked result to bpf_obj_drop() can crash the kernel.
+>
+> Second, type_is_ptr_alloc_obj() accepts PTR_UNTRUSTED pointers. This lets=
+ a
+> pointer that is no longer protected by RCU reach bpf_refcount_acquire(). =
+If
+> the object was freed and its address reused, the verifier may acquire a
+> reference through stale memory.
+>
+> Patches 1 and 2 fix and test the return-value nullability. Patches 3 and =
+4
+> reject untrusted allocated-object pointers while keeping safe
+> BPF_PROBE_MEM reads accepted.
+>
+> The series is based on bpf-next commit 806c1a185215
+> ("Merge branch 'bpf-introduce-global-percpu-data'").
+>
+> Testing used a fresh virtme-ng KVM boot with KASAN enabled:
+>
+>   full test_progs:           757/6685 passed, 7858 skipped, 0/0 failed
+>   KASAN/Oops/panic markers:  none
+>
 
-Add a sleepable verifier test that loads a refcount-only local kptr in an
-explicit RCU read-side critical section, ends the section, and passes the
-pointer to bpf_refcount_acquire().
+Hi Ning, thanks for the patches, and sorry for the delay on this set. I've =
+been
+buried with several other fixes. Nicholas also reported similar issues, and
+there were unresolved AI issues here, so I've taken over the series and mad=
+e
+some adjustments and sent a new version here, which I think should address =
+all
+concerns properly. If you have some time, please take a look and let me kno=
+w if
+you see any issues [0].
 
-The loaded pointer never carries NON_OWN_REF. After RCU unlock it retains
-MEM_ALLOC while becoming PTR_UNTRUSTED, which previously made the kfunc
-argument check accept it as a live allocated object. Expect verification to
-reject the untrusted argument instead.
+I have kept your authorship to credit you for the original work on this. Th=
+anks.
 
-Signed-off-by: Ning Ding <dingning04@gmail.com>
-[ kkd: Rewrote commit log ]
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- .../bpf/progs/refcounted_kptr_fail.c          | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
+  [0]: https://lore.kernel.org/bpf/20260904063650.3877826-1-memxor@gmail.co=
+m
 
-diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-index 5abd8387d26f..7be45100c4d6 100644
---- a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-@@ -187,6 +187,33 @@ long rbtree_remove_after_rcu_unlock(void *ctx)
- 	return 0;
- }
- 
-+SEC("?syscall")
-+__failure __msg("R1 is neither owning or non-owning ref")
-+long refcount_acquire_after_rcu_unlock(void *ctx)
-+{
-+	struct map_value_refcount_only *mapval;
-+	struct node_refcount_only *node, *ref;
-+	int idx = 0;
-+
-+	mapval = bpf_map_lookup_elem(&stashed_refcount_only, &idx);
-+	if (!mapval)
-+		return 0;
-+
-+	bpf_rcu_read_lock();
-+	node = mapval->node;
-+	if (!node) {
-+		bpf_rcu_read_unlock();
-+		return 0;
-+	}
-+	bpf_rcu_read_unlock();
-+
-+	ref = bpf_refcount_acquire(node);
-+	if (ref)
-+		bpf_obj_drop(ref);
-+
-+	return 0;
-+}
-+
- SEC("?syscall")
- __failure __msg("invalid mem access 'scalar'")
- long graph_kptr_after_spin_unlock(void *ctx)
--- 
-2.53.0
+> ---
+> v4:
+>   - Rebase and retarget the series onto bpf-next.
+>   - Change only the affected verifier test program sections from ?tc to
+>     sleepable ?syscall, as suggested by Kumar Kartikeya Dwivedi; leave th=
+e
+>     test logic unchanged.
+>   - Drop Cc: stable@vger.kernel.org.
+>   - Rerun the full unfiltered test_progs suite.
+>
+> v3:
+>   - Make type_is_ptr_alloc_obj() reject PTR_UNTRUSTED, as suggested by
+>     Kumar Kartikeya Dwivedi.
+>   - Add a separate helper for the BPF_PROBE_MEM read path.
+>   - Add read, refcount-acquire, and direct-write verifier tests.
+>   - Add Cc: stable@vger.kernel.org to both fixes, as requested by Greg
+>     Kroah-Hartman.
+>   - Split each fix from its selftests.
+>
+> v3: https://lore.kernel.org/r/20260803112218.3361213-1-dingning04@gmail.c=
+om
+> v2: https://lore.kernel.org/r/20260726235030.1152542-1-dingning04@gmail.c=
+om
+> v1: https://lore.kernel.org/r/20260726015330.705259-1-dingning04@gmail.co=
+m
+>
+> Ning Ding (4):
+>   bpf: Keep refcount_acquire nullable for borrowed RCU kptrs
+>   selftests/bpf: Test refcount_acquire return nullability
+>   bpf: Reject untrusted allocated-object pointers
+>   selftests/bpf: Test untrusted allocated-object pointers
+>
+>  include/linux/bpf_verifier.h                  |  11 +-
+>  kernel/bpf/verifier.c                         |  10 +-
+>  .../selftests/bpf/progs/refcounted_kptr.c     | 161 ++++++++++++++++++
+>  .../bpf/progs/refcounted_kptr_fail.c          |  74 ++++++++
+>  4 files changed, 253 insertions(+), 3 deletions(-)
+>
+>
+> base-commit: 806c1a185215382fab5a7fafc74e30070b2fb043
 
