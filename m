@@ -1,119 +1,188 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A894156F0
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 05:36:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788500219; cv=none; b=SR1V4nYNe87Sylr7pb6rJVrQcwDluG7TPbwQbZpltD62zPwPfwzyEkTT4xtnl60du5P78admlXgzCuBmV8ArPGRxEfnfb1l4V12HSQRpkqjRvKmOC9BsZd8VBmt1q9cm70HmhzyMMKFS3x5R2hiws7cRRBrP5yHLYOu4wCvjVkU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788500219; c=relaxed/simple;
-	bh=vcwv+5ze0yF/r8ZUbx2ZQwNddkeM76lizyZ23pyYRtM=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=flBqDIlM/VuhYRTtk1uZ8NmDNju0z8PqJ0FSFrf6GEUI4b7gt0gh1JexGddqfX2KZ6TpjV3ZCm41n3085diwFt+YLIq1Kxs3X/QeUgD+zXzDilO4weeumikEmXzdI1ciBHFzyDrRReJnrja0a9fZkgqdw6q+F1GgQpRjPo5ar+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E1Qsp/Ve; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC913AFB1C
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 05:41:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788500481; cv=pass; b=F4Zk2hSWazvuEClgMsb8uJtY0PugI8WRHcXvm5d7V9tqoQ4bnPSPPSjG8/FMlS+gnKDz0+LoLcjwuQ0yzXhP0C2vMLKLQuI9f8gWvtas4xCBmA9W8Q2oE0u1Dk/ntYsvNknkIaur9EgtiAmwPQLS55X1P4bJcHs8/Sf/IT8vJmc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788500481; c=relaxed/simple;
+	bh=aEP7uy33qGNpUUDQxlNY8I1X9OL2s9AG5vb3XEuG76o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VOB2oBZSE7GYURmuaPVwUCKuZCs0tfRLyItNHPYqwGCkMfTq0A2BNMaH7rQDaFKDCof+qsadL2gS4vRN8fCYKeMAwPMwso5CjBaEO88ThaxamDuEerGdOffIiYn0QjhNLTGvouizU7CvLiAAqtQAYNi3ST63s005cXlKbUaSDuo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=CSevkJzd; arc=pass smtp.client-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E1Qsp/Ve"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 335DE1F00A3F;
-	Fri,  4 Sep 2026 05:36:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788500218;
-	bh=WSd6TEnAZHDTx2HnWx6Nq0sfWCakM84f5O2xk8F9748=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=E1Qsp/Ve5WJHg1pvoPDFMhytEH15EDaTCPuLP9hKKhM9uZrhgVaFLilaUmOwN1/6G
-	 5rs7K6whAxNYQxRRYlIuzJHrOI9ojfXMMvuGap503+U5SUTU6q3oUwYlS/sfU8cbHo
-	 F278Lq0kNOAA9hBHBYJtTgQYIC+ZIJnEaTZNWrO8Fl+B2EmkSBQwchjrfI0DxDxs4n
-	 9+dehoGGD3PgIGGaYUMB+sJwSS55BDXMYkSoHGlg6LcVlFyodGVAPipmPx+elp8y8/
-	 cZ9Di6A1Ajsrq0pf0iEDx4Lo8Lxfa/qahW5a4RkRGnaf7qjC1jzHvf7/m9ZGHU+CsX
-	 gsQNnHBqgiMew==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 07/12] bpf, x86: Place kfunc arguments per the
- SysV calling convention
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yonghong Song" <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260904051033.3979978-1-yonghong.song@linux.dev>
-References: <20260904050957.3976119-1-yonghong.song@linux.dev>
- <20260904051033.3979978-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 04 Sep 2026 05:36:57 +0000
-Message-Id: <20260904053658.335DE1F00A3F@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="CSevkJzd"
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-857ff9fef54so6619857b3.1
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2026 22:41:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788500479; cv=none;
+        d=google.com; s=arc-20260327;
+        b=UREL0WqHp87TWULzaeFOjDQ83x0K16ReUBottZMRDk1DWcEc5qDo9l9rG+Q26YSpvk
+         zDPgxib1DL+iUCCGVz4KG2AY+Fa3JLVOdD+882Mc2+xKxgiEmEcOnYcqcYL6FkpiWKoH
+         grEQzyTfGUXjvYcxrznZa21SgKmP6x1n66+CPFgiO1pjgKVZq55XBhtEOhiEoS5fjN6U
+         0sTtCUUQeP0LtKET/2I3CIRxsehwynV2KDtcPrXvDi3B1LQvHTfNkaIXvyZ3putB5rHQ
+         ckGhU9zK6EwCXFf750QhXzJ9e8LVS7bagw9VIinTRy+6WkbTXQ0DYtQXf4OdHCt63/p2
+         Er3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=EuqE3ueVRiiHxh+pCSOdLubfFSA664DpxbaoLMe0ato=;
+        fh=5Q78AWiAcvfF872c7Qh0SYBgI1D97IJddwoA/fJNuwU=;
+        b=ZjhaQdg/pitZ5bX7VVLNIir0prscOAws2oBX8uRqqWeKZDQ6qX/kVmkvUOfQ1GesDp
+         cjwMgPumIzhcrli044oqnIs4lJ1WoNUUyt0Zx2+CYTku/p4jRgsVg2LzriSVxvpAnY4i
+         9VFVrXuQrnPyrpwX9veqmhrUoAN62a3Tv0i8HNnvaCrgCUPqfG3m+FuwCTRf+l2qRslp
+         ojwtCKBJUoDoejvYJkMFadlS5ZRUpzFaMfIV98tbtyE/HN3jgGZqdgU6Ohoyn4Ow5gZh
+         q7HtWpuq7CwPhcuDtNBqRPwfLGoPluK1HgtF1IRxxSLoD10DB1c/UuWq2UegQlg3c64G
+         EwJQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1788500479; x=1789105279; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=EuqE3ueVRiiHxh+pCSOdLubfFSA664DpxbaoLMe0ato=;
+        b=CSevkJzdj/mbLj+qNLY8wxuZo8cDYLYmf/y5vaicKUV71Qx+NwtLWlhFxY5N7hiRmR
+         qMjE31yjhZdFZxXlML/PeDFDdG6sR41Qbp7uwtnT7WaDbOC/5oycXRvUrpjAyQ/aGACf
+         /RnECDpMeB6zj4jdLVUtsyKDN/NKMBI5Xa5rVldDPdk7Gwq7KDMbLLyLCNWm4kfA4IIX
+         V/WsHNqP+uMw/HvodTfIKs1THYs1FT4VG8pnX2SnHlZMeW2I57N3ocmmDxIV25HBNqTA
+         LJyXvWqS162HkzX8wWQlTstnWvKSGHwvjvs7ERQMgnR/DwHlv3t9BMykKbIaPBGbTjLT
+         rN8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788500479; x=1789105279;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=EuqE3ueVRiiHxh+pCSOdLubfFSA664DpxbaoLMe0ato=;
+        b=ZagLVDYtTPaxflC9OKP8ESDsYBusfzqE6F6uGVxRsMYLw4Iepcfn+drXBLk+Nz5VRC
+         IJUIrAEmmb1O2+M2tkEoWhDvL/W48+wwOxLQPb77zxOO5IcDusEZxKOuon5UF+pkyfId
+         ibbLqK7BwEqomNqkEOxh9K3dISDYevzDhleNUOG34LcWxBsC8U978VfuC15xzZtObCV2
+         DVDZ/gLiJa6XCsahP5Jv1XeyFFXtYjBUC5b9FOj+ixm/1paVxQjUr56R+ByM26rVtxOd
+         nPNvn+0dP4WNBx0QZX2X9GTQtoG+dAaj05bNlC157MrtKXt1ldktTFhGbV0VPES/4JWL
+         MjFw==
+X-Forwarded-Encrypted: i=1; AKwUvBxlHJav/H5ldgydrz+8pHK4LHWCVgZRiACTG9Y4i07BmwgUSMvxP9FCQfmRRHPtQlbK4Xc=@vger.kernel.org
+X-Gm-Message-State: AFuF++lvB2EKJ7FAkmLH6Ngh+HHmnioTNRUWcQV5S2kbN2l73DXRSDyH
+	vpzYEPOWtHcRVGGFRJTmnqf9xF08Qim5s7hYmcfJ4+dLmFYL33EKNJ3Tbx7V7VqiK5EGQoCLN7B
+	L7y6GmaSe2TFu4fmo+C2MG5wtfikVfjbMzghSRixcOQ==
+X-Gm-Gg: AYBFou2N1WVb2Biv/M4Oyj+caK1eU9XAyYvmP5DWyxnL6NfZ0I6vTwyNq0RNg+fVVtd
+	vEbRs9cz8g2JuQoEdH2T3gooZMv7fJk6Wz4AU8aO4is8GtJI1HePoouYTKFs4TrVx58V+TzTNWF
+	rVUWf/Q3+WQ6f/4GETfAdISwstrLh573QfleKXOuYTul3QeA48dKdV6HXu+FOJQkcaxxwicNvpl
+	rDHqLmIO1rAHBDG1RlMwP7D6y2VlPDln1cbApkKPm4EcEfq2zizALs3EqvP/swuFCgXHqv2NPk6
+	z1baFtJWZ153pCkSBQMefOBbEokDecWxp5jN2TY/kZ0k
+X-Received: by 2002:a05:690c:a7cb:b0:81e:6658:53fe with SMTP id
+ 00721157ae682-87126aa6a93mr15719417b3.20.1788500478753; Thu, 03 Sep 2026
+ 22:41:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260819024443.781764-1-tushar.vyavahare@intel.com>
+In-Reply-To: <20260819024443.781764-1-tushar.vyavahare@intel.com>
+From: Emil Tsalapatis <linux-lists@etsalapatis.com>
+Date: Fri, 4 Sep 2026 01:41:07 -0400
+X-Gm-Features: AcwNN1W0qi_ei7Umz4XIh7S5aRdHKz5JTDd5nP5DkVfbP_TCgZcBavx87UB0Ftc
+Message-ID: <CABFh=a4ooWHaSzd1sk7bEP=KT1e+24EjJ0344aFg552ySoj_7A@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 0/4] selftests/xsk: improve shared-UMEM coverage
+To: Tushar Vyavahare <tushar.vyavahare@intel.com>
+Cc: netdev@vger.kernel.org, magnus.karlsson@intel.com, 
+	maciej.fijalkowski@intel.com, stfomichev@gmail.com, kernelxing@tencent.com, 
+	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, 
+	daniel@iogearbox.net, tirthendu.sarkar@intel.com, andrii@kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] emit_kfunc_args() and bpf_jit_kfunc_stack_slots() silently ignor=
-e kfunc_arg_layout() errors for kfuncs requiring more than 12 argument eigh=
-tbytes, leading to miscompiled BPF programs with incorrect argument placeme=
-nts.
---
+On Tue, Aug 18, 2026 at 10:53=E2=80=AFPM Tushar Vyavahare
+<tushar.vyavahare@intel.com> wrote:
+>
+> AF_XDP shared-UMEM support in the existing XSK selftests is limited to
+> a small set of scenarios, while the supporting setup and cleanup paths
+> become fragile as coverage expands.
+>
+> This series improves shared-UMEM testing and infrastructure in four
+> steps.
+>
+> Patch 1 makes UMEM ownership explicit with refcounting and centralizes
+> socket and UMEM teardown, keeping cleanup behavior consistent across
+> normal completion and error paths. A UMEM that survives teardown now
+> fails the test instead of leaking silently.
+>
+> Patch 2 prevents TX setup when RX socket configuration has already
+> failed. This avoids shared-UMEM TX setup relying on incomplete RX-side
+> socket and UMEM state.
+>
+> Patch 3 expands XSKMAP and test capacity to four sockets and adds a
+> length-based XDP steering program. The classifier uses total
+> XDP-visible packet length (data_end - data) and SHARED_UMEM_LEN_SPLIT.
+>
+> Patch 4 adds the shared-UMEM callback runner and initial 4-socket,
+> length-based steering, uneven-distribution, and unaligned-chunk test
+> cases. The three packet-stream sequences share one transactional helper
+> that stages replacement streams and publishes them into the socket
+> arrays only after every allocation has succeeded.
+>
+> Together, these patches strengthen shared-UMEM setup and cleanup and
+> extend selftest coverage to multi-socket and packet-distribution
+> scenarios.
+>
+> v1 -> v2:
+> - [1/4] Track per-slot UMEM ownership and centralize refcount-based
+>   teardown. [sashiko]
+> - [2/4] Publish RX failure before the setup barrier and skip TX setup
+>   after a failed RX configuration. [BPF AI]
+> - [3/4] Trim the length-classifier comment to match nearby BPF style.
+>   [BPF AI]
+> - [4/4] Clarify the partial stream replacement leak in the commit
+>   message. [BPF AI]
+>
+> v2 -> v3:
+> - [1/4] Keep one xsk_umem_info for shared-UMEM TX setup instead of
+>   copying it; initialize only the non-owning TX buffer view. [sashiko]
+> - [1/4] Propagate xsk_umem__delete() errors so the stack-allocated
+>   zero-copy probe cannot lose deferred cleanup. [sashiko]
+> - [1/4] Record UMEM deletion failures in test->fail; in-test teardown
+>   cannot retry them. [sashiko]
+> - [1/4] Collapse the redundant teardown helpers into a single loop.
+>   [sashiko]
+> - [4/4] Fold the previous 5/5 rollback-safe stream replacement into
+>   this patch. [BPF AI]
+> - [4/4] Factor the three stream sequences into pkt_stream_replace_seq(),
+>   driven by a pkt_stream_dims_fn callback. [BPF AI]
+> - [4/4] Drop the stream-readiness check and the uneven-distribution
+>   hook; neither could fail. [sashiko]
+> - [4/4] Drop the unreachable NULL-safe UMEM guards from the unaligned
+>   test. [co-pilot]
+>
+> Co-developed-by: Magnus Karlsson <magnus.karlsson@intel.com>
+> Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+> Signed-off-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
+>
+> Tushar Vyavahare (4):
+>   selftests/xsk: add UMEM users refcount and centralize socket teardown
+>   selftests/xsk: skip TX setup after RX configuration failure
+>   selftests/xsk: expand XSKMAP capacity and add length-based XDP program
+>   selftests/xsk: add shared-UMEM callback framework and initial test
+>     cases
+>
 
-commit f5201014b232baff8f1ba36c0b74d2c3e1e5ccf9
-Author: Yonghong Song <yonghong.song@linux.dev>
+For the series:
 
-bpf, x86: Place kfunc arguments per the SysV calling convention
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-This commit updates the BPF JIT on x86 to conform to the SysV calling
-convention when placing kfunc arguments. It adjusts argument placements
-before a kfunc call to account for differing rules between BPF and SysV
-regarding stack and register usage. The outgoing argument area is sized
-to support both conventions.
-
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-[ ... ]
-> +static int emit_kfunc_args(const struct btf_func_model *fm, u8 **pprog,
-> +			   s32 stack_base)
-> +{
-> +	u8 *prog =3D *pprog, *start =3D prog;
-> +	bool done[MAX_BPF_FUNC_ARGS] =3D {};
-> +	u8 pos[MAX_BPF_FUNC_ARGS];
-> +	int i, j, n, todo =3D 0, parked =3D -1;
-> +
-> +	n =3D kfunc_arg_layout(fm, pos, ARRAY_SIZE(pos));
-> +	if (n < 0)
-> +		return 0;
-
-[Severity: Medium]
-Will this silently ignore errors if a kfunc requires more than 12 argument
-eightbytes?
-
-While the verifier limits the argument count to 12 (MAX_BPF_FUNC_ARGS),
-arguments can take up to 2 slots, so the total slots could reach 24.
-If a BPF program calls a registered kfunc that requires more than 12
-eightbyte slots (such as 7 struct arguments of 16 bytes each),
-kfunc_arg_layout() will return -EINVAL because max is hardcoded to 12 here.
-
-Since emit_kfunc_args() returns 0 instead of propagating the error code,
-could this cause the BPF program to compile successfully but execute with
-missing argument shuffle instructions? It seems the kfunc might read garbage
-from the 6th slot onwards, potentially causing panics or data corruption.
-
-This same pattern of silently ignoring layout errors appears in
-bpf_jit_kfunc_stack_slots():
-
-kernel/bpf/core.c:bpf_jit_kfunc_stack_slots() {
-	...
-		n =3D layout(fm, pos, ARRAY_SIZE(pos));
-		if (n < 0)
-			continue;
-	...
-}
-
-Does this also leave stack calculations undersized?
-
-Though the stack corruption is mathematically averted because BPF's calling
-convention stack requirements always equal or exceed SysV's (making
-outgoing_rsp naturally sufficient), the silent argument corruption remains.
-As there are currently no mainline kfuncs that take more than 12 slots,
-this appears to be a latent regression.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260904050957.3976=
-119-1-yonghong.song@linux.dev?part=3D7
+>  .../selftests/bpf/prog_tests/test_xsk.c       | 340 +++++++++++++++---
+>  .../selftests/bpf/prog_tests/test_xsk.h       |  27 +-
+>  .../selftests/bpf/progs/xsk_xdp_progs.c       |  15 +-
+>  tools/testing/selftests/bpf/xsk_xdp_common.h  |   3 +-
+>  tools/testing/selftests/bpf/xskxceiver.c      |  40 +--
+>  5 files changed, 344 insertions(+), 81 deletions(-)
+>
+> --
+> 2.43.0
+>
+>
