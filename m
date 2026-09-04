@@ -1,113 +1,85 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6247626159E;
-	Fri,  4 Sep 2026 01:47:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0EE5372662
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 02:01:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788486470; cv=none; b=XQwKs/KmZwZlF22am0kX1Xfkt46eiV9E3YZxAKk06CqWz6tR5T0aZyOrxBawyhzmqhksEyVhKZMEhDmkaamz/lPy0U46pfl2hBFgkVc8h777VbbDFJUWI1ErIO4E9/z6sXNd2IPG9ZRhV0mQ5UaBD5PkSDfgUeILtHpZcoUdJGA=
+	t=1788487272; cv=none; b=DNk+dmCO+kXo6qeeoi0Xo/S35wcmis9hUNA3c90JqB2M4v08fMpJdDuHrzEvmKHieR9thnKS9z3Ia65RNkBmxD/sOxzHmYj0lT4eFTCnERrLe0ZPxOCElDrjS2Na9GZ6qQMcSAJTysIKtAtnB9kJwdzS19Ri3wX8RBXAM2C8JwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788486470; c=relaxed/simple;
-	bh=JVDeMIkLAV+FTDJQW2eQo7JhGBJ6KEDiA1nqd6dgOaI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=IWWdpLPgtUa0bg/8wih1cck37KK0mGVbz1q7vxCYQAxNN6fzEXrEMPeaRbATQgsgj+8AQeRTbfBwXV89QfgjV3nrSowQvaG6S0pYdwAn6NF7I4dPAKq3FmgKVCLVnNmKuB0LAAYAjY8nHh6c2Nkn4EZoRM202yI9rVTK315hcDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k0Be6oyF; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788487272; c=relaxed/simple;
+	bh=8yzs0jabwtdb5WiXY2w1qcVX1ps5QipsAF03gd/7ACo=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=ZJrAuYmKQ6pG9HVMUVE3hVsSfi4Sp8YJO8bpwWaD3BOYmWwNbHYdJmlXbjfxdi7FXYguze+Z0lt2TDAXsQx1PZ6FOtj3Yb7sCFmOOHPPsmH6UXWKnK4JOVCCqT+o9Tp3tNT/m542harE2CRM3PtfagIjImZ7/vxIiUhsSHalhto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EMLewiv1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k0Be6oyF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C04AA1F000E9;
-	Fri,  4 Sep 2026 01:47:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EMLewiv1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CA9B1F000E9;
+	Fri,  4 Sep 2026 02:01:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788486469;
-	bh=RZ163bT2SBMXkLQEC+5u90c1x+gxGZEmjcnUHnCF/8A=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=k0Be6oyFwDcODmK7c+iYIRQHgJYvQZcYniX9PhZkHPqT0/EnApR1/g1JcjrcSAzzA
-	 h+iVFjLyT/Pwj2p+IcGcYG3fugZbdr5BnzMYgPV/ukJ+fT26pTzKYcEitFyPRrp6fd
-	 XOBKXNolKa+U6CC3MTk0PcvwecTkWMSahnzDGK3tv+JFYXsbrzsazIO2OCBxuxZc0d
-	 BAzb7yJMpbbcvjVhdoHU2K4EJP864yVVplzS7dX9d5KBbgvRG7u1EoF/8jdDHNPph+
-	 aQfFFX73NCgNx3/8tFj6KKdFY4H1uzeUSf3sz5FV6VD3f1rIZ9KfcpWz9liizB4ZSA
-	 uSUUYFZhzoVTA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC 5/8] arm64: cfi: Use
- CONFIG_ARM64_FUNCTION_PREFIX_NOPS for the type hash offset
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?Sm9zZSBGZXJuYW5kZXogKEFudGhyb3BpYyk=?= <jose.fernandez@linux.dev>
-Cc: bpf@vger.kernel.org, ojeda@kernel.org, linux-trace-kernel@vger.kernel.org
-In-Reply-To: <20260904-b4-arm64-callops-kcfi-v1-5-ce6687739b0c@linux.dev>
-References: <20260904-b4-arm64-callops-kcfi-v1-0-ce6687739b0c@linux.dev>
- <20260904-b4-arm64-callops-kcfi-v1-5-ce6687739b0c@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 04 Sep 2026 01:47:48 +0000
-Message-Id: <20260904014748.C04AA1F000E9@smtp.kernel.org>
+	s=k20260515; t=1788487271;
+	bh=X5VpBHaKEFIT1xnTBDD5wNVonLn/QaNce8ioPpql2jY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=EMLewiv118Mi6RBet3aNuj6HaQJXxkGshbQuLiojv2l9/TxeKb73GOlWgwTej72eL
+	 /4OGUDngBz67wMBwuRPYYpdQwvhk9sAEGgVzoffeCwSR/+W8bp9qAPpgccHVr7YYDQ
+	 1aVgfZW/Lq9N/0TBGTLb6Z41nBGVzutHbJH9kH/Pm0U9QM+k0SkPq9F92jKYPPmlzf
+	 m7P//WUPqVNadH1l+0Kzfi5CGm5BGejoGsp8Uj/jQ823FTPfrIMH+gnHdUZaWJ0lac
+	 EcQG9+l5ZVsWX5rqFIT37XfrmcJfng5jZ7N26ajG/yznjz8kmSeRJz+14opZoBAUNu
+	 TAqJrfbI8GknQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93A5938119E3;
+	Fri,  4 Sep 2026 02:00:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf 1/3] bpf: zero extend the result of an arena 32-bit
+ cmpxchg
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178848721214.4116251.11029484236998441366.git-patchwork-notify@kernel.org>
+Date: Fri, 04 Sep 2026 02:00:12 +0000
+References: <20260903171542.1438050-1-eddyz87@gmail.com>
+In-Reply-To: <20260903171542.1438050-1-eddyz87@gmail.com>
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com,
+ yonghong.song@linux.dev, memxor@gmail.com, npc@anthropic.com
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+Hello:
 
-Pre-existing issues:
-- [Medium] bpf_prog_fill_jited_linfo() calculates incorrect line info addre=
-sses because ctx.offset includes the CFI prefix size.
---
+This series was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-commit 1909b8cf9ec25c69a7f49627fb1a30b3d8e545d4
-Author: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
-arm64: cfi: Use CONFIG_ARM64_FUNCTION_PREFIX_NOPS for the type hash offset
+On Thu,  3 Sep 2026 10:15:39 -0700 you wrote:
+> bpf_convert_ctx_accesses() rewrites an atomic on an arena pointer from
+> BPF_STX | BPF_ATOMIC to BPF_STX | BPF_PROBE_ATOMIC, and it runs before
+> bpf_opt_subreg_zext_lo32_rnd_hi32().
+> 
+> That pass emits an explicit zero extension for a 32-bit cmpxchg even
+> when bpf_jit_needs_zext() is false. This is done because on some
+> architectures 32-bit cmpxchg requires explicit zero extension for the
+> dst register. E.g. on x86-64 'lock cmpxchg' does not change the %eax
+> if comparison is successful, while BPF semantics declare that each
+> operation on a 32-bit register zero extends it's upper half.
+> 
+> [...]
 
-This patch modifies the CFI prefix to use CONFIG_ARM64_FUNCTION_PREFIX_NOPS
-instead of hardcoding four bytes. It adjusts cfi_get_offset(),
-SYM_TYPED_FUNC_START, and the BPF JIT to account for the dynamic number of
-NOPs required by kCFI kernels with CALL_OPS or ThinLTO and BTI.
+Here is the summary with links:
+  - [bpf,1/3] bpf: zero extend the result of an arena 32-bit cmpxchg
+    https://git.kernel.org/bpf/bpf/c/4814ed6406f3
+  - [bpf,2/3] bpf: update disasm.c to print BPF_PROBE_ATOMIC as atomics
+    https://git.kernel.org/bpf/bpf/c/1f3cd9719c40
+  - [bpf,3/3] selftests/bpf: check zero extension of an arena 32-bit cmpxchg
+    https://git.kernel.org/bpf/bpf/c/54ed91950363
 
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> index c18e005a41dbe..7ad14d9847138 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-[ ... ]
-> @@ -185,8 +185,12 @@ static inline void emit_bti(u32 insn, struct jit_ctx=
- *ctx)
-> =20
->  static inline void emit_kcfi(u32 hash, struct jit_ctx *ctx)
->  {
-> -	if (IS_ENABLED(CONFIG_CFI))
-> -		emit_u32_data(hash, ctx);
-> +	if (!IS_ENABLED(CONFIG_CFI))
-> +		return;
-> +
-> +	emit_u32_data(hash, ctx);
-> +	for (int i =3D 0; i < CONFIG_ARM64_FUNCTION_PREFIX_NOPS; i++)
-> +		emit(A64_NOP, ctx);
->  }
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-[Severity: Medium]
-This is a pre-existing issue, but does expanding the CFI prefix length
-cause bpf_prog_fill_jited_linfo() to calculate incorrect line info addresses
-by adding the CFI prefix twice?
 
-When loading any BPF program with line info on an arm64 kernel built with
-kCFI, ctx.offset measures from the start of the JIT buffer, which includes
-the CFI prefix emitted here.
-
-However, in bpf_int_jit_compile() in arch/arm64/net/bpf_jit_comp.c, the
-offsets are passed to bpf_prog_fill_jited_linfo():
-
-arch/arm64/net/bpf_jit_comp.c:bpf_int_jit_compile() {
-    ...
-    for (i =3D 0; i <=3D prog->len; i++)
-        ctx.offset[i] *=3D AARCH64_INSN_SIZE;
-    bpf_prog_fill_jited_linfo(prog, ctx.offset + 1);
-    ...
-}
-
-Since bpf_prog_fill_jited_linfo() adds these offsets to prog->bpf_func,
-which is already shifted past the CFI prefix by cfi_get_offset(), the CFI
-prefix length ends up being added twice. The bug existed prior to this patch
-(off by 4 bytes) but this patch exacerbates it to 16 or 24 bytes depending
-on the number of NOPs.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260904-b4-arm64-c=
-allops-kcfi-v1-0-ce6687739b0c@linux.dev?part=3D5
