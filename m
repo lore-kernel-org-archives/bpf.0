@@ -1,133 +1,144 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA56B358378
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 06:09:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9516F358378
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 06:09:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788502182; cv=none; b=Bbt2oRPLsWmHf9/WcbJtxlB8OhLDzJsAerAMDh25PJlpOVwGP7Vja8pQ6M+KL9WEp1rHtdo5yNCD2f/+kOsjLcDAhofWXHy+Mydy2nxewtAPS3YbvpMSvh/HDlnQrTGGa8dwM19gEkMwofqqzcUcotN6yS9PBqxzfVjuFfc0SYI=
+	t=1788502184; cv=none; b=PMz06PZu/PYPRJ4yAFkin4MhoAUcUsTKEqNaMdHRNgz/IFryI+yN4cW9Gfue05XBlqsE4jp6iCnG6tqFWNvxG5AuIO1UajybtJSztUp8Sn2ZnrxW1CT07y4ZKQTnDQLy/YxsBztnQ7Qys3Iw5e0Yc4dfu0KJ1egn4FvOEiRnrvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788502182; c=relaxed/simple;
-	bh=bhStVmuP5Chn8Q+lAuaID6ORW73ii0G/DlRnpEM1H6s=;
+	s=arc-20240116; t=1788502184; c=relaxed/simple;
+	bh=zyXffOIxDrOjcI1yYYbTmCGMEqoRNLulyQKuSSaYBeQ=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WhND4TJEP+9iZ72Ndx3zA0sjh8tnrdBfBj1aABMDOzeyPcQdcshcbHrH2OOr1VI3QHyQqfggx1XPXh9yTDtBnar+3JtU/Uj5Q5Lj9RmKB+p/1NvVwWSi8p2Y93xGuiHfnI/gg2PRIcN52n46vqQAUvbpJHRup7fupIjN5GfP/kc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=THqZbt2z; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=My2yB0sZ86UgWIl4OJyE3AOEEgZJQn+25RjT0KL6ZJRbhxRYOaeEggDS6/PUTzAhRSExe8gSb95JaiTJ23LpMGfb/xAhSxoVL9uKRNtzewG9xzJB1KLNEzJGW9SYjqrAjFoW75GfIkq1qOC2ThyHHYTCnRhPQ7cKmKq9CULbT4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DmoBPx1h; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="THqZbt2z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 131881F00A3D;
-	Fri,  4 Sep 2026 06:09:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DmoBPx1h"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C98651F00A3F;
+	Fri,  4 Sep 2026 06:09:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788502181;
-	bh=AQEmRn7FMSaQawwSOKXC+qx+NtQwZSHgXkkjORB43bM=;
+	s=k20260515; t=1788502183;
+	bh=eNKaWKv89DfELipwaDha/wU41O+euN4ntHHIhAK5jUM=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=THqZbt2zG79TQZhEuJZj8ECxnGSVsJFWIwaMbLapRoXIVTU8yXfBACX0etd5jEZfl
-	 PiT1u99CVdMc57DYX0L6yqrWENTzX+LGvjws5eiafAdUQU20I5vAVkGCZUtS8DPTjt
-	 uKxryYmWx5xjX6jeVn36LFqyN23m631h7AK7KhCzgx7DNfXwWCx507qROZxVV5wZbt
-	 IYsYGSsqXygR0jxh9C/FUW2ZFin6xPvXOEhu/BMq44/PM0JhSxMI5wof/ymvQ34Qw0
-	 Wq2+uMVBkkCaGeSMbOLVtzLxsLMBf76HsPrUFfKKUMK4w6ucBbvJ9vzXM7rrMqN64y
-	 he8KJNLNIGnug==
-Content-Type: multipart/mixed; boundary="===============4869065197338784549=="
+	b=DmoBPx1h5JZoWrkQh1Ndv2CfFYqNWq6LUz4TjbsRbtMzvdbFmTeg0Pepa7UsSiPC2
+	 +PkuO0lvBnOfPezwd+1i+RfM/+rYXq9buGEViJVZ0LV4kkr+eBlyOlZQj9bftW1DRA
+	 8VCcp+MtSFJrvdOI9BBvQmq1miE/6JhBEQk4MULZAzJDC7rk7Z2PBx2Nx0uMQxx50U
+	 Z2rlDhCHomMMo8gFwJtRohLaU1gYsZRAlDeIqMdJry3BKyl3Tc5oFTpVhmY6UqLOmj
+	 nXiz1bt7CvMkb1N5BLf7Psxle51Y5HVXc9Avl7mPzNUg3IYOa0Xu47XUJ2mAz8VueN
+	 v5h5OcIeTIFTg==
+Content-Type: multipart/mixed; boundary="===============2923292248830055560=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <8d16df40357e1ac7177a9e63e754fb506f348198ee3dfbad37d7c969b0f13431@mail.kernel.org>
-In-Reply-To: <20260904051038.3980676-1-yonghong.song@linux.dev>
-References: <20260904051038.3980676-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next 08/12] bpf: Record a 16-byte argument alignment in the function model
+Message-Id: <f3466f8c3246d1abb06f2651a539c2697670246105f2b4664cba6455fe9199c0@mail.kernel.org>
+In-Reply-To: <20260904051054.3983495-1-yonghong.song@linux.dev>
+References: <20260904051054.3983495-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next 11/12] selftests/bpf: Add inline-asm tests for by-value arguments
 From: bot+bpf-ci@kernel.org
 To: yonghong.song@linux.dev,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri,  4 Sep 2026 06:09:41 +0000 (UTC)
+Date: Fri,  4 Sep 2026 06:09:42 +0000 (UTC)
 
---===============4869065197338784549==
+--===============2923292248830055560==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 3a7eb2185c35..5b93aa97f1bc 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1193,6 +1193,9 @@ struct bpf_prog_offload {
->  	u32			jited_len;
->  };
->
-> +/* Argument aligned to 16 bytes. */
-> +#define BTF_FMODEL_ALIGN16_ARG		BIT(0)
+> diff --git a/tools/testing/selftests/bpf/prog_tests/aggregate_arg.c b/tools/testing/selftests/bpf/prog_tests/aggregate_arg.c
+> new file mode 100644
+> index 000000000000..b230f3bd3b2a
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/aggregate_arg.c
+> @@ -0,0 +1,9 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+> +#include <test_progs.h>
+> +#include "aggregate_arg_func.skel.h"
 > +
->  /* The argument is signed. */
->  #define BTF_FMODEL_SIGNED_ARG		BIT(1)
-
-[ ... ]
-
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 6c391449e298..f933a675b0a8 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -7633,6 +7633,15 @@ int btf_distill_func_proto(struct bpf_verifier_log *log,
->  		}
->  		m->arg_size[i] = ret;
->  		m->arg_flags[i] = __get_arg_fmodel_flags(btf, &args[i], t);
-> +
-> +		align16 = btf_type_align16(btf, t, 0);
-> +		if (align16 < 0) {
-> +			bpf_log(log, "The function %s arg%d type %s has unknown alignment.\n",
-> +				tname, i, btf_type_str(t));
-> +			return -EINVAL;
-> +		} else if (align16) {
-> +			m->arg_flags[i] |= BTF_FMODEL_ALIGN16_ARG;
-> +		}
->  	}
->  	m->nr_args = nargs;
->  	return 0;
-
-[ ... ]
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 030fb37c22ef..461883158ffa 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -11748,6 +11748,31 @@ bool btf_struct_is_composed_of(struct bpf_verifier_env *env,
->  	return btf_struct_member_walk(env, btf, t, member_kinds, 0, NULL);
->  }
->
-> +int btf_type_align16(const struct btf *btf, const struct btf_type *t, int rec)
+> +void test_aggregate_arg(void)
 > +{
-> +	const struct btf_member *member;
-> +	int ret;
-> +	u32 i;
-> +
-> +	while (btf_type_is_array(t))
-> +		t = btf_type_skip_modifiers(btf, btf_array(t)->type, NULL);
-> +
-> +	if (btf_type_is_int(t))
-> +		return t->size > 8;
-> +	if (!btf_type_is_struct(t))
-> +		return 0;
-> +	if (rec >= BTF_MEMBER_MAX_DEPTH)
-> +		return -E2BIG;
-> +
-> +	for_each_member(i, t, member) {
-> +		ret = btf_type_align16(btf, btf_type_skip_modifiers(btf, member->type, NULL),
-> +				       rec + 1);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +	return 0;
+> +	RUN_TESTS(aggregate_arg_func);
 > +}
+> diff --git a/tools/testing/selftests/bpf/progs/aggregate_arg_func.c b/tools/testing/selftests/bpf/progs/aggregate_arg_func.c
+> new file mode 100644
+> index 000000000000..61dd5f86c3a4
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/aggregate_arg_func.c
+> @@ -0,0 +1,155 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+> +#include <vmlinux.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include "bpf_misc.h"
+> +
+> +typedef unsigned __int128 u128;
+> +
+> +struct pair {
+> +	__u64 lo;
+> +	__u64 hi;
+> +};
 
-This isn't a bug, but btf_type_align16() looks structurally similar to
-kfunc_arg_align() further down in the same file. Both walk types with the
-same pattern: strip arrays with `while (btf_type_is_array(t))`, test for
-`btf_type_is_int(t)` with `t->size > 8`, bail on `!btf_type_is_struct(t)`,
-check `rec >= BTF_MEMBER_MAX_DEPTH`, and recurse through members via
-`btf_type_skip_modifiers(btf, member->type, NULL)`. Could the two share one
-walk, and would hiding the `rec` argument behind a wrapper keep the exported
-signature simpler, the way btf_struct_is_composed_of() wraps
-btf_struct_member_walk()?
+[ ... ]
+
+> +#if defined(__BPF_FEATURE_STACK_ARGUMENT)
+> +
+> +__noinline __u64 global_arg_split(int a, int b, int c, int d, struct pair p)
+> +{
+> +	return (__u64)a + b + c + d + p.lo + p.hi;
+> +}
+> +
+> +SEC("tc")
+> +__failure __msg("global function global_arg_split() needs 6 > 5 argument slots")
+> +__naked int aggregate_arg_split_fail(void)
+
+[ ... ]
+
+> +SEC("tc")
+> +__failure __msg("global function global_arg_past_regs() needs 7 > 5 argument slots")
+> +__naked int aggregate_arg_past_regs_fail(void)
+
+[ ... ]
+
+> +SEC("tc")
+> +__failure __msg("global function global_arg_i128_slots() needs 6 > 5 argument slots")
+> +__naked int aggregate_arg_i128_slots_fail(void)
+
+[ ... ]
+
+A subsystem pattern flags this as potentially concerning: this commit
+creates a new BPF prog file (progs/aggregate_arg_func.c) plus a new
+test_progs entry point (prog_tests/aggregate_arg.c) for by-value
+argument tests, while the immediately preceding commit in the same series
+(7bdde6e0b83d) added by-value aggregate argument tests to the existing
+progs/verifier_int128_arg.c, which is already run by
+prog_tests/verifier.c.
+
+This means coverage for one feature is now split across two test runners
+in the same directory, and struct pair is defined twice
+(progs/verifier_int128_arg.c and progs/aggregate_arg_func.c).
+
+Three of the six new subtests (aggregate_arg_split_fail,
+aggregate_arg_past_regs_fail, aggregate_arg_i128_slots_fail) are pure
+__failure/__msg verifier tests that need no hand-written register layout,
+so they could fit as cases in the existing file. The same is true of
+aggregate_arg_pair_ptr_fail.
+
+Is there a reason to create a separate test file rather than adding these
+tests to the existing progs/verifier_int128_arg.c, which already covers
+by-value aggregate arguments and would consolidate the feature's tests in
+one place?
+
+(For context: the pattern is motivated by the fact that aggregate_arg_pair_asm
+and aggregate_arg_pair_ptr_fail need hand-written register placement that
+C cannot express, and this layout mirrors the existing aggregate_ret
+structure with prog_tests/aggregate_ret.c + progs/aggregate_ret_func.c.
+A following commit extends the test with kfunc cases, so the new entry
+point is reused rather than single-purpose. The question is whether the
+C tests in verifier_int128_arg.c should move here too, so the feature's
+tests live in one place and struct pair is defined once.)
 
 
 ---
@@ -135,4 +146,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33840714551
---===============4869065197338784549==--
+--===============2923292248830055560==--
