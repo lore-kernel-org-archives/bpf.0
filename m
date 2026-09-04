@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DDFB4192F9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56FBF43F08A
 	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 21:56:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788558997; cv=none; b=qSBDmzw3CtWyrNxSGx7ndTZHtY16N1wRxiCmXdpG0jmlGW08znFkMAW62Zm5viEzx6mbdFjCG2+9mXW+qMdU35iIwSB9tL3hZ03/DLkV2MLUrLEdc0KiJTYa4i+CMv4WCtAgLN56DGlKOGx/M/4ZwjidKoWGRhycVNllhUlQ4P4=
+	t=1788558998; cv=none; b=q4L3OOqbQ+/UUEu3KmDuFmw24SsYOC2yL+7IAt+gUY7nnjDNKPdf/ksKkfINbCTFDOzMKcvqDIMEBhg0wu+v+6vr8DrqnhWDByIi/4W2tUWtm04X0GdRq6+Obn9DKO0nEZ0w8ajyCgotmRCyA6ixP3qUQvLA8xoQpV7UOWqFaOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788558997; c=relaxed/simple;
-	bh=JtlaDaE+IoXmmFQMpck+WCu3Q0zK7+6H9aWKU3TJzLQ=;
+	s=arc-20240116; t=1788558998; c=relaxed/simple;
+	bh=rQvHARr2Lrl4ADy+XsamXOkE7+ntUPta/Q63WKax9lY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=KqsQPbJyUdPi3NcHz7WaXtrzA2J9Ov0dUGGqYgOb5VcFdFm6L0So+YaTysvY9E8ft2dqnlQffUK1NEzdIWGaLZKKzzfIIMVPWflYsbTb3lymETEZOavLhdOtD15UtJH6PKd3ApuAIEZx80Fl8zoug5TqiBkD2GGm8K06lKeLrDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QmN+YtNs; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=HGOwXoDE8TzjfSL5kncw2G69eT3zjeVAJBHCVNB6caCUrhuCKDPn+69cncqW2wS8LOQQ8TEpFmMAp9qDTt6hyadUQ5s+c+fUlzXOppu4OJFOVVAtoTNAqskCit4HtiOFt1XDRsYwLnouXyflpewWLITZjxRWmongV30VzE07e70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nYZVxCFL; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QmN+YtNs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45AE41F00ACA;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nYZVxCFL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC5331F00ACF;
 	Fri,  4 Sep 2026 21:56:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788558994;
-	bh=GFh44tBh4BNp50sx74KggkEALF36FrdT1OWEq1ns9JQ=;
+	s=k20260515; t=1788558995;
+	bh=exKQ4R3Qfwq8UTZvppi1S0GiaB5JyffBG3FPE9ZK99E=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=QmN+YtNsxUeUo24867xyllU3zvpMN6jJM7DOOSUXBGKtIlEcw/GxOLbwCVYwe4sbn
-	 CGmW5knrygnR60Z6nFvcvm0rwT/E7f8v2/G6f/4s6Y1GRYChCo6j8RKRVNKBdh/RyB
-	 6CMQu3jiyGagvZeGKBxpJxD2ZC1aQgmU1L6xglDLKO8fSiwYbMLoT7PhuA9TNql+b2
-	 JMjsmQ4JDnMCRj5rTdnDNqzrDDJwkV0uMWOMEYc6x8+5dK0gNdu5CBvmmtSkbGEJzz
-	 G5/R1IiqIss/52HZwA/4tFf//oWwn3mUjlWSTbYdd3CBVpPgdRj+7KmBJJxdS/AyU0
-	 yMCmbjNUFR45g==
+	b=nYZVxCFL3zUIXjf1wMK0sTTS9UdExezPM/0uql8z+Hs6iyBrxDCWTnkW0dezX9y6K
+	 gP9Ki5BYdpLNtMjBpRIf0tkECZmm+HjztP0k2BLfVWBOf+m70NM7f77VaMEZy4RPhX
+	 G4Knga1sSVljWN/uL36vRb8IdvU1VZspOM7NDKcE/shEsvE66sla/0+rrt0DAWcUT0
+	 WYeDRkqUfLbYfwojc7npaWVQcleHS1OZdU9vdKoWAZKGOym+9Zl2F2w7jgHpXS4zM0
+	 mvqX1/RG4huffZuGo/7V6AAAMqtW1ZeYt1/T2DfGX9998k3HHY78rJS+ogBr48ynYF
+	 WKtNbtNdJzB3Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v5 10/12] gve: setup and teardown management
- interrupts
+Subject: Re: [PATCH net-next v5 12/12] gve: add link status/speed ctrl ops
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Harshitha Ramamurthy" <hramamurthy@google.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260903215606.31633-11-hramamurthy@google.com>
+In-Reply-To: <20260903215606.31633-13-hramamurthy@google.com>
 References: <20260903215606.31633-1-hramamurthy@google.com>
- <20260903215606.31633-11-hramamurthy@google.com>
+ <20260903215606.31633-13-hramamurthy@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 04 Sep 2026 21:56:33 +0000
-Message-Id: <20260904215634.45AE41F00ACA@smtp.kernel.org>
+Date: Fri, 04 Sep 2026 21:56:34 +0000
+Message-Id: <20260904215634.EC5331F00ACF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,58 +48,65 @@ Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] The `stats_report_task` is not canceled during device removal if t=
-he network interface was down, leading to a NULL pointer dereference when t=
-he workqueue is destroyed.
+- [High] Potential DMA use-after-free when an admin queue command times out.
 --
 
-commit b267ee52d04bbd318d288ea0576f1ecaaa85d7ae
+commit fd1cf5f7dd6ca7a5afb5900e7042fea37b95574b
 Author: Joshua Washington <joshwash@google.com>
 
-gve: setup and teardown management interrupts
+gve: add link status/speed ctrl ops
 
-This patch introduces control ops to set up and tear down control plane IRQ=
-s.
-It moves the admin queue-specific functionality to the admin queue files.
+This patch refactors the link status check and link speed retrieval
+to use new control plane operations. It adds report_link_status and
+report_link_speed to gve_ctrl_ops to handle these tasks in AQ mode.
 
-> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/eth=
-ernet/google/gve/gve_main.c
-> index a160d36f718b9..8522a495b78aa 100644
-> --- a/drivers/net/ethernet/google/gve/gve_main.c
-> +++ b/drivers/net/ethernet/google/gve/gve_main.c
-> @@ -290,18 +290,6 @@ static void gve_free_stats_report(struct gve_priv *p=
-riv)
->  	priv->stats_report =3D NULL;
->  }
+> diff --git a/drivers/net/ethernet/google/gve/gve_ethtool.c b/drivers/net/=
+ethernet/google/gve/gve_ethtool.c
+> index dd1c44fedc771..a3220c6514382 100644
+> --- a/drivers/net/ethernet/google/gve/gve_ethtool.c
+> +++ b/drivers/net/ethernet/google/gve/gve_ethtool.c
+> @@ -749,12 +749,11 @@ static int gve_get_link_ksettings(struct net_device=
+ *netdev,
+>  	int err =3D 0;
+> =20
+>  	if (priv->link_speed =3D=3D 0)
+> -		err =3D gve_adminq_report_link_speed(priv);
+> +		err =3D priv->ctrl_ops->report_link_speed(priv);
 
 [Severity: High]
-This is a pre-existing issue, but since the stats report is freed here, can
-the subsequent workqueue destruction in gve_remove() cause a NULL pointer
-dereference?
+This is a pre-existing issue, but is there a potential DMA use-after-free
+when an admin queue command times out here?
 
-If the network interface was down, unregister_netdev() bypasses gve_close(),
-omitting the cancellation of stats_report_task. The stats_report_task can be
-queued by gve_stats_report_timer() if the timer executes just before
-timer_delete_sync() runs in gve_free_stats_report().
+In the implementation of gve_adminq_report_link_speed(), we allocate a DMA
+buffer for the hardware to write into:
 
-Because gve_free_stats_report() frees priv->stats_report and sets the point=
-er
-to NULL, when gve_remove() later calls:
+drivers/net/ethernet/google/gve/gve_adminq.c:gve_adminq_report_link_speed()=
+ {
+...
+	link_speed_region =3D
+		dma_alloc_coherent(&priv->pdev->dev,
+				   sizeof(*link_speed_region),
+				   &link_speed_region_bus, GFP_KERNEL);
+...
+	err =3D gve_adminq_execute_cmd(priv, &gvnic_cmd);
 
-    disable_work_sync(&priv->service_task);
-    gve_teardown_device(priv);
-    destroy_workqueue(priv->gve_wq);
+	priv->link_speed =3D be64_to_cpu(*link_speed_region);
+	dma_free_coherent(&priv->pdev->dev, sizeof(*link_speed_region),
+			  link_speed_region, link_speed_region_bus);
+	return err;
+}
 
-The destroy_workqueue() call synchronously flushes and executes the pending
-stats_report_task. This executes gve_handle_report_stats(), which does:
+If gve_adminq_execute_cmd() times out because the hardware is slow to
+respond, it returns -ENOTRECOVERABLE. However, the driver unconditionally
+frees the DMA buffer via dma_free_coherent().=20
 
-    struct stats *stats =3D priv->stats_report->stats;
+If the hardware is not synchronously reset and eventually completes the
+command, could it asynchronously write the 8-byte link speed to the freed
+DMA address and corrupt memory?=20
 
-This unconditionally dereferences the NULL priv->stats_report pointer, lead=
-ing
-to a system crash. Should stats_report_task be explicitly canceled in
-gve_remove() before destroying the workqueue?
+Since this path can be reached by an unprivileged user reading
+/sys/class/net/ethX/speed, could this cause remote memory corruption?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260903215606.3163=
-3-1-hramamurthy@google.com?part=3D10
+3-1-hramamurthy@google.com?part=3D12
