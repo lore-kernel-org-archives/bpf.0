@@ -1,119 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f3.google.com (mail-pj2-f3.google.com [74.125.227.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A9E3DAAC8
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 06:47:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F6D73A544A
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 07:02:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788504478; cv=none; b=LudN7lH8KQeJxt29ESkdBx5ryIvxeInY8J9pap/L5bg6EB3sjFgE0d8CDxLt4/vR12Da0lNNCvnsN4orA8PlU1r8Ix1dqbccMI8doMMdQQz+UhX5c6YK2F5zvTfuZj2plgPsZ4e6GTIK5YLabEo3R0q90+w9UQazxuUTIipEKi0=
+	t=1788505342; cv=none; b=b1yrnDkgYIjHWuu/YeFsrgsHED42Hr3lp0xL+SQDUtj77A+ZDhW/nqA7POTkUL6Xmi0QHvKQ4/x5BZ28sjEOu2+P8MWiXjG/jOPbsf4DbnDstz/wA0q2ZCa67J0TiOM6yZfSgwYceJVlCHOcNpR+W8cFq8h1qWbXx2yfrRUSbdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788504478; c=relaxed/simple;
-	bh=Nfn/mAGw5wrfxN7ZCSRlKTYCEsbSUf70SRph7up/Z5U=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pJBGrNJ5YW7n0AqUTuBDMRibQZsGAY71uYWBxQWscbkVae0r51RAY18u/4MIzA8Aja7zxDeBDe+Kq9VN5fbdn4uGRDIxotsFM/tiK9Y7XEk4fLWulGJetHNrPOE4J4F/67oaGz8r/iaIgl1NQ4dd7DeK8ezbBhgr4xFSTalEhkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i0+3UP7w; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788505342; c=relaxed/simple;
+	bh=OsS7JXbczUOKWByEP5CiGAcQ+FzXXK7rO90IZ4MvpM8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Cr2rKCF+lulEYejTDAo8PqMLlQUxW92tkmz1xc2lw7mygbhLOlb6a2w9TyFRCY8o40IEe4Ii6O6RjLZec2jPO0RM1kp3GCe02cxMCHNHB9hKBEz773nEC3IabaCr1c/25V+SYkyxXKixph3/jktfzn0zSxv8fhzB5bXrzP4iVbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sc34Oxn2; arc=none smtp.client-ip=74.125.227.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i0+3UP7w"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 222541F00A3D;
-	Fri,  4 Sep 2026 06:47:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788504476;
-	bh=Go/0a8r2V3xStm3so9DX45n28Jl0lOIwGjM5jlnlYgw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=i0+3UP7wNJqjUWnGAYy9ajBKsM53l34iB+m/hfwmFsTiV2duwmEOR3GpfZlha6SxV
-	 efpDrg0i/cnXj4266D7xpQsjO6na16SMDboL0Q88Qi+7EF1PuV5FD5K3gFz9h0dlb+
-	 bKmGwJRjp/zcTrGt+XjRGM9S68NHmzSjQMTkrW+tSYktGEni9gyMJjgWqlBYUh5Yv6
-	 QZW2R4K7VUpAd6zbBavqxs1M2U2+osYLrCVNobcQv+NaCZAtJV1ngzeKO/9P8c515Y
-	 iUOsh9xVa6Cda9h8nvgz4CJGa43Mv6srvm9ZxFvxjOgOmj5Gp9vJEoVwlyrvsQrEoG
-	 I1OZ9laH0cFRA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v1 2/8] selftests/bpf: Reject non-percpu values in
- percpu kptr fields
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260904063650.3877826-3-memxor@gmail.com>
-References: <20260904063650.3877826-1-memxor@gmail.com>
- <20260904063650.3877826-3-memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 04 Sep 2026 06:47:55 +0000
-Message-Id: <20260904064756.222541F00A3D@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sc34Oxn2"
+Received: by mail-pj2-f3.google.com with SMTP id d9443c01a7336-2d6fff25530so2009285ad.0
+        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 00:02:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788505340; x=1789110140; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=2JcMzX/PCeTf7UGtxAjVYfuJkqAdewy/yttwf8L/2oc=;
+        b=sc34Oxn2DaydCYOoLpXKuzrz/V4nm5LW8E3DW5Gp45xF5akMYYOlqGOv+eV/L4AWjf
+         QOl3ysR1pl1iKj55V/xOElmsZFnwGD0yjgwqLEZLHWXBOTOI/wVlrkPlOaU1lTux6d/v
+         OsrBJL/nRIpP6cHKrcU5uPYhugIgyhmQAW5ldsaJ3EuBnInJWksOZeVW4kWEpagsOTvb
+         EtnPaJfBpG4nw3LNWuT370supaJ5WUZ6Qpktmw3enWFpqVO8YkF3c42V0sS4MFsftO1Q
+         KV2Txe6Y6gvyiKqS+0/f3VIZqMObBsh1KUUcft0J9+Cj0qhSSSsOEk0N7SQW8QypqoNy
+         8EZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788505340; x=1789110140;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=2JcMzX/PCeTf7UGtxAjVYfuJkqAdewy/yttwf8L/2oc=;
+        b=BhYAe430gEmNJHSxyC1fTeFJ2GeRmr0vM8UR9QCF+g+aV+O745xtE17y1gXaXbrWrd
+         SOGO8VaVb8kRjgAbTjQVuCfbMLkMKIwHpQcVGwW6cZPOdymfSVTHy53+LO4ZsMOsgi9a
+         TQp2QGcZt37FuB4oi4ryAsHBR5L1JTwIhd+SKptZ7qZzWBU+mTFZ3OlZTSAQDH5I55Nn
+         cUxxVeX0b686rlR9zfOTfTK4Fl35NFdMWQ++3K/07Ud9gWXZFNe5PIuLmvkUwVm+MpVd
+         IHwzduErp0EV9Scbz3yq3XcWZnh249DH/QPzq9Al4QAG6NGSQA5ZL5hsrzpK58vOq4Im
+         WATA==
+X-Gm-Message-State: AFuF++lUEVWnmv6D5hVC2OUqhiaWRIagwDEZDDEJxNqYsJh1l4VyfL2F
+	g9a2f05uKtVoOHpADs8E+KIjVSDi+sWd6M47ixxKGR6Lgt53ccJ7+E8QWQ4JDcniiqxRbeY=
+X-Gm-Gg: AYBFou1nZBeclqyVu+SngaThD0T+kWyrEjwa3CRDLF7ZmjmG6X1Pin6wr8JiKDlqpLR
+	Ehv1lV2MzykvhngCSnOQC8cLmq+qq+6Ef7hfWNPs0ZYdKt/iuhYLvWwR+mDzLQHmvdPV+V357V5
+	MXKU0LrO1ieeUlUiXEnrR+X8JEGgMP3H5fRQnA2kMX10taLVqpn0KlRrd0+RZIBo4dZpXYwQieT
+	dVRBcqGmWmY4W3X+ItZeUBN39WFVyYUEoIxxazsS1pXLBU4phB/v8I9VXRRuZDxWLwz7V2n7fUD
+	k9vxRuTfgbZ1KY0o0h9lwvyDj88l62RnucmRhQAY/Z2b3GNV1gZibdnpJweONTj5KgYCo9N4IUT
+	zLPdpkPYkEkcVeZaAIy12eEwZSC1n+LWQ6NEjlb/f9iIaI33/zPLA7sv2NA/Wz7LuoGrD/7l2sz
+	9ZEjoVemLOfv0zR+sOiDJP1/fIwyvFnfz7EYoYslpK7M1I9U/kzjKbmohzPrDn5PcundiXabbSh
+	dFjQdlSJhGBYxoHh8wD5X5R
+X-Received: by 2002:a05:6a20:6a1d:b0:3c3:a31b:3949 with SMTP id adf61e73a8af0-3da39d2e51amr5960262637.11.1788505340274;
+        Fri, 04 Sep 2026 00:02:20 -0700 (PDT)
+Received: from ydg-Zenbook-14-UM3406GA ([211.230.25.193])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8615273e3a0sm755511b3a.23.2026.09.04.00.02.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Sep 2026 00:02:19 -0700 (PDT)
+From: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Song Liu <song@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	Xu Kuohai <xukuohai@huaweicloud.com>,
+	Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Xu Kuohai <xukuohai@huawei.com>,
+	Donggeun Yoo <donggeunyoo.kernel@gmail.com>
+Subject: [PATCH bpf 0/2] bpf, arm64: fix the exception callback's frame pointer
+Date: Fri,  4 Sep 2026 16:02:08 +0900
+Message-ID: <20260904070210.4163193-1-donggeunyoo.kernel@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] Newly introduced selftests assert on incomplete verifier error mess=
-ages, cementing a preexisting verifier logging bug and making the tests bri=
-ttle.
---
+The arm64 JIT does not set BPF_REG_FP in the prologue of an exception
+callback, so the callback runs with whatever x25 held when bpf_throw()
+was called. A callback that materializes the register, for instance to
+pass the address of a local variable to a helper, then works on the
+frame of the subprogram that threw.
 
-commit ecbf9b0933ebffdc896739df59e08ba01779b11c
-Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Patch 1 sets ctx->fp_used on that path, the same fix commit b114fcee766d
+("bpf, arm64: Fix fp initialization for exception boundary") made for
+the exception boundary. Patch 2 adds a selftest that reaches the case.
 
-selftests/bpf: Reject non-percpu values in percpu kptr fields
+Tested on aarch64 under QEMU with vmtest.sh. Without patch 1 the new
+test panics the kernel, because the address handed to the helper lands
+on the helper's own saved return address:
 
-This commit adds verifier coverage for the two ways a non-percpu pointer can
-be stored in a __percpu_kptr field. It ensures that passing a program-BTF
-local allocation or a referenced kernel-BTF task_struct pointer correctly
-fails verification when MEM_PERCPU is required.
+  pc : 0x1234
+  lr : 0x1234
+  Call trace:
+   0x1234 (P)
+   bpf_test_run+0x188/0x3e0
+   bpf_prog_test_run_skb+0x47c/0x998
+   __sys_bpf+0xbdc/0xdd8
+  Kernel panic - not syncing: Oops: Fatal exception in interrupt
 
-> diff --git a/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c b/tool=
-s/testing/selftests/bpf/progs/percpu_alloc_fail.c
-> index 08379c3b6a038..3701f4ea58c75 100644
-> --- a/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c
-> +++ b/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c
-[ ... ]
-> @@ -137,6 +151,51 @@ int BPF_PROG(test_array_map_5)
->  	return 0;
->  }
-> =20
-> +SEC("?syscall")
-> +__failure __msg("invalid kptr access, R2 type=3Dtrusted_ptr_ expected=3D=
-ptr_task_struct")
-> +int reject_kernel_ptr_into_percpu_kptr(void *ctx)
+With patch 1 applied the whole group passes:
 
-[Severity: Low]
-Does this test hardcode an incomplete verifier error message resulting from=
- an
-uninitialized reg_name in the verifier?
+  #116/11  exceptions/exception_throw_subprog_stack_cb:OK
+  #116     exceptions:OK
+  Summary: 1/118 PASSED, 0 SKIPPED, 0/0 FAILED
 
-In map_kptr_match_type(), when triggering the MEM_PERCPU mismatch, the
-verifier jumps to bad_type before reg_name is populated. This leaves the
-struct name out of the output (e.g., outputting "type=3Dtrusted_ptr_" inste=
-ad
-of "type=3Dtrusted_ptr_task_struct").
+Not tested on other architectures.
 
-If the verifier logging bug is fixed to properly include the struct name,
-this substring match will break. Could the test be made robust against
-verifier log improvements, or could the verifier fix be included?
+Donggeun Yoo (2):
+  bpf, arm64: set up the frame pointer for the exception callback
+  selftests/bpf: cover the exception callback using its own BPF stack
 
-> +{
-> +	struct kernel_percpu_elem *e;
-[ ... ]
-> +	old =3D bpf_kptr_xchg(&e->task, p);
-> +	if (old)
-> +		bpf_task_release(old);
-> +	return 0;
-> +}
-> +
-> +SEC("?fentry.s/bpf_fentry_test1")
-> +__failure __msg("invalid kptr access, R2 type=3Dptr_ expected=3Dptr_val_=
-t")
-> +int BPF_PROG(reject_plain_alloc_into_percpu_kptr)
+ arch/arm64/net/bpf_jit_comp.c                 |  2 ++
+ .../selftests/bpf/prog_tests/exceptions.c     |  1 +
+ .../testing/selftests/bpf/progs/exceptions.c  | 29 +++++++++++++++++++
+ 3 files changed, 32 insertions(+)
 
-[Severity: Low]
-Similarly, does this assertion also rely on the incomplete verifier string
-(expecting "type=3Dptr_" instead of "type=3Dptr_val_t")?
+-- 
+2.53.0
 
-> +{
-> +	struct val_t __percpu_kptr *old;
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260904063650.3877=
-826-1-memxor@gmail.com?part=3D2
