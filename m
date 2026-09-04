@@ -1,112 +1,121 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56FBF43F08A
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 21:56:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10069468C09;
+	Fri,  4 Sep 2026 22:22:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788558998; cv=none; b=q4L3OOqbQ+/UUEu3KmDuFmw24SsYOC2yL+7IAt+gUY7nnjDNKPdf/ksKkfINbCTFDOzMKcvqDIMEBhg0wu+v+6vr8DrqnhWDByIi/4W2tUWtm04X0GdRq6+Obn9DKO0nEZ0w8ajyCgotmRCyA6ixP3qUQvLA8xoQpV7UOWqFaOE=
+	t=1788560530; cv=none; b=Jdp+JGPhaLP3DsnIHmkc36i6exXK83PZ/8Mrp9wpwVyGArZP5OBaOIMhmKqqs7j8pwadNTrVkhDtLgHygs5uTdSjE/qnwPFH93S6rxZQCbKlBh8hvS1OgaQ0sCTOjNwboR5IHR815YMmss+6Kn918IkpnC9KIwkVFYyLNI7sVp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788558998; c=relaxed/simple;
-	bh=rQvHARr2Lrl4ADy+XsamXOkE7+ntUPta/Q63WKax9lY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=HGOwXoDE8TzjfSL5kncw2G69eT3zjeVAJBHCVNB6caCUrhuCKDPn+69cncqW2wS8LOQQ8TEpFmMAp9qDTt6hyadUQ5s+c+fUlzXOppu4OJFOVVAtoTNAqskCit4HtiOFt1XDRsYwLnouXyflpewWLITZjxRWmongV30VzE07e70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nYZVxCFL; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788560530; c=relaxed/simple;
+	bh=oPVDPR9G8pvW4j/ptfuNum9f+WDa0bplq2EWwiuQ/Gw=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=mnwMh3iJ8JBZ9krTZsjh4wAdBqW6xeNIoL0qLC5/aSpW6KHFKDNsOpy8UiyFOtW/MsP69R14iT5GlCmXObDHIpAWl5smtbfl0gukPApbyeRaDDz6gz9c+anJ6Bi9krHDeF5ifv1W4K3zfCgg6fViAXMBtmRgIcEovgwKOD+3PJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WeReDTJR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nYZVxCFL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC5331F00ACF;
-	Fri,  4 Sep 2026 21:56:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WeReDTJR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D754A1F00A3D;
+	Fri,  4 Sep 2026 22:21:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788558995;
-	bh=exKQ4R3Qfwq8UTZvppi1S0GiaB5JyffBG3FPE9ZK99E=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=nYZVxCFL3zUIXjf1wMK0sTTS9UdExezPM/0uql8z+Hs6iyBrxDCWTnkW0dezX9y6K
-	 gP9Ki5BYdpLNtMjBpRIf0tkECZmm+HjztP0k2BLfVWBOf+m70NM7f77VaMEZy4RPhX
-	 G4Knga1sSVljWN/uL36vRb8IdvU1VZspOM7NDKcE/shEsvE66sla/0+rrt0DAWcUT0
-	 WYeDRkqUfLbYfwojc7npaWVQcleHS1OZdU9vdKoWAZKGOym+9Zl2F2w7jgHpXS4zM0
-	 mvqX1/RG4huffZuGo/7V6AAAMqtW1ZeYt1/T2DfGX9998k3HHY78rJS+ogBr48ynYF
-	 WKtNbtNdJzB3Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v5 12/12] gve: add link status/speed ctrl ops
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Harshitha Ramamurthy" <hramamurthy@google.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260903215606.31633-13-hramamurthy@google.com>
-References: <20260903215606.31633-1-hramamurthy@google.com>
- <20260903215606.31633-13-hramamurthy@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 04 Sep 2026 21:56:34 +0000
-Message-Id: <20260904215634.EC5331F00ACF@smtp.kernel.org>
+	s=k20260515; t=1788560515;
+	bh=qpMhiQLjSPn+IixWCKsh67n6JvkjgKbGv6IoFQYXMtY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=WeReDTJRV4eHcQJLUv8y1s8QoBUOva0wyvkASASXWjzIg0HngUoaR8PYAsmJkDXsM
+	 ySHFporkqf2DiYlc22O8xguBDjupK0PuSUcmlQQC4N1R/dl6k30h5BMnHvjz/skmmY
+	 vJhw4uq79PuiVjlpzLy6AthE3wqlrpc+l6kRjyDsIA66hxEAcaU7RlDENiaaQEobmZ
+	 M/wRwFGz5ZvawP2fn8wNkRlYXjsRYNFLvMNTWinAg5eS/+5R3UGrk4DlI3KMIhIf+U
+	 vq0gwVdLafuCByunbpEZVT9H+zfGDBQdepHtBMpYbOH6MVcesDWtMheRx+iuGqVqOs
+	 TGv+kNnUq/Gkw==
+Content-Type: multipart/mixed; boundary="===============4410765396966452123=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <d6eed7bdb5d4ba036cfcc7255b9e01fb111cd936be81ee00fff57d3cae7b02ce@mail.kernel.org>
+In-Reply-To: <20260904080524.3872926-1-tristmd@gmail.com>
+References: <20260904080524.3872926-1-tristmd@gmail.com>
+Subject: Re: [PATCH] HID: core: fix device cleanup on allocation failure
+From: bot+bpf-ci@kernel.org
+To: tristmd@gmail.com,jikos@kernel.org,bentiss@kernel.org
+Cc: linux-input@vger.kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,tristan@talencesecurity.com,stable@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri,  4 Sep 2026 22:21:54 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+--===============4410765396966452123==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Pre-existing issues:
-- [High] Potential DMA use-after-free when an admin queue command times out.
---
+> hid_allocate_device() calls hid_destroy_device() in its error path when
+> hid_bpf_device_init() fails.  hid_destroy_device() in turn calls
+> hid_bpf_destroy_device() which invokes synchronize_srcu() and
+> cleanup_srcu_struct() on the SRCU structure.  However, at this point
+> init_srcu_struct() has not been called (or has failed), so the SRCU
+> internal pointers are all zeroed from kzalloc.  Dereferencing them
+> causes a general protection fault:
 
-commit fd1cf5f7dd6ca7a5afb5900e7042fea37b95574b
-Author: Joshua Washington <joshwash@google.com>
+Is the reasoning here fully accurate?
 
-gve: add link status/speed ctrl ops
+Looking at hid_bpf_device_init() in drivers/hid/bpf/hid_bpf_dispatch.c,
+it returns the result of init_srcu_struct(&hdev->bpf.srcu), so
+init_srcu_struct() is always called before the error path is taken.
 
-This patch refactors the link status check and link speed retrieval
-to use new control plane operations. It adds report_link_status and
-report_link_speed to gve_ctrl_ops to handle these tasks in AQ mode.
+When init_srcu_struct() fails (specifically init_srcu_struct_fields() in
+kernel/rcu/srcutree.c), the failure paths explicitly free and NULL the
+pointers:
 
-> diff --git a/drivers/net/ethernet/google/gve/gve_ethtool.c b/drivers/net/=
-ethernet/google/gve/gve_ethtool.c
-> index dd1c44fedc771..a3220c6514382 100644
-> --- a/drivers/net/ethernet/google/gve/gve_ethtool.c
-> +++ b/drivers/net/ethernet/google/gve/gve_ethtool.c
-> @@ -749,12 +749,11 @@ static int gve_get_link_ksettings(struct net_device=
- *netdev,
->  	int err =3D 0;
-> =20
->  	if (priv->link_speed =3D=3D 0)
-> -		err =3D gve_adminq_report_link_speed(priv);
-> +		err =3D priv->ctrl_ops->report_link_speed(priv);
-
-[Severity: High]
-This is a pre-existing issue, but is there a potential DMA use-after-free
-when an admin queue command times out here?
-
-In the implementation of gve_adminq_report_link_speed(), we allocate a DMA
-buffer for the hardware to write into:
-
-drivers/net/ethernet/google/gve/gve_adminq.c:gve_adminq_report_link_speed()=
- {
-...
-	link_speed_region =3D
-		dma_alloc_coherent(&priv->pdev->dev,
-				   sizeof(*link_speed_region),
-				   &link_speed_region_bus, GFP_KERNEL);
-...
-	err =3D gve_adminq_execute_cmd(priv, &gvnic_cmd);
-
-	priv->link_speed =3D be64_to_cpu(*link_speed_region);
-	dma_free_coherent(&priv->pdev->dev, sizeof(*link_speed_region),
-			  link_speed_region, link_speed_region_bus);
-	return err;
+kernel/rcu/srcutree.c:init_srcu_struct_fields() {
+    ...
+err_free_sda:
+    free_percpu(ssp->sda);
+    ssp->sda = NULL;
+err_free_sup:
+    kfree(ssp->srcu_sup);
+    ssp->srcu_sup = NULL;
+    ...
 }
 
-If gve_adminq_execute_cmd() times out because the hardware is slow to
-respond, it returns -ENOTRECOVERABLE. However, the driver unconditionally
-frees the DMA buffer via dma_free_coherent().=20
+So the SRCU internal pointers are NULL due to init_srcu_struct()'s
+rollback on failure, not because init_srcu_struct() was never called or
+because they are still zeroed from kzalloc.
 
-If the hardware is not synchronously reset and eventually completes the
-command, could it asynchronously write the 8-byte link speed to the freed
-DMA address and corrupt memory?=20
+Could the commit message be more precise? Something like:
+"init_srcu_struct() was called but failed, and it rolled the SRCU
+internal pointers back to NULL"
 
-Since this path can be reached by an unprivileged user reading
-/sys/class/net/ethX/speed, could this cause remote memory corruption?
+> diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+> index a3ff0514f9cd..d8df23f67f1f 100644
+> --- a/drivers/hid/hid-core.c
+> +++ b/drivers/hid/hid-core.c
+> @@ -3115,7 +3115,12 @@ struct hid_device *hid_allocate_device(void)
+>  	return hdev;
+>
+>  out_err:
+> -	hid_destroy_device(hdev);
+> +	/*
+> +	 * hid_destroy_device() cannot be used here because
+> +	 * hid_bpf_device_init() failed and the SRCU struct was never
+> +	 * initialized.  Release the device directly.
+> +	 */
+> +	put_device(&hdev->dev);
+>  	return ERR_PTR(ret);
+>  }
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260903215606.3163=
-3-1-hramamurthy@google.com?part=3D12
+Should the comment say "was never successfully initialized" rather than
+"was never initialized"?
+
+As shown above, hid_bpf_device_init() returns init_srcu_struct()'s
+result, so init_srcu_struct() is always called before reaching this
+error path. It failed after partially initializing, then rolled back.
+
+The distinction matters for future readers trying to understand the
+ordering inside hid_bpf_device_init().
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33923149618
+--===============4410765396966452123==--
