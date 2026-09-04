@@ -1,127 +1,164 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5683A511E72
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 17:16:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788542212; cv=none; b=hIZtQvrmoXbaTNUGYIRXmzPPiMzOW2pFhZwoL8wy11zxFueskwdBQxiTS516z8PvgC8LYS02Z2crq1TMbkgKZUnnpUy/HFQ0gH4ZNPTxw2F/YqENC3bwjQVm/xlWpUVo4yjoJnqpRh9ZTLcBkQgiPBS/MPXtIjBO7Ek8Cus++yo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788542212; c=relaxed/simple;
-	bh=wiaIP9TTDtG/WSiCbsCjIuJjGjR5RUOLPoZLVQEJvGU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=myWxMDnbW0YrJDQhvcKW7dIQNM0ONjwE9RYu6Yg37/ZKg61njAz8lNADxWaBKpSC6ZrM+ycMm3m2kGJClfI/9opO5FUhT5DtfP0xA6ClxoNLGZdwf0npQ11iOT963R5zByLSLmiyVVGGxovszTZHQp8cLNFv5Ws+K3cP2ZWGI4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bMu3p0W6; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6384E511E98
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 17:21:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788542483; cv=pass; b=WjwWsJ4TTfe8qAkjuY23blcA2NfG3YxTVBAsW2IIAa4aBiwZCYTKP1EBJCL6ubdh9cjtPE3l1N+PoNLk8FIG3ufKiQx9gZsFE/upvSr835I4WacQR6nbgQ7G53ulP7fky2cbFhJ0dH2ixvjHxwBbCHKG4BxnLFJQ2tZma590diI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788542483; c=relaxed/simple;
+	bh=AFNBiWCRpUcEoXNChHss1VconiHm4hB8qaeZxdrK+Dg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AoKadHeCu3dKqD0o1ySfBucVLfF/z0EJkj7vSmKFgEEUZVD7Luvz+XzDa32V4TH16lZf1eP8GYy+wjY9lJf0HPRKmaZq8AMKgitn78gJpSu0P+mmQkLzYxaI9vi4P+Vmw6sY/HRXMLcRa82lDtjEy9RwBA/Un5ZWm4qdjm78L14=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S+5ZMHHh; arc=pass smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bMu3p0W6"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-482e4998d28so956098f8f.2
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 10:16:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S+5ZMHHh"
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-6a68aaf4840so2892868a12.0
+        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 10:21:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788542480; cv=none;
+        d=google.com; s=arc-20260327;
+        b=B2061ksr4bxRu68KFJnFXHQfF6Il72cqKigcmy+sBtVy9GSYakQPk9htS4e2pDaANK
+         W392N3OJBGDXm/Z05RK0DB8JzVgfjVGZnnWUP9RkPEK2ZMLiS9IlpSjCwpfaP0IdZ/mY
+         Ubo/z1cGNpEaIopPZXmfCpmNJESDEA2IebmNC7CRvDLSheYpIJCcEGKw2xmLnQpQ0K1f
+         9zfLAN6/Z67xZ1SDgS3JUpJiRmAEPB/f5rINoDwQByyz7kuWX4Q4Vhi2hVDkdcxzDALh
+         mRvYygO1LCY4i4NOr0sYQQ6fOrnnyu3mqeBYYjjPu0fniCLV4Ffta+A2qf2JznV8K5lf
+         Pi9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=xbP84TB5YSyUcPTlSRXVzwOJ5KiLCluO2L3qZFE4rqU=;
+        fh=XxepBa9FCeBNjPC/6uyoGBmFqf+C4gjt3eMLVqH6lbo=;
+        b=RzqFsRAI+IDu65jVwp28FW4gXLhJoxvM0XuiAv+hvuT3D+n2J5IZVpFy2W1nI7ZnSY
+         47JVTBJnvvxXk1pyYHF9CSH5++j5bBjgUnmvzxkI1ztAzKhyBCpPI4SYSTsCv8lQUQbv
+         tbYJvFi9XcWYezPC63qsaoB7sSjoACHIAVZBUM1EoWEN91bBvWJKyNvVTTVOFbl8TXyf
+         V9W6Qajn8dW+HZamdeIpaSRp5ChiKtPjfMCHY/ESZa6PFrhi7tfgQXqxx1RzVCYGjKvL
+         Ri7W9o9kogJE9zl/cxWk2cyGv2gd0Y0nS06L1CjP5rFt3/JJtTwPg/yhzzRdoRAT8ijz
+         vIaQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788542208; x=1789147008; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=FXMgamQiJ3XS87+vyDMMhRmFoTwg4dOgSBXjUApQgUQ=;
-        b=bMu3p0W6+gqmRdCjErvDcYo9P1P2BaV9ssA+0NEJ8KqVPsD1aTUu8VAZ0uObn6Yen0
-         dz70CXh1xRUS3/CTzNrW2wCCZie/jY8Z+Ijt0aSH4Hj0WHCim1V5A4fLkuI92CcrUbk/
-         7Nvi0Sx712PFecGrUoG4+kHFIQrfTdCKIixPib76eFMDvl2SWh/OSyaWp1iP9CynwVgp
-         Dc6YLNU5sYofA7RLCLRMOv+KYLcVqgKDR4NID9awKgpoSCbPuGP+RJ6TLyxoWGn7apoy
-         KjzDJu15d/ER7pR1gW0tPUsb5s+UWMnFQwq6ai39c7bdOQ0TJd7ylJIIWyqdlK2a2Rpv
-         16Bg==
+        d=gmail.com; s=20251104; t=1788542480; x=1789147280; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=xbP84TB5YSyUcPTlSRXVzwOJ5KiLCluO2L3qZFE4rqU=;
+        b=S+5ZMHHhfGjA+IdWmeugDDHgBwHG5bBYSPYfCEow+5chkn8MQle82UmWyVbxLiEN7d
+         ijcv6053WNTu2RqyJ6VR+Q1MSk4Vxz4n7ZKFRrjYrPqEbaWeUeae4OgCiLykWRLNUDRA
+         ZH/X93kZSKA1/wbKpcmxavHteq0Ow+JKUXYEkMsejbWI7AKmmLzp7rDEpD05dDMzdu05
+         qx2RS3AgstzLvoN8v5AUqAPOvMKc+nz/J8n2Lte3Wf5wq5bPQVeGs2cRbGv15hnp0TgY
+         EW5NlkkUE9iLPQcY1GiopKTuEm/IxQzvNCCThYHaycwvH5N4Y2kyLdCZ7Tyzs3tF5f6h
+         EH1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788542208; x=1789147008;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=FXMgamQiJ3XS87+vyDMMhRmFoTwg4dOgSBXjUApQgUQ=;
-        b=qeqOzCzEFGhG6mnhcGM/i/hlCAsGLg7/mNCR/oIj3KYdgSE2tMoLu+TXyrDN3Mf2V6
-         r4+8bEFylIz0oKfKuE8HqtxAYolYSf+zM4AynRFB8m38y35EvYFJNr0SzdRDAEru0qFf
-         E6vVB3fk1n/JE5PzYCNgel07XHdDgHFTolK4QC0laXeIS329K7TFt5S2hte8CrZcVJJe
-         F/pi33dJrZ8MjXblRPBclgJFaeL5uaiU/IzYDo0hvQ1UDsojKL8uaaf4qXzZkIZx1wbM
-         vTpi3D8sVkw+ypHK/Z39ZKH87sgU647bYbgnXoAR51yZM2nL+r3bjVnAxFgF28Ghhmf6
-         h33Q==
-X-Gm-Message-State: AFuF++m1240r8GpCZ9MxjvzeIXvT2YSQgLEIU8ycyM1tivpFCZNhC68l
-	EZte17j2np9T1YzR1ZWE/MrzFU/j0djYz93pV2r2/4ifwUuwZep3KNUu4YzIsg==
-X-Gm-Gg: AYBFou2LtUiNXkEQ68Ba9wVasMVvMl1Bzy64isO3Cyp1SCYVq9vN7P5fmGHx5ox8+ML
-	JMm7GZ7Xmzqr56e1DBTQllTS6/aMxscURyVlminxewRO2iffXH/Ylxwg6h4YY8t/8Xz6gc17pv4
-	mVCLH+71riQoi5b7/ZpALhIDeURMXya3ov4XBlxExWACo8Fpzr9Nlf6zgfVb96rqiWmPH0CWkNW
-	saum+OQdElx6iDTwC5mAjF5JA2DvFY6SjSCgL/wXNDFoVEsxs2o3Y84KIdcbqfcm0KvVDX5bvjN
-	3a2E1WbCYwvxpn2gYaleZ5d+I3MYJDtbzcU18lrZ+ZJUXbL4LYR5AP3DFly6GcInb7twXqAU0nX
-	V7fcciUCHuhrJtJXP8EdCI96uHraOS6HUZgwkbaL7N38X2ha/UtLIxxCtDSoi6eP06JxRqKLHYF
-	QjicEL4Z5N8LmIfRlgjk78YMoWX+4NibuwQ+QOo4QPnvloj3lO4geuWao/yy2D3BaDB4XgDvapM
-	0zYK6beNGf+aiSbEkG/AtLeONiAeKb2WQ==
-X-Received: by 2002:a05:6000:65b:b0:485:8ee5:5ffa with SMTP id ffacd0b85a97d-4858ee560a6mr1665815f8f.38.1788542208096;
-        Fri, 04 Sep 2026 10:16:48 -0700 (PDT)
-Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-4858d2693e8sm4119785f8f.3.2026.09.04.10.16.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2026 10:16:47 -0700 (PDT)
-From: Mahe Tardy <mahe.tardy@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	Mahe Tardy <mahe.tardy@gmail.com>
-Subject: [PATCH bpf] libbpf: fix log level propagation for light skeleton loaders
-Date: Fri,  4 Sep 2026 17:16:01 +0000
-Message-Id: <20260904171601.336613-1-mahe.tardy@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20251104; t=1788542480; x=1789147280;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=xbP84TB5YSyUcPTlSRXVzwOJ5KiLCluO2L3qZFE4rqU=;
+        b=BsjnOBXUa7hWamH0bgujKhpSEUu5Cwoo7XuZ1rqwwbJ1vZZ8r4kb4nkmkjihq2X8SP
+         Bcmwj12NB/++jU7ZZD6JYQCIN8MF5heXYVhGVTVoI6vYFYTrZWCZQE166gLgjJOjLtas
+         wwd57vt95WJYjgCDq07dQN1EQCbK79AZKncJ7VW0XFe1M+KcWEjCUwyRgyQ57WeVY3U5
+         4+qiEJ1CVU70KF3DyuX21DjzvROImN7+WI977xfTZpApICLqL8A3lXb61qVPexdfKYP4
+         XGWfYA8270AkcB8aR1TpLhbzl4WoJ/kC5LtglmN4j2eeEFeYdr1sU2jHk4vDOnEr/w2M
+         MBiw==
+X-Forwarded-Encrypted: i=1; AKwUvByekyAbfhnxYSAKcrHqYLYlvNv64SEDiREZ9w7qBE4kL8O2nnqHu4nbjJucKel0Q2VJVJM=@vger.kernel.org
+X-Gm-Message-State: AFuF++nwHGHhkxz21uzk5H/QHnSmBWKMyq8Zpn1uAuGaNbY8vQlI6H1E
+	5QyIEPzHhQZ9BecTf3U4s1G1CVPtfhDLkQkb5Q+IFliNvTA4mtmcXplo/UL/igZqtZfb80Qoqdo
+	1mLjk4B5I45P0smy9a4iVMhdF1leEcRA=
+X-Gm-Gg: AYBFou3oo2Pb1TJ4BELNg9QvWh4zqHvcq0D+sgAR5Zzfa4qJmhAdlRtx0X9mXZrzvUS
+	0/Ma4iGK53B8WM3lqvmG+ngzsO8Dexddn5jhfHpVA5aE3dEasDLsc3KiLnIQP1Ynvb8vFJovZjC
+	4VVDCyFolpPa6PG46HJpgWL9S2SAin3r/0QJZczliNIoUrYDJnMiRljB+LHFfoaFPrZFLkfRV47
+	vC1i6hPFCh852ts/6QSkQs35wHOS6HVG7WgnbP5e5I3cmzvcPBb1h55hyKcjaEtDHpcYu766Vs3
+	wm5q8Z8o2Uy2GgCtYy88HQiv+bs70VEOLybwFwbwfIEpTd5ajw/a40y4bjnJco5ShbbuIcVlXj9
+	ni75XrFsDZxUPYRVjUeNYFJkG7K2z+o0=
+X-Received: by 2002:a05:6402:a252:20b0:6a6:9368:73a0 with SMTP id
+ 4fb4d7f45d1cf-6a696a73aa1mr4363499a12.6.1788542479338; Fri, 04 Sep 2026
+ 10:21:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1788351089.git.rrobaina@redhat.com> <4ada9fcbb93af8d5c1c9bfe2c83d94fc10bfe327.1788351089.git.rrobaina@redhat.com>
+In-Reply-To: <4ada9fcbb93af8d5c1c9bfe2c83d94fc10bfe327.1788351089.git.rrobaina@redhat.com>
+From: Magnus Lindholm <linmag7@gmail.com>
+Date: Fri, 4 Sep 2026 19:21:07 +0200
+X-Gm-Features: AcwNN1WpEQ0Y6eKbtA6wNzDHeYOBs1Tconhq7C15XjRhFKDXvjk4jMYrR9OFExk
+Message-ID: <CA+=Fv5T4826T2sd0Gbh-nfZsqcWK_phdBKy4BLWOvDTt92t5Eg@mail.gmail.com>
+Subject: Re: [PATCH v2 02/13] alpha: pass pt_regs to audit_syscall_entry()
+To: Ricardo Robaina <rrobaina@redhat.com>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-csky@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-um@lists.infradead.org, bpf@vger.kernel.org, paul@paul-moore.com, 
+	eparis@redhat.com, sgrubb@redhat.com, oleg@redhat.com, 
+	richard.henderson@linaro.org, mattst88@gmail.com, linux@armlinux.org.uk, 
+	catalin.marinas@arm.com, will@kernel.org, guoren@kernel.org, monstr@monstr.eu, 
+	tsbogend@alpha.franken.de, jonas@southpole.se, 
+	stefan.kristiansson@saunalahti.fi, shorne@gmail.com, 
+	James.Bottomley@hansenpartnership.com, deller@gmx.de, 
+	ysato@users.sourceforge.jp, dalias@libc.org, glaubitz@physik.fu-berlin.de, 
+	davem@davemloft.net, andreas@gaisler.com, richard@nod.at, 
+	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net, chris@zankel.net, 
+	jcmvbkbc@gmail.com, tglx@kernel.org, peterz@infradead.org, luto@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-bpftool's -d option is documented to enable bpf_trace_printk() messages
-from the generated syscall loader when used with -L as specified in
-commit d510296d331a ("bpftool: Use syscall/loader program in "prog load"
-and "gen skeleton" command.")
+Hi Ricardo,
 
-However commit b59e4ce8bcaa ("bpftool: Switch bpf_object__load_xattr()
-to bpf_object__load()") changed bpftool to use bpf_object__load() which
-call the internal bpf_object_load with extra_log_level to 0 instead of
-bpf_object__load_xattr with the user request log_level.
+On Wed, Sep 2, 2026 at 4:44=E2=80=AFPM Ricardo Robaina <rrobaina@redhat.com=
+> wrote:
+>
+> audit_syscall_entry() now takes a pointer to pt_regs and extracts
+> the syscall arguments itself via syscall_get_arguments(). Drop the
+> individual argument registers from the call and pass regs instead.
+>
+> Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
+> ---
+>  arch/alpha/kernel/ptrace.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/arch/alpha/kernel/ptrace.c b/arch/alpha/kernel/ptrace.c
+> index fc8f6cedbb28..8a39c0473297 100644
+> --- a/arch/alpha/kernel/ptrace.c
+> +++ b/arch/alpha/kernel/ptrace.c
+> @@ -496,8 +496,7 @@ asmlinkage unsigned long syscall_trace_enter(void)
+>         }
+>
+>  #ifdef CONFIG_AUDITSYSCALL
+> -       audit_syscall_entry(syscall_get_nr(current, regs),
+> -               regs->r16, regs->r17, regs->r18, regs->r19);
+> +       audit_syscall_entry(syscall_get_nr(current, regs), regs);
+>  #endif
+>         return syscall_get_nr(current, regs);
+>  }
+> --
+> 2.55.0
+>
+This doesn't apply on top of my "alpha: enable GENERIC_ENTRY" series
 
-All the plumbing was still there to generate the bpf_trace_printk()
-instructions from the generator but was now unreachable because
-bpf_gen__init() was called with extra_log_level to 0, leaving
-gen->log_level at 0.
+https://lore.kernel.org/linux-alpha/20260902184058.198679-1-linmag7@gmail.c=
+om/T/#t
 
-This uses the obj->log_level field introduced in commit e0e3ea888c69
-("libbpf: Allow passing user log setting through bpf_object_open_opts")
-set from reading verifier_logs in do_skeleton(). This preserves both
-object-level and explicit load-time logging settings.
+That series moves alpha's syscall entry onto the generic entry
+framework and removes syscall_trace_enter() and its direct
+audit_syscall_entry() call entirely - verified with git am against
+GENERIC_ENTRY applied, it fails at exactly this hunk.
+You don't need a replacement alpha patch, though. Once GENERIC_ENTRY
+lands, alpha's syscall entry goes through
+syscall_enter_from_user_mode_randomize_stack(), which already calls
+syscall_enter_audit() as part of the shared entry helpers
+(include/linux/entry-common.h). I applied patch 1/13 alone on top of
+GENERIC_ENTRY and confirmed alpha's entry path already routes through
+the updated __audit_syscall_entry() - no alpha-specific code needed.
+So for alpha, you can drop this patch in the next revision rather
+than rebase it.
 
-Fixes: b59e4ce8bcaa ("bpftool: Switch bpf_object__load_xattr() to bpf_object__load()")
-Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
----
- tools/lib/bpf/libbpf.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index c036e8a91ed8..395c4dcb54de 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -9144,7 +9144,8 @@ static int bpf_object_load(struct bpf_object *obj, int extra_log_level, const ch
- 	 * permit cross-endian creation of "light skeleton".
- 	 */
- 	if (obj->gen_loader) {
--		bpf_gen__init(obj->gen_loader, extra_log_level, obj->nr_programs, obj->nr_maps);
-+		bpf_gen__init(obj->gen_loader, obj->log_level | extra_log_level,
-+			      obj->nr_programs, obj->nr_maps);
- 	} else if (!is_native_endianness(obj)) {
- 		pr_warn("object '%s': loading non-native endianness is unsupported\n", obj->name);
- 		return libbpf_err(-LIBBPF_ERRNO__ENDIAN);
---
-2.34.1
-
+Regards
+Magnus
