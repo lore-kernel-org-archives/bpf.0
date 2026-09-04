@@ -1,21 +1,21 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFB083B2FE4
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 05:10:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED83A412C04
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 05:10:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788498647; cv=none; b=C1YtJLT6mufZLQ7PsExLxbNqUrO7Sl8CCZJF+dFs7ldOf6DdlleW1TMjDFJ8GyNpl3WPjSl8ISoXG4v1fI+gYNzIzF1Rg9T5c7EzadPVTKpVCFqMj++2qV1yCMZTYf0zg3crFFa05F19uKK2YjwCPrNRWcZITeC3dZfRhy/ywuI=
+	t=1788498655; cv=none; b=mMxGH6yqnWK8v7J1OMJM9bdYOEAEbmvwY8yGQegIdLJtO6k/0tbRuzN9oefgFqvwraCeboHKjppkEIwklNjJbpuNd7rVyMwJe4kZeN57ScOax92SWFxuK8MYscxWd0gNZu+uAp5hKkv6mtP4v3QqKdkBD0d5yqm0bMoNPCN6MDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788498647; c=relaxed/simple;
-	bh=T3RVL1FmmhrWEtUC9zdeJ1nODk9HtF5Ky6LoKooKBSs=;
+	s=arc-20240116; t=1788498655; c=relaxed/simple;
+	bh=X4M9l8mxrF9I2fP3imiuOP0ucocUZ2nyZw048vbWXFg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Z0GIsFd5TOymSWxnRV2e/hhGmGqyHgRyeML33fYLd2QFCMre8kbqGixD6U6SBJvAQX233gSU2fh1x0SisxVQaHwlN7GK/hqr9BLbe0QoFL2MKi4rbbV3tQt9frZE6D4Ut+m/0Z1v4rl0L2Z+m/yTOlCuOCzfDkpyy8JXNgHMUwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+	 MIME-Version; b=hm3MtHtOVoyOA4S76qSqMpmAR8Dy0k9RxVFyJoODnHfIl1flpNGPOZLRstzef6vHSWAq6PMCjmt9YMCP6k7puFxdykG3bUeZ4myRIWlEQZOl2zHqpAhFZ/FrtdaMxOOz8IPrLS8umv1524Z4OFvTEO1g+zju+hcQdy0HtUu2bVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 7E038288131780; Thu,  3 Sep 2026 22:10:33 -0700 (PDT)
+	id 182E128813F98B; Thu,  3 Sep 2026 22:10:43 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next 07/12] bpf, x86: Place kfunc arguments per the SysV calling convention
-Date: Thu,  3 Sep 2026 22:10:33 -0700
-Message-ID: <20260904051033.3979978-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 09/12] bpf, arm64: Place kfunc arguments per AAPCS64
+Date: Thu,  3 Sep 2026 22:10:43 -0700
+Message-ID: <20260904051043.3981550-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260904050957.3976119-1-yonghong.song@linux.dev>
 References: <20260904050957.3976119-1-yonghong.song@linux.dev>
@@ -37,238 +37,160 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-The JIT hands each eightbyte the BPF calling convention passes an
-argument in to the argument position of the same number, registers first,
-so the two conventions agree unless the kernel one places an argument
-somewhere else. Compute where SysV wants each eightbyte, and move the
-ones that differ before the call.
+As on x86-64, the JIT hands each eightbyte the BPF calling convention
+passes an argument in to the argument position of the same number, and
+moves the ones AAPCS64 wants elsewhere.
 
-SysV disagrees over an argument that the registers left cannot hold: it
-moves the whole of it to the stack and leaves the registers to the
-arguments that follow, while the BPF convention splits it and keeps
-filling slots in order. So for
+AAPCS64 has eight argument registers and disagrees in two ways. It rounds
+the register number up to an even one for an argument aligned to 16
+bytes, so
 
-  u64 f(u64 a, u64 b, u64 c, u64 d, u64 e, struct pair s);
+  u64 f(u64 a, __int128 v, u64 b);
 
-the BPF convention puts s in the last argument register and the first
-stack slot, while SysV puts it wholly on the stack. Add an argument after
-s and it takes the register s vacated, which makes the moves a cycle, so
-one value at a time waits in RAX, dead before a call.
+wants v in x2 and x3 where the BPF convention put it in x1 and x2. And it
+gives no register to anything once an argument has gone to the stack,
+which the BPF convention, with three argument registers fewer, reaches
+sooner. Both only ever move an eightbyte further along than the BPF
+convention put it, so moving the last one first is enough and no value
+has to wait anywhere.
 
-The outgoing argument area is sized for both conventions, as SysV can put
-on the stack an argument the BPF slots kept in a register, and
-bpf_jit_supports_kfunc_arg_slot() can now answer yes to any placement.
+The alignment reaches the JIT as BTF_FMODEL_ALIGN16_ARG in the function
+model.
 
-In addition, the arena argument walk counts eightbytes rather than
-parameters, as an argument may take two registers.
+An argument AAPCS64 places on the stack while the BPF convention kept it
+in a register needs room the BPF slots do not account for, so the
+outgoing argument area is sized for both. As on x86-64, an eightbyte
+whose position equals its slot needs no move,
+bpf_jit_supports_kfunc_arg_slot() can now answer yes to any placement,
+and the arena argument walk counts eightbytes rather than parameters.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- arch/x86/net/bpf_jit_comp.c | 185 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 182 insertions(+), 3 deletions(-)
+ arch/arm64/net/bpf_jit_comp.c | 112 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 109 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 48429fae0641..0b07320ad011 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -1682,6 +1682,164 @@ static int emit_spectre_bhb_barrier(u8 **pprog, u=
-8 *ip,
- 	return 0;
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.=
+c
+index 3aa3ea0bc30b..f6c783d176ed 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -1256,6 +1256,93 @@ static void emit_stack_arg_store_imm(s32 imm, s16 =
+bpf_off, const u8 tmp, struct
+ 	}
  }
 =20
-+/* The kernel ABI hands the first six eightbytes of arguments to registe=
-rs. */
-+static const u32 x86_arg_reg[6] =3D {
-+	BPF_REG_1, BPF_REG_2, BPF_REG_3, BPF_REG_4, BPF_REG_5, X86_REG_R9,
++/* The kernel ABI hands the first eight eightbytes of arguments to regis=
+ters. */
++static const u8 a64_arg_reg[8] =3D {
++	A64_R(0), A64_R(1), A64_R(2), A64_R(3),
++	A64_R(4), A64_R(5), A64_R(6), A64_R(7),
 +};
 +
-+/* Fill argument positions based on the kernel calling convention. */
 +static int kfunc_arg_layout(const struct btf_func_model *fm, u8 *pos, in=
 t max)
 +{
-+	int i, k, nregs =3D 0, nstack =3D 0, slot =3D 0;
++	int i, k, ngrn =3D 0, nsaa =3D 0, slot =3D 0;
 +
 +	for (i =3D 0; i < fm->nr_args; i++) {
++		bool align16 =3D fm->arg_flags[i] & BTF_FMODEL_ALIGN16_ARG;
 +		int n =3D (fm->arg_size[i] + 7) / 8;
 +
 +		if (slot + n > max)
 +			return -EINVAL;
-+		if (nregs + n <=3D 6)
++		if (align16)
++			ngrn =3D round_up(ngrn, 2);
++		if (ngrn + n <=3D 8) {
 +			for (k =3D 0; k < n; k++)
-+				pos[slot++] =3D nregs++;
-+		else
-+			for (k =3D 0; k < n; k++)
-+				pos[slot++] =3D 6 + nstack++;
++				pos[slot++] =3D ngrn++;
++			continue;
++		}
++		/* Nothing that follows gets a register either. */
++		ngrn =3D 8;
++		if (align16)
++			nsaa =3D round_up(nsaa, 2);
++		for (k =3D 0; k < n; k++)
++			pos[slot++] =3D 8 + nsaa++;
 +	}
 +	return slot;
 +}
 +
 +static u16 kfunc_arg_stack_bytes(const struct bpf_prog *prog)
 +{
-+	return bpf_jit_kfunc_stack_slots(prog, 6, kfunc_arg_layout) * 8;
++	u16 slots =3D bpf_jit_kfunc_stack_slots(prog, 8, kfunc_arg_layout);
++
++	return round_up(slots * sizeof(u64), 16);
 +}
 +
-+static void emit_arg_pos_load(u8 **pprog, u32 reg, u8 pos, s32 stack_bas=
-e)
++static void emit_arg_pos_load(u8 reg, u8 pos, struct jit_ctx *ctx)
 +{
-+	if (pos < 6)
-+		emit_mov_reg(pprog, true, reg, x86_arg_reg[pos]);
++	if (pos < 8)
++		emit(A64_MOV(1, reg, a64_arg_reg[pos]), ctx);
 +	else
-+		emit_ldx(pprog, BPF_DW, reg, BPF_REG_FP,
-+			 stack_base + (pos - 6) * 8);
++		emit(A64_LDR64I(reg, A64_SP, (pos - 8) * sizeof(u64)), ctx);
 +}
 +
-+static void emit_arg_pos_store(u8 **pprog, u8 pos, u32 reg, s32 stack_ba=
-se)
++static void emit_arg_pos_store(u8 pos, u8 reg, struct jit_ctx *ctx)
 +{
-+	if (pos < 6)
-+		emit_mov_reg(pprog, true, x86_arg_reg[pos], reg);
++	if (pos < 8)
++		emit(A64_MOV(1, a64_arg_reg[pos], reg), ctx);
 +	else
-+		emit_stx(pprog, BPF_DW, BPF_REG_FP, reg,
-+			 stack_base + (pos - 6) * 8);
++		emit(A64_STR64I(reg, A64_SP, (pos - 8) * sizeof(u64)), ctx);
 +}
 +
-+static void emit_arg_pos_move(u8 **pprog, u8 to, u8 from, s32 stack_base=
-)
++static int emit_kfunc_args(const struct bpf_insn *insn, struct jit_ctx *=
+ctx)
 +{
-+	if (from < 6) {
-+		emit_arg_pos_store(pprog, to, x86_arg_reg[from], stack_base);
-+		return;
-+	}
-+	if (to < 6) {
-+		emit_arg_pos_load(pprog, x86_arg_reg[to], from, stack_base);
-+		return;
-+	}
-+	emit_arg_pos_load(pprog, AUX_REG, from, stack_base);
-+	emit_arg_pos_store(pprog, to, AUX_REG, stack_base);
-+}
-+
-+/*
-+ * Put the arguments of a kfunc call where the kernel ABI expects them, =
-given
-+ * that the BPF ABI has already put them in its own slots. Returns the n=
-umber
-+ * of emitted bytes, or a negative error.
-+ *
-+ * This is the parallel move problem: emit every move whose destination =
-no
-+ * longer holds a value, then break each remaining cycle with one tempor=
-ary.
-+ * See Rideau, Serpette and Leroy, "Tilting at Windmills with Coq: Forma=
-l
-+ * Verification of a Compilation Algorithm for Parallel Moves", Journal =
-of
-+ * Automated Reasoning 45(2), 2010.
-+ *
-+ * For
-+ *
-+ *   u64 f(u64 a, u64 b, u64 c, u64 d, u64 e, struct pair s);
-+ *
-+ *     slot     0 1 2 3 4 5 6
-+ *     position 0 1 2 3 4 6 7
-+ *     final    0 1 2 3 4 ? 6 7
-+ *
-+ * the BPF ABI splits s between the last register and the stack while th=
-e
-+ * kernel one takes it wholly on the stack, so each of its eightbytes mo=
-ves up
-+ * one position, the last one first, and position 5 (R9) is left unused.
-+ * Adding an argument after s,
-+ *
-+ *   u64 g(u64 a, u64 b, u64 c, u64 d, u64 e, struct pair s, u64 f);
-+ *
-+ *     slot     0 1 2 3 4 5 6 7
-+ *     position 0 1 2 3 4 6 7 5
-+ *     final    0 1 2 3 4 5 6 7
-+ *
-+ * gives f the register s vacated, and 5 -> 6 -> 7 -> 5 is a cycle: slot=
- 5
-+ * waits in PARK_REG while slots 7 and 6 move, and is stored last. AUX_R=
-EG
-+ * carries a value between two stack positions and cannot be the one tha=
-t
-+ * waits, while RAX is dead before a call, being where the return value
-+ * arrives.
-+ */
-+#define PARK_REG BPF_REG_0
-+
-+static int emit_kfunc_args(const struct btf_func_model *fm, u8 **pprog,
-+			   s32 stack_base)
-+{
-+	u8 *prog =3D *pprog, *start =3D prog;
-+	bool done[MAX_BPF_FUNC_ARGS] =3D {};
++	const u8 tmp =3D bpf2a64[TMP_REG_1];
++	const struct btf_func_model *fm;
 +	u8 pos[MAX_BPF_FUNC_ARGS];
-+	int i, j, n, todo =3D 0, parked =3D -1;
++	int i, n;
++
++	fm =3D bpf_jit_find_kfunc_model(ctx->prog, insn);
++	if (!fm)
++		return -EINVAL;
 +
 +	n =3D kfunc_arg_layout(fm, pos, ARRAY_SIZE(pos));
 +	if (n < 0)
 +		return 0;
-+	for (i =3D 0; i < n; i++)
-+		if (pos[i] !=3D i)
-+			todo++;
-+	if (!todo)
-+		return 0;
 +
-+	while (todo) {
-+		bool moved =3D false;
-+
-+		for (i =3D 0; i < n; i++) {
-+			if (done[i] || pos[i] =3D=3D i)
-+				continue;
-+			/* Writing there would lose a value still to be moved. */
-+			for (j =3D 0; j < n; j++)
-+				if (!done[j] && j !=3D parked && pos[j] !=3D j && j =3D=3D pos[i])
-+					break;
-+			if (j < n)
-+				continue;
-+			if (i =3D=3D parked) {
-+				emit_arg_pos_store(&prog, pos[i], PARK_REG, stack_base);
-+				parked =3D -1;
-+			} else {
-+				emit_arg_pos_move(&prog, pos[i], i, stack_base);
-+			}
-+			done[i] =3D true;
-+			todo--;
-+			moved =3D true;
-+		}
-+		if (moved)
++	for (i =3D n - 1; i >=3D 0; i--) {
++		if (pos[i] =3D=3D i)
 +			continue;
-+
-+		/* Every move left would clobber a value: break a cycle. */
-+		if (parked >=3D 0)
++		if (WARN_ON_ONCE(pos[i] < i))
 +			return -EFAULT;
-+		for (i =3D 0; i < n; i++)
-+			if (!done[i] && pos[i] !=3D i)
-+				break;
-+		if (i =3D=3D n)
-+			return -EFAULT;
-+		emit_arg_pos_load(&prog, PARK_REG, i, stack_base);
-+		parked =3D i;
++		if (pos[i] < 8) {
++			/* into a register, read straight from the slot */
++			emit_arg_pos_load(a64_arg_reg[pos[i]], i, ctx);
++		} else {
++			emit_arg_pos_load(tmp, i, ctx);
++			emit_arg_pos_store(pos[i], tmp, ctx);
++		}
 +	}
-+
-+	*pprog =3D prog;
-+	return prog - start;
++	return 0;
 +}
 +
  /*
   * Rebase the __arena args of a kfunc call to arena kernel addresses,
-  * rN =3D kern_vm_start + (u32)rN, with R12 holding kern_vm_start. A nul=
-lable
-@@ -1693,11 +1851,21 @@ static int emit_kfunc_arena_args(struct bpf_prog =
-*bpf_prog,
+  * xN =3D kern_vm_start + (u32)xN, with the arena base register holding
+@@ -1266,15 +1353,25 @@ static int emit_kfunc_arena_args(struct jit_ctx *=
+ctx, const struct bpf_insn *ins
  {
- 	u8 *prog =3D *pprog;
- 	u8 *start =3D prog;
+ 	const u8 arena_vm_base =3D bpf2a64[ARENA_VM_START];
+ 	const struct btf_func_model *fm;
 -	int i;
 +	int i, slot;
 =20
+ 	fm =3D bpf_jit_find_kfunc_model(ctx->prog, insn);
+ 	if (!fm)
+ 		return -EINVAL;
+=20
 -	for (i =3D 0; i < min_t(int, fm->nr_args, MAX_BPF_FUNC_REG_ARGS); i++) =
 {
+-		const u8 reg =3D bpf2a64[BPF_REG_1 + i];
 +	for (i =3D 0, slot =3D 0; i < fm->nr_args; i++) {
 +		u32 arg_regs =3D (fm->arg_size[i] + 7) / 8;
  		u8 flags =3D fm->arg_flags[i];
--		u32 reg =3D BPF_REG_1 + i;
-+		u32 reg;
++		u8 reg;
 +
 +		if (slot + arg_regs > MAX_BPF_FUNC_REG_ARGS) {
 +			/* The verifier refuses an arena pointer past the registers. */
@@ -276,34 +198,33 @@ lable
 +				return -EFAULT;
 +			break;
 +		}
-+		reg =3D BPF_REG_1 + slot;
++		reg =3D bpf2a64[BPF_REG_1 + slot];
 +		slot +=3D arg_regs;
 =20
  		if (!(flags & BTF_FMODEL_ARENA_ARG))
  			continue;
-@@ -1832,6 +2000,7 @@ static int do_jit(struct bpf_verifier_env *env, str=
-uct bpf_prog *bpf_prog, int *
- 	 * Arg 6 goes into r9 register, not on stack.
- 	 */
- 	outgoing_rsp =3D out_stack_arg_cnt > 1 ? (out_stack_arg_cnt - 1) * 8 : =
-0;
-+	outgoing_rsp =3D max(outgoing_rsp, kfunc_arg_stack_bytes(bpf_prog));
- 	if (bpf_prog->aux->exception_boundary)
- 		bpf_prog->aux->stack_arg_sp_adjust =3D outgoing_rsp;
- 	emit_sub_rsp(&prog, outgoing_rsp);
-@@ -2656,6 +2825,11 @@ st:			insn_off =3D insn->off;
- 				if (err < 0)
- 					return err;
- 				ip +=3D err;
-+				err =3D emit_kfunc_args(fm, &prog,
-+						      outgoing_arg_base - outgoing_rsp);
-+				if (err < 0)
-+					return err;
-+				ip +=3D err;
- 			}
- 			if (priv_frame_ptr) {
- 				push_r9(&prog);
-@@ -4169,6 +4343,11 @@ bool bpf_jit_supports_kfunc_ret_reg_pair(void)
+@@ -1719,6 +1816,9 @@ static int build_insn(const struct bpf_verifier_env=
+ *env, const struct bpf_insn
+ 			ret =3D emit_kfunc_arena_args(ctx, insn);
+ 			if (ret < 0)
+ 				return ret;
++			ret =3D emit_kfunc_args(insn, ctx);
++			if (ret < 0)
++				return ret;
+ 		}
+ 		emit_call(func_addr, ctx);
+ 		/*
+@@ -2223,6 +2323,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_ver=
+ifier_env *env, struct bpf_pr
+ 		if (nr_on_stack > 0)
+ 			ctx.stack_arg_size =3D round_up(nr_on_stack * sizeof(u64), 16);
+ 	}
++	ctx.stack_arg_size =3D max(ctx.stack_arg_size, kfunc_arg_stack_bytes(pr=
+og));
+=20
+ 	if (priv_stack_ptr)
+ 		ctx.priv_sp_used =3D true;
+@@ -2393,6 +2494,11 @@ bool bpf_jit_supports_kfunc_ret_reg_pair(void)
  	return true;
  }
 =20
