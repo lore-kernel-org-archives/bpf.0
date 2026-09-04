@@ -1,160 +1,184 @@
-Received: from mail-ej2-f0.google.com (mail-ej2-f0.google.com [74.125.228.128])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FEA53F39FF
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 09:02:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9ED33B47D2;
+	Fri,  4 Sep 2026 09:19:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788512559; cv=none; b=ow/UjTQbtb7ldddbkItGDoHPGJ6xSNrpQ7HP3cWSO2DcJRCwxw10f9aUXmkA0oxREYyDzfQCIM8PnDr0ocs3G0pIS3uyMMcvQWP7vKOh1dgAkHvWF4mfDT7j+nuKhoYwpzLxfpZeDJ6EJLlZ4M1FbgwXdK7Be/QD/KhLb4S5eJk=
+	t=1788513599; cv=none; b=f4fpuM3M0ebawwbS8JYcqLvcvy2A6JNFvonglj+lX8MwvePvHMlWi5Bzr/0HsqsRS4wMdU01OKSBpaa6MJIGRU2nJxohTCFTo0uqL0NbbbKeRzisUqiVX40RSZy3ezxlLTEOCWAJw0Gz2ROSTHQDYIeSTvikMJWq2cprWVcOoa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788512559; c=relaxed/simple;
-	bh=FocYj1Tg6JeoZyTDyfHblEWp+ZMU7BmLVvhrp05G4mE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=gZrdpLXX/5vJ/vNmuk8ken2DdJQLDhEiyCoU+cq2oYx9mcQ7qclvV+V01vY0Qk/QgQrndtRMyYFmfqMb6PJblvGfWfHmQZ8AqPStysUSB+gD4Mv1dPPAVXRUQQfiWL0kez0stvNOvZ0ZXuNjPmq/2UR3EGQ8bafAqJ1wWtC1qsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ahLmHHkU; arc=none smtp.client-ip=74.125.228.128
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788513599; c=relaxed/simple;
+	bh=/we4o96trO0R5t6PKQwVGx4wal4PKE15RhiGxtE7hsA=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Cew26g8uFI3k4vt4M1LASsy5pmNNa10qKMv85fzRKFVzd9cAfyNxQq7yeYqcjY7JPeGzhb8Gc734VcTvLNVy9jArJgFHp0kd4CFG5tKVTM2ZSZ8GIYVkNlzldpoblxhKeGrbHzdXKfr+S3VO/jIOi19hZ2JnRbXeERmBc++jnXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dUJIUN4Z; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ahLmHHkU"
-Received: by mail-ej2-f0.google.com with SMTP id a640c23a62f3a-c166aef4f02so37012566b.0
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 02:02:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788512556; x=1789117356; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=VSBcA76yWuklBIVlW8nFJkprKtYg80K7J6L7TsEg75w=;
-        b=ahLmHHkUUY5GyLFEnMgSOAo6lncxD0syIQsq9xaGV+PMU31VF/R0AWp1T1/XGVjJ7m
-         HyWJ6ezyl+fjWFsxwts/r4gMnEFYYrohLFL5iEBQs0Ti1XSxFN+F8sASHgWbPzuuUwBw
-         liwG7psGLFP2IfFG7ov6CWJztbtotCJ7nUQDDS7u54xWuXRJjljy+C3dSPaOZDET/eyh
-         HxP26qOtsXoJVsZ3a7Q6u2BZqigbdT7cq82dDmGsB2NfrnjNUpYaKE1jtCldZD4m9KSc
-         y6PHgMqjCn5Qi0tG5orQ4q1fLkSmUKySZBUVCNIz1CfwAeb5G+VvDVjMSghbqXxAgCVZ
-         a8mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788512556; x=1789117356;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=VSBcA76yWuklBIVlW8nFJkprKtYg80K7J6L7TsEg75w=;
-        b=c212g5GmyVuaUWbPMo1L0z1Y7GXR28/EsDNn06GDL3CQablvicd53c2vtz22SqT3uX
-         dL5KGGEMF4HYnVO8U/3GYfOZlAT/YiNxaXJ5C4BiaCcG5783UPXFLcTRTz5jKjdRA9Jx
-         nUoG7NvSKvxHMsOKFlEm0xxEEt4OAs/IvfDpOI0MDj8GAngpPPNRIIC8tIGdLgJ4d22O
-         65p46Rmo2vmMMX8hVOar31mpPHmBZA7aZCPS90v3X3651gOuzslr9wOEUMlBW6tdjpzz
-         B1CFkhj2h2yOFLk41xNnbA26yJenI9f7bB7H3p3r4xHa/em8KZnvIzsXL2mqS/VUNuaY
-         UiFw==
-X-Forwarded-Encrypted: i=1; AKwUvBzN9ycSeMhMUsGr9D1NipgXuujryHM4uiQYV+rfTX9fyxvhr2stQdbeYxEgNoOWNaUIb/Y=@vger.kernel.org
-X-Gm-Message-State: AFuF++lsmncpKazpcs7amWWL7G4yCw/Ak/0gu5OjVjmLVLcpCBiPqjhg
-	ZKjOhP6w8JmvSPbTVcBuvtPg/sA86ahOYbtPcIqxETUmn9+SEFHd6gA8
-X-Gm-Gg: AYBFou1uGQZKqx0wt72mIOamZ9Wu135ksbU9ZMSba8HedRpZscgQJKAqUldi71/zTek
-	Jt5jGoAZHrWW9Kf25dmeOHTCqX0qYIbLq0y5L7FWHwoKOUFQk3vwMnQXOnE5JNHkBBFE+Dw+i1Y
-	75WWlQefka20AZCaZ2Bm4Dy+j/bGWXm4S2GEmx8EI0qolpOldtsyaWZMyE58qT/AFPh5GN1wKKH
-	JEcBFJsFiFCgeI4q7DL5lL1wr/rONDPAs9ocj3rhgEOEH4hR3oYgk5VTIURIvxaALDx9BgyWIIC
-	V9Zw0kvKyvLOQBYW2vwCFmWDz2G/CAgziduF2tx1J46ywptznoq8BIwdG3I5nfj9sI6dC/2zxaY
-	8fMf4pSz8rf7MiY7ksRfZueUIp7dZgq1g3lexMgszGENzdoIOMFMdO2wm6+zeCr53exFFKXvzOv
-	GkNdUi3FHAw8K4JiAat97o+Gw+b6STJiJHjl45do16nLQfrXTtZ3I4gxfaeRZp8Qzr4yn4KeEWG
-	QgIIwO3L+Do6FppAe9kx5GZq2GCRxDYfywhlIabMTQUjK6re/WNDvoXTWuCul0OfGR8yGaBfCXh
-	CxSgZzbGfRlyYM10zxfQHaniYRI=
-X-Received: by 2002:a17:907:c81a:b0:c25:659:89ba with SMTP id a640c23a62f3a-c260c8d4e21mr198032866b.9.1788512555920;
-        Fri, 04 Sep 2026 02:02:35 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c260d503f96sm77028066b.26.2026.09.04.02.02.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Sep 2026 02:02:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dUJIUN4Z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65D831F00A3D;
+	Fri,  4 Sep 2026 09:19:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788513597;
+	bh=ySGxHNWJrB7UzfxPoKzyaL2ylg1x9/Sv8FGV/m2Q+GI=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=dUJIUN4ZW52SsdwcsJbr749PorqLW2asN0j5rXpCkwSbYtAiXGMr1uUsIUhWDrRGT
+	 RAp11rpEKxrZIxTc2wm2x1Wye3XdqkaWqs8ondoIFVyg1Xapd/T4GntYcMZErzYkHB
+	 DBEGgjxnuaZXMLTJA85aKT2+TsE2JGNAnjZU7zDVI1aQSjAR0v4D6CiId4iBcPRR4L
+	 3ohsDWMvuwaJtv9Q5+KW0Ov5ls2gT2mhQDZsmxpiGjiBlTfXOm9f+LTWHfxHUpjPBz
+	 xQV0mIQaBB5VoFh8n5lNQHaiuU/A7gulnF0rutHXImfjXAKAQoKRkFu0KAyhoZnpPW
+	 Db/rOMlr7oTPw==
+Subject:
+ Re: [PATCH net-next 2/4] i40e: add support for bpf_xdp_metadata_rx_hash()
+From: netdev-bot+sashiko@kernel.org
+To: anthony.l.nguyen@intel.com
+Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+ edumazet@google.com, andrew+netdev@lunn.ch, netdev@vger.kernel.org,
+ chris.packham@alliedtelesis.co.nz, kohei.enju@gmail.com, enjuk@amazon.com,
+ przemyslaw.kitszel@intel.com, blair.steven@alliedtelesis.co.nz,
+ carl.smith@alliedtelesis.co.nz, horms@kernel.org,
+ maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, ast@kernel.org,
+ daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, bpf@vger.kernel.org, aleksandr.loktionov@intel.com,
+ sx.rinitha@intel.com
+Date: Fri, 04 Sep 2026 09:19:55 +0000
+Message-ID: <178851359588.4131868.14209764775589320419@kernel.org>
+In-Reply-To: <20260901211752.1922993-3-anthony.l.nguyen@intel.com>
+References: <20260901211752.1922993-3-anthony.l.nguyen@intel.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 04 Sep 2026 11:02:34 +0200
-Message-Id: <DL6ESCNVJ52D.3NSNU8FZDQTU@gmail.com>
-Cc: <ebpf@linuxfoundation.org>, "Bastien Curutchet"
- <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v9 0/8] bpf: add support for KASAN checks in
- JITed programs
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
- <alexis.lothore@bootlin.com>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "John Fastabend"
- <john.fastabend@gmail.com>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
- "Jiri Olsa" <jolsa@kernel.org>, "Thomas Gleixner" <tglx@kernel.org>,
- "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
- <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
- <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Ingo Molnar"
- <mingo@redhat.com>, "Andrey Konovalov" <andreyknvl@gmail.com>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Yafang Shao" <laoar.shao@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260903-kasan-v9-0-2407fe99255a@bootlin.com>
-In-Reply-To: <20260903-kasan-v9-0-2407fe99255a@bootlin.com>
+MIME-Version: 1.0
 
-On Thu Sep 3, 2026 at 3:51 PM CEST, Alexis Lothor=C3=A9 (eBPF Foundation) w=
-rote:
-> Hello,
-> this is v9 of the series aiming to bring basic support for KASAN checks
-> to BPF JITed programs. Among a few minor optimizations, this revision
-> fixes some wrong kasan instrumentation on some unwanted stack access
-> (stack access ending up being instrumented AND targeting the wrong stack
-> offset). To mitigate this risk further, this revision introduces a
-> systematic KASAN check skip when (addr_reg =3D=3D BPF_REG_FP || addr_reg =
-=3D=3D
-> BPF_REG_PARAMS) in emit_kasan_check. This secondary check (on top of the
-> non_stack_access flag), should hopefully prevent the issues raised in
-> v8. I've also reworked the emit_st refactoring to realign it with
-> BPF_STX management in the x86 JIT compiler, as the "arguments on stack"
-> feature made me realize that it could be kept more symmetric with
-> BPF_STX; so I've dropped Ihor's Acked-by on this.
->
-> Original cover letter:
->
-> "Traditional" KASAN allows to spot memory management mistakes by
-> reserving a fraction of memory as "shadow memory" that will map to the
-> rest of the memory and allow its monitoring. Each memory-accessing
-> instruction is then instrumented at build time to call some ASAN check
-> function, that will analyze the corresponding bits in shadow memory, and
-> if it detects the access as invalid, trigger a detailed report. The goal
-> of this series is to replicate this mechanism for BPF programs when they
-> are being JITed into native instructions: that's then the JIT compiler
-> that is in charge of inserting calls to the corresponding kasan checks,
-> when a program is being loaded into the kernel. This task involves:
-> - identifying at program load time the instructions performing memory
->   accesses
-> - identifying those accesses properties (size ? read or write ?) to
->   define the relevant kasan check function to call
-> - just before the identified instructions:
->   - perform the basic context saving (ie: saving registers)
->   - inserting a call to the relevant kasan check function
->   - restore context
-> - whenever the instrumented program executes, if it performs an invalid
->   access, it triggers a kasan report identical to those instrumented on
->   kernel side at build time.
->
-> The series comes with new selftests programs that generate a wide
-> variety of kasan reports: those need the kernel to be running with
-> kasan_multi_shot enabled.
->
-> As discussed in [1], this series is based on some choices and
-> assumptions:
-> - it focuses on x86_64 for now, and so only on KASAN_GENERIC
-> - not all memory accessing BPF instructions are being instrumented:
->   - it discards instructions accessing BPF program stack (already
->     monitored by page guards)
->   - it discards possibly faulting instructions, like BPF_PROBE_MEM or
->     BPF_PROBE_ATOMIC insns
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider:
+
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
+
+- [Medium] i40e_config_netdev() sets `netdev->xdp_metadata_ops =
+  &i40e_xdp_metadata_ops;` unconditionally…
+
+--
+
+i40e: add support for bpf_xdp_metadata_rx_hash()
+
+This adds i40e_xdp_rx_hash() as an xdp_metadata_ops callback, extracting
+the RSS hash and hash type from the RX descriptor the same way
+i40e_rx_hash() does. A new I40E_RX_DESC_STATUS_FLTSTAT_MASK helper is
+added to i40e_type.h and the ops struct is installed on the netdev.
+
+> diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
+> index 4b11ae9ed8d53..e487d697a634f 100644
+> --- a/drivers/net/ethernet/intel/i40e/i40e_main.c
+> +++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+
+[ ... ]
+
+> @@ -13582,6 +13583,34 @@ static int i40e_xdp(struct net_device *dev,
+>  	}
+>  }
+>  
+> +static int i40e_xdp_rx_hash(const struct xdp_md *_ctx, u32 *hash,
+> +			    enum xdp_rss_hash_type *rss_type)
+> +{
+> +	const struct i40e_xdp_buff *ctx = (const void *)_ctx;
+> +	const union i40e_rx_desc *desc = ctx->desc;
+> +	struct libeth_rx_pt rx_ptype;
+> +	u8 raw_rx_ptype;
+> +	u64 status;
+> +
+> +	status = le64_to_cpu(desc->wb.qword1.status_error_len);
+> +	raw_rx_ptype = FIELD_GET(I40E_RXD_QW1_PTYPE_MASK, status);
+> +	rx_ptype = libie_rx_pt_parse(raw_rx_ptype);
+> +
+> +	if (!libeth_rx_pt_has_hash(ctx->xdp.rxq->dev, rx_ptype) ||
+> +	    FIELD_GET(I40E_RX_DESC_STATUS_FLTSTAT_MASK, status) !=
+> +		    I40E_RX_DESC_FLTSTAT_RSS_HASH)
+> +		return -ENODATA;
+> +
+> +	*hash = le32_to_cpu(desc->wb.qword0.hi_dword.rss);
+> +	*rss_type = rx_ptype.hash_type;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct xdp_metadata_ops i40e_xdp_metadata_ops = {
+> +	.xmo_rx_hash		= i40e_xdp_rx_hash,
+> +};
+> +
+>  static const struct net_device_ops i40e_netdev_ops = {
+>  	.ndo_open		= i40e_open,
+>  	.ndo_stop		= i40e_close,
+
+[ ... ]
+
+> @@ -13784,6 +13813,7 @@ static int i40e_config_netdev(struct i40e_vsi *vsi)
+>  	i40e_vsi_config_netdev_tc(vsi, vsi->tc_config.enabled_tc);
+>  
+>  	netdev->netdev_ops = &i40e_netdev_ops;
+> +	netdev->xdp_metadata_ops = &i40e_xdp_metadata_ops;
+
+[Severity: Medium]
+Should this assignment live inside the I40E_VSI_MAIN branch, next to where
+the rest of the XDP capability state is set?
+
+Earlier in i40e_config_netdev() the XDP capabilities are set only for the
+main VSI:
+
+	if (vsi->type == I40E_VSI_MAIN) {
+		...
+		netdev->xdp_features = NETDEV_XDP_ACT_BASIC |
+				       NETDEV_XDP_ACT_REDIRECT |
+				       NETDEV_XDP_ACT_XSK_ZEROCOPY |
+				       NETDEV_XDP_ACT_RX_SG;
+		netdev->xdp_zc_max_segs = I40E_MAX_BUFFER_TXD;
+	} else {
+		/* Relate the VSI_VMDQ name to the VSI_MAIN name ... */
+
+but i40e_config_netdev() also runs for VMDQ2 netdevs, via i40e_vsi_setup():
+
+	switch (vsi->type) {
+	/* setup the netdev if needed */
+	case I40E_VSI_MAIN:
+	case I40E_VSI_VMDQ2:
+		ret = i40e_config_netdev(vsi);
+
+Those macvlan-offload "<pf>v%d" netdevs get xdp_features == 0, and
+i40e_xdp() rejects every ndo_bpf command on them:
+
+	if (vsi->type != I40E_VSI_MAIN)
+		return -EINVAL;
+
+So no native XDP program can be attached there, and xmo_rx_hash can never
+be reached on such a netdev.
+
+Does this make the netlink capability report inconsistent?  netdev_nl_dev_fill()
+derives the xdp-rx-metadata-features bits purely from the presence of the
+callback, with no cross-check against dev->xdp_features:
+
+net/core/netdev-genl.c:netdev_nl_dev_fill() {
+	...
+#define XDP_METADATA_KFUNC(_, flag, __, xmo)			\
+	if (netdev->xdp_metadata_ops && netdev->xdp_metadata_ops->xmo)	\
+		xdp_rx_meta |= flag;
+	...
+}
+
+which means a VMDQ2 netdev advertises NETDEV_XDP_RX_METADATA_HASH ("Device is
+capable of exposing receive packet hash via bpf_xdp_metadata_rx_hash()") while
+rejecting XDP entirely.
+
+The follow-up patch adding bpf_xdp_metadata_rx_vlan_tag() extends the same
+unconditional assignment, so NETDEV_XDP_RX_METADATA_VLAN_TAG ends up reported
+on those netdevs too; the assignment is still unconditional at the end of the
+series.
+
+>  	netdev->watchdog_timeo = 5 * HZ;
+>  	i40e_set_ethtool_ops(netdev);
 >
 
-For the series:
-Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-
-If there are remaining issues, we can fix forward, but I think we should tr=
-y and
-land this for now.
-
-> [...]
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260901211752.1922993-1-anthony.l.nguyen%40intel.com
