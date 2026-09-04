@@ -1,240 +1,157 @@
-Received: from mta1.migadu.com (out-209.mta1.migadu.com [95.215.58.209])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B7744457C1
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 09:50:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.209
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B7B5421EF8
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 10:20:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788515441; cv=none; b=bXa7zBqBj+VuIEr/s4xL4DU+sq9ut9c9Pchaj1Ud+Uy6Qc9WwPMsm3XJyjhEkYCIekh6z7XPd6jqXnvi3PTji/izDFYXfqR9zFW/FMhNhVSDhbZ25FhdYNzoJfiDUVyh1kWgoyt9rPAgN1gvhAqHnZOs/9g9qENwq6iL2DFWJTo=
+	t=1788517203; cv=none; b=jh0o/qChKvI2YeTxb1nDLRDxtaaZ04G51MU2IJel/DUh9a70/fvBXqrInsNxijO1xqV6Le+vnzoWGGtvqst/EZm75bAHQuu93is0hT+fvgH8eD2kdLOR50Q2A8fpkGmjtIUeSQNqVWmnY83v8ubq8DDjmETM5UDlTyYiyjTQ97w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788515441; c=relaxed/simple;
-	bh=SlBX3aTzVhnrj3tpy1KFU3P3FZH9l3Z5w+HhiJfNOS0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VwRkmcbhT13JTiUh+5/X/G+jDSfrbXcUFB+TTqILJuyVmAfGmvrHILlw6vgGyiMEBjLc0cslQXRG5Y0dSh/5y4LstvQEVYZoq6IPIMZi/JMqUsYgn3uVjRz5VwzVetgt+WZ4yQDsfnJ4PNYpYNX0vITl8tI70N75lQw13AwEh48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CNOYj9kk; arc=none smtp.client-ip=95.215.58.209
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788517203; c=relaxed/simple;
+	bh=Jprzx/SzhQX/YeXrJG4V+qyALTc9BSYG/yYE/yiQ9bY=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=O6EiCNBuOMpd/6tqkFTvZGLMo9io6pwOjli4oV6GZRXslxX4PGJ23BiPISUzMLLwMV1SmErNxKcRMIkCzOJr9vjpprCnGQhKRtaohva/xbqFwCiyoz4QWdaDZyrb8lxsM/VndaVJZv4S06r2noO6JVam8x81JXnM/BOeNirIwMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hClYALz7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CNOYj9kk"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=SlBX3aTzVhnrj3tpy1KFU3P3FZH9l3Z5w+HhiJfNOS0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788515438; v=1; x=1789120238;
- b=CNOYj9kk3xz6BdYqI2vnZcLTXFzYquqq4z8jWxFdEZxcUacTMsiSk9UcUBRdJf8NVlhCr2UK
- 9CL72jS1sfFtyQkYfqTBOtxns/mTackaCijXvOLH/UGdKawK9o2kZ0+S9zqTUPiXNbLhbcWadXJ
- QShIigQGhs/orKUZcUfqs5Zg=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 3206c25e4c7eaa95;
-	Fri, 04 Sep 2026 09:50:38 +0000
-X-Mizu-Trace-ID: 3206c25e4c7eaa95
-X-Migadu-Flow: FLOW_OUT
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Aditi Ghag <aditi.ghag@isovalent.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v2 2/2] selftests/bpf: Test bpf_sock_destroy() on a TIME_WAIT sock
-Date: Fri,  4 Sep 2026 17:49:37 +0800
-Message-ID: <20260904094954.63447-2-jiayuan.chen@linux.dev>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hClYALz7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BE741F00A3D;
+	Fri,  4 Sep 2026 10:19:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788517198;
+	bh=9TCl79eTtLWqLm7FnAa03AholdqZupu1fcb6w2vRSXA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=hClYALz71Iz9Q3W3Zt/k2eBOMJAzkfUUWKdRZwct4wKx3D3F+jrrXqAheZk2dKnBg
+	 aYQfxpIdgiayFRBwmYO/RpDRDc25Wu/wtJTXJJqRhPEK8NY2CcX7MXR5QpFb6MsrFe
+	 /rDmVHYCEU7ijEmKy82Idg6AxigAca5byb6y7zH3UIwW8fKUD4FZpPU38gVj9AT/vQ
+	 mCXZMzWeGfwBgjiZ8P/R7doMO/t9hDAFYXts2q7Xn07yjJII1BhSS0oZil26Lex+SU
+	 7pBf61WwObpd+F3F/bt8I+YtpgvZqiVwaxvdNkUcLwsF64GlrQjnUdyl4OVVWDz+pM
+	 IIf6g9fw7IC8Q==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf v2 1/2] bpf: Fix out-of-bounds read of sk_protocol
+ in bpf_sock_destroy()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Cc: bpf@vger.kernel.org
 In-Reply-To: <20260904094954.63447-1-jiayuan.chen@linux.dev>
 References: <20260904094954.63447-1-jiayuan.chen@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 04 Sep 2026 10:19:57 +0000
+Message-Id: <20260904101958.2BE741F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add a tcp_timewait subtest. The client shuts down first and the server
-closes after it, so the client sock ends up in TIME_WAIT. A tcp iterator
-then finds the timewait sock by the cookie it inherited from the client
-sock and destroys it. Iterate once more to make sure it is gone.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-Without the previous fix bpf_sock_destroy() reads past the timewait sock
-and KASAN complains.
+Pre-existing issues:
+- [High] bpf_sock_destroy bypasses socket locking for iterators that do not=
+ pre-lock the socket, leading to data corruption and kernel panics.
+- [High] Calling cond_resched() while holding rcu_read_lock() via bpf_sock_=
+destroy() on TCP_LISTEN sockets.
+--
 
-  ./test_progs -a sock_destroy
+commit 1a9df13e7482333dfb4a7ad04982dba6254ff808
+Author: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-  #444/1   sock_destroy/tcp_client:OK
-  #444/2   sock_destroy/tcp_server:OK
-  #444/3   sock_destroy/tcp_timewait:OK
-  #444/4   sock_destroy/udp_client:OK
-  #444/5   sock_destroy/udp_server:OK
-  #444/6   sock_destroy/trace_tcp_destroy_sock:OK
-  #444     sock_destroy:OK
-  Summary: 1/6 PASSED, 0 SKIPPED, 0/0 FAILED
+bpf: Fix out-of-bounds read of sk_protocol in bpf_sock_destroy()
 
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- .../selftests/bpf/prog_tests/sock_destroy.c   | 71 ++++++++++++++++++-
- .../selftests/bpf/progs/sock_destroy_prog.c   | 30 ++++++++
- 2 files changed, 100 insertions(+), 1 deletion(-)
+sk_protocol lives in struct sock, not in struct sock_common. A timewait
+or request sock handed to bpf_sock_destroy() by the tcp iterator is
+neither, so reading sk->sk_protocol runs past the object.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-index 9c11938fe597..b90fab707338 100644
---- a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-@@ -110,6 +110,74 @@ static void test_tcp_server(struct sock_destroy_prog *skel)
- 		close(serv);
- }
- 
-+static void test_tcp_timewait(struct sock_destroy_prog *skel)
-+{
-+	int serv = -1, clien = -1, accept_serv = -1, n;
-+	struct timeval tv = {};
-+	char buf[1];
-+
-+	serv = start_server(AF_INET6, SOCK_STREAM, NULL, 0, 0);
-+	if (!ASSERT_GE(serv, 0, "start_server"))
-+		goto cleanup;
-+
-+	clien = connect_to_fd(serv, 0);
-+	if (!ASSERT_GE(clien, 0, "connect_to_fd"))
-+		goto cleanup;
-+
-+	accept_serv = accept(serv, NULL, NULL);
-+	if (!ASSERT_GE(accept_serv, 0, "serv accept"))
-+		goto cleanup;
-+
-+	/*
-+	 * Active close from the client, then close the server side. Once
-+	 * recv() sees EOF the server FIN has been processed and the client
-+	 * sock is in TIME_WAIT. Block without timeout so a loaded CI box
-+	 * can't race us.
-+	 */
-+	if (!ASSERT_OK(setsockopt(clien, SOL_SOCKET, SO_RCVTIMEO, &tv,
-+				  sizeof(tv)), "clear rcvtimeo"))
-+		goto cleanup;
-+	if (!ASSERT_OK(shutdown(clien, SHUT_WR), "client shutdown"))
-+		goto cleanup;
-+
-+	/*
-+	 * Make sure the server has seen the client FIN before it closes,
-+	 * so the two FINs never cross.
-+	 */
-+	n = recv(accept_serv, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(n, 0, "server recv EOF"))
-+		goto cleanup;
-+
-+	close(accept_serv);
-+	accept_serv = -1;
-+
-+	/* block until return EOF */
-+	n = recv(clien, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(n, 0, "client recv EOF"))
-+		goto cleanup;
-+
-+	/* Run iterator program that destroys the timewait client sock. */
-+	skel->bss->tw_found = 0;
-+	start_iter_sockets(skel->progs.iter_tcp6_timewait);
-+	if (!ASSERT_EQ(skel->bss->tw_found, 1, "timewait sock found"))
-+		goto cleanup;
-+
-+	ASSERT_OK(skel->bss->tw_destroy_err, "destroy timewait sock");
-+
-+	/* The destroyed timewait sock must be gone. */
-+	skel->bss->tw_found = 0;
-+	start_iter_sockets(skel->progs.iter_tcp6_timewait);
-+	ASSERT_EQ(skel->bss->tw_found, 0, "timewait sock destroyed");
-+
-+cleanup:
-+	if (clien != -1)
-+		close(clien);
-+	if (accept_serv != -1)
-+		close(accept_serv);
-+	if (serv != -1)
-+		close(serv);
-+}
-+
- static void test_udp_client(struct sock_destroy_prog *skel)
- {
- 	int serv = -1, clien = -1, n = 0;
-@@ -204,11 +272,12 @@ void test_sock_destroy(void)
- 		test_tcp_client(skel);
- 	if (test__start_subtest("tcp_server"))
- 		test_tcp_server(skel);
-+	if (test__start_subtest("tcp_timewait"))
-+		test_tcp_timewait(skel);
- 	if (test__start_subtest("udp_client"))
- 		test_udp_client(skel);
- 	if (test__start_subtest("udp_server"))
- 		test_udp_server(skel);
--
- 	RUN_TESTS(sock_destroy_prog_fail);
- 
- cleanup:
-diff --git a/tools/testing/selftests/bpf/progs/sock_destroy_prog.c b/tools/testing/selftests/bpf/progs/sock_destroy_prog.c
-index 9e0bf7a54cec..0a8887543218 100644
---- a/tools/testing/selftests/bpf/progs/sock_destroy_prog.c
-+++ b/tools/testing/selftests/bpf/progs/sock_destroy_prog.c
-@@ -7,6 +7,8 @@
- #include "bpf_tracing_net.h"
- 
- __be16 serv_port = 0;
-+int tw_found = 0;
-+int tw_destroy_err = 0;
- 
- int bpf_sock_destroy(struct sock_common *sk) __ksym;
- 
-@@ -100,6 +102,34 @@ int iter_tcp6_server(struct bpf_iter__tcp *ctx)
- 	return 0;
- }
- 
-+SEC("iter/tcp")
-+int iter_tcp6_timewait(struct bpf_iter__tcp *ctx)
-+{
-+	struct sock_common *sk_common = ctx->sk_common;
-+	__u64 *val;
-+	int key = 0;
-+
-+	if (!sk_common)
-+		return 0;
-+
-+	if (sk_common->skc_family != AF_INET6)
-+		return 0;
-+
-+	if (!bpf_skc_to_tcp_timewait_sock(sk_common))
-+		return 0;
-+
-+	val = bpf_map_lookup_elem(&tcp_conn_sockets, &key);
-+	if (!val)
-+		return 0;
-+	/* The timewait sock inherits the cookie of the closed client sock. */
-+	if (bpf_get_socket_cookie(sk_common) != *val)
-+		return 0;
-+
-+	tw_found++;
-+	tw_destroy_err = bpf_sock_destroy(sk_common);
-+
-+	return 0;
-+}
- 
- SEC("iter/udp")
- int iter_udp6_client(struct bpf_iter__udp *ctx)
--- 
-2.43.0
+Closes: https://lore.kernel.org/bpf/20260702224519.800135-1-xmei5@asu.edu/
 
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 61940e7535523..a41cc60a401a5 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+[ ... ]
+> @@ -12925,8 +12926,12 @@ __bpf_kfunc int bpf_sock_destroy(struct sock_com=
+mon *sock)
+>  	 * Supporting protocols will need to acquire sock lock in the BPF conte=
+xt
+>  	 * prior to invoking this kfunc.
+>  	 */
+> -	if (!sk->sk_prot->diag_destroy || (sk->sk_protocol !=3D IPPROTO_TCP &&
+> -					   sk->sk_protocol !=3D IPPROTO_UDP))
+> +	if (!sk->sk_prot->diag_destroy)
+> +		return -EOPNOTSUPP;
+> +
+> +	if (sk_fullsock(sk) &&
+> +	    sk->sk_protocol !=3D IPPROTO_TCP &&
+> +	    sk->sk_protocol !=3D IPPROTO_UDP)
+>  		return -EOPNOTSUPP;
+> =20
+>  	return sk->sk_prot->diag_destroy(sk, ECONNABORTED);
+
+[Severity: High]
+This is a pre-existing issue, but does this invoke the protocol's destroy
+handler without proper locking?
+
+The bpf_sock_destroy() kfunc can be called from iterators. It calls the
+protocol's diag_destroy() handler:
+
+net/core/filter.c:bpf_sock_destroy() {
+    ...
+    return sk->sk_prot->diag_destroy(sk, ECONNABORTED);
+}
+
+For TCP sockets, this resolves to tcp_abort(), which skips acquiring the
+socket lock because has_current_bpf_ctx() is always true inside a BPF
+program:
+
+net/ipv4/tcp.c:tcp_abort() {
+    ...
+    if (!has_current_bpf_ctx())
+        lock_sock(sk);
+    ...
+}
+
+While some iterators pre-lock the socket, others (like sockmap iterators) do
+not. Does this result in tcp_abort() running lockless and potentially
+corrupting socket state?
+
+Additionally, if a raw socket with IPPROTO_TCP is passed, raw_abort() is
+invoked instead, which unconditionally calls lock_sock():
+
+net/ipv4/raw.c:raw_abort() {
+    ...
+    lock_sock(sk);
+    ...
+}
+
+Since iterators run under rcu_read_lock(), will this sleep in an atomic
+context and trigger a BUG?
+
+[Severity: High]
+This is also a pre-existing issue, but can this call cond_resched() while
+holding an RCU read lock?
+
+When bpf_sock_destroy() processes a TCP socket in the TCP_LISTEN state,
+it calls tcp_abort(), which then calls inet_csk_listen_stop():
+
+net/ipv4/tcp.c:tcp_abort() {
+    ...
+    inet_csk_listen_stop(sk);
+    ...
+}
+
+Inside inet_csk_listen_stop(), there is a loop that explicitly yields:
+
+net/ipv4/inet_connection_sock.c:inet_csk_listen_stop() {
+    ...
+    cond_resched();
+    ...
+}
+
+Since bpf_iter_run_prog() runs iterators under rcu_read_lock_dont_migrate(),
+will calling cond_resched() from this atomic context trigger a "sleeping
+function called from invalid context" BUG?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260904094954.6344=
+7-1-jiayuan.chen@linux.dev?part=3D1
