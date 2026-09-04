@@ -1,33 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9ED33B47D2;
-	Fri,  4 Sep 2026 09:19:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55BA142123E;
+	Fri,  4 Sep 2026 09:19:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788513599; cv=none; b=f4fpuM3M0ebawwbS8JYcqLvcvy2A6JNFvonglj+lX8MwvePvHMlWi5Bzr/0HsqsRS4wMdU01OKSBpaa6MJIGRU2nJxohTCFTo0uqL0NbbbKeRzisUqiVX40RSZy3ezxlLTEOCWAJw0Gz2ROSTHQDYIeSTvikMJWq2cprWVcOoa8=
+	t=1788513601; cv=none; b=Q5Kkib2eTah1lKnunB2yOj+jmRBL+XDx+DEVDNeO7UehE+lZpNWniHQCvJum0Y2tU54J3U7LZsoCliffn8uJkgRlNhxTL7jnG6+4+VArJY13hSMWIgqz38IwJ/sY0tIq7Sym1umL7TF9AT2gJLLxZLQRXcZ1JeReCmRfjmjmzI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788513599; c=relaxed/simple;
-	bh=/we4o96trO0R5t6PKQwVGx4wal4PKE15RhiGxtE7hsA=;
+	s=arc-20240116; t=1788513601; c=relaxed/simple;
+	bh=OzRy7G56s8hu7pUt4GdQmahUiIPWrLYG9Cn0NPAezQ0=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Cew26g8uFI3k4vt4M1LASsy5pmNNa10qKMv85fzRKFVzd9cAfyNxQq7yeYqcjY7JPeGzhb8Gc734VcTvLNVy9jArJgFHp0kd4CFG5tKVTM2ZSZ8GIYVkNlzldpoblxhKeGrbHzdXKfr+S3VO/jIOi19hZ2JnRbXeERmBc++jnXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dUJIUN4Z; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=PH9PeMGNrE14lVYS4VmEq+06PCJ1Th37tUvE5ifgFzDFhm73k5NTOsj5Dbb3BAkVmyFHqiPBD3v4KSHf3QwMTjAqYL0+cpRmmX9TOd19wAtThzqTuiko5hbweG+CIGQpW6LUsQwjPf0cdmNL1cYnwAm+fc0oihVEHNHPPINY/vc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kPYd4ppv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dUJIUN4Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65D831F00A3D;
-	Fri,  4 Sep 2026 09:19:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kPYd4ppv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 764E71F00A3E;
+	Fri,  4 Sep 2026 09:19:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788513597;
-	bh=ySGxHNWJrB7UzfxPoKzyaL2ylg1x9/Sv8FGV/m2Q+GI=;
+	s=k20260515; t=1788513599;
+	bh=m3zmrB+UC+gNhBuz3Velpf0Gbjrecq4GQkgZcuKP/UY=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=dUJIUN4ZW52SsdwcsJbr749PorqLW2asN0j5rXpCkwSbYtAiXGMr1uUsIUhWDrRGT
-	 RAp11rpEKxrZIxTc2wm2x1Wye3XdqkaWqs8ondoIFVyg1Xapd/T4GntYcMZErzYkHB
-	 DBEGgjxnuaZXMLTJA85aKT2+TsE2JGNAnjZU7zDVI1aQSjAR0v4D6CiId4iBcPRR4L
-	 3ohsDWMvuwaJtv9Q5+KW0Ov5ls2gT2mhQDZsmxpiGjiBlTfXOm9f+LTWHfxHUpjPBz
-	 xQV0mIQaBB5VoFh8n5lNQHaiuU/A7gulnF0rutHXImfjXAKAQoKRkFu0KAyhoZnpPW
-	 Db/rOMlr7oTPw==
-Subject:
- Re: [PATCH net-next 2/4] i40e: add support for bpf_xdp_metadata_rx_hash()
+	b=kPYd4ppvGyi6dqlpk/0f8fJMDTzUJM2M6B/HW6hUnaDc6z4ulqM2oMCA3olf/sKPD
+	 nu+MT4bKVMJBMP+LmW0P0+k19cir814TPEZLWwL90uWrOVEvtNVuzYgJBBrVMie80b
+	 ceQNl48s7CB3hAoMnPFVRiuh1AXhfmSYom3UfRIOFMOOiH5EX8fSXxJUy1/sHDTyKR
+	 yvAtGFQpNehzgYBb8NKAZ11vvjxhaY1TOFmIeCDr/WP/470Q3H8x0JbxHrn2n4QAmq
+	 8+6X8W8b8uUYTAUUoFgwk7M0THeY1w3o93NItwrV1ODDKJ9S0F0XLUw6rffvuUljij
+	 pOgQuJvuhok5g==
+Subject: Re: [PATCH net-next 4/4] i40e: Avoid repeating RX filter warning
 From: netdev-bot+sashiko@kernel.org
 To: anthony.l.nguyen@intel.com
 Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
@@ -39,11 +38,11 @@ Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
  daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
  sdf@fomichev.me, bpf@vger.kernel.org, aleksandr.loktionov@intel.com,
  sx.rinitha@intel.com
-Date: Fri, 04 Sep 2026 09:19:55 +0000
-Message-ID: <178851359588.4131868.14209764775589320419@kernel.org>
-In-Reply-To: <20260901211752.1922993-3-anthony.l.nguyen@intel.com>
-References: <20260901211752.1922993-3-anthony.l.nguyen@intel.com>
-X-sashiko-severity: Medium
+Date: Fri, 04 Sep 2026 09:19:57 +0000
+Message-ID: <178851359799.4131868.11248615575150226456@kernel.org>
+In-Reply-To: <20260901211752.1922993-5-anthony.l.nguyen@intel.com>
+References: <20260901211752.1922993-5-anthony.l.nguyen@intel.com>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -56,129 +55,119 @@ MIME-Version: 1.0
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue(s) to consider:
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+Critical: 0 · High: 0 · Medium: 0 (1) · Low: 1
 
-- [Medium] i40e_config_netdev() sets `netdev->xdp_metadata_ops =
-  &i40e_xdp_metadata_ops;` unconditionally…
+- [Low] Two diagnostics that report different failure classes are now
+  gated on one shared single-shot bit.
+
+Pre-existing issues:
+- [Medium] The overflow-promiscuous bit that the patch now also uses as a
+  log-once latch lives in `vsi->state`, which is protected only by an…
 
 --
 
-i40e: add support for bpf_xdp_metadata_rx_hash()
+i40e: Avoid repeating RX filter warning
 
-This adds i40e_xdp_rx_hash() as an xdp_metadata_ops callback, extracting
-the RSS hash and hash type from the RX descriptor the same way
-i40e_rx_hash() does. A new I40E_RX_DESC_STATUS_FLTSTAT_MASK helper is
-added to i40e_type.h and the ops struct is installed on the netdev.
+The patch converts the two set_bit(__I40E_VSI_OVERFLOW_PROMISC, vsi->state)
+call sites in i40e_aqc_add_filters() and i40e_aqc_broadcast_filter() to
+test_and_set_bit(), so the "forcing overflow promiscuous" warning is only
+emitted on the transition into overflow promiscuous mode.
 
 > diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
-> index 4b11ae9ed8d53..e487d697a634f 100644
+> index 719f45b5cb409..abbc71e815ae3 100644
 > --- a/drivers/net/ethernet/intel/i40e/i40e_main.c
 > +++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-
-[ ... ]
-
-> @@ -13582,6 +13583,34 @@ static int i40e_xdp(struct net_device *dev,
->  	}
->  }
+> @@ -2412,10 +2412,12 @@ void i40e_aqc_add_filters(struct i40e_vsi *vsi, const char *vsi_name,
 >  
-> +static int i40e_xdp_rx_hash(const struct xdp_md *_ctx, u32 *hash,
-> +			    enum xdp_rss_hash_type *rss_type)
-> +{
-> +	const struct i40e_xdp_buff *ctx = (const void *)_ctx;
-> +	const union i40e_rx_desc *desc = ctx->desc;
-> +	struct libeth_rx_pt rx_ptype;
-> +	u8 raw_rx_ptype;
-> +	u64 status;
-> +
-> +	status = le64_to_cpu(desc->wb.qword1.status_error_len);
-> +	raw_rx_ptype = FIELD_GET(I40E_RXD_QW1_PTYPE_MASK, status);
-> +	rx_ptype = libie_rx_pt_parse(raw_rx_ptype);
-> +
-> +	if (!libeth_rx_pt_has_hash(ctx->xdp.rxq->dev, rx_ptype) ||
-> +	    FIELD_GET(I40E_RX_DESC_STATUS_FLTSTAT_MASK, status) !=
-> +		    I40E_RX_DESC_FLTSTAT_RSS_HASH)
-> +		return -ENODATA;
-> +
-> +	*hash = le32_to_cpu(desc->wb.qword0.hi_dword.rss);
-> +	*rss_type = rx_ptype.hash_type;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct xdp_metadata_ops i40e_xdp_metadata_ops = {
-> +	.xmo_rx_hash		= i40e_xdp_rx_hash,
-> +};
-> +
->  static const struct net_device_ops i40e_netdev_ops = {
->  	.ndo_open		= i40e_open,
->  	.ndo_stop		= i40e_close,
-
-[ ... ]
-
-> @@ -13784,6 +13813,7 @@ static int i40e_config_netdev(struct i40e_vsi *vsi)
->  	i40e_vsi_config_netdev_tc(vsi, vsi->tc_config.enabled_tc);
->  
->  	netdev->netdev_ops = &i40e_netdev_ops;
-> +	netdev->xdp_metadata_ops = &i40e_xdp_metadata_ops;
+>  	if (fcnt != num_add) {
+>  		if (vsi->type == I40E_VSI_MAIN) {
+> -			set_bit(__I40E_VSI_OVERFLOW_PROMISC, vsi->state);
+> -			dev_warn(&vsi->back->pdev->dev,
+> -				 "Error %s adding RX filters on %s, promiscuous mode forced on\n",
+> -				 libie_aq_str(aq_status), vsi_name);
+> +			if (!test_and_set_bit(__I40E_VSI_OVERFLOW_PROMISC,
+> +					      vsi->state)) {
+> +				dev_warn(&vsi->back->pdev->dev,
+> +					 "Error %s adding RX filters on %s, promiscuous mode forced on\n",
+> +					 libie_aq_str(aq_status), vsi_name);
+> +			}
 
 [Severity: Medium]
-Should this assignment live inside the I40E_VSI_MAIN branch, next to where
-the rest of the XDP capability state is set?
+This isn't a bug introduced by this patch, but the warning is now latched on
+a bit whose lifetime is managed by an ad-hoc flag-as-lock scheme, so is the
+latch reliable?
 
-Earlier in i40e_config_netdev() the XDP capabilities are set only for the
-main VSI:
+i40e_sync_vsi_filters() serializes its whole sleeping section with an
+open-coded acquire loop:
 
-	if (vsi->type == I40E_VSI_MAIN) {
-		...
-		netdev->xdp_features = NETDEV_XDP_ACT_BASIC |
-				       NETDEV_XDP_ACT_REDIRECT |
-				       NETDEV_XDP_ACT_XSK_ZEROCOPY |
-				       NETDEV_XDP_ACT_RX_SG;
-		netdev->xdp_zc_max_segs = I40E_MAX_BUFFER_TXD;
-	} else {
-		/* Relate the VSI_VMDQ name to the VSI_MAIN name ... */
+	while (test_and_set_bit(__I40E_VSI_SYNCING_FILTERS, vsi->state))
+		usleep_range(1000, 2000);
+	pf = vsi->back;
 
-but i40e_config_netdev() also runs for VMDQ2 netdevs, via i40e_vsi_setup():
+	old_overflow = test_bit(__I40E_VSI_OVERFLOW_PROMISC, vsi->state);
 
-	switch (vsi->type) {
-	/* setup the netdev if needed */
-	case I40E_VSI_MAIN:
-	case I40E_VSI_VMDQ2:
-		ret = i40e_config_netdev(vsi);
+and releases it with a plain clear_bit(__I40E_VSI_SYNCING_FILTERS,
+vsi->state) on both the out: and err_no_memory: paths.
 
-Those macvlan-offload "<pf>v%d" netdevs get xdp_features == 0, and
-i40e_xdp() rejects every ndo_bpf command on them:
+i40e_add_vsi(), reached from i40e_rebuild() and i40e_vsi_setup(), clears the
+bit without participating in that gate at all:
 
-	if (vsi->type != I40E_VSI_MAIN)
-		return -EINVAL;
+	spin_unlock_bh(&vsi->mac_filter_hash_lock);
+	clear_bit(__I40E_VSI_OVERFLOW_PROMISC, vsi->state);
 
-So no native XDP program can be attached there, and xmo_rx_hash can never
-be reached on such a netdev.
+If that clear lands while i40e_sync_vsi_filters() is between its
+old_overflow snapshot and the new_overflow / promisc_threshold decision, can
+the warning re-fire, or the opposite, can the state read as non-overflowing
+while filter programming keeps failing?
 
-Does this make the netlink capability report inconsistent?  netdev_nl_dev_fill()
-derives the xdp-rx-metadata-features bits purely from the presence of the
-callback, with no cross-check against dev->xdp_features:
+>  		} else if (vsi->type == I40E_VSI_SRIOV ||
+>  			   vsi->type == I40E_VSI_VMDQ1 ||
+>  			   vsi->type == I40E_VSI_VMDQ2) {
+> @@ -2465,10 +2467,11 @@ i40e_aqc_broadcast_filter(struct i40e_vsi *vsi, const char *vsi_name,
+>  	}
+>  
+>  	if (aq_ret) {
+> -		set_bit(__I40E_VSI_OVERFLOW_PROMISC, vsi->state);
+> -		dev_warn(&vsi->back->pdev->dev,
+> -			 "Error %s, forcing overflow promiscuous on %s\n",
+> -			 libie_aq_str(hw->aq.asq_last_status), vsi_name);
+> +		if (!test_and_set_bit(__I40E_VSI_OVERFLOW_PROMISC, vsi->state)) {
+> +			dev_warn(&vsi->back->pdev->dev,
+> +				 "Error %s, forcing overflow promiscuous on %s\n",
+> +				 libie_aq_str(hw->aq.asq_last_status), vsi_name);
+> +		}
+>  	}
 
-net/core/netdev-genl.c:netdev_nl_dev_fill() {
-	...
-#define XDP_METADATA_KFUNC(_, flag, __, xmo)			\
-	if (netdev->xdp_metadata_ops && netdev->xdp_metadata_ops->xmo)	\
-		xdp_rx_meta |= flag;
-	...
-}
+[Severity: Low]
+Two different failure classes now share one single-shot bit. Is that
+intended?
 
-which means a VMDQ2 netdev advertises NETDEV_XDP_RX_METADATA_HASH ("Device is
-capable of exposing receive packet hash via bpf_xdp_metadata_rx_hash()") while
-rejecting XDP entirely.
+i40e_aqc_add_filters() warns when MAC/VLAN filter space is exhausted
+(fcnt != num_add, typically LIBIE_AQ_RC_ENOSPC), while
+i40e_aqc_broadcast_filter() warns on any AdminQ error returned by
+i40e_aq_set_vsi_broadcast() or i40e_aq_set_vsi_bc_promisc_on_vlan(),
+including errors that are not ENOSPC, and prints its own
+libie_aq_str(hw->aq.asq_last_status) text.
 
-The follow-up patch adding bpf_xdp_metadata_rx_vlan_tag() extends the same
-unconditional assignment, so NETDEV_XDP_RX_METADATA_VLAN_TAG ends up reported
-on those netdevs too; the assignment is still unconditional at the end of the
-series.
+In the scenario from the commit message (bridge vlan add vid 2-4094) the add
+path sets __I40E_VSI_OVERFLOW_PROMISC first, so a later
+i40e_aqc_broadcast_filter() failure of an unrelated class prints nothing
+until the bit is cleared again.
 
->  	netdev->watchdog_timeo = 5 * HZ;
->  	i40e_set_ethtool_ops(netdev);
->
+For the delete path in i40e_sync_vsi_filters() the return value is
+discarded:
+
+			if (is_broadcast_ether_addr(f->macaddr)) {
+				i40e_aqc_broadcast_filter(vsi, vsi_name, f);
+
+				hlist_del(&f->hlist);
+				kfree(f);
+				continue;
+			}
+
+so with the warning suppressed, is that failure reported anywhere at all?
+Would a per-site dev_warn_once() style latch, or a separate condition flag
+per message, keep both diagnostics?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260901211752.1922993-1-anthony.l.nguyen%40intel.com
