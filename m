@@ -1,112 +1,136 @@
-Received: from mta0.migadu.com (out-158.mta0.migadu.com [91.218.175.158])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 796A73AEB35
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 07:37:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21C9E369D47
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 07:43:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788507487; cv=none; b=duYfTwI0AKSHttvdz0IGPtsocMsrhO2fHQb/ypeZ2XGlWTbwnstf+EaC0U7Uj1NTSCwiEG6l2VmZjJ7W+2OFXjZjKobs94TE/zGscHAgBYq5/myDUaYBXcpKj8IMA2EXiWTO06MaOusj/2to5q8b7nCAVxBlRPgwpmZAx8elMD0=
+	t=1788507791; cv=none; b=KHQTNiQfwIktykUUujISX1vVmIzZxDo5+o0/LCRkOzxh5nPuqCA9Eq/shpysqX7NBac1WkCU18EY/ysmLMmB93lLXb9iHiP+ubwwNItY3F4bUDCBR3vDuI0304q6/RJlQyafiYl26NJ2CEboK+Iz4LENG6ygP/REa/KK+A1XQmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788507487; c=relaxed/simple;
-	bh=ut1RAeTmhP4u08aElYbIvkNLEWQ6+/R9w+gyuZCJDQc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=stWb5hs7nphjMS50+xK/FqNGJfxwZoQsL5SbJW7O1SughEfn0ED49KDi/G/FCTPVOAA07NCV22i/pcjkbP57OsCS73t8Jdl+mh7xBW6Ge3aovXtMtoGY09J9Lc1FHr0CXMGcDued4SjgeaLjSmcPSvBtiBBjX7+W49OaT9m4Wok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xeMGwY1r; arc=none smtp.client-ip=91.218.175.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788507791; c=relaxed/simple;
+	bh=XpswYa85qiuiMbT1XnFvBWzd2qUtbha6q7zYMDprpKU=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=eYgxO2inmwRR5gEE9ekkoBF/fpJYyyDPMtUxQSV6TwlTpPPYlB8Q35UloRtUy0gAJAm1rsiwNY1PS1T/WCnIlGus9N3LmVmE7ql7KOPjOIgOdSSZIyH3rvJq3wTZJbNyCUOvQFZyZrqMn1mwb/n+tcXatGnhTSLD3o2fhRuZ6Nc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U0kzt256; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xeMGwY1r"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ut1RAeTmhP4u08aElYbIvkNLEWQ6+/R9w+gyuZCJDQc=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788507474; v=1; x=1789112274;
- b=xeMGwY1rdjAS2LpBJr0X9ZnB+aFQWQZohNpQlDKefM6J2c5JQ5B/KCJC608jE5U1drGnErB/
- fuVShES7NsqxabbBRoTqWjBYTl7zdbNaW/YbLiLgWu+O6tdGoDFuem6QH8htVS9p4Abznbh+88M
- GgpsVJ0df2ZsA3o0Rkh0I1T8=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id ba18ad104a91eea3;
-	Fri, 04 Sep 2026 07:37:54 +0000
-X-Mizu-Trace-ID: ba18ad104a91eea3
-X-Migadu-Flow: FLOW_OUT
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v1] selftests/bpf: Fix flaky bpf_nf test when random NAT port is 0
-Date: Fri,  4 Sep 2026 15:37:39 +0800
-Message-ID: <20260904073745.363314-1-jiayuan.chen@linux.dev>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U0kzt256"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 838141F00A3D;
+	Fri,  4 Sep 2026 07:43:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788507787;
+	bh=+R0YLqemQsHVWGS+X+hZOp4MAE2YFy+3l4P0+xwCPjY=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=U0kzt2562hlp8ha8/XafYBqL9dM+UlBnn5imccxtObHaayvzLguUWjBZQ7aSlsW5p
+	 QCk2n1+bV5aUAXTOmxtWrp+JpivFO554eP/Mm1zp4/PVwkKX/GTkj2gAGyh0JPtaSi
+	 17Kd0dt+ATRqJiC3t7IP+B0NTW3L/ELwcvDb7yrTaGsDMAetsm7ihYVDVIh499EAHB
+	 0FHSKMaFT0qL12ciE9qytK2afFGoNF4/MuS3YgxPh7MEuE8Qm6Vqxyf52WA/5QCscw
+	 9pp7zf8fdDQRKPdtio+ZXOUpsVBYy9e4n5Rpcoa88JqcMAOEQG9bhCgzgH6Lu0YuFe
+	 vsiwClq6v2g0g==
+Content-Type: multipart/mixed; boundary="===============8794906173795559932=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <3d3db265f9827e399b4d8857e61c241ca4081ce5d5bfdb9a512104bc9943da6f@mail.kernel.org>
+In-Reply-To: <20260904063650.3877826-7-memxor@gmail.com>
+References: <20260904063650.3877826-7-memxor@gmail.com>
+Subject: Re: [PATCH bpf v1 6/8] selftests/bpf: Reject graph kptr use after RCU unlock
+From: bot+bpf-ci@kernel.org
+To: memxor@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,npc@anthropic.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri,  4 Sep 2026 07:43:06 +0000 (UTC)
 
-The bpf_nf test allocs a ct, sets snat and dnat with random addr and
-port via bpf_ct_set_nat_info(), then looks the ct up and checks the
-reply tuple against what was set.
+--===============8794906173795559932==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-The port comes from bpf_get_prandom_u32() and can be 0. For
-bpf_ct_set_nat_info(), port 0 means "port not specified", so only the
-addr is mapped and the kernel keeps the original port. The check then
-compares that port with 0 and fails, which shows up as a flaky
-"Test for source natting" failure in CI [1][2].
+> diff --git a/tools/testing/selftests/bpf/progs/rcu_read_lock.c b/tools/testing/selftests/bpf/progs/rcu_read_lock.c
+> index 31d4081c3a9fd..cdb255addbc30 100644
+> --- a/tools/testing/selftests/bpf/progs/rcu_read_lock.c
+> +++ b/tools/testing/selftests/bpf/progs/rcu_read_lock.c
 
-Keep the random port in 1..65535 so it is always specified.
+[ ... ]
 
-[1] https://github.com/kernel-patches/bpf/actions/runs/33830002889/job/100893868791
-[2] https://github.com/kernel-patches/bpf/actions/runs/33829976794/job/100893220999
+> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+> index 7d2f8897e5ad1..5abd8387d26f3 100644
+> --- a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+> @@ -28,6 +28,15 @@ struct map_value_refcount_only {
+>  	struct node_refcount_only __kptr *node;
+>  };
+>
+> +struct rcu_graph_node {
+> +	struct bpf_rb_node node;
+> +	long data;
+> +};
+> +
+> +struct map_value_rcu_graph {
+> +	struct rcu_graph_node __kptr *node;
+> +};
+> +
+>  extern void bpf_rcu_read_lock(void) __ksym;
+>  extern void bpf_rcu_read_unlock(void) __ksym;
+>
+> @@ -36,6 +45,8 @@ private(A) struct bpf_spin_lock glock;
+>  private(A) struct bpf_rb_root groot __contains(node_acquire, node);
+>  private(B) struct bpf_spin_lock lock;
+>  private(B) struct bpf_list_head head __contains(node_refcounted, list);
+> +private(C) struct bpf_spin_lock graph_lock;
+> +private(C) struct bpf_rb_root graph_root __contains(rcu_graph_node, node);
 
-Fixes: b06b45e82b59 ("selftests/bpf: add tests for bpf_ct_set_nat_info kfunc")
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+Does struct rcu_graph_node have a forcing construct to ensure Clang emits
+a complete BTF_KIND_STRUCT rather than just a forward declaration?
+
+The struct is referenced only through pointer types in this file:
+
+  struct rcu_graph_node __kptr *node;         (map value member)
+  struct rcu_graph_node *node;                (pointer locals)
+  container_of(rb_node, struct rcu_graph_node, node)
+
+There is no bpf_obj_new(typeof(*n)), no sizeof(), and no by-value use.
+
+The __contains() tag at the private(C) graph_root declaration requires
+resolving rcu_graph_node by name as a struct. The kernel resolves this
+strictly by name and kind in btf_find_graph_root():
+
+    id = btf_find_by_name_kind(btf, value_type, BTF_KIND_STRUCT);
+
+If Clang emits only a BTF_KIND_FWD for rcu_graph_node, this returns
+-ENOENT, btf_parse_fields() fails for the .data.C internal ARRAY map, and
+libbpf's bpf_object__create_maps() fails. That takes down the whole
+refcounted_kptr_fail object, so every test in the file reports a failure
+with a map-creation error rather than the asserted verifier message.
+
+The immediately preceding commit in this series (1cf6db4cf60b4,
+"selftests/bpf: Test borrowed refcount acquisition nullability") had to
+add an explicit workaround in this same file for an identical shape:
+
+    /* Force Clang to emit complete BTF for struct node_refcount_only. */
+    tmp = bpf_obj_new(typeof(*tmp));
+    if (!tmp)
+        return 3;
+    bpf_obj_drop(tmp);
+
+rcu_graph_node has no equivalent construct. Surveying every __contains()
+target in tools/testing/selftests/bpf/progs (node_acquire, node_refcounted,
+node_data, skb_node, fq_flow_node, tree_node, tree_node_ref, foo, bar),
+every one is instantiated with bpf_obj_new(typeof(*x)) somewhere in the
+same object. rcu_graph_node is the first __contains() target in the tree
+that never is, so it is the first to depend on pointer-only references
+producing a complete struct.
+
+Should this add a forcing construct for rcu_graph_node in the same style
+as the sibling test, either a bpf_obj_new(typeof(*node))/bpf_obj_drop()
+pair or a statement in the changelog that the emitted BTF was verified to
+contain a full STRUCT rather than a FWD for rcu_graph_node?
+
+
 ---
- tools/testing/selftests/bpf/progs/test_bpf_nf.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-index df43649ecb78..eda9b7bbab75 100644
---- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-@@ -190,8 +190,8 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
- 	ct = alloc_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
- 		      sizeof(opts_def));
- 	if (ct) {
--		__u16 sport = bpf_get_prandom_u32();
--		__u16 dport = bpf_get_prandom_u32();
-+		__u16 sport = bpf_get_prandom_u32() % 65535 + 1;
-+		__u16 dport = bpf_get_prandom_u32() % 65535 + 1;
- 		union nf_inet_addr saddr = {};
- 		union nf_inet_addr daddr = {};
- 		struct nf_conn *ct_ins;
-@@ -293,8 +293,8 @@ nf_ct_opts_new_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *
- 	ct = alloc_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
- 		      sizeof(opts_def));
- 	if (ct) {
--		__u16 sport = bpf_get_prandom_u32();
--		__u16 dport = bpf_get_prandom_u32();
-+		__u16 sport = bpf_get_prandom_u32() % 65535 + 1;
-+		__u16 dport = bpf_get_prandom_u32() % 65535 + 1;
- 		union nf_inet_addr saddr = {};
- 		union nf_inet_addr daddr = {};
- 		struct nf_conn *ct_ins;
--- 
-2.43.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33846551561
+--===============8794906173795559932==--
