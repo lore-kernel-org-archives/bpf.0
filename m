@@ -1,68 +1,107 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABBB03B0583;
-	Fri,  4 Sep 2026 21:21:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17AD1432304
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 21:56:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788556870; cv=none; b=CFd0VMV6GXxRyy+AF41OWQc6YAG1VgVfZgWUJ0NN4G56M71adOHWO1iIncD6BadMh/ofdHQOSh5c5Sw643hTNj75mihuujuToDAKMpak0neExiOY8iOpXXCp4i7GfWWwaqYN2MeFx+/vI8kgtpbQoY9gnx8dcR/dkndzxcnL59g=
+	t=1788558995; cv=none; b=NXjINKVWIJkdgFFFnIJS5AKQnELkdM4MWgCAIFqGmjOonTRRlU1lAeAu+LF96JOAYahQzJ2uQwArEklcmkV0crWX5TmH2+w8TEMRdi5kZEUxhfBgVkbybshY0pWmLzCS0VN7XPNuOJ47hUkS5oLIW6Hi6qB7UsoPtm62GA7N6Tk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788556870; c=relaxed/simple;
-	bh=ow/zXpa/eilavpoy7ibKNGTK1Mwz7lSkjoPBxcAUZWE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mh5hkiJmV9qUVVbQzqcbG8Tvsh8APskP5veK8PzbomRFyW46LT+UsFgAZD+DBkmorzILt+OxVllf0zeIpud1YqCoS4bIYhMiIWO02nEfw9U4EaP7jjxakeIqyBXUoeEVIm+cbIZ6/BNgoVbeK+xAwSpLZddeaKEECg3PR615/sA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OJNh2F13; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788558995; c=relaxed/simple;
+	bh=3JdXz46nMatUQfuwWtmRIICVBNhzvoTZk5tGJMdjJeU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=TOa7fHb4fkPRouS4W2FNlQ0VaVnoEO248ad3vz68iL4hBNYyoN0f6rwmziZ683bYrjSVAeqyvs2oEBVKBPCX+jOox0UD6szWo24fy/+GjanFERvoF1EHvUuRNHh920PWlbf3NZ9wKEWdGr/kttoFnLKiptE6xViWpW2GoDyi0MQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZUhakuoQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OJNh2F13"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E04621F00A3D;
-	Fri,  4 Sep 2026 21:21:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZUhakuoQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 343001F00A3E;
+	Fri,  4 Sep 2026 21:56:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788556869;
-	bh=810qIrJpDWh09K9kiOgzNLqoPRq3TOZvKHQZ9uIXbHQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=OJNh2F136QTDXfXqn/x/sNTU41W2vOUXtSGgnjnhvUhVLk5yktSG4WaQLbYXmROX1
-	 tRp7E0AJJ0Uuonq2ZQ5Hvi6SDTeg+i9N5kL8XIevovUd9GXvv3h7cjursjeS7p3Gig
-	 DUPU+UAZypLywR3yNCNaF/veNamOFyp1ormbyyengO6t89lLUxcSuF83KqvVLY/aXQ
-	 FSKEbMHFwi0ESyyTnljDU+ekT4+X6u11UoyASXArh+Q+BcECp8Y9436zZV5BAb/kQT
-	 LFXrk/ACGFdIjQ/bHFBSRr93/xHElmOcpsFD1Ni641nc5zFCLtXUhe42XXMUzwrn9r
-	 7kmG4oF2j6zKw==
-Date: Fri, 4 Sep 2026 14:21:08 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Ratheesh Kannoth <rkannoth@marvell.com>
-Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <netdev@vger.kernel.org>, <andrew+netdev@lunn.ch>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <davem@davemloft.net>, <edumazet@google.com>,
- <hawk@kernel.org>, <john.fastabend@gmail.com>, <pabeni@redhat.com>,
- <sdf@fomichev.me>, <sgoutham@marvell.com>
-Subject: Re: [PATCH v12 net-next] octeontx2-pf: add mqprio bandwidth offload
- for NIX TX schedulers
-Message-ID: <20260904142108.72652338@kernel.org>
-In-Reply-To: <apo3CVfUw2-aXF8F@rkannoth-OptiPlex-7090>
-References: <20260903023324.3078284-1-rkannoth@marvell.com>
-	<apo3CVfUw2-aXF8F@rkannoth-OptiPlex-7090>
+	s=k20260515; t=1788558992;
+	bh=5GUHV/UVZvri1+7R91qr0mzJzcTq3gXNw9Bzge3Fm3A=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=ZUhakuoQbw0IDnDGcm1GJ6cJHFaeFpk6Wsx28zDOdlA/697lSO/B8ym60SbAKNa5/
+	 07/z2RcCLn4aUi3npDchKl2Ww6+09u0GcjjWH0JRoikAXP0r3QGvAirhQaosvB1q2B
+	 4ST+oxuK1PIFg0XF0pSXkNNTzu+F+ChEpA9/3iqEH9cAB8vM2DzuJ33lbtQzRxTri2
+	 ObiUoHuhcGld68NQkBRoh273EsTzJ4FGhBYdGvzMRSY0IPbCP/mAO0sUwnSJJakw89
+	 j2N68KyaVEvs6BDGfwMrbvjOZREumjOjyfM4khbSJTipweHVv+VtHb30eFSzekvSqL
+	 +Wxp++RUJjMvA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v5 06/12] gve: simplify reset logic
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Harshitha Ramamurthy" <hramamurthy@google.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260903215606.31633-7-hramamurthy@google.com>
+References: <20260903215606.31633-1-hramamurthy@google.com>
+ <20260903215606.31633-7-hramamurthy@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 04 Sep 2026 21:56:31 +0000
+Message-Id: <20260904215632.343001F00A3E@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Fri, 4 Sep 2026 08:42:09 +0530 Ratheesh Kannoth wrote:
-> On 2026-09-03 at 08:03:24, Ratheesh Kannoth (rkannoth@marvell.com) wrote:
-> > Add TC_SETUP_QDISC_MQPRIO offload for channel-mode mqprio with
-> > TC_MQPRIO_SHAPER_BW_RATE. Program per-queue MDQ CIR/PIR through the
-> > NIX TX scheduler mailbox for each non-QoS transmit queue. When offload
-> > is active, allocate one SMQ per such queue, parent every MDQ under
-> > TL4[0], and map each traffic class min/max rate to the queue(s) in that
-> > class.  
-> 
-> will address sashiko comments in v13
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-Please wait for netdev-ai report before you respin
-https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260903023324.3078284-1-rkannoth@marvell.com
-It seems to have found 5 more issues 
+Pre-existing issues:
+- [High] AF_XDP (XSK) pools configuration is silently dropped during device=
+ reset, breaking the zero-copy datapath.
+--
 
-Yes the embargo is really long for you, because it takes you 10+
-revisions to get anything merged.
+commit 5f54ed314a139ce612a748bc097cf6b6779ac055
+Author: Joshua Washington <joshwash@google.com>
+Subject: gve: simplify reset logic
+
+This commit simplifies the GVE reset path by removing recursive resets,
+removing resets during teardown, and decomposing the allocation and setup
+of control plane systems. It delays freeing shared resources until after
+a hardware reset completes if device deconfiguration fails.
+
+> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/eth=
+ernet/google/gve/gve_main.c
+> index 16ce55c6d74f6..acd09e9f416c1 100644
+> --- a/drivers/net/ethernet/google/gve/gve_main.c
+> +++ b/drivers/net/ethernet/google/gve/gve_main.c
+> @@ -590,7 +594,22 @@ static void gve_free_notify_blocks(struct gve_priv *=
+priv)
+[ ... ]
+> +static void gve_free_control_plane_resources(struct gve_priv *priv)
+> +{
+> +	bitmap_free(priv->xsk_pools);
+> +	priv->xsk_pools =3D NULL;
+> +
+[ ... ]
+> +static int gve_alloc_control_plane_resources(struct gve_priv *priv)
+> +{
+[ ... ]
+> +	priv->xsk_pools =3D bitmap_zalloc(priv->rx_cfg.max_queues, GFP_KERNEL);
+> +	if (!priv->xsk_pools) {
+> +		err =3D -ENOMEM;
+> +		goto abort;
+> +	}
+> +
+> +	return 0;
+
+[Severity: High]
+This is a pre-existing issue, but does unconditionally freeing and
+reallocating the xsk_pools bitmap during a device reset drop the AF_XDP
+pool configuration?
+
+When gve_reset() is triggered (for example, by a TX timeout or an MTU
+change), it calls gve_teardown_device() which leads to
+gve_free_control_plane_resources() unconditionally freeing the bitmap.
+During recovery, gve_alloc_control_plane_resources() allocates a fresh
+zero-initialized bitmap.
+
+If an application was actively using the XDP zero-copy datapath, wouldn't
+gve_reg_xdp_info() subsequently find no registered pools and silently fall
+back to standard page pools, breaking the application's zero-copy packet
+flow?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260903215606.3163=
+3-1-hramamurthy@google.com?part=3D6
