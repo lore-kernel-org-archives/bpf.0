@@ -1,231 +1,128 @@
-Received: from mail-yx1-f42.google.com (mail-yx1-f42.google.com [74.125.224.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EC2938E8A7
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 14:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB044D2EDE;
+	Fri,  4 Sep 2026 14:59:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788533707; cv=none; b=kwZRQxmK4mkMChUE0zVHrG8SXG3m1XvqiO0XhUYu1sSWPYeuLfFrGKF8FYFcPoyrN0pcZv1jgSBZhkEK3JGvLYgAT5b1eSXHsWRl/lwaK1ljBd+ffoGubSeT3cITO4PrqwarmKgpY9s44oY2haeNdVfoZUJ3gmg0S2klmEZuE0s=
+	t=1788533976; cv=none; b=VouZ50a+JqgVmTpy5WSluCnWWvMvexJwgjvDaayq6xBcS0+9VABi8sR7FZCnOeTIRg+LdgnNeF5z1Nc9uVwh5oO7ZNlEAxnFU4a+usrj9rnGqKgCAWOO4fto8dnyC2m+Vdgn1KoHJNB9QPmKh68OJgQ7tidi773vInkQoBM68/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788533707; c=relaxed/simple;
-	bh=IYCHIRkcU0Y26Lh+LLhttLcA6GVmm9WCqKr3QlsZawg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=mcr0Vjg134LtgmvAbsJqa5BUZspWKRkjOPPuP4XCmokmA6/xecS9+9pUxvJbe7SDQEfhLBAdrYsn1rXpPCUHzQa6NW401xtWWH8MNRt9d8te/Nte/AEHVPvyPt+5t3qbK82VDHSHzbvfLWG9raMnEeICQJr+qmmu6v/3uBc1x1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hli5wZpD; arc=none smtp.client-ip=74.125.224.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788533976; c=relaxed/simple;
+	bh=tg+beaFvFWyQqkBNHBB7oc6UW88l9wEu/T1qzRYhjfs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=A4O7HEbbmupjbAmk0sx8RQipe1nVsteS0EZXWHBRegxLyUpgQNHGWx7qQON/d0gC+//CbPdmox91dxsZwAyBflCrJVLvfJ4QwX8JHWeQzS1dTet5hZcAFgz0bD31UIeEv1eQJHJIITCGjHF9NeNaX6dqelLOvm0AfyZhNBnnxic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=akKvh57a; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hli5wZpD"
-Received: by mail-yx1-f42.google.com with SMTP id 956f58d0204a3-66fa996e65bso2085344d50.0
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 07:55:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788533704; x=1789138504; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=OmKNC+xz46c7sTpK++7HxSk0J2ccEwkpwZib7Yoy60o=;
-        b=hli5wZpD52So5JYP7494YC1zOfZzcgclWgO3j0h9SS7RsIHVovT+AAEpXi3XPJBoWV
-         dqvqUDC0d9lMkpWm2y+16QXVbDxN2mqbQDFGmL24oarGQ7H1TTx6JcamQ9TfIoMdx67O
-         LqlhGFSTXs3kcex+6XfAOZuo7i85TcAViLeWILPCESeGkzqbM+nSgGjJRI5zjqDJKHTt
-         yw7nwkwUTFpk5+GOJO0ljRs3rqk/Km2HKTLHWgncpTR1XhefjTpoU6PHD5VfR32p6g4t
-         Y5ZroNeALKw+PFbLta3wpZhObjqlOGDEOZR/mkgUutqrj0f2NAgmN3v78zD/3BaBdMRf
-         Qhpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788533704; x=1789138504;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=OmKNC+xz46c7sTpK++7HxSk0J2ccEwkpwZib7Yoy60o=;
-        b=VRxIwiN3JZ2ImovXOZ36K4WwxgCDXQ3F3JCoYg/DUxDe7nm24kl12Hg3maEe50akpI
-         YNEPR6KMV9kszIUletZvkfwIOj8DI3cN3jZ/LoHLbgVSvKYOwB9U+v0xhd53jAM2c3ew
-         A+4J4PLMhZWk3R/0xd9VCcaxM1LwH0NWuChtmiHHyBetgUnZd5eI2I8sHOtNFoqY39+z
-         jOv/0IDjGvQ1TgCjgH8iApJJXCf2UTFQ5fjDi0WyyejCAWyG4NG8uMhG0IUEsqr9KzLJ
-         037HGc6xuw7DjqSj0WYB4u35Dnz9q/9eNNPSIwzTLQLDZMLRNBz/sWhouU/rQAXeHJ1h
-         i8dA==
-X-Forwarded-Encrypted: i=1; AKwUvBwUZGZJdkK66UxVKm23IQsGjb65/H7pnNcUOla/Bk5PLOURpU8rLw3q4Mu8uYdNcixjXeQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++l7Sy5Zqe4qIeKb9RTF74JXdW1jX41wAabAzgVbRqhT3pKRB4B3
-	wxzMvvHpZUHh1sGsZuJvaFtOdBfL1IRW17gR58l3ezExmQ0LWls0vyie
-X-Gm-Gg: AYBFou1inPHNgTzTdt8rKpK89Z5Om8lD1oT/pbCDZ3jR8TWfSQWgVU6qIJomLuF/DMS
-	MWOSS5njbsRlw8nFO1XdcDwIj7NXsMcjq/8uGKxOQQt1Y5YtpHcHeWfWTwuvdInPEDfx9lGcnTk
-	K1gNdYaNKjMC3q5PRj4GjGZnFMXXu5N8+ehgy8Qc1Aj8EJ0V54WDTWoLrL6VTx9MIhE+q4FcV+p
-	lRch/sQpLFOqBuDhIjuWPN1/S8ceImO/++ZYw/Qrcf8q+NAxy65o3GT7AyyM4reOhrwdANASu2q
-	pY2xrZYIWElCclCp3tBEy9rdeb/YA3exe36TVuBnENm/ZYLoh53LsxN6iq5VYbB1LB7VONfuV3J
-	p2Thzld9BCdX5Ye93Fbmw7LBxIk+rjcV9Way4riOrOf1oeLxCao4p+MyfZgDKWgD5P7pyzc0sH9
-	NeVgHs1rN/Kv2QgL5LMh0VBOj+C3vHrmRUp+2k/nt+Vg/1kmKefzWF3UacVRCXZCMqPBLwB3Nk9
-	hqACiRJ63Qz2t+UwjVd3NBY+VebzhMVIdaGDwPTrrG/z9nEhkziISY=
-X-Received: by 2002:a05:690c:a785:b0:855:f387:98c0 with SMTP id 00721157ae682-87127d27776mr32660467b3.29.1788533703978;
-        Fri, 04 Sep 2026 07:55:03 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:11::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8714ab73f23sm19428697b3.33.2026.09.04.07.55.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Sep 2026 07:55:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="akKvh57a"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 624A11F00A3D;
+	Fri,  4 Sep 2026 14:59:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788533974;
+	bh=Mtmh+EbQEolZ0B+Cu+N77fkNfs3wVAfEnrHoZtaub+4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=akKvh57agkJAqnqARbiOesO0F3Co6J3xZW04uqfzOIDRqxFZnS/WAs4jLeWdy18dA
+	 asedTgctivCw0JSn15eNH1acIGeFsC1GbtOnJ5giNQGUfdJubfvG6Izb/8g2D9QNtb
+	 YSNZhSIqlfZEMZH7J9/WWd+Y/cSSrkB3WwUaF6MXteZmF30yKb3uAdxp5uLb0WSQoq
+	 9sBIS3ms5v9BDNzzHpaN1zaf0QEE8+JiSAZz+hCfCKJ5Nch+rgCMqru1j5wZpViyku
+	 rTI2mxXQHcdKUTn0US3bpM6bo6Lxumu1LjP81cTWu1HVfykZM2dzAhwaHchB64rsI/
+	 5zgI12L0kJppQ==
+Message-ID: <64106236-9d0d-4f64-b6dd-b1e609fb8c5a@kernel.org>
+Date: Fri, 4 Sep 2026 16:59:28 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH mptcp-next v2 0/2] selftests: mptcp: convert iptables to
+ nftables
+Content-Language: fr
+To: Hangbin Liu <hangbin.liu@linux.dev>, MPTCP Linux <mptcp@lists.linux.dev>,
+ Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ Hangbin Liu <liuhangbin@kylinos.cn>
+References: <20260903-mptcp_nft-v2-0-66283e4b9c3b@kylinos.cn>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20260903-mptcp_nft-v2-0-66283e4b9c3b@kylinos.cn>
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 04 Sep 2026 07:55:02 -0700
-Message-Id: <DL6MA7Z7QSI9.1DOEM4TWTJN5B@gmail.com>
-To: "Jiri Olsa" <olsajiri@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
- <bpf@vger.kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, "Mike Rapoport" <rppt@kernel.org>
-Subject: Re: [PATCHv2 bpf-next 3/3] bpf, x86: Add support for jit dry run
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-X-Mailer: aerc
-References: <20260903092039.477827-1-jolsa@kernel.org>
- <20260903092039.477827-4-jolsa@kernel.org>
- <DL697WN5AOBE.C8WRI12FLOG2@gmail.com> <app3IQUwVF97Tfq1@krava>
-In-Reply-To: <app3IQUwVF97Tfq1@krava>
+Content-Transfer-Encoding: 8bit
 
-On Fri Sep 4, 2026 at 12:45 AM PDT, Jiri Olsa wrote:
-> On Thu, Sep 03, 2026 at 09:40:46PM -0700, Alexei Starovoitov wrote:
->> On Thu Sep 3, 2026 at 2:20 AM PDT, Jiri Olsa wrote:
->> > Adding support to run jit code generation in dry_run mode that won't
->> > store any code and only returns the jir code size.
->> >
->> > The dry_run is enabled when __arch_prepare_bpf_trampoline is called
->> > with rw_image argument as NULL.
->> >
->> > It's used in arch_bpf_trampoline_size where it allows to skip the
->> > image allocation, that gives speed up for tracing_multi attachment.
->> >
->> > With current code:
->> >
->> >   # ./test_progs -t tracing_multi_bench_attach -v
->> >   ...
->> >   serial_test_tracing_multi_bench_attach: found 55227 functions
->> >   serial_test_tracing_multi_bench_attach: attached in   1.563s
->> >   serial_test_tracing_multi_bench_attach: detached in   0.256s
->> >
->> > With the fix:
->> >
->> >   # ./test_progs -t tracing_multi_bench_attach -v
->> >   ...
->> >   serial_test_tracing_multi_bench_attach: found 55235 functions
->> >   serial_test_tracing_multi_bench_attach: attached in   0.798s
->> >   serial_test_tracing_multi_bench_attach: detached in   0.258s
->> >
->> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
->> > ---
->> >  arch/x86/net/bpf_jit_comp.c | 42 ++++++++++++++++++------------------=
--
->> >  1 file changed, 20 insertions(+), 22 deletions(-)
->> >
->> > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
->> > index ee2ddeba3de1..d1af7dc5c5ce 100644
->> > --- a/arch/x86/net/bpf_jit_comp.c
->> > +++ b/arch/x86/net/bpf_jit_comp.c
->> > @@ -25,6 +25,7 @@ static bool all_callee_regs_used[4] =3D {true, true,=
- true, true};
->> > =20
->> >  struct jit_emit_context {
->> >  	u8 *prog;
->> > +	bool dry_run;
->> >  };
->> > =20
->> >  static u8 *emit_code(u8 *ptr, u32 bytes, unsigned int len)
->> > @@ -42,7 +43,10 @@ static u8 *emit_code(u8 *ptr, u32 bytes, unsigned i=
-nt len)
->> > =20
->> >  static void emit_code_jit(struct jit_emit_context *jit, u32 bytes, un=
-signed int len)
->> >  {
->> > -	jit->prog =3D emit_code(jit->prog, bytes, len);
->> > +	if (jit->dry_run)
->> > +		jit->prog +=3D len;
->> > +	else
->> > +		jit->prog =3D emit_code(jit->prog, bytes, len);
->>=20
->> Sorry, I don't believe that skipping emit makes that much
->> of runtime difference.
->> I suspect jit_alloc + jit_free are costly.
->> In such case the earlier patches are not needed.
->> Point emit logic to some scratch area and discard it.
->> Same effect with half of the changes.
->>=20
->> pw-bot: cr
->>=20
->
-> yes, I got same speed up with the change below
+Hello,
 
-Great :)
+On 03/09/2026 03:12, Hangbin Liu wrote:
+> iptables has been deprecated for years. The Linux kernel has included
+> nftables as the successor to iptables since 2014, and every major
+> distribution uses nftables as the default packet filtering framework.
+> The iptables command we run on modern systems is actually iptables‑nft,
+> a compatibility layer that translates iptables syntax to nftables rules
+> behind the scenes.
+> 
+> There are also some features that can be set easily with nft, while we need
+> to convert to BPF code under iptables, such as MPTCP add‑addr and
+> remove‑addr suboptions. To make future work easier, convert iptables usage
+> in mptcp to nftables.
+> 
+> Tested with iptables-translate to make sure each nft conversion is the same
+> with previous one. e.g. for mptcp_sockopt.sh, the ip6tables shows
+FYI, Hangbin is working on a new version addressing my comments from v1.
+The new version(s) will be sent to the MPTCP list only, and I will sent
+these patches to Netdev when ready.
 
-> jirka
->
->
-> ---
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index 48429fae0641..1bba19a9a17f 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -9,6 +9,7 @@
->  #include <linux/filter.h>
->  #include <linux/if_vlan.h>
->  #include <linux/bitfield.h>
-> +#include <linux/init.h>
->  #include <linux/bpf.h>
->  #include <linux/bpf_verifier.h>
->  #include <linux/memory.h>
-> @@ -23,6 +24,19 @@
-> =20
->  static bool all_callee_regs_used[4] =3D {true, true, true, true};
-> =20
-> +/*
-> + * Reuse a writable image in the BPF execmem range for size calculation.
-> + * Its contents do not affect size calculation.
-> + */
-> +static void *trampoline_size_image;
-> +
-> +static int __init init_trampoline_size_image(void)
-> +{
-> +	trampoline_size_image =3D bpf_jit_alloc_exec_rw(PAGE_SIZE);
+Updating here the PW status:
 
-I think you could have kvmalloc()-ed that memory instead.
+pw-bot: cr
 
-> +	return trampoline_size_image ? 0 : -ENOMEM;
-> +}
-> +late_initcall(init_trampoline_size_image);
-> +
->  static u8 *emit_code(u8 *ptr, u32 bytes, unsigned int len)
->  {
->  	if (len =3D=3D 1)
-> @@ -3819,23 +3833,14 @@ int arch_bpf_trampoline_size(const struct btf_fun=
-c_model *m, u32 flags,
->  			     struct bpf_tramp_nodes *tnodes, void *func_addr)
->  {
->  	struct bpf_tramp_image im;
-> -	void *image;
-> -	int ret;
-> =20
-> -	/* Allocate a temporary buffer for __arch_prepare_bpf_trampoline().
-> -	 *
-> -	 * We cannot use kvmalloc here, because we need image to be in
-> -	 * module memory range.
-> -	 * Since it must be writable use bpf_jit_alloc_exec_rw().
-> -	 */
-> -	image =3D bpf_jit_alloc_exec_rw(PAGE_SIZE);
-> -	if (!image)
-> +	if (!trampoline_size_image)
->  		return -ENOMEM;
-> =20
-> -	ret =3D __arch_prepare_bpf_trampoline(&im, image, image + PAGE_SIZE, im=
-age,
-> -					    m, flags, tnodes, func_addr);
-> -	bpf_jit_free_exec(image);
-> -	return ret;
-> +	return __arch_prepare_bpf_trampoline(&im, trampoline_size_image,
-> +					     trampoline_size_image + PAGE_SIZE,
-> +					     trampoline_size_image, m, flags,
-> +					     tnodes, func_addr);
->  }
-> =20
->  static int emit_bpf_dispatcher(u8 **pprog, int a, int b, s64 *progs, u8 =
-*image, u8 *buf)
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
 
