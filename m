@@ -1,59 +1,61 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D8E13F5BE4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F6C3F7A9B
 	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 08:33:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788510821; cv=none; b=LXiM5R05eknMIispP7Ag7ikAifrXgt3TIgJx1jsJqNR4llh8oQTAv/bw5v9yDGEcM5RdeNeQ+szJXGp3conepd4oQA01bqP7nWtJiFOTnULt8E66ZQpC3JT3I9m8px6sZEvbwNgyrW7Gt20ormVpOy/Qpn4+oAKi5soe+n8xVis=
+	t=1788510822; cv=none; b=tCcS6w9mT1AH9e85r+QXoo9fJP423A+GNAn2KerL4rb8UOvnivSn+oyxoYrQuL8L3T8MWoIKHVN6saSULIjTZlr2J5jJcvVQUDRi/8EMU2TuDzudrJ1/L6DBQzNic0SISzHMYupE3PiAut7vJmxKQ55/UGkMhAoI8yTNtL/i+Wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788510821; c=relaxed/simple;
-	bh=pA5zJRS43A2iUQhZFECl7Xvka1aAkjloEFb6W7FElAk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YHIAI1nYW2ZII3odk0qErp/pha5dRFGoUF/9KoP2WcyvnVJmgabYxHyViZQREOJf54M9YAnPMYWhAovPJKZfWvL5HacqKI1ksRTOeWS7PYRs21ZfNvnz4mVy3jsx3Z0o4V6dHzr7safvpms+cjLqcGje6vugvTyuRs92KDAniAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a6bGu0Ra; arc=none smtp.client-ip=209.85.216.42
+	s=arc-20240116; t=1788510822; c=relaxed/simple;
+	bh=cg3WJ8z7V1yWC4iyZ5x9R9+zXbGH03XeKIlUQgIAv1o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=kNCYuuz3qxs5JYhGg1oEqv0MMXACl/bFnDoCtI43qqUm12+xBJJ3MpZ0uArTAtXMLHb6knRNRG/NtgRlXajmlPJpM8jld+8L4BRxcV1P1hXcs+TmH5T03Obm/40UxsypNjjv8oo5t1wnx6o/EkXZTLDOjgA0Oj5I30QBH539KGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FiZMQACs; arc=none smtp.client-ip=209.85.215.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a6bGu0Ra"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-39b35105ba4so93687a91.1
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FiZMQACs"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-cc1cf287ef8so823309a12.3
         for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 01:33:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788510819; x=1789115619; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=OGptn61LHKtLuYEURKdgZbIn3ulAgNTAvxKj/ymLVYE=;
-        b=a6bGu0RaBMd9Jtsmc+7+LjOhrhPnsw2dZ9oqrg7/kz8yDo/Hh5H4PDJD68Wka8LWje
-         VLOWChxHRa5WtYPS9uKMoSL1z+1fn28Ui9luDwDu35zHhoBFCz3lb1VhOQoepTN1ilb1
-         z2nyllpTqXfbiBDRKjFiwaqNjMJjO9494jq6gRJGOsKVyRqCpbnfNtGaBqpEsymCDk2j
-         LjstHcKjwMJVWTJkVmxnM0chh73gOvgUgSPWG2MkfHvtkjvyJWOeo7D+rs6MJKv6WELP
-         70BM9QOBLtgtmRpJ/jwo4LOWuFx2Kt0PnMQMlBceREWyn39QX6u11Ey2TSafhNF2xKk4
-         Rzkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788510819; x=1789115619;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1788510820; x=1789115620; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=OGptn61LHKtLuYEURKdgZbIn3ulAgNTAvxKj/ymLVYE=;
-        b=RMnXDKx17KaQdIovmEyQiM0gHG2eY2P27N/kzEZGlLUlAsR4q7NMgresdfyWCaEQFS
-         8RxfT+Q6+H7x/TQ9wpYw6o++u1bBNBGQ6gE+vVfz8iGltBZitS8SSK1I0wDIzm7J5/Jg
-         rB2nWL1XFIXwxlZVjAUmbw2H+hd0vFfoBshPD5IXE1BpdyKBZTTaLfrEf5PQgdDl2qR+
-         6Wetk2CCui+BK8Ul9niJDCw3KRsdW+Da/+pgOB4emS/j/k4Ujfyi6BvaBzToc3+y26Ny
-         XkjnXeKP9+QTH2kZr/OHeSKAR7ldkExqObLLkOu+61hQovqFdDdd6ADAvSWh1TJ9aYCY
-         CDCQ==
-X-Gm-Message-State: AFuF++kIAj19z8OZ/B9I256s8NYUNyogMYrvH1o18We+r5Fq0kEXHaBH
-	kB0oINPq31kzJZKAl3AQky3qrCaA068Y3CcyHfKTrY2cuYQbFjWMEq57z+FoLA==
-X-Gm-Gg: AYBFou07gDTZW8irBUWBwKJfHaVnNwYcYb9UtFqOdJ5T/4m8RsfeJSzabAvR9BhZu/g
-	8mASrThFqCvjeFpOL6cUFsi3pn+J4p/yvXcObB43VtHWSNX9eZNmGVCTdkNjMmU8JE040KK67kq
-	9Fp3dSYj6YS+032kXUVNz05Ymg4353JGAkfKmYHIVXk1rTqT5TEStL33pR09nw3gBMYcBBqbEKf
-	3hxLga3+GCHG7lrnZqNJ7kWyb5GS3I+9sSVZQi6sJuEb8TQWyuuXLiuqdQglSmrGeqtBpLuEzXB
-	KUaVgJb7JqCbp7V4YBkDfkxw8FtLaOnwDtbWljPNGdg2m8ijEOcHR2luXMoKYkSM00UxstLN4Lp
-	Bul2N3b8ShxMaEYb/0bn5zYS5OcM40PHBH+QuY81u+9vO6DFxRw92eaHp/IL43x0QSy+fWkU6GC
-	dXmSAhk5mndri/w11IUa6+qE2Ba9wIRxP9f+w4AvbJXTKNycvtYZv/ofUaMOfY/20GYtuy13YNR
-	CRLYNdFb3OGGL0dCDYCOMwnca75pOeW
-X-Received: by 2002:a17:90b:5866:b0:398:e73e:5a13 with SMTP id 98e67ed59e1d1-39b2613272amr6777411a91.9.1788510819404;
-        Fri, 04 Sep 2026 01:33:39 -0700 (PDT)
+        bh=WCicz6o+ujtCgcRneONqgxLEs/Xt8g6Uj/7VwMxEi3E=;
+        b=FiZMQACsaCe/Wd3+W21Gl8DvinLFH4B9SUjk/kJKnQohUde3+LQgYtHyxFbZCrHzGr
+         AopxVRiMmDYOu8AGdhXjCbZdif7pFla8c9y37EHmTqYfuGdgLOjDnvXVA48QxZEhHJOI
+         chx3NNQWeVcKhNiv5JTetmYYc8XgoeUKO2cWe1w0eAnJdEDfLoXHW4GlbKHQOiGKND1b
+         rLobmN59ulKytJ5fzC7uLqQX6NHucQkZV0E+UJU7PG5Mq6oYOzGv/vQL2EkWbOEfCyio
+         sDeMt3hKBNW7Ai716dL9+4oCYg09R/gEgUHYZxhVSVCNWctdXvq82fw4sxHAqopoB568
+         d+3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788510820; x=1789115620;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=WCicz6o+ujtCgcRneONqgxLEs/Xt8g6Uj/7VwMxEi3E=;
+        b=TwwhI0fYQsMq20cR9umGsKsSlwAxxOVIyt7MJ7VnjL+enC7iU9WQfCpeOlffwx5BjJ
+         SNV3VCLmVIUoXd1/JrjYU8VLXBEdAfLE1WpvwYVEaepK2Y6hDA/Xyo+U0f1dt7410YeV
+         fnPEFyIvh0UiYzacoJrKog2OxVNIqyUnwRtBzTlhCj7Iseyro+yKfNaPG8imbtg4IA0A
+         xykLAdWkcBoIsv+Ms+1dodHD8FKNGAqwtKoqjn4xD3rkisap/iQ8zlyTqY94CvsFuIGQ
+         p/E1KmTcz+tgc98EDxwoISaBoD3gDqZort2/cUyjNUwKqsvffxs04gvdQUfu84Ztlx60
+         ukjg==
+X-Gm-Message-State: AFuF++l+XmKdZR8ICxL/hYzM47LM8N/ZlUbnWd6HgruQdInO8Br4Xoig
+	ehsCJg0EiH6i4cAEtl1gVtee4umDJRvUJY8QRy5txZ8zaJFhi4A0YonGf3b/7OSS8Ms=
+X-Gm-Gg: AYBFou3uk2XSZu8j3VuSg3XmRgmFwuURUCWDcz6lzrzeM994F0GX425c3Gzdoh+Co23
+	DIdBynS5QpRcwjM2Ga00kXqDa8ThQkiutPMKztgxjjbtwmMDxNdC8WNxlvGZdYeHtmaoId7rCy0
+	7eZqERrkXnwAVKL5PzCIqhqBlH0k2myMlnRK6OnNo/AywtL5akFH4hM5ww/0tBUI2+CCa+XCDIK
+	BQ/Jud7d7POD1/Z+1mNECFZMoAih61HomzK8o1OJhMavlUl/WoBpk/7nfUqQfOsZ90Rj5CihZA3
+	okjp8vs+19sfAiScIdMrKCyvnHW1g2tkccTXhMSxMKl/wW0HegLpArVHxVjZIUi5IWVZMbjlROq
+	wTOncHwE3dbcEiTX6WXeXLYRBdP1H+80OUlgvpidqfulHeE6ULYzTMnNh4mfRRqgRxY5j7ROmoI
+	J+ObjVVEUKyV4CrLZB+rJYEtrHI5OX0cY78MYA+N5tKR3yWtpUK2Kt+rNlHwYAexif6ASVe+/WX
+	f+7s76fVHdUcrcMYOp6PbVg6tAM8EAq
+X-Received: by 2002:a17:90a:51c6:b0:39b:29ca:3d23 with SMTP id 98e67ed59e1d1-39b29ca41d5mr3422821a91.17.1788510820303;
+        Fri, 04 Sep 2026 01:33:40 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b083e4fafsm9628057a91.1.2026.09.04.01.33.38
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b083e4fafsm9628057a91.1.2026.09.04.01.33.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 04 Sep 2026 01:33:39 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
@@ -67,10 +69,12 @@ Cc: daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	npc@anthropic.com
-Subject: [PATCH bpf 1/8] bpf: don't infer non-NULL from a pointer with an unbounded offset
-Date: Fri,  4 Sep 2026 01:33:18 -0700
-Message-ID: <20260904083325.2083493-1-eddyz87@gmail.com>
+Subject: [PATCH bpf 2/8] selftests/bpf: no non-NULL inference from unbounded offset pointers
+Date: Fri,  4 Sep 2026 01:33:19 -0700
+Message-ID: <20260904083325.2083493-2-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260904083325.2083493-1-eddyz87@gmail.com>
+References: <20260904083325.2083493-1-eddyz87@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,54 +83,109 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-reg_not_null() decides that a register holds a non-NULL value by
-looking at its type alone. For pointer types that allow arithmetic the
-type only guarantees a non-NULL base, in case of an unbound offset
-the runtime offset value might still add up to NULL.
-Consider the followng program:
+Check that a comparison against a pointer whose offset is not bounded
+from above does not make the verifier infer that a nullable pointer is
+not NULL, and that a bounded offset still does. W/o the previous patch
+the first test is accepted.
 
-  r6 = bpf_map_lookup_elem(map, &0);  /* present */
-  if (r6 == 0) return 0;
-  r7 = bpf_map_lookup_elem(map, &1);  /* absent, NULL at runtime */
-  r8 = r7;
-  r8 -= r6;     /* pointer - pointer: unknown scalar, -r6 */
-  r8 <<= 1;
-  r8 >>= 1;     /* any non-negative offset is accepted by */
-                /* check_reg_sane_offset_ptr() */
-  r6 += r8;     /* verifier: map value;    runtime: zero  */
-  if (r7 != r6) return 0;
-  *(u8 *)(r7 + 0);  /* r7 is inferred non-NULL, both are zero */
-
-At runtime both registers are zero, the comparison is true and the
-load faults with NULL pointer dereference.
-
-Require the offset to be within +-BPF_MAX_VAR_OFF in reg_not_null().
-
-Fixes: cac616db39c2 ("bpf: Verifier track null pointer branch_taken with JNE and JEQ")
 Reported-by: Nicholas Carlini <npc@anthropic.com>
+Suggested-by: Nicholas Carlini <npc@anthropic.com>
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/verifier.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ .../bpf/progs/verifier_jeq_infer_not_null.c   | 80 +++++++++++++++++++
+ 1 file changed, 80 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e64035683795..e53619e2210e 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -352,6 +352,13 @@ static bool reg_not_null(struct bpf_verifier_env *env, const struct bpf_reg_stat
- 	if (type_may_be_null(type))
- 		return false;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_jeq_infer_not_null.c b/tools/testing/selftests/bpf/progs/verifier_jeq_infer_not_null.c
+index b412a542ef76..8657e4a0d601 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_jeq_infer_not_null.c
++++ b/tools/testing/selftests/bpf/progs/verifier_jeq_infer_not_null.c
+@@ -311,6 +311,86 @@ __naked void untrusted_mem_does_not_infer_map_value_non_null(void)
+ 	: __clobber_all);
+ }
  
-+	/*
-+	 * The types below guarantee a non-NULL base, an unbounded offset can
-+	 * still wrap base + offset to zero.
-+	 */
-+	if (reg_smin(reg) <= -BPF_MAX_VAR_OFF || reg_smax(reg) >= BPF_MAX_VAR_OFF)
-+		return false;
++/*
++ * A pointer with an offset that is not bounded from above may be null at
++ * runtime, hence it is not a witness for the pointer it is compared with.
++ */
++SEC("socket")
++__failure
++__msg("error: invalid dereference of R7 (a nullable map value pointer)")
++__naked void unbounded_offset_does_not_infer_map_value_non_null(void)
++{
++	asm volatile ("					\
++	/* r6 = bpf_map_lookup_elem(map_hash, &0); */	\
++	*(u64 *)(r10 - 8) = 0;				\
++	r1 = %[map_hash] ll;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto 1f;				\
++	r6 = r0;					\
++	/* r7 = bpf_map_lookup_elem(map_hash, &1); */	\
++	*(u64 *)(r10 - 8) = 1;				\
++	r1 = %[map_hash] ll;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	call %[bpf_map_lookup_elem];			\
++	r7 = r0;					\
++	/* pointer - pointer is an unknown scalar */	\
++	r8 = r7;					\
++	r8 -= r6;					\
++	/* r8 is in [0, S64_MAX] */			\
++	r8 <<= 1;					\
++	r8 >>= 1;					\
++	/* r6 may wrap to zero at runtime */		\
++	r6 += r8;					\
++	if r7 != r6 goto 1f;				\
++	r0 = *(u8 *)(r7 + 0);				\
++1:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_hash)
++	: __clobber_all);
++}
 +
- 	type = base_type(type);
- 	return type == PTR_TO_SOCKET ||
- 		type == PTR_TO_TCP_SOCK ||
++/* Same, but the offset is bounded, so the inference is still done. */
++SEC("socket")
++__success
++__naked void bounded_offset_infers_map_value_non_null(void)
++{
++	asm volatile ("					\
++	/* r6 = bpf_map_lookup_elem(map_hash, &0); */	\
++	*(u64 *)(r10 - 8) = 0;				\
++	r1 = %[map_hash] ll;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == 0 goto 1f;				\
++	r6 = r0;					\
++	/* r7 = bpf_map_lookup_elem(map_hash, &1); */	\
++	*(u64 *)(r10 - 8) = 1;				\
++	r1 = %[map_hash] ll;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	call %[bpf_map_lookup_elem];			\
++	r7 = r0;					\
++	/* pointer - pointer is an unknown scalar */	\
++	r8 = r7;					\
++	r8 -= r6;					\
++	/* r8 is in [0, 3] */				\
++	r8 &= 3;					\
++	r6 += r8;					\
++	if r7 != r6 goto 1f;				\
++	r0 = *(u8 *)(r7 + 0);				\
++1:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_hash)
++	: __clobber_all);
++}
++
+ void kfunc_root(void)
+ {
+ 	bpf_rdonly_cast(0, 0);
 -- 
 2.55.0
 
