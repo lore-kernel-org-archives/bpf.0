@@ -1,120 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99B8E17D6
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 02:34:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 456B63563EB;
+	Fri,  4 Sep 2026 02:45:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788489260; cv=none; b=JChJd1nnwAhKpyCz4wJDHf+TeaVrMMuF0UcW2bN3WCMtJp63ObWMmfP9k9ok6+KTrtEKvRgCEhWzmDTBXr797nvDZwE4o5btsP7fD7dF5Xmb9GUaZV98N6tag3FX/YpBHkPD2Hii3a2rjZdG+jZsYS2rUKU3JGQRt6qKj2AKT3M=
+	t=1788489937; cv=none; b=Zx37Y2gv1eEO+OvQNDcSHyPZDssaKfpx05ErLYbEbRA2fEsgzl0B56DrEv6yc7RQaeMJxY8G3T914TjrNlYtsRb6hi0HhQ8W6y1YJdLsMhiCcj8KC4PE00uLBjLHHk1STwUIqTvHtlY2CmxyTdig2RHj3y3e7kNrFiLGLRNUzdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788489260; c=relaxed/simple;
-	bh=ai/TFdmwvyCDGLS23Ip65D3OUc/ce8CRzO7+RfsUeo8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=gwiS+GWtHluSbRmvU61vDWXrSoMgxld9iavirWZ6bfq/GW0UGOqtByPTJn3E5BkUaprzttPYdPkLBIlaltCbs5e0dRTDe62aYp5VScF2Z0j6izdvVoT93azR7aBI55cLElix/NYbOACb8S//QKMpbEdrNHaN9QP81iUoVBhLjTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G9HzcdCM; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788489937; c=relaxed/simple;
+	bh=svFL5GVsyMxjyZIfVZFUtOkSOeDAIlVTUrJgAyi3XSk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Xsxh4Im8jhHFIAISgVGvYH1z3bLElq1tVPBAUTV/VmhyGpvSBCrthmtjCXmh3+t/ljY1jzhSDmz7rIiYPMDdJ9lmspkVM7wa0we0e/9RbD+aKgsABFDvC3Dvoukglx3xe6Tv0VZLEgvolx3aP1TftANMOtLDFKrLPpr108Xi2zA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=cINy1kgF; arc=none smtp.client-ip=113.46.200.222
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G9HzcdCM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 055601F000E9;
-	Fri,  4 Sep 2026 02:34:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788489259;
-	bh=H7hBSrdkmAoUxTWWgrGJPEBhNJNeU7su4diInB9tC+4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=G9HzcdCMsaq/HHY8BxO7JhHhJwOQbMpw/LNns93CciF9ocmn2blvveKpftthv/zfW
-	 qa+rF2JPxnaqtqA5M79JieOibtA0uxuOSJIA71XqUgHL2cAZcu4tDJNDyOFJ/NT7in
-	 OfCzwQziNIxg3O9A/Jy0LgWybf9ufRfxa+sEjMIzLgrNOMAZXmp5jbwIXmULWHRfyt
-	 /l8KRcGPLCPwLAzm3opKmq6yiIUXsZNS8e8/LiPSCDWgCZGchRqZ5VgR/fhwE+kTeu
-	 SCWGpxS/+mcmNOOnBFqPJ8k3Lrkp/xaUNg5KNMW+GlsOkjNsi/0m8iPYNcxNkQBqmW
-	 mY1eFiAj70SHg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v12 net-next] octeontx2-pf: add mqprio bandwidth offload
- for NIX TX schedulers
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ratheesh Kannoth" <rkannoth@marvell.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260903023324.3078284-1-rkannoth@marvell.com>
-References: <20260903023324.3078284-1-rkannoth@marvell.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 04 Sep 2026 02:34:18 +0000
-Message-Id: <20260904023419.055601F000E9@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="cINy1kgF"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=svFL5GVsyMxjyZIfVZFUtOkSOeDAIlVTUrJgAyi3XSk=;
+	b=cINy1kgFclwLdhJA3KbeBlH1oUeCPoLQa8e/26fjaRkyyiDD2TOnlfdkf6We6uYk4b6fV6AC9
+	n6/JPCwwZa0Gxdh72Ayfj8EX49k2wnXcSM4NG5FbTbIh2awM3Rh598vgapeiOnJoEE4Vlr6ImR8
+	ajTzc6Un2pGtwVwidjVZTcQ=
+Received: from mail.maildlp.com (unknown [172.19.163.15])
+	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4hbgXS4jZgzLlXF;
+	Fri,  4 Sep 2026 10:34:32 +0800 (CST)
+Received: from kwepemo100012.china.huawei.com (unknown [7.202.195.139])
+	by mail.maildlp.com (Postfix) with ESMTPS id B080840578;
+	Fri,  4 Sep 2026 10:45:23 +0800 (CST)
+Received: from [10.67.120.222] (10.67.120.222) by
+ kwepemo100012.china.huawei.com (7.202.195.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.36; Fri, 4 Sep 2026 10:45:22 +0800
+Message-ID: <4f755a7f-0a55-4292-892a-28346ed235a4@huawei.com>
+Date: Fri, 4 Sep 2026 10:45:22 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 0/3] perf/core: sched_task() dispatch and branch entry
+ fixes
+To: Puranjay Mohan <puranjay@kernel.org>, Peter Zijlstra
+	<peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de
+ Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>
+CC: Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin
+	<alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
+ Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, James
+ Clark <james.clark@linaro.org>, Usama Arif <usama.arif@linux.dev>, Will
+ Deacon <will@kernel.org>, Anshuman Khandual <anshuman.khandual@arm.com>, Ravi
+ Bangoria <ravi.bangoria@amd.com>, Thomas Gleixner <tglx@kernel.org>, Borislav
+ Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter
+ Anvin" <hpa@zytor.com>, <x86@kernel.org>, <linux-perf-users@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <bpf@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+References: <20260810133540.1947118-1-puranjay@kernel.org>
+From: wuyifan <wuyifan50@huawei.com>
+In-Reply-To: <20260810133540.1947118-1-puranjay@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ kwepemo100012.china.huawei.com (7.202.195.139)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] Divide-by-zero in SMQ lookup during MQPRIO rollback
---
+Hi Puranjay,
 
-commit ba1788f860ad0c3ea2631aca0bfc1b979830add7
-Author: Ratheesh Kannoth <rkannoth@marvell.com>
-Subject: octeontx2-pf: add mqprio bandwidth offload for NIX TX schedulers
+On 8/10/2026 9:35 PM, Puranjay Mohan wrote:
+> These three fixes were found while adding BRBE support for
+> bpf_get_branch_snapshot() on arm64 and were carried in that series until
+> v6 [1]. They do not depend on it, so they go on their own; the version
+> number continues from that series to avoid two numbering schemes for the
+> same patches.
+perf record -C <cpu> -b [<command>] triggers a NULL pointer dereference
+in armv8pmu_sched_task().
 
-This commit adds TC_SETUP_QDISC_MQPRIO offload for channel-mode mqprio using
-the NIX TX scheduler mailbox. It programs per-queue MDQ shapers and handles
-mqprio setup, replacement, and teardown by restarting the netdev and
-caching active rates.
+Commit fa9d27773873 ("perf: arm_pmu: Kill last use of per-CPU cpu_armpmu
+pointer") changed armv8pmu_sched_task() from reading the per-CPU
+cpu_armpmu variable to dereferencing pmu_ctx->pmu via
+to_arm_pmu(pmu_ctx->pmu). Meanwhile, commit bd2756811766 ("perf:
+Rewrite core context handling") made __perf_pmu_sched_task() pass
+cpc->task_epc to pmu->sched_task(). cpc->task_epc is only non-NULL
+while a task context is scheduled in; CPU-bound events do not schedule a
+task context, so cpc->task_epc stays NULL. The NULL argument is dereferenced
+and crashes.
 
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drive=
-rs/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-[ ... ]
-> +static int otx2_mqprio_restore_old(struct otx2_nic *pfvf)
-> +{
-[ ... ]
-> +	if (otx2_mqprio_mdq_allocated(pfvf)) {
-> +		err =3D otx2_nix_tm_clear_queue_shaper(pfvf);
-> +		if (err)
-> +			return err;
-> +	}
-> +
-> +	/* otx2_mqprio_restart_netdev() clears rate_limit when ndo_open() fails=
-. */
-> +	pfvf->mqprio.rate_limit =3D true;
-> +
-> +	err =3D otx2_mqprio_up(pfvf);
+With the patches applied, perf record -C <cpu> -b no longer crashes,
+and system-wide perf record -b -e <event> -a alongside a task-bound event
+on a different CPU runs without any WARN_ON.
 
-[Severity: High]
-Can this lead to a divide-by-zero if ndo_open() fails during the replacemen=
-t?
+Tested-by: Yifan Wu <wuyifan50@huawei.com>
 
-In otx2_setup_tc_mqprio(), if otx2_mqprio_restart_netdev() fails (e.g., due
-to an allocation failure), the interface is left stopped and the TX schedul=
-ers
-are freed, setting pfvf->hw.txschq_cnt[NIX_TXSCH_LVL_SMQ] to 0.
-
-The error path then calls this function, otx2_mqprio_restore_old(), which
-unconditionally sets rate_limit to true and calls otx2_mqprio_up() to resto=
-re
-the shapers.
-
-otx2_mqprio_up() calls otx2_nix_tm_set_queue_shaper(), which eventually
-invokes otx2_get_smq_idx():
-
-otx2_common.h:otx2_get_smq_idx() {
-    ...
-    idx =3D qidx % pfvf->hw.txschq_cnt[NIX_TXSCH_LVL_SMQ];
-    smq =3D pfvf->hw.txschq_list[NIX_TXSCH_LVL_SMQ][idx];
-    ...
-}
-
-Since txschq_cnt is 0, won't this cause a divide-by-zero panic, or silently
-evaluate to an out-of-bounds index on architectures that do not trap on
-integer division, leading to malformed configuration commands being sent
-to the hardware?
-
-> +	if (err)
-> +		return err;
-> +
-> +	otx2_mqprio_snap_free(pfvf, &pfvf->cur_mq_snap);
-> +
-> +	return 0;
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260903023324.3078=
-284-1-rkannoth@marvell.com?part=3D1
