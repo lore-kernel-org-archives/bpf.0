@@ -1,61 +1,61 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BEC83E3C4D
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 08:33:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 339AF3F7A9B
+	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 08:33:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788510826; cv=none; b=dHFgqcyMerINaPbVzgIEUh9ihHkqALMA9g6fvqW01H0h4wDixExUdqXL/sCTZD3W22STrkKTAgk8Q5RApeEMo4obOci8p3CXUDahilaVxp6rAFG3pumGU8iV/h9+1n71LFJ7ay7XnEEX0dH/MO8r70nrD2nliTJTKWCmUa9giGA=
+	t=1788510827; cv=none; b=kEBKJ8dEGKra16eCNpwnjWiJFDt+DOytiyLMxlb0ULluyd1WL1ajdW+F56xqXi22SHBgn5iFUrs0/nMgUy4tUP5NAxZr1cP4I5NqUzcNMCSwLcReBIYW5T/mBXAqOYx0vGC7fHqdNNS1KcJkLxbUf+Kn4ZJ04IyWJxqxQlf74Kw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788510826; c=relaxed/simple;
-	bh=i8OPUhL4lUFFYi1+aCREuhyOOP8gIxyPhwlEkG5v80c=;
+	s=arc-20240116; t=1788510827; c=relaxed/simple;
+	bh=Kbq/5Y6/K0I38/VGWvmCrHZVYXA61WnjmQbU+4aDfzE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JLAkpqvcMGowiCUpYRSLfsCXZqtHgWz8pXD2MRcBgJoqAJrKxJJjSfgQwFAvzaBbDuJkNFbQzKZTh1kpXBBN2ZYN0qARNA+EnRG5iXqKwSEdQLe2cJrId8vtFQVnAZs04QV7yTJlucYgUz7omwo5zWgQeLTuylchisewqp0ocOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=renbHhl1; arc=none smtp.client-ip=209.85.216.44
+	 MIME-Version; b=jJFX3HWTdLoO5jP9Wu5/g2z3aAk+rWS9FrioayfL9WJekF0CjZjSbq1ohICbjMWNfbq28umJS9mkcjwb7vWQpdvfssxdhcTvyShXWWH6B9FVlb4U4R3d6Pp31h7qaIOap/NGfumtniLuaSppRB7BkLR47ibdmIB07KT4lEX/Uzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pAI24Mt+; arc=none smtp.client-ip=209.85.216.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="renbHhl1"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-395cf2535acso823991a91.1
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 01:33:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pAI24Mt+"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-398b1e63c49so1779414a91.0
+        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 01:33:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788510824; x=1789115624; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788510825; x=1789115625; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=vC40WbPgq+piJeq0gDg1QKCEupI2KwPTGsvEsuRJKWY=;
-        b=renbHhl1AC4XoZELTzieZGYDYvlUvP46DhahZ3PuYLUzUn/nTgWL6Pw3Y7FVJY1V34
-         aadMg+MG3QrG6umr80B9XWf1BqyMUIAexMwb0/kqUXDNkbrdl5HbxRsUnD8JgwgOQ9Zo
-         1kJHOkgHpPKSjJE+fPq2RB+D0Xdxgcm992tZjZOL/RfpN0iSuM1mtFQeEaEeH/W1B9ft
-         JaDINpO1XRqvkBwPQy5eN4QNB0rm1wSQBX2M4JMzoovZfFECt0DttKdHc6gbwPlAoz63
-         fk8LvZzYWTdSG9fuMcIgUSgiFQ4smI3aib5BSTk+sAjqHDhSHkdGqK6JzrxIBaK2y/pe
-         nOvA==
+        bh=LVR3wWJmEZHGLx0diAbkmeNaZxYOBSxuiyZgplyz7gI=;
+        b=pAI24Mt+rdth7753JNOuJkP2d/k3oLBFHd4ITfScP9WU91IaDR0UprF7c1k46skLqQ
+         cZaXhG7qF8M/SvdZ3WJOTqjDAgbqx7d1g3SrPNXEyrLOgDOjI6g+sZyZH0t9cAVvrEaO
+         4QehMmLcOlgS6I4xZmnMxG5V0UzGkVZmTBdfyV6dmN1wBE/c/zm2wW7hEjZ5HXZUNuam
+         AMsWOYSaT7AHNcft1R/e5nLZXdoPXwrBJzpXnl+RuCCvQS4alo7JuoOBwFzygTZ825Df
+         gDYpaWdB+05N/vUL6QcCI6x7sj4dpore2eHxo2dj5wMWDmJnW4XXvD1X//dZ0sMiFoJ1
+         RQLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788510824; x=1789115624;
+        d=1e100.net; s=20251104; t=1788510825; x=1789115625;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=vC40WbPgq+piJeq0gDg1QKCEupI2KwPTGsvEsuRJKWY=;
-        b=Hb2D8oKoBacMGsyGHr66ynAe7jqFYjpzMRn3R7o+zboOTHJbeoMTo77RYjOYRxPfi8
-         +a1z7sTmgYUqq8UDXuY7r8ZYLalAM+bODY+XNnUT8Fs2rvqwpx/sgYC/AVw9FMA6aEro
-         QP2QMH1qZ6bKAdnDzdgdRFrSUKogg7+HZ+efttDD9ajsZksxqaUNJIAQnrg5dGus2ebe
-         ItmV1yz/KrKfiheD+BDpdIqE+MOx3oX4VbIzIz0SxMcw8D0oB2/zWNDQ9peDbqkWBWxr
-         0Nls4xd0kV+A8GkubtgPl7/ZGA0rNShwDAicCpYMjBiXSe5jsqXE9CveWxPfpXOQWeLM
-         xIWg==
-X-Gm-Message-State: AFuF++k+VYYM+JEFTAhi/CYP9Y+4SisP+pFC3Z1FNlhcxgh3MbWgtjHa
-	NAGmQnflsWOVzVfBlNqaMxI4Mw+ywq9V1KRU31Bvegd0xULl4ACDE2nnouU2ByN45vs=
-X-Gm-Gg: AYBFou09lgC6Oux+U48eCdWt8dr3sICoj2KB2xFn9/YDyhjsvwEtaxE+FYQL8fs2/mI
-	5neg5rT59p/JVInvvZ7pkvBVrXgInBLL0GXrWbrhHFZoyYjptiEr9BbWEfPMVHLwfS8CCxWuRc5
-	0uRjtgH40y1BgTAQpn0+NcTGY4MEtUkjQ2bfjQvaLVjCoDp/DgIgQFpMDZWlEKsVNHCm6quQ3UM
-	gqd6G+srxMUpSv5v2wdOTSRB0XU9OEbEJFCco73GESHXrZxnTr8nmezflMT9vktC9ELFAzBeLZd
-	Za5xZ6hdTrslQErzHWCf0NvFc+lPDTjjY2cPUQd3hWCeEzL/b0oGYcbV9SSS7WgirqZffpABChJ
-	KKQ9uz78mN2SZr+Pz/CCCOfGMvaNLwed2t2qbu4OrCefBWH9tldJTU7Uq5rifGenaf0TJ1xWREb
-	1qMFDs4M+jEhW0xTVpP5AtEqs5gU1A7Zi00mGFytqQbCmsB5/xbsJBLkk1wk74eFqcqm7cERMmI
-	+R0OmQmRE7Z3L0gN5EF7iYaiku0VtcM
-X-Received: by 2002:a17:90b:4c09:b0:398:9bd3:d6d1 with SMTP id 98e67ed59e1d1-39b27d7894cmr2650053a91.11.1788510824448;
-        Fri, 04 Sep 2026 01:33:44 -0700 (PDT)
+        bh=LVR3wWJmEZHGLx0diAbkmeNaZxYOBSxuiyZgplyz7gI=;
+        b=hoKilKuJ3aW8cEqDbwdE9h/w7IbqNtf4uDpZz0Q2Z20Gku7j/fUuEMIuvJyKSQxO1N
+         uENfzXto2ZT4nTvu8FUD5ZyoBXV74Hu0XKcMr8A6TA9rptDU3XVeOdlumfuqMEOp2sfI
+         ImtWpUiE1ek66m6+dBlyTu5L3sltIrJp7Uf4yQWxOIc/QVUkKUSezFVovMv6C+H5HQXO
+         gUPmPF/BdwMuNU2SXFLH9X1WspeTfAvshSArPesnH+SUwhMhTn4QpCL3C50+d6JdLFFr
+         kc91AD87RuG0VFU6s9biB+mEplks04mrD/RKW86W4zLUXD9SreRNFRIaFZM9vKIVfiif
+         Qu9g==
+X-Gm-Message-State: AFuF++niTXbyC/KDYhO1+17su2tWeYFAKC6Q3cfPXJH2oMnhS/XNFD4U
+	9G+X3Ab69KFzST2R52hBTAFuSGTDyQxRdG8xWhYFohj5kooWYrnZRyHFNj1UTkWEbpQ=
+X-Gm-Gg: AYBFou2onPO2j5iDhYga4hdqvCGzEYDSoE4hMi2CUrQzxik/F5vsHgI9jgJbNmvT/yK
+	5dc/8X2TnDIIRUgpZWGFgJ3gQPh/7nmUGxED6wlFxIO80I/+udcTCm7eEGze/mqucYLYkWPxVjE
+	TKoDLO1B751R0TPpuJb6Z4WX41wQv/SJzbZTd1H63ftmQvroALLttpVVrIwMFc+W5JrwpO1mwjR
+	CX3ra2IjZYWfJuR8acvxIjEaWFbU3Ul4istoIZNm1So9gf1J0livdOfz1StCER3eXvPwJP3ostZ
+	T0u79MqAE3oALte1oddUsWKQvkVPu0Zxk03oVCYMRQP/ydTkR4afa+l3xKL+1pdipm37EoRPslk
+	c06gTtM5OQTuGynqo1lr94oRGvGgM7evUG+JLTDRSWvjrbKvfunHnUU1bmmdGuxRccfIoifW0ps
+	rBe7isEMPtInUKAkcNcvDru/l0C+3OILFp96NI60p2vOzoF2eYL87fIEIah6+5/Q6XqiOOoGsDy
+	7tM6JQ8eZsqmVvn/KogBl2BkFO6+q2iFYwVVge4KmY=
+X-Received: by 2002:a17:90b:5585:b0:390:84db:888e with SMTP id 98e67ed59e1d1-39b27c8ebdcmr3009205a91.7.1788510825409;
+        Fri, 04 Sep 2026 01:33:45 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b083e4fafsm9628057a91.1.2026.09.04.01.33.43
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b083e4fafsm9628057a91.1.2026.09.04.01.33.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 04 Sep 2026 01:33:44 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
@@ -69,9 +69,9 @@ Cc: daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	npc@anthropic.com
-Subject: [PATCH bpf 7/8] bpf: mark the zero register precise for a register-form NULL check
-Date: Fri,  4 Sep 2026 01:33:24 -0700
-Message-ID: <20260904083325.2083493-7-eddyz87@gmail.com>
+Subject: [PATCH bpf 8/8] selftests/bpf: no non-NULL inference from an imprecise zero register
+Date: Fri,  4 Sep 2026 01:33:25 -0700
+Message-ID: <20260904083325.2083493-8-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260904083325.2083493-1-eddyz87@gmail.com>
 References: <20260904083325.2083493-1-eddyz87@gmail.com>
@@ -83,56 +83,62 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-check_cond_jmp_op() accepts "if rA <op> rB" as a NULL check for a
-nullable pointer rA when rB is a scalar known to be zero,
-lifts PTR_MAYBE_NULL from rA in the corresponding branch and does not
-mark rB precise. Consider the following program:
+Check that a register-form NULL check does not lift PTR_MAYBE_NULL on
+a path where the compared register is non-zero. W/o the previous patch
+the program is accepted.
 
-  r0 = bpf_get_prandom_u32();
-  r6 = 1;                  /* the r6 == 0 path is explored first */
-  if (r0 == 0) goto 1f;
-  r6 = 0;
-1:
-  r0 = bpf_map_lookup_elem(map, &0);  /* absent, NULL at runtime */
-  if (r0 == r6) goto 2f;   /* taken as a NULL check for r0       */
-  *(u8 *)(r0 + 0);         /* verifier: map value; runtime: zero */
-2:
-  return 0;
-
-The r6 == 0 path is explored first and the dereference is accepted.
-The r6 == 1 path is pruned at the checkpoint recorded for (1),
-so the comparison is never verified with a non-zero r6. At runtime a
-failed lookup returns NULL, NULL != 1 takes the non-NULL edge and the
-program dereferences a pointer that is zero.
-
-Fixes: 2f4cb53eed44 ("bpf: detect non null pointer with register operand in JEQ/JNE.")
 Reported-by: Nicholas Carlini <npc@anthropic.com>
 Suggested-by: Nicholas Carlini <npc@anthropic.com>
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/verifier.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ .../bpf/progs/verifier_jeq_infer_not_null.c   | 34 +++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index bb8e9efcfbad..709b4793e8eb 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -17024,6 +17024,15 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 	    type_may_be_null(dst_reg->type) &&
- 	    ((BPF_SRC(insn->code) == BPF_K && insn->imm == 0) ||
- 	     (BPF_SRC(insn->code) == BPF_X && bpf_register_is_null(src_reg)))) {
-+		/*
-+		 * For BPF_X the zero is a property of this execution path,
-+		 * hence src_reg has to be precise.
-+		 */
-+		if (BPF_SRC(insn->code) == BPF_X) {
-+			err = mark_chain_precision(env, insn->src_reg);
-+			if (err)
-+				return err;
-+		}
- 		/* Mark all identical registers in each branch as either
- 		 * safe or unknown depending R == 0 or R != 0 conditional.
- 		 */
+diff --git a/tools/testing/selftests/bpf/progs/verifier_jeq_infer_not_null.c b/tools/testing/selftests/bpf/progs/verifier_jeq_infer_not_null.c
+index 410acbf658c7..3c789c565b18 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_jeq_infer_not_null.c
++++ b/tools/testing/selftests/bpf/progs/verifier_jeq_infer_not_null.c
+@@ -418,6 +418,40 @@ __naked void jmp32_ptr_vs_zero_jne(void)
+ 	: __clobber_all);
+ }
+ 
++/*
++ * The below program is explored in two paths: r6 == 0 and r6 == 1.
++ * On the first path comparison "if r0 == r6 goto 2f" should mark r6 as precise,
++ * otherwise unsafe path with r6 == 1 would be incorrectly pruned.
++ */
++SEC("socket")
++__failure
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("error: invalid dereference of R0 (a nullable map value pointer)")
++__naked void imprecise_zero_does_not_infer_map_value_non_null(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	/* r6 is 0 on the path explored first, 1 on the other */\
++	r6 = 1;						\
++	if r0 == 0 goto 1f;				\
++	r6 = 0;						\
++	/* r0 = bpf_map_lookup_elem(map_hash, &0); */	\
++1:	*(u64 *)(r10 - 8) = 0;				\
++	r1 = %[map_hash] ll;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	call %[bpf_map_lookup_elem];			\
++	if r0 == r6 goto 2f;				\
++	r0 = *(u8 *)(r0 + 0);				\
++2:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32),
++	  __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_hash)
++	: __clobber_all);
++}
++
+ void kfunc_root(void)
+ {
+ 	bpf_rdonly_cast(0, 0);
 -- 
 2.55.0
 
