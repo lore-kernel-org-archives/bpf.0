@@ -1,65 +1,65 @@
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19DFB36B91F
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 20:48:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6061397E75
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 21:29:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788641292; cv=none; b=U6tE84D0UwQZ5uE6o99/9kb0TKsBqIaRw4rxUx2zhBveuhrbR5hYIoCZEgXcWP3Cfcb2/cJYSYct+Q3fB9XaE8eZyht724sjc9xznpAKjLk2NXCNR3JnS44v94xA/eP6TlTlgElTEN901+LqWiltm4gbx+pQYUj9lsC+z7SkQzQ=
+	t=1788643782; cv=none; b=XTc3PZR+VplvPStpjQ3OHAp6p9//3vtF1njIcAhjo9Csi6bl82lB0eJXFy8AJmMeo03WHfqeeFk77gRcDcAb+X1sFRJ9PvVNZ7TEVPJORDdAgzNuxXxS6Jskbeq77Tvo0JUa7Oge/Oj45cyEllvi1hVLUcL6dismCxtga6BI74E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788641292; c=relaxed/simple;
-	bh=A4kGqd0Z3TmiaTsoJKHYGK16iKhgkKr2v7xKHWcW8Jk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=USeMtBWzFp1pjipv3LztV0s3/t58EQ2sI378vgXXzGrSQ6QpCWksgUs9I9yu/pBvkjwtsi3R2jSTzD7XEcSYY+ckQjl8kX8LfT8Od/dMf5oko3cq8DTLQlBIX2FCPPzlezGMxRultgju9GskVU0t+yJ9r0lvhfin5RGkL3b193c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TQmwLBMA; arc=none smtp.client-ip=209.85.167.173
+	s=arc-20240116; t=1788643782; c=relaxed/simple;
+	bh=GS2fEMFBUVhajDpP3zSZFxMqp0jKTSPYaGNLUwEWlA4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=hnW1g9+/LeIH4nA7cFuEELSFDaupOq0xepEjwesFEXs889I7PzctN9M3A+johExl7CTtOxBfu0mSzMVeBKxBuBXNylEaJOoKPPuARD3BL3XH2yh3WoBaDVMVblePGgOEmB9APRvOoyfz/wPLsd/h5IdCS2WYl2HJNaeoQJWjtHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ThWJF3od; arc=none smtp.client-ip=209.85.210.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TQmwLBMA"
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-4a45b3f0becso1747016b6e.1
-        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 13:48:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ThWJF3od"
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-7f3ece23165so1980538a34.0
+        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 14:29:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788641290; x=1789246090; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=gmail.com; s=20251104; t=1788643779; x=1789248579; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=Ll8R3SutNJw3bcBCy/eZULKcMm4QgvHNZq/L2aK/wXs=;
-        b=TQmwLBMAuyII/YRRQ0ok4KkelbJrdPaCVnaxKCPlpp8TOtEvYj4F6K15atKfo3GoOy
-         xgFbufcRqNnupPCAScbXuUK4HI399QMCMg4CDMCp/yH0qKoyAOvi/irWw+5Blvu8lJjS
-         ga9yP74XfrVASuWa89Li4HRouF3ADhweUlkXUcRXK+W8jJfeoX60JB5VLc3TwkVLDEAv
-         bs+lp2POv8QE03Qv/gI4aUfW1k5nmgBYswJZyiKBMZjuYJR2Qzuz5RHGGa9DdJkMIVcz
-         Y5hHFWtdKntCbmeK+aBDjwe/ZLNIIefq/PWACpMyMt7IIYs2XeEC8fl0jB0ZMHIc4Rgh
-         olcg==
+        bh=GS2fEMFBUVhajDpP3zSZFxMqp0jKTSPYaGNLUwEWlA4=;
+        b=ThWJF3odswcaqK1yq3AiRhnOA/lhbJmLnmzoi1O3LbNnQzTfCdbkcEfU99ZiNps1I2
+         p0bCIe6fjUq9m2ZxLzsQj8+7ntbTZh8RWQafJJ0dqvonWK0EKqOEz8mQJa9q5vsY1G6U
+         jBhbGbnXI5Ni2YqVAQPx5AkyrsO/1B2kT7FVjbF5DBE6BYLRxT7vui5B9ksr2jEGfhgf
+         8eeaKW2on21JM+F+kGd7X+IsresbYyaG8k9MPGXAc5bt9AKh/tKIsOWxoiWP06qyz+XI
+         P+Yb3nGi+dnsuoE+FlBmec9Jr+U4V9V+dc3zCyD0gcmywK1s2GuPc2FC21PxsoWZ+/6X
+         3aXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788641290; x=1789246090;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=1e100.net; s=20251104; t=1788643779; x=1789248579;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Ll8R3SutNJw3bcBCy/eZULKcMm4QgvHNZq/L2aK/wXs=;
-        b=pgdvYhhfx4Y3Rjboj0SzhqCpBGWT5Z+/nv4NvmobyVuP/uu7mV59As8pqpHSP5j6a1
-         7J0EIxuvmwDTE0fDtobnC8vnapWCrlDCEe/KWMU6t9bq+YG/5K3UUDFWhxBr5PXJ4DjE
-         KaFUzTfFkjdOpE50Kj9SchJh7bWKWtyLwU2jA0wk/hWcvmCTuwXZ3ZvluPLHASrJX4RJ
-         EGwOXBdQ10sPxiTvp3u346/k/6yeAFO25SaKx9zZ0pnIiXG4QqE7HelQqB/C1N4aTCPq
-         hj72frbKhCvFCq7InIl9GOe8Agm1AwVkCxkyYoTg667fXn9zDTeZFIiW6HuSrWkcI8W7
-         GB1Q==
-X-Forwarded-Encrypted: i=1; AKwUvBxti4xdBx42wG5ekUzNXKl+wBHp3nidPbdHaX92bn76j5+Ckqq3Q3A9t44g8xACLh/AMwM=@vger.kernel.org
-X-Gm-Message-State: AFuF++m4I98aG6tyvOQXeuyKQOwvLCrmp1aCk1Xfmq2LG3/4obYtCjTj
-	YjBmPCFRDcDj208RvDu/NHHNPG8KQ6wODUV6BIPEtxMcKo51IvYHG3KS57V7nw==
-X-Gm-Gg: AYBFou0g8GuyvveFpdL8A9ZACynNZoLHOHtTKBq3xp06+nzUHSFJhUxt4iGUob3Nv1W
-	Ik+QB43jD6GHwB3Yecq6RWIgGq605Z1R8bbL+vPp5NjOj8oa94zrOXZTsDu/jOoGLfr78B0n07d
-	4+r61VS9MQvKXS1fEF9t9dPKfs9q9N+++HMfcyfdNJd96s/4qy57Xi7gTj3sFfy9CsjiaUh50Ys
-	ysWwRMwZTVkN87EiScptI2CpM1iKCvsVOyRbEO9eRhx92GzpeiqtcyL58HWQU9wXk/3W8SU8ItQ
-	PWH6bGZxhSEnquZtTVHC8QTsbhN8zPKpUGLp9YtEVjBMWaQub6KckOngjaJDHbrfMbozA4KFkld
-	ZEU9EUopfQyn5z8vRBmD6uwuyWnxGLqnEE1XCFj8CgP2ihthaKLE2GYnHky0ef7ZuCvzEIA4fxY
-	hp3+X5QhlBmavbZwEgqdcNyO+u1buaK+UE8D/vAeHs4o9sFDeg2JZwdlD4OhLjGJQ6b6Hk8g/+T
-	HLMd3xS+O5lyYbbQhFbSjBgoUIjKsZPmYRQVKeJr38dnfVItJT+4S9akGnNUgU6IQ==
-X-Received: by 2002:a05:6820:1623:b0:6a3:1dc5:3570 with SMTP id 006d021491bc7-6b6fdac419amr8644519eaf.31.1788641289753;
-        Sat, 05 Sep 2026 13:48:09 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:73::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6b6dcb85657sm6928741eaf.7.2026.09.05.13.48.08
+        bh=GS2fEMFBUVhajDpP3zSZFxMqp0jKTSPYaGNLUwEWlA4=;
+        b=hHPGPYCHy1vs49p+piAVog54r3VYyO/K4RUBWZUOLS7jPwi1c1KmdteyHwBMig1tuj
+         9oKMjX321fwi989nHL0o1GQQCALwaijlb0GjpPauMo79Nr/E1ma/zRFapxqd5oT7snZ9
+         OYPDJKDVx+l/ZuO7w4didMWnmZH16XzVPpCPXN3GUYL6fnI+tH4a2zskKor7XaxI52+/
+         n15WyCzz2xSZn2d6PjKUkNIR4zTZSBq7Ml+H3Gjkzokd6kZSP1r7Fm0I4IbwT5T2O31p
+         wSz+JV118RxTxXt2kyypkGQ/QKHL4N4KiWY5cocbkiIsUGUvLNcI7iOYUZyB1+o53FxS
+         uMZQ==
+X-Forwarded-Encrypted: i=1; AKwUvBz8GJ1qDTcJPZ63duwdKlTSFvGxXKLtj8XuAo3CDDMoXoHEsoKqL54IfRijIQyzL4kwon4=@vger.kernel.org
+X-Gm-Message-State: AFuF++n/fvjzoRHbxEwz/QwCtLUNeD2G8mr56ydluE0uBqYOLPrNhXK7
+	ypf0GNyp3FOuQefrsaR9+vmLcyDKGOz71ypRqwHMLBdN68W+V+LJys4tJaO0BQ==
+X-Gm-Gg: AYBFou1v+VLv5fJ4IdEwNUCAs4jVCVCpH7ieysvE8KXPVScRfkw/fKqe4hL4sZdxZL6
+	96XkwrTdc6A6KdtqcjzBHdLCEceaX67/Ukx6Bbu4zcO4A6Fxz0/tWjlFJRMsbALoq60SPOfGiP2
+	th5Vk3w2Gb8E+PiedBiZQc6c64qFS2PBvUVwEkNsoY7gvxkqdd7bJPdKb2AZSjUyfUFlChFge0U
+	NQU0fPysJuCNpqlUjqZ7gyQpLs14xaBDylbuvCuZuK/+CP/7tAoHh2oMr3KXrRVz/NVPmYOh5CL
+	TK0jdjcgggpuucouoc+46zFysl7WEDkHvmVEa3BLYBONgVjsKMqrlY1c/dugX7JFoejhx3Cce9G
+	VBA91ovWi3aKFTuu332rjWnKsp1gZ/v4CoGC6+YVLdRNuxguW5kjaWNSS4VjsyWB7zoQfPFc7Hu
+	b4LBHZG+tNiux7QMjB0/R6udW/9qQe2t+fOMP7ZwHyVmJuevQ96fMD14RdOSuqNu8k+6O+I74ST
+	3Xf0nK05XeHCjqEf+cq5OaK5fe8ukjxIVFEDzkIWAe6rbQxtMdsR05Z1BdctW8HxA==
+X-Received: by 2002:a05:6830:2544:b0:7f1:ddf1:c731 with SMTP id 46e09a7af769-7fa1fe6b941mr10802928a34.13.1788643779382;
+        Sat, 05 Sep 2026 14:29:39 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:53::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7fcc45d7852sm1178325a34.20.2026.09.05.14.29.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Sep 2026 13:48:08 -0700 (PDT)
+        Sat, 05 Sep 2026 14:29:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,99 +68,55 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Sat, 05 Sep 2026 13:48:08 -0700
-Message-Id: <DL7OF45PMXXL.M40Z5M90EVCF@gmail.com>
+Date: Sat, 05 Sep 2026 14:29:38 -0700
+Message-Id: <DL7PAW1GJ5EE.3A8VB5PA5K3H2@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
 Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
  <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Eduard
  Zingerman" <eddyz87@gmail.com>, "Emil Tsalapatis" <emil@etsalapatis.com>,
  "Nicholas Carlini" <npc@anthropic.com>, <kkd@meta.com>,
  <kernel-team@meta.com>
-Subject: Re: [PATCH bpf v2 3/7] selftests/bpf: Test packet pointer class
- displacement pruning
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v1 1/3] bpf: Validate graph ownership with a
+ bounded walk
 X-Mailer: aerc
-References: <20260905083418.3723623-1-memxor@gmail.com>
- <20260905083418.3723623-4-memxor@gmail.com>
-In-Reply-To: <20260905083418.3723623-4-memxor@gmail.com>
+References: <20260905090750.4064411-1-memxor@gmail.com>
+ <20260905090750.4064411-2-memxor@gmail.com>
+In-Reply-To: <20260905090750.4064411-2-memxor@gmail.com>
 
-On Sat Sep 5, 2026 at 1:34 AM PDT, Kumar Kartikeya Dwivedi wrote:
-> Add two paths whose packet pointer ranges are individually compatible at
-> a join but whose members have different relative displacements. The first
-> path proves an eight-byte access through one member. On the second path,
-> the same guard only proves that the access starts before data_end.
+On Sat Sep 5, 2026 at 2:07 AM PDT, Kumar Kartikeya Dwivedi wrote:
+> btf_check_and_fixup_fields() prevents graph ownership cycles with a
+> one-hop restriction: a type that contains both a graph root and node cann=
+ot
+> own another root type. This limits graph ownership chains to three types,
+> but also rejects longer acyclic relationships.
 >
-> An affected verifier prunes the second path and accepts the program. With
-> packet pointer class displacement preserved, it explores that path and
-> rejects the out-of-bounds access.
+> All struct metadata is available once field fixups finish. Move ownership
+> validation out of the per-record fixup helper and walk graph-root type
+> relationships directly at BTF load time. Reject cycles and chains deeper
+> than eight record-bearing types, which keeps recursive destruction bounde=
+d
+> while permitting safe acyclic layouts.
 >
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
->  .../progs/verifier_xdp_direct_packet_access.c | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
+> Keep the depth limit independent of MAX_CALL_FRAMES because graph teardow=
+n
+> can run beneath a BPF call chain. btf_check_and_fixup_fields() continues =
+to
+> initialize graph_root.value_rec, including for the separately allocated m=
+ap
+> record. The ownership relationship itself belongs to the immutable BTF an=
+d
+> therefore only needs validation once during BTF load.
 >
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_xdp_direct_packet=
-_access.c b/tools/testing/selftests/bpf/progs/verifier_xdp_direct_packet_ac=
-cess.c
-> index 0b86d95a4133..692a8468f3d7 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_xdp_direct_packet_access=
-.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_xdp_direct_packet_access=
-.c
-> @@ -5,6 +5,50 @@
->  #include <bpf/bpf_helpers.h>
->  #include "bpf_misc.h"
-> =20
-> +SEC("xdp")
-> +__description("XDP pkt regsafe preserves packet pointer class displaceme=
-nt")
-> +__failure __msg("R2 min value is outside of the allowed memory range")
-> +__flag(BPF_F_ANY_ALIGNMENT)
-> +__naked void pkt_regsafe_class_displacement(void)
-> +{
-> +	asm volatile ("\
-> +	r8 =3D *(u32 *)(r1 + %[xdp_md_data_end]);\
-> +	r9 =3D *(u32 *)(r1 + %[xdp_md_data]);\
-> +	r6 =3D r9;\
-> +	r6 +=3D 8;\
-> +	if r6 > r8 goto l_exit_%=3D;\
-> +	r0 =3D *(u64 *)(r9 + 0);\
-> +	r4 =3D r0;\
-> +	r4 &=3D 15;\
-> +	r7 =3D r0;\
-> +	r7 >>=3D 63;\
-> +	if r7 !=3D 0 goto l_path_b_%=3D;\
+> Update the graph BTF tests to accept the two acyclic relationships that t=
+he
+> old approximation rejected.
 
-why all the loads and math? Are they meaningful for the test?
-I suspect the test can be reduced in half.
+Are you saying old approximation was not correct?
+Pls explain how it missed it.
 
-> +	r2 =3D r9;\
-> +	r2 +=3D r4;\
-> +	r3 =3D r2;\
-> +	r3 +=3D 4;\
-> +	goto l_join_%=3D;\
-> +l_path_b_%=3D: \
-> +	r4 &=3D 3;\
-> +	r4 +=3D 8;\
-> +	r2 =3D r9;\
-> +	r2 +=3D r4;\
-> +	r3 =3D r2;\
-> +	r3 -=3D 4;\
-> +l_join_%=3D: \
-> +	r5 =3D r3;\
-> +	r5 +=3D 4;\
-> +	if r5 > r8 goto l_exit_%=3D;\
-> +	r0 =3D *(u64 *)(r2 + 0);\
-> +l_exit_%=3D: \
-> +	r0 =3D 0;\
-> +	exit;\
-> +"	:
-> +	: __imm_const(xdp_md_data, offsetof(struct xdp_md, data)),
-> +	  __imm_const(xdp_md_data_end, offsetof(struct xdp_md, data_end))
-> +	: __clobber_all);
-> +}
-> +
->  SEC("xdp")
->  __description("XDP pkt read, pkt_end mangling, bad access 1")
->  __failure __msg("R3 pointer arithmetic on pkt_end")
+Probably better to merge patch 1 and 2. I don't see why they're split like =
+that
+and patch 2 immediately fixes patch 1.
 
+pw-bot: cr
