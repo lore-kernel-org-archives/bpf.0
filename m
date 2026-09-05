@@ -1,333 +1,147 @@
-Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02F935E95C
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 01:00:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90FC2F7EF1
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 01:20:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.178
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788570047; cv=pass; b=KM7/bWhmhdt9UhNumvRWSiD1GLlVTX9VRTc+X1Hc06tvuxWB0YU0/FOHVOjfkcU7LgZK5QWZJxpwxk49fgdNILW8oFbzdkP8y3t1SrPgXDrPZzKlDfkfExA9uHbXCOBbS/vfxbZ/gNH49q7E/h1CckGAlzL3/sApQeCRscxwJ1E=
+	t=1788571242; cv=pass; b=eCugpE6i7HPrkh8dzLYSsYTuF1UhUltL1KCcCswJ9Z37EATck28h+bHxz77daW2VF6pTLw7gFIiyG0RraWHkuHI38KpzUWnng88WRnLezPr+Iexa7k3MNZRSRgo50y0OaAs+VYcsJWU4juoyHAkkei6kQsv7h010hITl8X5abc0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788570047; c=relaxed/simple;
-	bh=Elwk7VmEoGhL32FW/Nx3bR/piitjtLgz4SNrUhNzp54=;
+	s=arc-20240116; t=1788571242; c=relaxed/simple;
+	bh=P/Hbu0V5Vc4QgElq6BDPyNbu7w0tz8nmjZRMAFRdhVQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RKlyJEumIUXmHMKefuGgS8y9tQiSS0qQSq8PNbVCYLNlFjQMXi/IyOQGyjby4pcw4ZeafX4U/2iby5WAaVt0oqvFA323OFQicEiPcekoaw1sicRQTT1ezfzo1vF6JBv89mHU9SkqFIkrmmOMCNNOrES/fdiOt0rK4ZmpV7y7L+w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=qKmebhjq; arc=pass smtp.client-ip=74.125.224.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	 To:Cc:Content-Type; b=S+u2wxwnmBz8747dCJYledURqldv8JhQKCYR+VODp34q9NUEIkG5SeLq4ndpTimfyN7z/aDzGMsODQu832AIPBZdWcC+mk1L5u2jir1fRfQPxoM3DwMAZLrQbkA8x4q4EaqtHFxAgX16RLUsxYvn8MFz41kd2TRtZd1oMmiBJSg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gfEhKl0I; arc=pass smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="qKmebhjq"
-Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-66825847b2cso2419347d50.3
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 18:00:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788570043; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gfEhKl0I"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-852c481415fso1620446b3a.3
+        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 18:20:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788571240; cv=none;
         d=google.com; s=arc-20260327;
-        b=IfXkf81zbTIh/lOGkFSQSDzk9+P3KezXbLAcoHkY7vMJkvFMWdnZ88VipsFqp9g9Pf
-         wpYlpU1gNOUZNrWf7lA1IxKmzdMuYNigjqaa7FjujOYnQDsPq/crVOavnuZFiSuaLs2E
-         pzZx7uAQzMcrVwZgOwLGqcRZnAdkxvC/An+F50YYcvsaXHtmBQEhX26zV9XewDRCuepG
-         yFIaOnW8MXLSpw2uW+IH+E+RSunZO8psBPERhyJ1gue0ENXkh7dYZIqN6KtInCPeOFPT
-         S7P2nMtWVMOoQ0VBxm9idK90bmOgc8QjiPhfiXlKJi06TZkHH6oslV/5pZi+o7+plafn
-         +cfg==
+        b=HnCxQDXYu8X4200+dVLqEasVN8mumtN/iqo3Xk7PBOFRY8meTj8VpegTgdF18kcTxG
+         /GV6XA9CWPidxJ7ZNFQw0UhPyKmxrpDzpp2Dn6+F/xqn/lMXhV8t7QKb5uBhFHYm56CT
+         fKcSsdcb5mdh3S7+StymH7lzcHdbZtiNN4ZSpWl5vBfg2Y9zaZX1R/t/rDKgDuUwzKpU
+         CZulE5Q4icQlqZ8MwRBPuGyiBnk8d7z8xY2f4jgUjHP2G54QJpkLyb4xYt5xqIO6pNca
+         aV0+FChw/QErTnv65KYLDZ5ZNkiBbAoX4NzLmx7pllxgBVWFCiFuUlQct8t4zSjalmd7
+         YdNw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=vLsjxOOD/PGvIN0UFoQWSpaF44F5YOlXXFag5HE958I=;
-        fh=XmlmS2/l7AnEV91Xe9xK11/l2uC8MMf7F67h9b8cbLY=;
-        b=Nk/LlDWa0Tj2IHtg0O0Je5Vbd7jaAGdyUCBp7NAY80qU1h/cx9jqckSUlYMmbso+zz
-         rr2G7eu+lRaIUarspKobrU2I2Qv5DhLkfC/PNqCbstaJMS/zpYTWnmBVfI9vdmBNwkmL
-         1LiuqQiThJ4yXLH8P72pFEbYxcAb2C2ihJyMQ4wr3ZE/2Xj6gtGFxxyfdzH5EmYR4vgN
-         qPKR5P8JwxHklqvFYBPhUTTqo5HrVcKwOH7sN0Bh+yDxFwXv7e88TnENBv/KRkQAToIS
-         N8cfTJW4JBaVM5U5YFafcomnC4z7S1B7kjWnXPfijOF0QYyxa/udH0RGE4wrrHrJWpz8
-         0o/w==;
+        bh=P/Hbu0V5Vc4QgElq6BDPyNbu7w0tz8nmjZRMAFRdhVQ=;
+        fh=woVywNWnoTvW+K67bURU3OKk9rzew8cWdAp3XkYggew=;
+        b=FhxX/c7VwB7Zjip0tX1I6GhUBqNtRwIezE8yNBIiWPfM8nXJXu0yKlmQe2uvEQ5KIJ
+         gnj6FqYQEnMm291BW3yxrTyfh6M6Le0TpnY2ghu4jtBVom7bLZ0neum92cBTa4AgXdVH
+         MIRV+mQwGmfC3Fm6sjVVPyvudQ1SvsGsphKv2omH5dpK6ImUxPzL+n6R3/ogXrwEcDqe
+         WCFrAxGcXEQfXFvMSF8aKWudJwTtG2YIFudsuggA0584APAg/5d2ygtuXbJdGlc3rNhn
+         GGIlk2/i/nD5iH8DhEhJjcmNttJ2jrK/eNbJHquOXgHuAhTWA3RKKayxxsiW2Y3Yo9Sr
+         3R5Q==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1788570043; x=1789174843; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788571240; x=1789176040; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=vLsjxOOD/PGvIN0UFoQWSpaF44F5YOlXXFag5HE958I=;
-        b=qKmebhjq+i9IEf1eNgGn7GWiFl1BqDHqIEb98Nlqph9NzsLEmPq8+ya05/k1696lS4
-         XosvTejjTJ9eBnwb1AAzLEGKaFQP3j6NipjTiT4F/S7BZVbX+kMWscI7zWM1vlbz2dcJ
-         xXTvEraTgqUmoc5Y6S5Y5/gXiGzvGW1eU+k40tjPEuwh4Jl5aScL8kk5+HIUe9RWBE0m
-         Y9uyg/nIQPduNZQ4J220GPbI/JaUYpGnd9VO5oTbd+4JSLPTit1gYwjUqtORGh/F9HW4
-         BV2VsbpuiQfaEYklQBfxTRl9CT4CSlD9LnLGMX2C9CGXHb8WHhc2ag09wDSqGbs57593
-         Udpg==
+        bh=P/Hbu0V5Vc4QgElq6BDPyNbu7w0tz8nmjZRMAFRdhVQ=;
+        b=gfEhKl0It9NqgR3w8+wejPtXZN9sOx1oMaFRAYr2TmIgv9zIWWQ0zlN8C9Y+ji8YT/
+         xqN3aUaYFp0UwVxtWZ9IqWdp9ADMLkdqiR77ZyZnoxvn6OxkCiBHx50KtjSRIeTYpyeh
+         gCSOi2IWF50ArN+eYejmr2Y+bbcfauLDFpOptdZndGV6tSCNETtVadfRiDpUNUzYDiP1
+         tB11vRwZrrV6B+t0Ks52C8lzxwaN05WvOhTTkdXcTg1UnS1KV0PhTo6lO+QWPLn+fTw4
+         G9xJIvPDgs8P1/DwNdoSjS7Pza6QcQRzaYk0ZYdKrJRVsGiNE5XLpJTCT/qxbz0nD9kG
+         kx/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788570043; x=1789174843;
+        d=1e100.net; s=20251104; t=1788571240; x=1789176040;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=vLsjxOOD/PGvIN0UFoQWSpaF44F5YOlXXFag5HE958I=;
-        b=i+7uR/OezmpWFwiT0Xh59JJEyuJ5GbXiu+P6WfZkBhGCF8XjptKhpWJBNxgGgp2cJL
-         hK/rbIffKFcFfsXKGXjCV7ULO0kUWJiow6SgfJJKnx8eWo5We0LjtEFTb30cBEGILGfv
-         eu9e+i+N/mZLWt3FxSq6jxCD/+KsiitfX2eRlM9EXOIPIhywlEvN6BBp2z2rb0gI/Ed1
-         OJXRua/C9iE8BlqNULnpHKncT4inGm8oviQ3IuJ2S/Up5YOP4RvaxaIQqEPZ5D9uEHRk
-         /kTQuj0yc0STS03xXDYWafa9gzTzrY8Rx2DwHgQ1zHgCrDjqA+y+Jv0h4IjnK6TRjs/q
-         0qwg==
-X-Forwarded-Encrypted: i=1; AKwUvBwtcJIjh5UMqIxsm/u2XV+6/iMxhhddMNoSGA5bG73bUh3pdr/EaXbwqMXrrruGtJcNVc8=@vger.kernel.org
-X-Gm-Message-State: AFuF++ktNCZeyeMo2rlcf3S8yN82eLpVXsu9VuLnRJG567hjX6ZnYZZo
-	XhAbwwLyteevqYAHCiI8fG1ohdOrYgZQkIoxDEVzL3XsQaAl/A3ucPtQmYutxkzupDvL6GyaGdq
-	Bpwkx3jio1rRffvjHTowhP9vpSEjaz/ZxJ6cYD19ing==
-X-Gm-Gg: AYBFou3kDbFjD2GzcSg9Sbwx2qLsCKvz2PH5mrC5TZ0RhmCHsUfH/gFcZY0xZvVKA1B
-	HbcCgUIuSRI+gwVs2KsiGfL9LmC6i6PVuJTfbpd9uQTrPdIoO5emH+fN1jW+KX2Ig2VwvEzs2PW
-	jDHDDhcPWp2ZZYEYoSKXrV45s99/O/iQtIyFetpn6tyC4T8MiVjyVTwFX22RD3Pf0MznbpqLMYV
-	ZzOy2WcI5sJvQmz2hG9mqICdgk/I1z8avR/HURr9kxVpYBsd2/8TLcGHy5T3s7zKTeXBr21DBEW
-	+NXwwXXTsOIiIvh1LvMiRE6xwWUh9GYzX7KxTVWKxt8n4GhBTPYJNkDxaFiXKA==
-X-Received: by 2002:a05:690e:408:b0:66f:c1be:84e3 with SMTP id
- 956f58d0204a3-66fc1be8719mr1324482d50.81.1788570043203; Fri, 04 Sep 2026
- 18:00:43 -0700 (PDT)
+        bh=P/Hbu0V5Vc4QgElq6BDPyNbu7w0tz8nmjZRMAFRdhVQ=;
+        b=gazBz4dSVso7ka8HONNiXoYWqtJ0109q+oYfYtWS3NdXJYgB/njLhXmnnGEt/eycTJ
+         pbQ9oVLpiIinsTmTpielte1S40tdSMRE+mncS+fsOQhfsa0K9p6peuc5CXHxGPwgWQpo
+         d5GYIBbn6MPVs/ZvKVXh5jET92+Pw5/AHm3XxHGXDkbhKeOXXei3d+iZDdFaGqeVbNm1
+         7m75wzBRsbt37firkSAj3y8H6UGdzhAIfs5gweVdX54DIbbj6XVwimH5bUqRcUlrHOO2
+         egQ1mxOMFkd8hXbMBmuETdIYTdpR+bY17l0akcWDwbuoZkVSnHIm7DWMxBIXeJQ7EVWe
+         FSLg==
+X-Forwarded-Encrypted: i=1; AKwUvBys3Esux3kTvYHFXV6eQII9KLz79WvN0avw7UW08ZtSu1BmGpwlLtkIDo7JM5NTUOFpnbE=@vger.kernel.org
+X-Gm-Message-State: AFuF++nlTiyBRsWcFlIHvttjPwWgm+AZm+HNNni7zKj/Rxt8SmwXpoZ7
+	YQ/LgLUq4yaI38ZANLLq0ys9t5AQUZF2TCiNVKrm6vgr0tCygMyLxcEBQ4lD6+48yf0AYPkHfG4
+	Wsz5yx8qbrB4rkNuUw75PpxpaM/vyr4c=
+X-Gm-Gg: AYBFou3wE8qtmxrOVOoxiESkZvc+52uqe0PqqtrWcEyhQ4uyVEVbqLIufRKKEYvSFQC
+	dAAJj/EQBy67bk5wjiJbhViOuXr4TewDS06+1v3R9x6Gqs83tb2COxFwvYbgiXBnt1RJ+Ish8Fx
+	sQDKgX5HAvBOSgAZU0J+RyN8oG/nVgL0/l7bJIvfsLC35vlUvEj5MT9gYcoWxp3sOxCFMtpew4Y
+	U6rEg8lLMiMH4xrMbfMZkU016rjkSiq/+EF+bhCjX5cvh1+5goU3A8MBeV4NvNP2Cbz8XBrn1rP
+	+lhwKzaJ7rrcBcll4OLPBs3T7fDUxp5dfl10YXaFjLs2Itr7z15wdy61KEenLZkFxqKq9es71Zl
+	ay4I+FOZiQ9qW9Tz5UuiGrynJKzyg
+X-Received: by 2002:a05:6a20:9f92:b0:3d0:ba81:79b1 with SMTP id
+ adf61e73a8af0-3da3980a0f4mr14688710637.0.1788571240105; Fri, 04 Sep 2026
+ 18:20:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260901014713.3502900-2-sanghyun.park.cnu@gmail.com> <20260901014713.3502900-4-sanghyun.park.cnu@gmail.com>
-In-Reply-To: <20260901014713.3502900-4-sanghyun.park.cnu@gmail.com>
-From: Emil Tsalapatis <emil@etsalapatis.com>
-Date: Fri, 4 Sep 2026 21:00:31 -0400
-X-Gm-Features: AcwNN1X6a5AXkI5YfosGFySD8AZcWFDNtmSjCkKbO7VUp53de4hbB8cR5UIq2PE
-Message-ID: <CABFh=a6YEtiZdcC51LXbZKTKWoXxCk9PSe5jtn1R-w_EWT4aUQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 2/2] selftests/bpf: Cover attach type checks
- in link update
-To: Sanghyun Park <sanghyun.park.cnu@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org, Leon Hwang <leon.hwang@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Pu Lehui <pulehui@huawei.com>, 
-	Suchit Karunakaran <suchitkarunakaran@gmail.com>, Xu Kuohai <xukuohai@huawei.com>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260902-sockmap-lookup-tcp-leak-v3-0-b998b3d49d07@rbox.co>
+ <CAAVpQUC==6KEBs3XgFjZ536mJ23cbHma8HuiWMu1DRc_=YYOHg@mail.gmail.com>
+ <20260902155216.4fa23444@kernel.org> <CAAVpQUAWjBuF1Rgze0Vt_XvkUT=Ajw-F+Kh+s2iHk38c8iAapg@mail.gmail.com>
+ <CAAVpQUATOCCc0N1jnfy2+tkD_zj1su-a-4+bV6qXOSzR7y_iQQ@mail.gmail.com>
+In-Reply-To: <CAAVpQUATOCCc0N1jnfy2+tkD_zj1su-a-4+bV6qXOSzR7y_iQQ@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 4 Sep 2026 18:20:28 -0700
+X-Gm-Features: AcwNN1UINzK3524FpZxXYWs5I9-HPFyb-jm4MKb0Vr_8_U4tRNTF9_M_llHPnxY
+Message-ID: <CAADnVQKi0yji3iEepgwy6c9cXWhzJqGJ9-gg-7NXJc5Jj+bVeA@mail.gmail.com>
+Subject: Re: [PATCH bpf v3 0/2] bpf: Fix socket leaks around connect(AF_UNSPEC)+listen()
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, Michal Luczaj <mhal@rbox.co>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Willem de Bruijn <willemb@google.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
+	Jiayuan Chen <jiayuan.chen@linux.dev>, Joe Stringer <joe@wand.net.nz>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Pablo Neira Ayuso <pablo@netfilter.org>, 
+	Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>, bpf <bpf@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	netfilter-devel <netfilter-devel@vger.kernel.org>, coreteam@netfilter.org, 
+	Sashiko <sashiko-bot@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 31, 2026 at 9:48=E2=80=AFPM Sanghyun Park
-<sanghyun.park.cnu@gmail.com> wrote:
+On Wed, Sep 2, 2026 at 4:06=E2=80=AFPM Kuniyuki Iwashima <kuniyu@google.com=
+> wrote:
 >
-> Pin down the two contracts changed by the companion patch. LINK_UPDATE
-> validates a replacement program against the link's attach type, while
-> CGROUP_SKB capability checks apply at LINK_CREATE and not LINK_UPDATE.
+> On Wed, Sep 2, 2026 at 4:04=E2=80=AFPM Kuniyuki Iwashima <kuniyu@google.c=
+om> wrote:
+> >
+> > On Wed, Sep 2, 2026 at 3:52=E2=80=AFPM Jakub Kicinski <kuba@kernel.org>=
+ wrote:
+> > >
+> > > On Wed, 2 Sep 2026 11:58:49 -0700 Kuniyuki Iwashima wrote:
+> > > > > Several BPF socket helpers acquire a socket reference only when
+> > > > > sk_is_refcounted() =3D=3D true, and release it, independently, by
+> > > > > re-evaluating sk_is_refcounted() again at the time the release ru=
+ns. TCP
+> > > > > connect(AF_UNSPEC)+listen() sets SOCK_RCU_FREE on an established =
+socket.
+> > > >
+> > > > Due to several bug reports, we are now inclined to forbid the
+> > > > buggy transformation.
+> > > > https://lore.kernel.org/netdev/CANn89i+px52TtJy3S9=3DuHxGj3s-WueguR=
+o1Z_4FxO=3D02KLmwmQ@mail.gmail.com/
+> > >
+> > > Kuniyuki, would you be willing to send a patch to do that?
+> > > Not sure if anyone else is planning to, I wasn't..
+> >
+> > Sure, I'll post one like this with s/synchronize_rcu()/-EINVAL/g
+> > https://lore.kernel.org/netdev/20260804015349.2353056-1-kuniyu@google.c=
+om/
 >
-> Cover incompatible UDP4/UDP6 and LSM attach flavors, plus a CGROUP_SKB
-> link update after dropping CAP_NET_ADMIN and CAP_SYS_ADMIN.
->
-> Signed-off-by: Sanghyun Park <sanghyun.park.cnu@gmail.com>
-> ---
-> v5:
->   - Isolate attach and update coverage in separate subtests with their ow=
-n setup.
->   - Inline the one-use LSM program FD and use a descriptive link FD.
->   - Explain the create-versus-update contracts covered by the tests.
-> v4: https://lore.kernel.org/r/20260831023918.1857658-2-sanghyun.park.cnu@=
-gmail.com
-> ---
->  .../selftests/bpf/prog_tests/cgroup_link.c    | 81 ++++++++++++++++++-
->  .../selftests/bpf/prog_tests/lsm_cgroup.c     | 12 +++
->  .../testing/selftests/bpf/progs/lsm_cgroup.c  |  6 ++
->  .../selftests/bpf/progs/test_cgroup_link.c    | 14 +++-
->  4 files changed, 111 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c b/tools=
-/testing/selftests/bpf/prog_tests/cgroup_link.c
-> index 15093a69510e..3b43c34917cc 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-> @@ -1,6 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
->
->  #include <test_progs.h>
-> +#include "cap_helpers.h"
->  #include "cgroup_helpers.h"
->  #include "testing_helpers.h"
->  #include "test_cgroup_link.skel.h"
-> @@ -24,7 +25,77 @@ int ping_and_check(int exp_calls, int exp_alt_calls)
->         return 0;
->  }
->
-> -void serial_test_cgroup_link(void)
-> +static void test_cgroup_link_update(void)
-> +{
-> +       const __u64 caps =3D (1ULL << CAP_NET_ADMIN) | (1ULL << CAP_SYS_A=
-DMIN);
-> +       struct bpf_link *link =3D NULL;
-> +       __u64 saved_caps =3D 0;
-> +       int cg_fd =3D -1, err;
-> +
-> +       skel =3D test_cgroup_link__open_and_load();
-> +       if (!ASSERT_OK_PTR(skel, "skel_open_load"))
-> +               return;
-> +
-> +       err =3D setup_cgroup_environment();
-> +       if (!ASSERT_OK(err, "cg_init"))
-> +               goto cleanup;
-> +
-> +       cg_fd =3D create_and_get_cgroup("/cgroup_link_update");
-> +       if (!ASSERT_GE(cg_fd, 0, "cg_create"))
-> +               goto cleanup;
-> +
-> +       err =3D join_cgroup("/cgroup_link_update");
-> +       if (!ASSERT_OK(err, "cg_join"))
-> +               goto cleanup;
-> +
+> and cover IPV6_ADDRFORM.
 
-Wrt bot feedback: This is fine, the bot itself says it's more
-consistent within the file to
-use the same setup/teardown.
-
-> +       link =3D bpf_program__attach_cgroup(skel->progs.sendmsg4, cg_fd);
-> +       if (!ASSERT_OK_PTR(link, "attach_sendmsg4"))
-> +               goto cleanup;
-> +
-> +       err =3D bpf_link__update_program(link, skel->progs.sendmsg6);
-> +       ASSERT_EQ(err, -EINVAL, "reject_sendmsg6_update");
-> +       bpf_link__destroy(link);
-> +       link =3D NULL;
-> +
-> +       err =3D cap_disable_effective(caps, &saved_caps);
-> +       if (!ASSERT_OK(err, "drop_caps_for_attach"))
-> +               goto cleanup;
-> +
-> +       link =3D bpf_program__attach_cgroup(skel->progs.egress, cg_fd);
-> +       if (!ASSERT_ERR_PTR(link, "attach_without_net_admin"))
-> +               goto cleanup;
-> +       err =3D libbpf_get_error(link);
-> +       link =3D NULL;
-> +       if (!ASSERT_EQ(err, -EPERM, "attach_err"))
-> +               goto cleanup;
-> +
-> +       err =3D cap_enable_effective(saved_caps & caps, NULL);
-> +       if (!ASSERT_OK(err, "restore_caps_for_attach"))
-> +               goto cleanup;
-> +
-> +       link =3D bpf_program__attach_cgroup(skel->progs.egress, cg_fd);
-> +       if (!ASSERT_OK_PTR(link, "attach_egress"))
-> +               goto cleanup;
-> +
-> +       err =3D cap_disable_effective(caps, &saved_caps);
-> +       if (!ASSERT_OK(err, "drop_caps"))
-> +               goto cleanup;
-> +
-> +       err =3D bpf_link__update_program(link, skel->progs.egress_alt);
-> +       ASSERT_OK(err, "update_without_net_admin");
-> +
-> +cleanup:
-> +       err =3D cap_enable_effective(saved_caps & caps, NULL);
-> +       ASSERT_OK(err, "restore_caps");
-> +       bpf_link__destroy(link);
-> +       if (cg_fd >=3D 0)
-> +               close(cg_fd);
-> +       cleanup_cgroup_environment();
-> +       test_cgroup_link__destroy(skel);
-> +       skel =3D NULL;
-> +}
-> +
-> +static void test_cgroup_link_attach(void)
->  {
->         struct {
->                 const char *path;
-> @@ -253,3 +324,11 @@ void serial_test_cgroup_link(void)
->         }
->         cleanup_cgroup_environment();
->  }
-> +
-> +void serial_test_cgroup_link(void)
-> +{
-> +       if (test__start_subtest("attach"))
-> +               test_cgroup_link_attach();
-> +       if (test__start_subtest("update"))
-> +               test_cgroup_link_update();
-> +}
-> diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c b/tools/=
-testing/selftests/bpf/prog_tests/lsm_cgroup.c
-> index 41e867467f6c..0dd44dbb9c95 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-> @@ -74,6 +74,7 @@ static void test_lsm_cgroup_functional(void)
->         int bind_prog_fd =3D -1;
->         int bind_link_fd =3D -1;
->         int clone_prog_fd =3D -1;
-> +       int socket_link_fd =3D -1;
->         int err, fd, prio;
->         socklen_t socklen;
->
-> @@ -156,6 +157,17 @@ static void test_lsm_cgroup_functional(void)
->         ASSERT_EQ(query_prog_cnt(cgroup_fd, "bpf_lsm_socket_bind"), 1, "p=
-rog count");
->         ASSERT_EQ(query_prog_cnt(cgroup_fd, NULL), 4, "total prog count")=
-;
->
-> +       socket_link_fd =3D
-> +               bpf_link_create(bpf_program__fd(skel->progs.socket_first)=
-,
-> +                               cgroup_fd, BPF_LSM_CGROUP, NULL);
-> +       if (!ASSERT_GE(socket_link_fd, 0, "link create socket_first"))
-> +               goto detach_cgroup;
-> +       err =3D bpf_link_update(socket_link_fd,
-> +                             bpf_program__fd(skel->progs.socket_create_l=
-sm),
-> +                             NULL);
-> +       ASSERT_EQ(err, -EINVAL, "reject lsm_mac link update");
-> +       close(socket_link_fd);
-> +
->         /* Attach another instance of bind program to another cgroup.
->          * This should trigger the reuse of the trampoline shim (two
->          * programs attaching to the same btf_id).
-> diff --git a/tools/testing/selftests/bpf/progs/lsm_cgroup.c b/tools/testi=
-ng/selftests/bpf/progs/lsm_cgroup.c
-> index 3bfa479104be..30727945cecc 100644
-> --- a/tools/testing/selftests/bpf/progs/lsm_cgroup.c
-> +++ b/tools/testing/selftests/bpf/progs/lsm_cgroup.c
-> @@ -213,6 +213,12 @@ int BPF_PROG(socket_first, int family, int type, int=
- protocol, int kern)
->         return 0;
->  }
->
-> +SEC("lsm/socket_create")
-> +int BPF_PROG(socket_create_lsm, int family, int type, int protocol, int =
-kern)
-> +{
-> +       return 0;
-> +}
-> +
->  SEC("lsm_cgroup/socket_create")
->  int BPF_PROG(socket_second, int family, int type, int protocol, int kern=
-)
->  {
-> diff --git a/tools/testing/selftests/bpf/progs/test_cgroup_link.c b/tools=
-/testing/selftests/bpf/progs/test_cgroup_link.c
-> index 4faba88e45a5..a987744d129c 100644
-> --- a/tools/testing/selftests/bpf/progs/test_cgroup_link.c
-> +++ b/tools/testing/selftests/bpf/progs/test_cgroup_link.c
-> @@ -20,5 +20,17 @@ int egress_alt(struct __sk_buff *skb)
->         return 1;
->  }
->
-> -char _license[] SEC("license") =3D "GPL";
-> +SEC("cgroup/sendmsg4")
-> +int sendmsg4(struct bpf_sock_addr *ctx)
-> +{
-> +       return 1;
-> +}
->
-> +SEC("cgroup/sendmsg6")
-> +int sendmsg6(struct bpf_sock_addr *ctx)
-> +{
-> +       ctx->msg_src_ip6[2] =3D 0;
-
-Bot is right on this, this as it stands doesn't affect the tests. We
-should remove it.
-That being said, the test itself is fine so please just remove the line and
-resend.
-
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-
-pw-bot: cr
-
-> +       return 1;
-> +}
-> +
-> +char _license[] SEC("license") =3D "GPL";
-> --
-> 2.48.1
+sounds like the fixes in this patch set won't be needed,
+so I tossed them out of patchwork.
