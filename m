@@ -1,99 +1,346 @@
-Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F65B222597
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 04:33:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 745C8235045
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 04:39:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788582791; cv=none; b=EOySHcUmRzLfk2oVJ/JE8gqtpQO5NSo+exH7/Uxa1X84douYhUb7rBNCtojQVZzBqpwTy+wqO47vKxrDn1HaFeUSVTAh2aVHgeYZiCfe+lYQH6sCt/SfkMe5ntcTiHq3VGEahEfLi2/ZHDzY9TpLSoIPd98DhkPXwGzfPcAHh80=
+	t=1788583157; cv=none; b=C5E4Y6oXOI5dV7/Z9APwDcEU9cd5u/V0msuxTaamM54kmDf2RzSrpoPFe5yGSy72GVJ5dXmJ1p5v+/NFDYvTLz/3RnwA4rxJW9ytoKK4v1A7N/CkNWyMb27y/AgrgHt8W2yVgo18oxEqkAvExRXxCYSn54otZp+bqqD2zsJmLeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788582791; c=relaxed/simple;
-	bh=S+yqJe04UoMbdyjmjqUyNEIPNJtbZOnTEiibvRHqZjs=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=E+j02Ae70krP8yJBGumUSVocVm5wjx+BdNx+w6+SlhWfxVf1ASix4thPsAOUj1m6/sqWe77ZDuh1XzErxoYwndgrqBGH6e3QVQZoWGvcDHSeFZIl7jzQrVclNzN/82NJ3qYkefE041FfzjPC/+bQS+rFnpHwrOdHnm55ISpS4CM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TvOfwWL1; arc=none smtp.client-ip=74.125.225.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788583157; c=relaxed/simple;
+	bh=4qU7d7Kwin4JiDfDNvFMOMhpb+xMrSnoMgF1UogpnPI=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=cw0o/Ghyv64NGfysH3XQ/mVceRuTooKAdYfKvJFUWF5u8UkAgiH9kQMl3YpCoGLwFp0jUKjQW3Ij3e9aiwk+ti/GMVNsLiyh7sKTjsyQ4OpGbYBiPQTHoHsVfD/nVvqbMOCbnjCPbAuuNlj4h4rUB2nlP831PJjffmBcdFh1NPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FtWwshjX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TvOfwWL1"
-Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-483960225ccso494646f8f.1
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 21:33:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788582788; x=1789187588; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=mGZsDm4uizvC7uugERQ41jrzAxKK+9ADw0Wmwd9so7A=;
-        b=TvOfwWL1LZuPNVrU5lIHK+P+QodrSruJEYecKQAVsobRlgfXMX3ZjphgB1a+tnr55w
-         r0LY7+bM9R93rZeYaOcWK0mS4H6Sb1kxPssF+P4iP26l2waHyhXcYysc2cC/3kLmd5MF
-         taU7013cmUhJUgqyzMsUx8dpfGF5qzIK2y3MJUM9IJQ1nJu2J2D7yzSr/JlRZ/kH0yml
-         SX3jeuhlOz7UpyWvVOwWZVRyKMriqv3WTKtqwv6k0EaZuAg0MTrbjh6hOX86fxCbJF+M
-         7+F+0X86j4sFNR43Ok4XGrIGr3skCdf2CH+/OXqT4ojv0RmpGVLquU395vp3+q6AhmGR
-         Wmng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788582788; x=1789187588;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=mGZsDm4uizvC7uugERQ41jrzAxKK+9ADw0Wmwd9so7A=;
-        b=LsRYugfdtnkr1wozai02L1lPo5jHi/mZ6YiIFjKY+mQtSxnm4fDjcgelyZViU88rbj
-         tHsEKWCuS08f/YjaScyzMmavi+xwdRXiwg/HfLIJgn9iEO1Azwm40HYiqDiLri1jTEzg
-         4+4uClcMJdsF1JNGSKfupHLklwF21CHDo4bpKpsdpr5bwTXNNm+yNKdh3YBdFBH9oNFJ
-         Rinxz5Wq+3Xme02cQyKlpJNpnzAK1EgZPQiN1+GBpYLEimpRP1g7D3l2KP7VZ4iRXcBV
-         GyI2gr39N8jf4EbRvQQU5WMNv8oXF55oNMrt3nRlum+eFVO1lThzZ0L5LUe7Zoy6370g
-         fyTg==
-X-Gm-Message-State: AFuF++nKQLrFuR6fKkrCZ6BYWvcuCM89+R+nCwzth/LUSNfE6VOuD94y
-	gdsibu6wzWhXd5M3u8eLJ5JL0rUEn1tQ6SlBL60QwLcmyP20vf8xHsaMpL3TD9KL
-X-Gm-Gg: AYBFou3Uv1xB9kkUvfRuQ9GbPHbbA3KZvVeSf2qKr0k15ZwW6kEBjNB0sm3UYY0dVKL
-	GmOIJPez4yhdFGPbiABY9jOhqllbiN8EB2klcN2AVpuSZwbh6BjfggJdj+68X28pR5BxnSN9nTG
-	Eke8ho14jWsfrDiIw0n3PXR10NZyIs7i/KEcF5y14zYUqoVI+VNDqkRTtN3PkRDz4XfjVHB9E0L
-	VUqPegF52l35F4mh5QVo8hjWW6+tLYzvhsA+kYMcIs+HdDgNjVdBkM7+rs5ObJAg08FGQjBhYus
-	XTwxHSX1Ok+OWPIeYS01lqPnT2ApAhYeUe/gnxhBOdG3N/+5yFxf+mbJ6F7oswz6fqJh3FXdNjV
-	PH3nflSb/pePep71k2tHYewlc/fcPWyQD/se2lI/+y4gPn7wU0nmANrG+Bzx6YpidKgLVUTE2aK
-	9G+Rv4aYvEQcsk9mXk/Np2WGPPIgxoSKVJWafqq3UXQHYgUZWh/aBpUDsG9/ZOt1Ykc1TD8pGSB
-	JgEnEVhHi/+fW9h2tWyAwUf8Qmn3AStQnDyH8wVQVmSAnpwJ63THQjzRScFwI23Xe+QFvUvP2uJ
-	qYcsuV6ighXtmkcZHXVhhU5HoAwH+JBPpH472w==
-X-Received: by 2002:a5d:5e87:0:b0:485:8a47:5b85 with SMTP id ffacd0b85a97d-4858a475c6bmr8204782f8f.34.1788582788421;
-        Fri, 04 Sep 2026 21:33:08 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485883927a3sm8269975f8f.11.2026.09.04.21.33.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Sep 2026 21:33:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FtWwshjX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5200C1F00A3D;
+	Sat,  5 Sep 2026 04:39:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788583156;
+	bh=dLE9YFjE3CV2Y23T7LUl4uCiYrCk8oaVWberoLn8scE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=FtWwshjXZPmVhpBIh6xGUG5s1bR+I/vRhTfx4vnFxmaZBlF8ROfkPe0lbC3cjKlQq
+	 /u1+Ivk2s26OAhIRLYrgwh0QxAYIpro0i4KDNBVBeJR0Y5EjwkkbtRvbu0HV4cJFzB
+	 +Qf71A6UoXaf+qIg+r3l0gbd2jIFcWmMwrIW825recpm69VxF7T59Zj8F6ppqQCT2I
+	 ZU7L777s8YZBheW7MLxyzm1g1wQPytU4XWpRqs8evex1E+G51b/sJX6q2AOL+UMzGk
+	 4E7mtYPQLkNP2hNDhF9IFkxgzGE+hI/mn372sUGWyvlX4RfF3UB+ntb7K3GB3hj2Nk
+	 Asw0+Gj2arWYQ==
+Content-Type: multipart/mixed; boundary="===============8407984580853000084=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 05 Sep 2026 06:33:07 +0200
-Message-Id: <DL73OLDDW2OX.3JGCQEAM6JO1Y@gmail.com>
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: <bpf@vger.kernel.org>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Emil Tsalapatis" <emil@etsalapatis.com>,
- "Nicholas Carlini" <npc@anthropic.com>, <kkd@meta.com>,
- <kernel-team@meta.com>
-Subject: Re: [PATCH bpf-next v1 0/2] Fix global subprog verification context
-X-Mailer: aerc 0.21.0
-References: <20260905034018.2095649-1-memxor@gmail.com>
-In-Reply-To: <20260905034018.2095649-1-memxor@gmail.com>
+MIME-Version: 1.0
+Message-Id: <2fc54e3d38f0f3ef2f419f35678a35d39a498c6ee8d8be6358a3a7ca5bb24587@mail.kernel.org>
+In-Reply-To: <20260905034018.2095649-3-memxor@gmail.com>
+References: <20260905034018.2095649-3-memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v1 2/2] selftests/bpf: Test global subprog callback contexts
+From: bot+bpf-ci@kernel.org
+To: memxor@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,npc@anthropic.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat,  5 Sep 2026 04:39:15 +0000 (UTC)
 
-On Sat Sep 5, 2026 at 5:40 AM CEST, Kumar Kartikeya Dwivedi wrote:
-> Global subprogs can be invoked in both sleepable and non-sleepable
-> contexts, but are verified based on context assumptions for the program
-> type as a whole and not the precise context in which they are invoked.
-> Nicholas identified that this can cause verifier's safety assumptions to
-> be violated. Implement a fix by performing verification twice but only
-> if different contexts are exercised, and add selftests to ensure coverage=
-.
->
-> Kumar Kartikeya Dwivedi (2):
->   bpf: Verify global subprogs in each sleepability context
->   selftests/bpf: Test global subprog callback contexts
->
+--===============8407984580853000084==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-CI failure in GCC-BPF run looks unrelated.
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_async_cb_context.c b/tools/testing/selftests/bpf/progs/verifier_async_cb_context.c
+> index 6bf95550a024..9ce7359913f8 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_async_cb_context.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_async_cb_context.c
+> @@ -9,6 +9,11 @@
+>
+>  char _license[] SEC("license") = "GPL";
+>
+> +struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
+> +void bpf_task_release(struct task_struct *p) __ksym;
+> +void bpf_rcu_read_lock(void) __ksym;
+> +void bpf_rcu_read_unlock(void) __ksym;
+> +
+>  /* Timer tests */
+>
+>  struct timer_elem {
+
+[ ... ]
+
+> @@ -66,6 +71,7 @@ int timer_sleepable_prog(void *ctx)
+>
+>  struct wq_elem {
+>  	struct bpf_wq w;
+> +	struct task_struct __kptr *task;
+>  };
+>
+>  struct {
+
+[ ... ]
+
+> @@ -119,6 +125,105 @@ int wq_sleepable_prog(void *ctx)
+>  	return 0;
+>  }
+>
+> +__noinline int wq_global_acquire(void)
+> +{
+> +	struct task_struct *task, *acquired;
+> +	struct wq_elem *val;
+> +	int key = 0;
+> +
+> +	val = bpf_map_lookup_elem(&wq_map, &key);
+> +	if (!val)
+> +		return 0;
+> +
+> +	task = val->task;
+> +	if (!task)
+> +		return 0;
+> +
+> +	acquired = bpf_task_acquire(task);
+> +	if (acquired)
+> +		bpf_task_release(acquired);
+> +	return 0;
+> +}
+> +
+> +static int wq_global_rcu_cb(void *map, int *key, void *value)
+> +{
+> +	return wq_global_acquire();
+> +}
+> +
+> +SEC("fentry/bpf_fentry_test1")
+> +__failure __msg("R1 must be a rcu pointer")
+> +int wq_global_rcu_prog(void *ctx)
+> +{
+> +	struct wq_elem *val;
+> +	int key = 0;
+> +
+> +	val = bpf_map_lookup_elem(&wq_map, &key);
+> +	if (!val)
+> +		return 0;
+> +
+> +	bpf_wq_init(&val->w, &wq_map, 0);
+> +	bpf_wq_set_callback(&val->w, wq_global_rcu_cb, 0);
+> +	return 0;
+> +}
+> +
+> +static int wq_global_rcu_lock_cb(void *map, int *key, void *value)
+> +{
+> +	int ret;
+> +
+> +	bpf_rcu_read_lock();
+> +	ret = wq_global_acquire();
+> +	bpf_rcu_read_unlock();
+> +	return ret;
+> +}
+
+Does wq_global_rcu_lock_cb() verify with this return value?
+
+Workqueue callbacks must return exactly 0. When bpf_wq_set_callback is
+processed, the callback's return range gets constrained to [0, 0] in
+set_timer_callback_state() via:
+
+kernel/bpf/verifier.c:set_timer_callback_state() {
+    ...
+    callee->callback_ret_range = retval_range(0, 0);
+    callee->in_async_callback_fn = true;
+    ...
+}
+
+Later when the callback returns, check_return_code() enforces this:
+
+kernel/bpf/verifier.c:check_return_code() {
+    ...
+    if (frame->in_async_callback_fn) {
+        range = frame->callback_ret_range;
+        goto enforce_retval;
+    }
+    ...
+}
+
+A call to a global subprogram leaves R0 as an unbounded scalar. In
+check_func_call(), the bpf_subprog_is_global() path does:
+
+kernel/bpf/verifier.c:check_func_call() {
+    ...
+    if (bpf_subprog_is_global(env, subprog)) {
+        ...
+        mark_reg_unknown(env, caller->regs, ret_regs[0]);
+        ...
+    }
+    ...
+}
+
+So returning ret here only verifies because the compiler constant-folds
+wq_global_acquire()'s return to 0 (every path returns 0). The same issue
+appears in wq_global_rcu_cb() above, which also returns the result of
+wq_global_acquire().
+
+If wq_global_acquire() ever gets a non-zero return path, or if the
+optimizer doesn't fold it, wq_global_rcu_lock_prog's __success
+annotation fails with "At async callback return the register R0 has ...
+should have been in [0, 0]", and wq_global_rcu_prog's
+__msg("R1 must be a rcu pointer") never appears because bpf_check()
+runs do_check_main() before do_check_subprogs() and the callback's
+return-code error aborts verification early.
+
+The existing callbacks in progs/wq.c all return literal constants
+(wq.c:wq_cb_sleepable() and wq.c:wq_cb()). Would
+`wq_global_acquire(); return 0;` in both wq_global_rcu_cb and
+wq_global_rcu_lock_cb remove the dependency on optimizer behavior?
+
+> +
+> +SEC("fentry/bpf_fentry_test1")
+> +__success
+> +int wq_global_rcu_lock_prog(void *ctx)
+> +{
+> +	struct wq_elem *val;
+> +	int key = 0;
+> +
+> +	/* Verify the same global subprog in non-sleepable and protected contexts. */
+> +	wq_global_acquire();
+> +
+> +	val = bpf_map_lookup_elem(&wq_map, &key);
+> +	if (!val)
+> +		return 0;
+> +
+> +	bpf_wq_init(&val->w, &wq_map, 0);
+> +	bpf_wq_set_callback(&val->w, wq_global_rcu_lock_cb, 0);
+> +	return 0;
+> +}
+> +
+> +__noinline int wq_global_no_rcu(void)
+> +{
+> +	return 0;
+> +}
+> +
+> +static int wq_global_no_rcu_cb(void *map, int *key, void *value)
+> +{
+> +	return wq_global_no_rcu();
+> +}
+> +
+> +SEC("fentry/bpf_fentry_test1")
+> +__success
+> +int wq_global_no_rcu_prog(void *ctx)
+> +{
+> +	struct wq_elem *val;
+> +	int key = 0;
+> +
+> +	/* Verify the same global in non-sleepable and unprotected contexts. */
+> +	wq_global_no_rcu();
+
+Can the calls to wq_global_no_rcu() get optimized away?
+
+The function has an empty body (return 0), takes no arguments, is not
+__weak, and its address is never taken. At -O2 (which selftests always
+use via tools/testing/selftests/bpf/Makefile), LLVM can infer
+memory(none)/willreturn/nounwind and constant-propagate the return
+value. Both call sites then become dead: the direct call here (result
+discarded) and the call in wq_global_no_rcu_cb() (whose result IPSCCP
+replaces with 0). The __noinline attribute only blocks inlining, not
+interprocedural attribute inference or DCE.
+
+If the calls are elided, there is no relocation to the subprog, libbpf
+never appends it to the program, check_func_call() never runs the
+bpf_subprog_is_global() path:
+
+kernel/bpf/verifier.c:check_func_call() {
+    ...
+    if (bpf_subprog_is_global(env, subprog)) {
+        ...
+    }
+    ...
+}
+
+and do_check_subprogs() never calls do_check_common(env, subprog, 0) or
+do_check_common(env, subprog, 1) for it:
+
+kernel/bpf/verifier.c:do_check_subprogs() {
+    for (i = 1; i < env->subprog_cnt; i++) {
+        ...
+        if (sub_aux->called[0])
+            ret = do_check_common(env, i, 0);
+        if (sub_aux->called[1])
+            ret = do_check_common(env, i, 1);
+        ...
+    }
+}
+
+The test still passes __success because wq_global_no_rcu_prog loads
+successfully, but it covers nothing. This is the only test that
+exercises successful sleepable-root verification of a global subprog and
+the caller-before-callee/repeat loop that patch 1/2 adds. The changelog
+claims "call the same harmless global subprogram directly from the main
+program and from an unprotected callback. This requires both
+non-sleepable and sleepable verification roots and proves that global
+calls from callbacks are not rejected wholesale", but this coverage
+would silently not happen.
+
+Searching progs/ for a zero-argument global subprog returning a constant
+matches only the two functions this patch adds. Every other
+plain-__noinline global subprog either takes pointer/scalar arguments or
+performs memory accesses (so memory(none) cannot be inferred), and files
+that need an opaque global subprog use __weak __noinline for this
+reason:
+
+progs/verifier_global_subprogs.c:__weak __noinline int noop_global_func()
+progs/summarization.c:__weak __noinline int noop_global_func()
+
+wq_global_acquire() survives only because it calls bpf_map_lookup_elem()
+through the constant function pointer from bpf_helper_defs.h, whose
+memory effects LLVM cannot infer.
+
+Would declaring wq_global_no_rcu() as __weak __noinline, or giving it an
+observable side effect, prevent the calls from being removed? This could
+be confirmed by checking llvm-objdump -d on the compiled .bpf.o to see
+if any `call -1` relocation to wq_global_no_rcu remains in
+wq_global_no_rcu_cb.
+
+> +
+> +	val = bpf_map_lookup_elem(&wq_map, &key);
+> +	if (!val)
+> +		return 0;
+> +
+> +	bpf_wq_init(&val->w, &wq_map, 0);
+> +	bpf_wq_set_callback(&val->w, wq_global_no_rcu_cb, 0);
+> +	return 0;
+> +}
+
+[ ... ]
+
+> @@ -179,3 +284,29 @@ int task_work_sleepable_prog(void *ctx)
+>  	bpf_task_work_schedule_resume(task, &val->tw, &task_work_map, task_work_cb);
+>  	return 0;
+>  }
+> +
+> +static int task_work_global_rcu_cb(struct bpf_map *map, void *key, void *value)
+> +{
+> +	return wq_global_acquire();
+> +}
+> +
+> +SEC("fentry/bpf_fentry_test1")
+> +__failure __msg("R1 must be a rcu pointer")
+> +int task_work_global_rcu_prog(void *ctx)
+> +{
+> +	struct task_work_elem *val;
+> +	struct task_struct *task;
+> +	int key = 0;
+> +
+> +	val = bpf_map_lookup_elem(&task_work_map, &key);
+> +	if (!val)
+> +		return 0;
+> +
+> +	task = bpf_get_current_task_btf();
+> +	if (!task)
+> +		return 0;
+> +
+> +	bpf_task_work_schedule_resume(task, &val->tw, &task_work_map,
+> +				      task_work_global_rcu_cb);
+> +	return 0;
+> +}
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33943332260
+--===============8407984580853000084==--
