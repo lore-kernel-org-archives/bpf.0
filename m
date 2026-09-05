@@ -1,167 +1,118 @@
-Received: from mail-wm2-f11.google.com (mail-wm2-f11.google.com [74.125.225.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5015928C5B1
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 07:32:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 096F93B71CF
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 07:42:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788593527; cv=none; b=qJf7F0I8Fs7oLHU5eHZ5yfT45dpRK9wop8u77pB2Y3DE1GFqvCp86sYRGgPFvDscuA5TqXOlbYN5zrGLOY2rpNjr+R2vGmBsQxTMcP8C10fogn93PmQPPXjLR9VvprPr/DjvlGoYNR0C+xiARC7bl8A8qbLuyjQNIavDUjEa8DE=
+	t=1788594173; cv=none; b=OuUVrWPm2EZso7NXT1prb0c5xSJeN+fdsel7FlcLWqwpQsSA7HREeBjP9MKHldUFAfvBlwh2wSnU2zwT+GFkZ84S3XEMeClDL9ePUklr1PClEUniiwkJJUTrXjKBJKggWMTnYNMn2/iZRo0M8Y4voOZPO66lsn7F4RN/4fg0SoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788593527; c=relaxed/simple;
-	bh=ou2fEbhVb1iPX4oTqnFSegex9wa6QnGgcVFEAR52CRI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=WZiSSmJpXEm/p4GNsQzn3NVA3blmxC1zUDqBdlhktyzW6qdooC1tC0Pb7LjCkvDrCbmwAXWpcpeYXMqwVOFLL79RZpF+Qkbg1DIxvPeNxBgtBmi3lhzqXbb63yoejDTJL76kQi+flzaTZZQ0qRfsVH8p+Q9T13Xsma3cUfLoJik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H8lp01w+; arc=none smtp.client-ip=74.125.225.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H8lp01w+"
-Received: by mail-wm2-f11.google.com with SMTP id 5b1f17b1804b1-49ccea58fe3so4106855e9.1
-        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 00:32:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788593524; x=1789198324; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Uf35E09dO4nIBoB7Nn5xsD7EOBYwYd1JDja5BkITBhM=;
-        b=H8lp01w+YR3Ex4Z0ukFzb8dEtHjlrsU4TBfdDjj90AC6de2zdZNm0sbBxfwOF2P04C
-         gluFa+PiNbkc61TiUJdBkKGP1y3Txi9fqedHCI/ZxEu+0FM/r+vya2jJGK0vuIWFZXu3
-         OXtNkofCc77O1/5t+ejDgS4axSoFak+H29FBkLKuddsXiuegPIvj0u1G/44GX9s9cFBP
-         yZTvRdx786ZsRDZYKiJXJ1GbWC/w4t1ip5qTbXBqbnsm4GqG8KJTr+aCdzoMQxjoD7qu
-         SrbuztvNYhM7QVrdjWm0qRicw3gkqdRt48Cc3rqcCAG+QOur/0pvQhrmDso9JQyQ1qT1
-         C2Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788593524; x=1789198324;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Uf35E09dO4nIBoB7Nn5xsD7EOBYwYd1JDja5BkITBhM=;
-        b=mlVuKZWyDBdtY3BBwZ/+fUAUdutHarwXqRskXQbovM+nIObzuE5xKSCc/YK1Iw4ea6
-         oAofJ6Ak1HLKvjAvXNpFS3TJO0WWHkX0MHvjOV85pA2eCMgtJyxP/Msg3jiXKuHWT//U
-         u+wJSafXxCPD5ertUM6AshNUX6jKfokEBd0cyP2mcdozx4AvTfF0BLy2pBsXiwv4WQ3A
-         dTZyZdDmE22YOqF7PWJ52N6PqNKES0BDJAh4B20N14j1653NVLVH+OwC+CHTuYUimpb8
-         hDrsGHQuVi2BlWsFObT9dr1iTagt5AGKE9U56aJY6gKYH6QEsZWXdXXl8XpCh/ZGpXBL
-         LJEA==
-X-Gm-Message-State: AFuF++k3vGxJgCBLBeENDa6BrzAC4B3KQ1dMLEOH6f5WLPcKCsYC8+u2
-	1+/qVemR7c+j7+GjtLXW7+THpMH05sfDAmhXIyiEfip6STSd5PanbS/3/3IruYfk
-X-Gm-Gg: AYBFou1WsQ4jVx3E2dW6uQ2Udp4VI1/a9kK85ZHPE/gvgLQeYQwz7Ll4KYHfvFhsjvK
-	iBC5h9YC3atQQZf6iR9KrXyW7RdG6cjqhtLWyO8lKN6WUFyEMdKphisAxVMs521KeMhOgBrkK2g
-	9ubBK6+zbOCiS9kwZmwANSWFPUyi7QYo9Ykq5QzeIZB8+yMWJOQ3NrgaR5/am0y5uFrSm34n0V1
-	64RDGgnVmIc0jaBS7Ikucc6sxwqucMk4hrxtWp2Cxb4k8xf/5E/GpXnEsZDkcWpbA1HYdMGhBau
-	/Bouuvm0KDURa10uEP5gFpF+1wnkun32GI1Au9KzMD4fNX1QYl2YzNVUhjKN/hX3PC/n11gdt/9
-	GMJJnkhcvmL5XPJf2MqWxlJgksloMtTXecZYL+p9QHJn//8lHA3WWZRKRWy8jqr1T+U3/D4+2Fo
-	L2fjuYkz3z3/96O8doM3v3cmgEAv5GJm6q5dHX73zeHJPe/r4tBhJDU5nNrUO2AYS2Ggs95CvRv
-	RjW88vDrdNC/QODV0nZ1qYYTMs5LYSzCM1CS5mDBYxIiss9PEbnhix6eWatu1GHu87k3vhVS2iM
-	9YYrMWgf5PoeH9TnQoWOO3x7FZ4=
-X-Received: by 2002:a05:600c:6748:b0:49c:fc6c:bdfa with SMTP id 5b1f17b1804b1-49cfc6cbfa2mr78895535e9.17.1788593524391;
-        Sat, 05 Sep 2026 00:32:04 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cee5f912esm216139135e9.4.2026.09.05.00.32.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Sep 2026 00:32:04 -0700 (PDT)
+	s=arc-20240116; t=1788594173; c=relaxed/simple;
+	bh=OFAD95/UKzUlNiWyqEdyyWeiSo4eY1mU+TAPlAvyV88=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pDCQFNJITfskWOSlLYWTWuNe5tX9Wui52QIwZtgZCu5FVD/59RVCrog5HDPbt+kFjQwXRQ72DIhacjnjsOTVkn0cnqNIW2D9QbomGojW11VUyMKKB7JU6cgZ626ThNlmScgOtmQQxwE5U15k7ER9oj1B/SIO4zopLO+uUZ7TAFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hcQJV4XV5zKHMKf
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 15:41:46 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 3DD5E4056B
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 15:42:43 +0800 (CST)
+Received: from [10.67.110.68] (unknown [10.67.110.68])
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgB32Zbyx5tqmJ1RAw--.46762S2;
+	Sat, 05 Sep 2026 15:42:43 +0800 (CST)
+Message-ID: <8151b6f6-1ea6-4469-9ef7-f174fe408bb0@huaweicloud.com>
+Date: Sat, 5 Sep 2026 15:42:41 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 05 Sep 2026 09:32:03 +0200
-Message-Id: <DL77HLIRV4VF.A1KEEFA7OJXW@gmail.com>
-Cc: <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf v1 7/8] bpf: Assign lock identity to callback map
- values
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: <sashiko-reviews@lists.linux.dev>
-X-Mailer: aerc 0.21.0
-References: <20260905070003.3193366-1-memxor@gmail.com>
- <20260905070003.3193366-8-memxor@gmail.com>
- <20260905072143.975EB1F00A3D@smtp.kernel.org>
-In-Reply-To: <20260905072143.975EB1F00A3D@smtp.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v4 3/3] selftests/bpf: Enable stack argument
+ tests for RV64
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260905070409.4141522-1-pulehui@huaweicloud.com>
+ <20260905070409.4141522-4-pulehui@huaweicloud.com>
+ <20260905070911.CAB0D1F00A3D@smtp.kernel.org>
+Content-Language: en-US
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <20260905070911.CAB0D1F00A3D@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgB32Zbyx5tqmJ1RAw--.46762S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFWrJw4fCFWkZr47tF1DJrb_yoW8uw43pa
+	ykZa47Kry0gF4jgFy7GrWjqr1rKw4kArWrCrs2qrZxZ3WDtryxXr1fKFW5A3s0grWruF98
+	Z3WIqwnavw48A37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+	Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+	AY17CE14v26r1Y6r17MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
+	cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
+	IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2
+	KfnxnUUI43ZEXa7IU1CPfJUUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-On Sat Sep 5, 2026 at 9:21 AM CEST, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 2 potential issu=
-e(s) to consider:
->
-> New issues:
-> - [High] Lock identity aliasing across distinct inner map instances due t=
-o flawed static identity check.
->
-> Pre-existing issues:
-> - [High] A BPF program can cause an AA deadlock by acquiring `bpf_res_spi=
-n_lock` twice on the same single-element array map element, bypassing verif=
-ier lock tracking.
+
+On 2026/9/5 15:09, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] The patch misses updating the architecture check in `tools/testing/selftests/bpf/progs/exceptions.c`, leaving stack argument exception tests permanently disabled on RV64.
 > --
->
-> commit 996188899c474047a5a9bb68f80d0d3c3e5a5b6a
-> Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
->
-> bpf: Assign lock identity to callback map values
->
-> This commit assigns a fresh verifier ID to lockable map values in
-> callback frame constructors to prevent lock aliasing. It specifically
-> preserves ID zero for single-element array maps to support stable
-> allocation aliases.
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 1c3039f3fc323..b08501734ddfa 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -447,6 +447,11 @@ static bool reg_may_point_to_spin_lock(const struct=
- bpf_reg_state *reg)
->>  	return btf_record_has_field(reg_btf_record(reg), BPF_SPIN_LOCK | BPF_R=
-ES_SPIN_LOCK);
->>  }
->>
->> +static bool map_value_has_static_identity(const struct bpf_map *map)
->> +{
->> +	return map->map_type =3D=3D BPF_MAP_TYPE_ARRAY && map->max_entries =3D=
-=3D 1;
->> +}
->
-> [Severity: High]
-> Does this check fail to distinguish inner_map_meta from an actual
-> single-element array map?
->
-> When a BPF program retrieves two distinct inner maps from an outer map
-> (where the inner maps are single-element array maps), and calls
-> bpf_for_each_map_elem on both, the verifier tracks both using the same
-> inner_map_meta.
->
-> Because inner_map_meta has max_entries =3D=3D 1 and map_type =3D=3D
-> BPF_MAP_TYPE_ARRAY, will map_value_has_static_identity() return true and
-> incorrectly assign id =3D 0 to both callbacks' element pointers?
->
-> Could this allow a program to acquire a lock on an element from the first
-> inner map and unlock it on the element from the second inner map, corrupt=
-ing
-> the spinlock state?
+> 
+> commit 064ba72e246734f0b6e1f3e1f7a66bfe6a3a8b0e
+> Author: Feng Jiang <jiangfeng@kylinos.cn>
+> 
+> selftests/bpf: Enable stack argument tests for RV64
+>      
+> Enable the stack argument selftests for RV64. The riscv guard is
+> restricted to __riscv_xlen == 64 since stack arguments are only
+> supported by the RV64 JIT.
+> 
+>> diff --git a/tools/testing/selftests/bpf/progs/stack_arg.c b/tools/testing/selftests/bpf/progs/stack_arg.c
+>> index 944e3bb603e7e..3e9ed37c57bb9 100644
+>> --- a/tools/testing/selftests/bpf/progs/stack_arg.c
+>> +++ b/tools/testing/selftests/bpf/progs/stack_arg.c
+>> @@ -21,7 +21,8 @@ struct {
+>>   
+>>   int timer_result;
+>>   
+>> -#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
+>> +#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
+>> +	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
+>>   	defined(__BPF_FEATURE_STACK_ARGUMENT)
+>>   
+>>   const volatile bool has_stack_arg = true;
+> 
+> [Severity: Medium]
+> Should tools/testing/selftests/bpf/progs/exceptions.c also be updated
+> with this new architecture guard?
+> 
+> It looks like the same has_stack_arg guard is used there:
+> 
+> tools/testing/selftests/bpf/progs/exceptions.c:
+> 
+> #if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) \
+> 	&& defined(__BPF_FEATURE_STACK_ARGUMENT)
+> 
+> const volatile bool has_stack_arg = true;
+> 
+> Without updating it, the C preprocessor will take the #else branch on RV64,
+> defining has_stack_arg = false. At runtime, prog_tests/exceptions.c checks
+> skel->rodata->has_stack_arg and silently bypasses the stack argument exception
+> tests.
+> 
+> Could this be added to ensure the exception tests are not permanently
+> disabled on RV64?
+> 
 
-This one is real, will fix.
-
->
-> [Severity: High]
-> This is a pre-existing issue, but does preserving ID 0 for single-element
-> array maps leave an AA deadlock vulnerability in bpf_res_spin_lock tracki=
-ng?
->
-> If a program acquires a bpf_res_spin_lock using a direct map value pointe=
-r
-> via LD_IMM64, check_ld_imm() assigns id =3D 0. If the program then acquir=
-es
-> the same lock again using a pointer obtained via bpf_map_lookup_elem(),
-> check_helper_call() unconditionally assigns a fresh ID to the lookup resu=
-lt.
->
-> Will find_lock_state() inside process_spin_lock() see the different IDs a=
-nd
-> fail to recognize the lock is already held, causing a system hang on the
-> second acquisition?
->
-
-This one is not.
-
-> [ ... ]
+bpf exception support not yet for rv64
 
