@@ -1,120 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF5C12931F7
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 00:23:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 273932E06D2
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 00:51:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788567839; cv=none; b=JcWePRy9sNjw/GvVxe9YCJirN20XHLIbW0PWviO7h8TUqjojH+nGTdAMwee+vly+lTuo0uPVIXdneU+vZ4WjGkFQG8meMUyxwooML8XbcZ6m3JpDOJOVALgeRdPwQdqu4MGSvQoS3/Yf7AotCQciY6ygKdiyeUq0vsK9cHeVfqE=
+	t=1788569513; cv=none; b=IUO6vDMY6NXGDx67mexnFVIMmQHt46NJcroLwamNsl/lYT0p822+2ftpER6VonDXPBaG5NLK6WWSshBg0wVPail+dZxURoI2oQ7OwEOM/HUFbMfVd4f5VzpOYqeKHXpja4pDghWc6NFroPoiQEGwvTV0u9UPVzFxB1zSXQcUnQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788567839; c=relaxed/simple;
-	bh=FuwxworsnmRpdS2wyxTknCYmINOeNTTGJ/Jpaj8FTQc=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ZBig4k+0JKsD/FwN5Dg41wumBi5VSny0Ic+GRMHEB9q95MMULoeJl24hq8OW4tMrPEKvBKMd6D2xfE68r1Gue7gwfQ0LQTQtVsMJsoTTSmNJKju4LpcW9m09sIGb1KtI/Dw78l75fqfklk3UHR9/XOGc3M9Qwk3N04NWX6oYddI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fQ6iY3pT; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788569513; c=relaxed/simple;
+	bh=QCVzeezZhlosxASj25WsVlNwLf2bZ4bX0eprxNEnhqE=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Rt2dhhqAdT/pOZAhm0qWrDTmFxuTYI/q+oeAWQmfS+t28mxyKzW8PyGhI7E3fYXSn5a0baao2yixiBogmYsBiyBBcN9j6/uGDTaDR4MnlZMnOgIGxI4eKXA38BFELMKFqpMblb38f8hZhaq4Jmu1wAQ4fPp2jqAua+u0vjCFccI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K+TpkW6V; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fQ6iY3pT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04E2E1F00A3D;
-	Sat,  5 Sep 2026 00:23:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K+TpkW6V"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06DFB1F00A3D;
+	Sat,  5 Sep 2026 00:51:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788567838;
-	bh=dyGq+DXVrcV2qIKytHJaHQjyP389fgDPP+pU0G4Hb30=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=fQ6iY3pT7nTLQcHGKQtcQC4PwDAK+emiG95wo8GklXWBkMR0EzQkk5WW6j6kkNfl1
-	 cpOHV7x276TyzzU/VBlTkiC/pDVQrJK4gcU51QZOXsaNIDlBBS2j0eLMvwuk9sPi0f
-	 Xg/JtWdRgBl8TjjHi83+Ps2xTinAXzZ1CXzZTKRmyRSj59CvxL9HkWUTwAzV68wTuO
-	 IdQ/ODoBQ5Qb6P2bG5HSVpXyQ+PBH1+UHsbEZ1o3X6MVhPa3yHt6cXIP5FVUv1injQ
-	 WLfOl2Q8nrhwuSfqNixjkg+qoNNpgzMqY1q46PclX2sjsxVfylpCDjHgJ08xXWs89Q
-	 qB8nM0+sgcWng==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 03/10] bpf: mark a NULL memory argument of a call
- precise
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Eduard Zingerman" <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260904-register-is-null-precise-fixes-v1-3-0f5a360ff15d@gmail.com>
-References: <20260904-register-is-null-precise-fixes-v1-0-0f5a360ff15d@gmail.com>
- <20260904-register-is-null-precise-fixes-v1-3-0f5a360ff15d@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 05 Sep 2026 00:23:57 +0000
-Message-Id: <20260905002358.04E2E1F00A3D@smtp.kernel.org>
+	s=k20260515; t=1788569510;
+	bh=qX9YdiP4sPw3E+R9EzY0ClsuUn7KVKYOdn1BB2xO21Y=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=K+TpkW6VBm5/FzlJzfp9+hDmgaIIn1ZTQL+wNwfcSpeVS8aLf2D8g5ET6VtqQfwdI
+	 1fB1zZaN72ypvZvKq2uHo+GsVrITZv+s8xoJj0rSH6xgx7676GgP2sAd+Q8Ffif68A
+	 3WYaeNrV4YLzYbyl7OE7OiemUZ3/DK6VuGI2+rHheK07FXUw7dTyPzefKonutctYQd
+	 DMqBru/MspytyyK+zqUO7pQwMYBcGM7dKh/23Qf+cuyIjCkL+3uKnkS3cmgUH5SwxT
+	 ZhUz/OavXe4WGELk+DDpNAI2H/U85ItZHGZZP1hCJCjhjfnCKPy8bnE6H86iWwPcr/
+	 PBQ7TewsuNriw==
+Content-Type: multipart/mixed; boundary="===============6905752161653878596=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <a641b37e4e3e21ef926438d6da0a33ca798a0d327a22f2ab8be2918a86ebcfb9@mail.kernel.org>
+In-Reply-To: <20260904-register-is-null-precise-fixes-v1-10-0f5a360ff15d@gmail.com>
+References: <20260904-register-is-null-precise-fixes-v1-10-0f5a360ff15d@gmail.com>
+Subject: Re: [PATCH bpf 10/10] bpf: use mark_arg_precision() in check_mem_size_reg()
+From: bot+bpf-ci@kernel.org
+To: eddyz87@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org
+Cc: daniel@iogearbox.net,martin.lau@linux.dev,kernel-team@fb.com,yonghong.song@linux.dev,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat,  5 Sep 2026 00:51:49 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Uninitialized variable `known_memory` is read on the error path =
-in `check_kfunc_args` when handling NULL memory arguments.
---
-
-commit 00db4f1dea6ce217e9633f69c742a410441956c2
-Author: Eduard Zingerman <eddyz87@gmail.com>
-
-bpf: mark a NULL memory argument of a call precise
-
-This commit ensures that a NULL memory argument is correctly marked precise=
-=20
-to prevent pruning against arbitrary scalar values. It also introduces a new
-mark_arg_precision() helper to handle arguments that reside on the stack.
+--===============6905752161653878596==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index ca362a7ea58c3..b758f28227540 100644
+> index e8af1d3dbdeb..1c3039f3fc32 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
-
-[ ... ]
-
-> @@ -7168,7 +7177,7 @@ static int check_mem_reg(struct bpf_verifier_env *e=
-nv, struct bpf_reg_state *reg
->  	int size, err =3D 0;
-> =20
->  	if (bpf_register_is_null(reg))
-> -		return 0;
-> +		return mark_arg_precision(env, argno);
-
-[Severity: Medium]
-Does this early return path leave the `known_memory` pointer uninitialized=
-=20
-if `mark_arg_precision()` fails?
-
-Looking at its caller in `check_kfunc_args()`, `known_memory` is declared
-without initialization:
-
-kernel/bpf/verifier.c:check_kfunc_args() {
-	...
-	bool known_memory;
-	...
-	ret =3D check_mem_reg(env, reg, argno, type_size, BPF_READ | BPF_WRITE,
-			    meta, &known_memory);
-	if (ret < 0) {
-		...
-		if (known_memory)
-			verbose(env, "...");
-		else
-			verbose(env, "...");
-		return ret;
-	}
-	...
-}
-
-If `mark_arg_precision()` returns a negative error code (like `-EFAULT` fro=
-m=20
-backtracking depth limits), `check_mem_reg()` will propagate it immediately=
-=20
-before reaching the `if (known_memory) *known_memory =3D true;` block.=20
-
-Could this cause `check_kfunc_args()` to evaluate an uninitialized boolean=
-=20
-variable when deciding which diagnostic message to print on the error path?
-
->  	if (known_memory)
->  		*known_memory =3D true;
+> @@ -7160,14 +7160,8 @@ static int check_mem_size_reg(struct bpf_verifier_env *env,
+>  	if (err && failure)
+>  		*failure = BPF_MEM_SIZE_FAIL_MEMORY;
 >
+> -	if (!err) {
+> -		int regno = reg_from_argno(size_argno);
+> -
+> -		if (regno >= 0)
+> -			err = mark_chain_precision(env, regno);
+> -		else
+> -			err = mark_stack_arg_precision(env, arg_idx_from_argno(size_argno));
+> -	}
+> +	if (!err)
+> +		err = mark_arg_precision(env, size_argno);
+>
+>  	return err;
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260904-register-i=
-s-null-precise-fixes-v1-0-0f5a360ff15d@gmail.com?part=3D3
+This isn't a bug, but since mark_arg_precision() now exists, could
+process_const_arg() and process_const_alloc_mem_size() use it as well, so
+the reg-vs-stack dispatch lives in one place? Both functions still
+open-code the identical four-line pattern that was just replaced here.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33932783420
+--===============6905752161653878596==--
