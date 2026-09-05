@@ -1,120 +1,157 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDDAB32B10F;
-	Sat,  5 Sep 2026 03:00:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D3822472AF;
+	Sat,  5 Sep 2026 03:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788577217; cv=none; b=YrWiaRx4FsJS/VPQn4c87XaiwgOH5XEqRfcJ7HE5zIOkMf1tATXXFBeO42kz/3jtXKuwbYQqeDBT8ppAxbRPwVfZY2gxeN20b7L+fqBSCGI1jAbNy/c1TxMmb2J8EHzQbjGwoKrODZ5UY0B0VE9bZhRinPb3XDfHZ5kQSTnAZKY=
+	t=1788577704; cv=none; b=d3uRokIbyhXiwuWfyaMOjJH2GcHHdENufdvPhYdxXhrvOd1VVj7nbZgD8OrAjEhbqO8Nl5MZhXm+Angw8o901RnV/L+x0BpV/r7zvIz38A0TN5+F68g16FXCk1dQGRgQ1ffWEtIykmx9YspWCbRr+4Vv8XGD5f8ITurID5I5d4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788577217; c=relaxed/simple;
-	bh=U5G8wqhdv6wNsgRU+y43xN9wON7WhKariG72lGJJ1V4=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WRnM0/brTxRo4J47oio0TzgiS7KTxQSGvYR/7he36qg5oupp9FeaUZnJzRUazDAFWL71sqnUlSIEC12KrWLgwbpMszg+FKcF2qCa11Et0riv+gK+8hR3cUASsMY+D0Jr/CC8Bs6S6mNn9qlWEzYclQIxJH2tMvl2E2q+O2tlg18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n3235vnO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788577704; c=relaxed/simple;
+	bh=aAn6XXVpZxkC4xYEu2hExGNPc3HYP0pNew+8EKplVpE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=L9dgpaVI4aitVXT9N5EEvhwtV6ylBdlsBuxz2YfntlHG5LxS3WiVj2yL6bz2GPJMGQ22j2L34p5RkNJ+JfH+bmzJ/Ri1ZO4N/XUemRoI9fjzuO2yab1XgpoW35L2mYsdWbyJQLolqQpzkLdtat5B42t1rjBgBvgKxo0TWn+7MHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=6XxG4jvV; arc=none smtp.client-ip=113.46.200.222
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n3235vnO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 684D61F00A3D;
-	Sat,  5 Sep 2026 03:00:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788577215;
-	bh=VIOhOu/LgEMPFfoPkmWi2vYvFUhC/tav40+uRkNrpMM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=n3235vnOhpnpmKCYNFh5rgg7TCC0HJO+Snz1jUqfnEKpIq7aPsg9S7LZBSqcy+Trm
-	 LG0khlIdXboBJn7CCRxM9M+zNGnVapadLzOht+KIRbhVJgt4ASmoABSqMa2nSow6Mh
-	 YeEAmuz74Fr28lrVTEDmNLDQgovD0PMgGbzumGm2p1H6EZGhNTgOnSLUm23WNJaGkl
-	 z/VLYY8ZwXbTflLeU88kLuEBq82mzUVo8zFo7GtU1CRgtQO5zCkpqWzdmtOmoZhJPF
-	 t4cskTUrhZAsej2I7V7h8tn2dP53a8pe3UKYhBw3nkbaYIPmTqiu/GJDp29bkZMtPj
-	 2GWOhqgdA1NFA==
-Content-Type: multipart/mixed; boundary="===============0188849458020851844=="
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="6XxG4jvV"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=Rau380fv/C3PIMO8upUmN2ndspPXutqa2G+T2w4vG2g=;
+	b=6XxG4jvVSS2yP6Twqz++PqKHMDiJ+xiJaTnRUXE78I1KRddCIO/l3t/PVROSi3vqBhDcqvNBg
+	VH80GddnFqp8jbISNmo1hRfzgljAx81PxpoS6zKcY9grHjWlBZvaEeeXrhQwRmKAsbXe389JuT9
+	gCkFoSX+kvTN1iDo/uk6uI0=
+Received: from mail.maildlp.com (unknown [172.19.163.214])
+	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4hcJ0B121DzLlXB;
+	Sat,  5 Sep 2026 10:57:14 +0800 (CST)
+Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
+	by mail.maildlp.com (Postfix) with ESMTPS id CE5C74056C;
+	Sat,  5 Sep 2026 11:08:05 +0800 (CST)
+Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
+ (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Sat, 5 Sep
+ 2026 11:08:04 +0800
+Message-ID: <3e7fb313-021a-49d0-9def-fd9f03e3c2bb@huawei.com>
+Date: Sat, 5 Sep 2026 11:08:04 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <6fb6eba20f7975410960a3603614f1873fe7212e4d4f77408dcc33726dc31fde@mail.kernel.org>
-In-Reply-To: <20260905021139.4116529-1-pulehui@huaweicloud.com>
-References: <20260905021139.4116529-1-pulehui@huaweicloud.com>
-Subject: Re: [PATCH bpf v4] bpf: Fix UAF due to concurrent consumption of ttrace lists in alloc_bulk
-From: bot+bpf-ci@kernel.org
-To: pulehui@huaweicloud.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,houtao@huaweicloud.com,leon.hwang@linux.dev
-Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,yonghong.song@linux.dev,song@kernel.org,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,pulehui@huawei.com,pulehui@huaweicloud.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat,  5 Sep 2026 03:00:14 +0000 (UTC)
-
---===============0188849458020851844==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v2] bpf, riscv: Make arena support depend on ZACAS
+Content-Language: en-US
+To: Chen Pei <cp0613@linux.alibaba.com>, <ast@kernel.org>,
+	<daniel@iogearbox.net>, <andrii@kernel.org>, <memxor@gmail.com>,
+	<bjorn@kernel.org>, <puranjay@kernel.org>
+CC: <ihor.solodrai@linux.dev>, <eddyz87@gmail.com>, <martin.lau@linux.dev>,
+	<song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
+	<emil@etsalapatis.com>, <pjw@kernel.org>, <palmer@dabbelt.com>,
+	<guoren@kernel.org>, <bpf@vger.kernel.org>,
+	<linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<stable@vger.kernel.org>
+References: <20260902061451.1416-1-cp0613@linux.alibaba.com>
+From: Pu Lehui <pulehui@huawei.com>
+In-Reply-To: <20260902061451.1416-1-cp0613@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ kwepemf100007.china.huawei.com (7.202.181.221)
 
-> Syzkaller repeatedly triggered UAF splats related to nodes in
-> waiting_for_gp_ttrace within the bpf memalloc:
-> BUG: KASAN: slab-use-after-free in llist_del_first+0x85/0x110 lib/llist.c:61
-> Read of size 8 at addr ffff8881572cd080 by task syz.4.470/5112
->  ...
->  llist_del_first+0x85/0x110 lib/llist.c:61
->  alloc_bulk+0x193/0x460 kernel/bpf/memalloc.c:229
->  bpf_mem_refill+0x386/0x560 kernel/bpf/memalloc.c:436
-> Freed by task 14:
->  ...
->  __free_rcu kernel/bpf/memalloc.c:281 [inline]
->  __free_rcu_tasks_trace+0x48/0xd0 kernel/bpf/memalloc.c:291
->  rcu_tasks_invoke_cbs+0x1ec/0x3e0 kernel/rcu/tasks.h:571
->  rcu_tasks_one_gp+0x13d/0x220 kernel/rcu/tasks.h:621
->  rcu_tasks_kthread+0xf3/0x120 kernel/rcu/tasks.h:651
+Hi Pei,
 
-The file and line numbers in this stack trace refer to v6.6 (the v1
-posting included 'Not tainted 6.6.0+', which was dropped in later
-versions). Against the current tree, these line numbers point to different
-locations: alloc_bulk() line 229 is in a blank/'if (i >= cnt)' section
-(the waiting_for_gp_ttrace access is now at line 231), bpf_mem_refill()
-line 436 is the closing brace, and __free_rcu_tasks_trace() no longer
-exists at all (removed by commit 57b23c0f612d).
+On 2026/9/2 14:14, Chen Pei wrote:
+> The arena range tree allocates its nodes with kmalloc_nolock() since
+> commit f8c67d8550ee ("bpf: Use kmalloc_nolock() in range tree").
+> kmalloc_nolock() requires slab caches with cmpxchg128 support
+> (__CMPXCHG_DOUBLE); on riscv cmpxchg128 is provided by the ZACAS
+> extension. On systems without ZACAS every arena map creation fails
 
-Should the stack trace include the kernel version to prevent future
-readers from trying to map these line numbers onto the current tree?
+This limitation has a significant impact, as much of the hardware on the 
+market lacks ZACAS support given that it is not mandatory in RVA23.
 
-> In addition, there is also a theoretical race condition on the
-> free_by_rcu_ttrace list. This race requires two preconditions: an
-> in-flight Tasks Trace GP keeping c->call_rcu_ttrace_in_progress == 1,
-> and concurrent cross-CPU frees repopulating c->free_by_rcu_ttrace with
-> new nodes. Under these conditions, the following scenario triggers UAF:
-> // CPU0
-> // irq work is still busy (on PREEMPT_RT)
-> alloc_bulk()
->   llist_del_first(&c->free_by_rcu_ttrace)
->     entry = smp_load_acquire(&head->first);
->     do {
->       if (entry == NULL)
->         return NULL;
->         // CPU1
->         bpf_mem_alloc_destroy()
->           WRITE_ONCE(c->draining, true)
->           // wait for CPU0
->           irq_work_sync()
->                 // CPU2
->                 do_call_rcu_ttrace(tgt(CPU0))
->                   if (c->draining) {
->                     llist_del_all(&c->free_by_rcu_ttrace)
->                     free_all()
->                   }
-> // CPU0 continue
->       next = READ_ONCE(entry->next); <-- trigger UAF
+> with a misleading -ENOMEM.
+> 
+> Report the missing support instead: make bpf_jit_supports_arena()
+> return system_has_cmpxchg128() where it is defined, so arena map
 
-The annotation suggests this race window exists only on PREEMPT_RT
-kernels. However, on non-PREEMPT_RT configurations, alloc_bulk() runs in
-hard IRQ context and irq_work_sync() from another CPU still has to wait
-for it, so the same race window exists there too. The earlier comment that
-commit d114dde245f9 removed also mentioned non-RT cases: 'arch_irq_work_
-has_interrupt() being false and irq work is invoked in timer interrupt.'
-
-Would '(e.g., on PREEMPT_RT)' be more accurate than '(on PREEMPT_RT)' to
-indicate this is an example rather than a precondition?
+Originally, I thought rv_ext_enabled(ZACAS) && 
+IS_ENABLED(CONFIG_TOOLCHAIN_HAS_ZACAS) would make it more explicit, but 
+system_has_cmpxchg128() seems to better capture what we were missing.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Acked-by: Pu Lehui <pulehui@huawei.com>
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33938697434
---===============0188849458020851844==--
+> creation fails with -EOPNOTSUPP on systems without ZACAS. The macro
+> is only defined when both CONFIG_RISCV_ISA_ZACAS and
+> CONFIG_TOOLCHAIN_HAS_ZACAS are enabled, so guard it with #ifdef the
+> same way mm/slab.h consumes it, and reject arena otherwise. This
+> matches how arena BPF_CMPXCHG instructions are already gated on ZACAS
+> in bpf_jit_supports_insn().
+> 
+> Fixes: f8c67d8550ee ("bpf: Use kmalloc_nolock() in range tree")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
+> ---
+> Changes since v1:
+> - Guard system_has_cmpxchg128() with #ifdef instead of calling it
+>    unconditionally: the macro is only defined when both
+>    CONFIG_RISCV_ISA_ZACAS and CONFIG_TOOLCHAIN_HAS_ZACAS are enabled
+>    (as reported by sashiko-bot), so v1 broke the build when either
+>    was disabled. This mirrors how mm/slab.h consumes the macro.
+> 
+> Why #ifdef rather than rv_ext_enabled(ZACAS)? The predicates differ
+> exactly in the configurations that matter:
+> 
+>    scenario (ISA_ZACAS/TOOLCHAIN/hw)  v1           rv_ext_enabled  #ifdef
+>    ISA=n or TOOLCHAIN=n               build fails  rejects         rejects
+>    ISA=y TOOLCHAIN=n hw has ZACAS     build fails  accepts, then   rejects
+>                                                    -ENOMEM again
+>    ISA=y TOOLCHAIN=y hw has ZACAS     exact        exact           exact
+> 
+> rv_ext_enabled(ZACAS) does not check CONFIG_TOOLCHAIN_HAS_ZACAS, but
+> slab's cmpxchg128 - and thus kmalloc_nolock() - does require it, so
+> on an old toolchain with ZACAS hardware it would accept arena maps
+> and bring back the very -ENOMEM failure this patch fixes. The #ifdef
+> form builds in every configuration and matches exactly the
+> kmalloc_nolock() availability gate in mm/slab.h.
+> 
+> This issue was reported by sashiko-bot:
+> https://sashiko.dev/#/patchset/20260901120013.16104-1-cp0613@linux.alibaba.com?part=1
+> 
+> Question for reviewers: should the arena selftests gate on ZACAS,
+> e.g. probing it via riscv_hwprobe() (RISCV_ISA_EXT_ZACAS) and
+> SKIPping cleanly on systems without the extension?
+
+riscv isn't currently integrated into the BPF CI, and handling this 
+locally via qemu is fairly straightforward, so I'm not entirely sure 
+this is strictly necessary.
+
+> 
+>   arch/riscv/net/bpf_jit_comp64.c | 10 +++++++++-
+>   1 file changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+> index 74efe4b138d2..151031e97a24 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
+> @@ -2128,7 +2128,15 @@ bool bpf_jit_supports_ptr_xchg(void)
+>   
+>   bool bpf_jit_supports_arena(void)
+>   {
+> -	return true;
+> +	/*
+> +	 * The arena range tree uses kmalloc_nolock(), which needs
+> +	 * cmpxchg128, provided by ZACAS on riscv.
+> +	 */
+> +#ifdef system_has_cmpxchg128
+> +	return system_has_cmpxchg128();
+> +#else
+> +	return false;
+> +#endif
+>   }
+>   
+>   bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena)
