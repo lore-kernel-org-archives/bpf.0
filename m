@@ -1,62 +1,62 @@
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF15626AF4
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 22:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E66D349CD6
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 22:01:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788645703; cv=none; b=eMOJYF19DFQnkeBubJg52hhlAMBqzVSVH4rSKcvIi1Gn+op9I6rjakdxG7NrBkBSyrwH0WYbSPm6OLVR/WkULbjIFRNHiouOYS5w97lwdZVsvVvgtENUTkhjRVY+++95LkxDtjaW0spztL3xXAxZknWUTpdcgmbunnsT6MrMtHE=
+	t=1788645705; cv=none; b=hGsewM4QoHzDFpVXfcPC6RcuEnF+FfonNl+LA9KrrL1zaFWHJiwhDeqlUOkqcbEKgV3QrAyM7Oc64N3jTPUHotbQkEOmtvO6QICHOg0BxB2QAuO0WytFvQKrc2lsTWDd6a/LHQTbvbkFQ+ueoCNxyyFpCCkHK4yCTDxCnScr3Xo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788645703; c=relaxed/simple;
-	bh=8yKgEFNTfKc1LisFJdPImacFHkOhT6LMEVqSFNxmXJ4=;
+	s=arc-20240116; t=1788645705; c=relaxed/simple;
+	bh=zTLMOboRFblccu09S2RI+U9wfVRPx5YDsmG8FNcayg0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BIpYacc6ujjLZxQQKD4GrWkYnajB407vDoKYtooUtnA9NOFVpHTm+Mlzf+NwxjpPj+t87r6u3vjx8iUUSkEEhbcdnYYeOLU6IJ/Xs1asPzEFHltHzL261U7LJPzHX/KrxCoGXq08jefXLord4a6ASGIQ/wR0ggoM+k+WPfCiFiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NLr/1UZL; arc=none smtp.client-ip=209.85.210.47
+	 MIME-Version; b=Ohnr/PQjIiWkEx1OnEnQLrV2ZKiUa9w2v/xlPuecvhx2rvPGBM6IAPCFDl01Oc4I8T6QHIq814OFv/u1mCkeci7aV/FJ16zMoQzFHDFA1GYM07bsfY1t6k/tXrEmNuUUiKbD46X/4aPcIeaDlSPlRAwbKmN45g07imrMWYsrvD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AZXaP46m; arc=none smtp.client-ip=209.85.210.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NLr/1UZL"
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-7eb61bbeb25so2356928a34.1
-        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 15:01:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AZXaP46m"
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7f3f52143cdso1933804a34.2
+        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 15:01:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788645701; x=1789250501; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788645702; x=1789250502; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=LPnqdx2jhCP+kGPRBBSG0L5V+/7YoAwaROBv0IPxyO8=;
-        b=NLr/1UZLbdiWFpIKYqRhmHFF3CJBJJ4GgwXunNKVBBt2dKRgkMWUV5x9JV5miDt5HB
-         2I0XXfT/dDm0pFV2t+4Yr85OAO1royCESyxSZTvmgOVJX40oXRoPDfYAVJP4ZMs0YdXu
-         Yr+/vepwnOKwb4NcYeAVhD0peyir+/r6pNhyopBVkZTVS+P/CN+qxh4whkBbqzf8ARXg
-         /0DvqR2pi09Y5jThjdIZoP2xaZAjN+qVp4On73/YVm899uE9D46GgX53iimDH7icRNJS
-         ZN6ct9f3QYayWx+qruvw3kcpoixSzdmQyJi/ckEe5bs7+Uo5hvFmxzdYe1r7yTlDKYD0
-         TLoQ==
+        bh=FoMZvrOQtVEmQAlXa34uJVRWaXDgKQyL9iUofPnIKyM=;
+        b=AZXaP46mpy0D2Fc5IR3UYVta+bWcbpBR9+NztUYS9Kea2q7Cen9CzQE+vtkG5rhM/J
+         7tHLZ3bWJiAO4yQCIq0OLcFUtcPZ/B7K6ORimUCckpY1sMK3gJLWWXJ7yw/hNfQKmOA0
+         pufkSxNdYX+q4qecgNCrCThW6TKw9ISY0SKEFzuXIGILZOtn7ODrduhvGCkcu6cZbDAz
+         hAitVaTW+sRO1N3EhLlDjAY4gnQhrwS+UHF4nrOsF7725OS5gluIxwzP7NuNI7R+XiyH
+         1sx+WkMOVp+ET6FoKGk2XW3NBFueBQT1HSyfHhBRaYZWiqL85YBtsGwmo+R3QTklQBSf
+         L4hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788645701; x=1789250501;
+        d=1e100.net; s=20251104; t=1788645702; x=1789250502;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=LPnqdx2jhCP+kGPRBBSG0L5V+/7YoAwaROBv0IPxyO8=;
-        b=PCQAZUTUrFIrM2LUma+boHpghJA12JrTBWYPRvPFN8cxhXas9psGj/tVLV++7F8Rx0
-         FD9gICtaPg9gc3YmjpADwB/aZY7q1xcjNArd6vFH7nxjdycIcg1Gy82FPXP42sNt6I79
-         TsG82OpjIwLiP/twWsEo7AxI1+Zj7MPOgpkblXSpWi6U53hjAVtwcYwP4v9t4vJw57PH
-         YwlMBv59UJsfDzwM1xyApNGvOdKdH3SStuRSCdmru0ini4b2KFlCSUJ60V3bBIXrafG3
-         rArHQjhAGFRnnO4LzwGfvcOlDXvs7nXtal0IGX+HQkp30ezsReLnVNA0pBDkudrsu2in
-         oSGQ==
-X-Gm-Message-State: AFuF++mZTZIoirqeoq+TRBLSTTLuBy5DsDi2fWnGBd6t+FsCyKKXgmPd
-	ybkvlDf9IIyrhqFS4UIOQ2Z1XVxECG3ar2b9KO0LX+ht+ZchMYc/IlnWj4Opvw==
-X-Gm-Gg: AYBFou18m25qiqju921DjbupfpNzCpj0ItWZHDJyEK5/Sd7IVA1uPR6caSLrcTuAq3T
-	aGY5GCId0YUqw7PrfQGnHvCqkZrZ0wR7G8PIUFmS/GIZw4RN/QJ0A9xwu0boxypSbvRp7Pq0tVd
-	kI8LJK7WN1wbTISbnRoQCkyfKwZsouFHkhBdySrbg1kjKUpkR0gt/xOxyKoF6nt3+f5OE79IfAc
-	Js40P9UlePANr+IBjliL5CRkxcFAh/DkC0VlGZF3hStRbIsdhdkG2eirzgllKUBsu0X8GF6eD6Q
-	cyymHrjDB0Q4uy+W7ojmlbkrB9azdmQ3SzuyvMZk6ANv0rnGgJweePawdLAiyRW4ncs+Q+UnJ12
-	YnWzYHh1XrneRAbsvgn2+Rbty9SRJC/rStaAMuPXYdTb78o02EWCd6opLUboM6I8d3AJeXluzMd
-	+ZoVnWQlTo4/KKKCGZqnz1plcS1Hzm4YIQx4IKK5QiUmgVo+QPoTs=
-X-Received: by 2002:a05:6830:3104:b0:7fa:ac4f:789 with SMTP id 46e09a7af769-7faac4f0da9mr7225648a34.21.1788645700855;
-        Sat, 05 Sep 2026 15:01:40 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:48::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f9f6793f53sm7227191a34.6.2026.09.05.15.01.40
+        bh=FoMZvrOQtVEmQAlXa34uJVRWaXDgKQyL9iUofPnIKyM=;
+        b=SjwE8yXDaZcZBsBLDWJzAYrJrbijMxV33B/aOJx480c7yyjkfEYSHcewXoyOsUyS64
+         PSjTTq3Vh32afUhoLYZ1Nf7cAHCgoqmBfnuN6WVLmZJbW7XaPptTvta/L3NAUJFZ4zOS
+         DC0nAtLNTIRaoltm5SPvSFSC75qW1RAaQ4qIEey5nH9pwGyJkCh4CY+iIFos/S3xOrcY
+         Xw9CCZHQjiAVgmXt90YHRqiCAUUyEbBzedkE6RujB2qgSlNpVuOg9CBvfY2AcQsSfK5S
+         3/egK47Wtk2G98a+Kz1gFIDZLPKkUg57/qpAG1uOIilLlzK35JneS5xj4NevsQ7fa1tx
+         KDzg==
+X-Gm-Message-State: AFuF++lrtFy4IJzDbdTbT43jGkdGqn9sDTX+i6nDtpGZMkWLCLd0jn2s
+	Go9sJ87hGiXXx3tnxJQx8kBqjoqXC992dLQJ6NYWx7tMqQYgRu3T6DkC6NqL5Q==
+X-Gm-Gg: AYBFou0WfHkZRbQ3h029drnUsQ2x16L02jlLvLWqfVaj9j0V2O7fqRcdL/W4QvJcirA
+	dywU6xdO+Ie3LBssNf6KcK1S14DDHQqpcl/KhEW21ma9c12fKmwxdNkyNM4G0PcUrz7BrxvpX7H
+	CPd6CLw4vvGbkLuzxC0/8vQNIPE9KuefJqfvW2acQh1kRRyGBRPn42ofoYGaO61fXiwZhW+dOti
+	7S/1WFgsyGGVjbU5O037nZDVx84LqyTjr/XeAHqt9LEXqA0IFCIxGuvMOksjZCYS/D1Uh/vm/Vi
+	cyLlixslbRXDday5CRHew9IfBi/Hcd1naGwGu7ElVV/ZSat2eNwf91EmTGRuPEAfM740AtSVDdi
+	pI4uqZsXJOmO9NthMdCbYLXol7ZJMQAdAp2JL7uqjjVx9Vd4KFoaE2ksPi14SxLLm/Oqb7z05ox
+	XwzcXD9FvuvRFrNxd2H3oax99Q2PrFiaJwaFa2quVes01WAslIRuY=
+X-Received: by 2002:a05:6830:258a:b0:7fa:ac4f:784 with SMTP id 46e09a7af769-7faac4f0f27mr7612163a34.16.1788645702297;
+        Sat, 05 Sep 2026 15:01:42 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:4f::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f9f67947fcsm6994666a34.5.2026.09.05.15.01.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Sep 2026 15:01:40 -0700 (PDT)
+        Sat, 05 Sep 2026 15:01:41 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: alexei.starovoitov@gmail.com,
@@ -66,9 +66,9 @@ Cc: alexei.starovoitov@gmail.com,
 	memxor@gmail.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 14/22] bpf: Consolidate runtime argument type resolution
-Date: Sat,  5 Sep 2026 15:01:09 -0700
-Message-ID: <20260905220117.922028-15-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v1 15/22] bpf: Consolidate nullable argument validation
+Date: Sat,  5 Sep 2026 15:01:10 -0700
+Message-ID: <20260905220117.922028-16-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260905220117.922028-1-ameryhung@gmail.com>
 References: <20260905220117.922028-1-ameryhung@gmail.com>
@@ -80,311 +80,416 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A function argument type can require call-site refinement before
-register admission. Helpers refine map-value arguments according to the
-recorded map type, while kfuncs reinterpret a pointer to a scalar-only
-BTF struct as fixed-size memory when the register does not carry a
-BTF ID.
+check_kfunc_args() rejects a NULL or possibly-NULL register passed to
+a non-nullable pointer argument up front. Helpers only do so inside
+check_reg_type() for PTR_TO_BTF_ID arguments, leaving other pointer
+kinds to fail indirectly through compatible_reg_types[].
 
-Add resolve_func_arg_type() as the common entry point. It delegates
-helper map-value refinement to the existing resolve_map_arg_type(),
-then handles the kfunc BTF-to-memory fallback. It updates the effective
-argument type and size consumed by the subsequent checks.
+Give both paths the same policy and factor it into
+check_func_arg_nullability(). Gate it on arg_type_is_scalar() rather
+than on the BTF shape of the kfunc parameter. This keeps a zero passed
+to a size argument from being interpreted as a NULL pointer.
 
-Preserve PTR_MAYBE_NULL when changing the base type so later
-nullability validation observes the BTF contract. Keep OBJ_RELEASE
-arguments in their original pointer class. The latter is not a bug fix:
-existing kfunc checking already validates ownership before this
-resolver. It preserves release metadata for the later shared checking
-order, where ownership validation follows register admission.
+Taking nullability from the argument classification also avoids an
+is_kfunc_arg_nullable() lookup for every kfunc argument on every
+verification.
 
-Moving the kfunc fallback before admission lets the resulting
-fixed-size memory argument enter the compatibility check directly.
-This is another step toward routing both call types through
-check_func_arg().
+Keep release-argument nullability separate from ownership checking.
+A possibly-NULL release argument must be rejected even if it is
+otherwise nullable, while the ownership check must still permit a
+literal NULL for bpf_kptr_xchg().
+
+Use call-neutral structured diagnostics and retain the expected BTF
+type when it is available for a kfunc argument. Resolve that type lazily
+from the call metadata only when reporting an error. Helpers now report
+NULL-ness rather than a register-type mismatch for non-BTF-ID pointer
+arguments and literal NULL passed to a non-nullable pointer argument.
+Update the affected selftest expectations.
 
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- kernel/bpf/verifier.c | 199 +++++++++++++++++++++++-------------------
- 1 file changed, 110 insertions(+), 89 deletions(-)
+ kernel/bpf/verifier.c                         | 110 ++++++++++++------
+ .../selftests/bpf/prog_tests/cb_refs.c        |   2 +-
+ .../selftests/bpf/progs/cpumask_failure.c     |   2 +-
+ .../selftests/bpf/progs/iters_testmod.c       |   4 +-
+ .../selftests/bpf/progs/map_kptr_fail.c       |   6 +-
+ .../selftests/bpf/progs/verifier_ctx.c        |   2 +-
+ .../progs/verifier_helper_access_var_len.c    |   4 +-
+ .../selftests/bpf/progs/verifier_live_stack.c |   2 +-
+ .../selftests/bpf/progs/verifier_map_in_map.c |   3 +-
+ .../bpf/progs/verifier_map_lookup_refine.c    |   2 +-
+ .../bpf/progs/verifier_ref_tracking.c         |   4 +-
+ .../selftests/bpf/progs/verifier_sock.c       |   4 +-
+ .../testing/selftests/bpf/verifier/map_kptr.c |   2 +-
+ 13 files changed, 94 insertions(+), 53 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2e068c095436..15ed47b90316 100644
+index 15ed47b90316..1f5f975c73a7 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -8151,8 +8151,8 @@ static bool is_kfunc_call(const struct bpf_call_arg_meta *meta, u32 btf_id)
+@@ -8135,6 +8135,25 @@ static bool arg_type_is_dynptr(enum bpf_arg_type type)
+ 	return base_type(type) == ARG_PTR_TO_DYNPTR;
  }
  
- static int resolve_map_arg_type(struct bpf_verifier_env *env,
--				 const struct bpf_call_arg_meta *meta,
--				 enum bpf_arg_type *arg_type)
-+				const struct bpf_call_arg_meta *meta,
-+				enum bpf_arg_type *arg_type)
- {
- 	if (!meta->map.ptr) {
- 		/* kernel subsystem misconfigured verifier */
-@@ -8180,6 +8180,11 @@ static int resolve_map_arg_type(struct bpf_verifier_env *env,
- 	return 0;
- }
- 
-+static int resolve_func_arg_type(struct bpf_verifier_env *env,
-+				 struct bpf_reg_state *reg, u32 arg,
-+				 struct bpf_call_arg_meta *meta, int insn_idx,
-+				 enum bpf_arg_type *arg_type, u32 *arg_size);
-+
- struct bpf_reg_types {
- 	const enum bpf_reg_type types[10];
- 	u32 *btf_id;
-@@ -8794,6 +8799,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 	int regno = reg_from_argno(argno);
- 	enum bpf_reg_type type = reg->type;
- 	const u32 *arg_btf_id = NULL;
-+	u32 arg_size = arg_type & MEM_FIXED_SIZE ? fn->arg_size[arg] : 0;
- 	u32 key_size;
- 	int err = 0;
- 
-@@ -8823,11 +8829,9 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 		return -EACCES;
- 	}
- 
--	if (base_type(arg_type) == ARG_PTR_TO_MAP_VALUE) {
--		err = resolve_map_arg_type(env, meta, &arg_type);
--		if (err)
--			return err;
--	}
-+	err = resolve_func_arg_type(env, reg, arg, meta, insn_idx, &arg_type, &arg_size);
-+	if (err)
-+		return err;
- 
- 	if (bpf_register_is_null(reg) && type_may_be_null(arg_type))
- 		/* A NULL register has a SCALAR_VALUE type, so skip
-@@ -8965,12 +8969,12 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 		 * next is_mem_size argument below.
- 		 */
- 		if (arg_type & MEM_FIXED_SIZE) {
--			err = check_mem_reg(env, reg, argno, fn->arg_size[arg],
-+			err = check_mem_reg(env, reg, argno, arg_size,
- 					    arg_type & MEM_WRITE ? BPF_WRITE : BPF_READ, meta, NULL);
- 			if (err)
- 				return err;
- 			if (arg_type & MEM_ALIGNED)
--				err = check_ptr_alignment(env, reg, 0, fn->arg_size[arg], true);
-+				err = check_ptr_alignment(env, reg, 0, arg_size, true);
- 		}
- 		break;
- 	case ARG_MEM_SIZE:
-@@ -11814,6 +11818,65 @@ static bool btf_type_is_scalar_struct(struct bpf_verifier_env *env,
- 	return btf_struct_is_composed_of(env, btf, t, BTF_MEMBER_SCALAR);
- }
- 
-+static int resolve_func_arg_type(struct bpf_verifier_env *env,
-+				 struct bpf_reg_state *reg, u32 arg,
-+				 struct bpf_call_arg_meta *meta, int insn_idx,
-+				 enum bpf_arg_type *arg_type, u32 *arg_size)
++/*
++ * An argument that only ever takes a scalar, so a zero register passed to it
++ * is a value rather than a NULL pointer.
++ */
++static bool arg_type_is_scalar(enum bpf_arg_type type)
 +{
-+	argno_t argno = argno_from_arg(arg + 1);
-+	const struct btf_param *args;
-+	const struct btf_type *ref_t, *resolve_ret;
-+	const struct btf *btf;
-+	const char *ref_tname;
-+	u32 ref_id;
-+
-+	if (base_type(*arg_type) == ARG_PTR_TO_MAP_VALUE)
-+		return resolve_map_arg_type(env, meta, arg_type);
-+
-+	if (base_type(*arg_type) == ARG_PTR_TO_BTF_ID) {
-+		if (!meta->btf || arg_type_is_release(*arg_type) ||
-+		    base_type(reg->type) == PTR_TO_BTF_ID ||
-+		    reg2btf_ids[base_type(reg->type)])
-+			return 0;
-+
-+		args = btf_params(meta->func_proto);
-+		ref_id = *meta->fn->arg_btf_id[arg];
-+		btf = is_kfunc_arg_map(meta->btf, &args[arg]) ? btf_vmlinux : meta->btf;
-+		ref_t = btf_type_skip_modifiers(btf, ref_id, &ref_id);
-+		ref_tname = btf_name_by_offset(btf, ref_t->name_off);
-+
-+		if (!btf_type_is_scalar_struct(env, btf, ref_t)) {
-+			enum bpf_reg_type reg2btf_type = lookup_reg2btf_ids(ref_id);
-+			const char *expected_type;
-+
-+			verbose(env, "%s is %s expected %s %s",
-+				reg_arg_name(env, argno), reg_type_str(env, reg->type),
-+				btf_type_str(ref_t), ref_tname);
-+			if (reg2btf_type != NOT_INIT)
-+				verbose(env, " or %s", reg_type_str(env, reg2btf_type));
-+			verbose(env, "\n");
-+			expected_type = bpf_diag_fmt_btf_type(env, btf, ref_id);
-+			bpf_diag_call_arg_fmt(env, insn_idx, argno, meta->func_name,
-+					      "Pass a verifier-tracked pointer to the expected kernel object type, not a pointer to stack storage or another memory buffer.",
-+					      "the function expects a pointer to %s, but this argument is %s and cannot be used as that kernel object pointer",
-+					      expected_type,
-+					      bpf_diag_reg_type_plain(env, reg->type));
-+			return -EINVAL;
-+		}
-+
-+		resolve_ret = btf_resolve_size(btf, ref_t, arg_size);
-+		if (IS_ERR(resolve_ret)) {
-+			verbose(env, "%s reference type('%s %s') size cannot be determined: %ld\n",
-+				reg_arg_name(env, argno), btf_type_str(ref_t), ref_tname,
-+				PTR_ERR(resolve_ret));
-+			return -EINVAL;
-+		}
-+		*arg_type = ARG_PTR_TO_MEM | MEM_FIXED_SIZE | (*arg_type & PTR_MAYBE_NULL);
++	switch (base_type(type)) {
++	case ARG_SCALAR:
++	case ARG_CONST_SCALAR:
++	case ARG_MEM_SIZE:
++	case ARG_MEM_SIZE_OR_ZERO:
++	case ARG_CONST_MEM_SIZE:
++	case ARG_CONST_ALLOC_SIZE_OR_ZERO:
++		return true;
++	default:
++		return false;
 +	}
-+
-+	return 0;
 +}
 +
- static void btf_member_path_str(const struct btf *btf, const struct btf_member_path *path,
- 				char *buf, size_t buf_sz)
- {
-@@ -12894,7 +12957,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
- 	for (i = 0; i < nargs; i++) {
- 		struct bpf_reg_state *reg = get_func_arg_reg(caller, regs, i);
- 		enum bpf_arg_type arg_type = meta->fn->arg_type[i];
--		const struct btf_type *t, *ref_t, *resolve_ret;
-+		const struct btf_type *t, *ref_t;
- 		argno_t argno = argno_from_arg(i + 1);
- 		int regno = reg_from_argno(argno);
- 		u32 ref_id = args[i].type;
-@@ -12951,18 +13014,13 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
- 			continue;
+ /*
+  * A kfunc is named by a BTF ID, which can take the same numeric value as an
+  * enum bpf_func_id. Only test meta->func_id against a BPF_FUNC_* once the call
+@@ -8336,6 +8355,34 @@ __printf(6, 7) static void bpf_diag_call_arg_fmt(struct bpf_verifier_env *env, u
+ 	bpf_diag_call_arg(env, insn_idx, argno, call_name, reason, suggestion);
+ }
  
- 		if (base_type(arg_type) == ARG_PTR_TO_BTF_ID) {
--			/*
--			 * gen_kfunc_arg_proto() resolved the expected BTF ID
--			 * once. A __map argument names a vmlinux type rather
--			 * than one from the kfunc's own BTF.
--			 */
-+			/* gen_kfunc_arg_proto() resolved the expected BTF ID once. */
- 			ref_id = *meta->fn->arg_btf_id[i];
--			if (is_kfunc_arg_map(btf, &args[i])) {
--				ref_t = btf_type_by_id(btf_vmlinux, ref_id);
--				ref_tname = btf_name_by_offset(btf, ref_t->name_off);
--			}
++static int check_func_arg_nullability(struct bpf_verifier_env *env,
++				      struct bpf_reg_state *reg, argno_t argno,
++				      enum bpf_arg_type arg_type,
++				      struct bpf_call_arg_meta *meta, int insn_idx)
++{
++	const char *expected_type = "pointer";
++
++	if (arg_type_is_scalar(arg_type) || type_may_be_null(arg_type) ||
++	    (!bpf_register_is_null(reg) && !type_may_be_null(reg->type)))
++		return 0;
++
++	if (meta->btf) {
++		u32 arg_btf_id;
++
++		arg_btf_id = btf_params(meta->func_proto)[arg_idx_from_argno(argno)].type;
++		expected_type = bpf_diag_fmt(env, "value of type %s",
++					     bpf_diag_fmt_btf_type(env, meta->btf, arg_btf_id));
++	}
++
++	verbose(env, "Possibly NULL pointer passed to trusted %s\n",
++		reg_arg_name(env, argno));
++	bpf_diag_call_arg_fmt(env, insn_idx, argno, meta->func_name,
++			      "Add a NULL check and make the call only on the non-NULL path.",
++			      "the pointer may be NULL, but this call requires a non-NULL %s",
++			      expected_type);
++	return -EACCES;
++}
++
+ static const char *bpf_diag_expected_reg_types(struct bpf_verifier_env *env,
+ 					       const enum bpf_reg_type *types, int count)
+ {
+@@ -8448,17 +8495,6 @@ static int check_reg_type(struct bpf_verifier_env *env, struct bpf_reg_state *re
+ 		bool strict_type_match = arg_type_is_release(arg_type) &&
+ 					 !is_helper_call(meta, BPF_FUNC_sk_release);
+ 
+-		if (type_may_be_null(reg->type) &&
+-		    (!type_may_be_null(arg_type) || arg_type_is_release(arg_type))) {
+-			verbose(env, "Possibly NULL pointer passed to helper %s\n",
+-				reg_arg_name(env, argno));
+-			bpf_diag_call_arg(
+-				env, env->insn_idx, argno, meta->func_name,
+-				"the pointer may be NULL, but this call requires a non-NULL pointer",
+-				"Add a NULL check and make the call only on the non-NULL path.");
+-			return -EACCES;
+-		}
+-
+ 		if (!arg_btf_id) {
+ 			if (!compatible->btf_id) {
+ 				verifier_bug(env, "missing arg compatible BTF ID");
+@@ -8839,6 +8875,10 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 		 */
+ 		goto skip_type_check;
+ 
++	err = check_func_arg_nullability(env, reg, argno, arg_type, meta, insn_idx);
++	if (err)
++		return err;
++
+ 	/* arg_btf_id and arg_size are in a union. */
+ 	if (base_type(arg_type) == ARG_PTR_TO_BTF_ID ||
+ 	    base_type(arg_type) == ARG_PTR_TO_SPIN_LOCK)
+@@ -8853,15 +8893,28 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 		return err;
+ 
+ skip_type_check:
+-	if (arg_type_is_release(arg_type) && !arg_type_is_dynptr(arg_type) &&
+-	    !reg_is_referenced(env, reg) && !bpf_register_is_null(reg)) {
+-		verbose(env, "release helper %s expects referenced PTR_TO_BTF_ID passed to %s\n",
+-			meta->func_name, reg_arg_name(env, argno));
+-		bpf_diag_call_arg(
+-			env, insn_idx, argno, meta->func_name,
+-			"release helpers require a value that owns a live resource returned by a matching acquire helper",
+-			"Pass the resource-owning pointer returned by the matching acquire helper, and avoid calling the release helper after ownership has already been transferred or released.");
+-		return -EINVAL;
++	if (arg_type_is_release(arg_type)) {
++		if (type_may_be_null(reg->type)) {
++			verbose(env, "Possibly NULL pointer passed to trusted %s\n",
++				reg_arg_name(env, argno));
++			bpf_diag_call_arg(
++				env, insn_idx, argno, meta->func_name,
++				"the pointer may be NULL, but this call requires a non-NULL pointer",
++				"Add a NULL check and make the call only on the non-NULL path.");
++			return -EACCES;
++		}
++
++		if (!arg_type_is_dynptr(arg_type) &&
++		    !reg_is_referenced(env, reg) && !bpf_register_is_null(reg)) {
++			verbose(env,
++				"release helper %s expects referenced PTR_TO_BTF_ID passed to %s\n",
++				meta->func_name, reg_arg_name(env, argno));
++			bpf_diag_call_arg(
++				env, insn_idx, argno, meta->func_name,
++				"release helpers require a value that owns a live resource returned by a matching acquire helper",
++				"Pass the resource-owning pointer returned by the matching acquire helper, and avoid calling the release helper after ownership has already been transferred or released.");
++			return -EINVAL;
++		}
+ 	}
+ 
+ 	if (reg_is_referenced(env, reg))
+@@ -12978,20 +13031,9 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
+ 			ref_tname = btf_name_by_offset(btf, ref_t->name_off);
  		}
  
-+		ret = resolve_func_arg_type(env, reg, i, meta, insn_idx, &arg_type, &arg_size);
+-		if (btf_type_is_ptr(t) &&
+-		    (bpf_register_is_null(reg) || type_may_be_null(reg->type)) &&
+-		    !type_may_be_null(arg_type)) {
+-			const char *expected_type;
+-
+-			expected_type = bpf_diag_fmt_btf_type(env, btf, args[i].type);
+-			verbose(env, "Possibly NULL pointer passed to trusted %s\n",
+-				reg_arg_name(env, argno));
+-			bpf_diag_call_arg_fmt(env, insn_idx, argno, func_name,
+-					      "Add a NULL check and call the kfunc only on the non-NULL path.",
+-					      "the pointer may be NULL, but this kfunc requires a non-NULL value of type %s",
+-					      expected_type);
+-			return -EACCES;
+-		}
++		ret = check_func_arg_nullability(env, reg, argno, arg_type, meta, insn_idx);
 +		if (ret < 0)
 +			return ret;
- 		ret = check_func_arg_reg_off(env, reg, argno, arg_type);
- 		if (ret < 0)
- 			return ret;
-@@ -13211,80 +13269,43 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
- 				return ret;
- 			break;
- 		case ARG_PTR_TO_BTF_ID:
--			/* Only base_type is checked, further checks are done here */
--			if (base_type(reg->type) == PTR_TO_BTF_ID ||
--			    reg2btf_ids[base_type(reg->type)]) {
--				if (!is_trusted_reg(env, reg) ||
--				    bpf_type_has_unsafe_modifiers(reg->type)) {
--					if (!(arg_type & MEM_RCU)) {
--						const char *expected_type;
--
--						expected_type = bpf_diag_fmt_btf_type(env, btf, ref_id);
--						verbose(env, "%s must be referenced or trusted\n",
--							reg_arg_name(env, argno));
--						bpf_diag_call_arg_fmt(env, insn_idx, argno, func_name,
--								      "Pass a pointer acquired from a verifier-tracked source, or call this kfunc only inside the required protection if it accepts RCU pointers.",
--								      "the kfunc requires a trusted or resource-owning pointer to %s, but %s is %s",
--								      expected_type,
--								      reg_arg_name(env, argno),
--								      bpf_diag_reg_type_plain(env, reg->type));
--						return -EINVAL;
--					}
--					if (!is_rcu_reg(reg)) {
--						const char *expected_type;
--
--						expected_type = bpf_diag_fmt_btf_type(env, btf, ref_id);
--						verbose(env, "%s must be a rcu pointer\n",
--							reg_arg_name(env, argno));
--						bpf_diag_call_arg_fmt(env, insn_idx, argno, func_name,
--								      "Use this kfunc with a pointer that is valid in an RCU read lock region.",
--								      "the kfunc requires an RCU-protected pointer to %s, but %s is %s",
--								      expected_type,
--								      reg_arg_name(env, argno),
--								      bpf_diag_reg_type_plain(env, reg->type));
--						return -EINVAL;
--					}
--				}
-+			if (!is_trusted_reg(env, reg) ||
-+			    bpf_type_has_unsafe_modifiers(reg->type)) {
-+				if (!(arg_type & MEM_RCU)) {
-+					const char *actual_type, *arg_name, *expected_type;
  
--				ret = process_kf_arg_ptr_to_btf_id(env, reg, ref_t, ref_tname, ref_id, meta, i, argno);
--				if (ret < 0)
--					return ret;
--				break;
--			}
-+					expected_type = bpf_diag_fmt_btf_type(env, btf, ref_id);
-+					verbose(env, "%s must be referenced or trusted\n",
-+						reg_arg_name(env, argno));
-+					arg_name = reg_arg_name(env, argno);
-+					actual_type = bpf_diag_reg_type_plain(env, reg->type);
-+					bpf_diag_call_arg_fmt(env, insn_idx, argno, func_name,
-+							      "Pass a pointer acquired from a verifier-tracked source, or call this kfunc only inside the required protection if it accepts RCU pointers.",
-+							      "the kfunc requires a trusted or resource-owning pointer to %s, but %s is %s",
-+							      expected_type, arg_name, actual_type);
-+					return -EINVAL;
-+				}
-+				if (!is_rcu_reg(reg)) {
-+					const char *actual_type, *arg_name, *expected_type;
+ 		if (regno == meta->release_regno && !is_kfunc_arg_dynptr(meta->btf, &args[i]) &&
+ 		    !reg_is_referenced(env, reg) && !bpf_register_is_null(reg)) {
+diff --git a/tools/testing/selftests/bpf/prog_tests/cb_refs.c b/tools/testing/selftests/bpf/prog_tests/cb_refs.c
+index 78566b817fd7..50ea3d72d446 100644
+--- a/tools/testing/selftests/bpf/prog_tests/cb_refs.c
++++ b/tools/testing/selftests/bpf/prog_tests/cb_refs.c
+@@ -12,7 +12,7 @@ struct {
+ 	const char *err_msg;
+ } cb_refs_tests[] = {
+ 	{ "underflow_prog", "release kfunc bpf_kfunc_call_test_release expects referenced PTR_TO_BTF_ID passed to R1" },
+-	{ "leak_prog", "Possibly NULL pointer passed to helper R2" },
++	{ "leak_prog", "Possibly NULL pointer passed to trusted R2" },
+ 	{ "nested_cb", "Unreleased reference id=4 alloc_insn=2" }, /* alloc_insn=2{4,5} */
+ 	{ "non_cb_transfer_ref", "Unreleased reference id=4 alloc_insn=1" }, /* alloc_insn=1{1,2} */
+ };
+diff --git a/tools/testing/selftests/bpf/progs/cpumask_failure.c b/tools/testing/selftests/bpf/progs/cpumask_failure.c
+index 4628feb53d86..6d730535eb95 100644
+--- a/tools/testing/selftests/bpf/progs/cpumask_failure.c
++++ b/tools/testing/selftests/bpf/progs/cpumask_failure.c
+@@ -183,7 +183,7 @@ int BPF_PROG(test_global_mask_no_null_check, struct task_struct *task, u64 clone
+ }
  
--			if (!btf_type_is_scalar_struct(env, meta->btf, ref_t)) {
--				enum bpf_reg_type reg2btf_type = lookup_reg2btf_ids(ref_id);
--				const char *expected_type;
--
--				verbose(env, "%s is %s expected %s %s",
--					reg_arg_name(env, argno), reg_type_str(env, reg->type),
--					btf_type_str(ref_t), ref_tname);
--				if (reg2btf_type != NOT_INIT)
--					verbose(env, " or %s", reg_type_str(env, reg2btf_type));
--				verbose(env, "\n");
--				expected_type = bpf_diag_fmt_btf_type(env, btf, ref_id);
--				bpf_diag_call_arg_fmt(env, insn_idx, argno, func_name,
--						      "Pass a verifier-tracked pointer to the expected kernel object type, not a pointer to stack storage or another memory buffer.",
--						      "the kfunc expects a pointer to %s, but this argument is %s and cannot be used as that kernel object pointer",
--						      expected_type,
--						      bpf_diag_reg_type_plain(env, reg->type));
--				return -EINVAL;
-+					expected_type = bpf_diag_fmt_btf_type(env, btf, ref_id);
-+					verbose(env, "%s must be a rcu pointer\n",
-+						reg_arg_name(env, argno));
-+					arg_name = reg_arg_name(env, argno);
-+					actual_type = bpf_diag_reg_type_plain(env, reg->type);
-+					bpf_diag_call_arg_fmt(env, insn_idx, argno, func_name,
-+							      "Use this kfunc with a pointer that is valid in an RCU read lock region.",
-+							      "the kfunc requires an RCU-protected pointer to %s, but %s is %s",
-+							      expected_type, arg_name, actual_type);
-+					return -EINVAL;
-+				}
- 			}
+ SEC("tp_btf/task_newtask")
+-__failure __msg("Possibly NULL pointer passed to helper R2")
++__failure __msg("Possibly NULL pointer passed to trusted R2")
+ int BPF_PROG(test_global_mask_rcu_no_null_check, struct task_struct *task, u64 clone_flags)
+ {
+ 	struct bpf_cpumask *prev, *curr;
+diff --git a/tools/testing/selftests/bpf/progs/iters_testmod.c b/tools/testing/selftests/bpf/progs/iters_testmod.c
+index 76012dbbdb41..5a3ff65e8234 100644
+--- a/tools/testing/selftests/bpf/progs/iters_testmod.c
++++ b/tools/testing/selftests/bpf/progs/iters_testmod.c
+@@ -135,7 +135,7 @@ int iter_ret_rcu_test_protected(const void *ctx)
+ }
  
--			/*
--			 * If the register does not contain btf id but the argument type is a pointer to
--			 * scalar-only struct, allow verifying it as a fixed size memory.
--			 */
--			resolve_ret = btf_resolve_size(btf, ref_t, &arg_size);
--			if (IS_ERR(resolve_ret)) {
--				verbose(env,
--					"%s reference type('%s %s') size cannot be determined: %ld\n",
--					reg_arg_name(env, argno), btf_type_str(ref_t),
--					ref_tname, PTR_ERR(resolve_ret));
--				return -EINVAL;
--			}
--			arg_type = ARG_PTR_TO_MEM | MEM_FIXED_SIZE;
--			fallthrough;
-+			ret = process_kf_arg_ptr_to_btf_id(env, reg, ref_t, ref_tname,
-+							ref_id, meta, i, argno);
-+			if (ret < 0)
-+				return ret;
-+			break;
- 		case ARG_PTR_TO_MEM:
- 			if (arg_type & MEM_FIXED_SIZE) {
- 				bool known_memory;
+ SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
+-__failure __msg("R1 type=rcu_ptr_or_null_ expected=")
++__failure __msg("Possibly NULL pointer passed to trusted R1")
+ int iter_ret_rcu_test_type(const void *ctx)
+ {
+ 	struct task_struct *p;
+@@ -158,7 +158,7 @@ int iter_ret_rcu_test_protected_nostruct(const void *ctx)
+ }
+ 
+ SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
+-__failure __msg("R1 type=rdonly_rcu_mem_or_null expected=")
++__failure __msg("Possibly NULL pointer passed to trusted R1")
+ int iter_ret_rcu_test_type_nostruct(const void *ctx)
+ {
+ 	void *p;
+diff --git a/tools/testing/selftests/bpf/progs/map_kptr_fail.c b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+index 5e25ca806060..60c14e185856 100644
+--- a/tools/testing/selftests/bpf/progs/map_kptr_fail.c
++++ b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
+@@ -149,7 +149,7 @@ int reject_bad_type_match(struct __sk_buff *ctx)
+ }
+ 
+ SEC("?tc")
+-__failure __msg("R1 type=untrusted_ptr_or_null_ expected=percpu_ptr_")
++__failure __msg("Possibly NULL pointer passed to trusted R1")
+ int marked_as_untrusted_or_null(struct __sk_buff *ctx)
+ {
+ 	struct map_value *v;
+@@ -217,7 +217,7 @@ int reject_kptr_xchg_on_unref(struct __sk_buff *ctx)
+ }
+ 
+ SEC("?tc")
+-__failure __msg("R1 type=rcu_ptr_or_null_ expected=percpu_ptr_")
++__failure __msg("Possibly NULL pointer passed to trusted R1")
+ int mark_ref_as_untrusted_or_null(struct __sk_buff *ctx)
+ {
+ 	struct map_value *v;
+@@ -364,7 +364,7 @@ int kptr_xchg_ref_state(struct __sk_buff *ctx)
+ }
+ 
+ SEC("?tc")
+-__failure __msg("Possibly NULL pointer passed to helper R2")
++__failure __msg("Possibly NULL pointer passed to trusted R2")
+ int kptr_xchg_possibly_null(struct __sk_buff *ctx)
+ {
+ 	struct prog_test_ref_kfunc *p;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_ctx.c b/tools/testing/selftests/bpf/progs/verifier_ctx.c
+index 7856dad3d1f3..9d42ba824408 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_ctx.c
++++ b/tools/testing/selftests/bpf/progs/verifier_ctx.c
+@@ -208,7 +208,7 @@ __naked void null_check_7_ctx_bind(void)
+ 
+ SEC("cgroup/post_bind4")
+ __description("pass ctx or null check, 8: null (bind)")
+-__failure __msg("R1 type=scalar expected=ctx")
++__failure __msg("Possibly NULL pointer passed to trusted R1")
+ __naked void null_check_8_null_bind(void)
+ {
+ 	asm volatile ("					\
+diff --git a/tools/testing/selftests/bpf/progs/verifier_helper_access_var_len.c b/tools/testing/selftests/bpf/progs/verifier_helper_access_var_len.c
+index 343fc08d9747..d1452ef6f2f9 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_helper_access_var_len.c
++++ b/tools/testing/selftests/bpf/progs/verifier_helper_access_var_len.c
+@@ -621,7 +621,7 @@ l0_%=:	exit;						\
+ 
+ SEC("tracepoint")
+ __description("helper access to variable memory: size = 0 not allowed on NULL (!ARG_PTR_TO_MEM_OR_NULL)")
+-__failure __msg("R1 type=scalar expected=fp")
++__failure __msg("Possibly NULL pointer passed to trusted R1")
+ __naked void ptr_to_mem_or_null_8(void)
+ {
+ 	asm volatile ("					\
+@@ -637,7 +637,7 @@ __naked void ptr_to_mem_or_null_8(void)
+ 
+ SEC("tracepoint")
+ __description("helper access to variable memory: size > 0 not allowed on NULL (!ARG_PTR_TO_MEM_OR_NULL)")
+-__failure __msg("R1 type=scalar expected=fp")
++__failure __msg("Possibly NULL pointer passed to trusted R1")
+ __naked void ptr_to_mem_or_null_9(void)
+ {
+ 	asm volatile ("					\
+diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+index 401152b2b64f..bc3dfdc1a536 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
++++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+@@ -246,7 +246,7 @@ static __used __naked void read_first_param2(void)
+ SEC("socket")
+ __flag(BPF_F_TEST_STATE_FREQ)
+ __failure
+-__msg("R1 type=scalar expected=map_ptr")
++__msg("Possibly NULL pointer passed to trusted R1")
+ __naked void caller_stack_pruning_callback(void)
+ {
+ 	asm volatile (
+diff --git a/tools/testing/selftests/bpf/progs/verifier_map_in_map.c b/tools/testing/selftests/bpf/progs/verifier_map_in_map.c
+index d3be69a9a755..621248a02a1f 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_map_in_map.c
++++ b/tools/testing/selftests/bpf/progs/verifier_map_in_map.c
+@@ -154,8 +154,7 @@ l0_%=:	r0 = 0;						\
+ 
+ SEC("socket")
+ __description("forgot null checking on the inner map pointer")
+-__failure __msg("R1 type=map_ptr_or_null expected=map_ptr")
+-__msg("map_ptr_or_null, but this argument accepts map_ptr")
++__failure __msg("Possibly NULL pointer passed to trusted R1")
+ __failure_unpriv
+ __naked void on_the_inner_map_pointer(void)
+ {
+diff --git a/tools/testing/selftests/bpf/progs/verifier_map_lookup_refine.c b/tools/testing/selftests/bpf/progs/verifier_map_lookup_refine.c
+index c01abf54923d..4b1eadddd89c 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_map_lookup_refine.c
++++ b/tools/testing/selftests/bpf/progs/verifier_map_lookup_refine.c
+@@ -58,7 +58,7 @@ int mapofmaps_value_as_helper_mem_buf(struct __sk_buff *skb)
+ }
+ 
+ SEC("?tc")
+-__failure __msg("type=map_ptr_or_null expected=fp")
++__failure __msg("Possibly NULL pointer passed to trusted R1")
+ int mapofmaps_value_as_helper_fixed_mem(struct __sk_buff *skb)
+ {
+ 	char th[sizeof(struct tcphdr)] = {};
+diff --git a/tools/testing/selftests/bpf/progs/verifier_ref_tracking.c b/tools/testing/selftests/bpf/progs/verifier_ref_tracking.c
+index 199ad18f8eb5..f3fad911b5bc 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_ref_tracking.c
++++ b/tools/testing/selftests/bpf/progs/verifier_ref_tracking.c
+@@ -344,7 +344,7 @@ __naked void potential_reference_to_system_key(void)
+ 
+ SEC("tc")
+ __description("reference tracking: release reference without check")
+-__failure __msg("type=sock_or_null expected=sock")
++__failure __msg("Possibly NULL pointer passed to trusted R1")
+ __naked void tracking_release_reference_without_check(void)
+ {
+ 	asm volatile (
+@@ -363,7 +363,7 @@ __naked void tracking_release_reference_without_check(void)
+ 
+ SEC("tc")
+ __description("reference tracking: release reference to sock_common without check")
+-__failure __msg("type=sock_common_or_null expected=sock")
++__failure __msg("Possibly NULL pointer passed to trusted R1")
+ __naked void to_sock_common_without_check(void)
+ {
+ 	asm volatile (
+diff --git a/tools/testing/selftests/bpf/progs/verifier_sock.c b/tools/testing/selftests/bpf/progs/verifier_sock.c
+index 4f2f3209eec8..d59b2f905671 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_sock.c
++++ b/tools/testing/selftests/bpf/progs/verifier_sock.c
+@@ -110,7 +110,7 @@ l0_%=:	r0 = *(u32*)(r1 + %[bpf_sock_type]);		\
+ 
+ SEC("cgroup/skb")
+ __description("bpf_sk_fullsock(skb->sk): no !skb->sk check")
+-__failure __msg("type=sock_common_or_null expected=sock_common")
++__failure __msg("Possibly NULL pointer passed to trusted R1")
+ __failure_unpriv
+ __naked void sk_no_skb_sk_check_1(void)
+ {
+@@ -466,7 +466,7 @@ l1_%=:	r0 = *(u32*)(r0 + %[bpf_sock_rx_queue_mapping__end]);\
+ 
+ SEC("cgroup/skb")
+ __description("bpf_tcp_sock(skb->sk): no !skb->sk check")
+-__failure __msg("type=sock_common_or_null expected=sock_common")
++__failure __msg("Possibly NULL pointer passed to trusted R1")
+ __failure_unpriv
+ __naked void sk_no_skb_sk_check_2(void)
+ {
+diff --git a/tools/testing/selftests/bpf/verifier/map_kptr.c b/tools/testing/selftests/bpf/verifier/map_kptr.c
+index 4b39f8472f9b..1efaff296b7c 100644
+--- a/tools/testing/selftests/bpf/verifier/map_kptr.c
++++ b/tools/testing/selftests/bpf/verifier/map_kptr.c
+@@ -311,7 +311,7 @@
+ 	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
+ 	.fixup_map_kptr = { 1 },
+ 	.result = REJECT,
+-	.errstr = "R1 type=rcu_ptr_or_null_ expected=percpu_ptr_",
++	.errstr = "Possibly NULL pointer passed to trusted R1",
+ },
+ {
+ 	"map_kptr: ref: reject off != 0",
 -- 
 2.52.0
 
