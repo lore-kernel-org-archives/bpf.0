@@ -1,95 +1,95 @@
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B5723D28C
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 00:55:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02F935E95C
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 01:00:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788569730; cv=pass; b=Cp8niuOyvvcjm4qetHQQFzAlWP4J8LW9xMiLaxlqhyDcBELdpYHLXompcObeI+H7m+I/1xu94fqsdxwKGbE1bz+eGW8A7AZxHOrtgrQX6Cv46TaGjXG377wRnqTa53gkV3UR1QajKOulU+8P44TeyVTFeIe1o0gl2V2NgKCEjfg=
+	t=1788570047; cv=pass; b=KM7/bWhmhdt9UhNumvRWSiD1GLlVTX9VRTc+X1Hc06tvuxWB0YU0/FOHVOjfkcU7LgZK5QWZJxpwxk49fgdNILW8oFbzdkP8y3t1SrPgXDrPZzKlDfkfExA9uHbXCOBbS/vfxbZ/gNH49q7E/h1CckGAlzL3/sApQeCRscxwJ1E=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788569730; c=relaxed/simple;
-	bh=uPysR5GFkyCY/qE0YCzGd8ZwpPP3JXLnMqhzAo7gH90=;
+	s=arc-20240116; t=1788570047; c=relaxed/simple;
+	bh=Elwk7VmEoGhL32FW/Nx3bR/piitjtLgz4SNrUhNzp54=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Su4kAqKJ0W7OtBBTG+FnSup4RU2ypDP6WTibupjAH7eTcwEVzFCDKJmqc9Q6FaueOzc/HEG8ixY4Rbh2J/kqEiKmIKHU+VTMhp66BIxPDcUmyh/CHxpgW/KcvFS9oDh1GvYJ6zNq8hCkkcCKqZekSdnfs/gt7U/ZIgvLvpGaF3A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=hKs/C6u0; arc=pass smtp.client-ip=209.85.128.181
+	 To:Cc:Content-Type; b=RKlyJEumIUXmHMKefuGgS8y9tQiSS0qQSq8PNbVCYLNlFjQMXi/IyOQGyjby4pcw4ZeafX4U/2iby5WAaVt0oqvFA323OFQicEiPcekoaw1sicRQTT1ezfzo1vF6JBv89mHU9SkqFIkrmmOMCNNOrES/fdiOt0rK4ZmpV7y7L+w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=qKmebhjq; arc=pass smtp.client-ip=74.125.224.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="hKs/C6u0"
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-86c0e4dd49cso21561607b3.3
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 17:55:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788569728; cv=none;
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="qKmebhjq"
+Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-66825847b2cso2419347d50.3
+        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 18:00:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788570043; cv=none;
         d=google.com; s=arc-20260327;
-        b=QABGaEReR2A1N4nSmXWqvkVKT7GcgO+p2PrTWJl0JsDBoZ+gnJehMljNcZTvH5NWcZ
-         eQWjhVrRotT87NpXTVnfMgSkqR8yjs84XNkoU1uGEZJlvMKTGIPkCqOg7bHDMeXN4SlJ
-         IX0cjvKuCbZwQuaky0NOiRgb1/wXJVOKYMT7RX5+N/3lgArzYc0dVruVvA55ubJf/IwS
-         yBoYZNgc6a/Q7dTyn1m/s8kHrmp12MzrFG+mmcMOO3urlF+bOgLAo9//3U5EaX6rYskz
-         e4c/bN1uzA5kLzNRJ2AX5q2n6t1UnqhyA4UmBHXdmPHOsNtE+CkBtRk4ITzhS2sf6H+j
-         KWWA==
+        b=IfXkf81zbTIh/lOGkFSQSDzk9+P3KezXbLAcoHkY7vMJkvFMWdnZ88VipsFqp9g9Pf
+         wpYlpU1gNOUZNrWf7lA1IxKmzdMuYNigjqaa7FjujOYnQDsPq/crVOavnuZFiSuaLs2E
+         pzZx7uAQzMcrVwZgOwLGqcRZnAdkxvC/An+F50YYcvsaXHtmBQEhX26zV9XewDRCuepG
+         yFIaOnW8MXLSpw2uW+IH+E+RSunZO8psBPERhyJ1gue0ENXkh7dYZIqN6KtInCPeOFPT
+         S7P2nMtWVMOoQ0VBxm9idK90bmOgc8QjiPhfiXlKJi06TZkHH6oslV/5pZi+o7+plafn
+         +cfg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=o2ZcMOhNLSW/gCHzJ1Lb1NgDbEasJyqkX407lKXNvbY=;
-        fh=eLPn84XM2Xqaf8/ftZ6Qmi5CCU2ORPG5KlY9cjuntSg=;
-        b=GlCUc+U4h4LXR3MV3dpNUFItZ4zE/gAhmpSZPyTWaPwUSd3bQbudgpe4/eiGFlvZdK
-         0iFE22vrQoqPSGOu/dZWNPJMbQbU6d44TuirJto1y/Rhzac5rbOEUjt+wAnPBOrbINn6
-         +jpNSgwQ8T73DX4veAPN1cBMfOgnOqJ3RUeAe8MCLynj/eedyL1Wan6j4ZfZpLTW+Cez
-         fbH1UpFkWNcZWr6LVXpyzXkzhQ56kHx8XRetCUhZQETkJillV2pbLHLBe7qdT9vzfo2P
-         E+qZDylZ+RuM5VTBDxukEKvBh+mU/KC6zJCG6SjAwqZe3zMkk/hkGlVRY7uXBOA/LhDf
-         spFg==;
+        bh=vLsjxOOD/PGvIN0UFoQWSpaF44F5YOlXXFag5HE958I=;
+        fh=XmlmS2/l7AnEV91Xe9xK11/l2uC8MMf7F67h9b8cbLY=;
+        b=Nk/LlDWa0Tj2IHtg0O0Je5Vbd7jaAGdyUCBp7NAY80qU1h/cx9jqckSUlYMmbso+zz
+         rr2G7eu+lRaIUarspKobrU2I2Qv5DhLkfC/PNqCbstaJMS/zpYTWnmBVfI9vdmBNwkmL
+         1LiuqQiThJ4yXLH8P72pFEbYxcAb2C2ihJyMQ4wr3ZE/2Xj6gtGFxxyfdzH5EmYR4vgN
+         qPKR5P8JwxHklqvFYBPhUTTqo5HrVcKwOH7sN0Bh+yDxFwXv7e88TnENBv/KRkQAToIS
+         N8cfTJW4JBaVM5U5YFafcomnC4z7S1B7kjWnXPfijOF0QYyxa/udH0RGE4wrrHrJWpz8
+         0o/w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1788569728; x=1789174528; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1788570043; x=1789174843; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=o2ZcMOhNLSW/gCHzJ1Lb1NgDbEasJyqkX407lKXNvbY=;
-        b=hKs/C6u0ncsJZXhvsGxhlFZ/zYUqxJ/pC6z65oAb/4n8Wjx1zk9Bnjp43PN+hXSL/H
-         w0oMMDhv6vg2Cpy+hUloiIlnpAVj02Y+QZ6Qw6CXMG241bQqTmbnKETOMaPD9GTQ3CmW
-         KoJ43Iltbq2/PcsKgzQwdZRR2mx+dR41vNLA235BiJ1UK9BkdvE0TGY9FCL/tYxh+bH/
-         +Rt1yFzNSHhJoMNWs23LRkCyMIjM6Rl7CgJP0BHjRLFCEvoYW14IFrWk8BQfGTkSEw9B
-         Dbhn/nKQ90USRDahbCKx2O87nPo7QlFZtZIZLq8yOoXMA6D2CM1E3m56p0R2wZUGPKC0
-         w/4Q==
+        bh=vLsjxOOD/PGvIN0UFoQWSpaF44F5YOlXXFag5HE958I=;
+        b=qKmebhjq+i9IEf1eNgGn7GWiFl1BqDHqIEb98Nlqph9NzsLEmPq8+ya05/k1696lS4
+         XosvTejjTJ9eBnwb1AAzLEGKaFQP3j6NipjTiT4F/S7BZVbX+kMWscI7zWM1vlbz2dcJ
+         xXTvEraTgqUmoc5Y6S5Y5/gXiGzvGW1eU+k40tjPEuwh4Jl5aScL8kk5+HIUe9RWBE0m
+         Y9uyg/nIQPduNZQ4J220GPbI/JaUYpGnd9VO5oTbd+4JSLPTit1gYwjUqtORGh/F9HW4
+         BV2VsbpuiQfaEYklQBfxTRl9CT4CSlD9LnLGMX2C9CGXHb8WHhc2ag09wDSqGbs57593
+         Udpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788569728; x=1789174528;
+        d=1e100.net; s=20251104; t=1788570043; x=1789174843;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=o2ZcMOhNLSW/gCHzJ1Lb1NgDbEasJyqkX407lKXNvbY=;
-        b=S2XgPGqdL55aHs0aj+T3SG5GlM7RUAsamuxK/rujNMtV4BRxQbCCy/ff0ztFyyT4d4
-         hzWEPEvFDPVbzRSb+su7c6xv8d3esVvSkuOk7U0K7ZgfnBarm3XzJrZqZj0uLEdcQYzl
-         K9vIXiHdrEowXRtJ0/7y0nlH5kpF14GF818aItaf4lkuPHft+HI59ICvqVLX28b81rgu
-         Q2o1j6TD3sl42nhj4b3F8hu/AVqYSCv4Qx4UI6PZCI8Jlye/o9rdjFdKB/A+3qPga0vv
-         LIUwI9ydbI8Z1bNqNN1G3/uEjHf3DBxSoFdzVHAC024xd9lDLnR3hezHYqpegUFlIYSt
-         pAXw==
-X-Forwarded-Encrypted: i=1; AKwUvBxgudaUVBYOwjHxsGgwTq5adI8HEf7lSChvqVw9PDxrpkeYtMSxxAn95w/Bt++Uj2Yj/Ng=@vger.kernel.org
-X-Gm-Message-State: AFuF++ly+VmRqohXXGTg9fOVMLNyoUOd8Sw45Vgh1/hP2CBLP0Jo9YtH
-	y0wetcB0NInwi7TE9cZUGSlPUSdBuK1yO8rOydrRO8s6K/DTYN7vg0HToIBU71swbGVCdVLwhye
-	WHZ/W/N8YPUwyFfrKD724//3UGsm2YhDO4wpdJ0+kOQ==
-X-Gm-Gg: AYBFou3LTWNi7q8k/r8WCRO5dfpS7aj4zplMyhUzBVzv1lyTWV4PSfBUycd1BkdQAn/
-	Y3A65Sa+NILquqB3xb2ugAmIicgTSq80BuAEzF2Gc35r+XXm4in+MlqB2gmEkJEWovGMFDuAlZG
-	F5cpCWDsjDhlNVVGbxw0l8z6bC7H6Cj58KNXt0tnz+IROBR6mXJzKFVfzTlv6mG0YD51Spq7nmW
-	r+eeeIFqBYq2pQy/3yaUna3PosQ2qjsF6GIgyDwU16aY5DD5raaoWelzDxDaoAiMtEOsriq40QW
-	9iQBLNLSjN0jTnQsjJJMUWDlXvHc/wJG/EIn0FWOfUYpHM0elmT7Cfs4qdVR
-X-Received: by 2002:a05:690c:dd6:b0:873:5c7b:c0ed with SMTP id
- 00721157ae682-8735c7bc2c1mr17195157b3.37.1788569727646; Fri, 04 Sep 2026
- 17:55:27 -0700 (PDT)
+        bh=vLsjxOOD/PGvIN0UFoQWSpaF44F5YOlXXFag5HE958I=;
+        b=i+7uR/OezmpWFwiT0Xh59JJEyuJ5GbXiu+P6WfZkBhGCF8XjptKhpWJBNxgGgp2cJL
+         hK/rbIffKFcFfsXKGXjCV7ULO0kUWJiow6SgfJJKnx8eWo5We0LjtEFTb30cBEGILGfv
+         eu9e+i+N/mZLWt3FxSq6jxCD/+KsiitfX2eRlM9EXOIPIhywlEvN6BBp2z2rb0gI/Ed1
+         OJXRua/C9iE8BlqNULnpHKncT4inGm8oviQ3IuJ2S/Up5YOP4RvaxaIQqEPZ5D9uEHRk
+         /kTQuj0yc0STS03xXDYWafa9gzTzrY8Rx2DwHgQ1zHgCrDjqA+y+Jv0h4IjnK6TRjs/q
+         0qwg==
+X-Forwarded-Encrypted: i=1; AKwUvBwtcJIjh5UMqIxsm/u2XV+6/iMxhhddMNoSGA5bG73bUh3pdr/EaXbwqMXrrruGtJcNVc8=@vger.kernel.org
+X-Gm-Message-State: AFuF++ktNCZeyeMo2rlcf3S8yN82eLpVXsu9VuLnRJG567hjX6ZnYZZo
+	XhAbwwLyteevqYAHCiI8fG1ohdOrYgZQkIoxDEVzL3XsQaAl/A3ucPtQmYutxkzupDvL6GyaGdq
+	Bpwkx3jio1rRffvjHTowhP9vpSEjaz/ZxJ6cYD19ing==
+X-Gm-Gg: AYBFou3kDbFjD2GzcSg9Sbwx2qLsCKvz2PH5mrC5TZ0RhmCHsUfH/gFcZY0xZvVKA1B
+	HbcCgUIuSRI+gwVs2KsiGfL9LmC6i6PVuJTfbpd9uQTrPdIoO5emH+fN1jW+KX2Ig2VwvEzs2PW
+	jDHDDhcPWp2ZZYEYoSKXrV45s99/O/iQtIyFetpn6tyC4T8MiVjyVTwFX22RD3Pf0MznbpqLMYV
+	ZzOy2WcI5sJvQmz2hG9mqICdgk/I1z8avR/HURr9kxVpYBsd2/8TLcGHy5T3s7zKTeXBr21DBEW
+	+NXwwXXTsOIiIvh1LvMiRE6xwWUh9GYzX7KxTVWKxt8n4GhBTPYJNkDxaFiXKA==
+X-Received: by 2002:a05:690e:408:b0:66f:c1be:84e3 with SMTP id
+ 956f58d0204a3-66fc1be8719mr1324482d50.81.1788570043203; Fri, 04 Sep 2026
+ 18:00:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260901014713.3502900-2-sanghyun.park.cnu@gmail.com>
-In-Reply-To: <20260901014713.3502900-2-sanghyun.park.cnu@gmail.com>
+References: <20260901014713.3502900-2-sanghyun.park.cnu@gmail.com> <20260901014713.3502900-4-sanghyun.park.cnu@gmail.com>
+In-Reply-To: <20260901014713.3502900-4-sanghyun.park.cnu@gmail.com>
 From: Emil Tsalapatis <emil@etsalapatis.com>
-Date: Fri, 4 Sep 2026 20:55:16 -0400
-X-Gm-Features: AcwNN1UW-1j4dMWYep58MqXBEV0s9deTc9aokvKEnPaB7kyqQmbppPFFaFUGT3s
-Message-ID: <CABFh=a4Gj1c64ak2NautOWxyo1g+7F1ruPjf_HRQ9ek6Zt4j4A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 1/2] bpf: Validate program attach type during
- link update
+Date: Fri, 4 Sep 2026 21:00:31 -0400
+X-Gm-Features: AcwNN1X6a5AXkI5YfosGFySD8AZcWFDNtmSjCkKbO7VUp53de4hbB8cR5UIq2PE
+Message-ID: <CABFh=a6YEtiZdcC51LXbZKTKWoXxCk9PSe5jtn1R-w_EWT4aUQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 2/2] selftests/bpf: Cover attach type checks
+ in link update
 To: Sanghyun Park <sanghyun.park.cnu@gmail.com>
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
@@ -103,136 +103,231 @@ Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 31, 2026 at 9:47=E2=80=AFPM Sanghyun Park
+On Mon, Aug 31, 2026 at 9:48=E2=80=AFPM Sanghyun Park
 <sanghyun.park.cnu@gmail.com> wrote:
 >
-> Cgroup link updates compare only the program type. Programs verified
-> for different hooks can share a type, so a UDP6 sock_addr program can
-> replace a UDP4 program and write beyond the four-byte ipc.addr field in
-> the stack-local struct ipcm_cookie. The same gap permits incompatible
-> LSM_MAC and LSM_CGROUP replacements.
+> Pin down the two contracts changed by the companion patch. LINK_UPDATE
+> validates a replacement program against the link's attach type, while
+> CGROUP_SKB capability checks apply at LINK_CREATE and not LINK_UPDATE.
 >
-> Validate every replacement program against the link attach type before
-> dispatching to the link-specific update operation. Keep the CGROUP_SKB
-> CAP_NET_ADMIN check at initial attach so pinned or delegated link FDs can
-> still be updated after a capability drop.
+> Cover incompatible UDP4/UDP6 and LSM attach flavors, plus a CGROUP_SKB
+> link update after dropping CAP_NET_ADMIN and CAP_SYS_ADMIN.
 >
-> Fixes: 0c991ebc8c69 ("bpf: Implement bpf_prog replacement for an active b=
-pf_cgroup_link")
-> Acked-by: Leon Hwang <leon.hwang@linux.dev>
 > Signed-off-by: Sanghyun Park <sanghyun.park.cnu@gmail.com>
+> ---
+> v5:
+>   - Isolate attach and update coverage in separate subtests with their ow=
+n setup.
+>   - Inline the one-use LSM program FD and use a descriptive link FD.
+>   - Explain the create-versus-update contracts covered by the tests.
+> v4: https://lore.kernel.org/r/20260831023918.1857658-2-sanghyun.park.cnu@=
+gmail.com
+> ---
+>  .../selftests/bpf/prog_tests/cgroup_link.c    | 81 ++++++++++++++++++-
+>  .../selftests/bpf/prog_tests/lsm_cgroup.c     | 12 +++
+>  .../testing/selftests/bpf/progs/lsm_cgroup.c  |  6 ++
+>  .../selftests/bpf/progs/test_cgroup_link.c    | 14 +++-
+>  4 files changed, 111 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c b/tools=
+/testing/selftests/bpf/prog_tests/cgroup_link.c
+> index 15093a69510e..3b43c34917cc 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
+> @@ -1,6 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>
+>  #include <test_progs.h>
+> +#include "cap_helpers.h"
+>  #include "cgroup_helpers.h"
+>  #include "testing_helpers.h"
+>  #include "test_cgroup_link.skel.h"
+> @@ -24,7 +25,77 @@ int ping_and_check(int exp_calls, int exp_alt_calls)
+>         return 0;
+>  }
+>
+> -void serial_test_cgroup_link(void)
+> +static void test_cgroup_link_update(void)
+> +{
+> +       const __u64 caps =3D (1ULL << CAP_NET_ADMIN) | (1ULL << CAP_SYS_A=
+DMIN);
+> +       struct bpf_link *link =3D NULL;
+> +       __u64 saved_caps =3D 0;
+> +       int cg_fd =3D -1, err;
+> +
+> +       skel =3D test_cgroup_link__open_and_load();
+> +       if (!ASSERT_OK_PTR(skel, "skel_open_load"))
+> +               return;
+> +
+> +       err =3D setup_cgroup_environment();
+> +       if (!ASSERT_OK(err, "cg_init"))
+> +               goto cleanup;
+> +
+> +       cg_fd =3D create_and_get_cgroup("/cgroup_link_update");
+> +       if (!ASSERT_GE(cg_fd, 0, "cg_create"))
+> +               goto cleanup;
+> +
+> +       err =3D join_cgroup("/cgroup_link_update");
+> +       if (!ASSERT_OK(err, "cg_join"))
+> +               goto cleanup;
+> +
+
+Wrt bot feedback: This is fine, the bot itself says it's more
+consistent within the file to
+use the same setup/teardown.
+
+> +       link =3D bpf_program__attach_cgroup(skel->progs.sendmsg4, cg_fd);
+> +       if (!ASSERT_OK_PTR(link, "attach_sendmsg4"))
+> +               goto cleanup;
+> +
+> +       err =3D bpf_link__update_program(link, skel->progs.sendmsg6);
+> +       ASSERT_EQ(err, -EINVAL, "reject_sendmsg6_update");
+> +       bpf_link__destroy(link);
+> +       link =3D NULL;
+> +
+> +       err =3D cap_disable_effective(caps, &saved_caps);
+> +       if (!ASSERT_OK(err, "drop_caps_for_attach"))
+> +               goto cleanup;
+> +
+> +       link =3D bpf_program__attach_cgroup(skel->progs.egress, cg_fd);
+> +       if (!ASSERT_ERR_PTR(link, "attach_without_net_admin"))
+> +               goto cleanup;
+> +       err =3D libbpf_get_error(link);
+> +       link =3D NULL;
+> +       if (!ASSERT_EQ(err, -EPERM, "attach_err"))
+> +               goto cleanup;
+> +
+> +       err =3D cap_enable_effective(saved_caps & caps, NULL);
+> +       if (!ASSERT_OK(err, "restore_caps_for_attach"))
+> +               goto cleanup;
+> +
+> +       link =3D bpf_program__attach_cgroup(skel->progs.egress, cg_fd);
+> +       if (!ASSERT_OK_PTR(link, "attach_egress"))
+> +               goto cleanup;
+> +
+> +       err =3D cap_disable_effective(caps, &saved_caps);
+> +       if (!ASSERT_OK(err, "drop_caps"))
+> +               goto cleanup;
+> +
+> +       err =3D bpf_link__update_program(link, skel->progs.egress_alt);
+> +       ASSERT_OK(err, "update_without_net_admin");
+> +
+> +cleanup:
+> +       err =3D cap_enable_effective(saved_caps & caps, NULL);
+> +       ASSERT_OK(err, "restore_caps");
+> +       bpf_link__destroy(link);
+> +       if (cg_fd >=3D 0)
+> +               close(cg_fd);
+> +       cleanup_cgroup_environment();
+> +       test_cgroup_link__destroy(skel);
+> +       skel =3D NULL;
+> +}
+> +
+> +static void test_cgroup_link_attach(void)
+>  {
+>         struct {
+>                 const char *path;
+> @@ -253,3 +324,11 @@ void serial_test_cgroup_link(void)
+>         }
+>         cleanup_cgroup_environment();
+>  }
+> +
+> +void serial_test_cgroup_link(void)
+> +{
+> +       if (test__start_subtest("attach"))
+> +               test_cgroup_link_attach();
+> +       if (test__start_subtest("update"))
+> +               test_cgroup_link_update();
+> +}
+> diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c b/tools/=
+testing/selftests/bpf/prog_tests/lsm_cgroup.c
+> index 41e867467f6c..0dd44dbb9c95 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
+> @@ -74,6 +74,7 @@ static void test_lsm_cgroup_functional(void)
+>         int bind_prog_fd =3D -1;
+>         int bind_link_fd =3D -1;
+>         int clone_prog_fd =3D -1;
+> +       int socket_link_fd =3D -1;
+>         int err, fd, prio;
+>         socklen_t socklen;
+>
+> @@ -156,6 +157,17 @@ static void test_lsm_cgroup_functional(void)
+>         ASSERT_EQ(query_prog_cnt(cgroup_fd, "bpf_lsm_socket_bind"), 1, "p=
+rog count");
+>         ASSERT_EQ(query_prog_cnt(cgroup_fd, NULL), 4, "total prog count")=
+;
+>
+> +       socket_link_fd =3D
+> +               bpf_link_create(bpf_program__fd(skel->progs.socket_first)=
+,
+> +                               cgroup_fd, BPF_LSM_CGROUP, NULL);
+> +       if (!ASSERT_GE(socket_link_fd, 0, "link create socket_first"))
+> +               goto detach_cgroup;
+> +       err =3D bpf_link_update(socket_link_fd,
+> +                             bpf_program__fd(skel->progs.socket_create_l=
+sm),
+> +                             NULL);
+> +       ASSERT_EQ(err, -EINVAL, "reject lsm_mac link update");
+> +       close(socket_link_fd);
+> +
+>         /* Attach another instance of bind program to another cgroup.
+>          * This should trigger the reuse of the trampoline shim (two
+>          * programs attaching to the same btf_id).
+> diff --git a/tools/testing/selftests/bpf/progs/lsm_cgroup.c b/tools/testi=
+ng/selftests/bpf/progs/lsm_cgroup.c
+> index 3bfa479104be..30727945cecc 100644
+> --- a/tools/testing/selftests/bpf/progs/lsm_cgroup.c
+> +++ b/tools/testing/selftests/bpf/progs/lsm_cgroup.c
+> @@ -213,6 +213,12 @@ int BPF_PROG(socket_first, int family, int type, int=
+ protocol, int kern)
+>         return 0;
+>  }
+>
+> +SEC("lsm/socket_create")
+> +int BPF_PROG(socket_create_lsm, int family, int type, int protocol, int =
+kern)
+> +{
+> +       return 0;
+> +}
+> +
+>  SEC("lsm_cgroup/socket_create")
+>  int BPF_PROG(socket_second, int family, int type, int protocol, int kern=
+)
+>  {
+> diff --git a/tools/testing/selftests/bpf/progs/test_cgroup_link.c b/tools=
+/testing/selftests/bpf/progs/test_cgroup_link.c
+> index 4faba88e45a5..a987744d129c 100644
+> --- a/tools/testing/selftests/bpf/progs/test_cgroup_link.c
+> +++ b/tools/testing/selftests/bpf/progs/test_cgroup_link.c
+> @@ -20,5 +20,17 @@ int egress_alt(struct __sk_buff *skb)
+>         return 1;
+>  }
+>
+> -char _license[] SEC("license") =3D "GPL";
+> +SEC("cgroup/sendmsg4")
+> +int sendmsg4(struct bpf_sock_addr *ctx)
+> +{
+> +       return 1;
+> +}
+>
+> +SEC("cgroup/sendmsg6")
+> +int sendmsg6(struct bpf_sock_addr *ctx)
+> +{
+> +       ctx->msg_src_ip6[2] =3D 0;
+
+Bot is right on this, this as it stands doesn't affect the tests. We
+should remove it.
+That being said, the test itself is fine so please just remove the line and
+resend.
 
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-> ---
-> v5:
->   - Fold the link-create permission check call onto one line.
-> v4: https://lore.kernel.org/r/20260831023918.1857658-1-sanghyun.park.cnu@=
-gmail.com
->   - Validate every program link update through the shared attach-type hel=
-per.
->   - Fold the LSM attach-flavor check into that helper.
->   - Keep the CGROUP_SKB permission check in the attach-only wrapper and r=
-ename
->     the wrapper to describe that role.
->   - Follow the preferred BPF multi-line comment style.
->   - Add focused regression selftests as patch 2/2.
-> v3: https://lore.kernel.org/r/20260821084726.3769957-2-sanghyun.park.cnu@=
-gmail.com
->   - Factor the CGROUP_SKB CAP_NET_ADMIN check into an attach-only helper.
-> v2: https://lore.kernel.org/r/20260818061021.2551771-2-sanghyun.park.cnu@=
-gmail.com
->   - Extend validation from cgroup sock_addr programs to all cgroup progra=
-m
->     types, including exact LSM attach flavors.
->   - Preserve legacy CGROUP_SKB ingress/egress replacement compatibility.
->   - Keep the CGROUP_SKB CAP_NET_ADMIN check on attach, not link update.
-> v1: https://lore.kernel.org/r/20260805052858.2390918-3-sanghyun.park.cnu@=
-gmail.com
-> ---
->  kernel/bpf/syscall.c | 30 +++++++++++++++++++++---------
->  1 file changed, 21 insertions(+), 9 deletions(-)
->
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 6874ba1424af..2bcd3f3a2a55 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -4481,14 +4481,9 @@ static int bpf_prog_attach_check_attach_type(const=
- struct bpf_prog *prog,
->         case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
->         case BPF_PROG_TYPE_CGROUP_SOCKOPT:
->         case BPF_PROG_TYPE_SK_LOOKUP:
-> +       case BPF_PROG_TYPE_LSM:
->                 return attach_type =3D=3D prog->expected_attach_type ? 0 =
-: -EINVAL;
->         case BPF_PROG_TYPE_CGROUP_SKB:
-> -               if (!bpf_token_capable(prog->aux->token, CAP_NET_ADMIN))
-> -                       /* cg-skb progs can be loaded by unpriv user.
-> -                        * check permissions at attach time.
-> -                        */
-> -                       return -EPERM;
-> -
->                 ptype =3D attach_type_to_prog_type(attach_type);
->                 if (prog->type !=3D ptype)
->                         return -EINVAL;
-> @@ -4542,6 +4537,20 @@ static int bpf_prog_attach_check_attach_type(const=
- struct bpf_prog *prog,
->         }
->  }
->
-> +static int bpf_prog_attach_check_perm(const struct bpf_prog *prog,
-> +                                     enum bpf_attach_type attach_type)
-> +{
-> +       /*
-> +        * CGROUP_SKB programs can be loaded by unprivileged users, so ch=
-eck
-> +        * permissions at attach time.
-> +        */
-> +       if (prog->type =3D=3D BPF_PROG_TYPE_CGROUP_SKB &&
-> +           !bpf_token_capable(prog->aux->token, CAP_NET_ADMIN))
-> +               return -EPERM;
-> +
-> +       return bpf_prog_attach_check_attach_type(prog, attach_type);
+pw-bot: cr
+
+> +       return 1;
 > +}
 > +
->  static bool is_cgroup_prog_type(enum bpf_prog_type ptype, enum bpf_attac=
-h_type atype,
->                                 bool check_atype)
->  {
-> @@ -4606,7 +4615,7 @@ static int bpf_prog_attach(const union bpf_attr *at=
-tr)
->         if (IS_ERR(prog))
->                 return PTR_ERR(prog);
->
-> -       if (bpf_prog_attach_check_attach_type(prog, attr->attach_type)) {
-> +       if (bpf_prog_attach_check_perm(prog, attr->attach_type)) {
->                 bpf_prog_put(prog);
->                 return -EINVAL;
->         }
-> @@ -5805,8 +5814,7 @@ static int link_create(union bpf_attr *attr, bpfptr=
-_t uattr)
->         if (IS_ERR(prog))
->                 return PTR_ERR(prog);
->
-> -       ret =3D bpf_prog_attach_check_attach_type(prog,
-> -                                               attr->link_create.attach_=
-type);
-> +       ret =3D bpf_prog_attach_check_perm(prog, attr->link_create.attach=
-_type);
->         if (ret)
->                 goto out;
->
-> @@ -5968,6 +5976,10 @@ static int link_update(union bpf_attr *attr)
->                 goto out_put_progs;
->         }
->
-> +       ret =3D bpf_prog_attach_check_attach_type(new_prog, link->attach_=
-type);
-> +       if (ret)
-> +               goto out_put_progs;
-> +
->         if (link->ops->update_prog)
->                 ret =3D link->ops->update_prog(link, new_prog, old_prog);
->         else
+> +char _license[] SEC("license") =3D "GPL";
 > --
 > 2.48.1
