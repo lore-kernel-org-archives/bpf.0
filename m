@@ -1,101 +1,180 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94A1E3168EF
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 09:25:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F6483D5236
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 09:25:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788600336; cv=none; b=IHZWUNQeFa6Z9I+zxdlmxXjemMN3Xt80sSJKzOfOtMPMUpH3MHMfVe0NHDPHCPovfGmkuuBe+pHnIXgjatJ+C3Z0+3lTSqpfNxpa9KL7Aon/qMk8T2scn+7QhFZCSqfWh/yKsvevukad7gHPBcMCYMIlKjbXvdebBLrsWMdDBI0=
+	t=1788600338; cv=none; b=f/JSx6FukAaMOcfQqGjbg47DrxIWa2BmJaBVY0Ojul6ZfEZFB8BiIb5cTkcAvJoSDrzloLM7lPnND9sDG5MHZOZruDZ+8e/T6aLthOCn5NwA3gn3BnyRJJo0oacWIx3OsuFJR1JbmmMu+whxgXjo1FyqnIBRH3N9iUjFd23IobY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788600336; c=relaxed/simple;
-	bh=M379bcCpdgMYpzllGxRiFnKcdBOPvAeMaDtNnKRn1so=;
+	s=arc-20240116; t=1788600338; c=relaxed/simple;
+	bh=mv0T3D2e0AvJn4DeHxREUAA0C6owrisDzLpK4biREe0=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=uypTrG2go2biukocG5fpC+2yLSOWX0RVIGZ/GpKJ3gekcoHLUV3ghYgdlffGt1/NF4G1IMHgvCf6GZjcj4z+dwSliMtk9citOGE+TqEBMouohljjoy36zH8bvl6RpdB4GDKduwlg3guSsqVMK1ZXq4FwLjG0GQOMKd9SH3SMHw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WXFCj6Hs; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=LA6riUkINalPlGwoF3uLQzzOZvaBRnjig/Dm8fsf20S4ne52/rWoHXUWZ0opP9DwKkNlGO57Tgzewlpp9i1XEmPClLoWQfJk7HZR6XpKImWOmP9XqoOl61z4A2lIfLAp2+jg4kQKkylDHpVrRMqb5pZBGKaPJE14tUiVX01drlk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cqkxsfb/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WXFCj6Hs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BDF71F00A3D;
-	Sat,  5 Sep 2026 09:25:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cqkxsfb/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68B141F00A3E;
+	Sat,  5 Sep 2026 09:25:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788600335;
-	bh=ep1sUy2Owl0C8NETh2uqYoR2bMcUBgqiNbkIZqsxcNM=;
+	s=k20260515; t=1788600337;
+	bh=vQWi+ftIY6iiIzKcuQC3NO5bAyOJyK8IHyxjhAad2oY=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=WXFCj6Hs1sgp3eksRSYPTz63vD+Li9jGVyi4mWwsmb0V1F5wzX6N0vMiew41ZnhGv
-	 /mS9oictQFsEfJN8fFcEWhWijocf+gKS3AWZ29qXsXDYGa3D3b+1R/sbveUdf2pySR
-	 TqHW4NQPOlD2n58tu2RkoGzvWwcGhNapvLB8GKdoMRT07SVbvfWyHHGnB4NMiHzJud
-	 cynME7h7tlvgOX4x+wlNPApSz+ftx5c49nFPi1CF2DnxsghlpBeo//A5tYyB5dQ5Im
-	 c+pNiyQUmx4h0HHi6ehvyvTp5huj3AZJMVek5aLDgMkgp4DhQQZcpL80mUww41svEq
-	 Br7d2jwt6vbFw==
-Content-Type: multipart/mixed; boundary="===============0258887377356042763=="
+	b=Cqkxsfb/5dsC2/KdLEcHXxa2UEga48arllEK3FvBU+CcwNnXFYezVU4SSVRemYPLH
+	 dq6H3c+3qV0cXO7MS84Q7H/7P2k7Xv06n9bu2QQWw8qcOgzBxn+mhVYcyL4eHrppUA
+	 VNXPbq3porJkluF4HEg7unPD1eavuu9O8BqoZ17mSUgxFHpApBQaooTPPZHUWgzf3n
+	 NSinhCeR2syakK7w1MlGXbIZPCrO+ylVrdNJfkd6ozWE0jO0ZPMTBO2aZjk4a561ko
+	 YPLTFMK+BcaI/SaE7FCh/ghVauQ2XsJO2swCUpYg17nUOLF+n4xDU+TUImsDJb1NO3
+	 bQvM3NxMfzfpw==
+Content-Type: multipart/mixed; boundary="===============7474914815246753722=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <1e939a19812107980e78e817ac3be8485a956d5f568fded29db2b512a847f497@mail.kernel.org>
-In-Reply-To: <20260905083418.3723623-7-memxor@gmail.com>
-References: <20260905083418.3723623-7-memxor@gmail.com>
-Subject: Re: [PATCH bpf v2 6/7] bpf: Assign lock identity to callback map values
+Message-Id: <f8c7bd485131b9093ab2c09d929574955b299c52f23a351991ed4519b64b4872@mail.kernel.org>
+In-Reply-To: <20260905083418.3723623-3-memxor@gmail.com>
+References: <20260905083418.3723623-3-memxor@gmail.com>
+Subject: Re: [PATCH bpf v2 2/7] bpf: Preserve packet pointer class displacement in regsafe()
 From: bot+bpf-ci@kernel.org
 To: memxor@gmail.com,bpf@vger.kernel.org
 Cc: npc@anthropic.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat,  5 Sep 2026 09:25:34 +0000 (UTC)
+Date: Sat,  5 Sep 2026 09:25:36 +0000 (UTC)
 
---===============0258887377356042763==
+--===============7474914815246753722==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 9c797cc3df40..ad14a7fbed72 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 36b65797877d..5cf92ce18520 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -854,6 +854,8 @@ struct backtrack_state {
+>  struct bpf_id_pair {
+>  	u32 old;
+>  	u32 cur;
+> +	s32 pkt_ptr_delta;
+> +	bool pkt_ptr_delta_set;
+>  };
 
-[ ... ]
+Adding both s32 pkt_ptr_delta and bool pkt_ptr_delta_set doubles
+sizeof(struct bpf_id_pair) from 8 to 16 bytes (4 + 4 + 4 + 1 = 13,
+rounded up to 16 by alignment). With BPF_ID_MAP_SIZE = 1312, this grows
+idmap_scratch from ~10 KiB to ~21 KiB on every bpf_verifier_env.
 
-> @@ -10036,6 +10050,9 @@ int map_set_for_each_callback_args(struct bpf_verifier_env *env,
->  	__mark_reg_known_zero(&callee->regs[BPF_REG_3]);
->  	callee->regs[BPF_REG_3].map_ptr = caller->regs[BPF_REG_1].map_ptr;
->  	callee->regs[BPF_REG_3].map_uid = caller->regs[BPF_REG_1].map_uid;
-> +	if (reg_may_point_to_spin_lock(&callee->regs[BPF_REG_3]) &&
-> +	    !map_value_has_static_identity(&callee->regs[BPF_REG_3]))
-> +		callee->regs[BPF_REG_3].id = ++env->id_gen;
+Could a sentinel value (e.g., S32_MIN) encode the 'unset' state without
+needing the separate flag? The code already bounds useful deltas to
+(-2^30, 2^30) via BPF_MAX_VAR_OFF and check_reg_sane_offset_ptr(), and
+rejects anything outside [S32_MIN, S32_MAX]. This would keep the struct
+at 12 bytes and save approximately 5 KiB per verifier environment.
+
+As a design note: struct bpf_id_pair is the generic old->cur id map
+shared by scalar linking, reference/lock/irq ids, dynptrs and iterators
+(check_ids() is called from check_scalar_ids(), regs_exact(), refsafe(),
+stacksafe() and regsafe()). Carrying packet-pointer-specific state in it
+means every one of those users pays the memory cost.
+
+> diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+> index 66fb11b6c6a7..2f8f3fe164b0 100644
+> --- a/kernel/bpf/states.c
+> +++ b/kernel/bpf/states.c
+> @@ -339,6 +339,7 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
+>  	if (idmap->cnt < BPF_ID_MAP_SIZE) {
+>  		map[idmap->cnt].old = old_id;
+>  		map[idmap->cnt].cur = cur_id;
+> +		map[idmap->cnt].pkt_ptr_delta_set = false;
+>  		idmap->cnt++;
+>  		return true;
+>  	}
+> @@ -352,6 +353,43 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
+>  	return false;
+>  }
 >
->  	/* pointer to stack or null */
->  	callee->regs[BPF_REG_4] = caller->regs[BPF_REG_3];
-> @@ -10132,6 +10149,9 @@ static int set_timer_callback_state(struct bpf_verifier_env *env,
->  	__mark_reg_known_zero(&callee->regs[BPF_REG_3]);
->  	callee->regs[BPF_REG_3].map_ptr = map_ptr;
->  	callee->regs[BPF_REG_3].map_uid = map_uid;
-> +	if (reg_may_point_to_spin_lock(&callee->regs[BPF_REG_3]) &&
-> +	    !map_value_has_static_identity(&callee->regs[BPF_REG_3]))
-> +		callee->regs[BPF_REG_3].id = ++env->id_gen;
->
->  	/* unused */
->  	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_4]);
-> @@ -10250,6 +10270,9 @@ static int set_task_work_schedule_callback_state(struct bpf_verifier_env *env,
->  	__mark_reg_known_zero(&callee->regs[BPF_REG_3]);
->  	callee->regs[BPF_REG_3].map_ptr = map_ptr;
->  	callee->regs[BPF_REG_3].map_uid = map_uid;
-> +	if (reg_may_point_to_spin_lock(&callee->regs[BPF_REG_3]) &&
-> +	    !map_value_has_static_identity(&callee->regs[BPF_REG_3]))
-> +		callee->regs[BPF_REG_3].id = ++env->id_gen;
->
->  	/* unused */
->  	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_4]);
+> +static bool check_pkt_ptr_ids(const struct bpf_reg_state *old,
+> +			      const struct bpf_reg_state *cur,
+> +			      struct bpf_idmap *idmap)
+> +{
+> +	struct bpf_id_pair *map = idmap->map;
+> +	s64 delta;
+> +	unsigned int i;
+> +
+> +	if (!check_ids(old->id, cur->id, idmap))
+> +		return false;
+> +	if (!old->id)
+> +		return true;
+> +
+> +	/*
+> +	 * Packet range is shared by all pointers with the same ID. Preserve
+> +	 * their relative displacement, while allowing the whole class to move.
+> +	 * Packet pointer offsets are bounded by BPF_MAX_VAR_OFF, so the delta
+> +	 * between two valid offsets fits in s32.
+> +	 */
+> +	delta = (s64)(cur->r64.base - old->r64.base);
+> +	if (delta < S32_MIN || delta > S32_MAX)
+> +		return false;
+> +
+> +	for (i = 0; i < idmap->cnt; i++) {
+> +		if (map[i].old != old->id)
+> +			continue;
+> +		if (!map[i].pkt_ptr_delta_set) {
+> +			map[i].pkt_ptr_delta = delta;
+> +			map[i].pkt_ptr_delta_set = true;
+> +			return true;
+> +		}
+> +		return map[i].pkt_ptr_delta == delta;
+> +	}
+> +
+> +	return false;
+> +}
 
-This isn't a bug, but the identical three-line block appears in all
-three callback-frame constructors (map_set_for_each_callback_args,
-set_timer_callback_state, and set_task_work_schedule_callback_state).
+Is the trailing return false reachable? check_pkt_ptr_ids() only reaches
+the loop after check_ids(old->id, cur->id, idmap) returned true AND
+old->id != 0. Looking at check_ids() in states.c, it has exactly two
+true-returning paths for a non-zero old_id:
 
-Since the security property depends on every PTR_TO_MAP_VALUE callback
-argument getting an identity, would it make sense to fold this logic
-into a small helper function? Something like mark_callback_map_value(env,
-reg, map_ptr, map_uid) that handles the type/map_ptr/map_uid assignment
-together with the conditional ID generation would make the invariant
-enforced by construction, so a future callback constructor couldn't
-accidentally omit the check.
+  for (i = 0; i < idmap->cnt; i++) {
+          if (map[i].old == old_id)
+                  return map[i].cur == cur_id;
+          if (map[i].cur == cur_id)
+                  return false;
+  }
+  if (idmap->cnt < BPF_ID_MAP_SIZE) {
+          map[idmap->cnt].old = old_id;
+          ...
+          return true;
+  }
+  return false;
+
+So on every path that reaches check_pkt_ptr_ids()'s loop there is
+guaranteed to be an i < idmap->cnt with map[i].old == old->id, and
+check_ids() never creates two entries with the same .old (it only
+appends after failing to find a match).
+
+The loop therefore always returns from inside its body and control never
+falls through to the trailing return false. This is cosmetic (the
+fallback returns the safe/conservative value), but it is unreachable
+code in a new function.
+
+The BPF verifier convention for a provably impossible state is
+verifier_bug()/WARN_ONCE() rather than a silent return, so either
+dropping the statement or making it a verifier_bug() would document the
+invariant instead of hiding it. As written, a future change that lets
+duplicate or foreign entries into idmap->map would silently degrade to
+'never prune' with no diagnostic.
+
+> @@ -632,8 +670,8 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+>  		} else if (rold->range > rcur->range) {
+>  			return false;
+>  		}
+> -		/* id relations must be preserved */
+> -		if (!check_ids(rold->id, rcur->id, idmap))
+> +		/* id relations and intra-class displacement must be preserved */
+> +		if (!check_pkt_ptr_ids(rold, rcur, idmap))
+>  			return false;
+>  		/* new val must satisfy old val knowledge */
+>  		return range_within(rold, rcur) &&
 
 
 ---
@@ -103,4 +182,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33955969043
---===============0258887377356042763==--
+--===============7474914815246753722==--
