@@ -1,106 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f10.google.com (mail-wr2-f10.google.com [74.125.225.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27B13822A5
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 09:03:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C4E32D0C62
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 09:07:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788599004; cv=none; b=Xj+O5MElW8YPKtmhcRs/SqDISPE8kV5xTewE+R+4plOoAsdLeur0RfpdN5XqHVzLLsPJatyIj1zdFGcJ+ml2mpAO/rVh9ka+r1yxzS2zddQV7NmC+iEcO5eCZiBdvsqTlxqAmPmYDaGNLt052g0CIt5FNCaVGWoQUTNOI6QJx4M=
+	t=1788599275; cv=none; b=BPP2ViZt90MXWqxJ17MCG3QEKVkphnKPYJFFXa8VTLNqPEJUGmk3MypH68wCImcbfB0AthXaaCxnGMqyEQOTXCZUk9zl6dmp+pD3i+VXS82LIwVfDPQIxB/tgGuTWnvxHzUw27US7BfYiAcSfcMptIOBjl/mv+yqXxI1npxkJT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788599004; c=relaxed/simple;
-	bh=JjxYZlCULaeMRmxnbZIXd8ZRoLgMsqwaVcvQqGIhuv8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hrQ5jCFXHqHsSoMLBSirqNysVCPd2OyfRj3UwavzWFqA59M7FER1kR1DzSJLX4pmHb9OMQgsKdo7ZWfvP+Xso61L6yJWYoUXz4HbeRAZdia50DE5nPnlD6It6c6ruR4Fp5ahEJND2ac7Ha/9zOZ9HSCkpV/j0crcqsMM+ivVbYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AKI4e8hy; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788599275; c=relaxed/simple;
+	bh=QyHFehQrmHWW1WURhgfYVwzqYfAWXKNkwNYX+TV1jyc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=L/hylZ94H+TR38SEqFL69JY42SWzWByyWrLRr4IuSS9I1qvfUA6EDmP+Udxt4OpSCv1DEoZP+/ivcrNWEJsgXCTmFhAcH6OBPLXBGki+/QdRstgPL0biLZdfRD4My8W0spQb9vewq1PFJyqNW4qQHpVGquhCrK9ihkU21wTCQHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aTP3VPHN; arc=none smtp.client-ip=74.125.225.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AKI4e8hy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AA9E1F00A3D;
-	Sat,  5 Sep 2026 09:03:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788599000;
-	bh=PuHAdoy+ZTMl1z2Y+WWB6JPxOktPOUeIYbQ5VSD5aKQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=AKI4e8hyfXE+22zC22+8Pkaqee5niiZiKevt4M11qPvkHMVx/MxXRM+/3RPTwz+DK
-	 us8rmaogvirqi8uB2gKN/Sw3serj+lIG6KVUPKjva/E6I2hOlY/LeHO1u6vVxW2U6d
-	 JAafdbBP7jwvs4uUNQonM1zoIU6AGBE7AB9LQ3k+lHvDA20cznd1z6UiPXJ361l6tV
-	 8Lq6g4yes8cYWl026AXOglyV+o96SBkcRu3IRW0oAtjkDwyJgD91P8DgWJo4t5gkvi
-	 /LkLpsg1CriXtlFWa7lJTnDMEn6klNPJxil1FOMeS+0DZjAl9h+LzQGFS0rY/PfkoQ
-	 qPPLj90BlKkkw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v5 3/3] selftests/bpf: Enable stack argument
- tests for RV64
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Pu Lehui" <pulehui@huaweicloud.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260905085857.14143-4-pulehui@huaweicloud.com>
-References: <20260905085857.14143-1-pulehui@huaweicloud.com>
- <20260905085857.14143-4-pulehui@huaweicloud.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 05 Sep 2026 09:03:20 +0000
-Message-Id: <20260905090320.8AA9E1F00A3D@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aTP3VPHN"
+Received: by mail-wr2-f10.google.com with SMTP id ffacd0b85a97d-48433107499so710934f8f.0
+        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 02:07:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788599272; x=1789204072; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=kmDe5RUUCAAQpxK6D0VmQGZ+sEMEtUqKEHb19pXsTJ0=;
+        b=aTP3VPHNHDmuLVCbYqtGjRjEv53YZbMTipQyWAAgGsQq4V72IKGb23l/zaH21VLFov
+         SBxrL3FsAgrIWznDrDovsteicZd+791sjthVD1sbeKcrhA2+gYgxfJksmqOfHpKuNUER
+         BhVoe1RITMqOaQ4BKg344xda+K2fDwBm7UrIgXOhCkla/Zp7+oL5d+YpMAUOBaGI9sor
+         G2HZINZmfcLTLwUJFO01EYDewKvpzxdGrUunxcnrMsussjoatpb//KJZ7GEJjTyn6GCR
+         JYCieovY8ajr8rNLrfIXZNajik9WPWvTINE7TIBKErlMHqCzxGDQvTywLhq2XCCsPSx/
+         Sryg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788599272; x=1789204072;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=kmDe5RUUCAAQpxK6D0VmQGZ+sEMEtUqKEHb19pXsTJ0=;
+        b=XU4SKq7hGtNexH8+XdD/O2qz6DuRYyLRObr+/ZNQPB224vdzSgIK+Go3T7CMiVAfZ/
+         +OxXGpdERPiKtSaxTtA9u+Z/ARqwajl6O9rC8Rz0mUr31IV5Efd3SYPQ5bJta4AdvE99
+         ZQXgsVCgAt+/uRThan9EZpUsmnXIW3sxEvKg/z2yTp+NvR0zRze/uxz+wJW/CCl5ixnQ
+         jIuGvvURSSYaFabt8zH/GzoF+HFP0ptef9lc8Jaf7WnHwOR9n3JzL6A0/TOp06qCByLV
+         4mHOzQe9uUDAfy8idZrWFC7O+2KWFayP28dIgsLCCWTg9eY2HDaT1lZnggohksi8Wk9Z
+         YdhQ==
+X-Gm-Message-State: AFuF++lXnaAXdHYsz71WPepOl/i23aeUU2ReZiIsfP0gN7SnfPniQyoZ
+	hqJCdar0YYAWnR2GnHd0SzQajM0yvvj9ySCI0DypwOymmd6SHvbqxCavgmLiX5R8
+X-Gm-Gg: AYBFou3DS+ebgzw7h6eNkE5iSj0t/3U+HMm8HfkO+/ggXgBxdR+40kyInJCM6rDNW1r
+	mmUqJNtgz9+jcVAtYKGlDkftgj2ThMGgiHhahymqH7wRoyGe8DLjMJCRdLxyNYYmhvCGroDfwRm
+	B1auHAoNrKcqtZlAohP22dUF0IsmWaeKR93Vt5OirOHRdh0IS8+4G79p+fLGYXIoMWCN4M963KQ
+	doq2XJiDKS6gZbXCTTzJhXG/exp3hwhuth4H1dwuSr5bxEsbRSRAUmqRG842I4suXnO7ZAM57a/
+	Kl4ZKQsoPapASZEae/hVUUNjM1kOrXTLGw/+RcngaUAkNhLfm44cYvPA6Oi/2l0zSwqEvU83ky1
+	q7Hpc8C2qyC4w4rYxIxKAoFutBOp1Ig0FQrXfHgfV4HTaRgBepxvXOQCnxt2OLOyDOP/RIaX55y
+	Gj+/FXD3ig7Rcdqedgex1OOvCjd9tBYcdFZnzM59I9xIX350nitOfDK0xNx93L64jCFX+x8gYbM
+	x1yVnTGnqVU9UuEPekJwTGgKoze6f8Y4hZYFxJssMv9e5wNuU0fj0XtdnRz4+vq1TiRloVUD4z4
+	pXmiLKI9H9FCcAA65fdSFi0QUAI=
+X-Received: by 2002:a05:6000:25f1:b0:485:8f60:f0e0 with SMTP id ffacd0b85a97d-4858f60f133mr3847885f8f.48.1788599271746;
+        Sat, 05 Sep 2026 02:07:51 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48591eb3d3bsm2898542f8f.0.2026.09.05.02.07.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Sep 2026 02:07:51 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Nicholas Carlini <npc@anthropic.com>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v1 0/3] Fix acyclic ownership checks
+Date: Sat,  5 Sep 2026 11:07:45 +0200
+Message-ID: <20260905090750.4064411-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=732; i=memxor@gmail.com; h=from:subject; bh=QyHFehQrmHWW1WURhgfYVwzqYfAWXKNkwNYX+TV1jyc=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWv2rXfT9H63BvkxiXL5quQ1vwlTnmJ+4VR3kcSavTV79 t19/qK7o5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABPR9GH4n7iYg0dwyQNL/Yp4 oZVJD91vccpntq9lrGYtLprofdLqCyPDagWP3sP+v2wXHPrTd1bkzqply17nxW8v9/Ho2f1twvc qLgA=
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] Missing architecture guard update for stack arguments in `tools/tes=
-ting/selftests/bpf/progs/exceptions.c`.
---
+Bound and ensure acyclic ownership graphs for native data structures to
+fix a bug reported by Nicholas. See commit logs and tests for details.
 
-commit 7ea892ecb0a3b4c34ad8033c7d6de54aaa01a98d
-Author: Feng Jiang <jiangfeng@kylinos.cn>
+Kumar Kartikeya Dwivedi (3):
+  bpf: Validate graph ownership with a bounded walk
+  bpf: Bound local kptr ownership depth
+  selftests/bpf: Check local object ownership depth
 
-selftests/bpf: Enable stack argument tests for RV64
+ kernel/bpf/btf.c                              | 134 +++++++-----
+ .../selftests/bpf/prog_tests/linked_list.c    |   4 +-
+ .../bpf/prog_tests/local_kptr_ownership.c     | 202 ++++++++++++++++++
+ 3 files changed, 290 insertions(+), 50 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/local_kptr_ownership.c
 
-Enable the stack argument selftests for RV64. The riscv guard is
-restricted to __riscv_xlen =3D=3D 64 since stack arguments are only
-supported by the RV64 JIT. Keep the __BPF_FEATURE_STACK_ARGUMENT=20
-gate, defined by clang with BPF stack argument support [1].
 
-[1] https://github.com/llvm/llvm-project/pull/189060
+base-commit: 3ccdb07813829ba9487273e75d1cb238cfa774c1
+-- 
+2.53.0
 
-> diff --git a/tools/testing/selftests/bpf/progs/stack_arg.c b/tools/testin=
-g/selftests/bpf/progs/stack_arg.c
-> index 944e3bb603e7e..3e9ed37c57bb9 100644
-> --- a/tools/testing/selftests/bpf/progs/stack_arg.c
-> +++ b/tools/testing/selftests/bpf/progs/stack_arg.c
-> @@ -21,7 +21,8 @@ struct {
-> =20
->  int timer_result;
-> =20
-> -#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-> +#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-> +	(defined(__TARGET_ARCH_riscv) && __riscv_xlen =3D=3D 64)) && \
->  	defined(__BPF_FEATURE_STACK_ARGUMENT)
-> =20
->  const volatile bool has_stack_arg =3D true;
-
-[Severity: Low]
-Does tools/testing/selftests/bpf/progs/exceptions.c also need this architec=
-ture
-guard update?
-
-The has_stack_arg macro in exceptions.c enables stack-argument-specific
-exception tests. The RV64 architecture check seems to be omitted from that =
-file
-during this refactoring:
-
-tools/testing/selftests/bpf/progs/exceptions.c:
-#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) \
-	&& defined(__BPF_FEATURE_STACK_ARGUMENT)
-
-const volatile bool has_stack_arg =3D true;
-
-When exception support is eventually added for the RV64 JIT, the stack argu=
-ment
-portions of the exceptions selftest will silently fail to enable, reducing =
-test
-coverage.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260905085857.1414=
-3-1-pulehui@huaweicloud.com?part=3D3
