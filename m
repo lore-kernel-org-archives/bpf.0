@@ -1,64 +1,64 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23221DF75B
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 00:06:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 652641A9FB7
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 00:06:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788566793; cv=none; b=tljYpzkanmfN9QM8v5AcEBurzpKx0ZtPfXaseWZEu9Ivx+GSj9yysklvUHsyhxCV6mTV9U8gndQCYIIQcEGENq5HGwE2B2qnOqIR65mt+2gXtrWkOzWrhhQwLvwe21pbT2+qmHc23/G3mwxoOXPatNdAgQY7JTTyiPrFzycBuUU=
+	t=1788566795; cv=none; b=PgaCZQXICezUvx537BEqeFFJuEw7R9J3M+J3ERQWl/TAifbPDVfDXRSRQncA1qXdqZJvc5+4r677lTdIbhb8ObbJfiFnWPCNyL9Ca9wxeroXGUZHqYgI7MiXMf6Dt+s3jkUqz7M4KMzqZGIOlEKPHDaw9QDe2WdRU9jkLd7ctok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788566793; c=relaxed/simple;
-	bh=VSP49arisSqaQuNKWNna4M/WB41JaFwkIK9y78cY4gU=;
+	s=arc-20240116; t=1788566795; c=relaxed/simple;
+	bh=sreJC0QD7nSk18kUU61bZa4E1sLUbQRbkYVJA7iQX4c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=C6lXw46plUXrEWj1XSyvrRJUygUNnStzAvyalU0deyQ5mWv2uC8fN35tmBR/yRYgGEQ/XV0lUqmi/rcmN7bo7J1vCl3W60qvidSkhwS9LLpoUAvIsgJ2oOF8NN7MjplqxnCGUMxzHeQMImDjQRrUClIdcgTwZlbfPgwhMCKjiew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rleiulni; arc=none smtp.client-ip=209.85.214.180
+	 MIME-Version:Content-Type; b=NvEGr5t13PdRSEmpTFVQ82T+v0c5dZl/0k3fXAmqJ/RalAF1w8PKnLWzl0yPfobEgeeH9lfS5FY3DboHDWivInVk95VCBcBgcykWfH/DCLiih7pXzGaL93KG+7a8tWMfM5lkUJqWIEI6eq0bipY6gInWcHkxhLDfvb0O5Hx3Zho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=isZPmGX3; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rleiulni"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2d7195706f1so18468405ad.0
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 17:06:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="isZPmGX3"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2ce98cb8165so18032115ad.1
+        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 17:06:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788566790; x=1789171590; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788566792; x=1789171592; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=f3pEGjDpPuQdFUetAARTQgC9NgWXVFOyCJE+lHgQhW4=;
-        b=rleiulnioQIdvUgORUCdk/oQLGWf3hfyUKO9IJlGAirJS1qjKN3ia16oOxiDF7RQOH
-         Tg/Lf3ZQ9xqH6uJjiO+6E9eTOjp7CJYXv3UkiMrUtYpaENZamIgE9J++CJp9t1ZAHcbG
-         bPf/ajjvuieWKpm84lqpgugLKS0LLy9OLF97VhzvhZcOmfYMEO/kBJVi/w6z0PTLOrjb
-         D4gToKbpSn8b5DbYX7Pt3Y7fjLSBUQnKxuv/xTRoU0Pkbt3rI+q8ovjlmE5c3R0caXw8
-         L3lPunWWlveOGFEXNkIEHN2joypiUXIQy7XraMwMgb65bKap8yzZ+4wcmn5rmntZoGTn
-         c9jg==
+        bh=8IzF9ccpEhaEz89RmEr2M6IGe3kEH8YxHnAeqL5mHJQ=;
+        b=isZPmGX33lexT8UDZeu0qUsKFU1Ng+LT55XVae4oGrhLC2owBn/vkA75EKCl1V0ni7
+         JvmWX1O9tGql6aQhjprfYyk0P4JZ0vWigA09NX26eXVL94coC4ab2D5FY2UB2MmmJoqS
+         7Ogx4iQ2722B6h0MipwGdjz0NL33d4NfsKy5XklSA5oDOmw6cQCKo/jxs/Me3LwCOK8I
+         wfSYRntvuJcSRbOjAvoluHOQctbdyxs/kcVqgweQCKpN42MELaXm5Wr49/1hCpjmMPNI
+         6a6kHziXlvqdUGh4uduXeCksbBUnRRV8MQKrFNqUq7XMDPuB1bkH2F/QrpeO1kVvReyk
+         tFHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788566790; x=1789171590;
+        d=1e100.net; s=20251104; t=1788566792; x=1789171592;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=f3pEGjDpPuQdFUetAARTQgC9NgWXVFOyCJE+lHgQhW4=;
-        b=ezC4ve2ig2QW5dggHh/mrkj/78PYggPrx0qdljGUu5+K0+u67XLrkN9ZH3xYXBtUJ+
-         9WR+NlmJ9jzOp1lM1teVLR26XeoZKgzZKiERBlkYCKNcwG4NO76nkP3JpbEcxOAumlkK
-         4YW5WQvcEcj/Fc+V9BsMGUCNfADwFICaSyEZ18jnekv7vXM56mKvlR9wZ3wdQTLXvzAd
-         r1pBaMaho7Yta1m6+OX58eLsRvXu8a95pwoUHJn8eZBEuvuiYEED2o+o61qen3+4kb4M
-         ewWwFcsSf+dW10/0LbTVenKuB4mYZfZFr8nlpOECvFRqQlSFQNUY8uKm8Rm1eTmXuOwI
-         3LpA==
-X-Gm-Message-State: AFuF++nQs+067QtQ6Who+knTFOw9Ma7r8BiCdi32TnehlHiu6uYbAyw5
-	FGZ4sX+7C67Zn0//Auk8Idp4PjtEgITqB2URx5sb9hT7K38OMkYccqnSv+IzdedOdf8=
-X-Gm-Gg: AYBFou2PRTH1Tb5zYLBFl9Zt+eNk/tqflxSpfrdP1NW8MnXoe8CrPVLEi73VOuGfTq9
-	pbtaaJWQrj1+0HYQMaND4GsywmWx7aKaFnQzsG0gUhv2+A5Roy5eWR/wrQ69Me+Ep8nAZgIe6bJ
-	GL6qHoqj2yIilspGGUkNpmwH1xvhAVA2dItfb7oC72fBsqSugBvFjHkQMPciF+M6uQyV8AxLZE4
-	tiO7b3Z7I6J9f58NYNFHODXNoROVqHgwMo88XYQXefgVTz5mb2gqRw11Xd7EEFcObGfhC1CLxy/
-	dXXgNGGKLC4SH0rsF9YpMFw7vgdHczG76yYhtigeajQBaRBmUhx/LnEMLrCl//PbbIMhz7GnqHR
-	PvZABimMMJwqYTOiGX+4oxUdNcpbvWfs9EZei4MAl/SYtnM1D3cU0Z4oVhlNmb6x3p3aEZRt4N8
-	YMZT2SnEBdo4zQ4yD+EXnXMx8VbYhK+WYVi4p49/Mq2/vrfWYiTKX09rjl5v7qord4fy1rtqv8K
-	Oqkwc7vhipQ03cTLoE542Aj6BD8Obst6kCE/PlacbeH+w==
-X-Received: by 2002:a17:902:bb88:b0:2d3:716e:e2ae with SMTP id d9443c01a7336-2db1261df71mr105253675ad.6.1788566789715;
-        Fri, 04 Sep 2026 17:06:29 -0700 (PDT)
+        bh=8IzF9ccpEhaEz89RmEr2M6IGe3kEH8YxHnAeqL5mHJQ=;
+        b=me0haGL/Sxl+lPltH2qwbtl6qq1GMp21I5khiN+J3+rVA/BzCXyPa5AgXvNFI4Rl1t
+         KNXIkCMAFwSF3MSa46WnDO3ZEC9OhM6NDvhfBDcQHJr8qWFHJZqjc2eo29B0V0lr/eGI
+         eBBKDcm3jNv9ZLQI2T2Pv4Fxybs8qPVFA3+fboGN/riIMoXJDhdnYHFOCx/OM/J7ct4u
+         jmovLIH794bTp8BFMxTB6Y2NGbwwQWdiTZe6E4B+mAkOk8UEgu5F5s8GfZQ9ly5mNJEL
+         xYJdnUwDuetAbV6Y2I5wX/ENLFnm2rCiYTa/K2Z4m/fVzNFt7AxlR23C78/NPxy19668
+         ayxA==
+X-Gm-Message-State: AFuF++kaxOypK0xCZYDxRwm78MUZQP3dHskSJkjVNTaykIoeAANkogy9
+	Q1R1EKr0J0X/wsJfT67Pu7saQpI3wuYzNUHqWh50qreb5bsf998pNuxaHu9dYNyaLms=
+X-Gm-Gg: AYBFou37ptv4iaf1cAct5y5ufwxit6MnYKg2tAWlb9vloUIjdgqEXODC5oYN7Twyw9R
+	vTniWy/vM2Szt7favQEFSBEWF4EG+fq5s+eU97C1Rq2hi4iSzQaao+0k+o9rwKwBF0nwIlVT0TW
+	7iKrp3Sxf2n/WOjekDopjQuDSPFnNQlsFPJx8fv5pe9a748hnjvENnTntEtdGXDl8Gy/yX9ZAvs
+	lSlLmq+Erb9n0vX3Z/SSqkBvmPSrlYwLx2dLwniKxHXVlUp9yv35GDuGH4hdoIJdFx4fOtDxOX8
+	Do89CpBFPJnpTWmNlVVoKKkzbo/OFdGQS1c62bQdu7JU6dFE6WxLJfLhjBF2MqwdLeTuWhZ6cBf
+	LRTJTYVmpCtMJ/LtC7Hru3VbSSTVX906cxp9iFTlY1Y5ETOGv3vDqdEAjkOCsQQup6rCyEnSsdk
+	U5Is5kPTNIDryupa52XagN+QAmyziuvx2OLWTrmJKFFe9KVP2ryP42Iul5H+BsCmCcyUzIihu1q
+	VsP/Dw/qangyfJ8FtbzXkHMsOO53pmMUaze6iAvQ9tksQ==
+X-Received: by 2002:a17:902:ce8e:b0:2d8:d4d2:d138 with SMTP id d9443c01a7336-2dafb136d0emr142168665ad.20.1788566791585;
+        Fri, 04 Sep 2026 17:06:31 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J.thefacebook.com ([2620:10d:c090:500::5:4f3d])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3356dc5c04dsm42277eec.8.2026.09.04.17.06.28
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3356dc5c04dsm42277eec.8.2026.09.04.17.06.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2026 17:06:29 -0700 (PDT)
+        Fri, 04 Sep 2026 17:06:31 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -69,9 +69,9 @@ Cc: daniel@iogearbox.net,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 09/10] bpf: propagate mark_chain_precision() errors out of loop_flag_is_zero()
-Date: Fri,  4 Sep 2026 17:06:00 -0700
-Message-ID: <20260904-register-is-null-precise-fixes-v1-9-0f5a360ff15d@gmail.com>
+Subject: [PATCH bpf 10/10] bpf: use mark_arg_precision() in check_mem_size_reg()
+Date: Fri,  4 Sep 2026 17:06:01 -0700
+Message-ID: <20260904-register-is-null-precise-fixes-v1-10-0f5a360ff15d@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260904-register-is-null-precise-fixes-v1-0-0f5a360ff15d@gmail.com>
 References: <20260904-register-is-null-precise-fixes-v1-0-0f5a360ff15d@gmail.com>
@@ -84,87 +84,34 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Stop verification if mark_chain_precision() fails when called from
-loop_flag_is_zero(). No functional change intended for the paths where
-backtracking succeeds.
+Use newly added mark_arg_precision() helper in check_mem_size_reg().
 
-Fixes: 1ade23711971 ("bpf: Inline calls to bpf_loop when callback is known")
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/verifier.c | 36 +++++++++++++++++++++++++-----------
- 1 file changed, 25 insertions(+), 11 deletions(-)
+ kernel/bpf/verifier.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 3c3575215899..dc1fef1ef1ef 100644
+index dc1fef1ef1ef..fc57275f15b6 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -10685,33 +10685,45 @@ static struct bpf_insn_aux_data *cur_aux(const struct bpf_verifier_env *env)
- 	return &env->insn_aux_data[env->insn_idx];
- }
+@@ -7153,14 +7153,8 @@ static int check_mem_size_reg(struct bpf_verifier_env *env,
+ 	if (err && failure)
+ 		*failure = BPF_MEM_SIZE_FAIL_MEMORY;
  
--static bool loop_flag_is_zero(struct bpf_verifier_env *env)
-+/* Returns 1 if R4 is a known zero, 0 if it is not, a negative errno on error. */
-+static int loop_flag_is_zero(struct bpf_verifier_env *env)
- {
- 	struct bpf_reg_state *reg = reg_state(env, BPF_REG_4);
--	bool reg_is_null = bpf_register_is_null(reg);
-+	int err;
+-	if (!err) {
+-		int regno = reg_from_argno(size_argno);
+-
+-		if (regno >= 0)
+-			err = mark_chain_precision(env, regno);
+-		else
+-			err = mark_stack_arg_precision(env, arg_idx_from_argno(size_argno));
+-	}
++	if (!err)
++		err = mark_arg_precision(env, size_argno);
  
--	if (reg_is_null)
--		mark_chain_precision(env, BPF_REG_4);
-+	if (!bpf_register_is_null(reg))
-+		return 0;
+ 	return err;
  
--	return reg_is_null;
-+	err = mark_chain_precision(env, BPF_REG_4);
-+	if (err)
-+		return err;
-+	return 1;
- }
- 
--static void update_loop_inline_state(struct bpf_verifier_env *env, u32 subprogno)
-+static int update_loop_inline_state(struct bpf_verifier_env *env, u32 subprogno)
- {
- 	struct bpf_loop_inline_state *state = &cur_aux(env)->loop_inline_state;
-+	int flag_is_zero;
- 
- 	if (!state->initialized) {
-+		flag_is_zero = loop_flag_is_zero(env);
-+		if (flag_is_zero < 0)
-+			return flag_is_zero;
- 		state->initialized = 1;
--		state->fit_for_inline = loop_flag_is_zero(env);
-+		state->fit_for_inline = flag_is_zero;
- 		state->callback_subprogno = subprogno;
--		return;
-+		return 0;
- 	}
- 
- 	if (!state->fit_for_inline)
--		return;
-+		return 0;
- 
--	state->fit_for_inline = (loop_flag_is_zero(env) &&
-+	flag_is_zero = loop_flag_is_zero(env);
-+	if (flag_is_zero < 0)
-+		return flag_is_zero;
-+	state->fit_for_inline = (flag_is_zero &&
- 				 state->callback_subprogno == subprogno);
-+	return 0;
- }
- 
- /* Returns whether or not the given map can potentially elide
-@@ -10943,7 +10955,9 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		err = check_bpf_snprintf_call(env, regs);
- 		break;
- 	case BPF_FUNC_loop:
--		update_loop_inline_state(env, meta.subprogno);
-+		err = update_loop_inline_state(env, meta.subprogno);
-+		if (err)
-+			return err;
- 		/* Verifier relies on R1 value to determine if bpf_loop() iteration
- 		 * is finished, thus mark it precise.
- 		 */
 
 -- 
 2.55.0
