@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1A323F4DFE
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 07:09:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01696413230
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 07:12:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788592164; cv=none; b=me/iIRZ6mXD2foYzF3xq3HQKWebp/yr95QUNUUvLRHGjWxAZ1z4K3PvzoB8l/IArgOhBfCKDWHK26LsXvSvPaGMUpCCDlcUrK3Mxl9lSmJFfqZJKMw2Nzo0Q6i3tdeW0VoOCRE0+3w6RGs9DCxaSovnm1JllzGJa32LPcf7SCPE=
+	t=1788592337; cv=none; b=TL6mn+slOfibByutMaoYCRnAspfDk6mO9HUyNVkyI/eNcrvmnbO/wzQr4cn9pMSoOucTTeK9RSbY0d6LgL4U5Wdi6v1NBCFclMOrXAdhtHAPwPkD059C+Ibu7L6twPx75EF3EvXCoDbUCR94bN33ALV5EFXvp7vaTx8cP6mNcg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788592164; c=relaxed/simple;
-	bh=d2HwYwHkuMKFUNANX/vhaUj15ARCyANGK1tIcTW/gNc=;
+	s=arc-20240116; t=1788592337; c=relaxed/simple;
+	bh=1BnqsscMj+0wNQx6hVHucc+0l5FWh+rpGMJJ6VGQ/e4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=IdGkdo0r5fzxF0glDR8nJ0L6JT/hn86CnEf+DZK1efjSVmlnkadQyuKdQKO/GJrONYvkZVMwnFF7D7M12axCWXwAHnCDj1bcWYH7x4HR/rWeczkTvgHju9odOoK4hnlwRwIgt2hqDXuaPkgwCjNzr52mNskTxKpujuBWxK8KCDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PgNoZi2b; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=cZ5pT5ZCBhz8Ks3b3WHK4T0o0uowABYHDMpMQ4eS1dU6Vbcyl7lqJ3L/rrDR7IadSO/lSvAEzozBJfSEK1gI4zgYY5oR9Y3CkfU53Qr7+DMwWrvd2xiXPMovfYkMnCtI4VvTLHkigq8ukT5+DaVq8gzIgGT6z4bMmoOb0psPlgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JMG+ix01; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PgNoZi2b"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAB0D1F00A3D;
-	Sat,  5 Sep 2026 07:09:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JMG+ix01"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 878301F00A3D;
+	Sat,  5 Sep 2026 07:12:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788592151;
-	bh=pv0UaPnhg44b0M7xrz0Fj0q1rSC9XrA3d+gs/NHty0c=;
+	s=k20260515; t=1788592333;
+	bh=SY/CTMpSpeKcxrnE4PKQJ2moBFcX/CvyMOdx0VJOawE=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=PgNoZi2bYTjSFnGAml8ItdcJsPWkXU70d6jl//8ECTnfmMn5srnSQ+m52jrwv2QQj
-	 XiGmvrwz+vJ9lpuiMY4nM4UscddnTkpF4oVsgI+5oI+4pk0jE6iaIm5J+UOSfQZsUt
-	 oZ1VYMT0IYXtB1hQ/mKSlzRCpY8yFrIm42wy4NoifXLfqjt5HvzMXOCXn/SUPGI4Gi
-	 RuF6r9G9EK0kHQ7k1BQvCCjssPqcayAHLd2HsLuUNdDbtknwyPI/PAhve+BVDY8AyH
-	 1or+UuA6Om6ZkEyL7ROzWyzYYVRMQhbLMlSi93gkTheSfSxEOuc3pwYlhcHtwOagaU
-	 hbx2v6GqSu8qw==
+	b=JMG+ix01OETgBnHDw+xM8+RP7JqKyDbao07rd9Q52aGF37y3f8VEb7/616wB2MVqs
+	 ShKMU1PH7fA/qQR51JCr/JwD6BlIoNp+edQe8gmdZ32WApuTxg43RiIf5bDIOtMm2l
+	 2izUd1qBDi9yyYmyMpBOXcKOuIimZNvORTVWnGzkINRxSWH+cqRtdEK8d1P4DChMbu
+	 G5Agnp9MisnRhncAEbfUqSRdXvqBbVjkcfaQV0dtRz4AF/WisA8gX4HyaGTdBCjV7B
+	 wudHWalzHyVSu4UWOMU2CdXsa7Tl+kxGJG9NUCYFYklMdTXNfSm3PWfV1Qly8qCjaQ
+	 47x6IFzvH4tYg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 3/3] selftests/bpf: Enable stack argument
- tests for RV64
+Subject: Re: [PATCH bpf-next v4 1/3] riscv, bpf: Remap BPF_REG_0 and
+ RV_REG_TCC
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Pu Lehui" <pulehui@huaweicloud.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260905070409.4141522-4-pulehui@huaweicloud.com>
+In-Reply-To: <20260905070409.4141522-2-pulehui@huaweicloud.com>
 References: <20260905070409.4141522-1-pulehui@huaweicloud.com>
- <20260905070409.4141522-4-pulehui@huaweicloud.com>
+ <20260905070409.4141522-2-pulehui@huaweicloud.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 05 Sep 2026 07:09:11 +0000
-Message-Id: <20260905070911.CAB0D1F00A3D@smtp.kernel.org>
+Date: Sat, 05 Sep 2026 07:12:13 +0000
+Message-Id: <20260905071213.878301F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,59 +47,42 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] The patch misses updating the architecture check in `tools/testi=
-ng/selftests/bpf/progs/exceptions.c`, leaving stack argument exception test=
-s permanently disabled on RV64.
+- [Low] The block and inline assembly comments in `bpf_timed_may_goto.S` co=
+ntinue to reference `a5` as the mapped register for `BPF_REG_0`, which cont=
+radicts the updated code utilizing `t6`. This patch changes `a5` to `t6` in=
+ the instructions, but missed updating the corresponding comments.
 --
 
-commit 064ba72e246734f0b6e1f3e1f7a66bfe6a3a8b0e
-Author: Feng Jiang <jiangfeng@kylinos.cn>
+commit 3f2026164fcac1b3db2387eec49e58f20293243f
+Author: Pu Lehui <pulehui@huawei.com>
 
-selftests/bpf: Enable stack argument tests for RV64
-   =20
-Enable the stack argument selftests for RV64. The riscv guard is
-restricted to __riscv_xlen =3D=3D 64 since stack arguments are only
-supported by the RV64 JIT.
+riscv, bpf: Remap BPF_REG_0 and RV_REG_TCC
 
-> diff --git a/tools/testing/selftests/bpf/progs/stack_arg.c b/tools/testin=
-g/selftests/bpf/progs/stack_arg.c
-> index 944e3bb603e7e..3e9ed37c57bb9 100644
-> --- a/tools/testing/selftests/bpf/progs/stack_arg.c
-> +++ b/tools/testing/selftests/bpf/progs/stack_arg.c
-> @@ -21,7 +21,8 @@ struct {
+This commit remaps BPF_REG_0 to t6 and RV_REG_TCC to t5 to support BPF
+stack arguments and unify calling conventions. Freeing up a5 and a6
+allows bpf2bpf calls to pass extra arguments consistently with kfuncs.
+
+> diff --git a/arch/riscv/net/bpf_timed_may_goto.S b/arch/riscv/net/bpf_tim=
+ed_may_goto.S
+> index 02c637d874205..ac41bf6dcb3d0 100644
+> --- a/arch/riscv/net/bpf_timed_may_goto.S
+> +++ b/arch/riscv/net/bpf_timed_may_goto.S
+> @@ -21,7 +21,7 @@ SYM_FUNC_START(arch_bpf_timed_may_goto)
+>  	addi	s0, sp, 8*SZREG
 > =20
->  int timer_result;
-> =20
-> -#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-> +#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-> +	(defined(__TARGET_ARCH_riscv) && __riscv_xlen =3D=3D 64)) && \
->  	defined(__BPF_FEATURE_STACK_ARGUMENT)
-> =20
->  const volatile bool has_stack_arg =3D true;
+>  	/* Save BPF registers R0-R5 (a5, a0-a4) */
+> -	REG_S	a5, 5*SZREG(sp)
+> +	REG_S	t6, 5*SZREG(sp)
 
-[Severity: Medium]
-Should tools/testing/selftests/bpf/progs/exceptions.c also be updated=20
-with this new architecture guard?
+[Severity: Low]
+This isn't a bug, but should the inline comment above this instruction also
+be updated to reflect that R0 is now mapped to t6 rather than a5?
 
-It looks like the same has_stack_arg guard is used there:
-
-tools/testing/selftests/bpf/progs/exceptions.c:
-
-#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) \
-	&& defined(__BPF_FEATURE_STACK_ARGUMENT)
-
-const volatile bool has_stack_arg =3D true;
-
-Without updating it, the C preprocessor will take the #else branch on RV64,
-defining has_stack_arg =3D false. At runtime, prog_tests/exceptions.c check=
-s=20
-skel->rodata->has_stack_arg and silently bypasses the stack argument except=
-ion=20
-tests.
-
-Could this be added to ensure the exception tests are not permanently=20
-disabled on RV64?
+Additionally, in the block comment at the beginning of
+arch_bpf_timed_may_goto in arch/riscv/net/bpf_timed_may_goto.S, the text
+still documents a5 as R0. Could these documentation references be updated to
+match the code changes?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260905070409.4141=
-522-1-pulehui@huaweicloud.com?part=3D3
+522-1-pulehui@huaweicloud.com?part=3D1
