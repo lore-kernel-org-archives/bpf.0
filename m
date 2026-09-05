@@ -1,270 +1,202 @@
-Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout03.his.huawei.com (canpmsgout03.his.huawei.com [113.46.200.218])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6460329E55
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 03:40:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB9B35E1AE;
+	Sat,  5 Sep 2026 03:44:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788579626; cv=none; b=J/MWIvTRwyQfTBv+gCzc9GrT4KUH/JRG3m7ATiEsXZCjPepQa9vTOUW5P3fbBnKUtHgIBdXquos0q1E4tJ+gOS8PgHlc/QBadjFZTetJzHhCNXPVYmTHxsMfDpNWaUgxbJawGdu3fU5gnXUakB2keGOg25LGI+GHCGMm0zaK5KM=
+	t=1788579878; cv=none; b=Y2mXkEuLuCmpWyLrcG/YkORfr9JtwU39dd/YsbAxP6+AcxjuXibIO6g5huld82mc5La9WLcCZnVA3hLAy9VE9qbQvzdez70GbzH7Ibt9zrB4XUXKl7BU0VBSNKXo//zfFqz8yqFddSnejKLJg2S3SrWeQHIIGdkH54zY8JiGwZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788579626; c=relaxed/simple;
-	bh=vJYJ87USojFC8YW0vrNr4ZssyAair+ly68ML5KluB60=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HRnJ3XHb1TkucN60tLyP3QvMNLWDzP+iPD6QrOeuD2RHbOEI/EtKEx1reefI/0kmtu7sI1SwPksCS7YV8L2kEO9ZULDSqpEu54y0/FX/cwkJytPLadZdkGzHCWhGUU5dVGvfZYTZ4e0aywPTCyViNj2nbQxaAlpw5yaGzXXeXqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TsvgsaAU; arc=none smtp.client-ip=74.125.225.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788579878; c=relaxed/simple;
+	bh=gUqfJVUvVAp7wj+4z59uWgVlitAYeLg/P9Y4JcBFQ40=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=fCUYOWJ8LsjvsNzslEoAaiESK+e39T+6hc91JX9FTcVxRdEilaUAoy0/6DFMYnXuoPoGx5vbzQhZIgUyQzhKedn8duWsrRUaTUd6isD1+sILKD2llmUQ8BC0C8kzTOA3NZFJ3Y/ObdUumexnbUByuFLPW3K7IW4w25FOZ/arWgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Ehcwnko2; arc=none smtp.client-ip=113.46.200.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TsvgsaAU"
-Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-4843147998cso310613f8f.0
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 20:40:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788579623; x=1789184423; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=um+fjr5gvmSP6eSB4H/XfcDPO6+qgH9Jtlkv2Ndg9vo=;
-        b=TsvgsaAUrxDpSKXrZ695GxypfhsK3lFyZK2pqnl6M/O73+xeDIpeyN23zdEz+bEIpe
-         Sp2JVmh0DuzRyj1KlGruXSagmRfSeQD1aiDh0N79u5F69jq49aZD2kq6KC3D9/VXYehR
-         7gwUKdILKq9svIYgMM+AB97K8fptwqzysYBaHeXqDwOIr0F3Nh+ls+B/5V+Iv445+7T4
-         97woGtztCtZJ9sTwfNz7eBhb7MYb6/H3rYBGyOMDg5vbhqVuLT+VYnIxdDAKEpgxeZ4W
-         yU5KNGK7VFX4fCggqk4Ql4qI/UNqqOE301X3NNWJ6EzysP8jDAMxnNHs65K53eAbhMSN
-         9ZsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788579623; x=1789184423;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=um+fjr5gvmSP6eSB4H/XfcDPO6+qgH9Jtlkv2Ndg9vo=;
-        b=XwIC+yjjgsaxGR00by4X1C7zofHiMrD6cCfzz9s8r0/wzRe6AzefZb1w4Vk9sFhcbL
-         EmFDAkxy7sNUzaZsGzuyXc1AbPl7b8vJuhe4uBaIoUjZGY35HPiO/ejXu+LhQUiFmvrS
-         dXLcBprNIYJCKVEJTnzbp4XOmoY4TsicqFQ2jW/2MsTi/80/agFtVDeSS0aY85ARU9cF
-         iL3RFbCY3j6M238+VE6WCbTFXxyiqeryVkWHk7uxEq+1ase5bu54F4su+o21AlftAUnB
-         WrR3pEp3JmvEP/SMIhsAZI7PV2MC/elPLBIzkhcRC1jt75SzPubtoQNIwggA29uMrRkI
-         xJfg==
-X-Gm-Message-State: AFuF++mAWVAJLOFf4UHKHBkPSAvMuQrPOaxGkO0RaexWan17d1aeUg4a
-	PFCGpbFEjtPXSRqPIK45fRzE7BjZX/unfEByy+Cd5Tr6//0AWIk8Pa4w+9KazuBG
-X-Gm-Gg: AYBFou1/3ChP5I6wh/0QQu93hsTIQPMh7q0OZyIVWo4g/EjNgY01aCka/tX/JYGGc2V
-	Mb3UtWGdRLCRomIAxjvn1ZjpanXoQ53eYKBfyzOTJDhuFA2UZCtmg4bedMMVb7hFCmZm7K0kZhe
-	9maZlyZO4MA2/nILmLolUUJjfgOHrffpvVar+xaet2xEAdFecVhj6hSlX0uVgC5tXIZ8/H8otrk
-	geEZDE8kD870mgYH9WG+28YiQkAXAVo7irT4Cwdqgt95LAJ+4FUSXGCFX58370xvuPsZ3e0Dfsz
-	MeRxKKxmr4+jnVyNFdMiNYcV8oTXNlvMs0QZrcS6ZqL+btuh/DCdnc1mdbqTjR+C9yjIQ1y1CIa
-	MRU/ZAYNMUmVz2iShLWIewYMrqSuBV/ZhG6SVy0oc0UCGgnR3VK6h58SR1FELOZKU8TzFoknKFi
-	LD4m3aSrArwYGzuorpfPFxCr67OoJbM2ddXQQjyVCfUi7y0hvWc9g5JqAhhv63v0bH54HS/81sn
-	wv9rrr80GSt7WQKNBHzJRwulT2jAuwNlUe9/SZrfed+xQF569Qoi3YvGSurJQFCUURfR/7XB7WB
-	bFApQbCihIyHWJRtNJD6ZTNAusc=
-X-Received: by 2002:a05:6000:2f86:b0:482:dfaa:dfa9 with SMTP id ffacd0b85a97d-485891e72fbmr10672329f8f.7.1788579622842;
-        Fri, 04 Sep 2026 20:40:22 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4858d2693e8sm7496712f8f.3.2026.09.04.20.40.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2026 20:40:22 -0700 (PDT)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Nicholas Carlini <npc@anthropic.com>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 2/2] selftests/bpf: Test global subprog callback contexts
-Date: Sat,  5 Sep 2026 05:40:16 +0200
-Message-ID: <20260905034018.2095649-3-memxor@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260905034018.2095649-1-memxor@gmail.com>
-References: <20260905034018.2095649-1-memxor@gmail.com>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="Ehcwnko2"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=Wp8B10J8KdXX1ICuZjCb5MGZd4JK6ZEKI5ReZhq+g4I=;
+	b=Ehcwnko2Vb9qOtg+1UmGVeyXzxq46q9jfDNH07nTQRZXRZSokJdIoiDr0+bjiVtdKFTWmSunl
+	vGPexvkmmBGBApKXAHoRiENF5Zbe2zAIJ4RNXBW5xhAIBQYLxa5NO247RXAEFsYt+XoZuAER5nr
+	YnbWasldB983YP6uFpE5n90=
+Received: from mail.maildlp.com (unknown [172.19.162.144])
+	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4hcJnQ36SMzpSvB;
+	Sat,  5 Sep 2026 11:32:58 +0800 (CST)
+Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
+	by mail.maildlp.com (Postfix) with ESMTPS id 16D3A4056D;
+	Sat,  5 Sep 2026 11:44:24 +0800 (CST)
+Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
+ (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Sat, 5 Sep
+ 2026 11:44:23 +0800
+Message-ID: <7fbae9ac-44e4-4607-8aba-15db9779f80d@huawei.com>
+Date: Sat, 5 Sep 2026 11:44:22 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4756; i=memxor@gmail.com; h=from:subject; bh=vJYJ87USojFC8YW0vrNr4ZssyAair+ly68ML5KluB60=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWt238dVvDGiQS+mZB5xuXJkPruvHPdj64+TZrUturXA4 bz5+9f9HaUsDGJcDLJiiiwl//cxGZ+o/B1ou4wbZg4rE8gQBi5OAZiI3lyG/0l9WVqTFXQ/PMwu yT5nW+eS+Ko18ZPK68rreStnBv6/LsTIMG3xTWaOnTwMO70KMu6wTC9Z3sq2VuXOShlVv3dFWue XcAAA
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next] bpf, riscv: Register extable entries at probe
+ insn call sites
+Content-Language: en-US
+To: Chen Pei <cp0613@linux.alibaba.com>, <ast@kernel.org>,
+	<daniel@iogearbox.net>, <andrii@kernel.org>, <memxor@gmail.com>,
+	<bjorn@kernel.org>, <puranjay@kernel.org>
+CC: <ihor.solodrai@linux.dev>, <eddyz87@gmail.com>, <martin.lau@linux.dev>,
+	<song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
+	<emil@etsalapatis.com>, <pjw@kernel.org>, <palmer@dabbelt.com>,
+	<shuah@kernel.org>, <guoren@kernel.org>, <bpf@vger.kernel.org>,
+	<linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20260901120013.16104-1-cp0613@linux.alibaba.com>
+From: Pu Lehui <pulehui@huawei.com>
+In-Reply-To: <20260901120013.16104-1-cp0613@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ kwepemf100007.china.huawei.com (7.202.181.221)
 
-Exercise global subprogram verification from workqueue and task-work
-callbacks. Both callback types can run in a sleepable context even when the
-containing program is not sleepable, so an unprotected callback must not let
-the global subprogram use implicit RCU protection inherited from the program.
 
-Add negative cases which load an RCU-protected task kptr in a global
-subprogram reached from each callback type. The tests fail on an unfixed
-kernel because the programs are incorrectly accepted.
+On 2026/9/1 20:00, Chen Pei wrote:
+> add_exception_handler() filters insns by matching BPF_MODE() against
+> the probe mode values. These values occupy unused opcode slots and
+> collide with legitimate encodings: BPF_PROBE_MEM32SX (0xc0) shares
+> its mode value with BPF_ATOMIC. Relying on the mode alone therefore
+> risks registering exception table entries for the wrong instructions,
+> as would happen for plain atomics without the LDX class check.
+> 
+> Make the decision explicit at the call sites instead: register an
+> entry only when emitting a probe load, a PROBE_MEM32 store, or a
+> PROBE_ATOMIC atomic, and drop the fragile mode gate from
+> add_exception_handler() along with the now unused insn argument. No
+> functional change intended.
+> 
+> Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
+> ---
+> base-commit: d761934c9483ecde93fe99d8705282f716dfee50
+> 
+>   arch/riscv/net/bpf_jit_comp64.c | 50 ++++++++++++++++++---------------
+>   1 file changed, 28 insertions(+), 22 deletions(-)
+> 
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+> index e7378be171a9..726c0169fc60 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
+> @@ -731,9 +731,8 @@ bool ex_handler_bpf(const struct exception_table_entry *ex,
+>   	return true;
+>   }
+>   
+> -/* For accesses to BTF pointers, add an entry to the exception table */
+> -static int add_exception_handler(const struct bpf_insn *insn, int dst_reg,
+> -				 struct rv_jit_context *ctx)
+> +/* Add an entry to the exception table for a faulting probe insn */
+> +static int add_exception_handler(int dst_reg, struct rv_jit_context *ctx)
+>   {
+>   	struct exception_table_entry *ex;
+>   	unsigned long pc;
+> @@ -744,14 +743,6 @@ static int add_exception_handler(const struct bpf_insn *insn, int dst_reg,
+>   	    ctx->ex_insn_off <= 0 || ctx->ex_jmp_off <= 0)
+>   		return 0;
+>   
+> -	if (BPF_MODE(insn->code) != BPF_PROBE_MEM &&
+> -	    BPF_MODE(insn->code) != BPF_PROBE_MEMSX &&
+> -	    BPF_MODE(insn->code) != BPF_PROBE_MEM32 &&
+> -	    !(BPF_MODE(insn->code) == BPF_PROBE_MEM32SX &&
+> -	      BPF_CLASS(insn->code) == BPF_LDX) &&
+> -	    BPF_MODE(insn->code) != BPF_PROBE_ATOMIC)
+> -		return 0;
 
-Also cover a workqueue callback protected by an explicit RCU read-side
-critical section. Finally, call the same harmless global subprogram directly
-from the main program and from an unprotected callback. This requires both
-non-sleepable and sleepable verification roots and proves that global calls
-from callbacks are not rejected wholesale.
+Hi Pei,
 
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- .../bpf/progs/verifier_async_cb_context.c     | 131 ++++++++++++++++++
- 1 file changed, 131 insertions(+)
+This patch looks fine, but I still tend not to introduce these changes. 
+I think the function itself should handle its own defensive checks, and 
+we should also avoid "shotgun surgery".
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_async_cb_context.c b/tools/testing/selftests/bpf/progs/verifier_async_cb_context.c
-index 6bf95550a024..9ce7359913f8 100644
---- a/tools/testing/selftests/bpf/progs/verifier_async_cb_context.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_async_cb_context.c
-@@ -9,6 +9,11 @@
- 
- char _license[] SEC("license") = "GPL";
- 
-+struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
-+void bpf_task_release(struct task_struct *p) __ksym;
-+void bpf_rcu_read_lock(void) __ksym;
-+void bpf_rcu_read_unlock(void) __ksym;
-+
- /* Timer tests */
- 
- struct timer_elem {
-@@ -66,6 +71,7 @@ int timer_sleepable_prog(void *ctx)
- 
- struct wq_elem {
- 	struct bpf_wq w;
-+	struct task_struct __kptr *task;
- };
- 
- struct {
-@@ -119,6 +125,105 @@ int wq_sleepable_prog(void *ctx)
- 	return 0;
- }
- 
-+__noinline int wq_global_acquire(void)
-+{
-+	struct task_struct *task, *acquired;
-+	struct wq_elem *val;
-+	int key = 0;
-+
-+	val = bpf_map_lookup_elem(&wq_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	task = val->task;
-+	if (!task)
-+		return 0;
-+
-+	acquired = bpf_task_acquire(task);
-+	if (acquired)
-+		bpf_task_release(acquired);
-+	return 0;
-+}
-+
-+static int wq_global_rcu_cb(void *map, int *key, void *value)
-+{
-+	return wq_global_acquire();
-+}
-+
-+SEC("fentry/bpf_fentry_test1")
-+__failure __msg("R1 must be a rcu pointer")
-+int wq_global_rcu_prog(void *ctx)
-+{
-+	struct wq_elem *val;
-+	int key = 0;
-+
-+	val = bpf_map_lookup_elem(&wq_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_wq_init(&val->w, &wq_map, 0);
-+	bpf_wq_set_callback(&val->w, wq_global_rcu_cb, 0);
-+	return 0;
-+}
-+
-+static int wq_global_rcu_lock_cb(void *map, int *key, void *value)
-+{
-+	int ret;
-+
-+	bpf_rcu_read_lock();
-+	ret = wq_global_acquire();
-+	bpf_rcu_read_unlock();
-+	return ret;
-+}
-+
-+SEC("fentry/bpf_fentry_test1")
-+__success
-+int wq_global_rcu_lock_prog(void *ctx)
-+{
-+	struct wq_elem *val;
-+	int key = 0;
-+
-+	/* Verify the same global subprog in non-sleepable and protected contexts. */
-+	wq_global_acquire();
-+
-+	val = bpf_map_lookup_elem(&wq_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_wq_init(&val->w, &wq_map, 0);
-+	bpf_wq_set_callback(&val->w, wq_global_rcu_lock_cb, 0);
-+	return 0;
-+}
-+
-+__noinline int wq_global_no_rcu(void)
-+{
-+	return 0;
-+}
-+
-+static int wq_global_no_rcu_cb(void *map, int *key, void *value)
-+{
-+	return wq_global_no_rcu();
-+}
-+
-+SEC("fentry/bpf_fentry_test1")
-+__success
-+int wq_global_no_rcu_prog(void *ctx)
-+{
-+	struct wq_elem *val;
-+	int key = 0;
-+
-+	/* Verify the same global in non-sleepable and unprotected contexts. */
-+	wq_global_no_rcu();
-+
-+	val = bpf_map_lookup_elem(&wq_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_wq_init(&val->w, &wq_map, 0);
-+	bpf_wq_set_callback(&val->w, wq_global_no_rcu_cb, 0);
-+	return 0;
-+}
-+
- /* Task work tests */
- 
- struct task_work_elem {
-@@ -179,3 +284,29 @@ int task_work_sleepable_prog(void *ctx)
- 	bpf_task_work_schedule_resume(task, &val->tw, &task_work_map, task_work_cb);
- 	return 0;
- }
-+
-+static int task_work_global_rcu_cb(struct bpf_map *map, void *key, void *value)
-+{
-+	return wq_global_acquire();
-+}
-+
-+SEC("fentry/bpf_fentry_test1")
-+__failure __msg("R1 must be a rcu pointer")
-+int task_work_global_rcu_prog(void *ctx)
-+{
-+	struct task_work_elem *val;
-+	struct task_struct *task;
-+	int key = 0;
-+
-+	val = bpf_map_lookup_elem(&task_work_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	task = bpf_get_current_task_btf();
-+	if (!task)
-+		return 0;
-+
-+	bpf_task_work_schedule_resume(task, &val->tw, &task_work_map,
-+				      task_work_global_rcu_cb);
-+	return 0;
-+}
--- 
-2.53.0
-
+> -
+>   	if (WARN_ON_ONCE(ctx->nexentries >= ctx->prog->aux->num_exentries))
+>   		return -EINVAL;
+>   
+> @@ -1360,6 +1351,15 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *ro_image,
+>   	return ret < 0 ? ret : size;
+>   }
+>   
+> +/* Probe loads fault on unmapped memory and need an exception table entry */
+> +static bool insn_is_probe_ldx(const struct bpf_insn *insn)
+> +{
+> +	return BPF_MODE(insn->code) == BPF_PROBE_MEM ||
+> +	       BPF_MODE(insn->code) == BPF_PROBE_MEMSX ||
+> +	       BPF_MODE(insn->code) == BPF_PROBE_MEM32 ||
+> +	       BPF_MODE(insn->code) == BPF_PROBE_MEM32SX;
+> +}
+> +
+>   int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>   		      bool extra_pass)
+>   {
+> @@ -1929,9 +1929,11 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>   
+>   		emit_ldx(rd, off, rs, BPF_SIZE(code), sign_ext, ctx);
+>   
+> -		ret = add_exception_handler(insn, rd, ctx);
+> -		if (ret)
+> -			return ret;
+> +		if (insn_is_probe_ldx(insn)) {
+> +			ret = add_exception_handler(rd, ctx);
+> +			if (ret)
+> +				return ret;
+> +		}
+>   
+>   		if (BPF_SIZE(code) != BPF_DW && insn_is_zext(&insn[1]))
+>   			return 1;
+> @@ -1959,9 +1961,11 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>   
+>   		emit_st(rd, off, imm, BPF_SIZE(code), ctx);
+>   
+> -		ret = add_exception_handler(insn, REG_DONT_CLEAR_MARKER, ctx);
+> -		if (ret)
+> -			return ret;
+> +		if (BPF_MODE(insn->code) == BPF_PROBE_MEM32) {
+> +			ret = add_exception_handler(REG_DONT_CLEAR_MARKER, ctx);
+> +			if (ret)
+> +				return ret;
+> +		}
+>   		break;
+>   
+>   	/* STX: *(size *)(dst + off) = src */
+> @@ -1981,9 +1985,11 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>   
+>   		emit_stx(rd, off, rs, BPF_SIZE(code), ctx);
+>   
+> -		ret = add_exception_handler(insn, REG_DONT_CLEAR_MARKER, ctx);
+> -		if (ret)
+> -			return ret;
+> +		if (BPF_MODE(insn->code) == BPF_PROBE_MEM32) {
+> +			ret = add_exception_handler(REG_DONT_CLEAR_MARKER, ctx);
+> +			if (ret)
+> +				return ret;
+> +		}
+>   		break;
+>   
+>   	/* Atomics */
+> @@ -2001,7 +2007,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>   			ret = emit_atomic_rmw(rd, rs, insn, ctx);
+>   
+>   		/* ret can be 1 (skip-zext); extable entry still needs to be added */
+> -		if (ret >= 0) {
+> +		if (ret >= 0 && BPF_MODE(insn->code) == BPF_PROBE_ATOMIC) {
+>   			/*
+>   			 * A load-acquire reads into dst_reg, and a read-modify-write
+>   			 * carrying BPF_FETCH reads the old value into src_reg, or into
+> @@ -2010,7 +2016,7 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>   			 */
+>   			int load_reg = bpf_atomic_load_reg(insn);
+>   
+> -			ret = add_exception_handler(insn, load_reg < 0 ?
+> +			ret = add_exception_handler(load_reg < 0 ?
+>   					REG_DONT_CLEAR_MARKER : regmap[load_reg],
+>   					ctx) ?: ret;
+>   		}
