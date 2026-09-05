@@ -1,77 +1,77 @@
-Received: from mail-wm2-f8.google.com (mail-wm2-f8.google.com [74.125.225.136])
+Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30B053B8D4A
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 07:00:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA523BBFA2
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 07:00:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788591628; cv=none; b=IT10Fj1JyLnHwa3b0atUzzXFxTAhTbfKPepmHqs/jDgpgQj3JMoXrMv2iviJMaAgkTVlVRrQZcRY04y7AzMW1HbopeFDCbhUe+1K9Td8Cjbd23KmrRhC0zGOHG5rvy4qaAg7BMKHuTOrWYSLcx/5fAu4DEiVLO31gNa0mHYG9zQ=
+	t=1788591631; cv=none; b=eccOrzLQMu3x08ngJDv9w6B5ylG0weDDoL5enkPrCNiHUsUF7XXmTkQ0m5oASG0qsZXRx3CVnBaGP71dvixltJIMXxYZJi9oL6mUsxVUxC4UHAw4BgjEN013U0MaV8e5t7VI5wOlKwzUz4jTZDoz8LKStcrEmHSSGGjbRtoNSkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788591628; c=relaxed/simple;
-	bh=s4Y0JiT4xAIDUadPi1is7tuuN5Ng/5Xc8W5oRApGOv0=;
+	s=arc-20240116; t=1788591631; c=relaxed/simple;
+	bh=yXo+ocbaU1mZ+3A0KGSyqwcN3Mkz92lDF/oF7smubEo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qbP825bWocA/IkgT7c7xw5Du/vTOWNIPJkcFN2Xn8YtkSJYba0hSNW8vn/+YjieLQuxDulGqyWkwudqlViDZTpLRLib/Q7YeHLrEn7XGz+SERkncB+owBEkEVe6Ch5PbN83HmyyloJoPGRTLhp3tKXscAvGpOhZX+9sUFVOthwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lmS68Au2; arc=none smtp.client-ip=74.125.225.136
+	 MIME-Version; b=hSPKa5Ax6uiM7sOEcQaEw9JrgXhtIIP/G+o5YuekFcWbdIDZJqcjMBudSWJszERMpndw3ijkZhGY311dNLjc1eUlLUMWNjPJ9JXMYWQnim4yHfs6i0ZK4VTD4JIU/NVyhQW9fBLsYuArO6Iyy9HB35tEnwa+AOyzBQhxpa0ojF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q8L0Plhi; arc=none smtp.client-ip=74.125.225.75
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lmS68Au2"
-Received: by mail-wm2-f8.google.com with SMTP id 5b1f17b1804b1-49cd3d0f150so7754075e9.1
-        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 00:00:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q8L0Plhi"
+Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-48431ba6e38so61854f8f.1
+        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 00:00:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788591609; x=1789196409; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788591617; x=1789196417; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=BgkcIgRjcx8CzsIkhrtznq+t9jdmXNqsjQeLbjfh6oU=;
-        b=lmS68Au2uEyevQpafL76e3zjfsBXVRZVeJTBJ9rMU19QJ2eNx7JZKBR5G7aNYdO11t
-         tVzW483EQCeas9GmSOh/4/CkDD7/JgDPr+XaK0vnhYQRmykwY+LO2QEIF6JPjqdHFvu1
-         J1Gz+lG30W3lTz2cQJ8CRwDM8m/smXq9Nmz65Ei+7gd45RKntTV+Mxd0foPxDDgQk5pF
-         01mmVlppOAVrdN1Dljf1iDfigbRNLpw1J8RPT/p2PqR3W9hs4BVyRd8mPpVzezPpRDnS
-         HmAP2GF6qVanYNebe3Cwpaf7H63Oc9fSqMNn0+3JgDONSdImW39jiWOcC+l9GCh2mKE6
-         GoOg==
+        bh=fG+8MFfXGhPK74KyDNWdTwGZoDEnaJ1TfevqvpcLCCo=;
+        b=q8L0PlhieQe+v4EkTTXAM8Pe6F8Bk1HKlElSLCGkGiTFtXUvV3rv1qCvG5PM4/Sja6
+         vZHZI534RckaViK9XPNykhr0wbc59hYRTj7Y3LQGUJcb2UpBsULHgRg1PNgBTO1q1CTe
+         J0YU2DZBjRvTnIbXjGveKlBDHnyITYo1IRV82GITJCNSTFgKIAD778RrsbHI4n6KKswi
+         6sG+IXRcZGYWXjnJ+QPV34bnuPBVBqJlUkYnDRXO/gGTNWDUPVCkpE1hOWWioEwk63ld
+         DhpGqkBhoHnP+G9kELu4lyIQIdoTBeXKDS3Qoz6ayJVLX73qmuO9W+K0qdMQr36M/Zph
+         YQyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788591609; x=1789196409;
+        d=1e100.net; s=20251104; t=1788591617; x=1789196417;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BgkcIgRjcx8CzsIkhrtznq+t9jdmXNqsjQeLbjfh6oU=;
-        b=JZrRyx4+qwGPbQa/zaA1fRedeJPUwXIHZbawnoCSLrGSQ73RMQxH2QcnKo6Mv9atjQ
-         enXFGRz1G3Le+rMhC7Xhr1Zz3fwJ6o7AerjyL2mxXfYi/lMe+YXFEjRDBv4UoeHPIWDn
-         f4eaekn3Yts9NVsnd15d32a9tK6Xk0//7IpUtCxh+gTr1egOVaNXGsJE8Au/2O0t5u2K
-         dFT93MYz9DbHHcOB0QZVdeXJtswZdKuT4QGpItPvS+A45FV2/LLuExFuY0Mg4U9GsmfQ
-         96XSUD34I+rJ7BAVZfVxqzf22oyL1o+cjeLpSrhqiTb9/stZ4XIUeZL155AP4nHRQle3
-         fEtg==
-X-Gm-Message-State: AFuF++m3SF8jbyJy+aqvaTvuoLQbYmE2eIEcPQWOnbTtv9zB5tDv4soY
-	bcGohscmb4peTOhuI8hQFESDK66pJU/6byOdQFTRxAFCf2auWgRlog6E9zau+mqi
-X-Gm-Gg: AYBFou2jSLjfy3432YOcXpPm9vH1FRa56KarSQ8rZYukOyJELh07k/9xlx7suovUVeW
-	xuXYiG/tb/AFPxF/sziaTFPZP5wwdTpFEfz32vtn5EpA6I0WAQRrcsFjskMDkvEghgZWjhjz1Zq
-	JZh2KNOfBzJa7mrkEg2/vyfOp+caimnSeGAHx0NnS/wD2k2uxcckEBgxnvPWSSTUopx6+W11hbf
-	B4bDSqsh1LaSl6y8hoqbX0gkwTvujqolsH7vqrSIzrv728jj+1Ib/Vxg57rZwZNa147bMYkYiB7
-	WFsdkl3PRwxUad3FXZCVIhE9L24Z9pMwvao2vWAUQvKBeb+t98HkJ3Cld+siyT8ULQxN1IAP7L7
-	9ByLpQXkHrnkscY3WnyOrEWdFzAaAfkEdxAop6V7hX5ttEaopb1ALAYnZkOAOITkeddFYQH7Xn/
-	jfmF70jhLWJJDnbNuaRBIVEJ54D0pmf1Datd3eUefsbHdtDXd9eHPPsMIIqRW5L5/RIZTX8WgZc
-	jW/p4WtCBPsJoub2YaylN90nhQCvLEiYGucoRZQihz8RjOgceW01/rk3nFh6I18YadGfmOCUI07
-	ko01HTqyEEON6B1p1jxIWxz+70E=
-X-Received: by 2002:a05:600d:8490:10b0:499:93b3:91ea with SMTP id 5b1f17b1804b1-49cf825e25dmr78021745e9.15.1788591609003;
-        Sat, 05 Sep 2026 00:00:09 -0700 (PDT)
+        bh=fG+8MFfXGhPK74KyDNWdTwGZoDEnaJ1TfevqvpcLCCo=;
+        b=tGqOaF7D9zftJJCxo3vlRjvA00qeu0J4Zit2Wqv/B4K7zHeP2v/7YtH05k8sbMVy3R
+         2qE6EGzvsXdZkzXm1hGiPN9tBnFWiglu4DWvvezBLKt4XrLbXsxr8fdlsqR1FLVgbXcU
+         B0yFtyRWHDJLZHdOagy4FWFSILnWjBo58Ix7L6lJnQHroooF2vAKNst/e+KxAgb5KDrj
+         aWSO0omsOFd0/e5eci3jwdEyGvO5A44mIZrKQfB62T5kmJw7i1b+qRycV2lRGXj0fgV+
+         yMdFRwlqMerL5EcofpVsE1EuRke+8iBwndIJP0LhP2p+R8jHLXeF8ogqfk6K3ugGCmiD
+         QLUQ==
+X-Gm-Message-State: AFuF++n9+MTGhF+FFASqEj+SZccLYosHhdS17awqoKwcWYZT1Uq8Za49
+	yfZ72tCybANullapPO8iy05HmGETpUGU0dRnfDXm6IO5Gtp34t96XyrOBts/mwvy
+X-Gm-Gg: AYBFou1z0jybCmbNVJF0hx5rYml+fr0Og3iTCjUbcSWKKSF7s7w58DfWwesvya89stL
+	Kp4DqDXfvDMTEwGfTaHVF59D3lGbH7/+YQyFDFjI250yyX6VnnmW4bRJmc9+Xa62jX7xLtse8Lt
+	B+ymL+RmOGa7L+/wmHbsxYzxhN+NSTs1AxKGkF+KL2ZmIs7U3KX/u0zlqg7g5PrrZnqYFMSeDTh
+	Eru6S56bVKdO5ifRdGoSL2ze6xLPvd0ndvhkWQ0icE67eyLf90qs6yyKdBGLdbmksq/WFAmyYnI
+	YjkTOGalXU9WiO1k/1MN4Em0ih4Vd172DF461PXdgi7J1ar2iIoPMDhx9rOejiuVjor4NMZhppL
+	cA+IC48A7Ln5/jKWeLx+IBsM6i4xS3eBCLdOxIcky4xzAecATmsjXeSdOXUnObBRFWd29jzgvm5
+	Ypnc5mjSwb/p+d/rwciWtL8DBMhMt/Fa5yHButtAgZiaiLSXcL5rZoerrSiQ7Yi8Jxs8+OwLtKG
+	zAEG5Ho++cuZBC/hAHq11Z4Ndabn9TUjsitfVI8wPWxCZWlOwTmDmAeo+ucVOjZKLvG+8zOdUNe
+	7BvAYnWZf2a4tV/AP2U0EQb+jsE=
+X-Received: by 2002:a05:600c:871b:b0:49b:4eb6:6ffd with SMTP id 5b1f17b1804b1-49cf82cbac2mr95336745e9.5.1788591617221;
+        Sat, 05 Sep 2026 00:00:17 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cf770fcf5sm123552355e9.6.2026.09.05.00.00.08
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ce5941cb4sm114854285e9.4.2026.09.05.00.00.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Sep 2026 00:00:08 -0700 (PDT)
+        Sat, 05 Sep 2026 00:00:16 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Nicholas Carlini <npc@anthropic.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
+	Nicholas Carlini <npc@anthropic.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf v1 3/8] bpf: Preserve packet pointer class displacement in regsafe()
-Date: Sat,  5 Sep 2026 08:59:54 +0200
-Message-ID: <20260905070003.3193366-4-memxor@gmail.com>
+Subject: [PATCH bpf v1 8/8] selftests/bpf: Check callback map value lock identity
+Date: Sat,  5 Sep 2026 08:59:59 +0200
+Message-ID: <20260905070003.3193366-9-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260905070003.3193366-1-memxor@gmail.com>
 References: <20260905070003.3193366-1-memxor@gmail.com>
@@ -81,120 +81,125 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4107; i=memxor@gmail.com; h=from:subject; bh=s4Y0JiT4xAIDUadPi1is7tuuN5Ng/5Xc8W5oRApGOv0=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWv23mWPLrT719rvVnGQz1p+R+R/mrD8DQ9nXT+l5FUtL x2DVW07SlkYxLgYZMUUWUr+72MyPlH5O9B2GTfMHFYmkCEMXJwCMJFbTYwM2xjm+txp/TZR4tnd QyetHgioxhpEyC3+/iP95XYh/eSaowz/ixJ1vQ6//picOX85U9i96RIL796edu/r+hmXE1+ucLm cwgsA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4200; i=memxor@gmail.com; h=from:subject; bh=yXo+ocbaU1mZ+3A0KGSyqwcN3Mkz92lDF/oF7smubEo=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWv23uVJjzeJ/5hXEeq27s+3xebZXn+F1Dh5YnL5mdfPt HvqxBnVUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIncU2FkuPPoT7b3X7X3C9/O k3/CsDhkUuqVtVt+TTinvJW7s2rHPW5Ghk+rHoT4TnuRsS0h5d7CuQH/XP5vmzG710uJ1YMnSej ZbHYA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-regsafe() maps packet pointer IDs between states and checks that each
-current register range is a subset of the corresponding explored
-register range. It does not, however, preserve the displacement between
-registers that share a packet pointer ID.
+Add a verifier test which retains a map value from an outer callback and
+then acquires a lock through an inner callback value before attempting to
+release the outer value's lock. Both values can denote different elements,
+so the verifier must reject the mismatched unlock.
 
-This is unsound because packet range is shared by ID. A bounds check on
-one class member updates every member, and a later access can consume the
-range through another member. Commit 022ac0750883 ("bpf: use reg->var_off
-instead of reg->off for pointers") folded the fixed pointer offset into
-r64 and removed the old off equality check, so two individually narrower
-registers can prune even when their displacement has changed. The
-explored path can then license an out-of-bounds packet access on the
-pruned path.
+Keep a nested same-element lock/unlock program as a positive control. This
+ensures assigning fresh identities to callback map values does not reject
+balanced locking through one callback argument.
 
-Requiring equal r64 bases would prevent the bug, but would also reject a
-safe uniform translation of the whole class. Instead, record the base
-translation seen for the first packet pointer in each ID mapping and
-require every subsequent member to have the same translation. This keeps
-the relative displacement invariant while retaining pruning for uniformly
-translated classes. Packet pointers without an ID remain unaffected.
-
-Fixes: 022ac0750883 ("bpf: use reg->var_off instead of reg->off for pointers")
-Reported-by: Nicholas Carlini <npc@anthropic.com>
-Suggested-by: Nicholas Carlini <npc@anthropic.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf_verifier.h |  2 ++
- kernel/bpf/states.c          | 42 ++++++++++++++++++++++++++++++++++--
- 2 files changed, 42 insertions(+), 2 deletions(-)
+ .../selftests/bpf/prog_tests/verifier.c       |  2 +
+ .../bpf/progs/verifier_callback_lock.c        | 73 +++++++++++++++++++
+ 2 files changed, 75 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_callback_lock.c
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 36b65797877d..5cf92ce18520 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -854,6 +854,8 @@ struct backtrack_state {
- struct bpf_id_pair {
- 	u32 old;
- 	u32 cur;
-+	s32 pkt_ptr_delta;
-+	bool pkt_ptr_delta_set;
- };
- 
- struct bpf_idmap {
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index 66fb11b6c6a7..2f8f3fe164b0 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -339,6 +339,7 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
- 	if (idmap->cnt < BPF_ID_MAP_SIZE) {
- 		map[idmap->cnt].old = old_id;
- 		map[idmap->cnt].cur = cur_id;
-+		map[idmap->cnt].pkt_ptr_delta_set = false;
- 		idmap->cnt++;
- 		return true;
- 	}
-@@ -352,6 +353,43 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
- 	return false;
- }
- 
-+static bool check_pkt_ptr_ids(const struct bpf_reg_state *old,
-+			      const struct bpf_reg_state *cur,
-+			      struct bpf_idmap *idmap)
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index 64ac49ad67e6..5c572dd725e7 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -25,6 +25,7 @@
+ #include "verifier_btf_ctx_access.skel.h"
+ #include "verifier_btf_unreliable_prog.skel.h"
+ #include "verifier_call_large_imm.skel.h"
++#include "verifier_callback_lock.skel.h"
+ #include "verifier_cfg.skel.h"
+ #include "verifier_cgroup_inv_retcode.skel.h"
+ #include "verifier_cgroup_skb.skel.h"
+@@ -188,6 +189,7 @@ void test_verifier_bswap(void)                { RUN(verifier_bswap); }
+ void test_verifier_btf_ctx_access(void)       { RUN(verifier_btf_ctx_access); }
+ void test_verifier_btf_unreliable_prog(void)  { RUN(verifier_btf_unreliable_prog); }
+ void test_verifier_call_large_imm(void)       { RUN(verifier_call_large_imm); }
++void test_verifier_callback_lock(void)        { RUN(verifier_callback_lock); }
+ void test_verifier_cfg(void)                  { RUN(verifier_cfg); }
+ void test_verifier_cgroup_inv_retcode(void)   { RUN(verifier_cgroup_inv_retcode); }
+ void test_verifier_cgroup_skb(void)           { RUN(verifier_cgroup_skb); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_callback_lock.c b/tools/testing/selftests/bpf/progs/verifier_callback_lock.c
+new file mode 100644
+index 000000000000..ee09dd66f467
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_callback_lock.c
+@@ -0,0 +1,73 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++struct bpf_map;
++
++struct lock_value {
++	struct bpf_spin_lock lock;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 2);
++	__type(key, int);
++	__type(value, struct lock_value);
++} lock_map SEC(".maps");
++
++struct callback_ctx {
++	struct lock_value *value;
++};
++
++static long lock_different_value(struct bpf_map *map, int *key,
++				 struct lock_value *value, struct callback_ctx *ctx)
 +{
-+	struct bpf_id_pair *map = idmap->map;
-+	s64 delta;
-+	unsigned int i;
-+
-+	if (!check_ids(old->id, cur->id, idmap))
-+		return false;
-+	if (!old->id)
-+		return true;
-+
-+	/*
-+	 * Packet range is shared by all pointers with the same ID. Preserve
-+	 * their relative displacement, while allowing the whole class to move.
-+	 * Packet pointer offsets are bounded by BPF_MAX_VAR_OFF, so the delta
-+	 * between two valid offsets fits in s32.
-+	 */
-+	delta = (s64)(cur->r64.base - old->r64.base);
-+	if (delta < S32_MIN || delta > S32_MAX)
-+		return false;
-+
-+	for (i = 0; i < idmap->cnt; i++) {
-+		if (map[i].old != old->id)
-+			continue;
-+		if (!map[i].pkt_ptr_delta_set) {
-+			map[i].pkt_ptr_delta = delta;
-+			map[i].pkt_ptr_delta_set = true;
-+			return true;
-+		}
-+		return map[i].pkt_ptr_delta == delta;
-+	}
-+
-+	return false;
++	bpf_spin_lock(&value->lock);
++	bpf_spin_unlock(&ctx->value->lock);
++	return 0;
 +}
 +
- /*
-  * Compare scalar register IDs for state equivalence.
-  *
-@@ -632,8 +670,8 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
- 		} else if (rold->range > rcur->range) {
- 			return false;
- 		}
--		/* id relations must be preserved */
--		if (!check_ids(rold->id, rcur->id, idmap))
-+		/* id relations and intra-class displacement must be preserved */
-+		if (!check_pkt_ptr_ids(rold, rcur, idmap))
- 			return false;
- 		/* new val must satisfy old val knowledge */
- 		return range_within(rold, rcur) &&
++static long nest_lock_different_value(struct bpf_map *map, int *key,
++				      struct lock_value *value, void *data)
++{
++	struct callback_ctx ctx = { .value = value };
++
++	bpf_for_each_map_elem(&lock_map, lock_different_value, &ctx, 0);
++	return 0;
++}
++
++SEC("?tc")
++__description("callback map value has a distinct lock identity")
++__failure __msg("bpf_spin_unlock of different lock")
++int callback_value_lock_identity(void *ctx)
++{
++	bpf_for_each_map_elem(&lock_map, nest_lock_different_value, NULL, 0);
++	return 0;
++}
++
++static long lock_same_value(struct bpf_map *map, int *key,
++			    struct lock_value *value, void *data)
++{
++	bpf_spin_lock(&value->lock);
++	bpf_spin_unlock(&value->lock);
++	return 0;
++}
++
++static long nest_lock_same_value(struct bpf_map *map, int *key,
++				 struct lock_value *value, void *data)
++{
++	bpf_for_each_map_elem(&lock_map, lock_same_value, NULL, 0);
++	return 0;
++}
++
++SEC("?tc")
++__description("nested callback can lock its own map value")
++__success
++int callback_value_lock_identity_same(void *ctx)
++{
++	bpf_for_each_map_elem(&lock_map, nest_lock_same_value, NULL, 0);
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.53.0
 
