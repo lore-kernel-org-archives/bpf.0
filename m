@@ -1,108 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ECDE499F1E
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 15:06:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B04C367F41
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 16:28:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788620783; cv=none; b=jl5F78CJIqpiVkqpoc3dzXZAR1P8Ejpv7vE6nqhOwUVT0h9H//fZbo+YJJGHBks7IKzDXqQ5hk204w9p6YDEFOznWdE+O1KX5KlWo1qWpQDKihf2rQVFjQaXJvOtzyCE5jyFfxmrQL4bclM86LuLByiJ+zvBpnio9mdhuSGk8No=
+	t=1788625737; cv=none; b=NvGTJhpJUAetegf9+epdtnwC0bV9FNOpaDYgzFy7x0OWOal1KQsv9gGrQOUVmhAA5RH/Q3+hBUfff9kyFuXCT51g7jzjlAjHFP0DIlVi/yt77Y/AGiESK23pAAKOA6jPI4wxiVqEMCwk8ERS1wS86/hoZhhu/lEs4jFlViXVwfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788620783; c=relaxed/simple;
-	bh=T/BoCHcn+7UNKzHUeVaxUpVLcaN6ZzFjFQ0osHhrjKk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KGewLLlHiPZSuqeoIFQekrr+VgmGL+ovcm3JkdsCg15t36GzRYAnMu81fNzwVlTqT/EEQjNrd3C4BbsxIqALVfgUjbNWN0GM/tKfjbSdly7DthyzpW6xJf9V0hjv54OQ7Cvm/5Ie3bg5jc+3EkTcHToQzterSp8EJubD1ZcGydk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BFN847tF; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788625737; c=relaxed/simple;
+	bh=Sd+WtO5DRtPYTABH6V2gV0Ob5SWHGcjMM8zwwK0oVWY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L+FiKNVN9ffDHJm/5yyVYbTXlPs3nw0p1Z860MZA8IgvjkquF40vDYz77HEmGD/uw3nkGsiDhJuXZKkItULwpVdYN/7cjLWL+Hg4F3Tx+GFXVa0grQEAA8lETxzYYWFzfiHNNidr+RKSHMTTClc1yL+FB2FyjPo9V7qBFhSeFgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ltwn0ZqS; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BFN847tF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF0DF1F00A3A
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 15:06:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788620780;
-	bh=KHshG6nMPDVCmd80dZy5JGDXk83+eLNv22ru8gCVG+8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=BFN847tFn0rW9Qc1HSoTHxaAQK4pQng2mb+hUMgPKGuEs9M4MYAUENxo8ATR4wM/H
-	 yWvXNhDew1s4jki+d3S7rr67ZKID/1kkVJLBUrDMNRpG5WF1KG5N2Rv3H4I6kXcaxA
-	 FuGIQ6hCoihrGOoT4ZjRw2uV4vp7tZUYjqmJyYFwj3lpI5DmxRAgiLlH2ApRwOzoeY
-	 VQ4RCA+PvZvEh1Ho/hFA7Kcz7U2GujGWr8mxC3uMbTXmeZZ4FZT2y+gq/k83dKwftU
-	 bJvZW/hU8WKZGSOYTPRdReTAXoNLN6izc8+wgY8wdbM+CDHtd2lGi+fye8VEoc5HVK
-	 tkyFxEaFvO13A==
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-c1600d040e4so333916166b.1
-        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 08:06:20 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBwAJDObX1+J0eTf6QaZaA+7qGfeZ01fYQ+Bt3i9pfrVflAC4aVbquNCGCWXINEP7UpcRPI=@vger.kernel.org
-X-Gm-Message-State: AFuF++kjeiPAc/4EOwdufPBYjucs7fr9mAkAEyzFGD5OmOW5Q9o2r3Rt
-	eAacKU0twa6uCSYP0Q3Ra19tcGHJknI9+otuhZzhbG+lPqAjqslKFNjWlCx5Ir2SS2BY6Lnzllq
-	yFuBpAAkokLzQ776H1/uDWZRpSTiRBNU=
-X-Received: by 2002:a17:907:a2cc:b0:c25:4ca3:dfda with SMTP id
- a640c23a62f3a-c25f012737cmr780960866b.9.1788620779385; Sat, 05 Sep 2026
- 08:06:19 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ltwn0ZqS"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Sd+WtO5DRtPYTABH6V2gV0Ob5SWHGcjMM8zwwK0oVWY=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788625732; v=1; x=1789230532;
+ b=ltwn0ZqSyKoRR5xXKfHHetKn+HuOUpB7/GQ6bJ3jn+ULrBDg6H+3/YhSmIbHOrqLbjRFl+VP
+ peAAGzb4T8nPgLVAB1+XQeppyQY7qad8dDQnYNrKdxkrczP9EGVY1W4zQvnsSC/8QnK6UyYIkQH
+ szlq2TYnpR0647s+ar+46HXU=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 6a082eb6d975864f;
+	Sat, 05 Sep 2026 16:28:52 +0000
+X-Mizu-Trace-ID: 6a082eb6d975864f
+X-Migadu-Flow: FLOW_OUT
+Date: Sat, 5 Sep 2026 09:28:46 -0700
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Hui Zhu <hui.zhu@linux.dev>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, JP Kobryn <inwardvessel@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Shuah Khan <shuah@kernel.org>, Barry Song <baohua@kernel.org>, 
+	Geliang Tang <geliang@kernel.org>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, Hui Zhu <zhuhui@kylinos.cn>
+Subject: Re: [PATCH bpf-next v7 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
+Message-ID: <apxB5tyglnSbqmEu@linux.dev>
+References: <cover.1788516769.git.zhuhui@kylinos.cn>
+ <7d8b77dc99ffe99a7bef874a257472fdaaf07e1c.1788516769.git.zhuhui@kylinos.cn>
+ <20260904110308.4473cde499e91aab14dbd5fc@linux-foundation.org>
+ <DL7CEX9EX781.23V26M3600JEI@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260831023106.3279-1-yangtiezhu@loongson.cn>
-In-Reply-To: <20260831023106.3279-1-yangtiezhu@loongson.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Sat, 5 Sep 2026 23:06:08 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6gwzWdck95Sr8Ubz0eeKtor8d0Ojc+gULK-=nakq-hXA@mail.gmail.com>
-X-Gm-Features: AcwNN1VxHVvqIMEdQIiXWuew_GsDjwo6BKiiVq6lKP0VXx78dtGRx0MNL75g1vI
-Message-ID: <CAAhV-H6gwzWdck95Sr8Ubz0eeKtor8d0Ojc+gULK-=nakq-hXA@mail.gmail.com>
-Subject: Re: [PATCH v2] LoongArch: BPF: Fix off-by-one error for insn_is_cast_user
-To: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Hengqi Chen <hengqi.chen@gmail.com>, loongarch@lists.linux.dev, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DL7CEX9EX781.23V26M3600JEI@gmail.com>
 
-Applied, thanks.
+On Sat, Sep 05, 2026 at 01:23:39PM +0200, Kumar Kartikeya Dwivedi wrote:
+> On Fri Sep 4, 2026 at 8:03 PM CEST, Andrew Morton wrote:
+> > On Fri,  4 Sep 2026 18:20:19 +0800 "Hui Zhu" <hui.zhu@linux.dev> wrote:
+> >
+> >> @@ -159,6 +160,74 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg)
+> >>  	mem_cgroup_flush_stats(memcg);
+> >>  }
+> >>
+> >> +/*
+> >> + * Reclaim must not recurse: try_to_free_mem_cgroup_pages() overwrites
+> >> + * current->reclaim_state, so a nested call would corrupt the outer
+> >> + * reclaim state. Reclaim windows are marked with PF_MEMALLOC;
+> >> + * reclaim_state is also checked because it is installed slightly
+> >> + * before PF_MEMALLOC.
+> >> + */
+> >> +static bool bpf_in_reclaim_context(void)
+> >> +{
+> >> +	return (current->flags & PF_MEMALLOC) || current->reclaim_state;
+> >> +}
+> >> +
+> >
+> > Would life improve if try_to_free_mem_cgroup_pages() didn't do that?
+> > If try_to_free_mem_cgroup_pages() (or some variant of it) were to
+> > permit nesting?
+> >
+> > 	rs = new_thing(current, &sc.reclaim_state);
+> > 	...
+> > 	set_task_reclaim_state(current, rs);
+> >
+> 
+> My understanding is that given the current restrictions on where this kfunc can
+> be called, this is mostly a defensive and shouldn't be firing (?). Given that,
+> we can probably revisit this when such reentrancy is necessary, even though I
+> doubt it would be the case in the future. It will at most be invoked from a wq
+> callback or a kthread, so should be fine.
+> 
 
-
-Huacai
-
-On Mon, Aug 31, 2026 at 10:31=E2=80=AFAM Tiezhu Yang <yangtiezhu@loongson.c=
-n> wrote:
->
-> In the LoongArch BPF JIT code, the branch offset represents the number
-> of instructions. An offset of 1 means the target of the "beq" is the
-> current PC plus 1 instruction (PC + 4 bytes). This matches the exact
-> same path as the sequential non-branch execution, the "or" instruction
-> is always executed for the cast_user JIT arm in build_insn().
->
-> If the pointer is not NULL, there is no side effect. But if the pointer
-> is NULL, it is incorrectly combined with the base address and turns into
-> a non-zero address, meaning a zero arena offset no longer casts to NULL.
->
-> Fix this by changing the branch offset from 1 to 2, which properly skips
-> the "or" instruction and jumps directly to the "move_reg" instruction if
-> the pointer is NULL, ensuring the destination register is safely cleared
-> to 0.
->
-> Fixes: 4fdb5dd8aeba ("LoongArch: BPF: Implement bpf_addr_space_cast instr=
-uction")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
-> v2: Update the commit message, no code changes.
->
->  arch/loongarch/net/bpf_jit.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-> index 1eb588e443c9..4da278900938 100644
-> --- a/arch/loongarch/net/bpf_jit.c
-> +++ b/arch/loongarch/net/bpf_jit.c
-> @@ -717,7 +717,7 @@ static int build_insn(const struct bpf_insn *insn, st=
-ruct jit_ctx *ctx, bool ext
->                         move_reg(ctx, t1, src);
->                         emit_zext_32(ctx, t1, true);
->                         move_imm(ctx, dst, (ctx->user_vm_start >> 32) << =
-32, false);
-> -                       emit_insn(ctx, beq, t1, LOONGARCH_GPR_ZERO, 1);
-> +                       emit_insn(ctx, beq, t1, LOONGARCH_GPR_ZERO, 2);
->                         emit_insn(ctx, or, t1, dst, t1);
->                         move_reg(ctx, dst, t1);
->                         break;
-> --
-> 2.42.0
->
+If with the current restrictions, this recursion can not happen then let's not
+add this check here. We never want recursion/reentrancy here.
