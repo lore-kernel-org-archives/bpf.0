@@ -1,277 +1,170 @@
-Received: from mail-wm2-f0.google.com (mail-wm2-f0.google.com [74.125.225.128])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D421347536
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 05:12:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30C7022157B
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 05:17:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788585152; cv=none; b=uCRu9j4I8jr1eQTUJl+DsvRhjxls1pnoiy6nWrq8hL7+Ofk9Ux9gIdIT7n6lxV/vrXS8RRpmPSK9lQzrfNoMEumxlSL6ycBgSGQ2jyE6/kMBsWyxV8FE+pKaOoLs2/Nv6ZM2ebqZ7STSyYvHLXOLuelKo+6Z+OcEqp9WR24X3go=
+	t=1788585442; cv=none; b=f5J/jsrepBJA//eTK1JS2OM/s81Et4oumI5S1Qzg8w8cCmLILonOQOGn9jt4aWCh5u1ETPDytTOJ15n/G82Rs/NZGWCloPaUYYKKpjvF1tCZJyZwfJkatRDpXhcbbBhw1B3C/nJRQup3xgyThwryFIZXp2a9kYgeJASLR+YaaWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788585152; c=relaxed/simple;
-	bh=IwLeXNYrvn44dlBsST2rWK9mOAjTc3IElBXZDmMPjas=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UOi84rvk3hwraQwLPQltTH4XwxUa1IGoOXI1GKV5Vgep2aETm3JZTh7X/SEQBiQlYonRwDW/dzHQkpt1TXSKa54Tg+5CXVuVX/axzBRvoSTWxwNn+TayZdDtOvYDpQPSpH4KL/sw23Bh4f1Afk40L7rlEbIFA5KXjWdaiqTI6hM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e4jofV5/; arc=none smtp.client-ip=74.125.225.128
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788585442; c=relaxed/simple;
+	bh=2N7N3DFQuE+aWAvgayOoeK9Kdsr9ItgNWqqp2QW4O6Q=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=nsxANscWBVptVBpCeb4chJv5uM8Jbb9YkelX2mX02ksauJ8cOZLVvFJNUIZy5uIKyBzfNN8QRFNwfp8Fw4k5m96TzsMhPZ1QeSFW8GQjppAuoRPMiF5bP88zJ/wVQKMUDmHaxLLGwthn9LDcn20G987OXlDvHiaZ9QPvZWGJXVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=S3IM3Kjg; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=C4wj0Rt1; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e4jofV5/"
-Received: by mail-wm2-f0.google.com with SMTP id 5b1f17b1804b1-49ced856e8dso7631545e9.0
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 22:12:30 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="S3IM3Kjg";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="C4wj0Rt1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1788585439;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2N7N3DFQuE+aWAvgayOoeK9Kdsr9ItgNWqqp2QW4O6Q=;
+	b=S3IM3KjgOrstj9VgPG83napvmCLC3q9XaVZqR0+tpQnAOk2XSMjtC/FvBbzVYal8cKwr+J
+	m9xS+vGRMhon7IuSAJ1XqeZeZs368FvGS+kCUDyXbNFJYA6EcWQQV8ZcoRAg3DM6o2BwDK
+	NhrjzKrpGFXTF8XqWCx8jdRji9PpbuQ=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-138-cQqJ5eArO8iKLA_lw1r2dw-1; Sat, 05 Sep 2026 01:17:16 -0400
+X-MC-Unique: cQqJ5eArO8iKLA_lw1r2dw-1
+X-Mimecast-MFC-AGG-ID: cQqJ5eArO8iKLA_lw1r2dw_1788585436
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-482f2b8a116so1415318f8f.1
+        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 22:17:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788585149; x=1789189949; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=8T3MRdleFeZALY2yg6PIwPx4JtdQgxftAueJ4prxCSQ=;
-        b=e4jofV5/gwNfLfcdJlnjM/9xbkaB1k0uiPu0zuyfuq1jCnOeT6zpuHt6gnUB+tZU7H
-         Rz7+IzJ0NQprpFmpC00tVqjP+3COTOzzreF6PoYPZPIAAdtPAlvpLUhiyYwkGXtbuV+/
-         WfnXsoknH8lsrlcsb4W1hzDGr2m3OHIgq/VhS2RuUXQx6X73i9iKXik6OmOrLA6CGUoJ
-         maLdkv+wGMda8W+ZkgJUe5ox9L0+hxzU+iZD47ChTXLhrc1Jj8fb6uzWzVbrOUQr9+Hg
-         KRKbra2MKPgzD4JGqTCBZW+ispqSAGGJr7QtJmVC9frPrzzl2VwTcoW6A/j1VDKoYdvn
-         4Wew==
+        d=redhat.com; s=google; t=1788585435; x=1789190235; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id
+         :references:in-reply-to:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=2N7N3DFQuE+aWAvgayOoeK9Kdsr9ItgNWqqp2QW4O6Q=;
+        b=C4wj0Rt1aG8z10KRpscuBBY7iifGBYVVgRbirW9UaQbemI2JcV8gff8HvmATKuauka
+         qOqWgnkN/ubcVhDL0iNq9QA1mbZf5TgmBOjEW6m7ZOz8mudoW4nWaJYkh3M5Kf9aBZSD
+         db/I8Zz+M0I+pq1AD1oRnYPJWQDmej4X9FhZ2IXmbqJu3CYYJR5rmtowXe8zhwc7dC6U
+         RKpIHTzIJ2j8efic0v9rHJPCWxVepXaMBbNgEDZUFdZM9uaGDM/FkpvCBrUjpYwfxiXD
+         jwm6rKfH9OqkmA9CjeBKPbNc2GZLub4jqVZdxx2aC7+/mVCc8nFuAHkzSyUDtsScK+xY
+         Tj4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788585149; x=1789189949;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=8T3MRdleFeZALY2yg6PIwPx4JtdQgxftAueJ4prxCSQ=;
-        b=cwdlNEEt7Yz/pBkvuZLXZklNCjt1qH8G2OcHe/bO/qdW3tr7IGexVCbBJEpHTr1nnG
-         6vtcx9QZzbaqDZi7V5ptz3xhFuYjNGN3YNJGYmpAPFKSsnsBeJm3xaFPZRVB8eSto3S7
-         5+M2J9cEn/1iylWTWvTHqBzwOdbPugyaQUwVEa3BFKTFnzskyhaxx/KkQgYYGG5OTuzO
-         +selHX0CNR9y2vOgVn0HYLYMQLQvbIew0/Tie0s+aPe1xIQszAqY5w0mfxIiXWTi2Cp0
-         Y4EHgTbdIyc5bbfO1WNzHZHGc4NAY4Z6QiFiPh7JjKnj8/G/e0h2TMYk47pM4n5ZQtF3
-         CDFw==
-X-Gm-Message-State: AFuF++lvTy28+1sOxU9H/StOgkunssSreeB8sMX3UEurEEg9/GUJzfTz
-	IN+wc2PKZbmc4wcDFOfnFt51mgBaoa/HaQ51kDlgVx5Xpd6prgjRBFSGacSGPl19
-X-Gm-Gg: AYBFou3ptqmwMICOI2qTi+i+lmQdsbLPlY0E2QEvyJqUGNgaUT+mXFvE9kYCnNwR4n8
-	8Q33nCeKjQvWJtHtIAWuqXJrPmIawY0ZEdgHjU3N42+aW8MMyDp9QIKp+LRoIFqRv2zXcgVWKwI
-	LktJpLQ2pOryWP/gLTeuLs0qaTCTilmXSeQxywPnloX7+PqiNpbciQ/TKQwwOqmCrjLwA7u0qwh
-	LnjVhpa3MJD+qJunzTZmADRqzbMHfS+Zxt9V+Y2JcBAr2pflUkdvmKdo64L6iNElDB0kbvRPQ9X
-	K6WQFtN2VJdRHteTjA2m1HP8xTBYZMjW2JhR1dUtZF+YlABgtk5mJ76Ml25Q7cja+I8DKwI8GgO
-	fVLqUHIUhtQAdUIsF6z1gKQp0B5eX1I7MlbbxBxiWgxMjuyRm8klNGmXFJoYfo7ltQWEFJtwzdy
-	4O1eChWmd55ZrFWgdtkur2z0cOvqpaFJmB6n2JshDTUZZrLNEJafx76fPmL8Ni1YfHwkmCzxaIj
-	xYBaxOFoFhAmOLd7vDPZTOWjM/fTme7LaJAt5COoDng5NCTl1cMATHukS8ZwaMwuqQY/7dop/On
-	Q2OtBDxO2lMG+IBLDcoJyxc5NwbvhoeTuf0Cxw==
-X-Received: by 2002:a05:600c:3485:b0:49c:cee0:e7c1 with SMTP id 5b1f17b1804b1-49cf825c119mr206011285e9.16.1788585148741;
-        Fri, 04 Sep 2026 22:12:28 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cf770fcf5sm117492735e9.6.2026.09.04.22.12.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2026 22:12:28 -0700 (PDT)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Nicholas Carlini <npc@anthropic.com>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Test global subprog callback contexts
-Date: Sat,  5 Sep 2026 07:12:22 +0200
-Message-ID: <20260905051224.2325381-3-memxor@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260905051224.2325381-1-memxor@gmail.com>
-References: <20260905051224.2325381-1-memxor@gmail.com>
+        d=1e100.net; s=20251104; t=1788585435; x=1789190235;
+        h=content-transfer-encoding:content-type:mime-version:message-id
+         :references:in-reply-to:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=2N7N3DFQuE+aWAvgayOoeK9Kdsr9ItgNWqqp2QW4O6Q=;
+        b=GDYk9/DvmvhGXrZ2dTBu5zbIlpzBsQ3rs+jLQIjfGGzqGyXFeH+9CKM4FzLW0O5hFa
+         12oxqvjjguXYkV8LuYxSY1rubSzdu1l/5Xkel5NmpwCs+GnS9ZDDr5v+fcNS97XUqleL
+         v7YT3B7EE/GlWfDqmbSc3nXejiRxva1id+Qbmlhod9kpNWh9BXmP+YvZ7FZHlnLKAcUO
+         qD5UT5/CgPmku9rJ1F4hp2FUyH++VsN9cshUPbZ46d0SQSTQ4Y9Uo4TFYAFhBTGxi4DP
+         NJ29ZnSk4ywM/KiJxW0Y9E1irTu5lkSOdu6yJLOi5VszESL+pYKzeJ2ntTYL7h5MPyyv
+         aFxQ==
+X-Forwarded-Encrypted: i=1; AKwUvByv3LVLARqYpAm+Olde6OFYF+pJZknnXsTorKmqSAUKgJa/5H5mYh215Nu1F9HGv32gf7k=@vger.kernel.org
+X-Gm-Message-State: AFuF++ma1UvsGi2XIWp7EhKj/NGzL5lGu8O/N+i6th0Y67OlHycOQuZJ
+	3VrcanRi9S4YkCkZw3lNoAkwBKucFPLMy87xX/vxeiVsX27W64yTFdB4fe7kRawqDEFGO4qGFH/
+	5L7nrY7iPSffVLZxy8RZN1WkefjZJa6pH48L0ZTJk+RC5mKdJqLC6ZQ==
+X-Gm-Gg: AYBFou1EkrVNPpYe4Fhzto0hZ0I7yxYkCzPie9AnE5A6k1c6GMEhy9LqEpWKpq5RFjf
+	z4Bhek4O8sTnzkGxeomLOpVaWNXXBSOxcsXufEYglR2AuhQ/V9LcRWHQYOLnJYIkvIyST2MfzqD
+	iVJW67pVtUVoOVCiPhhRiJI4SL+pWZ8+LEQL/qSzS46rf122vzNiiUG2V9n6CVvg+uBHHmBEO3N
+	IzTPr7SJ8ZAwB6YLc/8DtREg4jSBFe70WgTHUpWxbTYruU9rzVpvOhQjfX7EpxKgvr/CTTAMW+b
+	a5hGAWxA+CiFYCmk3H0qGkX3zXL5fv/GNaHRAFZXTtSEptCLnOJzCQqZXTBsL/ufJyGBhrzhAui
+	4rtimTuMWWQ==
+X-Received: by 2002:a05:600c:4585:b0:49c:fc6c:be16 with SMTP id 5b1f17b1804b1-49cfea09f08mr58738555e9.28.1788585435717;
+        Fri, 04 Sep 2026 22:17:15 -0700 (PDT)
+X-Received: by 2002:a05:600c:4585:b0:49c:fc6c:be16 with SMTP id 5b1f17b1804b1-49cfea09f08mr58738395e9.28.1788585435425;
+        Fri, 04 Sep 2026 22:17:15 -0700 (PDT)
+Received: from ehlo.thunderbird.net ([195.174.135.130])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cee80eda4sm200070045e9.15.2026.09.04.22.17.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 04 Sep 2026 22:17:15 -0700 (PDT)
+Date: Sat, 05 Sep 2026 04:53:35 +0000
+From: Gabriele Monaco <gmonaco@redhat.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>
+CC: Nam Cao <namcao@linutronix.de>, LKML <linux-kernel@vger.kernel.org>,
+ linux-trace-kernel <linux-trace-kernel@vger.kernel.org>,
+ bpf <bpf@vger.kernel.org>, Wen Yang <wen.yang@linux.dev>,
+ Tobias Schaffner <tobias.schaffner@siemens.com>,
+ Viktor Malik <vmalik@redhat.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [RFC PATCH 00/20] rv: Add support for BPF monitors
+In-Reply-To: <CAADnVQ+x4iRNXOg69nUmuJ53pB3-JtroePcyoReATy9+V1aRPg@mail.gmail.com>
+References: <20260831090524.106845-1-gmonaco@redhat.com> <87se3sakgi.fsf@yellow.woof> <df6e9168cb06c35e21db7f9d17cfbca6bd87005b.camel@redhat.com> <DL5B40CU17WD.3KD75URQZ6RRR@gmail.com> <eb3dd8158942d663ec8ad4c529eacd666c5f96d9.camel@redhat.com> <20260903090211.50d15220@gandalf.local.home> <CAADnVQK8e1Qp9rf1zThZxb3vr4Gc_bpo0nqpEO2LdnEwHdKokA@mail.gmail.com> <20260904074317.01b2c0e1@robin> <DL6O0KLPXLTA.2HJJUXQUVCP5@gmail.com> <20260904123108.1fa1d815@gandalf.local.home> <20260904132421.111c0279@gandalf.local.home> <DL6XBKITK7ZT.3RXK9YGGUYZZE@gmail.com> <20260904194620.0c7a8363@gandalf.local.home> <CAADnVQJH1SYR_GN6gewF3w_z_Sex9HFE1T1oXkQe6+v18bDTWA@mail.gmail.com> <20260904201741.2986efca@gandalf.local.home> <CAADnVQ+x4iRNXOg69nUmuJ53pB3-JtroePcyoReATy9+V1aRPg@mail.gmail.com>
+Message-ID: <228FE969-EBFF-4B60-B0E7-C1E4FD82FB8B@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5108; i=memxor@gmail.com; h=from:subject; bh=IwLeXNYrvn44dlBsST2rWK9mOAjTc3IElBXZDmMPjas=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWv2kqUujlPtmy+t53vVtN0lVeVaTErdv6TvxwJniO151 3FE/WJrRykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACYyRYuR4b9hw1+ntpJdxi2s Gaf/LGG/FN64PPlo5oH1HNG9P18ddmD4p27SfpZdYaXTIXt75V67ssl72YP4eysSzxW35x1teaP IAgA=
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Exercise global subprogram verification from workqueue and task-work
-callbacks. Both callback types can run in a sleepable context even when the
-containing program is not sleepable, so an unprotected callback must not let
-the global subprogram use implicit RCU protection inherited from the program.
 
-Add negative cases which load an RCU-protected task kptr in a global
-subprogram reached from each callback type. The tests fail on an unfixed
-kernel because the programs are incorrectly accepted.
 
-Also cover a workqueue callback protected by an explicit RCU read-side
-critical section. Finally, call the same harmless global subprogram directly
-from the main program and from an unprotected callback. This requires both
-non-sleepable and sleepable verification roots and proves that global calls
-from callbacks are not rejected wholesale.
+Il 5 settembre 2026 00:22:01 UTC, Alexei Starovoitov <alexei=2Estarovoitov=
+@gmail=2Ecom> ha scritto:
+>On Fri, Sep 4, 2026 at 5:16=E2=80=AFPM Steven Rostedt <rostedt@goodmis=2E=
+org> wrote:
+>>
+>> On Fri, 4 Sep 2026 16:48:55 -0700
+>> Alexei Starovoitov <alexei=2Estarovoitov@gmail=2Ecom> wrote:
+>>
+>> > On Fri, Sep 4, 2026 at 4:45=E2=80=AFPM Steven Rostedt <rostedt@goodmi=
+s=2Eorg> wrote:
+>> > >
+>> > > On Fri, 04 Sep 2026 16:34:00 -0700
+>> > > "Alexei Starovoitov" <alexei=2Estarovoitov@gmail=2Ecom> wrote:
+>> > >
+>> > > > bpf in 2022 was surely less capable then it is today=2E
+>> > > > It took us 2 years of bpf core development to statisfy sched-ext =
+demands
+>> > > > and we're still adding new features for sched-ext needs=2E
+>> > > > If you're trully willing to remove 90% of kernel/trace/rv/ and re=
+factor
+>> > > > it into tiny shim where all of the core pieces are bpf driven we =
+can
+>> > > > certainly work together (like we did with sched-ext) and add what=
+ever
+>> > > > is missing on bpf side=2E Then all existing monitors will become =
+bpf programs=2E
+>> > > > But adding bpf as another 'monitor', sorry but hard NO=2E
+>> > > > If hardcoded monitors was a mistake then admit it and fix it by d=
+eleting it,
+>> > > > if it's not a mistake then keep adding hardcoded monitors=2E
 
-Keep the harmless global opaque to LLVM with barrier() so both call sites
-remain in the generated BPF object and the positive case cannot pass
-vacuously. Have workqueue callbacks return zero explicitly after calling a
-global subprogram, as required by their callback contract, instead of relying
-on interprocedural return-value optimization.
+Alexei, what I read from your opinion is: if you really want to do this RV=
+ thing, then you should just implement it all in BPF=2E
 
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- .../bpf/progs/verifier_async_cb_context.c     | 132 ++++++++++++++++++
- 1 file changed, 132 insertions(+)
+Please correct me if I'm wrong, but I don't see how this series isn't a st=
+ep towards it=2E I am obviously open to all sorts of criticism on /how/ I'm=
+ doing it=2E
+We are adding the possibility to write (existing or new) monitors in BPF, =
+not adding another fat "bpf monitor"=2E
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_async_cb_context.c b/tools/testing/selftests/bpf/progs/verifier_async_cb_context.c
-index 6bf95550a024..987ca9dec6b7 100644
---- a/tools/testing/selftests/bpf/progs/verifier_async_cb_context.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_async_cb_context.c
-@@ -9,6 +9,11 @@
- 
- char _license[] SEC("license") = "GPL";
- 
-+struct task_struct *bpf_task_acquire(struct task_struct *p) __ksym;
-+void bpf_task_release(struct task_struct *p) __ksym;
-+void bpf_rcu_read_lock(void) __ksym;
-+void bpf_rcu_read_unlock(void) __ksym;
-+
- /* Timer tests */
- 
- struct timer_elem {
-@@ -66,6 +71,7 @@ int timer_sleepable_prog(void *ctx)
- 
- struct wq_elem {
- 	struct bpf_wq w;
-+	struct task_struct __kptr *task;
- };
- 
- struct {
-@@ -119,6 +125,106 @@ int wq_sleepable_prog(void *ctx)
- 	return 0;
- }
- 
-+__noinline int wq_global_acquire(void)
-+{
-+	struct task_struct *task, *acquired;
-+	struct wq_elem *val;
-+	int key = 0;
-+
-+	val = bpf_map_lookup_elem(&wq_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	task = val->task;
-+	if (!task)
-+		return 0;
-+
-+	acquired = bpf_task_acquire(task);
-+	if (acquired)
-+		bpf_task_release(acquired);
-+	return 0;
-+}
-+
-+static int wq_global_rcu_cb(void *map, int *key, void *value)
-+{
-+	wq_global_acquire();
-+	return 0;
-+}
-+
-+SEC("fentry/bpf_fentry_test1")
-+__failure __msg("R1 must be a rcu pointer")
-+int wq_global_rcu_prog(void *ctx)
-+{
-+	struct wq_elem *val;
-+	int key = 0;
-+
-+	val = bpf_map_lookup_elem(&wq_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_wq_init(&val->w, &wq_map, 0);
-+	bpf_wq_set_callback(&val->w, wq_global_rcu_cb, 0);
-+	return 0;
-+}
-+
-+static int wq_global_rcu_lock_cb(void *map, int *key, void *value)
-+{
-+	bpf_rcu_read_lock();
-+	wq_global_acquire();
-+	bpf_rcu_read_unlock();
-+	return 0;
-+}
-+
-+SEC("fentry/bpf_fentry_test1")
-+__success
-+int wq_global_rcu_lock_prog(void *ctx)
-+{
-+	struct wq_elem *val;
-+	int key = 0;
-+
-+	/* Verify the same global subprog in non-sleepable and protected contexts. */
-+	wq_global_acquire();
-+
-+	val = bpf_map_lookup_elem(&wq_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_wq_init(&val->w, &wq_map, 0);
-+	bpf_wq_set_callback(&val->w, wq_global_rcu_lock_cb, 0);
-+	return 0;
-+}
-+
-+__noinline int wq_global_no_rcu(void)
-+{
-+	barrier();
-+	return 0;
-+}
-+
-+static int wq_global_no_rcu_cb(void *map, int *key, void *value)
-+{
-+	wq_global_no_rcu();
-+	return 0;
-+}
-+
-+SEC("fentry/bpf_fentry_test1")
-+__success
-+int wq_global_no_rcu_prog(void *ctx)
-+{
-+	struct wq_elem *val;
-+	int key = 0;
-+
-+	/* Verify the same global in non-sleepable and unprotected contexts. */
-+	wq_global_no_rcu();
-+
-+	val = bpf_map_lookup_elem(&wq_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_wq_init(&val->w, &wq_map, 0);
-+	bpf_wq_set_callback(&val->w, wq_global_no_rcu_cb, 0);
-+	return 0;
-+}
-+
- /* Task work tests */
- 
- struct task_work_elem {
-@@ -179,3 +285,29 @@ int task_work_sleepable_prog(void *ctx)
- 	bpf_task_work_schedule_resume(task, &val->tw, &task_work_map, task_work_cb);
- 	return 0;
- }
-+
-+static int task_work_global_rcu_cb(struct bpf_map *map, void *key, void *value)
-+{
-+	return wq_global_acquire();
-+}
-+
-+SEC("fentry/bpf_fentry_test1")
-+__failure __msg("R1 must be a rcu pointer")
-+int task_work_global_rcu_prog(void *ctx)
-+{
-+	struct task_work_elem *val;
-+	struct task_struct *task;
-+	int key = 0;
-+
-+	val = bpf_map_lookup_elem(&task_work_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	task = bpf_get_current_task_btf();
-+	if (!task)
-+		return 0;
-+
-+	bpf_task_work_schedule_resume(task, &val->tw, &task_work_map,
-+				      task_work_global_rcu_cb);
-+	return 0;
-+}
--- 
-2.53.0
+And if you believe my attempt to have in-kernel and BPF monitors coexist i=
+s a waste of time, I get that too and I'm open to discuss=2E
+
+As you mentioned, when the project started, BPF was just not ready=2E My i=
+ntention with this series is to reassess this today=2E
+
+RV was initially built with the functional safety use-case in mind=2E For =
+various technical reasons this didn't take off, but that scenario drove tow=
+ards implementing RV reactors like the panic() one=2E Something BPF just sh=
+ouldn't do, as I get it=2E
+
+The interoperability with other tools (via RV-generated tracepoints) was a=
+lso a driving factor, together with Daniel probably being more proficient w=
+ith those back then=2E
+
+That's just from the top of my head: there are historical and technical re=
+asons for why RV looks like it is today, whether those are valid or just "m=
+istakes" is simply not for us to say=2E
+
+I'd rather discuss on what is the best approach /today/=2E And that's prec=
+isely why I submitted the talk for LPC=2E
+
+Gabriele
 
