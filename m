@@ -1,136 +1,116 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4764233943;
-	Sat,  5 Sep 2026 09:56:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0882F30D3ED
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 09:57:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788602181; cv=none; b=dmWtnDftWl/caAB1k7wh2UD91yY+T4GGCMsVcdtKDA7F1FI7I4+XYiNqpHkyAoL7U+oBOAiwB+osn8pV5VumlUqD0+eobaOzM/TXHx4lUJRvRBWuZ2KD7O6U258d2HcgB1ZsFtRuviQqRklzTjcI3vgeSeeagnvgKhwFCW3T6Fg=
+	t=1788602225; cv=none; b=jD9BXOwDXTVno2LbEFjEs9gNQPQqUfVGrgAX5+hMhlJyZkbihrsIpIJ+7fVnnZK1ttj/A7KN43l4g7F0IPhHVaqO1KlN5HGuayFM89H2KreSIRRav6ta/1jXhsYdcojZsQ47V1kesul/dMTMmwq33j2I22bnQNrOZL+b8qanC+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788602181; c=relaxed/simple;
-	bh=EYq+3BqsZwv6V6HCmMwDpZAf5y76L3CWyi26KXiCX+E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EmyicBpZmFdBptvgevsBWYJ9X2YQ0hR0UH6p2ZL6W279iShsdhBoHEMjIbARFIMwITwqcbrFrHNvJtp/PSvrmEAoW2PLEDF0OUUbmFTVJDo44kXOwGNRQKknHwuKq2DPlG/s4lBQPl/vT7SpufJMrd4n00Y9YKhhlzTBHaOdyLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hcTGm3pnYzYQtpl;
-	Sat,  5 Sep 2026 17:55:28 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id A359A40576;
-	Sat,  5 Sep 2026 17:56:14 +0800 (CST)
-Received: from [10.67.110.68] (unknown [10.67.110.68])
-	by APP4 (Coremail) with UTF8SMTPA id gCh0CgB3IpA955tqJERdAw--.352S2;
-	Sat, 05 Sep 2026 17:56:14 +0800 (CST)
-Message-ID: <5bbd9eda-96e9-4cc4-883d-9bda93bea2b3@huaweicloud.com>
-Date: Sat, 5 Sep 2026 17:56:13 +0800
+	s=arc-20240116; t=1788602225; c=relaxed/simple;
+	bh=fM50RelpZlPxGOz1H09/Lq54iXhKsyPkRZjYqpWNmCU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=siOtmbDwEMr16HZmWq2Z5tljdJZ//O1qWj0QZghEOo2OVFbnZT1nnFftJICEMGTiu7KouWx80gDIViUrzlCnAz9mJAgI+5cykNIXg5oAi6qoX+shHgZGg3SIM8bOUXlDe0W3oEp3GAY8cqYc9hgGDdWZEN9K4FgKpjX5l0Vjja4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FeYmdCdD; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FeYmdCdD"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-49b965570d7so21599275e9.0
+        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 02:57:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788602219; x=1789207019; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ayz/e09YuiQeSDHoY+u/lzDfVtJfvbORC9PNu8Y4WPc=;
+        b=FeYmdCdDM3HycuN6kG0lAtQMnWyhzZChHRcURAZwGacmlKF57187eEakaVhFU9Uj02
+         3owSNZECHgZ5GNjSbRGA1UDT+DFVPSc90AIsoxgdlw35UPtv3uhV4o9Xpp+LGjgyE80b
+         RIb7LkWR5tvZATBIXU/zB/W9nqPGfrY71FJnpGeJjAN6LFMuRSuThBI6I7+GEETQukrj
+         poNcR1vEVVb0SYLdJECrnTmeWpZqbvZt3YZXBwqkt7WPgxVMWHAgZdJFGWS6h9iGLDOG
+         eTcWmMLWzaqY1rOJ3VOAKZK0eo80rO4OkA3bpLLhrjghN3lmA2sEWIJnNP78y8c+YuV8
+         kuEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788602219; x=1789207019;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ayz/e09YuiQeSDHoY+u/lzDfVtJfvbORC9PNu8Y4WPc=;
+        b=ZsneotQGFt0VFkZ+8pV/6xXIhHpNxONmtI8axqaKwSbQGU1q4wRMvGhc8UVob7bRi+
+         HXGNpDlwzsVSUoYhWnsYYGM2o6GkBGQnIQbD/NIY+eAWsluzKXXYLWtC96m32mPwYWQA
+         rutUNhF6P7VTeMpZRWH792z6hLPw9lksCW0WyGas28fBTFkQamodaq/5mQFSq+1sAdPD
+         voCwlr9t03knfer7YY7BVrbTfcd3OFH7oHbPr4/eYbsehVTsDmYE/N+Oc0ggU3DBxMRM
+         vvMn0X12JBoLtAfZl0K1J00/6XoqAIlndWKkkbPgt9rUMWE/ytmJYHvYyJdSUe6YdZF9
+         Ez1Q==
+X-Forwarded-Encrypted: i=1; AKwUvByLyh5t8VxRdRdApXeRIDU2c0CNS1p2zYzW40DeWyEBQ3x5oa2WgVRQH8zKjTeXW/6XKy4=@vger.kernel.org
+X-Gm-Message-State: AFuF++nBq6QrAC4JpZIx7LEdA9pgmK5/IbbD9lkvuUioJ+CgxueeCRQZ
+	saJg8vWwsNKmBk9o9Ug/H82ID3rwEWxD8Ds659165SZnQ/ZVaLOg698d
+X-Gm-Gg: AYBFou0+sqstnuoPYyeVNcKe2Qswl+8Riob8afuWEWy0yrKWZtHh2tBXIt/AiLmk9k1
+	Ij6twl/vNrKEYOWYeGt06Gj8JSw3In5ZF/WS784LSg4HLk++2SFu4/W4t0k/N/+hWe7yoJk3gQM
+	ohZLXmgpd4WqseHkmsGEVw6Y2/vAM8gEeRTTz+xTtjwwHMG1pMvVkPy+LYbK8bjgyDeNHB0JHHN
+	r41j4tFCzkh5TiVkOIf4nhe8b/L7+2ThhaGqaVM5MjH7EiK7ryMGM6y+wPTAGYzcda762Fo1cZf
+	7Vq9h5irybDy3u99RojMl/ZAUW90Ibtna1etavjRV13N6P8TNU45Qr3nReQChSFwLKHgFeFKEP2
+	EpGSBYMQzmMbrBAnVq4jpdBImy81NPm4kEbLIua55kFDyHNJRHZIuDPW2XnKCADFYlDV6QGkkpe
+	Jz5nbxYRTuDOEPxsIuc/WCq87josPOtbunHgyER8m4o5JgtLVtZWdI/z02zUwuglKOyDCGZKpe3
+	Dl8OYLZk1Bea+M7nMOeXp8psD2ZV3FjNzvhnYTEe56/SVnoGOmxyCuUuh3u4v++TLzET/JlyCfV
+	BCDeCT18Cj2/APgmZ8vLWLDFwNxm7SFbesX6ZQyBMNw1cK8L+OG6Ghj2DKntdnE3nCe5b4Et9vh
+	aZw==
+X-Received: by 2002:a05:600c:548b:b0:49b:92df:87be with SMTP id 5b1f17b1804b1-49cf81f3655mr113590565e9.4.1788602219327;
+        Sat, 05 Sep 2026 02:56:59 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-2a02-3100-a4eb-3001-c06d-af27-9fa2-ea53.310.pool.telefonica.de. [2a02:3100:a4eb:3001:c06d:af27:9fa2:ea53])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49d057f4778sm32077245e9.8.2026.09.05.02.56.58
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sat, 05 Sep 2026 02:56:58 -0700 (PDT)
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Karl Mehltretter <kmehltretter@gmail.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-doc@vger.kernel.org,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH bpf-next] bpf, docs: Fix the struct btf_var name in btf.rst
+Date: Sat,  5 Sep 2026 11:56:49 +0200
+Message-Id: <20260905095649.42351-1-kmehltretter@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 1/3] riscv, bpf: Remap BPF_REG_0 and
- RV_REG_TCC
-Content-Language: en-US
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- jiangfeng@kylinos.cn
-Cc: bjorn@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- puranjay@kernel.org, pjw@kernel.org, palmer@dabbelt.com, alex@ghiti.fr,
- pulehui@huawei.com, martin.lau@kernel.org, mason@kernel.org
-References: <20260905085857.14143-2-pulehui@huaweicloud.com>
- <f7ac0b75cec70f36753ef48c97ffdca950d7c92632a74aa24187b9c076b7f115@mail.kernel.org>
-From: Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <f7ac0b75cec70f36753ef48c97ffdca950d7c92632a74aa24187b9c076b7f115@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:gCh0CgB3IpA955tqJERdAw--.352S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF1kCw1fZw48Kr1DXw1xAFb_yoW5GrWDpw
-	47CrnxJrWvga1rCry8KF1kXa1Skw40g3ZrCrySkrW5Jr9Fgr95JanFqw4Yy3s5CrWF9r4F
-	yFn0v3ySva1DArUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8
-	JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	bAw3UUUUU==
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+Content-Transfer-Encoding: 8bit
 
+struct btf_variable does not exist; the name is struct btf_var.
 
-On 2026/9/5 17:42, bot+bpf-ci@kernel.org wrote:
->> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
->> index e7378be171a9..fc1c8c5480b6 100644
->> --- a/arch/riscv/net/bpf_jit_comp64.c
->> +++ b/arch/riscv/net/bpf_jit_comp64.c
->> @@ -23,11 +23,11 @@
->>   /* fentry and TCC init insns will be skipped on tailcall */
->>   #define RV_TAILCALL_OFFSET ((RV_FENTRY_NINSNS + 1) * 4)
->>
->> -#define RV_REG_TCC RV_REG_A6
->> +#define RV_REG_TCC RV_REG_T5
->>   #define RV_REG_ARENA RV_REG_S7 /* For storing arena_vm_start */
->>
->>   static const int regmap[] = {
->> -	[BPF_REG_0] =	RV_REG_A5,
->> +	[BPF_REG_0] =	RV_REG_T6,
->>   	[BPF_REG_1] =	RV_REG_A0,
->>   	[BPF_REG_2] =	RV_REG_A1,
->>   	[BPF_REG_3] =	RV_REG_A2,
-> 
-> This isn't a bug, but does moving BPF_REG_0 to t6 affect code density?
-> arch/riscv/net/bpf_jit.h:is_creg() only accepts fp, s1, and a0-a5 for
-> RVC-compressible forms. With CONFIG_RISCV_ISA_C, every emitter that gates
-> on is_creg() now falls back to 4-byte instructions whenever BPF R0 is the
-> destination or base register. Since R0 holds return values and helper
-> results, could this measurably grow JIT image size for R0-heavy code?
+Use it.
 
-This is expected. The bpf prog image size growth is expected to be 
-negligible, and it is a necessary trade-off to free up registers for the 
-calling convention.
+Fixes: f063c889c945 ("bpf: add specification for BTF Var and DataSec kinds")
+Assisted-by: LLM
+Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+---
+ Documentation/bpf/btf.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> The changelog explains why a5 and a6 needed to be freed, but it doesn't
-> mention why t6 and t5 were chosen. Could a sentence be added about the
-> register selection rationale, particularly since t4 appears unused by
-> the JIT?
-
-It's fine, let's mention here. We prefer caller-saved registers that are 
-unused both now and going forward.
-
-> 
->> @@ -47,13 +47,13 @@ static const int pt_regmap[] = {
->>   	[RV_REG_A2] = offsetof(struct pt_regs, a2),
->>   	[RV_REG_A3] = offsetof(struct pt_regs, a3),
->>   	[RV_REG_A4] = offsetof(struct pt_regs, a4),
->> -	[RV_REG_A5] = offsetof(struct pt_regs, a5),
->>   	[RV_REG_S1] = offsetof(struct pt_regs, s1),
->>   	[RV_REG_S2] = offsetof(struct pt_regs, s2),
->>   	[RV_REG_S3] = offsetof(struct pt_regs, s3),
->>   	[RV_REG_S4] = offsetof(struct pt_regs, s4),
->>   	[RV_REG_S5] = offsetof(struct pt_regs, s5),
->>   	[RV_REG_T0] = offsetof(struct pt_regs, t0),
->> +	[RV_REG_T6] = offsetof(struct pt_regs, t6),
->>   };
-> 
-> [ ... ]
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33956847598
+diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
+index 3f05f17990ad..004aa1058d85 100644
+--- a/Documentation/bpf/btf.rst
++++ b/Documentation/bpf/btf.rst
+@@ -416,7 +416,7 @@ If the function has variable arguments, the last parameter is encoded with
+   * ``info.vlen``: 0
+   * ``type``: the type of the variable
+ 
+-``btf_type`` is followed by a single ``struct btf_variable`` with the
++``btf_type`` is followed by a single ``struct btf_var`` with the
+ following data::
+ 
+     struct btf_var {
+-- 
+2.53.0
 
