@@ -1,136 +1,140 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91221394793
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 08:02:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8177F3859DC
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 08:02:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788595347; cv=none; b=sZDLipRsqNOnGorTteTKh2ohCzsxjDgZoKFHVvVC25GB7tzrsim9scjMadwvaeq3qeUpqltbC7sDiAL/CoWRQdkzp44qglGxyk3tZoNB2vtf2JsnkmzSgO+vPDpVgSydiATFuad98FDgN7Ykp747Lu1Pz6IcYcgTh6MC5IhuBy0=
+	t=1788595348; cv=none; b=GT2PDXY92GhGAcx4XfzbfB9Z58XFE51kJZayyA6c3PoABcOrcjxkHConAj56bXOOR6veMMaQGK4ZK/tYyb1sZjZuMHKMD1Q9UXoBQ4o7B5YL5zfrNTz7FQnbgbCdnfDFd4ayiRXVozZioM35ILTrj+kP4ZN+WP4Y6kEu+uEC+xc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788595347; c=relaxed/simple;
-	bh=vhnqDah4EcxdtMFwQWkeZBGGmXmaNblKShGFHlk6AWQ=;
+	s=arc-20240116; t=1788595348; c=relaxed/simple;
+	bh=fBJ97Su5/P/bfwqdpEkUYb6AgBQbCA0o9k0u891ZSLU=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=K6wVCuEhKE0adkMpybkxb4imrVk811mxqO6xnbxxKrasjeOMatBKJtxluOHS0JC9ypGHQHq0M3ecIDmg18uTSHWixljAgLawbOxIL7Ed7OrJ/vItZCzOXFRjJPt5AUZRUY32PuXi/D/01o8PIwjFI2qpNSfAdFSK4yjwWkGEh9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZJOpLoBS; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=LcuSXbaguSsG3F8mo1r6zKnP+LW6As4DrG7QSbEJPWnD76HtSO68DvY69l6epDpZJ8/xtqHUrVHxV8pTW34sRjeanDOyWd5nN1tLTM19zyzGjXCZOdAj05y7ZZNJC8XAen28o4KhGN9dn/3QZ1v4qm1tzxtzVt4+Pd3I8h3lE8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cSRSegcU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZJOpLoBS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 804051F00A3D;
-	Sat,  5 Sep 2026 08:02:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cSRSegcU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 645CB1F00A3E;
+	Sat,  5 Sep 2026 08:02:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788595345;
-	bh=k+j0iVqP34q3Y629CQrB3WBuRy3qAY+u1vY2xvT7CGA=;
+	s=k20260515; t=1788595347;
+	bh=27kZHUZ28ODpJY9WrsTuwojj5b23CTuiNuRp07FwLDw=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ZJOpLoBSEfdYUua9gh+VlCuhu0WHpmePXB9MditdoZLJw+tfuRgm7fe50+IpUvLC4
-	 0mauPL+59WHrx7z6ru4dYF3dNS8JncYvDq+Jow2EGb3KnR9aANy6lXyQGh8oJvp1En
-	 Aj+7WWSYBeO5S1gPpOixn8tH+rE23laE3Xto+L5gJ7vguO0887PbtZsyv54iwpJ1Kd
-	 K8fXnqwZvCVhbEgRJjhlH7W5lzJValcnasFUHvm5vswoWaUVgUNc+mKBJe6RU3mPWS
-	 NXCUtxc+e6t10Y93EtCSXMEOMmZUvCt+knyS9IUreN8xXjjUZXfIuQuWYLGkhsbFYS
-	 QFlcBjGj6foFg==
-Content-Type: multipart/mixed; boundary="===============4698210227410485498=="
+	b=cSRSegcURTu8idy7TQVO0S1EJ1TA0Yv1zfKCeOC6vLVMP27PBdOLFTfcuGOC7zKl3
+	 1c4JANOMTVr8vf8BIhGta4J2MV6OxZc2rvsyv0I0vOgehlg6NJHTSsIJHxOgqbedB5
+	 BlXVJLxgPcMFTnQfpRXRtln2G274nyYak9t04WukkRjs/NLDdWZCH2ib8IoUqCBw4D
+	 rpomjK+7YHWx5QHcXOYRR7BfMkKMS6MAGW3KaHLRR/HTLksSn0m8aumH6+u+f2ca1i
+	 R7sGfxbCBCL/PGP2p9SSWSH+Xestuw60NZo+TAsDDIUvE1VXXKNWF6ECfu6VlK5Wga
+	 Bw1+wHnO+x9Bw==
+Content-Type: multipart/mixed; boundary="===============3088636442108631682=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <a9644fdbe7dd25d1d2ea0e4bcf474c720c66835b2f5f9b18186c67ea60e8bcf8@mail.kernel.org>
-In-Reply-To: <20260905070003.3193366-5-memxor@gmail.com>
-References: <20260905070003.3193366-5-memxor@gmail.com>
-Subject: Re: [PATCH bpf v1 4/8] selftests/bpf: Test packet pointer class displacement pruning
+Message-Id: <68717c2c3378b0a3acb915360911f1070e2afbe60f60491f54ce8f76d5ec11c9@mail.kernel.org>
+In-Reply-To: <20260905070003.3193366-3-memxor@gmail.com>
+References: <20260905070003.3193366-3-memxor@gmail.com>
+Subject: Re: [PATCH bpf v1 2/8] selftests/bpf: Test killing a loader during instruction rewrites
 From: bot+bpf-ci@kernel.org
 To: memxor@gmail.com,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,npc@anthropic.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat,  5 Sep 2026 08:02:24 +0000 (UTC)
+Date: Sat,  5 Sep 2026 08:02:26 +0000 (UTC)
 
---===============4698210227410485498==
+--===============3088636442108631682==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_xdp_direct_packet_access.c b/tools/testing/selftests/bpf/progs/verifier_xdp_direct_packet_access.c
-> index 0b86d95a4133..692a8468f3d7 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_xdp_direct_packet_access.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_xdp_direct_packet_access.c
-> @@ -5,6 +5,50 @@
->  #include <bpf/bpf_helpers.h>
->  #include "bpf_misc.h"
->  
-> +SEC("xdp")
-> +__description("XDP pkt regsafe preserves packet pointer class displacement")
-> +__failure __msg("R2 min value is outside of the allowed memory range")
-> +__flag(BPF_F_ANY_ALIGNMENT)
-> +__naked void pkt_regsafe_class_displacement(void)
+> diff --git a/tools/testing/selftests/bpf/prog_tests/prog_load_signal.c b/tools/testing/selftests/bpf/prog_tests/prog_load_signal.c
+> new file mode 100644
+> index 000000000000..0f78db3bccc7
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/prog_load_signal.c
+> @@ -0,0 +1,131 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+> +#include <test_progs.h>
+> +
+> +#define NOP_CNT		32768
+> +#define MIN_KILL_DELAY_NS	(100ULL * 1000 * 1000)
+> +#define REAP_TIMEOUT_NS		(1000ULL * 1000 * 1000)
+> +
+> +static __u64 monotonic_ns(void)
 > +{
-> +	asm volatile ("\
-> +	r8 = *(u32 *)(r1 + %[xdp_md_data_end]);\
-> +	r9 = *(u32 *)(r1 + %[xdp_md_data]);\
-> +	r6 = r9;\
-> +	r6 += 8;\
-> +	if r6 > r8 goto l_exit_%=;\
-> +	r0 = *(u64 *)(r9 + 0);\
-> +	r4 = r0;\
-> +	r4 &= 15;\
-> +	r7 = r0;\
-> +	r7 >>= 63;\
-> +	if r7 != 0 goto l_path_b_%=;\
-> +	r2 = r9;\
-> +	r2 += r4;\
-> +	r3 = r2;\
-> +	r3 += 4;\
-> +	goto l_join_%=;\
-> +l_path_b_%=: \
-> +	r4 &= 3;\
-> +	r4 += 8;\
-> +	r2 = r9;\
-> +	r2 += r4;\
-> +	r3 = r2;\
-> +	r3 -= 4;\
-> +l_join_%=: \
-> +	r5 = r3;\
-> +	r5 += 4;\
-> +	if r5 > r8 goto l_exit_%=;\
-> +	r0 = *(u64 *)(r2 + 0);\
-> +l_exit_%=: \
-> +	r0 = 0;\
-> +	exit;\
-> +"	:
-> +	: __imm_const(xdp_md_data, offsetof(struct xdp_md, data)),
-> +	  __imm_const(xdp_md_data_end, offsetof(struct xdp_md, data_end))
-> +	: __clobber_all);
+> +	struct timespec ts;
+> +
+> +	clock_gettime(CLOCK_MONOTONIC, &ts);
+> +	return ts.tv_sec * 1000000000ULL + ts.tv_nsec;
 > +}
+                ^^^
 
-A subsystem pattern flags this as potentially concerning:
+A subsystem pattern flags this as potentially concerning: monotonic_ns()
+re-implements a helper that the BPF selftests test-util header already
+provides.
 
-The test only detects the bug if the verifier happens to checkpoint a
-state at the join label. Nothing in the test pins that. do_check() calls
-bpf_is_state_visited() at the goto l_join target (marked a prune point
-in kernel/bpf/cfg.c), but a state is stored there only if the heuristic
-in kernel/bpf/states.c holds: env->jmps_processed - env->prev_jmps_processed
->= 2 && env->insn_processed - env->prev_insn_processed >= 8.
+tools/testing/selftests/bpf/testing_helpers.h defines get_time_ns():
 
-For this program the first path reaches the join with 3 jumps and 16
-processed instructions and no previous checkpoint, so the state is stored
-today and the test does discriminate. If that ever stops being true
-(heuristic retuned, one more instruction or jump added to the test, an
-extra checkpoint created earlier), the second path is simply walked
-instead of pruned and it still fails with the exact asserted string, so
-the test would keep passing on a kernel without 6ab7e7c0e9c6 and silently
-stop testing anything.
+    static inline __u64 get_time_ns(void)
+    {
+        struct timespec t;
 
-The analogous regsafe pruning test in the tree pins this explicitly:
-tools/testing/selftests/bpf/progs/verifier_linked_scalars.c uses
-__flag(BPF_F_TEST_STATE_FREQ) on scalars_alu32_alu64_regsafe_pruning()
-(85 progs in the tree use that flag). Adding it here would force a
-checkpoint at every prune point and make the pruning attempt independent
-of the heuristic.
+        clock_gettime(CLOCK_MONOTONIC, &t);
 
-Related gap in what the test pins: the kernel patch makes two claims -
-that displacement-changing classes no longer prune, and that safe uniform
-translation of the whole class still prunes - and only the first is
-covered. Would a companion __success case where every member of the
-packet-pointer class is translated by the same amount help guard
-check_pkt_ptr_ids()'s single-delta allowance against a future tightening
-to plain r64.base equality?
+        return (u64)t.tv_sec * 1000000000 + t.tv_nsec;
+    }
+
+That header is already pulled in by test_progs.h, so get_time_ns() is in
+scope here with no extra include. It's the helper the rest of prog_tests/
+uses for exactly this purpose:
+
+  kprobe_multi_test.c
+  reg_bounds.c
+  lru_lock_nmi.c
+  perf_link.c
+  test_tc_edt.c
+  uprobe_multi_test.c
+
+The new monotonic_ns() body is functionally identical (the only difference is
+the missing (u64) cast on tv_sec, which is harmless here because the
+multiplier is 1000000000ULL).
+
+> +
+> +static void sleep_ns(__u64 duration)
+> +{
+> +	struct timespec ts = {
+> +		.tv_sec = duration / 1000000000ULL,
+> +		.tv_nsec = duration % 1000000000ULL,
+> +	};
+> +
+> +	while (nanosleep(&ts, &ts) && errno == EINTR)
+> +		;
+> +}
+> +
+> +static int waitpid_timeout(pid_t pid, int *status, __u64 timeout)
+> +{
+> +	__u64 deadline = monotonic_ns() + timeout;
+> +	int ret;
+> +
+> +	do {
+> +		ret = waitpid(pid, status, WNOHANG);
+> +		if (ret)
+> +			return ret;
+> +		usleep(1000);
+> +	} while (monotonic_ns() < deadline);
+> +
+> +	return 0;
+> +}
+              ^^^
+
+Similarly, waitpid_timeout() hand-rolls a deadline/usleep(1000) polling loop,
+and lru_lock_nmi.c and perf_link.c show the established get_time_ns()-based
+deadline idiom in this directory. Would using the shared helper keep a single
+implementation to fix and keep the call sites consistent with the rest of the
+suite?
+
+[ ... ]
 
 
 ---
@@ -138,4 +142,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33952325041
---===============4698210227410485498==--
+--===============3088636442108631682==--
