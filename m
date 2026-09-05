@@ -1,336 +1,129 @@
-Received: from mail-wm2-f8.google.com (mail-wm2-f8.google.com [74.125.225.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F6CD33DEF7
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 06:13:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DE2414A619;
+	Sat,  5 Sep 2026 06:59:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788588788; cv=none; b=SugPFfBfu/GPMpCO4tajYfA29gmZmYaVQWgmfUXzpbtgLJcL2MazWUbYuJpKuXflzJLqLXuf36Z9PvsZvbsfHNHulIpwetxD95IYlPMRoYB5oUbvMIbc/U6FLOyv0L7K0UIkKzN6dgP13DaeDlryTAHbDT2zGjlKYY6UeiT94wI=
+	t=1788591547; cv=none; b=E/fYYCpb+bJVftv/FgMgBc7A+T3jEoasOuM0acyWPdkPAuqkJo+FFZ6vtAmoWmuveZQLnjEMfBlIMyXZaEuHkUJFTsVE1Om3XMK7VwnPNSPAaD0KIqZ5rK0OnXRpUbWnjq7x0LNLTavAPco4mOuTN3jBl4RV90VJZRSWKGQQVcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788588788; c=relaxed/simple;
-	bh=/nUOsB0/0xAU7lnfKbndKpHkg4KadqDnVMpBax1l4BM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=Guoi96KF3wsL+GgyZe3vLJfRE4bpDh1G965el19doTdQ4Iskc1pDvaNu+MYsFVbuxwQo0YL+xWAFh/lPrwzbjcjRzzzvOfdr6dyCNL0PDNNrIu9f6XNnrVDBUEKNMbSmQep2zzMoHQOxejZvDG+oDXqejXhJCyP48ilrziDbU/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BPjVIii2; arc=none smtp.client-ip=74.125.225.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BPjVIii2"
-Received: by mail-wm2-f8.google.com with SMTP id 5b1f17b1804b1-49cd3d0f150so7609315e9.1
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 23:13:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788588784; x=1789193584; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=ML4tQwaga7x6hatyElf9ZkS7gcNBjlOJuWIIW8nuelk=;
-        b=BPjVIii2zQW8/VnJUWIyiZpiy3/C7eXbjr8QwnlIHxjcS2LzKi1mAohFvTX+PlDtF7
-         uzEgFA7WZ0ELXXcZkjszH+D3BiL8hTKUxO/7o8rtHD+eHtH3ciXFKZkRDC2B16lnzk2R
-         h8MymeoeHURUYOK6zWvWpYCSskKSsEpUjH8NWTWdFGWC2QNBKSq4JwRMAN6+aR2N8KEx
-         AvayUsllxmtgYzkYkhMYwWGpVJCz+dkqpb96ppI8QsUSjRBilbBtaY98kLYpG/gY3TyU
-         rpRRFmRmU5cm9QAMaf6Y+JsrMDtx1LWd0cWHBPqNyZU5ip43mlSvAMJt6IyZuWgnXY8f
-         rVug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788588784; x=1789193584;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ML4tQwaga7x6hatyElf9ZkS7gcNBjlOJuWIIW8nuelk=;
-        b=svUa9s2Y1t6R3bW3g4852XaLolgP0Y5NYOIUewn7y8DGOXyuAdMWRmk18etpADkHPd
-         L2fHpGvACewXV9KnSoV/YZag2vW5JFm4e7yc3tK0WsBDuuJF9T5I1qn7SMpXKaQL7qw+
-         r9aIn2khSuoOy7DcEFoUfNJFrmduKxV5SLf8JOM9PLkXkK3n/DIfjGG/ZwFJBpyT/PZ+
-         1VV5Qo2eZFEF9Q0tVc/VIqZHuHqN61zEbX8mfd7PuDxVAY2ji3Mx14S9B/W95RBymKAp
-         kEubLfVYM0zYGh3rP06hwxM5dmit7zh7/+6IO2ASwSK1psAd4V8y1yrJERgAG6AOgWMl
-         kP7A==
-X-Forwarded-Encrypted: i=1; AKwUvBz8d5pUglUtmM8kxxodBFTxl6fni7zJ45nELIr4eRO58YhOSyDx0QkGHkJjKAuwVG2iZsQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++kDuD0MLHqZvxfZhR8Y5ilFTvU3uNWTn1RAHX7P1k+QGhIRfo9r
-	h4sy+bMHyW11Me0rboZRAsed15cf8fA+WOigJtmeYyvc9mw2Xl3WpFSD
-X-Gm-Gg: AYBFou3tTTZR5BIjdKVZEn31H3bdVwfO1O/7V5WWDqeYYqxP71UI11pMtaz0uYvgj9W
-	SqPkcywoGnCscMC5+7V3k7+drdQtmamsoCmaFEubVCbiaV945nAFJSrYUSSCDW8jQSo5Tx5FsmR
-	ir7mRTIFbXsQKQEHxt18TsYFFzvTSrJkItdrA3rz6lkxJBZgj6Nqdi2UnMu1HTkB2m466nxOy7O
-	EgP/3JXY55X+oNnrFleLBM9JR1E6i0s6cXk9WkRVHSmchw26dnLwpbwLIAh84HVUfNB93jWuap8
-	3Na0MrAp3gngmM+kHoQng3D4k52fIr7d2NXbtU5C/MjbYn3J/PbkmUeOZkrSQjaNz+pLK4mZLWr
-	c9pd7BUFwzY7EggvRL89DB17lwyW17r9bot1f+K+SOLNvl5YKDFSv/tE5gkk8RMJq35+i/5tK6f
-	0kgaRh2qm07VLOUdiYxRWC67tNNn6EZyWDeJRbnwrvEbPfpR3rPh/k6ZfZKrCOTi3MmAPSXbnM/
-	y7tF4+ebupmCrUt21ad0dn0Od70qROgxe3bA+u11qqHjbQI9F0fwWhbS2ERTnUYoxUNSGvN+wKA
-	RMDvE+fbchd+R468h4hi8U/+Ow/sLCBblLgvKw==
-X-Received: by 2002:a05:600c:4693:b0:49d:39:90ba with SMTP id 5b1f17b1804b1-49d00399d19mr37052335e9.3.1788588784172;
-        Fri, 04 Sep 2026 23:13:04 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cee5d476esm228433385e9.1.2026.09.04.23.13.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Sep 2026 23:13:03 -0700 (PDT)
+	s=arc-20240116; t=1788591547; c=relaxed/simple;
+	bh=Sl9FcmjzYX+gdN0zbJG9gCD5j/qX6Ln34MKkeEdIvZY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=O2RLVrLSdDna7684jlAUamoDJfC3hiN+s339xu/1+HjyryAsKc5N//oLwb8Yxnm2fgZKR0g0VdEOJ23tJCCg4Q5txCwGvwGnr1/gbFvc0WSauwbUjA9eG7TgGffp+uMLqH+La85MJ7DcuGhsFz9mqoHyK8XYpJAWksUrtcKqRac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hcPL54BhyzKHMV3;
+	Sat,  5 Sep 2026 14:58:05 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 243684056B;
+	Sat,  5 Sep 2026 14:59:02 +0800 (CST)
+Received: from ultra.huawei.com (unknown [10.90.53.71])
+	by APP1 (Coremail) with UTF8SMTPA id cCh0CgDXvQi0vZtqheFEAw--.38251S2;
+	Sat, 05 Sep 2026 14:59:01 +0800 (CST)
+From: Pu Lehui <pulehui@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Feng Jiang <jiangfeng@kylinos.cn>
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Pu Lehui <pulehui@huawei.com>
+Subject: [PATCH bpf-next v4 0/3] Add bpf stack arguments support for RV64
+Date: Sat,  5 Sep 2026 07:04:06 +0000
+Message-Id: <20260905070409.4141522-1-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 05 Sep 2026 08:13:03 +0200
-Message-Id: <DL75T3P90YMY.2I43E35KEI5HN@gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Verify global subprogs in each
- sleepability context
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>
-Cc: <npc@anthropic.com>, <ast@kernel.org>, <andrii@kernel.org>,
- <daniel@iogearbox.net>, <eddyz87@gmail.com>, <emil@etsalapatis.com>,
- <kkd@meta.com>, <kernel-team@meta.com>, <martin.lau@kernel.org>,
- <yonghong.song@linux.dev>, <mason@kernel.org>, <ihor.solodrai@linux.dev>
-X-Mailer: aerc 0.21.0
-References: <20260905051224.2325381-2-memxor@gmail.com>
- <652367e7a2ca75e71c0b7c2cadc8b760551008853bbe831dd596f65cb993e285@mail.kernel.org>
-In-Reply-To: <652367e7a2ca75e71c0b7c2cadc8b760551008853bbe831dd596f65cb993e285@mail.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgDXvQi0vZtqheFEAw--.38251S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KF18Jw48CrWxGr4xWw17Wrg_yoW8ury7pa
+	4v9Fy3Kryvva12ga1xCFWUWryrJF4ku3y3WF4xZ3y5J3W8tryUXrn3Ka1rJwn8JF97X3Wr
+	ZwnagF9xGa1kZ37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
+	w2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+	Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+	6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+	kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
+	xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+	xUIa0PDUUUU
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-On Sat Sep 5, 2026 at 8:05 AM CEST, bot+bpf-ci wrote:
->> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->> index 3a7eb2185c35..66d04244c737 100644
->> --- a/include/linux/bpf.h
->> +++ b/include/linux/bpf.h
->> @@ -1650,8 +1650,9 @@ static inline void bpf_trampoline_set_flags(struct=
- bpf_trampoline *tr, u32 flags
->>  struct bpf_func_info_aux {
->>  	u16 linkage;
->>  	bool unreliable;
->> -	bool called : 1;
->> -	bool verified : 1;
->> +	/* Indexed by in_sleepable. */
->> +	bool called[2];
->> +	bool verified[2];
->>  };
->
-> [ ... ]
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 5b51e7ee1a3f..f759a020c8a5 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -9957,6 +9957,7 @@ static int check_func_call(struct bpf_verifier_env=
- *env, struct bpf_insn *insn,
->>  	if (err =3D=3D -EFAULT)
->>  		return err;
->>  	if (bpf_subprog_is_global(env, subprog)) {
->> +		struct bpf_func_info_aux *sub_aux =3D subprog_aux(env, subprog);
->>  		const char *sub_name =3D bpf_subprog_name(env, subprog);
->>  		const char *operation;
->>  		bool returns_void;
->> @@ -9988,11 +9989,10 @@ static int check_func_call(struct bpf_verifier_e=
-nv *env, struct bpf_insn *insn,
->>  		if (env->log.level & BPF_LOG_LEVEL)
->>  			verbose(env, "Func#%d ('%s') is global and assumed valid.\n",
->>  				subprog, sub_name);
->> +		sub_aux->called[in_sleepable_context(env)] =3D true;
->>  		returns_void =3D subprog_returns_void(env, subprog);
->>  		if (env->subprog_info[subprog].changes_pkt_data)
->>  			clear_all_pkt_pointers(env);
->> -		/* mark global subprog for verifying after main prog */
->> -		subprog_aux(env, subprog)->called =3D true;
->>  		if (returns_void)
->>  			bpf_diag_record_scrub(env, &caller->regs[BPF_REG_0], BPF_DIAG_MOD_CA=
-LLER_SAVED);
->>  		else
->
-> [ ... ]
->
->> @@ -19560,13 +19565,14 @@ static void free_states(struct bpf_verifier_en=
-v *env)
->>  	}
->>  }
->>
->> -static int do_check_common(struct bpf_verifier_env *env, int subprog)
->> +static int do_check_common(struct bpf_verifier_env *env, int subprog, b=
-ool in_sleepable)
->>  {
->>  	bool pop_log =3D !(env->log.level & BPF_LOG_LEVEL2);
->>  	struct bpf_subprog_info *sub =3D subprog_info(env, subprog);
->>  	struct bpf_prog_aux *aux =3D env->prog->aux;
->>  	struct bpf_verifier_state *state;
->>  	struct bpf_reg_state *regs;
->> +	u32 old_insns_total =3D sub->insns_total;
->>  	u32 insn_processed =3D env->insn_processed;
->>  	int ret, i;
->>
->> @@ -19579,7 +19585,7 @@ static int do_check_common(struct bpf_verifier_e=
-nv *env, int subprog)
->>  	state->curframe =3D 0;
->>  	state->speculative =3D false;
->>  	state->branches =3D 1;
->> -	state->in_sleepable =3D env->prog->sleepable;
->> +	state->in_sleepable =3D in_sleepable;
->>  	state->frame[0] =3D kzalloc_obj(struct bpf_func_state, GFP_KERNEL_ACCO=
-UNT);
->>  	if (!state->frame[0]) {
->>  		kfree(state);
->
-> Can this change break check_css_task_iter_allowlist()?
->
-> That function currently uses in_sleepable(env) to decide whether to allow
-> bpf_iter_css_task_new(), per its comment:
->
->   "Any sleepable progs are also safe since bpf_check_attach_target() enfo=
-rce
->    them can only be attached to some specific hook points."
->
-> Before this patch, do_check_common() always set state->in_sleepable =3D
-> env->prog->sleepable, so in_sleepable(env) matched the program-level
-> sleepability even for global subprogs. After this patch, when a global
-> subprog is called from inside bpf_rcu_read_lock() or a similar protected
-> region in a sleepable program, in_sleepable_context(env) is false in
-> check_func_call(), so the global subprog is verified with in_sleepable =
-=3D=3D
-> false.
->
-> If that global subprog then calls bpf_iter_css_task_new(),
-> check_css_task_iter_allowlist() sees in_sleepable(env) =3D=3D false and r=
-ejects
-> it with "css_task_iter is only allowed in bpf_lsm, bpf_iter and sleepable
-> progs", even though:
->
-> 1. The iterator itself never sleeps (it is marked only KF_ITER_NEW, not
->    KF_SLEEPABLE, so it only takes spin_lock_irq(&css_set_lock));
->
-> 2. The allowlist check is meant to prove the attach point does not alread=
-y
->    hold css_set_lock, which is a property of the program's attach type, n=
-ot
->    of the current RCU/preempt nesting;
->
-> 3. The identical call written directly in the main program under the same
->    bpf_rcu_read_lock() is still accepted, because there in_sleepable rema=
-ins
->    true. Only the version factored into a global subprog is newly rejecte=
-d.
->
-> Should check_css_task_iter_allowlist() consult env->prog->sleepable direc=
-tly
-> instead of in_sleepable(env), so that normalizing a protected sleepable c=
-aller
-> to in_sleepable=3Dfalse at the global-subprog root does not affect allowl=
-ist
-> decisions?
+Implement bpf_jit_supports_stack_args() on RV64 JIT to allow bpf
+subprogs and kfuncs to pass and receive more than 5 arguments.
 
-No, it should not, the behavior in the patch is correct for this case.
+Tested on riscv64 QEMU with LLVM main [1]; BPF-to-BPF and kfunc
+selftests pass.
 
->
->> @@ -19721,7 +19727,8 @@ static int do_check_common(struct bpf_verifier_e=
-nv *env, int subprog)
->>  	 * Accumulate their total counts as total counts of the main or
->>  	 * global subprog hosting the async call.
->>  	 */
->> -	env->subprog_info[subprog].insns_total =3D env->insn_processed - insn_=
-processed;
->> +	env->subprog_info[subprog].insns_total =3D old_insns_total +
->> +						(env->insn_processed - insn_processed);
->>  	return ret;
->>  }
->
-> [ ... ]
->
->> @@ -19749,45 +19756,55 @@ static int do_check_subprogs(struct bpf_verifi=
-er_env *env)
->>  {
->>  	struct bpf_prog_aux *aux =3D env->prog->aux;
->>  	struct bpf_func_info_aux *sub_aux;
->> -	int i, ret, new_cnt;
->> +	int context, i, j, ret, new_cnt;
->>
->>  	if (!aux->func_info)
->>  		return 0;
->>
->>  	/* exception callback is presumed to be always called */
->> -	if (env->exception_callback_subprog)
->> -		subprog_aux(env, env->exception_callback_subprog)->called =3D true;
->> +	if (env->exception_callback_subprog) {
->> +		sub_aux =3D subprog_aux(env, env->exception_callback_subprog);
->> +		sub_aux->called[env->prog->sleepable] =3D true;
->> +	}
->>
->>  again:
->>  	new_cnt =3D 0;
->> -	for (i =3D 1; i < env->subprog_cnt; i++) {
->> +	/*
->> +	 * Walk callers before callees so each global subprog normally sees al=
-l
->> +	 * of its contexts before it is verified. Async callback cycles can ad=
-d a
->> +	 * context to an earlier subprog, so repeat until every called context=
- is
->> +	 * verified.
->> +	 */
->> +	for (j =3D env->subprog_cnt - 1; j >=3D 0; j--) {
->> +		i =3D env->subprog_topo_order[j];
->> +		if (!i)
->> +			continue;
->>  		if (!bpf_subprog_is_global(env, i))
->>  			continue;
->>
->>  		sub_aux =3D subprog_aux(env, i);
->> -		if (!sub_aux->called || sub_aux->verified)
->> -			continue;
->> +		for (context =3D 0; context < ARRAY_SIZE(sub_aux->called); context++)=
- {
->> +			if (!sub_aux->called[context] || sub_aux->verified[context])
->> +				continue;
->>
->> -		env->insn_idx =3D env->subprog_info[i].start;
->> -		WARN_ON_ONCE(env->insn_idx =3D=3D 0);
->> -		ret =3D do_check_common(env, i);
->> -		if (ret) {
->> -			return ret;
->> -		} else if (env->log.level & BPF_LOG_LEVEL) {
->> -			verbose(env, "Func#%d ('%s') is safe for any args that match its pro=
-totype\n",
->> -				i, bpf_subprog_name(env, i));
->> -		}
->> +			env->insn_idx =3D env->subprog_info[i].start;
->> +			WARN_ON_ONCE(env->insn_idx =3D=3D 0);
->> +			ret =3D do_check_common(env, i, context);
->> +			if (ret)
->> +				return ret;
->> +			if (env->log.level & BPF_LOG_LEVEL)
->> +				verbose(env, "Func#%d ('%s') is safe for any args "
->> +					"that match its prototype\n",
->> +					i, bpf_subprog_name(env, i));
->>
->> -		/* We verified new global subprog, it might have called some
->> -		 * more global subprogs that we haven't verified yet, so we
->> -		 * need to do another pass over subprogs to verify those.
->> -		 */
->> -		sub_aux->verified =3D true;
->> -		new_cnt++;
->> +			sub_aux->verified[context] =3D true;
->> +			new_cnt++;
->> +		}
->>  	}
->>
->> -	/* We can't loop forever as we verify at least one global subprog on
->> -	 * each pass.
->> +	/*
->> +	 * We can't loop forever as each pass verifies at least one new contex=
-t,
->> +	 * and there are only two contexts per global subprog.
->>  	 */
->>  	if (new_cnt)
->>  		goto again;
->> @@ -19800,7 +19817,7 @@ static int do_check_main(struct bpf_verifier_env=
- *env)
->>  	int ret;
->>
->>  	env->insn_idx =3D 0;
->> -	ret =3D do_check_common(env, 0);
->> +	ret =3D do_check_common(env, 0, env->prog->sleepable);
->>  	if (!ret)
->>  		env->prog->aux->stack_depth =3D env->subprog_info[0].stack_depth;
->>  	return ret;
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/339471=
-89666
+[1] https://github.com/llvm/llvm-project/pull/189060
+
+---
+Changes in v4:
+- Remap BPF_REG_0 and RV_REG_TCC to align the calling convention of
+  bpf2bpf and kfunc calls with the riscv abi.
+- Adapt the bpf stack arguments implementation based on change 1.
+
+Changes in v3:
+- Drop the exceptions.c guard change: the guarded programs use
+  bpf_throw(), unsupported by the RV64 JIT, so the test is denylisted
+  on riscv64 and the guard has no effect. (BPF CI)
+- Link to v2: https://lore.kernel.org/r/20260813-bpf-riscv-stack-args-v2-0-efea8f9b3fe1@kylinos.cn
+
+Changes in v2:
+- Sign-extend 32-bit kfunc arguments passed on the stack (args 9+),
+  matching the register path and the RISC-V psABI. (Sashiko)
+- Restrict the riscv selftest guard to __riscv_xlen == 64 so the
+  tests are not enabled on RV32. (Sashiko)
+- Link to v1: https://lore.kernel.org/r/20260812-bpf-riscv-stack-args-v1-0-67b246806e59@kylinos.cn
+
+
+Feng Jiang (2):
+  riscv, bpf: Add BPF stack arguments support for RV64 JIT
+  selftests/bpf: Enable stack argument tests for RV64
+
+Pu Lehui (1):
+  riscv, bpf: Remap BPF_REG_0 and RV_REG_TCC
+
+ arch/riscv/net/bpf_jit.h                      |  1 +
+ arch/riscv/net/bpf_jit_comp64.c               | 87 ++++++++++++++++---
+ arch/riscv/net/bpf_jit_core.c                 |  6 ++
+ arch/riscv/net/bpf_timed_may_goto.S           |  4 +-
+ .../bpf/progs/btf__stack_arg_precision.c      |  3 +-
+ .../bpf/progs/btf__verifier_stack_arg_order.c |  3 +-
+ tools/testing/selftests/bpf/progs/stack_arg.c |  3 +-
+ .../selftests/bpf/progs/stack_arg_kfunc.c     |  3 +-
+ .../selftests/bpf/progs/stack_arg_precision.c |  3 +-
+ .../selftests/bpf/progs/verifier_jit_inline.c |  2 +-
+ .../selftests/bpf/progs/verifier_ldsx.c       |  6 +-
+ .../selftests/bpf/progs/verifier_stack_arg.c  |  3 +-
+ .../bpf/progs/verifier_stack_arg_order.c      |  3 +-
+ 13 files changed, 101 insertions(+), 26 deletions(-)
+
+-- 
+2.34.1
 
