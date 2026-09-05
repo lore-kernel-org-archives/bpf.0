@@ -1,203 +1,106 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B22913112BD;
-	Sat,  5 Sep 2026 08:53:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27B13822A5
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 09:03:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788598437; cv=none; b=fGWqHV4PIMM++WA5ePhdFXX1gxbalVlwp49ZBgokHj+bxMcEXDtBeFUQvgZNtNz9jd1SVN7y6gUeOc7HJEBwvjYUynKgedEliSrfsoBTN47q8PQ+KnOyfudf5qy6jV1dRtJ6C8/YqeS8P9RYJuqjDUeDRmbl+PNicot97L7hGoY=
+	t=1788599004; cv=none; b=Xj+O5MElW8YPKtmhcRs/SqDISPE8kV5xTewE+R+4plOoAsdLeur0RfpdN5XqHVzLLsPJatyIj1zdFGcJ+ml2mpAO/rVh9ka+r1yxzS2zddQV7NmC+iEcO5eCZiBdvsqTlxqAmPmYDaGNLt052g0CIt5FNCaVGWoQUTNOI6QJx4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788598437; c=relaxed/simple;
-	bh=GHPQKzsP3RbwNes7z6+2vb3acznUeHY+PH1A9vDIlr0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=TSAr4eSvvzm988Yi9yinJCJgLkZrEI/DSem+8jcLeouQ4/HparYOyZK69ACEBVau9h1eNooZqYGksseNdNQTzA4J+6ys5xwC3HYrNK8CoyAr21QjbHdAJYRGl2XjNyXLRYRSMKqMuVweWk98Z3zxmH+ht6S4dcD0injzqNlrMlI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hcRtm0hzZzYQv1M;
-	Sat,  5 Sep 2026 16:53:04 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 261F340578;
-	Sat,  5 Sep 2026 16:53:50 +0800 (CST)
-Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP1 (Coremail) with UTF8SMTPA id cCh0CgBnTwqc2JtqP8lOAw--.13006S5;
-	Sat, 05 Sep 2026 16:53:49 +0800 (CST)
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Feng Jiang <jiangfeng@kylinos.cn>
-Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH bpf-next v5 3/3] selftests/bpf: Enable stack argument tests for RV64
-Date: Sat,  5 Sep 2026 08:58:57 +0000
-Message-Id: <20260905085857.14143-4-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260905085857.14143-1-pulehui@huaweicloud.com>
+	s=arc-20240116; t=1788599004; c=relaxed/simple;
+	bh=JjxYZlCULaeMRmxnbZIXd8ZRoLgMsqwaVcvQqGIhuv8=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=hrQ5jCFXHqHsSoMLBSirqNysVCPd2OyfRj3UwavzWFqA59M7FER1kR1DzSJLX4pmHb9OMQgsKdo7ZWfvP+Xso61L6yJWYoUXz4HbeRAZdia50DE5nPnlD6It6c6ruR4Fp5ahEJND2ac7Ha/9zOZ9HSCkpV/j0crcqsMM+ivVbYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AKI4e8hy; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AKI4e8hy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AA9E1F00A3D;
+	Sat,  5 Sep 2026 09:03:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788599000;
+	bh=PuHAdoy+ZTMl1z2Y+WWB6JPxOktPOUeIYbQ5VSD5aKQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=AKI4e8hyfXE+22zC22+8Pkaqee5niiZiKevt4M11qPvkHMVx/MxXRM+/3RPTwz+DK
+	 us8rmaogvirqi8uB2gKN/Sw3serj+lIG6KVUPKjva/E6I2hOlY/LeHO1u6vVxW2U6d
+	 JAafdbBP7jwvs4uUNQonM1zoIU6AGBE7AB9LQ3k+lHvDA20cznd1z6UiPXJ361l6tV
+	 8Lq6g4yes8cYWl026AXOglyV+o96SBkcRu3IRW0oAtjkDwyJgD91P8DgWJo4t5gkvi
+	 /LkLpsg1CriXtlFWa7lJTnDMEn6klNPJxil1FOMeS+0DZjAl9h+LzQGFS0rY/PfkoQ
+	 qPPLj90BlKkkw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v5 3/3] selftests/bpf: Enable stack argument
+ tests for RV64
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Pu Lehui" <pulehui@huaweicloud.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260905085857.14143-4-pulehui@huaweicloud.com>
 References: <20260905085857.14143-1-pulehui@huaweicloud.com>
+ <20260905085857.14143-4-pulehui@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 05 Sep 2026 09:03:20 +0000
+Message-Id: <20260905090320.8AA9E1F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgBnTwqc2JtqP8lOAw--.13006S5
-X-Coremail-Antispam: 1UD129KBjvPXoW5Ar1fGFyrKF4UXw47XFW5p5X_Cr1fWoZxKF
-	9Iy3WUCan7Zw47uF1fJFy8Wr48KF1fJF4IkryrtF9Fyr1rCr1jyw4fZF1Fq39Ygas0gFyD
-	C3yqvFykGF1kn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3AaLa
-	J3UjIYCTnIWjp_UUUO07kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAv
-	wI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82
-	xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI
-	8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr
-	0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0
-	oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7V
-	C0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j
-	6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r
-	4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
-	wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc4
-	0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
-	xVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F
-	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUIF4i
-	UUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-From: Feng Jiang <jiangfeng@kylinos.cn>
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] Missing architecture guard update for stack arguments in `tools/tes=
+ting/selftests/bpf/progs/exceptions.c`.
+--
+
+commit 7ea892ecb0a3b4c34ad8033c7d6de54aaa01a98d
+Author: Feng Jiang <jiangfeng@kylinos.cn>
+
+selftests/bpf: Enable stack argument tests for RV64
 
 Enable the stack argument selftests for RV64. The riscv guard is
-restricted to __riscv_xlen == 64 since stack arguments are only
-supported by the RV64 JIT.
-
-Keep the __BPF_FEATURE_STACK_ARGUMENT gate, defined by clang with
-BPF stack argument support [1].
+restricted to __riscv_xlen =3D=3D 64 since stack arguments are only
+supported by the RV64 JIT. Keep the __BPF_FEATURE_STACK_ARGUMENT=20
+gate, defined by clang with BPF stack argument support [1].
 
 [1] https://github.com/llvm/llvm-project/pull/189060
 
-Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
----
- tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c   | 3 ++-
- .../selftests/bpf/progs/btf__verifier_stack_arg_order.c        | 3 ++-
- tools/testing/selftests/bpf/progs/stack_arg.c                  | 3 ++-
- tools/testing/selftests/bpf/progs/stack_arg_kfunc.c            | 3 ++-
- tools/testing/selftests/bpf/progs/stack_arg_precision.c        | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_stack_arg.c         | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c   | 3 ++-
- 7 files changed, 14 insertions(+), 7 deletions(-)
+> diff --git a/tools/testing/selftests/bpf/progs/stack_arg.c b/tools/testin=
+g/selftests/bpf/progs/stack_arg.c
+> index 944e3bb603e7e..3e9ed37c57bb9 100644
+> --- a/tools/testing/selftests/bpf/progs/stack_arg.c
+> +++ b/tools/testing/selftests/bpf/progs/stack_arg.c
+> @@ -21,7 +21,8 @@ struct {
+> =20
+>  int timer_result;
+> =20
+> -#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
+> +#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
+> +	(defined(__TARGET_ARCH_riscv) && __riscv_xlen =3D=3D 64)) && \
+>  	defined(__BPF_FEATURE_STACK_ARGUMENT)
+> =20
+>  const volatile bool has_stack_arg =3D true;
 
-diff --git a/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c b/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c
-index 8d38aafe66a2..ab12397a9b52 100644
---- a/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c
-+++ b/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c
-@@ -4,7 +4,8 @@
- #include <bpf/bpf_helpers.h>
- #include "../test_kmods/bpf_testmod_kfunc.h"
- 
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
- 
- long subprog_call_mem_kfunc(long a, long b, long c, long d, long e, long size)
-diff --git a/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c b/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c
-index 99bc115f8380..a980a3a399d3 100644
---- a/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c
-+++ b/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c
-@@ -3,7 +3,8 @@
- #include <vmlinux.h>
- #include <bpf/bpf_helpers.h>
- 
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
- 
- int subprog_bad_order_6args(int a, int b, int c, int d, int e, int f)
-diff --git a/tools/testing/selftests/bpf/progs/stack_arg.c b/tools/testing/selftests/bpf/progs/stack_arg.c
-index 944e3bb603e7..3e9ed37c57bb 100644
---- a/tools/testing/selftests/bpf/progs/stack_arg.c
-+++ b/tools/testing/selftests/bpf/progs/stack_arg.c
-@@ -21,7 +21,8 @@ struct {
- 
- int timer_result;
- 
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
- 
- const volatile bool has_stack_arg = true;
-diff --git a/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c b/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
-index 345f2da2e361..b6b1a8aa7f44 100644
---- a/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
-+++ b/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
-@@ -6,7 +6,8 @@
- #include "bpf_kfuncs.h"
- #include "../test_kmods/bpf_testmod_kfunc.h"
- 
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
- 
- const volatile bool has_stack_arg = true;
-diff --git a/tools/testing/selftests/bpf/progs/stack_arg_precision.c b/tools/testing/selftests/bpf/progs/stack_arg_precision.c
-index ce0301a41fa9..7baa9c1c8e31 100644
---- a/tools/testing/selftests/bpf/progs/stack_arg_precision.c
-+++ b/tools/testing/selftests/bpf/progs/stack_arg_precision.c
-@@ -6,7 +6,8 @@
- #include "../test_kmods/bpf_testmod_kfunc.h"
- #include "bpf_misc.h"
- 
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
- 
- /* Force kfunc extern BTF generation for inline asm call below.
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-index 51d22faf4559..f6a4a6aa0e61 100644
---- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-@@ -12,7 +12,8 @@ struct {
- 	__type(value, long long);
- } map_hash_8b SEC(".maps");
- 
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
- 
- __noinline __used
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-index 8e4325273b3d..57f22691744a 100644
---- a/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-@@ -5,7 +5,8 @@
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
- 
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
- 
- __noinline __used __naked
--- 
-2.34.1
+[Severity: Low]
+Does tools/testing/selftests/bpf/progs/exceptions.c also need this architec=
+ture
+guard update?
 
+The has_stack_arg macro in exceptions.c enables stack-argument-specific
+exception tests. The RV64 architecture check seems to be omitted from that =
+file
+during this refactoring:
+
+tools/testing/selftests/bpf/progs/exceptions.c:
+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) \
+	&& defined(__BPF_FEATURE_STACK_ARGUMENT)
+
+const volatile bool has_stack_arg =3D true;
+
+When exception support is eventually added for the RV64 JIT, the stack argu=
+ment
+portions of the exceptions selftest will silently fail to enable, reducing =
+test
+coverage.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260905085857.1414=
+3-1-pulehui@huaweicloud.com?part=3D3
