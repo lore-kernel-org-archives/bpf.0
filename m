@@ -1,157 +1,179 @@
-Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D3822472AF;
-	Sat,  5 Sep 2026 03:08:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A50832D94B5
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 03:16:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788577704; cv=none; b=d3uRokIbyhXiwuWfyaMOjJH2GcHHdENufdvPhYdxXhrvOd1VVj7nbZgD8OrAjEhbqO8Nl5MZhXm+Angw8o901RnV/L+x0BpV/r7zvIz38A0TN5+F68g16FXCk1dQGRgQ1ffWEtIykmx9YspWCbRr+4Vv8XGD5f8ITurID5I5d4A=
+	t=1788578203; cv=none; b=Ulyj1uAd0eBEH+0yGH34rzLEC/y54aYXWd72omUMDQEDNjFaiaRfoG5lT8Jku8GQ9olNqs/A0ACxw8vCjjTzwrkJNDUKTzm2SeEwahzdO2Of/EF8MiWYgP+4iMwGaDoNqHN/Ec5JjPqw/WWbTLqygsbhSbRt/sgMQayZSLOQCzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788577704; c=relaxed/simple;
-	bh=aAn6XXVpZxkC4xYEu2hExGNPc3HYP0pNew+8EKplVpE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=L9dgpaVI4aitVXT9N5EEvhwtV6ylBdlsBuxz2YfntlHG5LxS3WiVj2yL6bz2GPJMGQ22j2L34p5RkNJ+JfH+bmzJ/Ri1ZO4N/XUemRoI9fjzuO2yab1XgpoW35L2mYsdWbyJQLolqQpzkLdtat5B42t1rjBgBvgKxo0TWn+7MHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=6XxG4jvV; arc=none smtp.client-ip=113.46.200.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1788578203; c=relaxed/simple;
+	bh=K5/82VVA8AJQYw9Uwylu0EEJQcHotFgVBa7ZSC3IQjI=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=kd4+Yh46KSn2dfs1lpyUtynMZ0H8s8ClUgDCOLoX7XJmTUXq6s4i0jMBmCfqRcBONbP6AaObTzgW1gAnxCoQmZtn534We3GzvmcHjSev5yYIVUm1eoqrfVH3GPO8yurRSpOZK//uPGMlhf8vZZIc+iixTjuJNciqjSjPs4unBpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NJLSihwu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="6XxG4jvV"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=Rau380fv/C3PIMO8upUmN2ndspPXutqa2G+T2w4vG2g=;
-	b=6XxG4jvVSS2yP6Twqz++PqKHMDiJ+xiJaTnRUXE78I1KRddCIO/l3t/PVROSi3vqBhDcqvNBg
-	VH80GddnFqp8jbISNmo1hRfzgljAx81PxpoS6zKcY9grHjWlBZvaEeeXrhQwRmKAsbXe389JuT9
-	gCkFoSX+kvTN1iDo/uk6uI0=
-Received: from mail.maildlp.com (unknown [172.19.163.214])
-	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4hcJ0B121DzLlXB;
-	Sat,  5 Sep 2026 10:57:14 +0800 (CST)
-Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
-	by mail.maildlp.com (Postfix) with ESMTPS id CE5C74056C;
-	Sat,  5 Sep 2026 11:08:05 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
- (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Sat, 5 Sep
- 2026 11:08:04 +0800
-Message-ID: <3e7fb313-021a-49d0-9def-fd9f03e3c2bb@huawei.com>
-Date: Sat, 5 Sep 2026 11:08:04 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NJLSihwu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3C191F00A3D;
+	Sat,  5 Sep 2026 03:16:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788578202;
+	bh=aaS3ysF2LUglav1zrk6IpsXDmKjV6D81eJrOCPvwqzE=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=NJLSihwugbcQfKW/bS7Pa4HL14dUjQ5LQ4I6SzwA5zZB+DFm9kkb6LfpWsEJYO753
+	 51OrThNGosnfEnCpMnaWwBh3Q6jbkRQs7+4BgiJMTVBSS8YyhjT8QTYPlJk0xIYjF7
+	 YG5cqztB3rm9YbyAZ8p6EXpLq1naxOIoAxJVnxvY34z4OFJnApilr3GPtL1AzRt2eA
+	 Oy9LqcGqWOUU5A3vO8Hfh9iE416Kr0iTdykO8JCXUQZrICwtkOPgGX33r7xpYRJpBt
+	 CM8tuUY9Jm8JWStIrMJxWXLZdGBPDiG093tAD4m99qzRWqZ7t5cQD0se0/QZ9twI+B
+	 ikJ6YK5UY3k8A==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v13 net-next] octeontx2-pf: add mqprio bandwidth offload
+ for NIX TX schedulers
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ratheesh Kannoth" <rkannoth@marvell.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260904031553.3196916-1-rkannoth@marvell.com>
+References: <20260904031553.3196916-1-rkannoth@marvell.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 05 Sep 2026 03:16:41 +0000
+Message-Id: <20260905031641.F3C191F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2] bpf, riscv: Make arena support depend on ZACAS
-Content-Language: en-US
-To: Chen Pei <cp0613@linux.alibaba.com>, <ast@kernel.org>,
-	<daniel@iogearbox.net>, <andrii@kernel.org>, <memxor@gmail.com>,
-	<bjorn@kernel.org>, <puranjay@kernel.org>
-CC: <ihor.solodrai@linux.dev>, <eddyz87@gmail.com>, <martin.lau@linux.dev>,
-	<song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
-	<emil@etsalapatis.com>, <pjw@kernel.org>, <palmer@dabbelt.com>,
-	<guoren@kernel.org>, <bpf@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<stable@vger.kernel.org>
-References: <20260902061451.1416-1-cp0613@linux.alibaba.com>
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <20260902061451.1416-1-cp0613@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemf100007.china.huawei.com (7.202.181.221)
 
-Hi Pei,
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
 
-On 2026/9/2 14:14, Chen Pei wrote:
-> The arena range tree allocates its nodes with kmalloc_nolock() since
-> commit f8c67d8550ee ("bpf: Use kmalloc_nolock() in range tree").
-> kmalloc_nolock() requires slab caches with cmpxchg128 support
-> (__CMPXCHG_DOUBLE); on riscv cmpxchg128 is provided by the ZACAS
-> extension. On systems without ZACAS every arena map creation fails
+New issues:
+- [High] Use-After-Free of transmit queue structure (qset.sq) due to direct=
+ ndo_stop() call without disabling TX
+- [High] Non-atomic read-modify-write of `pfvf->flags` causes a lost update=
+ of `OTX2_FLAG_INTF_DOWN`, leading to a double free of queue memory and IRQ=
+s.
 
-This limitation has a significant impact, as much of the hardware on the 
-market lacks ZACAS support given that it is not mandatory in RVA23.
+Pre-existing issues:
+- [High] Hardware QoS queues are not re-allocated after an interface bounce=
+, causing configuration of invalid/unallocated TX schedulers.
+--
 
-> with a misleading -ENOMEM.
-> 
-> Report the missing support instead: make bpf_jit_supports_arena()
-> return system_has_cmpxchg128() where it is defined, so arena map
+commit c0352f93e277cb08f3b57890bc0a90ef59777adb
+Author: Ratheesh Kannoth <rkannoth@marvell.com>
 
-Originally, I thought rv_ext_enabled(ZACAS) && 
-IS_ENABLED(CONFIG_TOOLCHAIN_HAS_ZACAS) would make it more explicit, but 
-system_has_cmpxchg128() seems to better capture what we were missing.
+octeontx2-pf: add mqprio bandwidth offload for NIX TX schedulers
 
+This commit adds TC_SETUP_QDISC_MQPRIO offload for channel-mode mqprio
+with TC_MQPRIO_SHAPER_BW_RATE. It programs per-queue MDQ CIR/PIR through
+the NIX TX scheduler mailbox for each non-QoS transmit queue.
 
-Acked-by: Pu Lehui <pulehui@huawei.com>
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drive=
+rs/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+> index 039fd47ebf522..abd66b366009a 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
 
-> creation fails with -EOPNOTSUPP on systems without ZACAS. The macro
-> is only defined when both CONFIG_RISCV_ISA_ZACAS and
-> CONFIG_TOOLCHAIN_HAS_ZACAS are enabled, so guard it with #ifdef the
-> same way mm/slab.h consumes it, and reject arena otherwise. This
-> matches how arena BPF_CMPXCHG instructions are already gated on ZACAS
-> in bpf_jit_supports_insn().
-> 
-> Fixes: f8c67d8550ee ("bpf: Use kmalloc_nolock() in range tree")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
-> ---
-> Changes since v1:
-> - Guard system_has_cmpxchg128() with #ifdef instead of calling it
->    unconditionally: the macro is only defined when both
->    CONFIG_RISCV_ISA_ZACAS and CONFIG_TOOLCHAIN_HAS_ZACAS are enabled
->    (as reported by sashiko-bot), so v1 broke the build when either
->    was disabled. This mirrors how mm/slab.h consumes the macro.
-> 
-> Why #ifdef rather than rv_ext_enabled(ZACAS)? The predicates differ
-> exactly in the configurations that matter:
-> 
->    scenario (ISA_ZACAS/TOOLCHAIN/hw)  v1           rv_ext_enabled  #ifdef
->    ISA=n or TOOLCHAIN=n               build fails  rejects         rejects
->    ISA=y TOOLCHAIN=n hw has ZACAS     build fails  accepts, then   rejects
->                                                    -ENOMEM again
->    ISA=y TOOLCHAIN=y hw has ZACAS     exact        exact           exact
-> 
-> rv_ext_enabled(ZACAS) does not check CONFIG_TOOLCHAIN_HAS_ZACAS, but
-> slab's cmpxchg128 - and thus kmalloc_nolock() - does require it, so
-> on an old toolchain with ZACAS hardware it would accept arena maps
-> and bring back the very -ENOMEM failure this patch fixes. The #ifdef
-> form builds in every configuration and matches exactly the
-> kmalloc_nolock() availability gate in mm/slab.h.
-> 
-> This issue was reported by sashiko-bot:
-> https://sashiko.dev/#/patchset/20260901120013.16104-1-cp0613@linux.alibaba.com?part=1
-> 
-> Question for reviewers: should the arena selftests gate on ZACAS,
-> e.g. probing it via riscv_hwprobe() (RISCV_ISA_EXT_ZACAS) and
-> SKIPping cleanly on systems without the extension?
+[ ... ]
 
-riscv isn't currently integrated into the BPF CI, and handling this 
-locally via qemu is fairly straightforward, so I'm not entirely sure 
-this is strictly necessary.
-
-> 
->   arch/riscv/net/bpf_jit_comp64.c | 10 +++++++++-
->   1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-> index 74efe4b138d2..151031e97a24 100644
-> --- a/arch/riscv/net/bpf_jit_comp64.c
-> +++ b/arch/riscv/net/bpf_jit_comp64.c
-> @@ -2128,7 +2128,15 @@ bool bpf_jit_supports_ptr_xchg(void)
->   
->   bool bpf_jit_supports_arena(void)
->   {
-> -	return true;
-> +	/*
-> +	 * The arena range tree uses kmalloc_nolock(), which needs
-> +	 * cmpxchg128, provided by ZACAS on riscv.
+> +static int otx2_mqprio_restart_netdev(struct net_device *netdev, bool ra=
+te_limit)
+> +{
+> +	struct otx2_nic *pfvf =3D netdev_priv(netdev);
+> +	const struct net_device_ops *ops =3D netdev->netdev_ops;
+> +	int err;
+> +
+> +	/* TODO: Explore live TX scheduler reprogramming to avoid a full
+> +	 * ndo_stop()/ndo_open() bounce on every mqprio change.
 > +	 */
-> +#ifdef system_has_cmpxchg128
-> +	return system_has_cmpxchg128();
-> +#else
-> +	return false;
-> +#endif
->   }
->   
->   bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena)
+> +	netdev_info(netdev,
+> +		    "mqprio: restarting interface to reprogram TX scheduler; in-flight=
+ traffic will be dropped\n");
+> +
+> +	err =3D ops->ndo_stop(netdev);
+
+[Severity: High]
+Could this direct call to ops->ndo_stop() cause a use-after-free on the
+transmission hot path?
+
+Unlike the standard dev_close() path, this skips dev_deactivate_many()
+and synchronize_net(), meaning the network stack is still actively
+transmitting packets. When otx2_stop() calls otx2_free_queue_mem(qset)
+and frees the sq array, a concurrent ndo_start_xmit() could dereference
+the freed pointer:
+
+drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c:otx2_xmit() {
+    ...
+    sq =3D &pf->qset.sq[sq_idx];
+    ...
+}
+
+> +	if (err)
+> +		return err;
+> +
+> +	/* Set before ndo_open() so otx2_txsch_alloc() widens SMQ allocation.
+> +	 * On teardown, drop mqprio software state so ndo_open() does not
+> +	 * re-apply bandwidth limits via otx2_mqprio_up() after the kernel
+> +	 * removed the qdisc.
+> +	 */
+> +	if (rate_limit)
+> +		pfvf->mqprio.rate_limit =3D true;
+> +	else
+> +		otx2_mqprio_clear_sw(pfvf);
+> +
+> +	err =3D ops->ndo_open(netdev);
+
+[Severity: High]
+This is a pre-existing issue, but does bouncing the interface here safely
+restore HTB QoS configurations?
+
+When the interface is bounced, ndo_stop() destroys the NIX LF and returns
+all hardware queues to the hardware. When ndo_open() subsequently creates
+a new NIX LF, it calls otx2_qos_config_txschq() which traverses active
+HTB software nodes and attempts to configure them.
+
+Because the hardware QoS queues aren't re-allocated after the bounce,
+__otx2_qos_txschq_cfg() in drivers/net/ethernet/marvell/octeontx2/nic/qos.c
+will send mailbox messages with stale queue indices (node->schq). Is it
+possible these queues might now belong to another VF, potentially
+corrupting cross-VF state or crashing the firmware?
+
+> +	if (err) {
+> +		netdev_err(netdev,
+> +			   "Failed to restart device after mqprio change: %d\n",
+> +			   err);
+> +		/* ndo_open() already freed the TX schedulers on failure while
+> +		 * netif_running() may still be true; drop mqprio software state
+> +		 * only instead of sending shaper clears to freed queues.
+> +		 */
+> +		otx2_mqprio_clear_sw(pfvf);
+> +		/* ndo_open() rolls back on failure; mark the interface down so
+> +		 * netif_close() does not invoke ndo_stop() on freed NAPI/queue
+> +		 * state. Caller holds RTNL; dev_close() would deadlock.
+> +		 */
+> +		pfvf->flags |=3D OTX2_FLAG_INTF_DOWN;
+
+[Severity: High]
+Could this non-atomic read-modify-write of the flags field lead to a lost
+update and a subsequent double free?
+
+If the asynchronous mailbox workqueue handler updates this same flags field
+concurrently (e.g., setting OTX2_FLAG_PORT_UP in
+otx2_mbox_up_handler_rep_event_up_notify without holding the RTNL lock),
+this OTX2_FLAG_INTF_DOWN update could be lost.
+
+If the flag update is lost, otx2_stop() might bypass its teardown guard
+later, proceeding to double-free qset->sq and other queue resources. Would
+it be safer to use atomic bit operations like set_bit() for these flags?
+
+> +		/* visible to otx2_stop() on other cpus */
+> +		smp_wmb();
+> +		netif_close(netdev);
+> +	}
+> +
+> +	return err;
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260904031553.3196=
+916-1-rkannoth@marvell.com?part=3D1
