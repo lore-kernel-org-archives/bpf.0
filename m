@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01696413230
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 07:12:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E10246781
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 07:13:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788592337; cv=none; b=TL6mn+slOfibByutMaoYCRnAspfDk6mO9HUyNVkyI/eNcrvmnbO/wzQr4cn9pMSoOucTTeK9RSbY0d6LgL4U5Wdi6v1NBCFclMOrXAdhtHAPwPkD059C+Ibu7L6twPx75EF3EvXCoDbUCR94bN33ALV5EFXvp7vaTx8cP6mNcg4=
+	t=1788592436; cv=none; b=pyq4NRJoLdoXYsFrprJl19TBAyr7dfML8eK7KqnXNB2MFDjiFCp5afOiqnag40EDncQtYbhX3/JkarpAnFWyWtEq2jxHaF1FE2ep9k3VVGutTSTKNElna0FSv9V7p6vqKJX7s66QMUL0YSjgZ8vFqTs9N2MOBGpTj5RRIbH9JbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788592337; c=relaxed/simple;
-	bh=1BnqsscMj+0wNQx6hVHucc+0l5FWh+rpGMJJ6VGQ/e4=;
+	s=arc-20240116; t=1788592436; c=relaxed/simple;
+	bh=AyB9u721jHvIVuLgXSY0ZxWQ1+CAqmyVKZtXHNcgR34=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=cZ5pT5ZCBhz8Ks3b3WHK4T0o0uowABYHDMpMQ4eS1dU6Vbcyl7lqJ3L/rrDR7IadSO/lSvAEzozBJfSEK1gI4zgYY5oR9Y3CkfU53Qr7+DMwWrvd2xiXPMovfYkMnCtI4VvTLHkigq8ukT5+DaVq8gzIgGT6z4bMmoOb0psPlgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JMG+ix01; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=lrAVLiXsahnkHiaAsq4/16s+QSuh//vUG2hX7iCkveNhIB29SjHLFtOMqtoUZsLDkf4vHTxeWfuvR9cGmAs0yc6uQw+N2x1Sru0nAIJuRTqrj0yVeNS3t2Y4zF7yNMPvkXOefW7yoW5oCbsUUMVDszE0QV9DLKQm3tZ/TKejyG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZWUnl1Bg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JMG+ix01"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 878301F00A3D;
-	Sat,  5 Sep 2026 07:12:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZWUnl1Bg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9089C1F00A3D;
+	Sat,  5 Sep 2026 07:13:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788592333;
-	bh=SY/CTMpSpeKcxrnE4PKQJ2moBFcX/CvyMOdx0VJOawE=;
+	s=k20260515; t=1788592434;
+	bh=huqV9D9d81Czy1B4trdueAzZlSVUQRYEW/RmSFhqJNo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=JMG+ix01OETgBnHDw+xM8+RP7JqKyDbao07rd9Q52aGF37y3f8VEb7/616wB2MVqs
-	 ShKMU1PH7fA/qQR51JCr/JwD6BlIoNp+edQe8gmdZ32WApuTxg43RiIf5bDIOtMm2l
-	 2izUd1qBDi9yyYmyMpBOXcKOuIimZNvORTVWnGzkINRxSWH+cqRtdEK8d1P4DChMbu
-	 G5Agnp9MisnRhncAEbfUqSRdXvqBbVjkcfaQV0dtRz4AF/WisA8gX4HyaGTdBCjV7B
-	 wudHWalzHyVSu4UWOMU2CdXsa7Tl+kxGJG9NUCYFYklMdTXNfSm3PWfV1Qly8qCjaQ
-	 47x6IFzvH4tYg==
+	b=ZWUnl1BgwUXtJxkfpsDDtNKn6/1lvgYB9RJkwMNs+CSo4f9yB4w2kbv29l22Qn08v
+	 ZuL4funJ4UNdsvuUEEcF8Jr3EIptsYcJ1A/mAv9hcHabQg0mcC7t9Yx/0EFhDOxOP5
+	 gY8D3JfidKlTAF3jb5paXEEF2thmaKcjBBPcxaZ7TLHv7hhsqHRhKjpsp4nonxbqfr
+	 duszS76/TE3kKZn45iSdBzDiXXD4Dh1T7x2Ny/wi57HYadhabfXmlMzxPsSs8tbXxK
+	 er+krCQk9eJfZksUgnyHWqxa85JUwVEetBN703p3EEFaA4UxWC/ku/7ktGxl27PUtt
+	 q9bo1SKtaJ8mQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 1/3] riscv, bpf: Remap BPF_REG_0 and
- RV_REG_TCC
+Subject: Re: [PATCH bpf v1 2/8] selftests/bpf: Test killing a loader during
+ instruction rewrites
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Pu Lehui" <pulehui@huaweicloud.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260905070409.4141522-2-pulehui@huaweicloud.com>
-References: <20260905070409.4141522-1-pulehui@huaweicloud.com>
- <20260905070409.4141522-2-pulehui@huaweicloud.com>
+In-Reply-To: <20260905070003.3193366-3-memxor@gmail.com>
+References: <20260905070003.3193366-1-memxor@gmail.com>
+ <20260905070003.3193366-3-memxor@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sat, 05 Sep 2026 07:12:13 +0000
-Message-Id: <20260905071213.878301F00A3D@smtp.kernel.org>
+Date: Sat, 05 Sep 2026 07:13:54 +0000
+Message-Id: <20260905071354.9089C1F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,42 +47,81 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] The block and inline assembly comments in `bpf_timed_may_goto.S` co=
-ntinue to reference `a5` as the mapped register for `BPF_REG_0`, which cont=
-radicts the updated code utilizing `t6`. This patch changes `a5` to `t6` in=
- the instructions, but missed updating the corresponding comments.
+- [Medium] Race condition causing false test failures on extremely fast har=
+dware or optimized verifiers.
 --
 
-commit 3f2026164fcac1b3db2387eec49e58f20293243f
-Author: Pu Lehui <pulehui@huawei.com>
+commit e86296a4aae66b4d0778df9e0379e5e9bc8a6bff
+Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: selftests/bpf: Test killing a loader during instruction rewrites
 
-riscv, bpf: Remap BPF_REG_0 and RV_REG_TCC
+This commit adds a selftest to verify that a child process stuck in the
+verifier's quadratic instruction rewrite phase can be successfully terminat=
+ed
+by a fatal signal.
 
-This commit remaps BPF_REG_0 to t6 and RV_REG_TCC to t5 to support BPF
-stack arguments and unify calling conventions. Freeing up a5 and a6
-allows bpf2bpf calls to pass extra arguments consistently with kfuncs.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/prog_load_signal.c b/=
+tools/testing/selftests/bpf/prog_tests/prog_load_signal.c
+> new file mode 100644
+> index 0000000000000..0f78db3bccc76
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/prog_load_signal.c
+[ ... ]
+> +	if (!pid) {
+> +		close(pipefd[0]);
+> +		if (write(pipefd[1], "x", 1) !=3D 1)
+> +			_exit(1);
+> +		close(pipefd[1]);
+> +		prog_fd =3D bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL",
+> +					insns, NOP_CNT + 2, NULL);
+> +		if (prog_fd >=3D 0)
+> +			close(prog_fd);
+> +		_exit(prog_fd < 0);
+> +	}
 
-> diff --git a/arch/riscv/net/bpf_timed_may_goto.S b/arch/riscv/net/bpf_tim=
-ed_may_goto.S
-> index 02c637d874205..ac41bf6dcb3d0 100644
-> --- a/arch/riscv/net/bpf_timed_may_goto.S
-> +++ b/arch/riscv/net/bpf_timed_may_goto.S
-> @@ -21,7 +21,7 @@ SYM_FUNC_START(arch_bpf_timed_may_goto)
->  	addi	s0, sp, 8*SZREG
-> =20
->  	/* Save BPF registers R0-R5 (a5, a0-a4) */
-> -	REG_S	a5, 5*SZREG(sp)
-> +	REG_S	t6, 5*SZREG(sp)
+[Severity: Medium]
+Could the child process exit too quickly on very fast hardware or with an
+optimized verifier? If the child completes the load before the parent sends
+SIGKILL, it will exit normally and become a zombie.
 
-[Severity: Low]
-This isn't a bug, but should the inline comment above this instruction also
-be updated to reflect that R0 is now mapped to t6 rather than a5?
+[ ... ]
+> +	/*
+> +	 * Allow linear verification to finish before sending SIGKILL. The nop
+> +	 * removal pass is quadratic, so four control-load times still leaves a
+> +	 * wide window in which an affected kernel is rewriting instructions.
+> +	 */
+> +	kill_delay =3D MAX(control_time * 4, MIN_KILL_DELAY_NS);
+> +	sleep_ns(kill_delay);
 
-Additionally, in the block comment at the beginning of
-arch_bpf_timed_may_goto in arch/riscv/net/bpf_timed_may_goto.S, the text
-still documents a5 as R0. Could these documentation references be updated to
-match the code changes?
+Here, kill_delay enforces a minimum delay of 100ms (MIN_KILL_DELAY_NS). Is =
+it
+possible that on modern CPUs with high cache bandwidth, the verifier's 32,7=
+68
+instruction rewrite could finish in under 100ms?
+
+If control_time is very small, the parent will sleep for 100ms, which might
+give the child ample time to finish bpf_prog_load() and exit.
+
+[ ... ]
+> +	start =3D monotonic_ns();
+> +	ret =3D waitpid_timeout(pid, &status, REAP_TIMEOUT_NS);
+> +	if (!ASSERT_EQ(ret, pid, "prog_load_killable")) {
+> +		fprintf(stderr, "control load %llu us, child still alive %llu us after=
+ SIGKILL\n",
+> +			control_time / 1000, (monotonic_ns() - start) / 1000);
+> +		goto cleanup;
+> +	}
+> +	pid =3D -1;
+> +	ASSERT_TRUE(WIFSIGNALED(status) && WTERMSIG(status) =3D=3D SIGKILL,
+> +		    "killed_by_sigkill");
+
+If the child finished early and exited normally as described above, waitpid
+will retrieve a normal exit status. This assertion will then incorrectly fa=
+il
+because the child wasn't killed by the signal.
+
+Could this lead to flaky test failures on fast CI machines?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260905070409.4141=
-522-1-pulehui@huaweicloud.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260905070003.3193=
+366-1-memxor@gmail.com?part=3D2
