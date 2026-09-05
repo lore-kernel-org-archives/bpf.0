@@ -1,27 +1,27 @@
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F21E031ED7C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F21582D592C;
 	Sat,  5 Sep 2026 06:59:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788591547; cv=none; b=nJYjgXVEnRrsIfjKZZ6hONLUYzAG7A1seG/wJFkWUWjaf4y8PCaV0j9lBVOsNbmm8nwOudZOUIoAwdUww05LRFQ8XXLJlnBrBXP6UPm/A6GMrt6M9zTE4nvPhtb7Ye0w+4mRTAY7USOQ5xwXYn9n51ifsy8WjRxrhtax3PRM4/M=
+	t=1788591548; cv=none; b=tOwuMbbz7VXoc0+tWt/2VbydXxFByQqKKN6qwowJZNYA4ncZcn278gJ3U+Cvg+X+H/YzIW38793z43daK/GSJHoiuewdU6FQnS9i5/GK9AeTiPSr2QW+SGiY+kM1VXg0bS3Ou5/kNvn/Ug3596cdWgxyUGy7z/odk/64SE0fOWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788591547; c=relaxed/simple;
-	bh=GHPQKzsP3RbwNes7z6+2vb3acznUeHY+PH1A9vDIlr0=;
+	s=arc-20240116; t=1788591548; c=relaxed/simple;
+	bh=MDWT2a0j76DHJzdFFzcubmgCmeYD+AGU/LjjTov8ud0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=kLOQF+K4BeVnm9lVp2Z6rIbgiU17m6JS8oSR6pbFFZ5sHcu6mqi3Ljv4xSE9K20CY+l6JQEEPJ45DBhrdrg6bVD5Qenz5CYnlfOnkaO++rjAa7SgleKJdAAVHSMoxaCKFaz7IP9BUqlvUI8c28m/LOH+K/+ByzHrXIbZ5KYk/Js=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	 MIME-Version; b=Y22/uvnADTz3o2bKDpQMw+0Q2Qjat4AvNfEus8Yt0quTPGR0uuF3sXWwTiuPosvOlmMVjkUqBXMWfZiNeRJzPEOc5x1cJGM/BRqp4j/BBQrG/Fm4hO+MvPlUUF2SAVvVHsJpSn9Lpa7TTeFnt4QJHapACfw0q1/6BATDsMMNdp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hcPLJ2y3rzYQtyJ;
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hcPLJ2k3GzYQtyH;
 	Sat,  5 Sep 2026 14:58:16 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 5279040577;
+	by mail.maildlp.com (Postfix) with ESMTP id 4917C40574;
 	Sat,  5 Sep 2026 14:59:02 +0800 (CST)
 Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP1 (Coremail) with UTF8SMTPA id cCh0CgDXvQi0vZtqheFEAw--.38251S5;
+	by APP1 (Coremail) with UTF8SMTPA id cCh0CgDXvQi0vZtqheFEAw--.38251S4;
 	Sat, 05 Sep 2026 14:59:02 +0800 (CST)
 From: Pu Lehui <pulehui@huaweicloud.com>
 To: bpf@vger.kernel.org,
@@ -45,9 +45,9 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
 	Alexandre Ghiti <alex@ghiti.fr>,
 	Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH bpf-next v4 3/3] selftests/bpf: Enable stack argument tests for RV64
-Date: Sat,  5 Sep 2026 07:04:09 +0000
-Message-Id: <20260905070409.4141522-4-pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next v4 2/3] riscv, bpf: Add BPF stack arguments support for RV64 JIT
+Date: Sat,  5 Sep 2026 07:04:08 +0000
+Message-Id: <20260905070409.4141522-3-pulehui@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260905070409.4141522-1-pulehui@huaweicloud.com>
 References: <20260905070409.4141522-1-pulehui@huaweicloud.com>
@@ -58,146 +58,232 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgDXvQi0vZtqheFEAw--.38251S5
-X-Coremail-Antispam: 1UD129KBjvPXoW5Ar1fGFyrKF4UXw47XFW5p5X_Cr1fWoZxKF
-	9Iy3WUCan7Zw47uF1fJFy8Wr48KF1fJF4IkryrtF9Fyr1rCr1jyw4fZF1Fq39Ygas0gFyD
-	C3yqvFykGF1kn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3AaLa
-	J3UjIYCTnIWjp_UUUO07kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAv
-	wI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82
-	xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI
-	8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr
-	0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0
-	oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7V
-	C0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j
-	6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r
-	4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
-	wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc4
-	0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
-	xVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
-	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUIF4i
-	UUUUU
+X-CM-TRANSID:cCh0CgDXvQi0vZtqheFEAw--.38251S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxtw18Jr17Jry3tF1DGFWkXrb_yoWxZF47p3
+	WDGr1SkrWvqw40qFyDtFnrXr15CrsYq3W7KFZ3G3yrJF42qrZ5G3W3K3WayFy5CryrW3Wx
+	AFWqkr9xC395t37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
+	0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
+	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
+	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
+	14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
+	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jI
+	sjbUUUUU=
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
 From: Feng Jiang <jiangfeng@kylinos.cn>
 
-Enable the stack argument selftests for RV64. The riscv guard is
-restricted to __riscv_xlen == 64 since stack arguments are only
-supported by the RV64 JIT.
+Implement bpf_jit_supports_stack_args() on RV64 JIT to allow bpf
+subprogs and kfuncs to pass and receive more than 5 arguments.
 
-Keep the __BPF_FEATURE_STACK_ARGUMENT gate, defined by clang with
-BPF stack argument support [1].
+In the riscv abi, the first 8 arguments are passed in registers a0 to
+a7, and arguments 9+ reside on the stack. To align bpf stack arguments
+with this calling convention and unify bpf2bpf calls with kfuncs, map
+the first 3 bpf stack arguments (6th to 8th) directly to a5 to a7, and
+store or load the remaining arguments (9th+) at SP or FP. Reserve
+outgoing stack space in the prologue accordingly when stack_arg_cnt
+exceeds 3.
 
-[1] https://github.com/llvm/llvm-project/pull/189060
+In addition, update kfunc argument sign extension to handle all 8
+register arguments as well as any arguments passed on the stack.
 
+Co-developed-by: Pu Lehui <pulehui@huawei.com>
 Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
 ---
- tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c   | 3 ++-
- .../selftests/bpf/progs/btf__verifier_stack_arg_order.c        | 3 ++-
- tools/testing/selftests/bpf/progs/stack_arg.c                  | 3 ++-
- tools/testing/selftests/bpf/progs/stack_arg_kfunc.c            | 3 ++-
- tools/testing/selftests/bpf/progs/stack_arg_precision.c        | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_stack_arg.c         | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c   | 3 ++-
- 7 files changed, 14 insertions(+), 7 deletions(-)
+ arch/riscv/net/bpf_jit.h        |  1 +
+ arch/riscv/net/bpf_jit_comp64.c | 79 +++++++++++++++++++++++++++++----
+ arch/riscv/net/bpf_jit_core.c   |  6 +++
+ 3 files changed, 77 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c b/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c
-index 8d38aafe66a2..ab12397a9b52 100644
---- a/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c
-+++ b/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c
-@@ -4,7 +4,8 @@
- #include <bpf/bpf_helpers.h>
- #include "../test_kmods/bpf_testmod_kfunc.h"
+diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
+index 419b9d795f2a..039877f286fc 100644
+--- a/arch/riscv/net/bpf_jit.h
++++ b/arch/riscv/net/bpf_jit.h
+@@ -82,6 +82,7 @@ struct rv_jit_context {
+ 	unsigned long flags;
+ 	int stack_size;
+ 	int tcc_offset;
++	int stack_arg_sz;
+ 	u64 arena_vm_start;
+ 	u64 user_vm_start;
+ };
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index aac128b9f0a4..cda99c1f9ffe 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -498,6 +498,18 @@ static void emit_ldx(u8 rd, s16 off, u8 rs, u8 size, bool sign_ext,
+ 	ctx->ex_jmp_off = ctx->ninsns;
+ }
  
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
++static void emit_stack_arg_ldx(u8 rd, s16 off, struct rv_jit_context *ctx)
++{
++	int idx = off / 8 - 1;
++
++	if (idx < 3) {
++		emit_mv(rd, RV_REG_A5 + idx, ctx);
++		return;
++	}
++
++	emit_ldx_insn(rd, (idx - 3) * 8, RV_REG_FP, BPF_DW, false, ctx);
++}
++
+ static void emit_st(u8 rd, s16 off, s32 imm, u8 size, struct rv_jit_context *ctx)
+ {
+ 	emit_imm(RV_REG_T1, imm, ctx);
+@@ -515,6 +527,19 @@ static void emit_st(u8 rd, s16 off, s32 imm, u8 size, struct rv_jit_context *ctx
+ 	ctx->ex_jmp_off = ctx->ninsns;
+ }
  
- long subprog_call_mem_kfunc(long a, long b, long c, long d, long e, long size)
-diff --git a/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c b/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c
-index 99bc115f8380..a980a3a399d3 100644
---- a/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c
-+++ b/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c
-@@ -3,7 +3,8 @@
- #include <vmlinux.h>
- #include <bpf/bpf_helpers.h>
++static void emit_stack_arg_st(s16 off, s32 imm, struct rv_jit_context *ctx)
++{
++	int idx = -off / 8 - 1;
++
++	emit_imm(RV_REG_T1, imm, ctx);
++	if (idx < 3) {
++		emit_mv(RV_REG_A5 + idx, RV_REG_T1, ctx);
++		return;
++	}
++
++	emit_stx_insn(RV_REG_SP, (idx - 3) * 8, RV_REG_T1, BPF_DW, ctx);
++}
++
+ static void emit_stx(u8 rd, s16 off, u8 rs, u8 size, struct rv_jit_context *ctx)
+ {
+ 	if (is_12b_int(off)) {
+@@ -531,6 +556,18 @@ static void emit_stx(u8 rd, s16 off, u8 rs, u8 size, struct rv_jit_context *ctx)
+ 	ctx->ex_jmp_off = ctx->ninsns;
+ }
  
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
++static void emit_stack_arg_stx(s16 off, u8 rs, struct rv_jit_context *ctx)
++{
++	int idx = -off / 8 - 1;
++
++	if (idx < 3) {
++		emit_mv(RV_REG_A5 + idx, rs, ctx);
++		return;
++	}
++
++	emit_stx_insn(RV_REG_SP, (idx - 3) * 8, rs, BPF_DW, ctx);
++}
++
+ static int emit_atomic_ld_st(u8 rd, u8 rs, const struct bpf_insn *insn,
+ 			     struct rv_jit_context *ctx)
+ {
+@@ -1824,11 +1861,21 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 				return -EINVAL;
  
- int subprog_bad_order_6args(int a, int b, int c, int d, int e, int f)
-diff --git a/tools/testing/selftests/bpf/progs/stack_arg.c b/tools/testing/selftests/bpf/progs/stack_arg.c
-index 944e3bb603e7..3e9ed37c57bb 100644
---- a/tools/testing/selftests/bpf/progs/stack_arg.c
-+++ b/tools/testing/selftests/bpf/progs/stack_arg.c
-@@ -21,7 +21,8 @@ struct {
+ 			for (idx = 0; idx < fm->nr_args; idx++) {
+-				u8 reg = bpf_to_rv_reg(BPF_REG_1 + idx, ctx);
+ 				bool sign = fm->arg_flags[idx] & BTF_FMODEL_SIGNED_ARG;
+-
+-				if (sign_extend(reg, reg, fm->arg_size[idx], sign, ctx))
+-					return -EINVAL;
++				u8 arg_sz = fm->arg_size[idx];
++
++				if (arg_sz == 8 || (arg_sz != 4 && !sign))
++					continue;
++
++				if (idx < RV_MAX_REG_ARGS) {
++					if (sign_extend(RV_REG_A0 + idx, RV_REG_A0 + idx, arg_sz, sign, ctx))
++						return -EINVAL;
++				} else {
++					emit_ld(RV_REG_T1, (idx - RV_MAX_REG_ARGS) * 8, RV_REG_SP, ctx);
++					if (sign_extend(RV_REG_T1, RV_REG_T1, arg_sz, sign, ctx))
++						return -EINVAL;
++					emit_sd(RV_REG_SP, (idx - RV_MAX_REG_ARGS) * 8, RV_REG_T1, ctx);
++				}
+ 			}
+ 		}
  
- int timer_result;
+@@ -1927,7 +1974,10 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 			rs = RV_REG_T2;
+ 		}
  
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
+-		emit_ldx(rd, off, rs, BPF_SIZE(code), sign_ext, ctx);
++		if (is_stack_arg_ldx(insn))
++			emit_stack_arg_ldx(rd, off, ctx);
++		else
++			emit_ldx(rd, off, rs, BPF_SIZE(code), sign_ext, ctx);
  
- const volatile bool has_stack_arg = true;
-diff --git a/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c b/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
-index 345f2da2e361..b6b1a8aa7f44 100644
---- a/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
-+++ b/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
-@@ -6,7 +6,8 @@
- #include "bpf_kfuncs.h"
- #include "../test_kmods/bpf_testmod_kfunc.h"
+ 		ret = add_exception_handler(insn, rd, ctx);
+ 		if (ret)
+@@ -1957,7 +2007,10 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 			rd = RV_REG_T3;
+ 		}
  
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
+-		emit_st(rd, off, imm, BPF_SIZE(code), ctx);
++		if (is_stack_arg_st(insn))
++			emit_stack_arg_st(off, imm, ctx);
++		else
++			emit_st(rd, off, imm, BPF_SIZE(code), ctx);
  
- const volatile bool has_stack_arg = true;
-diff --git a/tools/testing/selftests/bpf/progs/stack_arg_precision.c b/tools/testing/selftests/bpf/progs/stack_arg_precision.c
-index ce0301a41fa9..7baa9c1c8e31 100644
---- a/tools/testing/selftests/bpf/progs/stack_arg_precision.c
-+++ b/tools/testing/selftests/bpf/progs/stack_arg_precision.c
-@@ -6,7 +6,8 @@
- #include "../test_kmods/bpf_testmod_kfunc.h"
- #include "bpf_misc.h"
+ 		ret = add_exception_handler(insn, REG_DONT_CLEAR_MARKER, ctx);
+ 		if (ret)
+@@ -1979,7 +2032,10 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 			rd = RV_REG_T2;
+ 		}
  
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
+-		emit_stx(rd, off, rs, BPF_SIZE(code), ctx);
++		if (is_stack_arg_stx(insn))
++			emit_stack_arg_stx(off, rs, ctx);
++		else
++			emit_stx(rd, off, rs, BPF_SIZE(code), ctx);
  
- /* Force kfunc extern BTF generation for inline asm call below.
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-index 51d22faf4559..f6a4a6aa0e61 100644
---- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-@@ -12,7 +12,8 @@ struct {
- 	__type(value, long long);
- } map_hash_8b SEC(".maps");
+ 		ret = add_exception_handler(insn, REG_DONT_CLEAR_MARKER, ctx);
+ 		if (ret)
+@@ -2029,9 +2085,9 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
  
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
+ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
+ {
+-	int i, stack_adjust = 0, store_offset, bpf_stack_adjust;
++	int i, stack_adjust = 0, store_offset, bpf_stack_adjust = ctx->stack_arg_sz;
  
- __noinline __used
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-index 8e4325273b3d..57f22691744a 100644
---- a/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-@@ -5,7 +5,8 @@
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
+-	bpf_stack_adjust = round_up(ctx->prog->aux->stack_depth, STACK_ALIGN);
++	bpf_stack_adjust += round_up(ctx->prog->aux->stack_depth, STACK_ALIGN);
+ 	if (bpf_stack_adjust)
+ 		mark_fp(ctx);
  
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
+@@ -2190,3 +2246,8 @@ bool bpf_jit_supports_timed_may_goto(void)
+ {
+ 	return true;
+ }
++
++bool bpf_jit_supports_stack_args(void)
++{
++	return true;
++}
+diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
+index cbfcd287ea16..ed48005568c8 100644
+--- a/arch/riscv/net/bpf_jit_core.c
++++ b/arch/riscv/net/bpf_jit_core.c
+@@ -48,6 +48,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 	int pass = 0, prev_ninsns = 0, i;
+ 	struct rv_jit_data *jit_data;
+ 	struct rv_jit_context *ctx;
++	u16 stack_arg_cnt;
  
- __noinline __used __naked
+ 	if (!prog->jit_requested)
+ 		return prog;
+@@ -71,6 +72,11 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 
+ 	ctx->arena_vm_start = bpf_arena_get_kern_vm_start(prog->aux->arena);
+ 	ctx->user_vm_start = bpf_arena_get_user_vm_start(prog->aux->arena);
++
++	stack_arg_cnt = bpf_out_stack_arg_cnt(env, prog);
++	/* First 3 stack args in regs, rest on stack */
++	ctx->stack_arg_sz = stack_arg_cnt > 3 ? round_up((stack_arg_cnt - 3) * 8, STACK_ALIGN) : 0;
++
+ 	ctx->prog = prog;
+ 	ctx->offset = kvzalloc_objs(int, prog->len);
+ 	if (!ctx->offset)
 -- 
 2.34.1
 
