@@ -1,113 +1,207 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B66E73033CB
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 01:57:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77561A5BAE;
+	Sat,  5 Sep 2026 02:00:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788573423; cv=none; b=oWK0Tlpp8gobpvPN4D9c15X0975hnsXR+NcRhtRb0VemLhNRV5UqL8rAL82vyeI4Feg5ysCOFA3FVtfW3nWDza9R12qfiMUXCLcectd0WY54aDfUK1xlN3fSoVkb8m2Cg8GXkBq9TMYG8sVDjbU+/ebuDPXWsUCQbocdOjwbnMk=
+	t=1788573629; cv=none; b=aZzMeqg/CuSL5008+8Tom4g1lYy6hRC9BzcXuu2M2+sPnBm7PJqLUnJ5D2zZlrl/xKYACQ8l2ZMLMrH8sGYJkUm77YwFEw4TPiDr6Ug6ANvIIwes6gWthlbo7gnjzc8EDvLx+e1b1PIx7BtxSODysw4u1xKuKVBPy/Sz/YbYiYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788573423; c=relaxed/simple;
-	bh=4l9Yd1J4VNpALFE41MXDKgnDV/o6JJAJddNMPFqE0wI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=O0EiuMcPiCZnwtMUVFiyp7MeDsGAUidPEGqGzJ1ndiim2KIXN7phZHz2Vp9gSfvomMPl2OCd5aBaDkNLWB0LhdV5fYMN9spMhUKlXIVzc/TaEqn3m/1oGyT42t52sjFnHLnd9H6senEYR4QT8jb2Gc34ffoLNumzipuGuUtMC0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bIeqdK2V; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bIeqdK2V"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ED241F00A3D;
-	Sat,  5 Sep 2026 01:57:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788573422;
-	bh=iLmQhno0TZJUiMUU4eLIV6082vPvUA1P05H8vinUX84=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=bIeqdK2VuR3QIf/Axl4TU+xqcXNvFWNccoQkBGPuFdRSfzA/CZwhtHJv2o/2CGE8i
-	 uW3CdxSnJ2EK4AYhvC8BgBJ5rpUUqqyPrLeoFDdlS2WO2mlmt0IhUj68khoj+TtAeX
-	 UZeelBc4a6/Hdw/ZKUZTdBfzAynRK/DNzfHSV1VCdD0VIiSduD8K7EwJsDZ/8EIP7o
-	 dluJh2qBCOS2YBBB17rKYPMl9IDhDeVWxo1WDqErR9b6xqCqNl4G7lEs8cWpFuQmrT
-	 NcZ3tYu+cL/mBgj+yq1cobQWfwxWkIhH1hAgbp55QEQWoJMpH0Gh6I1xWvoY2oVaXx
-	 /3xM9GzVtHjRA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v1 1/2] bpf: Reject non-scalar bpf_loop iteration
- counts
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260905014735.1452988-2-memxor@gmail.com>
-References: <20260905014735.1452988-1-memxor@gmail.com>
- <20260905014735.1452988-2-memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 05 Sep 2026 01:57:01 +0000
-Message-Id: <20260905015702.5ED241F00A3D@smtp.kernel.org>
+	s=arc-20240116; t=1788573629; c=relaxed/simple;
+	bh=DEC1CJcgiZa8m+iFXZymvRKB4evD3khcBk1hxMOv0NI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=m+CpJEmvuow8mSDwzB4bRTRkaiNkTvxcBYFJnYxKRjTXC8ZKIiP3LjTcM1UrsTTEq18NouRE/jqtSYeoKpL4mffaqqYkbfn3DWEs3aJGzQhfkUm75xQY9tE7lmYtpwNVul6ajr6zeTMOmMpDF90/Rj82IiurDJLPRT8oDJbm1Kk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hcGjQ0M8FzKHMPY;
+	Sat,  5 Sep 2026 09:59:22 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 41AC240590;
+	Sat,  5 Sep 2026 10:00:18 +0800 (CST)
+Received: from [10.67.110.68] (unknown [10.67.110.68])
+	by APP1 (Coremail) with UTF8SMTPA id cCh0CgC3nQiwd5tqRzwrAw--.48710S2;
+	Sat, 05 Sep 2026 10:00:18 +0800 (CST)
+Message-ID: <4dd1dfe3-7dc3-415c-99de-73f3f46a3397@huaweicloud.com>
+Date: Sat, 5 Sep 2026 10:00:16 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v3] bpf: Fix UAF due to concurrent consumption of
+ ttrace lists in alloc_bulk
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ ast@kernel.org, houtao@huaweicloud.com, leon.hwang@linux.dev
+Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, martin.lau@linux.dev, yonghong.song@linux.dev,
+ song@kernel.org, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, pulehui@huawei.com, martin.lau@kernel.org,
+ mason@kernel.org
+References: <20260901150307.3474349-1-pulehui@huaweicloud.com>
+ <c846615ea25cf371f04302e136ce4b4dc50224fed1df1b1063afc94ecfc711db@mail.kernel.org>
+Content-Language: en-US
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <c846615ea25cf371f04302e136ce4b4dc50224fed1df1b1063afc94ecfc711db@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:cCh0CgC3nQiwd5tqRzwrAw--.48710S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Jw13XryrGF1fXryDAryDtrb_yoW7Wry5pF
+	WrXF15Cr4DZFy2v34Iqr48Wr129wnYq343JFWrur9Ykrn0vrn5KF4Skry3ua4rCws7ua4S
+	qFn0grn7Ja1Y9FDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9j14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+	6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
+	xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+	6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+	0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
+	n2IY04v7MxkF7I0En4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+	AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+	17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+	IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4l
+	IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
+	C2KfnxnUUI43ZEXa7sRidbbtUUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
 
-Pre-existing issues:
-- [High] Missing negative bounds checks for enum array indices in memcg BPF=
- kfuncs (bpf_mem_cgroup_memory_events and bpf_mem_cgroup_vm_events).
---
+On 2026/9/1 23:55, bot+bpf-ci@kernel.org wrote:
+>> This is expected because, as noted in commit 57b23c0f612d ("bpf: Retire
+>> rcu_trace_implies_rcu_gp()"), an RCU Tasks Trace GP currently implies
+>> (and will continue to imply in the future) a normal RCU GP. Since
+>> alloc_bulk() runs in an RCU read-side CS (!PREEMPT_RT runs in IRQ
+>> context, PREEMPT_RT runs with guard(rcu)), an RCU Tasks Trace GP cannot
+>> complete while alloc_bulk() is accessing the list.
+> 
+> Is this claim about the RCU Tasks Trace GP accurate? Looking at the SRCU
+> implementation, synchronize_rcu() sits in the middle of the SRCU scan
+> (kernel/rcu/srcutree.c srcu_readers_active_idx_check()), not at the end.
+> 
+> An RCU GP is only required to wait for read-side critical sections that
+> were already in progress when the GP started. Once a CPU reports its
+> quiescent state, a new hardirq handler on that CPU does not delay the GP.
+> So an alloc_bulk() that starts after the synchronize_rcu() call cannot
+> hold off the RCU Tasks Trace GP at all.
+> 
+> Even if the GP could not complete during alloc_bulk(), that would not
+> prevent the callback from running during alloc_bulk(). Callbacks are
+> invoked asynchronously after the GP ends (srcu_invoke_callbacks workqueue
+> in current kernels, or rcu_tasks_invoke_cbs in the 6.6 kernel that
+> produced the splat).
+> 
+> The race diagram three paragraphs later shows __free_rcu executing
+> concurrently with alloc_bulk's llist_del_first, which would not be
+> possible if the statement above were true.
+> 
+> Would it be more accurate to say that RCU read-side protection is not the
+> missing ingredient here, but rather mutual exclusion between the two
+> llist consumers?
 
-commit 3f8d69cede626ae022617ccb30f54b8f41f90edd
-Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Regarding the commit message: there is no real contradiction. Those 
+paragraphs were merely explaining our initial troubleshooting hypothesis 
+and addressing earlier discussions where adding rcu_read_lock_trace() 
+was suggested [0], rather than claiming that RCU Tasks Trace prevents 
+the race.
 
-bpf: Reject non-scalar bpf_loop iteration counts
+However, to keep the commit log focused and avoid any confusion, I will 
+simply drop that part in the next
 
-This commit fixes a verifier warning and subsequent panic triggered when
-pointer values are passed to the bpf_loop() nr_loops argument. It
-introduces ARG_SCALAR to ensure generic helper argument validation
-rejects pointers before loop inlining and precision processing.
+[0] 
+https://lore.kernel.org/bpf/3f72c4e7-340f-4374-9ebe-f9bffd08c755@paulmck-laptop/
 
-Link: https://lore.kernel.org/bpf/6a9ad24c.b5d4176b.238c3e.0001.GAE@google.=
-com/
+> 
+>> diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
+>> index e9662db7198f..5927943c765a 100644
+>> --- a/kernel/bpf/memalloc.c
+>> +++ b/kernel/bpf/memalloc.c
+> 
+> [ ... ]
+> 
+>> @@ -214,25 +215,25 @@ static void alloc_bulk(struct bpf_mem_cache *c, int cnt, int node, bool atomic)
+>>   	gfp = __GFP_NOWARN | __GFP_ACCOUNT;
+>>   	gfp |= atomic ? GFP_NOWAIT : GFP_KERNEL;
+>>
+>> -	for (i = 0; i < cnt; i++) {
+>> -		/*
+>> -		 * For every 'c' llist_del_first(&c->free_by_rcu_ttrace); is
+>> -		 * done only by one CPU == current CPU. Other CPUs might
+>> -		 * llist_add() and llist_del_all() in parallel.
+>> -		 */
+>> -		obj = llist_del_first(&c->free_by_rcu_ttrace);
+>> -		if (!obj)
+>> -			break;
+>> -		add_obj_to_free_list(c, obj);
+>> -	}
+>> -	if (i >= cnt)
+>> -		return;
+>> +	scoped_guard(raw_spinlock_irqsave, &c->lock) {
+>> +		for (i = 0; i < cnt; i++) {
+>> +			/*
+>> +			 * For every 'c' llist_del_first(&c->free_by_rcu_ttrace); is
+>> +			 * done only by one CPU == current CPU. Other CPUs might
+>> +			 * llist_add() and llist_del_all() in parallel.
+>> +			 */
+>> +			obj = llist_del_first(&c->free_by_rcu_ttrace);
+>> +			if (!obj)
+>> +				break;
+>> +			add_obj_to_free_list(c, obj);
+>> +		}
+>>
+>> -	for (; i < cnt; i++) {
+>> -		obj = llist_del_first(&c->waiting_for_gp_ttrace);
+>> -		if (!obj)
+>> -			break;
+>> -		add_obj_to_free_list(c, obj);
+>> +		for (; i < cnt; i++) {
+>> +			obj = llist_del_first(&c->waiting_for_gp_ttrace);
+>> +			if (!obj)
+>> +				break;
+>> +			add_obj_to_free_list(c, obj);
+>> +		}
+>>   	}
+>>   	if (i >= cnt)
+>>   		return;
+> 
+> The comment moved inside the new critical section still states the
+> lockless rationale:
+> 
+>      /*
+>       * For every 'c' llist_del_first(&c->free_by_rcu_ttrace); is
+>       * done only by one CPU == current CPU. Other CPUs might
+>       * llist_add() and llist_del_all() in parallel.
+>       */
+> 
+> The last sentence asserts that concurrent llist_del_all() is fine.
+> According to include/linux/llist.h, the del_first x del_all combination
+> requires a lock, and the commit message's first race diagram shows exactly
+> this combination producing the KASAN splat.
+> 
+> Should this comment be updated to reflect that c->lock now serializes
+> against __free_rcu() and the draining branch of do_call_rcu_ttrace(),
+> rather than asserting that lockless operation is safe?
 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 3a7eb2185c354..591dfab3e706c 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -894,6 +894,7 @@ enum bpf_arg_type {
-> =20
->  	ARG_PTR_TO_CTX,		/* pointer to context */
->  	ARG_ANYTHING,		/* any (initialized) argument is ok */
-> +	ARG_SCALAR,		/* scalar argument */
+make sense to me.
 
-[Severity: High]
-This isn't a bug introduced by this patch, but while reviewing the addition
-of ARG_SCALAR and how the verifier handles scalar arguments, a pre-existing
-missing bounds check was noticed in the memory cgroup kfuncs.
+> 
+> The related comments in enque_to_free() ("Nothing races to add to
 
-Could negative enum values passed by untrusted BPF programs cause an
-out-of-bounds read in the memcg BPF kfuncs?
+The comments in enque_to_free looks fine, no need to modify.
 
-Looking at mm/bpf_memcontrol.c:bpf_mem_cgroup_memory_events():
+> free_by_rcu_ttrace list.") and drain_mem_cache() ("Except for
+> waiting_for_gp_ttrace list, there are no concurrent operations on these
+> lists") may also need updates, though they are outside this diff.
 
-	if (unlikely(event >=3D MEMCG_NR_MEMORY_EVENTS))
-		return (unsigned long)-1;
+The comments in drain_mem_cache are slightly incorrect, but the impact 
+is not significant. In addition, they are outside this diff.
 
-	return atomic_long_read(&memcg->memory_events[event]);
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33525009657
 
-And similarly in mm/bpf_memcontrol.c:bpf_mem_cgroup_vm_events(), which
-exposes validation logic from mm/memcontrol.c:memcg_vm_event_item_valid():
-
-	if (idx >=3D NR_VM_EVENT_ITEMS)
-		return false;
-
-	return !BAD_STAT_IDX(memcg_events_index(idx));
-
-Because the BPF verifier enforces scalar types but does not validate enum
-ranges, a BPF program can pass a negative integer as the event parameter.
-The bounds checks use signed comparisons without a lower bound (< 0) check,
-so negative values will bypass the validation (e.g., -1 >=3D 4 evaluates to
-false).
-
-Can this lead to an out-of-bounds array access on kernel memory when the
-negative value is used as an index into memcg->memory_events?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260905014735.1452=
-988-1-memxor@gmail.com?part=3D1
