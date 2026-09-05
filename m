@@ -1,65 +1,65 @@
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CFFC165F1A
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 20:46:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19DFB36B91F
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 20:48:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788641182; cv=none; b=ResZ07mLSPNZp6xeyuFbZYSFT24QhsSJjqcfUs3X4e4Vttnj2y9UcDpSPBy2PRmx0hPk9yt4pfX70EbxtILvp6LxToc/6LruHH6Oc6gGcRb/bEzL+7T/MIwRPyiii2lbxcejj5JuS+ZoL7q34sNpS+i16cU/JhDEZYVWZYV7vsU=
+	t=1788641292; cv=none; b=U6tE84D0UwQZ5uE6o99/9kb0TKsBqIaRw4rxUx2zhBveuhrbR5hYIoCZEgXcWP3Cfcb2/cJYSYct+Q3fB9XaE8eZyht724sjc9xznpAKjLk2NXCNR3JnS44v94xA/eP6TlTlgElTEN901+LqWiltm4gbx+pQYUj9lsC+z7SkQzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788641182; c=relaxed/simple;
-	bh=bH/up2eC8GchIyDx1vNnN2+uSHqn3ecHIvhf6FI4Nbc=;
+	s=arc-20240116; t=1788641292; c=relaxed/simple;
+	bh=A4kGqd0Z3TmiaTsoJKHYGK16iKhgkKr2v7xKHWcW8Jk=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=CA2bVONi0ir7ot/SbqADw6X1dh15qfs0R2P2L5PXWoH2ds0NaMQMscos1wZKAXHpJalq9JwAHoC9P+6cFo11ONC4uCAdEhqlqfW+xBYsQxB9NXBC3A9njY2NENJmL42lp13xye4CtBAUwhxoJRcn41Ubi7/3Ox0fo/+oprbJNiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RbW2zbSP; arc=none smtp.client-ip=209.85.160.45
+	 References:In-Reply-To; b=USeMtBWzFp1pjipv3LztV0s3/t58EQ2sI378vgXXzGrSQ6QpCWksgUs9I9yu/pBvkjwtsi3R2jSTzD7XEcSYY+ckQjl8kX8LfT8Od/dMf5oko3cq8DTLQlBIX2FCPPzlezGMxRultgju9GskVU0t+yJ9r0lvhfin5RGkL3b193c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TQmwLBMA; arc=none smtp.client-ip=209.85.167.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RbW2zbSP"
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-475920b9ca2so692301fac.1
-        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 13:46:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TQmwLBMA"
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-4a45b3f0becso1747016b6e.1
+        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 13:48:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788641180; x=1789245980; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788641290; x=1789246090; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=rXsfvGq/E7bt5gl6myfL3gDoy0paTh5wxWE6/NMq0Cw=;
-        b=RbW2zbSPaom0sQ3S9zJDogXbp9NVcDL3Zjdv95kGTcIIU4vp7X2/9ckZAqyCQEACfI
-         njV4mSxx8CTa0Mapmtg8dNatd+omDrwNzBWujvx5oywCM+/I6US0Uv9sh0+hs1isuzky
-         vOvgxQvxfu/hKLJeY4EYjMCOkmuPjhVCzfWkDGphd+dJtVcRk8xsDrNRcMm79+UKrmtM
-         /nROfXZyPhE4lf+JQUQR1/oGy+aynowhakNEjULId/IQfgUmdpoq8sDpRrlFXlNVAd07
-         gRXWv8IL1b+FRGqEnlPykwUXwgI0pXf3SnGBgdPVU+SELz6q4lwwB3kdeUGTwEC8voCy
-         VQ+g==
+        bh=Ll8R3SutNJw3bcBCy/eZULKcMm4QgvHNZq/L2aK/wXs=;
+        b=TQmwLBMAuyII/YRRQ0ok4KkelbJrdPaCVnaxKCPlpp8TOtEvYj4F6K15atKfo3GoOy
+         xgFbufcRqNnupPCAScbXuUK4HI399QMCMg4CDMCp/yH0qKoyAOvi/irWw+5Blvu8lJjS
+         ga9yP74XfrVASuWa89Li4HRouF3ADhweUlkXUcRXK+W8jJfeoX60JB5VLc3TwkVLDEAv
+         bs+lp2POv8QE03Qv/gI4aUfW1k5nmgBYswJZyiKBMZjuYJR2Qzuz5RHGGa9DdJkMIVcz
+         Y5hHFWtdKntCbmeK+aBDjwe/ZLNIIefq/PWACpMyMt7IIYs2XeEC8fl0jB0ZMHIc4Rgh
+         olcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788641180; x=1789245980;
+        d=1e100.net; s=20251104; t=1788641290; x=1789246090;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=rXsfvGq/E7bt5gl6myfL3gDoy0paTh5wxWE6/NMq0Cw=;
-        b=SgDiReBzyZHnGJI2MFp4IzTDpInyvuEumh4sBrD3RFhMrLJ9kvLkYZOhPX8etZnmgR
-         oJA3Zf8kEefHdChjt3p1MibEpwYstRWOfjhVCjwbk3M5oDK5WhRxK9i6LW4iZN6i5uyG
-         jqPkNMN5w/nFy9YJjdKEOqXhKzuAyww2RMG0M3msoT0ZKoV9UcwYFYN2pH4v170CziOY
-         SvF235mx18JpCkh64fMZutge/QJzZlVAXE1Qlp79c82kh4L6ILBYm/CuSnXY9J6O/CRN
-         LT2A1wEno5l1ovLUEeuzj7m7ELdYMsGfK/71XxfwCcR7H/dwbUpz+cN2tQCYTdu5ikwT
-         qdAw==
-X-Forwarded-Encrypted: i=1; AKwUvBzdDfx+hWHqMnE+nXYXLwaNlcvTxUSb6jHb7zihFdZy/W6qDcjl5jv7AdQ2bggHrYXjxYw=@vger.kernel.org
-X-Gm-Message-State: AFuF++lKwHqMaaoK/FvYknPRDhWg139Wo1qhJsnaaHCZEtMzUSUhZSnm
-	8BH0OeGKAkQpH7+Z75ggkq98CbvuMJSNZs731nBalkM0WD1DOTZ3EwEa
-X-Gm-Gg: AYBFou17jktpjwHfPfaf50uZwP9SsGe0Z5wYntfRUZfR1nhezQZBAx6UC4sux4TgCqn
-	UpWSO44lYPWcabKkdZYNBP/rpdxU0E3p8B/tVezeznW6BjfEp56kWx+Excoszet+tXv0GFn5Ogz
-	/laQcKv0YRKD/Gbi32kGL4u7nRhEtL6bigzGlKmAXDLRVIu5ZN6V9WBHmxLQsqHZ/9glwD8Au4y
-	8OsVZcbBJ9zqTb9k44pV32VtIPAb0M+JvetxJ/hgFWouV3YMvMo2puzWsVNcYWIubxZ5lLwU1jF
-	5/huBDfR7nmo8KRbWUxwXlyKhxT38LuqjFS6imLt7ErkATuhy/CuCY1YLurMTEhg9VQbholnJNN
-	DJcdQCdqreGoqH/RiY8BHJL48naR+DxX2reEmE0i3hPKqmEo1NQUgdPoHt/pHTy96xWm3As1MQR
-	vBeEgUOJsMtFoZQx4q8LM4I72wggEj+hy3tzXoELY0Es9nThy+3sM3SYVHBSLk5tr572C5Lj+/a
-	2uKXvsJgsNcvE58v0+shyMpz/80jQS7LMZHYubxdX28cO9GBIvhW34=
-X-Received: by 2002:a05:6870:21ce:b0:475:a112:1279 with SMTP id 586e51a60fabf-475a1124c2emr7936544fac.38.1788641179813;
-        Sat, 05 Sep 2026 13:46:19 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:58::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-475543f5ac5sm6372330fac.8.2026.09.05.13.46.17
+        bh=Ll8R3SutNJw3bcBCy/eZULKcMm4QgvHNZq/L2aK/wXs=;
+        b=pgdvYhhfx4Y3Rjboj0SzhqCpBGWT5Z+/nv4NvmobyVuP/uu7mV59As8pqpHSP5j6a1
+         7J0EIxuvmwDTE0fDtobnC8vnapWCrlDCEe/KWMU6t9bq+YG/5K3UUDFWhxBr5PXJ4DjE
+         KaFUzTfFkjdOpE50Kj9SchJh7bWKWtyLwU2jA0wk/hWcvmCTuwXZ3ZvluPLHASrJX4RJ
+         EGwOXBdQ10sPxiTvp3u346/k/6yeAFO25SaKx9zZ0pnIiXG4QqE7HelQqB/C1N4aTCPq
+         hj72frbKhCvFCq7InIl9GOe8Agm1AwVkCxkyYoTg667fXn9zDTeZFIiW6HuSrWkcI8W7
+         GB1Q==
+X-Forwarded-Encrypted: i=1; AKwUvBxti4xdBx42wG5ekUzNXKl+wBHp3nidPbdHaX92bn76j5+Ckqq3Q3A9t44g8xACLh/AMwM=@vger.kernel.org
+X-Gm-Message-State: AFuF++m4I98aG6tyvOQXeuyKQOwvLCrmp1aCk1Xfmq2LG3/4obYtCjTj
+	YjBmPCFRDcDj208RvDu/NHHNPG8KQ6wODUV6BIPEtxMcKo51IvYHG3KS57V7nw==
+X-Gm-Gg: AYBFou0g8GuyvveFpdL8A9ZACynNZoLHOHtTKBq3xp06+nzUHSFJhUxt4iGUob3Nv1W
+	Ik+QB43jD6GHwB3Yecq6RWIgGq605Z1R8bbL+vPp5NjOj8oa94zrOXZTsDu/jOoGLfr78B0n07d
+	4+r61VS9MQvKXS1fEF9t9dPKfs9q9N+++HMfcyfdNJd96s/4qy57Xi7gTj3sFfy9CsjiaUh50Ys
+	ysWwRMwZTVkN87EiScptI2CpM1iKCvsVOyRbEO9eRhx92GzpeiqtcyL58HWQU9wXk/3W8SU8ItQ
+	PWH6bGZxhSEnquZtTVHC8QTsbhN8zPKpUGLp9YtEVjBMWaQub6KckOngjaJDHbrfMbozA4KFkld
+	ZEU9EUopfQyn5z8vRBmD6uwuyWnxGLqnEE1XCFj8CgP2ihthaKLE2GYnHky0ef7ZuCvzEIA4fxY
+	hp3+X5QhlBmavbZwEgqdcNyO+u1buaK+UE8D/vAeHs4o9sFDeg2JZwdlD4OhLjGJQ6b6Hk8g/+T
+	HLMd3xS+O5lyYbbQhFbSjBgoUIjKsZPmYRQVKeJr38dnfVItJT+4S9akGnNUgU6IQ==
+X-Received: by 2002:a05:6820:1623:b0:6a3:1dc5:3570 with SMTP id 006d021491bc7-6b6fdac419amr8644519eaf.31.1788641289753;
+        Sat, 05 Sep 2026 13:48:09 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:73::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6b6dcb85657sm6928741eaf.7.2026.09.05.13.48.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Sep 2026 13:46:18 -0700 (PDT)
+        Sat, 05 Sep 2026 13:48:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,144 +68,99 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Sat, 05 Sep 2026 13:46:16 -0700
-Message-Id: <DL7ODORZJ7ZO.1E8FPR423HTZM@gmail.com>
-Cc: "Nicholas Carlini" <npc@anthropic.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, <kkd@meta.com>, <kernel-team@meta.com>
-Subject: Re: [PATCH bpf v2 2/7] bpf: Preserve packet pointer class
- displacement in regsafe()
+Date: Sat, 05 Sep 2026 13:48:08 -0700
+Message-Id: <DL7OF45PMXXL.M40Z5M90EVCF@gmail.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Emil Tsalapatis" <emil@etsalapatis.com>,
+ "Nicholas Carlini" <npc@anthropic.com>, <kkd@meta.com>,
+ <kernel-team@meta.com>
+Subject: Re: [PATCH bpf v2 3/7] selftests/bpf: Test packet pointer class
+ displacement pruning
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
 To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
 X-Mailer: aerc
 References: <20260905083418.3723623-1-memxor@gmail.com>
- <20260905083418.3723623-3-memxor@gmail.com>
-In-Reply-To: <20260905083418.3723623-3-memxor@gmail.com>
+ <20260905083418.3723623-4-memxor@gmail.com>
+In-Reply-To: <20260905083418.3723623-4-memxor@gmail.com>
 
 On Sat Sep 5, 2026 at 1:34 AM PDT, Kumar Kartikeya Dwivedi wrote:
-> regsafe() maps packet pointer IDs between states and checks that each
-> current register range is a subset of the corresponding explored
-> register range. It does not, however, preserve the displacement between
-> registers that share a packet pointer ID.
+> Add two paths whose packet pointer ranges are individually compatible at
+> a join but whose members have different relative displacements. The first
+> path proves an eight-byte access through one member. On the second path,
+> the same guard only proves that the access starts before data_end.
 >
-> This is unsound because packet range is shared by ID. A bounds check on
-> one class member updates every member, and a later access can consume the
-> range through another member. Commit 022ac0750883 ("bpf: use reg->var_off
-> instead of reg->off for pointers") folded the fixed pointer offset into
-> r64 and removed the old off equality check, so two individually narrower
-> registers can prune even when their displacement has changed. The
-> explored path can then license an out-of-bounds packet access on the
-> pruned path.
+> An affected verifier prunes the second path and accepts the program. With
+> packet pointer class displacement preserved, it explores that path and
+> rejects the out-of-bounds access.
 >
-> Requiring equal r64 bases would prevent the bug, but would also reject a
-> safe uniform translation of the whole class. Instead, record the base
-> translation seen for the first packet pointer in each ID mapping and
-> require every subsequent member to have the same translation. This keeps
-> the relative displacement invariant while retaining pruning for uniformly
-> translated classes. Packet pointers without an ID remain unaffected.
->
-> Fixes: 022ac0750883 ("bpf: use reg->var_off instead of reg->off for point=
-ers")
-> Reported-by: Nicholas Carlini <npc@anthropic.com>
-> Suggested-by: Nicholas Carlini <npc@anthropic.com>
 > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 > ---
->  include/linux/bpf_verifier.h |  2 ++
->  kernel/bpf/states.c          | 42 ++++++++++++++++++++++++++++++++++--
->  2 files changed, 42 insertions(+), 2 deletions(-)
+>  .../progs/verifier_xdp_direct_packet_access.c | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
 >
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index 36b65797877d..5cf92ce18520 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -854,6 +854,8 @@ struct backtrack_state {
->  struct bpf_id_pair {
->  	u32 old;
->  	u32 cur;
-> +	s32 pkt_ptr_delta;
-> +	bool pkt_ptr_delta_set;
-
-AI's complain is somewhat valid.
-Using extra memory for this narrow case isn't great.
-
->  };
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_xdp_direct_packet=
+_access.c b/tools/testing/selftests/bpf/progs/verifier_xdp_direct_packet_ac=
+cess.c
+> index 0b86d95a4133..692a8468f3d7 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_xdp_direct_packet_access=
+.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_xdp_direct_packet_access=
+.c
+> @@ -5,6 +5,50 @@
+>  #include <bpf/bpf_helpers.h>
+>  #include "bpf_misc.h"
 > =20
->  struct bpf_idmap {
-> diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-> index 66fb11b6c6a7..2f8f3fe164b0 100644
-> --- a/kernel/bpf/states.c
-> +++ b/kernel/bpf/states.c
-> @@ -339,6 +339,7 @@ static bool check_ids(u32 old_id, u32 cur_id, struct =
-bpf_idmap *idmap)
->  	if (idmap->cnt < BPF_ID_MAP_SIZE) {
->  		map[idmap->cnt].old =3D old_id;
->  		map[idmap->cnt].cur =3D cur_id;
-> +		map[idmap->cnt].pkt_ptr_delta_set =3D false;
->  		idmap->cnt++;
->  		return true;
->  	}
-> @@ -352,6 +353,43 @@ static bool check_ids(u32 old_id, u32 cur_id, struct=
- bpf_idmap *idmap)
->  	return false;
->  }
-> =20
-> +static bool check_pkt_ptr_ids(const struct bpf_reg_state *old,
-> +			      const struct bpf_reg_state *cur,
-> +			      struct bpf_idmap *idmap)
+> +SEC("xdp")
+> +__description("XDP pkt regsafe preserves packet pointer class displaceme=
+nt")
+> +__failure __msg("R2 min value is outside of the allowed memory range")
+> +__flag(BPF_F_ANY_ALIGNMENT)
+> +__naked void pkt_regsafe_class_displacement(void)
 > +{
-> +	struct bpf_id_pair *map =3D idmap->map;
-> +	s64 delta;
-> +	unsigned int i;
-> +
-> +	if (!check_ids(old->id, cur->id, idmap))
-> +		return false;
-> +	if (!old->id)
-> +		return true;
-> +
-> +	/*
-> +	 * Packet range is shared by all pointers with the same ID. Preserve
-> +	 * their relative displacement, while allowing the whole class to move.
-> +	 * Packet pointer offsets are bounded by BPF_MAX_VAR_OFF, so the delta
-> +	 * between two valid offsets fits in s32.
-> +	 */
-> +	delta =3D (s64)(cur->r64.base - old->r64.base);
+> +	asm volatile ("\
+> +	r8 =3D *(u32 *)(r1 + %[xdp_md_data_end]);\
+> +	r9 =3D *(u32 *)(r1 + %[xdp_md_data]);\
+> +	r6 =3D r9;\
+> +	r6 +=3D 8;\
+> +	if r6 > r8 goto l_exit_%=3D;\
+> +	r0 =3D *(u64 *)(r9 + 0);\
+> +	r4 =3D r0;\
+> +	r4 &=3D 15;\
+> +	r7 =3D r0;\
+> +	r7 >>=3D 63;\
+> +	if r7 !=3D 0 goto l_path_b_%=3D;\
 
-Poking into cnum internals isn't great either.
-If we go with this apporach it has be some helper in cnum.c
+why all the loads and math? Are they meaningful for the test?
+I suspect the test can be reduced in half.
 
-Let's figure out an alternative fix.
-
-> +	if (delta < S32_MIN || delta > S32_MAX)
-> +		return false;
-> +
-> +	for (i =3D 0; i < idmap->cnt; i++) {
-> +		if (map[i].old !=3D old->id)
-> +			continue;
-> +		if (!map[i].pkt_ptr_delta_set) {
-> +			map[i].pkt_ptr_delta =3D delta;
-> +			map[i].pkt_ptr_delta_set =3D true;
-> +			return true;
-> +		}
-> +		return map[i].pkt_ptr_delta =3D=3D delta;
-> +	}
-> +
-> +	return false;
+> +	r2 =3D r9;\
+> +	r2 +=3D r4;\
+> +	r3 =3D r2;\
+> +	r3 +=3D 4;\
+> +	goto l_join_%=3D;\
+> +l_path_b_%=3D: \
+> +	r4 &=3D 3;\
+> +	r4 +=3D 8;\
+> +	r2 =3D r9;\
+> +	r2 +=3D r4;\
+> +	r3 =3D r2;\
+> +	r3 -=3D 4;\
+> +l_join_%=3D: \
+> +	r5 =3D r3;\
+> +	r5 +=3D 4;\
+> +	if r5 > r8 goto l_exit_%=3D;\
+> +	r0 =3D *(u64 *)(r2 + 0);\
+> +l_exit_%=3D: \
+> +	r0 =3D 0;\
+> +	exit;\
+> +"	:
+> +	: __imm_const(xdp_md_data, offsetof(struct xdp_md, data)),
+> +	  __imm_const(xdp_md_data_end, offsetof(struct xdp_md, data_end))
+> +	: __clobber_all);
 > +}
 > +
->  /*
->   * Compare scalar register IDs for state equivalence.
->   *
-> @@ -632,8 +670,8 @@ static bool regsafe(struct bpf_verifier_env *env, str=
-uct bpf_reg_state *rold,
->  		} else if (rold->range > rcur->range) {
->  			return false;
->  		}
-> -		/* id relations must be preserved */
-> -		if (!check_ids(rold->id, rcur->id, idmap))
-> +		/* id relations and intra-class displacement must be preserved */
-> +		if (!check_pkt_ptr_ids(rold, rcur, idmap))
->  			return false;
->  		/* new val must satisfy old val knowledge */
->  		return range_within(rold, rcur) &&
+>  SEC("xdp")
+>  __description("XDP pkt read, pkt_end mangling, bad access 1")
+>  __failure __msg("R3 pointer arithmetic on pkt_end")
 
