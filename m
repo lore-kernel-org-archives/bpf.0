@@ -1,77 +1,77 @@
-Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
+Received: from mail-wm2-f8.google.com (mail-wm2-f8.google.com [74.125.225.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DDD33BA232
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 07:00:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30B053B8D4A
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 07:00:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788591627; cv=none; b=rTUd4Lw5UluU9zvmODBmADbcphvBoIydj6Z99wCbHf+bm96IrjETdqYd9uj5Cc7g6sMLXYcFezsdhGIQRdnVMr2R/i45FYFf26uZe9PszFw1uq8KXheoEqDaeZ1I01AIouzfwUd/A8fFRGHqorx9ntsXbxATaAO7qrwFEIEAXDU=
+	t=1788591628; cv=none; b=IT10Fj1JyLnHwa3b0atUzzXFxTAhTbfKPepmHqs/jDgpgQj3JMoXrMv2iviJMaAgkTVlVRrQZcRY04y7AzMW1HbopeFDCbhUe+1K9Td8Cjbd23KmrRhC0zGOHG5rvy4qaAg7BMKHuTOrWYSLcx/5fAu4DEiVLO31gNa0mHYG9zQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788591627; c=relaxed/simple;
-	bh=un4EqKSpjszRLLrGbZXIDMytQ0AUYaeYfFCHa0AmG44=;
+	s=arc-20240116; t=1788591628; c=relaxed/simple;
+	bh=s4Y0JiT4xAIDUadPi1is7tuuN5Ng/5Xc8W5oRApGOv0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pU4xhInOPwmCtnUgiMbvr/pZ7QkxMsssE1fSZ9Wn2ixv/xavTPD+LvMPf+L96fkfx13UiEJDe+Kmx8bt/Ajs0fM0IFrVrgwz/m72vKy7aSNLnwY8x6Y6HVKpc91evknu2ljDtqkxCMcdQgtgTA6rClo4r4lcU2of57eG2DaLNUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TFkiRti0; arc=none smtp.client-ip=74.125.225.75
+	 MIME-Version; b=qbP825bWocA/IkgT7c7xw5Du/vTOWNIPJkcFN2Xn8YtkSJYba0hSNW8vn/+YjieLQuxDulGqyWkwudqlViDZTpLRLib/Q7YeHLrEn7XGz+SERkncB+owBEkEVe6Ch5PbN83HmyyloJoPGRTLhp3tKXscAvGpOhZX+9sUFVOthwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lmS68Au2; arc=none smtp.client-ip=74.125.225.136
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TFkiRti0"
-Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-483960225ccso527581f8f.1
-        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 00:00:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lmS68Au2"
+Received: by mail-wm2-f8.google.com with SMTP id 5b1f17b1804b1-49cd3d0f150so7754075e9.1
+        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 00:00:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788591607; x=1789196407; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788591609; x=1789196409; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=tUXWKB1W6LaUQmqyFFwzNQKPp+kPaUIL616ZeUs4N4M=;
-        b=TFkiRti04CQKz7dKzfJq1Lh2ysQQN93sBb7etUO5PcBCRGGbOcsXIJGcDY9mwwdBfP
-         xOHKEOykzjZSxstvNqyMSj3lNNhXoRAA81+zxZixSJK0Y1Qf/J1Eq9PFyDD5lEBOYQzT
-         vexZNpV/ilK1pvecJOPuFONgdwVkmN6Jds4bNeNJ1vguqY3vqzzWqUQg4PT+TZoaGp7w
-         jm30yjJNyboqQR4uqPLph1DtCxIBOShpB5NSlsZ+R6yHX+MMJw5DiH8DspxQUI/PUHNL
-         QGJDp+IiWimzpAV/8fTuK2dqSFHNU1QC0nL7FQnJGfxg9h0r2D0DZECGEWSpo1P+T6wF
-         VNng==
+        bh=BgkcIgRjcx8CzsIkhrtznq+t9jdmXNqsjQeLbjfh6oU=;
+        b=lmS68Au2uEyevQpafL76e3zjfsBXVRZVeJTBJ9rMU19QJ2eNx7JZKBR5G7aNYdO11t
+         tVzW483EQCeas9GmSOh/4/CkDD7/JgDPr+XaK0vnhYQRmykwY+LO2QEIF6JPjqdHFvu1
+         J1Gz+lG30W3lTz2cQJ8CRwDM8m/smXq9Nmz65Ei+7gd45RKntTV+Mxd0foPxDDgQk5pF
+         01mmVlppOAVrdN1Dljf1iDfigbRNLpw1J8RPT/p2PqR3W9hs4BVyRd8mPpVzezPpRDnS
+         HmAP2GF6qVanYNebe3Cwpaf7H63Oc9fSqMNn0+3JgDONSdImW39jiWOcC+l9GCh2mKE6
+         GoOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788591607; x=1789196407;
+        d=1e100.net; s=20251104; t=1788591609; x=1789196409;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=tUXWKB1W6LaUQmqyFFwzNQKPp+kPaUIL616ZeUs4N4M=;
-        b=V9RAXL6Fa5tTTWyBIhdyJprHCAEo6zu497uoheHUXFQKEO1us4sfcimc8lGImBuiOS
-         MU7uCPTcfLsZTCJc7UEQ+gxvFBlWt6PqPK2MC1HqvcEG3z0CtzRMwsl65Vxs2VdB3+fc
-         f1h8JS2/poBvxgJxs4gYx4xcyxvME9PhGKoQrqGmIW2jX6pGK1QoXfWL6yb431n7lNw5
-         K2PQFdelGWozdIx/i1AYm57JpaB3+tr78Qg4qd91/BLKWir9V0HzrSBvcT5NVsNGuoIr
-         Vx9RmJYBPObIACXJwkmNpSp88o6DWMUCA08sGJeINQta1ORQFAIhXDNezAn2dzkKC/av
-         J+uA==
-X-Gm-Message-State: AFuF++mKi1dkT5rtG9i4TudjkLR1XnRQ3X57mLc5bl1QnDowlKftFHXL
-	oy6BXhzIyM0PstDypCHdBGGIvrL3LqzOJYytuhnZkAcInUXkEUjX8jwkXTHW0SNU
-X-Gm-Gg: AYBFou11DGIK3AqoxAJarMiJmDqlyU74tihlEzDriGOkVHooZ7F8efrnc2gA3qxnyZd
-	SuQ/O2KdTGcPh/ytr0m17zZM+F3qCGJjua8Lh2mH2yJAQZOkYEUGhFuzSmSk1kvyArLB0DijEhA
-	7yKs6cgSDAUIHu0COD4M8Y7GLP79xQ/OgvR6TxhRAuwyxH47E55nI3tlhDl3f69ucWmqfh/3d5Q
-	fbiwtyyT8KjPHaO+EiBi4q1Ci7ZCjB36kHOcqU+Rc9utUOHJU78bA1d8/QyZu9/FxV3BvLb7wu2
-	WY3lzQlx0XuAVU/7P9VPyLXAtOKc/7r8vZwLmjgLA5eTKtgKI1AuFtEvmk4AUbrx2zbd6I1nCkE
-	7rZLFSaaCpKiucxD5hEar2ZzVHDbKdAUWNnwfCIQ6QwRMX4ygT8SvpsJmhejyxX7hoW+aeXtovF
-	za2nlfXkqqzl8VXsXHf2OhXEmiCh+xJN7ZJ/WerINN+RYrext7p6zOUEb0rdiHd5rrVvff+HH2g
-	yBOSAZRMMbt/m91tM140cXnuIjHQ3jPUfHtb3St8pBsja5cWies0SfQngD1ZOtjGSrYTazepj4J
-	+hy7ZUXP98d2QVFPUCnx3Xuije1srYHDnzaHug==
-X-Received: by 2002:a05:600c:c48f:b0:497:fecd:5b00 with SMTP id 5b1f17b1804b1-49cf825d507mr107310345e9.9.1788591607456;
-        Sat, 05 Sep 2026 00:00:07 -0700 (PDT)
+        bh=BgkcIgRjcx8CzsIkhrtznq+t9jdmXNqsjQeLbjfh6oU=;
+        b=JZrRyx4+qwGPbQa/zaA1fRedeJPUwXIHZbawnoCSLrGSQ73RMQxH2QcnKo6Mv9atjQ
+         enXFGRz1G3Le+rMhC7Xhr1Zz3fwJ6o7AerjyL2mxXfYi/lMe+YXFEjRDBv4UoeHPIWDn
+         f4eaekn3Yts9NVsnd15d32a9tK6Xk0//7IpUtCxh+gTr1egOVaNXGsJE8Au/2O0t5u2K
+         dFT93MYz9DbHHcOB0QZVdeXJtswZdKuT4QGpItPvS+A45FV2/LLuExFuY0Mg4U9GsmfQ
+         96XSUD34I+rJ7BAVZfVxqzf22oyL1o+cjeLpSrhqiTb9/stZ4XIUeZL155AP4nHRQle3
+         fEtg==
+X-Gm-Message-State: AFuF++m3SF8jbyJy+aqvaTvuoLQbYmE2eIEcPQWOnbTtv9zB5tDv4soY
+	bcGohscmb4peTOhuI8hQFESDK66pJU/6byOdQFTRxAFCf2auWgRlog6E9zau+mqi
+X-Gm-Gg: AYBFou2jSLjfy3432YOcXpPm9vH1FRa56KarSQ8rZYukOyJELh07k/9xlx7suovUVeW
+	xuXYiG/tb/AFPxF/sziaTFPZP5wwdTpFEfz32vtn5EpA6I0WAQRrcsFjskMDkvEghgZWjhjz1Zq
+	JZh2KNOfBzJa7mrkEg2/vyfOp+caimnSeGAHx0NnS/wD2k2uxcckEBgxnvPWSSTUopx6+W11hbf
+	B4bDSqsh1LaSl6y8hoqbX0gkwTvujqolsH7vqrSIzrv728jj+1Ib/Vxg57rZwZNa147bMYkYiB7
+	WFsdkl3PRwxUad3FXZCVIhE9L24Z9pMwvao2vWAUQvKBeb+t98HkJ3Cld+siyT8ULQxN1IAP7L7
+	9ByLpQXkHrnkscY3WnyOrEWdFzAaAfkEdxAop6V7hX5ttEaopb1ALAYnZkOAOITkeddFYQH7Xn/
+	jfmF70jhLWJJDnbNuaRBIVEJ54D0pmf1Datd3eUefsbHdtDXd9eHPPsMIIqRW5L5/RIZTX8WgZc
+	jW/p4WtCBPsJoub2YaylN90nhQCvLEiYGucoRZQihz8RjOgceW01/rk3nFh6I18YadGfmOCUI07
+	ko01HTqyEEON6B1p1jxIWxz+70E=
+X-Received: by 2002:a05:600d:8490:10b0:499:93b3:91ea with SMTP id 5b1f17b1804b1-49cf825e25dmr78021745e9.15.1788591609003;
+        Sat, 05 Sep 2026 00:00:09 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cee80eda4sm205794095e9.15.2026.09.05.00.00.07
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cf770fcf5sm123552355e9.6.2026.09.05.00.00.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Sep 2026 00:00:07 -0700 (PDT)
+        Sat, 05 Sep 2026 00:00:08 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
+Cc: Nicholas Carlini <npc@anthropic.com>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
-	Nicholas Carlini <npc@anthropic.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf v1 2/8] selftests/bpf: Test killing a loader during instruction rewrites
-Date: Sat,  5 Sep 2026 08:59:53 +0200
-Message-ID: <20260905070003.3193366-3-memxor@gmail.com>
+Subject: [PATCH bpf v1 3/8] bpf: Preserve packet pointer class displacement in regsafe()
+Date: Sat,  5 Sep 2026 08:59:54 +0200
+Message-ID: <20260905070003.3193366-4-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260905070003.3193366-1-memxor@gmail.com>
 References: <20260905070003.3193366-1-memxor@gmail.com>
@@ -81,163 +81,120 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4531; i=memxor@gmail.com; h=from:subject; bh=un4EqKSpjszRLLrGbZXIDMytQ0AUYaeYfFCHa0AmG44=; b=kA0DAAoWRy03e2NUL4MByyZiAGqbvaWhn5GWa+Nz4oFc7QiQHpXmG8iH9OvA4wLiHEiolgDJs Yh1BAAWCgAdFiEEdP++AjPIeftRPaYLRy03e2NUL4MFAmqbvaUACgkQRy03e2NUL4O7bAEAykLx y0Eru9sWSdceoGc+oOfb2gYG+VnF1gfAwdTXep4A/iBWgKHTVuDsjQ67fXX2Z4/QJ0SxxU+Jjvq zrQDjbAID
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4107; i=memxor@gmail.com; h=from:subject; bh=s4Y0JiT4xAIDUadPi1is7tuuN5Ng/5Xc8W5oRApGOv0=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWv23mWPLrT719rvVnGQz1p+R+R/mrD8DQ9nXT+l5FUtL x2DVW07SlkYxLgYZMUUWUr+72MyPlH5O9B2GTfMHFYmkCEMXJwCMJFbTYwM2xjm+txp/TZR4tnd QyetHgioxhpEyC3+/iP95XYh/eSaowz/ixJ1vQ6//picOX85U9i96RIL796edu/r+hmXE1+ucLm cwgsA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Exercise fatal-signal handling after verifier exploration has completed. Load
-a 32768-instruction control program to estimate the time needed for linear
-verification, then load the same-sized program made of unconditional jumps by
-zero in a child process.
+regsafe() maps packet pointer IDs between states and checks that each
+current register range is a subset of the corresponding explored
+register range. It does not, however, preserve the displacement between
+registers that share a packet pointer ID.
 
-The latter reaches the quadratic bpf_opt_remove_nops() rewrite. Send SIGKILL
-after four control-load durations and require the child to be reaped within
-one second. Without cancellation points in the rewrite helpers, the killed
-child stays in BPF_PROG_LOAD until all no-ops have been removed.
+This is unsound because packet range is shared by ID. A bounds check on
+one class member updates every member, and a later access can consume the
+range through another member. Commit 022ac0750883 ("bpf: use reg->var_off
+instead of reg->off for pointers") folded the fixed pointer offset into
+r64 and removed the old off equality check, so two individually narrower
+registers can prune even when their displacement has changed. The
+explored path can then license an out-of-bounds packet access on the
+pruned path.
 
+Requiring equal r64 bases would prevent the bug, but would also reject a
+safe uniform translation of the whole class. Instead, record the base
+translation seen for the first packet pointer in each ID mapping and
+require every subsequent member to have the same translation. This keeps
+the relative displacement invariant while retaining pruning for uniformly
+translated classes. Packet pointers without an ID remain unaffected.
+
+Fixes: 022ac0750883 ("bpf: use reg->var_off instead of reg->off for pointers")
+Reported-by: Nicholas Carlini <npc@anthropic.com>
+Suggested-by: Nicholas Carlini <npc@anthropic.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- .../bpf/prog_tests/prog_load_signal.c         | 131 ++++++++++++++++++
- 1 file changed, 131 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/prog_load_signal.c
+ include/linux/bpf_verifier.h |  2 ++
+ kernel/bpf/states.c          | 42 ++++++++++++++++++++++++++++++++++--
+ 2 files changed, 42 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/prog_load_signal.c b/tools/testing/selftests/bpf/prog_tests/prog_load_signal.c
-new file mode 100644
-index 000000000000..0f78db3bccc7
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/prog_load_signal.c
-@@ -0,0 +1,131 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <test_progs.h>
-+
-+#define NOP_CNT		32768
-+#define MIN_KILL_DELAY_NS	(100ULL * 1000 * 1000)
-+#define REAP_TIMEOUT_NS		(1000ULL * 1000 * 1000)
-+
-+static __u64 monotonic_ns(void)
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 36b65797877d..5cf92ce18520 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -854,6 +854,8 @@ struct backtrack_state {
+ struct bpf_id_pair {
+ 	u32 old;
+ 	u32 cur;
++	s32 pkt_ptr_delta;
++	bool pkt_ptr_delta_set;
+ };
+ 
+ struct bpf_idmap {
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index 66fb11b6c6a7..2f8f3fe164b0 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -339,6 +339,7 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
+ 	if (idmap->cnt < BPF_ID_MAP_SIZE) {
+ 		map[idmap->cnt].old = old_id;
+ 		map[idmap->cnt].cur = cur_id;
++		map[idmap->cnt].pkt_ptr_delta_set = false;
+ 		idmap->cnt++;
+ 		return true;
+ 	}
+@@ -352,6 +353,43 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
+ 	return false;
+ }
+ 
++static bool check_pkt_ptr_ids(const struct bpf_reg_state *old,
++			      const struct bpf_reg_state *cur,
++			      struct bpf_idmap *idmap)
 +{
-+	struct timespec ts;
++	struct bpf_id_pair *map = idmap->map;
++	s64 delta;
++	unsigned int i;
 +
-+	clock_gettime(CLOCK_MONOTONIC, &ts);
-+	return ts.tv_sec * 1000000000ULL + ts.tv_nsec;
-+}
-+
-+static void sleep_ns(__u64 duration)
-+{
-+	struct timespec ts = {
-+		.tv_sec = duration / 1000000000ULL,
-+		.tv_nsec = duration % 1000000000ULL,
-+	};
-+
-+	while (nanosleep(&ts, &ts) && errno == EINTR)
-+		;
-+}
-+
-+static int waitpid_timeout(pid_t pid, int *status, __u64 timeout)
-+{
-+	__u64 deadline = monotonic_ns() + timeout;
-+	int ret;
-+
-+	do {
-+		ret = waitpid(pid, status, WNOHANG);
-+		if (ret)
-+			return ret;
-+		usleep(1000);
-+	} while (monotonic_ns() < deadline);
-+
-+	return 0;
-+}
-+
-+void test_prog_load_signal(void)
-+{
-+	struct bpf_insn *insns = NULL;
-+	__u64 start, control_time, kill_delay;
-+	int pipefd[2] = { -1, -1 };
-+	int prog_fd = -1, status = 0;
-+	pid_t pid = -1;
-+	char byte;
-+	int i, ret;
-+
-+	insns = calloc(NOP_CNT + 2, sizeof(*insns));
-+	if (!ASSERT_OK_PTR(insns, "calloc"))
-+		return;
-+
-+	for (i = 0; i < NOP_CNT; i++)
-+		insns[i] = BPF_MOV64_REG(BPF_REG_1, BPF_REG_1);
-+	insns[NOP_CNT] = BPF_MOV64_IMM(BPF_REG_0, 0);
-+	insns[NOP_CNT + 1] = BPF_EXIT_INSN();
-+
-+	start = monotonic_ns();
-+	prog_fd = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL",
-+				insns, NOP_CNT + 2, NULL);
-+	control_time = monotonic_ns() - start;
-+	if (!ASSERT_GE(prog_fd, 0, "control_prog_load"))
-+		goto cleanup;
-+	close(prog_fd);
-+	prog_fd = -1;
-+
-+	for (i = 0; i < NOP_CNT; i++)
-+		insns[i] = BPF_JMP_IMM(BPF_JA, 0, 0, 0);
-+
-+	if (!ASSERT_OK(pipe(pipefd), "pipe"))
-+		goto cleanup;
-+
-+	pid = fork();
-+	if (!ASSERT_GE(pid, 0, "fork"))
-+		goto cleanup;
-+	if (!pid) {
-+		close(pipefd[0]);
-+		if (write(pipefd[1], "x", 1) != 1)
-+			_exit(1);
-+		close(pipefd[1]);
-+		prog_fd = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL",
-+					insns, NOP_CNT + 2, NULL);
-+		if (prog_fd >= 0)
-+			close(prog_fd);
-+		_exit(prog_fd < 0);
-+	}
-+
-+	close(pipefd[1]);
-+	pipefd[1] = -1;
-+	ret = read(pipefd[0], &byte, 1);
-+	if (!ASSERT_EQ(ret, 1, "child_ready"))
-+		goto cleanup;
++	if (!check_ids(old->id, cur->id, idmap))
++		return false;
++	if (!old->id)
++		return true;
 +
 +	/*
-+	 * Allow linear verification to finish before sending SIGKILL. The nop
-+	 * removal pass is quadratic, so four control-load times still leaves a
-+	 * wide window in which an affected kernel is rewriting instructions.
++	 * Packet range is shared by all pointers with the same ID. Preserve
++	 * their relative displacement, while allowing the whole class to move.
++	 * Packet pointer offsets are bounded by BPF_MAX_VAR_OFF, so the delta
++	 * between two valid offsets fits in s32.
 +	 */
-+	kill_delay = MAX(control_time * 4, MIN_KILL_DELAY_NS);
-+	sleep_ns(kill_delay);
-+	if (!ASSERT_OK(kill(pid, SIGKILL), "kill"))
-+		goto cleanup;
++	delta = (s64)(cur->r64.base - old->r64.base);
++	if (delta < S32_MIN || delta > S32_MAX)
++		return false;
 +
-+	start = monotonic_ns();
-+	ret = waitpid_timeout(pid, &status, REAP_TIMEOUT_NS);
-+	if (!ASSERT_EQ(ret, pid, "prog_load_killable")) {
-+		fprintf(stderr, "control load %llu us, child still alive %llu us after SIGKILL\n",
-+			control_time / 1000, (monotonic_ns() - start) / 1000);
-+		goto cleanup;
++	for (i = 0; i < idmap->cnt; i++) {
++		if (map[i].old != old->id)
++			continue;
++		if (!map[i].pkt_ptr_delta_set) {
++			map[i].pkt_ptr_delta = delta;
++			map[i].pkt_ptr_delta_set = true;
++			return true;
++		}
++		return map[i].pkt_ptr_delta == delta;
 +	}
-+	pid = -1;
-+	ASSERT_TRUE(WIFSIGNALED(status) && WTERMSIG(status) == SIGKILL,
-+		    "killed_by_sigkill");
 +
-+cleanup:
-+	if (prog_fd >= 0)
-+		close(prog_fd);
-+	if (pipefd[0] >= 0)
-+		close(pipefd[0]);
-+	if (pipefd[1] >= 0)
-+		close(pipefd[1]);
-+	if (pid > 0) {
-+		kill(pid, SIGKILL);
-+		waitpid(pid, &status, 0);
-+	}
-+	free(insns);
++	return false;
 +}
++
+ /*
+  * Compare scalar register IDs for state equivalence.
+  *
+@@ -632,8 +670,8 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+ 		} else if (rold->range > rcur->range) {
+ 			return false;
+ 		}
+-		/* id relations must be preserved */
+-		if (!check_ids(rold->id, rcur->id, idmap))
++		/* id relations and intra-class displacement must be preserved */
++		if (!check_pkt_ptr_ids(rold, rcur, idmap))
+ 			return false;
+ 		/* new val must satisfy old val knowledge */
+ 		return range_within(rold, rcur) &&
 -- 
 2.53.0
 
