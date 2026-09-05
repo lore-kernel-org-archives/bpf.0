@@ -1,155 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2048F1A680E
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 22:33:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87CFE3B19B2
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 22:39:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788647630; cv=none; b=Gad1EtW26NmrTWdJKwR5Rw+tg1Jh6RnWYhjbPkGfimqq7U0Ly5p0T8DDUrulUCIFHDVCyT79kZHixEMeKGmDLmKH1/U3a4CDSjmuuDSfUggbvpUQlM2VaPwgoVhO1n9+zxwOB/lsrPwUkzbksCcECOpCMH7itK7gIXHvVngK8JM=
+	t=1788647978; cv=none; b=WUomO6yR6n+1Js0MlCvf3QLmtfMSLsRuUThENywjPA4aoLoYBWOzYUNM+J2r4uyivFKRVfohPl7UYYg+pUw3nbp21en/gcaFOtBx/MsvUrJ5qnu09aH4AW2q9ogk+efjvtFYrOh1yfA1UEHfHJ/BRm5peNTvx9KnnccAckR5SnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788647630; c=relaxed/simple;
-	bh=3kaH3+BbBDo9qOmeFzDwz91mKumU9Lr2oLJBdg3UX3A=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hOQ46tvIJlOBvRIAcxssx07FpxdojMC7wjvphiPJ8COaK2CMaza+bEzEwZ1sV6WySJdGTZ2bb0+rKsNDrMy+hGRy0ZeBlQLEsZTLTpvHloKFYluSuy58amwKhcBKxgI30wn5fs/LI2P9LEqPtx9u8M9JM9ZwMFizsBiq/KMovIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=flWiIM6+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788647978; c=relaxed/simple;
+	bh=0H8U5D/PR2nl8fIgoNBuIh3GIAaZtHX2NdF5dpTl6X8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=scNFGiQx1Zh1LNRIvB2b/g8sXmUJqS0nUE+7ohRukcd2xGZssm2A42u5NSG8LS3WD6U/TaN67jg3G2Ouv8G5RkwGqmc/wzpv+utvP+UqCshSYzJrXFSpJTPx6w2RAzKdXxnexOHJZoAH8SFCrqXeNDbGtNIbvh+8W8/ipaXDwnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W18bgdbM; arc=none smtp.client-ip=209.85.210.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="flWiIM6+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85D551F00A3A;
-	Sat,  5 Sep 2026 22:33:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788647628;
-	bh=Nu7vhQOSXgdFltMr2dnSieTUo9klsYk/p0hJIqSiCug=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=flWiIM6+VrBZf2gQtu13ZqD5HNr1qF3kr/RTEkVdHrs69utwyb7CTat7l0pi9I9Uf
-	 aSsRQuD0kDH9+X497UC5hSaPBqk2FJInuJxb4fjQTuM7LcIvbQ5Ma3EIlzcdM9QBZ3
-	 Fq4TEpEBu9BOnPpqPxqYUf0/brZ6sCG7k5mlZgj7UIwEqOr5+iPN8DDZV2knJ79gDe
-	 svicNovziFVpztzfYcp+PWlZAC3X11YZwC2l9JeO+QJzlfSGyCCIUyqpI4aDtPSd83
-	 20EOIVMJyBDJxvkPbb31WlQyb5gXzzdYNHuE8c/bdDHvYPney6/wYPlAJ8fotxdSdn
-	 eqw45DhLImGbA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v1 22/22] bpf: Check helper and kfunc arguments
- in one path
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Amery Hung" <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260905220117.922028-23-ameryhung@gmail.com>
-References: <20260905220117.922028-1-ameryhung@gmail.com>
- <20260905220117.922028-23-ameryhung@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 05 Sep 2026 22:33:47 +0000
-Message-Id: <20260905223348.85D551F00A3A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W18bgdbM"
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7f4e596e393so2592829a34.1
+        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 15:39:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788647975; x=1789252775; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=X/f+z2nmCi/0KNOuKpqOW6wHU++XKerP0D0hide5es4=;
+        b=W18bgdbMTewPOy7lR231htehgZ1beNc4hQh5KVbftdlQlwRFagHApZPXGlRiHrJj0o
+         jvFU48gF8P8H4hQlt+5sFi0uLtpZgR9wLwe4DX12JcUXCAQWPokYg9cH2J+iHzTJggrH
+         /b6YRcPYSYE4C1R4WMma80vWSy257v50y+aoPxiFTKlLMGWGezg07mfuW05jIYdcRvJn
+         7l6uzulCLfFT9Pt5apc9sIxqmovVTTbgCtaybJMwKgBHa+65C6xHS2pfi3dRCdJDqMxf
+         FpQqT+o2+TAAGv3WhiveFlbT7++RilcMWrpyyO4XazUENiRa2QCPpbJ8gkniA/rUwLMH
+         +ziA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788647975; x=1789252775;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=X/f+z2nmCi/0KNOuKpqOW6wHU++XKerP0D0hide5es4=;
+        b=CvRI4L0qZz9XKG1L0DB9tF6y5IgyNCi1FEXTIFkbfOOL9eopCWivlWc3WKGPe+JHSx
+         xWOAb1ju9+Yj3V/WFOFW/rDcZt2NFbeFbqUuF7oRd8PMKCnSag2W2j8jFgm3UaNxbazM
+         YaGYSbMGt2Lrs1SdpmXso5SwXlT3+3j9VuBU7LvfhTcVbPKaTczN9rxN8zwVes7A/nNz
+         CUebwjZCXHRUf8EZAbVaXVVqt7iP2XYf/JWzlcFwbW0O2wVjFJZ1B81lCwPQj9Wzkxwy
+         scb3Nqtp0HSxKKGyJxYlN1f6xtcqar1JNSFHsm0WTF8pybYtjUzwKVFS8GqLzg3FcPX3
+         hm4w==
+X-Forwarded-Encrypted: i=1; AKwUvBzhcK8YTUkcWeqxf4ZdwixhLrHyP9nlCCih2puLp5G2QWzYqt+x6VIJ+wxl3UdOc0GWGWo=@vger.kernel.org
+X-Gm-Message-State: AFuF++kBEy2ayaT67Tw5k3WdR0D91K8K5M+V17BtU6CpWQCtbQ1PxQb6
+	ecRbv2xJhvah5hkdp9YltqoJC2G98JkjWOdGpH3jl+XJUZkJ7DDis5+D
+X-Gm-Gg: AYBFou1MApZs27ub9pwOcrYOYgbm43aWZ4JUeuJoA7yVoibl4Ue0m2c2pM78OyDLjxQ
+	FT1Htj6Ri2CuLbnuFXSPDvtCuMCDuUZqbWwBRF5ZX7BLNWQUOsCzEH6qNv5qtgFKrZ8X/3jJfrh
+	+lx2Kx4cl8tAs00TkKs7S74ToCuipTEAQ/EHo5auSaw28rPHN1lBpnRbUb3EQUGf5EG0DOSypUN
+	TFsAghJhRtIZcgsmz2LCUQpL7cocQEgbHrXffCP+ZlPJYk8Dv/VDOCd4o3KgSW/a1l/jfxHNMVC
+	EJRlNWO0x+1cKgvt5/1oxuh4c2DY+cqnyKsA53w6GyiqMnkqWifo3JiKYuvM8/UI/zEmeureDLN
+	x+v+hUY4D2vfWIXr3kK2EBZFQufrd0F/nDA33fiBKfduF6Ve7ead5lN4t/HJADLcbr03cw41Wiu
+	yBZhuz84eSUXSlHYHMq4xV6jz6XEiEOSj9M2POKLUptyhmje/Pf+/FFX+g1MN5twSlYcJg1Dtzo
+	vbwxr+ahvzmXqbHXwcOGe0zPOswz1aqfTXPrJtVMLgdXGng7CkAxmI=
+X-Received: by 2002:a05:6820:c0d4:10b0:6b7:83c5:fe03 with SMTP id 006d021491bc7-6b783c60410mr5495274eaf.68.1788647975023;
+        Sat, 05 Sep 2026 15:39:35 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:14::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6b6dc6aca49sm6920103eaf.6.2026.09.05.15.39.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 05 Sep 2026 15:39:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 05 Sep 2026 15:39:32 -0700
+Message-Id: <DL7QSF4BZB1E.3U5O9EBHDN2LE@gmail.com>
+Cc: "Nicholas Carlini" <npc@anthropic.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, <kkd@meta.com>, <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Verify global subprogs in each
+ sleepability context
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc
+References: <20260905051224.2325381-1-memxor@gmail.com>
+ <20260905051224.2325381-2-memxor@gmail.com>
+In-Reply-To: <20260905051224.2325381-2-memxor@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Critical] Out-of-bounds reads on `meta->fn->arg_type` and `meta->fn->arg=
-_btf_id` for kfuncs with more than 5 arguments, allowing bypass of eBPF ver=
-ifier safety checks.
---
+On Fri Sep 4, 2026 at 10:12 PM PDT, Kumar Kartikeya Dwivedi wrote:
+>
+> Record whether each global subprogram is called with either in_sleepable
+> value and verify it once for every observed value.
+...
 
-commit a1895fafaa5219b7b972d20a932c550f7862cec8
-Author: Amery Hung <ameryhung@gmail.com>
+> Since a global subprogram may now be verified twice, accumulate both pass=
+es
+> in subprog_info[].insns_total.
 
-bpf: Check helper and kfunc arguments in one path
+Only after reading the patch carefully I realized that above is saying 'may=
+'.
+Just by reading commit log it sounds that all global progs are now verified=
+ twice.
 
-This commit unifies the argument checking logic for BPF helpers and kfuncs
-by introducing check_func_args(). It moves kfunc-specific argument handling
-into the shared check_func_arg() path to avoid duplicating the argument
-iteration and switch logic.
+Please reword to make it clear that glob progs are verifier in the specific
+context when it's actually reachable.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 6c5d7e544f844..54656fb31bbe7 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-[ ... ]
-> @@ -8808,6 +8840,7 @@ static int check_func_arg(struct bpf_verifier_env *=
-env, u32 arg,
->  			  struct bpf_call_arg_meta *meta,
->  			  int insn_idx)
->  {
-> +	const struct btf_param *btf_arg =3D meta->btf ? &btf_params(meta->func_=
-proto)[arg] : NULL;
->  	const struct bpf_func_proto *fn =3D meta->fn;
->  	struct bpf_func_state *caller =3D cur_func(env);
->  	struct bpf_reg_state *regs =3D cur_regs(env);
->  	argno_t argno =3D argno_from_arg(arg + 1);
->  	struct bpf_reg_state *reg =3D get_func_arg_reg(caller, regs, arg);
->  	enum bpf_arg_type arg_type =3D fn->arg_type[arg];
-
-[Severity: Critical]
-Can this read out of bounds when processing kfuncs with more than 5
-arguments? The fn->arg_type array is sized for MAX_BPF_FUNC_ARGS (5), but
-kfuncs can have more arguments. For stack arguments (arg >=3D 5), this appe=
-ars
-to read past the end of the array.
-
-[ ... ]
-> @@ -8935,6 +8980,7 @@ static int check_func_arg(struct bpf_verifier_env *=
-env, u32 arg,
->  	case ARG_PTR_TO_BTF_ID_SOCK_COMMON:
->  	{
->  		const u32 *arg_btf_id =3D fn->arg_btf_id[arg];
-
-[Severity: Critical]
-Does this also read out of bounds for kfuncs with more than 5 arguments?
-Similar to arg_type, the arg_btf_id array in struct bpf_func_proto is limit=
-ed
-to MAX_BPF_FUNC_ARGS. If a garbage pointer is dereferenced here, could it
-crash the verifier?
-
-[ ... ]
-> @@ -9056,6 +9389,37 @@ static int check_func_arg(struct bpf_verifier_env =
-*env, u32 arg,
->  	return err;
->  }
 > =20
-> +static int check_func_args(struct bpf_verifier_env *env, struct bpf_call=
-_arg_meta *meta,
-> +			   int insn_idx)
-> +{
-> +	struct bpf_func_state *caller =3D cur_func(env);
-> +	const struct btf_param *args =3D NULL;
-> +	u32 arg, nargs =3D MAX_BPF_FUNC_REG_ARGS;
-> +	int err;
-> +
-> +	if (meta->btf) {
-> +		args =3D btf_params(meta->func_proto);
-> +		nargs =3D btf_type_vlen(meta->func_proto);
-> +	}
-> +
-> +	if (nargs > MAX_BPF_FUNC_REG_ARGS) {
-> +		err =3D check_outgoing_stack_args(env, caller, nargs, meta->func_name,
-> +						meta->btf, args);
-> +		if (err)
-> +			return err;
-> +	}
-> +
-> +	for (arg =3D 0; arg < nargs; arg++) {
-> +		if (meta->fn->arg_type[arg] =3D=3D ARG_UNUSED)
-> +			break;
+> -/* Check if we're in a sleepable context. */
+> +/*
+> + * This predicate is the inverse of in_rcu_cs(): non-sleepable programs =
+and
+> + * every condition that prevents sleeping also provide RCU protection. G=
+lobal
+> + * subprog verification relies on this equivalence to represent the call=
+er's
+> + * execution context using only the in_sleepable bit.
+> + */
+>  static inline bool in_sleepable_context(struct bpf_verifier_env *env)
+>  {
+>  	return !env->cur_state->active_rcu_locks &&
 
-[Severity: Critical]
-Could this loop early-exit and bypass verifier checks for stack arguments?
+Since it is !in_rcu_cs() let's make it so in the code.
 
-Since nargs can exceed 5 for kfuncs, the out-of-bounds read on
-meta->fn->arg_type[arg] might evaluate to ARG_UNUSED (0). If this happens,
-the loop breaks and skips the safety checks for all remaining stack
-arguments, potentially allowing unverified memory access.
-
-> +		err =3D check_func_arg(env, arg, meta, insn_idx);
-> +		if (err)
-> +			return err;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260905220117.9220=
-28-1-ameryhung@gmail.com?part=3D22
+pw-bot: cr
