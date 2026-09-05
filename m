@@ -1,125 +1,365 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7681D233956;
-	Sat,  5 Sep 2026 07:03:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 208423EF65B;
+	Sat,  5 Sep 2026 07:05:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.221
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788591823; cv=none; b=of51M+v5J9tSWhLt0LmPaJvCnR/nB6QRrfAXyhkzoHADef8shG8bohrySDBfEtlfx3R/I8/q2tZRSNQa/p/KJLYE8MfoqfngonANrE2ixvrs2iyICHC07aNkPEd9dfRo0JcUwx/pz94KUUNpZf6XwqeoJeDl32iLH1ADGyxK1ZE=
+	t=1788591949; cv=none; b=klC6Dyu0yVUvHp4Cq4r4yGMEeVLY+/ky7uCJnzsmaU4Upc/7IZuUkYBWXaVEzM5+VhnbXQov+itK7I1FWk/4lt26vS8NQHSvhRe5nJfSmaXmAGOhK/1UyhAFzty6EAjnhtzqIGlzQq1RQa8/X4li3E4F7l/QYjSqebpTN/oPMdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788591823; c=relaxed/simple;
-	bh=SeBWSOb1qf9Bg0eA4nbAYm+OQzTz1jL6stZZQm4Cyqo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DmAl9KLPAXj5RfhzKdXPPD8sgVhKlhUO4lr412iy27vHE4ZBc3NVbpF9/9wlEVAS1PKMTFFvhUpEYd1vd81wMV2+e4wGuwL+uUiWMPUnc3gIBMKeqToxYN+cSOjS83Lr9sF9M6FeQzaRE1nPLCx0F9pc3oR7AgGkt7dGCMJKVBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LedNeuKF; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788591949; c=relaxed/simple;
+	bh=k0I8rn8o0DL2nh2+hT6O42cxuqwP+1q/3AxR8XjKGik=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=hHlehkhW49dUoTgmFi1eutJlBeZty0mbLBKufw4btCVO6+NDIe80vc3byvGdtYvsFpIYcG4NvHqWIkbhdEwZpTGXLEsJuXEBdpInSMH200WMkCVIe1OgIAQFQvlDyK8B/RdcO9/xu2TYARvI+zw5CChNK98yXLGupGTs7ait8Sg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=ryT8JIyF; arc=none smtp.client-ip=113.46.200.221
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LedNeuKF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A1C91F00A3D;
-	Sat,  5 Sep 2026 07:03:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788591819;
-	bh=kCLjtnqzGTdq0E5NzkKTnwmOkR6pFXvKGu8NsTngeNU=;
-	h=From:To:Cc:Subject:Date;
-	b=LedNeuKFQidD5DIB4244v393FoF4+1GyDWz7cS14ckSEIKWHC7vNph3hEolfaa9I5
-	 aCs2BAardKnz/CRU3uUur+ahHW0eDhp6ZMvq58LUhVfnelZ31HeCa4f0PLhn92AZDz
-	 ZwzCZl7cjJ300c050lTjyZ0Vcd9HpjPfEYmUNPsFxoz7D6OoC4wJVBlJARSWAOlWdI
-	 8tHyibjickpsdasgxHYvPca2kqrSI2UzOl6Qn09Ym86YyjWAjBQZkemQ3fiYjK4l/3
-	 0h+RwqA0S4MzMrkyQv6DwZhUGOIGq3WIws0oUVtdTstdFNOdgnaZLKpfvcOyGXJuFh
-	 g92JNeqjJReeQ==
-From: Geliang Tang <geliang@kernel.org>
-To: John Fastabend <john.fastabend@gmail.com>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH v2] bpf, sockmap: Fix self-redirect copied_seq double-counting
-Date: Sat,  5 Sep 2026 15:03:03 +0800
-Message-ID: <1d2370f4c81f10834b8dd77524924575c629a464.1788591198.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="ryT8JIyF"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=Q6dEH3g2T1S8eynI8/V88r65/Z7Y/FIPLqfHq+ZF0Fo=;
+	b=ryT8JIyFIKuaD+ztJXNQHiHq8cvmPQZGfbk7emTFJvEBpUr30jO5i8aZzXfMg67i1P26J7jVg
+	qRolOZPPOoqaVmyf/SWAiEUQtJTTJa+PonzazfuF/b4zj1avaVVurm9l/HvrNl1quL8yVFpQ1bf
+	wzAejj2wvXauKEeDvXfa//8=
+Received: from mail.maildlp.com (unknown [172.19.163.104])
+	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4hcPG36cd8zRhR0;
+	Sat,  5 Sep 2026 14:54:35 +0800 (CST)
+Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
+	by mail.maildlp.com (Postfix) with ESMTPS id 896644058F;
+	Sat,  5 Sep 2026 15:05:25 +0800 (CST)
+Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
+ (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Sat, 5 Sep
+ 2026 15:05:24 +0800
+Message-ID: <482278aa-67e3-41f0-9b12-528efe6e1940@huawei.com>
+Date: Sat, 5 Sep 2026 15:05:24 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 1/2] bpf, riscv: Add BPF stack arguments
+ support for RV64 JIT
+Content-Language: en-US
+From: Pu Lehui <pulehui@huawei.com>
+To: Feng Jiang <jiangfeng@kylinos.cn>
+CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+	<eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai
+ Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+	<yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
+	<emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, Luke Nelson
+	<luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
+	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, Puranjay Mohan
+	<puranjay@kernel.org>, Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt
+	<palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti
+	<alex@ghiti.fr>, Shuah Khan <shuah@kernel.org>, Nathan Chancellor
+	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill
+ Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+	<bpf@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<llvm@lists.linux.dev>
+References: <20260814-bpf-riscv-stack-args-v3-0-2160de56fea3@kylinos.cn>
+ <20260814-bpf-riscv-stack-args-v3-1-2160de56fea3@kylinos.cn>
+ <729d2110-20b2-4e63-af44-99ca8cebdbfd@huawei.com>
+ <1a0c0b5a-fc09-431f-b3a5-56593a6e76be@huawei.com>
+In-Reply-To: <1a0c0b5a-fc09-431f-b3a5-56593a6e76be@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemf100007.china.huawei.com (7.202.181.221)
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
 
-When a BPF stream_verdict program redirects an skb back to the same
-socket (self-redirect with BPF_F_INGRESS), sk_psock_verdict_apply()
-calls tcp_eat_skb() which advances tcp_sk->copied_seq. However, the
-skb is then delivered to the socket's psock ingress queue and later
-read by tcp_bpf_recvmsg_parser(), which also advances copied_seq via
-the copied_from_self accounting path. This double-counting causes
-copied_seq to advance by 2x the actual data length, triggering:
+On 2026/8/18 11:48, Pu Lehui wrote:
+> 
+> On 2026/8/17 9:52, Pu Lehui wrote:
+>> Hi Feng Jiang,
+>>
+>> On 2026/8/14 9:29, Feng Jiang wrote:
+>>> Add bpf_jit_supports_stack_args() for the RV64 JIT so BPF subprograms
+>>> and kfuncs can receive more than 5 arguments via the stack
+>>> (BPF_REG_PARAMS / r11).
+>>>
+>>> For BPF-to-BPF calls the caller writes outgoing arguments at the
+>>> bottom of its frame (SP-relative). The callee reads them with
+>>> FP-relative loads. Its FP is set to the caller SP in the prologue,
+>>> so the offsets match.
+>>>
+>>> The RISC-V ABI puts arguments 6-8 in A5-A7 and arguments 9+ at
+>>> SP+0. Before each kfunc call, load arguments 6-8 from the outgoing
+>>> area into A5-A7 and copy any remaining arguments down so argument 9
+>>> lands at SP+0.
+>>
+>> bpf2bpf calls pass extra arguments entirely on the stack, whereas 
+>> kfuncs pass them via a mix of registers and the stack. This 
+>> inconsistency not only wastes stack slots in kfunc scenarios but is 
+>> also error-prone and easy to overlook during maintenance.
+>>
+>> To make argument passing more straightforward and consistent, I think 
+>> we can align it with the standard riscv calling convention: use a0-a7 
+>> for the first 8 arguments and pass any remaining arguments on the stack.
+>>
+>> To support this, the current bpf-to-rv register mapping needs to be 
+>> revised:
+>>
+>> T0 -> BPF_REG_0 (ftrace use T0 too, but it might not be an issue / 
+>> needs verification)
+>> T6 -> TCC
+>> T7 -> BPF_REG_AX (rarely used, so let's move to t7)
+>>
+>> Note that this remapping affects multiple places and requires careful 
+>> auditing.
+> 
+> Discussed offline with Feng Jiang; I will take over refactoring this 
+> patch and post an updated version once it's ready.
 
-  TCP recvmsg seq # bug 2: copied BF2E806, seq BF2E7FD, \
-			   rcvnxt BF2E806, fl 0
-  WARNING: net/ipv4/tcp.c:2745 at tcp_recvmsg_locked+0x72b/0x2640
-  Call Trace:
-   tcp_recvmsg+0x10a/0x500
-   sock_recvmsg+0x168/0x1d0
-   __sys_recvfrom+0x19a/0x2a0
-   __x64_sys_recvfrom+0xe4/0x1f0
-   do_syscall_64+0xf7/0x530
-   entry_SYSCALL_64_after_hwframe+0x77/0x7f
+Hi Jiang,
 
-  cleanup rbuf bug: copied BF2E806 seq BF2E806 rcvnxt BF2E806
-  WARNING: net/ipv4/tcp.c:1609 at tcp_cleanup_rbuf+0xf2/0x1c0
-  Call Trace:
-   tcp_recvmsg_locked+0x8d1/0x2640
-   tcp_recvmsg+0x10a/0x500
-   sock_recvmsg+0x168/0x1d0
-   __sys_recvfrom+0x19a/0x2a0
-   __x64_sys_recvfrom+0xe4/0x1f0
-   do_syscall_64+0xf7/0x530
-   entry_SYSCALL_64_after_hwframe+0x77/0x7f
+Sorry for the late.
 
-Fix this by converting self-redirect verdict to __SK_PASS at the
-beginning of sk_psock_verdict_apply(). This bypasses the
-__SK_REDIRECT case entirely (which calls sk_psock_eat_skb), letting
-the __SK_PASS path queue the skb to the psock ingress queue. The
-data is then read via tcp_bpf_recvmsg_parser(), which advances
-copied_seq exactly once through copied_from_self. Cross-socket
-redirects continue through __SK_REDIRECT with sk_psock_eat_skb()
-unchanged.
+I just send a new series, hope you have time to review and test.
 
-Fixes: e5c6de5fa025 ("bpf, sockmap: Incorrectly handling copied_seq")
-Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
-Suggested-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
----
-v2:
- - fixup the verdict as Jakub and Jiayuan suggested.
+https://lore.kernel.org/bpf/20260905070409.4141522-1-pulehui@huaweicloud.com/
 
-v1:
- - https://patchwork.kernel.org/project/netdevbpf/patch/b840c35fdfdf36e9fddedfa645b12699bc51aa34.1787968065.git.tanggeliang@kylinos.cn/
----
- net/core/skmsg.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 2521b643fa05..df385a5a961e 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -1000,6 +1000,10 @@ static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
- 	int err = 0;
- 	u32 len, off;
- 
-+	if (verdict == __SK_REDIRECT && skb_bpf_ingress(skb) &&
-+	    skb_bpf_redirect_fetch(skb) == psock->sk)
-+		verdict = __SK_PASS;
-+
- 	switch (verdict) {
- 	case __SK_PASS:
- 		err = -EIO;
--- 
-2.53.0
-
+> 
+>>
+>>>
+>>> A5 (BPF_REG_0), A6 (TCC) and A7 are safe to clobber here: R0 is not
+>>> live before a call, TCC is backed up on the stack, and A7 is unused
+>>> by the JIT.
+>>
+>>
+>>
+>>>
+>>> Limit the existing kfunc sign-extension loop to MAX_BPF_FUNC_REG_ARGS
+>>> iterations; otherwise idx >= 5 resolves to S1-S5 (BPF_R6-FP) and
+>>> corrupts callee-saved registers.
+>>>
+>>> Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+>>> ---
+>>>   arch/riscv/net/bpf_jit.h        |  1 +
+>>>   arch/riscv/net/bpf_jit_comp64.c | 79 
+>>> +++++++++++++++++++++++++++++++++++++++--
+>>>   arch/riscv/net/bpf_jit_core.c   |  4 +++
+>>>   3 files changed, 81 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
+>>> index 419b9d795f2a..9eb4e149505d 100644
+>>> --- a/arch/riscv/net/bpf_jit.h
+>>> +++ b/arch/riscv/net/bpf_jit.h
+>>> @@ -82,6 +82,7 @@ struct rv_jit_context {
+>>>       unsigned long flags;
+>>>       int stack_size;
+>>>       int tcc_offset;
+>>> +    u16 stack_arg_size;
+>>>       u64 arena_vm_start;
+>>>       u64 user_vm_start;
+>>>   };
+>>> diff --git a/arch/riscv/net/bpf_jit_comp64.c 
+>>> b/arch/riscv/net/bpf_jit_comp64.c
+>>> index 6b9972b07c1b..58cb3e5ff6b4 100644
+>>> --- a/arch/riscv/net/bpf_jit_comp64.c
+>>> +++ b/arch/riscv/net/bpf_jit_comp64.c
+>>> @@ -1815,18 +1815,43 @@ int bpf_jit_emit_insn(const struct bpf_insn 
+>>> *insn, struct rv_jit_context *ctx,
+>>>           if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
+>>>               const struct btf_func_model *fm;
+>>> -            int idx;
+>>> +            int idx, nargs;
+>>>               fm = bpf_jit_find_kfunc_model(ctx->prog, insn);
+>>>               if (!fm)
+>>>                   return -EINVAL;
+>>> -            for (idx = 0; idx < fm->nr_args; idx++) {
+>>> +            nargs = min_t(int, fm->nr_args, MAX_BPF_FUNC_REG_ARGS);
+>>> +            for (idx = 0; idx < nargs; idx++) {
+>>>                   u8 reg = bpf_to_rv_reg(BPF_REG_1 + idx, ctx);
+>>>                   if (fm->arg_size[idx] == sizeof(int))
+>>>                       emit_sextw(reg, reg, ctx);
+>>>               }
+>>> +
+>>> +            /* BPF stack args -> RISC-V ABI: args 6-8 in A5-A7, 9+ 
+>>> at SP+0 */
+>>> +            if (fm->nr_args > MAX_BPF_FUNC_REG_ARGS) {
+>>> +                int n_stack = fm->nr_args - MAX_BPF_FUNC_REG_ARGS;
+>>> +                int n_reg = min_t(int, n_stack,
+>>> +                          RV_MAX_REG_ARGS - MAX_BPF_FUNC_REG_ARGS);
+>>> +
+>>> +                for (idx = 0; idx < n_reg; idx++) {
+>>> +                    int sz = fm->arg_size[MAX_BPF_FUNC_REG_ARGS + idx];
+>>> +
+>>> +                    emit_ld(RV_REG_A5 + idx, idx * 8, RV_REG_SP, ctx);
+>>> +                    if (sz == sizeof(int))
+>>> +                        emit_sextw(RV_REG_A5 + idx, RV_REG_A5 + idx, 
+>>> ctx);
+>>> +                }
+>>> +
+>>> +                for (idx = n_reg; idx < n_stack; idx++) {
+>>> +                    int sz = fm->arg_size[MAX_BPF_FUNC_REG_ARGS + idx];
+>>> +
+>>> +                    emit_ld(RV_REG_T1, idx * 8, RV_REG_SP, ctx);
+>>> +                    if (sz == sizeof(int))
+>>> +                        emit_sextw(RV_REG_T1, RV_REG_T1, ctx);
+>>> +                    emit_sd(RV_REG_SP, (idx - n_reg) * 8, RV_REG_T1, 
+>>> ctx);
+>>> +                }
+>>> +            }
+>>
+>> looks a bit complicated, how about the following after redefine regmap:
+>>
+>> ```
+>> for (idx = 0; idx < fm->nr_args; idx++) {
+>>    if (idx < RV_MAX_REG_ARGS) {
+>>      u8 reg = RV_REG_A0 + idx;
+>>
+>>      sign_extend(reg, reg, xxx)
+>>    } else {
+>>      load from stack to T1
+>>      sign_extend
+>>      retore from T1 to orig stack slot
+>>    }
+>> }
+>> ```
+>>
+>>>           }
+>>>           /* restore TCC to RV_REG_TCC before bpf2bpf call */
+>>> @@ -1891,6 +1916,21 @@ int bpf_jit_emit_insn(const struct bpf_insn 
+>>> *insn, struct rv_jit_context *ctx,
+>>>       case BPF_LDX | BPF_MEM | BPF_H:
+>>>       case BPF_LDX | BPF_MEM | BPF_W:
+>>>       case BPF_LDX | BPF_MEM | BPF_DW:
+>>> +        if (insn->src_reg == BPF_REG_PARAMS) {
+>>
+>> pls use is_stack_arg_ldx/st/stx instead.
+>>
+>>> +            int idx = off / 8 - 1;
+>>> +
+>>> +            if (is_12b_int(idx * 8)) {
+>>> +                emit_ldx_insn(rd, idx * 8, RV_REG_FP, 
+>>> BPF_SIZE(code), false, ctx);
+>>> +            } else {
+>>> +                emit_imm(RV_REG_T1, idx * 8, ctx);
+>>> +                emit_add(RV_REG_T1, RV_REG_T1, RV_REG_FP, ctx);
+>>> +                emit_ldx_insn(rd, 0, RV_REG_T1, BPF_SIZE(code), 
+>>> false, ctx);
+>>> +            }
+>>> +            if (BPF_SIZE(code) != BPF_DW && insn_is_zext(&insn[1]))
+>>> +                return 1;
+>>> +            break;
+>>
+>> This piece of code was refactored not long ago. Let's see if we can 
+>> merge it into the logic below or fold it into emit_ldx—let's give it a 
+>> try.
+>>
+>>> +        }
+>>> +        fallthrough;
+>>>       case BPF_LDX | BPF_PROBE_MEM | BPF_B:
+>>>       case BPF_LDX | BPF_PROBE_MEM | BPF_H:
+>>>       case BPF_LDX | BPF_PROBE_MEM | BPF_W:
+>>> @@ -1938,6 +1978,20 @@ int bpf_jit_emit_insn(const struct bpf_insn 
+>>> *insn, struct rv_jit_context *ctx,
+>>>       case BPF_ST | BPF_MEM | BPF_H:
+>>>       case BPF_ST | BPF_MEM | BPF_W:
+>>>       case BPF_ST | BPF_MEM | BPF_DW:
+>>> +        if (insn->dst_reg == BPF_REG_PARAMS) {
+>>> +            int idx = -off / 8 - 1;
+>>> +
+>>> +            emit_imm(RV_REG_T1, imm, ctx);
+>>> +            if (is_12b_int(idx * 8)) {
+>>> +                emit_stx_insn(RV_REG_SP, idx * 8, RV_REG_T1, 
+>>> BPF_SIZE(code), ctx);
+>>> +            } else {
+>>> +                emit_imm(RV_REG_T2, idx * 8, ctx);
+>>> +                emit_add(RV_REG_T2, RV_REG_SP, RV_REG_T2, ctx);
+>>> +                emit_stx_insn(RV_REG_T2, 0, RV_REG_T1, 
+>>> BPF_SIZE(code), ctx);
+>>> +            }
+>>> +            break;
+>>> +        }
+>>> +        fallthrough;
+>>
+>> ditto
+>>
+>>>       /* ST | PROBE_MEM32: *(size *)(dst + RV_REG_ARENA + off) = imm */
+>>>       case BPF_ST | BPF_PROBE_MEM32 | BPF_B:
+>>>       case BPF_ST | BPF_PROBE_MEM32 | BPF_H:
+>>> @@ -1960,6 +2014,19 @@ int bpf_jit_emit_insn(const struct bpf_insn 
+>>> *insn, struct rv_jit_context *ctx,
+>>>       case BPF_STX | BPF_MEM | BPF_H:
+>>>       case BPF_STX | BPF_MEM | BPF_W:
+>>>       case BPF_STX | BPF_MEM | BPF_DW:
+>>> +        if (insn->dst_reg == BPF_REG_PARAMS) {
+>>> +            int idx = -off / 8 - 1;
+>>> +
+>>> +            if (is_12b_int(idx * 8)) {
+>>> +                emit_stx_insn(RV_REG_SP, idx * 8, rs, 
+>>> BPF_SIZE(code), ctx);
+>>> +            } else {
+>>> +                emit_imm(RV_REG_T1, idx * 8, ctx);
+>>> +                emit_add(RV_REG_T1, RV_REG_SP, RV_REG_T1, ctx);
+>>> +                emit_stx_insn(RV_REG_T1, 0, rs, BPF_SIZE(code), ctx);
+>>> +            }
+>>> +            break;
+>>> +        }
+>>> +        fallthrough;
+>>
+>> ditto
+>>
+>>>       /* STX | PROBE_MEM32: *(size *)(dst + RV_REG_ARENA + off) = src */
+>>>       case BPF_STX | BPF_PROBE_MEM32 | BPF_B:
+>>>       case BPF_STX | BPF_PROBE_MEM32 | BPF_H:
+>>> @@ -2036,6 +2103,7 @@ void bpf_jit_build_prologue(struct 
+>>> rv_jit_context *ctx, bool is_subprog)
+>>>       stack_adjust = round_up(stack_adjust, STACK_ALIGN);
+>>>       stack_adjust += bpf_stack_adjust;
+>>> +    stack_adjust += ctx->stack_arg_size;
+>>>       store_offset = stack_adjust - 8;
+>>> @@ -2093,7 +2161,7 @@ void bpf_jit_build_prologue(struct 
+>>> rv_jit_context *ctx, bool is_subprog)
+>>>       emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
+>>>       if (bpf_stack_adjust)
+>>> -        emit_addi(RV_REG_S5, RV_REG_SP, bpf_stack_adjust, ctx);
+>>> +        emit_addi(RV_REG_S5, RV_REG_SP, ctx->stack_arg_size + 
+>>> bpf_stack_adjust, ctx);
+>>>       ctx->stack_size = stack_adjust;
+>>> @@ -2171,3 +2239,8 @@ bool bpf_jit_supports_timed_may_goto(void)
+>>>   {
+>>>       return true;
+>>>   }
+>>> +
+>>> +bool bpf_jit_supports_stack_args(void)
+>>> +{
+>>> +    return true;
+>>> +}
+>>> diff --git a/arch/riscv/net/bpf_jit_core.c 
+>>> b/arch/riscv/net/bpf_jit_core.c
+>>> index cbfcd287ea16..844a0f3e0fa9 100644
+>>> --- a/arch/riscv/net/bpf_jit_core.c
+>>> +++ b/arch/riscv/net/bpf_jit_core.c
+>>> @@ -72,6 +72,10 @@ struct bpf_prog *bpf_int_jit_compile(struct 
+>>> bpf_verifier_env *env, struct bpf_pr
+>>>       ctx->arena_vm_start = 
+>>> bpf_arena_get_kern_vm_start(prog->aux->arena);
+>>>       ctx->user_vm_start = 
+>>> bpf_arena_get_user_vm_start(prog->aux->arena);
+>>>       ctx->prog = prog;
+>>> +
+>>> +    ctx->stack_arg_size = round_up(bpf_out_stack_arg_cnt(env, prog) *
+>>> +                       sizeof(u64), STACK_ALIGN);
+>>
+>> It's not u64—since every stack slot is aligned to the pointer size 
+>> (sizeof(long)), I think using 8 is fine.
+>>
+>>> +
+>>>       ctx->offset = kvzalloc_objs(int, prog->len);
+>>>       if (!ctx->offset)
+>>>           goto out_offset;
+>>>
+>>
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-riscv
