@@ -1,115 +1,115 @@
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26EE7401A2E
-	for <bpf@vger.kernel.org>; Fri,  4 Sep 2026 23:58:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A76FC70836
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 00:06:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788566320; cv=none; b=SoZRZPcaOk/kXOaXzEqFWKGuAbZoFPx4SHYpsKp8HkAXTiAxfGXbC9eMLmWlxOxukp7ZfcR4WExzeoi9NvTAWV2GWyu0ZJmV4ceFLRVMpbhxOXHQJzUgH0sNFeQ4dSj0CIkAvtyg8qdF+MErZuUli8bDPibdFQS+el7I2pgr1Kc=
+	t=1788566774; cv=none; b=RsJm+2RKsifS2fVmiyUbtjYBN9j9SjFodFppH5b9z4aEwQ1w7XQGEk9jg52BaJe6bInMEwrvMBR2JyscJOS6pl/DNBsVcPj0TKLkIyMfWpzb+bxep+gjLmjrT4+JMSxMDuGABT4CQfCQKqapgilSLDMk8fSaBYVMODKBAHsTNOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788566320; c=relaxed/simple;
-	bh=Qfj1VzO8VilQP3tSYCf68+ld4mpz1ee2xOxvMHOwFHw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=kShacAlBUd18oscsYtppsjgaigO02J1jJxWkNV7IcRSJJI+46li6XnzwSdB+TBtgoA1stZEqLq5CqpHaZgGnSHEl//aqPlUNDWWLlDQDb9KTy6SEBGOiJ2JGIhPbh9m/cjnyAG3ZXLNEW7O2jHCIXiLDiWyZj5mvmkUyUo8uskA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KJ9a2RzS; arc=none smtp.client-ip=209.85.161.45
+	s=arc-20240116; t=1788566774; c=relaxed/simple;
+	bh=L4VtiDAFeBMLz62i/IGbofQ1YKJ7TRAsEkVAxX6dtr4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=EmSQac5xrYn9iDpzt2FKY908FieZK4EkqTOQYTpsCl/qsnrpDOS9RHoczC7PgVFRZVFJGa0g9EVNf21zekCiFRiamLl7jS7qVhy21JG0loOzEfS4wjqHoCHZ83nFpR3kstn0yDr54uiXWLe5pOZvLxOaP4uVqQJ8IxZKalmt7KE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iCYUuJlR; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KJ9a2RzS"
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-6b1b766bf01so851852eaf.0
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 16:58:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iCYUuJlR"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2cc891373e0so17196495ad.2
+        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 17:06:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788566317; x=1789171117; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=ccOCDWIkCpy2i1PlX07Jf62/1wwrww9fzlMZ7/BsuZw=;
-        b=KJ9a2RzSkY+vLnloyQwwbhM57D8/WGm2+rN+G18PXyyJM3DaQ0PsY8OMKaqPJdfWax
-         TYq+AQNFmVtKchr0ImW05HcZ35B7PF3vuklupuru2hVbWhP5bcqyZ4bRbEm+uCxSz2kQ
-         qVSiQcckrDJgn+lYeZCwefHj9hfCaop/VrzIrjy9MzPUUel40R7I2FAZjdw5JRmno2Ll
-         IhkCRZKwec4kMgmfKFRwZmQv1Cn5DVyvnoF6u0wrm3zTqZ4gyEdayLpmEU7MvXQ8frsN
-         UkAZ3EkzurfSskMz/xsv8p1w9GbvzGYuUfSQlmJMS+RfF6P0BYoJZMFcXxYscmIoSM/s
-         uwew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788566317; x=1789171117;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1788566773; x=1789171573; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ccOCDWIkCpy2i1PlX07Jf62/1wwrww9fzlMZ7/BsuZw=;
-        b=cjefHnQdOg7GkGbJzjlhiNnYVVz4bRuqoor21Bo11iiWfHKke+vQiCjxCWfUQ67cgU
-         TlCzU5w+aGe4J5cl/mcuTRDcYduijBqzmgYGZ63QZWMiNDbtma7eEh0Vmv21WKjENXGC
-         uK7EvIC3zGQnJin4NT30m7y/vqIBLH8dvRR8Rz0kx4Au5kjcw+TBFk8JPvzrKQbp0dd2
-         gf1Q3eyBVD+W4dUpMUqG8BAMGzkxpG2rVt0Pytm6o3oUQB6xCYjsxJPF53qc05CikAJM
-         BHEMGg7x5thizGE5iM73RdlvDP2hfAppbHcGTH1A8/3oiUxVpNxvUiViLiBhLrG2gmI+
-         JH4A==
-X-Forwarded-Encrypted: i=1; AKwUvBx3xINl5bUT1dLycrgxXTRXN3EP5Rh4D9vEDXV0apEj5EKKIbmIau1ioBWLt83/tHAow2A=@vger.kernel.org
-X-Gm-Message-State: AFuF++k1mA20Qc51Uiw8Ipx1/zVG57YHV1dM9Ub/CXa79UgE4pwiPsIN
-	kBu2LutdcXOUIRySFgZ/uMXtGHRueNvDBHOgXu1i931Z1urTxluJ4Nz7
-X-Gm-Gg: AYBFou3IMzx2X73b637zShG3C3EorEGfJ/ip9dKk5ntAFCiKmL7ApHjYU9YotzshHhy
-	+nyEZnKn8SMnyrAXoFOAYIr8osd0Bgfv0nVie4tMeJgXs09xtevvMleVj7Wvl9Tbwcsszb1enJs
-	cHHlEJWO17elWokUiDe9VRRr26dhOvr01UV++HSXnREKVC8jWLTgvNzqwBXeUor/2/aM662kvjR
-	7kTooMq/ewMXy/t8TEtGz479eTbGzKl2A2gXeMn/CdCE3etivGMcl0JMHyGIrvOMYFB/mAsnbKN
-	AD9MEUne1XE7r+EPQ8hRRcTwLS1/6KlFR9M7k3+kVB0Z/ZtvPIY6dvmB7IXkQDrPRSF1u10Hf8f
-	NAgqaPfECzwada4o0070oLYVaFUMgp3CXqD8xSac7SaxijpgbTDn76OqNKiQURja7iIV/G2TZPF
-	gsZufs/bGyRZ/qr5OEUdi65rPbo4j2XfKTFAZZFv+o9YRHd9lXaJEU4clos9awIAxVkLa/7YR6G
-	sj119DIBmZwdKjy8hrAq4kwxnMb1e111CWSuXctay+e6PLIxapHPhM=
-X-Received: by 2002:a05:6820:80f:b0:6b1:4250:6a43 with SMTP id 006d021491bc7-6b6fd2ce67fmr6721953eaf.17.1788566317356;
-        Fri, 04 Sep 2026 16:58:37 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:13::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6b6dcb85a61sm5122781eaf.8.2026.09.04.16.58.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Sep 2026 16:58:36 -0700 (PDT)
+        bh=EriVP3OG/RGSUzqKFg29+kHQzQPXOpc09jsIDUSQfU0=;
+        b=iCYUuJlRzICPQaQ6Wtuo92IaTvwObF7xUoHgeu+2ZDXMvpsxzYtJghdKXduIn1tI5k
+         HfjNaLfQmkJj0X5kZVsYHgSn5mX8I3bKiAKruN5HeBDz0sM3A18dST47AW5azBPsjl+3
+         lP7ee6BJ7IbbEpRSIpFRkVLhA7eY8QZdn/ltlyX+VKBKObnIBEj/tqITkQVAkgkCbJqf
+         BKMs+AddOKZ39neJlCK6wZspe0/mYnju0XZHhMdMiBg3fc28ttaPaExEIvN77oflN7Jz
+         nxZ+CNb8Og7LRsHI9rFuh8zCHBfxcW8036I5JtV14MoVMeLMU0Bz17tSVMx1fX9882SA
+         jP+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788566773; x=1789171573;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=EriVP3OG/RGSUzqKFg29+kHQzQPXOpc09jsIDUSQfU0=;
+        b=cjxJTFY1HW8LM8tHIO1AX3ALieq7rbsXoB+WbhOG0IpLJwkXv1fXUhErXFkDVW0GKs
+         nUw2us5TeFQT/eo4UpNSXb0W1ePp2VObraEj8gEAjE31EBmINTfFE58In0MWd/OpcGvc
+         vSlNn6BsPIbm7C54Ib9XbnThUif+8AGV9VHyEvIkzJIZqjKbCnbD71I1OoejICAHNsC+
+         b4u5WOUbLn4hvRVGOkqrVubEyu8UrLRfYYAGpWZiEHyTB+IofS9pWLOiH7uBywfmXaF0
+         O2OYpn29J1+BtamZmrNbBsRsRVL44BnzAqTu/46E3Y7y6ZAEwVIQrh0otbEyDtGvG60R
+         jEbA==
+X-Gm-Message-State: AFuF++lszCJ8jxsA9+peGngeSRvADOtGX2vQ/uwRYt2hR4xZW7QX7x6/
+	3fqpTDTxxGvDjYniQ8YGQSZV2BjpvqDxVvyUtQwTa+kXf46Kdsh0RaUagO/+9u0vVuI=
+X-Gm-Gg: AYBFou121wc0KbAHGwff/A2u2nkCcGaDdPooXDPs+SB61dNmfkOT+8DgainJr+54A9o
+	MdVJR3aeFjKXYm4D9/2SuSVrQf1Yjy4snQgCQhEIOm9bi1n8U3wz0VDcIW+eEULZlG+l1xMgYb3
+	LEsvGE2qRj2Zns2KQWBDBjNoAUxJKUbusAOPX9Kvniqki+9rptNenpyBEa5VXevTLSm92J7uzn8
+	JJ27dFRPfvSQRNgc4RGzhJcbWATQjKuvOPdwwoDjoMdRnIJJpY8fW591pU+hOeoEzSyaqmndzjq
+	HZeDi7Gg340LfIJ0YGylFgoM2pUE6ReY63c81EIiw9HQZbu94YpXrZVeS+rzAMYXF/DahAErjh+
+	sDy9ISKy614MTkF2j0gMvwsNSxz4BCRIf3DlyhbTYnuI3S5QvOoJ+bfnkb2G+OZ4USiwE9WDhkI
+	6dhoIgp9jg4soI7nDWSlA0DYEwVxsdIIW0wsuUy8MpbhSh743bWRXe7RwRkEjA0RQiMwpoy07E8
+	OuCG+Vfla/pPzNHPiHoLzgaczkulJuYzskuUC8Alu9I/w==
+X-Received: by 2002:a17:903:1670:b0:2d9:438e:b70d with SMTP id d9443c01a7336-2db1232c88emr143226675ad.1.1788566772708;
+        Fri, 04 Sep 2026 17:06:12 -0700 (PDT)
+Received: from ezingerman-fedora-PF4V722J.thefacebook.com ([2620:10d:c090:500::5:4f3d])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3356dc5c04dsm42277eec.8.2026.09.04.17.06.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Sep 2026 17:06:12 -0700 (PDT)
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	andrii@kernel.org
+Cc: daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	kernel-team@fb.com,
+	yonghong.song@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Subject: [PATCH bpf 00/10] bpf: add missing precision propagation after bpf_register_is_null calls
+Date: Fri,  4 Sep 2026 17:05:51 -0700
+Message-ID: <20260904-register-is-null-precise-fixes-v1-0-0f5a360ff15d@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 04 Sep 2026 16:58:36 -0700
-Message-Id: <DL6XUEHAJN3Z.20UKZKTLHI2XZ@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Eduard
- Zingerman" <eddyz87@gmail.com>, <kernel-team@fb.com>
-Subject: Re: [PATCH bpf-next 07/12] bpf, x86: Place kfunc arguments per the
- SysV calling convention
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>
-X-Mailer: aerc
-References: <20260904050957.3976119-1-yonghong.song@linux.dev>
- <20260904051033.3979978-1-yonghong.song@linux.dev>
-In-Reply-To: <20260904051033.3979978-1-yonghong.song@linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Change-ID: 20260904-register-is-null-precise-fixes-15c7f8cd7a73
+Content-Transfer-Encoding: 8bit
 
-On Thu Sep 3, 2026 at 10:10 PM PDT, Yonghong Song wrote:
-> The JIT hands each eightbyte the BPF calling convention passes an
-> argument in to the argument position of the same number, registers first,
-> so the two conventions agree unless the kernel one places an argument
-> somewhere else. Compute where SysV wants each eightbyte, and move the
-> ones that differ before the call.
->
-> SysV disagrees over an argument that the registers left cannot hold: it
-> moves the whole of it to the stack and leaves the registers to the
-> arguments that follow, while the BPF convention splits it and keeps
-> filling slots in order. So for
->
->   u64 f(u64 a, u64 b, u64 c, u64 d, u64 e, struct pair s);
->
-> the BPF convention puts s in the last argument register and the first
-> stack slot, while SysV puts it wholly on the stack. Add an argument after
-> s and it takes the register s vacated, which makes the moves a cycle, so
-> one value at a time waits in RAX, dead before a call.
->
-> The outgoing argument area is sized for both conventions, as SysV can put
-> on the stack an argument the BPF slots kept in a register, and
-> bpf_jit_supports_kfunc_arg_slot() can now answer yes to any placement.
+Fix [1] uncovered a host of locations where the call to
+bpf_register_is_null() is not followed by a call to
+bpf_mark_chain_precision().
 
-What is SysV ? This change is about x86-64 ABI.
-How come BPF calling convention diverged from x86-64?
-Maybe we should adjust bpf side instead.
-Looks like next patch is doing the same shift/move dance for arm64
-which is a sign that we got it wrong on bpf side.
-It needs to match x86/arm64.
+check_map_kptr_access() is omitted as it is handled [2]
+by another series.
 
-pw-bot: cr
+[1] https://lore.kernel.org/bpf/20260904083325.2083493-7-eddyz87@gmail.com/
+[2] https://lore.kernel.org/bpf/20260904104203.345917-6-memxor@gmail.com/
+
+---
+Eduard Zingerman (10):
+      bpf: mark a NULL call argument precise
+      selftests/bpf: precision of a NULL helper argument
+      bpf: mark a NULL memory argument of a call precise
+      selftests/bpf: precision of a NULL global subprogram memory argument
+      bpf: mark a NULL kfunc argument precise
+      selftests/bpf: precision of a NULL kfunc argument
+      bpf: mark a NULL BTF_ID argument of a global subprogram precise
+      selftests/bpf: precision of a NULL global subprogram BTF_ID argument
+      bpf: propagate mark_chain_precision() errors out of loop_flag_is_zero()
+      bpf: use mark_arg_precision() in check_mem_size_reg()
+
+ kernel/bpf/verifier.c                              |  78 +++++++++++-----
+ .../selftests/bpf/progs/verifier_cgroup_storage.c  |  29 ++++++
+ .../selftests/bpf/progs/verifier_global_ptr_args.c |  24 +++++
+ .../selftests/bpf/progs/verifier_precision.c       | 100 +++++++++++++++++++++
+ .../bpf/progs/verifier_subprog_precision.c         |  12 +--
+ 5 files changed, 214 insertions(+), 29 deletions(-)
+---
+base-commit: 41e6f03658adfa9df68642750b53a046f1abdea9
+change-id: 20260904-register-is-null-precise-fixes-15c7f8cd7a73
