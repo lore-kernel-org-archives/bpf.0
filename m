@@ -1,62 +1,62 @@
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5FCD14A619
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 22:01:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D5A12D2487
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 22:01:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788645694; cv=none; b=SwDbsFQmqKLcnLLWChMMR0aIATVvghas+4U/c/40jTdSudjPdzkbmSBiBJ+pSMMtsnChxNgl6BlcXusEkZ5AQaTtb/51m1RsifEP8fu45/sFprQVRgsZ447DJYNqrtGInJySjvNImq8ogckImqeS5NAklctWpaK0zkOawH24mq8=
+	t=1788645695; cv=none; b=tegzYpJO9alFaNvUdNSWAAmHOg+Y7dzMobi/w2DYvqTlXiDIRhQlex6uJf9RbxbBcGVvb88xug0ZCk/LjprxoGLbb4qgeGk1k8KUHNTfoaTrnkPtGJzSVX5F4VlPJq+g4uh/ZWdOlTE5fwC3Od89DUDDmW9+0KpS+1RSKZuuHwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788645694; c=relaxed/simple;
-	bh=oetYajvIg6ov0h1rOXlJQ4h+5pt3Ah7G1NRnJNRLLa0=;
+	s=arc-20240116; t=1788645695; c=relaxed/simple;
+	bh=tBV5UGL47tPha9R1YZP9lYTBgBE/8GYyQsRzcCSfHyE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o8FlTu+cOsCVfF9sj6UA5S+G/xK9AVwZVxd3Yespop5wcYsB+FR2x/Wi+zHG2xBR7yDlOpxokpuhf335OtCCnfF2UqOzzxV0r6qxGUfemMZHaXWDdOmazhhB3vZQwxaf76+vGrEGc1GR1721Yf6JLeTcSQJnGwEV9t4LROVwltc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PaoxAYGI; arc=none smtp.client-ip=209.85.210.43
+	 MIME-Version; b=rO3MAX3bPFZAShG+tk4fYb4Fw53Q8dXw3DT9go3ga+98zA+ksNCtWHAtwbbSNd1YZRkdALHJRVjkSSWEFQ278NSgl0DjR/1dQJvDlQ92tz5N10To3AgQslYW7MkVA/aYZSzSyxQ8zMp0ASpNEiULj/Mt/+3Ry2JHqBzeU69VHnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xav8Uw5p; arc=none smtp.client-ip=209.85.161.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PaoxAYGI"
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7f4ea388ba6so2351703a34.0
-        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 15:01:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xav8Uw5p"
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-6aa9606ddadso1716562eaf.0
+        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 15:01:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788645692; x=1789250492; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788645693; x=1789250493; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=qT5Roaod8XbVgUQqldYwKGUlkGgdWm753VGgOMrU5L4=;
-        b=PaoxAYGIYLTXqnpJfFHVP3Kkr2f+FGx9B9wuhoZ1OSqOoiYSbzXT39Be2Guydz76AK
-         L/rzbMNZXgGq9BdQ0Zocw0FMx8Zh1d+rPMTOyCHrI3h7ktXgNc+DrFomjnrEUBruLIMn
-         0Y0flcxMs7WOpJZeeZlD7N9pJ09vURCTdXhZxlj51Mf9o60GgP8JBTxnT/wyQ+Qj0HGI
-         tjSKLr6q+DhHe1iPX31rrQpkW7VdIVN26DwH7ifs7m7nyMmFGCf5q18mS3wAOlfJ2nUc
-         JNPdb3BHd/uahCltqQGNqY7ejXlBg51XTaPuqJtYDMycIFGQ+HiqXWxOMOCfc+DAhCiU
-         O2bw==
+        bh=xhfve7DSFBV41cbcxRKWxVEu2g3A9iQc/b0ZDts2N2I=;
+        b=Xav8Uw5p/gUg9d/JaMAVmxRI+ZYjBv4EWHJlMq+Z5K1WbZik4S0vlCG4weEQtVm3ay
+         p4gX4+uXSsdNmVrG5bN4+PmflpM9oKrwXtBmUwEfCePjWZZf6mGIPLE02vYgHrpoQY8i
+         kioQ7aTTzeOJNAFvxtaaMxG3DofzeOlo99Fhr7uP/nbF+87ptm5hkd6rGZfEKuijdCZE
+         r9nYQOg/tRR9tD+/JqDMkJu3YE+LqJSEQmbYpqrKmYyHPelAJrlC1Ig0lv5NqK20krdv
+         +UlR1xGjAhuPK4nHJ7X71dnSomucxgp8+TpbZzQ10anNfAlGlgeZctkL1E/utV0kSzDo
+         3eVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788645692; x=1789250492;
+        d=1e100.net; s=20251104; t=1788645693; x=1789250493;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=qT5Roaod8XbVgUQqldYwKGUlkGgdWm753VGgOMrU5L4=;
-        b=pAigHVEgSI0witCyZW65sqfcOr4kYftgUH3qFv7PLQJa04CnzFpwf7WbbbhkdywUya
-         wpc4jvekHsdCa47t+Snarn/Gbx6ZKhc9nRdsWX/Q0LcM4x9qfD5i9N5rDl8+7P4xaceh
-         KAyQ/mInr+P86i0YoeGVESi9Xtd2TQLBdKPNrId1KxH8QkXlzv3sUkyEBexi1hJesPmg
-         rkeWyCRo83jHtVvMZ44seDKP++umCjKjWMIpNWx/U2gDCDesmg3LeWMm89cAnpYmad7/
-         9tHeqNtH4H4QThMvLAgNyw0cu/ppQH1gSIxgv4sQqA68BumKg6G2nlInaEL1djJRaKV9
-         Sztw==
-X-Gm-Message-State: AFuF++nPVC588teggVn8vdSZywaUjYtIR0cZyAhUZFz3THJTkGTsPFgc
-	l5osX0sPcyiYoKqttmZEbBm4alkInqU5xAuKXfgm47KZofrrZ4QPNL1qphwwCA==
-X-Gm-Gg: AYBFou03BM3BqDBaSF+n/mg13iUeo5IluMiioATKuvk8w1hvyim04Y8VuHcf4jtxBdA
-	mmMp1PCK+v76wfAbdCK1GSqj9hZP7KXM80Jsw5d02AEpLfU6JBc3BLXoIajwSdsEFVbC8g8fOwY
-	IkZj7i0rcXUkgH4ew4Gxih3P56IH8nZWNvJ5d/b2dXR0GR9wRpDKYQDwrzzWp6OXPp+MfGsc4Vc
-	zI9klZ2gj/GdgSpd0mgByVeE1JtQtBxz/OM0Zf+85RWYT3Ey5sUo0+fhfEcL6XleXlp4VWS1n/a
-	Rgj5ymM5ec17v4t3ORfOm5YwwLuc51r03vCRz9XIRYfp9daC8dA6tZobhlwOgmBuvPmKVOj/L90
-	0CZRtLn6wav0vTAQq4tPp6Pg7DfLRW1lLR0btuXwDnjDv26yO3PA46S1tDy/9UKNYpii5AsFOXV
-	THn0rcpltZ5YqjXf1zIU2PCHFvbR6biAYi7lSudREAlnmE35FkGu0=
-X-Received: by 2002:a05:6830:82bb:b0:7d7:d524:bc88 with SMTP id 46e09a7af769-7fa1f420061mr10848857a34.10.1788645691702;
-        Sat, 05 Sep 2026 15:01:31 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:40::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f9f1b06b7csm7123975a34.0.2026.09.05.15.01.31
+        bh=xhfve7DSFBV41cbcxRKWxVEu2g3A9iQc/b0ZDts2N2I=;
+        b=FkU74i0BGcwkVQaIFkmZWLd+J9ZacTcmEUk1rf3tXU+gCa1Y5WJVKI+OFPrjKvg8DN
+         Go7/OD3aBMD0F5+jG6cCNtR0xQii1DuaX7MSGl9mPkiZdPP942Jz+EKdZjgqyyFM0Lpi
+         s4vZMywE1DNa5Fede2PbbSAlNJLlbLarnuYZvwHmrb85iRrbgvt1f4xldq3Xs+3J4MIA
+         lfazJdd6n/Av8Z6pwm2Jtc6b74vaoLxXWUGEwx5veYQT6QwR2v+M8hP+a4HsUBGnf3Eg
+         +CsVKZAx2iOtbH5Y4bGYKdMctAO14jKdFngUKIwRZZW6cnrzBSoSyZizWgB8JbULeixm
+         FOyQ==
+X-Gm-Message-State: AFuF++lO8BSCVCXQ3dqAkiDb4y3nILVa3a0YItMDUn1eS2E7syMgppp6
+	mnBljJkXp1tmI72J65cCLK1YsSeQ0iYTbVpVinAcpDIFRpPDu+u2gguPa+EJTA==
+X-Gm-Gg: AYBFou2C8mKF2FUdFvYlY74NFPXgt9crQUVVr6BlVYYkIqPp7H/pEBxXRHKgqodCdVq
+	3q7eilVz6MakHbD31x+Z5f/lYIP2BaGD316ARM3v20qbWdrQ/EeLi4Gmy28gUNm/f3mPXQxlu3n
+	mrPq/HJR3fKossN23JU/MBX1QkaAtskSqXf1EQBiMZCdBEwHeQhYwBmHknOrPanz5TKCOfAvLVn
+	bZXlZ/iJN0OpoHTVlOghvCec6R4oAbUsHjyLvlD4q5LBlxK8MgZn3su2Us8E89Bo6GbsY83j+Ge
+	6ehTUogHZYlpLTdTCrvFmeDJBXVRBprdBYirOr0JfiXMYriKkM2dodRWnNROqgbZDQrIYUj+l1D
+	U5g7BWsuB2DShnnJmYkZKumz9avbimXnSVtXviyI9yLVIEiv7L7Tky7e63Clt8iZYJKUh+byC/S
+	7iew9PKfM6iIaksZBOJCQ6jscoyGtNamjSyDPEe8NiDFM5kqQcgD4=
+X-Received: by 2002:a05:6820:99a:b0:6b1:3cb7:f535 with SMTP id 006d021491bc7-6b6f757c0a4mr10094594eaf.0.1788645692883;
+        Sat, 05 Sep 2026 15:01:32 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:49::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6b7691588f4sm6326256eaf.13.2026.09.05.15.01.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Sep 2026 15:01:31 -0700 (PDT)
+        Sat, 05 Sep 2026 15:01:32 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: alexei.starovoitov@gmail.com,
@@ -66,9 +66,9 @@ Cc: alexei.starovoitov@gmail.com,
 	memxor@gmail.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 08/22] bpf: Classify kfunc arguments the verifier ignores
-Date: Sat,  5 Sep 2026 15:01:03 -0700
-Message-ID: <20260905220117.922028-9-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v1 09/22] bpf: Set OBJ_RELEASE when generating kfunc argument types
+Date: Sat,  5 Sep 2026 15:01:04 -0700
+Message-ID: <20260905220117.922028-10-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260905220117.922028-1-ameryhung@gmail.com>
 References: <20260905220117.922028-1-ameryhung@gmail.com>
@@ -80,86 +80,56 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The verifier does not inspect __ign arguments or the implicit
-arguments of a KF_IMPLICIT_ARGS kfunc. get_kfunc_arg_type() leaves
-them unclassified, so gen_kfunc_arg_proto() skips them and
-check_kfunc_args() repeats the same BTF predicates for every call.
+check_kfunc_args() ORs OBJ_RELEASE into arg_type on every verification
+of every argument of every call, from a comparison against
+meta->release_regno. Neither side of that comparison depends on the
+call site. bpf_fetch_kfunc_arg_meta() sets release_regno to BPF_REG_1
+when the kfunc is KF_RELEASE and leaves it zero otherwise, and regno
+is derived from the argument index, so the test is true exactly for
+argument 0 of a KF_RELEASE kfunc.
 
-Add ARG_IGNORE and classify both cases in get_kfunc_arg_type(). The
-generated prototype can then record every argument, and the call site
-can consume the recorded type without deriving the classification
-again.
+Set the flag in get_kfunc_arg_type() instead, where the rest
+of the classification is built, and drop the comparison. The release
+handling in check_func_proto() is helper-only, so an OBJ_RELEASE in a
+generated kfunc prototype does not feed back into meta->release_regno.
+
+meta->release_regno itself stays: it is still what tells the referenced
+PTR_TO_BTF_ID check and release_reg() which register to act on.
 
 No functional change.
 
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- include/linux/bpf.h   |  1 +
- kernel/bpf/verifier.c | 11 ++++++-----
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ kernel/bpf/verifier.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 547703f54a89..1f78746e0601 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -923,6 +923,7 @@ enum bpf_arg_type {
- 	ARG_PTR_TO_IRQ_FLAG,	/* pointer to saved IRQ flags on the stack */
- 	ARG_PTR_TO_RES_SPIN_LOCK,	/* pointer to bpf_res_spin_lock */
- 	ARG_PTR_TO_PROG_AUX,	/* pointer to the caller's bpf_prog_aux */
-+	ARG_IGNORE,		/* argument the verifier does not check at all */
- 	__BPF_ARG_TYPE_MAX,
- 
- 	/* Extended arg_types. */
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 22f5aff76b40..7416f1e16aa9 100644
+index 7416f1e16aa9..7662293ac7d2 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -8797,6 +8797,8 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 		cur_aux(env)->arg_prog = regno;
- 		return 0;
- 	}
-+	if (arg_type == ARG_IGNORE)
-+		return 0;
+@@ -12214,6 +12214,13 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
+ 	if (is_kfunc_arg_nullable(meta->btf, &args[arg]))
+ 		arg_type |= PTR_MAYBE_NULL;
  
- 	err = check_reg_arg(env, regno, SRC_OP);
- 	if (err)
-@@ -12086,6 +12088,9 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
- 	if (is_kfunc_arg_prog_aux(meta->btf, &args[arg]))
- 		return ARG_PTR_TO_PROG_AUX;
- 
-+	if (is_kfunc_arg_ignore(meta->btf, &args[arg]) || is_kfunc_arg_implicit(meta, arg))
-+		return ARG_IGNORE;
++	/*
++	 * Only the first argument of a KF_RELEASE kfunc releases anything, and
++	 * bpf_fetch_kfunc_arg_meta() only ever records BPF_REG_1 for it.
++	 */
++	if (is_kfunc_release(meta) && arg == 0)
++		arg_type |= OBJ_RELEASE;
 +
- 	t = btf_type_skip_modifiers(meta->btf, args[arg].type, NULL);
+ 	return arg_type;
+ }
  
- 	/* Scalar arguments are classified from their BTF suffix/name alone. */
-@@ -12215,7 +12220,6 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
- static int gen_kfunc_arg_proto(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
- 			       struct bpf_func_proto *proto)
- {
--	const struct btf *btf = meta->btf;
- 	const struct btf_param *args;
- 	u32 i, nargs;
- 	int arg_type;
-@@ -12234,9 +12238,6 @@ static int gen_kfunc_arg_proto(struct bpf_verifier_env *env, struct bpf_call_arg
- 	}
- 
- 	for (i = 0; i < nargs; i++) {
--		if (is_kfunc_arg_ignore(btf, &args[i]) || is_kfunc_arg_implicit(meta, i))
--			continue;
--
- 		arg_type = get_kfunc_arg_type(env, meta, args, i, nargs);
- 		if (arg_type < 0)
- 			return arg_type;
-@@ -12844,7 +12845,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
- 			continue;
+@@ -12896,8 +12903,6 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
+ 			ref_tname = btf_name_by_offset(btf, ref_t->name_off);
  		}
  
--		if (is_kfunc_arg_ignore(btf, &args[i]) || is_kfunc_arg_implicit(meta, i))
-+		if (arg_type == ARG_IGNORE)
- 			continue;
- 
- 		t = btf_type_skip_modifiers(btf, args[i].type, NULL);
+-		if (regno == meta->release_regno)
+-			arg_type |= OBJ_RELEASE;
+ 		ret = check_func_arg_reg_off(env, reg, argno, arg_type);
+ 		if (ret < 0)
+ 			return ret;
 -- 
 2.52.0
 
