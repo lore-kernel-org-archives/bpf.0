@@ -1,121 +1,153 @@
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87CFE3B19B2
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 22:39:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDCF52264DB
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 22:44:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788647978; cv=none; b=WUomO6yR6n+1Js0MlCvf3QLmtfMSLsRuUThENywjPA4aoLoYBWOzYUNM+J2r4uyivFKRVfohPl7UYYg+pUw3nbp21en/gcaFOtBx/MsvUrJ5qnu09aH4AW2q9ogk+efjvtFYrOh1yfA1UEHfHJ/BRm5peNTvx9KnnccAckR5SnA=
+	t=1788648283; cv=none; b=IwiHgr3xDLq1qWf744AC2pevvmJWv+yzmdQmXLM5eGdRE1BxOe4nqCMRF5D7lBMsVl3JpxC7sPp6uvDbMpNT+JTCIxy77vYKeVlh8oTg63K3iwV0KHqlP9b14qBHaR/8wiZ8dECIFFFvkxnFUx3PiN1RqdoXqyPNqb/IX6VH6Cs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788647978; c=relaxed/simple;
-	bh=0H8U5D/PR2nl8fIgoNBuIh3GIAaZtHX2NdF5dpTl6X8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=scNFGiQx1Zh1LNRIvB2b/g8sXmUJqS0nUE+7ohRukcd2xGZssm2A42u5NSG8LS3WD6U/TaN67jg3G2Ouv8G5RkwGqmc/wzpv+utvP+UqCshSYzJrXFSpJTPx6w2RAzKdXxnexOHJZoAH8SFCrqXeNDbGtNIbvh+8W8/ipaXDwnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W18bgdbM; arc=none smtp.client-ip=209.85.210.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788648283; c=relaxed/simple;
+	bh=vH1jFTXdDwvwK1Cq3cdtKHrfjlClw3AMsKEWfkA/RXo=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=at00L6LNZzRcHfbRwM0NCYGYX9hDYz7fKVbMG6tJDoNNRb3rrLtqU9dPF+QZGj/yjc3Z0Qn5N1o5V3OjGDBJ9x26aAqAUMXT4N2Q9SSyeReUWg4bvAGJRibuy5icAVi0JeENQL2wxITcLyS1GQyCyHAOWgpsLyqzrP+0F3+GPwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZvaMyZpP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W18bgdbM"
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7f4e596e393so2592829a34.1
-        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 15:39:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788647975; x=1789252775; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=X/f+z2nmCi/0KNOuKpqOW6wHU++XKerP0D0hide5es4=;
-        b=W18bgdbMTewPOy7lR231htehgZ1beNc4hQh5KVbftdlQlwRFagHApZPXGlRiHrJj0o
-         jvFU48gF8P8H4hQlt+5sFi0uLtpZgR9wLwe4DX12JcUXCAQWPokYg9cH2J+iHzTJggrH
-         /b6YRcPYSYE4C1R4WMma80vWSy257v50y+aoPxiFTKlLMGWGezg07mfuW05jIYdcRvJn
-         7l6uzulCLfFT9Pt5apc9sIxqmovVTTbgCtaybJMwKgBHa+65C6xHS2pfi3dRCdJDqMxf
-         FpQqT+o2+TAAGv3WhiveFlbT7++RilcMWrpyyO4XazUENiRa2QCPpbJ8gkniA/rUwLMH
-         +ziA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788647975; x=1789252775;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=X/f+z2nmCi/0KNOuKpqOW6wHU++XKerP0D0hide5es4=;
-        b=CvRI4L0qZz9XKG1L0DB9tF6y5IgyNCi1FEXTIFkbfOOL9eopCWivlWc3WKGPe+JHSx
-         xWOAb1ju9+Yj3V/WFOFW/rDcZt2NFbeFbqUuF7oRd8PMKCnSag2W2j8jFgm3UaNxbazM
-         YaGYSbMGt2Lrs1SdpmXso5SwXlT3+3j9VuBU7LvfhTcVbPKaTczN9rxN8zwVes7A/nNz
-         CUebwjZCXHRUf8EZAbVaXVVqt7iP2XYf/JWzlcFwbW0O2wVjFJZ1B81lCwPQj9Wzkxwy
-         scb3Nqtp0HSxKKGyJxYlN1f6xtcqar1JNSFHsm0WTF8pybYtjUzwKVFS8GqLzg3FcPX3
-         hm4w==
-X-Forwarded-Encrypted: i=1; AKwUvBzhcK8YTUkcWeqxf4ZdwixhLrHyP9nlCCih2puLp5G2QWzYqt+x6VIJ+wxl3UdOc0GWGWo=@vger.kernel.org
-X-Gm-Message-State: AFuF++kBEy2ayaT67Tw5k3WdR0D91K8K5M+V17BtU6CpWQCtbQ1PxQb6
-	ecRbv2xJhvah5hkdp9YltqoJC2G98JkjWOdGpH3jl+XJUZkJ7DDis5+D
-X-Gm-Gg: AYBFou1MApZs27ub9pwOcrYOYgbm43aWZ4JUeuJoA7yVoibl4Ue0m2c2pM78OyDLjxQ
-	FT1Htj6Ri2CuLbnuFXSPDvtCuMCDuUZqbWwBRF5ZX7BLNWQUOsCzEH6qNv5qtgFKrZ8X/3jJfrh
-	+lx2Kx4cl8tAs00TkKs7S74ToCuipTEAQ/EHo5auSaw28rPHN1lBpnRbUb3EQUGf5EG0DOSypUN
-	TFsAghJhRtIZcgsmz2LCUQpL7cocQEgbHrXffCP+ZlPJYk8Dv/VDOCd4o3KgSW/a1l/jfxHNMVC
-	EJRlNWO0x+1cKgvt5/1oxuh4c2DY+cqnyKsA53w6GyiqMnkqWifo3JiKYuvM8/UI/zEmeureDLN
-	x+v+hUY4D2vfWIXr3kK2EBZFQufrd0F/nDA33fiBKfduF6Ve7ead5lN4t/HJADLcbr03cw41Wiu
-	yBZhuz84eSUXSlHYHMq4xV6jz6XEiEOSj9M2POKLUptyhmje/Pf+/FFX+g1MN5twSlYcJg1Dtzo
-	vbwxr+ahvzmXqbHXwcOGe0zPOswz1aqfTXPrJtVMLgdXGng7CkAxmI=
-X-Received: by 2002:a05:6820:c0d4:10b0:6b7:83c5:fe03 with SMTP id 006d021491bc7-6b783c60410mr5495274eaf.68.1788647975023;
-        Sat, 05 Sep 2026 15:39:35 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:14::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6b6dc6aca49sm6920103eaf.6.2026.09.05.15.39.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Sep 2026 15:39:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZvaMyZpP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE54B1F00A3A;
+	Sat,  5 Sep 2026 22:44:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788648281;
+	bh=rdhFao6J0z5X163zamdOEz2dZ8HwSbyO75/RfUM9RzM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=ZvaMyZpPaJvhe27F7tIN4PE8qXjSBqixCK6xxGOSi7pCGf9gbfLdCE6amCUTKVU0Y
+	 94A8VJCz2P8vNoTHgaGpYrPnf0IZUpMSWDv1ZmxaaIUHUK7mVtm5pmXNXLgRQIJrHQ
+	 eB8GPAVomBgQQd53q8I8xzYUisH4J8qBdDVljDSa70h0zXUtpnukDZrkNYRgj0sobM
+	 /l/+GbhYxmKThxGKBY0g7gc/LxAf3xSeZwfBjrsfFFbAxZSNNhHlFYtu0bbaG5pqUo
+	 n/otpm8t1GjKYa7L7Jzi5y0zeaeG53ooZIQMs98b7WCYtxS7RUBcBtb5jnEqGXApUd
+	 m2WNDA8JmwEHg==
+Content-Type: multipart/mixed; boundary="===============7163078914324861484=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 05 Sep 2026 15:39:32 -0700
-Message-Id: <DL7QSF4BZB1E.3U5O9EBHDN2LE@gmail.com>
-Cc: "Nicholas Carlini" <npc@anthropic.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, <kkd@meta.com>, <kernel-team@meta.com>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Verify global subprogs in each
- sleepability context
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
-X-Mailer: aerc
-References: <20260905051224.2325381-1-memxor@gmail.com>
- <20260905051224.2325381-2-memxor@gmail.com>
-In-Reply-To: <20260905051224.2325381-2-memxor@gmail.com>
+MIME-Version: 1.0
+Message-Id: <44341c2c66e3c9d2256dfdfbe10c7164152ea6ba3d45ef3aec833ddb7f468f8d@mail.kernel.org>
+In-Reply-To: <20260905220117.922028-20-ameryhung@gmail.com>
+References: <20260905220117.922028-20-ameryhung@gmail.com>
+Subject: Re: [PATCH bpf-next v1 19/22] selftests/bpf: Test kfunc packet memory direct writes
+From: bot+bpf-ci@kernel.org
+To: ameryhung@gmail.com,bpf@vger.kernel.org
+Cc: alexei.starovoitov@gmail.com,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,ameryhung@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat,  5 Sep 2026 22:44:40 +0000 (UTC)
 
-On Fri Sep 4, 2026 at 10:12 PM PDT, Kumar Kartikeya Dwivedi wrote:
->
-> Record whether each global subprogram is called with either in_sleepable
-> value and verify it once for every observed value.
-...
+--===============7163078914324861484==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-> Since a global subprogram may now be verified twice, accumulate both pass=
-es
-> in subprog_info[].insns_total.
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_kfunc_packet_access.c b/tools/testing/selftests/bpf/progs/verifier_kfunc_packet_access.c
+> new file mode 100644
+> index 000000000000..9ae63c9eab02
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/verifier_kfunc_packet_access.c
+> @@ -0,0 +1,47 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <vmlinux.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include "bpf_misc.h"
+> +
+> +struct nf_conn *bpf_skb_ct_lookup(struct __sk_buff *skb_ctx,
+> +				  struct bpf_sock_tuple *bpf_tuple,
+> +				  u32 tuple__sz, struct bpf_ct_opts *opts,
+> +				  u32 opts__sz) __ksym;
+> +void bpf_ct_release(struct nf_conn *nfct) __ksym;
+> +
+> +char _license[] SEC("license") = "GPL";
+> +
+> +SEC("tc")
+> +__description("kfunc packet write requests writable skb")
+> +__success
+> +/* bpf_unclone_prologue() */
+> +__xlated("r6 = *(u8 *)(r1 +{{[0-9]+}})")
+> +__xlated("...")
+> +__xlated("w6 &= {{1|128}}")
 
-Only after reading the patch carefully I realized that above is saying 'may=
-'.
-Just by reading commit log it sounds that all global progs are now verified=
- twice.
+Is this test expected to pass at this commit? Looking at the verifier
+code at this commit, the kfunc memory-argument path goes through
+check_helper_mem_access() for PTR_TO_PACKET, which calls
+check_packet_access() directly:
 
-Please reword to make it clear that glob progs are verifier in the specific
-context when it's actually reachable.
+kernel/bpf/verifier.c:check_helper_mem_access():
+    case PTR_TO_PACKET:
+    case PTR_TO_PACKET_META:
+            return check_packet_access(env, reg, argno, 0, access_size,
+                                       zero_size_allowed);
 
-> =20
-> -/* Check if we're in a sleepable context. */
-> +/*
-> + * This predicate is the inverse of in_rcu_cs(): non-sleepable programs =
-and
-> + * every condition that prevents sleeping also provide RCU protection. G=
-lobal
-> + * subprog verification relies on this equivalence to represent the call=
-er's
-> + * execution context using only the in_sleepable bit.
-> + */
->  static inline bool in_sleepable_context(struct bpf_verifier_env *env)
->  {
->  	return !env->cur_state->active_rcu_locks &&
+This path never calls may_access_direct_pkt_data(), so
+env->seen_direct_write remains false. Without seen_direct_write set,
+net/core/filter.c:tc_cls_act_prologue() -> bpf_unclone_prologue()
+returns 0:
 
-Since it is !in_rcu_cs() let's make it so in the code.
+net/core/filter.c:bpf_unclone_prologue():
+    if (!direct_write)
+            return 0;
 
-pw-bot: cr
+The kfunc_packet_write() program performs no direct packet store, so
+it won't trigger the may_access_direct_pkt_data() call that would set
+env->seen_direct_write. This means no prologue instructions are emitted
+and the __xlated() patterns from here to the end would fail to match.
+
+This appears to be fixed by a later commit in the series that moves the
+check into check_helper_mem_access(). Should this test be reordered to
+appear after that commit to avoid breaking bisection?
+
+> +__xlated("...")
+> +__xlated("if r6 == 0x0 goto")
+> +__xlated("r6 = r1")
+> +__xlated("r2 ^= r2")
+> +__xlated("call")
+> +__xlated("if r0 == 0x0 goto")
+> +__xlated("w0 = 2")
+> +__xlated("...")
+> +__xlated("exit")
+> +__xlated("r1 = r6")
+> +int kfunc_packet_write(struct __sk_buff *skb)
+> +{
+> +	void *data_end = (void *)(long)skb->data_end;
+> +	void *data = (void *)(long)skb->data;
+> +	struct bpf_sock_tuple tuple = {};
+> +	struct nf_conn *nfct;
+> +
+> +	if (data + sizeof(struct bpf_ct_opts) > data_end)
+> +		return 0;
+> +
+> +	/* An invalid tuple size makes bpf_skb_ct_lookup() write opts->error. */
+> +	nfct = bpf_skb_ct_lookup(skb, &tuple, 1, data, sizeof(struct bpf_ct_opts));
+> +	if (nfct)
+> +		bpf_ct_release(nfct);
+> +	return 0;
+> +}
+
+Going back to the alternation pattern above:
+
+> +__xlated("w6 &= {{1|128}}")
+
+This isn't a bug, but does the regex match what the commit message
+describes? The pattern text "w6 &= {{1|128}}" compiles to the POSIX ERE
+"w6 &= 1|128" since tools/testing/selftests/bpf/test_loader.c only
+escapes metacharacters outside {{ }}. Without grouping, this is
+(w6 &= 1)|(128) due to '|' having lowest precedence, so the second
+alternative matches a bare "128" anywhere in the xlated dump rather than
+constraining the cloned-bit mask value. Should this be "w6 &= {{(1|128)}}"
+to properly match the endian-specific mask?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33995442755
+--===============7163078914324861484==--
