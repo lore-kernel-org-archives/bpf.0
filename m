@@ -1,77 +1,155 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC5537BE98
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 22:24:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2048F1A680E
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 22:33:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788647080; cv=none; b=SU9THIcglJCQzt/EM++8HyC1/Mo9uwqwqTiFLD4pMJoWe44ZJgBMCiynU/5RsQdfkx+qwNscaLXOHNoICHZGCteYk0FRvTcsO86c52QyBpjOHufSsrDNK8S8Yi//xBVgigzh5arVtSN9JPK4S3cQZB6ZAQKTQBzG79x8NotcBvo=
+	t=1788647630; cv=none; b=Gad1EtW26NmrTWdJKwR5Rw+tg1Jh6RnWYhjbPkGfimqq7U0Ly5p0T8DDUrulUCIFHDVCyT79kZHixEMeKGmDLmKH1/U3a4CDSjmuuDSfUggbvpUQlM2VaPwgoVhO1n9+zxwOB/lsrPwUkzbksCcECOpCMH7itK7gIXHvVngK8JM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788647080; c=relaxed/simple;
-	bh=euymEhroWZ9Lxa89VdU44nzhP3mvslqrXMiL6PZkZrI=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=ITjWNiCYABnOsz4qPhKfyLIgcezIsNulHJSINp/42in6wDow2fh17rMZsEOGHN57dkGSGR97cxmYnJHbKLUzPFVRp02usFRI1+dt+Kc7VFsHQQjea9QtyspGtyVxqyLx22xzqpBxmBIOssWMi8B5ZTdMGmRxMae/28dFFoOrD8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=rkYVF9GI; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1788647630; c=relaxed/simple;
+	bh=3kaH3+BbBDo9qOmeFzDwz91mKumU9Lr2oLJBdg3UX3A=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=hOQ46tvIJlOBvRIAcxssx07FpxdojMC7wjvphiPJ8COaK2CMaza+bEzEwZ1sV6WySJdGTZ2bb0+rKsNDrMy+hGRy0ZeBlQLEsZTLTpvHloKFYluSuy58amwKhcBKxgI30wn5fs/LI2P9LEqPtx9u8M9JM9ZwMFizsBiq/KMovIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=flWiIM6+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="rkYVF9GI"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1x2yoB-007naf-LG
-	for bpf@vger.kernel.org; Sun, 06 Sep 2026 00:24:23 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
-	bh=euymEhroWZ9Lxa89VdU44nzhP3mvslqrXMiL6PZkZrI=; b=rkYVF9GIy4W7DKuddlkx7Kjee6
-	Hxxm7jOKW85dnAhAG8DIUsZsKNSgvushqjSs6B3dwEA3cvBO1RhE2Si1wS0W3M4YioGBz5i2QSueC
-	zRUY1hY8ZJVzTKUus31ytB6yTHSBjzvLg0UhmZT5b0kaFz+g+bO1gcrl+dXJBrjUwsLTTz6bnTws5
-	lVomFK64W9s4+uyvB7diP7v8s1+EUp6IZoqcYb72ZUsSJXfqKzgKzO4mSkJkSaBCxhRYqA07JNGnr
-	tpeugPq8buT9WRMvgBSxjygjlhbD0Bi/ijbni/9RKHk6P9taClcO0bi3CM2mlnztsutv2SnmxpnTn
-	oWkcaYzA==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1x2yo6-00010j-9o; Sun, 06 Sep 2026 00:24:18 +0200
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.95)
-	id 1x2ynm-006yaA-KJ;
-	Sun, 06 Sep 2026 00:23:58 +0200
-Message-ID: <2bf5493d-a87b-40b2-bd3c-4d726da9af9e@rbox.co>
-Date: Sun, 6 Sep 2026 00:23:52 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="flWiIM6+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85D551F00A3A;
+	Sat,  5 Sep 2026 22:33:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788647628;
+	bh=Nu7vhQOSXgdFltMr2dnSieTUo9klsYk/p0hJIqSiCug=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=flWiIM6+VrBZf2gQtu13ZqD5HNr1qF3kr/RTEkVdHrs69utwyb7CTat7l0pi9I9Uf
+	 aSsRQuD0kDH9+X497UC5hSaPBqk2FJInuJxb4fjQTuM7LcIvbQ5Ma3EIlzcdM9QBZ3
+	 Fq4TEpEBu9BOnPpqPxqYUf0/brZ6sCG7k5mlZgj7UIwEqOr5+iPN8DDZV2knJ79gDe
+	 svicNovziFVpztzfYcp+PWlZAC3X11YZwC2l9JeO+QJzlfSGyCCIUyqpI4aDtPSd83
+	 20EOIVMJyBDJxvkPbb31WlQyb5gXzzdYNHuE8c/bdDHvYPney6/wYPlAJ8fotxdSdn
+	 eqw45DhLImGbA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v1 22/22] bpf: Check helper and kfunc arguments
+ in one path
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Amery Hung" <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260905220117.922028-23-ameryhung@gmail.com>
+References: <20260905220117.922028-1-ameryhung@gmail.com>
+ <20260905220117.922028-23-ameryhung@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 05 Sep 2026 22:33:47 +0000
+Message-Id: <20260905223348.85D551F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Michal Luczaj <mhal@rbox.co>
-Subject: Re: [PATCH bpf v3 2/2] bpf: Fix reference leak in bpf_sk_assign()
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260902-sockmap-lookup-tcp-leak-v3-0-b998b3d49d07@rbox.co>
- <20260902-sockmap-lookup-tcp-leak-v3-2-b998b3d49d07@rbox.co>
- <20260902183840.9756B1F000E9@smtp.kernel.org>
-Content-Language: pl-PL, en-GB
-In-Reply-To: <20260902183840.9756B1F000E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 9/2/26 20:38, sashiko-bot@kernel.org wrote:
-> Pre-existing issues:
-> - [Critical] bpf_sk_assign_tcp_reqsk() stores an unreferenced pointer to
-> a TCP_LISTEN socket inside a request socket. If the packet is queued via
-> NF_QUEUE, the listener socket can be freed, causing a Use-After-Free
-> when the packet is reinjected and stolen by tcp_v4_rcv().
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Critical] Out-of-bounds reads on `meta->fn->arg_type` and `meta->fn->arg=
+_btf_id` for kfuncs with more than 5 arguments, allowing bypass of eBPF ver=
+ifier safety checks.
+--
 
-Right, that's another bug. So either make bpf_sk_assign_tcp_reqsk() call
-inet_reqsk_alloc() with @attach_listener=true, or orphan reqsk whenever
-listener can outlive the RCU?
+commit a1895fafaa5219b7b972d20a932c550f7862cec8
+Author: Amery Hung <ameryhung@gmail.com>
 
-Sashiko is quiet about this, but doesn't bpf_sk_assign() have a similar
-issue? Commit 3b836da4081f ("netfilter: nf_queue: handle socket prefetch")
-fixed NF, but other RCU escapes seem possible; e.g. skb_do_redirect().
+bpf: Check helper and kfunc arguments in one path
 
+This commit unifies the argument checking logic for BPF helpers and kfuncs
+by introducing check_func_args(). It moves kfunc-specific argument handling
+into the shared check_func_arg() path to avoid duplicating the argument
+iteration and switch logic.
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 6c5d7e544f844..54656fb31bbe7 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+[ ... ]
+> @@ -8808,6 +8840,7 @@ static int check_func_arg(struct bpf_verifier_env *=
+env, u32 arg,
+>  			  struct bpf_call_arg_meta *meta,
+>  			  int insn_idx)
+>  {
+> +	const struct btf_param *btf_arg =3D meta->btf ? &btf_params(meta->func_=
+proto)[arg] : NULL;
+>  	const struct bpf_func_proto *fn =3D meta->fn;
+>  	struct bpf_func_state *caller =3D cur_func(env);
+>  	struct bpf_reg_state *regs =3D cur_regs(env);
+>  	argno_t argno =3D argno_from_arg(arg + 1);
+>  	struct bpf_reg_state *reg =3D get_func_arg_reg(caller, regs, arg);
+>  	enum bpf_arg_type arg_type =3D fn->arg_type[arg];
+
+[Severity: Critical]
+Can this read out of bounds when processing kfuncs with more than 5
+arguments? The fn->arg_type array is sized for MAX_BPF_FUNC_ARGS (5), but
+kfuncs can have more arguments. For stack arguments (arg >=3D 5), this appe=
+ars
+to read past the end of the array.
+
+[ ... ]
+> @@ -8935,6 +8980,7 @@ static int check_func_arg(struct bpf_verifier_env *=
+env, u32 arg,
+>  	case ARG_PTR_TO_BTF_ID_SOCK_COMMON:
+>  	{
+>  		const u32 *arg_btf_id =3D fn->arg_btf_id[arg];
+
+[Severity: Critical]
+Does this also read out of bounds for kfuncs with more than 5 arguments?
+Similar to arg_type, the arg_btf_id array in struct bpf_func_proto is limit=
+ed
+to MAX_BPF_FUNC_ARGS. If a garbage pointer is dereferenced here, could it
+crash the verifier?
+
+[ ... ]
+> @@ -9056,6 +9389,37 @@ static int check_func_arg(struct bpf_verifier_env =
+*env, u32 arg,
+>  	return err;
+>  }
+> =20
+> +static int check_func_args(struct bpf_verifier_env *env, struct bpf_call=
+_arg_meta *meta,
+> +			   int insn_idx)
+> +{
+> +	struct bpf_func_state *caller =3D cur_func(env);
+> +	const struct btf_param *args =3D NULL;
+> +	u32 arg, nargs =3D MAX_BPF_FUNC_REG_ARGS;
+> +	int err;
+> +
+> +	if (meta->btf) {
+> +		args =3D btf_params(meta->func_proto);
+> +		nargs =3D btf_type_vlen(meta->func_proto);
+> +	}
+> +
+> +	if (nargs > MAX_BPF_FUNC_REG_ARGS) {
+> +		err =3D check_outgoing_stack_args(env, caller, nargs, meta->func_name,
+> +						meta->btf, args);
+> +		if (err)
+> +			return err;
+> +	}
+> +
+> +	for (arg =3D 0; arg < nargs; arg++) {
+> +		if (meta->fn->arg_type[arg] =3D=3D ARG_UNUSED)
+> +			break;
+
+[Severity: Critical]
+Could this loop early-exit and bypass verifier checks for stack arguments?
+
+Since nargs can exceed 5 for kfuncs, the out-of-bounds read on
+meta->fn->arg_type[arg] might evaluate to ARG_UNUSED (0). If this happens,
+the loop breaks and skips the safety checks for all remaining stack
+arguments, potentially allowing unverified memory access.
+
+> +		err =3D check_func_arg(env, arg, meta, insn_idx);
+> +		if (err)
+> +			return err;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260905220117.9220=
+28-1-ameryhung@gmail.com?part=3D22
