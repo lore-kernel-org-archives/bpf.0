@@ -1,104 +1,113 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D5FB37F732
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 07:43:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2859E258EE9;
+	Sat,  5 Sep 2026 07:45:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788594190; cv=none; b=hwotvITowDWSVjqfd9Fo4gsVHO87M41amqNtdj40PmAker8qg6MdAV+sis04JYWYK+HZLh+hE+PsGCPniBWt+FmANq/1D+9YI99ilYrqf1IhX0+u20tauX6DYdqUHbigpgXSIPHd222KYvOF0oDpZiprl7Ak1D6EWluaTak4dEY=
+	t=1788594337; cv=none; b=H3MUhLMtZabQGTstXBMNwZ822EyO6cp6OXI1nNB9WdGnmdEKBclQaf/zteeaSxavvnkepvq6gDOqIAEPvzrbL6tdIRCXbZByAy/8LHdtDY6LR5HZZ37/QwSBHVjkgHaklxXfkKHnXdlN0RMF1OSy5cKL7Qke81tIFH0ISFB6Q6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788594190; c=relaxed/simple;
-	bh=GiF6rpZ8urYB6pW1Mm3W/LwDnfYSiGKuXUZ7eMAYxms=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n6Z7fezYbwS6orK92xgFPAOjgKECs508mvhuKvbxEeOQmuNRllR3DtdlTsOHMI3vwmaDZ9cNzike4jgxtmjjjgWeWF1i36eQub5CPgfR1CJcdA1Z7XvNYzm8O/ZPlgJNA14B5SQORVnrKekkPIkuyzIYE71HHyvUyBcjUbRSK7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hcQJw3CDdzKHMVf
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 15:42:08 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 0DE1C4058C
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 15:43:05 +0800 (CST)
-Received: from [10.67.110.68] (unknown [10.67.110.68])
-	by APP4 (Coremail) with UTF8SMTPA id gCh0CgB32Zbyx5tqmJ1RAw--.46762S3;
-	Sat, 05 Sep 2026 15:43:05 +0800 (CST)
-Message-ID: <f8d4eaee-5b88-4427-85ee-4e25b0f276de@huaweicloud.com>
-Date: Sat, 5 Sep 2026 15:43:04 +0800
+	s=arc-20240116; t=1788594337; c=relaxed/simple;
+	bh=F8I23AU+j838hjXhl1ya9Hoh94IUJB6RgV6WyOcUdpY=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=IzxzQ3DAfQ5y9UhLtx7WELhw9OoMnMPQNrs/EZOTR/3Uc/eQh70Wab3bc19hB1ms1iMG1PJKhM9ee+YEMMagWwruAUtvCqhjETfvtRDSRMSDRbRPh9dwdMxCiwxDSQWcxczkI4h9yM58BFRzPO8bL6mJoDze3Ryss2Rz/t9HBLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dQ0j8Z/X; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dQ0j8Z/X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E6531F00A3D;
+	Sat,  5 Sep 2026 07:45:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788594335;
+	bh=7yOxbGjvD5wE0Hp6BWVA5Rm3CoQLfyp/woX5BV7pxRk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=dQ0j8Z/Xlikm1kfjAyCjsTDBJEGEqnfRe88eQVGnQeuofnhc8atPho0+xkyxlztfu
+	 bNwZlfsv9iXQ649b14RT2AUFJfXQdUh/9sIruDdNyjdsLF0DjER7yEW4DJgANFzrDm
+	 s26tzieG9TOc1wqFKN/FCZO0rXZYiQ80ma42Dl+BnD9bawuWVCidUETJUkjjYmrZpC
+	 FIWHuYup0D89otgLZBlbfzpzGdYY9O2cBa/9QI99fw5WoKTJA0opFEb4j8+HaeTFAd
+	 GBA4YUY1yz2vzwXobLfaR8K/+i9+uEXbuOtdnrgFzNBPESkYt2ykwdImL5h7up4EZV
+	 JoA6i2hcg2nFQ==
+Content-Type: multipart/mixed; boundary="===============0711090133430070351=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v4 1/3] riscv, bpf: Remap BPF_REG_0 and
- RV_REG_TCC
-Content-Language: en-US
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260905070409.4141522-1-pulehui@huaweicloud.com>
- <20260905070409.4141522-2-pulehui@huaweicloud.com>
- <20260905071213.878301F00A3D@smtp.kernel.org>
-From: Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <20260905071213.878301F00A3D@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-Id: <5e50a375b8cc6ff27c370db71783041b6ceebdf6a014a008bb2ecbfb2dca88ca@mail.kernel.org>
+In-Reply-To: <20260905070409.4141522-4-pulehui@huaweicloud.com>
+References: <20260905070409.4141522-4-pulehui@huaweicloud.com>
+Subject: Re: [PATCH bpf-next v4 3/3] selftests/bpf: Enable stack argument tests for RV64
+From: bot+bpf-ci@kernel.org
+To: pulehui@huaweicloud.com,bpf@vger.kernel.org,linux-riscv@lists.infradead.org,linux-kernel@vger.kernel.org,jiangfeng@kylinos.cn
+Cc: bjorn@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,puranjay@kernel.org,pjw@kernel.org,palmer@dabbelt.com,alex@ghiti.fr,pulehui@huawei.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat,  5 Sep 2026 07:45:34 +0000 (UTC)
+
+--===============0711090133430070351==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:gCh0CgB32Zbyx5tqmJ1RAw--.46762S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7KFW8Kry7tFWxKw4xJF1DKFg_yoW8Ww45p3
-	yfWF1fCry8Xr9Iqr92yF48Z348uwsIqF13Xr47Kr9rAF1xWwn3tF4UKa13JrW5JFWSkayY
-	9rWj934kJwn8ZrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-	A2048vs2IY020Ec7CjxVAFwI0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7
-	M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JV
-	WxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE
-	3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2I
-	x0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8
-	JwACjcxG0xvEwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s
-	026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_
-	Jrv_JF1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20x
-	vEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE
-	14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyT
-	uYvjxUzWrWUUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+
+> Enable the stack argument selftests for RV64. The riscv guard is
+> restricted to __riscv_xlen == 64 since stack arguments are only
+> supported by the RV64 JIT.
+>
+> Keep the __BPF_FEATURE_STACK_ARGUMENT gate, defined by clang with
+> BPF stack argument support [1].
+>
+> [1] https://github.com/llvm/llvm-project/pull/189060
+>
+> Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+
+The changelog says "Enable the stack argument selftests for RV64", but
+one arch-gated stack-argument test remains on x86_64/arm64 only.
+
+Exhaustive list of every arch-gated stack-argument test in
+tools/testing/selftests/bpf:
+
+  progs/btf__stack_arg_precision.c        updated by this patch
+  progs/btf__verifier_stack_arg_order.c   updated by this patch
+  progs/stack_arg.c                       updated by this patch
+  progs/stack_arg_kfunc.c                 updated by this patch
+  progs/stack_arg_precision.c             updated by this patch
+  progs/verifier_stack_arg.c              updated by this patch
+  progs/verifier_stack_arg_order.c        updated by this patch
+  progs/stack_arg_fail.c                  no arch gate - already runs
+  progs/exceptions.c:383                  intentionally left alone
+  progs/arena_kfunc.c:219-230             not updated, not explained
+
+progs/exceptions.c is correctly left alone: DENYLIST.riscv64 lists
+'exceptions' with the comment "JIT does not support exceptions", and
+arch/riscv/net/ implements no bpf_jit_supports_exceptions().
+
+progs/arena_kfunc.c is not explained. It gates its stack-argument test
+with test_loader arch annotations rather than a preprocessor guard:
+
+  #if defined(__BPF_FEATURE_ADDR_SPACE_CAST) && \
+          defined(__BPF_FEATURE_STACK_ARGUMENT)
+  SEC("syscall")
+  __arch_x86_64
+  __arch_arm64
+  __failure __msg("arena pointer cannot be a stack argument")
+  int arena_arg_stack(void *ctx)
+
+test_loader.c skips any test whose arch mask does not contain the running
+arch, so arena_arg_stack stays skipped on RV64 after this patch.
+
+Does anything block it from running on RV64?  bpf_jit_supports_arena()
+returns true on riscv64, DENYLIST.riscv64 contains only 'exceptions', and
+arena_arg_stack is a __failure test so it only needs the verifier to reach
+the "arena pointer cannot be a stack argument" check - which now happens
+on RV64 because the preceding commit makes bpf_jit_supports_stack_args()
+return true.
+
+Should __arch_riscv64 be added to progs/arena_kfunc.c's arena_arg_stack
+(and the #else dummy_test, which carries the same two annotations), or is
+there a reason it should stay on x86_64/arm64 only?
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-On 2026/9/5 15:12, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Low] The block and inline assembly comments in `bpf_timed_may_goto.S` continue to reference `a5` as the mapped register for `BPF_REG_0`, which contradicts the updated code utilizing `t6`. This patch changes `a5` to `t6` in the instructions, but missed updating the corresponding comments.
-> --
-> 
-> commit 3f2026164fcac1b3db2387eec49e58f20293243f
-> Author: Pu Lehui <pulehui@huawei.com>
-> 
-> riscv, bpf: Remap BPF_REG_0 and RV_REG_TCC
-> 
-> This commit remaps BPF_REG_0 to t6 and RV_REG_TCC to t5 to support BPF
-> stack arguments and unify calling conventions. Freeing up a5 and a6
-> allows bpf2bpf calls to pass extra arguments consistently with kfuncs.
-> 
->> diff --git a/arch/riscv/net/bpf_timed_may_goto.S b/arch/riscv/net/bpf_timed_may_goto.S
->> index 02c637d874205..ac41bf6dcb3d0 100644
->> --- a/arch/riscv/net/bpf_timed_may_goto.S
->> +++ b/arch/riscv/net/bpf_timed_may_goto.S
->> @@ -21,7 +21,7 @@ SYM_FUNC_START(arch_bpf_timed_may_goto)
->>   	addi	s0, sp, 8*SZREG
->>   
->>   	/* Save BPF registers R0-R5 (a5, a0-a4) */
->> -	REG_S	a5, 5*SZREG(sp)
->> +	REG_S	t6, 5*SZREG(sp)
-> 
-> [Severity: Low]
-> This isn't a bug, but should the inline comment above this instruction also
-> be updated to reflect that R0 is now mapped to t6 rather than a5?
-> 
-> Additionally, in the block comment at the beginning of
-> arch_bpf_timed_may_goto in arch/riscv/net/bpf_timed_may_goto.S, the text
-> still documents a5 as R0. Could these documentation references be updated to
-> match the code changes?
-> 
-
-all right
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33952202002
+--===============0711090133430070351==--
