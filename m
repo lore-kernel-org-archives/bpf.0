@@ -1,64 +1,64 @@
-Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
+Received: from mail-wr2-f10.google.com (mail-wr2-f10.google.com [74.125.225.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1742314B63
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 08:34:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E6C743F0B7
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 08:34:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788597265; cv=none; b=XV6JZBhjMns0jdZVYq0dbr+2yQQzMEi+vJyGj56h3UV5vanKw/ecprtE58tcqc+ybcoF2vHYiWGn1Ns05MLw5ixF/Yi5ZJvP8dwIHlV2pIJCPQVWkdeeaHJyXjwn9AfZOT6gWhTZG9QdL3ognDc8mHp7OjmL0pf0gOWFy7oKMhI=
+	t=1788597267; cv=none; b=t/ewwwna/fZzvivYqx9eiu0lE4YMN9GsmM1U/lcAPFfYAiqsrTwG+/fRLeBgxepItTNTV6XZFu2EbiWPY2p3iG3svrGapQFaAnqcumLe9y23/ZaebNfV+CWfKrC2wgUS51yLVI344PIfAdV+LxwOhMsV0Di23XEjyvi9NrkMtkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788597265; c=relaxed/simple;
-	bh=zcza65wjEK8NEEIK+tbsHqerDnQIIfxWk/CUvJpdu80=;
+	s=arc-20240116; t=1788597267; c=relaxed/simple;
+	bh=s4Y0JiT4xAIDUadPi1is7tuuN5Ng/5Xc8W5oRApGOv0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SVP106xXS+U1HJFljyD6Ni72Xw0eu/Qp1IF487iWafhuVdyfwiUwNBlK5N+E0WCGsyA62P3sWfN6D1FWcBUW1RnNlFlbRwhtciTQSbth5wLfdXsQte+WzssjtXgoOVrIWxTzrF84IEAwNPMF8DYdQ5RJKfT85YOOluj+lQ3H/xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IlN9EE07; arc=none smtp.client-ip=74.125.225.65
+	 MIME-Version; b=miTlxLDMbae6yl+62qvQVFzFmfadOANtFnrUuJ0Hw4ubLYLS3kGTOprk7aiILfNa0KDj2mRAQ07M5g/GhcKXUAw7TScODKoIq+1pbH8tVUY4/Dwc4J7Auk83FDcrwHqCIeG8gT1Om4lEDmsTEONym/TM7O/HmGWN9Hni+yKzBPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bx5Va2IT; arc=none smtp.client-ip=74.125.225.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IlN9EE07"
-Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-482dd2e92ebso388797f8f.0
-        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 01:34:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bx5Va2IT"
+Received: by mail-wr2-f10.google.com with SMTP id ffacd0b85a97d-484372811e5so538472f8f.0
+        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 01:34:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788597262; x=1789202062; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788597263; x=1789202063; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=zWJANbLFGq9MawAaFxt+pKtX9i+kT4WhXeppFB8idGk=;
-        b=IlN9EE078qaHVt8ja0Dx1/dMYeMgPBG2KtZzK0TSd1+vGxsbeXhmilxsWHqy8mpKJJ
-         Vsau0WQWqtlDWPK17u6GNcSZjANCMUOQX0Wu63r3HSoMuLRSvAJO2COQMXXxesLnzKGU
-         mhAeqoztnmlnhpKnXhUN6ym5VO+XxJSeJEL0IojcYrwsNo42WVUIdj8CBaRAeYMnnCYZ
-         1Hrr14V8x6sCsz7enQ9pcTtFkXgRG4IkLhhO5b/cgSgHzTQBYd0ObWwKljlHTHiaiGjo
-         5U4q+gnSH6FQ/LKydzkl4X8Pt+XszZP+zOckFTwmbBW5XU95ey7TOx6561AQ17eyC+1h
-         Hujw==
+        bh=BgkcIgRjcx8CzsIkhrtznq+t9jdmXNqsjQeLbjfh6oU=;
+        b=Bx5Va2ITzCSDUoxpyG7glKZdGao0zIREAtqTOtfRNd02tOPoHDKp18YFZ7soNN+x5N
+         WFgXLcIcQapYskyg3IFtRVEi8qLVrnn5TuDe2nZIfOK9NQpqLTY1Fpa1hFGj9x2joeBv
+         0TzscKTgdS3xq9kastP5z++mfNAZeVN+PBn4C8YzXUzH+AyoiZKx3QEmbLH+XI9R+WPy
+         O6GiGyrOz7NkF+Q8FYOhXchC8zdW7gemaDyLFP7n+YPIGfctwyEbPAssFvHqeyE2agW7
+         y5oafOR0Or1c2uZmZv2vknvYx1uMYS3eeCcLZzRhzSN0OPCWBpf7uqYf0L05JDxbsAlt
+         1YxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788597262; x=1789202062;
+        d=1e100.net; s=20251104; t=1788597263; x=1789202063;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=zWJANbLFGq9MawAaFxt+pKtX9i+kT4WhXeppFB8idGk=;
-        b=Hi/HdSpoxoGE3yrTLYr93tQHUd+iSvMGEO8b4vq6dEhDKDXckjPF9w8gootdhVPc+T
-         vMV/DMksidnRONYHl+cLojcHX69jHVIFU/6cU7N9NPbzeb1WToEOATnYhsFtJO+F8y1P
-         rube8iwuwzRVXERyG6NEkK/0jEgEV1z56d60ul/qWhLUicG1dA5E0knC85DPPz0iVgDv
-         yQnFFa++qUE9kFxeXHhp7UbDGU1PvLe0r0KSOKDwtbnhqhDzC+NUIMbe3DsZScvZXyHa
-         6DBnnZUuJvxMbSOqgVmwm/+fa9vrd1BpURULxH/6slwdzxgNe/t2Avg/AW27EIRLJtSF
-         gVXg==
-X-Gm-Message-State: AFuF++k5TGceLtUgJ7xZKqozQBVXzWCDimL9/BMuRCGBNolTz7JYas6f
-	2lEhsHjvwWJYKC0/lfjRV2sYibTaGSJQXxZ/LfmR2QxkbrgNc++kQJqUPcvA0lpN
-X-Gm-Gg: AYBFou2uHGtoAcSKO0IJgzulQ9nL71q2l0NidMcD1+0w/qJ32Xf4O9UjcZGiMBTNqcn
-	3u5VZZpRqe4dg9OSx0xppm+4BnYqPgCEkHOJ7awnIb5Pwx4sE5G69aca3HVF8CahXT5MnLVupPd
-	AXgxKIMH4qaGv/RXxn+3ZLE4+4mObe4gXBCB+lAIi54I1gI/rW23uEM30vsrhGXC/h5x0n200UI
-	D6PSUOUXxCMdhj9+bUe88XNPsvU2BJnJJO3tIDuAXC8iMyBN25jl+RndS7k659jO34vXHjk5W6n
-	O4/V8l3abJ20y7U8RIE5Kbkz1fhN4B2L2miEtiacV5FNQzRozb2t79Z+bHA+XffFcpwEoHTsGx/
-	mzU34d8r/F1Aj6jCeBiWKc5OGylZgJv4wfrX0g46h7oCROVlMaV6N7dVjh6zojaMrxlXdrgj7FT
-	Dp7cNzfcPE480Us+Px7tlC66MRwcbTH6/8Sya3Xpgyem9G8nsuq9kM4fAz8Oq15s+yGpA2wnV9r
-	rIw3nVVVVV1gkfqlmwa2QLNzjUWAEdkWMYA2LDfqeJFB+X63N+9NTCNGxF4jS+xhDqJF6plGx4X
-	zB86KFwLY+zygzAeMlD3DDA8QFs=
-X-Received: by 2002:a05:6000:25e7:b0:485:8a46:b3d1 with SMTP id ffacd0b85a97d-4858a46b5acmr9656113f8f.57.1788597261646;
-        Sat, 05 Sep 2026 01:34:21 -0700 (PDT)
+        bh=BgkcIgRjcx8CzsIkhrtznq+t9jdmXNqsjQeLbjfh6oU=;
+        b=MvPHTGoD3Oi8POAcEFHIZ07xIdgqe7Lyo/70WzV/5kHv1x3dUC6x8HaPTOdB6yPCop
+         rIspPh047zDUgJyCRs+HdwWgYyHUqAgW0rKp1kbI4hipzy4h1fww6BsiHsBfZnsYlsln
+         1FVxVLMMKU/opNwgeIlNvOWnW8v74EVKihtavBLwR8+arC4m4R+pkU1ik5cGGCLT2RxO
+         eLBIcoqDa26Dg9hQYtFErIWB1Qrv/2VPMOUK4BmEd6Cda7nXF4Cd+t5i14lY4zayU3yD
+         BihiqbvbCqjjtujBsJGe1iEulRk9WcIXJ10BRHbDI886sJtDdl7tBKMg+Rw8tfSa2HkR
+         j3Dg==
+X-Gm-Message-State: AFuF++kbHl+8wPLbwpGbnWSY/KyfQ4ZQX6l97yOIMlOoqiw3IjVJdryT
+	lzSGtqxhWsuM5V0V5qaAOndu9pSBCJ4bNLv9Oms7+o6PQ1pGZRm1keg9Dso2ZZFA
+X-Gm-Gg: AYBFou1oR4xinBNPl2fmve1Zq1q0gP0ByUE6d38OWVg7kpNGi/4K31lvZsOhZeoD0R9
+	4aGzvfsZIw6PjA5MmseGmAcjF6h1SNhNopxGC6OvHKsKcvBBLAsCSAvxcZnB1KIKGLMoAu9qPDh
+	4BCpTOQRdzHv/0EcWFWQHYRgKhCou6+x+ghiXe9rYWOBacV5hGjylT1ZMQ0zmgKsFE9IG2oXn5H
+	dQb0k7u4GwL24UVR8QacQHbyu+XiZCXIUse/848wu8G6c8WzHJAs9o0rscOnKHUJBF1of5KQMMm
+	1Ka3MXhmohPcap05LySV9/cxZv7JObLODK1naA2bf2IUC5ZMly7nCwWoAdWTqft6FYUGb0jhL0c
+	s/a6HYwuEbj+HTLpMQHK0kUEheeuGfTzbNCJACuH4S08+Yvr0joW5XZ3mcNMNSpvcM8y2F9SjW+
+	vAToQfxuExSFJPJw5db48HsrxdRVM8N7WNRGvp6a8Rn3Ij/BsM2TGU/UWHcl+5rimvWaWJJevEm
+	tG+G9roGwMxydkuiqA6dmDrCzB/I2zmBlSGGVU4Fjufd0VQCzye68SExfcWNEpBtfOzxA7vvKZj
+	apGCu2ok9JzAlz++cK3QRgmyqtk=
+X-Received: by 2002:a5d:64eb:0:b0:482:e4bc:51a8 with SMTP id ffacd0b85a97d-485870899cfmr13967010f8f.7.1788597263317;
+        Sat, 05 Sep 2026 01:34:23 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485885bfe14sm12795865f8f.35.2026.09.05.01.34.21
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485885be1c1sm11682289f8f.32.2026.09.05.01.34.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Sep 2026 01:34:21 -0700 (PDT)
+        Sat, 05 Sep 2026 01:34:22 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Nicholas Carlini <npc@anthropic.com>,
@@ -69,9 +69,9 @@ Cc: Nicholas Carlini <npc@anthropic.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf v2 1/7] bpf: Make post-verification instruction rewrites killable
-Date: Sat,  5 Sep 2026 10:34:09 +0200
-Message-ID: <20260905083418.3723623-2-memxor@gmail.com>
+Subject: [PATCH bpf v2 2/7] bpf: Preserve packet pointer class displacement in regsafe()
+Date: Sat,  5 Sep 2026 10:34:10 +0200
+Message-ID: <20260905083418.3723623-3-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260905083418.3723623-1-memxor@gmail.com>
 References: <20260905083418.3723623-1-memxor@gmail.com>
@@ -81,133 +81,120 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4539; i=memxor@gmail.com; h=from:subject; bh=zcza65wjEK8NEEIK+tbsHqerDnQIIfxWk/CUvJpdu80=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWv2pTzTuZNW3Pv4vMVy1Tnrf1/Ongg4u2BvBLeR6Xzmh baTTB+XdpSyMIhxMciKKbKU/N/HZHyi8neg7TJumDmsTCBDGLg4BWAiP3sZ/goKyC+TXf8gzXvC 8hVH4ufYVD2/Eqa1uPDdvP4bs3UY2P4yMkxfmcYZ9X6KnPFRo+dWvluvnt/tlTVjac3JRQ6BPJe Yf/EDAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4107; i=memxor@gmail.com; h=from:subject; bh=s4Y0JiT4xAIDUadPi1is7tuuN5Ng/5Xc8W5oRApGOv0=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWv2pfxHF9r9a+13qzjIZy2/I/I/TVj+hoezrp9S8qqWl 47BqrYdpSwMYlwMsmKKLCX/9zEZn6j8HWi7jBtmDisTyBAGLk4BmMif9wz/o6R5Nh5YH7ddyGaf /Zvl+/rX3Rdoj7525Na2IOZY3Ql/pBl+sz360FHo8uFI2465ftUZv2yalXpdrGY6rcsXd5uWeU+ DBQA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-After do_check() returns, the verifier runs several instruction rewrite
-passes. Some of them patch or remove one instruction at a time. Each
-operation moves the remaining instruction and auxiliary-data arrays and
-adjusts all branch offsets, making the overall work quadratic in the
-program length.
+regsafe() maps packet pointer IDs between states and checks that each
+current register range is a subset of the corresponding explored
+register range. It does not, however, preserve the displacement between
+registers that share a packet pointer ID.
 
-A privileged loader can submit 131072 unconditional jumps by zero followed
-by a valid return. Verification finishes quickly, but bpf_opt_remove_nops()
-then spends a long time removing each jump separately. Since this
-post-verification work neither checks for signals nor reschedules, a pending
-SIGKILL cannot terminate the task until the rewrite finishes.
+This is unsound because packet range is shared by ID. A bounds check on
+one class member updates every member, and a later access can consume the
+range through another member. Commit 022ac0750883 ("bpf: use reg->var_off
+instead of reg->off for pointers") folded the fixed pointer offset into
+r64 and removed the old off equality check, so two individually narrower
+registers can prune even when their displacement has changed. The
+explored path can then license an out-of-bounds packet access on the
+pruned path.
 
-Make bpf_patch_insn_data() and verifier_remove_insns() common cancellation
-and rescheduling points. These helpers run from BPF_PROG_LOAD process
-context, and bpf_patch_insn_data() can already sleep while reallocating
-auxiliary data. Most callers propagate patching failures directly. JIT
-constant blinding can instead fall back to the interpreter, so recheck for
-a pending fatal signal after bpf_fixup_call_args() and after runtime
-selection to keep cancellation from being consumed by that fallback.
+Requiring equal r64 bases would prevent the bug, but would also reject a
+safe uniform translation of the whole class. Instead, record the base
+translation seen for the first packet pointer in each ID mapping and
+require every subsequent member to have the same translation. This keeps
+the relative displacement invariant while retaining pruning for uniformly
+translated classes. Packet pointers without an ID remain unaffected.
 
-This does not reduce the quadratic cost of the rewrite passes, but it makes
-the work preemptible and allows a killed loader to be torn down promptly.
-
-Fixes: 52875a04f4b2 ("bpf: verifier: remove dead code")
+Fixes: 022ac0750883 ("bpf: use reg->var_off instead of reg->off for pointers")
 Reported-by: Nicholas Carlini <npc@anthropic.com>
 Suggested-by: Nicholas Carlini <npc@anthropic.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/fixups.c   | 21 ++++++++++++++++++++-
- kernel/bpf/verifier.c | 10 ++++++++++
- 2 files changed, 30 insertions(+), 1 deletion(-)
+ include/linux/bpf_verifier.h |  2 ++
+ kernel/bpf/states.c          | 42 ++++++++++++++++++++++++++++++++++--
+ 2 files changed, 42 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 52d3cec33672..9401fffcedfd 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -8,6 +8,7 @@
- #include <linux/bsearch.h>
- #include <linux/sort.h>
- #include <linux/perf_event.h>
-+#include <linux/sched/signal.h>
- #include <net/xdp.h>
- #include "disasm.h"
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 36b65797877d..5cf92ce18520 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -854,6 +854,8 @@ struct backtrack_state {
+ struct bpf_id_pair {
+ 	u32 old;
+ 	u32 cur;
++	s32 pkt_ptr_delta;
++	bool pkt_ptr_delta_set;
+ };
  
-@@ -306,12 +307,28 @@ static void adjust_poke_descs(struct bpf_prog *prog, u32 off, u32 len)
+ struct bpf_idmap {
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index 66fb11b6c6a7..2f8f3fe164b0 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -339,6 +339,7 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
+ 	if (idmap->cnt < BPF_ID_MAP_SIZE) {
+ 		map[idmap->cnt].old = old_id;
+ 		map[idmap->cnt].cur = cur_id;
++		map[idmap->cnt].pkt_ptr_delta_set = false;
+ 		idmap->cnt++;
+ 		return true;
  	}
+@@ -352,6 +353,43 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
+ 	return false;
  }
  
-+/*
-+ * Some post-verification instruction rewriting passes require an
-+ * O(prog->len) operation per instruction. Keep their shared primitives
-+ * killable and preemptible.
-+ */
-+static bool bpf_rewrite_must_abort(void)
++static bool check_pkt_ptr_ids(const struct bpf_reg_state *old,
++			      const struct bpf_reg_state *cur,
++			      struct bpf_idmap *idmap)
 +{
-+	if (fatal_signal_pending(current))
++	struct bpf_id_pair *map = idmap->map;
++	s64 delta;
++	unsigned int i;
++
++	if (!check_ids(old->id, cur->id, idmap))
++		return false;
++	if (!old->id)
 +		return true;
-+	cond_resched();
++
++	/*
++	 * Packet range is shared by all pointers with the same ID. Preserve
++	 * their relative displacement, while allowing the whole class to move.
++	 * Packet pointer offsets are bounded by BPF_MAX_VAR_OFF, so the delta
++	 * between two valid offsets fits in s32.
++	 */
++	delta = (s64)(cur->r64.base - old->r64.base);
++	if (delta < S32_MIN || delta > S32_MAX)
++		return false;
++
++	for (i = 0; i < idmap->cnt; i++) {
++		if (map[i].old != old->id)
++			continue;
++		if (!map[i].pkt_ptr_delta_set) {
++			map[i].pkt_ptr_delta = delta;
++			map[i].pkt_ptr_delta_set = true;
++			return true;
++		}
++		return map[i].pkt_ptr_delta == delta;
++	}
++
 +	return false;
 +}
 +
- struct bpf_prog *bpf_patch_insn_data(struct bpf_verifier_env *env, u32 off,
- 				     const struct bpf_insn *patch, u32 len)
- {
- 	struct bpf_prog *new_prog;
- 	struct bpf_insn_aux_data *new_data = NULL;
- 
-+	if (bpf_rewrite_must_abort())
-+		return NULL;
-+
- 	if (len > 1) {
- 		new_data = vrealloc(env->insn_aux_data,
- 				    array_size(env->prog->len + len - 1,
-@@ -523,6 +540,9 @@ static int verifier_remove_insns(struct bpf_verifier_env *env, u32 off, u32 cnt)
- 	unsigned int orig_prog_len = env->prog->len;
- 	int err;
- 
-+	if (bpf_rewrite_must_abort())
-+		return -EINTR;
-+
- 	if (bpf_prog_is_offloaded(env->prog->aux))
- 		bpf_prog_offload_remove_insns(env, off, cnt);
- 
-@@ -2666,4 +2686,3 @@ int bpf_remove_fastcall_spills_fills(struct bpf_verifier_env *env)
- 
- 	return 0;
- }
--
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1c3039f3fc32..9c797cc3df40 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19,6 +19,7 @@
- #include <linux/bsearch.h>
- #include <linux/sort.h>
- #include <linux/perf_event.h>
-+#include <linux/sched/signal.h>
- #include <linux/ctype.h>
- #include <linux/error-injection.h>
- #include <linux/bpf_lsm.h>
-@@ -21367,6 +21368,13 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 
- 	if (ret == 0)
- 		ret = bpf_fixup_call_args(env);
-+	/*
-+	 * JIT constant blinding treats instruction patching failures as a
-+	 * request to fall back to the interpreter. Do not let such fallback
-+	 * consume a fatal-signal cancellation from bpf_patch_insn_data().
-+	 */
-+	if (ret == 0 && fatal_signal_pending(current))
-+		ret = -EINTR;
- 
- 	env->verification_time = ktime_get_ns() - start_time;
- 	print_verification_stats(env);
-@@ -21425,6 +21433,8 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 		env->prog->expected_attach_type = 0;
- 
- 	env->prog = __bpf_prog_select_runtime(env, env->prog, &ret);
-+	if (ret == 0 && fatal_signal_pending(current))
-+		ret = -EINTR;
- 
- err_release_maps:
- 	if (ret)
+ /*
+  * Compare scalar register IDs for state equivalence.
+  *
+@@ -632,8 +670,8 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+ 		} else if (rold->range > rcur->range) {
+ 			return false;
+ 		}
+-		/* id relations must be preserved */
+-		if (!check_ids(rold->id, rcur->id, idmap))
++		/* id relations and intra-class displacement must be preserved */
++		if (!check_pkt_ptr_ids(rold, rcur, idmap))
+ 			return false;
+ 		/* new val must satisfy old val knowledge */
+ 		return range_within(rold, rcur) &&
 -- 
 2.53.0
 
