@@ -1,104 +1,163 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45EC433263F
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 23:08:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28B373264DD
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 23:08:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788649712; cv=none; b=LkygVpCMVUCXrsRYQk8KLZbrgmSyjXJXt6RzzUG77X0vO6kkxiZ457sAJkfHW2KwEmIUW1d+wxuB1pF+m29naaaz/SRernO4YLztYUw0p/DveGzD2qU9F87XV2hABzLFm+WVYn1S7vKJWm/i/LbBWoBSZqP6LHSzdX9G7SJMZ+0=
+	t=1788649714; cv=none; b=Sis2qAfCGZ2+ma5v1sy3Uxee7ZGsA4xPT4MvBt/PmNxoiLMelAWwlX/awZWCveykES9xh3zZ8lAV54i+x64AMtCZH2OVsW6hmdPZT1fv+MjyqDtvkXC6Dua9zv65eltxFi4Kuhr+iUQzqMgJk3+bZGnRCdj+eWGxLt9gpcyj78A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788649712; c=relaxed/simple;
-	bh=zqqmGeWCckygJ7CEXAhibXfwZRb6STmebYboeFpmchI=;
+	s=arc-20240116; t=1788649714; c=relaxed/simple;
+	bh=4W1o8arDmyP0XN6ysoqC3TJ8N/OWG8ExHbUuTttuhNs=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=rLBfiL0ohHQXX2HtRB4fbmg56GRukUzmyudr2RjWV80Aod1jKfUZkWX0Tkz2U0OKHq2Nrzzb4Maorem2WMzVUBYHT1KeNHs+JWuvaWAcIAzm5miv4W75gaw9LVVwSV5CiTlzRTcVTQBSFxYMrR1ew1KkpgGx6QVQgBb9Bl3aQr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GdTlfseJ; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=rX6YtGlLu0inXJ+YzR3yR98nJvAx+C4s/82vjdw7OONAx8bVjNdywWxazuXmZgc8/U1D0/cRXHZE6ebkG4Qb/SwNp4R1rhNPY2Yg9S/RL6Dr18TJLFQU8npzo976R7UKZWrDNa+/SVkP8+nSfAxG4v1oDzOY0kRIDtd520N0EkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e92jqQB7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GdTlfseJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D1851F00A3A;
-	Sat,  5 Sep 2026 23:08:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e92jqQB7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F6961F00A3D;
+	Sat,  5 Sep 2026 23:08:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788649711;
-	bh=iUk6URweXyVEloAU41iVDtlPw6FS6e8GlB6RajzJEmw=;
+	s=k20260515; t=1788649712;
+	bh=yV4tWkoS7ILsao87flOcpKs1OtiwSJGCOV+4iz8w7pc=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=GdTlfseJznthHcOxE6tNTHBkbZQ31pabaOhoG5IdJkgII4L2wnSfD23Fv1aL1iOgX
-	 MV3HyZ87BoHwZK1Kfon3wDaWZJ7C5MfieCRcGHwZ/rpZqW6qI1XoCzG9MTI5TmXMHU
-	 XhRvh6YUJ8pfa4PzlzsJdbUbVzxJAoxprdAvs9IB2qTBW499FvirVcWUH0/QeouBHI
-	 8Hyb5wb4h4V7/BhPfOf9BPs587fsx0w80wyEeA+2TvR9F49OnDqBGRiVxpmobP4XvT
-	 4h/EelrXSNROoWOz3GzNOiqqlZVbVnlvpv+5dR/SyclXll4bXeTojJ7WDkUh9EW10Q
-	 r81PYhFWXhwpA==
-Content-Type: multipart/mixed; boundary="===============4529544850695607230=="
+	b=e92jqQB7ZjnZrfu8SCjBHI8npW0jUYmeg//svblgv511KEaU8THdg3BYBpnnHDHJ/
+	 9/4aX5ABw0CbMjaKWrPtedZ3Y1BRKg3ZdBb8lylBRSATnOzx/YdIwh40VlD1sdV0ee
+	 qxtd7z/ikSOH34fVVO6RuJa4CmBjAwhxEyouYv8B5M64ySY/b8IyLU5zaFPhDudXIZ
+	 muH3QJNdTx86vcgSDsEEQhtw4/BfU37y2u6T/OYsgZG6CxRQhaMYGPAOptA6in6Ctt
+	 F6TqrZi4cGyznqL4n9utQWQMVza1dHypcXlHhn+Z1L0BtHy/0ilrXFWAgbIVnzWHBo
+	 velcsB3GlamQg==
+Content-Type: multipart/mixed; boundary="===============6641046982242341562=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <51c890fd762298bb1e73a112953c44751f6161de741b57e9239067ed8d19d75f@mail.kernel.org>
-In-Reply-To: <20260905220117.922028-6-ameryhung@gmail.com>
-References: <20260905220117.922028-6-ameryhung@gmail.com>
-Subject: Re: [PATCH bpf-next v1 05/22] bpf: Rename ambiguous function argument types
+Message-Id: <340e5dbc173faa706ec7029f44c75431cced19fe03e2d18f9ebdbe418ec021ef@mail.kernel.org>
+In-Reply-To: <20260905220117.922028-13-ameryhung@gmail.com>
+References: <20260905220117.922028-13-ameryhung@gmail.com>
+Subject: Re: [PATCH bpf-next v1 12/22] bpf: Resolve BTF ID of ARG_PTR_TO_BTF_ID in kfunc bpf_func_proto
 From: bot+bpf-ci@kernel.org
 To: ameryhung@gmail.com,bpf@vger.kernel.org
 Cc: alexei.starovoitov@gmail.com,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,ameryhung@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat,  5 Sep 2026 23:08:30 +0000 (UTC)
+Date: Sat,  5 Sep 2026 23:08:32 +0000 (UTC)
 
---===============4529544850695607230==
+--===============6641046982242341562==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> ARG_ANYTHING does not accept just anything: check_func_arg() accepts
-> an initialized scalar and rejects pointers. Rename it to ARG_SCALAR.
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 1f78746e0601..fe6ab92ceeff 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1020,13 +1020,13 @@ struct bpf_func_proto {
+>  	};
+>  	union {
+>  		struct {
+> -			u32 *arg1_btf_id;
+> -			u32 *arg2_btf_id;
+> -			u32 *arg3_btf_id;
+> -			u32 *arg4_btf_id;
+> -			u32 *arg5_btf_id;
+> +			const u32 *arg1_btf_id;
+> +			const u32 *arg2_btf_id;
+> +			const u32 *arg3_btf_id;
+> +			const u32 *arg4_btf_id;
+> +			const u32 *arg5_btf_id;
+>  		};
+> -		u32 *arg_btf_id[MAX_BPF_FUNC_ARGS];
+> +		const u32 *arg_btf_id[MAX_BPF_FUNC_ARGS];
+>  		struct {
+>  			size_t arg1_size;
+>  			size_t arg2_size;
+
+[ ... ]
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index c5b394e847e6..b6e36df72d13 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -12082,13 +12082,18 @@ bool bpf_is_kfunc_pkt_changing(struct bpf_call_arg_meta *meta)
 >
-> ARG_DONTCARE is the zero-valued terminator for the fixed-size argument
-> array rather than an argument whose value is ignored. Rename it to
-> ARG_UNUSED and stop helper argument iteration explicitly when it
-> is encountered.
+>  static int
+>  get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
+> -		   const struct btf_param *args, int arg, int nargs)
+> +		   const struct btf_param *args, int arg, int nargs,
+> +		   struct bpf_func_proto *proto)
+>  {
+>  	const struct btf_type *t, *ref_t = NULL;
+> +	const u32 *ref_id_ptr = NULL;
+>  	argno_t argno = argno_from_arg(arg + 1);
+>  	const char *ref_tname = NULL;
+> +	u32 ref_id;
+>  	int arg_type;
 >
-> Also pass ARG_PTR_TO_MEM when checking a global subprogram memory
-> argument instead of using the prototype terminator as a placeholder.
+> +	proto->arg_btf_id[arg] = NULL;
+> +
+>  	if (is_kfunc_arg_prog_aux(meta->btf, &args[arg]))
+>  		return ARG_PTR_TO_PROG_AUX;
 >
-> No functional change.
+> @@ -12116,7 +12121,11 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
+>  			reg_arg_name(env, argno), btf_type_str(t));
+>  		return -EINVAL;
+>  	}
+> -	ref_t = btf_type_skip_modifiers(meta->btf, t->type, NULL);
+> +	/* Keep a pointer to the BTF field containing the resolved referent ID. */
+> +	ref_id_ptr = &t->type;
+> +	ref_t = btf_type_skip_modifiers(meta->btf, *ref_id_ptr, &ref_id);
+> +	while (*ref_id_ptr != ref_id)
+> +		ref_id_ptr = &btf_type_by_id(meta->btf, *ref_id_ptr)->type;
+>  	ref_tname = btf_name_by_offset(meta->btf, ref_t->name_off);
 >
-> Signed-off-by: Amery Hung <ameryhung@gmail.com>
+>  	/* In this function, we verify the kfunc's BTF as per the argument type,
 
-The commit message says check_func_arg() "rejects pointers" for
-ARG_SCALAR (formerly ARG_ANYTHING). Is this claim complete?
+[ ... ]
 
-Looking at kernel/bpf/verifier.c, the rejection is conditional on
-allow_ptr_leaks:
+> @@ -12239,13 +12248,21 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
+>  	if (is_kfunc_release(meta) && arg == 0)
+>  		arg_type |= OBJ_RELEASE;
+>
+> -	/*
+> -	 * A KF_RCU kfunc accepts an RCU-protected pointer where it would
+> -	 * otherwise demand a referenced or trusted one. Only ARG_PTR_TO_BTF_ID
+> -	 * looks at where its register came from, so leave the other kinds alone.
+> -	 */
+> -	if (base_type(arg_type) == ARG_PTR_TO_BTF_ID && is_kfunc_rcu(meta))
+> -		arg_type |= MEM_RCU;
+> +	if (base_type(arg_type) == ARG_PTR_TO_BTF_ID) {
+> +		/* A __map argument names a vmlinux type rather than one from
+> +		 * the kfunc's own BTF.
+> +		 */
+                   ^^^^
 
-    if (arg_type == ARG_SCALAR) {
-        if (__is_pointer_value(env->allow_ptr_leaks, reg)) {
-            verbose(env, "%s leaks addr into helper function\n",
-                    reg_arg_name(env, argno));
-            return -EACCES;
-        }
-        return 0;
-    }
+This isn't a bug, but both multi-line comments added in this block start
+their text on the same line as the opening '/*'. The BPF subsystem's
+comment style puts the opening '/*' on its own line. The second comment
+below rewrites one that was previously in the preferred style (with '/*'
+on its own line), and another comment added by this patch in
+check_kfunc_args() does follow the standard. Could these two be
+reformatted to match?
 
-and __is_pointer_value() short-circuits when allow_ptr_leaks is true:
+> +		if (is_kfunc_arg_map(meta->btf, &args[arg]))
+> +			proto->arg_btf_id[arg] = reg2btf_ids[CONST_PTR_TO_MAP];
+> +		else
+> +			proto->arg_btf_id[arg] = ref_id_ptr;
+> +
+> +		/* A KF_RCU kfunc accepts an RCU-protected pointer where it would
+> +		 * otherwise demand a referenced or trusted one.
+> +		 */
+                   ^^^^
 
-    static bool __is_pointer_value(bool allow_ptr_leaks,
-                                   const struct bpf_reg_state *reg)
-    {
-        if (allow_ptr_leaks)
-            return false;
-
-        return is_pointer_regtype(reg->type);
-    }
-
-So a privileged program (one with allow_ptr_leaks set) can pass
-PTR_TO_MAP_VALUE, PTR_TO_STACK, or other pointer types to an ARG_SCALAR
-helper argument. The pointer check only applies to unprivileged programs.
-
-The later commit in this series, a490f49b0c4e, acknowledges this
-explicitly: "helpers retain their privileged ARG_SCALAR pointer-leak
-behavior."
-
-Could the commit message be more precise? Perhaps: "rejects pointers
-unless the program is allowed to leak pointers" or "rejects pointers for
-unprivileged programs"?
+> +		if (is_kfunc_rcu(meta))
+> +			arg_type |= MEM_RCU;
+> +	}
+>
+>  	return arg_type;
+>  }
 
 
 ---
@@ -106,4 +165,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33995442755
---===============4529544850695607230==--
+--===============6641046982242341562==--
