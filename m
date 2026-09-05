@@ -1,64 +1,64 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0938B126C02
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 00:06:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9E1F190462
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 00:06:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788566778; cv=none; b=mlrhVsYfETZqg16vBoXguzPLi7rEH54o4sjjXg0kUiF8dUxeTr4TDi+p5NVpPT9EgOWAhNbrgqNMYCPNqLmHZfrDrVu3hgDQkqelCswC9/bYkcawPFvrZzH8wRxsW9XqfPeURMnaqR+BDLuUBc4hvLgNpog9fYP/Mb3+I0NX/zs=
+	t=1788566779; cv=none; b=hU7ggx41JPlwgzpi9aIxporQ2ibYMlMrBgKCExQDEjHow2bYt73eH+qxta842tjbeb1ihox0S6iMhDHKMOwZcqpa6Nt6f/y8SKsxw/iBXEkTbv2Mv6V9upz76dNUu+ABuqc55wvXXkjkcRcsJmgokGb3RxK8gvhubMFSQ7J0bdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788566778; c=relaxed/simple;
-	bh=7mDchWi3SLG715zWe3B64fd2fq9tpEq5faVGUbt+XpM=;
+	s=arc-20240116; t=1788566779; c=relaxed/simple;
+	bh=Dk50IKCC/oMjLnABy3/dUsgLUiS5wf8h5/Hcr99VgfI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PHoC2uLkalpcctmvkLdQojX7lqLcReVm0+LooslTsL1EjnqLYAJkKPQNapwtdNZn4erGKRAD5JtrjsW9af4fysIViN9yV2HPw3wGzWbReRvp6EP06bpYMrW6ZJE/TNwsK/rnZgg3KPHJrb0TX556AQVps0FJ2d5w0QXjv0Ej+dc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EQPyXd/5; arc=none smtp.client-ip=209.85.216.49
+	 MIME-Version:Content-Type; b=cEej7x7qX/eLe3R8X5Aq4EWipHxEwHJdsFqOX00P5cKLTOHzZE5SObVYxBV4m1Z29tN+zyAzg5rbWOy5Q4OEDmd64zZ+x3917/uv95cs9KQMVcI5Xs/3Wqm7aajVF2Mxtz0MpXlbw8uE1YVQA7u8DAbRlWWxJhhvYimY6HPE4qY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ij3B2hXn; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EQPyXd/5"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3969e82ff8fso1704664a91.0
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 17:06:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ij3B2hXn"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2d72ae08fa1so15322675ad.2
+        for <bpf@vger.kernel.org>; Fri, 04 Sep 2026 17:06:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788566775; x=1789171575; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788566777; x=1789171577; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=iaOgD+CmNkylJGpCzYi4x/eklCrg17cZ2WgqT8gtpRY=;
-        b=EQPyXd/5QqtPejFHqjsRuvShsYe8lTQmLgpR3iiNDaOxOlva+m3NI94BGl8GcropG0
-         FAkQ+eAXKAMaNQlnOJVky7H802IQPSlvC/5Yb5A0VBUziMXoQ/RgeSh813Qa2kdolvkk
-         RH7a6m5GOEnFdYX1GO2X8XN8ilaI7r04Sqbl4DeDSXq7s6r5HIIf8JhFtD4sXkhhPRBH
-         TKywKU/ip+m7uTHRwsgngQQkAeEVHLGSj/r7YJJrWCi9qivSzRtW6F1CpC5+Knz2bfRM
-         e9abUQXfuBRsJtLzrIkdfrbrj48u1UqbODuc22Ok1pJY3AHo1piNFRTvdeK04vsMhQUW
-         yREw==
+        bh=zGGayUq1fHfFb7U9tjVKRyLypA43Uc0Cqzaq25U4zSk=;
+        b=ij3B2hXnDzas6b7X/PtuZQuA50kWIogm4AmqFt8nKgpSytw69Hs/hr/RlHKUR6WyAt
+         XJtwDMPXyAsKWfbIzuobFbLfnEWyEL3eecvK812iHtZcTvn5OjjY5RbmysfV/UxUxeI6
+         nfauac98nTUI3hKg/LmTzi1mFZQmH4Ggpo3cVlLFH19NW+LbwFGb39yDeKUyV9SAleQX
+         G2FkI+kN6pi8P9BhOJIQjtHURO/7vORltKJ6OV28+ffKnJ5iGufnDoRbZEs0twmNASl5
+         wIKDDuG0UNKmdYqRuhaTlM415eoRc0RVxFx2rGU1IrN0rwS0DaiPT9co0B4IOjyt1DIE
+         /Q5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788566775; x=1789171575;
+        d=1e100.net; s=20251104; t=1788566777; x=1789171577;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=iaOgD+CmNkylJGpCzYi4x/eklCrg17cZ2WgqT8gtpRY=;
-        b=ledH/vq9t8YxGJAnPIgm6Y4yEmTg/C2KrrpGNgxJDBLovKPsxwXVbC6NjHrU4x2gcX
-         OQhfTg5NMrMxS8IjfBL/+XUQlYaxtdA7iTnrhDstgXKZDQQDjWoAu0dsj3NZuQN/aG5w
-         3QYIlnqVWFF/RtRA4rBnKTWaWiQWWy2zEAXfMCCFzj2vs1ZO/Pg8DnBQ8Z8YB4+8PkZ/
-         G1Z0oDO5MA7wWK9nu097gdFsYXSyF6c3iX6HjTCbrMCptjSzg55RgEZ/atPnS5j6ciEc
-         yiTH0e7AeaGsrl6bRhqyN2pLeDvOfuNnG7dnjOkOk+CDQOqOJ8YTNPNw107i9LtFZP4N
-         h64g==
-X-Gm-Message-State: AFuF++nl32+FFpRNiylzQC+7sTpRGq+4kA+ebf2JH1t04krEgJU1zsO2
-	KK7DR89DH0SL/GQLFQHWmoUNghRrpCCXwBEhMQpiOnW1KlCrBz84z5zN1pbutxMJw8o=
-X-Gm-Gg: AYBFou2lD95zx20zsMPmSm/kzr2C0j75HNi46h8TOBUOuWalFcNw0DvWGrArK5Ip6F/
-	/qTZcbbJs6KoxWdNLo6L0w1bVF6U5nzrsdo0WTdr0PqhTRacPyLp0KZxwzeF7XJv6K8PQ3N+uh9
-	/MpMDXPsAfIvC/NIGi9i/EuQMVo+u8xquxoLNK6g4tfrQprM4tfrRKztpVeyl9yedDU080v0rpl
-	GEwzElFowH77Js1/9oUQar9DYHJarB4XfjVVs5JU0EM1f7DG6Omqsk37FxHev6kORMOrRyUInow
-	7JRyWCeNpsHbLGMXl1LOZ+p6xJTkwjrXOkOez1si8qDj2U9zje3zLBurYF0KTJ1hv5bgdKjllB/
-	SrTgsrUWXB7u0j6l3g5+YMbNECWRzH8O+KpXg0ZsP5pDCnpEECNEsTW3yhaufsUqi6o6c0rjGyD
-	RFJC6KDQz9pADY1YZiG5m7YFC4E9zKj77m94g+PZDfjQIR0u5EmvdBd/GhQofJIifPD8Dww5zZe
-	BfGtyDoXMaWfmLVXskhNf8QENk39bQN4uMfXR8zNo9Krw==
-X-Received: by 2002:a17:90b:3c05:b0:393:288:29e3 with SMTP id 98e67ed59e1d1-39b26106c44mr13814872a91.10.1788566774999;
-        Fri, 04 Sep 2026 17:06:14 -0700 (PDT)
+        bh=zGGayUq1fHfFb7U9tjVKRyLypA43Uc0Cqzaq25U4zSk=;
+        b=VzXTVj7Bu4DaCMLmK2ZkwVpdoz0L1TTgfiwhhucnqEjgBMThXPID35G72CRQ991O9h
+         I85SdCD2bLOyqO4eMtfezeJ/0N4yyRmHBMGCLLugbyqUCbgMUKwtMQ1ABllXw04Ho399
+         Vp+LJGF7VmU9SAwryuS2VAEZzEjzA2Oif1C3BvsuWs2EYA3pugJmRRlO/eNVRg8RaEqL
+         Cdaw2Q4RKJMfbBqi/jx/1ACvxdHTorzUJs95nAHMP+Y3LOfJB9FnD2YfT78+XBqdDvrs
+         v+oxm1c/MasnQDzI65h3Eb32/1ICTZLDlobhPOGqA150qGWFrjq2GuSpw1xldfusqQIo
+         wl5A==
+X-Gm-Message-State: AFuF++nDQ3JwIDSb1VlvHZo8zWL7AzWiHFg3TQwXTH3KUkumthKNv1Iw
+	gjqZfQCVhRXVZBA8nGc0AwWdK/RYnS9MVlB/HWpVaIDenlXff/2H9pFS7PTWiMtEIR0=
+X-Gm-Gg: AYBFou2jlp9V9NC1zqtWOIkYdLPgy4TIXfr5dQ48Xva4OO5OHsDtgOpb2EK3yOO4rGd
+	n1S1SiW4JzLkAV1oIvf4xh1akkzTSiJCS4qb8b0uMRIlTXMxSu1ne8cQqnESFsuaHtMpekfWHH4
+	Y9F3zYtvVH0tFwJUSSXVjiWjt95ba1mVNb1tJVAfDWEpwnBVL9ev0ISdbSJ3YxIYrBoTkCLRn7h
+	kiTESSx0dqSyOJ6a+16IwROTdVIO6c1wmaNs8f30LAaMOSj0ODclDXnmCOvbkn1/g1jobVKCUhz
+	vSCH2DZH/egTerp8yRI3StFni6bLib45Iqp+BzU0uUcehSNbt6CO+KmVuJMjNUoe/ytW0n2L/TA
+	x80Mp4S1Xb8J+ERj5PYFy0YGWcotNdAyPSeNYpHr/TOrVRfWQr4Ago8KM/CYuG9dcdXN6aq6GE5
+	k8K9HWsRxd6oSuc6RL+zoKwtxXy9jirzyS1ikBi6/Bt+gXCf8MdyhEw3joXgrzJ63vw65FiOOaw
+	oQ7jslyv5NcC94Tj9fZwGPW10BTzgoLCSmPdioGPkoiJQ==
+X-Received: by 2002:a17:902:d987:b0:2db:257c:9fd5 with SMTP id d9443c01a7336-2db257ca020mr55609135ad.16.1788566776914;
+        Fri, 04 Sep 2026 17:06:16 -0700 (PDT)
 Received: from ezingerman-fedora-PF4V722J.thefacebook.com ([2620:10d:c090:500::5:4f3d])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3356dc5c04dsm42277eec.8.2026.09.04.17.06.13
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3356dc5c04dsm42277eec.8.2026.09.04.17.06.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2026 17:06:14 -0700 (PDT)
+        Fri, 04 Sep 2026 17:06:16 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -69,9 +69,9 @@ Cc: daniel@iogearbox.net,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf 01/10] bpf: mark a NULL call argument precise
-Date: Fri,  4 Sep 2026 17:05:52 -0700
-Message-ID: <20260904-register-is-null-precise-fixes-v1-1-0f5a360ff15d@gmail.com>
+Subject: [PATCH bpf 02/10] selftests/bpf: precision of a NULL helper argument
+Date: Fri,  4 Sep 2026 17:05:53 -0700
+Message-ID: <20260904-register-is-null-precise-fixes-v1-2-0f5a360ff15d@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260904-register-is-null-precise-fixes-v1-0-0f5a360ff15d@gmail.com>
 References: <20260904-register-is-null-precise-fixes-v1-0-0f5a360ff15d@gmail.com>
@@ -84,95 +84,96 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-check_func_arg() allows bpf_register_is_null() for nullable arguments
-w/o marking the underlying scalar register precise. Hence a checkpoint
-created on such a path would prune against arbitrary scalar value.
+Check that mark_chain_precision() is called for a NULL nullable memory
+argument and for the zero flags argument of bpf_get_local_storage().
 
-check_helper_call() enforces second parameter of the
-bpf_get_local_storage() to be zero, w/o marking the underlying scalar
-register precise. Hence a checkpoint created on such a path would
-prune against arbitrary scalar value.
-
-Grouping these two into one patch, as they share the same fixes tag.
-
-Fixes: b5dc0163d8fd ("bpf: precise scalar_value tracking")
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/verifier.c                                        |  9 ++++++++-
- .../testing/selftests/bpf/progs/verifier_subprog_precision.c | 12 ++++++------
- 2 files changed, 14 insertions(+), 7 deletions(-)
+ .../selftests/bpf/progs/verifier_cgroup_storage.c  | 29 ++++++++++++++++++
+ .../selftests/bpf/progs/verifier_precision.c       | 34 ++++++++++++++++++++++
+ 2 files changed, 63 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9c6ad157a61e..ca362a7ea58c 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -8752,11 +8752,15 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 			return err;
- 	}
+diff --git a/tools/testing/selftests/bpf/progs/verifier_cgroup_storage.c b/tools/testing/selftests/bpf/progs/verifier_cgroup_storage.c
+index 9a13f5c11ac7..884080a5bffc 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_cgroup_storage.c
++++ b/tools/testing/selftests/bpf/progs/verifier_cgroup_storage.c
+@@ -305,4 +305,33 @@ __naked void cpu_cgroup_storage_access_6(void)
+ 	: __clobber_all);
+ }
  
--	if (bpf_register_is_null(reg) && type_may_be_null(arg_type))
-+	if (bpf_register_is_null(reg) && type_may_be_null(arg_type)) {
- 		/* A NULL register has a SCALAR_VALUE type, so skip
- 		 * type checking.
- 		 */
-+		err = mark_chain_precision(env, regno);
-+		if (err)
-+			return err;
- 		goto skip_type_check;
-+	}
++/*
++ * Verification takes two paths: with r2 being scalar zero on path (1)
++ * and with r2 being some other scalar on path (2).
++ * Check that the verifier does not use checkpoints created
++ * on path (1) to prune path (2).
++ */
++SEC("cgroup/skb")
++__failure
++__flag(BPF_F_TEST_STATE_FREQ)
++__msg("get_local_storage() doesn't support non-zero flags")
++__naked void non_zero_flags_on_a_pruned_path(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	/* r2 is 0 on the path explored first, 1 on the other */\
++	r2 = 1;						\
++	if r0 == 0 goto 1f;				\
++	r2 = 0;						\
++1:	r1 = %[cgroup_storage] ll;			\
++	call %[bpf_get_local_storage];			\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32),
++	  __imm(bpf_get_local_storage),
++	  __imm_addr(cgroup_storage)
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_precision.c b/tools/testing/selftests/bpf/progs/verifier_precision.c
+index 6f325876efdd..3e290b07f672 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_precision.c
++++ b/tools/testing/selftests/bpf/progs/verifier_precision.c
+@@ -642,4 +642,38 @@ __naked int bpf_atomic_cmpxchg_32bit_precision(void)
+ 	: __clobber_all);
+ }
  
- 	/* arg_btf_id and arg_size are in a union. */
- 	if (base_type(arg_type) == ARG_PTR_TO_BTF_ID ||
-@@ -10906,6 +10910,9 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 			verbose(env, "get_local_storage() doesn't support non-zero flags\n");
- 			return -EINVAL;
- 		}
-+		err = mark_chain_precision(env, BPF_REG_2);
-+		if (err)
-+			return err;
- 		break;
- 	case BPF_FUNC_for_each_map_elem:
- 		err = push_callback_call(env, insn, insn_idx, meta.subprogno,
-diff --git a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-index e174a905c562..dc0c7034c04f 100644
---- a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
-@@ -287,9 +287,9 @@ __msg("17: (b7) r0 = 0")
- __msg("18: (95) exit")
- __msg("returning from callee:")
- __msg("to caller at 9:")
--__msg("frame 0: propagating r1,r4")
-+__msg("frame 0: propagating r1,r3,r4")
- __msg("mark_precise: frame0: last_idx 9 first_idx 9 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r1,r4 stack= before 18: (95) exit")
-+__msg("mark_precise: frame0: regs=r1,r3,r4 stack= before 18: (95) exit")
- __msg("from 18 to 9: safe")
- __naked int callback_result_precise(void)
- {
-@@ -419,9 +419,9 @@ __msg("to caller at 9:")
- /* r1, r4 are always precise for bpf_loop(),
-  * r6 was marked before backtracking to callback body.
-  */
--__msg("frame 0: propagating r1,r4,r6")
-+__msg("frame 0: propagating r1,r3,r4,r6")
- __msg("mark_precise: frame0: last_idx 9 first_idx 9 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r1,r4,r6 stack= before 16: (95) exit")
-+__msg("mark_precise: frame0: regs=r1,r3,r4,r6 stack= before 16: (95) exit")
- __msg("mark_precise: frame1: regs= stack= before 15: (b7) r0 = 0")
- __msg("mark_precise: frame1: regs= stack= before 9: (85) call bpf_loop")
- __msg("mark_precise: frame0: parent state regs= stack=:")
-@@ -575,9 +575,9 @@ __msg("to caller at 10:")
- /* r1, r4 are always precise for bpf_loop(),
-  * fp-8 was marked before backtracking to callback body.
-  */
--__msg("frame 0: propagating r1,r4,fp-8")
-+__msg("frame 0: propagating r1,r3,r4,fp-8")
- __msg("mark_precise: frame0: last_idx 10 first_idx 10 subseq_idx -1")
--__msg("mark_precise: frame0: regs=r1,r4 stack=-8 before 18: (95) exit")
-+__msg("mark_precise: frame0: regs=r1,r3,r4 stack=-8 before 18: (95) exit")
- __msg("mark_precise: frame1: regs= stack= before 17: (b7) r0 = 0")
- __msg("mark_precise: frame1: regs= stack= before 10: (85) call bpf_loop#181")
- __msg("mark_precise: frame0: parent state regs= stack=:")
++/*
++ * Verification takes two paths: with r1 being scalar zero on path (1)
++ * and with r1 being some other scalar on path (2).
++ * Check that the verifier does not use checkpoints created
++ * on path (1) to prune path (2).
++ */
++SEC("?tc")
++__flag(BPF_F_TEST_STATE_FREQ)
++__failure __msg("R1 type=scalar expected=fp")
++__naked int null_mem_arg_zero_size(void)
++{
++	asm volatile (
++		"call %[bpf_get_prandom_u32];"
++		"r1 = 42;"
++		"if r0 > 42 goto 1f;"
++		"r1 = 0;"
++	"1:"
++		"r2 = 0;"
++		"r3 = 0;"
++		"r4 = 0;"
++		"r5 = 0;"
++		/*
++		 * ARG_PTR_TO_MEM | PTR_MAYBE_NULL parameter can be NULL,
++		 * but can't be some other scalar value.
++		 */
++		"call %[bpf_csum_diff];"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm(bpf_get_prandom_u32),
++		  __imm(bpf_csum_diff)
++		: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 
 -- 
 2.55.0
