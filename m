@@ -1,223 +1,279 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA3A43644A0
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 23:08:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0751368D4C
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 23:08:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788649716; cv=none; b=Sck4WdZQBisobIX2gJg4n5kJ7iYexN7gzACVKfJdbOiwAMsG+2QCxAq/776pnsfGBdmSfpgvRO/GQsbDlm6Ca7TAtecpz/RlxaYVxkb4p2EV9/s5Z28Tv0umi6yNeDLEByAfplvI2PeqL9HxX0uavw92axjX3OdHJaIV5T3XPxY=
+	t=1788649718; cv=none; b=M+arO7aid3o3iT1WleEA43yegatHVuQEEsZJRAm7Xh2tct6XDNOPoQa5kvKXItLRzSEgtc1eA6TJ875Ayj6Ht3Sl0cR+Z9l/AhG6f/1BdV0nEHvYuf+ADtwBD9JAT18lsPFCneR66DVK/mcSvZyGJ+JSaY1RuKrAbKASlAixB+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788649716; c=relaxed/simple;
-	bh=1vkPEjFhhg7l1MbWJeB7h6XTOPzpjb0DsaOXRmrPKY0=;
+	s=arc-20240116; t=1788649718; c=relaxed/simple;
+	bh=OtQZB59vqhRT2UOz9CDtFNHpTxXh2peRvSW5+/z2QUg=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=tNIkEVFKT39NZIDRimJWV6/UiQ8EVyZArS7JJtuTq2ycNmkWYRQjv0AT7keMc1ZedxTVg2OyEEbNwkwRYGBH0HKCWo4C0AkTo1oTVHSMza2IrG7hQ9B1uNITjdyGTM4E+7/KN3Wem9tGhYPesbJd3Sqlxq1uE9imDJFnDBJlAiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZEmqLuOy; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=FvAQxhXphzEIX0d28rs3eCKH4tkYULZyMCbyayLgvm7xK6Wz088EIxHphr4N+dQwDv9YRXczHxvDKZe2wexM4IX38QerUrLf6kyTl7iTbJJ6Ezt35TlLfFelZPk7A+IoFGjvL5PGDGctmW6hNHE/dqGEFAZGiiKEG8vCVQMBz3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Top4bUs0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZEmqLuOy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 025DB1F00A3A;
-	Sat,  5 Sep 2026 23:08:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Top4bUs0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCE1D1F00A3D;
+	Sat,  5 Sep 2026 23:08:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788649714;
-	bh=VpgeurKK0ytYdC4y0iCeFyzdnt8zYRisPKZccFtEJ7o=;
+	s=k20260515; t=1788649716;
+	bh=peffDe1FscJmzHJj4olIA9VH941aNVYDDvHcXEzNWEw=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ZEmqLuOyCzniyA7jEPD3QSPVX+8WyLoUCcbk9VvRhUa5SYNy+mln8wtWdOWnozW/f
-	 /36XRPyYJfPD6lwrKOja8thKDUifhatI6D/HnKr0hfoCd9sToF9YjEPePMKQnBB2H1
-	 ckmjWq2ZGUOEM/kq8IuBM/qa56RB738NT6om2k3XQ4Smw6MlwlJHbNP5vLwf03EQdk
-	 oHwgIDhTNw6AkRVikAPkqSEI1Y+2NFr0p4MfA1QQDr0rTC2Z9+zXu/E00W0r1TeYbU
-	 m2+qUgHf9XqXhsKCzax8D/MJDwpIrz2HWCCW8mizMwP+sVU0UL5cmffpdRKMACIl+O
-	 PR0NGl5F1OWDA==
-Content-Type: multipart/mixed; boundary="===============7785990450871967204=="
+	b=Top4bUs0hjYN1m4wr2vO77M2vfekcxxXAWu3HfJHF6s48SYuq6Vikc5JlJDcRTgQA
+	 J01pU7RQ0b90ZSp9iHmquzcbBBJy78SRSq7a814MHtmrvVk1q0ztFkSei75UgCfSOn
+	 oR0G7d4kG0MuIubtQTzRNXa/ylszKbk3VygL8fBagAWmU+UdTBa0jfw6lBvlfEhnfi
+	 HRgZXx7xOB/eSxOciAGPWjmz6pMox54bzr41o7JwvOxrAgwn1G/VJxcFYW/DmaeNxF
+	 jyADqxDAjjrDRDHivElRjTRGmdia0lm+RKgdRYN5vS1GsRxeFYtsRqwReyC5QY1zmP
+	 Crwvw8WiGxETw==
+Content-Type: multipart/mixed; boundary="===============8825046529455296876=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <2f4372e64739b68cece2725901e21e0a9437726f003a2c454edda97ee10d0cb7@mail.kernel.org>
-In-Reply-To: <20260905220117.922028-22-ameryhung@gmail.com>
-References: <20260905220117.922028-22-ameryhung@gmail.com>
-Subject: Re: [PATCH bpf-next v1 21/22] bpf: Consolidate release argument validation
+Message-Id: <40ffa664fac297b60b3387d9e763a2adc31e5ef0692791b718054cd5b5772133@mail.kernel.org>
+In-Reply-To: <20260905220117.922028-8-ameryhung@gmail.com>
+References: <20260905220117.922028-8-ameryhung@gmail.com>
+Subject: Re: [PATCH bpf-next v1 07/22] bpf: Align helper and kfunc ARG_PTR_TO_PROG_AUX handling
 From: bot+bpf-ci@kernel.org
 To: ameryhung@gmail.com,bpf@vger.kernel.org
 Cc: alexei.starovoitov@gmail.com,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,ameryhung@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat,  5 Sep 2026 23:08:33 +0000 (UTC)
+Date: Sat,  5 Sep 2026 23:08:35 +0000 (UTC)
 
---===============7785990450871967204==
+--===============8825046529455296876==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index f620920ea575..547703f54a89 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -922,6 +922,7 @@ enum bpf_arg_type {
+>  	ARG_PTR_TO_TASK_WORK,	/* pointer to bpf_task_work */
+>  	ARG_PTR_TO_IRQ_FLAG,	/* pointer to saved IRQ flags on the stack */
+>  	ARG_PTR_TO_RES_SPIN_LOCK,	/* pointer to bpf_res_spin_lock */
+> +	ARG_PTR_TO_PROG_AUX,	/* pointer to the caller's bpf_prog_aux */
+>  	__BPF_ARG_TYPE_MAX,
+>
+>  	/* Extended arg_types. */
+
+[ ... ]
+
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 72bfd8f93ae4..1b731aad54da 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -1510,6 +1510,7 @@ static const struct bpf_func_proto bpf_timer_set_callback_proto = {
+>  	.ret_type	= RET_INTEGER,
+>  	.arg1_type	= ARG_PTR_TO_TIMER,
+>  	.arg2_type	= ARG_PTR_TO_FUNC,
+> +	.arg3_type	= ARG_PTR_TO_PROG_AUX,
+>  };
+
+[ ... ]
+
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 487ad1ee4179..6c5d7e544f84 100644
+> index a0a74a5e23be..22f5aff76b40 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> @@ -8825,29 +8862,9 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
->  		return err;
+> @@ -9400,9 +9406,42 @@ static bool check_proto_release_reg(const struct bpf_func_proto *fn, struct bpf_
+>  	return true;
+>  }
 >
->  skip_type_check:
-> -	if (arg_type_is_release(arg_type)) {
-> -		if (type_may_be_null(reg->type)) {
-> -			verbose(env, "Possibly NULL pointer passed to trusted %s\n",
-> -				reg_arg_name(env, argno));
-> -			bpf_diag_call_arg(
-> -				env, insn_idx, argno, meta->func_name,
-> -				"the pointer may be NULL, but this call requires a non-NULL pointer",
-> -				"Add a NULL check and make the call only on the non-NULL path.");
-> -			return -EACCES;
-> -		}
-> -
-> -		if (!arg_type_is_dynptr(arg_type) &&
-> -		    !reg_is_referenced(env, reg) && !bpf_register_is_null(reg)) {
-> -			verbose(env,
-> -				"release helper %s expects referenced PTR_TO_BTF_ID passed to %s\n",
-> -				meta->func_name, reg_arg_name(env, argno));
-> -			bpf_diag_call_arg(
-> -				env, insn_idx, argno, meta->func_name,
-> -				"release helpers require a value that owns a live resource returned by a matching acquire helper",
-> -				"Pass the resource-owning pointer returned by the matching acquire helper, and avoid calling the release helper after ownership has already been transferred or released.");
-> -			return -EINVAL;
-> -		}
-> -	}
-> +	err = check_func_arg_release(env, reg, argno, arg_type, meta, insn_idx);
-> +	if (err)
-> +		return err;
+> -static int check_func_proto(const struct bpf_func_proto *fn, struct bpf_call_arg_meta *meta)
+> +static bool check_arg_prog_aux(struct bpf_verifier_env *env,
+> +			       const struct bpf_func_proto *proto)
+>  {
+> -	return check_raw_mode_ok(fn, meta) &&
+> +	bool seen = false;
+> +	argno_t argno;
+> +	u32 i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(proto->arg_type); i++) {
+> +		if (proto->arg_type[i] == ARG_UNUSED)
+> +			break;
 
-Does removing the type_may_be_null() check here break the percpu kptr
-RCU conversion path?
+Does this early break work correctly for kfunc protos?
 
-The deleted block rejected maybe-null registers passed to OBJ_RELEASE
-helper arguments. Only bpf_kptr_xchg() arg2 has ARG_PTR_TO_BTR_ID_OR_NULL
-| OBJ_RELEASE, so it is the only argument whose admission changes.
+gen_kfunc_arg_proto() in verifier.c skips __ign and implicit arguments
+without assigning a type, leaving ARG_UNUSED holes in the middle of
+proto->arg_type. For example:
 
-check_func_arg_release() only keeps the ownership half of the test:
+  bpf_arena_alloc_pages(void *p__map, void *addr__ign, u32 page_cnt,
+                        int node_id, u64 flags)
 
-kernel/bpf/verifier.c:check_func_arg_release() {
-    if (arg_type_is_dynptr(arg_type) || reg_is_referenced(env, reg) ||
-        bpf_register_is_null(reg))
-        return 0;
-}
+leaves arg_type[1] == ARG_UNUSED while arg_type[2], [3], [4] have real
+types. Similarly:
 
-but for the percpu-kptr RCU conversion path, release_reg() assumes the
-released register is known non-NULL. In check_helper_call():
+  bpf_list_push_front_impl(head, node, meta__ign, off)
 
-    bool convert_rcu = (func_id == BPF_FUNC_kptr_xchg) && in_rcu_cs(env) &&
-                       (reg->type & MEM_ALLOC) && (reg->type & MEM_PERCPU);
-    err = release_reg(env, reg, convert_rcu, !!meta.dynptr.id);
+leaves arg_type[2] == ARG_UNUSED while arg_type[3] is a real type.
 
-release_reg() then calls ref_convert_alloc_rcu_protected(), which for
-every register carrying the id does:
+The loop above terminates at the first hole and never inspects remaining
+arguments. If a kfunc has a prog_aux argument after a hole, or has >5
+arguments with a prog_aux argument in position 6+, these checks are
+unreachable.
 
-    reg->id = 0;
-    reg->type &= ~MEM_ALLOC;
-    reg->type |= MEM_RCU;
+The consequence is a net loss of validation. check_kfunc_args()
+previously performed both checks unconditionally, per argument, from
+BTF. Both were deleted from that function (which now does an unguarded
+cur_aux(env)->arg_prog = regno) and moved here, where the early break
+makes them unreachable for affected signatures.
 
-PTR_MAYBE_NULL is deliberately not touched, and reg->id is zeroed. Before
-this patch that combination was unreachable because a maybe-null register
-could not be passed to bpf_kptr_xchg() at all. Now the verifier can
-produce PTR_TO_BTF_ID | MEM_PERCPU | MEM_RCU | PTR_MAYBE_NULL with
-reg->id == 0.
+The stack-argument check is the more critical one. argno_from_arg(i + 1)
+/ reg_from_argno() return -1 for arguments 6 and above, and
+check_kfunc_args() now assigns that value into the 4-bit arg_prog
+bitfield (include/linux/bpf_verifier.h), yielding arg_prog == 0xf.
+bpf_fixup_kfunc_call() would then emit BPF_LD_IMM64(15, (long)prog->aux),
+storing to a non-existent register number.
 
-That state breaks NULL-check identity matching. check_cond_jmp_op() calls
-mark_ptr_or_null_regs() for any JEQ/JNE-against-0 on a maybe-null
-register, and mark_ptr_or_null_regs() uses u32 id = regs[regno].id, i.e.
-0. mark_ptr_or_null_reg() then matches on:
+No in-tree kfunc currently combines >5 arguments, a non-implicit
+bpf_prog_aux argument and a preceding hole, so the escalation is latent;
+the validation loss itself is not.
 
-    if (type_may_be_null(reg->type) && reg->id == id &&
-        (is_rcu_reg(reg) || !WARN_ON_ONCE(!reg->id))) {
+> +		if (proto->arg_type[i] != ARG_PTR_TO_PROG_AUX)
+> +			continue;
+> +
+> +		if (seen) {
+> +			verifier_bug(env, "Only 1 prog->aux argument supported");
+> +			return false;
+> +		}
+> +
+> +		argno = argno_from_arg(i + 1);
+> +		if (reg_from_argno(argno) < 0) {
+> +			verbose(env, "%s prog->aux cannot be a stack argument\n",
+> +				reg_arg_name(env, argno));
+> +			return false;
+> +		}
+> +
+> +		seen = true;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +static int check_func_proto(struct bpf_verifier_env *env, const struct bpf_func_proto *fn,
+> +			    struct bpf_call_arg_meta *meta)
+> +{
+> +	return check_arg_prog_aux(env, fn) &&
+> +	       check_raw_mode_ok(fn, meta) &&
+>  	       check_arg_pair_ok(fn) &&
+>  	       check_mem_arg_rw_flag_ok(fn) &&
+>  	       check_proto_release_reg(fn, meta) &&
 
-is_rcu_reg() is just "reg->type & MEM_RCU", so the id==0 sanity WARN is
-bypassed and every maybe-null MEM_RCU register with id 0 in the state is
-marked non-NULL by a NULL check on any one of them.
+[ ... ]
 
-Concrete accepted-but-unsafe program with percpu kptr fields pc1/pc2 in a
-map value:
+> @@ -12044,6 +12083,9 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
+>  	const char *ref_tname = NULL;
+>  	int arg_type;
+>
+> +	if (is_kfunc_arg_prog_aux(meta->btf, &args[arg]))
+> +		return ARG_PTR_TO_PROG_AUX;
+> +
+>  	t = btf_type_skip_modifiers(meta->btf, args[arg].type, NULL);
+>
+>  	/* Scalar arguments are classified from their BTF suffix/name alone. */
+> @@ -12192,9 +12234,7 @@ static int gen_kfunc_arg_proto(struct bpf_verifier_env *env, struct bpf_call_arg
+>  	}
+>
+>  	for (i = 0; i < nargs; i++) {
+> -		if (is_kfunc_arg_prog_aux(btf, &args[i]) ||
+> -		    is_kfunc_arg_ignore(btf, &args[i]) ||
+> -		    is_kfunc_arg_implicit(meta, i))
+> +		if (is_kfunc_arg_ignore(btf, &args[i]) || is_kfunc_arg_implicit(meta, i))
+>  			continue;
 
-    p1 = bpf_percpu_obj_new(struct val_t);
-      /* MEM_ALLOC|MEM_PERCPU|PTR_MAYBE_NULL, id=N1 */
+Does ARG_PTR_TO_PROG_AUX get recorded for KF_IMPLICIT_ARGS kfuncs with
+a bpf_prog_aux argument?
 
-    p2 = bpf_percpu_obj_new(struct val_t);
-      /* MEM_ALLOC|MEM_PERCPU|PTR_MAYBE_NULL, id=N2 */
+The loop above skips implicit arguments before calling
+get_kfunc_arg_type(), so those arguments never get a type and
+proto->arg_type[i] stays ARG_UNUSED.
 
-    bpf_rcu_read_lock();
+resolve_btfids' is_kf_implicit_arg() restricts implicit arguments to
+exactly two types: bpf_prog_aux and btf_struct_meta.
+process_kfunc_with_implicit_args() rewrites the BTF at build time: the
+visible kfunc FUNC gets a truncated func_proto without the implicit
+args, while a <name>_impl FUNC keeps the full one. fetch_kfunc_meta()
+sets meta->func_proto to the _impl proto, so is_kfunc_arg_implicit()
+returns true for the trailing bpf_prog_aux argument in KF_IMPLICIT_ARGS
+kfuncs.
 
-    old = bpf_kptr_xchg(&v->pc1, p1);
-      /* p1 -> MEM_RCU|MEM_PERCPU|PTR_MAYBE_NULL, id=0 */
+Concrete trace for bpf_wq_set_callback (kernel/bpf/helpers.c, registered
+KF_IMPLICIT_ARGS):
 
-    old = bpf_kptr_xchg(&v->pc2, p2);
-      /* p2 -> MEM_RCU|MEM_PERCPU|PTR_MAYBE_NULL, id=0 */
+  1. nargs = 4 from the _impl proto (wq, callback_fn, flags, aux); the
+     visible proto has vlen 3.
 
-    if (p1) {
-      /* clears PTR_MAYBE_NULL on p1 AND on p2 (both id 0, both MEM_RCU) */
+  2. i == 3: is_kfunc_arg_implicit(meta, 3) is true -> continue,
+     get_kfunc_arg_type() never runs, proto->arg_type[3] == ARG_UNUSED.
 
-      q = bpf_this_cpu_ptr(p2);
-      /* R1 now looks non-NULL, so ARG_PTR_TO_PERCPU_BTF_ID is accepted */
+  3. check_kfunc_args() i == 3: arg_type == ARG_UNUSED, so the
+     ARG_PTR_TO_PROG_AUX branch is skipped and the next line
+     (is_kfunc_arg_implicit) continues. cur_aux(env)->arg_prog is never
+     set.
 
-      q->field = 1;
-      /* q is PTR_TO_BTF_ID|MEM_ALLOC|MEM_RCU, non-NULL, writable */
-    }
-    bpf_rcu_read_unlock();
+  4. bpf_fixup_kfunc_call() tests env->insn_aux_data[insn_idx].arg_prog,
+     which is 0, so no BPF_LD_IMM64(R4, prog->aux) is emitted.
 
-If bpf_percpu_obj_new() for p2 returned NULL at runtime, the program
-stores NULL into the percpu kptr field and then executes
-this_cpu_ptr(NULL), which writes at NULL + __per_cpu_offset[cpu].
+  5. At run time bpf_wq_set_callback() is entered with whatever the
+     program left in R4 and immediately dereferences it:
 
-This would be an unchecked write into the per-CPU area from a
-verifier-accepted program.
+       return __bpf_async_set_callback(async, callback_fn, aux->prog);
 
-Note that progs/map_kptr_fail.c:kptr_xchg_possibly_null was deliberately
-flipped from __failure to __success, so the relaxation is intentional,
-but the changelog does not address the percpu/RCU conversion path, and no
-test covers a nullable percpu source xchg'd inside an RCU critical
-section.
+This affects every KF_IMPLICIT_ARGS kfunc with a bpf_prog_aux argument:
+bpf_wq_set_callback (helpers.c, aux->prog), bpf_task_work_schedule_signal
+(helpers.c), bpf_task_work_schedule_resume (helpers.c), bpf_stream_vprintk
+(stream.c, bpf_stream_get(stream_id, aux)), bpf_stream_print_stack (stream.c),
+scx_bpf_cid_override (kernel/sched/ext/cid.c), plus the testmod kfuncs
+bpf_kfunc_implicit_arg and bpf_kfunc_multi_st_ops_test_1_assoc. The
+register is program-controlled, so this is an arbitrary kernel pointer
+dereference reachable from a loadable BPF program.
 
-Should the verifier keep rejecting type_may_be_null(reg->type) for
-OBJ_RELEASE helper arguments when the destination kptr field is
-BPF_KPTR_PERCPU, or should ref_convert_alloc_rcu_protected() leave a
-fresh non-zero reg->id so that maybe-null identity tracking stays intact?
+The immediately following commit in the series, ef7ad41fb8d0, repairs
+exactly this by adding ARG_IGNORE, moving the ignore/implicit test after
+is_kfunc_arg_prog_aux() inside get_kfunc_arg_type(), and deleting the
+pre-classification skip from gen_kfunc_arg_proto(). The ordering fix
+from ef7ad41fb8d0 belongs in this commit to avoid a bisect hole.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/cb_refs.c b/tools/testing/selftests/bpf/prog_tests/cb_refs.c
-> index 50ea3d72d446..8743f52e755d 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/cb_refs.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/cb_refs.c
-> @@ -11,8 +11,8 @@ struct {
->  	const char *prog_name;
->  	const char *err_msg;
->  } cb_refs_tests[] = {
-> -	{ "underflow_prog", "release kfunc bpf_kfunc_call_test_release expects referenced PTR_TO_BTF_ID passed to R1" },
-> -	{ "leak_prog", "Possibly NULL pointer passed to trusted R2" },
-> +	{ "underflow_prog", "release function bpf_kfunc_call_test_release expects referenced PTR_TO_BTF_ID passed to R1" },
-> +	{ "leak_prog", "Unreleased reference id=4 alloc_insn=33" },
+>
+>  		arg_type = get_kfunc_arg_type(env, meta, args, i, nargs);
+> @@ -12204,7 +12244,7 @@ static int gen_kfunc_arg_proto(struct bpf_verifier_env *env, struct bpf_call_arg
+>  		proto->arg_type[i] = arg_type;
+>  	}
+>
+> -	return 0;
+> +	return check_arg_prog_aux(env, proto) ? 0 : -EINVAL;
+>  }
 
-This isn't a bug, but could the leak_prog expectation be more robust?
+[ ... ]
 
-The new expectation hard-codes a full instruction index, "Unreleased
-reference id=4 alloc_insn=33", which pins the test to one compiler's
-instruction layout for the callback subprog cb2().
-
-Every neighbouring expectation in the same table deliberately truncates
-the digits and documents why:
-
-    { "nested_cb", "Unreleased reference id=4 alloc_insn=2" },
-      /* alloc_insn=2{4,5} */
-
-    { "non_cb_transfer_ref", "Unreleased reference id=4 alloc_insn=1" },
-      /* alloc_insn=1{1,2} */
-
-and the equivalent expectation added for the same verifier message in
-map_kptr_fail.c drops the number entirely:
-
-    __failure __msg("Unreleased reference id=4 alloc_insn=")
-
-Matching in test_cb_refs() is strstr(log_buf, cb_refs_tests[i].err_msg),
-so a truncated prefix such as "Unreleased reference id=4 alloc_insn=3"
-matches equally well while tolerating a one- or two-instruction shift from
-a different clang version.
-
-As written, the entry breaks with any layout change in cb2(), and unlike
-the two neighbours it carries no comment recording the observed range.
+> @@ -12799,18 +12839,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
+>  		int regno = reg_from_argno(argno);
+>  		u32 ref_id = args[i].type, type_size;
+>
+> -		if (is_kfunc_arg_prog_aux(btf, &args[i])) {
+> -			/* Reject repeated use bpf_prog_aux */
+> -			if (meta->arg_prog) {
+> -				verifier_bug(env, "Only 1 prog->aux argument supported per-kfunc");
+> -				return -EFAULT;
+> -			}
+> -			if (regno < 0) {
+> -				verbose(env, "%s prog->aux cannot be a stack argument\n",
+> -					reg_arg_name(env, argno));
+> -				return -EINVAL;
+> -			}
+> -			meta->arg_prog = true;
+> +		if (arg_type == ARG_PTR_TO_PROG_AUX) {
+>  			cur_aux(env)->arg_prog = regno;
+>  			continue;
+>  		}
 
 
 ---
@@ -225,4 +281,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33995442755
---===============7785990450871967204==--
+--===============8825046529455296876==--
