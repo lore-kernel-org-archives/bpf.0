@@ -1,62 +1,62 @@
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D814F34252B
-	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 22:01:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DFBA26AF4
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 22:01:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788645697; cv=none; b=VdcePIqXG3z3q8OPzxBGPHtMLi41cTWinhvNQlG0/wx3H24k59kNDQyrp5S036VvtVlGT1ErbCLH+8vWFcspv98v6qfFRI8TzY0GgNcnMObqb85clmtTJAy5lZ6vYtjgfaheicOJrbH3uT5Xclr67u54H1UuNvV6DqdDU53LEBs=
+	t=1788645698; cv=none; b=T/cDXNFTjcYzwZf4OY4W45xyVvwxOaxqYMGN+WdmbnoMyBmgkX1dWxrzisLl9OmjyenSzZ0JimeG0SzaDTclbndiJjXOQCifG14cC+RkDfyXV9mJplvrA9XWxFyyA0htatqlbbx4f2KVQ6wz38sLgJI2kw21yq6av8sXFmmoEHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788645697; c=relaxed/simple;
-	bh=Q7Pfc1Ad521mTE/Aqk1fmAjOO9toj/ACDaPAXOpH/F0=;
+	s=arc-20240116; t=1788645698; c=relaxed/simple;
+	bh=aCviLAcySKIOqoj5sG1ssYRXtbnCJ6L2GMiJKHndqdc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uHj6GLlCCkNAkWGubHfDOfhrV8K3qqbvzg85GFhIJSUaF5NHE/ykN2wUNGlROfBSbDhcYtcc9ADtubMa6TRNS/8TAaV7/d2VBJM2QFsM2TpM3Kap5SSVPEEp6ICVT6HIEfLVQAfrP9BKkdDX4lID19tYwi7RgQj8gZDkkL3hOqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nven19uW; arc=none smtp.client-ip=209.85.210.53
+	 MIME-Version; b=aOpf22JCCdMNP6GYN7dfU0RnWpXmQP7xmtnkzJSV16LcwORuWJCHYdaoHhu94wbSNWjk8C91drINMCByc4qJkE3tc35+Nr1wkuoDkS8QeGZ5aciM0773VrgKBkOhYOEoJolECoKFqyciSrYdmK2O7HLQ7BkLw9CM9XBjIHrQhU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rMwrmtHV; arc=none smtp.client-ip=209.85.167.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nven19uW"
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-7f84a55e31aso1750723a34.2
-        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 15:01:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rMwrmtHV"
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-4af173320f9so1705437b6e.2
+        for <bpf@vger.kernel.org>; Sat, 05 Sep 2026 15:01:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788645695; x=1789250495; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788645696; x=1789250496; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ZC64P2NumaOLf2Tr2iK+YX+7Bmm486ZhLBPnk0J2JB8=;
-        b=nven19uW/Nuw57qXnmA9s9m9sYzaYt1zM6SiZQFbvkZ0Y8mRZiqCUDoVEz9QAxnjca
-         Pyfy8PWYEuREwljc7OPfmdKxcfRyhnIsCuRXwn4siy8tgcBmAyP/RxBxbQDS44xAxQql
-         QRVYydQHXI0QDVkj1Nnq6Or/zojIcElT32hz5UafvKP4QGhkT6dBrDanO5M4uPRHxMmG
-         e/V8fl7iCkF549qyDSUMkxi++cnprsadvD7haDPsL50Ee4QWL9XFLKCWm3SH1QRXN7cM
-         Th8eYnD0OX7Ly8LwHLei9UmlDhEJwRUnqVW5SOEhN7WsUPxqNTn7zDj/vZw4uPKcemdq
-         m4zA==
+        bh=HZm0ttASY7rre/2JxFqWxyWYHaZ5PaCtc1JLxshrQdw=;
+        b=rMwrmtHV9U0GZH+1r9pT3+yL6ZlmQAwDog/BqEHUu6SEC1WHVMRWFLu2ty/KBIirKj
+         8nmiSAs3NqS2afpqt2UJ/kwl/2S2rKVW1dKrQsmAFXE61N+vyY6McthVaFkJt79b2Run
+         KRrN0JX13gMJjljcUY+tFWpmpuB1dYQeIIaJde7ibZGqguXCqNsUvaElRMMJtnAKvCuL
+         INpdPG4HtqlUCHIcSLheMW4paW45nOdU/LCpEb0yaeyagwcMPl9q5U2nO/r6yDSRKlZz
+         6egLBICfPclxJWOCucPPbYpJfdH7cLCHw7usYOb1tw2hLA3O3HPLbwRXdZYsOfPOEKjk
+         k0Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788645695; x=1789250495;
+        d=1e100.net; s=20251104; t=1788645696; x=1789250496;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ZC64P2NumaOLf2Tr2iK+YX+7Bmm486ZhLBPnk0J2JB8=;
-        b=BsDx8/MuhlUiYL9MQrjnCz6iqjNnZJV3REolU+93OCPA+NbgNq2UyFgb3yMqfWRvsa
-         h5dBFZlFuZmgIB6cFfh8enwtU5aHRLRtTw8sDqnyoQmDk4sRqYalzcsqrXe/uc5nsAf6
-         JMPlegqJR3+s3sbGUAHGH5CZXZtIXRtA0YFLASEaHM3Va3dHF7Kuo8+myGM7NhiVwX6T
-         ZQFOKXWERKiH+Rabl888QwYvM73Af/ULyi/yO2DZuGhXN4hprZpPSmLzt9axHWWGoXvs
-         cL1mDWyx7sP+eS2UHQzmXvVc8MlZTYYwV9V5rGpMK1TJzHo7hX53n0vDKmbsJrW89qEk
-         zGQg==
-X-Gm-Message-State: AFuF++n03JW/DKIbyyYC99tbW5GIm4woh7Z3kEOP/XdAUBdr56q60FAS
-	mCf8IJSwEZcZlXUiGcgYJnJGp+SfbljvHNC3ZKLfgjDOFmd1Rf3qfFwLmBsixQ==
-X-Gm-Gg: AYBFou2Tyh6kFD8nLILMFm1zYBhZVXw6pr1sO+1EiU4P2qrYp4/i0CiFZXZ0PwsQyhE
-	dLcGf8FQWssl86hjYyw7wKapKvXAk8KKqKw8v4gmbyT5gCYYrCFqxsHT0RGS2OScnOCOBCC+DQQ
-	cs5oNYJVScb9wOqId0V3YPhKwZpor2jh1ElMczMIfzU+Lwr7d/GwoivK0axRqahH0CJy+xWBaIt
-	j2Gj43aJWlf4XIPGWWWvvZhR+njUUs4FYz6zn81yBF5HoF/lLRKVkuuSdbB0ed0YmiBfcdD5E8f
-	wRFxtZ1IGqiBsSP8c7IWPJBXFBLSS3pbaOC/Upcv/6TunhOH5xlxRNPFM+X4RyPQuFRgb4K/v3e
-	E2IzrUkvO1hUSRuQj59FTHPTgyBm0Yc758xEgRikTEjCCgVKL9gd9HXHTx5GS/6vZ1UnZAc7Xx/
-	9XUWitqpYePtFy80+SeymP3Xc4f6K/fLzNgn3tJyHczQ8t/lS0eIA=
-X-Received: by 2002:a05:6830:6385:b0:7f4:daae:401d with SMTP id 46e09a7af769-7fa1e7d967cmr10284589a34.8.1788645694588;
-        Sat, 05 Sep 2026 15:01:34 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:71::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f9f7aeac18sm7152730a34.25.2026.09.05.15.01.33
+        bh=HZm0ttASY7rre/2JxFqWxyWYHaZ5PaCtc1JLxshrQdw=;
+        b=gnunapZpWUSm/WRlVsi8xkjwWrQvqDHk2Bo/0NxiHhKR6V2VaqpdcUI9Mhm4Ml77H7
+         8LPq6sHMN4mJDg8FH/TqspLR1smfEZO9//tpaJeaw4/l1ZFbrq+Owa/rdEL6gL1OQSYU
+         4LRyZ25QZyo6B3B7eZrASGail+eIxUZolcF0nAdG/tNUf3IsvK7mb5gUXDRwpD48k5KZ
+         PUlWspx1Uj8SU4jKfiaimGiAALoCYQjS/0+45uXpFiomfsGtuyhWlvbQxarFkbWTM3DE
+         n3u/ojs2Z+Gj785tMQ8yHokwI7twcGm/CUHsW/dox++ADX77+KrlSb0urh20w64c2+PO
+         5KEw==
+X-Gm-Message-State: AFuF++nrwXU+DlQ5AHUuy7bzReCwfuc6WeMpUE75R+Fr1xqMcCS+F9jX
+	JAaV+0nOo4so4TFpJZYySpVUvyuAP5snDVmQ1IJzRSiucF+jm1dk4EULecHPOA==
+X-Gm-Gg: AYBFou1FqMoyIpf+fb3XLFTbqPmQEDHIPjv42s3E1pWt0PyzU5Q+TXY3ed5E0jtZ/ej
+	yVkVbCHp42dtp6ifXjMjjS+NUX/9nc7hRXYdYhYgIovS82mxloGZ0XPLm1dDAFmjTiSzVPCyeRh
+	/GjoWLOJnRnvEl55DzFPxk9RmyO+1XAXLzKE2usUKqqF82ybwcNJl7VgTJD3IOxXEHJ5OcxLCFW
+	R+OXdftU0IyjdfkMzGJDaiRx9d4mSLS8pWDCTivb+BO/+OtAPRTy4mL2arwzw8Z7JxuDVFUmXg/
+	agJIlLcEyKX95hmli+I4d7FE6IAw3b9Qxnvrind9FFgJ1wAyMEbpIAFmi+762HnLw2gUbG3RoNT
+	mFoFjkeOjpu8HcNO8N+TcV0Xhp/s1sC3ChvAusAHfSixwgG7+4lr3A1jQVMs4B1ZKPBvMe+plXQ
+	sPQVI11fcpnNnIdbpSlkOScqPJsv8XOxhfHsONEIqjQ/JBCQwmNLQ=
+X-Received: by 2002:a05:6808:67c6:b0:4b3:880a:f08d with SMTP id 5614622812f47-4b9622c002amr9184197b6e.11.1788645695927;
+        Sat, 05 Sep 2026 15:01:35 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:59::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b970d200fesm6123132b6e.3.2026.09.05.15.01.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Sep 2026 15:01:34 -0700 (PDT)
+        Sat, 05 Sep 2026 15:01:35 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: alexei.starovoitov@gmail.com,
@@ -66,9 +66,9 @@ Cc: alexei.starovoitov@gmail.com,
 	memxor@gmail.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 10/22] bpf: Set MEM_UNINIT and dynptr subtypes when generating kfunc arg types
-Date: Sat,  5 Sep 2026 15:01:05 -0700
-Message-ID: <20260905220117.922028-11-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v1 11/22] bpf: Set MEM_RCU when generating kfunc argument types
+Date: Sat,  5 Sep 2026 15:01:06 -0700
+Message-ID: <20260905220117.922028-12-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260905220117.922028-1-ameryhung@gmail.com>
 References: <20260905220117.922028-1-ameryhung@gmail.com>
@@ -80,113 +80,54 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The dynptr flavour a kfunc argument expects is rebuilt on every
-verification of the call: check_kfunc_args() starts from
-ARG_PTR_TO_DYNPTR, adds MEM_UNINIT from the __uninit suffix, and then
-walks a chain of func_id comparisons to add DYNPTR_TYPE_SKB, _XDP,
-_SKB_META or _FILE. All of that is fixed by the kfunc identity and BTF,
-so move it into get_kfunc_arg_type() and let the generated prototype
-carry it.
+The BTF ID argument of a kfunc has to be referenced or trusted
+unless the kfunc is KF_RCU, in which case an RCU-protected pointer is
+accepted too. check_kfunc_args() reads that off meta->kfunc_flags on
+every verification of the call, which is the last thing keeping the
+argument policy of ARG_PTR_TO_BTF_ID out of the generated prototype.
 
-Inheriting the classification also means PTR_MAYBE_NULL reaches
-process_dynptr_func() for a __nullable dynptr argument, where it did not
-before, and is_dynptr_type_expected() tested for any type of dynptr with
-an exact arg_type == ARG_PTR_TO_DYNPTR comparison. Test the
-DYNPTR_TYPE_FLAG_MASK bits instead, which is what the comment there
-already claims to mean and does not care about unrelated flags.
+Set MEM_RCU in get_kfunc_arg_type() for ARG_PTR_TO_BTF_ID arguments
+of KF_RCU kfuncs, the way it already sets OBJ_RELEASE for release
+arguments, and test the generated flag instead. Setting it on every
+pointer argument would be equivalent here but would leak MEM_RCU into
+arguments whose handling compares the whole arg_type, such as the
+ARG_PTR_TO_CTX test in check_func_arg_reg_off().
 
-What cannot move is the KF_bpf_dynptr_clone arm, which takes its type
-from meta->dynptr.type, recorded while verifying the parent dynptr
-argument earlier in the same call. That stays at the call site, applied
-on top of the cached classification.
-
-No functional change.
+No functional change intended.
 
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- kernel/bpf/verifier.c | 47 ++++++++++++++++++++++++-------------------
- 1 file changed, 26 insertions(+), 21 deletions(-)
+ kernel/bpf/verifier.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 7662293ac7d2..f43462a43ee9 100644
+index f43462a43ee9..c5b394e847e6 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -951,8 +951,12 @@ static enum bpf_dynptr_type dynptr_reg_type(struct bpf_verifier_env *env, struct
- static bool is_dynptr_type_expected(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
- 				    enum bpf_arg_type arg_type)
- {
--	/* ARG_PTR_TO_DYNPTR takes any type of dynptr */
--	if (arg_type == ARG_PTR_TO_DYNPTR)
+@@ -12239,6 +12239,14 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
+ 	if (is_kfunc_release(meta) && arg == 0)
+ 		arg_type |= OBJ_RELEASE;
+ 
 +	/*
-+	 * ARG_PTR_TO_DYNPTR without a type flag takes any type of dynptr.
-+	 * Test the flags rather than the whole arg_type, which may carry
-+	 * unrelated ones such as PTR_MAYBE_NULL.
++	 * A KF_RCU kfunc accepts an RCU-protected pointer where it would
++	 * otherwise demand a referenced or trusted one. Only ARG_PTR_TO_BTF_ID
++	 * looks at where its register came from, so leave the other kinds alone.
 +	 */
-+	if (!(arg_type & DYNPTR_TYPE_FLAG_MASK))
- 		return true;
- 
- 	return dynptr_reg_type(env, reg) == arg_to_dynptr_type(arg_type);
-@@ -12130,9 +12134,20 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
- 		arg_type = ARG_PTR_TO_ALLOC_BTF_ID;
- 	else if (is_kfunc_arg_refcounted_kptr(meta->btf, &args[arg]))
- 		arg_type = ARG_PTR_TO_REFCOUNTED_KPTR;
--	else if (is_kfunc_arg_dynptr(meta->btf, &args[arg]))
-+	else if (is_kfunc_arg_dynptr(meta->btf, &args[arg])) {
- 		arg_type = ARG_PTR_TO_DYNPTR;
--	else if (is_kfunc_arg_iter(meta, arg, &args[arg]))
++	if (base_type(arg_type) == ARG_PTR_TO_BTF_ID && is_kfunc_rcu(meta))
++		arg_type |= MEM_RCU;
 +
-+		if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_from_skb]))
-+			arg_type |= DYNPTR_TYPE_SKB;
-+		else if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_from_xdp]))
-+			arg_type |= DYNPTR_TYPE_XDP;
-+		else if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_from_skb_meta]))
-+			arg_type |= DYNPTR_TYPE_SKB_META;
-+		else if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_from_file]) ||
-+			 is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_file_discard]))
-+			/* OBJ_RELEASE for the latter comes from KF_RELEASE below */
-+			arg_type |= DYNPTR_TYPE_FILE;
-+	} else if (is_kfunc_arg_iter(meta, arg, &args[arg]))
- 		arg_type = ARG_PTR_TO_ITER;
- 	else if (is_kfunc_arg_list_head(meta->btf, &args[arg]))
- 		arg_type = ARG_PTR_TO_LIST_HEAD;
-@@ -12211,6 +12226,9 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
- 		arg_type = ARG_PTR_TO_MEM | MEM_FIXED_SIZE;
- 	}
+ 	return arg_type;
+ }
  
-+	if (is_kfunc_arg_uninit(meta->btf, &args[arg]))
-+		arg_type |= MEM_UNINIT;
-+
- 	if (is_kfunc_arg_nullable(meta->btf, &args[arg]))
- 		arg_type |= PTR_MAYBE_NULL;
+@@ -13174,7 +13182,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
+ 			    reg2btf_ids[base_type(reg->type)]) {
+ 				if (!is_trusted_reg(env, reg) ||
+ 				    bpf_type_has_unsafe_modifiers(reg->type)) {
+-					if (!is_kfunc_rcu(meta)) {
++					if (!(arg_type & MEM_RCU)) {
+ 						const char *expected_type;
  
-@@ -13027,23 +13045,10 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
- 			break;
- 		case ARG_PTR_TO_DYNPTR:
- 		{
--			enum bpf_arg_type dynptr_arg_type = ARG_PTR_TO_DYNPTR;
--
--			if (is_kfunc_arg_uninit(btf, &args[i]))
--				dynptr_arg_type |= MEM_UNINIT;
--
--			if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_from_skb])) {
--				dynptr_arg_type |= DYNPTR_TYPE_SKB;
--			} else if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_from_xdp])) {
--				dynptr_arg_type |= DYNPTR_TYPE_XDP;
--			} else if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_from_skb_meta])) {
--				dynptr_arg_type |= DYNPTR_TYPE_SKB_META;
--			} else if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_from_file])) {
--				dynptr_arg_type |= DYNPTR_TYPE_FILE;
--			} else if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_file_discard])) {
--				dynptr_arg_type |= DYNPTR_TYPE_FILE | OBJ_RELEASE;
--			} else if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_clone]) &&
--				   (dynptr_arg_type & MEM_UNINIT)) {
-+			enum bpf_arg_type dynptr_arg_type = arg_type;
-+
-+			if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_clone]) &&
-+			    (dynptr_arg_type & MEM_UNINIT)) {
- 				enum bpf_dynptr_type parent_type = meta->dynptr.type;
- 
- 				if (parent_type == BPF_DYNPTR_TYPE_INVALID) {
+ 						expected_type = bpf_diag_fmt_btf_type(env, btf, ref_id);
 -- 
 2.52.0
 
