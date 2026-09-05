@@ -1,137 +1,114 @@
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB22D264F80;
-	Sat,  5 Sep 2026 00:16:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7119C282F0E
+	for <bpf@vger.kernel.org>; Sat,  5 Sep 2026 00:19:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788567413; cv=none; b=A+NG/ljkQBIMTCIhfw939O8AfGv+N/tSCiWyZGm7+EEWc3BkZ65TkBng/7TN6S+TXf73BRZxNybNXDYgf+DZEpoAH7JzYLN6GQsNGsWzY+AsbcAzKhyIPSDFndEtGaIMRzeuZObD+qOvQI1BQI6jaifgeK1R1nvp0aCk9So1H/k=
+	t=1788567597; cv=none; b=qnR+c2lub5Qfa/neqw3WKlAkDVBc266YY3d7h5hld5jJ+Ctgu5uNWCzb8Xs5t2Z5wBsUhUohi0pbsx5WuLmp0KqCpYJjBsER0nQst8IVu2UW28ygfeVV48Y+Ec6M1K6Pd4EH5YgBmn/wtqdrVXoRZlwtH0iyTem3YpvxYp5x9fE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788567413; c=relaxed/simple;
-	bh=pLv+2SyjfZxcPWRztrF/sBkUPU9/iQ3eNSWoQGAxTWo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gVifPp1poM835/mmhNEtyzukqsbN9mQFuy1iQYN0CkY6ES5OsdVN6LgJ48DGpLfDbVsJ60GUeI/av1RoXyD6zjEC4EESFk7JiPTKyrReQMQTDXPfn9/gjkZAGMjAl3SHgXullaTWVAv5MJGIEI7jn0SaON0r9rxzzi6N/LM/244=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b=pPxg2SXJ; arc=none smtp.client-ip=216.40.44.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	s=arc-20240116; t=1788567597; c=relaxed/simple;
+	bh=MbGMLEOwOBMQ9riw58HNApqS+11eUhYApssNYJhkdxM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Ut9cGSiyqF4qVcnGi9VuzTcvfZJ7vGYC8huB8E3HSGUa8U+CYFKZl8YXSQGOeyIp9LJxwOFYIzeD1dGHePee2ne8v/VhS/+KSfO2hA9TtvqCiqMEi3k720jLTj38A9eoMfglHHELY6166UOIoO9t6QVZ6+yPtPx1R0VibYpwUZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BEcHmjeS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b="pPxg2SXJ"
-Received: from omf04.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay03.hostedemail.com (Postfix) with ESMTP id 61914A0244;
-	Sat,  5 Sep 2026 00:16:42 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf04.hostedemail.com (Postfix) with ESMTPA id 5020E2002D;
-	Sat,  5 Sep 2026 00:16:40 +0000 (UTC)
-Date: Fri, 4 Sep 2026 20:17:41 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Gabriele Monaco <gmonaco@redhat.com>, Nam Cao <namcao@linutronix.de>,
- LKML <linux-kernel@vger.kernel.org>, linux-trace-kernel
- <linux-trace-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, Wen Yang
- <wen.yang@linux.dev>, Tobias Schaffner <tobias.schaffner@siemens.com>,
- Viktor Malik <vmalik@redhat.com>, Linus Torvalds
- <torvalds@linux-foundation.org>
-Subject: Re: [RFC PATCH 00/20] rv: Add support for BPF monitors
-Message-ID: <20260904201741.2986efca@gandalf.local.home>
-In-Reply-To: <CAADnVQJH1SYR_GN6gewF3w_z_Sex9HFE1T1oXkQe6+v18bDTWA@mail.gmail.com>
-References: <20260831090524.106845-1-gmonaco@redhat.com>
-	<87se3sakgi.fsf@yellow.woof>
-	<df6e9168cb06c35e21db7f9d17cfbca6bd87005b.camel@redhat.com>
-	<DL5B40CU17WD.3KD75URQZ6RRR@gmail.com>
-	<eb3dd8158942d663ec8ad4c529eacd666c5f96d9.camel@redhat.com>
-	<20260903090211.50d15220@gandalf.local.home>
-	<CAADnVQK8e1Qp9rf1zThZxb3vr4Gc_bpo0nqpEO2LdnEwHdKokA@mail.gmail.com>
-	<20260904074317.01b2c0e1@robin>
-	<DL6O0KLPXLTA.2HJJUXQUVCP5@gmail.com>
-	<20260904123108.1fa1d815@gandalf.local.home>
-	<20260904132421.111c0279@gandalf.local.home>
-	<DL6XBKITK7ZT.3RXK9YGGUYZZE@gmail.com>
-	<20260904194620.0c7a8363@gandalf.local.home>
-	<CAADnVQJH1SYR_GN6gewF3w_z_Sex9HFE1T1oXkQe6+v18bDTWA@mail.gmail.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BEcHmjeS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FFA21F00A3D;
+	Sat,  5 Sep 2026 00:19:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788567596;
+	bh=wjj9JmKtdKdS0+rzR52dTjOP3Gml2RaP7Ej5uS4HjT8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=BEcHmjeSrKZo6kGoM3260luRZ30g3MWQVg/b4VorNNaVYHk4vAfoZ224mXCXZ4otL
+	 6RsUnsa2ytK+YgVYIVg6mKhhy/gydajCGKWO6hDXqeq1NBWKHXq7WENNm0ijIFylUj
+	 jj+zAoxSFfG81gJL5pFrsGJ4xiD6ArBkkuqap1h8X4V8Dqrht4NHO7dK6B7H2jzCaS
+	 cXPlFxg9Mqz3acFHfV58mDKy5J/JqwbfWVPuaqbeVZgFORRGysoRaFqTY5q63ebOHf
+	 +a2HCDMHf+OfKAMEfop6Fa2PTrdCZi191dX0aGOtZ4PXOLMiDiXBetAdJWE/T9723i
+	 uXXgZsl80PvDQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf 07/10] bpf: mark a NULL BTF_ID argument of a global
+ subprogram precise
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Eduard Zingerman" <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260904-register-is-null-precise-fixes-v1-7-0f5a360ff15d@gmail.com>
+References: <20260904-register-is-null-precise-fixes-v1-0-0f5a360ff15d@gmail.com>
+ <20260904-register-is-null-precise-fixes-v1-7-0f5a360ff15d@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 05 Sep 2026 00:19:55 +0000
+Message-Id: <20260905001956.1FFA21F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Stat-Signature: z4d4bwstn79amrnd3g1qoq6mup4yp5st
-X-Rspamd-Server: rspamout06
-X-Rspamd-Queue-Id: 5020E2002D
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/qwamaypo6TbuC6tWjO86g4VqY8Tv4B4U=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=pLv+2SyjfZxcPWRztrF/sBkUPU9/iQ3eNSWoQGAxTWo=; b=pPxg2SXJgwKSVPfHO6bzUa0wOT5VGiAPYSB4FLr4p/2ZFkcCkVu3AMtiCMcureTzoZAesI8Z19k47wHqs0b5159+ls666JAX3h7AWManDibbpUyceX5TejaYYIV7Ji/hPxLrPn+KWmQj6BkpzDijVq6Be1S00xZIIEiEIIYNzvI=
-X-HE-Tag: 1788567400-473223
-X-HE-Meta: U2FsdGVkX1+ozkwmmqAmsdWFMhF46eR524x491CUTUt6caq18LHLnZhkXdJqseZIcZ2pNTpbeXARje52YBvOcZd0cQ8Lr754fRcYQ2YfXgNX7KBOBnonsYxQna7aSv/veqlCGEP2bjdli11MnLU5QkNCNDVQSPrdpaKIhzriiMZdRxK0EBDpp6iGcPy9ijw3YYuSOu2SI4ioO5EYB274WhtHiLeYJUBE2F/rMYiRaUdvhc/MdMmgKKgORDimKBk2twVyCE6TXoxBVoIM6GGC0EAOC6ycZaN/ZmC1UHwELm7fse4+HlfAiDVui9H+J6GHgHvrZJ5XzpOD2Hr5CKclv77qatfaizKID1h9oqPneLcA2G4/14t6dstjmia9zrqrRik3E2x2YfD3tyUpleGzNw==
 
-On Fri, 4 Sep 2026 16:48:55 -0700
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-> On Fri, Sep 4, 2026 at 4:45=E2=80=AFPM Steven Rostedt <rostedt@goodmis.or=
-g> wrote:
-> >
-> > On Fri, 04 Sep 2026 16:34:00 -0700
-> > "Alexei Starovoitov" <alexei.starovoitov@gmail.com> wrote:
-> > =20
-> > > bpf in 2022 was surely less capable then it is today.
-> > > It took us 2 years of bpf core development to statisfy sched-ext dema=
-nds
-> > > and we're still adding new features for sched-ext needs.
-> > > If you're trully willing to remove 90% of kernel/trace/rv/ and refact=
-or
-> > > it into tiny shim where all of the core pieces are bpf driven we can
-> > > certainly work together (like we did with sched-ext) and add whatever
-> > > is missing on bpf side. Then all existing monitors will become bpf pr=
-ograms.
-> > > But adding bpf as another 'monitor', sorry but hard NO.
-> > > If hardcoded monitors was a mistake then admit it and fix it by delet=
-ing it,
-> > > if it's not a mistake then keep adding hardcoded monitors. =20
-> >
-> > Regardless of whether or not BPF can replace "hardcoded monitors" today=
-, it
-> > wasn't a mistake back then if BPF wasn't able to do it when they were f=
-irst
-> > being added. sched_ext wanted to use BPF for scheduling as module plugi=
-ns
-> > were nack'd by the scheduler maintainers for a long time. BPF programs =
-to
-> > handle scheduling was the work-around to that, and basically the only w=
-ay
-> > forward. And it still required special hooks into the scheduler.
-> >
-> > The rv monitors only needed to use tracepoints for hooks. A module was =
-the
-> > easiest way to get there, as BPF at the time wasn't an option.
-> >
-> > If you want to use hostile language like "admit you made a mistake" the=
-n it
-> > makes it harder to collaborate. =20
->=20
-> If you're offended by the word "mistake" then ok. There is no path forwar=
-d.
-> Keep adding hardcoded stuff.
+Pre-existing issues:
+- [Critical] Missing precision marking for NULL register in `check_map_kptr=
+_access` bypasses kptr type checks, enabling arbitrary kernel memory read/w=
+rite.
+--
 
-I'm not offended by the words, I'm offended by your tone. As BPF was
-insufficient when RV started, it obviously wasn't a mistake that we didn't
-use it. If you are just going to say it was a mistake because we didn't
-modify BPF to suite our needs (which I highly doubt you would have wanted
-to help us, as you already stated that you don't care about this project),
-then you are obviously biased against us.
+commit 86bb17dfcff95ef6eeda4b1333ab93abe99ab7bb
+Author: Eduard Zingerman <eddyz87@gmail.com>
 
-Your response was fine until you through in that last sentence. As making a
-mistake means that the other non-mistake option was viable at the item. It
-wasn't.
+bpf: mark a NULL BTF_ID argument of a global subprogram precise
 
-Look, if BPF has changed so much that it could be re-evaluated to see if it
-suits the needs of RV, then sure. We could look into doing that. Perhaps it
-can replace the hard-coded monitors. But what we have been doing has not
-been a mistake. Saying so is a bit disrespectful to the project and a
-direct insult to Daniel.
+btf_check_func_arg_match() accepts a NULL register for an
+ARG_PTR_TO_BTF_ID argument tagged __arg_nullable and skips
+check_reg_type() and check_func_arg_reg_off() without marking the
+register precise. Hence a checkpoint created on such a path would
+prune against arbitrary scalar value.
 
--- Steve
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 2b3d080978062..3c3575215899b 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -9767,8 +9767,12 @@ static int btf_check_func_arg_match(struct bpf_ver=
+ifier_env *env, int subprog,
+>  			struct bpf_call_arg_meta meta;
+>  			int err;
+> =20
+> -			if (bpf_register_is_null(reg) && type_may_be_null(arg->arg_type))
+> +			if (bpf_register_is_null(reg) && type_may_be_null(arg->arg_type)) {
+> +				err =3D mark_arg_precision(env, argno);
+> +				if (err)
+> +					return err;
+>  				continue;
+> +			}
+> =20
+>  			memset(&meta, 0, sizeof(meta)); /* leave func_id as zero */
 
+[Severity: Critical]
+This isn't a bug introduced by this patch, but does the same missing
+precision issue exist in check_map_kptr_access() for BPF_STX operations?
 
--- Steve
+Looking at check_map_kptr_access() when handling BPF_STX:
 
+	} else if (class =3D=3D BPF_STX) {
+		val_reg =3D reg_state(env, value_regno);
+		if (!bpf_register_is_null(val_reg) &&
+		    map_kptr_match_type(env, kptr_field, val_reg, value_regno))
+			return -EACCES;
+	}
+
+If a BPF program branch sets the register to 0, bpf_register_is_null()
+returns true, and the type check is skipped without calling
+mark_chain_precision().
+
+Could a subsequent branch set the same register to an arbitrary non-zero
+scalar and get incorrectly pruned by regsafe() because it compares against
+the imprecise 0?
+
+This sequence appears to allow storing an arbitrary scalar as a forged
+pointer into a map. This could then lead to arbitrary memory read/write or
+local privilege escalation when the kernel later drops or uses the kptr.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260904-register-i=
+s-null-precise-fixes-v1-0-0f5a360ff15d@gmail.com?part=3D7
