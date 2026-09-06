@@ -1,51 +1,78 @@
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5272331EB0;
-	Sun,  6 Sep 2026 22:34:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D5C23B8BBB
+	for <bpf@vger.kernel.org>; Sun,  6 Sep 2026 22:34:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788734046; cv=none; b=S+HBSceIfWKXjc+Pq67+iLU0jDmIQjIhekRQuDpqlpmV+Ne2KUIwYZGV6O9NK1dIFwB/qqxcmMfDKnwXfIwrMsAX83tJJZ6MNtGhB3UNJgdfgxmXywnuCvIcXfuLIo28N3l35rZharJtxnFxNa3cqskdcT7mpjldHovNb81+VNI=
+	t=1788734054; cv=none; b=HDJHEflk/fw+9Z9FPDWF6pzV+ulTi4csz99e3+yKmgtXHRxXAfKknqh+HutO6qxEnf5CrdouMzg90NFpmGK3cw9odL2QHyOdM3Q7V23oPBqlEYTGm+L0ZC//YSvmC2JUSIYdXuTiREV7LGYE7sgyXDBaPOSAZTxeQ/i1OsQMEN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788734046; c=relaxed/simple;
-	bh=XBy0VcovaU4ItO/ghGaC7L7fQ7lOeCzSb3Jf5Kd66Ek=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WzbyJw8b1+NrqMsSOCH/vZzLP1m47fhnry8SbhauPmaC5PGFfsIdjYISvvYKYlsyUsc1Sti/YGW+c0dE3TaG6FcgmC6elo+rKlzQhVE305Jhxi1l6ZZk4hVjky00KUOIlVHjwqNgCX7L9srEGW6/4huijj8xK8u4VRx8NIvo7ic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=Nju7nCuv; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=82wiqzf0; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+	s=arc-20240116; t=1788734054; c=relaxed/simple;
+	bh=okvJ6MUhnWI+E7FimIXZxzgRJVCReJSPDgX+XaGLlzc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=GIzanu9ylQrsHXloTwkmS9YcuNs7d2dmgNK22cmvDXi+77MxHuWzhrFB3nhAUhNj1ebU6zpYOzm9HebAQRQKGFlwYbP1v4Jd3gxJbVSO9xy6dwtwLAZ5mJ8vLMuerZ/1sFeTba8XWZmHW+QkVgxdoLdSZn7nJY6vG5/uFz3rzec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mqfKEdp+; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="Nju7nCuv";
-	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="82wiqzf0"
-DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
-	h=Message-ID:Date:Subject:To:From; t=1788734039; bh=pUNc+A4t94f6TwnwdwgXfAA
-	dye5zpzhXS9o4iV8CRMk=; b=Nju7nCuvNnrOLF2VSm0KincQMdeuJhKqJdAC5VMSrh73LMIIOs
-	rQNIceoh7c7geqBiVOOavoMSYOCTMa+ynGcH9j6qXQzOJAe88yW6B82j7ROdN0VB0bBmBUJ2xkn
-	qzxg6/L6GFC/cCaaeIKyi0LqfebUnYKsZKj7P4/dnhKU0R60Z6R1pLCKcZSlKoTe6mK9zjxzbl1
-	v+/GNnw54T1G1WYlGSFIab1HpL8Bozlz+fVzhTvi1qhb6KSLbp5PihebYO1ubWOGjfjs3vhsOhF
-	6QReuMcQjmMzR3FU3ibtkY+EGzcxgzeQwbDJi1LpWUmrhPfEsJnKpBJ4iEcNnHUE29Q==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
-	h=Message-ID:Date:Subject:To:From; t=1788734039; bh=pUNc+A4t94f6TwnwdwgXfAA
-	dye5zpzhXS9o4iV8CRMk=; b=82wiqzf0wn99F5Ls8Vd0/bBr08DBe0nlD16aqgKjCxSN+NtfN8
-	I7dmHnzWzeU9n5eqyvaHl7htIu+YqZP134AQ==;
-From: Bradley Morgan <brads@mainlining.org>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mqfKEdp+"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-49b0eab380eso25695495e9.0
+        for <bpf@vger.kernel.org>; Sun, 06 Sep 2026 15:34:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788734051; x=1789338851; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=okvJ6MUhnWI+E7FimIXZxzgRJVCReJSPDgX+XaGLlzc=;
+        b=mqfKEdp+nW+9PSuCpA7jvxUSRg42G9LcDOFu5y0PFb7AX4EChtT1R8WJG27sJJzNrn
+         Wn4TCPERjxBpXS/LonVV3dwC2HpRY+qwkGOZacfX9qOTa+3X99lQ+sYzhtvsElx54KPH
+         Y3YzjLgFh7yRR5YFxFS6tDbCpJ6Njaw7O2Af1P14NFIYZiuymzhU2HKgrIbZXcQyhOAv
+         ibccAt0Xw4C4AaaFulo9y4srYevs/qQZLJE9Soa7BnB1YhpwdzMmGfa0TwadxhUiaRus
+         G2Twp2mdcVB5Stm7/eI/zZkrSUXfIK9gt+AQIsQxhnBNTBwEqHSed1d60ws1v6WqGWYU
+         QsHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788734051; x=1789338851;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=okvJ6MUhnWI+E7FimIXZxzgRJVCReJSPDgX+XaGLlzc=;
+        b=aWsi5Bq0jJVdPGIgw81nTa/O57SfWURo8RTaJtwa10IqsD2MjJ00pIPCQ1G4hCNoaU
+         KQq/qgJZ3LfhgPr4CKdTOsP7KI1FYzvyrlrBaRxL7wt2h642wJ+LqvxJHT2480OCDBOj
+         nai6833S0WQnI2sfc1RdNwtvH1r2GL93/3hXLQpFl6ZpAET1mT95BhjRPal4K1PQnroe
+         6Hj7EBWfi1HMQI1bTxZ+tDTAML6ZE40rsVrf2yx3rGhmucMz67yboTfUjoijxKh3m0Is
+         a9SMDoTMupX6FsnxJgzJkMxjPqfjzGVE/8wYjm2nfdlDeqq1Tcji7CXJZPga55fpMT6I
+         7tVQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwaCHJm9MCJGWw/fgRda4y0eqlpdeDSECPDV5ezD1XbnEbuXMZKhoKNUylrPFnQFyrDn+c=@vger.kernel.org
+X-Gm-Message-State: AFuF++lRS7hL3ejAa+ncoM0TAVLfsf2VCFaWgjgMpJ36l5ZoPImFhNrl
+	XNuuqA4VE+RTgzgcojuPiFG8XZVV/i8EOuK1sVTfL9zwOr47PnRSxgrWc54pTP1Y
+X-Gm-Gg: AYBFou0/UHFGPzE5KXWV/iZLIwcxklu6K6F0U+rM6z7lyyQL1d0oU1cYXUnoi7A3T1p
+	HatCbwPX19CMtiRXC1VcDhkGRUn9g3Gv93OFq940K5nCidH2BKsMNAWBjwandDaEF3qxuvYZutv
+	NGwrY7bKTpBcBcnYAO5aOnv5OCe410JtP865xGLdRqbSjp/BmpR9+DrdTivd0UKuzzj4kiMOJsP
+	JS3evLWcp3oas1Giwaz0zscgaNGRqS3sd3o+Z9RtPd1PqPBhTffm0dInmZQOYN6ahTRen3SkYac
+	IK4npzli4Q7VQmLfzwNt0A6uOTWEk98qT0r+OUryndy1jYTXwDp50xGL5Adn1EFv1faaULmrO0Y
+	bhYREQ+16kqgU06xnrCV8XyYogzqD05L48jtys2Dx0uJz0jrSPPvDAi39/E+rCjQ5rsEC3eZ79j
+	VPOHtZ1U3hwTb3Ce/3xY9+zDWLr4F5kqKNIo0PvtfIUOG6iJ2vKjWjQ9k1RczTScXapJr0K9r1r
+	Y1GVHXL9wdW1iFPK5/c2Oytq+VNowAlTCLVr1HdrSV05OTeg9yETcOSg3u0uBemrB1zlfLPKREh
+	jxiaueX6Z+BOom4yMh7ZgaNQfFM3Fxe3fq5/838Xij6H4AN4YiJGFc3IDlk6lNoH3e4=
+X-Received: by 2002:a05:600c:5397:b0:49c:e37e:4389 with SMTP id 5b1f17b1804b1-49cf82cba17mr169598915e9.4.1788734051512;
+        Sun, 06 Sep 2026 15:34:11 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-2a02-3100-9d84-5101-9c80-d25b-14b6-410c.310.pool.telefonica.de. [2a02:3100:9d84:5101:9c80:d25b:14b6:410c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cf7740d44sm587151185e9.15.2026.09.06.15.34.10
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 06 Sep 2026 15:34:11 -0700 (PDT)
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	Bradley Morgan <brads@mainlining.org>
-Subject: [PATCH] bpf: btf: make alloc_obj_fields array const
-Date: Sun,  6 Sep 2026 22:33:58 +0000
-Message-ID: <20260906223358.25717-1-brads@mainlining.org>
-X-Mailer: git-send-email 2.47.3
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Karl Mehltretter <kmehltretter@gmail.com>,
+	bpf@vger.kernel.org,
+	Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH bpf-next] bpf, docs: Fix the struct bpf_cpumask name in kfuncs.rst
+Date: Mon,  7 Sep 2026 00:34:06 +0200
+Message-Id: <20260906223406.3528-1-kmehltretter@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <20260905095527.42261-1-kmehltretter@gmail.com>
+References: 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,27 +81,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The alloc_obj_fields array is never modified. Make the array itself
-const, not just the strings it points to.
+Superseded by the combined v2 with the btf_var patch:
 
-Signed-off-by: Bradley Morgan <brads@mainlining.org>
----
- kernel/bpf/btf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://lore.kernel.org/r/20260906222656.3459-1-kmehltretter@gmail.com/
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 91b8ce77f699..d23282e218b0 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -5766,7 +5766,7 @@ static int btf_parse_hdr(struct btf_verifier_env *env)
- 	return btf_check_sec_info(env, btf_data_size);
- }
- 
--static const char *alloc_obj_fields[] = {
-+static const char * const alloc_obj_fields[] = {
- 	"bpf_spin_lock",
- 	"bpf_list_head",
- 	"bpf_list_node",
--- 
-2.47.3
-
+Thanks,
+Karl
