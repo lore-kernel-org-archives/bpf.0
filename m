@@ -1,119 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BD9B28690
-	for <bpf@vger.kernel.org>; Sun,  6 Sep 2026 07:50:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF62937418C
+	for <bpf@vger.kernel.org>; Sun,  6 Sep 2026 08:01:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788681037; cv=none; b=GS26kFONzOAY2JnrJbd0Cvzryi++02+TJk+4bm8i4+Sy2HJb6SsnZo4TaNCzAgK1qAyM4Y2MXesNFIpzAwLiBtpQ6H8awglbDApv+WusfGVybhPLZHkwd3cNtqJm4fFaBQDq25I3crvhMvwccWNCo/7BeBXhNV6cDnRLDwYz4kw=
+	t=1788681694; cv=none; b=h6rU6vnEGFGU0u78xt28q+ssKMW3jYsE6NKllphXJuuP1Q5696ZgxWTHGpG93KKH5BLRvqo10JeNOOlT+eihGfckqSiCE9VJIAPO6CisnwRMnNT5VPB/ZM9fBuaNxOgIFxJsdmhw8iRpeEny+c96FodoH5UdB0vhr6bSaKpGRcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788681037; c=relaxed/simple;
-	bh=hE3AULDJNnvwny2F+GBwpYF2O+LYmp75OXhdHXSHvBw=;
+	s=arc-20240116; t=1788681694; c=relaxed/simple;
+	bh=H/Az3sZaD5QrZzPIrcD5Zdc0VElcr7yT7S9BnIPUuXw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=sxDNFcDrDjfrdTK5MtQK/XYBWOcbzdSAcwmRaYkEM+vMR+9kALl8XY/2/cyhtIfv2wbloAEmt7vTdbt+5klnbc1o7WJ7Ei3VG6nKaVUP7bV6tT5BKFB6Vh72sdGjb7UGdsK5/6RZTfwRhKnTqYGSaxP7/xQVf8XZAgC3YbWaZCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b108QIce; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Zjxw1yJ7e4pgD/9cBZX7z+6WlOyeSgkmf0yUFcd7BppsZFNLPysd9ii0ZfDySd7I+0MsuU0pzsJkz6hdkEk/EsaZzbdVg52frC9KvgHK0pr9k7SNW0rIdq5lxgIgajv3h9l1XdckBEWDgzBsnj589Xtwes8Ng1+jFHHBgVE5usw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d0i35QBG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b108QIce"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BED911F00A3A;
-	Sun,  6 Sep 2026 07:50:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d0i35QBG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 470B01F00A3A;
+	Sun,  6 Sep 2026 08:01:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788681036;
-	bh=mcqkeJOQmGWEfGCewiknoWj3+1pybwhvO9B3/akQKMs=;
+	s=k20260515; t=1788681692;
+	bh=KxX1+qI4/rUIGX3BvjnFW1YJDtGDIHZgVoCGRU6UVmE=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=b108QIcemf6mHrhD7d53/mnP1Mbgx3miA0bqmqDrxAdelZq3RhaYINyQs94MlQO8t
-	 vxTBrCBm6i/GOwbenkghCqby5yqQq3ksrhgo9Ih7TpMw7zLfgNB+yDtZwHLlW9FnS1
-	 C9JCO5ovv/7Dk+d1+JOxyMI1P1J0Ingg9QxZpItWmRJwnD8sw9QSVgmr4zFeNjvUra
-	 I3yVHkeptzU1jZ4DfKg8SScDjzwtREXg7yXlzemU4vryVbbfnPdMOyk0xBDH8IYgrY
-	 oBYbSY2h4Hg2UZIk+TGYEdvtZ7g3VRhfwAabYxj2UmgpMFY3gpRzwz8Er3NwSLMABA
-	 OYdNmO6V1tGaA==
+	b=d0i35QBGRz0mx0meIQ1s2D1wkRU0A3oPeD2N/bo7RfTP/vxGBPlA/xitZ52tUe3mt
+	 pCy9wvMNwQR9LojurjKis52XGaseVtaHf3RWtUXaM5oD/Aol6KFFV/kBrAnKC63r3F
+	 4gGLemIXhAd858RQwI1AEmg6+h9TzzFGY9HHwvIbwKBi3agkFtrjGtMtwry0QM9O1N
+	 8sCQVOVjSPj6zvqNLYBFkOXVLLwon3cSGBgKU60CuCIEIIhv75W3yPtzhuNspBYEhm
+	 S+hJjOHYphutbgZG18+kFvRMpoQjItiM5BWzHP3oln3Q5csg9NymcLDZIpcBcwLYBu
+	 uQtQ0qah5mSYg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v2 3/3] selftests/bpf: Test bpf_sock_destroy() on
- TIME_WAIT and listener socks
+Subject: Re: [PATCH bpf v2 2/3] tcp: Skip cond_resched() in
+ inet_csk_listen_stop() under BPF context
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260906074135.185212-4-jiayuan.chen@linux.dev>
+In-Reply-To: <20260906074135.185212-3-jiayuan.chen@linux.dev>
 References: <20260906074135.185212-1-jiayuan.chen@linux.dev>
- <20260906074135.185212-4-jiayuan.chen@linux.dev>
+ <20260906074135.185212-3-jiayuan.chen@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 06 Sep 2026 07:50:35 +0000
-Message-Id: <20260906075035.BED911F00A3A@smtp.kernel.org>
+Date: Sun, 06 Sep 2026 08:01:31 +0000
+Message-Id: <20260906080132.470B01F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] The file descriptor returned by `accept()` is leaked on the test=
- failure path in `test_tcp_listen_pending()`.
+
+New issues:
+- [Medium] Unconditionally skipping `cond_resched()` in `inet_csk_listen_st=
+op()` during BPF execution forces unbounded accept queue processing to run =
+atomically, causing CPU soft lockups and RCU stalls.
+
+Pre-existing issues:
+- [High] This problem wasn't introduced by this patch, but the TCP BPF iter=
+ator acquires `lock_sock()` on unaccepted child sockets, causing destructiv=
+e data races if the parent listener is closed concurrently.
 --
 
-commit a0eed787a7f06953fc57cb1d362195f000753ca9
+commit ab882b1f2e506040f7bcef30415806e9b24c59a4
 Author: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-selftests/bpf: Test bpf_sock_destroy() on TIME_WAIT and listener socks
+tcp: Skip cond_resched() in inet_csk_listen_stop() under BPF context
 
-This commit adds two subtests to the sock_destroy BPF selftest. The tests
-ensure that bpf_sock_destroy() correctly handles sockets in TIME_WAIT and
-listener sockets with pending connections in the accept queue.
+This commit skips cond_resched() in inet_csk_listen_stop() when called unde=
+r a
+BPF context. This prevents a "sleeping function called from invalid context"
+bug when an iterator BPF program calls bpf_sock_destroy() on a listener
+socket.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c b/tool=
-s/testing/selftests/bpf/prog_tests/sock_destroy.c
-> index 9c11938fe597d..c9f0885709c7e 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
+> diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_s=
+ock.c
+> index 6257459bcee24..6a30f11384547 100644
+> --- a/net/ipv4/inet_connection_sock.c
+> +++ b/net/ipv4/inet_connection_sock.c
 
-[ ... ]
+[Severity: High]
+This isn't a bug introduced by this patch, but does the TCP BPF iterator
+acquire lock_sock() on unaccepted child sockets, causing destructive data
+races if the parent listener is closed concurrently?
 
-> @@ -110,6 +111,120 @@ static void test_tcp_server(struct sock_destroy_pro=
-g *skel)
->  		close(serv);
->  }
+If a TCP BPF iterator is running in bpf_iter_tcp_seq_show() and visits a
+child socket in the ehash table that has not yet been accepted by userspace:
+
+net/ipv4/tcp_ipv4.c:bpf_iter_tcp_seq_show() {
+    ...
+    if (sk_fullsock(sk))
+        lock_sock(sk);
+    ...
+}
+
+And concurrently, the parent listener is closed, invoking
+inet_csk_listen_stop():
+
+net/ipv4/inet_connection_sock.c:inet_csk_listen_stop() {
+    ...
+    bh_lock_sock(child);
+    WARN_ON(sock_owned_by_user(child));
+    ...
+}
+
+inet_csk_listen_stop() only takes the spinlock (bh_lock_sock()), triggers
+the WARN_ON, and completely ignores the mutex, destructively modifying the
+socket while the BPF program actively uses it.
+
+> @@ -1520,7 +1520,8 @@ void inet_csk_listen_stop(struct sock *sk)
+>  		local_bh_enable();
+>  		sock_put(child);
 > =20
-> +static void test_tcp_listen_pending(struct sock_destroy_prog *skel)
-> +{
-> +	int serv =3D -1, clien =3D -1, n, serv_port;
-> +	struct pollfd pfd =3D { .events =3D POLLIN };
-> +	char buf[1];
-> +
-> +	serv =3D start_server(AF_INET6, SOCK_STREAM, NULL, 0, 0);
-
-[ ... ]
-
-> +	/* Run iterator program that destroys server sockets. */
-> +	start_iter_sockets(skel->progs.iter_tcp6_server);
-> +
-> +	n =3D accept(serv, NULL, NULL);
-> +	if (!ASSERT_LT(n, 0, "accept on destroyed listener"))
-> +		goto cleanup;
+> -		cond_resched();
+> +		if (!has_current_bpf_ctx())
+> +			cond_resched();
 
 [Severity: Medium]
-Does this code leak the file descriptor on the error path?
+Can unconditionally skipping cond_resched() here force unbounded accept que=
+ue
+processing to run atomically?
 
-If accept(serv, NULL, NULL) unexpectedly succeeds, it returns a valid
-file descriptor in n (where n >=3D 0). The ASSERT_LT(n, 0) check then
-fails and execution jumps to the cleanup block.
-
-Because n is not closed in cleanup, the accepted socket is leaked.
-
-> +	ASSERT_EQ(errno, EINVAL, "error code on destroyed listener");
-> +
-> +	/* The unaccepted child was reset along with the listener. */
-> +	n =3D recv(clien, buf, sizeof(buf), 0);
-> +	if (!ASSERT_LT(n, 0, "client recv on reset child"))
-> +		goto cleanup;
-> +	ASSERT_EQ(errno, ECONNRESET, "error code on reset child");
-> +
-> +cleanup:
-> +	if (clien !=3D -1)
-> +		close(clien);
-> +	if (serv !=3D -1)
-> +		close(serv);
-> +}
+Because the loop dismantles the accept queue (which can contain up to
+somaxconn sockets), executing it entirely within a non-preemptible RCU
+read-side section could cause CPU soft lockups and RCU stalls.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260906074135.1852=
-12-1-jiayuan.chen@linux.dev?part=3D3
+12-1-jiayuan.chen@linux.dev?part=3D2
