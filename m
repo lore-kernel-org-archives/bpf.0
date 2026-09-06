@@ -1,148 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-33.mta1.migadu.com [95.215.58.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 740E43A7198;
-	Sun,  6 Sep 2026 20:25:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52B4535677D
+	for <bpf@vger.kernel.org>; Sun,  6 Sep 2026 20:41:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788726344; cv=none; b=O39+wjQKlhi/qzJcvFe9mVGiYpTHuYIgdF4iY+HDiGqrQBoyouhOvhH0nYBBlsE2WaR44ul8UYojME/uaZHUypLojYXuk9jXhTWotSa2Xmu/H3JsyYVdPK/7UKcLafBJh/463Sx7YYLZ2PtAKDMLkFgcUUjGBMIwyG4wtYKiKYs=
+	t=1788727276; cv=none; b=Yee2tyyKv+gr6TEvQIfbwOPfaVetaaCFP4N8Y5JuLBbLCujvi+/Mq8AmlRgP+gBoUgwz94/1bg3Z/Xc4uokUHxP/ubolcYJ0znNUgzlDZNO0s3u6i3zaPave7/Ig/B4Es412vjDbX81xL4Mwubey2Z8KfHxTMFNJw5bi8FtKh7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788726344; c=relaxed/simple;
-	bh=i+VEFGydjRmWtovSRcPCo8NPPuSfbfIlJtHcJgBtaFw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=E01Q9R88zAaWbq7r4po3l70SS4nA/v/wkdangE9m5J34HVkJht6D9dVry6mtuohik8Sa/5Dc1u0InuUOH9UfGAUxNrBbbwjJ8JladEnW3i5uzToNNd9Rgnbs066FGj66on5Z8LFbo5Nf8D4onffIaRv1gvX5e3z5dxKl49eQsR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mX/0x+vI; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788727276; c=relaxed/simple;
+	bh=bSpNhh9FtdEJvuQK9j6aUZgksjI6iJ3Km92h4AkEbNc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jrUMuBM3/ec0D3bEQ8Au4WNFtWf5XqiusOR6RGheBKmEUOBCLxyzTkVk5DNQj6rP2GH2DlmMlIFdeRBxKPjOIv25pqyCsO/u6fTt7co2Kg5F3xWxfr2LTJVKkQKfMRisQ6u0QIMTOY3kyoAD09xdDzpN2jwsK1P5tnjHCKynweM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ve0+NxTg; arc=none smtp.client-ip=95.215.58.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mX/0x+vI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E548D1F00A3A;
-	Sun,  6 Sep 2026 20:25:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788726343;
-	bh=T9+te7uz+mnvfAO46KAXRpNVSZePg/F54ygoeem8aM8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=mX/0x+vIRYkvUOHrVsaxrSGm2plGVsAKd9vAVl2QwFubrMjmRBYH4x6hy8HJltnlT
-	 Iaug6+llTL9s99JVa6Mk9U/Ni/mQOhbSVyN1TmfG0AbgzuOyFJhkFL8Za8SBFRbAf0
-	 fVpI3k4eX9k1+UZTYOtG6R6A1+rpsJZApgSv84o4qe9Al8dODodzIH01fFCoaqpZ/Z
-	 MdWnSudDiuT8jVgRY8+8i/HqgwcfylxflfWrD6UzKO4gtZat7AmEj8LNDS3erFi07j
-	 suZWAZnNPCqPXONLnALVhAI/h2wjA9i4RM8XZqRe5GjFIc9fAu4uvrxdYMZXcvLmD1
-	 5yRfOconnSxeg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v7 1/3] tools: port perf ui from GTK 2 to GTK 4
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Matt Turner" <mattst88@gmail.com>
-Cc: bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-In-Reply-To: <20260906-perf-gtk2-v7-1-1ece839fbca0@gmail.com>
-References: <20260906-perf-gtk2-v7-0-1ece839fbca0@gmail.com>
- <20260906-perf-gtk2-v7-1-1ece839fbca0@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 06 Sep 2026 20:25:42 +0000
-Message-Id: <20260906202542.E548D1F00A3A@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ve0+NxTg"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=bSpNhh9FtdEJvuQK9j6aUZgksjI6iJ3Km92h4AkEbNc=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788727271; v=1; x=1789332071;
+ b=ve0+NxTg7EOaLORzxPRSMPAsyjX76cEpURXPr2Wczsq0Y3VU1YC3jjBMmhAk/xlZZfoPG4Fx
+ g43Enh5rW+yGQfcXUFcw3N5dO+qwej5NQqRBJwN+KXOPqmhWr+T99MXMDn7gF0nfGTzhcZjrPEB
+ QvnU1HjF9VQiBvQZ37d8+ue8=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id ce9db71ae2dcd178;
+	Sun, 06 Sep 2026 20:41:11 +0000
+X-Mizu-Trace-ID: ce9db71ae2dcd178
+X-Migadu-Flow: FLOW_OUT
+Date: Sun, 6 Sep 2026 20:40:59 +0000
+From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Puranjay Mohan <puranjay@kernel.org>, 
+	Xu Kuohai <xukuohai@huaweicloud.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+	Gary Guo <gary@garyguo.net>, =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
+	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
+	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Sami Tolvanen <samitolvanen@google.com>, 
+	Kees Cook <kees@kernel.org>, Leon Hwang <leon.hwang@linux.dev>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	bpf@vger.kernel.org, linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	Ben Cressey <ben@cressey.dev>, "Florent Revest (Anthropic)" <florent.revest@linux.dev>
+Subject: Re: [PATCH RFC 1/8] ftrace: Let ftrace_call_adjust() reject a patch
+ site
+Message-ID: <ap3PYIdhL3ETmN0Y@linux.dev>
+References: <20260904-b4-arm64-callops-kcfi-v1-0-ce6687739b0c@linux.dev>
+ <20260904-b4-arm64-callops-kcfi-v1-1-ce6687739b0c@linux.dev>
+ <20260904084728.6d2ebcc8@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260904084728.6d2ebcc8@gandalf.local.home>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Connecting to the removed 'destroy' signal in GTK4 causes main l=
-oop hangs and use-after-free/double-free bugs.
---
+On Fri, 4 Sep 2026 08:47:28 -0400, Steven Rostedt wrote:
+> The above could use a comment to why addr could be zero (I didn't even
+> realize some architectures do that).
+>
+> 	/* Some architectures may return zero for mis-aligned addresses */
 
-commit fc78f437c6f22aa072d608cee2f291c6178f6853
-Author: Matt Turner <mattst88@gmail.com>
+Will add one in v2, thanks.
 
-    tools: port perf ui from GTK 2 to GTK 4
-   =20
-    Port straight to GTK 4 rather than GTK 3, since GTK 4 is where new
-    development happens and GTK 3 is old itself now.
+Today arm64 returns 0 only for a mis-aligned patch site. But patch 4 of
+this series replaces that check with two: the two NOPs to patch must be
+there, and the ops pointer must fit in the prefix NOPs (which also
+catches a mis-aligned site). How about this to cover the series?
 
-> diff --git a/tools/perf/ui/gtk/progress.c b/tools/perf/ui/gtk/progress.c
-> index eea6fcde518a8..770f9251b54b7 100644
-> --- a/tools/perf/ui/gtk/progress.c
-> +++ b/tools/perf/ui/gtk/progress.c
-> @@ -1,49 +1,65 @@
->  // SPDX-License-Identifier: GPL-2.0
->  #include <inttypes.h>
-> +#include <stdio.h>
+	/* The architecture may return 0 to reject a patch site */
 
-[ ... ]
+Happy to name the mis-aligned case in patch 1 and extend the comment
+in patch 4 if you prefer that.
 
-> +static void gtk_ui_progress__destroyed(GtkWidget *widget __maybe_unused,
-> +					gpointer data __maybe_unused)
-> +{
-> +	dialog =3D NULL;
-> +	progress =3D NULL;
-> +}
-> +
->  static void gtk_ui_progress__update(struct ui_progress *p)
->  {
->  	double fraction =3D p->total ? 1.0 * p->curr / p->total : 0.0;
->  	char buf[1024];
-> =20
->  	if (dialog =3D=3D NULL) {
-> -		GtkWidget *vbox =3D gtk_vbox_new(TRUE, 5);
-> +		GtkWidget *vbox =3D gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
->  		GtkWidget *label =3D gtk_label_new(p->title);
-> =20
-> -		dialog =3D gtk_window_new(GTK_WINDOW_TOPLEVEL);
-> +		dialog =3D gtk_window_new();
->  		progress =3D gtk_progress_bar_new();
-> =20
-> -		gtk_box_pack_start(GTK_BOX(vbox), label, TRUE, FALSE, 3);
-> -		gtk_box_pack_start(GTK_BOX(vbox), progress, TRUE, TRUE, 3);
-> +		gtk_widget_set_vexpand(label, TRUE);
-> +		gtk_box_append(GTK_BOX(vbox), label);
-> +		gtk_widget_set_vexpand(progress, TRUE);
-> +		gtk_box_append(GTK_BOX(vbox), progress);
-> +
-> +		gtk_window_set_child(GTK_WINDOW(dialog), vbox);
-> =20
-> -		gtk_container_add(GTK_CONTAINER(dialog), vbox);
-> +		g_signal_connect(dialog, "destroy",
-> +				 G_CALLBACK(gtk_ui_progress__destroyed), NULL);
-
-[Severity: Medium]
-In gtk_ui_progress__update(), will this signal connection fail at runtime?
-The destroy signal was removed from GtkWidget in GTK 4. If it fails silentl=
-y,
-gtk_ui_progress__destroyed() would not be called to nullify the pointer when
-the user manually closes the progress window. This could result in a
-use-after-free or double-free crash when gtk_ui_progress__finish() is
-subsequently called on the already-freed pointer.
-
-[ ... ]
-
-> diff --git a/tools/perf/ui/gtk/util.c b/tools/perf/ui/gtk/util.c
-> index c47f5c387838c..5823ff0d7c2a7 100644
-> --- a/tools/perf/ui/gtk/util.c
-> +++ b/tools/perf/ui/gtk/util.c
-> @@ -28,86 +30,103 @@ int perf_gtk__deactivate_context(struct perf_gtk_con=
-text **ctx)
-
-[ ... ]
-
-> +	/*
-> +	 * "response" only fires when a button is clicked; DESTROY_WITH_PARENT
-> +	 * destroys the dialog directly without it. Quit from "destroy"
-> +	 * instead, which fires either way, so the nested loop below can't
-> +	 * outlive the dialog and hang.
-> +	 */
-> +	loop =3D g_main_loop_new(NULL, FALSE);
-> +	perf_gtk__error_loops =3D g_slist_prepend(perf_gtk__error_loops, loop);
-> +	g_signal_connect(dialog, "response",
-> +			 G_CALLBACK(perf_gtk__dialog_response), NULL);
-> +	g_signal_connect_swapped(dialog, "destroy",
-> +				 G_CALLBACK(g_main_loop_quit), loop);
-
-[Severity: Medium]
-In perf_gtk__error(), since the destroy signal no longer exists in GTK 4,
-could this leave the nested main loop running indefinitely and hanging the
-application? Because the destroy signal is not emitted when the dialog is
-closed (even via the confirmation button), g_main_loop_quit() will never be
-called.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260906-perf-gtk2-=
-v7-0-1ece839fbca0@gmail.com?part=3D1
+Thanks,
+Jose
