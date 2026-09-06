@@ -1,193 +1,183 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out-zbxj-a75.jellyfish.systems (out-zbxj-a75.jellyfish.systems [198.54.127.75])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B54331A66;
-	Sun,  6 Sep 2026 15:29:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86CB72DA74C
+	for <bpf@vger.kernel.org>; Sun,  6 Sep 2026 15:37:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788708566; cv=none; b=l8/KEwQdbrKlFRPGXbd2DFTubqVTz4Qj0qLMDsKOQ2yFl+wX4Yud7Xq6tiCL8BjLxAEau67xDYHDzczfTv+cE5vwZbzQ8RGIxNJ1PAr8SGlIQAiy5JGfW5OZfyXeTQt8Pma8bjFrQUIAbAeBnPhp1XDpRyeBMvQuZAb6hKWoPYc=
+	t=1788709050; cv=none; b=e5yHdPXWd3bvTCKN2gjNorwNh0CRQBOajdhx8s5dZ6eUfuo5s0b0T62SRzzOoYe55sYTrdTCbWXbZ4jCkvrOyGnTGEZBrpeVKfQQLLRKPzCibSQrQWZJZasd9eIgC1eZJkyvcjKc8UMtOIuLNR/1vcLO1PAMFQgefy7Dn5CGfPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788708566; c=relaxed/simple;
-	bh=OV/5IWe5pistXA3pi9H757XvIyzE8TuEEpfpAfTdGRY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=msSnO57gHQnUCh6vgm+pL7VMlB9rdwgsu+yJlkqKaiFj4jFRPFVyN3JS2KQpTvXTURsfk4irF1puCmze5aB9dWNgdq1K/7RODy1uaKIVgz8yPBGZMms+w3D7XL31MhgjVZIxZD8LgUJn6o4tisIg8ggp0cm9diT6FAvFHvD6qVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QIdZKaX0; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788709050; c=relaxed/simple;
+	bh=XyL7AOWnPAUqZgn9BzIhON3fVHrsyTT58SYLvVkw7jE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nS5fUCWwUrYL+q3LWN2RFPLNeHm8P9GVqSgGJzuCVKEWQkf0i7boFyjeWtvvOYQX4hUFoCVeJdf1S5+L5I1tPPn1yuRgxBf7iTx/lu0FKbJFrqrQemXielUSTvJnoLOizhZRKt3hiWr9fgf/WevHtse0fgDbWwP/Pj9muOUXM0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=Pi6yuokZ; arc=none smtp.client-ip=198.54.127.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QIdZKaX0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4BCD1F00A3A;
-	Sun,  6 Sep 2026 15:29:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788708564;
-	bh=3z6kdk9HvzCnOoTTMspLK3Wnge5NvKjkMS82ssnyvzE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=QIdZKaX0Ym/iXkHIMfzigV/MF8Ip1JNSJCGewiW9pTEmMGTelB0j5zj2vqrgCi1lB
-	 X2VBKcgW7LD7S3gioCxSmpur+mWaOaah36pUjmTJ35uROxhNIujSF2LewqQm3Y0DtI
-	 bm8GcLF/g8SRkZITcpIWNzmvHS7D8qDAdnm3n4L7ek3hpPdCh03E87BGVu87rrnY7A
-	 xffl3WzofRpWjNtuUmlcaOME/Cj7WdH6DG5HsMI7LlfULjT6dCS4/CD5NXX/pERT2U
-	 yX5AgBOp+/Uqk3dV9lgzgXyYofuaEWw+vk1HlOlUYLvriKnKlEFUwVOVdVFp2NvZlU
-	 3ineLUXAOxWqQ==
-Content-Type: multipart/mixed; boundary="===============0986854606940610145=="
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="Pi6yuokZ"
+Received: from fedora (unknown [69.5.53.41])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdDpV5cBvz8sWW;
+	Sun, 06 Sep 2026 15:37:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
+	s=spacemail; t=1788709032;
+	bh=q6cSyvPreWKONkLUFI9E06SSGG6JGS8PdVxZdY0jEgY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Pi6yuokZh6qN1HunLPsbJs6jAtnWnvmy3KleAwr3/I+U7B/7CgHKV+SVt8ZfjC8WQ
+	 9oNCjPugZfuuNqHZdV9XjotQkM0pWRm7ROAlpzFbjCvuWes7IbLPUcUYfrIeM+7vP3
+	 r6e59eaGU6f0XPG/c0fUaQD8kV2pEU/KZ3Pztfc64oWmjR4utHDZ6+Zpq8iFSdtEXw
+	 QQaHiw2xwj95/YZvh+3EIeVrwkkgQ/DE2h6X5Yh6azQzijo/rutuc6D8ZHuP99Lwra
+	 jVAxe9pB2/3o2a0leT9TOXc6DK8moU+hs2fonwCbcZBiCJiSVawycJy99bEg0tnbnb
+	 7CCwhTNUnaDuA==
+From: Tianyi Chen <hi@tychen.cc>
+To: andrii@kernel.org,
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: Tianyi Chen <hi@tychen.cc>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Brian Vazquez <brianvv@google.com>,
+	Pedro Tammela <pctammela@mojatatu.com>
+Subject: [PATCH bpf v2] selftests/bpf: Check returned keys in map batch validators
+Date: Sun,  6 Sep 2026 23:36:56 +0800
+Message-ID: <178870889323.880246.16480713814270899611.bpf-batch-v2@tychen.cc>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <c7c61d154f13c45ee2007e3162e9b36a4886e624d5bfb19fdd0793a100347d30@mail.kernel.org>
-In-Reply-To: <20260906143950.848769-1-hi@tychen.cc>
-References: <20260906143950.848769-1-hi@tychen.cc>
-Subject: Re: [PATCH bpf-next 1/2] bpftool: Add recursive map dumping
-From: bot+bpf-ci@kernel.org
-To: hi@tychen.cc,qmo@kernel.org,andrii@kernel.org,eddyz87@gmail.com
-Cc: hi@tychen.cc,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,shuah@kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun,  6 Sep 2026 15:29:23 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-Envelope-From: hi@tychen.cc
 
---===============0986854606940610145==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+The hash, array and LPM trie batch validators mark visited entries by
+output position, making the subsequent completeness checks always
+succeed. Duplicate keys with matching values can therefore hide
+missing entries.
 
-> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-> index 684a8fb72414..853f775b7d52 100644
-> --- a/tools/bpf/bpftool/map.c
-> +++ b/tools/bpf/bpftool/map.c
+Check each returned key against the set populated by the test and
+index the visited array by key. This detects missing entries while
+preserving unordered results and existing per-CPU value validation.
 
-[ ... ]
+For LPM trie keys, check the /32 prefix and complete IPv4 address
+before using the host octet as the index. Compare the address directly
+in host byte order instead of parsing its textual representation.
 
-> @@ -745,8 +745,10 @@ static int dump_map_elem(int fd, void *key, void *value,
->  			 json_writer_t *btf_wtr)
->  {
->  	if (bpf_map_lookup_elem(fd, key, value)) {
-> -		print_entry_error(map_info, key, errno);
-> -		return -1;
-> +		int lookup_errno = errno;
-> +
-> +		print_entry_error(map_info, key, lookup_errno);
-> +		return -lookup_errno;
->  	}
->
->  	if (json_output) {
-
-[ ... ]
-
-> @@ -874,10 +928,22 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
->  		if (err) {
->  			if (errno == ENOENT)
->  				err = 0;
-> +			else if (ctx)
-> +				p_err("can't get next key for map id %u: %s",
-> +				      info->id, strerror(errno));
->  			break;
->  		}
-> -		if (!dump_map_elem(fd, key, value, info, btf, wtr))
-> +		err = dump_map_elem(fd, key, value, info, btf, wtr);
-> +		if (!err) {
->  			num_elems++;
-> +			if (ctx && map_is_map_of_maps(info->type)) {
-> +				err = collect_inner_map(ctx, *(__u32 *)value);
-> +				if (err)
-> +					break;
-> +			}
-> +		} else if (ctx && err != -ENOENT) {
-> +			break;
-> +		}
->  		prev_key = key;
->  	}
-
-Does the 'else if (ctx && err != -ENOENT) break;' path handle all
-expected lookup failures correctly?
-
-dump_map_elem() now returns -lookup_errno instead of -1, so any
-bpf_map_lookup_elem() failure other than ENOENT aborts the recursive
-dump. Several map types fail every syscall lookup by design:
-
-  * BPF_MAP_TYPE_PERF_EVENT_ARRAY / BPF_MAP_TYPE_CGROUP_ARRAY:
-    bpf_fd_array_map_lookup_elem() returns -ENOTSUPP when .map_fd_sys_lookup_elem
-    is not defined, and perf_event_array_map_ops does not define one.
-  * BPF_MAP_TYPE_XSKMAP: xsk_map_lookup_elem_sys_only() returns -EOPNOTSUPP
-    unconditionally.
-  * BPF_MAP_TYPE_REUSEPORT_SOCKARRAY with value_size != 8:
-    bpf_fd_reuseport_array_lookup_elem() returns -ENOSPC for every key.
-
-print_entry_error() handles all of these, emitting '<cannot read>' or
-strerror(lookup_errno), and the pre-patch loop ignored the result. So
-'bpftool map dump id N' on such a map prints one error marker per entry
-and exits 0.
-
-With -r, 'bpftool map dump -r id N' on any of the map types above now
-fails outright and exits nonzero where the same command without -r
-succeeds. This also defeats the feature's own purpose: a PERF_EVENT_ARRAY
-is a legal inner map, so recursing into a HASH_OF_MAPS/ARRAY_OF_MAPS of
-PERF_EVENT_ARRAYs aborts with 'Unknown error 524' on the first inner-map
-entry instead of dumping the traversal.
-
-The new fatal handling looks intended for inner-map collection failures,
-which is already handled by 'if (err) break;' on the collect_inner_map()
-branch above. Could the per-entry value lookup failure keep the
-pre-existing tolerant behaviour and continue rather than break?
-
-> @@ -902,6 +970,7 @@ static int do_dump(int argc, char **argv)
->  {
->  	json_writer_t *wtr = NULL, *btf_wtr = NULL;
->  	struct bpf_map_info info = {};
-> +	struct map_dump_ctx ctx = {};
->  	int nb_fds, i = 0;
->  	__u32 len = sizeof(info);
->  	int *fds = NULL;
-
-[ ... ]
-
-> @@ -936,7 +1032,7 @@ static int do_dump(int argc, char **argv)
->  		}
->  	}
->
-> -	if (wtr && nb_fds > 1)
-> +	if (wtr && (nb_fds > 1 || recursive))
->  		jsonw_start_array(wtr);	/* root array */
->  	for (i = 0; i < nb_fds; i++) {
->  		if (bpf_map_get_info_by_fd(fds[i], &info, &len)) {
-> @@ -944,22 +1040,28 @@ static int do_dump(int argc, char **argv)
->  			err = -1;
->  			break;
->  		}
-> -		err = map_dump(fds[i], &info, wtr, nb_fds > 1);
-> +		err = map_dump(fds[i], &info, wtr, nb_fds > 1 || recursive,
-> +			       recursive ? &ctx : NULL);
->  		if (!wtr && i != nb_fds - 1)
->  			printf("\n");
->
->  		if (err)
->  			break;
-> -		close(fds[i]);
-> +		/* Keep discovered maps alive until the recursive dump is complete. */
-> +		if (!recursive)
-> +			close(fds[i]);
->  	}
-
-Could the fd accumulation hit RLIMIT_NOFILE?
-
-Under -r, every discovered inner map fd is held open until the entire
-dump completes, so the number of simultaneously open fds scales with the
-number of distinct maps reachable from the selected roots.
-
-collect_inner_map() appends one fd per newly seen id and do_dump() skips
-the in-loop close(), deferring all closes to exit_close. bpftool never
-raises RLIMIT_NOFILE, so the inherited soft limit (commonly 1024) applies.
-An ARRAY_OF_MAPS/HASH_OF_MAPS whose entries reference more distinct inner
-maps than that limit makes bpf_map_get_fd_by_id_opts() fail with EMFILE,
-producing 'can't open inner map id %u: Too many open files' and aborting
-the dump after partial output has already been written.
-
-max_entries for a map-of-maps is not bounded by the fd limit, so this is
-reachable without any unusual privilege. Holding the fd does serve a
-purpose - it pins the map so its id cannot be recycled between discovery
-and dump. Could the number of concurrently held fds be bounded, or could
-each discovered map be dumped as soon as it is found and closed then?
-
-
+Fixes: 30ff3c59137d ("selftests/bpf: Add batch ops testing for htab and htab_percpu map")
+Fixes: f0fac2cec286 ("selftests/bpf: Add batch ops testing to array bpf map")
+Fixes: e9bd8cbd970b ("bpf: selftests: Add tests for batched ops in LPM trie maps")
+Assisted-by: LLM
+Signed-off-by: Tianyi Chen <hi@tychen.cc>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Changes in v2:
+- Cover the LPM trie batch validator as well, including its complete
+  IPv4 key and /32 prefix before indexing visited.
+- Move validation details out of the commit message.
+- Retain CHECK(): these tests use the legacy test_maps.h framework,
+  which does not provide test_progs.h's ASSERT_* helpers.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34040347400
---===============0986854606940610145==--
+Validation:
+- Rebuilt and ran the full test_maps suite on a matching 7.3.0-rc1 VM:
+  all tests passed, with 0 skips, including all five batch variants.
+- Exact old/new LPM validator controls under ASan and UBSan accept valid
+  permutations and reject duplicates, invalid prefixes/networks/hosts
+  and mismatched values with the new checks.
+- The array/hash changes and their prior scalar/per-CPU controls are
+  unchanged from v1.
+
+v1: https://lore.kernel.org/bpf/20260906143918.848536-1-hi@tychen.cc/
+
+ .../bpf/map_tests/array_map_batch_ops.c       |  5 ++++-
+ .../bpf/map_tests/htab_map_batch_ops.c        |  4 +++-
+ .../bpf/map_tests/lpm_trie_map_batch_ops.c    | 19 ++++++++++---------
+ 3 files changed, 17 insertions(+), 11 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c b/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c
+index b595556315b..76d3800a82a 100644
+--- a/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c
++++ b/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c
+@@ -45,6 +45,9 @@ static void map_batch_verify(int *visited, __u32 max_entries, int *keys,
+ 
+ 	memset(visited, 0, max_entries * sizeof(*visited));
+ 	for (i = 0; i < max_entries; i++) {
++		CHECK(keys[i] < 0 || keys[i] >= max_entries, "key checking",
++		      "error: i %d key %d out of range\n", i, keys[i]);
++
+ 		if (is_pcpu) {
+ 			cpu_offset = i * nr_cpus;
+ 			for (j = 0; j < nr_cpus; j++) {
+@@ -59,7 +62,7 @@ static void map_batch_verify(int *visited, __u32 max_entries, int *keys,
+ 			      "error: i %d key %d value %lld\n", i, keys[i],
+ 			      values[i]);
+ 		}
+-		visited[i] = 1;
++		visited[keys[i]] = 1;
+ 	}
+ 	for (i = 0; i < max_entries; i++) {
+ 		CHECK(visited[i] != 1, "visited checking",
+diff --git a/tools/testing/selftests/bpf/map_tests/htab_map_batch_ops.c b/tools/testing/selftests/bpf/map_tests/htab_map_batch_ops.c
+index 5da493b94ae..430949f9691 100644
+--- a/tools/testing/selftests/bpf/map_tests/htab_map_batch_ops.c
++++ b/tools/testing/selftests/bpf/map_tests/htab_map_batch_ops.c
+@@ -50,6 +50,8 @@ static void map_batch_verify(int *visited, __u32 max_entries,
+ 
+ 	memset(visited, 0, max_entries * sizeof(*visited));
+ 	for (i = 0; i < max_entries; i++) {
++		CHECK(keys[i] < 1 || keys[i] > max_entries, "key checking",
++		      "error: i %d key %d out of range\n", i, keys[i]);
+ 
+ 		if (is_pcpu) {
+ 			for (j = 0; j < bpf_num_possible_cpus(); j++) {
+@@ -65,7 +67,7 @@ static void map_batch_verify(int *visited, __u32 max_entries,
+ 			      ((int *)values)[i]);
+ 		}
+ 
+-		visited[i] = 1;
++		visited[keys[i] - 1] = 1;
+ 
+ 	}
+ 	for (i = 0; i < max_entries; i++) {
+diff --git a/tools/testing/selftests/bpf/map_tests/lpm_trie_map_batch_ops.c b/tools/testing/selftests/bpf/map_tests/lpm_trie_map_batch_ops.c
+index fe3e19f9624..3b51670b3cd 100644
+--- a/tools/testing/selftests/bpf/map_tests/lpm_trie_map_batch_ops.c
++++ b/tools/testing/selftests/bpf/map_tests/lpm_trie_map_batch_ops.c
+@@ -44,18 +44,19 @@ static void map_batch_update(int map_fd, __u32 max_entries,
+ static void map_batch_verify(int *visited, __u32 max_entries,
+ 			     struct test_lpm_key *keys, int *values)
+ {
+-	char buff[16] = { 0 };
+-	int lower_byte = 0;
+-	__u32 i;
++	__u32 i, ipv4, key;
+ 
+ 	memset(visited, 0, max_entries * sizeof(*visited));
+ 	for (i = 0; i < max_entries; i++) {
+-		inet_ntop(AF_INET, &keys[i].ipv4, buff, 32);
+-		CHECK(sscanf(buff, "192.168.1.%d", &lower_byte) == EOF,
+-		      "sscanf()", "error: i %d\n", i);
+-		CHECK(lower_byte != values[i], "key/value checking",
+-		      "error: i %d key %s value %d\n", i, buff, values[i]);
+-		visited[i] = 1;
++		ipv4 = ntohl(keys[i].ipv4.s_addr);
++		key = ipv4 & 0xff;
++		/* Expected keys are 192.168.1.1..max_entries with a /32 prefix. */
++		CHECK(keys[i].prefix != 32 || (ipv4 & 0xffffff00) != 0xc0a80100 ||
++		      key == 0 || key > max_entries, "key checking",
++		      "error: i %u prefix %u ipv4 %#x\n", i, keys[i].prefix, ipv4);
++		CHECK(key != values[i], "key/value checking",
++		      "error: i %u key %u value %d\n", i, key, values[i]);
++		visited[key - 1] = 1;
+ 	}
+ 	for (i = 0; i < max_entries; i++) {
+ 		CHECK(visited[i] != 1, "visited checking",
+-- 
+2.55.0
+
