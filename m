@@ -1,96 +1,146 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C40C95B21A;
-	Sun,  6 Sep 2026 13:56:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4BB2F28EA;
+	Sun,  6 Sep 2026 14:02:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788703008; cv=none; b=p4GEUBVnvSRyD860WELz3wUQ/Kttujs5faR963fzln33Jdoe7e2mQc2BIRhtlX66qWHA4kDTmJ13fCPZkQjio1FT6a/F5xsSeuKrV/lSFX+THnW4yE8pnNnzgtvvUyV4Oh6EXS4coBXeSReQ9xBm2k70hW7qCl1XcD+Y+6bWFfE=
+	t=1788703347; cv=none; b=ifyY3j7PjnbuCzmKX0yQuvXdzn3l8aMa8RV+Sekgy6xQBV31Cu7SFP2oitTQZ8Lv3OYopMVEiyi9aF64fQjHWakBRONHdF6/1NzeiQLlP4X23Qr2xyKXBXmC2PUw20fW9pTca6yhuT2hjJ/TBsiuvoMzkw2Iht3IdPN6PGIZdS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788703008; c=relaxed/simple;
-	bh=vb5ltAB6HXEirqVV/IKzVOZrN5l5GeUIZevMJsER5J8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=dJjmGOijQnsR07CrY0s86MyizztxpCPqAZnzaw5JGichJF32ivBRmU59WfBvRRmhkPT4ymO0WMgf3KJD/b4mQK9Ui9mxLpqxdGmi0G1d31lJsG1qhTh7xnqKpOrlazwrMz7CJgXkWI9ej92cqA3cE+FRz4EwKxrf2GO0I3CvjuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I9gvx7RZ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788703347; c=relaxed/simple;
+	bh=m4X/qxNbi5DcgokuXTbaLgnScflV54NCxGlaOr5BYog=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=sDiKPAEEssM1j8fPlThrinWOGMIZVwXt0004kdxVVQKpzKhLE4Qjc2+1NIX04Pf8hDFqmLdQEV0+Ql5nUUlR2iTHbgzDM/Lrl3LQgP7VdgQmr8OpOucOjocBi0hc9Ziwipdss3udX5YrwsjxaEUSSS8C4QnActCHdlnN2FIAaUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GmtJ4cEa; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I9gvx7RZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C321D1F00A3A;
-	Sun,  6 Sep 2026 13:56:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GmtJ4cEa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0F3E1F00A3A;
+	Sun,  6 Sep 2026 14:02:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788703007;
-	bh=vb5ltAB6HXEirqVV/IKzVOZrN5l5GeUIZevMJsER5J8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=I9gvx7RZdcixzco1WFo5Vq90ErkRkPAlXKvHA2DZWu/4vr2clOmnW0LFgoMbK5m3L
-	 qwdACvpi85TbHApA7/CeIw/bDveGMcqR9kYIytBHliNspg4hX0ir/n/gvF1as0JPP2
-	 I8NJ8SCC4z+MfxKHEsWub2zkWJ6Qkor5Y6ghgSNP6NQ/yCfmnoIoZFOoijMDcQXgUd
-	 N/TguHwmoI3Ov1EmBpy5W3uDFDiFJaVik88jIQJVp8sj2zjyEqWyzU8RoYVNl8o6pP
-	 yty3Kdgkh+hsYkFwSPQhn3uZyKPZBLl3iFL2PfNDsq/uBJcXWRczdbFUJMkwzbqUYQ
-	 3wW4nu9ne/1HQ==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Jakub Kicinski
- <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>, Tushar Vyavahare
- <tushar.vyavahare@intel.com>, netdev@vger.kernel.org,
- magnus.karlsson@intel.com, stfomichev@gmail.com, kernelxing@tencent.com,
- davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
- tirthendu.sarkar@intel.com, andrii@kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v3 0/4] selftests/xsk: improve shared-UMEM
- coverage
-In-Reply-To: <apBHXkxgq3XNEEy4@boxer>
-References: <20260819024443.781764-1-tushar.vyavahare@intel.com>
- <a602a1f6-e279-4c7c-86df-1bd0ef244fd0@redhat.com>
- <20260820104419.050cbc44@kernel.org> <aoc+/OW8Gy4ZOx+w@boxer>
- <20260820142920.6c96ec67@kernel.org> <apBHXkxgq3XNEEy4@boxer>
-Date: Sun, 06 Sep 2026 15:56:41 +0200
-Message-ID: <878q5epjom.fsf@all.your.base.are.belong.to.us>
+	s=k20260515; t=1788703346;
+	bh=S8NZJkDhSbWcg/zqEMAu07Aymn+Ww7scUyc2kjcPZ8I=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=GmtJ4cEaFQky9q89CCrrW3M6THul8DmpcMe1FumeHcq4bxnu/uNJJRh1QBgQZ516s
+	 sfuBlxJckHl83CEzvsX6+wa0hERbPYsJnmavRRcJUziWKEKoe9tdNiUrQMTgSRTb63
+	 VTJ+fweg8X6eNxh+upzc6AwLXzEbHTIUWRF25qbcfXbhDVLsy36gfMX5x+kYfi2SxU
+	 YPMJ3QIJY2+91if9+QdRpc76BK/crgiOw+ZNxeFNwNRIFH9wq0PCCA1V/4fxS1F8kg
+	 irIAFVOnUv7n9hZNc+wEUCgdobRAOTgY4fAWgNJg3vik3bQDvLvnv48Uggxp4r0Uky
+	 OIFNA/4bppocA==
+Subject: Re: [PATCH net-next, v3] net/mlx5: Use dma_wmb() for completion queue
+ doorbell updates
+From: netdev-bot+sashiko@kernel.org
+To: lirongqing@baidu.com
+Cc: saeedm@nvidia.com, leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+ hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me, borisp@nvidia.com,
+ richardcochran@gmail.com, cratiu@nvidia.com, dtatulea@nvidia.com,
+ cjubran@nvidia.com, kees@kernel.org, agoldberger@nvidia.com, horms@kernel.org,
+ netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Date: Sun, 06 Sep 2026 14:02:24 +0000
+Message-ID: <178870334429.219967.11248144823139889707@kernel.org>
+In-Reply-To: <20260902023429.1717-1-lirongqing@baidu.com>
+References: <20260902023429.1717-1-lirongqing@baidu.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-Maciej Fijalkowski <maciej.fijalkowski@intel.com> writes:
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider:
 
-> On Thu, Aug 20, 2026 at 02:29:20PM -0700, Jakub Kicinski wrote:
->> On Thu, 20 Aug 2026 19:53:00 +0200 Maciej Fijalkowski wrote:
->> > On Thu, Aug 20, 2026 at 10:44:19AM -0700, Jakub Kicinski wrote:
->> > > On Thu, 20 Aug 2026 11:35:53 +0200 Paolo Abeni wrote:=20=20
->> > > > ## Form letter - net-next-closed=20=20
->> > >=20
->> > > these are bpf patches. Tushar, tools/testing/selftests/bpf is BPF=20=
-=20
->> >=20
->> > But AF_XDP is now net target since some time. Should we move the test
->> > suite out of bpf directory then?
->>=20
->> True.. but until the move happens it feels a little awkward
->> taking pure ksft/bpf patches via net-next?
->
-> CC: Bjorn
->
-> We had a talk about potential next steps and what would take to get this
-> test suite executed against HW tests. tl;dr version is that some of the
-> work is needed to adjust it from infrastructure POV as currently
-> xskxceiver runs as a single process with two separate threads and what
-> Bjorn was saying we will rather be needing two standalone processes that
-> could be used on DUT and packet generator.
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
 
-Yeah, that matches what I had in mind -- for HW tests, the two endpoints
-need to be independently runnable processes. One runs on the DUT, and
-the other on the peer/traffic generator. IOW, the existing tool needs to
-support such a setup, which is a move awway from the two-thread setup.
+- [Medium] Commit message justification is factually wrong for at least
+  one converted site, and the change's correctness silently depends on…
 
-I'm still not convinced that this would be this tool, or something else
-(new).
+--
 
-Again, restructuring is definitely a follow-up, and should not block the
-shared-UMEM work. Also, the move from selftest/bpf can also be handled
-separately.
+net/mlx5: Use dma_wmb() for completion queue doorbell updates
 
+This converts the wmb() that follows mlx5_cqwq_update_db_record() into
+dma_wmb() at six CQ polling sites in the mlx5 driver.  The reasoning given
+is that only DMA coherent memory is written around the barrier, so the
+lighter DMA barrier is sufficient.  The wmb() in wc.c is intentionally left
+alone.
 
-Bj=C3=B6rn
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
 
+[ ... ]
 
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c b/drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c
+> index 1f6bde5d76265..1341874ee58a3 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c
+> @@ -384,7 +384,7 @@ static inline void mlx5_fpga_conn_cqes(struct mlx5_fpga_conn *conn,
+>  
+>  	mlx5_fpga_dbg(conn->fdev, "Re-arming CQ with cc# %u\n", conn->cq.wq.cc);
+>  	/* ensure cq space is freed before enabling more cqes */
+> -	wmb();
+> +	dma_wmb();
+>  	mlx5_fpga_conn_arm_cq(conn);
+>  }
+
+[Severity: Medium]
+The commit message says:
+
+    Since only DMA coherent memory accesses are involved (no MMIO accesses
+    follow), we can safely use dma_wmb() instead of wmb().
+
+Is that accurate for mlx5_fpga_conn_cqes()?  The statement right after the
+converted barrier is mlx5_fpga_conn_arm_cq(), which reaches an MMIO write:
+
+drivers/net/ethernet/mellanox/mlx5/core/fpga/conn.c:
+static void mlx5_fpga_conn_arm_cq(struct mlx5_fpga_conn *conn)
+{
+	mlx5_cq_arm(&conn->cq.mcq, MLX5_CQ_DB_REQ_NOT,
+		    conn->fdev->conn_res.uar->map, conn->cq.wq.cc);
+}
+
+include/linux/mlx5/cq.h:mlx5_cq_arm() {
+	*cq->arm_db = cpu_to_be32(sn << 28 | cmd | ci);
+
+	/* Make sure that the doorbell record in host memory is
+	 * written before ringing the doorbell via PCI MMIO.
+	 */
+	wmb();
+	...
+	mlx5_write64(doorbell, uar_page + MLX5_CQ_DOORBELL);
+}
+
+and mlx5_write64() uses __raw_writeq()/__raw_writel(), which carry no
+implicit barriers.
+
+The same holds indirectly for the other four converted sites,
+mlx5e_poll_rx_cq(), mlx5e_poll_tx_cq(), mlx5e_poll_xdpsq_cq() and
+mlx5e_ptp_poll_ts_cq(): the NAPI caller in en_txrx.c arms the CQ over MMIO
+shortly after the poll returns:
+
+drivers/net/ethernet/mellanox/mlx5/core/en/txrx.h:
+static inline void mlx5e_cq_arm(struct mlx5e_cq *cq)
+{
+	mlx5_cq_arm(&cq->mcq, MLX5_CQ_DB_REQ_NOT, cq->uar->map, cq->wq.cc);
+}
+
+dma_wmb() is strictly weaker than wmb() on some architectures (arm64
+dmb(oshst) versus dsb(st)), and by itself it does not order the coherent
+memory consumer-index store against a later MMIO write.  So is the change
+relying on the wmb() inside mlx5_cq_arm() to provide that ordering?
+
+If so, could the changelog state that instead, and could the code comment
+be updated from "ensure cq space is freed before enabling more cqes" to
+mention that the MMIO ordering comes from mlx5_cq_arm()?  Otherwise a later
+change that relaxes the wmb() in mlx5_cq_arm(), or a new arm path without
+one, would quietly lose the CQ consumer-index versus arm-doorbell ordering
+with nothing in the history pointing at it.
+
+[ ... ]
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260902023429.1717-1-lirongqing%40baidu.com
