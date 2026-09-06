@@ -1,228 +1,131 @@
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773323BE162
-	for <bpf@vger.kernel.org>; Sun,  6 Sep 2026 17:18:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79C043B8934
+	for <bpf@vger.kernel.org>; Sun,  6 Sep 2026 17:20:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788715096; cv=none; b=Isbet162Yaff5i0tpeDineRn6LV7ikYakbkepCOCYpb6zAqTdoLC3VP8Y/+fooUe9tXTmL8QTOkp4u02wjuNOfEboK7TM1w6WL3xXZLQ5vf6AGkKvyleDU/EmU3LtIF7wdso4wwdm1xiFWT5Hjk1uY4bAvw3oKOIuNcl8+7d9iY=
+	t=1788715254; cv=none; b=Tz79r17lubUqasMHNnM6yo8+d/vqhzx8ryMbN6V97fbLLhrq4KxuSTwEwpV8M+TgiJcevbS8EW8cdF2BiD6Z8VNXIUWhebU8hplX66jpIpBTQ2HqJwnSwVfbqvsAc8dvT4Iahqci5ojt9xusZPBTmlDPt4yyoiRU7WFcXW0aVyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788715096; c=relaxed/simple;
-	bh=WYWkloWX0WwYIbfuRU0AbifbyJ2iXxd78Hzjdu5xb60=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eZ/fqeCEu/753Sg57BQHY4d/KdYuc/83Pgwyeb/2WDgkTdwvH0vlNdcdHMnX7zD+4RThrysmY2yGp977lTThdolmLshM+gJoKz4y2hRgYiNMF4YOq59MfC1DhobNixeMcb3p7Nd+IRiU+VHS1L7ioURvaH8k9dVZmCIPQKCUdzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KJ3RKGop; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788715254; c=relaxed/simple;
+	bh=g8QlHbaIA+F21fU5jaLfuUVZhyYEOG06j/37lqMsD10=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=rwELZs4C4yeKWzNJBM80TToHPlK9PEbexpiFNuUoq9oY+bgj5QBsvfJfT3QUb1p7jKINrkKgE3uMaIZYOa4z8uRknuEBBbZWH8OLVLYe9JAu7A6XK5rnU+OUND80l/vrEB0pOeaqMAPeKibVIrRhel5RGYhHSsWrUtectMQMSIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nnk5bvxR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KJ3RKGop"
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-867a943b149so42803647b3.1
-        for <bpf@vger.kernel.org>; Sun, 06 Sep 2026 10:18:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788715093; x=1789319893; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=t5Xptp4H+rxzUUCx4qt8Wtg7L4/4Oif3JrXMZT5ooQM=;
-        b=KJ3RKGopVD+MUwJKsDfjsTr13qI4M9luSyJs4hA133gHsuBvrnUs0/+hrDcVadH03l
-         nuFjLQF257l2gCXDcaeW/1MhQBbYFg+PyyxMmNjGUzf+pEnSMe+aYJVXAFO6d5Wx1kDn
-         4129G0IxXCiqeIxTZIi3H6qxYwK3xpt92O64MvOHcrtSEwvanLI1KRyFdbWY11PT6kM/
-         k178iCvIKm3Z7KsP399yzw4UXUQmtv3B1S6J5kUrIgYUTlyr0EDbaocABXkp8gzqiyFM
-         24bv/Jw0lYGkXWjK1JVl4XdMCNBkrHz4tavFE05/sXTsIQZDjO3ObCWvkNwwqD9Sx7y5
-         SLRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788715093; x=1789319893;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=t5Xptp4H+rxzUUCx4qt8Wtg7L4/4Oif3JrXMZT5ooQM=;
-        b=Y+en9D6dmwSDUjGGYaHzIeG9lmid3UBJJA5ayDQ2Vbu67qMahjI9a5i7ujkYr9Fd2o
-         U7H4wkRqJuGu7JitZ7lVez9sHs3ZXkvzjzjEI1KIVuL5LTHuzMsZSr5RXfY09Fw3EVev
-         cMHbiYw9MfMF0B+ZqCKd3nhrJImDeIWjB3ZFTH8ltD5zO3r9k/Ws7pAdxa5tMuK161VU
-         Wimd55+bBSvOvZGixGouZLTzpEvgFXj5vTZ3NzIuscYp2ZgyxoYIjSZW8QPazOLOJMRX
-         FF8id56y5X139AWycb/l4Qqm0IIbpuibSFkyBNYOqSd/0XloVV2ldi34Lin1DFJj1cLX
-         9HUg==
-X-Forwarded-Encrypted: i=1; AKwUvBwvSS1tsld8Xw+LApSv48ntPTZeyxIwWqoSK4ESumLBYatpKWa2GClbR9rBaUAmM9kXo04=@vger.kernel.org
-X-Gm-Message-State: AFuF++mlvs/DkYkGf2MavipdJixsWq6Qg1NDZ6MVh8FnZ11Wy5szsVVN
-	ZUZWaLQndXBz0pvkaobnMt/MNkTKMB3umVmo7Oc1wCwYkU9M0ZpYUEW6
-X-Gm-Gg: AYBFou0sNE0WhgaZzh1mtLAjUt9TwQjh/415c7MtJFnCQiHhWPq+rRJ2fDUUX3a9odP
-	iF95OPSkvwla5LqIUXiPqqHcbVB4mEJk+ItqOwM08Aae0Dk96VO6dOP8mRLODK9trkxXq82Py19
-	cZYkjUleIjRhNwf4/gmsjsW6SoGP5DUybZNRPk6on0u7SOkzkRYmCnj3eRU4RZ696tKGnOEgx0Q
-	zKtNTxvK+NHd9uMwFLPm7DdwmQtkaQKjjqwQ2EnIHxjwNo6YhNGNoLmjnAAn0JJoDHWuUrug+BB
-	TAFJKXa/elVGNPJKwXX2pptMSNqwAyJB8lMuRBHI7WxO8S1PaGhkZiEtfeJ1eVACAYqEyXkudnW
-	EztOIp8OJKJAA+FiY6j2iM5j2dDTQVBNL2blvFmqI9RdIkwi5n34aE6UcArVNC2VhJdl8ku/FJ3
-	Ei0FOwAldOfyQtZhhzy6QJbSy6wAfMchR31IQKEgIuq4L3yFhB7wbAfG5/9ZRlhw==
-X-Received: by 2002:a05:690c:1a:b0:873:5bd1:98b1 with SMTP id 00721157ae682-8735bd19fa2mr41605437b3.35.1788715093078;
-        Sun, 06 Sep 2026 10:18:13 -0700 (PDT)
-Received: from localhost ([2600:1702:7a90:6f9f:8bc4:8aec:108d:7a04])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8714b62bc77sm58248267b3.39.2026.09.06.10.18.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Sep 2026 10:18:12 -0700 (PDT)
-From: Matt Turner <mattst88@gmail.com>
-Date: Sun, 06 Sep 2026 13:18:06 -0400
-Subject: [PATCH v4 3/3] perf tools: fix GTK4 leftover show/hide calls and
- error-loop list race
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nnk5bvxR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE1431F00A3A;
+	Sun,  6 Sep 2026 17:20:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788715250;
+	bh=MeIbzytCAh3nKhtft5AJ0Tak/5YflWswAYQl8AWd2To=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Nnk5bvxRTBqyx9TQJ1FCd2dH1EJ+8At7IT4woGAqi4zjMzrkBnm2WbjQfHk/n6/NI
+	 vCeLsbAq3RuLrqvNZIVvV28w2yZQameCA2jk+mv8xYudE9G9ysNal7+cklvQqOruxH
+	 HwkjfRiGzQIvllAb7RWO+wgfVX2ggzo4BF5azL9ReXQaHpp87UL+hoLsUXmSvND6/+
+	 up2Q7PFCkH9l8/OF21rQQ1vpH6XFFVJSJer9m2Qzs/kXSitZtBafTES/xSvUHZtNiO
+	 bUAIGUCrxaLHh/njeQrJmK4uxbrAk87qMFMvmXSsUkQ40pXPeMr9/lq1SPAEw8pJkz
+	 J7Oo00R+NOUGg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 1/2] bpftool: Use batch lookups for bounded
+ hash map dumps
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tianyi Chen" <hi@tychen.cc>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260906170819.1212661-2-hi@tychen.cc>
+References: <20260906170819.1212661-1-hi@tychen.cc>
+ <20260906170819.1212661-2-hi@tychen.cc>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 06 Sep 2026 17:20:49 +0000
+Message-Id: <20260906172049.EE1431F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260906-perf-gtk2-v4-3-97e92ee07214@gmail.com>
-References: <20260906-perf-gtk2-v4-0-97e92ee07214@gmail.com>
-In-Reply-To: <20260906-perf-gtk2-v4-0-97e92ee07214@gmail.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
- Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
- Adrian Hunter <adrian.hunter@intel.com>, 
- James Clark <james.clark@linaro.org>
-Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
- bpf@vger.kernel.org, Matt Turner <mattst88@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4571; i=mattst88@gmail.com;
- h=from:subject:message-id; bh=WYWkloWX0WwYIbfuRU0AbifbyJ2iXxd78Hzjdu5xb60=;
- b=owGbwMvMwCW25rVmCc8sv+mMp9WSGLLmLvBp23LZQib47aP9Z933OftXl5u5Vk3rqTmRt1s4O
- uXu2vDTHR9ZGMS4GGaKKbLErVdkmdW2Y6nPaelfMHNYmUCGSIs0MAABCwNfbmJeqZGOkZ6ptqGe
- IZChYxQPkdNj0MgsLi5NLdJNKyhyyMsvSSzJzM8r1ssvSM0rSC/QS8tMK8nIyC8qTgUaoZeXWmL
- q6uhmZGhgYuloYeZk4Whq4uzsZOjk5ujo7OpkZGluYuBs6WjiamnOwMUpAHNNaQzDT8Yrs272TQ
- nT9+yyKnRWrdvCznxQI/uZlsq9oFKuTxwaLQx/xfYtbLF/eCdudyTzGbb6vdqBhdMSvaRbFe+W/
- 97CveAvFwA=
-X-Developer-Key: i=mattst88@gmail.com; a=openpgp;
- fpr=3BB639E56F861FA2E86505690FDD682D974CA72A
 
-Sashiko AI review of the GTK2-to-GTK4 port flagged two real issues:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] Multi-line comments do not follow the mandatory BPF subsystem style.
+--
 
-- gtk_widget_show()/gtk_widget_hide() were removed in GTK4 but three
-  call sites were missed during the port. Replace with
-  gtk_widget_set_visible(), adding a small wrapper for the
-  info-bar "response" signal callback since gtk_widget_hide() no
-  longer exists to pass directly.
+commit a1cb333fccdbef3bcdfaf55fc0e0a282326e27a3
+Author: Tianyi Chen <hi@tychen.cc>
 
-- perf_gtk__error_loops is updated with g_slist_prepend()/
-  g_slist_remove() in perf_gtk__error(), but perf_gtk__quit_error_dialog()
-  walks the same list from a signal handler (perf_gtk__signal() ->
-  perf_gtk__exit()) that can fire mid-update, corrupting the list.
-  Block the relevant signals around the two list updates.
----
- tools/perf/ui/gtk/browser.c | 10 ++++++++--
- tools/perf/ui/gtk/util.c    | 27 ++++++++++++++++++++++++++-
- 2 files changed, 34 insertions(+), 3 deletions(-)
+bpftool: Use batch lookups for bounded hash map dumps
 
-diff --git a/tools/perf/ui/gtk/browser.c b/tools/perf/ui/gtk/browser.c
-index e1d286945832..40a413787192 100644
---- a/tools/perf/ui/gtk/browser.c
-+++ b/tools/perf/ui/gtk/browser.c
-@@ -74,6 +74,12 @@ const char *perf_gtk__get_percent_color(double percent)
- 	return NULL;
- }
- 
-+static void perf_gtk__hide_widget(GtkWidget *widget, gint response_id __maybe_unused,
-+				   gpointer data __maybe_unused)
-+{
-+	gtk_widget_set_visible(widget, FALSE);
-+}
-+
- GtkWidget *perf_gtk__setup_info_bar(void)
- {
- 	GtkWidget *info_bar;
-@@ -83,14 +89,14 @@ GtkWidget *perf_gtk__setup_info_bar(void)
- 	gtk_widget_set_visible(info_bar, FALSE);
- 
- 	label = gtk_label_new("");
--	gtk_widget_show(label);
-+	gtk_widget_set_visible(label, TRUE);
- 
- 	gtk_info_bar_add_child(GTK_INFO_BAR(info_bar), label);
- 
- 	gtk_info_bar_add_button(GTK_INFO_BAR(info_bar), "_OK",
- 				GTK_RESPONSE_OK);
- 	g_signal_connect(info_bar, "response",
--			 G_CALLBACK(gtk_widget_hide), NULL);
-+			 G_CALLBACK(perf_gtk__hide_widget), NULL);
- 
- 	pgctx->info_bar = info_bar;
- 	pgctx->message_label = label;
-diff --git a/tools/perf/ui/gtk/util.c b/tools/perf/ui/gtk/util.c
-index 8a922851257e..f1dbd96e2370 100644
---- a/tools/perf/ui/gtk/util.c
-+++ b/tools/perf/ui/gtk/util.c
-@@ -2,6 +2,7 @@
- #include "../util.h"
- #include "gtk.h"
- 
-+#include <signal.h>
- #include <stdarg.h>
- #include <stdio.h>
- #include <stdlib.h>
-@@ -48,6 +49,25 @@ void perf_gtk__quit_error_dialog(void)
- 	g_slist_foreach(perf_gtk__error_loops, perf_gtk__quit_loop, NULL);
- }
- 
-+/*
-+ * perf_gtk__signal() runs perf_gtk__quit_error_dialog() from a signal
-+ * handler, which can preempt perf_gtk__error() while it is updating
-+ * perf_gtk__error_loops below. Block those signals around the update so
-+ * the list is never traversed half-modified.
-+ */
-+static void perf_gtk__block_exit_signals(sigset_t *old_set)
-+{
-+	sigset_t set;
-+
-+	sigemptyset(&set);
-+	sigaddset(&set, SIGSEGV);
-+	sigaddset(&set, SIGFPE);
-+	sigaddset(&set, SIGINT);
-+	sigaddset(&set, SIGQUIT);
-+	sigaddset(&set, SIGTERM);
-+	sigprocmask(SIG_BLOCK, &set, old_set);
-+}
-+
- static void perf_gtk__dialog_response(GtkDialog *dialog,
- 				      gint response_id __maybe_unused,
- 				      gpointer data __maybe_unused)
-@@ -61,6 +81,7 @@ static int perf_gtk__error(const char *format, va_list args)
- 	GtkWidget *dialog;
- 	GMainLoop *loop;
- 	va_list args_copy;
-+	sigset_t old_set;
- 
- 	va_copy(args_copy, args);
- 	if (!perf_gtk__is_active_context(pgctx) ||
-@@ -86,7 +107,9 @@ static int perf_gtk__error(const char *format, va_list args)
- 	 * outlive the dialog and hang.
- 	 */
- 	loop = g_main_loop_new(NULL, FALSE);
-+	perf_gtk__block_exit_signals(&old_set);
- 	perf_gtk__error_loops = g_slist_prepend(perf_gtk__error_loops, loop);
-+	sigprocmask(SIG_SETMASK, &old_set, NULL);
- 	g_signal_connect(dialog, "response",
- 			 G_CALLBACK(perf_gtk__dialog_response), NULL);
- 	g_signal_connect_swapped(dialog, "destroy",
-@@ -94,7 +117,9 @@ static int perf_gtk__error(const char *format, va_list args)
- 
- 	gtk_widget_set_visible(dialog, TRUE);
- 	g_main_loop_run(loop);
-+	perf_gtk__block_exit_signals(&old_set);
- 	perf_gtk__error_loops = g_slist_remove(perf_gtk__error_loops, loop);
-+	sigprocmask(SIG_SETMASK, &old_set, NULL);
- 	g_main_loop_unref(loop);
- 
- 	free(msg);
-@@ -120,7 +145,7 @@ static int perf_gtk__warning_info_bar(const char *format, va_list args)
- 	gtk_label_set_text(GTK_LABEL(pgctx->message_label), msg);
- 	gtk_info_bar_set_message_type(GTK_INFO_BAR(pgctx->info_bar),
- 				      GTK_MESSAGE_WARNING);
--	gtk_widget_show(pgctx->info_bar);
-+	gtk_widget_set_visible(pgctx->info_bar, TRUE);
- 
- 	free(msg);
- 	return 0;
+This patch updates bpftool to use BPF_MAP_LOOKUP_BATCH when dumping bounded
+hash maps to reduce BPF syscalls. It restricts this optimization to maps
+that fit within a 4 MiB memory budget and handles fallbacks.
 
--- 
-2.54.0
+> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+> index 684a8fb724146..1eccdc0d1e963 100644
+> --- a/tools/bpf/bpftool/map.c
+> +++ b/tools/bpf/bpftool/map.c
+[ ... ]
+> @@ -762,10 +757,108 @@ static int dump_map_elem(int fd, void *key, void *=
+value,
+[ ... ]
+> +/* Return 1 to use individual lookups, but only before batch traversal s=
+tarts. */
+> +static int dump_map_batch(int fd, void *key, void *value,
+> +			  struct bpf_map_info *info, struct btf *btf,
+> +			  json_writer_t *wtr, unsigned int *num_elems)
+> +{
+> +	__u32 capacity, count, batch =3D 0, next_batch =3D 0, i;
+> +	void *keys =3D NULL, *values =3D NULL, *buf;
+> +	bool first =3D true, can_fallback =3D true;
+> +	int err;
+> +
+> +	/* Hash lookup batches must accommodate a whole bucket. Restrict the
+> +	 * optimization to maps whose worst-case bucket fits the memory budget,
+> +	 * so a later ENOSPC never forces a restart after printing some entries.
+> +	 * Division also bounds the allocation multiplications on 32-bit hosts.
+> +	 */
 
+[Severity: Low]
+Should the opening /* be on its own line to follow the BPF subsystem
+multi-line comment style?
+
+> +	if (info->type !=3D BPF_MAP_TYPE_HASH || !info->max_entries ||
+> +	    (__u64)info->key_size + info->value_size >
+> +	    MAP_DUMP_BATCH_MAX_BYTES / info->max_entries)
+> +		return 1;
+[ ... ]
+> +	while (true) {
+> +		count =3D capacity;
+> +		err =3D bpf_map_lookup_batch(fd, first ? NULL : &batch,
+> +					   &next_batch, keys, values, &count, NULL);
+> +		err =3D err ? errno : 0;
+> +		/* Older kernels reject the command before updating count. Do not
+> +		 * inspect the buffers on these errors, or fall back after progress.
+> +		 */
+
+[Severity: Low]
+Does this comment also need the opening /* on its own line?
+
+> +		if (can_fallback && (err =3D=3D EINVAL || err =3D=3D EOPNOTSUPP ||
+> +				     err =3D=3D 524 /* ENOTSUPP */)) {
+> +			err =3D 1;
+> +			goto out;
+> +		}
+[ ... ]
+> +		for (i =3D 0; i < count; i++) {
+> +			/* Keep the alignment provided by individual lookups, including
+> +			 * for BTF types whose map key/value size is not aligned.
+> +			 */
+
+[Severity: Low]
+Here is a third instance. Should this opening /* be on its own line as well?
+
+> +			memcpy(key, keys + (size_t)i * info->key_size, info->key_size);
+> +			memcpy(value, values + (size_t)i * info->value_size, info->value_size=
+);
+> +			print_map_elem(key, value, info, btf, wtr);
+> +			(*num_elems)++;
+> +		}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260906170819.1212=
+661-1-hi@tychen.cc?part=3D1
