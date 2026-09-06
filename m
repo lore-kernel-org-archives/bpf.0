@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928B12F6586
-	for <bpf@vger.kernel.org>; Sun,  6 Sep 2026 16:18:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D6D63B28D;
+	Sun,  6 Sep 2026 16:19:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788711497; cv=none; b=AmFKi36qa63NavaZBSlYqfkH9Gwb1ZWF3Nb7q9H91lkFTATXoTg93hLY6Oj2hVlKiCfAiZdtcod5fCSNCa74L3DZgqO54tC2ElhAduao4lAwP4XlD5qdh0H9dkvbCSKt/osC5KD7q17PzmAsNRxYF/GFb92XLJpAMRWN3Lp3U08=
+	t=1788711553; cv=none; b=tClJCNxhVmRyVIgP3q2k28LXTO02sGijXVVR+Pt6J56UrpDSyUnsvwEFH1pyQfksMQEE31TkVTGpinix4jlP2wxKDhl2ni9y/H3Q5nuDBIp+XAY3tF7rfnDvyeFoSFuSxMdf994E00qxQgP3uIzm9UqYU3lJeE10FHGY4F/kmZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788711497; c=relaxed/simple;
-	bh=6As943DaH6GWJIsfJooLi3Gr/B9sktdFOk9vN/aRvcg=;
+	s=arc-20240116; t=1788711553; c=relaxed/simple;
+	bh=hcHXjohoRkBJMydlTLNLrhy7esbxTNiPxsOf54E5VOw=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=dO6JwqZLR0/yI36nIvBJoEHjY3LKBmMG7gCdpf+dnJtqGwBIwt3LQlTICdUX48hYXEpu4fO9RyZpMEM+oz75KPK4bZUkTLitYLbSlSZC4goeVykgn7vmU3TFV3877LLDypEVGwTEsLSAQMDCfpP1OEz9+FdW5nOaP2lDm9r36VE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R9soT7wJ; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=CBoROaP6uCbmC5UB4/14pi6qnyMyBQVgfvUh64VpaAx0lVsItPHnlGyM53rBc7qFpf6I6/+yBsuRAhMFlL1y7VSsmuG8iQ77bVMhqyG4moyRI6TT1nfjyfOykitiH8mkkDhbjdnz9IG8SWoHcZc3SV8aLqvBSEBSfzDELLvc+d0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IsRYOUMi; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R9soT7wJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53FE71F00A3A;
-	Sun,  6 Sep 2026 16:18:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IsRYOUMi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 058571F00A3A;
+	Sun,  6 Sep 2026 16:19:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788711496;
-	bh=059Xf1CaIVfnMTole34Pv5xKtm1Z/wiB1WRJqBA1czI=;
+	s=k20260515; t=1788711552;
+	bh=RWe9BS3C5oRWwzmuoBIATuBOQkzPFNNebZRFeOGcctY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=R9soT7wJrt5sQAkC74EsuEQyu7fp37CCB8f0O7WsmeCqR02yLg7Dz298sH/UA4YYZ
-	 rVzBxuZgmVJXR6WTTC4PqtN29NH6tKIs1zS6iais3INbUE7NJN4912QhIKL97syChU
-	 qU4EjwWQfczk9u8UmNTo60b0+hTY9yeuTZhM3FzQe6uNg1kUbp6xhRgCgqPhK6J2cD
-	 BQY2K6prWH2hp1It0lENgvAAFcX6GNI8Tbri9eumkTB+z8Mbq4YC2IyZwK7jkxVsRs
-	 Y3SMdKn4y3+rPNGakZm2KmUpUiQc3EoOnOpYaxKAdSvggZBhiHpWeBB6Pp+0RU9QUG
-	 i71bk792SVo1g==
+	b=IsRYOUMiaujgsKdERaW8Ivt89T4MblZrrzhf79GWjLe0OmI6R5ASWGMOVeKITissS
+	 MsikBUjiliDlwRymXg5zMqzgWxyT5ewRiumhkyLWyUuomQ1V0iyqFxeJMJdApXBP4M
+	 7LEwjNp1/81cgyjMwhuf9Cv+TeXqCW/aJNngcYoPq0/XBPPTPTZqcFp5c2Kc9DUpbu
+	 WMGC7EsA2B/9lQSkAs194e5aCSyF7eHEwoSKfB6t0OPX9dRVmFru0N7u+PIESTYQfg
+	 E4bqj+EgMUcaNIHBXcHl+OJO/QLGrTSlp1948eHgeXncJef3Q2OkDW5t5fsi2yako0
+	 E8NDHXgagNZpg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Cover recursive bpftool
- map dumps
+Subject: Re: [PATCH v3 1/2] tools: port perf ui from GTK 2 to GTK 4
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tianyi Chen" <hi@tychen.cc>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <178870998583.979169.18178382250623407398@tychen.cc>
-References: <178870998583.979169.16526173782819097354@tychen.cc>
- <178870998583.979169.18178382250623407398@tychen.cc>
+To: "Matt Turner" <mattst88@gmail.com>
+Cc: bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+In-Reply-To: <20260906-perf-gtk2-v3-1-e1f2086214a0@gmail.com>
+References: <20260906-perf-gtk2-v3-0-e1f2086214a0@gmail.com>
+ <20260906-perf-gtk2-v3-1-e1f2086214a0@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 06 Sep 2026 16:18:15 +0000
-Message-Id: <20260906161816.53FE71F00A3A@smtp.kernel.org>
+Date: Sun, 06 Sep 2026 16:19:11 +0000
+Message-Id: <20260906161912.058571F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,105 +46,132 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] Lowering RLIMIT_NOFILE without closing inherited FDs from the te=
-st runner creates brittle test execution.
-- [Low] Multi-line comments do not follow the BPF subsystem standard (openi=
-ng `/*` on its own line).
+- [Medium] Non-atomic GSList updates race with traversal in signal handler,=
+ risking list corruption and crashes.
+- [Low] The GTK 4 port incorrectly uses `gtk_widget_show` and `gtk_widget_h=
+ide`, which were completely removed in GTK 4, leading to build and linkage =
+failures.
 --
 
-commit bfea95162d84a988e16f2cd61621377edfd83849
-Author: Tianyi Chen <hi@tychen.cc>
+commit 42bf24edb84bb238d5385cd7669415baed4ad796
+Author: Matt Turner <mattst88@gmail.com>
 
-selftests/bpf: Cover recursive bpftool map dumps
+tools: port perf ui from GTK 2 to GTK 4
 
-Exercise recursive map dumping for array-of-maps and hash-of-maps,
-including shared inner maps, empty outer and inner maps, BTF-formatted
-values and multiple selected roots.
+This patch ports the perf GTK UI directly to GTK 4, migrating widget APIs,
+monitor geometry access, and event loops. It also removes GTK 2 compatibili=
+ty
+and converts manual loops to signal-driven GMainLoops.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c b/=
-tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
-> index 0000000000000..330a3344770d1
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
-> @@ -0,0 +1,419 @@
-
+> diff --git a/tools/perf/ui/gtk/browser.c b/tools/perf/ui/gtk/browser.c
+> index d2dadf3873fbd..e1d2869458329 100644
+> --- a/tools/perf/ui/gtk/browser.c
+> +++ b/tools/perf/ui/gtk/browser.c
 [ ... ]
-
-> +	/* Compare the complete JSON document: a flat array with the root first,
-> +	 * one copy of the shared inner map, and unchanged entry representation=
-s.
-> +	 */
+>  GtkWidget *perf_gtk__setup_info_bar(void)
+>  {
+>  	GtkWidget *info_bar;
+>  	GtkWidget *label;
+> =20
+>  	info_bar =3D gtk_info_bar_new();
+> -	gtk_widget_set_no_show_all(info_bar, TRUE);
+> +	gtk_widget_set_visible(info_bar, FALSE);
+> =20
+>  	label =3D gtk_label_new("");
+>  	gtk_widget_show(label);
 
 [Severity: Low]
-Does this follow the BPF subsystem multi-line comment style? The opening
-/* should be on its own line:
+Does this successfully compile against GTK 4? It appears gtk_widget_show()
+was removed in GTK 4, but this line remains unchanged. Should this be
+migrated to gtk_widget_set_visible() instead?
 
-/*
- * Compare the complete JSON document...
-
-[ ... ]
-
-> +	/* Select the first inner map and both outers as roots. The other inner
-> +	 * map must be appended after all three roots, even though it is found
-> +	 * while dumping the first outer. A process-specific name avoids other
-> +	 * tests' maps joining the selection.
-> +	 */
-
-[Severity: Low]
-Does this follow the BPF subsystem multi-line comment style? The opening
-/* should be on its own line.
-
-[ ... ]
-
-> +	/* Every key is enumerable, but PERF_EVENT_ARRAY lookup returns
-> +	 * ENOTSUPP (the kernel-internal errno). Check both entries so an
-> +	 * early exit on the first lookup failure cannot pass.
-> +	 */
+> =20
+> -	content_area =3D gtk_info_bar_get_content_area(GTK_INFO_BAR(info_bar));
+> -	gtk_container_add(GTK_CONTAINER(content_area), label);
+> +	gtk_info_bar_add_child(GTK_INFO_BAR(info_bar), label);
+> =20
+> -	gtk_info_bar_add_button(GTK_INFO_BAR(info_bar), GTK_STOCK_OK,
+> +	gtk_info_bar_add_button(GTK_INFO_BAR(info_bar), "_OK",
+>  				GTK_RESPONSE_OK);
+>  	g_signal_connect(info_bar, "response",
+>  			 G_CALLBACK(gtk_widget_hide), NULL);
 
 [Severity: Low]
-Does this follow the BPF subsystem multi-line comment style? The opening
-/* should be on its own line.
+Similarly, gtk_widget_hide() is passed as a signal callback here, but it
+was also removed in GTK 4. Could this cause linkage or build failures?
 
 [ ... ]
-
-> +	/* Create all fixtures before lowering the limit, and keep the test
-> +	 * runner's limit unchanged. Retaining every discovered FD would exceed
-> +	 * this limit before the recursive dump could visit all inner maps.
-> +	 */
-
-[Severity: Low]
-Does this follow the BPF subsystem multi-line comment style? The opening
-/* should be on its own line.
-
-> +	pid =3D fork();
-> +	if (!ASSERT_GE(pid, 0, "fork"))
-> +		goto out;
-> +	if (!pid) {
-> +		close(outer_fd);
-> +		if (setrlimit(RLIMIT_NOFILE, &limit))
-> +			_exit(1);
-> +		snprintf(command, sizeof(command), "%s -r map dump id %u",
-> +			 json ? "-j" : "", root_id);
-> +		if (get_bpftool_command_output(command, output, 65535))
-> +			_exit(2);
+> diff --git a/tools/perf/ui/gtk/util.c b/tools/perf/ui/gtk/util.c
+> index c47f5c387838c..8a922851257e7 100644
+> --- a/tools/perf/ui/gtk/util.c
+> +++ b/tools/perf/ui/gtk/util.c
+[ ... ]
+> +static GSList *perf_gtk__error_loops;
+> +
+> +static void perf_gtk__quit_loop(gpointer data, gpointer user_data __mayb=
+e_unused)
+> +{
+> +	g_main_loop_quit(data);
+> +}
+> +
+> +void perf_gtk__quit_error_dialog(void)
+> +{
+> +	g_slist_foreach(perf_gtk__error_loops, perf_gtk__quit_loop, NULL);
+> +}
+[ ... ]
+>  static int perf_gtk__error(const char *format, va_list args)
+>  {
+[ ... ]
+> +	loop =3D g_main_loop_new(NULL, FALSE);
+> +	perf_gtk__error_loops =3D g_slist_prepend(perf_gtk__error_loops, loop);
+> +	g_signal_connect(dialog, "response",
+> +			 G_CALLBACK(perf_gtk__dialog_response), NULL);
+> +	g_signal_connect_swapped(dialog, "destroy",
+> +				 G_CALLBACK(g_main_loop_quit), loop);
+> +
+> +	gtk_widget_set_visible(dialog, TRUE);
+> +	g_main_loop_run(loop);
+> +	perf_gtk__error_loops =3D g_slist_remove(perf_gtk__error_loops, loop);
+> +	g_main_loop_unref(loop);
+> +
+>  	free(msg);
+>  	return 0;
+>  }
 
 [Severity: Medium]
-Will this sequence cause sporadic test failures if the parent test runner
-already has 32 or more file descriptors open?
+Can these non-atomic list updates to perf_gtk__error_loops race with the
+signal handler?
 
-Since the child process inherits all file descriptors from the parent,
-lowering RLIMIT_NOFILE to 32 here leaves no available file descriptor
-numbers if the parent already holds >=3D 32 descriptors (which is common
-when running the full test suite).
+If a user presses Ctrl+C (sending SIGINT) at the exact moment the
+application is inside perf_gtk__error() modifying the list via
+g_slist_prepend() or g_slist_remove(), the async signal handler path
+is triggered:
 
-Later in the block, get_bpftool_command_output() relies on popen(), which
-needs to allocate new descriptors for a pipe. If no descriptors are
-available, opening the pipe will fail with EMFILE, aborting the test
-prematurely.
+perf_gtk__signal() ->
+  perf_gtk__exit() ->
+    perf_gtk__quit_error_dialog() ->
+      g_slist_foreach(perf_gtk__error_loops, ...)
+     =20
+Could this traversal crash or enter an infinite loop due to the interrupted
+list modifications?
 
-Should the child process explicitly close all inherited file descriptors
-(e.g., using close_range(3, ~0U, 0)) before calling setrlimit?
+[ ... ]
+>  static int perf_gtk__warning_info_bar(const char *format, va_list args)
+>  {
+[ ... ]
+>  	gtk_label_set_text(GTK_LABEL(pgctx->message_label), msg);
+>  	gtk_info_bar_set_message_type(GTK_INFO_BAR(pgctx->info_bar),
+>  				      GTK_MESSAGE_WARNING);
+>  	gtk_widget_show(pgctx->info_bar);
+> =20
+>  	free(msg);
+>  	return 0;
+>  }
+
+[Severity: Low]
+Does this call to gtk_widget_show() also need to be replaced with
+gtk_widget_set_visible() for the GTK 4 build to succeed?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/178870998583.979169=
-.16526173782819097354@tychen.cc?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260906-perf-gtk2-=
+v3-0-e1f2086214a0@gmail.com?part=3D1
