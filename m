@@ -1,231 +1,192 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC08535028C;
-	Sun,  6 Sep 2026 18:17:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FC0B3C109A
+	for <bpf@vger.kernel.org>; Sun,  6 Sep 2026 18:26:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788718639; cv=none; b=XUgloSqqDz/Yo4yylr4EgSVSNouyqeKrQRyvVII2eqIAXS93wv1eQOVbNJ7Gj+u0Zwn/yghfF/4vH9ZbuXwuBOTNqWuFZfVU2gYZhW05dSdGFadfJ0PsbnZ5D417SYKL6K9+HthKX1VlzZyLRtHgOuLzxhc2sasReDjKjC00coo=
+	t=1788719214; cv=none; b=eemuVJvPUCNEoFdkT36xFhFRgvAvqi0IkDhUSqF4MKnQP9NL1tq9rBkHNIpjosa05LkZHezyRBn0ZpyGeUQjadKfDlef0+yMP1RDb+WuraXU0cHS24T7264P5sSe9tcYD9XOk8iW2bg0kBFq0OzNqnWIg7zaMK2mK0W79NDr8O4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788718639; c=relaxed/simple;
-	bh=Sri5cwoa9jXxhPTga+k9z0P194cuRmtGhbEKIvZLHp0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=p0S8g7ZvqGOPjq71VfnT+q9EPs3aC6rkZYxwSJ25+v2HWAvxC9WjMLqKhWVlPEYQROQRa5Z24jxJvJwnErEVzsWLXtfRBGp3icDdAXktjt9eZ4SDuPN6Z3nEmEIVRwwB01wIKR4XLapmtZcOkALLsvrRkgjHjkc5ZZBhrJNo5Gg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bwfiVJJQ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788719214; c=relaxed/simple;
+	bh=SgX1YF5BinqnYgFFhO7dDlEYttQMLZuaOdTahuCoQno=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=mcFqKl5LG9HAerV34nhZs0RwXV7MSuZ/OOVreSoHZyQByqHoH5F3NwHAZXaS3NUAJAfiPn8p+oiTEQzYvWFS2IObf7jyD+GNKizXkV9f0WLQc57WS0zlN7kqd34bLcDxiB9/Ynstqxf49psSeJcueL4rVqi+RSZWRVFKLj7dC90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=anT2eLhr; arc=none smtp.client-ip=74.125.224.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bwfiVJJQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFD951F00A3A;
-	Sun,  6 Sep 2026 18:17:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788718637;
-	bh=uVERsCJGlx+uVFflvPHMDwWoQgR4pFdAHPwLTy/V11w=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=bwfiVJJQUyAdXxef5pcUF3ZKWexsBOxht0hxBx03uwtzPCFfM2t9fUiTkwEjOAy9K
-	 3+pUoDSxy2HqbnvU/CRn3+3b594YMgDjVXchyBOltST09X3ZElYS/XDkbhGmZNYtVx
-	 v67x5Mlj4Vg0+HrBZlQqh6kMHDLtfwK3FMztPKeOuf+MvI5hIjlcawgdV6XmFrSjfQ
-	 WbMF360nJOgHuDpdV0LtFdqtGWAd7cV1U8IWBurEhdc21HMXV+xtmEM3g8Y0ZvOLTZ
-	 /f9jKMv5Ds9z3LBwus4vuqNL1Az+cpG3nL3XxIBeEy+CX+o40uSo0sRaI5NIHKUsNr
-	 yN3itA6XfGufw==
-Content-Type: multipart/mixed; boundary="===============4227706866215804155=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="anT2eLhr"
+Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-66e63c2c9e1so3555859d50.0
+        for <bpf@vger.kernel.org>; Sun, 06 Sep 2026 11:26:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788719212; x=1789324012; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=sKM47l7YkmZt/cmjld1HYUn2TA7R7T3CNQOleawZSeQ=;
+        b=anT2eLhrEPpY2kPms8u2W2LEcbLVbZx6LRxybgjVugnFqR9EHhDuFzxsf2o+248ziM
+         bB4OD0Mhvn3KTg96qj5jSsyw+Dxz0hALK782njJ7c8rHx7qppvKVXY2Uj/MXf8UQhb9s
+         CItsKBsI+VrcKDzJ0FxYtRueL1i9a1uKosc8CNyHpIatuNykq0d4DGRfhm1Jt01uO+jp
+         hQNwjZr4R9QXVlCIFoumus2rWGNLGt0xdagq+gEMMpQwtpcpJwhpfX7BOqk1qJ2WqJ1J
+         KtVvSGYGM8HYY8OksZfr4dvVtlDYPaqzzhIIjXFYe86W1xVrE6i1LkMN8QdRrwkQ2FQy
+         iLZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788719212; x=1789324012;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=sKM47l7YkmZt/cmjld1HYUn2TA7R7T3CNQOleawZSeQ=;
+        b=bxOeDlniMu+4Q/aAwtk2o3TdVujbcLLjn3usRxYcWkFHGjm+lr7SEDyV7ycvT5NoAO
+         IV4qyUoCaIogj/6i6nhz1YB/36vtYCMraKZyA1Z0/oE29qWR1vdrCG2jctrz/QFq0VJl
+         zt90q5BpDRVK1D8KgVP5zw4kLCxBwtAGxgenrbjHmqlXDyZmAcR3lQxXsz0q8xsIFZbY
+         EylGZRADVSiQnnYBGZu+OG6Nnn0RsBAoETLVswdkEXo7VT0Z1s9mlUVnPqMX9g8PezdM
+         aY0IfbYpSIT8I+aPEaJ/MSbk/V++ADbjy07mHNSzQOTexp3TcqSFgSYUjBl11MVbEv+M
+         ZTXQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwPwZZ7/NIXGiqKS3LEYT4IMDpe3sZERvJVEO8I3q1yG6Y3GB8t776hwguF6BSCVkKFUYM=@vger.kernel.org
+X-Gm-Message-State: AFuF++mkIT+tBqHf95UD+N6U1IgOyBnEp+wZp3JdZrrF9BvE+ilxg/3b
+	UYjzNGYtzvDPVWU+hQGZcIWXI6CZUy12FpR8tYqgnP4ElIchbp2/R+mZ
+X-Gm-Gg: AYBFou39jZgJ4dYn5W3YrUZEa1s4i/lsMcohbaKElN+XLnhkFpzOcY9Hfzc5MShjrEC
+	YCtH5p10M2PEcpphX2hbIg0oioyn0XPGBViCV5tYjOc+DSj1kQ7v0vLr1aqzto9f2Q+Offg7l4W
+	NbrqPvkSpkrPX6V4hLNhv6Qv+ywLITu4biyRGu/srkZarEwfS6dnx9xXwiyDQYTwaXhB5nIFz9p
+	D9p6LiGdSsA1qjODdP3MvcviGAkGSSQnCEbbkYNQZCzTPCwhhYkZZrIunB8ep5fp8H9+sLxy2FC
+	2PDgoiqdX4j1cwe0wHMd5oG4p5H4chAT9pW4znVDy5F6MhIAOoo2YWi/SoIRx135duhVkHiUwPF
+	VYVF0fuQK8393W54PpFzDd2HcqCeB87+wCyh7R47cyODceNNCCsEhS9FZVoGFFEJq+M8nraypbe
+	R16dJYu6pctJUjt003ytAFwfLl0iOh+7Fw/yunXvoRy5T/OmS+nZO1hpRJT5qJjlO7++SYlao=
+X-Received: by 2002:a05:690e:1a26:b0:66f:c1bc:404d with SMTP id 956f58d0204a3-66fc1bc448cmr1525418d50.46.1788719211893;
+        Sun, 06 Sep 2026 11:26:51 -0700 (PDT)
+Received: from localhost ([2600:1702:7a90:6f9f:8bc4:8aec:108d:7a04])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-66fb48f1646sm6778111d50.9.2026.09.06.11.26.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Sep 2026 11:26:51 -0700 (PDT)
+From: Matt Turner <mattst88@gmail.com>
+Subject: [PATCH v5 0/2] perf tools: port UI from GTK2 to GTK4
+Date: Sun, 06 Sep 2026 14:26:49 -0400
+Message-Id: <20260906-perf-gtk2-v5-0-e8747a65c240@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d7cd223b492db152abcb27b5541b1c9719b4489d6ed94c59064674843d40cadc@mail.kernel.org>
-In-Reply-To: <20260906170819.1212661-2-hi@tychen.cc>
-References: <20260906170819.1212661-2-hi@tychen.cc>
-Subject: Re: [PATCH bpf-next 1/2] bpftool: Use batch lookups for bounded hash map dumps
-From: bot+bpf-ci@kernel.org
-To: hi@tychen.cc,bpf@vger.kernel.org
-Cc: hi@tychen.cc,qmo@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun,  6 Sep 2026 18:17:16 +0000 (UTC)
-
---===============4227706866215804155==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3XMTQ6CMBCG4auYrq2ZTn8QV97DuChlCo0KpBCiI
+ dzdwsoQWX6Ted6J9RQD9exymFikMfShbdLQxwNztW0q4qFMmyGggRwM7yh6Xg0P5FprZ0EVhdH
+ I0n8XyYf32rrd065DP7Txs6ZHsVz/VUbBgWfaqMKfNUqbX6uXDc+Ta19sqYy4KzFJSc55D1q6U
+ myl3JUySRIe4WxQKAtbqXalSjLPKEciyJL9lfM8fwGDyn+iUAEAAA==
+X-Change-ID: 20260906-perf-gtk2-555ca04bb652
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+ Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ James Clark <james.clark@linaro.org>
+Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+ bpf@vger.kernel.org, Matt Turner <mattst88@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4960; i=mattst88@gmail.com;
+ h=from:subject:message-id; bh=SgX1YF5BinqnYgFFhO7dDlEYttQMLZuaOdTahuCoQno=;
+ b=owGbwMvMwCW25rVmCc8sv+mMp9WSGLLmbsgMTb//Q1PiFcOVVFcF0dcPTn02y3fsmvW7VzTWZ
+ /adIwZyHR9ZGMS4GGaKKbLErVdkmdW2Y6nPaelfMHNYmUCGSIs0MAABCwNfbmJeqZGOkZ6ptqGe
+ IZChYxQPkdNj0MgsLi5NLdJNKyhyyMsvSSzJzM8r1ssvSM0rSC/QS8tMK8nIyC8qTgUaoZeXWmL
+ q6uhmZGhgYuloYeZk4Whq4uzsZOjk5ujo7OpkZGluYuBs6WjiamnOwMUpAHPNxB8M/ws1bqnv6z
+ pzuefrtN7Nc9nvcCUfCLRYs8zOoPWB18XZv2oZ/qfOvhF/WNJ+9r79hZs2XQl8sFsiW8Nc+dqGo
+ 28FuNYrm7ABAA==
+X-Developer-Key: i=mattst88@gmail.com; a=openpgp;
+ fpr=3BB639E56F861FA2E86505690FDD682D974CA72A
 
-> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-> index 684a8fb72414..1eccdc0d1e96 100644
-> --- a/tools/bpf/bpftool/map.c
-> +++ b/tools/bpf/bpftool/map.c
+GTK2 is long dead upstream and increasingly hard to keep building on
+current distros. This series ports perf's GTK-based report browser to
+GTK4 and fixes it up so it's actually loadable at runtime after the
+port.
 
-[ ... ]
+Patch 1 does the mechanical port (build system, widget API changes),
+including the leftover-GTK2-call and signal-handling fixes that were a
+separate patch 3 in v4. Patch 2 fixes a runtime issue found after the
+port that prevented the browser from loading.
 
-> @@ -762,10 +757,108 @@ static int dump_map_elem(int fd, void *key, void *value,
->  	} else {
->  		print_entry_plain(map_info, key, value);
->  	}
-> +}
-> +
-> +static int dump_map_elem(int fd, void *key, void *value,
-> +			 struct bpf_map_info *map_info, struct btf *btf,
-> +			 json_writer_t *btf_wtr)
-> +{
-> +	if (bpf_map_lookup_elem(fd, key, value)) {
-> +		print_entry_error(map_info, key, errno);
-> +		return -1;
-> +	}
->
-> +	print_map_elem(key, value, map_info, btf, btf_wtr);
->  	return 0;
->  }
->
-> +#define MAP_DUMP_BATCH_SIZE 256U
-> +#define MAP_DUMP_BATCH_MAX_BYTES (4 * 1024 * 1024)
-> +
-> +/* Return 1 to use individual lookups, but only before batch traversal starts. */
-> +static int dump_map_batch(int fd, void *key, void *value,
-> +			  struct bpf_map_info *info, struct btf *btf,
-> +			  json_writer_t *wtr, unsigned int *num_elems)
-> +{
-> +	__u32 capacity, count, batch = 0, next_batch = 0, i;
-> +	void *keys = NULL, *values = NULL, *buf;
-> +	bool first = true, can_fallback = true;
-> +	int err;
-> +
-> +	/* Hash lookup batches must accommodate a whole bucket. Restrict the
-> +	 * optimization to maps whose worst-case bucket fits the memory budget,
-> +	 * so a later ENOSPC never forces a restart after printing some entries.
-> +	 * Division also bounds the allocation multiplications on 32-bit hosts.
-> +	 */
-> +	if (info->type != BPF_MAP_TYPE_HASH || !info->max_entries ||
-> +	    (__u64)info->key_size + info->value_size >
-> +	    MAP_DUMP_BATCH_MAX_BYTES / info->max_entries)
-> +		return 1;
-> +
-> +	capacity = min(info->max_entries, MAP_DUMP_BATCH_SIZE);
-> +resize:
-> +	buf = realloc(keys, (size_t)capacity * info->key_size);
-> +	if (!buf) {
-> +		err = ENOMEM;
-> +		goto error;
-> +	}
-> +	keys = buf;
-> +	buf = realloc(values, (size_t)capacity * info->value_size);
-> +	if (!buf) {
-> +		err = ENOMEM;
-> +		goto error;
-> +	}
-> +	values = buf;
-> +
-> +	while (true) {
-> +		count = capacity;
-> +		err = bpf_map_lookup_batch(fd, first ? NULL : &batch,
-> +					   &next_batch, keys, values, &count, NULL);
-> +		err = err ? errno : 0;
-> +		/* Older kernels reject the command before updating count. Do not
-> +		 * inspect the buffers on these errors, or fall back after progress.
-> +		 */
-> +		if (can_fallback && (err == EINVAL || err == EOPNOTSUPP ||
-> +				     err == 524 /* ENOTSUPP */)) {
-> +			err = 1;
-> +			goto out;
-> +		}
-> +		can_fallback = false;
-> +		if (err == ENOSPC) {
-> +			if (capacity == info->max_entries)
-> +				goto error;
-> +			capacity += min(capacity, info->max_entries - capacity);
-> +			/* Preserve the input cursor: the oversized bucket was not read. */
-> +			goto resize;
-> +		}
-> +		/* In particular, EFAULT can leave count and the buffers invalid. */
-> +		if (err && err != ENOENT)
-> +			goto error;
-> +		for (i = 0; i < count; i++) {
-> +			/* Keep the alignment provided by individual lookups, including
-> +			 * for BTF types whose map key/value size is not aligned.
-> +			 */
-> +			memcpy(key, keys + (size_t)i * info->key_size, info->key_size);
-> +			memcpy(value, values + (size_t)i * info->value_size, info->value_size);
-> +			print_map_elem(key, value, info, btf, wtr);
-> +			(*num_elems)++;
-> +		}
-> +		if (err == ENOENT) {
-> +			err = 0;
-> +			goto out;
-> +		}
-> +		first = false;
-> +		batch = next_batch;
-> +	}
-> +error:
-> +	p_err("can't lookup map batch: %s", strerror(err));
-> +	err = -1;
+Signed-off-by: Matt Turner <mattst88@gmail.com>
+---
+Changes in v5:
+- Fold v4's patch 3 into patch 1, since sigprocmask() only blocks
+  delivery to the calling thread: it did nothing to stop the signal
+  handler from running concurrently on another thread and doesn't make
+  the handler's GSList calls async-signal-safe either
+- Defer perf_gtk__exit() on SIGINT/SIGQUIT/SIGTERM to a GLib source via
+  g_unix_signal_add() instead of running it straight out of a real
+  signal handler, so it always runs on the main-loop thread, serialized
+  with perf_gtk__error()'s updates to perf_gtk__error_loops, instead of
+  racing them from arbitrary signal-handler context
+- Keep a real handler for SIGSEGV/SIGFPE, since those are synchronous
+  faults with no "later" to defer to, but pare it down to reporting and
+  reraising the default disposition: there's no safe way to run
+  GTK/GLib code from the faulting context itself
+- Link to v4: https://lore.kernel.org/r/20260906-perf-gtk2-v4-0-97e92ee07214@gmail.com
 
-Could this p_err() call produce malformed JSON output when json_output is
-set?
+Changes in v4:
+- Fix gtk_widget_show()/gtk_widget_hide() calls left over from the GTK2
+  port: both were removed in GTK 4. Replace with gtk_widget_set_visible(),
+  adding a small wrapper for the info-bar "response" signal callback
+- Block SIGSEGV/SIGFPE/SIGINT/SIGQUIT/SIGTERM around the
+  perf_gtk__error_loops list updates in perf_gtk__error(): the signal
+  handler (perf_gtk__signal() -> perf_gtk__exit() ->
+  perf_gtk__quit_error_dialog()) walks that same list and could fire
+  mid-update, corrupting it
+- Link to v3: https://lore.kernel.org/r/20260906-perf-gtk2-v3-0-e1f2086214a0@gmail.com
 
-Looking at the call chain from do_dump():
+Changes in v3:
+- Fix GMainLoop leak if perf_gtk__error() is called re-entrantly: track
+  active loops in a list instead of a single global pointer
+- Add explicit <stdarg.h>/<stdio.h> includes instead of relying on
+  transitive inclusion, which musl doesn't guarantee
+- Drop the gtk4-infobar feature check and HAVE_GTK_INFO_BAR_SUPPORT:
+  GtkInfoBar has been unconditionally available since well before GTK 4,
+  and the check was failing outright due to its deprecation warning
+- Link to v2: https://lore.kernel.org/r/20260906-perf-gtk2-v2-0-3eccff053cd1@gmail.com
 
-do_dump()
-  assigns wtr = json_wtr when json_output is set
-  calls map_dump()
-    opens the elements array with jsonw_start_array(wtr)
-    calls dump_map_batch()
-      can reach p_err() here while the array is still open
-    closes the array at end_dump: with jsonw_end_array(wtr)
-
-When p_err() runs with json_output set, it emits:
-
-tools/bpf/bpftool/common.c:p_err() {
-    if (json_output) {
-        jsonw_start_object(json_wtr);
-        jsonw_name(json_wtr, "error");
-        jsonw_vprintf_enquote(json_wtr, fmt, ap);
-        jsonw_end_object(json_wtr);
-    }
-}
-
-So the error object would be inserted as a member of the elements array,
-giving consumers an object with no .key or .value fields mixed in with
-normal element objects.
-
-This differs from the existing in-array error handling. The pre-existing
-print_entry_error() deliberately emits a well-formed element:
-
-{"key": [...], "value": {"error": "..."}}
-
-And p_info() returns early when json_output is set, which is why the
-existing REUSEPORT_SOCKARRAY warning inside the array is safe.
-
-Would it be better to emit the error after jsonw_end_array() to keep the
-array schema homogeneous, or to use the print_entry_error() format with
-a key?
-
-> +out:
-> +	free(keys);
-> +	free(values);
-> +	return err;
-> +}
-
-[ ... ]
-
-> @@ -869,6 +962,9 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
->  		p_info("Warning: cannot read values from %s map with value_size != 8",
->  		       map_type_str);
->  	}
-> +	err = dump_map_batch(fd, key, value, info, btf, wtr, &num_elems);
-> +	if (err != 1)
-> +		goto end_dump;
->  	while (true) {
->  		err = bpf_map_get_next_key(fd, prev_key, key);
->  		if (err) {
-> @@ -881,6 +977,7 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
->  		prev_key = key;
->  	}
->
-> +end_dump:
->  	if (wtr) {
->  		jsonw_end_array(wtr);	/* elements */
->  		if (show_header)
-
+Changes in v2:
+- Fix error dialog's nested GMainLoop hanging if the parent window
+  closes or a signal arrives while the dialog is open (quit from
+  "destroy", not just "response")
+- Fix build with GTK_INFO_BAR_SUPPORT: gtk_info_bar_get_content_area()
+  is gone in GTK 4, use gtk_info_bar_add_child() instead
+- Fix use-after-free in the progress dialog on manual close
+- Fix reuse of an exhausted va_list in the vasprintf() failure path
+- Link to v1: https://lore.kernel.org/r/20260906-perf-gtk2-v1-0-7564bf8523a9@gmail.com
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Matt Turner (2):
+      tools: port perf ui from GTK 2 to GTK 4
+      perf tools: make the GTK4 report browser actually loadable at runtime
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34048943300
---===============4227706866215804155==--
+ tools/build/Makefile.feature                     |  4 +-
+ tools/build/feature/Makefile                     | 10 +--
+ tools/build/feature/test-gtk2-infobar.c          | 12 ---
+ tools/build/feature/{test-gtk2.c => test-gtk4.c} |  4 +-
+ tools/perf/Documentation/perf-report.txt         |  2 +-
+ tools/perf/Makefile                              |  2 +-
+ tools/perf/Makefile.config                       | 27 +++----
+ tools/perf/Makefile.perf                         |  6 +-
+ tools/perf/builtin-annotate.c                    |  8 +-
+ tools/perf/builtin-report.c                      |  8 +-
+ tools/perf/scripts/install-build-deps.sh         |  4 +-
+ tools/perf/tests/make                            |  4 +-
+ tools/perf/ui/gtk/annotate.c                     | 35 ++++-----
+ tools/perf/ui/gtk/browser.c                      | 96 ++++++++++++++++++-----
+ tools/perf/ui/gtk/gtk.h                          | 16 ++--
+ tools/perf/ui/gtk/hists.c                        | 41 ++++------
+ tools/perf/ui/gtk/progress.c                     | 40 +++++++---
+ tools/perf/ui/gtk/setup.c                        |  5 +-
+ tools/perf/ui/gtk/util.c                         | 97 ++++++++++++++----------
+ tools/perf/ui/setup.c                            |  2 +-
+ tools/perf/util/annotate.c                       | 11 +++
+ tools/perf/util/annotate.h                       | 12 +--
+ 22 files changed, 254 insertions(+), 192 deletions(-)
+---
+base-commit: 9f0346dcbea363787186c94ef94dd01aaa215afa
+change-id: 20260906-perf-gtk2-555ca04bb652
+
+Best regards,
+-- 
+Matt Turner <mattst88@gmail.com>
+
