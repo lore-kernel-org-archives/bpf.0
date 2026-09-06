@@ -1,114 +1,142 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90D6360EE2
-	for <bpf@vger.kernel.org>; Sun,  6 Sep 2026 21:28:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788730091; cv=pass; b=MnMcoyr1cyNUWW5S8qiSNdrI8G0nzgAYFttdn9JgNZMqNMECl4AmUDppx+Qxiz7gMy+vPAU3p3obgdxKJTeJnZKpRGMaV9/Hx3X5ojwhIah0B7bXNygAJZlouBlkXL4A6siFf3R2i1rfrXd1aC5C0pXxbISPl6Mr9YnbL5amfVM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788730091; c=relaxed/simple;
-	bh=JNL1Hi83Gfi4VLq7/UZiKhBZw5BLa4CanROgvJ4RCUo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I7cURhyULT1ACcKgR3rtI2Wmcrlo/2YHbcirGw2rl9fAMQQvrV7HdnzprEGaEEeahGtA//NcECq2+w5I/Rx9WIFdfjXF7SW6NftpmSwTOE3yZiiLAFR2j5SXxiJKeJXt4V4gf/HoF4zWSheYrvMj6Zeb5BffFHelvE+sGVcVuqw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RV4TBfRZ; arc=pass smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 294F73812EF
+	for <bpf@vger.kernel.org>; Sun,  6 Sep 2026 22:27:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788733630; cv=none; b=igaUG1EjmPi9xujD643/2fb60XUHRN+SsieUDj3Q7JGwyVozBlksvTTcW8N8PuYVPL2d/E7Y3f++u+3AiwDH0Ddj3LZBYS2BFqxi/7QZUDRUp7ECTQqths6VSxUQnHRnQLBbUY+7O8nddPTnrZv+LGISFczniOujjJE9L0/CCls=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788733630; c=relaxed/simple;
+	bh=h3MY+etQFRyDC5vTUte9Ey6CUC24f9Tomj2v46v8wQ8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=nDcx6Ls8uI7JhYBii7sBkRraA1p64QC8o9720HIRa9+9TBUK7dw5NaW75LRW1lu1Ze2zPoG1umsR5Pw1uf2godRlVrCW793Y8yHJ5l7oNIh7OGBnaa/tplMkeGFVOLMvaoldDZKxVauCerwGtB3U8USUJhUAUJPtq92Ux6NA72k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GXhJIbN2; arc=none smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RV4TBfRZ"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-863c229c3adso863363b3a.0
-        for <bpf@vger.kernel.org>; Sun, 06 Sep 2026 14:28:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788730089; cv=none;
-        d=google.com; s=arc-20260327;
-        b=sKckRJadCbWTXdTMyq1P1xGsJOI0CQOpRe7YnHfiKDe1Vc1FtV8RuxYuTThQeq82RA
-         TBARf/2F0FR+OWuFfylt82CnZIbWZ6LQWc6bnaKfrn/jRy+HwMzMmUL9idfNb4/PTHJn
-         Rlgc7zvvEOUifapjH5HdJd4RcJAq6pJiK1ZlLtrikxuqHo+tYr9br5A917qLpToNIRq2
-         QPzvnkRcx/XTPqwgNA6Nczh4UFHY3psS8w8DyZHRTUmQWRpPWjzAOKaSEpwlLJmpjIeU
-         m2cQAZO/fa7dIDG7DiGdJDIWLqXfRRA0VnFJqfjaHY8wpHZGEG6JZ4hXY/CCzkdNlAAS
-         ZEMA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=2QFCcOK1H33fcWWj4EUDq7nl1+88B+9dXT9y3A7VyfY=;
-        fh=sSEwiWOWpzQ8rPe8Yo/OSIlV/cG6KvizYhMaKthrZ3k=;
-        b=SvOhp5naLPISBPK+BLGgBa56MTwPtPZePoj1yCRWZ1B6g951cIkDY/PqDoSicO48a0
-         FcBbYPmwSVlXJevmVQtgQ70KvxRu2CMo/c2kCLpzut5nTjWB3hAb1MPhVVLZGjqGH1ni
-         GLnKMMaEopRkt7rZx1njnA1A6L7L+/Qy3ZUpEfMAlooaYsR9PDQFyxvDeFqfzM385mOK
-         AofPeGV7tBgJq5RbCrjONWKyB+r3wFJuL8tWKERinplaxvzTkzwgROf01gNjBnmjd1IP
-         2B1U7SsQwsARzfXeha2ByYD21OjgBp1k3/m42mwaEEKWrB24EJbdnhvmXvtUYewWM5Jg
-         G4yQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GXhJIbN2"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-482e067e908so2400846f8f.2
+        for <bpf@vger.kernel.org>; Sun, 06 Sep 2026 15:27:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788730089; x=1789334889; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=2QFCcOK1H33fcWWj4EUDq7nl1+88B+9dXT9y3A7VyfY=;
-        b=RV4TBfRZdmy1gWMR0BiCBtmOLSz+td92Z0dQXfzVm9nB3wvgvyGEF/hN75F3aIyGj6
-         ttUVe+wFzfbAX7lu0H/4HjHKrEzBLl1QJIbnjlTmJzupcSrI9k4ddzyoV6wTjo4sFw9M
-         GX4v8dAECH0QEDFgZTeDL+/QF7iz12P3I2Ic5GbqRympz1Og/d/aqMHVNix3lE07POi3
-         2rO63mhxkxtraF1JgDHgGNKEPHzwmXG+7qyG1DGJlkhEDyVughIa6q5okqKGKSc41Mdi
-         CGVj4IWjd/r2VliJZtA9+L4rHfplktL57NsksQ0cVbrxUibtdhStCabrOmmd2rYhzqze
-         S9fQ==
+        d=gmail.com; s=20251104; t=1788733627; x=1789338427; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=zX+QAFEbpQP+MEQRst9ypdyQVxu18GwQkXl0+/O/eYs=;
+        b=GXhJIbN2ot7mXoqA/x1uEVefFrm/YfBLP9mffbiVXwqAriZ9K9zLbxlJtt5U1dOi/D
+         1NihEwNR0JauAkHnm1oG18YHu5UPKk/YZlKUkyrdfu1Jh1+dTVMAg5qjkAaS79s0BF/a
+         /CJVdy4floyEOvwOOYZmTyBgB7FrgYMozOKPFJOfgvPFAuNsHQzl9OI/KYK7yEaiZ0ps
+         mAowL7A2xx+yzg/PA86VXCXZgoXVQdADtsX/3LEWciS1kB3sgGqkvk1fpptNvw6zFGLj
+         +0PZJbaj3SPOg6+apQqqbBadq04AAOUZ69HDg0nT9Y42BDjyqJ5OPEQSq4AW5zgGsd0Q
+         8a+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788730089; x=1789334889;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=2QFCcOK1H33fcWWj4EUDq7nl1+88B+9dXT9y3A7VyfY=;
-        b=g8Ut+hX/o5p152bAd2L4Q0ivHbg2YOl+e8tvewttsuejhbFdBfC5zQoTQ4WNPExSDy
-         44/hdIByMbMZmJ4ZvftT16QZ560xYPT46HMGRSqTQ1bU7jtkvV0PXGf2ecl2/UOZfNGw
-         UwwFxXQYYKh3Zi7n8ZtAfgnp9wgin7lX2K7EP0+z5JguwUFdPZXgnfIK3Net17v2SR2m
-         4w3YfY0gCro/9YRJNcJqVGzyW4OHXk6NNcXZpQr+8fOWPhkwFMnQp15iKS0AHpb5hesr
-         0zWMX+3bkYIkjphT9bOoMGvgVoSiwtLhTRgjjnfPNMbNU82Hqz66o3NcSUPSpOF6X0Vc
-         gbmw==
-X-Gm-Message-State: AFuF++lNbKRoc1t3boHWK/F9ABJeLqqgNiSKiCTlOziZ39lIlLOPpFVd
-	/3Su0msnQmKfNZn90lQsT6TH7VqQWmT2NpYVx8XBCB3A4WsbP6ycvhb9oDQeXkaQIFtrTLsrO5p
-	fCNCXZYK0sZs5ZJbFgqlbmIuSWb4xl64=
-X-Gm-Gg: AYBFou0qZpGkvHwoG6OaSa9eIF2Q6lKqgxqrHsu7kVoP5iaCKJXic+v9Elccyh5txIf
-	ymgWUeB3b74b0xgP6bQjIXzdX0sEXqTLgjRRmD3/6EVB/SLLooX7iVvylRX8HggNxY2mK10iA7e
-	8UBdzCqfceWDi/S7kfebz1RT8nCniXTS77g9St79BIKyoDPmkC+BWeHM2sKkI0wDzmEcOfMlyJq
-	KO9TF5CqyAZvltrev1Y8cmRoX6uCm/SjZ6+Csd8qiD4BiULEUtttaLC57Lw9SoxvICUPPRgZn2r
-	Kh7ToK5XSnP9gkmb+36mAOKZ8bYlxVrmfZVnQi6jpb+dIwN06q4wRqKyD1CsZPg447pYSwytaXb
-	WjBrkBBViB/jElVFy5pe4rLyNhcLV
-X-Received: by 2002:a05:6a00:2d24:b0:846:22ea:e171 with SMTP id
- d2e1a72fcca58-8616809b0ddmr27662552b3a.3.1788730089364; Sun, 06 Sep 2026
- 14:28:09 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1788733627; x=1789338427;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=zX+QAFEbpQP+MEQRst9ypdyQVxu18GwQkXl0+/O/eYs=;
+        b=NIRrE239milbf5+XSaQKmdZf+/oZZHViFP5TD2jUIxAdffHZ9E7MBcjRP04ElH6Ig9
+         loZE/Odrkh4xqpQ836VSjZy0GAjcH3MJp5kinGOWpGR42nI+Ph6Cr+dqSiKzLsIMllzD
+         fW7rbiYCW9OpcdXlgEzQMkigM5fKJjm6wZckcacYO5PPAYb+e1/dUK1aJ9lIHjIsKZ2k
+         n14Y1o2KQ4NQeeoU9EzBy/z0RTLIZohlgpudQ1/K4bUDBGLtd0CPy4xyoVF0MzrpeL53
+         Hg5HspLoWaMPfUCWhkiEPPgXoVkgTf4iDahQPOwJ0bljJLL3fZAvIksMTIf+TGvdguIN
+         7oQw==
+X-Forwarded-Encrypted: i=1; AKwUvBy+126Mzw3tJdh+jM2dpK0Ik2L5xI74mMNKkF7UrN8gcm9L9md6MkP4XFVE/2CKgyXsmlQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++k00ny9Y+bT+UB99q3XGQDoQb2Wn+JdJSJHS6jN5qqse/87LjGz
+	mN7bwh6Zo9/q7tLuCbVM1RV/aBgkdwTVNqNtYkaxzk2nidyDws7XyS2D
+X-Gm-Gg: AYBFou1gl8wgnGe/kTCB9Brp8gu5nVqEIycP370MMRgBKD44g62mdzEmtuyEQ55Kvnw
+	KW6E08/8eE/kP1MuLYmedfgmLPziHHLt7EooSBD3/kkSLIcThVzpelYxJSiRn6AD7u68zmwmYpf
+	++UjLgWWt5JndHEK22bcovtxmQDhGm6L1qvfAtHZ+K8BKqDmTVj2KlAoRgMFQY2GC/+sUsaDCA0
+	E10vVV+KJFmQBoR0picqz/zDsVhNgRKN3u6ZikleqDqjDGNGhNVYmLWfgykKHbE2XXyVI+Fr6XO
+	zFAVQLJx6DdaiTf7iB4ftXuDWsXch+qWMUDnownSmz3E/S1ZyXP9xye5mvOm+EnjGBlbyTApc8R
+	K2g1zFr7TB/06+oL230fxzbZ/OkGiYnQsgfjauxQRUxh7DnnnTRBclH3SLk0UsWQSUW9INEDUTP
+	pveIVPDvYA82dGh4GOrzOHnnv4YAqbnWelGWHf5VOUWFJdxiHbG/WKpaBVjooInGE2MRwzy8PA1
+	2eGPIMM17DeoP3l9vsFFkEL4ibpU9ccwXRwtNgqn3OUEc/6DKBmCEPOoUg1/54tsIvTf+X2k6YM
+	NXIkd+MRPWbiaBZatN/I4zUnlUx+6CIoYJBA7JMEC8HtdYzuZqZ3S5KjLxA8prxAnpddxzqHv8G
+	KZ3AOrk4=
+X-Received: by 2002:a05:6000:1785:b0:485:91ac:434f with SMTP id ffacd0b85a97d-48591ac44a5mr10269844f8f.16.1788733626624;
+        Sun, 06 Sep 2026 15:27:06 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-2a02-3100-9d84-5101-9c80-d25b-14b6-410c.310.pool.telefonica.de. [2a02:3100:9d84:5101:9c80:d25b:14b6:410c])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485885c5bbdsm22396316f8f.36.2026.09.06.15.27.04
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 06 Sep 2026 15:27:05 -0700 (PDT)
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Karl Mehltretter <kmehltretter@gmail.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-doc@vger.kernel.org,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	David Vernet <void@manifault.com>
+Subject: [PATCH bpf-next v2] bpf, docs: Fix two struct names in btf.rst and kfuncs.rst
+Date: Mon,  7 Sep 2026 00:26:56 +0200
+Message-Id: <20260906222656.3459-1-kmehltretter@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CABzjXVz3iBuump-pXFkefZ5v+2uu4fG61zqRyWD4xmz3PuBycw@mail.gmail.com>
-In-Reply-To: <CABzjXVz3iBuump-pXFkefZ5v+2uu4fG61zqRyWD4xmz3PuBycw@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 6 Sep 2026 14:27:57 -0700
-X-Gm-Features: AcwNN1Xot9l7EgefYBb1-TDJ5GKy5LgWnTHeUrsJtELw63EywZ96HZqKdkGcUQc
-Message-ID: <CAADnVQLsiYikybbLrBVPTwhnp5_VfEYh2k-HVGJoe2F_1kvATg@mail.gmail.com>
-Subject: Re: [BUG] libbpf: BTF dedup merges arrays with different element types
-To: Mingpei CAO <caomingpei@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sun, Sep 6, 2026 at 3:23=E2=80=AFAM Mingpei CAO <caomingpei@gmail.com> w=
-rote:
->
->
-> Proposed fix
-> ------------
->
-> The second array descriptor should be obtained from t2:
->
->     a1 =3D btf_array(t1);
->     a2 =3D btf_array(t2);
->
-> I applied this change to the assessed source and reran the libbpf linker =
-and
-> loader controls. The output retained both types and the verifier accepted
-> the program.
+struct btf_variable and struct bpf_cpmuask do not exist; the names are
+struct btf_var and struct bpf_cpumask.
 
-Please submit the fix and selftest as two patches.
+Use them.
+
+Fixes: f063c889c945 ("bpf: add specification for BTF Var and DataSec kinds")
+Fixes: 027bdec89364 ("bpf/docs: Document the nocast aliasing behavior of ___init")
+Assisted-by: LLM
+Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+---
+v2: the two one-line fixes combined into one patch, as Alexei asked;
+    the two Fixes: tags stay because the typos have different origins
+    Randy's Reviewed-by, given on both v1 postings, collected
+v1: https://lore.kernel.org/r/20260905095649.42351-1-kmehltretter@gmail.com/
+    https://lore.kernel.org/r/20260905095527.42261-1-kmehltretter@gmail.com/
+
+ Documentation/bpf/btf.rst    | 2 +-
+ Documentation/bpf/kfuncs.rst | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
+index 3f05f17990ad..004aa1058d85 100644
+--- a/Documentation/bpf/btf.rst
++++ b/Documentation/bpf/btf.rst
+@@ -416,7 +416,7 @@ If the function has variable arguments, the last parameter is encoded with
+   * ``info.vlen``: 0
+   * ``type``: the type of the variable
+ 
+-``btf_type`` is followed by a single ``struct btf_variable`` with the
++``btf_type`` is followed by a single ``struct btf_var`` with the
+ following data::
+ 
+     struct btf_var {
+diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+index 85f73e0bbd0f..57831eda0a33 100644
+--- a/Documentation/bpf/kfuncs.rst
++++ b/Documentation/bpf/kfuncs.rst
+@@ -536,7 +536,7 @@ For example, for the following type definition:
+ 
+ The verifier would allow a ``struct bpf_cpumask *`` to be passed to a kfunc
+ taking a ``cpumask_t *`` (which is a typedef of ``struct cpumask *``). For
+-instance, both ``struct cpumask *`` and ``struct bpf_cpmuask *`` can be passed
++instance, both ``struct cpumask *`` and ``struct bpf_cpumask *`` can be passed
+ to bpf_cpumask_test_cpu().
+ 
+ In some cases, this type-aliasing behavior is not desired. ``struct
+
+base-commit: 986c24e0fe44f844b44d365b71ce831947f50298
+-- 
+2.53.0
+
